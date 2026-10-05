@@ -32,7 +32,11 @@ class _DefaultSeason(str):
 # "Regular Season" (the default SeasonType) ran 2025-12-19 to 2026-03-28, the Tip-Off Tournament
 # before it is not in it; the Summer League labelled "2026-27" was played 2026-07-09 to 07-19;
 # draft-combine SeasonYear "2026-27" holds the May 2026 combine; G League playoffs (leaguegamelog,
-# SeasonType=Playoffs) began 2023-03-28, 2024-04-02, 2025-04-01 and 2026-03-31.
+# SeasonType=Playoffs) began 2023-03-28, 2024-04-02, 2025-04-01 and 2026-03-31; NBA All-Star games
+# (leaguegamefinder, SeasonType="All Star") 2019-02-17, 2020-02-16, 2022-02-20, 2023-02-19,
+# 2024-02-18 (2021's was 03-07), with rows for 2024-25 and 2025-26 too (leaguedashplayerstats); WNBA
+# All-Star 2021-07-14 to 2026-07-25 (latest). The G League has no All-Star rows (leaguegamelog
+# 2024-25, 2025-26), so its "All Star" stays on its regular rule.
 _FIRST_ROWS = {
     "00": (11, 0),  # NBA: tips off late October
     "20": (1, 1),  # G League: regular season from late December
@@ -44,6 +48,8 @@ _FIRST_ROWS = {
     "00 playoffs": (5, 1),  # NBA playoffs and play-in: from mid-April of the season's second year
     "20 playoffs": (5, 1),  # G League playoffs: from late March / early April (2024's began 04-02)
     "10 playoffs": (10, 0),  # WNBA playoffs: from mid-September
+    "00 allstar": (3, 1),  # NBA All-Star: mid-February of the season's second year
+    "10 allstar": (8, 0),  # WNBA All-Star: mid-to-late July
 }
 
 
@@ -53,12 +59,15 @@ def _latest_season(
     """The latest season that has rows on ``today``, labelled for ``league_id``.
 
     ``"2025-26"`` style for the NBA, G League (``"20"``) and Summer League (``"15"``); a year for the
-    WNBA (``"10"``) and for ``drafthistory``. ``endpoint`` picks the draft rules, and
-    ``commonplayoffseries`` or a ``season_type`` of ``Playoffs`` / ``PlayIn`` the playoff rule.
+    WNBA (``"10"``) and for ``drafthistory``. ``endpoint`` picks the draft rules,
+    ``commonplayoffseries`` or a ``season_type`` of ``Playoffs`` / ``PlayIn`` the playoff rule, and
+    ``All Star`` the All-Star rule.
     """
     today = today or date.today()
     if endpoint == "commonplayoffseries" or season_type in ("Playoffs", "PlayIn"):
         endpoint = "playoffs"  # a season's playoffs have rows months after its first games
+    elif season_type == "All Star":
+        endpoint = "allstar"  # so does its All-Star game
     elif endpoint.startswith("draftcombine"):
         endpoint = "draftcombine"
     month, lag = (
@@ -87,11 +96,13 @@ def season_latest_with_data(season: Optional[str]) -> str:
     * ``drafthistory`` (a year, ``"2026"``): from July, after the late-June draft.
     * Playoffs (``commonplayoffseries``, or ``SeasonType`` ``"Playoffs"`` / ``"PlayIn"`` on any
       endpoint), NBA and G League: from May of the season's second year, once they have started.
+    * ``SeasonType`` ``"All Star"``, NBA: from March of the season's second year, after the
+      mid-February game. The G League has no All-Star rows and keeps its regular rule.
 
     Until a rollover the previous season is returned. It has data, but for a few weeks after the
     newest season's first games it is not the newest: late October for the NBA, late December for
     the G League, July for the Summer League, late May for the combine, late June for the draft,
-    late March to April for the playoffs. A fixed month table cannot follow a lockout, a CBA delay
+    late March to April for the playoffs, late February for the All-Star game. A fixed month table cannot follow a lockout, a CBA delay
     or a pandemic calendar (1998-99, 2011-12, 2020-21); pass ``season`` explicitly then.
 
     Args:

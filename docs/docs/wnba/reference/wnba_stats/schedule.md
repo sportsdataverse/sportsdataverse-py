@@ -18,7 +18,7 @@ GET /stats/scheduleleaguev2
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 | `LeagueID` | `league_id` |  |  | `Y` |  |
-| `Season` | `season` |  |  | `Y` | Season year, e.g. ``2024``. Defaults at call time to the latest WNBA season that has rows: the current year from June (``2026`` from June 2026, ``2025`` before), a draft (``drafthistory``) from May, and with season type ``Playoffs`` (or ``commonplayoffseries``) from October. A month table cannot follow a lockout or pandemic calendar: pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or every season summed. |
+| `Season` | `season` |  |  | `Y` | Season year, e.g. ``2024``. Defaults at call time to the latest WNBA season that has rows: the current year from June (``2026`` from June 2026, ``2025`` before), a draft (``drafthistory``) from May; with season type ``Playoffs`` (or ``commonplayoffseries``) from October, with ``All Star`` from the August after its July game. A month table cannot follow a lockout or pandemic calendar: pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or every season summed. |
 
 ### Returns {#wnba_stats_scheduleleaguev2-returns}
 
@@ -100,7 +100,7 @@ GET /stats/scheduleleaguev2int
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 | `LeagueID` | `league_id` |  |  | `Y` |  |
-| `Season` | `season` |  |  | `Y` | Season year, e.g. ``2024``. Defaults at call time to the latest WNBA season that has rows: the current year from June (``2026`` from June 2026, ``2025`` before), a draft (``drafthistory``) from May, and with season type ``Playoffs`` (or ``commonplayoffseries``) from October. A month table cannot follow a lockout or pandemic calendar: pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or every season summed. |
+| `Season` | `season` |  |  | `Y` | Season year, e.g. ``2024``. Defaults at call time to the latest WNBA season that has rows: the current year from June (``2026`` from June 2026, ``2025`` before), a draft (``drafthistory``) from May; with season type ``Playoffs`` (or ``commonplayoffseries``) from October, with ``All Star`` from the August after its July game. A month table cannot follow a lockout or pandemic calendar: pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or every season summed. |
 
 ### Returns {#wnba_stats_scheduleleaguev2int-returns}
 

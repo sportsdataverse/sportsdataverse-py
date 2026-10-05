@@ -96,12 +96,18 @@ now (live sweep through the proxy pool, 2026-10-05; no wrapper went from working
     2026-03-31), and from October for the WNBA. Before this, `leaguedashplayerstats(
     season_type_all_star="Playoffs")` on 2027-02-01 would have asked for 2026-27, five months
     before those playoffs, and got HTTP 200 with zero rows.
+  - All-Star: any endpoint asked for `SeasonType` `"All Star"`. From March of the season's second
+    year for the NBA (games 2019-02-17 to 2024-02-18, 2021's on 03-07; 2024-25 and 2025-26 have
+    rows too) and from August for the WNBA (2021-07-14 to 2026-07-25). The G League has no
+    All-Star rows, so it keeps its own rule. Before this, an NBA All-Star call from November to
+    mid-February asked for a season whose game had not been played.
   - WNBA: the current year from June, the previous year before.
 
   Until a rollover the previous season is sent. It has rows, but for a few weeks after the newest
   season's first games (late October for the NBA, late December for the G League, July for the
   Summer League, late May for the WNBA and the combine, late June for the NBA draft, late March to
-  April for the NBA and G League playoffs, September for the WNBA playoffs) it is not the newest.
+  April for the NBA and G League playoffs, September for the WNBA playoffs, late February for the
+  NBA All-Star game, late July for the WNBA's) it is not the newest.
   The NBA default is hoopR's current season (`year_to_season(most_recent_nba_season() - 1)`)
   except in October. Of the 79 season defaults in wehoop's `wnba_stats_*.R` that call
   `most_recent_wnba_season()`, 54 subtract one, a season behind this default in every month but

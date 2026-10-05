@@ -22,7 +22,7 @@ def season_latest_with_data(season: Optional[str]) -> str:
     previous year before it (``"2025"`` until May 2026, ``"2026"`` from June 2026). ``drafthistory``
     rolls over in May, after the mid-April draft; the playoffs (``commonplayoffseries``, or
     ``SeasonType`` ``"Playoffs"`` on any endpoint) in October, once they have started in
-    mid-September. A fixed month table cannot follow a lockout, a CBA delay or a pandemic
+    mid-September; ``SeasonType`` ``"All Star"`` in August, after the July game. A fixed month table cannot follow a lockout, a CBA delay or a pandemic
     calendar; pass ``season`` explicitly then.
 
     Of the 79 season defaults in wehoop's ``wnba_stats_*.R`` that call ``most_recent_wnba_season()``,

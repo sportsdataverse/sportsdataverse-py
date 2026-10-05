@@ -64,6 +64,13 @@ _FIRST_ROWS = {
     ("00", "commonplayoffseries"): (4, 18, 1),
     ("20", "commonplayoffseries"): (4, 2, 1),
     ("10", "commonplayoffseries"): (9, 14, 0),
+    # "SeasonType=..." is a season type on any endpoint. All-Star games (leaguegamefinder, 2026-10-05):
+    # NBA 2019-02-17 .. 2024-02-18 (latest 2022-02-20; 2021's 03-07 is the pandemic outlier), WNBA
+    # 2021-07-14 .. 2026-07-25. The G League has none (leaguegamelog 2024-25, 2025-26: 0 rows), so its
+    # All-Star default is its regular season's.
+    ("00", "SeasonType=All Star"): (2, 20, 1),
+    ("10", "SeasonType=All Star"): (7, 25, 0),
+    ("20", "SeasonType=All Star"): (12, 19, 0),
 }
 # The one month in which the newest season has rows but the default is still the previous one.
 _LAG_MONTH = {
@@ -78,6 +85,9 @@ _LAG_MONTH = {
     ("00", "commonplayoffseries"): 4,
     ("20", "commonplayoffseries"): 4,
     ("10", "commonplayoffseries"): 9,
+    ("00", "SeasonType=All Star"): 2,
+    ("10", "SeasonType=All Star"): 7,
+    ("20", "SeasonType=All Star"): 12,
 }
 # Months in which hoopR's current season (``year_to_season(most_recent_nba_season() - 1)``, rolls
 # over in October) or wehoop's ``most_recent_wnba_season()`` (rolls over in May) is a different one.
@@ -98,16 +108,17 @@ def _hoopr_current(league, day):
 @pytest.mark.parametrize("year", [1999, 2008, 2026])
 @pytest.mark.parametrize("kind", list(_FIRST_ROWS), ids=" ".join)
 def test_default_is_the_latest_season_with_rows_every_day(kind, year):
-    league, endpoint = kind
+    league, what = kind
+    endpoint, _, season_type = what.partition("SeasonType=")
     day = date(year, 1, 1)
     while day.year == year:
-        label = _latest_season(league, endpoint, today=day)
+        label = _latest_season(league, endpoint, today=day, season_type=season_type or None)
         start = int(label[:4])
         assert len(label) == (4 if league == "10" or endpoint == "drafthistory" else 7), (day, label)
         assert _first_rows(kind, start) <= day, f"{day}: default {label} has no rows yet"
         if _first_rows(kind, start + 1) <= day:  # a newer season has rows
             assert day.month == _LAG_MONTH[kind], f"{day}: {label} is not the latest with rows"
-        if not endpoint and day.month not in _HOOPR_DIFFERS[league]:
+        if not what and day.month not in _HOOPR_DIFFERS[league]:
             assert label == _hoopr_current(league, day), day
         day += timedelta(days=1)
 
@@ -154,24 +165,29 @@ _SEASON_TYPE_ARGS = [
 ]
 
 
-@pytest.mark.parametrize("season_type", ["Playoffs", "PlayIn"])
+@pytest.mark.parametrize("season_type", ["Playoffs", "PlayIn", "All Star"])
 @pytest.mark.parametrize("fn,arg", _SEASON_TYPE_ARGS, ids=lambda v: getattr(v, "__name__", v))
-def test_playoffs_default_to_playoffs_that_have_been_played(monkeypatch, fn, arg, season_type):
-    monkeypatch.setattr(rt, "date", _on(date(2027, 2, 1)))  # 2026-27 under way, its playoffs not
+def test_season_types_default_to_one_that_has_been_played(monkeypatch, fn, arg, season_type):
+    monkeypatch.setattr(rt, "date", _on(date(2027, 2, 1)))  # 2026-27 under way, its All-Star and playoffs not
     assert _sent(fn)["Season"] == "2026-27"
     assert _sent(fn, **{arg: season_type})["Season"] == "2025-26"
 
 
-def test_playoff_rollover_per_league(monkeypatch):
+def test_season_type_rollover_per_league(monkeypatch):
     monkeypatch.setattr(rt, "date", _on(date(2027, 2, 1)))
     assert _sent(nba_stats.nba_stats_commonplayoffseries)["Season"] == "2025-26"
     assert _sent(nba_stats.nba_stats_commonplayoffseries, league_id="20")["Season"] == "2025-26"
     gleague = {"league_id": "20", "season_type_all_star": "Playoffs"}
     assert _sent(nba_stats.nba_stats_leaguegamelog, **gleague)["Season"] == "2025-26"
+    gleague["season_type_all_star"] = "All Star"  # no G League All-Star rows: its regular rule
+    assert _sent(nba_stats.nba_stats_leaguegamelog, **gleague)["Season"] == "2026-27"
     monkeypatch.setattr(rt, "date", _on(date(2027, 7, 1)))  # WNBA 2027 under way, its playoffs not
     assert _sent(wnba_stats.wnba_stats_commonplayoffseries)["Season"] == "2026"
     assert _sent(wnba_stats.wnba_stats_leaguedashplayerstats)["Season"] == "2027"
     assert _sent(wnba_stats.wnba_stats_leaguedashplayerstats, season_type_all_star="Playoffs")["Season"] == "2026"
+    assert _sent(wnba_stats.wnba_stats_leaguedashplayerstats, season_type_all_star="All Star")["Season"] == "2026"
+    monkeypatch.setattr(rt, "date", _on(date(2027, 8, 1)))  # WNBA 2027 All-Star played
+    assert _sent(wnba_stats.wnba_stats_leaguedashplayerstats, season_type_all_star="All Star")["Season"] == "2027"
 
 
 def test_drafts_default_to_the_latest_draft(monkeypatch):

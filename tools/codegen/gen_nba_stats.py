@@ -235,16 +235,17 @@ _SEASON_DOC = {
         "an NBA season from the November after its late-October tip-off (``2025-26`` until October "
         "2026), a G League season from the January after, a Summer League from its August (July "
         "2026's is ``2026-27``), a draft combine from June, a draft (``drafthistory``, a year) from "
-        "July, and with season type ``Playoffs`` / ``PlayIn`` (or ``commonplayoffseries``) a season "
-        "from the May its playoffs start. A month table cannot follow a lockout or pandemic calendar "
+        "July; with season type ``Playoffs`` / ``PlayIn`` (or ``commonplayoffseries``) a season from "
+        "the May its playoffs start, with ``All Star`` from the March after its February game (the G "
+        "League has no All-Star rows and keeps its own rule). A month table cannot follow a lockout or pandemic calendar "
         "(1998-99, 2011-12, 2020-21): pass a season then. Without one stats.nba.com answers an empty "
         "HTTP 500 or every season summed."
     ),
     "wnba_stats": (
         "Season year, e.g. ``2024``. Defaults at call time to the latest WNBA season that has rows: "
         "the current year from June (``2026`` from June 2026, ``2025`` before), a draft "
-        "(``drafthistory``) from May, and with season type ``Playoffs`` (or ``commonplayoffseries``) "
-        "from October. A month table cannot follow a lockout or pandemic calendar: pass a season "
+        "(``drafthistory``) from May; with season type ``Playoffs`` (or ``commonplayoffseries``) from "
+        "October, with ``All Star`` from the August after its July game. A month table cannot follow a lockout or pandemic calendar: pass a season "
         "then. Without one stats.wnba.com answers an empty HTTP 500 or every season summed."
     ),
 }
