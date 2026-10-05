@@ -8,35 +8,59 @@ Merged to `main` since 0.1.4 and not yet released. Released versions are on the 
 
 ## Unreleased
 
-### Fixed — ESPN basketball pbp: one-provider spreads, team timeouts, MBB double-overtime seconds
+### Fixed — ESPN basketball pbp: one-provider spreads, paired spread signs, team timeouts, MBB double-overtime seconds
 
-Three fixes to `espn_nba_pbp`, `espn_wnba_pbp`, `espn_mbb_pbp` and `espn_wbb_pbp` (and their
-`helper_<lg>_pbp` reprocess path):
+Four fixes to `espn_nba_pbp`, `espn_wnba_pbp`, `espn_mbb_pbp` and `espn_wbb_pbp` (and their
+`helper_<lg>_pbp` reprocess path). The shared logic now lives in one private module,
+`sportsdataverse/_espn_basketball_pbp.py`.
 
 - **The spread from a one-provider pickcenter.** The pickcenter helper read the odds only when
   ESPN listed more than one provider. Modern summaries list one (DraftKings), so every such game
   got the default spread (2.5, home favored, `gameSpreadAvailable=False`). The 2026 men's title
   game (401856600) shipped 2.5 when DraftKings had MICH -6.5. One provider is now enough. A
   pickcenter with no spread (a lone teamrankings record entry) still gets the defaults, and an
-  all-null favorite or over/under column no longer raises.
+  all-null over/under column no longer raises.
+- **The spread and the home favorite come from the same provider.** They used to be taken
+  independently, each as the first non-null value across providers. A record-only teamrankings
+  row has no spread and sorts first, and its favorite flag (False for both teams) was paired
+  with consensus' spread. UNC Asheville, a 17.5-point home favorite (330582427), got a home line
+  of -17.5; it is now +17.5. MIA in NBA 401430219 goes from -4.5 to +4.5. Both now come from the
+  first provider with a spread, and the favorite is the spread's sign (ESPN's spread is the home
+  line). The provider order is now explicit and unchanged: `str(provider.id)`, so teamrankings
+  ("1002") reads ahead of consensus ("1004") and Caesars ("45"). Where teamrankings and consensus
+  disagree, teamrankings matches the winner more often, and an integer sort would move MBB
+  2021-22 to Caesars' line.
 - **Every team timeout.** The timeout flags matched only ESPN's NCAA `ShortTimeOut` type, so the
   NBA/WNBA `timeouts` map was always empty and NCAA full timeouts (`RegularTimeOut`) were
   dropped. The flags now cover `RegularTimeOut`, `ShortTimeOut`, `Full Timeout`, `Short Timeout`,
-  `No Timeout` and `Reset Timeout`. Official and TV timeouts are not charged to a team and stay
-  out. Coach's challenges also stay out: the timeout a challenge costs is the Full Timeout play
-  logged before it. The calling team comes from the play's own `team.id`. The team-name match
-  that used to decide it is now a fallback, because it is a substring test: "PHI" matched
-  "Memphis", so both teams were credited.
+  `No Timeout` and `Reset Timeout`. Official and TV timeouts belong to no team and stay out. The
+  calling team comes from the play's own `team.id`. The team-name match that used to decide it is
+  a fallback for plays without one, and now matches whole words: as a substring test it credited
+  "Memphis" to PHI and "timeout" to ME. The map holds timeouts *called* as ESPN logs them, not
+  timeouts *charged*. A coach's challenge outcome is not applied because ESPN logs the
+  challenge's own timeout too inconsistently: a team timeout precedes 90% of charged and 56% of
+  retained NBA challenges, and about 5% of NCAA ones.
 - **MBB end-of-period seconds in the second and later overtimes.** On the first play of 2OT and
   later, `end.period_seconds_remaining` took the next play's start while
   `end.game_seconds_remaining` was set to 300. Both are now 300, matching the first overtime and
   the other leagues. A bare-seconds MBB clock ("23.4") now parses as 0:23 instead of raising.
 
 `tests/test_basketball_pbp_offline.py` checks each fix against real summaries in
-`tests/fixtures/espn/basketball_pbp/`. A release reprocess is needed to change published data.
-About 9,500 games in the raw stores have a one-provider pickcenter with a spread: MBB about
-5,500 (4,766 of them in 2025-26), NBA 1,070 (2025-26), WBB about 2,000 (mostly 2022-23 and
-2025-26) and WNBA 911 (2020-22 and 2026).
+`tests/fixtures/espn/basketball_pbp/`. The spread does not feed the shipped basketball
+win-probability models, which are ratings-based, so a reprocess changes only the published
+spread columns (`game_spread`, `home_team_spread`, `game_spread_available`, `home_favorite`)
+and the timeout flags. Published data changes only after a release reprocess, and its scope is
+the owner's call:
+
+- **One-provider games only.** About 9,500 games in the raw stores have a one-provider pickcenter
+  with a spread: MBB about 5,500 (4,766 of them in 2025-26), NBA 1,070 (2025-26), WBB about 2,000
+  (mostly 2022-23 and 2025-26) and WNBA 911 (2020-22 and 2026). Add the 128 mixed-row sign
+  games (127 MBB, 107 of them in 2012-13, and NBA 401430219).
+- **Full history.** Older MBB and NBA `final.json` files were built by the pickcenter helper as
+  it stood before August 2023. A full reprocess also changes about 27% of MBB 2013-22
+  multi-provider games (about 13,000; 2.3% change sign, median change 0.5 point) and about 32% of
+  NBA 2013-19 (about 2,900; about 1% change sign). Most changes are improvements: where the
+  signs disagree, the current code matches the winner in MBB 22 of 35 and NBA 12 of 15.
 
 ### Fixed — reference-docs Valid URLs are the URLs the example calls request; summary documents its dict
 
