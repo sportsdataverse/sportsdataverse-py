@@ -162,7 +162,7 @@ defender/shot-clock context tables when `include_context=True`).
 | `player_ids` | `list[int]` |  | Player ids to fetch. |
 | `season` | `str` |  | Season string, e.g. `"2022-23"`. |
 | `league_id` | `str` | `'00'` | `"00"` NBA, `"10"` WNBA, `"20"` G-League. |
-| `include_context` | `bool` | `False` | Also fetch + return the `playerdashptshots` defender/shot-clock context tables. |
+| `include_context` | `bool` | `False` | Also fetch + return the `playerdashptshots` defender/shot-clock context tables, once per player and team his fetched shots came from. |
 | `return_as_pandas` | `bool` | `False` | Return pandas frames instead of polars. |
 
 **Returns**

@@ -237,16 +237,68 @@ now (live sweep through the proxy pool, 2026-10-05; no wrapper went from working
   `teamgamelogs`, `commonteamroster`, `commonallplayers`, `leaguedashplayerstats` and
   `leaguestandingsv3`; `synergyplaytypes`, the draft-combine family, `cumestats*`,
   `videodetailsasset`, `commonplayoffseries` and WNBA `playercompare` need theirs too.
-  These arguments now default to the **previous season**, resolved at call time: `"2025-26"`
-  for NBA, G League and Summer League from October 2026, and `"2025"` for WNBA during 2026
-  (wehoop's own `most_recent_wnba_season() - 1`). The previous season always has data; a
-  current-season default returned empty frames in the preseason. An explicit value, including
-  `""`, is sent as given.
-- **Endpoints that work without a season keep the API's default.** For `drafthistory`,
-  `leaguegamefinder`, `playergamestreakfinder`, `playercareerbycollegerollup` and
-  `shotchartdetail` that default is every season, which a season default would silently narrow.
-  The 30 NBA and 25 WNBA endpoints the sweep measured this way are listed in
-  `tools/codegen/gen_nba_stats.py`.
+  These arguments now default to the **latest season that has rows**, resolved at call time for
+  the league and endpoint asked for:
+  - NBA: from November of the season's first year (`"2025-26"` until October 2026, `"2026-27"`
+    from November 2026).
+  - G League (`league_id="20"`): from the January after it tips off. Its regular season, the
+    default `SeasonType`, starts in late December (2025-26 ran 2025-12-19 to 2026-03-28).
+  - Summer League (`league_id="15"`): from August. stats.nba.com labels a Summer League by its own
+    July, so July 2026's is `"2026-27"`, a season ahead of the NBA label.
+  - Draft combine (`SeasonYear`, read by its leading year: `"2026-27"` is the May 2026 combine),
+    whichever league asks: from June.
+  - `drafthistory` (a year: `"2026"`): from July for the NBA (late-June draft) and from May for the
+    WNBA (mid-April draft).
+  - Playoffs: `commonplayoffseries`, and any endpoint asked for `SeasonType` `"Playoffs"` or
+    `"PlayIn"` (whatever the argument is called: `season_type`, `season_type_all_star`,
+    `season_type_nullable`, `season_type_playoffs`, ...). From May of the season's second year for
+    the NBA and the G League (whose playoffs began 2023-03-28, 2024-04-02, 2025-04-01 and
+    2026-03-31), and from October for the WNBA. Before this, `leaguedashplayerstats(
+    season_type_all_star="Playoffs")` on 2027-02-01 would have asked for 2026-27, five months
+    before those playoffs, and got HTTP 200 with zero rows.
+  - All-Star: any endpoint asked for `SeasonType` `"All Star"`. From March of the season's second
+    year for the NBA (games 2019-02-17 to 2024-02-18, 2021's on 03-07; 2024-25 and 2025-26 have
+    rows too) and from August for the WNBA (2021-07-14 to 2026-07-25). The G League has no
+    All-Star rows, so it keeps its own rule. Before this, an NBA All-Star call from November to
+    mid-February asked for a season whose game had not been played.
+  - WNBA: the current year from June, the previous year before.
+
+  Until a rollover the previous season is sent. It has rows, but for a few weeks after the newest
+  season's first games (late October for the NBA, late December for the G League, July for the
+  Summer League, late May for the WNBA and the combine, late June for the NBA draft, late March to
+  April for the NBA and G League playoffs, September for the WNBA playoffs, late February for the
+  NBA All-Star game, late July for the WNBA's) it is not the newest.
+  The NBA default is hoopR's current season (`year_to_season(most_recent_nba_season() - 1)`)
+  except in October. Of the 79 season defaults in wehoop's `wnba_stats_*.R` that call
+  `most_recent_wnba_season()`, 54 subtract one, a season behind this default in every month but
+  May; 24 do not, the same as this default except in May, when theirs has not tipped off; one
+  subtracts two. An explicit value, including `""`, is sent as given. A fixed month table cannot
+  follow a lockout, a CBA delay or a pandemic calendar (1998-99, 2011-12, 2020-21): pass `season`
+  explicitly then.
+- **No endpoint is exempt from the season default.** The rule: a season argument gets the
+  default iff hoopR (NBA, G League, Summer League) or wehoop (WNBA) gives that endpoint's season a
+  default season in its R signature; an R default of `""` / `NULL` keeps the API's own. An earlier
+  revision of this change exempted 30 NBA and 25 WNBA endpoints because they answer without a
+  season, but that answer is every season summed: `leaguedashteamstats()` returned each franchise
+  since 1996-97 (SuperSonics and Bullets rows, GP up to 2,395). hoopR and wehoop give every one of
+  them a season default (wehoop's deprecated `homepageleaders` / `homepagev2` / `leaderstiles`
+  included), and the three WNBA endpoints wehoop does not wrap (`leaguedashptdefend`,
+  `scheduleleaguev2`, `scheduleleaguev2int`) are per-season, so they take the NBA call like any
+  other. `drafthistory`, `leaguegamefinder` and `playergamestreakfinder` therefore return one
+  season, as in hoopR / wehoop; pass an empty season for all of them (`season_year_nullable=""`
+  for `drafthistory`, `season_nullable=""` for the finders). The catalog had also lost hoopR's
+  season for `scheduleleaguev2` (`nbagl_schedule()`). Only
+  `cumestats*` and NBA `playercompare` keep hoopR's / wehoop's literal season, paired with their
+  literal ids.
+- **`nba_shot_value(include_context=True)` asks for each shooter's own team.** `playerdashptshots`
+  answers HTTP 500 for `TeamID "0"` with a season, so the wrapper's default pins a player with his
+  team, and a context call that passed only `player_id` sent that default team: every other
+  player's context was filtered out. It now passes each (player, team) pair its fetched shots came
+  from; a player traded mid-season gets one context per team.
+- **`SeasonType` is documented as a label.** The stats wrappers inherited ESPN's
+  "1=preseason, 2=regular season, 3=postseason" description by argument name; stats.nba.com
+  answers `SeasonType=3` with HTTP 400. Every `season_type*` argument now lists the labels and
+  the rollover each one sets.
 - **Each league's own ids.** The catalog kept one example per argument and let wehoop's overwrite
   hoopR's, so NBA wrappers defaulted to WNBA games, teams and players. `nba_stats_teaminfocommon()`
   asked for a WNBA team and got HTTP 500, and every NBA box-score wrapper defaulted to a WNBA

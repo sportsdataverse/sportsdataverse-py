@@ -72,7 +72,7 @@ def _now_toggle(ep: spec.Endpoint) -> str:
 def _transform(name: str, module: str = "sportsdataverse._codegen_runtime"):
     """The runtime callable a ``transform:`` names, from the family's getter module.
 
-    A family with its own runtime (``getter_module:``, e.g. nba_stats' ``season_or_previous``)
+    A family with its own runtime (``getter_module:``, e.g. nba_stats' ``season_latest_with_data``)
     imports its transforms from there, so the replay must too; anything else is shared."""
     import importlib
 

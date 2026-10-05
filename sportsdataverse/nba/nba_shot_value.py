@@ -526,7 +526,8 @@ def nba_shot_value(
         season: Season string, e.g. ``"2022-23"``.
         league_id: ``"00"`` NBA, ``"10"`` WNBA, ``"20"`` G-League.
         include_context: Also fetch + return the ``playerdashptshots``
-            defender/shot-clock context tables.
+            defender/shot-clock context tables, once per player and team his
+            fetched shots came from.
         return_as_pandas: Return pandas frames instead of polars.
 
     Returns:
@@ -556,9 +557,23 @@ def nba_shot_value(
         from sportsdataverse.nba.nba_stats_parsers import parse_nba_stats_result_sets  # noqa: PLC0415
 
         rows = []
-        for pid in player_ids:
+        # playerdashptshots needs the player's own team (TeamID "0" with a season is HTTP 500, and the
+        # wrapper's default team belongs to its default player), so ask once per (player, team) the
+        # shots came from: a player traded mid-season has one context per team.
+        wanted = [int(p) for p in player_ids]
+        pairs = (
+            scored.select("player_id", "team_id")
+            .drop_nulls()
+            .filter(pl.col("player_id").is_in(wanted))
+            .unique()
+            .sort("player_id", "team_id")
+            .rows()
+            if {"player_id", "team_id"} <= set(scored.columns)
+            else []
+        )
+        for pid, tid in pairs:
             raw = nba_stats_playerdashptshots(
-                player_id=str(pid), season=season, league_id=league_id, return_parsed=False
+                player_id=str(pid), team_id=str(tid), season=season, league_id=league_id, return_parsed=False
             )
             parsed = parse_nba_stats_result_sets(raw)
             if not isinstance(parsed, dict):

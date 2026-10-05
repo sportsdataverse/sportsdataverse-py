@@ -5,22 +5,32 @@ from __future__ import annotations
 
 from typing import Any, Optional
 
+from sportsdataverse.nba.nba_stats_runtime import _DefaultSeason, _latest_season
 from sportsdataverse.nba.nba_stats_runtime import _get as _nba_get
 from sportsdataverse.nba.nba_stats_runtime import stats_headers
 
-__all__ = ["_get", "season_or_previous", "stats_headers"]
+__all__ = ["_get", "season_latest_with_data", "stats_headers"]
 
 
-def season_or_previous(season: Optional[str]) -> str:
-    """Return ``season`` unchanged, or the previous WNBA season year when it is ``None``.
+def season_latest_with_data(season: Optional[str]) -> str:
+    """Return ``season`` unchanged, or the latest WNBA season that has data when it is ``None``.
 
-    The codegen transform behind every generated ``wnba_stats_*`` season argument that
-    stats.wnba.com needs (it answers a request without one with an empty HTTP 500). The previous
-    season always has data, which a current-season default lacks before a season tips off. It is
-    wehoop's own default, ``most_recent_wnba_season() - 1`` (``"2025"`` during 2026).
+    The codegen transform behind every generated ``wnba_stats_*`` season argument that wehoop gives
+    a season default (stats.wnba.com answers most endpoints without one with an empty HTTP 500,
+    and the rest with every season summed). It resolves per call, so a long-running process rolls
+    over too. The WNBA tips off in mid-May, so the current year is the default from June and the
+    previous year before it (``"2025"`` until May 2026, ``"2026"`` from June 2026). ``drafthistory``
+    rolls over in May, after the mid-April draft; the playoffs (``commonplayoffseries``, or
+    ``SeasonType`` ``"Playoffs"`` on any endpoint) in October, once they have started in
+    mid-September; ``SeasonType`` ``"All Star"`` in August, after the July game. A fixed month table cannot follow a lockout, a CBA delay or a pandemic
+    calendar; pass ``season`` explicitly then.
+
+    Of the 79 season defaults in wehoop's ``wnba_stats_*.R`` that call ``most_recent_wnba_season()``,
+    54 subtract one, a season behind this default in every month but May; 24 do not, the same as
+    this default except in May, when theirs has not tipped off; one subtracts two.
 
     Args:
-        season: The caller's season (e.g. ``"2024"``), or ``None`` for the previous one.
+        season: The caller's season (e.g. ``"2024"``), or ``None`` for the latest one with data.
             An explicit ``""`` is returned as-is.
 
     Returns:
@@ -29,20 +39,16 @@ def season_or_previous(season: Optional[str]) -> str:
     Example:
         Quick start::
 
-            from sportsdataverse.wnba.wnba_stats_runtime import season_or_previous
-            season_or_previous(None)     # e.g. "2025"
-            season_or_previous("2023")   # "2023"
+            from sportsdataverse.wnba.wnba_stats_runtime import season_latest_with_data
+            season_latest_with_data(None)     # "2026" in October 2026
+            season_latest_with_data("2023")   # "2023"
 
         See Also:
             * `wehoop`_ -- the R sister package these defaults are mined from
 
         .. _wehoop: https://wehoop.sportsdataverse.org
     """
-    if season is not None:
-        return season
-    from sportsdataverse.wnba.wnba_schedule import most_recent_wnba_season
-
-    return str(most_recent_wnba_season() - 1)
+    return season if season is not None else _DefaultSeason(_latest_season("10"))
 
 
 def _get(
@@ -66,7 +72,7 @@ def _get(
         path: Bare endpoint name or fully-qualified URL.
         params: Query-string parameters. ``None`` values are stripped;
             ``GameID`` is zero-padded to 10 characters. Season defaults are applied by the
-            generated wrappers (:func:`season_or_previous`), not here.
+            generated wrappers (:func:`season_latest_with_data`), not here.
         host: Target host. Defaults to ``"stats.wnba.com"``.
         **kwargs: Forwarded to :func:`sportsdataverse.nba.nba_stats_runtime._get`
             (``headers``, ``transport``, ``proxy_url``, etc.).

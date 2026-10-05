@@ -1,7 +1,7 @@
 ---
 title: "WNBA — WNBA Stats API (stats.wnba.com) — Schedule"
 sidebar_label: "Schedule"
-sidebar_position: 16
+sidebar_position: 17
 description: "WNBA — WNBA Stats API (stats.wnba.com) — Schedule — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---
@@ -13,12 +13,12 @@ GET /stats/scheduleleaguev2
 
 **Endpoint URL:** `GET https://stats.wnba.com/stats/scheduleleaguev2`
 
-**Valid URL:** [https://stats.wnba.com/stats/scheduleleaguev2?LeagueID=10](https://stats.wnba.com/stats/scheduleleaguev2?LeagueID=10)
+**Valid URL:** [https://stats.wnba.com/stats/scheduleleaguev2?LeagueID=10&Season=2024](https://stats.wnba.com/stats/scheduleleaguev2?LeagueID=10&Season=2024)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 | `LeagueID` | `league_id` |  |  | `Y` |  |
-| `Season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
+| `Season` | `season` |  |  | `Y` | Season year, e.g. ``2024``. Defaults at call time by a calendar cutoff, the month after a season's first games, so it can lag the newest rows by a few weeks. A WNBA season tips off in mid-May and becomes the default in June (``2025`` through May 2026, ``2026`` from June 2026); a draft (``drafthistory``, mid-April) in May. With season type ``Playoffs`` (or ``commonplayoffseries``) the WNBA rolls over in October, after its mid-September playoffs start; with ``All Star`` in August, after the July game. A month table cannot follow a lockout or pandemic calendar: pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or every season summed. |
 
 ### Returns {#wnba_stats_scheduleleaguev2-returns}
 
@@ -84,7 +84,7 @@ GET /stats/scheduleleaguev2
 ### Example {#wnba_stats_scheduleleaguev2-example}
 
 ```python
-wnba_stats_scheduleleaguev2(league_id='10')
+wnba_stats_scheduleleaguev2(league_id='10', season='2024')
 ```
 
 _Last validated n/a._
@@ -95,12 +95,12 @@ GET /stats/scheduleleaguev2int
 
 **Endpoint URL:** `GET https://stats.wnba.com/stats/scheduleleaguev2int`
 
-**Valid URL:** [https://stats.wnba.com/stats/scheduleleaguev2int?LeagueID=10](https://stats.wnba.com/stats/scheduleleaguev2int?LeagueID=10)
+**Valid URL:** [https://stats.wnba.com/stats/scheduleleaguev2int?LeagueID=10&Season=2024](https://stats.wnba.com/stats/scheduleleaguev2int?LeagueID=10&Season=2024)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 | `LeagueID` | `league_id` |  |  | `Y` |  |
-| `Season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
+| `Season` | `season` |  |  | `Y` | Season year, e.g. ``2024``. Defaults at call time by a calendar cutoff, the month after a season's first games, so it can lag the newest rows by a few weeks. A WNBA season tips off in mid-May and becomes the default in June (``2025`` through May 2026, ``2026`` from June 2026); a draft (``drafthistory``, mid-April) in May. With season type ``Playoffs`` (or ``commonplayoffseries``) the WNBA rolls over in October, after its mid-September playoffs start; with ``All Star`` in August, after the July game. A month table cannot follow a lockout or pandemic calendar: pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or every season summed. |
 
 ### Returns {#wnba_stats_scheduleleaguev2int-returns}
 
@@ -166,7 +166,7 @@ GET /stats/scheduleleaguev2int
 ### Example {#wnba_stats_scheduleleaguev2int-example}
 
 ```python
-wnba_stats_scheduleleaguev2int(league_id='10')
+wnba_stats_scheduleleaguev2int(league_id='10', season='2024')
 ```
 
 _Last validated n/a._

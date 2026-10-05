@@ -1,11 +1,11 @@
 ---
-title: "WNBA — WNBA Stats API (stats.wnba.com) — Player: playerawards–playergamestreakfinder"
-sidebar_label: "Player: playerawards–playergamestreakfinder"
-sidebar_position: 8
-description: "WNBA — WNBA Stats API (stats.wnba.com) — Player: playerawards–playergamestreakfinder — function reference in sdv-py, the SportsDataverse Python package."
+title: "WNBA — WNBA Stats API (stats.wnba.com) — Player: playerawards–playergamelogs"
+sidebar_label: "Player: playerawards–playergamelogs"
+sidebar_position: 9
+description: "WNBA — WNBA Stats API (stats.wnba.com) — Player: playerawards–playergamelogs — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---
-# WNBA — WNBA Stats API (stats.wnba.com) — Player: playerawards–playergamestreakfinder
+# WNBA — WNBA Stats API (stats.wnba.com) — Player: playerawards–playergamelogs
 
 ## wnba_stats_playerawards
 
@@ -56,14 +56,14 @@ GET /stats/playercareerbycollegerollup
 
 **Endpoint URL:** `GET https://stats.wnba.com/stats/playercareerbycollegerollup`
 
-**Valid URL:** [https://stats.wnba.com/stats/playercareerbycollegerollup?LeagueID=10&PerMode=Totals&SeasonType=Regular+Season](https://stats.wnba.com/stats/playercareerbycollegerollup?LeagueID=10&PerMode=Totals&SeasonType=Regular+Season)
+**Valid URL:** [https://stats.wnba.com/stats/playercareerbycollegerollup?LeagueID=10&PerMode=Totals&Season=2024&SeasonType=Regular+Season](https://stats.wnba.com/stats/playercareerbycollegerollup?LeagueID=10&PerMode=Totals&Season=2024&SeasonType=Regular+Season)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 | `LeagueID` | `league_id` |  |  | `Y` |  |
 | `PerMode` | `per_mode_simple` |  |  | `Y` |  |
-| `Season` | `season_nullable` |  |  | `Y` |  |
-| `SeasonType` | `season_type_all_star` |  |  | `Y` |  |
+| `Season` | `season_nullable` |  |  | `Y` | Season year, e.g. ``2024``. Defaults at call time by a calendar cutoff, the month after a season's first games, so it can lag the newest rows by a few weeks. A WNBA season tips off in mid-May and becomes the default in June (``2025`` through May 2026, ``2026`` from June 2026); a draft (``drafthistory``, mid-April) in May. With season type ``Playoffs`` (or ``commonplayoffseries``) the WNBA rolls over in October, after its mid-September playoffs start; with ``All Star`` in August, after the July game. A month table cannot follow a lockout or pandemic calendar: pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or every season summed. |
+| `SeasonType` | `season_type_all_star` |  |  | `Y` | Season type, a label: ``Regular Season``, ``Pre Season``, ``Playoffs`` or ``All Star`` (each endpoint takes a subset). Not ESPN's numeric code: ``3`` is HTTP 400. A default season follows it: ``Playoffs`` rolls over in October, ``All Star`` in August. |
 
 ### Returns {#wnba_stats_playercareerbycollegerollup-returns}
 
@@ -190,7 +190,7 @@ GET /stats/playercareerbycollegerollup
 ### Example {#wnba_stats_playercareerbycollegerollup-example}
 
 ```python
-wnba_stats_playercareerbycollegerollup(league_id='10')
+wnba_stats_playercareerbycollegerollup(league_id='10', season_nullable='2024')
 ```
 
 _Last validated n/a._
@@ -652,9 +652,9 @@ GET /stats/playercompare
 | `PlayerIDList` | `player_id_list` |  |  | `Y` |  |
 | `PlusMinus` | `plus_minus` |  |  | `Y` |  |
 | `Rank` | `rank` |  |  | `Y` |  |
-| `Season` | `season` |  |  | `Y` | Season year, e.g. ``2024``. Defaults to the previous WNBA season at call time (``2025`` during 2026), as wehoop does; stats.wnba.com answers a request without a season with an empty HTTP 500. |
+| `Season` | `season` |  |  | `Y` | Season year, e.g. ``2024``. Defaults at call time by a calendar cutoff, the month after a season's first games, so it can lag the newest rows by a few weeks. A WNBA season tips off in mid-May and becomes the default in June (``2025`` through May 2026, ``2026`` from June 2026); a draft (``drafthistory``, mid-April) in May. With season type ``Playoffs`` (or ``commonplayoffseries``) the WNBA rolls over in October, after its mid-September playoffs start; with ``All Star`` in August, after the July game. A month table cannot follow a lockout or pandemic calendar: pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or every season summed. |
 | `SeasonSegment` | `season_segment_nullable` |  |  | `Y` |  |
-| `SeasonType` | `season_type_playoffs` |  |  | `Y` |  |
+| `SeasonType` | `season_type_playoffs` |  |  | `Y` | Season type, a label: ``Regular Season``, ``Pre Season``, ``Playoffs`` or ``All Star`` (each endpoint takes a subset). Not ESPN's numeric code: ``3`` is HTTP 400. A default season follows it: ``Playoffs`` rolls over in October, ``All Star`` in August. |
 | `ShotClockRange` | `shot_clock_range_nullable` |  |  | `Y` |  |
 | `VsConference` | `vs_conference_nullable` |  |  | `Y` |  |
 | `VsDivision` | `vs_division_nullable` |  |  | `Y` |  |
@@ -738,13 +738,13 @@ GET /stats/playerestimatedmetrics
 
 **Endpoint URL:** `GET https://stats.wnba.com/stats/playerestimatedmetrics`
 
-**Valid URL:** [https://stats.wnba.com/stats/playerestimatedmetrics?LeagueID=10&SeasonType=Regular+Season](https://stats.wnba.com/stats/playerestimatedmetrics?LeagueID=10&SeasonType=Regular+Season)
+**Valid URL:** [https://stats.wnba.com/stats/playerestimatedmetrics?LeagueID=10&Season=2024&SeasonType=Regular+Season](https://stats.wnba.com/stats/playerestimatedmetrics?LeagueID=10&Season=2024&SeasonType=Regular+Season)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 | `LeagueID` | `league_id` |  |  | `Y` |  |
-| `Season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
-| `SeasonType` | `season_type` |  |  | `Y` | Season phase: 1=preseason, 2=regular season, 3=postseason. |
+| `Season` | `season` |  |  | `Y` | Season year, e.g. ``2024``. Defaults at call time by a calendar cutoff, the month after a season's first games, so it can lag the newest rows by a few weeks. A WNBA season tips off in mid-May and becomes the default in June (``2025`` through May 2026, ``2026`` from June 2026); a draft (``drafthistory``, mid-April) in May. With season type ``Playoffs`` (or ``commonplayoffseries``) the WNBA rolls over in October, after its mid-September playoffs start; with ``All Star`` in August, after the July game. A month table cannot follow a lockout or pandemic calendar: pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or every season summed. |
+| `SeasonType` | `season_type` |  |  | `Y` | Season type, a label: ``Regular Season``, ``Pre Season``, ``Playoffs`` or ``All Star`` (each endpoint takes a subset). Not ESPN's numeric code: ``3`` is HTTP 400. A default season follows it: ``Playoffs`` rolls over in October, ``All Star`` in August. |
 
 ### Returns {#wnba_stats_playerestimatedmetrics-returns}
 
@@ -790,7 +790,7 @@ GET /stats/playerestimatedmetrics
 ### Example {#wnba_stats_playerestimatedmetrics-example}
 
 ```python
-wnba_stats_playerestimatedmetrics(league_id='10')
+wnba_stats_playerestimatedmetrics(league_id='10', season='2024')
 ```
 
 _Last validated n/a._
@@ -801,7 +801,7 @@ GET /stats/playerfantasyprofile
 
 **Endpoint URL:** `GET https://stats.wnba.com/stats/playerfantasyprofile`
 
-**Valid URL:** [https://stats.wnba.com/stats/playerfantasyprofile?LeagueID=10&MeasureType=Base&PaceAdjust=N&PerMode=Totals&PlayerID=1628932&PlusMinus=N&Rank=N&SeasonType=Regular+Season](https://stats.wnba.com/stats/playerfantasyprofile?LeagueID=10&MeasureType=Base&PaceAdjust=N&PerMode=Totals&PlayerID=1628932&PlusMinus=N&Rank=N&SeasonType=Regular+Season)
+**Valid URL:** [https://stats.wnba.com/stats/playerfantasyprofile?LeagueID=10&MeasureType=Base&PaceAdjust=N&PerMode=Totals&PlayerID=1628932&PlusMinus=N&Rank=N&Season=2024&SeasonType=Regular+Season](https://stats.wnba.com/stats/playerfantasyprofile?LeagueID=10&MeasureType=Base&PaceAdjust=N&PerMode=Totals&PlayerID=1628932&PlusMinus=N&Rank=N&Season=2024&SeasonType=Regular+Season)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -812,8 +812,8 @@ GET /stats/playerfantasyprofile
 | `PlayerID` | `player_id` |  |  | `Y` |  |
 | `PlusMinus` | `plus_minus` |  |  | `Y` |  |
 | `Rank` | `rank` |  |  | `Y` |  |
-| `Season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
-| `SeasonType` | `season_type` |  |  | `Y` | Season phase: 1=preseason, 2=regular season, 3=postseason. |
+| `Season` | `season` |  |  | `Y` | Season year, e.g. ``2024``. Defaults at call time by a calendar cutoff, the month after a season's first games, so it can lag the newest rows by a few weeks. A WNBA season tips off in mid-May and becomes the default in June (``2025`` through May 2026, ``2026`` from June 2026); a draft (``drafthistory``, mid-April) in May. With season type ``Playoffs`` (or ``commonplayoffseries``) the WNBA rolls over in October, after its mid-September playoffs start; with ``All Star`` in August, after the July game. A month table cannot follow a lockout or pandemic calendar: pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or every season summed. |
+| `SeasonType` | `season_type` |  |  | `Y` | Season type, a label: ``Regular Season``, ``Pre Season``, ``Playoffs`` or ``All Star`` (each endpoint takes a subset). Not ESPN's numeric code: ``3`` is HTTP 400. A default season follows it: ``Playoffs`` rolls over in October, ``All Star`` in August. |
 
 ### Returns {#wnba_stats_playerfantasyprofile-returns}
 
@@ -1010,7 +1010,7 @@ GET /stats/playerfantasyprofile
 ### Example {#wnba_stats_playerfantasyprofile-example}
 
 ```python
-wnba_stats_playerfantasyprofile(league_id='10')
+wnba_stats_playerfantasyprofile(league_id='10', season='2024')
 ```
 
 _Last validated n/a._
@@ -1027,8 +1027,8 @@ GET /stats/playerfantasyprofilebargraph
 |---|---|:---:|:---:|:---:|---|
 | `LeagueID` | `league_id` |  |  | `Y` |  |
 | `PlayerID` | `player_id` |  |  | `Y` |  |
-| `Season` | `season` |  |  | `Y` | Season year, e.g. ``2024``. Defaults to the previous WNBA season at call time (``2025`` during 2026), as wehoop does; stats.wnba.com answers a request without a season with an empty HTTP 500. |
-| `SeasonType` | `season_type_all_star_nullable` |  |  | `Y` |  |
+| `Season` | `season` |  |  | `Y` | Season year, e.g. ``2024``. Defaults at call time by a calendar cutoff, the month after a season's first games, so it can lag the newest rows by a few weeks. A WNBA season tips off in mid-May and becomes the default in June (``2025`` through May 2026, ``2026`` from June 2026); a draft (``drafthistory``, mid-April) in May. With season type ``Playoffs`` (or ``commonplayoffseries``) the WNBA rolls over in October, after its mid-September playoffs start; with ``All Star`` in August, after the July game. A month table cannot follow a lockout or pandemic calendar: pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or every season summed. |
+| `SeasonType` | `season_type_all_star_nullable` |  |  | `Y` | Season type, a label: ``Regular Season``, ``Pre Season``, ``Playoffs`` or ``All Star`` (each endpoint takes a subset). Not ESPN's numeric code: ``3`` is HTTP 400. A default season follows it: ``Playoffs`` rolls over in October, ``All Star`` in August. |
 
 ### Returns {#wnba_stats_playerfantasyprofilebargraph-returns}
 
@@ -1098,8 +1098,8 @@ GET /stats/playergamelog
 | `DateTo` | `date_to_nullable` |  |  | `Y` |  |
 | `LeagueID` | `league_id` |  |  | `Y` |  |
 | `PlayerID` | `player_id` |  |  | `Y` |  |
-| `Season` | `season` |  |  | `Y` | Season year, e.g. ``2024``. Defaults to the previous WNBA season at call time (``2025`` during 2026), as wehoop does; stats.wnba.com answers a request without a season with an empty HTTP 500. |
-| `SeasonType` | `season_type_all_star` |  |  | `Y` |  |
+| `Season` | `season` |  |  | `Y` | Season year, e.g. ``2024``. Defaults at call time by a calendar cutoff, the month after a season's first games, so it can lag the newest rows by a few weeks. A WNBA season tips off in mid-May and becomes the default in June (``2025`` through May 2026, ``2026`` from June 2026); a draft (``drafthistory``, mid-April) in May. With season type ``Playoffs`` (or ``commonplayoffseries``) the WNBA rolls over in October, after its mid-September playoffs start; with ``All Star`` in August, after the July game. A month table cannot follow a lockout or pandemic calendar: pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or every season summed. |
+| `SeasonType` | `season_type_all_star` |  |  | `Y` | Season type, a label: ``Regular Season``, ``Pre Season``, ``Playoffs`` or ``All Star`` (each endpoint takes a subset). Not ESPN's numeric code: ``3`` is HTTP 400. A default season follows it: ``Playoffs`` rolls over in October, ``All Star`` in August. |
 
 ### Returns {#wnba_stats_playergamelog-returns}
 
@@ -1169,9 +1169,9 @@ GET /stats/playergamelogs
 | `PerMode` | `per_mode_simple_nullable` |  |  | `Y` |  |
 | `Period` | `period_nullable` |  |  | `Y` |  |
 | `PlayerID` | `player_id_nullable` |  |  | `Y` |  |
-| `Season` | `season_nullable` |  |  | `Y` | Season year, e.g. ``2024``. Defaults to the previous WNBA season at call time (``2025`` during 2026), as wehoop does; stats.wnba.com answers a request without a season with an empty HTTP 500. |
+| `Season` | `season_nullable` |  |  | `Y` | Season year, e.g. ``2024``. Defaults at call time by a calendar cutoff, the month after a season's first games, so it can lag the newest rows by a few weeks. A WNBA season tips off in mid-May and becomes the default in June (``2025`` through May 2026, ``2026`` from June 2026); a draft (``drafthistory``, mid-April) in May. With season type ``Playoffs`` (or ``commonplayoffseries``) the WNBA rolls over in October, after its mid-September playoffs start; with ``All Star`` in August, after the July game. A month table cannot follow a lockout or pandemic calendar: pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or every season summed. |
 | `SeasonSegment` | `season_segment_nullable` |  |  | `Y` |  |
-| `SeasonType` | `season_type_nullable` |  |  | `Y` |  |
+| `SeasonType` | `season_type_nullable` |  |  | `Y` | Season type, a label: ``Regular Season``, ``Pre Season``, ``Playoffs`` or ``All Star`` (each endpoint takes a subset). Not ESPN's numeric code: ``3`` is HTTP 400. A default season follows it: ``Playoffs`` rolls over in October, ``All Star`` in August. |
 | `ShotClockRange` | `shot_clock_range_nullable` |  |  | `Y` |  |
 | `TeamID` | `team_id_nullable` |  |  | `Y` |  |
 | `VsConference` | `vs_conference_nullable` |  |  | `Y` |  |
@@ -1260,132 +1260,6 @@ GET /stats/playergamelogs
 
 ```python
 wnba_stats_playergamelogs(league_id='10', season_nullable='2024')
-```
-
-_Last validated n/a._
-
-## wnba_stats_playergamestreakfinder
-
-GET /stats/playergamestreakfinder
-
-**Endpoint URL:** `GET https://stats.wnba.com/stats/playergamestreakfinder`
-
-**Valid URL:** [https://stats.wnba.com/stats/playergamestreakfinder?ActiveStreaksOnly=&Conference=&DateFrom=&DateTo=&Division=&DraftNumber=&DraftRound=&DraftTeamID=0&DraftYear=&EqAST=&EqBLK=&EqDD=&EqDREB=&EqFG3A=&EqFG3M=&EqFG3_PCT=&EqFGA=&EqFGM=&EqFG_PCT=&EqFTA=&EqFTM=&EqFT_PCT=&EqMINUTES=&EqOREB=&EqPF=&EqPTS=&EqREB=&EqSTL=&EqTD=&EqTOV=&GameID=&GtAST=&GtBLK=&GtDD=&GtDREB=&GtFG3A=&GtFG3M=&GtFG3_PCT=&GtFGA=&GtFGM=&GtFG_PCT=&GtFTA=&GtFTM=&GtFT_PCT=&GtMINUTES=&GtOREB=&GtPF=&GtPTS=&GtREB=&GtSTL=&GtTD=&GtTOV=&LeagueID=10&Location=&LtAST=&LtBLK=&LtDD=&LtDREB=&LtFG3A=&LtFG3M=&LtFG3_PCT=&LtFGA=&LtFGM=&LtFG_PCT=&LtFTA=&LtFTM=&LtFT_PCT=&LtMINUTES=&LtOREB=&LtPF=&LtPTS=&LtREB=&LtSTL=&LtTD=&LtTOV=&MinGames=&Outcome=&PORound=&PlayerID=&RookieYear=&SeasonSegment=&SeasonType=Regular+Season&StarterBench=&TeamID=0&VsConference=&VsDivision=&VsTeamID=0&YearsExperience=](https://stats.wnba.com/stats/playergamestreakfinder?ActiveStreaksOnly=&Conference=&DateFrom=&DateTo=&Division=&DraftNumber=&DraftRound=&DraftTeamID=0&DraftYear=&EqAST=&EqBLK=&EqDD=&EqDREB=&EqFG3A=&EqFG3M=&EqFG3_PCT=&EqFGA=&EqFGM=&EqFG_PCT=&EqFTA=&EqFTM=&EqFT_PCT=&EqMINUTES=&EqOREB=&EqPF=&EqPTS=&EqREB=&EqSTL=&EqTD=&EqTOV=&GameID=&GtAST=&GtBLK=&GtDD=&GtDREB=&GtFG3A=&GtFG3M=&GtFG3_PCT=&GtFGA=&GtFGM=&GtFG_PCT=&GtFTA=&GtFTM=&GtFT_PCT=&GtMINUTES=&GtOREB=&GtPF=&GtPTS=&GtREB=&GtSTL=&GtTD=&GtTOV=&LeagueID=10&Location=&LtAST=&LtBLK=&LtDD=&LtDREB=&LtFG3A=&LtFG3M=&LtFG3_PCT=&LtFGA=&LtFGM=&LtFG_PCT=&LtFTA=&LtFTM=&LtFT_PCT=&LtMINUTES=&LtOREB=&LtPF=&LtPTS=&LtREB=&LtSTL=&LtTD=&LtTOV=&MinGames=&Outcome=&PORound=&PlayerID=&RookieYear=&SeasonSegment=&SeasonType=Regular+Season&StarterBench=&TeamID=0&VsConference=&VsDivision=&VsTeamID=0&YearsExperience=)
-
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-| `ActiveStreaksOnly` | `active_streaks_only_nullable` |  |  | `Y` |  |
-| `Conference` | `conference_nullable` |  |  | `Y` |  |
-| `DateFrom` | `date_from_nullable` |  |  | `Y` |  |
-| `DateTo` | `date_to_nullable` |  |  | `Y` |  |
-| `Division` | `division_simple_nullable` |  |  | `Y` |  |
-| `DraftNumber` | `draft_number_nullable` |  |  | `Y` |  |
-| `DraftRound` | `draft_round_nullable` |  |  | `Y` |  |
-| `DraftTeamID` | `draft_team_id_nullable` |  |  | `Y` |  |
-| `DraftYear` | `draft_year_nullable` |  |  | `Y` |  |
-| `EqAST` | `eq_ast_nullable` |  |  | `Y` |  |
-| `EqBLK` | `eq_blk_nullable` |  |  | `Y` |  |
-| `EqDD` | `eq_dd_nullable` |  |  | `Y` |  |
-| `EqDREB` | `eq_dreb_nullable` |  |  | `Y` |  |
-| `EqFG3A` | `eq_fg3a_nullable` |  |  | `Y` |  |
-| `EqFG3M` | `eq_fg3m_nullable` |  |  | `Y` |  |
-| `EqFG3_PCT` | `eq_fg3_pct_nullable` |  |  | `Y` |  |
-| `EqFGA` | `eq_fga_nullable` |  |  | `Y` |  |
-| `EqFGM` | `eq_fgm_nullable` |  |  | `Y` |  |
-| `EqFG_PCT` | `eq_fg_pct_nullable` |  |  | `Y` |  |
-| `EqFTA` | `eq_fta_nullable` |  |  | `Y` |  |
-| `EqFTM` | `eq_ftm_nullable` |  |  | `Y` |  |
-| `EqFT_PCT` | `eq_ft_pct_nullable` |  |  | `Y` |  |
-| `EqMINUTES` | `eq_minutes_nullable` |  |  | `Y` |  |
-| `EqOREB` | `eq_oreb_nullable` |  |  | `Y` |  |
-| `EqPF` | `eq_pf_nullable` |  |  | `Y` |  |
-| `EqPTS` | `eq_pts_nullable` |  |  | `Y` |  |
-| `EqREB` | `eq_reb_nullable` |  |  | `Y` |  |
-| `EqSTL` | `eq_stl_nullable` |  |  | `Y` |  |
-| `EqTD` | `eq_td_nullable` |  |  | `Y` |  |
-| `EqTOV` | `eq_tov_nullable` |  |  | `Y` |  |
-| `GameID` | `game_id_nullable` |  |  | `Y` |  |
-| `GtAST` | `gt_ast_nullable` |  |  | `Y` |  |
-| `GtBLK` | `gt_blk_nullable` |  |  | `Y` |  |
-| `GtDD` | `gt_dd_nullable` |  |  | `Y` |  |
-| `GtDREB` | `gt_dreb_nullable` |  |  | `Y` |  |
-| `GtFG3A` | `gt_fg3a_nullable` |  |  | `Y` |  |
-| `GtFG3M` | `gt_fg3m_nullable` |  |  | `Y` |  |
-| `GtFG3_PCT` | `gt_fg3_pct_nullable` |  |  | `Y` |  |
-| `GtFGA` | `gt_fga_nullable` |  |  | `Y` |  |
-| `GtFGM` | `gt_fgm_nullable` |  |  | `Y` |  |
-| `GtFG_PCT` | `gt_fg_pct_nullable` |  |  | `Y` |  |
-| `GtFTA` | `gt_fta_nullable` |  |  | `Y` |  |
-| `GtFTM` | `gt_ftm_nullable` |  |  | `Y` |  |
-| `GtFT_PCT` | `gt_ft_pct_nullable` |  |  | `Y` |  |
-| `GtMINUTES` | `gt_minutes_nullable` |  |  | `Y` |  |
-| `GtOREB` | `gt_oreb_nullable` |  |  | `Y` |  |
-| `GtPF` | `gt_pf_nullable` |  |  | `Y` |  |
-| `GtPTS` | `gt_pts_nullable` |  |  | `Y` |  |
-| `GtREB` | `gt_reb_nullable` |  |  | `Y` |  |
-| `GtSTL` | `gt_stl_nullable` |  |  | `Y` |  |
-| `GtTD` | `gt_td_nullable` |  |  | `Y` |  |
-| `GtTOV` | `gt_tov_nullable` |  |  | `Y` |  |
-| `LeagueID` | `league_id` |  |  | `Y` |  |
-| `Location` | `location_nullable` |  |  | `Y` |  |
-| `LtAST` | `lt_ast_nullable` |  |  | `Y` |  |
-| `LtBLK` | `lt_blk_nullable` |  |  | `Y` |  |
-| `LtDD` | `lt_dd_nullable` |  |  | `Y` |  |
-| `LtDREB` | `lt_dreb_nullable` |  |  | `Y` |  |
-| `LtFG3A` | `lt_fg3a_nullable` |  |  | `Y` |  |
-| `LtFG3M` | `lt_fg3m_nullable` |  |  | `Y` |  |
-| `LtFG3_PCT` | `lt_fg3_pct_nullable` |  |  | `Y` |  |
-| `LtFGA` | `lt_fga_nullable` |  |  | `Y` |  |
-| `LtFGM` | `lt_fgm_nullable` |  |  | `Y` |  |
-| `LtFG_PCT` | `lt_fg_pct_nullable` |  |  | `Y` |  |
-| `LtFTA` | `lt_fta_nullable` |  |  | `Y` |  |
-| `LtFTM` | `lt_ftm_nullable` |  |  | `Y` |  |
-| `LtFT_PCT` | `lt_ft_pct_nullable` |  |  | `Y` |  |
-| `LtMINUTES` | `lt_minutes_nullable` |  |  | `Y` |  |
-| `LtOREB` | `lt_oreb_nullable` |  |  | `Y` |  |
-| `LtPF` | `lt_pf_nullable` |  |  | `Y` |  |
-| `LtPTS` | `lt_pts_nullable` |  |  | `Y` |  |
-| `LtREB` | `lt_reb_nullable` |  |  | `Y` |  |
-| `LtSTL` | `lt_stl_nullable` |  |  | `Y` |  |
-| `LtTD` | `lt_td_nullable` |  |  | `Y` |  |
-| `LtTOV` | `lt_tov_nullable` |  |  | `Y` |  |
-| `MinGames` | `min_games_nullable` |  |  | `Y` |  |
-| `Outcome` | `outcome_nullable` |  |  | `Y` |  |
-| `PORound` | `po_round_nullable` |  |  | `Y` |  |
-| `PlayerID` | `player_id_nullable` |  |  | `Y` |  |
-| `RookieYear` | `rookie_year_nullable` |  |  | `Y` |  |
-| `Season` | `season_nullable` |  |  | `Y` |  |
-| `SeasonSegment` | `season_segment_nullable` |  |  | `Y` |  |
-| `SeasonType` | `season_type_nullable` |  |  | `Y` |  |
-| `StarterBench` | `starter_bench_nullable` |  |  | `Y` |  |
-| `TeamID` | `team_id_nullable` |  |  | `Y` |  |
-| `VsConference` | `vs_conference_nullable` |  |  | `Y` |  |
-| `VsDivision` | `vs_division_nullable` |  |  | `Y` |  |
-| `VsTeamID` | `vs_team_id_nullable` |  |  | `Y` |  |
-| `YearsExperience` | `years_experience_nullable` |  |  | `Y` |  |
-
-### Returns {#wnba_stats_playergamestreakfinder-returns}
-
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
-
-| col_name | type | description |
-|---|---|---|
-| `player_name_last_first` | character | Player display name formatted as Last, First for sorting in NBA or WNBA Stats tables. |
-| `player_id` | integer | Unique player identifier. |
-| `gamestreak` | integer | NBA or WNBA Stats value for gamestreak in the playergamestreakfinder result set. |
-| `startdate` | character | Date or timestamp for startdate in the NBA or WNBA Stats result set. |
-| `enddate` | character | Date or timestamp for enddate in the NBA or WNBA Stats result set. |
-| `activestreak` | integer | NBA or WNBA Stats value for activestreak in the playergamestreakfinder result set. |
-| `numseasons` | integer | NBA or WNBA Stats value for numseasons in the playergamestreakfinder result set. |
-| `lastseason` | character | NBA or WNBA Stats value for lastseason in the playergamestreakfinder result set. |
-| `firstseason` | character | NBA or WNBA Stats value for firstseason in the playergamestreakfinder result set. |
-
-**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
-
-### Example {#wnba_stats_playergamestreakfinder-example}
-
-```python
-wnba_stats_playergamestreakfinder(league_id='10')
 ```
 
 _Last validated n/a._

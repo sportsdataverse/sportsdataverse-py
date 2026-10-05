@@ -1,7 +1,7 @@
 ---
 title: "NBA — NBA Stats API (stats.nba.com) — Scoreboard"
 sidebar_label: "Scoreboard"
-sidebar_position: 19
+sidebar_position: 20
 description: "NBA — NBA Stats API (stats.nba.com) — Scoreboard — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---
