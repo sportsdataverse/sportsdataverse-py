@@ -11,7 +11,7 @@
   - [Project Structure](#project-structure)
   - [ESPN Cross-League Architecture (0.0.51+)](#espn-cross-league-architecture-0051)
   - [Parser Layer (0.0.51+)](#parser-layer-0051)
-    - [`return_parsed=True` dispatch shim](#return_parsedtrue-dispatch-shim)
+    - [`return_parsed` parameter](#return_parsed-parameter)
     - [Summary dispatcher (21 sub-frames)](#summary-dispatcher-21-sub-frames)
     - [Test fixtures (89 captures across 6 directories)](#test-fixtures-89-captures-across-6-directories)
     - [Test infrastructure summary](#test-infrastructure-summary)
@@ -165,7 +165,7 @@ sportsdataverse/
     cfb_play_participants.py  # ESPN per-play participants -> {type}_player_name/_id pivot
     cfb_loaders.py, cfb_schedule.py, cfb_teams.py, cfb_game_rosters.py, models/
   mbb/        # Men's college basketball
-  mlb/        # MLB (mlbam endpoints + retrosheet/retrosplits)
+  mlb/        # MLB (Statcast / Baseball Savant + stats API)
   nba/        # NBA
   nfl/        # NFL — nflreadpy-parity surface
     nfl_loaders.py    # 24 canonical load_nfl_* + 11 deprecated per-type aliases
@@ -254,8 +254,8 @@ leagues = **819 wrappers**.
 
 ## Parser Layer (0.0.51+)
 
-Every wrapper returns raw `Dict` by default. The parser layer turns
-those payloads into tidy polars / pandas DataFrames. **Six parser
+Wrappers default to `return_parsed=True` and return tidy polars / pandas
+DataFrames. The parser layer turns raw payloads into those frames. **Six parser
 modules**, one per data surface:
 
 | Module | Surface | Parsers |
@@ -279,24 +279,22 @@ modules**, one per data surface:
   to polars at the end. List-valued cells are stringified so polars
   accepts the frame.
 
-### `return_parsed=True` dispatch shim
+### `return_parsed` parameter
 
 ESPN cross-league wrappers whose `short` name is registered in
-`ENDPOINT_PARSERS` accept an optional `return_parsed=True` kwarg
-that routes the raw payload through the registered parser:
+`ENDPOINT_PARSERS` accept a `return_parsed` parameter (defaults to `True`)
+that controls whether the raw payload is parsed into tidy frames:
 
 ```python
 from sportsdataverse.nba import espn_nba_team_roster
 
-raw = espn_nba_team_roster(team_id=13)                          # → Dict
-df  = espn_nba_team_roster(team_id=13, return_parsed=True)      # → polars
-pdf = espn_nba_team_roster(team_id=13, return_parsed=True,
-                            return_as_pandas=True)              # → pandas
+df  = espn_nba_team_roster(team_id=13)                          # → polars (default)
+pdf = espn_nba_team_roster(team_id=13, return_as_pandas=True)   # → pandas (default parsed)
+raw = espn_nba_team_roster(team_id=13, return_parsed=False)     # → Dict (raw)
 ```
 
-The shim is **strictly additive** — every existing caller continues
-to get raw `Dict` when the kwarg is omitted. NHL / MLB sibling-API
-wrappers compose with their parser explicitly:
+By default, callers get tidy polars DataFrames. Pass `return_parsed=False` for
+the raw payload. NHL / MLB sibling-API wrappers compose with their parser explicitly:
 
 ```python
 from sportsdataverse.nhl import nhl_web_pbp, parse_nhl_web_pbp
@@ -1197,8 +1195,8 @@ the wrappers, via the codegen CLI:
   new endpoints surface with no sidebar edit. Verify with
   `cd docs && yarn build` (broken-link warnings are confined to the frozen
   `0.0.50` version + CHANGELOG doctoc fragments).
-- **Deploy & versioning:** the site builds on **Vercel** (auto-deploy on push to
-  `main`; no in-repo deploy workflow — a GitHub Pages action would double-publish).
+- **Deploy & versioning:** the site is built on GitHub Actions (`docs-deploy.yml`) and
+  published to the `gh-pages` branch, which Vercel serves at py.sportsdataverse.org.
   The unversioned `docs/docs/` tree is the live DEFAULT at the root URL
   (`lastVersion: 'current'`, labelled `main`), so the published docs always track
   the code. At **each release**, freeze a per-release archive:
