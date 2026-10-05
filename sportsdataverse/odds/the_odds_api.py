@@ -101,8 +101,8 @@ def _toa_get(path: str, params: Optional[Dict] = None, api_key: Optional[str] = 
     Raises:
         NoDataError: The API answered 404.
         AssetFetchError: Any other non-2xx answer -- a rejected key (401), spent
-            quota (429), or a 5xx that outlived the retries. Its error body is not
-            data, so it never reaches a parser.
+            quota (429), or a 5xx that outlived the retries -- or a 2xx whose body
+            is not JSON. Its error body is not data, so it never reaches a parser.
     """
     merged = {"apiKey": _toa_key(api_key)}
     merged.update({k: v for k, v in (params or {}).items() if v is not None})
@@ -122,7 +122,12 @@ def _toa_get(path: str, params: Optional[Dict] = None, api_key: Optional[str] = 
         pass
     if not 200 <= resp.status_code < 300:
         raise AssetFetchError(f"The Odds API /v4/{path} answered HTTP {resp.status_code}: {(resp.text or '')[:200]}")
-    return resp.json()
+    try:
+        return resp.json()
+    except ValueError:  # requests' JSONDecodeError; the decoder's own text adds nothing
+        raise AssetFetchError(
+            f"The Odds API /v4/{path} answered HTTP {resp.status_code} with a non-JSON body: {(resp.text or '')[:200]}"
+        ) from None
 
 
 def toa_usage(return_as_pandas: bool = False) -> DataFrameT:

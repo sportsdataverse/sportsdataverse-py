@@ -209,6 +209,13 @@ def test_non_2xx_is_a_failed_fetch_not_data(monkeypatch, status):
     assert toa._USAGE["requests_remaining"] == 0  # the quota headers are still read
 
 
+def test_non_json_200_is_a_failed_fetch(monkeypatch):
+    _serve(monkeypatch, 200, "<html>down for maintenance</html>")
+    with pytest.raises(AssetFetchError, match="non-JSON body: <html>down for maintenance") as ei:
+        toa.toa_sports(return_parsed=False)
+    assert ei.value.__cause__ is None and ei.value.__suppress_context__
+
+
 def test_404_is_no_data(monkeypatch):
     _serve(monkeypatch, 404, '{"message": "Unknown sport"}')
     with pytest.raises(NoDataError):

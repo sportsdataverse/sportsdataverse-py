@@ -1246,6 +1246,12 @@ def cfb_odds_events_crosswalk(
         ``espn_game_id``, ``home_team``, ``away_team``, ``commence_time``,
         ``espn_date``, ``matched_sources``.
 
+    Raises:
+        NoDataError: The Odds API answered 404 (e.g. an unknown ``sport``).
+        AssetFetchError: The Odds API answered any other non-2xx status (a
+            rejected key, spent quota, a 5xx that outlived the retries) or a
+            non-JSON body. Its error body used to be parsed as an event list.
+
     Example:
         Map Odds API events to ESPN game ids for week 5::
 
