@@ -1,0 +1,15 @@
+{
+  "$schema": "https://context7.com/schema/context7.json",
+  "projectTitle": "sportsdataverse-py",
+  "description": "SportsDataverse Python package: load_* readers for released sports datasets and wrappers for ESPN, stats.nba.com, Baseball Savant, NHL and other APIs, returning polars DataFrames.",
+  "folders": ["docs/docs"],
+  "excludeFiles": ["CLAUDE.md", "CHANGELOG.md", "docs_instructions.md"],
+  "rules": [
+    "Import functions from the league submodule, e.g. `from sportsdataverse.nba import espn_nba_team_roster`.",
+    "Functions return a polars DataFrame by default; pass `return_as_pandas=True` to get pandas.",
+    "For historical data prefer the `load_<league>_*` loaders, which read pre-built datasets from sportsdataverse-data GitHub releases; most take `seasons` (an int or a list of ints).",
+    "Live-API wrappers (`espn_<league>_*`, `nba_stats_*`, `mlb_statcast_*`) return tidy frames by default; pass `return_parsed=False` for the raw JSON payload.",
+    "`NoDataError` means the request succeeded and there is no data; `AssetFetchError` means the request failed (403, rate limit, retries exhausted). Both live in `sportsdataverse.errors`.",
+    "`nba_stats_*` and `wnba_stats_*` need `curl_cffi` (`pip install sportsdataverse[all]`); stats.nba.com often hangs from cloud or datacenter IPs."
+  ]
+}
