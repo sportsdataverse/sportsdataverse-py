@@ -1,0 +1,284 @@
+{
+  "SiteKit": {
+    "Parameters": {
+      "feed": "modulekit",
+      "key": "REDACTED",
+      "client_code": "mhl",
+      "site_id": "0",
+      "lang": "en",
+      "view": "seasons",
+      "lang_id": 1,
+      "league_id": "1",
+      "season_id": "46"
+    },
+    "Seasons": [
+      {
+        "season_id": "46",
+        "season_name": "2026-27 MHL Regular Season",
+        "shortname": "2026-27 RS",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2026-09-10",
+        "end_date": "2027-03-07"
+      },
+      {
+        "season_id": "45",
+        "season_name": "2026-27 MHL Exhibition Season",
+        "shortname": "2026-27 Exhibition",
+        "career": "0",
+        "playoff": "0",
+        "start_date": "2026-06-01",
+        "end_date": "2026-09-08"
+      },
+      {
+        "season_id": "44",
+        "season_name": "2026 MetalFab MHL Cup Playoffs",
+        "shortname": "2026 Playoffs",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "2026-03-09",
+        "end_date": "2026-05-04"
+      },
+      {
+        "season_id": "43",
+        "season_name": "2025 All-Star Game",
+        "shortname": "2025 ASG",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "2025-12-09",
+        "end_date": "2025-12-11"
+      },
+      {
+        "season_id": "42",
+        "season_name": "2025 East Coast Prospects Game",
+        "shortname": "2025 ECPG",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "2025-11-05",
+        "end_date": "2025-11-05"
+      },
+      {
+        "season_id": "41",
+        "season_name": "2025-26 MHL Regular Season",
+        "shortname": "2025-26 RS",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2025-09-09",
+        "end_date": "2026-03-09"
+      },
+      {
+        "season_id": "40",
+        "season_name": "2025-26 MHL Exhibition Season",
+        "shortname": "2025-26 EX",
+        "career": "0",
+        "playoff": "0",
+        "start_date": "2025-06-01",
+        "end_date": "2025-09-08"
+      },
+      {
+        "season_id": "39",
+        "season_name": "2025 MetalFab MHL Cup Playoffs",
+        "shortname": "2025 Playoffs",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "2025-03-13",
+        "end_date": "2025-05-31"
+      },
+      {
+        "season_id": "38",
+        "season_name": "2025 All Star Game",
+        "shortname": "2025 All Star Game",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "2025-02-11",
+        "end_date": "2025-02-12"
+      },
+      {
+        "season_id": "37",
+        "season_name": "2024-25 MHL Regular Season",
+        "shortname": "2024-25 MHL RS",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2024-09-11",
+        "end_date": "2025-03-10"
+      },
+      {
+        "season_id": "36",
+        "season_name": "2024-25 MHL Exhibition Season",
+        "shortname": "2024-25 ES",
+        "career": "0",
+        "playoff": "0",
+        "start_date": "2024-06-01",
+        "end_date": "2024-09-09"
+      },
+      {
+        "season_id": "35",
+        "season_name": "2024 MetalFab MHL Cup Playoffs",
+        "shortname": "2024 Playoffs",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "2024-03-12",
+        "end_date": "2024-05-04"
+      },
+      {
+        "season_id": "34",
+        "season_name": "2023-24 MHL Regular Season",
+        "shortname": "2023-24 MHL RS",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2023-09-13",
+        "end_date": "2024-03-10"
+      },
+      {
+        "season_id": "33",
+        "season_name": "2023-24 MHL Exhibition Season",
+        "shortname": "2023-24 MHL ES",
+        "career": "0",
+        "playoff": "0",
+        "start_date": "2023-06-01",
+        "end_date": "2023-09-10"
+      },
+      {
+        "season_id": "32",
+        "season_name": "2023 MetalFab MHL Cup Playoffs",
+        "shortname": "2023 Playoffs",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "2023-03-14",
+        "end_date": "2023-05-20"
+      },
+      {
+        "season_id": "30",
+        "season_name": "2022-23 MHL Regular Season",
+        "shortname": "2022-23 RS",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2022-09-15",
+        "end_date": "2023-03-13"
+      },
+      {
+        "season_id": "31",
+        "season_name": "2022-23 MHL Exhibition Season",
+        "shortname": "2022-23 ES",
+        "career": "0",
+        "playoff": "0",
+        "start_date": "2022-08-24",
+        "end_date": "2022-09-14"
+      },
+      {
+        "season_id": "29",
+        "season_name": "2022 Canadian Tire Cup Playoffs",
+        "shortname": "2022 CTC Playoffs",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "2022-03-24",
+        "end_date": "2022-05-08"
+      },
+      {
+        "season_id": "28",
+        "season_name": "2021-22 MHL Regular Season",
+        "shortname": "2021-22 RS",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2021-09-30",
+        "end_date": "2022-03-22"
+      },
+      {
+        "season_id": "27",
+        "season_name": "2021-22 MHL Exhibition Season",
+        "shortname": "2021-22 Ex",
+        "career": "0",
+        "playoff": "0",
+        "start_date": "2021-09-03",
+        "end_date": "2021-09-29"
+      },
+      {
+        "season_id": "26",
+        "season_name": "2021 Canadian Tire Cup Playoffs",
+        "shortname": "2021 CTC",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "2021-04-23",
+        "end_date": "2021-05-31"
+      },
+      {
+        "season_id": "25",
+        "season_name": "2020-21 MHL Round Robin Play In",
+        "shortname": "2020-21 RRPI",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "2021-04-14",
+        "end_date": "2021-05-04"
+      },
+      {
+        "season_id": "23",
+        "season_name": "2020-21 MHL Regular Season",
+        "shortname": "2020-21 RS",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2020-10-30",
+        "end_date": "2021-04-14"
+      },
+      {
+        "season_id": "24",
+        "season_name": "2020-21 MHL Exhibition Season",
+        "shortname": "2020-21 Ex",
+        "career": "0",
+        "playoff": "0",
+        "start_date": "2020-08-20",
+        "end_date": "2020-10-26"
+      },
+      {
+        "season_id": "21",
+        "season_name": "2019-20 MHL Regular Season",
+        "shortname": "2019-20 RS",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2019-09-12",
+        "end_date": "2020-03-09"
+      },
+      {
+        "season_id": "20",
+        "season_name": "2019-20 MHL Exhibition Season",
+        "shortname": "2019-20 Ex",
+        "career": "0",
+        "playoff": "0",
+        "start_date": "2019-08-26",
+        "end_date": "2019-09-11"
+      },
+      {
+        "season_id": "4",
+        "season_name": "2019 Canadian Tire Cup Playoffs",
+        "shortname": "2019 Playoffs",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "2019-03-11",
+        "end_date": "2019-04-28"
+      },
+      {
+        "season_id": "2",
+        "season_name": "2018-19 MHL Regular Season",
+        "shortname": "2018-19",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2018-09-13",
+        "end_date": "2019-03-10"
+      },
+      {
+        "season_id": "3",
+        "season_name": "2018-19 MHL Exhibition Season",
+        "shortname": "2018-19",
+        "career": "0",
+        "playoff": "0",
+        "start_date": "2018-08-28",
+        "end_date": "2018-09-12"
+      }
+    ],
+    "Copyright": {
+      "required_copyright": "Official statistics provided by Maritime Hockey League",
+      "required_link": "http://leaguestat.com",
+      "powered_by": "Powered by HockeyTech.com",
+      "powered_by_url": "http://hockeytech.com"
+    }
+  }
+}

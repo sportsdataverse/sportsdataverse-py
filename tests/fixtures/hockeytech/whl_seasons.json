@@ -1,0 +1,743 @@
+{
+  "SiteKit": {
+    "Parameters": {
+      "feed": "modulekit",
+      "key": "REDACTED",
+      "client_code": "whl",
+      "site_id": "0",
+      "lang": "en",
+      "view": "seasons",
+      "lang_id": 1,
+      "league_id": "26",
+      "season_id": "295"
+    },
+    "Seasons": [
+      {
+        "season_id": "295",
+        "season_name": "2026 - 27 Regular Season",
+        "shortname": "26 - 27 Reg",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2026-09-18",
+        "end_date": "2027-03-28"
+      },
+      {
+        "season_id": "294",
+        "season_name": "2026 - 27 Pre-Season",
+        "shortname": "26 - 27 Pre",
+        "career": "0",
+        "playoff": "0",
+        "start_date": "2026-08-30",
+        "end_date": "2026-09-13"
+      },
+      {
+        "season_id": "293",
+        "season_name": "2026 WHL Playoffs",
+        "shortname": "'26 Playoffs",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "2026-03-27",
+        "end_date": "2026-05-18"
+      },
+      {
+        "season_id": "292",
+        "season_name": "WHL Prospects Game 2026",
+        "shortname": "WHL Prospect 26",
+        "career": "0",
+        "playoff": "0",
+        "start_date": "2026-02-17",
+        "end_date": "2026-02-19"
+      },
+      {
+        "season_id": "289",
+        "season_name": "2025 - 26 Regular Season",
+        "shortname": "25 - 26 Reg",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2025-09-18",
+        "end_date": "2026-03-25"
+      },
+      {
+        "season_id": "290",
+        "season_name": "2025 - 26 Pre-Season",
+        "shortname": "25 - 26 Pre",
+        "career": "0",
+        "playoff": "0",
+        "start_date": "2025-08-31",
+        "end_date": "2025-09-16"
+      },
+      {
+        "season_id": "288",
+        "season_name": "2025 WHL Playoffs",
+        "shortname": "'25 Playoffs",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "2025-03-28",
+        "end_date": "2025-05-19"
+      },
+      {
+        "season_id": "285",
+        "season_name": "2024 - 25 Regular Season",
+        "shortname": "24 - 25 Reg",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2024-09-20",
+        "end_date": "2025-03-26"
+      },
+      {
+        "season_id": "286",
+        "season_name": "2024 - 25 Pre-Season",
+        "shortname": "24 - 25 Pre",
+        "career": "0",
+        "playoff": "0",
+        "start_date": "2024-09-03",
+        "end_date": "2024-09-18"
+      },
+      {
+        "season_id": "284",
+        "season_name": "2024 WHL Playoffs",
+        "shortname": "'24 Playoffs",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "2024-03-28",
+        "end_date": "2024-05-20"
+      },
+      {
+        "season_id": "281",
+        "season_name": "2023 - 24 Regular Season",
+        "shortname": "23 - 24 Reg",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2023-09-22",
+        "end_date": "2024-03-26"
+      },
+      {
+        "season_id": "282",
+        "season_name": "2023 - 24 Pre-Season",
+        "shortname": "23 - 24 Pre",
+        "career": "0",
+        "playoff": "0",
+        "start_date": "2023-09-04",
+        "end_date": "2023-09-18"
+      },
+      {
+        "season_id": "280",
+        "season_name": "2023 WHL Playoffs",
+        "shortname": "'23 Playoffs",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "2023-03-31",
+        "end_date": "2023-05-22"
+      },
+      {
+        "season_id": "279",
+        "season_name": "2022 - 23 Regular Season",
+        "shortname": "22 - 23 Reg",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2022-09-23",
+        "end_date": "2023-03-27"
+      },
+      {
+        "season_id": "278",
+        "season_name": "2022 - 23 Pre-Season",
+        "shortname": "22 - 23 Pre",
+        "career": "0",
+        "playoff": "0",
+        "start_date": "2022-09-06",
+        "end_date": "2022-09-19"
+      },
+      {
+        "season_id": "277",
+        "season_name": "2022 WHL Playoffs",
+        "shortname": "'22 Playoffs",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "2022-04-21",
+        "end_date": "2022-06-14"
+      },
+      {
+        "season_id": "275",
+        "season_name": "2021 - 22 Regular Season",
+        "shortname": "21 - 22 Reg",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2021-10-01",
+        "end_date": "2022-04-15"
+      },
+      {
+        "season_id": "274",
+        "season_name": "2021 Pre Season",
+        "shortname": "2021 Pre",
+        "career": "0",
+        "playoff": "0",
+        "start_date": "2021-09-10",
+        "end_date": "2021-09-25"
+      },
+      {
+        "season_id": "273",
+        "season_name": "2020 - 21 Regular Season",
+        "shortname": "20 - 21 Reg",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2021-02-26",
+        "end_date": "2021-05-31"
+      },
+      {
+        "season_id": "270",
+        "season_name": "2019 - 20 Regular Season",
+        "shortname": "19 - 20 Reg",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2019-09-20",
+        "end_date": "2020-03-22"
+      },
+      {
+        "season_id": "269",
+        "season_name": "2019 Pre Season",
+        "shortname": "2019 Pre",
+        "career": "0",
+        "playoff": "0",
+        "start_date": "2019-08-27",
+        "end_date": "2019-09-15"
+      },
+      {
+        "season_id": "267",
+        "season_name": "2019 WHL Playoffs",
+        "shortname": "19 Playoffs",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "2019-03-22",
+        "end_date": "2019-05-13"
+      },
+      {
+        "season_id": "268",
+        "season_name": "19 Tie Break",
+        "shortname": "19 TB",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2019-03-19",
+        "end_date": "2019-03-20"
+      },
+      {
+        "season_id": "266",
+        "season_name": "2018 - 19 Regular Season",
+        "shortname": "18 - 19 Reg",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2018-09-21",
+        "end_date": "2019-03-19"
+      },
+      {
+        "season_id": "265",
+        "season_name": "2018 Pre Season",
+        "shortname": "2018 Pre",
+        "career": "0",
+        "playoff": "0",
+        "start_date": "2018-08-30",
+        "end_date": "2018-09-16"
+      },
+      {
+        "season_id": "264",
+        "season_name": "2018 WHL Playoffs",
+        "shortname": "18 Playoffs",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "2018-03-22",
+        "end_date": "2018-05-14"
+      },
+      {
+        "season_id": "262",
+        "season_name": "2017 - 18 Regular Season",
+        "shortname": "17 - 18 Reg",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2017-09-22",
+        "end_date": "2018-03-18"
+      },
+      {
+        "season_id": "261",
+        "season_name": "2017 Pre Season",
+        "shortname": "2017 Pre",
+        "career": "0",
+        "playoff": "0",
+        "start_date": "2017-08-29",
+        "end_date": "2017-09-17"
+      },
+      {
+        "season_id": "260",
+        "season_name": "2017 WHL Playoffs",
+        "shortname": "17 Playoffs",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "2017-03-24",
+        "end_date": "2017-05-15"
+      },
+      {
+        "season_id": "257",
+        "season_name": "2016 - 17 Regular Season",
+        "shortname": "16 - 17 Reg",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2016-09-23",
+        "end_date": "2017-03-19"
+      },
+      {
+        "season_id": "256",
+        "season_name": "2016 Pre Season",
+        "shortname": "2016 Pre",
+        "career": "0",
+        "playoff": "0",
+        "start_date": "2016-08-30",
+        "end_date": "2016-09-17"
+      },
+      {
+        "season_id": "255",
+        "season_name": "16 Tie Break",
+        "shortname": "16 TB",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2016-03-22",
+        "end_date": "2016-03-23"
+      },
+      {
+        "season_id": "254",
+        "season_name": "2016 WHL Playoffs",
+        "shortname": "2016Playoffs",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "2016-03-21",
+        "end_date": "2016-05-18"
+      },
+      {
+        "season_id": "251",
+        "season_name": "2015-16 Regular Season",
+        "shortname": "15-16 Reg",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2015-09-24",
+        "end_date": "2016-03-20"
+      },
+      {
+        "season_id": "252",
+        "season_name": "2015 Preseason",
+        "shortname": "2015 Pre",
+        "career": "0",
+        "playoff": "0",
+        "start_date": "2015-09-01",
+        "end_date": "2015-09-19"
+      },
+      {
+        "season_id": "250",
+        "season_name": "2015 WHL Playoffs",
+        "shortname": "15 Playoffs",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "2015-03-26",
+        "end_date": "2015-05-20"
+      },
+      {
+        "season_id": "249",
+        "season_name": "2014-15 Regular Season",
+        "shortname": "14-15 Reg",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2014-09-18",
+        "end_date": "2015-03-23"
+      },
+      {
+        "season_id": "248",
+        "season_name": "2014 Preseason",
+        "shortname": "2014 Pre",
+        "career": "0",
+        "playoff": "0",
+        "start_date": "2014-08-24",
+        "end_date": "2014-09-15"
+      },
+      {
+        "season_id": "246",
+        "season_name": "2014 WHL Playoffs",
+        "shortname": "14 Playoffs",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "2014-03-20",
+        "end_date": "2014-05-15"
+      },
+      {
+        "season_id": "247",
+        "season_name": "2014 Tie-Break",
+        "shortname": "14 Tie-break",
+        "career": "0",
+        "playoff": "1",
+        "start_date": "2014-03-18",
+        "end_date": "2014-03-19"
+      },
+      {
+        "season_id": "245",
+        "season_name": "2013-14 Regular Season",
+        "shortname": "13-14",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2013-09-18",
+        "end_date": "2014-03-17"
+      },
+      {
+        "season_id": "244",
+        "season_name": "2013 WHL Preseason",
+        "shortname": "13 Preseason",
+        "career": "0",
+        "playoff": "0",
+        "start_date": "2013-08-26",
+        "end_date": "2013-09-16"
+      },
+      {
+        "season_id": "243",
+        "season_name": "2013 WHL Playoffs",
+        "shortname": "13 Playoffs",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "2013-03-21",
+        "end_date": "2013-05-14"
+      },
+      {
+        "season_id": "242",
+        "season_name": "2012-13 Regular Season",
+        "shortname": "2012-13",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2012-09-19",
+        "end_date": "2013-03-18"
+      },
+      {
+        "season_id": "241",
+        "season_name": "2012 WHL Preseason",
+        "shortname": "12 Preseason",
+        "career": "0",
+        "playoff": "0",
+        "start_date": "2012-08-27",
+        "end_date": "2012-09-17"
+      },
+      {
+        "season_id": "240",
+        "season_name": "2012 WHL Playoffs",
+        "shortname": "12 Playoffs",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "2012-03-20",
+        "end_date": "2012-05-15"
+      },
+      {
+        "season_id": "238",
+        "season_name": "2011-12 Regular Season",
+        "shortname": "11-12 Reg",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2011-09-20",
+        "end_date": "2012-03-21"
+      },
+      {
+        "season_id": "239",
+        "season_name": "2011 WHL Preseason",
+        "shortname": "11 Preseason",
+        "career": "0",
+        "playoff": "0",
+        "start_date": "2011-08-29",
+        "end_date": "2011-09-19"
+      },
+      {
+        "season_id": "237",
+        "season_name": "2011 WHL Playoffs",
+        "shortname": "11 Playoffs",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "2011-03-24",
+        "end_date": "2011-05-16"
+      },
+      {
+        "season_id": "236",
+        "season_name": "2010-11 Regular Season",
+        "shortname": "10-11 Reg",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2010-09-23",
+        "end_date": "2011-03-21"
+      },
+      {
+        "season_id": "235",
+        "season_name": "2010 WHL Playoffs",
+        "shortname": "10 Playoffs",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "2010-03-16",
+        "end_date": "2010-05-15"
+      },
+      {
+        "season_id": "234",
+        "season_name": "2009-10 Regular Season",
+        "shortname": "09-10 Reg",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2009-09-16",
+        "end_date": "2010-03-15"
+      },
+      {
+        "season_id": "232",
+        "season_name": "2009 WHL Playoffs",
+        "shortname": "09 Playoffs",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "2009-03-18",
+        "end_date": "2009-05-13"
+      },
+      {
+        "season_id": "233",
+        "season_name": "2009 WHL Tie-break",
+        "shortname": "09 Tiebreak",
+        "career": "0",
+        "playoff": "0",
+        "start_date": "2009-03-16",
+        "end_date": "2009-03-17"
+      },
+      {
+        "season_id": "231",
+        "season_name": "2008-09 Regular Season",
+        "shortname": "08-09 Reg",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2008-09-18",
+        "end_date": "2009-03-17"
+      },
+      {
+        "season_id": "230",
+        "season_name": "2008 WHL Playoffs",
+        "shortname": "08 Playoffs",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "2008-03-20",
+        "end_date": "2008-05-13"
+      },
+      {
+        "season_id": "229",
+        "season_name": "2007-08 Regular Season",
+        "shortname": "07-08 Reg",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2007-09-20",
+        "end_date": "2008-03-17"
+      },
+      {
+        "season_id": "228",
+        "season_name": "2007 WHL Playoffs",
+        "shortname": "07 Playoffs",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "2007-03-22",
+        "end_date": "2007-05-17"
+      },
+      {
+        "season_id": "227",
+        "season_name": "2006-07 WHL Season",
+        "shortname": "06-07 Season",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2006-09-20",
+        "end_date": "2007-03-19"
+      },
+      {
+        "season_id": "226",
+        "season_name": "2006 WHL Playoffs",
+        "shortname": "2006 WHL Pla",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "2006-03-24",
+        "end_date": "2006-05-17"
+      },
+      {
+        "season_id": "225",
+        "season_name": "2005-06 WHL Season",
+        "shortname": "2005-06 Seas",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2005-09-01",
+        "end_date": "2006-03-23"
+      },
+      {
+        "season_id": "224",
+        "season_name": "2005 WHL Playoffs",
+        "shortname": "05 Playoffs",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "2005-03-23",
+        "end_date": "2005-05-18"
+      },
+      {
+        "season_id": "223",
+        "season_name": "2004-05 WHL Season",
+        "shortname": "2004-05 Seas",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2004-09-06",
+        "end_date": "2005-03-21"
+      },
+      {
+        "season_id": "222",
+        "season_name": "2004 WHL Playoffs",
+        "shortname": "04 Playoffs",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "2004-03-17",
+        "end_date": "2004-05-14"
+      },
+      {
+        "season_id": "220",
+        "season_name": "2003-2004 WHL Season",
+        "shortname": "2003-04 Seas",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2003-09-01",
+        "end_date": "2004-03-14"
+      },
+      {
+        "season_id": "219",
+        "season_name": "2003 WHL Playoffs",
+        "shortname": "03 Playoffs",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "2003-03-21",
+        "end_date": "2003-05-15"
+      },
+      {
+        "season_id": "217",
+        "season_name": "2002-03 WHL Season",
+        "shortname": "2002-03 Seas",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2002-09-19",
+        "end_date": "2003-03-20"
+      },
+      {
+        "season_id": "216",
+        "season_name": "2002 WHL Playoffs",
+        "shortname": "02 Playoffs",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "2002-03-22",
+        "end_date": "2002-05-14"
+      },
+      {
+        "season_id": "215",
+        "season_name": "2001-2002 WHL Season",
+        "shortname": "2001-02 Seas",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2001-09-21",
+        "end_date": "2002-03-19"
+      },
+      {
+        "season_id": "214",
+        "season_name": "2001 WHL Playoffs",
+        "shortname": "01 Playoffs",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "2001-03-23",
+        "end_date": "2001-05-15"
+      },
+      {
+        "season_id": "213",
+        "season_name": "2000-2001 WHL Season",
+        "shortname": "2000-01 Seas",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2000-09-22",
+        "end_date": "2001-03-25"
+      },
+      {
+        "season_id": "212",
+        "season_name": "2000 WHL Playoffs",
+        "shortname": "00 Playoffs",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "2000-03-29",
+        "end_date": "2000-05-16"
+      },
+      {
+        "season_id": "211",
+        "season_name": "1999-2000 WHL Season",
+        "shortname": "1999-00 Seas",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "1999-09-24",
+        "end_date": "2000-03-26"
+      },
+      {
+        "season_id": "210",
+        "season_name": "1999 WHL Playoffs",
+        "shortname": "99 Playoffs",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "1999-03-24",
+        "end_date": "1999-05-11"
+      },
+      {
+        "season_id": "209",
+        "season_name": "1998-99 WHL Season",
+        "shortname": "1998-99 Seas",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "1998-09-25",
+        "end_date": "1999-03-21"
+      },
+      {
+        "season_id": "207",
+        "season_name": "1998 WHL Playoffs",
+        "shortname": "98 Playoffs",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "1998-03-17",
+        "end_date": "1998-05-06"
+      },
+      {
+        "season_id": "206",
+        "season_name": "1997-98 WHL Season",
+        "shortname": "1997-98 Seas",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "1997-09-24",
+        "end_date": "1998-03-15"
+      },
+      {
+        "season_id": "205",
+        "season_name": "1997 WHL Playoffs",
+        "shortname": "97 Playoffs",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "1997-03-19",
+        "end_date": "1997-05-06"
+      },
+      {
+        "season_id": "204",
+        "season_name": "1996-97 WHL Season",
+        "shortname": "1996-97 Seas",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "1996-09-20",
+        "end_date": "1997-03-16"
+      },
+      {
+        "season_id": "202",
+        "season_name": "1996 WHL Playoffs",
+        "shortname": "96 Playoffs",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "1996-03-20",
+        "end_date": "1996-05-07"
+      }
+    ],
+    "Copyright": {
+      "required_copyright": "Official statistics provided by Western Hockey League",
+      "required_link": "http://leaguestat.com",
+      "powered_by": "Powered by HockeyTech.com",
+      "powered_by_url": "http://hockeytech.com"
+    }
+  }
+}

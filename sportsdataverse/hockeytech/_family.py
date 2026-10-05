@@ -65,13 +65,14 @@ def build_family(league: str) -> dict[str, Any]:
     _season_id.__doc__ = f"All {cfg.name} seasons with end-year + game-type labels."
 
     def _most_recent_season() -> int:
-        """Most-recent season as an end-year integer (max ``season_yr``)."""
+        """Newest regular season as an end-year integer."""
         return most_recent_season_yr(_season_id(), lg)
 
     _most_recent_season.__name__ = f"most_recent_{lg}_season"
     _most_recent_season.__qualname__ = f"most_recent_{lg}_season"
     _most_recent_season.__doc__ = (
-        f"Most-recent {cfg.name} season as an end-year integer (max ``season_yr``). "
+        f"Newest {cfg.name} regular season as an end-year integer: the highest ``season_yr`` of a "
+        "regular season that is not a one-off event, so a preseason listed first is not a default. "
         "Raises ``NoDataError`` when the seasons feed lists none, ``AssetFetchError`` when it fails."
     )
 

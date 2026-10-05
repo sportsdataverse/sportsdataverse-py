@@ -8,6 +8,98 @@ Merged to `main` since 0.1.4 and not yet released. Released versions are on the 
 
 ## Unreleased
 
+### Fixed — HockeyTech season names read as their end year in every league (BREAKING)
+
+`season_yr` (the `<lg>_season_id` column, and the year every `season=` argument is matched
+against) only understood "2025-26". The feeds also write "2025/26" (KIJHL, older OJHL),
+"2025-2026" (AJHL, GOJHL, SPHL, VIJHL, recent CCHL and OJHL), "2026 - 27" (WHL) and "26-27"
+(OJHL's current season):
+
+- "2025-2026" read as 2120 from 2021-22 on (2020 before). `most_recent_sphl_season()` returned
+  2120, as did AJHL, GOJHL, OJHL and VIJHL, and `sphl_standings(season=2026)` raised `ValueError`.
+  CCHL returned 2425, from "CCHL 2425 Special Events".
+- "2025/26" and "2026 - 27" read as the start year, so `whl_standings(season=2026)` and
+  `kijhl_standings(season=2026)` silently returned the 2026-27 season.
+- "26-27 Regular Season" carried no year, so OJHL's current regular season could not be resolved.
+- A one-year preseason or exhibition ("2026 Pre-season", "Pre-Season 2026", "2026 Exhibition
+  Season") took its calendar year, the year before the season it opens.
+
+The year rules now, first match wins:
+
+1. `YYYY-YYYY` or `YYYY-YY`, with `-` or `/` and optional spaces, is its end year ("1999-00" is
+   2000).
+2. `YY-ZZ` with ZZ = YY + 1 is 20ZZ ("26-27" is 2027).
+3. Otherwise the first standalone 4-digit token: a year from 1950 to two years ahead is itself; a
+   compact span `YYZZ` with ZZ = YY + 1 is its end year ("CCHL 2425 Special Events" is 2025, not
+   2425). A two-digit end year is 20ZZ, or 19ZZ while 20ZZ is more than two years ahead.
+4. Anything else, or any year outside that range, is `None` ("19 Tie Break").
+5. A preseason or exhibition whose name spans no two years and which starts in the year its name
+   gives belongs to the next year ("2026 Pre-season", starting 2026-08-11, is 2027). PWHL's "2024
+   Preseason" started 2023-11-01 and stays 2024; AHL's mid-season "2017-18 Exhibition" stays 2018.
+
+`game_type_label` gains `"exhibition"`. 45 exhibitions that were labelled `"regular"` move to it
+(MJHL 15, MHL 9, VIJHL 7, KIJHL 6, AJHL 5, AHL 2, OJHL 1), so they never answer a regular-season
+lookup. `season_yr` is `Int64` in every league; CCHL, OJHL, VIJHL and WHL returned `Float64`
+because a season without a year made pandas widen the column.
+
+`most_recent_<lg>_season()` / `most_recent_pwhl_season()`, the default every season-defaulting
+wrapper uses, is now the newest *regular season* that is not a one-off event. It falls back to the
+newest row of any kind only when the feed lists no such season. The feeds add a preseason before
+its regular season (ECHL "2026 Preseason" is id 77, "2026-27 Regular Season" id 78). Taken over
+every row, the default would name a year that has no regular season yet. Rebuilt as the feeds
+stood when each preseason or exhibition appeared, 151 of the 152 windows in the 17 leagues that
+list one now resolve to a regular season (128 on main), among them ECHL 18 of 18, QMJHL 16 of
+16, CCHL 16 of 16, WHL 15 of 15, OHL 11 of 11 and GOJHL 1 of 1. The exception is MJHL's "2017-18
+Pre-season", season id 1, which predates every regular season in its feed.
+
+Season resolution still drops the one-off events (all-star, showcase, prospect, combine, special
+event, exhibition, play-in) from regular and playoff lookups. Of the rows left, the first wins in
+this order:
+
+1. the name carries no other registered league's code;
+2. the name says its game type ("Regular Season", "Playoff", "Pre-Season", "Exhibition");
+3. the name spans two years;
+4. feed order.
+
+Before, resolution took the first row. That picked "2019 ANAVET Cup" for `mjhl` and `sjhl` 2019,
+"2025 Cottage Cup" for `ojhl` 2025, "2014 Tie-Break" for `whl` 2014 and the Sutherland Cups for
+`gojhl` 2008-15. It also picked the CCHL's "CCHL 2009/2010", which the OJHL feed lists first, for
+`ojhl` 2010, while that year's playoffs resolved to the OJHL's own "OJAHL Playoffs 2010". With
+the corrected years it would also have picked "2025 Mowat Cup" for `kijhl` 2025. Tournaments
+rank last rather than being excluded, because CHL lists nothing but its Memorial Cups, and AHL,
+ECHL, GOJHL and MHL name real playoffs after cups ("2026 Calder Cup Playoffs").
+
+**Limit:** divisions listed side by side for one year, with none of these markers between them,
+are not told apart. BCHL 2024 resolves to "2023-24 BC Regular Season" but to the "2024 AB
+Playoffs", and GOJHL 2008 to its GHL conference. Pass `season_id=` for the others.
+
+Measured on the live seasons feeds of all 20 leagues (2026-10-05, 1,154 seasons), 272
+`season_yr` values change:
+
+- AJHL 46, GOJHL 39, KIJHL 34, WHL 30, OJHL 25, SPHL 22, ECHL 18, QMJHL 16, VIJHL 15, CCHL 12,
+  OHL 12;
+- one each in BCHL, MJHL and NOJHL;
+- 71 of the 272 are preseasons and 17 exhibitions.
+
+The committed fixtures are those feeds for 18 leagues; AHL keeps its trimmed 2026-07-12 capture
+and PWHL its 2026-06-09 one, which ends at the "2026-27 Pre-Season" (id 10). On them, each
+(year, game type) lookup was checked against the feed's own dates (end year for a regular season
+or playoffs, start year + 1 for a one-year-named camp). 817 of 818 resolved seasons now agree; on
+main, 594 of 716 did. The one disagreement is MJHL's "2015 Playoffs", whose end date is 2016. The
+tests check that agreement.
+
+**Breaking:**
+
+- `season_yr` changes in those leagues, and with it the season a `season=` year selects. In WHL and
+  KIJHL `season=2026` now means 2025-26 (it returned 2026-27).
+- One-year preseasons and exhibitions answer to the next year: `resolve_season_id("ohl",
+  season=2027, game_type="preseason")` is the "2026 Pre-season".
+- Exhibitions are `game_type="exhibition"`, not `"regular"`.
+- The default season is the newest regular season, so while a preseason is listed ahead of its
+  regular season the default stays on the season just ended.
+
+A caller who passed the start year to get a season should pass the end year.
+
 ### Fixed — PFF time to throw, aimed passes and receiving positive-EPA descriptions
 
 The return tables of the legacy `pff_*` passing and receiving reports, and the `pff_api` position
