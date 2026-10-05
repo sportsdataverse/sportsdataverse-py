@@ -13,9 +13,11 @@ from __future__ import annotations
 from pathlib import Path
 
 import polars as pl
+import pytest
 
 from sportsdataverse.cfb.cfb_ncaa_pbp import (
     _SCRIMMAGE_TYPES,
+    _decompose_play_text,
     DRIVE_TITLES_SCHEMA,
     PBP_SCHEMA,
     _own_side_codes,
@@ -535,3 +537,31 @@ def test_initials_keep_their_own_period() -> None:
     assert "Hutchinson,K.D." in df.get_column("receiver").to_list()
     old = parse_cfb_ncaa_pbp(_variant("1736435"), contest_id="1736435")
     assert "Walker, A.J." in old.get_column("rusher").to_list()
+
+
+@pytest.mark.parametrize(
+    ("text", "distance", "made"),
+    [
+        # real play text, contest/game_play_number noted
+        ("MOFFITT, Shawn field goal attempt from 32 GOOD, clock 00:58.", 32, True),  # 688871 #82 (2013)
+        (
+            "Jesse Aguilar field goal attempt from 45 MISSED - wide left, spot at SJ28, clock 09:34.",
+            45,
+            False,
+        ),  # 688872 #111 (2013)
+        (
+            "STINNETT,Cade field goal attempt from 51 MISSED - short, spot at NCAT34, clock 14:55.",
+            51,
+            False,
+        ),  # 1519846 #151 (2018)
+        (
+            "Layous,Samer field goal attempt from 34 yards NO GOOD (H: Mannino,Sonny, LS: McElderry,Aidan), clock 00:24.",
+            34,
+            False,
+        ),  # 6386297 #92 (2025)
+    ],
+)
+def test_field_goal_outcome_in_both_text_eras(text: str, distance: int, made: bool) -> None:
+    """The 2013-2023 "MISSED" wording sets fg_made False; it was null for ~1,100 misses a season."""
+    out = _decompose_play_text(text)
+    assert (out["play_type"], out["fg_distance"], out["fg_made"]) == ("field_goal", distance, made)
