@@ -52,6 +52,9 @@ helpers and the `mlb_api_extra` helpers. Specifically:
 - The 400 / 422 -> `ValueError` rule also covers `hockeytech_api` (every HockeyTech family,
   PWHL included), The Odds API (`toa_*`, which rejects bad parameters with 422) and the
   Statcast search windows; all three raised `AssetFetchError` for them.
+- `mlb_statcast_*` and `torvik_*`: a body labelled JSON that does not decode raises
+  `AssetFetchError` instead of being returned as text (which parsed to an empty frame);
+  CSV and HTML bodies are still returned as text.
 - The CFB crosswalks (`cfb_schedule_crosswalk`, through its ESPN calendar/schedule, Fox and
   Yahoo legs) swallowed every exception into an empty leg, recording a failed fetch as "no
   games". They now use the basketball crosswalk's `FetchTally`, one per leg: a 404 is an

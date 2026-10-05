@@ -25,7 +25,7 @@ from __future__ import annotations
 from typing import Any, Dict, Optional, Union
 
 from sportsdataverse._codegen_runtime import _as_season_list, _csv, bool_str  # noqa: F401  (re-export for generated imports)
-from sportsdataverse._codegen_runtime import _check_response, _text_body, _transport_errors
+from sportsdataverse._codegen_runtime import _check_response, _json_body, _text_body, _transport_errors
 from sportsdataverse.dl_utils import download
 
 
@@ -49,7 +49,8 @@ def _get(url: str, params: Optional[dict] = None, **kwargs: Any) -> Union[Dict, 
         NoDataError: Savant answered 404.
         ValueError: Savant answered 400 / 422 -- the request is wrong.
         AssetFetchError: any other non-2xx or a connection failure after retries, or
-            an empty 200 -- its error page is not data.
+            an empty 200, or a JSON-labelled body that does not decode -- its error
+            page is not data.
     """
     clean = {k: v for k, v in (params or {}).items() if v is not None}
     with _transport_errors(url):
@@ -57,8 +58,6 @@ def _get(url: str, params: Optional[dict] = None, **kwargs: Any) -> Union[Dict, 
     _check_response(resp, url)
     ctype = (resp.headers.get("content-type") or "").lower() if getattr(resp, "headers", None) else ""
     if "json" in ctype:
-        try:
-            return resp.json()
-        except ValueError:
-            pass
+        # A JSON-labelled body that will not decode is a failed fetch, never text to parse.
+        return _json_body(resp, url)
     return _text_body(resp, url)

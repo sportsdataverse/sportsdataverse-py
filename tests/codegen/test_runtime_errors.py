@@ -282,6 +282,23 @@ def test_other_json_getters_raise_on_a_non_json_2xx(monkeypatch, name):
     assert ei.value.__context__ is None
 
 
+@pytest.mark.parametrize("name", ["statcast", "torvik"])
+def test_text_getters_raise_on_a_json_labelled_body_that_will_not_decode(monkeypatch, name):
+    # The decode failure used to fall through to the text branch, which parsed to an empty frame.
+    _serve(monkeypatch, 200, "<html>Service Unavailable</html>", "application/json")
+    with pytest.raises(AssetFetchError, match="non-JSON body") as ei:
+        _getter(name)()
+    assert ei.value.__context__ is None
+
+
+@pytest.mark.parametrize("name", ["statcast", "torvik"])
+def test_text_getters_keep_csv_text_and_json(monkeypatch, name):
+    _serve(monkeypatch, 200, "team,conf\nDuke,ACC\n", "text/csv")
+    assert _getter(name)() == "team,conf\nDuke,ACC\n"
+    _serve(monkeypatch, 200, '{"data": [1]}', "application/json; charset=utf-8")
+    assert _getter(name)() == {"data": [1]}
+
+
 # --------------------------------------------------------------------------------------
 # on3's Next.js data route: a 404 first means "buildId rotated", then means "absent"
 # --------------------------------------------------------------------------------------
