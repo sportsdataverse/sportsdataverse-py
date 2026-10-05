@@ -74,7 +74,7 @@ def mlb_statcast_leaderboard_expected_stats(
     """GET /leaderboard/expected_statistics — xBA/xSLG/xwOBA/xISO expected-statistics leaderboard.
 
     Endpoint: ``GET https://baseballsavant.mlb.com/leaderboard/expected_statistics``
-    Example URL: https://baseballsavant.mlb.com/leaderboard/expected_statistics
+    Example URL: https://baseballsavant.mlb.com/leaderboard/expected_statistics?csv=true
 
     Args:
         type: type query parameter.
@@ -123,7 +123,7 @@ def mlb_statcast_leaderboard_percentile_rankings(
     """GET /leaderboard/percentile-rankings — player percentile-ranking sliders (xwOBA/xBA/xSLG/…).
 
     Endpoint: ``GET https://baseballsavant.mlb.com/leaderboard/percentile-rankings``
-    Example URL: https://baseballsavant.mlb.com/leaderboard/percentile-rankings
+    Example URL: https://baseballsavant.mlb.com/leaderboard/percentile-rankings?csv=true
 
     Args:
         type: type query parameter.
@@ -172,7 +172,7 @@ def mlb_statcast_leaderboard_sprint_speed(
     """GET /leaderboard/sprint_speed — sprint-speed (ft/sec) leaderboard.
 
     Endpoint: ``GET https://baseballsavant.mlb.com/leaderboard/sprint_speed``
-    Example URL: https://baseballsavant.mlb.com/leaderboard/sprint_speed
+    Example URL: https://baseballsavant.mlb.com/leaderboard/sprint_speed?csv=true
 
     Args:
         type: type query parameter.
@@ -221,7 +221,7 @@ def mlb_statcast_leaderboard_running_splits(
     """GET /leaderboard/running_splits — 90-foot running splits leaderboard.
 
     Endpoint: ``GET https://baseballsavant.mlb.com/leaderboard/running_splits``
-    Example URL: https://baseballsavant.mlb.com/leaderboard/running_splits
+    Example URL: https://baseballsavant.mlb.com/leaderboard/running_splits?csv=true
 
     Args:
         type: type query parameter.
@@ -270,7 +270,7 @@ def mlb_statcast_leaderboard_bat_tracking(
     """GET /leaderboard/bat-tracking — bat-tracking (swing speed / squared-up) leaderboard.
 
     Endpoint: ``GET https://baseballsavant.mlb.com/leaderboard/bat-tracking``
-    Example URL: https://baseballsavant.mlb.com/leaderboard/bat-tracking
+    Example URL: https://baseballsavant.mlb.com/leaderboard/bat-tracking?csv=true
 
     Args:
         type: type query parameter.
@@ -319,7 +319,7 @@ def mlb_statcast_leaderboard_swing_path(
     """GET /leaderboard/bat-tracking/swing-path-attack-angle — swing path & attack-angle leaderboard.
 
     Endpoint: ``GET https://baseballsavant.mlb.com/leaderboard/bat-tracking/swing-path-attack-angle``
-    Example URL: https://baseballsavant.mlb.com/leaderboard/bat-tracking/swing-path-attack-angle
+    Example URL: https://baseballsavant.mlb.com/leaderboard/bat-tracking/swing-path-attack-angle?csv=true
 
     Args:
         type: type query parameter.
@@ -368,7 +368,7 @@ def mlb_statcast_leaderboard_swing_timing(
     """GET /leaderboard/bat-tracking/swing-timing-miss-distance — swing timing & miss-distance leaderboard.
 
     Endpoint: ``GET https://baseballsavant.mlb.com/leaderboard/bat-tracking/swing-timing-miss-distance``
-    Example URL: https://baseballsavant.mlb.com/leaderboard/bat-tracking/swing-timing-miss-distance
+    Example URL: https://baseballsavant.mlb.com/leaderboard/bat-tracking/swing-timing-miss-distance?csv=true
 
     Args:
         type: type query parameter.
@@ -417,7 +417,7 @@ def mlb_statcast_leaderboard_swing_take(
     """GET /leaderboard/swing-take — swing/take run-value leaderboard.
 
     Endpoint: ``GET https://baseballsavant.mlb.com/leaderboard/swing-take``
-    Example URL: https://baseballsavant.mlb.com/leaderboard/swing-take
+    Example URL: https://baseballsavant.mlb.com/leaderboard/swing-take?csv=true
 
     Args:
         type: type query parameter.
@@ -466,7 +466,7 @@ def mlb_statcast_leaderboard_exit_velocity_barrels(
     """GET /leaderboard/statcast — exit velocity & barrels leaderboard.
 
     Endpoint: ``GET https://baseballsavant.mlb.com/leaderboard/statcast``
-    Example URL: https://baseballsavant.mlb.com/leaderboard/statcast
+    Example URL: https://baseballsavant.mlb.com/leaderboard/statcast?csv=true
 
     Args:
         type: type query parameter.
@@ -515,7 +515,7 @@ def mlb_statcast_leaderboard_batted_ball(
     """GET /leaderboard/batted-ball — batted-ball profile leaderboard.
 
     Endpoint: ``GET https://baseballsavant.mlb.com/leaderboard/batted-ball``
-    Example URL: https://baseballsavant.mlb.com/leaderboard/batted-ball
+    Example URL: https://baseballsavant.mlb.com/leaderboard/batted-ball?csv=true
 
     Args:
         type: type query parameter.
@@ -564,7 +564,7 @@ def mlb_statcast_leaderboard_home_runs(
     """GET /leaderboard/home-runs — Statcast home-runs leaderboard.
 
     Endpoint: ``GET https://baseballsavant.mlb.com/leaderboard/home-runs``
-    Example URL: https://baseballsavant.mlb.com/leaderboard/home-runs
+    Example URL: https://baseballsavant.mlb.com/leaderboard/home-runs?csv=true
 
     Args:
         type: type query parameter.
@@ -613,7 +613,7 @@ def mlb_statcast_leaderboard_pitch_arsenals(
     """GET /leaderboard/pitch-arsenals — pitch arsenals (velo/spin/movement) leaderboard.
 
     Endpoint: ``GET https://baseballsavant.mlb.com/leaderboard/pitch-arsenals``
-    Example URL: https://baseballsavant.mlb.com/leaderboard/pitch-arsenals
+    Example URL: https://baseballsavant.mlb.com/leaderboard/pitch-arsenals?csv=true
 
     Args:
         type: type query parameter.
@@ -662,7 +662,7 @@ def mlb_statcast_leaderboard_pitch_arsenal_stats(
     """GET /leaderboard/pitch-arsenal-stats — per-pitch-type outcome stats leaderboard.
 
     Endpoint: ``GET https://baseballsavant.mlb.com/leaderboard/pitch-arsenal-stats``
-    Example URL: https://baseballsavant.mlb.com/leaderboard/pitch-arsenal-stats
+    Example URL: https://baseballsavant.mlb.com/leaderboard/pitch-arsenal-stats?csv=true
 
     Args:
         type: type query parameter.
@@ -711,7 +711,7 @@ def mlb_statcast_leaderboard_pitch_movement(
     """GET /leaderboard/pitch-movement — pitch-movement leaderboard.
 
     Endpoint: ``GET https://baseballsavant.mlb.com/leaderboard/pitch-movement``
-    Example URL: https://baseballsavant.mlb.com/leaderboard/pitch-movement
+    Example URL: https://baseballsavant.mlb.com/leaderboard/pitch-movement?csv=true
 
     Args:
         type: type query parameter.
@@ -760,7 +760,7 @@ def mlb_statcast_leaderboard_pitch_tempo(
     """GET /leaderboard/pitch-tempo — pitch-tempo leaderboard.
 
     Endpoint: ``GET https://baseballsavant.mlb.com/leaderboard/pitch-tempo``
-    Example URL: https://baseballsavant.mlb.com/leaderboard/pitch-tempo
+    Example URL: https://baseballsavant.mlb.com/leaderboard/pitch-tempo?csv=true
 
     Args:
         type: type query parameter.
@@ -809,7 +809,7 @@ def mlb_statcast_leaderboard_active_spin(
     """GET /leaderboard/active-spin — active-spin leaderboard.
 
     Endpoint: ``GET https://baseballsavant.mlb.com/leaderboard/active-spin``
-    Example URL: https://baseballsavant.mlb.com/leaderboard/active-spin
+    Example URL: https://baseballsavant.mlb.com/leaderboard/active-spin?csv=true
 
     Args:
         type: type query parameter.
@@ -858,7 +858,7 @@ def mlb_statcast_leaderboard_spin_direction(
     """GET /leaderboard/spin-direction-pitches — spin-direction (per-pitch) leaderboard.
 
     Endpoint: ``GET https://baseballsavant.mlb.com/leaderboard/spin-direction-pitches``
-    Example URL: https://baseballsavant.mlb.com/leaderboard/spin-direction-pitches
+    Example URL: https://baseballsavant.mlb.com/leaderboard/spin-direction-pitches?csv=true
 
     Args:
         type: type query parameter.
@@ -907,7 +907,7 @@ def mlb_statcast_leaderboard_arm_angles(
     """GET /leaderboard/pitcher-arm-angles — pitcher arm-angle leaderboard.
 
     Endpoint: ``GET https://baseballsavant.mlb.com/leaderboard/pitcher-arm-angles``
-    Example URL: https://baseballsavant.mlb.com/leaderboard/pitcher-arm-angles
+    Example URL: https://baseballsavant.mlb.com/leaderboard/pitcher-arm-angles?csv=true
 
     Args:
         type: type query parameter.
@@ -956,7 +956,7 @@ def mlb_statcast_leaderboard_pitcher_running_game(
     """GET /leaderboard/pitcher-running-game — pitcher running-game (holding runners) leaderboard.
 
     Endpoint: ``GET https://baseballsavant.mlb.com/leaderboard/pitcher-running-game``
-    Example URL: https://baseballsavant.mlb.com/leaderboard/pitcher-running-game
+    Example URL: https://baseballsavant.mlb.com/leaderboard/pitcher-running-game?csv=true
 
     Args:
         type: type query parameter.
@@ -1005,7 +1005,7 @@ def mlb_statcast_leaderboard_outs_above_average(
     """GET /leaderboard/outs_above_average — Outs Above Average (OAA) fielding leaderboard.
 
     Endpoint: ``GET https://baseballsavant.mlb.com/leaderboard/outs_above_average``
-    Example URL: https://baseballsavant.mlb.com/leaderboard/outs_above_average
+    Example URL: https://baseballsavant.mlb.com/leaderboard/outs_above_average?csv=true
 
     Args:
         type: type query parameter.
@@ -1054,7 +1054,7 @@ def mlb_statcast_leaderboard_outfield_directional_oaa(
     """GET /leaderboard/outfield_directional_outs_above_average — outfield directional OAA leaderboard.
 
     Endpoint: ``GET https://baseballsavant.mlb.com/leaderboard/outfield_directional_outs_above_average``
-    Example URL: https://baseballsavant.mlb.com/leaderboard/outfield_directional_outs_above_average
+    Example URL: https://baseballsavant.mlb.com/leaderboard/outfield_directional_outs_above_average?csv=true
 
     Args:
         type: type query parameter.
@@ -1103,7 +1103,7 @@ def mlb_statcast_leaderboard_outfield_jump(
     """GET /leaderboard/outfield_jump — outfielder jump leaderboard.
 
     Endpoint: ``GET https://baseballsavant.mlb.com/leaderboard/outfield_jump``
-    Example URL: https://baseballsavant.mlb.com/leaderboard/outfield_jump
+    Example URL: https://baseballsavant.mlb.com/leaderboard/outfield_jump?csv=true
 
     Args:
         type: type query parameter.
@@ -1152,7 +1152,7 @@ def mlb_statcast_leaderboard_catch_probability(
     """GET /leaderboard/catch_probability — outfielder catch-probability leaderboard.
 
     Endpoint: ``GET https://baseballsavant.mlb.com/leaderboard/catch_probability``
-    Example URL: https://baseballsavant.mlb.com/leaderboard/catch_probability
+    Example URL: https://baseballsavant.mlb.com/leaderboard/catch_probability?csv=true
 
     Args:
         type: type query parameter.
@@ -1201,7 +1201,7 @@ def mlb_statcast_leaderboard_arm_strength(
     """GET /leaderboard/arm-strength — fielder arm-strength leaderboard.
 
     Endpoint: ``GET https://baseballsavant.mlb.com/leaderboard/arm-strength``
-    Example URL: https://baseballsavant.mlb.com/leaderboard/arm-strength
+    Example URL: https://baseballsavant.mlb.com/leaderboard/arm-strength?csv=true
 
     Args:
         type: type query parameter.
@@ -1250,7 +1250,7 @@ def mlb_statcast_leaderboard_poptime(
     """GET /leaderboard/poptime — catcher pop-time leaderboard.
 
     Endpoint: ``GET https://baseballsavant.mlb.com/leaderboard/poptime``
-    Example URL: https://baseballsavant.mlb.com/leaderboard/poptime
+    Example URL: https://baseballsavant.mlb.com/leaderboard/poptime?csv=true
 
     Args:
         type: type query parameter.
@@ -1299,7 +1299,7 @@ def mlb_statcast_leaderboard_catcher_framing(
     """GET /leaderboard/catcher-framing — catcher framing leaderboard.
 
     Endpoint: ``GET https://baseballsavant.mlb.com/leaderboard/catcher-framing``
-    Example URL: https://baseballsavant.mlb.com/leaderboard/catcher-framing
+    Example URL: https://baseballsavant.mlb.com/leaderboard/catcher-framing?csv=true
 
     Args:
         type: type query parameter.
@@ -1348,7 +1348,7 @@ def mlb_statcast_leaderboard_catcher_blocking(
     """GET /leaderboard/catcher-blocking — catcher blocking leaderboard.
 
     Endpoint: ``GET https://baseballsavant.mlb.com/leaderboard/catcher-blocking``
-    Example URL: https://baseballsavant.mlb.com/leaderboard/catcher-blocking
+    Example URL: https://baseballsavant.mlb.com/leaderboard/catcher-blocking?csv=true
 
     Args:
         type: type query parameter.
@@ -1397,7 +1397,7 @@ def mlb_statcast_leaderboard_catcher_throwing(
     """GET /leaderboard/catcher-throwing — catcher throwing leaderboard.
 
     Endpoint: ``GET https://baseballsavant.mlb.com/leaderboard/catcher-throwing``
-    Example URL: https://baseballsavant.mlb.com/leaderboard/catcher-throwing
+    Example URL: https://baseballsavant.mlb.com/leaderboard/catcher-throwing?csv=true
 
     Args:
         type: type query parameter.
@@ -1446,7 +1446,7 @@ def mlb_statcast_leaderboard_catcher_stance(
     """GET /leaderboard/catcher-stance — catcher stance leaderboard.
 
     Endpoint: ``GET https://baseballsavant.mlb.com/leaderboard/catcher-stance``
-    Example URL: https://baseballsavant.mlb.com/leaderboard/catcher-stance
+    Example URL: https://baseballsavant.mlb.com/leaderboard/catcher-stance?csv=true
 
     Args:
         type: type query parameter.
@@ -1495,7 +1495,7 @@ def mlb_statcast_leaderboard_basestealing_run_value(
     """GET /leaderboard/basestealing-run-value — basestealing run-value leaderboard.
 
     Endpoint: ``GET https://baseballsavant.mlb.com/leaderboard/basestealing-run-value``
-    Example URL: https://baseballsavant.mlb.com/leaderboard/basestealing-run-value
+    Example URL: https://baseballsavant.mlb.com/leaderboard/basestealing-run-value?csv=true
 
     Args:
         type: type query parameter.
@@ -1544,7 +1544,7 @@ def mlb_statcast_leaderboard_baserunning_run_value(
     """GET /leaderboard/baserunning-run-value — baserunning run-value leaderboard.
 
     Endpoint: ``GET https://baseballsavant.mlb.com/leaderboard/baserunning-run-value``
-    Example URL: https://baseballsavant.mlb.com/leaderboard/baserunning-run-value
+    Example URL: https://baseballsavant.mlb.com/leaderboard/baserunning-run-value?csv=true
 
     Args:
         type: type query parameter.
@@ -1593,7 +1593,7 @@ def mlb_statcast_leaderboard_baserunning(
     """GET /leaderboard/baserunning — extra-bases-taken run-value leaderboard.
 
     Endpoint: ``GET https://baseballsavant.mlb.com/leaderboard/baserunning``
-    Example URL: https://baseballsavant.mlb.com/leaderboard/baserunning
+    Example URL: https://baseballsavant.mlb.com/leaderboard/baserunning?csv=true
 
     Args:
         type: type query parameter.
@@ -1642,7 +1642,7 @@ def mlb_statcast_leaderboard_year_to_year(
     """GET /leaderboard/statcast-year-to-year — year-to-year metric change leaderboard.
 
     Endpoint: ``GET https://baseballsavant.mlb.com/leaderboard/statcast-year-to-year``
-    Example URL: https://baseballsavant.mlb.com/leaderboard/statcast-year-to-year
+    Example URL: https://baseballsavant.mlb.com/leaderboard/statcast-year-to-year?csv=true
 
     Args:
         type: type query parameter.
@@ -1691,7 +1691,7 @@ def mlb_statcast_leaderboard_timer_infractions(
     """GET /leaderboard/pitch-timer-infractions — pitch-timer infractions leaderboard.
 
     Endpoint: ``GET https://baseballsavant.mlb.com/leaderboard/pitch-timer-infractions``
-    Example URL: https://baseballsavant.mlb.com/leaderboard/pitch-timer-infractions
+    Example URL: https://baseballsavant.mlb.com/leaderboard/pitch-timer-infractions?csv=true
 
     Args:
         type: type query parameter.
@@ -1744,7 +1744,7 @@ def mlb_statcast_leaderboard_custom(
     """GET /leaderboard/custom — build-your-own metric leaderboard (comma-separated selections).
 
     Endpoint: ``GET https://baseballsavant.mlb.com/leaderboard/custom``
-    Example URL: https://baseballsavant.mlb.com/leaderboard/custom
+    Example URL: https://baseballsavant.mlb.com/leaderboard/custom?csv=true
 
     Args:
         type: type query parameter.

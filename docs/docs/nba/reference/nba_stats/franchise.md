@@ -21,7 +21,8 @@ GET /stats/franchisehistory
 
 ### Returns {#nba_stats_franchisehistory-returns}
 
-**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`FranchiseHistory`, `DefunctTeams`) (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`FranchiseHistory`, `DefunctTeams`) (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+
 **FranchiseHistory**
 
 | col_name | type | description |
@@ -78,7 +79,7 @@ GET /stats/franchiseleaders
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/franchiseleaders`
 
-**Valid URL:** [https://stats.nba.com/stats/franchiseleaders?LeagueID=00](https://stats.nba.com/stats/franchiseleaders?LeagueID=00)
+**Valid URL:** [https://stats.nba.com/stats/franchiseleaders?LeagueID=00&TeamID=1611661324](https://stats.nba.com/stats/franchiseleaders?LeagueID=00&TeamID=1611661324)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -88,6 +89,7 @@ GET /stats/franchiseleaders
 ### Returns {#nba_stats_franchiseleaders-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `team_id` | integer | Unique team identifier. |
@@ -123,7 +125,7 @@ GET /stats/franchiseleaderswrank
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/franchiseleaderswrank`
 
-**Valid URL:** [https://stats.nba.com/stats/franchiseleaderswrank?LeagueID=00](https://stats.nba.com/stats/franchiseleaderswrank?LeagueID=00)
+**Valid URL:** [https://stats.nba.com/stats/franchiseleaderswrank?LeagueID=00&PerMode=Totals&SeasonType=Regular+Season&TeamID=1611661324](https://stats.nba.com/stats/franchiseleaderswrank?LeagueID=00&PerMode=Totals&SeasonType=Regular+Season&TeamID=1611661324)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -135,6 +137,7 @@ GET /stats/franchiseleaderswrank
 ### Returns {#nba_stats_franchiseleaderswrank-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `league_id` | character | League identifier ('10' = WNBA). |
@@ -201,7 +204,7 @@ GET /stats/franchiseplayers
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/franchiseplayers`
 
-**Valid URL:** [https://stats.nba.com/stats/franchiseplayers?LeagueID=00](https://stats.nba.com/stats/franchiseplayers?LeagueID=00)
+**Valid URL:** [https://stats.nba.com/stats/franchiseplayers?LeagueID=00&PerMode=Totals&SeasonType=Regular+Season&TeamID=1611661319](https://stats.nba.com/stats/franchiseplayers?LeagueID=00&PerMode=Totals&SeasonType=Regular+Season&TeamID=1611661319)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -213,6 +216,7 @@ GET /stats/franchiseplayers
 ### Returns {#nba_stats_franchiseplayers-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `league_id` | character | League identifier ('10' = WNBA). |

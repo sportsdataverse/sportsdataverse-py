@@ -1003,6 +1003,15 @@ def test_espn_ufl_scoreboard_answers():
     assert isinstance(payload, dict) and "leagues" in payload
 
 
+def test_espn_nbagl_teams_and_standings_parse():
+    from sportsdataverse.nbagl import espn_nbagl_standings, espn_nbagl_teams_site
+
+    teams = espn_nbagl_teams_site()
+    assert teams.height >= 25, f"expected >=25 G League teams, got {teams.height}"
+    standings = espn_nbagl_standings(season=2026)
+    assert standings.height >= 25 and {"team_id", "wins", "losses"} <= set(standings.columns)
+
+
 def test_espn_soccer_scoreboard_param_league_answers():
     from sportsdataverse.soccer.soccer_espn_ext import espn_soccer_scoreboard
 

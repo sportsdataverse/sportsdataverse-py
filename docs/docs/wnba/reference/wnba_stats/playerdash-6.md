@@ -13,7 +13,7 @@ GET /stats/playerdashboardbyyearoveryear
 
 **Endpoint URL:** `GET https://stats.wnba.com/stats/playerdashboardbyyearoveryear`
 
-**Valid URL:** [https://stats.wnba.com/stats/playerdashboardbyyearoveryear?LeagueID=10](https://stats.wnba.com/stats/playerdashboardbyyearoveryear?LeagueID=10)
+**Valid URL:** [https://stats.wnba.com/stats/playerdashboardbyyearoveryear?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlayerID=1628932&PlusMinus=N&Rank=N&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&VsConference=&VsDivision=](https://stats.wnba.com/stats/playerdashboardbyyearoveryear?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlayerID=1628932&PlusMinus=N&Rank=N&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&VsConference=&VsDivision=)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -43,7 +43,8 @@ GET /stats/playerdashboardbyyearoveryear
 
 ### Returns {#wnba_stats_playerdashboardbyyearoveryear-returns}
 
-**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`OverallPlayerDashboard`, `ByYearPlayerDashboard`) (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`OverallPlayerDashboard`, `ByYearPlayerDashboard`) (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+
 **OverallPlayerDashboard**
 
 | col_name | type | description |
@@ -202,7 +203,7 @@ GET /stats/playerdashptshotdefend
 
 **Endpoint URL:** `GET https://stats.wnba.com/stats/playerdashptshotdefend`
 
-**Valid URL:** [https://stats.wnba.com/stats/playerdashptshotdefend?LeagueID=10](https://stats.wnba.com/stats/playerdashptshotdefend?LeagueID=10)
+**Valid URL:** [https://stats.wnba.com/stats/playerdashptshotdefend?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=10&Location=&Month=0&OpponentTeamID=0&Outcome=&PerMode=Totals&Period=0&PlayerID=2544&SeasonSegment=&SeasonType=Regular+Season&TeamID=0&VsConference=&VsDivision=](https://stats.wnba.com/stats/playerdashptshotdefend?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=10&Location=&Month=0&OpponentTeamID=0&Outcome=&PerMode=Totals&Period=0&PlayerID=2544&SeasonSegment=&SeasonType=Regular+Season&TeamID=0&VsConference=&VsDivision=)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -228,6 +229,7 @@ GET /stats/playerdashptshotdefend
 ### Returns {#wnba_stats_playerdashptshotdefend-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `matchupid` | integer | Stats API identifier for matchupid associated with this NBA or WNBA Stats row. |

@@ -13,7 +13,7 @@ GET /stats/teamdetails
 
 **Endpoint URL:** `GET https://stats.wnba.com/stats/teamdetails`
 
-**Valid URL:** [https://stats.wnba.com/stats/teamdetails](https://stats.wnba.com/stats/teamdetails)
+**Valid URL:** [https://stats.wnba.com/stats/teamdetails?TeamID=1611661328](https://stats.wnba.com/stats/teamdetails?TeamID=1611661328)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -21,7 +21,8 @@ GET /stats/teamdetails
 
 ### Returns {#wnba_stats_teamdetails-returns}
 
-**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`TeamBackground`, `TeamHistory`, `TeamSocialSites`, `TeamAwardsChampionships`, `TeamAwardsConf`, `TeamAwardsDiv`, `TeamHof`, `TeamRetired`, `TeamAwardsCommCup`) (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`TeamBackground`, `TeamHistory`, `TeamSocialSites`, `TeamAwardsChampionships`, `TeamAwardsConf`, `TeamAwardsDiv`, `TeamHof`, `TeamRetired`, `TeamAwardsCommCup`) (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+
 **TeamBackground**
 
 | col_name | type | description |
@@ -121,7 +122,7 @@ GET /stats/teamestimatedmetrics
 
 **Endpoint URL:** `GET https://stats.wnba.com/stats/teamestimatedmetrics`
 
-**Valid URL:** [https://stats.wnba.com/stats/teamestimatedmetrics?LeagueID=10](https://stats.wnba.com/stats/teamestimatedmetrics?LeagueID=10)
+**Valid URL:** [https://stats.wnba.com/stats/teamestimatedmetrics?LeagueID=10&SeasonType=Regular+Season](https://stats.wnba.com/stats/teamestimatedmetrics?LeagueID=10&SeasonType=Regular+Season)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -132,6 +133,7 @@ GET /stats/teamestimatedmetrics
 ### Returns {#wnba_stats_teamestimatedmetrics-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
@@ -181,7 +183,7 @@ GET /stats/teamgamelog
 
 **Endpoint URL:** `GET https://stats.wnba.com/stats/teamgamelog`
 
-**Valid URL:** [https://stats.wnba.com/stats/teamgamelog?LeagueID=10](https://stats.wnba.com/stats/teamgamelog?LeagueID=10)
+**Valid URL:** [https://stats.wnba.com/stats/teamgamelog?DateFrom=&DateTo=&LeagueID=10&SeasonType=Regular+Season&TeamID=1611661328](https://stats.wnba.com/stats/teamgamelog?DateFrom=&DateTo=&LeagueID=10&SeasonType=Regular+Season&TeamID=1611661328)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -195,6 +197,7 @@ GET /stats/teamgamelog
 ### Returns {#wnba_stats_teamgamelog-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `team_id` | integer | Unique team identifier. |
@@ -241,7 +244,7 @@ GET /stats/teamgamelogs
 
 **Endpoint URL:** `GET https://stats.wnba.com/stats/teamgamelogs`
 
-**Valid URL:** [https://stats.wnba.com/stats/teamgamelogs?LeagueID=10](https://stats.wnba.com/stats/teamgamelogs?LeagueID=10)
+**Valid URL:** [https://stats.wnba.com/stats/teamgamelogs?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&OppTeamID=0&Outcome=&PORound=&PerMode=Totals&Period=0&PlayerID=&SeasonSegment=&SeasonType=Regular+Season&TeamID=0&VsConference=&VsDivision=](https://stats.wnba.com/stats/teamgamelogs?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&OppTeamID=0&Outcome=&PORound=&PerMode=Totals&Period=0&PlayerID=&SeasonSegment=&SeasonType=Regular+Season&TeamID=0&VsConference=&VsDivision=)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -270,6 +273,7 @@ GET /stats/teamgamelogs
 ### Returns {#wnba_stats_teamgamelogs-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `season_year` | character | Season year string ('YYYY-YY' format). |
@@ -346,7 +350,7 @@ GET /stats/teaminfocommon
 
 **Endpoint URL:** `GET https://stats.wnba.com/stats/teaminfocommon`
 
-**Valid URL:** [https://stats.wnba.com/stats/teaminfocommon?LeagueID=10](https://stats.wnba.com/stats/teaminfocommon?LeagueID=10)
+**Valid URL:** [https://stats.wnba.com/stats/teaminfocommon?LeagueID=10&SeasonType=Regular+Season&TeamID=1611661328](https://stats.wnba.com/stats/teaminfocommon?LeagueID=10&SeasonType=Regular+Season&TeamID=1611661328)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -357,7 +361,8 @@ GET /stats/teaminfocommon
 
 ### Returns {#wnba_stats_teaminfocommon-returns}
 
-**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`TeamInfoCommon`, `TeamSeasonRanks`, `AvailableSeasons`) (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`TeamInfoCommon`, `TeamSeasonRanks`, `AvailableSeasons`) (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+
 **TeamInfoCommon**
 
 | col_name | type | description |
@@ -417,7 +422,7 @@ GET /stats/teamvsplayer
 
 **Endpoint URL:** `GET https://stats.wnba.com/stats/teamvsplayer`
 
-**Valid URL:** [https://stats.wnba.com/stats/teamvsplayer?LeagueID=10](https://stats.wnba.com/stats/teamvsplayer?LeagueID=10)
+**Valid URL:** [https://stats.wnba.com/stats/teamvsplayer?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PaceAdjust=N&PerMode=Totals&Period=0&PlayerID=&PlusMinus=N&Rank=N&SeasonSegment=&SeasonType=Regular+Season&TeamID=1611661328&VsConference=&VsDivision=&VsPlayerID=1628932](https://stats.wnba.com/stats/teamvsplayer?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PaceAdjust=N&PerMode=Totals&Period=0&PlayerID=&PlusMinus=N&Rank=N&SeasonSegment=&SeasonType=Regular+Season&TeamID=1611661328&VsConference=&VsDivision=&VsPlayerID=1628932)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -447,7 +452,8 @@ GET /stats/teamvsplayer
 
 ### Returns {#wnba_stats_teamvsplayer-returns}
 
-**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`Overall`, `vsPlayerOverall`, `OnOffCourt`, `ShotDistanceOverall`, `ShotDistanceOnCourt`, `ShotDistanceOffCourt`, `ShotAreaOverall`, `ShotAreaOnCourt`, `ShotAreaOffCourt`) (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`Overall`, `vsPlayerOverall`, `OnOffCourt`, `ShotDistanceOverall`, `ShotDistanceOnCourt`, `ShotDistanceOffCourt`, `ShotAreaOverall`, `ShotAreaOnCourt`, `ShotAreaOffCourt`) (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+
 **Overall**
 
 | col_name | type | description |
@@ -748,7 +754,7 @@ GET /stats/teamyearbyyearstats
 
 **Endpoint URL:** `GET https://stats.wnba.com/stats/teamyearbyyearstats`
 
-**Valid URL:** [https://stats.wnba.com/stats/teamyearbyyearstats?LeagueID=10](https://stats.wnba.com/stats/teamyearbyyearstats?LeagueID=10)
+**Valid URL:** [https://stats.wnba.com/stats/teamyearbyyearstats?LeagueID=10&PerMode=Totals&SeasonType=Regular+Season&TeamID=1611661328](https://stats.wnba.com/stats/teamyearbyyearstats?LeagueID=10&PerMode=Totals&SeasonType=Regular+Season&TeamID=1611661328)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -760,6 +766,7 @@ GET /stats/teamyearbyyearstats
 ### Returns {#wnba_stats_teamyearbyyearstats-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `team_id` | integer | Unique team identifier. |

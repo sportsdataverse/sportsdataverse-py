@@ -22,6 +22,7 @@ Coach alma-mater Institution.
 ### Returns {#sports247_site_pages_coach_alma_mater-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `key` | integer | Primary key of this entity (the id used in its `.json` route). |
@@ -72,6 +73,7 @@ Coach hometown Location.
 ### Returns {#sports247_site_pages_coach_hometown-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `key` | integer | Primary key of this entity (the id used in its `.json` route). |
@@ -102,8 +104,6 @@ Single CoachRanking row.
 
 **Endpoint URL:** `GET https://247sports.com/CoachRanking/{key}.json`
 
-**Valid URL:** [https://247sports.com/CoachRanking](https://247sports.com/CoachRanking)
-
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 | `key` | `key` |  | `Y` |  | key path parameter. |
@@ -111,6 +111,7 @@ Single CoachRanking row.
 ### Returns {#sports247_site_pages_coach_ranking-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `key` | integer | Primary key of this entity (the id used in its `.json` route). |
@@ -178,6 +179,7 @@ Coach's recruiting-ranking history (one row per Ranking snapshot).
 ### Returns {#sports247_site_pages_coach_rankings-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `key` | integer | Primary key of this entity (the id used in its `.json` route). |

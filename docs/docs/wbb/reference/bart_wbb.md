@@ -24,6 +24,7 @@ GET /ncaaw/{year}_team_results.csv — women's T-Rank team ratings (adjoe/adjde/
 ### Returns {#bart_wbb_ratings-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `rank` | integer | T-Rank position (overall barthag rank). |

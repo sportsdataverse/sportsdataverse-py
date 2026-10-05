@@ -13,7 +13,7 @@ GET /api/secured/stats/fantasy/season — one row per player for the season — 
 
 **Endpoint URL:** `GET https://pro.nfl.com/api/secured/stats/fantasy/season`
 
-**Valid URL:** [https://pro.nfl.com/api/secured/stats/fantasy/season?season=2024&seasonType=REG](https://pro.nfl.com/api/secured/stats/fantasy/season?season=2024&seasonType=REG)
+**Valid URL:** [https://pro.nfl.com/api/secured/stats/fantasy/season?season=2024&seasonType=REG&limit=500](https://pro.nfl.com/api/secured/stats/fantasy/season?season=2024&seasonType=REG&limit=500)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -29,6 +29,7 @@ GET /api/secured/stats/fantasy/season — one row per player for the season — 
 ### Returns {#nfl_pro_fantasy_season-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `nfl_id` | character | NFL ID of player (this is used in Big Data Bowl Data) |
@@ -239,7 +240,7 @@ GET /api/secured/stats/fantasy/game — one row per player-game — fantasy scor
 
 **Endpoint URL:** `GET https://pro.nfl.com/api/secured/stats/fantasy/game`
 
-**Valid URL:** [https://pro.nfl.com/api/secured/stats/fantasy/game?season=2024&seasonType=REG&positionGroup=QB](https://pro.nfl.com/api/secured/stats/fantasy/game?season=2024&seasonType=REG&positionGroup=QB)
+**Valid URL:** [https://pro.nfl.com/api/secured/stats/fantasy/game?season=2024&seasonType=REG&limit=500&positionGroup=QB](https://pro.nfl.com/api/secured/stats/fantasy/game?season=2024&seasonType=REG&limit=500&positionGroup=QB)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -255,6 +256,7 @@ GET /api/secured/stats/fantasy/game — one row per player-game — fantasy scor
 ### Returns {#nfl_pro_fantasy_game-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `nfl_id` | character | NFL ID of player (this is used in Big Data Bowl Data) |

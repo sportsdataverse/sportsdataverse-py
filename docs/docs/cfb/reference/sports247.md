@@ -15,7 +15,7 @@ toc_max_heading_level: 2
 
 **Endpoint URL:** `GET https://ipa.247sports.com/rdb/v1/teams/`
 
-**Valid URL:** [https://ipa.247sports.com/rdb/v1/teams/](https://ipa.247sports.com/rdb/v1/teams/)
+**Valid URL:** [https://ipa.247sports.com/rdb/v1/teams/?sportKey=1](https://ipa.247sports.com/rdb/v1/teams/?sportKey=1)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -26,6 +26,7 @@ toc_max_heading_level: 2
 ### Returns {#sports247_teams-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `name` | character | Team display name (school + nickname). |
@@ -52,7 +53,7 @@ _Last validated n/a._
 
 **Endpoint URL:** `GET https://ipa.247sports.com/rdb/v1/rankings/{sport_key}/{year}/institutionrankings/`
 
-**Valid URL:** [https://ipa.247sports.com/rdb/v1/rankings/1/2026/institutionrankings/](https://ipa.247sports.com/rdb/v1/rankings/1/2026/institutionrankings/)
+**Valid URL:** [https://ipa.247sports.com/rdb/v1/rankings/1/2026/institutionrankings/?pagesize=50](https://ipa.247sports.com/rdb/v1/rankings/1/2026/institutionrankings/?pagesize=50)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -67,6 +68,7 @@ _Last validated n/a._
 ### Returns {#sports247_institution_rankings-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `name` | character | Short display name of the institution as shown on the 247Sports class-ranking page (e.g. USC, Notre Dame). |
@@ -118,7 +120,7 @@ _Last validated n/a._
 
 **Endpoint URL:** `GET https://ipa.247sports.com/rdb/v1/recruits/`
 
-**Valid URL:** [https://ipa.247sports.com/rdb/v1/recruits/?sportKey=1&year=2026](https://ipa.247sports.com/rdb/v1/recruits/?sportKey=1&year=2026)
+**Valid URL:** [https://ipa.247sports.com/rdb/v1/recruits/?sportKey=1&year=2026&pagesize=50](https://ipa.247sports.com/rdb/v1/recruits/?sportKey=1&year=2026&pagesize=50)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -132,6 +134,7 @@ _Last validated n/a._
 ### Returns {#sports247_recruits-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `key` | integer | 247Sports player key of the recruit. |
@@ -184,7 +187,7 @@ _Last validated n/a._
 
 **Endpoint URL:** `GET https://ipa.247sports.com/rdb/v1/transfers/`
 
-**Valid URL:** [https://ipa.247sports.com/rdb/v1/transfers/?sportKey=1&year=2026](https://ipa.247sports.com/rdb/v1/transfers/?sportKey=1&year=2026)
+**Valid URL:** [https://ipa.247sports.com/rdb/v1/transfers/?sportKey=1&year=2026&pagesize=50](https://ipa.247sports.com/rdb/v1/transfers/?sportKey=1&year=2026&pagesize=50)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -196,6 +199,7 @@ _Last validated n/a._
 ### Returns {#sports247_transfers-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `player_key` | integer | 247Sports player key of the transfer. |
@@ -254,7 +258,7 @@ _Last validated n/a._
 
 **Endpoint URL:** `GET https://ipa.247sports.com/rdb/v1/coaches/`
 
-**Valid URL:** [https://ipa.247sports.com/rdb/v1/coaches/?sportKey=1&year=2026](https://ipa.247sports.com/rdb/v1/coaches/?sportKey=1&year=2026)
+**Valid URL:** [https://ipa.247sports.com/rdb/v1/coaches/?sportKey=1&year=2026&pageSize=50](https://ipa.247sports.com/rdb/v1/coaches/?sportKey=1&year=2026&pageSize=50)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -266,6 +270,7 @@ _Last validated n/a._
 ### Returns {#sports247_coaches-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `key` | integer | 247Sports coach key. |
@@ -303,7 +308,7 @@ _Last validated n/a._
 
 **Endpoint URL:** `GET https://ipa.247sports.com/rdb/v1/rankings/{sport_key}/{year}/transferPortalPlayerfeed/`
 
-**Valid URL:** [https://ipa.247sports.com/rdb/v1/rankings/1/2026/transferPortalPlayerfeed/](https://ipa.247sports.com/rdb/v1/rankings/1/2026/transferPortalPlayerfeed/)
+**Valid URL:** [https://ipa.247sports.com/rdb/v1/rankings/1/2026/transferPortalPlayerfeed/?pageSize=50](https://ipa.247sports.com/rdb/v1/rankings/1/2026/transferPortalPlayerfeed/?pageSize=50)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -314,6 +319,7 @@ _Last validated n/a._
 ### Returns {#sports247_transfer_portal_player_feed-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `key` | integer | 247Sports player key. |
@@ -352,7 +358,7 @@ _Last validated n/a._
 
 **Endpoint URL:** `GET https://ipa.247sports.com/rdb/v1/rankings/{sport_key}/{year}/compositeTeamRankingFeed/`
 
-**Valid URL:** [https://ipa.247sports.com/rdb/v1/rankings/1/2026/compositeTeamRankingFeed/](https://ipa.247sports.com/rdb/v1/rankings/1/2026/compositeTeamRankingFeed/)
+**Valid URL:** [https://ipa.247sports.com/rdb/v1/rankings/1/2026/compositeTeamRankingFeed/?pageSize=50](https://ipa.247sports.com/rdb/v1/rankings/1/2026/compositeTeamRankingFeed/?pageSize=50)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -363,6 +369,7 @@ _Last validated n/a._
 ### Returns {#sports247_composite_team_ranking_feed-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `name` | character | Short display name of the program. |
@@ -406,7 +413,7 @@ _Last validated n/a._
 
 **Endpoint URL:** `GET https://ipa.247sports.com/rdb/v1/rankings/{sport_key}/{year}/transferPortalOnlyTeamFeed/`
 
-**Valid URL:** [https://ipa.247sports.com/rdb/v1/rankings/1/2026/transferPortalOnlyTeamFeed/](https://ipa.247sports.com/rdb/v1/rankings/1/2026/transferPortalOnlyTeamFeed/)
+**Valid URL:** [https://ipa.247sports.com/rdb/v1/rankings/1/2026/transferPortalOnlyTeamFeed/?pageSize=50](https://ipa.247sports.com/rdb/v1/rankings/1/2026/transferPortalOnlyTeamFeed/?pageSize=50)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -417,6 +424,7 @@ _Last validated n/a._
 ### Returns {#sports247_transfer_portal_team_feed-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `name` | character | Display name of the program. |
@@ -443,7 +451,7 @@ _Last validated n/a._
 
 **Endpoint URL:** `GET https://ipa.247sports.com/rdb/v1/sites/{site_key}/years/{year}/sports/{sport_key}/currentTargetPredictions/`
 
-**Valid URL:** [https://ipa.247sports.com/rdb/v1/sites/1/years/2026/sports/1/currentTargetPredictions/](https://ipa.247sports.com/rdb/v1/sites/1/years/2026/sports/1/currentTargetPredictions/)
+**Valid URL:** [https://ipa.247sports.com/rdb/v1/sites/1/years/2026/sports/1/currentTargetPredictions/?pageSize=50](https://ipa.247sports.com/rdb/v1/sites/1/years/2026/sports/1/currentTargetPredictions/?pageSize=50)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -455,6 +463,7 @@ _Last validated n/a._
 ### Returns {#sports247_target_predictions-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `player_key` | integer | 247Sports player key of the recruit the prediction is about. |
@@ -510,6 +519,7 @@ Class years for which the 247Sports RDB has data for a given sport.
 ### Returns {#sports247_sport_years-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `value` | integer | A class year for which the 247Sports RDB has data for the sport. |
@@ -530,7 +540,7 @@ _Last validated n/a._
 
 **Endpoint URL:** `GET https://ipa.247sports.com/rdb/v1/tags/autocomplete/`
 
-**Valid URL:** [https://ipa.247sports.com/rdb/v1/tags/autocomplete/?defaultName=smith](https://ipa.247sports.com/rdb/v1/tags/autocomplete/?defaultName=smith)
+**Valid URL:** [https://ipa.247sports.com/rdb/v1/tags/autocomplete/?defaultName=smith&items=10](https://ipa.247sports.com/rdb/v1/tags/autocomplete/?defaultName=smith&items=10)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -540,6 +550,7 @@ _Last validated n/a._
 ### Returns {#sports247_tags_autocomplete-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `id` | character | 247Sports tag id (prefixed key, e.g. Player_46151084). |
@@ -574,6 +585,7 @@ _Last validated n/a._
 ### Returns {#sports247_positions-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `group` | character | Position group name (e.g. Quarterback, Running Back). |

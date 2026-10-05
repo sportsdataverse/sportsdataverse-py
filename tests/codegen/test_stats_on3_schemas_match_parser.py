@@ -93,6 +93,7 @@ def test_stats_schema_matches_parser(stem, short, capture):
     doc = _schema(stem, short)
     parsed = parse_nba_stats_result_sets(json.loads((ROOT / capture).read_text(encoding="utf-8")))
     if "unverified" in doc:  # the parser emits nothing for this capture, so nothing is published
+        assert doc["unverified"], short  # the template renders only a non-empty reason
         assert doc["columns"] == [] and not any(df.width for df in _frames_of(parsed).values())
         return
     _assert_matches(parsed, doc, f"{stem}/{short} on {capture}")

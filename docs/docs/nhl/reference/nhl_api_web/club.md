@@ -13,7 +13,7 @@ Pull a team's full-season schedule.
 
 **Endpoint URL:** `GET https://api-web.nhle.com/v1/club-schedule-season/{team}/{season}`
 
-**Valid URL:** [https://api-web.nhle.com/v1/club-schedule-season/TOR](https://api-web.nhle.com/v1/club-schedule-season/TOR)
+**Valid URL:** [https://api-web.nhle.com/v1/club-schedule-season/TOR/now](https://api-web.nhle.com/v1/club-schedule-season/TOR/now)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -23,6 +23,7 @@ Pull a team's full-season schedule.
 ### Returns {#nhl_club_schedule_season-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `club_previous_season` | integer | Indicator for whether the game belongs to the club's prior completed season (1 = previous season, 0 otherwise). |
@@ -121,7 +122,7 @@ Pull a team's schedule for one month.
 
 **Endpoint URL:** `GET https://api-web.nhle.com/v1/club-schedule/{team}/month/{month}`
 
-**Valid URL:** [https://api-web.nhle.com/v1/club-schedule/TOR/month](https://api-web.nhle.com/v1/club-schedule/TOR/month)
+**Valid URL:** [https://api-web.nhle.com/v1/club-schedule/TOR/month/now](https://api-web.nhle.com/v1/club-schedule/TOR/month/now)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -147,7 +148,7 @@ Pull a team's schedule for one week.
 
 **Endpoint URL:** `GET https://api-web.nhle.com/v1/club-schedule/{team}/week/{date}`
 
-**Valid URL:** [https://api-web.nhle.com/v1/club-schedule/TOR/week](https://api-web.nhle.com/v1/club-schedule/TOR/week)
+**Valid URL:** [https://api-web.nhle.com/v1/club-schedule/TOR/week/now](https://api-web.nhle.com/v1/club-schedule/TOR/week/now)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -173,7 +174,7 @@ Pull a team's season stat block.
 
 **Endpoint URL:** `GET https://api-web.nhle.com/v1/club-stats/{team}/{season}/{game_type}`
 
-**Valid URL:** [https://api-web.nhle.com/v1/club-stats/TOR](https://api-web.nhle.com/v1/club-stats/TOR)
+**Valid URL:** [https://api-web.nhle.com/v1/club-stats/TOR/now](https://api-web.nhle.com/v1/club-stats/TOR/now)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|

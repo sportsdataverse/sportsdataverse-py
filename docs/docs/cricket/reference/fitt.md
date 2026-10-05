@@ -31,7 +31,7 @@ ESPN endpoint.
 ### Example {#espn_cricket_fpi-example}
 
 ```python
-espn_cricket_fpi(season=2024)
+espn_cricket_fpi(league='eng.1', season=2024)
 ```
 
 _Last validated n/a._

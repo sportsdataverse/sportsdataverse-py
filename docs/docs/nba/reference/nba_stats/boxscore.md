@@ -1,11 +1,11 @@
 ---
-title: "NBA — NBA Stats API (stats.nba.com) — Box scores: boxscoreadvancedv3–boxscoretraditionalv3"
-sidebar_label: "Box scores: boxscoreadvancedv3–boxscoretraditionalv3"
+title: "NBA — NBA Stats API (stats.nba.com) — Box scores: boxscoreadvancedv3–boxscoretraditionalv2"
+sidebar_label: "Box scores: boxscoreadvancedv3–boxscoretraditionalv2"
 sidebar_position: 1
-description: "NBA — NBA Stats API (stats.nba.com) — Box scores: boxscoreadvancedv3–boxscoretraditionalv3 — function reference in sdv-py, the SportsDataverse Python package."
+description: "NBA — NBA Stats API (stats.nba.com) — Box scores: boxscoreadvancedv3–boxscoretraditionalv2 — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---
-# NBA — NBA Stats API (stats.nba.com) — Box scores: boxscoreadvancedv3–boxscoretraditionalv3
+# NBA — NBA Stats API (stats.nba.com) — Box scores: boxscoreadvancedv3–boxscoretraditionalv2
 
 ## nba_stats_boxscoreadvancedv3
 
@@ -13,7 +13,7 @@ GET /stats/boxscoreadvancedv3
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/boxscoreadvancedv3`
 
-**Valid URL:** [https://stats.nba.com/stats/boxscoreadvancedv3](https://stats.nba.com/stats/boxscoreadvancedv3)
+**Valid URL:** [https://stats.nba.com/stats/boxscoreadvancedv3?EndPeriod=14&EndRange=0&GameID=1022200034&RangeType=0&StartPeriod=0&StartRange=0](https://stats.nba.com/stats/boxscoreadvancedv3?EndPeriod=14&EndRange=0&GameID=1022200034&RangeType=0&StartPeriod=0&StartRange=0)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -26,7 +26,8 @@ GET /stats/boxscoreadvancedv3
 
 ### Returns {#nba_stats_boxscoreadvancedv3-returns}
 
-**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`PlayerStats`, `TeamStats`) (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`PlayerStats`, `TeamStats`) (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+
 **PlayerStats**
 
 | col_name | type | description |
@@ -124,7 +125,7 @@ GET /stats/boxscoredefensivev2
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/boxscoredefensivev2`
 
-**Valid URL:** [https://stats.nba.com/stats/boxscoredefensivev2](https://stats.nba.com/stats/boxscoredefensivev2)
+**Valid URL:** [https://stats.nba.com/stats/boxscoredefensivev2?GameID=1022200034](https://stats.nba.com/stats/boxscoredefensivev2?GameID=1022200034)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -132,7 +133,8 @@ GET /stats/boxscoredefensivev2
 
 ### Returns {#nba_stats_boxscoredefensivev2-returns}
 
-**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`PlayerStats`, `TeamStats`) (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`PlayerStats`, `TeamStats`) (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+
 **PlayerStats**
 
 | col_name | type | description |
@@ -199,7 +201,7 @@ GET /stats/boxscorefourfactorsv3
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/boxscorefourfactorsv3`
 
-**Valid URL:** [https://stats.nba.com/stats/boxscorefourfactorsv3](https://stats.nba.com/stats/boxscorefourfactorsv3)
+**Valid URL:** [https://stats.nba.com/stats/boxscorefourfactorsv3?EndPeriod=14&EndRange=0&GameID=1022200034&RangeType=0&StartPeriod=0&StartRange=0](https://stats.nba.com/stats/boxscorefourfactorsv3?EndPeriod=14&EndRange=0&GameID=1022200034&RangeType=0&StartPeriod=0&StartRange=0)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -212,7 +214,8 @@ GET /stats/boxscorefourfactorsv3
 
 ### Returns {#nba_stats_boxscorefourfactorsv3-returns}
 
-**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`PlayerStats`, `TeamStats`) (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`PlayerStats`, `TeamStats`) (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+
 **PlayerStats**
 
 | col_name | type | description |
@@ -281,7 +284,7 @@ GET /stats/boxscorehustlev2
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/boxscorehustlev2`
 
-**Valid URL:** [https://stats.nba.com/stats/boxscorehustlev2](https://stats.nba.com/stats/boxscorehustlev2)
+**Valid URL:** [https://stats.nba.com/stats/boxscorehustlev2?GameID=0022200021](https://stats.nba.com/stats/boxscorehustlev2?GameID=0022200021)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -289,7 +292,8 @@ GET /stats/boxscorehustlev2
 
 ### Returns {#nba_stats_boxscorehustlev2-returns}
 
-**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`PlayerStats`, `TeamStats`) (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`PlayerStats`, `TeamStats`) (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+
 **PlayerStats**
 
 | col_name | type | description |
@@ -374,7 +378,7 @@ GET /stats/boxscorematchupsv3
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/boxscorematchupsv3`
 
-**Valid URL:** [https://stats.nba.com/stats/boxscorematchupsv3](https://stats.nba.com/stats/boxscorematchupsv3)
+**Valid URL:** [https://stats.nba.com/stats/boxscorematchupsv3?GameID=1022200034](https://stats.nba.com/stats/boxscorematchupsv3?GameID=1022200034)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -382,7 +386,8 @@ GET /stats/boxscorematchupsv3
 
 ### Returns {#nba_stats_boxscorematchupsv3-returns}
 
-**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`PlayerStats`, `TeamStats`) (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`PlayerStats`, `TeamStats`) (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+
 **PlayerStats**
 
 | col_name | type | description |
@@ -434,7 +439,7 @@ GET /stats/boxscoremiscv3
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/boxscoremiscv3`
 
-**Valid URL:** [https://stats.nba.com/stats/boxscoremiscv3](https://stats.nba.com/stats/boxscoremiscv3)
+**Valid URL:** [https://stats.nba.com/stats/boxscoremiscv3?EndPeriod=14&EndRange=0&GameID=1022200034&RangeType=0&StartPeriod=0&StartRange=0](https://stats.nba.com/stats/boxscoremiscv3?EndPeriod=14&EndRange=0&GameID=1022200034&RangeType=0&StartPeriod=0&StartRange=0)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -447,7 +452,8 @@ GET /stats/boxscoremiscv3
 
 ### Returns {#nba_stats_boxscoremiscv3-returns}
 
-**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`PlayerStats`, `TeamStats`) (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`PlayerStats`, `TeamStats`) (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+
 **PlayerStats**
 
 | col_name | type | description |
@@ -524,7 +530,7 @@ GET /stats/boxscoreplayertrackv3
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/boxscoreplayertrackv3`
 
-**Valid URL:** [https://stats.nba.com/stats/boxscoreplayertrackv3](https://stats.nba.com/stats/boxscoreplayertrackv3)
+**Valid URL:** [https://stats.nba.com/stats/boxscoreplayertrackv3?GameID=1022200034](https://stats.nba.com/stats/boxscoreplayertrackv3?GameID=1022200034)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -532,7 +538,8 @@ GET /stats/boxscoreplayertrackv3
 
 ### Returns {#nba_stats_boxscoreplayertrackv3-returns}
 
-**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`PlayerStats`, `TeamStats`) (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`PlayerStats`, `TeamStats`) (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+
 **PlayerStats**
 
 | col_name | type | description |
@@ -624,7 +631,7 @@ GET /stats/boxscorescoringv3
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/boxscorescoringv3`
 
-**Valid URL:** [https://stats.nba.com/stats/boxscorescoringv3](https://stats.nba.com/stats/boxscorescoringv3)
+**Valid URL:** [https://stats.nba.com/stats/boxscorescoringv3?EndPeriod=14&EndRange=0&GameID=1022200034&RangeType=0&StartPeriod=0&StartRange=0](https://stats.nba.com/stats/boxscorescoringv3?EndPeriod=14&EndRange=0&GameID=1022200034&RangeType=0&StartPeriod=0&StartRange=0)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -637,7 +644,8 @@ GET /stats/boxscorescoringv3
 
 ### Returns {#nba_stats_boxscorescoringv3-returns}
 
-**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`PlayerStats`, `TeamStats`) (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`PlayerStats`, `TeamStats`) (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+
 **PlayerStats**
 
 | col_name | type | description |
@@ -720,7 +728,7 @@ GET /stats/boxscoresummaryv2
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/boxscoresummaryv2`
 
-**Valid URL:** [https://stats.nba.com/stats/boxscoresummaryv2](https://stats.nba.com/stats/boxscoresummaryv2)
+**Valid URL:** [https://stats.nba.com/stats/boxscoresummaryv2?GameID=1022200034](https://stats.nba.com/stats/boxscoresummaryv2?GameID=1022200034)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -728,7 +736,8 @@ GET /stats/boxscoresummaryv2
 
 ### Returns {#nba_stats_boxscoresummaryv2-returns}
 
-**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`GameSummary`, `OtherStats`, `Officials`, `InactivePlayers`, `GameInfo`, `LineScore`, `LastMeeting`, `SeasonSeries`, `AvailableVideo`) (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`GameSummary`, `OtherStats`, `Officials`, `InactivePlayers`, `GameInfo`, `LineScore`, `LastMeeting`, `SeasonSeries`, `AvailableVideo`) (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+
 **GameSummary**
 
 | col_name | type | description |
@@ -883,7 +892,7 @@ GET /stats/boxscoresummaryv3
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/boxscoresummaryv3`
 
-**Valid URL:** [https://stats.nba.com/stats/boxscoresummaryv3](https://stats.nba.com/stats/boxscoresummaryv3)
+**Valid URL:** [https://stats.nba.com/stats/boxscoresummaryv3?GameID=1022200034](https://stats.nba.com/stats/boxscoresummaryv3?GameID=1022200034)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -891,7 +900,8 @@ GET /stats/boxscoresummaryv3
 
 ### Returns {#nba_stats_boxscoresummaryv3-returns}
 
-**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`PlayerStats`, `TeamStats`, `Officials`) (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`PlayerStats`, `TeamStats`, `Officials`) (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+
 **PlayerStats**
 
 | col_name | type | description |
@@ -1011,7 +1021,7 @@ GET /stats/boxscoretraditionalv2
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/boxscoretraditionalv2`
 
-**Valid URL:** [https://stats.nba.com/stats/boxscoretraditionalv2](https://stats.nba.com/stats/boxscoretraditionalv2)
+**Valid URL:** [https://stats.nba.com/stats/boxscoretraditionalv2?EndPeriod=14&EndRange=0&GameID=1022200034&RangeType=0&StartPeriod=0&StartRange=0](https://stats.nba.com/stats/boxscoretraditionalv2?EndPeriod=14&EndRange=0&GameID=1022200034&RangeType=0&StartPeriod=0&StartRange=0)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -1024,7 +1034,8 @@ GET /stats/boxscoretraditionalv2
 
 ### Returns {#nba_stats_boxscoretraditionalv2-returns}
 
-**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`PlayerStats`, `TeamStats`, `TeamStarterBenchStats`) (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`PlayerStats`, `TeamStats`, `TeamStarterBenchStats`) (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+
 **PlayerStats**
 
 | col_name | type | description |
@@ -1125,110 +1136,6 @@ GET /stats/boxscoretraditionalv2
 
 ```python
 nba_stats_boxscoretraditionalv2()
-```
-
-_Last validated n/a._
-
-## nba_stats_boxscoretraditionalv3
-
-GET /stats/boxscoretraditionalv3
-
-**Endpoint URL:** `GET https://stats.nba.com/stats/boxscoretraditionalv3`
-
-**Valid URL:** [https://stats.nba.com/stats/boxscoretraditionalv3](https://stats.nba.com/stats/boxscoretraditionalv3)
-
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-| `EndPeriod` | `end_period` |  |  | `Y` |  |
-| `EndRange` | `end_range` |  |  | `Y` |  |
-| `GameID` | `game_id` |  |  | `Y` |  |
-| `RangeType` | `range_type` |  |  | `Y` |  |
-| `StartPeriod` | `start_period` |  |  | `Y` |  |
-| `StartRange` | `start_range` |  |  | `Y` |  |
-
-### Returns {#nba_stats_boxscoretraditionalv3-returns}
-
-**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`PlayerStats`, `TeamStats`) (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
-**PlayerStats**
-
-| col_name | type | description |
-|---|---|---|
-| `game_id` | character | Unique 10-character game identifier from the league's stats API. |
-| `away_team_id` | integer | Unique identifier for the away team. |
-| `home_team_id` | integer | Unique identifier for the home team. |
-| `team_id` | integer | Unique team identifier. |
-| `team_city` | character | Team city or region (e.g. 'Las Vegas'). |
-| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
-| `team_tricode` | character | Three-letter team abbreviation. |
-| `team_slug` | character | URL-friendly slug for the team name. |
-| `person_id` | integer | Player identifier from the league's stats API. |
-| `first_name` | character | Player's first name. |
-| `family_name` | character | Player's family (last) name. |
-| `name_i` | character | Abbreviated player name (first initial and last name). |
-| `player_slug` | character | URL-friendly slug for the player's name. |
-| `position` | character | Listed roster position (G, F, C, etc.). |
-| `comment` | character | Player status / inactive reason (e.g. 'DNP - Coach's Decision', 'Inactive'). |
-| `jersey_num` | character | Player's jersey number. |
-| `minutes` | character | Minutes played, formatted MM:SS (V3 PT-duration parsed) or decimal minutes (V2). |
-| `field_goals_made` | integer | Field goals made recorded in the game. |
-| `field_goals_attempted` | integer | Field goal attempts recorded in the game. |
-| `field_goals_percentage` | numeric | Field goal percentage for the game, as a decimal. |
-| `three_pointers_made` | integer | Three-pointers made recorded in the game. |
-| `three_pointers_attempted` | integer | Three-point attempts recorded in the game. |
-| `three_pointers_percentage` | numeric | Three-point percentage for the game, as a decimal. |
-| `free_throws_made` | integer | Free throws made recorded in the game. |
-| `free_throws_attempted` | integer | Free throw attempts recorded in the game. |
-| `free_throws_percentage` | numeric | Free throw percentage for the game, as a decimal. |
-| `rebounds_offensive` | integer | Offensive rebounds recorded in the game. |
-| `rebounds_defensive` | integer | Defensive rebounds recorded in the game. |
-| `rebounds_total` | integer | Total rebounds recorded in the game. |
-| `assists` | integer | Total assists. |
-| `steals` | integer | Total steals. |
-| `blocks` | integer | Total blocks. |
-| `turnovers` | integer | Total turnovers. |
-| `fouls_personal` | integer | Personal fouls recorded in the game. |
-| `points` | integer | Points scored. |
-| `plus_minus_points` | numeric | Team point differential while the player was on the floor (plus-minus). |
-
-**TeamStats**
-
-| col_name | type | description |
-|---|---|---|
-| `game_id` | character | Unique 10-character game identifier from the league's stats API. |
-| `away_team_id` | integer | Unique identifier for the away team. |
-| `home_team_id` | integer | Unique identifier for the home team. |
-| `team_id` | integer | Unique team identifier. |
-| `team_city` | character | Team city or region (e.g. 'Las Vegas'). |
-| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
-| `team_tricode` | character | Three-letter team abbreviation. |
-| `team_slug` | character | URL-friendly slug for the team name. |
-| `minutes` | character | Minutes played, formatted MM:SS (V3 PT-duration parsed) or decimal minutes (V2). |
-| `field_goals_made` | integer | Field goals made recorded in the game. |
-| `field_goals_attempted` | integer | Field goal attempts recorded in the game. |
-| `field_goals_percentage` | numeric | Field goal percentage for the game, as a decimal. |
-| `three_pointers_made` | integer | Three-pointers made recorded in the game. |
-| `three_pointers_attempted` | integer | Three-point attempts recorded in the game. |
-| `three_pointers_percentage` | numeric | Three-point percentage for the game, as a decimal. |
-| `free_throws_made` | integer | Free throws made recorded in the game. |
-| `free_throws_attempted` | integer | Free throw attempts recorded in the game. |
-| `free_throws_percentage` | numeric | Free throw percentage for the game, as a decimal. |
-| `rebounds_offensive` | integer | Offensive rebounds recorded in the game. |
-| `rebounds_defensive` | integer | Defensive rebounds recorded in the game. |
-| `rebounds_total` | integer | Total rebounds recorded in the game. |
-| `assists` | integer | Total assists. |
-| `steals` | integer | Total steals. |
-| `blocks` | integer | Total blocks. |
-| `turnovers` | integer | Total turnovers. |
-| `fouls_personal` | integer | Personal fouls recorded in the game. |
-| `points` | integer | Points scored. |
-| `plus_minus_points` | numeric | Team point differential while the player was on the floor (plus-minus). |
-
-**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
-
-### Example {#nba_stats_boxscoretraditionalv3-example}
-
-```python
-nba_stats_boxscoretraditionalv3()
 ```
 
 _Last validated n/a._

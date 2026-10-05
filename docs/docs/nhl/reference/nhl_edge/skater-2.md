@@ -13,7 +13,7 @@ Pull the EDGE skater landing page (summary across all skaters).
 
 **Endpoint URL:** `GET https://api-web.nhle.com/v1/edge/skater-landing/{season}/{game_type}`
 
-**Valid URL:** [https://api-web.nhle.com/v1/edge/skater-landing](https://api-web.nhle.com/v1/edge/skater-landing)
+**Valid URL:** [https://api-web.nhle.com/v1/edge/skater-landing/now](https://api-web.nhle.com/v1/edge/skater-landing/now)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -23,6 +23,7 @@ Pull the EDGE skater landing page (summary across all skaters).
 ### Returns {#nhl_edge_skater_landing-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `seasons_with_edge_stats` | character | List of NHL seasons for which this skater has NHL EDGE player-tracking statistics available. |

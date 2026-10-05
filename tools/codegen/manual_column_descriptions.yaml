@@ -34628,9 +34628,14 @@ scoreboard:
   home_team_id: Home team ESPN id.
   name: Full event name (e.g. 'Team A at Team B').
   neutral_site: Whether the match is played at a neutral venue.
+  note: "Event note text from the competition (e.g. a series or game label such as 'World Series - Game 1', or a shootout result); an empty string when there is none."
+  season_type: "ESPN season-type id of the event's season: 1 preseason, 2 regular season, 3 postseason, 4 offseason for the US leagues; soccer competitions carry their own competition-specific ids (e.g. 13481)."
+  season_year: 'Integer season year ESPN assigns the event (e.g. 2025 for the 2025-26 season).'
   short_name: Abbreviated event name (e.g. 'TA @ TB').
   status: Status type name (e.g. STATUS_FINAL, STATUS_SCHEDULED, STATUS_IN_PROGRESS).
+  status_clock: 'Game clock in seconds as ESPN reports it: time remaining in the period for clock sports, elapsed seconds for soccer (e.g. 5400.0 at full time); 0.0 once a game has ended.'
   status_detail: Human-readable status detail (e.g. 'Final', the over/innings summary).
+  status_period: 'Current or final period number (quarter, half, inning or period, depending on the sport).'
   venue: Full name of the venue where the match was played.
 scoreboardv2:
   pts_ot10: Points scored by the team in overtime period 10.

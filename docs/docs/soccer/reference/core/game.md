@@ -13,7 +13,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/{event_id}/competitions/{cid}`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions](https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions/401584793](https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions/401584793)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -28,7 +28,7 @@ ESPN endpoint.
 ### Example {#espn_soccer_game_competition-example}
 
 ```python
-espn_soccer_game_competition(event_id='401584793')
+espn_soccer_game_competition(league='eng.1', event_id='401584793')
 ```
 
 _Last validated n/a._
@@ -39,7 +39,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/{event_id}/competitions/{cid}/competitors`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions](https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions/401584793/competitors](https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions/401584793/competitors)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -54,7 +54,7 @@ ESPN endpoint.
 ### Example {#espn_soccer_game_teams-example}
 
 ```python
-espn_soccer_game_teams(event_id='401584793')
+espn_soccer_game_teams(league='eng.1', event_id='401584793')
 ```
 
 _Last validated n/a._
@@ -65,7 +65,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/{event_id}/competitions/{cid}/competitors/{team_id}`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions](https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions/401584793/competitors/4](https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions/401584793/competitors/4)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -81,7 +81,7 @@ ESPN endpoint.
 ### Example {#espn_soccer_game_team-example}
 
 ```python
-espn_soccer_game_team(event_id='401584793', team_id='4')
+espn_soccer_game_team(league='eng.1', event_id='401584793', team_id='4')
 ```
 
 _Last validated n/a._
@@ -92,7 +92,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/{event_id}/competitions/{cid}/competitors/{team_id}/roster`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions](https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions/401584793/competitors/4/roster](https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions/401584793/competitors/4/roster)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -108,7 +108,7 @@ ESPN endpoint.
 ### Example {#espn_soccer_game_team_roster-example}
 
 ```python
-espn_soccer_game_team_roster(event_id='401584793', team_id='4')
+espn_soccer_game_team_roster(league='eng.1', event_id='401584793', team_id='4')
 ```
 
 _Last validated n/a._
@@ -119,7 +119,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/{event_id}/competitions/{cid}/competitors/{team_id}/linescores`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions](https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions/401584793/competitors/4/linescores](https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions/401584793/competitors/4/linescores)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -135,7 +135,7 @@ ESPN endpoint.
 ### Example {#espn_soccer_game_team_linescores-example}
 
 ```python
-espn_soccer_game_team_linescores(event_id='401584793', team_id='4')
+espn_soccer_game_team_linescores(league='eng.1', event_id='401584793', team_id='4')
 ```
 
 _Last validated n/a._
@@ -146,7 +146,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/{event_id}/competitions/{cid}/competitors/{team_id}/statistics`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions](https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions/401584793/competitors/4/statistics](https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions/401584793/competitors/4/statistics)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -162,7 +162,7 @@ ESPN endpoint.
 ### Example {#espn_soccer_game_team_statistics-example}
 
 ```python
-espn_soccer_game_team_statistics(event_id='401584793', team_id='4')
+espn_soccer_game_team_statistics(league='eng.1', event_id='401584793', team_id='4')
 ```
 
 _Last validated n/a._
@@ -173,7 +173,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/{event_id}/competitions/{cid}/competitors/{team_id}/record`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions](https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions/401584793/competitors/4/record](https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions/401584793/competitors/4/record)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -189,7 +189,7 @@ ESPN endpoint.
 ### Example {#espn_soccer_game_team_record-example}
 
 ```python
-espn_soccer_game_team_record(event_id='401584793', team_id='4')
+espn_soccer_game_team_record(league='eng.1', event_id='401584793', team_id='4')
 ```
 
 _Last validated n/a._
@@ -200,7 +200,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/{event_id}/competitions/{cid}/competitors/{team_id}/leaders`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions](https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions/401584793/competitors/4/leaders](https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions/401584793/competitors/4/leaders)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -216,7 +216,7 @@ ESPN endpoint.
 ### Example {#espn_soccer_game_team_leaders-example}
 
 ```python
-espn_soccer_game_team_leaders(event_id='401584793', team_id='4')
+espn_soccer_game_team_leaders(league='eng.1', event_id='401584793', team_id='4')
 ```
 
 _Last validated n/a._
@@ -227,7 +227,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/{event_id}/competitions/{cid}/odds`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions](https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions/401584793/odds](https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions/401584793/odds)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -242,7 +242,7 @@ ESPN endpoint.
 ### Example {#espn_soccer_game_odds-example}
 
 ```python
-espn_soccer_game_odds(event_id='401584793')
+espn_soccer_game_odds(league='eng.1', event_id='401584793')
 ```
 
 _Last validated n/a._
@@ -253,7 +253,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/{event_id}/competitions/{cid}/probabilities`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions](https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions/401584793/probabilities?limit=300](https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions/401584793/probabilities?limit=300)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -269,7 +269,7 @@ ESPN endpoint.
 ### Example {#espn_soccer_game_probabilities-example}
 
 ```python
-espn_soccer_game_probabilities(event_id='401584793')
+espn_soccer_game_probabilities(league='eng.1', event_id='401584793')
 ```
 
 _Last validated n/a._
@@ -280,7 +280,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/{event_id}/competitions/{cid}/plays`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions](https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions/401584793/plays?limit=1000](https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions/401584793/plays?limit=1000)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -296,7 +296,7 @@ ESPN endpoint.
 ### Example {#espn_soccer_game_plays-example}
 
 ```python
-espn_soccer_game_plays(event_id='401584793')
+espn_soccer_game_plays(league='eng.1', event_id='401584793')
 ```
 
 _Last validated n/a._
@@ -307,7 +307,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/{event_id}/competitions/{cid}/plays/{play_id}`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions](https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions/401584793/plays/1](https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions/401584793/plays/1)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -323,7 +323,7 @@ ESPN endpoint.
 ### Example {#espn_soccer_game_play-example}
 
 ```python
-espn_soccer_game_play(event_id='401584793', play_id='1')
+espn_soccer_game_play(league='eng.1', event_id='401584793', play_id='1')
 ```
 
 _Last validated n/a._
@@ -334,7 +334,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/{event_id}/competitions/{cid}/plays/{play_id}/personnel`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions](https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions/401584793/plays/1/personnel](https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions/401584793/plays/1/personnel)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -350,7 +350,7 @@ ESPN endpoint.
 ### Example {#espn_soccer_game_play_personnel-example}
 
 ```python
-espn_soccer_game_play_personnel(event_id='401584793', play_id='1')
+espn_soccer_game_play_personnel(league='eng.1', event_id='401584793', play_id='1')
 ```
 
 _Last validated n/a._
@@ -361,7 +361,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/{event_id}/competitions/{cid}/situation`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions](https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions/401584793/situation](https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions/401584793/situation)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -376,7 +376,7 @@ ESPN endpoint.
 ### Example {#espn_soccer_game_situation-example}
 
 ```python
-espn_soccer_game_situation(event_id='401584793')
+espn_soccer_game_situation(league='eng.1', event_id='401584793')
 ```
 
 _Last validated n/a._
@@ -387,7 +387,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/{event_id}/competitions/{cid}/status`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions](https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions/401584793/status](https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions/401584793/status)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -402,7 +402,7 @@ ESPN endpoint.
 ### Example {#espn_soccer_game_status-example}
 
 ```python
-espn_soccer_game_status(event_id='401584793')
+espn_soccer_game_status(league='eng.1', event_id='401584793')
 ```
 
 _Last validated n/a._
@@ -413,7 +413,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/{event_id}/competitions/{cid}/officials`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions](https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions/401584793/officials](https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions/401584793/officials)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -428,7 +428,7 @@ ESPN endpoint.
 ### Example {#espn_soccer_game_officials-example}
 
 ```python
-espn_soccer_game_officials(event_id='401584793')
+espn_soccer_game_officials(league='eng.1', event_id='401584793')
 ```
 
 _Last validated n/a._
@@ -439,7 +439,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/{event_id}/competitions/{cid}/broadcasts`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions](https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions/401584793/broadcasts](https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions/401584793/broadcasts)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -454,7 +454,7 @@ ESPN endpoint.
 ### Example {#espn_soccer_game_broadcasts-example}
 
 ```python
-espn_soccer_game_broadcasts(event_id='401584793')
+espn_soccer_game_broadcasts(league='eng.1', event_id='401584793')
 ```
 
 _Last validated n/a._
@@ -465,7 +465,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/{event_id}/competitions/{cid}/predictor`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions](https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions/401584793/predictor](https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions/401584793/predictor)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -480,7 +480,7 @@ ESPN endpoint.
 ### Example {#espn_soccer_game_predictor-example}
 
 ```python
-espn_soccer_game_predictor(event_id='401584793')
+espn_soccer_game_predictor(league='eng.1', event_id='401584793')
 ```
 
 _Last validated n/a._
@@ -491,7 +491,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/{event_id}/competitions/{cid}/powerindex`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions](https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions/401584793/powerindex](https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions/401584793/powerindex)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -506,7 +506,7 @@ ESPN endpoint.
 ### Example {#espn_soccer_game_powerindex-example}
 
 ```python
-espn_soccer_game_powerindex(event_id='401584793')
+espn_soccer_game_powerindex(league='eng.1', event_id='401584793')
 ```
 
 _Last validated n/a._
@@ -517,7 +517,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/{event_id}/competitions/{cid}/propbets`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions](https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions/401584793/propbets](https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions/401584793/propbets)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -532,7 +532,7 @@ ESPN endpoint.
 ### Example {#espn_soccer_game_propbets-example}
 
 ```python
-espn_soccer_game_propbets(event_id='401584793')
+espn_soccer_game_propbets(league='eng.1', event_id='401584793')
 ```
 
 _Last validated n/a._
@@ -543,7 +543,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/{event_id}/competitions/{cid}/leaders`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions](https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions/401584793/leaders](https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions/401584793/leaders)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -558,7 +558,7 @@ ESPN endpoint.
 ### Example {#espn_soccer_game_leaders-example}
 
 ```python
-espn_soccer_game_leaders(event_id='401584793')
+espn_soccer_game_leaders(league='eng.1', event_id='401584793')
 ```
 
 _Last validated n/a._
@@ -569,7 +569,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/{event_id}/competitions/{cid}/scoringplays`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions](https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions/401584793/scoringplays](https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions/401584793/scoringplays)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -584,7 +584,7 @@ ESPN endpoint.
 ### Example {#espn_soccer_game_scoringplays-example}
 
 ```python
-espn_soccer_game_scoringplays(event_id='401584793')
+espn_soccer_game_scoringplays(league='eng.1', event_id='401584793')
 ```
 
 _Last validated n/a._
@@ -595,7 +595,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/{event_id}/competitions/{cid}/officials/{official_id}`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions](https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions/401584793/officials/1](https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions/401584793/officials/1)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -611,7 +611,7 @@ ESPN endpoint.
 ### Example {#espn_soccer_game_official_detail-example}
 
 ```python
-espn_soccer_game_official_detail(event_id='401584793', official_id='1')
+espn_soccer_game_official_detail(league='eng.1', event_id='401584793', official_id='1')
 ```
 
 _Last validated n/a._

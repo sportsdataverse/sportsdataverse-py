@@ -1,11 +1,11 @@
 ---
-title: "MLB — MLB Statcast (Baseball Savant) — Leaderboard: expected–year"
-sidebar_label: "Leaderboard: expected–year"
+title: "MLB — MLB Statcast (Baseball Savant) — Leaderboard: expected–baserunning"
+sidebar_label: "Leaderboard: expected–baserunning"
 sidebar_position: 1
-description: "MLB — MLB Statcast (Baseball Savant) — Leaderboard: expected–year — function reference in sdv-py, the SportsDataverse Python package."
+description: "MLB — MLB Statcast (Baseball Savant) — Leaderboard: expected–baserunning — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---
-# MLB — MLB Statcast (Baseball Savant) — Leaderboard: expected–year
+# MLB — MLB Statcast (Baseball Savant) — Leaderboard: expected–baserunning
 
 ## mlb_statcast_leaderboard_expected_stats
 
@@ -13,7 +13,7 @@ GET /leaderboard/expected_statistics — xBA/xSLG/xwOBA/xISO expected-statistics
 
 **Endpoint URL:** `GET https://baseballsavant.mlb.com/leaderboard/expected_statistics`
 
-**Valid URL:** [https://baseballsavant.mlb.com/leaderboard/expected_statistics](https://baseballsavant.mlb.com/leaderboard/expected_statistics)
+**Valid URL:** [https://baseballsavant.mlb.com/leaderboard/expected_statistics?csv=true](https://baseballsavant.mlb.com/leaderboard/expected_statistics?csv=true)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -25,6 +25,7 @@ GET /leaderboard/expected_statistics — xBA/xSLG/xwOBA/xISO expected-statistics
 ### Returns {#mlb_statcast_leaderboard_expected_stats-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `last_name, first_name` | character | Last name, first name. |
@@ -58,7 +59,7 @@ GET /leaderboard/percentile-rankings — player percentile-ranking sliders (xwOB
 
 **Endpoint URL:** `GET https://baseballsavant.mlb.com/leaderboard/percentile-rankings`
 
-**Valid URL:** [https://baseballsavant.mlb.com/leaderboard/percentile-rankings](https://baseballsavant.mlb.com/leaderboard/percentile-rankings)
+**Valid URL:** [https://baseballsavant.mlb.com/leaderboard/percentile-rankings?csv=true](https://baseballsavant.mlb.com/leaderboard/percentile-rankings?csv=true)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -70,6 +71,7 @@ GET /leaderboard/percentile-rankings — player percentile-ranking sliders (xwOB
 ### Returns {#mlb_statcast_leaderboard_percentile_rankings-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `player_name` | character | Player name. |
@@ -112,7 +114,7 @@ GET /leaderboard/sprint_speed — sprint-speed (ft/sec) leaderboard.
 
 **Endpoint URL:** `GET https://baseballsavant.mlb.com/leaderboard/sprint_speed`
 
-**Valid URL:** [https://baseballsavant.mlb.com/leaderboard/sprint_speed](https://baseballsavant.mlb.com/leaderboard/sprint_speed)
+**Valid URL:** [https://baseballsavant.mlb.com/leaderboard/sprint_speed?csv=true](https://baseballsavant.mlb.com/leaderboard/sprint_speed?csv=true)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -124,6 +126,7 @@ GET /leaderboard/sprint_speed — sprint-speed (ft/sec) leaderboard.
 ### Returns {#mlb_statcast_leaderboard_sprint_speed-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `last_name, first_name` | character | Last name, first name. |
@@ -153,7 +156,7 @@ GET /leaderboard/running_splits — 90-foot running splits leaderboard.
 
 **Endpoint URL:** `GET https://baseballsavant.mlb.com/leaderboard/running_splits`
 
-**Valid URL:** [https://baseballsavant.mlb.com/leaderboard/running_splits](https://baseballsavant.mlb.com/leaderboard/running_splits)
+**Valid URL:** [https://baseballsavant.mlb.com/leaderboard/running_splits?csv=true](https://baseballsavant.mlb.com/leaderboard/running_splits?csv=true)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -165,6 +168,7 @@ GET /leaderboard/running_splits — 90-foot running splits leaderboard.
 ### Returns {#mlb_statcast_leaderboard_running_splits-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `last_name, first_name` | character | Last name, first name. |
@@ -210,7 +214,7 @@ GET /leaderboard/bat-tracking — bat-tracking (swing speed / squared-up) leader
 
 **Endpoint URL:** `GET https://baseballsavant.mlb.com/leaderboard/bat-tracking`
 
-**Valid URL:** [https://baseballsavant.mlb.com/leaderboard/bat-tracking](https://baseballsavant.mlb.com/leaderboard/bat-tracking)
+**Valid URL:** [https://baseballsavant.mlb.com/leaderboard/bat-tracking?csv=true](https://baseballsavant.mlb.com/leaderboard/bat-tracking?csv=true)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -222,6 +226,7 @@ GET /leaderboard/bat-tracking — bat-tracking (swing speed / squared-up) leader
 ### Returns {#mlb_statcast_leaderboard_bat_tracking-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `id` | integer | MLBAM player id. |
@@ -259,7 +264,7 @@ GET /leaderboard/bat-tracking/swing-path-attack-angle — swing path & attack-an
 
 **Endpoint URL:** `GET https://baseballsavant.mlb.com/leaderboard/bat-tracking/swing-path-attack-angle`
 
-**Valid URL:** [https://baseballsavant.mlb.com/leaderboard/bat-tracking/swing-path-attack-angle](https://baseballsavant.mlb.com/leaderboard/bat-tracking/swing-path-attack-angle)
+**Valid URL:** [https://baseballsavant.mlb.com/leaderboard/bat-tracking/swing-path-attack-angle?csv=true](https://baseballsavant.mlb.com/leaderboard/bat-tracking/swing-path-attack-angle?csv=true)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -271,6 +276,7 @@ GET /leaderboard/bat-tracking/swing-path-attack-angle — swing path & attack-an
 ### Returns {#mlb_statcast_leaderboard_swing_path-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `id` | integer | MLBAM player id. |
@@ -303,7 +309,7 @@ GET /leaderboard/bat-tracking/swing-timing-miss-distance — swing timing & miss
 
 **Endpoint URL:** `GET https://baseballsavant.mlb.com/leaderboard/bat-tracking/swing-timing-miss-distance`
 
-**Valid URL:** [https://baseballsavant.mlb.com/leaderboard/bat-tracking/swing-timing-miss-distance](https://baseballsavant.mlb.com/leaderboard/bat-tracking/swing-timing-miss-distance)
+**Valid URL:** [https://baseballsavant.mlb.com/leaderboard/bat-tracking/swing-timing-miss-distance?csv=true](https://baseballsavant.mlb.com/leaderboard/bat-tracking/swing-timing-miss-distance?csv=true)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -315,6 +321,7 @@ GET /leaderboard/bat-tracking/swing-timing-miss-distance — swing timing & miss
 ### Returns {#mlb_statcast_leaderboard_swing_timing-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `id` | integer | MLBAM player id. |
@@ -360,7 +367,7 @@ GET /leaderboard/swing-take — swing/take run-value leaderboard.
 
 **Endpoint URL:** `GET https://baseballsavant.mlb.com/leaderboard/swing-take`
 
-**Valid URL:** [https://baseballsavant.mlb.com/leaderboard/swing-take](https://baseballsavant.mlb.com/leaderboard/swing-take)
+**Valid URL:** [https://baseballsavant.mlb.com/leaderboard/swing-take?csv=true](https://baseballsavant.mlb.com/leaderboard/swing-take?csv=true)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -372,6 +379,7 @@ GET /leaderboard/swing-take — swing/take run-value leaderboard.
 ### Returns {#mlb_statcast_leaderboard_swing_take-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `year` | character | Season year. |
@@ -402,7 +410,7 @@ GET /leaderboard/statcast — exit velocity & barrels leaderboard.
 
 **Endpoint URL:** `GET https://baseballsavant.mlb.com/leaderboard/statcast`
 
-**Valid URL:** [https://baseballsavant.mlb.com/leaderboard/statcast](https://baseballsavant.mlb.com/leaderboard/statcast)
+**Valid URL:** [https://baseballsavant.mlb.com/leaderboard/statcast?csv=true](https://baseballsavant.mlb.com/leaderboard/statcast?csv=true)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -414,6 +422,7 @@ GET /leaderboard/statcast — exit velocity & barrels leaderboard.
 ### Returns {#mlb_statcast_leaderboard_exit_velocity_barrels-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `last_name, first_name` | character | Last name, first name. |
@@ -451,7 +460,7 @@ GET /leaderboard/batted-ball — batted-ball profile leaderboard.
 
 **Endpoint URL:** `GET https://baseballsavant.mlb.com/leaderboard/batted-ball`
 
-**Valid URL:** [https://baseballsavant.mlb.com/leaderboard/batted-ball](https://baseballsavant.mlb.com/leaderboard/batted-ball)
+**Valid URL:** [https://baseballsavant.mlb.com/leaderboard/batted-ball?csv=true](https://baseballsavant.mlb.com/leaderboard/batted-ball?csv=true)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -463,6 +472,7 @@ GET /leaderboard/batted-ball — batted-ball profile leaderboard.
 ### Returns {#mlb_statcast_leaderboard_batted_ball-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `id` | integer | MLBAM player id. |
@@ -500,7 +510,7 @@ GET /leaderboard/home-runs — Statcast home-runs leaderboard.
 
 **Endpoint URL:** `GET https://baseballsavant.mlb.com/leaderboard/home-runs`
 
-**Valid URL:** [https://baseballsavant.mlb.com/leaderboard/home-runs](https://baseballsavant.mlb.com/leaderboard/home-runs)
+**Valid URL:** [https://baseballsavant.mlb.com/leaderboard/home-runs?csv=true](https://baseballsavant.mlb.com/leaderboard/home-runs?csv=true)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -512,6 +522,7 @@ GET /leaderboard/home-runs — Statcast home-runs leaderboard.
 ### Returns {#mlb_statcast_leaderboard_home_runs-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `player` | character | Player. |
@@ -544,7 +555,7 @@ GET /leaderboard/pitch-arsenals — pitch arsenals (velo/spin/movement) leaderbo
 
 **Endpoint URL:** `GET https://baseballsavant.mlb.com/leaderboard/pitch-arsenals`
 
-**Valid URL:** [https://baseballsavant.mlb.com/leaderboard/pitch-arsenals](https://baseballsavant.mlb.com/leaderboard/pitch-arsenals)
+**Valid URL:** [https://baseballsavant.mlb.com/leaderboard/pitch-arsenals?csv=true](https://baseballsavant.mlb.com/leaderboard/pitch-arsenals?csv=true)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -556,6 +567,7 @@ GET /leaderboard/pitch-arsenals — pitch arsenals (velo/spin/movement) leaderbo
 ### Returns {#mlb_statcast_leaderboard_pitch_arsenals-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `last_name, first_name` | character | Last name, first name. |
@@ -587,7 +599,7 @@ GET /leaderboard/pitch-arsenal-stats — per-pitch-type outcome stats leaderboar
 
 **Endpoint URL:** `GET https://baseballsavant.mlb.com/leaderboard/pitch-arsenal-stats`
 
-**Valid URL:** [https://baseballsavant.mlb.com/leaderboard/pitch-arsenal-stats](https://baseballsavant.mlb.com/leaderboard/pitch-arsenal-stats)
+**Valid URL:** [https://baseballsavant.mlb.com/leaderboard/pitch-arsenal-stats?csv=true](https://baseballsavant.mlb.com/leaderboard/pitch-arsenal-stats?csv=true)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -599,6 +611,7 @@ GET /leaderboard/pitch-arsenal-stats — per-pitch-type outcome stats leaderboar
 ### Returns {#mlb_statcast_leaderboard_pitch_arsenal_stats-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `last_name, first_name` | character | Last name, first name. |
@@ -638,7 +651,7 @@ GET /leaderboard/pitch-movement — pitch-movement leaderboard.
 
 **Endpoint URL:** `GET https://baseballsavant.mlb.com/leaderboard/pitch-movement`
 
-**Valid URL:** [https://baseballsavant.mlb.com/leaderboard/pitch-movement](https://baseballsavant.mlb.com/leaderboard/pitch-movement)
+**Valid URL:** [https://baseballsavant.mlb.com/leaderboard/pitch-movement?csv=true](https://baseballsavant.mlb.com/leaderboard/pitch-movement?csv=true)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -650,6 +663,7 @@ GET /leaderboard/pitch-movement — pitch-movement leaderboard.
 ### Returns {#mlb_statcast_leaderboard_pitch_movement-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `year` | integer | Season year. |
@@ -693,7 +707,7 @@ GET /leaderboard/pitch-tempo — pitch-tempo leaderboard.
 
 **Endpoint URL:** `GET https://baseballsavant.mlb.com/leaderboard/pitch-tempo`
 
-**Valid URL:** [https://baseballsavant.mlb.com/leaderboard/pitch-tempo](https://baseballsavant.mlb.com/leaderboard/pitch-tempo)
+**Valid URL:** [https://baseballsavant.mlb.com/leaderboard/pitch-tempo?csv=true](https://baseballsavant.mlb.com/leaderboard/pitch-tempo?csv=true)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -705,6 +719,7 @@ GET /leaderboard/pitch-tempo — pitch-tempo leaderboard.
 ### Returns {#mlb_statcast_leaderboard_pitch_tempo-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `entity_id` | integer | MLBAM id of the player/team entity. |
@@ -735,7 +750,7 @@ GET /leaderboard/active-spin — active-spin leaderboard.
 
 **Endpoint URL:** `GET https://baseballsavant.mlb.com/leaderboard/active-spin`
 
-**Valid URL:** [https://baseballsavant.mlb.com/leaderboard/active-spin](https://baseballsavant.mlb.com/leaderboard/active-spin)
+**Valid URL:** [https://baseballsavant.mlb.com/leaderboard/active-spin?csv=true](https://baseballsavant.mlb.com/leaderboard/active-spin?csv=true)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -747,6 +762,7 @@ GET /leaderboard/active-spin — active-spin leaderboard.
 ### Returns {#mlb_statcast_leaderboard_active_spin-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `entity_name` | character | Player (or team) entity name. |
@@ -778,7 +794,7 @@ GET /leaderboard/spin-direction-pitches — spin-direction (per-pitch) leaderboa
 
 **Endpoint URL:** `GET https://baseballsavant.mlb.com/leaderboard/spin-direction-pitches`
 
-**Valid URL:** [https://baseballsavant.mlb.com/leaderboard/spin-direction-pitches](https://baseballsavant.mlb.com/leaderboard/spin-direction-pitches)
+**Valid URL:** [https://baseballsavant.mlb.com/leaderboard/spin-direction-pitches?csv=true](https://baseballsavant.mlb.com/leaderboard/spin-direction-pitches?csv=true)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -790,6 +806,7 @@ GET /leaderboard/spin-direction-pitches — spin-direction (per-pitch) leaderboa
 ### Returns {#mlb_statcast_leaderboard_spin_direction-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `year` | integer | Season year. |
@@ -838,7 +855,7 @@ GET /leaderboard/pitcher-arm-angles — pitcher arm-angle leaderboard.
 
 **Endpoint URL:** `GET https://baseballsavant.mlb.com/leaderboard/pitcher-arm-angles`
 
-**Valid URL:** [https://baseballsavant.mlb.com/leaderboard/pitcher-arm-angles](https://baseballsavant.mlb.com/leaderboard/pitcher-arm-angles)
+**Valid URL:** [https://baseballsavant.mlb.com/leaderboard/pitcher-arm-angles?csv=true](https://baseballsavant.mlb.com/leaderboard/pitcher-arm-angles?csv=true)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -850,6 +867,7 @@ GET /leaderboard/pitcher-arm-angles — pitcher arm-angle leaderboard.
 ### Returns {#mlb_statcast_leaderboard_arm_angles-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `pitcher` | integer | MLBAM id of the pitcher. |
@@ -879,7 +897,7 @@ GET /leaderboard/pitcher-running-game — pitcher running-game (holding runners)
 
 **Endpoint URL:** `GET https://baseballsavant.mlb.com/leaderboard/pitcher-running-game`
 
-**Valid URL:** [https://baseballsavant.mlb.com/leaderboard/pitcher-running-game](https://baseballsavant.mlb.com/leaderboard/pitcher-running-game)
+**Valid URL:** [https://baseballsavant.mlb.com/leaderboard/pitcher-running-game?csv=true](https://baseballsavant.mlb.com/leaderboard/pitcher-running-game?csv=true)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -891,6 +909,7 @@ GET /leaderboard/pitcher-running-game — pitcher running-game (holding runners)
 ### Returns {#mlb_statcast_leaderboard_pitcher_running_game-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `player_id` | integer | MLBAM player id. |
@@ -935,7 +954,7 @@ GET /leaderboard/outs_above_average — Outs Above Average (OAA) fielding leader
 
 **Endpoint URL:** `GET https://baseballsavant.mlb.com/leaderboard/outs_above_average`
 
-**Valid URL:** [https://baseballsavant.mlb.com/leaderboard/outs_above_average](https://baseballsavant.mlb.com/leaderboard/outs_above_average)
+**Valid URL:** [https://baseballsavant.mlb.com/leaderboard/outs_above_average?csv=true](https://baseballsavant.mlb.com/leaderboard/outs_above_average?csv=true)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -947,6 +966,7 @@ GET /leaderboard/outs_above_average — Outs Above Average (OAA) fielding leader
 ### Returns {#mlb_statcast_leaderboard_outs_above_average-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `last_name, first_name` | character | Last name, first name. |
@@ -982,7 +1002,7 @@ GET /leaderboard/outfield_directional_outs_above_average — outfield directiona
 
 **Endpoint URL:** `GET https://baseballsavant.mlb.com/leaderboard/outfield_directional_outs_above_average`
 
-**Valid URL:** [https://baseballsavant.mlb.com/leaderboard/outfield_directional_outs_above_average](https://baseballsavant.mlb.com/leaderboard/outfield_directional_outs_above_average)
+**Valid URL:** [https://baseballsavant.mlb.com/leaderboard/outfield_directional_outs_above_average?csv=true](https://baseballsavant.mlb.com/leaderboard/outfield_directional_outs_above_average?csv=true)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -994,6 +1014,7 @@ GET /leaderboard/outfield_directional_outs_above_average — outfield directiona
 ### Returns {#mlb_statcast_leaderboard_outfield_directional_oaa-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `last_name, first_name` | character | Last name, first name. |
@@ -1025,7 +1046,7 @@ GET /leaderboard/outfield_jump — outfielder jump leaderboard.
 
 **Endpoint URL:** `GET https://baseballsavant.mlb.com/leaderboard/outfield_jump`
 
-**Valid URL:** [https://baseballsavant.mlb.com/leaderboard/outfield_jump](https://baseballsavant.mlb.com/leaderboard/outfield_jump)
+**Valid URL:** [https://baseballsavant.mlb.com/leaderboard/outfield_jump?csv=true](https://baseballsavant.mlb.com/leaderboard/outfield_jump?csv=true)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -1037,6 +1058,7 @@ GET /leaderboard/outfield_jump — outfielder jump leaderboard.
 ### Returns {#mlb_statcast_leaderboard_outfield_jump-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `last_name, first_name` | character | Last name, first name. |
@@ -1068,7 +1090,7 @@ GET /leaderboard/catch_probability — outfielder catch-probability leaderboard.
 
 **Endpoint URL:** `GET https://baseballsavant.mlb.com/leaderboard/catch_probability`
 
-**Valid URL:** [https://baseballsavant.mlb.com/leaderboard/catch_probability](https://baseballsavant.mlb.com/leaderboard/catch_probability)
+**Valid URL:** [https://baseballsavant.mlb.com/leaderboard/catch_probability?csv=true](https://baseballsavant.mlb.com/leaderboard/catch_probability?csv=true)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -1080,6 +1102,7 @@ GET /leaderboard/catch_probability — outfielder catch-probability leaderboard.
 ### Returns {#mlb_statcast_leaderboard_catch_probability-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `last_name, first_name` | character | Last name, first name. |
@@ -1117,7 +1140,7 @@ GET /leaderboard/arm-strength — fielder arm-strength leaderboard.
 
 **Endpoint URL:** `GET https://baseballsavant.mlb.com/leaderboard/arm-strength`
 
-**Valid URL:** [https://baseballsavant.mlb.com/leaderboard/arm-strength](https://baseballsavant.mlb.com/leaderboard/arm-strength)
+**Valid URL:** [https://baseballsavant.mlb.com/leaderboard/arm-strength?csv=true](https://baseballsavant.mlb.com/leaderboard/arm-strength?csv=true)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -1129,6 +1152,7 @@ GET /leaderboard/arm-strength — fielder arm-strength leaderboard.
 ### Returns {#mlb_statcast_leaderboard_arm_strength-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `fielder_name` | character | Fielder name. |
@@ -1174,7 +1198,7 @@ GET /leaderboard/poptime — catcher pop-time leaderboard.
 
 **Endpoint URL:** `GET https://baseballsavant.mlb.com/leaderboard/poptime`
 
-**Valid URL:** [https://baseballsavant.mlb.com/leaderboard/poptime](https://baseballsavant.mlb.com/leaderboard/poptime)
+**Valid URL:** [https://baseballsavant.mlb.com/leaderboard/poptime?csv=true](https://baseballsavant.mlb.com/leaderboard/poptime?csv=true)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -1186,6 +1210,7 @@ GET /leaderboard/poptime — catcher pop-time leaderboard.
 ### Returns {#mlb_statcast_leaderboard_poptime-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `entity_name` | character | Player (or team) entity name. |
@@ -1219,7 +1244,7 @@ GET /leaderboard/catcher-framing — catcher framing leaderboard.
 
 **Endpoint URL:** `GET https://baseballsavant.mlb.com/leaderboard/catcher-framing`
 
-**Valid URL:** [https://baseballsavant.mlb.com/leaderboard/catcher-framing](https://baseballsavant.mlb.com/leaderboard/catcher-framing)
+**Valid URL:** [https://baseballsavant.mlb.com/leaderboard/catcher-framing?csv=true](https://baseballsavant.mlb.com/leaderboard/catcher-framing?csv=true)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -1231,6 +1256,7 @@ GET /leaderboard/catcher-framing — catcher framing leaderboard.
 ### Returns {#mlb_statcast_leaderboard_catcher_framing-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `id` | integer | MLBAM player id. |
@@ -1271,7 +1297,7 @@ GET /leaderboard/catcher-blocking — catcher blocking leaderboard.
 
 **Endpoint URL:** `GET https://baseballsavant.mlb.com/leaderboard/catcher-blocking`
 
-**Valid URL:** [https://baseballsavant.mlb.com/leaderboard/catcher-blocking](https://baseballsavant.mlb.com/leaderboard/catcher-blocking)
+**Valid URL:** [https://baseballsavant.mlb.com/leaderboard/catcher-blocking?csv=true](https://baseballsavant.mlb.com/leaderboard/catcher-blocking?csv=true)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -1283,6 +1309,7 @@ GET /leaderboard/catcher-blocking — catcher blocking leaderboard.
 ### Returns {#mlb_statcast_leaderboard_catcher_blocking-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `player_id` | integer | MLBAM player id. |
@@ -1319,7 +1346,7 @@ GET /leaderboard/catcher-throwing — catcher throwing leaderboard.
 
 **Endpoint URL:** `GET https://baseballsavant.mlb.com/leaderboard/catcher-throwing`
 
-**Valid URL:** [https://baseballsavant.mlb.com/leaderboard/catcher-throwing](https://baseballsavant.mlb.com/leaderboard/catcher-throwing)
+**Valid URL:** [https://baseballsavant.mlb.com/leaderboard/catcher-throwing?csv=true](https://baseballsavant.mlb.com/leaderboard/catcher-throwing?csv=true)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -1331,6 +1358,7 @@ GET /leaderboard/catcher-throwing — catcher throwing leaderboard.
 ### Returns {#mlb_statcast_leaderboard_catcher_throwing-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `player_id` | integer | MLBAM player id. |
@@ -1373,7 +1401,7 @@ GET /leaderboard/catcher-stance — catcher stance leaderboard.
 
 **Endpoint URL:** `GET https://baseballsavant.mlb.com/leaderboard/catcher-stance`
 
-**Valid URL:** [https://baseballsavant.mlb.com/leaderboard/catcher-stance](https://baseballsavant.mlb.com/leaderboard/catcher-stance)
+**Valid URL:** [https://baseballsavant.mlb.com/leaderboard/catcher-stance?csv=true](https://baseballsavant.mlb.com/leaderboard/catcher-stance?csv=true)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -1385,6 +1413,7 @@ GET /leaderboard/catcher-stance — catcher stance leaderboard.
 ### Returns {#mlb_statcast_leaderboard_catcher_stance-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `id` | integer | MLBAM player id. |
@@ -1431,7 +1460,7 @@ GET /leaderboard/basestealing-run-value — basestealing run-value leaderboard.
 
 **Endpoint URL:** `GET https://baseballsavant.mlb.com/leaderboard/basestealing-run-value`
 
-**Valid URL:** [https://baseballsavant.mlb.com/leaderboard/basestealing-run-value](https://baseballsavant.mlb.com/leaderboard/basestealing-run-value)
+**Valid URL:** [https://baseballsavant.mlb.com/leaderboard/basestealing-run-value?csv=true](https://baseballsavant.mlb.com/leaderboard/basestealing-run-value?csv=true)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -1443,6 +1472,7 @@ GET /leaderboard/basestealing-run-value — basestealing run-value leaderboard.
 ### Returns {#mlb_statcast_leaderboard_basestealing_run_value-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `player_id` | integer | MLBAM player id. |
@@ -1486,7 +1516,7 @@ GET /leaderboard/baserunning-run-value — baserunning run-value leaderboard.
 
 **Endpoint URL:** `GET https://baseballsavant.mlb.com/leaderboard/baserunning-run-value`
 
-**Valid URL:** [https://baseballsavant.mlb.com/leaderboard/baserunning-run-value](https://baseballsavant.mlb.com/leaderboard/baserunning-run-value)
+**Valid URL:** [https://baseballsavant.mlb.com/leaderboard/baserunning-run-value?csv=true](https://baseballsavant.mlb.com/leaderboard/baserunning-run-value?csv=true)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -1498,6 +1528,7 @@ GET /leaderboard/baserunning-run-value — baserunning run-value leaderboard.
 ### Returns {#mlb_statcast_leaderboard_baserunning_run_value-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `player_id` | integer | MLBAM player id. |
@@ -1535,7 +1566,7 @@ GET /leaderboard/baserunning — extra-bases-taken run-value leaderboard.
 
 **Endpoint URL:** `GET https://baseballsavant.mlb.com/leaderboard/baserunning`
 
-**Valid URL:** [https://baseballsavant.mlb.com/leaderboard/baserunning](https://baseballsavant.mlb.com/leaderboard/baserunning)
+**Valid URL:** [https://baseballsavant.mlb.com/leaderboard/baserunning?csv=true](https://baseballsavant.mlb.com/leaderboard/baserunning?csv=true)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -1547,6 +1578,7 @@ GET /leaderboard/baserunning — extra-bases-taken run-value leaderboard.
 ### Returns {#mlb_statcast_leaderboard_baserunning-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `entity_name` | character | Player (or team) entity name. |
@@ -1577,62 +1609,6 @@ GET /leaderboard/baserunning — extra-bases-taken run-value leaderboard.
 
 ```python
 mlb_statcast_leaderboard_baserunning()
-```
-
-_Last validated n/a._
-
-## mlb_statcast_leaderboard_year_to_year
-
-GET /leaderboard/statcast-year-to-year — year-to-year metric change leaderboard.
-
-**Endpoint URL:** `GET https://baseballsavant.mlb.com/leaderboard/statcast-year-to-year`
-
-**Valid URL:** [https://baseballsavant.mlb.com/leaderboard/statcast-year-to-year](https://baseballsavant.mlb.com/leaderboard/statcast-year-to-year)
-
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-| `type` | `type` |  |  | `Y` | type query parameter. |
-| `year` | `year` |  |  | `Y` | year query parameter. |
-| `team` | `team` |  |  | `Y` | team query parameter. |
-| `csv` | `csv` |  |  | `Y` | csv query parameter. |
-
-### Returns {#mlb_statcast_leaderboard_year_to_year-returns}
-
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
-| col_name | type | description |
-|---|---|---|
-| `name` | character | Player (or entity) name. |
-| `entity_id` | integer | MLBAM id of the player/team entity. |
-| `2015` | character | 2015. |
-| `2016` | character | 2016. |
-| `delta_2015_2016` | character | Delta 2015 2016. |
-| `2017` | character | 2017. |
-| `delta_2016_2017` | character | Delta 2016 2017. |
-| `2018` | character | 2018. |
-| `delta_2017_2018` | character | Delta 2017 2018. |
-| `2019` | character | 2019. |
-| `delta_2018_2019` | character | Delta 2018 2019. |
-| `2020` | character | 2020. |
-| `delta_2019_2020` | character | Delta 2019 2020. |
-| `2021` | character | 2021. |
-| `delta_2020_2021` | character | Delta 2020 2021. |
-| `2022` | character | 2022. |
-| `delta_2021_2022` | character | Delta 2021 2022. |
-| `2023` | character | 2023. |
-| `delta_2022_2023` | character | Delta 2022 2023. |
-| `2024` | character | 2024. |
-| `delta_2023_2024` | character | Delta 2023 2024. |
-| `2025` | character | 2025. |
-| `delta_2024_2025` | character | Delta 2024 2025. |
-| `2026` | character | 2026. |
-| `delta_2025_2026` | character | Delta 2025 2026. |
-
-**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
-
-### Example {#mlb_statcast_leaderboard_year_to_year-example}
-
-```python
-mlb_statcast_leaderboard_year_to_year()
 ```
 
 _Last validated n/a._

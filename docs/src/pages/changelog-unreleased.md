@@ -8,42 +8,44 @@ Merged to `main` since 0.1.4 and not yet released. Released versions are on the 
 
 ## Unreleased
 
-### Fixed — nba_stats / wnba_stats defaults: a season where the API needs one, each league's own ids
+### Fixed — reference-docs Valid URLs are the URLs the example calls request; summary documents its dict
 
-The `nba_stats_*` / `wnba_stats_*` defaults are mined from hoopR / wehoop through the
-sdv-internal-refs catalog, and three things were lost on the way. Called with their defaults, 67
-of 128 NBA and 65 of 111 WNBA wrappers returned data before this change; all 128 NBA and 109
-WNBA do now (live sweep through the proxy pool, 2026-10-05, no wrapper went from working to
-broken).
+The **Valid URL** on each generated reference page, and the `Example URL:` line in the
+wrapper's docstring, now replay the wrapper body on its example arguments. Each one is the URL
+that the documented example call requests.
 
-- **Season.** hoopR's default `year_to_season(most_recent_nba_season() - 1)` is a call, and the
-  catalog dropped it, so `season` defaulted to `None` and the request went out without a
-  `Season`. stats.nba.com answers that with an empty HTTP 500, which these wrappers return as an
-  empty frame with no error. 51 NBA and 42 WNBA wrappers failed this way, among them
-  `playergamelogs`, `playergamelog`, `teamgamelogs`, `commonteamroster`, `commonallplayers`,
-  `leaguedashplayerstats` and `leaguestandingsv3`; `synergyplaytypes`, the draft-combine family,
-  `cumestats*`, `videodetailsasset` and WNBA `playercompare` need theirs too.
-  These arguments now default to the current season, resolved at call time: hoopR's label for
-  NBA, G League and Summer League (`"2026-27"` from October 2026), and the current WNBA year
-  (`"2026"`). `commonplayoffseries` defaults to the previous season, as hoopR's `- 2` asks (the
-  last finished playoffs). wehoop's `most_recent_wnba_season() - 1` is always one season behind,
-  so sdv-py does not copy it except for `commonplayoffseries`, where it is the right season.
-  An explicit value, including `""`, is sent as given.
-- **Endpoints that work without a season keep the API's default.** For `drafthistory`,
-  `leaguegamefinder`, `playergamestreakfinder`, `playercareerbycollegerollup` and
-  `shotchartdetail` that default is every season, which a current-season default would silently
-  narrow. The 30 NBA and 25 WNBA endpoints the sweep measured this way are listed in
-  `tools/codegen/gen_nba_stats.py`.
-- **Each league's own ids.** The catalog kept one example per argument and let wehoop's overwrite
-  hoopR's, so NBA wrappers defaulted to WNBA games, teams and players. `nba_stats_teaminfocommon()`
-  asked for a WNBA team and got HTTP 500, and every NBA box-score wrapper defaulted to a WNBA
-  game. NBA wrappers now take hoopR's examples and WNBA wrappers wehoop's, and an id that only the
-  other league's package sets is left out rather than borrowed: WNBA `boxscorehustlev2` /
-  `hustlestatsboxscore` used to fetch an NBA game, and `playerdashptshotdefend` defaulted to LeBron
-  James (without a player it now returns the league-wide table). `playercompare` gains its player-id lists,
-  and WNBA `playbyplayv2` sends wehoop's `StartPeriod` / `EndPeriod` (it was HTTP 500 without).
-- stats.wnba.com answers `draftcombinestats` with the NBA draft combine; wehoop has deprecated its
-  draft-combine wrappers.
+- **ESPN Core v2 child resources.** `espn_<lg>_game_competition(event_id='401584793')` requests
+  `/events/401584793/competitions/401584793`, but the page showed `/events/401584793/competitions`.
+  Every game, competitor, play and official child resource showed that same collection URL. Path
+  tokens the wrapper fills from a default (`cid` falls back to `event_id`, `record_type=0`), an
+  optional segment, or a `/now` variant are now substituted.
+- **Default query params.** Params the wrapper always sends, such as `limit=1000` or the
+  nba_stats `PerMode` / `SeasonType` defaults, now appear in the URL.
+- **No runnable example.** 50 flat-API wrappers (41 `cbs_*`, 9 `sports247_site_pages_*`) have no
+  example value for a required argument. Their pages no longer show a truncated URL.
+- **Soccer and cricket catch-all wrappers** now pass the required `league=` argument in their
+  examples.
+
+1,426 of 3,446 ESPN URLs and 467 of 1,033 flat-API URLs changed.
+`tests/codegen/test_valid_url_matches_call.py` calls every generated wrapper offline against a
+recording `_get` and asserts that the documented URL is the requested one.
+
+`espn_<lg>_summary` (30 leagues) said it returns "a tidy `polars.DataFrame` with the columns
+below". With `section=None`, `parse_summary` returns a dict of frames keyed by section. The
+endpoint now declares `parsed_doc`, like the `espn_cdn` game pages, so its docs and docstring
+say it returns a dict.
+
+### Added — ESPN NBA G League wrappers (`espn_nbagl_*`)
+
+ESPN's G League (`basketball/nba-development`) is registered in `leagues.yaml` like every other
+ESPN league, so codegen now emits the full universal family (112 wrappers) as
+`sportsdataverse.nbagl.nbagl_espn_ext`: `espn_nbagl_standings`, `espn_nbagl_scoreboard`,
+`espn_nbagl_teams_site`, `espn_nbagl_summary`, `espn_nbagl_team_roster`, and the rest. They are
+exported from `sportsdataverse.nbagl` and the top-level package, and `return_parsed=True` (the
+default) routes through the shared ESPN parsers. Before this, G League standings needed the
+private `sportsdataverse._common_espn_parsers` and a hand-built URL. Offline tests drive the
+standings, teams, and scoreboard wrappers through real captured 2025-26 G League payloads;
+a gated live smoke test checks the teams and standings endpoints.
 
 ### Fixed — nba_stats, wnba_stats and on3 return tables now match what the parsers return
 

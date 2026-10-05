@@ -24,6 +24,7 @@ Single club detail (stats-api).
 ### Returns {#mls_club-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `club_id` | character | Sportec club id |
@@ -88,6 +89,7 @@ List seasons for a competition (stats-api).
 ### Returns {#mls_competition_seasons-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `season_id` | character | Sportec season id |
@@ -117,6 +119,7 @@ List competitions (stats-api).
 ### Returns {#mls_competitions-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `competition_id` | character | Sportec competition id |
@@ -150,6 +153,7 @@ Season content entity by slug (dapi / Contentful).
 ### Returns {#mls_content_season-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `type` | character | Type discriminator for the record. |
@@ -211,6 +215,7 @@ Query season content entities (dapi / Contentful).
 ### Returns {#mls_content_seasons-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `type` | character | Type discriminator for the record. |
@@ -265,6 +270,7 @@ Single match detail incl. lineups + referees (stats-api).
 ### Returns {#mls_match-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `competition_id` | character | Sportec competition id |
@@ -333,6 +339,7 @@ List matches in a season, date-windowed (stats-api).
 ### Returns {#mls_season_matches-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `competition_id` | character | Sportec competition id |
@@ -403,6 +410,7 @@ Club roster with player Sportec ids (sportapi).
 ### Returns {#mls_sportapi_club_players-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `opta_id` | character | Parallel Opta integer id for the entity. |
@@ -455,6 +463,7 @@ Batch club detail by Sportec ids (sportapi).
 ### Returns {#mls_sportapi_clubs_by_sportec_ids-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `opta_id` | character | Parallel Opta integer id for the entity. |
@@ -495,6 +504,7 @@ Single match detail (sportapi / .NET).
 ### Returns {#mls_sportapi_match-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `opta_id` | character | Parallel Opta integer id for the entity. |
@@ -601,6 +611,7 @@ Batch match detail by Sportec ids (sportapi).
 ### Returns {#mls_sportapi_matches_by_sportec_ids-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `opta_id` | character | Parallel Opta integer id for the entity. |
@@ -709,6 +720,7 @@ Standings table for a competition season (stats-api).
 ### Returns {#mls_standings-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `competition_id` | character | Sportec competition id |

@@ -22,6 +22,7 @@ Pull the boxscore for one NHL game.
 ### Returns {#nhl_boxscore-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `home_away` | character | Home or away indicator. |
@@ -86,6 +87,7 @@ Pull the gamecenter landing payload for one NHL game.
 ### Returns {#nhl_landing-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `id` | integer | Unique player identifier. |
@@ -179,7 +181,7 @@ Pull the single-day scoreboard for `date`.
 
 **Endpoint URL:** `GET https://api-web.nhle.com/v1/score/{date}`
 
-**Valid URL:** [https://api-web.nhle.com/v1/score](https://api-web.nhle.com/v1/score)
+**Valid URL:** [https://api-web.nhle.com/v1/score/now](https://api-web.nhle.com/v1/score/now)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -188,6 +190,7 @@ Pull the single-day scoreboard for `date`.
 ### Returns {#nhl_score-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `id` | integer | Unique player identifier. |
@@ -255,7 +258,7 @@ Pull the calendar of game-days for the season.
 
 **Endpoint URL:** `GET https://api-web.nhle.com/v1/schedule-calendar/{date}`
 
-**Valid URL:** [https://api-web.nhle.com/v1/schedule-calendar](https://api-web.nhle.com/v1/schedule-calendar)
+**Valid URL:** [https://api-web.nhle.com/v1/schedule-calendar/now](https://api-web.nhle.com/v1/schedule-calendar/now)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -280,7 +283,7 @@ Pull a single playoff series payload.
 
 **Endpoint URL:** `GET https://api-web.nhle.com/v1/schedule/playoff-series/{season}/{series_letter}`
 
-**Valid URL:** [https://api-web.nhle.com/v1/schedule/playoff-series/2025/a](https://api-web.nhle.com/v1/schedule/playoff-series/2025/a)
+**Valid URL:** [https://api-web.nhle.com/v1/schedule/playoff-series/20242025/a](https://api-web.nhle.com/v1/schedule/playoff-series/20242025/a)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -290,6 +293,7 @@ Pull a single playoff series payload.
 ### Returns {#nhl_playoff_series-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `round` | integer | Shootout round number. |
@@ -353,7 +357,7 @@ Pull the NHL standings.
 
 **Endpoint URL:** `GET https://api-web.nhle.com/v1/standings/{date}`
 
-**Valid URL:** [https://api-web.nhle.com/v1/standings](https://api-web.nhle.com/v1/standings)
+**Valid URL:** [https://api-web.nhle.com/v1/standings/now](https://api-web.nhle.com/v1/standings/now)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -362,6 +366,7 @@ Pull the NHL standings.
 ### Returns {#nhl_standings-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `clinch_indicator` | character | Playoff clinch indicator (e.g. 'x' clinched playoff, 'e' eliminated). |
@@ -473,6 +478,7 @@ Pull the per-season standings cutover dates.
 ### Returns {#nhl_standings_season-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `id` | integer | Unique player identifier. |
@@ -502,7 +508,7 @@ Pull a team's roster.
 
 **Endpoint URL:** `GET https://api-web.nhle.com/v1/roster/{team}/{season}`
 
-**Valid URL:** [https://api-web.nhle.com/v1/roster/TOR](https://api-web.nhle.com/v1/roster/TOR)
+**Valid URL:** [https://api-web.nhle.com/v1/roster/TOR/current](https://api-web.nhle.com/v1/roster/TOR/current)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -512,6 +518,7 @@ Pull a team's roster.
 ### Returns {#nhl_roster-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `position_group` | character | Position group name (e.g. Centers). |
@@ -577,7 +584,7 @@ Pull skater stat leaders.
 
 **Endpoint URL:** `GET https://api-web.nhle.com/v1/skater-stats-leaders/{season}/{game_type}`
 
-**Valid URL:** [https://api-web.nhle.com/v1/skater-stats-leaders](https://api-web.nhle.com/v1/skater-stats-leaders)
+**Valid URL:** [https://api-web.nhle.com/v1/skater-stats-leaders/current](https://api-web.nhle.com/v1/skater-stats-leaders/current)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -587,6 +594,7 @@ Pull skater stat leaders.
 ### Returns {#nhl_skater_leaders-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `category` | character | Stat leader category. |
@@ -626,7 +634,7 @@ Pull goalie stat leaders.
 
 **Endpoint URL:** `GET https://api-web.nhle.com/v1/goalie-stats-leaders/{season}/{game_type}`
 
-**Valid URL:** [https://api-web.nhle.com/v1/goalie-stats-leaders](https://api-web.nhle.com/v1/goalie-stats-leaders)
+**Valid URL:** [https://api-web.nhle.com/v1/goalie-stats-leaders/current](https://api-web.nhle.com/v1/goalie-stats-leaders/current)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -636,6 +644,7 @@ Pull goalie stat leaders.
 ### Returns {#nhl_goalie_leaders-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `category` | character | Stat leader category. |

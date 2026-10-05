@@ -21,6 +21,7 @@ All-Star Game career statistics for skaters.
 ### Returns {#nhl_records_allstar_skater_career-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `id` | integer | Unique player identifier. |
@@ -69,6 +70,7 @@ All-Star Game career statistics for goaltenders.
 ### Returns {#nhl_records_allstar_goalie_career-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `id` | integer | Unique player identifier. |
@@ -118,6 +120,7 @@ All-Star Game career records for coaches.
 ### Returns {#nhl_records_allstar_coach_career-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `id` | integer | Unique player identifier. |
@@ -158,6 +161,7 @@ All-Star Game single-game scoring records for skaters.
 ### Returns {#nhl_records_allstar_skater_game-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `id` | integer | Unique player identifier. |
@@ -214,6 +218,7 @@ All-Star Game single-game stats for goaltenders.
 ### Returns {#nhl_records_allstar_goalie_game-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `id` | integer | Unique player identifier. |

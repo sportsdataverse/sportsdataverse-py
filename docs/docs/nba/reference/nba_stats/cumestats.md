@@ -13,7 +13,7 @@ GET /stats/cumestatsplayer
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/cumestatsplayer`
 
-**Valid URL:** [https://stats.nba.com/stats/cumestatsplayer?LeagueID=00](https://stats.nba.com/stats/cumestatsplayer?LeagueID=00)
+**Valid URL:** [https://stats.nba.com/stats/cumestatsplayer?GameIDs=1022200018&LeagueID=00&PlayerID=204319&Season=2021-22&SeasonType=Regular+Season](https://stats.nba.com/stats/cumestatsplayer?GameIDs=1022200018&LeagueID=00&PlayerID=204319&Season=2021-22&SeasonType=Regular+Season)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -25,7 +25,8 @@ GET /stats/cumestatsplayer
 
 ### Returns {#nba_stats_cumestatsplayer-returns}
 
-**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`GameByGameStats`, `TotalPlayerStats`) (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`GameByGameStats`, `TotalPlayerStats`) (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+
 **GameByGameStats**
 
 | col_name | type | description |
@@ -128,7 +129,7 @@ GET /stats/cumestatsplayergames
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/cumestatsplayergames`
 
-**Valid URL:** [https://stats.nba.com/stats/cumestatsplayergames?LeagueID=00](https://stats.nba.com/stats/cumestatsplayergames?LeagueID=00)
+**Valid URL:** [https://stats.nba.com/stats/cumestatsplayergames?LeagueID=00&Location=&Outcome=&PlayerID=204319&Season=2021-22&SeasonType=Regular+Season&VsConference=&VsDivision=&VsTeamID=0](https://stats.nba.com/stats/cumestatsplayergames?LeagueID=00&Location=&Outcome=&PlayerID=204319&Season=2021-22&SeasonType=Regular+Season&VsConference=&VsDivision=&VsTeamID=0)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -145,6 +146,7 @@ GET /stats/cumestatsplayergames
 ### Returns {#nba_stats_cumestatsplayergames-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `matchup` | character | Matchup. |
@@ -166,7 +168,7 @@ GET /stats/cumestatsteam
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/cumestatsteam`
 
-**Valid URL:** [https://stats.nba.com/stats/cumestatsteam?LeagueID=00](https://stats.nba.com/stats/cumestatsteam?LeagueID=00)
+**Valid URL:** [https://stats.nba.com/stats/cumestatsteam?GameIDs=1022200018&LeagueID=00&Season=2021-22&SeasonType=Regular+Season&TeamID=1611661317](https://stats.nba.com/stats/cumestatsteam?GameIDs=1022200018&LeagueID=00&Season=2021-22&SeasonType=Regular+Season&TeamID=1611661317)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -178,7 +180,8 @@ GET /stats/cumestatsteam
 
 ### Returns {#nba_stats_cumestatsteam-returns}
 
-**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`GameByGameStats`, `TotalTeamStats`) (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`GameByGameStats`, `TotalTeamStats`) (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+
 **GameByGameStats**
 
 | col_name | type | description |
@@ -290,7 +293,7 @@ GET /stats/cumestatsteamgames
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/cumestatsteamgames`
 
-**Valid URL:** [https://stats.nba.com/stats/cumestatsteamgames?LeagueID=00](https://stats.nba.com/stats/cumestatsteamgames?LeagueID=00)
+**Valid URL:** [https://stats.nba.com/stats/cumestatsteamgames?LeagueID=00&Location=&Outcome=&Season=2021-22&SeasonID=&SeasonType=Regular+Season&TeamID=1611661317&VsConference=&VsDivision=&VsTeamID=0](https://stats.nba.com/stats/cumestatsteamgames?LeagueID=00&Location=&Outcome=&Season=2021-22&SeasonID=&SeasonType=Regular+Season&TeamID=1611661317&VsConference=&VsDivision=&VsTeamID=0)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -308,6 +311,7 @@ GET /stats/cumestatsteamgames
 ### Returns {#nba_stats_cumestatsteamgames-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `matchup` | character | Matchup. |

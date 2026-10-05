@@ -13,7 +13,7 @@ Pull EDGE detail stats for a single goalie.
 
 **Endpoint URL:** `GET https://api-web.nhle.com/v1/edge/goalie-detail/{player_id}/{season}/{game_type}`
 
-**Valid URL:** [https://api-web.nhle.com/v1/edge/goalie-detail/8480801](https://api-web.nhle.com/v1/edge/goalie-detail/8480801)
+**Valid URL:** [https://api-web.nhle.com/v1/edge/goalie-detail/8480801/now](https://api-web.nhle.com/v1/edge/goalie-detail/8480801/now)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -24,6 +24,7 @@ Pull EDGE detail stats for a single goalie.
 ### Returns {#nhl_edge_goalie_detail-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `seasons_with_edge_stats` | character | Serialized list of seasons for which NHL EDGE player-tracking data is available for this goalie. |
@@ -81,7 +82,7 @@ Pull EDGE 5-on-5 detail stats for a single goalie.
 
 **Endpoint URL:** `GET https://api-web.nhle.com/v1/edge/goalie-5v5-detail/{player_id}/{season}/{game_type}`
 
-**Valid URL:** [https://api-web.nhle.com/v1/edge/goalie-5v5-detail/8480801](https://api-web.nhle.com/v1/edge/goalie-5v5-detail/8480801)
+**Valid URL:** [https://api-web.nhle.com/v1/edge/goalie-5v5-detail/8480801/now](https://api-web.nhle.com/v1/edge/goalie-5v5-detail/8480801/now)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -92,6 +93,7 @@ Pull EDGE 5-on-5 detail stats for a single goalie.
 ### Returns {#nhl_edge_goalie_5v5_detail-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `save_pctg5v5_last10` | character | Serialized last-10-game 5-on-5 save percentage trend data for the goalie. |
@@ -124,7 +126,7 @@ Pull the EDGE top-10 goalies by 5-on-5 metrics.
 
 **Endpoint URL:** `GET https://api-web.nhle.com/v1/edge/goalie-5v5-top-10/{sort_by}/{season}/{game_type}`
 
-**Valid URL:** [https://api-web.nhle.com/v1/edge/goalie-5v5-top-10/points](https://api-web.nhle.com/v1/edge/goalie-5v5-top-10/points)
+**Valid URL:** [https://api-web.nhle.com/v1/edge/goalie-5v5-top-10/points/now](https://api-web.nhle.com/v1/edge/goalie-5v5-top-10/points/now)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -151,7 +153,7 @@ Pull EDGE comparison data for a single goalie.
 
 **Endpoint URL:** `GET https://api-web.nhle.com/v1/edge/goalie-comparison/{player_id}/{season}/{game_type}`
 
-**Valid URL:** [https://api-web.nhle.com/v1/edge/goalie-comparison/8480801](https://api-web.nhle.com/v1/edge/goalie-comparison/8480801)
+**Valid URL:** [https://api-web.nhle.com/v1/edge/goalie-comparison/8480801/now](https://api-web.nhle.com/v1/edge/goalie-comparison/8480801/now)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -162,6 +164,7 @@ Pull EDGE comparison data for a single goalie.
 ### Returns {#nhl_edge_goalie_comparison-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `seasons_with_edge_stats` | character | Serialized list of season identifiers for which EDGE player-tracking data is available for this goalie. |
@@ -215,7 +218,7 @@ Pull EDGE save-percentage detail for a single goalie.
 
 **Endpoint URL:** `GET https://api-web.nhle.com/v1/edge/goalie-save-percentage-detail/{player_id}/{season}/{game_type}`
 
-**Valid URL:** [https://api-web.nhle.com/v1/edge/goalie-save-percentage-detail/8480801](https://api-web.nhle.com/v1/edge/goalie-save-percentage-detail/8480801)
+**Valid URL:** [https://api-web.nhle.com/v1/edge/goalie-save-percentage-detail/8480801/now](https://api-web.nhle.com/v1/edge/goalie-save-percentage-detail/8480801/now)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -226,6 +229,7 @@ Pull EDGE save-percentage detail for a single goalie.
 ### Returns {#nhl_edge_goalie_save_percentage_detail-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `save_pctg_last10` | character | Serialized summary of the goalie's save percentage across their most recent 10 games. |
@@ -252,7 +256,7 @@ Pull the EDGE top-10 goalies by save-percentage.
 
 **Endpoint URL:** `GET https://api-web.nhle.com/v1/edge/goalie-edge-save-pctg-top-10/{sort_by}/{season}/{game_type}`
 
-**Valid URL:** [https://api-web.nhle.com/v1/edge/goalie-edge-save-pctg-top-10/points](https://api-web.nhle.com/v1/edge/goalie-edge-save-pctg-top-10/points)
+**Valid URL:** [https://api-web.nhle.com/v1/edge/goalie-edge-save-pctg-top-10/points/now](https://api-web.nhle.com/v1/edge/goalie-edge-save-pctg-top-10/points/now)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -279,7 +283,7 @@ Pull EDGE shot-location detail for a single goalie.
 
 **Endpoint URL:** `GET https://api-web.nhle.com/v1/edge/goalie-shot-location-detail/{player_id}/{season}/{game_type}`
 
-**Valid URL:** [https://api-web.nhle.com/v1/edge/goalie-shot-location-detail/8480801](https://api-web.nhle.com/v1/edge/goalie-shot-location-detail/8480801)
+**Valid URL:** [https://api-web.nhle.com/v1/edge/goalie-shot-location-detail/8480801/now](https://api-web.nhle.com/v1/edge/goalie-shot-location-detail/8480801/now)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -290,6 +294,7 @@ Pull EDGE shot-location detail for a single goalie.
 ### Returns {#nhl_edge_goalie_shot_location_detail-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `area` | character | Net/ice zone the shots were taken from. |
@@ -318,7 +323,7 @@ Pull the EDGE top-10 goalies for a shot-location category.
 
 **Endpoint URL:** `GET https://api-web.nhle.com/v1/edge/goalie-shot-location-top-10/{category}/{sort_by}/{season}/{game_type}`
 
-**Valid URL:** [https://api-web.nhle.com/v1/edge/goalie-shot-location-top-10/shots/points](https://api-web.nhle.com/v1/edge/goalie-shot-location-top-10/shots/points)
+**Valid URL:** [https://api-web.nhle.com/v1/edge/goalie-shot-location-top-10/shots/points/now](https://api-web.nhle.com/v1/edge/goalie-shot-location-top-10/shots/points/now)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -346,7 +351,7 @@ Pull the EDGE goalie landing page (summary across all goalies).
 
 **Endpoint URL:** `GET https://api-web.nhle.com/v1/edge/goalie-landing/{season}/{game_type}`
 
-**Valid URL:** [https://api-web.nhle.com/v1/edge/goalie-landing](https://api-web.nhle.com/v1/edge/goalie-landing)
+**Valid URL:** [https://api-web.nhle.com/v1/edge/goalie-landing/now](https://api-web.nhle.com/v1/edge/goalie-landing/now)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -356,6 +361,7 @@ Pull the EDGE goalie landing page (summary across all goalies).
 ### Returns {#nhl_edge_goalie_landing-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `seasons_with_edge_stats` | character | Serialized list of season identifiers for which EDGE player-tracking data is available on this landing page. |

@@ -1,11 +1,11 @@
 ---
-title: "WNBA — WNBA Stats API (stats.wnba.com) — Player: playerawards–playerindex"
-sidebar_label: "Player: playerawards–playerindex"
+title: "WNBA — WNBA Stats API (stats.wnba.com) — Player: playerawards–playergamestreakfinder"
+sidebar_label: "Player: playerawards–playergamestreakfinder"
 sidebar_position: 8
-description: "WNBA — WNBA Stats API (stats.wnba.com) — Player: playerawards–playerindex — function reference in sdv-py, the SportsDataverse Python package."
+description: "WNBA — WNBA Stats API (stats.wnba.com) — Player: playerawards–playergamestreakfinder — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---
-# WNBA — WNBA Stats API (stats.wnba.com) — Player: playerawards–playerindex
+# WNBA — WNBA Stats API (stats.wnba.com) — Player: playerawards–playergamestreakfinder
 
 ## wnba_stats_playerawards
 
@@ -13,7 +13,7 @@ GET /stats/playerawards
 
 **Endpoint URL:** `GET https://stats.wnba.com/stats/playerawards`
 
-**Valid URL:** [https://stats.wnba.com/stats/playerawards](https://stats.wnba.com/stats/playerawards)
+**Valid URL:** [https://stats.wnba.com/stats/playerawards?PlayerID=1628932](https://stats.wnba.com/stats/playerawards?PlayerID=1628932)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -22,6 +22,7 @@ GET /stats/playerawards
 ### Returns {#wnba_stats_playerawards-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `person_id` | integer | Unique player identifier (V3 endpoints). |
@@ -55,7 +56,7 @@ GET /stats/playercareerbycollegerollup
 
 **Endpoint URL:** `GET https://stats.wnba.com/stats/playercareerbycollegerollup`
 
-**Valid URL:** [https://stats.wnba.com/stats/playercareerbycollegerollup?LeagueID=10](https://stats.wnba.com/stats/playercareerbycollegerollup?LeagueID=10)
+**Valid URL:** [https://stats.wnba.com/stats/playercareerbycollegerollup?LeagueID=10&PerMode=Totals&SeasonType=Regular+Season](https://stats.wnba.com/stats/playercareerbycollegerollup?LeagueID=10&PerMode=Totals&SeasonType=Regular+Season)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -66,7 +67,8 @@ GET /stats/playercareerbycollegerollup
 
 ### Returns {#wnba_stats_playercareerbycollegerollup-returns}
 
-**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`East`, `South`, `Midwest`, `West`) (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`East`, `South`, `Midwest`, `West`) (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+
 **East**
 
 | col_name | type | description |
@@ -199,7 +201,7 @@ GET /stats/playercareerstats
 
 **Endpoint URL:** `GET https://stats.wnba.com/stats/playercareerstats`
 
-**Valid URL:** [https://stats.wnba.com/stats/playercareerstats?LeagueID=10](https://stats.wnba.com/stats/playercareerstats?LeagueID=10)
+**Valid URL:** [https://stats.wnba.com/stats/playercareerstats?LeagueID=10&PerMode=Totals&PlayerID=1628932](https://stats.wnba.com/stats/playercareerstats?LeagueID=10&PerMode=Totals&PlayerID=1628932)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -209,7 +211,8 @@ GET /stats/playercareerstats
 
 ### Returns {#wnba_stats_playercareerstats-returns}
 
-**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`SeasonTotalsRegularSeason`, `CareerTotalsRegularSeason`, `SeasonTotalsPostSeason`, `CareerTotalsPostSeason`, `SeasonTotalsAllStarSeason`, `CareerTotalsAllStarSeason`, `SeasonTotalsCollegeSeason`, `CareerTotalsCollegeSeason`, `SeasonTotalsShowcaseSeason`, `CareerTotalsShowcaseSeason`, `SeasonRankingsRegularSeason`, `SeasonRankingsPostSeason`, `SeasonHighs`, `CareerHighs`) (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`SeasonTotalsRegularSeason`, `CareerTotalsRegularSeason`, `SeasonTotalsPostSeason`, `CareerTotalsPostSeason`, `SeasonTotalsAllStarSeason`, `CareerTotalsAllStarSeason`, `SeasonTotalsCollegeSeason`, `CareerTotalsCollegeSeason`, `SeasonTotalsShowcaseSeason`, `CareerTotalsShowcaseSeason`, `SeasonRankingsRegularSeason`, `SeasonRankingsPostSeason`, `SeasonHighs`, `CareerHighs`) (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+
 **SeasonTotalsRegularSeason**
 
 | col_name | type | description |
@@ -627,7 +630,7 @@ GET /stats/playercompare
 
 **Endpoint URL:** `GET https://stats.wnba.com/stats/playercompare`
 
-**Valid URL:** [https://stats.wnba.com/stats/playercompare?LeagueID=10](https://stats.wnba.com/stats/playercompare?LeagueID=10)
+**Valid URL:** [https://stats.wnba.com/stats/playercompare?Conference=&DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&Season=2020-21&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&VsConference=&VsDivision=](https://stats.wnba.com/stats/playercompare?Conference=&DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&Season=2020-21&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&VsConference=&VsDivision=)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -649,7 +652,7 @@ GET /stats/playercompare
 | `PlayerIDList` | `player_id_list` |  |  | `Y` |  |
 | `PlusMinus` | `plus_minus` |  |  | `Y` |  |
 | `Rank` | `rank` |  |  | `Y` |  |
-| `Season` | `season` |  |  | `Y` | Season year, e.g. ``2025``. Defaults to the current WNBA season at call time (``2026`` from May 2026); stats.wnba.com answers a request without a season with an empty HTTP 500. |
+| `Season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
 | `SeasonSegment` | `season_segment_nullable` |  |  | `Y` |  |
 | `SeasonType` | `season_type_playoffs` |  |  | `Y` |  |
 | `ShotClockRange` | `shot_clock_range_nullable` |  |  | `Y` |  |
@@ -659,7 +662,8 @@ GET /stats/playercompare
 
 ### Returns {#wnba_stats_playercompare-returns}
 
-**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`OverallCompare`, `Individual`) (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`OverallCompare`, `Individual`) (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+
 **OverallCompare**
 
 | col_name | type | description |
@@ -734,7 +738,7 @@ GET /stats/playerestimatedmetrics
 
 **Endpoint URL:** `GET https://stats.wnba.com/stats/playerestimatedmetrics`
 
-**Valid URL:** [https://stats.wnba.com/stats/playerestimatedmetrics?LeagueID=10](https://stats.wnba.com/stats/playerestimatedmetrics?LeagueID=10)
+**Valid URL:** [https://stats.wnba.com/stats/playerestimatedmetrics?LeagueID=10&SeasonType=Regular+Season](https://stats.wnba.com/stats/playerestimatedmetrics?LeagueID=10&SeasonType=Regular+Season)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -745,6 +749,7 @@ GET /stats/playerestimatedmetrics
 ### Returns {#wnba_stats_playerestimatedmetrics-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `player_id` | integer | Unique player identifier. |
@@ -796,7 +801,7 @@ GET /stats/playerfantasyprofile
 
 **Endpoint URL:** `GET https://stats.wnba.com/stats/playerfantasyprofile`
 
-**Valid URL:** [https://stats.wnba.com/stats/playerfantasyprofile?LeagueID=10](https://stats.wnba.com/stats/playerfantasyprofile?LeagueID=10)
+**Valid URL:** [https://stats.wnba.com/stats/playerfantasyprofile?LeagueID=10&MeasureType=Base&PaceAdjust=N&PerMode=Totals&PlayerID=1628932&PlusMinus=N&Rank=N&SeasonType=Regular+Season](https://stats.wnba.com/stats/playerfantasyprofile?LeagueID=10&MeasureType=Base&PaceAdjust=N&PerMode=Totals&PlayerID=1628932&PlusMinus=N&Rank=N&SeasonType=Regular+Season)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -812,7 +817,8 @@ GET /stats/playerfantasyprofile
 
 ### Returns {#wnba_stats_playerfantasyprofile-returns}
 
-**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`Overall`, `Location`, `LastNGames`, `DaysRestModified`, `Opponent`) (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`Overall`, `Location`, `LastNGames`, `DaysRestModified`, `Opponent`) (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+
 **Overall**
 
 | col_name | type | description |
@@ -1015,18 +1021,19 @@ GET /stats/playerfantasyprofilebargraph
 
 **Endpoint URL:** `GET https://stats.wnba.com/stats/playerfantasyprofilebargraph`
 
-**Valid URL:** [https://stats.wnba.com/stats/playerfantasyprofilebargraph?LeagueID=10](https://stats.wnba.com/stats/playerfantasyprofilebargraph?LeagueID=10)
+**Valid URL:** [https://stats.wnba.com/stats/playerfantasyprofilebargraph?LeagueID=10&PlayerID=1628932&SeasonType=Regular+Season](https://stats.wnba.com/stats/playerfantasyprofilebargraph?LeagueID=10&PlayerID=1628932&SeasonType=Regular+Season)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 | `LeagueID` | `league_id` |  |  | `Y` |  |
 | `PlayerID` | `player_id` |  |  | `Y` |  |
-| `Season` | `season` |  |  | `Y` | Season year, e.g. ``2025``. Defaults to the current WNBA season at call time (``2026`` from May 2026); stats.wnba.com answers a request without a season with an empty HTTP 500. |
+| `Season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
 | `SeasonType` | `season_type_all_star_nullable` |  |  | `Y` |  |
 
 ### Returns {#wnba_stats_playerfantasyprofilebargraph-returns}
 
-**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`SeasonAvg`, `LastFiveGamesAvg`) (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`SeasonAvg`, `LastFiveGamesAvg`) (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+
 **SeasonAvg**
 
 | col_name | type | description |
@@ -1083,7 +1090,7 @@ GET /stats/playergamelog
 
 **Endpoint URL:** `GET https://stats.wnba.com/stats/playergamelog`
 
-**Valid URL:** [https://stats.wnba.com/stats/playergamelog?LeagueID=10](https://stats.wnba.com/stats/playergamelog?LeagueID=10)
+**Valid URL:** [https://stats.wnba.com/stats/playergamelog?DateFrom=&DateTo=&LeagueID=10&PlayerID=1628932&SeasonType=Regular+Season](https://stats.wnba.com/stats/playergamelog?DateFrom=&DateTo=&LeagueID=10&PlayerID=1628932&SeasonType=Regular+Season)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -1091,12 +1098,13 @@ GET /stats/playergamelog
 | `DateTo` | `date_to_nullable` |  |  | `Y` |  |
 | `LeagueID` | `league_id` |  |  | `Y` |  |
 | `PlayerID` | `player_id` |  |  | `Y` |  |
-| `Season` | `season` |  |  | `Y` | Season year, e.g. ``2025``. Defaults to the current WNBA season at call time (``2026`` from May 2026); stats.wnba.com answers a request without a season with an empty HTTP 500. |
+| `Season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
 | `SeasonType` | `season_type_all_star` |  |  | `Y` |  |
 
 ### Returns {#wnba_stats_playergamelog-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `season_id` | character | Unique season identifier. |
@@ -1143,7 +1151,7 @@ GET /stats/playergamelogs
 
 **Endpoint URL:** `GET https://stats.wnba.com/stats/playergamelogs`
 
-**Valid URL:** [https://stats.wnba.com/stats/playergamelogs?LeagueID=10](https://stats.wnba.com/stats/playergamelogs?LeagueID=10)
+**Valid URL:** [https://stats.wnba.com/stats/playergamelogs?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&Outcome=&PORound=&PerMode=Totals&Period=0&PlayerID=&SeasonSegment=&SeasonType=Regular+Season&TeamID=0&VsConference=&VsDivision=](https://stats.wnba.com/stats/playergamelogs?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&Outcome=&PORound=&PerMode=Totals&Period=0&PlayerID=&SeasonSegment=&SeasonType=Regular+Season&TeamID=0&VsConference=&VsDivision=)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -1161,7 +1169,7 @@ GET /stats/playergamelogs
 | `PerMode` | `per_mode_simple_nullable` |  |  | `Y` |  |
 | `Period` | `period_nullable` |  |  | `Y` |  |
 | `PlayerID` | `player_id_nullable` |  |  | `Y` |  |
-| `Season` | `season_nullable` |  |  | `Y` | Season year, e.g. ``2025``. Defaults to the current WNBA season at call time (``2026`` from May 2026); stats.wnba.com answers a request without a season with an empty HTTP 500. |
+| `Season` | `season_nullable` |  |  | `Y` |  |
 | `SeasonSegment` | `season_segment_nullable` |  |  | `Y` |  |
 | `SeasonType` | `season_type_nullable` |  |  | `Y` |  |
 | `ShotClockRange` | `shot_clock_range_nullable` |  |  | `Y` |  |
@@ -1172,6 +1180,7 @@ GET /stats/playergamelogs
 ### Returns {#wnba_stats_playergamelogs-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `season_year` | character | Season year string ('YYYY-YY' format). |
@@ -1261,7 +1270,7 @@ GET /stats/playergamestreakfinder
 
 **Endpoint URL:** `GET https://stats.wnba.com/stats/playergamestreakfinder`
 
-**Valid URL:** [https://stats.wnba.com/stats/playergamestreakfinder?LeagueID=10](https://stats.wnba.com/stats/playergamestreakfinder?LeagueID=10)
+**Valid URL:** [https://stats.wnba.com/stats/playergamestreakfinder?ActiveStreaksOnly=&Conference=&DateFrom=&DateTo=&Division=&DraftNumber=&DraftRound=&DraftTeamID=0&DraftYear=&EqAST=&EqBLK=&EqDD=&EqDREB=&EqFG3A=&EqFG3M=&EqFG3_PCT=&EqFGA=&EqFGM=&EqFG_PCT=&EqFTA=&EqFTM=&EqFT_PCT=&EqMINUTES=&EqOREB=&EqPF=&EqPTS=&EqREB=&EqSTL=&EqTD=&EqTOV=&GameID=&GtAST=&GtBLK=&GtDD=&GtDREB=&GtFG3A=&GtFG3M=&GtFG3_PCT=&GtFGA=&GtFGM=&GtFG_PCT=&GtFTA=&GtFTM=&GtFT_PCT=&GtMINUTES=&GtOREB=&GtPF=&GtPTS=&GtREB=&GtSTL=&GtTD=&GtTOV=&LeagueID=10&Location=&LtAST=&LtBLK=&LtDD=&LtDREB=&LtFG3A=&LtFG3M=&LtFG3_PCT=&LtFGA=&LtFGM=&LtFG_PCT=&LtFTA=&LtFTM=&LtFT_PCT=&LtMINUTES=&LtOREB=&LtPF=&LtPTS=&LtREB=&LtSTL=&LtTD=&LtTOV=&MinGames=&Outcome=&PORound=&PlayerID=&RookieYear=&SeasonSegment=&SeasonType=Regular+Season&StarterBench=&TeamID=0&VsConference=&VsDivision=&VsTeamID=0&YearsExperience=](https://stats.wnba.com/stats/playergamestreakfinder?ActiveStreaksOnly=&Conference=&DateFrom=&DateTo=&Division=&DraftNumber=&DraftRound=&DraftTeamID=0&DraftYear=&EqAST=&EqBLK=&EqDD=&EqDREB=&EqFG3A=&EqFG3M=&EqFG3_PCT=&EqFGA=&EqFGM=&EqFG_PCT=&EqFTA=&EqFTM=&EqFT_PCT=&EqMINUTES=&EqOREB=&EqPF=&EqPTS=&EqREB=&EqSTL=&EqTD=&EqTOV=&GameID=&GtAST=&GtBLK=&GtDD=&GtDREB=&GtFG3A=&GtFG3M=&GtFG3_PCT=&GtFGA=&GtFGM=&GtFG_PCT=&GtFTA=&GtFTM=&GtFT_PCT=&GtMINUTES=&GtOREB=&GtPF=&GtPTS=&GtREB=&GtSTL=&GtTD=&GtTOV=&LeagueID=10&Location=&LtAST=&LtBLK=&LtDD=&LtDREB=&LtFG3A=&LtFG3M=&LtFG3_PCT=&LtFGA=&LtFGM=&LtFG_PCT=&LtFTA=&LtFTM=&LtFT_PCT=&LtMINUTES=&LtOREB=&LtPF=&LtPTS=&LtREB=&LtSTL=&LtTD=&LtTOV=&MinGames=&Outcome=&PORound=&PlayerID=&RookieYear=&SeasonSegment=&SeasonType=Regular+Season&StarterBench=&TeamID=0&VsConference=&VsDivision=&VsTeamID=0&YearsExperience=)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -1358,6 +1367,7 @@ GET /stats/playergamestreakfinder
 ### Returns {#wnba_stats_playergamestreakfinder-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `player_name_last_first` | character | Player display name formatted as Last, First for sorting in NBA or WNBA Stats tables. |
@@ -1376,71 +1386,6 @@ GET /stats/playergamestreakfinder
 
 ```python
 wnba_stats_playergamestreakfinder(league_id='10')
-```
-
-_Last validated n/a._
-
-## wnba_stats_playerindex
-
-GET /stats/playerindex
-
-**Endpoint URL:** `GET https://stats.wnba.com/stats/playerindex`
-
-**Valid URL:** [https://stats.wnba.com/stats/playerindex?LeagueID=10](https://stats.wnba.com/stats/playerindex?LeagueID=10)
-
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-| `Active` | `active_nullable` |  |  | `Y` |  |
-| `AllStar` | `allstar_nullable` |  |  | `Y` |  |
-| `College` | `college_nullable` |  |  | `Y` |  |
-| `Country` | `country_nullable` |  |  | `Y` |  |
-| `DraftPick` | `draft_pick_nullable` |  |  | `Y` |  |
-| `DraftRound` | `draft_round_nullable` |  |  | `Y` |  |
-| `DraftYear` | `draft_year_nullable` |  |  | `Y` |  |
-| `Height` | `height_nullable` |  |  | `Y` |  |
-| `Historical` | `historical_nullable` |  |  | `Y` |  |
-| `LeagueID` | `league_id` |  |  | `Y` |  |
-| `Season` | `season` |  |  | `Y` | Season year, e.g. ``2025``. Defaults to the current WNBA season at call time (``2026`` from May 2026); stats.wnba.com answers a request without a season with an empty HTTP 500. |
-| `TeamID` | `team_id_nullable` |  |  | `Y` |  |
-| `Weight` | `weight_nullable` |  |  | `Y` |  |
-
-### Returns {#wnba_stats_playerindex-returns}
-
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
-| col_name | type | description |
-|---|---|---|
-| `person_id` | integer | Unique player identifier (V3 endpoints). |
-| `player_last_name` | character | Participant last name. |
-| `player_first_name` | character | Participant first name. |
-| `player_slug` | character | URL-safe player identifier. |
-| `team_id` | integer | Unique team identifier. |
-| `team_slug` | character | URL-safe team identifier (e.g. 'lasvegas-aces' / 'aces'). |
-| `team_city` | character | Team city or region (e.g. 'Las Vegas'). |
-| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
-| `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
-| `jersey_number` | character | Jersey number. |
-| `position` | character | Listed roster position (G, F, C, etc.). |
-| `height` | character | Player height (string e.g. '6-2' or inches). |
-| `weight` | character | Player weight in pounds. |
-| `college` | character | College or school attended. |
-| `country` | character | Country (full name or code). |
-| `draft_year` | integer | Draft year (4-digit). |
-| `draft_round` | integer | Round of the draft selection. |
-| `draft_number` | integer | The number pick that was used to select a given player. |
-| `roster_status` | numeric | Payroll table the row came from: Active, IL, or Retained Salary. |
-| `from_year` | character | First season. |
-| `to_year` | character | Most recent season. |
-| `pts` | numeric | Points scored. |
-| `reb` | numeric | Total rebounds. |
-| `ast` | numeric | Assists. |
-| `stats_timeframe` | character | Time value for stats timeframe in the NBA or WNBA Stats result set. |
-
-**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
-
-### Example {#wnba_stats_playerindex-example}
-
-```python
-wnba_stats_playerindex(league_id='10')
 ```
 
 _Last validated n/a._

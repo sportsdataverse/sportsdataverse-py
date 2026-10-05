@@ -13,7 +13,7 @@ GET /stats/boxscoresummaryv3
 
 **Endpoint URL:** `GET https://stats.wnba.com/stats/boxscoresummaryv3`
 
-**Valid URL:** [https://stats.wnba.com/stats/boxscoresummaryv3](https://stats.wnba.com/stats/boxscoresummaryv3)
+**Valid URL:** [https://stats.wnba.com/stats/boxscoresummaryv3?GameID=1022200034](https://stats.wnba.com/stats/boxscoresummaryv3?GameID=1022200034)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -21,7 +21,8 @@ GET /stats/boxscoresummaryv3
 
 ### Returns {#wnba_stats_boxscoresummaryv3-returns}
 
-**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`PlayerStats`, `TeamStats`, `Officials`) (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`PlayerStats`, `TeamStats`, `Officials`) (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+
 **PlayerStats**
 
 | col_name | type | description |
@@ -141,7 +142,7 @@ GET /stats/boxscoretraditionalv2
 
 **Endpoint URL:** `GET https://stats.wnba.com/stats/boxscoretraditionalv2`
 
-**Valid URL:** [https://stats.wnba.com/stats/boxscoretraditionalv2](https://stats.wnba.com/stats/boxscoretraditionalv2)
+**Valid URL:** [https://stats.wnba.com/stats/boxscoretraditionalv2?EndPeriod=14&EndRange=0&GameID=1022200034&RangeType=0&StartPeriod=0&StartRange=0](https://stats.wnba.com/stats/boxscoretraditionalv2?EndPeriod=14&EndRange=0&GameID=1022200034&RangeType=0&StartPeriod=0&StartRange=0)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -154,7 +155,8 @@ GET /stats/boxscoretraditionalv2
 
 ### Returns {#wnba_stats_boxscoretraditionalv2-returns}
 
-**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`PlayerStats`, `TeamStats`, `TeamStarterBenchStats`) (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`PlayerStats`, `TeamStats`, `TeamStarterBenchStats`) (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+
 **PlayerStats**
 
 | col_name | type | description |
@@ -265,7 +267,7 @@ GET /stats/boxscoretraditionalv3
 
 **Endpoint URL:** `GET https://stats.wnba.com/stats/boxscoretraditionalv3`
 
-**Valid URL:** [https://stats.wnba.com/stats/boxscoretraditionalv3](https://stats.wnba.com/stats/boxscoretraditionalv3)
+**Valid URL:** [https://stats.wnba.com/stats/boxscoretraditionalv3?EndPeriod=14&EndRange=0&GameID=1022200034&RangeType=0&StartPeriod=0&StartRange=0](https://stats.wnba.com/stats/boxscoretraditionalv3?EndPeriod=14&EndRange=0&GameID=1022200034&RangeType=0&StartPeriod=0&StartRange=0)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -278,7 +280,8 @@ GET /stats/boxscoretraditionalv3
 
 ### Returns {#wnba_stats_boxscoretraditionalv3-returns}
 
-**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`PlayerStats`, `TeamStats`) (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`PlayerStats`, `TeamStats`) (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+
 **PlayerStats**
 
 | col_name | type | description |
@@ -369,7 +372,7 @@ GET /stats/boxscoreusagev2
 
 **Endpoint URL:** `GET https://stats.wnba.com/stats/boxscoreusagev2`
 
-**Valid URL:** [https://stats.wnba.com/stats/boxscoreusagev2](https://stats.wnba.com/stats/boxscoreusagev2)
+**Valid URL:** [https://stats.wnba.com/stats/boxscoreusagev2?EndPeriod=14&EndRange=0&GameID=1022200034&RangeType=0&StartPeriod=0&StartRange=0](https://stats.wnba.com/stats/boxscoreusagev2?EndPeriod=14&EndRange=0&GameID=1022200034&RangeType=0&StartPeriod=0&StartRange=0)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -382,7 +385,8 @@ GET /stats/boxscoreusagev2
 
 ### Returns {#wnba_stats_boxscoreusagev2-returns}
 
-**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`sqlPlayersUsage`, `sqlTeamsUsage`) (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`sqlPlayersUsage`, `sqlTeamsUsage`) (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+
 **sqlPlayersUsage**
 
 | col_name | type | description |
@@ -461,7 +465,7 @@ GET /stats/boxscoreusagev3
 
 **Endpoint URL:** `GET https://stats.wnba.com/stats/boxscoreusagev3`
 
-**Valid URL:** [https://stats.wnba.com/stats/boxscoreusagev3](https://stats.wnba.com/stats/boxscoreusagev3)
+**Valid URL:** [https://stats.wnba.com/stats/boxscoreusagev3?EndPeriod=14&EndRange=0&GameID=1022200034&RangeType=0&StartPeriod=0&StartRange=0](https://stats.wnba.com/stats/boxscoreusagev3?EndPeriod=14&EndRange=0&GameID=1022200034&RangeType=0&StartPeriod=0&StartRange=0)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -474,7 +478,8 @@ GET /stats/boxscoreusagev3
 
 ### Returns {#wnba_stats_boxscoreusagev3-returns}
 
-**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`PlayerStats`, `TeamStats`) (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`PlayerStats`, `TeamStats`) (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+
 **PlayerStats**
 
 | col_name | type | description |

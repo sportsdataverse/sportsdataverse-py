@@ -22,6 +22,7 @@ Pull the play-by-play feed for one NHL game.
 ### Returns {#nhl_web_pbp-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `event_id` | integer | ESPN event id (echoed from arg). |
@@ -89,7 +90,7 @@ Pull the week-of NHL schedule rooted at `date`.
 
 **Endpoint URL:** `GET https://api-web.nhle.com/v1/schedule/{date}`
 
-**Valid URL:** [https://api-web.nhle.com/v1/schedule](https://api-web.nhle.com/v1/schedule)
+**Valid URL:** [https://api-web.nhle.com/v1/schedule/now](https://api-web.nhle.com/v1/schedule/now)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -98,6 +99,7 @@ Pull the week-of NHL schedule rooted at `date`.
 ### Returns {#nhl_web_schedule-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `schedule_date` | character | Calendar date of the game in YYYY-MM-DD format as returned by the NHL api-web schedule endpoint. |

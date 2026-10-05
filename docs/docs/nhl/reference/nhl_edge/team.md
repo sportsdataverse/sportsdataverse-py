@@ -13,7 +13,7 @@ Pull EDGE detail stats for a single team.
 
 **Endpoint URL:** `GET https://api-web.nhle.com/v1/edge/team-detail/{team_id}/{season}/{game_type}`
 
-**Valid URL:** [https://api-web.nhle.com/v1/edge/team-detail/10](https://api-web.nhle.com/v1/edge/team-detail/10)
+**Valid URL:** [https://api-web.nhle.com/v1/edge/team-detail/10/now](https://api-web.nhle.com/v1/edge/team-detail/10/now)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -24,6 +24,7 @@ Pull EDGE detail stats for a single team.
 ### Returns {#nhl_edge_team_detail-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `seasons_with_edge_stats` | character | Comma-separated list of season identifiers for which NHL EDGE player-tracking statistics are available for this team. |
@@ -122,7 +123,7 @@ Pull the EDGE team landing page (summary across all teams).
 
 **Endpoint URL:** `GET https://api-web.nhle.com/v1/edge/team-landing/{season}/{game_type}`
 
-**Valid URL:** [https://api-web.nhle.com/v1/edge/team-landing](https://api-web.nhle.com/v1/edge/team-landing)
+**Valid URL:** [https://api-web.nhle.com/v1/edge/team-landing/now](https://api-web.nhle.com/v1/edge/team-landing/now)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -132,6 +133,7 @@ Pull the EDGE team landing page (summary across all teams).
 ### Returns {#nhl_edge_team_landing-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `seasons_with_edge_stats` | character | Serialized list of NHL seasons for which EDGE player-tracking data is available for this team. |
@@ -238,7 +240,7 @@ Pull EDGE shot-location detail for a single team.
 
 **Endpoint URL:** `GET https://api-web.nhle.com/v1/edge/team-shot-location-detail/{team_id}/{season}/{game_type}`
 
-**Valid URL:** [https://api-web.nhle.com/v1/edge/team-shot-location-detail/10](https://api-web.nhle.com/v1/edge/team-shot-location-detail/10)
+**Valid URL:** [https://api-web.nhle.com/v1/edge/team-shot-location-detail/10/now](https://api-web.nhle.com/v1/edge/team-shot-location-detail/10/now)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -249,6 +251,7 @@ Pull EDGE shot-location detail for a single team.
 ### Returns {#nhl_edge_team_shot_location_detail-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `area` | character | Net/ice zone the shots were taken from. |
@@ -275,7 +278,7 @@ Pull the EDGE top-10 teams for a shot-location category.
 
 **Endpoint URL:** `GET https://api-web.nhle.com/v1/edge/team-shot-location-top-10/{position}/{category}/{sort_by}/{season}/{game_type}`
 
-**Valid URL:** [https://api-web.nhle.com/v1/edge/team-shot-location-top-10/forwards/shots/points](https://api-web.nhle.com/v1/edge/team-shot-location-top-10/forwards/shots/points)
+**Valid URL:** [https://api-web.nhle.com/v1/edge/team-shot-location-top-10/forwards/shots/points/now](https://api-web.nhle.com/v1/edge/team-shot-location-top-10/forwards/shots/points/now)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -304,7 +307,7 @@ Pull EDGE shot-speed detail for a single team.
 
 **Endpoint URL:** `GET https://api-web.nhle.com/v1/edge/team-shot-speed-detail/{team_id}/{season}/{game_type}`
 
-**Valid URL:** [https://api-web.nhle.com/v1/edge/team-shot-speed-detail/10](https://api-web.nhle.com/v1/edge/team-shot-speed-detail/10)
+**Valid URL:** [https://api-web.nhle.com/v1/edge/team-shot-speed-detail/10/now](https://api-web.nhle.com/v1/edge/team-shot-speed-detail/10/now)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -315,6 +318,7 @@ Pull EDGE shot-speed detail for a single team.
 ### Returns {#nhl_edge_team_shot_speed_detail-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `hardest_shots` | character | Serialized list of the hardest individual shot records associated with the team's players. |
@@ -336,7 +340,7 @@ Pull EDGE skating-distance detail for a single team.
 
 **Endpoint URL:** `GET https://api-web.nhle.com/v1/edge/team-skating-distance-detail/{team_id}/{season}/{game_type}`
 
-**Valid URL:** [https://api-web.nhle.com/v1/edge/team-skating-distance-detail/10](https://api-web.nhle.com/v1/edge/team-skating-distance-detail/10)
+**Valid URL:** [https://api-web.nhle.com/v1/edge/team-skating-distance-detail/10/now](https://api-web.nhle.com/v1/edge/team-skating-distance-detail/10/now)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -362,7 +366,7 @@ Pull the EDGE top-10 teams by skating distance.
 
 **Endpoint URL:** `GET https://api-web.nhle.com/v1/edge/team-skating-distance-top-10/{positions}/{strength}/{sort_by}/{season}/{game_type}`
 
-**Valid URL:** [https://api-web.nhle.com/v1/edge/team-skating-distance-top-10/defense/ev/points](https://api-web.nhle.com/v1/edge/team-skating-distance-top-10/defense/ev/points)
+**Valid URL:** [https://api-web.nhle.com/v1/edge/team-skating-distance-top-10/defense/ev/points/now](https://api-web.nhle.com/v1/edge/team-skating-distance-top-10/defense/ev/points/now)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -391,7 +395,7 @@ Pull EDGE skating-speed detail for a single team.
 
 **Endpoint URL:** `GET https://api-web.nhle.com/v1/edge/team-skating-speed-detail/{team_id}/{season}/{game_type}`
 
-**Valid URL:** [https://api-web.nhle.com/v1/edge/team-skating-speed-detail/10](https://api-web.nhle.com/v1/edge/team-skating-speed-detail/10)
+**Valid URL:** [https://api-web.nhle.com/v1/edge/team-skating-speed-detail/10/now](https://api-web.nhle.com/v1/edge/team-skating-speed-detail/10/now)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -417,7 +421,7 @@ Pull the EDGE top-10 teams by skating speed.
 
 **Endpoint URL:** `GET https://api-web.nhle.com/v1/edge/team-skating-speed-top-10/{positions}/{sort_by}/{season}/{game_type}`
 
-**Valid URL:** [https://api-web.nhle.com/v1/edge/team-skating-speed-top-10/defense/points](https://api-web.nhle.com/v1/edge/team-skating-speed-top-10/defense/points)
+**Valid URL:** [https://api-web.nhle.com/v1/edge/team-skating-speed-top-10/defense/points/now](https://api-web.nhle.com/v1/edge/team-skating-speed-top-10/defense/points/now)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -445,7 +449,7 @@ Pull EDGE zone-time details for a single team.
 
 **Endpoint URL:** `GET https://api-web.nhle.com/v1/edge/team-zone-time-details/{team_id}/{season}/{game_type}`
 
-**Valid URL:** [https://api-web.nhle.com/v1/edge/team-zone-time-details/10](https://api-web.nhle.com/v1/edge/team-zone-time-details/10)
+**Valid URL:** [https://api-web.nhle.com/v1/edge/team-zone-time-details/10/now](https://api-web.nhle.com/v1/edge/team-zone-time-details/10/now)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -456,6 +460,7 @@ Pull EDGE zone-time details for a single team.
 ### Returns {#nhl_edge_team_zone_time_details-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `strength_code` | character | Strength state code (e.g., all, even, pp, pk). |
@@ -485,7 +490,7 @@ Pull the EDGE top-10 teams by zone time.
 
 **Endpoint URL:** `GET https://api-web.nhle.com/v1/edge/team-zone-time-top-10/{strength}/{sort_by}/{season}/{game_type}`
 
-**Valid URL:** [https://api-web.nhle.com/v1/edge/team-zone-time-top-10/ev/points](https://api-web.nhle.com/v1/edge/team-zone-time-top-10/ev/points)
+**Valid URL:** [https://api-web.nhle.com/v1/edge/team-zone-time-top-10/ev/points/now](https://api-web.nhle.com/v1/edge/team-zone-time-top-10/ev/points/now)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|

@@ -23,7 +23,7 @@ against the NBA league. Used by `tests/test_espn_universal_parsers.py`.
 | `recruiting_years_mbb.json`  | Core v2 MBB `recruiting` (captured 2026-07-07) | 23 `$ref`-only year items |
 | `recruiting_athletes_mbb_2026.json` | Core v2 MBB `recruiting/2026/athletes?limit=5` (captured 2026-07-07) | 5 INLINE athlete objects (not $ref-only) |
 | `recruiting_rankings_mbb_2026.json` | Core v2 MBB `recruiting/2026/rankings` (captured 2026-07-07) | 1 `$ref` ranking-set item ("ESPN Class Rankings") |
-| `summary_nba.json`           | Site v2 `summary?event=401585607`              | 2024 NBA Finals G5 BOS@DAL; ~700KB, 19 top-level sections |
+| `summary_nba.json`           | Site v2 `summary?event=401585607`              | 2024-03-17 regular season TOR@ORL; ~700KB, 19 top-level sections |
 | `summary_mlb.json`           | Site v2 `summary?event=401701044`              | 2024 World Series G5 LAD@NYY; ~1.8MB, 22 top-level sections |
 | `summary_nfl.json`           | Site v2 `summary?event=401671889`              | Super Bowl LIX KC@PHI; ~950KB, 19 sections (uses drives.previous[]) |
 | `summary_nhl.json`           | Site v2 `summary?event=401675111`              | 2024 Stanley Cup Final G7 EDM@FLA; ~880KB, 19 sections (no winprob) |
@@ -34,6 +34,9 @@ against the NBA league. Used by `tests/test_espn_universal_parsers.py`.
 | `injuries_{mlb,nfl,nhl,wnba}.json` | Site v2 `injuries` | Cross-league captures for `parse_injuries`; NFL is the largest (~15 MB) |
 | `depthcharts_{nfl,nba,mlb}.json` | Site v2 `teams/{id}/depthcharts` (captured 2026-09-02) | One team each for `parse_depthchart_snapshot`: NFL=ARI id 22 (3 groups / 68 slots, incl. the wr1/wr2/wr3 slots that share one position id), NBA=ATL id 1 (1 / 39), MLB=SEA id 29 (1 / 76) |
 | `depthcharts_nhl.json` | Site v2 `teams/25/depthcharts` (captured 2026-09-02) | The empty case, and the reason NHL/WNBA/CFB are excluded: HTTP 200 with the `depthchart` key **absent entirely** (558 bytes) |
+| `standings_nbagl.json` | Site v2 alt `apis/v2/sports/basketball/nba-development/standings?season=2026` (captured 2026-10-05) | NBA G League 2025-26: 2 conferences, 31 teams. Used by `tests/nbagl/test_nbagl_espn.py` |
+| `teams_nbagl.json` | Site v2 `basketball/nba-development/teams` (captured 2026-10-05) | NBA G League, 34 teams |
+| `scoreboard_nbagl.json` | Site v2 `basketball/nba-development/scoreboard?dates=20260115&limit=500` (captured 2026-10-05) | NBA G League, 7 completed games on 2026-01-15 |
 
 Endpoints are league-agnostic so capturing against NBA is sufficient — the
 parsers run identically against MLB, NFL, NHL, WNBA, MBB, WBB, CFB payloads

@@ -22,6 +22,7 @@ Yahoo shangrila persisted query `gamePropBets` -> one row per `games` entry
 ### Returns {#yahoo_game_prop_bets-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `alias_path` | character | Site-relative path portion of the entity's Yahoo alias (e.g., "/ncaaf/teams/tcu/"). |
@@ -222,6 +223,7 @@ Yahoo shangrila persisted query `gameStatsLeaders` -> one row per `games` entry
 ### Returns {#yahoo_game_stats_leaders-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `status` | character | Status label. |

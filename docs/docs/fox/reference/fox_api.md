@@ -15,7 +15,7 @@ GET /bifrost/v1/{sport}/scoreboard/main -- Fox Sports API scoreboard.
 
 **Endpoint URL:** `GET https://api.foxsports.com/bifrost/v1/{sport}/scoreboard/main`
 
-**Valid URL:** [https://api.foxsports.com/bifrost/v1/nfl/scoreboard/main](https://api.foxsports.com/bifrost/v1/nfl/scoreboard/main)
+**Valid URL:** [https://api.foxsports.com/bifrost/v1/nfl/scoreboard/main?apikey=jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq&api-version=1.1](https://api.foxsports.com/bifrost/v1/nfl/scoreboard/main?apikey=jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq&api-version=1.1)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -43,7 +43,7 @@ GET /bifrost/v1/{sport}/scorechip/{chip_id} -- one game's score chip (this route
 
 **Endpoint URL:** `GET https://api.foxsports.com/bifrost/v1/{sport}/scorechip/{chip_id}`
 
-**Valid URL:** [https://api.foxsports.com/bifrost/v1/nfl/scorechip/nfl11195](https://api.foxsports.com/bifrost/v1/nfl/scorechip/nfl11195)
+**Valid URL:** [https://api.foxsports.com/bifrost/v1/nfl/scorechip/nfl11195?apikey=jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq](https://api.foxsports.com/bifrost/v1/nfl/scorechip/nfl11195?apikey=jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -70,7 +70,7 @@ GET /bifrost/v1/topevents/scoreboard/segment/{segment} -- Fox Sports API topeven
 
 **Endpoint URL:** `GET https://api.foxsports.com/bifrost/v1/topevents/scoreboard/segment/{segment}`
 
-**Valid URL:** [https://api.foxsports.com/bifrost/v1/topevents/scoreboard/segment/1](https://api.foxsports.com/bifrost/v1/topevents/scoreboard/segment/1)
+**Valid URL:** [https://api.foxsports.com/bifrost/v1/topevents/scoreboard/segment/1?apikey=jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq&api-version=1.1](https://api.foxsports.com/bifrost/v1/topevents/scoreboard/segment/1?apikey=jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq&api-version=1.1)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -97,7 +97,7 @@ GET /bifrost/v1/{sport}/league/conferences -- Fox Sports API league conferences.
 
 **Endpoint URL:** `GET https://api.foxsports.com/bifrost/v1/{sport}/league/conferences`
 
-**Valid URL:** [https://api.foxsports.com/bifrost/v1/nfl/league/conferences](https://api.foxsports.com/bifrost/v1/nfl/league/conferences)
+**Valid URL:** [https://api.foxsports.com/bifrost/v1/nfl/league/conferences?apikey=jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq&api-version=1.1](https://api.foxsports.com/bifrost/v1/nfl/league/conferences?apikey=jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq&api-version=1.1)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -124,7 +124,7 @@ GET /bifrost/v1/{sport}/league/header -- Fox Sports API league header.
 
 **Endpoint URL:** `GET https://api.foxsports.com/bifrost/v1/{sport}/league/header`
 
-**Valid URL:** [https://api.foxsports.com/bifrost/v1/nfl/league/header](https://api.foxsports.com/bifrost/v1/nfl/league/header)
+**Valid URL:** [https://api.foxsports.com/bifrost/v1/nfl/league/header?apikey=jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq&api-version=1.1](https://api.foxsports.com/bifrost/v1/nfl/league/header?apikey=jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq&api-version=1.1)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -151,7 +151,7 @@ GET /bifrost/v1/{sport}/league/odds -- Fox Sports API league odds.
 
 **Endpoint URL:** `GET https://api.foxsports.com/bifrost/v1/{sport}/league/odds`
 
-**Valid URL:** [https://api.foxsports.com/bifrost/v1/nfl/league/odds](https://api.foxsports.com/bifrost/v1/nfl/league/odds)
+**Valid URL:** [https://api.foxsports.com/bifrost/v1/nfl/league/odds?apikey=jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq&api-version=1.1](https://api.foxsports.com/bifrost/v1/nfl/league/odds?apikey=jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq&api-version=1.1)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -179,7 +179,7 @@ GET /bifrost/v1/{sport}/league/playernews -- Fox Sports API league playernews.
 
 **Endpoint URL:** `GET https://api.foxsports.com/bifrost/v1/{sport}/league/playernews`
 
-**Valid URL:** [https://api.foxsports.com/bifrost/v1/nfl/league/playernews](https://api.foxsports.com/bifrost/v1/nfl/league/playernews)
+**Valid URL:** [https://api.foxsports.com/bifrost/v1/nfl/league/playernews?apikey=jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq&api-version=1.1](https://api.foxsports.com/bifrost/v1/nfl/league/playernews?apikey=jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq&api-version=1.1)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -206,7 +206,7 @@ GET /bifrost/v1/{sport}/league/polls -- Fox Sports API league polls.
 
 **Endpoint URL:** `GET https://api.foxsports.com/bifrost/v1/{sport}/league/polls`
 
-**Valid URL:** [https://api.foxsports.com/bifrost/v1/nfl/league/polls](https://api.foxsports.com/bifrost/v1/nfl/league/polls)
+**Valid URL:** [https://api.foxsports.com/bifrost/v1/nfl/league/polls?apikey=jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq&api-version=1.1](https://api.foxsports.com/bifrost/v1/nfl/league/polls?apikey=jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq&api-version=1.1)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -233,7 +233,7 @@ GET /bifrost/v1/{sport}/league/schedule -- Fox Sports API league schedule.
 
 **Endpoint URL:** `GET https://api.foxsports.com/bifrost/v1/{sport}/league/schedule`
 
-**Valid URL:** [https://api.foxsports.com/bifrost/v1/nfl/league/schedule](https://api.foxsports.com/bifrost/v1/nfl/league/schedule)
+**Valid URL:** [https://api.foxsports.com/bifrost/v1/nfl/league/schedule?apikey=jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq&api-version=1.1](https://api.foxsports.com/bifrost/v1/nfl/league/schedule?apikey=jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq&api-version=1.1)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -260,7 +260,7 @@ GET /bifrost/v1/{sport}/league/scores -- Fox Sports API league scores.
 
 **Endpoint URL:** `GET https://api.foxsports.com/bifrost/v1/{sport}/league/scores`
 
-**Valid URL:** [https://api.foxsports.com/bifrost/v1/nfl/league/scores](https://api.foxsports.com/bifrost/v1/nfl/league/scores)
+**Valid URL:** [https://api.foxsports.com/bifrost/v1/nfl/league/scores?apikey=jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq&api-version=1.1](https://api.foxsports.com/bifrost/v1/nfl/league/scores?apikey=jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq&api-version=1.1)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -287,7 +287,7 @@ GET /bifrost/v1/{sport}/league/scores-segment/{segment_id} -- Fox Sports API lea
 
 **Endpoint URL:** `GET https://api.foxsports.com/bifrost/v1/{sport}/league/scores-segment/{segment_id}`
 
-**Valid URL:** [https://api.foxsports.com/bifrost/v1/nfl/league/scores-segment/2026-3-1](https://api.foxsports.com/bifrost/v1/nfl/league/scores-segment/2026-3-1)
+**Valid URL:** [https://api.foxsports.com/bifrost/v1/nfl/league/scores-segment/2026-3-1?apikey=jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq&api-version=1.1](https://api.foxsports.com/bifrost/v1/nfl/league/scores-segment/2026-3-1?apikey=jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq&api-version=1.1)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -316,7 +316,7 @@ GET /bifrost/v1/{sport}/league/standings -- Fox Sports API league standings.
 
 **Endpoint URL:** `GET https://api.foxsports.com/bifrost/v1/{sport}/league/standings`
 
-**Valid URL:** [https://api.foxsports.com/bifrost/v1/nfl/league/standings](https://api.foxsports.com/bifrost/v1/nfl/league/standings)
+**Valid URL:** [https://api.foxsports.com/bifrost/v1/nfl/league/standings?apikey=jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq&api-version=1.1](https://api.foxsports.com/bifrost/v1/nfl/league/standings?apikey=jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq&api-version=1.1)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -343,7 +343,7 @@ GET /bifrost/v1/{sport}/league/stats -- Fox Sports API league stats.
 
 **Endpoint URL:** `GET https://api.foxsports.com/bifrost/v1/{sport}/league/stats`
 
-**Valid URL:** [https://api.foxsports.com/bifrost/v1/nfl/league/stats](https://api.foxsports.com/bifrost/v1/nfl/league/stats)
+**Valid URL:** [https://api.foxsports.com/bifrost/v1/nfl/league/stats?apikey=jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq&api-version=1.1](https://api.foxsports.com/bifrost/v1/nfl/league/stats?apikey=jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq&api-version=1.1)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -370,7 +370,7 @@ GET /bifrost/v1/{sport}/league/stats-con/{who}/{category}/{page} -- Fox Sports A
 
 **Endpoint URL:** `GET https://api.foxsports.com/bifrost/v1/{sport}/league/stats-con/{who}/{category}/{page}`
 
-**Valid URL:** [https://api.foxsports.com/bifrost/v1/nfl/league/stats-con/player/passing/1](https://api.foxsports.com/bifrost/v1/nfl/league/stats-con/player/passing/1)
+**Valid URL:** [https://api.foxsports.com/bifrost/v1/nfl/league/stats-con/player/passing/1?apikey=jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq&api-version=1.1](https://api.foxsports.com/bifrost/v1/nfl/league/stats-con/player/passing/1?apikey=jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq&api-version=1.1)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -401,7 +401,7 @@ GET /bifrost/v1/{sport}/league/teamnav -- Fox Sports API league teamnav.
 
 **Endpoint URL:** `GET https://api.foxsports.com/bifrost/v1/{sport}/league/teamnav`
 
-**Valid URL:** [https://api.foxsports.com/bifrost/v1/nfl/league/teamnav](https://api.foxsports.com/bifrost/v1/nfl/league/teamnav)
+**Valid URL:** [https://api.foxsports.com/bifrost/v1/nfl/league/teamnav?apikey=jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq&api-version=1.1](https://api.foxsports.com/bifrost/v1/nfl/league/teamnav?apikey=jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq&api-version=1.1)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -428,7 +428,7 @@ GET /bifrost/v1/{sport}/event/{event_id}/data -- Fox Sports API event data.
 
 **Endpoint URL:** `GET https://api.foxsports.com/bifrost/v1/{sport}/event/{event_id}/data`
 
-**Valid URL:** [https://api.foxsports.com/bifrost/v1/nfl/event/11195/data](https://api.foxsports.com/bifrost/v1/nfl/event/11195/data)
+**Valid URL:** [https://api.foxsports.com/bifrost/v1/nfl/event/11195/data?apikey=jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq&api-version=1.1](https://api.foxsports.com/bifrost/v1/nfl/event/11195/data?apikey=jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq&api-version=1.1)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -456,7 +456,7 @@ GET /bifrost/v1/{sport}/event/{event_id}/matchup -- Fox Sports API event matchup
 
 **Endpoint URL:** `GET https://api.foxsports.com/bifrost/v1/{sport}/event/{event_id}/matchup`
 
-**Valid URL:** [https://api.foxsports.com/bifrost/v1/nfl/event/11195/matchup](https://api.foxsports.com/bifrost/v1/nfl/event/11195/matchup)
+**Valid URL:** [https://api.foxsports.com/bifrost/v1/nfl/event/11195/matchup?apikey=jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq&api-version=1.1](https://api.foxsports.com/bifrost/v1/nfl/event/11195/matchup?apikey=jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq&api-version=1.1)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -484,7 +484,7 @@ GET /bifrost/v1/{sport}/event/{event_id}/odds -- Fox Sports API event odds.
 
 **Endpoint URL:** `GET https://api.foxsports.com/bifrost/v1/{sport}/event/{event_id}/odds`
 
-**Valid URL:** [https://api.foxsports.com/bifrost/v1/nfl/event/11195/odds](https://api.foxsports.com/bifrost/v1/nfl/event/11195/odds)
+**Valid URL:** [https://api.foxsports.com/bifrost/v1/nfl/event/11195/odds?apikey=jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq&api-version=1.1](https://api.foxsports.com/bifrost/v1/nfl/event/11195/odds?apikey=jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq&api-version=1.1)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -512,7 +512,7 @@ GET /bifrost/v1/{sport}/event/{event_id}/recap -- Fox Sports API event recap.
 
 **Endpoint URL:** `GET https://api.foxsports.com/bifrost/v1/{sport}/event/{event_id}/recap`
 
-**Valid URL:** [https://api.foxsports.com/bifrost/v1/nfl/event/11195/recap](https://api.foxsports.com/bifrost/v1/nfl/event/11195/recap)
+**Valid URL:** [https://api.foxsports.com/bifrost/v1/nfl/event/11195/recap?apikey=jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq&api-version=1.1](https://api.foxsports.com/bifrost/v1/nfl/event/11195/recap?apikey=jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq&api-version=1.1)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -540,7 +540,7 @@ GET /bifrost/v1/{sport}/event/{event_id}/standings -- Fox Sports API event stand
 
 **Endpoint URL:** `GET https://api.foxsports.com/bifrost/v1/{sport}/event/{event_id}/standings`
 
-**Valid URL:** [https://api.foxsports.com/bifrost/v1/nfl/event/11195/standings](https://api.foxsports.com/bifrost/v1/nfl/event/11195/standings)
+**Valid URL:** [https://api.foxsports.com/bifrost/v1/nfl/event/11195/standings?apikey=jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq&api-version=1.1](https://api.foxsports.com/bifrost/v1/nfl/event/11195/standings?apikey=jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq&api-version=1.1)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -568,7 +568,7 @@ GET /bifrost/v1/{sport}/team/{team_id}/gamelog -- Fox Sports API team gamelog.
 
 **Endpoint URL:** `GET https://api.foxsports.com/bifrost/v1/{sport}/team/{team_id}/gamelog`
 
-**Valid URL:** [https://api.foxsports.com/bifrost/v1/nfl/team/25/gamelog](https://api.foxsports.com/bifrost/v1/nfl/team/25/gamelog)
+**Valid URL:** [https://api.foxsports.com/bifrost/v1/nfl/team/25/gamelog?apikey=jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq&api-version=1.1](https://api.foxsports.com/bifrost/v1/nfl/team/25/gamelog?apikey=jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq&api-version=1.1)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -596,7 +596,7 @@ GET /bifrost/v1/{sport}/team/{team_id}/header -- Fox Sports API team header.
 
 **Endpoint URL:** `GET https://api.foxsports.com/bifrost/v1/{sport}/team/{team_id}/header`
 
-**Valid URL:** [https://api.foxsports.com/bifrost/v1/nfl/team/25/header](https://api.foxsports.com/bifrost/v1/nfl/team/25/header)
+**Valid URL:** [https://api.foxsports.com/bifrost/v1/nfl/team/25/header?apikey=jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq&api-version=1.1](https://api.foxsports.com/bifrost/v1/nfl/team/25/header?apikey=jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq&api-version=1.1)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -624,7 +624,7 @@ GET /bifrost/v1/{sport}/team/{team_id}/roster -- Fox Sports API team roster.
 
 **Endpoint URL:** `GET https://api.foxsports.com/bifrost/v1/{sport}/team/{team_id}/roster`
 
-**Valid URL:** [https://api.foxsports.com/bifrost/v1/nfl/team/25/roster](https://api.foxsports.com/bifrost/v1/nfl/team/25/roster)
+**Valid URL:** [https://api.foxsports.com/bifrost/v1/nfl/team/25/roster?apikey=jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq&api-version=1.1](https://api.foxsports.com/bifrost/v1/nfl/team/25/roster?apikey=jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq&api-version=1.1)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -652,7 +652,7 @@ GET /bifrost/v1/{sport}/team/{team_id}/standings -- Fox Sports API team standing
 
 **Endpoint URL:** `GET https://api.foxsports.com/bifrost/v1/{sport}/team/{team_id}/standings`
 
-**Valid URL:** [https://api.foxsports.com/bifrost/v1/nfl/team/25/standings](https://api.foxsports.com/bifrost/v1/nfl/team/25/standings)
+**Valid URL:** [https://api.foxsports.com/bifrost/v1/nfl/team/25/standings?apikey=jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq&api-version=1.1](https://api.foxsports.com/bifrost/v1/nfl/team/25/standings?apikey=jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq&api-version=1.1)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -680,7 +680,7 @@ GET /bifrost/v1/{sport}/team/{team_id}/stats -- Fox Sports API team stats.
 
 **Endpoint URL:** `GET https://api.foxsports.com/bifrost/v1/{sport}/team/{team_id}/stats`
 
-**Valid URL:** [https://api.foxsports.com/bifrost/v1/nfl/team/25/stats](https://api.foxsports.com/bifrost/v1/nfl/team/25/stats)
+**Valid URL:** [https://api.foxsports.com/bifrost/v1/nfl/team/25/stats?apikey=jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq&api-version=1.1](https://api.foxsports.com/bifrost/v1/nfl/team/25/stats?apikey=jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq&api-version=1.1)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -708,7 +708,7 @@ GET /bifrost/v1/explore/browse/{section}/main -- Fox Sports API explore browse.
 
 **Endpoint URL:** `GET https://api.foxsports.com/bifrost/v1/explore/browse/{section}/main`
 
-**Valid URL:** [https://api.foxsports.com/bifrost/v1/explore/browse/sports/main](https://api.foxsports.com/bifrost/v1/explore/browse/sports/main)
+**Valid URL:** [https://api.foxsports.com/bifrost/v1/explore/browse/sports/main?apikey=jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq&api-version=1.1](https://api.foxsports.com/bifrost/v1/explore/browse/sports/main?apikey=jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq&api-version=1.1)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -735,7 +735,7 @@ GET /bifrost/v1/explore/odds/main -- Fox Sports API explore odds.
 
 **Endpoint URL:** `GET https://api.foxsports.com/bifrost/v1/explore/odds/main`
 
-**Valid URL:** [https://api.foxsports.com/bifrost/v1/explore/odds/main](https://api.foxsports.com/bifrost/v1/explore/odds/main)
+**Valid URL:** [https://api.foxsports.com/bifrost/v1/explore/odds/main?apikey=jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq&api-version=1.1](https://api.foxsports.com/bifrost/v1/explore/odds/main?apikey=jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq&api-version=1.1)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -761,7 +761,7 @@ GET /bifrost/v1/search/content -- Fox Sports API search content.
 
 **Endpoint URL:** `GET https://api.foxsports.com/bifrost/v1/search/content`
 
-**Valid URL:** [https://api.foxsports.com/bifrost/v1/search/content?text=mahomes](https://api.foxsports.com/bifrost/v1/search/content?text=mahomes)
+**Valid URL:** [https://api.foxsports.com/bifrost/v1/search/content?apikey=jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq&api-version=1.1&text=mahomes](https://api.foxsports.com/bifrost/v1/search/content?apikey=jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq&api-version=1.1&text=mahomes)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -788,7 +788,7 @@ GET /bifrost/v1/search/entities -- Fox Sports API search entities.
 
 **Endpoint URL:** `GET https://api.foxsports.com/bifrost/v1/search/entities`
 
-**Valid URL:** [https://api.foxsports.com/bifrost/v1/search/entities?text=mahomes](https://api.foxsports.com/bifrost/v1/search/entities?text=mahomes)
+**Valid URL:** [https://api.foxsports.com/bifrost/v1/search/entities?apikey=jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq&api-version=1.1&text=mahomes](https://api.foxsports.com/bifrost/v1/search/entities?apikey=jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq&api-version=1.1&text=mahomes)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -815,7 +815,7 @@ GET /bifrost/v1/search/popular -- Fox Sports API search popular.
 
 **Endpoint URL:** `GET https://api.foxsports.com/bifrost/v1/search/popular`
 
-**Valid URL:** [https://api.foxsports.com/bifrost/v1/search/popular](https://api.foxsports.com/bifrost/v1/search/popular)
+**Valid URL:** [https://api.foxsports.com/bifrost/v1/search/popular?apikey=jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq&api-version=1.1](https://api.foxsports.com/bifrost/v1/search/popular?apikey=jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq&api-version=1.1)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -841,7 +841,7 @@ GET /bifrost/v1/general/trending/articles -- Fox Sports API trending articles.
 
 **Endpoint URL:** `GET https://api.foxsports.com/bifrost/v1/general/trending/articles`
 
-**Valid URL:** [https://api.foxsports.com/bifrost/v1/general/trending/articles](https://api.foxsports.com/bifrost/v1/general/trending/articles)
+**Valid URL:** [https://api.foxsports.com/bifrost/v1/general/trending/articles?apikey=SuNgfBgmTGS2xozZbnV6FcjGGRQrR8cg&api-version=1.1&duration=4](https://api.foxsports.com/bifrost/v1/general/trending/articles?apikey=SuNgfBgmTGS2xozZbnV6FcjGGRQrR8cg&api-version=1.1&duration=4)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -869,7 +869,7 @@ GET /bifrost/v1/general/trending/videos -- Fox Sports API trending videos.
 
 **Endpoint URL:** `GET https://api.foxsports.com/bifrost/v1/general/trending/videos`
 
-**Valid URL:** [https://api.foxsports.com/bifrost/v1/general/trending/videos](https://api.foxsports.com/bifrost/v1/general/trending/videos)
+**Valid URL:** [https://api.foxsports.com/bifrost/v1/general/trending/videos?apikey=SuNgfBgmTGS2xozZbnV6FcjGGRQrR8cg&api-version=1.1&duration=4&maxItems=12](https://api.foxsports.com/bifrost/v1/general/trending/videos?apikey=SuNgfBgmTGS2xozZbnV6FcjGGRQrR8cg&api-version=1.1&duration=4&maxItems=12)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -897,7 +897,7 @@ GET /foxpolls/v1/polls -- Fox Sports API foxpolls.
 
 **Endpoint URL:** `GET https://api.foxsports.com/foxpolls/v1/polls`
 
-**Valid URL:** [https://api.foxsports.com/foxpolls/v1/polls](https://api.foxsports.com/foxpolls/v1/polls)
+**Valid URL:** [https://api.foxsports.com/foxpolls/v1/polls?apikey=SuNgfBgmTGS2xozZbnV6FcjGGRQrR8cg&includeAnswers=true](https://api.foxsports.com/foxpolls/v1/polls?apikey=SuNgfBgmTGS2xozZbnV6FcjGGRQrR8cg&includeAnswers=true)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|

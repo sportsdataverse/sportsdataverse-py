@@ -69,7 +69,7 @@ def nhl_edge_skater_detail(
     """Pull EDGE detail stats for a single skater.
 
     Endpoint: ``GET https://api-web.nhle.com/v1/edge/skater-detail/{player_id}/{season}/{game_type}``
-    Example URL: https://api-web.nhle.com/v1/edge/skater-detail/8480801
+    Example URL: https://api-web.nhle.com/v1/edge/skater-detail/8480801/now
 
     Args:
         player_id: player_id path parameter.
@@ -117,7 +117,7 @@ def nhl_edge_skater_comparison(
     """Pull EDGE comparison data for a single skater.
 
     Endpoint: ``GET https://api-web.nhle.com/v1/edge/skater-comparison/{player_id}/{season}/{game_type}``
-    Example URL: https://api-web.nhle.com/v1/edge/skater-comparison/8480801
+    Example URL: https://api-web.nhle.com/v1/edge/skater-comparison/8480801/now
 
     Args:
         player_id: player_id path parameter.
@@ -165,7 +165,7 @@ def nhl_edge_skater_shot_location_detail(
     """Pull EDGE shot-location detail for a single skater.
 
     Endpoint: ``GET https://api-web.nhle.com/v1/edge/skater-shot-location-detail/{player_id}/{season}/{game_type}``
-    Example URL: https://api-web.nhle.com/v1/edge/skater-shot-location-detail/8480801
+    Example URL: https://api-web.nhle.com/v1/edge/skater-shot-location-detail/8480801/now
 
     Args:
         player_id: player_id path parameter.
@@ -215,7 +215,7 @@ def nhl_edge_skater_shot_location_top_10(
     """Pull the EDGE top-10 skaters for a shot-location category.
 
     Endpoint: ``GET https://api-web.nhle.com/v1/edge/skater-shot-location-top-10/{position}/{category}/{sort_by}/{season}/{game_type}``
-    Example URL: https://api-web.nhle.com/v1/edge/skater-shot-location-top-10/forwards/shots/points
+    Example URL: https://api-web.nhle.com/v1/edge/skater-shot-location-top-10/forwards/shots/points/now
 
     Args:
         position: position path parameter.
@@ -265,7 +265,7 @@ def nhl_edge_skater_shot_speed_detail(
     """Pull EDGE shot-speed detail for a single skater.
 
     Endpoint: ``GET https://api-web.nhle.com/v1/edge/skater-shot-speed-detail/{player_id}/{season}/{game_type}``
-    Example URL: https://api-web.nhle.com/v1/edge/skater-shot-speed-detail/8480801
+    Example URL: https://api-web.nhle.com/v1/edge/skater-shot-speed-detail/8480801/now
 
     Args:
         player_id: player_id path parameter.
@@ -314,7 +314,7 @@ def nhl_edge_skater_shot_speed_top_10(
     """Pull the EDGE top-10 skaters by shot speed.
 
     Endpoint: ``GET https://api-web.nhle.com/v1/edge/skater-shot-speed-top-10/{positions}/{sort_by}/{season}/{game_type}``
-    Example URL: https://api-web.nhle.com/v1/edge/skater-shot-speed-top-10/defense/points
+    Example URL: https://api-web.nhle.com/v1/edge/skater-shot-speed-top-10/defense/points/now
 
     Args:
         positions: positions path parameter.
@@ -363,7 +363,7 @@ def nhl_edge_skater_skating_distance_detail(
     """Pull EDGE skating-distance detail for a single skater.
 
     Endpoint: ``GET https://api-web.nhle.com/v1/edge/skater-skating-distance-detail/{player_id}/{season}/{game_type}``
-    Example URL: https://api-web.nhle.com/v1/edge/skater-skating-distance-detail/8480801
+    Example URL: https://api-web.nhle.com/v1/edge/skater-skating-distance-detail/8480801/now
 
     Args:
         player_id: player_id path parameter.
@@ -411,7 +411,7 @@ def nhl_edge_skater_skating_speed_detail(
     """Pull EDGE skating-speed detail for a single skater.
 
     Endpoint: ``GET https://api-web.nhle.com/v1/edge/skater-skating-speed-detail/{player_id}/{season}/{game_type}``
-    Example URL: https://api-web.nhle.com/v1/edge/skater-skating-speed-detail/8480801
+    Example URL: https://api-web.nhle.com/v1/edge/skater-skating-speed-detail/8480801/now
 
     Args:
         player_id: player_id path parameter.
@@ -460,7 +460,7 @@ def nhl_edge_skater_speed_top_10(
     """Pull the EDGE top-10 skaters by skating speed.
 
     Endpoint: ``GET https://api-web.nhle.com/v1/edge/skater-speed-top-10/{positions}/{sort_by}/{season}/{game_type}``
-    Example URL: https://api-web.nhle.com/v1/edge/skater-speed-top-10/defense/points
+    Example URL: https://api-web.nhle.com/v1/edge/skater-speed-top-10/defense/points/now
 
     Args:
         positions: positions path parameter.
@@ -511,7 +511,7 @@ def nhl_edge_skater_distance_top_10(
     """Pull the EDGE top-10 skaters by skating distance.
 
     Endpoint: ``GET https://api-web.nhle.com/v1/edge/skater-distance-top-10/{positions}/{strength}/{sort_by}/{season}/{game_type}``
-    Example URL: https://api-web.nhle.com/v1/edge/skater-distance-top-10/defense/ev/points
+    Example URL: https://api-web.nhle.com/v1/edge/skater-distance-top-10/defense/ev/points/now
 
     Args:
         positions: positions path parameter.
@@ -561,7 +561,7 @@ def nhl_edge_skater_zone_time(
     """Pull EDGE zone-time detail for a single skater.
 
     Endpoint: ``GET https://api-web.nhle.com/v1/edge/skater-zone-time/{player_id}/{season}/{game_type}``
-    Example URL: https://api-web.nhle.com/v1/edge/skater-zone-time/8480801
+    Example URL: https://api-web.nhle.com/v1/edge/skater-zone-time/8480801/now
 
     Args:
         player_id: player_id path parameter.
@@ -611,7 +611,7 @@ def nhl_edge_skater_zone_time_top_10(
     """Pull the EDGE top-10 skaters by zone time.
 
     Endpoint: ``GET https://api-web.nhle.com/v1/edge/skater-zone-time-top-10/{positions}/{strength}/{sort_by}/{season}/{game_type}``
-    Example URL: https://api-web.nhle.com/v1/edge/skater-zone-time-top-10/defense/ev/points
+    Example URL: https://api-web.nhle.com/v1/edge/skater-zone-time-top-10/defense/ev/points/now
 
     Args:
         positions: positions path parameter.
@@ -660,7 +660,7 @@ def nhl_edge_skater_landing(
     """Pull the EDGE skater landing page (summary across all skaters).
 
     Endpoint: ``GET https://api-web.nhle.com/v1/edge/skater-landing/{season}/{game_type}``
-    Example URL: https://api-web.nhle.com/v1/edge/skater-landing
+    Example URL: https://api-web.nhle.com/v1/edge/skater-landing/now
 
     Args:
         season: season path parameter.
@@ -707,7 +707,7 @@ def nhl_edge_goalie_detail(
     """Pull EDGE detail stats for a single goalie.
 
     Endpoint: ``GET https://api-web.nhle.com/v1/edge/goalie-detail/{player_id}/{season}/{game_type}``
-    Example URL: https://api-web.nhle.com/v1/edge/goalie-detail/8480801
+    Example URL: https://api-web.nhle.com/v1/edge/goalie-detail/8480801/now
 
     Args:
         player_id: player_id path parameter.
@@ -755,7 +755,7 @@ def nhl_edge_goalie_5v5_detail(
     """Pull EDGE 5-on-5 detail stats for a single goalie.
 
     Endpoint: ``GET https://api-web.nhle.com/v1/edge/goalie-5v5-detail/{player_id}/{season}/{game_type}``
-    Example URL: https://api-web.nhle.com/v1/edge/goalie-5v5-detail/8480801
+    Example URL: https://api-web.nhle.com/v1/edge/goalie-5v5-detail/8480801/now
 
     Args:
         player_id: player_id path parameter.
@@ -803,7 +803,7 @@ def nhl_edge_goalie_5v5_top_10(
     """Pull the EDGE top-10 goalies by 5-on-5 metrics.
 
     Endpoint: ``GET https://api-web.nhle.com/v1/edge/goalie-5v5-top-10/{sort_by}/{season}/{game_type}``
-    Example URL: https://api-web.nhle.com/v1/edge/goalie-5v5-top-10/points
+    Example URL: https://api-web.nhle.com/v1/edge/goalie-5v5-top-10/points/now
 
     Args:
         sort_by: sort_by path parameter.
@@ -851,7 +851,7 @@ def nhl_edge_goalie_comparison(
     """Pull EDGE comparison data for a single goalie.
 
     Endpoint: ``GET https://api-web.nhle.com/v1/edge/goalie-comparison/{player_id}/{season}/{game_type}``
-    Example URL: https://api-web.nhle.com/v1/edge/goalie-comparison/8480801
+    Example URL: https://api-web.nhle.com/v1/edge/goalie-comparison/8480801/now
 
     Args:
         player_id: player_id path parameter.
@@ -899,7 +899,7 @@ def nhl_edge_goalie_save_percentage_detail(
     """Pull EDGE save-percentage detail for a single goalie.
 
     Endpoint: ``GET https://api-web.nhle.com/v1/edge/goalie-save-percentage-detail/{player_id}/{season}/{game_type}``
-    Example URL: https://api-web.nhle.com/v1/edge/goalie-save-percentage-detail/8480801
+    Example URL: https://api-web.nhle.com/v1/edge/goalie-save-percentage-detail/8480801/now
 
     Args:
         player_id: player_id path parameter.
@@ -947,7 +947,7 @@ def nhl_edge_goalie_edge_save_pctg_top_10(
     """Pull the EDGE top-10 goalies by save-percentage.
 
     Endpoint: ``GET https://api-web.nhle.com/v1/edge/goalie-edge-save-pctg-top-10/{sort_by}/{season}/{game_type}``
-    Example URL: https://api-web.nhle.com/v1/edge/goalie-edge-save-pctg-top-10/points
+    Example URL: https://api-web.nhle.com/v1/edge/goalie-edge-save-pctg-top-10/points/now
 
     Args:
         sort_by: sort_by path parameter.
@@ -995,7 +995,7 @@ def nhl_edge_goalie_shot_location_detail(
     """Pull EDGE shot-location detail for a single goalie.
 
     Endpoint: ``GET https://api-web.nhle.com/v1/edge/goalie-shot-location-detail/{player_id}/{season}/{game_type}``
-    Example URL: https://api-web.nhle.com/v1/edge/goalie-shot-location-detail/8480801
+    Example URL: https://api-web.nhle.com/v1/edge/goalie-shot-location-detail/8480801/now
 
     Args:
         player_id: player_id path parameter.
@@ -1044,7 +1044,7 @@ def nhl_edge_goalie_shot_location_top_10(
     """Pull the EDGE top-10 goalies for a shot-location category.
 
     Endpoint: ``GET https://api-web.nhle.com/v1/edge/goalie-shot-location-top-10/{category}/{sort_by}/{season}/{game_type}``
-    Example URL: https://api-web.nhle.com/v1/edge/goalie-shot-location-top-10/shots/points
+    Example URL: https://api-web.nhle.com/v1/edge/goalie-shot-location-top-10/shots/points/now
 
     Args:
         category: category path parameter.
@@ -1092,7 +1092,7 @@ def nhl_edge_goalie_landing(
     """Pull the EDGE goalie landing page (summary across all goalies).
 
     Endpoint: ``GET https://api-web.nhle.com/v1/edge/goalie-landing/{season}/{game_type}``
-    Example URL: https://api-web.nhle.com/v1/edge/goalie-landing
+    Example URL: https://api-web.nhle.com/v1/edge/goalie-landing/now
 
     Args:
         season: season path parameter.
@@ -1139,7 +1139,7 @@ def nhl_edge_team_detail(
     """Pull EDGE detail stats for a single team.
 
     Endpoint: ``GET https://api-web.nhle.com/v1/edge/team-detail/{team_id}/{season}/{game_type}``
-    Example URL: https://api-web.nhle.com/v1/edge/team-detail/10
+    Example URL: https://api-web.nhle.com/v1/edge/team-detail/10/now
 
     Args:
         team_id: team_id path parameter.
@@ -1186,7 +1186,7 @@ def nhl_edge_team_landing(
     """Pull the EDGE team landing page (summary across all teams).
 
     Endpoint: ``GET https://api-web.nhle.com/v1/edge/team-landing/{season}/{game_type}``
-    Example URL: https://api-web.nhle.com/v1/edge/team-landing
+    Example URL: https://api-web.nhle.com/v1/edge/team-landing/now
 
     Args:
         season: season path parameter.
@@ -1233,7 +1233,7 @@ def nhl_edge_team_shot_location_detail(
     """Pull EDGE shot-location detail for a single team.
 
     Endpoint: ``GET https://api-web.nhle.com/v1/edge/team-shot-location-detail/{team_id}/{season}/{game_type}``
-    Example URL: https://api-web.nhle.com/v1/edge/team-shot-location-detail/10
+    Example URL: https://api-web.nhle.com/v1/edge/team-shot-location-detail/10/now
 
     Args:
         team_id: team_id path parameter.
@@ -1283,7 +1283,7 @@ def nhl_edge_team_shot_location_top_10(
     """Pull the EDGE top-10 teams for a shot-location category.
 
     Endpoint: ``GET https://api-web.nhle.com/v1/edge/team-shot-location-top-10/{position}/{category}/{sort_by}/{season}/{game_type}``
-    Example URL: https://api-web.nhle.com/v1/edge/team-shot-location-top-10/forwards/shots/points
+    Example URL: https://api-web.nhle.com/v1/edge/team-shot-location-top-10/forwards/shots/points/now
 
     Args:
         position: position path parameter.
@@ -1333,7 +1333,7 @@ def nhl_edge_team_shot_speed_detail(
     """Pull EDGE shot-speed detail for a single team.
 
     Endpoint: ``GET https://api-web.nhle.com/v1/edge/team-shot-speed-detail/{team_id}/{season}/{game_type}``
-    Example URL: https://api-web.nhle.com/v1/edge/team-shot-speed-detail/10
+    Example URL: https://api-web.nhle.com/v1/edge/team-shot-speed-detail/10/now
 
     Args:
         team_id: team_id path parameter.
@@ -1378,7 +1378,7 @@ def nhl_edge_team_skating_distance_detail(
     """Pull EDGE skating-distance detail for a single team.
 
     Endpoint: ``GET https://api-web.nhle.com/v1/edge/team-skating-distance-detail/{team_id}/{season}/{game_type}``
-    Example URL: https://api-web.nhle.com/v1/edge/team-skating-distance-detail/10
+    Example URL: https://api-web.nhle.com/v1/edge/team-skating-distance-detail/10/now
 
     Args:
         team_id: team_id path parameter.
@@ -1424,7 +1424,7 @@ def nhl_edge_team_skating_distance_top_10(
     """Pull the EDGE top-10 teams by skating distance.
 
     Endpoint: ``GET https://api-web.nhle.com/v1/edge/team-skating-distance-top-10/{positions}/{strength}/{sort_by}/{season}/{game_type}``
-    Example URL: https://api-web.nhle.com/v1/edge/team-skating-distance-top-10/defense/ev/points
+    Example URL: https://api-web.nhle.com/v1/edge/team-skating-distance-top-10/defense/ev/points/now
 
     Args:
         positions: positions path parameter.
@@ -1471,7 +1471,7 @@ def nhl_edge_team_skating_speed_detail(
     """Pull EDGE skating-speed detail for a single team.
 
     Endpoint: ``GET https://api-web.nhle.com/v1/edge/team-skating-speed-detail/{team_id}/{season}/{game_type}``
-    Example URL: https://api-web.nhle.com/v1/edge/team-skating-speed-detail/10
+    Example URL: https://api-web.nhle.com/v1/edge/team-skating-speed-detail/10/now
 
     Args:
         team_id: team_id path parameter.
@@ -1516,7 +1516,7 @@ def nhl_edge_team_skating_speed_top_10(
     """Pull the EDGE top-10 teams by skating speed.
 
     Endpoint: ``GET https://api-web.nhle.com/v1/edge/team-skating-speed-top-10/{positions}/{sort_by}/{season}/{game_type}``
-    Example URL: https://api-web.nhle.com/v1/edge/team-skating-speed-top-10/defense/points
+    Example URL: https://api-web.nhle.com/v1/edge/team-skating-speed-top-10/defense/points/now
 
     Args:
         positions: positions path parameter.
@@ -1565,7 +1565,7 @@ def nhl_edge_team_zone_time_details(
     """Pull EDGE zone-time details for a single team.
 
     Endpoint: ``GET https://api-web.nhle.com/v1/edge/team-zone-time-details/{team_id}/{season}/{game_type}``
-    Example URL: https://api-web.nhle.com/v1/edge/team-zone-time-details/10
+    Example URL: https://api-web.nhle.com/v1/edge/team-zone-time-details/10/now
 
     Args:
         team_id: team_id path parameter.
@@ -1614,7 +1614,7 @@ def nhl_edge_team_zone_time_top_10(
     """Pull the EDGE top-10 teams by zone time.
 
     Endpoint: ``GET https://api-web.nhle.com/v1/edge/team-zone-time-top-10/{strength}/{sort_by}/{season}/{game_type}``
-    Example URL: https://api-web.nhle.com/v1/edge/team-zone-time-top-10/ev/points
+    Example URL: https://api-web.nhle.com/v1/edge/team-zone-time-top-10/ev/points/now
 
     Args:
         strength: strength path parameter.
@@ -1663,7 +1663,7 @@ def nhl_edge_cat_skater_detail(
     """Pull categorized (cat) EDGE detail stats for a single skater.
 
     Endpoint: ``GET https://api-web.nhle.com/v1/cat/edge/skater-detail/{player_id}/{season}/{game_type}``
-    Example URL: https://api-web.nhle.com/v1/cat/edge/skater-detail/8480801
+    Example URL: https://api-web.nhle.com/v1/cat/edge/skater-detail/8480801/now
 
     Args:
         player_id: player_id path parameter.
@@ -1711,7 +1711,7 @@ def nhl_edge_cat_goalie_detail(
     """Pull categorized (cat) EDGE detail stats for a single goalie.
 
     Endpoint: ``GET https://api-web.nhle.com/v1/cat/edge/goalie-detail/{player_id}/{season}/{game_type}``
-    Example URL: https://api-web.nhle.com/v1/cat/edge/goalie-detail/8480801
+    Example URL: https://api-web.nhle.com/v1/cat/edge/goalie-detail/8480801/now
 
     Args:
         player_id: player_id path parameter.

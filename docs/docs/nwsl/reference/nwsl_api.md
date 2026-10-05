@@ -15,7 +15,7 @@ All competitions StatsPerform tracks for NWSL (league + friendlies/cups).
 
 **Endpoint URL:** `GET https://api-sdp.nwslsoccer.com/v1/nwsl/football/competitions`
 
-**Valid URL:** [https://api-sdp.nwslsoccer.com/v1/nwsl/football/competitions](https://api-sdp.nwslsoccer.com/v1/nwsl/football/competitions)
+**Valid URL:** [https://api-sdp.nwslsoccer.com/v1/nwsl/football/competitions?locale=en-US](https://api-sdp.nwslsoccer.com/v1/nwsl/football/competitions?locale=en-US)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -24,6 +24,7 @@ All competitions StatsPerform tracks for NWSL (league + friendlies/cups).
 ### Returns {#nwsl_competitions-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `competition_id` | character | Composite Competition id (Utf8 join key). |
@@ -49,7 +50,7 @@ Team lineups (starting XI + bench + staff) for a match.
 
 **Endpoint URL:** `GET https://api-sdp.nwslsoccer.com/v1/nwsl/football/seasons/{season_id}/matches/{match_id}/lineups`
 
-**Valid URL:** [https://api-sdp.nwslsoccer.com/v1/nwsl/football/seasons/nwsl::Football_Season::0b6761e4701749f593690c0f338da74c/matches/nwsl::Football_Match::0b6761e4701749f593690c0f338da74c/lineups](https://api-sdp.nwslsoccer.com/v1/nwsl/football/seasons/nwsl::Football_Season::0b6761e4701749f593690c0f338da74c/matches/nwsl::Football_Match::0b6761e4701749f593690c0f338da74c/lineups)
+**Valid URL:** [https://api-sdp.nwslsoccer.com/v1/nwsl/football/seasons/nwsl::Football_Season::0b6761e4701749f593690c0f338da74c/matches/nwsl::Football_Match::0b6761e4701749f593690c0f338da74c/lineups?locale=en-US](https://api-sdp.nwslsoccer.com/v1/nwsl/football/seasons/nwsl::Football_Season::0b6761e4701749f593690c0f338da74c/matches/nwsl::Football_Match::0b6761e4701749f593690c0f338da74c/lineups?locale=en-US)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -60,6 +61,7 @@ Team lineups (starting XI + bench + staff) for a match.
 ### Returns {#nwsl_match_lineups-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `match_id` | character | Composite Match id (Utf8 join key). |
@@ -102,7 +104,7 @@ Match days (rounds) for a season.
 
 **Endpoint URL:** `GET https://api-sdp.nwslsoccer.com/v1/nwsl/football/seasons/{season_id}/matchdays`
 
-**Valid URL:** [https://api-sdp.nwslsoccer.com/v1/nwsl/football/seasons/nwsl::Football_Season::0b6761e4701749f593690c0f338da74c/matchdays](https://api-sdp.nwslsoccer.com/v1/nwsl/football/seasons/nwsl::Football_Season::0b6761e4701749f593690c0f338da74c/matchdays)
+**Valid URL:** [https://api-sdp.nwslsoccer.com/v1/nwsl/football/seasons/nwsl::Football_Season::0b6761e4701749f593690c0f338da74c/matchdays?locale=en-US](https://api-sdp.nwslsoccer.com/v1/nwsl/football/seasons/nwsl::Football_Season::0b6761e4701749f593690c0f338da74c/matchdays?locale=en-US)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -112,6 +114,7 @@ Match days (rounds) for a season.
 ### Returns {#nwsl_matchdays-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `match_set_id` | character | Composite match-day (match set) id. |
@@ -145,7 +148,7 @@ Player-stats leaderboard for a season (paginated).
 
 **Endpoint URL:** `GET https://api-sdp.nwslsoccer.com/v1/nwsl/football/seasons/{season_id}/stats/players`
 
-**Valid URL:** [https://api-sdp.nwslsoccer.com/v1/nwsl/football/seasons/nwsl::Football_Season::0b6761e4701749f593690c0f338da74c/stats/players](https://api-sdp.nwslsoccer.com/v1/nwsl/football/seasons/nwsl::Football_Season::0b6761e4701749f593690c0f338da74c/stats/players)
+**Valid URL:** [https://api-sdp.nwslsoccer.com/v1/nwsl/football/seasons/nwsl::Football_Season::0b6761e4701749f593690c0f338da74c/stats/players?locale=en-US](https://api-sdp.nwslsoccer.com/v1/nwsl/football/seasons/nwsl::Football_Season::0b6761e4701749f593690c0f338da74c/stats/players?locale=en-US)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -160,6 +163,7 @@ Player-stats leaderboard for a season (paginated).
 ### Returns {#nwsl_player_stats-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `rank_label` | character | Leaderboard rank label (null unless ranked view). |
@@ -226,7 +230,7 @@ Matches across one or more seasons within a US-format date window.
 
 **Endpoint URL:** `GET https://api-sdp.nwslsoccer.com/v1/nwsl/football/seasons/multipleSeasonMatches`
 
-**Valid URL:** [https://api-sdp.nwslsoccer.com/v1/nwsl/football/seasons/multipleSeasonMatches](https://api-sdp.nwslsoccer.com/v1/nwsl/football/seasons/multipleSeasonMatches)
+**Valid URL:** [https://api-sdp.nwslsoccer.com/v1/nwsl/football/seasons/multipleSeasonMatches?locale=en-US](https://api-sdp.nwslsoccer.com/v1/nwsl/football/seasons/multipleSeasonMatches?locale=en-US)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -238,6 +242,7 @@ Matches across one or more seasons within a US-format date window.
 ### Returns {#nwsl_season_matches-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `provider_id` | character | Underlying StatsPerform/Opta provider id (e.g. `opta:...`). |
@@ -369,7 +374,7 @@ Competition stages for a season (may be empty for league play).
 
 **Endpoint URL:** `GET https://api-sdp.nwslsoccer.com/v1/nwsl/football/seasons/{season_id}/stages`
 
-**Valid URL:** [https://api-sdp.nwslsoccer.com/v1/nwsl/football/seasons/nwsl::Football_Season::0b6761e4701749f593690c0f338da74c/stages](https://api-sdp.nwslsoccer.com/v1/nwsl/football/seasons/nwsl::Football_Season::0b6761e4701749f593690c0f338da74c/stages)
+**Valid URL:** [https://api-sdp.nwslsoccer.com/v1/nwsl/football/seasons/nwsl::Football_Season::0b6761e4701749f593690c0f338da74c/stages?locale=en-US](https://api-sdp.nwslsoccer.com/v1/nwsl/football/seasons/nwsl::Football_Season::0b6761e4701749f593690c0f338da74c/stages?locale=en-US)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -379,6 +384,7 @@ Competition stages for a season (may be empty for league play).
 ### Returns {#nwsl_stages-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `stage_id` | character | Composite Stage id (`nwsl::Football_Stage::{hex}`). |
@@ -400,7 +406,7 @@ Overall standings table for a season (table/home/away splits).
 
 **Endpoint URL:** `GET https://api-sdp.nwslsoccer.com/v1/nwsl/football/seasons/{season_id}/standings/overall`
 
-**Valid URL:** [https://api-sdp.nwslsoccer.com/v1/nwsl/football/seasons/nwsl::Football_Season::0b6761e4701749f593690c0f338da74c/standings/overall](https://api-sdp.nwslsoccer.com/v1/nwsl/football/seasons/nwsl::Football_Season::0b6761e4701749f593690c0f338da74c/standings/overall)
+**Valid URL:** [https://api-sdp.nwslsoccer.com/v1/nwsl/football/seasons/nwsl::Football_Season::0b6761e4701749f593690c0f338da74c/standings/overall?locale=en-US](https://api-sdp.nwslsoccer.com/v1/nwsl/football/seasons/nwsl::Football_Season::0b6761e4701749f593690c0f338da74c/standings/overall?locale=en-US)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -412,6 +418,7 @@ Overall standings table for a season (table/home/away splits).
 ### Returns {#nwsl_standings-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `split_type` | character | Split type code. |
@@ -463,7 +470,7 @@ Team-stats leaderboard for a season.
 
 **Endpoint URL:** `GET https://api-sdp.nwslsoccer.com/v1/nwsl/football/seasons/{season_id}/stats/teams`
 
-**Valid URL:** [https://api-sdp.nwslsoccer.com/v1/nwsl/football/seasons/nwsl::Football_Season::0b6761e4701749f593690c0f338da74c/stats/teams](https://api-sdp.nwslsoccer.com/v1/nwsl/football/seasons/nwsl::Football_Season::0b6761e4701749f593690c0f338da74c/stats/teams)
+**Valid URL:** [https://api-sdp.nwslsoccer.com/v1/nwsl/football/seasons/nwsl::Football_Season::0b6761e4701749f593690c0f338da74c/stats/teams?locale=en-US](https://api-sdp.nwslsoccer.com/v1/nwsl/football/seasons/nwsl::Football_Season::0b6761e4701749f593690c0f338da74c/stats/teams?locale=en-US)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -474,6 +481,7 @@ Team-stats leaderboard for a season.
 ### Returns {#nwsl_team_stats-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `rank_label` | character | Leaderboard rank label (null unless ranked view). |
@@ -526,7 +534,7 @@ Teams participating in a season.
 
 **Endpoint URL:** `GET https://api-sdp.nwslsoccer.com/v1/nwsl/football/seasons/{season_id}/teams`
 
-**Valid URL:** [https://api-sdp.nwslsoccer.com/v1/nwsl/football/seasons/nwsl::Football_Season::0b6761e4701749f593690c0f338da74c/teams](https://api-sdp.nwslsoccer.com/v1/nwsl/football/seasons/nwsl::Football_Season::0b6761e4701749f593690c0f338da74c/teams)
+**Valid URL:** [https://api-sdp.nwslsoccer.com/v1/nwsl/football/seasons/nwsl::Football_Season::0b6761e4701749f593690c0f338da74c/teams?locale=en-US](https://api-sdp.nwslsoccer.com/v1/nwsl/football/seasons/nwsl::Football_Season::0b6761e4701749f593690c0f338da74c/teams?locale=en-US)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -536,6 +544,7 @@ Teams participating in a season.
 ### Returns {#nwsl_teams-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `team_id` | character | Composite Team id (Utf8 join key). |

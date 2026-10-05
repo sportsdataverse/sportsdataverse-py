@@ -13,7 +13,7 @@ GET /stats/scoreboardv2
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/scoreboardv2`
 
-**Valid URL:** [https://stats.nba.com/stats/scoreboardv2?LeagueID=00](https://stats.nba.com/stats/scoreboardv2?LeagueID=00)
+**Valid URL:** [https://stats.nba.com/stats/scoreboardv2?DayOffset=0&GameDate=2022-07-20&LeagueID=00](https://stats.nba.com/stats/scoreboardv2?DayOffset=0&GameDate=2022-07-20&LeagueID=00)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -23,7 +23,8 @@ GET /stats/scoreboardv2
 
 ### Returns {#nba_stats_scoreboardv2-returns}
 
-**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`GameHeader`, `LineScore`, `SeriesStandings`, `LastMeeting`, `EastConfStandingsByDay`, `WestConfStandingsByDay`, `Available`, `TeamLeaders`, `TicketLinks`) (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`GameHeader`, `LineScore`, `SeriesStandings`, `LastMeeting`, `EastConfStandingsByDay`, `WestConfStandingsByDay`, `Available`, `TeamLeaders`, `TicketLinks`) (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+
 **GameHeader**
 
 | col_name | type | description |
@@ -194,7 +195,7 @@ GET /stats/scoreboardv3
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/scoreboardv3`
 
-**Valid URL:** [https://stats.nba.com/stats/scoreboardv3?LeagueID=00](https://stats.nba.com/stats/scoreboardv3?LeagueID=00)
+**Valid URL:** [https://stats.nba.com/stats/scoreboardv3?GameDate=2022-06-26&LeagueID=00](https://stats.nba.com/stats/scoreboardv3?GameDate=2022-06-26&LeagueID=00)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -204,6 +205,7 @@ GET /stats/scoreboardv3
 ### Returns {#nba_stats_scoreboardv3-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `awayteam_inbonus` | character | Whether the away team is currently in the bonus (penalty) foul situation. |

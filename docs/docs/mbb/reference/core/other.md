@@ -37,7 +37,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/basketball/leagues/mens-college-basketball/seasons`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/basketball/leagues/mens-college-basketball/seasons](https://sports.core.api.espn.com/v2/sports/basketball/leagues/mens-college-basketball/seasons)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/basketball/leagues/mens-college-basketball/seasons?limit=200](https://sports.core.api.espn.com/v2/sports/basketball/leagues/mens-college-basketball/seasons?limit=200)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -62,7 +62,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/basketball/leagues/mens-college-basketball/events`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/basketball/leagues/mens-college-basketball/events](https://sports.core.api.espn.com/v2/sports/basketball/leagues/mens-college-basketball/events)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/basketball/leagues/mens-college-basketball/events?limit=500](https://sports.core.api.espn.com/v2/sports/basketball/leagues/mens-college-basketball/events?limit=500)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -113,7 +113,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/basketball/leagues/mens-college-basketball/teams`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/basketball/leagues/mens-college-basketball/teams](https://sports.core.api.espn.com/v2/sports/basketball/leagues/mens-college-basketball/teams)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/basketball/leagues/mens-college-basketball/teams?limit=1000&page=1](https://sports.core.api.espn.com/v2/sports/basketball/leagues/mens-college-basketball/teams?limit=1000&page=1)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -123,6 +123,7 @@ ESPN endpoint.
 ### Returns {#espn_mbb_teams_core-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `team_abbreviation` | character | Short team abbreviation (e.g. "BOS"). |
@@ -181,7 +182,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/basketball/leagues/mens-college-basketball/venues`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/basketball/leagues/mens-college-basketball/venues](https://sports.core.api.espn.com/v2/sports/basketball/leagues/mens-college-basketball/venues)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/basketball/leagues/mens-college-basketball/venues?limit=1000](https://sports.core.api.espn.com/v2/sports/basketball/leagues/mens-college-basketball/venues?limit=1000)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -231,7 +232,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/basketball/leagues/mens-college-basketball/franchises`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/basketball/leagues/mens-college-basketball/franchises](https://sports.core.api.espn.com/v2/sports/basketball/leagues/mens-college-basketball/franchises)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/basketball/leagues/mens-college-basketball/franchises?limit=200](https://sports.core.api.espn.com/v2/sports/basketball/leagues/mens-college-basketball/franchises?limit=200)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -306,7 +307,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/basketball/leagues/mens-college-basketball/coaches/{coach_id}/record/{record_type}`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/basketball/leagues/mens-college-basketball/coaches/1/record](https://sports.core.api.espn.com/v2/sports/basketball/leagues/mens-college-basketball/coaches/1/record)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/basketball/leagues/mens-college-basketball/coaches/1/record/0](https://sports.core.api.espn.com/v2/sports/basketball/leagues/mens-college-basketball/coaches/1/record/0)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -358,7 +359,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/basketball/leagues/mens-college-basketball/positions`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/basketball/leagues/mens-college-basketball/positions](https://sports.core.api.espn.com/v2/sports/basketball/leagues/mens-college-basketball/positions)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/basketball/leagues/mens-college-basketball/positions?limit=200](https://sports.core.api.espn.com/v2/sports/basketball/leagues/mens-college-basketball/positions?limit=200)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -408,7 +409,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/basketball/leagues/mens-college-basketball/tournaments`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/basketball/leagues/mens-college-basketball/tournaments](https://sports.core.api.espn.com/v2/sports/basketball/leagues/mens-college-basketball/tournaments)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/basketball/leagues/mens-college-basketball/tournaments?limit=200](https://sports.core.api.espn.com/v2/sports/basketball/leagues/mens-college-basketball/tournaments?limit=200)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -433,7 +434,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/basketball/leagues/mens-college-basketball/awards`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/basketball/leagues/mens-college-basketball/awards](https://sports.core.api.espn.com/v2/sports/basketball/leagues/mens-college-basketball/awards)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/basketball/leagues/mens-college-basketball/awards?limit=200](https://sports.core.api.espn.com/v2/sports/basketball/leagues/mens-college-basketball/awards?limit=200)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -491,6 +492,7 @@ ESPN endpoint.
 ### Returns {#espn_mbb_standings_core-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `group_name` | character | Group name. |
@@ -633,7 +635,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/basketball/leagues/mens-college-basketball/recruiting/{year}/athletes`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/basketball/leagues/mens-college-basketball/recruiting/2026/athletes](https://sports.core.api.espn.com/v2/sports/basketball/leagues/mens-college-basketball/recruiting/2026/athletes)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/basketball/leagues/mens-college-basketball/recruiting/2026/athletes?limit=1000&page=1](https://sports.core.api.espn.com/v2/sports/basketball/leagues/mens-college-basketball/recruiting/2026/athletes?limit=1000&page=1)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|

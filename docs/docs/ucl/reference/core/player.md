@@ -13,7 +13,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.champions/athletes`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.champions/athletes](https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.champions/athletes)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.champions/athletes?active=true&limit=100&page=1](https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.champions/athletes?active=true&limit=100&page=1)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -250,6 +250,7 @@ ESPN endpoint.
 ### Returns {#espn_ucl_player_injuries-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `id` | character | ESPN numeric identifier for the athlete. |

@@ -13,7 +13,7 @@ GET /api/v1/draft/{year} — draft results for a year (optionally one round).
 
 **Endpoint URL:** `GET https://statsapi.mlb.com/api/v1/draft/{year}`
 
-**Valid URL:** [https://statsapi.mlb.com/api/v1/draft/2024](https://statsapi.mlb.com/api/v1/draft/2024)
+**Valid URL:** [https://statsapi.mlb.com/api/v1/draft/2024?limit=100](https://statsapi.mlb.com/api/v1/draft/2024?limit=100)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -51,6 +51,7 @@ View latest player drafted, endpoint best used when draft is currently open.
 ### Returns {#mlb_draft_latest-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `number` | integer | Jersey number. |

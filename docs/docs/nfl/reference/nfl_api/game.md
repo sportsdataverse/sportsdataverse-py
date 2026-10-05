@@ -24,6 +24,7 @@ GET /football/v2/stats/live/game-summaries — one row per game (live state).
 ### Returns {#nfl_game_summaries-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `game_id` | character | NFL.com Shield GUID for the game. |
@@ -77,7 +78,7 @@ GET /experience/v2/gamedetails/{game_id} — one row: the flat v2 game detail (g
 
 **Endpoint URL:** `GET https://api.nfl.com/experience/v2/gamedetails/{game_id}`
 
-**Valid URL:** [https://api.nfl.com/experience/v2/gamedetails/a9a890ed-4feb-11f1-abca-2c54536568a9](https://api.nfl.com/experience/v2/gamedetails/a9a890ed-4feb-11f1-abca-2c54536568a9)
+**Valid URL:** [https://api.nfl.com/experience/v2/gamedetails/a9a890ed-4feb-11f1-abca-2c54536568a9?includeDriveChart=false&includeReplays=false&includeStandings=false&includeTaggedVideos=false](https://api.nfl.com/experience/v2/gamedetails/a9a890ed-4feb-11f1-abca-2c54536568a9?includeDriveChart=false&includeReplays=false&includeStandings=false&includeTaggedVideos=false)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -90,6 +91,7 @@ GET /experience/v2/gamedetails/{game_id} — one row: the flat v2 game detail (g
 ### Returns {#nfl_game_details_v2-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `id` | character | NFL.com Shield GUID for the game. |
@@ -289,7 +291,7 @@ GET /experience/v1/gamedetailsbyslug/{slug} — one row: the flat game detail lo
 
 **Endpoint URL:** `GET https://api.nfl.com/experience/v1/gamedetailsbyslug/{slug}`
 
-**Valid URL:** [https://api.nfl.com/experience/v1/gamedetailsbyslug/broncos-at-chiefs-2026-reg-1](https://api.nfl.com/experience/v1/gamedetailsbyslug/broncos-at-chiefs-2026-reg-1)
+**Valid URL:** [https://api.nfl.com/experience/v1/gamedetailsbyslug/broncos-at-chiefs-2026-reg-1?includeReplays=false](https://api.nfl.com/experience/v1/gamedetailsbyslug/broncos-at-chiefs-2026-reg-1?includeReplays=false)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -299,6 +301,7 @@ GET /experience/v1/gamedetailsbyslug/{slug} — one row: the flat game detail lo
 ### Returns {#nfl_game_details_by_slug-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `id` | character | NFL.com Shield GUID for the game. |

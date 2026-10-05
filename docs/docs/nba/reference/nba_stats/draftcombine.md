@@ -23,6 +23,7 @@ GET /stats/draftcombinedrillresults
 ### Returns {#nba_stats_draftcombinedrillresults-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `temp_player_id` | integer | Temporary combine player identifier assigned by the NBA before a permanent player id exists. |
@@ -64,6 +65,7 @@ GET /stats/draftcombinenonstationaryshooting
 ### Returns {#nba_stats_draftcombinenonstationaryshooting-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `temp_player_id` | integer | Temporary combine player identifier assigned by the NBA before a permanent player id exists. |
@@ -123,6 +125,7 @@ GET /stats/draftcombineplayeranthro
 ### Returns {#nba_stats_draftcombineplayeranthro-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `temp_player_id` | integer | Temporary combine player identifier assigned by the NBA before a permanent player id exists. |
@@ -170,6 +173,7 @@ GET /stats/draftcombinespotshooting
 ### Returns {#nba_stats_draftcombinespotshooting-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `temp_player_id` | integer | Temporary combine player identifier assigned by the NBA before a permanent player id exists. |
@@ -250,6 +254,7 @@ GET /stats/draftcombinestats
 ### Returns {#nba_stats_draftcombinestats-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `season` | character | Season year. |

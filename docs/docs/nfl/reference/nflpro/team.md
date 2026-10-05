@@ -13,7 +13,7 @@ GET /api/secured/stats/team-offense/overview/season — one row per team for the
 
 **Endpoint URL:** `GET https://pro.nfl.com/api/secured/stats/team-offense/overview/season`
 
-**Valid URL:** [https://pro.nfl.com/api/secured/stats/team-offense/overview/season?season=2024&seasonType=REG](https://pro.nfl.com/api/secured/stats/team-offense/overview/season?season=2024&seasonType=REG)
+**Valid URL:** [https://pro.nfl.com/api/secured/stats/team-offense/overview/season?season=2024&seasonType=REG&limit=500](https://pro.nfl.com/api/secured/stats/team-offense/overview/season?season=2024&seasonType=REG&limit=500)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -27,6 +27,7 @@ GET /api/secured/stats/team-offense/overview/season — one row per team for the
 ### Returns {#nfl_pro_team_offense_overview_season-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `team_id` | character | ESPN team id. |
@@ -75,7 +76,7 @@ GET /api/secured/stats/team-offense/overview/week — one row per team per week 
 
 **Endpoint URL:** `GET https://pro.nfl.com/api/secured/stats/team-offense/overview/week`
 
-**Valid URL:** [https://pro.nfl.com/api/secured/stats/team-offense/overview/week?season=2024&seasonType=REG](https://pro.nfl.com/api/secured/stats/team-offense/overview/week?season=2024&seasonType=REG)
+**Valid URL:** [https://pro.nfl.com/api/secured/stats/team-offense/overview/week?season=2024&seasonType=REG&limit=500](https://pro.nfl.com/api/secured/stats/team-offense/overview/week?season=2024&seasonType=REG&limit=500)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -89,6 +90,7 @@ GET /api/secured/stats/team-offense/overview/week — one row per team per week 
 ### Returns {#nfl_pro_team_offense_overview_week-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `team_id` | character | ESPN team id. |
@@ -144,7 +146,7 @@ GET /api/secured/stats/team-defense/overview/season — one row per team for the
 
 **Endpoint URL:** `GET https://pro.nfl.com/api/secured/stats/team-defense/overview/season`
 
-**Valid URL:** [https://pro.nfl.com/api/secured/stats/team-defense/overview/season?season=2024&seasonType=REG](https://pro.nfl.com/api/secured/stats/team-defense/overview/season?season=2024&seasonType=REG)
+**Valid URL:** [https://pro.nfl.com/api/secured/stats/team-defense/overview/season?season=2024&seasonType=REG&limit=500](https://pro.nfl.com/api/secured/stats/team-defense/overview/season?season=2024&seasonType=REG&limit=500)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -158,6 +160,7 @@ GET /api/secured/stats/team-defense/overview/season — one row per team for the
 ### Returns {#nfl_pro_team_defense_overview_season-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `team_id` | character | ESPN team id. |
@@ -213,7 +216,7 @@ GET /api/secured/stats/team-defense/overview/week — one row per team per week 
 
 **Endpoint URL:** `GET https://pro.nfl.com/api/secured/stats/team-defense/overview/week`
 
-**Valid URL:** [https://pro.nfl.com/api/secured/stats/team-defense/overview/week?season=2024&seasonType=REG](https://pro.nfl.com/api/secured/stats/team-defense/overview/week?season=2024&seasonType=REG)
+**Valid URL:** [https://pro.nfl.com/api/secured/stats/team-defense/overview/week?season=2024&seasonType=REG&limit=500](https://pro.nfl.com/api/secured/stats/team-defense/overview/week?season=2024&seasonType=REG&limit=500)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -227,6 +230,7 @@ GET /api/secured/stats/team-defense/overview/week — one row per team per week 
 ### Returns {#nfl_pro_team_defense_overview_week-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `team_id` | character | ESPN team id. |

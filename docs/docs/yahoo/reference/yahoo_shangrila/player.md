@@ -22,7 +22,8 @@ Yahoo shangrila persisted query `playerBasic` -> tables: players, leagues
 
 ### Returns {#yahoo_player_basic-returns}
 
-**`return_parsed=True`** (default) — A dict of polars/pandas DataFrames keyed by the payload's `data` collections (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — A dict of polars/pandas DataFrames keyed by the payload's `data` collections (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+
 **players**
 
 | col_name | type | description |
@@ -78,6 +79,7 @@ Yahoo shangrila persisted query `playerCareerStats` -> one row per `players` ent
 ### Returns {#yahoo_player_career_stats-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `positions` | character | Positions. |
@@ -118,6 +120,7 @@ Yahoo shangrila persisted query `playerGameLog` -> one row per `players` entry
 ### Returns {#yahoo_player_game_log-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `player_id` | character | Unique player identifier. |
@@ -152,6 +155,7 @@ Yahoo shangrila persisted query `playerProps` -> one row per `players` entry
 ### Returns {#yahoo_player_props-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `games` | character | Games played. |
@@ -189,6 +193,7 @@ Yahoo shangrila persisted query `playerSearch` -> one row per `leagues.players` 
 ### Returns {#yahoo_player_search-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `player_id` | character | Unique player identifier. |
@@ -237,6 +242,7 @@ Yahoo shangrila persisted query `playerSeasonStats` -> one row per `players` ent
 ### Returns {#yahoo_player_season_stats-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `player_id` | character | Unique player identifier. |

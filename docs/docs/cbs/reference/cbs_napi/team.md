@@ -74,6 +74,7 @@ Get player resources on a team.
 ### Returns {#cbs_team_players-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `player_id` | integer | Unique player identifier. |
@@ -246,6 +247,7 @@ Get standings for a particular team.
 ### Returns {#cbs_team_standings-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `season_year` | integer | Season year string ('YYYY-YY' format). |

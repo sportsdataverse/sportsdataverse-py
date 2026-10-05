@@ -118,7 +118,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://site.web.api.espn.com/apis/common/v3/sports/soccer/fifa.wwc/statistics/byathlete`
 
-**Valid URL:** [https://site.web.api.espn.com/apis/common/v3/sports/soccer/fifa.wwc/statistics/byathlete](https://site.web.api.espn.com/apis/common/v3/sports/soccer/fifa.wwc/statistics/byathlete)
+**Valid URL:** [https://site.web.api.espn.com/apis/common/v3/sports/soccer/fifa.wwc/statistics/byathlete?limit=50&page=1](https://site.web.api.espn.com/apis/common/v3/sports/soccer/fifa.wwc/statistics/byathlete?limit=50&page=1)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -132,6 +132,7 @@ ESPN endpoint.
 ### Returns {#espn_wwc_leaders-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `athletes` | character | Athletes. |

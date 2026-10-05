@@ -26,7 +26,7 @@ ESPN endpoint.
 ### Example {#espn_soccer_league_root-example}
 
 ```python
-espn_soccer_league_root()
+espn_soccer_league_root(league='eng.1')
 ```
 
 _Last validated n/a._
@@ -37,7 +37,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/seasons`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/seasons](https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/seasons)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/seasons?limit=200](https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/seasons?limit=200)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -51,7 +51,7 @@ ESPN endpoint.
 ### Example {#espn_soccer_seasons-example}
 
 ```python
-espn_soccer_seasons()
+espn_soccer_seasons(league='eng.1')
 ```
 
 _Last validated n/a._
@@ -62,7 +62,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events](https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events?limit=500](https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events?limit=500)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -77,7 +77,7 @@ ESPN endpoint.
 ### Example {#espn_soccer_games-example}
 
 ```python
-espn_soccer_games()
+espn_soccer_games(league='eng.1')
 ```
 
 _Last validated n/a._
@@ -102,7 +102,7 @@ ESPN endpoint.
 ### Example {#espn_soccer_game-example}
 
 ```python
-espn_soccer_game(event_id='401584793')
+espn_soccer_game(league='eng.1', event_id='401584793')
 ```
 
 _Last validated n/a._
@@ -113,7 +113,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/teams`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/teams](https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/teams)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/teams?limit=1000&page=1](https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/teams?limit=1000&page=1)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -123,6 +123,7 @@ ESPN endpoint.
 ### Returns {#espn_soccer_teams_core-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `team_id` | character | ESPN numeric identifier for the team. |
@@ -144,7 +145,7 @@ ESPN endpoint.
 ### Example {#espn_soccer_teams_core-example}
 
 ```python
-espn_soccer_teams_core()
+espn_soccer_teams_core(league='eng.1')
 ```
 
 _Last validated n/a._
@@ -169,7 +170,7 @@ ESPN endpoint.
 ### Example {#espn_soccer_team_core-example}
 
 ```python
-espn_soccer_team_core(team_id='4')
+espn_soccer_team_core(league='eng.1', team_id='4')
 ```
 
 _Last validated n/a._
@@ -180,7 +181,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/venues`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/venues](https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/venues)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/venues?limit=1000](https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/venues?limit=1000)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -194,7 +195,7 @@ ESPN endpoint.
 ### Example {#espn_soccer_venues-example}
 
 ```python
-espn_soccer_venues()
+espn_soccer_venues(league='eng.1')
 ```
 
 _Last validated n/a._
@@ -219,7 +220,7 @@ ESPN endpoint.
 ### Example {#espn_soccer_venue-example}
 
 ```python
-espn_soccer_venue(venue_id='3663')
+espn_soccer_venue(league='eng.1', venue_id='3663')
 ```
 
 _Last validated n/a._
@@ -230,7 +231,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/franchises`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/franchises](https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/franchises)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/franchises?limit=200](https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/franchises?limit=200)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -244,7 +245,7 @@ ESPN endpoint.
 ### Example {#espn_soccer_franchises-example}
 
 ```python
-espn_soccer_franchises()
+espn_soccer_franchises(league='eng.1')
 ```
 
 _Last validated n/a._
@@ -269,7 +270,7 @@ ESPN endpoint.
 ### Example {#espn_soccer_franchise-example}
 
 ```python
-espn_soccer_franchise(franchise_id='2')
+espn_soccer_franchise(league='eng.1', franchise_id='2')
 ```
 
 _Last validated n/a._
@@ -294,7 +295,7 @@ ESPN endpoint.
 ### Example {#espn_soccer_coach-example}
 
 ```python
-espn_soccer_coach(coach_id='1')
+espn_soccer_coach(league='eng.1', coach_id='1')
 ```
 
 _Last validated n/a._
@@ -305,7 +306,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/coaches/{coach_id}/record/{record_type}`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/coaches/1/record](https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/coaches/1/record)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/coaches/1/record/0](https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/coaches/1/record/0)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -320,7 +321,7 @@ ESPN endpoint.
 ### Example {#espn_soccer_coach_record-example}
 
 ```python
-espn_soccer_coach_record(coach_id='1')
+espn_soccer_coach_record(league='eng.1', coach_id='1')
 ```
 
 _Last validated n/a._
@@ -346,7 +347,7 @@ ESPN endpoint.
 ### Example {#espn_soccer_coach_season-example}
 
 ```python
-espn_soccer_coach_season(coach_id='1', season=2024)
+espn_soccer_coach_season(league='eng.1', coach_id='1', season=2024)
 ```
 
 _Last validated n/a._
@@ -357,7 +358,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/positions`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/positions](https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/positions)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/positions?limit=200](https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/positions?limit=200)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -371,7 +372,7 @@ ESPN endpoint.
 ### Example {#espn_soccer_positions-example}
 
 ```python
-espn_soccer_positions()
+espn_soccer_positions(league='eng.1')
 ```
 
 _Last validated n/a._
@@ -396,7 +397,7 @@ ESPN endpoint.
 ### Example {#espn_soccer_position-example}
 
 ```python
-espn_soccer_position(position_id='1')
+espn_soccer_position(league='eng.1', position_id='1')
 ```
 
 _Last validated n/a._
@@ -407,7 +408,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/tournaments`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/tournaments](https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/tournaments)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/tournaments?limit=200](https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/tournaments?limit=200)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -421,7 +422,7 @@ ESPN endpoint.
 ### Example {#espn_soccer_tournaments-example}
 
 ```python
-espn_soccer_tournaments()
+espn_soccer_tournaments(league='eng.1')
 ```
 
 _Last validated n/a._
@@ -432,7 +433,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/awards`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/awards](https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/awards)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/awards?limit=200](https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/awards?limit=200)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -446,7 +447,7 @@ ESPN endpoint.
 ### Example {#espn_soccer_awards-example}
 
 ```python
-espn_soccer_awards()
+espn_soccer_awards(league='eng.1')
 ```
 
 _Last validated n/a._
@@ -471,7 +472,7 @@ ESPN endpoint.
 ### Example {#espn_soccer_award-example}
 
 ```python
-espn_soccer_award(award_id='1')
+espn_soccer_award(league='eng.1', award_id='1')
 ```
 
 _Last validated n/a._
@@ -490,6 +491,7 @@ ESPN endpoint.
 ### Returns {#espn_soccer_standings_core-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `group` | character | Conference/group/table the row belongs to, flattened from the standings children hierarchy. |
@@ -517,7 +519,7 @@ ESPN endpoint.
 ### Example {#espn_soccer_standings_core-example}
 
 ```python
-espn_soccer_standings_core()
+espn_soccer_standings_core(league='eng.1')
 ```
 
 _Last validated n/a._
@@ -541,7 +543,7 @@ ESPN endpoint.
 ### Example {#espn_soccer_leaders_core-example}
 
 ```python
-espn_soccer_leaders_core()
+espn_soccer_leaders_core(league='eng.1')
 ```
 
 _Last validated n/a._
@@ -565,7 +567,7 @@ ESPN endpoint.
 ### Example {#espn_soccer_league_notes-example}
 
 ```python
-espn_soccer_league_notes()
+espn_soccer_league_notes(league='eng.1')
 ```
 
 _Last validated n/a._
@@ -589,7 +591,7 @@ ESPN endpoint.
 ### Example {#espn_soccer_talentpicks-example}
 
 ```python
-espn_soccer_talentpicks()
+espn_soccer_talentpicks(league='eng.1')
 ```
 
 _Last validated n/a._

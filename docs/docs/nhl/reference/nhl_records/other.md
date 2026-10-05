@@ -21,6 +21,7 @@ List all NHL award / trophy records.
 ### Returns {#nhl_records_awards-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `id` | integer | Unique player identifier. |
@@ -95,6 +96,7 @@ Retrieve the trophy winner for a specific season.
 ### Returns {#nhl_records_awards_trophy_season-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `id` | integer | Unique player identifier. |
@@ -142,6 +144,7 @@ List NHL head coaches.
 ### Returns {#nhl_records_coaches-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `id` | integer | Unique player identifier. |
@@ -197,6 +200,7 @@ Retrieve one coach by their numeric ID.
 ### Returns {#nhl_records_coach-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `id` | integer | Unique player identifier. |
@@ -251,6 +255,7 @@ All-time head-to-head records between every franchise pairing.
 ### Returns {#nhl_records_all_time_record_vs_franchise-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `id` | integer | Unique player identifier. |
@@ -363,6 +368,7 @@ Skaters with the most consecutive 100-point seasons.
 ### Returns {#nhl_records_consecutive_100pt_seasons-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `id` | integer | Unique player identifier. |
@@ -405,6 +411,7 @@ Retrieve NHL Entry Draft picks.
 ### Returns {#nhl_records_draft-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `id` | integer | Unique player identifier. |
@@ -464,6 +471,7 @@ All draft picks made by a single team.
 ### Returns {#nhl_records_draft_by_team-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `id` | integer | Unique player identifier. |
@@ -523,6 +531,7 @@ Draft prospect records.
 ### Returns {#nhl_records_draft_prospect-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `id` | integer | Unique player identifier. |
@@ -578,6 +587,7 @@ Draft lottery odds (current year or filtered by season).
 ### Returns {#nhl_records_draft_lottery_odds-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `id` | integer | Unique player identifier. |
@@ -610,6 +620,7 @@ Expansion draft picks (e.g. Vegas 2017, Seattle 2021).
 ### Returns {#nhl_records_expansion_draft_picks-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `id` | integer | Unique player identifier. |
@@ -642,6 +653,7 @@ NHL arena attendance records.
 ### Returns {#nhl_records_attendance-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `id` | integer | Unique player identifier. |
@@ -674,6 +686,7 @@ Hockey Hall of Fame player inductees.
 ### Returns {#nhl_records_hof_players-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `id` | integer | Unique player identifier. |
@@ -709,6 +722,7 @@ Hall of Fame players for a specific induction office/category.
 ### Returns {#nhl_records_hof_players_by_office-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `id` | integer | Unique player identifier. |
@@ -735,7 +749,7 @@ General Manager career records.
 
 **Endpoint URL:** `GET https://records.nhl.com/site/api/general-manager/{gm_id}`
 
-**Valid URL:** [https://records.nhl.com/site/api/general-manager](https://records.nhl.com/site/api/general-manager)
+**Valid URL:** [https://records.nhl.com/site/api/general-manager-career-records](https://records.nhl.com/site/api/general-manager-career-records)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -744,6 +758,7 @@ General Manager career records.
 ### Returns {#nhl_records_gm_career-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `id` | integer | Unique player identifier. |
@@ -811,6 +826,7 @@ General Manager records scoped to franchise stints.
 ### Returns {#nhl_records_gm_franchise-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `id` | integer | Unique player identifier. |
@@ -881,6 +897,7 @@ League-wide home-team win/loss record by season.
 ### Returns {#nhl_records_home_team_record-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `id` | integer | Unique player identifier. |
@@ -925,6 +942,7 @@ League-wide away-team win/loss record by season.
 ### Returns {#nhl_records_away_team_record-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `id` | integer | Unique player identifier. |

@@ -22,6 +22,7 @@ Pull the player profile / overview.
 ### Returns {#nhl_player_landing-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `player_id` | integer | Unique player identifier. |
@@ -171,7 +172,7 @@ Pull a player's game-by-game log.
 
 **Endpoint URL:** `GET https://api-web.nhle.com/v1/player/{player_id}/game-log/{season}/{game_type}`
 
-**Valid URL:** [https://api-web.nhle.com/v1/player/8480801/game-log](https://api-web.nhle.com/v1/player/8480801/game-log)
+**Valid URL:** [https://api-web.nhle.com/v1/player/8480801/game-log/now](https://api-web.nhle.com/v1/player/8480801/game-log/now)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -182,6 +183,7 @@ Pull a player's game-by-game log.
 ### Returns {#nhl_player_game_log-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `game_id` | integer | Unique game identifier. |
@@ -231,6 +233,7 @@ Pull the league's currently featured players.
 ### Returns {#nhl_player_spotlight-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `player_id` | integer | Unique player identifier. |

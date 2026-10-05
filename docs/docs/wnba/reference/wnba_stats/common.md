@@ -13,7 +13,7 @@ GET /stats/commonallplayers
 
 **Endpoint URL:** `GET https://stats.wnba.com/stats/commonallplayers`
 
-**Valid URL:** [https://stats.wnba.com/stats/commonallplayers?LeagueID=10](https://stats.wnba.com/stats/commonallplayers?LeagueID=10)
+**Valid URL:** [https://stats.wnba.com/stats/commonallplayers?IsOnlyCurrentSeason=0&LeagueID=10](https://stats.wnba.com/stats/commonallplayers?IsOnlyCurrentSeason=0&LeagueID=10)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -24,6 +24,7 @@ GET /stats/commonallplayers
 ### Returns {#wnba_stats_commonallplayers-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `person_id` | integer | Unique player identifier (V3 endpoints). |
@@ -60,7 +61,7 @@ GET /stats/commonplayerinfo
 
 **Endpoint URL:** `GET https://stats.wnba.com/stats/commonplayerinfo`
 
-**Valid URL:** [https://stats.wnba.com/stats/commonplayerinfo?LeagueID=10](https://stats.wnba.com/stats/commonplayerinfo?LeagueID=10)
+**Valid URL:** [https://stats.wnba.com/stats/commonplayerinfo?LeagueID=10&PlayerID=1628932](https://stats.wnba.com/stats/commonplayerinfo?LeagueID=10&PlayerID=1628932)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -69,7 +70,8 @@ GET /stats/commonplayerinfo
 
 ### Returns {#wnba_stats_commonplayerinfo-returns}
 
-**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`CommonPlayerInfo`, `PlayerHeadlineStats`, `AvailableSeasons`) (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`CommonPlayerInfo`, `PlayerHeadlineStats`, `AvailableSeasons`) (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+
 **CommonPlayerInfo**
 
 | col_name | type | description |
@@ -142,7 +144,7 @@ GET /stats/commonplayoffseries
 
 **Endpoint URL:** `GET https://stats.wnba.com/stats/commonplayoffseries`
 
-**Valid URL:** [https://stats.wnba.com/stats/commonplayoffseries?LeagueID=10](https://stats.wnba.com/stats/commonplayoffseries?LeagueID=10)
+**Valid URL:** [https://stats.wnba.com/stats/commonplayoffseries?LeagueID=10&SeriesID=](https://stats.wnba.com/stats/commonplayoffseries?LeagueID=10&SeriesID=)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -153,6 +155,7 @@ GET /stats/commonplayoffseries
 ### Returns {#wnba_stats_commonplayoffseries-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `game_id` | character | Unique game identifier. |
@@ -177,7 +180,7 @@ GET /stats/commonteamroster
 
 **Endpoint URL:** `GET https://stats.wnba.com/stats/commonteamroster`
 
-**Valid URL:** [https://stats.wnba.com/stats/commonteamroster?LeagueID=10](https://stats.wnba.com/stats/commonteamroster?LeagueID=10)
+**Valid URL:** [https://stats.wnba.com/stats/commonteamroster?LeagueID=10&TeamID=1611661317](https://stats.wnba.com/stats/commonteamroster?LeagueID=10&TeamID=1611661317)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -187,7 +190,8 @@ GET /stats/commonteamroster
 
 ### Returns {#wnba_stats_commonteamroster-returns}
 
-**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`CommonTeamRoster`, `Coaches`) (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`CommonTeamRoster`, `Coaches`) (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+
 **CommonTeamRoster**
 
 | col_name | type | description |
@@ -248,6 +252,7 @@ GET /stats/commonteamyears
 ### Returns {#wnba_stats_commonteamyears-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `league_id` | character | League identifier ('10' = WNBA). |

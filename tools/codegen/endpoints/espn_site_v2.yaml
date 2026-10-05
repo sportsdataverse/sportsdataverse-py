@@ -35,6 +35,10 @@ endpoints:
     type: int|str
   parser: parse_summary
   returns_schema: summary
+  # parse_summary (and the soccer/cricket overrides) returns one frame per section
+  # when section=None, the same dict the espn_cdn game pages document.
+  docstring:
+    parsed_doc: a dict of ``polars.DataFrame``s keyed by summary section
 # Base calendar works (current-season week labels/dates). The /calendar/{offseason,
 # regular-season,postseason,ondays} sub-paths 404 at ESPN for every league/season
 # (verified nfl/cfb/nhl) -- removed so we don't ship endpoints that always raise

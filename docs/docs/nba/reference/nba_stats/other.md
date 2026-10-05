@@ -1,7 +1,7 @@
 ---
 title: "NBA — NBA Stats API (stats.nba.com) — Other"
 sidebar_label: "Other"
-sidebar_position: 27
+sidebar_position: 28
 description: "NBA — NBA Stats API (stats.nba.com) — Other — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---
@@ -13,7 +13,7 @@ GET /stats/alltimeleadersgrids
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/alltimeleadersgrids`
 
-**Valid URL:** [https://stats.nba.com/stats/alltimeleadersgrids?LeagueID=00](https://stats.nba.com/stats/alltimeleadersgrids?LeagueID=00)
+**Valid URL:** [https://stats.nba.com/stats/alltimeleadersgrids?LeagueID=00&PerMode=PerGame&SeasonType=Regular+Season&TopX=10](https://stats.nba.com/stats/alltimeleadersgrids?LeagueID=00&PerMode=PerGame&SeasonType=Regular+Season&TopX=10)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -24,7 +24,8 @@ GET /stats/alltimeleadersgrids
 
 ### Returns {#nba_stats_alltimeleadersgrids-returns}
 
-**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`GPLeaders`, `PTSLeaders`, `ASTLeaders`, `STLLeaders`, `OREBLeaders`, `DREBLeaders`, `REBLeaders`, `BLKLeaders`, `FGMLeaders`, `FGALeaders`, `FG_PCTLeaders`, `TOVLeaders`, `FG3MLeaders`, `FG3ALeaders`, `FG3_PCTLeaders`, `PFLeaders`, `FTMLeaders`, `FTALeaders`, `FT_PCTLeaders`) (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`GPLeaders`, `PTSLeaders`, `ASTLeaders`, `STLLeaders`, `OREBLeaders`, `DREBLeaders`, `REBLeaders`, `BLKLeaders`, `FGMLeaders`, `FGALeaders`, `FG_PCTLeaders`, `TOVLeaders`, `FG3MLeaders`, `FG3ALeaders`, `FG3_PCTLeaders`, `PFLeaders`, `FTMLeaders`, `FTALeaders`, `FT_PCTLeaders`) (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+
 **GPLeaders**
 
 | col_name | type | description |
@@ -231,7 +232,7 @@ GET /stats/assistleaders
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/assistleaders`
 
-**Valid URL:** [https://stats.nba.com/stats/assistleaders?LeagueID=00](https://stats.nba.com/stats/assistleaders?LeagueID=00)
+**Valid URL:** [https://stats.nba.com/stats/assistleaders?LeagueID=00&PerMode=PerGame&PlayerOrTeam=Team&SeasonType=Regular+Season](https://stats.nba.com/stats/assistleaders?LeagueID=00&PerMode=PerGame&PlayerOrTeam=Team&SeasonType=Regular+Season)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -244,6 +245,7 @@ GET /stats/assistleaders
 ### Returns {#nba_stats_assistleaders-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `rank` | integer | Rank. |
@@ -272,7 +274,7 @@ GET /stats/assisttracker
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/assisttracker`
 
-**Valid URL:** [https://stats.nba.com/stats/assisttracker?LeagueID=00](https://stats.nba.com/stats/assisttracker?LeagueID=00)
+**Valid URL:** [https://stats.nba.com/stats/assisttracker?LeagueID=00&OpponentTeamID=0&PerMode=PerGame&SeasonType=Regular+Season&TeamID=0](https://stats.nba.com/stats/assisttracker?LeagueID=00&OpponentTeamID=0&PerMode=PerGame&SeasonType=Regular+Season&TeamID=0)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -308,6 +310,7 @@ GET /stats/assisttracker
 ### Returns {#nba_stats_assisttracker-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `assists` | numeric | Total assists. |
@@ -328,7 +331,7 @@ GET /stats/drafthistory
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/drafthistory`
 
-**Valid URL:** [https://stats.nba.com/stats/drafthistory?LeagueID=00&Season=2024](https://stats.nba.com/stats/drafthistory?LeagueID=00&Season=2024)
+**Valid URL:** [https://stats.nba.com/stats/drafthistory?College=&LeagueID=00&OverallPick=&RoundNum=&RoundPick=&Season=2024&TeamID=0&TopX=](https://stats.nba.com/stats/drafthistory?College=&LeagueID=00&OverallPick=&RoundNum=&RoundPick=&Season=2024&TeamID=0&TopX=)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -344,6 +347,7 @@ GET /stats/drafthistory
 ### Returns {#nba_stats_drafthistory-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `person_id` | integer | Unique player identifier (V3 endpoints). |
@@ -377,7 +381,7 @@ GET /stats/fantasywidget
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/fantasywidget`
 
-**Valid URL:** [https://stats.nba.com/stats/fantasywidget?LeagueID=00](https://stats.nba.com/stats/fantasywidget?LeagueID=00)
+**Valid URL:** [https://stats.nba.com/stats/fantasywidget?ActivePlayers=N&DateFrom=&DateTo=&LastNGames=0&LeagueID=00&Location=&Month=&OpponentTeamID=0&PORound=&PlayerID=&Position=&SeasonSegment=&SeasonType=Regular+Season&TeamID=0&TodaysOpponent=0&TodaysPlayers=N&VsConference=&VsDivision=](https://stats.nba.com/stats/fantasywidget?ActivePlayers=N&DateFrom=&DateTo=&LastNGames=0&LeagueID=00&Location=&Month=&OpponentTeamID=0&PORound=&PlayerID=&Position=&SeasonSegment=&SeasonType=Regular+Season&TeamID=0&TodaysOpponent=0&TodaysPlayers=N&VsConference=&VsDivision=)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -404,6 +408,7 @@ GET /stats/fantasywidget
 ### Returns {#nba_stats_fantasywidget-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `player_id` | integer | Unique player identifier. |
@@ -443,7 +448,7 @@ GET /stats/gamerotation
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/gamerotation`
 
-**Valid URL:** [https://stats.nba.com/stats/gamerotation?LeagueID=00](https://stats.nba.com/stats/gamerotation?LeagueID=00)
+**Valid URL:** [https://stats.nba.com/stats/gamerotation?GameID=1022200034&LeagueID=00](https://stats.nba.com/stats/gamerotation?GameID=1022200034&LeagueID=00)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -452,7 +457,8 @@ GET /stats/gamerotation
 
 ### Returns {#nba_stats_gamerotation-returns}
 
-**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`AwayTeam`, `HomeTeam`) (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`AwayTeam`, `HomeTeam`) (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+
 **AwayTeam**
 
 | col_name | type | description |
@@ -503,7 +509,7 @@ GET /stats/homepageleaders
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/homepageleaders`
 
-**Valid URL:** [https://stats.nba.com/stats/homepageleaders?LeagueID=00](https://stats.nba.com/stats/homepageleaders?LeagueID=00)
+**Valid URL:** [https://stats.nba.com/stats/homepageleaders?GameScope=Season&LeagueID=00&PlayerOrTeam=Team&PlayerScope=All+Players&SeasonType=Regular+Season&StatCategory=Points](https://stats.nba.com/stats/homepageleaders?GameScope=Season&LeagueID=00&PlayerOrTeam=Team&PlayerScope=All+Players&SeasonType=Regular+Season&StatCategory=Points)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -517,7 +523,8 @@ GET /stats/homepageleaders
 
 ### Returns {#nba_stats_homepageleaders-returns}
 
-**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`HomePageLeaders`, `LeagueAverage`, `LeagueMax`) (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`HomePageLeaders`, `LeagueAverage`, `LeagueMax`) (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+
 **HomePageLeaders**
 
 | col_name | type | description |
@@ -574,7 +581,7 @@ GET /stats/homepagev2
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/homepagev2`
 
-**Valid URL:** [https://stats.nba.com/stats/homepagev2?LeagueID=00](https://stats.nba.com/stats/homepagev2?LeagueID=00)
+**Valid URL:** [https://stats.nba.com/stats/homepagev2?GameScope=Season&LeagueID=00&PlayerOrTeam=Team&PlayerScope=All+Players&SeasonType=Regular+Season&StatType=Traditional](https://stats.nba.com/stats/homepagev2?GameScope=Season&LeagueID=00&PlayerOrTeam=Team&PlayerScope=All+Players&SeasonType=Regular+Season&StatType=Traditional)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -588,7 +595,8 @@ GET /stats/homepagev2
 
 ### Returns {#nba_stats_homepagev2-returns}
 
-**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`HomePageStat1`, `HomePageStat2`, `HomePageStat3`, `HomePageStat4`, `HomePageStat5`, `HomePageStat6`, `HomePageStat7`, `HomePageStat8`) (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`HomePageStat1`, `HomePageStat2`, `HomePageStat3`, `HomePageStat4`, `HomePageStat5`, `HomePageStat6`, `HomePageStat7`, `HomePageStat8`) (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+
 **HomePageStat1**
 
 | col_name | type | description |
@@ -717,7 +725,7 @@ GET /stats/hustlestatsboxscore
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/hustlestatsboxscore`
 
-**Valid URL:** [https://stats.nba.com/stats/hustlestatsboxscore](https://stats.nba.com/stats/hustlestatsboxscore)
+**Valid URL:** [https://stats.nba.com/stats/hustlestatsboxscore?GameID=0022200021](https://stats.nba.com/stats/hustlestatsboxscore?GameID=0022200021)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -725,7 +733,8 @@ GET /stats/hustlestatsboxscore
 
 ### Returns {#nba_stats_hustlestatsboxscore-returns}
 
-**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`HustleStatsAvailable`, `PlayerStats`, `TeamStats`) (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`HustleStatsAvailable`, `PlayerStats`, `TeamStats`) (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+
 **HustleStatsAvailable**
 
 | col_name | type | description |
@@ -806,7 +815,7 @@ GET /stats/infographicfanduelplayer
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/infographicfanduelplayer`
 
-**Valid URL:** [https://stats.nba.com/stats/infographicfanduelplayer](https://stats.nba.com/stats/infographicfanduelplayer)
+**Valid URL:** [https://stats.nba.com/stats/infographicfanduelplayer?GameID=1022200034](https://stats.nba.com/stats/infographicfanduelplayer?GameID=1022200034)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -815,6 +824,7 @@ GET /stats/infographicfanduelplayer
 ### Returns {#nba_stats_infographicfanduelplayer-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `player_id` | integer | Unique player identifier. |
@@ -867,7 +877,7 @@ GET /stats/leaderstiles
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/leaderstiles`
 
-**Valid URL:** [https://stats.nba.com/stats/leaderstiles?LeagueID=00](https://stats.nba.com/stats/leaderstiles?LeagueID=00)
+**Valid URL:** [https://stats.nba.com/stats/leaderstiles?GameScope=Season&LeagueID=00&PlayerOrTeam=Team&PlayerScope=All+Players&SeasonType=Regular+Season&Stat=PTS](https://stats.nba.com/stats/leaderstiles?GameScope=Season&LeagueID=00&PlayerOrTeam=Team&PlayerScope=All+Players&SeasonType=Regular+Season&Stat=PTS)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -881,7 +891,8 @@ GET /stats/leaderstiles
 
 ### Returns {#nba_stats_leaderstiles-returns}
 
-**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`LeadersTiles`, `AllTimeSeasonHigh`, `LastSeasonHigh`, `LowSeasonHigh`) (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`LeadersTiles`, `AllTimeSeasonHigh`, `LastSeasonHigh`, `LowSeasonHigh`) (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+
 **LeadersTiles**
 
 | col_name | type | description |
@@ -946,7 +957,7 @@ GET /stats/matchupsrollup
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/matchupsrollup`
 
-**Valid URL:** [https://stats.nba.com/stats/matchupsrollup?LeagueID=00](https://stats.nba.com/stats/matchupsrollup?LeagueID=00)
+**Valid URL:** [https://stats.nba.com/stats/matchupsrollup?DefPlayerID=&DefTeamID=0&LeagueID=00&OffPlayerID=&OffTeamID=0&PerMode=Totals&SeasonType=Regular+Season](https://stats.nba.com/stats/matchupsrollup?DefPlayerID=&DefTeamID=0&LeagueID=00&OffPlayerID=&OffTeamID=0&PerMode=Totals&SeasonType=Regular+Season)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -962,6 +973,7 @@ GET /stats/matchupsrollup
 ### Returns {#nba_stats_matchupsrollup-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `season_id` | character | Unique season identifier. |
@@ -1003,7 +1015,7 @@ GET /stats/playbyplayv3
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/playbyplayv3`
 
-**Valid URL:** [https://stats.nba.com/stats/playbyplayv3](https://stats.nba.com/stats/playbyplayv3)
+**Valid URL:** [https://stats.nba.com/stats/playbyplayv3?EndPeriod=0&GameID=1022200034&StartPeriod=0](https://stats.nba.com/stats/playbyplayv3?EndPeriod=0&GameID=1022200034&StartPeriod=0)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -1033,7 +1045,7 @@ GET /stats/playoffpicture
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/playoffpicture`
 
-**Valid URL:** [https://stats.nba.com/stats/playoffpicture?LeagueID=00](https://stats.nba.com/stats/playoffpicture?LeagueID=00)
+**Valid URL:** [https://stats.nba.com/stats/playoffpicture?LeagueID=00&SeasonID=22022](https://stats.nba.com/stats/playoffpicture?LeagueID=00&SeasonID=22022)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -1042,7 +1054,8 @@ GET /stats/playoffpicture
 
 ### Returns {#nba_stats_playoffpicture-returns}
 
-**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`EastConfPlayoffPicture`, `WestConfPlayoffPicture`, `EastConfStandings`, `WestConfStandings`, `EastConfRemainingGames`, `WestConfRemainingGames`) (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`EastConfPlayoffPicture`, `WestConfPlayoffPicture`, `EastConfStandings`, `WestConfStandings`, `EastConfRemainingGames`, `WestConfRemainingGames`) (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+
 **EastConfPlayoffPicture**
 
 | col_name | type | description |
@@ -1173,7 +1186,7 @@ GET /stats/synergyplaytypes
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/synergyplaytypes`
 
-**Valid URL:** [https://stats.nba.com/stats/synergyplaytypes?LeagueID=00](https://stats.nba.com/stats/synergyplaytypes?LeagueID=00)
+**Valid URL:** [https://stats.nba.com/stats/synergyplaytypes?LeagueID=00&PerMode=PerGame&PlayType=Isolation&PlayerOrTeam=P&SeasonType=Regular+Season&TypeGrouping=Offensive](https://stats.nba.com/stats/synergyplaytypes?LeagueID=00&PerMode=PerGame&PlayType=Isolation&PlayerOrTeam=P&SeasonType=Regular+Season&TypeGrouping=Offensive)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -1188,6 +1201,7 @@ GET /stats/synergyplaytypes
 ### Returns {#nba_stats_synergyplaytypes-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `season_id` | character | Unique season identifier. |
@@ -1231,7 +1245,7 @@ GET /stats/videodetailsasset
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/videodetailsasset`
 
-**Valid URL:** [https://stats.nba.com/stats/videodetailsasset?LeagueID=00](https://stats.nba.com/stats/videodetailsasset?LeagueID=00)
+**Valid URL:** [https://stats.nba.com/stats/videodetailsasset?ContextMeasure=FGA&LastNGames=0&Month=0&OpponentTeamID=0&Period=0&PlayerID=2544&Season=2022-23&SeasonType=Regular+Season&TeamID=1610612747&VsDivision=&VsConference=&StartRange=&StartPeriod=&SeasonSegment=&RookieYear=&RangeType=&Position=&PointDiff=&Outcome=&Location=&LeagueID=00&GameSegment=&GameID=&EndRange=&EndPeriod=&DateTo=&DateFrom=&ContextFilter=&ClutchTime=&AheadBehind=](https://stats.nba.com/stats/videodetailsasset?ContextMeasure=FGA&LastNGames=0&Month=0&OpponentTeamID=0&Period=0&PlayerID=2544&Season=2022-23&SeasonType=Regular+Season&TeamID=1610612747&VsDivision=&VsConference=&StartRange=&StartPeriod=&SeasonSegment=&RookieYear=&RangeType=&Position=&PointDiff=&Outcome=&Location=&LeagueID=00&GameSegment=&GameID=&EndRange=&EndPeriod=&DateTo=&DateFrom=&ContextFilter=&ClutchTime=&AheadBehind=)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -1268,7 +1282,8 @@ GET /stats/videodetailsasset
 
 ### Returns {#nba_stats_videodetailsasset-returns}
 
-**`return_parsed=True`** (default) — A dict of two DataFrames keyed `videoUrls` (clip URLs, durations, thumbnails) and `playlist` (per-event game metadata) (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — A dict of two DataFrames keyed `videoUrls` (clip URLs, durations, thumbnails) and `playlist` (per-event game metadata) (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+
 **videoUrls**
 
 | col_name | type | description |
@@ -1325,7 +1340,7 @@ GET /stats/videoevents
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/videoevents`
 
-**Valid URL:** [https://stats.nba.com/stats/videoevents](https://stats.nba.com/stats/videoevents)
+**Valid URL:** [https://stats.nba.com/stats/videoevents?GameEventID=10&GameID=1022200075](https://stats.nba.com/stats/videoevents?GameEventID=10&GameID=1022200075)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -1334,7 +1349,8 @@ GET /stats/videoevents
 
 ### Returns {#nba_stats_videoevents-returns}
 
-**`return_parsed=True`** (default) — A dict of two DataFrames keyed `videoUrls` (clip URLs, durations, thumbnails) and `playlist` (per-event game metadata) (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — A dict of two DataFrames keyed `videoUrls` (clip URLs, durations, thumbnails) and `playlist` (per-event game metadata) (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+
 **videoUrls**
 
 | col_name | type | description |
@@ -1390,7 +1406,7 @@ GET /stats/videoeventsasset
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/videoeventsasset`
 
-**Valid URL:** [https://stats.nba.com/stats/videoeventsasset](https://stats.nba.com/stats/videoeventsasset)
+**Valid URL:** [https://stats.nba.com/stats/videoeventsasset?GameEventID=0&GameID=0021700807](https://stats.nba.com/stats/videoeventsasset?GameEventID=0&GameID=0021700807)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -1399,7 +1415,8 @@ GET /stats/videoeventsasset
 
 ### Returns {#nba_stats_videoeventsasset-returns}
 
-**`return_parsed=True`** (default) — A dict of two DataFrames keyed `videoUrls` (clip URLs, durations, thumbnails) and `playlist` (per-event game metadata) (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — A dict of two DataFrames keyed `videoUrls` (clip URLs, durations, thumbnails) and `playlist` (per-event game metadata) (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+
 **videoUrls**
 
 | col_name | type | description |
@@ -1456,7 +1473,7 @@ GET /stats/videostatus
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/videostatus`
 
-**Valid URL:** [https://stats.nba.com/stats/videostatus?LeagueID=00](https://stats.nba.com/stats/videostatus?LeagueID=00)
+**Valid URL:** [https://stats.nba.com/stats/videostatus?GameDate=2022-06-10&LeagueID=00](https://stats.nba.com/stats/videostatus?GameDate=2022-06-10&LeagueID=00)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -1466,6 +1483,7 @@ GET /stats/videostatus
 ### Returns {#nba_stats_videostatus-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `game_id` | character | Unique game identifier. |

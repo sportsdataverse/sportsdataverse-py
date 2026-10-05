@@ -45,7 +45,7 @@ def sports247_teams(
     """247Sports RDB college team directory (teamId / institutionKey / conference) for a sport.
 
     Endpoint: ``GET https://ipa.247sports.com/rdb/v1/teams/``
-    Example URL: https://ipa.247sports.com/rdb/v1/teams/
+    Example URL: https://ipa.247sports.com/rdb/v1/teams/?sportKey=1
 
     Args:
         sport_key: 247Sports sport key (1 = football, 2 = basketball).
@@ -95,7 +95,7 @@ def sports247_institution_rankings(
     """247Sports team recruiting-class rankings (247 rank/rating + industry composite) for a sport and class year.
 
     Endpoint: ``GET https://ipa.247sports.com/rdb/v1/rankings/{sport_key}/{year}/institutionrankings/``
-    Example URL: https://ipa.247sports.com/rdb/v1/rankings/1/2026/institutionrankings/
+    Example URL: https://ipa.247sports.com/rdb/v1/rankings/1/2026/institutionrankings/?pagesize=50
 
     Args:
         year: year path parameter.
@@ -150,7 +150,7 @@ def sports247_recruits(
     """247Sports individual recruit rankings for a sport and class year (247 + industry-composite ratings, stars, commit status; paginated).
 
     Endpoint: ``GET https://ipa.247sports.com/rdb/v1/recruits/``
-    Example URL: https://ipa.247sports.com/rdb/v1/recruits/?sportKey=1&year=2026
+    Example URL: https://ipa.247sports.com/rdb/v1/recruits/?sportKey=1&year=2026&pagesize=50
 
     Args:
         sport_key: 247Sports sport key (1 = football, 2 = basketball).
@@ -203,7 +203,7 @@ def sports247_transfers(
     """247Sports transfer-portal player entries for a sport and year (paginated).
 
     Endpoint: ``GET https://ipa.247sports.com/rdb/v1/transfers/``
-    Example URL: https://ipa.247sports.com/rdb/v1/transfers/?sportKey=1&year=2026
+    Example URL: https://ipa.247sports.com/rdb/v1/transfers/?sportKey=1&year=2026&pagesize=50
 
     Args:
         sport_key: 247Sports sport key (1 = football, 2 = basketball).
@@ -252,7 +252,7 @@ def sports247_coaches(
     """247Sports coach recruiting rankings for a sport and year (paginated).
 
     Endpoint: ``GET https://ipa.247sports.com/rdb/v1/coaches/``
-    Example URL: https://ipa.247sports.com/rdb/v1/coaches/?sportKey=1&year=2026
+    Example URL: https://ipa.247sports.com/rdb/v1/coaches/?sportKey=1&year=2026&pageSize=50
 
     Args:
         sport_key: 247Sports sport key (1 = football, 2 = basketball).
@@ -300,7 +300,7 @@ def sports247_transfer_portal_player_feed(
     """247Sports transfer-portal player ranking feed for a sport and class year.
 
     Endpoint: ``GET https://ipa.247sports.com/rdb/v1/rankings/{sport_key}/{year}/transferPortalPlayerfeed/``
-    Example URL: https://ipa.247sports.com/rdb/v1/rankings/1/2026/transferPortalPlayerfeed/
+    Example URL: https://ipa.247sports.com/rdb/v1/rankings/1/2026/transferPortalPlayerfeed/?pageSize=50
 
     Args:
         year: year path parameter.
@@ -344,7 +344,7 @@ def sports247_composite_team_ranking_feed(
     """247Sports composite team recruiting-class ranking feed for a sport and class year.
 
     Endpoint: ``GET https://ipa.247sports.com/rdb/v1/rankings/{sport_key}/{year}/compositeTeamRankingFeed/``
-    Example URL: https://ipa.247sports.com/rdb/v1/rankings/1/2026/compositeTeamRankingFeed/
+    Example URL: https://ipa.247sports.com/rdb/v1/rankings/1/2026/compositeTeamRankingFeed/?pageSize=50
 
     Args:
         year: year path parameter.
@@ -388,7 +388,7 @@ def sports247_transfer_portal_team_feed(
     """247Sports transfer-portal team ranking feed for a sport and class year.
 
     Endpoint: ``GET https://ipa.247sports.com/rdb/v1/rankings/{sport_key}/{year}/transferPortalOnlyTeamFeed/``
-    Example URL: https://ipa.247sports.com/rdb/v1/rankings/1/2026/transferPortalOnlyTeamFeed/
+    Example URL: https://ipa.247sports.com/rdb/v1/rankings/1/2026/transferPortalOnlyTeamFeed/?pageSize=50
 
     Args:
         year: year path parameter.
@@ -433,7 +433,7 @@ def sports247_target_predictions(
     """247Sports current expert target predictions ("crystal ball") for a site, class year, and sport.
 
     Endpoint: ``GET https://ipa.247sports.com/rdb/v1/sites/{site_key}/years/{year}/sports/{sport_key}/currentTargetPredictions/``
-    Example URL: https://ipa.247sports.com/rdb/v1/sites/1/years/2026/sports/1/currentTargetPredictions/
+    Example URL: https://ipa.247sports.com/rdb/v1/sites/1/years/2026/sports/1/currentTargetPredictions/?pageSize=50
 
     Args:
         site_key: site_key path parameter.
@@ -516,7 +516,7 @@ def sports247_tags_autocomplete(
     """247Sports taggable-entity autocomplete (players / teams / institutions) by name prefix.
 
     Endpoint: ``GET https://ipa.247sports.com/rdb/v1/tags/autocomplete/``
-    Example URL: https://ipa.247sports.com/rdb/v1/tags/autocomplete/?defaultName=smith
+    Example URL: https://ipa.247sports.com/rdb/v1/tags/autocomplete/?defaultName=smith&items=10
 
     Args:
         default_name: defaultName query parameter.

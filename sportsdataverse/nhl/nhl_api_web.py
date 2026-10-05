@@ -225,7 +225,7 @@ def nhl_web_schedule(
     """Pull the week-of NHL schedule rooted at ``date``.
 
     Endpoint: ``GET https://api-web.nhle.com/v1/schedule/{date}``
-    Example URL: https://api-web.nhle.com/v1/schedule
+    Example URL: https://api-web.nhle.com/v1/schedule/now
 
     Args:
         date: date path parameter.
@@ -266,7 +266,7 @@ def nhl_score(
     """Pull the single-day scoreboard for ``date``.
 
     Endpoint: ``GET https://api-web.nhle.com/v1/score/{date}``
-    Example URL: https://api-web.nhle.com/v1/score
+    Example URL: https://api-web.nhle.com/v1/score/now
 
     Args:
         date: date path parameter.
@@ -305,7 +305,7 @@ def nhl_schedule_calendar(
     """Pull the calendar of game-days for the season.
 
     Endpoint: ``GET https://api-web.nhle.com/v1/schedule-calendar/{date}``
-    Example URL: https://api-web.nhle.com/v1/schedule-calendar
+    Example URL: https://api-web.nhle.com/v1/schedule-calendar/now
 
     Args:
         date: date path parameter.
@@ -349,7 +349,7 @@ def nhl_playoff_series(
     """Pull a single playoff series payload.
 
     Endpoint: ``GET https://api-web.nhle.com/v1/schedule/playoff-series/{season}/{series_letter}``
-    Example URL: https://api-web.nhle.com/v1/schedule/playoff-series/2025/a
+    Example URL: https://api-web.nhle.com/v1/schedule/playoff-series/20242025/a
 
     Args:
         season: season path parameter.
@@ -390,7 +390,7 @@ def nhl_standings(
     """Pull the NHL standings.
 
     Endpoint: ``GET https://api-web.nhle.com/v1/standings/{date}``
-    Example URL: https://api-web.nhle.com/v1/standings
+    Example URL: https://api-web.nhle.com/v1/standings/now
 
     Args:
         date: date path parameter.
@@ -468,7 +468,7 @@ def nhl_club_schedule_season(
     """Pull a team's full-season schedule.
 
     Endpoint: ``GET https://api-web.nhle.com/v1/club-schedule-season/{team}/{season}``
-    Example URL: https://api-web.nhle.com/v1/club-schedule-season/TOR
+    Example URL: https://api-web.nhle.com/v1/club-schedule-season/TOR/now
 
     Args:
         team: team path parameter.
@@ -514,7 +514,7 @@ def nhl_club_schedule_month(
     """Pull a team's schedule for one month.
 
     Endpoint: ``GET https://api-web.nhle.com/v1/club-schedule/{team}/month/{month}``
-    Example URL: https://api-web.nhle.com/v1/club-schedule/TOR/month
+    Example URL: https://api-web.nhle.com/v1/club-schedule/TOR/month/now
 
     Args:
         team: team path parameter.
@@ -559,7 +559,7 @@ def nhl_club_schedule_week(
     """Pull a team's schedule for one week.
 
     Endpoint: ``GET https://api-web.nhle.com/v1/club-schedule/{team}/week/{date}``
-    Example URL: https://api-web.nhle.com/v1/club-schedule/TOR/week
+    Example URL: https://api-web.nhle.com/v1/club-schedule/TOR/week/now
 
     Args:
         team: team path parameter.
@@ -605,7 +605,7 @@ def nhl_club_stats(
     """Pull a team's season stat block.
 
     Endpoint: ``GET https://api-web.nhle.com/v1/club-stats/{team}/{season}/{game_type}``
-    Example URL: https://api-web.nhle.com/v1/club-stats/TOR
+    Example URL: https://api-web.nhle.com/v1/club-stats/TOR/now
 
     Args:
         team: team path parameter.
@@ -690,7 +690,7 @@ def nhl_roster(
     """Pull a team's roster.
 
     Endpoint: ``GET https://api-web.nhle.com/v1/roster/{team}/{season}``
-    Example URL: https://api-web.nhle.com/v1/roster/TOR
+    Example URL: https://api-web.nhle.com/v1/roster/TOR/current
 
     Args:
         team: team path parameter.
@@ -813,7 +813,7 @@ def nhl_player_game_log(
     """Pull a player's game-by-game log.
 
     Endpoint: ``GET https://api-web.nhle.com/v1/player/{player_id}/game-log/{season}/{game_type}``
-    Example URL: https://api-web.nhle.com/v1/player/8480801/game-log
+    Example URL: https://api-web.nhle.com/v1/player/8480801/game-log/now
 
     Args:
         player_id: player_id path parameter.
@@ -896,7 +896,7 @@ def nhl_skater_leaders(
     """Pull skater stat leaders.
 
     Endpoint: ``GET https://api-web.nhle.com/v1/skater-stats-leaders/{season}/{game_type}``
-    Example URL: https://api-web.nhle.com/v1/skater-stats-leaders
+    Example URL: https://api-web.nhle.com/v1/skater-stats-leaders/current
 
     Args:
         season: season path parameter.
@@ -942,7 +942,7 @@ def nhl_goalie_leaders(
     """Pull goalie stat leaders.
 
     Endpoint: ``GET https://api-web.nhle.com/v1/goalie-stats-leaders/{season}/{game_type}``
-    Example URL: https://api-web.nhle.com/v1/goalie-stats-leaders
+    Example URL: https://api-web.nhle.com/v1/goalie-stats-leaders/current
 
     Args:
         season: season path parameter.
@@ -988,7 +988,7 @@ def nhl_draft_picks(
     """Pull NHL draft picks for a year (and optionally one round).
 
     Endpoint: ``GET https://api-web.nhle.com/v1/draft/picks/{year}/{round_}``
-    Example URL: https://api-web.nhle.com/v1/draft/picks/2024
+    Example URL: https://api-web.nhle.com/v1/draft/picks/2024/all
 
     Args:
         year: year path parameter.
@@ -1028,7 +1028,7 @@ def nhl_draft_rankings(
     """Pull NHL Central Scouting rankings for a draft year.
 
     Endpoint: ``GET https://api-web.nhle.com/v1/draft/rankings/{year}/{category}``
-    Example URL: https://api-web.nhle.com/v1/draft/rankings/2024
+    Example URL: https://api-web.nhle.com/v1/draft/rankings/2024/1
 
     Args:
         year: year path parameter.

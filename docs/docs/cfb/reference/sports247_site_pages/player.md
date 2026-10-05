@@ -13,8 +13,6 @@ Player detail (identity + primary-sport rating/ranks).
 
 **Endpoint URL:** `GET https://247sports.com/Player/{key}.json`
 
-**Valid URL:** [https://247sports.com/Player](https://247sports.com/Player)
-
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 | `key` | `key` |  | `Y` |  | key path parameter. |
@@ -22,6 +20,7 @@ Player detail (identity + primary-sport rating/ranks).
 ### Returns {#sports247_site_pages_player-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `key` | integer | Primary key of this entity (the id used in its `.json` route). |
@@ -87,6 +86,7 @@ Player's current PlayerInstitution (committed/enrolled school).
 ### Returns {#sports247_site_pages_player_current_institution-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `key` | integer | Primary key of this entity (the id used in its `.json` route). |
@@ -145,6 +145,7 @@ Player's high-school PlayerInstitution row.
 ### Returns {#sports247_site_pages_player_high_school-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `key` | integer | Primary key of this entity (the id used in its `.json` route). |
@@ -194,8 +195,6 @@ Player-at-institution association detail.
 
 **Endpoint URL:** `GET https://247sports.com/PlayerInstitution/{key}.json`
 
-**Valid URL:** [https://247sports.com/PlayerInstitution](https://247sports.com/PlayerInstitution)
-
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 | `key` | `key` |  | `Y` |  | key path parameter. |
@@ -203,6 +202,7 @@ Player-at-institution association detail.
 ### Returns {#sports247_site_pages_player_institution-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `key` | integer | Primary key of this entity (the id used in its `.json` route). |
@@ -252,8 +252,6 @@ Scout evaluation of a player-institution fit.
 
 **Endpoint URL:** `GET https://247sports.com/PlayerInstitutionEvaluation/{key}.json`
 
-**Valid URL:** [https://247sports.com/PlayerInstitutionEvaluation](https://247sports.com/PlayerInstitutionEvaluation)
-
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 | `key` | `key` |  | `Y` |  | key path parameter. |
@@ -261,6 +259,7 @@ Scout evaluation of a player-institution fit.
 ### Returns {#sports247_site_pages_player_institution_evaluation-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `key` | integer | Primary key of this entity (the id used in its `.json` route). |
@@ -299,6 +298,7 @@ Player's primary PlayerSport (rating/class/positions).
 ### Returns {#sports247_site_pages_player_primary_sport-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `key` | integer | Primary key of this entity (the id used in its `.json` route). |
@@ -365,6 +365,7 @@ Player name search.
 ### Returns {#sports247_site_pages_player_search-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `key` | integer | Primary key of this entity (the id used in its `.json` route). |
@@ -421,8 +422,6 @@ PlayerSport detail (note lowercase route segment).
 
 **Endpoint URL:** `GET https://247sports.com/playersport/{key}.json`
 
-**Valid URL:** [https://247sports.com/playersport](https://247sports.com/playersport)
-
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 | `key` | `key` |  | `Y` |  | key path parameter. |
@@ -430,6 +429,7 @@ PlayerSport detail (note lowercase route segment).
 ### Returns {#sports247_site_pages_playersport-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `key` | integer | Primary key of this entity (the id used in its `.json` route). |

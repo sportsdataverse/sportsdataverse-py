@@ -13,7 +13,7 @@ GET /api/secured/stats/players-offense/passing/season — one row per passer for
 
 **Endpoint URL:** `GET https://pro.nfl.com/api/secured/stats/players-offense/passing/season`
 
-**Valid URL:** [https://pro.nfl.com/api/secured/stats/players-offense/passing/season?season=2024&seasonType=REG](https://pro.nfl.com/api/secured/stats/players-offense/passing/season?season=2024&seasonType=REG)
+**Valid URL:** [https://pro.nfl.com/api/secured/stats/players-offense/passing/season?season=2024&seasonType=REG&limit=500](https://pro.nfl.com/api/secured/stats/players-offense/passing/season?season=2024&seasonType=REG&limit=500)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -28,6 +28,7 @@ GET /api/secured/stats/players-offense/passing/season — one row per passer for
 ### Returns {#nfl_pro_players_offense_passing_season-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `nfl_id` | character | NFL ID of player (this is used in Big Data Bowl Data) |
@@ -104,7 +105,7 @@ GET /api/secured/stats/players-offense/passing/week — one row per passer per w
 
 **Endpoint URL:** `GET https://pro.nfl.com/api/secured/stats/players-offense/passing/week`
 
-**Valid URL:** [https://pro.nfl.com/api/secured/stats/players-offense/passing/week?season=2024&seasonType=REG](https://pro.nfl.com/api/secured/stats/players-offense/passing/week?season=2024&seasonType=REG)
+**Valid URL:** [https://pro.nfl.com/api/secured/stats/players-offense/passing/week?season=2024&seasonType=REG&limit=500](https://pro.nfl.com/api/secured/stats/players-offense/passing/week?season=2024&seasonType=REG&limit=500)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -120,6 +121,7 @@ GET /api/secured/stats/players-offense/passing/week — one row per passer per w
 ### Returns {#nfl_pro_players_offense_passing_week-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `nfl_id` | character | NFL ID of player (this is used in Big Data Bowl Data) |
@@ -203,7 +205,7 @@ GET /api/secured/stats/players-offense/rushing/season — one row per rusher for
 
 **Endpoint URL:** `GET https://pro.nfl.com/api/secured/stats/players-offense/rushing/season`
 
-**Valid URL:** [https://pro.nfl.com/api/secured/stats/players-offense/rushing/season?season=2024&seasonType=REG](https://pro.nfl.com/api/secured/stats/players-offense/rushing/season?season=2024&seasonType=REG)
+**Valid URL:** [https://pro.nfl.com/api/secured/stats/players-offense/rushing/season?season=2024&seasonType=REG&limit=500](https://pro.nfl.com/api/secured/stats/players-offense/rushing/season?season=2024&seasonType=REG&limit=500)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -218,6 +220,7 @@ GET /api/secured/stats/players-offense/rushing/season — one row per rusher for
 ### Returns {#nfl_pro_players_offense_rushing_season-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `nfl_id` | character | NFL ID of player (this is used in Big Data Bowl Data) |
@@ -289,7 +292,7 @@ GET /api/secured/stats/players-offense/rushing/week — one row per rusher per w
 
 **Endpoint URL:** `GET https://pro.nfl.com/api/secured/stats/players-offense/rushing/week`
 
-**Valid URL:** [https://pro.nfl.com/api/secured/stats/players-offense/rushing/week?season=2024&seasonType=REG](https://pro.nfl.com/api/secured/stats/players-offense/rushing/week?season=2024&seasonType=REG)
+**Valid URL:** [https://pro.nfl.com/api/secured/stats/players-offense/rushing/week?season=2024&seasonType=REG&limit=500](https://pro.nfl.com/api/secured/stats/players-offense/rushing/week?season=2024&seasonType=REG&limit=500)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -305,6 +308,7 @@ GET /api/secured/stats/players-offense/rushing/week — one row per rusher per w
 ### Returns {#nfl_pro_players_offense_rushing_week-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `nfl_id` | character | NFL ID of player (this is used in Big Data Bowl Data) |
@@ -383,7 +387,7 @@ GET /api/secured/stats/players-offense/receiving/season — one row per receiver
 
 **Endpoint URL:** `GET https://pro.nfl.com/api/secured/stats/players-offense/receiving/season`
 
-**Valid URL:** [https://pro.nfl.com/api/secured/stats/players-offense/receiving/season?season=2024&seasonType=REG](https://pro.nfl.com/api/secured/stats/players-offense/receiving/season?season=2024&seasonType=REG)
+**Valid URL:** [https://pro.nfl.com/api/secured/stats/players-offense/receiving/season?season=2024&seasonType=REG&limit=500](https://pro.nfl.com/api/secured/stats/players-offense/receiving/season?season=2024&seasonType=REG&limit=500)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -398,6 +402,7 @@ GET /api/secured/stats/players-offense/receiving/season — one row per receiver
 ### Returns {#nfl_pro_players_offense_receiving_season-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `nfl_id` | character | NFL ID of player (this is used in Big Data Bowl Data) |
@@ -476,7 +481,7 @@ GET /api/secured/stats/players-offense/receiving/week — one row per receiver p
 
 **Endpoint URL:** `GET https://pro.nfl.com/api/secured/stats/players-offense/receiving/week`
 
-**Valid URL:** [https://pro.nfl.com/api/secured/stats/players-offense/receiving/week?season=2024&seasonType=REG](https://pro.nfl.com/api/secured/stats/players-offense/receiving/week?season=2024&seasonType=REG)
+**Valid URL:** [https://pro.nfl.com/api/secured/stats/players-offense/receiving/week?season=2024&seasonType=REG&limit=500](https://pro.nfl.com/api/secured/stats/players-offense/receiving/week?season=2024&seasonType=REG&limit=500)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -492,6 +497,7 @@ GET /api/secured/stats/players-offense/receiving/week — one row per receiver p
 ### Returns {#nfl_pro_players_offense_receiving_week-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `nfl_id` | character | NFL ID of player (this is used in Big Data Bowl Data) |

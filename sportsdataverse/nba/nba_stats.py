@@ -158,7 +158,7 @@ def nba_stats_alltimeleadersgrids(
     """GET /stats/alltimeleadersgrids
 
     Endpoint: ``GET https://stats.nba.com/stats/alltimeleadersgrids``
-    Example URL: https://stats.nba.com/stats/alltimeleadersgrids?LeagueID=00
+    Example URL: https://stats.nba.com/stats/alltimeleadersgrids?LeagueID=00&PerMode=PerGame&SeasonType=Regular+Season&TopX=10
 
     Args:
         league_id: LeagueID query parameter.
@@ -209,7 +209,7 @@ def nba_stats_assistleaders(
     """GET /stats/assistleaders
 
     Endpoint: ``GET https://stats.nba.com/stats/assistleaders``
-    Example URL: https://stats.nba.com/stats/assistleaders?LeagueID=00
+    Example URL: https://stats.nba.com/stats/assistleaders?LeagueID=00&PerMode=PerGame&PlayerOrTeam=Team&SeasonType=Regular+Season
 
     Args:
         league_id: LeagueID query parameter.
@@ -284,7 +284,7 @@ def nba_stats_assisttracker(
     """GET /stats/assisttracker
 
     Endpoint: ``GET https://stats.nba.com/stats/assisttracker``
-    Example URL: https://stats.nba.com/stats/assisttracker?LeagueID=00
+    Example URL: https://stats.nba.com/stats/assisttracker?LeagueID=00&OpponentTeamID=0&PerMode=PerGame&SeasonType=Regular+Season&TeamID=0
 
     Args:
         college_nullable: College query parameter.
@@ -383,7 +383,7 @@ def nba_stats_boxscoreadvancedv3(
     """GET /stats/boxscoreadvancedv3
 
     Endpoint: ``GET https://stats.nba.com/stats/boxscoreadvancedv3``
-    Example URL: https://stats.nba.com/stats/boxscoreadvancedv3
+    Example URL: https://stats.nba.com/stats/boxscoreadvancedv3?EndPeriod=14&EndRange=0&GameID=1022200034&RangeType=0&StartPeriod=0&StartRange=0
 
     Args:
         end_period: EndPeriod query parameter.
@@ -434,7 +434,7 @@ def nba_stats_boxscoredefensivev2(
     """GET /stats/boxscoredefensivev2
 
     Endpoint: ``GET https://stats.nba.com/stats/boxscoredefensivev2``
-    Example URL: https://stats.nba.com/stats/boxscoredefensivev2
+    Example URL: https://stats.nba.com/stats/boxscoredefensivev2?GameID=1022200034
 
     Args:
         game_id: GameID query parameter.
@@ -480,7 +480,7 @@ def nba_stats_boxscorefourfactorsv3(
     """GET /stats/boxscorefourfactorsv3
 
     Endpoint: ``GET https://stats.nba.com/stats/boxscorefourfactorsv3``
-    Example URL: https://stats.nba.com/stats/boxscorefourfactorsv3
+    Example URL: https://stats.nba.com/stats/boxscorefourfactorsv3?EndPeriod=14&EndRange=0&GameID=1022200034&RangeType=0&StartPeriod=0&StartRange=0
 
     Args:
         end_period: EndPeriod query parameter.
@@ -531,7 +531,7 @@ def nba_stats_boxscorehustlev2(
     """GET /stats/boxscorehustlev2
 
     Endpoint: ``GET https://stats.nba.com/stats/boxscorehustlev2``
-    Example URL: https://stats.nba.com/stats/boxscorehustlev2
+    Example URL: https://stats.nba.com/stats/boxscorehustlev2?GameID=0022200021
 
     Args:
         game_id: GameID query parameter.
@@ -572,7 +572,7 @@ def nba_stats_boxscorematchupsv3(
     """GET /stats/boxscorematchupsv3
 
     Endpoint: ``GET https://stats.nba.com/stats/boxscorematchupsv3``
-    Example URL: https://stats.nba.com/stats/boxscorematchupsv3
+    Example URL: https://stats.nba.com/stats/boxscorematchupsv3?GameID=1022200034
 
     Args:
         game_id: GameID query parameter.
@@ -618,7 +618,7 @@ def nba_stats_boxscoremiscv3(
     """GET /stats/boxscoremiscv3
 
     Endpoint: ``GET https://stats.nba.com/stats/boxscoremiscv3``
-    Example URL: https://stats.nba.com/stats/boxscoremiscv3
+    Example URL: https://stats.nba.com/stats/boxscoremiscv3?EndPeriod=14&EndRange=0&GameID=1022200034&RangeType=0&StartPeriod=0&StartRange=0
 
     Args:
         end_period: EndPeriod query parameter.
@@ -669,7 +669,7 @@ def nba_stats_boxscoreplayertrackv3(
     """GET /stats/boxscoreplayertrackv3
 
     Endpoint: ``GET https://stats.nba.com/stats/boxscoreplayertrackv3``
-    Example URL: https://stats.nba.com/stats/boxscoreplayertrackv3
+    Example URL: https://stats.nba.com/stats/boxscoreplayertrackv3?GameID=1022200034
 
     Args:
         game_id: GameID query parameter.
@@ -715,7 +715,7 @@ def nba_stats_boxscorescoringv3(
     """GET /stats/boxscorescoringv3
 
     Endpoint: ``GET https://stats.nba.com/stats/boxscorescoringv3``
-    Example URL: https://stats.nba.com/stats/boxscorescoringv3
+    Example URL: https://stats.nba.com/stats/boxscorescoringv3?EndPeriod=14&EndRange=0&GameID=1022200034&RangeType=0&StartPeriod=0&StartRange=0
 
     Args:
         end_period: EndPeriod query parameter.
@@ -766,7 +766,7 @@ def nba_stats_boxscoresummaryv2(
     """GET /stats/boxscoresummaryv2
 
     Endpoint: ``GET https://stats.nba.com/stats/boxscoresummaryv2``
-    Example URL: https://stats.nba.com/stats/boxscoresummaryv2
+    Example URL: https://stats.nba.com/stats/boxscoresummaryv2?GameID=1022200034
 
     Args:
         game_id: GameID query parameter.
@@ -807,7 +807,7 @@ def nba_stats_boxscoresummaryv3(
     """GET /stats/boxscoresummaryv3
 
     Endpoint: ``GET https://stats.nba.com/stats/boxscoresummaryv3``
-    Example URL: https://stats.nba.com/stats/boxscoresummaryv3
+    Example URL: https://stats.nba.com/stats/boxscoresummaryv3?GameID=1022200034
 
     Args:
         game_id: GameID query parameter.
@@ -853,7 +853,7 @@ def nba_stats_boxscoretraditionalv2(
     """GET /stats/boxscoretraditionalv2
 
     Endpoint: ``GET https://stats.nba.com/stats/boxscoretraditionalv2``
-    Example URL: https://stats.nba.com/stats/boxscoretraditionalv2
+    Example URL: https://stats.nba.com/stats/boxscoretraditionalv2?EndPeriod=14&EndRange=0&GameID=1022200034&RangeType=0&StartPeriod=0&StartRange=0
 
     Args:
         end_period: EndPeriod query parameter.
@@ -909,7 +909,7 @@ def nba_stats_boxscoretraditionalv3(
     """GET /stats/boxscoretraditionalv3
 
     Endpoint: ``GET https://stats.nba.com/stats/boxscoretraditionalv3``
-    Example URL: https://stats.nba.com/stats/boxscoretraditionalv3
+    Example URL: https://stats.nba.com/stats/boxscoretraditionalv3?EndPeriod=14&EndRange=0&GameID=1022200034&RangeType=0&StartPeriod=0&StartRange=0
 
     Args:
         end_period: EndPeriod query parameter.
@@ -965,7 +965,7 @@ def nba_stats_boxscoreusagev3(
     """GET /stats/boxscoreusagev3
 
     Endpoint: ``GET https://stats.nba.com/stats/boxscoreusagev3``
-    Example URL: https://stats.nba.com/stats/boxscoreusagev3
+    Example URL: https://stats.nba.com/stats/boxscoreusagev3?EndPeriod=14&EndRange=0&GameID=1022200034&RangeType=0&StartPeriod=0&StartRange=0
 
     Args:
         end_period: EndPeriod query parameter.
@@ -1018,7 +1018,7 @@ def nba_stats_commonallplayers(
     """GET /stats/commonallplayers
 
     Endpoint: ``GET https://stats.nba.com/stats/commonallplayers``
-    Example URL: https://stats.nba.com/stats/commonallplayers?LeagueID=00
+    Example URL: https://stats.nba.com/stats/commonallplayers?IsOnlyCurrentSeason=0&LeagueID=00
 
     Args:
         is_only_current_season: IsOnlyCurrentSeason query parameter.
@@ -1063,7 +1063,7 @@ def nba_stats_commonplayerinfo(
     """GET /stats/commonplayerinfo
 
     Endpoint: ``GET https://stats.nba.com/stats/commonplayerinfo``
-    Example URL: https://stats.nba.com/stats/commonplayerinfo?LeagueID=00
+    Example URL: https://stats.nba.com/stats/commonplayerinfo?LeagueID=00&PlayerID=1628932
 
     Args:
         league_id: LeagueID query parameter.
@@ -1108,7 +1108,7 @@ def nba_stats_commonplayoffseries(
     """GET /stats/commonplayoffseries
 
     Endpoint: ``GET https://stats.nba.com/stats/commonplayoffseries``
-    Example URL: https://stats.nba.com/stats/commonplayoffseries?LeagueID=00
+    Example URL: https://stats.nba.com/stats/commonplayoffseries?LeagueID=00&SeriesID=
 
     Args:
         league_id: LeagueID query parameter.
@@ -1154,7 +1154,7 @@ def nba_stats_commonteamroster(
     """GET /stats/commonteamroster
 
     Endpoint: ``GET https://stats.nba.com/stats/commonteamroster``
-    Example URL: https://stats.nba.com/stats/commonteamroster?LeagueID=00
+    Example URL: https://stats.nba.com/stats/commonteamroster?LeagueID=00&TeamID=1611661317
 
     Args:
         league_id: LeagueID query parameter.
@@ -1243,7 +1243,7 @@ def nba_stats_cumestatsplayer(
     """GET /stats/cumestatsplayer
 
     Endpoint: ``GET https://stats.nba.com/stats/cumestatsplayer``
-    Example URL: https://stats.nba.com/stats/cumestatsplayer?LeagueID=00
+    Example URL: https://stats.nba.com/stats/cumestatsplayer?GameIDs=1022200018&LeagueID=00&PlayerID=204319&Season=2021-22&SeasonType=Regular+Season
 
     Args:
         game_ids: GameIDs query parameter.
@@ -1300,7 +1300,7 @@ def nba_stats_cumestatsplayergames(
     """GET /stats/cumestatsplayergames
 
     Endpoint: ``GET https://stats.nba.com/stats/cumestatsplayergames``
-    Example URL: https://stats.nba.com/stats/cumestatsplayergames?LeagueID=00
+    Example URL: https://stats.nba.com/stats/cumestatsplayergames?LeagueID=00&Location=&Outcome=&PlayerID=204319&Season=2021-22&SeasonType=Regular+Season&VsConference=&VsDivision=&VsTeamID=0
 
     Args:
         league_id: LeagueID query parameter.
@@ -1360,7 +1360,7 @@ def nba_stats_cumestatsteam(
     """GET /stats/cumestatsteam
 
     Endpoint: ``GET https://stats.nba.com/stats/cumestatsteam``
-    Example URL: https://stats.nba.com/stats/cumestatsteam?LeagueID=00
+    Example URL: https://stats.nba.com/stats/cumestatsteam?GameIDs=1022200018&LeagueID=00&Season=2021-22&SeasonType=Regular+Season&TeamID=1611661317
 
     Args:
         game_ids: GameIDs query parameter.
@@ -1418,7 +1418,7 @@ def nba_stats_cumestatsteamgames(
     """GET /stats/cumestatsteamgames
 
     Endpoint: ``GET https://stats.nba.com/stats/cumestatsteamgames``
-    Example URL: https://stats.nba.com/stats/cumestatsteamgames?LeagueID=00
+    Example URL: https://stats.nba.com/stats/cumestatsteamgames?LeagueID=00&Location=&Outcome=&Season=2021-22&SeasonID=&SeasonType=Regular+Season&TeamID=1611661317&VsConference=&VsDivision=&VsTeamID=0
 
     Args:
         league_id: LeagueID query parameter.
@@ -1698,7 +1698,7 @@ def nba_stats_drafthistory(
     """GET /stats/drafthistory
 
     Endpoint: ``GET https://stats.nba.com/stats/drafthistory``
-    Example URL: https://stats.nba.com/stats/drafthistory?LeagueID=00&Season=2024
+    Example URL: https://stats.nba.com/stats/drafthistory?College=&LeagueID=00&OverallPick=&RoundNum=&RoundPick=&Season=2024&TeamID=0&TopX=
 
     Args:
         college_nullable: College query parameter.
@@ -1785,7 +1785,7 @@ def nba_stats_fantasywidget(
     """GET /stats/fantasywidget
 
     Endpoint: ``GET https://stats.nba.com/stats/fantasywidget``
-    Example URL: https://stats.nba.com/stats/fantasywidget?LeagueID=00
+    Example URL: https://stats.nba.com/stats/fantasywidget?ActivePlayers=N&DateFrom=&DateTo=&LastNGames=0&LeagueID=00&Location=&Month=&OpponentTeamID=0&PORound=&PlayerID=&Position=&SeasonSegment=&SeasonType=Regular+Season&TeamID=0&TodaysOpponent=0&TodaysPlayers=N&VsConference=&VsDivision=
 
     Args:
         active_players: ActivePlayers query parameter.
@@ -1903,7 +1903,7 @@ def nba_stats_franchiseleaders(
     """GET /stats/franchiseleaders
 
     Endpoint: ``GET https://stats.nba.com/stats/franchiseleaders``
-    Example URL: https://stats.nba.com/stats/franchiseleaders?LeagueID=00
+    Example URL: https://stats.nba.com/stats/franchiseleaders?LeagueID=00&TeamID=1611661324
 
     Args:
         league_id: LeagueID query parameter.
@@ -1948,7 +1948,7 @@ def nba_stats_franchiseleaderswrank(
     """GET /stats/franchiseleaderswrank
 
     Endpoint: ``GET https://stats.nba.com/stats/franchiseleaderswrank``
-    Example URL: https://stats.nba.com/stats/franchiseleaderswrank?LeagueID=00
+    Example URL: https://stats.nba.com/stats/franchiseleaderswrank?LeagueID=00&PerMode=Totals&SeasonType=Regular+Season&TeamID=1611661324
 
     Args:
         league_id: LeagueID query parameter.
@@ -1997,7 +1997,7 @@ def nba_stats_franchiseplayers(
     """GET /stats/franchiseplayers
 
     Endpoint: ``GET https://stats.nba.com/stats/franchiseplayers``
-    Example URL: https://stats.nba.com/stats/franchiseplayers?LeagueID=00
+    Example URL: https://stats.nba.com/stats/franchiseplayers?LeagueID=00&PerMode=Totals&SeasonType=Regular+Season&TeamID=1611661319
 
     Args:
         league_id: LeagueID query parameter.
@@ -2044,7 +2044,7 @@ def nba_stats_gamerotation(
     """GET /stats/gamerotation
 
     Endpoint: ``GET https://stats.nba.com/stats/gamerotation``
-    Example URL: https://stats.nba.com/stats/gamerotation?LeagueID=00
+    Example URL: https://stats.nba.com/stats/gamerotation?GameID=1022200034&LeagueID=00
 
     Args:
         game_id: GameID query parameter.
@@ -2093,7 +2093,7 @@ def nba_stats_homepageleaders(
     """GET /stats/homepageleaders
 
     Endpoint: ``GET https://stats.nba.com/stats/homepageleaders``
-    Example URL: https://stats.nba.com/stats/homepageleaders?LeagueID=00
+    Example URL: https://stats.nba.com/stats/homepageleaders?GameScope=Season&LeagueID=00&PlayerOrTeam=Team&PlayerScope=All+Players&SeasonType=Regular+Season&StatCategory=Points
 
     Args:
         game_scope_detailed: GameScope query parameter.
@@ -2152,7 +2152,7 @@ def nba_stats_homepagev2(
     """GET /stats/homepagev2
 
     Endpoint: ``GET https://stats.nba.com/stats/homepagev2``
-    Example URL: https://stats.nba.com/stats/homepagev2?LeagueID=00
+    Example URL: https://stats.nba.com/stats/homepagev2?GameScope=Season&LeagueID=00&PlayerOrTeam=Team&PlayerScope=All+Players&SeasonType=Regular+Season&StatType=Traditional
 
     Args:
         game_scope_detailed: GameScope query parameter.
@@ -2205,7 +2205,7 @@ def nba_stats_hustlestatsboxscore(
     """GET /stats/hustlestatsboxscore
 
     Endpoint: ``GET https://stats.nba.com/stats/hustlestatsboxscore``
-    Example URL: https://stats.nba.com/stats/hustlestatsboxscore
+    Example URL: https://stats.nba.com/stats/hustlestatsboxscore?GameID=0022200021
 
     Args:
         game_id: GameID query parameter.
@@ -2246,7 +2246,7 @@ def nba_stats_infographicfanduelplayer(
     """GET /stats/infographicfanduelplayer
 
     Endpoint: ``GET https://stats.nba.com/stats/infographicfanduelplayer``
-    Example URL: https://stats.nba.com/stats/infographicfanduelplayer
+    Example URL: https://stats.nba.com/stats/infographicfanduelplayer?GameID=1022200034
 
     Args:
         game_id: GameID query parameter.
@@ -2292,7 +2292,7 @@ def nba_stats_leaderstiles(
     """GET /stats/leaderstiles
 
     Endpoint: ``GET https://stats.nba.com/stats/leaderstiles``
-    Example URL: https://stats.nba.com/stats/leaderstiles?LeagueID=00
+    Example URL: https://stats.nba.com/stats/leaderstiles?GameScope=Season&LeagueID=00&PlayerOrTeam=Team&PlayerScope=All+Players&SeasonType=Regular+Season&Stat=PTS
 
     Args:
         game_scope_detailed: GameScope query parameter.
@@ -2370,7 +2370,7 @@ def nba_stats_leaguedashlineups(
     """GET /stats/leaguedashlineups
 
     Endpoint: ``GET https://stats.nba.com/stats/leaguedashlineups``
-    Example URL: https://stats.nba.com/stats/leaguedashlineups?LeagueID=00
+    Example URL: https://stats.nba.com/stats/leaguedashlineups?Conference=&DateFrom=&DateTo=&Division=&GameSegment=&GroupQuantity=5&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&TeamID=0&VsConference=&VsDivision=
 
     Args:
         conference_nullable: Conference query parameter.
@@ -2485,7 +2485,7 @@ def nba_stats_leaguedashoppptshot(
     """GET /stats/leaguedashoppptshot
 
     Endpoint: ``GET https://stats.nba.com/stats/leaguedashoppptshot``
-    Example URL: https://stats.nba.com/stats/leaguedashoppptshot?LeagueID=00
+    Example URL: https://stats.nba.com/stats/leaguedashoppptshot?CloseDefDistRange=&Conference=&DateFrom=&DateTo=&Division=&DribbleRange=&GameSegment=&GeneralRange=&LastNGames=0&LeagueID=00&Location=&Month=0&OpponentTeamID=0&Outcome=&PORound=&PerMode=Totals&Period=0&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&ShotDistRange=&TeamID=0&TouchTimeRange=&VsConference=&VsDivision=
 
     Args:
         close_def_dist_range_nullable: CloseDefDistRange query parameter.
@@ -2605,7 +2605,7 @@ def nba_stats_leaguedashplayerbiostats(
     """GET /stats/leaguedashplayerbiostats
 
     Endpoint: ``GET https://stats.nba.com/stats/leaguedashplayerbiostats``
-    Example URL: https://stats.nba.com/stats/leaguedashplayerbiostats?LeagueID=00
+    Example URL: https://stats.nba.com/stats/leaguedashplayerbiostats?College=&Conference=&Country=&DateFrom=&DateTo=&Division=&DraftPick=&DraftYear=&GameScope=&GameSegment=&Height=&LastNGames=0&LeagueID=00&Location=&Month=0&OpponentTeamID=0&Outcome=&PORound=&PerMode=Totals&Period=&PlayerExperience=&PlayerPosition=&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&StarterBench=&TeamID=0&VsConference=&VsDivision=&Weight=
 
     Args:
         college_nullable: College query parameter.
@@ -2742,7 +2742,7 @@ def nba_stats_leaguedashplayerclutch(
     """GET /stats/leaguedashplayerclutch
 
     Endpoint: ``GET https://stats.nba.com/stats/leaguedashplayerclutch``
-    Example URL: https://stats.nba.com/stats/leaguedashplayerclutch?LeagueID=00
+    Example URL: https://stats.nba.com/stats/leaguedashplayerclutch?AheadBehind=Ahead+or+Behind&ClutchTime=Last+5+Minutes&College=&Conference=&Country=&DateFrom=&DateTo=&Division=&DraftPick=&DraftYear=&GameScope=&GameSegment=&Height=&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlayerExperience=&PlayerPosition=&PlusMinus=N&PointDiff=5&Rank=N&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&StarterBench=&TeamID=0&VsConference=&VsDivision=&Weight=
 
     Args:
         ahead_behind: AheadBehind query parameter.
@@ -2890,7 +2890,7 @@ def nba_stats_leaguedashplayerptshot(
     """GET /stats/leaguedashplayerptshot
 
     Endpoint: ``GET https://stats.nba.com/stats/leaguedashplayerptshot``
-    Example URL: https://stats.nba.com/stats/leaguedashplayerptshot?LeagueID=00
+    Example URL: https://stats.nba.com/stats/leaguedashplayerptshot?CloseDefDistRange=&College=&Conference=&Country=&DateFrom=&DateTo=&Division=&DraftPick=&DraftYear=&DribbleRange=&GameSegment=&GeneralRange=&Height=&LastNGames=0&LeagueID=00&Location=&Month=0&OpponentTeamID=0&Outcome=&PORound=&PerMode=Totals&Period=0&PlayerExperience=&PlayerPosition=&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&StarterBench=&TeamID=0&TouchTimeRange=&VsConference=&VsDivision=&Weight=
 
     Args:
         close_def_dist_range_nullable: CloseDefDistRange query parameter.
@@ -3033,7 +3033,7 @@ def nba_stats_leaguedashplayershotlocations(
     """GET /stats/leaguedashplayershotlocations
 
     Endpoint: ``GET https://stats.nba.com/stats/leaguedashplayershotlocations``
-    Example URL: https://stats.nba.com/stats/leaguedashplayershotlocations?LeagueID=00
+    Example URL: https://stats.nba.com/stats/leaguedashplayershotlocations?College=&Conference=&Country=&DateFrom=&DateTo=&DistanceRange=By+Zone&Division=&DraftPick=&DraftYear=&GameScope=&GameSegment=&Height=&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlayerExperience=&PlayerPosition=&PlusMinus=N&Rank=N&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&StarterBench=&TeamID=0&VsConference=&VsDivision=&Weight=
 
     Args:
         college_nullable: College query parameter.
@@ -3178,7 +3178,7 @@ def nba_stats_leaguedashplayerstats(
     """GET /stats/leaguedashplayerstats
 
     Endpoint: ``GET https://stats.nba.com/stats/leaguedashplayerstats``
-    Example URL: https://stats.nba.com/stats/leaguedashplayerstats?LeagueID=00
+    Example URL: https://stats.nba.com/stats/leaguedashplayerstats?College=&Conference=&Country=&DateFrom=&DateTo=&Division=&DraftPick=&DraftYear=&GameScope=&GameSegment=&Height=&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlayerExperience=&PlayerPosition=&PlusMinus=N&Rank=N&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&StarterBench=&TeamID=0&TwoWay=&VsConference=&VsDivision=&Weight=
 
     Args:
         college_nullable: College query parameter.
@@ -3318,7 +3318,7 @@ def nba_stats_leaguedashptdefend(
     """GET /stats/leaguedashptdefend
 
     Endpoint: ``GET https://stats.nba.com/stats/leaguedashptdefend``
-    Example URL: https://stats.nba.com/stats/leaguedashptdefend?LeagueID=00
+    Example URL: https://stats.nba.com/stats/leaguedashptdefend?College=&Conference=&Country=&DateFrom=&DateTo=&DefenseCategory=Overall&Division=&DraftPick=&DraftYear=&GameSegment=&Height=&LastNGames=0&LeagueID=00&Location=&Month=0&OpponentTeamID=0&Outcome=&PORound=&PerMode=Totals&Period=&PlayerExperience=&PlayerID=&PlayerPosition=&SeasonSegment=&SeasonType=Regular+Season&StarterBench=&TeamID=0&VsConference=&VsDivision=&Weight=
 
     Args:
         college_nullable: College query parameter.
@@ -3447,7 +3447,7 @@ def nba_stats_leaguedashptstats(
     """GET /stats/leaguedashptstats
 
     Endpoint: ``GET https://stats.nba.com/stats/leaguedashptstats``
-    Example URL: https://stats.nba.com/stats/leaguedashptstats?LeagueID=00
+    Example URL: https://stats.nba.com/stats/leaguedashptstats?College=&Conference=&Country=&DateFrom=&DateTo=&Division=&DraftPick=&DraftYear=&GameScope=&Height=&LastNGames=0&LeagueID=00&Location=&Month=0&OpponentTeamID=0&Outcome=&PORound=&PerMode=PerGame&PlayerExperience=&PlayerOrTeam=Player&PlayerPosition=&PtMeasureType=Drives&SeasonSegment=&SeasonType=Regular+Season&StarterBench=&TeamID=0&VsConference=&VsDivision=&Weight=
 
     Args:
         college_nullable: College query parameter.
@@ -3565,7 +3565,7 @@ def nba_stats_leaguedashptteamdefend(
     """GET /stats/leaguedashptteamdefend
 
     Endpoint: ``GET https://stats.nba.com/stats/leaguedashptteamdefend``
-    Example URL: https://stats.nba.com/stats/leaguedashptteamdefend?LeagueID=00
+    Example URL: https://stats.nba.com/stats/leaguedashptteamdefend?Conference=&DateFrom=&DateTo=&DefenseCategory=Overall&Division=&GameSegment=&LastNGames=0&LeagueID=00&Location=&Month=0&OpponentTeamID=0&Outcome=&PORound=&PerMode=PerGame&Period=&SeasonSegment=&SeasonType=Regular+Season&TeamID=0&VsConference=&VsDivision=
 
     Args:
         conference_nullable: Conference query parameter.
@@ -3676,7 +3676,7 @@ def nba_stats_leaguedashteamclutch(
     """GET /stats/leaguedashteamclutch
 
     Endpoint: ``GET https://stats.nba.com/stats/leaguedashteamclutch``
-    Example URL: https://stats.nba.com/stats/leaguedashteamclutch?LeagueID=00
+    Example URL: https://stats.nba.com/stats/leaguedashteamclutch?AheadBehind=Ahead+or+Behind&ClutchTime=Last+5+Minutes&Conference=&DateFrom=&DateTo=&Division=&GameScope=&GameSegment=&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlayerExperience=&PlayerPosition=&PlusMinus=N&PointDiff=5&Rank=N&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&StarterBench=&TeamID=0&VsConference=&VsDivision=
 
     Args:
         ahead_behind: AheadBehind query parameter.
@@ -3803,7 +3803,7 @@ def nba_stats_leaguedashteamptshot(
     """GET /stats/leaguedashteamptshot
 
     Endpoint: ``GET https://stats.nba.com/stats/leaguedashteamptshot``
-    Example URL: https://stats.nba.com/stats/leaguedashteamptshot?LeagueID=00
+    Example URL: https://stats.nba.com/stats/leaguedashteamptshot?CloseDefDistRange=&Conference=&DateFrom=&DateTo=&Division=&DribbleRange=&GameSegment=&GeneralRange=&LastNGames=0&LeagueID=00&Location=&Month=0&OpponentTeamID=0&Outcome=&PORound=&PerMode=Totals&Period=0&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&TeamID=0&TouchTimeRange=&VsConference=&VsDivision=
 
     Args:
         close_def_dist_range_nullable: CloseDefDistRange query parameter.
@@ -3922,7 +3922,7 @@ def nba_stats_leaguedashteamshotlocations(
     """GET /stats/leaguedashteamshotlocations
 
     Endpoint: ``GET https://stats.nba.com/stats/leaguedashteamshotlocations``
-    Example URL: https://stats.nba.com/stats/leaguedashteamshotlocations?LeagueID=00
+    Example URL: https://stats.nba.com/stats/leaguedashteamshotlocations?Conference=&DateFrom=&DateTo=&DistanceRange=By+Zone&Division=&GameScope=&GameSegment=&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlayerExperience=&PlayerPosition=&PlusMinus=N&Rank=N&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&StarterBench=&TeamID=0&VsConference=&VsDivision=
 
     Args:
         conference_nullable: Conference query parameter.
@@ -4049,7 +4049,7 @@ def nba_stats_leaguedashteamstats(
     """GET /stats/leaguedashteamstats
 
     Endpoint: ``GET https://stats.nba.com/stats/leaguedashteamstats``
-    Example URL: https://stats.nba.com/stats/leaguedashteamstats?LeagueID=00
+    Example URL: https://stats.nba.com/stats/leaguedashteamstats?Conference=&DateFrom=&DateTo=&Division=&GameScope=&GameSegment=&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&StarterBench=&TeamID=0&TwoWay=&VsConference=&VsDivision=
 
     Args:
         conference_nullable: Conference query parameter.
@@ -4234,7 +4234,7 @@ def nba_stats_leaguegamefinder(
     """GET /stats/leaguegamefinder
 
     Endpoint: ``GET https://stats.nba.com/stats/leaguegamefinder``
-    Example URL: https://stats.nba.com/stats/leaguegamefinder?LeagueID=00
+    Example URL: https://stats.nba.com/stats/leaguegamefinder?Conference=&DateFrom=&DateTo=&Division=&DraftNumber=&DraftRound=&DraftTeamID=0&DraftYear=&EqAST=&EqBLK=&EqDD=&EqDREB=&EqFG3A=&EqFG3M=&EqFG3_PCT=&EqFGA=&EqFGM=&EqFG_PCT=&EqFTA=&EqFTM=&EqFT_PCT=&EqMINUTES=&EqOREB=&EqPF=&EqPTS=&EqREB=&EqSTL=&EqTD=&EqTOV=&GameID=&GtAST=&GtBLK=&GtDD=&GtDREB=&GtFG3A=&GtFG3M=&GtFG3_PCT=&GtFGA=&GtFGM=&GtFG_PCT=&GtFTA=&GtFTM=&GtFT_PCT=&GtMINUTES=&GtOREB=&GtPF=&GtPTS=&GtREB=&GtSTL=&GtTD=&GtTOV=&LeagueID=00&Location=&LtAST=&LtBLK=&LtDD=&LtDREB=&LtFG3A=&LtFG3M=&LtFG3_PCT=&LtFGA=&LtFGM=&LtFG_PCT=&LtFTA=&LtFTM=&LtFT_PCT=&LtMINUTES=&LtOREB=&LtPF=&LtPTS=&LtREB=&LtSTL=&LtTD=&LtTOV=&Outcome=&PORound=&PlayerID=&PlayerOrTeam=T&RookieYear=&SeasonSegment=&SeasonType=Regular+Season&StarterBench=&TeamID=0&VsConference=&VsDivision=&VsTeamID=0&YearsExperience=
 
     Args:
         conference_nullable: Conference query parameter.
@@ -4456,7 +4456,7 @@ def nba_stats_leaguegamelog(
     """GET /stats/leaguegamelog
 
     Endpoint: ``GET https://stats.nba.com/stats/leaguegamelog``
-    Example URL: https://stats.nba.com/stats/leaguegamelog?LeagueID=00
+    Example URL: https://stats.nba.com/stats/leaguegamelog?Counter=0&DateFrom=&DateTo=&Direction=ASC&LeagueID=00&PlayerOrTeam=T&SeasonType=Regular+Season&Sorter=DATE
 
     Args:
         counter: Counter query parameter.
@@ -4536,7 +4536,7 @@ def nba_stats_leaguehustlestatsplayer(
     """GET /stats/leaguehustlestatsplayer
 
     Endpoint: ``GET https://stats.nba.com/stats/leaguehustlestatsplayer``
-    Example URL: https://stats.nba.com/stats/leaguehustlestatsplayer?LeagueID=00
+    Example URL: https://stats.nba.com/stats/leaguehustlestatsplayer?College=&Conference=&Country=&DateFrom=&DateTo=&Division=&DraftPick=&DraftYear=&Height=&LeagueID=00&Location=&Month=0&OpponentTeamID=0&Outcome=&PORound=&PerMode=Totals&PlayerExperience=&PlayerPosition=&SeasonSegment=&SeasonType=Regular+Season&TeamID=0&VsConference=&VsDivision=&Weight=
 
     Args:
         college_nullable: College query parameter.
@@ -4648,7 +4648,7 @@ def nba_stats_leaguehustlestatsteam(
     """GET /stats/leaguehustlestatsteam
 
     Endpoint: ``GET https://stats.nba.com/stats/leaguehustlestatsteam``
-    Example URL: https://stats.nba.com/stats/leaguehustlestatsteam?LeagueID=00
+    Example URL: https://stats.nba.com/stats/leaguehustlestatsteam?College=&Conference=&Country=&DateFrom=&DateTo=&Division=&DraftPick=&DraftYear=&Height=&LeagueID=00&Location=&Month=0&OpponentTeamID=0&Outcome=&PORound=&PerMode=Totals&PlayerExperience=&PlayerPosition=&SeasonSegment=&SeasonType=Regular+Season&TeamID=0&VsConference=&VsDivision=&Weight=
 
     Args:
         college_nullable: College query parameter.
@@ -4742,7 +4742,7 @@ def nba_stats_leagueleaders(
     """GET /stats/leagueleaders
 
     Endpoint: ``GET https://stats.nba.com/stats/leagueleaders``
-    Example URL: https://stats.nba.com/stats/leagueleaders?LeagueID=00
+    Example URL: https://stats.nba.com/stats/leagueleaders?ActiveFlag=&LeagueID=00&PerMode=Totals&Scope=S&SeasonType=Regular+Season&StatCategory=PTS
 
     Args:
         active_flag_nullable: ActiveFlag query parameter.
@@ -4820,7 +4820,7 @@ def nba_stats_leaguelineupviz(
     """GET /stats/leaguelineupviz
 
     Endpoint: ``GET https://stats.nba.com/stats/leaguelineupviz``
-    Example URL: https://stats.nba.com/stats/leaguelineupviz?LeagueID=00
+    Example URL: https://stats.nba.com/stats/leaguelineupviz?Conference=&DateFrom=&DateTo=&Division=&GameSegment=&GroupQuantity=5&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&MinutesMin=10&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&TeamID=0&VsConference=&VsDivision=
 
     Args:
         conference_nullable: Conference query parameter.
@@ -4932,7 +4932,7 @@ def nba_stats_leagueplayerondetails(
     """GET /stats/leagueplayerondetails
 
     Endpoint: ``GET https://stats.nba.com/stats/leagueplayerondetails``
-    Example URL: https://stats.nba.com/stats/leagueplayerondetails?LeagueID=00
+    Example URL: https://stats.nba.com/stats/leagueplayerondetails?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&SeasonSegment=&SeasonType=Regular+Season&TeamID=1611661313&VsConference=&VsDivision=
 
     Args:
         date_from_nullable: DateFrom query parameter.
@@ -5019,7 +5019,7 @@ def nba_stats_leagueseasonmatchups(
     """GET /stats/leagueseasonmatchups
 
     Endpoint: ``GET https://stats.nba.com/stats/leagueseasonmatchups``
-    Example URL: https://stats.nba.com/stats/leagueseasonmatchups?LeagueID=00
+    Example URL: https://stats.nba.com/stats/leagueseasonmatchups?DefPlayerID=&DefTeamID=0&LeagueID=00&OffPlayerID=&OffTeamID=0&PerMode=Totals&SeasonType=Regular+Season
 
     Args:
         def_player_id_nullable: DefPlayerID query parameter.
@@ -5076,7 +5076,7 @@ def nba_stats_leaguestandings(
     """GET /stats/leaguestandings
 
     Endpoint: ``GET https://stats.nba.com/stats/leaguestandings``
-    Example URL: https://stats.nba.com/stats/leaguestandings?LeagueID=00
+    Example URL: https://stats.nba.com/stats/leaguestandings?LeagueID=00&SeasonType=Regular+Season&SeasonYear=
 
     Args:
         league_id: LeagueID query parameter.
@@ -5125,7 +5125,7 @@ def nba_stats_leaguestandingsv3(
     """GET /stats/leaguestandingsv3
 
     Endpoint: ``GET https://stats.nba.com/stats/leaguestandingsv3``
-    Example URL: https://stats.nba.com/stats/leaguestandingsv3?LeagueID=00
+    Example URL: https://stats.nba.com/stats/leaguestandingsv3?LeagueID=00&SeasonType=Regular+Season&SeasonYear=
 
     Args:
         league_id: LeagueID query parameter.
@@ -5178,7 +5178,7 @@ def nba_stats_matchupsrollup(
     """GET /stats/matchupsrollup
 
     Endpoint: ``GET https://stats.nba.com/stats/matchupsrollup``
-    Example URL: https://stats.nba.com/stats/matchupsrollup?LeagueID=00
+    Example URL: https://stats.nba.com/stats/matchupsrollup?DefPlayerID=&DefTeamID=0&LeagueID=00&OffPlayerID=&OffTeamID=0&PerMode=Totals&SeasonType=Regular+Season
 
     Args:
         def_player_id_nullable: DefPlayerID query parameter.
@@ -5234,7 +5234,7 @@ def nba_stats_playbyplayv3(
     """GET /stats/playbyplayv3
 
     Endpoint: ``GET https://stats.nba.com/stats/playbyplayv3``
-    Example URL: https://stats.nba.com/stats/playbyplayv3
+    Example URL: https://stats.nba.com/stats/playbyplayv3?EndPeriod=0&GameID=1022200034&StartPeriod=0
 
     Args:
         end_period: EndPeriod query parameter.
@@ -5278,7 +5278,7 @@ def nba_stats_playerawards(
     """GET /stats/playerawards
 
     Endpoint: ``GET https://stats.nba.com/stats/playerawards``
-    Example URL: https://stats.nba.com/stats/playerawards
+    Example URL: https://stats.nba.com/stats/playerawards?PlayerID=1628932
 
     Args:
         player_id: PlayerID query parameter.
@@ -5321,7 +5321,7 @@ def nba_stats_playercareerbycollegerollup(
     """GET /stats/playercareerbycollegerollup
 
     Endpoint: ``GET https://stats.nba.com/stats/playercareerbycollegerollup``
-    Example URL: https://stats.nba.com/stats/playercareerbycollegerollup?LeagueID=00
+    Example URL: https://stats.nba.com/stats/playercareerbycollegerollup?LeagueID=00&PerMode=Totals&SeasonType=Regular+Season
 
     Args:
         league_id: LeagueID query parameter.
@@ -5370,7 +5370,7 @@ def nba_stats_playercareerstats(
     """GET /stats/playercareerstats
 
     Endpoint: ``GET https://stats.nba.com/stats/playercareerstats``
-    Example URL: https://stats.nba.com/stats/playercareerstats?LeagueID=00
+    Example URL: https://stats.nba.com/stats/playercareerstats?LeagueID=00&PerMode=Totals&PlayerID=1628932
 
     Args:
         league_id: LeagueID query parameter.
@@ -5439,7 +5439,7 @@ def nba_stats_playercompare(
     """GET /stats/playercompare
 
     Endpoint: ``GET https://stats.nba.com/stats/playercompare``
-    Example URL: https://stats.nba.com/stats/playercompare?LeagueID=00
+    Example URL: https://stats.nba.com/stats/playercompare?Conference=&DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&Season=2020-21&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&VsConference=&VsDivision=
 
     Args:
         conference_nullable: Conference query parameter.
@@ -5550,7 +5550,7 @@ def nba_stats_playerdashboardbyclutch(
     """GET /stats/playerdashboardbyclutch
 
     Endpoint: ``GET https://stats.nba.com/stats/playerdashboardbyclutch``
-    Example URL: https://stats.nba.com/stats/playerdashboardbyclutch?LeagueID=00
+    Example URL: https://stats.nba.com/stats/playerdashboardbyclutch?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlayerID=1628932&PlusMinus=N&Rank=N&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&VsConference=&VsDivision=
 
     Args:
         date_from_nullable: DateFrom query parameter.
@@ -5657,7 +5657,7 @@ def nba_stats_playerdashboardbygamesplits(
     """GET /stats/playerdashboardbygamesplits
 
     Endpoint: ``GET https://stats.nba.com/stats/playerdashboardbygamesplits``
-    Example URL: https://stats.nba.com/stats/playerdashboardbygamesplits?LeagueID=00
+    Example URL: https://stats.nba.com/stats/playerdashboardbygamesplits?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlayerID=1628932&PlusMinus=N&Rank=N&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&VsConference=&VsDivision=
 
     Args:
         date_from_nullable: DateFrom query parameter.
@@ -5764,7 +5764,7 @@ def nba_stats_playerdashboardbygeneralsplits(
     """GET /stats/playerdashboardbygeneralsplits
 
     Endpoint: ``GET https://stats.nba.com/stats/playerdashboardbygeneralsplits``
-    Example URL: https://stats.nba.com/stats/playerdashboardbygeneralsplits?LeagueID=00
+    Example URL: https://stats.nba.com/stats/playerdashboardbygeneralsplits?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlayerID=1628932&PlusMinus=N&Rank=N&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&VsConference=&VsDivision=
 
     Args:
         date_from_nullable: DateFrom query parameter.
@@ -5871,7 +5871,7 @@ def nba_stats_playerdashboardbylastngames(
     """GET /stats/playerdashboardbylastngames
 
     Endpoint: ``GET https://stats.nba.com/stats/playerdashboardbylastngames``
-    Example URL: https://stats.nba.com/stats/playerdashboardbylastngames?LeagueID=00
+    Example URL: https://stats.nba.com/stats/playerdashboardbylastngames?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlayerID=1628932&PlusMinus=N&Rank=N&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&VsConference=&VsDivision=
 
     Args:
         date_from_nullable: DateFrom query parameter.
@@ -5978,7 +5978,7 @@ def nba_stats_playerdashboardbyopponent(
     """GET /stats/playerdashboardbyopponent
 
     Endpoint: ``GET https://stats.nba.com/stats/playerdashboardbyopponent``
-    Example URL: https://stats.nba.com/stats/playerdashboardbyopponent?LeagueID=00
+    Example URL: https://stats.nba.com/stats/playerdashboardbyopponent?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlayerID=1628932&PlusMinus=N&Rank=N&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&VsConference=&VsDivision=
 
     Args:
         date_from: DateFrom query parameter.
@@ -6085,7 +6085,7 @@ def nba_stats_playerdashboardbyshootingsplits(
     """GET /stats/playerdashboardbyshootingsplits
 
     Endpoint: ``GET https://stats.nba.com/stats/playerdashboardbyshootingsplits``
-    Example URL: https://stats.nba.com/stats/playerdashboardbyshootingsplits?LeagueID=00
+    Example URL: https://stats.nba.com/stats/playerdashboardbyshootingsplits?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlayerID=1628932&PlusMinus=N&Rank=N&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&VsConference=&VsDivision=
 
     Args:
         date_from_nullable: DateFrom query parameter.
@@ -6192,7 +6192,7 @@ def nba_stats_playerdashboardbyteamperformance(
     """GET /stats/playerdashboardbyteamperformance
 
     Endpoint: ``GET https://stats.nba.com/stats/playerdashboardbyteamperformance``
-    Example URL: https://stats.nba.com/stats/playerdashboardbyteamperformance?LeagueID=00
+    Example URL: https://stats.nba.com/stats/playerdashboardbyteamperformance?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlayerID=1628932&PlusMinus=N&Rank=N&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&VsConference=&VsDivision=
 
     Args:
         date_from_nullable: DateFrom query parameter.
@@ -6299,7 +6299,7 @@ def nba_stats_playerdashboardbyyearoveryear(
     """GET /stats/playerdashboardbyyearoveryear
 
     Endpoint: ``GET https://stats.nba.com/stats/playerdashboardbyyearoveryear``
-    Example URL: https://stats.nba.com/stats/playerdashboardbyyearoveryear?LeagueID=00
+    Example URL: https://stats.nba.com/stats/playerdashboardbyyearoveryear?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlayerID=1628932&PlusMinus=N&Rank=N&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&VsConference=&VsDivision=
 
     Args:
         date_from_nullable: DateFrom query parameter.
@@ -6399,7 +6399,7 @@ def nba_stats_playerdashptpass(
     """GET /stats/playerdashptpass
 
     Endpoint: ``GET https://stats.nba.com/stats/playerdashptpass``
-    Example URL: https://stats.nba.com/stats/playerdashptpass?LeagueID=00
+    Example URL: https://stats.nba.com/stats/playerdashptpass?DateFrom=&DateTo=&LastNGames=0&LeagueID=00&Location=&Month=0&OpponentTeamID=0&Outcome=&PerMode=Totals&PlayerID=2544&SeasonSegment=&SeasonType=Regular+Season&TeamID=0&VsConference=&VsDivision=
 
     Args:
         date_from_nullable: DateFrom query parameter.
@@ -6487,7 +6487,7 @@ def nba_stats_playerdashptreb(
     """GET /stats/playerdashptreb
 
     Endpoint: ``GET https://stats.nba.com/stats/playerdashptreb``
-    Example URL: https://stats.nba.com/stats/playerdashptreb?LeagueID=00
+    Example URL: https://stats.nba.com/stats/playerdashptreb?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=00&Location=&Month=0&OpponentTeamID=0&Outcome=&PerMode=Totals&Period=0&PlayerID=2544&SeasonSegment=&SeasonType=Regular+Season&TeamID=0&VsConference=&VsDivision=
 
     Args:
         date_from_nullable: DateFrom query parameter.
@@ -6579,7 +6579,7 @@ def nba_stats_playerdashptshotdefend(
     """GET /stats/playerdashptshotdefend
 
     Endpoint: ``GET https://stats.nba.com/stats/playerdashptshotdefend``
-    Example URL: https://stats.nba.com/stats/playerdashptshotdefend?LeagueID=00
+    Example URL: https://stats.nba.com/stats/playerdashptshotdefend?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=00&Location=&Month=0&OpponentTeamID=0&Outcome=&PerMode=Totals&Period=0&PlayerID=2544&SeasonSegment=&SeasonType=Regular+Season&TeamID=0&VsConference=&VsDivision=
 
     Args:
         date_from_nullable: DateFrom query parameter.
@@ -6670,7 +6670,7 @@ def nba_stats_playerdashptshots(
     """GET /stats/playerdashptshots
 
     Endpoint: ``GET https://stats.nba.com/stats/playerdashptshots``
-    Example URL: https://stats.nba.com/stats/playerdashptshots?LeagueID=00
+    Example URL: https://stats.nba.com/stats/playerdashptshots?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=00&Location=&Month=0&OpponentTeamID=0&Outcome=&PerMode=Totals&Period=0&PlayerID=2544&SeasonSegment=&SeasonType=Regular+Season&TeamID=0&VsConference=&VsDivision=
 
     Args:
         date_from_nullable: DateFrom query parameter.
@@ -6747,7 +6747,7 @@ def nba_stats_playerestimatedmetrics(
     """GET /stats/playerestimatedmetrics
 
     Endpoint: ``GET https://stats.nba.com/stats/playerestimatedmetrics``
-    Example URL: https://stats.nba.com/stats/playerestimatedmetrics?LeagueID=00
+    Example URL: https://stats.nba.com/stats/playerestimatedmetrics?LeagueID=00&SeasonType=Regular+Season
 
     Args:
         league_id: LeagueID query parameter.
@@ -6799,7 +6799,7 @@ def nba_stats_playerfantasyprofile(
     """GET /stats/playerfantasyprofile
 
     Endpoint: ``GET https://stats.nba.com/stats/playerfantasyprofile``
-    Example URL: https://stats.nba.com/stats/playerfantasyprofile?LeagueID=00
+    Example URL: https://stats.nba.com/stats/playerfantasyprofile?LeagueID=00&MeasureType=Base&PaceAdjust=N&PerMode=Totals&PlayerID=1628932&PlusMinus=N&Rank=N&SeasonType=Regular+Season
 
     Args:
         league_id: LeagueID query parameter.
@@ -6859,7 +6859,7 @@ def nba_stats_playerfantasyprofilebargraph(
     """GET /stats/playerfantasyprofilebargraph
 
     Endpoint: ``GET https://stats.nba.com/stats/playerfantasyprofilebargraph``
-    Example URL: https://stats.nba.com/stats/playerfantasyprofilebargraph?LeagueID=00
+    Example URL: https://stats.nba.com/stats/playerfantasyprofilebargraph?LeagueID=00&PlayerID=1628932&SeasonType=Regular+Season
 
     Args:
         league_id: LeagueID query parameter.
@@ -6911,7 +6911,7 @@ def nba_stats_playergamelog(
     """GET /stats/playergamelog
 
     Endpoint: ``GET https://stats.nba.com/stats/playergamelog``
-    Example URL: https://stats.nba.com/stats/playergamelog?LeagueID=00
+    Example URL: https://stats.nba.com/stats/playergamelog?DateFrom=&DateTo=&LeagueID=00&PlayerID=1628932&SeasonType=Regular+Season
 
     Args:
         date_from_nullable: DateFrom query parameter.
@@ -6981,7 +6981,7 @@ def nba_stats_playergamelogs(
     """GET /stats/playergamelogs
 
     Endpoint: ``GET https://stats.nba.com/stats/playergamelogs``
-    Example URL: https://stats.nba.com/stats/playergamelogs?LeagueID=00
+    Example URL: https://stats.nba.com/stats/playergamelogs?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&Outcome=&PORound=&PerMode=Totals&Period=0&PlayerID=&SeasonSegment=&SeasonType=Regular+Season&TeamID=0&VsConference=&VsDivision=
 
     Args:
         date_from_nullable: DateFrom query parameter.
@@ -7149,7 +7149,7 @@ def nba_stats_playergamestreakfinder(
     """GET /stats/playergamestreakfinder
 
     Endpoint: ``GET https://stats.nba.com/stats/playergamestreakfinder``
-    Example URL: https://stats.nba.com/stats/playergamestreakfinder?LeagueID=00
+    Example URL: https://stats.nba.com/stats/playergamestreakfinder?ActiveStreaksOnly=&Conference=&DateFrom=&DateTo=&Division=&DraftNumber=&DraftRound=&DraftTeamID=0&DraftYear=&EqAST=&EqBLK=&EqDD=&EqDREB=&EqFG3A=&EqFG3M=&EqFG3_PCT=&EqFGA=&EqFGM=&EqFG_PCT=&EqFTA=&EqFTM=&EqFT_PCT=&EqMINUTES=&EqOREB=&EqPF=&EqPTS=&EqREB=&EqSTL=&EqTD=&EqTOV=&GameID=&GtAST=&GtBLK=&GtDD=&GtDREB=&GtFG3A=&GtFG3M=&GtFG3_PCT=&GtFGA=&GtFGM=&GtFG_PCT=&GtFTA=&GtFTM=&GtFT_PCT=&GtMINUTES=&GtOREB=&GtPF=&GtPTS=&GtREB=&GtSTL=&GtTD=&GtTOV=&LeagueID=00&Location=&LtAST=&LtBLK=&LtDD=&LtDREB=&LtFG3A=&LtFG3M=&LtFG3_PCT=&LtFGA=&LtFGM=&LtFG_PCT=&LtFTA=&LtFTM=&LtFT_PCT=&LtMINUTES=&LtOREB=&LtPF=&LtPTS=&LtREB=&LtSTL=&LtTD=&LtTOV=&MinGames=&Outcome=&PORound=&PlayerID=&RookieYear=&SeasonSegment=&SeasonType=Regular+Season&StarterBench=&TeamID=0&VsConference=&VsDivision=&VsTeamID=0&YearsExperience=
 
     Args:
         active_streaks_only_nullable: ActiveStreaksOnly query parameter.
@@ -7377,7 +7377,7 @@ def nba_stats_playerindex(
     """GET /stats/playerindex
 
     Endpoint: ``GET https://stats.nba.com/stats/playerindex``
-    Example URL: https://stats.nba.com/stats/playerindex?LeagueID=00
+    Example URL: https://stats.nba.com/stats/playerindex?College=&Country=&DraftPick=&DraftRound=&DraftYear=&Height=&Historical=1&LeagueID=00&TeamID=0&Weight=
 
     Args:
         active_nullable: Active query parameter.
@@ -7443,7 +7443,7 @@ def nba_stats_playerprofilev2(
     """GET /stats/playerprofilev2
 
     Endpoint: ``GET https://stats.nba.com/stats/playerprofilev2``
-    Example URL: https://stats.nba.com/stats/playerprofilev2?LeagueID=00
+    Example URL: https://stats.nba.com/stats/playerprofilev2?LeagueID=00&PerMode=Totals&PlayerID=1628932
 
     Args:
         league_id: LeagueID query parameter.
@@ -7509,7 +7509,7 @@ def nba_stats_playervsplayer(
     """GET /stats/playervsplayer
 
     Endpoint: ``GET https://stats.nba.com/stats/playervsplayer``
-    Example URL: https://stats.nba.com/stats/playervsplayer?LeagueID=00
+    Example URL: https://stats.nba.com/stats/playervsplayer?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PaceAdjust=N&PerMode=Totals&Period=0&PlayerID=1628932&PlusMinus=N&Rank=N&SeasonSegment=&SeasonType=Regular+Season&VsConference=&VsDivision=&VsPlayerID=1629488
 
     Args:
         date_from_nullable: DateFrom query parameter.
@@ -7593,7 +7593,7 @@ def nba_stats_playoffpicture(
     """GET /stats/playoffpicture
 
     Endpoint: ``GET https://stats.nba.com/stats/playoffpicture``
-    Example URL: https://stats.nba.com/stats/playoffpicture?LeagueID=00
+    Example URL: https://stats.nba.com/stats/playoffpicture?LeagueID=00&SeasonID=22022
 
     Args:
         league_id: LeagueID query parameter.
@@ -7724,7 +7724,7 @@ def nba_stats_scoreboardv2(
     """GET /stats/scoreboardv2
 
     Endpoint: ``GET https://stats.nba.com/stats/scoreboardv2``
-    Example URL: https://stats.nba.com/stats/scoreboardv2?LeagueID=00
+    Example URL: https://stats.nba.com/stats/scoreboardv2?DayOffset=0&GameDate=2022-07-20&LeagueID=00
 
     Args:
         day_offset: DayOffset query parameter.
@@ -7770,7 +7770,7 @@ def nba_stats_scoreboardv3(
     """GET /stats/scoreboardv3
 
     Endpoint: ``GET https://stats.nba.com/stats/scoreboardv3``
-    Example URL: https://stats.nba.com/stats/scoreboardv3?LeagueID=00
+    Example URL: https://stats.nba.com/stats/scoreboardv3?GameDate=2022-06-26&LeagueID=00
 
     Args:
         game_date: GameDate query parameter.
@@ -7842,7 +7842,7 @@ def nba_stats_shotchartdetail(
     """GET /stats/shotchartdetail
 
     Endpoint: ``GET https://stats.nba.com/stats/shotchartdetail``
-    Example URL: https://stats.nba.com/stats/shotchartdetail?LeagueID=00
+    Example URL: https://stats.nba.com/stats/shotchartdetail?ContextMeasure=FGA&DateFrom=&DateTo=&GameID=&GameSegment=&LastNGames=0&LeagueID=00&Location=&Month=0&OpponentTeamID=0&Outcome=&Period=0&PlayerID=1628932&PlayerPosition=&RookieYear=&SeasonSegment=&SeasonType=Regular+Season&TeamID=0&VsConference=&VsDivision=
 
     Args:
         ahead_behind_nullable: AheadBehind query parameter.
@@ -8005,7 +8005,7 @@ def nba_stats_shotchartlineupdetail(
     """GET /stats/shotchartlineupdetail
 
     Endpoint: ``GET https://stats.nba.com/stats/shotchartlineupdetail``
-    Example URL: https://stats.nba.com/stats/shotchartlineupdetail?LeagueID=00
+    Example URL: https://stats.nba.com/stats/shotchartlineupdetail?ContextFilter=&ContextMeasure=FGA&DateFrom=&DateTo=&GROUP_ID=-1628899-1629481-1630096-1631019-1642784-&GameID=&GameSegment=&LastNGames=0&LeagueID=00&Location=&Month=0&OpponentTeamID=0&Outcome=&Period=0&SeasonSegment=&SeasonType=Regular+Season&TeamID=0&VsConference=&VsDivision=
 
     Args:
         context_filter_nullable: ContextFilter query parameter.
@@ -8090,7 +8090,7 @@ def nba_stats_synergyplaytypes(
     """GET /stats/synergyplaytypes
 
     Endpoint: ``GET https://stats.nba.com/stats/synergyplaytypes``
-    Example URL: https://stats.nba.com/stats/synergyplaytypes?LeagueID=00
+    Example URL: https://stats.nba.com/stats/synergyplaytypes?LeagueID=00&PerMode=PerGame&PlayType=Isolation&PlayerOrTeam=P&SeasonType=Regular+Season&TypeGrouping=Offensive
 
     Args:
         league_id: LeagueID query parameter.
@@ -8164,7 +8164,7 @@ def nba_stats_teamdashboardbyclutch(
     """GET /stats/teamdashboardbyclutch
 
     Endpoint: ``GET https://stats.nba.com/stats/teamdashboardbyclutch``
-    Example URL: https://stats.nba.com/stats/teamdashboardbyclutch?LeagueID=00
+    Example URL: https://stats.nba.com/stats/teamdashboardbyclutch?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&TeamID=1611661328&VsConference=&VsDivision=
 
     Args:
         date_from: DateFrom query parameter.
@@ -8271,7 +8271,7 @@ def nba_stats_teamdashboardbygamesplits(
     """GET /stats/teamdashboardbygamesplits
 
     Endpoint: ``GET https://stats.nba.com/stats/teamdashboardbygamesplits``
-    Example URL: https://stats.nba.com/stats/teamdashboardbygamesplits?LeagueID=00
+    Example URL: https://stats.nba.com/stats/teamdashboardbygamesplits?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&TeamID=1611661328&VsConference=&VsDivision=
 
     Args:
         date_from: DateFrom query parameter.
@@ -8378,7 +8378,7 @@ def nba_stats_teamdashboardbygeneralsplits(
     """GET /stats/teamdashboardbygeneralsplits
 
     Endpoint: ``GET https://stats.nba.com/stats/teamdashboardbygeneralsplits``
-    Example URL: https://stats.nba.com/stats/teamdashboardbygeneralsplits?LeagueID=00
+    Example URL: https://stats.nba.com/stats/teamdashboardbygeneralsplits?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&TeamID=1611661328&VsConference=&VsDivision=
 
     Args:
         date_from_nullable: DateFrom query parameter.
@@ -8485,7 +8485,7 @@ def nba_stats_teamdashboardbylastngames(
     """GET /stats/teamdashboardbylastngames
 
     Endpoint: ``GET https://stats.nba.com/stats/teamdashboardbylastngames``
-    Example URL: https://stats.nba.com/stats/teamdashboardbylastngames?LeagueID=00
+    Example URL: https://stats.nba.com/stats/teamdashboardbylastngames?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&TeamID=1611661328&VsConference=&VsDivision=
 
     Args:
         date_from: DateFrom query parameter.
@@ -8592,7 +8592,7 @@ def nba_stats_teamdashboardbyopponent(
     """GET /stats/teamdashboardbyopponent
 
     Endpoint: ``GET https://stats.nba.com/stats/teamdashboardbyopponent``
-    Example URL: https://stats.nba.com/stats/teamdashboardbyopponent?LeagueID=00
+    Example URL: https://stats.nba.com/stats/teamdashboardbyopponent?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&TeamID=1611661328&VsConference=&VsDivision=
 
     Args:
         date_from: DateFrom query parameter.
@@ -8699,7 +8699,7 @@ def nba_stats_teamdashboardbyshootingsplits(
     """GET /stats/teamdashboardbyshootingsplits
 
     Endpoint: ``GET https://stats.nba.com/stats/teamdashboardbyshootingsplits``
-    Example URL: https://stats.nba.com/stats/teamdashboardbyshootingsplits?LeagueID=00
+    Example URL: https://stats.nba.com/stats/teamdashboardbyshootingsplits?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&TeamID=1611661328&VsConference=&VsDivision=
 
     Args:
         date_from_nullable: DateFrom query parameter.
@@ -8806,7 +8806,7 @@ def nba_stats_teamdashboardbyteamperformance(
     """GET /stats/teamdashboardbyteamperformance
 
     Endpoint: ``GET https://stats.nba.com/stats/teamdashboardbyteamperformance``
-    Example URL: https://stats.nba.com/stats/teamdashboardbyteamperformance?LeagueID=00
+    Example URL: https://stats.nba.com/stats/teamdashboardbyteamperformance?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&TeamID=1611661328&VsConference=&VsDivision=
 
     Args:
         date_from: DateFrom query parameter.
@@ -8913,7 +8913,7 @@ def nba_stats_teamdashboardbyyearoveryear(
     """GET /stats/teamdashboardbyyearoveryear
 
     Endpoint: ``GET https://stats.nba.com/stats/teamdashboardbyyearoveryear``
-    Example URL: https://stats.nba.com/stats/teamdashboardbyyearoveryear?LeagueID=00
+    Example URL: https://stats.nba.com/stats/teamdashboardbyyearoveryear?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&TeamID=1611661328&VsConference=&VsDivision=
 
     Args:
         date_from: DateFrom query parameter.
@@ -9022,7 +9022,7 @@ def nba_stats_teamdashlineups(
     """GET /stats/teamdashlineups
 
     Endpoint: ``GET https://stats.nba.com/stats/teamdashlineups``
-    Example URL: https://stats.nba.com/stats/teamdashlineups?LeagueID=00
+    Example URL: https://stats.nba.com/stats/teamdashlineups?DateFrom=&DateTo=&GameID=&GameSegment=&GroupQuantity=5&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&TeamID=1611661328&VsConference=&VsDivision=
 
     Args:
         date_from_nullable: DateFrom query parameter.
@@ -9125,7 +9125,7 @@ def nba_stats_teamdashptpass(
     """GET /stats/teamdashptpass
 
     Endpoint: ``GET https://stats.nba.com/stats/teamdashptpass``
-    Example URL: https://stats.nba.com/stats/teamdashptpass?LeagueID=00
+    Example URL: https://stats.nba.com/stats/teamdashptpass?DateFrom=&DateTo=&LastNGames=0&LeagueID=00&Location=&Month=0&OpponentTeamID=0&Outcome=&PerMode=Totals&SeasonSegment=&SeasonType=Regular+Season&TeamID=1610612749&VsConference=&VsDivision=
 
     Args:
         date_from_nullable: DateFrom query parameter.
@@ -9210,7 +9210,7 @@ def nba_stats_teamdashptreb(
     """GET /stats/teamdashptreb
 
     Endpoint: ``GET https://stats.nba.com/stats/teamdashptreb``
-    Example URL: https://stats.nba.com/stats/teamdashptreb?LeagueID=00
+    Example URL: https://stats.nba.com/stats/teamdashptreb?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=00&Location=&Month=0&OpponentTeamID=0&Outcome=&PerMode=Totals&Period=0&SeasonSegment=&SeasonType=Regular+Season&TeamID=1610612749&VsConference=&VsDivision=
 
     Args:
         date_from_nullable: DateFrom query parameter.
@@ -9299,7 +9299,7 @@ def nba_stats_teamdashptshots(
     """GET /stats/teamdashptshots
 
     Endpoint: ``GET https://stats.nba.com/stats/teamdashptshots``
-    Example URL: https://stats.nba.com/stats/teamdashptshots?LeagueID=00
+    Example URL: https://stats.nba.com/stats/teamdashptshots?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=00&Location=&Month=0&OpponentTeamID=0&Outcome=&PerMode=Totals&Period=0&SeasonSegment=&SeasonType=Regular+Season&TeamID=1610612749&VsConference=&VsDivision=
 
     Args:
         date_from_nullable: DateFrom query parameter.
@@ -9372,7 +9372,7 @@ def nba_stats_teamdetails(
     """GET /stats/teamdetails
 
     Endpoint: ``GET https://stats.nba.com/stats/teamdetails``
-    Example URL: https://stats.nba.com/stats/teamdetails
+    Example URL: https://stats.nba.com/stats/teamdetails?TeamID=1611661328
 
     Args:
         team_id: TeamID query parameter.
@@ -9415,7 +9415,7 @@ def nba_stats_teamestimatedmetrics(
     """GET /stats/teamestimatedmetrics
 
     Endpoint: ``GET https://stats.nba.com/stats/teamestimatedmetrics``
-    Example URL: https://stats.nba.com/stats/teamestimatedmetrics?LeagueID=00
+    Example URL: https://stats.nba.com/stats/teamestimatedmetrics?LeagueID=00&SeasonType=Regular+Season
 
     Args:
         league_id: LeagueID query parameter.
@@ -9464,7 +9464,7 @@ def nba_stats_teamgamelog(
     """GET /stats/teamgamelog
 
     Endpoint: ``GET https://stats.nba.com/stats/teamgamelog``
-    Example URL: https://stats.nba.com/stats/teamgamelog?LeagueID=00
+    Example URL: https://stats.nba.com/stats/teamgamelog?DateFrom=&DateTo=&LeagueID=00&SeasonType=Regular+Season&TeamID=1611661328
 
     Args:
         date_from_nullable: DateFrom query parameter.
@@ -9534,7 +9534,7 @@ def nba_stats_teamgamelogs(
     """GET /stats/teamgamelogs
 
     Endpoint: ``GET https://stats.nba.com/stats/teamgamelogs``
-    Example URL: https://stats.nba.com/stats/teamgamelogs?LeagueID=00
+    Example URL: https://stats.nba.com/stats/teamgamelogs?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&OppTeamID=0&Outcome=&PORound=&PerMode=Totals&Period=0&PlayerID=&SeasonSegment=&SeasonType=Regular+Season&TeamID=0&VsConference=&VsDivision=
 
     Args:
         date_from_nullable: DateFrom query parameter.
@@ -9617,7 +9617,7 @@ def nba_stats_teaminfocommon(
     """GET /stats/teaminfocommon
 
     Endpoint: ``GET https://stats.nba.com/stats/teaminfocommon``
-    Example URL: https://stats.nba.com/stats/teaminfocommon?LeagueID=00
+    Example URL: https://stats.nba.com/stats/teaminfocommon?LeagueID=00&SeasonType=Regular+Season&TeamID=1611661328
 
     Args:
         league_id: LeagueID query parameter.
@@ -9686,7 +9686,7 @@ def nba_stats_teamplayerdashboard(
     """GET /stats/teamplayerdashboard
 
     Endpoint: ``GET https://stats.nba.com/stats/teamplayerdashboard``
-    Example URL: https://stats.nba.com/stats/teamplayerdashboard?LeagueID=00
+    Example URL: https://stats.nba.com/stats/teamplayerdashboard?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&TeamID=1611661328&VsConference=&VsDivision=
 
     Args:
         date_from_nullable: DateFrom query parameter.
@@ -9791,7 +9791,7 @@ def nba_stats_teamplayeronoffdetails(
     """GET /stats/teamplayeronoffdetails
 
     Endpoint: ``GET https://stats.nba.com/stats/teamplayeronoffdetails``
-    Example URL: https://stats.nba.com/stats/teamplayeronoffdetails?LeagueID=00
+    Example URL: https://stats.nba.com/stats/teamplayeronoffdetails?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&SeasonSegment=&SeasonType=Regular+Season&TeamID=1611661328&VsConference=&VsDivision=
 
     Args:
         date_from_nullable: DateFrom query parameter.
@@ -9892,7 +9892,7 @@ def nba_stats_teamplayeronoffsummary(
     """GET /stats/teamplayeronoffsummary
 
     Endpoint: ``GET https://stats.nba.com/stats/teamplayeronoffsummary``
-    Example URL: https://stats.nba.com/stats/teamplayeronoffsummary?LeagueID=00
+    Example URL: https://stats.nba.com/stats/teamplayeronoffsummary?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&SeasonSegment=&SeasonType=Regular+Season&TeamID=1611661328&VsConference=&VsDivision=
 
     Args:
         date_from_nullable: DateFrom query parameter.
@@ -9995,7 +9995,7 @@ def nba_stats_teamvsplayer(
     """GET /stats/teamvsplayer
 
     Endpoint: ``GET https://stats.nba.com/stats/teamvsplayer``
-    Example URL: https://stats.nba.com/stats/teamvsplayer?LeagueID=00
+    Example URL: https://stats.nba.com/stats/teamvsplayer?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PaceAdjust=N&PerMode=Totals&Period=0&PlayerID=&PlusMinus=N&Rank=N&SeasonSegment=&SeasonType=Regular+Season&TeamID=1611661328&VsConference=&VsDivision=&VsPlayerID=1628932
 
     Args:
         date_from_nullable: DateFrom query parameter.
@@ -10083,7 +10083,7 @@ def nba_stats_teamyearbyyearstats(
     """GET /stats/teamyearbyyearstats
 
     Endpoint: ``GET https://stats.nba.com/stats/teamyearbyyearstats``
-    Example URL: https://stats.nba.com/stats/teamyearbyyearstats?LeagueID=00
+    Example URL: https://stats.nba.com/stats/teamyearbyyearstats?LeagueID=00&PerMode=Totals&SeasonType=Regular+Season&TeamID=1611661328
 
     Args:
         league_id: LeagueID query parameter.
@@ -10158,7 +10158,7 @@ def nba_stats_videodetailsasset(
     """GET /stats/videodetailsasset
 
     Endpoint: ``GET https://stats.nba.com/stats/videodetailsasset``
-    Example URL: https://stats.nba.com/stats/videodetailsasset?LeagueID=00
+    Example URL: https://stats.nba.com/stats/videodetailsasset?ContextMeasure=FGA&LastNGames=0&Month=0&OpponentTeamID=0&Period=0&PlayerID=2544&Season=2022-23&SeasonType=Regular+Season&TeamID=1610612747&VsDivision=&VsConference=&StartRange=&StartPeriod=&SeasonSegment=&RookieYear=&RangeType=&Position=&PointDiff=&Outcome=&Location=&LeagueID=00&GameSegment=&GameID=&EndRange=&EndPeriod=&DateTo=&DateFrom=&ContextFilter=&ClutchTime=&AheadBehind=
 
     Args:
         context_measure_detailed: ContextMeasure query parameter.
@@ -10258,7 +10258,7 @@ def nba_stats_videoevents(
     """GET /stats/videoevents
 
     Endpoint: ``GET https://stats.nba.com/stats/videoevents``
-    Example URL: https://stats.nba.com/stats/videoevents
+    Example URL: https://stats.nba.com/stats/videoevents?GameEventID=10&GameID=1022200075
 
     Args:
         game_event_id: GameEventID query parameter.
@@ -10302,7 +10302,7 @@ def nba_stats_videoeventsasset(
     """GET /stats/videoeventsasset
 
     Endpoint: ``GET https://stats.nba.com/stats/videoeventsasset``
-    Example URL: https://stats.nba.com/stats/videoeventsasset
+    Example URL: https://stats.nba.com/stats/videoeventsasset?GameEventID=0&GameID=0021700807
 
     Args:
         game_event_id: GameEventID query parameter.
@@ -10346,7 +10346,7 @@ def nba_stats_videostatus(
     """GET /stats/videostatus
 
     Endpoint: ``GET https://stats.nba.com/stats/videostatus``
-    Example URL: https://stats.nba.com/stats/videostatus?LeagueID=00
+    Example URL: https://stats.nba.com/stats/videostatus?GameDate=2022-06-10&LeagueID=00
 
     Args:
         game_date: GameDate query parameter.

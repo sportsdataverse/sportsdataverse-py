@@ -166,7 +166,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/soccer/leagues/mex.1/seasons/{season}/types/{season_type}/groups/{group_id}/teams`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/mex.1/seasons/2024/types/2/groups/80/teams](https://sports.core.api.espn.com/v2/sports/soccer/leagues/mex.1/seasons/2024/types/2/groups/80/teams)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/mex.1/seasons/2024/types/2/groups/80/teams?limit=500](https://sports.core.api.espn.com/v2/sports/soccer/leagues/mex.1/seasons/2024/types/2/groups/80/teams?limit=500)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -194,7 +194,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/soccer/leagues/mex.1/seasons/{season}/types/{season_type}/groups/{group_id}/children`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/mex.1/seasons/2024/types/2/groups/80/children](https://sports.core.api.espn.com/v2/sports/soccer/leagues/mex.1/seasons/2024/types/2/groups/80/children)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/mex.1/seasons/2024/types/2/groups/80/children?limit=500](https://sports.core.api.espn.com/v2/sports/soccer/leagues/mex.1/seasons/2024/types/2/groups/80/children?limit=500)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -355,7 +355,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/soccer/leagues/mex.1/seasons/{season}/types/{season_type}/weeks/{week}/events`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/mex.1/seasons/2024/types/2/weeks/1/events](https://sports.core.api.espn.com/v2/sports/soccer/leagues/mex.1/seasons/2024/types/2/weeks/1/events)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/mex.1/seasons/2024/types/2/weeks/1/events?limit=500](https://sports.core.api.espn.com/v2/sports/soccer/leagues/mex.1/seasons/2024/types/2/weeks/1/events?limit=500)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -383,7 +383,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/soccer/leagues/mex.1/seasons/{season}/teams`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/mex.1/seasons/2024/teams](https://sports.core.api.espn.com/v2/sports/soccer/leagues/mex.1/seasons/2024/teams)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/mex.1/seasons/2024/teams?limit=1000&page=1](https://sports.core.api.espn.com/v2/sports/soccer/leagues/mex.1/seasons/2024/teams?limit=1000&page=1)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -436,7 +436,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/soccer/leagues/mex.1/seasons/{season}/athletes`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/mex.1/seasons/2024/athletes](https://sports.core.api.espn.com/v2/sports/soccer/leagues/mex.1/seasons/2024/athletes)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/mex.1/seasons/2024/athletes?limit=100&page=1](https://sports.core.api.espn.com/v2/sports/soccer/leagues/mex.1/seasons/2024/athletes?limit=100&page=1)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -463,7 +463,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/soccer/leagues/mex.1/seasons/{season}/coaches`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/mex.1/seasons/2024/coaches](https://sports.core.api.espn.com/v2/sports/soccer/leagues/mex.1/seasons/2024/coaches)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/mex.1/seasons/2024/coaches?limit=500](https://sports.core.api.espn.com/v2/sports/soccer/leagues/mex.1/seasons/2024/coaches?limit=500)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -641,7 +641,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/soccer/leagues/mex.1/seasons/{season}/awards`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/mex.1/seasons/2024/awards](https://sports.core.api.espn.com/v2/sports/soccer/leagues/mex.1/seasons/2024/awards)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/mex.1/seasons/2024/awards?limit=200](https://sports.core.api.espn.com/v2/sports/soccer/leagues/mex.1/seasons/2024/awards?limit=200)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|

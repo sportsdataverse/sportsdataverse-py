@@ -13,8 +13,6 @@ Coach identity detail.
 
 **Endpoint URL:** `GET https://247sports.com/Coach/{key}.json`
 
-**Valid URL:** [https://247sports.com/Coach](https://247sports.com/Coach)
-
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 | `key` | `key` |  | `Y` |  | key path parameter. |
@@ -22,6 +20,7 @@ Coach identity detail.
 ### Returns {#sports247_site_pages_coach-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `key` | integer | Primary key of this entity (the id used in its `.json` route). |
@@ -56,8 +55,6 @@ Recruiting event detail (camp/combine/regional).
 
 **Endpoint URL:** `GET https://247sports.com/Event/{slug}.json`
 
-**Valid URL:** [https://247sports.com/Event](https://247sports.com/Event)
-
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 | `slug` | `slug` |  | `Y` |  | slug path parameter. |
@@ -65,6 +62,7 @@ Recruiting event detail (camp/combine/regional).
 ### Returns {#sports247_site_pages_event-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `key` | integer | Primary key of this entity (the id used in its `.json` route). |
@@ -93,8 +91,6 @@ Institution (school/team) detail.
 
 **Endpoint URL:** `GET https://247sports.com/Institution/{key}.json`
 
-**Valid URL:** [https://247sports.com/Institution](https://247sports.com/Institution)
-
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 | `key` | `key` |  | `Y` |  | key path parameter. |
@@ -102,6 +98,7 @@ Institution (school/team) detail.
 ### Returns {#sports247_site_pages_institution-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `key` | integer | Primary key of this entity (the id used in its `.json` route). |
@@ -152,6 +149,7 @@ Institution directory (paginated list).
 ### Returns {#sports247_site_pages_institution_list-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `key` | integer | Primary key of this entity (the id used in its `.json` route). |
@@ -202,6 +200,7 @@ Institution location (city/state/coords/tax).
 ### Returns {#sports247_site_pages_institution_location-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `key` | integer | Primary key of this entity (the id used in its `.json` route). |
@@ -242,6 +241,7 @@ Institution recruiting timeline (site-authored event blurbs).
 ### Returns {#sports247_site_pages_institution_timeline_events-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `body` | character | Text body of the timeline entry. |
@@ -277,6 +277,7 @@ Pro-draft picks embed for a league/year/round.
 ### Returns {#sports247_site_pages_league_draft_picks-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `key` | integer | Primary key of this entity (the id used in its `.json` route). |
@@ -324,6 +325,7 @@ Institutions belonging to a league.
 ### Returns {#sports247_site_pages_league_institutions-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `key` | integer | Primary key of this entity (the id used in its `.json` route). |
@@ -374,6 +376,7 @@ News/headline feed items for a site Page.
 ### Returns {#sports247_site_pages_page_feeds-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `uid` | character | ESPN global unique identifier. |
@@ -407,6 +410,7 @@ PlayerInstitution linked to a PlayerSport.
 ### Returns {#sports247_site_pages_playersport_institution-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `key` | integer | Primary key of this entity (the id used in its `.json` route). |
@@ -465,6 +469,7 @@ Ranking history for a PlayerSport (one row per Ranking snapshot).
 ### Returns {#sports247_site_pages_playersport_rank_history-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `key` | integer | Primary key of this entity (the id used in its `.json` route). |
@@ -521,6 +526,7 @@ Player-sport rankings for a position.
 ### Returns {#sports247_site_pages_position_rankings-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `key` | integer | Primary key of this entity (the id used in its `.json` route). |
@@ -568,8 +574,6 @@ Single recruit-interest (school<->recruit link) detail.
 
 **Endpoint URL:** `GET https://247sports.com/RecruitInterest/{key}.json`
 
-**Valid URL:** [https://247sports.com/RecruitInterest](https://247sports.com/RecruitInterest)
-
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 | `key` | `key` |  | `Y` |  | key path parameter. |
@@ -577,6 +581,7 @@ Single recruit-interest (school<->recruit link) detail.
 ### Returns {#sports247_site_pages_recruit_interest-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `key` | integer | Primary key of this entity (the id used in its `.json` route). |
