@@ -182,7 +182,10 @@ const config: Config = {
         // One index per league directory and one for the package reference, so a league page downloads its
         // own (the largest, MBB, was 1.9 MB raw on the 2026-10-04 prototype) instead of the whole site's 22 MB.
         // Contexts are URL prefixes: a small league cannot share its sport's index, so it gets its own. Pages
-        // outside every context (guides, tutorials, the home page) keep a site-wide index of just those pages.
+        // outside every context (guides, tutorials, the home page) search everything, so a function name typed on
+        // the home page still finds its reference page in any league (owner, 2026-10-04); only those pages pay for
+        // the site-wide index, and only when the reader starts a search.
+        useAllContextsWithNoSearchContext: true,
         searchContextByPaths: [
           ...registry.sports.flatMap((sport) =>
             sport.leagues.map((l) => ({label: l.label, path: `docs/${l.prefix}`})),
