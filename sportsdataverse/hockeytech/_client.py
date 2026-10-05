@@ -19,6 +19,8 @@ _UA = "Mozilla/5.0 (compatible; sportsdataverse/hockeytech)"
 _CALLBACK_RE = re.compile(r"^[A-Za-z_$][\w.$]*\(")
 # The only "source never has this" reply: plain text, HTTP 200 (MJHL gc/gamesummary).
 _ACCESS_DENIED_RE = re.compile(r"^\s*Feed type access denied\.?\s*$", re.IGNORECASE)
+# Credential query params a transport error can quote back with the request URL.
+_CREDENTIAL_QS_RE = re.compile(r"(?i)\b(key|api_?key|access_token|token|password|secret)=[^&\s'\"<>)]+")
 _RATE_LIMIT_S = 0.4
 _last_request_ts = 0.0
 
@@ -65,6 +67,12 @@ def _invalid_view_reason(payload: Any) -> Optional[str]:
         if isinstance(node, dict) and node.get("Undefined"):
             return str(node["Undefined"])
     return None
+
+
+def _redact(text: str, secret: str = "") -> str:
+    """Mask the feed key (and any other credential query param) in text that may quote the URL."""
+    text = _CREDENTIAL_QS_RE.sub(r"\1=REDACTED", text)
+    return text.replace(secret, "REDACTED") if secret else text
 
 
 def _build_url(league: str, feed: str, view: str, params: Optional[Dict[str, Any]] = None) -> str:
@@ -119,19 +127,25 @@ def hockeytech_api(
     if referer:
         headers["Referer"] = referer
     where = f"hockeytech_api({league}/{feed}/{view})"  # no URL: it carries the key
+    key = resolve_api_key(league, view=view)
 
     elapsed = time.monotonic() - _last_request_ts
     if elapsed < _RATE_LIMIT_S:
         time.sleep(_RATE_LIMIT_S - elapsed)
 
+    # Error text from requests / download() quotes the URL, which carries the key: redact
+    # it, and raise outside the except block so the original is not chained either.
+    failure: Optional[Exception] = None
     try:
         resp = download(url, headers=headers, timeout=timeout, num_retries=max_retries)
-    except NoDataError:
-        raise
+    except NoDataError as exc:
+        failure = NoDataError(_redact(str(exc), key))
     except Exception as exc:  # noqa: BLE001 - any transport failure is a failed fetch
-        raise AssetFetchError(f"{where}: fetch failed: {exc}") from exc
+        failure = AssetFetchError(f"{where}: fetch failed: {_redact(f'{type(exc).__name__}: {exc}', key)}")
     finally:
         _last_request_ts = time.monotonic()
+    if failure is not None:
+        raise failure
 
     status = getattr(resp, "status_code", 200)
     if not 200 <= status < 300:

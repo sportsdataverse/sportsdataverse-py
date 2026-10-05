@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import pathlib
+import traceback
 
 import pytest
 import requests
@@ -196,3 +197,42 @@ def test_error_messages_do_not_carry_the_key(monkeypatch):
     with pytest.raises(AssetFetchError) as ei:
         _call()
     assert "446521baf8c38984" not in str(ei.value)
+
+
+def _rendered(err):
+    """Everything a traceback would print for ``err``, causes and contexts included."""
+    return "".join(traceback.format_exception(type(err), err, err.__traceback__))
+
+
+def test_transport_error_text_never_carries_the_key(monkeypatch):
+    """requests quotes the URL (and so the key) in a ConnectionError; it must not reach the caller."""
+    from sportsdataverse import dl_utils
+
+    secret = "SECRETKEY12345678"
+    monkeypatch.setenv("SDV_PWHL_API_KEY", secret)
+    _serve(monkeypatch, 200, "")
+
+    def refuse(url, **_k):
+        path = url.split("lscluster.hockeytech.com", 1)[1]
+        raise requests.exceptions.ConnectionError(
+            "HTTPSConnectionPool(host='lscluster.hockeytech.com', port=443): Max retries exceeded "
+            f"with url: {path} (Caused by NewConnectionError('Failed to establish a new connection'))"
+        )
+
+    monkeypatch.setattr(dl_utils._SHARED_SESSION, "get", refuse)
+    with pytest.raises(AssetFetchError) as ei:
+        _call()
+    err = ei.value
+    assert "Max retries exceeded" in str(err) and "key=REDACTED" in str(err)
+    assert secret not in _rendered(err)
+    assert err.__cause__ is None and err.__context__ is None
+
+
+def test_404_text_never_carries_the_key(monkeypatch):
+    secret = "SECRETKEY12345678"
+    monkeypatch.setenv("SDV_PWHL_API_KEY", secret)
+    _serve(monkeypatch, 404, "Not Found")
+    with pytest.raises(NoDataError) as ei:
+        _call()
+    assert secret not in _rendered(ei.value)
+    assert ei.value.__context__ is None
