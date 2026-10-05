@@ -45,7 +45,7 @@ toc_max_heading_level: 2
 | [mlb_statcast_leaderboard_basestealing_run_value](mlb_statcast/leaderboard.md#mlb_statcast_leaderboard_basestealing_run_value) | GET /leaderboard/basestealing-run-value — basestealing run-value leaderboard. |
 | [mlb_statcast_leaderboard_baserunning_run_value](mlb_statcast/leaderboard.md#mlb_statcast_leaderboard_baserunning_run_value) | GET /leaderboard/baserunning-run-value — baserunning run-value leaderboard. |
 | [mlb_statcast_leaderboard_baserunning](mlb_statcast/leaderboard.md#mlb_statcast_leaderboard_baserunning) | GET /leaderboard/baserunning — extra-bases-taken run-value leaderboard. |
-| [mlb_statcast_leaderboard_year_to_year](mlb_statcast/leaderboard.md#mlb_statcast_leaderboard_year_to_year) | GET /leaderboard/statcast-year-to-year — year-to-year metric change leaderboard. |
+| [mlb_statcast_leaderboard_year_to_year](mlb_statcast/leaderboard-2.md#mlb_statcast_leaderboard_year_to_year) | GET /leaderboard/statcast-year-to-year — year-to-year metric change leaderboard. |
 | [mlb_statcast_leaderboard_timer_infractions](mlb_statcast/leaderboard-2.md#mlb_statcast_leaderboard_timer_infractions) | GET /leaderboard/pitch-timer-infractions — pitch-timer infractions leaderboard. |
 | [mlb_statcast_leaderboard_custom](mlb_statcast/leaderboard-2.md#mlb_statcast_leaderboard_custom) | GET /leaderboard/custom — build-your-own metric leaderboard (comma-separated selections). |
 | [mlb_statcast_leaderboard_fielding_run_value](mlb_statcast/leaderboard-2.md#mlb_statcast_leaderboard_fielding_run_value) | GET /leaderboard/fielding-run-value — fielding run-value leaderboard (HTML-embedded JSON). |

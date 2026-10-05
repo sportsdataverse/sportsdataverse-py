@@ -77,7 +77,7 @@ GET /experience/v2/gamedetails/{game_id} — one row: the flat v2 game detail (g
 
 **Endpoint URL:** `GET https://api.nfl.com/experience/v2/gamedetails/{game_id}`
 
-**Valid URL:** [https://api.nfl.com/experience/v2/gamedetails/a9a890ed-4feb-11f1-abca-2c54536568a9](https://api.nfl.com/experience/v2/gamedetails/a9a890ed-4feb-11f1-abca-2c54536568a9)
+**Valid URL:** [https://api.nfl.com/experience/v2/gamedetails/a9a890ed-4feb-11f1-abca-2c54536568a9?includeDriveChart=false&includeReplays=false&includeStandings=false&includeTaggedVideos=false](https://api.nfl.com/experience/v2/gamedetails/a9a890ed-4feb-11f1-abca-2c54536568a9?includeDriveChart=false&includeReplays=false&includeStandings=false&includeTaggedVideos=false)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -289,7 +289,7 @@ GET /experience/v1/gamedetailsbyslug/{slug} — one row: the flat game detail lo
 
 **Endpoint URL:** `GET https://api.nfl.com/experience/v1/gamedetailsbyslug/{slug}`
 
-**Valid URL:** [https://api.nfl.com/experience/v1/gamedetailsbyslug/broncos-at-chiefs-2026-reg-1](https://api.nfl.com/experience/v1/gamedetailsbyslug/broncos-at-chiefs-2026-reg-1)
+**Valid URL:** [https://api.nfl.com/experience/v1/gamedetailsbyslug/broncos-at-chiefs-2026-reg-1?includeReplays=false](https://api.nfl.com/experience/v1/gamedetailsbyslug/broncos-at-chiefs-2026-reg-1?includeReplays=false)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|

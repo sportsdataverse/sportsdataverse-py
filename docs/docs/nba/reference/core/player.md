@@ -13,7 +13,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/athletes`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/athletes](https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/athletes)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/athletes?active=true&limit=100&page=1](https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/athletes?active=true&limit=100&page=1)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|

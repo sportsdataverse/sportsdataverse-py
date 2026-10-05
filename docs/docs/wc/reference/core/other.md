@@ -37,7 +37,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/seasons`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/seasons](https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/seasons)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/seasons?limit=200](https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/seasons?limit=200)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -62,7 +62,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/events`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/events](https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/events)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/events?limit=500](https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/events?limit=500)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -113,7 +113,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/teams`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/teams](https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/teams)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/teams?limit=1000&page=1](https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/teams?limit=1000&page=1)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -181,7 +181,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/venues`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/venues](https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/venues)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/venues?limit=1000](https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/venues?limit=1000)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -231,7 +231,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/franchises`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/franchises](https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/franchises)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/franchises?limit=200](https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/franchises?limit=200)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -306,7 +306,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/coaches/{coach_id}/record/{record_type}`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/coaches/1/record](https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/coaches/1/record)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/coaches/1/record/0](https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/coaches/1/record/0)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -358,7 +358,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/positions`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/positions](https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/positions)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/positions?limit=200](https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/positions?limit=200)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -408,7 +408,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/tournaments`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/tournaments](https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/tournaments)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/tournaments?limit=200](https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/tournaments?limit=200)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -433,7 +433,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/awards`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/awards](https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/awards)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/awards?limit=200](https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/awards?limit=200)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|

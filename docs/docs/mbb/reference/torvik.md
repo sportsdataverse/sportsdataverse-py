@@ -157,7 +157,7 @@ GET /getgamestats.php?year=&json=1 — men's per-team-game efficiency and four-f
 
 **Endpoint URL:** `GET https://barttorvik.com/getgamestats.php`
 
-**Valid URL:** [https://barttorvik.com/getgamestats.php?year=2025](https://barttorvik.com/getgamestats.php?year=2025)
+**Valid URL:** [https://barttorvik.com/getgamestats.php?year=2025&json=1](https://barttorvik.com/getgamestats.php?year=2025&json=1)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -218,7 +218,7 @@ GET /getadvstats.php?year=&csv=1 — men's player advanced stats (one row per pl
 
 **Endpoint URL:** `GET https://barttorvik.com/getadvstats.php`
 
-**Valid URL:** [https://barttorvik.com/getadvstats.php?year=2025](https://barttorvik.com/getadvstats.php?year=2025)
+**Valid URL:** [https://barttorvik.com/getadvstats.php?year=2025&csv=1](https://barttorvik.com/getadvstats.php?year=2025&csv=1)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|

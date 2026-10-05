@@ -62,7 +62,6 @@ def sports247_site_pages_coach(
     """Coach identity detail.
 
     Endpoint: ``GET https://247sports.com/Coach/{key}.json``
-    Example URL: https://247sports.com/Coach
 
     Args:
         key: key path parameter.
@@ -179,7 +178,6 @@ def sports247_site_pages_coach_ranking(
     """Single CoachRanking row.
 
     Endpoint: ``GET https://247sports.com/CoachRanking/{key}.json``
-    Example URL: https://247sports.com/CoachRanking
 
     Args:
         key: key path parameter.
@@ -257,7 +255,6 @@ def sports247_site_pages_event(
     """Recruiting event detail (camp/combine/regional).
 
     Endpoint: ``GET https://247sports.com/Event/{slug}.json``
-    Example URL: https://247sports.com/Event
 
     Args:
         slug: slug path parameter.
@@ -296,7 +293,6 @@ def sports247_site_pages_institution(
     """Institution (school/team) detail.
 
     Endpoint: ``GET https://247sports.com/Institution/{key}.json``
-    Example URL: https://247sports.com/Institution
 
     Args:
         key: key path parameter.
@@ -581,7 +577,6 @@ def sports247_site_pages_player(
     """Player detail (identity + primary-sport rating/ranks).
 
     Endpoint: ``GET https://247sports.com/Player/{key}.json``
-    Example URL: https://247sports.com/Player
 
     Args:
         key: key path parameter.
@@ -698,7 +693,6 @@ def sports247_site_pages_player_institution(
     """Player-at-institution association detail.
 
     Endpoint: ``GET https://247sports.com/PlayerInstitution/{key}.json``
-    Example URL: https://247sports.com/PlayerInstitution
 
     Args:
         key: key path parameter.
@@ -737,7 +731,6 @@ def sports247_site_pages_player_institution_evaluation(
     """Scout evaluation of a player-institution fit.
 
     Endpoint: ``GET https://247sports.com/PlayerInstitutionEvaluation/{key}.json``
-    Example URL: https://247sports.com/PlayerInstitutionEvaluation
 
     Args:
         key: key path parameter.
@@ -858,7 +851,6 @@ def sports247_site_pages_playersport(
     """PlayerSport detail (note lowercase route segment).
 
     Endpoint: ``GET https://247sports.com/playersport/{key}.json``
-    Example URL: https://247sports.com/playersport
 
     Args:
         key: key path parameter.
@@ -1014,7 +1006,6 @@ def sports247_site_pages_recruit_interest(
     """Single recruit-interest (school<->recruit link) detail.
 
     Endpoint: ``GET https://247sports.com/RecruitInterest/{key}.json``
-    Example URL: https://247sports.com/RecruitInterest
 
     Args:
         key: key path parameter.

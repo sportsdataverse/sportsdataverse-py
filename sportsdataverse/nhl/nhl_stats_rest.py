@@ -75,7 +75,7 @@ def nhl_stats_rest_component_season(
     """Retrieve the component-season configuration.
 
     Endpoint: ``GET https://api.nhle.com/stats/rest/{lang}/componentSeason``
-    Example URL: https://api.nhle.com/stats/rest
+    Example URL: https://api.nhle.com/stats/rest/en/componentSeason
 
     Args:
         lang: lang path parameter.
@@ -107,7 +107,7 @@ def nhl_stats_rest_config(
     """Retrieve the Stats REST API configuration payload.
 
     Endpoint: ``GET https://api.nhle.com/stats/rest/{lang}/config``
-    Example URL: https://api.nhle.com/stats/rest
+    Example URL: https://api.nhle.com/stats/rest/en/config
 
     Args:
         lang: lang path parameter.
@@ -140,7 +140,7 @@ def nhl_stats_rest_content_module(
     """Retrieve a content module by template key.
 
     Endpoint: ``GET https://api.nhle.com/stats/rest/{lang}/content/module/{template_key}``
-    Example URL: https://api.nhle.com/stats/rest
+    Example URL: https://api.nhle.com/stats/rest/en/content/module/X
 
     Args:
         template_key: template_key path parameter.
@@ -176,7 +176,7 @@ def nhl_stats_rest_country(
     """Retrieve the list of countries used in NHL data.
 
     Endpoint: ``GET https://api.nhle.com/stats/rest/{lang}/country``
-    Example URL: https://api.nhle.com/stats/rest
+    Example URL: https://api.nhle.com/stats/rest/en/country
 
     Args:
         lang: lang path parameter.
@@ -215,7 +215,7 @@ def nhl_stats_rest_draft(
     """Retrieve draft data, optionally filtered with Cayenne expressions.
 
     Endpoint: ``GET https://api.nhle.com/stats/rest/{lang}/draft``
-    Example URL: https://api.nhle.com/stats/rest
+    Example URL: https://api.nhle.com/stats/rest/en/draft
 
     Args:
         lang: lang path parameter.
@@ -254,7 +254,7 @@ def nhl_stats_rest_franchise(
     """Retrieve franchise data.
 
     Endpoint: ``GET https://api.nhle.com/stats/rest/{lang}/franchise``
-    Example URL: https://api.nhle.com/stats/rest
+    Example URL: https://api.nhle.com/stats/rest/en/franchise
 
     Args:
         lang: lang path parameter.
@@ -293,7 +293,7 @@ def nhl_stats_rest_game(
     """Retrieve game-level data.
 
     Endpoint: ``GET https://api.nhle.com/stats/rest/{lang}/game``
-    Example URL: https://api.nhle.com/stats/rest
+    Example URL: https://api.nhle.com/stats/rest/en/game
 
     Args:
         lang: lang path parameter.
@@ -332,7 +332,7 @@ def nhl_stats_rest_glossary(
     """Retrieve the NHL Stats glossary of stat definitions.
 
     Endpoint: ``GET https://api.nhle.com/stats/rest/{lang}/glossary``
-    Example URL: https://api.nhle.com/stats/rest
+    Example URL: https://api.nhle.com/stats/rest/en/glossary
 
     Args:
         lang: lang path parameter.
@@ -372,7 +372,7 @@ def nhl_stats_rest_goalie_report(
     """Retrieve a goalie statistical report.
 
     Endpoint: ``GET https://api.nhle.com/stats/rest/{lang}/goalie/{report}``
-    Example URL: https://api.nhle.com/stats/rest
+    Example URL: https://api.nhle.com/stats/rest/en/goalie/summary
 
     Args:
         report: report path parameter.
@@ -413,7 +413,7 @@ def nhl_stats_rest_leaders_goalies(
     """Retrieve league leaders for a goalie statistical attribute.
 
     Endpoint: ``GET https://api.nhle.com/stats/rest/{lang}/leaders/goalies/{attribute}``
-    Example URL: https://api.nhle.com/stats/rest
+    Example URL: https://api.nhle.com/stats/rest/en/leaders/goalies/X
 
     Args:
         attribute: attribute path parameter.
@@ -454,7 +454,7 @@ def nhl_stats_rest_leaders_skaters(
     """Retrieve league leaders for a skater statistical attribute.
 
     Endpoint: ``GET https://api.nhle.com/stats/rest/{lang}/leaders/skaters/{attribute}``
-    Example URL: https://api.nhle.com/stats/rest
+    Example URL: https://api.nhle.com/stats/rest/en/leaders/skaters/X
 
     Args:
         attribute: attribute path parameter.
@@ -494,7 +494,7 @@ def nhl_stats_rest_milestones_goalies(
     """Retrieve milestone data for goalies.
 
     Endpoint: ``GET https://api.nhle.com/stats/rest/{lang}/milestones/goalies``
-    Example URL: https://api.nhle.com/stats/rest
+    Example URL: https://api.nhle.com/stats/rest/en/milestones/goalies
 
     Args:
         lang: lang path parameter.
@@ -533,7 +533,7 @@ def nhl_stats_rest_milestones_skaters(
     """Retrieve milestone data for skaters.
 
     Endpoint: ``GET https://api.nhle.com/stats/rest/{lang}/milestones/skaters``
-    Example URL: https://api.nhle.com/stats/rest
+    Example URL: https://api.nhle.com/stats/rest/en/milestones/skaters
 
     Args:
         lang: lang path parameter.
@@ -572,7 +572,7 @@ def nhl_stats_rest_players(
     """Retrieve the NHL player registry.
 
     Endpoint: ``GET https://api.nhle.com/stats/rest/{lang}/players``
-    Example URL: https://api.nhle.com/stats/rest
+    Example URL: https://api.nhle.com/stats/rest/en/players
 
     Args:
         lang: lang path parameter.
@@ -611,7 +611,7 @@ def nhl_stats_rest_season(
     """Retrieve the list of all NHL seasons.
 
     Endpoint: ``GET https://api.nhle.com/stats/rest/{lang}/season``
-    Example URL: https://api.nhle.com/stats/rest
+    Example URL: https://api.nhle.com/stats/rest/en/season
 
     Args:
         lang: lang path parameter.
@@ -650,7 +650,7 @@ def nhl_stats_rest_shiftcharts(
     """Retrieve shift-chart data.
 
     Endpoint: ``GET https://api.nhle.com/stats/rest/{lang}/shiftcharts``
-    Example URL: https://api.nhle.com/stats/rest
+    Example URL: https://api.nhle.com/stats/rest/en/shiftcharts
 
     Args:
         lang: lang path parameter.
@@ -690,7 +690,7 @@ def nhl_stats_rest_skater_report(
     """Retrieve a skater statistical report.
 
     Endpoint: ``GET https://api.nhle.com/stats/rest/{lang}/skater/{report}``
-    Example URL: https://api.nhle.com/stats/rest
+    Example URL: https://api.nhle.com/stats/rest/en/skater/summary
 
     Args:
         report: report path parameter.
@@ -730,7 +730,7 @@ def nhl_stats_rest_team(
     """Retrieve the list of all NHL teams.
 
     Endpoint: ``GET https://api.nhle.com/stats/rest/{lang}/team``
-    Example URL: https://api.nhle.com/stats/rest
+    Example URL: https://api.nhle.com/stats/rest/en/team
 
     Args:
         lang: lang path parameter.
@@ -770,7 +770,7 @@ def nhl_stats_rest_team_by_id(
     """Retrieve a single team by its numeric ID.
 
     Endpoint: ``GET https://api.nhle.com/stats/rest/{lang}/team/id/{team_id}``
-    Example URL: https://api.nhle.com/stats/rest
+    Example URL: https://api.nhle.com/stats/rest/en/team/id/10
 
     Args:
         team_id: team_id path parameter.
@@ -811,7 +811,7 @@ def nhl_stats_rest_team_report(
     """Retrieve a team statistical report.
 
     Endpoint: ``GET https://api.nhle.com/stats/rest/{lang}/team/{report}``
-    Example URL: https://api.nhle.com/stats/rest
+    Example URL: https://api.nhle.com/stats/rest/en/team/summary
 
     Args:
         report: report path parameter.

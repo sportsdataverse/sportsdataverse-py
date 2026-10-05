@@ -15,7 +15,7 @@ All competitions StatsPerform tracks for NWSL (league + friendlies/cups).
 
 **Endpoint URL:** `GET https://api-sdp.nwslsoccer.com/v1/nwsl/football/competitions`
 
-**Valid URL:** [https://api-sdp.nwslsoccer.com/v1/nwsl/football/competitions](https://api-sdp.nwslsoccer.com/v1/nwsl/football/competitions)
+**Valid URL:** [https://api-sdp.nwslsoccer.com/v1/nwsl/football/competitions?locale=en-US](https://api-sdp.nwslsoccer.com/v1/nwsl/football/competitions?locale=en-US)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -49,7 +49,7 @@ Team lineups (starting XI + bench + staff) for a match.
 
 **Endpoint URL:** `GET https://api-sdp.nwslsoccer.com/v1/nwsl/football/seasons/{season_id}/matches/{match_id}/lineups`
 
-**Valid URL:** [https://api-sdp.nwslsoccer.com/v1/nwsl/football/seasons/nwsl::Football_Season::0b6761e4701749f593690c0f338da74c/matches/nwsl::Football_Match::0b6761e4701749f593690c0f338da74c/lineups](https://api-sdp.nwslsoccer.com/v1/nwsl/football/seasons/nwsl::Football_Season::0b6761e4701749f593690c0f338da74c/matches/nwsl::Football_Match::0b6761e4701749f593690c0f338da74c/lineups)
+**Valid URL:** [https://api-sdp.nwslsoccer.com/v1/nwsl/football/seasons/nwsl::Football_Season::0b6761e4701749f593690c0f338da74c/matches/nwsl::Football_Match::0b6761e4701749f593690c0f338da74c/lineups?locale=en-US](https://api-sdp.nwslsoccer.com/v1/nwsl/football/seasons/nwsl::Football_Season::0b6761e4701749f593690c0f338da74c/matches/nwsl::Football_Match::0b6761e4701749f593690c0f338da74c/lineups?locale=en-US)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -102,7 +102,7 @@ Match days (rounds) for a season.
 
 **Endpoint URL:** `GET https://api-sdp.nwslsoccer.com/v1/nwsl/football/seasons/{season_id}/matchdays`
 
-**Valid URL:** [https://api-sdp.nwslsoccer.com/v1/nwsl/football/seasons/nwsl::Football_Season::0b6761e4701749f593690c0f338da74c/matchdays](https://api-sdp.nwslsoccer.com/v1/nwsl/football/seasons/nwsl::Football_Season::0b6761e4701749f593690c0f338da74c/matchdays)
+**Valid URL:** [https://api-sdp.nwslsoccer.com/v1/nwsl/football/seasons/nwsl::Football_Season::0b6761e4701749f593690c0f338da74c/matchdays?locale=en-US](https://api-sdp.nwslsoccer.com/v1/nwsl/football/seasons/nwsl::Football_Season::0b6761e4701749f593690c0f338da74c/matchdays?locale=en-US)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -145,7 +145,7 @@ Player-stats leaderboard for a season (paginated).
 
 **Endpoint URL:** `GET https://api-sdp.nwslsoccer.com/v1/nwsl/football/seasons/{season_id}/stats/players`
 
-**Valid URL:** [https://api-sdp.nwslsoccer.com/v1/nwsl/football/seasons/nwsl::Football_Season::0b6761e4701749f593690c0f338da74c/stats/players](https://api-sdp.nwslsoccer.com/v1/nwsl/football/seasons/nwsl::Football_Season::0b6761e4701749f593690c0f338da74c/stats/players)
+**Valid URL:** [https://api-sdp.nwslsoccer.com/v1/nwsl/football/seasons/nwsl::Football_Season::0b6761e4701749f593690c0f338da74c/stats/players?locale=en-US](https://api-sdp.nwslsoccer.com/v1/nwsl/football/seasons/nwsl::Football_Season::0b6761e4701749f593690c0f338da74c/stats/players?locale=en-US)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -226,7 +226,7 @@ Matches across one or more seasons within a US-format date window.
 
 **Endpoint URL:** `GET https://api-sdp.nwslsoccer.com/v1/nwsl/football/seasons/multipleSeasonMatches`
 
-**Valid URL:** [https://api-sdp.nwslsoccer.com/v1/nwsl/football/seasons/multipleSeasonMatches](https://api-sdp.nwslsoccer.com/v1/nwsl/football/seasons/multipleSeasonMatches)
+**Valid URL:** [https://api-sdp.nwslsoccer.com/v1/nwsl/football/seasons/multipleSeasonMatches?locale=en-US](https://api-sdp.nwslsoccer.com/v1/nwsl/football/seasons/multipleSeasonMatches?locale=en-US)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -369,7 +369,7 @@ Competition stages for a season (may be empty for league play).
 
 **Endpoint URL:** `GET https://api-sdp.nwslsoccer.com/v1/nwsl/football/seasons/{season_id}/stages`
 
-**Valid URL:** [https://api-sdp.nwslsoccer.com/v1/nwsl/football/seasons/nwsl::Football_Season::0b6761e4701749f593690c0f338da74c/stages](https://api-sdp.nwslsoccer.com/v1/nwsl/football/seasons/nwsl::Football_Season::0b6761e4701749f593690c0f338da74c/stages)
+**Valid URL:** [https://api-sdp.nwslsoccer.com/v1/nwsl/football/seasons/nwsl::Football_Season::0b6761e4701749f593690c0f338da74c/stages?locale=en-US](https://api-sdp.nwslsoccer.com/v1/nwsl/football/seasons/nwsl::Football_Season::0b6761e4701749f593690c0f338da74c/stages?locale=en-US)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -400,7 +400,7 @@ Overall standings table for a season (table/home/away splits).
 
 **Endpoint URL:** `GET https://api-sdp.nwslsoccer.com/v1/nwsl/football/seasons/{season_id}/standings/overall`
 
-**Valid URL:** [https://api-sdp.nwslsoccer.com/v1/nwsl/football/seasons/nwsl::Football_Season::0b6761e4701749f593690c0f338da74c/standings/overall](https://api-sdp.nwslsoccer.com/v1/nwsl/football/seasons/nwsl::Football_Season::0b6761e4701749f593690c0f338da74c/standings/overall)
+**Valid URL:** [https://api-sdp.nwslsoccer.com/v1/nwsl/football/seasons/nwsl::Football_Season::0b6761e4701749f593690c0f338da74c/standings/overall?locale=en-US](https://api-sdp.nwslsoccer.com/v1/nwsl/football/seasons/nwsl::Football_Season::0b6761e4701749f593690c0f338da74c/standings/overall?locale=en-US)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -463,7 +463,7 @@ Team-stats leaderboard for a season.
 
 **Endpoint URL:** `GET https://api-sdp.nwslsoccer.com/v1/nwsl/football/seasons/{season_id}/stats/teams`
 
-**Valid URL:** [https://api-sdp.nwslsoccer.com/v1/nwsl/football/seasons/nwsl::Football_Season::0b6761e4701749f593690c0f338da74c/stats/teams](https://api-sdp.nwslsoccer.com/v1/nwsl/football/seasons/nwsl::Football_Season::0b6761e4701749f593690c0f338da74c/stats/teams)
+**Valid URL:** [https://api-sdp.nwslsoccer.com/v1/nwsl/football/seasons/nwsl::Football_Season::0b6761e4701749f593690c0f338da74c/stats/teams?locale=en-US](https://api-sdp.nwslsoccer.com/v1/nwsl/football/seasons/nwsl::Football_Season::0b6761e4701749f593690c0f338da74c/stats/teams?locale=en-US)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -526,7 +526,7 @@ Teams participating in a season.
 
 **Endpoint URL:** `GET https://api-sdp.nwslsoccer.com/v1/nwsl/football/seasons/{season_id}/teams`
 
-**Valid URL:** [https://api-sdp.nwslsoccer.com/v1/nwsl/football/seasons/nwsl::Football_Season::0b6761e4701749f593690c0f338da74c/teams](https://api-sdp.nwslsoccer.com/v1/nwsl/football/seasons/nwsl::Football_Season::0b6761e4701749f593690c0f338da74c/teams)
+**Valid URL:** [https://api-sdp.nwslsoccer.com/v1/nwsl/football/seasons/nwsl::Football_Season::0b6761e4701749f593690c0f338da74c/teams?locale=en-US](https://api-sdp.nwslsoccer.com/v1/nwsl/football/seasons/nwsl::Football_Season::0b6761e4701749f593690c0f338da74c/teams?locale=en-US)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|

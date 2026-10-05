@@ -13,7 +13,7 @@ GET /api/v1/schedule/postseason — postseason-only schedule for a season.
 
 **Endpoint URL:** `GET https://statsapi.mlb.com/api/v1/schedule/postseason`
 
-**Valid URL:** [https://statsapi.mlb.com/api/v1/schedule/postseason](https://statsapi.mlb.com/api/v1/schedule/postseason)
+**Valid URL:** [https://statsapi.mlb.com/api/v1/schedule/postseason?sportId=1](https://statsapi.mlb.com/api/v1/schedule/postseason?sportId=1)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|

@@ -13,7 +13,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/hockey/leagues/womens-college-hockey/events/{event_id}/competitions/{cid}`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/hockey/leagues/womens-college-hockey/events/401584793/competitions](https://sports.core.api.espn.com/v2/sports/hockey/leagues/womens-college-hockey/events/401584793/competitions)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/hockey/leagues/womens-college-hockey/events/401584793/competitions/401584793](https://sports.core.api.espn.com/v2/sports/hockey/leagues/womens-college-hockey/events/401584793/competitions/401584793)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -39,7 +39,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/hockey/leagues/womens-college-hockey/events/{event_id}/competitions/{cid}/competitors`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/hockey/leagues/womens-college-hockey/events/401584793/competitions](https://sports.core.api.espn.com/v2/sports/hockey/leagues/womens-college-hockey/events/401584793/competitions)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/hockey/leagues/womens-college-hockey/events/401584793/competitions/401584793/competitors](https://sports.core.api.espn.com/v2/sports/hockey/leagues/womens-college-hockey/events/401584793/competitions/401584793/competitors)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -65,7 +65,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/hockey/leagues/womens-college-hockey/events/{event_id}/competitions/{cid}/competitors/{team_id}`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/hockey/leagues/womens-college-hockey/events/401584793/competitions](https://sports.core.api.espn.com/v2/sports/hockey/leagues/womens-college-hockey/events/401584793/competitions)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/hockey/leagues/womens-college-hockey/events/401584793/competitions/401584793/competitors/4](https://sports.core.api.espn.com/v2/sports/hockey/leagues/womens-college-hockey/events/401584793/competitions/401584793/competitors/4)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -92,7 +92,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/hockey/leagues/womens-college-hockey/events/{event_id}/competitions/{cid}/competitors/{team_id}/roster`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/hockey/leagues/womens-college-hockey/events/401584793/competitions](https://sports.core.api.espn.com/v2/sports/hockey/leagues/womens-college-hockey/events/401584793/competitions)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/hockey/leagues/womens-college-hockey/events/401584793/competitions/401584793/competitors/4/roster](https://sports.core.api.espn.com/v2/sports/hockey/leagues/womens-college-hockey/events/401584793/competitions/401584793/competitors/4/roster)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -119,7 +119,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/hockey/leagues/womens-college-hockey/events/{event_id}/competitions/{cid}/competitors/{team_id}/linescores`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/hockey/leagues/womens-college-hockey/events/401584793/competitions](https://sports.core.api.espn.com/v2/sports/hockey/leagues/womens-college-hockey/events/401584793/competitions)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/hockey/leagues/womens-college-hockey/events/401584793/competitions/401584793/competitors/4/linescores](https://sports.core.api.espn.com/v2/sports/hockey/leagues/womens-college-hockey/events/401584793/competitions/401584793/competitors/4/linescores)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -146,7 +146,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/hockey/leagues/womens-college-hockey/events/{event_id}/competitions/{cid}/competitors/{team_id}/statistics`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/hockey/leagues/womens-college-hockey/events/401584793/competitions](https://sports.core.api.espn.com/v2/sports/hockey/leagues/womens-college-hockey/events/401584793/competitions)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/hockey/leagues/womens-college-hockey/events/401584793/competitions/401584793/competitors/4/statistics](https://sports.core.api.espn.com/v2/sports/hockey/leagues/womens-college-hockey/events/401584793/competitions/401584793/competitors/4/statistics)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -173,7 +173,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/hockey/leagues/womens-college-hockey/events/{event_id}/competitions/{cid}/competitors/{team_id}/record`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/hockey/leagues/womens-college-hockey/events/401584793/competitions](https://sports.core.api.espn.com/v2/sports/hockey/leagues/womens-college-hockey/events/401584793/competitions)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/hockey/leagues/womens-college-hockey/events/401584793/competitions/401584793/competitors/4/record](https://sports.core.api.espn.com/v2/sports/hockey/leagues/womens-college-hockey/events/401584793/competitions/401584793/competitors/4/record)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -200,7 +200,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/hockey/leagues/womens-college-hockey/events/{event_id}/competitions/{cid}/competitors/{team_id}/leaders`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/hockey/leagues/womens-college-hockey/events/401584793/competitions](https://sports.core.api.espn.com/v2/sports/hockey/leagues/womens-college-hockey/events/401584793/competitions)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/hockey/leagues/womens-college-hockey/events/401584793/competitions/401584793/competitors/4/leaders](https://sports.core.api.espn.com/v2/sports/hockey/leagues/womens-college-hockey/events/401584793/competitions/401584793/competitors/4/leaders)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -227,7 +227,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/hockey/leagues/womens-college-hockey/events/{event_id}/competitions/{cid}/odds`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/hockey/leagues/womens-college-hockey/events/401584793/competitions](https://sports.core.api.espn.com/v2/sports/hockey/leagues/womens-college-hockey/events/401584793/competitions)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/hockey/leagues/womens-college-hockey/events/401584793/competitions/401584793/odds](https://sports.core.api.espn.com/v2/sports/hockey/leagues/womens-college-hockey/events/401584793/competitions/401584793/odds)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -253,7 +253,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/hockey/leagues/womens-college-hockey/events/{event_id}/competitions/{cid}/probabilities`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/hockey/leagues/womens-college-hockey/events/401584793/competitions](https://sports.core.api.espn.com/v2/sports/hockey/leagues/womens-college-hockey/events/401584793/competitions)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/hockey/leagues/womens-college-hockey/events/401584793/competitions/401584793/probabilities?limit=300](https://sports.core.api.espn.com/v2/sports/hockey/leagues/womens-college-hockey/events/401584793/competitions/401584793/probabilities?limit=300)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -280,7 +280,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/hockey/leagues/womens-college-hockey/events/{event_id}/competitions/{cid}/plays`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/hockey/leagues/womens-college-hockey/events/401584793/competitions](https://sports.core.api.espn.com/v2/sports/hockey/leagues/womens-college-hockey/events/401584793/competitions)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/hockey/leagues/womens-college-hockey/events/401584793/competitions/401584793/plays?limit=1000](https://sports.core.api.espn.com/v2/sports/hockey/leagues/womens-college-hockey/events/401584793/competitions/401584793/plays?limit=1000)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -307,7 +307,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/hockey/leagues/womens-college-hockey/events/{event_id}/competitions/{cid}/plays/{play_id}`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/hockey/leagues/womens-college-hockey/events/401584793/competitions](https://sports.core.api.espn.com/v2/sports/hockey/leagues/womens-college-hockey/events/401584793/competitions)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/hockey/leagues/womens-college-hockey/events/401584793/competitions/401584793/plays/1](https://sports.core.api.espn.com/v2/sports/hockey/leagues/womens-college-hockey/events/401584793/competitions/401584793/plays/1)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -334,7 +334,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/hockey/leagues/womens-college-hockey/events/{event_id}/competitions/{cid}/plays/{play_id}/personnel`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/hockey/leagues/womens-college-hockey/events/401584793/competitions](https://sports.core.api.espn.com/v2/sports/hockey/leagues/womens-college-hockey/events/401584793/competitions)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/hockey/leagues/womens-college-hockey/events/401584793/competitions/401584793/plays/1/personnel](https://sports.core.api.espn.com/v2/sports/hockey/leagues/womens-college-hockey/events/401584793/competitions/401584793/plays/1/personnel)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -361,7 +361,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/hockey/leagues/womens-college-hockey/events/{event_id}/competitions/{cid}/situation`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/hockey/leagues/womens-college-hockey/events/401584793/competitions](https://sports.core.api.espn.com/v2/sports/hockey/leagues/womens-college-hockey/events/401584793/competitions)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/hockey/leagues/womens-college-hockey/events/401584793/competitions/401584793/situation](https://sports.core.api.espn.com/v2/sports/hockey/leagues/womens-college-hockey/events/401584793/competitions/401584793/situation)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -387,7 +387,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/hockey/leagues/womens-college-hockey/events/{event_id}/competitions/{cid}/status`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/hockey/leagues/womens-college-hockey/events/401584793/competitions](https://sports.core.api.espn.com/v2/sports/hockey/leagues/womens-college-hockey/events/401584793/competitions)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/hockey/leagues/womens-college-hockey/events/401584793/competitions/401584793/status](https://sports.core.api.espn.com/v2/sports/hockey/leagues/womens-college-hockey/events/401584793/competitions/401584793/status)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -413,7 +413,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/hockey/leagues/womens-college-hockey/events/{event_id}/competitions/{cid}/officials`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/hockey/leagues/womens-college-hockey/events/401584793/competitions](https://sports.core.api.espn.com/v2/sports/hockey/leagues/womens-college-hockey/events/401584793/competitions)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/hockey/leagues/womens-college-hockey/events/401584793/competitions/401584793/officials](https://sports.core.api.espn.com/v2/sports/hockey/leagues/womens-college-hockey/events/401584793/competitions/401584793/officials)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -439,7 +439,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/hockey/leagues/womens-college-hockey/events/{event_id}/competitions/{cid}/broadcasts`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/hockey/leagues/womens-college-hockey/events/401584793/competitions](https://sports.core.api.espn.com/v2/sports/hockey/leagues/womens-college-hockey/events/401584793/competitions)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/hockey/leagues/womens-college-hockey/events/401584793/competitions/401584793/broadcasts](https://sports.core.api.espn.com/v2/sports/hockey/leagues/womens-college-hockey/events/401584793/competitions/401584793/broadcasts)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -465,7 +465,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/hockey/leagues/womens-college-hockey/events/{event_id}/competitions/{cid}/predictor`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/hockey/leagues/womens-college-hockey/events/401584793/competitions](https://sports.core.api.espn.com/v2/sports/hockey/leagues/womens-college-hockey/events/401584793/competitions)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/hockey/leagues/womens-college-hockey/events/401584793/competitions/401584793/predictor](https://sports.core.api.espn.com/v2/sports/hockey/leagues/womens-college-hockey/events/401584793/competitions/401584793/predictor)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -491,7 +491,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/hockey/leagues/womens-college-hockey/events/{event_id}/competitions/{cid}/powerindex`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/hockey/leagues/womens-college-hockey/events/401584793/competitions](https://sports.core.api.espn.com/v2/sports/hockey/leagues/womens-college-hockey/events/401584793/competitions)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/hockey/leagues/womens-college-hockey/events/401584793/competitions/401584793/powerindex](https://sports.core.api.espn.com/v2/sports/hockey/leagues/womens-college-hockey/events/401584793/competitions/401584793/powerindex)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -517,7 +517,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/hockey/leagues/womens-college-hockey/events/{event_id}/competitions/{cid}/propbets`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/hockey/leagues/womens-college-hockey/events/401584793/competitions](https://sports.core.api.espn.com/v2/sports/hockey/leagues/womens-college-hockey/events/401584793/competitions)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/hockey/leagues/womens-college-hockey/events/401584793/competitions/401584793/propbets](https://sports.core.api.espn.com/v2/sports/hockey/leagues/womens-college-hockey/events/401584793/competitions/401584793/propbets)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -543,7 +543,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/hockey/leagues/womens-college-hockey/events/{event_id}/competitions/{cid}/leaders`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/hockey/leagues/womens-college-hockey/events/401584793/competitions](https://sports.core.api.espn.com/v2/sports/hockey/leagues/womens-college-hockey/events/401584793/competitions)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/hockey/leagues/womens-college-hockey/events/401584793/competitions/401584793/leaders](https://sports.core.api.espn.com/v2/sports/hockey/leagues/womens-college-hockey/events/401584793/competitions/401584793/leaders)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -569,7 +569,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/hockey/leagues/womens-college-hockey/events/{event_id}/competitions/{cid}/scoringplays`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/hockey/leagues/womens-college-hockey/events/401584793/competitions](https://sports.core.api.espn.com/v2/sports/hockey/leagues/womens-college-hockey/events/401584793/competitions)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/hockey/leagues/womens-college-hockey/events/401584793/competitions/401584793/scoringplays](https://sports.core.api.espn.com/v2/sports/hockey/leagues/womens-college-hockey/events/401584793/competitions/401584793/scoringplays)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -595,7 +595,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/hockey/leagues/womens-college-hockey/events/{event_id}/competitions/{cid}/officials/{official_id}`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/hockey/leagues/womens-college-hockey/events/401584793/competitions](https://sports.core.api.espn.com/v2/sports/hockey/leagues/womens-college-hockey/events/401584793/competitions)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/hockey/leagues/womens-college-hockey/events/401584793/competitions/401584793/officials/1](https://sports.core.api.espn.com/v2/sports/hockey/leagues/womens-college-hockey/events/401584793/competitions/401584793/officials/1)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|

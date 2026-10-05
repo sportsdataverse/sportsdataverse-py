@@ -62,7 +62,7 @@ def nfl_standings(
     """GET /football/v2/standings — one row per team standing across the returned week(s).
 
     Endpoint: ``GET https://api.nfl.com/football/v2/standings``
-    Example URL: https://api.nfl.com/football/v2/standings?season=2024&seasonType=REG&week=18
+    Example URL: https://api.nfl.com/football/v2/standings?season=2024&seasonType=REG&week=18&limit=40
 
     Args:
         season: season query parameter.
@@ -113,7 +113,7 @@ def nfl_rosters(
     """GET /football/v2/rosters — one row per team roster for the season.
 
     Endpoint: ``GET https://api.nfl.com/football/v2/rosters``
-    Example URL: https://api.nfl.com/football/v2/rosters?season=2024
+    Example URL: https://api.nfl.com/football/v2/rosters?season=2024&limit=40
 
     Args:
         season: season query parameter.
@@ -161,7 +161,7 @@ def nfl_teams_history(
     """GET /football/v2/teams/history — one row per team for a season.
 
     Endpoint: ``GET https://api.nfl.com/football/v2/teams/history``
-    Example URL: https://api.nfl.com/football/v2/teams/history?season=2024
+    Example URL: https://api.nfl.com/football/v2/teams/history?season=2024&limit=40
 
     Args:
         season: season query parameter.
@@ -332,7 +332,7 @@ def nfl_combine_profiles(
     """GET /football/v2/combine/profiles — one row per combine prospect.
 
     Endpoint: ``GET https://api.nfl.com/football/v2/combine/profiles``
-    Example URL: https://api.nfl.com/football/v2/combine/profiles?year=2024
+    Example URL: https://api.nfl.com/football/v2/combine/profiles?year=2024&limit=40
 
     Args:
         year: year query parameter.
@@ -378,7 +378,7 @@ def nfl_draft_picks(
     """GET /football/v2/draft/picks/report — one row per draft pick.
 
     Endpoint: ``GET https://api.nfl.com/football/v2/draft/picks/report``
-    Example URL: https://api.nfl.com/football/v2/draft/picks/report?year=2024
+    Example URL: https://api.nfl.com/football/v2/draft/picks/report?year=2024&limit=40
 
     Args:
         year: year query parameter.
@@ -527,7 +527,7 @@ def nfl_weekly_game_details(
     """GET /football/v2/experience/weekly-game-details — one row per game (bare list).
 
     Endpoint: ``GET https://api.nfl.com/football/v2/experience/weekly-game-details``
-    Example URL: https://api.nfl.com/football/v2/experience/weekly-game-details?season=2024&type=REG&week=1
+    Example URL: https://api.nfl.com/football/v2/experience/weekly-game-details?season=2024&type=REG&week=1&includeDriveChart=true&includeReplays=false&includeStandings=false&includeTaggedVideos=false
 
     Args:
         season: season query parameter.
@@ -668,7 +668,7 @@ def nfl_game_details_v2(
     """GET /experience/v2/gamedetails/{game_id} — one row: the flat v2 game detail (game, summary, optional drive chart / replays / standings).
 
     Endpoint: ``GET https://api.nfl.com/experience/v2/gamedetails/{game_id}``
-    Example URL: https://api.nfl.com/experience/v2/gamedetails/a9a890ed-4feb-11f1-abca-2c54536568a9
+    Example URL: https://api.nfl.com/experience/v2/gamedetails/a9a890ed-4feb-11f1-abca-2c54536568a9?includeDriveChart=false&includeReplays=false&includeStandings=false&includeTaggedVideos=false
 
     Args:
         game_id: Shield uuid game id -- the ``id`` column of the week games and weekly game details listings.
@@ -719,7 +719,7 @@ def nfl_game_details_by_slug(
     """GET /experience/v1/gamedetailsbyslug/{slug} — one row: the flat game detail looked up by nfl.com slug.
 
     Endpoint: ``GET https://api.nfl.com/experience/v1/gamedetailsbyslug/{slug}``
-    Example URL: https://api.nfl.com/experience/v1/gamedetailsbyslug/broncos-at-chiefs-2026-reg-1
+    Example URL: https://api.nfl.com/experience/v1/gamedetailsbyslug/broncos-at-chiefs-2026-reg-1?includeReplays=false
 
     Args:
         slug: nfl.com game slug, e.g. ``broncos-at-chiefs-2026-reg-1`` -- the last segment of the nfl.com game page URL and the ``slug`` external id.

@@ -50,7 +50,7 @@ def nfl_pro_players_offense_passing_season(
     """GET /api/secured/stats/players-offense/passing/season — one row per passer for the season — quarterback passing incl. Next Gen time-to-throw, aggressiveness and CPOE.
 
     Endpoint: ``GET https://pro.nfl.com/api/secured/stats/players-offense/passing/season``
-    Example URL: https://pro.nfl.com/api/secured/stats/players-offense/passing/season?season=2024&seasonType=REG
+    Example URL: https://pro.nfl.com/api/secured/stats/players-offense/passing/season?season=2024&seasonType=REG&limit=500
 
     Args:
         season: Season, as the STARTING year (2024 = the 2024-25 NFL season).
@@ -118,7 +118,7 @@ def nfl_pro_players_offense_passing_week(
     """GET /api/secured/stats/players-offense/passing/week — one row per passer per week — quarterback passing incl. Next Gen time-to-throw, aggressiveness and CPOE.
 
     Endpoint: ``GET https://pro.nfl.com/api/secured/stats/players-offense/passing/week``
-    Example URL: https://pro.nfl.com/api/secured/stats/players-offense/passing/week?season=2024&seasonType=REG
+    Example URL: https://pro.nfl.com/api/secured/stats/players-offense/passing/week?season=2024&seasonType=REG&limit=500
 
     Args:
         season: Season, as the STARTING year (2024 = the 2024-25 NFL season).
@@ -187,7 +187,7 @@ def nfl_pro_players_offense_rushing_season(
     """GET /api/secured/stats/players-offense/rushing/season — one row per rusher for the season — rushing incl. Next Gen efficiency, yards over expected and defenders-in-box.
 
     Endpoint: ``GET https://pro.nfl.com/api/secured/stats/players-offense/rushing/season``
-    Example URL: https://pro.nfl.com/api/secured/stats/players-offense/rushing/season?season=2024&seasonType=REG
+    Example URL: https://pro.nfl.com/api/secured/stats/players-offense/rushing/season?season=2024&seasonType=REG&limit=500
 
     Args:
         season: Season, as the STARTING year (2024 = the 2024-25 NFL season).
@@ -255,7 +255,7 @@ def nfl_pro_players_offense_rushing_week(
     """GET /api/secured/stats/players-offense/rushing/week — one row per rusher per week — rushing incl. Next Gen efficiency, yards over expected and defenders-in-box.
 
     Endpoint: ``GET https://pro.nfl.com/api/secured/stats/players-offense/rushing/week``
-    Example URL: https://pro.nfl.com/api/secured/stats/players-offense/rushing/week?season=2024&seasonType=REG
+    Example URL: https://pro.nfl.com/api/secured/stats/players-offense/rushing/week?season=2024&seasonType=REG&limit=500
 
     Args:
         season: Season, as the STARTING year (2024 = the 2024-25 NFL season).
@@ -324,7 +324,7 @@ def nfl_pro_players_offense_receiving_season(
     """GET /api/secured/stats/players-offense/receiving/season — one row per receiver for the season — receiving incl. Next Gen separation, cushion and catch rate over expected.
 
     Endpoint: ``GET https://pro.nfl.com/api/secured/stats/players-offense/receiving/season``
-    Example URL: https://pro.nfl.com/api/secured/stats/players-offense/receiving/season?season=2024&seasonType=REG
+    Example URL: https://pro.nfl.com/api/secured/stats/players-offense/receiving/season?season=2024&seasonType=REG&limit=500
 
     Args:
         season: Season, as the STARTING year (2024 = the 2024-25 NFL season).
@@ -392,7 +392,7 @@ def nfl_pro_players_offense_receiving_week(
     """GET /api/secured/stats/players-offense/receiving/week — one row per receiver per week — receiving incl. Next Gen separation, cushion and catch rate over expected.
 
     Endpoint: ``GET https://pro.nfl.com/api/secured/stats/players-offense/receiving/week``
-    Example URL: https://pro.nfl.com/api/secured/stats/players-offense/receiving/week?season=2024&seasonType=REG
+    Example URL: https://pro.nfl.com/api/secured/stats/players-offense/receiving/week?season=2024&seasonType=REG&limit=500
 
     Args:
         season: Season, as the STARTING year (2024 = the 2024-25 NFL season).
@@ -461,7 +461,7 @@ def nfl_pro_defense_overview_season(
     """GET /api/secured/stats/defense/overview/season — one row per defender for the season — defensive overview incl. snap counts, pressures and havoc stops.
 
     Endpoint: ``GET https://pro.nfl.com/api/secured/stats/defense/overview/season``
-    Example URL: https://pro.nfl.com/api/secured/stats/defense/overview/season?season=2024&seasonType=REG
+    Example URL: https://pro.nfl.com/api/secured/stats/defense/overview/season?season=2024&seasonType=REG&limit=500
 
     Args:
         season: Season, as the STARTING year (2024 = the 2024-25 NFL season).
@@ -529,7 +529,7 @@ def nfl_pro_defense_overview_week(
     """GET /api/secured/stats/defense/overview/week — one row per defender per week — defensive overview incl. snap counts, pressures and havoc stops.
 
     Endpoint: ``GET https://pro.nfl.com/api/secured/stats/defense/overview/week``
-    Example URL: https://pro.nfl.com/api/secured/stats/defense/overview/week?season=2024&seasonType=REG
+    Example URL: https://pro.nfl.com/api/secured/stats/defense/overview/week?season=2024&seasonType=REG&limit=500
 
     Args:
         season: Season, as the STARTING year (2024 = the 2024-25 NFL season).
@@ -598,7 +598,7 @@ def nfl_pro_defense_nearest_season(
     """GET /api/secured/stats/defense/nearest/season — one row per defender for the season — nearest-defender coverage incl. targets, catch rate and CROE allowed.
 
     Endpoint: ``GET https://pro.nfl.com/api/secured/stats/defense/nearest/season``
-    Example URL: https://pro.nfl.com/api/secured/stats/defense/nearest/season?season=2024&seasonType=REG
+    Example URL: https://pro.nfl.com/api/secured/stats/defense/nearest/season?season=2024&seasonType=REG&limit=500
 
     Args:
         season: Season, as the STARTING year (2024 = the 2024-25 NFL season).
@@ -666,7 +666,7 @@ def nfl_pro_defense_nearest_week(
     """GET /api/secured/stats/defense/nearest/week — one row per defender per week — nearest-defender coverage incl. targets, catch rate and CROE allowed.
 
     Endpoint: ``GET https://pro.nfl.com/api/secured/stats/defense/nearest/week``
-    Example URL: https://pro.nfl.com/api/secured/stats/defense/nearest/week?season=2024&seasonType=REG
+    Example URL: https://pro.nfl.com/api/secured/stats/defense/nearest/week?season=2024&seasonType=REG&limit=500
 
     Args:
         season: Season, as the STARTING year (2024 = the 2024-25 NFL season).
@@ -734,7 +734,7 @@ def nfl_pro_team_offense_overview_season(
     """GET /api/secured/stats/team-offense/overview/season — one row per team for the season — team offensive overview incl. EPA per play, pass and rush splits.
 
     Endpoint: ``GET https://pro.nfl.com/api/secured/stats/team-offense/overview/season``
-    Example URL: https://pro.nfl.com/api/secured/stats/team-offense/overview/season?season=2024&seasonType=REG
+    Example URL: https://pro.nfl.com/api/secured/stats/team-offense/overview/season?season=2024&seasonType=REG&limit=500
 
     Args:
         season: Season, as the STARTING year (2024 = the 2024-25 NFL season).
@@ -798,7 +798,7 @@ def nfl_pro_team_offense_overview_week(
     """GET /api/secured/stats/team-offense/overview/week — one row per team per week — team offensive overview incl. EPA per play, pass and rush splits.
 
     Endpoint: ``GET https://pro.nfl.com/api/secured/stats/team-offense/overview/week``
-    Example URL: https://pro.nfl.com/api/secured/stats/team-offense/overview/week?season=2024&seasonType=REG
+    Example URL: https://pro.nfl.com/api/secured/stats/team-offense/overview/week?season=2024&seasonType=REG&limit=500
 
     Args:
         season: Season, as the STARTING year (2024 = the 2024-25 NFL season).
@@ -862,7 +862,7 @@ def nfl_pro_team_defense_overview_season(
     """GET /api/secured/stats/team-defense/overview/season — one row per team for the season — team defensive overview incl. EPA allowed per play and takeaways.
 
     Endpoint: ``GET https://pro.nfl.com/api/secured/stats/team-defense/overview/season``
-    Example URL: https://pro.nfl.com/api/secured/stats/team-defense/overview/season?season=2024&seasonType=REG
+    Example URL: https://pro.nfl.com/api/secured/stats/team-defense/overview/season?season=2024&seasonType=REG&limit=500
 
     Args:
         season: Season, as the STARTING year (2024 = the 2024-25 NFL season).
@@ -926,7 +926,7 @@ def nfl_pro_team_defense_overview_week(
     """GET /api/secured/stats/team-defense/overview/week — one row per team per week — team defensive overview incl. EPA allowed per play and takeaways.
 
     Endpoint: ``GET https://pro.nfl.com/api/secured/stats/team-defense/overview/week``
-    Example URL: https://pro.nfl.com/api/secured/stats/team-defense/overview/week?season=2024&seasonType=REG
+    Example URL: https://pro.nfl.com/api/secured/stats/team-defense/overview/week?season=2024&seasonType=REG&limit=500
 
     Args:
         season: Season, as the STARTING year (2024 = the 2024-25 NFL season).
@@ -992,7 +992,7 @@ def nfl_pro_fantasy_season(
     """GET /api/secured/stats/fantasy/season — one row per player for the season — fantasy points, opportunity and usage.
 
     Endpoint: ``GET https://pro.nfl.com/api/secured/stats/fantasy/season``
-    Example URL: https://pro.nfl.com/api/secured/stats/fantasy/season?season=2024&seasonType=REG
+    Example URL: https://pro.nfl.com/api/secured/stats/fantasy/season?season=2024&seasonType=REG&limit=500
 
     Args:
         season: Season, as the STARTING year (2024 = the 2024-25 NFL season).
@@ -1062,7 +1062,7 @@ def nfl_pro_fantasy_game(
     """GET /api/secured/stats/fantasy/game — one row per player-game — fantasy scoring by game. Requires ``position_group``.
 
     Endpoint: ``GET https://pro.nfl.com/api/secured/stats/fantasy/game``
-    Example URL: https://pro.nfl.com/api/secured/stats/fantasy/game?season=2024&seasonType=REG&positionGroup=QB
+    Example URL: https://pro.nfl.com/api/secured/stats/fantasy/game?season=2024&seasonType=REG&limit=500&positionGroup=QB
 
     Args:
         season: Season, as the STARTING year (2024 = the 2024-25 NFL season).

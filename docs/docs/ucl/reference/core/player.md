@@ -13,7 +13,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.champions/athletes`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.champions/athletes](https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.champions/athletes)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.champions/athletes?active=true&limit=100&page=1](https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.champions/athletes?active=true&limit=100&page=1)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|

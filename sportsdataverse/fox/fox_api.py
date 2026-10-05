@@ -74,7 +74,7 @@ def fox_api_scoreboard(
     """GET /bifrost/v1/{sport}/scoreboard/main -- Fox Sports API scoreboard.
 
     Endpoint: ``GET https://api.foxsports.com/bifrost/v1/{sport}/scoreboard/main``
-    Example URL: https://api.foxsports.com/bifrost/v1/nfl/scoreboard/main
+    Example URL: https://api.foxsports.com/bifrost/v1/nfl/scoreboard/main?apikey=jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq&api-version=1.1
 
     Args:
         sport: Fox sport/league slug as used in foxsports.com URLs, e.g. ``nfl``, ``cfb``, ``nba``, ``cbk``, ``wcbk``, ``mlb``, ``nhl``.
@@ -133,7 +133,7 @@ def fox_api_scorechip(
     """GET /bifrost/v1/{sport}/scorechip/{chip_id} -- one game's score chip (this route 400s if api-version is sent).
 
     Endpoint: ``GET https://api.foxsports.com/bifrost/v1/{sport}/scorechip/{chip_id}``
-    Example URL: https://api.foxsports.com/bifrost/v1/nfl/scorechip/nfl11195
+    Example URL: https://api.foxsports.com/bifrost/v1/nfl/scorechip/nfl11195?apikey=jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq
 
     Args:
         sport: Fox sport/league slug as used in foxsports.com URLs, e.g. ``nfl``, ``cfb``, ``nba``, ``cbk``, ``wcbk``, ``mlb``, ``nhl``.
@@ -189,7 +189,7 @@ def fox_api_topevents_scoreboard_segment(
     """GET /bifrost/v1/topevents/scoreboard/segment/{segment} -- Fox Sports API topevents scoreboard segment.
 
     Endpoint: ``GET https://api.foxsports.com/bifrost/v1/topevents/scoreboard/segment/{segment}``
-    Example URL: https://api.foxsports.com/bifrost/v1/topevents/scoreboard/segment/1
+    Example URL: https://api.foxsports.com/bifrost/v1/topevents/scoreboard/segment/1?apikey=jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq&api-version=1.1
 
     Args:
         segment: Top-events scoreboard segment id (``0`` / ``1`` ... as listed by ``topevents/scoreboard/main``); NOT a league ``<season>-<week>-<type>`` id.
@@ -246,7 +246,7 @@ def fox_api_league_conferences(
     """GET /bifrost/v1/{sport}/league/conferences -- Fox Sports API league conferences.
 
     Endpoint: ``GET https://api.foxsports.com/bifrost/v1/{sport}/league/conferences``
-    Example URL: https://api.foxsports.com/bifrost/v1/nfl/league/conferences
+    Example URL: https://api.foxsports.com/bifrost/v1/nfl/league/conferences?apikey=jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq&api-version=1.1
 
     Args:
         sport: Fox sport/league slug as used in foxsports.com URLs, e.g. ``nfl``, ``cfb``, ``nba``, ``cbk``, ``wcbk``, ``mlb``, ``nhl``.
@@ -303,7 +303,7 @@ def fox_api_league_header(
     """GET /bifrost/v1/{sport}/league/header -- Fox Sports API league header.
 
     Endpoint: ``GET https://api.foxsports.com/bifrost/v1/{sport}/league/header``
-    Example URL: https://api.foxsports.com/bifrost/v1/nfl/league/header
+    Example URL: https://api.foxsports.com/bifrost/v1/nfl/league/header?apikey=jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq&api-version=1.1
 
     Args:
         sport: Fox sport/league slug as used in foxsports.com URLs, e.g. ``nfl``, ``cfb``, ``nba``, ``cbk``, ``wcbk``, ``mlb``, ``nhl``.
@@ -361,7 +361,7 @@ def fox_api_league_odds(
     """GET /bifrost/v1/{sport}/league/odds -- Fox Sports API league odds.
 
     Endpoint: ``GET https://api.foxsports.com/bifrost/v1/{sport}/league/odds``
-    Example URL: https://api.foxsports.com/bifrost/v1/nfl/league/odds
+    Example URL: https://api.foxsports.com/bifrost/v1/nfl/league/odds?apikey=jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq&api-version=1.1
 
     Args:
         sport: Fox sport/league slug as used in foxsports.com URLs, e.g. ``nfl``, ``cfb``, ``nba``, ``cbk``, ``wcbk``, ``mlb``, ``nhl``.
@@ -420,7 +420,7 @@ def fox_api_league_playernews(
     """GET /bifrost/v1/{sport}/league/playernews -- Fox Sports API league playernews.
 
     Endpoint: ``GET https://api.foxsports.com/bifrost/v1/{sport}/league/playernews``
-    Example URL: https://api.foxsports.com/bifrost/v1/nfl/league/playernews
+    Example URL: https://api.foxsports.com/bifrost/v1/nfl/league/playernews?apikey=jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq&api-version=1.1
 
     Args:
         sport: Fox sport/league slug as used in foxsports.com URLs, e.g. ``nfl``, ``cfb``, ``nba``, ``cbk``, ``wcbk``, ``mlb``, ``nhl``.
@@ -477,7 +477,7 @@ def fox_api_league_polls(
     """GET /bifrost/v1/{sport}/league/polls -- Fox Sports API league polls.
 
     Endpoint: ``GET https://api.foxsports.com/bifrost/v1/{sport}/league/polls``
-    Example URL: https://api.foxsports.com/bifrost/v1/nfl/league/polls
+    Example URL: https://api.foxsports.com/bifrost/v1/nfl/league/polls?apikey=jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq&api-version=1.1
 
     Args:
         sport: Fox sport/league slug as used in foxsports.com URLs, e.g. ``nfl``, ``cfb``, ``nba``, ``cbk``, ``wcbk``, ``mlb``, ``nhl``.
@@ -534,7 +534,7 @@ def fox_api_league_schedule(
     """GET /bifrost/v1/{sport}/league/schedule -- Fox Sports API league schedule.
 
     Endpoint: ``GET https://api.foxsports.com/bifrost/v1/{sport}/league/schedule``
-    Example URL: https://api.foxsports.com/bifrost/v1/nfl/league/schedule
+    Example URL: https://api.foxsports.com/bifrost/v1/nfl/league/schedule?apikey=jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq&api-version=1.1
 
     Args:
         sport: Fox sport/league slug as used in foxsports.com URLs, e.g. ``nfl``, ``cfb``, ``nba``, ``cbk``, ``wcbk``, ``mlb``, ``nhl``.
@@ -591,7 +591,7 @@ def fox_api_league_scores(
     """GET /bifrost/v1/{sport}/league/scores -- Fox Sports API league scores.
 
     Endpoint: ``GET https://api.foxsports.com/bifrost/v1/{sport}/league/scores``
-    Example URL: https://api.foxsports.com/bifrost/v1/nfl/league/scores
+    Example URL: https://api.foxsports.com/bifrost/v1/nfl/league/scores?apikey=jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq&api-version=1.1
 
     Args:
         sport: Fox sport/league slug as used in foxsports.com URLs, e.g. ``nfl``, ``cfb``, ``nba``, ``cbk``, ``wcbk``, ``mlb``, ``nhl``.
@@ -650,7 +650,7 @@ def fox_api_league_scores_segment(
     """GET /bifrost/v1/{sport}/league/scores-segment/{segment_id} -- Fox Sports API league scores segment.
 
     Endpoint: ``GET https://api.foxsports.com/bifrost/v1/{sport}/league/scores-segment/{segment_id}``
-    Example URL: https://api.foxsports.com/bifrost/v1/nfl/league/scores-segment/2026-3-1
+    Example URL: https://api.foxsports.com/bifrost/v1/nfl/league/scores-segment/2026-3-1?apikey=jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq&api-version=1.1
 
     Args:
         sport: Fox sport/league slug as used in foxsports.com URLs, e.g. ``nfl``, ``cfb``, ``nba``, ``cbk``, ``wcbk``, ``mlb``, ``nhl``.
@@ -710,7 +710,7 @@ def fox_api_league_standings(
     """GET /bifrost/v1/{sport}/league/standings -- Fox Sports API league standings.
 
     Endpoint: ``GET https://api.foxsports.com/bifrost/v1/{sport}/league/standings``
-    Example URL: https://api.foxsports.com/bifrost/v1/nfl/league/standings
+    Example URL: https://api.foxsports.com/bifrost/v1/nfl/league/standings?apikey=jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq&api-version=1.1
 
     Args:
         sport: Fox sport/league slug as used in foxsports.com URLs, e.g. ``nfl``, ``cfb``, ``nba``, ``cbk``, ``wcbk``, ``mlb``, ``nhl``.
@@ -767,7 +767,7 @@ def fox_api_league_stats(
     """GET /bifrost/v1/{sport}/league/stats -- Fox Sports API league stats.
 
     Endpoint: ``GET https://api.foxsports.com/bifrost/v1/{sport}/league/stats``
-    Example URL: https://api.foxsports.com/bifrost/v1/nfl/league/stats
+    Example URL: https://api.foxsports.com/bifrost/v1/nfl/league/stats?apikey=jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq&api-version=1.1
 
     Args:
         sport: Fox sport/league slug as used in foxsports.com URLs, e.g. ``nfl``, ``cfb``, ``nba``, ``cbk``, ``wcbk``, ``mlb``, ``nhl``.
@@ -828,7 +828,7 @@ def fox_api_league_stats_con(
     """GET /bifrost/v1/{sport}/league/stats-con/{who}/{category}/{page} -- Fox Sports API league stats con.
 
     Endpoint: ``GET https://api.foxsports.com/bifrost/v1/{sport}/league/stats-con/{who}/{category}/{page}``
-    Example URL: https://api.foxsports.com/bifrost/v1/nfl/league/stats-con/player/passing/1
+    Example URL: https://api.foxsports.com/bifrost/v1/nfl/league/stats-con/player/passing/1?apikey=jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq&api-version=1.1
 
     Args:
         sport: Fox sport/league slug as used in foxsports.com URLs, e.g. ``nfl``, ``cfb``, ``nba``, ``cbk``, ``wcbk``, ``mlb``, ``nhl``.
@@ -890,7 +890,7 @@ def fox_api_league_teamnav(
     """GET /bifrost/v1/{sport}/league/teamnav -- Fox Sports API league teamnav.
 
     Endpoint: ``GET https://api.foxsports.com/bifrost/v1/{sport}/league/teamnav``
-    Example URL: https://api.foxsports.com/bifrost/v1/nfl/league/teamnav
+    Example URL: https://api.foxsports.com/bifrost/v1/nfl/league/teamnav?apikey=jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq&api-version=1.1
 
     Args:
         sport: Fox sport/league slug as used in foxsports.com URLs, e.g. ``nfl``, ``cfb``, ``nba``, ``cbk``, ``wcbk``, ``mlb``, ``nhl``.
@@ -948,7 +948,7 @@ def fox_api_event_data(
     """GET /bifrost/v1/{sport}/event/{event_id}/data -- Fox Sports API event data.
 
     Endpoint: ``GET https://api.foxsports.com/bifrost/v1/{sport}/event/{event_id}/data``
-    Example URL: https://api.foxsports.com/bifrost/v1/nfl/event/11195/data
+    Example URL: https://api.foxsports.com/bifrost/v1/nfl/event/11195/data?apikey=jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq&api-version=1.1
 
     Args:
         sport: Fox sport/league slug as used in foxsports.com URLs, e.g. ``nfl``, ``cfb``, ``nba``, ``cbk``, ``wcbk``, ``mlb``, ``nhl``.
@@ -1007,7 +1007,7 @@ def fox_api_event_matchup(
     """GET /bifrost/v1/{sport}/event/{event_id}/matchup -- Fox Sports API event matchup.
 
     Endpoint: ``GET https://api.foxsports.com/bifrost/v1/{sport}/event/{event_id}/matchup``
-    Example URL: https://api.foxsports.com/bifrost/v1/nfl/event/11195/matchup
+    Example URL: https://api.foxsports.com/bifrost/v1/nfl/event/11195/matchup?apikey=jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq&api-version=1.1
 
     Args:
         sport: Fox sport/league slug as used in foxsports.com URLs, e.g. ``nfl``, ``cfb``, ``nba``, ``cbk``, ``wcbk``, ``mlb``, ``nhl``.
@@ -1066,7 +1066,7 @@ def fox_api_event_odds(
     """GET /bifrost/v1/{sport}/event/{event_id}/odds -- Fox Sports API event odds.
 
     Endpoint: ``GET https://api.foxsports.com/bifrost/v1/{sport}/event/{event_id}/odds``
-    Example URL: https://api.foxsports.com/bifrost/v1/nfl/event/11195/odds
+    Example URL: https://api.foxsports.com/bifrost/v1/nfl/event/11195/odds?apikey=jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq&api-version=1.1
 
     Args:
         sport: Fox sport/league slug as used in foxsports.com URLs, e.g. ``nfl``, ``cfb``, ``nba``, ``cbk``, ``wcbk``, ``mlb``, ``nhl``.
@@ -1125,7 +1125,7 @@ def fox_api_event_recap(
     """GET /bifrost/v1/{sport}/event/{event_id}/recap -- Fox Sports API event recap.
 
     Endpoint: ``GET https://api.foxsports.com/bifrost/v1/{sport}/event/{event_id}/recap``
-    Example URL: https://api.foxsports.com/bifrost/v1/nfl/event/11195/recap
+    Example URL: https://api.foxsports.com/bifrost/v1/nfl/event/11195/recap?apikey=jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq&api-version=1.1
 
     Args:
         sport: Fox sport/league slug as used in foxsports.com URLs, e.g. ``nfl``, ``cfb``, ``nba``, ``cbk``, ``wcbk``, ``mlb``, ``nhl``.
@@ -1184,7 +1184,7 @@ def fox_api_event_standings(
     """GET /bifrost/v1/{sport}/event/{event_id}/standings -- Fox Sports API event standings.
 
     Endpoint: ``GET https://api.foxsports.com/bifrost/v1/{sport}/event/{event_id}/standings``
-    Example URL: https://api.foxsports.com/bifrost/v1/nfl/event/11195/standings
+    Example URL: https://api.foxsports.com/bifrost/v1/nfl/event/11195/standings?apikey=jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq&api-version=1.1
 
     Args:
         sport: Fox sport/league slug as used in foxsports.com URLs, e.g. ``nfl``, ``cfb``, ``nba``, ``cbk``, ``wcbk``, ``mlb``, ``nhl``.
@@ -1243,7 +1243,7 @@ def fox_api_team_gamelog(
     """GET /bifrost/v1/{sport}/team/{team_id}/gamelog -- Fox Sports API team gamelog.
 
     Endpoint: ``GET https://api.foxsports.com/bifrost/v1/{sport}/team/{team_id}/gamelog``
-    Example URL: https://api.foxsports.com/bifrost/v1/nfl/team/25/gamelog
+    Example URL: https://api.foxsports.com/bifrost/v1/nfl/team/25/gamelog?apikey=jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq&api-version=1.1
 
     Args:
         sport: Fox sport/league slug as used in foxsports.com URLs, e.g. ``nfl``, ``cfb``, ``nba``, ``cbk``, ``wcbk``, ``mlb``, ``nhl``.
@@ -1302,7 +1302,7 @@ def fox_api_team_header(
     """GET /bifrost/v1/{sport}/team/{team_id}/header -- Fox Sports API team header.
 
     Endpoint: ``GET https://api.foxsports.com/bifrost/v1/{sport}/team/{team_id}/header``
-    Example URL: https://api.foxsports.com/bifrost/v1/nfl/team/25/header
+    Example URL: https://api.foxsports.com/bifrost/v1/nfl/team/25/header?apikey=jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq&api-version=1.1
 
     Args:
         sport: Fox sport/league slug as used in foxsports.com URLs, e.g. ``nfl``, ``cfb``, ``nba``, ``cbk``, ``wcbk``, ``mlb``, ``nhl``.
@@ -1361,7 +1361,7 @@ def fox_api_team_roster(
     """GET /bifrost/v1/{sport}/team/{team_id}/roster -- Fox Sports API team roster.
 
     Endpoint: ``GET https://api.foxsports.com/bifrost/v1/{sport}/team/{team_id}/roster``
-    Example URL: https://api.foxsports.com/bifrost/v1/nfl/team/25/roster
+    Example URL: https://api.foxsports.com/bifrost/v1/nfl/team/25/roster?apikey=jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq&api-version=1.1
 
     Args:
         sport: Fox sport/league slug as used in foxsports.com URLs, e.g. ``nfl``, ``cfb``, ``nba``, ``cbk``, ``wcbk``, ``mlb``, ``nhl``.
@@ -1420,7 +1420,7 @@ def fox_api_team_standings(
     """GET /bifrost/v1/{sport}/team/{team_id}/standings -- Fox Sports API team standings.
 
     Endpoint: ``GET https://api.foxsports.com/bifrost/v1/{sport}/team/{team_id}/standings``
-    Example URL: https://api.foxsports.com/bifrost/v1/nfl/team/25/standings
+    Example URL: https://api.foxsports.com/bifrost/v1/nfl/team/25/standings?apikey=jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq&api-version=1.1
 
     Args:
         sport: Fox sport/league slug as used in foxsports.com URLs, e.g. ``nfl``, ``cfb``, ``nba``, ``cbk``, ``wcbk``, ``mlb``, ``nhl``.
@@ -1479,7 +1479,7 @@ def fox_api_team_stats(
     """GET /bifrost/v1/{sport}/team/{team_id}/stats -- Fox Sports API team stats.
 
     Endpoint: ``GET https://api.foxsports.com/bifrost/v1/{sport}/team/{team_id}/stats``
-    Example URL: https://api.foxsports.com/bifrost/v1/nfl/team/25/stats
+    Example URL: https://api.foxsports.com/bifrost/v1/nfl/team/25/stats?apikey=jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq&api-version=1.1
 
     Args:
         sport: Fox sport/league slug as used in foxsports.com URLs, e.g. ``nfl``, ``cfb``, ``nba``, ``cbk``, ``wcbk``, ``mlb``, ``nhl``.
@@ -1537,7 +1537,7 @@ def fox_api_explore_browse(
     """GET /bifrost/v1/explore/browse/{section}/main -- Fox Sports API explore browse.
 
     Endpoint: ``GET https://api.foxsports.com/bifrost/v1/explore/browse/{section}/main``
-    Example URL: https://api.foxsports.com/bifrost/v1/explore/browse/sports/main
+    Example URL: https://api.foxsports.com/bifrost/v1/explore/browse/sports/main?apikey=jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq&api-version=1.1
 
     Args:
         section: Browse section: ``sports``, ``players``, ``shows``, ``personalities`` or ``topics``.
@@ -1593,7 +1593,7 @@ def fox_api_explore_odds(
     """GET /bifrost/v1/explore/odds/main -- Fox Sports API explore odds.
 
     Endpoint: ``GET https://api.foxsports.com/bifrost/v1/explore/odds/main``
-    Example URL: https://api.foxsports.com/bifrost/v1/explore/odds/main
+    Example URL: https://api.foxsports.com/bifrost/v1/explore/odds/main?apikey=jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq&api-version=1.1
 
     Args:
         apikey: Public Fox Sports data-tier key shipped in the foxsports.com web bundle (not a secret); override only if Fox rotates it.
@@ -1649,7 +1649,7 @@ def fox_api_search_content(
     """GET /bifrost/v1/search/content -- Fox Sports API search content.
 
     Endpoint: ``GET https://api.foxsports.com/bifrost/v1/search/content``
-    Example URL: https://api.foxsports.com/bifrost/v1/search/content?text=mahomes
+    Example URL: https://api.foxsports.com/bifrost/v1/search/content?apikey=jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq&api-version=1.1&text=mahomes
 
     Args:
         apikey: Public Fox Sports data-tier key shipped in the foxsports.com web bundle (not a secret); override only if Fox rotates it.
@@ -1707,7 +1707,7 @@ def fox_api_search_entities(
     """GET /bifrost/v1/search/entities -- Fox Sports API search entities.
 
     Endpoint: ``GET https://api.foxsports.com/bifrost/v1/search/entities``
-    Example URL: https://api.foxsports.com/bifrost/v1/search/entities?text=mahomes
+    Example URL: https://api.foxsports.com/bifrost/v1/search/entities?apikey=jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq&api-version=1.1&text=mahomes
 
     Args:
         apikey: Public Fox Sports data-tier key shipped in the foxsports.com web bundle (not a secret); override only if Fox rotates it.
@@ -1764,7 +1764,7 @@ def fox_api_search_popular(
     """GET /bifrost/v1/search/popular -- Fox Sports API search popular.
 
     Endpoint: ``GET https://api.foxsports.com/bifrost/v1/search/popular``
-    Example URL: https://api.foxsports.com/bifrost/v1/search/popular
+    Example URL: https://api.foxsports.com/bifrost/v1/search/popular?apikey=jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq&api-version=1.1
 
     Args:
         apikey: Public Fox Sports data-tier key shipped in the foxsports.com web bundle (not a secret); override only if Fox rotates it.
@@ -1821,7 +1821,7 @@ def fox_api_trending_articles(
     """GET /bifrost/v1/general/trending/articles -- Fox Sports API trending articles.
 
     Endpoint: ``GET https://api.foxsports.com/bifrost/v1/general/trending/articles``
-    Example URL: https://api.foxsports.com/bifrost/v1/general/trending/articles
+    Example URL: https://api.foxsports.com/bifrost/v1/general/trending/articles?apikey=SuNgfBgmTGS2xozZbnV6FcjGGRQrR8cg&api-version=1.1&duration=4
 
     Args:
         apikey: Public Fox Sports feed-tier key shipped in the foxsports.com web bundle (not a secret); override only if Fox rotates it.
@@ -1882,7 +1882,7 @@ def fox_api_trending_videos(
     """GET /bifrost/v1/general/trending/videos -- Fox Sports API trending videos.
 
     Endpoint: ``GET https://api.foxsports.com/bifrost/v1/general/trending/videos``
-    Example URL: https://api.foxsports.com/bifrost/v1/general/trending/videos
+    Example URL: https://api.foxsports.com/bifrost/v1/general/trending/videos?apikey=SuNgfBgmTGS2xozZbnV6FcjGGRQrR8cg&api-version=1.1&duration=4&maxItems=12
 
     Args:
         apikey: Public Fox Sports feed-tier key shipped in the foxsports.com web bundle (not a secret); override only if Fox rotates it.
@@ -1942,7 +1942,7 @@ def fox_api_foxpolls(
     """GET /foxpolls/v1/polls -- Fox Sports API foxpolls.
 
     Endpoint: ``GET https://api.foxsports.com/foxpolls/v1/polls``
-    Example URL: https://api.foxsports.com/foxpolls/v1/polls
+    Example URL: https://api.foxsports.com/foxpolls/v1/polls?apikey=SuNgfBgmTGS2xozZbnV6FcjGGRQrR8cg&includeAnswers=true
 
     Args:
         apikey: Public Fox Sports feed-tier key shipped in the foxsports.com web bundle (not a secret); override only if Fox rotates it.

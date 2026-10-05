@@ -29,7 +29,7 @@ ESPN endpoint.
 ### Example {#espn_soccer_player_overview-example}
 
 ```python
-espn_soccer_player_overview(athlete_id='4239')
+espn_soccer_player_overview(league='eng.1', athlete_id='4239')
 ```
 
 _Last validated n/a._
@@ -55,7 +55,7 @@ ESPN endpoint.
 ### Example {#espn_soccer_player_stats-example}
 
 ```python
-espn_soccer_player_stats(athlete_id='4239')
+espn_soccer_player_stats(league='eng.1', athlete_id='4239')
 ```
 
 _Last validated n/a._
@@ -81,7 +81,7 @@ ESPN endpoint.
 ### Example {#espn_soccer_player_gamelog-example}
 
 ```python
-espn_soccer_player_gamelog(athlete_id='4239')
+espn_soccer_player_gamelog(league='eng.1', athlete_id='4239')
 ```
 
 _Last validated n/a._
@@ -107,7 +107,7 @@ ESPN endpoint.
 ### Example {#espn_soccer_player_splits-example}
 
 ```python
-espn_soccer_player_splits(athlete_id='4239')
+espn_soccer_player_splits(league='eng.1', athlete_id='4239')
 ```
 
 _Last validated n/a._
@@ -118,7 +118,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://site.web.api.espn.com/apis/common/v3/sports/soccer/eng.1/statistics/byathlete`
 
-**Valid URL:** [https://site.web.api.espn.com/apis/common/v3/sports/soccer/eng.1/statistics/byathlete](https://site.web.api.espn.com/apis/common/v3/sports/soccer/eng.1/statistics/byathlete)
+**Valid URL:** [https://site.web.api.espn.com/apis/common/v3/sports/soccer/eng.1/statistics/byathlete?limit=50&page=1](https://site.web.api.espn.com/apis/common/v3/sports/soccer/eng.1/statistics/byathlete?limit=50&page=1)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -174,7 +174,7 @@ ESPN endpoint.
 ### Example {#espn_soccer_leaders-example}
 
 ```python
-espn_soccer_leaders()
+espn_soccer_leaders(league='eng.1')
 ```
 
 _Last validated n/a._

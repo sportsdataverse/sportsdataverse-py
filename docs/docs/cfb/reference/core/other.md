@@ -37,7 +37,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons](https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons?limit=200](https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons?limit=200)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -139,7 +139,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/events`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/events](https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/events)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/events?limit=500](https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/events?limit=500)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -190,7 +190,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/teams`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/teams](https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/teams)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/teams?limit=1000&page=1](https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/teams?limit=1000&page=1)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -258,7 +258,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/venues`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/venues](https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/venues)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/venues?limit=1000](https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/venues?limit=1000)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -308,7 +308,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/franchises`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/franchises](https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/franchises)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/franchises?limit=200](https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/franchises?limit=200)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -383,7 +383,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/coaches/{coach_id}/record/{record_type}`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/coaches/1/record](https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/coaches/1/record)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/coaches/1/record/0](https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/coaches/1/record/0)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -435,7 +435,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/positions`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/positions](https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/positions)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/positions?limit=200](https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/positions?limit=200)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -485,7 +485,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/tournaments`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/tournaments](https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/tournaments)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/tournaments?limit=200](https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/tournaments?limit=200)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -510,7 +510,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/awards`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/awards](https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/awards)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/awards?limit=200](https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/awards?limit=200)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -685,7 +685,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/{season}/recruits`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2024/recruits](https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2024/recruits)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2024/recruits?limit=1000&page=1](https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2024/recruits?limit=1000&page=1)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -736,7 +736,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/recruiting/{year}/athletes`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/recruiting/2026/athletes](https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/recruiting/2026/athletes)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/recruiting/2026/athletes?limit=1000&page=1](https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/recruiting/2026/athletes?limit=1000&page=1)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|

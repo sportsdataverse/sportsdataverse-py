@@ -171,7 +171,7 @@ def espn_soccer_scoreboard(
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
 
     Endpoint: ``GET https://site.api.espn.com/apis/site/v2/sports/{sport}/{league}/scoreboard``
-    Example URL: https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/scoreboard?dates=20240115
+    Example URL: https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/scoreboard?dates=20240115&limit=500
 
     Args:
         dates: Date or date range filter (YYYYMMDD or YYYYMMDD-YYYYMMDD).
@@ -188,7 +188,7 @@ def espn_soccer_scoreboard(
     Example:
         Quick start::
 
-            espn_soccer_scoreboard(dates='20240115')
+            espn_soccer_scoreboard(league='eng.1', dates='20240115')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -226,16 +226,17 @@ def espn_soccer_summary(
 
     Args:
         event_id: event query parameter.
-        return_parsed: parse the payload through parse_summary -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
-        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        return_parsed: parse the payload through parse_summary -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
-        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+        a dict of ``polars.DataFrame``s keyed by summary section by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         Quick start::
 
-            espn_soccer_summary()
+            espn_soccer_summary(league='eng.1')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -276,7 +277,7 @@ def espn_soccer_calendar(
     Example:
         Quick start::
 
-            espn_soccer_calendar()
+            espn_soccer_calendar(league='eng.1')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {}
@@ -304,7 +305,7 @@ def espn_soccer_news(
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
 
     Endpoint: ``GET https://site.api.espn.com/apis/site/v2/sports/{sport}/{league}/news``
-    Example URL: https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/news
+    Example URL: https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/news?limit=50
 
     Args:
         limit: Maximum number of items to return.
@@ -317,7 +318,7 @@ def espn_soccer_news(
     Example:
         Quick start::
 
-            espn_soccer_news()
+            espn_soccer_news(league='eng.1')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -358,7 +359,7 @@ def espn_soccer_injuries(
     Example:
         Quick start::
 
-            espn_soccer_injuries()
+            espn_soccer_injuries(league='eng.1')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {}
@@ -386,7 +387,7 @@ def espn_soccer_transactions(
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
 
     Endpoint: ``GET https://site.api.espn.com/apis/site/v2/sports/{sport}/{league}/transactions``
-    Example URL: https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/transactions
+    Example URL: https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/transactions?limit=500
 
     Args:
         limit: Maximum number of items to return.
@@ -399,7 +400,7 @@ def espn_soccer_transactions(
     Example:
         Quick start::
 
-            espn_soccer_transactions()
+            espn_soccer_transactions(league='eng.1')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -440,7 +441,7 @@ def espn_soccer_conferences(
     Example:
         Quick start::
 
-            espn_soccer_conferences()
+            espn_soccer_conferences(league='eng.1')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {}
@@ -479,7 +480,7 @@ def espn_soccer_statistics_league(
     Example:
         Quick start::
 
-            espn_soccer_statistics_league()
+            espn_soccer_statistics_league(league='eng.1')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {}
@@ -518,7 +519,7 @@ def espn_soccer_draft(
     Example:
         Quick start::
 
-            espn_soccer_draft()
+            espn_soccer_draft(league='eng.1')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {}
@@ -546,7 +547,7 @@ def espn_soccer_teams_site(
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
 
     Endpoint: ``GET https://site.api.espn.com/apis/site/v2/sports/{sport}/{league}/teams``
-    Example URL: https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/teams
+    Example URL: https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/teams?limit=1000
 
     Args:
         limit: Maximum number of items to return.
@@ -559,7 +560,7 @@ def espn_soccer_teams_site(
     Example:
         Quick start::
 
-            espn_soccer_teams_site()
+            espn_soccer_teams_site(league='eng.1')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -602,7 +603,7 @@ def espn_soccer_team(
     Example:
         Quick start::
 
-            espn_soccer_team(team_id='4')
+            espn_soccer_team(league='eng.1', team_id='4')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {}
@@ -631,7 +632,7 @@ def espn_soccer_team_roster(
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
 
     Endpoint: ``GET https://site.api.espn.com/apis/site/v2/sports/{sport}/{league}/teams/{team_id}/roster``
-    Example URL: https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/teams/4/roster
+    Example URL: https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/teams/4/roster?limit=500
 
     Args:
         team_id: team_id path parameter.
@@ -645,7 +646,7 @@ def espn_soccer_team_roster(
     Example:
         Quick start::
 
-            espn_soccer_team_roster(team_id='4')
+            espn_soccer_team_roster(league='eng.1', team_id='4')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -690,7 +691,7 @@ def espn_soccer_team_schedule(
     Example:
         Quick start::
 
-            espn_soccer_team_schedule(team_id='4')
+            espn_soccer_team_schedule(league='eng.1', team_id='4')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -733,7 +734,7 @@ def espn_soccer_team_record(
     Example:
         Quick start::
 
-            espn_soccer_team_record(team_id='4')
+            espn_soccer_team_record(league='eng.1', team_id='4')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {}
@@ -774,7 +775,7 @@ def espn_soccer_team_depthcharts(
     Example:
         Quick start::
 
-            espn_soccer_team_depthcharts(team_id='4')
+            espn_soccer_team_depthcharts(league='eng.1', team_id='4')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {}
@@ -815,7 +816,7 @@ def espn_soccer_team_injuries(
     Example:
         Quick start::
 
-            espn_soccer_team_injuries(team_id='4')
+            espn_soccer_team_injuries(league='eng.1', team_id='4')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {}
@@ -856,7 +857,7 @@ def espn_soccer_team_transactions(
     Example:
         Quick start::
 
-            espn_soccer_team_transactions(team_id='4')
+            espn_soccer_team_transactions(league='eng.1', team_id='4')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {}
@@ -897,7 +898,7 @@ def espn_soccer_team_history(
     Example:
         Quick start::
 
-            espn_soccer_team_history(team_id='4')
+            espn_soccer_team_history(league='eng.1', team_id='4')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {}
@@ -926,7 +927,7 @@ def espn_soccer_team_news(
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
 
     Endpoint: ``GET https://site.api.espn.com/apis/site/v2/sports/{sport}/{league}/teams/{team_id}/news``
-    Example URL: https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/teams/4/news
+    Example URL: https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/teams/4/news?limit=50
 
     Args:
         team_id: team_id path parameter.
@@ -940,7 +941,7 @@ def espn_soccer_team_news(
     Example:
         Quick start::
 
-            espn_soccer_team_news(team_id='4')
+            espn_soccer_team_news(league='eng.1', team_id='4')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -983,7 +984,7 @@ def espn_soccer_team_leaders(
     Example:
         Quick start::
 
-            espn_soccer_team_leaders(team_id='4')
+            espn_soccer_team_leaders(league='eng.1', team_id='4')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {}
@@ -1024,7 +1025,7 @@ def espn_soccer_player_info(
     Example:
         Quick start::
 
-            espn_soccer_player_info(athlete_id='4239')
+            espn_soccer_player_info(league='eng.1', athlete_id='4239')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {}
@@ -1065,7 +1066,7 @@ def espn_soccer_player_bio(
     Example:
         Quick start::
 
-            espn_soccer_player_bio(athlete_id='4239')
+            espn_soccer_player_bio(league='eng.1', athlete_id='4239')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {}
@@ -1106,7 +1107,7 @@ def espn_soccer_player_news(
     Example:
         Quick start::
 
-            espn_soccer_player_news(athlete_id='4239')
+            espn_soccer_player_news(league='eng.1', athlete_id='4239')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {}
@@ -1151,7 +1152,7 @@ def espn_soccer_standings(
     Example:
         Quick start::
 
-            espn_soccer_standings()
+            espn_soccer_standings(league='eng.1')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -1196,7 +1197,7 @@ def espn_soccer_player_overview(
     Example:
         Quick start::
 
-            espn_soccer_player_overview(athlete_id='4239')
+            espn_soccer_player_overview(league='eng.1', athlete_id='4239')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {}
@@ -1239,7 +1240,7 @@ def espn_soccer_player_stats(
     Example:
         Quick start::
 
-            espn_soccer_player_stats(athlete_id='4239')
+            espn_soccer_player_stats(league='eng.1', athlete_id='4239')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -1284,7 +1285,7 @@ def espn_soccer_player_gamelog(
     Example:
         Quick start::
 
-            espn_soccer_player_gamelog(athlete_id='4239')
+            espn_soccer_player_gamelog(league='eng.1', athlete_id='4239')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -1329,7 +1330,7 @@ def espn_soccer_player_splits(
     Example:
         Quick start::
 
-            espn_soccer_player_splits(athlete_id='4239')
+            espn_soccer_player_splits(league='eng.1', athlete_id='4239')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -1364,7 +1365,7 @@ def espn_soccer_leaders(
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
 
     Endpoint: ``GET https://site.web.api.espn.com/apis/common/v3/sports/{sport}/{league}/statistics/byathlete``
-    Example URL: https://site.web.api.espn.com/apis/common/v3/sports/soccer/eng.1/statistics/byathlete
+    Example URL: https://site.web.api.espn.com/apis/common/v3/sports/soccer/eng.1/statistics/byathlete?limit=50&page=1
 
     Args:
         category: category query parameter.
@@ -1382,7 +1383,7 @@ def espn_soccer_leaders(
     Example:
         Quick start::
 
-            espn_soccer_leaders()
+            espn_soccer_leaders(league='eng.1')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -1428,7 +1429,7 @@ def espn_soccer_league_root(
     Example:
         Quick start::
 
-            espn_soccer_league_root()
+            espn_soccer_league_root(league='eng.1')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {}
@@ -1467,7 +1468,7 @@ def espn_soccer_season_pointer(
     Example:
         Quick start::
 
-            espn_soccer_season_pointer()
+            espn_soccer_season_pointer(league='eng.1')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {}
@@ -1495,7 +1496,7 @@ def espn_soccer_seasons(
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
 
     Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/seasons``
-    Example URL: https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/seasons
+    Example URL: https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/seasons?limit=200
 
     Args:
         limit: Maximum number of items to return.
@@ -1508,7 +1509,7 @@ def espn_soccer_seasons(
     Example:
         Quick start::
 
-            espn_soccer_seasons()
+            espn_soccer_seasons(league='eng.1')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -1551,7 +1552,7 @@ def espn_soccer_season_info(
     Example:
         Quick start::
 
-            espn_soccer_season_info(season=2024)
+            espn_soccer_season_info(league='eng.1', season=2024)
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {}
@@ -1592,7 +1593,7 @@ def espn_soccer_season_types(
     Example:
         Quick start::
 
-            espn_soccer_season_types(season=2024)
+            espn_soccer_season_types(league='eng.1', season=2024)
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {}
@@ -1635,7 +1636,7 @@ def espn_soccer_season_type(
     Example:
         Quick start::
 
-            espn_soccer_season_type(season=2024, season_type=2)
+            espn_soccer_season_type(league='eng.1', season=2024, season_type=2)
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {}
@@ -1680,7 +1681,7 @@ def espn_soccer_season_group(
     Example:
         Quick start::
 
-            espn_soccer_season_group(season=2024, season_type=2, group_id=80)
+            espn_soccer_season_group(league='eng.1', season=2024, season_type=2, group_id=80)
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {}
@@ -1723,7 +1724,7 @@ def espn_soccer_season_groups(
     Example:
         Quick start::
 
-            espn_soccer_season_groups(season=2024, season_type=2)
+            espn_soccer_season_groups(league='eng.1', season=2024, season_type=2)
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {}
@@ -1754,7 +1755,7 @@ def espn_soccer_season_group_teams(
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
 
     Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/seasons/{season}/types/{season_type}/groups/{group_id}/teams``
-    Example URL: https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/seasons/2024/types/2/groups/80/teams
+    Example URL: https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/seasons/2024/types/2/groups/80/teams?limit=500
 
     Args:
         season: season path parameter.
@@ -1770,7 +1771,7 @@ def espn_soccer_season_group_teams(
     Example:
         Quick start::
 
-            espn_soccer_season_group_teams(season=2024, season_type=2, group_id=80)
+            espn_soccer_season_group_teams(league='eng.1', season=2024, season_type=2, group_id=80)
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -1803,7 +1804,7 @@ def espn_soccer_season_group_children(
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
 
     Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/seasons/{season}/types/{season_type}/groups/{group_id}/children``
-    Example URL: https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/seasons/2024/types/2/groups/80/children
+    Example URL: https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/seasons/2024/types/2/groups/80/children?limit=500
 
     Args:
         season: season path parameter.
@@ -1819,7 +1820,7 @@ def espn_soccer_season_group_children(
     Example:
         Quick start::
 
-            espn_soccer_season_group_children(season=2024, season_type=2, group_id=80)
+            espn_soccer_season_group_children(league='eng.1', season=2024, season_type=2, group_id=80)
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -1864,7 +1865,7 @@ def espn_soccer_season_type_leaders(
     Example:
         Quick start::
 
-            espn_soccer_season_type_leaders(season=2024, season_type=2)
+            espn_soccer_season_type_leaders(league='eng.1', season=2024, season_type=2)
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {}
@@ -1907,7 +1908,7 @@ def espn_soccer_season_type_corrections(
     Example:
         Quick start::
 
-            espn_soccer_season_type_corrections(season=2024, season_type=2)
+            espn_soccer_season_type_corrections(league='eng.1', season=2024, season_type=2)
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {}
@@ -1950,7 +1951,7 @@ def espn_soccer_season_weeks(
     Example:
         Quick start::
 
-            espn_soccer_season_weeks(season=2024, season_type=2)
+            espn_soccer_season_weeks(league='eng.1', season=2024, season_type=2)
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {}
@@ -1995,7 +1996,7 @@ def espn_soccer_season_week(
     Example:
         Quick start::
 
-            espn_soccer_season_week(season=2024, season_type=2, week=1)
+            espn_soccer_season_week(league='eng.1', season=2024, season_type=2, week=1)
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {}
@@ -2042,7 +2043,7 @@ def espn_soccer_season_week_powerindex(
     Example:
         Quick start::
 
-            espn_soccer_season_week_powerindex(season=2024, season_type=2, week=8)
+            espn_soccer_season_week_powerindex(league='eng.1', season=2024, season_type=2, week=8)
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -2075,7 +2076,7 @@ def espn_soccer_season_week_games(
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
 
     Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/seasons/{season}/types/{season_type}/weeks/{week}/events``
-    Example URL: https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/seasons/2024/types/2/weeks/1/events
+    Example URL: https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/seasons/2024/types/2/weeks/1/events?limit=500
 
     Args:
         season: season path parameter.
@@ -2091,7 +2092,7 @@ def espn_soccer_season_week_games(
     Example:
         Quick start::
 
-            espn_soccer_season_week_games(season=2024, season_type=2, week=1)
+            espn_soccer_season_week_games(league='eng.1', season=2024, season_type=2, week=1)
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -2123,7 +2124,7 @@ def espn_soccer_season_teams(
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
 
     Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/seasons/{season}/teams``
-    Example URL: https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/seasons/2024/teams
+    Example URL: https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/seasons/2024/teams?limit=1000&page=1
 
     Args:
         season: season path parameter.
@@ -2138,7 +2139,7 @@ def espn_soccer_season_teams(
     Example:
         Quick start::
 
-            espn_soccer_season_teams(season=2024)
+            espn_soccer_season_teams(league='eng.1', season=2024)
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -2184,7 +2185,7 @@ def espn_soccer_season_team(
     Example:
         Quick start::
 
-            espn_soccer_season_team(season=2024, team_id='4')
+            espn_soccer_season_team(league='eng.1', season=2024, team_id='4')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {}
@@ -2214,7 +2215,7 @@ def espn_soccer_season_players(
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
 
     Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/seasons/{season}/athletes``
-    Example URL: https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/seasons/2024/athletes
+    Example URL: https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/seasons/2024/athletes?limit=100&page=1
 
     Args:
         season: season path parameter.
@@ -2229,7 +2230,7 @@ def espn_soccer_season_players(
     Example:
         Quick start::
 
-            espn_soccer_season_players(season=2024)
+            espn_soccer_season_players(league='eng.1', season=2024)
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -2261,7 +2262,7 @@ def espn_soccer_season_coaches(
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
 
     Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/seasons/{season}/coaches``
-    Example URL: https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/seasons/2024/coaches
+    Example URL: https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/seasons/2024/coaches?limit=500
 
     Args:
         season: season path parameter.
@@ -2275,7 +2276,7 @@ def espn_soccer_season_coaches(
     Example:
         Quick start::
 
-            espn_soccer_season_coaches(season=2024)
+            espn_soccer_season_coaches(league='eng.1', season=2024)
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -2318,7 +2319,7 @@ def espn_soccer_season_draft(
     Example:
         Quick start::
 
-            espn_soccer_season_draft(season=2024)
+            espn_soccer_season_draft(league='eng.1', season=2024)
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {}
@@ -2361,7 +2362,7 @@ def espn_soccer_season_draft_round_picks(
     Example:
         Quick start::
 
-            espn_soccer_season_draft_round_picks(season=2024, round_num='1')
+            espn_soccer_season_draft_round_picks(league='eng.1', season=2024, round_num='1')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {}
@@ -2402,7 +2403,7 @@ def espn_soccer_season_futures(
     Example:
         Quick start::
 
-            espn_soccer_season_futures(season=2024)
+            espn_soccer_season_futures(league='eng.1', season=2024)
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {}
@@ -2443,7 +2444,7 @@ def espn_soccer_season_freeagents(
     Example:
         Quick start::
 
-            espn_soccer_season_freeagents(season=2024)
+            espn_soccer_season_freeagents(league='eng.1', season=2024)
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {}
@@ -2486,7 +2487,7 @@ def espn_soccer_season_powerindex(
     Example:
         Quick start::
 
-            espn_soccer_season_powerindex(season=2024)
+            espn_soccer_season_powerindex(league='eng.1', season=2024)
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {}
@@ -2529,7 +2530,7 @@ def espn_soccer_season_powerindex_leaders(
     Example:
         Quick start::
 
-            espn_soccer_season_powerindex_leaders(season=2024)
+            espn_soccer_season_powerindex_leaders(league='eng.1', season=2024)
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {}
@@ -2558,7 +2559,7 @@ def espn_soccer_season_awards(
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
 
     Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/seasons/{season}/awards``
-    Example URL: https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/seasons/2024/awards
+    Example URL: https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/seasons/2024/awards?limit=200
 
     Args:
         season: season path parameter.
@@ -2572,7 +2573,7 @@ def espn_soccer_season_awards(
     Example:
         Quick start::
 
-            espn_soccer_season_awards(season=2024)
+            espn_soccer_season_awards(league='eng.1', season=2024)
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -2604,7 +2605,7 @@ def espn_soccer_players_index(
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
 
     Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/athletes``
-    Example URL: https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/athletes
+    Example URL: https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/athletes?active=true&limit=100&page=1
 
     Args:
         active: active query parameter.
@@ -2619,7 +2620,7 @@ def espn_soccer_players_index(
     Example:
         Quick start::
 
-            espn_soccer_players_index()
+            espn_soccer_players_index(league='eng.1')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -2664,7 +2665,7 @@ def espn_soccer_player_core(
     Example:
         Quick start::
 
-            espn_soccer_player_core(athlete_id='4239')
+            espn_soccer_player_core(league='eng.1', athlete_id='4239')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {}
@@ -2707,7 +2708,7 @@ def espn_soccer_player_career_stats(
     Example:
         Quick start::
 
-            espn_soccer_player_career_stats(athlete_id='4239')
+            espn_soccer_player_career_stats(league='eng.1', athlete_id='4239')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {}
@@ -2752,7 +2753,7 @@ def espn_soccer_player_statisticslog(
     Example:
         Quick start::
 
-            espn_soccer_player_statisticslog(athlete_id='4239')
+            espn_soccer_player_statisticslog(league='eng.1', athlete_id='4239')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {}
@@ -2793,7 +2794,7 @@ def espn_soccer_player_eventlog(
     Example:
         Quick start::
 
-            espn_soccer_player_eventlog(athlete_id='4239')
+            espn_soccer_player_eventlog(league='eng.1', athlete_id='4239')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {}
@@ -2834,7 +2835,7 @@ def espn_soccer_player_contracts(
     Example:
         Quick start::
 
-            espn_soccer_player_contracts(athlete_id='4239')
+            espn_soccer_player_contracts(league='eng.1', athlete_id='4239')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {}
@@ -2875,7 +2876,7 @@ def espn_soccer_player_awards(
     Example:
         Quick start::
 
-            espn_soccer_player_awards(athlete_id='4239')
+            espn_soccer_player_awards(league='eng.1', athlete_id='4239')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {}
@@ -2916,7 +2917,7 @@ def espn_soccer_player_seasons(
     Example:
         Quick start::
 
-            espn_soccer_player_seasons(athlete_id='4239')
+            espn_soccer_player_seasons(league='eng.1', athlete_id='4239')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {}
@@ -2957,7 +2958,7 @@ def espn_soccer_player_records(
     Example:
         Quick start::
 
-            espn_soccer_player_records(athlete_id='4239')
+            espn_soccer_player_records(league='eng.1', athlete_id='4239')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {}
@@ -2998,7 +2999,7 @@ def espn_soccer_player_injuries(
     Example:
         Quick start::
 
-            espn_soccer_player_injuries(athlete_id='4239')
+            espn_soccer_player_injuries(league='eng.1', athlete_id='4239')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {}
@@ -3039,7 +3040,7 @@ def espn_soccer_player_notes(
     Example:
         Quick start::
 
-            espn_soccer_player_notes(athlete_id='4239')
+            espn_soccer_player_notes(league='eng.1', athlete_id='4239')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {}
@@ -3082,7 +3083,7 @@ def espn_soccer_player_vs_player(
     Example:
         Quick start::
 
-            espn_soccer_player_vs_player(athlete_id='4239', opp_id='5')
+            espn_soccer_player_vs_player(league='eng.1', athlete_id='4239', opp_id='5')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {}
@@ -3111,7 +3112,7 @@ def espn_soccer_games(
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
 
     Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/events``
-    Example URL: https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events
+    Example URL: https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events?limit=500
 
     Args:
         dates: Date or date range filter (YYYYMMDD or YYYYMMDD-YYYYMMDD).
@@ -3125,7 +3126,7 @@ def espn_soccer_games(
     Example:
         Quick start::
 
-            espn_soccer_games()
+            espn_soccer_games(league='eng.1')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -3169,7 +3170,7 @@ def espn_soccer_game(
     Example:
         Quick start::
 
-            espn_soccer_game(event_id='401584793')
+            espn_soccer_game(league='eng.1', event_id='401584793')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {}
@@ -3198,7 +3199,7 @@ def espn_soccer_game_competition(
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
 
     Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}``
-    Example URL: https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions
+    Example URL: https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions/401584793
 
     Args:
         event_id: event_id path parameter.
@@ -3212,7 +3213,7 @@ def espn_soccer_game_competition(
     Example:
         Quick start::
 
-            espn_soccer_game_competition(event_id='401584793')
+            espn_soccer_game_competition(league='eng.1', event_id='401584793')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {}
@@ -3243,7 +3244,7 @@ def espn_soccer_game_teams(
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
 
     Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/competitors``
-    Example URL: https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions
+    Example URL: https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions/401584793/competitors
 
     Args:
         event_id: event_id path parameter.
@@ -3257,7 +3258,7 @@ def espn_soccer_game_teams(
     Example:
         Quick start::
 
-            espn_soccer_game_teams(event_id='401584793')
+            espn_soccer_game_teams(league='eng.1', event_id='401584793')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {}
@@ -3289,7 +3290,7 @@ def espn_soccer_game_team(
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
 
     Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/competitors/{team_id}``
-    Example URL: https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions
+    Example URL: https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions/401584793/competitors/4
 
     Args:
         event_id: event_id path parameter.
@@ -3304,7 +3305,7 @@ def espn_soccer_game_team(
     Example:
         Quick start::
 
-            espn_soccer_game_team(event_id='401584793', team_id='4')
+            espn_soccer_game_team(league='eng.1', event_id='401584793', team_id='4')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {}
@@ -3336,7 +3337,7 @@ def espn_soccer_game_team_roster(
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
 
     Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/competitors/{team_id}/roster``
-    Example URL: https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions
+    Example URL: https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions/401584793/competitors/4/roster
 
     Args:
         event_id: event_id path parameter.
@@ -3351,7 +3352,7 @@ def espn_soccer_game_team_roster(
     Example:
         Quick start::
 
-            espn_soccer_game_team_roster(event_id='401584793', team_id='4')
+            espn_soccer_game_team_roster(league='eng.1', event_id='401584793', team_id='4')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {}
@@ -3383,7 +3384,7 @@ def espn_soccer_game_team_linescores(
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
 
     Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/competitors/{team_id}/linescores``
-    Example URL: https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions
+    Example URL: https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions/401584793/competitors/4/linescores
 
     Args:
         event_id: event_id path parameter.
@@ -3398,7 +3399,7 @@ def espn_soccer_game_team_linescores(
     Example:
         Quick start::
 
-            espn_soccer_game_team_linescores(event_id='401584793', team_id='4')
+            espn_soccer_game_team_linescores(league='eng.1', event_id='401584793', team_id='4')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {}
@@ -3430,7 +3431,7 @@ def espn_soccer_game_team_statistics(
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
 
     Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/competitors/{team_id}/statistics``
-    Example URL: https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions
+    Example URL: https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions/401584793/competitors/4/statistics
 
     Args:
         event_id: event_id path parameter.
@@ -3445,7 +3446,7 @@ def espn_soccer_game_team_statistics(
     Example:
         Quick start::
 
-            espn_soccer_game_team_statistics(event_id='401584793', team_id='4')
+            espn_soccer_game_team_statistics(league='eng.1', event_id='401584793', team_id='4')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {}
@@ -3477,7 +3478,7 @@ def espn_soccer_game_team_record(
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
 
     Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/competitors/{team_id}/record``
-    Example URL: https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions
+    Example URL: https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions/401584793/competitors/4/record
 
     Args:
         event_id: event_id path parameter.
@@ -3492,7 +3493,7 @@ def espn_soccer_game_team_record(
     Example:
         Quick start::
 
-            espn_soccer_game_team_record(event_id='401584793', team_id='4')
+            espn_soccer_game_team_record(league='eng.1', event_id='401584793', team_id='4')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {}
@@ -3524,7 +3525,7 @@ def espn_soccer_game_team_leaders(
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
 
     Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/competitors/{team_id}/leaders``
-    Example URL: https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions
+    Example URL: https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions/401584793/competitors/4/leaders
 
     Args:
         event_id: event_id path parameter.
@@ -3539,7 +3540,7 @@ def espn_soccer_game_team_leaders(
     Example:
         Quick start::
 
-            espn_soccer_game_team_leaders(event_id='401584793', team_id='4')
+            espn_soccer_game_team_leaders(league='eng.1', event_id='401584793', team_id='4')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {}
@@ -3570,7 +3571,7 @@ def espn_soccer_game_odds(
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
 
     Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/odds``
-    Example URL: https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions
+    Example URL: https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions/401584793/odds
 
     Args:
         event_id: event_id path parameter.
@@ -3584,7 +3585,7 @@ def espn_soccer_game_odds(
     Example:
         Quick start::
 
-            espn_soccer_game_odds(event_id='401584793')
+            espn_soccer_game_odds(league='eng.1', event_id='401584793')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {}
@@ -3618,7 +3619,7 @@ def espn_soccer_game_probabilities(
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
 
     Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/probabilities``
-    Example URL: https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions
+    Example URL: https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions/401584793/probabilities?limit=300
 
     Args:
         event_id: event_id path parameter.
@@ -3633,7 +3634,7 @@ def espn_soccer_game_probabilities(
     Example:
         Quick start::
 
-            espn_soccer_game_probabilities(event_id='401584793')
+            espn_soccer_game_probabilities(league='eng.1', event_id='401584793')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -3667,7 +3668,7 @@ def espn_soccer_game_plays(
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
 
     Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/plays``
-    Example URL: https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions
+    Example URL: https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions/401584793/plays?limit=1000
 
     Args:
         event_id: event_id path parameter.
@@ -3682,7 +3683,7 @@ def espn_soccer_game_plays(
     Example:
         Quick start::
 
-            espn_soccer_game_plays(event_id='401584793')
+            espn_soccer_game_plays(league='eng.1', event_id='401584793')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -3718,7 +3719,7 @@ def espn_soccer_game_play(
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
 
     Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/plays/{play_id}``
-    Example URL: https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions
+    Example URL: https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions/401584793/plays/1
 
     Args:
         event_id: event_id path parameter.
@@ -3733,7 +3734,7 @@ def espn_soccer_game_play(
     Example:
         Quick start::
 
-            espn_soccer_game_play(event_id='401584793', play_id='1')
+            espn_soccer_game_play(league='eng.1', event_id='401584793', play_id='1')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {}
@@ -3765,7 +3766,7 @@ def espn_soccer_game_play_personnel(
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
 
     Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/plays/{play_id}/personnel``
-    Example URL: https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions
+    Example URL: https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions/401584793/plays/1/personnel
 
     Args:
         event_id: event_id path parameter.
@@ -3780,7 +3781,7 @@ def espn_soccer_game_play_personnel(
     Example:
         Quick start::
 
-            espn_soccer_game_play_personnel(event_id='401584793', play_id='1')
+            espn_soccer_game_play_personnel(league='eng.1', event_id='401584793', play_id='1')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {}
@@ -3811,7 +3812,7 @@ def espn_soccer_game_situation(
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
 
     Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/situation``
-    Example URL: https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions
+    Example URL: https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions/401584793/situation
 
     Args:
         event_id: event_id path parameter.
@@ -3825,7 +3826,7 @@ def espn_soccer_game_situation(
     Example:
         Quick start::
 
-            espn_soccer_game_situation(event_id='401584793')
+            espn_soccer_game_situation(league='eng.1', event_id='401584793')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {}
@@ -3856,7 +3857,7 @@ def espn_soccer_game_status(
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
 
     Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/status``
-    Example URL: https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions
+    Example URL: https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions/401584793/status
 
     Args:
         event_id: event_id path parameter.
@@ -3870,7 +3871,7 @@ def espn_soccer_game_status(
     Example:
         Quick start::
 
-            espn_soccer_game_status(event_id='401584793')
+            espn_soccer_game_status(league='eng.1', event_id='401584793')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {}
@@ -3901,7 +3902,7 @@ def espn_soccer_game_officials(
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
 
     Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/officials``
-    Example URL: https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions
+    Example URL: https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions/401584793/officials
 
     Args:
         event_id: event_id path parameter.
@@ -3915,7 +3916,7 @@ def espn_soccer_game_officials(
     Example:
         Quick start::
 
-            espn_soccer_game_officials(event_id='401584793')
+            espn_soccer_game_officials(league='eng.1', event_id='401584793')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {}
@@ -3946,7 +3947,7 @@ def espn_soccer_game_broadcasts(
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
 
     Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/broadcasts``
-    Example URL: https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions
+    Example URL: https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions/401584793/broadcasts
 
     Args:
         event_id: event_id path parameter.
@@ -3960,7 +3961,7 @@ def espn_soccer_game_broadcasts(
     Example:
         Quick start::
 
-            espn_soccer_game_broadcasts(event_id='401584793')
+            espn_soccer_game_broadcasts(league='eng.1', event_id='401584793')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {}
@@ -3991,7 +3992,7 @@ def espn_soccer_game_predictor(
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
 
     Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/predictor``
-    Example URL: https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions
+    Example URL: https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions/401584793/predictor
 
     Args:
         event_id: event_id path parameter.
@@ -4005,7 +4006,7 @@ def espn_soccer_game_predictor(
     Example:
         Quick start::
 
-            espn_soccer_game_predictor(event_id='401584793')
+            espn_soccer_game_predictor(league='eng.1', event_id='401584793')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {}
@@ -4036,7 +4037,7 @@ def espn_soccer_game_powerindex(
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
 
     Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/powerindex``
-    Example URL: https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions
+    Example URL: https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions/401584793/powerindex
 
     Args:
         event_id: event_id path parameter.
@@ -4050,7 +4051,7 @@ def espn_soccer_game_powerindex(
     Example:
         Quick start::
 
-            espn_soccer_game_powerindex(event_id='401584793')
+            espn_soccer_game_powerindex(league='eng.1', event_id='401584793')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {}
@@ -4081,7 +4082,7 @@ def espn_soccer_game_propbets(
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
 
     Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/propbets``
-    Example URL: https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions
+    Example URL: https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions/401584793/propbets
 
     Args:
         event_id: event_id path parameter.
@@ -4095,7 +4096,7 @@ def espn_soccer_game_propbets(
     Example:
         Quick start::
 
-            espn_soccer_game_propbets(event_id='401584793')
+            espn_soccer_game_propbets(league='eng.1', event_id='401584793')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {}
@@ -4126,7 +4127,7 @@ def espn_soccer_game_leaders(
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
 
     Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/leaders``
-    Example URL: https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions
+    Example URL: https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions/401584793/leaders
 
     Args:
         event_id: event_id path parameter.
@@ -4140,7 +4141,7 @@ def espn_soccer_game_leaders(
     Example:
         Quick start::
 
-            espn_soccer_game_leaders(event_id='401584793')
+            espn_soccer_game_leaders(league='eng.1', event_id='401584793')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {}
@@ -4171,7 +4172,7 @@ def espn_soccer_game_scoringplays(
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
 
     Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/scoringplays``
-    Example URL: https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions
+    Example URL: https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions/401584793/scoringplays
 
     Args:
         event_id: event_id path parameter.
@@ -4185,7 +4186,7 @@ def espn_soccer_game_scoringplays(
     Example:
         Quick start::
 
-            espn_soccer_game_scoringplays(event_id='401584793')
+            espn_soccer_game_scoringplays(league='eng.1', event_id='401584793')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {}
@@ -4217,7 +4218,7 @@ def espn_soccer_game_official_detail(
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
 
     Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/officials/{official_id}``
-    Example URL: https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions
+    Example URL: https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793/competitions/401584793/officials/1
 
     Args:
         event_id: event_id path parameter.
@@ -4232,7 +4233,7 @@ def espn_soccer_game_official_detail(
     Example:
         Quick start::
 
-            espn_soccer_game_official_detail(event_id='401584793', official_id='1')
+            espn_soccer_game_official_detail(league='eng.1', event_id='401584793', official_id='1')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {}
@@ -4263,7 +4264,7 @@ def espn_soccer_teams_core(
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
 
     Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/teams``
-    Example URL: https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/teams
+    Example URL: https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/teams?limit=1000&page=1
 
     Args:
         limit: Maximum number of items to return.
@@ -4277,7 +4278,7 @@ def espn_soccer_teams_core(
     Example:
         Quick start::
 
-            espn_soccer_teams_core()
+            espn_soccer_teams_core(league='eng.1')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -4321,7 +4322,7 @@ def espn_soccer_team_core(
     Example:
         Quick start::
 
-            espn_soccer_team_core(team_id='4')
+            espn_soccer_team_core(league='eng.1', team_id='4')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {}
@@ -4349,7 +4350,7 @@ def espn_soccer_venues(
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
 
     Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/venues``
-    Example URL: https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/venues
+    Example URL: https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/venues?limit=1000
 
     Args:
         limit: Maximum number of items to return.
@@ -4362,7 +4363,7 @@ def espn_soccer_venues(
     Example:
         Quick start::
 
-            espn_soccer_venues()
+            espn_soccer_venues(league='eng.1')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -4405,7 +4406,7 @@ def espn_soccer_venue(
     Example:
         Quick start::
 
-            espn_soccer_venue(venue_id='3663')
+            espn_soccer_venue(league='eng.1', venue_id='3663')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {}
@@ -4433,7 +4434,7 @@ def espn_soccer_franchises(
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
 
     Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/franchises``
-    Example URL: https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/franchises
+    Example URL: https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/franchises?limit=200
 
     Args:
         limit: Maximum number of items to return.
@@ -4446,7 +4447,7 @@ def espn_soccer_franchises(
     Example:
         Quick start::
 
-            espn_soccer_franchises()
+            espn_soccer_franchises(league='eng.1')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -4489,7 +4490,7 @@ def espn_soccer_franchise(
     Example:
         Quick start::
 
-            espn_soccer_franchise(franchise_id='2')
+            espn_soccer_franchise(league='eng.1', franchise_id='2')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {}
@@ -4530,7 +4531,7 @@ def espn_soccer_coach(
     Example:
         Quick start::
 
-            espn_soccer_coach(coach_id='1')
+            espn_soccer_coach(league='eng.1', coach_id='1')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {}
@@ -4559,7 +4560,7 @@ def espn_soccer_coach_record(
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
 
     Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/coaches/{coach_id}/record/{record_type}``
-    Example URL: https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/coaches/1/record
+    Example URL: https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/coaches/1/record/0
 
     Args:
         coach_id: coach_id path parameter.
@@ -4573,7 +4574,7 @@ def espn_soccer_coach_record(
     Example:
         Quick start::
 
-            espn_soccer_coach_record(coach_id='1')
+            espn_soccer_coach_record(league='eng.1', coach_id='1')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {}
@@ -4616,7 +4617,7 @@ def espn_soccer_coach_season(
     Example:
         Quick start::
 
-            espn_soccer_coach_season(coach_id='1', season=2024)
+            espn_soccer_coach_season(league='eng.1', coach_id='1', season=2024)
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {}
@@ -4644,7 +4645,7 @@ def espn_soccer_positions(
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
 
     Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/positions``
-    Example URL: https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/positions
+    Example URL: https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/positions?limit=200
 
     Args:
         limit: Maximum number of items to return.
@@ -4657,7 +4658,7 @@ def espn_soccer_positions(
     Example:
         Quick start::
 
-            espn_soccer_positions()
+            espn_soccer_positions(league='eng.1')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -4700,7 +4701,7 @@ def espn_soccer_position(
     Example:
         Quick start::
 
-            espn_soccer_position(position_id='1')
+            espn_soccer_position(league='eng.1', position_id='1')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {}
@@ -4728,7 +4729,7 @@ def espn_soccer_tournaments(
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
 
     Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/tournaments``
-    Example URL: https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/tournaments
+    Example URL: https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/tournaments?limit=200
 
     Args:
         limit: Maximum number of items to return.
@@ -4741,7 +4742,7 @@ def espn_soccer_tournaments(
     Example:
         Quick start::
 
-            espn_soccer_tournaments()
+            espn_soccer_tournaments(league='eng.1')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -4771,7 +4772,7 @@ def espn_soccer_awards(
     Bound to sport='soccer'; ``league`` is a required argument (e.g. 'eng.1').
 
     Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/awards``
-    Example URL: https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/awards
+    Example URL: https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/awards?limit=200
 
     Args:
         limit: Maximum number of items to return.
@@ -4784,7 +4785,7 @@ def espn_soccer_awards(
     Example:
         Quick start::
 
-            espn_soccer_awards()
+            espn_soccer_awards(league='eng.1')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -4827,7 +4828,7 @@ def espn_soccer_award(
     Example:
         Quick start::
 
-            espn_soccer_award(award_id='1')
+            espn_soccer_award(league='eng.1', award_id='1')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {}
@@ -4866,7 +4867,7 @@ def espn_soccer_standings_core(
     Example:
         Quick start::
 
-            espn_soccer_standings_core()
+            espn_soccer_standings_core(league='eng.1')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {}
@@ -4905,7 +4906,7 @@ def espn_soccer_leaders_core(
     Example:
         Quick start::
 
-            espn_soccer_leaders_core()
+            espn_soccer_leaders_core(league='eng.1')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {}
@@ -4944,7 +4945,7 @@ def espn_soccer_league_notes(
     Example:
         Quick start::
 
-            espn_soccer_league_notes()
+            espn_soccer_league_notes(league='eng.1')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {}
@@ -4983,7 +4984,7 @@ def espn_soccer_talentpicks(
     Example:
         Quick start::
 
-            espn_soccer_talentpicks()
+            espn_soccer_talentpicks(league='eng.1')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {}
@@ -5028,7 +5029,7 @@ def espn_soccer_fpi(
     Example:
         Quick start::
 
-            espn_soccer_fpi(season=2024)
+            espn_soccer_fpi(league='eng.1', season=2024)
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {

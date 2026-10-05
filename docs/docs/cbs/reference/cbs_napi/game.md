@@ -13,8 +13,6 @@ Get a BettingSplits resource for a particular game.
 
 **Endpoint URL:** `GET https://api.cbssports.com/napi/resource/game/bettingSplits/{game_id}`
 
-**Valid URL:** [https://api.cbssports.com/napi/resource/game/bettingSplits](https://api.cbssports.com/napi/resource/game/bettingSplits)
-
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 | `game_id` | `game_id` |  | `Y` |  | Numerical game ID |
@@ -37,8 +35,6 @@ _Last validated n/a._
 Get boxscore resource
 
 **Endpoint URL:** `GET https://api.cbssports.com/napi/resource/game/boxscore/{game_id}`
-
-**Valid URL:** [https://api.cbssports.com/napi/resource/game/boxscore](https://api.cbssports.com/napi/resource/game/boxscore)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -63,8 +59,6 @@ Get content for game preview
 
 **Endpoint URL:** `GET https://api.cbssports.com/napi/resource/game/content/preview/{game_id}`
 
-**Valid URL:** [https://api.cbssports.com/napi/resource/game/content/preview](https://api.cbssports.com/napi/resource/game/content/preview)
-
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 | `game_id` | `game_id` |  | `Y` |  | Numerical game ID |
@@ -88,8 +82,6 @@ Get content for game recap
 
 **Endpoint URL:** `GET https://api.cbssports.com/napi/resource/game/content/recap/{game_id}`
 
-**Valid URL:** [https://api.cbssports.com/napi/resource/game/content/recap](https://api.cbssports.com/napi/resource/game/content/recap)
-
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 | `game_id` | `game_id` |  | `Y` |  | Numerical game ID |
@@ -112,8 +104,6 @@ _Last validated n/a._
 Get content for game story
 
 **Endpoint URL:** `GET https://api.cbssports.com/napi/resource/game/content/story/{game_id}`
-
-**Valid URL:** [https://api.cbssports.com/napi/resource/game/content/story](https://api.cbssports.com/napi/resource/game/content/story)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -139,8 +129,6 @@ Get a FeaturedGame resource.
 
 **Endpoint URL:** `GET https://api.cbssports.com/napi/resource/game/featured/{game_id}`
 
-**Valid URL:** [https://api.cbssports.com/napi/resource/game/featured](https://api.cbssports.com/napi/resource/game/featured)
-
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 | `game_id` | `game_id` |  | `Y` |  | Numerical game ID |
@@ -163,8 +151,6 @@ _Last validated n/a._
 Get a lineup resource for a particular game.
 
 **Endpoint URL:** `GET https://api.cbssports.com/napi/resource/game/lineup/{game_id}`
-
-**Valid URL:** [https://api.cbssports.com/napi/resource/game/lineup](https://api.cbssports.com/napi/resource/game/lineup)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -189,8 +175,6 @@ _Last validated n/a._
 Get an odds resource for a particular game.
 
 **Endpoint URL:** `GET https://api.cbssports.com/napi/resource/game/odds/{game_id}`
-
-**Valid URL:** [https://api.cbssports.com/napi/resource/game/odds](https://api.cbssports.com/napi/resource/game/odds)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -220,8 +204,6 @@ Get an HQ odds resource for a particular game.
 
 **Endpoint URL:** `GET https://api.cbssports.com/napi/resource/game/odds/hq/{game_id}`
 
-**Valid URL:** [https://api.cbssports.com/napi/resource/game/odds/hq](https://api.cbssports.com/napi/resource/game/odds/hq)
-
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 | `game_id` | `game_id` |  | `Y` |  | Numerical game ID |
@@ -245,8 +227,6 @@ Get an odds outcome for a particular game.
 
 **Endpoint URL:** `GET https://api.cbssports.com/napi/resource/game/outcomes/{game_id}`
 
-**Valid URL:** [https://api.cbssports.com/napi/resource/game/outcomes](https://api.cbssports.com/napi/resource/game/outcomes)
-
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 | `game_id` | `game_id` |  | `Y` |  | Numerical game ID |
@@ -269,8 +249,6 @@ _Last validated n/a._
 Get a list of players who are probably playing in a particular game.
 
 **Endpoint URL:** `GET https://api.cbssports.com/napi/resource/game/probablePlayers/{game_id}`
-
-**Valid URL:** [https://api.cbssports.com/napi/resource/game/probablePlayers](https://api.cbssports.com/napi/resource/game/probablePlayers)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -296,8 +274,6 @@ _Last validated n/a._
 Get game props for a game.
 
 **Endpoint URL:** `GET https://api.cbssports.com/napi/resource/game/props/{game_id}`
-
-**Valid URL:** [https://api.cbssports.com/napi/resource/game/props](https://api.cbssports.com/napi/resource/game/props)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -327,8 +303,6 @@ Get a rtwp resource for a particular game.
 
 **Endpoint URL:** `GET https://api.cbssports.com/napi/resource/game/rtwp/{game_id}`
 
-**Valid URL:** [https://api.cbssports.com/napi/resource/game/rtwp](https://api.cbssports.com/napi/resource/game/rtwp)
-
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 | `game_id` | `game_id` |  | `Y` |  | Numerical game ID |
@@ -351,8 +325,6 @@ _Last validated n/a._
 Get the RUWT highlights resource for a particular game.
 
 **Endpoint URL:** `GET https://api.cbssports.com/napi/resource/game/ruwtHighlights/{game_id}`
-
-**Valid URL:** [https://api.cbssports.com/napi/resource/game/ruwtHighlights](https://api.cbssports.com/napi/resource/game/ruwtHighlights)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -377,8 +349,6 @@ Get an scoring box scores resource for a particular game.
 
 **Endpoint URL:** `GET https://api.cbssports.com/napi/resource/game/scoring/boxscores/{game_id}`
 
-**Valid URL:** [https://api.cbssports.com/napi/resource/game/scoring/boxscores](https://api.cbssports.com/napi/resource/game/scoring/boxscores)
-
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 | `game_id` | `game_id` |  | `Y` |  | Numerical game ID |
@@ -401,8 +371,6 @@ _Last validated n/a._
 Get a drives resource for a particular game.
 
 **Endpoint URL:** `GET https://api.cbssports.com/napi/resource/game/scoring/drives/{game_id}`
-
-**Valid URL:** [https://api.cbssports.com/napi/resource/game/scoring/drives](https://api.cbssports.com/napi/resource/game/scoring/drives)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -448,8 +416,6 @@ Get an scoring leaders resource for a particular game.
 
 **Endpoint URL:** `GET https://api.cbssports.com/napi/resource/game/scoring/leaders/{game_id}`
 
-**Valid URL:** [https://api.cbssports.com/napi/resource/game/scoring/leaders](https://api.cbssports.com/napi/resource/game/scoring/leaders)
-
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 | `game_id` | `game_id` |  | `Y` |  | Numerical game ID |
@@ -473,8 +439,6 @@ Get an scoring player stats resource for a particular game.
 
 **Endpoint URL:** `GET https://api.cbssports.com/napi/resource/game/scoring/playerStats/{game_id}`
 
-**Valid URL:** [https://api.cbssports.com/napi/resource/game/scoring/playerStats](https://api.cbssports.com/napi/resource/game/scoring/playerStats)
-
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 | `game_id` | `game_id` |  | `Y` |  | Numerical game ID |
@@ -497,8 +461,6 @@ _Last validated n/a._
 Get an scoring plays resource for a particular game.
 
 **Endpoint URL:** `GET https://api.cbssports.com/napi/resource/game/scoring/plays/{game_id}`
-
-**Valid URL:** [https://api.cbssports.com/napi/resource/game/scoring/plays](https://api.cbssports.com/napi/resource/game/scoring/plays)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -547,8 +509,6 @@ Get an scoring rosters resource for a particular game.
 
 **Endpoint URL:** `GET https://api.cbssports.com/napi/resource/game/scoring/rosters/{game_id}`
 
-**Valid URL:** [https://api.cbssports.com/napi/resource/game/scoring/rosters](https://api.cbssports.com/napi/resource/game/scoring/rosters)
-
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 | `game_id` | `game_id` |  | `Y` |  | Numerical game ID |
@@ -571,8 +531,6 @@ _Last validated n/a._
 Get an scoring scoreboard resource for a particular game.
 
 **Endpoint URL:** `GET https://api.cbssports.com/napi/resource/game/scoring/scoreboard/{game_id}`
-
-**Valid URL:** [https://api.cbssports.com/napi/resource/game/scoring/scoreboard](https://api.cbssports.com/napi/resource/game/scoring/scoreboard)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -597,8 +555,6 @@ Get an scoring scores resource for a particular game.
 
 **Endpoint URL:** `GET https://api.cbssports.com/napi/resource/game/scoring/scores/{game_id}`
 
-**Valid URL:** [https://api.cbssports.com/napi/resource/game/scoring/scores](https://api.cbssports.com/napi/resource/game/scoring/scores)
-
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 | `game_id` | `game_id` |  | `Y` |  | Numerical game ID |
@@ -621,8 +577,6 @@ _Last validated n/a._
 Get an scoring team stats resource for a particular game.
 
 **Endpoint URL:** `GET https://api.cbssports.com/napi/resource/game/scoring/teamStats/{game_id}`
-
-**Valid URL:** [https://api.cbssports.com/napi/resource/game/scoring/teamStats](https://api.cbssports.com/napi/resource/game/scoring/teamStats)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -647,8 +601,6 @@ Get an scoring winprob resource for a particular game.
 
 **Endpoint URL:** `GET https://api.cbssports.com/napi/resource/game/scoring/winprob/{game_id}`
 
-**Valid URL:** [https://api.cbssports.com/napi/resource/game/scoring/winprob](https://api.cbssports.com/napi/resource/game/scoring/winprob)
-
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 | `game_id` | `game_id` |  | `Y` |  | Numerical game ID |
@@ -671,8 +623,6 @@ _Last validated n/a._
 Get an scoring YTD player stats resource for a particular game.
 
 **Endpoint URL:** `GET https://api.cbssports.com/napi/resource/game/scoring/ytdPlayerStats/{game_id}`
-
-**Valid URL:** [https://api.cbssports.com/napi/resource/game/scoring/ytdPlayerStats](https://api.cbssports.com/napi/resource/game/scoring/ytdPlayerStats)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -697,8 +647,6 @@ Get an scoring YTD team stats resource for a particular game.
 
 **Endpoint URL:** `GET https://api.cbssports.com/napi/resource/game/scoring/ytdTeamStats/{game_id}`
 
-**Valid URL:** [https://api.cbssports.com/napi/resource/game/scoring/ytdTeamStats](https://api.cbssports.com/napi/resource/game/scoring/ytdTeamStats)
-
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 | `game_id` | `game_id` |  | `Y` |  | Numerical game ID |
@@ -722,8 +670,6 @@ Get a ticket resource for a particular game.
 
 **Endpoint URL:** `GET https://api.cbssports.com/napi/resource/game/ticket/{game_id}`
 
-**Valid URL:** [https://api.cbssports.com/napi/resource/game/ticket](https://api.cbssports.com/napi/resource/game/ticket)
-
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 | `game_id` | `game_id` |  | `Y` |  | Numerical game ID |
@@ -746,8 +692,6 @@ _Last validated n/a._
 Get a Weather resource for a particular game.
 
 **Endpoint URL:** `GET https://api.cbssports.com/napi/resource/game/weather/{game_id}`
-
-**Valid URL:** [https://api.cbssports.com/napi/resource/game/weather](https://api.cbssports.com/napi/resource/game/weather)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|

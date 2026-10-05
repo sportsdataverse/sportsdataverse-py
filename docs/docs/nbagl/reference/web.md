@@ -118,7 +118,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://site.web.api.espn.com/apis/common/v3/sports/basketball/nba-development/statistics/byathlete`
 
-**Valid URL:** [https://site.web.api.espn.com/apis/common/v3/sports/basketball/nba-development/statistics/byathlete](https://site.web.api.espn.com/apis/common/v3/sports/basketball/nba-development/statistics/byathlete)
+**Valid URL:** [https://site.web.api.espn.com/apis/common/v3/sports/basketball/nba-development/statistics/byathlete?limit=50&page=1](https://site.web.api.espn.com/apis/common/v3/sports/basketball/nba-development/statistics/byathlete?limit=50&page=1)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|

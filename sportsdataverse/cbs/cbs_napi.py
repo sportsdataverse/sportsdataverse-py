@@ -247,7 +247,6 @@ def cbs_coach_rankings(
     """Get rankings resource for a coach.
 
     Endpoint: ``GET https://api.cbssports.com/napi/resource/coach/rankings/{coach_id}``
-    Example URL: https://api.cbssports.com/napi/resource/coach/rankings
 
     Args:
         coach_id: Numerical player ID
@@ -298,7 +297,6 @@ def cbs_coach_team_associations(
     """Get team associations for a particular coach.
 
     Endpoint: ``GET https://api.cbssports.com/napi/resource/coach/teamAssociations/{coach_id}``
-    Example URL: https://api.cbssports.com/napi/resource/coach/teamAssociations
 
     Args:
         coach_id: Numerical player ID
@@ -353,7 +351,6 @@ def cbs_division_subdivisions(
     """Get subdivisions for a division from Atlas.
 
     Endpoint: ``GET https://api.cbssports.com/napi/resource/division/subdivisions/{division_id}``
-    Example URL: https://api.cbssports.com/napi/resource/division/subdivisions
 
     Args:
         division_id: Numerical division ID
@@ -458,7 +455,6 @@ def cbs_event(
     """Get an event resource
 
     Endpoint: ``GET https://api.cbssports.com/napi/resource/event/{event_id}``
-    Example URL: https://api.cbssports.com/napi/resource/event
 
     Args:
         event_id: Numerical event ID
@@ -513,7 +509,6 @@ def cbs_event_entrants(
     """Get players entered in a particular event.
 
     Endpoint: ``GET https://api.cbssports.com/napi/resource/event/entrants/{event_id}``
-    Example URL: https://api.cbssports.com/napi/resource/event/entrants
 
     Args:
         event_id: Numerical event ID
@@ -563,7 +558,6 @@ def cbs_event_leaderboard(
     """Get a leaderboard data resource for a particular event.
 
     Endpoint: ``GET https://api.cbssports.com/napi/resource/event/leaderboard/{event_id}``
-    Example URL: https://api.cbssports.com/napi/resource/event/leaderboard
 
     Args:
         event_id: Numerical event ID
@@ -613,7 +607,6 @@ def cbs_event_seasons(
     """Get seasons associated to a particular event.
 
     Endpoint: ``GET https://api.cbssports.com/napi/resource/event/seasons/{event_id}``
-    Example URL: https://api.cbssports.com/napi/resource/event/seasons
 
     Args:
         event_id: Numerical event ID
@@ -663,7 +656,6 @@ def cbs_event_venues(
     """Get venues associated to a particular event.
 
     Endpoint: ``GET https://api.cbssports.com/napi/resource/event/venues/{event_id}``
-    Example URL: https://api.cbssports.com/napi/resource/event/venues
 
     Args:
         event_id: Numerical event ID
@@ -715,7 +707,6 @@ def cbs_game(
     """Get a game resource
 
     Endpoint: ``GET https://api.cbssports.com/napi/resource/game/{game_id}``
-    Example URL: https://api.cbssports.com/napi/resource/game
 
     Args:
         game_id: Numerical game ID
@@ -770,7 +761,6 @@ def cbs_game_betting_splits(
     """Get a BettingSplits resource for a particular game.
 
     Endpoint: ``GET https://api.cbssports.com/napi/resource/game/bettingSplits/{game_id}``
-    Example URL: https://api.cbssports.com/napi/resource/game/bettingSplits
 
     Args:
         game_id: Numerical game ID
@@ -820,7 +810,6 @@ def cbs_game_boxscore(
     """Get boxscore resource
 
     Endpoint: ``GET https://api.cbssports.com/napi/resource/game/boxscore/{game_id}``
-    Example URL: https://api.cbssports.com/napi/resource/game/boxscore
 
     Args:
         game_id: Numerical game ID
@@ -870,7 +859,6 @@ def cbs_game_content_preview(
     """Get content for game preview
 
     Endpoint: ``GET https://api.cbssports.com/napi/resource/game/content/preview/{game_id}``
-    Example URL: https://api.cbssports.com/napi/resource/game/content/preview
 
     Args:
         game_id: Numerical game ID
@@ -920,7 +908,6 @@ def cbs_game_content_recap(
     """Get content for game recap
 
     Endpoint: ``GET https://api.cbssports.com/napi/resource/game/content/recap/{game_id}``
-    Example URL: https://api.cbssports.com/napi/resource/game/content/recap
 
     Args:
         game_id: Numerical game ID
@@ -971,7 +958,6 @@ def cbs_game_content_story(
     """Get content for game story
 
     Endpoint: ``GET https://api.cbssports.com/napi/resource/game/content/story/{game_id}``
-    Example URL: https://api.cbssports.com/napi/resource/game/content/story
 
     Args:
         game_id: Numerical game ID
@@ -1024,7 +1010,6 @@ def cbs_game_featured(
     """Get a FeaturedGame resource.
 
     Endpoint: ``GET https://api.cbssports.com/napi/resource/game/featured/{game_id}``
-    Example URL: https://api.cbssports.com/napi/resource/game/featured
 
     Args:
         game_id: Numerical game ID
@@ -1075,7 +1060,6 @@ def cbs_game_lineup(
     """Get a lineup resource for a particular game.
 
     Endpoint: ``GET https://api.cbssports.com/napi/resource/game/lineup/{game_id}``
-    Example URL: https://api.cbssports.com/napi/resource/game/lineup
 
     Args:
         game_id: Numerical game ID
@@ -1133,7 +1117,6 @@ def cbs_game_odds(
     """Get an odds resource for a particular game.
 
     Endpoint: ``GET https://api.cbssports.com/napi/resource/game/odds/{game_id}``
-    Example URL: https://api.cbssports.com/napi/resource/game/odds
 
     Args:
         game_id: Numerical game ID
@@ -1194,7 +1177,6 @@ def cbs_game_odds_hq(
     """Get an HQ odds resource for a particular game.
 
     Endpoint: ``GET https://api.cbssports.com/napi/resource/game/odds/hq/{game_id}``
-    Example URL: https://api.cbssports.com/napi/resource/game/odds/hq
 
     Args:
         game_id: Numerical game ID
@@ -1244,7 +1226,6 @@ def cbs_game_outcomes(
     """Get an odds outcome for a particular game.
 
     Endpoint: ``GET https://api.cbssports.com/napi/resource/game/outcomes/{game_id}``
-    Example URL: https://api.cbssports.com/napi/resource/game/outcomes
 
     Args:
         game_id: Numerical game ID
@@ -1296,7 +1277,6 @@ def cbs_game_probable_players(
     """Get a list of players who are probably playing in a particular game.
 
     Endpoint: ``GET https://api.cbssports.com/napi/resource/game/probablePlayers/{game_id}``
-    Example URL: https://api.cbssports.com/napi/resource/game/probablePlayers
 
     Args:
         game_id: Numerical game ID
@@ -1356,7 +1336,6 @@ def cbs_game_props(
     """Get game props for a game.
 
     Endpoint: ``GET https://api.cbssports.com/napi/resource/game/props/{game_id}``
-    Example URL: https://api.cbssports.com/napi/resource/game/props
 
     Args:
         game_id: Numerical game ID
@@ -1417,7 +1396,6 @@ def cbs_game_rtwp(
     """Get a rtwp resource for a particular game.
 
     Endpoint: ``GET https://api.cbssports.com/napi/resource/game/rtwp/{game_id}``
-    Example URL: https://api.cbssports.com/napi/resource/game/rtwp
 
     Args:
         game_id: Numerical game ID
@@ -1467,7 +1445,6 @@ def cbs_game_ruwt_highlights(
     """Get the RUWT highlights resource for a particular game.
 
     Endpoint: ``GET https://api.cbssports.com/napi/resource/game/ruwtHighlights/{game_id}``
-    Example URL: https://api.cbssports.com/napi/resource/game/ruwtHighlights
 
     Args:
         game_id: Numerical game ID
@@ -1517,7 +1494,6 @@ def cbs_game_scoring_boxscores(
     """Get an scoring box scores resource for a particular game.
 
     Endpoint: ``GET https://api.cbssports.com/napi/resource/game/scoring/boxscores/{game_id}``
-    Example URL: https://api.cbssports.com/napi/resource/game/scoring/boxscores
 
     Args:
         game_id: Numerical game ID
@@ -1567,7 +1543,6 @@ def cbs_game_scoring_drives(
     """Get a drives resource for a particular game.
 
     Endpoint: ``GET https://api.cbssports.com/napi/resource/game/scoring/drives/{game_id}``
-    Example URL: https://api.cbssports.com/napi/resource/game/scoring/drives
 
     Args:
         game_id: Numerical game ID
@@ -1617,7 +1592,6 @@ def cbs_game_scoring_leaders(
     """Get an scoring leaders resource for a particular game.
 
     Endpoint: ``GET https://api.cbssports.com/napi/resource/game/scoring/leaders/{game_id}``
-    Example URL: https://api.cbssports.com/napi/resource/game/scoring/leaders
 
     Args:
         game_id: Numerical game ID
@@ -1667,7 +1641,6 @@ def cbs_game_scoring_player_stats(
     """Get an scoring player stats resource for a particular game.
 
     Endpoint: ``GET https://api.cbssports.com/napi/resource/game/scoring/playerStats/{game_id}``
-    Example URL: https://api.cbssports.com/napi/resource/game/scoring/playerStats
 
     Args:
         game_id: Numerical game ID
@@ -1717,7 +1690,6 @@ def cbs_game_scoring_plays(
     """Get an scoring plays resource for a particular game.
 
     Endpoint: ``GET https://api.cbssports.com/napi/resource/game/scoring/plays/{game_id}``
-    Example URL: https://api.cbssports.com/napi/resource/game/scoring/plays
 
     Args:
         game_id: Numerical game ID
@@ -1767,7 +1739,6 @@ def cbs_game_scoring_rosters(
     """Get an scoring rosters resource for a particular game.
 
     Endpoint: ``GET https://api.cbssports.com/napi/resource/game/scoring/rosters/{game_id}``
-    Example URL: https://api.cbssports.com/napi/resource/game/scoring/rosters
 
     Args:
         game_id: Numerical game ID
@@ -1817,7 +1788,6 @@ def cbs_game_scoring_scoreboard(
     """Get an scoring scoreboard resource for a particular game.
 
     Endpoint: ``GET https://api.cbssports.com/napi/resource/game/scoring/scoreboard/{game_id}``
-    Example URL: https://api.cbssports.com/napi/resource/game/scoring/scoreboard
 
     Args:
         game_id: Numerical game ID
@@ -1867,7 +1837,6 @@ def cbs_game_scoring_scores(
     """Get an scoring scores resource for a particular game.
 
     Endpoint: ``GET https://api.cbssports.com/napi/resource/game/scoring/scores/{game_id}``
-    Example URL: https://api.cbssports.com/napi/resource/game/scoring/scores
 
     Args:
         game_id: Numerical game ID
@@ -1917,7 +1886,6 @@ def cbs_game_scoring_team_stats(
     """Get an scoring team stats resource for a particular game.
 
     Endpoint: ``GET https://api.cbssports.com/napi/resource/game/scoring/teamStats/{game_id}``
-    Example URL: https://api.cbssports.com/napi/resource/game/scoring/teamStats
 
     Args:
         game_id: Numerical game ID
@@ -1967,7 +1935,6 @@ def cbs_game_scoring_winprob(
     """Get an scoring winprob resource for a particular game.
 
     Endpoint: ``GET https://api.cbssports.com/napi/resource/game/scoring/winprob/{game_id}``
-    Example URL: https://api.cbssports.com/napi/resource/game/scoring/winprob
 
     Args:
         game_id: Numerical game ID
@@ -2017,7 +1984,6 @@ def cbs_game_scoring_ytd_player_stats(
     """Get an scoring YTD player stats resource for a particular game.
 
     Endpoint: ``GET https://api.cbssports.com/napi/resource/game/scoring/ytdPlayerStats/{game_id}``
-    Example URL: https://api.cbssports.com/napi/resource/game/scoring/ytdPlayerStats
 
     Args:
         game_id: Numerical game ID
@@ -2067,7 +2033,6 @@ def cbs_game_scoring_ytd_team_stats(
     """Get an scoring YTD team stats resource for a particular game.
 
     Endpoint: ``GET https://api.cbssports.com/napi/resource/game/scoring/ytdTeamStats/{game_id}``
-    Example URL: https://api.cbssports.com/napi/resource/game/scoring/ytdTeamStats
 
     Args:
         game_id: Numerical game ID
@@ -2117,7 +2082,6 @@ def cbs_game_ticket(
     """Get a ticket resource for a particular game.
 
     Endpoint: ``GET https://api.cbssports.com/napi/resource/game/ticket/{game_id}``
-    Example URL: https://api.cbssports.com/napi/resource/game/ticket
 
     Args:
         game_id: Numerical game ID
@@ -2167,7 +2131,6 @@ def cbs_game_weather(
     """Get a Weather resource for a particular game.
 
     Endpoint: ``GET https://api.cbssports.com/napi/resource/game/weather/{game_id}``
-    Example URL: https://api.cbssports.com/napi/resource/game/weather
 
     Args:
         game_id: Numerical game ID
@@ -2217,7 +2180,6 @@ def cbs_golf_event_markets(
     """Get markets for an event.
 
     Endpoint: ``GET https://api.cbssports.com/napi/resource/golf/event/markets/{event_id}``
-    Example URL: https://api.cbssports.com/napi/resource/golf/event/markets
 
     Args:
         event_id: Numerical event ID
@@ -2486,7 +2448,6 @@ def cbs_odds(
     """Get an odds resource for a particular game.
 
     Endpoint: ``GET https://api.cbssports.com/napi/resource/odds/{game_id}``
-    Example URL: https://api.cbssports.com/napi/resource/odds
 
     Args:
         game_id: Numerical game ID
@@ -4460,7 +4421,6 @@ def cbs_venue(
     """Get a venue resource
 
     Endpoint: ``GET https://api.cbssports.com/napi/resource/venue/{venue_id}``
-    Example URL: https://api.cbssports.com/napi/resource/venue
 
     Args:
         venue_id: Numerical venue ID
@@ -4513,7 +4473,6 @@ def cbs_venue_metadata(
     """Get a venues metadata resource
 
     Endpoint: ``GET https://api.cbssports.com/napi/resource/venue/metadata/{venue_id}``
-    Example URL: https://api.cbssports.com/napi/resource/venue/metadata
 
     Args:
         venue_id: Numerical venue ID

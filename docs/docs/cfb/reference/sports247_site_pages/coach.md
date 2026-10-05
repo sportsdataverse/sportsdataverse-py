@@ -102,8 +102,6 @@ Single CoachRanking row.
 
 **Endpoint URL:** `GET https://247sports.com/CoachRanking/{key}.json`
 
-**Valid URL:** [https://247sports.com/CoachRanking](https://247sports.com/CoachRanking)
-
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 | `key` | `key` |  | `Y` |  | key path parameter. |

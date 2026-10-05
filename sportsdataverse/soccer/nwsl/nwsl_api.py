@@ -41,7 +41,7 @@ def nwsl_competitions(
     """All competitions StatsPerform tracks for NWSL (league + friendlies/cups).
 
     Endpoint: ``GET https://api-sdp.nwslsoccer.com/v1/nwsl/football/competitions``
-    Example URL: https://api-sdp.nwslsoccer.com/v1/nwsl/football/competitions
+    Example URL: https://api-sdp.nwslsoccer.com/v1/nwsl/football/competitions?locale=en-US
 
     Args:
         locale: UI locale, always `en-US`.
@@ -96,7 +96,7 @@ def nwsl_match_lineups(
     """Team lineups (starting XI + bench + staff) for a match.
 
     Endpoint: ``GET https://api-sdp.nwslsoccer.com/v1/nwsl/football/seasons/{season_id}/matches/{match_id}/lineups``
-    Example URL: https://api-sdp.nwslsoccer.com/v1/nwsl/football/seasons/nwsl::Football_Season::0b6761e4701749f593690c0f338da74c/matches/nwsl::Football_Match::0b6761e4701749f593690c0f338da74c/lineups
+    Example URL: https://api-sdp.nwslsoccer.com/v1/nwsl/football/seasons/nwsl::Football_Season::0b6761e4701749f593690c0f338da74c/matches/nwsl::Football_Match::0b6761e4701749f593690c0f338da74c/lineups?locale=en-US
 
     Args:
         season_id: season_id path parameter.
@@ -152,7 +152,7 @@ def nwsl_matchdays(
     """Match days (rounds) for a season.
 
     Endpoint: ``GET https://api-sdp.nwslsoccer.com/v1/nwsl/football/seasons/{season_id}/matchdays``
-    Example URL: https://api-sdp.nwslsoccer.com/v1/nwsl/football/seasons/nwsl::Football_Season::0b6761e4701749f593690c0f338da74c/matchdays
+    Example URL: https://api-sdp.nwslsoccer.com/v1/nwsl/football/seasons/nwsl::Football_Season::0b6761e4701749f593690c0f338da74c/matchdays?locale=en-US
 
     Args:
         season_id: season_id path parameter.
@@ -212,7 +212,7 @@ def nwsl_player_stats(
     """Player-stats leaderboard for a season (paginated).
 
     Endpoint: ``GET https://api-sdp.nwslsoccer.com/v1/nwsl/football/seasons/{season_id}/stats/players``
-    Example URL: https://api-sdp.nwslsoccer.com/v1/nwsl/football/seasons/nwsl::Football_Season::0b6761e4701749f593690c0f338da74c/stats/players
+    Example URL: https://api-sdp.nwslsoccer.com/v1/nwsl/football/seasons/nwsl::Football_Season::0b6761e4701749f593690c0f338da74c/stats/players?locale=en-US
 
     Args:
         season_id: season_id path parameter.
@@ -279,7 +279,7 @@ def nwsl_season_matches(
     """Matches across one or more seasons within a US-format date window.
 
     Endpoint: ``GET https://api-sdp.nwslsoccer.com/v1/nwsl/football/seasons/multipleSeasonMatches``
-    Example URL: https://api-sdp.nwslsoccer.com/v1/nwsl/football/seasons/multipleSeasonMatches
+    Example URL: https://api-sdp.nwslsoccer.com/v1/nwsl/football/seasons/multipleSeasonMatches?locale=en-US
 
     Args:
         season_ids: Comma-separated composite Season ids.
@@ -339,7 +339,7 @@ def nwsl_stages(
     """Competition stages for a season (may be empty for league play).
 
     Endpoint: ``GET https://api-sdp.nwslsoccer.com/v1/nwsl/football/seasons/{season_id}/stages``
-    Example URL: https://api-sdp.nwslsoccer.com/v1/nwsl/football/seasons/nwsl::Football_Season::0b6761e4701749f593690c0f338da74c/stages
+    Example URL: https://api-sdp.nwslsoccer.com/v1/nwsl/football/seasons/nwsl::Football_Season::0b6761e4701749f593690c0f338da74c/stages?locale=en-US
 
     Args:
         season_id: season_id path parameter.
@@ -396,7 +396,7 @@ def nwsl_standings(
     """Overall standings table for a season (table/home/away splits).
 
     Endpoint: ``GET https://api-sdp.nwslsoccer.com/v1/nwsl/football/seasons/{season_id}/standings/overall``
-    Example URL: https://api-sdp.nwslsoccer.com/v1/nwsl/football/seasons/nwsl::Football_Season::0b6761e4701749f593690c0f338da74c/standings/overall
+    Example URL: https://api-sdp.nwslsoccer.com/v1/nwsl/football/seasons/nwsl::Football_Season::0b6761e4701749f593690c0f338da74c/standings/overall?locale=en-US
 
     Args:
         season_id: season_id path parameter.
@@ -456,7 +456,7 @@ def nwsl_team_stats(
     """Team-stats leaderboard for a season.
 
     Endpoint: ``GET https://api-sdp.nwslsoccer.com/v1/nwsl/football/seasons/{season_id}/stats/teams``
-    Example URL: https://api-sdp.nwslsoccer.com/v1/nwsl/football/seasons/nwsl::Football_Season::0b6761e4701749f593690c0f338da74c/stats/teams
+    Example URL: https://api-sdp.nwslsoccer.com/v1/nwsl/football/seasons/nwsl::Football_Season::0b6761e4701749f593690c0f338da74c/stats/teams?locale=en-US
 
     Args:
         season_id: season_id path parameter.
@@ -513,7 +513,7 @@ def nwsl_teams(
     """Teams participating in a season.
 
     Endpoint: ``GET https://api-sdp.nwslsoccer.com/v1/nwsl/football/seasons/{season_id}/teams``
-    Example URL: https://api-sdp.nwslsoccer.com/v1/nwsl/football/seasons/nwsl::Football_Season::0b6761e4701749f593690c0f338da74c/teams
+    Example URL: https://api-sdp.nwslsoccer.com/v1/nwsl/football/seasons/nwsl::Football_Season::0b6761e4701749f593690c0f338da74c/teams?locale=en-US
 
     Args:
         season_id: season_id path parameter.

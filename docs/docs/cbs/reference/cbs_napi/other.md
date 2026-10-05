@@ -73,8 +73,6 @@ Get rankings resource for a coach.
 
 **Endpoint URL:** `GET https://api.cbssports.com/napi/resource/coach/rankings/{coach_id}`
 
-**Valid URL:** [https://api.cbssports.com/napi/resource/coach/rankings](https://api.cbssports.com/napi/resource/coach/rankings)
-
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 | `coach_id` | `coach_id` |  | `Y` |  | Numerical player ID |
@@ -97,8 +95,6 @@ _Last validated n/a._
 Get team associations for a particular coach.
 
 **Endpoint URL:** `GET https://api.cbssports.com/napi/resource/coach/teamAssociations/{coach_id}`
-
-**Valid URL:** [https://api.cbssports.com/napi/resource/coach/teamAssociations](https://api.cbssports.com/napi/resource/coach/teamAssociations)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -123,8 +119,6 @@ _Last validated n/a._
 Get subdivisions for a division from Atlas.
 
 **Endpoint URL:** `GET https://api.cbssports.com/napi/resource/division/subdivisions/{division_id}`
-
-**Valid URL:** [https://api.cbssports.com/napi/resource/division/subdivisions](https://api.cbssports.com/napi/resource/division/subdivisions)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -200,8 +194,6 @@ Get an event resource
 
 **Endpoint URL:** `GET https://api.cbssports.com/napi/resource/event/{event_id}`
 
-**Valid URL:** [https://api.cbssports.com/napi/resource/event](https://api.cbssports.com/napi/resource/event)
-
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 | `event_id` | `event_id` |  | `Y` |  | Numerical event ID |
@@ -227,8 +219,6 @@ Get players entered in a particular event.
 
 **Endpoint URL:** `GET https://api.cbssports.com/napi/resource/event/entrants/{event_id}`
 
-**Valid URL:** [https://api.cbssports.com/napi/resource/event/entrants](https://api.cbssports.com/napi/resource/event/entrants)
-
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 | `event_id` | `event_id` |  | `Y` |  | Numerical event ID |
@@ -251,8 +241,6 @@ _Last validated n/a._
 Get a leaderboard data resource for a particular event.
 
 **Endpoint URL:** `GET https://api.cbssports.com/napi/resource/event/leaderboard/{event_id}`
-
-**Valid URL:** [https://api.cbssports.com/napi/resource/event/leaderboard](https://api.cbssports.com/napi/resource/event/leaderboard)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -277,8 +265,6 @@ Get seasons associated to a particular event.
 
 **Endpoint URL:** `GET https://api.cbssports.com/napi/resource/event/seasons/{event_id}`
 
-**Valid URL:** [https://api.cbssports.com/napi/resource/event/seasons](https://api.cbssports.com/napi/resource/event/seasons)
-
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 | `event_id` | `event_id` |  | `Y` |  | Numerical event ID |
@@ -302,8 +288,6 @@ Get venues associated to a particular event.
 
 **Endpoint URL:** `GET https://api.cbssports.com/napi/resource/event/venues/{event_id}`
 
-**Valid URL:** [https://api.cbssports.com/napi/resource/event/venues](https://api.cbssports.com/napi/resource/event/venues)
-
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 | `event_id` | `event_id` |  | `Y` |  | Numerical event ID |
@@ -326,8 +310,6 @@ _Last validated n/a._
 Get a game resource
 
 **Endpoint URL:** `GET https://api.cbssports.com/napi/resource/game/{game_id}`
-
-**Valid URL:** [https://api.cbssports.com/napi/resource/game](https://api.cbssports.com/napi/resource/game)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -353,8 +335,6 @@ _Last validated n/a._
 Get markets for an event.
 
 **Endpoint URL:** `GET https://api.cbssports.com/napi/resource/golf/event/markets/{event_id}`
-
-**Valid URL:** [https://api.cbssports.com/napi/resource/golf/event/markets](https://api.cbssports.com/napi/resource/golf/event/markets)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -494,8 +474,6 @@ _Last validated n/a._
 Get an odds resource for a particular game.
 
 **Endpoint URL:** `GET https://api.cbssports.com/napi/resource/odds/{game_id}`
-
-**Valid URL:** [https://api.cbssports.com/napi/resource/odds](https://api.cbssports.com/napi/resource/odds)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -682,8 +660,6 @@ Get a venue resource
 
 **Endpoint URL:** `GET https://api.cbssports.com/napi/resource/venue/{venue_id}`
 
-**Valid URL:** [https://api.cbssports.com/napi/resource/venue](https://api.cbssports.com/napi/resource/venue)
-
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 | `venue_id` | `venue_id` |  | `Y` |  | Numerical venue ID |
@@ -707,8 +683,6 @@ _Last validated n/a._
 Get a venues metadata resource
 
 **Endpoint URL:** `GET https://api.cbssports.com/napi/resource/venue/metadata/{venue_id}`
-
-**Valid URL:** [https://api.cbssports.com/napi/resource/venue/metadata](https://api.cbssports.com/napi/resource/venue/metadata)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|

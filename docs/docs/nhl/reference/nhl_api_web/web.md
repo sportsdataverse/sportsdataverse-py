@@ -89,7 +89,7 @@ Pull the week-of NHL schedule rooted at `date`.
 
 **Endpoint URL:** `GET https://api-web.nhle.com/v1/schedule/{date}`
 
-**Valid URL:** [https://api-web.nhle.com/v1/schedule](https://api-web.nhle.com/v1/schedule)
+**Valid URL:** [https://api-web.nhle.com/v1/schedule/now](https://api-web.nhle.com/v1/schedule/now)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|

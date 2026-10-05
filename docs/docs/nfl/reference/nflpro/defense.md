@@ -13,7 +13,7 @@ GET /api/secured/stats/defense/overview/season — one row per defender for the 
 
 **Endpoint URL:** `GET https://pro.nfl.com/api/secured/stats/defense/overview/season`
 
-**Valid URL:** [https://pro.nfl.com/api/secured/stats/defense/overview/season?season=2024&seasonType=REG](https://pro.nfl.com/api/secured/stats/defense/overview/season?season=2024&seasonType=REG)
+**Valid URL:** [https://pro.nfl.com/api/secured/stats/defense/overview/season?season=2024&seasonType=REG&limit=500](https://pro.nfl.com/api/secured/stats/defense/overview/season?season=2024&seasonType=REG&limit=500)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -80,7 +80,7 @@ GET /api/secured/stats/defense/overview/week — one row per defender per week �
 
 **Endpoint URL:** `GET https://pro.nfl.com/api/secured/stats/defense/overview/week`
 
-**Valid URL:** [https://pro.nfl.com/api/secured/stats/defense/overview/week?season=2024&seasonType=REG](https://pro.nfl.com/api/secured/stats/defense/overview/week?season=2024&seasonType=REG)
+**Valid URL:** [https://pro.nfl.com/api/secured/stats/defense/overview/week?season=2024&seasonType=REG&limit=500](https://pro.nfl.com/api/secured/stats/defense/overview/week?season=2024&seasonType=REG&limit=500)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -155,7 +155,7 @@ GET /api/secured/stats/defense/nearest/season — one row per defender for the s
 
 **Endpoint URL:** `GET https://pro.nfl.com/api/secured/stats/defense/nearest/season`
 
-**Valid URL:** [https://pro.nfl.com/api/secured/stats/defense/nearest/season?season=2024&seasonType=REG](https://pro.nfl.com/api/secured/stats/defense/nearest/season?season=2024&seasonType=REG)
+**Valid URL:** [https://pro.nfl.com/api/secured/stats/defense/nearest/season?season=2024&seasonType=REG&limit=500](https://pro.nfl.com/api/secured/stats/defense/nearest/season?season=2024&seasonType=REG&limit=500)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -222,7 +222,7 @@ GET /api/secured/stats/defense/nearest/week — one row per defender per week �
 
 **Endpoint URL:** `GET https://pro.nfl.com/api/secured/stats/defense/nearest/week`
 
-**Valid URL:** [https://pro.nfl.com/api/secured/stats/defense/nearest/week?season=2024&seasonType=REG](https://pro.nfl.com/api/secured/stats/defense/nearest/week?season=2024&seasonType=REG)
+**Valid URL:** [https://pro.nfl.com/api/secured/stats/defense/nearest/week?season=2024&seasonType=REG&limit=500](https://pro.nfl.com/api/secured/stats/defense/nearest/week?season=2024&seasonType=REG&limit=500)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|

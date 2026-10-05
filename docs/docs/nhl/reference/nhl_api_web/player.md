@@ -171,7 +171,7 @@ Pull a player's game-by-game log.
 
 **Endpoint URL:** `GET https://api-web.nhle.com/v1/player/{player_id}/game-log/{season}/{game_type}`
 
-**Valid URL:** [https://api-web.nhle.com/v1/player/8480801/game-log](https://api-web.nhle.com/v1/player/8480801/game-log)
+**Valid URL:** [https://api-web.nhle.com/v1/player/8480801/game-log/now](https://api-web.nhle.com/v1/player/8480801/game-log/now)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|

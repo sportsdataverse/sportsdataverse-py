@@ -57,22 +57,64 @@ def _sub_slugs(path: str, sport: str, league: str) -> str:
     return path
 
 
+def _now_toggle(ep: spec.Endpoint) -> str:
+    """The path param whose ``None`` selects ``ep.now_variant``.
+
+    The explicit ``now_toggle``, else the first None-default optional path param,
+    else the last path param (back-compat).
+    """
+    if ep.now_toggle is not None:
+        return ep.now_toggle
+    none_default = [p.python_name for p in ep.path_params if not p.required and p.default is None]
+    return none_default[0] if none_default else ep.path_params[-1].python_name
+
+
+def _transform(name: str):
+    """The runtime callable a ``transform:`` names (all live in ``_codegen_runtime``)."""
+    from sportsdataverse import _codegen_runtime
+
+    # ponytail: nfl_api_runtime._bool_str is a copy of the shared bool_str.
+    return getattr(_codegen_runtime, {"_bool_str": "bool_str"}.get(name, name))
+
+
 def _example_url(host_url: str, ep: spec.Endpoint, sport: str, league: str) -> str:
-    path = _sub_slugs(ep.path.replace("[", "").replace("]", ""), sport, league)
-    for p in ep.path_params:
-        val = ep.example_args.get(p.python_name)
-        if val is not None:
-            path = path.replace("{" + p.python_name + "}", str(val))
-    # drop any unfilled (optional, trailing) path tokens from the example
-    if "{" in path:
-        path = path[: path.index("{")].rstrip("/")
-    qs = {p.api: ep.example_args[p.python_name] for p in ep.query_params if p.python_name in ep.example_args}
-    qs = {**ep.fixed_params, **qs}
-    return f"{host_url}{path}" + (f"?{urlencode(qs)}" if qs else "")
+    """The URL the generated wrapper requests when called with ``ep.example_args``.
+
+    Replays the wrapper body (see ``espn_league_module.py.jinja`` / ``api_module.py.jinja``
+    and :meth:`_EndpointView._build_path_expr`): argument defaults, ``default_from``,
+    ``transform``, ``[optional segments]`` and ``now_variant``, then every non-None
+    query param in ``_params`` order. Empty when the example omits a required argument,
+    since that call raises before it requests anything.
+    """
+    params = [*ep.path_params, *ep.query_params]
+    if any(p.required and p.default_from is None and p.python_name not in ep.example_args for p in params):
+        return ""
+    vals = {p.python_name: ep.example_args.get(p.python_name, p.default) for p in params}
+    qs = {**ep.fixed_params}
+    for p in ep.query_params:
+        v = vals[p.python_name]
+        qs[p.api] = _transform(p.transform)(v) if p.transform else v
+    for p in ep.path_params:  # same statement order as _build_path_expr
+        if p.default_from and vals[p.python_name] is None:
+            vals[p.python_name] = vals[p.default_from]
+        if p.transform:
+            vals[p.python_name] = _transform(p.transform)(vals[p.python_name])
+    path = ep.path
+    if "[" in path:
+        head, rest = path.split("[", 1)
+        seg, tail = rest.split("]", 1)
+        path = head + (seg if vals[_path_token_first(seg)] is not None else "") + tail
+    elif ep.now_variant and vals[_now_toggle(ep)] is None:
+        path = ep.now_variant
+    path = _PATH_TOKEN.sub(lambda m: str(vals.get(m.group(1), m.group(0))), _sub_slugs(path, sport, league))
+    qs = {k: v for k, v in qs.items() if v is not None}  # _get strips None params
+    return f"{host_url}{path}" + (f"?{urlencode(qs, doseq=True)}" if qs else "")
 
 
-def _example_call(ep: spec.Endpoint, fn_name: str) -> str:
-    args = ", ".join(f"{k}={v!r}" for k, v in ep.example_args.items())
+def _example_call(ep: spec.Endpoint, fn_name: str, league: str = "") -> str:
+    """``fn(k=v, ...)`` for the example args; ``league`` leads in league-param mode (a required arg)."""
+    example = {"league": league, **ep.example_args} if league else ep.example_args
+    args = ", ".join(f"{k}={v!r}" for k, v in example.items())
     return f"{fn_name}({args})"
 
 
@@ -699,7 +741,7 @@ class _EndpointView:
             self.url_literal = ('f"' + url + '"') if needs_fstring else ('"' + url + '"')
 
         self.example_url = _example_url(ep_host, ep, league.sport, league.league)
-        self.example_call = _example_call(ep, fn_name)
+        self.example_call = _example_call(ep, fn_name, league.league if league.league_param else "")
         self.docstring = _build_docstring(
             ep,
             league.sport,
@@ -755,12 +797,7 @@ class _EndpointView:
                 url_expr += f' + f"{tail_f}"'
             lines.append(f"__url = {url_expr}")
         elif ep.now_variant:
-            # toggle = explicit now_toggle, else the first None-default path param,
-            # else the last path param (back-compat).
-            toggle = ep.now_toggle
-            if toggle is None:
-                none_default = [p.python_name for p in ep.path_params if not p.required and p.default is None]
-                toggle = none_default[0] if none_default else ep.path_params[-1].python_name
+            toggle = _now_toggle(ep)
             now_f = ep_host + _sub_slugs(ep.now_variant, sport, lg)
             full_f = ep_host + _sub_slugs(ep.path, sport, lg)
             # Emit the now-variant as an f-string only when it still has path-param

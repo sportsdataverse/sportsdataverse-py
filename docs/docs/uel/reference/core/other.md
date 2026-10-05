@@ -37,7 +37,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.europa/seasons`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.europa/seasons](https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.europa/seasons)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.europa/seasons?limit=200](https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.europa/seasons?limit=200)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -62,7 +62,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.europa/events`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.europa/events](https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.europa/events)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.europa/events?limit=500](https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.europa/events?limit=500)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -113,7 +113,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.europa/teams`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.europa/teams](https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.europa/teams)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.europa/teams?limit=1000&page=1](https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.europa/teams?limit=1000&page=1)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -181,7 +181,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.europa/venues`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.europa/venues](https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.europa/venues)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.europa/venues?limit=1000](https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.europa/venues?limit=1000)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -231,7 +231,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.europa/franchises`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.europa/franchises](https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.europa/franchises)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.europa/franchises?limit=200](https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.europa/franchises?limit=200)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -306,7 +306,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.europa/coaches/{coach_id}/record/{record_type}`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.europa/coaches/1/record](https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.europa/coaches/1/record)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.europa/coaches/1/record/0](https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.europa/coaches/1/record/0)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -358,7 +358,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.europa/positions`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.europa/positions](https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.europa/positions)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.europa/positions?limit=200](https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.europa/positions?limit=200)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -408,7 +408,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.europa/tournaments`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.europa/tournaments](https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.europa/tournaments)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.europa/tournaments?limit=200](https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.europa/tournaments?limit=200)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -433,7 +433,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.europa/awards`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.europa/awards](https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.europa/awards)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.europa/awards?limit=200](https://sports.core.api.espn.com/v2/sports/soccer/leagues/uefa.europa/awards?limit=200)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|

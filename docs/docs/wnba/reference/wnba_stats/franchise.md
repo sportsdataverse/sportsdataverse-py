@@ -78,7 +78,7 @@ GET /stats/franchiseleaders
 
 **Endpoint URL:** `GET https://stats.wnba.com/stats/franchiseleaders`
 
-**Valid URL:** [https://stats.wnba.com/stats/franchiseleaders?LeagueID=10](https://stats.wnba.com/stats/franchiseleaders?LeagueID=10)
+**Valid URL:** [https://stats.wnba.com/stats/franchiseleaders?LeagueID=10&TeamID=1611661324](https://stats.wnba.com/stats/franchiseleaders?LeagueID=10&TeamID=1611661324)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -123,7 +123,7 @@ GET /stats/franchiseleaderswrank
 
 **Endpoint URL:** `GET https://stats.wnba.com/stats/franchiseleaderswrank`
 
-**Valid URL:** [https://stats.wnba.com/stats/franchiseleaderswrank?LeagueID=10](https://stats.wnba.com/stats/franchiseleaderswrank?LeagueID=10)
+**Valid URL:** [https://stats.wnba.com/stats/franchiseleaderswrank?LeagueID=10&PerMode=Totals&SeasonType=Regular+Season&TeamID=1611661324](https://stats.wnba.com/stats/franchiseleaderswrank?LeagueID=10&PerMode=Totals&SeasonType=Regular+Season&TeamID=1611661324)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -201,7 +201,7 @@ GET /stats/franchiseplayers
 
 **Endpoint URL:** `GET https://stats.wnba.com/stats/franchiseplayers`
 
-**Valid URL:** [https://stats.wnba.com/stats/franchiseplayers?LeagueID=10](https://stats.wnba.com/stats/franchiseplayers?LeagueID=10)
+**Valid URL:** [https://stats.wnba.com/stats/franchiseplayers?LeagueID=10&PerMode=Totals&SeasonType=Regular+Season&TeamID=1611661319](https://stats.wnba.com/stats/franchiseplayers?LeagueID=10&PerMode=Totals&SeasonType=Regular+Season&TeamID=1611661319)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|

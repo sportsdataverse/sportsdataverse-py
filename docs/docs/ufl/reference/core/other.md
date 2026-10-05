@@ -37,7 +37,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/football/leagues/ufl/seasons`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/football/leagues/ufl/seasons](https://sports.core.api.espn.com/v2/sports/football/leagues/ufl/seasons)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/football/leagues/ufl/seasons?limit=200](https://sports.core.api.espn.com/v2/sports/football/leagues/ufl/seasons?limit=200)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -62,7 +62,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/football/leagues/ufl/events`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/football/leagues/ufl/events](https://sports.core.api.espn.com/v2/sports/football/leagues/ufl/events)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/football/leagues/ufl/events?limit=500](https://sports.core.api.espn.com/v2/sports/football/leagues/ufl/events?limit=500)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -113,7 +113,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/football/leagues/ufl/teams`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/football/leagues/ufl/teams](https://sports.core.api.espn.com/v2/sports/football/leagues/ufl/teams)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/football/leagues/ufl/teams?limit=1000&page=1](https://sports.core.api.espn.com/v2/sports/football/leagues/ufl/teams?limit=1000&page=1)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -181,7 +181,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/football/leagues/ufl/venues`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/football/leagues/ufl/venues](https://sports.core.api.espn.com/v2/sports/football/leagues/ufl/venues)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/football/leagues/ufl/venues?limit=1000](https://sports.core.api.espn.com/v2/sports/football/leagues/ufl/venues?limit=1000)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -231,7 +231,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/football/leagues/ufl/franchises`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/football/leagues/ufl/franchises](https://sports.core.api.espn.com/v2/sports/football/leagues/ufl/franchises)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/football/leagues/ufl/franchises?limit=200](https://sports.core.api.espn.com/v2/sports/football/leagues/ufl/franchises?limit=200)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -306,7 +306,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/football/leagues/ufl/coaches/{coach_id}/record/{record_type}`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/football/leagues/ufl/coaches/1/record](https://sports.core.api.espn.com/v2/sports/football/leagues/ufl/coaches/1/record)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/football/leagues/ufl/coaches/1/record/0](https://sports.core.api.espn.com/v2/sports/football/leagues/ufl/coaches/1/record/0)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -358,7 +358,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/football/leagues/ufl/positions`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/football/leagues/ufl/positions](https://sports.core.api.espn.com/v2/sports/football/leagues/ufl/positions)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/football/leagues/ufl/positions?limit=200](https://sports.core.api.espn.com/v2/sports/football/leagues/ufl/positions?limit=200)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -408,7 +408,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/football/leagues/ufl/tournaments`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/football/leagues/ufl/tournaments](https://sports.core.api.espn.com/v2/sports/football/leagues/ufl/tournaments)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/football/leagues/ufl/tournaments?limit=200](https://sports.core.api.espn.com/v2/sports/football/leagues/ufl/tournaments?limit=200)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -433,7 +433,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/football/leagues/ufl/awards`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/football/leagues/ufl/awards](https://sports.core.api.espn.com/v2/sports/football/leagues/ufl/awards)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/football/leagues/ufl/awards?limit=200](https://sports.core.api.espn.com/v2/sports/football/leagues/ufl/awards?limit=200)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|

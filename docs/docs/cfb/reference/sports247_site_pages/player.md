@@ -13,8 +13,6 @@ Player detail (identity + primary-sport rating/ranks).
 
 **Endpoint URL:** `GET https://247sports.com/Player/{key}.json`
 
-**Valid URL:** [https://247sports.com/Player](https://247sports.com/Player)
-
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 | `key` | `key` |  | `Y` |  | key path parameter. |
@@ -194,8 +192,6 @@ Player-at-institution association detail.
 
 **Endpoint URL:** `GET https://247sports.com/PlayerInstitution/{key}.json`
 
-**Valid URL:** [https://247sports.com/PlayerInstitution](https://247sports.com/PlayerInstitution)
-
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 | `key` | `key` |  | `Y` |  | key path parameter. |
@@ -251,8 +247,6 @@ _Last validated n/a._
 Scout evaluation of a player-institution fit.
 
 **Endpoint URL:** `GET https://247sports.com/PlayerInstitutionEvaluation/{key}.json`
-
-**Valid URL:** [https://247sports.com/PlayerInstitutionEvaluation](https://247sports.com/PlayerInstitutionEvaluation)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -420,8 +414,6 @@ _Last validated n/a._
 PlayerSport detail (note lowercase route segment).
 
 **Endpoint URL:** `GET https://247sports.com/playersport/{key}.json`
-
-**Valid URL:** [https://247sports.com/playersport](https://247sports.com/playersport)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|

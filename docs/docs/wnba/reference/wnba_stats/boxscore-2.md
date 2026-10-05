@@ -13,7 +13,7 @@ GET /stats/boxscoresummaryv3
 
 **Endpoint URL:** `GET https://stats.wnba.com/stats/boxscoresummaryv3`
 
-**Valid URL:** [https://stats.wnba.com/stats/boxscoresummaryv3](https://stats.wnba.com/stats/boxscoresummaryv3)
+**Valid URL:** [https://stats.wnba.com/stats/boxscoresummaryv3?GameID=1022200034](https://stats.wnba.com/stats/boxscoresummaryv3?GameID=1022200034)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -141,7 +141,7 @@ GET /stats/boxscoretraditionalv2
 
 **Endpoint URL:** `GET https://stats.wnba.com/stats/boxscoretraditionalv2`
 
-**Valid URL:** [https://stats.wnba.com/stats/boxscoretraditionalv2](https://stats.wnba.com/stats/boxscoretraditionalv2)
+**Valid URL:** [https://stats.wnba.com/stats/boxscoretraditionalv2?EndPeriod=14&EndRange=0&GameID=1022200034&RangeType=0&StartPeriod=0&StartRange=0](https://stats.wnba.com/stats/boxscoretraditionalv2?EndPeriod=14&EndRange=0&GameID=1022200034&RangeType=0&StartPeriod=0&StartRange=0)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -265,7 +265,7 @@ GET /stats/boxscoretraditionalv3
 
 **Endpoint URL:** `GET https://stats.wnba.com/stats/boxscoretraditionalv3`
 
-**Valid URL:** [https://stats.wnba.com/stats/boxscoretraditionalv3](https://stats.wnba.com/stats/boxscoretraditionalv3)
+**Valid URL:** [https://stats.wnba.com/stats/boxscoretraditionalv3?EndPeriod=14&EndRange=0&GameID=1022200034&RangeType=0&StartPeriod=0&StartRange=0](https://stats.wnba.com/stats/boxscoretraditionalv3?EndPeriod=14&EndRange=0&GameID=1022200034&RangeType=0&StartPeriod=0&StartRange=0)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -369,7 +369,7 @@ GET /stats/boxscoreusagev2
 
 **Endpoint URL:** `GET https://stats.wnba.com/stats/boxscoreusagev2`
 
-**Valid URL:** [https://stats.wnba.com/stats/boxscoreusagev2](https://stats.wnba.com/stats/boxscoreusagev2)
+**Valid URL:** [https://stats.wnba.com/stats/boxscoreusagev2?EndPeriod=14&EndRange=0&GameID=1022200034&RangeType=0&StartPeriod=0&StartRange=0](https://stats.wnba.com/stats/boxscoreusagev2?EndPeriod=14&EndRange=0&GameID=1022200034&RangeType=0&StartPeriod=0&StartRange=0)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -461,7 +461,7 @@ GET /stats/boxscoreusagev3
 
 **Endpoint URL:** `GET https://stats.wnba.com/stats/boxscoreusagev3`
 
-**Valid URL:** [https://stats.wnba.com/stats/boxscoreusagev3](https://stats.wnba.com/stats/boxscoreusagev3)
+**Valid URL:** [https://stats.wnba.com/stats/boxscoreusagev3?EndPeriod=14&EndRange=0&GameID=1022200034&RangeType=0&StartPeriod=0&StartRange=0](https://stats.wnba.com/stats/boxscoreusagev3?EndPeriod=14&EndRange=0&GameID=1022200034&RangeType=0&StartPeriod=0&StartRange=0)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|

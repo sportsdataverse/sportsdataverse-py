@@ -13,8 +13,6 @@ Coach identity detail.
 
 **Endpoint URL:** `GET https://247sports.com/Coach/{key}.json`
 
-**Valid URL:** [https://247sports.com/Coach](https://247sports.com/Coach)
-
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 | `key` | `key` |  | `Y` |  | key path parameter. |
@@ -56,8 +54,6 @@ Recruiting event detail (camp/combine/regional).
 
 **Endpoint URL:** `GET https://247sports.com/Event/{slug}.json`
 
-**Valid URL:** [https://247sports.com/Event](https://247sports.com/Event)
-
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 | `slug` | `slug` |  | `Y` |  | slug path parameter. |
@@ -92,8 +88,6 @@ _Last validated n/a._
 Institution (school/team) detail.
 
 **Endpoint URL:** `GET https://247sports.com/Institution/{key}.json`
-
-**Valid URL:** [https://247sports.com/Institution](https://247sports.com/Institution)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -567,8 +561,6 @@ _Last validated n/a._
 Single recruit-interest (school<->recruit link) detail.
 
 **Endpoint URL:** `GET https://247sports.com/RecruitInterest/{key}.json`
-
-**Valid URL:** [https://247sports.com/RecruitInterest](https://247sports.com/RecruitInterest)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|

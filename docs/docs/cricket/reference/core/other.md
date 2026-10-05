@@ -26,7 +26,7 @@ ESPN endpoint.
 ### Example {#espn_cricket_league_root-example}
 
 ```python
-espn_cricket_league_root()
+espn_cricket_league_root(league='eng.1')
 ```
 
 _Last validated n/a._
@@ -37,7 +37,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/cricket/leagues/eng.1/seasons`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/cricket/leagues/eng.1/seasons](https://sports.core.api.espn.com/v2/sports/cricket/leagues/eng.1/seasons)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/cricket/leagues/eng.1/seasons?limit=200](https://sports.core.api.espn.com/v2/sports/cricket/leagues/eng.1/seasons?limit=200)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -51,7 +51,7 @@ ESPN endpoint.
 ### Example {#espn_cricket_seasons-example}
 
 ```python
-espn_cricket_seasons()
+espn_cricket_seasons(league='eng.1')
 ```
 
 _Last validated n/a._
@@ -62,7 +62,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/cricket/leagues/eng.1/events`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/cricket/leagues/eng.1/events](https://sports.core.api.espn.com/v2/sports/cricket/leagues/eng.1/events)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/cricket/leagues/eng.1/events?limit=500](https://sports.core.api.espn.com/v2/sports/cricket/leagues/eng.1/events?limit=500)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -77,7 +77,7 @@ ESPN endpoint.
 ### Example {#espn_cricket_games-example}
 
 ```python
-espn_cricket_games()
+espn_cricket_games(league='eng.1')
 ```
 
 _Last validated n/a._
@@ -102,7 +102,7 @@ ESPN endpoint.
 ### Example {#espn_cricket_game-example}
 
 ```python
-espn_cricket_game(event_id='401584793')
+espn_cricket_game(league='eng.1', event_id='401584793')
 ```
 
 _Last validated n/a._
@@ -113,7 +113,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/cricket/leagues/eng.1/teams`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/cricket/leagues/eng.1/teams](https://sports.core.api.espn.com/v2/sports/cricket/leagues/eng.1/teams)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/cricket/leagues/eng.1/teams?limit=1000&page=1](https://sports.core.api.espn.com/v2/sports/cricket/leagues/eng.1/teams?limit=1000&page=1)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -145,7 +145,7 @@ ESPN endpoint.
 ### Example {#espn_cricket_teams_core-example}
 
 ```python
-espn_cricket_teams_core()
+espn_cricket_teams_core(league='eng.1')
 ```
 
 _Last validated n/a._
@@ -170,7 +170,7 @@ ESPN endpoint.
 ### Example {#espn_cricket_team_core-example}
 
 ```python
-espn_cricket_team_core(team_id='4')
+espn_cricket_team_core(league='eng.1', team_id='4')
 ```
 
 _Last validated n/a._
@@ -181,7 +181,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/cricket/leagues/eng.1/venues`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/cricket/leagues/eng.1/venues](https://sports.core.api.espn.com/v2/sports/cricket/leagues/eng.1/venues)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/cricket/leagues/eng.1/venues?limit=1000](https://sports.core.api.espn.com/v2/sports/cricket/leagues/eng.1/venues?limit=1000)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -195,7 +195,7 @@ ESPN endpoint.
 ### Example {#espn_cricket_venues-example}
 
 ```python
-espn_cricket_venues()
+espn_cricket_venues(league='eng.1')
 ```
 
 _Last validated n/a._
@@ -220,7 +220,7 @@ ESPN endpoint.
 ### Example {#espn_cricket_venue-example}
 
 ```python
-espn_cricket_venue(venue_id='3663')
+espn_cricket_venue(league='eng.1', venue_id='3663')
 ```
 
 _Last validated n/a._
@@ -231,7 +231,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/cricket/leagues/eng.1/franchises`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/cricket/leagues/eng.1/franchises](https://sports.core.api.espn.com/v2/sports/cricket/leagues/eng.1/franchises)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/cricket/leagues/eng.1/franchises?limit=200](https://sports.core.api.espn.com/v2/sports/cricket/leagues/eng.1/franchises?limit=200)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -245,7 +245,7 @@ ESPN endpoint.
 ### Example {#espn_cricket_franchises-example}
 
 ```python
-espn_cricket_franchises()
+espn_cricket_franchises(league='eng.1')
 ```
 
 _Last validated n/a._
@@ -270,7 +270,7 @@ ESPN endpoint.
 ### Example {#espn_cricket_franchise-example}
 
 ```python
-espn_cricket_franchise(franchise_id='2')
+espn_cricket_franchise(league='eng.1', franchise_id='2')
 ```
 
 _Last validated n/a._
@@ -295,7 +295,7 @@ ESPN endpoint.
 ### Example {#espn_cricket_coach-example}
 
 ```python
-espn_cricket_coach(coach_id='1')
+espn_cricket_coach(league='eng.1', coach_id='1')
 ```
 
 _Last validated n/a._
@@ -306,7 +306,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/cricket/leagues/eng.1/coaches/{coach_id}/record/{record_type}`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/cricket/leagues/eng.1/coaches/1/record](https://sports.core.api.espn.com/v2/sports/cricket/leagues/eng.1/coaches/1/record)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/cricket/leagues/eng.1/coaches/1/record/0](https://sports.core.api.espn.com/v2/sports/cricket/leagues/eng.1/coaches/1/record/0)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -321,7 +321,7 @@ ESPN endpoint.
 ### Example {#espn_cricket_coach_record-example}
 
 ```python
-espn_cricket_coach_record(coach_id='1')
+espn_cricket_coach_record(league='eng.1', coach_id='1')
 ```
 
 _Last validated n/a._
@@ -347,7 +347,7 @@ ESPN endpoint.
 ### Example {#espn_cricket_coach_season-example}
 
 ```python
-espn_cricket_coach_season(coach_id='1', season=2024)
+espn_cricket_coach_season(league='eng.1', coach_id='1', season=2024)
 ```
 
 _Last validated n/a._
@@ -358,7 +358,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/cricket/leagues/eng.1/positions`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/cricket/leagues/eng.1/positions](https://sports.core.api.espn.com/v2/sports/cricket/leagues/eng.1/positions)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/cricket/leagues/eng.1/positions?limit=200](https://sports.core.api.espn.com/v2/sports/cricket/leagues/eng.1/positions?limit=200)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -372,7 +372,7 @@ ESPN endpoint.
 ### Example {#espn_cricket_positions-example}
 
 ```python
-espn_cricket_positions()
+espn_cricket_positions(league='eng.1')
 ```
 
 _Last validated n/a._
@@ -397,7 +397,7 @@ ESPN endpoint.
 ### Example {#espn_cricket_position-example}
 
 ```python
-espn_cricket_position(position_id='1')
+espn_cricket_position(league='eng.1', position_id='1')
 ```
 
 _Last validated n/a._
@@ -408,7 +408,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/cricket/leagues/eng.1/tournaments`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/cricket/leagues/eng.1/tournaments](https://sports.core.api.espn.com/v2/sports/cricket/leagues/eng.1/tournaments)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/cricket/leagues/eng.1/tournaments?limit=200](https://sports.core.api.espn.com/v2/sports/cricket/leagues/eng.1/tournaments?limit=200)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -422,7 +422,7 @@ ESPN endpoint.
 ### Example {#espn_cricket_tournaments-example}
 
 ```python
-espn_cricket_tournaments()
+espn_cricket_tournaments(league='eng.1')
 ```
 
 _Last validated n/a._
@@ -433,7 +433,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/cricket/leagues/eng.1/awards`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/cricket/leagues/eng.1/awards](https://sports.core.api.espn.com/v2/sports/cricket/leagues/eng.1/awards)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/cricket/leagues/eng.1/awards?limit=200](https://sports.core.api.espn.com/v2/sports/cricket/leagues/eng.1/awards?limit=200)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -447,7 +447,7 @@ ESPN endpoint.
 ### Example {#espn_cricket_awards-example}
 
 ```python
-espn_cricket_awards()
+espn_cricket_awards(league='eng.1')
 ```
 
 _Last validated n/a._
@@ -472,7 +472,7 @@ ESPN endpoint.
 ### Example {#espn_cricket_award-example}
 
 ```python
-espn_cricket_award(award_id='1')
+espn_cricket_award(league='eng.1', award_id='1')
 ```
 
 _Last validated n/a._
@@ -514,7 +514,7 @@ ESPN endpoint.
 ### Example {#espn_cricket_standings_core-example}
 
 ```python
-espn_cricket_standings_core()
+espn_cricket_standings_core(league='eng.1')
 ```
 
 _Last validated n/a._
@@ -538,7 +538,7 @@ ESPN endpoint.
 ### Example {#espn_cricket_leaders_core-example}
 
 ```python
-espn_cricket_leaders_core()
+espn_cricket_leaders_core(league='eng.1')
 ```
 
 _Last validated n/a._
@@ -562,7 +562,7 @@ ESPN endpoint.
 ### Example {#espn_cricket_league_notes-example}
 
 ```python
-espn_cricket_league_notes()
+espn_cricket_league_notes(league='eng.1')
 ```
 
 _Last validated n/a._
@@ -586,7 +586,7 @@ ESPN endpoint.
 ### Example {#espn_cricket_talentpicks-example}
 
 ```python
-espn_cricket_talentpicks()
+espn_cricket_talentpicks(league='eng.1')
 ```
 
 _Last validated n/a._

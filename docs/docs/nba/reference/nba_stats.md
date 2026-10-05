@@ -24,7 +24,7 @@ toc_max_heading_level: 2
 | [nba_stats_boxscoresummaryv2](nba_stats/boxscore.md#nba_stats_boxscoresummaryv2) | GET /stats/boxscoresummaryv2 |
 | [nba_stats_boxscoresummaryv3](nba_stats/boxscore.md#nba_stats_boxscoresummaryv3) | GET /stats/boxscoresummaryv3 |
 | [nba_stats_boxscoretraditionalv2](nba_stats/boxscore.md#nba_stats_boxscoretraditionalv2) | GET /stats/boxscoretraditionalv2 |
-| [nba_stats_boxscoretraditionalv3](nba_stats/boxscore.md#nba_stats_boxscoretraditionalv3) | GET /stats/boxscoretraditionalv3 |
+| [nba_stats_boxscoretraditionalv3](nba_stats/boxscore-2.md#nba_stats_boxscoretraditionalv3) | GET /stats/boxscoretraditionalv3 |
 | [nba_stats_boxscoreusagev3](nba_stats/boxscore-2.md#nba_stats_boxscoreusagev3) | GET /stats/boxscoreusagev3 |
 
 ## Common
@@ -95,8 +95,8 @@ toc_max_heading_level: 2
 | [nba_stats_leaguedashptstats](nba_stats/leaguedash.md#nba_stats_leaguedashptstats) | GET /stats/leaguedashptstats |
 | [nba_stats_leaguedashptteamdefend](nba_stats/leaguedash.md#nba_stats_leaguedashptteamdefend) | GET /stats/leaguedashptteamdefend |
 | [nba_stats_leaguedashteamclutch](nba_stats/leaguedash.md#nba_stats_leaguedashteamclutch) | GET /stats/leaguedashteamclutch |
-| [nba_stats_leaguedashteamptshot](nba_stats/leaguedash.md#nba_stats_leaguedashteamptshot) | GET /stats/leaguedashteamptshot |
-| [nba_stats_leaguedashteamshotlocations](nba_stats/leaguedash.md#nba_stats_leaguedashteamshotlocations) | GET /stats/leaguedashteamshotlocations |
+| [nba_stats_leaguedashteamptshot](nba_stats/leaguedash-2.md#nba_stats_leaguedashteamptshot) | GET /stats/leaguedashteamptshot |
+| [nba_stats_leaguedashteamshotlocations](nba_stats/leaguedash-2.md#nba_stats_leaguedashteamshotlocations) | GET /stats/leaguedashteamshotlocations |
 | [nba_stats_leaguedashteamstats](nba_stats/leaguedash-2.md#nba_stats_leaguedashteamstats) | GET /stats/leaguedashteamstats |
 
 ## Player
@@ -113,7 +113,7 @@ toc_max_heading_level: 2
 | [nba_stats_playergamelog](nba_stats/player.md#nba_stats_playergamelog) | GET /stats/playergamelog |
 | [nba_stats_playergamelogs](nba_stats/player.md#nba_stats_playergamelogs) | GET /stats/playergamelogs |
 | [nba_stats_playergamestreakfinder](nba_stats/player.md#nba_stats_playergamestreakfinder) | GET /stats/playergamestreakfinder |
-| [nba_stats_playerindex](nba_stats/player.md#nba_stats_playerindex) | GET /stats/playerindex |
+| [nba_stats_playerindex](nba_stats/player-2.md#nba_stats_playerindex) | GET /stats/playerindex |
 | [nba_stats_playerprofilev2](nba_stats/player-2.md#nba_stats_playerprofilev2) | GET /stats/playerprofilev2 |
 | [nba_stats_playervsplayer](nba_stats/player-2.md#nba_stats_playervsplayer) | GET /stats/playervsplayer |
 
@@ -181,17 +181,17 @@ toc_max_heading_level: 2
 | Function | Summary |
 |---|---|
 | [nba_stats_teamdashboardbyclutch](nba_stats/teamdash.md#nba_stats_teamdashboardbyclutch) | GET /stats/teamdashboardbyclutch |
-| [nba_stats_teamdashboardbygamesplits](nba_stats/teamdash.md#nba_stats_teamdashboardbygamesplits) | GET /stats/teamdashboardbygamesplits |
+| [nba_stats_teamdashboardbygamesplits](nba_stats/teamdash-2.md#nba_stats_teamdashboardbygamesplits) | GET /stats/teamdashboardbygamesplits |
 | [nba_stats_teamdashboardbygeneralsplits](nba_stats/teamdash-2.md#nba_stats_teamdashboardbygeneralsplits) | GET /stats/teamdashboardbygeneralsplits |
-| [nba_stats_teamdashboardbylastngames](nba_stats/teamdash-2.md#nba_stats_teamdashboardbylastngames) | GET /stats/teamdashboardbylastngames |
+| [nba_stats_teamdashboardbylastngames](nba_stats/teamdash-3.md#nba_stats_teamdashboardbylastngames) | GET /stats/teamdashboardbylastngames |
 | [nba_stats_teamdashboardbyopponent](nba_stats/teamdash-3.md#nba_stats_teamdashboardbyopponent) | GET /stats/teamdashboardbyopponent |
-| [nba_stats_teamdashboardbyshootingsplits](nba_stats/teamdash-3.md#nba_stats_teamdashboardbyshootingsplits) | GET /stats/teamdashboardbyshootingsplits |
-| [nba_stats_teamdashboardbyteamperformance](nba_stats/teamdash-3.md#nba_stats_teamdashboardbyteamperformance) | GET /stats/teamdashboardbyteamperformance |
+| [nba_stats_teamdashboardbyshootingsplits](nba_stats/teamdash-4.md#nba_stats_teamdashboardbyshootingsplits) | GET /stats/teamdashboardbyshootingsplits |
+| [nba_stats_teamdashboardbyteamperformance](nba_stats/teamdash-4.md#nba_stats_teamdashboardbyteamperformance) | GET /stats/teamdashboardbyteamperformance |
 | [nba_stats_teamdashboardbyyearoveryear](nba_stats/teamdash-4.md#nba_stats_teamdashboardbyyearoveryear) | GET /stats/teamdashboardbyyearoveryear |
-| [nba_stats_teamdashlineups](nba_stats/teamdash-4.md#nba_stats_teamdashlineups) | GET /stats/teamdashlineups |
-| [nba_stats_teamdashptpass](nba_stats/teamdash-4.md#nba_stats_teamdashptpass) | GET /stats/teamdashptpass |
-| [nba_stats_teamdashptreb](nba_stats/teamdash-4.md#nba_stats_teamdashptreb) | GET /stats/teamdashptreb |
-| [nba_stats_teamdashptshots](nba_stats/teamdash-4.md#nba_stats_teamdashptshots) | GET /stats/teamdashptshots |
+| [nba_stats_teamdashlineups](nba_stats/teamdash-5.md#nba_stats_teamdashlineups) | GET /stats/teamdashlineups |
+| [nba_stats_teamdashptpass](nba_stats/teamdash-5.md#nba_stats_teamdashptpass) | GET /stats/teamdashptpass |
+| [nba_stats_teamdashptreb](nba_stats/teamdash-5.md#nba_stats_teamdashptreb) | GET /stats/teamdashptreb |
+| [nba_stats_teamdashptshots](nba_stats/teamdash-5.md#nba_stats_teamdashptshots) | GET /stats/teamdashptshots |
 
 ## Other
 

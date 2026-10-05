@@ -13,7 +13,7 @@ Pull categorized (cat) EDGE detail stats for a single skater.
 
 **Endpoint URL:** `GET https://api-web.nhle.com/v1/cat/edge/skater-detail/{player_id}/{season}/{game_type}`
 
-**Valid URL:** [https://api-web.nhle.com/v1/cat/edge/skater-detail/8480801](https://api-web.nhle.com/v1/cat/edge/skater-detail/8480801)
+**Valid URL:** [https://api-web.nhle.com/v1/cat/edge/skater-detail/8480801/now](https://api-web.nhle.com/v1/cat/edge/skater-detail/8480801/now)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -95,7 +95,7 @@ Pull categorized (cat) EDGE detail stats for a single goalie.
 
 **Endpoint URL:** `GET https://api-web.nhle.com/v1/cat/edge/goalie-detail/{player_id}/{season}/{game_type}`
 
-**Valid URL:** [https://api-web.nhle.com/v1/cat/edge/goalie-detail/8480801](https://api-web.nhle.com/v1/cat/edge/goalie-detail/8480801)
+**Valid URL:** [https://api-web.nhle.com/v1/cat/edge/goalie-detail/8480801/now](https://api-web.nhle.com/v1/cat/edge/goalie-detail/8480801/now)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|

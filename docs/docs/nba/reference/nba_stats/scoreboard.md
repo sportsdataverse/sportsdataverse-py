@@ -13,7 +13,7 @@ GET /stats/scoreboardv2
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/scoreboardv2`
 
-**Valid URL:** [https://stats.nba.com/stats/scoreboardv2?LeagueID=00](https://stats.nba.com/stats/scoreboardv2?LeagueID=00)
+**Valid URL:** [https://stats.nba.com/stats/scoreboardv2?DayOffset=0&GameDate=2022-07-20&LeagueID=00](https://stats.nba.com/stats/scoreboardv2?DayOffset=0&GameDate=2022-07-20&LeagueID=00)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -194,7 +194,7 @@ GET /stats/scoreboardv3
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/scoreboardv3`
 
-**Valid URL:** [https://stats.nba.com/stats/scoreboardv3?LeagueID=00](https://stats.nba.com/stats/scoreboardv3?LeagueID=00)
+**Valid URL:** [https://stats.nba.com/stats/scoreboardv3?GameDate=2022-06-26&LeagueID=00](https://stats.nba.com/stats/scoreboardv3?GameDate=2022-06-26&LeagueID=00)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|

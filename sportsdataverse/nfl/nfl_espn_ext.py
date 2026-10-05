@@ -175,7 +175,7 @@ def espn_nfl_scoreboard(
     Bound to sport='football', league='nfl'.
 
     Endpoint: ``GET https://site.api.espn.com/apis/site/v2/sports/{sport}/{league}/scoreboard``
-    Example URL: https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard?dates=20240115
+    Example URL: https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard?dates=20240115&limit=500
 
     Args:
         dates: Date or date range filter (YYYYMMDD or YYYYMMDD-YYYYMMDD).
@@ -229,11 +229,12 @@ def espn_nfl_summary(
 
     Args:
         event_id: event query parameter.
-        return_parsed: parse the payload through parse_summary -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
-        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        return_parsed: parse the payload through parse_summary -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
-        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+        a dict of ``polars.DataFrame``s keyed by summary section by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         Quick start::
@@ -305,7 +306,7 @@ def espn_nfl_news(
     Bound to sport='football', league='nfl'.
 
     Endpoint: ``GET https://site.api.espn.com/apis/site/v2/sports/{sport}/{league}/news``
-    Example URL: https://site.api.espn.com/apis/site/v2/sports/football/nfl/news
+    Example URL: https://site.api.espn.com/apis/site/v2/sports/football/nfl/news?limit=50
 
     Args:
         limit: Maximum number of items to return.
@@ -385,7 +386,7 @@ def espn_nfl_transactions(
     Bound to sport='football', league='nfl'.
 
     Endpoint: ``GET https://site.api.espn.com/apis/site/v2/sports/{sport}/{league}/transactions``
-    Example URL: https://site.api.espn.com/apis/site/v2/sports/football/nfl/transactions
+    Example URL: https://site.api.espn.com/apis/site/v2/sports/football/nfl/transactions?limit=500
 
     Args:
         limit: Maximum number of items to return.
@@ -541,7 +542,7 @@ def espn_nfl_teams_site(
     Bound to sport='football', league='nfl'.
 
     Endpoint: ``GET https://site.api.espn.com/apis/site/v2/sports/{sport}/{league}/teams``
-    Example URL: https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams
+    Example URL: https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams?limit=1000
 
     Args:
         limit: Maximum number of items to return.
@@ -624,7 +625,7 @@ def espn_nfl_team_roster(
     Bound to sport='football', league='nfl'.
 
     Endpoint: ``GET https://site.api.espn.com/apis/site/v2/sports/{sport}/{league}/teams/{team_id}/roster``
-    Example URL: https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/4/roster
+    Example URL: https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/4/roster?limit=500
 
     Args:
         team_id: team_id path parameter.
@@ -912,7 +913,7 @@ def espn_nfl_team_news(
     Bound to sport='football', league='nfl'.
 
     Endpoint: ``GET https://site.api.espn.com/apis/site/v2/sports/{sport}/{league}/teams/{team_id}/news``
-    Example URL: https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/4/news
+    Example URL: https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/4/news?limit=50
 
     Args:
         team_id: team_id path parameter.
@@ -1340,7 +1341,7 @@ def espn_nfl_leaders(
     Bound to sport='football', league='nfl'.
 
     Endpoint: ``GET https://site.web.api.espn.com/apis/common/v3/sports/{sport}/{league}/statistics/byathlete``
-    Example URL: https://site.web.api.espn.com/apis/common/v3/sports/football/nfl/statistics/byathlete
+    Example URL: https://site.web.api.espn.com/apis/common/v3/sports/football/nfl/statistics/byathlete?limit=50&page=1
 
     Args:
         category: category query parameter.
@@ -1468,7 +1469,7 @@ def espn_nfl_seasons(
     Bound to sport='football', league='nfl'.
 
     Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/seasons``
-    Example URL: https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons
+    Example URL: https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons?limit=200
 
     Args:
         limit: Maximum number of items to return.
@@ -1721,7 +1722,7 @@ def espn_nfl_season_group_teams(
     Bound to sport='football', league='nfl'.
 
     Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/seasons/{season}/types/{season_type}/groups/{group_id}/teams``
-    Example URL: https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2024/types/2/groups/80/teams
+    Example URL: https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2024/types/2/groups/80/teams?limit=500
 
     Args:
         season: season path parameter.
@@ -1769,7 +1770,7 @@ def espn_nfl_season_group_children(
     Bound to sport='football', league='nfl'.
 
     Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/seasons/{season}/types/{season_type}/groups/{group_id}/children``
-    Example URL: https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2024/types/2/groups/80/children
+    Example URL: https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2024/types/2/groups/80/children?limit=500
 
     Args:
         season: season path parameter.
@@ -2035,7 +2036,7 @@ def espn_nfl_season_week_games(
     Bound to sport='football', league='nfl'.
 
     Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/seasons/{season}/types/{season_type}/weeks/{week}/events``
-    Example URL: https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2024/types/2/weeks/1/events
+    Example URL: https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2024/types/2/weeks/1/events?limit=500
 
     Args:
         season: season path parameter.
@@ -2082,7 +2083,7 @@ def espn_nfl_season_teams(
     Bound to sport='football', league='nfl'.
 
     Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/seasons/{season}/teams``
-    Example URL: https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2024/teams
+    Example URL: https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2024/teams?limit=1000&page=1
 
     Args:
         season: season path parameter.
@@ -2171,7 +2172,7 @@ def espn_nfl_season_players(
     Bound to sport='football', league='nfl'.
 
     Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/seasons/{season}/athletes``
-    Example URL: https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2024/athletes
+    Example URL: https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2024/athletes?limit=100&page=1
 
     Args:
         season: season path parameter.
@@ -2217,7 +2218,7 @@ def espn_nfl_season_coaches(
     Bound to sport='football', league='nfl'.
 
     Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/seasons/{season}/coaches``
-    Example URL: https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2024/coaches
+    Example URL: https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2024/coaches?limit=500
 
     Args:
         season: season path parameter.
@@ -2507,7 +2508,7 @@ def espn_nfl_season_awards(
     Bound to sport='football', league='nfl'.
 
     Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/seasons/{season}/awards``
-    Example URL: https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2024/awards
+    Example URL: https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2024/awards?limit=200
 
     Args:
         season: season path parameter.
@@ -2552,7 +2553,7 @@ def espn_nfl_players_index(
     Bound to sport='football', league='nfl'.
 
     Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/athletes``
-    Example URL: https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/athletes
+    Example URL: https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/athletes?active=true&limit=100&page=1
 
     Args:
         active: active query parameter.
@@ -3045,7 +3046,7 @@ def espn_nfl_games(
     Bound to sport='football', league='nfl'.
 
     Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/events``
-    Example URL: https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events
+    Example URL: https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events?limit=500
 
     Args:
         dates: Date or date range filter (YYYYMMDD or YYYYMMDD-YYYYMMDD).
@@ -3130,7 +3131,7 @@ def espn_nfl_game_competition(
     Bound to sport='football', league='nfl'.
 
     Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}``
-    Example URL: https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401584793/competitions
+    Example URL: https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401584793/competitions/401584793
 
     Args:
         event_id: event_id path parameter.
@@ -3174,7 +3175,7 @@ def espn_nfl_game_teams(
     Bound to sport='football', league='nfl'.
 
     Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/competitors``
-    Example URL: https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401584793/competitions
+    Example URL: https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401584793/competitions/401584793/competitors
 
     Args:
         event_id: event_id path parameter.
@@ -3219,7 +3220,7 @@ def espn_nfl_game_team(
     Bound to sport='football', league='nfl'.
 
     Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/competitors/{team_id}``
-    Example URL: https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401584793/competitions
+    Example URL: https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401584793/competitions/401584793/competitors/4
 
     Args:
         event_id: event_id path parameter.
@@ -3265,7 +3266,7 @@ def espn_nfl_game_team_roster(
     Bound to sport='football', league='nfl'.
 
     Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/competitors/{team_id}/roster``
-    Example URL: https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401584793/competitions
+    Example URL: https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401584793/competitions/401584793/competitors/4/roster
 
     Args:
         event_id: event_id path parameter.
@@ -3311,7 +3312,7 @@ def espn_nfl_game_team_linescores(
     Bound to sport='football', league='nfl'.
 
     Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/competitors/{team_id}/linescores``
-    Example URL: https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401584793/competitions
+    Example URL: https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401584793/competitions/401584793/competitors/4/linescores
 
     Args:
         event_id: event_id path parameter.
@@ -3357,7 +3358,7 @@ def espn_nfl_game_team_statistics(
     Bound to sport='football', league='nfl'.
 
     Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/competitors/{team_id}/statistics``
-    Example URL: https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401584793/competitions
+    Example URL: https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401584793/competitions/401584793/competitors/4/statistics
 
     Args:
         event_id: event_id path parameter.
@@ -3403,7 +3404,7 @@ def espn_nfl_game_team_record(
     Bound to sport='football', league='nfl'.
 
     Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/competitors/{team_id}/record``
-    Example URL: https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401584793/competitions
+    Example URL: https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401584793/competitions/401584793/competitors/4/record
 
     Args:
         event_id: event_id path parameter.
@@ -3449,7 +3450,7 @@ def espn_nfl_game_team_leaders(
     Bound to sport='football', league='nfl'.
 
     Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/competitors/{team_id}/leaders``
-    Example URL: https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401584793/competitions
+    Example URL: https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401584793/competitions/401584793/competitors/4/leaders
 
     Args:
         event_id: event_id path parameter.
@@ -3494,7 +3495,7 @@ def espn_nfl_game_odds(
     Bound to sport='football', league='nfl'.
 
     Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/odds``
-    Example URL: https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401584793/competitions
+    Example URL: https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401584793/competitions/401584793/odds
 
     Args:
         event_id: event_id path parameter.
@@ -3539,7 +3540,7 @@ def espn_nfl_game_probabilities(
     Bound to sport='football', league='nfl'.
 
     Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/probabilities``
-    Example URL: https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401584793/competitions
+    Example URL: https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401584793/competitions/401584793/probabilities?limit=300
 
     Args:
         event_id: event_id path parameter.
@@ -3587,7 +3588,7 @@ def espn_nfl_game_plays(
     Bound to sport='football', league='nfl'.
 
     Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/plays``
-    Example URL: https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401584793/competitions
+    Example URL: https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401584793/competitions/401584793/plays?limit=1000
 
     Args:
         event_id: event_id path parameter.
@@ -3637,7 +3638,7 @@ def espn_nfl_game_play(
     Bound to sport='football', league='nfl'.
 
     Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/plays/{play_id}``
-    Example URL: https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401584793/competitions
+    Example URL: https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401584793/competitions/401584793/plays/1
 
     Args:
         event_id: event_id path parameter.
@@ -3683,7 +3684,7 @@ def espn_nfl_game_play_personnel(
     Bound to sport='football', league='nfl'.
 
     Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/plays/{play_id}/personnel``
-    Example URL: https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401584793/competitions
+    Example URL: https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401584793/competitions/401584793/plays/1/personnel
 
     Args:
         event_id: event_id path parameter.
@@ -3728,7 +3729,7 @@ def espn_nfl_game_situation(
     Bound to sport='football', league='nfl'.
 
     Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/situation``
-    Example URL: https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401584793/competitions
+    Example URL: https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401584793/competitions/401584793/situation
 
     Args:
         event_id: event_id path parameter.
@@ -3772,7 +3773,7 @@ def espn_nfl_game_status(
     Bound to sport='football', league='nfl'.
 
     Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/status``
-    Example URL: https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401584793/competitions
+    Example URL: https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401584793/competitions/401584793/status
 
     Args:
         event_id: event_id path parameter.
@@ -3818,7 +3819,7 @@ def espn_nfl_game_officials(
     Bound to sport='football', league='nfl'.
 
     Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/officials``
-    Example URL: https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401584793/competitions
+    Example URL: https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401584793/competitions/401584793/officials
 
     Args:
         event_id: event_id path parameter.
@@ -3862,7 +3863,7 @@ def espn_nfl_game_broadcasts(
     Bound to sport='football', league='nfl'.
 
     Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/broadcasts``
-    Example URL: https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401584793/competitions
+    Example URL: https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401584793/competitions/401584793/broadcasts
 
     Args:
         event_id: event_id path parameter.
@@ -3906,7 +3907,7 @@ def espn_nfl_game_predictor(
     Bound to sport='football', league='nfl'.
 
     Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/predictor``
-    Example URL: https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401584793/competitions
+    Example URL: https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401584793/competitions/401584793/predictor
 
     Args:
         event_id: event_id path parameter.
@@ -3950,7 +3951,7 @@ def espn_nfl_game_powerindex(
     Bound to sport='football', league='nfl'.
 
     Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/powerindex``
-    Example URL: https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401584793/competitions
+    Example URL: https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401584793/competitions/401584793/powerindex
 
     Args:
         event_id: event_id path parameter.
@@ -3994,7 +3995,7 @@ def espn_nfl_game_propbets(
     Bound to sport='football', league='nfl'.
 
     Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/propbets``
-    Example URL: https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401584793/competitions
+    Example URL: https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401584793/competitions/401584793/propbets
 
     Args:
         event_id: event_id path parameter.
@@ -4040,7 +4041,7 @@ def espn_nfl_game_leaders(
     Bound to sport='football', league='nfl'.
 
     Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/leaders``
-    Example URL: https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401584793/competitions
+    Example URL: https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401584793/competitions/401584793/leaders
 
     Args:
         event_id: event_id path parameter.
@@ -4086,7 +4087,7 @@ def espn_nfl_game_scoringplays(
     Bound to sport='football', league='nfl'.
 
     Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/scoringplays``
-    Example URL: https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401584793/competitions
+    Example URL: https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401584793/competitions/401584793/scoringplays
 
     Args:
         event_id: event_id path parameter.
@@ -4131,7 +4132,7 @@ def espn_nfl_game_official_detail(
     Bound to sport='football', league='nfl'.
 
     Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/officials/{official_id}``
-    Example URL: https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401584793/competitions
+    Example URL: https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401584793/competitions/401584793/officials/1
 
     Args:
         event_id: event_id path parameter.
@@ -4176,7 +4177,7 @@ def espn_nfl_teams_core(
     Bound to sport='football', league='nfl'.
 
     Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/teams``
-    Example URL: https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/teams
+    Example URL: https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/teams?limit=1000&page=1
 
     Args:
         limit: Maximum number of items to return.
@@ -4260,7 +4261,7 @@ def espn_nfl_venues(
     Bound to sport='football', league='nfl'.
 
     Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/venues``
-    Example URL: https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/venues
+    Example URL: https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/venues?limit=1000
 
     Args:
         limit: Maximum number of items to return.
@@ -4342,7 +4343,7 @@ def espn_nfl_franchises(
     Bound to sport='football', league='nfl'.
 
     Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/franchises``
-    Example URL: https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/franchises
+    Example URL: https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/franchises?limit=200
 
     Args:
         limit: Maximum number of items to return.
@@ -4465,7 +4466,7 @@ def espn_nfl_coach_record(
     Bound to sport='football', league='nfl'.
 
     Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/coaches/{coach_id}/record/{record_type}``
-    Example URL: https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/coaches/1/record
+    Example URL: https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/coaches/1/record/0
 
     Args:
         coach_id: coach_id path parameter.
@@ -4548,7 +4549,7 @@ def espn_nfl_positions(
     Bound to sport='football', league='nfl'.
 
     Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/positions``
-    Example URL: https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions
+    Example URL: https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions?limit=200
 
     Args:
         limit: Maximum number of items to return.
@@ -4630,7 +4631,7 @@ def espn_nfl_tournaments(
     Bound to sport='football', league='nfl'.
 
     Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/tournaments``
-    Example URL: https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/tournaments
+    Example URL: https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/tournaments?limit=200
 
     Args:
         limit: Maximum number of items to return.
@@ -4672,7 +4673,7 @@ def espn_nfl_awards(
     Bound to sport='football', league='nfl'.
 
     Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/awards``
-    Example URL: https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/awards
+    Example URL: https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/awards?limit=200
 
     Args:
         limit: Maximum number of items to return.
@@ -4909,7 +4910,7 @@ def espn_nfl_season_qbr(
     Bound to sport='football', league='nfl'.
 
     Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/seasons/{season}/types/{season_type}[/groups/{group_id}]/qbr/{split}``
-    Example URL: https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2024/types
+    Example URL: https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2024/types/2/qbr/0
 
     Args:
         season: season path parameter.
@@ -4961,7 +4962,7 @@ def espn_nfl_season_qbr_week(
     Bound to sport='football', league='nfl'.
 
     Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/seasons/{season}/types/{season_type}/weeks/{week}/qbr/{split}``
-    Example URL: https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2024/types
+    Example URL: https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2024/types/2/weeks/1/qbr/0
 
     Args:
         season: season path parameter.

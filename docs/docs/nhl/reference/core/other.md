@@ -37,7 +37,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/hockey/leagues/nhl/seasons`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/hockey/leagues/nhl/seasons](https://sports.core.api.espn.com/v2/sports/hockey/leagues/nhl/seasons)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/hockey/leagues/nhl/seasons?limit=200](https://sports.core.api.espn.com/v2/sports/hockey/leagues/nhl/seasons?limit=200)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -62,7 +62,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/hockey/leagues/nhl/events`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/hockey/leagues/nhl/events](https://sports.core.api.espn.com/v2/sports/hockey/leagues/nhl/events)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/hockey/leagues/nhl/events?limit=500](https://sports.core.api.espn.com/v2/sports/hockey/leagues/nhl/events?limit=500)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -113,7 +113,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/hockey/leagues/nhl/teams`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/hockey/leagues/nhl/teams](https://sports.core.api.espn.com/v2/sports/hockey/leagues/nhl/teams)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/hockey/leagues/nhl/teams?limit=1000&page=1](https://sports.core.api.espn.com/v2/sports/hockey/leagues/nhl/teams?limit=1000&page=1)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -181,7 +181,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/hockey/leagues/nhl/venues`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/hockey/leagues/nhl/venues](https://sports.core.api.espn.com/v2/sports/hockey/leagues/nhl/venues)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/hockey/leagues/nhl/venues?limit=1000](https://sports.core.api.espn.com/v2/sports/hockey/leagues/nhl/venues?limit=1000)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -231,7 +231,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/hockey/leagues/nhl/franchises`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/hockey/leagues/nhl/franchises](https://sports.core.api.espn.com/v2/sports/hockey/leagues/nhl/franchises)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/hockey/leagues/nhl/franchises?limit=200](https://sports.core.api.espn.com/v2/sports/hockey/leagues/nhl/franchises?limit=200)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -306,7 +306,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/hockey/leagues/nhl/coaches/{coach_id}/record/{record_type}`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/hockey/leagues/nhl/coaches/1/record](https://sports.core.api.espn.com/v2/sports/hockey/leagues/nhl/coaches/1/record)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/hockey/leagues/nhl/coaches/1/record/0](https://sports.core.api.espn.com/v2/sports/hockey/leagues/nhl/coaches/1/record/0)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -358,7 +358,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/hockey/leagues/nhl/positions`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/hockey/leagues/nhl/positions](https://sports.core.api.espn.com/v2/sports/hockey/leagues/nhl/positions)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/hockey/leagues/nhl/positions?limit=200](https://sports.core.api.espn.com/v2/sports/hockey/leagues/nhl/positions?limit=200)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -408,7 +408,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/hockey/leagues/nhl/tournaments`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/hockey/leagues/nhl/tournaments](https://sports.core.api.espn.com/v2/sports/hockey/leagues/nhl/tournaments)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/hockey/leagues/nhl/tournaments?limit=200](https://sports.core.api.espn.com/v2/sports/hockey/leagues/nhl/tournaments?limit=200)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -433,7 +433,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/hockey/leagues/nhl/awards`
 
-**Valid URL:** [https://sports.core.api.espn.com/v2/sports/hockey/leagues/nhl/awards](https://sports.core.api.espn.com/v2/sports/hockey/leagues/nhl/awards)
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/hockey/leagues/nhl/awards?limit=200](https://sports.core.api.espn.com/v2/sports/hockey/leagues/nhl/awards?limit=200)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
