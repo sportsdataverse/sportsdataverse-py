@@ -1,12 +1,18 @@
 columns:
 - description: ''
-  name: twenty_attempts
+  name: targets
   type: integer
+- description: ''
+  name: grades_offense
+  type: numeric
 - description: ''
   name: game_id
   type: integer
 - description: ''
-  name: pat_percent
+  name: yards_after_catch_per_reception
+  type: numeric
+- description: ''
+  name: grades_pass_route
   type: numeric
 - description: ''
   name: week
@@ -15,79 +21,124 @@ columns:
   name: status
   type: character
 - description: ''
-  name: forty_made
-  type: integer
-- description: ''
-  name: fifty_percent
+  name: yprr
   type: numeric
 - description: ''
-  name: total_made
+  name: wide_snaps
+  type: integer
+- description: ''
+  name: fumbles
+  type: integer
+- description: ''
+  name: first_downs
   type: integer
 - description: ''
   name: jersey_number
   type: character
 - description: ''
+  name: inline_snaps
+  type: integer
+- description: ''
   name: away_team_name
   type: character
 - description: ''
-  name: one_made
+  name: contested_targets
   type: integer
 - description: ''
-  name: fifty_attempts
-  type: integer
-- description: ''
-  name: forty_attempts
-  type: integer
-- description: ''
-  name: thirty_percent
+  name: inline_rate
   type: numeric
 - description: ''
-  name: total_attempts
-  type: integer
+  name: contested_catch_rate
+  type: numeric
 - description: ''
-  name: pat_attempts
+  name: yards
   type: integer
 - description: ''
   name: player_franchise_id
   type: integer
 - description: ''
-  name: twenty_made
+  name: receptions
   type: integer
 - description: ''
-  name: one_attempts
-  type: integer
-- description: ''
-  name: grades_fgep_kicker
+  name: targeted_qb_rating
   type: numeric
 - description: ''
-  name: thirty_attempts
+  name: interceptions
   type: integer
 - description: ''
-  name: pat_made
+  name: caught_percent
+  type: numeric
+- description: ''
+  name: positive_epa_plays
   type: integer
 - description: ''
-  name: one_percent
+  name: drop_rate
   type: numeric
 - description: ''
-  name: total_percent
+  name: grades_hands_drop
   type: numeric
+- description: ''
+  name: slot_rate
+  type: numeric
+- description: ''
+  name: plays_with_epa
+  type: integer
+- description: ''
+  name: slot_snaps
+  type: integer
+- description: ''
+  name: penalties
+  type: integer
+- description: ''
+  name: wide_rate
+  type: numeric
+- description: ''
+  name: pass_block_rate
+  type: numeric
+- description: ''
+  name: declined_penalties
+  type: integer
+- description: ''
+  name: route_rate
+  type: numeric
+- description: ''
+  name: drops
+  type: integer
 - description: ''
   name: position
   type: character
 - description: ''
-  name: twenty_percent
+  name: grades_hands_fumble
   type: numeric
+- description: ''
+  name: longest
+  type: integer
+- description: ''
+  name: pass_blocks
+  type: integer
 - description: ''
   name: away_franchise_id
   type: integer
 - description: ''
-  name: forty_percent
-  type: numeric
-- description: ''
-  name: fifty_made
+  name: routes
   type: integer
 - description: ''
-  name: thirty_made
+  name: pass_plays
+  type: integer
+- description: ''
+  name: yards_per_reception
+  type: numeric
+- description: ''
+  name: targets_percent
+  type: numeric
+- description: ''
+  name: positive_epa_percent
+  type: numeric
+- description: ''
+  name: contested_receptions
+  type: integer
+- description: ''
+  name: yards_after_catch
   type: integer
 - description: ''
   name: home_franchise_id
@@ -96,7 +147,19 @@ columns:
   name: home_team_name
   type: character
 - description: ''
+  name: avg_depth_of_target
+  type: numeric
+- description: ''
+  name: epa
+  type: numeric
+- description: ''
+  name: avoided_tackles
+  type: integer
+- description: ''
   name: player_id
+  type: integer
+- description: ''
+  name: touchdowns
   type: integer
 - description: ''
   name: game_away_franchise_id
@@ -132,4 +195,4 @@ columns:
   name: season
   type: integer
 kind: dataframe
-schema: pff_api_player_field_goal_summary
+schema: pff_api_player_receiving_summary

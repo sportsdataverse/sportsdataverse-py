@@ -1,0 +1,58 @@
+{
+ "rushing_direction_stats": {
+  "directions": [
+   {
+    "attempts": 3,
+    "direction": "LG",
+    "explosive": 0,
+    "first_downs": 0,
+    "franchise_id": 7,
+    "fumbles": 0,
+    "long": 5,
+    "missed_tackles": 0,
+    "player_id": 11803,
+    "team_name": "CIN",
+    "touchdowns": 0,
+    "yards": 5,
+    "yards_after_contact": 4,
+    "yco_attempt": 1.33,
+    "ypa": 1.7
+   },
+   {
+    "attempts": 4,
+    "direction": "LT",
+    "explosive": 0,
+    "first_downs": 0,
+    "franchise_id": 7,
+    "fumbles": 0,
+    "long": 3,
+    "missed_tackles": 1,
+    "player_id": 11803,
+    "team_name": "CIN",
+    "touchdowns": 0,
+    "yards": 8,
+    "yards_after_contact": 7,
+    "yco_attempt": 1.75,
+    "ypa": 2
+   },
+   {
+    "attempts": 2,
+    "direction": "ML",
+    "explosive": 0,
+    "first_downs": 0,
+    "franchise_id": 7,
+    "fumbles": 0,
+    "long": 0,
+    "missed_tackles": 0,
+    "player_id": 11803,
+    "team_name": "CIN",
+    "touchdowns": 0,
+    "yards": -2,
+    "yards_after_contact": 1,
+    "yco_attempt": 0.5,
+    "ypa": -1
+   }
+  ],
+  "player_id": 11803
+ }
+}

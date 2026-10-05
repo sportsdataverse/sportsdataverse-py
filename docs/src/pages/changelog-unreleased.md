@@ -33,6 +33,89 @@ each of the three providers on a 404, a 503 and a connection failure, and checks
 message, `str`, `repr`, the formatted traceback with its chained causes, and the captured
 logs.
 
+### Fixed — ESPN basketball pbp: one-provider spreads, paired spread signs, team timeouts, MBB double-overtime seconds
+
+Four fixes to `espn_nba_pbp`, `espn_wnba_pbp`, `espn_mbb_pbp` and `espn_wbb_pbp` (and their
+`helper_<lg>_pbp` reprocess path). The shared logic now lives in one private module,
+`sportsdataverse/_espn_basketball_pbp.py`.
+
+- **The spread from a one-provider pickcenter.** The pickcenter helper read the odds only when
+  ESPN listed more than one provider. Modern summaries list one (DraftKings), so every such game
+  got the default spread (2.5, home favored, `gameSpreadAvailable=False`). The 2026 men's title
+  game (401856600) shipped 2.5 when DraftKings had MICH -6.5. One provider is now enough. A
+  pickcenter with no spread (a lone teamrankings record entry) still gets the defaults, and an
+  all-null over/under column no longer raises.
+- **The spread and the home favorite come from the same provider.** They used to be taken
+  independently, each as the first non-null value across providers. A record-only teamrankings
+  row has no spread and sorts first, and its favorite flag (False for both teams) was paired
+  with consensus' spread. UNC Asheville, a 17.5-point home favorite (330582427), got a home line
+  of -17.5; it is now +17.5. MIA in NBA 401430219 goes from -4.5 to +4.5. Both now come from the
+  first provider with a spread, and the favorite is the spread's sign (ESPN's spread is the home
+  line). The provider order is now explicit and unchanged: `str(provider.id)`, so teamrankings
+  ("1002") reads ahead of consensus ("1004") and Caesars ("45"). Where teamrankings and consensus
+  disagree, teamrankings matches the winner more often, and an integer sort would move MBB
+  2021-22 to Caesars' line. A spread of exactly 0 takes that row's favorite flag (home if unset).
+  `helper_<lg>_pickcenter` now returns plain floats/bools for `gameSpread`, `overUnder` and
+  `homeFavorite`; a found line used to come back as a 1-element numpy array.
+- **Every team timeout.** The timeout flags matched only ESPN's NCAA `ShortTimeOut` type, so the
+  NBA/WNBA `timeouts` map was always empty and NCAA full timeouts (`RegularTimeOut`) were
+  dropped. The flags now cover `RegularTimeOut`, `ShortTimeOut`, `Full Timeout`, `Short Timeout`,
+  `No Timeout` and `Reset Timeout`. Official and TV timeouts belong to no team and stay out. The
+  calling team comes from the play's own `team.id`. The team-name match that used to decide it is
+  a fallback for plays without one, and now matches whole words: as a substring test it credited
+  "Memphis" to PHI and "timeout" to ME. The map holds timeouts *called* as ESPN logs them, not
+  timeouts *charged*. A coach's challenge outcome is not applied because ESPN logs the
+  challenge's own timeout too inconsistently: a team timeout precedes 90% of charged and 56% of
+  retained NBA challenges, and about 5% of NCAA ones.
+- **MBB end-of-period seconds in the second and later overtimes.** On the first play of 2OT and
+  later, `end.period_seconds_remaining` took the next play's start while
+  `end.game_seconds_remaining` was set to 300. Both are now 300, matching the first overtime and
+  the other leagues. A bare-seconds MBB clock ("23.4") now parses as 0:23 instead of raising.
+
+`tests/test_basketball_pbp_offline.py` checks each fix against real summaries in
+`tests/fixtures/espn/basketball_pbp/`. The spread does not feed the shipped basketball
+win-probability models, which are ratings-based, so a reprocess changes only the published
+spread columns (`game_spread`, `home_team_spread`, `game_spread_available`, `home_favorite`)
+and the timeout flags. Published data changes only after a release reprocess, and its scope is
+the owner's call:
+
+- **One-provider games only.** About 9,150 games in the raw stores have a one-provider pickcenter
+  with a spread: MBB about 5,300 (4,766 of them in 2025-26), NBA 1,078 (2025-26), WBB 1,855
+  (mostly 2022-23 and 2025-26) and WNBA 911 (2020-22 and 2026). Add the 128 mixed-row sign
+  games (127 MBB, 107 of them in 2012-13, and NBA 401430219).
+- **Full history.** Older MBB and NBA `final.json` files were built by the pickcenter helper as
+  it stood before August 2023. A full reprocess also changes about 27% of MBB 2013-22
+  multi-provider games (about 13,000; 2.3% change sign, median change 0.5 point) and about 32% of
+  NBA 2013-19 (about 2,900; about 1% change sign). Most changes are improvements: where the
+  signs disagree, the current code matches the winner in MBB 22 of 35 and NBA 12 of 15.
+
+### Fixed — pff_api return tables for the per-player and coverage-matrix routes
+
+19 `pff_api_*` routes had no columns in their return tables. The capture they were generated
+from had two gaps. It requested one QB for every per-player report, so the kicker, punter,
+returner and defense reports came back with no week rows. It also recorded the nested bodies
+(per-game `weeks`, the coverage matrix, the snaps and rushing-direction objects) only as object
+keys. A new live capture uses a player who played each role in 2025 (NFL and NCAA, 38 reads). The
+return table of each of these routes now lists what its parser returns on that capture:
+
+- **13 per-player summaries** (`pff_api_player_*_summary`, `_offense_blocking`,
+  `_offense_pass_blocking`, `_offense_run_blocking`): the per-game rows, including the `game_*`
+  columns exploded from each row's nested game object.
+- `pff_api_player_seasons`, `_snaps_summary`, `_position_pivot` and `_rushing_direction`.
+- `pff_api_facet_receiving_coverage` and `pff_api_facet_defense_coverage_matchup`: one shared
+  schema with three frames, `defenders`, `receivers` and `versus`.
+
+710 column descriptions were added. Stat columns reuse the text already written for the same
+column of the same PFF report. Context and new columns were written from PFF's spec, and each
+derived column's formula was checked against the captured rows.
+
+**Parser fix.** For the player rushing-direction and player snaps-summary bodies,
+`parse_pff_report` returned a zero-row frame even when PFF sent data, because each body is one
+object rather than a list of rows. It now returns one row per direction, and one row with
+`snap_counts_<type>` columns, respectively. `pff_api_player_rushing_direction()` and
+`pff_api_player_snaps_summary()` now return those rows by default. Passing the envelope key
+explicitly (`report="rushing_direction_stats"` or `report="snaps"`) returns the same rows.
+
 ### Fixed — reference-docs Valid URLs are the URLs the example calls request; summary documents its dict
 
 The **Valid URL** on each generated reference page, and the `Example URL:` line in the

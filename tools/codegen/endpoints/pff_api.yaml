@@ -199,7 +199,7 @@ endpoints:
     type: int
   parser: parse_pff_report
   path: /v1/player/seasons
-  returns_schema: native/pff/player_seasons
+  returns_schema: native/pff_api/player_seasons
   short: player_seasons
   summary: List the seasons a player has data for
 - example_args:
@@ -230,7 +230,7 @@ endpoints:
     type: int
   parser: parse_pff_report
   path: /v1/player/snaps/summary
-  returns_schema: native/pff/player_snaps_summary
+  returns_schema: native/pff_api/player_snaps_summary
   short: player_snaps_summary
   summary: Snap counts for a player, broken out by position
 - example_args:
@@ -261,7 +261,7 @@ endpoints:
     type: int
   parser: parse_pff_report
   path: /v1/player/position/pivot
-  returns_schema: native/pff/player_position_pivot
+  returns_schema: native/pff_api/player_position_pivot
   short: player_position_pivot
   summary: Player snap counts pivoted by position
 - example_args:
@@ -295,7 +295,7 @@ endpoints:
     type: str
   parser: parse_pff_player_detail
   path: /v1/player/offense/summary
-  returns_schema: native/pff/player_offense_summary
+  returns_schema: native/pff_api/player_offense_summary
   short: player_offense_summary
   summary: Offense summary for one player
 - example_args:
@@ -329,7 +329,7 @@ endpoints:
     type: str
   parser: parse_pff_player_detail
   path: /v1/player/offense/blocking
-  returns_schema: native/pff/player_offense_blocking
+  returns_schema: native/pff_api/player_offense_blocking
   short: player_offense_blocking
   summary: Blocking report for one player
 - example_args:
@@ -431,7 +431,7 @@ endpoints:
     type: str
   parser: parse_pff_player_detail
   path: /v1/player/passing/summary
-  returns_schema: native/pff/player_passing_summary
+  returns_schema: native/pff_api/player_passing_summary
   short: player_passing_summary
   summary: Passing summary for one player
 - example_args:
@@ -605,7 +605,7 @@ endpoints:
     type: str
   parser: parse_pff_player_detail
   path: /v1/player/rushing/summary
-  returns_schema: native/pff/player_rushing_summary
+  returns_schema: native/pff_api/player_rushing_summary
   short: player_rushing_summary
   summary: Rushing summary for one player
 - example_args:
@@ -674,7 +674,7 @@ endpoints:
     type: str
   parser: parse_pff_player_detail
   path: /v1/player/receiving/summary
-  returns_schema: native/pff/player_receiving_summary
+  returns_schema: native/pff_api/player_receiving_summary
   short: player_receiving_summary
   summary: Receiving summary for one player
 - example_args:
@@ -708,7 +708,7 @@ endpoints:
     type: str
   parser: parse_pff_player_detail
   path: /v1/player/defense/summary
-  returns_schema: native/pff/player_defense_summary
+  returns_schema: native/pff_api/player_defense_summary
   short: player_defense_summary
   summary: Defense summary for one player
 - example_args:
@@ -1298,7 +1298,7 @@ endpoints:
     type: str
   parser: parse_pff_report
   path: /v1/facet/receiving/coverage
-  returns_schema: native/pff/receiving_coverage_stats
+  returns_schema: native/pff_api/receiving_coverage_stats
   short: facet_receiving_coverage
   summary: League-wide receiving-versus-coverage leaderboard
 - example_args:
@@ -1578,7 +1578,7 @@ endpoints:
     type: str
   parser: parse_pff_report
   path: /v1/facet/defense/coverage_matchup
-  returns_schema: native/pff/receiving_coverage_stats
+  returns_schema: native/pff_api/receiving_coverage_stats
   short: facet_defense_coverage_matchup
   summary: League-wide coverage matchup leaderboard
 - example_args:

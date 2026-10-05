@@ -1,0 +1,12 @@
+columns:
+- description: ''
+  name: group
+  type: character
+- description: ''
+  name: group_order
+  type: integer
+- description: ''
+  name: positions
+  type: character
+kind: dataframe
+schema: pff_api_player_position_pivot

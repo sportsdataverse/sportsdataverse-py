@@ -9,6 +9,8 @@ import numpy as np
 import pandas as pd
 import polars as pl
 
+from sportsdataverse._espn_basketball_pbp import pickcenter_odds as _pickcenter_odds
+from sportsdataverse._espn_basketball_pbp import team_timeout_called as _team_timeout_called
 from sportsdataverse.dl_utils import download, flatten_json_iterative
 
 
@@ -305,38 +307,8 @@ def helper_wnba_pbp_features(game_id, pbp_txt, init):
         .with_columns(
             pl.col("clock.minutes").cast(pl.Float32),
             pl.col("clock.seconds").cast(pl.Float32),
-            pl.when(
-                (pl.col("type.text") == "ShortTimeOut").and_(
-                    pl.col("text")
-                    .str.to_lowercase()
-                    .str.contains(str(init["homeTeamAbbrev"]).lower())
-                    .or_(
-                        pl.col("text").str.to_lowercase().str.contains(str(init["homeTeamAbbrev"]).lower()),
-                        pl.col("text").str.to_lowercase().str.contains(str(init["homeTeamName"]).lower()),
-                        pl.col("text").str.to_lowercase().str.contains(str(init["homeTeamMascot"]).lower()),
-                        pl.col("text").str.to_lowercase().str.contains(str(init["homeTeamNameAlt"]).lower()),
-                    ),
-                ),
-            )
-            .then(True)
-            .otherwise(False)
-            .alias("homeTimeoutCalled"),
-            pl.when(
-                (pl.col("type.text") == "ShortTimeOut").and_(
-                    pl.col("text")
-                    .str.to_lowercase()
-                    .str.contains(str(init["awayTeamAbbrev"]).lower())
-                    .or_(
-                        pl.col("text").str.to_lowercase().str.contains(str(init["awayTeamAbbrev"]).lower()),
-                        pl.col("text").str.to_lowercase().str.contains(str(init["awayTeamName"]).lower()),
-                        pl.col("text").str.to_lowercase().str.contains(str(init["awayTeamMascot"]).lower()),
-                        pl.col("text").str.to_lowercase().str.contains(str(init["awayTeamNameAlt"]).lower()),
-                    ),
-                ),
-            )
-            .then(True)
-            .otherwise(False)
-            .alias("awayTimeoutCalled"),
+            _team_timeout_called(pbp_txt["plays"].columns, init, "home").alias("homeTimeoutCalled"),
+            _team_timeout_called(pbp_txt["plays"].columns, init, "away").alias("awayTimeoutCalled"),
         )
         .with_columns(
             half=half_expr,
@@ -464,34 +436,4 @@ def helper_wnba_pbp_features(game_id, pbp_txt, init):
 
 
 def helper_wnba_pickcenter(pbp_txt):
-    # Spread definition
-    if len(pbp_txt.get("pickcenter", [])) > 1:
-        pickcenter = pd.json_normalize(data=pbp_txt, record_path="pickcenter")
-        pickcenter = pickcenter.sort_values(by=["provider.id"])
-        homeFavorite = (
-            pickcenter[pickcenter["homeTeamOdds.favorite"].notnull()][["homeTeamOdds.favorite"]].values[0]
-            if "homeTeamOdds.favorite" in pickcenter.columns
-            else True
-        )
-        gameSpread = (
-            pickcenter[pickcenter["spread"].notnull()][["spread"]].values[0] if "spread" in pickcenter.columns else 2.5
-        )
-        overUnder = (
-            pickcenter[pickcenter["overUnder"].notnull()][["overUnder"]].values[0]
-            if "overUnder" in pickcenter.columns
-            else 165.5
-        )
-        gameSpreadAvailable = True
-        # self.logger.info(f"Spread: {gameSpread}, home Favorite: {homeFavorite}, ou: {overUnder}")
-    else:
-        gameSpread = 2.5
-        overUnder = 165.5
-        homeFavorite = True
-        gameSpreadAvailable = False
-
-    return {
-        "gameSpread": gameSpread,
-        "overUnder": overUnder,
-        "homeFavorite": homeFavorite,
-        "gameSpreadAvailable": gameSpreadAvailable,
-    }
+    return _pickcenter_odds(pbp_txt.get("pickcenter"), 165.5)
