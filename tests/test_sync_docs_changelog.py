@@ -5,6 +5,8 @@ from __future__ import annotations
 import importlib.util
 from pathlib import Path
 
+import pytest
+
 ROOT = Path(__file__).parents[1]
 _spec = importlib.util.spec_from_file_location(
     "sync_docs_changelog", ROOT / "tools" / "hooks" / "sync_docs_changelog.py"
@@ -53,3 +55,20 @@ def test_the_real_changelog_round_trips():
     unreleased, recent, older = sync.split(text)
     assert "".join([unreleased, *recent, *older]).split() == sync._TOC.sub("", text).split()
     assert len(recent) == 1 or sum(len(s.encode()) for s in recent) <= sync.RECENT_BYTES
+
+
+def test_committed_pages_match_the_changelog():
+    """Catches a GitHub-UI edit, a --no-verify commit or a changed RECENT_BYTES: the hook alone cannot."""
+    pages = sync.render((ROOT / "CHANGELOG.md").read_text(encoding="utf-8"))
+    for name, content in pages.items():
+        assert (sync.PAGES / name).read_text(encoding="utf-8") == content, f"{name} is stale: run the hook"
+
+
+def test_unrecognised_heading_is_an_error_naming_its_line():
+    with pytest.raises(ValueError, match=r"line 3: unrecognised heading '## \[Unreleased\]'"):
+        sync.split("# Changelog\n\n## [Unreleased]\n\nx\n\n## 0.1.0 Release: x\n\ny\n")
+
+
+def test_text_before_the_first_heading_is_an_error():
+    with pytest.raises(ValueError, match="line 1: text before the first release heading"):
+        sync.split("stray\n\n## 0.1.0 Release: x\n")

@@ -27,8 +27,25 @@ _SECTION = re.compile(r"^## (?=Unreleased\b|\d[\w.-]* Release\b)", re.M)
 _VERSION = re.compile(r"## (\S+) Release")
 
 
+def _check(text: str) -> None:
+    """Raise ValueError naming the line of an unrecognised ``## `` heading or of text before the first section."""
+    fenced = seen = False
+    for no, line in enumerate(text.splitlines(), 1):
+        if line.startswith("```"):
+            fenced = not fenced
+        elif fenced:
+            continue
+        elif line.startswith("## "):
+            if not _SECTION.match(line):
+                raise ValueError(f"CHANGELOG.md line {no}: unrecognised heading {line!r}")
+            seen = True
+        elif not seen and line.strip() and not line.startswith("# "):
+            raise ValueError(f"CHANGELOG.md line {no}: text before the first release heading: {line!r}")
+
+
 def split(text: str) -> tuple[str, list[str], list[str]]:
     """``(unreleased section, recent release sections, older release sections)`` in file order."""
+    _check(_TOC.sub(lambda m: "\n" * m.group().count("\n"), text))  # blanked, not cut: line numbers stay true
     sections = ["## " + s.rstrip() + "\n" for s in _SECTION.split(_TOC.sub("", text))[1:]]
     unreleased = "".join(s for s in sections if s.startswith("## Unreleased"))
     releases = [s for s in sections if not s.startswith("## Unreleased")]
@@ -74,7 +91,12 @@ def render(text: str) -> dict[str, str]:
 
 def main(argv: list[str]) -> int:
     paths = []
-    for name, content in render(SOURCE.read_text(encoding="utf-8")).items():
+    try:
+        pages = render(SOURCE.read_text(encoding="utf-8"))
+    except ValueError as e:
+        print(f"sync_docs_changelog: {e}", file=sys.stderr)
+        return 1
+    for name, content in pages.items():
         path = PAGES / name
         path.write_text(content, encoding="utf-8", newline="\n")
         paths.append(str(path.relative_to(ROOT)))
