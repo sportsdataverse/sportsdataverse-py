@@ -8,17 +8,14 @@ from pathlib import Path
 
 from tools.codegen import generate
 
-OUT = Path("tools/codegen/_generated")
 
-
-def _defs(prefix: str) -> set:
-    generate.build()
-    src = (OUT / f"{prefix}_espn_ext.py").read_text(encoding="utf-8")
+def _defs(out: Path, prefix: str) -> set:
+    src = (out / f"{prefix}_espn_ext.py").read_text(encoding="utf-8")
     return {n.name for n in ast.parse(src).body if isinstance(n, ast.FunctionDef)}
 
 
-def test_cfb_renames_applied():
-    cfb = _defs("cfb")
+def test_cfb_renames_applied(espn_ext_dir):
+    cfb = _defs(espn_ext_dir, "cfb")
     for new in (
         "espn_cfb_game_broadcasts",
         "espn_cfb_player_overview",
@@ -31,11 +28,11 @@ def test_cfb_renames_applied():
         assert old not in cfb, f"old name still present: {old}"
 
 
-def test_convention_is_universal_across_leagues():
+def test_convention_is_universal_across_leagues(espn_ext_dir):
     # the structural convention (event->game, athlete->player, competitor->game_team)
     # applies to every league at the TOKEN level, not just cfb / not just prefixes
     for prefix in ("nba", "wnba", "nhl", "nfl"):
-        d = _defs(prefix)
+        d = _defs(espn_ext_dir, prefix)
         assert f"espn_{prefix}_game_broadcasts" in d  # event_broadcasts -> game_broadcasts
         assert f"espn_{prefix}_player_overview" in d  # athlete_overview -> player_overview
         assert f"espn_{prefix}_game" in d  # bare event -> game
@@ -61,8 +58,8 @@ def test_token_level_convention_handles_embedded_and_plural_forms():
     assert generate._convention_rename("athlete_eventlog") == "player_eventlog"
 
 
-def test_collision_prone_names_preserved():
-    cfb = _defs("cfb")
+def test_collision_prone_names_preserved(espn_ext_dir):
+    cfb = _defs(espn_ext_dir, "cfb")
     # these would collide with existing generated catalog fns, so they are excluded
     # from the curated map (and the generator's guard is the backstop) -> preserved
     for kept in ("espn_cfb_season_team", "espn_cfb_season_awards", "espn_cfb_season_coaches"):
@@ -71,7 +68,7 @@ def test_collision_prone_names_preserved():
     assert "espn_cfb_teams_site" in cfb
 
 
-def test_athlete_stats_versions_only_when_bare_player_stats_exists():
+def test_athlete_stats_versions_only_when_bare_player_stats_exists(espn_ext_dir):
     # _convention_rename gives the web-v3 /athletes/{id}/stats endpoint the BARE
     # player_stats name; the pass-2 collision guard version-qualifies it to
     # player_stats_v3 ONLY when a bare player_stats sibling already exists. Every
@@ -85,7 +82,7 @@ def test_athlete_stats_versions_only_when_bare_player_stats_exists():
     assert generate._versioned_on_collision("athlete_overview", "nba") is None  # no versioned target
 
     for prefix in ("nba", "mbb", "nfl", "nhl", "mlb", "cfb", "wnba", "wbb"):
-        d = _defs(prefix)
+        d = _defs(espn_ext_dir, prefix)
         assert f"espn_{prefix}_player_stats_v3" in d, f"{prefix}: missing player_stats_v3"
         assert f"espn_{prefix}_athlete_stats" not in d, f"{prefix}: old athlete_stats should be gone"
         # the bare player_stats is hand-written (core-v2 season), NOT generated

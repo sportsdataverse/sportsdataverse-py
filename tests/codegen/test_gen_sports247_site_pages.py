@@ -18,15 +18,28 @@ _SPEC = (
 pytestmark = pytest.mark.skipif(
     not _SPEC.exists(), reason="sdv-internal-refs 247 site-pages spec not present (local-only source)"
 )
-ENDPOINTS = ROOT / "tools/codegen/endpoints/sports247_site_pages.yaml"
-SCHEMA_DIR = ROOT / "tools/codegen/schemas/native/sports247_site_pages"
+ENDPOINTS = "tools/codegen/endpoints/sports247_site_pages.yaml"
+SCHEMA_DIR = "tools/codegen/schemas/native/sports247_site_pages"
 
 
-def test_generator_is_idempotent_and_emits_expected_stem():
-    gen = importlib.import_module("tools.codegen.gen_sports247_site_pages")
+@pytest.fixture
+def gen(tmp_path, monkeypatch):
+    """The generator with its output root redirected to ``tmp_path``.
+
+    ``main()`` wipes and rewrites ``schemas/native/sports247_site_pages/``; against the
+    real tree that raced every parallel test reading those schemas.
+    """
+    mod = importlib.import_module("tools.codegen.gen_sports247_site_pages")
+    monkeypatch.setattr(mod, "ROOT", tmp_path)
+    return mod
+
+
+def test_generator_is_idempotent_and_emits_expected_stem(gen, tmp_path):
+    endpoints_out = tmp_path / ENDPOINTS
+    schema_out = tmp_path / SCHEMA_DIR
     gen.main()
 
-    ydoc = yaml.safe_load(ENDPOINTS.read_text(encoding="utf-8"))
+    ydoc = yaml.safe_load(endpoints_out.read_text(encoding="utf-8"))
     assert ydoc["api"] == "sports247_site_pages"
     assert ydoc["host"] == "https://247sports.com"
     assert ydoc["name_pattern"] == "sports247_site_pages_{short}"
@@ -44,17 +57,17 @@ def test_generator_is_idempotent_and_emits_expected_stem():
         assert e["returns_schema"].startswith("native/sports247_site_pages/")
 
     # 17 distinct returns-schemas emitted
-    assert len(list(SCHEMA_DIR.glob("*.yaml"))) == 17
+    assert len(list(schema_out.glob("*.yaml"))) == 17
 
     # schema names are stem-prefixed so manual_column_descriptions keys never
     # collide with another bucket's bare entity name (coach/player/event/...).
-    inst = yaml.safe_load((SCHEMA_DIR / "sports247_site_pages_institution.yaml").read_text(encoding="utf-8"))
+    inst = yaml.safe_load((schema_out / "sports247_site_pages_institution.yaml").read_text(encoding="utf-8"))
     assert inst["schema"] == "sports247_site_pages_institution"
     cols = {c["name"] for c in inst["columns"]}
     assert {"key", "location", "state", "latitude", "name"} <= cols
 
     # inlined Player object in Recruit flattens to player_* leaf columns
-    rec = yaml.safe_load((SCHEMA_DIR / "sports247_site_pages_recruit.yaml").read_text(encoding="utf-8"))
+    rec = yaml.safe_load((schema_out / "sports247_site_pages_recruit.yaml").read_text(encoding="utf-8"))
     rec_cols = {c["name"] for c in rec["columns"]}
     assert {"key", "player_key", "player_full_name", "player_hometown_state"} <= rec_cols
 
@@ -64,15 +77,16 @@ def test_generator_is_idempotent_and_emits_expected_stem():
     assert tl["path"].endswith(".json")
 
     # idempotence: a second run is byte-identical
-    first = ENDPOINTS.read_text(encoding="utf-8")
+    first = endpoints_out.read_text(encoding="utf-8")
     gen.main()
-    assert ENDPOINTS.read_text(encoding="utf-8") == first
+    assert endpoints_out.read_text(encoding="utf-8") == first
+    # and it matches the committed stem, so the real tree never needs rewriting
+    assert first == (ROOT / ENDPOINTS).read_text(encoding="utf-8")
 
 
-def test_query_and_path_params_snake_cased_with_original_query_key():
-    gen = importlib.import_module("tools.codegen.gen_sports247_site_pages")
+def test_query_and_path_params_snake_cased_with_original_query_key(gen, tmp_path):
     gen.main()
-    ydoc = yaml.safe_load(ENDPOINTS.read_text(encoding="utf-8"))
+    ydoc = yaml.safe_load((tmp_path / ENDPOINTS).read_text(encoding="utf-8"))
 
     recruits = next(e for e in ydoc["endpoints"] if e["short"] == "season_recruits")
     # path param season is a str carrying the {year}-{Sport} note

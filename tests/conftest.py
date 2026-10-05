@@ -41,6 +41,7 @@ from __future__ import annotations
 
 import json
 import os
+import subprocess
 from pathlib import Path
 from urllib.error import HTTPError, URLError
 
@@ -237,3 +238,65 @@ def fetch_pbp_or_skip(proc):
     except NoESPNDataError as exc:
         pytest.skip(f"ESPN returned incomplete data for game {getattr(proc, 'gameId', '?')}: {exc}")
     return proc
+
+
+# ---------------------------------------------------------------------------
+# Committed-tree guard: no test may write into the repo.
+# ---------------------------------------------------------------------------
+# A test that rewrites a committed file -- even one that restores the bytes
+# afterwards -- leaves it truncated or missing for a moment, and under ``-n auto``
+# a parallel reader lands in that moment (codegen generator tests that wiped
+# ``schemas/native/<stem>/`` produced FileNotFoundError in schema readers). Write
+# to ``tmp_path``; generators take a monkeypatched ``ROOT`` / output path.
+#
+# ponytail: the fingerprint is (mtime_ns, size), not a content hash -- a same-bytes
+# rewrite is still the race, and stat is ~5x cheaper than hashing the ~300 MB tree.
+# It runs in the xdist controller only (workers carry ``workerinput``); the
+# controller's sessionfinish fires after every worker has exited.
+_GUARDED_DIRS = ("tools/codegen", "docs/docs", "sportsdataverse", "tests/fixtures")
+_REPO_ROOT = Path(__file__).resolve().parents[1]
+_tree_at_start: dict[str, tuple[int, int]] | None = None
+
+
+def _tree_fingerprint() -> dict[str, tuple[int, int]] | None:
+    """(mtime_ns, size) of every tracked file under ``_GUARDED_DIRS``; None outside git."""
+    try:
+        out = subprocess.run(
+            ["git", "ls-files", "-z", "--", *_GUARDED_DIRS],
+            cwd=_REPO_ROOT,
+            capture_output=True,
+            check=True,
+        ).stdout
+    except (OSError, subprocess.CalledProcessError):
+        return None  # not a git checkout (an sdist): nothing to guard
+    fingerprint = {}
+    for rel in filter(None, out.decode("utf-8").split("\0")):
+        try:
+            st = (_REPO_ROOT / rel).stat()
+            fingerprint[rel] = (st.st_mtime_ns, st.st_size)
+        except FileNotFoundError:
+            fingerprint[rel] = (-1, -1)
+    return fingerprint
+
+
+def pytest_sessionstart(session: pytest.Session) -> None:
+    global _tree_at_start
+    if not hasattr(session.config, "workerinput"):
+        _tree_at_start = _tree_fingerprint()
+
+
+def pytest_sessionfinish(session: pytest.Session, exitstatus: int) -> None:
+    if _tree_at_start is None:
+        return
+    after = _tree_fingerprint() or {}
+    changed = sorted(k for k in _tree_at_start.keys() | after.keys() if _tree_at_start.get(k) != after.get(k))
+    if not changed:
+        return
+    reporter = session.config.pluginmanager.get_plugin("terminalreporter")
+    write = reporter.write_line if reporter else print
+    write("")
+    write(f"ERROR: the test session wrote {len(changed)} committed file(s); tests must write to tmp_path:")
+    for rel in changed:
+        write(f"  {rel}")
+    if session.exitstatus == pytest.ExitCode.OK:
+        session.exitstatus = pytest.ExitCode.TESTS_FAILED
