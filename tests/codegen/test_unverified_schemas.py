@@ -50,8 +50,13 @@ def test_variant_frames_functions_are_not_described_as_returning_a_dict():
         for p in (SCHEMAS / "native" / "pff_api").glob("*.yaml")
         if yaml.safe_load(p.read_text(encoding="utf-8")).get("kind") == "frames"
     }
-    assert set(by) == {"position_report", "team_stats", "team_leaders", "team_report"}
-    for short, param in by.items():
-        assert param, f"{short}: a variant-frames schema must name its request parameter in frames_by"
+    variants = {short: param for short, param in by.items() if param}
+    assert set(variants) == {"position_report", "team_stats", "team_leaders", "team_report"}
+    # `kind: frames` WITHOUT frames_by is a true multi-table body (parse_pff_report returns a
+    # dict, e.g. {defenders, receivers, versus}); pin the set so a new one is a deliberate choice.
+    assert set(by) - set(variants) == {"receiving_coverage_stats"}
+    for short in variants:
         doc = getattr(pff_api, f"pff_api_{short}").__doc__
         assert "dict of polars" not in doc and "dict of pandas" not in doc, short
+    for fn in ("pff_api_facet_receiving_coverage", "pff_api_facet_defense_coverage_matchup"):
+        assert "dict of polars" in getattr(pff_api, fn).__doc__, fn

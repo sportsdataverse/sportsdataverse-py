@@ -1,0 +1,234 @@
+frames:
+- columns:
+  - description: ''
+    name: broken_up_passes
+    type: integer
+  - description: ''
+    name: drops
+    type: integer
+  - description: ''
+    name: first_downs
+    type: integer
+  - description: ''
+    name: grades_coverage_defense
+    type: numeric
+  - description: ''
+    name: grades_defense
+    type: numeric
+  - description: ''
+    name: grades_defense_penalty
+    type: numeric
+  - description: ''
+    name: grades_overall
+    type: numeric
+  - description: ''
+    name: grades_overall_tackle
+    type: numeric
+  - description: ''
+    name: grades_pass_rush_defense
+    type: numeric
+  - description: ''
+    name: grades_run_defense
+    type: numeric
+  - description: ''
+    name: grades_tackle
+    type: numeric
+  - description: ''
+    name: interceptions
+    type: integer
+  - description: ''
+    name: longest
+    type: integer
+  - description: ''
+    name: player_game_count
+    type: integer
+  - description: ''
+    name: player_id
+    type: integer
+  - description: ''
+    name: receptions
+    type: integer
+  - description: ''
+    name: targets
+    type: integer
+  - description: ''
+    name: touchdowns
+    type: integer
+  - description: ''
+    name: yards
+    type: integer
+  - description: ''
+    name: yards_after_catch
+    type: integer
+  - description: ''
+    name: yards_per_reception
+    type: numeric
+  - description: ''
+    name: grades_offense
+    type: numeric
+  - description: ''
+    name: grades_offense_penalty
+    type: numeric
+  - description: ''
+    name: grades_run_block
+    type: numeric
+  - description: ''
+    name: grades_pass_block
+    type: numeric
+  - description: ''
+    name: grades_hands_drop
+    type: numeric
+  - description: ''
+    name: grades_hands_fumble
+    type: numeric
+  - description: ''
+    name: grades_pass_route
+    type: numeric
+  - description: ''
+    name: grades_pass
+    type: numeric
+  - description: ''
+    name: grades_run
+    type: numeric
+  section: defenders
+- columns:
+  - description: ''
+    name: broken_up_passes
+    type: integer
+  - description: ''
+    name: drops
+    type: integer
+  - description: ''
+    name: first_downs
+    type: integer
+  - description: ''
+    name: grades_hands_drop
+    type: numeric
+  - description: ''
+    name: grades_hands_fumble
+    type: numeric
+  - description: ''
+    name: grades_offense
+    type: numeric
+  - description: ''
+    name: grades_offense_penalty
+    type: numeric
+  - description: ''
+    name: grades_overall
+    type: numeric
+  - description: ''
+    name: grades_pass_route
+    type: numeric
+  - description: ''
+    name: grades_run_block
+    type: numeric
+  - description: ''
+    name: grades_screen_block
+    type: numeric
+  - description: ''
+    name: interceptions
+    type: integer
+  - description: ''
+    name: longest
+    type: integer
+  - description: ''
+    name: player_game_count
+    type: integer
+  - description: ''
+    name: player_id
+    type: integer
+  - description: ''
+    name: receptions
+    type: integer
+  - description: ''
+    name: targets
+    type: integer
+  - description: ''
+    name: touchdowns
+    type: integer
+  - description: ''
+    name: yards
+    type: integer
+  - description: ''
+    name: yards_after_catch
+    type: integer
+  - description: ''
+    name: yards_per_reception
+    type: numeric
+  - description: ''
+    name: grades_pass
+    type: numeric
+  - description: ''
+    name: grades_pass_block
+    type: numeric
+  - description: ''
+    name: grades_run
+    type: numeric
+  - description: ''
+    name: grades_defense
+    type: numeric
+  - description: ''
+    name: grades_defense_penalty
+    type: numeric
+  - description: ''
+    name: grades_pass_rush_defense
+    type: numeric
+  - description: ''
+    name: grades_run_defense
+    type: numeric
+  - description: ''
+    name: grades_coverage_defense
+    type: numeric
+  - description: ''
+    name: grades_overall_tackle
+    type: numeric
+  - description: ''
+    name: grades_tackle
+    type: numeric
+  - description: ''
+    name: grades_snap
+    type: numeric
+  section: receivers
+- columns:
+  - description: ''
+    name: broken_up_passes
+    type: integer
+  - description: ''
+    name: coverage_player_id
+    type: integer
+  - description: ''
+    name: drops
+    type: integer
+  - description: ''
+    name: first_downs
+    type: integer
+  - description: ''
+    name: interceptions
+    type: integer
+  - description: ''
+    name: longest
+    type: integer
+  - description: ''
+    name: player_id
+    type: integer
+  - description: ''
+    name: receptions
+    type: integer
+  - description: ''
+    name: targets
+    type: integer
+  - description: ''
+    name: touchdowns
+    type: integer
+  - description: ''
+    name: yards
+    type: integer
+  - description: ''
+    name: yards_after_catch
+    type: integer
+  - description: ''
+    name: yards_per_reception
+    type: numeric
+  section: versus
+kind: frames
+schema: pff_api_receiving_coverage_stats

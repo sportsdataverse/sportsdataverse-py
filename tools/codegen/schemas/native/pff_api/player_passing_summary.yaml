@@ -1,13 +1,28 @@
 columns:
 - description: ''
-  name: twenty_attempts
-  type: integer
+  name: grades_offense
+  type: numeric
+- description: ''
+  name: twp_rate
+  type: numeric
 - description: ''
   name: game_id
   type: integer
 - description: ''
-  name: pat_percent
+  name: btt_rate
   type: numeric
+- description: ''
+  name: spikes
+  type: integer
+- description: ''
+  name: dropbacks
+  type: integer
+- description: ''
+  name: all_attempts
+  type: integer
+- description: ''
+  name: thrown_aways
+  type: integer
 - description: ''
   name: week
   type: integer
@@ -15,80 +30,110 @@ columns:
   name: status
   type: character
 - description: ''
-  name: forty_made
+  name: all_dropbacks
   type: integer
 - description: ''
-  name: fifty_percent
+  name: grades_pass
   type: numeric
 - description: ''
-  name: total_made
+  name: ttt_total_time
+  type: numeric
+- description: ''
+  name: hit_as_threw
+  type: integer
+- description: ''
+  name: first_downs
   type: integer
 - description: ''
   name: jersey_number
   type: character
 - description: ''
+  name: sack_percent
+  type: numeric
+- description: ''
+  name: bats
+  type: integer
+- description: ''
   name: away_team_name
   type: character
 - description: ''
-  name: one_made
+  name: sacks
   type: integer
 - description: ''
-  name: fifty_attempts
+  name: completions
   type: integer
 - description: ''
-  name: forty_attempts
-  type: integer
-- description: ''
-  name: thirty_percent
-  type: numeric
-- description: ''
-  name: total_attempts
-  type: integer
-- description: ''
-  name: pat_attempts
+  name: yards
   type: integer
 - description: ''
   name: player_franchise_id
   type: integer
 - description: ''
-  name: twenty_made
-  type: integer
-- description: ''
-  name: one_attempts
-  type: integer
-- description: ''
-  name: grades_fgep_kicker
+  name: accuracy_percent
   type: numeric
 - description: ''
-  name: thirty_attempts
+  name: scrambles
   type: integer
 - description: ''
-  name: pat_made
+  name: interceptions
   type: integer
 - description: ''
-  name: one_percent
+  name: positive_epa_plays
+  type: integer
+- description: ''
+  name: drop_rate
   type: numeric
 - description: ''
-  name: total_percent
+  name: grades_run
   type: numeric
+- description: ''
+  name: qb_rating
+  type: numeric
+- description: ''
+  name: completion_percent
+  type: numeric
+- description: ''
+  name: plays_with_epa
+  type: integer
+- description: ''
+  name: penalties
+  type: integer
+- description: ''
+  name: attempts
+  type: integer
+- description: ''
+  name: declined_penalties
+  type: integer
+- description: ''
+  name: passing_snaps
+  type: integer
+- description: ''
+  name: pressure_to_sack_rate
+  type: numeric
+- description: ''
+  name: ypa
+  type: numeric
+- description: ''
+  name: drops
+  type: integer
 - description: ''
   name: position
   type: character
 - description: ''
-  name: twenty_percent
+  name: grades_hands_fumble
+  type: numeric
+- description: ''
+  name: avg_time_to_throw
   type: numeric
 - description: ''
   name: away_franchise_id
   type: integer
 - description: ''
-  name: forty_percent
+  name: big_time_throws
+  type: integer
+- description: ''
+  name: positive_epa_percent
   type: numeric
-- description: ''
-  name: fifty_made
-  type: integer
-- description: ''
-  name: thirty_made
-  type: integer
 - description: ''
   name: home_franchise_id
   type: integer
@@ -96,7 +141,25 @@ columns:
   name: home_team_name
   type: character
 - description: ''
+  name: avg_depth_of_target
+  type: numeric
+- description: ''
+  name: turnover_worthy_plays
+  type: integer
+- description: ''
+  name: epa
+  type: numeric
+- description: ''
+  name: aimed_passes
+  type: integer
+- description: ''
   name: player_id
+  type: integer
+- description: ''
+  name: touchdowns
+  type: integer
+- description: ''
+  name: def_gen_pressures
   type: integer
 - description: ''
   name: game_away_franchise_id
@@ -132,4 +195,4 @@ columns:
   name: season
   type: integer
 kind: dataframe
-schema: pff_api_player_field_goal_summary
+schema: pff_api_player_passing_summary

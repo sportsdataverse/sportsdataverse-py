@@ -2761,12 +2761,12 @@ def pff_api_facet_receiving_coverage(
         game_id: Single-game filter, facet family only, forwarded uncoerced.
         division: NCAA division fan-out, facet family only, and **only honoured when league=ncaa** — for any other league it is ignored entirely.
         headers: optional headers dict reused across calls; an ``Authorization: Bearer <key>`` here wins over ``api_key=`` (a keyword accepted by every wrapper) and the ``PFF_API_KEY`` / ``SDV_PY_PFF_API_KEY`` environment. With no key anywhere the call raises RuntimeError -- there is no anonymous access.
-        return_parsed: parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for The decoded JSON body. /v1 routes return the Premium Stats envelope (``{report_slug: rows}``); /v2 routes return ``{..meta.., columns, rows}``..
-        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        return_parsed: parse the payload through parse_pff_report -> dict of polars DataFrames (default True). Pass return_parsed=False for The decoded JSON body. /v1 routes return the Premium Stats envelope (``{report_slug: rows}``); /v2 routes return ``{..meta.., columns, rows}``..
+        return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
-        A polars/pandas DataFrame by default; The decoded JSON body. /v1 routes return the Premium Stats envelope (``{report_slug: rows}``); /v2 routes return ``{..meta.., columns, rows}``. when ``return_parsed=False``.
+        A dict of polars/pandas DataFrames by default; The decoded JSON body. /v1 routes return the Premium Stats envelope (``{report_slug: rows}``); /v2 routes return ``{..meta.., columns, rows}``. when ``return_parsed=False``.
 
     Raises:
         RuntimeError: No PFF API key (pass ``api_key=`` or set ``PFF_API_KEY``).
@@ -3345,12 +3345,12 @@ def pff_api_facet_defense_coverage_matchup(
         game_id: Single-game filter, facet family only, forwarded uncoerced.
         division: NCAA division fan-out, facet family only, and **only honoured when league=ncaa** — for any other league it is ignored entirely.
         headers: optional headers dict reused across calls; an ``Authorization: Bearer <key>`` here wins over ``api_key=`` (a keyword accepted by every wrapper) and the ``PFF_API_KEY`` / ``SDV_PY_PFF_API_KEY`` environment. With no key anywhere the call raises RuntimeError -- there is no anonymous access.
-        return_parsed: parse the payload through parse_pff_report -> polars DataFrame (default True). Pass return_parsed=False for The decoded JSON body. /v1 routes return the Premium Stats envelope (``{report_slug: rows}``); /v2 routes return ``{..meta.., columns, rows}``..
-        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        return_parsed: parse the payload through parse_pff_report -> dict of polars DataFrames (default True). Pass return_parsed=False for The decoded JSON body. /v1 routes return the Premium Stats envelope (``{report_slug: rows}``); /v2 routes return ``{..meta.., columns, rows}``..
+        return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
-        A polars/pandas DataFrame by default; The decoded JSON body. /v1 routes return the Premium Stats envelope (``{report_slug: rows}``); /v2 routes return ``{..meta.., columns, rows}``. when ``return_parsed=False``.
+        A dict of polars/pandas DataFrames by default; The decoded JSON body. /v1 routes return the Premium Stats envelope (``{report_slug: rows}``); /v2 routes return ``{..meta.., columns, rows}``. when ``return_parsed=False``.
 
     Raises:
         RuntimeError: No PFF API key (pass ``api_key=`` or set ``PFF_API_KEY``).
