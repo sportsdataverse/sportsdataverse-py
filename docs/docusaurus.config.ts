@@ -3,6 +3,7 @@ import * as path from 'path';
 import type {PrismTheme} from 'prism-react-renderer';
 import type {Config} from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
+import registry from './src/data/leagues.json';
 
 // Cap which doc versions are BUILT, derived from versions.json (which Docusaurus
 // maintains newest-first) so the list never needs manual editing at release time:
@@ -178,6 +179,16 @@ const config: Config = {
         // stay searchable. A name that appears only in a table no longer matches: a returned column,
         // a row of the dataset catalog on a loaders page, a row of a tutorial's function table.
         ignoreCssSelectors: ['table'],
+        // One index per league directory and one for the package reference, so a league page downloads its
+        // own (the largest, MBB, was 1.9 MB raw on the 2026-10-04 prototype) instead of the whole site's 22 MB.
+        // Contexts are URL prefixes: a small league cannot share its sport's index, so it gets its own. Pages
+        // outside every context (guides, tutorials, the home page) keep a site-wide index of just those pages.
+        searchContextByPaths: [
+          ...registry.sports.flatMap((sport) =>
+            sport.leagues.map((l) => ({label: l.label, path: `docs/${l.prefix}`})),
+          ),
+          {label: 'Package reference', path: 'docs/reference'},
+        ],
       },
     ],
   ],
