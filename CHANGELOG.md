@@ -345,7 +345,8 @@ derived column's formula was checked against the captured rows.
 `parse_pff_report` returned a zero-row frame even when PFF sent data, because each body is one
 object rather than a list of rows. It now returns one row per direction, and one row with
 `snap_counts_<type>` columns, respectively. `pff_api_player_rushing_direction()` and
-`pff_api_player_snaps_summary()` now return those rows by default.
+`pff_api_player_snaps_summary()` now return those rows by default. Passing the envelope key
+explicitly (`report="rushing_direction_stats"` or `report="snaps"`) returns the same rows.
 
 ### Fixed — reference-docs Valid URLs are the URLs the example calls request; summary documents its dict
 

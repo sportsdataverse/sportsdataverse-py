@@ -252,6 +252,7 @@ def build() -> tuple[dict, Dict[str, dict]]:
     endpoints: List[Dict[str, Any]] = []
     schemas: Dict[str, dict] = {}
     parsed: Dict[str, tuple] = {}  # {schema slug: (parser, union bodies)}
+    missing: List[str] = []  # parsed /v1 routes left with no columns to document
     for path, item in spec["paths"].items():
         op = item.get("get")
         # x-cli-hidden only hides a command from restish; facet-defense-coverage-matchup is
@@ -292,12 +293,13 @@ def build() -> tuple[dict, Dict[str, dict]]:
             # (player/passing/depth == facet passing_depth rows): reuse that schema
             legacy_rs = f"native/pff/{env}" if (LEGACY_SCHEMAS / f"{env}.yaml").exists() else None
         bodies = _union_bodies(s1, short) if parser and path.startswith("/v1") else []
-        if legacy_rs and not (bodies and _legacy_empty(legacy_rs)):
+        if legacy_rs and not _legacy_empty(legacy_rs):
             ep["returns_schema"] = legacy_rs  # identical wire format / rows -> legacy schema
         elif bodies:
             # Deliberate: ANY parsed /v1 route with a captured union body (and no non-empty legacy
-            # schema to reuse) is documented as what its parser emits on it -- the most faithful source (nested rows, game_* explosion, id
-            # casts). Today only the 19 re-captured routes carry one; a full re-sweep would move
+            # schema to reuse) is documented as what its parser emits on it -- the most faithful
+            # source (nested rows, game_* explosion, id casts). Today only the 19 re-captured
+            # routes carry one; a full re-sweep would move
             # the other NEW routes (e.g. team_summary) here from _v1_schema's raw-key union: the
             # same underscore-d names (descriptions still match), parser dtypes and first-seen
             # instead of sorted column order. Routes sharing a legacy envelope share one schema
@@ -305,6 +307,10 @@ def build() -> tuple[dict, Dict[str, dict]]:
             slug = legacy_rs.rsplit("/", 1)[-1] if legacy_rs else short
             parsed.setdefault(slug, (parser, []))[1].extend(bodies)
             ep["returns_schema"] = f"native/pff_api/{slug}"
+        elif legacy_rs:
+            ep["returns_schema"] = legacy_rs
+            if parser:
+                missing.append(short)  # empty legacy schema and no union body to derive one from
         elif path.startswith("/v2"):
             variants, by = None, ""
             if short in ("team_report", "position_report"):
@@ -321,7 +327,16 @@ def build() -> tuple[dict, Dict[str, dict]]:
         elif parser:
             schemas[short] = _v1_schema(s1, short, short, shape)
             ep["returns_schema"] = f"native/pff_api/{short}"
+            if not schemas[short]["columns"]:
+                missing.append(short)  # no table columns captured and no union body
         endpoints.append(ep)
+    if missing:
+        # the per-route twin of _load's guard: one stale or partial capture must not ship an
+        # empty returns schema (or delete a parsed one) for the routes it lacks
+        raise SystemExit(
+            f"sdv-internal-refs at {_REFS} has no /v1 union capture for {', '.join(missing)}; their returns "
+            "schemas would be empty. Capture them: pff/developer/tools/capture.py --only v1 --grep '^(...)$'"
+        )
     for slug, (parser, bodies) in parsed.items():
         schemas[slug] = _parsed_schema(slug, parser, bodies)
 

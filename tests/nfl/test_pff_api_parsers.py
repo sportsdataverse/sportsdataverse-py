@@ -88,6 +88,10 @@ def test_v1_single_object_bodies_parse_to_rows_not_an_empty_frame():
     assert snaps.height == 1 and snaps["season"].to_list() == [raw["snaps"]["season"]]
     assert snaps.columns[1:] == [f"snap_counts_{k}" for k in raw["snaps"]["snap_counts"]]
     assert snaps.row(0)[1:] == tuple(raw["snaps"]["snap_counts"].values())
+    # naming the envelope key explicitly parses the same body the same way (rows AND values)
+    assert parse_pff_report(load("player_rushing_direction"), report="rushing_direction_stats").equals(rd)
+    assert parse_pff_report(raw, report="snaps").equals(snaps)
+    assert parse_pff_report(raw, report="missing").height == 0
     # a player-detail envelope routed here still yields the documented zero-row frame
     assert parse_pff_report(load("player_offense_pass_blocking")).height == 0
 

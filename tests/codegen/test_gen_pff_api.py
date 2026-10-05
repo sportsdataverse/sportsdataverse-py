@@ -6,6 +6,7 @@ the vendored spec + captures in ``sdv-internal-refs`` (skipped when that checkou
 """
 
 import importlib.util
+import json
 import os
 from pathlib import Path
 
@@ -115,6 +116,47 @@ def test_generator_refuses_a_checkout_without_union_captures(tmp_path, monkeypat
     # with a union body present the guard lets it through (an empty spec -> no endpoints)
     (dev / "captures" / "schemas_v1.json").write_text('{"v1/nfl/player_seasons": {"union": {}}}', encoding="utf-8")
     assert mod.build()[0]["endpoints"] == []
+
+
+def test_generator_names_each_route_missing_its_union_capture(tmp_path, monkeypatch):
+    """A PARTIAL capture (another route has its union, so _load's guard passes) must not ship an
+    empty schema: every route with no reusable legacy schema and no captured table needs one."""
+
+    def op(op_id: str, env: str, ref: str) -> dict:
+        body = {"$ref": f"#/components/schemas/{op_id}"}
+        return {
+            "get": {"operationId": op_id, "responses": {"200": {"content": {"application/json": {"schema": body}}}}},
+            "_component": (op_id, {"properties": {env: {"$ref": f"#/components/schemas/{ref}"}}}),
+        }
+
+    paths = {
+        "/v1/player/kickoff/summary": op("player-kickoff-summary", "kicking_summary", "PlayerReportSummary"),
+        "/v1/player/seasons": op("player-seasons", "seasons", "Seasons"),  # legacy schema is empty
+    }
+    spec = {"paths": {}, "components": {"schemas": {}, "parameters": {}}}
+    for path, item in paths.items():
+        name, comp = item.pop("_component")
+        spec["paths"][path] = item
+        spec["components"]["schemas"][name] = comp
+    dev = tmp_path / "pff" / "developer"
+    (dev / "captures").mkdir(parents=True)
+    (dev / "pff-developer.openapi.json").write_text(json.dumps(spec), encoding="utf-8")
+    (dev / "captures" / "schemas_v2.json").write_text("{}", encoding="utf-8")
+    s1 = {"v1/nfl/team_summary": {"union": {"team_summary": [{"game_id": 1}]}}}  # some OTHER route
+    (dev / "captures" / "schemas_v1.json").write_text(json.dumps(s1), encoding="utf-8")
+    monkeypatch.setenv("SDV_INTERNAL_REFS_REPO", str(tmp_path))
+    mod = _gen()
+    with pytest.raises(SystemExit, match="no /v1 union capture for player_kickoff_summary, player_seasons"):
+        mod.build()
+    s1["v1/nfl/player_kickoff_summary"] = {"union": {"kicking_summary": {"weeks": [{"game_id": 1, "yards": 60}]}}}
+    s1["v1/nfl/player_seasons"] = {"union": {"seasons": [2025]}}
+    (dev / "captures" / "schemas_v1.json").write_text(json.dumps(s1), encoding="utf-8")
+    doc, schemas = mod.build()
+    assert {e["returns_schema"] for e in doc["endpoints"]} == {
+        "native/pff_api/player_kickoff_summary",
+        "native/pff_api/player_seasons",
+    }
+    assert [c["name"] for c in schemas["player_seasons"]["columns"]] == ["value"]
 
 
 def test_league_dtypes_widen_instead_of_first_league_winning():
