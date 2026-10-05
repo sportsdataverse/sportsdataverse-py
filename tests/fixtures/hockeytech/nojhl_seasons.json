@@ -1,0 +1,365 @@
+{
+  "SiteKit": {
+    "Parameters": {
+      "feed": "modulekit",
+      "key": "REDACTED",
+      "client_code": "nojhl",
+      "site_id": "0",
+      "lang": "en",
+      "view": "seasons",
+      "lang_id": 1,
+      "league_id": "1",
+      "season_id": "44"
+    },
+    "Seasons": [
+      {
+        "season_id": "44",
+        "season_name": "2026-27 Regular Season",
+        "shortname": "26-27 Reg",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2026-09-10",
+        "end_date": "2027-03-14"
+      },
+      {
+        "season_id": "45",
+        "season_name": "2026 Preseason Exhibition",
+        "shortname": "2026 Preseason Exhib",
+        "career": "0",
+        "playoff": "0",
+        "start_date": "2026-08-27",
+        "end_date": "2026-09-09"
+      },
+      {
+        "season_id": "43",
+        "season_name": "2026 Playoffs",
+        "shortname": "2026 Playoffs",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "2026-03-16",
+        "end_date": "2026-05-01"
+      },
+      {
+        "season_id": "41",
+        "season_name": "2025-26 Regular Season",
+        "shortname": "25-26 Reg",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2025-09-11",
+        "end_date": "2026-03-15"
+      },
+      {
+        "season_id": "40",
+        "season_name": "2025 Playoffs",
+        "shortname": "2025 Playoffs",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "2025-03-17",
+        "end_date": "2025-05-01"
+      },
+      {
+        "season_id": "38",
+        "season_name": "2024-25 Regular Season",
+        "shortname": "24-25 Reg",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2024-06-01",
+        "end_date": "2025-03-16"
+      },
+      {
+        "season_id": "37",
+        "season_name": "2024 Playoffs",
+        "shortname": "2024 Playoffs",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "2024-03-21",
+        "end_date": "2024-05-31"
+      },
+      {
+        "season_id": "35",
+        "season_name": "2023-24 Regular Season",
+        "shortname": "23-24 Reg",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2023-06-01",
+        "end_date": "2024-03-17"
+      },
+      {
+        "season_id": "34",
+        "season_name": "2023 Playoffs",
+        "shortname": "2023 Playoffs",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "2023-03-21",
+        "end_date": "2023-05-31"
+      },
+      {
+        "season_id": "32",
+        "season_name": "2022-23 Regular Season",
+        "shortname": "22-23 Reg",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2022-06-01",
+        "end_date": "2023-03-20"
+      },
+      {
+        "season_id": "31",
+        "season_name": "2022 Playoffs",
+        "shortname": "2022 Playoffs",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "2022-04-03",
+        "end_date": "2022-05-14"
+      },
+      {
+        "season_id": "29",
+        "season_name": "2021-22 Regular Season",
+        "shortname": "21-22 Reg",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2021-06-01",
+        "end_date": "2022-04-03"
+      },
+      {
+        "season_id": "27",
+        "season_name": "2020-21 Regular Season",
+        "shortname": "20-21 Reg",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2020-06-01",
+        "end_date": "2021-03-30"
+      },
+      {
+        "season_id": "26",
+        "season_name": "2020 Playoffs",
+        "shortname": "2020 Playoffs",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "2020-03-03",
+        "end_date": "2020-04-30"
+      },
+      {
+        "season_id": "24",
+        "season_name": "2019-20 Regular Season",
+        "shortname": "19-20 Reg",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2019-06-01",
+        "end_date": "2020-03-02"
+      },
+      {
+        "season_id": "23",
+        "season_name": "2019 Playoffs",
+        "shortname": "2019 Playoffs",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "2019-03-08",
+        "end_date": "2019-04-30"
+      },
+      {
+        "season_id": "22",
+        "season_name": "2018-19 Regular Season",
+        "shortname": "18-19 Reg",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2018-06-01",
+        "end_date": "2019-03-06"
+      },
+      {
+        "season_id": "21",
+        "season_name": "2018 Playoffs",
+        "shortname": "2018 Playoff",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "2018-03-08",
+        "end_date": "2018-04-30"
+      },
+      {
+        "season_id": "20",
+        "season_name": "2017-18 Regular Season",
+        "shortname": "17-18 Reg",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2017-05-01",
+        "end_date": "2018-03-07"
+      },
+      {
+        "season_id": "19",
+        "season_name": "2017 Playoffs",
+        "shortname": "2017 Playoff",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "2017-03-10",
+        "end_date": "2017-04-30"
+      },
+      {
+        "season_id": "18",
+        "season_name": "2016-17 Regular Season",
+        "shortname": "16-17 Reg",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2016-06-01",
+        "end_date": "2017-03-09"
+      },
+      {
+        "season_id": "17",
+        "season_name": "2016 Playoffs",
+        "shortname": "2016 Playoff",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "2016-03-11",
+        "end_date": "2016-05-01"
+      },
+      {
+        "season_id": "16",
+        "season_name": "2015-16 Regular Season",
+        "shortname": "15-16 Reg",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2015-08-19",
+        "end_date": "2016-03-12"
+      },
+      {
+        "season_id": "14",
+        "season_name": "2015 Playoff Season",
+        "shortname": "2015 P.Off",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "2015-03-09",
+        "end_date": "2015-04-14"
+      },
+      {
+        "season_id": "3",
+        "season_name": "2014-15 Regular Season",
+        "shortname": "2014-15 Reg",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2014-09-03",
+        "end_date": "2015-04-08"
+      },
+      {
+        "season_id": "15",
+        "season_name": "2014 Playoff Season",
+        "shortname": "2014 P.Off",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "2014-03-14",
+        "end_date": "2014-04-22"
+      },
+      {
+        "season_id": "7",
+        "season_name": "2013-14 Regular Season",
+        "shortname": "2013-14 Reg",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2013-09-04",
+        "end_date": "2014-04-08"
+      },
+      {
+        "season_id": "13",
+        "season_name": "2013 Playoff Season",
+        "shortname": "2013 P.Off",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "2013-03-15",
+        "end_date": "2013-04-24"
+      },
+      {
+        "season_id": "2",
+        "season_name": "2012-13 Regular Season",
+        "shortname": "2012-13 Reg",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2012-09-05",
+        "end_date": "2013-03-13"
+      },
+      {
+        "season_id": "10",
+        "season_name": "2011-12 Regular Season",
+        "shortname": "2011-12 Reg",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2012-03-03",
+        "end_date": "2012-04-10"
+      },
+      {
+        "season_id": "11",
+        "season_name": "2010-11 Regular Season",
+        "shortname": "2010-11 Reg",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2010-09-08",
+        "end_date": "2011-03-02"
+      },
+      {
+        "season_id": "9",
+        "season_name": "2009-10 Regular Season",
+        "shortname": "2009-10 Reg",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2009-09-09",
+        "end_date": "2010-03-03"
+      },
+      {
+        "season_id": "1",
+        "season_name": "2008-09 Regular Season",
+        "shortname": "2008-09 Reg",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2008-09-06",
+        "end_date": "2009-03-04"
+      },
+      {
+        "season_id": "5",
+        "season_name": "2007-08 Regular Season",
+        "shortname": "2007-08 Reg",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2007-09-05",
+        "end_date": "2008-03-05"
+      },
+      {
+        "season_id": "4",
+        "season_name": "2006-07 Regular Season",
+        "shortname": "2006-07 Reg",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2006-09-09",
+        "end_date": "2007-03-10"
+      },
+      {
+        "season_id": "6",
+        "season_name": "2005-06 Regular Season",
+        "shortname": "2005-06 Reg",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2005-09-09",
+        "end_date": "2006-03-11"
+      },
+      {
+        "season_id": "8",
+        "season_name": "2004-05 Regular Season",
+        "shortname": "2004-05 Reg",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2004-09-08",
+        "end_date": "2005-03-12"
+      },
+      {
+        "season_id": "12",
+        "season_name": "2003-04 Regular Season",
+        "shortname": "2003-04 Reg",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2003-09-10",
+        "end_date": "2004-03-14"
+      }
+    ],
+    "Copyright": {
+      "required_copyright": "Official statistics provided by Northern Ontario Junior Hockey League",
+      "required_link": "http://leaguestat.com",
+      "powered_by": "Powered by HockeyTech.com",
+      "powered_by_url": "http://hockeytech.com"
+    }
+  }
+}

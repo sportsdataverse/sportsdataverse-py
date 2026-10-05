@@ -1,0 +1,572 @@
+{
+  "SiteKit": {
+    "Parameters": {
+      "feed": "modulekit",
+      "key": "REDACTED",
+      "client_code": "sjhl",
+      "site_id": "0",
+      "lang": "en",
+      "view": "seasons",
+      "lang_id": 1,
+      "league_id": "3",
+      "season_id": "69"
+    },
+    "Seasons": [
+      {
+        "season_id": "69",
+        "season_name": "2026-27 Regular Season",
+        "shortname": "2026-27 Season",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2026-09-18",
+        "end_date": "2027-03-15"
+      },
+      {
+        "season_id": "70",
+        "season_name": "2026-27 Preseason Exhibition",
+        "shortname": "2026-27 Preseason",
+        "career": "0",
+        "playoff": "0",
+        "start_date": "2026-09-04",
+        "end_date": "2026-09-14"
+      },
+      {
+        "season_id": "68",
+        "season_name": "2026 Playoffs",
+        "shortname": "2026 Playoffs",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "2026-03-20",
+        "end_date": "2026-05-06"
+      },
+      {
+        "season_id": "67",
+        "season_name": "2025 Western All Star Challenge",
+        "shortname": "2025 WAS",
+        "career": "0",
+        "playoff": "0",
+        "start_date": "2025-11-04",
+        "end_date": "2025-11-05"
+      },
+      {
+        "season_id": "65",
+        "season_name": "2025-26 Regular Season",
+        "shortname": "2025-26 Season",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2025-09-19",
+        "end_date": "2026-03-16"
+      },
+      {
+        "season_id": "66",
+        "season_name": "2025-26 Preseason Exhibition",
+        "shortname": "2025-26 Preseason",
+        "career": "0",
+        "playoff": "0",
+        "start_date": "2025-08-29",
+        "end_date": "2025-09-15"
+      },
+      {
+        "season_id": "64",
+        "season_name": "2025 Playoffs",
+        "shortname": "2025 Playoffs",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "2025-03-21",
+        "end_date": "2025-05-04"
+      },
+      {
+        "season_id": "63",
+        "season_name": "2024 Western All-Star Showcase",
+        "shortname": "2024 WAS Showcase",
+        "career": "0",
+        "playoff": "0",
+        "start_date": "2024-11-05",
+        "end_date": "2024-11-06"
+      },
+      {
+        "season_id": "61",
+        "season_name": "2024-25 Regular Season",
+        "shortname": "2024-25 Season",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2024-09-20",
+        "end_date": "2025-03-18"
+      },
+      {
+        "season_id": "62",
+        "season_name": "2024-25 Preseason Exhibition",
+        "shortname": "2024-25 Preseason",
+        "career": "0",
+        "playoff": "0",
+        "start_date": "2024-09-01",
+        "end_date": "2024-09-15"
+      },
+      {
+        "season_id": "60",
+        "season_name": "2024 Playoffs",
+        "shortname": "2024 Playoffs",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "2024-03-22",
+        "end_date": "2024-05-05"
+      },
+      {
+        "season_id": "58",
+        "season_name": "2023-24 Regular Season",
+        "shortname": "2023-24 Season",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2023-09-19",
+        "end_date": "2024-03-19"
+      },
+      {
+        "season_id": "59",
+        "season_name": "2023-24 Preseason Exhibition",
+        "shortname": "2023-24 Preseason",
+        "career": "0",
+        "playoff": "0",
+        "start_date": "2023-09-05",
+        "end_date": "2023-09-18"
+      },
+      {
+        "season_id": "57",
+        "season_name": "2023 Playoffs",
+        "shortname": "2023 Playoffs",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "2023-03-17",
+        "end_date": "2023-04-26"
+      },
+      {
+        "season_id": "56",
+        "season_name": "2022-23 Regular Season",
+        "shortname": "2022-23 Season",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2022-09-16",
+        "end_date": "2023-03-15"
+      },
+      {
+        "season_id": "55",
+        "season_name": "2022-23 Preseason Exhibition",
+        "shortname": "2022-23 Preseason",
+        "career": "0",
+        "playoff": "0",
+        "start_date": "2022-08-29",
+        "end_date": "2022-09-12"
+      },
+      {
+        "season_id": "54",
+        "season_name": "2022 Playoffs",
+        "shortname": "2022 Playoffs",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "2022-03-18",
+        "end_date": "2022-05-08"
+      },
+      {
+        "season_id": "53",
+        "season_name": "2021-22 Regular Season",
+        "shortname": "2021-22 Season",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2021-09-24",
+        "end_date": "2022-03-15"
+      },
+      {
+        "season_id": "52",
+        "season_name": "2021-22 Preseason Exhibition",
+        "shortname": "2021-22 Preseason",
+        "career": "0",
+        "playoff": "0",
+        "start_date": "2021-09-03",
+        "end_date": "2021-09-19"
+      },
+      {
+        "season_id": "51",
+        "season_name": "2020-21 Regular Season",
+        "shortname": "2020-21 Season",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2020-11-06",
+        "end_date": "2021-04-04"
+      },
+      {
+        "season_id": "50",
+        "season_name": "2020-21 Preseason Exhibition",
+        "shortname": "2020-21 Preseason",
+        "career": "0",
+        "playoff": "0",
+        "start_date": "2020-10-17",
+        "end_date": "2020-11-02"
+      },
+      {
+        "season_id": "48",
+        "season_name": "2020 Playoffs",
+        "shortname": "2020 Playoffs",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "2020-03-06",
+        "end_date": "2020-03-13"
+      },
+      {
+        "season_id": "49",
+        "season_name": "2020 SJHL-MJHL Showcase",
+        "shortname": "2020 SJ-MJ",
+        "career": "0",
+        "playoff": "0",
+        "start_date": "2020-01-08",
+        "end_date": "2020-01-23"
+      },
+      {
+        "season_id": "46",
+        "season_name": "2019-20 Regular Season",
+        "shortname": "2019-20 Season",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2019-09-13",
+        "end_date": "2020-03-04"
+      },
+      {
+        "season_id": "42",
+        "season_name": "2019 ANAVET Cup",
+        "shortname": "2019 ANAVET Cup",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "2019-04-26",
+        "end_date": "2019-05-07"
+      },
+      {
+        "season_id": "41",
+        "season_name": "2019 Playoffs",
+        "shortname": "2019 Playoffs",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "2019-03-08",
+        "end_date": "2019-04-23"
+      },
+      {
+        "season_id": "40",
+        "season_name": "2019 SJHL-MJHL Showcase",
+        "shortname": "2019 SJ-MJ",
+        "career": "0",
+        "playoff": "0",
+        "start_date": "2019-01-14",
+        "end_date": "2019-01-15"
+      },
+      {
+        "season_id": "38",
+        "season_name": "2018-19 Regular Season",
+        "shortname": "2018-19 Season",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2018-09-12",
+        "end_date": "2019-03-06"
+      },
+      {
+        "season_id": "39",
+        "season_name": "2018-19 Preseason Exhibition",
+        "shortname": "2018-19 Preseason",
+        "career": "0",
+        "playoff": "0",
+        "start_date": "2018-09-01",
+        "end_date": "2018-09-10"
+      },
+      {
+        "season_id": "37",
+        "season_name": "2018 ANAVET Cup",
+        "shortname": "2018 ANAVET Cup",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "2018-04-27",
+        "end_date": "2018-05-09"
+      },
+      {
+        "season_id": "36",
+        "season_name": "2018 Playoffs",
+        "shortname": "2018 Playoff",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "2018-03-11",
+        "end_date": "2018-04-25"
+      },
+      {
+        "season_id": "34",
+        "season_name": "2018 SJHL-MJHL Showcase",
+        "shortname": "2018 SJ-MJ",
+        "career": "0",
+        "playoff": "0",
+        "start_date": "2018-01-15",
+        "end_date": "2018-01-16"
+      },
+      {
+        "season_id": "31",
+        "season_name": "2017-18 Regular Season",
+        "shortname": "2017-18 Season",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2017-09-11",
+        "end_date": "2018-03-10"
+      },
+      {
+        "season_id": "32",
+        "season_name": "2017-18 Preseason Exhibition",
+        "shortname": "2017-18 PreSeason",
+        "career": "0",
+        "playoff": "0",
+        "start_date": "2017-09-02",
+        "end_date": "2017-09-10"
+      },
+      {
+        "season_id": "30",
+        "season_name": "2017 Playoffs",
+        "shortname": "2017 Playoff",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "2017-03-09",
+        "end_date": "2017-04-21"
+      },
+      {
+        "season_id": "29",
+        "season_name": "2016-17 Regular Season",
+        "shortname": "2016-17 Season",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2016-06-01",
+        "end_date": "2017-03-09"
+      },
+      {
+        "season_id": "28",
+        "season_name": "2016 Playoffs",
+        "shortname": "2016 Playoff",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "2016-03-10",
+        "end_date": "2016-04-27"
+      },
+      {
+        "season_id": "19",
+        "season_name": "2015-16 Regular Season",
+        "shortname": "2015-16 Season",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2015-09-01",
+        "end_date": "2016-03-09"
+      },
+      {
+        "season_id": "18",
+        "season_name": "2015 Playoffs",
+        "shortname": "2015 Playoffs",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "2015-03-06",
+        "end_date": "2015-04-18"
+      },
+      {
+        "season_id": "16",
+        "season_name": "2014-15 Regular Season",
+        "shortname": "2014-15",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2014-09-01",
+        "end_date": "2015-03-05"
+      },
+      {
+        "season_id": "15",
+        "season_name": "2014 Playoffs",
+        "shortname": "2014 Playoff",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "2014-03-06",
+        "end_date": "2014-05-02"
+      },
+      {
+        "season_id": "14",
+        "season_name": "2013-14 Regular Season",
+        "shortname": "2013-14",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2013-09-19",
+        "end_date": "2014-04-22"
+      },
+      {
+        "season_id": "13",
+        "season_name": "2013 Playoffs",
+        "shortname": "2013 Playoff",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "2013-03-02",
+        "end_date": "2013-04-20"
+      },
+      {
+        "season_id": "12",
+        "season_name": "2012-13 Regular Season",
+        "shortname": "2012-13",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2012-09-19",
+        "end_date": "2013-02-28"
+      },
+      {
+        "season_id": "11",
+        "season_name": "2012 ANAVET CUP",
+        "shortname": "2012 Anavet",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "2012-04-17",
+        "end_date": "2012-04-30"
+      },
+      {
+        "season_id": "8",
+        "season_name": "2012 Playoffs",
+        "shortname": "2012 Playoff",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "2012-02-23",
+        "end_date": "2012-04-14"
+      },
+      {
+        "season_id": "6",
+        "season_name": "2011-12 Regular Season",
+        "shortname": "2011-12",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2011-09-08",
+        "end_date": "2012-02-22"
+      },
+      {
+        "season_id": "5",
+        "season_name": "2011 ANAVET CUP",
+        "shortname": "2011 ANAVET CUP",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "2011-04-15",
+        "end_date": "2011-04-24"
+      },
+      {
+        "season_id": "3",
+        "season_name": "2011 Playoffs",
+        "shortname": "2011 Playoff",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "2011-02-24",
+        "end_date": "2011-04-12"
+      },
+      {
+        "season_id": "2",
+        "season_name": "2010-11 Regular Season",
+        "shortname": "2010-11",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2010-09-15",
+        "end_date": "2011-02-24"
+      },
+      {
+        "season_id": "45",
+        "season_name": "2010 ANAVET CUP",
+        "shortname": "2010 ANAVET CUP",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "2010-04-16",
+        "end_date": "2010-04-22"
+      },
+      {
+        "season_id": "27",
+        "season_name": "2010 Playoffs",
+        "shortname": "2010 Playoff",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "2010-02-26",
+        "end_date": "2010-04-11"
+      },
+      {
+        "season_id": "26",
+        "season_name": "2009-10 Regular Season",
+        "shortname": "2009-10",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2009-09-18",
+        "end_date": "2010-02-23"
+      },
+      {
+        "season_id": "25",
+        "season_name": "2009 Playoffs",
+        "shortname": "2009 Playoff",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "2009-02-20",
+        "end_date": "2009-04-07"
+      },
+      {
+        "season_id": "24",
+        "season_name": "2008-09 Regular Season",
+        "shortname": "2008-09",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2008-09-12",
+        "end_date": "2009-02-18"
+      },
+      {
+        "season_id": "44",
+        "season_name": "2008 ANAVET CUP",
+        "shortname": "2008 ANAVET CUP",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "2008-04-18",
+        "end_date": "2008-04-23"
+      },
+      {
+        "season_id": "23",
+        "season_name": "2008 Playoffs",
+        "shortname": "2008 Playoff",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "2008-02-22",
+        "end_date": "2008-04-15"
+      },
+      {
+        "season_id": "22",
+        "season_name": "2007-08 Regular Season",
+        "shortname": "2007-08",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2007-09-14",
+        "end_date": "2008-02-20"
+      },
+      {
+        "season_id": "43",
+        "season_name": "2007 ANAVET CUP",
+        "shortname": "2007 ANAVET CUP",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "2007-04-20",
+        "end_date": "2007-04-29"
+      },
+      {
+        "season_id": "21",
+        "season_name": "2007 Playoffs",
+        "shortname": "2007 Playoff",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "2007-02-16",
+        "end_date": "2007-04-08"
+      },
+      {
+        "season_id": "20",
+        "season_name": "2006-07 Regular Season",
+        "shortname": "2006-07",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2006-09-08",
+        "end_date": "2007-02-14"
+      }
+    ],
+    "Copyright": {
+      "required_copyright": "Official statistics provided by Saskatchewan Junior Hockey League",
+      "required_link": "http://leaguestat.com",
+      "powered_by": "Powered by HockeyTech.com",
+      "powered_by_url": "http://hockeytech.com"
+    }
+  }
+}
