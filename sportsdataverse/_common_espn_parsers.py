@@ -2256,9 +2256,9 @@ def parse_cdn_rankings(payload: Dict, return_as_pandas: bool = False) -> pl.Data
 
     ``content.data.rankings`` is a list of polls, each with ``ranks`` (the ranked
     teams) and ``others`` (teams receiving votes, which carry only a name and
-    points). Both are emitted, told apart by ``ranked``. ``team_id`` is read from
-    the team page URL, so it is null on the vote-receiving rows and on teams ESPN
-    does not link (most Division II / III entries).
+    points). Both are emitted, told apart by ``ranked``. ``team_id`` (a string, as
+    across the ESPN parsers) is read from the team page URL, so it is null on the
+    vote-receiving rows and on teams ESPN does not link (most Division II / III entries).
 
     Args:
         payload: Raw JSON dict from ``espn_cfb_cdn_rankings()``.
@@ -2295,10 +2295,15 @@ def parse_cdn_rankings(payload: Dict, return_as_pandas: bool = False) -> pl.Data
     # pandas frame would turn rank / previous_rank / first_place_votes into floats.
     df = pl.DataFrame(rows, infer_schema_length=None)
     df = df.rename({c: underscore(c) for c in df.columns})
+    # String, like every other ESPN team_id this parser layer emits (scoreboard
+    # home_id / away_id, summary team_id). The Utf8 cast keeps an all-null
+    # team_url (polars dtype Null) from breaking .str.
     if "team_url" in df.columns:
-        lead = ["poll_id", "poll_name", "poll_short_name", "ranked", "team_id"]
-        team_id = pl.col("team_url").str.extract(_TEAM_ID_FROM_URL, 1).cast(pl.Int64).alias("team_id")
-        df = df.with_columns(team_id).select(*lead, pl.exclude(lead))
+        team_id = pl.col("team_url").cast(pl.Utf8).str.extract(_TEAM_ID_FROM_URL, 1)
+    else:
+        team_id = pl.lit(None, dtype=pl.Utf8)
+    lead = ["poll_id", "poll_name", "poll_short_name", "ranked", "team_id"]
+    df = df.with_columns(team_id.alias("team_id")).select(*lead, pl.exclude(lead))
     return df.to_pandas() if return_as_pandas else df
 
 

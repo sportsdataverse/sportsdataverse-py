@@ -29,6 +29,10 @@ fixed_params:
 #   not exposed.
 # * playbyplay and boxscore return the same envelope (only the tab differs); the
 #   football playbyplay page adds drives/scoringPlays that its boxscore page omits.
+# * A desktop-browser User-Agent (Mozilla/5.0 ... Chrome) gets an HTTP 202 HTML
+#   challenge page instead of JSON (all five pages, probed on nba). The default
+#   python-requests User-Agent that dl_utils.download sends (and curl's) gets the
+#   JSON, so do not add a browser UA to these requests.
 endpoints:
 - short: cdn_playbyplay
   scope: universal

@@ -79,12 +79,38 @@ def test_rankings_one_row_per_poll_entry():
     ranked = df.filter(pl.col("ranked") == True)
     assert ranked.group_by("poll_name").len()["len"].to_list() == [25] * 5
     assert df.schema["rank"] == pl.Int64
-    assert df.schema["team_id"] == pl.Int64
+    assert df.schema["team_id"] == pl.Utf8
     ap1 = ranked.filter((pl.col("poll_id") == 1) & (pl.col("rank") == 1))
-    assert ap1.select("team_display_name", "team_id").row(0) == ("Texas", 251)
+    assert ap1.select("team_display_name", "team_id").row(0) == ("Texas", "251")
     votes = df.filter(pl.col("ranked") == False)
     assert votes.height > 0
     assert votes["rank"].null_count() == votes.height
+
+
+def test_rankings_team_id_joins_the_family_ids():
+    # Join-key discipline: the rankings team_id must share a dtype with the ids the
+    # rest of the family emits (scoreboard home_id / away_id, summary team_id).
+    rk = parse_cdn_rankings(_load("rankings_cfb.json"))
+    sb = parse_cdn_scoreboard(_load("scoreboard_nba.json"))
+    box = parse_cdn_game(_load("playbyplay_nba.json"))["boxscore_player"]
+    assert rk.schema["team_id"] == sb.schema["home_id"] == sb.schema["away_id"] == box.schema["team_id"]
+
+
+def test_rankings_all_null_team_url_does_not_raise():
+    # A page whose team_url is present but null on every row types the column Null.
+    raw = _load("rankings_cfb.json")
+    for poll in raw["content"]["data"]["rankings"]:
+        for entry in poll["ranks"]:
+            entry["team_url"] = None
+    df = parse_cdn_rankings(raw)
+    assert df.height == 217
+    assert df.schema["team_id"] == pl.Utf8
+    assert df["team_id"].null_count() == df.height
+    # and a page with no team_url key at all keeps the same column set
+    for poll in raw["content"]["data"]["rankings"]:
+        for entry in poll["ranks"]:
+            del entry["team_url"]
+    assert parse_cdn_rankings(raw).columns[:5] == ["poll_id", "poll_name", "poll_short_name", "ranked", "team_id"]
 
 
 @pytest.mark.parametrize(

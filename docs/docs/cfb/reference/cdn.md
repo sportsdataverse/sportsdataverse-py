@@ -948,7 +948,7 @@ espn.com poll rankings page data: every poll (AP, Coaches, FCS, Division II and 
 | `poll_name` | character | Full poll name, e.g. 'AP Top 25', 'AFCA Coaches Poll', 'FCS Coaches Poll'. |
 | `poll_short_name` | character | Short poll label, e.g. 'AP Poll'. |
 | `ranked` | logical | TRUE for the poll's ranked teams; FALSE for teams that only received votes, whose rows carry just the team name and points. |
-| `team_id` | integer | ESPN team id, read from team_url. Null on vote-receiving rows and on teams ESPN does not link (most Division II and III entries), so join on it only where present. |
+| `team_id` | character | ESPN team id as a string (the dtype of scoreboard home_id / away_id), read from team_url. Null on vote-receiving rows and on teams ESPN does not link (most Division II and III entries), so join on it only where present. |
 | `team_display_name` | character | Team name as the poll page shows it. |
 | `trend` | character | Movement since the previous poll as ESPN prints it, e.g. '+3', '-2', or '-' for no change. |
 | `formatted_record` | character | Team's win-loss record at the poll date, e.g. '4-0'. |

@@ -10,8 +10,23 @@
 
 Captured 2026-10-05 from `https://cdn.espn.com/core/{league}/{page}?xhr=1`
 with a plain `requests` GET (default user agent; a desktop-browser user agent
-gets an HTTP 202 HTML challenge instead of JSON). Stored byte-for-byte as
-served. Used by `tests/test_espn_cdn.py`.
+gets an HTTP 202 HTML challenge instead of JSON). Used by `tests/test_espn_cdn.py`.
+
+**Trimmed to what the parsers read.** Each capture was cut down by deleting keys
+only, then re-serialized as compact JSON. Every retained value is identical to the
+capture, and each parser returns identical frames on the full and the trimmed
+payload (checked frame-by-frame when trimming). What was deleted:
+
+- game pages (`playbyplay_*`, `boxscore_*`): every top-level key except `gameId`
+  and `gamepackageJSON`, plus the `gamepackageJSON` keys whose removal left
+  `parse_cdn_game` output unchanged: `videos`, and the keys that are empty in that
+  game (`winprobability`, `broadcasts` for NBA/CFB; `winprobability`, `standings`
+  for MLB).
+- `schedule_nba.json`: everything except `content.schedule`, and in each day block
+  everything except `games`.
+- `scoreboard_*`: everything except `content.sbData.events`.
+- `rankings_cfb.json`: everything except `content.data.rankings` (3.3 MB to 40 KB;
+  the bulk was page `config` and the season/week filter menus).
 
 | File | Request | Notes |
 |---|---|---|
