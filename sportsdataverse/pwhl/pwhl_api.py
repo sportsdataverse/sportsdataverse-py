@@ -16,6 +16,7 @@ from typing import Any, Optional
 from sportsdataverse.hockeytech import hockeytech_api, resolve_season_id
 from sportsdataverse.hockeytech import _parsers as P
 from sportsdataverse.hockeytech._analytics import enrich_pbp
+from sportsdataverse.hockeytech._leagues import most_recent_season_yr
 
 __all__ = [
     "pwhl_schedule",
@@ -49,9 +50,11 @@ def pwhl_season_id(return_as_pandas: bool = False) -> Any:
 
 
 def most_recent_pwhl_season() -> int:
-    """Most-recent PWHL season as an end-year integer (max ``season_yr``)."""
-    df = pwhl_season_id()
-    return int(df["season_yr"].max()) if df.height else 2026
+    """Most-recent PWHL season as an end-year integer (max ``season_yr``).
+
+    Raises ``NoDataError`` when the seasons feed lists none, ``AssetFetchError`` when it fails.
+    """
+    return most_recent_season_yr(pwhl_season_id(), _LG)
 
 
 def pwhl_schedule(

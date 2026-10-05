@@ -125,6 +125,20 @@ _PWHL_SEASON_FALLBACK = [
 ]
 
 
+def most_recent_season_yr(seasons, league: str) -> int:
+    """Max ``season_yr`` of a parsed seasons frame (the ``<lg>_season_id`` output).
+
+    A seasons list the feed answered with no usable season is ``NoDataError``;
+    there is no hard-coded default year to go stale.
+    """
+    yrs = seasons["season_yr"].drop_nulls() if "season_yr" in seasons.columns else []
+    if not len(yrs):
+        from sportsdataverse.errors import NoDataError
+
+        raise NoDataError(f"HockeyTech {league}: the seasons feed lists no season")
+    return int(yrs.max())
+
+
 def _fetch_seasons_raw(league: str):
     from sportsdataverse.hockeytech._client import hockeytech_api
 

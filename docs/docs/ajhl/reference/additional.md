@@ -15,7 +15,7 @@ not covered by the generated API-endpoint reference above.
 
 `most_recent_ajhl_season() -> 'int'`
 
-Most-recent AJHL season as an end-year integer (max `season_yr`), or 2026.
+Most-recent AJHL season as an end-year integer (max `season_yr`). Raises `NoDataError` when the seasons feed lists none, `AssetFetchError` when it fails.
 
 ## Other
 

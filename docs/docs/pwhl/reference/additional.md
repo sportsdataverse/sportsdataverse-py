@@ -144,6 +144,8 @@ Alias of load_pwhl_team_boxscores() for naming parity with fastRhockey (R).
 
 Most-recent PWHL season as an end-year integer (max `season_yr`).
 
+Raises `NoDataError` when the seasons feed lists none, `AssetFetchError` when it fails.
+
 ## Other
 
 ### LeagueConstants {#LeagueConstants}

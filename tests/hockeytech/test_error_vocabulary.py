@@ -146,6 +146,22 @@ def _seasons_fake(payload):
     return lambda league, feed, view, *a, **k: payload if view == "seasons" else {}
 
 
+@pytest.mark.parametrize("lg", ["pwhl", "ahl", "mjhl"])
+def test_most_recent_season_is_the_max_listed(monkeypatch, lg):
+    """The real PWHL feed lists 2026-27, so the old hard-coded 2026 was stale."""
+    _patch_all(monkeypatch, _seasons_fake(load_fixture("hockeytech", "pwhl_seasons")))
+    mod = importlib.import_module("sportsdataverse.pwhl.pwhl_api" if lg == "pwhl" else f"sportsdataverse.hockey.{lg}")
+    assert getattr(mod, f"most_recent_{lg}_season")() == 2027
+
+
+@pytest.mark.parametrize("lg", ["pwhl", "ahl"])
+def test_most_recent_season_answered_empty_is_no_data(monkeypatch, lg):
+    _patch_all(monkeypatch, _seasons_fake({"SiteKit": {"Seasons": []}}))
+    mod = importlib.import_module("sportsdataverse.pwhl.pwhl_api" if lg == "pwhl" else f"sportsdataverse.hockey.{lg}")
+    with pytest.raises(NoDataError, match="lists no season"):
+        getattr(mod, f"most_recent_{lg}_season")()
+
+
 def test_resolve_season_id_reads_the_live_list(monkeypatch):
     from sportsdataverse.hockeytech._leagues import resolve_season_id
 
