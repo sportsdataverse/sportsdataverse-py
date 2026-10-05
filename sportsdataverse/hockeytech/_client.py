@@ -12,10 +12,13 @@ import urllib.parse
 from typing import Any, Dict, Optional, Union
 
 from sportsdataverse.dl_utils import download
+from sportsdataverse.errors import AssetFetchError, NoDataError
 from sportsdataverse.hockeytech._leagues import get_config, resolve_api_key
 
 _UA = "Mozilla/5.0 (compatible; sportsdataverse/hockeytech)"
 _CALLBACK_RE = re.compile(r"^[A-Za-z_$][\w.$]*\(")
+# The only "source never has this" reply: plain text, HTTP 200 (MJHL gc/gamesummary).
+_ACCESS_DENIED_RE = re.compile(r"^\s*Feed type access denied\.?\s*$", re.IGNORECASE)
 _RATE_LIMIT_S = 0.4
 _last_request_ts = 0.0
 
@@ -43,8 +46,8 @@ def _invalid_view_reason(payload: Any) -> Optional[str]:
     """Return a human reason when ``payload`` is a HockeyTech invalid-view sentinel.
 
     HockeyTech reports an unknown view with **HTTP 200 and an error in the body**,
-    so a sentinel response is otherwise indistinguishable from "no data" -- it
-    parses straight through to a zero-row frame. Two shapes exist:
+    so a sentinel response would otherwise parse straight through to a zero-row
+    frame; :func:`hockeytech_api` raises on it instead. Two shapes exist:
 
     - ``modulekit`` / ``gc``: ``{"SiteKit"|"GC": {..., "Undefined": "Undefined Tab <view>"}}``
     - ``statviewfeed``: ``{"error": "InvalidView error: <view>"}``
@@ -92,14 +95,29 @@ def hockeytech_api(
     timeout: int = 30,
     max_retries: int = 3,
     **kwargs,
-) -> Union[Dict[str, Any], list, None]:
-    """Fetch + parse one HockeyTech feed call. Returns parsed JSON (dict/list) or None."""
+) -> Union[Dict[str, Any], list]:
+    """Fetch + parse one HockeyTech feed call.
+
+    Returns the parsed JSON (dict or list). The one reply the source sends for
+    "this key never has that feed" -- the plain-text ``Feed type access denied.``
+    (MJHL's public key on ``gc``) -- returns ``{}``, which every parser reads as a
+    zero-row frame.
+
+    Raises:
+        ValueError: ``league`` is not in the registry (before any request).
+        NoDataError: the host answered HTTP 404.
+        AssetFetchError: the fetch failed and the answer is unknown -- a transport
+            error, a non-2xx status that outlived the retries (403, 429, 5xx), an
+            empty or unparseable body, or an HTTP-200 error sentinel
+            (``Undefined Tab <view>`` / ``InvalidView error: <view>``).
+    """
     global _last_request_ts
     url = _build_url(league, feed, view, params)
     referer = _LEAGUE_REFERER.get(league)
     headers: Dict[str, str] = {"User-Agent": _UA, "Accept": "application/json"}
     if referer:
         headers["Referer"] = referer
+    where = f"hockeytech_api({league}/{feed}/{view})"  # no URL: it carries the key
 
     elapsed = time.monotonic() - _last_request_ts
     if elapsed < _RATE_LIMIT_S:
@@ -107,21 +125,26 @@ def hockeytech_api(
 
     try:
         resp = download(url, headers=headers, timeout=timeout, num_retries=max_retries)
+    except NoDataError:
+        raise
+    except Exception as exc:  # noqa: BLE001 - any transport failure is a failed fetch
+        raise AssetFetchError(f"{where}: fetch failed: {exc}") from exc
+    finally:
         _last_request_ts = time.monotonic()
-        payload = json.loads(_strip_jsonp(resp.text))
-        reason = _invalid_view_reason(payload)
-        if reason:
-            from sportsdataverse._codegen_runtime import cli_warn
 
-            cli_warn(
-                f"hockeytech_api({league}/{feed}/{view}): upstream rejected the view "
-                f"({reason!r}). The response is an error sentinel, NOT an empty result -- "
-                "any frame parsed from it will be empty for that reason."
-            )
-        return payload
-    except Exception as exc:  # noqa: BLE001
-        _last_request_ts = time.monotonic()
-        from sportsdataverse._codegen_runtime import cli_warn
-
-        cli_warn(f"hockeytech_api({league}/{feed}/{view}) failed: {exc}")
-        return None
+    status = getattr(resp, "status_code", 200)
+    if not 200 <= status < 300:
+        raise AssetFetchError(f"{where}: HTTP {status}")
+    text = resp.text or ""
+    if _ACCESS_DENIED_RE.match(text):
+        return {}
+    try:
+        payload = json.loads(_strip_jsonp(text))
+    except ValueError as exc:
+        raise AssetFetchError(f"{where}: empty or unparseable body {text[:80]!r}") from exc
+    reason = _invalid_view_reason(payload)
+    if reason:
+        raise AssetFetchError(
+            f"{where}: upstream rejected the view ({reason!r}); an error sentinel, not an empty result"
+        )
+    return payload

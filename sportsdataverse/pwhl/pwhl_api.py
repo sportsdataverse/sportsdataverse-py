@@ -301,10 +301,11 @@ def pwhl_streaks(return_as_pandas: bool = False) -> Any:
         the PWHL site appears to compute its Streaks page client-side from schedule
         data. fastRhockey's equivalent carries the same defect.
 
-        This function has therefore never returned data. It now emits a
-        :class:`DeprecationWarning` and still returns an empty frame rather than
-        failing silently, so the empty result is no longer mistakable for "the
-        league currently has no streaks". Derive streaks from
+        This function has therefore never returned data. It emits a
+        :class:`DeprecationWarning` and returns an empty frame without a request
+        (the feed would only answer the sentinel, which ``hockeytech_api`` now
+        raises on), so the empty result is not mistakable for "the league
+        currently has no streaks". Derive streaks from
         :func:`pwhl_schedule` / :func:`pwhl_standings` instead.
 
     Args:
@@ -325,7 +326,7 @@ def pwhl_streaks(return_as_pandas: bool = False) -> Any:
         DeprecationWarning,
         stacklevel=2,
     )
-    return P.parse_streaks(hockeytech_api(_LG, "modulekit", "streaks", {"league_id": 1}), return_as_pandas)
+    return P.parse_streaks({}, return_as_pandas)  # ponytail: no request -- the view does not exist
 
 
 def pwhl_transactions(return_as_pandas: bool = False) -> Any:

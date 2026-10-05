@@ -134,16 +134,23 @@ def _fetch_seasons_raw(league: str):
 def resolve_season_id(league: str, season=None, game_type: str = "regular", season_id=None):
     """Resolve an end-year ``season`` (e.g. 2025) to the integer HockeyTech
     ``season_id``. An explicit ``season_id`` short-circuits. PWHL falls back to a
-    hardcoded table if the live feed is unreachable.
+    hardcoded table if the live feed is unreachable or lacks the season; every
+    other league re-raises the fetch error (``AssetFetchError`` / ``NoDataError``).
     """
     if season_id is not None:
         return int(season_id)
     if season is None:
         raise ValueError("Provide either season (end-year) or season_id")
 
+    from sportsdataverse.errors import SportsDataverseError
     from sportsdataverse.hockeytech._parsers import parse_seasons
 
-    payload = _fetch_seasons_raw(league)
+    try:
+        payload = _fetch_seasons_raw(league)
+    except SportsDataverseError:
+        if league != "pwhl":
+            raise
+        payload = None
     df = parse_seasons(payload)
     if df.height:
         hit = df.filter((df["season_yr"] == int(season)) & (df["game_type_label"] == game_type))
