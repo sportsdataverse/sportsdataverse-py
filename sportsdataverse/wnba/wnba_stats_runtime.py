@@ -15,15 +15,19 @@ __all__ = ["_get", "season_latest_with_data", "stats_headers"]
 def season_latest_with_data(season: Optional[str]) -> str:
     """Return ``season`` unchanged, or the latest WNBA season that has data when it is ``None``.
 
-    The codegen transform behind every generated ``wnba_stats_*`` season argument that
-    stats.wnba.com needs (it answers a request without one with an empty HTTP 500). It resolves
-    per call, so a long-running process rolls over too. The WNBA tips off in mid-May, so the
-    current year is the default from June and the previous year before it (``"2025"`` until May
-    2026, ``"2026"`` from June 2026). ``commonplayoffseries`` rolls over in October, once the
-    playoffs have started in mid-September.
+    The codegen transform behind every generated ``wnba_stats_*`` season argument that wehoop gives
+    a season default (stats.wnba.com answers most endpoints without one with an empty HTTP 500,
+    and the rest with every season summed). It resolves per call, so a long-running process rolls
+    over too. The WNBA tips off in mid-May, so the current year is the default from June and the
+    previous year before it (``"2025"`` until May 2026, ``"2026"`` from June 2026). ``drafthistory``
+    rolls over in May, after the mid-April draft; the playoffs (``commonplayoffseries``, or
+    ``SeasonType`` ``"Playoffs"`` on any endpoint) in October, once they have started in
+    mid-September. A fixed month table cannot follow a lockout, a CBA delay or a pandemic
+    calendar; pass ``season`` explicitly then.
 
-    wehoop's own default is ``most_recent_wnba_season() - 1``, a season behind this one from June
-    to December.
+    Of the 79 season defaults in wehoop's ``wnba_stats_*.R`` that call ``most_recent_wnba_season()``,
+    54 subtract one, a season behind this default in every month but May; 24 do not, the same as
+    this default except in May, when theirs has not tipped off; one subtracts two.
 
     Args:
         season: The caller's season (e.g. ``"2024"``), or ``None`` for the latest one with data.
