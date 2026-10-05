@@ -8,6 +8,7 @@ defaults shipped in each league's site JS; override per league with the
 from __future__ import annotations
 
 import os
+import re
 from dataclasses import dataclass
 from typing import Dict, Literal, Optional
 
@@ -135,19 +136,37 @@ _PWHL_SEASON_FALLBACK = [
 
 # Season names that are one-off events, not a league's regular season or playoffs: the
 # feed lists them as seasons too ("2026 All-Star Challenge", "2025 Top Prospects",
-# "CCHL Pre-Draft Combine 2026", "2026 Exhibition Season", ...), and parse_seasons labels
-# them "regular" because the name says neither playoff nor preseason. Seen in the
-# 17-league seasons captures (sdv-internal-refs hockeytech/, 2026-07-12).
+# "CCHL Pre-Draft Combine 2026", ...), and parse_seasons labels them "regular" because the
+# name says neither playoff, preseason nor exhibition. Seen in the 17-league seasons captures
+# (sdv-internal-refs hockeytech/, 2026-07-12). Exhibitions get their own "exhibition" label.
 SPECIAL_EVENT_SEASON_RE = r"(?i)all[- ]?star|showcase|prospect|combine|special event|exhibition|play[- ]?in\b"
+_GAME_TYPE_NAME_RE = {
+    "regular": r"(?i)regular season",
+    "playoffs": r"(?i)playoff",
+    "preseason": r"(?i)pre[- ]?season",
+    "exhibition": r"(?i)exhibition",
+}
 
 
 def most_recent_season_yr(seasons, league: str) -> int:
-    """Max ``season_yr`` of a parsed seasons frame (the ``<lg>_season_id`` output).
+    """Newest regular season's ``season_yr`` in a parsed seasons frame (``<lg>_season_id``).
 
-    A seasons list the feed answered with no usable season is ``NoDataError``;
-    there is no hard-coded default year to go stale.
+    Only rows labelled "regular" whose name is not a one-off event count, so a preseason the
+    feed lists before its regular season ("2026 Preseason", 2027, ahead of "2026-27 Regular
+    Season") never becomes a default season with no regular season behind it. A feed with
+    no such row falls back to the newest row of any kind. A seasons list the feed answered
+    with no usable season is ``NoDataError``; there is no hard-coded default year to go stale.
     """
-    yrs = seasons["season_yr"].drop_nulls() if "season_yr" in seasons.columns else []
+    import polars as pl
+
+    if "season_yr" not in seasons.columns:
+        yrs = []
+    else:
+        regular = seasons.filter(
+            (pl.col("game_type_label") == "regular")
+            & ~pl.col("season_name").fill_null("").str.contains(SPECIAL_EVENT_SEASON_RE)
+        )["season_yr"].drop_nulls()
+        yrs = regular if len(regular) else seasons["season_yr"].drop_nulls()
     if not len(yrs):
         from sportsdataverse.errors import NoDataError
 
@@ -166,6 +185,14 @@ def resolve_season_id(league: str, season=None, game_type: str = "regular", seas
     ``season_id``. An explicit ``season_id`` short-circuits. PWHL falls back to a
     hardcoded table if the live feed is unreachable or lacks the season; every
     other league re-raises the fetch error (``AssetFetchError`` / ``NoDataError``).
+
+    Of the rows with that ``season_yr`` and ``game_type_label`` ("regular", "playoffs",
+    "preseason" or "exhibition"), regular and playoff lookups drop one-off events, then the
+    first row wins in this order: no other registered league's code in the name ("CCHL
+    2009/2010" in the OJHL feed ranks last), the name says its game type, the name spans two
+    years, feed order. Divisions listed side by side for one year with neither marker are
+    not told apart: BCHL 2024 resolves to "2023-24 BC Regular Season" but "2024 AB
+    Playoffs", GOJHL 2008 to its GHL conference; pass ``season_id`` for the others.
     """
     if season_id is not None:
         return int(season_id)
@@ -173,7 +200,7 @@ def resolve_season_id(league: str, season=None, game_type: str = "regular", seas
         raise ValueError("Provide either season (end-year) or season_id")
 
     from sportsdataverse.errors import SportsDataverseError
-    from sportsdataverse.hockeytech._parsers import parse_seasons
+    from sportsdataverse.hockeytech._parsers import TWO_YEAR_NAME_RE, parse_seasons
 
     try:
         payload = _fetch_seasons_raw(league)
@@ -184,8 +211,18 @@ def resolve_season_id(league: str, season=None, game_type: str = "regular", seas
     df = parse_seasons(payload)
     if df.height:
         hit = df.filter((df["season_yr"] == int(season)) & (df["game_type_label"] == game_type))
-        if game_type != "preseason":  # "2025-26 Preseason Exhibition" is a real preseason
+        if game_type in ("regular", "playoffs"):  # "2025-26 Preseason Exhibition" is a preseason
             hit = hit.filter(~hit["season_name"].fill_null("").str.contains(SPECIAL_EVENT_SEASON_RE))
+        # The single-year tournaments the feed also labels regular ("2025 Mowat Cup", "2025
+        # Cottage Cup", "2018 ANAVET Cup", "2014 Tie-Break") rank last but are not excluded:
+        # CHL lists nothing but its Memorial Cups.
+        names = hit["season_name"].fill_null("")
+        other_codes = "|".join(code.upper() for code in LEAGUES if code != league)
+        hit = hit.with_columns(
+            _own=~names.str.contains(rf"\b(?:{other_codes})\b"),
+            _named=names.str.contains(_GAME_TYPE_NAME_RE.get(game_type, re.escape(game_type))),
+            _spans=names.str.contains(TWO_YEAR_NAME_RE),
+        ).sort(["_own", "_named", "_spans"], descending=True, maintain_order=True)
         if hit.height:
             return int(hit["season_id"][0])
     if league == "pwhl":

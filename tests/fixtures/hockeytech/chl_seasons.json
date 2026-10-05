@@ -1,0 +1,257 @@
+{
+  "SiteKit": {
+    "Parameters": {
+      "feed": "modulekit",
+      "key": "REDACTED",
+      "client_code": "chl",
+      "site_id": "0",
+      "lang": "en",
+      "view": "seasons",
+      "lang_id": 1,
+      "league_id": "1",
+      "season_id": "82"
+    },
+    "Seasons": [
+      {
+        "season_id": "82",
+        "season_name": "2026 Memorial Cup",
+        "shortname": "MC 2026",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2026-05-22",
+        "end_date": "2026-06-01"
+      },
+      {
+        "season_id": "80",
+        "season_name": "2025 Memorial Cup",
+        "shortname": "MC 2025",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2025-05-20",
+        "end_date": "2025-06-02"
+      },
+      {
+        "season_id": "78",
+        "season_name": "2024 Memorial Cup",
+        "shortname": "MC 2024",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2024-04-08",
+        "end_date": "2024-06-03"
+      },
+      {
+        "season_id": "76",
+        "season_name": "2023 Memorial Cup",
+        "shortname": "MC 2023",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2022-11-01",
+        "end_date": "2023-06-04"
+      },
+      {
+        "season_id": "69",
+        "season_name": "2022 Memorial Cup",
+        "shortname": "MC 2022",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2022-02-23",
+        "end_date": "2022-06-30"
+      },
+      {
+        "season_id": "65",
+        "season_name": "2019 Memorial Cup",
+        "shortname": "2019 MC",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2019-04-25",
+        "end_date": "2019-06-30"
+      },
+      {
+        "season_id": "62",
+        "season_name": "2018 Memorial Cup",
+        "shortname": "2018 MC",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2018-04-25",
+        "end_date": "2018-06-30"
+      },
+      {
+        "season_id": "59",
+        "season_name": "2017 Memorial Cup",
+        "shortname": "2017 MC",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2017-05-08",
+        "end_date": "2017-06-30"
+      },
+      {
+        "season_id": "53",
+        "season_name": "2016 Memorial Cup",
+        "shortname": "2016 MMC",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2016-05-09",
+        "end_date": "2016-06-30"
+      },
+      {
+        "season_id": "51",
+        "season_name": "2015 Memorial Cup",
+        "shortname": "2015 MMC",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2015-05-08",
+        "end_date": "2015-06-30"
+      },
+      {
+        "season_id": "46",
+        "season_name": "2014 Memorial Cup",
+        "shortname": "2014 Mem Cup",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2014-05-09",
+        "end_date": "2014-05-30"
+      },
+      {
+        "season_id": "44",
+        "season_name": "2013 Memorial Cup",
+        "shortname": "2013 Mem Cup",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2013-05-16",
+        "end_date": "2013-05-27"
+      },
+      {
+        "season_id": "41",
+        "season_name": "2012 Memorial Cup",
+        "shortname": "2012 Mem Cup",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2012-05-17",
+        "end_date": "2012-05-28"
+      },
+      {
+        "season_id": "29",
+        "season_name": "2011 Memorial Cup",
+        "shortname": "2011 Mem Cup",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2011-05-16",
+        "end_date": "2011-05-30"
+      },
+      {
+        "season_id": "20",
+        "season_name": "2010 Memorial Cup",
+        "shortname": "2010 Mem Cup",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2010-05-13",
+        "end_date": "2010-05-24"
+      },
+      {
+        "season_id": "10",
+        "season_name": "2009 Memorial Cup",
+        "shortname": "2009 Mem Cup",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2009-05-14",
+        "end_date": "2009-05-25"
+      },
+      {
+        "season_id": "8",
+        "season_name": "2008 Memorial Cup",
+        "shortname": "2008 Mem Cup",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2008-05-16",
+        "end_date": "2008-05-25"
+      },
+      {
+        "season_id": "6",
+        "season_name": "2007 Memorial Cup",
+        "shortname": "2007 Mem Cup",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2007-05-18",
+        "end_date": "2007-05-27"
+      },
+      {
+        "season_id": "4",
+        "season_name": "2006 Memorial Cup",
+        "shortname": "2006 Mem Cup",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2006-05-19",
+        "end_date": "2006-05-29"
+      },
+      {
+        "season_id": "2",
+        "season_name": "2005 Memorial Cup",
+        "shortname": "2005 Mem Cup",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2005-05-17",
+        "end_date": "2005-05-31"
+      },
+      {
+        "season_id": "1",
+        "season_name": "2004 Memorial Cup",
+        "shortname": "2004 Mem Cup",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2004-05-12",
+        "end_date": "2004-05-25"
+      },
+      {
+        "season_id": "22",
+        "season_name": "2003 Memorial Cup",
+        "shortname": "2003 Mem Cup",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2003-05-16",
+        "end_date": "2003-05-26"
+      },
+      {
+        "season_id": "26",
+        "season_name": "2002 Memorial Cup",
+        "shortname": "2002 Mem Cup",
+        "career": "0",
+        "playoff": "0",
+        "start_date": "2002-05-17",
+        "end_date": "2002-05-27"
+      },
+      {
+        "season_id": "25",
+        "season_name": "2001 Memorial Cup",
+        "shortname": "2001 Mem Cup",
+        "career": "0",
+        "playoff": "0",
+        "start_date": "2001-05-19",
+        "end_date": "2001-05-27"
+      },
+      {
+        "season_id": "21",
+        "season_name": "2000 Memorial Cup",
+        "shortname": "2000 Mem Cup",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2000-05-19",
+        "end_date": "2000-05-29"
+      },
+      {
+        "season_id": "24",
+        "season_name": "1999 Memorial Cup",
+        "shortname": "1999 Mem Cup",
+        "career": "0",
+        "playoff": "0",
+        "start_date": "1999-05-15",
+        "end_date": "1999-05-23"
+      }
+    ],
+    "Copyright": {
+      "required_copyright": "Official statistics provided by CHL",
+      "required_link": "http://leaguestat.com",
+      "powered_by": "Powered by HockeyTech.com",
+      "powered_by_url": "http://hockeytech.com"
+    }
+  }
+}

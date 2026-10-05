@@ -1,0 +1,1202 @@
+{
+  "SiteKit": {
+    "Parameters": {
+      "feed": "modulekit",
+      "key": "REDACTED",
+      "client_code": "lhjmq",
+      "site_id": "0",
+      "lang": "en",
+      "view": "seasons",
+      "lang_id": 1,
+      "league_id": "1",
+      "season_id": "214"
+    },
+    "Seasons": [
+      {
+        "season_id": "214",
+        "season_name": "2026-27 | Regular Season",
+        "shortname": "2026-27",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2026-09-15",
+        "end_date": "2027-03-22"
+      },
+      {
+        "season_id": "213",
+        "season_name": "Pre-Season 2026",
+        "shortname": "Pre-Sea 2026",
+        "career": "0",
+        "playoff": "0",
+        "start_date": "2026-05-22",
+        "end_date": "2026-09-14"
+      },
+      {
+        "season_id": "212",
+        "season_name": "2026 | Playoffs",
+        "shortname": "2026 Plfs",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "2026-03-24",
+        "end_date": "2026-05-21"
+      },
+      {
+        "season_id": "211",
+        "season_name": "2025-26 | Regular Season",
+        "shortname": "2025-26",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2025-09-16",
+        "end_date": "2026-03-23"
+      },
+      {
+        "season_id": "210",
+        "season_name": "Pre-Season 2025",
+        "shortname": "Pre-Sea 2025",
+        "career": "0",
+        "playoff": "0",
+        "start_date": "2025-05-23",
+        "end_date": "2025-09-15"
+      },
+      {
+        "season_id": "209",
+        "season_name": "2025 | Playoffs",
+        "shortname": "2025 Plfs",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "2025-03-25",
+        "end_date": "2025-05-22"
+      },
+      {
+        "season_id": "208",
+        "season_name": "2024-25 | Regular Season",
+        "shortname": "2024-25",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2024-09-17",
+        "end_date": "2025-03-24"
+      },
+      {
+        "season_id": "207",
+        "season_name": "Pre-Season 2024",
+        "shortname": "Pre-Sea 2024",
+        "career": "0",
+        "playoff": "0",
+        "start_date": "2024-05-24",
+        "end_date": "2024-09-16"
+      },
+      {
+        "season_id": "206",
+        "season_name": "2024 | Playoffs",
+        "shortname": "2024 Plfs",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "2024-03-26",
+        "end_date": "2024-05-23"
+      },
+      {
+        "season_id": "205",
+        "season_name": "2023-24 | Regular Season",
+        "shortname": "2023-24",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2023-09-19",
+        "end_date": "2024-03-26"
+      },
+      {
+        "season_id": "204",
+        "season_name": "Pre-Season 2023",
+        "shortname": "Pre-Sea 2023",
+        "career": "0",
+        "playoff": "0",
+        "start_date": "2023-05-26",
+        "end_date": "2023-09-18"
+      },
+      {
+        "season_id": "203",
+        "season_name": "2023 | Playoffs",
+        "shortname": "2023 Plfs",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "2023-03-28",
+        "end_date": "2023-05-25"
+      },
+      {
+        "season_id": "202",
+        "season_name": "2022-23 | Regular Season",
+        "shortname": "2022-23",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2022-09-20",
+        "end_date": "2023-03-27"
+      },
+      {
+        "season_id": "201",
+        "season_name": "Pre-Season 2022",
+        "shortname": "Pre-Sea 2022",
+        "career": "0",
+        "playoff": "0",
+        "start_date": "2022-07-01",
+        "end_date": "2022-09-19"
+      },
+      {
+        "season_id": "200",
+        "season_name": "2022 | Playoffs",
+        "shortname": "2022 Plfs",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "2022-05-04",
+        "end_date": "2022-06-30"
+      },
+      {
+        "season_id": "199",
+        "season_name": "2021-22 | Regular Season",
+        "shortname": "2021-22",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2021-09-28",
+        "end_date": "2022-05-03"
+      },
+      {
+        "season_id": "198",
+        "season_name": "Pre-Season 2021",
+        "shortname": "Pre-Sea 2021",
+        "career": "0",
+        "playoff": "0",
+        "start_date": "2021-05-17",
+        "end_date": "2021-09-28"
+      },
+      {
+        "season_id": "197",
+        "season_name": "2021 | Playoffs",
+        "shortname": "2021 Plfs",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "2021-04-06",
+        "end_date": "2021-06-24"
+      },
+      {
+        "season_id": "196",
+        "season_name": "2020-21 | Regular Season",
+        "shortname": "2020-21",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2020-09-29",
+        "end_date": "2021-05-03"
+      },
+      {
+        "season_id": "195",
+        "season_name": "Pre-Season 2020",
+        "shortname": "Pre-Sea 2020",
+        "career": "0",
+        "playoff": "0",
+        "start_date": "2020-03-26",
+        "end_date": "2020-09-28"
+      },
+      {
+        "season_id": "194",
+        "season_name": "2020 | Playoffs",
+        "shortname": "2020 Plfs",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "2020-03-24",
+        "end_date": "2020-03-25"
+      },
+      {
+        "season_id": "193",
+        "season_name": "2019-20 | Regular Season",
+        "shortname": "2019-20",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2019-09-17",
+        "end_date": "2020-03-24"
+      },
+      {
+        "season_id": "192",
+        "season_name": "Pre-Season 2019",
+        "shortname": "Pre-Sea 2019",
+        "career": "0",
+        "playoff": "0",
+        "start_date": "2019-05-16",
+        "end_date": "2019-09-16"
+      },
+      {
+        "season_id": "191",
+        "season_name": "2019 | Playoffs",
+        "shortname": "2019 Plfs",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "2019-03-19",
+        "end_date": "2019-05-15"
+      },
+      {
+        "season_id": "190",
+        "season_name": "2018-19 | Regular Season",
+        "shortname": "2018-19",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2018-09-18",
+        "end_date": "2019-03-18"
+      },
+      {
+        "season_id": "189",
+        "season_name": "Pre-Season 2018",
+        "shortname": "Pre-Sea 2018",
+        "career": "0",
+        "playoff": "0",
+        "start_date": "2018-05-17",
+        "end_date": "2018-09-17"
+      },
+      {
+        "season_id": "188",
+        "season_name": "2018 | Playoffs",
+        "shortname": "2018 Plfs",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "2018-03-20",
+        "end_date": "2018-05-16"
+      },
+      {
+        "season_id": "187",
+        "season_name": "2017-18 | Regular Season",
+        "shortname": "2017-18",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2017-09-19",
+        "end_date": "2018-03-19"
+      },
+      {
+        "season_id": "186",
+        "season_name": "Pre-Season 2017",
+        "shortname": "Pre-Sea 2017",
+        "career": "0",
+        "playoff": "0",
+        "start_date": "2017-05-18",
+        "end_date": "2017-09-18"
+      },
+      {
+        "season_id": "185",
+        "season_name": "2017 | Playoffs",
+        "shortname": "2017 Plfs",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "2017-03-22",
+        "end_date": "2017-05-17"
+      },
+      {
+        "season_id": "184",
+        "season_name": "2016-17 | Regular Season",
+        "shortname": "2016-17",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2016-09-20",
+        "end_date": "2017-03-20"
+      },
+      {
+        "season_id": "183",
+        "season_name": "Pre-Season 2016",
+        "shortname": "Pre-Sea 2016",
+        "career": "0",
+        "playoff": "0",
+        "start_date": "2016-05-18",
+        "end_date": "2016-09-19"
+      },
+      {
+        "season_id": "182",
+        "season_name": "2016 | Playoffs",
+        "shortname": "2016 Plfs",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "2016-03-23",
+        "end_date": "2016-05-17"
+      },
+      {
+        "season_id": "181",
+        "season_name": "2015-16 | Regular Season",
+        "shortname": "2015-16",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2015-09-08",
+        "end_date": "2016-03-21"
+      },
+      {
+        "season_id": "180",
+        "season_name": "Pre-Season 2015",
+        "shortname": "Pre-Sea 2015",
+        "career": "0",
+        "playoff": "0",
+        "start_date": "2015-06-01",
+        "end_date": "2015-09-07"
+      },
+      {
+        "season_id": "179",
+        "season_name": "2015 | Playoffs",
+        "shortname": "2015 Plfs",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "2015-03-24",
+        "end_date": "2015-05-21"
+      },
+      {
+        "season_id": "178",
+        "season_name": "2014-15 | Regular Season",
+        "shortname": "2014-15",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2014-09-09",
+        "end_date": "2015-03-23"
+      },
+      {
+        "season_id": "177",
+        "season_name": "Pre-Season 2014",
+        "shortname": "Pre-Sea 2014",
+        "career": "0",
+        "playoff": "0",
+        "start_date": "2014-05-28",
+        "end_date": "2014-09-08"
+      },
+      {
+        "season_id": "176",
+        "season_name": "2014 | Playoffs",
+        "shortname": "2014 Plfs",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "2014-03-18",
+        "end_date": "2014-05-14"
+      },
+      {
+        "season_id": "175",
+        "season_name": "2013-14 | Regular Season",
+        "shortname": "2013-14",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2013-09-10",
+        "end_date": "2014-03-17"
+      },
+      {
+        "season_id": "174",
+        "season_name": "Pre-Season 2013",
+        "shortname": "Pre-Sea 2013",
+        "career": "0",
+        "playoff": "0",
+        "start_date": "2013-05-27",
+        "end_date": "2013-09-09"
+      },
+      {
+        "season_id": "172",
+        "season_name": "2013 | Playoffs",
+        "shortname": "2013 Plfs",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "2013-03-19",
+        "end_date": "2013-05-16"
+      },
+      {
+        "season_id": "171",
+        "season_name": "2012-13 | Regular Season",
+        "shortname": "2012-13",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2012-09-18",
+        "end_date": "2013-03-18"
+      },
+      {
+        "season_id": "170",
+        "season_name": "Pre-Season 2012",
+        "shortname": "Pre-Sea 2012",
+        "career": "0",
+        "playoff": "0",
+        "start_date": "2012-05-30",
+        "end_date": "2012-09-17"
+      },
+      {
+        "season_id": "169",
+        "season_name": "2012 | Playoffs",
+        "shortname": "2012 Plfs",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "2012-03-22",
+        "end_date": "2012-05-15"
+      },
+      {
+        "season_id": "168",
+        "season_name": "2011-12 | Regular Season",
+        "shortname": "2011-12",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2011-09-06",
+        "end_date": "2012-03-19"
+      },
+      {
+        "season_id": "167",
+        "season_name": "Pre-Season 2011",
+        "shortname": "Pre-Sea 2011",
+        "career": "0",
+        "playoff": "0",
+        "start_date": "2011-05-18",
+        "end_date": "2011-09-05"
+      },
+      {
+        "season_id": "166",
+        "season_name": "2011 | Playoffs",
+        "shortname": "2011 Plfs",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "2011-03-24",
+        "end_date": "2011-05-18"
+      },
+      {
+        "season_id": "82",
+        "season_name": "2010-11 | Regular Season",
+        "shortname": "2010-11",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2010-09-07",
+        "end_date": "2011-03-21"
+      },
+      {
+        "season_id": "165",
+        "season_name": "2010 | Playoffs",
+        "shortname": "2010 Plfs",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "2010-03-17",
+        "end_date": "2010-05-14"
+      },
+      {
+        "season_id": "164",
+        "season_name": "2009-10 | Regular Season",
+        "shortname": "2009-10",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2009-09-07",
+        "end_date": "2010-03-16"
+      },
+      {
+        "season_id": "163",
+        "season_name": "2009 | Playoffs",
+        "shortname": "2009 Plfs",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "2009-03-18",
+        "end_date": "2009-05-13"
+      },
+      {
+        "season_id": "162",
+        "season_name": "2008-09 | Regular Season",
+        "shortname": "2008-09",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2008-09-10",
+        "end_date": "2009-03-16"
+      },
+      {
+        "season_id": "161",
+        "season_name": "2008 | Playoffs",
+        "shortname": "2008 Plfs",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "2008-03-19",
+        "end_date": "2008-05-14"
+      },
+      {
+        "season_id": "160",
+        "season_name": "2007-08 | Regular Season",
+        "shortname": "2007-08",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2007-09-11",
+        "end_date": "2008-03-18"
+      },
+      {
+        "season_id": "105",
+        "season_name": "2007 | Playoffs",
+        "shortname": "2007 Plfs",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "2007-03-21",
+        "end_date": "2007-05-16"
+      },
+      {
+        "season_id": "104",
+        "season_name": "2006-07 | Regular Season",
+        "shortname": "2006-07",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2006-09-11",
+        "end_date": "2007-03-20"
+      },
+      {
+        "season_id": "97",
+        "season_name": "2006 | Playoffs",
+        "shortname": "2006 Plfs",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "2006-03-22",
+        "end_date": "2006-05-17"
+      },
+      {
+        "season_id": "90",
+        "season_name": "2005-06 | Regular Season",
+        "shortname": "2005-06",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2005-09-15",
+        "end_date": "2006-03-20"
+      },
+      {
+        "season_id": "89",
+        "season_name": "2005 | Playoffs",
+        "shortname": "2005 Plfs",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "2005-03-25",
+        "end_date": "2005-05-10"
+      },
+      {
+        "season_id": "88",
+        "season_name": "2004-05 | Regular Season",
+        "shortname": "2004-05",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2004-09-16",
+        "end_date": "2005-03-20"
+      },
+      {
+        "season_id": "87",
+        "season_name": "2004 | Playoffs",
+        "shortname": "2004 Plfs",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "2004-03-19",
+        "end_date": "2004-05-09"
+      },
+      {
+        "season_id": "86",
+        "season_name": "2003-04 | Regular Season",
+        "shortname": "2003-04",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2003-09-11",
+        "end_date": "2004-03-14"
+      },
+      {
+        "season_id": "85",
+        "season_name": "2003 | Playoffs",
+        "shortname": "2003 Plfs",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "2003-03-20",
+        "end_date": "2003-05-13"
+      },
+      {
+        "season_id": "84",
+        "season_name": "2002-03 | Regular Season",
+        "shortname": "2002-03",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2002-09-12",
+        "end_date": "2003-03-18"
+      },
+      {
+        "season_id": "159",
+        "season_name": "2002 | Playoffs",
+        "shortname": "2002 Plfs",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "2002-03-21",
+        "end_date": "2002-05-29"
+      },
+      {
+        "season_id": "158",
+        "season_name": "2001-02 | Regular Season",
+        "shortname": "2001-02",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2001-09-12",
+        "end_date": "2002-03-20"
+      },
+      {
+        "season_id": "157",
+        "season_name": "2001 | Playoffs",
+        "shortname": "2001 Plfs",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "2001-03-22",
+        "end_date": "2001-05-29"
+      },
+      {
+        "season_id": "156",
+        "season_name": "2000-01 | Regular Season",
+        "shortname": "2000-01",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2000-09-13",
+        "end_date": "2001-03-21"
+      },
+      {
+        "season_id": "155",
+        "season_name": "2000 | Playoffs",
+        "shortname": "2000 Plfs",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "2000-03-21",
+        "end_date": "2000-05-29"
+      },
+      {
+        "season_id": "154",
+        "season_name": "1999-00 | Regular Season",
+        "shortname": "1999-00",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "1999-09-08",
+        "end_date": "2000-03-20"
+      },
+      {
+        "season_id": "153",
+        "season_name": "1999 | Playoffs",
+        "shortname": "1999 Plfs",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "1999-03-16",
+        "end_date": "1999-05-29"
+      },
+      {
+        "season_id": "152",
+        "season_name": "1998-99 | Regular Season",
+        "shortname": "1998-99",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "1998-09-16",
+        "end_date": "1999-03-15"
+      },
+      {
+        "season_id": "149",
+        "season_name": "1998 | Playoffs",
+        "shortname": "1998 Plfs",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "1998-03-17",
+        "end_date": "1998-05-29"
+      },
+      {
+        "season_id": "151",
+        "season_name": "1997-98 | Regular Season",
+        "shortname": "1997-98",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "1997-09-09",
+        "end_date": "1998-03-16"
+      },
+      {
+        "season_id": "150",
+        "season_name": "1997 | Playoffs",
+        "shortname": "1997 Plfs",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "1997-03-16",
+        "end_date": "1997-05-29"
+      },
+      {
+        "season_id": "148",
+        "season_name": "1996-97 | Regular Season",
+        "shortname": "1996-97",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "1996-09-19",
+        "end_date": "1997-03-15"
+      },
+      {
+        "season_id": "147",
+        "season_name": "1996 | Playoffs",
+        "shortname": "1996 Plfs",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "1996-03-17",
+        "end_date": "1996-05-29"
+      },
+      {
+        "season_id": "146",
+        "season_name": "1995-96 | Regular Season",
+        "shortname": "1995-96",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "1995-09-08",
+        "end_date": "1996-03-16"
+      },
+      {
+        "season_id": "145",
+        "season_name": "1995 | Playoffs",
+        "shortname": "1995 Plfs",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "1995-03-20",
+        "end_date": "1995-05-28"
+      },
+      {
+        "season_id": "144",
+        "season_name": "1994-95 | Regular Season",
+        "shortname": "1994-95",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "1994-09-09",
+        "end_date": "1995-03-17"
+      },
+      {
+        "season_id": "143",
+        "season_name": "1994 | Playoffs",
+        "shortname": "1994 Plfs",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "1994-03-20",
+        "end_date": "1994-05-12"
+      },
+      {
+        "season_id": "142",
+        "season_name": "1993-94 | Regular Season",
+        "shortname": "1993-94",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "1993-09-09",
+        "end_date": "1994-03-19"
+      },
+      {
+        "season_id": "141",
+        "season_name": "1993 | Playoffs",
+        "shortname": "1993 Plfs",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "1993-03-26",
+        "end_date": "1993-05-29"
+      },
+      {
+        "season_id": "140",
+        "season_name": "1992-93 | Regular Season",
+        "shortname": "1992-93",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "1992-09-17",
+        "end_date": "1993-03-23"
+      },
+      {
+        "season_id": "139",
+        "season_name": "1992 | Playoffs",
+        "shortname": "1992 Plfs",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "1992-03-30",
+        "end_date": "1992-05-29"
+      },
+      {
+        "season_id": "138",
+        "season_name": "1991-92 | Regular Season",
+        "shortname": "1991-92",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "1991-09-09",
+        "end_date": "1992-03-29"
+      },
+      {
+        "season_id": "137",
+        "season_name": "1991 | Playoffs",
+        "shortname": "1991 Plfs",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "1991-03-24",
+        "end_date": "1991-05-09"
+      },
+      {
+        "season_id": "136",
+        "season_name": "1990-91 | Regular Season",
+        "shortname": "1990-91",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "1990-09-12",
+        "end_date": "1991-03-23"
+      },
+      {
+        "season_id": "135",
+        "season_name": "1990 | Playoffs",
+        "shortname": "1990 Plfs",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "1990-03-25",
+        "end_date": "1990-05-29"
+      },
+      {
+        "season_id": "134",
+        "season_name": "1989-90 | Regular Season",
+        "shortname": "1989-90",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "1989-09-20",
+        "end_date": "1990-03-24"
+      },
+      {
+        "season_id": "133",
+        "season_name": "1989 | Playoffs",
+        "shortname": "1989 Plfs",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "1989-03-26",
+        "end_date": "1989-05-29"
+      },
+      {
+        "season_id": "132",
+        "season_name": "1988-89 | Regular Season",
+        "shortname": "1988-89",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "1988-09-22",
+        "end_date": "1989-03-25"
+      },
+      {
+        "season_id": "131",
+        "season_name": "1988 | Playoffs",
+        "shortname": "1988 Plfs",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "1988-03-20",
+        "end_date": "1988-05-29"
+      },
+      {
+        "season_id": "130",
+        "season_name": "1987-88 | Regular Season",
+        "shortname": "1987-88",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "1987-09-17",
+        "end_date": "1988-03-19"
+      },
+      {
+        "season_id": "129",
+        "season_name": "1987 | Playoffs",
+        "shortname": "1987 Plfs",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "1987-03-24",
+        "end_date": "1987-05-29"
+      },
+      {
+        "season_id": "128",
+        "season_name": "1986-87 | Regular Season",
+        "shortname": "1986-87",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "1986-09-20",
+        "end_date": "1987-03-23"
+      },
+      {
+        "season_id": "127",
+        "season_name": "1986 | Playoffs",
+        "shortname": "1986 Plfs",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "1986-03-23",
+        "end_date": "1986-05-29"
+      },
+      {
+        "season_id": "126",
+        "season_name": "1985-86 | Regular Season",
+        "shortname": "1985-86",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "1985-09-12",
+        "end_date": "1986-03-22"
+      },
+      {
+        "season_id": "125",
+        "season_name": "1985 | Playoffs",
+        "shortname": "1985 Plfs",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "1985-03-24",
+        "end_date": "1985-05-09"
+      },
+      {
+        "season_id": "124",
+        "season_name": "1984-85 | Regular Season",
+        "shortname": "1984-85",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "1984-09-14",
+        "end_date": "1985-03-23"
+      },
+      {
+        "season_id": "123",
+        "season_name": "1984 | Playoffs",
+        "shortname": "1984 Plfs",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "1984-03-18",
+        "end_date": "1984-05-31"
+      },
+      {
+        "season_id": "122",
+        "season_name": "1983-84 | Regular Season",
+        "shortname": "1983-84",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "1983-09-16",
+        "end_date": "1984-03-17"
+      },
+      {
+        "season_id": "121",
+        "season_name": "1983 | Playoffs",
+        "shortname": "1983 Plfs",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "1983-03-20",
+        "end_date": "1983-05-30"
+      },
+      {
+        "season_id": "120",
+        "season_name": "1982-83 | Regular Season",
+        "shortname": "1982-83",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "1982-09-17",
+        "end_date": "1983-03-19"
+      },
+      {
+        "season_id": "119",
+        "season_name": "1982 | Playoffs",
+        "shortname": "1982 Plfs",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "1982-03-16",
+        "end_date": "1982-05-29"
+      },
+      {
+        "season_id": "118",
+        "season_name": "1981-82 | Regular Season",
+        "shortname": "1981-82",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "1981-09-10",
+        "end_date": "1982-03-15"
+      },
+      {
+        "season_id": "117",
+        "season_name": "1981 | Playoffs",
+        "shortname": "1981 Plfs",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "1981-03-19",
+        "end_date": "1981-05-29"
+      },
+      {
+        "season_id": "116",
+        "season_name": "1980-81 | Regular Season",
+        "shortname": "1980-81",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "1980-09-18",
+        "end_date": "1981-03-18"
+      },
+      {
+        "season_id": "115",
+        "season_name": "1980 | Playoffs",
+        "shortname": "1980 Plfs",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "1980-03-18",
+        "end_date": "1980-05-28"
+      },
+      {
+        "season_id": "114",
+        "season_name": "1979-80 | Regular Season",
+        "shortname": "1979-80",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "1979-09-23",
+        "end_date": "1980-03-17"
+      },
+      {
+        "season_id": "113",
+        "season_name": "1979 | Playoffs",
+        "shortname": "1979 Plfs",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "1979-03-20",
+        "end_date": "1979-05-20"
+      },
+      {
+        "season_id": "112",
+        "season_name": "1978-79 | Regular Season",
+        "shortname": "1978-79",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "1978-09-24",
+        "end_date": "1979-03-19"
+      },
+      {
+        "season_id": "111",
+        "season_name": "1978 | Playoffs",
+        "shortname": "1978 Plfs",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "1978-03-21",
+        "end_date": "1978-04-30"
+      },
+      {
+        "season_id": "110",
+        "season_name": "1977-78 | Regular Season",
+        "shortname": "1977-78",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "1977-09-18",
+        "end_date": "1978-03-20"
+      },
+      {
+        "season_id": "109",
+        "season_name": "1977 | Playoffs",
+        "shortname": "1977 Plfs",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "1977-03-23",
+        "end_date": "1977-05-05"
+      },
+      {
+        "season_id": "108",
+        "season_name": "1976-77 | Regular Season",
+        "shortname": "1976-77",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "1976-09-01",
+        "end_date": "1977-03-22"
+      },
+      {
+        "season_id": "107",
+        "season_name": "1976 | Playoffs",
+        "shortname": "1976 Plfs",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "1976-03-23",
+        "end_date": "1976-05-05"
+      },
+      {
+        "season_id": "106",
+        "season_name": "1975-76 | Regular Season",
+        "shortname": "1975-76",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "1975-09-25",
+        "end_date": "1976-03-22"
+      },
+      {
+        "season_id": "103",
+        "season_name": "1975 | Playoffs",
+        "shortname": "1975 Plfs",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "1975-03-27",
+        "end_date": "1975-04-30"
+      },
+      {
+        "season_id": "102",
+        "season_name": "1974-75 | Regular Season",
+        "shortname": "1974-75",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "1974-09-26",
+        "end_date": "1975-03-26"
+      },
+      {
+        "season_id": "101",
+        "season_name": "1974 | Playoffs",
+        "shortname": "1974 Plfs",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "1974-03-27",
+        "end_date": "1974-05-01"
+      },
+      {
+        "season_id": "100",
+        "season_name": "1973-74 | Regular Season",
+        "shortname": "1973-74",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "1973-09-27",
+        "end_date": "1974-03-26"
+      },
+      {
+        "season_id": "99",
+        "season_name": "1973 | Playoffs",
+        "shortname": "1973 Plfs",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "1973-03-20",
+        "end_date": "1973-04-30"
+      },
+      {
+        "season_id": "98",
+        "season_name": "1972-73 | Regular Season",
+        "shortname": "1972-73",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "1972-06-01",
+        "end_date": "1973-03-19"
+      },
+      {
+        "season_id": "96",
+        "season_name": "1972 | Playoffs",
+        "shortname": "1972 Plfs",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "1972-03-28",
+        "end_date": "1972-05-05"
+      },
+      {
+        "season_id": "95",
+        "season_name": "1971-72 | Regular Season",
+        "shortname": "1971-72",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "1971-06-01",
+        "end_date": "1972-03-27"
+      },
+      {
+        "season_id": "94",
+        "season_name": "1971 | Playoffs",
+        "shortname": "1971 Plfs",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "1971-03-21",
+        "end_date": "1971-04-30"
+      },
+      {
+        "season_id": "93",
+        "season_name": "1970-71 | Regular Season",
+        "shortname": "1970-71",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "1970-06-01",
+        "end_date": "1971-03-19"
+      },
+      {
+        "season_id": "92",
+        "season_name": "1970 | Playoffs",
+        "shortname": "1970 Plfs",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "1970-02-22",
+        "end_date": "1970-03-31"
+      },
+      {
+        "season_id": "91",
+        "season_name": "1969-70 | Regular Season",
+        "shortname": "1969-70",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "1969-09-01",
+        "end_date": "1970-02-21"
+      }
+    ],
+    "Copyright": {
+      "required_copyright": "Official statistics provided by LHJMQ",
+      "required_link": "http://leaguestat.com",
+      "powered_by": "Powered by HockeyTech.com",
+      "powered_by_url": "http://hockeytech.com"
+    }
+  }
+}
