@@ -3,6 +3,8 @@
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
 - [Unreleased](#unreleased)
+  - [Fixed — PFF time to throw, aimed passes and receiving positive-EPA descriptions](#fixed--pff-time-to-throw-aimed-passes-and-receiving-positive-epa-descriptions)
+  - [Security — a credential in a query string no longer reaches a log or an error message](#security--a-credential-in-a-query-string-no-longer-reaches-a-log-or-an-error-message)
   - [Fixed — nba_stats / wnba_stats defaults: a season where the API needs one, each league's own ids](#fixed--nba_stats--wnba_stats-defaults-a-season-where-the-api-needs-one-each-leagues-own-ids)
   - [Fixed — returns tables no longer cite R-only arguments](#fixed--returns-tables-no-longer-cite-r-only-arguments)
   - [Fixed — a failed HockeyTech fetch raises instead of returning an empty frame (BREAKING)](#fixed--a-failed-hockeytech-fetch-raises-instead-of-returning-an-empty-frame-breaking)
@@ -324,6 +326,61 @@
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## Unreleased
+
+### Fixed — PFF time to throw, aimed passes and receiving positive-EPA descriptions
+
+The return tables of the legacy `pff_*` passing and receiving reports, and the `pff_api` position
+and team reports, described three PFF stats wrongly. These are the same texts that #689 corrected
+for the `pff_api` player summaries. Each of the 210 descriptions was checked against real nfl and
+ncaa rows:
+
+- `avg_time_to_throw` and every `*_avg_time_to_throw` is per dropback (`ttt_total_time / dropbacks`
+  on all 74 rows that carry both, 41 of them with dropbacks different from attempts), not "on the
+  passer's attempts".
+- `aimed_passes` and every `*_aimed_passes` also excludes batted passes and throws made while hit:
+  `attempts − throwaways − spikes − bats − hit_as_threw` on 478 of 478 rows. The old formula
+  matched 331.
+- Receiving `positive_epa_percent` and its depth, concept and scheme splits are a share of the
+  receiver's plays with an EPA value, in practice their routes run, not of their targets. The
+  published percentage is a whole number of plays out of routes run on 83 of 85 rows, but out of
+  targets on only 21 of 76.
+
+Text only; no column or value changes.
+
+### Security — a credential in a query string no longer reaches a log or an error message
+
+`dl_utils.download` wrote the request URL and its `params` dict into its retry and failure
+log lines, and the `NoDataError` a 404 raises quoted the URL. Any key sent in the query
+string went with them: The Odds API's private, paid `apiKey`, the HockeyTech `key`, and the
+Fox `apikey`. A connection failure was re-raised as requests' own exception, which quotes
+the request path and chains urllib3's `MaxRetryError`, which quotes it again.
+
+- The value of a credential pair now reads `REDACTED` in every log line `download` writes,
+  in every sportsdataverse error message, in urllib3's request, retry, redirect and
+  header-parse log lines (including a caller's own `Retry` adapter), and in the re-raised transport
+  exception and every exception chained to it. That covers the exception's attributes as
+  well as its text: `err.url`, `err.request.url` and urllib3's pickled message are
+  redacted, and the request's `Authorization` / `Proxy-Authorization` / `Cookie` headers
+  are dropped. Covered names are
+  `apiKey` / `api_key` / `apikey`, `token` / `access_token`, `password`, `secret` /
+  `client_secret` and the rest of the sportsdataverse-js list, case-insensitively and in
+  URL-encoded and `'name': 'value'` form; a quoted value is redacted up to its closing
+  quote, spaces included. A bare `key` is redacted when its value has 16 or
+  more characters, as every HockeyTech key does. The host, path, status and other params
+  are kept, so the line still says which request failed.
+- The Odds API wrappers raise `AssetFetchError` on a non-2xx answer: a rejected key (401),
+  spent quota (429), or a 5xx that outlived the retries. Before, the error body came back
+  as if it were odds. A 2xx with a non-JSON body raises `AssetFetchError` too, instead of
+  a bare `JSONDecodeError`. A 404 still raises `NoDataError`. `cfb_odds_events_crosswalk`
+  reads The Odds API, so it now raises these too, where it used to parse the error body as
+  an event list.
+
+No signature changes. One behaviour change: the `args[0]` of a re-raised requests
+`ConnectionError` is now its redacted message string, not urllib3's `MaxRetryError`
+object; that object is still chained as `__context__`. `tests/test_credential_redaction.py` sends a synthetic key through
+each of the three providers on a 404, a 503 and a connection failure, and checks the
+message, `str`, `repr`, the formatted traceback with its chained causes, and the captured
+logs.
 
 ### Fixed — nba_stats / wnba_stats defaults: a season where the API needs one, each league's own ids
 

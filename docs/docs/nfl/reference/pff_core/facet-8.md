@@ -33,7 +33,7 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 | `left_deep_route_rate` | numeric | Share of pass-play snaps on which the player ran a route on deep passes (20 or more yards downfield) to the left third of the field. |
 | `center_short_first_downs` | numeric | Receptions that converted a first down on short passes (0-9 yards downfield) to the middle of the field. |
 | `center_short_routes` | numeric | Pass routes run by the player on short passes (0-9 yards downfield) to the middle of the field. |
-| `right_behind_los_positive_epa_percent` | numeric | Percentage of the player's targets producing positive expected points added on passes thrown behind the line of scrimmage to the right third of the field. |
+| `right_behind_los_positive_epa_percent` | numeric | Percentage of the receiver's plays with an EPA value (in practice their routes run) producing positive expected points added on passes thrown behind the line of scrimmage to the right third of the field. |
 | `left_behind_los_yards_after_catch` | numeric | Yards gained after the catch on passes thrown behind the line of scrimmage to the left third of the field. |
 | `center_behind_los_contested_targets` | numeric | PFF-charted contested targets on passes thrown behind the line of scrimmage to the middle of the field. |
 | `right_short_routes` | numeric | Pass routes run by the player on short passes (0-9 yards downfield) to the right third of the field. |
@@ -59,7 +59,7 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 | `behind_los_yards_after_catch_per_reception` | numeric | Average yards after the catch per reception on passes thrown behind the line of scrimmage. |
 | `right_deep_grades_pass_route` | numeric | PFF route-running (receiving) grade on deep passes (20 or more yards downfield) to the right third of the field, 0-100. |
 | `left_short_fumbles` | numeric | Fumbles by the player after the catch on short passes (0-9 yards downfield) to the left third of the field. |
-| `right_short_positive_epa_percent` | numeric | Percentage of the player's targets producing positive expected points added on short passes (0-9 yards downfield) to the right third of the field. |
+| `right_short_positive_epa_percent` | numeric | Percentage of the receiver's plays with an EPA value (in practice their routes run) producing positive expected points added on short passes (0-9 yards downfield) to the right third of the field. |
 | `center_deep_pass_block_rate` | numeric | Share of pass-play snaps spent pass blocking on deep passes (20 or more yards downfield) to the middle of the field. |
 | `left_behind_los_avoided_tackles` | numeric | Tackles avoided after the catch on passes thrown behind the line of scrimmage to the left third of the field. |
 | `center_short_longest` | numeric | Longest reception in yards on short passes (0-9 yards downfield) to the middle of the field. |
@@ -90,7 +90,7 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 | `left_short_yards_after_catch_per_reception` | numeric | Average yards after the catch per reception on short passes (0-9 yards downfield) to the left third of the field. |
 | `center_medium_avoided_tackles` | numeric | Tackles avoided after the catch on medium passes (10-19 yards downfield) to the middle of the field. |
 | `center_medium_grades_pass_route` | numeric | PFF route-running (receiving) grade on medium passes (10-19 yards downfield) to the middle of the field, 0-100. |
-| `center_behind_los_positive_epa_percent` | numeric | Percentage of the player's targets producing positive expected points added on passes thrown behind the line of scrimmage to the middle of the field. |
+| `center_behind_los_positive_epa_percent` | numeric | Percentage of the receiver's plays with an EPA value (in practice their routes run) producing positive expected points added on passes thrown behind the line of scrimmage to the middle of the field. |
 | `medium_yards_after_catch_per_reception` | numeric | Average yards after the catch per reception on medium passes (10-19 yards downfield). |
 | `medium_receptions` | numeric | Receptions made on medium passes (10-19 yards downfield). |
 | `deep_pass_blocks` | numeric | Pass-play snaps spent pass blocking on deep passes (20 or more yards downfield). |
@@ -113,7 +113,7 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 | `center_medium_drops` | numeric | PFF-charted drops on medium passes (10-19 yards downfield) to the middle of the field. |
 | `left_short_pass_blocks` | numeric | Pass-play snaps spent pass blocking on short passes (0-9 yards downfield) to the left third of the field. |
 | `right_short_grades_pass_route` | numeric | PFF route-running (receiving) grade on short passes (0-9 yards downfield) to the right third of the field, 0-100. |
-| `center_short_positive_epa_percent` | numeric | Percentage of the player's targets producing positive expected points added on short passes (0-9 yards downfield) to the middle of the field. |
+| `center_short_positive_epa_percent` | numeric | Percentage of the receiver's plays with an EPA value (in practice their routes run) producing positive expected points added on short passes (0-9 yards downfield) to the middle of the field. |
 | `deep_avg_depth_of_target` | numeric | Average depth of target in yards downfield on deep passes (20 or more yards downfield). |
 | `deep_grades_hands_drop` | numeric | PFF hands/drop grade on deep passes (20 or more yards downfield), 0-100. |
 | `center_behind_los_avg_depth_of_target` | numeric | Average depth of target in yards downfield on passes thrown behind the line of scrimmage to the middle of the field. |
@@ -138,7 +138,7 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 | `left_medium_longest` | numeric | Longest reception in yards on medium passes (10-19 yards downfield) to the left third of the field. |
 | `jersey_number` | character | Jersey number (string; zero-padded, e.g. "09"). |
 | `medium_yprr` | numeric | Yards per route run on medium passes (10-19 yards downfield). |
-| `left_short_positive_epa_percent` | numeric | Percentage of the player's targets producing positive expected points added on short passes (0-9 yards downfield) to the left third of the field. |
+| `left_short_positive_epa_percent` | numeric | Percentage of the receiver's plays with an EPA value (in practice their routes run) producing positive expected points added on short passes (0-9 yards downfield) to the left third of the field. |
 | `center_behind_los_pass_block_rate` | numeric | Share of pass-play snaps spent pass blocking on passes thrown behind the line of scrimmage to the middle of the field. |
 | `right_short_fumbles` | numeric | Fumbles by the player after the catch on short passes (0-9 yards downfield) to the right third of the field. |
 | `right_deep_route_rate` | numeric | Share of pass-play snaps on which the player ran a route on deep passes (20 or more yards downfield) to the right third of the field. |
@@ -171,7 +171,7 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 | `left_deep_contested_targets` | numeric | PFF-charted contested targets on deep passes (20 or more yards downfield) to the left third of the field. |
 | `medium_avg_depth_of_target` | numeric | Average depth of target in yards downfield on medium passes (10-19 yards downfield). |
 | `short_route_rate` | numeric | Share of pass-play snaps on which the player ran a route on short passes (0-9 yards downfield). |
-| `left_behind_los_positive_epa_percent` | numeric | Percentage of the player's targets producing positive expected points added on passes thrown behind the line of scrimmage to the left third of the field. |
+| `left_behind_los_positive_epa_percent` | numeric | Percentage of the receiver's plays with an EPA value (in practice their routes run) producing positive expected points added on passes thrown behind the line of scrimmage to the left third of the field. |
 | `left_medium_touchdowns` | numeric | Receiving touchdowns scored on medium passes (10-19 yards downfield) to the left third of the field. |
 | `deep_targets_percent` | numeric | Share of the team's targets thrown to the player on deep passes (20 or more yards downfield). |
 | `behind_los_targets` | numeric | Pass targets to the player on passes thrown behind the line of scrimmage. |
@@ -185,7 +185,7 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 | `center_short_avg_depth_of_target` | numeric | Average depth of target in yards downfield on short passes (0-9 yards downfield) to the middle of the field. |
 | `right_short_yards` | numeric | Receiving yards gained on short passes (0-9 yards downfield) to the right third of the field. |
 | `left_medium_first_downs` | numeric | Receptions that converted a first down on medium passes (10-19 yards downfield) to the left third of the field. |
-| `right_medium_positive_epa_percent` | numeric | Percentage of the player's targets producing positive expected points added on medium passes (10-19 yards downfield) to the right third of the field. |
+| `right_medium_positive_epa_percent` | numeric | Percentage of the receiver's plays with an EPA value (in practice their routes run) producing positive expected points added on medium passes (10-19 yards downfield) to the right third of the field. |
 | `left_medium_targeted_qb_rating` | numeric | NFL passer rating on throws targeting the player on medium passes (10-19 yards downfield) to the left third of the field. |
 | `right_short_contested_receptions` | numeric | Catches made on PFF-charted contested targets on short passes (0-9 yards downfield) to the right third of the field. |
 | `right_deep_avoided_tackles` | numeric | Tackles avoided after the catch on deep passes (20 or more yards downfield) to the right third of the field. |
@@ -237,7 +237,7 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 | `left_short_yards` | numeric | Receiving yards gained on short passes (0-9 yards downfield) to the left third of the field. |
 | `right_behind_los_avg_depth_of_target` | numeric | Average depth of target in yards downfield on passes thrown behind the line of scrimmage to the right third of the field. |
 | `right_deep_first_downs` | numeric | Receptions that converted a first down on deep passes (20 or more yards downfield) to the right third of the field. |
-| `left_deep_positive_epa_percent` | numeric | Percentage of the player's targets producing positive expected points added on deep passes (20 or more yards downfield) to the left third of the field. |
+| `left_deep_positive_epa_percent` | numeric | Percentage of the receiver's plays with an EPA value (in practice their routes run) producing positive expected points added on deep passes (20 or more yards downfield) to the left third of the field. |
 | `short_yards_after_catch` | numeric | Yards gained after the catch on short passes (0-9 yards downfield). |
 | `center_medium_yprr` | numeric | Yards per route run on medium passes (10-19 yards downfield) to the middle of the field. |
 | `short_pass_blocks` | numeric | Pass-play snaps spent pass blocking on short passes (0-9 yards downfield). |
@@ -269,7 +269,7 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 | `right_behind_los_avoided_tackles` | numeric | Tackles avoided after the catch on passes thrown behind the line of scrimmage to the right third of the field. |
 | `right_deep_longest` | numeric | Longest reception in yards on deep passes (20 or more yards downfield) to the right third of the field. |
 | `right_deep_contested_targets` | numeric | PFF-charted contested targets on deep passes (20 or more yards downfield) to the right third of the field. |
-| `right_deep_positive_epa_percent` | numeric | Percentage of the player's targets producing positive expected points added on deep passes (20 or more yards downfield) to the right third of the field. |
+| `right_deep_positive_epa_percent` | numeric | Percentage of the receiver's plays with an EPA value (in practice their routes run) producing positive expected points added on deep passes (20 or more yards downfield) to the right third of the field. |
 | `right_behind_los_pass_plays` | numeric | Pass-play snaps on passes thrown behind the line of scrimmage to the right third of the field. |
 | `medium_contested_receptions` | numeric | Catches made on PFF-charted contested targets on medium passes (10-19 yards downfield). |
 | `short_targeted_qb_rating` | numeric | NFL passer rating on throws targeting the player on short passes (0-9 yards downfield). |
@@ -310,11 +310,11 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 | `left_deep_avg_depth_of_target` | numeric | Average depth of target in yards downfield on deep passes (20 or more yards downfield) to the left third of the field. |
 | `deep_first_downs` | numeric | Receptions that converted a first down on deep passes (20 or more yards downfield). |
 | `short_drop_rate` | numeric | Share of catchable targets the player dropped on short passes (0-9 yards downfield). |
-| `left_medium_positive_epa_percent` | numeric | Percentage of the player's targets producing positive expected points added on medium passes (10-19 yards downfield) to the left third of the field. |
+| `left_medium_positive_epa_percent` | numeric | Percentage of the receiver's plays with an EPA value (in practice their routes run) producing positive expected points added on medium passes (10-19 yards downfield) to the left third of the field. |
 | `center_deep_touchdowns` | numeric | Receiving touchdowns scored on deep passes (20 or more yards downfield) to the middle of the field. |
 | `right_behind_los_yprr` | numeric | Yards per route run on passes thrown behind the line of scrimmage to the right third of the field. |
 | `center_medium_pass_blocks` | numeric | Pass-play snaps spent pass blocking on medium passes (10-19 yards downfield) to the middle of the field. |
-| `short_positive_epa_percent` | numeric | Percentage of the player's targets producing positive expected points added on short passes (0-9 yards downfield). |
+| `short_positive_epa_percent` | numeric | Percentage of the receiver's plays with an EPA value (in practice their routes run) producing positive expected points added on short passes (0-9 yards downfield). |
 | `medium_fumbles` | numeric | Fumbles by the player after the catch on medium passes (10-19 yards downfield). |
 | `center_medium_yards_after_catch_per_reception` | numeric | Average yards after the catch per reception on medium passes (10-19 yards downfield) to the middle of the field. |
 | `left_short_routes` | numeric | Pass routes run by the player on short passes (0-9 yards downfield) to the left third of the field. |
@@ -420,7 +420,7 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 | `center_behind_los_targets` | numeric | Pass targets to the player on passes thrown behind the line of scrimmage to the middle of the field. |
 | `left_deep_pass_blocks` | numeric | Pass-play snaps spent pass blocking on deep passes (20 or more yards downfield) to the left third of the field. |
 | `left_short_drops` | numeric | PFF-charted drops on short passes (0-9 yards downfield) to the left third of the field. |
-| `medium_positive_epa_percent` | numeric | Percentage of the player's targets producing positive expected points added on medium passes (10-19 yards downfield). |
+| `medium_positive_epa_percent` | numeric | Percentage of the receiver's plays with an EPA value (in practice their routes run) producing positive expected points added on medium passes (10-19 yards downfield). |
 | `center_deep_receptions` | numeric | Receptions made on deep passes (20 or more yards downfield) to the middle of the field. |
 | `right_medium_epa` | numeric | Total expected points added on targets to the player on medium passes (10-19 yards downfield) to the right third of the field. |
 | `right_short_pass_block_rate` | numeric | Share of pass-play snaps spent pass blocking on short passes (0-9 yards downfield) to the right third of the field. |
@@ -478,10 +478,10 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 | `center_behind_los_receptions` | numeric | Receptions made on passes thrown behind the line of scrimmage to the middle of the field. |
 | `right_medium_caught_percent` | numeric | Percentage of targets caught on medium passes (10-19 yards downfield) to the right third of the field. |
 | `right_deep_targets` | numeric | Pass targets to the player on deep passes (20 or more yards downfield) to the right third of the field. |
-| `center_medium_positive_epa_percent` | numeric | Percentage of the player's targets producing positive expected points added on medium passes (10-19 yards downfield) to the middle of the field. |
+| `center_medium_positive_epa_percent` | numeric | Percentage of the receiver's plays with an EPA value (in practice their routes run) producing positive expected points added on medium passes (10-19 yards downfield) to the middle of the field. |
 | `medium_drops` | numeric | PFF-charted drops on medium passes (10-19 yards downfield). |
 | `left_deep_grades_hands_drop` | numeric | PFF hands/drop grade on deep passes (20 or more yards downfield) to the left third of the field, 0-100. |
-| `behind_los_positive_epa_percent` | numeric | Percentage of the player's targets producing positive expected points added on passes thrown behind the line of scrimmage. |
+| `behind_los_positive_epa_percent` | numeric | Percentage of the receiver's plays with an EPA value (in practice their routes run) producing positive expected points added on passes thrown behind the line of scrimmage. |
 | `left_short_avoided_tackles` | numeric | Tackles avoided after the catch on short passes (0-9 yards downfield) to the left third of the field. |
 | `right_medium_grades_pass_route` | numeric | PFF route-running (receiving) grade on medium passes (10-19 yards downfield) to the right third of the field, 0-100. |
 | `right_short_grades_hands_drop` | numeric | PFF hands/drop grade on short passes (0-9 yards downfield) to the right third of the field, 0-100. |
@@ -494,7 +494,7 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 | `behind_los_contested_catch_rate` | numeric | Percentage of PFF-charted contested targets caught on passes thrown behind the line of scrimmage. |
 | `behind_los_yards_after_catch` | numeric | Yards gained after the catch on passes thrown behind the line of scrimmage. |
 | `left_deep_drops` | numeric | PFF-charted drops on deep passes (20 or more yards downfield) to the left third of the field. |
-| `center_deep_positive_epa_percent` | numeric | Percentage of the player's targets producing positive expected points added on deep passes (20 or more yards downfield) to the middle of the field. |
+| `center_deep_positive_epa_percent` | numeric | Percentage of the receiver's plays with an EPA value (in practice their routes run) producing positive expected points added on deep passes (20 or more yards downfield) to the middle of the field. |
 | `left_behind_los_yards_after_catch_per_reception` | numeric | Average yards after the catch per reception on passes thrown behind the line of scrimmage to the left third of the field. |
 | `right_deep_routes` | numeric | Pass routes run by the player on deep passes (20 or more yards downfield) to the right third of the field. |
 | `center_deep_grades_pass_route` | numeric | PFF route-running (receiving) grade on deep passes (20 or more yards downfield) to the middle of the field, 0-100. |
@@ -526,7 +526,7 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 | `center_deep_epa` | numeric | Total expected points added on targets to the player on deep passes (20 or more yards downfield) to the middle of the field. |
 | `left_medium_interceptions` | numeric | Interceptions thrown on passes targeting the player on medium passes (10-19 yards downfield) to the left third of the field. |
 | `right_deep_interceptions` | numeric | Interceptions thrown on passes targeting the player on deep passes (20 or more yards downfield) to the right third of the field. |
-| `deep_positive_epa_percent` | numeric | Percentage of the player's targets producing positive expected points added on deep passes (20 or more yards downfield). |
+| `deep_positive_epa_percent` | numeric | Percentage of the receiver's plays with an EPA value (in practice their routes run) producing positive expected points added on deep passes (20 or more yards downfield). |
 | `deep_fumbles` | numeric | Fumbles by the player after the catch on deep passes (20 or more yards downfield). |
 | `center_short_contested_catch_rate` | numeric | Percentage of PFF-charted contested targets caught on short passes (0-9 yards downfield) to the middle of the field. |
 | `center_behind_los_targets_percent` | numeric | Share of the team's targets thrown to the player on passes thrown behind the line of scrimmage to the middle of the field. |

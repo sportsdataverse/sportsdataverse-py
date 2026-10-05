@@ -43,7 +43,7 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 | `draft_season` | numeric | NFL season (year) in which the player was drafted, per PFF player metadata. |
 | `more_grades_pass_route` | character | PFF receiving (route) grade for the player (0-100) on dropbacks with time in pocket of 2.5 seconds or more. |
 | `less_pressure_to_sack_rate` | numeric | Percentage of pressured dropbacks that ended in a sack on dropbacks with time in pocket under 2.5 seconds. |
-| `less_aimed_passes` | numeric | Number of aimed passes (attempts excluding spikes and throwaways) on dropbacks with time in pocket under 2.5 seconds, as charted by PFF. |
+| `less_aimed_passes` | numeric | Number of aimed passes (attempts excluding throwaways, spikes, batted passes and throws made while hit) on dropbacks with time in pocket under 2.5 seconds, as charted by PFF. |
 | `more_dropbacks_percent` | numeric | Share of the player's total dropbacks that came on dropbacks with time in pocket of 2.5 seconds or more, expressed as a percentage. |
 | `less_positive_epa_percent` | numeric | Percentage of dropbacks with positive expected points added on dropbacks with time in pocket under 2.5 seconds. |
 | `team_name` | character | Team abbreviation the player is credited to for the range. |
@@ -81,7 +81,7 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 | `more_first_downs` | numeric | Number of passing first downs gained on dropbacks with time in pocket of 2.5 seconds or more. |
 | `less_big_time_throws` | numeric | Number of big-time throws on dropbacks with time in pocket under 2.5 seconds, per PFF's highest-value, highest-difficulty throw designation. |
 | `avg_ttt_attempts` | numeric | Average time from snap to release in seconds on dropbacks ending in a pass attempt. |
-| `more_aimed_passes` | numeric | Number of aimed passes (attempts excluding spikes and throwaways) on dropbacks with time in pocket of 2.5 seconds or more, as charted by PFF. |
+| `more_aimed_passes` | numeric | Number of aimed passes (attempts excluding throwaways, spikes, batted passes and throws made while hit) on dropbacks with time in pocket of 2.5 seconds or more, as charted by PFF. |
 | `less_accuracy_percent` | numeric | Percentage of aimed passes charted as accurate by PFF on dropbacks with time in pocket under 2.5 seconds. |
 | `more_scrambles` | numeric | Number of scrambles on dropbacks with time in pocket of 2.5 seconds or more. |
 | `less_epa` | numeric | Total expected points added (EPA) on the player's dropbacks on dropbacks with time in pocket under 2.5 seconds. |
@@ -100,7 +100,7 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 | `less_grades_hands_fumble` | numeric | PFF hands (fumble) grade for the player, reflecting ball security (0-100) on dropbacks with time in pocket under 2.5 seconds. |
 | `more_hit_as_threw` | numeric | Number of attempts on which the passer was hit as he threw on dropbacks with time in pocket of 2.5 seconds or more, as charted by PFF. |
 | `more_epa` | numeric | Total expected points added (EPA) on the player's dropbacks on dropbacks with time in pocket of 2.5 seconds or more. |
-| `avg_time_to_throw` | numeric | Average time to throw, in seconds from snap to release, on the passer's attempts. |
+| `avg_time_to_throw` | numeric | Average time to throw per dropback, in seconds from snap to release. |
 | `less_turnover_worthy_plays` | numeric | Number of turnover-worthy plays on dropbacks with time in pocket under 2.5 seconds, plays PFF charts as deserving of a turnover. |
 | `less_completion_percent` | numeric | Percentage of pass attempts completed on dropbacks with time in pocket under 2.5 seconds. |
 | `more_drops` | numeric | Number of catchable passes dropped by receivers on dropbacks with time in pocket of 2.5 seconds or more. |
@@ -112,11 +112,11 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 | `more_grades_offense` | numeric | PFF overall offense grade for the player (0-100) on dropbacks with time in pocket of 2.5 seconds or more. |
 | `less_thrown_aways` | numeric | Number of intentional throwaways on dropbacks with time in pocket under 2.5 seconds. |
 | `less_avg_depth_of_target` | numeric | Average depth of target in air yards on dropbacks with time in pocket under 2.5 seconds. |
-| `less_avg_time_to_throw` | numeric | Average time from snap to release in seconds on dropbacks with time in pocket under 2.5 seconds. |
+| `less_avg_time_to_throw` | numeric | Average time to throw per dropback, in seconds from snap to release, on dropbacks with time in pocket under 2.5 seconds. |
 | `less_grades_offense_penalty` | numeric | PFF offensive penalty grade for the player (0-100) on dropbacks with time in pocket under 2.5 seconds. |
 | `less_interceptions` | numeric | Number of passes intercepted on dropbacks with time in pocket under 2.5 seconds. |
 | `more_def_gen_pressures` | numeric | Number of defense-generated pressures on the player's dropbacks on dropbacks with time in pocket of 2.5 seconds or more, as charted by PFF. |
-| `more_avg_time_to_throw` | numeric | Average time from snap to release in seconds on dropbacks with time in pocket of 2.5 seconds or more. |
+| `more_avg_time_to_throw` | numeric | Average time to throw per dropback, in seconds from snap to release, on dropbacks with time in pocket of 2.5 seconds or more. |
 | `more_dropbacks` | numeric | Number of dropbacks on dropbacks with time in pocket of 2.5 seconds or more. |
 | `more_grades_pass` | numeric | PFF passing grade (0-100) on dropbacks with time in pocket of 2.5 seconds or more. |
 | `player_id` | numeric | PFF player id (integer; matches the /players id and every player_id join key). |
@@ -183,7 +183,7 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 | `screen_targeted_qb_rating` | numeric | NFL passer rating on throws targeting the player on screen concepts. |
 | `slot_grades_pass_route` | numeric | PFF route-running (receiving) grade when aligned in the slot, 0-100. |
 | `slot_avg_depth_of_target` | numeric | Average depth of target in yards downfield when aligned in the slot. |
-| `slot_positive_epa_percent` | numeric | Percentage of the player's targets producing positive expected points added when aligned in the slot. |
+| `slot_positive_epa_percent` | numeric | Percentage of the receiver's plays with an EPA value (in practice their routes run) producing positive expected points added when aligned in the slot. |
 | `screen_yprr` | numeric | Yards per route run on screen concepts. |
 | `draft_season` | numeric | Season of the player's NFL draft class, per PFF. |
 | `slot_routes` | numeric | Pass routes run by the player when aligned in the slot. |
@@ -225,7 +225,7 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 | `slot_pass_plays` | numeric | Pass-play snaps when aligned in the slot. |
 | `team` | character | Team abbreviation the player is credited to for the range. |
 | `declined_penalties` | numeric | Penalties committed by the player that were declined. |
-| `screen_positive_epa_percent` | numeric | Percentage of the player's targets producing positive expected points added on screen concepts. |
+| `screen_positive_epa_percent` | numeric | Percentage of the receiver's plays with an EPA value (in practice their routes run) producing positive expected points added on screen concepts. |
 | `slot_first_downs` | numeric | Receptions that converted a first down when aligned in the slot. |
 | `screen_route_rate` | numeric | Share of pass-play snaps on which the player ran a route on screen concepts. |
 | `position` | character | PFF position code the player is listed at (e.g. QB, HB, FB, WR, TE, T, G, C, ED, DI, LB, CB, S, K, P). |

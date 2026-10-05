@@ -25602,11 +25602,11 @@ passing_concept:
   franchise_id: PFF franchise (team) id (integer join key).
   jersey_number: Jersey number (string; zero-padded, e.g. "09").
   no_screen_accuracy_percent: Percentage of aimed passes charted as accurate by PFF excluding screen passes.
-  no_screen_aimed_passes: Number of aimed passes (attempts excluding spikes and throwaways) excluding screen passes, as charted
-    by PFF.
+  no_screen_aimed_passes: Number of aimed passes (attempts excluding throwaways, spikes, batted passes and throws made while
+    hit) excluding screen passes, as charted by PFF.
   no_screen_attempts: Number of pass attempts excluding screen passes.
   no_screen_avg_depth_of_target: Average depth of target in air yards excluding screen passes.
-  no_screen_avg_time_to_throw: Average time from snap to release in seconds excluding screen passes.
+  no_screen_avg_time_to_throw: Average time to throw per dropback, in seconds from snap to release, excluding screen passes.
   no_screen_bats: Number of pass attempts batted down at the line of scrimmage excluding screen passes.
   no_screen_big_time_throws: Number of big-time throws excluding screen passes, per PFF's highest-value, highest-difficulty
     throw designation.
@@ -25658,11 +25658,11 @@ passing_concept:
   no_screen_yards: Passing yards gained excluding screen passes.
   no_screen_ypa: Yards gained per pass attempt excluding screen passes.
   npa_accuracy_percent: Percentage of aimed passes charted as accurate by PFF on non-play-action dropbacks.
-  npa_aimed_passes: Number of aimed passes (attempts excluding spikes and throwaways) on non-play-action dropbacks, as charted
-    by PFF.
+  npa_aimed_passes: Number of aimed passes (attempts excluding throwaways, spikes, batted passes and throws made while hit)
+    on non-play-action dropbacks, as charted by PFF.
   npa_attempts: Number of pass attempts on non-play-action dropbacks.
   npa_avg_depth_of_target: Average depth of target in air yards on non-play-action dropbacks.
-  npa_avg_time_to_throw: Average time from snap to release in seconds on non-play-action dropbacks.
+  npa_avg_time_to_throw: Average time to throw per dropback, in seconds from snap to release, on non-play-action dropbacks.
   npa_bats: Number of pass attempts batted down at the line of scrimmage on non-play-action dropbacks.
   npa_big_time_throws: Number of big-time throws on non-play-action dropbacks, per PFF's highest-value, highest-difficulty
     throw designation.
@@ -25713,11 +25713,11 @@ passing_concept:
   npa_yards: Passing yards gained on non-play-action dropbacks.
   npa_ypa: Yards gained per pass attempt on non-play-action dropbacks.
   pa_accuracy_percent: Percentage of aimed passes charted as accurate by PFF on play-action dropbacks.
-  pa_aimed_passes: Number of aimed passes (attempts excluding spikes and throwaways) on play-action dropbacks, as charted
-    by PFF.
+  pa_aimed_passes: Number of aimed passes (attempts excluding throwaways, spikes, batted passes and throws made while hit)
+    on play-action dropbacks, as charted by PFF.
   pa_attempts: Number of pass attempts on play-action dropbacks.
   pa_avg_depth_of_target: Average depth of target in air yards on play-action dropbacks.
-  pa_avg_time_to_throw: Average time from snap to release in seconds on play-action dropbacks.
+  pa_avg_time_to_throw: Average time to throw per dropback, in seconds from snap to release, on play-action dropbacks.
   pa_bats: Number of pass attempts batted down at the line of scrimmage on play-action dropbacks.
   pa_big_time_throws: Number of big-time throws on play-action dropbacks, per PFF's highest-value, highest-difficulty throw
     designation.
@@ -25771,10 +25771,11 @@ passing_concept:
   player_id: PFF player id (integer; matches the /players id and every player_id join key).
   position: PFF position code the player is listed at (e.g. QB, HB, FB, WR, TE, T, G, C, ED, DI, LB, CB, S, K, P).
   screen_accuracy_percent: Percentage of aimed passes charted as accurate by PFF on screen passes.
-  screen_aimed_passes: Number of aimed passes (attempts excluding spikes and throwaways) on screen passes, as charted by PFF.
+  screen_aimed_passes: Number of aimed passes (attempts excluding throwaways, spikes, batted passes and throws made while
+    hit) on screen passes, as charted by PFF.
   screen_attempts: Number of pass attempts on screen passes.
   screen_avg_depth_of_target: Average depth of target in air yards on screen passes.
-  screen_avg_time_to_throw: Average time from snap to release in seconds on screen passes.
+  screen_avg_time_to_throw: Average time to throw per dropback, in seconds from snap to release, on screen passes.
   screen_bats: Number of pass attempts batted down at the line of scrimmage on screen passes.
   screen_big_time_throws: Number of big-time throws on screen passes, per PFF's highest-value, highest-difficulty throw designation.
   screen_btt_rate: Big-time throws as a percentage of qualifying attempts on screen passes, per PFF charting.
@@ -25829,13 +25830,14 @@ passing_depth:
   base_attempts: Number of pass attempts across all splits, the baseline total for this facet.
   base_dropbacks: Number of dropbacks across all splits, the baseline total for this facet.
   behind_los_accuracy_percent: Percentage of aimed passes charted as accurate by PFF on throws behind the line of scrimmage.
-  behind_los_aimed_passes: Number of aimed passes (attempts excluding spikes and throwaways) on throws behind the line of
-    scrimmage, as charted by PFF.
+  behind_los_aimed_passes: Number of aimed passes (attempts excluding throwaways, spikes, batted passes and throws made while
+    hit) on throws behind the line of scrimmage, as charted by PFF.
   behind_los_attempts: Number of pass attempts on throws behind the line of scrimmage.
   behind_los_attempts_percent: Share of the player's total pass attempts that came on throws behind the line of scrimmage,
     expressed as a percentage.
   behind_los_avg_depth_of_target: Average depth of target in air yards on throws behind the line of scrimmage.
-  behind_los_avg_time_to_throw: Average time from snap to release in seconds on throws behind the line of scrimmage.
+  behind_los_avg_time_to_throw: Average time to throw per dropback, in seconds from snap to release, on throws behind the
+    line of scrimmage.
   behind_los_bats: Number of pass attempts batted down at the line of scrimmage on throws behind the line of scrimmage.
   behind_los_big_time_throws: Number of big-time throws on throws behind the line of scrimmage, per PFF's highest-value, highest-difficulty
     throw designation.
@@ -25873,15 +25875,15 @@ passing_depth:
   behind_los_ypa: Yards gained per pass attempt on throws behind the line of scrimmage.
   center_behind_los_accuracy_percent: Percentage of aimed passes charted as accurate by PFF on throws behind the line of scrimmage
     to the center of the field.
-  center_behind_los_aimed_passes: Number of aimed passes (attempts excluding spikes and throwaways) on throws behind the line
-    of scrimmage to the center of the field, as charted by PFF.
+  center_behind_los_aimed_passes: Number of aimed passes (attempts excluding throwaways, spikes, batted passes and throws
+    made while hit) on throws behind the line of scrimmage to the center of the field, as charted by PFF.
   center_behind_los_attempts: Number of pass attempts on throws behind the line of scrimmage to the center of the field.
   center_behind_los_attempts_percent: Share of the player's total pass attempts that came on throws behind the line of scrimmage
     to the center of the field, expressed as a percentage.
   center_behind_los_avg_depth_of_target: Average depth of target in air yards on throws behind the line of scrimmage to the
     center of the field.
-  center_behind_los_avg_time_to_throw: Average time from snap to release in seconds on throws behind the line of scrimmage
-    to the center of the field.
+  center_behind_los_avg_time_to_throw: Average time to throw per dropback, in seconds from snap to release, on throws behind
+    the line of scrimmage to the center of the field.
   center_behind_los_bats: Number of pass attempts batted down at the line of scrimmage on throws behind the line of scrimmage
     to the center of the field.
   center_behind_los_big_time_throws: Number of big-time throws on throws behind the line of scrimmage to the center of the
@@ -25931,15 +25933,15 @@ passing_depth:
   center_behind_los_ypa: Yards gained per pass attempt on throws behind the line of scrimmage to the center of the field.
   center_deep_accuracy_percent: Percentage of aimed passes charted as accurate by PFF on deep (20+ air yards) throws to the
     center of the field.
-  center_deep_aimed_passes: Number of aimed passes (attempts excluding spikes and throwaways) on deep (20+ air yards) throws
-    to the center of the field, as charted by PFF.
+  center_deep_aimed_passes: Number of aimed passes (attempts excluding throwaways, spikes, batted passes and throws made while
+    hit) on deep (20+ air yards) throws to the center of the field, as charted by PFF.
   center_deep_attempts: Number of pass attempts on deep (20+ air yards) throws to the center of the field.
   center_deep_attempts_percent: Share of the player's total pass attempts that came on deep (20+ air yards) throws to the
     center of the field, expressed as a percentage.
   center_deep_avg_depth_of_target: Average depth of target in air yards on deep (20+ air yards) throws to the center of the
     field.
-  center_deep_avg_time_to_throw: Average time from snap to release in seconds on deep (20+ air yards) throws to the center
-    of the field.
+  center_deep_avg_time_to_throw: Average time to throw per dropback, in seconds from snap to release, on deep (20+ air yards)
+    throws to the center of the field.
   center_deep_bats: Number of pass attempts batted down at the line of scrimmage on deep (20+ air yards) throws to the center
     of the field.
   center_deep_big_time_throws: Number of big-time throws on deep (20+ air yards) throws to the center of the field, per PFF's
@@ -25983,15 +25985,15 @@ passing_depth:
   center_deep_ypa: Yards gained per pass attempt on deep (20+ air yards) throws to the center of the field.
   center_medium_accuracy_percent: Percentage of aimed passes charted as accurate by PFF on medium (10-19 air yards) throws
     to the center of the field.
-  center_medium_aimed_passes: Number of aimed passes (attempts excluding spikes and throwaways) on medium (10-19 air yards)
-    throws to the center of the field, as charted by PFF.
+  center_medium_aimed_passes: Number of aimed passes (attempts excluding throwaways, spikes, batted passes and throws made
+    while hit) on medium (10-19 air yards) throws to the center of the field, as charted by PFF.
   center_medium_attempts: Number of pass attempts on medium (10-19 air yards) throws to the center of the field.
   center_medium_attempts_percent: Share of the player's total pass attempts that came on medium (10-19 air yards) throws to
     the center of the field, expressed as a percentage.
   center_medium_avg_depth_of_target: Average depth of target in air yards on medium (10-19 air yards) throws to the center
     of the field.
-  center_medium_avg_time_to_throw: Average time from snap to release in seconds on medium (10-19 air yards) throws to the
-    center of the field.
+  center_medium_avg_time_to_throw: Average time to throw per dropback, in seconds from snap to release, on medium (10-19 air
+    yards) throws to the center of the field.
   center_medium_bats: Number of pass attempts batted down at the line of scrimmage on medium (10-19 air yards) throws to the
     center of the field.
   center_medium_big_time_throws: Number of big-time throws on medium (10-19 air yards) throws to the center of the field,
@@ -26037,15 +26039,15 @@ passing_depth:
   center_medium_ypa: Yards gained per pass attempt on medium (10-19 air yards) throws to the center of the field.
   center_short_accuracy_percent: Percentage of aimed passes charted as accurate by PFF on short (0-9 air yards) throws to
     the center of the field.
-  center_short_aimed_passes: Number of aimed passes (attempts excluding spikes and throwaways) on short (0-9 air yards) throws
-    to the center of the field, as charted by PFF.
+  center_short_aimed_passes: Number of aimed passes (attempts excluding throwaways, spikes, batted passes and throws made
+    while hit) on short (0-9 air yards) throws to the center of the field, as charted by PFF.
   center_short_attempts: Number of pass attempts on short (0-9 air yards) throws to the center of the field.
   center_short_attempts_percent: Share of the player's total pass attempts that came on short (0-9 air yards) throws to the
     center of the field, expressed as a percentage.
   center_short_avg_depth_of_target: Average depth of target in air yards on short (0-9 air yards) throws to the center of
     the field.
-  center_short_avg_time_to_throw: Average time from snap to release in seconds on short (0-9 air yards) throws to the center
-    of the field.
+  center_short_avg_time_to_throw: Average time to throw per dropback, in seconds from snap to release, on short (0-9 air yards)
+    throws to the center of the field.
   center_short_bats: Number of pass attempts batted down at the line of scrimmage on short (0-9 air yards) throws to the center
     of the field.
   center_short_big_time_throws: Number of big-time throws on short (0-9 air yards) throws to the center of the field, per
@@ -26090,13 +26092,13 @@ passing_depth:
   center_short_ypa: Yards gained per pass attempt on short (0-9 air yards) throws to the center of the field.
   declined_penalties: Number of declined penalties committed by the player.
   deep_accuracy_percent: Percentage of aimed passes charted as accurate by PFF on deep (20+ air yards) throws.
-  deep_aimed_passes: Number of aimed passes (attempts excluding spikes and throwaways) on deep (20+ air yards) throws, as
-    charted by PFF.
+  deep_aimed_passes: Number of aimed passes (attempts excluding throwaways, spikes, batted passes and throws made while hit)
+    on deep (20+ air yards) throws, as charted by PFF.
   deep_attempts: Number of pass attempts on deep (20+ air yards) throws.
   deep_attempts_percent: Share of the player's total pass attempts that came on deep (20+ air yards) throws, expressed as
     a percentage.
   deep_avg_depth_of_target: Average depth of target in air yards on deep (20+ air yards) throws.
-  deep_avg_time_to_throw: Average time from snap to release in seconds on deep (20+ air yards) throws.
+  deep_avg_time_to_throw: Average time to throw per dropback, in seconds from snap to release, on deep (20+ air yards) throws.
   deep_bats: Number of pass attempts batted down at the line of scrimmage on deep (20+ air yards) throws.
   deep_big_time_throws: Number of big-time throws on deep (20+ air yards) throws, per PFF's highest-value, highest-difficulty
     throw designation.
@@ -26135,15 +26137,15 @@ passing_depth:
   jersey_number: Jersey number (string; zero-padded, e.g. "09").
   left_behind_los_accuracy_percent: Percentage of aimed passes charted as accurate by PFF on throws behind the line of scrimmage
     to the left side of the field.
-  left_behind_los_aimed_passes: Number of aimed passes (attempts excluding spikes and throwaways) on throws behind the line
-    of scrimmage to the left side of the field, as charted by PFF.
+  left_behind_los_aimed_passes: Number of aimed passes (attempts excluding throwaways, spikes, batted passes and throws made
+    while hit) on throws behind the line of scrimmage to the left side of the field, as charted by PFF.
   left_behind_los_attempts: Number of pass attempts on throws behind the line of scrimmage to the left side of the field.
   left_behind_los_attempts_percent: Share of the player's total pass attempts that came on throws behind the line of scrimmage
     to the left side of the field, expressed as a percentage.
   left_behind_los_avg_depth_of_target: Average depth of target in air yards on throws behind the line of scrimmage to the
     left side of the field.
-  left_behind_los_avg_time_to_throw: Average time from snap to release in seconds on throws behind the line of scrimmage to
-    the left side of the field.
+  left_behind_los_avg_time_to_throw: Average time to throw per dropback, in seconds from snap to release, on throws behind
+    the line of scrimmage to the left side of the field.
   left_behind_los_bats: Number of pass attempts batted down at the line of scrimmage on throws behind the line of scrimmage
     to the left side of the field.
   left_behind_los_big_time_throws: Number of big-time throws on throws behind the line of scrimmage to the left side of the
@@ -26194,15 +26196,15 @@ passing_depth:
   left_behind_los_ypa: Yards gained per pass attempt on throws behind the line of scrimmage to the left side of the field.
   left_deep_accuracy_percent: Percentage of aimed passes charted as accurate by PFF on deep (20+ air yards) throws to the
     left side of the field.
-  left_deep_aimed_passes: Number of aimed passes (attempts excluding spikes and throwaways) on deep (20+ air yards) throws
-    to the left side of the field, as charted by PFF.
+  left_deep_aimed_passes: Number of aimed passes (attempts excluding throwaways, spikes, batted passes and throws made while
+    hit) on deep (20+ air yards) throws to the left side of the field, as charted by PFF.
   left_deep_attempts: Number of pass attempts on deep (20+ air yards) throws to the left side of the field.
   left_deep_attempts_percent: Share of the player's total pass attempts that came on deep (20+ air yards) throws to the left
     side of the field, expressed as a percentage.
   left_deep_avg_depth_of_target: Average depth of target in air yards on deep (20+ air yards) throws to the left side of the
     field.
-  left_deep_avg_time_to_throw: Average time from snap to release in seconds on deep (20+ air yards) throws to the left side
-    of the field.
+  left_deep_avg_time_to_throw: Average time to throw per dropback, in seconds from snap to release, on deep (20+ air yards)
+    throws to the left side of the field.
   left_deep_bats: Number of pass attempts batted down at the line of scrimmage on deep (20+ air yards) throws to the left
     side of the field.
   left_deep_big_time_throws: Number of big-time throws on deep (20+ air yards) throws to the left side of the field, per PFF's
@@ -26247,15 +26249,15 @@ passing_depth:
   left_deep_ypa: Yards gained per pass attempt on deep (20+ air yards) throws to the left side of the field.
   left_medium_accuracy_percent: Percentage of aimed passes charted as accurate by PFF on medium (10-19 air yards) throws to
     the left side of the field.
-  left_medium_aimed_passes: Number of aimed passes (attempts excluding spikes and throwaways) on medium (10-19 air yards)
-    throws to the left side of the field, as charted by PFF.
+  left_medium_aimed_passes: Number of aimed passes (attempts excluding throwaways, spikes, batted passes and throws made while
+    hit) on medium (10-19 air yards) throws to the left side of the field, as charted by PFF.
   left_medium_attempts: Number of pass attempts on medium (10-19 air yards) throws to the left side of the field.
   left_medium_attempts_percent: Share of the player's total pass attempts that came on medium (10-19 air yards) throws to
     the left side of the field, expressed as a percentage.
   left_medium_avg_depth_of_target: Average depth of target in air yards on medium (10-19 air yards) throws to the left side
     of the field.
-  left_medium_avg_time_to_throw: Average time from snap to release in seconds on medium (10-19 air yards) throws to the left
-    side of the field.
+  left_medium_avg_time_to_throw: Average time to throw per dropback, in seconds from snap to release, on medium (10-19 air
+    yards) throws to the left side of the field.
   left_medium_bats: Number of pass attempts batted down at the line of scrimmage on medium (10-19 air yards) throws to the
     left side of the field.
   left_medium_big_time_throws: Number of big-time throws on medium (10-19 air yards) throws to the left side of the field,
@@ -26301,15 +26303,15 @@ passing_depth:
   left_medium_ypa: Yards gained per pass attempt on medium (10-19 air yards) throws to the left side of the field.
   left_short_accuracy_percent: Percentage of aimed passes charted as accurate by PFF on short (0-9 air yards) throws to the
     left side of the field.
-  left_short_aimed_passes: Number of aimed passes (attempts excluding spikes and throwaways) on short (0-9 air yards) throws
-    to the left side of the field, as charted by PFF.
+  left_short_aimed_passes: Number of aimed passes (attempts excluding throwaways, spikes, batted passes and throws made while
+    hit) on short (0-9 air yards) throws to the left side of the field, as charted by PFF.
   left_short_attempts: Number of pass attempts on short (0-9 air yards) throws to the left side of the field.
   left_short_attempts_percent: Share of the player's total pass attempts that came on short (0-9 air yards) throws to the
     left side of the field, expressed as a percentage.
   left_short_avg_depth_of_target: Average depth of target in air yards on short (0-9 air yards) throws to the left side of
     the field.
-  left_short_avg_time_to_throw: Average time from snap to release in seconds on short (0-9 air yards) throws to the left side
-    of the field.
+  left_short_avg_time_to_throw: Average time to throw per dropback, in seconds from snap to release, on short (0-9 air yards)
+    throws to the left side of the field.
   left_short_bats: Number of pass attempts batted down at the line of scrimmage on short (0-9 air yards) throws to the left
     side of the field.
   left_short_big_time_throws: Number of big-time throws on short (0-9 air yards) throws to the left side of the field, per
@@ -26353,13 +26355,14 @@ passing_depth:
   left_short_yards: Passing yards gained on short (0-9 air yards) throws to the left side of the field.
   left_short_ypa: Yards gained per pass attempt on short (0-9 air yards) throws to the left side of the field.
   medium_accuracy_percent: Percentage of aimed passes charted as accurate by PFF on medium (10-19 air yards) throws.
-  medium_aimed_passes: Number of aimed passes (attempts excluding spikes and throwaways) on medium (10-19 air yards) throws,
-    as charted by PFF.
+  medium_aimed_passes: Number of aimed passes (attempts excluding throwaways, spikes, batted passes and throws made while
+    hit) on medium (10-19 air yards) throws, as charted by PFF.
   medium_attempts: Number of pass attempts on medium (10-19 air yards) throws.
   medium_attempts_percent: Share of the player's total pass attempts that came on medium (10-19 air yards) throws, expressed
     as a percentage.
   medium_avg_depth_of_target: Average depth of target in air yards on medium (10-19 air yards) throws.
-  medium_avg_time_to_throw: Average time from snap to release in seconds on medium (10-19 air yards) throws.
+  medium_avg_time_to_throw: Average time to throw per dropback, in seconds from snap to release, on medium (10-19 air yards)
+    throws.
   medium_bats: Number of pass attempts batted down at the line of scrimmage on medium (10-19 air yards) throws.
   medium_big_time_throws: Number of big-time throws on medium (10-19 air yards) throws, per PFF's highest-value, highest-difficulty
     throw designation.
@@ -26400,15 +26403,15 @@ passing_depth:
   position: PFF position code the player is listed at (e.g. QB, HB, FB, WR, TE, T, G, C, ED, DI, LB, CB, S, K, P).
   right_behind_los_accuracy_percent: Percentage of aimed passes charted as accurate by PFF on throws behind the line of scrimmage
     to the right side of the field.
-  right_behind_los_aimed_passes: Number of aimed passes (attempts excluding spikes and throwaways) on throws behind the line
-    of scrimmage to the right side of the field, as charted by PFF.
+  right_behind_los_aimed_passes: Number of aimed passes (attempts excluding throwaways, spikes, batted passes and throws made
+    while hit) on throws behind the line of scrimmage to the right side of the field, as charted by PFF.
   right_behind_los_attempts: Number of pass attempts on throws behind the line of scrimmage to the right side of the field.
   right_behind_los_attempts_percent: Share of the player's total pass attempts that came on throws behind the line of scrimmage
     to the right side of the field, expressed as a percentage.
   right_behind_los_avg_depth_of_target: Average depth of target in air yards on throws behind the line of scrimmage to the
     right side of the field.
-  right_behind_los_avg_time_to_throw: Average time from snap to release in seconds on throws behind the line of scrimmage
-    to the right side of the field.
+  right_behind_los_avg_time_to_throw: Average time to throw per dropback, in seconds from snap to release, on throws behind
+    the line of scrimmage to the right side of the field.
   right_behind_los_bats: Number of pass attempts batted down at the line of scrimmage on throws behind the line of scrimmage
     to the right side of the field.
   right_behind_los_big_time_throws: Number of big-time throws on throws behind the line of scrimmage to the right side of
@@ -26462,15 +26465,15 @@ passing_depth:
   right_behind_los_ypa: Yards gained per pass attempt on throws behind the line of scrimmage to the right side of the field.
   right_deep_accuracy_percent: Percentage of aimed passes charted as accurate by PFF on deep (20+ air yards) throws to the
     right side of the field.
-  right_deep_aimed_passes: Number of aimed passes (attempts excluding spikes and throwaways) on deep (20+ air yards) throws
-    to the right side of the field, as charted by PFF.
+  right_deep_aimed_passes: Number of aimed passes (attempts excluding throwaways, spikes, batted passes and throws made while
+    hit) on deep (20+ air yards) throws to the right side of the field, as charted by PFF.
   right_deep_attempts: Number of pass attempts on deep (20+ air yards) throws to the right side of the field.
   right_deep_attempts_percent: Share of the player's total pass attempts that came on deep (20+ air yards) throws to the right
     side of the field, expressed as a percentage.
   right_deep_avg_depth_of_target: Average depth of target in air yards on deep (20+ air yards) throws to the right side of
     the field.
-  right_deep_avg_time_to_throw: Average time from snap to release in seconds on deep (20+ air yards) throws to the right side
-    of the field.
+  right_deep_avg_time_to_throw: Average time to throw per dropback, in seconds from snap to release, on deep (20+ air yards)
+    throws to the right side of the field.
   right_deep_bats: Number of pass attempts batted down at the line of scrimmage on deep (20+ air yards) throws to the right
     side of the field.
   right_deep_big_time_throws: Number of big-time throws on deep (20+ air yards) throws to the right side of the field, per
@@ -26515,15 +26518,15 @@ passing_depth:
   right_deep_ypa: Yards gained per pass attempt on deep (20+ air yards) throws to the right side of the field.
   right_medium_accuracy_percent: Percentage of aimed passes charted as accurate by PFF on medium (10-19 air yards) throws
     to the right side of the field.
-  right_medium_aimed_passes: Number of aimed passes (attempts excluding spikes and throwaways) on medium (10-19 air yards)
-    throws to the right side of the field, as charted by PFF.
+  right_medium_aimed_passes: Number of aimed passes (attempts excluding throwaways, spikes, batted passes and throws made
+    while hit) on medium (10-19 air yards) throws to the right side of the field, as charted by PFF.
   right_medium_attempts: Number of pass attempts on medium (10-19 air yards) throws to the right side of the field.
   right_medium_attempts_percent: Share of the player's total pass attempts that came on medium (10-19 air yards) throws to
     the right side of the field, expressed as a percentage.
   right_medium_avg_depth_of_target: Average depth of target in air yards on medium (10-19 air yards) throws to the right side
     of the field.
-  right_medium_avg_time_to_throw: Average time from snap to release in seconds on medium (10-19 air yards) throws to the right
-    side of the field.
+  right_medium_avg_time_to_throw: Average time to throw per dropback, in seconds from snap to release, on medium (10-19 air
+    yards) throws to the right side of the field.
   right_medium_bats: Number of pass attempts batted down at the line of scrimmage on medium (10-19 air yards) throws to the
     right side of the field.
   right_medium_big_time_throws: Number of big-time throws on medium (10-19 air yards) throws to the right side of the field,
@@ -26571,15 +26574,15 @@ passing_depth:
   right_medium_ypa: Yards gained per pass attempt on medium (10-19 air yards) throws to the right side of the field.
   right_short_accuracy_percent: Percentage of aimed passes charted as accurate by PFF on short (0-9 air yards) throws to the
     right side of the field.
-  right_short_aimed_passes: Number of aimed passes (attempts excluding spikes and throwaways) on short (0-9 air yards) throws
-    to the right side of the field, as charted by PFF.
+  right_short_aimed_passes: Number of aimed passes (attempts excluding throwaways, spikes, batted passes and throws made while
+    hit) on short (0-9 air yards) throws to the right side of the field, as charted by PFF.
   right_short_attempts: Number of pass attempts on short (0-9 air yards) throws to the right side of the field.
   right_short_attempts_percent: Share of the player's total pass attempts that came on short (0-9 air yards) throws to the
     right side of the field, expressed as a percentage.
   right_short_avg_depth_of_target: Average depth of target in air yards on short (0-9 air yards) throws to the right side
     of the field.
-  right_short_avg_time_to_throw: Average time from snap to release in seconds on short (0-9 air yards) throws to the right
-    side of the field.
+  right_short_avg_time_to_throw: Average time to throw per dropback, in seconds from snap to release, on short (0-9 air yards)
+    throws to the right side of the field.
   right_short_bats: Number of pass attempts batted down at the line of scrimmage on short (0-9 air yards) throws to the right
     side of the field.
   right_short_big_time_throws: Number of big-time throws on short (0-9 air yards) throws to the right side of the field, per
@@ -26623,13 +26626,13 @@ passing_depth:
   right_short_yards: Passing yards gained on short (0-9 air yards) throws to the right side of the field.
   right_short_ypa: Yards gained per pass attempt on short (0-9 air yards) throws to the right side of the field.
   short_accuracy_percent: Percentage of aimed passes charted as accurate by PFF on short (0-9 air yards) throws.
-  short_aimed_passes: Number of aimed passes (attempts excluding spikes and throwaways) on short (0-9 air yards) throws, as
-    charted by PFF.
+  short_aimed_passes: Number of aimed passes (attempts excluding throwaways, spikes, batted passes and throws made while hit)
+    on short (0-9 air yards) throws, as charted by PFF.
   short_attempts: Number of pass attempts on short (0-9 air yards) throws.
   short_attempts_percent: Share of the player's total pass attempts that came on short (0-9 air yards) throws, expressed as
     a percentage.
   short_avg_depth_of_target: Average depth of target in air yards on short (0-9 air yards) throws.
-  short_avg_time_to_throw: Average time from snap to release in seconds on short (0-9 air yards) throws.
+  short_avg_time_to_throw: Average time to throw per dropback, in seconds from snap to release, on short (0-9 air yards) throws.
   short_bats: Number of pass attempts batted down at the line of scrimmage on short (0-9 air yards) throws.
   short_big_time_throws: Number of big-time throws on short (0-9 air yards) throws, per PFF's highest-value, highest-difficulty
     throw designation.
@@ -26666,19 +26669,21 @@ passing_depth:
   team_name: Team abbreviation the player is credited to for the range.
 passing_detail_stats:
   accuracy_percent: Percentage of aimed passes charted as accurate by PFF.
-  aimed_passes: Number of aimed passes (attempts excluding spikes and throwaways), as charted by PFF.
+  aimed_passes: Number of aimed passes (attempts excluding throwaways, spikes, batted passes and throws made while hit), as
+    charted by PFF.
   attempts: Pass attempts thrown by the passer.
   avg_depth_of_target: Average depth of target in air yards.
-  avg_time_to_throw: Average time to throw, in seconds from snap to release, on the passer's attempts.
+  avg_time_to_throw: Average time to throw per dropback, in seconds from snap to release.
   bats: Number of pass attempts batted down at the line of scrimmage.
   behind_los_accuracy_percent: Percentage of aimed passes charted as accurate by PFF on throws behind the line of scrimmage.
-  behind_los_aimed_passes: Number of aimed passes (attempts excluding spikes and throwaways) on throws behind the line of
-    scrimmage, as charted by PFF.
+  behind_los_aimed_passes: Number of aimed passes (attempts excluding throwaways, spikes, batted passes and throws made while
+    hit) on throws behind the line of scrimmage, as charted by PFF.
   behind_los_attempts: Number of pass attempts on throws behind the line of scrimmage.
   behind_los_attempts_percent: Share of the player's total pass attempts that came on throws behind the line of scrimmage,
     expressed as a percentage.
   behind_los_avg_depth_of_target: Average depth of target in air yards on throws behind the line of scrimmage.
-  behind_los_avg_time_to_throw: Average time from snap to release in seconds on throws behind the line of scrimmage.
+  behind_los_avg_time_to_throw: Average time to throw per dropback, in seconds from snap to release, on throws behind the
+    line of scrimmage.
   behind_los_bats: Number of pass attempts batted down at the line of scrimmage on throws behind the line of scrimmage.
   behind_los_big_time_throws: Number of big-time throws on throws behind the line of scrimmage, per PFF's highest-value, highest-difficulty
     throw designation.
@@ -26716,10 +26721,11 @@ passing_detail_stats:
   behind_los_ypa: Yards gained per pass attempt on throws behind the line of scrimmage.
   big_time_throws: Number of big-time throws, per PFF's highest-value, highest-difficulty throw designation.
   blitz_accuracy_percent: Percentage of aimed passes charted as accurate by PFF when blitzed.
-  blitz_aimed_passes: Number of aimed passes (attempts excluding spikes and throwaways) when blitzed, as charted by PFF.
+  blitz_aimed_passes: Number of aimed passes (attempts excluding throwaways, spikes, batted passes and throws made while hit)
+    when blitzed, as charted by PFF.
   blitz_attempts: Number of pass attempts when blitzed.
   blitz_avg_depth_of_target: Average depth of target in air yards when blitzed.
-  blitz_avg_time_to_throw: Average time from snap to release in seconds when blitzed.
+  blitz_avg_time_to_throw: Average time to throw per dropback, in seconds from snap to release, when blitzed.
   blitz_bats: Number of pass attempts batted down at the line of scrimmage when blitzed.
   blitz_big_time_throws: Number of big-time throws when blitzed, per PFF's highest-value, highest-difficulty throw designation.
   blitz_btt_rate: Big-time throws as a percentage of qualifying attempts when blitzed, per PFF charting.
@@ -26761,15 +26767,15 @@ passing_detail_stats:
   btt_rate: Big-time throws as a percentage of qualifying attempts, per PFF charting.
   center_behind_los_accuracy_percent: Percentage of aimed passes charted as accurate by PFF on throws behind the line of scrimmage
     to the center of the field.
-  center_behind_los_aimed_passes: Number of aimed passes (attempts excluding spikes and throwaways) on throws behind the line
-    of scrimmage to the center of the field, as charted by PFF.
+  center_behind_los_aimed_passes: Number of aimed passes (attempts excluding throwaways, spikes, batted passes and throws
+    made while hit) on throws behind the line of scrimmage to the center of the field, as charted by PFF.
   center_behind_los_attempts: Number of pass attempts on throws behind the line of scrimmage to the center of the field.
   center_behind_los_attempts_percent: Share of the player's total pass attempts that came on throws behind the line of scrimmage
     to the center of the field, expressed as a percentage.
   center_behind_los_avg_depth_of_target: Average depth of target in air yards on throws behind the line of scrimmage to the
     center of the field.
-  center_behind_los_avg_time_to_throw: Average time from snap to release in seconds on throws behind the line of scrimmage
-    to the center of the field.
+  center_behind_los_avg_time_to_throw: Average time to throw per dropback, in seconds from snap to release, on throws behind
+    the line of scrimmage to the center of the field.
   center_behind_los_bats: Number of pass attempts batted down at the line of scrimmage on throws behind the line of scrimmage
     to the center of the field.
   center_behind_los_big_time_throws: Number of big-time throws on throws behind the line of scrimmage to the center of the
@@ -26819,15 +26825,15 @@ passing_detail_stats:
   center_behind_los_ypa: Yards gained per pass attempt on throws behind the line of scrimmage to the center of the field.
   center_deep_accuracy_percent: Percentage of aimed passes charted as accurate by PFF on deep (20+ air yards) throws to the
     center of the field.
-  center_deep_aimed_passes: Number of aimed passes (attempts excluding spikes and throwaways) on deep (20+ air yards) throws
-    to the center of the field, as charted by PFF.
+  center_deep_aimed_passes: Number of aimed passes (attempts excluding throwaways, spikes, batted passes and throws made while
+    hit) on deep (20+ air yards) throws to the center of the field, as charted by PFF.
   center_deep_attempts: Number of pass attempts on deep (20+ air yards) throws to the center of the field.
   center_deep_attempts_percent: Share of the player's total pass attempts that came on deep (20+ air yards) throws to the
     center of the field, expressed as a percentage.
   center_deep_avg_depth_of_target: Average depth of target in air yards on deep (20+ air yards) throws to the center of the
     field.
-  center_deep_avg_time_to_throw: Average time from snap to release in seconds on deep (20+ air yards) throws to the center
-    of the field.
+  center_deep_avg_time_to_throw: Average time to throw per dropback, in seconds from snap to release, on deep (20+ air yards)
+    throws to the center of the field.
   center_deep_bats: Number of pass attempts batted down at the line of scrimmage on deep (20+ air yards) throws to the center
     of the field.
   center_deep_big_time_throws: Number of big-time throws on deep (20+ air yards) throws to the center of the field, per PFF's
@@ -26871,15 +26877,15 @@ passing_detail_stats:
   center_deep_ypa: Yards gained per pass attempt on deep (20+ air yards) throws to the center of the field.
   center_medium_accuracy_percent: Percentage of aimed passes charted as accurate by PFF on medium (10-19 air yards) throws
     to the center of the field.
-  center_medium_aimed_passes: Number of aimed passes (attempts excluding spikes and throwaways) on medium (10-19 air yards)
-    throws to the center of the field, as charted by PFF.
+  center_medium_aimed_passes: Number of aimed passes (attempts excluding throwaways, spikes, batted passes and throws made
+    while hit) on medium (10-19 air yards) throws to the center of the field, as charted by PFF.
   center_medium_attempts: Number of pass attempts on medium (10-19 air yards) throws to the center of the field.
   center_medium_attempts_percent: Share of the player's total pass attempts that came on medium (10-19 air yards) throws to
     the center of the field, expressed as a percentage.
   center_medium_avg_depth_of_target: Average depth of target in air yards on medium (10-19 air yards) throws to the center
     of the field.
-  center_medium_avg_time_to_throw: Average time from snap to release in seconds on medium (10-19 air yards) throws to the
-    center of the field.
+  center_medium_avg_time_to_throw: Average time to throw per dropback, in seconds from snap to release, on medium (10-19 air
+    yards) throws to the center of the field.
   center_medium_bats: Number of pass attempts batted down at the line of scrimmage on medium (10-19 air yards) throws to the
     center of the field.
   center_medium_big_time_throws: Number of big-time throws on medium (10-19 air yards) throws to the center of the field,
@@ -26925,15 +26931,15 @@ passing_detail_stats:
   center_medium_ypa: Yards gained per pass attempt on medium (10-19 air yards) throws to the center of the field.
   center_short_accuracy_percent: Percentage of aimed passes charted as accurate by PFF on short (0-9 air yards) throws to
     the center of the field.
-  center_short_aimed_passes: Number of aimed passes (attempts excluding spikes and throwaways) on short (0-9 air yards) throws
-    to the center of the field, as charted by PFF.
+  center_short_aimed_passes: Number of aimed passes (attempts excluding throwaways, spikes, batted passes and throws made
+    while hit) on short (0-9 air yards) throws to the center of the field, as charted by PFF.
   center_short_attempts: Number of pass attempts on short (0-9 air yards) throws to the center of the field.
   center_short_attempts_percent: Share of the player's total pass attempts that came on short (0-9 air yards) throws to the
     center of the field, expressed as a percentage.
   center_short_avg_depth_of_target: Average depth of target in air yards on short (0-9 air yards) throws to the center of
     the field.
-  center_short_avg_time_to_throw: Average time from snap to release in seconds on short (0-9 air yards) throws to the center
-    of the field.
+  center_short_avg_time_to_throw: Average time to throw per dropback, in seconds from snap to release, on short (0-9 air yards)
+    throws to the center of the field.
   center_short_bats: Number of pass attempts batted down at the line of scrimmage on short (0-9 air yards) throws to the center
     of the field.
   center_short_big_time_throws: Number of big-time throws on short (0-9 air yards) throws to the center of the field, per
@@ -26981,13 +26987,13 @@ passing_detail_stats:
   completion_percent: Percentage of pass attempts completed.
   completions: Completed passes by the passer.
   deep_accuracy_percent: Percentage of aimed passes charted as accurate by PFF on deep (20+ air yards) throws.
-  deep_aimed_passes: Number of aimed passes (attempts excluding spikes and throwaways) on deep (20+ air yards) throws, as
-    charted by PFF.
+  deep_aimed_passes: Number of aimed passes (attempts excluding throwaways, spikes, batted passes and throws made while hit)
+    on deep (20+ air yards) throws, as charted by PFF.
   deep_attempts: Number of pass attempts on deep (20+ air yards) throws.
   deep_attempts_percent: Share of the player's total pass attempts that came on deep (20+ air yards) throws, expressed as
     a percentage.
   deep_avg_depth_of_target: Average depth of target in air yards on deep (20+ air yards) throws.
-  deep_avg_time_to_throw: Average time from snap to release in seconds on deep (20+ air yards) throws.
+  deep_avg_time_to_throw: Average time to throw per dropback, in seconds from snap to release, on deep (20+ air yards) throws.
   deep_bats: Number of pass attempts batted down at the line of scrimmage on deep (20+ air yards) throws.
   deep_big_time_throws: Number of big-time throws on deep (20+ air yards) throws, per PFF's highest-value, highest-difficulty
     throw designation.
@@ -27038,15 +27044,15 @@ passing_detail_stats:
   jersey_number: Jersey number (string; zero-padded, e.g. "09").
   left_behind_los_accuracy_percent: Percentage of aimed passes charted as accurate by PFF on throws behind the line of scrimmage
     to the left side of the field.
-  left_behind_los_aimed_passes: Number of aimed passes (attempts excluding spikes and throwaways) on throws behind the line
-    of scrimmage to the left side of the field, as charted by PFF.
+  left_behind_los_aimed_passes: Number of aimed passes (attempts excluding throwaways, spikes, batted passes and throws made
+    while hit) on throws behind the line of scrimmage to the left side of the field, as charted by PFF.
   left_behind_los_attempts: Number of pass attempts on throws behind the line of scrimmage to the left side of the field.
   left_behind_los_attempts_percent: Share of the player's total pass attempts that came on throws behind the line of scrimmage
     to the left side of the field, expressed as a percentage.
   left_behind_los_avg_depth_of_target: Average depth of target in air yards on throws behind the line of scrimmage to the
     left side of the field.
-  left_behind_los_avg_time_to_throw: Average time from snap to release in seconds on throws behind the line of scrimmage to
-    the left side of the field.
+  left_behind_los_avg_time_to_throw: Average time to throw per dropback, in seconds from snap to release, on throws behind
+    the line of scrimmage to the left side of the field.
   left_behind_los_bats: Number of pass attempts batted down at the line of scrimmage on throws behind the line of scrimmage
     to the left side of the field.
   left_behind_los_big_time_throws: Number of big-time throws on throws behind the line of scrimmage to the left side of the
@@ -27097,15 +27103,15 @@ passing_detail_stats:
   left_behind_los_ypa: Yards gained per pass attempt on throws behind the line of scrimmage to the left side of the field.
   left_deep_accuracy_percent: Percentage of aimed passes charted as accurate by PFF on deep (20+ air yards) throws to the
     left side of the field.
-  left_deep_aimed_passes: Number of aimed passes (attempts excluding spikes and throwaways) on deep (20+ air yards) throws
-    to the left side of the field, as charted by PFF.
+  left_deep_aimed_passes: Number of aimed passes (attempts excluding throwaways, spikes, batted passes and throws made while
+    hit) on deep (20+ air yards) throws to the left side of the field, as charted by PFF.
   left_deep_attempts: Number of pass attempts on deep (20+ air yards) throws to the left side of the field.
   left_deep_attempts_percent: Share of the player's total pass attempts that came on deep (20+ air yards) throws to the left
     side of the field, expressed as a percentage.
   left_deep_avg_depth_of_target: Average depth of target in air yards on deep (20+ air yards) throws to the left side of the
     field.
-  left_deep_avg_time_to_throw: Average time from snap to release in seconds on deep (20+ air yards) throws to the left side
-    of the field.
+  left_deep_avg_time_to_throw: Average time to throw per dropback, in seconds from snap to release, on deep (20+ air yards)
+    throws to the left side of the field.
   left_deep_bats: Number of pass attempts batted down at the line of scrimmage on deep (20+ air yards) throws to the left
     side of the field.
   left_deep_big_time_throws: Number of big-time throws on deep (20+ air yards) throws to the left side of the field, per PFF's
@@ -27150,15 +27156,15 @@ passing_detail_stats:
   left_deep_ypa: Yards gained per pass attempt on deep (20+ air yards) throws to the left side of the field.
   left_medium_accuracy_percent: Percentage of aimed passes charted as accurate by PFF on medium (10-19 air yards) throws to
     the left side of the field.
-  left_medium_aimed_passes: Number of aimed passes (attempts excluding spikes and throwaways) on medium (10-19 air yards)
-    throws to the left side of the field, as charted by PFF.
+  left_medium_aimed_passes: Number of aimed passes (attempts excluding throwaways, spikes, batted passes and throws made while
+    hit) on medium (10-19 air yards) throws to the left side of the field, as charted by PFF.
   left_medium_attempts: Number of pass attempts on medium (10-19 air yards) throws to the left side of the field.
   left_medium_attempts_percent: Share of the player's total pass attempts that came on medium (10-19 air yards) throws to
     the left side of the field, expressed as a percentage.
   left_medium_avg_depth_of_target: Average depth of target in air yards on medium (10-19 air yards) throws to the left side
     of the field.
-  left_medium_avg_time_to_throw: Average time from snap to release in seconds on medium (10-19 air yards) throws to the left
-    side of the field.
+  left_medium_avg_time_to_throw: Average time to throw per dropback, in seconds from snap to release, on medium (10-19 air
+    yards) throws to the left side of the field.
   left_medium_bats: Number of pass attempts batted down at the line of scrimmage on medium (10-19 air yards) throws to the
     left side of the field.
   left_medium_big_time_throws: Number of big-time throws on medium (10-19 air yards) throws to the left side of the field,
@@ -27204,15 +27210,15 @@ passing_detail_stats:
   left_medium_ypa: Yards gained per pass attempt on medium (10-19 air yards) throws to the left side of the field.
   left_short_accuracy_percent: Percentage of aimed passes charted as accurate by PFF on short (0-9 air yards) throws to the
     left side of the field.
-  left_short_aimed_passes: Number of aimed passes (attempts excluding spikes and throwaways) on short (0-9 air yards) throws
-    to the left side of the field, as charted by PFF.
+  left_short_aimed_passes: Number of aimed passes (attempts excluding throwaways, spikes, batted passes and throws made while
+    hit) on short (0-9 air yards) throws to the left side of the field, as charted by PFF.
   left_short_attempts: Number of pass attempts on short (0-9 air yards) throws to the left side of the field.
   left_short_attempts_percent: Share of the player's total pass attempts that came on short (0-9 air yards) throws to the
     left side of the field, expressed as a percentage.
   left_short_avg_depth_of_target: Average depth of target in air yards on short (0-9 air yards) throws to the left side of
     the field.
-  left_short_avg_time_to_throw: Average time from snap to release in seconds on short (0-9 air yards) throws to the left side
-    of the field.
+  left_short_avg_time_to_throw: Average time to throw per dropback, in seconds from snap to release, on short (0-9 air yards)
+    throws to the left side of the field.
   left_short_bats: Number of pass attempts batted down at the line of scrimmage on short (0-9 air yards) throws to the left
     side of the field.
   left_short_big_time_throws: Number of big-time throws on short (0-9 air yards) throws to the left side of the field, per
@@ -27256,13 +27262,14 @@ passing_detail_stats:
   left_short_yards: Passing yards gained on short (0-9 air yards) throws to the left side of the field.
   left_short_ypa: Yards gained per pass attempt on short (0-9 air yards) throws to the left side of the field.
   medium_accuracy_percent: Percentage of aimed passes charted as accurate by PFF on medium (10-19 air yards) throws.
-  medium_aimed_passes: Number of aimed passes (attempts excluding spikes and throwaways) on medium (10-19 air yards) throws,
-    as charted by PFF.
+  medium_aimed_passes: Number of aimed passes (attempts excluding throwaways, spikes, batted passes and throws made while
+    hit) on medium (10-19 air yards) throws, as charted by PFF.
   medium_attempts: Number of pass attempts on medium (10-19 air yards) throws.
   medium_attempts_percent: Share of the player's total pass attempts that came on medium (10-19 air yards) throws, expressed
     as a percentage.
   medium_avg_depth_of_target: Average depth of target in air yards on medium (10-19 air yards) throws.
-  medium_avg_time_to_throw: Average time from snap to release in seconds on medium (10-19 air yards) throws.
+  medium_avg_time_to_throw: Average time to throw per dropback, in seconds from snap to release, on medium (10-19 air yards)
+    throws.
   medium_bats: Number of pass attempts batted down at the line of scrimmage on medium (10-19 air yards) throws.
   medium_big_time_throws: Number of big-time throws on medium (10-19 air yards) throws, per PFF's highest-value, highest-difficulty
     throw designation.
@@ -27297,11 +27304,11 @@ passing_detail_stats:
   medium_yards: Passing yards gained on medium (10-19 air yards) throws.
   medium_ypa: Yards gained per pass attempt on medium (10-19 air yards) throws.
   no_blitz_accuracy_percent: Percentage of aimed passes charted as accurate by PFF when not blitzed.
-  no_blitz_aimed_passes: Number of aimed passes (attempts excluding spikes and throwaways) when not blitzed, as charted by
-    PFF.
+  no_blitz_aimed_passes: Number of aimed passes (attempts excluding throwaways, spikes, batted passes and throws made while
+    hit) when not blitzed, as charted by PFF.
   no_blitz_attempts: Number of pass attempts when not blitzed.
   no_blitz_avg_depth_of_target: Average depth of target in air yards when not blitzed.
-  no_blitz_avg_time_to_throw: Average time from snap to release in seconds when not blitzed.
+  no_blitz_avg_time_to_throw: Average time to throw per dropback, in seconds from snap to release, when not blitzed.
   no_blitz_bats: Number of pass attempts batted down at the line of scrimmage when not blitzed.
   no_blitz_big_time_throws: Number of big-time throws when not blitzed, per PFF's highest-value, highest-difficulty throw
     designation.
@@ -27343,11 +27350,12 @@ passing_detail_stats:
   no_blitz_yards: Passing yards gained when not blitzed.
   no_blitz_ypa: Yards gained per pass attempt when not blitzed.
   no_pressure_accuracy_percent: Percentage of aimed passes charted as accurate by PFF from a clean pocket (no pressure).
-  no_pressure_aimed_passes: Number of aimed passes (attempts excluding spikes and throwaways) from a clean pocket (no pressure),
-    as charted by PFF.
+  no_pressure_aimed_passes: Number of aimed passes (attempts excluding throwaways, spikes, batted passes and throws made while
+    hit) from a clean pocket (no pressure), as charted by PFF.
   no_pressure_attempts: Number of pass attempts from a clean pocket (no pressure).
   no_pressure_avg_depth_of_target: Average depth of target in air yards from a clean pocket (no pressure).
-  no_pressure_avg_time_to_throw: Average time from snap to release in seconds from a clean pocket (no pressure).
+  no_pressure_avg_time_to_throw: Average time to throw per dropback, in seconds from snap to release, from a clean pocket
+    (no pressure).
   no_pressure_bats: Number of pass attempts batted down at the line of scrimmage from a clean pocket (no pressure).
   no_pressure_big_time_throws: Number of big-time throws from a clean pocket (no pressure), per PFF's highest-value, highest-difficulty
     throw designation.
@@ -27396,11 +27404,11 @@ passing_detail_stats:
   no_pressure_yards: Passing yards gained from a clean pocket (no pressure).
   no_pressure_ypa: Yards gained per pass attempt from a clean pocket (no pressure).
   no_screen_accuracy_percent: Percentage of aimed passes charted as accurate by PFF excluding screen passes.
-  no_screen_aimed_passes: Number of aimed passes (attempts excluding spikes and throwaways) excluding screen passes, as charted
-    by PFF.
+  no_screen_aimed_passes: Number of aimed passes (attempts excluding throwaways, spikes, batted passes and throws made while
+    hit) excluding screen passes, as charted by PFF.
   no_screen_attempts: Number of pass attempts excluding screen passes.
   no_screen_avg_depth_of_target: Average depth of target in air yards excluding screen passes.
-  no_screen_avg_time_to_throw: Average time from snap to release in seconds excluding screen passes.
+  no_screen_avg_time_to_throw: Average time to throw per dropback, in seconds from snap to release, excluding screen passes.
   no_screen_bats: Number of pass attempts batted down at the line of scrimmage excluding screen passes.
   no_screen_big_time_throws: Number of big-time throws excluding screen passes, per PFF's highest-value, highest-difficulty
     throw designation.
@@ -27448,11 +27456,11 @@ passing_detail_stats:
   no_screen_yards: Passing yards gained excluding screen passes.
   no_screen_ypa: Yards gained per pass attempt excluding screen passes.
   npa_accuracy_percent: Percentage of aimed passes charted as accurate by PFF on non-play-action dropbacks.
-  npa_aimed_passes: Number of aimed passes (attempts excluding spikes and throwaways) on non-play-action dropbacks, as charted
-    by PFF.
+  npa_aimed_passes: Number of aimed passes (attempts excluding throwaways, spikes, batted passes and throws made while hit)
+    on non-play-action dropbacks, as charted by PFF.
   npa_attempts: Number of pass attempts on non-play-action dropbacks.
   npa_avg_depth_of_target: Average depth of target in air yards on non-play-action dropbacks.
-  npa_avg_time_to_throw: Average time from snap to release in seconds on non-play-action dropbacks.
+  npa_avg_time_to_throw: Average time to throw per dropback, in seconds from snap to release, on non-play-action dropbacks.
   npa_bats: Number of pass attempts batted down at the line of scrimmage on non-play-action dropbacks.
   npa_big_time_throws: Number of big-time throws on non-play-action dropbacks, per PFF's highest-value, highest-difficulty
     throw designation.
@@ -27499,11 +27507,11 @@ passing_detail_stats:
   npa_yards: Passing yards gained on non-play-action dropbacks.
   npa_ypa: Yards gained per pass attempt on non-play-action dropbacks.
   pa_accuracy_percent: Percentage of aimed passes charted as accurate by PFF on play-action dropbacks.
-  pa_aimed_passes: Number of aimed passes (attempts excluding spikes and throwaways) on play-action dropbacks, as charted
-    by PFF.
+  pa_aimed_passes: Number of aimed passes (attempts excluding throwaways, spikes, batted passes and throws made while hit)
+    on play-action dropbacks, as charted by PFF.
   pa_attempts: Number of pass attempts on play-action dropbacks.
   pa_avg_depth_of_target: Average depth of target in air yards on play-action dropbacks.
-  pa_avg_time_to_throw: Average time from snap to release in seconds on play-action dropbacks.
+  pa_avg_time_to_throw: Average time to throw per dropback, in seconds from snap to release, on play-action dropbacks.
   pa_bats: Number of pass attempts batted down at the line of scrimmage on play-action dropbacks.
   pa_big_time_throws: Number of big-time throws on play-action dropbacks, per PFF's highest-value, highest-difficulty throw
     designation.
@@ -27554,11 +27562,11 @@ passing_detail_stats:
   position: PFF position code the player is listed at (e.g. QB, HB, FB, WR, TE, T, G, C, ED, DI, LB, CB, S, K, P).
   positive_epa_percent: Percentage of dropbacks with positive expected points added.
   pressure_accuracy_percent: Percentage of aimed passes charted as accurate by PFF when under pressure.
-  pressure_aimed_passes: Number of aimed passes (attempts excluding spikes and throwaways) when under pressure, as charted
-    by PFF.
+  pressure_aimed_passes: Number of aimed passes (attempts excluding throwaways, spikes, batted passes and throws made while
+    hit) when under pressure, as charted by PFF.
   pressure_attempts: Number of pass attempts when under pressure.
   pressure_avg_depth_of_target: Average depth of target in air yards when under pressure.
-  pressure_avg_time_to_throw: Average time from snap to release in seconds when under pressure.
+  pressure_avg_time_to_throw: Average time to throw per dropback, in seconds from snap to release, when under pressure.
   pressure_bats: Number of pass attempts batted down at the line of scrimmage when under pressure.
   pressure_big_time_throws: Number of big-time throws when under pressure, per PFF's highest-value, highest-difficulty throw
     designation.
@@ -27604,15 +27612,15 @@ passing_detail_stats:
   qb_rating: Traditional NFL passer rating.
   right_behind_los_accuracy_percent: Percentage of aimed passes charted as accurate by PFF on throws behind the line of scrimmage
     to the right side of the field.
-  right_behind_los_aimed_passes: Number of aimed passes (attempts excluding spikes and throwaways) on throws behind the line
-    of scrimmage to the right side of the field, as charted by PFF.
+  right_behind_los_aimed_passes: Number of aimed passes (attempts excluding throwaways, spikes, batted passes and throws made
+    while hit) on throws behind the line of scrimmage to the right side of the field, as charted by PFF.
   right_behind_los_attempts: Number of pass attempts on throws behind the line of scrimmage to the right side of the field.
   right_behind_los_attempts_percent: Share of the player's total pass attempts that came on throws behind the line of scrimmage
     to the right side of the field, expressed as a percentage.
   right_behind_los_avg_depth_of_target: Average depth of target in air yards on throws behind the line of scrimmage to the
     right side of the field.
-  right_behind_los_avg_time_to_throw: Average time from snap to release in seconds on throws behind the line of scrimmage
-    to the right side of the field.
+  right_behind_los_avg_time_to_throw: Average time to throw per dropback, in seconds from snap to release, on throws behind
+    the line of scrimmage to the right side of the field.
   right_behind_los_bats: Number of pass attempts batted down at the line of scrimmage on throws behind the line of scrimmage
     to the right side of the field.
   right_behind_los_big_time_throws: Number of big-time throws on throws behind the line of scrimmage to the right side of
@@ -27666,15 +27674,15 @@ passing_detail_stats:
   right_behind_los_ypa: Yards gained per pass attempt on throws behind the line of scrimmage to the right side of the field.
   right_deep_accuracy_percent: Percentage of aimed passes charted as accurate by PFF on deep (20+ air yards) throws to the
     right side of the field.
-  right_deep_aimed_passes: Number of aimed passes (attempts excluding spikes and throwaways) on deep (20+ air yards) throws
-    to the right side of the field, as charted by PFF.
+  right_deep_aimed_passes: Number of aimed passes (attempts excluding throwaways, spikes, batted passes and throws made while
+    hit) on deep (20+ air yards) throws to the right side of the field, as charted by PFF.
   right_deep_attempts: Number of pass attempts on deep (20+ air yards) throws to the right side of the field.
   right_deep_attempts_percent: Share of the player's total pass attempts that came on deep (20+ air yards) throws to the right
     side of the field, expressed as a percentage.
   right_deep_avg_depth_of_target: Average depth of target in air yards on deep (20+ air yards) throws to the right side of
     the field.
-  right_deep_avg_time_to_throw: Average time from snap to release in seconds on deep (20+ air yards) throws to the right side
-    of the field.
+  right_deep_avg_time_to_throw: Average time to throw per dropback, in seconds from snap to release, on deep (20+ air yards)
+    throws to the right side of the field.
   right_deep_bats: Number of pass attempts batted down at the line of scrimmage on deep (20+ air yards) throws to the right
     side of the field.
   right_deep_big_time_throws: Number of big-time throws on deep (20+ air yards) throws to the right side of the field, per
@@ -27719,15 +27727,15 @@ passing_detail_stats:
   right_deep_ypa: Yards gained per pass attempt on deep (20+ air yards) throws to the right side of the field.
   right_medium_accuracy_percent: Percentage of aimed passes charted as accurate by PFF on medium (10-19 air yards) throws
     to the right side of the field.
-  right_medium_aimed_passes: Number of aimed passes (attempts excluding spikes and throwaways) on medium (10-19 air yards)
-    throws to the right side of the field, as charted by PFF.
+  right_medium_aimed_passes: Number of aimed passes (attempts excluding throwaways, spikes, batted passes and throws made
+    while hit) on medium (10-19 air yards) throws to the right side of the field, as charted by PFF.
   right_medium_attempts: Number of pass attempts on medium (10-19 air yards) throws to the right side of the field.
   right_medium_attempts_percent: Share of the player's total pass attempts that came on medium (10-19 air yards) throws to
     the right side of the field, expressed as a percentage.
   right_medium_avg_depth_of_target: Average depth of target in air yards on medium (10-19 air yards) throws to the right side
     of the field.
-  right_medium_avg_time_to_throw: Average time from snap to release in seconds on medium (10-19 air yards) throws to the right
-    side of the field.
+  right_medium_avg_time_to_throw: Average time to throw per dropback, in seconds from snap to release, on medium (10-19 air
+    yards) throws to the right side of the field.
   right_medium_bats: Number of pass attempts batted down at the line of scrimmage on medium (10-19 air yards) throws to the
     right side of the field.
   right_medium_big_time_throws: Number of big-time throws on medium (10-19 air yards) throws to the right side of the field,
@@ -27775,15 +27783,15 @@ passing_detail_stats:
   right_medium_ypa: Yards gained per pass attempt on medium (10-19 air yards) throws to the right side of the field.
   right_short_accuracy_percent: Percentage of aimed passes charted as accurate by PFF on short (0-9 air yards) throws to the
     right side of the field.
-  right_short_aimed_passes: Number of aimed passes (attempts excluding spikes and throwaways) on short (0-9 air yards) throws
-    to the right side of the field, as charted by PFF.
+  right_short_aimed_passes: Number of aimed passes (attempts excluding throwaways, spikes, batted passes and throws made while
+    hit) on short (0-9 air yards) throws to the right side of the field, as charted by PFF.
   right_short_attempts: Number of pass attempts on short (0-9 air yards) throws to the right side of the field.
   right_short_attempts_percent: Share of the player's total pass attempts that came on short (0-9 air yards) throws to the
     right side of the field, expressed as a percentage.
   right_short_avg_depth_of_target: Average depth of target in air yards on short (0-9 air yards) throws to the right side
     of the field.
-  right_short_avg_time_to_throw: Average time from snap to release in seconds on short (0-9 air yards) throws to the right
-    side of the field.
+  right_short_avg_time_to_throw: Average time to throw per dropback, in seconds from snap to release, on short (0-9 air yards)
+    throws to the right side of the field.
   right_short_bats: Number of pass attempts batted down at the line of scrimmage on short (0-9 air yards) throws to the right
     side of the field.
   right_short_big_time_throws: Number of big-time throws on short (0-9 air yards) throws to the right side of the field, per
@@ -27830,10 +27838,11 @@ passing_detail_stats:
   sacks: Times the passer was sacked.
   scrambles: Number of scrambles.
   screen_accuracy_percent: Percentage of aimed passes charted as accurate by PFF on screen passes.
-  screen_aimed_passes: Number of aimed passes (attempts excluding spikes and throwaways) on screen passes, as charted by PFF.
+  screen_aimed_passes: Number of aimed passes (attempts excluding throwaways, spikes, batted passes and throws made while
+    hit) on screen passes, as charted by PFF.
   screen_attempts: Number of pass attempts on screen passes.
   screen_avg_depth_of_target: Average depth of target in air yards on screen passes.
-  screen_avg_time_to_throw: Average time from snap to release in seconds on screen passes.
+  screen_avg_time_to_throw: Average time to throw per dropback, in seconds from snap to release, on screen passes.
   screen_bats: Number of pass attempts batted down at the line of scrimmage on screen passes.
   screen_big_time_throws: Number of big-time throws on screen passes, per PFF's highest-value, highest-difficulty throw designation.
   screen_btt_rate: Big-time throws as a percentage of qualifying attempts on screen passes, per PFF charting.
@@ -27877,13 +27886,13 @@ passing_detail_stats:
   screen_yards: Passing yards gained on screen passes.
   screen_ypa: Yards gained per pass attempt on screen passes.
   short_accuracy_percent: Percentage of aimed passes charted as accurate by PFF on short (0-9 air yards) throws.
-  short_aimed_passes: Number of aimed passes (attempts excluding spikes and throwaways) on short (0-9 air yards) throws, as
-    charted by PFF.
+  short_aimed_passes: Number of aimed passes (attempts excluding throwaways, spikes, batted passes and throws made while hit)
+    on short (0-9 air yards) throws, as charted by PFF.
   short_attempts: Number of pass attempts on short (0-9 air yards) throws.
   short_attempts_percent: Share of the player's total pass attempts that came on short (0-9 air yards) throws, expressed as
     a percentage.
   short_avg_depth_of_target: Average depth of target in air yards on short (0-9 air yards) throws.
-  short_avg_time_to_throw: Average time from snap to release in seconds on short (0-9 air yards) throws.
+  short_avg_time_to_throw: Average time to throw per dropback, in seconds from snap to release, on short (0-9 air yards) throws.
   short_bats: Number of pass attempts batted down at the line of scrimmage on short (0-9 air yards) throws.
   short_big_time_throws: Number of big-time throws on short (0-9 air yards) throws, per PFF's highest-value, highest-difficulty
     throw designation.
@@ -27930,10 +27939,11 @@ passing_detail_stats:
 passing_pressure:
   base_dropbacks: Number of dropbacks across all splits, the baseline total for this facet.
   blitz_accuracy_percent: Percentage of aimed passes charted as accurate by PFF when blitzed.
-  blitz_aimed_passes: Number of aimed passes (attempts excluding spikes and throwaways) when blitzed, as charted by PFF.
+  blitz_aimed_passes: Number of aimed passes (attempts excluding throwaways, spikes, batted passes and throws made while hit)
+    when blitzed, as charted by PFF.
   blitz_attempts: Number of pass attempts when blitzed.
   blitz_avg_depth_of_target: Average depth of target in air yards when blitzed.
-  blitz_avg_time_to_throw: Average time from snap to release in seconds when blitzed.
+  blitz_avg_time_to_throw: Average time to throw per dropback, in seconds from snap to release, when blitzed.
   blitz_bats: Number of pass attempts batted down at the line of scrimmage when blitzed.
   blitz_big_time_throws: Number of big-time throws when blitzed, per PFF's highest-value, highest-difficulty throw designation.
   blitz_btt_rate: Big-time throws as a percentage of qualifying attempts when blitzed, per PFF charting.
@@ -27988,11 +27998,11 @@ passing_pressure:
   grades_run: PFF rushing grade for the player (0-100).
   jersey_number: Jersey number (string; zero-padded, e.g. "09").
   no_blitz_accuracy_percent: Percentage of aimed passes charted as accurate by PFF when not blitzed.
-  no_blitz_aimed_passes: Number of aimed passes (attempts excluding spikes and throwaways) when not blitzed, as charted by
-    PFF.
+  no_blitz_aimed_passes: Number of aimed passes (attempts excluding throwaways, spikes, batted passes and throws made while
+    hit) when not blitzed, as charted by PFF.
   no_blitz_attempts: Number of pass attempts when not blitzed.
   no_blitz_avg_depth_of_target: Average depth of target in air yards when not blitzed.
-  no_blitz_avg_time_to_throw: Average time from snap to release in seconds when not blitzed.
+  no_blitz_avg_time_to_throw: Average time to throw per dropback, in seconds from snap to release, when not blitzed.
   no_blitz_bats: Number of pass attempts batted down at the line of scrimmage when not blitzed.
   no_blitz_big_time_throws: Number of big-time throws when not blitzed, per PFF's highest-value, highest-difficulty throw
     designation.
@@ -28040,11 +28050,12 @@ passing_pressure:
   no_blitz_yards: Passing yards gained when not blitzed.
   no_blitz_ypa: Yards gained per pass attempt when not blitzed.
   no_pressure_accuracy_percent: Percentage of aimed passes charted as accurate by PFF from a clean pocket (no pressure).
-  no_pressure_aimed_passes: Number of aimed passes (attempts excluding spikes and throwaways) from a clean pocket (no pressure),
-    as charted by PFF.
+  no_pressure_aimed_passes: Number of aimed passes (attempts excluding throwaways, spikes, batted passes and throws made while
+    hit) from a clean pocket (no pressure), as charted by PFF.
   no_pressure_attempts: Number of pass attempts from a clean pocket (no pressure).
   no_pressure_avg_depth_of_target: Average depth of target in air yards from a clean pocket (no pressure).
-  no_pressure_avg_time_to_throw: Average time from snap to release in seconds from a clean pocket (no pressure).
+  no_pressure_avg_time_to_throw: Average time to throw per dropback, in seconds from snap to release, from a clean pocket
+    (no pressure).
   no_pressure_bats: Number of pass attempts batted down at the line of scrimmage from a clean pocket (no pressure).
   no_pressure_big_time_throws: Number of big-time throws from a clean pocket (no pressure), per PFF's highest-value, highest-difficulty
     throw designation.
@@ -28104,11 +28115,11 @@ passing_pressure:
   player_id: PFF player id (integer; matches the /players id and every player_id join key).
   position: PFF position code the player is listed at (e.g. QB, HB, FB, WR, TE, T, G, C, ED, DI, LB, CB, S, K, P).
   pressure_accuracy_percent: Percentage of aimed passes charted as accurate by PFF when under pressure.
-  pressure_aimed_passes: Number of aimed passes (attempts excluding spikes and throwaways) when under pressure, as charted
-    by PFF.
+  pressure_aimed_passes: Number of aimed passes (attempts excluding throwaways, spikes, batted passes and throws made while
+    hit) when under pressure, as charted by PFF.
   pressure_attempts: Number of pass attempts when under pressure.
   pressure_avg_depth_of_target: Average depth of target in air yards when under pressure.
-  pressure_avg_time_to_throw: Average time from snap to release in seconds when under pressure.
+  pressure_avg_time_to_throw: Average time to throw per dropback, in seconds from snap to release, when under pressure.
   pressure_bats: Number of pass attempts batted down at the line of scrimmage when under pressure.
   pressure_big_time_throws: Number of big-time throws when under pressure, per PFF's highest-value, highest-difficulty throw
     designation.
@@ -28160,10 +28171,11 @@ passing_pressure:
   team_name: Team abbreviation the player is credited to for the range.
 passing_summary:
   accuracy_percent: Charted accuracy percentage.
-  aimed_passes: Number of aimed passes (attempts excluding spikes and throwaways), as charted by PFF.
+  aimed_passes: 'Aimed passes: attempts excluding throwaways, spikes, batted passes and throws made while hit (the accuracy_percent
+    denominator).'
   attempts: Pass attempts thrown by the passer.
   avg_depth_of_target: Average depth of target in air yards.
-  avg_time_to_throw: Average time to throw, in seconds from snap to release, on the passer's attempts.
+  avg_time_to_throw: Average time to throw per dropback, in seconds from snap to release.
   bats: Passes batted at the line.
   big_time_throws: Number of big-time throws, per PFF's highest-value, highest-difficulty throw designation.
   btt_rate: Big-time-throw rate.
@@ -29083,7 +29095,8 @@ pff_api_player_special_summary:
 pff_api_position_report:
   accuracy_oe: Accuracy percentage over expectation, in percentage points (PFF-charted accuracy minus its expected value).
   accuracy_percent: Charted accuracy percentage.
-  aimed_passes: Number of aimed passes (attempts excluding spikes and throwaways), as charted by PFF.
+  aimed_passes: Number of aimed passes (attempts excluding throwaways, spikes, batted passes and throws made while hit), as
+    charted by PFF.
   assists: Assisted tackles credited to the player.
   attempts: 'Attempts in the report''s play family: pass attempts on the passing report, carries on rushing, punts on punting
     and kickoffs on the kickoffs report.'
@@ -29098,7 +29111,7 @@ pff_api_position_report:
   avg_depth_of_tackle: Average depth downfield, in yards, at which the player made his tackles on run plays.
   avg_depth_of_target: 'Average depth of target, in yards downfield: of the passer''s throws (passing), of passes to the player
     (receiving), or of targets into the player''s coverage (coverage).'
-  avg_time_to_throw: Average time to throw, in seconds from snap to release, on the passer's attempts.
+  avg_time_to_throw: Average time to throw per dropback, in seconds from snap to release.
   avoided_tackles: 'Missed tackles forced (tackles avoided) by the player: after the catch on the receiving report, as a runner
     on rushing.'
   base_attempts: Number of pass attempts across all splits, the baseline total for this facet.
@@ -29107,14 +29120,15 @@ pff_api_position_report:
   bats: Passes batted at the line.
   batted_passes: Passes batted down at the line of scrimmage.
   behind_los_accuracy_percent: Percentage of aimed passes charted as accurate by PFF on throws behind the line of scrimmage.
-  behind_los_aimed_passes: Number of aimed passes (attempts excluding spikes and throwaways) on throws behind the line of
-    scrimmage, as charted by PFF.
+  behind_los_aimed_passes: Number of aimed passes (attempts excluding throwaways, spikes, batted passes and throws made while
+    hit) on throws behind the line of scrimmage, as charted by PFF.
   behind_los_attempts: Number of pass attempts on throws behind the line of scrimmage.
   behind_los_attempts_percent: Share of the player's total pass attempts that came on throws behind the line of scrimmage,
     expressed as a percentage.
   behind_los_avg_depth_of_target: 'Average depth of target, in air yards, on throws behind the line of scrimmage: of the passer''s
     throws (passing-depth) or the player''s targets (receiving-depth).'
-  behind_los_avg_time_to_throw: Average time from snap to release in seconds on throws behind the line of scrimmage.
+  behind_los_avg_time_to_throw: Average time to throw per dropback, in seconds from snap to release, on throws behind the
+    line of scrimmage.
   behind_los_avoided_tackles: Tackles avoided after the catch on passes thrown behind the line of scrimmage.
   behind_los_bats: Number of pass attempts batted down at the line of scrimmage on throws behind the line of scrimmage.
   behind_los_big_time_throws: Number of big-time throws on throws behind the line of scrimmage, per PFF's highest-value, highest-difficulty
@@ -29176,10 +29190,11 @@ pff_api_position_report:
   behind_los_yprr: Yards per route run on passes thrown behind the line of scrimmage.
   big_time_throws: Number of big-time throws, per PFF's highest-value, highest-difficulty throw designation.
   blitz_accuracy_percent: Percentage of aimed passes charted as accurate by PFF when blitzed.
-  blitz_aimed_passes: Number of aimed passes (attempts excluding spikes and throwaways) when blitzed, as charted by PFF.
+  blitz_aimed_passes: Number of aimed passes (attempts excluding throwaways, spikes, batted passes and throws made while hit)
+    when blitzed, as charted by PFF.
   blitz_attempts: Number of pass attempts when blitzed.
   blitz_avg_depth_of_target: Average depth of target in air yards when blitzed.
-  blitz_avg_time_to_throw: Average time from snap to release in seconds when blitzed.
+  blitz_avg_time_to_throw: Average time to throw per dropback, in seconds from snap to release, when blitzed.
   blitz_bats: Number of pass attempts batted down at the line of scrimmage when blitzed.
   blitz_big_time_throws: Number of big-time throws when blitzed, per PFF's highest-value, highest-difficulty throw designation.
   blitz_btt_rate: Big-time throws as a percentage of qualifying attempts when blitzed, per PFF charting.
@@ -29235,15 +29250,15 @@ pff_api_position_report:
   caught_percent: Percentage of targets caught.
   center_behind_los_accuracy_percent: Percentage of aimed passes charted as accurate by PFF on throws behind the line of scrimmage
     to the center of the field.
-  center_behind_los_aimed_passes: Number of aimed passes (attempts excluding spikes and throwaways) on throws behind the line
-    of scrimmage to the center of the field, as charted by PFF.
+  center_behind_los_aimed_passes: Number of aimed passes (attempts excluding throwaways, spikes, batted passes and throws
+    made while hit) on throws behind the line of scrimmage to the center of the field, as charted by PFF.
   center_behind_los_attempts: Number of pass attempts on throws behind the line of scrimmage to the center of the field.
   center_behind_los_attempts_percent: Share of the player's total pass attempts that came on throws behind the line of scrimmage
     to the center of the field, expressed as a percentage.
   center_behind_los_avg_depth_of_target: Average depth of target in air yards on throws behind the line of scrimmage to the
     center of the field.
-  center_behind_los_avg_time_to_throw: Average time from snap to release in seconds on throws behind the line of scrimmage
-    to the center of the field.
+  center_behind_los_avg_time_to_throw: Average time to throw per dropback, in seconds from snap to release, on throws behind
+    the line of scrimmage to the center of the field.
   center_behind_los_bats: Number of pass attempts batted down at the line of scrimmage on throws behind the line of scrimmage
     to the center of the field.
   center_behind_los_big_time_throws: Number of big-time throws on throws behind the line of scrimmage to the center of the
@@ -29293,15 +29308,15 @@ pff_api_position_report:
   center_behind_los_ypa: Yards gained per pass attempt on throws behind the line of scrimmage to the center of the field.
   center_deep_accuracy_percent: Percentage of aimed passes charted as accurate by PFF on deep (20+ air yards) throws to the
     center of the field.
-  center_deep_aimed_passes: Number of aimed passes (attempts excluding spikes and throwaways) on deep (20+ air yards) throws
-    to the center of the field, as charted by PFF.
+  center_deep_aimed_passes: Number of aimed passes (attempts excluding throwaways, spikes, batted passes and throws made while
+    hit) on deep (20+ air yards) throws to the center of the field, as charted by PFF.
   center_deep_attempts: Number of pass attempts on deep (20+ air yards) throws to the center of the field.
   center_deep_attempts_percent: Share of the player's total pass attempts that came on deep (20+ air yards) throws to the
     center of the field, expressed as a percentage.
   center_deep_avg_depth_of_target: Average depth of target in air yards on deep (20+ air yards) throws to the center of the
     field.
-  center_deep_avg_time_to_throw: Average time from snap to release in seconds on deep (20+ air yards) throws to the center
-    of the field.
+  center_deep_avg_time_to_throw: Average time to throw per dropback, in seconds from snap to release, on deep (20+ air yards)
+    throws to the center of the field.
   center_deep_bats: Number of pass attempts batted down at the line of scrimmage on deep (20+ air yards) throws to the center
     of the field.
   center_deep_big_time_throws: Number of big-time throws on deep (20+ air yards) throws to the center of the field, per PFF's
@@ -29345,15 +29360,15 @@ pff_api_position_report:
   center_deep_ypa: Yards gained per pass attempt on deep (20+ air yards) throws to the center of the field.
   center_medium_accuracy_percent: Percentage of aimed passes charted as accurate by PFF on medium (10-19 air yards) throws
     to the center of the field.
-  center_medium_aimed_passes: Number of aimed passes (attempts excluding spikes and throwaways) on medium (10-19 air yards)
-    throws to the center of the field, as charted by PFF.
+  center_medium_aimed_passes: Number of aimed passes (attempts excluding throwaways, spikes, batted passes and throws made
+    while hit) on medium (10-19 air yards) throws to the center of the field, as charted by PFF.
   center_medium_attempts: Number of pass attempts on medium (10-19 air yards) throws to the center of the field.
   center_medium_attempts_percent: Share of the player's total pass attempts that came on medium (10-19 air yards) throws to
     the center of the field, expressed as a percentage.
   center_medium_avg_depth_of_target: Average depth of target in air yards on medium (10-19 air yards) throws to the center
     of the field.
-  center_medium_avg_time_to_throw: Average time from snap to release in seconds on medium (10-19 air yards) throws to the
-    center of the field.
+  center_medium_avg_time_to_throw: Average time to throw per dropback, in seconds from snap to release, on medium (10-19 air
+    yards) throws to the center of the field.
   center_medium_bats: Number of pass attempts batted down at the line of scrimmage on medium (10-19 air yards) throws to the
     center of the field.
   center_medium_big_time_throws: Number of big-time throws on medium (10-19 air yards) throws to the center of the field,
@@ -29399,15 +29414,15 @@ pff_api_position_report:
   center_medium_ypa: Yards gained per pass attempt on medium (10-19 air yards) throws to the center of the field.
   center_short_accuracy_percent: Percentage of aimed passes charted as accurate by PFF on short (0-9 air yards) throws to
     the center of the field.
-  center_short_aimed_passes: Number of aimed passes (attempts excluding spikes and throwaways) on short (0-9 air yards) throws
-    to the center of the field, as charted by PFF.
+  center_short_aimed_passes: Number of aimed passes (attempts excluding throwaways, spikes, batted passes and throws made
+    while hit) on short (0-9 air yards) throws to the center of the field, as charted by PFF.
   center_short_attempts: Number of pass attempts on short (0-9 air yards) throws to the center of the field.
   center_short_attempts_percent: Share of the player's total pass attempts that came on short (0-9 air yards) throws to the
     center of the field, expressed as a percentage.
   center_short_avg_depth_of_target: Average depth of target in air yards on short (0-9 air yards) throws to the center of
     the field.
-  center_short_avg_time_to_throw: Average time from snap to release in seconds on short (0-9 air yards) throws to the center
-    of the field.
+  center_short_avg_time_to_throw: Average time to throw per dropback, in seconds from snap to release, on short (0-9 air yards)
+    throws to the center of the field.
   center_short_bats: Number of pass attempts batted down at the line of scrimmage on short (0-9 air yards) throws to the center
     of the field.
   center_short_big_time_throws: Number of big-time throws on short (0-9 air yards) throws to the center of the field, per
@@ -29461,14 +29476,14 @@ pff_api_position_report:
   coverage_snaps_per_target: Coverage snaps played per target into the player's coverage.
   declined_penalties: Penalties committed by the player that were declined.
   deep_accuracy_percent: Percentage of aimed passes charted as accurate by PFF on deep (20+ air yards) throws.
-  deep_aimed_passes: Number of aimed passes (attempts excluding spikes and throwaways) on deep (20+ air yards) throws, as
-    charted by PFF.
+  deep_aimed_passes: Number of aimed passes (attempts excluding throwaways, spikes, batted passes and throws made while hit)
+    on deep (20+ air yards) throws, as charted by PFF.
   deep_attempts: Number of pass attempts on deep (20+ air yards) throws.
   deep_attempts_percent: Share of the player's total pass attempts that came on deep (20+ air yards) throws, expressed as
     a percentage.
   deep_avg_depth_of_target: 'Average depth of target, in air yards, on deep (20+ air yards) throws: of the passer''s throws
     (passing-depth) or the player''s targets (receiving-depth).'
-  deep_avg_time_to_throw: Average time from snap to release in seconds on deep (20+ air yards) throws.
+  deep_avg_time_to_throw: Average time to throw per dropback, in seconds from snap to release, on deep (20+ air yards) throws.
   deep_avoided_tackles: Tackles avoided after the catch on deep passes (20 or more yards downfield).
   deep_bats: Number of pass attempts batted down at the line of scrimmage on deep (20+ air yards) throws.
   deep_big_time_throws: Number of big-time throws on deep (20+ air yards) throws, per PFF's highest-value, highest-difficulty
@@ -29622,15 +29637,15 @@ pff_api_position_report:
   knockdowns: Quarterback knockdowns credited to the pass rusher, as charted by PFF.
   left_behind_los_accuracy_percent: Percentage of aimed passes charted as accurate by PFF on throws behind the line of scrimmage
     to the left side of the field.
-  left_behind_los_aimed_passes: Number of aimed passes (attempts excluding spikes and throwaways) on throws behind the line
-    of scrimmage to the left side of the field, as charted by PFF.
+  left_behind_los_aimed_passes: Number of aimed passes (attempts excluding throwaways, spikes, batted passes and throws made
+    while hit) on throws behind the line of scrimmage to the left side of the field, as charted by PFF.
   left_behind_los_attempts: Number of pass attempts on throws behind the line of scrimmage to the left side of the field.
   left_behind_los_attempts_percent: Share of the player's total pass attempts that came on throws behind the line of scrimmage
     to the left side of the field, expressed as a percentage.
   left_behind_los_avg_depth_of_target: Average depth of target in air yards on throws behind the line of scrimmage to the
     left side of the field.
-  left_behind_los_avg_time_to_throw: Average time from snap to release in seconds on throws behind the line of scrimmage to
-    the left side of the field.
+  left_behind_los_avg_time_to_throw: Average time to throw per dropback, in seconds from snap to release, on throws behind
+    the line of scrimmage to the left side of the field.
   left_behind_los_bats: Number of pass attempts batted down at the line of scrimmage on throws behind the line of scrimmage
     to the left side of the field.
   left_behind_los_big_time_throws: Number of big-time throws on throws behind the line of scrimmage to the left side of the
@@ -29681,15 +29696,15 @@ pff_api_position_report:
   left_behind_los_ypa: Yards gained per pass attempt on throws behind the line of scrimmage to the left side of the field.
   left_deep_accuracy_percent: Percentage of aimed passes charted as accurate by PFF on deep (20+ air yards) throws to the
     left side of the field.
-  left_deep_aimed_passes: Number of aimed passes (attempts excluding spikes and throwaways) on deep (20+ air yards) throws
-    to the left side of the field, as charted by PFF.
+  left_deep_aimed_passes: Number of aimed passes (attempts excluding throwaways, spikes, batted passes and throws made while
+    hit) on deep (20+ air yards) throws to the left side of the field, as charted by PFF.
   left_deep_attempts: Number of pass attempts on deep (20+ air yards) throws to the left side of the field.
   left_deep_attempts_percent: Share of the player's total pass attempts that came on deep (20+ air yards) throws to the left
     side of the field, expressed as a percentage.
   left_deep_avg_depth_of_target: Average depth of target in air yards on deep (20+ air yards) throws to the left side of the
     field.
-  left_deep_avg_time_to_throw: Average time from snap to release in seconds on deep (20+ air yards) throws to the left side
-    of the field.
+  left_deep_avg_time_to_throw: Average time to throw per dropback, in seconds from snap to release, on deep (20+ air yards)
+    throws to the left side of the field.
   left_deep_bats: Number of pass attempts batted down at the line of scrimmage on deep (20+ air yards) throws to the left
     side of the field.
   left_deep_big_time_throws: Number of big-time throws on deep (20+ air yards) throws to the left side of the field, per PFF's
@@ -29734,15 +29749,15 @@ pff_api_position_report:
   left_deep_ypa: Yards gained per pass attempt on deep (20+ air yards) throws to the left side of the field.
   left_medium_accuracy_percent: Percentage of aimed passes charted as accurate by PFF on medium (10-19 air yards) throws to
     the left side of the field.
-  left_medium_aimed_passes: Number of aimed passes (attempts excluding spikes and throwaways) on medium (10-19 air yards)
-    throws to the left side of the field, as charted by PFF.
+  left_medium_aimed_passes: Number of aimed passes (attempts excluding throwaways, spikes, batted passes and throws made while
+    hit) on medium (10-19 air yards) throws to the left side of the field, as charted by PFF.
   left_medium_attempts: Number of pass attempts on medium (10-19 air yards) throws to the left side of the field.
   left_medium_attempts_percent: Share of the player's total pass attempts that came on medium (10-19 air yards) throws to
     the left side of the field, expressed as a percentage.
   left_medium_avg_depth_of_target: Average depth of target in air yards on medium (10-19 air yards) throws to the left side
     of the field.
-  left_medium_avg_time_to_throw: Average time from snap to release in seconds on medium (10-19 air yards) throws to the left
-    side of the field.
+  left_medium_avg_time_to_throw: Average time to throw per dropback, in seconds from snap to release, on medium (10-19 air
+    yards) throws to the left side of the field.
   left_medium_bats: Number of pass attempts batted down at the line of scrimmage on medium (10-19 air yards) throws to the
     left side of the field.
   left_medium_big_time_throws: Number of big-time throws on medium (10-19 air yards) throws to the left side of the field,
@@ -29788,15 +29803,15 @@ pff_api_position_report:
   left_medium_ypa: Yards gained per pass attempt on medium (10-19 air yards) throws to the left side of the field.
   left_short_accuracy_percent: Percentage of aimed passes charted as accurate by PFF on short (0-9 air yards) throws to the
     left side of the field.
-  left_short_aimed_passes: Number of aimed passes (attempts excluding spikes and throwaways) on short (0-9 air yards) throws
-    to the left side of the field, as charted by PFF.
+  left_short_aimed_passes: Number of aimed passes (attempts excluding throwaways, spikes, batted passes and throws made while
+    hit) on short (0-9 air yards) throws to the left side of the field, as charted by PFF.
   left_short_attempts: Number of pass attempts on short (0-9 air yards) throws to the left side of the field.
   left_short_attempts_percent: Share of the player's total pass attempts that came on short (0-9 air yards) throws to the
     left side of the field, expressed as a percentage.
   left_short_avg_depth_of_target: Average depth of target in air yards on short (0-9 air yards) throws to the left side of
     the field.
-  left_short_avg_time_to_throw: Average time from snap to release in seconds on short (0-9 air yards) throws to the left side
-    of the field.
+  left_short_avg_time_to_throw: Average time to throw per dropback, in seconds from snap to release, on short (0-9 air yards)
+    throws to the left side of the field.
   left_short_bats: Number of pass attempts batted down at the line of scrimmage on short (0-9 air yards) throws to the left
     side of the field.
   left_short_big_time_throws: Number of big-time throws on short (0-9 air yards) throws to the left side of the field, per
@@ -29862,14 +29877,15 @@ pff_api_position_report:
   longest: 'Longest play in yards: longest reception (receiving), longest run (rushing), or longest completion allowed in
     coverage (coverage, defense).'
   medium_accuracy_percent: Percentage of aimed passes charted as accurate by PFF on medium (10-19 air yards) throws.
-  medium_aimed_passes: Number of aimed passes (attempts excluding spikes and throwaways) on medium (10-19 air yards) throws,
-    as charted by PFF.
+  medium_aimed_passes: Number of aimed passes (attempts excluding throwaways, spikes, batted passes and throws made while
+    hit) on medium (10-19 air yards) throws, as charted by PFF.
   medium_attempts: Number of pass attempts on medium (10-19 air yards) throws.
   medium_attempts_percent: Share of the player's total pass attempts that came on medium (10-19 air yards) throws, expressed
     as a percentage.
   medium_avg_depth_of_target: 'Average depth of target, in air yards, on medium (10-19 air yards) throws: of the passer''s
     throws (passing-depth) or the player''s targets (receiving-depth).'
-  medium_avg_time_to_throw: Average time from snap to release in seconds on medium (10-19 air yards) throws.
+  medium_avg_time_to_throw: Average time to throw per dropback, in seconds from snap to release, on medium (10-19 air yards)
+    throws.
   medium_avoided_tackles: Tackles avoided after the catch on medium passes (10-19 yards downfield).
   medium_bats: Number of pass attempts batted down at the line of scrimmage on medium (10-19 air yards) throws.
   medium_big_time_throws: Number of big-time throws on medium (10-19 air yards) throws, per PFF's highest-value, highest-difficulty
@@ -29929,11 +29945,11 @@ pff_api_position_report:
   missed_tackles: Missed tackles by the player (on special-teams plays in the special-teams report).
   neg_graded_rate: Percentage of the player's plays in the report's phase (run blocking or run defense) that PFF graded negatively.
   no_blitz_accuracy_percent: Percentage of aimed passes charted as accurate by PFF when not blitzed.
-  no_blitz_aimed_passes: Number of aimed passes (attempts excluding spikes and throwaways) when not blitzed, as charted by
-    PFF.
+  no_blitz_aimed_passes: Number of aimed passes (attempts excluding throwaways, spikes, batted passes and throws made while
+    hit) when not blitzed, as charted by PFF.
   no_blitz_attempts: Number of pass attempts when not blitzed.
   no_blitz_avg_depth_of_target: Average depth of target in air yards when not blitzed.
-  no_blitz_avg_time_to_throw: Average time from snap to release in seconds when not blitzed.
+  no_blitz_avg_time_to_throw: Average time to throw per dropback, in seconds from snap to release, when not blitzed.
   no_blitz_bats: Number of pass attempts batted down at the line of scrimmage when not blitzed.
   no_blitz_big_time_throws: Number of big-time throws when not blitzed, per PFF's highest-value, highest-difficulty throw
     designation.
@@ -29981,11 +29997,12 @@ pff_api_position_report:
   no_blitz_yards: Passing yards gained when not blitzed.
   no_blitz_ypa: Yards gained per pass attempt when not blitzed.
   no_pressure_accuracy_percent: Percentage of aimed passes charted as accurate by PFF from a clean pocket (no pressure).
-  no_pressure_aimed_passes: Number of aimed passes (attempts excluding spikes and throwaways) from a clean pocket (no pressure),
-    as charted by PFF.
+  no_pressure_aimed_passes: Number of aimed passes (attempts excluding throwaways, spikes, batted passes and throws made while
+    hit) from a clean pocket (no pressure), as charted by PFF.
   no_pressure_attempts: Number of pass attempts from a clean pocket (no pressure).
   no_pressure_avg_depth_of_target: Average depth of target in air yards from a clean pocket (no pressure).
-  no_pressure_avg_time_to_throw: Average time from snap to release in seconds from a clean pocket (no pressure).
+  no_pressure_avg_time_to_throw: Average time to throw per dropback, in seconds from snap to release, from a clean pocket
+    (no pressure).
   no_pressure_bats: Number of pass attempts batted down at the line of scrimmage from a clean pocket (no pressure).
   no_pressure_big_time_throws: Number of big-time throws from a clean pocket (no pressure), per PFF's highest-value, highest-difficulty
     throw designation.
@@ -30081,11 +30098,11 @@ pff_api_position_report:
   position: PFF position code the player is listed at (e.g. QB, HB, WR, TE, T, G, C, ED, DI, LB, CB, S, K, P, LS).
   positive_epa_percent: Percentage of dropbacks with positive expected points added.
   pressure_accuracy_percent: Percentage of aimed passes charted as accurate by PFF when under pressure.
-  pressure_aimed_passes: Number of aimed passes (attempts excluding spikes and throwaways) when under pressure, as charted
-    by PFF.
+  pressure_aimed_passes: Number of aimed passes (attempts excluding throwaways, spikes, batted passes and throws made while
+    hit) when under pressure, as charted by PFF.
   pressure_attempts: Number of pass attempts when under pressure.
   pressure_avg_depth_of_target: Average depth of target in air yards when under pressure.
-  pressure_avg_time_to_throw: Average time from snap to release in seconds when under pressure.
+  pressure_avg_time_to_throw: Average time to throw per dropback, in seconds from snap to release, when under pressure.
   pressure_bats: Number of pass attempts batted down at the line of scrimmage when under pressure.
   pressure_big_time_throws: Number of big-time throws when under pressure, per PFF's highest-value, highest-difficulty throw
     designation.
@@ -30171,15 +30188,15 @@ pff_api_position_report:
   rhs_tackles: Tackles made on snaps rushing from the right-hand side (RHS).
   right_behind_los_accuracy_percent: Percentage of aimed passes charted as accurate by PFF on throws behind the line of scrimmage
     to the right side of the field.
-  right_behind_los_aimed_passes: Number of aimed passes (attempts excluding spikes and throwaways) on throws behind the line
-    of scrimmage to the right side of the field, as charted by PFF.
+  right_behind_los_aimed_passes: Number of aimed passes (attempts excluding throwaways, spikes, batted passes and throws made
+    while hit) on throws behind the line of scrimmage to the right side of the field, as charted by PFF.
   right_behind_los_attempts: Number of pass attempts on throws behind the line of scrimmage to the right side of the field.
   right_behind_los_attempts_percent: Share of the player's total pass attempts that came on throws behind the line of scrimmage
     to the right side of the field, expressed as a percentage.
   right_behind_los_avg_depth_of_target: Average depth of target in air yards on throws behind the line of scrimmage to the
     right side of the field.
-  right_behind_los_avg_time_to_throw: Average time from snap to release in seconds on throws behind the line of scrimmage
-    to the right side of the field.
+  right_behind_los_avg_time_to_throw: Average time to throw per dropback, in seconds from snap to release, on throws behind
+    the line of scrimmage to the right side of the field.
   right_behind_los_bats: Number of pass attempts batted down at the line of scrimmage on throws behind the line of scrimmage
     to the right side of the field.
   right_behind_los_big_time_throws: Number of big-time throws on throws behind the line of scrimmage to the right side of
@@ -30233,15 +30250,15 @@ pff_api_position_report:
   right_behind_los_ypa: Yards gained per pass attempt on throws behind the line of scrimmage to the right side of the field.
   right_deep_accuracy_percent: Percentage of aimed passes charted as accurate by PFF on deep (20+ air yards) throws to the
     right side of the field.
-  right_deep_aimed_passes: Number of aimed passes (attempts excluding spikes and throwaways) on deep (20+ air yards) throws
-    to the right side of the field, as charted by PFF.
+  right_deep_aimed_passes: Number of aimed passes (attempts excluding throwaways, spikes, batted passes and throws made while
+    hit) on deep (20+ air yards) throws to the right side of the field, as charted by PFF.
   right_deep_attempts: Number of pass attempts on deep (20+ air yards) throws to the right side of the field.
   right_deep_attempts_percent: Share of the player's total pass attempts that came on deep (20+ air yards) throws to the right
     side of the field, expressed as a percentage.
   right_deep_avg_depth_of_target: Average depth of target in air yards on deep (20+ air yards) throws to the right side of
     the field.
-  right_deep_avg_time_to_throw: Average time from snap to release in seconds on deep (20+ air yards) throws to the right side
-    of the field.
+  right_deep_avg_time_to_throw: Average time to throw per dropback, in seconds from snap to release, on deep (20+ air yards)
+    throws to the right side of the field.
   right_deep_bats: Number of pass attempts batted down at the line of scrimmage on deep (20+ air yards) throws to the right
     side of the field.
   right_deep_big_time_throws: Number of big-time throws on deep (20+ air yards) throws to the right side of the field, per
@@ -30286,15 +30303,15 @@ pff_api_position_report:
   right_deep_ypa: Yards gained per pass attempt on deep (20+ air yards) throws to the right side of the field.
   right_medium_accuracy_percent: Percentage of aimed passes charted as accurate by PFF on medium (10-19 air yards) throws
     to the right side of the field.
-  right_medium_aimed_passes: Number of aimed passes (attempts excluding spikes and throwaways) on medium (10-19 air yards)
-    throws to the right side of the field, as charted by PFF.
+  right_medium_aimed_passes: Number of aimed passes (attempts excluding throwaways, spikes, batted passes and throws made
+    while hit) on medium (10-19 air yards) throws to the right side of the field, as charted by PFF.
   right_medium_attempts: Number of pass attempts on medium (10-19 air yards) throws to the right side of the field.
   right_medium_attempts_percent: Share of the player's total pass attempts that came on medium (10-19 air yards) throws to
     the right side of the field, expressed as a percentage.
   right_medium_avg_depth_of_target: Average depth of target in air yards on medium (10-19 air yards) throws to the right side
     of the field.
-  right_medium_avg_time_to_throw: Average time from snap to release in seconds on medium (10-19 air yards) throws to the right
-    side of the field.
+  right_medium_avg_time_to_throw: Average time to throw per dropback, in seconds from snap to release, on medium (10-19 air
+    yards) throws to the right side of the field.
   right_medium_bats: Number of pass attempts batted down at the line of scrimmage on medium (10-19 air yards) throws to the
     right side of the field.
   right_medium_big_time_throws: Number of big-time throws on medium (10-19 air yards) throws to the right side of the field,
@@ -30342,15 +30359,15 @@ pff_api_position_report:
   right_medium_ypa: Yards gained per pass attempt on medium (10-19 air yards) throws to the right side of the field.
   right_short_accuracy_percent: Percentage of aimed passes charted as accurate by PFF on short (0-9 air yards) throws to the
     right side of the field.
-  right_short_aimed_passes: Number of aimed passes (attempts excluding spikes and throwaways) on short (0-9 air yards) throws
-    to the right side of the field, as charted by PFF.
+  right_short_aimed_passes: Number of aimed passes (attempts excluding throwaways, spikes, batted passes and throws made while
+    hit) on short (0-9 air yards) throws to the right side of the field, as charted by PFF.
   right_short_attempts: Number of pass attempts on short (0-9 air yards) throws to the right side of the field.
   right_short_attempts_percent: Share of the player's total pass attempts that came on short (0-9 air yards) throws to the
     right side of the field, expressed as a percentage.
   right_short_avg_depth_of_target: Average depth of target in air yards on short (0-9 air yards) throws to the right side
     of the field.
-  right_short_avg_time_to_throw: Average time from snap to release in seconds on short (0-9 air yards) throws to the right
-    side of the field.
+  right_short_avg_time_to_throw: Average time to throw per dropback, in seconds from snap to release, on short (0-9 air yards)
+    throws to the right side of the field.
   right_short_bats: Number of pass attempts batted down at the line of scrimmage on short (0-9 air yards) throws to the right
     side of the field.
   right_short_big_time_throws: Number of big-time throws on short (0-9 air yards) throws to the right side of the field, per
@@ -30407,14 +30424,14 @@ pff_api_position_report:
   scramble_yards: Rushing yards gained on scrambles.
   scrambles: Quarterback scrambles (pass plays on which the passer ran with the ball).
   short_accuracy_percent: Percentage of aimed passes charted as accurate by PFF on short (0-9 air yards) throws.
-  short_aimed_passes: Number of aimed passes (attempts excluding spikes and throwaways) on short (0-9 air yards) throws, as
-    charted by PFF.
+  short_aimed_passes: Number of aimed passes (attempts excluding throwaways, spikes, batted passes and throws made while hit)
+    on short (0-9 air yards) throws, as charted by PFF.
   short_attempts: Number of pass attempts on short (0-9 air yards) throws.
   short_attempts_percent: Share of the player's total pass attempts that came on short (0-9 air yards) throws, expressed as
     a percentage.
   short_avg_depth_of_target: 'Average depth of target, in air yards, on short (0-9 air yards) throws: of the passer''s throws
     (passing-depth) or the player''s targets (receiving-depth).'
-  short_avg_time_to_throw: Average time from snap to release in seconds on short (0-9 air yards) throws.
+  short_avg_time_to_throw: Average time to throw per dropback, in seconds from snap to release, on short (0-9 air yards) throws.
   short_avoided_tackles: Tackles avoided after the catch on short passes (0-9 yards downfield).
   short_bats: Number of pass attempts batted down at the line of scrimmage on short (0-9 air yards) throws.
   short_big_time_throws: Number of big-time throws on short (0-9 air yards) throws, per PFF's highest-value, highest-difficulty
@@ -30916,7 +30933,8 @@ pff_api_team_leaders:
 pff_api_team_report:
   accuracy_oe: Accuracy percentage over expectation, in percentage points (PFF-charted accuracy minus its expected value).
   accuracy_percent: Charted accuracy percentage.
-  aimed_passes: Number of aimed passes (attempts excluding spikes and throwaways), as charted by PFF.
+  aimed_passes: Number of aimed passes (attempts excluding throwaways, spikes, batted passes and throws made while hit), as
+    charted by PFF.
   assists: Assisted tackles credited to the player.
   attempts: 'Attempts in the report''s play family: pass attempts on the passing report, carries on rushing, punts on punting
     and kickoffs on the kickoffs report.'
@@ -30931,7 +30949,7 @@ pff_api_team_report:
   avg_depth_of_tackle: Average depth downfield, in yards, at which the player made his tackles on run plays.
   avg_depth_of_target: 'Average depth of target, in yards downfield: of the passer''s throws (passing), of passes to the player
     (receiving), or of targets into the player''s coverage (coverage).'
-  avg_time_to_throw: Average time to throw, in seconds from snap to release, on the passer's attempts.
+  avg_time_to_throw: Average time to throw per dropback, in seconds from snap to release.
   avoided_tackles: 'Missed tackles forced (tackles avoided) by the player: after the catch on the receiving report, as a runner
     on rushing.'
   base_attempts: Number of pass attempts across all splits, the baseline total for this facet.
@@ -30940,14 +30958,15 @@ pff_api_team_report:
   bats: Passes batted at the line.
   batted_passes: Passes batted down at the line of scrimmage.
   behind_los_accuracy_percent: Percentage of aimed passes charted as accurate by PFF on throws behind the line of scrimmage.
-  behind_los_aimed_passes: Number of aimed passes (attempts excluding spikes and throwaways) on throws behind the line of
-    scrimmage, as charted by PFF.
+  behind_los_aimed_passes: Number of aimed passes (attempts excluding throwaways, spikes, batted passes and throws made while
+    hit) on throws behind the line of scrimmage, as charted by PFF.
   behind_los_attempts: Number of pass attempts on throws behind the line of scrimmage.
   behind_los_attempts_percent: Share of the player's total pass attempts that came on throws behind the line of scrimmage,
     expressed as a percentage.
   behind_los_avg_depth_of_target: 'Average depth of target, in air yards, on throws behind the line of scrimmage: of the passer''s
     throws (passing-depth) or the player''s targets (receiving-depth).'
-  behind_los_avg_time_to_throw: Average time from snap to release in seconds on throws behind the line of scrimmage.
+  behind_los_avg_time_to_throw: Average time to throw per dropback, in seconds from snap to release, on throws behind the
+    line of scrimmage.
   behind_los_avoided_tackles: Tackles avoided after the catch on passes thrown behind the line of scrimmage.
   behind_los_bats: Number of pass attempts batted down at the line of scrimmage on throws behind the line of scrimmage.
   behind_los_big_time_throws: Number of big-time throws on throws behind the line of scrimmage, per PFF's highest-value, highest-difficulty
@@ -31009,10 +31028,11 @@ pff_api_team_report:
   behind_los_yprr: Yards per route run on passes thrown behind the line of scrimmage.
   big_time_throws: Number of big-time throws, per PFF's highest-value, highest-difficulty throw designation.
   blitz_accuracy_percent: Percentage of aimed passes charted as accurate by PFF when blitzed.
-  blitz_aimed_passes: Number of aimed passes (attempts excluding spikes and throwaways) when blitzed, as charted by PFF.
+  blitz_aimed_passes: Number of aimed passes (attempts excluding throwaways, spikes, batted passes and throws made while hit)
+    when blitzed, as charted by PFF.
   blitz_attempts: Number of pass attempts when blitzed.
   blitz_avg_depth_of_target: Average depth of target in air yards when blitzed.
-  blitz_avg_time_to_throw: Average time from snap to release in seconds when blitzed.
+  blitz_avg_time_to_throw: Average time to throw per dropback, in seconds from snap to release, when blitzed.
   blitz_bats: Number of pass attempts batted down at the line of scrimmage when blitzed.
   blitz_big_time_throws: Number of big-time throws when blitzed, per PFF's highest-value, highest-difficulty throw designation.
   blitz_btt_rate: Big-time throws as a percentage of qualifying attempts when blitzed, per PFF charting.
@@ -31062,15 +31082,15 @@ pff_api_team_report:
   caught_percent: Percentage of targets caught.
   center_behind_los_accuracy_percent: Percentage of aimed passes charted as accurate by PFF on throws behind the line of scrimmage
     to the center of the field.
-  center_behind_los_aimed_passes: Number of aimed passes (attempts excluding spikes and throwaways) on throws behind the line
-    of scrimmage to the center of the field, as charted by PFF.
+  center_behind_los_aimed_passes: Number of aimed passes (attempts excluding throwaways, spikes, batted passes and throws
+    made while hit) on throws behind the line of scrimmage to the center of the field, as charted by PFF.
   center_behind_los_attempts: Number of pass attempts on throws behind the line of scrimmage to the center of the field.
   center_behind_los_attempts_percent: Share of the player's total pass attempts that came on throws behind the line of scrimmage
     to the center of the field, expressed as a percentage.
   center_behind_los_avg_depth_of_target: Average depth of target in air yards on throws behind the line of scrimmage to the
     center of the field.
-  center_behind_los_avg_time_to_throw: Average time from snap to release in seconds on throws behind the line of scrimmage
-    to the center of the field.
+  center_behind_los_avg_time_to_throw: Average time to throw per dropback, in seconds from snap to release, on throws behind
+    the line of scrimmage to the center of the field.
   center_behind_los_bats: Number of pass attempts batted down at the line of scrimmage on throws behind the line of scrimmage
     to the center of the field.
   center_behind_los_big_time_throws: Number of big-time throws on throws behind the line of scrimmage to the center of the
@@ -31120,15 +31140,15 @@ pff_api_team_report:
   center_behind_los_ypa: Yards gained per pass attempt on throws behind the line of scrimmage to the center of the field.
   center_deep_accuracy_percent: Percentage of aimed passes charted as accurate by PFF on deep (20+ air yards) throws to the
     center of the field.
-  center_deep_aimed_passes: Number of aimed passes (attempts excluding spikes and throwaways) on deep (20+ air yards) throws
-    to the center of the field, as charted by PFF.
+  center_deep_aimed_passes: Number of aimed passes (attempts excluding throwaways, spikes, batted passes and throws made while
+    hit) on deep (20+ air yards) throws to the center of the field, as charted by PFF.
   center_deep_attempts: Number of pass attempts on deep (20+ air yards) throws to the center of the field.
   center_deep_attempts_percent: Share of the player's total pass attempts that came on deep (20+ air yards) throws to the
     center of the field, expressed as a percentage.
   center_deep_avg_depth_of_target: Average depth of target in air yards on deep (20+ air yards) throws to the center of the
     field.
-  center_deep_avg_time_to_throw: Average time from snap to release in seconds on deep (20+ air yards) throws to the center
-    of the field.
+  center_deep_avg_time_to_throw: Average time to throw per dropback, in seconds from snap to release, on deep (20+ air yards)
+    throws to the center of the field.
   center_deep_bats: Number of pass attempts batted down at the line of scrimmage on deep (20+ air yards) throws to the center
     of the field.
   center_deep_big_time_throws: Number of big-time throws on deep (20+ air yards) throws to the center of the field, per PFF's
@@ -31172,15 +31192,15 @@ pff_api_team_report:
   center_deep_ypa: Yards gained per pass attempt on deep (20+ air yards) throws to the center of the field.
   center_medium_accuracy_percent: Percentage of aimed passes charted as accurate by PFF on medium (10-19 air yards) throws
     to the center of the field.
-  center_medium_aimed_passes: Number of aimed passes (attempts excluding spikes and throwaways) on medium (10-19 air yards)
-    throws to the center of the field, as charted by PFF.
+  center_medium_aimed_passes: Number of aimed passes (attempts excluding throwaways, spikes, batted passes and throws made
+    while hit) on medium (10-19 air yards) throws to the center of the field, as charted by PFF.
   center_medium_attempts: Number of pass attempts on medium (10-19 air yards) throws to the center of the field.
   center_medium_attempts_percent: Share of the player's total pass attempts that came on medium (10-19 air yards) throws to
     the center of the field, expressed as a percentage.
   center_medium_avg_depth_of_target: Average depth of target in air yards on medium (10-19 air yards) throws to the center
     of the field.
-  center_medium_avg_time_to_throw: Average time from snap to release in seconds on medium (10-19 air yards) throws to the
-    center of the field.
+  center_medium_avg_time_to_throw: Average time to throw per dropback, in seconds from snap to release, on medium (10-19 air
+    yards) throws to the center of the field.
   center_medium_bats: Number of pass attempts batted down at the line of scrimmage on medium (10-19 air yards) throws to the
     center of the field.
   center_medium_big_time_throws: Number of big-time throws on medium (10-19 air yards) throws to the center of the field,
@@ -31226,15 +31246,15 @@ pff_api_team_report:
   center_medium_ypa: Yards gained per pass attempt on medium (10-19 air yards) throws to the center of the field.
   center_short_accuracy_percent: Percentage of aimed passes charted as accurate by PFF on short (0-9 air yards) throws to
     the center of the field.
-  center_short_aimed_passes: Number of aimed passes (attempts excluding spikes and throwaways) on short (0-9 air yards) throws
-    to the center of the field, as charted by PFF.
+  center_short_aimed_passes: Number of aimed passes (attempts excluding throwaways, spikes, batted passes and throws made
+    while hit) on short (0-9 air yards) throws to the center of the field, as charted by PFF.
   center_short_attempts: Number of pass attempts on short (0-9 air yards) throws to the center of the field.
   center_short_attempts_percent: Share of the player's total pass attempts that came on short (0-9 air yards) throws to the
     center of the field, expressed as a percentage.
   center_short_avg_depth_of_target: Average depth of target in air yards on short (0-9 air yards) throws to the center of
     the field.
-  center_short_avg_time_to_throw: Average time from snap to release in seconds on short (0-9 air yards) throws to the center
-    of the field.
+  center_short_avg_time_to_throw: Average time to throw per dropback, in seconds from snap to release, on short (0-9 air yards)
+    throws to the center of the field.
   center_short_bats: Number of pass attempts batted down at the line of scrimmage on short (0-9 air yards) throws to the center
     of the field.
   center_short_big_time_throws: Number of big-time throws on short (0-9 air yards) throws to the center of the field, per
@@ -31288,14 +31308,14 @@ pff_api_team_report:
   coverage_snaps_per_target: Coverage snaps played per target into the player's coverage.
   declined_penalties: Penalties committed by the player that were declined.
   deep_accuracy_percent: Percentage of aimed passes charted as accurate by PFF on deep (20+ air yards) throws.
-  deep_aimed_passes: Number of aimed passes (attempts excluding spikes and throwaways) on deep (20+ air yards) throws, as
-    charted by PFF.
+  deep_aimed_passes: Number of aimed passes (attempts excluding throwaways, spikes, batted passes and throws made while hit)
+    on deep (20+ air yards) throws, as charted by PFF.
   deep_attempts: Number of pass attempts on deep (20+ air yards) throws.
   deep_attempts_percent: Share of the player's total pass attempts that came on deep (20+ air yards) throws, expressed as
     a percentage.
   deep_avg_depth_of_target: 'Average depth of target, in air yards, on deep (20+ air yards) throws: of the passer''s throws
     (passing-depth) or the player''s targets (receiving-depth).'
-  deep_avg_time_to_throw: Average time from snap to release in seconds on deep (20+ air yards) throws.
+  deep_avg_time_to_throw: Average time to throw per dropback, in seconds from snap to release, on deep (20+ air yards) throws.
   deep_avoided_tackles: Tackles avoided after the catch on deep passes (20 or more yards downfield).
   deep_bats: Number of pass attempts batted down at the line of scrimmage on deep (20+ air yards) throws.
   deep_big_time_throws: Number of big-time throws on deep (20+ air yards) throws, per PFF's highest-value, highest-difficulty
@@ -31449,15 +31469,15 @@ pff_api_team_report:
   knockdowns: Quarterback knockdowns credited to the pass rusher, as charted by PFF.
   left_behind_los_accuracy_percent: Percentage of aimed passes charted as accurate by PFF on throws behind the line of scrimmage
     to the left side of the field.
-  left_behind_los_aimed_passes: Number of aimed passes (attempts excluding spikes and throwaways) on throws behind the line
-    of scrimmage to the left side of the field, as charted by PFF.
+  left_behind_los_aimed_passes: Number of aimed passes (attempts excluding throwaways, spikes, batted passes and throws made
+    while hit) on throws behind the line of scrimmage to the left side of the field, as charted by PFF.
   left_behind_los_attempts: Number of pass attempts on throws behind the line of scrimmage to the left side of the field.
   left_behind_los_attempts_percent: Share of the player's total pass attempts that came on throws behind the line of scrimmage
     to the left side of the field, expressed as a percentage.
   left_behind_los_avg_depth_of_target: Average depth of target in air yards on throws behind the line of scrimmage to the
     left side of the field.
-  left_behind_los_avg_time_to_throw: Average time from snap to release in seconds on throws behind the line of scrimmage to
-    the left side of the field.
+  left_behind_los_avg_time_to_throw: Average time to throw per dropback, in seconds from snap to release, on throws behind
+    the line of scrimmage to the left side of the field.
   left_behind_los_bats: Number of pass attempts batted down at the line of scrimmage on throws behind the line of scrimmage
     to the left side of the field.
   left_behind_los_big_time_throws: Number of big-time throws on throws behind the line of scrimmage to the left side of the
@@ -31508,15 +31528,15 @@ pff_api_team_report:
   left_behind_los_ypa: Yards gained per pass attempt on throws behind the line of scrimmage to the left side of the field.
   left_deep_accuracy_percent: Percentage of aimed passes charted as accurate by PFF on deep (20+ air yards) throws to the
     left side of the field.
-  left_deep_aimed_passes: Number of aimed passes (attempts excluding spikes and throwaways) on deep (20+ air yards) throws
-    to the left side of the field, as charted by PFF.
+  left_deep_aimed_passes: Number of aimed passes (attempts excluding throwaways, spikes, batted passes and throws made while
+    hit) on deep (20+ air yards) throws to the left side of the field, as charted by PFF.
   left_deep_attempts: Number of pass attempts on deep (20+ air yards) throws to the left side of the field.
   left_deep_attempts_percent: Share of the player's total pass attempts that came on deep (20+ air yards) throws to the left
     side of the field, expressed as a percentage.
   left_deep_avg_depth_of_target: Average depth of target in air yards on deep (20+ air yards) throws to the left side of the
     field.
-  left_deep_avg_time_to_throw: Average time from snap to release in seconds on deep (20+ air yards) throws to the left side
-    of the field.
+  left_deep_avg_time_to_throw: Average time to throw per dropback, in seconds from snap to release, on deep (20+ air yards)
+    throws to the left side of the field.
   left_deep_bats: Number of pass attempts batted down at the line of scrimmage on deep (20+ air yards) throws to the left
     side of the field.
   left_deep_big_time_throws: Number of big-time throws on deep (20+ air yards) throws to the left side of the field, per PFF's
@@ -31561,15 +31581,15 @@ pff_api_team_report:
   left_deep_ypa: Yards gained per pass attempt on deep (20+ air yards) throws to the left side of the field.
   left_medium_accuracy_percent: Percentage of aimed passes charted as accurate by PFF on medium (10-19 air yards) throws to
     the left side of the field.
-  left_medium_aimed_passes: Number of aimed passes (attempts excluding spikes and throwaways) on medium (10-19 air yards)
-    throws to the left side of the field, as charted by PFF.
+  left_medium_aimed_passes: Number of aimed passes (attempts excluding throwaways, spikes, batted passes and throws made while
+    hit) on medium (10-19 air yards) throws to the left side of the field, as charted by PFF.
   left_medium_attempts: Number of pass attempts on medium (10-19 air yards) throws to the left side of the field.
   left_medium_attempts_percent: Share of the player's total pass attempts that came on medium (10-19 air yards) throws to
     the left side of the field, expressed as a percentage.
   left_medium_avg_depth_of_target: Average depth of target in air yards on medium (10-19 air yards) throws to the left side
     of the field.
-  left_medium_avg_time_to_throw: Average time from snap to release in seconds on medium (10-19 air yards) throws to the left
-    side of the field.
+  left_medium_avg_time_to_throw: Average time to throw per dropback, in seconds from snap to release, on medium (10-19 air
+    yards) throws to the left side of the field.
   left_medium_bats: Number of pass attempts batted down at the line of scrimmage on medium (10-19 air yards) throws to the
     left side of the field.
   left_medium_big_time_throws: Number of big-time throws on medium (10-19 air yards) throws to the left side of the field,
@@ -31615,15 +31635,15 @@ pff_api_team_report:
   left_medium_ypa: Yards gained per pass attempt on medium (10-19 air yards) throws to the left side of the field.
   left_short_accuracy_percent: Percentage of aimed passes charted as accurate by PFF on short (0-9 air yards) throws to the
     left side of the field.
-  left_short_aimed_passes: Number of aimed passes (attempts excluding spikes and throwaways) on short (0-9 air yards) throws
-    to the left side of the field, as charted by PFF.
+  left_short_aimed_passes: Number of aimed passes (attempts excluding throwaways, spikes, batted passes and throws made while
+    hit) on short (0-9 air yards) throws to the left side of the field, as charted by PFF.
   left_short_attempts: Number of pass attempts on short (0-9 air yards) throws to the left side of the field.
   left_short_attempts_percent: Share of the player's total pass attempts that came on short (0-9 air yards) throws to the
     left side of the field, expressed as a percentage.
   left_short_avg_depth_of_target: Average depth of target in air yards on short (0-9 air yards) throws to the left side of
     the field.
-  left_short_avg_time_to_throw: Average time from snap to release in seconds on short (0-9 air yards) throws to the left side
-    of the field.
+  left_short_avg_time_to_throw: Average time to throw per dropback, in seconds from snap to release, on short (0-9 air yards)
+    throws to the left side of the field.
   left_short_bats: Number of pass attempts batted down at the line of scrimmage on short (0-9 air yards) throws to the left
     side of the field.
   left_short_big_time_throws: Number of big-time throws on short (0-9 air yards) throws to the left side of the field, per
@@ -31689,14 +31709,15 @@ pff_api_team_report:
   longest: 'Longest play in yards: longest reception (receiving), longest run (rushing), or longest completion allowed in
     coverage (coverage, defense).'
   medium_accuracy_percent: Percentage of aimed passes charted as accurate by PFF on medium (10-19 air yards) throws.
-  medium_aimed_passes: Number of aimed passes (attempts excluding spikes and throwaways) on medium (10-19 air yards) throws,
-    as charted by PFF.
+  medium_aimed_passes: Number of aimed passes (attempts excluding throwaways, spikes, batted passes and throws made while
+    hit) on medium (10-19 air yards) throws, as charted by PFF.
   medium_attempts: Number of pass attempts on medium (10-19 air yards) throws.
   medium_attempts_percent: Share of the player's total pass attempts that came on medium (10-19 air yards) throws, expressed
     as a percentage.
   medium_avg_depth_of_target: 'Average depth of target, in air yards, on medium (10-19 air yards) throws: of the passer''s
     throws (passing-depth) or the player''s targets (receiving-depth).'
-  medium_avg_time_to_throw: Average time from snap to release in seconds on medium (10-19 air yards) throws.
+  medium_avg_time_to_throw: Average time to throw per dropback, in seconds from snap to release, on medium (10-19 air yards)
+    throws.
   medium_avoided_tackles: Tackles avoided after the catch on medium passes (10-19 yards downfield).
   medium_bats: Number of pass attempts batted down at the line of scrimmage on medium (10-19 air yards) throws.
   medium_big_time_throws: Number of big-time throws on medium (10-19 air yards) throws, per PFF's highest-value, highest-difficulty
@@ -31756,11 +31777,11 @@ pff_api_team_report:
   missed_tackles: Missed tackles by the player (on special-teams plays in the special-teams report).
   neg_graded_rate: Percentage of the player's plays in the report's phase (run blocking or run defense) that PFF graded negatively.
   no_blitz_accuracy_percent: Percentage of aimed passes charted as accurate by PFF when not blitzed.
-  no_blitz_aimed_passes: Number of aimed passes (attempts excluding spikes and throwaways) when not blitzed, as charted by
-    PFF.
+  no_blitz_aimed_passes: Number of aimed passes (attempts excluding throwaways, spikes, batted passes and throws made while
+    hit) when not blitzed, as charted by PFF.
   no_blitz_attempts: Number of pass attempts when not blitzed.
   no_blitz_avg_depth_of_target: Average depth of target in air yards when not blitzed.
-  no_blitz_avg_time_to_throw: Average time from snap to release in seconds when not blitzed.
+  no_blitz_avg_time_to_throw: Average time to throw per dropback, in seconds from snap to release, when not blitzed.
   no_blitz_bats: Number of pass attempts batted down at the line of scrimmage when not blitzed.
   no_blitz_big_time_throws: Number of big-time throws when not blitzed, per PFF's highest-value, highest-difficulty throw
     designation.
@@ -31802,11 +31823,12 @@ pff_api_team_report:
   no_blitz_yards: Passing yards gained when not blitzed.
   no_blitz_ypa: Yards gained per pass attempt when not blitzed.
   no_pressure_accuracy_percent: Percentage of aimed passes charted as accurate by PFF from a clean pocket (no pressure).
-  no_pressure_aimed_passes: Number of aimed passes (attempts excluding spikes and throwaways) from a clean pocket (no pressure),
-    as charted by PFF.
+  no_pressure_aimed_passes: Number of aimed passes (attempts excluding throwaways, spikes, batted passes and throws made while
+    hit) from a clean pocket (no pressure), as charted by PFF.
   no_pressure_attempts: Number of pass attempts from a clean pocket (no pressure).
   no_pressure_avg_depth_of_target: Average depth of target in air yards from a clean pocket (no pressure).
-  no_pressure_avg_time_to_throw: Average time from snap to release in seconds from a clean pocket (no pressure).
+  no_pressure_avg_time_to_throw: Average time to throw per dropback, in seconds from snap to release, from a clean pocket
+    (no pressure).
   no_pressure_bats: Number of pass attempts batted down at the line of scrimmage from a clean pocket (no pressure).
   no_pressure_big_time_throws: Number of big-time throws from a clean pocket (no pressure), per PFF's highest-value, highest-difficulty
     throw designation.
@@ -31898,11 +31920,11 @@ pff_api_team_report:
     on every row at that position (e.g. the whole WR group's share).
   positive_epa_percent: Percentage of dropbacks with positive expected points added.
   pressure_accuracy_percent: Percentage of aimed passes charted as accurate by PFF when under pressure.
-  pressure_aimed_passes: Number of aimed passes (attempts excluding spikes and throwaways) when under pressure, as charted
-    by PFF.
+  pressure_aimed_passes: Number of aimed passes (attempts excluding throwaways, spikes, batted passes and throws made while
+    hit) when under pressure, as charted by PFF.
   pressure_attempts: Number of pass attempts when under pressure.
   pressure_avg_depth_of_target: Average depth of target in air yards when under pressure.
-  pressure_avg_time_to_throw: Average time from snap to release in seconds when under pressure.
+  pressure_avg_time_to_throw: Average time to throw per dropback, in seconds from snap to release, when under pressure.
   pressure_bats: Number of pass attempts batted down at the line of scrimmage when under pressure.
   pressure_big_time_throws: Number of big-time throws when under pressure, per PFF's highest-value, highest-difficulty throw
     designation.
@@ -31982,15 +32004,15 @@ pff_api_team_report:
   rhs_tackles: Tackles made on snaps rushing from the right-hand side (RHS).
   right_behind_los_accuracy_percent: Percentage of aimed passes charted as accurate by PFF on throws behind the line of scrimmage
     to the right side of the field.
-  right_behind_los_aimed_passes: Number of aimed passes (attempts excluding spikes and throwaways) on throws behind the line
-    of scrimmage to the right side of the field, as charted by PFF.
+  right_behind_los_aimed_passes: Number of aimed passes (attempts excluding throwaways, spikes, batted passes and throws made
+    while hit) on throws behind the line of scrimmage to the right side of the field, as charted by PFF.
   right_behind_los_attempts: Number of pass attempts on throws behind the line of scrimmage to the right side of the field.
   right_behind_los_attempts_percent: Share of the player's total pass attempts that came on throws behind the line of scrimmage
     to the right side of the field, expressed as a percentage.
   right_behind_los_avg_depth_of_target: Average depth of target in air yards on throws behind the line of scrimmage to the
     right side of the field.
-  right_behind_los_avg_time_to_throw: Average time from snap to release in seconds on throws behind the line of scrimmage
-    to the right side of the field.
+  right_behind_los_avg_time_to_throw: Average time to throw per dropback, in seconds from snap to release, on throws behind
+    the line of scrimmage to the right side of the field.
   right_behind_los_bats: Number of pass attempts batted down at the line of scrimmage on throws behind the line of scrimmage
     to the right side of the field.
   right_behind_los_big_time_throws: Number of big-time throws on throws behind the line of scrimmage to the right side of
@@ -32044,15 +32066,15 @@ pff_api_team_report:
   right_behind_los_ypa: Yards gained per pass attempt on throws behind the line of scrimmage to the right side of the field.
   right_deep_accuracy_percent: Percentage of aimed passes charted as accurate by PFF on deep (20+ air yards) throws to the
     right side of the field.
-  right_deep_aimed_passes: Number of aimed passes (attempts excluding spikes and throwaways) on deep (20+ air yards) throws
-    to the right side of the field, as charted by PFF.
+  right_deep_aimed_passes: Number of aimed passes (attempts excluding throwaways, spikes, batted passes and throws made while
+    hit) on deep (20+ air yards) throws to the right side of the field, as charted by PFF.
   right_deep_attempts: Number of pass attempts on deep (20+ air yards) throws to the right side of the field.
   right_deep_attempts_percent: Share of the player's total pass attempts that came on deep (20+ air yards) throws to the right
     side of the field, expressed as a percentage.
   right_deep_avg_depth_of_target: Average depth of target in air yards on deep (20+ air yards) throws to the right side of
     the field.
-  right_deep_avg_time_to_throw: Average time from snap to release in seconds on deep (20+ air yards) throws to the right side
-    of the field.
+  right_deep_avg_time_to_throw: Average time to throw per dropback, in seconds from snap to release, on deep (20+ air yards)
+    throws to the right side of the field.
   right_deep_bats: Number of pass attempts batted down at the line of scrimmage on deep (20+ air yards) throws to the right
     side of the field.
   right_deep_big_time_throws: Number of big-time throws on deep (20+ air yards) throws to the right side of the field, per
@@ -32097,15 +32119,15 @@ pff_api_team_report:
   right_deep_ypa: Yards gained per pass attempt on deep (20+ air yards) throws to the right side of the field.
   right_medium_accuracy_percent: Percentage of aimed passes charted as accurate by PFF on medium (10-19 air yards) throws
     to the right side of the field.
-  right_medium_aimed_passes: Number of aimed passes (attempts excluding spikes and throwaways) on medium (10-19 air yards)
-    throws to the right side of the field, as charted by PFF.
+  right_medium_aimed_passes: Number of aimed passes (attempts excluding throwaways, spikes, batted passes and throws made
+    while hit) on medium (10-19 air yards) throws to the right side of the field, as charted by PFF.
   right_medium_attempts: Number of pass attempts on medium (10-19 air yards) throws to the right side of the field.
   right_medium_attempts_percent: Share of the player's total pass attempts that came on medium (10-19 air yards) throws to
     the right side of the field, expressed as a percentage.
   right_medium_avg_depth_of_target: Average depth of target in air yards on medium (10-19 air yards) throws to the right side
     of the field.
-  right_medium_avg_time_to_throw: Average time from snap to release in seconds on medium (10-19 air yards) throws to the right
-    side of the field.
+  right_medium_avg_time_to_throw: Average time to throw per dropback, in seconds from snap to release, on medium (10-19 air
+    yards) throws to the right side of the field.
   right_medium_bats: Number of pass attempts batted down at the line of scrimmage on medium (10-19 air yards) throws to the
     right side of the field.
   right_medium_big_time_throws: Number of big-time throws on medium (10-19 air yards) throws to the right side of the field,
@@ -32153,15 +32175,15 @@ pff_api_team_report:
   right_medium_ypa: Yards gained per pass attempt on medium (10-19 air yards) throws to the right side of the field.
   right_short_accuracy_percent: Percentage of aimed passes charted as accurate by PFF on short (0-9 air yards) throws to the
     right side of the field.
-  right_short_aimed_passes: Number of aimed passes (attempts excluding spikes and throwaways) on short (0-9 air yards) throws
-    to the right side of the field, as charted by PFF.
+  right_short_aimed_passes: Number of aimed passes (attempts excluding throwaways, spikes, batted passes and throws made while
+    hit) on short (0-9 air yards) throws to the right side of the field, as charted by PFF.
   right_short_attempts: Number of pass attempts on short (0-9 air yards) throws to the right side of the field.
   right_short_attempts_percent: Share of the player's total pass attempts that came on short (0-9 air yards) throws to the
     right side of the field, expressed as a percentage.
   right_short_avg_depth_of_target: Average depth of target in air yards on short (0-9 air yards) throws to the right side
     of the field.
-  right_short_avg_time_to_throw: Average time from snap to release in seconds on short (0-9 air yards) throws to the right
-    side of the field.
+  right_short_avg_time_to_throw: Average time to throw per dropback, in seconds from snap to release, on short (0-9 air yards)
+    throws to the right side of the field.
   right_short_bats: Number of pass attempts batted down at the line of scrimmage on short (0-9 air yards) throws to the right
     side of the field.
   right_short_big_time_throws: Number of big-time throws on short (0-9 air yards) throws to the right side of the field, per
@@ -32218,14 +32240,14 @@ pff_api_team_report:
   scramble_yards: Rushing yards gained on scrambles.
   scrambles: Quarterback scrambles (pass plays on which the passer ran with the ball).
   short_accuracy_percent: Percentage of aimed passes charted as accurate by PFF on short (0-9 air yards) throws.
-  short_aimed_passes: Number of aimed passes (attempts excluding spikes and throwaways) on short (0-9 air yards) throws, as
-    charted by PFF.
+  short_aimed_passes: Number of aimed passes (attempts excluding throwaways, spikes, batted passes and throws made while hit)
+    on short (0-9 air yards) throws, as charted by PFF.
   short_attempts: Number of pass attempts on short (0-9 air yards) throws.
   short_attempts_percent: Share of the player's total pass attempts that came on short (0-9 air yards) throws, expressed as
     a percentage.
   short_avg_depth_of_target: 'Average depth of target, in air yards, on short (0-9 air yards) throws: of the passer''s throws
     (passing-depth) or the player''s targets (receiving-depth).'
-  short_avg_time_to_throw: Average time from snap to release in seconds on short (0-9 air yards) throws.
+  short_avg_time_to_throw: Average time to throw per dropback, in seconds from snap to release, on short (0-9 air yards) throws.
   short_avoided_tackles: Tackles avoided after the catch on short passes (0-9 yards downfield).
   short_bats: Number of pass attempts batted down at the line of scrimmage on short (0-9 air yards) throws.
   short_big_time_throws: Number of big-time throws on short (0-9 air yards) throws, per PFF's highest-value, highest-difficulty
@@ -34130,7 +34152,8 @@ receiving_concept:
   screen_pass_block_rate: Share of pass-play snaps spent pass blocking on screen concepts.
   screen_pass_blocks: Pass-play snaps spent pass blocking on screen concepts.
   screen_pass_plays: Pass-play snaps on screen concepts.
-  screen_positive_epa_percent: Percentage of the player's targets producing positive expected points added on screen concepts.
+  screen_positive_epa_percent: Percentage of the receiver's plays with an EPA value (in practice their routes run) producing
+    positive expected points added on screen concepts.
   screen_receptions: Receptions made on screen concepts.
   screen_route_rate: Share of pass-play snaps on which the player ran a route on screen concepts.
   screen_routes: Pass routes run by the player on screen concepts.
@@ -34161,8 +34184,8 @@ receiving_concept:
   slot_pass_block_rate: Share of pass-play snaps spent pass blocking when aligned in the slot.
   slot_pass_blocks: Pass-play snaps spent pass blocking when aligned in the slot.
   slot_pass_plays: Pass-play snaps when aligned in the slot.
-  slot_positive_epa_percent: Percentage of the player's targets producing positive expected points added when aligned in the
-    slot.
+  slot_positive_epa_percent: Percentage of the receiver's plays with an EPA value (in practice their routes run) producing
+    positive expected points added when aligned in the slot.
   slot_receptions: Receptions made when aligned in the slot.
   slot_route_rate: Share of pass-play snaps on which the player ran a route when aligned in the slot.
   slot_routes: Pass routes run by the player when aligned in the slot.
@@ -34198,8 +34221,8 @@ receiving_depth:
   behind_los_pass_block_rate: Share of pass-play snaps spent pass blocking on passes thrown behind the line of scrimmage.
   behind_los_pass_blocks: Pass-play snaps spent pass blocking on passes thrown behind the line of scrimmage.
   behind_los_pass_plays: Pass-play snaps on passes thrown behind the line of scrimmage.
-  behind_los_positive_epa_percent: Percentage of the player's targets producing positive expected points added on passes thrown
-    behind the line of scrimmage.
+  behind_los_positive_epa_percent: Percentage of the receiver's plays with an EPA value (in practice their routes run) producing
+    positive expected points added on passes thrown behind the line of scrimmage.
   behind_los_receptions: Receptions made on passes thrown behind the line of scrimmage.
   behind_los_route_rate: Share of pass-play snaps on which the player ran a route on passes thrown behind the line of scrimmage.
   behind_los_routes: Pass routes run by the player on passes thrown behind the line of scrimmage.
@@ -34247,8 +34270,8 @@ receiving_depth:
   center_behind_los_pass_blocks: Pass-play snaps spent pass blocking on passes thrown behind the line of scrimmage to the
     middle of the field.
   center_behind_los_pass_plays: Pass-play snaps on passes thrown behind the line of scrimmage to the middle of the field.
-  center_behind_los_positive_epa_percent: Percentage of the player's targets producing positive expected points added on passes
-    thrown behind the line of scrimmage to the middle of the field.
+  center_behind_los_positive_epa_percent: Percentage of the receiver's plays with an EPA value (in practice their routes run)
+    producing positive expected points added on passes thrown behind the line of scrimmage to the middle of the field.
   center_behind_los_receptions: Receptions made on passes thrown behind the line of scrimmage to the middle of the field.
   center_behind_los_route_rate: Share of pass-play snaps on which the player ran a route on passes thrown behind the line
     of scrimmage to the middle of the field.
@@ -34303,8 +34326,8 @@ receiving_depth:
   center_deep_pass_blocks: Pass-play snaps spent pass blocking on deep passes (20 or more yards downfield) to the middle of
     the field.
   center_deep_pass_plays: Pass-play snaps on deep passes (20 or more yards downfield) to the middle of the field.
-  center_deep_positive_epa_percent: Percentage of the player's targets producing positive expected points added on deep passes
-    (20 or more yards downfield) to the middle of the field.
+  center_deep_positive_epa_percent: Percentage of the receiver's plays with an EPA value (in practice their routes run) producing
+    positive expected points added on deep passes (20 or more yards downfield) to the middle of the field.
   center_deep_receptions: Receptions made on deep passes (20 or more yards downfield) to the middle of the field.
   center_deep_route_rate: Share of pass-play snaps on which the player ran a route on deep passes (20 or more yards downfield)
     to the middle of the field.
@@ -34356,8 +34379,8 @@ receiving_depth:
   center_medium_pass_blocks: Pass-play snaps spent pass blocking on medium passes (10-19 yards downfield) to the middle of
     the field.
   center_medium_pass_plays: Pass-play snaps on medium passes (10-19 yards downfield) to the middle of the field.
-  center_medium_positive_epa_percent: Percentage of the player's targets producing positive expected points added on medium
-    passes (10-19 yards downfield) to the middle of the field.
+  center_medium_positive_epa_percent: Percentage of the receiver's plays with an EPA value (in practice their routes run)
+    producing positive expected points added on medium passes (10-19 yards downfield) to the middle of the field.
   center_medium_receptions: Receptions made on medium passes (10-19 yards downfield) to the middle of the field.
   center_medium_route_rate: Share of pass-play snaps on which the player ran a route on medium passes (10-19 yards downfield)
     to the middle of the field.
@@ -34406,8 +34429,8 @@ receiving_depth:
   center_short_pass_blocks: Pass-play snaps spent pass blocking on short passes (0-9 yards downfield) to the middle of the
     field.
   center_short_pass_plays: Pass-play snaps on short passes (0-9 yards downfield) to the middle of the field.
-  center_short_positive_epa_percent: Percentage of the player's targets producing positive expected points added on short
-    passes (0-9 yards downfield) to the middle of the field.
+  center_short_positive_epa_percent: Percentage of the receiver's plays with an EPA value (in practice their routes run) producing
+    positive expected points added on short passes (0-9 yards downfield) to the middle of the field.
   center_short_receptions: Receptions made on short passes (0-9 yards downfield) to the middle of the field.
   center_short_route_rate: Share of pass-play snaps on which the player ran a route on short passes (0-9 yards downfield)
     to the middle of the field.
@@ -34445,8 +34468,8 @@ receiving_depth:
   deep_pass_block_rate: Share of pass-play snaps spent pass blocking on deep passes (20 or more yards downfield).
   deep_pass_blocks: Pass-play snaps spent pass blocking on deep passes (20 or more yards downfield).
   deep_pass_plays: Pass-play snaps on deep passes (20 or more yards downfield).
-  deep_positive_epa_percent: Percentage of the player's targets producing positive expected points added on deep passes (20
-    or more yards downfield).
+  deep_positive_epa_percent: Percentage of the receiver's plays with an EPA value (in practice their routes run) producing
+    positive expected points added on deep passes (20 or more yards downfield).
   deep_receptions: Receptions made on deep passes (20 or more yards downfield).
   deep_route_rate: Share of pass-play snaps on which the player ran a route on deep passes (20 or more yards downfield).
   deep_routes: Pass routes run by the player on deep passes (20 or more yards downfield).
@@ -34497,8 +34520,8 @@ receiving_depth:
   left_behind_los_pass_blocks: Pass-play snaps spent pass blocking on passes thrown behind the line of scrimmage to the left
     third of the field.
   left_behind_los_pass_plays: Pass-play snaps on passes thrown behind the line of scrimmage to the left third of the field.
-  left_behind_los_positive_epa_percent: Percentage of the player's targets producing positive expected points added on passes
-    thrown behind the line of scrimmage to the left third of the field.
+  left_behind_los_positive_epa_percent: Percentage of the receiver's plays with an EPA value (in practice their routes run)
+    producing positive expected points added on passes thrown behind the line of scrimmage to the left third of the field.
   left_behind_los_receptions: Receptions made on passes thrown behind the line of scrimmage to the left third of the field.
   left_behind_los_route_rate: Share of pass-play snaps on which the player ran a route on passes thrown behind the line of
     scrimmage to the left third of the field.
@@ -34553,8 +34576,8 @@ receiving_depth:
   left_deep_pass_blocks: Pass-play snaps spent pass blocking on deep passes (20 or more yards downfield) to the left third
     of the field.
   left_deep_pass_plays: Pass-play snaps on deep passes (20 or more yards downfield) to the left third of the field.
-  left_deep_positive_epa_percent: Percentage of the player's targets producing positive expected points added on deep passes
-    (20 or more yards downfield) to the left third of the field.
+  left_deep_positive_epa_percent: Percentage of the receiver's plays with an EPA value (in practice their routes run) producing
+    positive expected points added on deep passes (20 or more yards downfield) to the left third of the field.
   left_deep_receptions: Receptions made on deep passes (20 or more yards downfield) to the left third of the field.
   left_deep_route_rate: Share of pass-play snaps on which the player ran a route on deep passes (20 or more yards downfield)
     to the left third of the field.
@@ -34606,8 +34629,8 @@ receiving_depth:
   left_medium_pass_blocks: Pass-play snaps spent pass blocking on medium passes (10-19 yards downfield) to the left third
     of the field.
   left_medium_pass_plays: Pass-play snaps on medium passes (10-19 yards downfield) to the left third of the field.
-  left_medium_positive_epa_percent: Percentage of the player's targets producing positive expected points added on medium
-    passes (10-19 yards downfield) to the left third of the field.
+  left_medium_positive_epa_percent: Percentage of the receiver's plays with an EPA value (in practice their routes run) producing
+    positive expected points added on medium passes (10-19 yards downfield) to the left third of the field.
   left_medium_receptions: Receptions made on medium passes (10-19 yards downfield) to the left third of the field.
   left_medium_route_rate: Share of pass-play snaps on which the player ran a route on medium passes (10-19 yards downfield)
     to the left third of the field.
@@ -34658,8 +34681,8 @@ receiving_depth:
   left_short_pass_blocks: Pass-play snaps spent pass blocking on short passes (0-9 yards downfield) to the left third of the
     field.
   left_short_pass_plays: Pass-play snaps on short passes (0-9 yards downfield) to the left third of the field.
-  left_short_positive_epa_percent: Percentage of the player's targets producing positive expected points added on short passes
-    (0-9 yards downfield) to the left third of the field.
+  left_short_positive_epa_percent: Percentage of the receiver's plays with an EPA value (in practice their routes run) producing
+    positive expected points added on short passes (0-9 yards downfield) to the left third of the field.
   left_short_receptions: Receptions made on short passes (0-9 yards downfield) to the left third of the field.
   left_short_route_rate: Share of pass-play snaps on which the player ran a route on short passes (0-9 yards downfield) to
     the left third of the field.
@@ -34696,8 +34719,8 @@ receiving_depth:
   medium_pass_block_rate: Share of pass-play snaps spent pass blocking on medium passes (10-19 yards downfield).
   medium_pass_blocks: Pass-play snaps spent pass blocking on medium passes (10-19 yards downfield).
   medium_pass_plays: Pass-play snaps on medium passes (10-19 yards downfield).
-  medium_positive_epa_percent: Percentage of the player's targets producing positive expected points added on medium passes
-    (10-19 yards downfield).
+  medium_positive_epa_percent: Percentage of the receiver's plays with an EPA value (in practice their routes run) producing
+    positive expected points added on medium passes (10-19 yards downfield).
   medium_receptions: Receptions made on medium passes (10-19 yards downfield).
   medium_route_rate: Share of pass-play snaps on which the player ran a route on medium passes (10-19 yards downfield).
   medium_routes: Pass routes run by the player on medium passes (10-19 yards downfield).
@@ -34749,8 +34772,8 @@ receiving_depth:
   right_behind_los_pass_blocks: Pass-play snaps spent pass blocking on passes thrown behind the line of scrimmage to the right
     third of the field.
   right_behind_los_pass_plays: Pass-play snaps on passes thrown behind the line of scrimmage to the right third of the field.
-  right_behind_los_positive_epa_percent: Percentage of the player's targets producing positive expected points added on passes
-    thrown behind the line of scrimmage to the right third of the field.
+  right_behind_los_positive_epa_percent: Percentage of the receiver's plays with an EPA value (in practice their routes run)
+    producing positive expected points added on passes thrown behind the line of scrimmage to the right third of the field.
   right_behind_los_receptions: Receptions made on passes thrown behind the line of scrimmage to the right third of the field.
   right_behind_los_route_rate: Share of pass-play snaps on which the player ran a route on passes thrown behind the line of
     scrimmage to the right third of the field.
@@ -34805,8 +34828,8 @@ receiving_depth:
   right_deep_pass_blocks: Pass-play snaps spent pass blocking on deep passes (20 or more yards downfield) to the right third
     of the field.
   right_deep_pass_plays: Pass-play snaps on deep passes (20 or more yards downfield) to the right third of the field.
-  right_deep_positive_epa_percent: Percentage of the player's targets producing positive expected points added on deep passes
-    (20 or more yards downfield) to the right third of the field.
+  right_deep_positive_epa_percent: Percentage of the receiver's plays with an EPA value (in practice their routes run) producing
+    positive expected points added on deep passes (20 or more yards downfield) to the right third of the field.
   right_deep_receptions: Receptions made on deep passes (20 or more yards downfield) to the right third of the field.
   right_deep_route_rate: Share of pass-play snaps on which the player ran a route on deep passes (20 or more yards downfield)
     to the right third of the field.
@@ -34859,8 +34882,8 @@ receiving_depth:
   right_medium_pass_blocks: Pass-play snaps spent pass blocking on medium passes (10-19 yards downfield) to the right third
     of the field.
   right_medium_pass_plays: Pass-play snaps on medium passes (10-19 yards downfield) to the right third of the field.
-  right_medium_positive_epa_percent: Percentage of the player's targets producing positive expected points added on medium
-    passes (10-19 yards downfield) to the right third of the field.
+  right_medium_positive_epa_percent: Percentage of the receiver's plays with an EPA value (in practice their routes run) producing
+    positive expected points added on medium passes (10-19 yards downfield) to the right third of the field.
   right_medium_receptions: Receptions made on medium passes (10-19 yards downfield) to the right third of the field.
   right_medium_route_rate: Share of pass-play snaps on which the player ran a route on medium passes (10-19 yards downfield)
     to the right third of the field.
@@ -34913,8 +34936,8 @@ receiving_depth:
   right_short_pass_blocks: Pass-play snaps spent pass blocking on short passes (0-9 yards downfield) to the right third of
     the field.
   right_short_pass_plays: Pass-play snaps on short passes (0-9 yards downfield) to the right third of the field.
-  right_short_positive_epa_percent: Percentage of the player's targets producing positive expected points added on short passes
-    (0-9 yards downfield) to the right third of the field.
+  right_short_positive_epa_percent: Percentage of the receiver's plays with an EPA value (in practice their routes run) producing
+    positive expected points added on short passes (0-9 yards downfield) to the right third of the field.
   right_short_receptions: Receptions made on short passes (0-9 yards downfield) to the right third of the field.
   right_short_route_rate: Share of pass-play snaps on which the player ran a route on short passes (0-9 yards downfield) to
     the right third of the field.
@@ -34951,8 +34974,8 @@ receiving_depth:
   short_pass_block_rate: Share of pass-play snaps spent pass blocking on short passes (0-9 yards downfield).
   short_pass_blocks: Pass-play snaps spent pass blocking on short passes (0-9 yards downfield).
   short_pass_plays: Pass-play snaps on short passes (0-9 yards downfield).
-  short_positive_epa_percent: Percentage of the player's targets producing positive expected points added on short passes
-    (0-9 yards downfield).
+  short_positive_epa_percent: Percentage of the receiver's plays with an EPA value (in practice their routes run) producing
+    positive expected points added on short passes (0-9 yards downfield).
   short_receptions: Receptions made on short passes (0-9 yards downfield).
   short_route_rate: Share of pass-play snaps on which the player ran a route on short passes (0-9 yards downfield).
   short_routes: Pass routes run by the player on short passes (0-9 yards downfield).
@@ -34992,7 +35015,8 @@ receiving_scheme:
   man_pass_block_rate: Share of pass-play snaps spent pass blocking against man coverage.
   man_pass_blocks: Pass-play snaps spent pass blocking against man coverage.
   man_pass_plays: Pass-play snaps against man coverage.
-  man_positive_epa_percent: Percentage of the player's targets producing positive expected points added against man coverage.
+  man_positive_epa_percent: Percentage of the receiver's plays with an EPA value (in practice their routes run) producing
+    positive expected points added against man coverage.
   man_receptions: Receptions made against man coverage.
   man_route_rate: Share of pass-play snaps on which the player ran a route against man coverage.
   man_routes: Pass routes run by the player against man coverage.
@@ -35030,7 +35054,8 @@ receiving_scheme:
   zone_pass_block_rate: Share of pass-play snaps spent pass blocking against zone coverage.
   zone_pass_blocks: Pass-play snaps spent pass blocking against zone coverage.
   zone_pass_plays: Pass-play snaps against zone coverage.
-  zone_positive_epa_percent: Percentage of the player's targets producing positive expected points added against zone coverage.
+  zone_positive_epa_percent: Percentage of the receiver's plays with an EPA value (in practice their routes run) producing
+    positive expected points added against zone coverage.
   zone_receptions: Receptions made against zone coverage.
   zone_route_rate: Share of pass-play snaps on which the player ran a route against zone coverage.
   zone_routes: Pass routes run by the player against zone coverage.
@@ -35077,7 +35102,8 @@ receiving_summary:
   player_game_count: Games with at least one qualifying snap in the requested range.
   player_id: PFF player id (integer; matches the /players id and every player_id join key).
   position: PFF position code the player is listed at (e.g. QB, HB, FB, WR, TE, T, G, C, ED, DI, LB, CB, S, K, P).
-  positive_epa_percent: Percentage of the player's targets producing positive expected points added.
+  positive_epa_percent: Percentage of the receiver's plays with an EPA value (in practice their routes run) producing positive
+    expected points added.
   receptions: Passes caught by the receiver.
   route_rate: Share of pass-play snaps on which the player ran a route.
   routes: Pass routes run by the receiver.
@@ -38536,7 +38562,7 @@ teamyearbyyearstats:
   po_wins: Playoff wins recorded by the team that season.
   pts_rank: League rank of the team's points scored for the season.
 time_in_pockets:
-  avg_time_to_throw: Average time to throw, in seconds from snap to release, on the passer's attempts.
+  avg_time_to_throw: Average time to throw per dropback, in seconds from snap to release.
   avg_ttt_attempts: Average time from snap to release in seconds on dropbacks ending in a pass attempt.
   avg_ttt_sacks: Average time from snap to sack in seconds on dropbacks ending in a sack.
   avg_ttt_scrambles: Average time in the pocket in seconds on dropbacks ending in a scramble.
@@ -38547,11 +38573,12 @@ time_in_pockets:
   jersey_number: Jersey number (string; zero-padded, e.g. "09").
   less_accuracy_percent: Percentage of aimed passes charted as accurate by PFF on dropbacks with time in pocket under 2.5
     seconds.
-  less_aimed_passes: Number of aimed passes (attempts excluding spikes and throwaways) on dropbacks with time in pocket under
-    2.5 seconds, as charted by PFF.
+  less_aimed_passes: Number of aimed passes (attempts excluding throwaways, spikes, batted passes and throws made while hit)
+    on dropbacks with time in pocket under 2.5 seconds, as charted by PFF.
   less_attempts: Number of pass attempts on dropbacks with time in pocket under 2.5 seconds.
   less_avg_depth_of_target: Average depth of target in air yards on dropbacks with time in pocket under 2.5 seconds.
-  less_avg_time_to_throw: Average time from snap to release in seconds on dropbacks with time in pocket under 2.5 seconds.
+  less_avg_time_to_throw: Average time to throw per dropback, in seconds from snap to release, on dropbacks with time in pocket
+    under 2.5 seconds.
   less_bats: Number of pass attempts batted down at the line of scrimmage on dropbacks with time in pocket under 2.5 seconds.
   less_big_time_throws: Number of big-time throws on dropbacks with time in pocket under 2.5 seconds, per PFF's highest-value,
     highest-difficulty throw designation.
@@ -38612,12 +38639,12 @@ time_in_pockets:
   less_ypa: Yards gained per pass attempt on dropbacks with time in pocket under 2.5 seconds.
   more_accuracy_percent: Percentage of aimed passes charted as accurate by PFF on dropbacks with time in pocket of 2.5 seconds
     or more.
-  more_aimed_passes: Number of aimed passes (attempts excluding spikes and throwaways) on dropbacks with time in pocket of
-    2.5 seconds or more, as charted by PFF.
+  more_aimed_passes: Number of aimed passes (attempts excluding throwaways, spikes, batted passes and throws made while hit)
+    on dropbacks with time in pocket of 2.5 seconds or more, as charted by PFF.
   more_attempts: Number of pass attempts on dropbacks with time in pocket of 2.5 seconds or more.
   more_avg_depth_of_target: Average depth of target in air yards on dropbacks with time in pocket of 2.5 seconds or more.
-  more_avg_time_to_throw: Average time from snap to release in seconds on dropbacks with time in pocket of 2.5 seconds or
-    more.
+  more_avg_time_to_throw: Average time to throw per dropback, in seconds from snap to release, on dropbacks with time in pocket
+    of 2.5 seconds or more.
   more_bats: Number of pass attempts batted down at the line of scrimmage on dropbacks with time in pocket of 2.5 seconds
     or more.
   more_big_time_throws: Number of big-time throws on dropbacks with time in pocket of 2.5 seconds or more, per PFF's highest-value,

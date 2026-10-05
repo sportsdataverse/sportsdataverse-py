@@ -15,10 +15,84 @@ import polars as pl
 import requests
 from requests.adapters import HTTPAdapter
 
-from sportsdataverse.errors import NoDataError, no_espn_data
+from sportsdataverse.errors import NoDataError, _redact_secrets, no_espn_data
 
 logger = logging.getLogger("sdv.dl_utils")
 logger.addHandler(logging.NullHandler())
+
+
+class _RedactSecretsFilter(logging.Filter):
+    """Strip credentials from a record's rendered message (it may quote a request URL)."""
+
+    def filter(self, record: logging.LogRecord) -> bool:
+        try:
+            message = record.getMessage()
+        except Exception:  # noqa: BLE001 -- a malformed record is the handler's to report, not ours to raise
+            return True
+        clean = _redact_secrets(message)
+        if clean != message:
+            record.msg, record.args = clean, None
+        return True
+
+
+# urllib3 quotes the URL, query string and all, in its DEBUG request line
+# (``"GET /v4/sports?apiKey=... HTTP/1.1" 200``), its connection-retry warnings, a
+# ``Retry`` adapter's "Incremented Retry for (url=...)", its redirect lines and (2.x,
+# on ``urllib3.connection``) "Failed to parse headers (url=...)".
+_URLLIB3_LOGGERS = ("urllib3.connectionpool", "urllib3.connection", "urllib3.util.retry", "urllib3.poolmanager")
+for _urllib3_logger in _URLLIB3_LOGGERS:
+    logging.getLogger(_urllib3_logger).addFilter(_RedactSecretsFilter())
+
+# Request headers that carry a credential; dropped from an exception's request.
+_SECRET_HEADERS = frozenset({"authorization", "proxy-authorization", "cookie"})
+
+
+def _redact_exception(exc: BaseException) -> None:
+    """Redact credentials from ``exc`` and every exception chained to it, in place.
+
+    requests' ``ConnectionError`` quotes the request path, query string and all, and
+    chains urllib3's ``MaxRetryError``, which quotes it again; re-raising it, or a
+    wrapper's ``raise ... from exc``, would print both. Their attributes hold the same
+    URL (``err.url``, ``err.request.url``) and the request's ``Authorization`` /
+    ``Cookie`` headers, which an error reporter that serializes attributes would send
+    on; the URLs are redacted and those headers dropped, as sportsdataverse-js
+    ``safeCause`` does.
+    """
+    seen: set[int] = set()
+    todo: list[BaseException | None] = [exc]
+    while todo:
+        err = todo.pop()
+        if err is None or id(err) in seen:
+            continue
+        seen.add(id(err))
+        try:
+            text = str(err)
+        except Exception:  # noqa: BLE001 -- a broken __str__ must not mask the real failure
+            text = ""
+        clean = _redact_secrets(text)
+        if clean != text:
+            err.args = (clean,)
+        # String attributes: urllib3's ``url`` and the ``_message`` its ``__reduce__``
+        # pickles (a QueueHandler or a worker process would carry it on).
+        for name, value in list(getattr(err, "__dict__", {}).items()):
+            if isinstance(value, str):
+                err.__dict__[name] = _redact_secrets(value)
+        request = getattr(err, "request", None)
+        url = getattr(request, "url", None)
+        if isinstance(url, str):
+            try:
+                request.url = _redact_secrets(url)
+            except (AttributeError, TypeError):
+                pass
+        headers = getattr(request, "headers", None)
+        if headers is not None:
+            try:
+                for name in [h for h in headers if str(h).lower() in _SECRET_HEADERS]:
+                    del headers[name]
+            except (AttributeError, TypeError):
+                pass
+        todo += [err.__cause__, err.__context__]
+
 
 # Module-level pooled session: reuses TCP connections across the many small
 # requests a single workflow makes (e.g. a season crosswalk fires ~50). The
@@ -341,7 +415,7 @@ def download(
                     "retryable status %s - %s for url (%s) [status retry %d/%d]",
                     status,
                     getattr(response, "reason", "?"),
-                    getattr(response, "url", url),
+                    _redact_secrets(str(getattr(response, "url", url))),
                     status_retries,
                     status_budget,
                 )
@@ -355,7 +429,7 @@ def download(
                     status,
                     status_retries,
                     "y" if status_retries == 1 else "ies",
-                    getattr(response, "url", url),
+                    _redact_secrets(str(getattr(response, "url", url))),
                 )
             # Persist only successful (2xx) responses to the cache — never cache a
             # 429/5xx body. Catches any body-parse error so a cache write never
@@ -372,15 +446,17 @@ def download(
             # rate-limited host. Fail fast instead of burning the retry budget.
             raise
         except Exception as e:  # noqa: BLE001
+            # Before anything logs or re-raises it: requests quotes the URL, key and all.
+            _redact_exception(e)
             last_exc = e
             remaining = attempts - attempt - 1
 
             # Surface ESPN 404 explicitly; the wrapper layer keys on this.
             if hasattr(e, "code") and getattr(e, "code") == 404:
-                logger.error(f"404: {url} \nparams: {params}")
+                logger.error(_redact_secrets(f"404: {url} \nparams: {params}"))
 
             if remaining <= 0:
-                logger.error(f"Retry Limit Exceeded: {url} \nparams: {params}\n {e}")
+                logger.error(_redact_secrets(f"Retry Limit Exceeded: {url} \nparams: {params}\n {e}"))
                 break
 
             # Status / reason / final URL are only available when the
@@ -394,7 +470,7 @@ def download(
                     e,
                     getattr(response, "status_code", "?"),
                     getattr(response, "reason", "?"),
-                    getattr(response, "url", url),
+                    _redact_secrets(str(getattr(response, "url", url))),
                     attempt + 1,
                     num_retries,
                 )
@@ -402,7 +478,7 @@ def download(
                 logger.warning(
                     "%s for url (%s) [retry %d/%d]",
                     e,
-                    url,
+                    _redact_secrets(url),
                     attempt + 1,
                     num_retries,
                 )
