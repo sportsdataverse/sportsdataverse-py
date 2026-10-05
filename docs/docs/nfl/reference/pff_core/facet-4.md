@@ -194,7 +194,7 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 | `drops` | numeric | Passes dropped by the passer's receivers. |
 | `position` | character | PFF position code the player is listed at (e.g. QB, HB, FB, WR, TE, T, G, C, ED, DI, LB, CB, S, K, P). |
 | `grades_hands_fumble` | numeric | PFF hands (fumble) grade for the player, reflecting ball security (0-100). |
-| `avg_time_to_throw` | numeric | Average time to throw, in seconds from snap to release, on the passer's attempts. |
+| `avg_time_to_throw` | numeric | Average time to throw per dropback, in seconds from snap to release. |
 | `big_time_throws` | numeric | Number of big-time throws, per PFF's highest-value, highest-difficulty throw designation. |
 | `player` | character | Player's display name as PFF lists it. |
 | `positive_epa_percent` | numeric | Percentage of dropbacks with positive expected points added. |
@@ -202,7 +202,7 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 | `avg_depth_of_target` | numeric | Average depth of target in air yards. |
 | `turnover_worthy_plays` | numeric | Number of turnover-worthy plays, plays PFF charts as deserving of a turnover. |
 | `epa` | numeric | Expected points added per play on the passer's dropbacks, as computed by PFF (an average such as 0.14, not a total). |
-| `aimed_passes` | numeric | Number of aimed passes (attempts excluding spikes and throwaways), as charted by PFF. |
+| `aimed_passes` | numeric | Aimed passes: attempts excluding throwaways, spikes, batted passes and throws made while hit (the accuracy_percent denominator). |
 | `player_id` | numeric | PFF player id (integer; matches the /players id and every player_id join key). |
 | `touchdowns` | numeric | Number of passing touchdowns thrown. |
 | `def_gen_pressures` | numeric | Number of defense-generated pressures on the player's dropbacks, as charted by PFF. |

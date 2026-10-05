@@ -43,7 +43,7 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 | `no_blitz_bats` | numeric | Number of pass attempts batted down at the line of scrimmage when not blitzed. |
 | `no_blitz_drops` | numeric | Number of catchable passes dropped by receivers when not blitzed. |
 | `no_pressure_completion_percent` | numeric | Percentage of pass attempts completed from a clean pocket (no pressure). |
-| `blitz_aimed_passes` | numeric | Number of aimed passes (attempts excluding spikes and throwaways) when blitzed, as charted by PFF. |
+| `blitz_aimed_passes` | numeric | Number of aimed passes (attempts excluding throwaways, spikes, batted passes and throws made while hit) when blitzed, as charted by PFF. |
 | `pressure_grades_run` | numeric | PFF rushing grade for the player (0-100) when under pressure. |
 | `no_blitz_sack_percent` | numeric | Percentage of dropbacks that ended in a sack when not blitzed. |
 | `no_pressure_bats` | numeric | Number of pass attempts batted down at the line of scrimmage from a clean pocket (no pressure). |
@@ -55,9 +55,9 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 | `draft_season` | numeric | NFL season (year) in which the player was drafted, per PFF player metadata. |
 | `no_pressure_passing_snaps` | numeric | Number of passing snaps played from a clean pocket (no pressure). |
 | `no_blitz_first_downs` | numeric | Number of passing first downs gained when not blitzed. |
-| `blitz_avg_time_to_throw` | numeric | Average time from snap to release in seconds when blitzed. |
+| `blitz_avg_time_to_throw` | numeric | Average time to throw per dropback, in seconds from snap to release, when blitzed. |
 | `no_pressure_grades_hands_fumble` | numeric | PFF hands (fumble) grade for the player, reflecting ball security (0-100) from a clean pocket (no pressure). |
-| `pressure_aimed_passes` | numeric | Number of aimed passes (attempts excluding spikes and throwaways) when under pressure, as charted by PFF. |
+| `pressure_aimed_passes` | numeric | Number of aimed passes (attempts excluding throwaways, spikes, batted passes and throws made while hit) when under pressure, as charted by PFF. |
 | `blitz_sacks` | numeric | Number of sacks taken when blitzed. |
 | `no_pressure_interceptions` | numeric | Number of passes intercepted from a clean pocket (no pressure). |
 | `team_name` | character | Team abbreviation the player is credited to for the range. |
@@ -92,7 +92,7 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 | `pressure_pressure_to_sack_rate` | numeric | Percentage of pressured dropbacks that ended in a sack, reported within the pressure split. |
 | `no_blitz_grades_hands_fumble` | numeric | PFF hands (fumble) grade for the player, reflecting ball security (0-100) when not blitzed. |
 | `no_pressure_grades_offense` | numeric | PFF overall offense grade for the player (0-100) from a clean pocket (no pressure). |
-| `no_pressure_avg_time_to_throw` | numeric | Average time from snap to release in seconds from a clean pocket (no pressure). |
+| `no_pressure_avg_time_to_throw` | numeric | Average time to throw per dropback, in seconds from snap to release, from a clean pocket (no pressure). |
 | `pressure_dropbacks` | numeric | Number of dropbacks when under pressure. |
 | `no_blitz_grades_offense_penalty` | numeric | PFF offensive penalty grade for the player (0-100) when not blitzed. |
 | `no_pressure_grades_run` | numeric | PFF rushing grade for the player (0-100) from a clean pocket (no pressure). |
@@ -116,10 +116,10 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 | `no_blitz_dropbacks_percent` | numeric | Share of the player's total dropbacks that came when not blitzed, expressed as a percentage. |
 | `pressure_turnover_worthy_plays` | numeric | Number of turnover-worthy plays when under pressure, plays PFF charts as deserving of a turnover. |
 | `no_pressure_epa` | numeric | Total expected points added (EPA) on the player's dropbacks from a clean pocket (no pressure). |
-| `no_blitz_avg_time_to_throw` | numeric | Average time from snap to release in seconds when not blitzed. |
+| `no_blitz_avg_time_to_throw` | numeric | Average time to throw per dropback, in seconds from snap to release, when not blitzed. |
 | `no_blitz_positive_epa_percent` | numeric | Percentage of dropbacks with positive expected points added when not blitzed. |
 | `pressure_btt_rate` | numeric | Big-time throws as a percentage of qualifying attempts when under pressure, per PFF charting. |
-| `no_pressure_aimed_passes` | numeric | Number of aimed passes (attempts excluding spikes and throwaways) from a clean pocket (no pressure), as charted by PFF. |
+| `no_pressure_aimed_passes` | numeric | Number of aimed passes (attempts excluding throwaways, spikes, batted passes and throws made while hit) from a clean pocket (no pressure), as charted by PFF. |
 | `pressure_dropbacks_percent` | numeric | Share of the player's total dropbacks that came when under pressure, expressed as a percentage. |
 | `grades_run` | numeric | PFF rushing grade for the player (0-100). |
 | `no_pressure_def_gen_pressures` | numeric | Number of defense-generated pressures on the player's dropbacks from a clean pocket (no pressure), as charted by PFF. |
@@ -144,7 +144,7 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 | `blitz_dropbacks_percent` | numeric | Share of the player's total dropbacks that came when blitzed, expressed as a percentage. |
 | `no_pressure_qb_rating` | numeric | Traditional NFL passer rating from a clean pocket (no pressure). |
 | `no_blitz_passing_snaps` | numeric | Number of passing snaps played when not blitzed. |
-| `no_blitz_aimed_passes` | numeric | Number of aimed passes (attempts excluding spikes and throwaways) when not blitzed, as charted by PFF. |
+| `no_blitz_aimed_passes` | numeric | Number of aimed passes (attempts excluding throwaways, spikes, batted passes and throws made while hit) when not blitzed, as charted by PFF. |
 | `blitz_yards` | numeric | Passing yards gained when blitzed. |
 | `team` | character | Team abbreviation the player is credited to for the range. |
 | `no_blitz_attempts` | numeric | Number of pass attempts when not blitzed. |
@@ -168,7 +168,7 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 | `blitz_hit_as_threw` | numeric | Number of attempts on which the passer was hit as he threw when blitzed, as charted by PFF. |
 | `pressure_ypa` | numeric | Yards gained per pass attempt when under pressure. |
 | `blitz_grades_pass_route` | numeric | PFF receiving (route) grade for the player (0-100) when blitzed. |
-| `pressure_avg_time_to_throw` | numeric | Average time from snap to release in seconds when under pressure. |
+| `pressure_avg_time_to_throw` | numeric | Average time to throw per dropback, in seconds from snap to release, when under pressure. |
 | `no_blitz_completions` | numeric | Number of completed passes when not blitzed. |
 | `no_pressure_grades_pass_route` | numeric | PFF receiving (route) grade for the player (0-100) from a clean pocket (no pressure). |
 | `no_pressure_sack_percent` | numeric | Percentage of dropbacks that ended in a sack from a clean pocket (no pressure). |
@@ -319,7 +319,7 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 | `pass_plays` | numeric | Pass-play snaps. |
 | `yards_per_reception` | numeric | Average yards per reception. |
 | `player` | character | Player's display name as PFF lists it. |
-| `positive_epa_percent` | numeric | Percentage of the player's targets producing positive expected points added. |
+| `positive_epa_percent` | numeric | Percentage of the receiver's plays with an EPA value (in practice their routes run) producing positive expected points added. |
 | `franchise_id` | numeric | PFF franchise (team) id (integer join key). |
 | `contested_receptions` | numeric | Contested catches made. |
 | `yards_after_catch` | numeric | Yards after the catch. |
@@ -774,7 +774,7 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 | `zone_avoided_tackles` | numeric | Tackles avoided after the catch against zone coverage. |
 | `man_targeted_qb_rating` | numeric | NFL passer rating on throws targeting the player against man coverage. |
 | `draft_season` | numeric | Season of the player's NFL draft class, per PFF. |
-| `zone_positive_epa_percent` | numeric | Percentage of the player's targets producing positive expected points added against zone coverage. |
+| `zone_positive_epa_percent` | numeric | Percentage of the receiver's plays with an EPA value (in practice their routes run) producing positive expected points added against zone coverage. |
 | `man_targets_percent` | numeric | Share of the team's targets thrown to the player against man coverage. |
 | `man_yards_per_reception` | numeric | Average yards per reception against man coverage. |
 | `team_name` | character | Team abbreviation the player is credited to for the range. |
@@ -836,7 +836,7 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 | `man_caught_percent` | numeric | Percentage of targets caught against man coverage. |
 | `zone_drop_rate` | numeric | Share of catchable targets the player dropped against zone coverage. |
 | `zone_interceptions` | numeric | Interceptions thrown on passes targeting the player against zone coverage. |
-| `man_positive_epa_percent` | numeric | Percentage of the player's targets producing positive expected points added against man coverage. |
+| `man_positive_epa_percent` | numeric | Percentage of the receiver's plays with an EPA value (in practice their routes run) producing positive expected points added against man coverage. |
 | `zone_routes` | numeric | Pass routes run by the player against zone coverage. |
 | `player_id` | numeric | PFF player id (integer; matches the /players id and every player_id join key). |
 
