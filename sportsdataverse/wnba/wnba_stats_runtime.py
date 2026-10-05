@@ -83,4 +83,4 @@ def _get(
                 return 200, '{"resultSets": []}'
             data = _get("leaguedashplayerstats", {"LeagueID": "40"}, transport=fake)
     """
-    return _nba_get(path, params, host=host, **kwargs)
+    return _nba_get(path, params, host=host, _shim_frames=1, **kwargs)

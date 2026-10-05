@@ -228,19 +228,24 @@ def _get(
             try:
                 payload = json.loads(text)
             except json.JSONDecodeError:
-                payload = {}
+                payload = None
             if payload:  # a valid, non-empty envelope
                 return payload
         # non-200 / blank / undecodable / bare {} — a transient throttle; retry
         if attempt < retries:
             time.sleep(backoff * (attempt + 1))
             continue
-        reason = "with an empty body" if not text.strip() else ("with an empty object" if status == 200 else "")
+        if not text.strip():
+            reason = " with an empty body"
+        elif status != 200:
+            reason = ""
+        else:
+            reason = " with a body that is not JSON" if payload is None else " with an empty object"
         warnings.warn(
-            f"{url} answered HTTP {status} {reason}".rstrip() + "; returning {}. stats.nba.com answers this "
-            "way when a parameter it needs is missing or invalid (most often Season), and when it throttles.",
+            f"{url} answered HTTP {status}{reason}; returning {{}}. {host} answers this way when a "
+            "parameter it needs is missing or invalid (most often Season), and when it throttles.",
             EmptyResponseWarning,
-            stacklevel=3,
+            stacklevel=3 + kwargs.get("_shim_frames", 0),  # the caller, past the WNBA shim's frame
         )
         return {}
     return {}  # unreachable; keeps type-checkers happy

@@ -1,3 +1,5 @@
+import sys
+
 import pytest
 
 from sportsdataverse.errors import EmptyResponseWarning
@@ -41,6 +43,24 @@ def test_get_returns_empty_dict_on_blank_body():
     with pytest.warns(EmptyResponseWarning, match="HTTP 200 with an empty body"):
         out = _get("x", {}, transport=lambda *a: (200, "   "))
     assert out == {}
+
+
+def test_get_names_a_non_json_body():
+    with pytest.warns(EmptyResponseWarning, match="HTTP 200 with a body that is not JSON"):
+        assert _get("x", {}, transport=lambda *a: (200, "<html>blocked</html>")) == {}
+
+
+def test_wnba_warning_names_its_host_and_points_at_the_caller():
+    from sportsdataverse.wnba.wnba_stats_runtime import _get as wnba_get
+
+    def wrapper():  # stands in for a generated wnba_stats_* wrapper
+        return wnba_get("x", {}, transport=lambda *a: (500, ""))
+
+    with pytest.warns(EmptyResponseWarning, match="stats.wnba.com answers this way") as rec:
+        line = sys._getframe().f_lineno + 1
+        wrapper()
+    # The warning points at the wrapper's caller, past the WNBA shim's extra frame.
+    assert (rec[0].filename, rec[0].lineno) == (__file__, line)
 
 
 def test_get_does_not_warn_on_data(recwarn):
