@@ -1,0 +1,68 @@
+{
+ "resource": "drafthistory",
+ "parameters": {
+  "LeagueID": "00",
+  "Season": null,
+  "TeamID": null,
+  "RoundNum": null,
+  "RoundPick": null,
+  "OverallPick": null,
+  "TopX": null,
+  "College": null
+ },
+ "resultSets": [
+  {
+   "name": "DraftHistory",
+   "headers": [
+    "PERSON_ID",
+    "PLAYER_NAME",
+    "SEASON",
+    "ROUND_NUMBER",
+    "ROUND_PICK",
+    "OVERALL_PICK",
+    "DRAFT_TYPE",
+    "TEAM_ID",
+    "TEAM_CITY",
+    "TEAM_NAME",
+    "TEAM_ABBREVIATION",
+    "ORGANIZATION",
+    "ORGANIZATION_TYPE",
+    "PLAYER_PROFILE_FLAG"
+   ],
+   "rowSet": [
+    [
+     1643407,
+     "AJ Dybantsa",
+     "2026",
+     1,
+     1,
+     1,
+     "Draft",
+     1610612764,
+     "Washington",
+     "Wizards",
+     "WAS",
+     "Brigham Young",
+     "College/University",
+     1
+    ],
+    [
+     1643408,
+     "Darryn Peterson",
+     "2026",
+     1,
+     2,
+     2,
+     "Draft",
+     1610612762,
+     "Utah",
+     "Jazz",
+     "UTA",
+     "Kansas",
+     "College/University",
+     1
+    ]
+   ]
+  }
+ ]
+}

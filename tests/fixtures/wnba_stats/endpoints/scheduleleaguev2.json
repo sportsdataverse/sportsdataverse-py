@@ -1,0 +1,733 @@
+{
+ "meta": {
+  "version": 1,
+  "request": "http://nba.cloud/league/10/2023/scheduleleaguev2?Format=json",
+  "time": "2026-06-28T20:15:52.1552Z"
+ },
+ "leagueSchedule": {
+  "seasonYear": "2023",
+  "leagueId": "10",
+  "gameDates": [
+   {
+    "gameDate": "05/05/2023 00:00:00",
+    "games": [
+     {
+      "gameId": "1012300004",
+      "gameCode": "20230505/WASMIN",
+      "gameStatus": 3,
+      "gameStatusText": "Final",
+      "gameSequence": 1,
+      "gameDateEst": "2023-05-05T00:00:00Z",
+      "gameTimeEst": "1900-01-01T20:00:00Z",
+      "gameDateTimeEst": "2023-05-05T20:00:00Z",
+      "gameDateUTC": "2023-05-06T00:00:00Z",
+      "gameTimeUTC": "1900-01-01T00:00:00Z",
+      "gameDateTimeUTC": "2023-05-06T00:00:00Z",
+      "awayTeamTime": "2023-05-05T20:00:00Z",
+      "homeTeamTime": "2023-05-05T19:00:00Z",
+      "day": "Fri",
+      "monthNum": 5,
+      "weekNumber": 0,
+      "weekName": "",
+      "ifNecessary": false,
+      "seriesGameNumber": "",
+      "gameLabel": "Pre-Season",
+      "gameSubLabel": "",
+      "seriesText": "",
+      "arenaName": "Target Center",
+      "arenaState": "MN",
+      "arenaCity": "Minneapolis",
+      "postponedStatus": "A",
+      "branchLink": "",
+      "gameSubtype": "",
+      "isNeutral": false,
+      "broadcasters": {
+       "nationalBroadcasters": [],
+       "nationalRadioBroadcasters": [],
+       "nationalOttBroadcasters": [],
+       "homeTvBroadcasters": [],
+       "homeRadioBroadcasters": [],
+       "homeOttBroadcasters": [],
+       "awayTvBroadcasters": [],
+       "awayRadioBroadcasters": [],
+       "awayOttBroadcasters": []
+      },
+      "homeTeam": {
+       "teamId": 1611661324,
+       "teamName": "Lynx",
+       "teamCity": "Minnesota",
+       "teamTricode": "MIN",
+       "teamSlug": "lynx",
+       "wins": 1,
+       "losses": 0,
+       "score": 72,
+       "seed": 0
+      },
+      "awayTeam": {
+       "teamId": 1611661322,
+       "teamName": "Mystics",
+       "teamCity": "Washington",
+       "teamTricode": "WAS",
+       "teamSlug": "mystics",
+       "wins": 0,
+       "losses": 1,
+       "score": 69,
+       "seed": 0
+      },
+      "pointsLeaders": [
+       {
+        "personId": 1641649,
+        "firstName": "Diamond",
+        "lastName": "Miller",
+        "teamId": 1611661324,
+        "teamCity": "Minnesota",
+        "teamName": "Lynx",
+        "teamTricode": "MIN",
+        "points": 19.0
+       }
+      ]
+     },
+     {
+      "gameId": "1012300005",
+      "gameCode": "20230505/CHIDAL",
+      "gameStatus": 3,
+      "gameStatusText": "Final",
+      "gameSequence": 2,
+      "gameDateEst": "2023-05-05T00:00:00Z",
+      "gameTimeEst": "1900-01-01T20:00:00Z",
+      "gameDateTimeEst": "2023-05-05T20:00:00Z",
+      "gameDateUTC": "2023-05-06T00:00:00Z",
+      "gameTimeUTC": "1900-01-01T00:00:00Z",
+      "gameDateTimeUTC": "2023-05-06T00:00:00Z",
+      "awayTeamTime": "2023-05-05T19:00:00Z",
+      "homeTeamTime": "2023-05-05T19:00:00Z",
+      "day": "Fri",
+      "monthNum": 5,
+      "weekNumber": 0,
+      "weekName": "",
+      "ifNecessary": false,
+      "seriesGameNumber": "",
+      "gameLabel": "Pre-Season",
+      "gameSubLabel": "",
+      "seriesText": "",
+      "arenaName": "College Park Center",
+      "arenaState": "TX",
+      "arenaCity": "Arlington",
+      "postponedStatus": "A",
+      "branchLink": "",
+      "gameSubtype": "",
+      "isNeutral": false,
+      "broadcasters": {
+       "nationalBroadcasters": [],
+       "nationalRadioBroadcasters": [],
+       "nationalOttBroadcasters": [],
+       "homeTvBroadcasters": [],
+       "homeRadioBroadcasters": [],
+       "homeOttBroadcasters": [],
+       "awayTvBroadcasters": [],
+       "awayRadioBroadcasters": [],
+       "awayOttBroadcasters": []
+      },
+      "homeTeam": {
+       "teamId": 1611661321,
+       "teamName": "Wings",
+       "teamCity": "Dallas",
+       "teamTricode": "DAL",
+       "teamSlug": "wings",
+       "wins": 1,
+       "losses": 0,
+       "score": 75,
+       "seed": 0
+      },
+      "awayTeam": {
+       "teamId": 1611661329,
+       "teamName": "Sky",
+       "teamCity": "Chicago",
+       "teamTricode": "CHI",
+       "teamSlug": "sky",
+       "wins": 0,
+       "losses": 1,
+       "score": 70,
+       "seed": 0
+      },
+      "pointsLeaders": [
+       {
+        "personId": 1629479,
+        "firstName": "Teaira",
+        "lastName": "McCowan",
+        "teamId": 1611661321,
+        "teamCity": "Dallas",
+        "teamName": "Wings",
+        "teamTricode": "DAL",
+        "points": 17.0
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "gameDate": "05/07/2023 00:00:00",
+    "games": [
+     {
+      "gameId": "1012300006",
+      "gameCode": "20230507/INDCHI",
+      "gameStatus": 3,
+      "gameStatusText": "Final",
+      "gameSequence": 1,
+      "gameDateEst": "2023-05-07T00:00:00Z",
+      "gameTimeEst": "1900-01-01T18:00:00Z",
+      "gameDateTimeEst": "2023-05-07T18:00:00Z",
+      "gameDateUTC": "2023-05-07T00:00:00Z",
+      "gameTimeUTC": "1900-01-01T22:00:00Z",
+      "gameDateTimeUTC": "2023-05-07T22:00:00Z",
+      "awayTeamTime": "2023-05-07T18:00:00Z",
+      "homeTeamTime": "2023-05-07T17:00:00Z",
+      "day": "Sun",
+      "monthNum": 5,
+      "weekNumber": 0,
+      "weekName": "",
+      "ifNecessary": false,
+      "seriesGameNumber": "",
+      "gameLabel": "Pre-Season",
+      "gameSubLabel": "",
+      "seriesText": "",
+      "arenaName": "Wintrust Arena",
+      "arenaState": "IL",
+      "arenaCity": "Chicago",
+      "postponedStatus": "A",
+      "branchLink": "",
+      "gameSubtype": "",
+      "isNeutral": false,
+      "broadcasters": {
+       "nationalBroadcasters": [],
+       "nationalRadioBroadcasters": [],
+       "nationalOttBroadcasters": [],
+       "homeTvBroadcasters": [],
+       "homeRadioBroadcasters": [],
+       "homeOttBroadcasters": [],
+       "awayTvBroadcasters": [],
+       "awayRadioBroadcasters": [],
+       "awayOttBroadcasters": []
+      },
+      "homeTeam": {
+       "teamId": 1611661329,
+       "teamName": "Sky",
+       "teamCity": "Chicago",
+       "teamTricode": "CHI",
+       "teamSlug": "sky",
+       "wins": 1,
+       "losses": 1,
+       "score": 81,
+       "seed": 0
+      },
+      "awayTeam": {
+       "teamId": 1611661325,
+       "teamName": "Fever",
+       "teamCity": "Indiana",
+       "teamTricode": "IND",
+       "teamSlug": "fever",
+       "wins": 0,
+       "losses": 1,
+       "score": 56,
+       "seed": 0
+      },
+      "pointsLeaders": [
+       {
+        "personId": 204330,
+        "firstName": "Isabelle",
+        "lastName": "Harrison",
+        "teamId": 1611661329,
+        "teamCity": "Chicago",
+        "teamName": "Sky",
+        "teamTricode": "CHI",
+        "points": 15.0
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "gameDate": "05/13/2023 00:00:00",
+    "games": [
+     {
+      "gameId": "1012300001",
+      "gameCode": "20230513/CHIMIN",
+      "gameStatus": 3,
+      "gameStatusText": "Final",
+      "gameSequence": 2,
+      "gameDateEst": "2023-05-13T00:00:00Z",
+      "gameTimeEst": "1900-01-01T16:00:00Z",
+      "gameDateTimeEst": "2023-05-13T16:00:00Z",
+      "gameDateUTC": "2023-05-13T00:00:00Z",
+      "gameTimeUTC": "1900-01-01T20:00:00Z",
+      "gameDateTimeUTC": "2023-05-13T20:00:00Z",
+      "awayTeamTime": "2023-05-13T15:00:00Z",
+      "homeTeamTime": "2023-05-13T15:00:00Z",
+      "day": "Sat",
+      "monthNum": 5,
+      "weekNumber": 0,
+      "weekName": "",
+      "ifNecessary": false,
+      "seriesGameNumber": "",
+      "gameLabel": "Preseason",
+      "gameSubLabel": "",
+      "seriesText": "",
+      "arenaName": "Scotiabank Arena",
+      "arenaState": "ON",
+      "arenaCity": "Toronto",
+      "postponedStatus": "A",
+      "branchLink": "",
+      "gameSubtype": "",
+      "isNeutral": false,
+      "broadcasters": {
+       "nationalBroadcasters": [],
+       "nationalRadioBroadcasters": [],
+       "nationalOttBroadcasters": [],
+       "homeTvBroadcasters": [
+        {
+         "broadcasterScope": "home",
+         "broadcasterMedia": "tv",
+         "broadcasterId": 1000369,
+         "broadcasterDisplay": "Bally Sports North Extra",
+         "broadcasterAbbreviation": "BSNX",
+         "tapeDelayComments": "",
+         "broadcasterVideoLink": "",
+         "broadcasterDescription": "",
+         "broadcasterTeamId": 1610612750,
+         "broadcasterRanking": 0
+        }
+       ],
+       "homeRadioBroadcasters": [],
+       "homeOttBroadcasters": [],
+       "awayTvBroadcasters": [],
+       "awayRadioBroadcasters": [],
+       "awayOttBroadcasters": []
+      },
+      "homeTeam": {
+       "teamId": 1611661324,
+       "teamName": "Lynx",
+       "teamCity": "Minnesota",
+       "teamTricode": "MIN",
+       "teamSlug": "lynx",
+       "wins": 1,
+       "losses": 1,
+       "score": 74,
+       "seed": 0
+      },
+      "awayTeam": {
+       "teamId": 1611661329,
+       "teamName": "Sky",
+       "teamCity": "Chicago",
+       "teamTricode": "CHI",
+       "teamSlug": "sky",
+       "wins": 2,
+       "losses": 1,
+       "score": 82,
+       "seed": 0
+      },
+      "pointsLeaders": [
+       {
+        "personId": 1627676,
+        "firstName": "Tiffany",
+        "lastName": "Mitchell",
+        "teamId": 1611661324,
+        "teamCity": "Minnesota",
+        "teamName": "Lynx",
+        "teamTricode": "MIN",
+        "points": 19.0
+       }
+      ]
+     },
+     {
+      "gameId": "1012300009",
+      "gameCode": "20230513/DALIND",
+      "gameStatus": 3,
+      "gameStatusText": "Final",
+      "gameSequence": 1,
+      "gameDateEst": "2023-05-13T00:00:00Z",
+      "gameTimeEst": "1900-01-01T13:00:00Z",
+      "gameDateTimeEst": "2023-05-13T13:00:00Z",
+      "gameDateUTC": "2023-05-13T00:00:00Z",
+      "gameTimeUTC": "1900-01-01T17:00:00Z",
+      "gameDateTimeUTC": "2023-05-13T17:00:00Z",
+      "awayTeamTime": "2023-05-13T12:00:00Z",
+      "homeTeamTime": "2023-05-13T13:00:00Z",
+      "day": "Sat",
+      "monthNum": 5,
+      "weekNumber": 0,
+      "weekName": "",
+      "ifNecessary": false,
+      "seriesGameNumber": "",
+      "gameLabel": "Pre-Season",
+      "gameSubLabel": "",
+      "seriesText": "",
+      "arenaName": "Gainbridge Fieldhouse",
+      "arenaState": "IN",
+      "arenaCity": "Indianapolis",
+      "postponedStatus": "A",
+      "branchLink": "",
+      "gameSubtype": "",
+      "isNeutral": false,
+      "broadcasters": {
+       "nationalBroadcasters": [],
+       "nationalRadioBroadcasters": [],
+       "nationalOttBroadcasters": [],
+       "homeTvBroadcasters": [],
+       "homeRadioBroadcasters": [],
+       "homeOttBroadcasters": [],
+       "awayTvBroadcasters": [],
+       "awayRadioBroadcasters": [],
+       "awayOttBroadcasters": []
+      },
+      "homeTeam": {
+       "teamId": 1611661325,
+       "teamName": "Fever",
+       "teamCity": "Indiana",
+       "teamTricode": "IND",
+       "teamSlug": "fever",
+       "wins": 1,
+       "losses": 1,
+       "score": 90,
+       "seed": 0
+      },
+      "awayTeam": {
+       "teamId": 1611661321,
+       "teamName": "Wings",
+       "teamCity": "Dallas",
+       "teamTricode": "DAL",
+       "teamSlug": "wings",
+       "wins": 1,
+       "losses": 1,
+       "score": 83,
+       "seed": 0
+      },
+      "pointsLeaders": [
+       {
+        "personId": 1628909,
+        "firstName": "Kelsey",
+        "lastName": "Mitchell",
+        "teamId": 1611661325,
+        "teamCity": "Indiana",
+        "teamName": "Fever",
+        "teamTricode": "IND",
+        "points": 29.0
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "gameDate": "05/19/2023 00:00:00",
+    "games": [
+     {
+      "gameId": "1022300001",
+      "gameCode": "20230519/CONIND",
+      "gameStatus": 3,
+      "gameStatusText": "Final",
+      "gameSequence": 1,
+      "gameDateEst": "2023-05-19T00:00:00Z",
+      "gameTimeEst": "1900-01-01T19:00:00Z",
+      "gameDateTimeEst": "2023-05-19T19:00:00Z",
+      "gameDateUTC": "2023-05-19T00:00:00Z",
+      "gameTimeUTC": "1900-01-01T23:00:00Z",
+      "gameDateTimeUTC": "2023-05-19T23:00:00Z",
+      "awayTeamTime": "2023-05-19T19:00:00Z",
+      "homeTeamTime": "2023-05-19T19:00:00Z",
+      "day": "Fri",
+      "monthNum": 5,
+      "weekNumber": 0,
+      "weekName": "",
+      "ifNecessary": false,
+      "seriesGameNumber": "",
+      "gameLabel": "Commissioner's Cup",
+      "gameSubLabel": "",
+      "seriesText": "",
+      "arenaName": "Gainbridge Fieldhouse",
+      "arenaState": "IN",
+      "arenaCity": "Indianapolis",
+      "postponedStatus": "A",
+      "branchLink": "",
+      "gameSubtype": "Commissioner",
+      "isNeutral": false,
+      "broadcasters": {
+       "nationalBroadcasters": [],
+       "nationalRadioBroadcasters": [],
+       "nationalOttBroadcasters": [],
+       "homeTvBroadcasters": [
+        {
+         "broadcasterScope": "home",
+         "broadcasterMedia": "tv",
+         "broadcasterId": 1000341,
+         "broadcasterDisplay": "Bally Sports Indiana",
+         "broadcasterAbbreviation": "BSIN",
+         "tapeDelayComments": "",
+         "broadcasterVideoLink": "",
+         "broadcasterDescription": "",
+         "broadcasterTeamId": 1610612754,
+         "broadcasterRanking": 0
+        }
+       ],
+       "homeRadioBroadcasters": [],
+       "homeOttBroadcasters": [],
+       "awayTvBroadcasters": [
+        {
+         "broadcasterScope": "away",
+         "broadcasterMedia": "tv",
+         "broadcasterId": 1001003,
+         "broadcasterDisplay": "NECN",
+         "broadcasterAbbreviation": "NECN",
+         "tapeDelayComments": "",
+         "broadcasterVideoLink": "",
+         "broadcasterDescription": "",
+         "broadcasterTeamId": -1,
+         "broadcasterRanking": 0
+        }
+       ],
+       "awayRadioBroadcasters": [],
+       "awayOttBroadcasters": []
+      },
+      "homeTeam": {
+       "teamId": 1611661325,
+       "teamName": "Fever",
+       "teamCity": "Indiana",
+       "teamTricode": "IND",
+       "teamSlug": "fever",
+       "wins": 0,
+       "losses": 1,
+       "score": 61,
+       "seed": 0
+      },
+      "awayTeam": {
+       "teamId": 1611661323,
+       "teamName": "Sun",
+       "teamCity": "Connecticut",
+       "teamTricode": "CON",
+       "teamSlug": "sun",
+       "wins": 1,
+       "losses": 0,
+       "score": 70,
+       "seed": 0
+      },
+      "pointsLeaders": [
+       {
+        "personId": 1628909,
+        "firstName": "Kelsey",
+        "lastName": "Mitchell",
+        "teamId": 1611661325,
+        "teamCity": "Indiana",
+        "teamName": "Fever",
+        "teamTricode": "IND",
+        "points": 20.0
+       }
+      ]
+     },
+     {
+      "gameId": "1022300002",
+      "gameCode": "20230519/NYLWAS",
+      "gameStatus": 3,
+      "gameStatusText": "Final",
+      "gameSequence": 2,
+      "gameDateEst": "2023-05-19T00:00:00Z",
+      "gameTimeEst": "1900-01-01T19:00:00Z",
+      "gameDateTimeEst": "2023-05-19T19:00:00Z",
+      "gameDateUTC": "2023-05-19T00:00:00Z",
+      "gameTimeUTC": "1900-01-01T23:00:00Z",
+      "gameDateTimeUTC": "2023-05-19T23:00:00Z",
+      "awayTeamTime": "2023-05-19T19:00:00Z",
+      "homeTeamTime": "2023-05-19T19:00:00Z",
+      "day": "Fri",
+      "monthNum": 5,
+      "weekNumber": 0,
+      "weekName": "",
+      "ifNecessary": false,
+      "seriesGameNumber": "",
+      "gameLabel": "Commissioner's Cup",
+      "gameSubLabel": "",
+      "seriesText": "",
+      "arenaName": "Entertainment and Sports Arena",
+      "arenaState": "DC",
+      "arenaCity": "Washington",
+      "postponedStatus": "A",
+      "branchLink": "",
+      "gameSubtype": "Commissioner",
+      "isNeutral": false,
+      "broadcasters": {
+       "nationalBroadcasters": [
+        {
+         "broadcasterScope": "natl",
+         "broadcasterMedia": "tv",
+         "broadcasterId": 7,
+         "broadcasterDisplay": "NBA TV",
+         "broadcasterAbbreviation": "NBA TV",
+         "tapeDelayComments": "",
+         "broadcasterVideoLink": "",
+         "broadcasterDescription": "Watch with League Pass or your TV subscription",
+         "broadcasterTeamId": -1,
+         "broadcasterRanking": 0
+        }
+       ],
+       "nationalRadioBroadcasters": [],
+       "nationalOttBroadcasters": [],
+       "homeTvBroadcasters": [
+        {
+         "broadcasterScope": "home",
+         "broadcasterMedia": "tv",
+         "broadcasterId": 1705,
+         "broadcasterDisplay": "NBC Sports Washington/Monumental Sports",
+         "broadcasterAbbreviation": "NBCSWA/MON",
+         "tapeDelayComments": "",
+         "broadcasterVideoLink": "",
+         "broadcasterDescription": "",
+         "broadcasterTeamId": -1,
+         "broadcasterRanking": 0
+        }
+       ],
+       "homeRadioBroadcasters": [],
+       "homeOttBroadcasters": [],
+       "awayTvBroadcasters": [
+        {
+         "broadcasterScope": "away",
+         "broadcasterMedia": "tv",
+         "broadcasterId": 1098,
+         "broadcasterDisplay": "WWOR-My9",
+         "broadcasterAbbreviation": "WWOR",
+         "tapeDelayComments": "",
+         "broadcasterVideoLink": "",
+         "broadcasterDescription": "",
+         "broadcasterTeamId": 1610612751,
+         "broadcasterRanking": 0
+        }
+       ],
+       "awayRadioBroadcasters": [],
+       "awayOttBroadcasters": []
+      },
+      "homeTeam": {
+       "teamId": 1611661322,
+       "teamName": "Mystics",
+       "teamCity": "Washington",
+       "teamTricode": "WAS",
+       "teamSlug": "mystics",
+       "wins": 1,
+       "losses": 0,
+       "score": 80,
+       "seed": 0
+      },
+      "awayTeam": {
+       "teamId": 1611661313,
+       "teamName": "Liberty",
+       "teamCity": "New York",
+       "teamTricode": "NYL",
+       "teamSlug": "liberty",
+       "wins": 0,
+       "losses": 1,
+       "score": 64,
+       "seed": 0
+      },
+      "pointsLeaders": [
+       {
+        "personId": 1629477,
+        "firstName": "Sabrina",
+        "lastName": "Ionescu",
+        "teamId": 1611661313,
+        "teamCity": "New York",
+        "teamName": "Liberty",
+        "teamTricode": "NYL",
+        "points": 18.0
+       }
+      ]
+     },
+     {
+      "gameId": "1022300004",
+      "gameCode": "20230519/PHOLAS",
+      "gameStatus": 3,
+      "gameStatusText": "Final",
+      "gameSequence": 4,
+      "gameDateEst": "2023-05-19T00:00:00Z",
+      "gameTimeEst": "1900-01-01T23:00:00Z",
+      "gameDateTimeEst": "2023-05-19T23:00:00Z",
+      "gameDateUTC": "2023-05-20T00:00:00Z",
+      "gameTimeUTC": "1900-01-01T03:00:00Z",
+      "gameDateTimeUTC": "2023-05-20T03:00:00Z",
+      "awayTeamTime": "2023-05-19T20:00:00Z",
+      "homeTeamTime": "2023-05-19T20:00:00Z",
+      "day": "Fri",
+      "monthNum": 5,
+      "weekNumber": 0,
+      "weekName": "",
+      "ifNecessary": false,
+      "seriesGameNumber": "",
+      "gameLabel": "Commissioner's Cup",
+      "gameSubLabel": "",
+      "seriesText": "",
+      "arenaName": "Crypto.com Arena",
+      "arenaState": "CA",
+      "arenaCity": "Los Angeles",
+      "postponedStatus": "A",
+      "branchLink": "",
+      "gameSubtype": "Commissioner",
+      "isNeutral": false,
+      "broadcasters": {
+       "nationalBroadcasters": [
+        {
+         "broadcasterScope": "natl",
+         "broadcasterMedia": "tv",
+         "broadcasterId": 1000985,
+         "broadcasterDisplay": "ESPN/ESPN+",
+         "broadcasterAbbreviation": "ESPN/ESPN+",
+         "tapeDelayComments": "",
+         "broadcasterVideoLink": "",
+         "broadcasterDescription": "",
+         "broadcasterTeamId": -1,
+         "broadcasterRanking": 0
+        }
+       ],
+       "nationalRadioBroadcasters": [],
+       "nationalOttBroadcasters": [],
+       "homeTvBroadcasters": [],
+       "homeRadioBroadcasters": [],
+       "homeOttBroadcasters": [],
+       "awayTvBroadcasters": [],
+       "awayRadioBroadcasters": [],
+       "awayOttBroadcasters": []
+      },
+      "homeTeam": {
+       "teamId": 1611661320,
+       "teamName": "Sparks",
+       "teamCity": "Los Angeles",
+       "teamTricode": "LAS",
+       "teamSlug": "sparks",
+       "wins": 1,
+       "losses": 0,
+       "score": 94,
+       "seed": 0
+      },
+      "awayTeam": {
+       "teamId": 1611661317,
+       "teamName": "Mercury",
+       "teamCity": "Phoenix",
+       "teamTricode": "PHO",
+       "teamSlug": "mercury",
+       "wins": 0,
+       "losses": 1,
+       "score": 71,
+       "seed": 0
+      },
+      "pointsLeaders": [
+       {
+        "personId": 203398,
+        "firstName": "Brittney",
+        "lastName": "Griner",
+        "teamId": 1611661317,
+        "teamCity": "Phoenix",
+        "teamName": "Mercury",
+        "teamTricode": "PHO",
+        "points": 18.0
+       }
+      ]
+     }
+    ]
+   }
+  ],
+  "weeks": []
+ }
+}

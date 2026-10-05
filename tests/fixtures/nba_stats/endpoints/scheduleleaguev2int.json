@@ -1,0 +1,2182 @@
+{
+ "meta": {
+  "version": 1,
+  "request": "http://nba.cloud/league/00/2023-24/scheduleleaguev2?Format=json",
+  "time": "2025-08-11T11:51:01.511Z"
+ },
+ "leagueSchedule": {
+  "seasonYear": "2023-24",
+  "leagueId": "00",
+  "gameDates": [
+   {
+    "gameDate": "10/05/2023 00:00:00",
+    "games": [
+     {
+      "gameId": "0012300001",
+      "gameCode": "20231005/DALMIN",
+      "gameStatus": 3,
+      "gameStatusText": "Final",
+      "gameSequence": 1,
+      "gameDateEst": "2023-10-05T00:00:00Z",
+      "gameTimeEst": "1900-01-01T12:00:00Z",
+      "gameDateTimeEst": "2023-10-05T12:00:00Z",
+      "gameDateUTC": "2023-10-05T04:00:00Z",
+      "gameTimeUTC": "1900-01-01T16:00:00Z",
+      "gameDateTimeUTC": "2023-10-05T16:00:00Z",
+      "awayTeamTime": "2023-10-05T11:00:00Z",
+      "homeTeamTime": "2023-10-05T11:00:00Z",
+      "day": "Thu",
+      "monthNum": 10,
+      "weekNumber": 0,
+      "weekName": "",
+      "ifNecessary": false,
+      "seriesGameNumber": "",
+      "gameLabel": "",
+      "gameSubLabel": "",
+      "seriesText": "Preseason",
+      "arenaName": "Etihad Arena",
+      "arenaState": "",
+      "arenaCity": "Abu Dhabi",
+      "postponedStatus": "N",
+      "branchLink": "https://app.link.nba.com/sTXDSduQ8Db",
+      "gameSubtype": "",
+      "isNeutral": false,
+      "broadcasters": {
+       "nationalTvBroadcasters": [
+        {
+         "broadcasterScope": "natl",
+         "broadcasterMedia": "tv",
+         "broadcasterId": 7,
+         "broadcasterDisplay": "NBA TV",
+         "broadcasterAbbreviation": "NBA TV",
+         "broadcasterDescription": "",
+         "tapeDelayComments": "",
+         "broadcasterVideoLink": "",
+         "regionId": 1,
+         "broadcasterTeamId": -1,
+         "broadcasterRanking": null,
+         "localizationRegion": ""
+        }
+       ],
+       "nationalRadioBroadcasters": [],
+       "nationalOttBroadcasters": [],
+       "homeTvBroadcasters": [],
+       "homeRadioBroadcasters": [
+        {
+         "broadcasterScope": "home",
+         "broadcasterMedia": "radio",
+         "broadcasterId": 1001054,
+         "broadcasterDisplay": "Wolves App / iHeart Radio",
+         "broadcasterAbbreviation": "MIN App",
+         "broadcasterDescription": "",
+         "tapeDelayComments": "",
+         "broadcasterVideoLink": "",
+         "regionId": 1,
+         "broadcasterTeamId": 1610612750,
+         "broadcasterRanking": null
+        }
+       ],
+       "homeOttBroadcasters": [],
+       "awayTvBroadcasters": [
+        {
+         "broadcasterScope": "away",
+         "broadcasterMedia": "tv",
+         "broadcasterId": 1000218,
+         "broadcasterDisplay": "Mavs.com",
+         "broadcasterAbbreviation": "Mavs.com",
+         "broadcasterDescription": "",
+         "tapeDelayComments": "",
+         "broadcasterVideoLink": "",
+         "regionId": 1,
+         "broadcasterTeamId": 1610612742,
+         "broadcasterRanking": null
+        }
+       ],
+       "awayRadioBroadcasters": [
+        {
+         "broadcasterScope": "away",
+         "broadcasterMedia": "radio",
+         "broadcasterId": 1000695,
+         "broadcasterDisplay": "97.1 FM / S: 99.1 FM",
+         "broadcasterAbbreviation": "KEGL/KFZO",
+         "broadcasterDescription": "",
+         "tapeDelayComments": "",
+         "broadcasterVideoLink": "",
+         "regionId": 1,
+         "broadcasterTeamId": 1610612742,
+         "broadcasterRanking": null
+        }
+       ],
+       "awayOttBroadcasters": [],
+       "intlRadioBroadcasters": [],
+       "intlTvBroadcasters": [
+        {
+         "broadcasterScope": "can",
+         "broadcasterMedia": "tv",
+         "broadcasterId": 181,
+         "broadcasterDisplay": "NBA TV Canada",
+         "broadcasterAbbreviation": "NBAC",
+         "broadcasterDescription": "",
+         "tapeDelayComments": "",
+         "broadcasterVideoLink": "",
+         "regionId": 2,
+         "broadcasterTeamId": 1610612761,
+         "broadcasterRanking": null
+        },
+        {
+         "broadcasterScope": "intl",
+         "broadcasterMedia": "tv",
+         "broadcasterId": 1220,
+         "broadcasterDisplay": "Sport TV 1",
+         "broadcasterAbbreviation": "SportTVPor",
+         "broadcasterDescription": "",
+         "tapeDelayComments": "",
+         "broadcasterVideoLink": "",
+         "regionId": 28,
+         "broadcasterTeamId": -1,
+         "broadcasterRanking": null
+        }
+       ],
+       "intlOttBroadcasters": [
+        {
+         "broadcasterScope": "intl",
+         "broadcasterMedia": "ott",
+         "broadcasterId": 1605,
+         "broadcasterDisplay": "DAZN",
+         "broadcasterAbbreviation": "DAZN_GER",
+         "broadcasterDescription": "",
+         "tapeDelayComments": "",
+         "broadcasterVideoLink": "",
+         "regionId": 14,
+         "broadcasterTeamId": -1,
+         "broadcasterRanking": null
+        },
+        {
+         "broadcasterScope": "intl",
+         "broadcasterMedia": "ott",
+         "broadcasterId": 1675,
+         "broadcasterDisplay": "NBA Rakuten",
+         "broadcasterAbbreviation": "Rakuten",
+         "broadcasterDescription": "",
+         "tapeDelayComments": "",
+         "broadcasterVideoLink": "",
+         "regionId": 20,
+         "broadcasterTeamId": -1,
+         "broadcasterRanking": null
+        }
+       ]
+      },
+      "homeTeam": {
+       "teamId": 1610612750,
+       "teamName": "Timberwolves",
+       "teamCity": "Minnesota",
+       "teamTricode": "MIN",
+       "teamSlug": "timberwolves",
+       "wins": 1,
+       "losses": 0,
+       "score": 111,
+       "seed": 0
+      },
+      "awayTeam": {
+       "teamId": 1610612742,
+       "teamName": "Mavericks",
+       "teamCity": "Dallas",
+       "teamTricode": "DAL",
+       "teamSlug": "mavericks",
+       "wins": 0,
+       "losses": 1,
+       "score": 99,
+       "seed": 0
+      },
+      "pointsLeaders": [
+       {
+        "personId": 1629029,
+        "firstName": "Luka",
+        "lastName": "Doncic",
+        "teamId": 1610612742,
+        "teamCity": "Dallas",
+        "teamName": "Mavericks",
+        "teamTricode": "DAL",
+        "points": 25.0
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "gameDate": "10/07/2023 00:00:00",
+    "games": [
+     {
+      "gameId": "0012300002",
+      "gameCode": "20231007/MINDAL",
+      "gameStatus": 3,
+      "gameStatusText": "Final",
+      "gameSequence": 1,
+      "gameDateEst": "2023-10-07T00:00:00Z",
+      "gameTimeEst": "1900-01-01T12:00:00Z",
+      "gameDateTimeEst": "2023-10-07T12:00:00Z",
+      "gameDateUTC": "2023-10-07T04:00:00Z",
+      "gameTimeUTC": "1900-01-01T16:00:00Z",
+      "gameDateTimeUTC": "2023-10-07T16:00:00Z",
+      "awayTeamTime": "2023-10-07T11:00:00Z",
+      "homeTeamTime": "2023-10-07T11:00:00Z",
+      "day": "Sat",
+      "monthNum": 10,
+      "weekNumber": 0,
+      "weekName": "",
+      "ifNecessary": false,
+      "seriesGameNumber": "",
+      "gameLabel": "",
+      "gameSubLabel": "",
+      "seriesText": "Preseason",
+      "arenaName": "Etihad Arena",
+      "arenaState": "",
+      "arenaCity": "Abu Dhabi",
+      "postponedStatus": "N",
+      "branchLink": "https://app.link.nba.com/DAS0HeuQ8Db",
+      "gameSubtype": "",
+      "isNeutral": false,
+      "broadcasters": {
+       "nationalTvBroadcasters": [
+        {
+         "broadcasterScope": "natl",
+         "broadcasterMedia": "tv",
+         "broadcasterId": 7,
+         "broadcasterDisplay": "NBA TV",
+         "broadcasterAbbreviation": "NBA TV",
+         "broadcasterDescription": "",
+         "tapeDelayComments": "",
+         "broadcasterVideoLink": "",
+         "regionId": 1,
+         "broadcasterTeamId": -1,
+         "broadcasterRanking": null,
+         "localizationRegion": ""
+        }
+       ],
+       "nationalRadioBroadcasters": [],
+       "nationalOttBroadcasters": [],
+       "homeTvBroadcasters": [
+        {
+         "broadcasterScope": "home",
+         "broadcasterMedia": "tv",
+         "broadcasterId": 1000218,
+         "broadcasterDisplay": "Mavs.com",
+         "broadcasterAbbreviation": "Mavs.com",
+         "broadcasterDescription": "",
+         "tapeDelayComments": "",
+         "broadcasterVideoLink": "",
+         "regionId": 1,
+         "broadcasterTeamId": 1610612742,
+         "broadcasterRanking": null
+        },
+        {
+         "broadcasterScope": "home",
+         "broadcasterMedia": "tv",
+         "broadcasterId": 1000343,
+         "broadcasterDisplay": "Bally Sports SW-DAL",
+         "broadcasterAbbreviation": "BSSW-DAL",
+         "broadcasterDescription": "",
+         "tapeDelayComments": "",
+         "broadcasterVideoLink": "",
+         "regionId": 1,
+         "broadcasterTeamId": 1610612742,
+         "broadcasterRanking": null
+        }
+       ],
+       "homeRadioBroadcasters": [
+        {
+         "broadcasterScope": "home",
+         "broadcasterMedia": "radio",
+         "broadcasterId": 1000695,
+         "broadcasterDisplay": "97.1 FM / S: 99.1 FM",
+         "broadcasterAbbreviation": "KEGL/KFZO",
+         "broadcasterDescription": "",
+         "tapeDelayComments": "",
+         "broadcasterVideoLink": "",
+         "regionId": 1,
+         "broadcasterTeamId": 1610612742,
+         "broadcasterRanking": null
+        }
+       ],
+       "homeOttBroadcasters": [],
+       "awayTvBroadcasters": [],
+       "awayRadioBroadcasters": [
+        {
+         "broadcasterScope": "away",
+         "broadcasterMedia": "radio",
+         "broadcasterId": 1001054,
+         "broadcasterDisplay": "Wolves App / iHeart Radio",
+         "broadcasterAbbreviation": "MIN App",
+         "broadcasterDescription": "",
+         "tapeDelayComments": "",
+         "broadcasterVideoLink": "",
+         "regionId": 1,
+         "broadcasterTeamId": 1610612750,
+         "broadcasterRanking": null
+        }
+       ],
+       "awayOttBroadcasters": [],
+       "intlRadioBroadcasters": [],
+       "intlTvBroadcasters": [
+        {
+         "broadcasterScope": "can",
+         "broadcasterMedia": "tv",
+         "broadcasterId": 181,
+         "broadcasterDisplay": "NBA TV Canada",
+         "broadcasterAbbreviation": "NBAC",
+         "broadcasterDescription": "",
+         "tapeDelayComments": "",
+         "broadcasterVideoLink": "",
+         "regionId": 2,
+         "broadcasterTeamId": 1610612761,
+         "broadcasterRanking": null
+        },
+        {
+         "broadcasterScope": "intl",
+         "broadcasterMedia": "tv",
+         "broadcasterId": 1220,
+         "broadcasterDisplay": "Sport TV 1",
+         "broadcasterAbbreviation": "SportTVPor",
+         "broadcasterDescription": "",
+         "tapeDelayComments": "",
+         "broadcasterVideoLink": "",
+         "regionId": 28,
+         "broadcasterTeamId": -1,
+         "broadcasterRanking": null
+        }
+       ],
+       "intlOttBroadcasters": [
+        {
+         "broadcasterScope": "intl",
+         "broadcasterMedia": "ott",
+         "broadcasterId": 1605,
+         "broadcasterDisplay": "DAZN",
+         "broadcasterAbbreviation": "DAZN_GER",
+         "broadcasterDescription": "",
+         "tapeDelayComments": "",
+         "broadcasterVideoLink": "",
+         "regionId": 14,
+         "broadcasterTeamId": -1,
+         "broadcasterRanking": null
+        },
+        {
+         "broadcasterScope": "intl",
+         "broadcasterMedia": "ott",
+         "broadcasterId": 1675,
+         "broadcasterDisplay": "NBA Rakuten",
+         "broadcasterAbbreviation": "Rakuten",
+         "broadcasterDescription": "",
+         "tapeDelayComments": "",
+         "broadcasterVideoLink": "",
+         "regionId": 20,
+         "broadcasterTeamId": -1,
+         "broadcasterRanking": null
+        }
+       ]
+      },
+      "homeTeam": {
+       "teamId": 1610612742,
+       "teamName": "Mavericks",
+       "teamCity": "Dallas",
+       "teamTricode": "DAL",
+       "teamSlug": "mavericks",
+       "wins": 0,
+       "losses": 2,
+       "score": 96,
+       "seed": 0
+      },
+      "awayTeam": {
+       "teamId": 1610612750,
+       "teamName": "Timberwolves",
+       "teamCity": "Minnesota",
+       "teamTricode": "MIN",
+       "teamSlug": "timberwolves",
+       "wins": 2,
+       "losses": 0,
+       "score": 104,
+       "seed": 0
+      },
+      "pointsLeaders": [
+       {
+        "personId": 1630702,
+        "firstName": "Jaden",
+        "lastName": "Hardy",
+        "teamId": 1610612742,
+        "teamCity": "Dallas",
+        "teamName": "Mavericks",
+        "teamTricode": "DAL",
+        "points": 22.0
+       }
+      ]
+     },
+     {
+      "gameId": "0012300003",
+      "gameCode": "20231007/LALGSW",
+      "gameStatus": 3,
+      "gameStatusText": "Final",
+      "gameSequence": 2,
+      "gameDateEst": "2023-10-07T00:00:00Z",
+      "gameTimeEst": "1900-01-01T20:30:00Z",
+      "gameDateTimeEst": "2023-10-07T20:30:00Z",
+      "gameDateUTC": "2023-10-07T04:00:00Z",
+      "gameTimeUTC": "1900-01-01T00:30:00Z",
+      "gameDateTimeUTC": "2023-10-08T00:30:00Z",
+      "awayTeamTime": "2023-10-07T17:30:00Z",
+      "homeTeamTime": "2023-10-07T17:30:00Z",
+      "day": "Sat",
+      "monthNum": 10,
+      "weekNumber": 0,
+      "weekName": "",
+      "ifNecessary": false,
+      "seriesGameNumber": "",
+      "gameLabel": "",
+      "gameSubLabel": "",
+      "seriesText": "Preseason",
+      "arenaName": "Chase Center",
+      "arenaState": "CA",
+      "arenaCity": "San Francisco",
+      "postponedStatus": "N",
+      "branchLink": "https://app.link.nba.com/RLzqtfuQ8Db",
+      "gameSubtype": "",
+      "isNeutral": false,
+      "broadcasters": {
+       "nationalTvBroadcasters": [
+        {
+         "broadcasterScope": "natl",
+         "broadcasterMedia": "tv",
+         "broadcasterId": 7,
+         "broadcasterDisplay": "NBA TV",
+         "broadcasterAbbreviation": "NBA TV",
+         "broadcasterDescription": "",
+         "tapeDelayComments": "",
+         "broadcasterVideoLink": "",
+         "regionId": 1,
+         "broadcasterTeamId": -1,
+         "broadcasterRanking": null,
+         "localizationRegion": ""
+        }
+       ],
+       "nationalRadioBroadcasters": [],
+       "nationalOttBroadcasters": [],
+       "homeTvBroadcasters": [
+        {
+         "broadcasterScope": "home",
+         "broadcasterMedia": "tv",
+         "broadcasterId": 1097,
+         "broadcasterDisplay": "NBCSBA",
+         "broadcasterAbbreviation": "NBCSBA",
+         "broadcasterDescription": "",
+         "tapeDelayComments": "",
+         "broadcasterVideoLink": "",
+         "regionId": 1,
+         "broadcasterTeamId": 1610612744,
+         "broadcasterRanking": null
+        }
+       ],
+       "homeRadioBroadcasters": [
+        {
+         "broadcasterScope": "home",
+         "broadcasterMedia": "radio",
+         "broadcasterId": 1597,
+         "broadcasterDisplay": "95.7 The Game",
+         "broadcasterAbbreviation": "KGMZ-FM",
+         "broadcasterDescription": "",
+         "tapeDelayComments": "",
+         "broadcasterVideoLink": "",
+         "regionId": 1,
+         "broadcasterTeamId": 1610612744,
+         "broadcasterRanking": null
+        }
+       ],
+       "homeOttBroadcasters": [],
+       "awayTvBroadcasters": [
+        {
+         "broadcasterScope": "away",
+         "broadcasterMedia": "tv",
+         "broadcasterId": 1651,
+         "broadcasterDisplay": "Spectrum SportsNet",
+         "broadcasterAbbreviation": "SPECSN",
+         "broadcasterDescription": "",
+         "tapeDelayComments": "",
+         "broadcasterVideoLink": "",
+         "regionId": 1,
+         "broadcasterTeamId": 1610612747,
+         "broadcasterRanking": null
+        }
+       ],
+       "awayRadioBroadcasters": [
+        {
+         "broadcasterScope": "away",
+         "broadcasterMedia": "radio",
+         "broadcasterId": 1000286,
+         "broadcasterDisplay": "ESPN LA 710/1330 KWKW",
+         "broadcasterAbbreviation": "KSPN/KWKW-LAL",
+         "broadcasterDescription": "",
+         "tapeDelayComments": "",
+         "broadcasterVideoLink": "",
+         "regionId": 1,
+         "broadcasterTeamId": 1610612747,
+         "broadcasterRanking": null
+        }
+       ],
+       "awayOttBroadcasters": [],
+       "intlRadioBroadcasters": [],
+       "intlTvBroadcasters": [
+        {
+         "broadcasterScope": "can",
+         "broadcasterMedia": "tv",
+         "broadcasterId": 181,
+         "broadcasterDisplay": "NBA TV Canada",
+         "broadcasterAbbreviation": "NBAC",
+         "broadcasterDescription": "",
+         "tapeDelayComments": "",
+         "broadcasterVideoLink": "",
+         "regionId": 2,
+         "broadcasterTeamId": 1610612761,
+         "broadcasterRanking": null
+        },
+        {
+         "broadcasterScope": "intl",
+         "broadcasterMedia": "tv",
+         "broadcasterId": 1210,
+         "broadcasterDisplay": "Videoland",
+         "broadcasterAbbreviation": "Videoland",
+         "broadcasterDescription": "",
+         "tapeDelayComments": "",
+         "broadcasterVideoLink": "",
+         "regionId": 32,
+         "broadcasterTeamId": -1,
+         "broadcasterRanking": null
+        }
+       ],
+       "intlOttBroadcasters": [
+        {
+         "broadcasterScope": "intl",
+         "broadcasterMedia": "ott",
+         "broadcasterId": 1675,
+         "broadcasterDisplay": "NBA Rakuten",
+         "broadcasterAbbreviation": "Rakuten",
+         "broadcasterDescription": "",
+         "tapeDelayComments": "",
+         "broadcasterVideoLink": "",
+         "regionId": 20,
+         "broadcasterTeamId": -1,
+         "broadcasterRanking": null
+        }
+       ]
+      },
+      "homeTeam": {
+       "teamId": 1610612744,
+       "teamName": "Warriors",
+       "teamCity": "Golden State",
+       "teamTricode": "GSW",
+       "teamSlug": "warriors",
+       "wins": 1,
+       "losses": 0,
+       "score": 125,
+       "seed": 0
+      },
+      "awayTeam": {
+       "teamId": 1610612747,
+       "teamName": "Lakers",
+       "teamCity": "Los Angeles",
+       "teamTricode": "LAL",
+       "teamSlug": "lakers",
+       "wins": 0,
+       "losses": 1,
+       "score": 108,
+       "seed": 0
+      },
+      "pointsLeaders": [
+       {
+        "personId": 1630228,
+        "firstName": "Jonathan",
+        "lastName": "Kuminga",
+        "teamId": 1610612744,
+        "teamCity": "Golden State",
+        "teamName": "Warriors",
+        "teamTricode": "GSW",
+        "points": 24.0
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "gameDate": "10/08/2023 00:00:00",
+    "games": [
+     {
+      "gameId": "0012300004",
+      "gameCode": "20231008/CHIMIL",
+      "gameStatus": 3,
+      "gameStatusText": "Final",
+      "gameSequence": 1,
+      "gameDateEst": "2023-10-08T00:00:00Z",
+      "gameTimeEst": "1900-01-01T13:00:00Z",
+      "gameDateTimeEst": "2023-10-08T13:00:00Z",
+      "gameDateUTC": "2023-10-08T04:00:00Z",
+      "gameTimeUTC": "1900-01-01T17:00:00Z",
+      "gameDateTimeUTC": "2023-10-08T17:00:00Z",
+      "awayTeamTime": "2023-10-08T12:00:00Z",
+      "homeTeamTime": "2023-10-08T12:00:00Z",
+      "day": "Sun",
+      "monthNum": 10,
+      "weekNumber": 0,
+      "weekName": "",
+      "ifNecessary": false,
+      "seriesGameNumber": "",
+      "gameLabel": "",
+      "gameSubLabel": "",
+      "seriesText": "Preseason",
+      "arenaName": "Fiserv Forum",
+      "arenaState": "WI",
+      "arenaCity": "Milwaukee",
+      "postponedStatus": "N",
+      "branchLink": "https://app.link.nba.com/h3TOeguQ8Db",
+      "gameSubtype": "",
+      "isNeutral": false,
+      "broadcasters": {
+       "nationalTvBroadcasters": [],
+       "nationalRadioBroadcasters": [],
+       "nationalOttBroadcasters": [],
+       "homeTvBroadcasters": [
+        {
+         "broadcasterScope": "home",
+         "broadcasterMedia": "tv",
+         "broadcasterId": 1000351,
+         "broadcasterDisplay": "Bally Sports WI",
+         "broadcasterAbbreviation": "BSWI",
+         "broadcasterDescription": "",
+         "tapeDelayComments": "",
+         "broadcasterVideoLink": "",
+         "regionId": 1,
+         "broadcasterTeamId": 1610612749,
+         "broadcasterRanking": null
+        }
+       ],
+       "homeRadioBroadcasters": [
+        {
+         "broadcasterScope": "home",
+         "broadcasterMedia": "radio",
+         "broadcasterId": 1697,
+         "broadcasterDisplay": "620 AM/103.3 FM WTMJ",
+         "broadcasterAbbreviation": "WTMJ-AM/FM",
+         "broadcasterDescription": "",
+         "tapeDelayComments": "",
+         "broadcasterVideoLink": "",
+         "regionId": 1,
+         "broadcasterTeamId": 1610612749,
+         "broadcasterRanking": null
+        }
+       ],
+       "homeOttBroadcasters": [],
+       "awayTvBroadcasters": [
+        {
+         "broadcasterScope": "away",
+         "broadcasterMedia": "tv",
+         "broadcasterId": 1656,
+         "broadcasterDisplay": "NBC Sports Chicago",
+         "broadcasterAbbreviation": "NBCSCH",
+         "broadcasterDescription": "",
+         "tapeDelayComments": "",
+         "broadcasterVideoLink": "",
+         "regionId": 1,
+         "broadcasterTeamId": 1610612741,
+         "broadcasterRanking": null
+        }
+       ],
+       "awayRadioBroadcasters": [
+        {
+         "broadcasterScope": "away",
+         "broadcasterMedia": "radio",
+         "broadcasterId": 1687,
+         "broadcasterDisplay": "670 The Score",
+         "broadcasterAbbreviation": "WSCR",
+         "broadcasterDescription": "",
+         "tapeDelayComments": "",
+         "broadcasterVideoLink": "",
+         "regionId": 1,
+         "broadcasterTeamId": 1610612741,
+         "broadcasterRanking": null
+        }
+       ],
+       "awayOttBroadcasters": [],
+       "intlRadioBroadcasters": [],
+       "intlTvBroadcasters": [],
+       "intlOttBroadcasters": [
+        {
+         "broadcasterScope": "intl",
+         "broadcasterMedia": "ott",
+         "broadcasterId": 1675,
+         "broadcasterDisplay": "NBA Rakuten",
+         "broadcasterAbbreviation": "Rakuten",
+         "broadcasterDescription": "",
+         "tapeDelayComments": "",
+         "broadcasterVideoLink": "",
+         "regionId": 20,
+         "broadcasterTeamId": -1,
+         "broadcasterRanking": null
+        }
+       ]
+      },
+      "homeTeam": {
+       "teamId": 1610612749,
+       "teamName": "Bucks",
+       "teamCity": "Milwaukee",
+       "teamTricode": "MIL",
+       "teamSlug": "bucks",
+       "wins": 1,
+       "losses": 0,
+       "score": 105,
+       "seed": 0
+      },
+      "awayTeam": {
+       "teamId": 1610612741,
+       "teamName": "Bulls",
+       "teamCity": "Chicago",
+       "teamTricode": "CHI",
+       "teamSlug": "bulls",
+       "wins": 0,
+       "losses": 1,
+       "score": 102,
+       "seed": 0
+      },
+      "pointsLeaders": [
+       {
+        "personId": 1630699,
+        "firstName": "MarJon",
+        "lastName": "Beauchamp",
+        "teamId": 1610612749,
+        "teamCity": "Milwaukee",
+        "teamName": "Bucks",
+        "teamTricode": "MIL",
+        "points": 18.0
+       }
+      ]
+     },
+     {
+      "gameId": "0012300005",
+      "gameCode": "20231008/PHXDET",
+      "gameStatus": 3,
+      "gameStatusText": "Final/OT",
+      "gameSequence": 2,
+      "gameDateEst": "2023-10-08T00:00:00Z",
+      "gameTimeEst": "1900-01-01T15:00:00Z",
+      "gameDateTimeEst": "2023-10-08T15:00:00Z",
+      "gameDateUTC": "2023-10-08T04:00:00Z",
+      "gameTimeUTC": "1900-01-01T19:00:00Z",
+      "gameDateTimeUTC": "2023-10-08T19:00:00Z",
+      "awayTeamTime": "2023-10-08T12:00:00Z",
+      "homeTeamTime": "2023-10-08T15:00:00Z",
+      "day": "Sun",
+      "monthNum": 10,
+      "weekNumber": 0,
+      "weekName": "",
+      "ifNecessary": false,
+      "seriesGameNumber": "",
+      "gameLabel": "",
+      "gameSubLabel": "",
+      "seriesText": "Preseason",
+      "arenaName": "Little Caesars Arena",
+      "arenaState": "MI",
+      "arenaCity": "Detroit",
+      "postponedStatus": "N",
+      "branchLink": "https://app.link.nba.com/sygu4guQ8Db",
+      "gameSubtype": "",
+      "isNeutral": false,
+      "broadcasters": {
+       "nationalTvBroadcasters": [
+        {
+         "broadcasterScope": "natl",
+         "broadcasterMedia": "tv",
+         "broadcasterId": 7,
+         "broadcasterDisplay": "NBA TV",
+         "broadcasterAbbreviation": "NBA TV",
+         "broadcasterDescription": "",
+         "tapeDelayComments": "",
+         "broadcasterVideoLink": "",
+         "regionId": 1,
+         "broadcasterTeamId": -1,
+         "broadcasterRanking": null,
+         "localizationRegion": ""
+        }
+       ],
+       "nationalRadioBroadcasters": [],
+       "nationalOttBroadcasters": [],
+       "homeTvBroadcasters": [
+        {
+         "broadcasterScope": "home",
+         "broadcasterMedia": "tv",
+         "broadcasterId": 1000339,
+         "broadcasterDisplay": "Bally Sports DET",
+         "broadcasterAbbreviation": "BSDET",
+         "broadcasterDescription": "",
+         "tapeDelayComments": "",
+         "broadcasterVideoLink": "",
+         "regionId": 1,
+         "broadcasterTeamId": 1610612765,
+         "broadcasterRanking": null
+        }
+       ],
+       "homeRadioBroadcasters": [
+        {
+         "broadcasterScope": "home",
+         "broadcasterMedia": "radio",
+         "broadcasterId": 1187,
+         "broadcasterDisplay": "950 AM",
+         "broadcasterAbbreviation": "WWJ",
+         "broadcasterDescription": "",
+         "tapeDelayComments": "",
+         "broadcasterVideoLink": "",
+         "regionId": 1,
+         "broadcasterTeamId": 1610612765,
+         "broadcasterRanking": null
+        }
+       ],
+       "homeOttBroadcasters": [],
+       "awayTvBroadcasters": [
+        {
+         "broadcasterScope": "away",
+         "broadcasterMedia": "tv",
+         "broadcasterId": 1000998,
+         "broadcasterDisplay": "Arizona's Family 3TV / Arizona's Family Sports",
+         "broadcasterAbbreviation": "KTVK/KPHE",
+         "broadcasterDescription": "",
+         "tapeDelayComments": "",
+         "broadcasterVideoLink": "",
+         "regionId": 1,
+         "broadcasterTeamId": 1610612756,
+         "broadcasterRanking": null
+        }
+       ],
+       "awayRadioBroadcasters": [
+        {
+         "broadcasterScope": "away",
+         "broadcasterMedia": "radio",
+         "broadcasterId": 1000271,
+         "broadcasterDisplay": "ESPN 620 / S: KSUN",
+         "broadcasterAbbreviation": "KTAR/KSUN",
+         "broadcasterDescription": "",
+         "tapeDelayComments": "",
+         "broadcasterVideoLink": "",
+         "regionId": 1,
+         "broadcasterTeamId": 1610612756,
+         "broadcasterRanking": null
+        }
+       ],
+       "awayOttBroadcasters": [],
+       "intlRadioBroadcasters": [],
+       "intlTvBroadcasters": [
+        {
+         "broadcasterScope": "can",
+         "broadcasterMedia": "tv",
+         "broadcasterId": 181,
+         "broadcasterDisplay": "NBA TV Canada",
+         "broadcasterAbbreviation": "NBAC",
+         "broadcasterDescription": "",
+         "tapeDelayComments": "",
+         "broadcasterVideoLink": "",
+         "regionId": 2,
+         "broadcasterTeamId": 1610612761,
+         "broadcasterRanking": null
+        }
+       ],
+       "intlOttBroadcasters": [
+        {
+         "broadcasterScope": "intl",
+         "broadcasterMedia": "ott",
+         "broadcasterId": 1675,
+         "broadcasterDisplay": "NBA Rakuten",
+         "broadcasterAbbreviation": "Rakuten",
+         "broadcasterDescription": "",
+         "tapeDelayComments": "",
+         "broadcasterVideoLink": "",
+         "regionId": 20,
+         "broadcasterTeamId": -1,
+         "broadcasterRanking": null
+        }
+       ]
+      },
+      "homeTeam": {
+       "teamId": 1610612765,
+       "teamName": "Pistons",
+       "teamCity": "Detroit",
+       "teamTricode": "DET",
+       "teamSlug": "pistons",
+       "wins": 0,
+       "losses": 1,
+       "score": 126,
+       "seed": 0
+      },
+      "awayTeam": {
+       "teamId": 1610612756,
+       "teamName": "Suns",
+       "teamCity": "Phoenix",
+       "teamTricode": "PHX",
+       "teamSlug": "suns",
+       "wins": 1,
+       "losses": 0,
+       "score": 130,
+       "seed": 0
+      },
+      "pointsLeaders": [
+       {
+        "personId": 1628963,
+        "firstName": "Marvin",
+        "lastName": "Bagley III",
+        "teamId": 1610612765,
+        "teamCity": "Detroit",
+        "teamName": "Pistons",
+        "teamTricode": "DET",
+        "points": 25.0
+       }
+      ]
+     },
+     {
+      "gameId": "0012300006",
+      "gameCode": "20231008/PHIBOS",
+      "gameStatus": 3,
+      "gameStatusText": "Final",
+      "gameSequence": 3,
+      "gameDateEst": "2023-10-08T00:00:00Z",
+      "gameTimeEst": "1900-01-01T18:00:00Z",
+      "gameDateTimeEst": "2023-10-08T18:00:00Z",
+      "gameDateUTC": "2023-10-08T04:00:00Z",
+      "gameTimeUTC": "1900-01-01T22:00:00Z",
+      "gameDateTimeUTC": "2023-10-08T22:00:00Z",
+      "awayTeamTime": "2023-10-08T18:00:00Z",
+      "homeTeamTime": "2023-10-08T18:00:00Z",
+      "day": "Sun",
+      "monthNum": 10,
+      "weekNumber": 0,
+      "weekName": "",
+      "ifNecessary": false,
+      "seriesGameNumber": "",
+      "gameLabel": "",
+      "gameSubLabel": "",
+      "seriesText": "Preseason",
+      "arenaName": "TD Garden",
+      "arenaState": "MA",
+      "arenaCity": "Boston",
+      "postponedStatus": "N",
+      "branchLink": "https://app.link.nba.com/4g9qUhuQ8Db",
+      "gameSubtype": "",
+      "isNeutral": false,
+      "broadcasters": {
+       "nationalTvBroadcasters": [
+        {
+         "broadcasterScope": "natl",
+         "broadcasterMedia": "tv",
+         "broadcasterId": 2,
+         "broadcasterDisplay": "ESPN",
+         "broadcasterAbbreviation": "ESPN",
+         "broadcasterDescription": "",
+         "tapeDelayComments": "",
+         "broadcasterVideoLink": "https://www.espn.com/espnplus/player/_/id/4b0df6ca-bcae-4204-814c-783075957bcf?ex_cid=nba",
+         "regionId": 1,
+         "broadcasterTeamId": -1,
+         "broadcasterRanking": 3,
+         "localizationRegion": ""
+        }
+       ],
+       "nationalRadioBroadcasters": [],
+       "nationalOttBroadcasters": [],
+       "homeTvBroadcasters": [
+        {
+         "broadcasterScope": "home",
+         "broadcasterMedia": "tv",
+         "broadcasterId": 1658,
+         "broadcasterDisplay": "NBC SPORTS BOSTON",
+         "broadcasterAbbreviation": "NBCSB",
+         "broadcasterDescription": "",
+         "tapeDelayComments": "",
+         "broadcasterVideoLink": "",
+         "regionId": 1,
+         "broadcasterTeamId": 1610612738,
+         "broadcasterRanking": null
+        }
+       ],
+       "homeRadioBroadcasters": [
+        {
+         "broadcasterScope": "home",
+         "broadcasterMedia": "radio",
+         "broadcasterId": 1471,
+         "broadcasterDisplay": "98.5 The Sports Hub",
+         "broadcasterAbbreviation": "WBZ-FM",
+         "broadcasterDescription": "",
+         "tapeDelayComments": "",
+         "broadcasterVideoLink": "",
+         "regionId": 1,
+         "broadcasterTeamId": 1610612738,
+         "broadcasterRanking": null
+        }
+       ],
+       "homeOttBroadcasters": [],
+       "awayTvBroadcasters": [],
+       "awayRadioBroadcasters": [],
+       "awayOttBroadcasters": [],
+       "intlRadioBroadcasters": [],
+       "intlTvBroadcasters": [
+        {
+         "broadcasterScope": "can",
+         "broadcasterMedia": "tv",
+         "broadcasterId": 181,
+         "broadcasterDisplay": "NBA TV Canada",
+         "broadcasterAbbreviation": "NBAC",
+         "broadcasterDescription": "",
+         "tapeDelayComments": "",
+         "broadcasterVideoLink": "",
+         "regionId": 2,
+         "broadcasterTeamId": 1610612761,
+         "broadcasterRanking": null
+        },
+        {
+         "broadcasterScope": "intl",
+         "broadcasterMedia": "tv",
+         "broadcasterId": 1203,
+         "broadcasterDisplay": "ESPN",
+         "broadcasterAbbreviation": "ESPN_I_Ven",
+         "broadcasterDescription": "",
+         "tapeDelayComments": "",
+         "broadcasterVideoLink": "",
+         "regionId": 35,
+         "broadcasterTeamId": -1,
+         "broadcasterRanking": null
+        }
+       ],
+       "intlOttBroadcasters": [
+        {
+         "broadcasterScope": "intl",
+         "broadcasterMedia": "ott",
+         "broadcasterId": 1675,
+         "broadcasterDisplay": "NBA Rakuten",
+         "broadcasterAbbreviation": "Rakuten",
+         "broadcasterDescription": "",
+         "tapeDelayComments": "",
+         "broadcasterVideoLink": "",
+         "regionId": 20,
+         "broadcasterTeamId": -1,
+         "broadcasterRanking": null
+        }
+       ]
+      },
+      "homeTeam": {
+       "teamId": 1610612738,
+       "teamName": "Celtics",
+       "teamCity": "Boston",
+       "teamTricode": "BOS",
+       "teamSlug": "celtics",
+       "wins": 1,
+       "losses": 0,
+       "score": 114,
+       "seed": 0
+      },
+      "awayTeam": {
+       "teamId": 1610612755,
+       "teamName": "76ers",
+       "teamCity": "Philadelphia",
+       "teamTricode": "PHI",
+       "teamSlug": "sixers",
+       "wins": 0,
+       "losses": 1,
+       "score": 106,
+       "seed": 0
+      },
+      "pointsLeaders": [
+       {
+        "personId": 1630202,
+        "firstName": "Payton",
+        "lastName": "Pritchard",
+        "teamId": 1610612738,
+        "teamCity": "Boston",
+        "teamName": "Celtics",
+        "teamTricode": "BOS",
+        "points": 26.0
+       }
+      ]
+     },
+     {
+      "gameId": "0012300008",
+      "gameCode": "20231008/SACTOR",
+      "gameStatus": 3,
+      "gameStatusText": "Final",
+      "gameSequence": 5,
+      "gameDateEst": "2023-10-08T00:00:00Z",
+      "gameTimeEst": "1900-01-01T20:00:00Z",
+      "gameDateTimeEst": "2023-10-08T20:00:00Z",
+      "gameDateUTC": "2023-10-08T04:00:00Z",
+      "gameTimeUTC": "1900-01-01T00:00:00Z",
+      "gameDateTimeUTC": "2023-10-09T00:00:00Z",
+      "awayTeamTime": "2023-10-08T17:00:00Z",
+      "homeTeamTime": "2023-10-08T20:00:00Z",
+      "day": "Sun",
+      "monthNum": 10,
+      "weekNumber": 0,
+      "weekName": "",
+      "ifNecessary": false,
+      "seriesGameNumber": "",
+      "gameLabel": "",
+      "gameSubLabel": "",
+      "seriesText": "Preseason",
+      "arenaName": "Rogers Arena",
+      "arenaState": "BC",
+      "arenaCity": "Vancouver",
+      "postponedStatus": "N",
+      "branchLink": "https://app.link.nba.com/pD5dKouQ8Db",
+      "gameSubtype": "",
+      "isNeutral": false,
+      "broadcasters": {
+       "nationalTvBroadcasters": [],
+       "nationalRadioBroadcasters": [],
+       "nationalOttBroadcasters": [],
+       "homeTvBroadcasters": [
+        {
+         "broadcasterScope": "home",
+         "broadcasterMedia": "tv",
+         "broadcasterId": 1563,
+         "broadcasterDisplay": "SN",
+         "broadcasterAbbreviation": "SN",
+         "broadcasterDescription": "",
+         "tapeDelayComments": "",
+         "broadcasterVideoLink": "",
+         "regionId": 2,
+         "broadcasterTeamId": 1610612761,
+         "broadcasterRanking": null
+        }
+       ],
+       "homeRadioBroadcasters": [
+        {
+         "broadcasterScope": "home",
+         "broadcasterMedia": "radio",
+         "broadcasterId": 1494,
+         "broadcasterDisplay": "TSN Radio 1050",
+         "broadcasterAbbreviation": "CHUM",
+         "broadcasterDescription": "",
+         "tapeDelayComments": "",
+         "broadcasterVideoLink": "",
+         "regionId": 2,
+         "broadcasterTeamId": 1610612761,
+         "broadcasterRanking": null
+        }
+       ],
+       "homeOttBroadcasters": [],
+       "awayTvBroadcasters": [
+        {
+         "broadcasterScope": "away",
+         "broadcasterMedia": "tv",
+         "broadcasterId": 1000214,
+         "broadcasterDisplay": "Kings.com/live",
+         "broadcasterAbbreviation": "Kings.com",
+         "broadcasterDescription": "",
+         "tapeDelayComments": "",
+         "broadcasterVideoLink": "",
+         "regionId": 1,
+         "broadcasterTeamId": 1610612758,
+         "broadcasterRanking": null
+        }
+       ],
+       "awayRadioBroadcasters": [],
+       "awayOttBroadcasters": [],
+       "intlRadioBroadcasters": [],
+       "intlTvBroadcasters": [
+        {
+         "broadcasterScope": "can",
+         "broadcasterMedia": "tv",
+         "broadcasterId": 1563,
+         "broadcasterDisplay": "Sportsnet",
+         "broadcasterAbbreviation": "SN",
+         "broadcasterDescription": "",
+         "tapeDelayComments": "",
+         "broadcasterVideoLink": "",
+         "regionId": 2,
+         "broadcasterTeamId": 1610612761,
+         "broadcasterRanking": null
+        }
+       ],
+       "intlOttBroadcasters": []
+      },
+      "homeTeam": {
+       "teamId": 1610612761,
+       "teamName": "Raptors",
+       "teamCity": "Toronto",
+       "teamTricode": "TOR",
+       "teamSlug": "raptors",
+       "wins": 1,
+       "losses": 0,
+       "score": 112,
+       "seed": 0
+      },
+      "awayTeam": {
+       "teamId": 1610612758,
+       "teamName": "Kings",
+       "teamCity": "Sacramento",
+       "teamTricode": "SAC",
+       "teamSlug": "kings",
+       "wins": 0,
+       "losses": 1,
+       "score": 99,
+       "seed": 0
+      },
+      "pointsLeaders": [
+       {
+        "personId": 1629018,
+        "firstName": "Gary",
+        "lastName": "Trent Jr.",
+        "teamId": 1610612761,
+        "teamCity": "Toronto",
+        "teamName": "Raptors",
+        "teamTricode": "TOR",
+        "points": 22.0
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "gameDate": "10/09/2023 00:00:00",
+    "games": [
+     {
+      "gameId": "0012300010",
+      "gameCode": "20231009/BOSNYK",
+      "gameStatus": 3,
+      "gameStatusText": "Final",
+      "gameSequence": 1,
+      "gameDateEst": "2023-10-09T00:00:00Z",
+      "gameTimeEst": "1900-01-01T19:30:00Z",
+      "gameDateTimeEst": "2023-10-09T19:30:00Z",
+      "gameDateUTC": "2023-10-09T04:00:00Z",
+      "gameTimeUTC": "1900-01-01T23:30:00Z",
+      "gameDateTimeUTC": "2023-10-09T23:30:00Z",
+      "awayTeamTime": "2023-10-09T19:30:00Z",
+      "homeTeamTime": "2023-10-09T19:30:00Z",
+      "day": "Mon",
+      "monthNum": 10,
+      "weekNumber": 0,
+      "weekName": "",
+      "ifNecessary": false,
+      "seriesGameNumber": "",
+      "gameLabel": "",
+      "gameSubLabel": "",
+      "seriesText": "Preseason",
+      "arenaName": "Madison Square Garden",
+      "arenaState": "NY",
+      "arenaCity": "New York",
+      "postponedStatus": "N",
+      "branchLink": "https://app.link.nba.com/N652equQ8Db",
+      "gameSubtype": "",
+      "isNeutral": false,
+      "broadcasters": {
+       "nationalTvBroadcasters": [],
+       "nationalRadioBroadcasters": [],
+       "nationalOttBroadcasters": [],
+       "homeTvBroadcasters": [
+        {
+         "broadcasterScope": "home",
+         "broadcasterMedia": "tv",
+         "broadcasterId": 100,
+         "broadcasterDisplay": "MSG",
+         "broadcasterAbbreviation": "MSG",
+         "broadcasterDescription": "",
+         "tapeDelayComments": "",
+         "broadcasterVideoLink": "",
+         "regionId": 1,
+         "broadcasterTeamId": 1610612752,
+         "broadcasterRanking": null
+        }
+       ],
+       "homeRadioBroadcasters": [
+        {
+         "broadcasterScope": "home",
+         "broadcasterMedia": "radio",
+         "broadcasterId": 1023,
+         "broadcasterDisplay": "ESPN NY 98.7",
+         "broadcasterAbbreviation": "WEPN",
+         "broadcasterDescription": "",
+         "tapeDelayComments": "",
+         "broadcasterVideoLink": "",
+         "regionId": 1,
+         "broadcasterTeamId": 1610612752,
+         "broadcasterRanking": null
+        }
+       ],
+       "homeOttBroadcasters": [],
+       "awayTvBroadcasters": [
+        {
+         "broadcasterScope": "away",
+         "broadcasterMedia": "tv",
+         "broadcasterId": 1658,
+         "broadcasterDisplay": "NBC SPORTS BOSTON",
+         "broadcasterAbbreviation": "NBCSB",
+         "broadcasterDescription": "",
+         "tapeDelayComments": "",
+         "broadcasterVideoLink": "",
+         "regionId": 1,
+         "broadcasterTeamId": 1610612738,
+         "broadcasterRanking": null
+        }
+       ],
+       "awayRadioBroadcasters": [
+        {
+         "broadcasterScope": "away",
+         "broadcasterMedia": "radio",
+         "broadcasterId": 1471,
+         "broadcasterDisplay": "98.5 The Sports Hub",
+         "broadcasterAbbreviation": "WBZ-FM",
+         "broadcasterDescription": "",
+         "tapeDelayComments": "",
+         "broadcasterVideoLink": "",
+         "regionId": 1,
+         "broadcasterTeamId": 1610612738,
+         "broadcasterRanking": null
+        }
+       ],
+       "awayOttBroadcasters": [],
+       "intlRadioBroadcasters": [],
+       "intlTvBroadcasters": [
+        {
+         "broadcasterScope": "can",
+         "broadcasterMedia": "tv",
+         "broadcasterId": 181,
+         "broadcasterDisplay": "NBA TV Canada",
+         "broadcasterAbbreviation": "NBAC",
+         "broadcasterDescription": "",
+         "tapeDelayComments": "",
+         "broadcasterVideoLink": "",
+         "regionId": 2,
+         "broadcasterTeamId": 1610612761,
+         "broadcasterRanking": null
+        },
+        {
+         "broadcasterScope": "intl",
+         "broadcasterMedia": "tv",
+         "broadcasterId": 1306,
+         "broadcasterDisplay": "Tencent",
+         "broadcasterAbbreviation": "QQ",
+         "broadcasterDescription": "",
+         "tapeDelayComments": "",
+         "broadcasterVideoLink": "",
+         "regionId": 8,
+         "broadcasterTeamId": -1,
+         "broadcasterRanking": null
+        }
+       ],
+       "intlOttBroadcasters": [
+        {
+         "broadcasterScope": "intl",
+         "broadcasterMedia": "ott",
+         "broadcasterId": 1675,
+         "broadcasterDisplay": "NBA Rakuten",
+         "broadcasterAbbreviation": "Rakuten",
+         "broadcasterDescription": "",
+         "tapeDelayComments": "",
+         "broadcasterVideoLink": "",
+         "regionId": 20,
+         "broadcasterTeamId": -1,
+         "broadcasterRanking": null
+        }
+       ]
+      },
+      "homeTeam": {
+       "teamId": 1610612752,
+       "teamName": "Knicks",
+       "teamCity": "New York",
+       "teamTricode": "NYK",
+       "teamSlug": "knicks",
+       "wins": 1,
+       "losses": 0,
+       "score": 114,
+       "seed": 0
+      },
+      "awayTeam": {
+       "teamId": 1610612738,
+       "teamName": "Celtics",
+       "teamCity": "Boston",
+       "teamTricode": "BOS",
+       "teamSlug": "celtics",
+       "wins": 1,
+       "losses": 1,
+       "score": 107,
+       "seed": 0
+      },
+      "pointsLeaders": [
+       {
+        "personId": 1630202,
+        "firstName": "Payton",
+        "lastName": "Pritchard",
+        "teamId": 1610612738,
+        "teamCity": "Boston",
+        "teamName": "Celtics",
+        "teamTricode": "BOS",
+        "points": 21.0
+       },
+       {
+        "personId": 1630193,
+        "firstName": "Immanuel",
+        "lastName": "Quickley",
+        "teamId": 1610612752,
+        "teamCity": "New York",
+        "teamName": "Knicks",
+        "teamTricode": "NYK",
+        "points": 21.0
+       }
+      ]
+     },
+     {
+      "gameId": "0012300011",
+      "gameCode": "20231009/SASOKC",
+      "gameStatus": 3,
+      "gameStatusText": "Final",
+      "gameSequence": 2,
+      "gameDateEst": "2023-10-09T00:00:00Z",
+      "gameTimeEst": "1900-01-01T20:00:00Z",
+      "gameDateTimeEst": "2023-10-09T20:00:00Z",
+      "gameDateUTC": "2023-10-09T04:00:00Z",
+      "gameTimeUTC": "1900-01-01T00:00:00Z",
+      "gameDateTimeUTC": "2023-10-10T00:00:00Z",
+      "awayTeamTime": "2023-10-09T19:00:00Z",
+      "homeTeamTime": "2023-10-09T19:00:00Z",
+      "day": "Mon",
+      "monthNum": 10,
+      "weekNumber": 0,
+      "weekName": "",
+      "ifNecessary": false,
+      "seriesGameNumber": "",
+      "gameLabel": "",
+      "gameSubLabel": "",
+      "seriesText": "Preseason",
+      "arenaName": "Paycom Center",
+      "arenaState": "OK",
+      "arenaCity": "Oklahoma City",
+      "postponedStatus": "N",
+      "branchLink": "https://app.link.nba.com/rlpz3quQ8Db",
+      "gameSubtype": "",
+      "isNeutral": false,
+      "broadcasters": {
+       "nationalTvBroadcasters": [
+        {
+         "broadcasterScope": "natl",
+         "broadcasterMedia": "tv",
+         "broadcasterId": 7,
+         "broadcasterDisplay": "NBA TV",
+         "broadcasterAbbreviation": "NBA TV",
+         "broadcasterDescription": "",
+         "tapeDelayComments": "",
+         "broadcasterVideoLink": "",
+         "regionId": 1,
+         "broadcasterTeamId": -1,
+         "broadcasterRanking": null,
+         "localizationRegion": ""
+        }
+       ],
+       "nationalRadioBroadcasters": [],
+       "nationalOttBroadcasters": [],
+       "homeTvBroadcasters": [
+        {
+         "broadcasterScope": "home",
+         "broadcasterMedia": "tv",
+         "broadcasterId": 1000256,
+         "broadcasterDisplay": "Thunder App",
+         "broadcasterAbbreviation": "OKC App",
+         "broadcasterDescription": "",
+         "tapeDelayComments": "",
+         "broadcasterVideoLink": "",
+         "regionId": 1,
+         "broadcasterTeamId": 1610612760,
+         "broadcasterRanking": null
+        },
+        {
+         "broadcasterScope": "home",
+         "broadcasterMedia": "tv",
+         "broadcasterId": 1000345,
+         "broadcasterDisplay": "Bally Sports OK",
+         "broadcasterAbbreviation": "BSOK",
+         "broadcasterDescription": "",
+         "tapeDelayComments": "",
+         "broadcasterVideoLink": "",
+         "regionId": 1,
+         "broadcasterTeamId": 1610612760,
+         "broadcasterRanking": null
+        }
+       ],
+       "homeRadioBroadcasters": [
+        {
+         "broadcasterScope": "home",
+         "broadcasterMedia": "radio",
+         "broadcasterId": 1140,
+         "broadcasterDisplay": "WWLS 98.1FM OKC",
+         "broadcasterAbbreviation": "WWLS",
+         "broadcasterDescription": "",
+         "tapeDelayComments": "",
+         "broadcasterVideoLink": "",
+         "regionId": 1,
+         "broadcasterTeamId": 1610612760,
+         "broadcasterRanking": null
+        }
+       ],
+       "homeOttBroadcasters": [],
+       "awayTvBroadcasters": [
+        {
+         "broadcasterScope": "away",
+         "broadcasterMedia": "tv",
+         "broadcasterId": 1000344,
+         "broadcasterDisplay": "Bally Sports SW-SA",
+         "broadcasterAbbreviation": "BSSW-SA",
+         "broadcasterDescription": "",
+         "tapeDelayComments": "",
+         "broadcasterVideoLink": "",
+         "regionId": 1,
+         "broadcasterTeamId": 1610612759,
+         "broadcasterRanking": null
+        }
+       ],
+       "awayRadioBroadcasters": [
+        {
+         "broadcasterScope": "away",
+         "broadcasterMedia": "radio",
+         "broadcasterId": 1033,
+         "broadcasterDisplay": "WOAI 1200AM",
+         "broadcasterAbbreviation": "WOAI",
+         "broadcasterDescription": "",
+         "tapeDelayComments": "",
+         "broadcasterVideoLink": "",
+         "regionId": 1,
+         "broadcasterTeamId": 1610612759,
+         "broadcasterRanking": null
+        }
+       ],
+       "awayOttBroadcasters": [],
+       "intlRadioBroadcasters": [],
+       "intlTvBroadcasters": [
+        {
+         "broadcasterScope": "can",
+         "broadcasterMedia": "tv",
+         "broadcasterId": 11,
+         "broadcasterDisplay": "TSN",
+         "broadcasterAbbreviation": "TSN",
+         "broadcasterDescription": "",
+         "tapeDelayComments": "",
+         "broadcasterVideoLink": "",
+         "regionId": 2,
+         "broadcasterTeamId": 1610612761,
+         "broadcasterRanking": null
+        },
+        {
+         "broadcasterScope": "intl",
+         "broadcasterMedia": "tv",
+         "broadcasterId": 1209,
+         "broadcasterDisplay": "ELTA TV",
+         "broadcasterAbbreviation": "Elta",
+         "broadcasterDescription": "",
+         "tapeDelayComments": "",
+         "broadcasterVideoLink": "",
+         "regionId": 32,
+         "broadcasterTeamId": -1,
+         "broadcasterRanking": null
+        }
+       ],
+       "intlOttBroadcasters": [
+        {
+         "broadcasterScope": "intl",
+         "broadcasterMedia": "ott",
+         "broadcasterId": 1675,
+         "broadcasterDisplay": "NBA Rakuten",
+         "broadcasterAbbreviation": "Rakuten",
+         "broadcasterDescription": "",
+         "tapeDelayComments": "",
+         "broadcasterVideoLink": "",
+         "regionId": 20,
+         "broadcasterTeamId": -1,
+         "broadcasterRanking": null
+        }
+       ]
+      },
+      "homeTeam": {
+       "teamId": 1610612760,
+       "teamName": "Thunder",
+       "teamCity": "Oklahoma City",
+       "teamTricode": "OKC",
+       "teamSlug": "thunder",
+       "wins": 1,
+       "losses": 0,
+       "score": 122,
+       "seed": 0
+      },
+      "awayTeam": {
+       "teamId": 1610612759,
+       "teamName": "Spurs",
+       "teamCity": "San Antonio",
+       "teamTricode": "SAS",
+       "teamSlug": "spurs",
+       "wins": 0,
+       "losses": 1,
+       "score": 121,
+       "seed": 0
+      },
+      "pointsLeaders": [
+       {
+        "personId": 1631096,
+        "firstName": "Chet",
+        "lastName": "Holmgren",
+        "teamId": 1610612760,
+        "teamCity": "Oklahoma City",
+        "teamName": "Thunder",
+        "teamTricode": "OKC",
+        "points": 21.0
+       }
+      ]
+     },
+     {
+      "gameId": "0012300012",
+      "gameCode": "20231009/BKNLAL",
+      "gameStatus": 3,
+      "gameStatusText": "Final",
+      "gameSequence": 3,
+      "gameDateEst": "2023-10-09T00:00:00Z",
+      "gameTimeEst": "1900-01-01T21:00:00Z",
+      "gameDateTimeEst": "2023-10-09T21:00:00Z",
+      "gameDateUTC": "2023-10-09T04:00:00Z",
+      "gameTimeUTC": "1900-01-01T01:00:00Z",
+      "gameDateTimeUTC": "2023-10-10T01:00:00Z",
+      "awayTeamTime": "2023-10-09T21:00:00Z",
+      "homeTeamTime": "2023-10-09T18:00:00Z",
+      "day": "Mon",
+      "monthNum": 10,
+      "weekNumber": 0,
+      "weekName": "",
+      "ifNecessary": false,
+      "seriesGameNumber": "",
+      "gameLabel": "",
+      "gameSubLabel": "",
+      "seriesText": "Preseason",
+      "arenaName": "T-Mobile Arena",
+      "arenaState": "NV",
+      "arenaCity": "Las Vegas",
+      "postponedStatus": "N",
+      "branchLink": "https://app.link.nba.com/hexpOruQ8Db",
+      "gameSubtype": "",
+      "isNeutral": false,
+      "broadcasters": {
+       "nationalTvBroadcasters": [],
+       "nationalRadioBroadcasters": [],
+       "nationalOttBroadcasters": [],
+       "homeTvBroadcasters": [
+        {
+         "broadcasterScope": "home",
+         "broadcasterMedia": "tv",
+         "broadcasterId": 1651,
+         "broadcasterDisplay": "Spectrum SportsNet",
+         "broadcasterAbbreviation": "SPECSN",
+         "broadcasterDescription": "",
+         "tapeDelayComments": "",
+         "broadcasterVideoLink": "",
+         "regionId": 1,
+         "broadcasterTeamId": 1610612747,
+         "broadcasterRanking": null
+        }
+       ],
+       "homeRadioBroadcasters": [],
+       "homeOttBroadcasters": [],
+       "awayTvBroadcasters": [
+        {
+         "broadcasterScope": "away",
+         "broadcasterMedia": "tv",
+         "broadcasterId": 175,
+         "broadcasterDisplay": "YES",
+         "broadcasterAbbreviation": "YES",
+         "broadcasterDescription": "",
+         "tapeDelayComments": "",
+         "broadcasterVideoLink": "",
+         "regionId": 1,
+         "broadcasterTeamId": 1610612751,
+         "broadcasterRanking": null
+        }
+       ],
+       "awayRadioBroadcasters": [],
+       "awayOttBroadcasters": [],
+       "intlRadioBroadcasters": [],
+       "intlTvBroadcasters": [
+        {
+         "broadcasterScope": "intl",
+         "broadcasterMedia": "tv",
+         "broadcasterId": 1210,
+         "broadcasterDisplay": "Videoland",
+         "broadcasterAbbreviation": "Videoland",
+         "broadcasterDescription": "",
+         "tapeDelayComments": "",
+         "broadcasterVideoLink": "",
+         "regionId": 32,
+         "broadcasterTeamId": -1,
+         "broadcasterRanking": null
+        }
+       ],
+       "intlOttBroadcasters": [
+        {
+         "broadcasterScope": "intl",
+         "broadcasterMedia": "ott",
+         "broadcasterId": 1675,
+         "broadcasterDisplay": "NBA Rakuten",
+         "broadcasterAbbreviation": "Rakuten",
+         "broadcasterDescription": "",
+         "tapeDelayComments": "",
+         "broadcasterVideoLink": "",
+         "regionId": 20,
+         "broadcasterTeamId": -1,
+         "broadcasterRanking": null
+        }
+       ]
+      },
+      "homeTeam": {
+       "teamId": 1610612747,
+       "teamName": "Lakers",
+       "teamCity": "Los Angeles",
+       "teamTricode": "LAL",
+       "teamSlug": "lakers",
+       "wins": 1,
+       "losses": 1,
+       "score": 129,
+       "seed": 0
+      },
+      "awayTeam": {
+       "teamId": 1610612751,
+       "teamName": "Nets",
+       "teamCity": "Brooklyn",
+       "teamTricode": "BKN",
+       "teamSlug": "nets",
+       "wins": 0,
+       "losses": 1,
+       "score": 126,
+       "seed": 0
+      },
+      "pointsLeaders": [
+       {
+        "personId": 1630560,
+        "firstName": "Cam",
+        "lastName": "Thomas",
+        "teamId": 1610612751,
+        "teamCity": "Brooklyn",
+        "teamName": "Nets",
+        "teamTricode": "BKN",
+        "points": 26.0
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "gameDate": "10/24/2023 00:00:00",
+    "games": [
+     {
+      "gameId": "0022300061",
+      "gameCode": "20231024/LALDEN",
+      "gameStatus": 3,
+      "gameStatusText": "Final",
+      "gameSequence": 1,
+      "gameDateEst": "2023-10-24T00:00:00Z",
+      "gameTimeEst": "1900-01-01T19:30:00Z",
+      "gameDateTimeEst": "2023-10-24T19:30:00Z",
+      "gameDateUTC": "2023-10-24T04:00:00Z",
+      "gameTimeUTC": "1900-01-01T23:30:00Z",
+      "gameDateTimeUTC": "2023-10-24T23:30:00Z",
+      "awayTeamTime": "2023-10-24T16:30:00Z",
+      "homeTeamTime": "2023-10-24T17:30:00Z",
+      "day": "Tue",
+      "monthNum": 10,
+      "weekNumber": 1,
+      "weekName": "Week 1",
+      "ifNecessary": false,
+      "seriesGameNumber": "",
+      "gameLabel": "",
+      "gameSubLabel": "",
+      "seriesText": "",
+      "arenaName": "Ball Arena",
+      "arenaState": "CO",
+      "arenaCity": "Denver",
+      "postponedStatus": "N",
+      "branchLink": "https://app.link.nba.com/N0FG35vQ8Db",
+      "gameSubtype": "",
+      "isNeutral": false,
+      "broadcasters": {
+       "nationalTvBroadcasters": [
+        {
+         "broadcasterScope": "natl",
+         "broadcasterMedia": "tv",
+         "broadcasterId": 10,
+         "broadcasterDisplay": "TNT",
+         "broadcasterAbbreviation": "TNT",
+         "broadcasterDescription": "",
+         "tapeDelayComments": "",
+         "broadcasterVideoLink": "https://www.tntdrama.com/nba-on-tnt",
+         "regionId": 1,
+         "broadcasterTeamId": -1,
+         "broadcasterRanking": null,
+         "localizationRegion": ""
+        }
+       ],
+       "nationalRadioBroadcasters": [
+        {
+         "broadcasterScope": "natl",
+         "broadcasterMedia": "radio",
+         "broadcasterId": 3,
+         "broadcasterDisplay": "ESPN Radio",
+         "broadcasterAbbreviation": "ESPNR",
+         "broadcasterDescription": "",
+         "tapeDelayComments": "",
+         "broadcasterVideoLink": "",
+         "regionId": 1,
+         "broadcasterTeamId": -1,
+         "broadcasterRanking": null
+        }
+       ],
+       "nationalOttBroadcasters": [],
+       "homeTvBroadcasters": [],
+       "homeRadioBroadcasters": [
+        {
+         "broadcasterScope": "home",
+         "broadcasterMedia": "radio",
+         "broadcasterId": 1730,
+         "broadcasterDisplay": "Altitude Sports Radio 92.5 FM",
+         "broadcasterAbbreviation": "KKSE-FM",
+         "broadcasterDescription": "",
+         "tapeDelayComments": "",
+         "broadcasterVideoLink": "",
+         "regionId": 1,
+         "broadcasterTeamId": 1610612743,
+         "broadcasterRanking": null
+        }
+       ],
+       "homeOttBroadcasters": [],
+       "awayTvBroadcasters": [],
+       "awayRadioBroadcasters": [
+        {
+         "broadcasterScope": "away",
+         "broadcasterMedia": "radio",
+         "broadcasterId": 1000286,
+         "broadcasterDisplay": "ESPN LA 710/1330 KWKW",
+         "broadcasterAbbreviation": "KSPN/KWKW-LAL",
+         "broadcasterDescription": "",
+         "tapeDelayComments": "",
+         "broadcasterVideoLink": "",
+         "regionId": 1,
+         "broadcasterTeamId": 1610612747,
+         "broadcasterRanking": null
+        }
+       ],
+       "awayOttBroadcasters": [],
+       "intlRadioBroadcasters": [],
+       "intlTvBroadcasters": [
+        {
+         "broadcasterScope": "can",
+         "broadcasterMedia": "tv",
+         "broadcasterId": 11,
+         "broadcasterDisplay": "TSN",
+         "broadcasterAbbreviation": "TSN",
+         "broadcasterDescription": "",
+         "tapeDelayComments": "",
+         "broadcasterVideoLink": "",
+         "regionId": 2,
+         "broadcasterTeamId": 1610612761,
+         "broadcasterRanking": null
+        },
+        {
+         "broadcasterScope": "intl",
+         "broadcasterMedia": "tv",
+         "broadcasterId": 1209,
+         "broadcasterDisplay": "ELTA TV",
+         "broadcasterAbbreviation": "Elta",
+         "broadcasterDescription": "",
+         "tapeDelayComments": "",
+         "broadcasterVideoLink": "",
+         "regionId": 32,
+         "broadcasterTeamId": -1,
+         "broadcasterRanking": null
+        }
+       ],
+       "intlOttBroadcasters": [
+        {
+         "broadcasterScope": "intl",
+         "broadcasterMedia": "ott",
+         "broadcasterId": 1605,
+         "broadcasterDisplay": "DAZN",
+         "broadcasterAbbreviation": "DAZN_GER",
+         "broadcasterDescription": "",
+         "tapeDelayComments": "",
+         "broadcasterVideoLink": "",
+         "regionId": 14,
+         "broadcasterTeamId": -1,
+         "broadcasterRanking": null
+        },
+        {
+         "broadcasterScope": "intl",
+         "broadcasterMedia": "ott",
+         "broadcasterId": 1675,
+         "broadcasterDisplay": "NBA Rakuten",
+         "broadcasterAbbreviation": "Rakuten",
+         "broadcasterDescription": "",
+         "tapeDelayComments": "",
+         "broadcasterVideoLink": "",
+         "regionId": 20,
+         "broadcasterTeamId": -1,
+         "broadcasterRanking": null
+        }
+       ]
+      },
+      "homeTeam": {
+       "teamId": 1610612743,
+       "teamName": "Nuggets",
+       "teamCity": "Denver",
+       "teamTricode": "DEN",
+       "teamSlug": "nuggets",
+       "wins": 1,
+       "losses": 0,
+       "score": 119,
+       "seed": 0
+      },
+      "awayTeam": {
+       "teamId": 1610612747,
+       "teamName": "Lakers",
+       "teamCity": "Los Angeles",
+       "teamTricode": "LAL",
+       "teamSlug": "lakers",
+       "wins": 0,
+       "losses": 1,
+       "score": 107,
+       "seed": 0
+      },
+      "pointsLeaders": [
+       {
+        "personId": 203999,
+        "firstName": "Nikola",
+        "lastName": "Jokic",
+        "teamId": 1610612743,
+        "teamCity": "Denver",
+        "teamName": "Nuggets",
+        "teamTricode": "DEN",
+        "points": 29.0
+       }
+      ]
+     },
+     {
+      "gameId": "0022300062",
+      "gameCode": "20231024/PHXGSW",
+      "gameStatus": 3,
+      "gameStatusText": "Final",
+      "gameSequence": 2,
+      "gameDateEst": "2023-10-24T00:00:00Z",
+      "gameTimeEst": "1900-01-01T22:00:00Z",
+      "gameDateTimeEst": "2023-10-24T22:00:00Z",
+      "gameDateUTC": "2023-10-24T04:00:00Z",
+      "gameTimeUTC": "1900-01-01T02:00:00Z",
+      "gameDateTimeUTC": "2023-10-25T02:00:00Z",
+      "awayTeamTime": "2023-10-24T19:00:00Z",
+      "homeTeamTime": "2023-10-24T19:00:00Z",
+      "day": "Tue",
+      "monthNum": 10,
+      "weekNumber": 1,
+      "weekName": "Week 1",
+      "ifNecessary": false,
+      "seriesGameNumber": "",
+      "gameLabel": "",
+      "gameSubLabel": "",
+      "seriesText": "",
+      "arenaName": "Chase Center",
+      "arenaState": "CA",
+      "arenaCity": "San Francisco",
+      "postponedStatus": "N",
+      "branchLink": "https://app.link.nba.com/AqLXN6vQ8Db",
+      "gameSubtype": "",
+      "isNeutral": false,
+      "broadcasters": {
+       "nationalTvBroadcasters": [
+        {
+         "broadcasterScope": "natl",
+         "broadcasterMedia": "tv",
+         "broadcasterId": 10,
+         "broadcasterDisplay": "TNT",
+         "broadcasterAbbreviation": "TNT",
+         "broadcasterDescription": "",
+         "tapeDelayComments": "",
+         "broadcasterVideoLink": "https://www.tntdrama.com/nba-on-tnt",
+         "regionId": 1,
+         "broadcasterTeamId": -1,
+         "broadcasterRanking": null,
+         "localizationRegion": ""
+        }
+       ],
+       "nationalRadioBroadcasters": [
+        {
+         "broadcasterScope": "natl",
+         "broadcasterMedia": "radio",
+         "broadcasterId": 1001098,
+         "broadcasterDisplay": "SiriusXM",
+         "broadcasterAbbreviation": "SiriusXM",
+         "broadcasterDescription": "",
+         "tapeDelayComments": "",
+         "broadcasterVideoLink": "https://www.siriusxm.com/sports/nba?utm_campaign=SXM_NA_BAU&utm_source=2023-11_NA_NBA-SiriusXMNFLRadio.NBA.NBAWebsiteWaystoListen.NA.Logo-NBA2023WaystoListen.Q42023.NA&utm_medium=Partner&utm_term=",
+         "regionId": 1,
+         "broadcasterTeamId": -1,
+         "broadcasterRanking": null
+        }
+       ],
+       "nationalOttBroadcasters": [],
+       "homeTvBroadcasters": [],
+       "homeRadioBroadcasters": [
+        {
+         "broadcasterScope": "home",
+         "broadcasterMedia": "radio",
+         "broadcasterId": 1597,
+         "broadcasterDisplay": "95.7 The Game",
+         "broadcasterAbbreviation": "KGMZ-FM",
+         "broadcasterDescription": "",
+         "tapeDelayComments": "",
+         "broadcasterVideoLink": "",
+         "regionId": 1,
+         "broadcasterTeamId": 1610612744,
+         "broadcasterRanking": null
+        }
+       ],
+       "homeOttBroadcasters": [],
+       "awayTvBroadcasters": [],
+       "awayRadioBroadcasters": [
+        {
+         "broadcasterScope": "away",
+         "broadcasterMedia": "radio",
+         "broadcasterId": 1598,
+         "broadcasterDisplay": "KMVP 98.7 / S: KSUN",
+         "broadcasterAbbreviation": "KMVP/KSUN",
+         "broadcasterDescription": "",
+         "tapeDelayComments": "",
+         "broadcasterVideoLink": "",
+         "regionId": 1,
+         "broadcasterTeamId": 1610612756,
+         "broadcasterRanking": null
+        }
+       ],
+       "awayOttBroadcasters": [],
+       "intlRadioBroadcasters": [],
+       "intlTvBroadcasters": [
+        {
+         "broadcasterScope": "can",
+         "broadcasterMedia": "tv",
+         "broadcasterId": 11,
+         "broadcasterDisplay": "TSN",
+         "broadcasterAbbreviation": "TSN",
+         "broadcasterDescription": "",
+         "tapeDelayComments": "",
+         "broadcasterVideoLink": "",
+         "regionId": 2,
+         "broadcasterTeamId": 1610612761,
+         "broadcasterRanking": null
+        },
+        {
+         "broadcasterScope": "intl",
+         "broadcasterMedia": "tv",
+         "broadcasterId": 1209,
+         "broadcasterDisplay": "ELTA TV",
+         "broadcasterAbbreviation": "Elta",
+         "broadcasterDescription": "",
+         "tapeDelayComments": "",
+         "broadcasterVideoLink": "",
+         "regionId": 32,
+         "broadcasterTeamId": -1,
+         "broadcasterRanking": null
+        }
+       ],
+       "intlOttBroadcasters": [
+        {
+         "broadcasterScope": "intl",
+         "broadcasterMedia": "ott",
+         "broadcasterId": 1605,
+         "broadcasterDisplay": "DAZN",
+         "broadcasterAbbreviation": "DAZN_GER",
+         "broadcasterDescription": "",
+         "tapeDelayComments": "",
+         "broadcasterVideoLink": "",
+         "regionId": 14,
+         "broadcasterTeamId": -1,
+         "broadcasterRanking": null
+        },
+        {
+         "broadcasterScope": "intl",
+         "broadcasterMedia": "ott",
+         "broadcasterId": 1675,
+         "broadcasterDisplay": "NBA Rakuten",
+         "broadcasterAbbreviation": "Rakuten",
+         "broadcasterDescription": "",
+         "tapeDelayComments": "",
+         "broadcasterVideoLink": "",
+         "regionId": 20,
+         "broadcasterTeamId": -1,
+         "broadcasterRanking": null
+        }
+       ]
+      },
+      "homeTeam": {
+       "teamId": 1610612744,
+       "teamName": "Warriors",
+       "teamCity": "Golden State",
+       "teamTricode": "GSW",
+       "teamSlug": "warriors",
+       "wins": 0,
+       "losses": 1,
+       "score": 104,
+       "seed": 0
+      },
+      "awayTeam": {
+       "teamId": 1610612756,
+       "teamName": "Suns",
+       "teamCity": "Phoenix",
+       "teamTricode": "PHX",
+       "teamSlug": "suns",
+       "wins": 1,
+       "losses": 0,
+       "score": 108,
+       "seed": 0
+      },
+      "pointsLeaders": [
+       {
+        "personId": 1626164,
+        "firstName": "Devin",
+        "lastName": "Booker",
+        "teamId": 1610612756,
+        "teamCity": "Phoenix",
+        "teamName": "Suns",
+        "teamTricode": "PHX",
+        "points": 32.0
+       }
+      ]
+     }
+    ]
+   }
+  ],
+  "weeks": [
+   {
+    "weekNumber": 1,
+    "weekName": "Week 1",
+    "startDate": "2023-10-24T00:00:00Z",
+    "endDate": "2023-10-29T00:00:00Z"
+   },
+   {
+    "weekNumber": 2,
+    "weekName": "Week 2",
+    "startDate": "2023-10-30T00:00:00Z",
+    "endDate": "2023-11-05T00:00:00Z"
+   }
+  ],
+  "broadcasterList": [
+   {
+    "broadcasterId": 1,
+    "broadcasterDisplay": "ABC",
+    "broadcasterAbbreviation": "ABC",
+    "broadcasterDescription": "",
+    "regionId": 1
+   },
+   {
+    "broadcasterId": 2,
+    "broadcasterDisplay": "ESPN",
+    "broadcasterAbbreviation": "ESPN",
+    "broadcasterDescription": "",
+    "regionId": 1
+   }
+  ]
+ }
+}

@@ -1,0 +1,120 @@
+{
+ "resource": "franchisehistory",
+ "parameters": {
+  "LeagueID": "00"
+ },
+ "resultSets": [
+  {
+   "name": "FranchiseHistory",
+   "headers": [
+    "LEAGUE_ID",
+    "TEAM_ID",
+    "TEAM_CITY",
+    "TEAM_NAME",
+    "START_YEAR",
+    "END_YEAR",
+    "YEARS",
+    "GAMES",
+    "WINS",
+    "LOSSES",
+    "WIN_PCT",
+    "PO_APPEARANCES",
+    "DIV_TITLES",
+    "CONF_TITLES",
+    "LEAGUE_TITLES"
+   ],
+   "rowSet": [
+    [
+     "00",
+     1610612737,
+     "Atlanta",
+     "Hawks",
+     "1949",
+     "2025",
+     77,
+     6103,
+     3014,
+     3089,
+     0.494,
+     50,
+     13,
+     0,
+     1
+    ],
+    [
+     "00",
+     1610612737,
+     "Atlanta",
+     "Hawks",
+     "1968",
+     "2025",
+     58,
+     4683,
+     2315,
+     2368,
+     0.494,
+     37,
+     7,
+     0,
+     0
+    ]
+   ]
+  },
+  {
+   "name": "DefunctTeams",
+   "headers": [
+    "LEAGUE_ID",
+    "TEAM_ID",
+    "TEAM_CITY",
+    "TEAM_NAME",
+    "START_YEAR",
+    "END_YEAR",
+    "YEARS",
+    "GAMES",
+    "WINS",
+    "LOSSES",
+    "WIN_PCT",
+    "PO_APPEARANCES",
+    "DIV_TITLES",
+    "CONF_TITLES",
+    "LEAGUE_TITLES"
+   ],
+   "rowSet": [
+    [
+     "00",
+     1610610023,
+     "Anderson",
+     "Packers",
+     "1949",
+     "1949",
+     1,
+     64,
+     37,
+     27,
+     0.578,
+     1,
+     0,
+     0,
+     0
+    ],
+    [
+     "00",
+     1610610024,
+     "Baltimore",
+     "Bullets",
+     "1947",
+     "1953",
+     7,
+     450,
+     158,
+     292,
+     0.351,
+     3,
+     0,
+     0,
+     1
+    ]
+   ]
+  }
+ ]
+}

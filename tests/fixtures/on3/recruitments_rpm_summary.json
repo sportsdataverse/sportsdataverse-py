@@ -1,0 +1,51 @@
+{
+ "predictions": [
+  {
+   "key": 346360857,
+   "organization": {
+    "assetUrl": {
+     "key": 12013,
+     "url": "https://on3static.com/uploads/assets/984/149/149984.svg",
+     "slug": "kentucky-wildcats",
+     "fullName": "Kentucky Wildcats"
+    },
+    "fullName": "Kentucky Wildcats",
+    "key": 12013,
+    "name": "Kentucky",
+    "mascot": "Wildcats",
+    "abbreviation": "UK",
+    "asset": {
+     "key": 149984,
+     "domainOverride": null,
+     "domain": "on3static.com",
+     "sourceOverride": null,
+     "source": "/uploads/assets/984/149/149984.svg",
+     "title": "Organization Logo",
+     "description": null,
+     "caption": null,
+     "category": null,
+     "altText": null,
+     "height": 1600,
+     "width": 2000,
+     "assetType": "Image",
+     "fileSystem": "s3",
+     "path": "/uploads/assets/984/149",
+     "type": "svg",
+     "thumbnail": null,
+     "duration": 0,
+     "mimeType": "image/svg+xml"
+    },
+    "slug": "kentucky-wildcats",
+    "primaryColor": "#00339F"
+   },
+   "percent": 100,
+   "committed": true,
+   "committedDate": "2026-06-01T21:01:00",
+   "flippedFromOrganization": null,
+   "status": "Enrolled",
+   "statusDate": "2026-06-01T21:01:00",
+   "distance": null
+  }
+ ],
+ "locked": false
+}

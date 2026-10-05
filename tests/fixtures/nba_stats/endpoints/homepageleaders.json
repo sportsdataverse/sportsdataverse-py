@@ -1,0 +1,104 @@
+{
+ "resource": "homepageleaders",
+ "parameters": {
+  "LeagueID": "00",
+  "Season": "2024-25",
+  "SeasonType": "Regular Season",
+  "GameScope": "Season",
+  "PlayerScope": "All Players",
+  "PlayerOrTeam": "Team",
+  "StatCategory": "Points"
+ },
+ "resultSets": [
+  {
+   "name": "HomePageLeaders",
+   "headers": [
+    "RANK",
+    "TEAM_ID",
+    "TEAM_NAME",
+    "TEAM_ABBREVIATION",
+    "PTS",
+    "FG_PCT",
+    "FG3_PCT",
+    "FT_PCT",
+    "EFG_PCT",
+    "TS_PCT",
+    "PTS_PER48"
+   ],
+   "rowSet": [
+    [
+     1,
+     1610612739,
+     "Cleveland Cavaliers",
+     "CLE",
+     121.9,
+     0.491,
+     0.383,
+     0.776,
+     0.578,
+     0.607,
+     121.5
+    ],
+    [
+     2,
+     1610612763,
+     "Memphis Grizzlies",
+     "MEM",
+     121.7,
+     0.479,
+     0.367,
+     0.786,
+     0.554,
+     0.588,
+     121.6
+    ]
+   ]
+  },
+  {
+   "name": "LeagueAverage",
+   "headers": [
+    "PTS",
+    "FG_PCT",
+    "FG3_PCT",
+    "FT_PCT",
+    "EFG_PCT",
+    "TS_PCT",
+    "PTS_PER48"
+   ],
+   "rowSet": [
+    [
+     113.8,
+     0.467,
+     0.36,
+     0.78,
+     0.543,
+     0.576,
+     113.2
+    ]
+   ]
+  },
+  {
+   "name": "LeagueMax",
+   "headers": [
+    "PTS",
+    "FG_PCT",
+    "FG3_PCT",
+    "FT_PCT",
+    "EFG_PCT",
+    "TS_PCT",
+    "PTS_PER48"
+   ],
+   "rowSet": [
+    [
+     121.9,
+     0.506,
+     0.387,
+     0.819,
+     0.578,
+     0.607,
+     121.6
+    ]
+   ]
+  }
+ ]
+}

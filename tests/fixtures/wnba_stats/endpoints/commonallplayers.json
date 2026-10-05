@@ -1,0 +1,91 @@
+{
+ "resource": "commonallplayers",
+ "parameters": {
+  "LeagueID": "10",
+  "Season": "2023",
+  "IsOnlyCurrentSeason": 0
+ },
+ "resultSets": [
+  {
+   "name": "CommonAllPlayers",
+   "headers": [
+    "PERSON_ID",
+    "DISPLAY_LAST_COMMA_FIRST",
+    "DISPLAY_FIRST_LAST",
+    "ROSTERSTATUS",
+    "FROM_YEAR",
+    "TO_YEAR",
+    "PLAYERCODE",
+    "PLAYER_SLUG",
+    "TEAM_ID",
+    "TEAM_CITY",
+    "TEAM_NAME",
+    "TEAM_ABBREVIATION",
+    "TEAM_CODE",
+    "TEAM_SLUG",
+    "IS_NBA_ASSIGNED",
+    "NBA_ASSIGNED_TEAM_ID",
+    "GAMES_PLAYED_FLAG"
+   ],
+   "rowSet": [
+    [
+     203025,
+     "Abdi, Farhiya",
+     "Farhiya Abdi",
+     0,
+     "2013",
+     "2015",
+     "farhiya_abdi",
+     "farhiya_abdi",
+     0,
+     "",
+     "",
+     "",
+     "",
+     null,
+     0,
+     0,
+     "Y"
+    ],
+    [
+     100023,
+     "Abraham, Tajama",
+     "Tajama Abraham",
+     0,
+     "1997",
+     "1998",
+     "tajama_abraham",
+     "tajama_abraham",
+     0,
+     "",
+     "",
+     "",
+     "",
+     null,
+     0,
+     0,
+     "Y"
+    ],
+    [
+     203831,
+     "Achonwa, Natalie",
+     "Natalie Achonwa",
+     1,
+     "2015",
+     "2023",
+     "natalie_achonwa",
+     "natalie_achonwa",
+     1611661324,
+     "Minnesota",
+     "Lynx",
+     "MIN",
+     "lynx",
+     "lynx",
+     0,
+     0,
+     "Y"
+    ]
+   ]
+  }
+ ]
+}

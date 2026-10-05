@@ -1,0 +1,61 @@
+{
+ "resource": "playerawards",
+ "parameters": {
+  "PlayerID": 203826
+ },
+ "resultSets": [
+  {
+   "name": "PlayerAwards",
+   "headers": [
+    "PERSON_ID",
+    "FIRST_NAME",
+    "LAST_NAME",
+    "TEAM",
+    "DESCRIPTION",
+    "ALL_NBA_TEAM_NUMBER",
+    "SEASON",
+    "MONTH",
+    "WEEK",
+    "CONFERENCE",
+    "TYPE",
+    "SUBTYPE1",
+    "SUBTYPE2",
+    "SUBTYPE3"
+   ],
+   "rowSet": [
+    [
+     203826,
+     "Alyssa",
+     "Thomas",
+     "CON",
+     "All-Defensive Team",
+     "2",
+     "2017",
+     null,
+     "1900-01-01T12:00:00",
+     " ",
+     "Award",
+     " ",
+     " ",
+     " "
+    ],
+    [
+     203826,
+     "Alyssa",
+     "Thomas",
+     "CON",
+     "All-Defensive Team",
+     "2",
+     "2019",
+     null,
+     "1900-01-01T12:00:00",
+     " ",
+     "Award",
+     " ",
+     " ",
+     " "
+    ]
+   ]
+  }
+ ]
+}

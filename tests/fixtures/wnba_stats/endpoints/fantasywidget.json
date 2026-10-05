@@ -1,0 +1,75 @@
+{
+ "resource": "fantasywidget",
+ "parameters": {
+  "LeagueID": "10",
+  "Season": "2023",
+  "SeasonType": "Regular Season",
+  "TodaysPlayers": "N",
+  "ActivePlayers": "Y",
+  "LastNGames": 0,
+  "TeamID": 0,
+  "PlayerID": 203826,
+  "Location": null,
+  "Month": 0,
+  "SeasonSegment": null,
+  "DateFrom": "",
+  "DateTo": "",
+  "OpponentTeamID": 0,
+  "VsConference": null,
+  "VsDivision": null,
+  "Position": null,
+  "TodaysOpponent": 0,
+  "PORound": 0
+ },
+ "resultSets": [
+  {
+   "name": "FantasyWidgetResult",
+   "headers": [
+    "PLAYER_ID",
+    "PLAYER_NAME",
+    "PLAYER_POSITION",
+    "TEAM_ID",
+    "TEAM_ABBREVIATION",
+    "GP",
+    "MIN",
+    "FAN_DUEL_PTS",
+    "NBA_FANTASY_PTS",
+    "PTS",
+    "REB",
+    "AST",
+    "BLK",
+    "STL",
+    "TOV",
+    "FG3M",
+    "FGA",
+    "FG_PCT",
+    "FTA",
+    "FT_PCT"
+   ],
+   "rowSet": [
+    [
+     203826,
+     "Alyssa Thomas",
+     "F",
+     1611661323,
+     "CON",
+     40,
+     36.1,
+     40.3,
+     42.6,
+     15.5,
+     9.9,
+     7.9,
+     0.48,
+     1.83,
+     3.4,
+     0.0,
+     12.8,
+     0.474,
+     4.7,
+     0.715
+    ]
+   ]
+  }
+ ]
+}

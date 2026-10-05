@@ -1,0 +1,50 @@
+{
+ "resource": "assistleaders",
+ "parameters": {
+  "LeagueID": "10",
+  "Season": "2023",
+  "SeasonType": "Regular Season",
+  "PerMode": "PerGame",
+  "PlayerOrTeam": "Player"
+ },
+ "resultSets": [
+  {
+   "name": "AssistLeaders",
+   "headers": [
+    "RANK",
+    "PLAYER_ID",
+    "PLAYER",
+    "TEAM_ID",
+    "TEAM_ABBREVIATION",
+    "TEAM_NAME",
+    "JERSEY_NUM",
+    "PLAYER_POSITION",
+    "AST"
+   ],
+   "rowSet": [
+    [
+     1,
+     202664,
+     "Courtney Vandersloot",
+     1611661313,
+     "NYL",
+     "New York Liberty",
+     "22",
+     "G",
+     8.1
+    ],
+    [
+     2,
+     203826,
+     "Alyssa Thomas",
+     1611661323,
+     "CON",
+     "Connecticut Sun",
+     "25",
+     "F",
+     7.9
+    ]
+   ]
+  }
+ ]
+}

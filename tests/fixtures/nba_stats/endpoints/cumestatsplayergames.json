@@ -1,0 +1,33 @@
+{
+ "resource": "cumestatsplayergames",
+ "parameters": {
+  "LeagueID": "00",
+  "Season": "2023-24",
+  "SeasonType": "Regular Season",
+  "PlayerID": 2544,
+  "Location": null,
+  "Outcome": null,
+  "VsTeamID": 0,
+  "VsDivision": null,
+  "VsConference": null
+ },
+ "resultSets": [
+  {
+   "name": "CumeStatsPlayerGames",
+   "headers": [
+    "MATCHUP",
+    "GAME_ID"
+   ],
+   "rowSet": [
+    [
+     "04/14/2024 Lakers at Pelicans",
+     "0022301195"
+    ],
+    [
+     "04/12/2024 Lakers at Grizzlies",
+     "0022301177"
+    ]
+   ]
+  }
+ ]
+}

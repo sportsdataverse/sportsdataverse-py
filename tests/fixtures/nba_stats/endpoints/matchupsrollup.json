@@ -1,0 +1,92 @@
+{
+ "resource": "matchupsrollup",
+ "parameters": {
+  "LeagueID": "00",
+  "Season": "2023-24",
+  "SeasonType": "Regular Season",
+  "PerMode": "PerGame",
+  "DefTeamID": 0,
+  "OffTeamID": 0,
+  "DefPlayerID": 0,
+  "OffPlayerID": 0
+ },
+ "resultSets": [
+  {
+   "name": "MatchupsRollup",
+   "headers": [
+    "SEASON_ID",
+    "POSITION",
+    "PERCENT_OF_TIME",
+    "DEF_PLAYER_ID",
+    "DEF_PLAYER_NAME",
+    "GP",
+    "MATCHUP_MIN",
+    "PARTIAL_POSS",
+    "PLAYER_PTS",
+    "TEAM_PTS",
+    "MATCHUP_AST",
+    "MATCHUP_TOV",
+    "MATCHUP_BLK",
+    "MATCHUP_FGM",
+    "MATCHUP_FGA",
+    "MATCHUP_FG_PCT",
+    "MATCHUP_FG3M",
+    "MATCHUP_FG3A",
+    "MATCHUP_FG3_PCT",
+    "MATCHUP_FTM",
+    "MATCHUP_FTA",
+    "SFL"
+   ],
+   "rowSet": [
+    [
+     "22023",
+     "F",
+     0.5550360495912,
+     2544,
+     "LeBron James",
+     70,
+     7.8,
+     39.7,
+     5.9,
+     41.7,
+     1.4,
+     0.7,
+     0.1,
+     2.4,
+     5.4,
+     0.454,
+     0.9,
+     2.4,
+     0.351,
+     0.2,
+     0.2,
+     0.1
+    ],
+    [
+     "22023",
+     "G",
+     0.3512775648314,
+     2544,
+     "LeBron James",
+     70,
+     4.9,
+     26.7,
+     4.1,
+     29.6,
+     1.1,
+     0.5,
+     0.2,
+     1.7,
+     3.7,
+     0.446,
+     0.6,
+     1.8,
+     0.35,
+     0.1,
+     0.2,
+     0.1
+    ]
+   ]
+  }
+ ]
+}

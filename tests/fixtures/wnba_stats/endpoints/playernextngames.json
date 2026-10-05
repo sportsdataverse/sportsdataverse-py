@@ -1,0 +1,62 @@
+{
+ "resource": "playernextngames",
+ "parameters": {
+  "LeagueID": "10",
+  "Season": "2026",
+  "SeasonType": "Regular Season",
+  "PlayerID": 203826,
+  "NumberOfGames": 5
+ },
+ "resultSets": [
+  {
+   "name": "NextNGames",
+   "headers": [
+    "GAME_ID",
+    "GAME_DATE",
+    "HOME_TEAM_ID",
+    "VISITOR_TEAM_ID",
+    "HOME_TEAM_NAME",
+    "VISITOR_TEAM_NAME",
+    "HOME_TEAM_ABBREVIATION",
+    "VISITOR_TEAM_ABBREVIATION",
+    "HOME_TEAM_NICKNAME",
+    "VISITOR_TEAM_NICKNAME",
+    "GAME_TIME",
+    "HOME_WL",
+    "VISITOR_WL"
+   ],
+   "rowSet": [
+    [
+     "1022600147",
+     "JUL 02, 2026",
+     1611661317,
+     1611661328,
+     "Phoenix",
+     "Seattle",
+     "PHX",
+     "SEA",
+     "Mercury",
+     "Storm",
+     "10:00 PM",
+     "7-13",
+     "5-15"
+    ],
+    [
+     "1022600158",
+     "JUL 07, 2026",
+     1611661317,
+     1611661329,
+     "Phoenix",
+     "Chicago",
+     "PHX",
+     "CHI",
+     "Mercury",
+     "Sky",
+     "10:00 PM",
+     "7-13",
+     "6-13"
+    ]
+   ]
+  }
+ ]
+}

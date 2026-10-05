@@ -5,6 +5,7 @@
 - [NBA Stats fixtures](#nba-stats-fixtures)
   - [Trimming](#trimming)
   - [Re-capturing](#re-capturing)
+  - [Per-endpoint captures](#per-endpoint-captures)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -56,3 +57,30 @@ json.dump(raw, open('tests/fixtures/nba_stats/scheduleleaguev2_2025_26.json', 'w
 `tests/test_crosswalk_basketball_sources.py` derives its expected row count from
 the fixture itself, so a re-capture does not need a matching test edit unless the
 column contract moved.
+
+## Per-endpoint captures
+
+`endpoints/<slug>.json` holds one real body per `nba_stats_*` wrapper (125 of
+128). They are the 2026-08 capture sweep's samples,
+`sdv-internal-refs/nba/captures/_sample/00/<slug>.json` (commit `3d754b8`), copied
+by `tools/codegen/vendor_captures.py`. The returns-table schemas under
+`tools/codegen/schemas/native/nba_stats/` are generated from what
+`parse_nba_stats_result_sets` emits on them (`tools/codegen/gen_nba_stats.py`).
+`tests/codegen/test_stats_on3_schemas_match_parser.py` checks that the schemas
+still match.
+
+The three video endpoints are not in the directory, because their sweep samples
+are empty. Their schema comes from the pilot captures in `tests/nba/fixtures/`
+instead (`gen_nba_stats.CAPTURE_OVERRIDES`).
+
+Each body is trimmed in the same way: every record list keeps its first 2
+records, plus every later record that adds a `(field path, value type)` pair the
+kept records lack. Parser dtypes depend only on that set of pairs, so the vendor
+script asserts that the trimmed body parses to the same columns, in the same
+order and with the same dtypes, as the full one. Headers, result-set lists and
+scalar rows are never cut. Re-vendor (this needs the private repo):
+
+```sh
+SDV_INTERNAL_REFS_REPO=<path> uv run python tools/codegen/vendor_captures.py
+uv run python tools/codegen/gen_nba_stats.py
+```

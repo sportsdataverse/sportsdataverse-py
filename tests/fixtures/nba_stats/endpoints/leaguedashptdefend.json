@@ -1,0 +1,76 @@
+{
+ "resource": "leaguedashptdefend",
+ "parameters": {
+  "PerMode": "PerGame",
+  "LeagueID": "00",
+  "Season": "2023-24",
+  "SeasonType": "Regular Season",
+  "PlayerID": 2544,
+  "TeamID": 0,
+  "Outcome": null,
+  "Location": null,
+  "Month": 0,
+  "SeasonSegment": null,
+  "DateFrom": "",
+  "DateTo": "",
+  "OpponentTeamID": 0,
+  "vsConfernce": null,
+  "vsDivision": null,
+  "Conference": null,
+  "Division": null,
+  "GameSegment": null,
+  "Period": 0,
+  "LastNGames": 0,
+  "DraftYear": null,
+  "DraftPick": null,
+  "College": null,
+  "Country": null,
+  "Height": null,
+  "Weight": null,
+  "PlayerExperience": null,
+  "PlayerPosition": null,
+  "StarterBench": null,
+  "PORound": null,
+  "DefenseCategory": "Overall",
+  "ISTRound": null
+ },
+ "resultSets": [
+  {
+   "name": "LeagueDashPTDefend",
+   "headers": [
+    "CLOSE_DEF_PERSON_ID",
+    "PLAYER_NAME",
+    "PLAYER_LAST_TEAM_ID",
+    "PLAYER_LAST_TEAM_ABBREVIATION",
+    "PLAYER_POSITION",
+    "AGE",
+    "GP",
+    "G",
+    "FREQ",
+    "D_FGM",
+    "D_FGA",
+    "D_FG_PCT",
+    "NORMAL_FG_PCT",
+    "PCT_PLUSMINUS"
+   ],
+   "rowSet": [
+    [
+     2544,
+     "LeBron James",
+     1610612747,
+     "LAL",
+     "F",
+     39.0,
+     70,
+     70,
+     1.0,
+     4.69,
+     10.14,
+     0.462,
+     0.48,
+     -0.018
+    ]
+   ]
+  }
+ ]
+}

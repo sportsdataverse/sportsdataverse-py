@@ -1,0 +1,146 @@
+{
+ "resource": "teamdetails",
+ "parameters": {
+  "TeamID": 1611661319
+ },
+ "resultSets": [
+  {
+   "name": "TeamBackground",
+   "headers": [
+    "TEAM_ID",
+    "ABBREVIATION",
+    "NICKNAME",
+    "YEARFOUNDED",
+    "CITY",
+    "ARENA",
+    "ARENACAPACITY",
+    "OWNER",
+    "GENERALMANAGER",
+    "HEADCOACH",
+    "DLEAGUEAFFILIATION"
+   ],
+   "rowSet": [
+    [
+     1611661319,
+     "LVA",
+     "Aces",
+     1997,
+     "Las Vegas",
+     "Michelob Ultra Arena",
+     null,
+     "Mark Davis",
+     "",
+     "Becky Hammon",
+     null
+    ]
+   ]
+  },
+  {
+   "name": "TeamHistory",
+   "headers": [
+    "TEAM_ID",
+    "CITY",
+    "NICKNAME",
+    "YEARFOUNDED",
+    "YEARACTIVETILL"
+   ],
+   "rowSet": []
+  },
+  {
+   "name": "TeamSocialSites",
+   "headers": [
+    "ACCOUNTTYPE",
+    "WEBSITE_LINK"
+   ],
+   "rowSet": []
+  },
+  {
+   "name": "TeamAwardsChampionships",
+   "headers": [
+    "YEARAWARDED",
+    "OPPOSITETEAM"
+   ],
+   "rowSet": [
+    [
+     2022,
+     "Connecticut Sun"
+    ],
+    [
+     2023,
+     "New York Liberty"
+    ]
+   ]
+  },
+  {
+   "name": "TeamAwardsConf",
+   "headers": [
+    "YEARAWARDED",
+    "OPPOSITETEAM"
+   ],
+   "rowSet": []
+  },
+  {
+   "name": "TeamAwardsDiv",
+   "headers": [
+    "YEARAWARDED",
+    "OPPOSITETEAM"
+   ],
+   "rowSet": []
+  },
+  {
+   "name": "TeamHof",
+   "headers": [
+    "PLAYERID",
+    "PLAYER",
+    "POSITION",
+    "JERSEY",
+    "SEASONSWITHTEAM",
+    "YEAR"
+   ],
+   "rowSet": [
+    [
+     100342,
+     "Becky Hammon",
+     "G",
+     null,
+     "2007-2014",
+     2023
+    ]
+   ]
+  },
+  {
+   "name": "TeamRetired",
+   "headers": [
+    "PLAYERID",
+    "PLAYER",
+    "POSITION",
+    "JERSEY",
+    "SEASONSWITHTEAM",
+    "YEAR"
+   ],
+   "rowSet": [
+    [
+     100342,
+     "Becky Hammon",
+     "G",
+     "25",
+     "2007-2014",
+     2016
+    ]
+   ]
+  },
+  {
+   "name": "TeamAwardsCommCup",
+   "headers": [
+    "YEARAWARDED",
+    "OPPOSITETEAM"
+   ],
+   "rowSet": [
+    [
+     2022,
+     "Chicago Sky"
+    ]
+   ]
+  }
+ ]
+}

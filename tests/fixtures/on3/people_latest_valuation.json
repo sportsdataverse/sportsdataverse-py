@@ -1,0 +1,41 @@
+{
+ "nilStatus": "Normal",
+ "valuation": 6000000,
+ "valuationChange": 4009175,
+ "followers": 18985,
+ "rank": 1,
+ "lastUpdated": 1783468800,
+ "whisper": 6000000.0,
+ "whisperChange": 0.0,
+ "socialValuations": [
+  {
+   "socialType": "Instagram",
+   "profile": {
+    "type": "Instagram",
+    "handle": "milan_momcilovic",
+    "handshake": false
+   },
+   "valuation": null,
+   "valuationChange": null,
+   "followers": null,
+   "previousValuation": 440
+  },
+  {
+   "socialType": "TikTok",
+   "profile": {
+    "type": "TikTok",
+    "handle": "milanmomcilovic22",
+    "handshake": false
+   },
+   "valuation": null,
+   "valuationChange": null,
+   "followers": null,
+   "previousValuation": 104
+  }
+ ],
+ "groupRank": 1,
+ "groupName": null,
+ "tags": [],
+ "rosterValue": null,
+ "nilValue": null
+}

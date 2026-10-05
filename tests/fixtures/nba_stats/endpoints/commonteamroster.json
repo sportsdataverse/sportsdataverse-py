@@ -1,0 +1,116 @@
+{
+ "resource": "commonteamroster",
+ "parameters": {
+  "TeamID": 1610612747,
+  "LeagueID": "00",
+  "Season": "2023-24"
+ },
+ "resultSets": [
+  {
+   "name": "CommonTeamRoster",
+   "headers": [
+    "TeamID",
+    "SEASON",
+    "LeagueID",
+    "PLAYER",
+    "NICKNAME",
+    "PLAYER_SLUG",
+    "NUM",
+    "POSITION",
+    "HEIGHT",
+    "WEIGHT",
+    "BIRTH_DATE",
+    "AGE",
+    "EXP",
+    "SCHOOL",
+    "PLAYER_ID",
+    "HOW_ACQUIRED"
+   ],
+   "rowSet": [
+    [
+     1610612747,
+     "2023",
+     "00",
+     "Jalen Hood-Schifino",
+     "Jalen",
+     "jalen-hood-schifino",
+     "0",
+     "G",
+     "6-5",
+     "215",
+     "JUN 19, 2003",
+     21.0,
+     "R",
+     "Indiana",
+     1641720,
+     null
+    ],
+    [
+     1610612747,
+     "2023",
+     "00",
+     "D'Angelo Russell",
+     "D'Angelo",
+     "dangelo-russell",
+     "1",
+     "G",
+     "6-3",
+     "193",
+     "FEB 23, 1996",
+     28.0,
+     "8",
+     "Ohio State",
+     1626156,
+     null
+    ],
+    [
+     1610612747,
+     "2023",
+     "00",
+     "Jarred Vanderbilt",
+     "Jarred",
+     "jarred-vanderbilt",
+     "2",
+     "F",
+     "6-8",
+     "214",
+     "APR 03, 1999",
+     25.0,
+     "5",
+     "Kentucky",
+     1629020,
+     "Traded from UTA on 02/09/23"
+    ]
+   ]
+  },
+  {
+   "name": "Coaches",
+   "headers": [
+    "TEAM_ID",
+    "SEASON",
+    "COACH_ID",
+    "FIRST_NAME",
+    "LAST_NAME",
+    "COACH_NAME",
+    "IS_ASSISTANT",
+    "COACH_TYPE",
+    "SORT_SEQUENCE",
+    "SUB_SORT_SEQUENCE"
+   ],
+   "rowSet": [
+    [
+     1610612747,
+     "2023",
+     1627319,
+     "Roger",
+     "Sancho",
+     "Roger Sancho",
+     3,
+     "Trainer",
+     null,
+     7
+    ]
+   ]
+  }
+ ]
+}

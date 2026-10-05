@@ -1,0 +1,505 @@
+{
+ "resource": "alltimeleadersgrids",
+ "parameters": {
+  "LeagueID": "10",
+  "SeasonType": "Regular Season",
+  "PerMode": "PerGame",
+  "TopX": "10"
+ },
+ "resultSets": [
+  {
+   "name": "GPLeaders",
+   "headers": [
+    "PLAYER_ID",
+    "PLAYER_NAME",
+    "GP",
+    "GP_RANK",
+    "IS_ACTIVE_FLAG"
+   ],
+   "rowSet": [
+    [
+     100720,
+     "Sue Bird",
+     580,
+     1,
+     "N"
+    ],
+    [
+     100940,
+     "Diana Taurasi",
+     565,
+     2,
+     "N"
+    ]
+   ]
+  },
+  {
+   "name": "PTSLeaders",
+   "headers": [
+    "PLAYER_ID",
+    "PLAYER_NAME",
+    "PTS",
+    "PTS_RANK",
+    "IS_ACTIVE_FLAG"
+   ],
+   "rowSet": [
+    [
+     100940,
+     "Diana Taurasi",
+     18.8,
+     1,
+     "N"
+    ],
+    [
+     202250,
+     "Tina Charles",
+     17.8,
+     2,
+     "N"
+    ]
+   ]
+  },
+  {
+   "name": "ASTLeaders",
+   "headers": [
+    "PLAYER_ID",
+    "PLAYER_NAME",
+    "AST",
+    "AST_RANK",
+    "IS_ACTIVE_FLAG"
+   ],
+   "rowSet": [
+    [
+     202664,
+     "Courtney Vandersloot",
+     6.6,
+     1,
+     "Y"
+    ],
+    [
+     100234,
+     "Ticha Penicheiro",
+     5.7,
+     2,
+     "N"
+    ]
+   ]
+  },
+  {
+   "name": "STLLeaders",
+   "headers": [
+    "PLAYER_ID",
+    "PLAYER_NAME",
+    "STL",
+    "STL_RANK",
+    "IS_ACTIVE_FLAG"
+   ],
+   "rowSet": [
+    [
+     100646,
+     "Tamika Catchings",
+     2.35011,
+     1,
+     "N"
+    ],
+    [
+     100072,
+     "Sheryl Swoopes",
+     2.02778,
+     2,
+     "N"
+    ]
+   ]
+  },
+  {
+   "name": "OREBLeaders",
+   "headers": [
+    "PLAYER_ID",
+    "PLAYER_NAME",
+    "OREB",
+    "OREB_RANK",
+    "IS_ACTIVE_FLAG"
+   ],
+   "rowSet": [
+    [
+     201480,
+     "Sylvia Fowles",
+     2.77451,
+     1,
+     "N"
+    ],
+    [
+     100944,
+     "Rebekkah Brunson",
+     2.57395,
+     2,
+     "N"
+    ]
+   ]
+  },
+  {
+   "name": "DREBLeaders",
+   "headers": [
+    "PLAYER_ID",
+    "PLAYER_NAME",
+    "DREB",
+    "DREB_RANK",
+    "IS_ACTIVE_FLAG"
+   ],
+   "rowSet": [
+    [
+     201480,
+     "Sylvia Fowles",
+     7.04412,
+     1,
+     "N"
+    ],
+    [
+     201496,
+     "Candace Parker",
+     6.94146,
+     2,
+     "N"
+    ]
+   ]
+  },
+  {
+   "name": "REBLeaders",
+   "headers": [
+    "PLAYER_ID",
+    "PLAYER_NAME",
+    "REB",
+    "REB_RANK",
+    "IS_ACTIVE_FLAG"
+   ],
+   "rowSet": [
+    [
+     201480,
+     "Sylvia Fowles",
+     9.81863,
+     1,
+     "N"
+    ],
+    [
+     202250,
+     "Tina Charles",
+     9.01057,
+     2,
+     "N"
+    ]
+   ]
+  },
+  {
+   "name": "BLKLeaders",
+   "headers": [
+    "PLAYER_ID",
+    "PLAYER_NAME",
+    "BLK",
+    "BLK_RANK",
+    "IS_ACTIVE_FLAG"
+   ],
+   "rowSet": [
+    [
+     100239,
+     "Margo Dydek",
+     2.71517,
+     1,
+     "N"
+    ],
+    [
+     203398,
+     "Brittney Griner",
+     2.40822,
+     2,
+     "Y"
+    ]
+   ]
+  },
+  {
+   "name": "FGMLeaders",
+   "headers": [
+    "PLAYER_ID",
+    "PLAYER_NAME",
+    "FGM",
+    "FGM_RANK",
+    "IS_ACTIVE_FLAG"
+   ],
+   "rowSet": [
+    [
+     1628932,
+     "A'ja Wilson",
+     7.90909,
+     1,
+     "Y"
+    ],
+    [
+     202250,
+     "Tina Charles",
+     7.11205,
+     2,
+     "N"
+    ]
+   ]
+  },
+  {
+   "name": "FGALeaders",
+   "headers": [
+    "PLAYER_ID",
+    "PLAYER_NAME",
+    "FGA",
+    "FGA_RANK",
+    "IS_ACTIVE_FLAG"
+   ],
+   "rowSet": [
+    [
+     1629481,
+     "Arike Ogunbowale",
+     16.94239,
+     1,
+     "Y"
+    ],
+    [
+     1628932,
+     "A'ja Wilson",
+     15.82168,
+     2,
+     "Y"
+    ]
+   ]
+  },
+  {
+   "name": "FG_PCTLeaders",
+   "headers": [
+    "PLAYER_ID",
+    "PLAYER_NAME",
+    "FG_PCT",
+    "FG_PCT_RANK",
+    "IS_ACTIVE_FLAG"
+   ],
+   "rowSet": [
+    [
+     201480,
+     "Sylvia Fowles",
+     0.599,
+     1,
+     "N"
+    ],
+    [
+     201518,
+     "Crystal Langhorne",
+     0.56,
+     2,
+     "N"
+    ]
+   ]
+  },
+  {
+   "name": "TOVLeaders",
+   "headers": [
+    "PLAYER_ID",
+    "PLAYER_NAME",
+    "TOV",
+    "TOV_RANK",
+    "IS_ACTIVE_FLAG"
+   ],
+   "rowSet": [
+    [
+     100003,
+     "Lisa Leslie",
+     3.2865,
+     1,
+     "N"
+    ],
+    [
+     203826,
+     "Alyssa Thomas",
+     2.75266,
+     2,
+     "Y"
+    ]
+   ]
+  },
+  {
+   "name": "FG3MLeaders",
+   "headers": [
+    "PLAYER_ID",
+    "PLAYER_NAME",
+    "FG3M",
+    "FG3M_RANK",
+    "IS_ACTIVE_FLAG"
+   ],
+   "rowSet": [
+    [
+     1642286,
+     "Caitlin Clark",
+     2.78571,
+     1,
+     "Y"
+    ],
+    [
+     1631009,
+     "Rhyne Howard",
+     2.75325,
+     2,
+     "Y"
+    ]
+   ]
+  },
+  {
+   "name": "FG3ALeaders",
+   "headers": [
+    "PLAYER_ID",
+    "PLAYER_NAME",
+    "FG3A",
+    "FG3A_RANK",
+    "IS_ACTIVE_FLAG"
+   ],
+   "rowSet": [
+    [
+     1642286,
+     "Caitlin Clark",
+     8.38571,
+     1,
+     "Y"
+    ],
+    [
+     1631009,
+     "Rhyne Howard",
+     8.0974,
+     2,
+     "Y"
+    ]
+   ]
+  },
+  {
+   "name": "FG3_PCTLeaders",
+   "headers": [
+    "PLAYER_ID",
+    "PLAYER_NAME",
+    "FG3_PCT",
+    "FG3_PCT_RANK",
+    "IS_ACTIVE_FLAG"
+   ],
+   "rowSet": [
+    [
+     100382,
+     "Jennifer Azzi",
+     0.458,
+     1,
+     "N"
+    ],
+    [
+     1630142,
+     "Leonie Fiebich",
+     0.43,
+     2,
+     "Y"
+    ]
+   ]
+  },
+  {
+   "name": "PFLeaders",
+   "headers": [
+    "PLAYER_ID",
+    "PLAYER_NAME",
+    "PF",
+    "PF_RANK",
+    "IS_ACTIVE_FLAG"
+   ],
+   "rowSet": [
+    [
+     100396,
+     "DeLisha Milton-Jones",
+     3.15431,
+     1,
+     "N"
+    ],
+    [
+     100940,
+     "Diana Taurasi",
+     3.0708,
+     2,
+     "N"
+    ]
+   ]
+  },
+  {
+   "name": "FTMLeaders",
+   "headers": [
+    "PLAYER_ID",
+    "PLAYER_NAME",
+    "FTM",
+    "FTM_RANK",
+    "IS_ACTIVE_FLAG"
+   ],
+   "rowSet": [
+    [
+     1628932,
+     "A'ja Wilson",
+     5.52797,
+     1,
+     "Y"
+    ],
+    [
+     1627668,
+     "Breanna Stewart",
+     4.96774,
+     2,
+     "Y"
+    ]
+   ]
+  },
+  {
+   "name": "FTALeaders",
+   "headers": [
+    "PLAYER_ID",
+    "PLAYER_NAME",
+    "FTA",
+    "FTA_RANK",
+    "IS_ACTIVE_FLAG"
+   ],
+   "rowSet": [
+    [
+     1628932,
+     "A'ja Wilson",
+     6.72727,
+     1,
+     "Y"
+    ],
+    [
+     201881,
+     "Angel McCoughtry",
+     6.06109,
+     2,
+     "N"
+    ]
+   ]
+  },
+  {
+   "name": "FT_PCTLeaders",
+   "headers": [
+    "PLAYER_ID",
+    "PLAYER_NAME",
+    "FT_PCT",
+    "FT_PCT_RANK",
+    "IS_ACTIVE_FLAG"
+   ],
+   "rowSet": [
+    [
+     100342,
+     "Becky Hammon",
+     0.897,
+     1,
+     "N"
+    ],
+    [
+     203825,
+     "Kayla McBride",
+     0.895,
+     2,
+     "Y"
+    ]
+   ]
+  }
+ ]
+}

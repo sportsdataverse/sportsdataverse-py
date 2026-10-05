@@ -1,0 +1,30 @@
+{
+ "meta": {
+  "version": 1,
+  "request": "http://nba.cloud/games/1022600128/boxscorehustle?Format=json",
+  "time": "2026-06-28T20:11:54.1154Z"
+ },
+ "boxScoreHustle": {
+  "gameId": "1022600128",
+  "awayTeamId": 1611661317,
+  "homeTeamId": 1611661325,
+  "homeTeam": {
+   "teamId": 0,
+   "teamCity": null,
+   "teamName": null,
+   "teamTricode": null,
+   "teamSlug": null,
+   "players": [],
+   "statistics": null
+  },
+  "awayTeam": {
+   "teamId": 0,
+   "teamCity": null,
+   "teamName": null,
+   "teamTricode": null,
+   "teamSlug": null,
+   "players": [],
+   "statistics": null
+  }
+ }
+}

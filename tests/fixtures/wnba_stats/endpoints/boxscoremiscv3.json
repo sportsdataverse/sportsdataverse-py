@@ -1,0 +1,160 @@
+{
+ "meta": {
+  "version": 1,
+  "request": "http://nba.cloud/games/1022600128/boxscoremisc?Format=json",
+  "time": "2026-06-29T01:55:34.5534Z"
+ },
+ "boxScoreMisc": {
+  "gameId": "1022600128",
+  "awayTeamId": 1611661317,
+  "homeTeamId": 1611661325,
+  "homeTeam": {
+   "teamId": 1611661325,
+   "teamCity": "Indiana",
+   "teamName": "Fever",
+   "teamTricode": "IND",
+   "teamSlug": "fever",
+   "players": [
+    {
+     "personId": 1631086,
+     "firstName": "Lexie",
+     "familyName": "Hull",
+     "nameI": "L. Hull",
+     "playerSlug": "lexie-hull",
+     "position": "F",
+     "comment": "",
+     "jerseyNum": "",
+     "statistics": {
+      "minutes": "24:29",
+      "pointsOffTurnovers": 0,
+      "pointsSecondChance": 2,
+      "pointsFastBreak": 0,
+      "pointsPaint": 4,
+      "oppPointsOffTurnovers": 16,
+      "oppPointsSecondChance": 0,
+      "oppPointsFastBreak": 13,
+      "oppPointsPaint": 30,
+      "blocks": 0,
+      "blocksAgainst": 0,
+      "foulsPersonal": 4,
+      "foulsDrawn": 1
+     }
+    },
+    {
+     "personId": 1628881,
+     "firstName": "Monique",
+     "familyName": "Billings",
+     "nameI": "M. Billings",
+     "playerSlug": "monique-billings",
+     "position": "F",
+     "comment": "",
+     "jerseyNum": "",
+     "statistics": {
+      "minutes": "19:55",
+      "pointsOffTurnovers": 0,
+      "pointsSecondChance": 2,
+      "pointsFastBreak": 0,
+      "pointsPaint": 4,
+      "oppPointsOffTurnovers": 15,
+      "oppPointsSecondChance": 6,
+      "oppPointsFastBreak": 15,
+      "oppPointsPaint": 28,
+      "blocks": 0,
+      "blocksAgainst": 0,
+      "foulsPersonal": 3,
+      "foulsDrawn": 4
+     }
+    }
+   ],
+   "statistics": {
+    "minutes": "200:00",
+    "pointsOffTurnovers": 10,
+    "pointsSecondChance": 9,
+    "pointsFastBreak": 4,
+    "pointsPaint": 48,
+    "oppPointsOffTurnovers": 25,
+    "oppPointsSecondChance": 11,
+    "oppPointsFastBreak": 17,
+    "oppPointsPaint": 52,
+    "blocks": 1,
+    "blocksAgainst": 3,
+    "foulsPersonal": 29,
+    "foulsDrawn": 19
+   }
+  },
+  "awayTeam": {
+   "teamId": 1611661317,
+   "teamCity": "Phoenix",
+   "teamName": "Mercury",
+   "teamTricode": "PHX",
+   "teamSlug": "mercury",
+   "players": [
+    {
+     "personId": 1643493,
+     "firstName": "Noemie",
+     "familyName": "Brochant",
+     "nameI": "N. Brochant",
+     "playerSlug": "noemie-brochant",
+     "position": "F",
+     "comment": "",
+     "jerseyNum": "",
+     "statistics": {
+      "minutes": "33:06",
+      "pointsOffTurnovers": 4,
+      "pointsSecondChance": 0,
+      "pointsFastBreak": 7,
+      "pointsPaint": 4,
+      "oppPointsOffTurnovers": 10,
+      "oppPointsSecondChance": 4,
+      "oppPointsFastBreak": 2,
+      "oppPointsPaint": 38,
+      "blocks": 0,
+      "blocksAgainst": 0,
+      "foulsPersonal": 1,
+      "foulsDrawn": 1
+     }
+    },
+    {
+     "personId": 201886,
+     "firstName": "DeWanna",
+     "familyName": "Bonner",
+     "nameI": "D. Bonner",
+     "playerSlug": "dewanna-bonner",
+     "position": "F",
+     "comment": "",
+     "jerseyNum": "",
+     "statistics": {
+      "minutes": "32:43",
+      "pointsOffTurnovers": 3,
+      "pointsSecondChance": 0,
+      "pointsFastBreak": 0,
+      "pointsPaint": 6,
+      "oppPointsOffTurnovers": 7,
+      "oppPointsSecondChance": 6,
+      "oppPointsFastBreak": 2,
+      "oppPointsPaint": 32,
+      "blocks": 1,
+      "blocksAgainst": 0,
+      "foulsPersonal": 3,
+      "foulsDrawn": 2
+     }
+    }
+   ],
+   "statistics": {
+    "minutes": "200:00",
+    "pointsOffTurnovers": 25,
+    "pointsSecondChance": 11,
+    "pointsFastBreak": 17,
+    "pointsPaint": 52,
+    "oppPointsOffTurnovers": 10,
+    "oppPointsSecondChance": 9,
+    "oppPointsFastBreak": 4,
+    "oppPointsPaint": 48,
+    "blocks": 3,
+    "blocksAgainst": 1,
+    "foulsPersonal": 19,
+    "foulsDrawn": 29
+   }
+  }
+ }
+}

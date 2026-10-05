@@ -1,0 +1,75 @@
+{
+ "resource": "fantasywidget",
+ "parameters": {
+  "LeagueID": "00",
+  "Season": "2023-24",
+  "SeasonType": "Regular Season",
+  "TodaysPlayers": "N",
+  "ActivePlayers": "Y",
+  "LastNGames": 0,
+  "TeamID": 0,
+  "PlayerID": 2544,
+  "Location": null,
+  "Month": 0,
+  "SeasonSegment": null,
+  "DateFrom": "",
+  "DateTo": "",
+  "OpponentTeamID": 0,
+  "VsConference": null,
+  "VsDivision": null,
+  "Position": null,
+  "TodaysOpponent": 0,
+  "PORound": 0
+ },
+ "resultSets": [
+  {
+   "name": "FantasyWidgetResult",
+   "headers": [
+    "PLAYER_ID",
+    "PLAYER_NAME",
+    "PLAYER_POSITION",
+    "TEAM_ID",
+    "TEAM_ABBREVIATION",
+    "GP",
+    "MIN",
+    "FAN_DUEL_PTS",
+    "NBA_FANTASY_PTS",
+    "PTS",
+    "REB",
+    "AST",
+    "BLK",
+    "STL",
+    "TOV",
+    "FG3M",
+    "FGA",
+    "FG_PCT",
+    "FTA",
+    "FT_PCT"
+   ],
+   "rowSet": [
+    [
+     2544,
+     "LeBron James",
+     "F",
+     1610612747,
+     "LAL",
+     71,
+     35.3,
+     47.0,
+     48.8,
+     25.7,
+     7.3,
+     8.3,
+     0.54,
+     1.25,
+     3.5,
+     2.1,
+     17.9,
+     0.54,
+     5.7,
+     0.75
+    ]
+   ]
+  }
+ ]
+}

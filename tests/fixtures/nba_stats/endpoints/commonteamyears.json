@@ -1,0 +1,41 @@
+{
+ "resource": "commonteamyears",
+ "parameters": {
+  "LeagueID": "00"
+ },
+ "resultSets": [
+  {
+   "name": "TeamYears",
+   "headers": [
+    "LEAGUE_ID",
+    "TEAM_ID",
+    "MIN_YEAR",
+    "MAX_YEAR",
+    "ABBREVIATION"
+   ],
+   "rowSet": [
+    [
+     "00",
+     1610610023,
+     "1949",
+     "1949",
+     null
+    ],
+    [
+     "00",
+     1610610024,
+     "1947",
+     "1954",
+     null
+    ],
+    [
+     "00",
+     1610612737,
+     "1949",
+     "2026",
+     "ATL"
+    ]
+   ]
+  }
+ ]
+}

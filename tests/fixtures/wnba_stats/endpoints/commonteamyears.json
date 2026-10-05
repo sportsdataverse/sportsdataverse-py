@@ -1,0 +1,34 @@
+{
+ "resource": "commonteamyears",
+ "parameters": {
+  "LeagueID": "10"
+ },
+ "resultSets": [
+  {
+   "name": "TeamYears",
+   "headers": [
+    "LEAGUE_ID",
+    "TEAM_ID",
+    "MIN_YEAR",
+    "MAX_YEAR",
+    "ABBREVIATION"
+   ],
+   "rowSet": [
+    [
+     "10",
+     1611661313,
+     "1997",
+     "2026",
+     "NYL"
+    ],
+    [
+     "10",
+     1611661314,
+     "1997",
+     "2006",
+     null
+    ]
+   ]
+  }
+ ]
+}

@@ -1,0 +1,50 @@
+{
+ "resource": "assistleaders",
+ "parameters": {
+  "LeagueID": "00",
+  "Season": "2023-24",
+  "SeasonType": "Regular Season",
+  "PerMode": "PerGame",
+  "PlayerOrTeam": "Player"
+ },
+ "resultSets": [
+  {
+   "name": "AssistLeaders",
+   "headers": [
+    "RANK",
+    "PLAYER_ID",
+    "PLAYER",
+    "TEAM_ID",
+    "TEAM_ABBREVIATION",
+    "TEAM_NAME",
+    "JERSEY_NUM",
+    "PLAYER_POSITION",
+    "AST"
+   ],
+   "rowSet": [
+    [
+     1,
+     1630169,
+     "Tyrese Haliburton",
+     1610612754,
+     "IND",
+     "Indiana Pacers",
+     "0",
+     "G",
+     10.9
+    ],
+    [
+     2,
+     1629029,
+     "Luka Dončić",
+     1610612742,
+     "DAL",
+     "Dallas Mavericks",
+     "77",
+     "F-G",
+     9.8
+    ]
+   ]
+  }
+ ]
+}
