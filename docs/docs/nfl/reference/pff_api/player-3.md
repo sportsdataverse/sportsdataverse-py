@@ -271,7 +271,26 @@ Rushing by direction for one player
 
 ### Returns {#pff_api_player_rushing_direction-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_pff_report`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `attempts` | integer | Rushing attempts in this direction. |
+| `direction` | character | Run direction / gap of the split, PFF's own vocabulary (e.g. "LT", "LG", "ML", "RG", "RE", "QBSc"). |
+| `explosive` | integer | Runs in this direction PFF designates as explosive. |
+| `first_downs` | integer | Rushing first downs gained in this direction. |
+| `franchise_id` | integer | PFF franchise id of the runner's team. |
+| `fumbles` | integer | Fumbles on runs in this direction. |
+| `long` | integer | Longest run in this direction, in yards. |
+| `missed_tackles` | integer | Missed tackles forced on runs in this direction. |
+| `player_id` | integer | PFF player id of the runner. |
+| `team_name` | character | Abbreviation of the runner's team (e.g. "BUF"). |
+| `touchdowns` | integer | Rushing touchdowns in this direction. |
+| `yards` | integer | Rushing yards gained in this direction. |
+| `yards_after_contact` | integer | Yards after contact on runs in this direction. |
+| `yco_attempt` | numeric | Average yards after contact per attempt in this direction. |
+| `ypa` | numeric | Yards per rushing attempt in this direction. |
+
 **`return_parsed=False`** — The decoded JSON body. /v1 routes return the Premium Stats envelope (`{report_slug: rows}`); /v2 routes return `{..meta.., columns, rows}`..
 
 ### Example {#pff_api_player_rushing_direction-example}
@@ -300,7 +319,72 @@ Rushing summary for one player
 
 ### Returns {#pff_api_player_rushing_summary-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_pff_player_detail`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `targets` | integer | Passes thrown to the ball carrier (targets). |
+| `grades_offense` | numeric | PFF overall offense grade (0-100). |
+| `game_id` | integer | PFF game id of the game (integer join key). |
+| `yards_after_contact` | integer | Yards after contact. |
+| `explosive` | integer | Runs PFF designates as explosive. |
+| `week` | integer | Week number of the game, as PFF numbers weeks. |
+| `elu_rush_mtf` | integer | Missed tackles forced as a rusher, an input to PFF's elusive rating. |
+| `breakaway_attempts` | integer | Runs of 15 or more yards, PFF's breakaway designation. |
+| `status` | character | "S" when the player started the game; PFF owns the value set. |
+| `designed_yards` | integer | Rushing yards gained on designed runs, excluding scrambles. |
+| `yprr` | numeric | Yards per route run. |
+| `breakaway_percent` | numeric | Share of rushing yards gained on breakaway runs of 15 or more yards. |
+| `fumbles` | integer | Fumbles by the ball carrier. |
+| `first_downs` | integer | Rushing first downs. |
+| `elusive_rating` | numeric | PFF elusive rating. |
+| `jersey_number` | character | Jersey number the player wore in the game (string; zero-padded, e.g. "09"). |
+| `breakaway_yards` | integer | Breakaway (long-run) yards. |
+| `away_team_name` | character | Abbreviation of the away team (e.g. "LV"). |
+| `total_touches` | integer | Combined carries and receptions. |
+| `scramble_yards` | integer | Rushing yards gained on scrambles. |
+| `yco_attempt` | numeric | Average yards after contact per rushing attempt. |
+| `yards` | integer | Total rushing yards gained. |
+| `player_franchise_id` | integer | PFF franchise id of the team the player played for in the game. |
+| `grades_run_block` | numeric | PFF run-blocking grade, 0-100. |
+| `receptions` | integer | Passes caught by the ball carrier. |
+| `zone_attempts` | integer | Rushing attempts on zone-scheme runs. |
+| `scrambles` | integer | Quarterback scrambles. |
+| `grades_run` | numeric | PFF rushing grade (0-100). |
+| `penalties` | integer | Penalties charged to the player over the covered span. |
+| `attempts` | integer | Rushing attempts (carries) by the runner. |
+| `elu_yco` | integer | Yards-after-contact component used in PFF's elusive rating. |
+| `elu_recv_mtf` | integer | Missed tackles forced as a receiver, an input to PFF's elusive rating. |
+| `declined_penalties` | integer | Penalties committed by the player that were declined. |
+| `ypa` | numeric | Average yards per rushing attempt. |
+| `drops` | integer | Passes dropped by the ball carrier. |
+| `position` | character | PFF position code the player was charted at in the game (e.g. QB, HB, WR, T, LB, K). |
+| `grades_hands_fumble` | numeric | PFF ball-security (hands/fumble) grade, 0-100. |
+| `longest` | integer | Longest run in yards. |
+| `away_franchise_id` | integer | PFF franchise id of the away team. |
+| `count_of_yards` | integer | Rushing attempts counted toward the yardage figures (equal to attempts in the captured rows). |
+| `routes` | integer | Pass routes run by the player. |
+| `rec_yards` | integer | Receiving yards gained by the ball carrier (the rushing report also carries his receiving line). |
+| `home_franchise_id` | integer | PFF franchise id of the home team. |
+| `gap_attempts` | integer | Rushing attempts on gap-scheme runs. |
+| `run_plays` | integer | Run-play snaps. |
+| `home_team_name` | character | Abbreviation of the home team (e.g. "NE"). |
+| `avoided_tackles` | integer | Missed tackles forced. |
+| `grades_offense_penalty` | numeric | PFF offensive penalty grade, 0-100. |
+| `player_id` | integer | PFF player id (integer join key) of the player the report is about. |
+| `touchdowns` | integer | Rushing touchdowns. |
+| `game_away_franchise_id` | integer | Repeats away_franchise_id from the row's nested game object: PFF franchise id of the away team. |
+| `game_away_team_name` | character | Repeats away_team_name from the row's nested game object: Abbreviation of the away team (e.g. "LV"). |
+| `game_game_id` | integer | Repeats game_id from the row's nested game object: PFF game id of the game (integer join key). |
+| `game_home_franchise_id` | integer | Repeats home_franchise_id from the row's nested game object: PFF franchise id of the home team. |
+| `game_home_team_name` | character | Repeats home_team_name from the row's nested game object: Abbreviation of the home team (e.g. "NE"). |
+| `game_player_franchise_id` | integer | Repeats player_franchise_id from the row's nested game object: PFF franchise id of the team the player played for in the game. |
+| `game_position` | character | Repeats position from the row's nested game object: PFF position code the player was charted at in the game (e.g. QB, HB, WR, T, LB, K). |
+| `game_status` | character | Repeats status from the row's nested game object: "S" when the player started the game; PFF owns the value set. |
+| `game_week` | integer | Repeats week from the row's nested game object: Week number of the game, as PFF numbers weeks. |
+| `league_id` | integer | PFF league id (1 = NFL, 2 = NCAA), filled from the report's subject. |
+| `season` | integer | Season (starting year) of the report, filled from the report's subject. |
+
 **`return_parsed=False`** — The decoded JSON body. /v1 routes return the Premium Stats envelope (`{report_slug: rows}`); /v2 routes return `{..meta.., columns, rows}`..
 
 ### Example {#pff_api_player_rushing_summary-example}

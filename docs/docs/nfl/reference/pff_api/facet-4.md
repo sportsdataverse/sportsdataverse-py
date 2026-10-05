@@ -464,7 +464,98 @@ League-wide receiving-versus-coverage leaderboard
 
 ### Returns {#pff_api_facet_receiving_coverage-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_pff_report`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a dict of `polars.DataFrame`s (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+
+**defenders**
+
+| col_name | type | description |
+|---|---|---|
+| `broken_up_passes` | integer | Passes broken up in the row's coverage matchups. |
+| `drops` | integer | Dropped passes in the row's coverage matchups. |
+| `first_downs` | integer | Receiving first downs (defenders: allowed in the defender's coverage; receivers / versus: by the receiver). |
+| `grades_coverage_defense` | numeric | The player's PFF coverage grade (0-100). |
+| `grades_defense` | numeric | The player's PFF overall defense grade (0-100). |
+| `grades_defense_penalty` | numeric | The player's PFF defensive penalty grade (0-100). |
+| `grades_overall` | numeric | The player's PFF overall grade (0-100) over the requested filters. |
+| `grades_overall_tackle` | numeric | The player's PFF overall tackling grade (0-100). |
+| `grades_pass_rush_defense` | numeric | The player's PFF pass-rush grade (0-100). |
+| `grades_run_defense` | numeric | The player's PFF run-defense grade (0-100). |
+| `grades_tackle` | numeric | The player's PFF tackling grade (0-100). |
+| `interceptions` | integer | Interceptions on throws in the row's coverage matchups. |
+| `longest` | integer | Longest reception, in yards (defenders: allowed in the defender's coverage; receivers / versus: by the receiver). |
+| `player_game_count` | integer | Games the player appeared in over the requested filters. |
+| `player_id` | integer | PFF player id: the covering defender (defenders) or the receiver (receivers, versus). |
+| `receptions` | integer | Receptions (defenders: allowed in the defender's coverage; receivers / versus: by the receiver). |
+| `targets` | integer | Targets (defenders: allowed in the defender's coverage; receivers / versus: by the receiver). |
+| `touchdowns` | integer | Receiving touchdowns (defenders: allowed in the defender's coverage; receivers / versus: by the receiver). |
+| `yards` | integer | Receiving yards (defenders: allowed in the defender's coverage; receivers / versus: by the receiver). |
+| `yards_after_catch` | integer | Yards after the catch (defenders: allowed in the defender's coverage; receivers / versus: by the receiver). |
+| `yards_per_reception` | numeric | Yards per reception (defenders: allowed in the defender's coverage; receivers / versus: by the receiver). |
+| `grades_offense` | numeric | The player's PFF overall offense grade (0-100). |
+| `grades_offense_penalty` | numeric | The player's PFF offensive penalty grade (0-100). |
+| `grades_run_block` | numeric | The player's PFF run-blocking grade (0-100). |
+| `grades_pass_block` | numeric | The player's PFF pass-blocking grade (0-100). |
+| `grades_hands_drop` | numeric | The player's PFF hands (drop) grade (0-100). |
+| `grades_hands_fumble` | numeric | The player's PFF ball-security (fumble) grade (0-100). |
+| `grades_pass_route` | numeric | The player's PFF receiving (route-running) grade (0-100). |
+| `grades_pass` | numeric | The player's PFF passing grade (0-100). |
+| `grades_run` | numeric | The player's PFF rushing grade (0-100). |
+
+**receivers**
+
+| col_name | type | description |
+|---|---|---|
+| `broken_up_passes` | integer | Passes broken up in the row's coverage matchups. |
+| `drops` | integer | Dropped passes in the row's coverage matchups. |
+| `first_downs` | integer | Receiving first downs (defenders: allowed in the defender's coverage; receivers / versus: by the receiver). |
+| `grades_hands_drop` | numeric | The player's PFF hands (drop) grade (0-100). |
+| `grades_hands_fumble` | numeric | The player's PFF ball-security (fumble) grade (0-100). |
+| `grades_offense` | numeric | The player's PFF overall offense grade (0-100). |
+| `grades_offense_penalty` | numeric | The player's PFF offensive penalty grade (0-100). |
+| `grades_overall` | numeric | The player's PFF overall grade (0-100) over the requested filters. |
+| `grades_pass_route` | numeric | The player's PFF receiving (route-running) grade (0-100). |
+| `grades_run_block` | numeric | The player's PFF run-blocking grade (0-100). |
+| `grades_screen_block` | numeric | The player's PFF screen-blocking grade (0-100). |
+| `interceptions` | integer | Interceptions on throws in the row's coverage matchups. |
+| `longest` | integer | Longest reception, in yards (defenders: allowed in the defender's coverage; receivers / versus: by the receiver). |
+| `player_game_count` | integer | Games the player appeared in over the requested filters. |
+| `player_id` | integer | PFF player id: the covering defender (defenders) or the receiver (receivers, versus). |
+| `receptions` | integer | Receptions (defenders: allowed in the defender's coverage; receivers / versus: by the receiver). |
+| `targets` | integer | Targets (defenders: allowed in the defender's coverage; receivers / versus: by the receiver). |
+| `touchdowns` | integer | Receiving touchdowns (defenders: allowed in the defender's coverage; receivers / versus: by the receiver). |
+| `yards` | integer | Receiving yards (defenders: allowed in the defender's coverage; receivers / versus: by the receiver). |
+| `yards_after_catch` | integer | Yards after the catch (defenders: allowed in the defender's coverage; receivers / versus: by the receiver). |
+| `yards_per_reception` | numeric | Yards per reception (defenders: allowed in the defender's coverage; receivers / versus: by the receiver). |
+| `grades_pass` | numeric | The player's PFF passing grade (0-100). |
+| `grades_pass_block` | numeric | The player's PFF pass-blocking grade (0-100). |
+| `grades_run` | numeric | The player's PFF rushing grade (0-100). |
+| `grades_defense` | numeric | The player's PFF overall defense grade (0-100). |
+| `grades_defense_penalty` | numeric | The player's PFF defensive penalty grade (0-100). |
+| `grades_pass_rush_defense` | numeric | The player's PFF pass-rush grade (0-100). |
+| `grades_run_defense` | numeric | The player's PFF run-defense grade (0-100). |
+| `grades_coverage_defense` | numeric | The player's PFF coverage grade (0-100). |
+| `grades_overall_tackle` | numeric | The player's PFF overall tackling grade (0-100). |
+| `grades_tackle` | numeric | The player's PFF tackling grade (0-100). |
+| `grades_snap` | numeric | PFF grade reported as grades_snap (0-100); PFF does not document it, and the capture shows it only in the ncaa receivers frame. |
+
+**versus**
+
+| col_name | type | description |
+|---|---|---|
+| `broken_up_passes` | integer | Passes broken up in the row's coverage matchups. |
+| `coverage_player_id` | integer | PFF player id of the defender covering the receiver (versus only). |
+| `drops` | integer | Dropped passes in the row's coverage matchups. |
+| `first_downs` | integer | Receiving first downs (defenders: allowed in the defender's coverage; receivers / versus: by the receiver). |
+| `interceptions` | integer | Interceptions on throws in the row's coverage matchups. |
+| `longest` | integer | Longest reception, in yards (defenders: allowed in the defender's coverage; receivers / versus: by the receiver). |
+| `player_id` | integer | PFF player id: the covering defender (defenders) or the receiver (receivers, versus). |
+| `receptions` | integer | Receptions (defenders: allowed in the defender's coverage; receivers / versus: by the receiver). |
+| `targets` | integer | Targets (defenders: allowed in the defender's coverage; receivers / versus: by the receiver). |
+| `touchdowns` | integer | Receiving touchdowns (defenders: allowed in the defender's coverage; receivers / versus: by the receiver). |
+| `yards` | integer | Receiving yards (defenders: allowed in the defender's coverage; receivers / versus: by the receiver). |
+| `yards_after_catch` | integer | Yards after the catch (defenders: allowed in the defender's coverage; receivers / versus: by the receiver). |
+| `yards_per_reception` | numeric | Yards per reception (defenders: allowed in the defender's coverage; receivers / versus: by the receiver). |
+
 **`return_parsed=False`** — The decoded JSON body. /v1 routes return the Premium Stats envelope (`{report_slug: rows}`); /v2 routes return `{..meta.., columns, rows}`..
 
 ### Example {#pff_api_facet_receiving_coverage-example}

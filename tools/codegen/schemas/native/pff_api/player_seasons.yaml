@@ -1,0 +1,6 @@
+columns:
+- description: ''
+  name: value
+  type: integer
+kind: dataframe
+schema: pff_api_player_seasons

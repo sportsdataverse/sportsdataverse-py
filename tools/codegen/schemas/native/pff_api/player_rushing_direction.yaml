@@ -1,4 +1,48 @@
-columns: []
+columns:
+- description: ''
+  name: attempts
+  type: integer
+- description: ''
+  name: direction
+  type: character
+- description: ''
+  name: explosive
+  type: integer
+- description: ''
+  name: first_downs
+  type: integer
+- description: ''
+  name: franchise_id
+  type: integer
+- description: ''
+  name: fumbles
+  type: integer
+- description: ''
+  name: long
+  type: integer
+- description: ''
+  name: missed_tackles
+  type: integer
+- description: ''
+  name: player_id
+  type: integer
+- description: ''
+  name: team_name
+  type: character
+- description: ''
+  name: touchdowns
+  type: integer
+- description: ''
+  name: yards
+  type: integer
+- description: ''
+  name: yards_after_contact
+  type: integer
+- description: ''
+  name: yco_attempt
+  type: numeric
+- description: ''
+  name: ypa
+  type: numeric
 kind: dataframe
-note: opaque
 schema: pff_api_player_rushing_direction

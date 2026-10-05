@@ -104,6 +104,29 @@ def _maybe_pandas(df: pl.DataFrame, return_as_pandas: bool) -> Union[pl.DataFram
     return df.to_pandas() if return_as_pandas else df
 
 
+def _report_value(
+    key: str, val: Any, return_as_pandas: bool
+) -> Union[pl.DataFrame, "pd.DataFrame", Dict[str, Union[pl.DataFrame, "pd.DataFrame"]]]:
+    """One report envelope value ``raw[key]`` -> frame(s); shared by the explicit-``report`` and
+    the single-key paths of :func:`parse_pff_report` so both parse every body shape alike."""
+    if isinstance(val, dict) and _MATRIX_KEYS <= set(val):
+        return parse_pff_matrix({key: val}, return_as_pandas=return_as_pandas)
+    if isinstance(val, list):
+        return _maybe_pandas(_frame(val), return_as_pandas)
+    if isinstance(val, dict) and isinstance(val.get("directions"), list):
+        # player rushing direction: {player_id, directions: [rows]} -> one row per direction
+        return _maybe_pandas(_frame(val["directions"]), return_as_pandas)
+    if isinstance(val, dict) and isinstance(val.get("snap_counts"), dict):
+        # player snaps summary: {season, snap_counts: {type: n}} -> one row, flattened to the
+        # ``snap_counts_<type>`` columns every report row carries
+        row = {k: v for k, v in val.items() if k != "snap_counts"}
+        row.update({f"snap_counts_{k}": v for k, v in val["snap_counts"].items()})
+        return _maybe_pandas(_frame([row]), return_as_pandas)
+    # anything else (absent key, a player-detail envelope routed to the generic parser) ->
+    # zero-row frame; use parse_pff_player_detail for those.
+    return _maybe_pandas(pl.DataFrame(), return_as_pandas)
+
+
 def parse_pff_report(
     raw: dict,
     report: Optional[str] = None,
@@ -122,7 +145,9 @@ def parse_pff_report(
         return_as_pandas: Return pandas frame(s) instead of polars. Defaults to ``False``.
 
     Returns:
-        * ``pl.DataFrame`` (or pandas) for a single flat report,
+        * ``pl.DataFrame`` (or pandas) for a single flat report, and for the two single-object
+          bodies: player rushing direction (one row per direction) and player snaps summary
+          (one row, ``snap_counts`` flattened to ``snap_counts_<type>``),
         * ``dict[str, pl.DataFrame]`` for matrix reports and multi-key singletons,
         * a zero-row frame on empty / malformed input.
 
@@ -153,21 +178,10 @@ def parse_pff_report(
     raw = _envelope(raw)
 
     if report is not None:
-        val = raw.get(report)
-        if isinstance(val, dict) and _MATRIX_KEYS <= set(val):
-            return parse_pff_matrix({report: val}, return_as_pandas=return_as_pandas)
-        return _maybe_pandas(_frame(val if isinstance(val, list) else []), return_as_pandas)
-
+        return _report_value(report, raw.get(report), return_as_pandas)
     keys = list(raw.keys())
     if len(keys) == 1:
-        val = raw[keys[0]]
-        if isinstance(val, dict) and _MATRIX_KEYS <= set(val):
-            return parse_pff_matrix(raw, return_as_pandas=return_as_pandas)
-        if isinstance(val, list):
-            return _maybe_pandas(_frame(val), return_as_pandas)
-        # a single non-list, non-matrix dict value (e.g. a player-detail envelope routed to
-        # the generic parser) -> zero-row frame; use parse_pff_player_detail for those.
-        return _maybe_pandas(pl.DataFrame(), return_as_pandas)
+        return _report_value(keys[0], raw[keys[0]], return_as_pandas)
 
     # multi-key singleton (teams -> {franchise_groups, games, teams})
     out = {k: _maybe_pandas(_frame(v), return_as_pandas) for k, v in raw.items() if isinstance(v, list)}
