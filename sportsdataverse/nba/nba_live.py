@@ -34,6 +34,7 @@ from typing import Any, Callable, Optional
 
 import polars as pl
 
+from sportsdataverse._codegen_runtime import _check_status
 from sportsdataverse.dl_utils import underscore
 from sportsdataverse.errors import AssetFetchError, NoDataError
 from sportsdataverse.nba.nba_officiating import _as_dict, _gid, _l2m_gid, _records
@@ -207,11 +208,12 @@ def _fetch_live(
 
     Raises:
         ValueError: ``game_id`` is not one non-negative integer id (a bool, a
-            negative or fractional number, a string that is not all digits, or more than 10 digits).
-        NoDataError: 404, or a 403 whose body carries the S3
+            negative or fractional number, a string that is not all digits, or more than 10 digits);
+            or the host answered HTTP 400 / 422 (never retried).
+        NoDataError: 404, a 204 / 205, or a 403 whose body carries the S3
             ``<Code>AccessDenied</Code>`` marker -- no liveData object exists for
             this game (too old, or not yet started). Never retried.
-        AssetFetchError: A WAF/bot-check block (403 HTML), a throttle/5xx status,
+        AssetFetchError: A WAF/bot-check block (403 HTML), a 401, a throttle/5xx status,
             or a 200 whose body is not a JSON object carrying the liveData ``game``
             object (an error envelope or a changed schema), once the retry budget
             above is exhausted; also raised (chained via ``from exc``)
@@ -263,7 +265,8 @@ def _fetch_live(
                 f"{host} liveData {kind} fetch failed (transport error) for game {_gid(game_id)}: {exc}"
             ) from exc
 
-        if status == 404 or (status == 403 and "<Code>AccessDenied</Code>" in text[:500]):
+        # 204/205 is "no content": nothing there, like a 404 (a liveData answer needs a `game`).
+        if status in (204, 205, 404) or (status == 403 and "<Code>AccessDenied</Code>" in text[:500]):
             raise NoDataError(f"{host} has no liveData {kind} for game {_gid(game_id)}")
 
         payload = None
@@ -277,8 +280,10 @@ def _fetch_live(
         if status == 200 and isinstance(payload, dict) and isinstance(payload.get("game"), dict):
             return payload
 
-        if status != 200 and status not in _RETRYABLE_STATUSES:
-            raise AssetFetchError(f"{host} liveData {kind} fetch failed (status={status}) for game {_gid(game_id)}")
+        # "fetch failed" marks a failed fetch: the live tests skip on it, never on drift.
+        where = f"fetch failed: {host} liveData {kind} for game {_gid(game_id)}"
+        if not 200 <= status < 300 and status not in _RETRYABLE_STATUSES:
+            _check_status(url, status, text, label=where)  # 400/422 ValueError, else AssetFetchError
 
         # Retryable: a throttle/5xx status, or a 200 without the liveData `game`
         # object (H2) -- both a transient failure mode, never silently treated as "no
@@ -291,10 +296,7 @@ def _fetch_live(
                 f"{host} liveData {kind} returned a 200 whose body is not a liveData JSON "
                 f"object (no `game` object) for game {_gid(game_id)} after exhausting the retry budget"
             )
-        raise AssetFetchError(
-            f"{host} liveData {kind} fetch failed (status={status}) for game {_gid(game_id)} "
-            "after exhausting the retry budget"
-        )
+        _check_status(url, status, text, label=f"{where} (retry budget exhausted)")
 
     # Unreachable under normal env values (retries >= 0 guarantees at least one
     # iteration); kept as a defensive fallback + satisfies mypy's return-path check.

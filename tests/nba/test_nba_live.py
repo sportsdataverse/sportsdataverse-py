@@ -528,6 +528,35 @@ def test_only_failed_fetches_say_fetch_failed(monkeypatch, response, blocked):
     assert ("fetch failed" in str(err.value)) is blocked
 
 
+@pytest.mark.parametrize(
+    ("status", "body", "exc", "match", "calls_made"),
+    [
+        (204, "", NoDataError, "has no liveData", 1),
+        (205, "", NoDataError, "has no liveData", 1),
+        (
+            400,
+            '{"error": "bad"}',
+            ValueError,
+            r"fetch failed: cdn.nba.com liveData .* rejected the request: HTTP 400",
+            1,
+        ),
+        (422, "", ValueError, "rejected the request: HTTP 422", 1),
+        (401, "Unauthorized", AssetFetchError, r"fetch failed: cdn.nba.com liveData .* answered HTTP 401: Unauth", 1),
+        (429, "", AssetFetchError, r"\(retry budget exhausted\) answered HTTP 429", 3),
+        (500, "", AssetFetchError, r"\(retry budget exhausted\) answered HTTP 500", 3),
+    ],
+)
+def test_status_vocabulary(monkeypatch, status, body, exc, match, calls_made):
+    # 204/205 = nothing there; 400/422 = the request is wrong (never retried); 401 and the
+    # throttle/5xx statuses (retried) = a failed fetch, named with the "fetch failed" marker.
+    monkeypatch.setenv("SDV_PY_NBA_STATS_RETRIES", "2")
+    transport, calls = _sequence_transport((status, body))
+    monkeypatch.setattr(mod, "_curl_transport", transport)
+    with pytest.raises(exc, match=match):
+        nba_live_pbp("0022500001")
+    assert calls["n"] == calls_made
+
+
 def test_fractional_ids_are_null_not_truncated():
     df = mod._normalize([{"personId": 1628983.5}, {"personId": 1628983.0}, {"personId": "1628983"}])
     assert df["person_id"].to_list() == [None, 1628983, 1628983]
