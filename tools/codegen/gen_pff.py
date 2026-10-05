@@ -33,7 +33,9 @@ from typing import Any, Dict, List, Optional
 import yaml
 
 ROOT = Path(__file__).resolve().parents[2]
-_REFS = Path(os.environ.get("SDV_INTERNAL_REFS_REPO", r"C:/Users/saiem/Documents/sdv-internal-refs"))
+_REFS = Path(
+    os.environ.get("SDV_INTERNAL_REFS_REPO", r"C:/Users/saiem/Documents/GitHub-Data/sdv-dev/sdv-internal-refs")
+)
 SPEC_PATH = _REFS / "pff" / "pff-premium.openapi.yaml"
 
 HOST = "https://premium.pff.com"

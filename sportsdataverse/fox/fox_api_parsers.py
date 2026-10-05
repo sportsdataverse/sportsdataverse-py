@@ -72,16 +72,24 @@ def _largest_record_list(payload: Any) -> List[Dict[str, Any]]:
 
 
 def _homogenize(rows: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
-    """Stringify any column whose non-null values mix Python types (polars refuses those)."""
+    """Make each column single-typed (polars refuses mixed ones): an int/float mix is
+    promoted to float, any other mix is stringified."""
     kinds: Dict[str, set] = {}
     for r in rows:
         for k, v in r.items():
             if v is not None:
                 kinds.setdefault(k, set()).add(bool if isinstance(v, bool) else type(v))
-    mixed = {k for k, t in kinds.items() if len(t) > 1}
-    if not mixed:
+    to_float = {k for k, t in kinds.items() if t == {int, float}}
+    to_str = {k for k, t in kinds.items() if len(t) > 1} - to_float
+    if not (to_float or to_str):
         return rows
-    return [{k: (str(v) if k in mixed and v is not None else v) for k, v in r.items()} for r in rows]
+
+    def fix(k: str, v: Any) -> Any:
+        if v is None:
+            return v
+        return float(v) if k in to_float else (str(v) if k in to_str else v)
+
+    return [{k: fix(k, v) for k, v in r.items()} for r in rows]
 
 
 def _out(rows: List[Dict[str, Any]], return_as_pandas: bool) -> _Frame:
@@ -100,7 +108,7 @@ def _safe(fn: Callable[[Dict], List[Dict]], raw: Any) -> List[Dict[str, Any]]:
         return []
     try:
         return fn(raw)
-    except (AttributeError, KeyError, IndexError, TypeError, ValueError):
+    except (AttributeError, KeyError, IndexError, TypeError, ValueError, RecursionError):
         return []
 
 
@@ -126,7 +134,7 @@ def parse_fox_api(raw: Any, *, return_as_pandas: bool = False) -> _Frame:
     """
     try:
         rows = [_flatten(r) for r in _largest_record_list(raw)]
-    except (AttributeError, TypeError, ValueError):
+    except (AttributeError, TypeError, ValueError, RecursionError):
         rows = []
     return _out(rows, return_as_pandas)
 
