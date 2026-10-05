@@ -666,7 +666,26 @@ def test_weekly_loops_skip_isolated_failures_and_refuse_all_failed(monkeypatch: 
     # ESPN: a failed calendar falls back to the default slots; all weeks failing raises.
     monkeypatch.setattr(cw, "espn_cfb_calendar", lambda **k: (_ for _ in ()).throw(AssetFetchError("cal 503")))
     monkeypatch.setattr(cw, "espn_cfb_schedule", lambda **k: (_ for _ in ()).throw(AssetFetchError("sched 503")))
-    with pytest.raises(CrosswalkSourceError, match="espn_cfb_calendar/espn_cfb_schedule"):
+    with pytest.raises(CrosswalkSourceError, match="espn_cfb_schedule: all 18 per-item"):
+        cw._espn_season_games(2024)
+
+
+def test_espn_weeks_all_failing_raise_even_when_the_calendar_answered(monkeypatch: pytest.MonkeyPatch) -> None:
+    # Review repro: an answered calendar shared the weeks' tally, so every week
+    # rate-limited (429) still came back as a well-formed empty season ([]).
+    from sportsdataverse._crosswalk_basketball_sources import CrosswalkSourceError
+    from sportsdataverse.errors import AssetFetchError
+
+    calendar = pl.DataFrame({"week": ["1", "2", "1"], "season_type": ["2", "2", "3"]})
+    monkeypatch.setattr(cw, "espn_cfb_calendar", lambda **k: calendar)
+
+    def rate_limited(**k: Any) -> pl.DataFrame:
+        raise AssetFetchError(
+            "site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard answered HTTP 429"
+        )
+
+    monkeypatch.setattr(cw, "espn_cfb_schedule", rate_limited)
+    with pytest.raises(CrosswalkSourceError, match="espn_cfb_schedule: all 3 per-item fetches failed"):
         cw._espn_season_games(2024)
 
 

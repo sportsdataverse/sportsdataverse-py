@@ -51,11 +51,14 @@ helpers and the `mlb_api_extra` helpers. Specifically:
   `exc.response` breaks: read the status from the message, or catch the new types.
 - The CFB crosswalks (`cfb_schedule_crosswalk`, through its ESPN calendar/schedule, Fox and
   Yahoo legs) swallowed every exception into an empty leg, recording a failed fetch as "no
-  games". They now use the basketball crosswalk's `FetchTally`: a 404 is an answered empty
-  item, an isolated failed week is skipped and logged once, and a leg where nothing
-  answered raises `CrosswalkSourceError`. A failed ESPN calendar still falls back to the
-  default week slots. `fox_cfb_schedule` keeps raising on one bad segment: a partial
-  season must not look complete.
+  games". They now use the basketball crosswalk's `FetchTally`, one per leg: a 404 is an
+  answered empty item, an isolated failed week is skipped and logged once, and a leg where
+  no item answered raises `CrosswalkSourceError`. The ESPN calendar is tallied apart from
+  the ESPN weeks, so a season whose weeks all failed raises even when the calendar
+  answered; a failed calendar is logged and falls back to the default week slots. The Fox
+  week and full-season fetches are one item each, so a failed Fox fetch raises.
+  `fox_cfb_schedule` keeps raising on one bad segment: a partial season must not look
+  complete.
 
 The generated docstrings name `NoDataError`, `ValueError` and `AssetFetchError` under
 `Raises:` (the stale `requests.exceptions.RequestException` lines are gone).

@@ -41,6 +41,7 @@ Public surface:
 
 from __future__ import annotations
 
+import logging
 import re
 import unicodedata
 from concurrent.futures import ThreadPoolExecutor
@@ -75,6 +76,8 @@ __all__ = [
 
 DataFrameT = Union[pl.DataFrame, "pd.DataFrame"]
 
+
+logger = logging.getLogger(__name__)
 
 _T = TypeVar("_T")
 
@@ -358,16 +361,22 @@ def _espn_season_games(season: int, **kwargs: Any) -> List[Dict[str, Any]]:
 
     Driven by the ESPN calendar so the exact (week, season_type) slots are used:
     regular weeks (season_type 2), bowls (season_type 3, week 1), and the CFP
-    (season_type 3, week 999). season_type 4 (all-star) is skipped. The calendar
-    and every week share one :class:`FetchTally`: a 404 week contributes nothing,
-    an isolated failed week is skipped and logged, and a season where nothing
-    answered raises :class:`CrosswalkSourceError` -- a failed fetch is never an
-    empty week. A failed calendar falls back to the default week slots.
+    (season_type 3, week 999). season_type 4 (all-star) is skipped. The weeks
+    share one :class:`FetchTally`: a 404 week contributes nothing, an isolated
+    failed week is skipped and logged, and a season where no WEEK answered raises
+    :class:`CrosswalkSourceError` -- a failed fetch is never an empty week. The
+    calendar is tallied apart (an answered calendar must not mask failed weeks); a
+    failed calendar is logged and falls back to the default week slots.
     """
     out: List[Dict[str, Any]] = []
     seen: set[Any] = set()
-    tally = FetchTally("espn_cfb_calendar/espn_cfb_schedule")
-    cal = tally.fetch(f"calendar season={season}", lambda: espn_cfb_calendar(season=season, **kwargs))
+    cal_tally = FetchTally("espn_cfb_calendar")
+    cal = cal_tally.fetch(f"season={season}", lambda: espn_cfb_calendar(season=season, **kwargs))
+    if cal_tally.failed:
+        logger.warning(
+            "espn_cfb_calendar failed for %s; using the default week slots: %s", season, cal_tally.failed[0][1]
+        )
+    tally = FetchTally("espn_cfb_schedule")
     slots: List[tuple[Any, Any]] = [] if cal is None else [(r.get("week"), r.get("season_type")) for r in _rows(cal)]
     if not slots:  # calendar unavailable -> sensible default coverage
         slots = [(str(w), "2") for w in range(1, 17)] + [("1", "3"), ("999", "3")]
