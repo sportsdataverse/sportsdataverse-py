@@ -3,6 +3,7 @@
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
 - [Unreleased](#unreleased)
+  - [Fixed — ESPN basketball pbp: one-provider spreads, team timeouts, MBB double-overtime seconds](#fixed--espn-basketball-pbp-one-provider-spreads-team-timeouts-mbb-double-overtime-seconds)
   - [Fixed — reference-docs Valid URLs are the URLs the example calls request; summary documents its dict](#fixed--reference-docs-valid-urls-are-the-urls-the-example-calls-request-summary-documents-its-dict)
   - [Added — ESPN NBA G League wrappers (`espn_nbagl_*`)](#added--espn-nba-g-league-wrappers-espn_nbagl_)
   - [Fixed — nba_stats, wnba_stats and on3 return tables now match what the parsers return](#fixed--nba_stats-wnba_stats-and-on3-return-tables-now-match-what-the-parsers-return)
@@ -319,6 +320,36 @@
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## Unreleased
+
+### Fixed — ESPN basketball pbp: one-provider spreads, team timeouts, MBB double-overtime seconds
+
+Three fixes to `espn_nba_pbp`, `espn_wnba_pbp`, `espn_mbb_pbp` and `espn_wbb_pbp` (and their
+`helper_<lg>_pbp` reprocess path):
+
+- **The spread from a one-provider pickcenter.** The pickcenter helper read the odds only when
+  ESPN listed more than one provider. Modern summaries list one (DraftKings), so every such game
+  got the default spread (2.5, home favored, `gameSpreadAvailable=False`). The 2026 men's title
+  game (401856600) shipped 2.5 when DraftKings had MICH -6.5. One provider is now enough. A
+  pickcenter with no spread (a lone teamrankings record entry) still gets the defaults, and an
+  all-null favorite or over/under column no longer raises.
+- **Every team timeout.** The timeout flags matched only ESPN's NCAA `ShortTimeOut` type, so the
+  NBA/WNBA `timeouts` map was always empty and NCAA full timeouts (`RegularTimeOut`) were
+  dropped. The flags now cover `RegularTimeOut`, `ShortTimeOut`, `Full Timeout`, `Short Timeout`,
+  `No Timeout` and `Reset Timeout`. Official and TV timeouts are not charged to a team and stay
+  out. Coach's challenges also stay out: the timeout a challenge costs is the Full Timeout play
+  logged before it. The calling team comes from the play's own `team.id`. The team-name match
+  that used to decide it is now a fallback, because it is a substring test: "PHI" matched
+  "Memphis", so both teams were credited.
+- **MBB end-of-period seconds in the second and later overtimes.** On the first play of 2OT and
+  later, `end.period_seconds_remaining` took the next play's start while
+  `end.game_seconds_remaining` was set to 300. Both are now 300, matching the first overtime and
+  the other leagues. A bare-seconds MBB clock ("23.4") now parses as 0:23 instead of raising.
+
+`tests/test_basketball_pbp_offline.py` checks each fix against real summaries in
+`tests/fixtures/espn/basketball_pbp/`. A release reprocess is needed to change published data.
+About 9,500 games in the raw stores have a one-provider pickcenter with a spread: MBB about
+5,500 (4,766 of them in 2025-26), NBA 1,070 (2025-26), WBB about 2,000 (mostly 2022-23 and
+2025-26) and WNBA 911 (2020-22 and 2026).
 
 ### Fixed — reference-docs Valid URLs are the URLs the example calls request; summary documents its dict
 
