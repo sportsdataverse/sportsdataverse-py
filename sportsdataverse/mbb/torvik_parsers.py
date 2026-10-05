@@ -299,11 +299,14 @@ def parse_torvik_game_schedule(payload: Any, return_as_pandas: bool = False) -> 
 
     Public wrapper over the crosswalk's private
     :func:`~sportsdataverse._crosswalk_basketball_sources.parse_super_sked` (55
-    positional text fields plus ``game_date`` and ``year``). ``year`` is
-    inferred from each game date (July onward = next season) because the
-    request year does not reach the parser. Rows with an unparseable date are
-    kept with a null ``game_date`` (the crosswalk's ``bart_super_sked`` drops
-    them).
+    positional text fields plus ``game_date`` and ``year``). The generated
+    wrapper does not pass the request year to the parser, so ``year`` is
+    inferred per row from ``game_date``: a date in July or later maps to the
+    next calendar year (the season end-year), a date before July to the same
+    year, and a row with a null ``game_date`` gets a null ``year``. It can
+    therefore differ from the ``year`` you requested only for games Torvik
+    dates outside the season. Rows with an unparseable date are kept (null
+    ``game_date``); the crosswalk's ``bart_super_sked`` drops them.
 
     Args:
         payload: Raw JSON text or the already-decoded list of rows.

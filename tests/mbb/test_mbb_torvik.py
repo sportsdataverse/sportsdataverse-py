@@ -154,8 +154,10 @@ def test_parse_game_stats_real_capture():
     assert df["game_stats"][0].startswith('["12/9/24"')
     # null margins in the capture survive as nulls, not 0
     assert df["margin"].null_count() == 2
-    # both sides of a game share a muid
-    assert df["muid"][0] != df["muid"][1] or df["team"][0] != df["team"][1]
+    # both sides of one game: rows 0/1 are Abilene Christian vs Baylor on 12/9/24
+    assert df["muid"][0] == df["muid"][1] == "Abilene ChristianBaylor12-9"
+    assert df["team"][0] == df["opp"][1] and df["team"][1] == df["opp"][0]
+    assert df["team"][0] != df["team"][1]
 
 
 def test_parse_player_stats_real_capture():
@@ -224,3 +226,23 @@ def test_wrappers_hit_expected_urls(monkeypatch):
     assert seen[1][0] == "https://barttorvik.com/getadvstats.php"
     assert seen[1][1] == {"year": 2025, "csv": 1}
     assert seen[2][0] == "https://barttorvik.com/2025_super_sked.json"
+
+
+def test_game_schedule_year_inference_and_unparseable_date_rows():
+    """year is inferred from the date (Jul+ -> next year, Jun -> same year, null -> null);
+    a row with an unparseable date is KEPT (bart_super_sked drops it)."""
+    import json
+
+    from sportsdataverse.mbb.torvik_parsers import parse_torvik_game_schedule
+
+    base = json.loads(_read("2025_super_sked_head.json"))[0]
+    rows = []
+    for d in ("7/1/24", "6/30/25", "11/4/24", "not-a-date"):
+        r = list(base)
+        r[1] = d
+        rows.append(r)
+    df = parse_torvik_game_schedule(json.dumps(rows))
+    assert df.height == 4  # unparseable-date row kept
+    assert df["year"].to_list() == [2025, 2025, 2025, None]
+    assert df["game_date"].to_list()[3] is None
+    assert df["game_date"].null_count() == 1
