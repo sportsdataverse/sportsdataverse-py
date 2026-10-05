@@ -410,36 +410,32 @@ const config: Config = {
     },
     footer: {
       style: 'dark',
+      // Full columns, as sdvplot's (sub-project 2): the guide, the community, the rest of the SportsDataverse.
       links: [
         {
           title: 'Docs',
           items: [
-            {
-              label: 'Docs',
-              to: '/docs/intro',
-            },
+            {label: 'Getting started', to: '/docs/intro'},
+            {label: 'Leagues', to: '/'},
+            {label: 'Tutorials', to: '/docs/category/tutorials'},
+            {label: 'Changelog', to: '/CHANGELOG'},
           ],
         },
         {
           title: 'Community',
           items: [
-            {
-              label: 'Twitter (Author)',
-              href: 'https://twitter.com/saiemgilani',
-            },
-            {
-              label: 'Twitter (SportsDataverse)',
-              href: 'https://twitter.com/sportsdataverse',
-            },
+            {label: 'GitHub', href: 'https://github.com/sportsdataverse/sportsdataverse-py'},
+            {label: 'Bluesky', href: 'https://bsky.app/profile/sportsdataverse.org'},
+            {label: 'X', href: 'https://twitter.com/sportsdataverse'},
           ],
         },
         {
-          title: 'More',
+          title: 'SportsDataverse',
           items: [
-            {
-              label: 'GitHub',
-              href: 'https://github.com/sportsdataverse/sportsdataverse-py',
-            },
+            {label: 'sportsdataverse.org', href: 'https://sportsdataverse.org'},
+            {label: 'sdvplot', href: 'https://sdvplot.sportsdataverse.org'},
+            {label: 'R packages', href: 'https://r.sportsdataverse.org'},
+            {label: 'Data status', href: 'https://sportsdataverse.org/status'},
           ],
         },
       ],
