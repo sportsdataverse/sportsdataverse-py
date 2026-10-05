@@ -22,7 +22,9 @@ _SECRET_PAIR = _re.compile(
     r"((password|passwd|pwd|(?:(?:access|refresh|id|auth|session)[_-]?)?token|client[_-]?secret|secret"
     r"|api[_-]?key|key|jwt)"
     r"[\"']?\s*(?:[:=]|%3[AD])\s*[\"']?)"
-    r"([^&\s\"'<>]+)",
+    # A quoted value runs to its closing quote (it may hold spaces); an unquoted one
+    # stops at the first separator.
+    r"((?<=\")[^\"\n]*|(?<=')[^'\n]*|[^&\s\"'<>]+)",
     _re.IGNORECASE,
 )
 
@@ -30,8 +32,9 @@ _SECRET_PAIR = _re.compile(
 def _redact_pair(match: _re.Match[str]) -> str:
     prefix, name, value = match.groups()
     # An unquoted value (``{'key': 1234}``, ``(token=abc)``) runs into the
-    # punctuation that closes it; keep that punctuation out of the redaction.
-    secret = value.rstrip(",;)]}")
+    # punctuation that closes it; keep that punctuation out of the redaction. A
+    # quoted value already stopped at its quote, so all of it is the secret.
+    secret = value if prefix.endswith(('"', "'")) else value.rstrip(",;)]}")
     tail = value[len(secret) :]
     # A bare ``key`` must look like a credential (16+ characters, as every
     # HockeyTech key is), so "primary key=player_id" survives. The short value is

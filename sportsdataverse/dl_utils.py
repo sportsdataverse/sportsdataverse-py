@@ -37,8 +37,10 @@ class _RedactSecretsFilter(logging.Filter):
 
 # urllib3 quotes the URL, query string and all, in its DEBUG request line
 # (``"GET /v4/sports?apiKey=... HTTP/1.1" 200``), its connection-retry warnings, a
-# ``Retry`` adapter's "Incremented Retry for (url=...)" and its redirect lines.
-for _urllib3_logger in ("urllib3.connectionpool", "urllib3.util.retry", "urllib3.poolmanager"):
+# ``Retry`` adapter's "Incremented Retry for (url=...)", its redirect lines and (2.x,
+# on ``urllib3.connection``) "Failed to parse headers (url=...)".
+_URLLIB3_LOGGERS = ("urllib3.connectionpool", "urllib3.connection", "urllib3.util.retry", "urllib3.poolmanager")
+for _urllib3_logger in _URLLIB3_LOGGERS:
     logging.getLogger(_urllib3_logger).addFilter(_RedactSecretsFilter())
 
 # Request headers that carry a credential; dropped from an exception's request.

@@ -187,6 +187,18 @@ def test_urllib3_request_line_is_redacted(caplog):
     assert SECRET not in caplog.text and "/v4/sports?apiKey=REDACTED&all=false" in caplog.text
 
 
+# Listed here, not imported from dl_utils: a test reading the module's own tuple
+# could not notice a logger missing from it.
+@pytest.mark.parametrize(
+    "name", ["urllib3.connectionpool", "urllib3.connection", "urllib3.util.retry", "urllib3.poolmanager"]
+)
+def test_every_urllib3_logger_that_quotes_a_url_is_redacted(name, caplog):
+    with caplog.at_level(logging.DEBUG, logger=name):
+        logging.getLogger(name).warning("Failed to parse headers (url=%s)", f"/v4/sports?apiKey={SECRET}")
+    assert [r for r in caplog.records if r.name == name]
+    assert SECRET not in caplog.text and "apiKey=REDACTED" in caplog.text
+
+
 def test_every_sdv_error_message_is_redacted():
     err = NoDataError(f"No data found for https://x.test/a?apiKey={SECRET}&season=2024")
     assert SECRET not in str(err) and "season=2024" in str(err)
@@ -209,6 +221,9 @@ def test_every_sdv_error_message_is_redacted():
         ("next=%2Fv4%3Fall%3Dx%26apiKey%3Dabc123", "next=%2Fv4%3Fall%3Dx%26apiKey%3DREDACTED"),
         ("{'feed': 'modulekit', 'key': 'f1aa699db3d81487'}", "{'feed': 'modulekit', 'key': 'REDACTED'}"),
         ('{"apiKey": "abc123", "regions": "us"}', '{"apiKey": "REDACTED", "regions": "us"}'),
+        # A quoted value runs to its quote: spaces and closing punctuation inside are secret.
+        ("{'password': 'a b', 'x': 1}", "{'password': 'REDACTED', 'x': 1}"),
+        ('token="abc)" next', 'token="REDACTED" next'),
         # Left alone: a bare ``key`` needs a credential-length value, and a name
         # only counts at the start of a word.
         ("primary key=player_id", "primary key=player_id"),
@@ -229,6 +244,8 @@ _ADVERSARIAL = {  # ~100 KB each
     "escapes": "%26" * 34_000,
     "escaped_almost_pairs": "%26key%3" * 12_500,
     "plain": "a" * 100_000,
+    "unclosed_quote": 'key="' + "a" * 100_000,
+    "quoted_pairs": 'key="' * 20_000,
 }
 
 
