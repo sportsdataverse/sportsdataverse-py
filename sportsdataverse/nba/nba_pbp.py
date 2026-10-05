@@ -507,12 +507,15 @@ def helper_nba_pickcenter(pbp_txt):
             pbp = espn_nba_pbp(game_id=401585183)
     """
     # Spread definition
-    if len(pbp_txt.get("pickcenter", [])) > 1:
-        pickcenter = pd.json_normalize(data=pbp_txt, record_path="pickcenter")
+    # One provider is enough: modern summaries carry only DraftKings, and the old
+    # `> 1` guard sent every such game to the defaults. No spread at all (e.g. a
+    # lone teamrankings record-only entry) still means the defaults.
+    pickcenter = pd.json_normalize(pbp_txt.get("pickcenter") or [])
+    if "spread" in pickcenter.columns and pickcenter["spread"].notnull().any():
         pickcenter = pickcenter.sort_values(by=["provider.id"])
         homeFavorite = (
             pickcenter[pickcenter["homeTeamOdds.favorite"].notnull()][["homeTeamOdds.favorite"]].values[0]
-            if "homeTeamOdds.favorite" in pickcenter.columns
+            if "homeTeamOdds.favorite" in pickcenter.columns and pickcenter["homeTeamOdds.favorite"].notnull().any()
             else True
         )
         gameSpread = (
@@ -520,7 +523,7 @@ def helper_nba_pickcenter(pbp_txt):
         )
         overUnder = (
             pickcenter[pickcenter["overUnder"].notnull()][["overUnder"]].values[0]
-            if "overUnder" in pickcenter.columns
+            if "overUnder" in pickcenter.columns and pickcenter["overUnder"].notnull().any()
             else 215.5
         )
         gameSpreadAvailable = True
