@@ -7,6 +7,7 @@ from __future__ import annotations
 
 import difflib
 import json
+import sys
 from typing import Any, Callable, Optional
 
 from sdv_docs.index import Index, IndexUnavailable, locate
@@ -236,3 +237,31 @@ def index_info() -> str:
 
 
 TOOLS: tuple[Callable[..., str], ...] = (search, get_function, find_columns, find_endpoints, list_datasets, index_info)
+
+
+def build_server() -> Any:
+    """The MCP server with every tool registered (imports mcp lazily so 3.9 can still import this module)."""
+    from mcp.server import MCPServer
+
+    server = MCPServer("sdv-docs")
+    for tool in TOOLS:
+        server.tool()(tool)
+    return server
+
+
+def main(argv: Optional[list[str]] = None) -> int:
+    """Console entry point ``sdv-docs``: serve the tools over stdio until the client disconnects."""
+    if sys.version_info < (3, 10):
+        print(INSTALL, file=sys.stderr)
+        return 2
+    try:
+        server = build_server()
+    except ImportError:
+        print(INSTALL, file=sys.stderr)
+        return 2
+    server.run()
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

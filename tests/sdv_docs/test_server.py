@@ -1,4 +1,6 @@
 import sqlite3
+import subprocess
+import sys
 
 import pytest
 
@@ -144,3 +146,64 @@ def test_tools_tuple_is_complete():
         "list_datasets",
         "index_info",
     ]
+
+
+needs_mcp = pytest.mark.skipif(sys.version_info < (3, 10), reason="mcp needs Python >= 3.10")
+
+
+def test_importing_sdv_docs_never_imports_sportsdataverse():
+    code = "import sys, sdv_docs.server, sdv_docs.index; print('sportsdataverse' in sys.modules)"
+    out = subprocess.run([sys.executable, "-c", code], check=True, capture_output=True, text=True).stdout.strip()
+    assert out == "False"
+
+
+def test_main_exits_2_on_python_39(monkeypatch, capsys):
+    monkeypatch.setattr(sys, "version_info", (3, 9, 18))
+    assert server.main() == 2
+    assert "pip install 'sportsdataverse[mcp]'" in capsys.readouterr().err
+
+
+def test_main_exits_2_without_mcp(monkeypatch, capsys):
+    def no_mcp():
+        raise ImportError("No module named 'mcp'")
+
+    monkeypatch.setattr(server, "build_server", no_mcp)
+    assert server.main() == 2
+    assert "sdv-docs needs Python >= 3.10" in capsys.readouterr().err
+
+
+@needs_mcp
+def test_in_memory_client_lists_six_tools_and_calls_one():
+    import anyio
+    from mcp import Client
+
+    async def go():
+        async with Client(server.build_server()) as client:
+            tools = (await client.list_tools()).tools
+            result = await client.call_tool("find_columns", {"column": "event_type"})
+        return sorted(t.name for t in tools), result.content[0].text
+
+    names, text = anyio.run(go)
+    assert names == sorted(f.__name__ for f in server.TOOLS)
+    assert "**load_nhl_pbp**" in text
+
+
+@needs_mcp
+def test_stdio_smoke(tiny_db):
+    import anyio
+    from mcp import Client, StdioServerParameters
+
+    # The child gets an allow-listed environment, so SDV_DOCS_DB must be passed explicitly.
+    params = StdioServerParameters(
+        command=sys.executable, args=["-m", "sdv_docs.server"], env={"SDV_DOCS_DB": str(tiny_db)}
+    )
+
+    async def go():
+        async with Client(params) as client:
+            tools = (await client.list_tools()).tools
+            result = await client.call_tool("get_function", {"name": "load_nhl_pbp"})
+        return len(tools), result.content[0].text
+
+    n, text = anyio.run(go)
+    assert n == 6
+    assert "| `event_type` | String |" in text
