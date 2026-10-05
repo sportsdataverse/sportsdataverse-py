@@ -24,6 +24,7 @@ Games/fixtures with final scores, venue/official/manager FKs.
 ### Returns {#asa_games-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `game_id` | character | ASA game id (base62 string; Utf8 join key). |
@@ -78,6 +79,7 @@ Per-game expected-goals + expected points for both sides.
 ### Returns {#asa_games_xgoals-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `game_id` | character | ASA game id (base62 string; Utf8 join key). |
@@ -131,6 +133,7 @@ Per-goalkeeper Goals Added with a per-action-type data[] breakdown.
 ### Returns {#asa_goalkeepers_goals_added-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `player_id` | character | ASA player id (base62 string; Utf8 join key). |
@@ -171,6 +174,7 @@ Per-goalkeeper shot-stopping vs post-shot expected goals.
 ### Returns {#asa_goalkeepers_xgoals-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `player_id` | character | ASA player id (base62 string; Utf8 join key). |
@@ -209,6 +213,7 @@ Managers/head coaches.
 ### Returns {#asa_managers-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `manager_id` | character | ASA manager id (base62 string; Utf8 join key). |
@@ -240,6 +245,7 @@ Players in the league (identity + biometrics + positions).
 ### Returns {#asa_players-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `player_id` | character | ASA player id (base62 string; Utf8 join key). |
@@ -288,6 +294,7 @@ Per-player Goals Added (g+) with a per-action-type data[] breakdown.
 ### Returns {#asa_players_goals_added-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `player_id` | character | ASA player id (base62 string; Utf8 join key). |
@@ -329,6 +336,7 @@ Player salaries (MLS only; server caps the response at 10000 rows).
 ### Returns {#asa_players_salaries-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `player_id` | character | ASA player id (base62 string; Utf8 join key). |
@@ -373,6 +381,7 @@ Per-player expected-goals + attacking production.
 ### Returns {#asa_players_xgoals-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `player_id` | character | ASA player id (base62 string; Utf8 join key). |
@@ -419,6 +428,7 @@ Match referees.
 ### Returns {#asa_referees-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `referee_id` | character | ASA referee id (base62 string; Utf8 join key). |
@@ -451,6 +461,7 @@ Stadia (venue metadata incl. coordinates + pitch dimensions).
 ### Returns {#asa_stadia-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `stadium_id` | character | ASA stadium id (base62 string; Utf8 join key). |
@@ -494,6 +505,7 @@ Teams in the league (full table, no filter params).
 ### Returns {#asa_teams-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `team_id` | character | ASA team id (base62 string; Utf8 join key, never numeric). |
@@ -535,6 +547,7 @@ Per-team Goals Added for/against with a per-action-type data[] breakdown.
 ### Returns {#asa_teams_goals_added-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `team_id` | character | ASA team id (base62 string; Utf8 join key, never numeric). |
@@ -574,6 +587,7 @@ Per-team expected-goals for/against + expected points.
 ### Returns {#asa_teams_xgoals-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `team_id` | character | ASA team id (base62 string; Utf8 join key, never numeric). |
@@ -624,6 +638,7 @@ Per-team expected-passing (completion over expected, vertical distance).
 ### Returns {#asa_teams_xpass-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `team_id` | character | ASA team id (base62 string; Utf8 join key, never numeric). |

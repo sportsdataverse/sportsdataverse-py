@@ -22,6 +22,7 @@ Pull the player profile / overview.
 ### Returns {#nhl_player_landing-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `player_id` | integer | Unique player identifier. |
@@ -182,6 +183,7 @@ Pull a player's game-by-game log.
 ### Returns {#nhl_player_game_log-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `game_id` | integer | Unique game identifier. |
@@ -231,6 +233,7 @@ Pull the league's currently featured players.
 ### Returns {#nhl_player_spotlight-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `player_id` | integer | Unique player identifier. |

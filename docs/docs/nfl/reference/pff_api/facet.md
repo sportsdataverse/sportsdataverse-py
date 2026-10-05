@@ -27,6 +27,7 @@ League-wide offense summary leaderboard
 ### Returns {#pff_api_facet_offense_summary-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `declined_penalties` | numeric | Penalties committed by the player that were declined. |
@@ -88,6 +89,7 @@ League-wide blocking leaderboard
 ### Returns {#pff_api_facet_offense_blocking-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `grades_pass_block` | numeric | PFF pass-blocking grade, 0-100. |
@@ -156,6 +158,7 @@ League-wide pass-blocking leaderboard
 ### Returns {#pff_api_facet_offense_pass_blocking-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `true_pass_set_non_spike_pass_block_percentage` | numeric | Share of non-spike pass-play snaps spent pass blocking on PFF-designated true pass sets. |
@@ -223,6 +226,7 @@ League-wide run-blocking leaderboard
 ### Returns {#pff_api_facet_offense_run_blocking-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `declined_penalties` | numeric | Penalties committed by the player that were declined. |
@@ -282,6 +286,7 @@ League-wide pressure-allowed leaderboard
 ### Returns {#pff_api_facet_passing_allowed_pressure-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `te_percent` | numeric | Share of allowed pressures attributed to tight ends, expressed as a percentage. |
@@ -351,6 +356,7 @@ League-wide passing-by-concept leaderboard
 ### Returns {#pff_api_facet_passing_concept-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `comp_pct_diff` | numeric | Difference in completion percentage between play-action and non-play-action attempts (PA minus non-PA), from the PFF passing-concept split. |

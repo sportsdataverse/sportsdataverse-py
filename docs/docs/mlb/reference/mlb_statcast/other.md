@@ -23,6 +23,7 @@ GET /gf — Savant per-game JSON feed (pitch-by-pitch tracking).
 ### Returns {#mlb_statcast_gamefeed-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `type` | character | Record/pitch type. |
@@ -118,6 +119,7 @@ GET /schedule — Savant schedule feed (one row per game).
 ### Returns {#mlb_statcast_schedule-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `game_pk` | integer | MLBAM game id. |

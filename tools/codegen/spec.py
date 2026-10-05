@@ -319,6 +319,18 @@ def load_espn_api(path: Path, registry: Dict[str, Param]) -> EspnApi:
     return EspnApi(api=raw["api"], host=raw["host"], name_pattern=raw["name_pattern"], endpoints=endpoints)
 
 
+def validate_league_keys(apis: List[EspnApi], cfg: "LeaguesConfig") -> None:
+    """Reject an ``include_prefixes`` / ``league_example_args`` entry that names no league
+    in ``leagues.yaml`` -- a typo would otherwise silently drop the endpoint (or its
+    example) for that league."""
+    known = {lg.prefix for lg in cfg.leagues}
+    for api in apis:
+        for ep in api.endpoints:
+            bad = (set(ep.include_prefixes) | set(ep.league_example_args)) - known
+            if bad:
+                raise SpecError(f"{api.api}.{ep.short}: unknown league prefix(es) {sorted(bad)}")
+
+
 def _on_missing(ld: dict) -> str:
     value = ld.get("on_missing", "skip")
     if value not in ("skip", "raise"):

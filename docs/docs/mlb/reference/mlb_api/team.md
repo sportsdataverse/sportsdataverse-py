@@ -26,6 +26,7 @@ GET /api/v1/teams/{teamId} — single team detail.
 ### Returns {#mlb_team-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `all_star_status` | character | All-star status flag. |
@@ -92,6 +93,7 @@ GET /api/v1/teams/{teamId}/roster — team roster.
 ### Returns {#mlb_team_roster-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `jersey_number` | character | Jersey number worn (often blank for non-uniformed roles). |
@@ -133,6 +135,7 @@ GET /api/v1/teams/{teamId}/alumni — players who played for this team in a seas
 ### Returns {#mlb_team_alumni-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `id` | integer | Id. |
@@ -210,6 +213,7 @@ GET /api/v1/teams/affiliates — org affiliates (MLB parent → minor league cha
 ### Returns {#mlb_team_affiliates-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `all_star_status` | character | All-star status flag. |
@@ -276,6 +280,7 @@ View historical records for a list of teams.
 ### Returns {#mlb_teams_history-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `all_star_status` | character | All-star status flag. |
@@ -337,6 +342,7 @@ View team stats.
 ### Returns {#mlb_teams_stats-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `total_splits` | integer | Total number of splits in the leaderboard. |
@@ -383,6 +389,7 @@ View leaders for a statistic.
 ### Returns {#mlb_teams_stats_leaders-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `leader_category` | character | Team leader category (e.g., homeRuns). |
@@ -421,6 +428,7 @@ View biographical  information on all coaches for a given club.
 ### Returns {#mlb_team_coaches-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `jersey_number` | character | Jersey number worn (often blank for non-uniformed roles). |
@@ -458,6 +466,7 @@ View biographical  information on all personnel for a given club.
 ### Returns {#mlb_team_personnel-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `jersey_number` | character | Jersey number worn (often blank for non-uniformed roles). |
@@ -498,6 +507,7 @@ View biographical and statistical information for a club's roster based on roste
 ### Returns {#mlb_team_roster_type-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `jersey_number` | character | Jersey number worn (often blank for non-uniformed roles). |

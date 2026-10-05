@@ -26,7 +26,8 @@ GET /stats/boxscoretraditionalv3
 
 ### Returns {#nba_stats_boxscoretraditionalv3-returns}
 
-**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`PlayerStats`, `TeamStats`) (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`PlayerStats`, `TeamStats`) (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+
 **PlayerStats**
 
 | col_name | type | description |
@@ -130,7 +131,8 @@ GET /stats/boxscoreusagev3
 
 ### Returns {#nba_stats_boxscoreusagev3-returns}
 
-**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`PlayerStats`, `TeamStats`) (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`PlayerStats`, `TeamStats`) (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+
 **PlayerStats**
 
 | col_name | type | description |

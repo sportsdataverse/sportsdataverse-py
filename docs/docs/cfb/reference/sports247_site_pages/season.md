@@ -22,6 +22,7 @@ Current expert 'crystal ball' predictions for a season.
 ### Returns {#sports247_site_pages_season_current_expert_predictions-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `key` | integer | Primary key of this entity (the id used in its `.json` route). |
@@ -63,6 +64,7 @@ Recruit-interest timeline events for a season (offers/visits/commits).
 ### Returns {#sports247_site_pages_season_recruit_interest_events-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `key` | integer | Primary key of this entity (the id used in its `.json` route). |
@@ -98,6 +100,7 @@ All recruit interests for a season (paginated).
 ### Returns {#sports247_site_pages_season_recruit_interests-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `key` | integer | Primary key of this entity (the id used in its `.json` route). |
@@ -158,6 +161,7 @@ Recruit class rankings for a season (rich per-recruit rows with inlined Player).
 ### Returns {#sports247_site_pages_season_recruits-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `key` | integer | Primary key of this entity (the id used in its `.json` route). |
@@ -245,6 +249,7 @@ Signed-class roster embed (PlayerSport rows). Accuracy can lag.
 ### Returns {#sports247_site_pages_season_roster_embed-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `key` | integer | Primary key of this entity (the id used in its `.json` route). |

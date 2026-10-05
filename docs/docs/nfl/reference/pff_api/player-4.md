@@ -26,6 +26,7 @@ Receiving by target depth for one player
 ### Returns {#pff_api_player_receiving_depth-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `left_deep_route_rate` | numeric | Share of pass-play snaps on which the player ran a route on deep passes (20 or more yards downfield) to the left third of the field. |

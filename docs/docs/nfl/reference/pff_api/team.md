@@ -25,6 +25,7 @@ List a season's teams, franchise groups and schedule
 ### Returns {#pff_api_team_list-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `heirarchy` | list | Nested hierarchy of franchise groupings as returned by the PFF API; the field name's spelling follows the source. |
@@ -60,6 +61,7 @@ Season-to-date team report, one row per team
 ### Returns {#pff_api_team_overview-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `abbreviation` | character | Team abbreviation. |
@@ -112,6 +114,7 @@ Per-game team report for one franchise, one row per game
 ### Returns {#pff_api_team_summary-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `away` | logical | True when the team was the away side in the game. |
@@ -165,6 +168,7 @@ The league's teams for a season, with ids, slugs, colours and groups
 ### Returns {#pff_api_team_directory-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `franchise_id` | integer | PFF franchise (team) id, stable across seasons; the value franchise_id / teamId carry everywhere else. |
@@ -206,7 +210,8 @@ Team stats table for one category, every value ranked against the scope
 
 ### Returns {#pff_api_team_stats-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` whose columns depend on `category` (one table per value below); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 **offense-overall-success**
 
 | col_name | type | description |
@@ -496,6 +501,7 @@ A team's depth-chart roster with grades, ranks and snap counts
 ### Returns {#pff_api_team_roster-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `player_id` | integer | PFF player id (integer; matches the /players id and every player_id join key). |
@@ -543,6 +549,7 @@ A team's season schedule, with results and strength of schedule
 ### Returns {#pff_api_team_schedule-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `week` | integer | Week number of the row within the season, as PFF numbers weeks (see week_label for the display label). |

@@ -29,6 +29,7 @@ GET /rdb/v1/transfers/best-available
 ### Returns {#on3_transfers_best_available-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `key` | integer | On3 RDB key for the transfer entry. |
@@ -315,6 +316,7 @@ GET /rdb/v1/transfers/latest
 ### Returns {#on3_transfers_latest-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `key` | integer | On3 RDB key for the transfer entry. |

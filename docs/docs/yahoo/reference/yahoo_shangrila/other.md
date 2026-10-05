@@ -23,6 +23,7 @@ Yahoo shangrila persisted query `OlyMedalCount` -> one row per `olympics` entry
 ### Returns {#yahoo_oly_medal_count-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `display_name` | character | Display name. |
@@ -58,6 +59,7 @@ Yahoo shangrila persisted query `OlySeasons` -> one row per `olympics` entry
 ### Returns {#yahoo_oly_seasons-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `season` | integer | Season year. |
@@ -89,6 +91,7 @@ Yahoo shangrila persisted query `alias` -> one row per `pageMetaData` entry
 ### Returns {#yahoo_alias-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `page_type` | character | Two word identifier separated by a dash identifying the type of fantasy ranking (best = bestball; dynasty; redraft) and what position it applies to |
@@ -138,6 +141,7 @@ Yahoo shangrila persisted query `articleListCardPlayers` -> one row per `players
 ### Returns {#yahoo_article_list_card_players-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `alias_path` | character | Site-relative path portion of the entity's Yahoo alias (e.g., "/ncaaf/teams/tcu/"). |
@@ -182,6 +186,7 @@ Yahoo shangrila persisted query `articleListCardTeams` -> one row per `teams` en
 ### Returns {#yahoo_article_list_card_teams-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `alias_path` | character | Site-relative path portion of the entity's Yahoo alias (e.g., "/ncaaf/teams/tcu/"). |
@@ -232,6 +237,7 @@ Yahoo shangrila persisted query `basicPlayers` -> one row per `players` entry
 ### Returns {#yahoo_basic_players-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `player_id` | character | Unique player identifier. |
@@ -264,6 +270,7 @@ Yahoo shangrila persisted query `bettingDisclaimer` -> one row per `bettingDiscl
 ### Returns {#yahoo_betting_disclaimer-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `disclaimer_id` | character | Identifier of the responsible-gambling disclaimer block to render alongside the odds. |
@@ -296,6 +303,7 @@ Yahoo shangrila persisted query `combatEventFights` -> one row per `leagues` ent
 ### Returns {#yahoo_combat_event_fights-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `short_name` | character | Short display name. |
@@ -327,6 +335,7 @@ Yahoo shangrila persisted query `combatSchedule` -> one row per `leagues` entry
 ### Returns {#yahoo_combat_schedule-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `short_name` | character | Short display name. |
@@ -518,6 +527,7 @@ Yahoo shangrila persisted query `featuredGameIds` -> one row per `featuredGames`
 ### Returns {#yahoo_featured_game_ids-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `game_id` | character | Unique game identifier. |
@@ -547,6 +557,7 @@ Yahoo shangrila persisted query `gametimeGame` -> one row per `games` entry
 ### Returns {#yahoo_gametime_game-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `game_id` | character | Unique game identifier. |
@@ -578,6 +589,7 @@ Yahoo shangrila persisted query `gametimeTeam` -> one row per `teams` entry
 ### Returns {#yahoo_gametime_team-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `gametime_ticket_url` | character | Gametime affiliate ticket-purchase URL for the event or team. |
@@ -635,6 +647,7 @@ Yahoo shangrila persisted query `golfTournaments` -> one row per `golfTournament
 ### Returns {#yahoo_golf_tournaments-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `alias_url` | character | Absolute sports.yahoo.com URL of the entity's page (e.g., "https://sports.yahoo.com/ncaaf/players/464024/"). |
@@ -684,6 +697,7 @@ Yahoo shangrila persisted query `golfTournamentsBasic` -> one row per `golfTourn
 ### Returns {#yahoo_golf_tournaments_basic-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `event_group_id` | character | Yahoo identifier that groups the rounds or legs making up a single tournament. |
@@ -730,6 +744,7 @@ Yahoo shangrila persisted query `moduleGame` -> one row per `games` entry
 ### Returns {#yahoo_module_game-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `game_id` | character | Unique game identifier. |
@@ -848,6 +863,7 @@ Yahoo shangrila persisted query `motorsportStandings` -> one row per `leagues` e
 ### Returns {#yahoo_motorsport_standings-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `name` | character | Display name. |
@@ -879,6 +895,7 @@ Yahoo shangrila persisted query `nascarDrivers` -> one row per `leagues` entry
 ### Returns {#yahoo_nascar_drivers-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `short_name` | character | Short display name. |
@@ -910,7 +927,8 @@ Yahoo shangrila persisted query `navDropdownTray` -> tables: nfl, nhl, nba, mlb,
 
 ### Returns {#yahoo_nav_dropdown_tray-returns}
 
-**`return_parsed=True`** (default) — A dict of polars/pandas DataFrames keyed by the payload's `data` collections (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — A dict of polars/pandas DataFrames keyed by the payload's `data` collections (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+
 **nfl**
 
 | col_name | type | description |
@@ -1000,6 +1018,7 @@ Yahoo shangrila persisted query `pickDistribution` -> one row per `leagues` entr
 ### Returns {#yahoo_pick_distribution-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `ncaaf_games` | character | JSON-encoded list of NCAAF game nodes carrying the pick or odds distribution for the slate. |
@@ -1034,6 +1053,7 @@ Yahoo shangrila persisted query `playoffBracket` -> one row per `leagues.bracket
 ### Returns {#yahoo_playoff_bracket-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `conference` | character | Conference name. |
@@ -1071,6 +1091,7 @@ Yahoo shangrila persisted query `playoffSeriesGame` -> one row per `games` entry
 ### Returns {#yahoo_playoff_series_game-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `game_id` | character | Unique game identifier. |
@@ -1101,6 +1122,7 @@ Yahoo shangrila persisted query `polymarketGame` -> one row per `games` entry
 ### Returns {#yahoo_polymarket_game-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `game_id` | character | Unique game identifier. |
@@ -1134,6 +1156,7 @@ Yahoo shangrila persisted query `racingSchedule` -> one row per `leagues` entry
 ### Returns {#yahoo_racing_schedule-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `league_seasons` | character | JSON-encoded list of the seasons for which Yahoo carries data for this league. |
@@ -1169,6 +1192,7 @@ Yahoo shangrila persisted query `scoreboardGame` -> one row per `games` entry
 ### Returns {#yahoo_scoreboard_game-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `game_id` | character | Unique game identifier. |
@@ -1275,6 +1299,7 @@ Yahoo shangrila persisted query `tennisMatchesByDate` -> one row per `tennisTour
 ### Returns {#yahoo_tennis_matches_by_date-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `display_name` | character | Display name. |
@@ -1314,6 +1339,7 @@ Yahoo shangrila persisted query `tennisTournament` -> one row per `tennisTournam
 ### Returns {#yahoo_tennis_tournament-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `display_name` | character | Display name. |
@@ -1354,6 +1380,7 @@ Yahoo shangrila persisted query `tennisTournaments` -> one row per `tennisTourna
 ### Returns {#yahoo_tennis_tournaments-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `gender` | character | League gender designation. |

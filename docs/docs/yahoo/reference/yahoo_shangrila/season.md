@@ -25,7 +25,8 @@ Legacy player season Defense leaders (NCAAF)
 
 ### Returns {#yahoo_season_stats_football_defense_ncaaf-returns}
 
-**`return_parsed=True`** (default) — A dict of polars/pandas DataFrames keyed by the payload's `data` collections (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — A dict of polars/pandas DataFrames keyed by the payload's `data` collections (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+
 **stat_types**
 
 | col_name | type | description |
@@ -75,7 +76,8 @@ Legacy player season Kicking leaders (NCAAF)
 
 ### Returns {#yahoo_season_stats_football_kicking_ncaaf-returns}
 
-**`return_parsed=True`** (default) — A dict of polars/pandas DataFrames keyed by the payload's `data` collections (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — A dict of polars/pandas DataFrames keyed by the payload's `data` collections (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+
 **stat_types**
 
 | col_name | type | description |
@@ -125,7 +127,8 @@ Legacy player season Passing leaders (NCAAF)
 
 ### Returns {#yahoo_season_stats_football_passing_ncaaf-returns}
 
-**`return_parsed=True`** (default) — A dict of polars/pandas DataFrames keyed by the payload's `data` collections (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — A dict of polars/pandas DataFrames keyed by the payload's `data` collections (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+
 **stat_types**
 
 | col_name | type | description |
@@ -175,7 +178,8 @@ Legacy player season Punting leaders (NCAAF)
 
 ### Returns {#yahoo_season_stats_football_punting_ncaaf-returns}
 
-**`return_parsed=True`** (default) — A dict of polars/pandas DataFrames keyed by the payload's `data` collections (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — A dict of polars/pandas DataFrames keyed by the payload's `data` collections (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+
 **stat_types**
 
 | col_name | type | description |
@@ -225,7 +229,8 @@ Legacy player season Receiving leaders (NCAAF)
 
 ### Returns {#yahoo_season_stats_football_receiving_ncaaf-returns}
 
-**`return_parsed=True`** (default) — A dict of polars/pandas DataFrames keyed by the payload's `data` collections (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — A dict of polars/pandas DataFrames keyed by the payload's `data` collections (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+
 **stat_types**
 
 | col_name | type | description |
@@ -275,7 +280,8 @@ Legacy player season Returns leaders (NCAAF)
 
 ### Returns {#yahoo_season_stats_football_returns_ncaaf-returns}
 
-**`return_parsed=True`** (default) — A dict of polars/pandas DataFrames keyed by the payload's `data` collections (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — A dict of polars/pandas DataFrames keyed by the payload's `data` collections (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+
 **stat_types**
 
 | col_name | type | description |
@@ -325,7 +331,8 @@ Legacy player season Rushing leaders (NCAAF)
 
 ### Returns {#yahoo_season_stats_football_rushing_ncaaf-returns}
 
-**`return_parsed=True`** (default) — A dict of polars/pandas DataFrames keyed by the payload's `data` collections (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — A dict of polars/pandas DataFrames keyed by the payload's `data` collections (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+
 **stat_types**
 
 | col_name | type | description |
@@ -375,7 +382,8 @@ Legacy team season Defense (NCAAF)
 
 ### Returns {#yahoo_season_team_stats_football_defense-returns}
 
-**`return_parsed=True`** (default) — A dict of polars/pandas DataFrames keyed by the payload's `data` collections (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — A dict of polars/pandas DataFrames keyed by the payload's `data` collections (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+
 **stat_types**
 
 | col_name | type | description |
@@ -425,7 +433,8 @@ Legacy team season Kicking (NCAAF)
 
 ### Returns {#yahoo_season_team_stats_football_kicking-returns}
 
-**`return_parsed=True`** (default) — A dict of polars/pandas DataFrames keyed by the payload's `data` collections (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — A dict of polars/pandas DataFrames keyed by the payload's `data` collections (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+
 **stat_types**
 
 | col_name | type | description |
@@ -475,7 +484,8 @@ Legacy team season Kickoffs (NCAAF)
 
 ### Returns {#yahoo_season_team_stats_football_kickoffs-returns}
 
-**`return_parsed=True`** (default) — A dict of polars/pandas DataFrames keyed by the payload's `data` collections (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — A dict of polars/pandas DataFrames keyed by the payload's `data` collections (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+
 **stat_types**
 
 | col_name | type | description |
@@ -525,7 +535,8 @@ Legacy team season Offense (NCAAF)
 
 ### Returns {#yahoo_season_team_stats_football_offense-returns}
 
-**`return_parsed=True`** (default) — A dict of polars/pandas DataFrames keyed by the payload's `data` collections (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — A dict of polars/pandas DataFrames keyed by the payload's `data` collections (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+
 **stat_types**
 
 | col_name | type | description |
@@ -575,7 +586,8 @@ Legacy team season Passing (NCAAF)
 
 ### Returns {#yahoo_season_team_stats_football_passing-returns}
 
-**`return_parsed=True`** (default) — A dict of polars/pandas DataFrames keyed by the payload's `data` collections (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — A dict of polars/pandas DataFrames keyed by the payload's `data` collections (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+
 **stat_types**
 
 | col_name | type | description |
@@ -625,7 +637,8 @@ Legacy team Passing defense allowed (NCAAF)
 
 ### Returns {#yahoo_season_team_stats_football_passing_defense-returns}
 
-**`return_parsed=True`** (default) — A dict of polars/pandas DataFrames keyed by the payload's `data` collections (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — A dict of polars/pandas DataFrames keyed by the payload's `data` collections (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+
 **stat_types**
 
 | col_name | type | description |
@@ -675,7 +688,8 @@ Legacy team season Punting (NCAAF)
 
 ### Returns {#yahoo_season_team_stats_football_punting-returns}
 
-**`return_parsed=True`** (default) — A dict of polars/pandas DataFrames keyed by the payload's `data` collections (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — A dict of polars/pandas DataFrames keyed by the payload's `data` collections (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+
 **stat_types**
 
 | col_name | type | description |
@@ -725,7 +739,8 @@ Legacy team season Receiving (NCAAF)
 
 ### Returns {#yahoo_season_team_stats_football_receiving-returns}
 
-**`return_parsed=True`** (default) — A dict of polars/pandas DataFrames keyed by the payload's `data` collections (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — A dict of polars/pandas DataFrames keyed by the payload's `data` collections (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+
 **stat_types**
 
 | col_name | type | description |
@@ -775,7 +790,8 @@ Legacy team Receiving defense allowed (NCAAF)
 
 ### Returns {#yahoo_season_team_stats_football_receiving_defense-returns}
 
-**`return_parsed=True`** (default) — A dict of polars/pandas DataFrames keyed by the payload's `data` collections (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — A dict of polars/pandas DataFrames keyed by the payload's `data` collections (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+
 **stat_types**
 
 | col_name | type | description |
@@ -825,7 +841,8 @@ Legacy team season Returns (NCAAF)
 
 ### Returns {#yahoo_season_team_stats_football_returns-returns}
 
-**`return_parsed=True`** (default) — A dict of polars/pandas DataFrames keyed by the payload's `data` collections (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — A dict of polars/pandas DataFrames keyed by the payload's `data` collections (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+
 **stat_types**
 
 | col_name | type | description |
@@ -875,7 +892,8 @@ Legacy team season Rushing (NCAAF)
 
 ### Returns {#yahoo_season_team_stats_football_rushing-returns}
 
-**`return_parsed=True`** (default) — A dict of polars/pandas DataFrames keyed by the payload's `data` collections (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — A dict of polars/pandas DataFrames keyed by the payload's `data` collections (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+
 **stat_types**
 
 | col_name | type | description |
@@ -925,7 +943,8 @@ Legacy team Rushing defense allowed (NCAAF)
 
 ### Returns {#yahoo_season_team_stats_football_rushing_defense-returns}
 
-**`return_parsed=True`** (default) — A dict of polars/pandas DataFrames keyed by the payload's `data` collections (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — A dict of polars/pandas DataFrames keyed by the payload's `data` collections (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+
 **stat_types**
 
 | col_name | type | description |

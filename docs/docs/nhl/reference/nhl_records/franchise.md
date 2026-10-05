@@ -21,6 +21,7 @@ List all NHL franchises (historical and active).
 ### Returns {#nhl_records_franchises-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `id` | integer | Unique player identifier. |
@@ -56,6 +57,7 @@ Franchise detail records (extended metadata per franchise).
 ### Returns {#nhl_records_franchise_detail-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `id` | integer | Unique player identifier. |
@@ -96,6 +98,7 @@ All-time team totals per franchise (regular season).
 ### Returns {#nhl_records_franchise_team_totals-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `id` | integer | Unique player identifier. |
@@ -161,6 +164,7 @@ Season-by-season results for each franchise.
 ### Returns {#nhl_records_franchise_season_results-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `id` | integer | Unique player identifier. |
@@ -226,6 +230,7 @@ Franchise playoff appearance counts and streak information.
 ### Returns {#nhl_records_franchise_playoff_appearances-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `id` | integer | Unique player identifier. |
@@ -261,6 +266,7 @@ League-wide franchise totals (all-time aggregate per franchise).
 ### Returns {#nhl_records_franchise_totals-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `id` | integer | Unique player identifier. |

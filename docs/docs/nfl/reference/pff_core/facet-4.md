@@ -27,6 +27,7 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 ### Returns {#pff_facet_run_blocking-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `declined_penalties` | numeric | Penalties committed by the player that were declined. |
@@ -86,6 +87,7 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 ### Returns {#pff_facet_pass_blocking-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `true_pass_set_non_spike_pass_block_percentage` | numeric | Share of non-spike pass-play snaps spent pass blocking on PFF-designated true pass sets. |
@@ -153,6 +155,7 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 ### Returns {#pff_facet_passing_summary-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `grades_offense` | numeric | PFF overall offense grade (0-100). |
@@ -234,6 +237,7 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 ### Returns {#pff_facet_punting_summary-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `touchbacks` | numeric | Punts resulting in touchbacks. |

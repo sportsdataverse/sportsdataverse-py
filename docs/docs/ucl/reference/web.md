@@ -132,6 +132,7 @@ ESPN endpoint.
 ### Returns {#espn_ucl_leaders-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `athletes` | character | Athletes. |
