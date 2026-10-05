@@ -7,6 +7,7 @@ tolerates empty/None payloads by returning a zero-row frame.
 from __future__ import annotations
 
 import re
+from datetime import date
 from typing import Any, Dict, List, Optional
 
 import pandas as pd
@@ -45,16 +46,41 @@ def _sitekit(payload: Any, key: str) -> Any:
 
 
 def _derive_season_year(name: str) -> Optional[int]:
-    m = re.search(r"(\d{4})-(\d{2})", name or "")
+    """End year of a season name; the first rule that matches wins.
+
+    1. ``YYYY-YYYY`` / ``YYYY-YY`` (``-`` or ``/``, spaces allowed): "2025-2026", "2025/26",
+       "2026 - 27" -> 2026, 2026, 2027. A two-digit tail takes the start's century, +100 when
+       that falls below the start ("1999-00" -> 2000).
+    2. ``YY-ZZ`` with ZZ = YY + 1: "26-27 Regular Season" -> 2027.
+    3. The first standalone 4-digit token: a year in 1950..(this year + 2) is itself; else a
+       compact span ``YYZZ`` with ZZ = YY + 1 is its end year ("CCHL 2425 Special Events" -> 2025).
+
+    A two-digit end year is 20ZZ, or 19ZZ when 20ZZ is past this year + 2. A result outside
+    1950..(this year + 2), or a name none of the rules match ("19 Tie Break"), is None.
+    """
+    latest = date.today().year + 2
+
+    def two_digit_end(zz: int) -> int:
+        return 2000 + zz if 2000 + zz <= latest else 1900 + zz
+
+    name = name or ""
+    yr = None
+    m = re.search(r"(\d{4})\s*[-/]\s*(\d{4}|\d{2})(?!\d)", name)
+    short = re.search(r"(?<!\d)(\d{2})\s*[-/]\s*(\d{2})(?!\d)", name)
+    token = re.search(r"(?<!\d)(\d{4})(?!\d)", name)
     if m:
-        start = int(m.group(1))
-        end2 = int(m.group(2))
-        end = (start // 100) * 100 + end2
-        if end < start:
-            end += 100
-        return end
-    m2 = re.search(r"(\d{4})", name or "")
-    return int(m2.group(1)) if m2 else None
+        start, tail = int(m.group(1)), m.group(2)
+        yr = int(tail) if len(tail) == 4 else (start // 100) * 100 + int(tail)
+        yr = yr + 100 if yr < start else yr
+    elif short and (int(short.group(1)) + 1) % 100 == int(short.group(2)):
+        yr = two_digit_end(int(short.group(2)))
+    elif token:
+        t = int(token.group(1))
+        if 1950 <= t <= latest:
+            yr = t
+        elif (t // 100 + 1) % 100 == t % 100:
+            yr = two_digit_end(t % 100)
+    return yr if yr is not None and 1950 <= yr <= latest else None
 
 
 def _game_type_label(name: str) -> str:
@@ -786,6 +812,13 @@ def parse_seasons(payload: Any, return_as_pandas: bool = False) -> Any:
     rows = []
     for s in raw:
         name = s.get("season_name")
+        yr, label = _derive_season_year(name), _game_type_label(name)
+        # A one-year preseason name gives the camp's calendar year: "2026 Pre-season" starts
+        # 2026-08-11 and opens 2026-27, so it is 2027. So is every preseason that starts in
+        # the year its name gives (all 20 feeds, 2026-10-05). PWHL's "2024 Preseason" started
+        # 2023-11-01 and stays 2024, the season it opened.
+        if label == "preseason" and yr is not None and str(s.get("start_date") or "")[:4] == str(yr):
+            yr += 1
         rows.append(
             {
                 "season_id": int(s.get("season_id")) if s.get("season_id") else None,
@@ -795,8 +828,8 @@ def parse_seasons(payload: Any, return_as_pandas: bool = False) -> Any:
                 "playoff": s.get("playoff", "0"),
                 "start_date": s.get("start_date"),
                 "end_date": s.get("end_date"),
-                "season_yr": _derive_season_year(name),
-                "game_type_label": _game_type_label(name),
+                "season_yr": yr,
+                "game_type_label": label,
             }
         )
     return _to_frame(rows, return_as_pandas)

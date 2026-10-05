@@ -3,6 +3,7 @@
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
 - [Unreleased](#unreleased)
+  - [Fixed — HockeyTech season names read as their end year in every league (BREAKING)](#fixed--hockeytech-season-names-read-as-their-end-year-in-every-league-breaking)
   - [Fixed — a failed HockeyTech fetch raises instead of returning an empty frame (BREAKING)](#fixed--a-failed-hockeytech-fetch-raises-instead-of-returning-an-empty-frame-breaking)
   - [Fixed — ESPN basketball pbp: one-provider spreads, paired spread signs, team timeouts, MBB double-overtime seconds](#fixed--espn-basketball-pbp-one-provider-spreads-paired-spread-signs-team-timeouts-mbb-double-overtime-seconds)
   - [Fixed — pff_api return tables for the per-player and coverage-matrix routes](#fixed--pff_api-return-tables-for-the-per-player-and-coverage-matrix-routes)
@@ -322,6 +323,63 @@
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## Unreleased
+
+### Fixed — HockeyTech season names read as their end year in every league (BREAKING)
+
+`season_yr` (the `<lg>_season_id` column, and the year every `season=` argument is matched
+against) only understood "2025-26". The feeds also write "2025/26" (KIJHL, older OJHL),
+"2025-2026" (AJHL, GOJHL, SPHL, VIJHL, recent CCHL and OJHL), "2026 - 27" (WHL) and "26-27"
+(OJHL's current season):
+
+- "2025-2026" read as 2120 from 2021-22 on (2020 before). `most_recent_sphl_season()` returned
+  2120, as did AJHL, GOJHL, OJHL and VIJHL, and `sphl_standings(season=2026)` raised `ValueError`.
+  CCHL returned 2425, from "CCHL 2425 Special Events".
+- "2025/26" and "2026 - 27" read as the start year, so `whl_standings(season=2026)` and
+  `kijhl_standings(season=2026)` silently returned the 2026-27 season.
+- "26-27 Regular Season" carried no year, so OJHL's current regular season could not be resolved.
+- A one-year preseason ("2026 Pre-season", "Pre-Season 2026", "2026 GOHL Pre-Season") took its
+  calendar year, the year before the season it opens.
+
+The rules now, first match wins:
+
+1. `YYYY-YYYY` or `YYYY-YY`, with `-` or `/` and optional spaces, is its end year ("1999-00" is
+   2000).
+2. `YY-ZZ` with ZZ = YY + 1 is 20ZZ ("26-27" is 2027).
+3. Otherwise the first standalone 4-digit token: a year from 1950 to two years ahead is itself; a
+   compact span `YYZZ` with ZZ = YY + 1 is its end year ("CCHL 2425 Special Events" is 2025, not
+   2425). A two-digit end year is 20ZZ, or 19ZZ while 20ZZ is more than two years ahead.
+4. Anything else, or any year outside that range, is `None` ("19 Tie Break").
+5. A preseason that starts in the year its name gives belongs to the next year ("2026
+   Pre-season", starting 2026-08-11, is 2027). PWHL's "2024 Preseason" started 2023-11-01 and
+   stays 2024.
+
+Season resolution still drops the one-off events (all-star, showcase, prospect, combine, special
+event, exhibition, play-in) from regular and playoff lookups. Of the rows left it now prefers a name
+that says its game type ("Regular Season", "Playoff", "Pre-Season"), then a two-year name, then feed
+order. Before, it took the first row. That picked "2019 ANAVET Cup" for `mjhl` and `sjhl` 2019,
+"2025 Cottage Cup" for `ojhl` 2025, "2014 Tie-Break" for `whl` 2014 and the Sutherland Cups for
+`gojhl` 2008-15. With the corrected years it would also have picked "2025 Mowat Cup" for `kijhl`
+2025. Tournaments are ranked last rather than excluded, because CHL lists nothing but its Memorial
+Cups and AHL, ECHL, GOJHL and MHL name real playoffs after cups ("2026 Calder Cup Playoffs").
+
+Measured on the live seasons feeds of all 20 leagues (2026-10-05, 1,154 seasons), 266 `season_yr`
+values change:
+
+- AJHL 41, GOJHL 39, KIJHL 34, WHL 30, OJHL 24, SPHL 22, ECHL 18, QMJHL 16, VIJHL 15, CCHL 12,
+  OHL 12;
+- one each in BCHL, MJHL and NOJHL;
+- 71 of the 266 are preseasons.
+
+Every league's most recent season is now 2026 or 2027 and resolves to its regular season. On the
+committed seasons fixtures of all 20 leagues, the season every (year, game type) resolves to now
+agrees with the feed's own dates in 854 of 855 lookups; before the change, 628 of 756 did. The one remaining disagreement is
+MJHL's "2015 Playoffs", whose end date is 2016. The feeds are committed as fixtures, and the tests
+check that agreement.
+
+**Breaking:** `season_yr` changes in those leagues, and with it the season a `season=` year
+selects. In WHL and KIJHL `season=2026` now means 2025-26 (it returned 2026-27). One-year
+preseasons answer to the next year, so `resolve_season_id("ohl", season=2027,
+game_type="preseason")` is the "2026 Pre-season". A caller who passed the start year to get a season should pass the end year.
 
 ### Fixed — a failed HockeyTech fetch raises instead of returning an empty frame (BREAKING)
 

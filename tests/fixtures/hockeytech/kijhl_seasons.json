@@ -1,0 +1,374 @@
+{
+  "SiteKit": {
+    "Parameters": {
+      "feed": "modulekit",
+      "key": "REDACTED",
+      "client_code": "kijhl",
+      "site_id": "0",
+      "lang": "en",
+      "view": "seasons",
+      "lang_id": 1,
+      "league_id": "1",
+      "season_id": "68"
+    },
+    "Seasons": [
+      {
+        "season_id": "68",
+        "season_name": "2026/27 Regular Season",
+        "shortname": "2026/27 RS",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2026-09-01",
+        "end_date": "2027-02-28"
+      },
+      {
+        "season_id": "67",
+        "season_name": "2025-26 Playoffs",
+        "shortname": "2025-26 Playoffs",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "2026-03-01",
+        "end_date": "2026-04-30"
+      },
+      {
+        "season_id": "65",
+        "season_name": "2025/26 Regular Season",
+        "shortname": "2025/26 RS",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2025-09-19",
+        "end_date": "2026-02-28"
+      },
+      {
+        "season_id": "66",
+        "season_name": "2025/26 Exhibition",
+        "shortname": "2025/26 EXH",
+        "career": "0",
+        "playoff": "0",
+        "start_date": "2025-08-25",
+        "end_date": "2025-09-17"
+      },
+      {
+        "season_id": "64",
+        "season_name": "2025 Mowat Cup",
+        "shortname": "2025 Mowat",
+        "career": "0",
+        "playoff": "0",
+        "start_date": "2025-04-22",
+        "end_date": "2025-04-29"
+      },
+      {
+        "season_id": "63",
+        "season_name": "2024/25 Playoffs",
+        "shortname": "2024/25 Playoffs",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "2025-02-25",
+        "end_date": "2025-04-19"
+      },
+      {
+        "season_id": "61",
+        "season_name": "2024/25 Regular Season",
+        "shortname": "2024/25 RS",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2024-09-19",
+        "end_date": "2025-02-24"
+      },
+      {
+        "season_id": "62",
+        "season_name": "2024/25 Exhibition",
+        "shortname": "2024/25 EXH",
+        "career": "0",
+        "playoff": "0",
+        "start_date": "2024-08-30",
+        "end_date": "2024-09-18"
+      },
+      {
+        "season_id": "60",
+        "season_name": "2024 Mowat Cup",
+        "shortname": "2024 Mowat",
+        "career": "0",
+        "playoff": "0",
+        "start_date": "2024-04-18",
+        "end_date": "2024-04-21"
+      },
+      {
+        "season_id": "59",
+        "season_name": "2023/24 Playoffs",
+        "shortname": "2023/24 Playoffs",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "2024-02-23",
+        "end_date": "2024-04-16"
+      },
+      {
+        "season_id": "58",
+        "season_name": "2023 BCHC Prospects Game",
+        "shortname": "2023 Prospects",
+        "career": "0",
+        "playoff": "0",
+        "start_date": "2023-11-01",
+        "end_date": "2023-11-28"
+      },
+      {
+        "season_id": "56",
+        "season_name": "2023/24 Regular Season",
+        "shortname": "2023/24 RS",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2023-09-22",
+        "end_date": "2024-02-18"
+      },
+      {
+        "season_id": "57",
+        "season_name": "2023/24 Exhibition",
+        "shortname": "2023/24 EXH",
+        "career": "0",
+        "playoff": "0",
+        "start_date": "2023-07-31",
+        "end_date": "2023-09-17"
+      },
+      {
+        "season_id": "55",
+        "season_name": "2023 Cyclone Taylor Cup",
+        "shortname": "2023 CTC",
+        "career": "0",
+        "playoff": "0",
+        "start_date": "2023-04-13",
+        "end_date": "2023-04-16"
+      },
+      {
+        "season_id": "54",
+        "season_name": "2022/23 Playoffs",
+        "shortname": "2022/23 Playoffs",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "2023-02-17",
+        "end_date": "2023-04-10"
+      },
+      {
+        "season_id": "52",
+        "season_name": "2022/23 Regular Season",
+        "shortname": "2022/23 RS",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2022-09-23",
+        "end_date": "2023-02-12"
+      },
+      {
+        "season_id": "53",
+        "season_name": "2022/23 Exhibition",
+        "shortname": "2022/23 EXH",
+        "career": "0",
+        "playoff": "0",
+        "start_date": "2022-08-22",
+        "end_date": "2022-09-19"
+      },
+      {
+        "season_id": "51",
+        "season_name": "2021/22 Playoffs",
+        "shortname": "2021/22 Playoffs",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "2022-02-22",
+        "end_date": "2022-04-10"
+      },
+      {
+        "season_id": "49",
+        "season_name": "2021/22 Regular Season",
+        "shortname": "2021/22 RS",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2021-10-01",
+        "end_date": "2022-02-20"
+      },
+      {
+        "season_id": "50",
+        "season_name": "2021/22 Exhibition",
+        "shortname": "2021 EXH",
+        "career": "0",
+        "playoff": "0",
+        "start_date": "2021-09-01",
+        "end_date": "2021-09-30"
+      },
+      {
+        "season_id": "48",
+        "season_name": "2020/21 Playoffs",
+        "shortname": "2020/21 PO",
+        "career": "0",
+        "playoff": "1",
+        "start_date": "2021-03-01",
+        "end_date": "2021-04-30"
+      },
+      {
+        "season_id": "47",
+        "season_name": "2020/21 Regular Season",
+        "shortname": "2020/21 RS",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2020-11-13",
+        "end_date": "2021-02-28"
+      },
+      {
+        "season_id": "46",
+        "season_name": "2020/21 Exhibition",
+        "shortname": "2020/21 EX",
+        "career": "0",
+        "playoff": "0",
+        "start_date": "2020-10-01",
+        "end_date": "2020-11-08"
+      },
+      {
+        "season_id": "45",
+        "season_name": "2019/20 Playoffs",
+        "shortname": "2019/20 PO",
+        "career": "0",
+        "playoff": "1",
+        "start_date": "2020-02-28",
+        "end_date": "2020-04-30"
+      },
+      {
+        "season_id": "44",
+        "season_name": "2019/20 Regular Season",
+        "shortname": "2019/20 RS",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2019-09-13",
+        "end_date": "2020-02-22"
+      },
+      {
+        "season_id": "41",
+        "season_name": "2018/19 Regular Season",
+        "shortname": "2018/19 RS",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2018-09-07",
+        "end_date": "2019-02-24"
+      },
+      {
+        "season_id": "38",
+        "season_name": "2017/18 Regular Season",
+        "shortname": "2017/18 RS",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2017-09-08",
+        "end_date": "2018-02-18"
+      },
+      {
+        "season_id": "35",
+        "season_name": "2016/17 Regular Season",
+        "shortname": "2016/17 RS",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2016-09-09",
+        "end_date": "2017-02-19"
+      },
+      {
+        "season_id": "32",
+        "season_name": "2015/16 Regular Season",
+        "shortname": "2015/16 RS",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2015-09-11",
+        "end_date": "2016-02-21"
+      },
+      {
+        "season_id": "29",
+        "season_name": "2014/15 Regular Season",
+        "shortname": "2014/15 RS",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2014-09-12",
+        "end_date": "2015-02-15"
+      },
+      {
+        "season_id": "26",
+        "season_name": "2013/14 Regular Season",
+        "shortname": "2013/14 RS",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2013-09-12",
+        "end_date": "2014-02-22"
+      },
+      {
+        "season_id": "23",
+        "season_name": "2012/13 Regular Season",
+        "shortname": "2012/13 RS",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2012-09-14",
+        "end_date": "2013-02-17"
+      },
+      {
+        "season_id": "20",
+        "season_name": "2011/12 Regular Season",
+        "shortname": "2011/12 RS",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2011-09-16",
+        "end_date": "2012-02-19"
+      },
+      {
+        "season_id": "17",
+        "season_name": "2010/11 Regular Season",
+        "shortname": "2010/11 RS",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2010-09-10",
+        "end_date": "2011-02-12"
+      },
+      {
+        "season_id": "14",
+        "season_name": "2009/10 Regular Season",
+        "shortname": "2009/10 RS",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2009-09-11",
+        "end_date": "2010-02-17"
+      },
+      {
+        "season_id": "11",
+        "season_name": "2008/09 Regular Season",
+        "shortname": "2008/09 RS",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2008-09-12",
+        "end_date": "2009-02-22"
+      },
+      {
+        "season_id": "8",
+        "season_name": "2007/08 Regular Season",
+        "shortname": "2007/08 RS",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2007-09-14",
+        "end_date": "2008-02-19"
+      },
+      {
+        "season_id": "5",
+        "season_name": "2006/07 Regular Season",
+        "shortname": "2006/07 RS",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2006-09-08",
+        "end_date": "2007-02-21"
+      },
+      {
+        "season_id": "2",
+        "season_name": "2005/06 Regular Season",
+        "shortname": "2005/06 RS",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2005-09-16",
+        "end_date": "2006-02-25"
+      }
+    ],
+    "Copyright": {
+      "required_copyright": "Official statistics provided by Kootenay International Junior Hockey",
+      "required_link": "http://leaguestat.com",
+      "powered_by": "Powered by HockeyTech.com",
+      "powered_by_url": "http://hockeytech.com"
+    }
+  }
+}

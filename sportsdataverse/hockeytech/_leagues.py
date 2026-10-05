@@ -139,6 +139,7 @@ _PWHL_SEASON_FALLBACK = [
 # them "regular" because the name says neither playoff nor preseason. Seen in the
 # 17-league seasons captures (sdv-internal-refs hockeytech/, 2026-07-12).
 SPECIAL_EVENT_SEASON_RE = r"(?i)all[- ]?star|showcase|prospect|combine|special event|exhibition|play[- ]?in\b"
+_GAME_TYPE_NAME_RE = {"regular": r"(?i)regular season", "playoffs": r"(?i)playoff", "preseason": r"(?i)pre[- ]?season"}
 
 
 def most_recent_season_yr(seasons, league: str) -> int:
@@ -186,6 +187,16 @@ def resolve_season_id(league: str, season=None, game_type: str = "regular", seas
         hit = df.filter((df["season_yr"] == int(season)) & (df["game_type_label"] == game_type))
         if game_type != "preseason":  # "2025-26 Preseason Exhibition" is a real preseason
             hit = hit.filter(~hit["season_name"].fill_null("").str.contains(SPECIAL_EVENT_SEASON_RE))
+        # Of the rows left, prefer one whose name says its game type ("Regular Season",
+        # "Playoffs", "Pre-Season"), then one spanning two years ("CCHL 2023-2024", "OJHL 22-23"),
+        # then feed order. The single-year tournaments the feed also labels regular ("2025 Mowat
+        # Cup", "2025 Cottage Cup", "2018 ANAVET Cup", "2014 Tie-Break") rank last but are not
+        # excluded: CHL lists nothing but its Memorial Cups.
+        names = hit["season_name"].fill_null("")
+        hit = hit.with_columns(
+            _named=names.str.contains(_GAME_TYPE_NAME_RE[game_type]),
+            _spans=names.str.contains(r"\d{2}\s*[-/]\s*\d{2}"),
+        ).sort(["_named", "_spans"], descending=True, maintain_order=True)
         if hit.height:
             return int(hit["season_id"][0])
     if league == "pwhl":

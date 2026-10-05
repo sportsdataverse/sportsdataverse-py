@@ -1,0 +1,554 @@
+{
+  "SiteKit": {
+    "Parameters": {
+      "feed": "modulekit",
+      "key": "REDACTED",
+      "client_code": "cchl",
+      "site_id": "0",
+      "lang": "en",
+      "view": "seasons",
+      "lang_id": 1,
+      "league_id": "1",
+      "season_id": "117"
+    },
+    "Seasons": [
+      {
+        "season_id": "117",
+        "season_name": "CCHL 2026-27",
+        "shortname": "CCHL2627",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2026-09-16",
+        "end_date": "2027-03-14"
+      },
+      {
+        "season_id": "116",
+        "season_name": "CCHL Preseason 2026",
+        "shortname": "CCHL Pre 2026",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2026-08-23",
+        "end_date": "2026-09-15"
+      },
+      {
+        "season_id": "115",
+        "season_name": "CCHL Pre-Draft Combine 2026",
+        "shortname": "PDC2026",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2026-04-11",
+        "end_date": "2026-04-12"
+      },
+      {
+        "season_id": "114",
+        "season_name": "CCHL Playoffs 2026",
+        "shortname": "Plyfs 25-26",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "2026-03-18",
+        "end_date": "2026-04-28"
+      },
+      {
+        "season_id": "111",
+        "season_name": "CCHL 2025-26",
+        "shortname": "CCHL2526",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2025-09-17",
+        "end_date": "2026-03-17"
+      },
+      {
+        "season_id": "112",
+        "season_name": "CCHL Preseason 2025",
+        "shortname": "CCHL Pre 2025",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2025-08-01",
+        "end_date": "2025-09-15"
+      },
+      {
+        "season_id": "109",
+        "season_name": "CCHL Pre-Draft Combine 2025",
+        "shortname": "PDC2025",
+        "career": "0",
+        "playoff": "0",
+        "start_date": "2025-04-03",
+        "end_date": "2025-04-07"
+      },
+      {
+        "season_id": "107",
+        "season_name": "CCHL Playoffs 2025",
+        "shortname": "Plyfs 24-25",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "2025-03-19",
+        "end_date": "2025-05-31"
+      },
+      {
+        "season_id": "103",
+        "season_name": "CCHL 2425 Special Events",
+        "shortname": "Sp Evnts 2425",
+        "career": "0",
+        "playoff": "0",
+        "start_date": "2024-11-01",
+        "end_date": "2025-02-28"
+      },
+      {
+        "season_id": "100",
+        "season_name": "CCHL 2024-25",
+        "shortname": "CCHL 2425",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2024-09-11",
+        "end_date": "2025-03-19"
+      },
+      {
+        "season_id": "99",
+        "season_name": "CCHL Preseason 2024",
+        "shortname": "CCHL Pre 2024",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2024-06-01",
+        "end_date": "2024-09-11"
+      },
+      {
+        "season_id": "98",
+        "season_name": "CCHL Prospects League",
+        "shortname": "Prospects League",
+        "career": "0",
+        "playoff": "0",
+        "start_date": "2024-05-02",
+        "end_date": "2024-06-29"
+      },
+      {
+        "season_id": "96",
+        "season_name": "CCHL Playoffs 2024",
+        "shortname": "Plyfs 23-24",
+        "career": "0",
+        "playoff": "1",
+        "start_date": "2024-03-18",
+        "end_date": "2024-05-30"
+      },
+      {
+        "season_id": "95",
+        "season_name": "CCHL 2324 ALL-STAR GAMES",
+        "shortname": "CCHL2324 STAR EVENTS",
+        "career": "0",
+        "playoff": "0",
+        "start_date": "2024-01-11",
+        "end_date": "2024-01-24"
+      },
+      {
+        "season_id": "89",
+        "season_name": "CCHL 2023-2024",
+        "shortname": "CCHL 2324",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2023-09-13",
+        "end_date": "2024-03-17"
+      },
+      {
+        "season_id": "88",
+        "season_name": "CCHL Preseason 2023",
+        "shortname": "CCHL Pre 2023",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2023-06-01",
+        "end_date": "2023-09-17"
+      },
+      {
+        "season_id": "86",
+        "season_name": "CCHL Prospects League 2023",
+        "shortname": "Prospects League",
+        "career": "0",
+        "playoff": "0",
+        "start_date": "2023-05-01",
+        "end_date": "2023-06-29"
+      },
+      {
+        "season_id": "84",
+        "season_name": "CCHL Playoffs 2022",
+        "shortname": "Plyfs 22-23",
+        "career": "0",
+        "playoff": "1",
+        "start_date": "2023-03-20",
+        "end_date": "2023-05-01"
+      },
+      {
+        "season_id": "77",
+        "season_name": "CCHL 2022-2023",
+        "shortname": "CCHL 22.23",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2022-09-19",
+        "end_date": "2023-03-19"
+      },
+      {
+        "season_id": "76",
+        "season_name": "CCHL Preseason 2022",
+        "shortname": "CCHL Pre 2022",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2022-06-01",
+        "end_date": "2022-09-19"
+      },
+      {
+        "season_id": "74",
+        "season_name": "CCHL Prospects League 2022",
+        "shortname": "Prospects League",
+        "career": "0",
+        "playoff": "0",
+        "start_date": "2022-05-15",
+        "end_date": "2022-06-30"
+      },
+      {
+        "season_id": "72",
+        "season_name": "CCHL Playoffs 2021-22",
+        "shortname": "Plyfs 21-22",
+        "career": "0",
+        "playoff": "1",
+        "start_date": "2022-04-11",
+        "end_date": "2022-05-31"
+      },
+      {
+        "season_id": "68",
+        "season_name": "Special Events 1  2021-2022",
+        "shortname": "SpEv1",
+        "career": "0",
+        "playoff": "0",
+        "start_date": "2021-10-23",
+        "end_date": "2021-10-24"
+      },
+      {
+        "season_id": "65",
+        "season_name": "CCHL 2021-2022",
+        "shortname": "CCHL 21/22",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2021-09-20",
+        "end_date": "2022-04-10"
+      },
+      {
+        "season_id": "55",
+        "season_name": "CCHL Preseason 2021-2022",
+        "shortname": "CCHL Pre 2122",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2021-06-01",
+        "end_date": "2021-09-20"
+      },
+      {
+        "season_id": "54",
+        "season_name": "CCHL Developmental Scrimmage Action 2020-21",
+        "shortname": "CCHL DevScrm 2021",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2020-06-01",
+        "end_date": "2021-05-31"
+      },
+      {
+        "season_id": "52",
+        "season_name": "CCHL Playoffs 2019-20",
+        "shortname": "Plyfs 1920",
+        "career": "0",
+        "playoff": "1",
+        "start_date": "2020-03-09",
+        "end_date": "2020-05-01"
+      },
+      {
+        "season_id": "48",
+        "season_name": "CCHL All-Star Game 2019-2020",
+        "shortname": "All-Star 19/20",
+        "career": "0",
+        "playoff": "0",
+        "start_date": "2019-11-15",
+        "end_date": "2019-11-19"
+      },
+      {
+        "season_id": "44",
+        "season_name": "CCHL 2019-2020",
+        "shortname": "CCHL 2019/20",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2019-09-04",
+        "end_date": "2020-03-08"
+      },
+      {
+        "season_id": "43",
+        "season_name": "CCHL Preseason 2019-20",
+        "shortname": "Preseason 19",
+        "career": "0",
+        "playoff": "0",
+        "start_date": "2019-05-01",
+        "end_date": "2019-09-04"
+      },
+      {
+        "season_id": "42",
+        "season_name": "CDHL Spring 2019",
+        "shortname": "CDHL 2019",
+        "career": "0",
+        "playoff": "0",
+        "start_date": "2019-04-27",
+        "end_date": "2019-06-23"
+      },
+      {
+        "season_id": "40",
+        "season_name": "CCHL Playoffs 2018-19",
+        "shortname": "Plfs 1819",
+        "career": "0",
+        "playoff": "1",
+        "start_date": "2019-03-16",
+        "end_date": "2019-05-01"
+      },
+      {
+        "season_id": "30",
+        "season_name": "CCHL 2018-19",
+        "shortname": "CCHL 18/19",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2018-08-30",
+        "end_date": "2019-03-15"
+      },
+      {
+        "season_id": "31",
+        "season_name": "CCHL Preseason 2018-19",
+        "shortname": "Preseason 18",
+        "career": "0",
+        "playoff": "0",
+        "start_date": "2018-05-01",
+        "end_date": "2018-08-29"
+      },
+      {
+        "season_id": "29",
+        "season_name": "CDHL Spring 2018",
+        "shortname": "CDHL 2018",
+        "career": "0",
+        "playoff": "0",
+        "start_date": "2018-04-28",
+        "end_date": "2018-06-24"
+      },
+      {
+        "season_id": "25",
+        "season_name": "CCHL Playoffs 2017-18",
+        "shortname": "Plfs 17/18",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "2018-03-12",
+        "end_date": "2018-04-30"
+      },
+      {
+        "season_id": "1",
+        "season_name": "CCHL 2017-18",
+        "shortname": "2017-18",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2017-08-31",
+        "end_date": "2018-03-12"
+      },
+      {
+        "season_id": "2",
+        "season_name": "CCHL Preseason 2017-18",
+        "shortname": "Preseason 17",
+        "career": "0",
+        "playoff": "0",
+        "start_date": "2017-08-09",
+        "end_date": "2017-08-30"
+      },
+      {
+        "season_id": "3",
+        "season_name": "CCHL Playoffs 2016-17",
+        "shortname": "2016-17 Plfs",
+        "career": "0",
+        "playoff": "1",
+        "start_date": "2017-03-15",
+        "end_date": "2017-04-25"
+      },
+      {
+        "season_id": "4",
+        "season_name": "CCHL 2016-17",
+        "shortname": "2016-17 Reg",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2016-09-03",
+        "end_date": "2017-03-12"
+      },
+      {
+        "season_id": "17",
+        "season_name": "CCHL Preseason 2016-17",
+        "shortname": "Preseason 16",
+        "career": "0",
+        "playoff": "0",
+        "start_date": "2016-08-10",
+        "end_date": "2016-08-25"
+      },
+      {
+        "season_id": "5",
+        "season_name": "CCHL Playoffs 2015-16",
+        "shortname": "2015-16 Plfs",
+        "career": "0",
+        "playoff": "1",
+        "start_date": "2016-03-11",
+        "end_date": "2016-04-24"
+      },
+      {
+        "season_id": "6",
+        "season_name": "CCHL 2015-16",
+        "shortname": "2015-16 Reg",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2015-09-04",
+        "end_date": "2016-03-06"
+      },
+      {
+        "season_id": "18",
+        "season_name": "CCHL Preseason 2015-16",
+        "shortname": "Preseason 15",
+        "career": "0",
+        "playoff": "0",
+        "start_date": "2015-08-10",
+        "end_date": "2015-08-25"
+      },
+      {
+        "season_id": "7",
+        "season_name": "CCHL Playoffs 2014-15",
+        "shortname": "2014-15 Plfs",
+        "career": "0",
+        "playoff": "1",
+        "start_date": "2015-03-08",
+        "end_date": "2015-04-19"
+      },
+      {
+        "season_id": "8",
+        "season_name": "CCHL 2014-15",
+        "shortname": "2014-15 Reg",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2014-08-29",
+        "end_date": "2015-03-06"
+      },
+      {
+        "season_id": "19",
+        "season_name": "CCHL Preseason 2014-15",
+        "shortname": "Preseason 14",
+        "career": "0",
+        "playoff": "0",
+        "start_date": "2014-08-10",
+        "end_date": "2014-08-25"
+      },
+      {
+        "season_id": "9",
+        "season_name": "CCHL Playoffs 2013-14",
+        "shortname": "2013-14 Plfs",
+        "career": "0",
+        "playoff": "1",
+        "start_date": "2014-03-11",
+        "end_date": "2014-04-20"
+      },
+      {
+        "season_id": "10",
+        "season_name": "CCHL 2013-14",
+        "shortname": "2013-14 reg",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2013-08-30",
+        "end_date": "2014-03-08"
+      },
+      {
+        "season_id": "20",
+        "season_name": "CCHL Preseason 2013-14",
+        "shortname": "Preseason 13",
+        "career": "0",
+        "playoff": "0",
+        "start_date": "2013-08-10",
+        "end_date": "2013-08-25"
+      },
+      {
+        "season_id": "11",
+        "season_name": "CCHL Playoffs 2012-13",
+        "shortname": "2012-13 Plfs",
+        "career": "0",
+        "playoff": "1",
+        "start_date": "2013-03-13",
+        "end_date": "2013-04-22"
+      },
+      {
+        "season_id": "12",
+        "season_name": "CCHL 2012-13",
+        "shortname": "2012-13 Reg",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2012-09-07",
+        "end_date": "2013-03-10"
+      },
+      {
+        "season_id": "21",
+        "season_name": "CCHL Preseason 2012-13",
+        "shortname": "Preseason 12",
+        "career": "0",
+        "playoff": "0",
+        "start_date": "2012-08-10",
+        "end_date": "2012-08-25"
+      },
+      {
+        "season_id": "13",
+        "season_name": "CCHL Playoffs 2011-12",
+        "shortname": "2011-12 Plfs",
+        "career": "0",
+        "playoff": "1",
+        "start_date": "2012-03-13",
+        "end_date": "2012-04-22"
+      },
+      {
+        "season_id": "14",
+        "season_name": "CCHL 2011-12",
+        "shortname": "2011-12 Reg",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2011-09-09",
+        "end_date": "2012-03-13"
+      },
+      {
+        "season_id": "22",
+        "season_name": "CCHL Preseason 2011-12",
+        "shortname": "Preseason 11",
+        "career": "0",
+        "playoff": "0",
+        "start_date": "2011-08-10",
+        "end_date": "2011-08-25"
+      },
+      {
+        "season_id": "15",
+        "season_name": "CCHL Playoffs 2010-11",
+        "shortname": "2010-11 Plfs",
+        "career": "0",
+        "playoff": "1",
+        "start_date": "2011-03-08",
+        "end_date": "2011-04-14"
+      },
+      {
+        "season_id": "16",
+        "season_name": "CCHL 2010-11",
+        "shortname": "2010-11 Reg",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2010-09-10",
+        "end_date": "2011-03-06"
+      },
+      {
+        "season_id": "24",
+        "season_name": "CCHL Preseason 2010-11",
+        "shortname": "Preseason 10",
+        "career": "0",
+        "playoff": "0",
+        "start_date": "2010-08-10",
+        "end_date": "2010-08-25"
+      }
+    ],
+    "Copyright": {
+      "required_copyright": "Official statistics provided by Central Canada Hockey League",
+      "required_link": "http://leaguestat.com",
+      "powered_by": "Powered by HockeyTech.com",
+      "powered_by_url": "http://hockeytech.com"
+    }
+  }
+}
