@@ -13,12 +13,12 @@ GET /stats/scheduleleaguev2
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/scheduleleaguev2`
 
-**Valid URL:** [https://stats.nba.com/stats/scheduleleaguev2?LeagueID=00](https://stats.nba.com/stats/scheduleleaguev2?LeagueID=00)
+**Valid URL:** [https://stats.nba.com/stats/scheduleleaguev2?LeagueID=00&Season=2024-25](https://stats.nba.com/stats/scheduleleaguev2?LeagueID=00&Season=2024-25)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 | `LeagueID` | `league_id` |  |  | `Y` |  |
-| `Season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
+| `Season` | `season` |  |  | `Y` | Season label, e.g. ``2024-25``. Defaults at call time to the latest season that has rows: an NBA season from the November after its late-October tip-off (``2025-26`` until October 2026), a G League season from the January after, a Summer League from its August (July 2026's is ``2026-27``), a draft combine from June, a draft (``drafthistory``, a year) from July, and with season type ``Playoffs`` / ``PlayIn`` (or ``commonplayoffseries``) a season from the May its playoffs start. A month table cannot follow a lockout or pandemic calendar (1998-99, 2011-12, 2020-21): pass a season then. Without one stats.nba.com answers an empty HTTP 500 or every season summed. |
 
 ### Returns {#nba_stats_scheduleleaguev2-returns}
 
@@ -84,7 +84,7 @@ GET /stats/scheduleleaguev2
 ### Example {#nba_stats_scheduleleaguev2-example}
 
 ```python
-nba_stats_scheduleleaguev2(league_id='00')
+nba_stats_scheduleleaguev2(league_id='00', season='2024-25')
 ```
 
 _Last validated n/a._
@@ -95,12 +95,12 @@ GET /stats/scheduleleaguev2int
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/scheduleleaguev2int`
 
-**Valid URL:** [https://stats.nba.com/stats/scheduleleaguev2int?LeagueID=00](https://stats.nba.com/stats/scheduleleaguev2int?LeagueID=00)
+**Valid URL:** [https://stats.nba.com/stats/scheduleleaguev2int?LeagueID=00&Season=2024-25](https://stats.nba.com/stats/scheduleleaguev2int?LeagueID=00&Season=2024-25)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 | `LeagueID` | `league_id` |  |  | `Y` |  |
-| `Season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
+| `Season` | `season` |  |  | `Y` | Season label, e.g. ``2024-25``. Defaults at call time to the latest season that has rows: an NBA season from the November after its late-October tip-off (``2025-26`` until October 2026), a G League season from the January after, a Summer League from its August (July 2026's is ``2026-27``), a draft combine from June, a draft (``drafthistory``, a year) from July, and with season type ``Playoffs`` / ``PlayIn`` (or ``commonplayoffseries``) a season from the May its playoffs start. A month table cannot follow a lockout or pandemic calendar (1998-99, 2011-12, 2020-21): pass a season then. Without one stats.nba.com answers an empty HTTP 500 or every season summed. |
 
 ### Returns {#nba_stats_scheduleleaguev2int-returns}
 
@@ -166,7 +166,7 @@ GET /stats/scheduleleaguev2int
 ### Example {#nba_stats_scheduleleaguev2int-example}
 
 ```python
-nba_stats_scheduleleaguev2int(league_id='00')
+nba_stats_scheduleleaguev2int(league_id='00', season='2024-25')
 ```
 
 _Last validated n/a._

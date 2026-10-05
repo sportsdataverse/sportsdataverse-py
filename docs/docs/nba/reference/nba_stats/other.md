@@ -239,7 +239,7 @@ GET /stats/assistleaders
 | `LeagueID` | `league_id` |  |  | `Y` |  |
 | `PerMode` | `per_mode_simple` |  |  | `Y` |  |
 | `PlayerOrTeam` | `player_or_team` |  |  | `Y` |  |
-| `Season` | `season` |  |  | `Y` | Season label, e.g. ``2024-25``. Defaults at call time to the latest season that has rows: an NBA season from the November it tips off (``2025-26`` until October 2026), a G League season from the January after, a Summer League from its August (July 2026's is ``2026-27``), a draft combine from June, playoff series from May. stats.nba.com answers a request without a season with an empty HTTP 500. |
+| `Season` | `season` |  |  | `Y` | Season label, e.g. ``2024-25``. Defaults at call time to the latest season that has rows: an NBA season from the November after its late-October tip-off (``2025-26`` until October 2026), a G League season from the January after, a Summer League from its August (July 2026's is ``2026-27``), a draft combine from June, a draft (``drafthistory``, a year) from July, and with season type ``Playoffs`` / ``PlayIn`` (or ``commonplayoffseries``) a season from the May its playoffs start. A month table cannot follow a lockout or pandemic calendar (1998-99, 2011-12, 2020-21): pass a season then. Without one stats.nba.com answers an empty HTTP 500 or every season summed. |
 | `SeasonType` | `season_type_playoffs` |  |  | `Y` |  |
 
 ### Returns {#nba_stats_assistleaders-returns}
@@ -274,7 +274,7 @@ GET /stats/assisttracker
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/assisttracker`
 
-**Valid URL:** [https://stats.nba.com/stats/assisttracker?LeagueID=00&OpponentTeamID=0&PerMode=PerGame&SeasonType=Regular+Season&TeamID=0](https://stats.nba.com/stats/assisttracker?LeagueID=00&OpponentTeamID=0&PerMode=PerGame&SeasonType=Regular+Season&TeamID=0)
+**Valid URL:** [https://stats.nba.com/stats/assisttracker?LeagueID=00&OpponentTeamID=0&PerMode=PerGame&Season=2024-25&SeasonType=Regular+Season&TeamID=0](https://stats.nba.com/stats/assisttracker?LeagueID=00&OpponentTeamID=0&PerMode=PerGame&Season=2024-25&SeasonType=Regular+Season&TeamID=0)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -298,7 +298,7 @@ GET /stats/assisttracker
 | `PerMode` | `per_mode_simple_nullable` |  |  | `Y` |  |
 | `PlayerExperience` | `player_experience_nullable` |  |  | `Y` |  |
 | `PlayerPosition` | `player_position_abbreviation_nullable` |  |  | `Y` |  |
-| `Season` | `season_nullable` |  |  | `Y` |  |
+| `Season` | `season_nullable` |  |  | `Y` | Season label, e.g. ``2024-25``. Defaults at call time to the latest season that has rows: an NBA season from the November after its late-October tip-off (``2025-26`` until October 2026), a G League season from the January after, a Summer League from its August (July 2026's is ``2026-27``), a draft combine from June, a draft (``drafthistory``, a year) from July, and with season type ``Playoffs`` / ``PlayIn`` (or ``commonplayoffseries``) a season from the May its playoffs start. A month table cannot follow a lockout or pandemic calendar (1998-99, 2011-12, 2020-21): pass a season then. Without one stats.nba.com answers an empty HTTP 500 or every season summed. |
 | `SeasonSegment` | `season_segment_nullable` |  |  | `Y` |  |
 | `SeasonType` | `season_type_all_star_nullable` |  |  | `Y` |  |
 | `StarterBench` | `starter_bench_nullable` |  |  | `Y` |  |
@@ -320,7 +320,7 @@ GET /stats/assisttracker
 ### Example {#nba_stats_assisttracker-example}
 
 ```python
-nba_stats_assisttracker(league_id='00')
+nba_stats_assisttracker(league_id='00', season_nullable='2024-25')
 ```
 
 _Last validated n/a._
@@ -340,7 +340,7 @@ GET /stats/drafthistory
 | `OverallPick` | `overall_pick_nullable` |  |  | `Y` |  |
 | `RoundNum` | `round_num_nullable` |  |  | `Y` |  |
 | `RoundPick` | `round_pick_nullable` |  |  | `Y` |  |
-| `Season` | `season_year_nullable` |  |  | `Y` |  |
+| `Season` | `season_year_nullable` |  |  | `Y` | Season label, e.g. ``2024-25``. Defaults at call time to the latest season that has rows: an NBA season from the November after its late-October tip-off (``2025-26`` until October 2026), a G League season from the January after, a Summer League from its August (July 2026's is ``2026-27``), a draft combine from June, a draft (``drafthistory``, a year) from July, and with season type ``Playoffs`` / ``PlayIn`` (or ``commonplayoffseries``) a season from the May its playoffs start. A month table cannot follow a lockout or pandemic calendar (1998-99, 2011-12, 2020-21): pass a season then. Without one stats.nba.com answers an empty HTTP 500 or every season summed. |
 | `TeamID` | `team_id_nullable` |  |  | `Y` |  |
 | `TopX` | `topx_nullable` |  |  | `Y` |  |
 
@@ -381,7 +381,7 @@ GET /stats/fantasywidget
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/fantasywidget`
 
-**Valid URL:** [https://stats.nba.com/stats/fantasywidget?ActivePlayers=N&DateFrom=&DateTo=&LastNGames=0&LeagueID=00&Location=&Month=&OpponentTeamID=0&PORound=&PlayerID=&Position=&SeasonSegment=&SeasonType=Regular+Season&TeamID=0&TodaysOpponent=0&TodaysPlayers=N&VsConference=&VsDivision=](https://stats.nba.com/stats/fantasywidget?ActivePlayers=N&DateFrom=&DateTo=&LastNGames=0&LeagueID=00&Location=&Month=&OpponentTeamID=0&PORound=&PlayerID=&Position=&SeasonSegment=&SeasonType=Regular+Season&TeamID=0&TodaysOpponent=0&TodaysPlayers=N&VsConference=&VsDivision=)
+**Valid URL:** [https://stats.nba.com/stats/fantasywidget?ActivePlayers=N&DateFrom=&DateTo=&LastNGames=0&LeagueID=00&Location=&Month=&OpponentTeamID=0&PORound=&PlayerID=&Position=&Season=2024-25&SeasonSegment=&SeasonType=Regular+Season&TeamID=0&TodaysOpponent=0&TodaysPlayers=N&VsConference=&VsDivision=](https://stats.nba.com/stats/fantasywidget?ActivePlayers=N&DateFrom=&DateTo=&LastNGames=0&LeagueID=00&Location=&Month=&OpponentTeamID=0&PORound=&PlayerID=&Position=&Season=2024-25&SeasonSegment=&SeasonType=Regular+Season&TeamID=0&TodaysOpponent=0&TodaysPlayers=N&VsConference=&VsDivision=)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -396,7 +396,7 @@ GET /stats/fantasywidget
 | `PORound` | `po_round_nullable` |  |  | `Y` |  |
 | `PlayerID` | `player_id_nullable` |  |  | `Y` |  |
 | `Position` | `position_nullable` |  |  | `Y` |  |
-| `Season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
+| `Season` | `season` |  |  | `Y` | Season label, e.g. ``2024-25``. Defaults at call time to the latest season that has rows: an NBA season from the November after its late-October tip-off (``2025-26`` until October 2026), a G League season from the January after, a Summer League from its August (July 2026's is ``2026-27``), a draft combine from June, a draft (``drafthistory``, a year) from July, and with season type ``Playoffs`` / ``PlayIn`` (or ``commonplayoffseries``) a season from the May its playoffs start. A month table cannot follow a lockout or pandemic calendar (1998-99, 2011-12, 2020-21): pass a season then. Without one stats.nba.com answers an empty HTTP 500 or every season summed. |
 | `SeasonSegment` | `season_segment_nullable` |  |  | `Y` |  |
 | `SeasonType` | `season_type_all_star` |  |  | `Y` |  |
 | `TeamID` | `team_id_nullable` |  |  | `Y` |  |
@@ -437,7 +437,7 @@ GET /stats/fantasywidget
 ### Example {#nba_stats_fantasywidget-example}
 
 ```python
-nba_stats_fantasywidget(league_id='00')
+nba_stats_fantasywidget(league_id='00', season='2024-25')
 ```
 
 _Last validated n/a._
@@ -509,7 +509,7 @@ GET /stats/homepageleaders
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/homepageleaders`
 
-**Valid URL:** [https://stats.nba.com/stats/homepageleaders?GameScope=Season&LeagueID=00&PlayerOrTeam=Team&PlayerScope=All+Players&SeasonType=Regular+Season&StatCategory=Points](https://stats.nba.com/stats/homepageleaders?GameScope=Season&LeagueID=00&PlayerOrTeam=Team&PlayerScope=All+Players&SeasonType=Regular+Season&StatCategory=Points)
+**Valid URL:** [https://stats.nba.com/stats/homepageleaders?GameScope=Season&LeagueID=00&PlayerOrTeam=Team&PlayerScope=All+Players&Season=2024-25&SeasonType=Regular+Season&StatCategory=Points](https://stats.nba.com/stats/homepageleaders?GameScope=Season&LeagueID=00&PlayerOrTeam=Team&PlayerScope=All+Players&Season=2024-25&SeasonType=Regular+Season&StatCategory=Points)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -517,7 +517,7 @@ GET /stats/homepageleaders
 | `LeagueID` | `league_id` |  |  | `Y` |  |
 | `PlayerOrTeam` | `player_or_team` |  |  | `Y` |  |
 | `PlayerScope` | `player_scope` |  |  | `Y` |  |
-| `Season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
+| `Season` | `season` |  |  | `Y` | Season label, e.g. ``2024-25``. Defaults at call time to the latest season that has rows: an NBA season from the November after its late-October tip-off (``2025-26`` until October 2026), a G League season from the January after, a Summer League from its August (July 2026's is ``2026-27``), a draft combine from June, a draft (``drafthistory``, a year) from July, and with season type ``Playoffs`` / ``PlayIn`` (or ``commonplayoffseries``) a season from the May its playoffs start. A month table cannot follow a lockout or pandemic calendar (1998-99, 2011-12, 2020-21): pass a season then. Without one stats.nba.com answers an empty HTTP 500 or every season summed. |
 | `SeasonType` | `season_type_playoffs` |  |  | `Y` |  |
 | `StatCategory` | `stat_category` |  |  | `Y` |  |
 
@@ -570,7 +570,7 @@ GET /stats/homepageleaders
 ### Example {#nba_stats_homepageleaders-example}
 
 ```python
-nba_stats_homepageleaders(league_id='00')
+nba_stats_homepageleaders(league_id='00', season='2024-25')
 ```
 
 _Last validated n/a._
@@ -581,7 +581,7 @@ GET /stats/homepagev2
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/homepagev2`
 
-**Valid URL:** [https://stats.nba.com/stats/homepagev2?GameScope=Season&LeagueID=00&PlayerOrTeam=Team&PlayerScope=All+Players&SeasonType=Regular+Season&StatType=Traditional](https://stats.nba.com/stats/homepagev2?GameScope=Season&LeagueID=00&PlayerOrTeam=Team&PlayerScope=All+Players&SeasonType=Regular+Season&StatType=Traditional)
+**Valid URL:** [https://stats.nba.com/stats/homepagev2?GameScope=Season&LeagueID=00&PlayerOrTeam=Team&PlayerScope=All+Players&Season=2024-25&SeasonType=Regular+Season&StatType=Traditional](https://stats.nba.com/stats/homepagev2?GameScope=Season&LeagueID=00&PlayerOrTeam=Team&PlayerScope=All+Players&Season=2024-25&SeasonType=Regular+Season&StatType=Traditional)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -589,7 +589,7 @@ GET /stats/homepagev2
 | `LeagueID` | `league_id` |  |  | `Y` |  |
 | `PlayerOrTeam` | `player_or_team` |  |  | `Y` |  |
 | `PlayerScope` | `player_scope` |  |  | `Y` |  |
-| `Season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
+| `Season` | `season` |  |  | `Y` | Season label, e.g. ``2024-25``. Defaults at call time to the latest season that has rows: an NBA season from the November after its late-October tip-off (``2025-26`` until October 2026), a G League season from the January after, a Summer League from its August (July 2026's is ``2026-27``), a draft combine from June, a draft (``drafthistory``, a year) from July, and with season type ``Playoffs`` / ``PlayIn`` (or ``commonplayoffseries``) a season from the May its playoffs start. A month table cannot follow a lockout or pandemic calendar (1998-99, 2011-12, 2020-21): pass a season then. Without one stats.nba.com answers an empty HTTP 500 or every season summed. |
 | `SeasonType` | `season_type_playoffs` |  |  | `Y` |  |
 | `StatType` | `stat_type` |  |  | `Y` |  |
 
@@ -714,7 +714,7 @@ GET /stats/homepagev2
 ### Example {#nba_stats_homepagev2-example}
 
 ```python
-nba_stats_homepagev2(league_id='00')
+nba_stats_homepagev2(league_id='00', season='2024-25')
 ```
 
 _Last validated n/a._
@@ -877,7 +877,7 @@ GET /stats/leaderstiles
 
 **Endpoint URL:** `GET https://stats.nba.com/stats/leaderstiles`
 
-**Valid URL:** [https://stats.nba.com/stats/leaderstiles?GameScope=Season&LeagueID=00&PlayerOrTeam=Team&PlayerScope=All+Players&SeasonType=Regular+Season&Stat=PTS](https://stats.nba.com/stats/leaderstiles?GameScope=Season&LeagueID=00&PlayerOrTeam=Team&PlayerScope=All+Players&SeasonType=Regular+Season&Stat=PTS)
+**Valid URL:** [https://stats.nba.com/stats/leaderstiles?GameScope=Season&LeagueID=00&PlayerOrTeam=Team&PlayerScope=All+Players&Season=2024-25&SeasonType=Regular+Season&Stat=PTS](https://stats.nba.com/stats/leaderstiles?GameScope=Season&LeagueID=00&PlayerOrTeam=Team&PlayerScope=All+Players&Season=2024-25&SeasonType=Regular+Season&Stat=PTS)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -885,7 +885,7 @@ GET /stats/leaderstiles
 | `LeagueID` | `league_id` |  |  | `Y` |  |
 | `PlayerOrTeam` | `player_or_team` |  |  | `Y` |  |
 | `PlayerScope` | `player_scope` |  |  | `Y` |  |
-| `Season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
+| `Season` | `season` |  |  | `Y` | Season label, e.g. ``2024-25``. Defaults at call time to the latest season that has rows: an NBA season from the November after its late-October tip-off (``2025-26`` until October 2026), a G League season from the January after, a Summer League from its August (July 2026's is ``2026-27``), a draft combine from June, a draft (``drafthistory``, a year) from July, and with season type ``Playoffs`` / ``PlayIn`` (or ``commonplayoffseries``) a season from the May its playoffs start. A month table cannot follow a lockout or pandemic calendar (1998-99, 2011-12, 2020-21): pass a season then. Without one stats.nba.com answers an empty HTTP 500 or every season summed. |
 | `SeasonType` | `season_type_playoffs` |  |  | `Y` |  |
 | `Stat` | `stat` |  |  | `Y` |  |
 
@@ -946,7 +946,7 @@ GET /stats/leaderstiles
 ### Example {#nba_stats_leaderstiles-example}
 
 ```python
-nba_stats_leaderstiles(league_id='00')
+nba_stats_leaderstiles(league_id='00', season='2024-25')
 ```
 
 _Last validated n/a._
@@ -967,7 +967,7 @@ GET /stats/matchupsrollup
 | `OffPlayerID` | `off_player_id_nullable` |  |  | `Y` |  |
 | `OffTeamID` | `off_team_id_nullable` |  |  | `Y` |  |
 | `PerMode` | `per_mode_simple` |  |  | `Y` |  |
-| `Season` | `season` |  |  | `Y` | Season label, e.g. ``2024-25``. Defaults at call time to the latest season that has rows: an NBA season from the November it tips off (``2025-26`` until October 2026), a G League season from the January after, a Summer League from its August (July 2026's is ``2026-27``), a draft combine from June, playoff series from May. stats.nba.com answers a request without a season with an empty HTTP 500. |
+| `Season` | `season` |  |  | `Y` | Season label, e.g. ``2024-25``. Defaults at call time to the latest season that has rows: an NBA season from the November after its late-October tip-off (``2025-26`` until October 2026), a G League season from the January after, a Summer League from its August (July 2026's is ``2026-27``), a draft combine from June, a draft (``drafthistory``, a year) from July, and with season type ``Playoffs`` / ``PlayIn`` (or ``commonplayoffseries``) a season from the May its playoffs start. A month table cannot follow a lockout or pandemic calendar (1998-99, 2011-12, 2020-21): pass a season then. Without one stats.nba.com answers an empty HTTP 500 or every season summed. |
 | `SeasonType` | `season_type_playoffs` |  |  | `Y` |  |
 
 ### Returns {#nba_stats_matchupsrollup-returns}
@@ -1195,7 +1195,7 @@ GET /stats/synergyplaytypes
 | `PlayType` | `play_type_nullable` |  |  | `Y` |  |
 | `PlayerOrTeam` | `player_or_team_abbreviation` |  |  | `Y` |  |
 | `SeasonType` | `season_type_all_star` |  |  | `Y` |  |
-| `SeasonYear` | `season` |  |  | `Y` | Season label, e.g. ``2024-25``. Defaults at call time to the latest season that has rows: an NBA season from the November it tips off (``2025-26`` until October 2026), a G League season from the January after, a Summer League from its August (July 2026's is ``2026-27``), a draft combine from June, playoff series from May. stats.nba.com answers a request without a season with an empty HTTP 500. |
+| `SeasonYear` | `season` |  |  | `Y` | Season label, e.g. ``2024-25``. Defaults at call time to the latest season that has rows: an NBA season from the November after its late-October tip-off (``2025-26`` until October 2026), a G League season from the January after, a Summer League from its August (July 2026's is ``2026-27``), a draft combine from June, a draft (``drafthistory``, a year) from July, and with season type ``Playoffs`` / ``PlayIn`` (or ``commonplayoffseries``) a season from the May its playoffs start. A month table cannot follow a lockout or pandemic calendar (1998-99, 2011-12, 2020-21): pass a season then. Without one stats.nba.com answers an empty HTTP 500 or every season summed. |
 | `TypeGrouping` | `type_grouping_nullable` |  |  | `Y` |  |
 
 ### Returns {#nba_stats_synergyplaytypes-returns}

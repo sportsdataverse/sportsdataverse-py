@@ -48,11 +48,14 @@ endpoints:
     type: str
   - default: null
     description: 'Season label, e.g. ``2024-25``. Defaults at call time to the latest
-      season that has rows: an NBA season from the November it tips off (``2025-26``
-      until October 2026), a G League season from the January after, a Summer League
-      from its August (July 2026''s is ``2026-27``), a draft combine from June, playoff
-      series from May. stats.nba.com answers a request without a season with an empty
-      HTTP 500.'
+      season that has rows: an NBA season from the November after its late-October
+      tip-off (``2025-26`` until October 2026), a G League season from the January
+      after, a Summer League from its August (July 2026''s is ``2026-27``), a draft
+      combine from June, a draft (``drafthistory``, a year) from July, and with season
+      type ``Playoffs`` / ``PlayIn`` (or ``commonplayoffseries``) a season from the
+      May its playoffs start. A month table cannot follow a lockout or pandemic calendar
+      (1998-99, 2011-12, 2020-21): pass a season then. Without one stats.nba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season
     query_key: Season
     transform: season_latest_with_data
@@ -68,6 +71,7 @@ endpoints:
   summary: GET /stats/assistleaders
 - example_args:
     league_id: '00'
+    season_nullable: 2024-25
   extra_params:
   - default: null
     name: college_nullable
@@ -150,8 +154,18 @@ endpoints:
     query_key: PlayerPosition
     type: str
   - default: null
+    description: 'Season label, e.g. ``2024-25``. Defaults at call time to the latest
+      season that has rows: an NBA season from the November after its late-October
+      tip-off (``2025-26`` until October 2026), a G League season from the January
+      after, a Summer League from its August (July 2026''s is ``2026-27``), a draft
+      combine from June, a draft (``drafthistory``, a year) from July, and with season
+      type ``Playoffs`` / ``PlayIn`` (or ``commonplayoffseries``) a season from the
+      May its playoffs start. A month table cannot follow a lockout or pandemic calendar
+      (1998-99, 2011-12, 2020-21): pass a season then. Without one stats.nba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season_nullable
     query_key: Season
+    transform: season_latest_with_data
     type: str
   - default: null
     name: season_segment_nullable
@@ -513,11 +527,14 @@ endpoints:
     type: str
   - default: null
     description: 'Season label, e.g. ``2024-25``. Defaults at call time to the latest
-      season that has rows: an NBA season from the November it tips off (``2025-26``
-      until October 2026), a G League season from the January after, a Summer League
-      from its August (July 2026''s is ``2026-27``), a draft combine from June, playoff
-      series from May. stats.nba.com answers a request without a season with an empty
-      HTTP 500.'
+      season that has rows: an NBA season from the November after its late-October
+      tip-off (``2025-26`` until October 2026), a G League season from the January
+      after, a Summer League from its August (July 2026''s is ``2026-27``), a draft
+      combine from June, a draft (``drafthistory``, a year) from July, and with season
+      type ``Playoffs`` / ``PlayIn`` (or ``commonplayoffseries``) a season from the
+      May its playoffs start. A month table cannot follow a lockout or pandemic calendar
+      (1998-99, 2011-12, 2020-21): pass a season then. Without one stats.nba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season
     query_key: Season
     transform: season_latest_with_data
@@ -556,11 +573,14 @@ endpoints:
     type: str
   - default: null
     description: 'Season label, e.g. ``2024-25``. Defaults at call time to the latest
-      season that has rows: an NBA season from the November it tips off (``2025-26``
-      until October 2026), a G League season from the January after, a Summer League
-      from its August (July 2026''s is ``2026-27``), a draft combine from June, playoff
-      series from May. stats.nba.com answers a request without a season with an empty
-      HTTP 500.'
+      season that has rows: an NBA season from the November after its late-October
+      tip-off (``2025-26`` until October 2026), a G League season from the January
+      after, a Summer League from its August (July 2026''s is ``2026-27``), a draft
+      combine from June, a draft (``drafthistory``, a year) from July, and with season
+      type ``Playoffs`` / ``PlayIn`` (or ``commonplayoffseries``) a season from the
+      May its playoffs start. A month table cannot follow a lockout or pandemic calendar
+      (1998-99, 2011-12, 2020-21): pass a season then. Without one stats.nba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season
     query_key: Season
     transform: season_latest_with_data
@@ -587,11 +607,14 @@ endpoints:
     type: str
   - default: null
     description: 'Season label, e.g. ``2024-25``. Defaults at call time to the latest
-      season that has rows: an NBA season from the November it tips off (``2025-26``
-      until October 2026), a G League season from the January after, a Summer League
-      from its August (July 2026''s is ``2026-27``), a draft combine from June, playoff
-      series from May. stats.nba.com answers a request without a season with an empty
-      HTTP 500.'
+      season that has rows: an NBA season from the November after its late-October
+      tip-off (``2025-26`` until October 2026), a G League season from the January
+      after, a Summer League from its August (July 2026''s is ``2026-27``), a draft
+      combine from June, a draft (``drafthistory``, a year) from July, and with season
+      type ``Playoffs`` / ``PlayIn`` (or ``commonplayoffseries``) a season from the
+      May its playoffs start. A month table cannot follow a lockout or pandemic calendar
+      (1998-99, 2011-12, 2020-21): pass a season then. Without one stats.nba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season
     query_key: Season
     transform: season_latest_with_data
@@ -670,11 +693,14 @@ endpoints:
     type: str
   - default: null
     description: 'Season label, e.g. ``2024-25``. Defaults at call time to the latest
-      season that has rows: an NBA season from the November it tips off (``2025-26``
-      until October 2026), a G League season from the January after, a Summer League
-      from its August (July 2026''s is ``2026-27``), a draft combine from June, playoff
-      series from May. stats.nba.com answers a request without a season with an empty
-      HTTP 500.'
+      season that has rows: an NBA season from the November after its late-October
+      tip-off (``2025-26`` until October 2026), a G League season from the January
+      after, a Summer League from its August (July 2026''s is ``2026-27``), a draft
+      combine from June, a draft (``drafthistory``, a year) from July, and with season
+      type ``Playoffs`` / ``PlayIn`` (or ``commonplayoffseries``) a season from the
+      May its playoffs start. A month table cannot follow a lockout or pandemic calendar
+      (1998-99, 2011-12, 2020-21): pass a season then. Without one stats.nba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season
     query_key: Season
     transform: season_latest_with_data
@@ -717,11 +743,14 @@ endpoints:
     type: str
   - default: null
     description: 'Season label, e.g. ``2024-25``. Defaults at call time to the latest
-      season that has rows: an NBA season from the November it tips off (``2025-26``
-      until October 2026), a G League season from the January after, a Summer League
-      from its August (July 2026''s is ``2026-27``), a draft combine from June, playoff
-      series from May. stats.nba.com answers a request without a season with an empty
-      HTTP 500.'
+      season that has rows: an NBA season from the November after its late-October
+      tip-off (``2025-26`` until October 2026), a G League season from the January
+      after, a Summer League from its August (July 2026''s is ``2026-27``), a draft
+      combine from June, a draft (``drafthistory``, a year) from July, and with season
+      type ``Playoffs`` / ``PlayIn`` (or ``commonplayoffseries``) a season from the
+      May its playoffs start. A month table cannot follow a lockout or pandemic calendar
+      (1998-99, 2011-12, 2020-21): pass a season then. Without one stats.nba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season
     query_key: Season
     transform: season_latest_with_data
@@ -757,11 +786,14 @@ endpoints:
     type: str
   - default: null
     description: 'Season label, e.g. ``2024-25``. Defaults at call time to the latest
-      season that has rows: an NBA season from the November it tips off (``2025-26``
-      until October 2026), a G League season from the January after, a Summer League
-      from its August (July 2026''s is ``2026-27``), a draft combine from June, playoff
-      series from May. stats.nba.com answers a request without a season with an empty
-      HTTP 500.'
+      season that has rows: an NBA season from the November after its late-October
+      tip-off (``2025-26`` until October 2026), a G League season from the January
+      after, a Summer League from its August (July 2026''s is ``2026-27``), a draft
+      combine from June, a draft (``drafthistory``, a year) from July, and with season
+      type ``Playoffs`` / ``PlayIn`` (or ``commonplayoffseries``) a season from the
+      May its playoffs start. A month table cannot follow a lockout or pandemic calendar
+      (1998-99, 2011-12, 2020-21): pass a season then. Without one stats.nba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season
     query_key: Season
     transform: season_latest_with_data
@@ -805,11 +837,14 @@ endpoints:
     type: str
   - default: null
     description: 'Season label, e.g. ``2024-25``. Defaults at call time to the latest
-      season that has rows: an NBA season from the November it tips off (``2025-26``
-      until October 2026), a G League season from the January after, a Summer League
-      from its August (July 2026''s is ``2026-27``), a draft combine from June, playoff
-      series from May. stats.nba.com answers a request without a season with an empty
-      HTTP 500.'
+      season that has rows: an NBA season from the November after its late-October
+      tip-off (``2025-26`` until October 2026), a G League season from the January
+      after, a Summer League from its August (July 2026''s is ``2026-27``), a draft
+      combine from June, a draft (``drafthistory``, a year) from July, and with season
+      type ``Playoffs`` / ``PlayIn`` (or ``commonplayoffseries``) a season from the
+      May its playoffs start. A month table cannot follow a lockout or pandemic calendar
+      (1998-99, 2011-12, 2020-21): pass a season then. Without one stats.nba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season_year
     query_key: SeasonYear
     transform: season_latest_with_data
@@ -829,11 +864,14 @@ endpoints:
     type: str
   - default: null
     description: 'Season label, e.g. ``2024-25``. Defaults at call time to the latest
-      season that has rows: an NBA season from the November it tips off (``2025-26``
-      until October 2026), a G League season from the January after, a Summer League
-      from its August (July 2026''s is ``2026-27``), a draft combine from June, playoff
-      series from May. stats.nba.com answers a request without a season with an empty
-      HTTP 500.'
+      season that has rows: an NBA season from the November after its late-October
+      tip-off (``2025-26`` until October 2026), a G League season from the January
+      after, a Summer League from its August (July 2026''s is ``2026-27``), a draft
+      combine from June, a draft (``drafthistory``, a year) from July, and with season
+      type ``Playoffs`` / ``PlayIn`` (or ``commonplayoffseries``) a season from the
+      May its playoffs start. A month table cannot follow a lockout or pandemic calendar
+      (1998-99, 2011-12, 2020-21): pass a season then. Without one stats.nba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season_year
     query_key: SeasonYear
     transform: season_latest_with_data
@@ -853,11 +891,14 @@ endpoints:
     type: str
   - default: null
     description: 'Season label, e.g. ``2024-25``. Defaults at call time to the latest
-      season that has rows: an NBA season from the November it tips off (``2025-26``
-      until October 2026), a G League season from the January after, a Summer League
-      from its August (July 2026''s is ``2026-27``), a draft combine from June, playoff
-      series from May. stats.nba.com answers a request without a season with an empty
-      HTTP 500.'
+      season that has rows: an NBA season from the November after its late-October
+      tip-off (``2025-26`` until October 2026), a G League season from the January
+      after, a Summer League from its August (July 2026''s is ``2026-27``), a draft
+      combine from June, a draft (``drafthistory``, a year) from July, and with season
+      type ``Playoffs`` / ``PlayIn`` (or ``commonplayoffseries``) a season from the
+      May its playoffs start. A month table cannot follow a lockout or pandemic calendar
+      (1998-99, 2011-12, 2020-21): pass a season then. Without one stats.nba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season_year
     query_key: SeasonYear
     transform: season_latest_with_data
@@ -877,11 +918,14 @@ endpoints:
     type: str
   - default: null
     description: 'Season label, e.g. ``2024-25``. Defaults at call time to the latest
-      season that has rows: an NBA season from the November it tips off (``2025-26``
-      until October 2026), a G League season from the January after, a Summer League
-      from its August (July 2026''s is ``2026-27``), a draft combine from June, playoff
-      series from May. stats.nba.com answers a request without a season with an empty
-      HTTP 500.'
+      season that has rows: an NBA season from the November after its late-October
+      tip-off (``2025-26`` until October 2026), a G League season from the January
+      after, a Summer League from its August (July 2026''s is ``2026-27``), a draft
+      combine from June, a draft (``drafthistory``, a year) from July, and with season
+      type ``Playoffs`` / ``PlayIn`` (or ``commonplayoffseries``) a season from the
+      May its playoffs start. A month table cannot follow a lockout or pandemic calendar
+      (1998-99, 2011-12, 2020-21): pass a season then. Without one stats.nba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season_year
     query_key: SeasonYear
     transform: season_latest_with_data
@@ -901,11 +945,14 @@ endpoints:
     type: str
   - default: null
     description: 'Season label, e.g. ``2024-25``. Defaults at call time to the latest
-      season that has rows: an NBA season from the November it tips off (``2025-26``
-      until October 2026), a G League season from the January after, a Summer League
-      from its August (July 2026''s is ``2026-27``), a draft combine from June, playoff
-      series from May. stats.nba.com answers a request without a season with an empty
-      HTTP 500.'
+      season that has rows: an NBA season from the November after its late-October
+      tip-off (``2025-26`` until October 2026), a G League season from the January
+      after, a Summer League from its August (July 2026''s is ``2026-27``), a draft
+      combine from June, a draft (``drafthistory``, a year) from July, and with season
+      type ``Playoffs`` / ``PlayIn`` (or ``commonplayoffseries``) a season from the
+      May its playoffs start. A month table cannot follow a lockout or pandemic calendar
+      (1998-99, 2011-12, 2020-21): pass a season then. Without one stats.nba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season_all_time
     query_key: SeasonYear
     transform: season_latest_with_data
@@ -961,8 +1008,18 @@ endpoints:
     query_key: RoundPick
     type: str
   - default: null
+    description: 'Season label, e.g. ``2024-25``. Defaults at call time to the latest
+      season that has rows: an NBA season from the November after its late-October
+      tip-off (``2025-26`` until October 2026), a G League season from the January
+      after, a Summer League from its August (July 2026''s is ``2026-27``), a draft
+      combine from June, a draft (``drafthistory``, a year) from July, and with season
+      type ``Playoffs`` / ``PlayIn`` (or ``commonplayoffseries``) a season from the
+      May its playoffs start. A month table cannot follow a lockout or pandemic calendar
+      (1998-99, 2011-12, 2020-21): pass a season then. Without one stats.nba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season_year_nullable
     query_key: Season
+    transform: season_latest_with_data
     type: str
   - default: '0'
     name: team_id_nullable
@@ -979,6 +1036,7 @@ endpoints:
   summary: GET /stats/drafthistory
 - example_args:
     league_id: '00'
+    season: 2024-25
   extra_params:
   - default: N
     name: active_players
@@ -1025,8 +1083,18 @@ endpoints:
     query_key: Position
     type: str
   - default: null
+    description: 'Season label, e.g. ``2024-25``. Defaults at call time to the latest
+      season that has rows: an NBA season from the November after its late-October
+      tip-off (``2025-26`` until October 2026), a G League season from the January
+      after, a Summer League from its August (July 2026''s is ``2026-27``), a draft
+      combine from June, a draft (``drafthistory``, a year) from July, and with season
+      type ``Playoffs`` / ``PlayIn`` (or ``commonplayoffseries``) a season from the
+      May its playoffs start. A month table cannot follow a lockout or pandemic calendar
+      (1998-99, 2011-12, 2020-21): pass a season then. Without one stats.nba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season
     query_key: Season
+    transform: season_latest_with_data
     type: str
   - default: ''
     name: season_segment_nullable
@@ -1163,6 +1231,7 @@ endpoints:
       ``LeagueAverage``, ``LeagueMax``)
   example_args:
     league_id: '00'
+    season: 2024-25
   extra_params:
   - default: Season
     name: game_scope_detailed
@@ -1181,8 +1250,18 @@ endpoints:
     query_key: PlayerScope
     type: str
   - default: null
+    description: 'Season label, e.g. ``2024-25``. Defaults at call time to the latest
+      season that has rows: an NBA season from the November after its late-October
+      tip-off (``2025-26`` until October 2026), a G League season from the January
+      after, a Summer League from its August (July 2026''s is ``2026-27``), a draft
+      combine from June, a draft (``drafthistory``, a year) from July, and with season
+      type ``Playoffs`` / ``PlayIn`` (or ``commonplayoffseries``) a season from the
+      May its playoffs start. A month table cannot follow a lockout or pandemic calendar
+      (1998-99, 2011-12, 2020-21): pass a season then. Without one stats.nba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season
     query_key: Season
+    transform: season_latest_with_data
     type: str
   - default: Regular Season
     name: season_type_playoffs
@@ -1203,6 +1282,7 @@ endpoints:
       ``HomePageStat6``, ``HomePageStat7``, ``HomePageStat8``)
   example_args:
     league_id: '00'
+    season: 2024-25
   extra_params:
   - default: Season
     name: game_scope_detailed
@@ -1221,8 +1301,18 @@ endpoints:
     query_key: PlayerScope
     type: str
   - default: null
+    description: 'Season label, e.g. ``2024-25``. Defaults at call time to the latest
+      season that has rows: an NBA season from the November after its late-October
+      tip-off (``2025-26`` until October 2026), a G League season from the January
+      after, a Summer League from its August (July 2026''s is ``2026-27``), a draft
+      combine from June, a draft (``drafthistory``, a year) from July, and with season
+      type ``Playoffs`` / ``PlayIn`` (or ``commonplayoffseries``) a season from the
+      May its playoffs start. A month table cannot follow a lockout or pandemic calendar
+      (1998-99, 2011-12, 2020-21): pass a season then. Without one stats.nba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season
     query_key: Season
+    transform: season_latest_with_data
     type: str
   - default: Regular Season
     name: season_type_playoffs
@@ -1267,6 +1357,7 @@ endpoints:
       ``LastSeasonHigh``, ``LowSeasonHigh``)
   example_args:
     league_id: '00'
+    season: 2024-25
   extra_params:
   - default: Season
     name: game_scope_detailed
@@ -1285,8 +1376,18 @@ endpoints:
     query_key: PlayerScope
     type: str
   - default: null
+    description: 'Season label, e.g. ``2024-25``. Defaults at call time to the latest
+      season that has rows: an NBA season from the November after its late-October
+      tip-off (``2025-26`` until October 2026), a G League season from the January
+      after, a Summer League from its August (July 2026''s is ``2026-27``), a draft
+      combine from June, a draft (``drafthistory``, a year) from July, and with season
+      type ``Playoffs`` / ``PlayIn`` (or ``commonplayoffseries``) a season from the
+      May its playoffs start. A month table cannot follow a lockout or pandemic calendar
+      (1998-99, 2011-12, 2020-21): pass a season then. Without one stats.nba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season
     query_key: Season
+    transform: season_latest_with_data
     type: str
   - default: Regular Season
     name: season_type_playoffs
@@ -1383,11 +1484,14 @@ endpoints:
     type: str
   - default: null
     description: 'Season label, e.g. ``2024-25``. Defaults at call time to the latest
-      season that has rows: an NBA season from the November it tips off (``2025-26``
-      until October 2026), a G League season from the January after, a Summer League
-      from its August (July 2026''s is ``2026-27``), a draft combine from June, playoff
-      series from May. stats.nba.com answers a request without a season with an empty
-      HTTP 500.'
+      season that has rows: an NBA season from the November after its late-October
+      tip-off (``2025-26`` until October 2026), a G League season from the January
+      after, a Summer League from its August (July 2026''s is ``2026-27``), a draft
+      combine from June, a draft (``drafthistory``, a year) from July, and with season
+      type ``Playoffs`` / ``PlayIn`` (or ``commonplayoffseries``) a season from the
+      May its playoffs start. A month table cannot follow a lockout or pandemic calendar
+      (1998-99, 2011-12, 2020-21): pass a season then. Without one stats.nba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season
     query_key: Season
     transform: season_latest_with_data
@@ -1495,11 +1599,14 @@ endpoints:
     type: str
   - default: null
     description: 'Season label, e.g. ``2024-25``. Defaults at call time to the latest
-      season that has rows: an NBA season from the November it tips off (``2025-26``
-      until October 2026), a G League season from the January after, a Summer League
-      from its August (July 2026''s is ``2026-27``), a draft combine from June, playoff
-      series from May. stats.nba.com answers a request without a season with an empty
-      HTTP 500.'
+      season that has rows: an NBA season from the November after its late-October
+      tip-off (``2025-26`` until October 2026), a G League season from the January
+      after, a Summer League from its August (July 2026''s is ``2026-27``), a draft
+      combine from June, a draft (``drafthistory``, a year) from July, and with season
+      type ``Playoffs`` / ``PlayIn`` (or ``commonplayoffseries``) a season from the
+      May its playoffs start. A month table cannot follow a lockout or pandemic calendar
+      (1998-99, 2011-12, 2020-21): pass a season then. Without one stats.nba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season
     query_key: Season
     transform: season_latest_with_data
@@ -1635,11 +1742,14 @@ endpoints:
     type: str
   - default: null
     description: 'Season label, e.g. ``2024-25``. Defaults at call time to the latest
-      season that has rows: an NBA season from the November it tips off (``2025-26``
-      until October 2026), a G League season from the January after, a Summer League
-      from its August (July 2026''s is ``2026-27``), a draft combine from June, playoff
-      series from May. stats.nba.com answers a request without a season with an empty
-      HTTP 500.'
+      season that has rows: an NBA season from the November after its late-October
+      tip-off (``2025-26`` until October 2026), a G League season from the January
+      after, a Summer League from its August (July 2026''s is ``2026-27``), a draft
+      combine from June, a draft (``drafthistory``, a year) from July, and with season
+      type ``Playoffs`` / ``PlayIn`` (or ``commonplayoffseries``) a season from the
+      May its playoffs start. A month table cannot follow a lockout or pandemic calendar
+      (1998-99, 2011-12, 2020-21): pass a season then. Without one stats.nba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season
     query_key: Season
     transform: season_latest_with_data
@@ -1803,11 +1913,14 @@ endpoints:
     type: str
   - default: null
     description: 'Season label, e.g. ``2024-25``. Defaults at call time to the latest
-      season that has rows: an NBA season from the November it tips off (``2025-26``
-      until October 2026), a G League season from the January after, a Summer League
-      from its August (July 2026''s is ``2026-27``), a draft combine from June, playoff
-      series from May. stats.nba.com answers a request without a season with an empty
-      HTTP 500.'
+      season that has rows: an NBA season from the November after its late-October
+      tip-off (``2025-26`` until October 2026), a G League season from the January
+      after, a Summer League from its August (July 2026''s is ``2026-27``), a draft
+      combine from June, a draft (``drafthistory``, a year) from July, and with season
+      type ``Playoffs`` / ``PlayIn`` (or ``commonplayoffseries``) a season from the
+      May its playoffs start. A month table cannot follow a lockout or pandemic calendar
+      (1998-99, 2011-12, 2020-21): pass a season then. Without one stats.nba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season
     query_key: Season
     transform: season_latest_with_data
@@ -1951,11 +2064,14 @@ endpoints:
     type: str
   - default: null
     description: 'Season label, e.g. ``2024-25``. Defaults at call time to the latest
-      season that has rows: an NBA season from the November it tips off (``2025-26``
-      until October 2026), a G League season from the January after, a Summer League
-      from its August (July 2026''s is ``2026-27``), a draft combine from June, playoff
-      series from May. stats.nba.com answers a request without a season with an empty
-      HTTP 500.'
+      season that has rows: an NBA season from the November after its late-October
+      tip-off (``2025-26`` until October 2026), a G League season from the January
+      after, a Summer League from its August (July 2026''s is ``2026-27``), a draft
+      combine from June, a draft (``drafthistory``, a year) from July, and with season
+      type ``Playoffs`` / ``PlayIn`` (or ``commonplayoffseries``) a season from the
+      May its playoffs start. A month table cannot follow a lockout or pandemic calendar
+      (1998-99, 2011-12, 2020-21): pass a season then. Without one stats.nba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season
     query_key: Season
     transform: season_latest_with_data
@@ -2119,11 +2235,14 @@ endpoints:
     type: str
   - default: null
     description: 'Season label, e.g. ``2024-25``. Defaults at call time to the latest
-      season that has rows: an NBA season from the November it tips off (``2025-26``
-      until October 2026), a G League season from the January after, a Summer League
-      from its August (July 2026''s is ``2026-27``), a draft combine from June, playoff
-      series from May. stats.nba.com answers a request without a season with an empty
-      HTTP 500.'
+      season that has rows: an NBA season from the November after its late-October
+      tip-off (``2025-26`` until October 2026), a G League season from the January
+      after, a Summer League from its August (July 2026''s is ``2026-27``), a draft
+      combine from June, a draft (``drafthistory``, a year) from July, and with season
+      type ``Playoffs`` / ``PlayIn`` (or ``commonplayoffseries``) a season from the
+      May its playoffs start. A month table cannot follow a lockout or pandemic calendar
+      (1998-99, 2011-12, 2020-21): pass a season then. Without one stats.nba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season
     query_key: Season
     transform: season_latest_with_data
@@ -2275,11 +2394,14 @@ endpoints:
     type: str
   - default: null
     description: 'Season label, e.g. ``2024-25``. Defaults at call time to the latest
-      season that has rows: an NBA season from the November it tips off (``2025-26``
-      until October 2026), a G League season from the January after, a Summer League
-      from its August (July 2026''s is ``2026-27``), a draft combine from June, playoff
-      series from May. stats.nba.com answers a request without a season with an empty
-      HTTP 500.'
+      season that has rows: an NBA season from the November after its late-October
+      tip-off (``2025-26`` until October 2026), a G League season from the January
+      after, a Summer League from its August (July 2026''s is ``2026-27``), a draft
+      combine from June, a draft (``drafthistory``, a year) from July, and with season
+      type ``Playoffs`` / ``PlayIn`` (or ``commonplayoffseries``) a season from the
+      May its playoffs start. A month table cannot follow a lockout or pandemic calendar
+      (1998-99, 2011-12, 2020-21): pass a season then. Without one stats.nba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season
     query_key: Season
     transform: season_latest_with_data
@@ -2327,6 +2449,7 @@ endpoints:
   summary: GET /stats/leaguedashplayerstats
 - example_args:
     league_id: '00'
+    season: 2024-25
   extra_params:
   - default: ''
     name: college_nullable
@@ -2421,8 +2544,18 @@ endpoints:
     query_key: PlayerPosition
     type: str
   - default: null
+    description: 'Season label, e.g. ``2024-25``. Defaults at call time to the latest
+      season that has rows: an NBA season from the November after its late-October
+      tip-off (``2025-26`` until October 2026), a G League season from the January
+      after, a Summer League from its August (July 2026''s is ``2026-27``), a draft
+      combine from June, a draft (``drafthistory``, a year) from July, and with season
+      type ``Playoffs`` / ``PlayIn`` (or ``commonplayoffseries``) a season from the
+      May its playoffs start. A month table cannot follow a lockout or pandemic calendar
+      (1998-99, 2011-12, 2020-21): pass a season then. Without one stats.nba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season
     query_key: Season
+    transform: season_latest_with_data
     type: str
   - default: ''
     name: season_segment_nullable
@@ -2459,6 +2592,7 @@ endpoints:
   summary: GET /stats/leaguedashptdefend
 - example_args:
     league_id: '00'
+    season: 2024-25
   extra_params:
   - default: ''
     name: college_nullable
@@ -2549,8 +2683,18 @@ endpoints:
     query_key: PtMeasureType
     type: str
   - default: null
+    description: 'Season label, e.g. ``2024-25``. Defaults at call time to the latest
+      season that has rows: an NBA season from the November after its late-October
+      tip-off (``2025-26`` until October 2026), a G League season from the January
+      after, a Summer League from its August (July 2026''s is ``2026-27``), a draft
+      combine from June, a draft (``drafthistory``, a year) from July, and with season
+      type ``Playoffs`` / ``PlayIn`` (or ``commonplayoffseries``) a season from the
+      May its playoffs start. A month table cannot follow a lockout or pandemic calendar
+      (1998-99, 2011-12, 2020-21): pass a season then. Without one stats.nba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season
     query_key: Season
+    transform: season_latest_with_data
     type: str
   - default: ''
     name: season_segment_nullable
@@ -2651,11 +2795,14 @@ endpoints:
     type: str
   - default: null
     description: 'Season label, e.g. ``2024-25``. Defaults at call time to the latest
-      season that has rows: an NBA season from the November it tips off (``2025-26``
-      until October 2026), a G League season from the January after, a Summer League
-      from its August (July 2026''s is ``2026-27``), a draft combine from June, playoff
-      series from May. stats.nba.com answers a request without a season with an empty
-      HTTP 500.'
+      season that has rows: an NBA season from the November after its late-October
+      tip-off (``2025-26`` until October 2026), a G League season from the January
+      after, a Summer League from its August (July 2026''s is ``2026-27``), a draft
+      combine from June, a draft (``drafthistory``, a year) from July, and with season
+      type ``Playoffs`` / ``PlayIn`` (or ``commonplayoffseries``) a season from the
+      May its playoffs start. A month table cannot follow a lockout or pandemic calendar
+      (1998-99, 2011-12, 2020-21): pass a season then. Without one stats.nba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season
     query_key: Season
     transform: season_latest_with_data
@@ -2687,6 +2834,7 @@ endpoints:
   summary: GET /stats/leaguedashptteamdefend
 - example_args:
     league_id: '00'
+    season: 2024-25
   extra_params:
   - default: Ahead or Behind
     name: ahead_behind
@@ -2785,8 +2933,18 @@ endpoints:
     query_key: Rank
     type: str
   - default: null
+    description: 'Season label, e.g. ``2024-25``. Defaults at call time to the latest
+      season that has rows: an NBA season from the November after its late-October
+      tip-off (``2025-26`` until October 2026), a G League season from the January
+      after, a Summer League from its August (July 2026''s is ``2026-27``), a draft
+      combine from June, a draft (``drafthistory``, a year) from July, and with season
+      type ``Playoffs`` / ``PlayIn`` (or ``commonplayoffseries``) a season from the
+      May its playoffs start. A month table cannot follow a lockout or pandemic calendar
+      (1998-99, 2011-12, 2020-21): pass a season then. Without one stats.nba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season
     query_key: Season
+    transform: season_latest_with_data
     type: str
   - default: ''
     name: season_segment_nullable
@@ -2823,6 +2981,7 @@ endpoints:
   summary: GET /stats/leaguedashteamclutch
 - example_args:
     league_id: '00'
+    season: 2024-25
   extra_params:
   - default: ''
     name: close_def_dist_range_nullable
@@ -2893,8 +3052,18 @@ endpoints:
     query_key: Period
     type: str
   - default: null
+    description: 'Season label, e.g. ``2024-25``. Defaults at call time to the latest
+      season that has rows: an NBA season from the November after its late-October
+      tip-off (``2025-26`` until October 2026), a G League season from the January
+      after, a Summer League from its August (July 2026''s is ``2026-27``), a draft
+      combine from June, a draft (``drafthistory``, a year) from July, and with season
+      type ``Playoffs`` / ``PlayIn`` (or ``commonplayoffseries``) a season from the
+      May its playoffs start. A month table cannot follow a lockout or pandemic calendar
+      (1998-99, 2011-12, 2020-21): pass a season then. Without one stats.nba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season
     query_key: Season
+    transform: season_latest_with_data
     type: str
   - default: ''
     name: season_segment_nullable
@@ -2935,6 +3104,7 @@ endpoints:
   summary: GET /stats/leaguedashteamptshot
 - example_args:
     league_id: '00'
+    season: 2024-25
   extra_params:
   - default: ''
     name: conference_nullable
@@ -3025,8 +3195,18 @@ endpoints:
     query_key: Rank
     type: str
   - default: null
+    description: 'Season label, e.g. ``2024-25``. Defaults at call time to the latest
+      season that has rows: an NBA season from the November after its late-October
+      tip-off (``2025-26`` until October 2026), a G League season from the January
+      after, a Summer League from its August (July 2026''s is ``2026-27``), a draft
+      combine from June, a draft (``drafthistory``, a year) from July, and with season
+      type ``Playoffs`` / ``PlayIn`` (or ``commonplayoffseries``) a season from the
+      May its playoffs start. A month table cannot follow a lockout or pandemic calendar
+      (1998-99, 2011-12, 2020-21): pass a season then. Without one stats.nba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season
     query_key: Season
+    transform: season_latest_with_data
     type: str
   - default: ''
     name: season_segment_nullable
@@ -3063,6 +3243,7 @@ endpoints:
   summary: GET /stats/leaguedashteamshotlocations
 - example_args:
     league_id: '00'
+    season: 2024-25
   extra_params:
   - default: ''
     name: conference_nullable
@@ -3149,8 +3330,18 @@ endpoints:
     query_key: Rank
     type: str
   - default: null
+    description: 'Season label, e.g. ``2024-25``. Defaults at call time to the latest
+      season that has rows: an NBA season from the November after its late-October
+      tip-off (``2025-26`` until October 2026), a G League season from the January
+      after, a Summer League from its August (July 2026''s is ``2026-27``), a draft
+      combine from June, a draft (``drafthistory``, a year) from July, and with season
+      type ``Playoffs`` / ``PlayIn`` (or ``commonplayoffseries``) a season from the
+      May its playoffs start. A month table cannot follow a lockout or pandemic calendar
+      (1998-99, 2011-12, 2020-21): pass a season then. Without one stats.nba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season
     query_key: Season
+    transform: season_latest_with_data
     type: str
   - default: ''
     name: season_segment_nullable
@@ -3191,6 +3382,7 @@ endpoints:
   summary: GET /stats/leaguedashteamstats
 - example_args:
     league_id: '00'
+    season_nullable: 2024-25
   extra_params:
   - default: ''
     name: conference_nullable
@@ -3509,8 +3701,18 @@ endpoints:
     query_key: RookieYear
     type: str
   - default: null
+    description: 'Season label, e.g. ``2024-25``. Defaults at call time to the latest
+      season that has rows: an NBA season from the November after its late-October
+      tip-off (``2025-26`` until October 2026), a G League season from the January
+      after, a Summer League from its August (July 2026''s is ``2026-27``), a draft
+      combine from June, a draft (``drafthistory``, a year) from July, and with season
+      type ``Playoffs`` / ``PlayIn`` (or ``commonplayoffseries``) a season from the
+      May its playoffs start. A month table cannot follow a lockout or pandemic calendar
+      (1998-99, 2011-12, 2020-21): pass a season then. Without one stats.nba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season_nullable
     query_key: Season
+    transform: season_latest_with_data
     type: str
   - default: ''
     name: season_segment_nullable
@@ -3579,11 +3781,14 @@ endpoints:
     type: str
   - default: null
     description: 'Season label, e.g. ``2024-25``. Defaults at call time to the latest
-      season that has rows: an NBA season from the November it tips off (``2025-26``
-      until October 2026), a G League season from the January after, a Summer League
-      from its August (July 2026''s is ``2026-27``), a draft combine from June, playoff
-      series from May. stats.nba.com answers a request without a season with an empty
-      HTTP 500.'
+      season that has rows: an NBA season from the November after its late-October
+      tip-off (``2025-26`` until October 2026), a G League season from the January
+      after, a Summer League from its August (July 2026''s is ``2026-27``), a draft
+      combine from June, a draft (``drafthistory``, a year) from July, and with season
+      type ``Playoffs`` / ``PlayIn`` (or ``commonplayoffseries``) a season from the
+      May its playoffs start. A month table cannot follow a lockout or pandemic calendar
+      (1998-99, 2011-12, 2020-21): pass a season then. Without one stats.nba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season
     query_key: Season
     transform: season_latest_with_data
@@ -3679,11 +3884,14 @@ endpoints:
     type: str
   - default: null
     description: 'Season label, e.g. ``2024-25``. Defaults at call time to the latest
-      season that has rows: an NBA season from the November it tips off (``2025-26``
-      until October 2026), a G League season from the January after, a Summer League
-      from its August (July 2026''s is ``2026-27``), a draft combine from June, playoff
-      series from May. stats.nba.com answers a request without a season with an empty
-      HTTP 500.'
+      season that has rows: an NBA season from the November after its late-October
+      tip-off (``2025-26`` until October 2026), a G League season from the January
+      after, a Summer League from its August (July 2026''s is ``2026-27``), a draft
+      combine from June, a draft (``drafthistory``, a year) from July, and with season
+      type ``Playoffs`` / ``PlayIn`` (or ``commonplayoffseries``) a season from the
+      May its playoffs start. A month table cannot follow a lockout or pandemic calendar
+      (1998-99, 2011-12, 2020-21): pass a season then. Without one stats.nba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season
     query_key: Season
     transform: season_latest_with_data
@@ -3795,11 +4003,14 @@ endpoints:
     type: str
   - default: null
     description: 'Season label, e.g. ``2024-25``. Defaults at call time to the latest
-      season that has rows: an NBA season from the November it tips off (``2025-26``
-      until October 2026), a G League season from the January after, a Summer League
-      from its August (July 2026''s is ``2026-27``), a draft combine from June, playoff
-      series from May. stats.nba.com answers a request without a season with an empty
-      HTTP 500.'
+      season that has rows: an NBA season from the November after its late-October
+      tip-off (``2025-26`` until October 2026), a G League season from the January
+      after, a Summer League from its August (July 2026''s is ``2026-27``), a draft
+      combine from June, a draft (``drafthistory``, a year) from July, and with season
+      type ``Playoffs`` / ``PlayIn`` (or ``commonplayoffseries``) a season from the
+      May its playoffs start. A month table cannot follow a lockout or pandemic calendar
+      (1998-99, 2011-12, 2020-21): pass a season then. Without one stats.nba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season
     query_key: Season
     transform: season_latest_with_data
@@ -3835,6 +4046,7 @@ endpoints:
   summary: GET /stats/leaguehustlestatsteam
 - example_args:
     league_id: '00'
+    season: 2024-25
   extra_params:
   - default: ''
     name: active_flag_nullable
@@ -3853,8 +4065,18 @@ endpoints:
     query_key: Scope
     type: str
   - default: null
+    description: 'Season label, e.g. ``2024-25``. Defaults at call time to the latest
+      season that has rows: an NBA season from the November after its late-October
+      tip-off (``2025-26`` until October 2026), a G League season from the January
+      after, a Summer League from its August (July 2026''s is ``2026-27``), a draft
+      combine from June, a draft (``drafthistory``, a year) from July, and with season
+      type ``Playoffs`` / ``PlayIn`` (or ``commonplayoffseries``) a season from the
+      May its playoffs start. A month table cannot follow a lockout or pandemic calendar
+      (1998-99, 2011-12, 2020-21): pass a season then. Without one stats.nba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season
     query_key: Season
+    transform: season_latest_with_data
     type: str
   - default: Regular Season
     name: season_type_all_star
@@ -3955,11 +4177,14 @@ endpoints:
     type: str
   - default: null
     description: 'Season label, e.g. ``2024-25``. Defaults at call time to the latest
-      season that has rows: an NBA season from the November it tips off (``2025-26``
-      until October 2026), a G League season from the January after, a Summer League
-      from its August (July 2026''s is ``2026-27``), a draft combine from June, playoff
-      series from May. stats.nba.com answers a request without a season with an empty
-      HTTP 500.'
+      season that has rows: an NBA season from the November after its late-October
+      tip-off (``2025-26`` until October 2026), a G League season from the January
+      after, a Summer League from its August (July 2026''s is ``2026-27``), a draft
+      combine from June, a draft (``drafthistory``, a year) from July, and with season
+      type ``Playoffs`` / ``PlayIn`` (or ``commonplayoffseries``) a season from the
+      May its playoffs start. A month table cannot follow a lockout or pandemic calendar
+      (1998-99, 2011-12, 2020-21): pass a season then. Without one stats.nba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season
     query_key: Season
     transform: season_latest_with_data
@@ -4059,11 +4284,14 @@ endpoints:
     type: str
   - default: null
     description: 'Season label, e.g. ``2024-25``. Defaults at call time to the latest
-      season that has rows: an NBA season from the November it tips off (``2025-26``
-      until October 2026), a G League season from the January after, a Summer League
-      from its August (July 2026''s is ``2026-27``), a draft combine from June, playoff
-      series from May. stats.nba.com answers a request without a season with an empty
-      HTTP 500.'
+      season that has rows: an NBA season from the November after its late-October
+      tip-off (``2025-26`` until October 2026), a G League season from the January
+      after, a Summer League from its August (July 2026''s is ``2026-27``), a draft
+      combine from June, a draft (``drafthistory``, a year) from July, and with season
+      type ``Playoffs`` / ``PlayIn`` (or ``commonplayoffseries``) a season from the
+      May its playoffs start. A month table cannot follow a lockout or pandemic calendar
+      (1998-99, 2011-12, 2020-21): pass a season then. Without one stats.nba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season
     query_key: Season
     transform: season_latest_with_data
@@ -4123,11 +4351,14 @@ endpoints:
     type: str
   - default: null
     description: 'Season label, e.g. ``2024-25``. Defaults at call time to the latest
-      season that has rows: an NBA season from the November it tips off (``2025-26``
-      until October 2026), a G League season from the January after, a Summer League
-      from its August (July 2026''s is ``2026-27``), a draft combine from June, playoff
-      series from May. stats.nba.com answers a request without a season with an empty
-      HTTP 500.'
+      season that has rows: an NBA season from the November after its late-October
+      tip-off (``2025-26`` until October 2026), a G League season from the January
+      after, a Summer League from its August (July 2026''s is ``2026-27``), a draft
+      combine from June, a draft (``drafthistory``, a year) from July, and with season
+      type ``Playoffs`` / ``PlayIn`` (or ``commonplayoffseries``) a season from the
+      May its playoffs start. A month table cannot follow a lockout or pandemic calendar
+      (1998-99, 2011-12, 2020-21): pass a season then. Without one stats.nba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season
     query_key: Season
     transform: season_latest_with_data
@@ -4151,11 +4382,14 @@ endpoints:
     type: str
   - default: null
     description: 'Season label, e.g. ``2024-25``. Defaults at call time to the latest
-      season that has rows: an NBA season from the November it tips off (``2025-26``
-      until October 2026), a G League season from the January after, a Summer League
-      from its August (July 2026''s is ``2026-27``), a draft combine from June, playoff
-      series from May. stats.nba.com answers a request without a season with an empty
-      HTTP 500.'
+      season that has rows: an NBA season from the November after its late-October
+      tip-off (``2025-26`` until October 2026), a G League season from the January
+      after, a Summer League from its August (July 2026''s is ``2026-27``), a draft
+      combine from June, a draft (``drafthistory``, a year) from July, and with season
+      type ``Playoffs`` / ``PlayIn`` (or ``commonplayoffseries``) a season from the
+      May its playoffs start. A month table cannot follow a lockout or pandemic calendar
+      (1998-99, 2011-12, 2020-21): pass a season then. Without one stats.nba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season
     query_key: Season
     transform: season_latest_with_data
@@ -4183,11 +4417,14 @@ endpoints:
     type: str
   - default: null
     description: 'Season label, e.g. ``2024-25``. Defaults at call time to the latest
-      season that has rows: an NBA season from the November it tips off (``2025-26``
-      until October 2026), a G League season from the January after, a Summer League
-      from its August (July 2026''s is ``2026-27``), a draft combine from June, playoff
-      series from May. stats.nba.com answers a request without a season with an empty
-      HTTP 500.'
+      season that has rows: an NBA season from the November after its late-October
+      tip-off (``2025-26`` until October 2026), a G League season from the January
+      after, a Summer League from its August (July 2026''s is ``2026-27``), a draft
+      combine from June, a draft (``drafthistory``, a year) from July, and with season
+      type ``Playoffs`` / ``PlayIn`` (or ``commonplayoffseries``) a season from the
+      May its playoffs start. A month table cannot follow a lockout or pandemic calendar
+      (1998-99, 2011-12, 2020-21): pass a season then. Without one stats.nba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season
     query_key: Season
     transform: season_latest_with_data
@@ -4235,11 +4472,14 @@ endpoints:
     type: str
   - default: null
     description: 'Season label, e.g. ``2024-25``. Defaults at call time to the latest
-      season that has rows: an NBA season from the November it tips off (``2025-26``
-      until October 2026), a G League season from the January after, a Summer League
-      from its August (July 2026''s is ``2026-27``), a draft combine from June, playoff
-      series from May. stats.nba.com answers a request without a season with an empty
-      HTTP 500.'
+      season that has rows: an NBA season from the November after its late-October
+      tip-off (``2025-26`` until October 2026), a G League season from the January
+      after, a Summer League from its August (July 2026''s is ``2026-27``), a draft
+      combine from June, a draft (``drafthistory``, a year) from July, and with season
+      type ``Playoffs`` / ``PlayIn`` (or ``commonplayoffseries``) a season from the
+      May its playoffs start. A month table cannot follow a lockout or pandemic calendar
+      (1998-99, 2011-12, 2020-21): pass a season then. Without one stats.nba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season
     query_key: Season
     transform: season_latest_with_data
@@ -4288,6 +4528,7 @@ endpoints:
       ``Midwest``, ``West``)
   example_args:
     league_id: '00'
+    season_nullable: 2024-25
   extra_params:
   - default: '00'
     name: league_id
@@ -4298,8 +4539,18 @@ endpoints:
     query_key: PerMode
     type: str
   - default: null
+    description: 'Season label, e.g. ``2024-25``. Defaults at call time to the latest
+      season that has rows: an NBA season from the November after its late-October
+      tip-off (``2025-26`` until October 2026), a G League season from the January
+      after, a Summer League from its August (July 2026''s is ``2026-27``), a draft
+      combine from June, a draft (``drafthistory``, a year) from July, and with season
+      type ``Playoffs`` / ``PlayIn`` (or ``commonplayoffseries``) a season from the
+      May its playoffs start. A month table cannot follow a lockout or pandemic calendar
+      (1998-99, 2011-12, 2020-21): pass a season then. Without one stats.nba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season_nullable
     query_key: Season
+    transform: season_latest_with_data
     type: str
   - default: Regular Season
     name: season_type_all_star
@@ -4528,11 +4779,14 @@ endpoints:
     type: str
   - default: null
     description: 'Season label, e.g. ``2024-25``. Defaults at call time to the latest
-      season that has rows: an NBA season from the November it tips off (``2025-26``
-      until October 2026), a G League season from the January after, a Summer League
-      from its August (July 2026''s is ``2026-27``), a draft combine from June, playoff
-      series from May. stats.nba.com answers a request without a season with an empty
-      HTTP 500.'
+      season that has rows: an NBA season from the November after its late-October
+      tip-off (``2025-26`` until October 2026), a G League season from the January
+      after, a Summer League from its August (July 2026''s is ``2026-27``), a draft
+      combine from June, a draft (``drafthistory``, a year) from July, and with season
+      type ``Playoffs`` / ``PlayIn`` (or ``commonplayoffseries``) a season from the
+      May its playoffs start. A month table cannot follow a lockout or pandemic calendar
+      (1998-99, 2011-12, 2020-21): pass a season then. Without one stats.nba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season
     query_key: Season
     transform: season_latest_with_data
@@ -4640,11 +4894,14 @@ endpoints:
     type: str
   - default: null
     description: 'Season label, e.g. ``2024-25``. Defaults at call time to the latest
-      season that has rows: an NBA season from the November it tips off (``2025-26``
-      until October 2026), a G League season from the January after, a Summer League
-      from its August (July 2026''s is ``2026-27``), a draft combine from June, playoff
-      series from May. stats.nba.com answers a request without a season with an empty
-      HTTP 500.'
+      season that has rows: an NBA season from the November after its late-October
+      tip-off (``2025-26`` until October 2026), a G League season from the January
+      after, a Summer League from its August (July 2026''s is ``2026-27``), a draft
+      combine from June, a draft (``drafthistory``, a year) from July, and with season
+      type ``Playoffs`` / ``PlayIn`` (or ``commonplayoffseries``) a season from the
+      May its playoffs start. A month table cannot follow a lockout or pandemic calendar
+      (1998-99, 2011-12, 2020-21): pass a season then. Without one stats.nba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season
     query_key: Season
     transform: season_latest_with_data
@@ -4752,11 +5009,14 @@ endpoints:
     type: str
   - default: null
     description: 'Season label, e.g. ``2024-25``. Defaults at call time to the latest
-      season that has rows: an NBA season from the November it tips off (``2025-26``
-      until October 2026), a G League season from the January after, a Summer League
-      from its August (July 2026''s is ``2026-27``), a draft combine from June, playoff
-      series from May. stats.nba.com answers a request without a season with an empty
-      HTTP 500.'
+      season that has rows: an NBA season from the November after its late-October
+      tip-off (``2025-26`` until October 2026), a G League season from the January
+      after, a Summer League from its August (July 2026''s is ``2026-27``), a draft
+      combine from June, a draft (``drafthistory``, a year) from July, and with season
+      type ``Playoffs`` / ``PlayIn`` (or ``commonplayoffseries``) a season from the
+      May its playoffs start. A month table cannot follow a lockout or pandemic calendar
+      (1998-99, 2011-12, 2020-21): pass a season then. Without one stats.nba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season
     query_key: Season
     transform: season_latest_with_data
@@ -4864,11 +5124,14 @@ endpoints:
     type: str
   - default: null
     description: 'Season label, e.g. ``2024-25``. Defaults at call time to the latest
-      season that has rows: an NBA season from the November it tips off (``2025-26``
-      until October 2026), a G League season from the January after, a Summer League
-      from its August (July 2026''s is ``2026-27``), a draft combine from June, playoff
-      series from May. stats.nba.com answers a request without a season with an empty
-      HTTP 500.'
+      season that has rows: an NBA season from the November after its late-October
+      tip-off (``2025-26`` until October 2026), a G League season from the January
+      after, a Summer League from its August (July 2026''s is ``2026-27``), a draft
+      combine from June, a draft (``drafthistory``, a year) from July, and with season
+      type ``Playoffs`` / ``PlayIn`` (or ``commonplayoffseries``) a season from the
+      May its playoffs start. A month table cannot follow a lockout or pandemic calendar
+      (1998-99, 2011-12, 2020-21): pass a season then. Without one stats.nba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season
     query_key: Season
     transform: season_latest_with_data
@@ -4975,11 +5238,14 @@ endpoints:
     type: str
   - default: null
     description: 'Season label, e.g. ``2024-25``. Defaults at call time to the latest
-      season that has rows: an NBA season from the November it tips off (``2025-26``
-      until October 2026), a G League season from the January after, a Summer League
-      from its August (July 2026''s is ``2026-27``), a draft combine from June, playoff
-      series from May. stats.nba.com answers a request without a season with an empty
-      HTTP 500.'
+      season that has rows: an NBA season from the November after its late-October
+      tip-off (``2025-26`` until October 2026), a G League season from the January
+      after, a Summer League from its August (July 2026''s is ``2026-27``), a draft
+      combine from June, a draft (``drafthistory``, a year) from July, and with season
+      type ``Playoffs`` / ``PlayIn`` (or ``commonplayoffseries``) a season from the
+      May its playoffs start. A month table cannot follow a lockout or pandemic calendar
+      (1998-99, 2011-12, 2020-21): pass a season then. Without one stats.nba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season
     query_key: Season
     transform: season_latest_with_data
@@ -5088,11 +5354,14 @@ endpoints:
     type: str
   - default: null
     description: 'Season label, e.g. ``2024-25``. Defaults at call time to the latest
-      season that has rows: an NBA season from the November it tips off (``2025-26``
-      until October 2026), a G League season from the January after, a Summer League
-      from its August (July 2026''s is ``2026-27``), a draft combine from June, playoff
-      series from May. stats.nba.com answers a request without a season with an empty
-      HTTP 500.'
+      season that has rows: an NBA season from the November after its late-October
+      tip-off (``2025-26`` until October 2026), a G League season from the January
+      after, a Summer League from its August (July 2026''s is ``2026-27``), a draft
+      combine from June, a draft (``drafthistory``, a year) from July, and with season
+      type ``Playoffs`` / ``PlayIn`` (or ``commonplayoffseries``) a season from the
+      May its playoffs start. A month table cannot follow a lockout or pandemic calendar
+      (1998-99, 2011-12, 2020-21): pass a season then. Without one stats.nba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season
     query_key: Season
     transform: season_latest_with_data
@@ -5199,11 +5468,14 @@ endpoints:
     type: str
   - default: null
     description: 'Season label, e.g. ``2024-25``. Defaults at call time to the latest
-      season that has rows: an NBA season from the November it tips off (``2025-26``
-      until October 2026), a G League season from the January after, a Summer League
-      from its August (July 2026''s is ``2026-27``), a draft combine from June, playoff
-      series from May. stats.nba.com answers a request without a season with an empty
-      HTTP 500.'
+      season that has rows: an NBA season from the November after its late-October
+      tip-off (``2025-26`` until October 2026), a G League season from the January
+      after, a Summer League from its August (July 2026''s is ``2026-27``), a draft
+      combine from June, a draft (``drafthistory``, a year) from July, and with season
+      type ``Playoffs`` / ``PlayIn`` (or ``commonplayoffseries``) a season from the
+      May its playoffs start. A month table cannot follow a lockout or pandemic calendar
+      (1998-99, 2011-12, 2020-21): pass a season then. Without one stats.nba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season
     query_key: Season
     transform: season_latest_with_data
@@ -5238,6 +5510,7 @@ endpoints:
       ``ByYearPlayerDashboard``)
   example_args:
     league_id: '00'
+    season: 2024-25
   extra_params:
   - default: ''
     name: date_from_nullable
@@ -5308,8 +5581,18 @@ endpoints:
     query_key: Rank
     type: str
   - default: null
+    description: 'Season label, e.g. ``2024-25``. Defaults at call time to the latest
+      season that has rows: an NBA season from the November after its late-October
+      tip-off (``2025-26`` until October 2026), a G League season from the January
+      after, a Summer League from its August (July 2026''s is ``2026-27``), a draft
+      combine from June, a draft (``drafthistory``, a year) from July, and with season
+      type ``Playoffs`` / ``PlayIn`` (or ``commonplayoffseries``) a season from the
+      May its playoffs start. A month table cannot follow a lockout or pandemic calendar
+      (1998-99, 2011-12, 2020-21): pass a season then. Without one stats.nba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season
     query_key: Season
+    transform: season_latest_with_data
     type: str
   - default: ''
     name: season_segment_nullable
@@ -5384,11 +5667,14 @@ endpoints:
     type: str
   - default: null
     description: 'Season label, e.g. ``2024-25``. Defaults at call time to the latest
-      season that has rows: an NBA season from the November it tips off (``2025-26``
-      until October 2026), a G League season from the January after, a Summer League
-      from its August (July 2026''s is ``2026-27``), a draft combine from June, playoff
-      series from May. stats.nba.com answers a request without a season with an empty
-      HTTP 500.'
+      season that has rows: an NBA season from the November after its late-October
+      tip-off (``2025-26`` until October 2026), a G League season from the January
+      after, a Summer League from its August (July 2026''s is ``2026-27``), a draft
+      combine from June, a draft (``drafthistory``, a year) from July, and with season
+      type ``Playoffs`` / ``PlayIn`` (or ``commonplayoffseries``) a season from the
+      May its playoffs start. A month table cannot follow a lockout or pandemic calendar
+      (1998-99, 2011-12, 2020-21): pass a season then. Without one stats.nba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season
     query_key: Season
     transform: season_latest_with_data
@@ -5424,6 +5710,7 @@ endpoints:
       ``RebDistanceRebounding``)
   example_args:
     league_id: '00'
+    season: 2024-25
   extra_params:
   - default: ''
     name: date_from_nullable
@@ -5474,8 +5761,18 @@ endpoints:
     query_key: PlayerID
     type: str
   - default: null
+    description: 'Season label, e.g. ``2024-25``. Defaults at call time to the latest
+      season that has rows: an NBA season from the November after its late-October
+      tip-off (``2025-26`` until October 2026), a G League season from the January
+      after, a Summer League from its August (July 2026''s is ``2026-27``), a draft
+      combine from June, a draft (``drafthistory``, a year) from July, and with season
+      type ``Playoffs`` / ``PlayIn`` (or ``commonplayoffseries``) a season from the
+      May its playoffs start. A month table cannot follow a lockout or pandemic calendar
+      (1998-99, 2011-12, 2020-21): pass a season then. Without one stats.nba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season
     query_key: Season
+    transform: season_latest_with_data
     type: str
   - default: ''
     name: season_segment_nullable
@@ -5556,11 +5853,14 @@ endpoints:
     type: str
   - default: null
     description: 'Season label, e.g. ``2024-25``. Defaults at call time to the latest
-      season that has rows: an NBA season from the November it tips off (``2025-26``
-      until October 2026), a G League season from the January after, a Summer League
-      from its August (July 2026''s is ``2026-27``), a draft combine from June, playoff
-      series from May. stats.nba.com answers a request without a season with an empty
-      HTTP 500.'
+      season that has rows: an NBA season from the November after its late-October
+      tip-off (``2025-26`` until October 2026), a G League season from the January
+      after, a Summer League from its August (July 2026''s is ``2026-27``), a draft
+      combine from June, a draft (``drafthistory``, a year) from July, and with season
+      type ``Playoffs`` / ``PlayIn`` (or ``commonplayoffseries``) a season from the
+      May its playoffs start. A month table cannot follow a lockout or pandemic calendar
+      (1998-99, 2011-12, 2020-21): pass a season then. Without one stats.nba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season
     query_key: Season
     transform: season_latest_with_data
@@ -5596,6 +5896,7 @@ endpoints:
       ``TouchTimeShooting``)
   example_args:
     league_id: '00'
+    season: 2024-25
   extra_params:
   - default: ''
     name: date_from_nullable
@@ -5646,8 +5947,18 @@ endpoints:
     query_key: PlayerID
     type: str
   - default: null
+    description: 'Season label, e.g. ``2024-25``. Defaults at call time to the latest
+      season that has rows: an NBA season from the November after its late-October
+      tip-off (``2025-26`` until October 2026), a G League season from the January
+      after, a Summer League from its August (July 2026''s is ``2026-27``), a draft
+      combine from June, a draft (``drafthistory``, a year) from July, and with season
+      type ``Playoffs`` / ``PlayIn`` (or ``commonplayoffseries``) a season from the
+      May its playoffs start. A month table cannot follow a lockout or pandemic calendar
+      (1998-99, 2011-12, 2020-21): pass a season then. Without one stats.nba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season
     query_key: Season
+    transform: season_latest_with_data
     type: str
   - default: ''
     name: season_segment_nullable
@@ -5657,7 +5968,7 @@ endpoints:
     name: season_type_all_star
     query_key: SeasonType
     type: str
-  - default: '0'
+  - default: '1610612747'
     name: team_id
     query_key: TeamID
     type: str
@@ -5676,14 +5987,25 @@ endpoints:
   summary: GET /stats/playerdashptshots
 - example_args:
     league_id: '00'
+    season: 2024-25
   extra_params:
   - default: '00'
     name: league_id
     query_key: LeagueID
     type: str
   - default: null
+    description: 'Season label, e.g. ``2024-25``. Defaults at call time to the latest
+      season that has rows: an NBA season from the November after its late-October
+      tip-off (``2025-26`` until October 2026), a G League season from the January
+      after, a Summer League from its August (July 2026''s is ``2026-27``), a draft
+      combine from June, a draft (``drafthistory``, a year) from July, and with season
+      type ``Playoffs`` / ``PlayIn`` (or ``commonplayoffseries``) a season from the
+      May its playoffs start. A month table cannot follow a lockout or pandemic calendar
+      (1998-99, 2011-12, 2020-21): pass a season then. Without one stats.nba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season
     query_key: Season
+    transform: season_latest_with_data
     type: str
   - default: Regular Season
     name: season_type
@@ -5699,6 +6021,7 @@ endpoints:
       ``LastNGames``, ``DaysRestModified``, ``Opponent``)
   example_args:
     league_id: '00'
+    season: 2024-25
   extra_params:
   - default: '00'
     name: league_id
@@ -5729,8 +6052,18 @@ endpoints:
     query_key: Rank
     type: str
   - default: null
+    description: 'Season label, e.g. ``2024-25``. Defaults at call time to the latest
+      season that has rows: an NBA season from the November after its late-October
+      tip-off (``2025-26`` until October 2026), a G League season from the January
+      after, a Summer League from its August (July 2026''s is ``2026-27``), a draft
+      combine from June, a draft (``drafthistory``, a year) from July, and with season
+      type ``Playoffs`` / ``PlayIn`` (or ``commonplayoffseries``) a season from the
+      May its playoffs start. A month table cannot follow a lockout or pandemic calendar
+      (1998-99, 2011-12, 2020-21): pass a season then. Without one stats.nba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season
     query_key: Season
+    transform: season_latest_with_data
     type: str
   - default: Regular Season
     name: season_type
@@ -5757,11 +6090,14 @@ endpoints:
     type: str
   - default: null
     description: 'Season label, e.g. ``2024-25``. Defaults at call time to the latest
-      season that has rows: an NBA season from the November it tips off (``2025-26``
-      until October 2026), a G League season from the January after, a Summer League
-      from its August (July 2026''s is ``2026-27``), a draft combine from June, playoff
-      series from May. stats.nba.com answers a request without a season with an empty
-      HTTP 500.'
+      season that has rows: an NBA season from the November after its late-October
+      tip-off (``2025-26`` until October 2026), a G League season from the January
+      after, a Summer League from its August (July 2026''s is ``2026-27``), a draft
+      combine from June, a draft (``drafthistory``, a year) from July, and with season
+      type ``Playoffs`` / ``PlayIn`` (or ``commonplayoffseries``) a season from the
+      May its playoffs start. A month table cannot follow a lockout or pandemic calendar
+      (1998-99, 2011-12, 2020-21): pass a season then. Without one stats.nba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season
     query_key: Season
     transform: season_latest_with_data
@@ -5797,11 +6133,14 @@ endpoints:
     type: str
   - default: null
     description: 'Season label, e.g. ``2024-25``. Defaults at call time to the latest
-      season that has rows: an NBA season from the November it tips off (``2025-26``
-      until October 2026), a G League season from the January after, a Summer League
-      from its August (July 2026''s is ``2026-27``), a draft combine from June, playoff
-      series from May. stats.nba.com answers a request without a season with an empty
-      HTTP 500.'
+      season that has rows: an NBA season from the November after its late-October
+      tip-off (``2025-26`` until October 2026), a G League season from the January
+      after, a Summer League from its August (July 2026''s is ``2026-27``), a draft
+      combine from June, a draft (``drafthistory``, a year) from July, and with season
+      type ``Playoffs`` / ``PlayIn`` (or ``commonplayoffseries``) a season from the
+      May its playoffs start. A month table cannot follow a lockout or pandemic calendar
+      (1998-99, 2011-12, 2020-21): pass a season then. Without one stats.nba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season
     query_key: Season
     transform: season_latest_with_data
@@ -5877,11 +6216,14 @@ endpoints:
     type: str
   - default: null
     description: 'Season label, e.g. ``2024-25``. Defaults at call time to the latest
-      season that has rows: an NBA season from the November it tips off (``2025-26``
-      until October 2026), a G League season from the January after, a Summer League
-      from its August (July 2026''s is ``2026-27``), a draft combine from June, playoff
-      series from May. stats.nba.com answers a request without a season with an empty
-      HTTP 500.'
+      season that has rows: an NBA season from the November after its late-October
+      tip-off (``2025-26`` until October 2026), a G League season from the January
+      after, a Summer League from its August (July 2026''s is ``2026-27``), a draft
+      combine from June, a draft (``drafthistory``, a year) from July, and with season
+      type ``Playoffs`` / ``PlayIn`` (or ``commonplayoffseries``) a season from the
+      May its playoffs start. A month table cannot follow a lockout or pandemic calendar
+      (1998-99, 2011-12, 2020-21): pass a season then. Without one stats.nba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season_nullable
     query_key: Season
     transform: season_latest_with_data
@@ -5917,6 +6259,7 @@ endpoints:
   summary: GET /stats/playergamelogs
 - example_args:
     league_id: '00'
+    season_nullable: 2024-25
   extra_params:
   - default: ''
     name: active_streaks_only_nullable
@@ -6239,8 +6582,18 @@ endpoints:
     query_key: RookieYear
     type: str
   - default: null
+    description: 'Season label, e.g. ``2024-25``. Defaults at call time to the latest
+      season that has rows: an NBA season from the November after its late-October
+      tip-off (``2025-26`` until October 2026), a G League season from the January
+      after, a Summer League from its August (July 2026''s is ``2026-27``), a draft
+      combine from June, a draft (``drafthistory``, a year) from July, and with season
+      type ``Playoffs`` / ``PlayIn`` (or ``commonplayoffseries``) a season from the
+      May its playoffs start. A month table cannot follow a lockout or pandemic calendar
+      (1998-99, 2011-12, 2020-21): pass a season then. Without one stats.nba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season_nullable
     query_key: Season
+    transform: season_latest_with_data
     type: str
   - default: ''
     name: season_segment_nullable
@@ -6325,11 +6678,14 @@ endpoints:
     type: str
   - default: null
     description: 'Season label, e.g. ``2024-25``. Defaults at call time to the latest
-      season that has rows: an NBA season from the November it tips off (``2025-26``
-      until October 2026), a G League season from the January after, a Summer League
-      from its August (July 2026''s is ``2026-27``), a draft combine from June, playoff
-      series from May. stats.nba.com answers a request without a season with an empty
-      HTTP 500.'
+      season that has rows: an NBA season from the November after its late-October
+      tip-off (``2025-26`` until October 2026), a G League season from the January
+      after, a Summer League from its August (July 2026''s is ``2026-27``), a draft
+      combine from June, a draft (``drafthistory``, a year) from July, and with season
+      type ``Playoffs`` / ``PlayIn`` (or ``commonplayoffseries``) a season from the
+      May its playoffs start. A month table cannot follow a lockout or pandemic calendar
+      (1998-99, 2011-12, 2020-21): pass a season then. Without one stats.nba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season
     query_key: Season
     transform: season_latest_with_data
@@ -6449,11 +6805,14 @@ endpoints:
     type: str
   - default: null
     description: 'Season label, e.g. ``2024-25``. Defaults at call time to the latest
-      season that has rows: an NBA season from the November it tips off (``2025-26``
-      until October 2026), a G League season from the January after, a Summer League
-      from its August (July 2026''s is ``2026-27``), a draft combine from June, playoff
-      series from May. stats.nba.com answers a request without a season with an empty
-      HTTP 500.'
+      season that has rows: an NBA season from the November after its late-October
+      tip-off (``2025-26`` until October 2026), a G League season from the January
+      after, a Summer League from its August (July 2026''s is ``2026-27``), a draft
+      combine from June, a draft (``drafthistory``, a year) from July, and with season
+      type ``Playoffs`` / ``PlayIn`` (or ``commonplayoffseries``) a season from the
+      May its playoffs start. A month table cannot follow a lockout or pandemic calendar
+      (1998-99, 2011-12, 2020-21): pass a season then. Without one stats.nba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season
     query_key: Season
     transform: season_latest_with_data
@@ -6505,14 +6864,25 @@ endpoints:
   summary: GET /stats/playoffpicture
 - example_args:
     league_id: '00'
+    season: 2024-25
   extra_params:
   - default: '00'
     name: league_id
     query_key: LeagueID
     type: str
   - default: null
+    description: 'Season label, e.g. ``2024-25``. Defaults at call time to the latest
+      season that has rows: an NBA season from the November after its late-October
+      tip-off (``2025-26`` until October 2026), a G League season from the January
+      after, a Summer League from its August (July 2026''s is ``2026-27``), a draft
+      combine from June, a draft (``drafthistory``, a year) from July, and with season
+      type ``Playoffs`` / ``PlayIn`` (or ``commonplayoffseries``) a season from the
+      May its playoffs start. A month table cannot follow a lockout or pandemic calendar
+      (1998-99, 2011-12, 2020-21): pass a season then. Without one stats.nba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season
     query_key: Season
+    transform: season_latest_with_data
     type: str
   parser: parse_nba_stats_result_sets
   path: /stats/scheduleleaguev2
@@ -6521,14 +6891,25 @@ endpoints:
   summary: GET /stats/scheduleleaguev2
 - example_args:
     league_id: '00'
+    season: 2024-25
   extra_params:
   - default: '00'
     name: league_id
     query_key: LeagueID
     type: str
   - default: null
+    description: 'Season label, e.g. ``2024-25``. Defaults at call time to the latest
+      season that has rows: an NBA season from the November after its late-October
+      tip-off (``2025-26`` until October 2026), a G League season from the January
+      after, a Summer League from its August (July 2026''s is ``2026-27``), a draft
+      combine from June, a draft (``drafthistory``, a year) from July, and with season
+      type ``Playoffs`` / ``PlayIn`` (or ``commonplayoffseries``) a season from the
+      May its playoffs start. A month table cannot follow a lockout or pandemic calendar
+      (1998-99, 2011-12, 2020-21): pass a season then. Without one stats.nba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season
     query_key: Season
+    transform: season_latest_with_data
     type: str
   parser: parse_nba_stats_result_sets
   path: /stats/scheduleleaguev2int
@@ -6580,6 +6961,7 @@ endpoints:
       ``LeagueAverages``)
   example_args:
     league_id: '00'
+    season_nullable: 2024-25
   extra_params:
   - default: null
     name: ahead_behind_nullable
@@ -6674,8 +7056,18 @@ endpoints:
     query_key: RookieYear
     type: str
   - default: null
+    description: 'Season label, e.g. ``2024-25``. Defaults at call time to the latest
+      season that has rows: an NBA season from the November after its late-October
+      tip-off (``2025-26`` until October 2026), a G League season from the January
+      after, a Summer League from its August (July 2026''s is ``2026-27``), a draft
+      combine from June, a draft (``drafthistory``, a year) from July, and with season
+      type ``Playoffs`` / ``PlayIn`` (or ``commonplayoffseries``) a season from the
+      May its playoffs start. A month table cannot follow a lockout or pandemic calendar
+      (1998-99, 2011-12, 2020-21): pass a season then. Without one stats.nba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season_nullable
     query_key: Season
+    transform: season_latest_with_data
     type: str
   - default: ''
     name: season_segment_nullable
@@ -6720,11 +7112,14 @@ endpoints:
     type: str
   - default: null
     description: 'Season label, e.g. ``2024-25``. Defaults at call time to the latest
-      season that has rows: an NBA season from the November it tips off (``2025-26``
-      until October 2026), a G League season from the January after, a Summer League
-      from its August (July 2026''s is ``2026-27``), a draft combine from June, playoff
-      series from May. stats.nba.com answers a request without a season with an empty
-      HTTP 500.'
+      season that has rows: an NBA season from the November after its late-October
+      tip-off (``2025-26`` until October 2026), a G League season from the January
+      after, a Summer League from its August (July 2026''s is ``2026-27``), a draft
+      combine from June, a draft (``drafthistory``, a year) from July, and with season
+      type ``Playoffs`` / ``PlayIn`` (or ``commonplayoffseries``) a season from the
+      May its playoffs start. A month table cannot follow a lockout or pandemic calendar
+      (1998-99, 2011-12, 2020-21): pass a season then. Without one stats.nba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season
     query_key: Season
     transform: season_latest_with_data
@@ -6739,6 +7134,7 @@ endpoints:
       ``ShotChartLineupLeagueAverage``)
   example_args:
     league_id: '00'
+    season: 2024-25
   extra_params:
   - default: ''
     name: context_filter_nullable
@@ -6797,8 +7193,18 @@ endpoints:
     query_key: Period
     type: str
   - default: null
+    description: 'Season label, e.g. ``2024-25``. Defaults at call time to the latest
+      season that has rows: an NBA season from the November after its late-October
+      tip-off (``2025-26`` until October 2026), a G League season from the January
+      after, a Summer League from its August (July 2026''s is ``2026-27``), a draft
+      combine from June, a draft (``drafthistory``, a year) from July, and with season
+      type ``Playoffs`` / ``PlayIn`` (or ``commonplayoffseries``) a season from the
+      May its playoffs start. A month table cannot follow a lockout or pandemic calendar
+      (1998-99, 2011-12, 2020-21): pass a season then. Without one stats.nba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season
     query_key: Season
+    transform: season_latest_with_data
     type: str
   - default: ''
     name: season_segment_nullable
@@ -6851,11 +7257,14 @@ endpoints:
     type: str
   - default: null
     description: 'Season label, e.g. ``2024-25``. Defaults at call time to the latest
-      season that has rows: an NBA season from the November it tips off (``2025-26``
-      until October 2026), a G League season from the January after, a Summer League
-      from its August (July 2026''s is ``2026-27``), a draft combine from June, playoff
-      series from May. stats.nba.com answers a request without a season with an empty
-      HTTP 500.'
+      season that has rows: an NBA season from the November after its late-October
+      tip-off (``2025-26`` until October 2026), a G League season from the January
+      after, a Summer League from its August (July 2026''s is ``2026-27``), a draft
+      combine from June, a draft (``drafthistory``, a year) from July, and with season
+      type ``Playoffs`` / ``PlayIn`` (or ``commonplayoffseries``) a season from the
+      May its playoffs start. A month table cannot follow a lockout or pandemic calendar
+      (1998-99, 2011-12, 2020-21): pass a season then. Without one stats.nba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season
     query_key: SeasonYear
     transform: season_latest_with_data
@@ -6945,11 +7354,14 @@ endpoints:
     type: str
   - default: null
     description: 'Season label, e.g. ``2024-25``. Defaults at call time to the latest
-      season that has rows: an NBA season from the November it tips off (``2025-26``
-      until October 2026), a G League season from the January after, a Summer League
-      from its August (July 2026''s is ``2026-27``), a draft combine from June, playoff
-      series from May. stats.nba.com answers a request without a season with an empty
-      HTTP 500.'
+      season that has rows: an NBA season from the November after its late-October
+      tip-off (``2025-26`` until October 2026), a G League season from the January
+      after, a Summer League from its August (July 2026''s is ``2026-27``), a draft
+      combine from June, a draft (``drafthistory``, a year) from July, and with season
+      type ``Playoffs`` / ``PlayIn`` (or ``commonplayoffseries``) a season from the
+      May its playoffs start. A month table cannot follow a lockout or pandemic calendar
+      (1998-99, 2011-12, 2020-21): pass a season then. Without one stats.nba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season
     query_key: Season
     transform: season_latest_with_data
@@ -7057,11 +7469,14 @@ endpoints:
     type: str
   - default: null
     description: 'Season label, e.g. ``2024-25``. Defaults at call time to the latest
-      season that has rows: an NBA season from the November it tips off (``2025-26``
-      until October 2026), a G League season from the January after, a Summer League
-      from its August (July 2026''s is ``2026-27``), a draft combine from June, playoff
-      series from May. stats.nba.com answers a request without a season with an empty
-      HTTP 500.'
+      season that has rows: an NBA season from the November after its late-October
+      tip-off (``2025-26`` until October 2026), a G League season from the January
+      after, a Summer League from its August (July 2026''s is ``2026-27``), a draft
+      combine from June, a draft (``drafthistory``, a year) from July, and with season
+      type ``Playoffs`` / ``PlayIn`` (or ``commonplayoffseries``) a season from the
+      May its playoffs start. A month table cannot follow a lockout or pandemic calendar
+      (1998-99, 2011-12, 2020-21): pass a season then. Without one stats.nba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season
     query_key: Season
     transform: season_latest_with_data
@@ -7169,11 +7584,14 @@ endpoints:
     type: str
   - default: null
     description: 'Season label, e.g. ``2024-25``. Defaults at call time to the latest
-      season that has rows: an NBA season from the November it tips off (``2025-26``
-      until October 2026), a G League season from the January after, a Summer League
-      from its August (July 2026''s is ``2026-27``), a draft combine from June, playoff
-      series from May. stats.nba.com answers a request without a season with an empty
-      HTTP 500.'
+      season that has rows: an NBA season from the November after its late-October
+      tip-off (``2025-26`` until October 2026), a G League season from the January
+      after, a Summer League from its August (July 2026''s is ``2026-27``), a draft
+      combine from June, a draft (``drafthistory``, a year) from July, and with season
+      type ``Playoffs`` / ``PlayIn`` (or ``commonplayoffseries``) a season from the
+      May its playoffs start. A month table cannot follow a lockout or pandemic calendar
+      (1998-99, 2011-12, 2020-21): pass a season then. Without one stats.nba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season
     query_key: Season
     transform: season_latest_with_data
@@ -7281,11 +7699,14 @@ endpoints:
     type: str
   - default: null
     description: 'Season label, e.g. ``2024-25``. Defaults at call time to the latest
-      season that has rows: an NBA season from the November it tips off (``2025-26``
-      until October 2026), a G League season from the January after, a Summer League
-      from its August (July 2026''s is ``2026-27``), a draft combine from June, playoff
-      series from May. stats.nba.com answers a request without a season with an empty
-      HTTP 500.'
+      season that has rows: an NBA season from the November after its late-October
+      tip-off (``2025-26`` until October 2026), a G League season from the January
+      after, a Summer League from its August (July 2026''s is ``2026-27``), a draft
+      combine from June, a draft (``drafthistory``, a year) from July, and with season
+      type ``Playoffs`` / ``PlayIn`` (or ``commonplayoffseries``) a season from the
+      May its playoffs start. A month table cannot follow a lockout or pandemic calendar
+      (1998-99, 2011-12, 2020-21): pass a season then. Without one stats.nba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season
     query_key: Season
     transform: season_latest_with_data
@@ -7392,11 +7813,14 @@ endpoints:
     type: str
   - default: null
     description: 'Season label, e.g. ``2024-25``. Defaults at call time to the latest
-      season that has rows: an NBA season from the November it tips off (``2025-26``
-      until October 2026), a G League season from the January after, a Summer League
-      from its August (July 2026''s is ``2026-27``), a draft combine from June, playoff
-      series from May. stats.nba.com answers a request without a season with an empty
-      HTTP 500.'
+      season that has rows: an NBA season from the November after its late-October
+      tip-off (``2025-26`` until October 2026), a G League season from the January
+      after, a Summer League from its August (July 2026''s is ``2026-27``), a draft
+      combine from June, a draft (``drafthistory``, a year) from July, and with season
+      type ``Playoffs`` / ``PlayIn`` (or ``commonplayoffseries``) a season from the
+      May its playoffs start. A month table cannot follow a lockout or pandemic calendar
+      (1998-99, 2011-12, 2020-21): pass a season then. Without one stats.nba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season
     query_key: Season
     transform: season_latest_with_data
@@ -7504,11 +7928,14 @@ endpoints:
     type: str
   - default: null
     description: 'Season label, e.g. ``2024-25``. Defaults at call time to the latest
-      season that has rows: an NBA season from the November it tips off (``2025-26``
-      until October 2026), a G League season from the January after, a Summer League
-      from its August (July 2026''s is ``2026-27``), a draft combine from June, playoff
-      series from May. stats.nba.com answers a request without a season with an empty
-      HTTP 500.'
+      season that has rows: an NBA season from the November after its late-October
+      tip-off (``2025-26`` until October 2026), a G League season from the January
+      after, a Summer League from its August (July 2026''s is ``2026-27``), a draft
+      combine from June, a draft (``drafthistory``, a year) from July, and with season
+      type ``Playoffs`` / ``PlayIn`` (or ``commonplayoffseries``) a season from the
+      May its playoffs start. A month table cannot follow a lockout or pandemic calendar
+      (1998-99, 2011-12, 2020-21): pass a season then. Without one stats.nba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season
     query_key: Season
     transform: season_latest_with_data
@@ -7615,11 +8042,14 @@ endpoints:
     type: str
   - default: null
     description: 'Season label, e.g. ``2024-25``. Defaults at call time to the latest
-      season that has rows: an NBA season from the November it tips off (``2025-26``
-      until October 2026), a G League season from the January after, a Summer League
-      from its August (July 2026''s is ``2026-27``), a draft combine from June, playoff
-      series from May. stats.nba.com answers a request without a season with an empty
-      HTTP 500.'
+      season that has rows: an NBA season from the November after its late-October
+      tip-off (``2025-26`` until October 2026), a G League season from the January
+      after, a Summer League from its August (July 2026''s is ``2026-27``), a draft
+      combine from June, a draft (``drafthistory``, a year) from July, and with season
+      type ``Playoffs`` / ``PlayIn`` (or ``commonplayoffseries``) a season from the
+      May its playoffs start. A month table cannot follow a lockout or pandemic calendar
+      (1998-99, 2011-12, 2020-21): pass a season then. Without one stats.nba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season
     query_key: Season
     transform: season_latest_with_data
@@ -7658,6 +8088,7 @@ endpoints:
       ``ByYearTeamDashboard``)
   example_args:
     league_id: '00'
+    season: 2024-25
   extra_params:
   - default: ''
     name: date_from
@@ -7724,8 +8155,18 @@ endpoints:
     query_key: Rank
     type: str
   - default: null
+    description: 'Season label, e.g. ``2024-25``. Defaults at call time to the latest
+      season that has rows: an NBA season from the November after its late-October
+      tip-off (``2025-26`` until October 2026), a G League season from the January
+      after, a Summer League from its August (July 2026''s is ``2026-27``), a draft
+      combine from June, a draft (``drafthistory``, a year) from July, and with season
+      type ``Playoffs`` / ``PlayIn`` (or ``commonplayoffseries``) a season from the
+      May its playoffs start. A month table cannot follow a lockout or pandemic calendar
+      (1998-99, 2011-12, 2020-21): pass a season then. Without one stats.nba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season
     query_key: Season
+    transform: season_latest_with_data
     type: str
   - default: ''
     name: season_segment
@@ -7836,11 +8277,14 @@ endpoints:
     type: str
   - default: null
     description: 'Season label, e.g. ``2024-25``. Defaults at call time to the latest
-      season that has rows: an NBA season from the November it tips off (``2025-26``
-      until October 2026), a G League season from the January after, a Summer League
-      from its August (July 2026''s is ``2026-27``), a draft combine from June, playoff
-      series from May. stats.nba.com answers a request without a season with an empty
-      HTTP 500.'
+      season that has rows: an NBA season from the November after its late-October
+      tip-off (``2025-26`` until October 2026), a G League season from the January
+      after, a Summer League from its August (July 2026''s is ``2026-27``), a draft
+      combine from June, a draft (``drafthistory``, a year) from July, and with season
+      type ``Playoffs`` / ``PlayIn`` (or ``commonplayoffseries``) a season from the
+      May its playoffs start. A month table cannot follow a lockout or pandemic calendar
+      (1998-99, 2011-12, 2020-21): pass a season then. Without one stats.nba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season
     query_key: Season
     transform: season_latest_with_data
@@ -7918,11 +8362,14 @@ endpoints:
     type: str
   - default: null
     description: 'Season label, e.g. ``2024-25``. Defaults at call time to the latest
-      season that has rows: an NBA season from the November it tips off (``2025-26``
-      until October 2026), a G League season from the January after, a Summer League
-      from its August (July 2026''s is ``2026-27``), a draft combine from June, playoff
-      series from May. stats.nba.com answers a request without a season with an empty
-      HTTP 500.'
+      season that has rows: an NBA season from the November after its late-October
+      tip-off (``2025-26`` until October 2026), a G League season from the January
+      after, a Summer League from its August (July 2026''s is ``2026-27``), a draft
+      combine from June, a draft (``drafthistory``, a year) from July, and with season
+      type ``Playoffs`` / ``PlayIn`` (or ``commonplayoffseries``) a season from the
+      May its playoffs start. A month table cannot follow a lockout or pandemic calendar
+      (1998-99, 2011-12, 2020-21): pass a season then. Without one stats.nba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season
     query_key: Season
     transform: season_latest_with_data
@@ -7958,6 +8405,7 @@ endpoints:
       ``RebDistanceRebounding``)
   example_args:
     league_id: '00'
+    season: 2024-25
   extra_params:
   - default: ''
     name: date_from_nullable
@@ -8004,8 +8452,18 @@ endpoints:
     query_key: Period
     type: str
   - default: null
+    description: 'Season label, e.g. ``2024-25``. Defaults at call time to the latest
+      season that has rows: an NBA season from the November after its late-October
+      tip-off (``2025-26`` until October 2026), a G League season from the January
+      after, a Summer League from its August (July 2026''s is ``2026-27``), a draft
+      combine from June, a draft (``drafthistory``, a year) from July, and with season
+      type ``Playoffs`` / ``PlayIn`` (or ``commonplayoffseries``) a season from the
+      May its playoffs start. A month table cannot follow a lockout or pandemic calendar
+      (1998-99, 2011-12, 2020-21): pass a season then. Without one stats.nba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season
     query_key: Season
+    transform: season_latest_with_data
     type: str
   - default: ''
     name: season_segment_nullable
@@ -8086,11 +8544,14 @@ endpoints:
     type: str
   - default: null
     description: 'Season label, e.g. ``2024-25``. Defaults at call time to the latest
-      season that has rows: an NBA season from the November it tips off (``2025-26``
-      until October 2026), a G League season from the January after, a Summer League
-      from its August (July 2026''s is ``2026-27``), a draft combine from June, playoff
-      series from May. stats.nba.com answers a request without a season with an empty
-      HTTP 500.'
+      season that has rows: an NBA season from the November after its late-October
+      tip-off (``2025-26`` until October 2026), a G League season from the January
+      after, a Summer League from its August (July 2026''s is ``2026-27``), a draft
+      combine from June, a draft (``drafthistory``, a year) from July, and with season
+      type ``Playoffs`` / ``PlayIn`` (or ``commonplayoffseries``) a season from the
+      May its playoffs start. A month table cannot follow a lockout or pandemic calendar
+      (1998-99, 2011-12, 2020-21): pass a season then. Without one stats.nba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season
     query_key: Season
     transform: season_latest_with_data
@@ -8137,14 +8598,25 @@ endpoints:
   summary: GET /stats/teamdetails
 - example_args:
     league_id: '00'
+    season: 2024-25
   extra_params:
   - default: '00'
     name: league_id
     query_key: LeagueID
     type: str
   - default: null
+    description: 'Season label, e.g. ``2024-25``. Defaults at call time to the latest
+      season that has rows: an NBA season from the November after its late-October
+      tip-off (``2025-26`` until October 2026), a G League season from the January
+      after, a Summer League from its August (July 2026''s is ``2026-27``), a draft
+      combine from June, a draft (``drafthistory``, a year) from July, and with season
+      type ``Playoffs`` / ``PlayIn`` (or ``commonplayoffseries``) a season from the
+      May its playoffs start. A month table cannot follow a lockout or pandemic calendar
+      (1998-99, 2011-12, 2020-21): pass a season then. Without one stats.nba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season
     query_key: Season
+    transform: season_latest_with_data
     type: str
   - default: Regular Season
     name: season_type
@@ -8173,11 +8645,14 @@ endpoints:
     type: str
   - default: null
     description: 'Season label, e.g. ``2024-25``. Defaults at call time to the latest
-      season that has rows: an NBA season from the November it tips off (``2025-26``
-      until October 2026), a G League season from the January after, a Summer League
-      from its August (July 2026''s is ``2026-27``), a draft combine from June, playoff
-      series from May. stats.nba.com answers a request without a season with an empty
-      HTTP 500.'
+      season that has rows: an NBA season from the November after its late-October
+      tip-off (``2025-26`` until October 2026), a G League season from the January
+      after, a Summer League from its August (July 2026''s is ``2026-27``), a draft
+      combine from June, a draft (``drafthistory``, a year) from July, and with season
+      type ``Playoffs`` / ``PlayIn`` (or ``commonplayoffseries``) a season from the
+      May its playoffs start. A month table cannot follow a lockout or pandemic calendar
+      (1998-99, 2011-12, 2020-21): pass a season then. Without one stats.nba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season
     query_key: Season
     transform: season_latest_with_data
@@ -8257,11 +8732,14 @@ endpoints:
     type: str
   - default: null
     description: 'Season label, e.g. ``2024-25``. Defaults at call time to the latest
-      season that has rows: an NBA season from the November it tips off (``2025-26``
-      until October 2026), a G League season from the January after, a Summer League
-      from its August (July 2026''s is ``2026-27``), a draft combine from June, playoff
-      series from May. stats.nba.com answers a request without a season with an empty
-      HTTP 500.'
+      season that has rows: an NBA season from the November after its late-October
+      tip-off (``2025-26`` until October 2026), a G League season from the January
+      after, a Summer League from its August (July 2026''s is ``2026-27``), a draft
+      combine from June, a draft (``drafthistory``, a year) from July, and with season
+      type ``Playoffs`` / ``PlayIn`` (or ``commonplayoffseries``) a season from the
+      May its playoffs start. A month table cannot follow a lockout or pandemic calendar
+      (1998-99, 2011-12, 2020-21): pass a season then. Without one stats.nba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season_nullable
     query_key: Season
     transform: season_latest_with_data
@@ -8300,14 +8778,25 @@ endpoints:
       ``TeamSeasonRanks``, ``AvailableSeasons``)
   example_args:
     league_id: '00'
+    season_nullable: 2024-25
   extra_params:
   - default: '00'
     name: league_id
     query_key: LeagueID
     type: str
   - default: null
+    description: 'Season label, e.g. ``2024-25``. Defaults at call time to the latest
+      season that has rows: an NBA season from the November after its late-October
+      tip-off (``2025-26`` until October 2026), a G League season from the January
+      after, a Summer League from its August (July 2026''s is ``2026-27``), a draft
+      combine from June, a draft (``drafthistory``, a year) from July, and with season
+      type ``Playoffs`` / ``PlayIn`` (or ``commonplayoffseries``) a season from the
+      May its playoffs start. A month table cannot follow a lockout or pandemic calendar
+      (1998-99, 2011-12, 2020-21): pass a season then. Without one stats.nba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season_nullable
     query_key: Season
+    transform: season_latest_with_data
     type: str
   - default: Regular Season
     name: season_type_nullable
@@ -8326,6 +8815,7 @@ endpoints:
     parsed_doc: A dict of DataFrames keyed by result-set name (``TeamOverall``, ``PlayersSeasonTotals``)
   example_args:
     league_id: '00'
+    season: 2024-25
   extra_params:
   - default: ''
     name: date_from_nullable
@@ -8392,8 +8882,18 @@ endpoints:
     query_key: Rank
     type: str
   - default: null
+    description: 'Season label, e.g. ``2024-25``. Defaults at call time to the latest
+      season that has rows: an NBA season from the November after its late-October
+      tip-off (``2025-26`` until October 2026), a G League season from the January
+      after, a Summer League from its August (July 2026''s is ``2026-27``), a draft
+      combine from June, a draft (``drafthistory``, a year) from July, and with season
+      type ``Playoffs`` / ``PlayIn`` (or ``commonplayoffseries``) a season from the
+      May its playoffs start. A month table cannot follow a lockout or pandemic calendar
+      (1998-99, 2011-12, 2020-21): pass a season then. Without one stats.nba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season
     query_key: Season
+    transform: season_latest_with_data
     type: str
   - default: ''
     name: season_segment_nullable
@@ -8493,11 +8993,14 @@ endpoints:
     type: str
   - default: null
     description: 'Season label, e.g. ``2024-25``. Defaults at call time to the latest
-      season that has rows: an NBA season from the November it tips off (``2025-26``
-      until October 2026), a G League season from the January after, a Summer League
-      from its August (July 2026''s is ``2026-27``), a draft combine from June, playoff
-      series from May. stats.nba.com answers a request without a season with an empty
-      HTTP 500.'
+      season that has rows: an NBA season from the November after its late-October
+      tip-off (``2025-26`` until October 2026), a G League season from the January
+      after, a Summer League from its August (July 2026''s is ``2026-27``), a draft
+      combine from June, a draft (``drafthistory``, a year) from July, and with season
+      type ``Playoffs`` / ``PlayIn`` (or ``commonplayoffseries``) a season from the
+      May its playoffs start. A month table cannot follow a lockout or pandemic calendar
+      (1998-99, 2011-12, 2020-21): pass a season then. Without one stats.nba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season
     query_key: Season
     transform: season_latest_with_data
@@ -8596,11 +9099,14 @@ endpoints:
     type: str
   - default: null
     description: 'Season label, e.g. ``2024-25``. Defaults at call time to the latest
-      season that has rows: an NBA season from the November it tips off (``2025-26``
-      until October 2026), a G League season from the January after, a Summer League
-      from its August (July 2026''s is ``2026-27``), a draft combine from June, playoff
-      series from May. stats.nba.com answers a request without a season with an empty
-      HTTP 500.'
+      season that has rows: an NBA season from the November after its late-October
+      tip-off (``2025-26`` until October 2026), a G League season from the January
+      after, a Summer League from its August (July 2026''s is ``2026-27``), a draft
+      combine from June, a draft (``drafthistory``, a year) from July, and with season
+      type ``Playoffs`` / ``PlayIn`` (or ``commonplayoffseries``) a season from the
+      May its playoffs start. A month table cannot follow a lockout or pandemic calendar
+      (1998-99, 2011-12, 2020-21): pass a season then. Without one stats.nba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season
     query_key: Season
     transform: season_latest_with_data
@@ -8704,11 +9210,14 @@ endpoints:
     type: str
   - default: null
     description: 'Season label, e.g. ``2024-25``. Defaults at call time to the latest
-      season that has rows: an NBA season from the November it tips off (``2025-26``
-      until October 2026), a G League season from the January after, a Summer League
-      from its August (July 2026''s is ``2026-27``), a draft combine from June, playoff
-      series from May. stats.nba.com answers a request without a season with an empty
-      HTTP 500.'
+      season that has rows: an NBA season from the November after its late-October
+      tip-off (``2025-26`` until October 2026), a G League season from the January
+      after, a Summer League from its August (July 2026''s is ``2026-27``), a draft
+      combine from June, a draft (``drafthistory``, a year) from July, and with season
+      type ``Playoffs`` / ``PlayIn`` (or ``commonplayoffseries``) a season from the
+      May its playoffs start. A month table cannot follow a lockout or pandemic calendar
+      (1998-99, 2011-12, 2020-21): pass a season then. Without one stats.nba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season
     query_key: Season
     transform: season_latest_with_data
@@ -8799,11 +9308,14 @@ endpoints:
     type: str
   - default: null
     description: 'Season label, e.g. ``2024-25``. Defaults at call time to the latest
-      season that has rows: an NBA season from the November it tips off (``2025-26``
-      until October 2026), a G League season from the January after, a Summer League
-      from its August (July 2026''s is ``2026-27``), a draft combine from June, playoff
-      series from May. stats.nba.com answers a request without a season with an empty
-      HTTP 500.'
+      season that has rows: an NBA season from the November after its late-October
+      tip-off (``2025-26`` until October 2026), a G League season from the January
+      after, a Summer League from its August (July 2026''s is ``2026-27``), a draft
+      combine from June, a draft (``drafthistory``, a year) from July, and with season
+      type ``Playoffs`` / ``PlayIn`` (or ``commonplayoffseries``) a season from the
+      May its playoffs start. A month table cannot follow a lockout or pandemic calendar
+      (1998-99, 2011-12, 2020-21): pass a season then. Without one stats.nba.com answers
+      an empty HTTP 500 or every season summed.'
     name: season
     query_key: Season
     transform: season_latest_with_data

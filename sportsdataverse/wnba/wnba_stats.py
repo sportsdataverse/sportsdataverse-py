@@ -198,7 +198,7 @@ def wnba_stats_assistleaders(
         league_id: LeagueID query parameter.
         per_mode_simple: PerMode query parameter.
         player_or_team: PlayerOrTeam query parameter.
-        season: Season year, e.g. ``2024``. Defaults at call time to the latest WNBA season that has rows: the current year from June (``2026`` from June 2026, ``2025`` before), playoff series from October. stats.wnba.com answers a request without a season with an empty HTTP 500.
+        season: Season year, e.g. ``2024``. Defaults at call time to the latest WNBA season that has rows: the current year from June (``2026`` from June 2026, ``2025`` before), a draft (``drafthistory``) from May, and with season type ``Playoffs`` (or ``commonplayoffseries``) from October. A month table cannot follow a lockout or pandemic calendar: pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or every season summed.
         season_type_playoffs: SeasonType query parameter.
         return_parsed: parse the payload through parse_wnba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
@@ -267,7 +267,7 @@ def wnba_stats_assisttracker(
     """GET /stats/assisttracker
 
     Endpoint: ``GET https://stats.wnba.com/stats/assisttracker``
-    Example URL: https://stats.wnba.com/stats/assisttracker?LeagueID=10&OpponentTeamID=0&PerMode=PerGame&SeasonType=Regular+Season&TeamID=0
+    Example URL: https://stats.wnba.com/stats/assisttracker?LeagueID=10&OpponentTeamID=0&PerMode=PerGame&Season=2024&SeasonType=Regular+Season&TeamID=0
 
     Args:
         college_nullable: College query parameter.
@@ -290,7 +290,7 @@ def wnba_stats_assisttracker(
         per_mode_simple_nullable: PerMode query parameter.
         player_experience_nullable: PlayerExperience query parameter.
         player_position_abbreviation_nullable: PlayerPosition query parameter.
-        season_nullable: Season query parameter.
+        season_nullable: Season year, e.g. ``2024``. Defaults at call time to the latest WNBA season that has rows: the current year from June (``2026`` from June 2026, ``2025`` before), a draft (``drafthistory``) from May, and with season type ``Playoffs`` (or ``commonplayoffseries``) from October. A month table cannot follow a lockout or pandemic calendar: pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or every season summed.
         season_segment_nullable: SeasonSegment query parameter.
         season_type_all_star_nullable: SeasonType query parameter.
         starter_bench_nullable: StarterBench query parameter.
@@ -307,7 +307,7 @@ def wnba_stats_assisttracker(
     Example:
         Quick start::
 
-            wnba_stats_assisttracker(league_id='10')
+            wnba_stats_assisttracker(league_id='10', season_nullable='2024')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -331,7 +331,7 @@ def wnba_stats_assisttracker(
         "PerMode": per_mode_simple_nullable,
         "PlayerExperience": player_experience_nullable,
         "PlayerPosition": player_position_abbreviation_nullable,
-        "Season": season_nullable,
+        "Season": season_latest_with_data(season_nullable),
         "SeasonSegment": season_segment_nullable,
         "SeasonType": season_type_all_star_nullable,
         "StarterBench": starter_bench_nullable,
@@ -1286,7 +1286,7 @@ def wnba_stats_commonallplayers(
     Args:
         is_only_current_season: IsOnlyCurrentSeason query parameter.
         league_id: LeagueID query parameter.
-        season: Season year, e.g. ``2024``. Defaults at call time to the latest WNBA season that has rows: the current year from June (``2026`` from June 2026, ``2025`` before), playoff series from October. stats.wnba.com answers a request without a season with an empty HTTP 500.
+        season: Season year, e.g. ``2024``. Defaults at call time to the latest WNBA season that has rows: the current year from June (``2026`` from June 2026, ``2025`` before), a draft (``drafthistory``) from May, and with season type ``Playoffs`` (or ``commonplayoffseries``) from October. A month table cannot follow a lockout or pandemic calendar: pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or every season summed.
         return_parsed: parse the payload through parse_wnba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
@@ -1375,7 +1375,7 @@ def wnba_stats_commonplayoffseries(
 
     Args:
         league_id: LeagueID query parameter.
-        season: Season year, e.g. ``2024``. Defaults at call time to the latest WNBA season that has rows: the current year from June (``2026`` from June 2026, ``2025`` before), playoff series from October. stats.wnba.com answers a request without a season with an empty HTTP 500.
+        season: Season year, e.g. ``2024``. Defaults at call time to the latest WNBA season that has rows: the current year from June (``2026`` from June 2026, ``2025`` before), a draft (``drafthistory``) from May, and with season type ``Playoffs`` (or ``commonplayoffseries``) from October. A month table cannot follow a lockout or pandemic calendar: pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or every season summed.
         series_id_nullable: SeriesID query parameter.
         return_parsed: parse the payload through parse_wnba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
@@ -1421,7 +1421,7 @@ def wnba_stats_commonteamroster(
 
     Args:
         league_id: LeagueID query parameter.
-        season: Season year, e.g. ``2024``. Defaults at call time to the latest WNBA season that has rows: the current year from June (``2026`` from June 2026, ``2025`` before), playoff series from October. stats.wnba.com answers a request without a season with an empty HTTP 500.
+        season: Season year, e.g. ``2024``. Defaults at call time to the latest WNBA season that has rows: the current year from June (``2026`` from June 2026, ``2025`` before), a draft (``drafthistory``) from May, and with season type ``Playoffs`` (or ``commonplayoffseries``) from October. A month table cannot follow a lockout or pandemic calendar: pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or every season summed.
         team_id: TeamID query parameter.
         return_parsed: parse the payload through parse_wnba_stats_result_sets -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
@@ -1744,7 +1744,7 @@ def wnba_stats_draftcombinestats(
 
     Args:
         league_id: LeagueID query parameter.
-        season_all_time: Season year, e.g. ``2024``. Defaults at call time to the latest WNBA season that has rows: the current year from June (``2026`` from June 2026, ``2025`` before), playoff series from October. stats.wnba.com answers a request without a season with an empty HTTP 500.
+        season_all_time: Season year, e.g. ``2024``. Defaults at call time to the latest WNBA season that has rows: the current year from June (``2026`` from June 2026, ``2025`` before), a draft (``drafthistory``) from May, and with season type ``Playoffs`` (or ``commonplayoffseries``) from October. A month table cannot follow a lockout or pandemic calendar: pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or every season summed.
         return_parsed: parse the payload through parse_wnba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
@@ -1797,7 +1797,7 @@ def wnba_stats_drafthistory(
         overall_pick_nullable: OverallPick query parameter.
         round_num_nullable: RoundNum query parameter.
         round_pick_nullable: RoundPick query parameter.
-        season_year_nullable: Season query parameter.
+        season_year_nullable: Season year, e.g. ``2024``. Defaults at call time to the latest WNBA season that has rows: the current year from June (``2026`` from June 2026, ``2025`` before), a draft (``drafthistory``) from May, and with season type ``Playoffs`` (or ``commonplayoffseries``) from October. A month table cannot follow a lockout or pandemic calendar: pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or every season summed.
         team_id_nullable: TeamID query parameter.
         topx_nullable: TopX query parameter.
         return_parsed: parse the payload through parse_wnba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
@@ -1833,7 +1833,7 @@ def wnba_stats_drafthistory(
         "OverallPick": overall_pick_nullable,
         "RoundNum": round_num_nullable,
         "RoundPick": round_pick_nullable,
-        "Season": season_year_nullable,
+        "Season": season_latest_with_data(season_year_nullable),
         "TeamID": team_id_nullable,
         "TopX": topx_nullable,
     }
@@ -1876,7 +1876,7 @@ def wnba_stats_fantasywidget(
     """GET /stats/fantasywidget
 
     Endpoint: ``GET https://stats.wnba.com/stats/fantasywidget``
-    Example URL: https://stats.wnba.com/stats/fantasywidget?ActivePlayers=N&DateFrom=&DateTo=&LastNGames=0&LeagueID=10&Location=&Month=&OpponentTeamID=0&PORound=&PlayerID=&Position=&SeasonSegment=&SeasonType=Regular+Season&TeamID=0&TodaysOpponent=0&TodaysPlayers=N&VsConference=&VsDivision=
+    Example URL: https://stats.wnba.com/stats/fantasywidget?ActivePlayers=N&DateFrom=&DateTo=&LastNGames=0&LeagueID=10&Location=&Month=&OpponentTeamID=0&PORound=&PlayerID=&Position=&Season=2024&SeasonSegment=&SeasonType=Regular+Season&TeamID=0&TodaysOpponent=0&TodaysPlayers=N&VsConference=&VsDivision=
 
     Args:
         active_players: ActivePlayers query parameter.
@@ -1890,7 +1890,7 @@ def wnba_stats_fantasywidget(
         po_round_nullable: PORound query parameter.
         player_id_nullable: PlayerID query parameter.
         position_nullable: Position query parameter.
-        season: Season query parameter.
+        season: Season year, e.g. ``2024``. Defaults at call time to the latest WNBA season that has rows: the current year from June (``2026`` from June 2026, ``2025`` before), a draft (``drafthistory``) from May, and with season type ``Playoffs`` (or ``commonplayoffseries``) from October. A month table cannot follow a lockout or pandemic calendar: pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or every season summed.
         season_segment_nullable: SeasonSegment query parameter.
         season_type_all_star: SeasonType query parameter.
         team_id_nullable: TeamID query parameter.
@@ -1907,7 +1907,7 @@ def wnba_stats_fantasywidget(
     Example:
         Quick start::
 
-            wnba_stats_fantasywidget(league_id='10')
+            wnba_stats_fantasywidget(league_id='10', season='2024')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -1922,7 +1922,7 @@ def wnba_stats_fantasywidget(
         "PORound": po_round_nullable,
         "PlayerID": player_id_nullable,
         "Position": position_nullable,
-        "Season": season,
+        "Season": season_latest_with_data(season),
         "SeasonSegment": season_segment_nullable,
         "SeasonType": season_type_all_star,
         "TeamID": team_id_nullable,
@@ -2184,14 +2184,14 @@ def wnba_stats_homepageleaders(
     """GET /stats/homepageleaders
 
     Endpoint: ``GET https://stats.wnba.com/stats/homepageleaders``
-    Example URL: https://stats.wnba.com/stats/homepageleaders?GameScope=Season&LeagueID=10&PlayerOrTeam=Team&PlayerScope=All+Players&SeasonType=Regular+Season&StatCategory=Points
+    Example URL: https://stats.wnba.com/stats/homepageleaders?GameScope=Season&LeagueID=10&PlayerOrTeam=Team&PlayerScope=All+Players&Season=2024&SeasonType=Regular+Season&StatCategory=Points
 
     Args:
         game_scope_detailed: GameScope query parameter.
         league_id: LeagueID query parameter.
         player_or_team: PlayerOrTeam query parameter.
         player_scope: PlayerScope query parameter.
-        season: Season query parameter.
+        season: Season year, e.g. ``2024``. Defaults at call time to the latest WNBA season that has rows: the current year from June (``2026`` from June 2026, ``2025`` before), a draft (``drafthistory``) from May, and with season type ``Playoffs`` (or ``commonplayoffseries``) from October. A month table cannot follow a lockout or pandemic calendar: pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or every season summed.
         season_type_playoffs: SeasonType query parameter.
         stat_category: StatCategory query parameter.
         return_parsed: parse the payload through parse_wnba_stats_result_sets -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw JSON Dict.
@@ -2204,7 +2204,7 @@ def wnba_stats_homepageleaders(
     Example:
         Quick start::
 
-            wnba_stats_homepageleaders(league_id='10')
+            wnba_stats_homepageleaders(league_id='10', season='2024')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -2212,7 +2212,7 @@ def wnba_stats_homepageleaders(
         "LeagueID": league_id,
         "PlayerOrTeam": player_or_team,
         "PlayerScope": player_scope,
-        "Season": season,
+        "Season": season_latest_with_data(season),
         "SeasonType": season_type_playoffs,
         "StatCategory": stat_category,
     }
@@ -2243,14 +2243,14 @@ def wnba_stats_homepagev2(
     """GET /stats/homepagev2
 
     Endpoint: ``GET https://stats.wnba.com/stats/homepagev2``
-    Example URL: https://stats.wnba.com/stats/homepagev2?GameScope=Season&LeagueID=10&PlayerOrTeam=Team&PlayerScope=All+Players&SeasonType=Regular+Season&StatType=Traditional
+    Example URL: https://stats.wnba.com/stats/homepagev2?GameScope=Season&LeagueID=10&PlayerOrTeam=Team&PlayerScope=All+Players&Season=2024&SeasonType=Regular+Season&StatType=Traditional
 
     Args:
         game_scope_detailed: GameScope query parameter.
         league_id: LeagueID query parameter.
         player_or_team: PlayerOrTeam query parameter.
         player_scope: PlayerScope query parameter.
-        season: Season query parameter.
+        season: Season year, e.g. ``2024``. Defaults at call time to the latest WNBA season that has rows: the current year from June (``2026`` from June 2026, ``2025`` before), a draft (``drafthistory``) from May, and with season type ``Playoffs`` (or ``commonplayoffseries``) from October. A month table cannot follow a lockout or pandemic calendar: pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or every season summed.
         season_type_playoffs: SeasonType query parameter.
         stat_type: StatType query parameter.
         return_parsed: parse the payload through parse_wnba_stats_result_sets -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw JSON Dict.
@@ -2263,7 +2263,7 @@ def wnba_stats_homepagev2(
     Example:
         Quick start::
 
-            wnba_stats_homepagev2(league_id='10')
+            wnba_stats_homepagev2(league_id='10', season='2024')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -2271,7 +2271,7 @@ def wnba_stats_homepagev2(
         "LeagueID": league_id,
         "PlayerOrTeam": player_or_team,
         "PlayerScope": player_scope,
-        "Season": season,
+        "Season": season_latest_with_data(season),
         "SeasonType": season_type_playoffs,
         "StatType": stat_type,
     }
@@ -2383,14 +2383,14 @@ def wnba_stats_leaderstiles(
     """GET /stats/leaderstiles
 
     Endpoint: ``GET https://stats.wnba.com/stats/leaderstiles``
-    Example URL: https://stats.wnba.com/stats/leaderstiles?GameScope=Season&LeagueID=10&PlayerOrTeam=Team&PlayerScope=All+Players&SeasonType=Regular+Season&Stat=PTS
+    Example URL: https://stats.wnba.com/stats/leaderstiles?GameScope=Season&LeagueID=10&PlayerOrTeam=Team&PlayerScope=All+Players&Season=2024&SeasonType=Regular+Season&Stat=PTS
 
     Args:
         game_scope_detailed: GameScope query parameter.
         league_id: LeagueID query parameter.
         player_or_team: PlayerOrTeam query parameter.
         player_scope: PlayerScope query parameter.
-        season: Season query parameter.
+        season: Season year, e.g. ``2024``. Defaults at call time to the latest WNBA season that has rows: the current year from June (``2026`` from June 2026, ``2025`` before), a draft (``drafthistory``) from May, and with season type ``Playoffs`` (or ``commonplayoffseries``) from October. A month table cannot follow a lockout or pandemic calendar: pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or every season summed.
         season_type_playoffs: SeasonType query parameter.
         stat: Stat query parameter.
         return_parsed: parse the payload through parse_wnba_stats_result_sets -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw JSON Dict.
@@ -2403,7 +2403,7 @@ def wnba_stats_leaderstiles(
     Example:
         Quick start::
 
-            wnba_stats_leaderstiles(league_id='10')
+            wnba_stats_leaderstiles(league_id='10', season='2024')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -2411,7 +2411,7 @@ def wnba_stats_leaderstiles(
         "LeagueID": league_id,
         "PlayerOrTeam": player_or_team,
         "PlayerScope": player_scope,
-        "Season": season,
+        "Season": season_latest_with_data(season),
         "SeasonType": season_type_playoffs,
         "Stat": stat,
     }
@@ -2483,7 +2483,7 @@ def wnba_stats_leaguedashlineups(
         period: Period query parameter.
         plus_minus: PlusMinus query parameter.
         rank: Rank query parameter.
-        season: Season year, e.g. ``2024``. Defaults at call time to the latest WNBA season that has rows: the current year from June (``2026`` from June 2026, ``2025`` before), playoff series from October. stats.wnba.com answers a request without a season with an empty HTTP 500.
+        season: Season year, e.g. ``2024``. Defaults at call time to the latest WNBA season that has rows: the current year from June (``2026`` from June 2026, ``2025`` before), a draft (``drafthistory``) from May, and with season type ``Playoffs`` (or ``commonplayoffseries``) from October. A month table cannot follow a lockout or pandemic calendar: pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or every season summed.
         season_segment_nullable: SeasonSegment query parameter.
         season_type_all_star: SeasonType query parameter.
         shot_clock_range_nullable: ShotClockRange query parameter.
@@ -2606,7 +2606,7 @@ def wnba_stats_leaguedashplayerbiostats(
         period_nullable: Period query parameter.
         player_experience_nullable: PlayerExperience query parameter.
         player_position_abbreviation_nullable: PlayerPosition query parameter.
-        season: Season year, e.g. ``2024``. Defaults at call time to the latest WNBA season that has rows: the current year from June (``2026`` from June 2026, ``2025`` before), playoff series from October. stats.wnba.com answers a request without a season with an empty HTTP 500.
+        season: Season year, e.g. ``2024``. Defaults at call time to the latest WNBA season that has rows: the current year from June (``2026`` from June 2026, ``2025`` before), a draft (``drafthistory``) from May, and with season type ``Playoffs`` (or ``commonplayoffseries``) from October. A month table cannot follow a lockout or pandemic calendar: pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or every season summed.
         season_segment_nullable: SeasonSegment query parameter.
         season_type_all_star: SeasonType query parameter.
         shot_clock_range_nullable: ShotClockRange query parameter.
@@ -2750,7 +2750,7 @@ def wnba_stats_leaguedashplayerclutch(
         plus_minus: PlusMinus query parameter.
         point_diff: PointDiff query parameter.
         rank: Rank query parameter.
-        season: Season year, e.g. ``2024``. Defaults at call time to the latest WNBA season that has rows: the current year from June (``2026`` from June 2026, ``2025`` before), playoff series from October. stats.wnba.com answers a request without a season with an empty HTTP 500.
+        season: Season year, e.g. ``2024``. Defaults at call time to the latest WNBA season that has rows: the current year from June (``2026`` from June 2026, ``2025`` before), a draft (``drafthistory``) from May, and with season type ``Playoffs`` (or ``commonplayoffseries``) from October. A month table cannot follow a lockout or pandemic calendar: pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or every season summed.
         season_segment_nullable: SeasonSegment query parameter.
         season_type_all_star: SeasonType query parameter.
         shot_clock_range_nullable: ShotClockRange query parameter.
@@ -2897,7 +2897,7 @@ def wnba_stats_leaguedashplayershotlocations(
         player_position_abbreviation_nullable: PlayerPosition query parameter.
         plus_minus: PlusMinus query parameter.
         rank: Rank query parameter.
-        season: Season year, e.g. ``2024``. Defaults at call time to the latest WNBA season that has rows: the current year from June (``2026`` from June 2026, ``2025`` before), playoff series from October. stats.wnba.com answers a request without a season with an empty HTTP 500.
+        season: Season year, e.g. ``2024``. Defaults at call time to the latest WNBA season that has rows: the current year from June (``2026`` from June 2026, ``2025`` before), a draft (``drafthistory``) from May, and with season type ``Playoffs`` (or ``commonplayoffseries``) from October. A month table cannot follow a lockout or pandemic calendar: pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or every season summed.
         season_segment_nullable: SeasonSegment query parameter.
         season_type_all_star: SeasonType query parameter.
         shot_clock_range_nullable: ShotClockRange query parameter.
@@ -3041,7 +3041,7 @@ def wnba_stats_leaguedashplayerstats(
         player_position_abbreviation_nullable: PlayerPosition query parameter.
         plus_minus: PlusMinus query parameter.
         rank: Rank query parameter.
-        season: Season year, e.g. ``2024``. Defaults at call time to the latest WNBA season that has rows: the current year from June (``2026`` from June 2026, ``2025`` before), playoff series from October. stats.wnba.com answers a request without a season with an empty HTTP 500.
+        season: Season year, e.g. ``2024``. Defaults at call time to the latest WNBA season that has rows: the current year from June (``2026`` from June 2026, ``2025`` before), a draft (``drafthistory``) from May, and with season type ``Playoffs`` (or ``commonplayoffseries``) from October. A month table cannot follow a lockout or pandemic calendar: pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or every season summed.
         season_segment_nullable: SeasonSegment query parameter.
         season_type_all_star: SeasonType query parameter.
         shot_clock_range_nullable: ShotClockRange query parameter.
@@ -3152,7 +3152,7 @@ def wnba_stats_leaguedashptdefend(
     """GET /stats/leaguedashptdefend
 
     Endpoint: ``GET https://stats.wnba.com/stats/leaguedashptdefend``
-    Example URL: https://stats.wnba.com/stats/leaguedashptdefend?College=&Conference=&Country=&DateFrom=&DateTo=&DefenseCategory=Overall&Division=&DraftPick=&DraftYear=&GameSegment=&Height=&LastNGames=0&LeagueID=10&Location=&Month=0&OpponentTeamID=0&Outcome=&PORound=&PerMode=Totals&Period=&PlayerExperience=&PlayerID=&PlayerPosition=&SeasonSegment=&SeasonType=Regular+Season&StarterBench=&TeamID=0&VsConference=&VsDivision=&Weight=
+    Example URL: https://stats.wnba.com/stats/leaguedashptdefend?College=&Conference=&Country=&DateFrom=&DateTo=&DefenseCategory=Overall&Division=&DraftPick=&DraftYear=&GameSegment=&Height=&LastNGames=0&LeagueID=10&Location=&Month=0&OpponentTeamID=0&Outcome=&PORound=&PerMode=Totals&Period=&PlayerExperience=&PlayerID=&PlayerPosition=&Season=2024&SeasonSegment=&SeasonType=Regular+Season&StarterBench=&TeamID=0&VsConference=&VsDivision=&Weight=
 
     Args:
         college_nullable: College query parameter.
@@ -3178,7 +3178,7 @@ def wnba_stats_leaguedashptdefend(
         player_experience_nullable: PlayerExperience query parameter.
         player_id_nullable: PlayerID query parameter.
         player_position_nullable: PlayerPosition query parameter.
-        season: Season query parameter.
+        season: Season year, e.g. ``2024``. Defaults at call time to the latest WNBA season that has rows: the current year from June (``2026`` from June 2026, ``2025`` before), a draft (``drafthistory``) from May, and with season type ``Playoffs`` (or ``commonplayoffseries``) from October. A month table cannot follow a lockout or pandemic calendar: pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or every season summed.
         season_segment_nullable: SeasonSegment query parameter.
         season_type_all_star: SeasonType query parameter.
         starter_bench_nullable: StarterBench query parameter.
@@ -3195,7 +3195,7 @@ def wnba_stats_leaguedashptdefend(
     Example:
         Quick start::
 
-            wnba_stats_leaguedashptdefend(league_id='10')
+            wnba_stats_leaguedashptdefend(league_id='10', season='2024')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -3222,7 +3222,7 @@ def wnba_stats_leaguedashptdefend(
         "PlayerExperience": player_experience_nullable,
         "PlayerID": player_id_nullable,
         "PlayerPosition": player_position_nullable,
-        "Season": season,
+        "Season": season_latest_with_data(season),
         "SeasonSegment": season_segment_nullable,
         "SeasonType": season_type_all_star,
         "StarterBench": starter_bench_nullable,
@@ -3283,7 +3283,7 @@ def wnba_stats_leaguedashteamclutch(
     """GET /stats/leaguedashteamclutch
 
     Endpoint: ``GET https://stats.wnba.com/stats/leaguedashteamclutch``
-    Example URL: https://stats.wnba.com/stats/leaguedashteamclutch?AheadBehind=Ahead+or+Behind&ClutchTime=Last+5+Minutes&Conference=&DateFrom=&DateTo=&Division=&GameScope=&GameSegment=&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlayerExperience=&PlayerPosition=&PlusMinus=N&PointDiff=5&Rank=N&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&StarterBench=&TeamID=0&VsConference=&VsDivision=
+    Example URL: https://stats.wnba.com/stats/leaguedashteamclutch?AheadBehind=Ahead+or+Behind&ClutchTime=Last+5+Minutes&Conference=&DateFrom=&DateTo=&Division=&GameScope=&GameSegment=&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlayerExperience=&PlayerPosition=&PlusMinus=N&PointDiff=5&Rank=N&Season=2024&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&StarterBench=&TeamID=0&VsConference=&VsDivision=
 
     Args:
         ahead_behind: AheadBehind query parameter.
@@ -3310,7 +3310,7 @@ def wnba_stats_leaguedashteamclutch(
         plus_minus: PlusMinus query parameter.
         point_diff: PointDiff query parameter.
         rank: Rank query parameter.
-        season: Season query parameter.
+        season: Season year, e.g. ``2024``. Defaults at call time to the latest WNBA season that has rows: the current year from June (``2026`` from June 2026, ``2025`` before), a draft (``drafthistory``) from May, and with season type ``Playoffs`` (or ``commonplayoffseries``) from October. A month table cannot follow a lockout or pandemic calendar: pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or every season summed.
         season_segment_nullable: SeasonSegment query parameter.
         season_type_all_star: SeasonType query parameter.
         shot_clock_range_nullable: ShotClockRange query parameter.
@@ -3327,7 +3327,7 @@ def wnba_stats_leaguedashteamclutch(
     Example:
         Quick start::
 
-            wnba_stats_leaguedashteamclutch(league_id='10')
+            wnba_stats_leaguedashteamclutch(league_id='10', season='2024')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -3355,7 +3355,7 @@ def wnba_stats_leaguedashteamclutch(
         "PlusMinus": plus_minus,
         "PointDiff": point_diff,
         "Rank": rank,
-        "Season": season,
+        "Season": season_latest_with_data(season),
         "SeasonSegment": season_segment_nullable,
         "SeasonType": season_type_all_star,
         "ShotClockRange": shot_clock_range_nullable,
@@ -3414,7 +3414,7 @@ def wnba_stats_leaguedashteamshotlocations(
     """GET /stats/leaguedashteamshotlocations
 
     Endpoint: ``GET https://stats.wnba.com/stats/leaguedashteamshotlocations``
-    Example URL: https://stats.wnba.com/stats/leaguedashteamshotlocations?Conference=&DateFrom=&DateTo=&DistanceRange=By+Zone&Division=&GameScope=&GameSegment=&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlayerExperience=&PlayerPosition=&PlusMinus=N&Rank=N&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&StarterBench=&TeamID=0&VsConference=&VsDivision=
+    Example URL: https://stats.wnba.com/stats/leaguedashteamshotlocations?Conference=&DateFrom=&DateTo=&DistanceRange=By+Zone&Division=&GameScope=&GameSegment=&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlayerExperience=&PlayerPosition=&PlusMinus=N&Rank=N&Season=2024&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&StarterBench=&TeamID=0&VsConference=&VsDivision=
 
     Args:
         conference_nullable: Conference query parameter.
@@ -3439,7 +3439,7 @@ def wnba_stats_leaguedashteamshotlocations(
         player_position_abbreviation_nullable: PlayerPosition query parameter.
         plus_minus: PlusMinus query parameter.
         rank: Rank query parameter.
-        season: Season query parameter.
+        season: Season year, e.g. ``2024``. Defaults at call time to the latest WNBA season that has rows: the current year from June (``2026`` from June 2026, ``2025`` before), a draft (``drafthistory``) from May, and with season type ``Playoffs`` (or ``commonplayoffseries``) from October. A month table cannot follow a lockout or pandemic calendar: pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or every season summed.
         season_segment_nullable: SeasonSegment query parameter.
         season_type_all_star: SeasonType query parameter.
         shot_clock_range_nullable: ShotClockRange query parameter.
@@ -3456,7 +3456,7 @@ def wnba_stats_leaguedashteamshotlocations(
     Example:
         Quick start::
 
-            wnba_stats_leaguedashteamshotlocations(league_id='10')
+            wnba_stats_leaguedashteamshotlocations(league_id='10', season='2024')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -3482,7 +3482,7 @@ def wnba_stats_leaguedashteamshotlocations(
         "PlayerPosition": player_position_abbreviation_nullable,
         "PlusMinus": plus_minus,
         "Rank": rank,
-        "Season": season,
+        "Season": season_latest_with_data(season),
         "SeasonSegment": season_segment_nullable,
         "SeasonType": season_type_all_star,
         "ShotClockRange": shot_clock_range_nullable,
@@ -3541,7 +3541,7 @@ def wnba_stats_leaguedashteamstats(
     """GET /stats/leaguedashteamstats
 
     Endpoint: ``GET https://stats.wnba.com/stats/leaguedashteamstats``
-    Example URL: https://stats.wnba.com/stats/leaguedashteamstats?Conference=&DateFrom=&DateTo=&Division=&GameScope=&GameSegment=&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&StarterBench=&TeamID=0&TwoWay=&VsConference=&VsDivision=
+    Example URL: https://stats.wnba.com/stats/leaguedashteamstats?Conference=&DateFrom=&DateTo=&Division=&GameScope=&GameSegment=&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&Season=2024&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&StarterBench=&TeamID=0&TwoWay=&VsConference=&VsDivision=
 
     Args:
         conference_nullable: Conference query parameter.
@@ -3565,7 +3565,7 @@ def wnba_stats_leaguedashteamstats(
         player_position_abbreviation_nullable: PlayerPosition query parameter.
         plus_minus: PlusMinus query parameter.
         rank: Rank query parameter.
-        season: Season query parameter.
+        season: Season year, e.g. ``2024``. Defaults at call time to the latest WNBA season that has rows: the current year from June (``2026`` from June 2026, ``2025`` before), a draft (``drafthistory``) from May, and with season type ``Playoffs`` (or ``commonplayoffseries``) from October. A month table cannot follow a lockout or pandemic calendar: pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or every season summed.
         season_segment_nullable: SeasonSegment query parameter.
         season_type_all_star: SeasonType query parameter.
         shot_clock_range_nullable: ShotClockRange query parameter.
@@ -3583,7 +3583,7 @@ def wnba_stats_leaguedashteamstats(
     Example:
         Quick start::
 
-            wnba_stats_leaguedashteamstats(league_id='10')
+            wnba_stats_leaguedashteamstats(league_id='10', season='2024')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -3608,7 +3608,7 @@ def wnba_stats_leaguedashteamstats(
         "PlayerPosition": player_position_abbreviation_nullable,
         "PlusMinus": plus_minus,
         "Rank": rank,
-        "Season": season,
+        "Season": season_latest_with_data(season),
         "SeasonSegment": season_segment_nullable,
         "SeasonType": season_type_all_star,
         "ShotClockRange": shot_clock_range_nullable,
@@ -3726,7 +3726,7 @@ def wnba_stats_leaguegamefinder(
     """GET /stats/leaguegamefinder
 
     Endpoint: ``GET https://stats.wnba.com/stats/leaguegamefinder``
-    Example URL: https://stats.wnba.com/stats/leaguegamefinder?Conference=&DateFrom=&DateTo=&Division=&DraftNumber=&DraftRound=&DraftTeamID=0&DraftYear=&EqAST=&EqBLK=&EqDD=&EqDREB=&EqFG3A=&EqFG3M=&EqFG3_PCT=&EqFGA=&EqFGM=&EqFG_PCT=&EqFTA=&EqFTM=&EqFT_PCT=&EqMINUTES=&EqOREB=&EqPF=&EqPTS=&EqREB=&EqSTL=&EqTD=&EqTOV=&GameID=&GtAST=&GtBLK=&GtDD=&GtDREB=&GtFG3A=&GtFG3M=&GtFG3_PCT=&GtFGA=&GtFGM=&GtFG_PCT=&GtFTA=&GtFTM=&GtFT_PCT=&GtMINUTES=&GtOREB=&GtPF=&GtPTS=&GtREB=&GtSTL=&GtTD=&GtTOV=&LeagueID=10&Location=&LtAST=&LtBLK=&LtDD=&LtDREB=&LtFG3A=&LtFG3M=&LtFG3_PCT=&LtFGA=&LtFGM=&LtFG_PCT=&LtFTA=&LtFTM=&LtFT_PCT=&LtMINUTES=&LtOREB=&LtPF=&LtPTS=&LtREB=&LtSTL=&LtTD=&LtTOV=&Outcome=&PORound=&PlayerID=&PlayerOrTeam=T&RookieYear=&SeasonSegment=&SeasonType=Regular+Season&StarterBench=&TeamID=0&VsConference=&VsDivision=&VsTeamID=0&YearsExperience=
+    Example URL: https://stats.wnba.com/stats/leaguegamefinder?Conference=&DateFrom=&DateTo=&Division=&DraftNumber=&DraftRound=&DraftTeamID=0&DraftYear=&EqAST=&EqBLK=&EqDD=&EqDREB=&EqFG3A=&EqFG3M=&EqFG3_PCT=&EqFGA=&EqFGM=&EqFG_PCT=&EqFTA=&EqFTM=&EqFT_PCT=&EqMINUTES=&EqOREB=&EqPF=&EqPTS=&EqREB=&EqSTL=&EqTD=&EqTOV=&GameID=&GtAST=&GtBLK=&GtDD=&GtDREB=&GtFG3A=&GtFG3M=&GtFG3_PCT=&GtFGA=&GtFGM=&GtFG_PCT=&GtFTA=&GtFTM=&GtFT_PCT=&GtMINUTES=&GtOREB=&GtPF=&GtPTS=&GtREB=&GtSTL=&GtTD=&GtTOV=&LeagueID=10&Location=&LtAST=&LtBLK=&LtDD=&LtDREB=&LtFG3A=&LtFG3M=&LtFG3_PCT=&LtFGA=&LtFGM=&LtFG_PCT=&LtFTA=&LtFTM=&LtFT_PCT=&LtMINUTES=&LtOREB=&LtPF=&LtPTS=&LtREB=&LtSTL=&LtTD=&LtTOV=&Outcome=&PORound=&PlayerID=&PlayerOrTeam=T&RookieYear=&Season=2024&SeasonSegment=&SeasonType=Regular+Season&StarterBench=&TeamID=0&VsConference=&VsDivision=&VsTeamID=0&YearsExperience=
 
     Args:
         conference_nullable: Conference query parameter.
@@ -3808,7 +3808,7 @@ def wnba_stats_leaguegamefinder(
         player_id_nullable: PlayerID query parameter.
         player_or_team_abbreviation: PlayerOrTeam query parameter.
         rookie_year_nullable: RookieYear query parameter.
-        season_nullable: Season query parameter.
+        season_nullable: Season year, e.g. ``2024``. Defaults at call time to the latest WNBA season that has rows: the current year from June (``2026`` from June 2026, ``2025`` before), a draft (``drafthistory``) from May, and with season type ``Playoffs`` (or ``commonplayoffseries``) from October. A month table cannot follow a lockout or pandemic calendar: pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or every season summed.
         season_segment_nullable: SeasonSegment query parameter.
         season_type_nullable: SeasonType query parameter.
         starter_bench_nullable: StarterBench query parameter.
@@ -3826,7 +3826,7 @@ def wnba_stats_leaguegamefinder(
     Example:
         Quick start::
 
-            wnba_stats_leaguegamefinder(league_id='10')
+            wnba_stats_leaguegamefinder(league_id='10', season_nullable='2024')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -3909,7 +3909,7 @@ def wnba_stats_leaguegamefinder(
         "PlayerID": player_id_nullable,
         "PlayerOrTeam": player_or_team_abbreviation,
         "RookieYear": rookie_year_nullable,
-        "Season": season_nullable,
+        "Season": season_latest_with_data(season_nullable),
         "SeasonSegment": season_segment_nullable,
         "SeasonType": season_type_nullable,
         "StarterBench": starter_bench_nullable,
@@ -3957,7 +3957,7 @@ def wnba_stats_leaguegamelog(
         direction: Direction query parameter.
         league_id: LeagueID query parameter.
         player_or_team_abbreviation: PlayerOrTeam query parameter.
-        season: Season year, e.g. ``2024``. Defaults at call time to the latest WNBA season that has rows: the current year from June (``2026`` from June 2026, ``2025`` before), playoff series from October. stats.wnba.com answers a request without a season with an empty HTTP 500.
+        season: Season year, e.g. ``2024``. Defaults at call time to the latest WNBA season that has rows: the current year from June (``2026`` from June 2026, ``2025`` before), a draft (``drafthistory``) from May, and with season type ``Playoffs`` (or ``commonplayoffseries``) from October. A month table cannot follow a lockout or pandemic calendar: pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or every season summed.
         season_type_all_star: SeasonType query parameter.
         sorter: Sorter query parameter.
         return_parsed: parse the payload through parse_wnba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
@@ -4010,14 +4010,14 @@ def wnba_stats_leagueleaders(
     """GET /stats/leagueleaders
 
     Endpoint: ``GET https://stats.wnba.com/stats/leagueleaders``
-    Example URL: https://stats.wnba.com/stats/leagueleaders?ActiveFlag=&LeagueID=10&PerMode=Totals&Scope=S&SeasonType=Regular+Season&StatCategory=PTS
+    Example URL: https://stats.wnba.com/stats/leagueleaders?ActiveFlag=&LeagueID=10&PerMode=Totals&Scope=S&Season=2024&SeasonType=Regular+Season&StatCategory=PTS
 
     Args:
         active_flag_nullable: ActiveFlag query parameter.
         league_id: LeagueID query parameter.
         per_mode48: PerMode query parameter.
         scope: Scope query parameter.
-        season: Season query parameter.
+        season: Season year, e.g. ``2024``. Defaults at call time to the latest WNBA season that has rows: the current year from June (``2026`` from June 2026, ``2025`` before), a draft (``drafthistory``) from May, and with season type ``Playoffs`` (or ``commonplayoffseries``) from October. A month table cannot follow a lockout or pandemic calendar: pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or every season summed.
         season_type_all_star: SeasonType query parameter.
         stat_category_abbreviation: StatCategory query parameter.
         return_parsed: parse the payload through parse_wnba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
@@ -4029,7 +4029,7 @@ def wnba_stats_leagueleaders(
     Example:
         Quick start::
 
-            wnba_stats_leagueleaders(league_id='10')
+            wnba_stats_leagueleaders(league_id='10', season='2024')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -4037,7 +4037,7 @@ def wnba_stats_leagueleaders(
         "LeagueID": league_id,
         "PerMode": per_mode48,
         "Scope": scope,
-        "Season": season,
+        "Season": season_latest_with_data(season),
         "SeasonType": season_type_all_star,
         "StatCategory": stat_category_abbreviation,
     }
@@ -4111,7 +4111,7 @@ def wnba_stats_leaguelineupviz(
         period: Period query parameter.
         plus_minus: PlusMinus query parameter.
         rank: Rank query parameter.
-        season: Season year, e.g. ``2024``. Defaults at call time to the latest WNBA season that has rows: the current year from June (``2026`` from June 2026, ``2025`` before), playoff series from October. stats.wnba.com answers a request without a season with an empty HTTP 500.
+        season: Season year, e.g. ``2024``. Defaults at call time to the latest WNBA season that has rows: the current year from June (``2026`` from June 2026, ``2025`` before), a draft (``drafthistory``) from May, and with season type ``Playoffs`` (or ``commonplayoffseries``) from October. A month table cannot follow a lockout or pandemic calendar: pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or every season summed.
         season_segment_nullable: SeasonSegment query parameter.
         season_type_all_star: SeasonType query parameter.
         shot_clock_range_nullable: ShotClockRange query parameter.
@@ -4218,7 +4218,7 @@ def wnba_stats_leagueplayerondetails(
         period: Period query parameter.
         plus_minus: PlusMinus query parameter.
         rank: Rank query parameter.
-        season: Season year, e.g. ``2024``. Defaults at call time to the latest WNBA season that has rows: the current year from June (``2026`` from June 2026, ``2025`` before), playoff series from October. stats.wnba.com answers a request without a season with an empty HTTP 500.
+        season: Season year, e.g. ``2024``. Defaults at call time to the latest WNBA season that has rows: the current year from June (``2026`` from June 2026, ``2025`` before), a draft (``drafthistory``) from May, and with season type ``Playoffs`` (or ``commonplayoffseries``) from October. A month table cannot follow a lockout or pandemic calendar: pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or every season summed.
         season_segment_nullable: SeasonSegment query parameter.
         season_type_all_star: SeasonType query parameter.
         team_id: TeamID query parameter.
@@ -4296,7 +4296,7 @@ def wnba_stats_leagueseasonmatchups(
         off_player_id_nullable: OffPlayerID query parameter.
         off_team_id_nullable: OffTeamID query parameter.
         per_mode_simple: PerMode query parameter.
-        season: Season year, e.g. ``2024``. Defaults at call time to the latest WNBA season that has rows: the current year from June (``2026`` from June 2026, ``2025`` before), playoff series from October. stats.wnba.com answers a request without a season with an empty HTTP 500.
+        season: Season year, e.g. ``2024``. Defaults at call time to the latest WNBA season that has rows: the current year from June (``2026`` from June 2026, ``2025`` before), a draft (``drafthistory``) from May, and with season type ``Playoffs`` (or ``commonplayoffseries``) from October. A month table cannot follow a lockout or pandemic calendar: pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or every season summed.
         season_type_playoffs: SeasonType query parameter.
         return_parsed: parse the payload through parse_wnba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
@@ -4348,7 +4348,7 @@ def wnba_stats_leaguestandingsv3(
 
     Args:
         league_id: LeagueID query parameter.
-        season: Season year, e.g. ``2024``. Defaults at call time to the latest WNBA season that has rows: the current year from June (``2026`` from June 2026, ``2025`` before), playoff series from October. stats.wnba.com answers a request without a season with an empty HTTP 500.
+        season: Season year, e.g. ``2024``. Defaults at call time to the latest WNBA season that has rows: the current year from June (``2026`` from June 2026, ``2025`` before), a draft (``drafthistory``) from May, and with season type ``Playoffs`` (or ``commonplayoffseries``) from October. A month table cannot follow a lockout or pandemic calendar: pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or every season summed.
         season_type: SeasonType query parameter.
         season_nullable: SeasonYear query parameter.
         return_parsed: parse the payload through parse_wnba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
@@ -4526,12 +4526,12 @@ def wnba_stats_playercareerbycollegerollup(
     """GET /stats/playercareerbycollegerollup
 
     Endpoint: ``GET https://stats.wnba.com/stats/playercareerbycollegerollup``
-    Example URL: https://stats.wnba.com/stats/playercareerbycollegerollup?LeagueID=10&PerMode=Totals&SeasonType=Regular+Season
+    Example URL: https://stats.wnba.com/stats/playercareerbycollegerollup?LeagueID=10&PerMode=Totals&Season=2024&SeasonType=Regular+Season
 
     Args:
         league_id: LeagueID query parameter.
         per_mode_simple: PerMode query parameter.
-        season_nullable: Season query parameter.
+        season_nullable: Season year, e.g. ``2024``. Defaults at call time to the latest WNBA season that has rows: the current year from June (``2026`` from June 2026, ``2025`` before), a draft (``drafthistory``) from May, and with season type ``Playoffs`` (or ``commonplayoffseries``) from October. A month table cannot follow a lockout or pandemic calendar: pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or every season summed.
         season_type_all_star: SeasonType query parameter.
         return_parsed: parse the payload through parse_wnba_stats_result_sets -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
@@ -4543,13 +4543,13 @@ def wnba_stats_playercareerbycollegerollup(
     Example:
         Quick start::
 
-            wnba_stats_playercareerbycollegerollup(league_id='10')
+            wnba_stats_playercareerbycollegerollup(league_id='10', season_nullable='2024')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
         "LeagueID": league_id,
         "PerMode": per_mode_simple,
-        "Season": season_nullable,
+        "Season": season_latest_with_data(season_nullable),
         "SeasonType": season_type_all_star,
     }
     _params.update(_caller_params)
@@ -4665,7 +4665,7 @@ def wnba_stats_playercompare(
         player_id_list: PlayerIDList query parameter.
         plus_minus: PlusMinus query parameter.
         rank: Rank query parameter.
-        season: Season year, e.g. ``2024``. Defaults at call time to the latest WNBA season that has rows: the current year from June (``2026`` from June 2026, ``2025`` before), playoff series from October. stats.wnba.com answers a request without a season with an empty HTTP 500.
+        season: Season year, e.g. ``2024``. Defaults at call time to the latest WNBA season that has rows: the current year from June (``2026`` from June 2026, ``2025`` before), a draft (``drafthistory``) from May, and with season type ``Playoffs`` (or ``commonplayoffseries``) from October. A month table cannot follow a lockout or pandemic calendar: pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or every season summed.
         season_segment_nullable: SeasonSegment query parameter.
         season_type_playoffs: SeasonType query parameter.
         shot_clock_range_nullable: ShotClockRange query parameter.
@@ -4775,7 +4775,7 @@ def wnba_stats_playerdashboardbyclutch(
         player_id: PlayerID query parameter.
         plus_minus: PlusMinus query parameter.
         rank: Rank query parameter.
-        season: Season year, e.g. ``2024``. Defaults at call time to the latest WNBA season that has rows: the current year from June (``2026`` from June 2026, ``2025`` before), playoff series from October. stats.wnba.com answers a request without a season with an empty HTTP 500.
+        season: Season year, e.g. ``2024``. Defaults at call time to the latest WNBA season that has rows: the current year from June (``2026`` from June 2026, ``2025`` before), a draft (``drafthistory``) from May, and with season type ``Playoffs`` (or ``commonplayoffseries``) from October. A month table cannot follow a lockout or pandemic calendar: pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or every season summed.
         season_segment_nullable: SeasonSegment query parameter.
         season_type_playoffs: SeasonType query parameter.
         shot_clock_range_nullable: ShotClockRange query parameter.
@@ -4882,7 +4882,7 @@ def wnba_stats_playerdashboardbygamesplits(
         player_id: PlayerID query parameter.
         plus_minus: PlusMinus query parameter.
         rank: Rank query parameter.
-        season: Season year, e.g. ``2024``. Defaults at call time to the latest WNBA season that has rows: the current year from June (``2026`` from June 2026, ``2025`` before), playoff series from October. stats.wnba.com answers a request without a season with an empty HTTP 500.
+        season: Season year, e.g. ``2024``. Defaults at call time to the latest WNBA season that has rows: the current year from June (``2026`` from June 2026, ``2025`` before), a draft (``drafthistory``) from May, and with season type ``Playoffs`` (or ``commonplayoffseries``) from October. A month table cannot follow a lockout or pandemic calendar: pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or every season summed.
         season_segment_nullable: SeasonSegment query parameter.
         season_type_playoffs: SeasonType query parameter.
         shot_clock_range_nullable: ShotClockRange query parameter.
@@ -4989,7 +4989,7 @@ def wnba_stats_playerdashboardbygeneralsplits(
         player_id: PlayerID query parameter.
         plus_minus: PlusMinus query parameter.
         rank: Rank query parameter.
-        season: Season year, e.g. ``2024``. Defaults at call time to the latest WNBA season that has rows: the current year from June (``2026`` from June 2026, ``2025`` before), playoff series from October. stats.wnba.com answers a request without a season with an empty HTTP 500.
+        season: Season year, e.g. ``2024``. Defaults at call time to the latest WNBA season that has rows: the current year from June (``2026`` from June 2026, ``2025`` before), a draft (``drafthistory``) from May, and with season type ``Playoffs`` (or ``commonplayoffseries``) from October. A month table cannot follow a lockout or pandemic calendar: pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or every season summed.
         season_segment_nullable: SeasonSegment query parameter.
         season_type_playoffs: SeasonType query parameter.
         shot_clock_range_nullable: ShotClockRange query parameter.
@@ -5096,7 +5096,7 @@ def wnba_stats_playerdashboardbylastngames(
         player_id: PlayerID query parameter.
         plus_minus: PlusMinus query parameter.
         rank: Rank query parameter.
-        season: Season year, e.g. ``2024``. Defaults at call time to the latest WNBA season that has rows: the current year from June (``2026`` from June 2026, ``2025`` before), playoff series from October. stats.wnba.com answers a request without a season with an empty HTTP 500.
+        season: Season year, e.g. ``2024``. Defaults at call time to the latest WNBA season that has rows: the current year from June (``2026`` from June 2026, ``2025`` before), a draft (``drafthistory``) from May, and with season type ``Playoffs`` (or ``commonplayoffseries``) from October. A month table cannot follow a lockout or pandemic calendar: pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or every season summed.
         season_segment_nullable: SeasonSegment query parameter.
         season_type_playoffs: SeasonType query parameter.
         shot_clock_range_nullable: ShotClockRange query parameter.
@@ -5203,7 +5203,7 @@ def wnba_stats_playerdashboardbyopponent(
         player_id: PlayerID query parameter.
         plus_minus: PlusMinus query parameter.
         rank: Rank query parameter.
-        season: Season year, e.g. ``2024``. Defaults at call time to the latest WNBA season that has rows: the current year from June (``2026`` from June 2026, ``2025`` before), playoff series from October. stats.wnba.com answers a request without a season with an empty HTTP 500.
+        season: Season year, e.g. ``2024``. Defaults at call time to the latest WNBA season that has rows: the current year from June (``2026`` from June 2026, ``2025`` before), a draft (``drafthistory``) from May, and with season type ``Playoffs`` (or ``commonplayoffseries``) from October. A month table cannot follow a lockout or pandemic calendar: pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or every season summed.
         season_segment: SeasonSegment query parameter.
         season_type: SeasonType query parameter.
         shot_clock_range: ShotClockRange query parameter.
@@ -5310,7 +5310,7 @@ def wnba_stats_playerdashboardbyshootingsplits(
         player_id: PlayerID query parameter.
         plus_minus: PlusMinus query parameter.
         rank: Rank query parameter.
-        season: Season year, e.g. ``2024``. Defaults at call time to the latest WNBA season that has rows: the current year from June (``2026`` from June 2026, ``2025`` before), playoff series from October. stats.wnba.com answers a request without a season with an empty HTTP 500.
+        season: Season year, e.g. ``2024``. Defaults at call time to the latest WNBA season that has rows: the current year from June (``2026`` from June 2026, ``2025`` before), a draft (``drafthistory``) from May, and with season type ``Playoffs`` (or ``commonplayoffseries``) from October. A month table cannot follow a lockout or pandemic calendar: pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or every season summed.
         season_segment_nullable: SeasonSegment query parameter.
         season_type_playoffs: SeasonType query parameter.
         shot_clock_range_nullable: ShotClockRange query parameter.
@@ -5417,7 +5417,7 @@ def wnba_stats_playerdashboardbyteamperformance(
         player_id: PlayerID query parameter.
         plus_minus: PlusMinus query parameter.
         rank: Rank query parameter.
-        season: Season year, e.g. ``2024``. Defaults at call time to the latest WNBA season that has rows: the current year from June (``2026`` from June 2026, ``2025`` before), playoff series from October. stats.wnba.com answers a request without a season with an empty HTTP 500.
+        season: Season year, e.g. ``2024``. Defaults at call time to the latest WNBA season that has rows: the current year from June (``2026`` from June 2026, ``2025`` before), a draft (``drafthistory``) from May, and with season type ``Playoffs`` (or ``commonplayoffseries``) from October. A month table cannot follow a lockout or pandemic calendar: pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or every season summed.
         season_segment_nullable: SeasonSegment query parameter.
         season_type_playoffs: SeasonType query parameter.
         shot_clock_range_nullable: ShotClockRange query parameter.
@@ -5504,7 +5504,7 @@ def wnba_stats_playerdashboardbyyearoveryear(
     """GET /stats/playerdashboardbyyearoveryear
 
     Endpoint: ``GET https://stats.wnba.com/stats/playerdashboardbyyearoveryear``
-    Example URL: https://stats.wnba.com/stats/playerdashboardbyyearoveryear?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlayerID=1628932&PlusMinus=N&Rank=N&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&VsConference=&VsDivision=
+    Example URL: https://stats.wnba.com/stats/playerdashboardbyyearoveryear?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlayerID=1628932&PlusMinus=N&Rank=N&Season=2024&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&VsConference=&VsDivision=
 
     Args:
         date_from_nullable: DateFrom query parameter.
@@ -5524,7 +5524,7 @@ def wnba_stats_playerdashboardbyyearoveryear(
         player_id: PlayerID query parameter.
         plus_minus: PlusMinus query parameter.
         rank: Rank query parameter.
-        season: Season query parameter.
+        season: Season year, e.g. ``2024``. Defaults at call time to the latest WNBA season that has rows: the current year from June (``2026`` from June 2026, ``2025`` before), a draft (``drafthistory``) from May, and with season type ``Playoffs`` (or ``commonplayoffseries``) from October. A month table cannot follow a lockout or pandemic calendar: pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or every season summed.
         season_segment_nullable: SeasonSegment query parameter.
         season_type_playoffs: SeasonType query parameter.
         shot_clock_range_nullable: ShotClockRange query parameter.
@@ -5540,7 +5540,7 @@ def wnba_stats_playerdashboardbyyearoveryear(
     Example:
         Quick start::
 
-            wnba_stats_playerdashboardbyyearoveryear(league_id='10')
+            wnba_stats_playerdashboardbyyearoveryear(league_id='10', season='2024')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -5561,7 +5561,7 @@ def wnba_stats_playerdashboardbyyearoveryear(
         "PlayerID": player_id,
         "PlusMinus": plus_minus,
         "Rank": rank,
-        "Season": season,
+        "Season": season_latest_with_data(season),
         "SeasonSegment": season_segment_nullable,
         "SeasonType": season_type_playoffs,
         "ShotClockRange": shot_clock_range_nullable,
@@ -5621,7 +5621,7 @@ def wnba_stats_playerdashptshotdefend(
         per_mode_simple: PerMode query parameter.
         period: Period query parameter.
         player_id: PlayerID query parameter.
-        season: Season year, e.g. ``2024``. Defaults at call time to the latest WNBA season that has rows: the current year from June (``2026`` from June 2026, ``2025`` before), playoff series from October. stats.wnba.com answers a request without a season with an empty HTTP 500.
+        season: Season year, e.g. ``2024``. Defaults at call time to the latest WNBA season that has rows: the current year from June (``2026`` from June 2026, ``2025`` before), a draft (``drafthistory``) from May, and with season type ``Playoffs`` (or ``commonplayoffseries``) from October. A month table cannot follow a lockout or pandemic calendar: pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or every season summed.
         season_segment_nullable: SeasonSegment query parameter.
         season_type_all_star: SeasonType query parameter.
         team_id: TeamID query parameter.
@@ -5682,11 +5682,11 @@ def wnba_stats_playerestimatedmetrics(
     """GET /stats/playerestimatedmetrics
 
     Endpoint: ``GET https://stats.wnba.com/stats/playerestimatedmetrics``
-    Example URL: https://stats.wnba.com/stats/playerestimatedmetrics?LeagueID=10&SeasonType=Regular+Season
+    Example URL: https://stats.wnba.com/stats/playerestimatedmetrics?LeagueID=10&Season=2024&SeasonType=Regular+Season
 
     Args:
         league_id: LeagueID query parameter.
-        season: Season query parameter.
+        season: Season year, e.g. ``2024``. Defaults at call time to the latest WNBA season that has rows: the current year from June (``2026`` from June 2026, ``2025`` before), a draft (``drafthistory``) from May, and with season type ``Playoffs`` (or ``commonplayoffseries``) from October. A month table cannot follow a lockout or pandemic calendar: pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or every season summed.
         season_type: SeasonType query parameter.
         return_parsed: parse the payload through parse_wnba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
@@ -5697,12 +5697,12 @@ def wnba_stats_playerestimatedmetrics(
     Example:
         Quick start::
 
-            wnba_stats_playerestimatedmetrics(league_id='10')
+            wnba_stats_playerestimatedmetrics(league_id='10', season='2024')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
         "LeagueID": league_id,
-        "Season": season,
+        "Season": season_latest_with_data(season),
         "SeasonType": season_type,
     }
     _params.update(_caller_params)
@@ -5734,7 +5734,7 @@ def wnba_stats_playerfantasyprofile(
     """GET /stats/playerfantasyprofile
 
     Endpoint: ``GET https://stats.wnba.com/stats/playerfantasyprofile``
-    Example URL: https://stats.wnba.com/stats/playerfantasyprofile?LeagueID=10&MeasureType=Base&PaceAdjust=N&PerMode=Totals&PlayerID=1628932&PlusMinus=N&Rank=N&SeasonType=Regular+Season
+    Example URL: https://stats.wnba.com/stats/playerfantasyprofile?LeagueID=10&MeasureType=Base&PaceAdjust=N&PerMode=Totals&PlayerID=1628932&PlusMinus=N&Rank=N&Season=2024&SeasonType=Regular+Season
 
     Args:
         league_id: LeagueID query parameter.
@@ -5744,7 +5744,7 @@ def wnba_stats_playerfantasyprofile(
         player_id: PlayerID query parameter.
         plus_minus: PlusMinus query parameter.
         rank: Rank query parameter.
-        season: Season query parameter.
+        season: Season year, e.g. ``2024``. Defaults at call time to the latest WNBA season that has rows: the current year from June (``2026`` from June 2026, ``2025`` before), a draft (``drafthistory``) from May, and with season type ``Playoffs`` (or ``commonplayoffseries``) from October. A month table cannot follow a lockout or pandemic calendar: pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or every season summed.
         season_type: SeasonType query parameter.
         return_parsed: parse the payload through parse_wnba_stats_result_sets -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
@@ -5756,7 +5756,7 @@ def wnba_stats_playerfantasyprofile(
     Example:
         Quick start::
 
-            wnba_stats_playerfantasyprofile(league_id='10')
+            wnba_stats_playerfantasyprofile(league_id='10', season='2024')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -5767,7 +5767,7 @@ def wnba_stats_playerfantasyprofile(
         "PlayerID": player_id,
         "PlusMinus": plus_minus,
         "Rank": rank,
-        "Season": season,
+        "Season": season_latest_with_data(season),
         "SeasonType": season_type,
     }
     _params.update(_caller_params)
@@ -5799,7 +5799,7 @@ def wnba_stats_playerfantasyprofilebargraph(
     Args:
         league_id: LeagueID query parameter.
         player_id: PlayerID query parameter.
-        season: Season year, e.g. ``2024``. Defaults at call time to the latest WNBA season that has rows: the current year from June (``2026`` from June 2026, ``2025`` before), playoff series from October. stats.wnba.com answers a request without a season with an empty HTTP 500.
+        season: Season year, e.g. ``2024``. Defaults at call time to the latest WNBA season that has rows: the current year from June (``2026`` from June 2026, ``2025`` before), a draft (``drafthistory``) from May, and with season type ``Playoffs`` (or ``commonplayoffseries``) from October. A month table cannot follow a lockout or pandemic calendar: pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or every season summed.
         season_type_all_star_nullable: SeasonType query parameter.
         return_parsed: parse the payload through parse_wnba_stats_result_sets -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
@@ -5853,7 +5853,7 @@ def wnba_stats_playergamelog(
         date_to_nullable: DateTo query parameter.
         league_id: LeagueID query parameter.
         player_id: PlayerID query parameter.
-        season: Season year, e.g. ``2024``. Defaults at call time to the latest WNBA season that has rows: the current year from June (``2026`` from June 2026, ``2025`` before), playoff series from October. stats.wnba.com answers a request without a season with an empty HTTP 500.
+        season: Season year, e.g. ``2024``. Defaults at call time to the latest WNBA season that has rows: the current year from June (``2026`` from June 2026, ``2025`` before), a draft (``drafthistory``) from May, and with season type ``Playoffs`` (or ``commonplayoffseries``) from October. A month table cannot follow a lockout or pandemic calendar: pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or every season summed.
         season_type_all_star: SeasonType query parameter.
         return_parsed: parse the payload through parse_wnba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
@@ -5933,7 +5933,7 @@ def wnba_stats_playergamelogs(
         per_mode_simple_nullable: PerMode query parameter.
         period_nullable: Period query parameter.
         player_id_nullable: PlayerID query parameter.
-        season_nullable: Season year, e.g. ``2024``. Defaults at call time to the latest WNBA season that has rows: the current year from June (``2026`` from June 2026, ``2025`` before), playoff series from October. stats.wnba.com answers a request without a season with an empty HTTP 500.
+        season_nullable: Season year, e.g. ``2024``. Defaults at call time to the latest WNBA season that has rows: the current year from June (``2026`` from June 2026, ``2025`` before), a draft (``drafthistory``) from May, and with season type ``Playoffs`` (or ``commonplayoffseries``) from October. A month table cannot follow a lockout or pandemic calendar: pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or every season summed.
         season_segment_nullable: SeasonSegment query parameter.
         season_type_nullable: SeasonType query parameter.
         shot_clock_range_nullable: ShotClockRange query parameter.
@@ -6084,7 +6084,7 @@ def wnba_stats_playergamestreakfinder(
     """GET /stats/playergamestreakfinder
 
     Endpoint: ``GET https://stats.wnba.com/stats/playergamestreakfinder``
-    Example URL: https://stats.wnba.com/stats/playergamestreakfinder?ActiveStreaksOnly=&Conference=&DateFrom=&DateTo=&Division=&DraftNumber=&DraftRound=&DraftTeamID=0&DraftYear=&EqAST=&EqBLK=&EqDD=&EqDREB=&EqFG3A=&EqFG3M=&EqFG3_PCT=&EqFGA=&EqFGM=&EqFG_PCT=&EqFTA=&EqFTM=&EqFT_PCT=&EqMINUTES=&EqOREB=&EqPF=&EqPTS=&EqREB=&EqSTL=&EqTD=&EqTOV=&GameID=&GtAST=&GtBLK=&GtDD=&GtDREB=&GtFG3A=&GtFG3M=&GtFG3_PCT=&GtFGA=&GtFGM=&GtFG_PCT=&GtFTA=&GtFTM=&GtFT_PCT=&GtMINUTES=&GtOREB=&GtPF=&GtPTS=&GtREB=&GtSTL=&GtTD=&GtTOV=&LeagueID=10&Location=&LtAST=&LtBLK=&LtDD=&LtDREB=&LtFG3A=&LtFG3M=&LtFG3_PCT=&LtFGA=&LtFGM=&LtFG_PCT=&LtFTA=&LtFTM=&LtFT_PCT=&LtMINUTES=&LtOREB=&LtPF=&LtPTS=&LtREB=&LtSTL=&LtTD=&LtTOV=&MinGames=&Outcome=&PORound=&PlayerID=&RookieYear=&SeasonSegment=&SeasonType=Regular+Season&StarterBench=&TeamID=0&VsConference=&VsDivision=&VsTeamID=0&YearsExperience=
+    Example URL: https://stats.wnba.com/stats/playergamestreakfinder?ActiveStreaksOnly=&Conference=&DateFrom=&DateTo=&Division=&DraftNumber=&DraftRound=&DraftTeamID=0&DraftYear=&EqAST=&EqBLK=&EqDD=&EqDREB=&EqFG3A=&EqFG3M=&EqFG3_PCT=&EqFGA=&EqFGM=&EqFG_PCT=&EqFTA=&EqFTM=&EqFT_PCT=&EqMINUTES=&EqOREB=&EqPF=&EqPTS=&EqREB=&EqSTL=&EqTD=&EqTOV=&GameID=&GtAST=&GtBLK=&GtDD=&GtDREB=&GtFG3A=&GtFG3M=&GtFG3_PCT=&GtFGA=&GtFGM=&GtFG_PCT=&GtFTA=&GtFTM=&GtFT_PCT=&GtMINUTES=&GtOREB=&GtPF=&GtPTS=&GtREB=&GtSTL=&GtTD=&GtTOV=&LeagueID=10&Location=&LtAST=&LtBLK=&LtDD=&LtDREB=&LtFG3A=&LtFG3M=&LtFG3_PCT=&LtFGA=&LtFGM=&LtFG_PCT=&LtFTA=&LtFTM=&LtFT_PCT=&LtMINUTES=&LtOREB=&LtPF=&LtPTS=&LtREB=&LtSTL=&LtTD=&LtTOV=&MinGames=&Outcome=&PORound=&PlayerID=&RookieYear=&Season=2024&SeasonSegment=&SeasonType=Regular+Season&StarterBench=&TeamID=0&VsConference=&VsDivision=&VsTeamID=0&YearsExperience=
 
     Args:
         active_streaks_only_nullable: ActiveStreaksOnly query parameter.
@@ -6167,7 +6167,7 @@ def wnba_stats_playergamestreakfinder(
         po_round_nullable: PORound query parameter.
         player_id_nullable: PlayerID query parameter.
         rookie_year_nullable: RookieYear query parameter.
-        season_nullable: Season query parameter.
+        season_nullable: Season year, e.g. ``2024``. Defaults at call time to the latest WNBA season that has rows: the current year from June (``2026`` from June 2026, ``2025`` before), a draft (``drafthistory``) from May, and with season type ``Playoffs`` (or ``commonplayoffseries``) from October. A month table cannot follow a lockout or pandemic calendar: pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or every season summed.
         season_segment_nullable: SeasonSegment query parameter.
         season_type_nullable: SeasonType query parameter.
         starter_bench_nullable: StarterBench query parameter.
@@ -6185,7 +6185,7 @@ def wnba_stats_playergamestreakfinder(
     Example:
         Quick start::
 
-            wnba_stats_playergamestreakfinder(league_id='10')
+            wnba_stats_playergamestreakfinder(league_id='10', season_nullable='2024')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -6269,7 +6269,7 @@ def wnba_stats_playergamestreakfinder(
         "PORound": po_round_nullable,
         "PlayerID": player_id_nullable,
         "RookieYear": rookie_year_nullable,
-        "Season": season_nullable,
+        "Season": season_latest_with_data(season_nullable),
         "SeasonSegment": season_segment_nullable,
         "SeasonType": season_type_nullable,
         "StarterBench": starter_bench_nullable,
@@ -6325,7 +6325,7 @@ def wnba_stats_playerindex(
         height_nullable: Height query parameter.
         historical_nullable: Historical query parameter.
         league_id: LeagueID query parameter.
-        season: Season year, e.g. ``2024``. Defaults at call time to the latest WNBA season that has rows: the current year from June (``2026`` from June 2026, ``2025`` before), playoff series from October. stats.wnba.com answers a request without a season with an empty HTTP 500.
+        season: Season year, e.g. ``2024``. Defaults at call time to the latest WNBA season that has rows: the current year from June (``2026`` from June 2026, ``2025`` before), a draft (``drafthistory``) from May, and with season type ``Playoffs`` (or ``commonplayoffseries``) from October. A month table cannot follow a lockout or pandemic calendar: pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or every season summed.
         team_id_nullable: TeamID query parameter.
         weight_nullable: Weight query parameter.
         return_parsed: parse the payload through parse_wnba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
@@ -6386,7 +6386,7 @@ def wnba_stats_playernextngames(
         league_id: LeagueID query parameter.
         number_of_games: NumberOfGames query parameter.
         player_id: PlayerID query parameter.
-        season_all: Season year, e.g. ``2024``. Defaults at call time to the latest WNBA season that has rows: the current year from June (``2026`` from June 2026, ``2025`` before), playoff series from October. stats.wnba.com answers a request without a season with an empty HTTP 500.
+        season_all: Season year, e.g. ``2024``. Defaults at call time to the latest WNBA season that has rows: the current year from June (``2026`` from June 2026, ``2025`` before), a draft (``drafthistory``) from May, and with season type ``Playoffs`` (or ``commonplayoffseries``) from October. A month table cannot follow a lockout or pandemic calendar: pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or every season summed.
         season_type_all_star: SeasonType query parameter.
         return_parsed: parse the payload through parse_wnba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
@@ -6515,7 +6515,7 @@ def wnba_stats_playervsplayer(
         player_id: PlayerID query parameter.
         plus_minus: PlusMinus query parameter.
         rank: Rank query parameter.
-        season: Season year, e.g. ``2024``. Defaults at call time to the latest WNBA season that has rows: the current year from June (``2026`` from June 2026, ``2025`` before), playoff series from October. stats.wnba.com answers a request without a season with an empty HTTP 500.
+        season: Season year, e.g. ``2024``. Defaults at call time to the latest WNBA season that has rows: the current year from June (``2026`` from June 2026, ``2025`` before), a draft (``drafthistory``) from May, and with season type ``Playoffs`` (or ``commonplayoffseries``) from October. A month table cannot follow a lockout or pandemic calendar: pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or every season summed.
         season_segment_nullable: SeasonSegment query parameter.
         season_type_playoffs: SeasonType query parameter.
         vs_conference_nullable: VsConference query parameter.
@@ -6580,11 +6580,11 @@ def wnba_stats_scheduleleaguev2(
     """GET /stats/scheduleleaguev2
 
     Endpoint: ``GET https://stats.wnba.com/stats/scheduleleaguev2``
-    Example URL: https://stats.wnba.com/stats/scheduleleaguev2?LeagueID=10
+    Example URL: https://stats.wnba.com/stats/scheduleleaguev2?LeagueID=10&Season=2024
 
     Args:
         league_id: LeagueID query parameter.
-        season: Season query parameter.
+        season: Season year, e.g. ``2024``. Defaults at call time to the latest WNBA season that has rows: the current year from June (``2026`` from June 2026, ``2025`` before), a draft (``drafthistory``) from May, and with season type ``Playoffs`` (or ``commonplayoffseries``) from October. A month table cannot follow a lockout or pandemic calendar: pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or every season summed.
         return_parsed: parse the payload through parse_wnba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
@@ -6594,12 +6594,12 @@ def wnba_stats_scheduleleaguev2(
     Example:
         Quick start::
 
-            wnba_stats_scheduleleaguev2(league_id='10')
+            wnba_stats_scheduleleaguev2(league_id='10', season='2024')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
         "LeagueID": league_id,
-        "Season": season,
+        "Season": season_latest_with_data(season),
     }
     _params.update(_caller_params)
     raw = _get(
@@ -6623,11 +6623,11 @@ def wnba_stats_scheduleleaguev2int(
     """GET /stats/scheduleleaguev2int
 
     Endpoint: ``GET https://stats.wnba.com/stats/scheduleleaguev2int``
-    Example URL: https://stats.wnba.com/stats/scheduleleaguev2int?LeagueID=10
+    Example URL: https://stats.wnba.com/stats/scheduleleaguev2int?LeagueID=10&Season=2024
 
     Args:
         league_id: LeagueID query parameter.
-        season: Season query parameter.
+        season: Season year, e.g. ``2024``. Defaults at call time to the latest WNBA season that has rows: the current year from June (``2026`` from June 2026, ``2025`` before), a draft (``drafthistory``) from May, and with season type ``Playoffs`` (or ``commonplayoffseries``) from October. A month table cannot follow a lockout or pandemic calendar: pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or every season summed.
         return_parsed: parse the payload through parse_wnba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
@@ -6637,12 +6637,12 @@ def wnba_stats_scheduleleaguev2int(
     Example:
         Quick start::
 
-            wnba_stats_scheduleleaguev2int(league_id='10')
+            wnba_stats_scheduleleaguev2int(league_id='10', season='2024')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
         "LeagueID": league_id,
-        "Season": season,
+        "Season": season_latest_with_data(season),
     }
     _params.update(_caller_params)
     raw = _get(
@@ -6785,7 +6785,7 @@ def wnba_stats_shotchartdetail(
     """GET /stats/shotchartdetail
 
     Endpoint: ``GET https://stats.wnba.com/stats/shotchartdetail``
-    Example URL: https://stats.wnba.com/stats/shotchartdetail?ContextMeasure=FGA&DateFrom=&DateTo=&GameID=&GameSegment=&LastNGames=0&LeagueID=10&Location=&Month=0&OpponentTeamID=0&Outcome=&Period=0&PlayerID=1628932&PlayerPosition=&RookieYear=&SeasonSegment=&SeasonType=Regular+Season&TeamID=0&VsConference=&VsDivision=
+    Example URL: https://stats.wnba.com/stats/shotchartdetail?ContextMeasure=FGA&DateFrom=&DateTo=&GameID=&GameSegment=&LastNGames=0&LeagueID=10&Location=&Month=0&OpponentTeamID=0&Outcome=&Period=0&PlayerID=1628932&PlayerPosition=&RookieYear=&Season=2024&SeasonSegment=&SeasonType=Regular+Season&TeamID=0&VsConference=&VsDivision=
 
     Args:
         ahead_behind_nullable: AheadBehind query parameter.
@@ -6811,7 +6811,7 @@ def wnba_stats_shotchartdetail(
         position_nullable: Position query parameter.
         range_type_nullable: RangeType query parameter.
         rookie_year_nullable: RookieYear query parameter.
-        season_nullable: Season query parameter.
+        season_nullable: Season year, e.g. ``2024``. Defaults at call time to the latest WNBA season that has rows: the current year from June (``2026`` from June 2026, ``2025`` before), a draft (``drafthistory``) from May, and with season type ``Playoffs`` (or ``commonplayoffseries``) from October. A month table cannot follow a lockout or pandemic calendar: pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or every season summed.
         season_segment_nullable: SeasonSegment query parameter.
         season_type_all_star: SeasonType query parameter.
         start_period_nullable: StartPeriod query parameter.
@@ -6829,7 +6829,7 @@ def wnba_stats_shotchartdetail(
     Example:
         Quick start::
 
-            wnba_stats_shotchartdetail(league_id='10')
+            wnba_stats_shotchartdetail(league_id='10', season_nullable='2024')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -6856,7 +6856,7 @@ def wnba_stats_shotchartdetail(
         "Position": position_nullable,
         "RangeType": range_type_nullable,
         "RookieYear": rookie_year_nullable,
-        "Season": season_nullable,
+        "Season": season_latest_with_data(season_nullable),
         "SeasonSegment": season_segment_nullable,
         "SeasonType": season_type_all_star,
         "StartPeriod": start_period_nullable,
@@ -6891,7 +6891,7 @@ def wnba_stats_shotchartleaguewide(
 
     Args:
         league_id: LeagueID query parameter.
-        season: Season year, e.g. ``2024``. Defaults at call time to the latest WNBA season that has rows: the current year from June (``2026`` from June 2026, ``2025`` before), playoff series from October. stats.wnba.com answers a request without a season with an empty HTTP 500.
+        season: Season year, e.g. ``2024``. Defaults at call time to the latest WNBA season that has rows: the current year from June (``2026`` from June 2026, ``2025`` before), a draft (``drafthistory``) from May, and with season type ``Playoffs`` (or ``commonplayoffseries``) from October. A month table cannot follow a lockout or pandemic calendar: pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or every season summed.
         return_parsed: parse the payload through parse_wnba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
@@ -6948,7 +6948,7 @@ def wnba_stats_shotchartlineupdetail(
     """GET /stats/shotchartlineupdetail
 
     Endpoint: ``GET https://stats.wnba.com/stats/shotchartlineupdetail``
-    Example URL: https://stats.wnba.com/stats/shotchartlineupdetail?ContextFilter=&ContextMeasure=FGA&DateFrom=&DateTo=&GROUP_ID=-1628899-1629481-1630096-1631019-1642784-&GameID=&GameSegment=&LastNGames=0&LeagueID=10&Location=&Month=0&OpponentTeamID=0&Outcome=&Period=0&SeasonSegment=&SeasonType=Regular+Season&TeamID=0&VsConference=&VsDivision=
+    Example URL: https://stats.wnba.com/stats/shotchartlineupdetail?ContextFilter=&ContextMeasure=FGA&DateFrom=&DateTo=&GROUP_ID=-1628899-1629481-1630096-1631019-1642784-&GameID=&GameSegment=&LastNGames=0&LeagueID=10&Location=&Month=0&OpponentTeamID=0&Outcome=&Period=0&Season=2024&SeasonSegment=&SeasonType=Regular+Season&TeamID=0&VsConference=&VsDivision=
 
     Args:
         context_filter_nullable: ContextFilter query parameter.
@@ -6965,7 +6965,7 @@ def wnba_stats_shotchartlineupdetail(
         opponent_team_id_nullable: OpponentTeamID query parameter.
         outcome_nullable: Outcome query parameter.
         period: Period query parameter.
-        season: Season query parameter.
+        season: Season year, e.g. ``2024``. Defaults at call time to the latest WNBA season that has rows: the current year from June (``2026`` from June 2026, ``2025`` before), a draft (``drafthistory``) from May, and with season type ``Playoffs`` (or ``commonplayoffseries``) from October. A month table cannot follow a lockout or pandemic calendar: pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or every season summed.
         season_segment_nullable: SeasonSegment query parameter.
         season_type_all_star: SeasonType query parameter.
         team_id_nullable: TeamID query parameter.
@@ -6981,7 +6981,7 @@ def wnba_stats_shotchartlineupdetail(
     Example:
         Quick start::
 
-            wnba_stats_shotchartlineupdetail(league_id='10')
+            wnba_stats_shotchartlineupdetail(league_id='10', season='2024')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -6999,7 +6999,7 @@ def wnba_stats_shotchartlineupdetail(
         "OpponentTeamID": opponent_team_id_nullable,
         "Outcome": outcome_nullable,
         "Period": period,
-        "Season": season,
+        "Season": season_latest_with_data(season),
         "SeasonSegment": season_segment_nullable,
         "SeasonType": season_type_all_star,
         "TeamID": team_id_nullable,
@@ -7068,7 +7068,7 @@ def wnba_stats_teamdashboardbyclutch(
         period: Period query parameter.
         plus_minus: PlusMinus query parameter.
         rank: Rank query parameter.
-        season: Season year, e.g. ``2024``. Defaults at call time to the latest WNBA season that has rows: the current year from June (``2026`` from June 2026, ``2025`` before), playoff series from October. stats.wnba.com answers a request without a season with an empty HTTP 500.
+        season: Season year, e.g. ``2024``. Defaults at call time to the latest WNBA season that has rows: the current year from June (``2026`` from June 2026, ``2025`` before), a draft (``drafthistory``) from May, and with season type ``Playoffs`` (or ``commonplayoffseries``) from October. A month table cannot follow a lockout or pandemic calendar: pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or every season summed.
         season_segment: SeasonSegment query parameter.
         season_type: SeasonType query parameter.
         shot_clock_range: ShotClockRange query parameter.
@@ -7175,7 +7175,7 @@ def wnba_stats_teamdashboardbygamesplits(
         period: Period query parameter.
         plus_minus: PlusMinus query parameter.
         rank: Rank query parameter.
-        season: Season year, e.g. ``2024``. Defaults at call time to the latest WNBA season that has rows: the current year from June (``2026`` from June 2026, ``2025`` before), playoff series from October. stats.wnba.com answers a request without a season with an empty HTTP 500.
+        season: Season year, e.g. ``2024``. Defaults at call time to the latest WNBA season that has rows: the current year from June (``2026`` from June 2026, ``2025`` before), a draft (``drafthistory``) from May, and with season type ``Playoffs`` (or ``commonplayoffseries``) from October. A month table cannot follow a lockout or pandemic calendar: pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or every season summed.
         season_segment: SeasonSegment query parameter.
         season_type: SeasonType query parameter.
         shot_clock_range: ShotClockRange query parameter.
@@ -7282,7 +7282,7 @@ def wnba_stats_teamdashboardbygeneralsplits(
         period: Period query parameter.
         plus_minus: PlusMinus query parameter.
         rank: Rank query parameter.
-        season: Season year, e.g. ``2024``. Defaults at call time to the latest WNBA season that has rows: the current year from June (``2026`` from June 2026, ``2025`` before), playoff series from October. stats.wnba.com answers a request without a season with an empty HTTP 500.
+        season: Season year, e.g. ``2024``. Defaults at call time to the latest WNBA season that has rows: the current year from June (``2026`` from June 2026, ``2025`` before), a draft (``drafthistory``) from May, and with season type ``Playoffs`` (or ``commonplayoffseries``) from October. A month table cannot follow a lockout or pandemic calendar: pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or every season summed.
         season_segment_nullable: SeasonSegment query parameter.
         season_type_all_star: SeasonType query parameter.
         shot_clock_range_nullable: ShotClockRange query parameter.
@@ -7389,7 +7389,7 @@ def wnba_stats_teamdashboardbylastngames(
         period: Period query parameter.
         plus_minus: PlusMinus query parameter.
         rank: Rank query parameter.
-        season: Season year, e.g. ``2024``. Defaults at call time to the latest WNBA season that has rows: the current year from June (``2026`` from June 2026, ``2025`` before), playoff series from October. stats.wnba.com answers a request without a season with an empty HTTP 500.
+        season: Season year, e.g. ``2024``. Defaults at call time to the latest WNBA season that has rows: the current year from June (``2026`` from June 2026, ``2025`` before), a draft (``drafthistory``) from May, and with season type ``Playoffs`` (or ``commonplayoffseries``) from October. A month table cannot follow a lockout or pandemic calendar: pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or every season summed.
         season_segment: SeasonSegment query parameter.
         season_type: SeasonType query parameter.
         shot_clock_range: ShotClockRange query parameter.
@@ -7496,7 +7496,7 @@ def wnba_stats_teamdashboardbyopponent(
         period: Period query parameter.
         plus_minus: PlusMinus query parameter.
         rank: Rank query parameter.
-        season: Season year, e.g. ``2024``. Defaults at call time to the latest WNBA season that has rows: the current year from June (``2026`` from June 2026, ``2025`` before), playoff series from October. stats.wnba.com answers a request without a season with an empty HTTP 500.
+        season: Season year, e.g. ``2024``. Defaults at call time to the latest WNBA season that has rows: the current year from June (``2026`` from June 2026, ``2025`` before), a draft (``drafthistory``) from May, and with season type ``Playoffs`` (or ``commonplayoffseries``) from October. A month table cannot follow a lockout or pandemic calendar: pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or every season summed.
         season_segment: SeasonSegment query parameter.
         season_type: SeasonType query parameter.
         shot_clock_range: ShotClockRange query parameter.
@@ -7603,7 +7603,7 @@ def wnba_stats_teamdashboardbyshootingsplits(
         period: Period query parameter.
         plus_minus: PlusMinus query parameter.
         rank: Rank query parameter.
-        season: Season year, e.g. ``2024``. Defaults at call time to the latest WNBA season that has rows: the current year from June (``2026`` from June 2026, ``2025`` before), playoff series from October. stats.wnba.com answers a request without a season with an empty HTTP 500.
+        season: Season year, e.g. ``2024``. Defaults at call time to the latest WNBA season that has rows: the current year from June (``2026`` from June 2026, ``2025`` before), a draft (``drafthistory``) from May, and with season type ``Playoffs`` (or ``commonplayoffseries``) from October. A month table cannot follow a lockout or pandemic calendar: pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or every season summed.
         season_segment_nullable: SeasonSegment query parameter.
         season_type_all_star: SeasonType query parameter.
         shot_clock_range_nullable: ShotClockRange query parameter.
@@ -7710,7 +7710,7 @@ def wnba_stats_teamdashboardbyteamperformance(
         period: Period query parameter.
         plus_minus: PlusMinus query parameter.
         rank: Rank query parameter.
-        season: Season year, e.g. ``2024``. Defaults at call time to the latest WNBA season that has rows: the current year from June (``2026`` from June 2026, ``2025`` before), playoff series from October. stats.wnba.com answers a request without a season with an empty HTTP 500.
+        season: Season year, e.g. ``2024``. Defaults at call time to the latest WNBA season that has rows: the current year from June (``2026`` from June 2026, ``2025`` before), a draft (``drafthistory``) from May, and with season type ``Playoffs`` (or ``commonplayoffseries``) from October. A month table cannot follow a lockout or pandemic calendar: pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or every season summed.
         season_segment: SeasonSegment query parameter.
         season_type: SeasonType query parameter.
         shot_clock_range: ShotClockRange query parameter.
@@ -7798,7 +7798,7 @@ def wnba_stats_teamdashboardbyyearoveryear(
     """GET /stats/teamdashboardbyyearoveryear
 
     Endpoint: ``GET https://stats.wnba.com/stats/teamdashboardbyyearoveryear``
-    Example URL: https://stats.wnba.com/stats/teamdashboardbyyearoveryear?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&TeamID=1611661328&VsConference=&VsDivision=
+    Example URL: https://stats.wnba.com/stats/teamdashboardbyyearoveryear?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&Season=2024&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&TeamID=1611661328&VsConference=&VsDivision=
 
     Args:
         date_from: DateFrom query parameter.
@@ -7817,7 +7817,7 @@ def wnba_stats_teamdashboardbyyearoveryear(
         period: Period query parameter.
         plus_minus: PlusMinus query parameter.
         rank: Rank query parameter.
-        season: Season query parameter.
+        season: Season year, e.g. ``2024``. Defaults at call time to the latest WNBA season that has rows: the current year from June (``2026`` from June 2026, ``2025`` before), a draft (``drafthistory``) from May, and with season type ``Playoffs`` (or ``commonplayoffseries``) from October. A month table cannot follow a lockout or pandemic calendar: pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or every season summed.
         season_segment: SeasonSegment query parameter.
         season_type: SeasonType query parameter.
         shot_clock_range: ShotClockRange query parameter.
@@ -7834,7 +7834,7 @@ def wnba_stats_teamdashboardbyyearoveryear(
     Example:
         Quick start::
 
-            wnba_stats_teamdashboardbyyearoveryear(league_id='10')
+            wnba_stats_teamdashboardbyyearoveryear(league_id='10', season='2024')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -7854,7 +7854,7 @@ def wnba_stats_teamdashboardbyyearoveryear(
         "Period": period,
         "PlusMinus": plus_minus,
         "Rank": rank,
-        "Season": season,
+        "Season": season_latest_with_data(season),
         "SeasonSegment": season_segment,
         "SeasonType": season_type,
         "ShotClockRange": shot_clock_range,
@@ -7928,7 +7928,7 @@ def wnba_stats_teamdashlineups(
         period: Period query parameter.
         plus_minus: PlusMinus query parameter.
         rank: Rank query parameter.
-        season: Season year, e.g. ``2024``. Defaults at call time to the latest WNBA season that has rows: the current year from June (``2026`` from June 2026, ``2025`` before), playoff series from October. stats.wnba.com answers a request without a season with an empty HTTP 500.
+        season: Season year, e.g. ``2024``. Defaults at call time to the latest WNBA season that has rows: the current year from June (``2026`` from June 2026, ``2025`` before), a draft (``drafthistory``) from May, and with season type ``Playoffs`` (or ``commonplayoffseries``) from October. A month table cannot follow a lockout or pandemic calendar: pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or every season summed.
         season_segment_nullable: SeasonSegment query parameter.
         season_type_all_star: SeasonType query parameter.
         shot_clock_range_nullable: ShotClockRange query parameter.
@@ -8039,11 +8039,11 @@ def wnba_stats_teamestimatedmetrics(
     """GET /stats/teamestimatedmetrics
 
     Endpoint: ``GET https://stats.wnba.com/stats/teamestimatedmetrics``
-    Example URL: https://stats.wnba.com/stats/teamestimatedmetrics?LeagueID=10&SeasonType=Regular+Season
+    Example URL: https://stats.wnba.com/stats/teamestimatedmetrics?LeagueID=10&Season=2024&SeasonType=Regular+Season
 
     Args:
         league_id: LeagueID query parameter.
-        season: Season query parameter.
+        season: Season year, e.g. ``2024``. Defaults at call time to the latest WNBA season that has rows: the current year from June (``2026`` from June 2026, ``2025`` before), a draft (``drafthistory``) from May, and with season type ``Playoffs`` (or ``commonplayoffseries``) from October. A month table cannot follow a lockout or pandemic calendar: pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or every season summed.
         season_type: SeasonType query parameter.
         return_parsed: parse the payload through parse_wnba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
@@ -8054,12 +8054,12 @@ def wnba_stats_teamestimatedmetrics(
     Example:
         Quick start::
 
-            wnba_stats_teamestimatedmetrics(league_id='10')
+            wnba_stats_teamestimatedmetrics(league_id='10', season='2024')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
         "LeagueID": league_id,
-        "Season": season,
+        "Season": season_latest_with_data(season),
         "SeasonType": season_type,
     }
     _params.update(_caller_params)
@@ -8094,7 +8094,7 @@ def wnba_stats_teamgamelog(
         date_from_nullable: DateFrom query parameter.
         date_to_nullable: DateTo query parameter.
         league_id: LeagueID query parameter.
-        season: Season year, e.g. ``2024``. Defaults at call time to the latest WNBA season that has rows: the current year from June (``2026`` from June 2026, ``2025`` before), playoff series from October. stats.wnba.com answers a request without a season with an empty HTTP 500.
+        season: Season year, e.g. ``2024``. Defaults at call time to the latest WNBA season that has rows: the current year from June (``2026`` from June 2026, ``2025`` before), a draft (``drafthistory``) from May, and with season type ``Playoffs`` (or ``commonplayoffseries``) from October. A month table cannot follow a lockout or pandemic calendar: pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or every season summed.
         season_type_all_star: SeasonType query parameter.
         team_id: TeamID query parameter.
         return_parsed: parse the payload through parse_wnba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
@@ -8175,7 +8175,7 @@ def wnba_stats_teamgamelogs(
         per_mode_simple_nullable: PerMode query parameter.
         period_nullable: Period query parameter.
         player_id_nullable: PlayerID query parameter.
-        season_nullable: Season year, e.g. ``2024``. Defaults at call time to the latest WNBA season that has rows: the current year from June (``2026`` from June 2026, ``2025`` before), playoff series from October. stats.wnba.com answers a request without a season with an empty HTTP 500.
+        season_nullable: Season year, e.g. ``2024``. Defaults at call time to the latest WNBA season that has rows: the current year from June (``2026`` from June 2026, ``2025`` before), a draft (``drafthistory``) from May, and with season type ``Playoffs`` (or ``commonplayoffseries``) from October. A month table cannot follow a lockout or pandemic calendar: pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or every season summed.
         season_segment_nullable: SeasonSegment query parameter.
         season_type_nullable: SeasonType query parameter.
         shot_clock_range_nullable: ShotClockRange query parameter.
@@ -8241,11 +8241,11 @@ def wnba_stats_teaminfocommon(
     """GET /stats/teaminfocommon
 
     Endpoint: ``GET https://stats.wnba.com/stats/teaminfocommon``
-    Example URL: https://stats.wnba.com/stats/teaminfocommon?LeagueID=10&SeasonType=Regular+Season&TeamID=1611661328
+    Example URL: https://stats.wnba.com/stats/teaminfocommon?LeagueID=10&Season=2024&SeasonType=Regular+Season&TeamID=1611661328
 
     Args:
         league_id: LeagueID query parameter.
-        season_nullable: Season query parameter.
+        season_nullable: Season year, e.g. ``2024``. Defaults at call time to the latest WNBA season that has rows: the current year from June (``2026`` from June 2026, ``2025`` before), a draft (``drafthistory``) from May, and with season type ``Playoffs`` (or ``commonplayoffseries``) from October. A month table cannot follow a lockout or pandemic calendar: pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or every season summed.
         season_type_nullable: SeasonType query parameter.
         team_id: TeamID query parameter.
         return_parsed: parse the payload through parse_wnba_stats_result_sets -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw JSON Dict.
@@ -8258,12 +8258,12 @@ def wnba_stats_teaminfocommon(
     Example:
         Quick start::
 
-            wnba_stats_teaminfocommon(league_id='10')
+            wnba_stats_teaminfocommon(league_id='10', season_nullable='2024')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
         "LeagueID": league_id,
-        "Season": season_nullable,
+        "Season": season_latest_with_data(season_nullable),
         "SeasonType": season_type_nullable,
         "TeamID": team_id,
     }
@@ -8310,7 +8310,7 @@ def wnba_stats_teamplayerdashboard(
     """GET /stats/teamplayerdashboard
 
     Endpoint: ``GET https://stats.wnba.com/stats/teamplayerdashboard``
-    Example URL: https://stats.wnba.com/stats/teamplayerdashboard?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&TeamID=1611661328&VsConference=&VsDivision=
+    Example URL: https://stats.wnba.com/stats/teamplayerdashboard?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=10&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=&PaceAdjust=N&PerMode=Totals&Period=0&PlusMinus=N&Rank=N&Season=2024&SeasonSegment=&SeasonType=Regular+Season&ShotClockRange=&TeamID=1611661328&VsConference=&VsDivision=
 
     Args:
         date_from_nullable: DateFrom query parameter.
@@ -8329,7 +8329,7 @@ def wnba_stats_teamplayerdashboard(
         period: Period query parameter.
         plus_minus: PlusMinus query parameter.
         rank: Rank query parameter.
-        season: Season query parameter.
+        season: Season year, e.g. ``2024``. Defaults at call time to the latest WNBA season that has rows: the current year from June (``2026`` from June 2026, ``2025`` before), a draft (``drafthistory``) from May, and with season type ``Playoffs`` (or ``commonplayoffseries``) from October. A month table cannot follow a lockout or pandemic calendar: pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or every season summed.
         season_segment_nullable: SeasonSegment query parameter.
         season_type_all_star: SeasonType query parameter.
         shot_clock_range_nullable: ShotClockRange query parameter.
@@ -8346,7 +8346,7 @@ def wnba_stats_teamplayerdashboard(
     Example:
         Quick start::
 
-            wnba_stats_teamplayerdashboard(league_id='10')
+            wnba_stats_teamplayerdashboard(league_id='10', season='2024')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -8366,7 +8366,7 @@ def wnba_stats_teamplayerdashboard(
         "Period": period,
         "PlusMinus": plus_minus,
         "Rank": rank,
-        "Season": season,
+        "Season": season_latest_with_data(season),
         "SeasonSegment": season_segment_nullable,
         "SeasonType": season_type_all_star,
         "ShotClockRange": shot_clock_range_nullable,
@@ -8433,7 +8433,7 @@ def wnba_stats_teamplayeronoffdetails(
         period: Period query parameter.
         plus_minus: PlusMinus query parameter.
         rank: Rank query parameter.
-        season: Season year, e.g. ``2024``. Defaults at call time to the latest WNBA season that has rows: the current year from June (``2026`` from June 2026, ``2025`` before), playoff series from October. stats.wnba.com answers a request without a season with an empty HTTP 500.
+        season: Season year, e.g. ``2024``. Defaults at call time to the latest WNBA season that has rows: the current year from June (``2026`` from June 2026, ``2025`` before), a draft (``drafthistory``) from May, and with season type ``Playoffs`` (or ``commonplayoffseries``) from October. A month table cannot follow a lockout or pandemic calendar: pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or every season summed.
         season_segment_nullable: SeasonSegment query parameter.
         season_type_all_star: SeasonType query parameter.
         team_id: TeamID query parameter.
@@ -8534,7 +8534,7 @@ def wnba_stats_teamplayeronoffsummary(
         period: Period query parameter.
         plus_minus: PlusMinus query parameter.
         rank: Rank query parameter.
-        season: Season year, e.g. ``2024``. Defaults at call time to the latest WNBA season that has rows: the current year from June (``2026`` from June 2026, ``2025`` before), playoff series from October. stats.wnba.com answers a request without a season with an empty HTTP 500.
+        season: Season year, e.g. ``2024``. Defaults at call time to the latest WNBA season that has rows: the current year from June (``2026`` from June 2026, ``2025`` before), a draft (``drafthistory``) from May, and with season type ``Playoffs`` (or ``commonplayoffseries``) from October. A month table cannot follow a lockout or pandemic calendar: pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or every season summed.
         season_segment_nullable: SeasonSegment query parameter.
         season_type_all_star: SeasonType query parameter.
         team_id: TeamID query parameter.
@@ -8638,7 +8638,7 @@ def wnba_stats_teamvsplayer(
         player_id_nullable: PlayerID query parameter.
         plus_minus: PlusMinus query parameter.
         rank: Rank query parameter.
-        season: Season year, e.g. ``2024``. Defaults at call time to the latest WNBA season that has rows: the current year from June (``2026`` from June 2026, ``2025`` before), playoff series from October. stats.wnba.com answers a request without a season with an empty HTTP 500.
+        season: Season year, e.g. ``2024``. Defaults at call time to the latest WNBA season that has rows: the current year from June (``2026`` from June 2026, ``2025`` before), a draft (``drafthistory``) from May, and with season type ``Playoffs`` (or ``commonplayoffseries``) from October. A month table cannot follow a lockout or pandemic calendar: pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or every season summed.
         season_segment_nullable: SeasonSegment query parameter.
         season_type_playoffs: SeasonType query parameter.
         team_id: TeamID query parameter.

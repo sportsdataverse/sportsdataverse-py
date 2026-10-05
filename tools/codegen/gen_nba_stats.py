@@ -200,102 +200,52 @@ def _stats_eps(league_id: str) -> List[dict]:
     )
 
 
-# Season / SeasonYear params whose hoopR/wehoop default is a call (``year_to_season(
-# most_recent_nba_season() - 1)``, ``most_recent_wnba_season()``) get the latest season that has
-# data, at call time, via the runtime ``season_latest_with_data`` transform (the per-league and
-# per-endpoint rollover months live in ``nba_stats_runtime._FIRST_ROWS``): the API answers a request
-# without one with an empty HTTP 500 that the runtime turns into ``{}``. The endpoints below are the
-# exception. A live sweep on 2026-10-05 (every wrapper with a None season, example args, no season,
-# through the proxy pool) found they answer 200 with data WITHOUT a season, so they keep the API's
-# own default, which for drafthistory and the finders is ALL seasons. Re-checked by ROW count the
-# same day (an envelope with empty rowSets would not count): NBA leaguedashteamstats 38 rows,
-# leaguedashptstats 3,805. teaminfocommon was re-probed after its NBA
-# team default was fixed. Re-measure when the catalog grows: call every wrapper with its example args and
-# no season through the proxy pool (tests/nba/test_nba_stats_season_defaults.py::test_live_defaults_return_data
-# covers a sample).
+# RULE: a Season / SeasonYear param gets the latest season that has data, at call time, via the
+# runtime ``season_latest_with_data`` transform (the per-league, per-endpoint and playoff rollover
+# months live in ``nba_stats_runtime._FIRST_ROWS``) iff hoopR (nba_stats) / wehoop (wnba_stats)
+# gives that endpoint's season a default season in its R signature, i.e. a call such as
+# ``year_to_season(most_recent_nba_season() - 1)`` / ``most_recent_wnba_season()``. An R default of
+# "" / NULL (no call in the catalog) keeps the API's own default. An endpoint the league's package
+# does not wrap borrows the other package's call (see ``_endpoint_entry``). There is no exemption
+# list: an audit of hoopR + wehoop on 2026-10-05 found a season-call default for every endpoint a
+# 2026-10-05 sweep had exempted for answering without a season (wehoop's deprecated
+# homepageleaders / homepagev2 / leaderstiles included), and the three it does not wrap
+# (leaguedashptdefend, scheduleleaguev2, scheduleleaguev2int) are per-season. Without a season
+# those 55 answered with EVERY season summed (leaguedashteamstats: SuperSonics and Bullets rows,
+# GP up to 2,395), and drafthistory / the finders with all of history, as hoopR / wehoop never ask.
+# Re-check when the catalog grows: tests/nba/test_nba_stats_season_defaults.py::
+# test_live_defaults_return_rows covers a sample live.
 _SEASON_KEYS = ("Season", "SeasonYear")
+# The one season call the catalog lost: it credits scheduleleaguev2 to nba_api only, but hoopR's
+# nbagl_schedule() calls it with season = year_to_season(most_recent_nba_season() - 1). wehoop does
+# not wrap it (wnba_schedule() reads the CDN), so the WNBA wrapper borrows the call like any other.
+_SEASON_CALL_NOT_IN_CATALOG = {"scheduleleaguev2": "=year_to_season(most_recent_nba_season() - 1)"}
 # The documented example call passes a fixed season: the default itself depends on today's date,
 # and a docs page rendered from it would drift (and fail generate.py --check) at every rollover.
 _SEASON_EXAMPLE = {"nba_stats": "2024-25", "wnba_stats": "2024"}
-_SEASON_OPTIONAL: Dict[str, frozenset] = {
-    "nba_stats": frozenset(
-        {
-            "assisttracker",
-            "drafthistory",
-            "fantasywidget",
-            "homepageleaders",
-            "homepagev2",
-            "leaderstiles",
-            "leaguedashptdefend",
-            "leaguedashptstats",
-            "leaguedashteamclutch",
-            "leaguedashteamptshot",
-            "leaguedashteamshotlocations",
-            "leaguedashteamstats",
-            "leaguegamefinder",
-            "leagueleaders",
-            "playercareerbycollegerollup",
-            "playerdashboardbyyearoveryear",
-            "playerdashptreb",
-            "playerdashptshots",
-            "playerestimatedmetrics",
-            "playerfantasyprofile",
-            "playergamestreakfinder",
-            "scheduleleaguev2",
-            "scheduleleaguev2int",
-            "shotchartdetail",
-            "shotchartlineupdetail",
-            "teamdashboardbyyearoveryear",
-            "teamdashptreb",
-            "teamestimatedmetrics",
-            "teaminfocommon",
-            "teamplayerdashboard",
-        }
-    ),
-    "wnba_stats": frozenset(
-        {
-            "assisttracker",
-            "drafthistory",
-            "fantasywidget",
-            "homepageleaders",
-            "homepagev2",
-            "leaderstiles",
-            "leaguedashptdefend",
-            "leaguedashteamclutch",
-            "leaguedashteamshotlocations",
-            "leaguedashteamstats",
-            "leaguegamefinder",
-            "leagueleaders",
-            "playercareerbycollegerollup",
-            "playerdashboardbyyearoveryear",
-            "playerestimatedmetrics",
-            "playerfantasyprofile",
-            "playergamestreakfinder",
-            "scheduleleaguev2",
-            "scheduleleaguev2int",
-            "shotchartdetail",
-            "shotchartlineupdetail",
-            "teamdashboardbyyearoveryear",
-            "teamestimatedmetrics",
-            "teaminfocommon",
-            "teamplayerdashboard",
-        }
-    ),
-}
+# hoopR defaults that fail once a season is sent. Measured 2026-10-05: playerdashptshots with
+# PlayerID 2544, Season 2025-26 and hoopR's TeamID "0" answered HTTP 500 (twice); with the player's
+# own team, the Lakers, 27 rows. ponytail: tied to the default player's team; re-pick if he moves.
+_DEFAULT_OVERRIDES = {("nba_stats", "playerdashptshots", "TeamID"): "1610612747"}
 _SEASON_DOC = {
     # Never name the date helpers here: generate.py treats a whole-word mention on a reference
     # row as "already documented" and drops the helper's own section from the docs.
     "nba_stats": (
         "Season label, e.g. ``2024-25``. Defaults at call time to the latest season that has rows: "
-        "an NBA season from the November it tips off (``2025-26`` until October 2026), a G League "
-        "season from the January after, a Summer League from its August (July 2026's is ``2026-27``), "
-        "a draft combine from June, playoff series from May. stats.nba.com answers a request without "
-        "a season with an empty HTTP 500."
+        "an NBA season from the November after its late-October tip-off (``2025-26`` until October "
+        "2026), a G League season from the January after, a Summer League from its August (July "
+        "2026's is ``2026-27``), a draft combine from June, a draft (``drafthistory``, a year) from "
+        "July, and with season type ``Playoffs`` / ``PlayIn`` (or ``commonplayoffseries``) a season "
+        "from the May its playoffs start. A month table cannot follow a lockout or pandemic calendar "
+        "(1998-99, 2011-12, 2020-21): pass a season then. Without one stats.nba.com answers an empty "
+        "HTTP 500 or every season summed."
     ),
     "wnba_stats": (
         "Season year, e.g. ``2024``. Defaults at call time to the latest WNBA season that has rows: "
-        "the current year from June (``2026`` from June 2026, ``2025`` before), playoff series from "
-        "October. stats.wnba.com answers a request without a season with an empty HTTP 500."
+        "the current year from June (``2026`` from June 2026, ``2025`` before), a draft "
+        "(``drafthistory``) from May, and with season type ``Playoffs`` (or ``commonplayoffseries``) "
+        "from October. A month table cannot follow a lockout or pandemic calendar: pass a season "
+        "then. Without one stats.wnba.com answers an empty HTTP 500 or every season summed."
     ),
 }
 
@@ -365,7 +315,10 @@ def _endpoint_entry(
                 # one package wraps the endpoint without a season default; the other's season call
                 # still says the API wants one (wnba playerdashptshotdefend: only hoopR has it)
                 per_league = p.get("league_defaults") or {}
-                default = next((v for _, v in sorted(per_league.items()) if str(v).startswith("=")), None)
+                default = next(
+                    (v for _, v in sorted(per_league.items()) if str(v).startswith("=")),
+                    _SEASON_CALL_NOT_IN_CATALOG.get(ep["slug"]),
+                )
             param: Dict[str, Any] = {
                 # the catalog spells GameID ``gameid`` on boxscoresummaryv3/boxscorehustlev2;
                 # every per-game wrapper takes ``game_id`` (#640)
@@ -374,12 +327,14 @@ def _endpoint_entry(
                 "type": "str",
             }
             if isinstance(default, str) and default.startswith("="):
-                if p["query_key"] in _SEASON_KEYS and ep["slug"] not in _SEASON_OPTIONAL[stem]:
+                if p["query_key"] in _SEASON_KEYS:
                     # the latest season with rows, re-dated per league/endpoint by the runtime
                     param["transform"] = "season_latest_with_data"
                     param["description"] = _SEASON_DOC[stem]
                 default = None  # an R call has no literal; the transform (if any) resolves it per call
-            param["default"] = _clean_default(p["name"], p["query_key"], default)
+            param["default"] = _DEFAULT_OVERRIDES.get(
+                (stem, ep["slug"], p["query_key"]), _clean_default(p["name"], p["query_key"], default)
+            )
             extra.append(param)
     example_args: Dict[str, Any] = {"league_id": default_league} if has_league else {}
     example_args.update(

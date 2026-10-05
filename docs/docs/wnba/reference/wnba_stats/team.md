@@ -122,12 +122,12 @@ GET /stats/teamestimatedmetrics
 
 **Endpoint URL:** `GET https://stats.wnba.com/stats/teamestimatedmetrics`
 
-**Valid URL:** [https://stats.wnba.com/stats/teamestimatedmetrics?LeagueID=10&SeasonType=Regular+Season](https://stats.wnba.com/stats/teamestimatedmetrics?LeagueID=10&SeasonType=Regular+Season)
+**Valid URL:** [https://stats.wnba.com/stats/teamestimatedmetrics?LeagueID=10&Season=2024&SeasonType=Regular+Season](https://stats.wnba.com/stats/teamestimatedmetrics?LeagueID=10&Season=2024&SeasonType=Regular+Season)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 | `LeagueID` | `league_id` |  |  | `Y` |  |
-| `Season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
+| `Season` | `season` |  |  | `Y` | Season year, e.g. ``2024``. Defaults at call time to the latest WNBA season that has rows: the current year from June (``2026`` from June 2026, ``2025`` before), a draft (``drafthistory``) from May, and with season type ``Playoffs`` (or ``commonplayoffseries``) from October. A month table cannot follow a lockout or pandemic calendar: pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or every season summed. |
 | `SeasonType` | `season_type` |  |  | `Y` | Season phase: 1=preseason, 2=regular season, 3=postseason. |
 
 ### Returns {#wnba_stats_teamestimatedmetrics-returns}
@@ -172,7 +172,7 @@ GET /stats/teamestimatedmetrics
 ### Example {#wnba_stats_teamestimatedmetrics-example}
 
 ```python
-wnba_stats_teamestimatedmetrics(league_id='10')
+wnba_stats_teamestimatedmetrics(league_id='10', season='2024')
 ```
 
 _Last validated n/a._
@@ -190,7 +190,7 @@ GET /stats/teamgamelog
 | `DateFrom` | `date_from_nullable` |  |  | `Y` |  |
 | `DateTo` | `date_to_nullable` |  |  | `Y` |  |
 | `LeagueID` | `league_id` |  |  | `Y` |  |
-| `Season` | `season` |  |  | `Y` | Season year, e.g. ``2024``. Defaults at call time to the latest WNBA season that has rows: the current year from June (``2026`` from June 2026, ``2025`` before), playoff series from October. stats.wnba.com answers a request without a season with an empty HTTP 500. |
+| `Season` | `season` |  |  | `Y` | Season year, e.g. ``2024``. Defaults at call time to the latest WNBA season that has rows: the current year from June (``2026`` from June 2026, ``2025`` before), a draft (``drafthistory``) from May, and with season type ``Playoffs`` (or ``commonplayoffseries``) from October. A month table cannot follow a lockout or pandemic calendar: pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or every season summed. |
 | `SeasonType` | `season_type_all_star` |  |  | `Y` |  |
 | `TeamID` | `team_id` |  |  | `Y` |  |
 
@@ -262,7 +262,7 @@ GET /stats/teamgamelogs
 | `PerMode` | `per_mode_simple_nullable` |  |  | `Y` |  |
 | `Period` | `period_nullable` |  |  | `Y` |  |
 | `PlayerID` | `player_id_nullable` |  |  | `Y` |  |
-| `Season` | `season_nullable` |  |  | `Y` | Season year, e.g. ``2024``. Defaults at call time to the latest WNBA season that has rows: the current year from June (``2026`` from June 2026, ``2025`` before), playoff series from October. stats.wnba.com answers a request without a season with an empty HTTP 500. |
+| `Season` | `season_nullable` |  |  | `Y` | Season year, e.g. ``2024``. Defaults at call time to the latest WNBA season that has rows: the current year from June (``2026`` from June 2026, ``2025`` before), a draft (``drafthistory``) from May, and with season type ``Playoffs`` (or ``commonplayoffseries``) from October. A month table cannot follow a lockout or pandemic calendar: pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or every season summed. |
 | `SeasonSegment` | `season_segment_nullable` |  |  | `Y` |  |
 | `SeasonType` | `season_type_nullable` |  |  | `Y` |  |
 | `ShotClockRange` | `shot_clock_range_nullable` |  |  | `Y` |  |
@@ -350,12 +350,12 @@ GET /stats/teaminfocommon
 
 **Endpoint URL:** `GET https://stats.wnba.com/stats/teaminfocommon`
 
-**Valid URL:** [https://stats.wnba.com/stats/teaminfocommon?LeagueID=10&SeasonType=Regular+Season&TeamID=1611661328](https://stats.wnba.com/stats/teaminfocommon?LeagueID=10&SeasonType=Regular+Season&TeamID=1611661328)
+**Valid URL:** [https://stats.wnba.com/stats/teaminfocommon?LeagueID=10&Season=2024&SeasonType=Regular+Season&TeamID=1611661328](https://stats.wnba.com/stats/teaminfocommon?LeagueID=10&Season=2024&SeasonType=Regular+Season&TeamID=1611661328)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 | `LeagueID` | `league_id` |  |  | `Y` |  |
-| `Season` | `season_nullable` |  |  | `Y` |  |
+| `Season` | `season_nullable` |  |  | `Y` | Season year, e.g. ``2024``. Defaults at call time to the latest WNBA season that has rows: the current year from June (``2026`` from June 2026, ``2025`` before), a draft (``drafthistory``) from May, and with season type ``Playoffs`` (or ``commonplayoffseries``) from October. A month table cannot follow a lockout or pandemic calendar: pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or every season summed. |
 | `SeasonType` | `season_type_nullable` |  |  | `Y` |  |
 | `TeamID` | `team_id` |  |  | `Y` |  |
 
@@ -411,7 +411,7 @@ GET /stats/teaminfocommon
 ### Example {#wnba_stats_teaminfocommon-example}
 
 ```python
-wnba_stats_teaminfocommon(league_id='10')
+wnba_stats_teaminfocommon(league_id='10', season_nullable='2024')
 ```
 
 _Last validated n/a._
@@ -442,7 +442,7 @@ GET /stats/teamvsplayer
 | `PlayerID` | `player_id_nullable` |  |  | `Y` |  |
 | `PlusMinus` | `plus_minus` |  |  | `Y` |  |
 | `Rank` | `rank` |  |  | `Y` |  |
-| `Season` | `season` |  |  | `Y` | Season year, e.g. ``2024``. Defaults at call time to the latest WNBA season that has rows: the current year from June (``2026`` from June 2026, ``2025`` before), playoff series from October. stats.wnba.com answers a request without a season with an empty HTTP 500. |
+| `Season` | `season` |  |  | `Y` | Season year, e.g. ``2024``. Defaults at call time to the latest WNBA season that has rows: the current year from June (``2026`` from June 2026, ``2025`` before), a draft (``drafthistory``) from May, and with season type ``Playoffs`` (or ``commonplayoffseries``) from October. A month table cannot follow a lockout or pandemic calendar: pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or every season summed. |
 | `SeasonSegment` | `season_segment_nullable` |  |  | `Y` |  |
 | `SeasonType` | `season_type_playoffs` |  |  | `Y` |  |
 | `TeamID` | `team_id` |  |  | `Y` |  |

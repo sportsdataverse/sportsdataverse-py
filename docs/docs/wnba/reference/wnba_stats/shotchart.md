@@ -13,7 +13,7 @@ GET /stats/shotchartdetail
 
 **Endpoint URL:** `GET https://stats.wnba.com/stats/shotchartdetail`
 
-**Valid URL:** [https://stats.wnba.com/stats/shotchartdetail?ContextMeasure=FGA&DateFrom=&DateTo=&GameID=&GameSegment=&LastNGames=0&LeagueID=10&Location=&Month=0&OpponentTeamID=0&Outcome=&Period=0&PlayerID=1628932&PlayerPosition=&RookieYear=&SeasonSegment=&SeasonType=Regular+Season&TeamID=0&VsConference=&VsDivision=](https://stats.wnba.com/stats/shotchartdetail?ContextMeasure=FGA&DateFrom=&DateTo=&GameID=&GameSegment=&LastNGames=0&LeagueID=10&Location=&Month=0&OpponentTeamID=0&Outcome=&Period=0&PlayerID=1628932&PlayerPosition=&RookieYear=&SeasonSegment=&SeasonType=Regular+Season&TeamID=0&VsConference=&VsDivision=)
+**Valid URL:** [https://stats.wnba.com/stats/shotchartdetail?ContextMeasure=FGA&DateFrom=&DateTo=&GameID=&GameSegment=&LastNGames=0&LeagueID=10&Location=&Month=0&OpponentTeamID=0&Outcome=&Period=0&PlayerID=1628932&PlayerPosition=&RookieYear=&Season=2024&SeasonSegment=&SeasonType=Regular+Season&TeamID=0&VsConference=&VsDivision=](https://stats.wnba.com/stats/shotchartdetail?ContextMeasure=FGA&DateFrom=&DateTo=&GameID=&GameSegment=&LastNGames=0&LeagueID=10&Location=&Month=0&OpponentTeamID=0&Outcome=&Period=0&PlayerID=1628932&PlayerPosition=&RookieYear=&Season=2024&SeasonSegment=&SeasonType=Regular+Season&TeamID=0&VsConference=&VsDivision=)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -40,7 +40,7 @@ GET /stats/shotchartdetail
 | `Position` | `position_nullable` |  |  | `Y` |  |
 | `RangeType` | `range_type_nullable` |  |  | `Y` |  |
 | `RookieYear` | `rookie_year_nullable` |  |  | `Y` |  |
-| `Season` | `season_nullable` |  |  | `Y` |  |
+| `Season` | `season_nullable` |  |  | `Y` | Season year, e.g. ``2024``. Defaults at call time to the latest WNBA season that has rows: the current year from June (``2026`` from June 2026, ``2025`` before), a draft (``drafthistory``) from May, and with season type ``Playoffs`` (or ``commonplayoffseries``) from October. A month table cannot follow a lockout or pandemic calendar: pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or every season summed. |
 | `SeasonSegment` | `season_segment_nullable` |  |  | `Y` |  |
 | `SeasonType` | `season_type_all_star` |  |  | `Y` |  |
 | `StartPeriod` | `start_period_nullable` |  |  | `Y` |  |
@@ -99,7 +99,7 @@ GET /stats/shotchartdetail
 ### Example {#wnba_stats_shotchartdetail-example}
 
 ```python
-wnba_stats_shotchartdetail(league_id='10')
+wnba_stats_shotchartdetail(league_id='10', season_nullable='2024')
 ```
 
 _Last validated n/a._
@@ -115,7 +115,7 @@ GET /stats/shotchartleaguewide
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 | `LeagueID` | `league_id` |  |  | `Y` |  |
-| `Season` | `season` |  |  | `Y` | Season year, e.g. ``2024``. Defaults at call time to the latest WNBA season that has rows: the current year from June (``2026`` from June 2026, ``2025`` before), playoff series from October. stats.wnba.com answers a request without a season with an empty HTTP 500. |
+| `Season` | `season` |  |  | `Y` | Season year, e.g. ``2024``. Defaults at call time to the latest WNBA season that has rows: the current year from June (``2026`` from June 2026, ``2025`` before), a draft (``drafthistory``) from May, and with season type ``Playoffs`` (or ``commonplayoffseries``) from October. A month table cannot follow a lockout or pandemic calendar: pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or every season summed. |
 
 ### Returns {#wnba_stats_shotchartleaguewide-returns}
 
@@ -147,7 +147,7 @@ GET /stats/shotchartlineupdetail
 
 **Endpoint URL:** `GET https://stats.wnba.com/stats/shotchartlineupdetail`
 
-**Valid URL:** [https://stats.wnba.com/stats/shotchartlineupdetail?ContextFilter=&ContextMeasure=FGA&DateFrom=&DateTo=&GROUP_ID=-1628899-1629481-1630096-1631019-1642784-&GameID=&GameSegment=&LastNGames=0&LeagueID=10&Location=&Month=0&OpponentTeamID=0&Outcome=&Period=0&SeasonSegment=&SeasonType=Regular+Season&TeamID=0&VsConference=&VsDivision=](https://stats.wnba.com/stats/shotchartlineupdetail?ContextFilter=&ContextMeasure=FGA&DateFrom=&DateTo=&GROUP_ID=-1628899-1629481-1630096-1631019-1642784-&GameID=&GameSegment=&LastNGames=0&LeagueID=10&Location=&Month=0&OpponentTeamID=0&Outcome=&Period=0&SeasonSegment=&SeasonType=Regular+Season&TeamID=0&VsConference=&VsDivision=)
+**Valid URL:** [https://stats.wnba.com/stats/shotchartlineupdetail?ContextFilter=&ContextMeasure=FGA&DateFrom=&DateTo=&GROUP_ID=-1628899-1629481-1630096-1631019-1642784-&GameID=&GameSegment=&LastNGames=0&LeagueID=10&Location=&Month=0&OpponentTeamID=0&Outcome=&Period=0&Season=2024&SeasonSegment=&SeasonType=Regular+Season&TeamID=0&VsConference=&VsDivision=](https://stats.wnba.com/stats/shotchartlineupdetail?ContextFilter=&ContextMeasure=FGA&DateFrom=&DateTo=&GROUP_ID=-1628899-1629481-1630096-1631019-1642784-&GameID=&GameSegment=&LastNGames=0&LeagueID=10&Location=&Month=0&OpponentTeamID=0&Outcome=&Period=0&Season=2024&SeasonSegment=&SeasonType=Regular+Season&TeamID=0&VsConference=&VsDivision=)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -165,7 +165,7 @@ GET /stats/shotchartlineupdetail
 | `OpponentTeamID` | `opponent_team_id_nullable` |  |  | `Y` |  |
 | `Outcome` | `outcome_nullable` |  |  | `Y` |  |
 | `Period` | `period` |  |  | `Y` |  |
-| `Season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
+| `Season` | `season` |  |  | `Y` | Season year, e.g. ``2024``. Defaults at call time to the latest WNBA season that has rows: the current year from June (``2026`` from June 2026, ``2025`` before), a draft (``drafthistory``) from May, and with season type ``Playoffs`` (or ``commonplayoffseries``) from October. A month table cannot follow a lockout or pandemic calendar: pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or every season summed. |
 | `SeasonSegment` | `season_segment_nullable` |  |  | `Y` |  |
 | `SeasonType` | `season_type_all_star` |  |  | `Y` |  |
 | `TeamID` | `team_id_nullable` |  |  | `Y` |  |
@@ -224,7 +224,7 @@ GET /stats/shotchartlineupdetail
 ### Example {#wnba_stats_shotchartlineupdetail-example}
 
 ```python
-wnba_stats_shotchartlineupdetail(league_id='10')
+wnba_stats_shotchartlineupdetail(league_id='10', season='2024')
 ```
 
 _Last validated n/a._

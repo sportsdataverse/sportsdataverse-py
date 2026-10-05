@@ -13,12 +13,12 @@ GET /stats/scheduleleaguev2
 
 **Endpoint URL:** `GET https://stats.wnba.com/stats/scheduleleaguev2`
 
-**Valid URL:** [https://stats.wnba.com/stats/scheduleleaguev2?LeagueID=10](https://stats.wnba.com/stats/scheduleleaguev2?LeagueID=10)
+**Valid URL:** [https://stats.wnba.com/stats/scheduleleaguev2?LeagueID=10&Season=2024](https://stats.wnba.com/stats/scheduleleaguev2?LeagueID=10&Season=2024)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 | `LeagueID` | `league_id` |  |  | `Y` |  |
-| `Season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
+| `Season` | `season` |  |  | `Y` | Season year, e.g. ``2024``. Defaults at call time to the latest WNBA season that has rows: the current year from June (``2026`` from June 2026, ``2025`` before), a draft (``drafthistory``) from May, and with season type ``Playoffs`` (or ``commonplayoffseries``) from October. A month table cannot follow a lockout or pandemic calendar: pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or every season summed. |
 
 ### Returns {#wnba_stats_scheduleleaguev2-returns}
 
@@ -84,7 +84,7 @@ GET /stats/scheduleleaguev2
 ### Example {#wnba_stats_scheduleleaguev2-example}
 
 ```python
-wnba_stats_scheduleleaguev2(league_id='10')
+wnba_stats_scheduleleaguev2(league_id='10', season='2024')
 ```
 
 _Last validated n/a._
@@ -95,12 +95,12 @@ GET /stats/scheduleleaguev2int
 
 **Endpoint URL:** `GET https://stats.wnba.com/stats/scheduleleaguev2int`
 
-**Valid URL:** [https://stats.wnba.com/stats/scheduleleaguev2int?LeagueID=10](https://stats.wnba.com/stats/scheduleleaguev2int?LeagueID=10)
+**Valid URL:** [https://stats.wnba.com/stats/scheduleleaguev2int?LeagueID=10&Season=2024](https://stats.wnba.com/stats/scheduleleaguev2int?LeagueID=10&Season=2024)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 | `LeagueID` | `league_id` |  |  | `Y` |  |
-| `Season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
+| `Season` | `season` |  |  | `Y` | Season year, e.g. ``2024``. Defaults at call time to the latest WNBA season that has rows: the current year from June (``2026`` from June 2026, ``2025`` before), a draft (``drafthistory``) from May, and with season type ``Playoffs`` (or ``commonplayoffseries``) from October. A month table cannot follow a lockout or pandemic calendar: pass a season then. Without one stats.wnba.com answers an empty HTTP 500 or every season summed. |
 
 ### Returns {#wnba_stats_scheduleleaguev2int-returns}
 
@@ -166,7 +166,7 @@ GET /stats/scheduleleaguev2int
 ### Example {#wnba_stats_scheduleleaguev2int-example}
 
 ```python
-wnba_stats_scheduleleaguev2int(league_id='10')
+wnba_stats_scheduleleaguev2int(league_id='10', season='2024')
 ```
 
 _Last validated n/a._
