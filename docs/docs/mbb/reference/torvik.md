@@ -24,6 +24,7 @@ GET /{year}_team_results.csv — men's T-Rank team ratings (adjoe/adjde/barthag,
 ### Returns {#torvik_ratings-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `rank` | integer | T-Rank position (overall barthag rank). |
@@ -97,6 +98,7 @@ GET /{year}_fffinal.csv — men's four-factors splits (eFG%/FTR/OR%/TO% offense 
 ### Returns {#torvik_team_factors-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `team_name` | character | Torvik team name. |
@@ -167,6 +169,7 @@ GET /getgamestats.php?year=&json=1 — men's per-team-game efficiency and four-f
 ### Returns {#torvik_game_stats-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `date` | character | Game date as Torvik prints it (m/d/yy). |
@@ -228,6 +231,7 @@ GET /getadvstats.php?year=&csv=1 — men's player advanced stats (one row per pl
 ### Returns {#torvik_player_stats-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `player_name` | character | Player name as Torvik lists it, 'First Last' (e.g. Robby Carmody). |
@@ -323,6 +327,7 @@ GET /{year}_super_sked.json — men's season schedule/results with T-Rank projec
 ### Returns {#torvik_game_schedule-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `muid` | character | Torvik matchup id; equals the game_stats muid. |

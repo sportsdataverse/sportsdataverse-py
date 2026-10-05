@@ -24,6 +24,7 @@ Pull EDGE detail stats for a single skater.
 ### Returns {#nhl_edge_skater_detail-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `seasons_with_edge_stats` | character | Comma-separated list or serialized array of seasons for which NHL EDGE player-tracking data is available for this skater. |
@@ -150,6 +151,7 @@ Pull EDGE comparison data for a single skater.
 ### Returns {#nhl_edge_skater_comparison-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `seasons_with_edge_stats` | character | Serialized list of seasons for which NHL EDGE player-tracking data is available for the skater. |
@@ -285,6 +287,7 @@ Pull EDGE shot-location detail for a single skater.
 ### Returns {#nhl_edge_skater_shot_location_detail-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `area` | character | Net/ice zone the shots were taken from. |
@@ -351,6 +354,7 @@ Pull EDGE shot-speed detail for a single skater.
 ### Returns {#nhl_edge_skater_shot_speed_detail-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `hardest_shots` | character | Serialized list or JSON array of the player's hardest individual shot efforts, including speed and context metadata from NHL EDGE puck tracking. |
@@ -445,6 +449,7 @@ Pull EDGE skating-distance detail for a single skater.
 ### Returns {#nhl_edge_skater_skating_distance_detail-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `skating_distance_last10` | character | JSON-serialized rolling summary of total distance skated by the player across the last 10 games. |
@@ -477,6 +482,7 @@ Pull EDGE skating-speed detail for a single skater.
 ### Returns {#nhl_edge_skater_skating_speed_detail-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `top_skating_speeds` | character | JSON-serialized list of the skater's top individual speed bursts, typically the ten highest speed readings recorded during the tracking period. |
@@ -592,6 +598,7 @@ Pull EDGE zone-time detail for a single skater.
 ### Returns {#nhl_edge_skater_zone_time-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `strength_code` | character | Strength state code (e.g., all, even, pp, pk). |

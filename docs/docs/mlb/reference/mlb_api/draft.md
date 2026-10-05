@@ -51,6 +51,7 @@ View latest player drafted, endpoint best used when draft is currently open.
 ### Returns {#mlb_draft_latest-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `number` | integer | Jersey number. |

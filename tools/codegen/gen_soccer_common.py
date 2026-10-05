@@ -32,7 +32,7 @@ from sportsdataverse.dl_utils import underscore
 ROOT = Path(__file__).resolve().parents[2]
 
 # Windows dev-box fallback, matching the sibling generators (gen_cbs, gen_on3).
-_WINDOWS_REFS = Path("C:/Users/saiem/Documents/sdv-internal-refs")
+_WINDOWS_REFS = Path("C:/Users/saiem/Documents/GitHub-Data/sdv-dev/sdv-internal-refs")
 
 # polars dtype -> the R-style type vocabulary the returns-schemas use.
 _NUMERIC_KINDS = ("integer", "numeric")

@@ -23,6 +23,7 @@ GET /stats/scheduleleaguev2
 ### Returns {#nba_stats_scheduleleaguev2-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `arena_city` | character | City hosting the game's arena. |
@@ -104,6 +105,7 @@ GET /stats/scheduleleaguev2int
 ### Returns {#nba_stats_scheduleleaguev2int-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `arena_city` | character | City hosting the game's arena. |

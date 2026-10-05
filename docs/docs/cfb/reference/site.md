@@ -28,6 +28,7 @@ ESPN endpoint.
 ### Returns {#espn_cfb_scoreboard-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `game_id` | character | ESPN event id. |
@@ -35,8 +36,8 @@ ESPN endpoint.
 | `date` | character | Match start timestamp (ISO 8601, UTC). |
 | `name` | character | Full event name (e.g. 'Team A at Team B'). |
 | `short_name` | character | Abbreviated event name (e.g. 'TA @ TB'). |
-| `season_year` | integer | Season year string ('YYYY-YY' format). |
-| `season_type` | integer | ESPN season type (2 = regular, 3 = postseason). |
+| `season_year` | integer | Integer season year ESPN assigns the event (e.g. 2025 for the 2025-26 season). |
+| `season_type` | integer | ESPN season-type id of the event's season: 1 preseason, 2 regular season, 3 postseason, 4 offseason for the US leagues; soccer competitions carry their own competition-specific ids (e.g. 13481). |
 | `season_slug` | character | Season slug. |
 | `status_type_id` | character | Unique identifier for status type. |
 | `status_type_name` | character | Status type name. |
@@ -45,9 +46,9 @@ ESPN endpoint.
 | `status_type_description` | character | Status type description. |
 | `status_type_detail` | character | Status type detail. |
 | `status_type_short_detail` | character | Status type short detail. |
-| `status_clock` | double | Game clock in seconds. |
+| `status_clock` | double | Game clock in seconds as ESPN reports it: time remaining in the period for clock sports, elapsed seconds for soccer (e.g. 5400.0 at full time); 0.0 once a game has ended. |
 | `status_display_clock` | character | Status display clock. |
-| `status_period` | integer | Current period. |
+| `status_period` | integer | Current or final period number (quarter, half, inning or period, depending on the sport). |
 | `neutral_site` | logical | Whether the match is played at a neutral venue. |
 | `conference_competition` | logical | Conference competition. |
 | `attendance` | integer | Reported attendance at the game. |
@@ -57,7 +58,7 @@ ESPN endpoint.
 | `venue_state` | character | State (or province/country) where the venue is located. |
 | `venue_indoor` | logical | Whether the home venue is indoors. |
 | `broadcast` | character | Broadcast network short name. |
-| `note` | character | Injury status and description. |
+| `note` | character | Event note text from the competition (e.g. a series or game label such as 'World Series - Game 1', or a shootout result); an empty string when there is none. |
 | `home_id` | character | Home team referencing id. |
 | `home_name` | character | Home team display name. |
 | `home_abbreviation` | character | Home team's abbreviation. |
@@ -105,7 +106,8 @@ ESPN endpoint.
 
 ### Returns {#espn_cfb_summary-returns}
 
-**`return_parsed=True`** (default) — a dict of `polars.DataFrame`s keyed by summary section (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — a dict of `polars.DataFrame`s keyed by summary section (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+
 **boxscore_player**
 
 | col_name | type | description |
@@ -507,6 +509,7 @@ ESPN endpoint.
 ### Returns {#espn_cfb_news-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `id` | integer | ESPN numeric identifier for the article. |
@@ -555,6 +558,7 @@ ESPN endpoint.
 ### Returns {#espn_cfb_injuries-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `id` | character | ESPN numeric identifier for the athlete. |
@@ -683,6 +687,7 @@ ESPN endpoint.
 ### Returns {#espn_cfb_teams_site-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `team_abbreviation` | character | Short team abbreviation (e.g. "BOS"). |
@@ -751,6 +756,7 @@ ESPN endpoint.
 ### Returns {#espn_cfb_team_roster-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `position_group` | character | Position group of the recruits (e.g. Offensive Line, Defensive Back). |
@@ -836,6 +842,7 @@ ESPN endpoint.
 ### Returns {#espn_cfb_team_schedule-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `id` | character | ESPN numeric event identifier. |
@@ -927,6 +934,7 @@ ESPN endpoint.
 ### Returns {#espn_cfb_team_injuries-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `id` | character | ESPN numeric identifier for the athlete. |
@@ -1009,6 +1017,7 @@ ESPN endpoint.
 ### Returns {#espn_cfb_team_news-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `id` | integer | ESPN numeric identifier for the article. |
@@ -1133,6 +1142,7 @@ ESPN endpoint.
 ### Returns {#espn_cfb_player_news-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `id` | integer | ESPN numeric identifier for the article. |
@@ -1184,6 +1194,7 @@ ESPN endpoint.
 ### Returns {#espn_cfb_standings-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `group_name` | character | Group name. |

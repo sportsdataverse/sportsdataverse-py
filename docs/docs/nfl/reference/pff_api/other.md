@@ -21,6 +21,7 @@ List the leagues you can read, with their seasons and weeks
 ### Returns {#pff_api_ref_leagues-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `abbreviation` | character | Metric abbreviation. |
@@ -62,6 +63,7 @@ List game results for a league, season and week
 ### Returns {#pff_api_ref_games-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `away_franchise_id` | numeric | PFF franchise id of the away team. |
@@ -106,6 +108,7 @@ Search the player directory by name or id
 ### Returns {#pff_api_ref_players-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `college` | character | Official college (usually the last one attended) |

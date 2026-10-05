@@ -155,3 +155,18 @@ def test_wrapper_end_to_end_with_capture(monkeypatch: pytest.MonkeyPatch) -> Non
     monkeypatch.setattr(gen, "_get", lambda url, params=None, **kw: _load("nfl_league_scores_segment"))
     df = gen.fox_api_league_scores_segment(sport="nfl", segment_id="2026-3-1")
     assert df.height == 16
+
+
+def test_int_float_mix_is_promoted_to_float_not_stringified() -> None:
+    df = P.parse_fox_api({"rows": [{"v": 1, "t": 1}, {"v": 2.5, "t": "x"}]})
+    assert df["v"].dtype == pl.Float64 and df["v"].to_list() == [1.0, 2.5]
+    assert df["t"].dtype == pl.Utf8  # a non-numeric mix still stringifies
+
+
+def test_pathologically_nested_payload_returns_empty_frame() -> None:
+    deep: Dict[str, Any] = {}
+    node = deep
+    for _ in range(5000):
+        node["n"] = {}
+        node = node["n"]
+    assert P.parse_fox_api({"rows": [deep]}).shape[0] == 0

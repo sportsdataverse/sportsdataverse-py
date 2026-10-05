@@ -53,6 +53,7 @@ GET /api/v1/game/{gamePk}/boxscore — team + player boxscore for one game.
 ### Returns {#mlb_boxscore-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `team_side` | character | Home or away indicator. |
@@ -314,6 +315,7 @@ GET /api/v1/game/{gamePk}/linescore — inning-by-inning + current game state.
 ### Returns {#mlb_linescore-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `num` | integer | Inning number. |
@@ -353,6 +355,7 @@ GET /api/v1/game/{gamePk}/winProbability — per-play WP timeline.
 ### Returns {#mlb_win_probability-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `pitch_index` | character | A serialized list of indices identifying individual pitch events within the at-bat for this win-probability row. |
@@ -447,6 +450,7 @@ GET /api/v1/people?personIds=... — bulk person lookup by MLBAM id.
 ### Returns {#mlb_people-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `id` | integer | Id. |
@@ -521,6 +525,7 @@ GET /api/v1/people/{personId} — single person detail.
 ### Returns {#mlb_person-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `id` | integer | Id. |
@@ -591,6 +596,7 @@ GET /api/v1/people/{personId}/stats/game/{gamePk} — one player, one game.
 ### Returns {#mlb_person_game_stats-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `total_splits` | double | Total number of splits in the leaderboard. |
@@ -627,6 +633,7 @@ GET /api/v1/sports/{sportId}/players — every player in a sport for a season.
 ### Returns {#mlb_sport_players-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `id` | integer | Id. |
@@ -705,6 +712,7 @@ GET /api/v1/sports — list known sports (MLB, MiLB, KBO, NPB, …).
 ### Returns {#mlb_sports-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `id` | integer | Id. |
@@ -742,6 +750,7 @@ GET /api/v1/leagues — list leagues.
 ### Returns {#mlb_leagues-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `id` | integer | Id. |
@@ -811,6 +820,7 @@ GET /api/v1/seasons/{seasonId} — single season detail.
 ### Returns {#mlb_season-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `season_id` | character | stats.ncaa.org season identifier. |
@@ -862,6 +872,7 @@ GET /api/v1/venues — list venues.
 ### Returns {#mlb_venues-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `id` | integer | Id. |
@@ -897,6 +908,7 @@ GET /api/v1/venues/{venueId} — single venue detail.
 ### Returns {#mlb_venue-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `id` | integer | Id. |
@@ -955,6 +967,7 @@ GET /api/v1/awards — list award IDs (call with no params to enumerate).
 ### Returns {#mlb_awards-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `id` | character | Id. |
@@ -996,6 +1009,7 @@ GET /api/v1/awards/{awardId}/recipients — historical winners of one award.
 ### Returns {#mlb_award_recipients-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `id` | character | Id. |

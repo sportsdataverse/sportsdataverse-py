@@ -47,6 +47,7 @@ GET /stats/leaguedashteamptshot
 ### Returns {#nba_stats_leaguedashteamptshot-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `team_id` | integer | Unique team identifier. |
@@ -122,6 +123,7 @@ GET /stats/leaguedashteamshotlocations
 ### Returns {#nba_stats_leaguedashteamshotlocations-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `team_id` | integer | Unique team identifier. |
@@ -208,6 +210,7 @@ GET /stats/leaguedashteamstats
 ### Returns {#nba_stats_leaguedashteamstats-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `team_id` | integer | Unique team identifier. |

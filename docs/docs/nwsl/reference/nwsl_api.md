@@ -24,6 +24,7 @@ All competitions StatsPerform tracks for NWSL (league + friendlies/cups).
 ### Returns {#nwsl_competitions-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `competition_id` | character | Composite Competition id (Utf8 join key). |
@@ -60,6 +61,7 @@ Team lineups (starting XI + bench + staff) for a match.
 ### Returns {#nwsl_match_lineups-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `match_id` | character | Composite Match id (Utf8 join key). |
@@ -112,6 +114,7 @@ Match days (rounds) for a season.
 ### Returns {#nwsl_matchdays-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `match_set_id` | character | Composite match-day (match set) id. |
@@ -160,6 +163,7 @@ Player-stats leaderboard for a season (paginated).
 ### Returns {#nwsl_player_stats-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `rank_label` | character | Leaderboard rank label (null unless ranked view). |
@@ -238,6 +242,7 @@ Matches across one or more seasons within a US-format date window.
 ### Returns {#nwsl_season_matches-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `provider_id` | character | Underlying StatsPerform/Opta provider id (e.g. `opta:...`). |
@@ -379,6 +384,7 @@ Competition stages for a season (may be empty for league play).
 ### Returns {#nwsl_stages-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `stage_id` | character | Composite Stage id (`nwsl::Football_Stage::{hex}`). |
@@ -412,6 +418,7 @@ Overall standings table for a season (table/home/away splits).
 ### Returns {#nwsl_standings-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `split_type` | character | Split type code. |
@@ -474,6 +481,7 @@ Team-stats leaderboard for a season.
 ### Returns {#nwsl_team_stats-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `rank_label` | character | Leaderboard rank label (null unless ranked view). |
@@ -536,6 +544,7 @@ Teams participating in a season.
 ### Returns {#nwsl_teams-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `team_id` | character | Composite Team id (Utf8 join key). |

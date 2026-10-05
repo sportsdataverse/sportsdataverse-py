@@ -4684,5 +4684,6 @@ frames:
     name: touchbacks
     type: integer
   section: kickoffs
+frames_by: report
 kind: frames
 schema: pff_api_position_report

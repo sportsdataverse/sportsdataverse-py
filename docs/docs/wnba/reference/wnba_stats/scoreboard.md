@@ -23,7 +23,8 @@ GET /stats/scoreboardv2
 
 ### Returns {#wnba_stats_scoreboardv2-returns}
 
-**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`GameHeader`, `LineScore`, `SeriesStandings`, `LastMeeting`, `EastConfStandingsByDay`, `WestConfStandingsByDay`, `Available`, `TeamLeaders`, `TicketLinks`, `WinProbability`) (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`GameHeader`, `LineScore`, `SeriesStandings`, `LastMeeting`, `EastConfStandingsByDay`, `WestConfStandingsByDay`, `Available`, `TeamLeaders`, `TicketLinks`, `WinProbability`) (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+
 **GameHeader**
 
 | col_name | type | description |
@@ -204,6 +205,7 @@ GET /stats/scoreboardv3
 ### Returns {#wnba_stats_scoreboardv3-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `awayteam_inbonus` | character | Whether the away team is currently in the bonus (penalty) foul situation. |

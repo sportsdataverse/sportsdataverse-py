@@ -27,6 +27,7 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 ### Returns {#pff_facet_time_in_pockets-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `more_btt_rate` | numeric | Big-time throws as a percentage of qualifying attempts on dropbacks with time in pocket of 2.5 seconds or more, per PFF charting. |
@@ -175,6 +176,7 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 ### Returns {#pff_facet_receiving_concept-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `screen_caught_percent` | numeric | Percentage of targets caught on screen concepts. |
@@ -283,6 +285,7 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 ### Returns {#pff_facet_special_teams_summary-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `assists` | numeric | Assisted tackles credited to the player on special-teams plays. |

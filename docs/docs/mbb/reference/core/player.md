@@ -250,6 +250,7 @@ ESPN endpoint.
 ### Returns {#espn_mbb_player_injuries-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `id` | character | ESPN numeric identifier for the athlete. |

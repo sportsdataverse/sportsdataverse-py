@@ -22,6 +22,7 @@ Coach career-records (regular season).
 ### Returns {#nhl_records_coach_career-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `id` | integer | Unique player identifier. |
@@ -88,6 +89,7 @@ Coach career records inclusive of regular season + playoffs.
 ### Returns {#nhl_records_coach_career_with_playoffs-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `id` | integer | Unique player identifier. |
@@ -129,6 +131,7 @@ Coach records scoped to individual franchise stints.
 ### Returns {#nhl_records_coach_franchise-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `id` | integer | Unique player identifier. |
@@ -201,6 +204,7 @@ Coach Stanley Cup Final win streak and consecutive-cup records.
 ### Returns {#nhl_records_coach_stanley_cup-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `id` | integer | Unique player identifier. |

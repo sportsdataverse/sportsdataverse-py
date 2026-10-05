@@ -109,6 +109,7 @@ GET /stats/leaguegamefinder
 ### Returns {#nba_stats_leaguegamefinder-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `season_id` | character | Unique season identifier. |
@@ -173,6 +174,7 @@ GET /stats/leaguegamelog
 ### Returns {#nba_stats_leaguegamelog-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `season_id` | character | Unique season identifier. |
@@ -254,6 +256,7 @@ GET /stats/leaguehustlestatsplayer
 ### Returns {#nba_stats_leaguehustlestatsplayer-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `player_id` | integer | Unique player identifier. |
@@ -334,6 +337,7 @@ GET /stats/leaguehustlestatsteam
 ### Returns {#nba_stats_leaguehustlestatsteam-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `team_id` | integer | Unique team identifier. |
@@ -388,6 +392,7 @@ GET /stats/leagueleaders
 ### Returns {#nba_stats_leagueleaders-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `player_id` | integer | Unique player identifier. |
@@ -467,6 +472,7 @@ GET /stats/leaguelineupviz
 ### Returns {#nba_stats_leaguelineupviz-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `group_id` | character | ESPN group id. |
@@ -540,6 +546,7 @@ GET /stats/leagueplayerondetails
 ### Returns {#nba_stats_leagueplayerondetails-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `group_set` | character | Name of the grouping family used for this dashboard or split row. |
@@ -634,6 +641,7 @@ GET /stats/leagueseasonmatchups
 ### Returns {#nba_stats_leagueseasonmatchups-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `season_id` | character | Unique season identifier. |
@@ -691,6 +699,7 @@ GET /stats/leaguestandings
 ### Returns {#nba_stats_leaguestandings-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `league_id` | character | League identifier used in compact NBA Stats schedule and scoreboard result sets. |
@@ -803,6 +812,7 @@ GET /stats/leaguestandingsv3
 ### Returns {#nba_stats_leaguestandingsv3-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `league_id` | character | League identifier used in compact NBA Stats schedule and scoreboard result sets. |

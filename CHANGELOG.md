@@ -4,6 +4,7 @@
 
 - [Unreleased](#unreleased)
   - [Fixed — ESPN basketball pbp: one-provider spreads, paired spread signs, team timeouts, MBB double-overtime seconds](#fixed--espn-basketball-pbp-one-provider-spreads-paired-spread-signs-team-timeouts-mbb-double-overtime-seconds)
+  - [Fixed — pff_api return tables for the per-player and coverage-matrix routes](#fixed--pff_api-return-tables-for-the-per-player-and-coverage-matrix-routes)
   - [Fixed — reference-docs Valid URLs are the URLs the example calls request; summary documents its dict](#fixed--reference-docs-valid-urls-are-the-urls-the-example-calls-request-summary-documents-its-dict)
   - [Added — ESPN NBA G League wrappers (`espn_nbagl_*`)](#added--espn-nba-g-league-wrappers-espn_nbagl_)
   - [Fixed — nba_stats, wnba_stats and on3 return tables now match what the parsers return](#fixed--nba_stats-wnba_stats-and-on3-return-tables-now-match-what-the-parsers-return)
@@ -376,6 +377,33 @@ the owner's call:
   multi-provider games (about 13,000; 2.3% change sign, median change 0.5 point) and about 32% of
   NBA 2013-19 (about 2,900; about 1% change sign). Most changes are improvements: where the
   signs disagree, the current code matches the winner in MBB 22 of 35 and NBA 12 of 15.
+
+### Fixed — pff_api return tables for the per-player and coverage-matrix routes
+
+19 `pff_api_*` routes had no columns in their return tables. The capture they were generated
+from had two gaps. It requested one QB for every per-player report, so the kicker, punter,
+returner and defense reports came back with no week rows. It also recorded the nested bodies
+(per-game `weeks`, the coverage matrix, the snaps and rushing-direction objects) only as object
+keys. A new live capture uses a player who played each role in 2025 (NFL and NCAA, 38 reads). The
+return table of each of these routes now lists what its parser returns on that capture:
+
+- **13 per-player summaries** (`pff_api_player_*_summary`, `_offense_blocking`,
+  `_offense_pass_blocking`, `_offense_run_blocking`): the per-game rows, including the `game_*`
+  columns exploded from each row's nested game object.
+- `pff_api_player_seasons`, `_snaps_summary`, `_position_pivot` and `_rushing_direction`.
+- `pff_api_facet_receiving_coverage` and `pff_api_facet_defense_coverage_matchup`: one shared
+  schema with three frames, `defenders`, `receivers` and `versus`.
+
+710 column descriptions were added. Stat columns reuse the text already written for the same
+column of the same PFF report. Context and new columns were written from PFF's spec, and each
+derived column's formula was checked against the captured rows.
+
+**Parser fix.** For the player rushing-direction and player snaps-summary bodies,
+`parse_pff_report` returned a zero-row frame even when PFF sent data, because each body is one
+object rather than a list of rows. It now returns one row per direction, and one row with
+`snap_counts_<type>` columns, respectively. `pff_api_player_rushing_direction()` and
+`pff_api_player_snaps_summary()` now return those rows by default. Passing the envelope key
+explicitly (`report="rushing_direction_stats"` or `report="snaps"`) returns the same rows.
 
 ### Fixed — reference-docs Valid URLs are the URLs the example calls request; summary documents its dict
 

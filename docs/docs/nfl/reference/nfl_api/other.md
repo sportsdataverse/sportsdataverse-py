@@ -25,6 +25,7 @@ GET /football/v2/standings — one row per team standing across the returned wee
 ### Returns {#nfl_standings-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `team_id` | character | NFL.com Shield GUID for the team. |
@@ -108,6 +109,7 @@ GET /football/v2/rosters — one row per team roster for the season.
 ### Returns {#nfl_rosters-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `season` | integer | Season (year) of the roster. |
@@ -151,6 +153,7 @@ GET /football/v2/teams/history — one row per team for a season.
 ### Returns {#nfl_teams_history-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `id` | character | NFL.com Shield GUID for the team (or Pro Bowl team entry). |
@@ -192,6 +195,7 @@ GET /football/v2/teams/{team_id} — single-team detail (one row).
 ### Returns {#nfl_team-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `id` | character | NFL.com Shield GUID for the team. |
@@ -236,6 +240,7 @@ GET /football/v2/weeks/season/{season}/seasonType/{season_type} — week calenda
 ### Returns {#nfl_weeks-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `season` | integer | Season (year) of the week. |
@@ -271,6 +276,7 @@ GET /football/v2/weeks/date/{YYYY-MM-DD} — the week containing a date (one row
 ### Returns {#nfl_weeks_by_date-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `season` | integer | Season (year) the date falls in. |
@@ -307,6 +313,7 @@ GET /football/v2/combine/profiles — one row per combine prospect.
 ### Returns {#nfl_combine_profiles-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `id` | character | NFL.com Shield GUID for the combine profile. |
@@ -392,6 +399,7 @@ GET /football/v2/draft/picks/report — one row per draft pick.
 ### Returns {#nfl_draft_picks-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `year` | integer | Draft year. |
@@ -432,6 +440,7 @@ GET /football/v2/injuries — one row per injured player.
 ### Returns {#nfl_injuries-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `season` | integer | Season (year) of the injury report. |
@@ -485,6 +494,7 @@ GET /football/v2/experience/weekly-game-details — one row per game (bare list)
 ### Returns {#nfl_weekly_game_details-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `id` | character | NFL.com Shield GUID for the game. |

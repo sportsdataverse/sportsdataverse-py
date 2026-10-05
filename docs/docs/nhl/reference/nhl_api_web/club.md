@@ -23,6 +23,7 @@ Pull a team's full-season schedule.
 ### Returns {#nhl_club_schedule_season-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `club_previous_season` | integer | Indicator for whether the game belongs to the club's prior completed season (1 = previous season, 0 otherwise). |

@@ -694,5 +694,6 @@ frames:
     name: run_rate_against_rank
     type: integer
   section: defense-opponent-tendencies
+frames_by: category
 kind: frames
 schema: pff_api_team_stats

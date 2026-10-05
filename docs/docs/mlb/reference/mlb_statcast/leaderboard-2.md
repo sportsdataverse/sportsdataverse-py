@@ -25,6 +25,7 @@ GET /leaderboard/statcast-year-to-year — year-to-year metric change leaderboar
 ### Returns {#mlb_statcast_leaderboard_year_to_year-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `name` | character | Player (or entity) name. |
@@ -81,6 +82,7 @@ GET /leaderboard/pitch-timer-infractions — pitch-timer infractions leaderboard
 ### Returns {#mlb_statcast_leaderboard_timer_infractions-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `entity_id` | character | MLBAM id of the player/team entity. |
@@ -126,6 +128,7 @@ GET /leaderboard/custom — build-your-own metric leaderboard (comma-separated s
 ### Returns {#mlb_statcast_leaderboard_custom-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `last_name, first_name` | character | Last name, first name. |
@@ -162,6 +165,7 @@ GET /leaderboard/fielding-run-value — fielding run-value leaderboard (HTML-emb
 ### Returns {#mlb_statcast_leaderboard_fielding_run_value-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `total_runs` | numeric | Total runs. |
@@ -216,6 +220,7 @@ GET /leaderboard/statcast-park-factors — Statcast park-factors leaderboard (HT
 ### Returns {#mlb_statcast_leaderboard_park_factors-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `grouping_venue_conditions` | character | Grouping venue conditions. |

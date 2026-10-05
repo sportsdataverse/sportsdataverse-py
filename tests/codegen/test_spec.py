@@ -80,3 +80,19 @@ def test_endpoint_parses_path_params_optional_segment_default_from_now_variant(t
     assert b.path_params[1].default_from == "event_id"
     c = api.endpoints[2]
     assert c.now_variant == "/x/{team}/now"
+
+
+def _api_with(**fields):
+    ep = spec.Endpoint(short="x", path="/x", **fields)
+    return spec.EspnApi(api="a", host="h", name_pattern="{short}", endpoints=[ep])
+
+
+def test_validate_league_keys_rejects_typos_in_each_field():
+    import pytest
+
+    cfg = spec.load_leagues(ENDPOINTS / "leagues.yaml")
+    spec.validate_league_keys([_api_with(include_prefixes=["nba"], league_example_args={"wnba": {}})], cfg)
+    with pytest.raises(spec.SpecError, match="nbaa"):
+        spec.validate_league_keys([_api_with(include_prefixes=["nbaa"])], cfg)
+    with pytest.raises(spec.SpecError, match="wnbaa"):
+        spec.validate_league_keys([_api_with(league_example_args={"wnbaa": {}})], cfg)
