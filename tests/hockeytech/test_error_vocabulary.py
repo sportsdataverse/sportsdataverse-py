@@ -188,6 +188,29 @@ def test_resolve_season_id_pwhl_falls_back_on_failed_fetch(monkeypatch):
         resolve_season_id("pwhl", season=2031)
 
 
+def test_pwhl_fallback_table_matches_the_real_seasons_list():
+    """Every id in the committed PWHL seasons capture is in the fallback, with the same labels."""
+    from sportsdataverse.hockeytech._leagues import _PWHL_SEASON_FALLBACK
+    from sportsdataverse.hockeytech._parsers import parse_seasons
+
+    live = parse_seasons(load_fixture("hockeytech", "pwhl_seasons"))
+    table = {r["season_id"]: (r["season_yr"], r["game_type_label"]) for r in _PWHL_SEASON_FALLBACK}
+    for sid, yr, label in live.select("season_id", "season_yr", "game_type_label").iter_rows():
+        assert table.get(sid) == (yr, label), sid
+    assert table[11] == (2027, "regular")  # live 2026-10-05: "2026-27 Regular Season"
+
+
+@pytest.mark.parametrize(
+    "season, game_type, expected",
+    [(2026, "playoffs", 9), (2027, "regular", 11), (2027, "preseason", 10), (2024, "preseason", 2)],
+)
+def test_pwhl_fallback_covers_current_seasons(monkeypatch, season, game_type, expected):
+    from sportsdataverse.hockeytech._leagues import resolve_season_id
+
+    _patch_all(monkeypatch, _raiser(AssetFetchError("HTTP 503")))
+    assert resolve_season_id("pwhl", season=season, game_type=game_type) == expected
+
+
 def test_resolve_season_id_pwhl_falls_back_when_list_lacks_season(monkeypatch):
     from sportsdataverse.hockeytech._leagues import resolve_season_id
 

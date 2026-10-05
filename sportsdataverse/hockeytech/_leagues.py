@@ -115,13 +115,21 @@ def get_config(league: str) -> LeagueConfig:
 
 
 # Hardcoded PWHL fallback (ported from fastRhockey pwhl_season_id) used when the
-# live seasons feed is unreachable.
+# live seasons feed is unreachable. Ids 1-10 match the committed seasons fixture
+# (tests/fixtures/hockeytech/pwhl_seasons.json, a test locks it); 11 is the live
+# feed's "2026-27 Regular Season" (2026-10-05). Extend it when a season starts.
 _PWHL_SEASON_FALLBACK = [
     {"season_id": 1, "season_yr": 2024, "game_type_label": "regular"},
+    {"season_id": 2, "season_yr": 2024, "game_type_label": "preseason"},
     {"season_id": 3, "season_yr": 2024, "game_type_label": "playoffs"},
+    {"season_id": 4, "season_yr": 2025, "game_type_label": "preseason"},
     {"season_id": 5, "season_yr": 2025, "game_type_label": "regular"},
     {"season_id": 6, "season_yr": 2025, "game_type_label": "playoffs"},
+    {"season_id": 7, "season_yr": 2026, "game_type_label": "preseason"},
     {"season_id": 8, "season_yr": 2026, "game_type_label": "regular"},
+    {"season_id": 9, "season_yr": 2026, "game_type_label": "playoffs"},
+    {"season_id": 10, "season_yr": 2027, "game_type_label": "preseason"},
+    {"season_id": 11, "season_yr": 2027, "game_type_label": "regular"},
 ]
 
 
