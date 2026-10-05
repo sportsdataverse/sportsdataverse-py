@@ -10,7 +10,10 @@ Inputs:
     * ``pff/developer/pff-developer.openapi.json`` in the sibling ``sdv-internal-refs``
       checkout (``SDV_INTERNAL_REFS_REPO``), vendored byte-for-byte from PFF.
     * ``pff/developer/captures/schemas_v{1,2}.json`` there -- the live-captured columns
-      (``/v2`` tables describe themselves; ``/v1`` columns are the union across rows).
+      (``/v2`` tables describe themselves; ``/v1`` columns are the union across rows). A ``/v1``
+      target may also carry a ``union`` body (every row list folded into one row): a route whose
+      rows nest (per-player ``weeks``, the coverage matrix) or whose legacy schema is empty is
+      documented as what its parser emits on that body (``_parsed_schema``).
     * this repo's LEGACY stem ``tools/codegen/endpoints/pff.yaml``: a ``/v1`` route that
       already existed on premium.pff.com returns the identical wire format, so it reuses
       the legacy returns-schema instead of minting a duplicate.
@@ -40,6 +43,7 @@ from typing import Any, Dict, List
 import yaml
 
 from sportsdataverse.dl_utils import underscore
+from sportsdataverse.nfl import pff_parsers
 
 ROOT = Path(__file__).resolve().parents[2]
 _REFS = Path(os.environ.get("SDV_INTERNAL_REFS_REPO", str(ROOT.parent / "sdv-internal-refs")))
@@ -53,6 +57,7 @@ HOST = "https://api.pff.com"
 _SKIP_PARAMS = {"export", "format", "table"}  # CSV-only switches
 _PY_TYPE = {"integer": "int", "number": "float", "boolean": "bool"}
 _DTYPE = {"integer": "integer", "number": "numeric", "string": "character", "boolean": "logical"}
+_POLARS_TO_R = {"Int64": "integer", "Float64": "numeric", "Boolean": "logical"}
 
 
 def snake(s: str) -> str:
@@ -157,6 +162,53 @@ def _v1_schema(s1: dict, short: str, target: str, shape: Dict[str, str]) -> Dict
     }
 
 
+def _legacy_empty(rs: str) -> bool:
+    """True when the LEGACY returns-schema ``rs`` documents no columns (its premium.pff.com
+    capture predates role-appropriate players / nested bodies), so pff_api mints its own."""
+    doc = yaml.safe_load((ROOT / "tools/codegen/schemas" / f"{rs}.yaml").read_text(encoding="utf-8")) or {}
+    return not (doc.get("frames") if doc.get("kind") == "frames" else doc.get("columns"))
+
+
+def _union_bodies(s1: dict, target: str) -> List[dict]:
+    """The captured UNION bodies of a /v1 target (nfl, then ncaa): ``capture.py``'s
+    ``union_body`` folds every row of a list into one, so a parser run on it emits every
+    column any row carried -- the full surface that one row (or a trimmed sample) undercounts."""
+    return [b for lg in ("nfl", "ncaa") if (b := (s1.get(f"v1/{lg}/{target}") or {}).get("union")) is not None]
+
+
+def _parsed_schema(slug: str, parser: str, bodies: List[dict]) -> Dict[str, Any]:
+    """Returns-schema = what ``parser`` emits on ``bodies``, one table per section it returns.
+
+    A column's type is its first non-null dtype across the bodies; null in every capture, it
+    is typed from no data and left ``character``. A ``restricted`` list (columns withheld by
+    the account's entitlement) makes the schema ``unverified`` rather than a partial table."""
+    doc: Dict[str, Any] = {"schema": _schema_name(slug), "kind": "dataframe"}
+    withheld = sorted({c for b in bodies for c in b.get("restricted") or []})
+    if withheld:
+        doc.update(
+            columns=[],
+            unverified=f"PFF withheld {len(withheld)} columns from the capture under the account's entitlement ({', '.join(withheld)})",
+        )
+        return doc
+    seen: Dict[Any, Dict[str, str]] = {}  # {section: {column: polars dtype}}, first-seen order
+    for body in bodies:
+        out = getattr(pff_parsers, parser)(body)
+        for section, df in out.items() if isinstance(out, dict) else [(None, out)]:
+            cols = seen.setdefault(section, {})
+            for name, dtype in df.schema.items():
+                if cols.get(name, "Null") == "Null":
+                    cols[name] = str(dtype)
+
+    def table(cols: Dict[str, str]) -> List[dict]:
+        return [{"name": n, "type": _POLARS_TO_R.get(t, "character"), "description": ""} for n, t in cols.items()]
+
+    if None in seen:
+        doc["columns"] = table(seen[None])
+    else:
+        doc.update(kind="frames", frames=[{"section": s, "columns": table(c)} for s, c in seen.items()])
+    return doc
+
+
 def _example_args(op: dict, params: List[dict]) -> Dict[str, Any]:
     """Runnable example: required params + the first ``x-requires-one-of`` alternative
     (facets need ``league`` AND ``season`` together although neither is required alone)."""
@@ -175,6 +227,7 @@ def build() -> tuple[dict, Dict[str, dict]]:
     spec, s1, s2, legacy_schema = _load()
     endpoints: List[Dict[str, Any]] = []
     schemas: Dict[str, dict] = {}
+    parsed: Dict[str, tuple] = {}  # {schema slug: (parser, union bodies)}
     for path, item in spec["paths"].items():
         op = item.get("get")
         # x-cli-hidden only hides a command from restish; facet-defense-coverage-matchup is
@@ -208,8 +261,17 @@ def build() -> tuple[dict, Dict[str, dict]]:
         if parser:
             ep["parser"] = parser
 
-        if path in legacy_schema:
-            ep["returns_schema"] = legacy_schema[path]  # identical wire format -> legacy schema
+        legacy_rs = legacy_schema.get(path)
+        bodies = _union_bodies(s1, short) if parser and path.startswith("/v1") else []
+        if legacy_rs and not (bodies and _legacy_empty(legacy_rs)):
+            ep["returns_schema"] = legacy_rs  # identical wire format -> legacy schema
+        elif bodies:
+            # an empty legacy schema, or a NEW route whose body nests its rows: document what the
+            # parser emits on the live capture. Routes sharing a legacy envelope share one schema
+            # (both coverage-matrix routes answer `receiving_coverage_stats`).
+            slug = legacy_rs.rsplit("/", 1)[-1] if legacy_rs else short
+            parsed.setdefault(slug, (parser, []))[1].extend(bodies)
+            ep["returns_schema"] = f"native/pff_api/{slug}"
         elif path.startswith("/v2"):
             variants = None
             if short in ("team_report", "position_report"):
@@ -231,6 +293,8 @@ def build() -> tuple[dict, Dict[str, dict]]:
                 schemas[short] = _v1_schema(s1, short, short, shape)
                 ep["returns_schema"] = f"native/pff_api/{short}"
         endpoints.append(ep)
+    for slug, (parser, bodies) in parsed.items():
+        schemas[slug] = _parsed_schema(slug, parser, bodies)
 
     doc = {
         "api": "pff_api",

@@ -20,6 +20,8 @@ Joe Burrow, player 28022; game 23108). None of them come from our own captures.
 | `team_summary.json` | `GET /v1/teams/summary` |
 | `player_passing_concept.json` | `GET /v1/player/passing/concept` |
 | `player_offense_pass_blocking.json` | `GET /v1/player/offense/pass_blocking` |
+| `player_snaps_summary.json` | `GET /v1/player/snaps/summary` |
+| `player_rushing_direction.json` | `GET /v1/player/rushing/direction` (Joe Mixon, player 11803) |
 | `team_directory.json` | `GET /v2/{league}/teams` |
 | `team_stats.json` | `GET /v2/{league}/teams/stats` |
 | `team_roster.json` | `GET /v2/{league}/teams/{team}/roster` |

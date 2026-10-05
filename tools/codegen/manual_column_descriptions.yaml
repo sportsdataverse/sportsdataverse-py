@@ -28339,6 +28339,746 @@ person_primary_recruitment_evaluation:
 person_recruitment_evaluations:
 person_sport_profile_recruit:
 person_sport_rankings:
+pff_api_player_defense_summary:
+  assists: Assisted tackles.
+  away_franchise_id: PFF franchise id of the away team.
+  away_team_name: Abbreviation of the away team (e.g. "LV").
+  batted_passes: Passes batted down at the line of scrimmage.
+  catch_rate: Completion percentage allowed on targets into the player's coverage.
+  declined_penalties: Penalties committed by the player that were declined.
+  forced_fumbles: Forced fumbles.
+  fumble_recoveries: Opponent fumbles recovered by the player.
+  fumble_recovery_touchdowns: Touchdowns scored on fumble recoveries.
+  game_away_franchise_id: 'Repeats away_franchise_id from the row''s nested game object: PFF franchise id of the away team.'
+  game_away_team_name: 'Repeats away_team_name from the row''s nested game object: Abbreviation of the away team (e.g. "LV").'
+  game_game_id: 'Repeats game_id from the row''s nested game object: PFF game id of the game (integer join key).'
+  game_home_franchise_id: 'Repeats home_franchise_id from the row''s nested game object: PFF franchise id of the home team.'
+  game_home_team_name: 'Repeats home_team_name from the row''s nested game object: Abbreviation of the home team (e.g. "NE").'
+  game_id: PFF game id of the game (integer join key).
+  game_player_franchise_id: 'Repeats player_franchise_id from the row''s nested game object: PFF franchise id of the team
+    the player played for in the game.'
+  game_position: 'Repeats position from the row''s nested game object: PFF position code the player was charted at in the
+    game (e.g. QB, HB, WR, T, LB, K).'
+  game_status: 'Repeats status from the row''s nested game object: "S" when the player started the game; PFF owns the value
+    set.'
+  game_week: 'Repeats week from the row''s nested game object: Week number of the game, as PFF numbers weeks.'
+  grades_coverage_defense: PFF coverage grade (0-100).
+  grades_defense: PFF overall defense grade (0-100).
+  grades_defense_penalty: PFF defensive penalty grade, 0-100.
+  grades_pass_rush_defense: PFF pass-rush grade, 0-100.
+  grades_run_defense: PFF run-defense grade (0-100).
+  grades_tackle: PFF tackling grade, 0-100.
+  hits: Quarterback hits recorded by the player.
+  home_franchise_id: PFF franchise id of the home team.
+  home_team_name: Abbreviation of the home team (e.g. "NE").
+  hurries: Quarterback hurries recorded.
+  interception_touchdowns: Touchdowns scored on interception returns.
+  interceptions: Interceptions made in coverage.
+  jersey_number: Jersey number the player wore in the game (string; zero-padded, e.g. "09").
+  league_id: PFF league id (1 = NFL, 2 = NCAA), filled from the report's subject.
+  longest: Longest completion allowed, in yards.
+  missed_tackle_rate: Share of tackle attempts the player missed.
+  missed_tackles: Missed tackles.
+  pass_break_ups: Passes broken up.
+  penalties: Penalties charged to the player over the covered span.
+  player_franchise_id: PFF franchise id of the team the player played for in the game.
+  player_id: PFF player id (integer join key) of the player the report is about.
+  position: PFF position code the player was charted at in the game (e.g. QB, HB, WR, T, LB, K).
+  qb_rating_against: NFL passer rating allowed on targets into the player's coverage.
+  receptions: Receptions allowed in the player's coverage.
+  sacks: Sacks credited.
+  safeties: Safeties recorded by the player.
+  season: Season (starting year) of the report, filled from the report's subject.
+  snap_counts_box: Snaps aligned in the box.
+  snap_counts_corner: Snaps aligned at outside cornerback.
+  snap_counts_coverage: Coverage snaps played.
+  snap_counts_defense: Total defensive snaps played.
+  snap_counts_dl: Snaps aligned on the defensive line.
+  snap_counts_dl_a_gap: Defensive-line snaps aligned in the A gap.
+  snap_counts_dl_b_gap: Defensive-line snaps aligned in the B gap.
+  snap_counts_dl_outside_t: Defensive-line snaps aligned outside the offensive tackle.
+  snap_counts_dl_over_t: Defensive-line snaps aligned head-up over the offensive tackle.
+  snap_counts_fs: Snaps aligned at free safety.
+  snap_counts_offball: Snaps aligned as an off-ball linebacker.
+  snap_counts_pass_rush: Pass-rush snaps played.
+  snap_counts_run_defense: Run-defense snaps played.
+  snap_counts_slot: Snaps aligned in the slot.
+  status: '"S" when the player started the game; PFF owns the value set.'
+  stops: Tackles that constitute an offensive failure ("stops").
+  tackles: Total tackles made by the defender.
+  tackles_for_loss: Tackles for loss made by the player.
+  targets: Passes thrown into the player's coverage (targets allowed).
+  total_pressures: Total quarterback pressures (sacks + hits + hurries).
+  touchdowns: Touchdowns allowed into the player's coverage.
+  week: Week number of the game, as PFF numbers weeks.
+  yards: Receiving yards allowed in the player's coverage.
+  yards_after_catch: Yards after the catch allowed in the player's coverage.
+  yards_per_reception: Average yards allowed per reception.
+pff_api_player_field_goal_summary:
+  away_franchise_id: PFF franchise id of the away team.
+  away_team_name: Abbreviation of the away team (e.g. "LV").
+  fifty_attempts: Field goals attempted from 50 or more yards.
+  fifty_made: Field goals made from 50 or more yards.
+  fifty_percent: Field-goal percentage from 50 or more yards.
+  forty_attempts: Field goals attempted from 40-49 yards.
+  forty_made: Field goals made from 40-49 yards.
+  forty_percent: Field-goal percentage from 40-49 yards.
+  game_away_franchise_id: 'Repeats away_franchise_id from the row''s nested game object: PFF franchise id of the away team.'
+  game_away_team_name: 'Repeats away_team_name from the row''s nested game object: Abbreviation of the away team (e.g. "LV").'
+  game_game_id: 'Repeats game_id from the row''s nested game object: PFF game id of the game (integer join key).'
+  game_home_franchise_id: 'Repeats home_franchise_id from the row''s nested game object: PFF franchise id of the home team.'
+  game_home_team_name: 'Repeats home_team_name from the row''s nested game object: Abbreviation of the home team (e.g. "NE").'
+  game_id: PFF game id of the game (integer join key).
+  game_player_franchise_id: 'Repeats player_franchise_id from the row''s nested game object: PFF franchise id of the team
+    the player played for in the game.'
+  game_position: 'Repeats position from the row''s nested game object: PFF position code the player was charted at in the
+    game (e.g. QB, HB, WR, T, LB, K).'
+  game_status: 'Repeats status from the row''s nested game object: "S" when the player started the game; PFF owns the value
+    set.'
+  game_week: 'Repeats week from the row''s nested game object: Week number of the game, as PFF numbers weeks.'
+  grades_fgep_kicker: PFF field-goal and extra-point kicking grade, 0-100.
+  home_franchise_id: PFF franchise id of the home team.
+  home_team_name: Abbreviation of the home team (e.g. "NE").
+  jersey_number: Jersey number the player wore in the game (string; zero-padded, e.g. "09").
+  league_id: PFF league id (1 = NFL, 2 = NCAA), filled from the report's subject.
+  one_attempts: Field goals attempted from 1-19 yards.
+  one_made: Field goals made from 1-19 yards.
+  one_percent: Field-goal percentage from 1-19 yards.
+  pat_attempts: Extra points attempted.
+  pat_made: Extra points made.
+  pat_percent: Extra-point percentage.
+  player_franchise_id: PFF franchise id of the team the player played for in the game.
+  player_id: PFF player id (integer join key) of the player the report is about.
+  position: PFF position code the player was charted at in the game (e.g. QB, HB, WR, T, LB, K).
+  season: Season (starting year) of the report, filled from the report's subject.
+  status: '"S" when the player started the game; PFF owns the value set.'
+  thirty_attempts: Field goals attempted from 30-39 yards.
+  thirty_made: Field goals made from 30-39 yards.
+  thirty_percent: Field-goal percentage from 30-39 yards.
+  total_attempts: Total field goals attempted across all distances.
+  total_made: Total field goals made across all distances.
+  total_percent: Overall field-goal percentage.
+  twenty_attempts: Field goals attempted from 20-29 yards.
+  twenty_made: Field goals made from 20-29 yards.
+  twenty_percent: Field-goal percentage from 20-29 yards.
+  week: Week number of the game, as PFF numbers weeks.
+pff_api_player_kickoff_summary:
+  attempts: Kickoffs by the player.
+  attempts_with_hangtime: Kickoffs with a PFF-recorded hangtime.
+  average_distance: Average kickoff distance in yards.
+  average_hangtime: Average kickoff hangtime in seconds.
+  average_starting_field_position: Average opponent starting field position following the player's kickoffs.
+  average_yards_per_return: Average return yards allowed per kickoff returned.
+  away_franchise_id: PFF franchise id of the away team.
+  away_team_name: Abbreviation of the away team (e.g. "LV").
+  fair_catches: Kickoffs fair-caught by the return team.
+  game_away_franchise_id: 'Repeats away_franchise_id from the row''s nested game object: PFF franchise id of the away team.'
+  game_away_team_name: 'Repeats away_team_name from the row''s nested game object: Abbreviation of the away team (e.g. "LV").'
+  game_game_id: 'Repeats game_id from the row''s nested game object: PFF game id of the game (integer join key).'
+  game_home_franchise_id: 'Repeats home_franchise_id from the row''s nested game object: PFF franchise id of the home team.'
+  game_home_team_name: 'Repeats home_team_name from the row''s nested game object: Abbreviation of the home team (e.g. "NE").'
+  game_id: PFF game id of the game (integer join key).
+  game_player_franchise_id: 'Repeats player_franchise_id from the row''s nested game object: PFF franchise id of the team
+    the player played for in the game.'
+  game_position: 'Repeats position from the row''s nested game object: PFF position code the player was charted at in the
+    game (e.g. QB, HB, WR, T, LB, K).'
+  game_status: 'Repeats status from the row''s nested game object: "S" when the player started the game; PFF owns the value
+    set.'
+  game_week: 'Repeats week from the row''s nested game object: Week number of the game, as PFF numbers weeks.'
+  grades_kickoff_kicker: PFF kickoff kicking grade, 0-100.
+  home_franchise_id: PFF franchise id of the home team.
+  home_team_name: Abbreviation of the home team (e.g. "NE").
+  jersey_number: Jersey number the player wore in the game (string; zero-padded, e.g. "09").
+  kicked_yards: Total kickoff yards.
+  kicks_returned: Kickoffs returned by the opponent.
+  league_id: PFF league id (1 = NFL, 2 = NCAA), filled from the report's subject.
+  onside_kicks: Onside kicks attempted.
+  percent_returned: Percentage of the player's kickoffs that were returned.
+  player_franchise_id: PFF franchise id of the team the player played for in the game.
+  player_id: PFF player id (integer join key) of the player the report is about.
+  position: PFF position code the player was charted at in the game (e.g. QB, HB, WR, T, LB, K).
+  return_yards: Return yards gained by the return team on the player's kickoffs.
+  season: Season (starting year) of the report, filled from the report's subject.
+  status: '"S" when the player started the game; PFF owns the value set.'
+  total_hangtime: Total kickoff hangtime in seconds.
+  touchbacks: Kickoffs resulting in touchbacks.
+  week: Week number of the game, as PFF numbers weeks.
+pff_api_player_offense_blocking:
+  away_franchise_id: PFF franchise id of the away team.
+  away_team_name: Abbreviation of the away team (e.g. "LV").
+  block_percent: Share of offensive snaps spent blocking.
+  declined_penalties: Penalties committed by the player that were declined.
+  game_away_franchise_id: 'Repeats away_franchise_id from the row''s nested game object: PFF franchise id of the away team.'
+  game_away_team_name: 'Repeats away_team_name from the row''s nested game object: Abbreviation of the away team (e.g. "LV").'
+  game_game_id: 'Repeats game_id from the row''s nested game object: PFF game id of the game (integer join key).'
+  game_home_franchise_id: 'Repeats home_franchise_id from the row''s nested game object: PFF franchise id of the home team.'
+  game_home_team_name: 'Repeats home_team_name from the row''s nested game object: Abbreviation of the home team (e.g. "NE").'
+  game_id: PFF game id of the game (integer join key).
+  game_player_franchise_id: 'Repeats player_franchise_id from the row''s nested game object: PFF franchise id of the team
+    the player played for in the game.'
+  game_position: 'Repeats position from the row''s nested game object: PFF position code the player was charted at in the
+    game (e.g. QB, HB, WR, T, LB, K).'
+  game_status: 'Repeats status from the row''s nested game object: "S" when the player started the game; PFF owns the value
+    set.'
+  game_week: 'Repeats week from the row''s nested game object: Week number of the game, as PFF numbers weeks.'
+  grades_offense: PFF overall offense grade, 0-100.
+  grades_pass_block: PFF pass-blocking grade, 0-100.
+  grades_run_block: PFF run-blocking grade, 0-100.
+  hits_allowed: Quarterback hits allowed.
+  home_franchise_id: PFF franchise id of the home team.
+  home_team_name: Abbreviation of the home team (e.g. "NE").
+  hurries_allowed: Quarterback hurries allowed.
+  jersey_number: Jersey number the player wore in the game (string; zero-padded, e.g. "09").
+  league_id: PFF league id (1 = NFL, 2 = NCAA), filled from the report's subject.
+  non_spike_pass_block: Pass-blocking snaps excluding spike plays.
+  non_spike_pass_block_percentage: Share of non-spike pass-play snaps spent pass blocking.
+  non_spike_passing: Non-spike pass-play snaps, the denominator of non_spike_pass_block_percentage.
+  pass_block_percent: Share of pass-play snaps spent pass blocking.
+  pbe: PFF Pass Blocking Efficiency rating, pressures allowed per pass-blocking snap weighted toward sacks.
+  penalties: Penalties charged to the player over the covered span.
+  player_franchise_id: PFF franchise id of the team the player played for in the game.
+  player_id: PFF player id (integer join key) of the player the report is about.
+  position: PFF position code the player was charted at in the game (e.g. QB, HB, WR, T, LB, K).
+  pressures_allowed: Total pressures allowed (sacks, hits, and hurries).
+  sacks_allowed: Sacks allowed by the player in pass protection.
+  season: Season (starting year) of the report, filled from the report's subject.
+  snap_counts_block: Total blocking snaps played.
+  snap_counts_ce: Snaps aligned at center.
+  snap_counts_lg: Snaps aligned at left guard.
+  snap_counts_lt: Snaps aligned at left tackle.
+  snap_counts_offense: Offensive snaps played.
+  snap_counts_pass_block: Pass-blocking snaps played.
+  snap_counts_pass_play: Pass-play snaps.
+  snap_counts_rg: Snaps aligned at right guard.
+  snap_counts_rt: Snaps aligned at right tackle.
+  snap_counts_run_block: Run-blocking snaps played.
+  snap_counts_te: Snaps aligned at tight end.
+  status: '"S" when the player started the game; PFF owns the value set.'
+  week: Week number of the game, as PFF numbers weeks.
+pff_api_player_offense_pass_blocking:
+  away_franchise_id: PFF franchise id of the away team.
+  away_team_name: Abbreviation of the away team (e.g. "LV").
+  declined_penalties: Penalties committed by the player that were declined.
+  game_away_franchise_id: 'Repeats away_franchise_id from the row''s nested game object: PFF franchise id of the away team.'
+  game_away_team_name: 'Repeats away_team_name from the row''s nested game object: Abbreviation of the away team (e.g. "LV").'
+  game_game_id: 'Repeats game_id from the row''s nested game object: PFF game id of the game (integer join key).'
+  game_home_franchise_id: 'Repeats home_franchise_id from the row''s nested game object: PFF franchise id of the home team.'
+  game_home_team_name: 'Repeats home_team_name from the row''s nested game object: Abbreviation of the home team (e.g. "NE").'
+  game_id: PFF game id of the game (integer join key).
+  game_player_franchise_id: 'Repeats player_franchise_id from the row''s nested game object: PFF franchise id of the team
+    the player played for in the game.'
+  game_position: 'Repeats position from the row''s nested game object: PFF position code the player was charted at in the
+    game (e.g. QB, HB, WR, T, LB, K).'
+  game_status: 'Repeats status from the row''s nested game object: "S" when the player started the game; PFF owns the value
+    set.'
+  game_week: 'Repeats week from the row''s nested game object: Week number of the game, as PFF numbers weeks.'
+  grades_pass_block: PFF pass-blocking grade, 0-100.
+  hits_allowed: Quarterback hits allowed.
+  home_franchise_id: PFF franchise id of the home team.
+  home_team_name: Abbreviation of the home team (e.g. "NE").
+  hurries_allowed: Quarterback hurries allowed.
+  jersey_number: Jersey number the player wore in the game (string; zero-padded, e.g. "09").
+  league_id: PFF league id (1 = NFL, 2 = NCAA), filled from the report's subject.
+  non_spike_pass_block: Pass-blocking snaps excluding spike plays.
+  non_spike_pass_block_percentage: Share of non-spike pass-play snaps spent pass blocking.
+  non_spike_passing: Non-spike pass-play snaps, the denominator of non_spike_pass_block_percentage.
+  pass_block_percent: Share of pass-play snaps spent pass blocking.
+  pbe: PFF Pass Blocking Efficiency rating, pressures allowed per pass-blocking snap weighted toward sacks.
+  penalties: Penalties charged to the player over the covered span.
+  player_franchise_id: PFF franchise id of the team the player played for in the game.
+  player_id: PFF player id (integer join key) of the player the report is about.
+  position: PFF position code the player was charted at in the game (e.g. QB, HB, WR, T, LB, K).
+  pressures_allowed: Total pressures allowed (sacks, hits, and hurries).
+  sacks_allowed: Sacks allowed by the player in pass protection.
+  season: Season (starting year) of the report, filled from the report's subject.
+  snap_counts_pass_block: Pass-blocking snaps played.
+  snap_counts_pass_play: Pass-play snaps.
+  status: '"S" when the player started the game; PFF owns the value set.'
+  true_pass_set_hits_allowed: Quarterback hits allowed on PFF-designated true pass sets.
+  true_pass_set_hurries_allowed: Quarterback hurries allowed on PFF-designated true pass sets.
+  true_pass_set_non_spike_pass_block: Pass-blocking snaps excluding spike plays on PFF-designated true pass sets.
+  true_pass_set_non_spike_pass_block_percentage: Share of non-spike pass-play snaps spent pass blocking on PFF-designated
+    true pass sets.
+  true_pass_set_non_spike_passing: Non-spike pass-play snaps on PFF-designated true pass sets, the denominator of true_pass_set_non_spike_pass_block_percentage.
+  true_pass_set_pass_block_percent: Share of pass-play snaps spent pass blocking on PFF-designated true pass sets.
+  true_pass_set_pbe: PFF Pass Blocking Efficiency rating, pressures allowed per pass-blocking snap weighted toward sacks on
+    PFF-designated true pass sets.
+  true_pass_set_pressures_allowed: Total pressures allowed (sacks, hits, and hurries) on PFF-designated true pass sets.
+  true_pass_set_sacks_allowed: Sacks allowed on PFF-designated true pass sets.
+  true_pass_set_snap_counts_pass_block: Pass-blocking snaps played on PFF-designated true pass sets.
+  true_pass_set_snap_counts_pass_play: Pass-play snaps on PFF-designated true pass sets.
+  week: Week number of the game, as PFF numbers weeks.
+pff_api_player_offense_run_blocking:
+  away_franchise_id: PFF franchise id of the away team.
+  away_team_name: Abbreviation of the away team (e.g. "LV").
+  declined_penalties: Penalties committed by the player that were declined.
+  game_away_franchise_id: 'Repeats away_franchise_id from the row''s nested game object: PFF franchise id of the away team.'
+  game_away_team_name: 'Repeats away_team_name from the row''s nested game object: Abbreviation of the away team (e.g. "LV").'
+  game_game_id: 'Repeats game_id from the row''s nested game object: PFF game id of the game (integer join key).'
+  game_home_franchise_id: 'Repeats home_franchise_id from the row''s nested game object: PFF franchise id of the home team.'
+  game_home_team_name: 'Repeats home_team_name from the row''s nested game object: Abbreviation of the home team (e.g. "NE").'
+  game_id: PFF game id of the game (integer join key).
+  game_player_franchise_id: 'Repeats player_franchise_id from the row''s nested game object: PFF franchise id of the team
+    the player played for in the game.'
+  game_position: 'Repeats position from the row''s nested game object: PFF position code the player was charted at in the
+    game (e.g. QB, HB, WR, T, LB, K).'
+  game_status: 'Repeats status from the row''s nested game object: "S" when the player started the game; PFF owns the value
+    set.'
+  game_week: 'Repeats week from the row''s nested game object: Week number of the game, as PFF numbers weeks.'
+  gap_run_block_percent: Share of run-play snaps spent run blocking on gap-scheme runs.
+  gap_snap_counts_run_block: Run-blocking snaps played on gap-scheme runs.
+  gap_snap_counts_run_block_percent: Share of the player's run-blocking snaps on gap-scheme runs.
+  gap_snap_counts_run_play: Run-play snaps on gap-scheme runs.
+  grades_run_block: PFF run-blocking grade, 0-100.
+  home_franchise_id: PFF franchise id of the home team.
+  home_team_name: Abbreviation of the home team (e.g. "NE").
+  jersey_number: Jersey number the player wore in the game (string; zero-padded, e.g. "09").
+  league_id: PFF league id (1 = NFL, 2 = NCAA), filled from the report's subject.
+  penalties: Penalties charged to the player over the covered span.
+  player_franchise_id: PFF franchise id of the team the player played for in the game.
+  player_id: PFF player id (integer join key) of the player the report is about.
+  position: PFF position code the player was charted at in the game (e.g. QB, HB, WR, T, LB, K).
+  run_block_percent: Share of run-play snaps spent run blocking.
+  season: Season (starting year) of the report, filled from the report's subject.
+  snap_counts_run_block: Run-blocking snaps played.
+  snap_counts_run_play: Run-play snaps.
+  status: '"S" when the player started the game; PFF owns the value set.'
+  week: Week number of the game, as PFF numbers weeks.
+  zone_run_block_percent: Share of run-play snaps spent run blocking on zone-scheme runs.
+  zone_snap_counts_run_block: Run-blocking snaps played on zone-scheme runs.
+  zone_snap_counts_run_block_percent: Share of the player's run-blocking snaps on zone-scheme runs.
+  zone_snap_counts_run_play: Run-play snaps on zone-scheme runs.
+pff_api_player_offense_summary:
+  away_franchise_id: PFF franchise id of the away team.
+  away_team_name: Abbreviation of the away team (e.g. "LV").
+  declined_penalties: Penalties committed by the player that were declined.
+  game_away_franchise_id: 'Repeats away_franchise_id from the row''s nested game object: PFF franchise id of the away team.'
+  game_away_team_name: 'Repeats away_team_name from the row''s nested game object: Abbreviation of the away team (e.g. "LV").'
+  game_game_id: 'Repeats game_id from the row''s nested game object: PFF game id of the game (integer join key).'
+  game_home_franchise_id: 'Repeats home_franchise_id from the row''s nested game object: PFF franchise id of the home team.'
+  game_home_team_name: 'Repeats home_team_name from the row''s nested game object: Abbreviation of the home team (e.g. "NE").'
+  game_id: PFF game id of the game (integer join key).
+  game_player_franchise_id: 'Repeats player_franchise_id from the row''s nested game object: PFF franchise id of the team
+    the player played for in the game.'
+  game_position: 'Repeats position from the row''s nested game object: PFF position code the player was charted at in the
+    game (e.g. QB, HB, WR, T, LB, K).'
+  game_status: 'Repeats status from the row''s nested game object: "S" when the player started the game; PFF owns the value
+    set.'
+  game_week: 'Repeats week from the row''s nested game object: Week number of the game, as PFF numbers weeks.'
+  grades_hands_fumble: PFF ball-security (hands/fumble) grade, 0-100.
+  grades_offense: PFF overall offense grade (0-100).
+  grades_offense_penalty: PFF offensive penalty grade, 0-100.
+  grades_pass: PFF passing grade (0-100).
+  grades_pass_route: PFF receiving/route grade (0-100).
+  grades_run: PFF rushing grade (0-100).
+  grades_run_block: PFF run-blocking grade (0-100).
+  home_franchise_id: PFF franchise id of the home team.
+  home_team_name: Abbreviation of the home team (e.g. "NE").
+  jersey_number: Jersey number the player wore in the game (string; zero-padded, e.g. "09").
+  league_id: PFF league id (1 = NFL, 2 = NCAA), filled from the report's subject.
+  penalties: Penalties charged to the player over the covered span.
+  player_franchise_id: PFF franchise id of the team the player played for in the game.
+  player_id: PFF player id (integer join key) of the player the report is about.
+  position: PFF position code the player was charted at in the game (e.g. QB, HB, WR, T, LB, K).
+  season: Season (starting year) of the report, filled from the report's subject.
+  snap_counts_pass: Pass-play snaps spent as the passer, rather than blocking or running a route.
+  snap_counts_pass_block: Pass-blocking snaps played.
+  snap_counts_pass_route: Snaps spent running a pass route.
+  snap_counts_run: Run-play snaps spent as a runner, rather than run blocking.
+  snap_counts_run_block: Run-blocking snaps played.
+  snap_counts_total: Total offensive snaps played.
+  snap_counts_total_pass: Total pass-play snaps across passing, pass blocking, and route running.
+  snap_counts_total_run: Total run-play snaps across rushing and run blocking.
+  status: '"S" when the player started the game; PFF owns the value set.'
+  week: Week number of the game, as PFF numbers weeks.
+pff_api_player_passing_summary:
+  accuracy_percent: Charted accuracy percentage.
+  aimed_passes: 'Aimed passes: attempts excluding throwaways, spikes, batted passes and throws made while hit (the accuracy_percent
+    denominator).'
+  all_attempts: All pass attempts on the player's passing snaps; attempts counts a subset of these.
+  all_dropbacks: All dropbacks, equal to passing_snaps; dropbacks counts a subset of these.
+  attempts: Pass attempts thrown by the passer.
+  avg_depth_of_target: Average depth of target in air yards.
+  avg_time_to_throw: Average time to throw, in seconds from snap to release, on the passer's attempts.
+  away_franchise_id: PFF franchise id of the away team.
+  away_team_name: Abbreviation of the away team (e.g. "LV").
+  bats: Passes batted at the line.
+  big_time_throws: Number of big-time throws, per PFF's highest-value, highest-difficulty throw designation.
+  btt_rate: Big-time-throw rate.
+  completion_percent: Completion percentage.
+  completions: Completed passes by the passer.
+  declined_penalties: Declined penalties.
+  def_gen_pressures: Number of defense-generated pressures on the player's dropbacks, as charted by PFF.
+  drop_rate: Receiver drop rate on the quarterback's throws.
+  dropbacks: Total quarterback dropbacks.
+  drops: Passes dropped by the passer's receivers.
+  epa: Expected points added per play on the passer's dropbacks, as computed by PFF (an average such as 0.14, not a total).
+  first_downs: Passing first downs.
+  game_away_franchise_id: 'Repeats away_franchise_id from the row''s nested game object: PFF franchise id of the away team.'
+  game_away_team_name: 'Repeats away_team_name from the row''s nested game object: Abbreviation of the away team (e.g. "LV").'
+  game_game_id: 'Repeats game_id from the row''s nested game object: PFF game id of the game (integer join key).'
+  game_home_franchise_id: 'Repeats home_franchise_id from the row''s nested game object: PFF franchise id of the home team.'
+  game_home_team_name: 'Repeats home_team_name from the row''s nested game object: Abbreviation of the home team (e.g. "NE").'
+  game_id: PFF game id of the game (integer join key).
+  game_player_franchise_id: 'Repeats player_franchise_id from the row''s nested game object: PFF franchise id of the team
+    the player played for in the game.'
+  game_position: 'Repeats position from the row''s nested game object: PFF position code the player was charted at in the
+    game (e.g. QB, HB, WR, T, LB, K).'
+  game_status: 'Repeats status from the row''s nested game object: "S" when the player started the game; PFF owns the value
+    set.'
+  game_week: 'Repeats week from the row''s nested game object: Week number of the game, as PFF numbers weeks.'
+  grades_hands_fumble: PFF hands (fumble) grade for the player, reflecting ball security (0-100).
+  grades_offense: PFF overall offense grade (0-100).
+  grades_pass: PFF passing grade (0-100).
+  grades_run: PFF rushing grade (0-100).
+  hit_as_threw: Plays where the quarterback was hit as he threw.
+  home_franchise_id: PFF franchise id of the home team.
+  home_team_name: Abbreviation of the home team (e.g. "NE").
+  interceptions: Interceptions thrown.
+  jersey_number: Jersey number the player wore in the game (string; zero-padded, e.g. "09").
+  league_id: PFF league id (1 = NFL, 2 = NCAA), filled from the report's subject.
+  passing_snaps: Number of passing snaps played.
+  penalties: Penalties charged.
+  player_franchise_id: PFF franchise id of the team the player played for in the game.
+  player_id: PFF player id (integer join key) of the player the report is about.
+  plays_with_epa: Plays with an expected-points-added value, the denominator of positive_epa_percent.
+  position: PFF position code the player was charted at in the game (e.g. QB, HB, WR, T, LB, K).
+  positive_epa_percent: Percentage of dropbacks with positive expected points added.
+  positive_epa_plays: Plays with positive expected points added (positive_epa_percent = positive_epa_plays / plays_with_epa
+    x 100).
+  pressure_to_sack_rate: Percentage of pressured dropbacks that ended in a sack.
+  qb_rating: NFL passer rating.
+  sack_percent: Sack rate (sacks per dropback).
+  sacks: Times the passer was sacked.
+  scrambles: Scramble plays.
+  season: Season (starting year) of the report, filled from the report's subject.
+  spikes: Clock-stopping spike plays.
+  status: '"S" when the player started the game; PFF owns the value set.'
+  thrown_aways: Passes intentionally thrown away.
+  touchdowns: Number of passing touchdowns thrown.
+  ttt_total_time: Time to throw summed over the passer's dropbacks, in seconds (avg_time_to_throw = ttt_total_time / dropbacks).
+  turnover_worthy_plays: Number of turnover-worthy plays, plays PFF charts as deserving of a turnover.
+  twp_rate: Turnover-worthy-play rate.
+  week: Week number of the game, as PFF numbers weeks.
+  yards: Total passing yards gained.
+  ypa: Yards gained per pass attempt.
+pff_api_player_position_pivot:
+  group: Display position group (e.g. "QB", "WR"); one row per group.
+  group_order: Sort order of the group on PFF's page (0 = first).
+  positions: 'JSON-encoded list of the group''s alignments, each with its per-week snap counts by snap type (PFF has no group
+    rollup row: group totals are summed from these weeks).'
+pff_api_player_punting_summary:
+  attempts: Punts by the player.
+  attempts_with_hangtime: Punts with a PFF-recorded hangtime.
+  average_hangtime: Average punt hangtime in seconds.
+  average_net_yards: Average net punting yards per attempt.
+  average_yards_per_attempt: Average gross punting yards per attempt.
+  average_yards_per_return: Average return yards allowed per punt returned.
+  away_franchise_id: PFF franchise id of the away team.
+  away_team_name: Abbreviation of the away team (e.g. "LV").
+  blocks: Punts that were blocked.
+  downeds: Punts downed by the coverage unit.
+  fair_catches: Punts fair-caught by the return team.
+  game_away_franchise_id: 'Repeats away_franchise_id from the row''s nested game object: PFF franchise id of the away team.'
+  game_away_team_name: 'Repeats away_team_name from the row''s nested game object: Abbreviation of the away team (e.g. "LV").'
+  game_game_id: 'Repeats game_id from the row''s nested game object: PFF game id of the game (integer join key).'
+  game_home_franchise_id: 'Repeats home_franchise_id from the row''s nested game object: PFF franchise id of the home team.'
+  game_home_team_name: 'Repeats home_team_name from the row''s nested game object: Abbreviation of the home team (e.g. "NE").'
+  game_id: PFF game id of the game (integer join key).
+  game_player_franchise_id: 'Repeats player_franchise_id from the row''s nested game object: PFF franchise id of the team
+    the player played for in the game.'
+  game_position: 'Repeats position from the row''s nested game object: PFF position code the player was charted at in the
+    game (e.g. QB, HB, WR, T, LB, K).'
+  game_status: 'Repeats status from the row''s nested game object: "S" when the player started the game; PFF owns the value
+    set.'
+  game_week: 'Repeats week from the row''s nested game object: Week number of the game, as PFF numbers weeks.'
+  grades_punter: PFF punting grade, 0-100.
+  home_franchise_id: PFF franchise id of the home team.
+  home_team_name: Abbreviation of the home team (e.g. "NE").
+  inside_twenties: Punts downed inside the opponent 20-yard line.
+  jersey_number: Jersey number the player wore in the game (string; zero-padded, e.g. "09").
+  league_id: PFF league id (1 = NFL, 2 = NCAA), filled from the report's subject.
+  long: Longest punt in yards.
+  out_of_bounds: Punts that went out of bounds.
+  percent_returned: Percentage of the player's punts that were returned.
+  player_franchise_id: PFF franchise id of the team the player played for in the game.
+  player_id: PFF player id (integer join key) of the player the report is about.
+  position: PFF position code the player was charted at in the game (e.g. QB, HB, WR, T, LB, K).
+  return_yards: Return yards gained by the return team on the player's punts.
+  returns: Punts returned by the opponent.
+  season: Season (starting year) of the report, filled from the report's subject.
+  snaps: Punting snaps played.
+  status: '"S" when the player started the game; PFF owns the value set.'
+  total_hangtime: Total punt hangtime in seconds.
+  total_net_yards: Total net punting yards.
+  touchbacks: Punts resulting in touchbacks.
+  week: Week number of the game, as PFF numbers weeks.
+  yards: 'Gross punt yards: the summed distance of the player''s punts, before any return.'
+pff_api_player_receiving_summary:
+  avg_depth_of_target: Average depth of target in yards downfield.
+  avoided_tackles: Tackles avoided after the catch.
+  away_franchise_id: PFF franchise id of the away team.
+  away_team_name: Abbreviation of the away team (e.g. "LV").
+  caught_percent: Percentage of targets caught.
+  contested_catch_rate: Percentage of PFF-charted contested targets caught.
+  contested_receptions: Contested catches made.
+  contested_targets: Contested targets.
+  declined_penalties: Penalties committed by the player that were declined.
+  drop_rate: Share of catchable targets the player dropped.
+  drops: Dropped passes.
+  epa: Expected points added per target to the player, as computed by PFF (an average such as -0.27, not a total).
+  first_downs: Receptions that converted a first down.
+  fumbles: Fumbles by the player after the catch.
+  game_away_franchise_id: 'Repeats away_franchise_id from the row''s nested game object: PFF franchise id of the away team.'
+  game_away_team_name: 'Repeats away_team_name from the row''s nested game object: Abbreviation of the away team (e.g. "LV").'
+  game_game_id: 'Repeats game_id from the row''s nested game object: PFF game id of the game (integer join key).'
+  game_home_franchise_id: 'Repeats home_franchise_id from the row''s nested game object: PFF franchise id of the home team.'
+  game_home_team_name: 'Repeats home_team_name from the row''s nested game object: Abbreviation of the home team (e.g. "NE").'
+  game_id: PFF game id of the game (integer join key).
+  game_player_franchise_id: 'Repeats player_franchise_id from the row''s nested game object: PFF franchise id of the team
+    the player played for in the game.'
+  game_position: 'Repeats position from the row''s nested game object: PFF position code the player was charted at in the
+    game (e.g. QB, HB, WR, T, LB, K).'
+  game_status: 'Repeats status from the row''s nested game object: "S" when the player started the game; PFF owns the value
+    set.'
+  game_week: 'Repeats week from the row''s nested game object: Week number of the game, as PFF numbers weeks.'
+  grades_hands_drop: PFF hands/drop grade (0-100).
+  grades_hands_fumble: PFF ball-security (hands/fumble) grade, 0-100.
+  grades_offense: PFF overall offense grade (0-100).
+  grades_pass_route: PFF receiving/route grade (0-100).
+  home_franchise_id: PFF franchise id of the home team.
+  home_team_name: Abbreviation of the home team (e.g. "NE").
+  inline_rate: Share of receiving snaps aligned inline, tight to the formation.
+  inline_snaps: Receiving snaps aligned inline, tight to the formation.
+  interceptions: Interceptions on passes targeting the player.
+  jersey_number: Jersey number the player wore in the game (string; zero-padded, e.g. "09").
+  league_id: PFF league id (1 = NFL, 2 = NCAA), filled from the report's subject.
+  longest: Longest reception in yards.
+  pass_block_rate: Share of pass-play snaps spent pass blocking.
+  pass_blocks: Pass-play snaps spent pass blocking.
+  pass_plays: Pass-play snaps.
+  penalties: Penalties charged to the player over the covered span.
+  player_franchise_id: PFF franchise id of the team the player played for in the game.
+  player_id: PFF player id (integer join key) of the player the report is about.
+  plays_with_epa: Plays with an expected-points-added value, the denominator of positive_epa_percent.
+  position: PFF position code the player was charted at in the game (e.g. QB, HB, WR, T, LB, K).
+  positive_epa_percent: Percentage of the player's targets producing positive expected points added.
+  positive_epa_plays: Plays with positive expected points added (positive_epa_percent = positive_epa_plays / plays_with_epa
+    x 100).
+  receptions: Passes caught by the receiver.
+  route_rate: Share of pass-play snaps on which the player ran a route.
+  routes: Pass routes run by the receiver.
+  season: Season (starting year) of the report, filled from the report's subject.
+  slot_rate: Share of receiving snaps aligned in the slot.
+  slot_snaps: Receiving snaps aligned in the slot.
+  status: '"S" when the player started the game; PFF owns the value set.'
+  targeted_qb_rating: NFL passer rating on throws targeting the player.
+  targets: Times targeted.
+  targets_percent: Targets per route run, as a percentage (targets / routes x 100).
+  touchdowns: Receiving touchdowns.
+  week: Week number of the game, as PFF numbers weeks.
+  wide_rate: Share of receiving snaps aligned out wide.
+  wide_snaps: Receiving snaps aligned out wide.
+  yards: Receiving yards.
+  yards_after_catch: Yards after the catch.
+  yards_after_catch_per_reception: Average yards after the catch per reception.
+  yards_per_reception: Average yards per reception.
+  yprr: Yards per route run.
+pff_api_player_return_summary:
+  away_franchise_id: PFF franchise id of the away team.
+  away_team_name: Abbreviation of the away team (e.g. "LV").
+  game_away_franchise_id: 'Repeats away_franchise_id from the row''s nested game object: PFF franchise id of the away team.'
+  game_away_team_name: 'Repeats away_team_name from the row''s nested game object: Abbreviation of the away team (e.g. "LV").'
+  game_game_id: 'Repeats game_id from the row''s nested game object: PFF game id of the game (integer join key).'
+  game_home_franchise_id: 'Repeats home_franchise_id from the row''s nested game object: PFF franchise id of the home team.'
+  game_home_team_name: 'Repeats home_team_name from the row''s nested game object: Abbreviation of the home team (e.g. "NE").'
+  game_id: PFF game id of the game (integer join key).
+  game_player_franchise_id: 'Repeats player_franchise_id from the row''s nested game object: PFF franchise id of the team
+    the player played for in the game.'
+  game_position: 'Repeats position from the row''s nested game object: PFF position code the player was charted at in the
+    game (e.g. QB, HB, WR, T, LB, K).'
+  game_status: 'Repeats status from the row''s nested game object: "S" when the player started the game; PFF owns the value
+    set.'
+  game_week: 'Repeats week from the row''s nested game object: Week number of the game, as PFF numbers weeks.'
+  grades_kick_return: PFF kickoff-return grade, 0-100.
+  grades_punt_return: PFF punt-return grade, 0-100.
+  grades_return: PFF overall return grade, 0-100.
+  home_franchise_id: PFF franchise id of the home team.
+  home_team_name: Abbreviation of the home team (e.g. "NE").
+  jersey_number: Jersey number the player wore in the game (string; zero-padded, e.g. "09").
+  kickoff_attempts: Kickoff returns attempted.
+  kickoff_count_of_yards: Kickoff returns counted toward the return-yardage figures (equal to kickoff_attempts in the captured
+    rows).
+  kickoff_fair_catches: Kickoffs fair-caught by the player.
+  kickoff_long: Longest kickoff return in yards.
+  kickoff_muffed_returns: Kickoff returns the player muffed.
+  kickoff_touchdowns: Kickoff returns scoring a touchdown.
+  kickoff_yards: Total kickoff-return yards.
+  kickoff_ypa: Average yards per kickoff return.
+  league_id: PFF league id (1 = NFL, 2 = NCAA), filled from the report's subject.
+  player_franchise_id: PFF franchise id of the team the player played for in the game.
+  player_id: PFF player id (integer join key) of the player the report is about.
+  position: PFF position code the player was charted at in the game (e.g. QB, HB, WR, T, LB, K).
+  punt_attempts: Punt returns attempted.
+  punt_count_of_yards: Punt returns counted toward the return-yardage figures (equal to punt_attempts in the captured rows).
+  punt_fair_catches: Punts fair-caught by the player.
+  punt_long: Longest punt return in yards.
+  punt_muffed_returns: Punt returns the player muffed.
+  punt_touchdowns: Punt returns scoring a touchdown.
+  punt_yards: Total punt-return yards.
+  punt_ypa: Average yards per punt return.
+  season: Season (starting year) of the report, filled from the report's subject.
+  status: '"S" when the player started the game; PFF owns the value set.'
+  total_attempts: Total return attempts, kickoffs and punts combined.
+  week: Week number of the game, as PFF numbers weeks.
+pff_api_player_rushing_direction:
+  attempts: Rushing attempts in this direction.
+  direction: Run direction / gap of the split, PFF's own vocabulary (e.g. "LT", "LG", "ML", "RG", "RE", "QBSc").
+  explosive: Runs in this direction PFF designates as explosive.
+  first_downs: Rushing first downs gained in this direction.
+  franchise_id: PFF franchise id of the runner's team.
+  fumbles: Fumbles on runs in this direction.
+  long: Longest run in this direction, in yards.
+  missed_tackles: Missed tackles forced on runs in this direction.
+  player_id: PFF player id of the runner.
+  team_name: Abbreviation of the runner's team (e.g. "BUF").
+  touchdowns: Rushing touchdowns in this direction.
+  yards: Rushing yards gained in this direction.
+  yards_after_contact: Yards after contact on runs in this direction.
+  yco_attempt: Average yards after contact per attempt in this direction.
+  ypa: Yards per rushing attempt in this direction.
+pff_api_player_rushing_summary:
+  attempts: Rushing attempts (carries) by the runner.
+  avoided_tackles: Missed tackles forced.
+  away_franchise_id: PFF franchise id of the away team.
+  away_team_name: Abbreviation of the away team (e.g. "LV").
+  breakaway_attempts: Runs of 15 or more yards, PFF's breakaway designation.
+  breakaway_percent: Share of rushing yards gained on breakaway runs of 15 or more yards.
+  breakaway_yards: Breakaway (long-run) yards.
+  count_of_yards: Rushing attempts counted toward the yardage figures (equal to attempts in the captured rows).
+  declined_penalties: Penalties committed by the player that were declined.
+  designed_yards: Rushing yards gained on designed runs, excluding scrambles.
+  drops: Passes dropped by the ball carrier.
+  elu_recv_mtf: Missed tackles forced as a receiver, an input to PFF's elusive rating.
+  elu_rush_mtf: Missed tackles forced as a rusher, an input to PFF's elusive rating.
+  elu_yco: Yards-after-contact component used in PFF's elusive rating.
+  elusive_rating: PFF elusive rating.
+  explosive: Runs PFF designates as explosive.
+  first_downs: Rushing first downs.
+  fumbles: Fumbles by the ball carrier.
+  game_away_franchise_id: 'Repeats away_franchise_id from the row''s nested game object: PFF franchise id of the away team.'
+  game_away_team_name: 'Repeats away_team_name from the row''s nested game object: Abbreviation of the away team (e.g. "LV").'
+  game_game_id: 'Repeats game_id from the row''s nested game object: PFF game id of the game (integer join key).'
+  game_home_franchise_id: 'Repeats home_franchise_id from the row''s nested game object: PFF franchise id of the home team.'
+  game_home_team_name: 'Repeats home_team_name from the row''s nested game object: Abbreviation of the home team (e.g. "NE").'
+  game_id: PFF game id of the game (integer join key).
+  game_player_franchise_id: 'Repeats player_franchise_id from the row''s nested game object: PFF franchise id of the team
+    the player played for in the game.'
+  game_position: 'Repeats position from the row''s nested game object: PFF position code the player was charted at in the
+    game (e.g. QB, HB, WR, T, LB, K).'
+  game_status: 'Repeats status from the row''s nested game object: "S" when the player started the game; PFF owns the value
+    set.'
+  game_week: 'Repeats week from the row''s nested game object: Week number of the game, as PFF numbers weeks.'
+  gap_attempts: Rushing attempts on gap-scheme runs.
+  grades_hands_fumble: PFF ball-security (hands/fumble) grade, 0-100.
+  grades_offense: PFF overall offense grade (0-100).
+  grades_offense_penalty: PFF offensive penalty grade, 0-100.
+  grades_run: PFF rushing grade (0-100).
+  grades_run_block: PFF run-blocking grade, 0-100.
+  home_franchise_id: PFF franchise id of the home team.
+  home_team_name: Abbreviation of the home team (e.g. "NE").
+  jersey_number: Jersey number the player wore in the game (string; zero-padded, e.g. "09").
+  league_id: PFF league id (1 = NFL, 2 = NCAA), filled from the report's subject.
+  longest: Longest run in yards.
+  penalties: Penalties charged to the player over the covered span.
+  player_franchise_id: PFF franchise id of the team the player played for in the game.
+  player_id: PFF player id (integer join key) of the player the report is about.
+  position: PFF position code the player was charted at in the game (e.g. QB, HB, WR, T, LB, K).
+  rec_yards: Receiving yards gained by the ball carrier (the rushing report also carries his receiving line).
+  receptions: Passes caught by the ball carrier.
+  routes: Pass routes run by the player.
+  run_plays: Run-play snaps.
+  scramble_yards: Rushing yards gained on scrambles.
+  scrambles: Quarterback scrambles.
+  season: Season (starting year) of the report, filled from the report's subject.
+  status: '"S" when the player started the game; PFF owns the value set.'
+  targets: Passes thrown to the ball carrier (targets).
+  total_touches: Combined carries and receptions.
+  touchdowns: Rushing touchdowns.
+  week: Week number of the game, as PFF numbers weeks.
+  yards: Total rushing yards gained.
+  yards_after_contact: Yards after contact.
+  yco_attempt: Average yards after contact per rushing attempt.
+  ypa: Average yards per rushing attempt.
+  yprr: Yards per route run.
+  zone_attempts: Rushing attempts on zone-scheme runs.
+pff_api_player_seasons:
+  value: A season (starting year) PFF has data for the player in, newest first.
+pff_api_player_snaps_summary:
+  season: Season (starting year) the snap totals cover.
+  snap_counts_coverage: Coverage snaps played.
+  snap_counts_defense: Total defensive snaps played.
+  snap_counts_field_goal: Snaps on the field-goal and extra-point unit.
+  snap_counts_field_goal_blocking: Snaps on the field-goal and extra-point block unit.
+  snap_counts_field_goal_kicking: Field-goal and extra-point snaps spent kicking.
+  snap_counts_kickoff_coverage: Snaps on the kickoff coverage unit.
+  snap_counts_kickoff_kicking: Kickoff snaps spent kicking off.
+  snap_counts_kickoff_return_blocking: Kickoff-return snaps spent blocking.
+  snap_counts_kickoff_returning: Kickoff-return snaps spent as the returner.
+  snap_counts_offense: Offensive snaps played.
+  snap_counts_pass: Pass-play snaps spent as the passer, rather than blocking or running a route.
+  snap_counts_pass_block: Pass-blocking snaps played.
+  snap_counts_pass_route: Snaps spent running a pass route.
+  snap_counts_pass_rush: Pass-rush snaps played.
+  snap_counts_punt_coverage: Snaps on the punt coverage unit.
+  snap_counts_punt_punting: Punt snaps spent punting.
+  snap_counts_punt_return_blocking: Punt-return snaps spent blocking.
+  snap_counts_punt_returning: Punt-return snaps spent as the returner.
+  snap_counts_run: Run-play snaps spent as a runner, rather than run blocking.
+  snap_counts_run_block: Run-blocking snaps played.
+  snap_counts_run_defense: Run-defense snaps played.
+  snap_counts_special_teams: Total special-teams snaps played.
+pff_api_player_special_summary:
+  assists: Assisted tackles credited to the player on special-teams plays.
+  away_franchise_id: PFF franchise id of the away team.
+  away_team_name: Abbreviation of the away team (e.g. "LV").
+  declined_penalties: Penalties committed by the player that were declined.
+  game_away_franchise_id: 'Repeats away_franchise_id from the row''s nested game object: PFF franchise id of the away team.'
+  game_away_team_name: 'Repeats away_team_name from the row''s nested game object: Abbreviation of the away team (e.g. "LV").'
+  game_game_id: 'Repeats game_id from the row''s nested game object: PFF game id of the game (integer join key).'
+  game_home_franchise_id: 'Repeats home_franchise_id from the row''s nested game object: PFF franchise id of the home team.'
+  game_home_team_name: 'Repeats home_team_name from the row''s nested game object: Abbreviation of the home team (e.g. "NE").'
+  game_id: PFF game id of the game (integer join key).
+  game_player_franchise_id: 'Repeats player_franchise_id from the row''s nested game object: PFF franchise id of the team
+    the player played for in the game.'
+  game_position: 'Repeats position from the row''s nested game object: PFF position code the player was charted at in the
+    game (e.g. QB, HB, WR, T, LB, K).'
+  game_status: 'Repeats status from the row''s nested game object: "S" when the player started the game; PFF owns the value
+    set.'
+  game_week: 'Repeats week from the row''s nested game object: Week number of the game, as PFF numbers weeks.'
+  grades_fgep_defense: PFF grade on field-goal and extra-point defense, 0-100.
+  grades_misc_st: PFF miscellaneous special-teams grade, 0-100.
+  grades_special_teams_penalty: PFF special-teams penalty grade, 0-100.
+  home_franchise_id: PFF franchise id of the home team.
+  home_team_name: Abbreviation of the home team (e.g. "NE").
+  jersey_number: Jersey number the player wore in the game (string; zero-padded, e.g. "09").
+  league_id: PFF league id (1 = NFL, 2 = NCAA), filled from the report's subject.
+  missed_tackles: Missed tackles on special-teams plays.
+  penalties: Penalties charged to the player over the covered span.
+  player_franchise_id: PFF franchise id of the team the player played for in the game.
+  player_id: PFF player id (integer join key) of the player the report is about.
+  position: PFF position code the player was charted at in the game (e.g. QB, HB, WR, T, LB, K).
+  pu_def_rush: PFF punt-defense rush count (PFF's pu_def_rush; PFF does not document it further).
+  season: Season (starting year) of the report, filled from the report's subject.
+  snap_counts_field_goal: Snaps on the field-goal and extra-point unit.
+  snap_counts_field_goal_blocking: Snaps on the field-goal and extra-point block unit.
+  snap_counts_kickoff: Snaps on the kickoff coverage unit.
+  snap_counts_kickoff_return: Snaps on the kickoff return unit.
+  snap_counts_punt_coverage: Snaps on the punt coverage unit.
+  snap_counts_punt_return: Snaps on the punt return unit.
+  status: '"S" when the player started the game; PFF owns the value set.'
+  tackles: Tackles made by the player on special-teams plays.
+  week: Week number of the game, as PFF numbers weeks.
 pff_api_position_report:
   accuracy_oe: Accuracy percentage over expectation, in percentage points (PFF-charted accuracy minus its expected value).
   accuracy_percent: Charted accuracy percentage.
@@ -29859,6 +30599,40 @@ pff_api_position_report:
   zone_snap_counts_run_block: Run-blocking snaps played on zone-scheme runs.
   zone_snap_counts_run_block_percent: Share of the player's run-blocking snaps on zone-scheme runs.
   zone_snap_counts_run_play: Run-play snaps on zone-scheme runs.
+pff_api_receiving_coverage_stats:
+  broken_up_passes: Passes broken up in the row's coverage matchups.
+  coverage_player_id: PFF player id of the defender covering the receiver (versus only).
+  drops: Dropped passes in the row's coverage matchups.
+  first_downs: 'Receiving first downs (defenders: allowed in the defender''s coverage; receivers / versus: by the receiver).'
+  grades_coverage_defense: The player's PFF coverage grade (0-100).
+  grades_defense: The player's PFF overall defense grade (0-100).
+  grades_defense_penalty: The player's PFF defensive penalty grade (0-100).
+  grades_hands_drop: The player's PFF hands (drop) grade (0-100).
+  grades_hands_fumble: The player's PFF ball-security (fumble) grade (0-100).
+  grades_offense: The player's PFF overall offense grade (0-100).
+  grades_offense_penalty: The player's PFF offensive penalty grade (0-100).
+  grades_overall: The player's PFF overall grade (0-100) over the requested filters.
+  grades_overall_tackle: The player's PFF overall tackling grade (0-100).
+  grades_pass: The player's PFF passing grade (0-100).
+  grades_pass_block: The player's PFF pass-blocking grade (0-100).
+  grades_pass_route: The player's PFF receiving (route-running) grade (0-100).
+  grades_pass_rush_defense: The player's PFF pass-rush grade (0-100).
+  grades_run: The player's PFF rushing grade (0-100).
+  grades_run_block: The player's PFF run-blocking grade (0-100).
+  grades_run_defense: The player's PFF run-defense grade (0-100).
+  grades_screen_block: The player's PFF screen-blocking grade (0-100).
+  grades_snap: The player's PFF snapping grade (0-100), present only for players charted as snapping the ball.
+  grades_tackle: The player's PFF tackling grade (0-100).
+  interceptions: Interceptions on throws in the row's coverage matchups.
+  longest: 'Longest reception, in yards (defenders: allowed in the defender''s coverage; receivers / versus: by the receiver).'
+  player_game_count: Games the player appeared in over the requested filters.
+  player_id: 'PFF player id: the covering defender (defenders) or the receiver (receivers, versus).'
+  receptions: 'Receptions (defenders: allowed in the defender''s coverage; receivers / versus: by the receiver).'
+  targets: 'Targets (defenders: allowed in the defender''s coverage; receivers / versus: by the receiver).'
+  touchdowns: 'Receiving touchdowns (defenders: allowed in the defender''s coverage; receivers / versus: by the receiver).'
+  yards: 'Receiving yards (defenders: allowed in the defender''s coverage; receivers / versus: by the receiver).'
+  yards_after_catch: 'Yards after the catch (defenders: allowed in the defender''s coverage; receivers / versus: by the receiver).'
+  yards_per_reception: 'Yards per reception (defenders: allowed in the defender''s coverage; receivers / versus: by the receiver).'
 pff_api_team_directory:
   abbreviation: 'Short display code for the team (e.g. "ARZ"): the directory''s short code when it has one, else PFF''s abbreviation;
     null when neither exists.'

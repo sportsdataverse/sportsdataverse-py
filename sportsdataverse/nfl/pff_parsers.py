@@ -122,7 +122,9 @@ def parse_pff_report(
         return_as_pandas: Return pandas frame(s) instead of polars. Defaults to ``False``.
 
     Returns:
-        * ``pl.DataFrame`` (or pandas) for a single flat report,
+        * ``pl.DataFrame`` (or pandas) for a single flat report, and for the two single-object
+          bodies: player rushing direction (one row per direction) and player snaps summary
+          (one row, ``snap_counts`` flattened to ``snap_counts_<type>``),
         * ``dict[str, pl.DataFrame]`` for matrix reports and multi-key singletons,
         * a zero-row frame on empty / malformed input.
 
@@ -165,8 +167,17 @@ def parse_pff_report(
             return parse_pff_matrix(raw, return_as_pandas=return_as_pandas)
         if isinstance(val, list):
             return _maybe_pandas(_frame(val), return_as_pandas)
-        # a single non-list, non-matrix dict value (e.g. a player-detail envelope routed to
-        # the generic parser) -> zero-row frame; use parse_pff_player_detail for those.
+        if isinstance(val, dict) and isinstance(val.get("directions"), list):
+            # player rushing direction: {player_id, directions: [rows]} -> one row per direction
+            return _maybe_pandas(_frame(val["directions"]), return_as_pandas)
+        if isinstance(val, dict) and isinstance(val.get("snap_counts"), dict):
+            # player snaps summary: {season, snap_counts: {type: n}} -> one row, flattened to the
+            # ``snap_counts_<type>`` columns every report row carries
+            row = {k: v for k, v in val.items() if k != "snap_counts"}
+            row.update({f"snap_counts_{k}": v for k, v in val["snap_counts"].items()})
+            return _maybe_pandas(_frame([row]), return_as_pandas)
+        # any other single dict value (e.g. a player-detail envelope routed to the generic
+        # parser) -> zero-row frame; use parse_pff_player_detail for those.
         return _maybe_pandas(pl.DataFrame(), return_as_pandas)
 
     # multi-key singleton (teams -> {franchise_groups, games, teams})

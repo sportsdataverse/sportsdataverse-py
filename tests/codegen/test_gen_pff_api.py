@@ -68,6 +68,25 @@ def test_new_returns_schemas_have_unique_schema_names():
         assert not (isinstance(d, dict) and d.get("schema") in taken), p
 
 
+def test_every_parsed_route_documents_its_columns():
+    """19 routes once shipped an EMPTY returns table: one player for every per-player report (a
+    QB has no kickoff rows) and nested bodies the capture's shape could not see. Every parsed
+    route now documents its columns, or says why it cannot (``unverified``)."""
+    base = ROOT / "tools/codegen/schemas"
+    eps = _eps()
+    for e in eps.values():
+        if "parser" not in e:
+            continue
+        d = yaml.safe_load((base / f"{e['returns_schema']}.yaml").read_text(encoding="utf-8"))
+        tables = d.get("frames") if d.get("kind") == "frames" else [d]
+        assert (tables and all(t.get("columns") for t in tables)) or d.get("unverified"), e["short"]
+    # the two coverage-matrix routes answer the same envelope -> one schema, three frames
+    for short in ("facet_receiving_coverage", "facet_defense_coverage_matchup"):
+        assert eps[short]["returns_schema"] == "native/pff_api/receiving_coverage_stats"
+    d = yaml.safe_load((base / "native/pff_api/receiving_coverage_stats.yaml").read_text(encoding="utf-8"))
+    assert [f["section"] for f in d["frames"]] == ["defenders", "receivers", "versus"]
+
+
 @pytest.mark.skipif(not _SPEC.exists(), reason="sdv-internal-refs pff/developer spec not present (local-only source)")
 def test_generator_reproduces_the_committed_yaml():
     spec = importlib.util.spec_from_file_location("gen_pff_api", ROOT / "tools/codegen/gen_pff_api.py")
