@@ -1,0 +1,248 @@
+{
+  "sports": [
+    {
+      "key": "football",
+      "label": "Football",
+      "leagues": [
+        {
+          "prefix": "cfb",
+          "label": "CFB"
+        },
+        {
+          "prefix": "nfl",
+          "label": "NFL"
+        },
+        {
+          "prefix": "ufl",
+          "label": "UFL"
+        },
+        {
+          "prefix": "xfl",
+          "label": "XFL"
+        },
+        {
+          "prefix": "cfl",
+          "label": "CFL"
+        }
+      ]
+    },
+    {
+      "key": "basketball",
+      "label": "Basketball",
+      "leagues": [
+        {
+          "prefix": "nba",
+          "label": "NBA"
+        },
+        {
+          "prefix": "wnba",
+          "label": "WNBA"
+        },
+        {
+          "prefix": "mbb",
+          "label": "MBB"
+        },
+        {
+          "prefix": "wbb",
+          "label": "WBB"
+        }
+      ]
+    },
+    {
+      "key": "hockey",
+      "label": "Hockey",
+      "leagues": [
+        {
+          "prefix": "nhl",
+          "label": "NHL"
+        },
+        {
+          "prefix": "mch",
+          "label": "MCH"
+        },
+        {
+          "prefix": "wch",
+          "label": "WCH"
+        },
+        {
+          "prefix": "pwhl",
+          "label": "PWHL"
+        },
+        {
+          "prefix": "ahl",
+          "label": "AHL"
+        },
+        {
+          "prefix": "ohl",
+          "label": "OHL"
+        },
+        {
+          "prefix": "whl",
+          "label": "WHL"
+        },
+        {
+          "prefix": "qmjhl",
+          "label": "QMJHL"
+        },
+        {
+          "prefix": "echl",
+          "label": "ECHL"
+        },
+        {
+          "prefix": "sphl",
+          "label": "SPHL"
+        },
+        {
+          "prefix": "chl",
+          "label": "CHL"
+        },
+        {
+          "prefix": "ushl",
+          "label": "USHL"
+        },
+        {
+          "prefix": "bchl",
+          "label": "BCHL"
+        },
+        {
+          "prefix": "ajhl",
+          "label": "AJHL"
+        },
+        {
+          "prefix": "sjhl",
+          "label": "SJHL"
+        },
+        {
+          "prefix": "ojhl",
+          "label": "OJHL"
+        },
+        {
+          "prefix": "cchl",
+          "label": "CCHL"
+        },
+        {
+          "prefix": "gojhl",
+          "label": "GOJHL"
+        },
+        {
+          "prefix": "mhl",
+          "label": "MHL"
+        },
+        {
+          "prefix": "nojhl",
+          "label": "NOJHL"
+        },
+        {
+          "prefix": "vijhl",
+          "label": "VIJHL"
+        },
+        {
+          "prefix": "kijhl",
+          "label": "KIJHL"
+        },
+        {
+          "prefix": "mjhl",
+          "label": "MJHL"
+        }
+      ]
+    },
+    {
+      "key": "baseball",
+      "label": "Baseball",
+      "leagues": [
+        {
+          "prefix": "mlb",
+          "label": "MLB"
+        },
+        {
+          "prefix": "college_baseball",
+          "label": "College baseball"
+        },
+        {
+          "prefix": "college_softball",
+          "label": "College softball"
+        }
+      ]
+    },
+    {
+      "key": "soccer",
+      "label": "Soccer",
+      "leagues": [
+        {
+          "prefix": "soccer",
+          "label": "Soccer (all)"
+        },
+        {
+          "prefix": "epl",
+          "label": "EPL"
+        },
+        {
+          "prefix": "laliga",
+          "label": "LaLiga"
+        },
+        {
+          "prefix": "bundesliga",
+          "label": "Bundesliga"
+        },
+        {
+          "prefix": "seriea",
+          "label": "Serie A"
+        },
+        {
+          "prefix": "ligue1",
+          "label": "Ligue 1"
+        },
+        {
+          "prefix": "mls",
+          "label": "MLS"
+        },
+        {
+          "prefix": "ligamx",
+          "label": "Liga MX"
+        },
+        {
+          "prefix": "ucl",
+          "label": "UCL"
+        },
+        {
+          "prefix": "uel",
+          "label": "UEL"
+        },
+        {
+          "prefix": "nwsl",
+          "label": "NWSL"
+        },
+        {
+          "prefix": "wwc",
+          "label": "WWC"
+        },
+        {
+          "prefix": "wc",
+          "label": "WC"
+        }
+      ]
+    },
+    {
+      "key": "other",
+      "label": "Other",
+      "leagues": [
+        {
+          "prefix": "cricket",
+          "label": "Cricket"
+        },
+        {
+          "prefix": "odds",
+          "label": "Betting odds"
+        },
+        {
+          "prefix": "cbs",
+          "label": "CBS Sports"
+        },
+        {
+          "prefix": "yahoo",
+          "label": "Yahoo Sports"
+        }
+      ]
+    }
+  ]
+}

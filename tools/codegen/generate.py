@@ -4019,6 +4019,57 @@ def _split_family_pages(
     return moved
 
 
+# ===========================================================================
+# League registry (sub-project 3): one file, written with the docs, that the site reads for the sidebar,
+# the home page's league grid and the per-league search indexes.
+# ===========================================================================
+
+# Relative to docs/docs, like _ANCHOR_MAP_REL: the file lands at docs/src/data/leagues.json.
+_LEAGUES_JSON_REL = "../src/data/leagues.json"
+_SPORTS = (
+    ("football", "Football"),
+    ("basketball", "Basketball"),
+    ("hockey", "Hockey"),
+    ("baseball", "Baseball"),
+    ("soccer", "Soccer"),
+    ("other", "Other"),
+)
+# Sport of a documented league that leagues.yaml does not list (releases-only or hand-written modules).
+_EXTRA_LEAGUE_SPORT = {"pwhl": "hockey", **{lg: "hockey" for lg in _HOCKEYTECH_MODULE_LEAGUES}}
+# Labels for prefixes that are not initials; every other prefix is upper-cased (nfl -> NFL).
+_LEAGUE_LABELS = {
+    "bundesliga": "Bundesliga",
+    "cbs": "CBS Sports",
+    "college_baseball": "College baseball",
+    "college_softball": "College softball",
+    "cricket": "Cricket",
+    "laliga": "LaLiga",
+    "ligamx": "Liga MX",
+    "ligue1": "Ligue 1",
+    "odds": "Betting odds",
+    "seriea": "Serie A",
+    "soccer": "Soccer (all)",
+    "yahoo": "Yahoo Sports",
+}
+
+
+def render_leagues_json() -> str:
+    """``{"sports": [{key, label, leagues: [{prefix, label}]}]}`` for every documented league, in
+    :func:`_doc_leagues` order within each sport. A sport leagues.yaml names but :data:`_SPORTS` does not
+    (cricket) is "other"; so is a league with no sport at all (odds, cbs, yahoo)."""
+    cfg = spec.load_leagues(ENDPOINTS / "leagues.yaml")
+    sport_of = {lg.prefix: lg.sport for lg in cfg.leagues} | _EXTRA_LEAGUE_SPORT
+    keys = {key for key, _ in _SPORTS}
+    leagues: dict[str, list[dict[str, str]]] = {key: [] for key in keys}
+    for prefix in _doc_leagues():
+        sport = sport_of.get(prefix, "other")
+        leagues[sport if sport in keys else "other"].append(
+            {"prefix": prefix, "label": _LEAGUE_LABELS.get(prefix, prefix.upper())}
+        )
+    sports = [{"key": key, "label": label, "leagues": leagues[key]} for key, label in _SPORTS if leagues[key]]
+    return json.dumps({"sports": sports}, indent=2)
+
+
 def _render_docs_all() -> dict[str, str]:
     """{relpath: content} for the full generated docs staging tree.
 
@@ -4102,6 +4153,7 @@ def _render_docs_all() -> dict[str, str]:
         out[f"reference/{_AUTODOC_GLOBAL_PAGE}"] = global_autodoc
     _split_family_pages(out, None, anchor_map)
     out[_ANCHOR_MAP_REL] = json.dumps(anchor_map, indent=1, sort_keys=True)
+    out[_LEAGUES_JSON_REL] = render_leagues_json()
     pkgs = render_packages_page()
     if pkgs is not None:
         out["packages.mdx"] = pkgs

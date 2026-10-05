@@ -39,52 +39,51 @@
   white-space: normal;
 }
 
-.features {
+.leagues {
+  padding: 2rem 0 3rem;
+}
+
+.sport {
+  margin-bottom: 1.25rem;
+}
+
+.sportTitle {
+  margin-bottom: 0.5rem;
+}
+
+.leagueList {
   display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* a chip per league: 44 px tall, so a phone reader can tap it */
+.league {
+  display: inline-flex;
   align-items: center;
-  padding: 2rem 0;
-  width: 100%;
+  min-height: 44px;
+  padding: 0 1rem;
+  border: 1px solid var(--ifm-toc-border-color);
+  border-radius: var(--ifm-global-radius);
+  font-weight: 600;
+  text-decoration: none;
 }
 
-.featureImage {
-  height: 200px;
-  width: 200px;
+.league:hover {
+  border-color: var(--ifm-color-primary);
+  text-decoration: none;
 }
 
-.funcs {
-  margin-bottom: 80px;
+.sisters {
+  margin: 1.5rem 0 0;
 }
 
-.funcSet {
-  margin-bottom: 32px;
-}
-
-.funcSetHeading {
-  margin-bottom: 8px;
-}
-
-.funcSetItems {
-  columns: 2;
-}
-@media screen and (min-width: 500px) {
-  .funcSetItems {
-    columns: 3;
-  }
-}
-@media screen and (min-width: 750px) {
-  .funcSetItems {
-    columns: 4;
-  }
-}
-@media screen and (min-width: 966px) {
-  .funcSetItems {
-    columns: 5;
-  }
-}
-
-
-.funcSetItem {
-  display: block;
-  margin-bottom: 8px;
-  margin-right: 8px;
+/* inline links, but each a 24 px target (WCAG 2.5.8) */
+.sisters a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
 }

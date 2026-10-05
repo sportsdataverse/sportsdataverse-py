@@ -3,6 +3,7 @@ import * as path from 'path';
 import type {PrismTheme} from 'prism-react-renderer';
 import type {Config} from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
+import registry from './src/data/leagues.json';
 
 // Cap which doc versions are BUILT, derived from versions.json (which Docusaurus
 // maintains newest-first) so the list never needs manual editing at release time:
@@ -209,6 +210,19 @@ const config: Config = {
         // stay searchable. A name that appears only in a table no longer matches: a returned column,
         // a row of the dataset catalog on a loaders page, a row of a tutorial's function table.
         ignoreCssSelectors: ['table'],
+        // One index per league directory and one for the package reference, so a league page downloads its
+        // own (the largest, MBB, was 1.9 MB raw on the 2026-10-04 prototype) instead of the whole site's 22 MB.
+        // Contexts are URL prefixes: a small league cannot share its sport's index, so it gets its own. Pages
+        // outside every context (guides, tutorials, the home page) search everything, so a function name typed on
+        // the home page still finds its reference page in any league (owner, 2026-10-04); only those pages pay for
+        // the site-wide index, and only when the reader starts a search.
+        useAllContextsWithNoSearchContext: true,
+        searchContextByPaths: [
+          ...registry.sports.flatMap((sport) =>
+            sport.leagues.map((l) => ({label: l.label, path: `docs/${l.prefix}`})),
+          ),
+          {label: 'Package reference', path: 'docs/reference'},
+        ],
       },
     ],
   ],
@@ -441,36 +455,32 @@ const config: Config = {
     },
     footer: {
       style: 'dark',
+      // Full columns, as sdvplot's (sub-project 2): the guide, the community, the rest of the SportsDataverse.
       links: [
         {
           title: 'Docs',
           items: [
-            {
-              label: 'Docs',
-              to: '/docs/intro',
-            },
+            {label: 'Getting started', to: '/docs/intro'},
+            {label: 'Leagues', to: '/'},
+            {label: 'Tutorials', to: '/docs/category/tutorials'},
+            {label: 'Changelog', to: '/CHANGELOG'},
           ],
         },
         {
           title: 'Community',
           items: [
-            {
-              label: 'Twitter (Author)',
-              href: 'https://twitter.com/saiemgilani',
-            },
-            {
-              label: 'Twitter (SportsDataverse)',
-              href: 'https://twitter.com/sportsdataverse',
-            },
+            {label: 'GitHub', href: 'https://github.com/sportsdataverse/sportsdataverse-py'},
+            {label: 'Bluesky', href: 'https://bsky.app/profile/sportsdataverse.org'},
+            {label: 'X', href: 'https://twitter.com/sportsdataverse'},
           ],
         },
         {
-          title: 'More',
+          title: 'SportsDataverse',
           items: [
-            {
-              label: 'GitHub',
-              href: 'https://github.com/sportsdataverse/sportsdataverse-py',
-            },
+            {label: 'sportsdataverse.org', href: 'https://sportsdataverse.org'},
+            {label: 'sdvplot', href: 'https://sdvplot.sportsdataverse.org'},
+            {label: 'R packages', href: 'https://r.sportsdataverse.org'},
+            {label: 'Data status', href: 'https://sportsdataverse.org/status'},
           ],
         },
       ],

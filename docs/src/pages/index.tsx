@@ -3,105 +3,19 @@ import clsx from 'clsx';
 import Layout from '@theme/Layout';
 import Link from '@docusaurus/Link';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
-import useBaseUrl from '@docusaurus/useBaseUrl';
+import registry from '@site/src/data/leagues.json';
 import styles from './styles.module.css';
 
-type FeatureItem = {
-  title: string;
-  imageUrl?: string;
-  description: ReactNode;
-};
-
-const FeatureList: FeatureItem[] = [
-  {
-    title: 'Basketball',
-    description: (
-      <>
-        Tidy NBA, WNBA, and NCAA men's & women's basketball — play-by-play, box
-        scores, schedules, rosters, and standings — via the cross-league{' '}
-        <code>espn_nba_*</code> / <code>espn_wnba_*</code> / <code>espn_mbb_*</code>{' '}
-        / <code>espn_wbb_*</code> wrappers, mirroring{' '}
-        <Link to="https://hoopR.sportsdataverse.org">hoopR</Link> and{' '}
-        <Link to="https://wehoop.sportsdataverse.org">wehoop</Link>.
-      </>
-    ),
-  },
-  {
-    title: 'Football',
-    description: (
-      <>
-        College football and the NFL: ESPN play-by-play, schedules, teams, and QBR
-        through <code>espn_cfb_*</code> / <code>espn_nfl_*</code>, plus an{' '}
-        <code>nfl</code> module that mirrors{' '}
-        <Link to="https://github.com/nflverse/nflreadpy">nflreadpy</Link> and reads{' '}
-        <Link to="https://nflverse.nflverse.com">nflverse</Link> releases. Aligned
-        with <Link to="https://cfbfastR.sportsdataverse.org">cfbfastR</Link>.
-      </>
-    ),
-  },
-  {
-    title: 'Baseball',
-    description: (
-      <>
-        MLB across three surfaces — ESPN, the official MLB Stats API
-        (<code>mlb_api_*</code>), and Baseball Savant / Statcast — for schedules,
-        play-by-play, rosters, and pitch-level data. The Python companion to{' '}
-        <Link to="https://billpetti.github.io/baseballr/">baseballr</Link>.
-      </>
-    ),
-  },
-  {
-    title: 'Hockey',
-    description: (
-      <>
-        NHL & PWHL via ESPN plus the NHL's own modern APIs: the{' '}
-        <code>api-web.nhle.com</code> game feed (<code>nhl_*</code>), EDGE player
-        tracking (<code>nhl_edge_*</code>), Stats REST, and the Records site —
-        mirroring{' '}
-        <Link to="https://fastRhockey.sportsdataverse.org">fastRhockey</Link>.
-      </>
-    ),
-  },
-  {
-    title: 'Tidy by default',
-    description: (
-      <>
-        Every wrapper returns raw JSON by default; opt into an analysis-ready{' '}
-        <strong>polars</strong> (or pandas) DataFrame with{' '}
-        <code>return_parsed=True</code>, a <code>parse_*</code> function, or the{' '}
-        <code>sportsdataverse.parsed.*</code> mirror. Whole seasons load from
-        pre-built parquet via <code>load_*</code>.
-      </>
-    ),
-  },
-  {
-    title: 'Part of the SportsDataverse',
-    description: (
-      <>
-        Free and open, with one mental model across sports <em>and</em> languages —
-        the function you know in R is the call you make in Python — plus
-        benchmarkable EP/WP models. See{' '}
-        <Link to="/docs/ecosystem">Ecosystem &amp; philosophy</Link> for the full
-        Python ↔ R map.
-      </>
-    ),
-  },
+// The R and Python packages these leagues mirror; they were the six feature cards' outbound links.
+const SISTER_PACKAGES: {label: string; href: string}[] = [
+  {label: 'hoopR', href: 'https://hoopR.sportsdataverse.org'},
+  {label: 'wehoop', href: 'https://wehoop.sportsdataverse.org'},
+  {label: 'cfbfastR', href: 'https://cfbfastR.sportsdataverse.org'},
+  {label: 'nflverse', href: 'https://nflverse.nflverse.com'},
+  {label: 'nflreadpy', href: 'https://github.com/nflverse/nflreadpy'},
+  {label: 'baseballr', href: 'https://billpetti.github.io/baseballr/'},
+  {label: 'fastRhockey', href: 'https://fastRhockey.sportsdataverse.org'},
 ];
-
-function Feature({imageUrl, title, description}: FeatureItem): ReactNode {
-  const imgUrl = useBaseUrl(imageUrl);
-  return (
-    <div className={clsx('col col--4', styles.feature)}>
-      {imgUrl && (
-        <div className="text--center">
-          <img className={styles.featureImage} src={imgUrl} alt={title} />
-        </div>
-      )}
-      <h3>{title}</h3>
-      <p>{description}</p>
-    </div>
-  );
-}
 
 function HomepageHeader(): ReactNode {
   const {siteConfig} = useDocusaurusContext();
@@ -127,6 +41,43 @@ function HomepageHeader(): ReactNode {
   );
 }
 
+// Every league the codegen documents, grouped by sport (docs/src/data/leagues.json, written by
+// tools/codegen/generate.py); each chip opens the league's index page.
+function LeagueGrid(): ReactNode {
+  return (
+    <section className={styles.leagues} aria-labelledby="leagues">
+      <div className="container">
+        <h2 id="leagues">Leagues</h2>
+        {registry.sports.map((sport) => (
+          <div key={sport.key} className={styles.sport}>
+            <h3 className={styles.sportTitle}>
+              <Link to={`/docs/leagues/${sport.key}`}>{sport.label}</Link>
+            </h3>
+            <ul className={styles.leagueList}>
+              {sport.leagues.map((l) => (
+                <li key={l.prefix}>
+                  <Link className={styles.league} to={`/docs/${l.prefix}/`}>
+                    {l.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+        <p className={styles.sisters}>
+          Sister packages:{' '}
+          {SISTER_PACKAGES.map((p, i) => (
+            <span key={p.label}>
+              {i > 0 && ' · '}
+              <Link to={p.href}>{p.label}</Link>
+            </span>
+          ))}
+        </p>
+      </div>
+    </section>
+  );
+}
+
 export default function Home(): ReactNode {
   const {siteConfig} = useDocusaurusContext();
   return (
@@ -135,15 +86,7 @@ export default function Home(): ReactNode {
       description="The SportsDataverse's Python Package for Sports Data.">
       <HomepageHeader />
       <main>
-        <section className={styles.features}>
-          <div className="container">
-            <div className="row">
-              {FeatureList.map((props, idx) => (
-                <Feature key={idx} {...props} />
-              ))}
-            </div>
-          </div>
-        </section>
+        <LeagueGrid />
       </main>
     </Layout>
   );
