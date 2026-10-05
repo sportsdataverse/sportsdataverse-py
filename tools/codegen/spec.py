@@ -163,6 +163,12 @@ class Loader:
     # makes a cross-dataset join on that id silently match nothing. Declaring the
     # column here normalizes it on read without touching the published asset.
     id_int64: List[str] = field(default_factory=list)
+    # What the sdv-py loader does when a requested season has no published asset:
+    # ``skip`` (default; the generated loaders -- the season is dropped) or ``raise``
+    # (the hand-written nfl_loaders -- ``NoDataError``). Machine-readable so ports
+    # that generate every entry (sdv-js) can honour the difference; sdv-py's own
+    # generated output does not read it.
+    on_missing: str = "skip"
 
 
 @dataclass(frozen=True)
@@ -307,6 +313,13 @@ def load_espn_api(path: Path, registry: Dict[str, Param]) -> EspnApi:
     return EspnApi(api=raw["api"], host=raw["host"], name_pattern=raw["name_pattern"], endpoints=endpoints)
 
 
+def _on_missing(ld: dict) -> str:
+    value = ld.get("on_missing", "skip")
+    if value not in ("skip", "raise"):
+        raise ValueError(f"{ld['fn']}: on_missing must be 'skip' or 'raise', got {value!r}")
+    return value
+
+
 def load_releases(path: Path) -> ReleasesConfig:
     """Load the dataset-loader manifest (releases.yaml)."""
     raw = _read_yaml(path)
@@ -327,6 +340,7 @@ def load_releases(path: Path) -> ReleasesConfig:
             stub_message=ld.get("stub_message"),
             deprecated_for=ld.get("deprecated_for"),
             id_int64=list(ld.get("id_int64", []) or []),
+            on_missing=_on_missing(ld),
         )
         for ld in raw["loaders"]
     ]
