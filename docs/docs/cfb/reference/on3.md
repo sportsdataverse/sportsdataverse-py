@@ -3,12 +3,13 @@ title: CFB — On3 Recruit Database (api.on3.com)
 sidebar_label: On3 Recruit Database (api.on3.com)
 description: "CFB — On3 Recruit Database (api.on3.com) — endpoint reference in sdv-py, the SportsDataverse Python package."
 sidebar_position: 10
+toc_max_heading_level: 2
 ---
 # CFB — On3 Recruit Database (api.on3.com)
 
 `sportsdataverse.cfb` — 78 endpoints.
 
-## `on3_coaches_history`
+## on3_coaches_history
 
 GET /rdb/v1/coaches/{personKey}/history
 
@@ -22,7 +23,7 @@ GET /rdb/v1/coaches/{personKey}/history
 | `page` | `page` |  |  | `Y` | page query parameter. |
 | `pageSize` | `page_size` |  |  | `Y` | pageSize query parameter. |
 
-### Returns
+### Returns {#on3_coaches_history-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -42,7 +43,7 @@ GET /rdb/v1/coaches/{personKey}/history
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#on3_coaches_history-example}
 
 ```python
 on3_coaches_history(person_key=89617)
@@ -50,7 +51,7 @@ on3_coaches_history(person_key=89617)
 
 _Last validated n/a._
 
-## `on3_coaches_profile`
+## on3_coaches_profile
 
 GET /rdb/v1/coaches/{personKey}/profile
 
@@ -62,7 +63,7 @@ GET /rdb/v1/coaches/{personKey}/profile
 |---|---|:---:|:---:|:---:|---|
 | `person_key` | `person_key` |  | `Y` |  | person_key path parameter. |
 
-### Returns
+### Returns {#on3_coaches_profile-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -89,7 +90,7 @@ GET /rdb/v1/coaches/{personKey}/profile
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#on3_coaches_profile-example}
 
 ```python
 on3_coaches_profile(person_key=89617)
@@ -97,7 +98,7 @@ on3_coaches_profile(person_key=89617)
 
 _Last validated n/a._
 
-## `on3_collective_groups`
+## on3_collective_groups
 
 GET /rdb/v1/collective-groups
 
@@ -113,7 +114,7 @@ GET /rdb/v1/collective-groups
 | `page` | `page` |  |  | `Y` | page query parameter. |
 | `pageSize` | `page_size` |  |  | `Y` | pageSize query parameter. |
 
-### Returns
+### Returns {#on3_collective_groups-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -147,7 +148,7 @@ GET /rdb/v1/collective-groups
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#on3_collective_groups-example}
 
 ```python
 on3_collective_groups()
@@ -155,7 +156,7 @@ on3_collective_groups()
 
 _Last validated n/a._
 
-## `on3_collective_groups_deals`
+## on3_collective_groups_deals
 
 GET /rdb/v1/collective-groups/{key}/deals
 
@@ -169,7 +170,7 @@ GET /rdb/v1/collective-groups/{key}/deals
 | `page` | `page` |  |  | `Y` | page query parameter. |
 | `pageSize` | `page_size` |  |  | `Y` | pageSize query parameter. |
 
-### Returns
+### Returns {#on3_collective_groups_deals-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -193,7 +194,7 @@ GET /rdb/v1/collective-groups/{key}/deals
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#on3_collective_groups_deals-example}
 
 ```python
 on3_collective_groups_deals(key=1)
@@ -201,7 +202,7 @@ on3_collective_groups_deals(key=1)
 
 _Last validated n/a._
 
-## `on3_collective_groups_key`
+## on3_collective_groups_key
 
 GET /rdb/v1/collective-groups/{key}
 
@@ -213,7 +214,7 @@ GET /rdb/v1/collective-groups/{key}
 |---|---|:---:|:---:|:---:|---|
 | `key` | `key` |  | `Y` |  | key path parameter. |
 
-### Returns
+### Returns {#on3_collective_groups_key-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -247,7 +248,7 @@ GET /rdb/v1/collective-groups/{key}
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#on3_collective_groups_key-example}
 
 ```python
 on3_collective_groups_key(key=1)
@@ -255,7 +256,7 @@ on3_collective_groups_key(key=1)
 
 _Last validated n/a._
 
-## `on3_commits_latest`
+## on3_commits_latest
 
 GET /rdb/v1/commits/latest
 
@@ -269,7 +270,7 @@ GET /rdb/v1/commits/latest
 | `page` | `page` |  |  | `Y` | page query parameter. |
 | `pageSize` | `page_size` |  |  | `Y` | pageSize query parameter. |
 
-### Returns
+### Returns {#on3_commits_latest-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -300,7 +301,7 @@ GET /rdb/v1/commits/latest
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#on3_commits_latest-example}
 
 ```python
 on3_commits_latest()
@@ -308,7 +309,7 @@ on3_commits_latest()
 
 _Last validated n/a._
 
-## `on3_commits_organizations_latest_commits`
+## on3_commits_organizations_latest_commits
 
 GET /rdb/v1/commits/organizations/{orgKey}/latest-commits
 
@@ -320,7 +321,7 @@ GET /rdb/v1/commits/organizations/{orgKey}/latest-commits
 |---|---|:---:|:---:|:---:|---|
 | `org_key` | `org_key` |  | `Y` |  | org_key path parameter. |
 
-### Returns
+### Returns {#on3_commits_organizations_latest_commits-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -330,7 +331,7 @@ GET /rdb/v1/commits/organizations/{orgKey}/latest-commits
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#on3_commits_organizations_latest_commits-example}
 
 ```python
 on3_commits_organizations_latest_commits(org_key=1867)
@@ -338,7 +339,7 @@ on3_commits_organizations_latest_commits(org_key=1867)
 
 _Last validated n/a._
 
-## `on3_commits_organizations_org_key`
+## on3_commits_organizations_org_key
 
 GET /rdb/v1/commits/organizations/{orgKey}
 
@@ -350,7 +351,7 @@ GET /rdb/v1/commits/organizations/{orgKey}
 |---|---|:---:|:---:|:---:|---|
 | `org_key` | `org_key` |  | `Y` |  | org_key path parameter. |
 
-### Returns
+### Returns {#on3_commits_organizations_org_key-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -360,7 +361,7 @@ GET /rdb/v1/commits/organizations/{orgKey}
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#on3_commits_organizations_org_key-example}
 
 ```python
 on3_commits_organizations_org_key(org_key=1867)
@@ -368,7 +369,7 @@ on3_commits_organizations_org_key(org_key=1867)
 
 _Last validated n/a._
 
-## `on3_draft_organization_rank`
+## on3_draft_organization_rank
 
 GET /rdb/v1/draft-organization-rank
 
@@ -383,7 +384,7 @@ GET /rdb/v1/draft-organization-rank
 | `page` | `page` |  |  | `Y` | page query parameter. |
 | `pageSize` | `page_size` |  |  | `Y` | pageSize query parameter. |
 
-### Returns
+### Returns {#on3_draft_organization_rank-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -399,7 +400,7 @@ GET /rdb/v1/draft-organization-rank
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#on3_draft_organization_rank-example}
 
 ```python
 on3_draft_organization_rank()
@@ -407,7 +408,7 @@ on3_draft_organization_rank()
 
 _Last validated n/a._
 
-## `on3_draft_pick_organization_rank`
+## on3_draft_pick_organization_rank
 
 GET /rdb/v1/draft-pick-organization-rank
 
@@ -422,7 +423,7 @@ GET /rdb/v1/draft-pick-organization-rank
 | `page` | `page` |  |  | `Y` | page query parameter. |
 | `pageSize` | `page_size` |  |  | `Y` | pageSize query parameter. |
 
-### Returns
+### Returns {#on3_draft_pick_organization_rank-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -437,7 +438,7 @@ GET /rdb/v1/draft-pick-organization-rank
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#on3_draft_pick_organization_rank-example}
 
 ```python
 on3_draft_pick_organization_rank()
@@ -445,7 +446,7 @@ on3_draft_pick_organization_rank()
 
 _Last validated n/a._
 
-## `on3_drafts`
+## on3_drafts
 
 GET /rdb/v1/drafts
 
@@ -459,7 +460,7 @@ GET /rdb/v1/drafts
 | `round` | `round` |  |  | `Y` | round query parameter. |
 | `year` | `year` |  |  | `Y` | year query parameter. |
 
-### Returns
+### Returns {#on3_drafts-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -490,7 +491,7 @@ GET /rdb/v1/drafts
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#on3_drafts-example}
 
 ```python
 on3_drafts()
@@ -498,7 +499,7 @@ on3_drafts()
 
 _Last validated n/a._
 
-## `on3_drafts_by_stars`
+## on3_drafts_by_stars
 
 GET /rdb/v1/drafts-by-stars
 
@@ -512,7 +513,7 @@ GET /rdb/v1/drafts-by-stars
 | `year` | `year` |  |  | `Y` | year query parameter. |
 | `yearSpan` | `year_span` |  |  | `Y` | yearSpan query parameter. |
 
-### Returns
+### Returns {#on3_drafts_by_stars-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -529,7 +530,7 @@ GET /rdb/v1/drafts-by-stars
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#on3_drafts_by_stars-example}
 
 ```python
 on3_drafts_by_stars()
@@ -537,7 +538,7 @@ on3_drafts_by_stars()
 
 _Last validated n/a._
 
-## `on3_drafts_by_stars_summary`
+## on3_drafts_by_stars_summary
 
 GET /rdb/v1/drafts-by-stars-summary
 
@@ -550,7 +551,7 @@ GET /rdb/v1/drafts-by-stars-summary
 | `sportKey` | `sport_key` |  |  | `Y` | sportKey query parameter. |
 | `year` | `year` |  |  | `Y` | year query parameter. |
 
-### Returns
+### Returns {#on3_drafts_by_stars_summary-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -564,7 +565,7 @@ GET /rdb/v1/drafts-by-stars-summary
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#on3_drafts_by_stars_summary-example}
 
 ```python
 on3_drafts_by_stars_summary()
@@ -572,7 +573,7 @@ on3_drafts_by_stars_summary()
 
 _Last validated n/a._
 
-## `on3_drafts_players`
+## on3_drafts_players
 
 GET /rdb/v1/drafts/{orgKey}/players
 
@@ -585,7 +586,7 @@ GET /rdb/v1/drafts/{orgKey}/players
 | `org_key` | `org_key` |  | `Y` |  | org_key path parameter. |
 | `year` | `year` |  |  | `Y` | year query parameter. |
 
-### Returns
+### Returns {#on3_drafts_players-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -616,7 +617,7 @@ GET /rdb/v1/drafts/{orgKey}/players
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#on3_drafts_players-example}
 
 ```python
 on3_drafts_players(org_key=1867)
@@ -624,7 +625,7 @@ on3_drafts_players(org_key=1867)
 
 _Last validated n/a._
 
-## `on3_filters_conferences`
+## on3_filters_conferences
 
 GET /rdb/v1/filters/conferences
 
@@ -637,7 +638,7 @@ GET /rdb/v1/filters/conferences
 | `year` | `year` |  |  | `Y` | year query parameter. |
 | `sportKey` | `sport_key` |  |  | `Y` | sportKey query parameter. |
 
-### Returns
+### Returns {#on3_filters_conferences-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -648,7 +649,7 @@ GET /rdb/v1/filters/conferences
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#on3_filters_conferences-example}
 
 ```python
 on3_filters_conferences()
@@ -656,7 +657,7 @@ on3_filters_conferences()
 
 _Last validated n/a._
 
-## `on3_filters_draft_rounds`
+## on3_filters_draft_rounds
 
 GET /rdb/v1/filters/draft-rounds
 
@@ -669,12 +670,12 @@ GET /rdb/v1/filters/draft-rounds
 | `year` | `year` |  |  | `Y` | year query parameter. |
 | `sportKey` | `sport_key` |  |  | `Y` | sportKey query parameter. |
 
-### Returns
+### Returns {#on3_filters_draft_rounds-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_on3_rdb`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#on3_filters_draft_rounds-example}
 
 ```python
 on3_filters_draft_rounds()
@@ -682,7 +683,7 @@ on3_filters_draft_rounds()
 
 _Last validated n/a._
 
-## `on3_filters_positions`
+## on3_filters_positions
 
 GET /rdb/v1/filters/positions
 
@@ -695,7 +696,7 @@ GET /rdb/v1/filters/positions
 | `sportKey` | `sport_key` |  |  | `Y` | sportKey query parameter. |
 | `positionType` | `position_type` |  |  | `Y` | positionType query parameter. |
 
-### Returns
+### Returns {#on3_filters_positions-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -706,7 +707,7 @@ GET /rdb/v1/filters/positions
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#on3_filters_positions-example}
 
 ```python
 on3_filters_positions()
@@ -714,7 +715,7 @@ on3_filters_positions()
 
 _Last validated n/a._
 
-## `on3_filters_sports`
+## on3_filters_sports
 
 GET /rdb/v1/filters/sports
 
@@ -725,7 +726,7 @@ GET /rdb/v1/filters/sports
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 
-### Returns
+### Returns {#on3_filters_sports-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -735,7 +736,7 @@ GET /rdb/v1/filters/sports
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#on3_filters_sports-example}
 
 ```python
 on3_filters_sports()
@@ -743,7 +744,7 @@ on3_filters_sports()
 
 _Last validated n/a._
 
-## `on3_filters_status`
+## on3_filters_status
 
 GET /rdb/v1/filters/status
 
@@ -754,12 +755,12 @@ GET /rdb/v1/filters/status
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 
-### Returns
+### Returns {#on3_filters_status-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_on3_rdb`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#on3_filters_status-example}
 
 ```python
 on3_filters_status()
@@ -767,7 +768,7 @@ on3_filters_status()
 
 _Last validated n/a._
 
-## `on3_filters_teams`
+## on3_filters_teams
 
 GET /rdb/v1/filters/teams
 
@@ -781,7 +782,7 @@ GET /rdb/v1/filters/teams
 | `year` | `year` |  |  | `Y` | year query parameter. |
 | `sportKey` | `sport_key` |  |  | `Y` | sportKey query parameter. |
 
-### Returns
+### Returns {#on3_filters_teams-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -792,7 +793,7 @@ GET /rdb/v1/filters/teams
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#on3_filters_teams-example}
 
 ```python
 on3_filters_teams()
@@ -800,7 +801,7 @@ on3_filters_teams()
 
 _Last validated n/a._
 
-## `on3_filters_years`
+## on3_filters_years
 
 GET /rdb/v1/filters/years
 
@@ -811,12 +812,12 @@ GET /rdb/v1/filters/years
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 
-### Returns
+### Returns {#on3_filters_years-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_on3_rdb`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#on3_filters_years-example}
 
 ```python
 on3_filters_years()
@@ -824,7 +825,7 @@ on3_filters_years()
 
 _Last validated n/a._
 
-## `on3_nil_100`
+## on3_nil_100
 
 GET /rdb/v1/nil-100
 
@@ -836,7 +837,7 @@ GET /rdb/v1/nil-100
 |---|---|:---:|:---:|:---:|---|
 | `year` | `year` |  |  | `Y` | year query parameter. |
 
-### Returns
+### Returns {#on3_nil_100-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -846,7 +847,7 @@ GET /rdb/v1/nil-100
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#on3_nil_100-example}
 
 ```python
 on3_nil_100()
@@ -854,7 +855,7 @@ on3_nil_100()
 
 _Last validated n/a._
 
-## `on3_nil_100_v2`
+## on3_nil_100_v2
 
 GET /rdb/v2/nil-100
 
@@ -869,7 +870,7 @@ GET /rdb/v2/nil-100
 | `limit` | `limit` |  |  | `Y` | Maximum number of items to return. |
 | `page` | `page` |  |  | `Y` | page query parameter. |
 
-### Returns
+### Returns {#on3_nil_100_v2-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -879,7 +880,7 @@ GET /rdb/v2/nil-100
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#on3_nil_100_v2-example}
 
 ```python
 on3_nil_100_v2()
@@ -887,7 +888,7 @@ on3_nil_100_v2()
 
 _Last validated n/a._
 
-## `on3_nil_compliances_state`
+## on3_nil_compliances_state
 
 GET /rdb/v1/nil-compliances/state
 
@@ -899,7 +900,7 @@ GET /rdb/v1/nil-compliances/state
 |---|---|:---:|:---:|:---:|---|
 | `stateKey` | `state_key` |  |  | `Y` | stateKey query parameter. |
 
-### Returns
+### Returns {#on3_nil_compliances_state-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -915,7 +916,7 @@ GET /rdb/v1/nil-compliances/state
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#on3_nil_compliances_state-example}
 
 ```python
 on3_nil_compliances_state()
@@ -923,7 +924,7 @@ on3_nil_compliances_state()
 
 _Last validated n/a._
 
-## `on3_nil_rankings`
+## on3_nil_rankings
 
 GET /rdb/v1/nil-rankings
 
@@ -940,7 +941,7 @@ GET /rdb/v1/nil-rankings
 | `positionAbbr` | `position_abbr` |  |  | `Y` | positionAbbr query parameter. |
 | `stateAbbr` | `state_abbr` |  |  | `Y` | stateAbbr query parameter. |
 
-### Returns
+### Returns {#on3_nil_rankings-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -950,7 +951,7 @@ GET /rdb/v1/nil-rankings
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#on3_nil_rankings-example}
 
 ```python
 on3_nil_rankings()
@@ -958,7 +959,7 @@ on3_nil_rankings()
 
 _Last validated n/a._
 
-## `on3_organizations_draft_class_by_state`
+## on3_organizations_draft_class_by_state
 
 GET /rdb/v1/organizations/{organizationKey}/draft-class-by-state
 
@@ -972,7 +973,7 @@ GET /rdb/v1/organizations/{organizationKey}/draft-class-by-state
 | `page` | `page` |  |  | `Y` | page query parameter. |
 | `pageSize` | `page_size` |  |  | `Y` | pageSize query parameter. |
 
-### Returns
+### Returns {#on3_organizations_draft_class_by_state-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -982,7 +983,7 @@ GET /rdb/v1/organizations/{organizationKey}/draft-class-by-state
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#on3_organizations_draft_class_by_state-example}
 
 ```python
 on3_organizations_draft_class_by_state(organization_key=1867)
@@ -990,7 +991,7 @@ on3_organizations_draft_class_by_state(organization_key=1867)
 
 _Last validated n/a._
 
-## `on3_organizations_draft_class_by_year`
+## on3_organizations_draft_class_by_year
 
 GET /rdb/v1/organizations/{organizationKey}/draft-class-by-year
 
@@ -1004,7 +1005,7 @@ GET /rdb/v1/organizations/{organizationKey}/draft-class-by-year
 | `page` | `page` |  |  | `Y` | page query parameter. |
 | `pageSize` | `page_size` |  |  | `Y` | pageSize query parameter. |
 
-### Returns
+### Returns {#on3_organizations_draft_class_by_year-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1014,7 +1015,7 @@ GET /rdb/v1/organizations/{organizationKey}/draft-class-by-year
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#on3_organizations_draft_class_by_year-example}
 
 ```python
 on3_organizations_draft_class_by_year(organization_key=1867)
@@ -1022,7 +1023,7 @@ on3_organizations_draft_class_by_year(organization_key=1867)
 
 _Last validated n/a._
 
-## `on3_organizations_draft_count_by_stars`
+## on3_organizations_draft_count_by_stars
 
 GET /rdb/v1/organizations/{organizationKey}/draft-count-by-stars
 
@@ -1034,7 +1035,7 @@ GET /rdb/v1/organizations/{organizationKey}/draft-count-by-stars
 |---|---|:---:|:---:|:---:|---|
 | `organization_key` | `organization_key` |  | `Y` |  | organization_key path parameter. |
 
-### Returns
+### Returns {#on3_organizations_draft_count_by_stars-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1047,7 +1048,7 @@ GET /rdb/v1/organizations/{organizationKey}/draft-count-by-stars
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#on3_organizations_draft_count_by_stars-example}
 
 ```python
 on3_organizations_draft_count_by_stars(organization_key=1867)
@@ -1055,7 +1056,7 @@ on3_organizations_draft_count_by_stars(organization_key=1867)
 
 _Last validated n/a._
 
-## `on3_organizations_draft_count_by_year`
+## on3_organizations_draft_count_by_year
 
 GET /rdb/v1/organizations/{organizationKey}/draft-count-by-year
 
@@ -1069,7 +1070,7 @@ GET /rdb/v1/organizations/{organizationKey}/draft-count-by-year
 | `page` | `page` |  |  | `Y` | page query parameter. |
 | `pageSize` | `page_size` |  |  | `Y` | pageSize query parameter. |
 
-### Returns
+### Returns {#on3_organizations_draft_count_by_year-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1085,7 +1086,7 @@ GET /rdb/v1/organizations/{organizationKey}/draft-count-by-year
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#on3_organizations_draft_count_by_year-example}
 
 ```python
 on3_organizations_draft_count_by_year(organization_key=1867)
@@ -1093,7 +1094,7 @@ on3_organizations_draft_count_by_year(organization_key=1867)
 
 _Last validated n/a._
 
-## `on3_organizations_draft_ranking_summary`
+## on3_organizations_draft_ranking_summary
 
 GET /rdb/v1/organizations/{organizationKey}/draft-ranking-summary
 
@@ -1106,7 +1107,7 @@ GET /rdb/v1/organizations/{organizationKey}/draft-ranking-summary
 | `organization_key` | `organization_key` |  | `Y` |  | organization_key path parameter. |
 | `year` | `year` |  |  | `Y` | year query parameter. |
 
-### Returns
+### Returns {#on3_organizations_draft_ranking_summary-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1117,7 +1118,7 @@ GET /rdb/v1/organizations/{organizationKey}/draft-ranking-summary
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#on3_organizations_draft_ranking_summary-example}
 
 ```python
 on3_organizations_draft_ranking_summary(organization_key=1867)
@@ -1125,7 +1126,7 @@ on3_organizations_draft_ranking_summary(organization_key=1867)
 
 _Last validated n/a._
 
-## `on3_organizations_drafted_players`
+## on3_organizations_drafted_players
 
 GET /rdb/v1/organizations/{organizationKey}/drafted-players
 
@@ -1139,7 +1140,7 @@ GET /rdb/v1/organizations/{organizationKey}/drafted-players
 | `page` | `page` |  |  | `Y` | page query parameter. |
 | `pageSize` | `page_size` |  |  | `Y` | pageSize query parameter. |
 
-### Returns
+### Returns {#on3_organizations_drafted_players-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1170,7 +1171,7 @@ GET /rdb/v1/organizations/{organizationKey}/drafted-players
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#on3_organizations_drafted_players-example}
 
 ```python
 on3_organizations_drafted_players(organization_key=1867)
@@ -1178,7 +1179,7 @@ on3_organizations_drafted_players(organization_key=1867)
 
 _Last validated n/a._
 
-## `on3_organizations_drafts_by_stars_summary`
+## on3_organizations_drafts_by_stars_summary
 
 GET /rdb/v1/organizations/{organizationKey}/drafts-by-stars-summary
 
@@ -1191,7 +1192,7 @@ GET /rdb/v1/organizations/{organizationKey}/drafts-by-stars-summary
 | `organization_key` | `organization_key` |  | `Y` |  | organization_key path parameter. |
 | `year` | `year` |  |  | `Y` | year query parameter. |
 
-### Returns
+### Returns {#on3_organizations_drafts_by_stars_summary-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1207,7 +1208,7 @@ GET /rdb/v1/organizations/{organizationKey}/drafts-by-stars-summary
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#on3_organizations_drafts_by_stars_summary-example}
 
 ```python
 on3_organizations_drafts_by_stars_summary(organization_key=1867)
@@ -1215,7 +1216,7 @@ on3_organizations_drafts_by_stars_summary(organization_key=1867)
 
 _Last validated n/a._
 
-## `on3_organizations_roster`
+## on3_organizations_roster
 
 GET /rdb/v1/organizations/{organizationKey}/roster
 
@@ -1231,7 +1232,7 @@ GET /rdb/v1/organizations/{organizationKey}/roster
 | `page` | `page` |  |  | `Y` | page query parameter. |
 | `pageSize` | `page_size` |  |  | `Y` | pageSize query parameter. |
 
-### Returns
+### Returns {#on3_organizations_roster-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1248,7 +1249,7 @@ GET /rdb/v1/organizations/{organizationKey}/roster
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#on3_organizations_roster-example}
 
 ```python
 on3_organizations_roster(organization_key=1867)
@@ -1256,7 +1257,7 @@ on3_organizations_roster(organization_key=1867)
 
 _Last validated n/a._
 
-## `on3_organizations_roster_header`
+## on3_organizations_roster_header
 
 GET /rdb/v1/organizations/{organizationKey}/roster-header
 
@@ -1270,7 +1271,7 @@ GET /rdb/v1/organizations/{organizationKey}/roster-header
 | `sportKey` | `sport_key` |  |  | `Y` | sportKey query parameter. |
 | `year` | `year` |  |  | `Y` | year query parameter. |
 
-### Returns
+### Returns {#on3_organizations_roster_header-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1287,7 +1288,7 @@ GET /rdb/v1/organizations/{organizationKey}/roster-header
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#on3_organizations_roster_header-example}
 
 ```python
 on3_organizations_roster_header(organization_key=1867)
@@ -1295,7 +1296,7 @@ on3_organizations_roster_header(organization_key=1867)
 
 _Last validated n/a._
 
-## `on3_people_combine_measurements`
+## on3_people_combine_measurements
 
 GET /rdb/v1/people/{personKey}/combine-measurements
 
@@ -1307,7 +1308,7 @@ GET /rdb/v1/people/{personKey}/combine-measurements
 |---|---|:---:|:---:|:---:|---|
 | `person_key` | `person_key` |  | `Y` |  | person_key path parameter. |
 
-### Returns
+### Returns {#on3_people_combine_measurements-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1319,7 +1320,7 @@ GET /rdb/v1/people/{personKey}/combine-measurements
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#on3_people_combine_measurements-example}
 
 ```python
 on3_people_combine_measurements(person_key=89617)
@@ -1327,7 +1328,7 @@ on3_people_combine_measurements(person_key=89617)
 
 _Last validated n/a._
 
-## `on3_people_latest_valuation`
+## on3_people_latest_valuation
 
 GET /rdb/v1/people/{personKey}/latest-valuation
 
@@ -1339,7 +1340,7 @@ GET /rdb/v1/people/{personKey}/latest-valuation
 |---|---|:---:|:---:|:---:|---|
 | `person_key` | `person_key` |  | `Y` |  | person_key path parameter. |
 
-### Returns
+### Returns {#on3_people_latest_valuation-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1356,7 +1357,7 @@ GET /rdb/v1/people/{personKey}/latest-valuation
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#on3_people_latest_valuation-example}
 
 ```python
 on3_people_latest_valuation(person_key=89617)
@@ -1364,7 +1365,7 @@ on3_people_latest_valuation(person_key=89617)
 
 _Last validated n/a._
 
-## `on3_people_measurements`
+## on3_people_measurements
 
 GET /rdb/v1/people/{personKey}/measurements
 
@@ -1376,7 +1377,7 @@ GET /rdb/v1/people/{personKey}/measurements
 |---|---|:---:|:---:|:---:|---|
 | `person_key` | `person_key` |  | `Y` |  | person_key path parameter. |
 
-### Returns
+### Returns {#on3_people_measurements-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1409,7 +1410,7 @@ GET /rdb/v1/people/{personKey}/measurements
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#on3_people_measurements-example}
 
 ```python
 on3_people_measurements(person_key=89617)
@@ -1417,7 +1418,7 @@ on3_people_measurements(person_key=89617)
 
 _Last validated n/a._
 
-## `on3_people_measurements_averages`
+## on3_people_measurements_averages
 
 GET /rdb/v1/people/{personKey}/measurements/averages
 
@@ -1431,7 +1432,7 @@ GET /rdb/v1/people/{personKey}/measurements/averages
 | `page` | `page` |  |  | `Y` | page query parameter. |
 | `pageSize` | `page_size` |  |  | `Y` | pageSize query parameter. |
 
-### Returns
+### Returns {#on3_people_measurements_averages-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1449,7 +1450,7 @@ GET /rdb/v1/people/{personKey}/measurements/averages
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#on3_people_measurements_averages-example}
 
 ```python
 on3_people_measurements_averages(person_key=89617)
@@ -1457,7 +1458,7 @@ on3_people_measurements_averages(person_key=89617)
 
 _Last validated n/a._
 
-## `on3_people_person_connections`
+## on3_people_person_connections
 
 GET /rdb/v1/people/{personKey}/person-connections
 
@@ -1471,7 +1472,7 @@ GET /rdb/v1/people/{personKey}/person-connections
 | `page` | `page` |  |  | `Y` | page query parameter. |
 | `pageSize` | `page_size` |  |  | `Y` | pageSize query parameter. |
 
-### Returns
+### Returns {#on3_people_person_connections-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1485,7 +1486,7 @@ GET /rdb/v1/people/{personKey}/person-connections
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#on3_people_person_connections-example}
 
 ```python
 on3_people_person_connections(person_key=89617)
@@ -1493,7 +1494,7 @@ on3_people_person_connections(person_key=89617)
 
 _Last validated n/a._
 
-## `on3_people_social`
+## on3_people_social
 
 GET /rdb/v1/people/{personKey}/social
 
@@ -1505,7 +1506,7 @@ GET /rdb/v1/people/{personKey}/social
 |---|---|:---:|:---:|:---:|---|
 | `person_key` | `person_key` |  | `Y` |  | person_key path parameter. |
 
-### Returns
+### Returns {#on3_people_social-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1516,7 +1517,7 @@ GET /rdb/v1/people/{personKey}/social
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#on3_people_social-example}
 
 ```python
 on3_people_social(person_key=89617)
@@ -1524,7 +1525,7 @@ on3_people_social(person_key=89617)
 
 _Last validated n/a._
 
-## `on3_people_social_post_summary`
+## on3_people_social_post_summary
 
 GET /rdb/v1/people/{personKey}/social-post-summary
 
@@ -1536,7 +1537,7 @@ GET /rdb/v1/people/{personKey}/social-post-summary
 |---|---|:---:|:---:|:---:|---|
 | `person_key` | `person_key` |  | `Y` |  | person_key path parameter. |
 
-### Returns
+### Returns {#on3_people_social_post_summary-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1547,7 +1548,7 @@ GET /rdb/v1/people/{personKey}/social-post-summary
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#on3_people_social_post_summary-example}
 
 ```python
 on3_people_social_post_summary(person_key=89617)
@@ -1555,7 +1556,7 @@ on3_people_social_post_summary(person_key=89617)
 
 _Last validated n/a._
 
-## `on3_people_track_and_field_measurements`
+## on3_people_track_and_field_measurements
 
 GET /rdb/v1/people/{personKey}/track-and-field-measurements
 
@@ -1567,7 +1568,7 @@ GET /rdb/v1/people/{personKey}/track-and-field-measurements
 |---|---|:---:|:---:|:---:|---|
 | `person_key` | `person_key` |  | `Y` |  | person_key path parameter. |
 
-### Returns
+### Returns {#on3_people_track_and_field_measurements-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1600,7 +1601,7 @@ GET /rdb/v1/people/{personKey}/track-and-field-measurements
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#on3_people_track_and_field_measurements-example}
 
 ```python
 on3_people_track_and_field_measurements(person_key=89617)
@@ -1608,7 +1609,7 @@ on3_people_track_and_field_measurements(person_key=89617)
 
 _Last validated n/a._
 
-## `on3_people_valuation_growth`
+## on3_people_valuation_growth
 
 GET /rdb/v1/people/{personKey}/valuation-growth
 
@@ -1620,7 +1621,7 @@ GET /rdb/v1/people/{personKey}/valuation-growth
 |---|---|:---:|:---:|:---:|---|
 | `person_key` | `person_key` |  | `Y` |  | person_key path parameter. |
 
-### Returns
+### Returns {#on3_people_valuation_growth-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1633,7 +1634,7 @@ GET /rdb/v1/people/{personKey}/valuation-growth
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#on3_people_valuation_growth-example}
 
 ```python
 on3_people_valuation_growth(person_key=89617)
@@ -1641,7 +1642,7 @@ on3_people_valuation_growth(person_key=89617)
 
 _Last validated n/a._
 
-## `on3_person_connections_connection_key`
+## on3_person_connections_connection_key
 
 GET /rdb/v1/person-connections/{connectionKey}
 
@@ -1653,7 +1654,7 @@ GET /rdb/v1/person-connections/{connectionKey}
 |---|---|:---:|:---:|:---:|---|
 | `connection_key` | `connection_key` |  | `Y` |  | connection_key path parameter. |
 
-### Returns
+### Returns {#on3_person_connections_connection_key-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1667,7 +1668,7 @@ GET /rdb/v1/person-connections/{connectionKey}
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#on3_person_connections_connection_key-example}
 
 ```python
 on3_person_connections_connection_key(connection_key=89617)
@@ -1675,7 +1676,7 @@ on3_person_connections_connection_key(connection_key=89617)
 
 _Last validated n/a._
 
-## `on3_person_primary_recruitment_evaluation`
+## on3_person_primary_recruitment_evaluation
 
 GET /rdb/v1/person/{personKey}/primary-recruitment-evaluation
 
@@ -1687,7 +1688,7 @@ GET /rdb/v1/person/{personKey}/primary-recruitment-evaluation
 |---|---|:---:|:---:|:---:|---|
 | `person_key` | `person_key` |  | `Y` |  | person_key path parameter. |
 
-### Returns
+### Returns {#on3_person_primary_recruitment_evaluation-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1708,7 +1709,7 @@ GET /rdb/v1/person/{personKey}/primary-recruitment-evaluation
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#on3_person_primary_recruitment_evaluation-example}
 
 ```python
 on3_person_primary_recruitment_evaluation(person_key=89617)
@@ -1716,7 +1717,7 @@ on3_person_primary_recruitment_evaluation(person_key=89617)
 
 _Last validated n/a._
 
-## `on3_person_recruitment_evaluations`
+## on3_person_recruitment_evaluations
 
 GET /rdb/v1/person/{personKey}/recruitment-evaluations
 
@@ -1728,7 +1729,7 @@ GET /rdb/v1/person/{personKey}/recruitment-evaluations
 |---|---|:---:|:---:|:---:|---|
 | `person_key` | `person_key` |  | `Y` |  | person_key path parameter. |
 
-### Returns
+### Returns {#on3_person_recruitment_evaluations-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1749,7 +1750,7 @@ GET /rdb/v1/person/{personKey}/recruitment-evaluations
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#on3_person_recruitment_evaluations-example}
 
 ```python
 on3_person_recruitment_evaluations(person_key=89617)
@@ -1757,7 +1758,7 @@ on3_person_recruitment_evaluations(person_key=89617)
 
 _Last validated n/a._
 
-## `on3_person_sport_profile_recruit`
+## on3_person_sport_profile_recruit
 
 GET /rdb/v1/person-sport/{psKey}/profile-recruit
 
@@ -1769,7 +1770,7 @@ GET /rdb/v1/person-sport/{psKey}/profile-recruit
 |---|---|:---:|:---:|:---:|---|
 | `ps_key` | `ps_key` |  | `Y` |  | ps_key path parameter. |
 
-### Returns
+### Returns {#on3_person_sport_profile_recruit-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1796,7 +1797,7 @@ GET /rdb/v1/person-sport/{psKey}/profile-recruit
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#on3_person_sport_profile_recruit-example}
 
 ```python
 on3_person_sport_profile_recruit(ps_key=89617)
@@ -1804,7 +1805,7 @@ on3_person_sport_profile_recruit(ps_key=89617)
 
 _Last validated n/a._
 
-## `on3_person_sport_rankings`
+## on3_person_sport_rankings
 
 GET /rdb/v1/person-sport-rankings
 
@@ -1819,7 +1820,7 @@ GET /rdb/v1/person-sport-rankings
 | `page` | `page` |  |  | `Y` | page query parameter. |
 | `pageSize` | `page_size` |  |  | `Y` | pageSize query parameter. |
 
-### Returns
+### Returns {#on3_person_sport_rankings-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1830,7 +1831,7 @@ GET /rdb/v1/person-sport-rankings
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#on3_person_sport_rankings-example}
 
 ```python
 on3_person_sport_rankings()
@@ -1838,7 +1839,7 @@ on3_person_sport_rankings()
 
 _Last validated n/a._
 
-## `on3_player_all_rankings`
+## on3_player_all_rankings
 
 GET /rdb/v1/player/{personKey}/all-rankings
 
@@ -1850,7 +1851,7 @@ GET /rdb/v1/player/{personKey}/all-rankings
 |---|---|:---:|:---:|:---:|---|
 | `person_key` | `person_key` |  | `Y` |  | person_key path parameter. |
 
-### Returns
+### Returns {#on3_player_all_rankings-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1874,7 +1875,7 @@ GET /rdb/v1/player/{personKey}/all-rankings
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#on3_player_all_rankings-example}
 
 ```python
 on3_player_all_rankings(person_key=89617)
@@ -1882,7 +1883,7 @@ on3_player_all_rankings(person_key=89617)
 
 _Last validated n/a._
 
-## `on3_player_database_updates`
+## on3_player_database_updates
 
 GET /rdb/v1/player/{personKey}/database-updates
 
@@ -1894,7 +1895,7 @@ GET /rdb/v1/player/{personKey}/database-updates
 |---|---|:---:|:---:|:---:|---|
 | `person_key` | `person_key` |  | `Y` |  | person_key path parameter. |
 
-### Returns
+### Returns {#on3_player_database_updates-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1913,7 +1914,7 @@ GET /rdb/v1/player/{personKey}/database-updates
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#on3_player_database_updates-example}
 
 ```python
 on3_player_database_updates(person_key=89617)
@@ -1921,7 +1922,7 @@ on3_player_database_updates(person_key=89617)
 
 _Last validated n/a._
 
-## `on3_player_images`
+## on3_player_images
 
 GET /rdb/v1/player/{personKey}/images
 
@@ -1933,7 +1934,7 @@ GET /rdb/v1/player/{personKey}/images
 |---|---|:---:|:---:|:---:|---|
 | `person_key` | `person_key` |  | `Y` |  | person_key path parameter. |
 
-### Returns
+### Returns {#on3_player_images-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1960,7 +1961,7 @@ GET /rdb/v1/player/{personKey}/images
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#on3_player_images-example}
 
 ```python
 on3_player_images(person_key=89617)
@@ -1968,7 +1969,7 @@ on3_player_images(person_key=89617)
 
 _Last validated n/a._
 
-## `on3_player_organizations`
+## on3_player_organizations
 
 GET /rdb/v1/player/{personKey}/organizations
 
@@ -1980,7 +1981,7 @@ GET /rdb/v1/player/{personKey}/organizations
 |---|---|:---:|:---:|:---:|---|
 | `person_key` | `person_key` |  | `Y` |  | person_key path parameter. |
 
-### Returns
+### Returns {#on3_player_organizations-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1990,7 +1991,7 @@ GET /rdb/v1/player/{personKey}/organizations
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#on3_player_organizations-example}
 
 ```python
 on3_player_organizations(person_key=89617)
@@ -1998,7 +1999,7 @@ on3_player_organizations(person_key=89617)
 
 _Last validated n/a._
 
-## `on3_player_organizations_org_key`
+## on3_player_organizations_org_key
 
 GET /rdb/v1/player/{playerKey}/organizations/{orgKey}
 
@@ -2011,7 +2012,7 @@ GET /rdb/v1/player/{playerKey}/organizations/{orgKey}
 | `player_key` | `player_key` |  | `Y` |  | player_key path parameter. |
 | `org_key` | `org_key` |  | `Y` |  | org_key path parameter. |
 
-### Returns
+### Returns {#on3_player_organizations_org_key-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -2026,7 +2027,7 @@ GET /rdb/v1/player/{playerKey}/organizations/{orgKey}
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#on3_player_organizations_org_key-example}
 
 ```python
 on3_player_organizations_org_key(org_key=1867, player_key=89617)
@@ -2034,7 +2035,7 @@ on3_player_organizations_org_key(org_key=1867, player_key=89617)
 
 _Last validated n/a._
 
-## `on3_player_person_rankings`
+## on3_player_person_rankings
 
 GET /rdb/v1/player/{personKey}/rankings
 
@@ -2046,7 +2047,7 @@ GET /rdb/v1/player/{personKey}/rankings
 |---|---|:---:|:---:|:---:|---|
 | `person_key` | `person_key` |  | `Y` |  | person_key path parameter. |
 
-### Returns
+### Returns {#on3_player_person_rankings-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -2073,7 +2074,7 @@ GET /rdb/v1/player/{personKey}/rankings
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#on3_player_person_rankings-example}
 
 ```python
 on3_player_person_rankings(person_key=89617)
@@ -2081,7 +2082,7 @@ on3_player_person_rankings(person_key=89617)
 
 _Last validated n/a._
 
-## `on3_player_profile`
+## on3_player_profile
 
 GET /rdb/v1/player/{personKey}/profile
 
@@ -2093,7 +2094,7 @@ GET /rdb/v1/player/{personKey}/profile
 |---|---|:---:|:---:|:---:|---|
 | `person_key` | `person_key` |  | `Y` |  | person_key path parameter. |
 
-### Returns
+### Returns {#on3_player_profile-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -2148,7 +2149,7 @@ GET /rdb/v1/player/{personKey}/profile
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#on3_player_profile-example}
 
 ```python
 on3_player_profile(person_key=89617)
@@ -2156,7 +2157,7 @@ on3_player_profile(person_key=89617)
 
 _Last validated n/a._
 
-## `on3_player_team_targets`
+## on3_player_team_targets
 
 GET /rdb/v1/player/{playerKey}/team-targets
 
@@ -2168,7 +2169,7 @@ GET /rdb/v1/player/{playerKey}/team-targets
 |---|---|:---:|:---:|:---:|---|
 | `player_key` | `player_key` |  | `Y` |  | player_key path parameter. |
 
-### Returns
+### Returns {#on3_player_team_targets-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -2192,7 +2193,7 @@ GET /rdb/v1/player/{playerKey}/team-targets
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#on3_player_team_targets-example}
 
 ```python
 on3_player_team_targets(player_key=89617)
@@ -2200,7 +2201,7 @@ on3_player_team_targets(player_key=89617)
 
 _Last validated n/a._
 
-## `on3_player_verified`
+## on3_player_verified
 
 GET /rdb/v1/player/verified
 
@@ -2214,7 +2215,7 @@ GET /rdb/v1/player/verified
 | `page` | `page` |  |  | `Y` | page query parameter. |
 | `pageSize` | `page_size` |  |  | `Y` | pageSize query parameter. |
 
-### Returns
+### Returns {#on3_player_verified-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -2269,7 +2270,7 @@ GET /rdb/v1/player/verified
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#on3_player_verified-example}
 
 ```python
 on3_player_verified()
@@ -2277,7 +2278,7 @@ on3_player_verified()
 
 _Last validated n/a._
 
-## `on3_player_videos`
+## on3_player_videos
 
 GET /rdb/v1/player/{personKey}/videos
 
@@ -2289,7 +2290,7 @@ GET /rdb/v1/player/{personKey}/videos
 |---|---|:---:|:---:|:---:|---|
 | `person_key` | `person_key` |  | `Y` |  | person_key path parameter. |
 
-### Returns
+### Returns {#on3_player_videos-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -2307,7 +2308,7 @@ GET /rdb/v1/player/{personKey}/videos
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#on3_player_videos-example}
 
 ```python
 on3_player_videos(person_key=89617)
@@ -2315,7 +2316,7 @@ on3_player_videos(person_key=89617)
 
 _Last validated n/a._
 
-## `on3_player_visit_center`
+## on3_player_visit_center
 
 GET /rdb/v1/player/{playerKey}/visit-center
 
@@ -2327,7 +2328,7 @@ GET /rdb/v1/player/{playerKey}/visit-center
 |---|---|:---:|:---:|:---:|---|
 | `player_key` | `player_key` |  | `Y` |  | player_key path parameter. |
 
-### Returns
+### Returns {#on3_player_visit_center-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -2339,7 +2340,7 @@ GET /rdb/v1/player/{playerKey}/visit-center
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#on3_player_visit_center-example}
 
 ```python
 on3_player_visit_center(player_key=89617)
@@ -2347,7 +2348,7 @@ on3_player_visit_center(player_key=89617)
 
 _Last validated n/a._
 
-## `on3_players_industry_comparision`
+## on3_players_industry_comparision
 
 GET /rdb/v1/players/industry-comparision
 
@@ -2364,7 +2365,7 @@ GET /rdb/v1/players/industry-comparision
 | `page` | `page` |  |  | `Y` | page query parameter. |
 | `sortByIndustry` | `sort_by_industry` |  |  | `Y` | sortByIndustry query parameter. |
 
-### Returns
+### Returns {#on3_players_industry_comparision-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -2375,7 +2376,7 @@ GET /rdb/v1/players/industry-comparision
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#on3_players_industry_comparision-example}
 
 ```python
 on3_players_industry_comparision()
@@ -2383,7 +2384,7 @@ on3_players_industry_comparision()
 
 _Last validated n/a._
 
-## `on3_players_industry_comparision_list`
+## on3_players_industry_comparision_list
 
 GET /rdb/v1/players/industry-comparision-list
 
@@ -2398,7 +2399,7 @@ GET /rdb/v1/players/industry-comparision-list
 | `page` | `page` |  |  | `Y` | page query parameter. |
 | `pageSize` | `page_size` |  |  | `Y` | pageSize query parameter. |
 
-### Returns
+### Returns {#on3_players_industry_comparision_list-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -2409,7 +2410,7 @@ GET /rdb/v1/players/industry-comparision-list
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#on3_players_industry_comparision_list-example}
 
 ```python
 on3_players_industry_comparision_list()
@@ -2417,7 +2418,7 @@ on3_players_industry_comparision_list()
 
 _Last validated n/a._
 
-## `on3_predictions_user_key`
+## on3_predictions_user_key
 
 Expert prediction accuracy + feed (see PredictionAccuracies)
 
@@ -2431,12 +2432,12 @@ Expert prediction accuracy + feed (see PredictionAccuracies)
 | `page` | `page` |  |  | `Y` | page query parameter. |
 | `pageSize` | `page_size` |  |  | `Y` | pageSize query parameter. |
 
-### Returns
+### Returns {#on3_predictions_user_key-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_on3_rdb`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#on3_predictions_user_key-example}
 
 ```python
 on3_predictions_user_key(user_key=89617)
@@ -2444,7 +2445,7 @@ on3_predictions_user_key(user_key=89617)
 
 _Last validated n/a._
 
-## `on3_quotes`
+## on3_quotes
 
 GET /rdb/v1/quotes
 
@@ -2457,7 +2458,7 @@ GET /rdb/v1/quotes
 | `page` | `page` |  |  | `Y` | page query parameter. |
 | `pageSize` | `page_size` |  |  | `Y` | pageSize query parameter. |
 
-### Returns
+### Returns {#on3_quotes-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -2472,7 +2473,7 @@ GET /rdb/v1/quotes
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#on3_quotes-example}
 
 ```python
 on3_quotes()
@@ -2480,7 +2481,7 @@ on3_quotes()
 
 _Last validated n/a._
 
-## `on3_quotes_key`
+## on3_quotes_key
 
 GET /rdb/v1/quotes/{key}
 
@@ -2492,7 +2493,7 @@ GET /rdb/v1/quotes/{key}
 |---|---|:---:|:---:|:---:|---|
 | `key` | `key` |  | `Y` |  | key path parameter. |
 
-### Returns
+### Returns {#on3_quotes_key-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -2507,7 +2508,7 @@ GET /rdb/v1/quotes/{key}
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#on3_quotes_key-example}
 
 ```python
 on3_quotes_key(key=1)
@@ -2515,7 +2516,7 @@ on3_quotes_key(key=1)
 
 _Last validated n/a._
 
-## `on3_recruitment_primary_recruitment_evaluation`
+## on3_recruitment_primary_recruitment_evaluation
 
 GET /rdb/v1/recruitment/{recruitmentKey}/primary-recruitment-evaluation
 
@@ -2527,7 +2528,7 @@ GET /rdb/v1/recruitment/{recruitmentKey}/primary-recruitment-evaluation
 |---|---|:---:|:---:|:---:|---|
 | `recruitment_key` | `recruitment_key` |  | `Y` |  | recruitment_key path parameter. |
 
-### Returns
+### Returns {#on3_recruitment_primary_recruitment_evaluation-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -2548,7 +2549,7 @@ GET /rdb/v1/recruitment/{recruitmentKey}/primary-recruitment-evaluation
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#on3_recruitment_primary_recruitment_evaluation-example}
 
 ```python
 on3_recruitment_primary_recruitment_evaluation(recruitment_key=270036)
@@ -2556,7 +2557,7 @@ on3_recruitment_primary_recruitment_evaluation(recruitment_key=270036)
 
 _Last validated n/a._
 
-## `on3_recruitment_recruitment_evaluations`
+## on3_recruitment_recruitment_evaluations
 
 GET /rdb/v1/recruitment/{recruitmentKey}/recruitment-evaluations
 
@@ -2568,7 +2569,7 @@ GET /rdb/v1/recruitment/{recruitmentKey}/recruitment-evaluations
 |---|---|:---:|:---:|:---:|---|
 | `recruitment_key` | `recruitment_key` |  | `Y` |  | recruitment_key path parameter. |
 
-### Returns
+### Returns {#on3_recruitment_recruitment_evaluations-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -2589,7 +2590,7 @@ GET /rdb/v1/recruitment/{recruitmentKey}/recruitment-evaluations
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#on3_recruitment_recruitment_evaluations-example}
 
 ```python
 on3_recruitment_recruitment_evaluations(recruitment_key=270036)
@@ -2597,7 +2598,7 @@ on3_recruitment_recruitment_evaluations(recruitment_key=270036)
 
 _Last validated n/a._
 
-## `on3_recruitments_latest_rpm_picks`
+## on3_recruitments_latest_rpm_picks
 
 Latest RPM (prediction) picks feed — paged {list,pagination}
 
@@ -2612,7 +2613,7 @@ Latest RPM (prediction) picks feed — paged {list,pagination}
 | `page` | `page` |  |  | `Y` | page query parameter. |
 | `pageSize` | `page_size` |  |  | `Y` | pageSize query parameter. |
 
-### Returns
+### Returns {#on3_recruitments_latest_rpm_picks-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -2622,7 +2623,7 @@ Latest RPM (prediction) picks feed — paged {list,pagination}
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#on3_recruitments_latest_rpm_picks-example}
 
 ```python
 on3_recruitments_latest_rpm_picks()
@@ -2630,7 +2631,7 @@ on3_recruitments_latest_rpm_picks()
 
 _Last validated n/a._
 
-## `on3_recruitments_profile`
+## on3_recruitments_profile
 
 GET /rdb/v1/recruitments/{recKey}/profile
 
@@ -2642,7 +2643,7 @@ GET /rdb/v1/recruitments/{recKey}/profile
 |---|---|:---:|:---:|:---:|---|
 | `rec_key` | `rec_key` |  | `Y` |  | rec_key path parameter. |
 
-### Returns
+### Returns {#on3_recruitments_profile-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -2656,7 +2657,7 @@ GET /rdb/v1/recruitments/{recKey}/profile
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#on3_recruitments_profile-example}
 
 ```python
 on3_recruitments_profile(rec_key=270036)
@@ -2664,7 +2665,7 @@ on3_recruitments_profile(rec_key=270036)
 
 _Last validated n/a._
 
-## `on3_recruitments_rpm_picks`
+## on3_recruitments_rpm_picks
 
 GET /rdb/v1/recruitments/{recKey}/rpm-picks
 
@@ -2676,7 +2677,7 @@ GET /rdb/v1/recruitments/{recKey}/rpm-picks
 |---|---|:---:|:---:|:---:|---|
 | `rec_key` | `rec_key` |  | `Y` |  | rec_key path parameter. |
 
-### Returns
+### Returns {#on3_recruitments_rpm_picks-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -2699,7 +2700,7 @@ GET /rdb/v1/recruitments/{recKey}/rpm-picks
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#on3_recruitments_rpm_picks-example}
 
 ```python
 on3_recruitments_rpm_picks(rec_key=270036)
@@ -2707,7 +2708,7 @@ on3_recruitments_rpm_picks(rec_key=270036)
 
 _Last validated n/a._
 
-## `on3_recruitments_rpm_summary`
+## on3_recruitments_rpm_summary
 
 GET /rdb/v1/recruitments/{recKey}/rpm-summary
 
@@ -2719,7 +2720,7 @@ GET /rdb/v1/recruitments/{recKey}/rpm-summary
 |---|---|:---:|:---:|:---:|---|
 | `rec_key` | `rec_key` |  | `Y` |  | rec_key path parameter. |
 
-### Returns
+### Returns {#on3_recruitments_rpm_summary-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -2729,7 +2730,7 @@ GET /rdb/v1/recruitments/{recKey}/rpm-summary
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#on3_recruitments_rpm_summary-example}
 
 ```python
 on3_recruitments_rpm_summary(rec_key=270036)
@@ -2737,7 +2738,7 @@ on3_recruitments_rpm_summary(rec_key=270036)
 
 _Last validated n/a._
 
-## `on3_team_ranking`
+## on3_team_ranking
 
 GET /rdb/v1/team-ranking
 
@@ -2752,7 +2753,7 @@ GET /rdb/v1/team-ranking
 | `page` | `page` |  |  | `Y` | page query parameter. |
 | `pageSize` | `page_size` |  |  | `Y` | pageSize query parameter. |
 
-### Returns
+### Returns {#on3_team_ranking-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -2783,7 +2784,7 @@ GET /rdb/v1/team-ranking
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#on3_team_ranking-example}
 
 ```python
 on3_team_ranking()
@@ -2791,7 +2792,7 @@ on3_team_ranking()
 
 _Last validated n/a._
 
-## `on3_team_ranking_bluechips_team_rankings`
+## on3_team_ranking_bluechips_team_rankings
 
 GET /rdb/v1/team-ranking/{sport}-{year}/bluechips-team-rankings
 
@@ -2804,7 +2805,7 @@ GET /rdb/v1/team-ranking/{sport}-{year}/bluechips-team-rankings
 | `sport_slug` | `sport_slug` |  | `Y` |  | sport_slug path parameter. |
 | `year` | `year` |  | `Y` |  | year path parameter. |
 
-### Returns
+### Returns {#on3_team_ranking_bluechips_team_rankings-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -2821,7 +2822,7 @@ GET /rdb/v1/team-ranking/{sport}-{year}/bluechips-team-rankings
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#on3_team_ranking_bluechips_team_rankings-example}
 
 ```python
 on3_team_ranking_bluechips_team_rankings(sport_slug='football', year=2025)
@@ -2829,7 +2830,7 @@ on3_team_ranking_bluechips_team_rankings(sport_slug='football', year=2025)
 
 _Last validated n/a._
 
-## `on3_team_ranking_consensus_team_rankings`
+## on3_team_ranking_consensus_team_rankings
 
 GET /rdb/v1/team-ranking/{sport}-{year}/consensus-team-rankings
 
@@ -2842,7 +2843,7 @@ GET /rdb/v1/team-ranking/{sport}-{year}/consensus-team-rankings
 | `sport_slug` | `sport_slug` |  | `Y` |  | sport_slug path parameter. |
 | `year` | `year` |  | `Y` |  | year path parameter. |
 
-### Returns
+### Returns {#on3_team_ranking_consensus_team_rankings-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -2873,7 +2874,7 @@ GET /rdb/v1/team-ranking/{sport}-{year}/consensus-team-rankings
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#on3_team_ranking_consensus_team_rankings-example}
 
 ```python
 on3_team_ranking_consensus_team_rankings(sport_slug='football', year=2025)
@@ -2881,7 +2882,7 @@ on3_team_ranking_consensus_team_rankings(sport_slug='football', year=2025)
 
 _Last validated n/a._
 
-## `on3_team_ranking_organizations_summary`
+## on3_team_ranking_organizations_summary
 
 GET /rdb/v1/team-ranking/organizations/{orgKey}/summary
 
@@ -2893,7 +2894,7 @@ GET /rdb/v1/team-ranking/organizations/{orgKey}/summary
 |---|---|:---:|:---:|:---:|---|
 | `org_key` | `org_key` |  | `Y` |  | org_key path parameter. |
 
-### Returns
+### Returns {#on3_team_ranking_organizations_summary-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -2922,7 +2923,7 @@ GET /rdb/v1/team-ranking/organizations/{orgKey}/summary
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#on3_team_ranking_organizations_summary-example}
 
 ```python
 on3_team_ranking_organizations_summary(org_key=1867)
@@ -2930,7 +2931,7 @@ on3_team_ranking_organizations_summary(org_key=1867)
 
 _Last validated n/a._
 
-## `on3_team_ranking_team_rankings`
+## on3_team_ranking_team_rankings
 
 GET /rdb/v1/team-ranking/{sport}-{year}/team-rankings
 
@@ -2943,7 +2944,7 @@ GET /rdb/v1/team-ranking/{sport}-{year}/team-rankings
 | `sport_slug` | `sport_slug` |  | `Y` |  | sport_slug path parameter. |
 | `year` | `year` |  | `Y` |  | year path parameter. |
 
-### Returns
+### Returns {#on3_team_ranking_team_rankings-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -2974,7 +2975,7 @@ GET /rdb/v1/team-ranking/{sport}-{year}/team-rankings
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#on3_team_ranking_team_rankings-example}
 
 ```python
 on3_team_ranking_team_rankings(sport_slug='football', year=2025)
@@ -2982,7 +2983,7 @@ on3_team_ranking_team_rankings(sport_slug='football', year=2025)
 
 _Last validated n/a._
 
-## `on3_transfers_best_available`
+## on3_transfers_best_available
 
 GET /rdb/v1/transfers/best-available
 
@@ -3001,7 +3002,7 @@ GET /rdb/v1/transfers/best-available
 | `cutoff` | `cutoff` |  |  | `Y` | cutoff query parameter. |
 | `orderBy` | `order_by` |  |  | `Y` | orderBy query parameter. |
 
-### Returns
+### Returns {#on3_transfers_best_available-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -3037,7 +3038,7 @@ GET /rdb/v1/transfers/best-available
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#on3_transfers_best_available-example}
 
 ```python
 on3_transfers_best_available()
@@ -3045,7 +3046,7 @@ on3_transfers_best_available()
 
 _Last validated n/a._
 
-## `on3_transfers_latest`
+## on3_transfers_latest
 
 GET /rdb/v1/transfers/latest
 
@@ -3062,7 +3063,7 @@ GET /rdb/v1/transfers/latest
 | `status` | `status` |  |  | `Y` | status query parameter. |
 | `page` | `page` |  |  | `Y` | page query parameter. |
 
-### Returns
+### Returns {#on3_transfers_latest-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -3098,7 +3099,7 @@ GET /rdb/v1/transfers/latest
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#on3_transfers_latest-example}
 
 ```python
 on3_transfers_latest()
@@ -3106,7 +3107,7 @@ on3_transfers_latest()
 
 _Last validated n/a._
 
-## `on3_videos_video_key`
+## on3_videos_video_key
 
 GET /rdb/v1/videos/{videoKey}
 
@@ -3118,7 +3119,7 @@ GET /rdb/v1/videos/{videoKey}
 |---|---|:---:|:---:|:---:|---|
 | `video_key` | `video_key` |  | `Y` |  | video_key path parameter. |
 
-### Returns
+### Returns {#on3_videos_video_key-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -3136,7 +3137,7 @@ GET /rdb/v1/videos/{videoKey}
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#on3_videos_video_key-example}
 
 ```python
 on3_videos_video_key(video_key=1)

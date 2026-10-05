@@ -11,13 +11,17 @@ not covered by the generated API-endpoint reference above.
 
 ## Utilities & helpers
 
-### `most_recent_nojhl_season() -> 'int'` {#most_recent_nojhl_season}
+### most_recent_nojhl_season {#most_recent_nojhl_season}
+
+`most_recent_nojhl_season() -> 'int'`
 
 Most-recent NOJHL season as an end-year integer (max `season_yr`), or 2026.
 
 ## Other
 
-### `build_family(league: 'str') -> 'dict[str, Any]'` {#build_family}
+### build_family {#build_family}
+
+`build_family(league: 'str') -> 'dict[str, Any]'`
 
 Return a dict of public callables for *league*.
 
@@ -35,7 +39,9 @@ a module namespace via `globals().update(...)`.
 
 Keys are the public function names (e.g. `"ahl_schedule"`).
 
-### `nojhl_game_corsi(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'` {#nojhl_game_corsi}
+### nojhl_game_corsi {#nojhl_game_corsi}
+
+`nojhl_game_corsi(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'`
 
 Player-level on-ice Corsi and Fenwick for a single NOJHL game.
 
@@ -46,7 +52,9 @@ Player-level on-ice Corsi and Fenwick for a single NOJHL game.
 | `game_id` | `int` |  |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
-### `nojhl_game_shifts(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'` {#nojhl_game_shifts}
+### nojhl_game_shifts {#nojhl_game_shifts}
+
+`nojhl_game_shifts(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'`
 
 Parsed shift stints for a single NOJHL game.
 
@@ -57,7 +65,9 @@ Parsed shift stints for a single NOJHL game.
 | `game_id` | `int` |  |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
-### `nojhl_game_summary(game_id: 'int') -> 'dict'` {#nojhl_game_summary}
+### nojhl_game_summary {#nojhl_game_summary}
+
+`nojhl_game_summary(game_id: 'int') -> 'dict'`
 
 NOJHL game summary — dict of frames (game/goals/penalties/shots_by_period/three_stars).
 
@@ -67,7 +77,9 @@ NOJHL game summary — dict of frames (game/goals/penalties/shots_by_period/thre
 |---|---|---|---|
 | `game_id` | `int` |  |  |
 
-### `nojhl_leaders(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'` {#nojhl_leaders}
+### nojhl_leaders {#nojhl_leaders}
+
+`nojhl_leaders(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'`
 
 NOJHL statistical leaders for a given season.
 
@@ -100,7 +112,9 @@ NOJHL statistical leaders for a given season.
 | `position` | character | Listed roster position (G, F, C, etc.). |
 | `division` | character | Team division. |
 
-### `nojhl_pbp(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'` {#nojhl_pbp}
+### nojhl_pbp {#nojhl_pbp}
+
+`nojhl_pbp(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'`
 
 NOJHL play-by-play — one row per event, fully enriched.
 
@@ -111,7 +125,9 @@ NOJHL play-by-play — one row per event, fully enriched.
 | `game_id` | `int` |  |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
-### `nojhl_player_stats(player_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'` {#nojhl_player_stats}
+### nojhl_player_stats {#nojhl_player_stats}
+
+`nojhl_player_stats(player_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'`
 
 NOJHL player season stats across all seasons.
 
@@ -122,7 +138,9 @@ NOJHL player season stats across all seasons.
 | `player_id` | `int` |  |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
-### `nojhl_player_toi(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'` {#nojhl_player_toi}
+### nojhl_player_toi {#nojhl_player_toi}
+
+`nojhl_player_toi(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'`
 
 Per-player time-on-ice totals for a single NOJHL game.
 
@@ -133,7 +151,9 @@ Per-player time-on-ice totals for a single NOJHL game.
 | `game_id` | `int` |  |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
-### `nojhl_schedule(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'` {#nojhl_schedule}
+### nojhl_schedule {#nojhl_schedule}
+
+`nojhl_schedule(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'`
 
 NOJHL schedule — one row per game.
 
@@ -163,7 +183,9 @@ NOJHL schedule — one row per game.
 | `season_id` | character | Unique season identifier. |
 | `game_type` | character | The most recent game type of that season that a player appeared on the roster. |
 
-### `nojhl_season_id(return_as_pandas: 'bool' = False) -> 'Any'` {#nojhl_season_id}
+### nojhl_season_id {#nojhl_season_id}
+
+`nojhl_season_id(return_as_pandas: 'bool' = False) -> 'Any'`
 
 All NOJHL seasons with end-year + game-type labels.
 
@@ -188,7 +210,9 @@ All NOJHL seasons with end-year + game-type labels.
 | `season_yr` | integer | Year derived from the season name (concluding year). |
 | `game_type_label` | character | Game type: "preseason", "regular", or "playoffs". |
 
-### `nojhl_standings(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'` {#nojhl_standings}
+### nojhl_standings {#nojhl_standings}
+
+`nojhl_standings(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'`
 
 NOJHL standings — one row per team.
 
@@ -221,7 +245,9 @@ NOJHL standings — one row per team.
 | `past_10` | character | Record over the team's most recent 10 games (feed header 'Past 10 Games') as a hyphenated string: W-L-OTL-SOL when four parts are shipped (e.g. '2-0-0-1'), W-L-OTL when three are (e.g. '0-2-1'). |
 | `team` | character | Team-side label or team identifier. |
 
-### `nojhl_team_roster(team_id: 'int', season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'` {#nojhl_team_roster}
+### nojhl_team_roster {#nojhl_team_roster}
+
+`nojhl_team_roster(team_id: 'int', season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'`
 
 NOJHL team roster for a given team + season.
 
@@ -234,7 +260,9 @@ NOJHL team roster for a given team + season.
 | `season_id` | `Optional[int]` | `None` |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
-### `nojhl_teams(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'` {#nojhl_teams}
+### nojhl_teams {#nojhl_teams}
+
+`nojhl_teams(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'`
 
 NOJHL teams for a given season.
 

@@ -11,13 +11,17 @@ not covered by the generated API-endpoint reference above.
 
 ## Utilities & helpers
 
-### `most_recent_ohl_season() -> 'int'` {#most_recent_ohl_season}
+### most_recent_ohl_season {#most_recent_ohl_season}
+
+`most_recent_ohl_season() -> 'int'`
 
 Most-recent OHL season as an end-year integer (max `season_yr`), or 2026.
 
 ## Other
 
-### `ohl_game_corsi(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'` {#ohl_game_corsi}
+### ohl_game_corsi {#ohl_game_corsi}
+
+`ohl_game_corsi(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'`
 
 Player-level on-ice Corsi and Fenwick for a single OHL game.
 
@@ -44,7 +48,9 @@ Player-level on-ice Corsi and Fenwick for a single OHL game.
 | `toi_seconds` | integer | Total time on ice for the player during the game, recorded in seconds. |
 | `corsi_for_per60` | double | The player's Corsi For rate normalized to a 60-minute pace, enabling comparison across players with different ice times. |
 
-### `ohl_game_shifts(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'` {#ohl_game_shifts}
+### ohl_game_shifts {#ohl_game_shifts}
+
+`ohl_game_shifts(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'`
 
 Parsed shift stints for a single OHL game.
 
@@ -55,7 +61,9 @@ Parsed shift stints for a single OHL game.
 | `game_id` | `int` |  |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
-### `ohl_game_summary(game_id: 'int') -> 'dict'` {#ohl_game_summary}
+### ohl_game_summary {#ohl_game_summary}
+
+`ohl_game_summary(game_id: 'int') -> 'dict'`
 
 OHL game summary — dict of frames (game/goals/penalties/shots_by_period/three_stars).
 
@@ -65,7 +73,9 @@ OHL game summary — dict of frames (game/goals/penalties/shots_by_period/three_
 |---|---|---|---|
 | `game_id` | `int` |  |  |
 
-### `ohl_leaders(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'` {#ohl_leaders}
+### ohl_leaders {#ohl_leaders}
+
+`ohl_leaders(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'`
 
 OHL statistical leaders for a given season.
 
@@ -98,7 +108,9 @@ OHL statistical leaders for a given season.
 | `position` | character | Player position. |
 | `division` | character | Division identifier. |
 
-### `ohl_pbp(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'` {#ohl_pbp}
+### ohl_pbp {#ohl_pbp}
+
+`ohl_pbp(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'`
 
 OHL play-by-play — one row per event, fully enriched.
 
@@ -216,7 +228,9 @@ OHL play-by-play — one row per event, fully enriched.
 | `on_ice_home` | character | Jersey numbers or player IDs of home-team skaters on the ice at the time of this play. |
 | `on_ice_away` | character | Jersey numbers or player IDs of away-team skaters on the ice at the time of this play. |
 
-### `ohl_player_stats(player_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'` {#ohl_player_stats}
+### ohl_player_stats {#ohl_player_stats}
+
+`ohl_player_stats(player_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'`
 
 OHL player season stats across all seasons.
 
@@ -285,7 +299,9 @@ OHL player season stats across all seasons.
 | `shots_blocked_by_player` | character | Shots blocked by the player. |
 | `stat_type` | character | Statistic type ("regular"/"playoff"). |
 
-### `ohl_player_toi(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'` {#ohl_player_toi}
+### ohl_player_toi {#ohl_player_toi}
+
+`ohl_player_toi(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'`
 
 Per-player time-on-ice totals for a single OHL game.
 
@@ -308,7 +324,9 @@ Per-player time-on-ice totals for a single OHL game.
 | `num_shifts` | integer | Total number of shifts the player took during the game or tracked period. |
 | `avg_shift_s` | double | Average duration of the player's individual shifts during the game or season, measured in seconds. |
 
-### `ohl_schedule(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'` {#ohl_schedule}
+### ohl_schedule {#ohl_schedule}
+
+`ohl_schedule(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'`
 
 OHL schedule — one row per game.
 
@@ -338,7 +356,9 @@ OHL schedule — one row per game.
 | `season_id` | character | Season identifier. |
 | `game_type` | character | Game type the row belongs to. |
 
-### `ohl_season_id(return_as_pandas: 'bool' = False) -> 'Any'` {#ohl_season_id}
+### ohl_season_id {#ohl_season_id}
+
+`ohl_season_id(return_as_pandas: 'bool' = False) -> 'Any'`
 
 All OHL seasons with end-year + game-type labels.
 
@@ -363,7 +383,9 @@ All OHL seasons with end-year + game-type labels.
 | `season_yr` | integer | Year derived from the season name (concluding year). |
 | `game_type_label` | character | Game type: "preseason", "regular", or "playoffs". |
 
-### `ohl_standings(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'` {#ohl_standings}
+### ohl_standings {#ohl_standings}
+
+`ohl_standings(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'`
 
 OHL standings — one row per team.
 
@@ -402,7 +424,9 @@ OHL standings — one row per team.
 | `past_10` | character | Record over the team's most recent 10 games (feed header 'Past 10 Games') as a hyphenated string: W-L-OTL-SOL when four parts are shipped (e.g. '2-0-0-1'), W-L-OTL when three are (e.g. '0-2-1'). |
 | `team` | character | Team name. |
 
-### `ohl_team_roster(team_id: 'int', season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'` {#ohl_team_roster}
+### ohl_team_roster {#ohl_team_roster}
+
+`ohl_team_roster(team_id: 'int', season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'`
 
 OHL team roster for a given team + season.
 
@@ -415,7 +439,9 @@ OHL team roster for a given team + season.
 | `season_id` | `Optional[int]` | `None` |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
-### `ohl_teams(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'` {#ohl_teams}
+### ohl_teams {#ohl_teams}
+
+`ohl_teams(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'`
 
 OHL teams for a given season.
 

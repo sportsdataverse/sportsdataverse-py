@@ -3,12 +3,13 @@ title: NHL — NHL Records API
 sidebar_label: NHL Records API
 description: "NHL — NHL Records API — endpoint reference in sdv-py, the SportsDataverse Python package."
 sidebar_position: 13
+toc_max_heading_level: 2
 ---
 # NHL — NHL Records API
 
 `sportsdataverse.nhl` — 44 endpoints.
 
-## `nhl_records_awards`
+## nhl_records_awards
 
 List all NHL award / trophy records.
 
@@ -19,7 +20,7 @@ List all NHL award / trophy records.
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 
-### Returns
+### Returns {#nhl_records_awards-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -47,7 +48,7 @@ List all NHL award / trophy records.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nhl_records_awards-example}
 
 ```python
 nhl_records_awards()
@@ -55,7 +56,7 @@ nhl_records_awards()
 
 _Last validated n/a._
 
-## `nhl_records_awards_by_franchise`
+## nhl_records_awards_by_franchise
 
 List award records for a single franchise.
 
@@ -67,12 +68,12 @@ List award records for a single franchise.
 |---|---|:---:|:---:|:---:|---|
 | `franchise_id` | `franchise_id` |  | `Y` |  | franchise_id path parameter. |
 
-### Returns
+### Returns {#nhl_records_awards_by_franchise-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_nhl_records`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nhl_records_awards_by_franchise-example}
 
 ```python
 nhl_records_awards_by_franchise(franchise_id=1)
@@ -80,7 +81,7 @@ nhl_records_awards_by_franchise(franchise_id=1)
 
 _Last validated n/a._
 
-## `nhl_records_awards_trophy_season`
+## nhl_records_awards_trophy_season
 
 Retrieve the trophy winner for a specific season.
 
@@ -93,7 +94,7 @@ Retrieve the trophy winner for a specific season.
 | `trophy_id` | `trophy_id` |  | `Y` |  | trophy_id path parameter. |
 | `season_id` | `season_id` |  | `Y` |  | season_id path parameter. |
 
-### Returns
+### Returns {#nhl_records_awards_trophy_season-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -121,7 +122,7 @@ Retrieve the trophy winner for a specific season.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nhl_records_awards_trophy_season-example}
 
 ```python
 nhl_records_awards_trophy_season(trophy_id=1, season_id='X')
@@ -129,7 +130,7 @@ nhl_records_awards_trophy_season(trophy_id=1, season_id='X')
 
 _Last validated n/a._
 
-## `nhl_records_coaches`
+## nhl_records_coaches
 
 List NHL head coaches.
 
@@ -140,7 +141,7 @@ List NHL head coaches.
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 
-### Returns
+### Returns {#nhl_records_coaches-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -175,7 +176,7 @@ List NHL head coaches.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nhl_records_coaches-example}
 
 ```python
 nhl_records_coaches()
@@ -183,7 +184,7 @@ nhl_records_coaches()
 
 _Last validated n/a._
 
-## `nhl_records_coach`
+## nhl_records_coach
 
 Retrieve one coach by their numeric ID.
 
@@ -195,7 +196,7 @@ Retrieve one coach by their numeric ID.
 |---|---|:---:|:---:|:---:|---|
 | `coach_id` | `coach_id` |  | `Y` |  | coach_id path parameter. |
 
-### Returns
+### Returns {#nhl_records_coach-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -230,7 +231,7 @@ Retrieve one coach by their numeric ID.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nhl_records_coach-example}
 
 ```python
 nhl_records_coach(coach_id='X')
@@ -238,7 +239,7 @@ nhl_records_coach(coach_id='X')
 
 _Last validated n/a._
 
-## `nhl_records_coach_career`
+## nhl_records_coach_career
 
 Coach career-records (regular season).
 
@@ -250,7 +251,7 @@ Coach career-records (regular season).
 |---|---|:---:|:---:|:---:|---|
 | `coach_id` | `coach_id` |  |  | `Y` | coach_id path parameter. |
 
-### Returns
+### Returns {#nhl_records_coach_career-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -297,7 +298,7 @@ Coach career-records (regular season).
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nhl_records_coach_career-example}
 
 ```python
 nhl_records_coach_career()
@@ -305,7 +306,7 @@ nhl_records_coach_career()
 
 _Last validated n/a._
 
-## `nhl_records_coach_career_with_playoffs`
+## nhl_records_coach_career_with_playoffs
 
 Coach career records inclusive of regular season + playoffs.
 
@@ -316,7 +317,7 @@ Coach career records inclusive of regular season + playoffs.
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 
-### Returns
+### Returns {#nhl_records_coach_career_with_playoffs-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -337,7 +338,7 @@ Coach career records inclusive of regular season + playoffs.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nhl_records_coach_career_with_playoffs-example}
 
 ```python
 nhl_records_coach_career_with_playoffs()
@@ -345,7 +346,7 @@ nhl_records_coach_career_with_playoffs()
 
 _Last validated n/a._
 
-## `nhl_records_coach_franchise`
+## nhl_records_coach_franchise
 
 Coach records scoped to individual franchise stints.
 
@@ -357,7 +358,7 @@ Coach records scoped to individual franchise stints.
 |---|---|:---:|:---:|:---:|---|
 | `coach_id` | `coach_id` |  |  | `Y` | coach_id path parameter. |
 
-### Returns
+### Returns {#nhl_records_coach_franchise-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -410,7 +411,7 @@ Coach records scoped to individual franchise stints.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nhl_records_coach_franchise-example}
 
 ```python
 nhl_records_coach_franchise()
@@ -418,7 +419,7 @@ nhl_records_coach_franchise()
 
 _Last validated n/a._
 
-## `nhl_records_coach_stanley_cup`
+## nhl_records_coach_stanley_cup
 
 Coach Stanley Cup Final win streak and consecutive-cup records.
 
@@ -429,7 +430,7 @@ Coach Stanley Cup Final win streak and consecutive-cup records.
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 
-### Returns
+### Returns {#nhl_records_coach_stanley_cup-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -448,7 +449,7 @@ Coach Stanley Cup Final win streak and consecutive-cup records.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nhl_records_coach_stanley_cup-example}
 
 ```python
 nhl_records_coach_stanley_cup()
@@ -456,7 +457,7 @@ nhl_records_coach_stanley_cup()
 
 _Last validated n/a._
 
-## `nhl_records_franchises`
+## nhl_records_franchises
 
 List all NHL franchises (historical and active).
 
@@ -467,7 +468,7 @@ List all NHL franchises (historical and active).
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 
-### Returns
+### Returns {#nhl_records_franchises-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -483,7 +484,7 @@ List all NHL franchises (historical and active).
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nhl_records_franchises-example}
 
 ```python
 nhl_records_franchises()
@@ -491,7 +492,7 @@ nhl_records_franchises()
 
 _Last validated n/a._
 
-## `nhl_records_franchise_detail`
+## nhl_records_franchise_detail
 
 Franchise detail records (extended metadata per franchise).
 
@@ -502,7 +503,7 @@ Franchise detail records (extended metadata per franchise).
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 
-### Returns
+### Returns {#nhl_records_franchise_detail-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -523,7 +524,7 @@ Franchise detail records (extended metadata per franchise).
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nhl_records_franchise_detail-example}
 
 ```python
 nhl_records_franchise_detail()
@@ -531,7 +532,7 @@ nhl_records_franchise_detail()
 
 _Last validated n/a._
 
-## `nhl_records_franchise_team_totals`
+## nhl_records_franchise_team_totals
 
 All-time team totals per franchise (regular season).
 
@@ -542,7 +543,7 @@ All-time team totals per franchise (regular season).
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 
-### Returns
+### Returns {#nhl_records_franchise_team_totals-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -588,7 +589,7 @@ All-time team totals per franchise (regular season).
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nhl_records_franchise_team_totals-example}
 
 ```python
 nhl_records_franchise_team_totals()
@@ -596,7 +597,7 @@ nhl_records_franchise_team_totals()
 
 _Last validated n/a._
 
-## `nhl_records_franchise_season_results`
+## nhl_records_franchise_season_results
 
 Season-by-season results for each franchise.
 
@@ -607,7 +608,7 @@ Season-by-season results for each franchise.
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 
-### Returns
+### Returns {#nhl_records_franchise_season_results-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -653,7 +654,7 @@ Season-by-season results for each franchise.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nhl_records_franchise_season_results-example}
 
 ```python
 nhl_records_franchise_season_results()
@@ -661,7 +662,7 @@ nhl_records_franchise_season_results()
 
 _Last validated n/a._
 
-## `nhl_records_franchise_playoff_appearances`
+## nhl_records_franchise_playoff_appearances
 
 Franchise playoff appearance counts and streak information.
 
@@ -672,7 +673,7 @@ Franchise playoff appearance counts and streak information.
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 
-### Returns
+### Returns {#nhl_records_franchise_playoff_appearances-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -688,7 +689,7 @@ Franchise playoff appearance counts and streak information.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nhl_records_franchise_playoff_appearances-example}
 
 ```python
 nhl_records_franchise_playoff_appearances()
@@ -696,7 +697,7 @@ nhl_records_franchise_playoff_appearances()
 
 _Last validated n/a._
 
-## `nhl_records_franchise_totals`
+## nhl_records_franchise_totals
 
 League-wide franchise totals (all-time aggregate per franchise).
 
@@ -707,7 +708,7 @@ League-wide franchise totals (all-time aggregate per franchise).
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 
-### Returns
+### Returns {#nhl_records_franchise_totals-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -752,7 +753,7 @@ League-wide franchise totals (all-time aggregate per franchise).
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nhl_records_franchise_totals-example}
 
 ```python
 nhl_records_franchise_totals()
@@ -760,7 +761,7 @@ nhl_records_franchise_totals()
 
 _Last validated n/a._
 
-## `nhl_records_all_time_record_vs_franchise`
+## nhl_records_all_time_record_vs_franchise
 
 All-time head-to-head records between every franchise pairing.
 
@@ -771,7 +772,7 @@ All-time head-to-head records between every franchise pairing.
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 
-### Returns
+### Returns {#nhl_records_all_time_record_vs_franchise-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -816,7 +817,7 @@ All-time head-to-head records between every franchise pairing.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nhl_records_all_time_record_vs_franchise-example}
 
 ```python
 nhl_records_all_time_record_vs_franchise()
@@ -824,7 +825,7 @@ nhl_records_all_time_record_vs_franchise()
 
 _Last validated n/a._
 
-## `nhl_records_skater_career_stats`
+## nhl_records_skater_career_stats
 
 Skater career statistics (all-time, regular season).
 
@@ -835,12 +836,12 @@ Skater career statistics (all-time, regular season).
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 
-### Returns
+### Returns {#nhl_records_skater_career_stats-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_nhl_records`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nhl_records_skater_career_stats-example}
 
 ```python
 nhl_records_skater_career_stats()
@@ -848,7 +849,7 @@ nhl_records_skater_career_stats()
 
 _Last validated n/a._
 
-## `nhl_records_skater_career_leaders`
+## nhl_records_skater_career_leaders
 
 All-time skater career leaderboards.
 
@@ -859,12 +860,12 @@ All-time skater career leaderboards.
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 
-### Returns
+### Returns {#nhl_records_skater_career_leaders-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_nhl_records`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nhl_records_skater_career_leaders-example}
 
 ```python
 nhl_records_skater_career_leaders()
@@ -872,7 +873,7 @@ nhl_records_skater_career_leaders()
 
 _Last validated n/a._
 
-## `nhl_records_consecutive_100pt_seasons`
+## nhl_records_consecutive_100pt_seasons
 
 Skaters with the most consecutive 100-point seasons.
 
@@ -883,7 +884,7 @@ Skaters with the most consecutive 100-point seasons.
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 
-### Returns
+### Returns {#nhl_records_consecutive_100pt_seasons-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -905,7 +906,7 @@ Skaters with the most consecutive 100-point seasons.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nhl_records_consecutive_100pt_seasons-example}
 
 ```python
 nhl_records_consecutive_100pt_seasons()
@@ -913,7 +914,7 @@ nhl_records_consecutive_100pt_seasons()
 
 _Last validated n/a._
 
-## `nhl_records_goalie_career_stats`
+## nhl_records_goalie_career_stats
 
 Goaltender career statistics (regular season).
 
@@ -924,7 +925,7 @@ Goaltender career statistics (regular season).
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 
-### Returns
+### Returns {#nhl_records_goalie_career_stats-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -969,7 +970,7 @@ Goaltender career statistics (regular season).
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nhl_records_goalie_career_stats-example}
 
 ```python
 nhl_records_goalie_career_stats()
@@ -977,7 +978,7 @@ nhl_records_goalie_career_stats()
 
 _Last validated n/a._
 
-## `nhl_records_goalie_career_stats_with_playoffs`
+## nhl_records_goalie_career_stats_with_playoffs
 
 Goaltender career stats inclusive of regular season and playoffs.
 
@@ -988,7 +989,7 @@ Goaltender career stats inclusive of regular season and playoffs.
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 
-### Returns
+### Returns {#nhl_records_goalie_career_stats_with_playoffs-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1018,7 +1019,7 @@ Goaltender career stats inclusive of regular season and playoffs.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nhl_records_goalie_career_stats_with_playoffs-example}
 
 ```python
 nhl_records_goalie_career_stats_with_playoffs()
@@ -1026,7 +1027,7 @@ nhl_records_goalie_career_stats_with_playoffs()
 
 _Last validated n/a._
 
-## `nhl_records_goalie_season_stats`
+## nhl_records_goalie_season_stats
 
 Goaltender single-season statistics.
 
@@ -1037,7 +1038,7 @@ Goaltender single-season statistics.
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 
-### Returns
+### Returns {#nhl_records_goalie_season_stats-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1079,7 +1080,7 @@ Goaltender single-season statistics.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nhl_records_goalie_season_stats-example}
 
 ```python
 nhl_records_goalie_season_stats()
@@ -1087,7 +1088,7 @@ nhl_records_goalie_season_stats()
 
 _Last validated n/a._
 
-## `nhl_records_goalie_win_streak`
+## nhl_records_goalie_win_streak
 
 Goaltenders with the longest consecutive-win streaks.
 
@@ -1098,7 +1099,7 @@ Goaltenders with the longest consecutive-win streaks.
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 
-### Returns
+### Returns {#nhl_records_goalie_win_streak-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1122,7 +1123,7 @@ Goaltenders with the longest consecutive-win streaks.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nhl_records_goalie_win_streak-example}
 
 ```python
 nhl_records_goalie_win_streak()
@@ -1130,7 +1131,7 @@ nhl_records_goalie_win_streak()
 
 _Last validated n/a._
 
-## `nhl_records_goalie_shutout_streak`
+## nhl_records_goalie_shutout_streak
 
 Goaltenders with the longest consecutive-shutout streaks.
 
@@ -1141,7 +1142,7 @@ Goaltenders with the longest consecutive-shutout streaks.
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 
-### Returns
+### Returns {#nhl_records_goalie_shutout_streak-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1166,7 +1167,7 @@ Goaltenders with the longest consecutive-shutout streaks.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nhl_records_goalie_shutout_streak-example}
 
 ```python
 nhl_records_goalie_shutout_streak()
@@ -1174,7 +1175,7 @@ nhl_records_goalie_shutout_streak()
 
 _Last validated n/a._
 
-## `nhl_records_goalie_win_plateaus`
+## nhl_records_goalie_win_plateaus
 
 Goaltenders who reached each win plateau (100, 200, 300 …).
 
@@ -1185,7 +1186,7 @@ Goaltenders who reached each win plateau (100, 200, 300 …).
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 
-### Returns
+### Returns {#nhl_records_goalie_win_plateaus-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1205,7 +1206,7 @@ Goaltenders who reached each win plateau (100, 200, 300 …).
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nhl_records_goalie_win_plateaus-example}
 
 ```python
 nhl_records_goalie_win_plateaus()
@@ -1213,7 +1214,7 @@ nhl_records_goalie_win_plateaus()
 
 _Last validated n/a._
 
-## `nhl_records_goalie_playoff_streak`
+## nhl_records_goalie_playoff_streak
 
 Goaltender consecutive playoff-win streaks.
 
@@ -1224,7 +1225,7 @@ Goaltender consecutive playoff-win streaks.
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 
-### Returns
+### Returns {#nhl_records_goalie_playoff_streak-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1245,7 +1246,7 @@ Goaltender consecutive playoff-win streaks.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nhl_records_goalie_playoff_streak-example}
 
 ```python
 nhl_records_goalie_playoff_streak()
@@ -1253,7 +1254,7 @@ nhl_records_goalie_playoff_streak()
 
 _Last validated n/a._
 
-## `nhl_records_goalie_undefeated_streak`
+## nhl_records_goalie_undefeated_streak
 
 Goaltender longest undefeated streaks (wins + ties).
 
@@ -1264,7 +1265,7 @@ Goaltender longest undefeated streaks (wins + ties).
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 
-### Returns
+### Returns {#nhl_records_goalie_undefeated_streak-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1287,7 +1288,7 @@ Goaltender longest undefeated streaks (wins + ties).
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nhl_records_goalie_undefeated_streak-example}
 
 ```python
 nhl_records_goalie_undefeated_streak()
@@ -1295,7 +1296,7 @@ nhl_records_goalie_undefeated_streak()
 
 _Last validated n/a._
 
-## `nhl_records_draft`
+## nhl_records_draft
 
 Retrieve NHL Entry Draft picks.
 
@@ -1307,7 +1308,7 @@ Retrieve NHL Entry Draft picks.
 |---|---|:---:|:---:|:---:|---|
 | `draft_id` | `draft_id` |  |  | `Y` | draft_id path parameter. |
 
-### Returns
+### Returns {#nhl_records_draft-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1346,7 +1347,7 @@ Retrieve NHL Entry Draft picks.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nhl_records_draft-example}
 
 ```python
 nhl_records_draft()
@@ -1354,7 +1355,7 @@ nhl_records_draft()
 
 _Last validated n/a._
 
-## `nhl_records_draft_by_team`
+## nhl_records_draft_by_team
 
 All draft picks made by a single team.
 
@@ -1366,7 +1367,7 @@ All draft picks made by a single team.
 |---|---|:---:|:---:|:---:|---|
 | `team_id` | `team_id` |  | `Y` |  | team_id path parameter. |
 
-### Returns
+### Returns {#nhl_records_draft_by_team-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1405,7 +1406,7 @@ All draft picks made by a single team.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nhl_records_draft_by_team-example}
 
 ```python
 nhl_records_draft_by_team(team_id=10)
@@ -1413,7 +1414,7 @@ nhl_records_draft_by_team(team_id=10)
 
 _Last validated n/a._
 
-## `nhl_records_draft_prospect`
+## nhl_records_draft_prospect
 
 Draft prospect records.
 
@@ -1425,7 +1426,7 @@ Draft prospect records.
 |---|---|:---:|:---:|:---:|---|
 | `prospect_id` | `prospect_id` |  |  | `Y` | prospect_id path parameter. |
 
-### Returns
+### Returns {#nhl_records_draft_prospect-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1461,7 +1462,7 @@ Draft prospect records.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nhl_records_draft_prospect-example}
 
 ```python
 nhl_records_draft_prospect()
@@ -1469,7 +1470,7 @@ nhl_records_draft_prospect()
 
 _Last validated n/a._
 
-## `nhl_records_draft_lottery_odds`
+## nhl_records_draft_lottery_odds
 
 Draft lottery odds (current year or filtered by season).
 
@@ -1480,7 +1481,7 @@ Draft lottery odds (current year or filtered by season).
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 
-### Returns
+### Returns {#nhl_records_draft_lottery_odds-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1493,7 +1494,7 @@ Draft lottery odds (current year or filtered by season).
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nhl_records_draft_lottery_odds-example}
 
 ```python
 nhl_records_draft_lottery_odds()
@@ -1501,7 +1502,7 @@ nhl_records_draft_lottery_odds()
 
 _Last validated n/a._
 
-## `nhl_records_expansion_draft_picks`
+## nhl_records_expansion_draft_picks
 
 Expansion draft picks (e.g. Vegas 2017, Seattle 2021).
 
@@ -1512,7 +1513,7 @@ Expansion draft picks (e.g. Vegas 2017, Seattle 2021).
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 
-### Returns
+### Returns {#nhl_records_expansion_draft_picks-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1525,7 +1526,7 @@ Expansion draft picks (e.g. Vegas 2017, Seattle 2021).
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nhl_records_expansion_draft_picks-example}
 
 ```python
 nhl_records_expansion_draft_picks()
@@ -1533,7 +1534,7 @@ nhl_records_expansion_draft_picks()
 
 _Last validated n/a._
 
-## `nhl_records_allstar_skater_career`
+## nhl_records_allstar_skater_career
 
 All-Star Game career statistics for skaters.
 
@@ -1544,7 +1545,7 @@ All-Star Game career statistics for skaters.
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 
-### Returns
+### Returns {#nhl_records_allstar_skater_career-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1573,7 +1574,7 @@ All-Star Game career statistics for skaters.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nhl_records_allstar_skater_career-example}
 
 ```python
 nhl_records_allstar_skater_career()
@@ -1581,7 +1582,7 @@ nhl_records_allstar_skater_career()
 
 _Last validated n/a._
 
-## `nhl_records_allstar_goalie_career`
+## nhl_records_allstar_goalie_career
 
 All-Star Game career statistics for goaltenders.
 
@@ -1592,7 +1593,7 @@ All-Star Game career statistics for goaltenders.
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 
-### Returns
+### Returns {#nhl_records_allstar_goalie_career-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1622,7 +1623,7 @@ All-Star Game career statistics for goaltenders.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nhl_records_allstar_goalie_career-example}
 
 ```python
 nhl_records_allstar_goalie_career()
@@ -1630,7 +1631,7 @@ nhl_records_allstar_goalie_career()
 
 _Last validated n/a._
 
-## `nhl_records_allstar_coach_career`
+## nhl_records_allstar_coach_career
 
 All-Star Game career records for coaches.
 
@@ -1641,7 +1642,7 @@ All-Star Game career records for coaches.
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 
-### Returns
+### Returns {#nhl_records_allstar_coach_career-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1662,7 +1663,7 @@ All-Star Game career records for coaches.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nhl_records_allstar_coach_career-example}
 
 ```python
 nhl_records_allstar_coach_career()
@@ -1670,7 +1671,7 @@ nhl_records_allstar_coach_career()
 
 _Last validated n/a._
 
-## `nhl_records_allstar_skater_game`
+## nhl_records_allstar_skater_game
 
 All-Star Game single-game scoring records for skaters.
 
@@ -1681,7 +1682,7 @@ All-Star Game single-game scoring records for skaters.
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 
-### Returns
+### Returns {#nhl_records_allstar_skater_game-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1718,7 +1719,7 @@ All-Star Game single-game scoring records for skaters.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nhl_records_allstar_skater_game-example}
 
 ```python
 nhl_records_allstar_skater_game()
@@ -1726,7 +1727,7 @@ nhl_records_allstar_skater_game()
 
 _Last validated n/a._
 
-## `nhl_records_allstar_goalie_game`
+## nhl_records_allstar_goalie_game
 
 All-Star Game single-game stats for goaltenders.
 
@@ -1737,7 +1738,7 @@ All-Star Game single-game stats for goaltenders.
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 
-### Returns
+### Returns {#nhl_records_allstar_goalie_game-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1771,7 +1772,7 @@ All-Star Game single-game stats for goaltenders.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nhl_records_allstar_goalie_game-example}
 
 ```python
 nhl_records_allstar_goalie_game()
@@ -1779,7 +1780,7 @@ nhl_records_allstar_goalie_game()
 
 _Last validated n/a._
 
-## `nhl_records_attendance`
+## nhl_records_attendance
 
 NHL arena attendance records.
 
@@ -1790,7 +1791,7 @@ NHL arena attendance records.
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 
-### Returns
+### Returns {#nhl_records_attendance-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1803,7 +1804,7 @@ NHL arena attendance records.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nhl_records_attendance-example}
 
 ```python
 nhl_records_attendance()
@@ -1811,7 +1812,7 @@ nhl_records_attendance()
 
 _Last validated n/a._
 
-## `nhl_records_hof_players`
+## nhl_records_hof_players
 
 Hockey Hall of Fame player inductees.
 
@@ -1822,7 +1823,7 @@ Hockey Hall of Fame player inductees.
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 
-### Returns
+### Returns {#nhl_records_hof_players-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1837,7 +1838,7 @@ Hockey Hall of Fame player inductees.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nhl_records_hof_players-example}
 
 ```python
 nhl_records_hof_players()
@@ -1845,7 +1846,7 @@ nhl_records_hof_players()
 
 _Last validated n/a._
 
-## `nhl_records_hof_players_by_office`
+## nhl_records_hof_players_by_office
 
 Hall of Fame players for a specific induction office/category.
 
@@ -1857,7 +1858,7 @@ Hall of Fame players for a specific induction office/category.
 |---|---|:---:|:---:|:---:|---|
 | `office_id` | `office_id` |  | `Y` |  | office_id path parameter. |
 
-### Returns
+### Returns {#nhl_records_hof_players_by_office-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1872,7 +1873,7 @@ Hall of Fame players for a specific induction office/category.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nhl_records_hof_players_by_office-example}
 
 ```python
 nhl_records_hof_players_by_office(office_id='X')
@@ -1880,7 +1881,7 @@ nhl_records_hof_players_by_office(office_id='X')
 
 _Last validated n/a._
 
-## `nhl_records_gm_career`
+## nhl_records_gm_career
 
 General Manager career records.
 
@@ -1892,7 +1893,7 @@ General Manager career records.
 |---|---|:---:|:---:|:---:|---|
 | `gm_id` | `gm_id` |  |  | `Y` | gm_id path parameter. |
 
-### Returns
+### Returns {#nhl_records_gm_career-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1940,7 +1941,7 @@ General Manager career records.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nhl_records_gm_career-example}
 
 ```python
 nhl_records_gm_career()
@@ -1948,7 +1949,7 @@ nhl_records_gm_career()
 
 _Last validated n/a._
 
-## `nhl_records_gm_franchise`
+## nhl_records_gm_franchise
 
 General Manager records scoped to franchise stints.
 
@@ -1959,7 +1960,7 @@ General Manager records scoped to franchise stints.
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 
-### Returns
+### Returns {#nhl_records_gm_franchise-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -2010,7 +2011,7 @@ General Manager records scoped to franchise stints.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nhl_records_gm_franchise-example}
 
 ```python
 nhl_records_gm_franchise()
@@ -2018,7 +2019,7 @@ nhl_records_gm_franchise()
 
 _Last validated n/a._
 
-## `nhl_records_home_team_record`
+## nhl_records_home_team_record
 
 League-wide home-team win/loss record by season.
 
@@ -2029,7 +2030,7 @@ League-wide home-team win/loss record by season.
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 
-### Returns
+### Returns {#nhl_records_home_team_record-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -2054,7 +2055,7 @@ League-wide home-team win/loss record by season.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nhl_records_home_team_record-example}
 
 ```python
 nhl_records_home_team_record()
@@ -2062,7 +2063,7 @@ nhl_records_home_team_record()
 
 _Last validated n/a._
 
-## `nhl_records_away_team_record`
+## nhl_records_away_team_record
 
 League-wide away-team win/loss record by season.
 
@@ -2073,7 +2074,7 @@ League-wide away-team win/loss record by season.
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 
-### Returns
+### Returns {#nhl_records_away_team_record-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -2098,7 +2099,7 @@ League-wide away-team win/loss record by season.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nhl_records_away_team_record-example}
 
 ```python
 nhl_records_away_team_record()

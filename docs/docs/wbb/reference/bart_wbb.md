@@ -3,12 +3,13 @@ title: WBB — Bart Torvik Women's T-Rank (barttorvik.com/ncaaw)
 sidebar_label: Bart Torvik Women's T-Rank (barttorvik.com/ncaaw)
 description: "WBB — Bart Torvik Women's T-Rank (barttorvik.com/ncaaw) — endpoint reference in sdv-py, the SportsDataverse Python package."
 sidebar_position: 10
+toc_max_heading_level: 2
 ---
 # WBB — Bart Torvik Women's T-Rank (barttorvik.com/ncaaw)
 
 `sportsdataverse.wbb` — 1 endpoint.
 
-## `bart_wbb_ratings`
+## bart_wbb_ratings
 
 GET /ncaaw/{year}_team_results.csv — women's T-Rank team ratings (adjoe/adjde/barthag, one row per team; the team/conf pair feeds the WBB crosswalk).
 
@@ -20,7 +21,7 @@ GET /ncaaw/{year}_team_results.csv — women's T-Rank team ratings (adjoe/adjde/
 |---|---|:---:|:---:|:---:|---|
 | `year` | `year` |  | `Y` |  | year path parameter. |
 
-### Returns
+### Returns {#bart_wbb_ratings-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -73,7 +74,7 @@ GET /ncaaw/{year}_team_results.csv — women's T-Rank team ratings (adjoe/adjde/
 
 **`return_parsed=False`** — the raw CSV response body (`str`).
 
-### Example
+### Example {#bart_wbb_ratings-example}
 
 ```python
 bart_wbb_ratings(year=2025)

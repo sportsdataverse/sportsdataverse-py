@@ -3,12 +3,13 @@ title: NFL — PFF Developer API (api.pff.com, API key)
 sidebar_label: PFF Developer API (api.pff.com, API key)
 description: "NFL — PFF Developer API (api.pff.com, API key) — endpoint reference in sdv-py, the SportsDataverse Python package."
 sidebar_position: 13
+toc_max_heading_level: 2
 ---
 # NFL — PFF Developer API (api.pff.com, API key)
 
 `sportsdataverse.nfl` — 68 endpoints.
 
-## `pff_api_ref_leagues`
+## pff_api_ref_leagues
 
 List the leagues you can read, with their seasons and weeks
 
@@ -19,7 +20,7 @@ List the leagues you can read, with their seasons and weeks
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 
-### Returns
+### Returns {#pff_api_ref_leagues-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -37,7 +38,7 @@ List the leagues you can read, with their seasons and weeks
 
 **`return_parsed=False`** — The decoded JSON body. /v1 routes return the Premium Stats envelope (`{report_slug: rows}`); /v2 routes return `{..meta.., columns, rows}`..
 
-### Example
+### Example {#pff_api_ref_leagues-example}
 
 ```python
 pff_api_ref_leagues()
@@ -45,7 +46,7 @@ pff_api_ref_leagues()
 
 _Last validated n/a._
 
-## `pff_api_ref_games`
+## pff_api_ref_games
 
 List game results for a league, season and week
 
@@ -60,7 +61,7 @@ List game results for a league, season and week
 | `week` | `week` |  | `Y` |  | Week, and the THIRD positional argument of games — the one command that takes a single week number rather than a comma-separated list. |
 | `franchise_id` | `franchise_id` |  |  | `Y` | Franchise (team) id. |
 
-### Returns
+### Returns {#pff_api_ref_games-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -82,7 +83,7 @@ List game results for a league, season and week
 
 **`return_parsed=False`** — The decoded JSON body. /v1 routes return the Premium Stats envelope (`{report_slug: rows}`); /v2 routes return `{..meta.., columns, rows}`..
 
-### Example
+### Example {#pff_api_ref_games-example}
 
 ```python
 pff_api_ref_games(league='nfl', season=2022, week=1)
@@ -90,7 +91,7 @@ pff_api_ref_games(league='nfl', season=2022, week=1)
 
 _Last validated n/a._
 
-## `pff_api_ref_players`
+## pff_api_ref_players
 
 Search the player directory by name or id
 
@@ -104,7 +105,7 @@ Search the player directory by name or id
 | `id` | `id` |  |  | `Y` | Exact player-id lookup, ref-players only. |
 | `name` | `name` |  |  | `Y` | Free-text player-name search, ref-players only. |
 
-### Returns
+### Returns {#pff_api_ref_players-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -126,7 +127,7 @@ Search the player directory by name or id
 
 **`return_parsed=False`** — The decoded JSON body. /v1 routes return the Premium Stats envelope (`{report_slug: rows}`); /v2 routes return `{..meta.., columns, rows}`..
 
-### Example
+### Example {#pff_api_ref_players-example}
 
 ```python
 pff_api_ref_players(league='nfl', name='burrow')
@@ -134,7 +135,7 @@ pff_api_ref_players(league='nfl', name='burrow')
 
 _Last validated n/a._
 
-## `pff_api_team_list`
+## pff_api_team_list
 
 List a season's teams, franchise groups and schedule
 
@@ -149,7 +150,7 @@ List a season's teams, franchise groups and schedule
 | `week` | `week` |  |  | `Y` | Week filter. |
 | `franchise_id` | `franchise_id` |  |  | `Y` | Franchise (team) id. |
 
-### Returns
+### Returns {#pff_api_team_list-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -161,7 +162,7 @@ List a season's teams, franchise groups and schedule
 
 **`return_parsed=False`** — The decoded JSON body. /v1 routes return the Premium Stats envelope (`{report_slug: rows}`); /v2 routes return `{..meta.., columns, rows}`..
 
-### Example
+### Example {#pff_api_team_list-example}
 
 ```python
 pff_api_team_list(league='nfl', season=2022)
@@ -169,7 +170,7 @@ pff_api_team_list(league='nfl', season=2022)
 
 _Last validated n/a._
 
-## `pff_api_team_overview`
+## pff_api_team_overview
 
 Season-to-date team report, one row per team
 
@@ -184,7 +185,7 @@ Season-to-date team report, one row per team
 | `week` | `week` |  |  | `Y` | Week filter. |
 | `franchise_id` | `franchise_id` |  |  | `Y` | Franchise (team) id. |
 
-### Returns
+### Returns {#pff_api_team_overview-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -213,7 +214,7 @@ Season-to-date team report, one row per team
 
 **`return_parsed=False`** — The decoded JSON body. /v1 routes return the Premium Stats envelope (`{report_slug: rows}`); /v2 routes return `{..meta.., columns, rows}`..
 
-### Example
+### Example {#pff_api_team_overview-example}
 
 ```python
 pff_api_team_overview(league='nfl', season=2022)
@@ -221,7 +222,7 @@ pff_api_team_overview(league='nfl', season=2022)
 
 _Last validated n/a._
 
-## `pff_api_team_summary`
+## pff_api_team_summary
 
 Per-game team report for one franchise, one row per game
 
@@ -236,7 +237,7 @@ Per-game team report for one franchise, one row per game
 | `week` | `week` |  |  | `Y` | Week filter. |
 | `franchise_id` | `franchise_id` |  | `Y` |  | Franchise (team) id, and the THIRD positional argument of team-summary — the report is franchise-scoped, so there is no all-teams form of it. |
 
-### Returns
+### Returns {#pff_api_team_summary-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -268,7 +269,7 @@ Per-game team report for one franchise, one row per game
 
 **`return_parsed=False`** — The decoded JSON body. /v1 routes return the Premium Stats envelope (`{report_slug: rows}`); /v2 routes return `{..meta.., columns, rows}`..
 
-### Example
+### Example {#pff_api_team_summary-example}
 
 ```python
 pff_api_team_summary(franchise_id=7, league='nfl', season=2022)
@@ -276,7 +277,7 @@ pff_api_team_summary(franchise_id=7, league='nfl', season=2022)
 
 _Last validated n/a._
 
-## `pff_api_player_seasons`
+## pff_api_player_seasons
 
 List the seasons a player has data for
 
@@ -291,12 +292,12 @@ List the seasons a player has data for
 | `week` | `week` |  |  | `Y` | Week filter. |
 | `player_id` | `player_id` |  | `Y` |  | Player id, taken as a positional argument. |
 
-### Returns
+### Returns {#pff_api_player_seasons-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_pff_report`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — The decoded JSON body. /v1 routes return the Premium Stats envelope (`{report_slug: rows}`); /v2 routes return `{..meta.., columns, rows}`..
 
-### Example
+### Example {#pff_api_player_seasons-example}
 
 ```python
 pff_api_player_seasons(league='nfl', player_id=28022, season=2022)
@@ -304,7 +305,7 @@ pff_api_player_seasons(league='nfl', player_id=28022, season=2022)
 
 _Last validated n/a._
 
-## `pff_api_player_snaps_summary`
+## pff_api_player_snaps_summary
 
 Snap counts for a player, broken out by position
 
@@ -319,12 +320,12 @@ Snap counts for a player, broken out by position
 | `week` | `week` |  |  | `Y` | Week filter. |
 | `player_id` | `player_id` |  | `Y` |  | Player id, taken as a positional argument. |
 
-### Returns
+### Returns {#pff_api_player_snaps_summary-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_pff_report`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — The decoded JSON body. /v1 routes return the Premium Stats envelope (`{report_slug: rows}`); /v2 routes return `{..meta.., columns, rows}`..
 
-### Example
+### Example {#pff_api_player_snaps_summary-example}
 
 ```python
 pff_api_player_snaps_summary(league='nfl', player_id=28022, season=2022)
@@ -332,7 +333,7 @@ pff_api_player_snaps_summary(league='nfl', player_id=28022, season=2022)
 
 _Last validated n/a._
 
-## `pff_api_player_position_pivot`
+## pff_api_player_position_pivot
 
 Player snap counts pivoted by position
 
@@ -347,12 +348,12 @@ Player snap counts pivoted by position
 | `week` | `week` |  |  | `Y` | Week filter. |
 | `player_id` | `player_id` |  | `Y` |  | Player id, taken as a positional argument. |
 
-### Returns
+### Returns {#pff_api_player_position_pivot-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_pff_report`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — The decoded JSON body. /v1 routes return the Premium Stats envelope (`{report_slug: rows}`); /v2 routes return `{..meta.., columns, rows}`..
 
-### Example
+### Example {#pff_api_player_position_pivot-example}
 
 ```python
 pff_api_player_position_pivot(league='nfl', player_id=28022, season=2022)
@@ -360,7 +361,7 @@ pff_api_player_position_pivot(league='nfl', player_id=28022, season=2022)
 
 _Last validated n/a._
 
-## `pff_api_player_offense_summary`
+## pff_api_player_offense_summary
 
 Offense summary for one player
 
@@ -376,12 +377,12 @@ Offense summary for one player
 | `player_id` | `player_id` |  | `Y` |  | Player id, taken as a positional argument. |
 | `career` | `career` |  |  | `Y` | Career-aggregate toggle, on the player report operations only. |
 
-### Returns
+### Returns {#pff_api_player_offense_summary-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_pff_player_detail`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — The decoded JSON body. /v1 routes return the Premium Stats envelope (`{report_slug: rows}`); /v2 routes return `{..meta.., columns, rows}`..
 
-### Example
+### Example {#pff_api_player_offense_summary-example}
 
 ```python
 pff_api_player_offense_summary(league='nfl', player_id=28022, season=2022)
@@ -389,7 +390,7 @@ pff_api_player_offense_summary(league='nfl', player_id=28022, season=2022)
 
 _Last validated n/a._
 
-## `pff_api_player_offense_blocking`
+## pff_api_player_offense_blocking
 
 Blocking report for one player
 
@@ -405,12 +406,12 @@ Blocking report for one player
 | `player_id` | `player_id` |  | `Y` |  | Player id, taken as a positional argument. |
 | `career` | `career` |  |  | `Y` | Career-aggregate toggle, on the player report operations only. |
 
-### Returns
+### Returns {#pff_api_player_offense_blocking-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_pff_player_detail`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — The decoded JSON body. /v1 routes return the Premium Stats envelope (`{report_slug: rows}`); /v2 routes return `{..meta.., columns, rows}`..
 
-### Example
+### Example {#pff_api_player_offense_blocking-example}
 
 ```python
 pff_api_player_offense_blocking(league='nfl', player_id=28022, season=2022)
@@ -418,7 +419,7 @@ pff_api_player_offense_blocking(league='nfl', player_id=28022, season=2022)
 
 _Last validated n/a._
 
-## `pff_api_player_offense_pass_blocking`
+## pff_api_player_offense_pass_blocking
 
 Pass-blocking report for one player
 
@@ -434,12 +435,12 @@ Pass-blocking report for one player
 | `player_id` | `player_id` |  | `Y` |  | Player id, taken as a positional argument. |
 | `career` | `career` |  |  | `Y` | Career-aggregate toggle, on the player report operations only. |
 
-### Returns
+### Returns {#pff_api_player_offense_pass_blocking-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_pff_player_detail`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — The decoded JSON body. /v1 routes return the Premium Stats envelope (`{report_slug: rows}`); /v2 routes return `{..meta.., columns, rows}`..
 
-### Example
+### Example {#pff_api_player_offense_pass_blocking-example}
 
 ```python
 pff_api_player_offense_pass_blocking(league='nfl', player_id=28022, season=2022)
@@ -447,7 +448,7 @@ pff_api_player_offense_pass_blocking(league='nfl', player_id=28022, season=2022)
 
 _Last validated n/a._
 
-## `pff_api_player_offense_run_blocking`
+## pff_api_player_offense_run_blocking
 
 Run-blocking report for one player
 
@@ -463,12 +464,12 @@ Run-blocking report for one player
 | `player_id` | `player_id` |  | `Y` |  | Player id, taken as a positional argument. |
 | `career` | `career` |  |  | `Y` | Career-aggregate toggle, on the player report operations only. |
 
-### Returns
+### Returns {#pff_api_player_offense_run_blocking-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_pff_player_detail`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — The decoded JSON body. /v1 routes return the Premium Stats envelope (`{report_slug: rows}`); /v2 routes return `{..meta.., columns, rows}`..
 
-### Example
+### Example {#pff_api_player_offense_run_blocking-example}
 
 ```python
 pff_api_player_offense_run_blocking(league='nfl', player_id=28022, season=2022)
@@ -476,7 +477,7 @@ pff_api_player_offense_run_blocking(league='nfl', player_id=28022, season=2022)
 
 _Last validated n/a._
 
-## `pff_api_player_passing_summary`
+## pff_api_player_passing_summary
 
 Passing summary for one player
 
@@ -492,12 +493,12 @@ Passing summary for one player
 | `player_id` | `player_id` |  | `Y` |  | Player id, taken as a positional argument. |
 | `career` | `career` |  |  | `Y` | Career-aggregate toggle, on the player report operations only. |
 
-### Returns
+### Returns {#pff_api_player_passing_summary-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_pff_player_detail`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — The decoded JSON body. /v1 routes return the Premium Stats envelope (`{report_slug: rows}`); /v2 routes return `{..meta.., columns, rows}`..
 
-### Example
+### Example {#pff_api_player_passing_summary-example}
 
 ```python
 pff_api_player_passing_summary(league='nfl', player_id=28022, season=2022)
@@ -505,7 +506,7 @@ pff_api_player_passing_summary(league='nfl', player_id=28022, season=2022)
 
 _Last validated n/a._
 
-## `pff_api_player_passing_concept`
+## pff_api_player_passing_concept
 
 Passing by play concept for one player
 
@@ -521,7 +522,7 @@ Passing by play concept for one player
 | `player_id` | `player_id` |  | `Y` |  | Player id, taken as a positional argument. |
 | `career` | `career` |  |  | `Y` | Career-aggregate toggle, on the player report operations only. |
 
-### Returns
+### Returns {#pff_api_player_passing_concept-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -744,7 +745,7 @@ Passing by play concept for one player
 
 **`return_parsed=False`** — The decoded JSON body. /v1 routes return the Premium Stats envelope (`{report_slug: rows}`); /v2 routes return `{..meta.., columns, rows}`..
 
-### Example
+### Example {#pff_api_player_passing_concept-example}
 
 ```python
 pff_api_player_passing_concept(league='nfl', player_id=28022, season=2022)
@@ -752,7 +753,7 @@ pff_api_player_passing_concept(league='nfl', player_id=28022, season=2022)
 
 _Last validated n/a._
 
-## `pff_api_player_passing_depth`
+## pff_api_player_passing_depth
 
 Passing by target depth for one player
 
@@ -768,7 +769,7 @@ Passing by target depth for one player
 | `player_id` | `player_id` |  | `Y` |  | Player id, taken as a positional argument. |
 | `career` | `career` |  |  | `Y` | Career-aggregate toggle, on the player report operations only. |
 
-### Returns
+### Returns {#pff_api_player_passing_depth-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1334,7 +1335,7 @@ Passing by target depth for one player
 
 **`return_parsed=False`** — The decoded JSON body. /v1 routes return the Premium Stats envelope (`{report_slug: rows}`); /v2 routes return `{..meta.., columns, rows}`..
 
-### Example
+### Example {#pff_api_player_passing_depth-example}
 
 ```python
 pff_api_player_passing_depth(league='nfl', player_id=28022, season=2022)
@@ -1342,7 +1343,7 @@ pff_api_player_passing_depth(league='nfl', player_id=28022, season=2022)
 
 _Last validated n/a._
 
-## `pff_api_player_passing_pressure`
+## pff_api_player_passing_pressure
 
 Passing under pressure for one player
 
@@ -1358,7 +1359,7 @@ Passing under pressure for one player
 | `player_id` | `player_id` |  | `Y` |  | Player id, taken as a positional argument. |
 | `career` | `career` |  |  | `Y` | Career-aggregate toggle, on the player report operations only. |
 
-### Returns
+### Returns {#pff_api_player_passing_pressure-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1579,7 +1580,7 @@ Passing under pressure for one player
 
 **`return_parsed=False`** — The decoded JSON body. /v1 routes return the Premium Stats envelope (`{report_slug: rows}`); /v2 routes return `{..meta.., columns, rows}`..
 
-### Example
+### Example {#pff_api_player_passing_pressure-example}
 
 ```python
 pff_api_player_passing_pressure(league='nfl', player_id=28022, season=2022)
@@ -1587,7 +1588,7 @@ pff_api_player_passing_pressure(league='nfl', player_id=28022, season=2022)
 
 _Last validated n/a._
 
-## `pff_api_player_rushing_direction`
+## pff_api_player_rushing_direction
 
 Rushing by direction for one player
 
@@ -1603,12 +1604,12 @@ Rushing by direction for one player
 | `player_id` | `player_id` |  | `Y` |  | Player id, taken as a positional argument. |
 | `career` | `career` |  |  | `Y` | Career-aggregate toggle, on the player report operations only. |
 
-### Returns
+### Returns {#pff_api_player_rushing_direction-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_pff_report`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — The decoded JSON body. /v1 routes return the Premium Stats envelope (`{report_slug: rows}`); /v2 routes return `{..meta.., columns, rows}`..
 
-### Example
+### Example {#pff_api_player_rushing_direction-example}
 
 ```python
 pff_api_player_rushing_direction(league='nfl', player_id=28022, season=2022)
@@ -1616,7 +1617,7 @@ pff_api_player_rushing_direction(league='nfl', player_id=28022, season=2022)
 
 _Last validated n/a._
 
-## `pff_api_player_rushing_summary`
+## pff_api_player_rushing_summary
 
 Rushing summary for one player
 
@@ -1632,12 +1633,12 @@ Rushing summary for one player
 | `player_id` | `player_id` |  | `Y` |  | Player id, taken as a positional argument. |
 | `career` | `career` |  |  | `Y` | Career-aggregate toggle, on the player report operations only. |
 
-### Returns
+### Returns {#pff_api_player_rushing_summary-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_pff_player_detail`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — The decoded JSON body. /v1 routes return the Premium Stats envelope (`{report_slug: rows}`); /v2 routes return `{..meta.., columns, rows}`..
 
-### Example
+### Example {#pff_api_player_rushing_summary-example}
 
 ```python
 pff_api_player_rushing_summary(league='nfl', player_id=28022, season=2022)
@@ -1645,7 +1646,7 @@ pff_api_player_rushing_summary(league='nfl', player_id=28022, season=2022)
 
 _Last validated n/a._
 
-## `pff_api_player_receiving_depth`
+## pff_api_player_receiving_depth
 
 Receiving by target depth for one player
 
@@ -1661,7 +1662,7 @@ Receiving by target depth for one player
 | `player_id` | `player_id` |  | `Y` |  | Player id, taken as a positional argument. |
 | `career` | `career` |  |  | `Y` | Career-aggregate toggle, on the player report operations only. |
 
-### Returns
+### Returns {#pff_api_player_receiving_depth-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -2178,7 +2179,7 @@ Receiving by target depth for one player
 
 **`return_parsed=False`** — The decoded JSON body. /v1 routes return the Premium Stats envelope (`{report_slug: rows}`); /v2 routes return `{..meta.., columns, rows}`..
 
-### Example
+### Example {#pff_api_player_receiving_depth-example}
 
 ```python
 pff_api_player_receiving_depth(league='nfl', player_id=28022, season=2022)
@@ -2186,7 +2187,7 @@ pff_api_player_receiving_depth(league='nfl', player_id=28022, season=2022)
 
 _Last validated n/a._
 
-## `pff_api_player_receiving_summary`
+## pff_api_player_receiving_summary
 
 Receiving summary for one player
 
@@ -2202,12 +2203,12 @@ Receiving summary for one player
 | `player_id` | `player_id` |  | `Y` |  | Player id, taken as a positional argument. |
 | `career` | `career` |  |  | `Y` | Career-aggregate toggle, on the player report operations only. |
 
-### Returns
+### Returns {#pff_api_player_receiving_summary-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_pff_player_detail`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — The decoded JSON body. /v1 routes return the Premium Stats envelope (`{report_slug: rows}`); /v2 routes return `{..meta.., columns, rows}`..
 
-### Example
+### Example {#pff_api_player_receiving_summary-example}
 
 ```python
 pff_api_player_receiving_summary(league='nfl', player_id=28022, season=2022)
@@ -2215,7 +2216,7 @@ pff_api_player_receiving_summary(league='nfl', player_id=28022, season=2022)
 
 _Last validated n/a._
 
-## `pff_api_player_defense_summary`
+## pff_api_player_defense_summary
 
 Defense summary for one player
 
@@ -2231,12 +2232,12 @@ Defense summary for one player
 | `player_id` | `player_id` |  | `Y` |  | Player id, taken as a positional argument. |
 | `career` | `career` |  |  | `Y` | Career-aggregate toggle, on the player report operations only. |
 
-### Returns
+### Returns {#pff_api_player_defense_summary-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_pff_player_detail`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — The decoded JSON body. /v1 routes return the Premium Stats envelope (`{report_slug: rows}`); /v2 routes return `{..meta.., columns, rows}`..
 
-### Example
+### Example {#pff_api_player_defense_summary-example}
 
 ```python
 pff_api_player_defense_summary(league='nfl', player_id=28022, season=2022)
@@ -2244,7 +2245,7 @@ pff_api_player_defense_summary(league='nfl', player_id=28022, season=2022)
 
 _Last validated n/a._
 
-## `pff_api_player_field_goal_summary`
+## pff_api_player_field_goal_summary
 
 Field-goal kicking for one player
 
@@ -2260,12 +2261,12 @@ Field-goal kicking for one player
 | `player_id` | `player_id` |  | `Y` |  | Player id, taken as a positional argument. |
 | `career` | `career` |  |  | `Y` | Career-aggregate toggle, on the player report operations only. |
 
-### Returns
+### Returns {#pff_api_player_field_goal_summary-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_pff_player_detail`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — The decoded JSON body. /v1 routes return the Premium Stats envelope (`{report_slug: rows}`); /v2 routes return `{..meta.., columns, rows}`..
 
-### Example
+### Example {#pff_api_player_field_goal_summary-example}
 
 ```python
 pff_api_player_field_goal_summary(league='nfl', player_id=28022, season=2022)
@@ -2273,7 +2274,7 @@ pff_api_player_field_goal_summary(league='nfl', player_id=28022, season=2022)
 
 _Last validated n/a._
 
-## `pff_api_player_kickoff_summary`
+## pff_api_player_kickoff_summary
 
 Kickoffs for one player
 
@@ -2289,12 +2290,12 @@ Kickoffs for one player
 | `player_id` | `player_id` |  | `Y` |  | Player id, taken as a positional argument. |
 | `career` | `career` |  |  | `Y` | Career-aggregate toggle, on the player report operations only. |
 
-### Returns
+### Returns {#pff_api_player_kickoff_summary-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_pff_player_detail`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — The decoded JSON body. /v1 routes return the Premium Stats envelope (`{report_slug: rows}`); /v2 routes return `{..meta.., columns, rows}`..
 
-### Example
+### Example {#pff_api_player_kickoff_summary-example}
 
 ```python
 pff_api_player_kickoff_summary(league='nfl', player_id=28022, season=2022)
@@ -2302,7 +2303,7 @@ pff_api_player_kickoff_summary(league='nfl', player_id=28022, season=2022)
 
 _Last validated n/a._
 
-## `pff_api_player_punting_summary`
+## pff_api_player_punting_summary
 
 Punting for one player
 
@@ -2318,12 +2319,12 @@ Punting for one player
 | `player_id` | `player_id` |  | `Y` |  | Player id, taken as a positional argument. |
 | `career` | `career` |  |  | `Y` | Career-aggregate toggle, on the player report operations only. |
 
-### Returns
+### Returns {#pff_api_player_punting_summary-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_pff_player_detail`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — The decoded JSON body. /v1 routes return the Premium Stats envelope (`{report_slug: rows}`); /v2 routes return `{..meta.., columns, rows}`..
 
-### Example
+### Example {#pff_api_player_punting_summary-example}
 
 ```python
 pff_api_player_punting_summary(league='nfl', player_id=28022, season=2022)
@@ -2331,7 +2332,7 @@ pff_api_player_punting_summary(league='nfl', player_id=28022, season=2022)
 
 _Last validated n/a._
 
-## `pff_api_player_return_summary`
+## pff_api_player_return_summary
 
 Kick and punt returns for one player
 
@@ -2347,12 +2348,12 @@ Kick and punt returns for one player
 | `player_id` | `player_id` |  | `Y` |  | Player id, taken as a positional argument. |
 | `career` | `career` |  |  | `Y` | Career-aggregate toggle, on the player report operations only. |
 
-### Returns
+### Returns {#pff_api_player_return_summary-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_pff_player_detail`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — The decoded JSON body. /v1 routes return the Premium Stats envelope (`{report_slug: rows}`); /v2 routes return `{..meta.., columns, rows}`..
 
-### Example
+### Example {#pff_api_player_return_summary-example}
 
 ```python
 pff_api_player_return_summary(league='nfl', player_id=28022, season=2022)
@@ -2360,7 +2361,7 @@ pff_api_player_return_summary(league='nfl', player_id=28022, season=2022)
 
 _Last validated n/a._
 
-## `pff_api_player_special_summary`
+## pff_api_player_special_summary
 
 Special-teams summary for one player
 
@@ -2376,12 +2377,12 @@ Special-teams summary for one player
 | `player_id` | `player_id` |  | `Y` |  | Player id, taken as a positional argument. |
 | `career` | `career` |  |  | `Y` | Career-aggregate toggle, on the player report operations only. |
 
-### Returns
+### Returns {#pff_api_player_special_summary-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_pff_player_detail`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — The decoded JSON body. /v1 routes return the Premium Stats envelope (`{report_slug: rows}`); /v2 routes return `{..meta.., columns, rows}`..
 
-### Example
+### Example {#pff_api_player_special_summary-example}
 
 ```python
 pff_api_player_special_summary(league='nfl', player_id=28022, season=2022)
@@ -2389,7 +2390,7 @@ pff_api_player_special_summary(league='nfl', player_id=28022, season=2022)
 
 _Last validated n/a._
 
-## `pff_api_facet_offense_summary`
+## pff_api_facet_offense_summary
 
 League-wide offense summary leaderboard
 
@@ -2406,7 +2407,7 @@ League-wide offense summary leaderboard
 | `game_id` | `game_id` |  |  | `Y` | Single-game filter, facet family only, forwarded uncoerced. |
 | `division` | `division` |  |  | `Y` | NCAA division fan-out, facet family only, and **only honoured when league=ncaa** — for any other league it is ignored entirely. |
 
-### Returns
+### Returns {#pff_api_facet_offense_summary-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -2442,7 +2443,7 @@ League-wide offense summary leaderboard
 
 **`return_parsed=False`** — The decoded JSON body. /v1 routes return the Premium Stats envelope (`{report_slug: rows}`); /v2 routes return `{..meta.., columns, rows}`..
 
-### Example
+### Example {#pff_api_facet_offense_summary-example}
 
 ```python
 pff_api_facet_offense_summary(league='nfl', season='2022')
@@ -2450,7 +2451,7 @@ pff_api_facet_offense_summary(league='nfl', season='2022')
 
 _Last validated n/a._
 
-## `pff_api_facet_offense_blocking`
+## pff_api_facet_offense_blocking
 
 League-wide blocking leaderboard
 
@@ -2467,7 +2468,7 @@ League-wide blocking leaderboard
 | `game_id` | `game_id` |  |  | `Y` | Single-game filter, facet family only, forwarded uncoerced. |
 | `division` | `division` |  |  | `Y` | NCAA division fan-out, facet family only, and **only honoured when league=ncaa** — for any other league it is ignored entirely. |
 
-### Returns
+### Returns {#pff_api_facet_offense_blocking-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -2510,7 +2511,7 @@ League-wide blocking leaderboard
 
 **`return_parsed=False`** — The decoded JSON body. /v1 routes return the Premium Stats envelope (`{report_slug: rows}`); /v2 routes return `{..meta.., columns, rows}`..
 
-### Example
+### Example {#pff_api_facet_offense_blocking-example}
 
 ```python
 pff_api_facet_offense_blocking(league='nfl', season='2022')
@@ -2518,7 +2519,7 @@ pff_api_facet_offense_blocking(league='nfl', season='2022')
 
 _Last validated n/a._
 
-## `pff_api_facet_offense_pass_blocking`
+## pff_api_facet_offense_pass_blocking
 
 League-wide pass-blocking leaderboard
 
@@ -2535,7 +2536,7 @@ League-wide pass-blocking leaderboard
 | `game_id` | `game_id` |  |  | `Y` | Single-game filter, facet family only, forwarded uncoerced. |
 | `division` | `division` |  |  | `Y` | NCAA division fan-out, facet family only, and **only honoured when league=ncaa** — for any other league it is ignored entirely. |
 
-### Returns
+### Returns {#pff_api_facet_offense_pass_blocking-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -2577,7 +2578,7 @@ League-wide pass-blocking leaderboard
 
 **`return_parsed=False`** — The decoded JSON body. /v1 routes return the Premium Stats envelope (`{report_slug: rows}`); /v2 routes return `{..meta.., columns, rows}`..
 
-### Example
+### Example {#pff_api_facet_offense_pass_blocking-example}
 
 ```python
 pff_api_facet_offense_pass_blocking(league='nfl', season='2022')
@@ -2585,7 +2586,7 @@ pff_api_facet_offense_pass_blocking(league='nfl', season='2022')
 
 _Last validated n/a._
 
-## `pff_api_facet_offense_run_blocking`
+## pff_api_facet_offense_run_blocking
 
 League-wide run-blocking leaderboard
 
@@ -2602,7 +2603,7 @@ League-wide run-blocking leaderboard
 | `game_id` | `game_id` |  |  | `Y` | Single-game filter, facet family only, forwarded uncoerced. |
 | `division` | `division` |  |  | `Y` | NCAA division fan-out, facet family only, and **only honoured when league=ncaa** — for any other league it is ignored entirely. |
 
-### Returns
+### Returns {#pff_api_facet_offense_run_blocking-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -2636,7 +2637,7 @@ League-wide run-blocking leaderboard
 
 **`return_parsed=False`** — The decoded JSON body. /v1 routes return the Premium Stats envelope (`{report_slug: rows}`); /v2 routes return `{..meta.., columns, rows}`..
 
-### Example
+### Example {#pff_api_facet_offense_run_blocking-example}
 
 ```python
 pff_api_facet_offense_run_blocking(league='nfl', season='2022')
@@ -2644,7 +2645,7 @@ pff_api_facet_offense_run_blocking(league='nfl', season='2022')
 
 _Last validated n/a._
 
-## `pff_api_facet_passing_allowed_pressure`
+## pff_api_facet_passing_allowed_pressure
 
 League-wide pressure-allowed leaderboard
 
@@ -2661,7 +2662,7 @@ League-wide pressure-allowed leaderboard
 | `game_id` | `game_id` |  |  | `Y` | Single-game filter, facet family only, forwarded uncoerced. |
 | `division` | `division` |  |  | `Y` | NCAA division fan-out, facet family only, and **only honoured when league=ncaa** — for any other league it is ignored entirely. |
 
-### Returns
+### Returns {#pff_api_facet_passing_allowed_pressure-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -2705,7 +2706,7 @@ League-wide pressure-allowed leaderboard
 
 **`return_parsed=False`** — The decoded JSON body. /v1 routes return the Premium Stats envelope (`{report_slug: rows}`); /v2 routes return `{..meta.., columns, rows}`..
 
-### Example
+### Example {#pff_api_facet_passing_allowed_pressure-example}
 
 ```python
 pff_api_facet_passing_allowed_pressure(league='nfl', season='2022')
@@ -2713,7 +2714,7 @@ pff_api_facet_passing_allowed_pressure(league='nfl', season='2022')
 
 _Last validated n/a._
 
-## `pff_api_facet_passing_concept`
+## pff_api_facet_passing_concept
 
 League-wide passing-by-concept leaderboard
 
@@ -2730,7 +2731,7 @@ League-wide passing-by-concept leaderboard
 | `game_id` | `game_id` |  |  | `Y` | Single-game filter, facet family only, forwarded uncoerced. |
 | `division` | `division` |  |  | `Y` | NCAA division fan-out, facet family only, and **only honoured when league=ncaa** — for any other league it is ignored entirely. |
 
-### Returns
+### Returns {#pff_api_facet_passing_concept-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -2953,7 +2954,7 @@ League-wide passing-by-concept leaderboard
 
 **`return_parsed=False`** — The decoded JSON body. /v1 routes return the Premium Stats envelope (`{report_slug: rows}`); /v2 routes return `{..meta.., columns, rows}`..
 
-### Example
+### Example {#pff_api_facet_passing_concept-example}
 
 ```python
 pff_api_facet_passing_concept(league='nfl', season='2022')
@@ -2961,7 +2962,7 @@ pff_api_facet_passing_concept(league='nfl', season='2022')
 
 _Last validated n/a._
 
-## `pff_api_facet_passing_depth`
+## pff_api_facet_passing_depth
 
 League-wide passing-by-depth leaderboard
 
@@ -2978,7 +2979,7 @@ League-wide passing-by-depth leaderboard
 | `game_id` | `game_id` |  |  | `Y` | Single-game filter, facet family only, forwarded uncoerced. |
 | `division` | `division` |  |  | `Y` | NCAA division fan-out, facet family only, and **only honoured when league=ncaa** — for any other league it is ignored entirely. |
 
-### Returns
+### Returns {#pff_api_facet_passing_depth-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -3544,7 +3545,7 @@ League-wide passing-by-depth leaderboard
 
 **`return_parsed=False`** — The decoded JSON body. /v1 routes return the Premium Stats envelope (`{report_slug: rows}`); /v2 routes return `{..meta.., columns, rows}`..
 
-### Example
+### Example {#pff_api_facet_passing_depth-example}
 
 ```python
 pff_api_facet_passing_depth(league='nfl', season='2022')
@@ -3552,7 +3553,7 @@ pff_api_facet_passing_depth(league='nfl', season='2022')
 
 _Last validated n/a._
 
-## `pff_api_facet_passing_detail`
+## pff_api_facet_passing_detail
 
 League-wide passing detail leaderboard
 
@@ -3569,7 +3570,7 @@ League-wide passing detail leaderboard
 | `game_id` | `game_id` |  |  | `Y` | Single-game filter, facet family only, forwarded uncoerced. |
 | `division` | `division` |  |  | `Y` | NCAA division fan-out, facet family only, and **only honoured when league=ncaa** — for any other league it is ignored entirely. |
 
-### Returns
+### Returns {#pff_api_facet_passing_detail-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -4525,7 +4526,7 @@ League-wide passing detail leaderboard
 
 **`return_parsed=False`** — The decoded JSON body. /v1 routes return the Premium Stats envelope (`{report_slug: rows}`); /v2 routes return `{..meta.., columns, rows}`..
 
-### Example
+### Example {#pff_api_facet_passing_detail-example}
 
 ```python
 pff_api_facet_passing_detail(league='nfl', season='2022')
@@ -4533,7 +4534,7 @@ pff_api_facet_passing_detail(league='nfl', season='2022')
 
 _Last validated n/a._
 
-## `pff_api_facet_passing_pressure`
+## pff_api_facet_passing_pressure
 
 League-wide passing-under-pressure leaderboard
 
@@ -4550,7 +4551,7 @@ League-wide passing-under-pressure leaderboard
 | `game_id` | `game_id` |  |  | `Y` | Single-game filter, facet family only, forwarded uncoerced. |
 | `division` | `division` |  |  | `Y` | NCAA division fan-out, facet family only, and **only honoured when league=ncaa** — for any other league it is ignored entirely. |
 
-### Returns
+### Returns {#pff_api_facet_passing_pressure-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -4771,7 +4772,7 @@ League-wide passing-under-pressure leaderboard
 
 **`return_parsed=False`** — The decoded JSON body. /v1 routes return the Premium Stats envelope (`{report_slug: rows}`); /v2 routes return `{..meta.., columns, rows}`..
 
-### Example
+### Example {#pff_api_facet_passing_pressure-example}
 
 ```python
 pff_api_facet_passing_pressure(league='nfl', season='2022')
@@ -4779,7 +4780,7 @@ pff_api_facet_passing_pressure(league='nfl', season='2022')
 
 _Last validated n/a._
 
-## `pff_api_facet_passing_summary`
+## pff_api_facet_passing_summary
 
 League-wide passing summary leaderboard
 
@@ -4796,7 +4797,7 @@ League-wide passing summary leaderboard
 | `game_id` | `game_id` |  |  | `Y` | Single-game filter, facet family only, forwarded uncoerced. |
 | `division` | `division` |  |  | `Y` | NCAA division fan-out, facet family only, and **only honoured when league=ncaa** — for any other league it is ignored entirely. |
 
-### Returns
+### Returns {#pff_api_facet_passing_summary-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -4852,7 +4853,7 @@ League-wide passing summary leaderboard
 
 **`return_parsed=False`** — The decoded JSON body. /v1 routes return the Premium Stats envelope (`{report_slug: rows}`); /v2 routes return `{..meta.., columns, rows}`..
 
-### Example
+### Example {#pff_api_facet_passing_summary-example}
 
 ```python
 pff_api_facet_passing_summary(league='nfl', season='2022')
@@ -4860,7 +4861,7 @@ pff_api_facet_passing_summary(league='nfl', season='2022')
 
 _Last validated n/a._
 
-## `pff_api_facet_receiving_concept`
+## pff_api_facet_receiving_concept
 
 League-wide receiving-by-concept leaderboard
 
@@ -4877,7 +4878,7 @@ League-wide receiving-by-concept leaderboard
 | `game_id` | `game_id` |  |  | `Y` | Single-game filter, facet family only, forwarded uncoerced. |
 | `division` | `division` |  |  | `Y` | NCAA division fan-out, facet family only, and **only honoured when league=ncaa** — for any other league it is ignored entirely. |
 
-### Returns
+### Returns {#pff_api_facet_receiving_concept-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -4960,7 +4961,7 @@ League-wide receiving-by-concept leaderboard
 
 **`return_parsed=False`** — The decoded JSON body. /v1 routes return the Premium Stats envelope (`{report_slug: rows}`); /v2 routes return `{..meta.., columns, rows}`..
 
-### Example
+### Example {#pff_api_facet_receiving_concept-example}
 
 ```python
 pff_api_facet_receiving_concept(league='nfl', season='2022')
@@ -4968,7 +4969,7 @@ pff_api_facet_receiving_concept(league='nfl', season='2022')
 
 _Last validated n/a._
 
-## `pff_api_facet_receiving_coverage`
+## pff_api_facet_receiving_coverage
 
 League-wide receiving-versus-coverage leaderboard
 
@@ -4985,12 +4986,12 @@ League-wide receiving-versus-coverage leaderboard
 | `game_id` | `game_id` |  |  | `Y` | Single-game filter, facet family only, forwarded uncoerced. |
 | `division` | `division` |  |  | `Y` | NCAA division fan-out, facet family only, and **only honoured when league=ncaa** — for any other league it is ignored entirely. |
 
-### Returns
+### Returns {#pff_api_facet_receiving_coverage-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_pff_report`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — The decoded JSON body. /v1 routes return the Premium Stats envelope (`{report_slug: rows}`); /v2 routes return `{..meta.., columns, rows}`..
 
-### Example
+### Example {#pff_api_facet_receiving_coverage-example}
 
 ```python
 pff_api_facet_receiving_coverage(league='nfl', season='2022')
@@ -4998,7 +4999,7 @@ pff_api_facet_receiving_coverage(league='nfl', season='2022')
 
 _Last validated n/a._
 
-## `pff_api_facet_receiving_depth`
+## pff_api_facet_receiving_depth
 
 League-wide receiving-by-depth leaderboard
 
@@ -5015,7 +5016,7 @@ League-wide receiving-by-depth leaderboard
 | `game_id` | `game_id` |  |  | `Y` | Single-game filter, facet family only, forwarded uncoerced. |
 | `division` | `division` |  |  | `Y` | NCAA division fan-out, facet family only, and **only honoured when league=ncaa** — for any other league it is ignored entirely. |
 
-### Returns
+### Returns {#pff_api_facet_receiving_depth-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -5532,7 +5533,7 @@ League-wide receiving-by-depth leaderboard
 
 **`return_parsed=False`** — The decoded JSON body. /v1 routes return the Premium Stats envelope (`{report_slug: rows}`); /v2 routes return `{..meta.., columns, rows}`..
 
-### Example
+### Example {#pff_api_facet_receiving_depth-example}
 
 ```python
 pff_api_facet_receiving_depth(league='nfl', season='2022')
@@ -5540,7 +5541,7 @@ pff_api_facet_receiving_depth(league='nfl', season='2022')
 
 _Last validated n/a._
 
-## `pff_api_facet_receiving_scheme`
+## pff_api_facet_receiving_scheme
 
 League-wide receiving-by-scheme leaderboard
 
@@ -5557,7 +5558,7 @@ League-wide receiving-by-scheme leaderboard
 | `game_id` | `game_id` |  |  | `Y` | Single-game filter, facet family only, forwarded uncoerced. |
 | `division` | `division` |  |  | `Y` | NCAA division fan-out, facet family only, and **only honoured when league=ncaa** — for any other league it is ignored entirely. |
 
-### Returns
+### Returns {#pff_api_facet_receiving_scheme-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -5640,7 +5641,7 @@ League-wide receiving-by-scheme leaderboard
 
 **`return_parsed=False`** — The decoded JSON body. /v1 routes return the Premium Stats envelope (`{report_slug: rows}`); /v2 routes return `{..meta.., columns, rows}`..
 
-### Example
+### Example {#pff_api_facet_receiving_scheme-example}
 
 ```python
 pff_api_facet_receiving_scheme(league='nfl', season='2022')
@@ -5648,7 +5649,7 @@ pff_api_facet_receiving_scheme(league='nfl', season='2022')
 
 _Last validated n/a._
 
-## `pff_api_facet_receiving_summary`
+## pff_api_facet_receiving_summary
 
 League-wide receiving summary leaderboard
 
@@ -5665,7 +5666,7 @@ League-wide receiving summary leaderboard
 | `game_id` | `game_id` |  |  | `Y` | Single-game filter, facet family only, forwarded uncoerced. |
 | `division` | `division` |  |  | `Y` | NCAA division fan-out, facet family only, and **only honoured when league=ncaa** — for any other league it is ignored entirely. |
 
-### Returns
+### Returns {#pff_api_facet_receiving_summary-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -5724,7 +5725,7 @@ League-wide receiving summary leaderboard
 
 **`return_parsed=False`** — The decoded JSON body. /v1 routes return the Premium Stats envelope (`{report_slug: rows}`); /v2 routes return `{..meta.., columns, rows}`..
 
-### Example
+### Example {#pff_api_facet_receiving_summary-example}
 
 ```python
 pff_api_facet_receiving_summary(league='nfl', season='2022')
@@ -5732,7 +5733,7 @@ pff_api_facet_receiving_summary(league='nfl', season='2022')
 
 _Last validated n/a._
 
-## `pff_api_facet_rushing_direction`
+## pff_api_facet_rushing_direction
 
 League-wide rushing-by-direction leaderboard
 
@@ -5749,7 +5750,7 @@ League-wide rushing-by-direction leaderboard
 | `game_id` | `game_id` |  |  | `Y` | Single-game filter, facet family only, forwarded uncoerced. |
 | `division` | `division` |  |  | `Y` | NCAA division fan-out, facet family only, and **only honoured when league=ncaa** — for any other league it is ignored entirely. |
 
-### Returns
+### Returns {#pff_api_facet_rushing_direction-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -5768,7 +5769,7 @@ League-wide rushing-by-direction leaderboard
 
 **`return_parsed=False`** — The decoded JSON body. /v1 routes return the Premium Stats envelope (`{report_slug: rows}`); /v2 routes return `{..meta.., columns, rows}`..
 
-### Example
+### Example {#pff_api_facet_rushing_direction-example}
 
 ```python
 pff_api_facet_rushing_direction(league='nfl', season='2022')
@@ -5776,7 +5777,7 @@ pff_api_facet_rushing_direction(league='nfl', season='2022')
 
 _Last validated n/a._
 
-## `pff_api_facet_rushing_summary`
+## pff_api_facet_rushing_summary
 
 League-wide rushing summary leaderboard
 
@@ -5793,7 +5794,7 @@ League-wide rushing summary leaderboard
 | `game_id` | `game_id` |  |  | `Y` | Single-game filter, facet family only, forwarded uncoerced. |
 | `division` | `division` |  |  | `Y` | NCAA division fan-out, facet family only, and **only honoured when league=ncaa** — for any other league it is ignored entirely. |
 
-### Returns
+### Returns {#pff_api_facet_rushing_summary-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -5852,7 +5853,7 @@ League-wide rushing summary leaderboard
 
 **`return_parsed=False`** — The decoded JSON body. /v1 routes return the Premium Stats envelope (`{report_slug: rows}`); /v2 routes return `{..meta.., columns, rows}`..
 
-### Example
+### Example {#pff_api_facet_rushing_summary-example}
 
 ```python
 pff_api_facet_rushing_summary(league='nfl', season='2022')
@@ -5860,7 +5861,7 @@ pff_api_facet_rushing_summary(league='nfl', season='2022')
 
 _Last validated n/a._
 
-## `pff_api_facet_defense_coverage`
+## pff_api_facet_defense_coverage
 
 League-wide coverage leaderboard
 
@@ -5877,7 +5878,7 @@ League-wide coverage leaderboard
 | `game_id` | `game_id` |  |  | `Y` | Single-game filter, facet family only, forwarded uncoerced. |
 | `division` | `division` |  |  | `Y` | NCAA division fan-out, facet family only, and **only honoured when league=ncaa** — for any other league it is ignored entirely. |
 
-### Returns
+### Returns {#pff_api_facet_defense_coverage-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -5929,7 +5930,7 @@ League-wide coverage leaderboard
 
 **`return_parsed=False`** — The decoded JSON body. /v1 routes return the Premium Stats envelope (`{report_slug: rows}`); /v2 routes return `{..meta.., columns, rows}`..
 
-### Example
+### Example {#pff_api_facet_defense_coverage-example}
 
 ```python
 pff_api_facet_defense_coverage(league='nfl', season='2022')
@@ -5937,7 +5938,7 @@ pff_api_facet_defense_coverage(league='nfl', season='2022')
 
 _Last validated n/a._
 
-## `pff_api_facet_defense_coverage_scheme`
+## pff_api_facet_defense_coverage_scheme
 
 League-wide coverage-by-scheme leaderboard
 
@@ -5954,7 +5955,7 @@ League-wide coverage-by-scheme leaderboard
 | `game_id` | `game_id` |  |  | `Y` | Single-game filter, facet family only, forwarded uncoerced. |
 | `division` | `division` |  |  | `Y` | NCAA division fan-out, facet family only, and **only honoured when league=ncaa** — for any other league it is ignored entirely. |
 
-### Returns
+### Returns {#pff_api_facet_defense_coverage_scheme-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -6031,7 +6032,7 @@ League-wide coverage-by-scheme leaderboard
 
 **`return_parsed=False`** — The decoded JSON body. /v1 routes return the Premium Stats envelope (`{report_slug: rows}`); /v2 routes return `{..meta.., columns, rows}`..
 
-### Example
+### Example {#pff_api_facet_defense_coverage_scheme-example}
 
 ```python
 pff_api_facet_defense_coverage_scheme(league='nfl', season='2022')
@@ -6039,7 +6040,7 @@ pff_api_facet_defense_coverage_scheme(league='nfl', season='2022')
 
 _Last validated n/a._
 
-## `pff_api_facet_defense_coverage_matchup`
+## pff_api_facet_defense_coverage_matchup
 
 League-wide coverage matchup leaderboard
 
@@ -6056,12 +6057,12 @@ League-wide coverage matchup leaderboard
 | `game_id` | `game_id` |  |  | `Y` | Single-game filter, facet family only, forwarded uncoerced. |
 | `division` | `division` |  |  | `Y` | NCAA division fan-out, facet family only, and **only honoured when league=ncaa** — for any other league it is ignored entirely. |
 
-### Returns
+### Returns {#pff_api_facet_defense_coverage_matchup-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_pff_report`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — The decoded JSON body. /v1 routes return the Premium Stats envelope (`{report_slug: rows}`); /v2 routes return `{..meta.., columns, rows}`..
 
-### Example
+### Example {#pff_api_facet_defense_coverage_matchup-example}
 
 ```python
 pff_api_facet_defense_coverage_matchup(league='nfl', season='2022')
@@ -6069,7 +6070,7 @@ pff_api_facet_defense_coverage_matchup(league='nfl', season='2022')
 
 _Last validated n/a._
 
-## `pff_api_facet_defense_pass_rush`
+## pff_api_facet_defense_pass_rush
 
 League-wide pass-rush leaderboard
 
@@ -6086,7 +6087,7 @@ League-wide pass-rush leaderboard
 | `game_id` | `game_id` |  |  | `Y` | Single-game filter, facet family only, forwarded uncoerced. |
 | `division` | `division` |  |  | `Y` | NCAA division fan-out, facet family only, and **only honoured when league=ncaa** — for any other league it is ignored entirely. |
 
-### Returns
+### Returns {#pff_api_facet_defense_pass_rush-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -6132,7 +6133,7 @@ League-wide pass-rush leaderboard
 
 **`return_parsed=False`** — The decoded JSON body. /v1 routes return the Premium Stats envelope (`{report_slug: rows}`); /v2 routes return `{..meta.., columns, rows}`..
 
-### Example
+### Example {#pff_api_facet_defense_pass_rush-example}
 
 ```python
 pff_api_facet_defense_pass_rush(league='nfl', season='2022')
@@ -6140,7 +6141,7 @@ pff_api_facet_defense_pass_rush(league='nfl', season='2022')
 
 _Last validated n/a._
 
-## `pff_api_facet_defense_run`
+## pff_api_facet_defense_run
 
 League-wide run-defense leaderboard
 
@@ -6157,7 +6158,7 @@ League-wide run-defense leaderboard
 | `game_id` | `game_id` |  |  | `Y` | Single-game filter, facet family only, forwarded uncoerced. |
 | `division` | `division` |  |  | `Y` | NCAA division fan-out, facet family only, and **only honoured when league=ncaa** — for any other league it is ignored entirely. |
 
-### Returns
+### Returns {#pff_api_facet_defense_run-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -6193,7 +6194,7 @@ League-wide run-defense leaderboard
 
 **`return_parsed=False`** — The decoded JSON body. /v1 routes return the Premium Stats envelope (`{report_slug: rows}`); /v2 routes return `{..meta.., columns, rows}`..
 
-### Example
+### Example {#pff_api_facet_defense_run-example}
 
 ```python
 pff_api_facet_defense_run(league='nfl', season='2022')
@@ -6201,7 +6202,7 @@ pff_api_facet_defense_run(league='nfl', season='2022')
 
 _Last validated n/a._
 
-## `pff_api_facet_defense_summary`
+## pff_api_facet_defense_summary
 
 League-wide defense summary leaderboard
 
@@ -6218,7 +6219,7 @@ League-wide defense summary leaderboard
 | `game_id` | `game_id` |  |  | `Y` | Single-game filter, facet family only, forwarded uncoerced. |
 | `division` | `division` |  |  | `Y` | NCAA division fan-out, facet family only, and **only honoured when league=ncaa** — for any other league it is ignored entirely. |
 
-### Returns
+### Returns {#pff_api_facet_defense_summary-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -6285,7 +6286,7 @@ League-wide defense summary leaderboard
 
 **`return_parsed=False`** — The decoded JSON body. /v1 routes return the Premium Stats envelope (`{report_slug: rows}`); /v2 routes return `{..meta.., columns, rows}`..
 
-### Example
+### Example {#pff_api_facet_defense_summary-example}
 
 ```python
 pff_api_facet_defense_summary(league='nfl', season='2022')
@@ -6293,7 +6294,7 @@ pff_api_facet_defense_summary(league='nfl', season='2022')
 
 _Last validated n/a._
 
-## `pff_api_facet_field_goal_summary`
+## pff_api_facet_field_goal_summary
 
 League-wide field-goal kicking leaderboard
 
@@ -6310,7 +6311,7 @@ League-wide field-goal kicking leaderboard
 | `game_id` | `game_id` |  |  | `Y` | Single-game filter, facet family only, forwarded uncoerced. |
 | `division` | `division` |  |  | `Y` | NCAA division fan-out, facet family only, and **only honoured when league=ncaa** — for any other league it is ignored entirely. |
 
-### Returns
+### Returns {#pff_api_facet_field_goal_summary-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -6352,7 +6353,7 @@ League-wide field-goal kicking leaderboard
 
 **`return_parsed=False`** — The decoded JSON body. /v1 routes return the Premium Stats envelope (`{report_slug: rows}`); /v2 routes return `{..meta.., columns, rows}`..
 
-### Example
+### Example {#pff_api_facet_field_goal_summary-example}
 
 ```python
 pff_api_facet_field_goal_summary(league='nfl', season='2022')
@@ -6360,7 +6361,7 @@ pff_api_facet_field_goal_summary(league='nfl', season='2022')
 
 _Last validated n/a._
 
-## `pff_api_facet_kickoff_summary`
+## pff_api_facet_kickoff_summary
 
 League-wide kickoff leaderboard
 
@@ -6377,7 +6378,7 @@ League-wide kickoff leaderboard
 | `game_id` | `game_id` |  |  | `Y` | Single-game filter, facet family only, forwarded uncoerced. |
 | `division` | `division` |  |  | `Y` | NCAA division fan-out, facet family only, and **only honoured when league=ncaa** — for any other league it is ignored entirely. |
 
-### Returns
+### Returns {#pff_api_facet_kickoff_summary-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -6412,7 +6413,7 @@ League-wide kickoff leaderboard
 
 **`return_parsed=False`** — The decoded JSON body. /v1 routes return the Premium Stats envelope (`{report_slug: rows}`); /v2 routes return `{..meta.., columns, rows}`..
 
-### Example
+### Example {#pff_api_facet_kickoff_summary-example}
 
 ```python
 pff_api_facet_kickoff_summary(league='nfl', season='2022')
@@ -6420,7 +6421,7 @@ pff_api_facet_kickoff_summary(league='nfl', season='2022')
 
 _Last validated n/a._
 
-## `pff_api_facet_punting_summary`
+## pff_api_facet_punting_summary
 
 League-wide punting leaderboard
 
@@ -6437,7 +6438,7 @@ League-wide punting leaderboard
 | `game_id` | `game_id` |  |  | `Y` | Single-game filter, facet family only, forwarded uncoerced. |
 | `division` | `division` |  |  | `Y` | NCAA division fan-out, facet family only, and **only honoured when league=ncaa** — for any other league it is ignored entirely. |
 
-### Returns
+### Returns {#pff_api_facet_punting_summary-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -6478,7 +6479,7 @@ League-wide punting leaderboard
 
 **`return_parsed=False`** — The decoded JSON body. /v1 routes return the Premium Stats envelope (`{report_slug: rows}`); /v2 routes return `{..meta.., columns, rows}`..
 
-### Example
+### Example {#pff_api_facet_punting_summary-example}
 
 ```python
 pff_api_facet_punting_summary(league='nfl', season='2022')
@@ -6486,7 +6487,7 @@ pff_api_facet_punting_summary(league='nfl', season='2022')
 
 _Last validated n/a._
 
-## `pff_api_facet_return_summary`
+## pff_api_facet_return_summary
 
 League-wide return leaderboard
 
@@ -6503,7 +6504,7 @@ League-wide return leaderboard
 | `game_id` | `game_id` |  |  | `Y` | Single-game filter, facet family only, forwarded uncoerced. |
 | `division` | `division` |  |  | `Y` | NCAA division fan-out, facet family only, and **only honoured when league=ncaa** — for any other league it is ignored entirely. |
 
-### Returns
+### Returns {#pff_api_facet_return_summary-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -6541,7 +6542,7 @@ League-wide return leaderboard
 
 **`return_parsed=False`** — The decoded JSON body. /v1 routes return the Premium Stats envelope (`{report_slug: rows}`); /v2 routes return `{..meta.., columns, rows}`..
 
-### Example
+### Example {#pff_api_facet_return_summary-example}
 
 ```python
 pff_api_facet_return_summary(league='nfl', season='2022')
@@ -6549,7 +6550,7 @@ pff_api_facet_return_summary(league='nfl', season='2022')
 
 _Last validated n/a._
 
-## `pff_api_facet_special_summary`
+## pff_api_facet_special_summary
 
 League-wide special-teams leaderboard
 
@@ -6566,7 +6567,7 @@ League-wide special-teams leaderboard
 | `game_id` | `game_id` |  |  | `Y` | Single-game filter, facet family only, forwarded uncoerced. |
 | `division` | `division` |  |  | `Y` | NCAA division fan-out, facet family only, and **only honoured when league=ncaa** — for any other league it is ignored entirely. |
 
-### Returns
+### Returns {#pff_api_facet_special_summary-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -6605,7 +6606,7 @@ League-wide special-teams leaderboard
 
 **`return_parsed=False`** — The decoded JSON body. /v1 routes return the Premium Stats envelope (`{report_slug: rows}`); /v2 routes return `{..meta.., columns, rows}`..
 
-### Example
+### Example {#pff_api_facet_special_summary-example}
 
 ```python
 pff_api_facet_special_summary(league='nfl', season='2022')
@@ -6613,7 +6614,7 @@ pff_api_facet_special_summary(league='nfl', season='2022')
 
 _Last validated n/a._
 
-## `pff_api_signature_passing_time_in_pocket`
+## pff_api_signature_passing_time_in_pocket
 
 Signature stat: time in pocket
 
@@ -6627,7 +6628,7 @@ Signature stat: time in pocket
 | `season` | `season` |  | `Y` |  | Season, and the SECOND positional argument of the four signature commands. |
 | `week` | `week` |  | `Y` |  | Week, and the THIRD positional argument of the four signature commands. |
 
-### Returns
+### Returns {#pff_api_signature_passing_time_in_pocket-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -6750,7 +6751,7 @@ Signature stat: time in pocket
 
 **`return_parsed=False`** — The decoded JSON body. /v1 routes return the Premium Stats envelope (`{report_slug: rows}`); /v2 routes return `{..meta.., columns, rows}`..
 
-### Example
+### Example {#pff_api_signature_passing_time_in_pocket-example}
 
 ```python
 pff_api_signature_passing_time_in_pocket(league='nfl', season='2022', week='1')
@@ -6758,7 +6759,7 @@ pff_api_signature_passing_time_in_pocket(league='nfl', season='2022', week='1')
 
 _Last validated n/a._
 
-## `pff_api_signature_pass_blocking_efficiency_line`
+## pff_api_signature_pass_blocking_efficiency_line
 
 Signature stat: pass-blocking efficiency, by line
 
@@ -6772,7 +6773,7 @@ Signature stat: pass-blocking efficiency, by line
 | `season` | `season` |  | `Y` |  | Season, and the SECOND positional argument of the four signature commands. |
 | `week` | `week` |  | `Y` |  | Week, and the THIRD positional argument of the four signature commands. |
 
-### Returns
+### Returns {#pff_api_signature_pass_blocking_efficiency_line-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -6791,7 +6792,7 @@ Signature stat: pass-blocking efficiency, by line
 
 **`return_parsed=False`** — The decoded JSON body. /v1 routes return the Premium Stats envelope (`{report_slug: rows}`); /v2 routes return `{..meta.., columns, rows}`..
 
-### Example
+### Example {#pff_api_signature_pass_blocking_efficiency_line-example}
 
 ```python
 pff_api_signature_pass_blocking_efficiency_line(league='nfl', season='2022', week='1')
@@ -6799,7 +6800,7 @@ pff_api_signature_pass_blocking_efficiency_line(league='nfl', season='2022', wee
 
 _Last validated n/a._
 
-## `pff_api_signature_defense_outside_pass_rush`
+## pff_api_signature_defense_outside_pass_rush
 
 Signature stat: outside pass rush
 
@@ -6813,7 +6814,7 @@ Signature stat: outside pass rush
 | `season` | `season` |  | `Y` |  | Season, and the SECOND positional argument of the four signature commands. |
 | `week` | `week` |  | `Y` |  | Week, and the THIRD positional argument of the four signature commands. |
 
-### Returns
+### Returns {#pff_api_signature_defense_outside_pass_rush-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -6865,7 +6866,7 @@ Signature stat: outside pass rush
 
 **`return_parsed=False`** — The decoded JSON body. /v1 routes return the Premium Stats envelope (`{report_slug: rows}`); /v2 routes return `{..meta.., columns, rows}`..
 
-### Example
+### Example {#pff_api_signature_defense_outside_pass_rush-example}
 
 ```python
 pff_api_signature_defense_outside_pass_rush(league='nfl', season='2022', week='1')
@@ -6873,7 +6874,7 @@ pff_api_signature_defense_outside_pass_rush(league='nfl', season='2022', week='1
 
 _Last validated n/a._
 
-## `pff_api_signature_defense_slot_coverage`
+## pff_api_signature_defense_slot_coverage
 
 Signature stat: slot coverage
 
@@ -6887,7 +6888,7 @@ Signature stat: slot coverage
 | `season` | `season` |  | `Y` |  | Season, and the SECOND positional argument of the four signature commands. |
 | `week` | `week` |  | `Y` |  | Week, and the THIRD positional argument of the four signature commands. |
 
-### Returns
+### Returns {#pff_api_signature_defense_slot_coverage-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -6916,7 +6917,7 @@ Signature stat: slot coverage
 
 **`return_parsed=False`** — The decoded JSON body. /v1 routes return the Premium Stats envelope (`{report_slug: rows}`); /v2 routes return `{..meta.., columns, rows}`..
 
-### Example
+### Example {#pff_api_signature_defense_slot_coverage-example}
 
 ```python
 pff_api_signature_defense_slot_coverage(league='nfl', season='2022', week='1')
@@ -6924,7 +6925,7 @@ pff_api_signature_defense_slot_coverage(league='nfl', season='2022', week='1')
 
 _Last validated n/a._
 
-## `pff_api_whoami`
+## pff_api_whoami
 
 Show what this API believes about the current credential
 
@@ -6935,11 +6936,11 @@ Show what this API believes about the current credential
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 
-### Returns
+### Returns {#pff_api_whoami-returns}
 
 Show what this API believes about the current credential
 
-### Example
+### Example {#pff_api_whoami-example}
 
 ```python
 pff_api_whoami()
@@ -6947,7 +6948,7 @@ pff_api_whoami()
 
 _Last validated n/a._
 
-## `pff_api_position_report`
+## pff_api_position_report
 
 One of nineteen player reports for the whole league, one row per player
 
@@ -6964,7 +6965,7 @@ One of nineteen player reports for the whole league, one row per player
 | `week` | `week` |  |  | `Y` | Narrow the report to one week of the weekGroup — or, with weekTo, to a span of weeks. |
 | `weekTo` | `week_to` |  |  | `Y` | The last week of a span that starts at week; requires week. |
 
-### Returns
+### Returns {#pff_api_position_report-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **offense**
@@ -8613,7 +8614,7 @@ One of nineteen player reports for the whole league, one row per player
 
 **`return_parsed=False`** — The decoded JSON body. /v1 routes return the Premium Stats envelope (`{report_slug: rows}`); /v2 routes return `{..meta.., columns, rows}`..
 
-### Example
+### Example {#pff_api_position_report-example}
 
 ```python
 pff_api_position_report(league='nfl', report='offense', season=2022)
@@ -8621,7 +8622,7 @@ pff_api_position_report(league='nfl', report='offense', season=2022)
 
 _Last validated n/a._
 
-## `pff_api_team_directory`
+## pff_api_team_directory
 
 The league's teams for a season, with ids, slugs, colours and groups
 
@@ -8634,7 +8635,7 @@ The league's teams for a season, with ids, slugs, colours and groups
 | `league` | `league` |  | `Y` |  | League slug: nfl or ncaa. |
 | `season` | `season` |  |  | `Y` | Season, as a four-digit year: 2006 or later, and at most one year past the current season. |
 
-### Returns
+### Returns {#pff_api_team_directory-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -8651,7 +8652,7 @@ The league's teams for a season, with ids, slugs, colours and groups
 
 **`return_parsed=False`** — The decoded JSON body. /v1 routes return the Premium Stats envelope (`{report_slug: rows}`); /v2 routes return `{..meta.., columns, rows}`..
 
-### Example
+### Example {#pff_api_team_directory-example}
 
 ```python
 pff_api_team_directory(league='nfl', season=2022)
@@ -8659,7 +8660,7 @@ pff_api_team_directory(league='nfl', season=2022)
 
 _Last validated n/a._
 
-## `pff_api_team_stats`
+## pff_api_team_stats
 
 Team stats table for one category, every value ranked against the scope
 
@@ -8676,7 +8677,7 @@ Team stats table for one category, every value ranked against the scope
 | `category` | `category` |  |  | `Y` | Which stat category the table covers. |
 | `scope` | `scope` |  |  | `Y` | Which teams the ranks are computed against — and which rows come back: league (every team, the default), a conference (afc, nfc) or a division (afc-east … nfc-west). |
 
-### Returns
+### Returns {#pff_api_team_stats-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **offense-overall-success**
@@ -8943,7 +8944,7 @@ Team stats table for one category, every value ranked against the scope
 
 **`return_parsed=False`** — The decoded JSON body. /v1 routes return the Premium Stats envelope (`{report_slug: rows}`); /v2 routes return `{..meta.., columns, rows}`..
 
-### Example
+### Example {#pff_api_team_stats-example}
 
 ```python
 pff_api_team_stats(league='nfl', season=2022)
@@ -8951,7 +8952,7 @@ pff_api_team_stats(league='nfl', season=2022)
 
 _Last validated n/a._
 
-## `pff_api_team_roster`
+## pff_api_team_roster
 
 A team's depth-chart roster with grades, ranks and snap counts
 
@@ -8965,7 +8966,7 @@ A team's depth-chart roster with grades, ranks and snap counts
 | `team` | `team` |  | `Y` |  | The team, as its slug (los-angeles-rams) or its numeric franchise id (26) — both resolve through the league's team directory for the season, and both produce the same answer. |
 | `season` | `season` |  |  | `Y` | Season, as a four-digit year: 2006 or later, and at most one year past the current season. |
 
-### Returns
+### Returns {#pff_api_team_roster-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -8990,7 +8991,7 @@ A team's depth-chart roster with grades, ranks and snap counts
 
 **`return_parsed=False`** — The decoded JSON body. /v1 routes return the Premium Stats envelope (`{report_slug: rows}`); /v2 routes return `{..meta.., columns, rows}`..
 
-### Example
+### Example {#pff_api_team_roster-example}
 
 ```python
 pff_api_team_roster(league='nfl', season=2022, team='cincinnati-bengals')
@@ -8998,7 +8999,7 @@ pff_api_team_roster(league='nfl', season=2022, team='cincinnati-bengals')
 
 _Last validated n/a._
 
-## `pff_api_team_schedule`
+## pff_api_team_schedule
 
 A team's season schedule, with results and strength of schedule
 
@@ -9012,7 +9013,7 @@ A team's season schedule, with results and strength of schedule
 | `team` | `team` |  | `Y` |  | The team, as its slug (los-angeles-rams) or its numeric franchise id (26) — both resolve through the league's team directory for the season, and both produce the same answer. |
 | `season` | `season` |  |  | `Y` | Season, as a four-digit year: 2006 or later, and at most one year past the current season. |
 
-### Returns
+### Returns {#pff_api_team_schedule-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -9038,7 +9039,7 @@ A team's season schedule, with results and strength of schedule
 
 **`return_parsed=False`** — The decoded JSON body. /v1 routes return the Premium Stats envelope (`{report_slug: rows}`); /v2 routes return `{..meta.., columns, rows}`..
 
-### Example
+### Example {#pff_api_team_schedule-example}
 
 ```python
 pff_api_team_schedule(league='nfl', season=2022, team='cincinnati-bengals')
@@ -9046,7 +9047,7 @@ pff_api_team_schedule(league='nfl', season=2022, team='cincinnati-bengals')
 
 _Last validated n/a._
 
-## `pff_api_team_leaders`
+## pff_api_team_leaders
 
 A team's leaders for one position group, with rank and percentile
 
@@ -9062,7 +9063,7 @@ A team's leaders for one position group, with rank and percentile
 | `weekGroup` | `week_group` |  |  | `Y` | Which part of the season to cover: REG (regular season), PO (playoffs) or REGPO (both, the default). |
 | `group` | `group` |  |  | `Y` | Which position group the leaders come from — receiving (the default), passing, rushing or defense. |
 
-### Returns
+### Returns {#pff_api_team_leaders-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **receiving**
@@ -9295,7 +9296,7 @@ A team's leaders for one position group, with rank and percentile
 
 **`return_parsed=False`** — The decoded JSON body. /v1 routes return the Premium Stats envelope (`{report_slug: rows}`); /v2 routes return `{..meta.., columns, rows}`..
 
-### Example
+### Example {#pff_api_team_leaders-example}
 
 ```python
 pff_api_team_leaders(league='nfl', season=2022, team='cincinnati-bengals')
@@ -9303,7 +9304,7 @@ pff_api_team_leaders(league='nfl', season=2022, team='cincinnati-bengals')
 
 _Last validated n/a._
 
-## `pff_api_team_rushing_direction`
+## pff_api_team_rushing_direction
 
 A team's rushing by direction, one row per rusher and gap, plus totals
 
@@ -9318,7 +9319,7 @@ A team's rushing by direction, one row per rusher and gap, plus totals
 | `season` | `season` |  |  | `Y` | Season, as a four-digit year: 2006 or later, and at most one year past the current season. |
 | `weekGroup` | `week_group` |  |  | `Y` | Which part of the season to cover: REG (regular season), PO (playoffs) or REGPO (both, the default). |
 
-### Returns
+### Returns {#pff_api_team_rushing_direction-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -9341,7 +9342,7 @@ A team's rushing by direction, one row per rusher and gap, plus totals
 
 **`return_parsed=False`** — The decoded JSON body. /v1 routes return the Premium Stats envelope (`{report_slug: rows}`); /v2 routes return `{..meta.., columns, rows}`..
 
-### Example
+### Example {#pff_api_team_rushing_direction-example}
 
 ```python
 pff_api_team_rushing_direction(league='nfl', season=2022, team='cincinnati-bengals')
@@ -9349,7 +9350,7 @@ pff_api_team_rushing_direction(league='nfl', season=2022, team='cincinnati-benga
 
 _Last validated n/a._
 
-## `pff_api_team_report`
+## pff_api_team_report
 
 One of nineteen player reports for a team, one row per player
 
@@ -9367,7 +9368,7 @@ One of nineteen player reports for a team, one row per player
 | `week` | `week` |  |  | `Y` | Narrow the report to one week of the weekGroup — or, with weekTo, to a span of weeks. |
 | `weekTo` | `week_to` |  |  | `Y` | The last week of a span that starts at week; requires week. |
 
-### Returns
+### Returns {#pff_api_team_report-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **offense**
@@ -10993,7 +10994,7 @@ One of nineteen player reports for a team, one row per player
 
 **`return_parsed=False`** — The decoded JSON body. /v1 routes return the Premium Stats envelope (`{report_slug: rows}`); /v2 routes return `{..meta.., columns, rows}`..
 
-### Example
+### Example {#pff_api_team_report-example}
 
 ```python
 pff_api_team_report(league='nfl', report='offense', season=2022, team='cincinnati-bengals')

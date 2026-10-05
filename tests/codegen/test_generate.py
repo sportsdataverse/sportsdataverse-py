@@ -314,7 +314,7 @@ def test_loader_notes_reach_the_docstring_and_the_page():
             }
         ],
     )
-    assert ":::caution Coverage" in page
+    assert ":::caution[Coverage]" in page
     assert "45.7% populated in 2007" in page
 
 

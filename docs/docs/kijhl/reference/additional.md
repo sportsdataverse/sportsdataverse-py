@@ -11,13 +11,17 @@ not covered by the generated API-endpoint reference above.
 
 ## Utilities & helpers
 
-### `most_recent_kijhl_season() -> 'int'` {#most_recent_kijhl_season}
+### most_recent_kijhl_season {#most_recent_kijhl_season}
+
+`most_recent_kijhl_season() -> 'int'`
 
 Most-recent KIJHL season as an end-year integer (max `season_yr`), or 2026.
 
 ## Other
 
-### `build_family(league: 'str') -> 'dict[str, Any]'` {#build_family}
+### build_family {#build_family}
+
+`build_family(league: 'str') -> 'dict[str, Any]'`
 
 Return a dict of public callables for *league*.
 
@@ -35,7 +39,9 @@ a module namespace via `globals().update(...)`.
 
 Keys are the public function names (e.g. `"ahl_schedule"`).
 
-### `kijhl_game_corsi(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'` {#kijhl_game_corsi}
+### kijhl_game_corsi {#kijhl_game_corsi}
+
+`kijhl_game_corsi(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'`
 
 Player-level on-ice Corsi and Fenwick for a single KIJHL game.
 
@@ -46,7 +52,9 @@ Player-level on-ice Corsi and Fenwick for a single KIJHL game.
 | `game_id` | `int` |  |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
-### `kijhl_game_shifts(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'` {#kijhl_game_shifts}
+### kijhl_game_shifts {#kijhl_game_shifts}
+
+`kijhl_game_shifts(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'`
 
 Parsed shift stints for a single KIJHL game.
 
@@ -57,7 +65,9 @@ Parsed shift stints for a single KIJHL game.
 | `game_id` | `int` |  |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
-### `kijhl_game_summary(game_id: 'int') -> 'dict'` {#kijhl_game_summary}
+### kijhl_game_summary {#kijhl_game_summary}
+
+`kijhl_game_summary(game_id: 'int') -> 'dict'`
 
 KIJHL game summary — dict of frames (game/goals/penalties/shots_by_period/three_stars).
 
@@ -67,7 +77,9 @@ KIJHL game summary — dict of frames (game/goals/penalties/shots_by_period/thre
 |---|---|---|---|
 | `game_id` | `int` |  |  |
 
-### `kijhl_leaders(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'` {#kijhl_leaders}
+### kijhl_leaders {#kijhl_leaders}
+
+`kijhl_leaders(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'`
 
 KIJHL statistical leaders for a given season.
 
@@ -79,7 +91,9 @@ KIJHL statistical leaders for a given season.
 | `season_id` | `Optional[int]` | `None` |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
-### `kijhl_pbp(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'` {#kijhl_pbp}
+### kijhl_pbp {#kijhl_pbp}
+
+`kijhl_pbp(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'`
 
 KIJHL play-by-play — one row per event, fully enriched.
 
@@ -90,7 +104,9 @@ KIJHL play-by-play — one row per event, fully enriched.
 | `game_id` | `int` |  |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
-### `kijhl_player_stats(player_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'` {#kijhl_player_stats}
+### kijhl_player_stats {#kijhl_player_stats}
+
+`kijhl_player_stats(player_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'`
 
 KIJHL player season stats across all seasons.
 
@@ -101,7 +117,9 @@ KIJHL player season stats across all seasons.
 | `player_id` | `int` |  |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
-### `kijhl_player_toi(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'` {#kijhl_player_toi}
+### kijhl_player_toi {#kijhl_player_toi}
+
+`kijhl_player_toi(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'`
 
 Per-player time-on-ice totals for a single KIJHL game.
 
@@ -112,7 +130,9 @@ Per-player time-on-ice totals for a single KIJHL game.
 | `game_id` | `int` |  |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
-### `kijhl_schedule(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'` {#kijhl_schedule}
+### kijhl_schedule {#kijhl_schedule}
+
+`kijhl_schedule(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'`
 
 KIJHL schedule — one row per game.
 
@@ -142,7 +162,9 @@ KIJHL schedule — one row per game.
 | `season_id` | character | Unique season identifier. |
 | `game_type` | character | The most recent game type of that season that a player appeared on the roster. |
 
-### `kijhl_season_id(return_as_pandas: 'bool' = False) -> 'Any'` {#kijhl_season_id}
+### kijhl_season_id {#kijhl_season_id}
+
+`kijhl_season_id(return_as_pandas: 'bool' = False) -> 'Any'`
 
 All KIJHL seasons with end-year + game-type labels.
 
@@ -167,7 +189,9 @@ All KIJHL seasons with end-year + game-type labels.
 | `season_yr` | integer | Year derived from the season name (concluding year). |
 | `game_type_label` | character | Game type: "preseason", "regular", or "playoffs". |
 
-### `kijhl_standings(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'` {#kijhl_standings}
+### kijhl_standings {#kijhl_standings}
+
+`kijhl_standings(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'`
 
 KIJHL standings — one row per team.
 
@@ -179,7 +203,9 @@ KIJHL standings — one row per team.
 | `season_id` | `Optional[int]` | `None` |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
-### `kijhl_team_roster(team_id: 'int', season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'` {#kijhl_team_roster}
+### kijhl_team_roster {#kijhl_team_roster}
+
+`kijhl_team_roster(team_id: 'int', season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'`
 
 KIJHL team roster for a given team + season.
 
@@ -192,7 +218,9 @@ KIJHL team roster for a given team + season.
 | `season_id` | `Optional[int]` | `None` |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
-### `kijhl_teams(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'` {#kijhl_teams}
+### kijhl_teams {#kijhl_teams}
+
+`kijhl_teams(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'`
 
 KIJHL teams for a given season.
 

@@ -11,13 +11,17 @@ not covered by the generated API-endpoint reference above.
 
 ## Utilities & helpers
 
-### `most_recent_ojhl_season() -> 'int'` {#most_recent_ojhl_season}
+### most_recent_ojhl_season {#most_recent_ojhl_season}
+
+`most_recent_ojhl_season() -> 'int'`
 
 Most-recent OJHL season as an end-year integer (max `season_yr`), or 2026.
 
 ## Other
 
-### `build_family(league: 'str') -> 'dict[str, Any]'` {#build_family}
+### build_family {#build_family}
+
+`build_family(league: 'str') -> 'dict[str, Any]'`
 
 Return a dict of public callables for *league*.
 
@@ -35,7 +39,9 @@ a module namespace via `globals().update(...)`.
 
 Keys are the public function names (e.g. `"ahl_schedule"`).
 
-### `ojhl_game_corsi(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'` {#ojhl_game_corsi}
+### ojhl_game_corsi {#ojhl_game_corsi}
+
+`ojhl_game_corsi(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'`
 
 Player-level on-ice Corsi and Fenwick for a single OJHL game.
 
@@ -46,7 +52,9 @@ Player-level on-ice Corsi and Fenwick for a single OJHL game.
 | `game_id` | `int` |  |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
-### `ojhl_game_shifts(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'` {#ojhl_game_shifts}
+### ojhl_game_shifts {#ojhl_game_shifts}
+
+`ojhl_game_shifts(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'`
 
 Parsed shift stints for a single OJHL game.
 
@@ -57,7 +65,9 @@ Parsed shift stints for a single OJHL game.
 | `game_id` | `int` |  |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
-### `ojhl_game_summary(game_id: 'int') -> 'dict'` {#ojhl_game_summary}
+### ojhl_game_summary {#ojhl_game_summary}
+
+`ojhl_game_summary(game_id: 'int') -> 'dict'`
 
 OJHL game summary — dict of frames (game/goals/penalties/shots_by_period/three_stars).
 
@@ -67,7 +77,9 @@ OJHL game summary — dict of frames (game/goals/penalties/shots_by_period/three
 |---|---|---|---|
 | `game_id` | `int` |  |  |
 
-### `ojhl_leaders(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'` {#ojhl_leaders}
+### ojhl_leaders {#ojhl_leaders}
+
+`ojhl_leaders(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'`
 
 OJHL statistical leaders for a given season.
 
@@ -100,7 +112,9 @@ OJHL statistical leaders for a given season.
 | `position` | character | Listed roster position (G, F, C, etc.). |
 | `division` | character | Team division. |
 
-### `ojhl_pbp(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'` {#ojhl_pbp}
+### ojhl_pbp {#ojhl_pbp}
+
+`ojhl_pbp(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'`
 
 OJHL play-by-play — one row per event, fully enriched.
 
@@ -111,7 +125,9 @@ OJHL play-by-play — one row per event, fully enriched.
 | `game_id` | `int` |  |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
-### `ojhl_player_stats(player_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'` {#ojhl_player_stats}
+### ojhl_player_stats {#ojhl_player_stats}
+
+`ojhl_player_stats(player_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'`
 
 OJHL player season stats across all seasons.
 
@@ -122,7 +138,9 @@ OJHL player season stats across all seasons.
 | `player_id` | `int` |  |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
-### `ojhl_player_toi(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'` {#ojhl_player_toi}
+### ojhl_player_toi {#ojhl_player_toi}
+
+`ojhl_player_toi(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'`
 
 Per-player time-on-ice totals for a single OJHL game.
 
@@ -133,7 +151,9 @@ Per-player time-on-ice totals for a single OJHL game.
 | `game_id` | `int` |  |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
-### `ojhl_schedule(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'` {#ojhl_schedule}
+### ojhl_schedule {#ojhl_schedule}
+
+`ojhl_schedule(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'`
 
 OJHL schedule — one row per game.
 
@@ -163,7 +183,9 @@ OJHL schedule — one row per game.
 | `season_id` | character | Unique season identifier. |
 | `game_type` | character | The most recent game type of that season that a player appeared on the roster. |
 
-### `ojhl_season_id(return_as_pandas: 'bool' = False) -> 'Any'` {#ojhl_season_id}
+### ojhl_season_id {#ojhl_season_id}
+
+`ojhl_season_id(return_as_pandas: 'bool' = False) -> 'Any'`
 
 All OJHL seasons with end-year + game-type labels.
 
@@ -188,7 +210,9 @@ All OJHL seasons with end-year + game-type labels.
 | `season_yr` | double | Year derived from the season name (concluding year). |
 | `game_type_label` | character | Game type: "preseason", "regular", or "playoffs". |
 
-### `ojhl_standings(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'` {#ojhl_standings}
+### ojhl_standings {#ojhl_standings}
+
+`ojhl_standings(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'`
 
 OJHL standings — one row per team.
 
@@ -223,7 +247,9 @@ OJHL standings — one row per team.
 | `team_rank` | integer | Team rank in the standings. |
 | `team` | character | Team-side label or team identifier. |
 
-### `ojhl_team_roster(team_id: 'int', season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'` {#ojhl_team_roster}
+### ojhl_team_roster {#ojhl_team_roster}
+
+`ojhl_team_roster(team_id: 'int', season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'`
 
 OJHL team roster for a given team + season.
 
@@ -236,7 +262,9 @@ OJHL team roster for a given team + season.
 | `season_id` | `Optional[int]` | `None` |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
-### `ojhl_teams(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'` {#ojhl_teams}
+### ojhl_teams {#ojhl_teams}
+
+`ojhl_teams(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'`
 
 OJHL teams for a given season.
 

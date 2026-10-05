@@ -11,13 +11,17 @@ not covered by the generated API-endpoint reference above.
 
 ## Utilities & helpers
 
-### `most_recent_mhl_season() -> 'int'` {#most_recent_mhl_season}
+### most_recent_mhl_season {#most_recent_mhl_season}
+
+`most_recent_mhl_season() -> 'int'`
 
 Most-recent MHL season as an end-year integer (max `season_yr`), or 2026.
 
 ## Other
 
-### `build_family(league: 'str') -> 'dict[str, Any]'` {#build_family}
+### build_family {#build_family}
+
+`build_family(league: 'str') -> 'dict[str, Any]'`
 
 Return a dict of public callables for *league*.
 
@@ -35,7 +39,9 @@ a module namespace via `globals().update(...)`.
 
 Keys are the public function names (e.g. `"ahl_schedule"`).
 
-### `mhl_game_corsi(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'` {#mhl_game_corsi}
+### mhl_game_corsi {#mhl_game_corsi}
+
+`mhl_game_corsi(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'`
 
 Player-level on-ice Corsi and Fenwick for a single MHL game.
 
@@ -46,7 +52,9 @@ Player-level on-ice Corsi and Fenwick for a single MHL game.
 | `game_id` | `int` |  |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
-### `mhl_game_shifts(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'` {#mhl_game_shifts}
+### mhl_game_shifts {#mhl_game_shifts}
+
+`mhl_game_shifts(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'`
 
 Parsed shift stints for a single MHL game.
 
@@ -57,7 +65,9 @@ Parsed shift stints for a single MHL game.
 | `game_id` | `int` |  |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
-### `mhl_game_summary(game_id: 'int') -> 'dict'` {#mhl_game_summary}
+### mhl_game_summary {#mhl_game_summary}
+
+`mhl_game_summary(game_id: 'int') -> 'dict'`
 
 MHL game summary — dict of frames (game/goals/penalties/shots_by_period/three_stars).
 
@@ -67,7 +77,9 @@ MHL game summary — dict of frames (game/goals/penalties/shots_by_period/three_
 |---|---|---|---|
 | `game_id` | `int` |  |  |
 
-### `mhl_leaders(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'` {#mhl_leaders}
+### mhl_leaders {#mhl_leaders}
+
+`mhl_leaders(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'`
 
 MHL statistical leaders for a given season.
 
@@ -100,7 +112,9 @@ MHL statistical leaders for a given season.
 | `position` | character | Listed roster position (G, F, C, etc.). |
 | `division` | character | Team division. |
 
-### `mhl_pbp(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'` {#mhl_pbp}
+### mhl_pbp {#mhl_pbp}
+
+`mhl_pbp(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'`
 
 MHL play-by-play — one row per event, fully enriched.
 
@@ -111,7 +125,9 @@ MHL play-by-play — one row per event, fully enriched.
 | `game_id` | `int` |  |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
-### `mhl_player_stats(player_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'` {#mhl_player_stats}
+### mhl_player_stats {#mhl_player_stats}
+
+`mhl_player_stats(player_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'`
 
 MHL player season stats across all seasons.
 
@@ -122,7 +138,9 @@ MHL player season stats across all seasons.
 | `player_id` | `int` |  |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
-### `mhl_player_toi(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'` {#mhl_player_toi}
+### mhl_player_toi {#mhl_player_toi}
+
+`mhl_player_toi(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'`
 
 Per-player time-on-ice totals for a single MHL game.
 
@@ -133,7 +151,9 @@ Per-player time-on-ice totals for a single MHL game.
 | `game_id` | `int` |  |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
-### `mhl_schedule(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'` {#mhl_schedule}
+### mhl_schedule {#mhl_schedule}
+
+`mhl_schedule(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'`
 
 MHL schedule — one row per game.
 
@@ -163,7 +183,9 @@ MHL schedule — one row per game.
 | `season_id` | character | Unique season identifier. |
 | `game_type` | character | The most recent game type of that season that a player appeared on the roster. |
 
-### `mhl_season_id(return_as_pandas: 'bool' = False) -> 'Any'` {#mhl_season_id}
+### mhl_season_id {#mhl_season_id}
+
+`mhl_season_id(return_as_pandas: 'bool' = False) -> 'Any'`
 
 All MHL seasons with end-year + game-type labels.
 
@@ -188,7 +210,9 @@ All MHL seasons with end-year + game-type labels.
 | `season_yr` | integer | Year derived from the season name (concluding year). |
 | `game_type_label` | character | Game type: "preseason", "regular", or "playoffs". |
 
-### `mhl_standings(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'` {#mhl_standings}
+### mhl_standings {#mhl_standings}
+
+`mhl_standings(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'`
 
 MHL standings — one row per team.
 
@@ -225,7 +249,9 @@ MHL standings — one row per team.
 | `past_10` | character | Record over the team's most recent 10 games (feed header 'Past 10 Games') as a hyphenated string: W-L-OTL-SOL when four parts are shipped (e.g. '2-0-0-1'), W-L-OTL when three are (e.g. '0-2-1'). |
 | `team` | character | Team-side label or team identifier. |
 
-### `mhl_team_roster(team_id: 'int', season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'` {#mhl_team_roster}
+### mhl_team_roster {#mhl_team_roster}
+
+`mhl_team_roster(team_id: 'int', season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'`
 
 MHL team roster for a given team + season.
 
@@ -238,7 +264,9 @@ MHL team roster for a given team + season.
 | `season_id` | `Optional[int]` | `None` |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
-### `mhl_teams(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'` {#mhl_teams}
+### mhl_teams {#mhl_teams}
+
+`mhl_teams(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'`
 
 MHL teams for a given season.
 

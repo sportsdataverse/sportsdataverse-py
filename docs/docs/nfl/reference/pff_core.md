@@ -3,12 +3,13 @@ title: NFL — PFF Premium Stats -- LEGACY (premium.pff.com, cookie auth; use th
 sidebar_label: PFF Premium Stats -- LEGACY (premium.pff.com, cookie auth; use the PFF Developer API)
 description: "NFL — PFF Premium Stats -- LEGACY (premium.pff.com, cookie auth; use the PFF Developer API) — endpoint reference in sdv-py, the SportsDataverse Python package."
 sidebar_position: 12
+toc_max_heading_level: 2
 ---
 # NFL — PFF Premium Stats -- LEGACY (premium.pff.com, cookie auth; use the PFF Developer API)
 
 `sportsdataverse.nfl` — 46 endpoints.
 
-## `pff_facet_run_defense_summary`
+## pff_facet_run_defense_summary
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /defense/run (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -25,7 +26,7 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 | `gameId` | `game_id` |  |  | `Y` | PFF game id; filters a report 'By Game'. |
 | `division` | `division` |  |  | `Y` | Division filter (NCAA). |
 
-### Returns
+### Returns {#pff_facet_run_defense_summary-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -61,7 +62,7 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#pff_facet_run_defense_summary-example}
 
 ```python
 pff_facet_run_defense_summary()
@@ -69,7 +70,7 @@ pff_facet_run_defense_summary()
 
 _Last validated n/a._
 
-## `pff_facet_field_goal_summary`
+## pff_facet_field_goal_summary
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /field_goal/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -86,7 +87,7 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 | `gameId` | `game_id` |  |  | `Y` | PFF game id; filters a report 'By Game'. |
 | `division` | `division` |  |  | `Y` | Division filter (NCAA). |
 
-### Returns
+### Returns {#pff_facet_field_goal_summary-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -128,7 +129,7 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#pff_facet_field_goal_summary-example}
 
 ```python
 pff_facet_field_goal_summary()
@@ -136,7 +137,7 @@ pff_facet_field_goal_summary()
 
 _Last validated n/a._
 
-## `pff_facet_coverage_summary`
+## pff_facet_coverage_summary
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /defense/coverage (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -153,7 +154,7 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 | `gameId` | `game_id` |  |  | `Y` | PFF game id; filters a report 'By Game'. |
 | `division` | `division` |  |  | `Y` | Division filter (NCAA). |
 
-### Returns
+### Returns {#pff_facet_coverage_summary-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -205,7 +206,7 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#pff_facet_coverage_summary-example}
 
 ```python
 pff_facet_coverage_summary()
@@ -213,7 +214,7 @@ pff_facet_coverage_summary()
 
 _Last validated n/a._
 
-## `pff_facet_kicking_summary`
+## pff_facet_kicking_summary
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /kickoff/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -230,7 +231,7 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 | `gameId` | `game_id` |  |  | `Y` | PFF game id; filters a report 'By Game'. |
 | `division` | `division` |  |  | `Y` | Division filter (NCAA). |
 
-### Returns
+### Returns {#pff_facet_kicking_summary-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -265,7 +266,7 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#pff_facet_kicking_summary-example}
 
 ```python
 pff_facet_kicking_summary()
@@ -273,7 +274,7 @@ pff_facet_kicking_summary()
 
 _Last validated n/a._
 
-## `pff_facet_blocking_summary`
+## pff_facet_blocking_summary
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /offense/blocking (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -290,7 +291,7 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 | `gameId` | `game_id` |  |  | `Y` | PFF game id; filters a report 'By Game'. |
 | `division` | `division` |  |  | `Y` | Division filter (NCAA). |
 
-### Returns
+### Returns {#pff_facet_blocking_summary-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -333,7 +334,7 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#pff_facet_blocking_summary-example}
 
 ```python
 pff_facet_blocking_summary()
@@ -341,7 +342,7 @@ pff_facet_blocking_summary()
 
 _Last validated n/a._
 
-## `pff_facet_defense_summary`
+## pff_facet_defense_summary
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /defense/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -358,7 +359,7 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 | `gameId` | `game_id` |  |  | `Y` | PFF game id; filters a report 'By Game'. |
 | `division` | `division` |  |  | `Y` | Division filter (NCAA). |
 
-### Returns
+### Returns {#pff_facet_defense_summary-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -425,7 +426,7 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#pff_facet_defense_summary-example}
 
 ```python
 pff_facet_defense_summary()
@@ -433,7 +434,7 @@ pff_facet_defense_summary()
 
 _Last validated n/a._
 
-## `pff_facet_offense_summary`
+## pff_facet_offense_summary
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /offense/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -450,7 +451,7 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 | `gameId` | `game_id` |  |  | `Y` | PFF game id; filters a report 'By Game'. |
 | `division` | `division` |  |  | `Y` | Division filter (NCAA). |
 
-### Returns
+### Returns {#pff_facet_offense_summary-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -486,7 +487,7 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#pff_facet_offense_summary-example}
 
 ```python
 pff_facet_offense_summary()
@@ -494,7 +495,7 @@ pff_facet_offense_summary()
 
 _Last validated n/a._
 
-## `pff_facet_passing_allowed_pressure`
+## pff_facet_passing_allowed_pressure
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /passing/allowed_pressure (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -511,7 +512,7 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 | `gameId` | `game_id` |  |  | `Y` | PFF game id; filters a report 'By Game'. |
 | `division` | `division` |  |  | `Y` | Division filter (NCAA). |
 
-### Returns
+### Returns {#pff_facet_passing_allowed_pressure-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -555,7 +556,7 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#pff_facet_passing_allowed_pressure-example}
 
 ```python
 pff_facet_passing_allowed_pressure()
@@ -563,7 +564,7 @@ pff_facet_passing_allowed_pressure()
 
 _Last validated n/a._
 
-## `pff_facet_pass_rush_summary`
+## pff_facet_pass_rush_summary
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /defense/pass_rush (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -580,7 +581,7 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 | `gameId` | `game_id` |  |  | `Y` | PFF game id; filters a report 'By Game'. |
 | `division` | `division` |  |  | `Y` | Division filter (NCAA). |
 
-### Returns
+### Returns {#pff_facet_pass_rush_summary-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -626,7 +627,7 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#pff_facet_pass_rush_summary-example}
 
 ```python
 pff_facet_pass_rush_summary()
@@ -634,7 +635,7 @@ pff_facet_pass_rush_summary()
 
 _Last validated n/a._
 
-## `pff_facet_passing_concept`
+## pff_facet_passing_concept
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /passing/concept (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -651,7 +652,7 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 | `gameId` | `game_id` |  |  | `Y` | PFF game id; filters a report 'By Game'. |
 | `division` | `division` |  |  | `Y` | Division filter (NCAA). |
 
-### Returns
+### Returns {#pff_facet_passing_concept-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -874,7 +875,7 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#pff_facet_passing_concept-example}
 
 ```python
 pff_facet_passing_concept()
@@ -882,7 +883,7 @@ pff_facet_passing_concept()
 
 _Last validated n/a._
 
-## `pff_facet_coverage_scheme`
+## pff_facet_coverage_scheme
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /defense/coverage_scheme (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -899,7 +900,7 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 | `gameId` | `game_id` |  |  | `Y` | PFF game id; filters a report 'By Game'. |
 | `division` | `division` |  |  | `Y` | Division filter (NCAA). |
 
-### Returns
+### Returns {#pff_facet_coverage_scheme-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -976,7 +977,7 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#pff_facet_coverage_scheme-example}
 
 ```python
 pff_facet_coverage_scheme()
@@ -984,7 +985,7 @@ pff_facet_coverage_scheme()
 
 _Last validated n/a._
 
-## `pff_facet_passing_detail_stats`
+## pff_facet_passing_detail_stats
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /passing/detail (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -1001,7 +1002,7 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 | `gameId` | `game_id` |  |  | `Y` | PFF game id; filters a report 'By Game'. |
 | `division` | `division` |  |  | `Y` | Division filter (NCAA). |
 
-### Returns
+### Returns {#pff_facet_passing_detail_stats-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1957,7 +1958,7 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#pff_facet_passing_detail_stats-example}
 
 ```python
 pff_facet_passing_detail_stats()
@@ -1965,7 +1966,7 @@ pff_facet_passing_detail_stats()
 
 _Last validated n/a._
 
-## `pff_facet_run_blocking`
+## pff_facet_run_blocking
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /offense/run_blocking (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -1982,7 +1983,7 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 | `gameId` | `game_id` |  |  | `Y` | PFF game id; filters a report 'By Game'. |
 | `division` | `division` |  |  | `Y` | Division filter (NCAA). |
 
-### Returns
+### Returns {#pff_facet_run_blocking-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -2016,7 +2017,7 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#pff_facet_run_blocking-example}
 
 ```python
 pff_facet_run_blocking()
@@ -2024,7 +2025,7 @@ pff_facet_run_blocking()
 
 _Last validated n/a._
 
-## `pff_facet_pass_blocking`
+## pff_facet_pass_blocking
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /offense/pass_blocking (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -2041,7 +2042,7 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 | `gameId` | `game_id` |  |  | `Y` | PFF game id; filters a report 'By Game'. |
 | `division` | `division` |  |  | `Y` | Division filter (NCAA). |
 
-### Returns
+### Returns {#pff_facet_pass_blocking-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -2083,7 +2084,7 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#pff_facet_pass_blocking-example}
 
 ```python
 pff_facet_pass_blocking()
@@ -2091,7 +2092,7 @@ pff_facet_pass_blocking()
 
 _Last validated n/a._
 
-## `pff_facet_passing_summary`
+## pff_facet_passing_summary
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /passing/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -2108,7 +2109,7 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 | `gameId` | `game_id` |  |  | `Y` | PFF game id; filters a report 'By Game'. |
 | `division` | `division` |  |  | `Y` | Division filter (NCAA). |
 
-### Returns
+### Returns {#pff_facet_passing_summary-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -2164,7 +2165,7 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#pff_facet_passing_summary-example}
 
 ```python
 pff_facet_passing_summary()
@@ -2172,7 +2173,7 @@ pff_facet_passing_summary()
 
 _Last validated n/a._
 
-## `pff_facet_punting_summary`
+## pff_facet_punting_summary
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /punting/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -2189,7 +2190,7 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 | `gameId` | `game_id` |  |  | `Y` | PFF game id; filters a report 'By Game'. |
 | `division` | `division` |  |  | `Y` | Division filter (NCAA). |
 
-### Returns
+### Returns {#pff_facet_punting_summary-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -2230,7 +2231,7 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#pff_facet_punting_summary-example}
 
 ```python
 pff_facet_punting_summary()
@@ -2238,7 +2239,7 @@ pff_facet_punting_summary()
 
 _Last validated n/a._
 
-## `pff_facet_passing_depth`
+## pff_facet_passing_depth
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /passing/depth (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -2255,7 +2256,7 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 | `gameId` | `game_id` |  |  | `Y` | PFF game id; filters a report 'By Game'. |
 | `division` | `division` |  |  | `Y` | Division filter (NCAA). |
 
-### Returns
+### Returns {#pff_facet_passing_depth-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -2821,7 +2822,7 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#pff_facet_passing_depth-example}
 
 ```python
 pff_facet_passing_depth()
@@ -2829,7 +2830,7 @@ pff_facet_passing_depth()
 
 _Last validated n/a._
 
-## `pff_facet_passing_pressure`
+## pff_facet_passing_pressure
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /passing/pressure (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -2846,7 +2847,7 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 | `gameId` | `game_id` |  |  | `Y` | PFF game id; filters a report 'By Game'. |
 | `division` | `division` |  |  | `Y` | Division filter (NCAA). |
 
-### Returns
+### Returns {#pff_facet_passing_pressure-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -3067,7 +3068,7 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#pff_facet_passing_pressure-example}
 
 ```python
 pff_facet_passing_pressure()
@@ -3075,7 +3076,7 @@ pff_facet_passing_pressure()
 
 _Last validated n/a._
 
-## `pff_facet_receiving_summary`
+## pff_facet_receiving_summary
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /receiving/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -3092,7 +3093,7 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 | `gameId` | `game_id` |  |  | `Y` | PFF game id; filters a report 'By Game'. |
 | `division` | `division` |  |  | `Y` | Division filter (NCAA). |
 
-### Returns
+### Returns {#pff_facet_receiving_summary-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -3151,7 +3152,7 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#pff_facet_receiving_summary-example}
 
 ```python
 pff_facet_receiving_summary()
@@ -3159,7 +3160,7 @@ pff_facet_receiving_summary()
 
 _Last validated n/a._
 
-## `pff_facet_return_summary`
+## pff_facet_return_summary
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /return/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -3176,7 +3177,7 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 | `gameId` | `game_id` |  |  | `Y` | PFF game id; filters a report 'By Game'. |
 | `division` | `division` |  |  | `Y` | Division filter (NCAA). |
 
-### Returns
+### Returns {#pff_facet_return_summary-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -3214,7 +3215,7 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#pff_facet_return_summary-example}
 
 ```python
 pff_facet_return_summary()
@@ -3222,7 +3223,7 @@ pff_facet_return_summary()
 
 _Last validated n/a._
 
-## `pff_facet_rushing_direction_stats`
+## pff_facet_rushing_direction_stats
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /rushing/direction (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -3239,7 +3240,7 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 | `gameId` | `game_id` |  |  | `Y` | PFF game id; filters a report 'By Game'. |
 | `division` | `division` |  |  | `Y` | Division filter (NCAA). |
 
-### Returns
+### Returns {#pff_facet_rushing_direction_stats-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -3258,7 +3259,7 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#pff_facet_rushing_direction_stats-example}
 
 ```python
 pff_facet_rushing_direction_stats()
@@ -3266,7 +3267,7 @@ pff_facet_rushing_direction_stats()
 
 _Last validated n/a._
 
-## `pff_facet_receiving_coverage_stats`
+## pff_facet_receiving_coverage_stats
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /defense/coverage_matchup (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -3283,12 +3284,12 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 | `gameId` | `game_id` |  |  | `Y` | PFF game id; filters a report 'By Game'. |
 | `division` | `division` |  |  | `Y` | Division filter (NCAA). |
 
-### Returns
+### Returns {#pff_facet_receiving_coverage_stats-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_pff_report`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#pff_facet_receiving_coverage_stats-example}
 
 ```python
 pff_facet_receiving_coverage_stats()
@@ -3296,7 +3297,7 @@ pff_facet_receiving_coverage_stats()
 
 _Last validated n/a._
 
-## `pff_facet_rushing_summary`
+## pff_facet_rushing_summary
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /rushing/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -3313,7 +3314,7 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 | `gameId` | `game_id` |  |  | `Y` | PFF game id; filters a report 'By Game'. |
 | `division` | `division` |  |  | `Y` | Division filter (NCAA). |
 
-### Returns
+### Returns {#pff_facet_rushing_summary-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -3372,7 +3373,7 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#pff_facet_rushing_summary-example}
 
 ```python
 pff_facet_rushing_summary()
@@ -3380,7 +3381,7 @@ pff_facet_rushing_summary()
 
 _Last validated n/a._
 
-## `pff_facet_slot_coverages`
+## pff_facet_slot_coverages
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /signature/defense/slot_coverage (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -3397,7 +3398,7 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 | `gameId` | `game_id` |  |  | `Y` | PFF game id; filters a report 'By Game'. |
 | `division` | `division` |  |  | `Y` | Division filter (NCAA). |
 
-### Returns
+### Returns {#pff_facet_slot_coverages-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -3426,7 +3427,7 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#pff_facet_slot_coverages-example}
 
 ```python
 pff_facet_slot_coverages()
@@ -3434,7 +3435,7 @@ pff_facet_slot_coverages()
 
 _Last validated n/a._
 
-## `pff_facet_pbes`
+## pff_facet_pbes
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /signature/pass-blocking/efficiency/line (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -3451,7 +3452,7 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 | `gameId` | `game_id` |  |  | `Y` | PFF game id; filters a report 'By Game'. |
 | `division` | `division` |  |  | `Y` | Division filter (NCAA). |
 
-### Returns
+### Returns {#pff_facet_pbes-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -3470,7 +3471,7 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#pff_facet_pbes-example}
 
 ```python
 pff_facet_pbes()
@@ -3478,7 +3479,7 @@ pff_facet_pbes()
 
 _Last validated n/a._
 
-## `pff_facet_prps`
+## pff_facet_prps
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /signature/defense/outside_pass_rush (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -3495,7 +3496,7 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 | `gameId` | `game_id` |  |  | `Y` | PFF game id; filters a report 'By Game'. |
 | `division` | `division` |  |  | `Y` | Division filter (NCAA). |
 
-### Returns
+### Returns {#pff_facet_prps-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -3547,7 +3548,7 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#pff_facet_prps-example}
 
 ```python
 pff_facet_prps()
@@ -3555,7 +3556,7 @@ pff_facet_prps()
 
 _Last validated n/a._
 
-## `pff_facet_receiving_scheme`
+## pff_facet_receiving_scheme
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /receiving/scheme (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -3572,7 +3573,7 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 | `gameId` | `game_id` |  |  | `Y` | PFF game id; filters a report 'By Game'. |
 | `division` | `division` |  |  | `Y` | Division filter (NCAA). |
 
-### Returns
+### Returns {#pff_facet_receiving_scheme-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -3655,7 +3656,7 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#pff_facet_receiving_scheme-example}
 
 ```python
 pff_facet_receiving_scheme()
@@ -3663,7 +3664,7 @@ pff_facet_receiving_scheme()
 
 _Last validated n/a._
 
-## `pff_facet_time_in_pockets`
+## pff_facet_time_in_pockets
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /signature/passing/time_in_pocket (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -3680,7 +3681,7 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 | `gameId` | `game_id` |  |  | `Y` | PFF game id; filters a report 'By Game'. |
 | `division` | `division` |  |  | `Y` | Division filter (NCAA). |
 
-### Returns
+### Returns {#pff_facet_time_in_pockets-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -3803,7 +3804,7 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#pff_facet_time_in_pockets-example}
 
 ```python
 pff_facet_time_in_pockets()
@@ -3811,7 +3812,7 @@ pff_facet_time_in_pockets()
 
 _Last validated n/a._
 
-## `pff_facet_receiving_concept`
+## pff_facet_receiving_concept
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /receiving/concept (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -3828,7 +3829,7 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 | `gameId` | `game_id` |  |  | `Y` | PFF game id; filters a report 'By Game'. |
 | `division` | `division` |  |  | `Y` | Division filter (NCAA). |
 
-### Returns
+### Returns {#pff_facet_receiving_concept-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -3911,7 +3912,7 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#pff_facet_receiving_concept-example}
 
 ```python
 pff_facet_receiving_concept()
@@ -3919,7 +3920,7 @@ pff_facet_receiving_concept()
 
 _Last validated n/a._
 
-## `pff_facet_special_teams_summary`
+## pff_facet_special_teams_summary
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /special/summary (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -3936,7 +3937,7 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 | `gameId` | `game_id` |  |  | `Y` | PFF game id; filters a report 'By Game'. |
 | `division` | `division` |  |  | `Y` | Division filter (NCAA). |
 
-### Returns
+### Returns {#pff_facet_special_teams_summary-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -3975,7 +3976,7 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#pff_facet_special_teams_summary-example}
 
 ```python
 pff_facet_special_teams_summary()
@@ -3983,7 +3984,7 @@ pff_facet_special_teams_summary()
 
 _Last validated n/a._
 
-## `pff_facet_receiving_depth`
+## pff_facet_receiving_depth
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /receiving/depth (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -4000,7 +4001,7 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 | `gameId` | `game_id` |  |  | `Y` | PFF game id; filters a report 'By Game'. |
 | `division` | `division` |  |  | `Y` | Division filter (NCAA). |
 
-### Returns
+### Returns {#pff_facet_receiving_depth-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -4517,7 +4518,7 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#pff_facet_receiving_depth-example}
 
 ```python
 pff_facet_receiving_depth()
@@ -4525,7 +4526,7 @@ pff_facet_receiving_depth()
 
 _Last validated n/a._
 
-## `pff_facet_receiving_coverage`
+## pff_facet_receiving_coverage
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Facet report /receiving/coverage (By Position leaderboard; add franchiseId for By Team, gameId for By Game)
 
@@ -4542,12 +4543,12 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 | `gameId` | `game_id` |  |  | `Y` | PFF game id; filters a report 'By Game'. |
 | `division` | `division` |  |  | `Y` | Division filter (NCAA). |
 
-### Returns
+### Returns {#pff_facet_receiving_coverage-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_pff_report`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#pff_facet_receiving_coverage-example}
 
 ```python
 pff_facet_receiving_coverage()
@@ -4555,7 +4556,7 @@ pff_facet_receiving_coverage()
 
 _Last validated n/a._
 
-## `pff_player_passing_summary`
+## pff_player_passing_summary
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Player-detail report /passing/summary (per-week + totals for one player)
 
@@ -4571,12 +4572,12 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 | `player_id` | `player_id` |  |  | `Y` | PFF player id (snake_case on the wire; matches the /players id). |
 | `career` | `career` |  |  | `Y` | Career-rollup flag ("true"/"false"); player-detail views only. |
 
-### Returns
+### Returns {#pff_player_passing_summary-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_pff_player_detail`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#pff_player_passing_summary-example}
 
 ```python
 pff_player_passing_summary()
@@ -4584,7 +4585,7 @@ pff_player_passing_summary()
 
 _Last validated n/a._
 
-## `pff_player_rushing_summary`
+## pff_player_rushing_summary
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Player-detail report /rushing/summary (per-week + totals for one player)
 
@@ -4600,12 +4601,12 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 | `player_id` | `player_id` |  |  | `Y` | PFF player id (snake_case on the wire; matches the /players id). |
 | `career` | `career` |  |  | `Y` | Career-rollup flag ("true"/"false"); player-detail views only. |
 
-### Returns
+### Returns {#pff_player_rushing_summary-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_pff_player_detail`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#pff_player_rushing_summary-example}
 
 ```python
 pff_player_rushing_summary()
@@ -4613,7 +4614,7 @@ pff_player_rushing_summary()
 
 _Last validated n/a._
 
-## `pff_player_receiving_summary`
+## pff_player_receiving_summary
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Player-detail report /receiving/summary (per-week + totals for one player)
 
@@ -4629,12 +4630,12 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 | `player_id` | `player_id` |  |  | `Y` | PFF player id (snake_case on the wire; matches the /players id). |
 | `career` | `career` |  |  | `Y` | Career-rollup flag ("true"/"false"); player-detail views only. |
 
-### Returns
+### Returns {#pff_player_receiving_summary-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_pff_player_detail`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#pff_player_receiving_summary-example}
 
 ```python
 pff_player_receiving_summary()
@@ -4642,7 +4643,7 @@ pff_player_receiving_summary()
 
 _Last validated n/a._
 
-## `pff_player_defense_summary`
+## pff_player_defense_summary
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Player-detail report /defense/summary (per-week + totals for one player)
 
@@ -4658,12 +4659,12 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 | `player_id` | `player_id` |  |  | `Y` | PFF player id (snake_case on the wire; matches the /players id). |
 | `career` | `career` |  |  | `Y` | Career-rollup flag ("true"/"false"); player-detail views only. |
 
-### Returns
+### Returns {#pff_player_defense_summary-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_pff_player_detail`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#pff_player_defense_summary-example}
 
 ```python
 pff_player_defense_summary()
@@ -4671,7 +4672,7 @@ pff_player_defense_summary()
 
 _Last validated n/a._
 
-## `pff_player_offense_summary`
+## pff_player_offense_summary
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Player-detail report /offense/summary (per-week + totals for one player)
 
@@ -4687,12 +4688,12 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 | `player_id` | `player_id` |  |  | `Y` | PFF player id (snake_case on the wire; matches the /players id). |
 | `career` | `career` |  |  | `Y` | Career-rollup flag ("true"/"false"); player-detail views only. |
 
-### Returns
+### Returns {#pff_player_offense_summary-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_pff_player_detail`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#pff_player_offense_summary-example}
 
 ```python
 pff_player_offense_summary()
@@ -4700,7 +4701,7 @@ pff_player_offense_summary()
 
 _Last validated n/a._
 
-## `pff_player_snaps_summary`
+## pff_player_snaps_summary
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Player-detail report /snaps/summary (per-week + totals for one player)
 
@@ -4716,12 +4717,12 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 | `player_id` | `player_id` |  |  | `Y` | PFF player id (snake_case on the wire; matches the /players id). |
 | `career` | `career` |  |  | `Y` | Career-rollup flag ("true"/"false"); player-detail views only. |
 
-### Returns
+### Returns {#pff_player_snaps_summary-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_pff_player_detail`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#pff_player_snaps_summary-example}
 
 ```python
 pff_player_snaps_summary()
@@ -4729,7 +4730,7 @@ pff_player_snaps_summary()
 
 _Last validated n/a._
 
-## `pff_player_offense_blocking`
+## pff_player_offense_blocking
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Player-detail report /offense/blocking (per-week + totals for one player)
 
@@ -4745,12 +4746,12 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 | `player_id` | `player_id` |  |  | `Y` | PFF player id (snake_case on the wire; matches the /players id). |
 | `career` | `career` |  |  | `Y` | Career-rollup flag ("true"/"false"); player-detail views only. |
 
-### Returns
+### Returns {#pff_player_offense_blocking-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_pff_player_detail`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#pff_player_offense_blocking-example}
 
 ```python
 pff_player_offense_blocking()
@@ -4758,7 +4759,7 @@ pff_player_offense_blocking()
 
 _Last validated n/a._
 
-## `pff_leagues`
+## pff_leagues
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Leagues + seasons + week groups (bootstrap)
 
@@ -4769,7 +4770,7 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 
-### Returns
+### Returns {#pff_leagues-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -4787,7 +4788,7 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#pff_leagues-example}
 
 ```python
 pff_leagues()
@@ -4795,7 +4796,7 @@ pff_leagues()
 
 _Last validated n/a._
 
-## `pff_teams`
+## pff_teams
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Teams / franchise groups + games for a league-season
 
@@ -4808,7 +4809,7 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 | `league` | `league` |  |  | `Y` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
 | `season` | `season` |  |  | `Y` | Season (starting year). |
 
-### Returns
+### Returns {#pff_teams-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -4820,7 +4821,7 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#pff_teams-example}
 
 ```python
 pff_teams()
@@ -4828,7 +4829,7 @@ pff_teams()
 
 _Last validated n/a._
 
-## `pff_teams_overview`
+## pff_teams_overview
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Team overview table (By Team landing)
 
@@ -4842,7 +4843,7 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 | `season` | `season` |  |  | `Y` | Season (starting year). |
 | `week` | `week` |  |  | `Y` | Week or week-group key (e.g. 'REG', a week number, or a range). |
 
-### Returns
+### Returns {#pff_teams_overview-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -4871,7 +4872,7 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#pff_teams_overview-example}
 
 ```python
 pff_teams_overview()
@@ -4879,7 +4880,7 @@ pff_teams_overview()
 
 _Last validated n/a._
 
-## `pff_games`
+## pff_games
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Games list for league-season(-week)
 
@@ -4893,7 +4894,7 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 | `season` | `season` |  |  | `Y` | Season (starting year). |
 | `week` | `week` |  |  | `Y` | Single week number. |
 
-### Returns
+### Returns {#pff_games-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -4915,7 +4916,7 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#pff_games-example}
 
 ```python
 pff_games()
@@ -4923,7 +4924,7 @@ pff_games()
 
 _Last validated n/a._
 
-## `pff_players`
+## pff_players
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Player search (name=) or lookup (id=)
 
@@ -4937,7 +4938,7 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 | `name` | `name` |  |  | `Y` | Player-name search prefix. |
 | `id` | `id` |  |  | `Y` | Entity id (player lookup). |
 
-### Returns
+### Returns {#pff_players-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -4959,7 +4960,7 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#pff_players-example}
 
 ```python
 pff_players()
@@ -4967,7 +4968,7 @@ pff_players()
 
 _Last validated n/a._
 
-## `pff_player_seasons`
+## pff_player_seasons
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Seasons a player has data for
 
@@ -4980,12 +4981,12 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 | `league` | `league` |  |  | `Y` | League slug (nfl/ncaa/aaf/ufl); pre-bound by the per-league shim modules. |
 | `player_id` | `player_id` |  |  | `Y` | PFF player id (snake_case on the wire; matches the /players id). |
 
-### Returns
+### Returns {#pff_player_seasons-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_pff_report`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#pff_player_seasons-example}
 
 ```python
 pff_player_seasons()
@@ -4993,7 +4994,7 @@ pff_player_seasons()
 
 _Last validated n/a._
 
-## `pff_player_position_pivot`
+## pff_player_position_pivot
 
 LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Positional-pivot export (JSON; UI also uses this for CSV download)
 
@@ -5008,12 +5009,12 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 | `week` | `week` |  |  | `Y` | Week or week-group key (e.g. 'REG', a week number, or a range). |
 | `player_id` | `player_id` |  |  | `Y` | PFF player id (snake_case on the wire; matches the /players id). |
 
-### Returns
+### Returns {#pff_player_position_pivot-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_pff_report`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#pff_player_position_pivot-example}
 
 ```python
 pff_player_position_pivot()

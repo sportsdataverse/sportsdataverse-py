@@ -11,7 +11,9 @@ not covered by the generated API-endpoint reference above.
 
 ## Highlights
 
-### `espn_mbb_game_rosters(game_id: 'int', raw=False, return_as_pandas=False, **kwargs) -> 'pl.DataFrame'` {#espn_mbb_game_rosters}
+### espn_mbb_game_rosters {#espn_mbb_game_rosters}
+
+`espn_mbb_game_rosters(game_id: 'int', raw=False, return_as_pandas=False, **kwargs) -> 'pl.DataFrame'`
 
 espn_mbb_game_rosters() - Pull the game by id.
 
@@ -120,7 +122,9 @@ roster_pd = espn_mbb_game_rosters(game_id=401638637, return_as_pandas=True)
 roster_pd.head()
 ```
 
-### `espn_mbb_pbp(game_id: 'int', raw=False, **kwargs) -> 'Dict'` {#espn_mbb_pbp}
+### espn_mbb_pbp {#espn_mbb_pbp}
+
+`espn_mbb_pbp(game_id: 'int', raw=False, **kwargs) -> 'Dict'`
 
 espn_mbb_pbp() - Pull the game by id. Data from API endpoints: `mens-college-basketball/playbyplay`, `mens-college-basketball/summary`
 
@@ -172,7 +176,9 @@ raw = espn_mbb_pbp(game_id=401638637, raw=True)
 sorted(raw.keys())
 ```
 
-### `espn_mbb_player_stats(athlete_id: 'int', season: 'int', *, season_type: 'str' = 'regular', total: 'bool' = False, raw: 'bool' = False, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'pl.DataFrame | pd.DataFrame | dict[str, Any]'` {#espn_mbb_player_stats}
+### espn_mbb_player_stats {#espn_mbb_player_stats}
+
+`espn_mbb_player_stats(athlete_id: 'int', season: 'int', *, season_type: 'str' = 'regular', total: 'bool' = False, raw: 'bool' = False, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'pl.DataFrame | pd.DataFrame | dict[str, Any]'`
 
 Pull a men's-college-basketball athlete's ESPN **season** stat line.
 
@@ -326,7 +332,9 @@ df = espn_mbb_player_stats(athlete_id=4395624, season=2023)
 df.select(["full_name", "team_display_name", "offensive_points"])
 ```
 
-### `espn_mbb_schedule(dates=None, groups=50, season_type=None, limit=500, return_as_pandas=False, **kwargs) -> 'pl.DataFrame'` {#espn_mbb_schedule}
+### espn_mbb_schedule {#espn_mbb_schedule}
+
+`espn_mbb_schedule(dates=None, groups=50, season_type=None, limit=500, return_as_pandas=False, **kwargs) -> 'pl.DataFrame'`
 
 espn_mbb_schedule - look up the men's college basketball scheduler for a given season
 
@@ -446,7 +454,9 @@ season_pd = espn_mbb_schedule(dates=2024, return_as_pandas=True)
 season_pd.head()
 ```
 
-### `espn_mbb_teams(groups=None, return_as_pandas=False, **kwargs) -> 'pl.DataFrame'` {#espn_mbb_teams}
+### espn_mbb_teams {#espn_mbb_teams}
+
+`espn_mbb_teams(groups=None, return_as_pandas=False, **kwargs) -> 'pl.DataFrame'`
 
 espn_mbb_teams - look up the men's college basketball teams
 
@@ -497,7 +507,9 @@ d2_d3 = espn_mbb_teams(groups=51, return_as_pandas=True)
 d2_d3.head()
 ```
 
-### `most_recent_mbb_season()` {#most_recent_mbb_season}
+### most_recent_mbb_season {#most_recent_mbb_season}
+
+`most_recent_mbb_season()`
 
 Return the most recent men's college basketball season year.
 
@@ -517,7 +529,9 @@ season = most_recent_mbb_season()
 sched = espn_mbb_schedule(dates=season)
 ```
 
-### `ncaa_mbb_play_by_play(game_ids: "'Sequence[object]'", *, fetcher: 'Optional[_SupportsFetchGamePbp]' = None, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, Any]'"` {#ncaa_mbb_play_by_play}
+### ncaa_mbb_play_by_play {#ncaa_mbb_play_by_play}
+
+`ncaa_mbb_play_by_play(game_ids: "'Sequence[object]'", *, fetcher: 'Optional[_SupportsFetchGamePbp]' = None, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, Any]'"`
 
 Scrape many MBB games' play-by-play (bigballR `get_play_by_play`).
 
@@ -549,7 +563,9 @@ print(df.shape)
 df.group_by("game_id").len()
 ```
 
-### `ncaa_mbb_team_roster(team_id: 'Optional[int]' = None, *, team: 'Optional[str]' = None, season: 'Optional[str]' = None, fetcher: "Optional['NcaaFetcher']" = None, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#ncaa_mbb_team_roster}
+### ncaa_mbb_team_roster {#ncaa_mbb_team_roster}
+
+`ncaa_mbb_team_roster(team_id: 'Optional[int]' = None, *, team: 'Optional[str]' = None, season: 'Optional[str]' = None, fetcher: "Optional['NcaaFetcher']" = None, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"`
 
 Scrape a men's team roster from stats.ncaa.org.
 
@@ -579,7 +595,9 @@ df = ncaa_mbb_team_roster(team="Illinois", season="2025-26")
 print(df.select("jersey", "player", "ht_inches").head())
 ```
 
-### `ncaa_mbb_team_schedule(team_id: 'Optional[int]' = None, *, team: 'Optional[str]' = None, season: 'Optional[str]' = None, fetcher: "Optional['NcaaFetcher']" = None, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#ncaa_mbb_team_schedule}
+### ncaa_mbb_team_schedule {#ncaa_mbb_team_schedule}
+
+`ncaa_mbb_team_schedule(team_id: 'Optional[int]' = None, *, team: 'Optional[str]' = None, season: 'Optional[str]' = None, fetcher: "Optional['NcaaFetcher']" = None, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"`
 
 Scrape a men's team's season schedule from stats.ncaa.org.
 
@@ -616,7 +634,9 @@ df.filter(pl.col("is_neutral") == True).head()
 
 ## Dataset loaders
 
-### `load_artifact(name: 'str') -> 'dict'` {#load_artifact}
+### load_artifact {#load_artifact}
+
+`load_artifact(name: 'str') -> 'dict'`
 
 Read a bundled player-value artifact (`mbb/models/<name>.json`).
 
@@ -637,7 +657,9 @@ from sportsdataverse.mbb.mbb_player_value_constants import load_artifact
 art = load_artifact("mbb_box_bpm")
 ```
 
-### `load_proxybonanza_pool(api_key: 'str', pkg: 'str', *, transport: 'Optional[PoolTransport]' = None) -> "'list[str]'"` {#load_proxybonanza_pool}
+### load_proxybonanza_pool {#load_proxybonanza_pool}
+
+`load_proxybonanza_pool(api_key: 'str', pkg: 'str', *, transport: 'Optional[PoolTransport]' = None) -> "'list[str]'"`
 
 Resolve a ProxyBonanza package into a list of `http://login:pass@ip:port` URLs.
 
@@ -669,7 +691,9 @@ pool = load_proxybonanza_pool("key", "pkg", transport=fake)
 
 ## Other
 
-### `AssistEvent(player_code: 'str', count: 'ShotClockStats' = <factory>) -> None` {#AssistEvent}
+### AssistEvent {#AssistEvent}
+
+`AssistEvent(player_code: 'str', count: 'ShotClockStats' = <factory>) -> None`
 
 One assist relationship's counts (`LineupEventStats.AssistEvent`,
 
@@ -682,7 +706,9 @@ One assist relationship's counts (`LineupEventStats.AssistEvent`,
 | `player_code` | `str` |  | The other player in the assist event (by code). |
 | `count` | `ShotClockStats` | `<factory>` | The assist counts, by shot-clock segment. |
 
-### `AssistInfo(counts: 'ShotClockStats' = <factory>, target: 'Optional[list[AssistEvent]]' = None, source: 'Optional[list[AssistEvent]]' = None) -> None` {#AssistInfo}
+### AssistInfo {#AssistInfo}
+
+`AssistInfo(counts: 'ShotClockStats' = <factory>, target: 'Optional[list[AssistEvent]]' = None, source: 'Optional[list[AssistEvent]]' = None) -> None`
 
 Detailed assist info, split into given/received
 
@@ -696,7 +722,9 @@ Detailed assist info, split into given/received
 | `target` | `Optional[list[AssistEvent]]` | `None` | Players "I" assisted, if tracked. |
 | `source` | `Optional[list[AssistEvent]]` | `None` | Players who assisted "me", if tracked. |
 
-### `BadLineupClump(evs: 'list[LineupEvent]', next_good: 'Optional[LineupEvent]' = None) -> None` {#BadLineupClump}
+### BadLineupClump {#BadLineupClump}
+
+`BadLineupClump(evs: 'list[LineupEvent]', next_good: 'Optional[LineupEvent]' = None) -> None`
 
 A run of consecutive bad :class:`~sportsdataverse.mbb.mbb_ncaa_models
 
@@ -716,7 +744,9 @@ leading underscore.
 | `evs` | `list[LineupEvent]` |  | The clumped lineup events, in chronological order. |
 | `next_good` | `Optional[LineupEvent]` | `None` | The first known-good lineup event following the clump, if any -- used by the Task 5d.3 fixers to reason about a player who should have subbed back in. |
 
-### `ConcurrentClump(evs: 'list[RawGameEvent]' = <factory>, lineups: 'list[LineupEvent]' = <factory>) -> None` {#ConcurrentClump}
+### ConcurrentClump {#ConcurrentClump}
+
+`ConcurrentClump(evs: 'list[RawGameEvent]' = <factory>, lineups: 'list[LineupEvent]' = <factory>) -> None`
 
 A clump of concurrent raw events, together with the lineups that end
 
@@ -730,7 +760,9 @@ in that clump (`Concurrency.ConcurrentClump`, `PossessionUtils.scala
 | `evs` | `list[RawGameEvent]` | `<factory>` | The raw game events in this clump, in chronological order. |
 | `lineups` | `list[LineupEvent]` | `<factory>` | The lineups (if any) whose `end_min` falls in this clump. |
 
-### `ConferenceId(name: 'str') -> None` {#ConferenceId}
+### ConferenceId {#ConferenceId}
+
+`ConferenceId(name: 'str') -> None`
 
 CBB conference identifier (`ConferenceId`, ``models/ConferenceId
 
@@ -757,7 +789,9 @@ unreferenced companion-object members (see the module docstring's
 |---|---|---|---|
 | `name` | `str` |  | The unique name of the conference. |
 
-### `CutdownShotEvent(loc: 'Optional[ShotLocation]', geo: 'Optional[ShotGeo]', dist: 'Optional[float]', pts: 'int', value: 'int', is_ast: 'Optional[bool]', is_trans: 'Optional[bool]', is_orb: 'Optional[bool]') -> None` {#CutdownShotEvent}
+### CutdownShotEvent {#CutdownShotEvent}
+
+`CutdownShotEvent(loc: 'Optional[ShotLocation]', geo: 'Optional[ShotGeo]', dist: 'Optional[float]', pts: 'int', value: 'int', is_ast: 'Optional[bool]', is_trans: 'Optional[bool]', is_orb: 'Optional[bool]') -> None`
 
 A narrowed `ShotEvent`, keeping only the fields needed once a
 
@@ -787,11 +821,15 @@ precedent.
 | `is_trans` | `Optional[bool]` |  | Whether the shot was in transition, if known. |
 | `is_orb` | `Optional[bool]` |  | Whether the shot followed an offensive rebound, if known. |
 
-### `Direction(*values)` {#Direction}
+### Direction {#Direction}
+
+`Direction(*values)`
 
 Which team is in possession (`RawGameEvent.Direction`, `:119-121`).
 
-### `FieldAverage(league_off: 'float', league_def: 'float', hca_off: 'float', hca_def: 'float') -> None` {#FieldAverage}
+### FieldAverage {#FieldAverage}
+
+`FieldAverage(league_off: 'float', league_def: 'float', hca_off: 'float', hca_def: 'float') -> None`
 
 League average + estimated HCA for one stat field (`ts:620-625`).
 
@@ -808,7 +846,9 @@ home-court advantages the solver converged on.
 | `hca_off` | `float` |  |  |
 | `hca_def` | `float` |  |  |
 
-### `FieldGoalStats(attempts: 'ShotClockStats' = <factory>, made: 'ShotClockStats' = <factory>, ast: 'Optional[ShotClockStats]' = None) -> None` {#FieldGoalStats}
+### FieldGoalStats {#FieldGoalStats}
+
+`FieldGoalStats(attempts: 'ShotClockStats' = <factory>, made: 'ShotClockStats' = <factory>, ast: 'Optional[ShotClockStats]' = None) -> None`
 
 Field-goal counting stats (`LineupEventStats.FieldGoalStats`,
 
@@ -822,7 +862,9 @@ Field-goal counting stats (`LineupEventStats.FieldGoalStats`,
 | `made` | `ShotClockStats` | `<factory>` | Successful shot attempts. |
 | `ast` | `Optional[ShotClockStats]` | `None` | Successful shot attempts that were assisted, if tracked. |
 
-### `FuzzyMatchError(message: 'str') -> None` {#FuzzyMatchError}
+### FuzzyMatchError {#FuzzyMatchError}
+
+`FuzzyMatchError(message: 'str') -> None`
 
 A failed `fuzzy_box_match` resolution (Scala's `Left[String]`
 
@@ -837,7 +879,9 @@ convention already used in this port).
 |---|---|---|---|
 | `message` | `str` |  | Human-readable description of why no name won. |
 
-### `GameBreakEvent(min: 'float', score: 'Score') -> None` {#GameBreakEvent}
+### GameBreakEvent {#GameBreakEvent}
+
+`GameBreakEvent(min: 'float', score: 'Score') -> None`
 
 A break in play (timeout, end of period, etc.) short of the end of
 
@@ -852,7 +896,9 @@ the game (`Model.GameBreakEvent`, `ExtractorUtils.scala:874-877`).
 
 **Methods**
 
-#### `GameBreakEvent.with_min(new_min: 'float') -> "'GameBreakEvent'"`
+#### GameBreakEvent.with_min
+
+`GameBreakEvent.with_min(new_min: 'float') -> "'GameBreakEvent'"`
 
 Return a copy with `min` replaced (`:876`).
 
@@ -862,7 +908,9 @@ Return a copy with `min` replaced (`:876`).
 |---|---|---|---|
 | `new_min` | `float` |  |  |
 
-### `GameEndEvent(min: 'float', score: 'Score') -> None` {#GameEndEvent}
+### GameEndEvent {#GameEndEvent}
+
+`GameEndEvent(min: 'float', score: 'Score') -> None`
 
 The end of the game (`Model.GameEndEvent`, `ExtractorUtils.scala:878-881`).
 
@@ -875,7 +923,9 @@ The end of the game (`Model.GameEndEvent`, `ExtractorUtils.scala:878-881`).
 
 **Methods**
 
-#### `GameEndEvent.with_min(new_min: 'float') -> "'GameEndEvent'"`
+#### GameEndEvent.with_min
+
+`GameEndEvent.with_min(new_min: 'float') -> "'GameEndEvent'"`
 
 Return a copy with `min` replaced (`:880`).
 
@@ -885,7 +935,9 @@ Return a copy with `min` replaced (`:880`).
 |---|---|---|---|
 | `new_min` | `float` |  |  |
 
-### `IterationResult(adj_values: ForwardRef('AdjValues'), hca_per_field: ForwardRef('HcaPerField'))` {#IterationResult}
+### IterationResult {#IterationResult}
+
+`IterationResult(adj_values: ForwardRef('AdjValues'), hca_per_field: ForwardRef('HcaPerField'))`
 
 Return of `run_iterative_adjustment_with_hca` (`ts:314-317`).
 
@@ -900,7 +952,9 @@ strength-of-schedule adjustment); `hca_per_field` maps `field ->
 | `adj_values` | `ForwardRef('AdjValues')` |  |  |
 | `hca_per_field` | `ForwardRef('HcaPerField')` |  |  |
 
-### `LeagueConstants(hfa: 'float', margin_sd: 'float', em_scale: 'float', avg_tempo: 'float', avg_efficiency: 'float', quad_thresholds: 'dict[str, dict[str, int]]', bubble_adj_em: 'float', in_game_wp_artifact: 'str') -> None` {#LeagueConstants}
+### LeagueConstants {#LeagueConstants}
+
+`LeagueConstants(hfa: 'float', margin_sd: 'float', em_scale: 'float', avg_tempo: 'float', avg_efficiency: 'float', quad_thresholds: 'dict[str, dict[str, int]]', bubble_adj_em: 'float', in_game_wp_artifact: 'str') -> None`
 
 Per-league fitted constants for the prediction & tournament stack.
 
@@ -921,7 +975,9 @@ number lives here so a WBB caller is a by-reference shim plus this table
 | `bubble_adj_em` | `float` |  | AdjEM of a bubble-quality team on THIS engine's scale (mean of engine ranks 40-50 on the fit season) -- the WAB baseline. |
 | `in_game_wp_artifact` | `str` |  | Filename of the bundled in-game-WP coefficients under `sportsdataverse/mbb/models` (fitted + committed in Phase 3). |
 
-### `LineupBuildingState(curr: 'LineupEvent', tidy_ctx: "'TidyPlayerContext'", prev: 'list[LineupEvent]' = <factory>, old_format: 'Optional[bool]' = None) -> None` {#LineupBuildingState}
+### LineupBuildingState {#LineupBuildingState}
+
+`LineupBuildingState(curr: 'LineupEvent', tidy_ctx: "'TidyPlayerContext'", prev: 'list[LineupEvent]' = <factory>, old_format: 'Optional[bool]' = None) -> None`
 
 State for building raw lineup data across a fold over play-by-play
 
@@ -942,13 +998,17 @@ rather than mutating `self`.
 
 **Methods**
 
-#### `LineupBuildingState.build() -> 'list[LineupEvent]'`
+#### LineupBuildingState.build
+
+`LineupBuildingState.build() -> 'list[LineupEvent]'`
 
 The full chronological lineup-event list (`:742-744`:
 
 `(curr :: prev).reverse`).
 
-#### `LineupBuildingState.is_active(min: 'float') -> 'bool'`
+#### LineupBuildingState.is_active
+
+`LineupBuildingState.is_active(min: 'float') -> 'bool'`
 
 Whether the current lineup has non-sub activity, or has simply
 
@@ -964,7 +1024,9 @@ been on the floor long enough to trust (`:760-766`).
 
 `True` if any raw event on `curr` isn't an opponent sub, or if `min` is more than `SUB_SAFETY_DELTA_MINS` past `curr`'s `end_min`.
 
-#### `LineupBuildingState.is_sub(raw: 'RawGameEvent') -> 'bool'`
+#### LineupBuildingState.is_sub
+
+`LineupBuildingState.is_sub(raw: 'RawGameEvent') -> 'bool'`
 
 Whether `raw` is an *opponent*-side substitution line
 
@@ -988,7 +1050,9 @@ needs to look at the opponent side. Ported verbatim, quirk and all.
 
 `True` if `raw.opponent` ends with one of the four substitution phrases (case/whitespace-insensitive), else `False` (including when `raw.opponent` is `None`).
 
-#### `LineupBuildingState.with_latest_score(score: 'Score') -> "'LineupBuildingState'"`
+#### LineupBuildingState.with_latest_score
+
+`LineupBuildingState.with_latest_score(score: 'Score') -> "'LineupBuildingState'"`
 
 Update `curr`'s running end-of-event score (`:788-796`).
 
@@ -998,7 +1062,9 @@ Update `curr`'s running end-of-event score (`:788-796`).
 |---|---|---|---|
 | `score` | `Score` |  |  |
 
-#### `LineupBuildingState.with_opponent_event(min: 'float', event_string: 'str') -> "'LineupBuildingState'"`
+#### LineupBuildingState.with_opponent_event
+
+`LineupBuildingState.with_opponent_event(min: 'float', event_string: 'str') -> "'LineupBuildingState'"`
 
 Append an opponent-side raw event and bump `end_min` (`:808-818`).
 
@@ -1009,7 +1075,9 @@ Append an opponent-side raw event and bump `end_min` (`:808-818`).
 | `min` | `float` |  |  |
 | `event_string` | `str` |  |  |
 
-#### `LineupBuildingState.with_player_in(player_name: 'str') -> "'LineupBuildingState'"`
+#### LineupBuildingState.with_player_in
+
+`LineupBuildingState.with_player_in(player_name: 'str') -> "'LineupBuildingState'"`
 
 Prepend a new "subbed in" player code onto `curr` (`:770-778`).
 
@@ -1019,7 +1087,9 @@ Prepend a new "subbed in" player code onto `curr` (`:770-778`).
 |---|---|---|---|
 | `player_name` | `str` |  |  |
 
-#### `LineupBuildingState.with_player_out(player_name: 'str') -> "'LineupBuildingState'"`
+#### LineupBuildingState.with_player_out
+
+`LineupBuildingState.with_player_out(player_name: 'str') -> "'LineupBuildingState'"`
 
 Prepend a new "subbed out" player code onto `curr` (`:779-787`).
 
@@ -1029,7 +1099,9 @@ Prepend a new "subbed out" player code onto `curr` (`:779-787`).
 |---|---|---|---|
 | `player_name` | `str` |  |  |
 
-#### `LineupBuildingState.with_team_event(min: 'float', event_string: 'str') -> "'LineupBuildingState'"`
+#### LineupBuildingState.with_team_event
+
+`LineupBuildingState.with_team_event(min: 'float', event_string: 'str') -> "'LineupBuildingState'"`
 
 Append a team-side raw event and bump `end_min` (`:797-807`).
 
@@ -1040,7 +1112,9 @@ Append a team-side raw event and bump `end_min` (`:797-807`).
 | `min` | `float` |  |  |
 | `event_string` | `str` |  |  |
 
-### `LineupEvent(date: 'datetime', location_type: 'LocationType', start_min: 'float', end_min: 'float', duration_mins: 'float', score_info: 'ScoreInfo', team: 'TeamSeasonId', opponent: 'TeamSeasonId', lineup_id: 'LineupId', players: 'list[PlayerCodeId]', players_in: 'list[PlayerCodeId]', players_out: 'list[PlayerCodeId]', raw_game_events: 'list[RawGameEvent]', team_stats: 'LineupEventStats', opponent_stats: 'LineupEventStats', player_count_error: 'Optional[int]' = None) -> None` {#LineupEvent}
+### LineupEvent {#LineupEvent}
+
+`LineupEvent(date: 'datetime', location_type: 'LocationType', start_min: 'float', end_min: 'float', duration_mins: 'float', score_info: 'ScoreInfo', team: 'TeamSeasonId', opponent: 'TeamSeasonId', lineup_id: 'LineupId', players: 'list[PlayerCodeId]', players_in: 'list[PlayerCodeId]', players_out: 'list[PlayerCodeId]', raw_game_events: 'list[RawGameEvent]', team_stats: 'LineupEventStats', opponent_stats: 'LineupEventStats', player_count_error: 'Optional[int]' = None) -> None`
 
 A portion of a game during which a given lineup was on the floor
 
@@ -1067,7 +1141,9 @@ A portion of a game during which a given lineup was on the floor
 | `opponent_stats` | `LineupEventStats` |  | Numerical stats extracted for the lineup (opponent side). |
 | `player_count_error` | `Optional[int]` | `None` | If the lineup is "impossible", the number of players actually seen (for analysis purposes). |
 
-### `LineupEventStats(num_events: 'int' = 0, num_possessions: 'int' = 0, fg: 'FieldGoalStats' = <factory>, fg_rim: 'FieldGoalStats' = <factory>, fg_mid: 'FieldGoalStats' = <factory>, fg_2p: 'FieldGoalStats' = <factory>, fg_3p: 'FieldGoalStats' = <factory>, ft: 'FieldGoalStats' = <factory>, orb: 'Optional[ShotClockStats]' = None, drb: 'Optional[ShotClockStats]' = None, to: 'ShotClockStats' = <factory>, stl: 'Optional[ShotClockStats]' = None, blk: 'Optional[ShotClockStats]' = None, assist: 'Optional[ShotClockStats]' = None, ast_rim: 'Optional[AssistInfo]' = None, ast_mid: 'Optional[AssistInfo]' = None, ast_3p: 'Optional[AssistInfo]' = None, foul: 'Optional[ShotClockStats]' = None, player_shot_info: 'Optional[PlayerShotInfo]' = None, pts: 'int' = 0, plus_minus: 'int' = 0) -> None` {#LineupEventStats}
+### LineupEventStats {#LineupEventStats}
+
+`LineupEventStats(num_events: 'int' = 0, num_possessions: 'int' = 0, fg: 'FieldGoalStats' = <factory>, fg_rim: 'FieldGoalStats' = <factory>, fg_mid: 'FieldGoalStats' = <factory>, fg_2p: 'FieldGoalStats' = <factory>, fg_3p: 'FieldGoalStats' = <factory>, ft: 'FieldGoalStats' = <factory>, orb: 'Optional[ShotClockStats]' = None, drb: 'Optional[ShotClockStats]' = None, to: 'ShotClockStats' = <factory>, stl: 'Optional[ShotClockStats]' = None, blk: 'Optional[ShotClockStats]' = None, assist: 'Optional[ShotClockStats]' = None, ast_rim: 'Optional[AssistInfo]' = None, ast_mid: 'Optional[AssistInfo]' = None, ast_3p: 'Optional[AssistInfo]' = None, foul: 'Optional[ShotClockStats]' = None, player_shot_info: 'Optional[PlayerShotInfo]' = None, pts: 'int' = 0, plus_minus: 'int' = 0) -> None`
 
 A lineup event's full counting-stat tree (`LineupEventStats`,
 
@@ -1102,7 +1178,9 @@ exercised by Phase 5a -- see the module docstring's scope note.
 | `pts` | `int` | `0` | Points scored. |
 | `plus_minus` | `int` | `0` | Point differential while this lineup was on the floor. |
 
-### `LineupId(value: 'str') -> None` {#LineupId}
+### LineupId {#LineupId}
+
+`LineupId(value: 'str') -> None`
 
 The set of players on the floor, as an opaque id string
 
@@ -1114,11 +1192,15 @@ The set of players on the floor, as an opaque id string
 |---|---|---|---|
 | `value` | `str` |  | The opaque lineup identifier. |
 
-### `LocationType(*values)` {#LocationType}
+### LocationType {#LocationType}
+
+`LocationType(*values)`
 
 Game location (`Game.LocationType`, `Game.scala:36-38`).
 
-### `NcaaFetchConfig(cache_dir: 'Optional[Path]' = None, proxy_url: 'Optional[str]' = None, proxybonanza_key: 'Optional[str]' = None, proxybonanza_pkg: 'Optional[str]' = None, timeout: 'int' = 45, impersonate: 'str' = 'chrome', max_retries: 'int' = 2, rotation_backoff: 'float' = 1.0, rotate_every: 'int' = 200, terms_backoff: 'float' = 300.0, terms_retries: 'int' = 3, transport: 'Optional[FetchTransport]' = None) -> None` {#NcaaFetchConfig}
+### NcaaFetchConfig {#NcaaFetchConfig}
+
+`NcaaFetchConfig(cache_dir: 'Optional[Path]' = None, proxy_url: 'Optional[str]' = None, proxybonanza_key: 'Optional[str]' = None, proxybonanza_pkg: 'Optional[str]' = None, timeout: 'int' = 45, impersonate: 'str' = 'chrome', max_retries: 'int' = 2, rotation_backoff: 'float' = 1.0, rotate_every: 'int' = 200, terms_backoff: 'float' = 300.0, terms_retries: 'int' = 3, transport: 'Optional[FetchTransport]' = None) -> None`
 
 Runtime configuration for the stats.ncaa.org fetch layer.
 
@@ -1157,7 +1239,9 @@ from sportsdataverse.mbb.mbb_ncaa_fetch import NcaaFetchConfig
 cfg = NcaaFetchConfig(proxy_url="http://user:pass@1.2.3.4:8080")
 ```
 
-### `NcaaFetcher(config: 'Optional[NcaaFetchConfig]' = None, *, proxy_pool: "Optional['list[str]']" = None) -> 'None'` {#NcaaFetcher}
+### NcaaFetcher {#NcaaFetcher}
+
+`NcaaFetcher(config: 'Optional[NcaaFetchConfig]' = None, *, proxy_pool: "Optional['list[str]']" = None) -> 'None'`
 
 Cache-first stats.ncaa.org fetcher, proxy-bound per the binding directive.
 
@@ -1196,7 +1280,9 @@ Cache-first stats.ncaa.org fetcher, proxy-bound per the binding directive.
 
 **Methods**
 
-#### `NcaaFetcher.fetch_game_box(contest_id: 'object', period: 'int' = 1, *, legacy: 'bool' = False, force: 'bool' = False) -> 'str'`
+#### NcaaFetcher.fetch_game_box
+
+`NcaaFetcher.fetch_game_box(contest_id: 'object', period: 'int' = 1, *, legacy: 'bool' = False, force: 'bool' = False) -> 'str'`
 
 Fetch a game's box-score *landing* page for *period* (1-indexed).
 
@@ -1214,7 +1300,9 @@ team-stats surface and the legacy layout.
 | `legacy` | `bool` | `False` |  |
 | `force` | `bool` | `False` |  |
 
-#### `NcaaFetcher.fetch_game_individual_stats(contest_id: 'object', *, legacy: 'bool' = False, force: 'bool' = False) -> 'str'`
+#### NcaaFetcher.fetch_game_individual_stats
+
+`NcaaFetcher.fetch_game_individual_stats(contest_id: 'object', *, legacy: 'bool' = False, force: 'bool' = False) -> 'str'`
 
 Fetch a game's per-player box (the `individual_stats` tab).
 
@@ -1236,7 +1324,9 @@ legacy (pre-2018) layout has no separate individual-stats page, so
 | `legacy` | `bool` | `False` |  |
 | `force` | `bool` | `False` |  |
 
-#### `NcaaFetcher.fetch_game_pbp(contest_id: 'object', *, legacy: 'bool' = False, force: 'bool' = False) -> 'str'`
+#### NcaaFetcher.fetch_game_pbp
+
+`NcaaFetcher.fetch_game_pbp(contest_id: 'object', *, legacy: 'bool' = False, force: 'bool' = False) -> 'str'`
 
 Fetch a game's play-by-play page.
 
@@ -1248,7 +1338,9 @@ Fetch a game's play-by-play page.
 | `legacy` | `bool` | `False` |  |
 | `force` | `bool` | `False` |  |
 
-#### `NcaaFetcher.fetch_html(path: 'str', *, force: 'bool' = False) -> 'str'`
+#### NcaaFetcher.fetch_html
+
+`NcaaFetcher.fetch_html(path: 'str', *, force: 'bool' = False) -> 'str'`
 
 Fetch *path* (bare path or full stats.ncaa.org URL), cache-first.
 
@@ -1263,7 +1355,9 @@ Fetch *path* (bare path or full stats.ncaa.org URL), cache-first.
 
 The response HTML, decoded as UTF-8.
 
-#### `NcaaFetcher.fetch_team_roster(team_id: 'object', year_id: 'object', *, legacy: 'bool' = False, force: 'bool' = False) -> 'str'`
+#### NcaaFetcher.fetch_team_roster
+
+`NcaaFetcher.fetch_team_roster(team_id: 'object', year_id: 'object', *, legacy: 'bool' = False, force: 'bool' = False) -> 'str'`
 
 Fetch a team's roster page for *year_id*.
 
@@ -1280,7 +1374,9 @@ independently live-confirmed -- see module docstring; fix in Task
 | `legacy` | `bool` | `False` |  |
 | `force` | `bool` | `False` |  |
 
-#### `NcaaFetcher.fetch_team_schedule(team_id: 'object', *, legacy: 'bool' = False, force: 'bool' = False) -> 'str'`
+#### NcaaFetcher.fetch_team_schedule
+
+`NcaaFetcher.fetch_team_schedule(team_id: 'object', *, legacy: 'bool' = False, force: 'bool' = False) -> 'str'`
 
 Fetch a team's game-by-game schedule page.
 
@@ -1296,7 +1392,9 @@ Modern shape (`teams/{id}/game_by_game`) is confirmed by
 | `legacy` | `bool` | `False` |  |
 | `force` | `bool` | `False` |  |
 
-### `NoSurnameMatch(box_name: 'str', exact_first_name: 'Optional[str]', near_first_name: 'Optional[str]', err: 'str') -> None` {#NoSurnameMatch}
+### NoSurnameMatch {#NoSurnameMatch}
+
+`NoSurnameMatch(box_name: 'str', exact_first_name: 'Optional[str]', near_first_name: 'Optional[str]', err: 'str') -> None`
 
 No candidate surname fragment scored well enough
 
@@ -1311,7 +1409,9 @@ No candidate surname fragment scored well enough
 | `near_first_name` | `Optional[str]` |  | A first-name fragment fuzzy-matching the box name's first name, if any (only computed when `exact_first_name` is absent). |
 | `err` | `str` |  | Human-readable diagnostic (debug-only; see the module docstring's fuzzy-match-parity note for why its embedded score may not byte-match the upstream Java oracle). |
 
-### `OtherOpponentEvent(min: 'float', score: 'Score', event_string: 'str') -> None` {#OtherOpponentEvent}
+### OtherOpponentEvent {#OtherOpponentEvent}
+
+`OtherOpponentEvent(min: 'float', score: 'Score', event_string: 'str') -> None`
 
 A non-sub event belonging to the opponent (`Model.OtherOpponentEvent`,
 
@@ -1327,7 +1427,9 @@ A non-sub event belonging to the opponent (`Model.OtherOpponentEvent`,
 
 **Methods**
 
-#### `OtherOpponentEvent.with_min(new_min: 'float') -> "'OtherOpponentEvent'"`
+#### OtherOpponentEvent.with_min
+
+`OtherOpponentEvent.with_min(new_min: 'float') -> "'OtherOpponentEvent'"`
 
 Return a copy with `min` replaced (`:871`).
 
@@ -1337,7 +1439,9 @@ Return a copy with `min` replaced (`:871`).
 |---|---|---|---|
 | `new_min` | `float` |  |  |
 
-### `OtherTeamEvent(min: 'float', score: 'Score', event_string: 'str') -> None` {#OtherTeamEvent}
+### OtherTeamEvent {#OtherTeamEvent}
+
+`OtherTeamEvent(min: 'float', score: 'Score', event_string: 'str') -> None`
 
 A non-sub event belonging to the team under analysis
 
@@ -1353,7 +1457,9 @@ A non-sub event belonging to the team under analysis
 
 **Methods**
 
-#### `OtherTeamEvent.with_min(new_min: 'float') -> "'OtherTeamEvent'"`
+#### OtherTeamEvent.with_min
+
+`OtherTeamEvent.with_min(new_min: 'float') -> "'OtherTeamEvent'"`
 
 Return a copy with `min` replaced (`:863`).
 
@@ -1363,7 +1469,9 @@ Return a copy with `min` replaced (`:863`).
 |---|---|---|---|
 | `new_min` | `float` |  |  |
 
-### `ParseError(location: 'str', id: 'str', messages: 'list[str]') -> None` {#ParseError}
+### ParseError {#ParseError}
+
+`ParseError(location: 'str', id: 'str', messages: 'list[str]') -> None`
 
 A parse-time error (`ParseError`, `ParseError.scala:9`).
 
@@ -1375,7 +1483,9 @@ A parse-time error (`ParseError`, `ParseError.scala:9`).
 | `id` | `str` |  | The module-specific id for which the error occurred. |
 | `messages` | `list[str]` |  | Human-readable description(s) of the error. |
 
-### `PbpBuilders(team_finder: 'Callable[[BeautifulSoup], list[str]]', event_finder: 'Callable[[BeautifulSoup], list[Tag]]', event_time_finder: 'Callable[[Tag], Optional[str]]', event_score_finder: 'Callable[[Tag], Optional[str]]', game_event_finder: 'Callable[[Tag], Optional[str]]', event_team_finder: 'Callable[[Tag, bool], Optional[str]]', event_opponent_finder: 'Callable[[Tag, bool], Optional[str]]') -> None` {#PbpBuilders}
+### PbpBuilders {#PbpBuilders}
+
+`PbpBuilders(team_finder: 'Callable[[BeautifulSoup], list[str]]', event_finder: 'Callable[[BeautifulSoup], list[Tag]]', event_time_finder: 'Callable[[Tag], Optional[str]]', event_score_finder: 'Callable[[Tag], Optional[str]]', game_event_finder: 'Callable[[Tag], Optional[str]]', event_team_finder: 'Callable[[Tag, bool], Optional[str]]', event_opponent_finder: 'Callable[[Tag, bool], Optional[str]]') -> None`
 
 One version-era's HTML finder functions (``PlayByPlayParser
 
@@ -1393,7 +1503,9 @@ One version-era's HTML finder functions (``PlayByPlayParser
 | `event_team_finder` | `Callable[[Tag, bool], Optional[str]]` |  |  |
 | `event_opponent_finder` | `Callable[[Tag, bool], Optional[str]]` |  |  |
 
-### `PeekableIterator(iterable: 'Iterable[_T]') -> 'None'` {#PeekableIterator}
+### PeekableIterator {#PeekableIterator}
+
+`PeekableIterator(iterable: 'Iterable[_T]') -> 'None'`
 
 A stateful iterator with one element of look-ahead, the Python
 
@@ -1409,7 +1521,9 @@ Reproduces the three `Iterator` operations `find_pbp_clump` /
 
 **Methods**
 
-#### `PeekableIterator.find(pred: 'Callable[[_T], bool]') -> 'Optional[_T]'`
+#### PeekableIterator.find
+
+`PeekableIterator.find(pred: 'Callable[[_T], bool]') -> 'Optional[_T]'`
 
 First element satisfying `pred`, consuming up to and including
 
@@ -1422,17 +1536,23 @@ it (or exhausting the iterator and returning `None`) -- Scala
 |---|---|---|---|
 | `pred` | `Callable[[_T], bool]` |  |  |
 
-#### `PeekableIterator.has_next() -> 'bool'`
+#### PeekableIterator.has_next
+
+`PeekableIterator.has_next() -> 'bool'`
 
 Whether another element is available, without consuming it
 
 (Scala `Iterator.hasNext`).
 
-#### `PeekableIterator.to_list() -> 'list[_T]'`
+#### PeekableIterator.to_list
+
+`PeekableIterator.to_list() -> 'list[_T]'`
 
 Drain the remaining elements into a list (Scala `Iterator.toList`).
 
-### `PlayerCodeId(code: 'str', id: 'PlayerId', ncaa_id: 'Optional[str]' = None) -> None` {#PlayerCodeId}
+### PlayerCodeId {#PlayerCodeId}
+
+`PlayerCodeId(code: 'str', id: 'PlayerId', ncaa_id: 'Optional[str]' = None) -> None`
 
 A player's within-team-season code paired with their full identity
 
@@ -1446,7 +1566,9 @@ A player's within-team-season code paired with their full identity
 | `id` | `PlayerId` |  | The player's globally-unique identity. |
 | `ncaa_id` | `Optional[str]` | `None` | The player's NCAA-issued id, if known. |
 
-### `PlayerEvent(player: 'PlayerCodeId', player_stats: 'LineupEventStats', date: 'datetime', location_type: 'LocationType', start_min: 'float', end_min: 'float', duration_mins: 'float', score_info: 'ScoreInfo', team: 'TeamSeasonId', opponent: 'TeamSeasonId', lineup_id: 'LineupId', players: 'list[PlayerCodeId]', players_in: 'list[PlayerCodeId]', players_out: 'list[PlayerCodeId]', raw_game_events: 'list[RawGameEvent]', team_stats: 'LineupEventStats', opponent_stats: 'LineupEventStats', player_count_error: 'Optional[int]' = None) -> None` {#PlayerEvent}
+### PlayerEvent {#PlayerEvent}
+
+`PlayerEvent(player: 'PlayerCodeId', player_stats: 'LineupEventStats', date: 'datetime', location_type: 'LocationType', start_min: 'float', end_min: 'float', duration_mins: 'float', score_info: 'ScoreInfo', team: 'TeamSeasonId', opponent: 'TeamSeasonId', lineup_id: 'LineupId', players: 'list[PlayerCodeId]', players_in: 'list[PlayerCodeId]', players_out: 'list[PlayerCodeId]', raw_game_events: 'list[RawGameEvent]', team_stats: 'LineupEventStats', opponent_stats: 'LineupEventStats', player_count_error: 'Optional[int]' = None) -> None`
 
 A lineup event's stats, narrowed to one player (`PlayerEvent`,
 
@@ -1495,7 +1617,9 @@ to defer; there is no live field to port.
 | `opponent_stats` | `LineupEventStats` |  | Numerical stats extracted for the lineup (opponent side). |
 | `player_count_error` | `Optional[int]` | `None` | If the lineup is "impossible", the number of players actually seen (for analysis purposes). |
 
-### `PlayerShotInfo(unknown_3pm: 'Optional[tuple[int, int, int, int, int]]' = None, early_3pa: 'Optional[tuple[int, int, int, int, int]]' = None, unast_3pm: 'Optional[tuple[int, int, int, int, int]]' = None, ast_3pm: 'Optional[tuple[int, int, int, int, int]]' = None) -> None` {#PlayerShotInfo}
+### PlayerShotInfo {#PlayerShotInfo}
+
+`PlayerShotInfo(unknown_3pm: 'Optional[tuple[int, int, int, int, int]]' = None, early_3pa: 'Optional[tuple[int, int, int, int, int]]' = None, unast_3pm: 'Optional[tuple[int, int, int, int, int]]' = None, ast_3pm: 'Optional[tuple[int, int, int, int, int]]' = None) -> None`
 
 Per-player shot-quality info, keyed by lineup slot
 
@@ -1512,7 +1636,9 @@ Scala `PlayerTuple[Int] = Tuple5[Int, Int, Int, Int, Int]` alias.
 | `unast_3pm` | `Optional[tuple[int, int, int, int, int]]` | `None` | Unassisted 3pt makes, per slot. |
 | `ast_3pm` | `Optional[tuple[int, int, int, int, int]]` | `None` | Assisted 3pt makes, per slot. |
 
-### `PlayerValueConstants(pace_baseline: 'float', bubble_recruit_rank: 'int', bundle_prefix: 'str') -> None` {#PlayerValueConstants}
+### PlayerValueConstants {#PlayerValueConstants}
+
+`PlayerValueConstants(pace_baseline: 'float', bubble_recruit_rank: 'int', bundle_prefix: 'str') -> None`
 
 Per-league constants for the player-value spine.
 
@@ -1524,7 +1650,9 @@ Per-league constants for the player-value spine.
 | `bubble_recruit_rank` | `int` |  | National recruit rank of a "bubble" high-major rotation player (recruiting-model reference point). |
 | `bundle_prefix` | `str` |  | Artifact filename prefix under `mbb/models` (`"mbb"` / `"wbb"`). |
 
-### `PossCalcFragment(shots_made_or_missed: 'int' = 0, liveball_orbs: 'int' = 0, actual_deadball_orbs: 'int' = 0, ft_events: 'int' = 0, ignored_and_ones: 'int' = 0, bad_fouls: 'int' = 0, offsetting_bad_fouls: 'int' = 0, turnovers: 'int' = 0) -> None` {#PossCalcFragment}
+### PossCalcFragment {#PossCalcFragment}
+
+`PossCalcFragment(shots_made_or_missed: 'int' = 0, liveball_orbs: 'int' = 0, actual_deadball_orbs: 'int' = 0, ft_events: 'int' = 0, ignored_and_ones: 'int' = 0, bad_fouls: 'int' = 0, offsetting_bad_fouls: 'int' = 0, turnovers: 'int' = 0) -> None`
 
 Running stats needed to calculate possessions for one lineup event,
 
@@ -1544,7 +1672,9 @@ one direction at a time (`PossessionUtils.PossCalcFragment`,
 | `offsetting_bad_fouls` | `int` | `0` | Count of technical/flagrant fouls that offset (net zero) rather than counting against either side (capped-at-1 flag). |
 | `turnovers` | `int` | `0` | Count of turnovers. |
 
-### `PossState(team_stats: 'PossCalcFragment', opponent_stats: 'PossCalcFragment', prev_clump: 'ConcurrentClump') -> None` {#PossState}
+### PossState {#PossState}
+
+`PossState(team_stats: 'PossCalcFragment', opponent_stats: 'PossCalcFragment', prev_clump: 'ConcurrentClump') -> None`
 
 Running state threaded through `calculate_possessions_by_event`
 
@@ -1558,7 +1688,9 @@ Running state threaded through `calculate_possessions_by_event`
 | `opponent_stats` | `PossCalcFragment` |  | Accumulated fragment for the opponent since the last lineup boundary. |
 | `prev_clump` | `ConcurrentClump` |  | The previously-processed merged clump (used by `calculate_stats`'s and-one / deadball-rebound heuristics). |
 
-### `PossessionEvent(dir: 'Direction') -> None` {#PossessionEvent}
+### PossessionEvent {#PossessionEvent}
+
+`PossessionEvent(dir: 'Direction') -> None`
 
 Decomposes `RawGameEvent`\ s into attacking/defending sides
 
@@ -1572,7 +1704,9 @@ Decomposes `RawGameEvent`\ s into attacking/defending sides
 
 **Methods**
 
-#### `PossessionEvent.attacking_team(ev: 'RawGameEvent') -> 'Optional[str]'`
+#### PossessionEvent.attacking_team
+
+`PossessionEvent.attacking_team(ev: 'RawGameEvent') -> 'Optional[str]'`
 
 The event string for the team in possession, or `None`.
 
@@ -1586,7 +1720,9 @@ The event string for the team in possession, or `None`.
 
 `ev.team` if `dir` is `Direction.TEAM`, `ev.opponent` if `Direction.OPPONENT`, else `None`.
 
-#### `PossessionEvent.defending_team(ev: 'RawGameEvent') -> 'Optional[str]'`
+#### PossessionEvent.defending_team
+
+`PossessionEvent.defending_team(ev: 'RawGameEvent') -> 'Optional[str]'`
 
 The event string for the team NOT in possession, or `None`.
 
@@ -1600,7 +1736,9 @@ The event string for the team NOT in possession, or `None`.
 
 `ev.team` if `dir` is `Direction.OPPONENT`, `ev.opponent` if `Direction.TEAM`, else `None`.
 
-### `PossessionSplits(home_off_poss: 'float', away_off_poss: 'float', neutral_off_poss: 'float', total_off_poss: 'float', home_def_poss: 'float', away_def_poss: 'float', neutral_def_poss: 'float', total_def_poss: 'float') -> None` {#PossessionSplits}
+### PossessionSplits {#PossessionSplits}
+
+`PossessionSplits(home_off_poss: 'float', away_off_poss: 'float', neutral_off_poss: 'float', total_off_poss: 'float', home_def_poss: 'float', away_def_poss: 'float', neutral_def_poss: 'float', total_def_poss: 'float') -> None`
 
 Home/away/neutral possession totals for one team (`ts:143-152`).
 
@@ -1621,28 +1759,38 @@ imbalance `(home - away) / total` off these totals.
 | `neutral_def_poss` | `float` |  |  |
 | `total_def_poss` | `float` |  |  |
 
-### `RapmConfig(...)` {#RapmConfig}
+### RapmConfig {#RapmConfig}
+
+`RapmConfig(...)`
 
 Port of `RapmConfig` (`RapmUtils.ts:175-179`).
 
-### `RapmPlayerContext(...)` {#RapmPlayerContext}
+### RapmPlayerContext {#RapmPlayerContext}
+
+`RapmPlayerContext(...)`
 
 Port of `RapmPlayerContext` (`RapmUtils.ts:147-173`).
 
 See the module docstring for why `filtered_lineups` is a Python
 callable rather than a materialized dict.
 
-### `RapmPreProcDiagnostics(...)` {#RapmPreProcDiagnostics}
+### RapmPreProcDiagnostics {#RapmPreProcDiagnostics}
+
+`RapmPreProcDiagnostics(...)`
 
 Port of `RapmPreProcDiagnostics` (`RapmUtils.ts:187-194`) -- the
 
 multi-collinearity diagnostic `calc_collinearity_diag` returns.
 
-### `RapmPriorInfo(...)` {#RapmPriorInfo}
+### RapmPriorInfo {#RapmPriorInfo}
+
+`RapmPriorInfo(...)`
 
 Port of `RapmPriorInfo` (`RapmUtils.ts:124-133`).
 
-### `RapmProcessingInputs(...)` {#RapmProcessingInputs}
+### RapmProcessingInputs {#RapmProcessingInputs}
+
+`RapmProcessingInputs(...)`
 
 Port of `RapmProcessingInputs` (`RapmUtils.ts:196-203`).
 
@@ -1651,7 +1799,9 @@ See the module docstring's "Task 3.5 notes" for why `soln_matrix` and
 `sd_rapm` exists at all (a Python-only addition beyond upstream's own
 return shape).
 
-### `RawGameEvent(min: 'float', team: 'Optional[str]' = None, opponent: 'Optional[str]' = None) -> None` {#RawGameEvent}
+### RawGameEvent {#RawGameEvent}
+
+`RawGameEvent(min: 'float', team: 'Optional[str]' = None, opponent: 'Optional[str]' = None) -> None`
 
 A single NCAA play-by-play event line (`LineupEvent.RawGameEvent`,
 
@@ -1668,7 +1818,9 @@ string is the literal `"date,time,event"` line from the NCAA website.
 | `team` | `Optional[str]` | `None` | The raw event string, if this event belongs to the team under analysis. |
 | `opponent` | `Optional[str]` | `None` | The raw event string, if this event belongs to the opponent. |
 
-### `RosterEntry(player_code_id: 'PlayerCodeId', number: 'str', pos: 'str', height: 'str', height_in: 'Optional[int]', year_class: 'str', gp: 'int', origin: 'Optional[str]', role: 'Optional[str]') -> None` {#RosterEntry}
+### RosterEntry {#RosterEntry}
+
+`RosterEntry(player_code_id: 'PlayerCodeId', number: 'str', pos: 'str', height: 'str', height_in: 'Optional[int]', year_class: 'str', gp: 'int', origin: 'Optional[str]', role: 'Optional[str]') -> None`
 
 An entry in an NCAA team roster (`RosterEntry`, ``models/ncaa
 
@@ -1699,7 +1851,9 @@ populates it.
 | `origin` | `Optional[str]` |  | The player's hometown/prior-school text, if the source table has that column (v1 rosters only). |
 | `role` | `Optional[str]` |  | Reserved for a later phase; always `None` from `parse_roster` (see above). |
 
-### `ScheduleBuilders(team_name_finder: 'Callable[[BeautifulSoup], Optional[str]]', neutral_game_finder: 'Callable[[BeautifulSoup], list[str]]') -> None` {#ScheduleBuilders}
+### ScheduleBuilders {#ScheduleBuilders}
+
+`ScheduleBuilders(team_name_finder: 'Callable[[BeautifulSoup], Optional[str]]', neutral_game_finder: 'Callable[[BeautifulSoup], list[str]]') -> None`
 
 One version-era's HTML finder functions (``TeamScheduleParser
 
@@ -1712,7 +1866,9 @@ One version-era's HTML finder functions (``TeamScheduleParser
 | `team_name_finder` | `Callable[[BeautifulSoup], Optional[str]]` |  |  |
 | `neutral_game_finder` | `Callable[[BeautifulSoup], list[str]]` |  |  |
 
-### `ScoreInfo(start: 'Score', end: 'Score', start_diff: 'int', end_diff: 'int') -> None` {#ScoreInfo}
+### ScoreInfo {#ScoreInfo}
+
+`ScoreInfo(start: 'Score', end: 'Score', start_diff: 'int', end_diff: 'int') -> None`
 
 Score context at the start/end of a lineup event
 
@@ -1727,7 +1883,9 @@ Score context at the start/end of a lineup event
 | `start_diff` | `int` |  | Score differential (team - opponent) at the start. |
 | `end_diff` | `int` |  | Score differential (team - opponent) at the end. |
 
-### `ShotClockStats(total: 'int' = 0, early: 'Optional[int]' = None, mid: 'Optional[int]' = None, late: 'Optional[int]' = None, orb: 'Optional[int]' = None) -> None` {#ShotClockStats}
+### ShotClockStats {#ShotClockStats}
+
+`ShotClockStats(total: 'int' = 0, early: 'Optional[int]' = None, mid: 'Optional[int]' = None, late: 'Optional[int]' = None, orb: 'Optional[int]' = None) -> None`
 
 Counting stats broken down by shot-clock segment
 
@@ -1743,7 +1901,9 @@ Counting stats broken down by shot-clock segment
 | `late` | `Optional[int]` | `None` | Count in the last 10s, if tracked. |
 | `orb` | `Optional[int]` | `None` | Count in the first 10s following an offensive rebound, if tracked (else folded into `mid`/`late` as normal). |
 
-### `ShotEvent(player: 'Optional[PlayerCodeId]', date: 'datetime', location_type: 'LocationType', team: 'TeamSeasonId', opponent: 'TeamSeasonId', is_off: 'bool', lineup_id: 'Optional[LineupId]', players: 'list[PlayerCodeId]', score: 'Score', min: 'float', loc: 'ShotLocation', geo: 'ShotGeo', dist: 'float', pts: 'int', value: 'int', ast_by: 'Optional[PlayerCodeId]', is_ast: 'Optional[bool]', is_trans: 'Optional[bool]', raw_event: 'Optional[str]') -> None` {#ShotEvent}
+### ShotEvent {#ShotEvent}
+
+`ShotEvent(player: 'Optional[PlayerCodeId]', date: 'datetime', location_type: 'LocationType', team: 'TeamSeasonId', opponent: 'TeamSeasonId', is_off: 'bool', lineup_id: 'Optional[LineupId]', players: 'list[PlayerCodeId]', score: 'Score', min: 'float', loc: 'ShotLocation', geo: 'ShotGeo', dist: 'float', pts: 'int', value: 'int', ast_by: 'Optional[PlayerCodeId]', is_ast: 'Optional[bool]', is_trans: 'Optional[bool]', raw_event: 'Optional[str]') -> None`
 
 Info about one shot taken during a game, all distances in feet
 
@@ -1799,7 +1959,9 @@ builds).
 | `is_trans` | `Optional[bool]` |  | Whether the shot was in transition, if/when matched (see above). |
 | `raw_event` | `Optional[str]` |  | The raw SVG `<title>` text this shot was parsed from, for debugging (discarded before writing to disk upstream). |
 
-### `ShotEventBuilders(team_finder: 'Callable[[BeautifulSoup], list[str]]', shot_event_finder: 'Callable[[BeautifulSoup], list[Tag]]', script_extractor: 'Callable[[str], Optional[str]]', title_extractor: 'Callable[[Tag], Optional[str]]', event_period_finder: 'Callable[[Tag], Optional[int]]', event_time_finder: 'Callable[[Tag], Optional[float]]', event_player_finder: 'Callable[[Tag], Optional[str]]', shot_location_finder: 'Callable[[Tag], Optional[tuple[float, float]]]', event_score_finder: 'Callable[[Tag], Optional[Score]]', shot_result_finder: 'Callable[[Tag], Optional[bool]]', shot_taking_team_finder: 'Callable[[Tag], Optional[str]]') -> None` {#ShotEventBuilders}
+### ShotEventBuilders {#ShotEventBuilders}
+
+`ShotEventBuilders(team_finder: 'Callable[[BeautifulSoup], list[str]]', shot_event_finder: 'Callable[[BeautifulSoup], list[Tag]]', script_extractor: 'Callable[[str], Optional[str]]', title_extractor: 'Callable[[Tag], Optional[str]]', event_period_finder: 'Callable[[Tag], Optional[int]]', event_time_finder: 'Callable[[Tag], Optional[float]]', event_player_finder: 'Callable[[Tag], Optional[str]]', shot_location_finder: 'Callable[[Tag], Optional[tuple[float, float]]]', event_score_finder: 'Callable[[Tag], Optional[Score]]', shot_result_finder: 'Callable[[Tag], Optional[bool]]', shot_taking_team_finder: 'Callable[[Tag], Optional[str]]') -> None`
 
 The HTML finder-function table (`ShotEventParser.base_builders`,
 
@@ -1823,7 +1985,9 @@ the v0/v1 pairs in every other 5e parser.
 | `shot_result_finder` | `Callable[[Tag], Optional[bool]]` |  |  |
 | `shot_taking_team_finder` | `Callable[[Tag], Optional[str]]` |  |  |
 
-### `ShotGeo(lat: 'float', lon: 'float') -> None` {#ShotGeo}
+### ShotGeo {#ShotGeo}
+
+`ShotGeo(lat: 'float', lon: 'float') -> None`
 
 A shot's synthetic lat/lon, for geo-aware visualization tooling
 
@@ -1837,7 +2001,9 @@ addition, Task 5e.5** -- flattened per `ShotLocation`'s note.
 | `lat` | `float` |  | Synthetic latitude (feet-to-meters converted, offset from an arbitrary base point -- not a real-world location). |
 | `lon` | `float` |  | Synthetic longitude, same convention as `lat`. |
 
-### `ShotLocation(x: 'float', y: 'float') -> None` {#ShotLocation}
+### ShotLocation {#ShotLocation}
+
+`ShotLocation(x: 'float', y: 'float') -> None`
 
 A shot's court-relative coordinates, in feet (`ShotEvent.ShotLocation`,
 
@@ -1854,7 +2020,9 @@ already flattened out of `LineupEvent`'s companion the same way).
 | `x` | `float` |  | Feet from the basket; positive is to the right of the basket (facing the goal), negative is to the left. |
 | `y` | `float` |  | Feet from the basket along the baseline-perpendicular axis. |
 
-### `ShotMapDimensions()` {#ShotMapDimensions}
+### ShotMapDimensions {#ShotMapDimensions}
+
+`ShotMapDimensions()`
 
 SVG shot-map pixel<->feet conversion constants, taken from the
 
@@ -1865,7 +2033,9 @@ field names are kept snake_case to match the Scala vals verbatim,
 letting the ported oracle tests reference e.g.
 `ShotMapDimensions.court_length_x_px` 1:1.
 
-### `StrengthAdjustedResult(averages: 'dict[str, FieldAverage]', teams: 'list[TeamStrengthAdjusted]') -> None` {#StrengthAdjustedResult}
+### StrengthAdjustedResult {#StrengthAdjustedResult}
+
+`StrengthAdjustedResult(averages: 'dict[str, FieldAverage]', teams: 'list[TeamStrengthAdjusted]') -> None`
 
 The compute output of `build_strength_adjusted_stats`.
 
@@ -1879,7 +2049,9 @@ the `lastUpdated`/`gender`/`year` serialization wrapper.
 | `averages` | `dict[str, FieldAverage]` |  |  |
 | `teams` | `list[TeamStrengthAdjusted]` |  |  |
 
-### `StrongSurnameMatch(box_name: 'str', score: 'int') -> None` {#StrongSurnameMatch}
+### StrongSurnameMatch {#StrongSurnameMatch}
+
+`StrongSurnameMatch(box_name: 'str', score: 'int') -> None`
 
 A surname fragment matched and the whole-name score cleared
 
@@ -1892,7 +2064,9 @@ A surname fragment matched and the whole-name score cleared
 | `box_name` | `str` |  | The box-score name compared against. |
 | `score` | `int` |  | The whole-name similarity score. |
 
-### `SubInEvent(min: 'float', score: 'Score', player_name: 'str') -> None` {#SubInEvent}
+### SubInEvent {#SubInEvent}
+
+`SubInEvent(min: 'float', score: 'Score', player_name: 'str') -> None`
 
 A player subs into the game (`Model.SubInEvent`, `ExtractorUtils.scala:850-853`).
 
@@ -1906,7 +2080,9 @@ A player subs into the game (`Model.SubInEvent`, `ExtractorUtils.scala:850-853`)
 
 **Methods**
 
-#### `SubInEvent.with_min(new_min: 'float') -> "'SubInEvent'"`
+#### SubInEvent.with_min
+
+`SubInEvent.with_min(new_min: 'float') -> "'SubInEvent'"`
 
 Return a copy with `min` replaced (`:852`).
 
@@ -1916,7 +2092,9 @@ Return a copy with `min` replaced (`:852`).
 |---|---|---|---|
 | `new_min` | `float` |  |  |
 
-### `SubOutEvent(min: 'float', score: 'Score', player_name: 'str') -> None` {#SubOutEvent}
+### SubOutEvent {#SubOutEvent}
+
+`SubOutEvent(min: 'float', score: 'Score', player_name: 'str') -> None`
 
 A player subs out of the game (`Model.SubOutEvent`, `ExtractorUtils.scala:854-857`).
 
@@ -1930,7 +2108,9 @@ A player subs out of the game (`Model.SubOutEvent`, `ExtractorUtils.scala:854-85
 
 **Methods**
 
-#### `SubOutEvent.with_min(new_min: 'float') -> "'SubOutEvent'"`
+#### SubOutEvent.with_min
+
+`SubOutEvent.with_min(new_min: 'float') -> "'SubOutEvent'"`
 
 Return a copy with `min` replaced (`:856`).
 
@@ -1940,7 +2120,9 @@ Return a copy with `min` replaced (`:856`).
 |---|---|---|---|
 | `new_min` | `float` |  |  |
 
-### `TeamId(name: 'str') -> None` {#TeamId}
+### TeamId {#TeamId}
+
+`TeamId(name: 'str') -> None`
 
 CBB team identifier (`TeamId`, `TeamId.scala`, `AnyVal`).
 
@@ -1950,7 +2132,9 @@ CBB team identifier (`TeamId`, `TeamId.scala`, `AnyVal`).
 |---|---|---|---|
 | `name` | `str` |  | The unique team name. |
 
-### `TeamSeasonId(team: 'TeamId', year: 'Year') -> None` {#TeamSeasonId}
+### TeamSeasonId {#TeamSeasonId}
+
+`TeamSeasonId(team: 'TeamId', year: 'Year') -> None`
 
 A team's season identifier (`TeamSeasonId`, `TeamSeasonId.scala`).
 
@@ -1961,7 +2145,9 @@ A team's season identifier (`TeamSeasonId`, `TeamSeasonId.scala`).
 | `team` | `TeamId` |  | The team playing the season. |
 | `year` | `Year` |  | The year the season ends. |
 
-### `TeamStrengthAdjusted(team_name: 'str', conf: 'str', raw: 'FieldSideMap', adj: 'FieldSideMap', adj_hca: 'FieldSideMap') -> None` {#TeamStrengthAdjusted}
+### TeamStrengthAdjusted {#TeamStrengthAdjusted}
+
+`TeamStrengthAdjusted(team_name: 'str', conf: 'str', raw: 'FieldSideMap', adj: 'FieldSideMap', adj_hca: 'FieldSideMap') -> None`
 
 One team's raw / adjusted / HCA-adjusted rates (`ts:642-648`).
 
@@ -1980,7 +2166,9 @@ the home-court term (`off + hca_off`, `def - hca_def`).
 | `adj` | `FieldSideMap` |  |  |
 | `adj_hca` | `FieldSideMap` |  |  |
 
-### `TidyPlayerContext(box_lineup: 'LineupEvent', all_players_map: 'dict[str, str]', alt_all_players_map: 'dict[str, list[str]]', resolution_cache: 'dict[str, str]' = <factory>) -> None` {#TidyPlayerContext}
+### TidyPlayerContext {#TidyPlayerContext}
+
+`TidyPlayerContext(box_lineup: 'LineupEvent', all_players_map: 'dict[str, str]', alt_all_players_map: 'dict[str, list[str]]', resolution_cache: 'dict[str, str]' = <factory>) -> None`
 
 Precomputed box-score lookup tables + resolution cache for
 
@@ -1996,7 +2184,9 @@ Precomputed box-score lookup tables + resolution cache for
 | `alt_all_players_map` | `dict[str, list[str]]` |  | Truncated player code (see truncate_code_1` / truncate_code_2`) -> the list of full names sharing that truncation -- used when the exact code doesn't match but a unique truncated one does. |
 | `resolution_cache` | `dict[str, str]` | `<factory>` | Memoizes prior `tidy_player` resolutions. See the module docstring's "Behavioral quirk" note -- this is read by the raw input name but written by the corrected name, faithfully reproducing the upstream asymmetry. |
 
-### `ValidationError(*values)` {#ValidationError}
+### ValidationError {#ValidationError}
+
+`ValidationError(*values)`
 
 The 3 ways a lineup can be declared invalid, in Scala declaration
 
@@ -2004,7 +2194,9 @@ The 3 ways a lineup can be declared invalid, in Scala declaration
 Member order is load-bearing -- see the module docstring's "Return
 shape" note.
 
-### `WeakSurnameMatch(box_name: 'str', score: 'int', info: 'str') -> None` {#WeakSurnameMatch}
+### WeakSurnameMatch {#WeakSurnameMatch}
+
+`WeakSurnameMatch(box_name: 'str', score: 'int', info: 'str') -> None`
 
 A surname fragment matched, but the whole-name score fell short of
 
@@ -2018,7 +2210,9 @@ A surname fragment matched, but the whole-name score fell short of
 | `score` | `int` |  | The whole-name similarity score. |
 | `info` | `str` |  | Human-readable diagnostic (debug-only; see the fuzzy-match- parity note). |
 
-### `add_missing_players(clump: 'BadLineupClump', box_lineup: 'LineupEvent', valid_player_codes: 'set[str]') -> 'tuple[list[LineupEvent], BadLineupClump]'` {#add_missing_players}
+### add_missing_players {#add_missing_players}
+
+`add_missing_players(clump: 'BadLineupClump', box_lineup: 'LineupEvent', valid_player_codes: 'set[str]') -> 'tuple[list[LineupEvent], BadLineupClump]'`
 
 Back-fills a clump whose lineups carry TOO FEW players
 
@@ -2066,7 +2260,9 @@ from sportsdataverse.mbb.mbb_ncaa_stint_validation import (
 fixed, still = add_missing_players(clump, box_lineup, valid_codes)
 ```
 
-### `add_stats_to_lineups(lineup: 'LineupEvent') -> 'LineupEvent'` {#add_stats_to_lineups}
+### add_stats_to_lineups {#add_stats_to_lineups}
+
+`add_stats_to_lineups(lineup: 'LineupEvent') -> 'LineupEvent'`
 
 Enrich a lineup with play-by-play stats for both team and opponent
 
@@ -2082,7 +2278,9 @@ Enrich a lineup with play-by-play stats for both team and opponent
 
 A new `~sportsdataverse.mbb.mbb_ncaa_models.LineupEvent` with `team_stats`/`opponent_stats` populated.
 
-### `adjust_efficiency(game_eff: 'pl.DataFrame', *, league: 'str' = 'mens', max_iter: 'int' = 100, tol: 'float' = 0.0001) -> 'pl.DataFrame'` {#adjust_efficiency}
+### adjust_efficiency {#adjust_efficiency}
+
+`adjust_efficiency(game_eff: 'pl.DataFrame', *, league: 'str' = 'mens', max_iter: 'int' = 100, tol: 'float' = 0.0001) -> 'pl.DataFrame'`
 
 Iterative opponent-adjusted efficiency -> AdjO / AdjD / AdjEM per team-season.
 
@@ -2118,7 +2316,9 @@ from sportsdataverse.mbb.mbb_team_ratings import adjust_efficiency, raw_game_eff
 ratings = adjust_efficiency(raw_game_efficiency(sched, box))
 ```
 
-### `adjust_off_rating_stats(pts_correction_factor: 'float', poss_correction_factor: 'float', mutable_o_rtg: 'ORtgDiagnostics', maybe_raw_o_rtg: 'float | None') -> 'tuple[float, float] | None'` {#adjust_off_rating_stats}
+### adjust_off_rating_stats {#adjust_off_rating_stats}
+
+`adjust_off_rating_stats(pts_correction_factor: 'float', poss_correction_factor: 'float', mutable_o_rtg: 'ORtgDiagnostics', maybe_raw_o_rtg: 'float | None') -> 'tuple[float, float] | None'`
 
 Apply a missing-possession correction factor to an `ORtgDiagnostics` dict in place.
 
@@ -2157,7 +2357,9 @@ adjust_off_rating_stats(1.1, 0.9, o_diags, maybe_raw)
 print(o_diags["oRtg"], o_diags["adjORtgPlus"])
 ```
 
-### `adjust_tempo(game_eff: 'pl.DataFrame', *, league: 'str' = 'mens', max_iter: 'int' = 100, tol: 'float' = 0.0001) -> 'pl.DataFrame'` {#adjust_tempo}
+### adjust_tempo {#adjust_tempo}
+
+`adjust_tempo(game_eff: 'pl.DataFrame', *, league: 'str' = 'mens', max_iter: 'int' = 100, tol: 'float' = 0.0001) -> 'pl.DataFrame'`
 
 Opponent-adjusted tempo (possessions/40) per team-season.
 
@@ -2187,7 +2389,9 @@ from sportsdataverse.mbb.mbb_team_ratings import adjust_tempo, raw_game_efficien
 tempo = adjust_tempo(raw_game_efficiency(sched, box))
 ```
 
-### `aggregate_player_seasons(seasons: "'list[int]'", *, league: 'str' = 'mens') -> 'pl.DataFrame'` {#aggregate_player_seasons}
+### aggregate_player_seasons {#aggregate_player_seasons}
+
+`aggregate_player_seasons(seasons: "'list[int]'", *, league: 'str' = 'mens') -> 'pl.DataFrame'`
 
 Canonical per-player-season counting frame from the boxscore release.
 
@@ -2220,7 +2424,9 @@ from sportsdataverse.mbb.mbb_player_value_constants import (
 feats = player_per100_features(aggregate_player_seasons([2025]))
 ```
 
-### `alias_combos(first: 'str', last: 'str', to_name: 'str') -> 'dict[str, str]'` {#alias_combos}
+### alias_combos {#alias_combos}
+
+`alias_combos(first: 'str', last: 'str', to_name: 'str') -> 'dict[str, str]'`
 
 Pair each of `combos`' three name variants with a shared alias
 
@@ -2238,7 +2444,9 @@ target (`DataQualityIssues.alias_combos`, `DataQualityIssues.scala:351-356`).
 
 A dict mapping each of the three name variants to `to_name`.
 
-### `analyze_and_fix_clumps(clump: 'BadLineupClump', box_lineup: 'LineupEvent', valid_player_codes: 'set[str]') -> 'tuple[list[LineupEvent], BadLineupClump]'` {#analyze_and_fix_clumps}
+### analyze_and_fix_clumps {#analyze_and_fix_clumps}
+
+`analyze_and_fix_clumps(clump: 'BadLineupClump', box_lineup: 'LineupEvent', valid_player_codes: 'set[str]') -> 'tuple[list[LineupEvent], BadLineupClump]'`
 
 Runs the full self-healing fixer pipeline over one bad-lineup clump
 
@@ -2289,7 +2497,9 @@ for lineup in fixed:
     print(lineup.lineup_id.value)
 ```
 
-### `apply_relative_positional_overrides(results: 'list[dict[str, str]]', team_season: 'str', recurse_count: 'int' = 0) -> 'list[dict[str, str]]'` {#apply_relative_positional_overrides}
+### apply_relative_positional_overrides {#apply_relative_positional_overrides}
+
+`apply_relative_positional_overrides(results: 'list[dict[str, str]]', team_season: 'str', recurse_count: 'int' = 0) -> 'list[dict[str, str]]'`
 
 Recursively re-shuffle an ordered lineup per `RELATIVE_POSITION_FIXES`.
 
@@ -2331,7 +2541,9 @@ results = [
 apply_relative_positional_overrides(results, "Men_Maryland_2019/20")
 ```
 
-### `apply_weak_priors(field: 'str', player_poss_pcts: 'list[float]', prior_info: 'RapmPriorInfo', debug_mode: 'bool' = False) -> 'Callable[[float, list[float]], list[float]]'` {#apply_weak_priors}
+### apply_weak_priors {#apply_weak_priors}
+
+`apply_weak_priors(field: 'str', player_poss_pcts: 'list[float]', prior_info: 'RapmPriorInfo', debug_mode: 'bool' = False) -> 'Callable[[float, list[float]], list[float]]'`
 
 Build a closure that nudges ridge-regressed RAPM back towards its weak prior.
 
@@ -2367,7 +2579,9 @@ nudge = apply_weak_priors("off_adj_ppp", pct_by_player, ctx["prior_info"])
 adjusted = nudge(adj_eff_err_pre_prior, results_pre_prior)
 ```
 
-### `as_of_ratings_split(results: 'pl.DataFrame', cutoff_date: 'datetime.date') -> 'pl.DataFrame'` {#as_of_ratings_split}
+### as_of_ratings_split {#as_of_ratings_split}
+
+`as_of_ratings_split(results: 'pl.DataFrame', cutoff_date: 'datetime.date') -> 'pl.DataFrame'`
 
 Filter a results frame to games strictly before a cutoff date (leakage boundary).
 
@@ -2390,7 +2604,9 @@ from sportsdataverse._common.metrics import as_of_ratings_split
 as_of_ratings_split(results, dt.date(2023, 9, 8))
 ```
 
-### `as_of_season_split(df: 'pl.DataFrame', target_season: 'int') -> 'pl.DataFrame'` {#as_of_season_split}
+### as_of_season_split {#as_of_season_split}
+
+`as_of_season_split(df: 'pl.DataFrame', target_season: 'int') -> 'pl.DataFrame'`
 
 Rows strictly before `target_season` -- the leakage boundary.
 
@@ -2412,7 +2628,9 @@ from sportsdataverse.mbb.mbb_player_value_constants import as_of_season_split
 prior = as_of_season_split(df, 2026)
 ```
 
-### `assign_to_right_lineup(state: 'PossState', team_stats: 'PossCalcFragment', opponent_stats: 'PossCalcFragment', clump: 'ConcurrentClump', prev_clump: 'ConcurrentClump') -> 'list[LineupEvent]'` {#assign_to_right_lineup}
+### assign_to_right_lineup {#assign_to_right_lineup}
+
+`assign_to_right_lineup(state: 'PossState', team_stats: 'PossCalcFragment', opponent_stats: 'PossCalcFragment', clump: 'ConcurrentClump', prev_clump: 'ConcurrentClump') -> 'list[LineupEvent]'`
 
 Assign a clump's possessions to the lineup(s) ending in it
 
@@ -2439,7 +2657,9 @@ candidates if there's more than one) and finally `lineup_fixer`
 
 The lineup(s) ending in this clump, enriched with possession counts. Empty if `clump.lineups` is empty (see the module docstring's landmine-index note -- unreachable via `calculate_possessions_by_event`).
 
-### `attr_regex_filter(tags: 'list[Tag]', attr: 'str', regex: 'str') -> 'list[Tag]'` {#attr_regex_filter}
+### attr_regex_filter {#attr_regex_filter}
+
+`attr_regex_filter(tags: 'list[Tag]', attr: 'str', regex: 'str') -> 'list[Tag]'`
 
 JSoup `[attr~=regex]`: candidates whose `attr` value matches
 
@@ -2465,7 +2685,9 @@ soup = parse_html('<div width="45%"></div><div width="10%"></div>')
 attr_regex_filter(soup.find_all("div"), "width", r"^\[?4?5")
 ```
 
-### `bootstrap_ari(fit_fn: "'Callable[[np.ndarray], tuple[np.ndarray, np.ndarray]]'", X: 'np.ndarray', n_boot: 'int' = 20, seed: 'int' = 0) -> 'float'` {#bootstrap_ari}
+### bootstrap_ari {#bootstrap_ari}
+
+`bootstrap_ari(fit_fn: "'Callable[[np.ndarray], tuple[np.ndarray, np.ndarray]]'", X: 'np.ndarray', n_boot: 'int' = 20, seed: 'int' = 0) -> 'float'`
 
 Cluster stability: mean ARI between the full fit and bootstrap refits.
 
@@ -2489,7 +2711,9 @@ from functools import partial
 score = bootstrap_ari(lambda Z: kmeans_fit(Z, 8, seed=0), Z, n_boot=20, seed=0)
 ```
 
-### `box_aware_compare(candidate_in: 'str', box_name_in: 'str') -> 'MatchResult'` {#box_aware_compare}
+### box_aware_compare {#box_aware_compare}
+
+`box_aware_compare(candidate_in: 'str', box_name_in: 'str') -> 'MatchResult'`
 
 Score how well a single play-by-play candidate name fits a single
 
@@ -2514,7 +2738,9 @@ box_aware_compare("Tuitele, Peanut", "Tuitele, Peanut")
 # StrongSurnameMatch(box_name='Tuitele, Peanut', score=100)
 ```
 
-### `brier_score(y_true: 'np.ndarray', p_pred: 'np.ndarray') -> 'float'` {#brier_score}
+### brier_score {#brier_score}
+
+`brier_score(y_true: 'np.ndarray', p_pred: 'np.ndarray') -> 'float'`
 
 Mean squared error between predicted probabilities and binary outcomes.
 
@@ -2537,7 +2763,9 @@ from sportsdataverse._common.metrics import brier_score
 brier_score(np.array([1, 0]), np.array([0.9, 0.1]))
 ```
 
-### `build_3p_shot_info(p: 'LineupStatSet') -> 'OffLuckShotInfo3P'` {#build_3p_shot_info}
+### build_3p_shot_info {#build_3p_shot_info}
+
+`build_3p_shot_info(p: 'LineupStatSet') -> 'OffLuckShotInfo3P'`
 
 3P-only shot-decomposition wrapper.
 
@@ -2564,7 +2792,9 @@ info = build_3p_shot_info(player)
 print(info["shot_info_total_3p"])
 ```
 
-### `build_adjusted_3p(p: 'LineupStatSet', info: 'OffLuckShotInfo3P') -> 'OffLuckAdj3P'` {#build_adjusted_3p}
+### build_adjusted_3p {#build_adjusted_3p}
+
+`build_adjusted_3p(p: 'LineupStatSet', info: 'OffLuckShotInfo3P') -> 'OffLuckAdj3P'`
 
 3P-only approx-unassisted/assisted-FG% wrapper.
 
@@ -2593,7 +2823,9 @@ adj = build_adjusted_3p(base_player, base_info)
 print(adj["assisted3P"], adj["unassisted3P"])
 ```
 
-### `build_athlete_identity_lookup(rosters: 'dict[int | str, dict]') -> 'dict[str, dict[str, Any]]'` {#build_athlete_identity_lookup}
+### build_athlete_identity_lookup {#build_athlete_identity_lookup}
+
+`build_athlete_identity_lookup(rosters: 'dict[int | str, dict]') -> 'dict[str, dict[str, Any]]'`
 
 R `build_athlete_identity_lookup`: athlete_id -> identity from team rosters.
 
@@ -2607,7 +2839,9 @@ R `build_athlete_identity_lookup`: athlete_id -> identity from team rosters.
 
 athlete_id (str) -> identity fields for `helper_wbb_player_season_stats`.
 
-### `build_available_team_list(in_by_year: 'dict[str, list[tuple[TeamId, str, ConferenceId]]]') -> 'dict[ConferenceId, Callable[[str], str]]'` {#build_available_team_list}
+### build_available_team_list {#build_available_team_list}
+
+`build_available_team_list(in_by_year: 'dict[str, list[tuple[TeamId, str, ConferenceId]]]') -> 'dict[ConferenceId, Callable[[str], str]]'`
 
 Builds a per-conference team-index JSON fragment for
 
@@ -2640,7 +2874,9 @@ by_year = {"2018/9": [(TeamId("Kentucky"), "450591", ConferenceId("SEC"))]}
 build_available_team_list(by_year)[ConferenceId("SEC")]("test")
 ```
 
-### `build_base_event(box_lineup: 'LineupEvent') -> 'ShotEvent'` {#build_base_event}
+### build_base_event {#build_base_event}
+
+`build_base_event(box_lineup: 'LineupEvent') -> 'ShotEvent'`
 
 Fills in the fields a shot event can borrow straight from the
 
@@ -2664,7 +2900,9 @@ from sportsdataverse.mbb.mbb_ncaa_shot_parser import build_base_event
 base = build_base_event(box_lineup)
 ```
 
-### `build_d_rtg(stat_set: 'LineupStatSet | None', avg_efficiency: 'float', calc_diags: 'bool', override_adjusted: 'bool') -> 'tuple[dict[str, float] | None, dict[str, float] | None, dict[str, float] | None, dict[str, float] | None, DRtgDiagnostics | None]'` {#build_d_rtg}
+### build_d_rtg {#build_d_rtg}
+
+`build_d_rtg(stat_set: 'LineupStatSet | None', avg_efficiency: 'float', calc_diags: 'bool', override_adjusted: 'bool') -> 'tuple[dict[str, float] | None, dict[str, float] | None, dict[str, float] | None, dict[str, float] | None, DRtgDiagnostics | None]'`
 
 Individual defensive rating (Dean-Oliver DRtg) + diagnostics.
 
@@ -2703,7 +2941,9 @@ d_rtg2, adj_d_rtg2, raw_d_rtg2, raw_adj_d_rtg2, _ = build_d_rtg(
 )
 ```
 
-### `build_efficiency_margins(mutable_stat_set: 'LineupStatSet', key_override: 'str | None' = None) -> 'None'` {#build_efficiency_margins}
+### build_efficiency_margins {#build_efficiency_margins}
+
+`build_efficiency_margins(mutable_stat_set: 'LineupStatSet', key_override: 'str | None' = None) -> 'None'`
 
 Derive `off_net` / `off_raw_net` on a stat set, in place.
 
@@ -2736,7 +2976,9 @@ if isinstance(off_ppp, dict) and off_ppp.get("old_value") is not None:
 print(team_info["off_net"]["value"])
 ```
 
-### `build_exp_3p(info: 'OffLuckShotTypeAndAdj3P') -> 'float'` {#build_exp_3p}
+### build_exp_3p {#build_exp_3p}
+
+`build_exp_3p(info: 'OffLuckShotTypeAndAdj3P') -> 'float'`
 
 Expected made-3P count given a player's shot-type mix + shooting %s.
 
@@ -2767,7 +3009,9 @@ info = {**build_3p_shot_info(player), **build_adjusted_3p(base_player, base_info
 expected_makes = build_exp_3p(info)
 ```
 
-### `build_lineup_cli_array(in_triples: 'list[tuple[TeamId, str, ConferenceId]]') -> 'dict[ConferenceId, str]'` {#build_lineup_cli_array}
+### build_lineup_cli_array {#build_lineup_cli_array}
+
+`build_lineup_cli_array(in_triples: 'list[tuple[TeamId, str, ConferenceId]]') -> 'dict[ConferenceId, str]'`
 
 Builds the per-conference team array for `lineups-cli.sh` files
 
@@ -2804,7 +3048,9 @@ build_lineup_cli_array(triples)[ConferenceId("B1G")]
 # "   '1::Penn+St.'"
 ```
 
-### `build_lineup_id(players: 'list[PlayerCodeId]') -> 'LineupId'` {#build_lineup_id}
+### build_lineup_id {#build_lineup_id}
+
+`build_lineup_id(players: 'list[PlayerCodeId]') -> 'LineupId'`
 
 Builds a lineup id from a list of players (`ExtractorUtils.scala:602-606`):
 
@@ -2829,7 +3075,9 @@ build_lineup_id([PlayerCodeId("BbBob", PlayerId("Bob")), PlayerCodeId("AaAl", Pl
 # LineupId("AaAl_BbBob")
 ```
 
-### `build_mbb_player_identity_lookup(player_box: 'pl.DataFrame') -> 'dict[str, dict[str, Any]]'` {#build_mbb_player_identity_lookup}
+### build_mbb_player_identity_lookup {#build_mbb_player_identity_lookup}
+
+`build_mbb_player_identity_lookup(player_box: 'pl.DataFrame') -> 'dict[str, dict[str, Any]]'`
 
 R `build_identity_lookup(season)`: athlete_id -> identity from the
 
@@ -2847,7 +3095,9 @@ cannot answer that for historical seasons).
 
 athlete_id (str) -> identity fields for `helper_nba_player_season_stats`. When an athlete appears in multiple rows (multiple games), the LAST row (by frame order) wins -- mirroring R's `!duplicated(athlete_id, fromLast = TRUE)`, which keeps an athlete's most recent team within the season.
 
-### `build_mbb_season_wp(season: 'int', *, league: 'str' = 'mens', return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#build_mbb_season_wp}
+### build_mbb_season_wp {#build_mbb_season_wp}
+
+`build_mbb_season_wp(season: 'int', *, league: 'str' = 'mens', return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"`
 
 A season's play-by-play with win-probability columns joined in.
 
@@ -2878,7 +3128,9 @@ wp = build_mbb_season_wp(2024)
 wp.select("game_id", "game_play_number", "home_win_prob").head()
 ```
 
-### `build_net_points(player_rapm_and_poss_pct: 'LineupStatSet', ortg: 'ORtgDiagnostics', drtg: 'DRtgDiagnostics', avg_eff: 'float', scale_type: "Literal['T%', 'P%', '/G']", num_games: 'float' = 1, missing_game_adjustment: 'float' = 1) -> 'NetPoints'` {#build_net_points}
+### build_net_points {#build_net_points}
+
+`build_net_points(player_rapm_and_poss_pct: 'LineupStatSet', ortg: 'ORtgDiagnostics', drtg: 'DRtgDiagnostics', avg_eff: 'float', scale_type: "Literal['T%', 'P%', '/G']", num_games: 'float' = 1, missing_game_adjustment: 'float' = 1) -> 'NetPoints'`
 
 Decompose ORtg/DRtg + RAPM into a Net-Points-like breakdown.
 
@@ -2914,7 +3166,9 @@ net_pts = build_net_points(player, o_diags, d_diags, 100.0, "T%")
 print(net_pts["offNetPts"], net_pts["defNetPts"])
 ```
 
-### `build_new_player_list(curr: 'LineupEvent', prev: 'LineupEvent') -> 'list[PlayerCodeId]'` {#build_new_player_list}
+### build_new_player_list {#build_new_player_list}
+
+`build_new_player_list(curr: 'LineupEvent', prev: 'LineupEvent') -> 'list[PlayerCodeId]'`
 
 Builds a player list from the previous (or current, if pre-initialized)
 
@@ -2953,7 +3207,9 @@ from sportsdataverse.mbb.mbb_ncaa_stints import build_new_player_list
 build_new_player_list(curr_lineup_event, prev_lineup_event)
 ```
 
-### `build_o_rtg(stat_set: 'LineupStatSet | None', roster_stats_by_code: 'dict[str, LineupStatSet] | None', extra_team_stat_info: 'LineupStatSet', avg_efficiency: 'float', calc_diags: 'bool', override_adjusted: 'bool') -> 'tuple[dict[str, float] | None, dict[str, float] | None, dict[str, float] | None, dict[str, float] | None, ORtgDiagnostics | None]'` {#build_o_rtg}
+### build_o_rtg {#build_o_rtg}
+
+`build_o_rtg(stat_set: 'LineupStatSet | None', roster_stats_by_code: 'dict[str, LineupStatSet] | None', extra_team_stat_info: 'LineupStatSet', avg_efficiency: 'float', calc_diags: 'bool', override_adjusted: 'bool') -> 'tuple[dict[str, float] | None, dict[str, float] | None, dict[str, float] | None, dict[str, float] | None, ORtgDiagnostics | None]'`
 
 Individual offensive rating (Dean-Oliver ORtg) + diagnostics.
 
@@ -2997,7 +3253,9 @@ o_rtg2, adj_o_rtg2, raw_o_rtg2, raw_adj_o_rtg2, _ = build_o_rtg(
 )
 ```
 
-### `build_partial_lineup_list(reversed_partial_events: 'Iterable[PlayByPlayEvent]', box_lineup: 'LineupEvent') -> 'list[LineupEvent]'` {#build_partial_lineup_list}
+### build_partial_lineup_list {#build_partial_lineup_list}
+
+`build_partial_lineup_list(reversed_partial_events: 'Iterable[PlayByPlayEvent]', box_lineup: 'LineupEvent') -> 'list[LineupEvent]'`
 
 Converts a stream of partially parsed events into a list of lineup
 
@@ -3056,7 +3314,9 @@ stints = build_partial_lineup_list(reversed(events), box_lineup)
 print(len(stints))
 ```
 
-### `build_player_code(in_name: 'str', team: 'Optional[TeamId]') -> 'PlayerCodeId'` {#build_player_code}
+### build_player_code {#build_player_code}
+
+`build_player_code(in_name: 'str', team: 'Optional[TeamId]') -> 'PlayerCodeId'`
 
 Build a short player code from a name, in any of the NCAA formats
 
@@ -3099,7 +3359,9 @@ print(pc.code)  # "MiMitchell"
 build_player_code("BIGBY-WILLIAM,KAVELL", None).code  # "KaBigby-will"
 ```
 
-### `build_player_context(players: 'list[PlayerOnOffStats]', lineups: 'list[LineupStatSet]', players_baseline: 'dict[PlayerId, IndivStatSet]', stats_averages: 'PureStatSet', avg_efficiency: 'float', agg_value_key: 'ValueKey' = 'value', config: 'RapmConfig' = {'prior_mode': -1, 'removal_pct': 0.06, 'fixed_regression': -1}) -> 'RapmPlayerContext'` {#build_player_context}
+### build_player_context {#build_player_context}
+
+`build_player_context(players: 'list[PlayerOnOffStats]', lineups: 'list[LineupStatSet]', players_baseline: 'dict[PlayerId, IndivStatSet]', stats_averages: 'PureStatSet', avg_efficiency: 'float', agg_value_key: 'ValueKey' = 'value', config: 'RapmConfig' = {'prior_mode': -1, 'removal_pct': 0.06, 'fixed_regression': -1}) -> 'RapmPlayerContext'`
 
 Build the context object the RAPM matrix-solve layer consumes.
 
@@ -3144,7 +3406,9 @@ off_lineups = ctx["filtered_lineups"]("off")
 def_lineups = ctx["filtered_lineups"]("def")
 ```
 
-### `build_position(confs: 'dict[str, float]', confs_no_height: 'dict[str, float] | None', player: 'dict[str, Any]', team_season: 'str') -> 'tuple[str, str]'` {#build_position}
+### build_position {#build_position}
+
+`build_position(confs: 'dict[str, float]', confs_no_height: 'dict[str, float] | None', player: 'dict[str, Any]', team_season: 'str') -> 'tuple[str, str]'`
 
 Classify a player into a position label + diagnostic trace string.
 
@@ -3186,7 +3450,9 @@ build_position(confs, None, {"key": "Popovic, Nik",
     "off_assist": {"value": 0.10}}, "Men_Boston College_2019/20")
 ```
 
-### `build_position_confidences(player: 'dict[str, Any]', height_in: 'float | None' = None) -> 'tuple[dict[str, float], dict[str, Any]]'` {#build_position_confidences}
+### build_position_confidences {#build_position_confidences}
+
+`build_position_confidences(player: 'dict[str, Any]', height_in: 'float | None' = None) -> 'tuple[dict[str, float], dict[str, Any]]'`
 
 Build the 5-way positional confidence vector for a player.
 
@@ -3222,7 +3488,9 @@ print(confs["pos_pg"], diags["calculated"]["calc_ast_tov"])
 confs_h, diags_h = build_position_confidences(player_bucket, 78.0)
 ```
 
-### `build_positional_aware_filter(filter_str: 'str') -> 'tuple[list[dict[str, Any]], list[dict[str, Any]], bool]'` {#build_positional_aware_filter}
+### build_positional_aware_filter {#build_positional_aware_filter}
+
+`build_positional_aware_filter(filter_str: 'str') -> 'tuple[list[dict[str, Any]], list[dict[str, Any]], bool]'`
 
 Decompose a search-filter string into positionally-aware +ve/-ve fragments.
 
@@ -3256,7 +3524,9 @@ from sportsdataverse.mbb.mbb_positions import build_positional_aware_filter
 build_positional_aware_filter("test1=pg / -test2=Pf+C / test3")
 ```
 
-### `build_priors(players_baseline: 'dict[PlayerId, IndivStatSet]', stats_averages: 'PureStatSet', avg_efficiency: 'float', col_to_player: 'list[str]', prior_mode: 'float', value_key: 'ValueKey' = 'value') -> 'RapmPriorInfo'` {#build_priors}
+### build_priors {#build_priors}
+
+`build_priors(players_baseline: 'dict[PlayerId, IndivStatSet]', stats_averages: 'PureStatSet', avg_efficiency: 'float', col_to_player: 'list[str]', prior_mode: 'float', value_key: 'ValueKey' = 'value') -> 'RapmPriorInfo'`
 
 Build strong/weak per-player RAPM priors for every column.
 
@@ -3289,7 +3559,9 @@ priors = build_priors({}, {}, 100.0, ["Wiggins, Aaron"], -1)
 print(priors["players_weak"][0])
 ```
 
-### `build_productivity(o_rtg: 'float', o_adj: 'float', usage: 'float', avg_efficiency: 'float') -> 'dict[str, float]'` {#build_productivity}
+### build_productivity {#build_productivity}
+
+`build_productivity(o_rtg: 'float', o_adj: 'float', usage: 'float', avg_efficiency: 'float') -> 'dict[str, float]'`
 
 Public port of `RatingUtils.buildProductivity` (`RatingUtils.ts:963-990`).
 
@@ -3316,7 +3588,9 @@ see `PLAN-phase2.md`'s self-review notes.
 
 `{"Adj_ORtg": float, "Adj_ORtgPlus": float, "Usage_Bonus": float, "SoS_Bonus": float}` -- keys kept TS-verbatim (see module docstring's naming-convention note).
 
-### `build_strength_adjusted_stats(teams: 'Sequence[TeamDetail]', *, max_iterations: 'int' = 100, tolerance: 'float' = 1e-06) -> 'StrengthAdjustedResult'` {#build_strength_adjusted_stats}
+### build_strength_adjusted_stats {#build_strength_adjusted_stats}
+
+`build_strength_adjusted_stats(teams: 'Sequence[TeamDetail]', *, max_iterations: 'int' = 100, tolerance: 'float' = 1e-06) -> 'StrengthAdjustedResult'`
 
 Run the full strength-adjustment compute over a team list.
 
@@ -3350,7 +3624,9 @@ print(result.averages["3p"].league_off)
 print(result.teams[0].adj["3p"])  # {"off": ..., "def": ...}
 ```
 
-### `build_sub_error(*subids: 'str', error: 'str') -> 'ParseError'` {#build_sub_error}
+### build_sub_error {#build_sub_error}
+
+`build_sub_error(*subids: 'str', error: 'str') -> 'ParseError'`
 
 Build a location-less `ParseError` from id fragments
 
@@ -3385,7 +3661,9 @@ err = build_sub_error("team", error="Could not match team names")
 err.id  # '[team]'
 ```
 
-### `build_tidy_player_context(box_lineup: 'LineupEvent') -> 'TidyPlayerContext'` {#build_tidy_player_context}
+### build_tidy_player_context {#build_tidy_player_context}
+
+`build_tidy_player_context(box_lineup: 'LineupEvent') -> 'TidyPlayerContext'`
 
 Build the alternative player-code lookup maps for a box-score lineup
 
@@ -3414,7 +3692,9 @@ from sportsdataverse.mbb.mbb_ncaa_names import build_tidy_player_context
 ctx = build_tidy_player_context(box_lineup)
 ```
 
-### `build_weak_prior_from_rapm(rapm_results: 'list[float]', off_or_def: 'str') -> 'list[dict[str, float]]'` {#build_weak_prior_from_rapm}
+### build_weak_prior_from_rapm {#build_weak_prior_from_rapm}
+
+`build_weak_prior_from_rapm(rapm_results: 'list[float]', off_or_def: 'str') -> 'list[dict[str, float]]'`
 
 Wrap a flat RAPM-estimate vector into `playersWeak`-shaped dicts.
 
@@ -3452,7 +3732,9 @@ weak_prior = build_weak_prior_from_rapm([5.0, 4.5], "off")
 print(weak_prior[0])  # {"off_adj_ppp": 5.0}
 ```
 
-### `cached_path(path: 'str', *, cache_dir: 'Optional[Path]' = None) -> 'Path'` {#cached_path}
+### cached_path {#cached_path}
+
+`cached_path(path: 'str', *, cache_dir: 'Optional[Path]' = None) -> 'Path'`
 
 Return the on-disk cache file path for *path*, without touching it.
 
@@ -3479,7 +3761,9 @@ cached_path("contests/4690813/box_score?period_no=2")
 # .../stats.ncaa.org/contests/4690813/box_score__period_no=2.html
 ```
 
-### `calc_collinearity_diag(weight_matrix: 'NDArray[np.float64]', ctx: 'RapmPlayerContext') -> 'RapmPreProcDiagnostics'` {#calc_collinearity_diag}
+### calc_collinearity_diag {#calc_collinearity_diag}
+
+`calc_collinearity_diag(weight_matrix: 'NDArray[np.float64]', ctx: 'RapmPlayerContext') -> 'RapmPreProcDiagnostics'`
 
 Multi-collinearity diagnostic between the players in an off/def design matrix.
 
@@ -3538,7 +3822,9 @@ diag = calc_collinearity_diag(off_weights, ctx)
 print(diag["lineup_combos"][0])  # the worst-conditioned combo
 ```
 
-### `calc_def_player_luck_adj(sample: 'LineupStatSet', base: 'LineupStatSet', avg_eff: 'float') -> 'DefLuckAdjustmentDiags'` {#calc_def_player_luck_adj}
+### calc_def_player_luck_adj {#calc_def_player_luck_adj}
+
+`calc_def_player_luck_adj(sample: 'LineupStatSet', base: 'LineupStatSet', avg_eff: 'float') -> 'DefLuckAdjustmentDiags'`
 
 Defensive 3P-luck adjustment for a single player.
 
@@ -3569,7 +3855,9 @@ diags = calc_def_player_luck_adj(sample_player, base_player, 100.0)
 print(diags["deltaDefAdjEff"])
 ```
 
-### `calc_def_team_luck_adj(sample: 'LineupStatSet', base: 'LineupStatSet', avg_eff: 'float', sample_def_3pa_override: 'float | None' = None) -> 'DefLuckAdjustmentDiags'` {#calc_def_team_luck_adj}
+### calc_def_team_luck_adj {#calc_def_team_luck_adj}
+
+`calc_def_team_luck_adj(sample: 'LineupStatSet', base: 'LineupStatSet', avg_eff: 'float', sample_def_3pa_override: 'float | None' = None) -> 'DefLuckAdjustmentDiags'`
 
 Defensive 3P-luck adjustment for a team (or lineup).
 
@@ -3599,7 +3887,9 @@ diags = calc_def_team_luck_adj(sample_team_off, base_team, 100.0)
 print(diags["deltaDefAdjEff"])
 ```
 
-### `calc_lineup_outputs(field: 'str', off_offset: 'float', def_offset: 'float', ctx: 'RapmPlayerContext', adaptive_correl_weights: 'list[float] | None' = None, use_old_val_if_possible: 'tuple[bool, bool]' = (False, False)) -> 'list[NDArray[np.float64]]'` {#calc_lineup_outputs}
+### calc_lineup_outputs {#calc_lineup_outputs}
+
+`calc_lineup_outputs(field: 'str', off_offset: 'float', def_offset: 'float', ctx: 'RapmPlayerContext', adaptive_correl_weights: 'list[float] | None' = None, use_old_val_if_possible: 'tuple[bool, bool]' = (False, False)) -> 'list[NDArray[np.float64]]'`
 
 Build the off/def target vectors the RAPM design matrices are fit against.
 
@@ -3652,7 +3942,9 @@ off_luck, def_luck = calc_lineup_outputs(
 )
 ```
 
-### `calc_off_player_luck_adj(sample_player: 'LineupStatSet', base_player: 'LineupStatSet', avg_eff: 'float') -> 'OffLuckAdjustmentDiags'` {#calc_off_player_luck_adj}
+### calc_off_player_luck_adj {#calc_off_player_luck_adj}
+
+`calc_off_player_luck_adj(sample_player: 'LineupStatSet', base_player: 'LineupStatSet', avg_eff: 'float') -> 'OffLuckAdjustmentDiags'`
 
 Offensive 3P-luck adjustment for a single player.
 
@@ -3683,7 +3975,9 @@ diags = calc_off_player_luck_adj(sample_player, base_player, 100.0)
 print(diags["deltaOffAdjEff"])
 ```
 
-### `calc_off_team_luck_adj(sample_team: 'LineupStatSet', sample_players: 'list[LineupStatSet]', base_team: 'LineupStatSet', base_players_map: 'dict[str, LineupStatSet]', avg_eff: 'float', sample_3pa_override: 'float | None' = None, manual_overrides: 'list[ManualOverride] | None' = None) -> 'OffLuckAdjustmentDiags'` {#calc_off_team_luck_adj}
+### calc_off_team_luck_adj {#calc_off_team_luck_adj}
+
+`calc_off_team_luck_adj(sample_team: 'LineupStatSet', sample_players: 'list[LineupStatSet]', base_team: 'LineupStatSet', base_players_map: 'dict[str, LineupStatSet]', avg_eff: 'float', sample_3pa_override: 'float | None' = None, manual_overrides: 'list[ManualOverride] | None' = None) -> 'OffLuckAdjustmentDiags'`
 
 Offensive 3P-luck adjustment for a team (or lineup).
 
@@ -3728,7 +4022,9 @@ diags = calc_off_team_luck_adj(
 )
 ```
 
-### `calc_player_weights(ctx: 'RapmPlayerContext') -> 'list[NDArray[np.float64]]'` {#calc_player_weights}
+### calc_player_weights {#calc_player_weights}
+
+`calc_player_weights(ctx: 'RapmPlayerContext') -> 'list[NDArray[np.float64]]'`
 
 Build the off/def player-weight (design) matrices for the RAPM solve.
 
@@ -3760,7 +4056,9 @@ off_weights, def_weights = calc_player_weights(ctx)
 print(off_weights.shape)  # (num_off_lineups, num_players)
 ```
 
-### `calc_slow_pseudo_inverse(player_weight_matrix: 'NDArray[np.float64]', ridge_lambda: 'float', ctx: 'RapmPlayerContext') -> 'NDArray[np.float64]'` {#calc_slow_pseudo_inverse}
+### calc_slow_pseudo_inverse {#calc_slow_pseudo_inverse}
+
+`calc_slow_pseudo_inverse(player_weight_matrix: 'NDArray[np.float64]', ridge_lambda: 'float', ctx: 'RapmPlayerContext') -> 'NDArray[np.float64]'`
 
 Per-parameter variance terms for the ridge-regression standard errors.
 
@@ -3791,7 +4089,9 @@ from sportsdataverse.mbb.mbb_rapm import calc_slow_pseudo_inverse
 param_errs = calc_slow_pseudo_inverse(x, 1.0, ctx)
 ```
 
-### `calculate_aggregated_lineup_stats(lineups: 'list[LineupStatSet] | None') -> 'LineupStatSet'` {#calculate_aggregated_lineup_stats}
+### calculate_aggregated_lineup_stats {#calculate_aggregated_lineup_stats}
+
+`calculate_aggregated_lineup_stats(lineups: 'list[LineupStatSet] | None') -> 'LineupStatSet'`
 
 Combine all lineups into a single team stat set.
 
@@ -3838,7 +4138,9 @@ buckets[1]["rapmRemove"] = True  # divert into all_lineups instead
 team_info = calculate_aggregated_lineup_stats(buckets)
 ```
 
-### `calculate_possessions(lineup_events: 'Iterable[LineupEvent]') -> 'list[LineupEvent]'` {#calculate_possessions}
+### calculate_possessions {#calculate_possessions}
+
+`calculate_possessions(lineup_events: 'Iterable[LineupEvent]') -> 'list[LineupEvent]'`
 
 Top-level entry point: calculate team/opponent possessions for a
 
@@ -3864,7 +4166,9 @@ enriched = calculate_possessions(lineups)
 enriched[0].team_stats.num_possessions
 ```
 
-### `calculate_possessions_by_event(raw_events_as_clumps: 'Iterable[ConcurrentClump]') -> 'list[LineupEvent]'` {#calculate_possessions_by_event}
+### calculate_possessions_by_event {#calculate_possessions_by_event}
+
+`calculate_possessions_by_event(raw_events_as_clumps: 'Iterable[ConcurrentClump]') -> 'list[LineupEvent]'`
 
 Drive the batch loop + per-clump scoring over an already-flattened
 
@@ -3881,7 +4185,9 @@ clump stream (`PossessionUtils.calculate_possessions_by_event`,
 
 The lineups, each enriched with possession counts, in original order.
 
-### `calculate_predicted_out(player_weight_matrix: 'NDArray[np.float64]', regressed_players: 'list[float]', ctx: 'RapmPlayerContext') -> 'NDArray[np.float64]'` {#calculate_predicted_out}
+### calculate_predicted_out {#calculate_predicted_out}
+
+`calculate_predicted_out(player_weight_matrix: 'NDArray[np.float64]', regressed_players: 'list[float]', ctx: 'RapmPlayerContext') -> 'NDArray[np.float64]'`
 
 Predict per-lineup outputs from fitted per-player RAPM values.
 
@@ -3910,7 +4216,9 @@ from sportsdataverse.mbb.mbb_rapm import calculate_predicted_out
 predicted = calculate_predicted_out(x, [0.875, 1.375], ctx)
 ```
 
-### `calculate_rapm(regression_matrix: 'NDArray[np.float64]', player_outputs: 'list[float]') -> 'NDArray[np.float64]'` {#calculate_rapm}
+### calculate_rapm {#calculate_rapm}
+
+`calculate_rapm(regression_matrix: 'NDArray[np.float64]', player_outputs: 'list[float]') -> 'NDArray[np.float64]'`
 
 Apply a regression solver matrix to a target-outputs vector.
 
@@ -3938,7 +4246,9 @@ rapm = calculate_rapm(solver, [1.0, 2.0, 3.0])
 print(rapm.shape)  # (num_players,)
 ```
 
-### `calculate_residual_error(player_outs: 'list[float]', regressed_outs: 'list[float]', ctx: 'RapmPlayerContext') -> 'float'` {#calculate_residual_error}
+### calculate_residual_error {#calculate_residual_error}
+
+`calculate_residual_error(player_outs: 'list[float]', regressed_outs: 'list[float]', ctx: 'RapmPlayerContext') -> 'float'`
 
 Sum of squared residuals between actual and predicted lineup outputs.
 
@@ -3980,7 +4290,9 @@ from sportsdataverse.mbb.mbb_rapm import calculate_residual_error
 err_sq = calculate_residual_error([1.0, 2.0, 3.0], [0.875, 1.375, 2.25], ctx)
 ```
 
-### `calculate_sd_rapm(param_errs: 'NDArray[np.float64]', err_sq: 'float', num_lineups: 'int', num_players: 'int') -> 'NDArray[np.float64]'` {#calculate_sd_rapm}
+### calculate_sd_rapm {#calculate_sd_rapm}
+
+`calculate_sd_rapm(param_errs: 'NDArray[np.float64]', err_sq: 'float', num_lineups: 'int', num_players: 'int') -> 'NDArray[np.float64]'`
 
 Per-player RAPM standard errors.
 
@@ -4028,7 +4340,9 @@ from sportsdataverse.mbb.mbb_rapm import calculate_sd_rapm
 sd_rapm = calculate_sd_rapm(param_errs, err_sq, num_lineups=3, num_players=2)
 ```
 
-### `calculate_stats(clump: 'ConcurrentClump', prev: 'ConcurrentClump', dir: 'Direction') -> 'PossCalcFragment'` {#calculate_stats}
+### calculate_stats {#calculate_stats}
+
+`calculate_stats(clump: 'ConcurrentClump', prev: 'ConcurrentClump', dir: 'Direction') -> 'PossCalcFragment'`
 
 Calculate one direction's possession-fragment for one merged clump
 
@@ -4051,7 +4365,9 @@ port reproduces every step in the same order.
 
 A `~sportsdataverse.mbb.mbb_ncaa_models.PossCalcFragment` for this clump/direction.
 
-### `calibration_table(y_true: 'np.ndarray', p_pred: 'np.ndarray', n_bins: 'int' = 10) -> 'pl.DataFrame'` {#calibration_table}
+### calibration_table {#calibration_table}
+
+`calibration_table(y_true: 'np.ndarray', p_pred: 'np.ndarray', n_bins: 'int' = 10) -> 'pl.DataFrame'`
 
 Bucket predicted probabilities into bins and compare to actual outcome rates.
 
@@ -4075,7 +4391,9 @@ from sportsdataverse._common.metrics import calibration_table
 calibration_table(np.array([1, 0, 1, 0]), np.array([0.9, 0.1, 0.8, 0.2]))
 ```
 
-### `categorize_bad_lineups(lineup_events: 'list[LineupEvent]') -> 'dict[int, tuple[int, int]]'` {#categorize_bad_lineups}
+### categorize_bad_lineups {#categorize_bad_lineups}
+
+`categorize_bad_lineups(lineup_events: 'list[LineupEvent]') -> 'dict[int, tuple[int, int]]'`
 
 Aggregates bad lineup events for display, by clump-leader player count
 
@@ -4106,7 +4424,9 @@ from sportsdataverse.mbb.mbb_ncaa_stint_validation import categorize_bad_lineups
 categorize_bad_lineups([bad_ev])  # {5: (1, bad_ev.team_stats.num_possessions)}
 ```
 
-### `classify_point_value(dist_ft: 'float', x: 'float', y: 'float', *, league: 'str', season: 'int') -> 'int'` {#classify_point_value}
+### classify_point_value {#classify_point_value}
+
+`classify_point_value(dist_ft: 'float', x: 'float', y: 'float', *, league: 'str', season: 'int') -> 'int'`
 
 2 or 3 from basket-relative geometry (arc radius + corner band).
 
@@ -4131,7 +4451,9 @@ from sportsdataverse.mbb.mbb_shots_adapter import classify_point_value
 classify_point_value(24.0, 0.0, 24.0, league="mens", season=2020)
 ```
 
-### `classify_zone_geometry(dist_ft: 'float', x: 'float', y: 'float', *, league: 'str', season: 'int') -> 'str'` {#classify_zone_geometry}
+### classify_zone_geometry {#classify_zone_geometry}
+
+`classify_zone_geometry(dist_ft: 'float', x: 'float', y: 'float', *, league: 'str', season: 'int') -> 'str'`
 
 Shot zone from geometry: `rim | paint | mid | corner3 | abovebreak3`.
 
@@ -4156,7 +4478,9 @@ from sportsdataverse.mbb.mbb_shots_adapter import classify_zone_geometry
 classify_zone_geometry(2.0, 0.0, 2.0, league="mens", season=2020)
 ```
 
-### `classify_zone_type(type_text: "'str | None'") -> "'str | None'"` {#classify_zone_type}
+### classify_zone_type {#classify_zone_type}
+
+`classify_zone_type(type_text: "'str | None'") -> "'str | None'"`
 
 Collapse a source shot-type label to `rim | arc3 | jump`.
 
@@ -4182,7 +4506,9 @@ from sportsdataverse.mbb.mbb_shots_adapter import classify_zone_type
 classify_zone_type("DunkShot")
 ```
 
-### `clump_bad_lineups(lineup_events: 'list[tuple[LineupEvent, Optional[LineupEvent]]]') -> 'list[BadLineupClump]'` {#clump_bad_lineups}
+### clump_bad_lineups {#clump_bad_lineups}
+
+`clump_bad_lineups(lineup_events: 'list[tuple[LineupEvent, Optional[LineupEvent]]]') -> 'list[BadLineupClump]'`
 
 Groups consecutive bad lineup events into `BadLineupClump`\ s
 
@@ -4251,7 +4577,9 @@ clumps = clump_bad_lineups([(bad_ev, good_ev)])
 clumps[0].evs  # [bad_ev]
 ```
 
-### `code_from_box(name: 'str', box_lineup: 'LineupEvent', team: 'Optional[TeamId]' = None) -> 'PlayerCodeId'` {#code_from_box}
+### code_from_box {#code_from_box}
+
+`code_from_box(name: 'str', box_lineup: 'LineupEvent', team: 'Optional[TeamId]' = None) -> 'PlayerCodeId'`
 
 Resolve a tidied player NAME to the box roster's own `PlayerCodeId`.
 
@@ -4297,7 +4625,9 @@ build_player_code("Morris, Markieff", team).code  # "MaMorris" -- collides
 code_from_box("Morris, Markieff", box_lineup, team).code  # "MarkieffMorris"
 ```
 
-### `combos(first: 'str', last: 'str') -> 'list[str]'` {#combos}
+### combos {#combos}
+
+`combos(first: 'str', last: 'str') -> 'list[str]'`
 
 Generate the three name-string variants NCAA sources use for one
 
@@ -4329,7 +4659,9 @@ combos("Makhi", "Mitchell")
 # ['Mitchell, Makhi', 'Makhi Mitchell', 'MITCHELL,MAKHI']
 ```
 
-### `complete_weighted_avg(mutable_acc: 'LineupStatSet', harmonic_weighting: 'bool' = False, regress_diffs: 'float' = 0.0) -> 'None'` {#complete_weighted_avg}
+### complete_weighted_avg {#complete_weighted_avg}
+
+`complete_weighted_avg(mutable_acc: 'LineupStatSet', harmonic_weighting: 'bool' = False, regress_diffs: 'float' = 0.0) -> 'None'`
 
 Finish a `weighted_avg` accumulator into true weighted averages.
 
@@ -4373,7 +4705,9 @@ complete_weighted_avg(acc)
 print(acc["off_ppp"]["value"])  # now a true weighted average
 ```
 
-### `compute_league_averages_from_per_game(teams: 'Sequence[TeamDetail]', fields: 'Sequence[str]' = ('efg', '3p', '2pmid', '2prim')) -> 'LeagueAverages'` {#compute_league_averages_from_per_game}
+### compute_league_averages_from_per_game {#compute_league_averages_from_per_game}
+
+`compute_league_averages_from_per_game(teams: 'Sequence[TeamDetail]', fields: 'Sequence[str]' = ('efg', '3p', '2pmid', '2prim')) -> 'LeagueAverages'`
 
 Possession-weighted league means per field (`computeLeagueAveragesFromPerGame`, `ts:189-221`).
 
@@ -4401,7 +4735,9 @@ teams = [{"team_name": "A", "opponents": [{"off_3p_made": 5, "off_3p_attempts": 
 print(compute_league_averages_from_per_game(teams, ["3p"])["3p"]["league_off"])  # 0.5
 ```
 
-### `compute_opponent_strengths(team: 'TeamDetail', team_by_name: 'dict[str, TeamDetail]', fields: 'Sequence[str]', adj_values: 'AdjValues') -> 'dict[str, SideValues]'` {#compute_opponent_strengths}
+### compute_opponent_strengths {#compute_opponent_strengths}
+
+`compute_opponent_strengths(team: 'TeamDetail', team_by_name: 'dict[str, TeamDetail]', fields: 'Sequence[str]', adj_values: 'AdjValues') -> 'dict[str, SideValues]'`
 
 Schedule-weighted opponent strength per field (`computeOpponentStrengths`, `ts:253-299`).
 
@@ -4437,7 +4773,9 @@ adj = {"B": {"3p": {"off": 0.5, "def": 0.3}}}
 print(compute_opponent_strengths(team, by_name, ["3p"], adj)["3p"]["avg_opp_def"])  # 0.3
 ```
 
-### `compute_possession_splits(team: 'TeamDetail') -> 'PossessionSplits'` {#compute_possession_splits}
+### compute_possession_splits {#compute_possession_splits}
+
+`compute_possession_splits(team: 'TeamDetail') -> 'PossessionSplits'`
 
 Home/away/neutral possession totals for a team (`computePossessionSplits`, `ts:154-186`).
 
@@ -4464,7 +4802,9 @@ team = {"opponents": [{"off_poss": 70, "def_poss": 68, "location_type": "Home"}]
 print(compute_possession_splits(team).home_off_poss)  # 70.0
 ```
 
-### `concurrent_event_handler(clumps: 'Iterable[ConcurrentClump]') -> 'list[ConcurrentClump]'` {#concurrent_event_handler}
+### concurrent_event_handler {#concurrent_event_handler}
+
+`concurrent_event_handler(clumps: 'Iterable[ConcurrentClump]') -> 'list[ConcurrentClump]'`
 
 Batch a stream of singleton/boundary clumps into merged
 
@@ -4489,7 +4829,9 @@ breakdown and the post-game-break singleton port trap).
 
 The merged clumps, each an in-order concatenation of one batch's `evs`/`lineups`.
 
-### `convert_from_digits(name: 'str', player_numbers: 'list[PlayerCodeId]') -> 'Optional[str]'` {#convert_from_digits}
+### convert_from_digits {#convert_from_digits}
+
+`convert_from_digits(name: 'str', player_numbers: 'list[PlayerCodeId]') -> 'Optional[str]'`
 
 Resolve a jersey-number-only name to its box-score player
 
@@ -4515,7 +4857,9 @@ codes = [PlayerCodeId(code="1000", id=PlayerId("name1"))]
 convert_from_digits("1000", codes)  # "name1"
 ```
 
-### `convert_from_initials(name: 'str', codes_to_names: 'dict[str, str]') -> 'Optional[str]'` {#convert_from_initials}
+### convert_from_initials {#convert_from_initials}
+
+`convert_from_initials(name: 'str', codes_to_names: 'dict[str, str]') -> 'Optional[str]'`
 
 Resolve a 2-initial name (`"A B"` / `"B, A"`) to the single
 
@@ -4540,7 +4884,9 @@ from sportsdataverse.mbb.mbb_ncaa_names import convert_from_initials
 convert_from_initials("A B", {"AoBo": "name1"})  # "name1"
 ```
 
-### `count_matching(evs: 'Iterable[RawGameEvent]', side: 'DirFn', *parsers: 'Parser') -> 'int'` {#count_matching}
+### count_matching {#count_matching}
+
+`count_matching(evs: 'Iterable[RawGameEvent]', side: 'DirFn', *parsers: 'Parser') -> 'int'`
 
 Count events on one side matching any of the given parsers.
 
@@ -4561,7 +4907,9 @@ made or a missed free throw on the same event).
 
 The count of matching events.
 
-### `create_lineup_data(filename: 'str', in_html: 'str', box_lineup: 'LineupEvent', format_version: 'int') -> 'Union[tuple[list[LineupEvent], list[LineupEvent]], list[ParseError]]'` {#create_lineup_data}
+### create_lineup_data {#create_lineup_data}
+
+`create_lineup_data(filename: 'str', in_html: 'str', box_lineup: 'LineupEvent', format_version: 'int') -> 'Union[tuple[list[LineupEvent], list[LineupEvent]], list[ParseError]]'`
 
 Combines the different methods to build a set of lineup events
 
@@ -4625,7 +4973,9 @@ result = create_lineup_data("test.html", pbp_html, box_lineup, format_version=0)
     sum(ev.duration_mins for ev in good + bad)
 ```
 
-### `create_player_events(lineup_event_maybe_bad: 'LineupEvent', box_lineup: 'LineupEvent') -> 'list[PlayerEvent]'` {#create_player_events}
+### create_player_events {#create_player_events}
+
+`create_player_events(lineup_event_maybe_bad: 'LineupEvent', box_lineup: 'LineupEvent') -> 'list[PlayerEvent]'`
 
 Split a lineup event into one :class:`~sportsdataverse.mbb
 
@@ -4661,7 +5011,9 @@ player_events = create_player_events(lineup, box_lineup)
 player_events[0].player_stats.fg_3p.made.total
 ```
 
-### `create_shot_event_data(filename: 'str', in_html: 'str', box_lineup: 'LineupEvent') -> 'Union[list[ShotEvent], list[ParseError]]'` {#create_shot_event_data}
+### create_shot_event_data {#create_shot_event_data}
+
+`create_shot_event_data(filename: 'str', in_html: 'str', box_lineup: 'LineupEvent') -> 'Union[list[ShotEvent], list[ParseError]]'`
 
 Parses a game page's SVG shot map into a list of :class:`~sportsdataverse
 
@@ -4693,7 +5045,9 @@ box_lineup = get_box_lineup("test_p1.html", box_html, TeamId("TeamA"), format_ve
 shots = create_shot_event_data("test_p1.html", box_html, box_lineup)
 ```
 
-### `display_name_to_roster_key(name: 'Optional[str]') -> 'str'` {#display_name_to_roster_key}
+### display_name_to_roster_key {#display_name_to_roster_key}
+
+`display_name_to_roster_key(name: 'Optional[str]') -> 'str'`
 
 `"Ballisager Webb, Jermaine"` -> `"JERMAINE.BALLISAGER.WEBB"`.
 
@@ -4722,7 +5076,9 @@ display_name_to_roster_key("Wrightsell Jr., Latrell") # "LATRELL.WRIGHTSELL"
 display_name_to_roster_key('"TJ" Madlock, Antonio')   # "ANTONIO.MADLOCK"
 ```
 
-### `duration_from_period(period: 'int', is_women_game: 'bool') -> 'float'` {#duration_from_period}
+### duration_from_period {#duration_from_period}
+
+`duration_from_period(period: 'int', is_women_game: 'bool') -> 'float'`
 
 The game duration (minutes elapsed) once `period` has completed
 
@@ -4748,7 +5104,9 @@ duration_from_period(2, is_women_game=False)  # 40.0 (end of men's regulation)
 duration_from_period(4, is_women_game=True)  # 40.0 (end of women's regulation)
 ```
 
-### `enrich_and_reverse_game_events(in_events: 'list[PlayByPlayEvent]') -> 'list[PlayByPlayEvent]'` {#enrich_and_reverse_game_events}
+### enrich_and_reverse_game_events {#enrich_and_reverse_game_events}
+
+`enrich_and_reverse_game_events(in_events: 'list[PlayByPlayEvent]') -> 'list[PlayByPlayEvent]'`
 
 Inserts game-break events and turns descending per-row times into
 
@@ -4777,7 +5135,9 @@ reversed_enriched = enrich_and_reverse_game_events(events)
 reversed_enriched[0].__class__.__name__  # 'GameEndEvent'
 ```
 
-### `enrich_lineup(lineup: 'LineupEvent') -> 'LineupEvent'` {#enrich_lineup}
+### enrich_lineup {#enrich_lineup}
+
+`enrich_lineup(lineup: 'LineupEvent') -> 'LineupEvent'`
 
 Populate `pts`/`plus_minus` from the score delta, then run the
 
@@ -4802,7 +5162,9 @@ enriched = enrich_lineup(lineup)
 enriched.team_stats.pts
 ```
 
-### `enrich_shot_events_with_pbp(sorted_shot_events: 'list[ShotEvent]', sorted_pbp_events: 'list[PlayByPlayEvent]', lineup_events: 'list[LineupEvent]', bad_lineup_events: 'list[LineupEvent]', box_lineup: 'LineupEvent') -> 'list[ShotEvent]'` {#enrich_shot_events_with_pbp}
+### enrich_shot_events_with_pbp {#enrich_shot_events_with_pbp}
+
+`enrich_shot_events_with_pbp(sorted_shot_events: 'list[ShotEvent]', sorted_pbp_events: 'list[PlayByPlayEvent]', lineup_events: 'list[LineupEvent]', bad_lineup_events: 'list[LineupEvent]', box_lineup: 'LineupEvent') -> 'list[ShotEvent]'`
 
 Enrich each shot with its play-by-play event + on-floor lineup
 
@@ -4851,7 +5213,9 @@ enriched = enrich_shot_events_with_pbp(
 )
 ```
 
-### `enrich_stats(lineup: 'LineupEvent', event_parser: 'PossessionEvent', stats: 'LineupEventStats', player_filter_coder: 'Optional[PlayerFilterCoder]' = None, player_index: 'int' = -1) -> 'LineupEventStats'` {#enrich_stats}
+### enrich_stats {#enrich_stats}
+
+`enrich_stats(lineup: 'LineupEvent', event_parser: 'PossessionEvent', stats: 'LineupEventStats', player_filter_coder: 'Optional[PlayerFilterCoder]' = None, player_index: 'int' = -1) -> 'LineupEventStats'`
 
 Fold a lineup's raw events into a counting-stat tree (``protected def
 
@@ -4880,7 +5244,9 @@ literal (e.g. a shared "empty stats" fixture).
 
 A new `~sportsdataverse.mbb.mbb_ncaa_models.LineupEventStats` with every matching event folded in.
 
-### `enrich_sub_error(location: 'str', base_id: 'str', error: 'ParseError') -> 'list[ParseError]'` {#enrich_sub_error}
+### enrich_sub_error {#enrich_sub_error}
+
+`enrich_sub_error(location: 'str', base_id: 'str', error: 'ParseError') -> 'list[ParseError]'`
 
 Adds top-level location information to a single sub-error, returning a
 
@@ -4907,7 +5273,9 @@ child_err = build_sub_error("game_score", error="Could not find score")
 enrich_sub_error("ncaa.parse_playbyplay", "", child_err)
 ```
 
-### `enrich_sub_errors(location: 'str', base_id: 'str', errors: 'list[ParseError]') -> 'list[ParseError]'` {#enrich_sub_errors}
+### enrich_sub_errors {#enrich_sub_errors}
+
+`enrich_sub_errors(location: 'str', base_id: 'str', errors: 'list[ParseError]') -> 'list[ParseError]'`
 
 Adds top-level location information to a list of sub-errors generated
 
@@ -4934,7 +5302,9 @@ child_err = build_sub_error("game_time", error="Could not find time")
 enrich_sub_errors("ncaa.parse_playbyplay", "", [child_err])
 ```
 
-### `ensure_ev_uniqueness(clump: 'ConcurrentClump') -> 'ConcurrentClump'` {#ensure_ev_uniqueness}
+### ensure_ev_uniqueness {#ensure_ev_uniqueness}
+
+`ensure_ev_uniqueness(clump: 'ConcurrentClump') -> 'ConcurrentClump'`
 
 Nudge each event's `min` by a tiny per-index delta so truly
 
@@ -4951,7 +5321,9 @@ under `==` (`ensure_ev_uniqueness`, `LineupUtils.scala:105-111`).
 
 A new `~sportsdataverse.mbb.mbb_ncaa_possessions.ConcurrentClump` with each event's `min` incremented by `1e-6 * index`.
 
-### `espn_shots_to_canonical(espn: 'pl.DataFrame', *, league: 'str', season: 'int', scale: "'tuple[float, float, float] | None'" = None) -> 'pl.DataFrame'` {#espn_shots_to_canonical}
+### espn_shots_to_canonical {#espn_shots_to_canonical}
+
+`espn_shots_to_canonical(espn: 'pl.DataFrame', *, league: 'str', season: 'int', scale: "'tuple[float, float, float] | None'" = None) -> 'pl.DataFrame'`
 
 ESPN `load_mbb_shots` frame -> the canonical shot frame.
 
@@ -4982,7 +5354,9 @@ from sportsdataverse.mbb.mbb_shots_adapter import espn_shots_to_canonical
 df = espn_shots_to_canonical(load_mbb_shots([2025]), league="mens", season=2025)
 ```
 
-### `extract_player_from_ev(shot: 'ShotEvent', pbp_event: 'MiscGameEvent', tidy_ctx: 'TidyPlayerContext') -> 'Optional[PlayerCodeId]'` {#extract_player_from_ev}
+### extract_player_from_ev {#extract_player_from_ev}
+
+`extract_player_from_ev(shot: 'ShotEvent', pbp_event: 'MiscGameEvent', tidy_ctx: 'TidyPlayerContext') -> 'Optional[PlayerCodeId]'`
 
 Resolve the player named in `pbp_event` to a
 
@@ -5014,7 +5388,9 @@ from sportsdataverse.mbb.mbb_ncaa_pbp_glue import extract_player_from_ev
 pc = extract_player_from_ev(shot, pbp_event, tidy_ctx)
 ```
 
-### `field_keys(field: 'str') -> 'dict[str, str]'` {#field_keys}
+### field_keys {#field_keys}
+
+`field_keys(field: 'str') -> 'dict[str, str]'`
 
 Off/def stat-key names for a field (`fieldKeys`, `ts:77-79`).
 
@@ -5037,7 +5413,9 @@ keys = field_keys("3p")
 print(keys["off"], keys["def"])  # off_3p def_3p
 ```
 
-### `filter_matching_own(tags: 'list[Tag]', regex: 'str') -> 'list[Tag]'` {#filter_matching_own}
+### filter_matching_own {#filter_matching_own}
+
+`filter_matching_own(tags: 'list[Tag]', regex: 'str') -> 'list[Tag]'`
 
 JSoup `:matchesOwn(regex)` applied to an already-computed candidate
 
@@ -5069,7 +5447,9 @@ candidates = attr_regex_filter(soup.find_all("td"), "style", r"font-size:36px")
 filter_matching_own(candidates, r"[0-9]+")  # [<td style="font-size:36px">92</td>]
 ```
 
-### `find_lineup(shot: 'ShotEvent', curr_pbp: 'Optional[MiscGameEvent]', curr_lineups: 'list[LineupEvent]', lineup_it: "'PeekableIterator[LineupEvent]'") -> 'tuple[Optional[LineupEvent], list[LineupEvent]]'` {#find_lineup}
+### find_lineup {#find_lineup}
+
+`find_lineup(shot: 'ShotEvent', curr_pbp: 'Optional[MiscGameEvent]', curr_lineups: 'list[LineupEvent]', lineup_it: "'PeekableIterator[LineupEvent]'") -> 'tuple[Optional[LineupEvent], list[LineupEvent]]'`
 
 Find the lineup (stint) event on the floor for `shot`
 
@@ -5112,7 +5492,9 @@ from sportsdataverse.mbb.mbb_ncaa_pbp_glue import (
 matched, retry = find_lineup(shot, None, [lineup], PeekableIterator([]))
 ```
 
-### `find_missing_subs(clump: 'BadLineupClump', box_lineup: 'LineupEvent', valid_player_codes: 'set[str]') -> 'tuple[list[LineupEvent], BadLineupClump]'` {#find_missing_subs}
+### find_missing_subs {#find_missing_subs}
+
+`find_missing_subs(clump: 'BadLineupClump', box_lineup: 'LineupEvent', valid_player_codes: 'set[str]') -> 'tuple[list[LineupEvent], BadLineupClump]'`
 
 Trims a clump whose lineups carry TOO MANY players by identifying the
 
@@ -5181,7 +5563,9 @@ from sportsdataverse.mbb.mbb_ncaa_stint_validation import (
 fixed, still = find_missing_subs(clump, box_lineup, valid_codes)
 ```
 
-### `find_pbp_clump(shot_time: 'float', pbp_it: "'PeekableIterator[PlayByPlayEvent]'", curr_pbp_clump: 'list[MiscGameEvent]', maybe_next_pbp_event: 'Optional[MiscGameEvent]') -> 'tuple[list[MiscGameEvent], Optional[MiscGameEvent]]'` {#find_pbp_clump}
+### find_pbp_clump {#find_pbp_clump}
+
+`find_pbp_clump(shot_time: 'float', pbp_it: "'PeekableIterator[PlayByPlayEvent]'", curr_pbp_clump: 'list[MiscGameEvent]', maybe_next_pbp_event: 'Optional[MiscGameEvent]') -> 'tuple[list[MiscGameEvent], Optional[MiscGameEvent]]'`
 
 Gather every play-by-play shot/assist event sharing `shot_time`
 
@@ -5217,7 +5601,9 @@ clump, nxt = find_pbp_clump(5.0, PeekableIterator([]), [], None)
 # ([], None)
 ```
 
-### `fit_espn_court_scale(espn: 'pl.DataFrame', *, league: 'str', season: 'int') -> "'tuple[float, float, float]'"` {#fit_espn_court_scale}
+### fit_espn_court_scale {#fit_espn_court_scale}
+
+`fit_espn_court_scale(espn: 'pl.DataFrame', *, league: 'str', season: 'int') -> "'tuple[float, float, float]'"`
 
 Fit the ESPN raw-coordinate court scale: `(origin_x, origin_y, feet_per_unit)`.
 
@@ -5246,7 +5632,9 @@ from sportsdataverse.mbb.mbb_shots_adapter import fit_espn_court_scale
 scale = fit_espn_court_scale(espn, league="mens", season=2025)
 ```
 
-### `fit_shrinkage_k(scored: 'pl.DataFrame', *, seed: 'int' = 0) -> 'float'` {#fit_shrinkage_k}
+### fit_shrinkage_k {#fit_shrinkage_k}
+
+`fit_shrinkage_k(scored: 'pl.DataFrame', *, seed: 'int' = 0) -> 'float'`
 
 Fit the talent shrinkage `k` split-half (see module docstring).
 
@@ -5268,7 +5656,9 @@ from sportsdataverse.mbb.mbb_shooter_talent import fit_shrinkage_k
 k = fit_shrinkage_k(scored)
 ```
 
-### `fix_combos(first: 'str', last: 'str', code_start: 'Optional[str]' = None) -> 'list[tuple[str, Optional[str]]]'` {#fix_combos}
+### fix_combos {#fix_combos}
+
+`fix_combos(first: 'str', last: 'str', code_start: 'Optional[str]' = None) -> 'list[tuple[str, Optional[str]]]'`
 
 Pair each of `combos`' three name variants with a shared
 
@@ -5287,7 +5677,9 @@ player-code override (`DataQualityIssues.fix_combos`,
 
 Three `(name_variant, code_start)` pairs.
 
-### `fix_possible_score_swap_bug(lineup: 'list[LineupEvent]', box_lineup: 'LineupEvent') -> 'list[LineupEvent]'` {#fix_possible_score_swap_bug}
+### fix_possible_score_swap_bug {#fix_possible_score_swap_bug}
+
+`fix_possible_score_swap_bug(lineup: 'list[LineupEvent]', box_lineup: 'LineupEvent') -> 'list[LineupEvent]'`
 
 Undo a rare NCAA data bug where the scores get transposed
 
@@ -5309,7 +5701,9 @@ score's ending score, every lineup's `score_info` is un-transposed and
 
 `lineup` unchanged if the scores aren't transposed (or `lineup` is empty); otherwise a new list with every entry's score/pts/ plus_minus corrected.
 
-### `fox_mbb_boxscore(game_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#fox_mbb_boxscore}
+### fox_mbb_boxscore {#fox_mbb_boxscore}
+
+`fox_mbb_boxscore(game_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"`
 
 MBB boxscore (long: one row per player-stat).
 
@@ -5332,7 +5726,9 @@ from sportsdataverse.mbb import fox_mbb_boxscore
 df = fox_mbb_boxscore("...")
 ```
 
-### `fox_mbb_event_matchup(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_mbb_event_matchup}
+### fox_mbb_event_matchup {#fox_mbb_event_matchup}
+
+`fox_mbb_event_matchup(*args: 'Any', **kwargs: 'Any') -> 'Any'`
 
 Fox Sports cbk pregame team-stat comparison (one row per stat).
 
@@ -5349,7 +5745,9 @@ from sportsdataverse.mbb import fox_mbb_event_matchup
 df = fox_mbb_event_matchup("...")
 ```
 
-### `fox_mbb_event_recap(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_mbb_event_recap}
+### fox_mbb_event_recap {#fox_mbb_event_recap}
+
+`fox_mbb_event_recap(*args: 'Any', **kwargs: 'Any') -> 'Any'`
 
 Fox Sports cbk postgame top performers (one row per player).
 
@@ -5366,7 +5764,9 @@ from sportsdataverse.mbb import fox_mbb_event_recap
 df = fox_mbb_event_recap("...")
 ```
 
-### `fox_mbb_event_standings(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_mbb_event_standings}
+### fox_mbb_event_standings {#fox_mbb_event_standings}
+
+`fox_mbb_event_standings(*args: 'Any', **kwargs: 'Any') -> 'Any'`
 
 Fox Sports cbk the two teams' standings context.
 
@@ -5383,7 +5783,9 @@ from sportsdataverse.mbb import fox_mbb_event_standings
 df = fox_mbb_event_standings("...")
 ```
 
-### `fox_mbb_league_conferences(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_mbb_league_conferences}
+### fox_mbb_league_conferences {#fox_mbb_league_conferences}
+
+`fox_mbb_league_conferences(*args: 'Any', **kwargs: 'Any') -> 'Any'`
 
 Fox Sports cbk conference / group directory.
 
@@ -5412,7 +5814,9 @@ from sportsdataverse.mbb import fox_mbb_league_conferences
 df = fox_mbb_league_conferences()
 ```
 
-### `fox_mbb_league_header(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_mbb_league_header}
+### fox_mbb_league_header {#fox_mbb_league_header}
+
+`fox_mbb_league_header(*args: 'Any', **kwargs: 'Any') -> 'Any'`
 
 Fox Sports cbk league header (one row).
 
@@ -5442,7 +5846,9 @@ from sportsdataverse.mbb import fox_mbb_league_header
 df = fox_mbb_league_header()
 ```
 
-### `fox_mbb_league_leaders(category: 'str' = 'scoring', who: 'str' = 'player', page: 'int' = 0, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#fox_mbb_league_leaders}
+### fox_mbb_league_leaders {#fox_mbb_league_leaders}
+
+`fox_mbb_league_leaders(category: 'str' = 'scoring', who: 'str' = 'player', page: 'int' = 0, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"`
 
 MBB statistical leaders (`stats-con`); who=player|team.
 
@@ -5478,7 +5884,9 @@ from sportsdataverse.mbb import fox_mbb_league_leaders
 df = fox_mbb_league_leaders("scoring")
 ```
 
-### `fox_mbb_league_odds(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_mbb_league_odds}
+### fox_mbb_league_odds {#fox_mbb_league_odds}
+
+`fox_mbb_league_odds(*args: 'Any', **kwargs: 'Any') -> 'Any'`
 
 Fox Sports cbk league odds board (one row per team per game).
 
@@ -5495,7 +5903,9 @@ from sportsdataverse.mbb import fox_mbb_league_odds
 df = fox_mbb_league_odds()
 ```
 
-### `fox_mbb_league_player_news(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_mbb_league_player_news}
+### fox_mbb_league_player_news {#fox_mbb_league_player_news}
+
+`fox_mbb_league_player_news(*args: 'Any', **kwargs: 'Any') -> 'Any'`
 
 Fox Sports cbk league-wide player news feed.
 
@@ -5512,7 +5922,9 @@ from sportsdataverse.mbb import fox_mbb_league_player_news
 df = fox_mbb_league_player_news()
 ```
 
-### `fox_mbb_league_polls(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_mbb_league_polls}
+### fox_mbb_league_polls {#fox_mbb_league_polls}
+
+`fox_mbb_league_polls(*args: 'Any', **kwargs: 'Any') -> 'Any'`
 
 Fox Sports cbk rankings / polls rendered as standings tables.
 
@@ -5543,7 +5955,9 @@ from sportsdataverse.mbb import fox_mbb_league_polls
 df = fox_mbb_league_polls()
 ```
 
-### `fox_mbb_league_schedule(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_mbb_league_schedule}
+### fox_mbb_league_schedule {#fox_mbb_league_schedule}
+
+`fox_mbb_league_schedule(*args: 'Any', **kwargs: 'Any') -> 'Any'`
 
 Fox Sports cbk league schedule nav selections.
 
@@ -5571,7 +5985,9 @@ from sportsdataverse.mbb import fox_mbb_league_schedule
 df = fox_mbb_league_schedule()
 ```
 
-### `fox_mbb_league_scores(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_mbb_league_scores}
+### fox_mbb_league_scores {#fox_mbb_league_scores}
+
+`fox_mbb_league_scores(*args: 'Any', **kwargs: 'Any') -> 'Any'`
 
 Fox Sports cbk league scores nav selections.
 
@@ -5599,7 +6015,9 @@ from sportsdataverse.mbb import fox_mbb_league_scores
 df = fox_mbb_league_scores()
 ```
 
-### `fox_mbb_league_standings(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_mbb_league_standings}
+### fox_mbb_league_standings {#fox_mbb_league_standings}
+
+`fox_mbb_league_standings(*args: 'Any', **kwargs: 'Any') -> 'Any'`
 
 Fox Sports cbk league-wide standings tables.
 
@@ -5616,7 +6034,9 @@ from sportsdataverse.mbb import fox_mbb_league_standings
 df = fox_mbb_league_standings()
 ```
 
-### `fox_mbb_league_stat_leaders(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_mbb_league_stat_leaders}
+### fox_mbb_league_stat_leaders {#fox_mbb_league_stat_leaders}
+
+`fox_mbb_league_stat_leaders(*args: 'Any', **kwargs: 'Any') -> 'Any'`
 
 Fox Sports cbk league stats landing leaders.
 
@@ -5641,7 +6061,9 @@ from sportsdataverse.mbb import fox_mbb_league_stat_leaders
 df = fox_mbb_league_stat_leaders()
 ```
 
-### `fox_mbb_odds(game_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#fox_mbb_odds}
+### fox_mbb_odds {#fox_mbb_odds}
+
+`fox_mbb_odds(game_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"`
 
 MBB game odds six-pack (spread / to-win / total per team).
 
@@ -5664,7 +6086,9 @@ from sportsdataverse.mbb import fox_mbb_odds
 df = fox_mbb_odds("...")
 ```
 
-### `fox_mbb_pbp(game_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#fox_mbb_pbp}
+### fox_mbb_pbp {#fox_mbb_pbp}
+
+`fox_mbb_pbp(game_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"`
 
 MBB play-by-play (one row per play; period-based).
 
@@ -5687,7 +6111,9 @@ from sportsdataverse.mbb import fox_mbb_pbp
 df = fox_mbb_pbp("...")
 ```
 
-### `fox_mbb_scoreboard(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_mbb_scoreboard}
+### fox_mbb_scoreboard {#fox_mbb_scoreboard}
+
+`fox_mbb_scoreboard(*args: 'Any', **kwargs: 'Any') -> 'Any'`
 
 Fox Sports cbk scoreboard nav selections (weeks / dates / groups).
 
@@ -5715,7 +6141,9 @@ from sportsdataverse.mbb import fox_mbb_scoreboard
 df = fox_mbb_scoreboard()
 ```
 
-### `fox_mbb_scorechip(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_mbb_scorechip}
+### fox_mbb_scorechip {#fox_mbb_scorechip}
+
+`fox_mbb_scorechip(*args: 'Any', **kwargs: 'Any') -> 'Any'`
 
 Fox Sports cbk compact live score chip (raw dict -- live-only, uncaptured shape).
 
@@ -5732,7 +6160,9 @@ from sportsdataverse.mbb import fox_mbb_scorechip
 df = fox_mbb_scorechip("nfl12345")
 ```
 
-### `fox_mbb_scores_segment(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_mbb_scores_segment}
+### fox_mbb_scores_segment {#fox_mbb_scores_segment}
+
+`fox_mbb_scores_segment(*args: 'Any', **kwargs: 'Any') -> 'Any'`
 
 Fox Sports cbk one row per game in a scoreboard segment.
 
@@ -5749,7 +6179,9 @@ from sportsdataverse.mbb import fox_mbb_scores_segment
 df = fox_mbb_scores_segment("...")
 ```
 
-### `fox_mbb_standings(team_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#fox_mbb_standings}
+### fox_mbb_standings {#fox_mbb_standings}
+
+`fox_mbb_standings(team_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"`
 
 MBB standings for a team's conference/division.
 
@@ -5772,7 +6204,9 @@ from sportsdataverse.mbb import fox_mbb_standings
 df = fox_mbb_standings("...")
 ```
 
-### `fox_mbb_team_gamelog(team_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#fox_mbb_team_gamelog}
+### fox_mbb_team_gamelog {#fox_mbb_team_gamelog}
+
+`fox_mbb_team_gamelog(team_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"`
 
 MBB team game log (long: one row per game-stat).
 
@@ -5795,7 +6229,9 @@ from sportsdataverse.mbb import fox_mbb_team_gamelog
 df = fox_mbb_team_gamelog("...")
 ```
 
-### `fox_mbb_team_header(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_mbb_team_header}
+### fox_mbb_team_header {#fox_mbb_team_header}
+
+`fox_mbb_team_header(*args: 'Any', **kwargs: 'Any') -> 'Any'`
 
 Fox Sports cbk team header (one row).
 
@@ -5812,7 +6248,9 @@ from sportsdataverse.mbb import fox_mbb_team_header
 df = fox_mbb_team_header("...")
 ```
 
-### `fox_mbb_team_roster(team_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#fox_mbb_team_roster}
+### fox_mbb_team_roster {#fox_mbb_team_roster}
+
+`fox_mbb_team_roster(team_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"`
 
 MBB team roster (one row per player).
 
@@ -5835,7 +6273,9 @@ from sportsdataverse.mbb import fox_mbb_team_roster
 df = fox_mbb_team_roster("...")
 ```
 
-### `fox_mbb_team_stats(team_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#fox_mbb_team_stats}
+### fox_mbb_team_stats {#fox_mbb_team_stats}
+
+`fox_mbb_team_stats(team_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"`
 
 MBB team stat leaders by category.
 
@@ -5858,7 +6298,9 @@ from sportsdataverse.mbb import fox_mbb_team_stats
 df = fox_mbb_team_stats("...")
 ```
 
-### `fox_mbb_teamnav(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_mbb_teamnav}
+### fox_mbb_teamnav {#fox_mbb_teamnav}
+
+`fox_mbb_teamnav(*args: 'Any', **kwargs: 'Any') -> 'Any'`
 
 Fox Sports cbk team directory (one row per team).
 
@@ -5887,7 +6329,9 @@ from sportsdataverse.mbb import fox_mbb_teamnav
 df = fox_mbb_teamnav()
 ```
 
-### `fox_mbb_teams(team_id: 'Union[int, str]' = '150', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#fox_mbb_teams}
+### fox_mbb_teams {#fox_mbb_teams}
+
+`fox_mbb_teams(team_id: 'Union[int, str]' = '150', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"`
 
 MBB team directory for one seed team's conference.
 
@@ -5920,7 +6364,9 @@ from sportsdataverse.mbb import fox_mbb_teams
 df = fox_mbb_teams("150")
 ```
 
-### `fox_mbb_teams_all(max_id: 'int' = 500, max_calls: 'int' = 60, *, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#fox_mbb_teams_all}
+### fox_mbb_teams_all {#fox_mbb_teams_all}
+
+`fox_mbb_teams_all(max_id: 'int' = 500, max_calls: 'int' = 60, *, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame']"`
 
 Full MBB team directory by walking seed ids across conferences.
 
@@ -5958,7 +6404,9 @@ df = fox_mbb_teams_all()
 df.group_by("fox_section").len().sort("len", descending=True).head()
 ```
 
-### `fuzzy_box_match(candidate: 'str', unassigned_box_names: 'list[str]', team_context: 'str') -> 'Union[str, FuzzyMatchError]'` {#fuzzy_box_match}
+### fuzzy_box_match {#fuzzy_box_match}
+
+`fuzzy_box_match(candidate: 'str', unassigned_box_names: 'list[str]', team_context: 'str') -> 'Union[str, FuzzyMatchError]'`
 
 Pick the single unassigned box-score name a mis-spelled play-by-play
 
@@ -5994,7 +6442,9 @@ fuzzy_box_match(
 # "Suitele, Sirena"
 ```
 
-### `get_ascending_time(event: 'ShotEvent', period: 'int', is_women_game: 'bool') -> 'float'` {#get_ascending_time}
+### get_ascending_time {#get_ascending_time}
+
+`get_ascending_time(event: 'ShotEvent', period: 'int', is_women_game: 'bool') -> 'float'`
 
 Converts the descending in-period clock time to an ascending
 
@@ -6019,7 +6469,9 @@ from sportsdataverse.mbb.mbb_ncaa_shot_parser import get_ascending_time
 get_ascending_time(shot_with_min_4, period=1, is_women_game=False)  # 16.0
 ```
 
-### `get_box_lineup(filename: 'str', in_html: 'str', team_id: 'TeamId', format_version: 'int', external_roster: 'tuple[list[str], list[RosterEntry]]' = ([], []), neutral_game_dates: 'AbstractSet[str]' = frozenset(), home_team: 'Optional[str]' = None, away_team: 'Optional[str]' = None) -> 'Union[LineupEvent, list[ParseError]]'` {#get_box_lineup}
+### get_box_lineup {#get_box_lineup}
+
+`get_box_lineup(filename: 'str', in_html: 'str', team_id: 'TeamId', format_version: 'int', external_roster: 'tuple[list[str], list[RosterEntry]]' = ([], []), neutral_game_dates: 'AbstractSet[str]' = frozenset(), home_team: 'Optional[str]' = None, away_team: 'Optional[str]' = None) -> 'Union[LineupEvent, list[ParseError]]'`
 
 Gets the boxscore lineup from the HTML page (``BoxscoreParser
 
@@ -6053,7 +6505,9 @@ with open("tests/fixtures/ncaa/test_lineup.html", encoding="utf-8") as f:
 result = get_box_lineup("test_p1.html", html, TeamId("TeamA"), format_version=0)
 ```
 
-### `get_config() -> 'NcaaFetchConfig'` {#get_config}
+### get_config {#get_config}
+
+`get_config() -> 'NcaaFetchConfig'`
 
 Return the live `NcaaFetchConfig` singleton.
 
@@ -6065,7 +6519,9 @@ cfg = get_config()
 print(cfg.cache_dir, cfg.timeout)
 ```
 
-### `get_constants(league: 'str') -> 'LeagueConstants'` {#get_constants}
+### get_constants {#get_constants}
+
+`get_constants(league: 'str') -> 'LeagueConstants'`
 
 Return the `LeagueConstants` for a league.
 
@@ -6086,7 +6542,9 @@ from sportsdataverse.mbb.mbb_prediction_constants import get_constants
 get_constants("mens").hfa
 ```
 
-### `get_game_weight(opp: 'OpponentGame', field: 'str', side: 'str') -> 'float'` {#get_game_weight}
+### get_game_weight {#get_game_weight}
+
+`get_game_weight(opp: 'OpponentGame', field: 'str', side: 'str') -> 'float'`
 
 Weight for one game/field/side (`getGameWeight`, `ts:119-140`).
 
@@ -6116,7 +6574,9 @@ game = {"off_3p_attempts": 0, "off_poss": 70}
 print(get_game_weight(game, "3p", "off"))  # 70.0 (poss fallback)
 ```
 
-### `get_neutral_games(filename: 'str', in_html: 'str', format_version: 'int') -> 'Union[tuple[TeamId, set[str]], list[ParseError]]'` {#get_neutral_games}
+### get_neutral_games {#get_neutral_games}
+
+`get_neutral_games(filename: 'str', in_html: 'str', format_version: 'int') -> 'Union[tuple[TeamId, set[str]], list[ParseError]]'`
 
 Extracts the set of neutral/away-marked game dates from a saved NCAA
 
@@ -6148,7 +6608,9 @@ if isinstance(result, list):
 team, neutral_dates = result
 ```
 
-### `get_per_game_raw(opp: 'OpponentGame', field: 'str', side: 'str') -> 'Optional[float]'` {#get_per_game_raw}
+### get_per_game_raw {#get_per_game_raw}
+
+`get_per_game_raw(opp: 'OpponentGame', field: 'str', side: 'str') -> 'Optional[float]'`
 
 Per-game raw shooting rate from one opponent row (`getPerGameRaw`, `ts:82-116`).
 
@@ -6178,7 +6640,9 @@ game = {"off_3p_made": 4, "off_3p_attempts": 10}
 print(get_per_game_raw(game, "3p", "off"))  # 0.4
 ```
 
-### `get_player_value_constants(league: 'str') -> 'PlayerValueConstants'` {#get_player_value_constants}
+### get_player_value_constants {#get_player_value_constants}
+
+`get_player_value_constants(league: 'str') -> 'PlayerValueConstants'`
 
 Return the `PlayerValueConstants` for a league.
 
@@ -6199,7 +6663,9 @@ from sportsdataverse.mbb.mbb_player_value_constants import get_player_value_cons
 get_player_value_constants("mens").bundle_prefix
 ```
 
-### `get_sorted_pbp_events(filename: 'str', in_html: 'str', box_lineup: 'LineupEvent', format_version: 'int') -> 'Union[list[PlayByPlayEvent], list[ParseError]]'` {#get_sorted_pbp_events}
+### get_sorted_pbp_events {#get_sorted_pbp_events}
+
+`get_sorted_pbp_events(filename: 'str', in_html: 'str', box_lineup: 'LineupEvent', format_version: 'int') -> 'Union[list[PlayByPlayEvent], list[ParseError]]'`
 
 Handy util to return the play-by-play events in chronological order,
 
@@ -6235,7 +6701,9 @@ with open("tests/fixtures/ncaa/test_play_by_play.html", encoding="utf-8") as f:
 events = get_sorted_pbp_events("test.html", pbp_html, box_lineup, format_version=0)
 ```
 
-### `get_stats_diff(stat_set1: 'LineupStatSet', stat_set2: 'LineupStatSet', off_title: 'str', def_title: 'str | None' = None) -> 'LineupStatSet'` {#get_stats_diff}
+### get_stats_diff {#get_stats_diff}
+
+`get_stats_diff(stat_set1: 'LineupStatSet', stat_set2: 'LineupStatSet', off_title: 'str', def_title: 'str | None' = None) -> 'LineupStatSet'`
 
 Straight (unweighted) field-by-field diff of two team stat sets.
 
@@ -6267,7 +6735,9 @@ diff = get_stats_diff(team_a, team_b, "Team A", "Team B")
 print(diff["off_ppp"]["value"])  # team_a.off_ppp - team_b.off_ppp
 ```
 
-### `get_team_raw_from_per_game(team: 'TeamDetail', field: 'str') -> 'SideValues'` {#get_team_raw_from_per_game}
+### get_team_raw_from_per_game {#get_team_raw_from_per_game}
+
+`get_team_raw_from_per_game(team: 'TeamDetail', field: 'str') -> 'SideValues'`
 
 A team's field rate as the weighted mean of its per-game raws (`getTeamRawFromPerGame`, `ts:224-250`).
 
@@ -6294,7 +6764,9 @@ team = {"opponents": [{"off_3p_made": 4, "off_3p_attempts": 10}]}
 print(get_team_raw_from_per_game(team, "3p")["off"])  # 0.4
 ```
 
-### `get_team_triples(filename: 'str', in_html: 'str', old_format: 'bool' = False) -> 'Union[list[tuple[TeamId, str, ConferenceId]], list[ParseError]]'` {#get_team_triples}
+### get_team_triples {#get_team_triples}
+
+`get_team_triples(filename: 'str', in_html: 'str', old_format: 'bool' = False) -> 'Union[list[tuple[TeamId, str, ConferenceId]], list[ParseError]]'`
 
 Extracts `(team, NCAA id, conference)` triples from a saved NCAA
 
@@ -6323,7 +6795,9 @@ with open("tests/fixtures/ncaa/test_attendance_list.html", encoding="utf-8") as 
 result = get_team_triples("test_attendance_list.html", html, old_format=True)
 ```
 
-### `get_unified_ncaa_id(filename: 'str', in_html: 'str') -> 'Union[Optional[str], list[ParseError]]'` {#get_unified_ncaa_id}
+### get_unified_ncaa_id {#get_unified_ncaa_id}
+
+`get_unified_ncaa_id(filename: 'str', in_html: 'str') -> 'Union[Optional[str], list[ParseError]]'`
 
 Gets a player's lowest cross-season NCAA id from a saved player page
 
@@ -6350,7 +6824,9 @@ from sportsdataverse.mbb.mbb_ncaa_roster_parser import get_unified_ncaa_id
 get_unified_ncaa_id("player.html", player_page_html)
 ```
 
-### `handle_common_sub_bug(clump: 'BadLineupClump', box_lineup: 'LineupEvent', valid_player_codes: 'set[str]') -> 'tuple[list[LineupEvent], BadLineupClump]'` {#handle_common_sub_bug}
+### handle_common_sub_bug {#handle_common_sub_bug}
+
+`handle_common_sub_bug(clump: 'BadLineupClump', box_lineup: 'LineupEvent', valid_player_codes: 'set[str]') -> 'tuple[list[LineupEvent], BadLineupClump]'`
 
 Fixes the "2-in-1-out then a compensating 1-out" substitution bug
 
@@ -6400,7 +6876,9 @@ from sportsdataverse.mbb.mbb_ncaa_stint_validation import (
 fixed, still = handle_common_sub_bug(clump, box_lineup, valid_codes)
 ```
 
-### `has_kenpom_login() -> 'bool'` {#has_kenpom_login}
+### has_kenpom_login {#has_kenpom_login}
+
+`has_kenpom_login() -> 'bool'`
 
 Whether KenPom credentials are set in the environment.
 
@@ -6420,7 +6898,9 @@ from sportsdataverse.mbb import has_kenpom_login
 pytestmark = pytest.mark.skipif(not has_kenpom_login(), reason="no KenPom login")
 ```
 
-### `in_game_features(pbp: 'pl.DataFrame', pregame_home_prob: 'float') -> 'pl.DataFrame'` {#in_game_features}
+### in_game_features {#in_game_features}
+
+`in_game_features(pbp: 'pl.DataFrame', pregame_home_prob: 'float') -> 'pl.DataFrame'`
 
 Per-play in-game win-probability features from a `load_mbb_pbp` frame.
 
@@ -6444,7 +6924,9 @@ pbp = load_mbb_pbp([2024]).filter(pl.col("game_id") == 401638643)
 feats = in_game_features(pbp, 0.62)
 ```
 
-### `incorporate_height(height_in: 'float', confs: 'list[float]') -> 'list[float]'` {#incorporate_height}
+### incorporate_height {#incorporate_height}
+
+`incorporate_height(height_in: 'float', confs: 'list[float]') -> 'list[float]'`
 
 Reweight positional confidences by height (Bayesian-ish height prior).
 
@@ -6474,7 +6956,9 @@ from sportsdataverse.mbb.mbb_positions import incorporate_height
 incorporate_height(81, [0.03, 0.19, 0.49, 0.09, 0.18])
 ```
 
-### `inject_luck(mutable_stats: 'LineupStatSet', off_luck: 'OffLuckAdjustmentDiags | None', def_luck: 'DefLuckAdjustmentDiags | None') -> 'None'` {#inject_luck}
+### inject_luck {#inject_luck}
+
+`inject_luck(mutable_stats: 'LineupStatSet', off_luck: 'OffLuckAdjustmentDiags | None', def_luck: 'DefLuckAdjustmentDiags | None') -> 'None'`
 
 Reversibly mutate a stat set in place with luck-adjustment deltas.
 
@@ -6518,7 +7002,9 @@ print(sample_team_on["off_3p"])
 inject_luck(sample_team_on, None, None)
 ```
 
-### `inject_rapm_into_players(players: 'list[PlayerOnOffStats]', off_rapm_input: 'RapmProcessingInputs', def_rapm_input: 'RapmProcessingInputs', stats_averages: 'PureStatSet', ctx: 'RapmPlayerContext', adaptive_correl_weights: 'list[float] | None', read_value_keys: 'tuple[ValueKey, ValueKey]' = ('value', 'value'), write_value_key: 'ValueKey' = 'value') -> 'None'` {#inject_rapm_into_players}
+### inject_rapm_into_players {#inject_rapm_into_players}
+
+`inject_rapm_into_players(players: 'list[PlayerOnOffStats]', off_rapm_input: 'RapmProcessingInputs', def_rapm_input: 'RapmProcessingInputs', stats_averages: 'PureStatSet', ctx: 'RapmPlayerContext', adaptive_correl_weights: 'list[float] | None', read_value_keys: 'tuple[ValueKey, ValueKey]' = ('value', 'value'), write_value_key: 'ValueKey' = 'value') -> 'None'`
 
 Write `pick_ridge_regression`'s RAPM predictions back onto each player.
 
@@ -6573,7 +7059,9 @@ inject_rapm_into_players(
 )
 ```
 
-### `inject_starting_lineup_into_box(sorted_pbp_events: 'list[PlayByPlayEvent]', box_lineup: 'LineupEvent', external_roster: 'tuple[list[str], list[RosterEntry]]', format_version: 'int') -> 'LineupEvent'` {#inject_starting_lineup_into_box}
+### inject_starting_lineup_into_box {#inject_starting_lineup_into_box}
+
+`inject_starting_lineup_into_box(sorted_pbp_events: 'list[PlayByPlayEvent]', box_lineup: 'LineupEvent', external_roster: 'tuple[list[str], list[RosterEntry]]', format_version: 'int') -> 'LineupEvent'`
 
 Infer the starting five and reorder the box-score roster so they lead
 
@@ -6608,7 +7096,9 @@ from sportsdataverse.mbb.mbb_ncaa_pbp_glue import inject_starting_lineup_into_bo
 fixed = inject_starting_lineup_into_box(pbp_events, box_lineup, ([], []), 1)
 ```
 
-### `inject_validated_players(ordered_lineup_from_box: 'list[str]', box_minus_players: 'LineupEvent', external_roster: 'tuple[list[str], list[RosterEntry]]') -> 'list[str]'` {#inject_validated_players}
+### inject_validated_players {#inject_validated_players}
+
+`inject_validated_players(ordered_lineup_from_box: 'list[str]', box_minus_players: 'LineupEvent', external_roster: 'tuple[list[str], list[RosterEntry]]') -> 'list[str]'`
 
 Validates box players against the roster (if available) and any
 
@@ -6639,7 +7129,9 @@ from sportsdataverse.mbb.mbb_ncaa_boxscore_parser import inject_validated_player
 inject_validated_players(["Player One"], box_lineup, ([], []))
 ```
 
-### `is_cached(path: 'str', *, cache_dir: 'Optional[Path]' = None) -> 'bool'` {#is_cached}
+### is_cached {#is_cached}
+
+`is_cached(path: 'str', *, cache_dir: 'Optional[Path]' = None) -> 'bool'`
 
 Return whether *path* already has a cache file on disk.
 
@@ -6650,7 +7142,9 @@ Return whether *path* already has a cache file on disk.
 | `path` | `str` |  |  |
 | `cache_dir` | `Optional[Path]` | `None` |  |
 
-### `is_end_of_game_fouling_vs_fastbreak(curr_clump: 'ConcurrentClump', event_parser: 'PossessionEvent') -> 'bool'` {#is_end_of_game_fouling_vs_fastbreak}
+### is_end_of_game_fouling_vs_fastbreak {#is_end_of_game_fouling_vs_fastbreak}
+
+`is_end_of_game_fouling_vs_fastbreak(curr_clump: 'ConcurrentClump', event_parser: 'PossessionEvent') -> 'bool'`
 
 Check for intentional fouling to prolong the game, specifically so it
 
@@ -6676,7 +7170,9 @@ from sportsdataverse.mbb.mbb_ncaa_lineup_enrich import is_end_of_game_fouling_vs
 is_end_of_game_fouling_vs_fastbreak(curr_clump, event_parser)
 ```
 
-### `is_gen2(ev: 'RawGameEvent') -> 'bool'` {#is_gen2}
+### is_gen2 {#is_gen2}
+
+`is_gen2(ev: 'RawGameEvent') -> 'bool'`
 
 Detect the new/"gen2" NCAA event format (`EventUtils.is_gen2`,
 
@@ -6692,7 +7188,9 @@ Detect the new/"gen2" NCAA event format (`EventUtils.is_gen2`,
 
 `True` if `ev.info` contains a comma-space (`", "`), the gen2 format's field separator; `False` for the old/legacy format.
 
-### `is_scramble(curr_clump: 'ConcurrentClump', prev_clumps: 'list[ConcurrentClump]', event_parser: 'PossessionEvent', player_version: 'bool') -> 'tuple[Callable[[RawGameEvent], bool], str]'` {#is_scramble}
+### is_scramble {#is_scramble}
+
+`is_scramble(curr_clump: 'ConcurrentClump', prev_clumps: 'list[ConcurrentClump]', event_parser: 'PossessionEvent', player_version: 'bool') -> 'tuple[Callable[[RawGameEvent], bool], str]'`
 
 Figure out if (each event of) the current clump is part of a
 
@@ -6725,7 +7223,9 @@ predicate, tag = is_scramble(curr_clump, prev_clumps, event_parser, player_versi
 [predicate(ev) for ev in curr_clump.evs]
 ```
 
-### `is_team_shooting_left_to_start(sorted_very_raw_events: 'list[tuple[int, ShotEvent]]') -> 'tuple[bool, int]'` {#is_team_shooting_left_to_start}
+### is_team_shooting_left_to_start {#is_team_shooting_left_to_start}
+
+`is_team_shooting_left_to_start(sorted_very_raw_events: 'list[tuple[int, ShotEvent]]') -> 'tuple[bool, int]'`
 
 Infers which side of the SVG court the team under analysis shoots
 
@@ -6749,7 +7249,9 @@ from sportsdataverse.mbb.mbb_ncaa_shot_parser import is_team_shooting_left_to_st
 is_team_shooting_left_to_start([(1, shot_a), (1, shot_b)])
 ```
 
-### `is_women_game(sorted_very_raw_events: 'list[tuple[int, ShotEvent]]') -> 'bool'` {#is_women_game}
+### is_women_game {#is_women_game}
+
+`is_women_game(sorted_very_raw_events: 'list[tuple[int, ShotEvent]]') -> 'bool'`
 
 Infers men's vs. women's game from timing evidence
 
@@ -6776,7 +7278,9 @@ from sportsdataverse.mbb.mbb_ncaa_shot_parser import is_women_game
 is_women_game([(1, shot), (2, shot), (3, shot), (4, shot)])  # True
 ```
 
-### `jsoup_text(el: 'Optional[Tag]') -> 'str'` {#jsoup_text}
+### jsoup_text {#jsoup_text}
+
+`jsoup_text(el: 'Optional[Tag]') -> 'str'`
 
 JSoup `Element.text()`: all descendant text, whitespace-collapsed.
 
@@ -6804,7 +7308,9 @@ soup = parse_html("<td>\n  Akin,\tDaniel  </td>")
 jsoup_text(soup.find("td"))  # "Akin, Daniel"
 ```
 
-### `kenpom_login(email: 'Optional[str]' = None, password: 'Optional[str]' = None, *, proxy: 'Any' = None) -> 'requests.Session'` {#kenpom_login}
+### kenpom_login {#kenpom_login}
+
+`kenpom_login(email: 'Optional[str]' = None, password: 'Optional[str]' = None, *, proxy: 'Any' = None) -> 'requests.Session'`
 
 Log into kenpom.com and return the authenticated session.
 
@@ -6833,7 +7339,9 @@ from sportsdataverse.mbb import kenpom_login
 session = kenpom_login(proxy="http://user:pw@proxy.example:8080")
 ```
 
-### `kmeans_fit(X: 'np.ndarray', k: 'int', seed: 'int', n_init: 'int' = 10, max_iter: 'int' = 100) -> "'tuple[np.ndarray, np.ndarray]'"` {#kmeans_fit}
+### kmeans_fit {#kmeans_fit}
+
+`kmeans_fit(X: 'np.ndarray', k: 'int', seed: 'int', n_init: 'int' = 10, max_iter: 'int' = 100) -> "'tuple[np.ndarray, np.ndarray]'"`
 
 Seeded Lloyd's KMeans, best-of-`n_init` by inertia.
 
@@ -6857,7 +7365,9 @@ Seeded Lloyd's KMeans, best-of-`n_init` by inertia.
 centers, labels = kmeans_fit(Z, k=8, seed=0)
 ```
 
-### `lineup_as_raw_clumps(lineup: 'LineupEvent') -> 'Iterator[ConcurrentClump]'` {#lineup_as_raw_clumps}
+### lineup_as_raw_clumps {#lineup_as_raw_clumps}
+
+`lineup_as_raw_clumps(lineup: 'LineupEvent') -> 'Iterator[ConcurrentClump]'`
 
 Turn one lineup's raw events into unprocessed singleton clumps, plus a
 
@@ -6874,7 +7384,9 @@ trailing lineup-boundary marker (`Concurrency.lineup_as_raw_clumps`,
 
 One `ConcurrentClump([ev])` per raw event (in order), then a final `ConcurrentClump([], [lineup])` boundary marker.
 
-### `lineup_balancer(lineups: 'list[LineupEvent]', team_stats: 'PossCalcFragment', opponent_stats: 'PossCalcFragment', clump: 'ConcurrentClump', prev_clump: 'ConcurrentClump') -> 'list[LineupEvent]'` {#lineup_balancer}
+### lineup_balancer {#lineup_balancer}
+
+`lineup_balancer(lineups: 'list[LineupEvent]', team_stats: 'PossCalcFragment', opponent_stats: 'PossCalcFragment', clump: 'ConcurrentClump', prev_clump: 'ConcurrentClump') -> 'list[LineupEvent]'`
 
 Attribute this clump's possessions to the candidate lineup(s)
 
@@ -6902,7 +7414,9 @@ currently has the highest remaining approximate share.
 
 New lineup copies with `num_possessions` incremented.
 
-### `lineup_fixer(lineups: 'list[LineupEvent]') -> 'list[LineupEvent]'` {#lineup_fixer}
+### lineup_fixer {#lineup_fixer}
+
+`lineup_fixer(lineups: 'list[LineupEvent]') -> 'list[LineupEvent]'`
 
 Clamp obviously-broken possession counts (``PossessionUtils
 
@@ -6923,7 +7437,9 @@ still-negative possession count is clamped to 0.
 
 New lineup copies with clamped `num_possessions`.
 
-### `lineup_stats_bucket(ev: 'LineupEvent', *, avg_eff: 'float' = 100.0, opponent_baselines: 'Optional[dict[str, float]]' = None, doc_count: 'int' = 1) -> 'LineupStatSet'` {#lineup_stats_bucket}
+### lineup_stats_bucket {#lineup_stats_bucket}
+
+`lineup_stats_bucket(ev: 'LineupEvent', *, avg_eff: 'float' = 100.0, opponent_baselines: 'Optional[dict[str, float]]' = None, doc_count: 'int' = 1) -> 'LineupStatSet'`
 
 Assemble one lineup's full 254-field `{value}` bucket.
 
@@ -6957,7 +7473,9 @@ bucket = lineup_stats_bucket(enriched_event, doc_count=7)
 bucket["off_ppp"]["value"]
 ```
 
-### `lineup_stats_buckets(evs: 'list[LineupEvent]', *, avg_eff: 'float' = 100.0, opponent_baselines: 'Optional[dict[str, float]]' = None) -> 'list[LineupStatSet]'` {#lineup_stats_buckets}
+### lineup_stats_buckets {#lineup_stats_buckets}
+
+`lineup_stats_buckets(evs: 'list[LineupEvent]', *, avg_eff: 'float' = 100.0, opponent_baselines: 'Optional[dict[str, float]]' = None) -> 'list[LineupStatSet]'`
 
 Group events by lineup, fold each group's stats, and mint one bucket per lineup.
 
@@ -6989,7 +7507,9 @@ buckets = lineup_stats_buckets(enriched_events)
 buckets[0]["off_poss"]["value"]
 ```
 
-### `lineup_to_team_report(lineup_report: 'LineupStatSet', inc_replacement: 'bool' = False, regress_diffs: 'float' = 0.0, rep_on_off_diag_mode: 'int' = 0) -> 'LineupStatSet'` {#lineup_to_team_report}
+### lineup_to_team_report {#lineup_to_team_report}
+
+`lineup_to_team_report(lineup_report: 'LineupStatSet', inc_replacement: 'bool' = False, regress_diffs: 'float' = 0.0, rep_on_off_diag_mode: 'int' = 0) -> 'LineupStatSet'`
 
 Build per-player on/off splits out of a team's lineups.
 
@@ -7041,7 +7561,9 @@ report = lineup_to_team_report(
 )
 ```
 
-### `log_loss_score(y_true: 'np.ndarray', p_pred: 'np.ndarray', eps: 'float' = 1e-15) -> 'float'` {#log_loss_score}
+### log_loss_score {#log_loss_score}
+
+`log_loss_score(y_true: 'np.ndarray', p_pred: 'np.ndarray', eps: 'float' = 1e-15) -> 'float'`
 
 Binary cross-entropy loss between predicted probabilities and outcomes.
 
@@ -7065,7 +7587,9 @@ from sportsdataverse._common.metrics import log_loss_score
 log_loss_score(np.array([1, 0]), np.array([0.9, 0.1]))
 ```
 
-### `logistic_fit(X: 'np.ndarray', y: 'np.ndarray', lam: 'float' = 1.0) -> 'np.ndarray'` {#logistic_fit}
+### logistic_fit {#logistic_fit}
+
+`logistic_fit(X: 'np.ndarray', y: 'np.ndarray', lam: 'float' = 1.0) -> 'np.ndarray'`
 
 L2-penalized logistic regression via L-BFGS (intercept unpenalized).
 
@@ -7087,7 +7611,9 @@ Coefficient vector of length `d + 1` (intercept first).
 coef = logistic_fit(X, drafted, lam=1.0)
 ```
 
-### `mae(a: 'np.ndarray', b: 'np.ndarray') -> 'float'` {#mae}
+### mae {#mae}
+
+`mae(a: 'np.ndarray', b: 'np.ndarray') -> 'float'`
 
 Mean absolute error between two arrays.
 
@@ -7110,7 +7636,9 @@ from sportsdataverse._common.metrics import mae
 mae(np.array([1.0, 2.0]), np.array([1.5, 2.5]))
 ```
 
-### `matching_player(shot: 'ShotEvent', pbp_event: 'MiscGameEvent', tidy_ctx: 'TidyPlayerContext', code_match: 'bool') -> 'bool'` {#matching_player}
+### matching_player {#matching_player}
+
+`matching_player(shot: 'ShotEvent', pbp_event: 'MiscGameEvent', tidy_ctx: 'TidyPlayerContext', code_match: 'bool') -> 'bool'`
 
 Whether the player in `pbp_event` matches `shot`'s shooter
 
@@ -7136,7 +7664,9 @@ from sportsdataverse.mbb.mbb_ncaa_pbp_glue import matching_player
 matching_player(shot, pbp_event, tidy_ctx, code_match=False)
 ```
 
-### `mbb_archetypes(seasons: "'Union[int, list[int]]'", *, league: 'str' = 'mens', return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#mbb_archetypes}
+### mbb_archetypes {#mbb_archetypes}
+
+`mbb_archetypes(seasons: "'Union[int, list[int]]'", *, league: 'str' = 'mens', return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"`
 
 Per-player-season role archetype from the bundled KMeans centers.
 
@@ -7169,7 +7699,9 @@ roles = mbb_archetypes(2025)
 roles.filter(pl.col("archetype") == "rim protector").sort("dist_to_center").head(10)
 ```
 
-### `mbb_box_bpm(seasons: "'Union[int, list[int]]'", *, league: 'str' = 'mens', return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#mbb_box_bpm}
+### mbb_box_bpm {#mbb_box_bpm}
+
+`mbb_box_bpm(seasons: "'Union[int, list[int]]'", *, league: 'str' = 'mens', return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"`
 
 Per-player-season box Plus/Minus (offense, defense, total).
 
@@ -7202,7 +7734,9 @@ bpm = mbb_box_bpm(2025)
 bpm.filter(pl.col("min") >= 400).sort("box_bpm", descending=True).head(15)
 ```
 
-### `mbb_bracket_sim(seeded_field: 'pl.DataFrame', ratings: 'pl.DataFrame', *, n_sims: 'int' = 10000, seed: 'int' = 0, league: 'str' = 'mens', return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#mbb_bracket_sim}
+### mbb_bracket_sim {#mbb_bracket_sim}
+
+`mbb_bracket_sim(seeded_field: 'pl.DataFrame', ratings: 'pl.DataFrame', *, n_sims: 'int' = 10000, seed: 'int' = 0, league: 'str' = 'mens', return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
 
 Single-elimination Monte Carlo over a bracket-ordered field.
 
@@ -7234,7 +7768,9 @@ from sportsdataverse.mbb.mbb_season_sim import mbb_bracket_sim
 odds = mbb_bracket_sim(field_64, ratings, n_sims=20000, seed=42)
 ```
 
-### `mbb_bracketology(season: 'int', *, as_of_date: 'datetime.date | None' = None, league: 'str' = 'mens', return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#mbb_bracketology}
+### mbb_bracketology {#mbb_bracketology}
+
+`mbb_bracketology(season: 'int', *, as_of_date: 'datetime.date | None' = None, league: 'str' = 'mens', return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
 
 Projected tournament field for a season from the released ESPN data.
 
@@ -7267,7 +7803,9 @@ field = mbb_bracketology(2024)
 field.filter(pl.col("bid") == True).sort("projected_seed")
 ```
 
-### `mbb_draft_projection(seasons: "'Union[int, list[int]]'", *, league: 'str' = 'mens', return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#mbb_draft_projection}
+### mbb_draft_projection {#mbb_draft_projection}
+
+`mbb_draft_projection(seasons: "'Union[int, list[int]]'", *, league: 'str' = 'mens', return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"`
 
 Draft probability, projected pick, and pro tier per player-season.
 
@@ -7299,7 +7837,9 @@ board = mbb_draft_projection(2025)
 board.sort("draft_prob", descending=True).head(30)
 ```
 
-### `mbb_in_game_win_prob(pbp: 'pl.DataFrame', pregame_home_prob: 'float', *, league: 'str' = 'mens', return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#mbb_in_game_win_prob}
+### mbb_in_game_win_prob {#mbb_in_game_win_prob}
+
+`mbb_in_game_win_prob(pbp: 'pl.DataFrame', pregame_home_prob: 'float', *, league: 'str' = 'mens', return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
 
 Per-play home win probability from the bundled in-game logistic.
 
@@ -7329,7 +7869,9 @@ pbp = load_mbb_pbp([2024]).filter(pl.col("game_id") == 401638643)
 wp = mbb_in_game_win_prob(pbp, 0.62)
 ```
 
-### `mbb_pbp_disk(game_id, path_to_json)` {#mbb_pbp_disk}
+### mbb_pbp_disk {#mbb_pbp_disk}
+
+`mbb_pbp_disk(game_id, path_to_json)`
 
 _No description available._
 
@@ -7340,7 +7882,9 @@ _No description available._
 | `game_id` |  |  |  |
 | `path_to_json` |  |  |  |
 
-### `mbb_player_crosswalk(season: 'Optional[int]' = None, min_confidence: 'float' = 0.92, *, return_as_pandas: 'bool' = False, strict: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#mbb_player_crosswalk}
+### mbb_player_crosswalk {#mbb_player_crosswalk}
+
+`mbb_player_crosswalk(season: 'Optional[int]' = None, min_confidence: 'float' = 0.92, *, return_as_pandas: 'bool' = False, strict: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame']"`
 
 Build the MBB cross-source player crosswalk (ESPN / Fox).
 
@@ -7378,7 +7922,9 @@ strict = mbb_player_crosswalk(season=2026, min_confidence=0.97)
 df.filter(pl.col("match_method") == "fuzzy_jw").head()
 ```
 
-### `mbb_predict_games(games: 'pl.DataFrame', ratings: 'pl.DataFrame', *, league: 'str' = 'mens', return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#mbb_predict_games}
+### mbb_predict_games {#mbb_predict_games}
+
+`mbb_predict_games(games: 'pl.DataFrame', ratings: 'pl.DataFrame', *, league: 'str' = 'mens', return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
 
 Vectorized pregame predictions for a schedule of games.
 
@@ -7407,7 +7953,9 @@ from sportsdataverse.mbb.mbb_team_ratings import mbb_team_ratings
 preds = mbb_predict_games(games, mbb_team_ratings([2024]))
 ```
 
-### `mbb_recruiting_projection(seasons: "'Union[int, list[int]]'", *, league: 'str' = 'mens', return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#mbb_recruiting_projection}
+### mbb_recruiting_projection {#mbb_recruiting_projection}
+
+`mbb_recruiting_projection(seasons: "'Union[int, list[int]]'", *, league: 'str' = 'mens', return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"`
 
 Expected freshman box-BPM per recruit + over/under-performance residual.
 
@@ -7441,7 +7989,9 @@ proj = mbb_recruiting_projection(2026)
 proj.sort("exp_box_bpm", descending=True).head(15)
 ```
 
-### `mbb_schedule_crosswalk(season: 'Optional[int]' = None, *, return_as_pandas: 'bool' = False, strict: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#mbb_schedule_crosswalk}
+### mbb_schedule_crosswalk {#mbb_schedule_crosswalk}
+
+`mbb_schedule_crosswalk(season: 'Optional[int]' = None, *, return_as_pandas: 'bool' = False, strict: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame']"`
 
 Build the MBB cross-source schedule crosswalk (ESPN / Torvik).
 
@@ -7476,7 +8026,9 @@ print(df["match_method"].value_counts())
 df.filter(pl.col("match_method") == "both").select("espn_game_id", "bart_muid").head()
 ```
 
-### `mbb_season_sim(ratings: 'pl.DataFrame', remaining_schedule: 'pl.DataFrame', *, n_sims: 'int' = 10000, seed: 'int' = 0, league: 'str' = 'mens', return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#mbb_season_sim}
+### mbb_season_sim {#mbb_season_sim}
+
+`mbb_season_sim(ratings: 'pl.DataFrame', remaining_schedule: 'pl.DataFrame', *, n_sims: 'int' = 10000, seed: 'int' = 0, league: 'str' = 'mens', return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
 
 Monte Carlo the remaining schedule: expected wins + title odds.
 
@@ -7502,7 +8054,9 @@ from sportsdataverse.mbb.mbb_season_sim import mbb_season_sim
 odds = mbb_season_sim(ratings, remaining, n_sims=5000, seed=42)
 ```
 
-### `mbb_shooter_talent(scored: 'pl.DataFrame', *, league: 'str' = 'mens', k: "'float | None'" = None, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#mbb_shooter_talent}
+### mbb_shooter_talent {#mbb_shooter_talent}
+
+`mbb_shooter_talent(scored: 'pl.DataFrame', *, league: 'str' = 'mens', k: "'float | None'" = None, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"`
 
 Per-shooter EB-regressed make% over expected + points over expected.
 
@@ -7530,7 +8084,9 @@ talent = mbb_shooter_talent(mbb_shot_quality(mbb_shot_data(2025)))
 talent.filter(pl.col("n_shots") >= 200).sort("oe_pct_regressed", descending=True).head(15)
 ```
 
-### `mbb_shot_data(seasons: "'int | list[int]'", *, source: 'str' = 'espn', league: 'str' = 'mens', return_as_pandas: 'bool' = False) -> "'pl.DataFrame | pd.DataFrame'"` {#mbb_shot_data}
+### mbb_shot_data {#mbb_shot_data}
+
+`mbb_shot_data(seasons: "'int | list[int]'", *, source: 'str' = 'espn', league: 'str' = 'mens', return_as_pandas: 'bool' = False) -> "'pl.DataFrame | pd.DataFrame'"`
 
 Season(s) of shots in the canonical frame (the spine's data entry point).
 
@@ -7564,7 +8120,9 @@ shots = mbb_shot_data(2025)
 shots.group_by("shot_zone").agg(pl.col("made").mean()).sort("shot_zone")
 ```
 
-### `mbb_shot_quality(shots: 'pl.DataFrame', *, model: "'pl.DataFrame | None'" = None, league: 'str' = 'mens', return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#mbb_shot_quality}
+### mbb_shot_quality {#mbb_shot_quality}
+
+`mbb_shot_quality(shots: 'pl.DataFrame', *, model: "'pl.DataFrame | None'" = None, league: 'str' = 'mens', return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"`
 
 Score each shot with `xmake` / `xpoints` from the cell table.
 
@@ -7592,7 +8150,9 @@ scored = mbb_shot_quality(mbb_shot_data(2025))
 scored.group_by("team_id").agg(pl.col("xpoints").sum()).sort("xpoints", descending=True)
 ```
 
-### `mbb_shot_quality_model(shots: 'pl.DataFrame', *, league: 'str' = 'mens', return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#mbb_shot_quality_model}
+### mbb_shot_quality_model {#mbb_shot_quality_model}
+
+`mbb_shot_quality_model(shots: 'pl.DataFrame', *, league: 'str' = 'mens', return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"`
 
 Empirical-Bayes `zone x type` make-rate / xPoints table.
 
@@ -7625,7 +8185,9 @@ model = mbb_shot_quality_model(mbb_shot_data(2025))
 model.sort("xpoints", descending=True).head(5)
 ```
 
-### `mbb_shot_selection(scored: 'pl.DataFrame', *, group: 'str' = 'shooter_id', league: 'str' = 'mens', return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#mbb_shot_selection}
+### mbb_shot_selection {#mbb_shot_selection}
+
+`mbb_shot_selection(scored: 'pl.DataFrame', *, group: 'str' = 'shooter_id', league: 'str' = 'mens', return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"`
 
 Per shooter/team expected points per attempt vs the league-average mix.
 
@@ -7653,7 +8215,9 @@ sel = mbb_shot_selection(mbb_shot_quality(mbb_shot_data(2025)), group="team_id")
 sel.sort("selection_value", descending=True).head(10)
 ```
 
-### `mbb_strength_of_schedule(seasons: 'list[int]', *, league: 'str' = 'mens', return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#mbb_strength_of_schedule}
+### mbb_strength_of_schedule {#mbb_strength_of_schedule}
+
+`mbb_strength_of_schedule(seasons: 'list[int]', *, league: 'str' = 'mens', return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
 
 Season-level SoS / Quad / WAB résumé from the released ESPN data.
 
@@ -7683,7 +8247,9 @@ resume = mbb_strength_of_schedule([2024])
 resume.sort("wab", descending=True).head(20)
 ```
 
-### `mbb_team_crosswalk(season: 'Optional[int]' = None, *, fox: 'Optional[pl.DataFrame]' = None, bart: 'Optional[pl.DataFrame]' = None, kenpom: 'Optional[pl.DataFrame]' = None, return_as_pandas: 'bool' = False, strict: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#mbb_team_crosswalk}
+### mbb_team_crosswalk {#mbb_team_crosswalk}
+
+`mbb_team_crosswalk(season: 'Optional[int]' = None, *, fox: 'Optional[pl.DataFrame]' = None, bart: 'Optional[pl.DataFrame]' = None, kenpom: 'Optional[pl.DataFrame]' = None, return_as_pandas: 'bool' = False, strict: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame']"`
 
 Build the MBB cross-source team crosswalk (ESPN / Fox / Torvik / KenPom).
 
@@ -7724,7 +8290,9 @@ df = mbb_team_crosswalk(season=2026, fox=pl.DataFrame())
 df.filter(pl.col("match_method") == "espn_only").select("espn_display_name").head()
 ```
 
-### `mbb_team_ratings(seasons: 'int | list[int]', *, league: 'str' = 'mens', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'` {#mbb_team_ratings}
+### mbb_team_ratings {#mbb_team_ratings}
+
+`mbb_team_ratings(seasons: 'int | list[int]', *, league: 'str' = 'mens', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
 
 Opponent-adjusted team ratings (AdjO/AdjD/AdjEM/AdjTempo) per team-season.
 
@@ -7752,7 +8320,9 @@ ratings = mbb_team_ratings(2024)
 ratings.sort("rank").head()
 ```
 
-### `mbb_transfer_projection(seasons: "'Union[int, list[int]]'", *, league: 'str' = 'mens', return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#mbb_transfer_projection}
+### mbb_transfer_projection {#mbb_transfer_projection}
+
+`mbb_transfer_projection(seasons: "'Union[int, list[int]]'", *, league: 'str' = 'mens', return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"`
 
 Projected post-transfer box-BPM for each transfer arriving in `seasons`.
 
@@ -7788,7 +8358,9 @@ proj = mbb_transfer_projection(2026)
 proj.sort("proj_box_bpm", descending=True).head(15)
 ```
 
-### `misspellings(team: 'Optional[TeamId]') -> 'dict[str, str]'` {#misspellings}
+### misspellings {#misspellings}
+
+`misspellings(team: 'Optional[TeamId]') -> 'dict[str, str]'`
 
 Team-scoped misspelling map, falling back to the generic map
 
@@ -7817,7 +8389,9 @@ misspellings(TeamId("Some Unlisted Team"))  # {} (generic fallback)
 misspellings(None)  # {} (generic fallback)
 ```
 
-### `name_in_v0_box_format(v1_name: 'str') -> 'str'` {#name_in_v0_box_format}
+### name_in_v0_box_format {#name_in_v0_box_format}
+
+`name_in_v0_box_format(v1_name: 'str') -> 'str'`
 
 Switch a v1-box-format name (`"first_name names"`) to v0-box format
 
@@ -7854,7 +8428,9 @@ name_in_v0_box_format("Daniel Akin")  # "Akin, Daniel"
 name_in_v0_box_format("AKIN,DANIEL")  # "AKIN, DANIEL" (old PbP form, flipped then re-split)
 ```
 
-### `name_is_initials(name: 'str') -> 'Optional[tuple[str, str]]'` {#name_is_initials}
+### name_is_initials {#name_is_initials}
+
+`name_is_initials(name: 'str') -> 'Optional[tuple[str, str]]'`
 
 Detect a 2-initial name shorthand, e.g. `"A B"` or `"B, A"`
 
@@ -7876,7 +8452,9 @@ reject initials-only roster rows).
 
 `(p1, p2)` -- `p1` is the leading initial in a `"A B"`-style string, or the trailing initial in a `"B, A"`-style string; `None` if `name` doesn't fit either 3- or 4-character shape.
 
-### `ncaa_espn_team_crosswalk(league: 'str' = 'mbb', *, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#ncaa_espn_team_crosswalk}
+### ncaa_espn_team_crosswalk {#ncaa_espn_team_crosswalk}
+
+`ncaa_espn_team_crosswalk(league: 'str' = 'mbb', *, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"`
 
 Season-keyed stats.ncaa.org -> ESPN team-id crosswalk.
 
@@ -7928,7 +8506,9 @@ wdf = ncaa_espn_team_crosswalk(league="wbb", return_as_pandas=True)
 df.filter(pl.col("season") == "2025-26").select("ncaa_team_id", "espn_team_id")
 ```
 
-### `ncaa_mbb_box_scores(game_ids: 'Union[str, int, Iterable[Union[str, int]]]', *, multi_games: 'bool' = False, fetcher: 'Optional[_SupportsFetchIndividualStats]' = None, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#ncaa_mbb_box_scores}
+### ncaa_mbb_box_scores {#ncaa_mbb_box_scores}
+
+`ncaa_mbb_box_scores(game_ids: 'Union[str, int, Iterable[Union[str, int]]]', *, multi_games: 'bool' = False, fetcher: 'Optional[_SupportsFetchIndividualStats]' = None, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"`
 
 Box scores for one or more NCAA games (bigballR `get_box_scores` port).
 
@@ -7966,7 +8546,9 @@ agg = ncaa_mbb_box_scores(ids, multi_games=True)
 df = ncaa_mbb_box_scores("6470186", fetcher=my_fetcher)
 ```
 
-### `ncaa_mbb_date_games(date: 'Optional[str]' = None, *, conference: 'str' = 'All', conference_id: 'Optional[int]' = None, fetcher: "'Optional[NcaaFetcher]'" = None, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#ncaa_mbb_date_games}
+### ncaa_mbb_date_games {#ncaa_mbb_date_games}
+
+`ncaa_mbb_date_games(date: 'Optional[str]' = None, *, conference: 'str' = 'All', conference_id: 'Optional[int]' = None, fetcher: "'Optional[NcaaFetcher]'" = None, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"`
 
 Discover every NCAA MBB game played on a date (bigballR `get_date_games`).
 
@@ -8006,7 +8588,9 @@ acc_pd = ncaa_mbb_date_games("02/01/2025", conference="ACC",
 games.filter(pl.col("game_id").is_not_null())["game_id"].to_list()
 ```
 
-### `ncaa_mbb_game_pbp(game_id: 'object', *, fetcher: 'Optional[_SupportsFetchGamePbp]' = None, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, Any]'"` {#ncaa_mbb_game_pbp}
+### ncaa_mbb_game_pbp {#ncaa_mbb_game_pbp}
+
+`ncaa_mbb_game_pbp(game_id: 'object', *, fetcher: 'Optional[_SupportsFetchGamePbp]' = None, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, Any]'"`
 
 Scrape one MBB game's play-by-play (bigballR `scrape_game`).
 
@@ -8042,7 +8626,9 @@ df = ncaa_mbb_game_pbp("6470186", fetcher=my_fetcher)
 df.filter(pl.col("event_type") == "Three Point Jumper").head()
 ```
 
-### `ncaa_mbb_join_pbp_shots(pbp: 'pl.DataFrame', shots: 'pl.DataFrame', *, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, Any]'"` {#ncaa_mbb_join_pbp_shots}
+### ncaa_mbb_join_pbp_shots {#ncaa_mbb_join_pbp_shots}
+
+`ncaa_mbb_join_pbp_shots(pbp: 'pl.DataFrame', shots: 'pl.DataFrame', *, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, Any]'"`
 
 Attach shot-chart coordinates to play-by-play rows (bigballR
 
@@ -8087,7 +8673,9 @@ joined = ncaa_mbb_join_pbp_shots(pbp, shots)
 joined.filter(pl.col("x").is_not_null()).head()
 ```
 
-### `ncaa_mbb_on_off(players: 'Union[str, Sequence[str]]', lineups: 'pl.DataFrame', *, included: 'Union[str, Sequence[str], None]' = None, excluded: 'Union[str, Sequence[str], None]' = None, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#ncaa_mbb_on_off}
+### ncaa_mbb_on_off {#ncaa_mbb_on_off}
+
+`ncaa_mbb_on_off(players: 'Union[str, Sequence[str]]', lineups: 'pl.DataFrame', *, included: 'Union[str, Sequence[str], None]' = None, excluded: 'Union[str, Sequence[str], None]' = None, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
 
 Team stats for every on/off combination of the given players.
 
@@ -8134,7 +8722,9 @@ duo = ncaa_mbb_on_off(["A.PLAYER", "B.PLAYER"], lineups)
 split.select("status", "netrtg")
 ```
 
-### `ncaa_mbb_player_combos(lineups: 'pl.DataFrame', *, n: 'int' = 2, min_mins: 'float' = 0, included: 'Union[str, Sequence[str], None]' = None, excluded: 'Union[str, Sequence[str], None]' = None, include_transition: 'bool' = False, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#ncaa_mbb_player_combos}
+### ncaa_mbb_player_combos {#ncaa_mbb_player_combos}
+
+`ncaa_mbb_player_combos(lineups: 'pl.DataFrame', *, n: 'int' = 2, min_mins: 'float' = 0, included: 'Union[str, Sequence[str], None]' = None, excluded: 'Union[str, Sequence[str], None]' = None, include_transition: 'bool' = False, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
 
 Team stats for every n-player combination on the court together.
 
@@ -8184,7 +8774,9 @@ trios = ncaa_mbb_player_combos(lineups, n=3, included="KEATON.WAGLER")
 duos.sort("netrtg", descending=True).head()
 ```
 
-### `ncaa_mbb_player_lineups(lineups: 'pl.DataFrame', *, included: 'Union[str, Sequence[str], None]' = None, excluded: 'Union[str, Sequence[str], None]' = None, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#ncaa_mbb_player_lineups}
+### ncaa_mbb_player_lineups {#ncaa_mbb_player_lineups}
+
+`ncaa_mbb_player_lineups(lineups: 'pl.DataFrame', *, included: 'Union[str, Sequence[str], None]' = None, excluded: 'Union[str, Sequence[str], None]' = None, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
 
 Filter a lineups frame by on-court player membership.
 
@@ -8224,7 +8816,9 @@ df = ncaa_mbb_player_lineups(lineups, included=["A.PLAYER"], excluded=["B.PLAYER
 on.select(pl.col("mins").sum())
 ```
 
-### `ncaa_mbb_player_stats(pbp: 'pl.DataFrame', *, multi_games: 'bool' = False, simple: 'bool' = False, fix_tip_in: 'bool' = True, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#ncaa_mbb_player_stats}
+### ncaa_mbb_player_stats {#ncaa_mbb_player_stats}
+
+`ncaa_mbb_player_stats(pbp: 'pl.DataFrame', *, multi_games: 'bool' = False, simple: 'bool' = False, fix_tip_in: 'bool' = True, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
 
 Aggregate bigballR-contract play-by-play into per-player box stats.
 
@@ -8268,7 +8862,9 @@ df_pd = ncaa_mbb_player_stats(pbp, multi_games=True, simple=True, return_as_pand
 season.filter(pl.col("mins") > 50).sort("pts", descending=True).head()
 ```
 
-### `ncaa_mbb_shot_locations(game_ids: "'Sequence[object]'", *, fetcher: 'Optional[_SupportsFetchGameBox]' = None, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, Any]'"` {#ncaa_mbb_shot_locations}
+### ncaa_mbb_shot_locations {#ncaa_mbb_shot_locations}
+
+`ncaa_mbb_shot_locations(game_ids: "'Sequence[object]'", *, fetcher: 'Optional[_SupportsFetchGameBox]' = None, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, Any]'"`
 
 Scrape MBB shot locations for one or more games (bigballR
 
@@ -8307,7 +8903,9 @@ df = ncaa_mbb_shot_locations(["6470186"], fetcher=my_fetcher)
 df.group_by("team").agg(pl.col("shot_dist").mean()).head()
 ```
 
-### `ncaa_mbb_team_stats(pbp: 'pl.DataFrame', *, include_transition: 'bool' = False, fix_tip_in: 'bool' = True, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#ncaa_mbb_team_stats}
+### ncaa_mbb_team_stats {#ncaa_mbb_team_stats}
+
+`ncaa_mbb_team_stats(pbp: 'pl.DataFrame', *, include_transition: 'bool' = False, fix_tip_in: 'bool' = True, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
 
 Aggregate bigballR-contract play-by-play into per-team game stats.
 
@@ -8345,7 +8943,9 @@ df_pd = ncaa_mbb_team_stats(pbp, include_transition=True, return_as_pandas=True)
 teams.sort("netrtg", descending=True).head()
 ```
 
-### `order_lineup(player_codes_and_ids: 'list[dict[str, str]]', players_by_id: 'dict[str, dict[str, Any]]', team_season: 'str') -> 'list[dict[str, str]]'` {#order_lineup}
+### order_lineup {#order_lineup}
+
+`order_lineup(player_codes_and_ids: 'list[dict[str, str]]', players_by_id: 'dict[str, dict[str, Any]]', team_season: 'str') -> 'list[dict[str, str]]'`
 
 Order a 5-man lineup `X1_X2_X3_X4_X5` into PG/SG/SF/PF/C slot order.
 
@@ -8386,7 +8986,9 @@ order_lineup(
 )
 ```
 
-### `phase1_shot_event_enrichment(sorted_very_raw_events: 'list[tuple[int, ShotEvent]]', second_half_override: 'Optional[set[int]]' = None) -> 'list[ShotEvent]'` {#phase1_shot_event_enrichment}
+### phase1_shot_event_enrichment {#phase1_shot_event_enrichment}
+
+`phase1_shot_event_enrichment(sorted_very_raw_events: 'list[tuple[int, ShotEvent]]', second_half_override: 'Optional[set[int]]' = None) -> 'list[ShotEvent]'`
 
 The court-geometry enrichment pass: ascending time, coordinate
 
@@ -8427,7 +9029,9 @@ from sportsdataverse.mbb.mbb_ncaa_shot_parser import phase1_shot_event_enrichmen
 shots = phase1_shot_event_enrichment([(1, very_raw_shot)])
 ```
 
-### `pick_ridge_regression(off_weights: 'NDArray[np.float64]', def_weights: 'NDArray[np.float64]', ctx: 'RapmPlayerContext', adaptive_correl_weights: 'list[float] | None', diag_mode: 'bool', agg_value_key: 'ValueKey' = 'value', lineup_value_keys: 'tuple[ValueKey, ValueKey]' = ('value', 'value')) -> 'tuple[RapmProcessingInputs, RapmProcessingInputs]'` {#pick_ridge_regression}
+### pick_ridge_regression {#pick_ridge_regression}
+
+`pick_ridge_regression(off_weights: 'NDArray[np.float64]', def_weights: 'NDArray[np.float64]', ctx: 'RapmPlayerContext', adaptive_correl_weights: 'list[float] | None', diag_mode: 'bool', agg_value_key: 'ValueKey' = 'value', lineup_value_keys: 'tuple[ValueKey, ValueKey]' = ('value', 'value')) -> 'tuple[RapmProcessingInputs, RapmProcessingInputs]'`
 
 Adaptively pick a ridge-regression lambda and blend in the RAPM priors.
 
@@ -8539,7 +9143,9 @@ off_results, def_results = pick_ridge_regression(
 print(off_results["ridge_lambda"], off_results["rapm_adj_ppp"][:3])
 ```
 
-### `player_per100_features(season_stats: 'pl.DataFrame') -> 'pl.DataFrame'` {#player_per100_features}
+### player_per100_features {#player_per100_features}
+
+`player_per100_features(season_stats: 'pl.DataFrame') -> 'pl.DataFrame'`
 
 Per-100 / rate features for every (player_id, season).
 
@@ -8560,7 +9166,9 @@ from sportsdataverse.mbb.mbb_player_value_constants import player_per100_feature
 feats = player_per100_features(season_stats)
 ```
 
-### `playwright_transport(*, headless_new: 'bool' = True, challenge_wait_ms: 'int' = 8000, nav_timeout_ms: 'int' = 45000, user_agent: 'Optional[str]' = None, solve_attempts: 'int' = 3, relaunch_backoff: 'float' = 2.0) -> "'_PlaywrightTransport'"` {#playwright_transport}
+### playwright_transport {#playwright_transport}
+
+`playwright_transport(*, headless_new: 'bool' = True, challenge_wait_ms: 'int' = 8000, nav_timeout_ms: 'int' = 45000, user_agent: 'Optional[str]' = None, solve_attempts: 'int' = 3, relaunch_backoff: 'float' = 2.0) -> "'_PlaywrightTransport'"`
 
 Build the **suggested** stats.ncaa.org game-detail scraping transport.
 
@@ -8595,7 +9203,9 @@ with NcaaFetcher.with_browser() as fetcher:
 # -> feed to get_box_lineup / create_lineup_data (mbb_ncaa_*_parser)
 ```
 
-### `pos_class_to_score(pos_class: 'str') -> 'int'` {#pos_class_to_score}
+### pos_class_to_score {#pos_class_to_score}
+
+`pos_class_to_score(pos_class: 'str') -> 'int'`
 
 Ordinal "positional weight" for a position class, PG=1000..C=8000.
 
@@ -8622,7 +9232,9 @@ from sportsdataverse.mbb.mbb_positions import pos_class_to_score
 pos_class_to_score("WF")
 ```
 
-### `poss_calc_fragment_sum(a: 'PossCalcFragment', b: 'PossCalcFragment') -> 'PossCalcFragment'` {#poss_calc_fragment_sum}
+### poss_calc_fragment_sum {#poss_calc_fragment_sum}
+
+`poss_calc_fragment_sum(a: 'PossCalcFragment', b: 'PossCalcFragment') -> 'PossCalcFragment'`
 
 Field-wise add two `PossCalcFragment`\ s
 
@@ -8658,7 +9270,9 @@ poss_calc_fragment_sum(frag1, frag2)
 # PossCalcFragment(2, 5, 8, 11, 14, 17, 20, 23)
 ```
 
-### `predict_margin(home_adj_em: 'float', away_adj_em: 'float', neutral: 'bool' = False, *, league: 'str' = 'mens') -> 'float'` {#predict_margin}
+### predict_margin {#predict_margin}
+
+`predict_margin(home_adj_em: 'float', away_adj_em: 'float', neutral: 'bool' = False, *, league: 'str' = 'mens') -> 'float'`
 
 Expected home-minus-away margin from two adjusted efficiency margins.
 
@@ -8687,7 +9301,9 @@ from sportsdataverse.mbb.mbb_game_predict import predict_margin
 predict_margin(20.0, 10.0)
 ```
 
-### `predict_total(home_adj_o: 'float', home_adj_d: 'float', away_adj_o: 'float', away_adj_d: 'float', home_tempo: 'float', away_tempo: 'float', *, league: 'str' = 'mens') -> 'float'` {#predict_total}
+### predict_total {#predict_total}
+
+`predict_total(home_adj_o: 'float', home_adj_d: 'float', away_adj_o: 'float', away_adj_d: 'float', home_tempo: 'float', away_tempo: 'float', *, league: 'str' = 'mens') -> 'float'`
 
 Expected total points from adjusted efficiencies and tempos.
 
@@ -8718,7 +9334,9 @@ from sportsdataverse.mbb.mbb_game_predict import predict_total
 predict_total(110.0, 95.0, 105.0, 100.0, 68.0, 66.0)
 ```
 
-### `project_bracket(resume: 'pl.DataFrame', auto_bids: 'set[str]', *, league: 'str' = 'mens', field_size: 'int' = 68) -> 'pl.DataFrame'` {#project_bracket}
+### project_bracket {#project_bracket}
+
+`project_bracket(resume: 'pl.DataFrame', auto_bids: 'set[str]', *, league: 'str' = 'mens', field_size: 'int' = 68) -> 'pl.DataFrame'`
 
 Select and seed a tournament field from a per-team résumé frame.
 
@@ -8742,7 +9360,9 @@ from sportsdataverse.mbb.mbb_bracketology import project_bracket
 field = project_bracket(resume, auto_bids)
 ```
 
-### `rank_corr(a: 'np.ndarray', b: 'np.ndarray') -> 'float'` {#rank_corr}
+### rank_corr {#rank_corr}
+
+`rank_corr(a: 'np.ndarray', b: 'np.ndarray') -> 'float'`
 
 Spearman rank correlation between two arrays.
 
@@ -8765,7 +9385,9 @@ from sportsdataverse._common.metrics import spearman_corr
 spearman_corr(np.array([1, 2, 3]), np.array([3, 1, 2]))
 ```
 
-### `raw_game_efficiency(schedule: 'pl.DataFrame', team_box: 'pl.DataFrame') -> 'pl.DataFrame'` {#raw_game_efficiency}
+### raw_game_efficiency {#raw_game_efficiency}
+
+`raw_game_efficiency(schedule: 'pl.DataFrame', team_box: 'pl.DataFrame') -> 'pl.DataFrame'`
 
 Per-team, per-game possessions + raw offensive/defensive efficiency.
 
@@ -8788,7 +9410,9 @@ from sportsdataverse.mbb.mbb_team_ratings import raw_game_efficiency
 eff = raw_game_efficiency(load_mbb_schedule([2024]), load_mbb_team_boxscore([2024]))
 ```
 
-### `refresh_ncaa_team_ids(season: 'str', season_division_id: 'int', dates: 'Sequence[str]', *, league: 'str' = 'mbb', fetcher: "Optional['NcaaFetcher']" = None, prior_season: 'Optional[str]' = None, conference_overrides: 'Optional[Dict[str, str]]' = None, extra_teams: 'Optional[Iterable[Dict[str, object]]]' = None) -> 'pl.DataFrame'` {#refresh_ncaa_team_ids}
+### refresh_ncaa_team_ids {#refresh_ncaa_team_ids}
+
+`refresh_ncaa_team_ids(season: 'str', season_division_id: 'int', dates: 'Sequence[str]', *, league: 'str' = 'mbb', fetcher: "Optional['NcaaFetcher']" = None, prior_season: 'Optional[str]' = None, conference_overrides: 'Optional[Dict[str, str]]' = None, extra_teams: 'Optional[Iterable[Dict[str, object]]]' = None) -> 'pl.DataFrame'`
 
 Extend the bundled crosswalk with a new season (update_team_ids recipe).
 
@@ -8831,7 +9455,9 @@ df = refresh_ncaa_team_ids("2026-27", 18823, dates,
 df.write_csv("sportsdataverse/mbb/data/ncaa_teamids_mbb.csv")
 ```
 
-### `regress_shot_quality(stat: 'float', pos: 'int', feat: 'str', player: 'dict[str, Any]') -> 'float'` {#regress_shot_quality}
+### regress_shot_quality {#regress_shot_quality}
+
+`regress_shot_quality(stat: 'float', pos: 'int', feat: 'str', player: 'dict[str, Any]') -> 'float'`
 
 Shrink a small-sample shot-quality stat toward its positional average.
 
@@ -8873,7 +9499,9 @@ regress_shot_quality(100, 3, "calc_rim_relative",
      "total_off_2prim_attempts": {"value": 8}})
 ```
 
-### `remove_diacritics(fragment: 'str') -> 'str'` {#remove_diacritics}
+### remove_diacritics {#remove_diacritics}
+
+`remove_diacritics(fragment: 'str') -> 'str'`
 
 Strip diacritical marks, e.g. `"Juhász"` -> `"Juhasz"`
 
@@ -8897,7 +9525,9 @@ from sportsdataverse.mbb.mbb_ncaa_stints import remove_diacritics
 print(remove_diacritics("Dorka Juhász"))  # "Dorka Juhasz"
 ```
 
-### `remove_html_encoding(html_str: 'str') -> 'str'` {#remove_html_encoding}
+### remove_html_encoding {#remove_html_encoding}
+
+`remove_html_encoding(html_str: 'str') -> 'str'`
 
 Undo a handful of literal HTML entity escapes (``ExtractorUtils
 
@@ -8931,7 +9561,9 @@ remove_html_encoding("De&#39;Shayne")  # "De'Shayne"
 remove_html_encoding("Plain Name")  # "Plain Name" (unchanged)
 ```
 
-### `reorder_and_reverse(reversed_partial_events: 'Iterable[PlayByPlayEvent]') -> 'list[PlayByPlayEvent]'` {#reorder_and_reverse}
+### reorder_and_reverse {#reorder_and_reverse}
+
+`reorder_and_reverse(reversed_partial_events: 'Iterable[PlayByPlayEvent]') -> 'list[PlayByPlayEvent]'`
 
 Orders same-minute play-by-play events so subs never enclose the plays
 
@@ -8977,7 +9609,9 @@ reorder_and_reverse(events)
 # [OtherTeamEvent(...), SubInEvent(...)]
 ```
 
-### `reset_config() -> 'NcaaFetchConfig'` {#reset_config}
+### reset_config {#reset_config}
+
+`reset_config() -> 'NcaaFetchConfig'`
 
 Reset the active config to its env-var-derived defaults.
 
@@ -8989,7 +9623,9 @@ update_config(timeout=5)
 reset_config()
 ```
 
-### `resolve_ncaa_team_id(team: 'str', season: 'str', league: 'str' = 'mbb') -> 'Optional[int]'` {#resolve_ncaa_team_id}
+### resolve_ncaa_team_id {#resolve_ncaa_team_id}
+
+`resolve_ncaa_team_id(team: 'str', season: 'str', league: 'str' = 'mbb') -> 'Optional[int]'`
 
 Resolve a school name + season to its stats.ncaa.org team id.
 
@@ -9019,7 +9655,9 @@ resolve_ncaa_team_id("Illinois", "2025-26")
 resolve_ncaa_team_id("South Carolina", "2024-25", league="wbb")
 ```
 
-### `ridge_cv_lambda(X: 'np.ndarray', y: 'np.ndarray', groups: 'np.ndarray', lams: "'list[float]'") -> 'float'` {#ridge_cv_lambda}
+### ridge_cv_lambda {#ridge_cv_lambda}
+
+`ridge_cv_lambda(X: 'np.ndarray', y: 'np.ndarray', groups: 'np.ndarray', lams: "'list[float]'") -> 'float'`
 
 Pick lambda by leave-one-group-out CV (groups = seasons/classes).
 
@@ -9042,7 +9680,9 @@ The candidate with the lowest mean held-out MSE.
 lam = ridge_cv_lambda(X, y, seasons, [0.1, 1, 10, 100])
 ```
 
-### `ridge_fit(X: 'np.ndarray', y: 'np.ndarray', lam: 'float') -> 'np.ndarray'` {#ridge_fit}
+### ridge_fit {#ridge_fit}
+
+`ridge_fit(X: 'np.ndarray', y: 'np.ndarray', lam: 'float') -> 'np.ndarray'`
 
 Closed-form ridge with an unpenalized intercept (coefficient 0).
 
@@ -9066,7 +9706,9 @@ from sportsdataverse.mbb.mbb_player_value_constants import ridge_fit
 beta = ridge_fit(np.random.rand(50, 3), np.random.rand(50), lam=1.0)
 ```
 
-### `right_kind_of_shot(shot: 'ShotEvent', pbp_event: 'MiscGameEvent', strict: 'bool') -> 'bool'` {#right_kind_of_shot}
+### right_kind_of_shot {#right_kind_of_shot}
+
+`right_kind_of_shot(shot: 'ShotEvent', pbp_event: 'MiscGameEvent', strict: 'bool') -> 'bool'`
 
 Whether `pbp_event`'s shot type is compatible with `shot`'s
 
@@ -9097,7 +9739,9 @@ from sportsdataverse.mbb.mbb_ncaa_pbp_glue import right_kind_of_shot
 right_kind_of_shot(shot, pbp_event, strict=True)
 ```
 
-### `roc_auc(y_true: 'np.ndarray', score: 'np.ndarray') -> 'float'` {#roc_auc}
+### roc_auc {#roc_auc}
+
+`roc_auc(y_true: 'np.ndarray', score: 'np.ndarray') -> 'float'`
 
 Area under the ROC curve via the rank-sum (Mann-Whitney) identity.
 
@@ -9120,7 +9764,9 @@ from sportsdataverse.mbb.mbb_player_value_constants import roc_auc
 roc_auc(np.array([0, 1]), np.array([0.2, 0.9]))
 ```
 
-### `run_iterative_adjustment_with_hca(teams: 'Sequence[TeamDetail]', team_by_name: 'dict[str, TeamDetail]', fields: 'Sequence[str]', league_averages: 'LeagueAverages', poss_splits: 'dict[str, PossessionSplits]', *, max_iterations: 'int' = 100, tolerance: 'float' = 1e-06) -> 'IterationResult'` {#run_iterative_adjustment_with_hca}
+### run_iterative_adjustment_with_hca {#run_iterative_adjustment_with_hca}
+
+`run_iterative_adjustment_with_hca(teams: 'Sequence[TeamDetail]', team_by_name: 'dict[str, TeamDetail]', fields: 'Sequence[str]', league_averages: 'LeagueAverages', poss_splits: 'dict[str, PossessionSplits]', *, max_iterations: 'int' = 100, tolerance: 'float' = 1e-06) -> 'IterationResult'`
 
 KenPom-style SoS + HCA fixed-point solver (`runIterativeAdjustmentWithHCA`, `ts:306-527`).
 
@@ -9175,7 +9821,9 @@ result = run_iterative_adjustment_with_hca(
 print(result.hca_per_field["3p"]["hca_off"])
 ```
 
-### `same_school(a: 'str', b: 'str') -> 'bool'` {#same_school}
+### same_school {#same_school}
+
+`same_school(a: 'str', b: 'str') -> 'bool'`
 
 Whether two team-name spellings denote the same school.
 
@@ -9200,7 +9848,9 @@ same_school("New Orleans", "LSU New Orleans")  # True
 same_school("Miami (FL)", "Miami (OH)")        # False
 ```
 
-### `save_artifact(name: 'str', obj: 'dict') -> 'None'` {#save_artifact}
+### save_artifact {#save_artifact}
+
+`save_artifact(name: 'str', obj: 'dict') -> 'None'`
 
 Write a bundled artifact (dev/fitter use -- writes into the source tree).
 
@@ -9217,7 +9867,9 @@ Write a bundled artifact (dev/fitter use -- writes into the source tree).
 save_artifact("mbb_box_bpm", {"league": "mens", "coef": [0.1]})
 ```
 
-### `score_to_tuple(s: 'str') -> 'tuple[int, int]'` {#score_to_tuple}
+### score_to_tuple {#score_to_tuple}
+
+`score_to_tuple(s: 'str') -> 'tuple[int, int]'`
 
 Parse a `"scored-allowed"` score string (`ExtractorUtils.score_to_tuple`,
 
@@ -9247,7 +9899,9 @@ score_to_tuple("55-68")   # (55, 68)
 score_to_tuple("garbage")  # (0, 0)
 ```
 
-### `scoreboard_event_parsing(event)` {#scoreboard_event_parsing}
+### scoreboard_event_parsing {#scoreboard_event_parsing}
+
+`scoreboard_event_parsing(event)`
 
 _No description available._
 
@@ -9257,7 +9911,9 @@ _No description available._
 |---|---|---|---|
 | `event` |  |  |  |
 
-### `select_contains(root: 'Tag', selector: 'str', text: 'str') -> 'list[Tag]'` {#select_contains}
+### select_contains {#select_contains}
+
+`select_contains(root: 'Tag', selector: 'str', text: 'str') -> 'list[Tag]'`
 
 JSoup `root.select(sel + ":contains(text)")`: candidates whose full
 
@@ -9291,7 +9947,9 @@ soup = parse_html("<td>game date:</td><td>Location:</td>")
 select_contains(soup, "td", "Game Date:")  # [<td>game date:</td>]
 ```
 
-### `select_matching(root: 'Tag', selector: 'str', regex: 'str') -> 'list[Tag]'` {#select_matching}
+### select_matching {#select_matching}
+
+`select_matching(root: 'Tag', selector: 'str', regex: 'str') -> 'list[Tag]'`
 
 JSoup `root.select(sel + ":matches(regex)")`: candidates whose full
 
@@ -9323,7 +9981,9 @@ soup = parse_html("<div><p>Home Team</p><p>Away Team</p></div>")
 select_matching(soup, "p", r"^Home")  # [<p>Home Team</p>]
 ```
 
-### `select_matching_own(root: 'Tag', selector: 'str', regex: 'str') -> 'list[Tag]'` {#select_matching_own}
+### select_matching_own {#select_matching_own}
+
+`select_matching_own(root: 'Tag', selector: 'str', regex: 'str') -> 'list[Tag]'`
 
 JSoup `root.select(sel + ":matchesOwn(regex)")`: candidates whose
 
@@ -9355,7 +10015,9 @@ select_matching_own(soup, "div.card-header", r"^Coach")
 # [<div class="card-header">Coach <b>Info</b></div>]
 ```
 
-### `shot_events_to_frame(events: 'list[ShotEvent]', *, season: 'int', league: 'str' = 'mens') -> 'pl.DataFrame'` {#shot_events_to_frame}
+### shot_events_to_frame {#shot_events_to_frame}
+
+`shot_events_to_frame(events: 'list[ShotEvent]', *, season: 'int', league: 'str' = 'mens') -> 'pl.DataFrame'`
 
 Flatten NCAA HTML `ShotEvent` objects to the canonical frame.
 
@@ -9383,7 +10045,9 @@ from sportsdataverse.mbb.mbb_shots_adapter import shot_events_to_frame
 df = shot_events_to_frame(events, season=2025)
 ```
 
-### `shot_js_to_html(js: 'str') -> 'list[Tag]'` {#shot_js_to_html}
+### shot_js_to_html {#shot_js_to_html}
+
+`shot_js_to_html(js: 'str') -> 'list[Tag]'`
 
 Converts client-side `addShot(...)` JS calls into parseable
 
@@ -9411,7 +10075,9 @@ js = "addShot(27.0, 77.0, 392, false, 1, 'title text', 'class', false);"
 circles = shot_js_to_html(js)
 ```
 
-### `simulate_game(home_em: 'float', away_em: 'float', neutral: 'bool', rng: 'np.random.Generator', *, league: 'str' = 'mens') -> 'bool'` {#simulate_game}
+### simulate_game {#simulate_game}
+
+`simulate_game(home_em: 'float', away_em: 'float', neutral: 'bool', rng: 'np.random.Generator', *, league: 'str' = 'mens') -> 'bool'`
 
 Sample one game outcome: margin `~ Normal(exp_margin, margin_sd)`.
 
@@ -9437,7 +10103,9 @@ from sportsdataverse.mbb.mbb_season_sim import simulate_game
 simulate_game(20.0, 5.0, False, np.random.default_rng(0))
 ```
 
-### `slow_regression(player_weight_matrix: 'NDArray[np.float64]', ridge_lambda: 'float', ctx: 'RapmPlayerContext') -> 'NDArray[np.float64]'` {#slow_regression}
+### slow_regression {#slow_regression}
+
+`slow_regression(player_weight_matrix: 'NDArray[np.float64]', ridge_lambda: 'float', ctx: 'RapmPlayerContext') -> 'NDArray[np.float64]'`
 
 Build the Tikhonov (ridge) regression solver matrix.
 
@@ -9470,7 +10138,9 @@ solver = slow_regression(x, 1.0, ctx)  # ctx["num_players"] == 2
 rapm = calculate_rapm(solver, [1.0, 2.0, 3.0])
 ```
 
-### `spearman_corr(a: 'np.ndarray', b: 'np.ndarray') -> 'float'` {#spearman_corr}
+### spearman_corr {#spearman_corr}
+
+`spearman_corr(a: 'np.ndarray', b: 'np.ndarray') -> 'float'`
 
 Spearman rank correlation between two arrays.
 
@@ -9493,7 +10163,9 @@ from sportsdataverse._common.metrics import spearman_corr
 spearman_corr(np.array([1, 2, 3]), np.array([3, 1, 2]))
 ```
 
-### `start_time_from_period(period: 'int', is_women_game: 'bool') -> 'float'` {#start_time_from_period}
+### start_time_from_period {#start_time_from_period}
+
+`start_time_from_period(period: 'int', is_women_game: 'bool') -> 'float'`
 
 The game-clock time (minutes elapsed) a period starts at
 
@@ -9522,7 +10194,9 @@ start_time_from_period(1, is_women_game=True)  # 0.0 (women's 1st quarter)
 start_time_from_period(6, is_women_game=False)  # 45.0 (men's 2nd OT)
 ```
 
-### `strength_of_schedule(results: 'pl.DataFrame', ratings: 'pl.DataFrame', *, league: 'str' = 'mens') -> 'pl.DataFrame'` {#strength_of_schedule}
+### strength_of_schedule {#strength_of_schedule}
+
+`strength_of_schedule(results: 'pl.DataFrame', ratings: 'pl.DataFrame', *, league: 'str' = 'mens') -> 'pl.DataFrame'`
 
 Per-team SoS + Quad 1-4 record + WAB from completed games and ratings.
 
@@ -9545,7 +10219,9 @@ from sportsdataverse.mbb.mbb_strength_of_schedule import strength_of_schedule
 resume = strength_of_schedule(results, ratings)
 ```
 
-### `sum_event_stats(lhs: 'LineupEventStats', rhs: 'LineupEventStats') -> 'LineupEventStats'` {#sum_event_stats}
+### sum_event_stats {#sum_event_stats}
+
+`sum_event_stats(lhs: 'LineupEventStats', rhs: 'LineupEventStats') -> 'LineupEventStats'`
 
 Field-wise add two :class:`~sportsdataverse.mbb.mbb_ncaa_models
 
@@ -9575,7 +10251,9 @@ from sportsdataverse.mbb.mbb_ncaa_models import LineupEventStats
 sum_event_stats(LineupEventStats.empty(), LineupEventStats.empty()).num_events
 ```
 
-### `sum_shot_infos(shot_infos: 'list[PlayerShotInfo]') -> 'Optional[PlayerShotInfo]'` {#sum_shot_infos}
+### sum_shot_infos {#sum_shot_infos}
+
+`sum_shot_infos(shot_infos: 'list[PlayerShotInfo]') -> 'Optional[PlayerShotInfo]'`
 
 Field-wise sum a list of :class:`~sportsdataverse.mbb.mbb_ncaa_models
 
@@ -9601,7 +10279,9 @@ from sportsdataverse.mbb.mbb_ncaa_models import PlayerShotInfo
 sum_shot_infos([PlayerShotInfo(ast_3pm=(1, 0, 0, 0, 0)), PlayerShotInfo(ast_3pm=(0, 1, 0, 0, 0))])
 ```
 
-### `talent_split_mse(scored: 'pl.DataFrame', *, k: 'float', seed: 'int' = 0) -> 'float'` {#talent_split_mse}
+### talent_split_mse {#talent_split_mse}
+
+`talent_split_mse(scored: 'pl.DataFrame', *, k: 'float', seed: 'int' = 0) -> 'float'`
 
 Weighted MSE of the k-regressed first half predicting the raw second half.
 
@@ -9624,7 +10304,9 @@ from sportsdataverse.mbb.mbb_shooter_talent import talent_split_mse
 talent_split_mse(scored, k=200.0)
 ```
 
-### `td_at(row: 'Tag', n: 'int') -> 'Optional[Tag]'` {#td_at}
+### td_at {#td_at}
+
+`td_at(row: 'Tag', n: 'int') -> 'Optional[Tag]'`
 
 JSoup `row >?> element("td:eq(n)")`: the `n`-th `<td>` child.
 
@@ -9654,7 +10336,9 @@ td_at(row, 1).get_text()  # "B"
 td_at(row, 5)  # None
 ```
 
-### `test_positional_aware_filter(sorted_to_test: 'list[dict[str, str]]', pve_frags: 'list[dict[str, Any]]', nve_frags: 'list[dict[str, Any]]') -> 'bool'` {#test_positional_aware_filter}
+### test_positional_aware_filter {#test_positional_aware_filter}
+
+`test_positional_aware_filter(sorted_to_test: 'list[dict[str, str]]', pve_frags: 'list[dict[str, Any]]', nve_frags: 'list[dict[str, Any]]') -> 'bool'`
 
 Check a positional-aware filter (from `build_positional_aware_filter`)
 
@@ -9690,7 +10374,9 @@ lineup = [{"code": "AnCowan", "id": "Cowan, Anthony"}]
 test_positional_aware_filter(lineup, [{"filter": "cowan", "pos": []}], [])
 ```
 
-### `tidy_player(p_in: 'str', ctx: 'TidyPlayerContext') -> 'tuple[str, TidyPlayerContext]'` {#tidy_player}
+### tidy_player {#tidy_player}
+
+`tidy_player(p_in: 'str', ctx: 'TidyPlayerContext') -> 'tuple[str, TidyPlayerContext]'`
 
 Resolve a raw play-by-play name to its box-score full name, via an
 
@@ -9730,7 +10416,9 @@ ctx = build_tidy_player_context(box_lineup)
 resolved_name, ctx = tidy_player("MITCHELL,M", ctx)
 ```
 
-### `transfer_cohort(rosters: 'pl.DataFrame') -> 'pl.DataFrame'` {#transfer_cohort}
+### transfer_cohort {#transfer_cohort}
+
+`transfer_cohort(rosters: 'pl.DataFrame') -> 'pl.DataFrame'`
 
 One row per transfer: same `player_id`, different `team_id` in
 
@@ -9754,7 +10442,9 @@ bpm = mbb_box_bpm([2025, 2026]).filter(pl.col("min") >= 150)
 moves = transfer_cohort(bpm.select("player_id", "team_id", "season"))
 ```
 
-### `transform_shot_location(x: 'float', y: 'float', second_half_switch: 'bool', team_shooting_left_in_first_period: 'bool', is_offensive: 'bool') -> 'tuple[float, float, float, float]'` {#transform_shot_location}
+### transform_shot_location {#transform_shot_location}
+
+`transform_shot_location(x: 'float', y: 'float', second_half_switch: 'bool', team_shooting_left_in_first_period: 'bool', is_offensive: 'bool') -> 'tuple[float, float, float, float]'`
 
 Transforms a raw SVG pixel location into feet from the basket, always
 
@@ -9782,7 +10472,9 @@ from sportsdataverse.mbb.mbb_ncaa_shot_parser import transform_shot_location
 transform_shot_location(310.2, 235, False, False, True)
 ```
 
-### `update_config(**kwargs: 'object') -> 'NcaaFetchConfig'` {#update_config}
+### update_config {#update_config}
+
+`update_config(**kwargs: 'object') -> 'NcaaFetchConfig'`
 
 Update the active config in place.
 
@@ -9797,7 +10489,9 @@ from sportsdataverse.mbb.mbb_ncaa_fetch import update_config
 update_config(proxy_url="http://user:pass@1.2.3.4:8080")
 ```
 
-### `using_roster_pos(pos_class: 'str', roster_pos: 'str | None') -> 'tuple[str, str | None]'` {#using_roster_pos}
+### using_roster_pos {#using_roster_pos}
+
+`using_roster_pos(pos_class: 'str', roster_pos: 'str | None') -> 'tuple[str, str | None]'`
 
 Reconcile a stats-derived position class against roster metadata.
 
@@ -9825,7 +10519,9 @@ from sportsdataverse.mbb.mbb_positions import using_roster_pos
 using_roster_pos("G?", "C")
 ```
 
-### `validate_box_score(team: 'TeamId', lineup: 'list[str]') -> 'Union[list[PlayerCodeId], ParseError]'` {#validate_box_score}
+### validate_box_score {#validate_box_score}
+
+`validate_box_score(team: 'TeamId', lineup: 'list[str]') -> 'Union[list[PlayerCodeId], ParseError]'`
 
 Checks there are no duplicates in the lineup (``BoxscoreParser
 
@@ -9850,7 +10546,9 @@ from sportsdataverse.mbb.mbb_ncaa_models import TeamId
 validate_box_score(TeamId("Team"), ["Player One", "Player Two"])
 ```
 
-### `validate_lineup(lineup_event: 'LineupEvent', box_lineup: 'LineupEvent', valid_player_codes: 'set[str]') -> 'list[ValidationError]'` {#validate_lineup}
+### validate_lineup {#validate_lineup}
+
+`validate_lineup(lineup_event: 'LineupEvent', box_lineup: 'LineupEvent', valid_player_codes: 'set[str]') -> 'list[ValidationError]'`
 
 Flags a lineup stint as internally inconsistent, via 3 independent
 
@@ -9876,7 +10574,9 @@ errors = validate_lineup(lineup_event, box_lineup, {"MiMitchell", "BbBob"})
 assert not errors  # a clean lineup returns []
 ```
 
-### `weighted_avg(mutable_acc: 'LineupStatSet', obj: 'LineupStatSet') -> 'None'` {#weighted_avg}
+### weighted_avg {#weighted_avg}
+
+`weighted_avg(mutable_acc: 'LineupStatSet', obj: 'LineupStatSet') -> 'None'`
 
 Merge `obj` into `mutable_acc` with possession weighting.
 
@@ -9922,7 +10622,9 @@ for lineup in three_lineups:
 # ported) is required to turn these into rate-stat averages.
 ```
 
-### `win_prob_from_margin(exp_margin: 'float', *, league: 'str' = 'mens') -> 'float'` {#win_prob_from_margin}
+### win_prob_from_margin {#win_prob_from_margin}
+
+`win_prob_from_margin(exp_margin: 'float', *, league: 'str' = 'mens') -> 'float'`
 
 Home win probability from an expected margin (normal-CDF closed form).
 

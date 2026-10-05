@@ -3,12 +3,13 @@ title: NHL — NHL Stats REST API
 sidebar_label: NHL Stats REST API
 description: "NHL — NHL Stats REST API — endpoint reference in sdv-py, the SportsDataverse Python package."
 sidebar_position: 12
+toc_max_heading_level: 2
 ---
 # NHL — NHL Stats REST API
 
 `sportsdataverse.nhl` — 21 endpoints.
 
-## `nhl_stats_rest_ping`
+## nhl_stats_rest_ping
 
 Ping the NHL Stats REST API database.
 
@@ -19,11 +20,11 @@ Ping the NHL Stats REST API database.
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 
-### Returns
+### Returns {#nhl_stats_rest_ping-returns}
 
 Ping the NHL Stats REST API database.
 
-### Example
+### Example {#nhl_stats_rest_ping-example}
 
 ```python
 nhl_stats_rest_ping()
@@ -31,7 +32,7 @@ nhl_stats_rest_ping()
 
 _Last validated n/a._
 
-## `nhl_stats_rest_component_season`
+## nhl_stats_rest_component_season
 
 Retrieve the component-season configuration.
 
@@ -43,11 +44,11 @@ Retrieve the component-season configuration.
 |---|---|:---:|:---:|:---:|---|
 | `lang` | `lang` |  |  | `Y` | lang path parameter. |
 
-### Returns
+### Returns {#nhl_stats_rest_component_season-returns}
 
 Retrieve the component-season configuration.
 
-### Example
+### Example {#nhl_stats_rest_component_season-example}
 
 ```python
 nhl_stats_rest_component_season()
@@ -55,7 +56,7 @@ nhl_stats_rest_component_season()
 
 _Last validated n/a._
 
-## `nhl_stats_rest_config`
+## nhl_stats_rest_config
 
 Retrieve the Stats REST API configuration payload.
 
@@ -67,11 +68,11 @@ Retrieve the Stats REST API configuration payload.
 |---|---|:---:|:---:|:---:|---|
 | `lang` | `lang` |  |  | `Y` | lang path parameter. |
 
-### Returns
+### Returns {#nhl_stats_rest_config-returns}
 
 Retrieve the Stats REST API configuration payload.
 
-### Example
+### Example {#nhl_stats_rest_config-example}
 
 ```python
 nhl_stats_rest_config()
@@ -79,7 +80,7 @@ nhl_stats_rest_config()
 
 _Last validated n/a._
 
-## `nhl_stats_rest_content_module`
+## nhl_stats_rest_content_module
 
 Retrieve a content module by template key.
 
@@ -92,11 +93,11 @@ Retrieve a content module by template key.
 | `template_key` | `template_key` |  | `Y` |  | template_key path parameter. |
 | `lang` | `lang` |  |  | `Y` | lang path parameter. |
 
-### Returns
+### Returns {#nhl_stats_rest_content_module-returns}
 
 Retrieve a content module by template key.
 
-### Example
+### Example {#nhl_stats_rest_content_module-example}
 
 ```python
 nhl_stats_rest_content_module(template_key='X')
@@ -104,7 +105,7 @@ nhl_stats_rest_content_module(template_key='X')
 
 _Last validated n/a._
 
-## `nhl_stats_rest_country`
+## nhl_stats_rest_country
 
 Retrieve the list of countries used in NHL data.
 
@@ -116,7 +117,7 @@ Retrieve the list of countries used in NHL data.
 |---|---|:---:|:---:|:---:|---|
 | `lang` | `lang` |  |  | `Y` | lang path parameter. |
 
-### Returns
+### Returns {#nhl_stats_rest_country-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -135,7 +136,7 @@ Retrieve the list of countries used in NHL data.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nhl_stats_rest_country-example}
 
 ```python
 nhl_stats_rest_country()
@@ -143,7 +144,7 @@ nhl_stats_rest_country()
 
 _Last validated n/a._
 
-## `nhl_stats_rest_draft`
+## nhl_stats_rest_draft
 
 Retrieve draft data, optionally filtered with Cayenne expressions.
 
@@ -155,7 +156,7 @@ Retrieve draft data, optionally filtered with Cayenne expressions.
 |---|---|:---:|:---:|:---:|---|
 | `lang` | `lang` |  |  | `Y` | lang path parameter. |
 
-### Returns
+### Returns {#nhl_stats_rest_draft-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -166,7 +167,7 @@ Retrieve draft data, optionally filtered with Cayenne expressions.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nhl_stats_rest_draft-example}
 
 ```python
 nhl_stats_rest_draft()
@@ -174,7 +175,7 @@ nhl_stats_rest_draft()
 
 _Last validated n/a._
 
-## `nhl_stats_rest_franchise`
+## nhl_stats_rest_franchise
 
 Retrieve franchise data.
 
@@ -186,7 +187,7 @@ Retrieve franchise data.
 |---|---|:---:|:---:|:---:|---|
 | `lang` | `lang` |  |  | `Y` | lang path parameter. |
 
-### Returns
+### Returns {#nhl_stats_rest_franchise-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -198,7 +199,7 @@ Retrieve franchise data.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nhl_stats_rest_franchise-example}
 
 ```python
 nhl_stats_rest_franchise()
@@ -206,7 +207,7 @@ nhl_stats_rest_franchise()
 
 _Last validated n/a._
 
-## `nhl_stats_rest_game`
+## nhl_stats_rest_game
 
 Retrieve game-level data.
 
@@ -218,7 +219,7 @@ Retrieve game-level data.
 |---|---|:---:|:---:|:---:|---|
 | `lang` | `lang` |  |  | `Y` | lang path parameter. |
 
-### Returns
+### Returns {#nhl_stats_rest_game-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -239,7 +240,7 @@ Retrieve game-level data.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nhl_stats_rest_game-example}
 
 ```python
 nhl_stats_rest_game()
@@ -247,7 +248,7 @@ nhl_stats_rest_game()
 
 _Last validated n/a._
 
-## `nhl_stats_rest_glossary`
+## nhl_stats_rest_glossary
 
 Retrieve the NHL Stats glossary of stat definitions.
 
@@ -259,7 +260,7 @@ Retrieve the NHL Stats glossary of stat definitions.
 |---|---|:---:|:---:|:---:|---|
 | `lang` | `lang` |  |  | `Y` | lang path parameter. |
 
-### Returns
+### Returns {#nhl_stats_rest_glossary-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -274,7 +275,7 @@ Retrieve the NHL Stats glossary of stat definitions.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nhl_stats_rest_glossary-example}
 
 ```python
 nhl_stats_rest_glossary()
@@ -282,7 +283,7 @@ nhl_stats_rest_glossary()
 
 _Last validated n/a._
 
-## `nhl_stats_rest_goalie_report`
+## nhl_stats_rest_goalie_report
 
 Retrieve a goalie statistical report.
 
@@ -295,7 +296,7 @@ Retrieve a goalie statistical report.
 | `report` | `report` |  | `Y` |  | report path parameter. |
 | `lang` | `lang` |  |  | `Y` | lang path parameter. |
 
-### Returns
+### Returns {#nhl_stats_rest_goalie_report-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -326,7 +327,7 @@ Retrieve a goalie statistical report.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nhl_stats_rest_goalie_report-example}
 
 ```python
 nhl_stats_rest_goalie_report(report='summary')
@@ -334,7 +335,7 @@ nhl_stats_rest_goalie_report(report='summary')
 
 _Last validated n/a._
 
-## `nhl_stats_rest_leaders_goalies`
+## nhl_stats_rest_leaders_goalies
 
 Retrieve league leaders for a goalie statistical attribute.
 
@@ -347,7 +348,7 @@ Retrieve league leaders for a goalie statistical attribute.
 | `attribute` | `attribute` |  | `Y` |  | attribute path parameter. |
 | `lang` | `lang` |  |  | `Y` | lang path parameter. |
 
-### Returns
+### Returns {#nhl_stats_rest_leaders_goalies-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -370,7 +371,7 @@ Retrieve league leaders for a goalie statistical attribute.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nhl_stats_rest_leaders_goalies-example}
 
 ```python
 nhl_stats_rest_leaders_goalies(attribute='X')
@@ -378,7 +379,7 @@ nhl_stats_rest_leaders_goalies(attribute='X')
 
 _Last validated n/a._
 
-## `nhl_stats_rest_leaders_skaters`
+## nhl_stats_rest_leaders_skaters
 
 Retrieve league leaders for a skater statistical attribute.
 
@@ -391,7 +392,7 @@ Retrieve league leaders for a skater statistical attribute.
 | `attribute` | `attribute` |  | `Y` |  | attribute path parameter. |
 | `lang` | `lang` |  |  | `Y` | lang path parameter. |
 
-### Returns
+### Returns {#nhl_stats_rest_leaders_skaters-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -414,7 +415,7 @@ Retrieve league leaders for a skater statistical attribute.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nhl_stats_rest_leaders_skaters-example}
 
 ```python
 nhl_stats_rest_leaders_skaters(attribute='X')
@@ -422,7 +423,7 @@ nhl_stats_rest_leaders_skaters(attribute='X')
 
 _Last validated n/a._
 
-## `nhl_stats_rest_milestones_goalies`
+## nhl_stats_rest_milestones_goalies
 
 Retrieve milestone data for goalies.
 
@@ -434,7 +435,7 @@ Retrieve milestone data for goalies.
 |---|---|:---:|:---:|:---:|---|
 | `lang` | `lang` |  |  | `Y` | lang path parameter. |
 
-### Returns
+### Returns {#nhl_stats_rest_milestones_goalies-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -459,7 +460,7 @@ Retrieve milestone data for goalies.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nhl_stats_rest_milestones_goalies-example}
 
 ```python
 nhl_stats_rest_milestones_goalies()
@@ -467,7 +468,7 @@ nhl_stats_rest_milestones_goalies()
 
 _Last validated n/a._
 
-## `nhl_stats_rest_milestones_skaters`
+## nhl_stats_rest_milestones_skaters
 
 Retrieve milestone data for skaters.
 
@@ -479,7 +480,7 @@ Retrieve milestone data for skaters.
 |---|---|:---:|:---:|:---:|---|
 | `lang` | `lang` |  |  | `Y` | lang path parameter. |
 
-### Returns
+### Returns {#nhl_stats_rest_milestones_skaters-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -504,7 +505,7 @@ Retrieve milestone data for skaters.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nhl_stats_rest_milestones_skaters-example}
 
 ```python
 nhl_stats_rest_milestones_skaters()
@@ -512,7 +513,7 @@ nhl_stats_rest_milestones_skaters()
 
 _Last validated n/a._
 
-## `nhl_stats_rest_players`
+## nhl_stats_rest_players
 
 Retrieve the NHL player registry.
 
@@ -524,12 +525,12 @@ Retrieve the NHL player registry.
 |---|---|:---:|:---:|:---:|---|
 | `lang` | `lang` |  |  | `Y` | lang path parameter. |
 
-### Returns
+### Returns {#nhl_stats_rest_players-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_nhl_stats_rest`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nhl_stats_rest_players-example}
 
 ```python
 nhl_stats_rest_players()
@@ -537,7 +538,7 @@ nhl_stats_rest_players()
 
 _Last validated n/a._
 
-## `nhl_stats_rest_season`
+## nhl_stats_rest_season
 
 Retrieve the list of all NHL seasons.
 
@@ -549,7 +550,7 @@ Retrieve the list of all NHL seasons.
 |---|---|:---:|:---:|:---:|---|
 | `lang` | `lang` |  |  | `Y` | lang path parameter. |
 
-### Returns
+### Returns {#nhl_stats_rest_season-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -580,7 +581,7 @@ Retrieve the list of all NHL seasons.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nhl_stats_rest_season-example}
 
 ```python
 nhl_stats_rest_season()
@@ -588,7 +589,7 @@ nhl_stats_rest_season()
 
 _Last validated n/a._
 
-## `nhl_stats_rest_shiftcharts`
+## nhl_stats_rest_shiftcharts
 
 Retrieve shift-chart data.
 
@@ -600,7 +601,7 @@ Retrieve shift-chart data.
 |---|---|:---:|:---:|:---:|---|
 | `lang` | `lang` |  |  | `Y` | lang path parameter. |
 
-### Returns
+### Returns {#nhl_stats_rest_shiftcharts-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -627,7 +628,7 @@ Retrieve shift-chart data.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nhl_stats_rest_shiftcharts-example}
 
 ```python
 nhl_stats_rest_shiftcharts()
@@ -635,7 +636,7 @@ nhl_stats_rest_shiftcharts()
 
 _Last validated n/a._
 
-## `nhl_stats_rest_skater_report`
+## nhl_stats_rest_skater_report
 
 Retrieve a skater statistical report.
 
@@ -648,7 +649,7 @@ Retrieve a skater statistical report.
 | `report` | `report` |  | `Y` |  | report path parameter. |
 | `lang` | `lang` |  |  | `Y` | lang path parameter. |
 
-### Returns
+### Returns {#nhl_stats_rest_skater_report-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -682,7 +683,7 @@ Retrieve a skater statistical report.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nhl_stats_rest_skater_report-example}
 
 ```python
 nhl_stats_rest_skater_report(report='summary')
@@ -690,7 +691,7 @@ nhl_stats_rest_skater_report(report='summary')
 
 _Last validated n/a._
 
-## `nhl_stats_rest_team`
+## nhl_stats_rest_team
 
 Retrieve the list of all NHL teams.
 
@@ -702,7 +703,7 @@ Retrieve the list of all NHL teams.
 |---|---|:---:|:---:|:---:|---|
 | `lang` | `lang` |  |  | `Y` | lang path parameter. |
 
-### Returns
+### Returns {#nhl_stats_rest_team-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -716,7 +717,7 @@ Retrieve the list of all NHL teams.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nhl_stats_rest_team-example}
 
 ```python
 nhl_stats_rest_team()
@@ -724,7 +725,7 @@ nhl_stats_rest_team()
 
 _Last validated n/a._
 
-## `nhl_stats_rest_team_by_id`
+## nhl_stats_rest_team_by_id
 
 Retrieve a single team by its numeric ID.
 
@@ -737,7 +738,7 @@ Retrieve a single team by its numeric ID.
 | `team_id` | `team_id` |  | `Y` |  | team_id path parameter. |
 | `lang` | `lang` |  |  | `Y` | lang path parameter. |
 
-### Returns
+### Returns {#nhl_stats_rest_team_by_id-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -751,7 +752,7 @@ Retrieve a single team by its numeric ID.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nhl_stats_rest_team_by_id-example}
 
 ```python
 nhl_stats_rest_team_by_id(team_id=10)
@@ -759,7 +760,7 @@ nhl_stats_rest_team_by_id(team_id=10)
 
 _Last validated n/a._
 
-## `nhl_stats_rest_team_report`
+## nhl_stats_rest_team_report
 
 Retrieve a team statistical report.
 
@@ -772,7 +773,7 @@ Retrieve a team statistical report.
 | `report` | `report` |  | `Y` |  | report path parameter. |
 | `lang` | `lang` |  |  | `Y` | lang path parameter. |
 
-### Returns
+### Returns {#nhl_stats_rest_team_report-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -805,7 +806,7 @@ Retrieve a team statistical report.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nhl_stats_rest_team_report-example}
 
 ```python
 nhl_stats_rest_team_report(report='summary')

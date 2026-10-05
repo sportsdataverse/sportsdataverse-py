@@ -11,7 +11,9 @@ not covered by the generated API-endpoint reference above.
 
 ## Other
 
-### `toa_event_markets(sport: 'str', event_id: 'str', regions: 'str' = 'us', bookmakers: 'Optional[str]' = None, date_format: 'Optional[str]' = 'iso', api_key: 'Optional[str]' = None, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[DataFrameT, Dict]'` {#toa_event_markets}
+### toa_event_markets {#toa_event_markets}
+
+`toa_event_markets(sport: 'str', event_id: 'str', regions: 'str' = 'us', bookmakers: 'Optional[str]' = None, date_format: 'Optional[str]' = 'iso', api_key: 'Optional[str]' = None, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[DataFrameT, Dict]'`
 
 Markets available for a single event
 
@@ -42,7 +44,9 @@ eid = toa_sports_events(sport="americanfootball_nfl", return_parsed=False)[0]["i
 toa_event_markets(sport="americanfootball_nfl", event_id=eid).head()
 ```
 
-### `toa_event_odds(sport: 'str', event_id: 'str', regions: 'str' = 'us', markets: 'Optional[str]' = 'h2h', odds_format: 'Optional[str]' = 'american', date_format: 'Optional[str]' = 'iso', bookmakers: 'Optional[str]' = None, include_links: 'Optional[bool]' = None, include_sids: 'Optional[bool]' = None, include_bet_limits: 'Optional[bool]' = None, include_multipliers: 'Optional[bool]' = None, include_rotation_numbers: 'Optional[bool]' = None, api_key: 'Optional[str]' = None, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[DataFrameT, Dict]'` {#toa_event_odds}
+### toa_event_odds {#toa_event_odds}
+
+`toa_event_odds(sport: 'str', event_id: 'str', regions: 'str' = 'us', markets: 'Optional[str]' = 'h2h', odds_format: 'Optional[str]' = 'american', date_format: 'Optional[str]' = 'iso', bookmakers: 'Optional[str]' = None, include_links: 'Optional[bool]' = None, include_sids: 'Optional[bool]' = None, include_bet_limits: 'Optional[bool]' = None, include_multipliers: 'Optional[bool]' = None, include_rotation_numbers: 'Optional[bool]' = None, api_key: 'Optional[str]' = None, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[DataFrameT, Dict]'`
 
 Odds for a single event, incl. player-prop markets
 
@@ -80,7 +84,9 @@ eid = toa_sports_events(sport="americanfootball_nfl", return_parsed=False)[0]["i
 toa_event_odds(sport="americanfootball_nfl", event_id=eid, markets="player_pass_tds").head()
 ```
 
-### `toa_event_odds_history(sport: 'str', event_id: 'str', date: 'str' = '2023-11-29T22:45:00Z', regions: 'str' = 'us', markets: 'Optional[str]' = 'h2h', odds_format: 'Optional[str]' = 'american', date_format: 'Optional[str]' = 'iso', bookmakers: 'Optional[str]' = None, include_rotation_numbers: 'Optional[bool]' = None, include_multipliers: 'Optional[bool]' = None, api_key: 'Optional[str]' = None, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[DataFrameT, Dict]'` {#toa_event_odds_history}
+### toa_event_odds_history {#toa_event_odds_history}
+
+`toa_event_odds_history(sport: 'str', event_id: 'str', date: 'str' = '2023-11-29T22:45:00Z', regions: 'str' = 'us', markets: 'Optional[str]' = 'h2h', odds_format: 'Optional[str]' = 'american', date_format: 'Optional[str]' = 'iso', bookmakers: 'Optional[str]' = None, include_rotation_numbers: 'Optional[bool]' = None, include_multipliers: 'Optional[bool]' = None, api_key: 'Optional[str]' = None, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[DataFrameT, Dict]'`
 
 Historical odds snapshot for a single event
 
@@ -116,7 +122,9 @@ toa_event_odds_history(sport="americanfootball_nfl", event_id="...",
     date="2023-11-29T22:45:00Z").head()
 ```
 
-### `toa_sports(all_sports: 'Optional[bool]' = None, api_key: 'Optional[str]' = None, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[DataFrameT, List]'` {#toa_sports}
+### toa_sports {#toa_sports}
+
+`toa_sports(all_sports: 'Optional[bool]' = None, api_key: 'Optional[str]' = None, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[DataFrameT, List]'`
 
 List the sports/leagues available from The Odds API (`/v4/sports`). Quota: free.
 
@@ -149,7 +157,9 @@ from sportsdataverse.odds import toa_sports
 toa_sports(all_sports=True).head()
 ```
 
-### `toa_sports_events(sport: 'str' = 'americanfootball_nfl', date_format: 'Optional[str]' = 'iso', event_ids: 'Optional[str]' = None, commence_time_from: 'Optional[str]' = None, commence_time_to: 'Optional[str]' = None, include_rotation_numbers: 'Optional[bool]' = None, api_key: 'Optional[str]' = None, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[DataFrameT, List]'` {#toa_sports_events}
+### toa_sports_events {#toa_sports_events}
+
+`toa_sports_events(sport: 'str' = 'americanfootball_nfl', date_format: 'Optional[str]' = 'iso', event_ids: 'Optional[str]' = None, commence_time_from: 'Optional[str]' = None, commence_time_to: 'Optional[str]' = None, include_rotation_numbers: 'Optional[bool]' = None, api_key: 'Optional[str]' = None, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[DataFrameT, List]'`
 
 Upcoming + live events for a sport (`/v4/sports/{sport}/events`). Quota: free.
 
@@ -187,7 +197,9 @@ from sportsdataverse.odds import toa_sports_events
 toa_sports_events(sport="americanfootball_nfl").head()
 ```
 
-### `toa_sports_events_history(sport: 'str' = 'americanfootball_nfl', date: 'str' = '2023-11-29T22:45:00Z', date_format: 'Optional[str]' = 'iso', event_ids: 'Optional[str]' = None, commence_time_from: 'Optional[str]' = None, commence_time_to: 'Optional[str]' = None, include_rotation_numbers: 'Optional[bool]' = None, api_key: 'Optional[str]' = None, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[DataFrameT, Dict]'` {#toa_sports_events_history}
+### toa_sports_events_history {#toa_sports_events_history}
+
+`toa_sports_events_history(sport: 'str' = 'americanfootball_nfl', date: 'str' = '2023-11-29T22:45:00Z', date_format: 'Optional[str]' = 'iso', event_ids: 'Optional[str]' = None, commence_time_from: 'Optional[str]' = None, commence_time_to: 'Optional[str]' = None, include_rotation_numbers: 'Optional[bool]' = None, api_key: 'Optional[str]' = None, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[DataFrameT, Dict]'`
 
 Historical events snapshot for a sport
 
@@ -231,7 +243,9 @@ from sportsdataverse.odds import toa_sports_events_history
 toa_sports_events_history(sport="americanfootball_nfl", date="2023-11-29T22:45:00Z").head()
 ```
 
-### `toa_sports_odds(sport: 'str' = 'americanfootball_nfl', regions: 'str' = 'us', markets: 'Optional[str]' = 'h2h', odds_format: 'Optional[str]' = 'american', date_format: 'Optional[str]' = 'iso', event_ids: 'Optional[str]' = None, bookmakers: 'Optional[str]' = None, commence_time_from: 'Optional[str]' = None, commence_time_to: 'Optional[str]' = None, include_links: 'Optional[bool]' = None, include_sids: 'Optional[bool]' = None, include_bet_limits: 'Optional[bool]' = None, include_rotation_numbers: 'Optional[bool]' = None, api_key: 'Optional[str]' = None, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[DataFrameT, List]'` {#toa_sports_odds}
+### toa_sports_odds {#toa_sports_odds}
+
+`toa_sports_odds(sport: 'str' = 'americanfootball_nfl', regions: 'str' = 'us', markets: 'Optional[str]' = 'h2h', odds_format: 'Optional[str]' = 'american', date_format: 'Optional[str]' = 'iso', event_ids: 'Optional[str]' = None, bookmakers: 'Optional[str]' = None, commence_time_from: 'Optional[str]' = None, commence_time_to: 'Optional[str]' = None, include_links: 'Optional[bool]' = None, include_sids: 'Optional[bool]' = None, include_bet_limits: 'Optional[bool]' = None, include_rotation_numbers: 'Optional[bool]' = None, api_key: 'Optional[str]' = None, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[DataFrameT, List]'`
 
 Current odds for a sport (`/v4/sports/{sport}/odds`), one row per outcome.
 
@@ -287,7 +301,9 @@ from sportsdataverse.odds import toa_sports_odds
 toa_sports_odds(sport="americanfootball_nfl", regions="us", markets="h2h,spreads").head()
 ```
 
-### `toa_sports_odds_history(sport: 'str' = 'americanfootball_nfl', date: 'str' = '2023-11-29T22:45:00Z', regions: 'str' = 'us', markets: 'Optional[str]' = 'h2h', odds_format: 'Optional[str]' = 'american', date_format: 'Optional[str]' = 'iso', event_ids: 'Optional[str]' = None, bookmakers: 'Optional[str]' = None, api_key: 'Optional[str]' = None, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[DataFrameT, Dict]'` {#toa_sports_odds_history}
+### toa_sports_odds_history {#toa_sports_odds_history}
+
+`toa_sports_odds_history(sport: 'str' = 'americanfootball_nfl', date: 'str' = '2023-11-29T22:45:00Z', regions: 'str' = 'us', markets: 'Optional[str]' = 'h2h', odds_format: 'Optional[str]' = 'american', date_format: 'Optional[str]' = 'iso', event_ids: 'Optional[str]' = None, bookmakers: 'Optional[str]' = None, api_key: 'Optional[str]' = None, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[DataFrameT, Dict]'`
 
 Historical odds snapshot for a sport
 
@@ -343,7 +359,9 @@ from sportsdataverse.odds import toa_sports_odds_history
 toa_sports_odds_history(sport="americanfootball_nfl", date="2023-11-29T22:45:00Z").head()
 ```
 
-### `toa_sports_participants(sport: 'str' = 'americanfootball_nfl', api_key: 'Optional[str]' = None, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[DataFrameT, List]'` {#toa_sports_participants}
+### toa_sports_participants {#toa_sports_participants}
+
+`toa_sports_participants(sport: 'str' = 'americanfootball_nfl', api_key: 'Optional[str]' = None, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[DataFrameT, List]'`
 
 Teams / participants for a sport (`/v4/sports/{sport}/participants`). Quota: free.
 
@@ -372,7 +390,9 @@ from sportsdataverse.odds import toa_sports_participants
 toa_sports_participants(sport="americanfootball_nfl").head()
 ```
 
-### `toa_sports_scores(sport: 'str' = 'americanfootball_nfl', days_from: 'Optional[int]' = None, date_format: 'Optional[str]' = 'iso', event_ids: 'Optional[str]' = None, api_key: 'Optional[str]' = None, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[DataFrameT, List]'` {#toa_sports_scores}
+### toa_sports_scores {#toa_sports_scores}
+
+`toa_sports_scores(sport: 'str' = 'americanfootball_nfl', days_from: 'Optional[int]' = None, date_format: 'Optional[str]' = 'iso', event_ids: 'Optional[str]' = None, api_key: 'Optional[str]' = None, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Union[DataFrameT, List]'`
 
 Live + recently-completed scores for a sport (`/v4/sports/{sport}/scores`).
 
@@ -411,7 +431,9 @@ from sportsdataverse.odds import toa_sports_scores
 toa_sports_scores(sport="americanfootball_nfl", days_from=3).head()
 ```
 
-### `toa_usage(return_as_pandas: 'bool' = False) -> 'DataFrameT'` {#toa_usage}
+### toa_usage {#toa_usage}
+
+`toa_usage(return_as_pandas: 'bool' = False) -> 'DataFrameT'`
 
 Return the cached API-key quota from the most recent call (no network/quota cost).
 

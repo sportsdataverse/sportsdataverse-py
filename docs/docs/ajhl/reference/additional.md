@@ -11,13 +11,17 @@ not covered by the generated API-endpoint reference above.
 
 ## Utilities & helpers
 
-### `most_recent_ajhl_season() -> 'int'` {#most_recent_ajhl_season}
+### most_recent_ajhl_season {#most_recent_ajhl_season}
+
+`most_recent_ajhl_season() -> 'int'`
 
 Most-recent AJHL season as an end-year integer (max `season_yr`), or 2026.
 
 ## Other
 
-### `ajhl_game_corsi(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'` {#ajhl_game_corsi}
+### ajhl_game_corsi {#ajhl_game_corsi}
+
+`ajhl_game_corsi(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'`
 
 Player-level on-ice Corsi and Fenwick for a single AJHL game.
 
@@ -28,7 +32,9 @@ Player-level on-ice Corsi and Fenwick for a single AJHL game.
 | `game_id` | `int` |  |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
-### `ajhl_game_shifts(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'` {#ajhl_game_shifts}
+### ajhl_game_shifts {#ajhl_game_shifts}
+
+`ajhl_game_shifts(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'`
 
 Parsed shift stints for a single AJHL game.
 
@@ -39,7 +45,9 @@ Parsed shift stints for a single AJHL game.
 | `game_id` | `int` |  |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
-### `ajhl_game_summary(game_id: 'int') -> 'dict'` {#ajhl_game_summary}
+### ajhl_game_summary {#ajhl_game_summary}
+
+`ajhl_game_summary(game_id: 'int') -> 'dict'`
 
 AJHL game summary — dict of frames (game/goals/penalties/shots_by_period/three_stars).
 
@@ -49,7 +57,9 @@ AJHL game summary — dict of frames (game/goals/penalties/shots_by_period/three
 |---|---|---|---|
 | `game_id` | `int` |  |  |
 
-### `ajhl_leaders(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'` {#ajhl_leaders}
+### ajhl_leaders {#ajhl_leaders}
+
+`ajhl_leaders(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'`
 
 AJHL statistical leaders for a given season.
 
@@ -82,7 +92,9 @@ AJHL statistical leaders for a given season.
 | `position` | character | Listed roster position (G, F, C, etc.). |
 | `division` | character | Team division. |
 
-### `ajhl_pbp(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'` {#ajhl_pbp}
+### ajhl_pbp {#ajhl_pbp}
+
+`ajhl_pbp(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'`
 
 AJHL play-by-play — one row per event, fully enriched.
 
@@ -93,7 +105,9 @@ AJHL play-by-play — one row per event, fully enriched.
 | `game_id` | `int` |  |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
-### `ajhl_player_stats(player_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'` {#ajhl_player_stats}
+### ajhl_player_stats {#ajhl_player_stats}
+
+`ajhl_player_stats(player_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'`
 
 AJHL player season stats across all seasons.
 
@@ -104,7 +118,9 @@ AJHL player season stats across all seasons.
 | `player_id` | `int` |  |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
-### `ajhl_player_toi(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'` {#ajhl_player_toi}
+### ajhl_player_toi {#ajhl_player_toi}
+
+`ajhl_player_toi(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'`
 
 Per-player time-on-ice totals for a single AJHL game.
 
@@ -115,7 +131,9 @@ Per-player time-on-ice totals for a single AJHL game.
 | `game_id` | `int` |  |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
-### `ajhl_schedule(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'` {#ajhl_schedule}
+### ajhl_schedule {#ajhl_schedule}
+
+`ajhl_schedule(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'`
 
 AJHL schedule — one row per game.
 
@@ -145,7 +163,9 @@ AJHL schedule — one row per game.
 | `season_id` | character | Unique season identifier. |
 | `game_type` | character | The most recent game type of that season that a player appeared on the roster. |
 
-### `ajhl_season_id(return_as_pandas: 'bool' = False) -> 'Any'` {#ajhl_season_id}
+### ajhl_season_id {#ajhl_season_id}
+
+`ajhl_season_id(return_as_pandas: 'bool' = False) -> 'Any'`
 
 All AJHL seasons with end-year + game-type labels.
 
@@ -170,7 +190,9 @@ All AJHL seasons with end-year + game-type labels.
 | `season_yr` | integer | Year derived from the season name (concluding year). |
 | `game_type_label` | character | Game type: "preseason", "regular", or "playoffs". |
 
-### `ajhl_standings(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'` {#ajhl_standings}
+### ajhl_standings {#ajhl_standings}
+
+`ajhl_standings(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'`
 
 AJHL standings — one row per team.
 
@@ -209,7 +231,9 @@ AJHL standings — one row per team.
 | `past_10` | character | Record over the team's most recent 10 games (feed header 'Past 10 Games') as a hyphenated string: W-L-OTL-SOL when four parts are shipped (e.g. '2-0-0-1'), W-L-OTL when three are (e.g. '0-2-1'). |
 | `team` | character | Team-side label or team identifier. |
 
-### `ajhl_team_roster(team_id: 'int', season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'` {#ajhl_team_roster}
+### ajhl_team_roster {#ajhl_team_roster}
+
+`ajhl_team_roster(team_id: 'int', season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'`
 
 AJHL team roster for a given team + season.
 
@@ -222,7 +246,9 @@ AJHL team roster for a given team + season.
 | `season_id` | `Optional[int]` | `None` |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
-### `ajhl_teams(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'` {#ajhl_teams}
+### ajhl_teams {#ajhl_teams}
+
+`ajhl_teams(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'`
 
 AJHL teams for a given season.
 
@@ -247,7 +273,9 @@ AJHL teams for a given season.
 | `division` | character | Team division. |
 | `team_logo` | character | Team logo image URL. |
 
-### `build_family(league: 'str') -> 'dict[str, Any]'` {#build_family}
+### build_family {#build_family}
+
+`build_family(league: 'str') -> 'dict[str, Any]'`
 
 Return a dict of public callables for *league*.
 

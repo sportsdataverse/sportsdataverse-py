@@ -11,13 +11,17 @@ not covered by the generated API-endpoint reference above.
 
 ## Utilities & helpers
 
-### `most_recent_ahl_season() -> 'int'` {#most_recent_ahl_season}
+### most_recent_ahl_season {#most_recent_ahl_season}
+
+`most_recent_ahl_season() -> 'int'`
 
 Most-recent AHL season as an end-year integer (max `season_yr`), or 2026.
 
 ## Other
 
-### `ahl_game_corsi(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'` {#ahl_game_corsi}
+### ahl_game_corsi {#ahl_game_corsi}
+
+`ahl_game_corsi(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'`
 
 Player-level on-ice Corsi and Fenwick for a single AHL game.
 
@@ -28,7 +32,9 @@ Player-level on-ice Corsi and Fenwick for a single AHL game.
 | `game_id` | `int` |  |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
-### `ahl_game_shifts(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'` {#ahl_game_shifts}
+### ahl_game_shifts {#ahl_game_shifts}
+
+`ahl_game_shifts(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'`
 
 Parsed shift stints for a single AHL game.
 
@@ -39,7 +45,9 @@ Parsed shift stints for a single AHL game.
 | `game_id` | `int` |  |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
-### `ahl_game_summary(game_id: 'int') -> 'dict'` {#ahl_game_summary}
+### ahl_game_summary {#ahl_game_summary}
+
+`ahl_game_summary(game_id: 'int') -> 'dict'`
 
 AHL game summary — dict of frames (game/goals/penalties/shots_by_period/three_stars).
 
@@ -49,7 +57,9 @@ AHL game summary — dict of frames (game/goals/penalties/shots_by_period/three_
 |---|---|---|---|
 | `game_id` | `int` |  |  |
 
-### `ahl_leaders(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'` {#ahl_leaders}
+### ahl_leaders {#ahl_leaders}
+
+`ahl_leaders(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'`
 
 AHL statistical leaders for a given season.
 
@@ -82,7 +92,9 @@ AHL statistical leaders for a given season.
 | `position` | character | Player position. |
 | `division` | character | Division identifier. |
 
-### `ahl_pbp(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'` {#ahl_pbp}
+### ahl_pbp {#ahl_pbp}
+
+`ahl_pbp(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'`
 
 AHL play-by-play — one row per event, fully enriched.
 
@@ -93,7 +105,9 @@ AHL play-by-play — one row per event, fully enriched.
 | `game_id` | `int` |  |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
-### `ahl_player_stats(player_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'` {#ahl_player_stats}
+### ahl_player_stats {#ahl_player_stats}
+
+`ahl_player_stats(player_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'`
 
 AHL player season stats across all seasons.
 
@@ -160,7 +174,9 @@ AHL player season stats across all seasons.
 | `shots_blocked_by_player` | character | Shots blocked by the player. |
 | `stat_type` | character | Statistic type ("regular"/"playoff"). |
 
-### `ahl_player_toi(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'` {#ahl_player_toi}
+### ahl_player_toi {#ahl_player_toi}
+
+`ahl_player_toi(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'`
 
 Per-player time-on-ice totals for a single AHL game.
 
@@ -171,7 +187,9 @@ Per-player time-on-ice totals for a single AHL game.
 | `game_id` | `int` |  |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
-### `ahl_schedule(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'` {#ahl_schedule}
+### ahl_schedule {#ahl_schedule}
+
+`ahl_schedule(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'`
 
 AHL schedule — one row per game.
 
@@ -201,7 +219,9 @@ AHL schedule — one row per game.
 | `season_id` | character | Season identifier. |
 | `game_type` | character | Game type the row belongs to. |
 
-### `ahl_season_id(return_as_pandas: 'bool' = False) -> 'Any'` {#ahl_season_id}
+### ahl_season_id {#ahl_season_id}
+
+`ahl_season_id(return_as_pandas: 'bool' = False) -> 'Any'`
 
 All AHL seasons with end-year + game-type labels.
 
@@ -226,7 +246,9 @@ All AHL seasons with end-year + game-type labels.
 | `season_yr` | integer | Year derived from the season name (concluding year). |
 | `game_type_label` | character | Game type: "preseason", "regular", or "playoffs". |
 
-### `ahl_standings(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'` {#ahl_standings}
+### ahl_standings {#ahl_standings}
+
+`ahl_standings(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'`
 
 AHL standings — one row per team.
 
@@ -263,7 +285,9 @@ AHL standings — one row per team.
 | `past_10` | character | Win-loss-overtime record across the team's most recent 10 games, typically formatted as W-L-OTL. |
 | `team` | character | Team name. |
 
-### `ahl_team_roster(team_id: 'int', season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'` {#ahl_team_roster}
+### ahl_team_roster {#ahl_team_roster}
+
+`ahl_team_roster(team_id: 'int', season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'`
 
 AHL team roster for a given team + season.
 
@@ -276,7 +300,9 @@ AHL team roster for a given team + season.
 | `season_id` | `Optional[int]` | `None` |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
-### `ahl_teams(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'` {#ahl_teams}
+### ahl_teams {#ahl_teams}
+
+`ahl_teams(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'`
 
 AHL teams for a given season.
 

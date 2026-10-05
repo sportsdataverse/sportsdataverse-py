@@ -3,12 +3,13 @@ title: MLB — MLB Statcast (Baseball Savant)
 sidebar_label: MLB Statcast (Baseball Savant)
 description: "MLB — MLB Statcast (Baseball Savant) — endpoint reference in sdv-py, the SportsDataverse Python package."
 sidebar_position: 11
+toc_max_heading_level: 2
 ---
 # MLB — MLB Statcast (Baseball Savant)
 
 `sportsdataverse.mlb` — 39 endpoints.
 
-## `mlb_statcast_leaderboard_expected_stats`
+## mlb_statcast_leaderboard_expected_stats
 
 GET /leaderboard/expected_statistics — xBA/xSLG/xwOBA/xISO expected-statistics leaderboard.
 
@@ -23,7 +24,7 @@ GET /leaderboard/expected_statistics — xBA/xSLG/xwOBA/xISO expected-statistics
 | `team` | `team` |  |  | `Y` | team query parameter. |
 | `csv` | `csv` |  |  | `Y` | csv query parameter. |
 
-### Returns
+### Returns {#mlb_statcast_leaderboard_expected_stats-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -45,7 +46,7 @@ GET /leaderboard/expected_statistics — xBA/xSLG/xwOBA/xISO expected-statistics
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#mlb_statcast_leaderboard_expected_stats-example}
 
 ```python
 mlb_statcast_leaderboard_expected_stats()
@@ -53,7 +54,7 @@ mlb_statcast_leaderboard_expected_stats()
 
 _Last validated n/a._
 
-## `mlb_statcast_leaderboard_percentile_rankings`
+## mlb_statcast_leaderboard_percentile_rankings
 
 GET /leaderboard/percentile-rankings — player percentile-ranking sliders (xwOBA/xBA/xSLG/…).
 
@@ -68,7 +69,7 @@ GET /leaderboard/percentile-rankings — player percentile-ranking sliders (xwOB
 | `team` | `team` |  |  | `Y` | team query parameter. |
 | `csv` | `csv` |  |  | `Y` | csv query parameter. |
 
-### Returns
+### Returns {#mlb_statcast_leaderboard_percentile_rankings-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -99,7 +100,7 @@ GET /leaderboard/percentile-rankings — player percentile-ranking sliders (xwOB
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#mlb_statcast_leaderboard_percentile_rankings-example}
 
 ```python
 mlb_statcast_leaderboard_percentile_rankings()
@@ -107,7 +108,7 @@ mlb_statcast_leaderboard_percentile_rankings()
 
 _Last validated n/a._
 
-## `mlb_statcast_leaderboard_sprint_speed`
+## mlb_statcast_leaderboard_sprint_speed
 
 GET /leaderboard/sprint_speed — sprint-speed (ft/sec) leaderboard.
 
@@ -122,7 +123,7 @@ GET /leaderboard/sprint_speed — sprint-speed (ft/sec) leaderboard.
 | `team` | `team` |  |  | `Y` | team query parameter. |
 | `csv` | `csv` |  |  | `Y` | csv query parameter. |
 
-### Returns
+### Returns {#mlb_statcast_leaderboard_sprint_speed-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -140,7 +141,7 @@ GET /leaderboard/sprint_speed — sprint-speed (ft/sec) leaderboard.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#mlb_statcast_leaderboard_sprint_speed-example}
 
 ```python
 mlb_statcast_leaderboard_sprint_speed()
@@ -148,7 +149,7 @@ mlb_statcast_leaderboard_sprint_speed()
 
 _Last validated n/a._
 
-## `mlb_statcast_leaderboard_running_splits`
+## mlb_statcast_leaderboard_running_splits
 
 GET /leaderboard/running_splits — 90-foot running splits leaderboard.
 
@@ -163,7 +164,7 @@ GET /leaderboard/running_splits — 90-foot running splits leaderboard.
 | `team` | `team` |  |  | `Y` | team query parameter. |
 | `csv` | `csv` |  |  | `Y` | csv query parameter. |
 
-### Returns
+### Returns {#mlb_statcast_leaderboard_running_splits-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -197,7 +198,7 @@ GET /leaderboard/running_splits — 90-foot running splits leaderboard.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#mlb_statcast_leaderboard_running_splits-example}
 
 ```python
 mlb_statcast_leaderboard_running_splits()
@@ -205,7 +206,7 @@ mlb_statcast_leaderboard_running_splits()
 
 _Last validated n/a._
 
-## `mlb_statcast_leaderboard_bat_tracking`
+## mlb_statcast_leaderboard_bat_tracking
 
 GET /leaderboard/bat-tracking — bat-tracking (swing speed / squared-up) leaderboard.
 
@@ -220,7 +221,7 @@ GET /leaderboard/bat-tracking — bat-tracking (swing speed / squared-up) leader
 | `team` | `team` |  |  | `Y` | team query parameter. |
 | `csv` | `csv` |  |  | `Y` | csv query parameter. |
 
-### Returns
+### Returns {#mlb_statcast_leaderboard_bat_tracking-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -246,7 +247,7 @@ GET /leaderboard/bat-tracking — bat-tracking (swing speed / squared-up) leader
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#mlb_statcast_leaderboard_bat_tracking-example}
 
 ```python
 mlb_statcast_leaderboard_bat_tracking()
@@ -254,7 +255,7 @@ mlb_statcast_leaderboard_bat_tracking()
 
 _Last validated n/a._
 
-## `mlb_statcast_leaderboard_swing_path`
+## mlb_statcast_leaderboard_swing_path
 
 GET /leaderboard/bat-tracking/swing-path-attack-angle — swing path & attack-angle leaderboard.
 
@@ -269,7 +270,7 @@ GET /leaderboard/bat-tracking/swing-path-attack-angle — swing path & attack-an
 | `team` | `team` |  |  | `Y` | team query parameter. |
 | `csv` | `csv` |  |  | `Y` | csv query parameter. |
 
-### Returns
+### Returns {#mlb_statcast_leaderboard_swing_path-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -290,7 +291,7 @@ GET /leaderboard/bat-tracking/swing-path-attack-angle — swing path & attack-an
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#mlb_statcast_leaderboard_swing_path-example}
 
 ```python
 mlb_statcast_leaderboard_swing_path()
@@ -298,7 +299,7 @@ mlb_statcast_leaderboard_swing_path()
 
 _Last validated n/a._
 
-## `mlb_statcast_leaderboard_swing_timing`
+## mlb_statcast_leaderboard_swing_timing
 
 GET /leaderboard/bat-tracking/swing-timing-miss-distance — swing timing & miss-distance leaderboard.
 
@@ -313,7 +314,7 @@ GET /leaderboard/bat-tracking/swing-timing-miss-distance — swing timing & miss
 | `team` | `team` |  |  | `Y` | team query parameter. |
 | `csv` | `csv` |  |  | `Y` | csv query parameter. |
 
-### Returns
+### Returns {#mlb_statcast_leaderboard_swing_timing-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -347,7 +348,7 @@ GET /leaderboard/bat-tracking/swing-timing-miss-distance — swing timing & miss
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#mlb_statcast_leaderboard_swing_timing-example}
 
 ```python
 mlb_statcast_leaderboard_swing_timing()
@@ -355,7 +356,7 @@ mlb_statcast_leaderboard_swing_timing()
 
 _Last validated n/a._
 
-## `mlb_statcast_leaderboard_swing_take`
+## mlb_statcast_leaderboard_swing_take
 
 GET /leaderboard/swing-take — swing/take run-value leaderboard.
 
@@ -370,7 +371,7 @@ GET /leaderboard/swing-take — swing/take run-value leaderboard.
 | `team` | `team` |  |  | `Y` | team query parameter. |
 | `csv` | `csv` |  |  | `Y` | csv query parameter. |
 
-### Returns
+### Returns {#mlb_statcast_leaderboard_swing_take-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -389,7 +390,7 @@ GET /leaderboard/swing-take — swing/take run-value leaderboard.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#mlb_statcast_leaderboard_swing_take-example}
 
 ```python
 mlb_statcast_leaderboard_swing_take()
@@ -397,7 +398,7 @@ mlb_statcast_leaderboard_swing_take()
 
 _Last validated n/a._
 
-## `mlb_statcast_leaderboard_exit_velocity_barrels`
+## mlb_statcast_leaderboard_exit_velocity_barrels
 
 GET /leaderboard/statcast — exit velocity & barrels leaderboard.
 
@@ -412,7 +413,7 @@ GET /leaderboard/statcast — exit velocity & barrels leaderboard.
 | `team` | `team` |  |  | `Y` | team query parameter. |
 | `csv` | `csv` |  |  | `Y` | csv query parameter. |
 
-### Returns
+### Returns {#mlb_statcast_leaderboard_exit_velocity_barrels-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -438,7 +439,7 @@ GET /leaderboard/statcast — exit velocity & barrels leaderboard.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#mlb_statcast_leaderboard_exit_velocity_barrels-example}
 
 ```python
 mlb_statcast_leaderboard_exit_velocity_barrels()
@@ -446,7 +447,7 @@ mlb_statcast_leaderboard_exit_velocity_barrels()
 
 _Last validated n/a._
 
-## `mlb_statcast_leaderboard_batted_ball`
+## mlb_statcast_leaderboard_batted_ball
 
 GET /leaderboard/batted-ball — batted-ball profile leaderboard.
 
@@ -461,7 +462,7 @@ GET /leaderboard/batted-ball — batted-ball profile leaderboard.
 | `team` | `team` |  |  | `Y` | team query parameter. |
 | `csv` | `csv` |  |  | `Y` | csv query parameter. |
 
-### Returns
+### Returns {#mlb_statcast_leaderboard_batted_ball-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -487,7 +488,7 @@ GET /leaderboard/batted-ball — batted-ball profile leaderboard.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#mlb_statcast_leaderboard_batted_ball-example}
 
 ```python
 mlb_statcast_leaderboard_batted_ball()
@@ -495,7 +496,7 @@ mlb_statcast_leaderboard_batted_ball()
 
 _Last validated n/a._
 
-## `mlb_statcast_leaderboard_home_runs`
+## mlb_statcast_leaderboard_home_runs
 
 GET /leaderboard/home-runs — Statcast home-runs leaderboard.
 
@@ -510,7 +511,7 @@ GET /leaderboard/home-runs — Statcast home-runs leaderboard.
 | `team` | `team` |  |  | `Y` | team query parameter. |
 | `csv` | `csv` |  |  | `Y` | csv query parameter. |
 
-### Returns
+### Returns {#mlb_statcast_leaderboard_home_runs-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -531,7 +532,7 @@ GET /leaderboard/home-runs — Statcast home-runs leaderboard.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#mlb_statcast_leaderboard_home_runs-example}
 
 ```python
 mlb_statcast_leaderboard_home_runs()
@@ -539,7 +540,7 @@ mlb_statcast_leaderboard_home_runs()
 
 _Last validated n/a._
 
-## `mlb_statcast_leaderboard_pitch_arsenals`
+## mlb_statcast_leaderboard_pitch_arsenals
 
 GET /leaderboard/pitch-arsenals — pitch arsenals (velo/spin/movement) leaderboard.
 
@@ -554,7 +555,7 @@ GET /leaderboard/pitch-arsenals — pitch arsenals (velo/spin/movement) leaderbo
 | `team` | `team` |  |  | `Y` | team query parameter. |
 | `csv` | `csv` |  |  | `Y` | csv query parameter. |
 
-### Returns
+### Returns {#mlb_statcast_leaderboard_pitch_arsenals-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -574,7 +575,7 @@ GET /leaderboard/pitch-arsenals — pitch arsenals (velo/spin/movement) leaderbo
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#mlb_statcast_leaderboard_pitch_arsenals-example}
 
 ```python
 mlb_statcast_leaderboard_pitch_arsenals()
@@ -582,7 +583,7 @@ mlb_statcast_leaderboard_pitch_arsenals()
 
 _Last validated n/a._
 
-## `mlb_statcast_leaderboard_pitch_arsenal_stats`
+## mlb_statcast_leaderboard_pitch_arsenal_stats
 
 GET /leaderboard/pitch-arsenal-stats — per-pitch-type outcome stats leaderboard.
 
@@ -597,7 +598,7 @@ GET /leaderboard/pitch-arsenal-stats — per-pitch-type outcome stats leaderboar
 | `team` | `team` |  |  | `Y` | team query parameter. |
 | `csv` | `csv` |  |  | `Y` | csv query parameter. |
 
-### Returns
+### Returns {#mlb_statcast_leaderboard_pitch_arsenal_stats-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -625,7 +626,7 @@ GET /leaderboard/pitch-arsenal-stats — per-pitch-type outcome stats leaderboar
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#mlb_statcast_leaderboard_pitch_arsenal_stats-example}
 
 ```python
 mlb_statcast_leaderboard_pitch_arsenal_stats()
@@ -633,7 +634,7 @@ mlb_statcast_leaderboard_pitch_arsenal_stats()
 
 _Last validated n/a._
 
-## `mlb_statcast_leaderboard_pitch_movement`
+## mlb_statcast_leaderboard_pitch_movement
 
 GET /leaderboard/pitch-movement — pitch-movement leaderboard.
 
@@ -648,7 +649,7 @@ GET /leaderboard/pitch-movement — pitch-movement leaderboard.
 | `team` | `team` |  |  | `Y` | team query parameter. |
 | `csv` | `csv` |  |  | `Y` | csv query parameter. |
 
-### Returns
+### Returns {#mlb_statcast_leaderboard_pitch_movement-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -680,7 +681,7 @@ GET /leaderboard/pitch-movement — pitch-movement leaderboard.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#mlb_statcast_leaderboard_pitch_movement-example}
 
 ```python
 mlb_statcast_leaderboard_pitch_movement()
@@ -688,7 +689,7 @@ mlb_statcast_leaderboard_pitch_movement()
 
 _Last validated n/a._
 
-## `mlb_statcast_leaderboard_pitch_tempo`
+## mlb_statcast_leaderboard_pitch_tempo
 
 GET /leaderboard/pitch-tempo — pitch-tempo leaderboard.
 
@@ -703,7 +704,7 @@ GET /leaderboard/pitch-tempo — pitch-tempo leaderboard.
 | `team` | `team` |  |  | `Y` | team query parameter. |
 | `csv` | `csv` |  |  | `Y` | csv query parameter. |
 
-### Returns
+### Returns {#mlb_statcast_leaderboard_pitch_tempo-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -722,7 +723,7 @@ GET /leaderboard/pitch-tempo — pitch-tempo leaderboard.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#mlb_statcast_leaderboard_pitch_tempo-example}
 
 ```python
 mlb_statcast_leaderboard_pitch_tempo()
@@ -730,7 +731,7 @@ mlb_statcast_leaderboard_pitch_tempo()
 
 _Last validated n/a._
 
-## `mlb_statcast_leaderboard_active_spin`
+## mlb_statcast_leaderboard_active_spin
 
 GET /leaderboard/active-spin — active-spin leaderboard.
 
@@ -745,7 +746,7 @@ GET /leaderboard/active-spin — active-spin leaderboard.
 | `team` | `team` |  |  | `Y` | team query parameter. |
 | `csv` | `csv` |  |  | `Y` | csv query parameter. |
 
-### Returns
+### Returns {#mlb_statcast_leaderboard_active_spin-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -765,7 +766,7 @@ GET /leaderboard/active-spin — active-spin leaderboard.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#mlb_statcast_leaderboard_active_spin-example}
 
 ```python
 mlb_statcast_leaderboard_active_spin()
@@ -773,7 +774,7 @@ mlb_statcast_leaderboard_active_spin()
 
 _Last validated n/a._
 
-## `mlb_statcast_leaderboard_spin_direction`
+## mlb_statcast_leaderboard_spin_direction
 
 GET /leaderboard/spin-direction-pitches — spin-direction (per-pitch) leaderboard.
 
@@ -788,7 +789,7 @@ GET /leaderboard/spin-direction-pitches — spin-direction (per-pitch) leaderboa
 | `team` | `team` |  |  | `Y` | team query parameter. |
 | `csv` | `csv` |  |  | `Y` | csv query parameter. |
 
-### Returns
+### Returns {#mlb_statcast_leaderboard_spin_direction-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -825,7 +826,7 @@ GET /leaderboard/spin-direction-pitches — spin-direction (per-pitch) leaderboa
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#mlb_statcast_leaderboard_spin_direction-example}
 
 ```python
 mlb_statcast_leaderboard_spin_direction()
@@ -833,7 +834,7 @@ mlb_statcast_leaderboard_spin_direction()
 
 _Last validated n/a._
 
-## `mlb_statcast_leaderboard_arm_angles`
+## mlb_statcast_leaderboard_arm_angles
 
 GET /leaderboard/pitcher-arm-angles — pitcher arm-angle leaderboard.
 
@@ -848,7 +849,7 @@ GET /leaderboard/pitcher-arm-angles — pitcher arm-angle leaderboard.
 | `team` | `team` |  |  | `Y` | team query parameter. |
 | `csv` | `csv` |  |  | `Y` | csv query parameter. |
 
-### Returns
+### Returns {#mlb_statcast_leaderboard_arm_angles-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -866,7 +867,7 @@ GET /leaderboard/pitcher-arm-angles — pitcher arm-angle leaderboard.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#mlb_statcast_leaderboard_arm_angles-example}
 
 ```python
 mlb_statcast_leaderboard_arm_angles()
@@ -874,7 +875,7 @@ mlb_statcast_leaderboard_arm_angles()
 
 _Last validated n/a._
 
-## `mlb_statcast_leaderboard_pitcher_running_game`
+## mlb_statcast_leaderboard_pitcher_running_game
 
 GET /leaderboard/pitcher-running-game — pitcher running-game (holding runners) leaderboard.
 
@@ -889,7 +890,7 @@ GET /leaderboard/pitcher-running-game — pitcher running-game (holding runners)
 | `team` | `team` |  |  | `Y` | team query parameter. |
 | `csv` | `csv` |  |  | `Y` | csv query parameter. |
 
-### Returns
+### Returns {#mlb_statcast_leaderboard_pitcher_running_game-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -922,7 +923,7 @@ GET /leaderboard/pitcher-running-game — pitcher running-game (holding runners)
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#mlb_statcast_leaderboard_pitcher_running_game-example}
 
 ```python
 mlb_statcast_leaderboard_pitcher_running_game()
@@ -930,7 +931,7 @@ mlb_statcast_leaderboard_pitcher_running_game()
 
 _Last validated n/a._
 
-## `mlb_statcast_leaderboard_outs_above_average`
+## mlb_statcast_leaderboard_outs_above_average
 
 GET /leaderboard/outs_above_average — Outs Above Average (OAA) fielding leaderboard.
 
@@ -945,7 +946,7 @@ GET /leaderboard/outs_above_average — Outs Above Average (OAA) fielding leader
 | `team` | `team` |  |  | `Y` | team query parameter. |
 | `csv` | `csv` |  |  | `Y` | csv query parameter. |
 
-### Returns
+### Returns {#mlb_statcast_leaderboard_outs_above_average-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -969,7 +970,7 @@ GET /leaderboard/outs_above_average — Outs Above Average (OAA) fielding leader
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#mlb_statcast_leaderboard_outs_above_average-example}
 
 ```python
 mlb_statcast_leaderboard_outs_above_average()
@@ -977,7 +978,7 @@ mlb_statcast_leaderboard_outs_above_average()
 
 _Last validated n/a._
 
-## `mlb_statcast_leaderboard_outfield_directional_oaa`
+## mlb_statcast_leaderboard_outfield_directional_oaa
 
 GET /leaderboard/outfield_directional_outs_above_average — outfield directional OAA leaderboard.
 
@@ -992,7 +993,7 @@ GET /leaderboard/outfield_directional_outs_above_average — outfield directiona
 | `team` | `team` |  |  | `Y` | team query parameter. |
 | `csv` | `csv` |  |  | `Y` | csv query parameter. |
 
-### Returns
+### Returns {#mlb_statcast_leaderboard_outfield_directional_oaa-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1012,7 +1013,7 @@ GET /leaderboard/outfield_directional_outs_above_average — outfield directiona
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#mlb_statcast_leaderboard_outfield_directional_oaa-example}
 
 ```python
 mlb_statcast_leaderboard_outfield_directional_oaa()
@@ -1020,7 +1021,7 @@ mlb_statcast_leaderboard_outfield_directional_oaa()
 
 _Last validated n/a._
 
-## `mlb_statcast_leaderboard_outfield_jump`
+## mlb_statcast_leaderboard_outfield_jump
 
 GET /leaderboard/outfield_jump — outfielder jump leaderboard.
 
@@ -1035,7 +1036,7 @@ GET /leaderboard/outfield_jump — outfielder jump leaderboard.
 | `team` | `team` |  |  | `Y` | team query parameter. |
 | `csv` | `csv` |  |  | `Y` | csv query parameter. |
 
-### Returns
+### Returns {#mlb_statcast_leaderboard_outfield_jump-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1055,7 +1056,7 @@ GET /leaderboard/outfield_jump — outfielder jump leaderboard.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#mlb_statcast_leaderboard_outfield_jump-example}
 
 ```python
 mlb_statcast_leaderboard_outfield_jump()
@@ -1063,7 +1064,7 @@ mlb_statcast_leaderboard_outfield_jump()
 
 _Last validated n/a._
 
-## `mlb_statcast_leaderboard_catch_probability`
+## mlb_statcast_leaderboard_catch_probability
 
 GET /leaderboard/catch_probability — outfielder catch-probability leaderboard.
 
@@ -1078,7 +1079,7 @@ GET /leaderboard/catch_probability — outfielder catch-probability leaderboard.
 | `team` | `team` |  |  | `Y` | team query parameter. |
 | `csv` | `csv` |  |  | `Y` | csv query parameter. |
 
-### Returns
+### Returns {#mlb_statcast_leaderboard_catch_probability-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1104,7 +1105,7 @@ GET /leaderboard/catch_probability — outfielder catch-probability leaderboard.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#mlb_statcast_leaderboard_catch_probability-example}
 
 ```python
 mlb_statcast_leaderboard_catch_probability()
@@ -1112,7 +1113,7 @@ mlb_statcast_leaderboard_catch_probability()
 
 _Last validated n/a._
 
-## `mlb_statcast_leaderboard_arm_strength`
+## mlb_statcast_leaderboard_arm_strength
 
 GET /leaderboard/arm-strength — fielder arm-strength leaderboard.
 
@@ -1127,7 +1128,7 @@ GET /leaderboard/arm-strength — fielder arm-strength leaderboard.
 | `team` | `team` |  |  | `Y` | team query parameter. |
 | `csv` | `csv` |  |  | `Y` | csv query parameter. |
 
-### Returns
+### Returns {#mlb_statcast_leaderboard_arm_strength-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1161,7 +1162,7 @@ GET /leaderboard/arm-strength — fielder arm-strength leaderboard.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#mlb_statcast_leaderboard_arm_strength-example}
 
 ```python
 mlb_statcast_leaderboard_arm_strength()
@@ -1169,7 +1170,7 @@ mlb_statcast_leaderboard_arm_strength()
 
 _Last validated n/a._
 
-## `mlb_statcast_leaderboard_poptime`
+## mlb_statcast_leaderboard_poptime
 
 GET /leaderboard/poptime — catcher pop-time leaderboard.
 
@@ -1184,7 +1185,7 @@ GET /leaderboard/poptime — catcher pop-time leaderboard.
 | `team` | `team` |  |  | `Y` | team query parameter. |
 | `csv` | `csv` |  |  | `Y` | csv query parameter. |
 
-### Returns
+### Returns {#mlb_statcast_leaderboard_poptime-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1206,7 +1207,7 @@ GET /leaderboard/poptime — catcher pop-time leaderboard.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#mlb_statcast_leaderboard_poptime-example}
 
 ```python
 mlb_statcast_leaderboard_poptime()
@@ -1214,7 +1215,7 @@ mlb_statcast_leaderboard_poptime()
 
 _Last validated n/a._
 
-## `mlb_statcast_leaderboard_catcher_framing`
+## mlb_statcast_leaderboard_catcher_framing
 
 GET /leaderboard/catcher-framing — catcher framing leaderboard.
 
@@ -1229,7 +1230,7 @@ GET /leaderboard/catcher-framing — catcher framing leaderboard.
 | `team` | `team` |  |  | `Y` | team query parameter. |
 | `csv` | `csv` |  |  | `Y` | csv query parameter. |
 
-### Returns
+### Returns {#mlb_statcast_leaderboard_catcher_framing-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1258,7 +1259,7 @@ GET /leaderboard/catcher-framing — catcher framing leaderboard.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#mlb_statcast_leaderboard_catcher_framing-example}
 
 ```python
 mlb_statcast_leaderboard_catcher_framing()
@@ -1266,7 +1267,7 @@ mlb_statcast_leaderboard_catcher_framing()
 
 _Last validated n/a._
 
-## `mlb_statcast_leaderboard_catcher_blocking`
+## mlb_statcast_leaderboard_catcher_blocking
 
 GET /leaderboard/catcher-blocking — catcher blocking leaderboard.
 
@@ -1281,7 +1282,7 @@ GET /leaderboard/catcher-blocking — catcher blocking leaderboard.
 | `team` | `team` |  |  | `Y` | team query parameter. |
 | `csv` | `csv` |  |  | `Y` | csv query parameter. |
 
-### Returns
+### Returns {#mlb_statcast_leaderboard_catcher_blocking-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1306,7 +1307,7 @@ GET /leaderboard/catcher-blocking — catcher blocking leaderboard.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#mlb_statcast_leaderboard_catcher_blocking-example}
 
 ```python
 mlb_statcast_leaderboard_catcher_blocking()
@@ -1314,7 +1315,7 @@ mlb_statcast_leaderboard_catcher_blocking()
 
 _Last validated n/a._
 
-## `mlb_statcast_leaderboard_catcher_throwing`
+## mlb_statcast_leaderboard_catcher_throwing
 
 GET /leaderboard/catcher-throwing — catcher throwing leaderboard.
 
@@ -1329,7 +1330,7 @@ GET /leaderboard/catcher-throwing — catcher throwing leaderboard.
 | `team` | `team` |  |  | `Y` | team query parameter. |
 | `csv` | `csv` |  |  | `Y` | csv query parameter. |
 
-### Returns
+### Returns {#mlb_statcast_leaderboard_catcher_throwing-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1360,7 +1361,7 @@ GET /leaderboard/catcher-throwing — catcher throwing leaderboard.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#mlb_statcast_leaderboard_catcher_throwing-example}
 
 ```python
 mlb_statcast_leaderboard_catcher_throwing()
@@ -1368,7 +1369,7 @@ mlb_statcast_leaderboard_catcher_throwing()
 
 _Last validated n/a._
 
-## `mlb_statcast_leaderboard_catcher_stance`
+## mlb_statcast_leaderboard_catcher_stance
 
 GET /leaderboard/catcher-stance — catcher stance leaderboard.
 
@@ -1383,7 +1384,7 @@ GET /leaderboard/catcher-stance — catcher stance leaderboard.
 | `team` | `team` |  |  | `Y` | team query parameter. |
 | `csv` | `csv` |  |  | `Y` | csv query parameter. |
 
-### Returns
+### Returns {#mlb_statcast_leaderboard_catcher_stance-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1418,7 +1419,7 @@ GET /leaderboard/catcher-stance — catcher stance leaderboard.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#mlb_statcast_leaderboard_catcher_stance-example}
 
 ```python
 mlb_statcast_leaderboard_catcher_stance()
@@ -1426,7 +1427,7 @@ mlb_statcast_leaderboard_catcher_stance()
 
 _Last validated n/a._
 
-## `mlb_statcast_leaderboard_basestealing_run_value`
+## mlb_statcast_leaderboard_basestealing_run_value
 
 GET /leaderboard/basestealing-run-value — basestealing run-value leaderboard.
 
@@ -1441,7 +1442,7 @@ GET /leaderboard/basestealing-run-value — basestealing run-value leaderboard.
 | `team` | `team` |  |  | `Y` | team query parameter. |
 | `csv` | `csv` |  |  | `Y` | csv query parameter. |
 
-### Returns
+### Returns {#mlb_statcast_leaderboard_basestealing_run_value-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1473,7 +1474,7 @@ GET /leaderboard/basestealing-run-value — basestealing run-value leaderboard.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#mlb_statcast_leaderboard_basestealing_run_value-example}
 
 ```python
 mlb_statcast_leaderboard_basestealing_run_value()
@@ -1481,7 +1482,7 @@ mlb_statcast_leaderboard_basestealing_run_value()
 
 _Last validated n/a._
 
-## `mlb_statcast_leaderboard_baserunning_run_value`
+## mlb_statcast_leaderboard_baserunning_run_value
 
 GET /leaderboard/baserunning-run-value — baserunning run-value leaderboard.
 
@@ -1496,7 +1497,7 @@ GET /leaderboard/baserunning-run-value — baserunning run-value leaderboard.
 | `team` | `team` |  |  | `Y` | team query parameter. |
 | `csv` | `csv` |  |  | `Y` | csv query parameter. |
 
-### Returns
+### Returns {#mlb_statcast_leaderboard_baserunning_run_value-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1522,7 +1523,7 @@ GET /leaderboard/baserunning-run-value — baserunning run-value leaderboard.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#mlb_statcast_leaderboard_baserunning_run_value-example}
 
 ```python
 mlb_statcast_leaderboard_baserunning_run_value()
@@ -1530,7 +1531,7 @@ mlb_statcast_leaderboard_baserunning_run_value()
 
 _Last validated n/a._
 
-## `mlb_statcast_leaderboard_baserunning`
+## mlb_statcast_leaderboard_baserunning
 
 GET /leaderboard/baserunning — extra-bases-taken run-value leaderboard.
 
@@ -1545,7 +1546,7 @@ GET /leaderboard/baserunning — extra-bases-taken run-value leaderboard.
 | `team` | `team` |  |  | `Y` | team query parameter. |
 | `csv` | `csv` |  |  | `Y` | csv query parameter. |
 
-### Returns
+### Returns {#mlb_statcast_leaderboard_baserunning-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1574,7 +1575,7 @@ GET /leaderboard/baserunning — extra-bases-taken run-value leaderboard.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#mlb_statcast_leaderboard_baserunning-example}
 
 ```python
 mlb_statcast_leaderboard_baserunning()
@@ -1582,7 +1583,7 @@ mlb_statcast_leaderboard_baserunning()
 
 _Last validated n/a._
 
-## `mlb_statcast_leaderboard_year_to_year`
+## mlb_statcast_leaderboard_year_to_year
 
 GET /leaderboard/statcast-year-to-year — year-to-year metric change leaderboard.
 
@@ -1597,7 +1598,7 @@ GET /leaderboard/statcast-year-to-year — year-to-year metric change leaderboar
 | `team` | `team` |  |  | `Y` | team query parameter. |
 | `csv` | `csv` |  |  | `Y` | csv query parameter. |
 
-### Returns
+### Returns {#mlb_statcast_leaderboard_year_to_year-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1630,7 +1631,7 @@ GET /leaderboard/statcast-year-to-year — year-to-year metric change leaderboar
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#mlb_statcast_leaderboard_year_to_year-example}
 
 ```python
 mlb_statcast_leaderboard_year_to_year()
@@ -1638,7 +1639,7 @@ mlb_statcast_leaderboard_year_to_year()
 
 _Last validated n/a._
 
-## `mlb_statcast_leaderboard_timer_infractions`
+## mlb_statcast_leaderboard_timer_infractions
 
 GET /leaderboard/pitch-timer-infractions — pitch-timer infractions leaderboard.
 
@@ -1653,7 +1654,7 @@ GET /leaderboard/pitch-timer-infractions — pitch-timer infractions leaderboard
 | `team` | `team` |  |  | `Y` | team query parameter. |
 | `csv` | `csv` |  |  | `Y` | csv query parameter. |
 
-### Returns
+### Returns {#mlb_statcast_leaderboard_timer_infractions-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1671,7 +1672,7 @@ GET /leaderboard/pitch-timer-infractions — pitch-timer infractions leaderboard
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#mlb_statcast_leaderboard_timer_infractions-example}
 
 ```python
 mlb_statcast_leaderboard_timer_infractions()
@@ -1679,7 +1680,7 @@ mlb_statcast_leaderboard_timer_infractions()
 
 _Last validated n/a._
 
-## `mlb_statcast_leaderboard_custom`
+## mlb_statcast_leaderboard_custom
 
 GET /leaderboard/custom — build-your-own metric leaderboard (comma-separated selections).
 
@@ -1698,7 +1699,7 @@ GET /leaderboard/custom — build-your-own metric leaderboard (comma-separated s
 | `sortDir` | `sort_dir` |  |  | `Y` | sortDir query parameter. |
 | `csv` | `csv` |  |  | `Y` | csv query parameter. |
 
-### Returns
+### Returns {#mlb_statcast_leaderboard_custom-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1712,7 +1713,7 @@ GET /leaderboard/custom — build-your-own metric leaderboard (comma-separated s
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#mlb_statcast_leaderboard_custom-example}
 
 ```python
 mlb_statcast_leaderboard_custom()
@@ -1720,7 +1721,7 @@ mlb_statcast_leaderboard_custom()
 
 _Last validated n/a._
 
-## `mlb_statcast_leaderboard_fielding_run_value`
+## mlb_statcast_leaderboard_fielding_run_value
 
 GET /leaderboard/fielding-run-value — fielding run-value leaderboard (HTML-embedded JSON).
 
@@ -1734,7 +1735,7 @@ GET /leaderboard/fielding-run-value — fielding run-value leaderboard (HTML-emb
 | `year` | `year` |  |  | `Y` | year query parameter. |
 | `team` | `team` |  |  | `Y` | team query parameter. |
 
-### Returns
+### Returns {#mlb_statcast_leaderboard_fielding_run_value-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1766,7 +1767,7 @@ GET /leaderboard/fielding-run-value — fielding run-value leaderboard (HTML-emb
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#mlb_statcast_leaderboard_fielding_run_value-example}
 
 ```python
 mlb_statcast_leaderboard_fielding_run_value()
@@ -1774,7 +1775,7 @@ mlb_statcast_leaderboard_fielding_run_value()
 
 _Last validated n/a._
 
-## `mlb_statcast_leaderboard_park_factors`
+## mlb_statcast_leaderboard_park_factors
 
 GET /leaderboard/statcast-park-factors — Statcast park-factors leaderboard (HTML-embedded JSON).
 
@@ -1788,7 +1789,7 @@ GET /leaderboard/statcast-park-factors — Statcast park-factors leaderboard (HT
 | `year` | `year` |  |  | `Y` | year query parameter. |
 | `team` | `team` |  |  | `Y` | team query parameter. |
 
-### Returns
+### Returns {#mlb_statcast_leaderboard_park_factors-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1823,7 +1824,7 @@ GET /leaderboard/statcast-park-factors — Statcast park-factors leaderboard (HT
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#mlb_statcast_leaderboard_park_factors-example}
 
 ```python
 mlb_statcast_leaderboard_park_factors()
@@ -1831,7 +1832,7 @@ mlb_statcast_leaderboard_park_factors()
 
 _Last validated n/a._
 
-## `mlb_statcast_gamefeed`
+## mlb_statcast_gamefeed
 
 GET /gf — Savant per-game JSON feed (pitch-by-pitch tracking).
 
@@ -1844,7 +1845,7 @@ GET /gf — Savant per-game JSON feed (pitch-by-pitch tracking).
 | `game_pk` | `game_pk` |  |  | `Y` | game_pk query parameter. |
 | `at_bat_number` | `at_bat_number` |  |  | `Y` | at_bat_number query parameter. |
 
-### Returns
+### Returns {#mlb_statcast_gamefeed-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1919,7 +1920,7 @@ GET /gf — Savant per-game JSON feed (pitch-by-pitch tracking).
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#mlb_statcast_gamefeed-example}
 
 ```python
 mlb_statcast_gamefeed()
@@ -1927,7 +1928,7 @@ mlb_statcast_gamefeed()
 
 _Last validated n/a._
 
-## `mlb_statcast_schedule`
+## mlb_statcast_schedule
 
 GET /schedule — Savant schedule feed (one row per game).
 
@@ -1939,7 +1940,7 @@ GET /schedule — Savant schedule feed (one row per game).
 |---|---|:---:|:---:|:---:|---|
 | `date` | `date` |  |  | `Y` | date query parameter. |
 
-### Returns
+### Returns {#mlb_statcast_schedule-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -2158,7 +2159,7 @@ GET /schedule — Savant schedule feed (one row per game).
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#mlb_statcast_schedule-example}
 
 ```python
 mlb_statcast_schedule()

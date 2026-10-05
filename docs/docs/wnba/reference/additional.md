@@ -11,7 +11,9 @@ not covered by the generated API-endpoint reference above.
 
 ## Play-by-play, schedule & rosters
 
-### `espn_wnba_game_officials(game_id: 'int', season: 'int | None' = None, *, raw: 'bool' = False, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'pl.DataFrame | pd.DataFrame | dict[str, Any]'` {#espn_wnba_game_officials}
+### espn_wnba_game_officials {#espn_wnba_game_officials}
+
+`espn_wnba_game_officials(game_id: 'int', season: 'int | None' = None, *, raw: 'bool' = False, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'pl.DataFrame | pd.DataFrame | dict[str, Any]'`
 
 Pull the officials assigned to a WNBA game.
 
@@ -68,7 +70,9 @@ payload = espn_wnba_game_officials(game_id=401620238, season=2024, raw=True)
 list(payload.keys())[:8]
 ```
 
-### `espn_wnba_player_stats(athlete_id: 'int', season: 'int', *, season_type: 'str' = 'regular', total: 'bool' = False, raw: 'bool' = False, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'pl.DataFrame | pd.DataFrame | dict[str, Any]'` {#espn_wnba_player_stats}
+### espn_wnba_player_stats {#espn_wnba_player_stats}
+
+`espn_wnba_player_stats(athlete_id: 'int', season: 'int', *, season_type: 'str' = 'regular', total: 'bool' = False, raw: 'bool' = False, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'pl.DataFrame | pd.DataFrame | dict[str, Any]'`
 
 Pull a WNBA athlete's ESPN **season** stat line.
 
@@ -241,7 +245,9 @@ df = espn_wnba_player_stats(athlete_id=3149391, season=2024)
 df.select(["full_name", "team_display_name", "offensive_points"])
 ```
 
-### `espn_wnba_schedule(dates=None, season_type=None, limit=500, return_as_pandas=False, **kwargs) -> 'pl.DataFrame'` {#espn_wnba_schedule}
+### espn_wnba_schedule {#espn_wnba_schedule}
+
+`espn_wnba_schedule(dates=None, season_type=None, limit=500, return_as_pandas=False, **kwargs) -> 'pl.DataFrame'`
 
 espn_wnba_schedule - look up the WNBA schedule for a given season
 
@@ -348,7 +354,9 @@ reg.group_by("status_type_description").len().sort("len", descending=True)
 espn_wnba_schedule(dates=20241011, return_as_pandas=True).head()
 ```
 
-### `espn_wnba_team_stats(team_id: 'int', season: 'int', *, raw: 'bool' = False, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'dict[str, pl.DataFrame] | dict[str, pd.DataFrame] | dict[str, Any]'` {#espn_wnba_team_stats}
+### espn_wnba_team_stats {#espn_wnba_team_stats}
+
+`espn_wnba_team_stats(team_id: 'int', season: 'int', *, raw: 'bool' = False, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'dict[str, pl.DataFrame] | dict[str, pd.DataFrame] | dict[str, Any]'`
 
 Pull ESPN team season stats for a WNBA team.
 
@@ -393,7 +401,9 @@ frames_pd["Misc"].head()
 
 ## Dataset loaders
 
-### `load_wnba_stats_leaguedash(family: 'str', seasons, return_as_pandas: 'bool' = False) -> 'pl.DataFrame'` {#load_wnba_stats_leaguedash}
+### load_wnba_stats_leaguedash {#load_wnba_stats_leaguedash}
+
+`load_wnba_stats_leaguedash(family: 'str', seasons, return_as_pandas: 'bool' = False) -> 'pl.DataFrame'`
 
 Load one asset family of the `wnba_stats_leaguedash` release.
 
@@ -448,7 +458,9 @@ load_wnba_stats_leaguedash("team_stats_advanced", seasons=2025).sort(
 ).head()
 ```
 
-### `load_wnba_stats_lineups(seasons, return_as_pandas: 'bool' = False) -> 'pl.DataFrame'` {#load_wnba_stats_lineups}
+### load_wnba_stats_lineups {#load_wnba_stats_lineups}
+
+`load_wnba_stats_lineups(seasons, return_as_pandas: 'bool' = False) -> 'pl.DataFrame'`
 
 Load season-level WNBA 5-man lineup statistics (deprecated).
 
@@ -471,7 +483,9 @@ df = load_wnba_stats_lineups(seasons=2026)
 print(df.shape)
 ```
 
-### `load_wnba_stats_player_season_stats(seasons, return_as_pandas: 'bool' = False) -> 'pl.DataFrame'` {#load_wnba_stats_player_season_stats}
+### load_wnba_stats_player_season_stats {#load_wnba_stats_player_season_stats}
+
+`load_wnba_stats_player_season_stats(seasons, return_as_pandas: 'bool' = False) -> 'pl.DataFrame'`
 
 Load season-level WNBA player statistics (deprecated).
 
@@ -499,7 +513,9 @@ import polars as pl
 adv = df.filter(pl.col("measure_type") == "Advanced")
 ```
 
-### `load_wnba_stats_standings(seasons, return_as_pandas: 'bool' = False) -> 'pl.DataFrame'` {#load_wnba_stats_standings}
+### load_wnba_stats_standings {#load_wnba_stats_standings}
+
+`load_wnba_stats_standings(seasons, return_as_pandas: 'bool' = False) -> 'pl.DataFrame'`
 
 Load season-level WNBA standings (deprecated).
 
@@ -522,7 +538,9 @@ df = load_wnba_stats_standings(seasons=2026)
 print(df.shape)
 ```
 
-### `load_wnba_stats_team_season_stats(seasons, return_as_pandas: 'bool' = False) -> 'pl.DataFrame'` {#load_wnba_stats_team_season_stats}
+### load_wnba_stats_team_season_stats {#load_wnba_stats_team_season_stats}
+
+`load_wnba_stats_team_season_stats(seasons, return_as_pandas: 'bool' = False) -> 'pl.DataFrame'`
 
 Load season-level WNBA team statistics (deprecated).
 
@@ -547,7 +565,9 @@ print(df.shape)
 
 ## Utilities & helpers
 
-### `most_recent_wnba_season()` {#most_recent_wnba_season}
+### most_recent_wnba_season {#most_recent_wnba_season}
+
+`most_recent_wnba_season()`
 
 most_recent_wnba_season - return the most recent (likely-completed) WNBA season year.
 
@@ -569,7 +589,9 @@ print(season, cal.height)
 
 ## Other
 
-### `build_athlete_identity_lookup(rosters: 'dict[int | str, dict]') -> 'dict[str, dict[str, Any]]'` {#build_athlete_identity_lookup}
+### build_athlete_identity_lookup {#build_athlete_identity_lookup}
+
+`build_athlete_identity_lookup(rosters: 'dict[int | str, dict]') -> 'dict[str, dict[str, Any]]'`
 
 R `build_athlete_identity_lookup`: athlete_id -> identity from team rosters.
 
@@ -583,7 +605,9 @@ R `build_athlete_identity_lookup`: athlete_id -> identity from team rosters.
 
 athlete_id (str) -> identity fields for `helper_wbb_player_season_stats`.
 
-### `build_wnba_season_wp(season: 'int', *, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#build_wnba_season_wp}
+### build_wnba_season_wp {#build_wnba_season_wp}
+
+`build_wnba_season_wp(season: 'int', *, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"`
 
 A WNBA season's play-by-play with win-probability columns joined in.
 
@@ -618,7 +642,9 @@ wp.select("game_id", "game_play_number", "home_win_prob").head()
 wp_pd = build_wnba_season_wp(2024, return_as_pandas=True)
 ```
 
-### `espn_wnba_teams(return_as_pandas=False, **kwargs) -> 'pl.DataFrame'` {#espn_wnba_teams}
+### espn_wnba_teams {#espn_wnba_teams}
+
+`espn_wnba_teams(return_as_pandas=False, **kwargs) -> 'pl.DataFrame'`
 
 espn_wnba_teams - look up WNBA teams
 
@@ -667,7 +693,9 @@ espn_wnba_teams.cache_clear()  # cached at function-level
 teams_pd = espn_wnba_teams(return_as_pandas=True)
 ```
 
-### `fox_wnba_boxscore(game_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#fox_wnba_boxscore}
+### fox_wnba_boxscore {#fox_wnba_boxscore}
+
+`fox_wnba_boxscore(game_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"`
 
 WNBA boxscore (long: one row per player-stat).
 
@@ -690,7 +718,9 @@ from sportsdataverse.wnba import fox_wnba_boxscore
 df = fox_wnba_boxscore("2278")
 ```
 
-### `fox_wnba_event_matchup(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_wnba_event_matchup}
+### fox_wnba_event_matchup {#fox_wnba_event_matchup}
+
+`fox_wnba_event_matchup(*args: 'Any', **kwargs: 'Any') -> 'Any'`
 
 Fox Sports wnba pregame team-stat comparison (one row per stat).
 
@@ -707,7 +737,9 @@ from sportsdataverse.wnba import fox_wnba_event_matchup
 df = fox_wnba_event_matchup("...")
 ```
 
-### `fox_wnba_event_recap(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_wnba_event_recap}
+### fox_wnba_event_recap {#fox_wnba_event_recap}
+
+`fox_wnba_event_recap(*args: 'Any', **kwargs: 'Any') -> 'Any'`
 
 Fox Sports wnba postgame top performers (one row per player).
 
@@ -724,7 +756,9 @@ from sportsdataverse.wnba import fox_wnba_event_recap
 df = fox_wnba_event_recap("...")
 ```
 
-### `fox_wnba_event_standings(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_wnba_event_standings}
+### fox_wnba_event_standings {#fox_wnba_event_standings}
+
+`fox_wnba_event_standings(*args: 'Any', **kwargs: 'Any') -> 'Any'`
 
 Fox Sports wnba the two teams' standings context.
 
@@ -741,7 +775,9 @@ from sportsdataverse.wnba import fox_wnba_event_standings
 df = fox_wnba_event_standings("...")
 ```
 
-### `fox_wnba_league_conferences(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_wnba_league_conferences}
+### fox_wnba_league_conferences {#fox_wnba_league_conferences}
+
+`fox_wnba_league_conferences(*args: 'Any', **kwargs: 'Any') -> 'Any'`
 
 Fox Sports wnba conference / group directory.
 
@@ -758,7 +794,9 @@ from sportsdataverse.wnba import fox_wnba_league_conferences
 df = fox_wnba_league_conferences()
 ```
 
-### `fox_wnba_league_header(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_wnba_league_header}
+### fox_wnba_league_header {#fox_wnba_league_header}
+
+`fox_wnba_league_header(*args: 'Any', **kwargs: 'Any') -> 'Any'`
 
 Fox Sports wnba league header (one row).
 
@@ -788,7 +826,9 @@ from sportsdataverse.wnba import fox_wnba_league_header
 df = fox_wnba_league_header()
 ```
 
-### `fox_wnba_league_leaders(category: 'str' = 'scoring', who: 'str' = 'player', page: 'int' = 0, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#fox_wnba_league_leaders}
+### fox_wnba_league_leaders {#fox_wnba_league_leaders}
+
+`fox_wnba_league_leaders(category: 'str' = 'scoring', who: 'str' = 'player', page: 'int' = 0, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"`
 
 WNBA statistical leaders (`stats-con`); who=player|team.
 
@@ -822,7 +862,9 @@ from sportsdataverse.wnba import fox_wnba_league_leaders
 df = fox_wnba_league_leaders("scoring")
 ```
 
-### `fox_wnba_league_odds(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_wnba_league_odds}
+### fox_wnba_league_odds {#fox_wnba_league_odds}
+
+`fox_wnba_league_odds(*args: 'Any', **kwargs: 'Any') -> 'Any'`
 
 Fox Sports wnba league odds board (one row per team per game).
 
@@ -850,7 +892,9 @@ from sportsdataverse.wnba import fox_wnba_league_odds
 df = fox_wnba_league_odds()
 ```
 
-### `fox_wnba_league_player_news(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_wnba_league_player_news}
+### fox_wnba_league_player_news {#fox_wnba_league_player_news}
+
+`fox_wnba_league_player_news(*args: 'Any', **kwargs: 'Any') -> 'Any'`
 
 Fox Sports wnba league-wide player news feed.
 
@@ -881,7 +925,9 @@ from sportsdataverse.wnba import fox_wnba_league_player_news
 df = fox_wnba_league_player_news()
 ```
 
-### `fox_wnba_league_polls(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_wnba_league_polls}
+### fox_wnba_league_polls {#fox_wnba_league_polls}
+
+`fox_wnba_league_polls(*args: 'Any', **kwargs: 'Any') -> 'Any'`
 
 Fox Sports wnba rankings / polls rendered as standings tables.
 
@@ -898,7 +944,9 @@ from sportsdataverse.wnba import fox_wnba_league_polls
 df = fox_wnba_league_polls()
 ```
 
-### `fox_wnba_league_schedule(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_wnba_league_schedule}
+### fox_wnba_league_schedule {#fox_wnba_league_schedule}
+
+`fox_wnba_league_schedule(*args: 'Any', **kwargs: 'Any') -> 'Any'`
 
 Fox Sports wnba league schedule nav selections.
 
@@ -926,7 +974,9 @@ from sportsdataverse.wnba import fox_wnba_league_schedule
 df = fox_wnba_league_schedule()
 ```
 
-### `fox_wnba_league_scores(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_wnba_league_scores}
+### fox_wnba_league_scores {#fox_wnba_league_scores}
+
+`fox_wnba_league_scores(*args: 'Any', **kwargs: 'Any') -> 'Any'`
 
 Fox Sports wnba league scores nav selections.
 
@@ -954,7 +1004,9 @@ from sportsdataverse.wnba import fox_wnba_league_scores
 df = fox_wnba_league_scores()
 ```
 
-### `fox_wnba_league_standings(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_wnba_league_standings}
+### fox_wnba_league_standings {#fox_wnba_league_standings}
+
+`fox_wnba_league_standings(*args: 'Any', **kwargs: 'Any') -> 'Any'`
 
 Fox Sports wnba league-wide standings tables.
 
@@ -989,7 +1041,9 @@ from sportsdataverse.wnba import fox_wnba_league_standings
 df = fox_wnba_league_standings()
 ```
 
-### `fox_wnba_league_stat_leaders(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_wnba_league_stat_leaders}
+### fox_wnba_league_stat_leaders {#fox_wnba_league_stat_leaders}
+
+`fox_wnba_league_stat_leaders(*args: 'Any', **kwargs: 'Any') -> 'Any'`
 
 Fox Sports wnba league stats landing leaders.
 
@@ -1014,7 +1068,9 @@ from sportsdataverse.wnba import fox_wnba_league_stat_leaders
 df = fox_wnba_league_stat_leaders()
 ```
 
-### `fox_wnba_odds(game_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#fox_wnba_odds}
+### fox_wnba_odds {#fox_wnba_odds}
+
+`fox_wnba_odds(game_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"`
 
 WNBA game odds six-pack (spread / to-win / total per team).
 
@@ -1037,7 +1093,9 @@ from sportsdataverse.wnba import fox_wnba_odds
 df = fox_wnba_odds("2278")
 ```
 
-### `fox_wnba_pbp(game_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#fox_wnba_pbp}
+### fox_wnba_pbp {#fox_wnba_pbp}
+
+`fox_wnba_pbp(game_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"`
 
 WNBA play-by-play (one row per play; period-based).
 
@@ -1060,7 +1118,9 @@ from sportsdataverse.wnba import fox_wnba_pbp
 df = fox_wnba_pbp("2278")
 ```
 
-### `fox_wnba_scoreboard(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_wnba_scoreboard}
+### fox_wnba_scoreboard {#fox_wnba_scoreboard}
+
+`fox_wnba_scoreboard(*args: 'Any', **kwargs: 'Any') -> 'Any'`
 
 Fox Sports wnba scoreboard nav selections (weeks / dates / groups).
 
@@ -1088,7 +1148,9 @@ from sportsdataverse.wnba import fox_wnba_scoreboard
 df = fox_wnba_scoreboard()
 ```
 
-### `fox_wnba_scorechip(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_wnba_scorechip}
+### fox_wnba_scorechip {#fox_wnba_scorechip}
+
+`fox_wnba_scorechip(*args: 'Any', **kwargs: 'Any') -> 'Any'`
 
 Fox Sports wnba compact live score chip (raw dict -- live-only, uncaptured shape).
 
@@ -1105,7 +1167,9 @@ from sportsdataverse.wnba import fox_wnba_scorechip
 df = fox_wnba_scorechip("nfl12345")
 ```
 
-### `fox_wnba_scores_segment(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_wnba_scores_segment}
+### fox_wnba_scores_segment {#fox_wnba_scores_segment}
+
+`fox_wnba_scores_segment(*args: 'Any', **kwargs: 'Any') -> 'Any'`
 
 Fox Sports wnba one row per game in a scoreboard segment.
 
@@ -1122,7 +1186,9 @@ from sportsdataverse.wnba import fox_wnba_scores_segment
 df = fox_wnba_scores_segment("...")
 ```
 
-### `fox_wnba_standings(team_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#fox_wnba_standings}
+### fox_wnba_standings {#fox_wnba_standings}
+
+`fox_wnba_standings(team_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"`
 
 WNBA standings for a team's conference/division.
 
@@ -1145,7 +1211,9 @@ from sportsdataverse.wnba import fox_wnba_standings
 df = fox_wnba_standings("3")
 ```
 
-### `fox_wnba_team_gamelog(team_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#fox_wnba_team_gamelog}
+### fox_wnba_team_gamelog {#fox_wnba_team_gamelog}
+
+`fox_wnba_team_gamelog(team_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"`
 
 WNBA team game log (long: one row per game-stat).
 
@@ -1168,7 +1236,9 @@ from sportsdataverse.wnba import fox_wnba_team_gamelog
 df = fox_wnba_team_gamelog("3")
 ```
 
-### `fox_wnba_team_header(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_wnba_team_header}
+### fox_wnba_team_header {#fox_wnba_team_header}
+
+`fox_wnba_team_header(*args: 'Any', **kwargs: 'Any') -> 'Any'`
 
 Fox Sports wnba team header (one row).
 
@@ -1185,7 +1255,9 @@ from sportsdataverse.wnba import fox_wnba_team_header
 df = fox_wnba_team_header("...")
 ```
 
-### `fox_wnba_team_roster(team_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#fox_wnba_team_roster}
+### fox_wnba_team_roster {#fox_wnba_team_roster}
+
+`fox_wnba_team_roster(team_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"`
 
 WNBA team roster (one row per player).
 
@@ -1208,7 +1280,9 @@ from sportsdataverse.wnba import fox_wnba_team_roster
 df = fox_wnba_team_roster("3")
 ```
 
-### `fox_wnba_team_stats(team_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#fox_wnba_team_stats}
+### fox_wnba_team_stats {#fox_wnba_team_stats}
+
+`fox_wnba_team_stats(team_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"`
 
 WNBA team stat leaders by category.
 
@@ -1231,7 +1305,9 @@ from sportsdataverse.wnba import fox_wnba_team_stats
 df = fox_wnba_team_stats("3")
 ```
 
-### `fox_wnba_teamnav(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_wnba_teamnav}
+### fox_wnba_teamnav {#fox_wnba_teamnav}
+
+`fox_wnba_teamnav(*args: 'Any', **kwargs: 'Any') -> 'Any'`
 
 Fox Sports wnba team directory (one row per team).
 
@@ -1260,7 +1336,9 @@ from sportsdataverse.wnba import fox_wnba_teamnav
 df = fox_wnba_teamnav()
 ```
 
-### `fox_wnba_teams(team_id: 'Union[int, str]' = '3', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#fox_wnba_teams}
+### fox_wnba_teams {#fox_wnba_teams}
+
+`fox_wnba_teams(team_id: 'Union[int, str]' = '3', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"`
 
 WNBA team directory (`fox_team_id` / `fox_team_name` / `fox_section`).
 
@@ -1292,7 +1370,9 @@ from sportsdataverse.wnba import fox_wnba_teams
 df = fox_wnba_teams()
 ```
 
-### `make_prob_by_context(ptshots: 'pl.DataFrame', *, return_as_pandas: 'bool' = False) -> "'dict[str, Union[pl.DataFrame, pd.DataFrame]]'"` {#make_prob_by_context}
+### make_prob_by_context {#make_prob_by_context}
+
+`make_prob_by_context(ptshots: 'pl.DataFrame', *, return_as_pandas: 'bool' = False) -> "'dict[str, Union[pl.DataFrame, pd.DataFrame]]'"`
 
 Marginal FG% tables by defender distance and by shot clock.
 
@@ -1319,7 +1399,9 @@ tables = make_prob_by_context(ptshots)
 tables["defender"].sort("fg_pct")
 ```
 
-### `make_prob_joint(defender: 'pl.DataFrame', shot_clock: 'pl.DataFrame', overall_fg_pct: 'float', *, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#make_prob_joint}
+### make_prob_joint {#make_prob_joint}
+
+`make_prob_joint(defender: 'pl.DataFrame', shot_clock: 'pl.DataFrame', overall_fg_pct: 'float', *, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"`
 
 Independence-combined defender x shot-clock make probability.
 
@@ -1352,7 +1434,9 @@ t = make_prob_by_context(ptshots)
 joint = make_prob_joint(t["defender"], t["shot_clock"], 0.47)
 ```
 
-### `score_shot_xpoints(shots: 'pl.DataFrame', league_avgs: 'pl.DataFrame', *, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#score_shot_xpoints}
+### score_shot_xpoints {#score_shot_xpoints}
+
+`score_shot_xpoints(shots: 'pl.DataFrame', league_avgs: 'pl.DataFrame', *, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"`
 
 Score each shot with expected points from the league-average baseline.
 
@@ -1384,7 +1468,9 @@ scored = score_shot_xpoints(shots, league_avgs)
 scored.group_by("player_id").agg(pl.col("xpoints").sum())
 ```
 
-### `scoreboard_event_parsing(event)` {#scoreboard_event_parsing}
+### scoreboard_event_parsing {#scoreboard_event_parsing}
+
+`scoreboard_event_parsing(event)`
 
 _No description available._
 
@@ -1394,7 +1480,9 @@ _No description available._
 |---|---|---|---|
 | `event` |  |  |  |
 
-### `shooter_talent(scored_shots: 'pl.DataFrame', *, league_id: 'str' = '00', min_attempts: 'int' = 50, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#shooter_talent}
+### shooter_talent {#shooter_talent}
+
+`shooter_talent(scored_shots: 'pl.DataFrame', *, league_id: 'str' = '00', min_attempts: 'int' = 50, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"`
 
 Regressed shooter true-talent: make%-above-expected, shrunk to the mean.
 
@@ -1429,7 +1517,9 @@ talent = shooter_talent(score_shot_xpoints(shots, league_avgs))
 talent.sort("talent_pct", descending=True).head(15)
 ```
 
-### `shot_selection_quality(scored_shots: 'pl.DataFrame', *, min_attempts: 'int' = 50, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#shot_selection_quality}
+### shot_selection_quality {#shot_selection_quality}
+
+`shot_selection_quality(scored_shots: 'pl.DataFrame', *, min_attempts: 'int' = 50, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"`
 
 Player shot-selection quality: mean expected value vs the league mean.
 
@@ -1461,7 +1551,9 @@ sel = shot_selection_quality(score_shot_xpoints(shots, league_avgs))
 sel.sort("selection_quality", descending=True).head(15)
 ```
 
-### `wnba_aging_curve(*, return_as_pandas: 'bool' = False) -> "'pl.DataFrame | pd.DataFrame'"` {#wnba_aging_curve}
+### wnba_aging_curve {#wnba_aging_curve}
+
+`wnba_aging_curve(*, return_as_pandas: 'bool' = False) -> "'pl.DataFrame | pd.DataFrame'"`
 
 WNBA aging curve -- the NBA core bound to `league="wnba"`.
 
@@ -1492,7 +1584,9 @@ from sportsdataverse.wnba import wnba_aging_curve
 curve = wnba_aging_curve()
 ```
 
-### `wnba_availability(seasons: "'int | list[int]'", *, return_as_pandas: 'bool' = False) -> "'pl.DataFrame | pd.DataFrame'"` {#wnba_availability}
+### wnba_availability {#wnba_availability}
+
+`wnba_availability(seasons: "'int | list[int]'", *, return_as_pandas: 'bool' = False) -> "'pl.DataFrame | pd.DataFrame'"`
 
 WNBA availability -- the NBA core bound to `league="wnba"`.
 
@@ -1517,7 +1611,9 @@ from sportsdataverse.wnba import wnba_availability
 proj = wnba_availability(2023)
 ```
 
-### `wnba_career_trajectory(player_values: 'pl.DataFrame', *, return_as_pandas: 'bool' = False) -> "'pl.DataFrame | pd.DataFrame'"` {#wnba_career_trajectory}
+### wnba_career_trajectory {#wnba_career_trajectory}
+
+`wnba_career_trajectory(player_values: 'pl.DataFrame', *, return_as_pandas: 'bool' = False) -> "'pl.DataFrame | pd.DataFrame'"`
 
 WNBA career trajectory -- the NBA core bound to `league="wnba"`.
 
@@ -1544,7 +1640,9 @@ player_values = pl.DataFrame({"player_id": ["1"], "age": [26], "value": [10.0]})
 wnba_career_trajectory(player_values)
 ```
 
-### `wnba_draft_model(draft_year: "'int | list[int]'", *, return_as_pandas: 'bool' = False) -> "'pl.DataFrame | pd.DataFrame'"` {#wnba_draft_model}
+### wnba_draft_model {#wnba_draft_model}
+
+`wnba_draft_model(draft_year: "'int | list[int]'", *, return_as_pandas: 'bool' = False) -> "'pl.DataFrame | pd.DataFrame'"`
 
 Project WNBA prospect career value + draft probability from draft slot.
 
@@ -1566,7 +1664,9 @@ from sportsdataverse.wnba import wnba_draft_model
 board = wnba_draft_model(2023)
 ```
 
-### `wnba_enhanced_pbp(game_id: 'str', *, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#wnba_enhanced_pbp}
+### wnba_enhanced_pbp {#wnba_enhanced_pbp}
+
+`wnba_enhanced_pbp(game_id: 'str', *, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
 
 Return a normalised enhanced play-by-play frame for a WNBA game.
 
@@ -1606,7 +1706,9 @@ subs = df.filter(df["is_substitution"] == True)  # noqa: E712
 print(subs.select(["period", "seconds_remaining", "person_id"]))
 ```
 
-### `wnba_expected_turnovers(season: 'str', *, base: "'Optional[pl.DataFrame]'" = None, player_mix: "'Optional[pl.DataFrame]'" = None, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#wnba_expected_turnovers}
+### wnba_expected_turnovers {#wnba_expected_turnovers}
+
+`wnba_expected_turnovers(season: 'str', *, base: "'Optional[pl.DataFrame]'" = None, player_mix: "'Optional[pl.DataFrame]'" = None, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"`
 
 WNBA expected turnovers / ball-security skill (`league_id="10"`).
 
@@ -1635,7 +1737,9 @@ t = wnba_expected_turnovers("2024")
 print(t.sort("ball_security_skill", descending=True).head())
 ```
 
-### `wnba_foul_drawing(season: 'str', *, base: "'Optional[pl.DataFrame]'" = None, advanced: "'Optional[pl.DataFrame]'" = None, player_mix: "'Optional[pl.DataFrame]'" = None, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#wnba_foul_drawing}
+### wnba_foul_drawing {#wnba_foul_drawing}
+
+`wnba_foul_drawing(season: 'str', *, base: "'Optional[pl.DataFrame]'" = None, advanced: "'Optional[pl.DataFrame]'" = None, player_mix: "'Optional[pl.DataFrame]'" = None, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"`
 
 WNBA foul-drawing / FT-generation (`league_id="10"`).
 
@@ -1665,7 +1769,9 @@ f = wnba_foul_drawing("2024")
 print(f.sort("foul_draw_skill", descending=True).head())
 ```
 
-### `wnba_in_game_win_prob(pbp: 'pl.DataFrame', pregame_home_prob: 'float', *, league_id: 'str' = '00', return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#wnba_in_game_win_prob}
+### wnba_in_game_win_prob {#wnba_in_game_win_prob}
+
+`wnba_in_game_win_prob(pbp: 'pl.DataFrame', pregame_home_prob: 'float', *, league_id: 'str' = '00', return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
 
 WNBA in-game win probability (league_id='10'). See sportsdataverse.nba.nba_game_predict.nba_in_game_win_prob.
 
@@ -1678,7 +1784,9 @@ WNBA in-game win probability (league_id='10'). See sportsdataverse.nba.nba_game_
 | `league_id` | `str` | `'00'` |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
-### `wnba_live_boxscore(game_id: 'str | int', *, raw: 'bool' = False, return_as_pandas: 'bool' = False, proxy: 'dict[str, str] | None' = None) -> 'Any'` {#wnba_live_boxscore}
+### wnba_live_boxscore {#wnba_live_boxscore}
+
+`wnba_live_boxscore(game_id: 'str | int', *, raw: 'bool' = False, return_as_pandas: 'bool' = False, proxy: 'dict[str, str] | None' = None) -> 'Any'`
 
 Fetch and parse WNBA cdn.wnba.com liveData boxscore for a game.
 
@@ -1974,7 +2082,9 @@ officials = result["officials"]
 print(officials.select("person_id", "name", "assignment"))
 ```
 
-### `wnba_live_pbp(game_id: 'str | int', *, raw: 'bool' = False, return_as_pandas: 'bool' = False, proxy: 'dict[str, str] | None' = None) -> 'Any'` {#wnba_live_pbp}
+### wnba_live_pbp {#wnba_live_pbp}
+
+`wnba_live_pbp(game_id: 'str | int', *, raw: 'bool' = False, return_as_pandas: 'bool' = False, proxy: 'dict[str, str] | None' = None) -> 'Any'`
 
 Fetch and parse WNBA cdn.wnba.com liveData play-by-play for a game.
 
@@ -2064,7 +2174,9 @@ pbp = wnba_live_pbp("1022600097")
 print(pbp.filter(pbp["action_type"] == "foul").height)
 ```
 
-### `wnba_matchup_drapm(season: 'str', *, matchups: "'Optional[pl.DataFrame]'" = None, config: "'Optional[PlaytypeConfig]'" = None, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#wnba_matchup_drapm}
+### wnba_matchup_drapm {#wnba_matchup_drapm}
+
+`wnba_matchup_drapm(season: 'str', *, matchups: "'Optional[pl.DataFrame]'" = None, config: "'Optional[PlaytypeConfig]'" = None, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"`
 
 WNBA matchup defensive RAPM (`league_id="10"`).
 
@@ -2093,7 +2205,9 @@ d = wnba_matchup_drapm("2024")
 print(d.sort("matchup_drapm", descending=True).head())
 ```
 
-### `wnba_on_court(game_id: 'str', *, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#wnba_on_court}
+### wnba_on_court {#wnba_on_court}
+
+`wnba_on_court(game_id: 'str', *, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
 
 Return the rotation-keyed on-court player frame for a WNBA game.
 
@@ -2136,7 +2250,9 @@ enh = wnba_enhanced_pbp("1022400001")
 joined = enh.join(oc, on="action_number", how="left")
 ```
 
-### `wnba_pbp_disk(game_id, path_to_json)` {#wnba_pbp_disk}
+### wnba_pbp_disk {#wnba_pbp_disk}
+
+`wnba_pbp_disk(game_id, path_to_json)`
 
 _No description available._
 
@@ -2147,7 +2263,9 @@ _No description available._
 | `game_id` |  |  |  |
 | `path_to_json` |  |  |  |
 
-### `wnba_play_context(game_id: 'str', *, transition_seconds: 'float' = 6.0, transition_variant: 'str' = 'hoop_math', return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#wnba_play_context}
+### wnba_play_context {#wnba_play_context}
+
+`wnba_play_context(game_id: 'str', *, transition_seconds: 'float' = 6.0, transition_variant: 'str' = 'hoop_math', return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
 
 Return a WNBA game's possessions with the full CTG play-context surface.
 
@@ -2202,7 +2320,9 @@ clean = poss.filter(
 print(clean["is_transition"].mean())
 ```
 
-### `wnba_player_crosswalk(season: 'Optional[int]' = None, min_confidence: 'float' = 0.92, *, return_as_pandas: 'bool' = False, strict: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#wnba_player_crosswalk}
+### wnba_player_crosswalk {#wnba_player_crosswalk}
+
+`wnba_player_crosswalk(season: 'Optional[int]' = None, min_confidence: 'float' = 0.92, *, return_as_pandas: 'bool' = False, strict: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame']"`
 
 Build the WNBA cross-source player crosswalk (ESPN / WNBA Stats / Fox).
 
@@ -2240,7 +2360,9 @@ strict = wnba_player_crosswalk(season=2026, min_confidence=0.97)
 df.filter(pl.col("match_method") == "fuzzy_jw").head()
 ```
 
-### `wnba_player_props(season: 'int', game_id: 'str', home_team_id: 'str', away_team_id: 'str', *, league_id: 'str' = '00', return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#wnba_player_props}
+### wnba_player_props {#wnba_player_props}
+
+`wnba_player_props(season: 'int', game_id: 'str', home_team_id: 'str', away_team_id: 'str', *, league_id: 'str' = '00', return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
 
 WNBA player props (league_id='10'). See sportsdataverse.nba.nba_player_props.nba_player_props.
 
@@ -2255,7 +2377,9 @@ WNBA player props (league_id='10'). See sportsdataverse.nba.nba_player_props.nba
 | `league_id` | `str` | `'00'` |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
-### `wnba_playtype_ratings(season: 'str', *, off_team: "'Optional[pl.DataFrame]'" = None, def_team: "'Optional[pl.DataFrame]'" = None, schedule: "'Optional[pl.DataFrame]'" = None, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#wnba_playtype_ratings}
+### wnba_playtype_ratings {#wnba_playtype_ratings}
+
+`wnba_playtype_ratings(season: 'str', *, off_team: "'Optional[pl.DataFrame]'" = None, def_team: "'Optional[pl.DataFrame]'" = None, schedule: "'Optional[pl.DataFrame]'" = None, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"`
 
 WNBA Synergy play-type-adjusted offense/defense (`league_id="10"`).
 
@@ -2286,7 +2410,9 @@ r = wnba_playtype_ratings("2024")
 print(r.sort("adj_off", descending=True).head())
 ```
 
-### `wnba_possessions(game_id: 'str', *, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#wnba_possessions}
+### wnba_possessions {#wnba_possessions}
+
+`wnba_possessions(game_id: 'str', *, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
 
 Return the possession-level lineup stint matrix for a WNBA game.
 
@@ -2328,7 +2454,9 @@ total = int(poss["points"].sum())
 print(f"Total points scored: {total}")
 ```
 
-### `wnba_predict_games(games: 'pl.DataFrame', ratings: 'pl.DataFrame', *, league_id: 'str' = '00', return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#wnba_predict_games}
+### wnba_predict_games {#wnba_predict_games}
+
+`wnba_predict_games(games: 'pl.DataFrame', ratings: 'pl.DataFrame', *, league_id: 'str' = '00', return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
 
 WNBA vectorized pregame predictions (league_id='10'). See sportsdataverse.nba.nba_game_predict.nba_predict_games.
 
@@ -2341,7 +2469,9 @@ WNBA vectorized pregame predictions (league_id='10'). See sportsdataverse.nba.nb
 | `league_id` | `str` | `'00'` |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
-### `wnba_predict_margin(home_net: 'float', away_net: 'float', *, home_pace: 'float', away_pace: 'float', neutral: 'bool' = False, league_id: 'str' = '00') -> 'float'` {#wnba_predict_margin}
+### wnba_predict_margin {#wnba_predict_margin}
+
+`wnba_predict_margin(home_net: 'float', away_net: 'float', *, home_pace: 'float', away_pace: 'float', neutral: 'bool' = False, league_id: 'str' = '00') -> 'float'`
 
 WNBA expected margin (league_id='10'). See sportsdataverse.nba.nba_game_predict.predict_margin.
 
@@ -2356,7 +2486,9 @@ WNBA expected margin (league_id='10'). See sportsdataverse.nba.nba_game_predict.
 | `neutral` | `bool` | `False` |  |
 | `league_id` | `str` | `'00'` |  |
 
-### `wnba_predict_total(home_off: 'float', home_def: 'float', away_off: 'float', away_def: 'float', home_pace: 'float', away_pace: 'float', *, league_id: 'str' = '00') -> 'float'` {#wnba_predict_total}
+### wnba_predict_total {#wnba_predict_total}
+
+`wnba_predict_total(home_off: 'float', home_def: 'float', away_off: 'float', away_def: 'float', home_pace: 'float', away_pace: 'float', *, league_id: 'str' = '00') -> 'float'`
 
 WNBA expected total (league_id='10'). See sportsdataverse.nba.nba_game_predict.predict_total.
 
@@ -2372,7 +2504,9 @@ WNBA expected total (league_id='10'). See sportsdataverse.nba.nba_game_predict.p
 | `away_pace` | `float` |  |  |
 | `league_id` | `str` | `'00'` |  |
 
-### `wnba_rapm_from_games(game_ids: 'Sequence[str]', *, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#wnba_rapm_from_games}
+### wnba_rapm_from_games {#wnba_rapm_from_games}
+
+`wnba_rapm_from_games(game_ids: 'Sequence[str]', *, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
 
 Compute per-player RAPM estimates over a sequence of WNBA games.
 
@@ -2414,7 +2548,9 @@ rapm = wnba_rapm_from_games(game_ids)
 print(rapm.sort("rapm", descending=True).head(10))
 ```
 
-### `wnba_referee_assignments(date: 'str | _dt.date', *, raw: 'bool' = False, return_as_pandas: 'bool' = False, proxy: 'dict | None' = None) -> 'dict[str, Any]'` {#wnba_referee_assignments}
+### wnba_referee_assignments {#wnba_referee_assignments}
+
+`wnba_referee_assignments(date: 'str | _dt.date', *, raw: 'bool' = False, return_as_pandas: 'bool' = False, proxy: 'dict | None' = None) -> 'dict[str, Any]'`
 
 Fetch and parse WNBA referee assignments for a given date from official.nba.com.
 
@@ -2468,7 +2604,9 @@ officials = result["officials"]
 print(f"Found {officials.height} official slots")
 ```
 
-### `wnba_rookie_projection(draft_year: "'int | list[int]'", *, return_as_pandas: 'bool' = False) -> "'pl.DataFrame | pd.DataFrame'"` {#wnba_rookie_projection}
+### wnba_rookie_projection {#wnba_rookie_projection}
+
+`wnba_rookie_projection(draft_year: "'int | list[int]'", *, return_as_pandas: 'bool' = False) -> "'pl.DataFrame | pd.DataFrame'"`
 
 WNBA rookie/sophomore projection -- composes the WNBA draft/aging/availability pieces.
 
@@ -2490,7 +2628,9 @@ from sportsdataverse.wnba import wnba_rookie_projection
 board = wnba_rookie_projection(2023)
 ```
 
-### `wnba_schedule_crosswalk(season: 'Optional[int]' = None, *, stats_games: 'Optional[pl.DataFrame]' = None, return_as_pandas: 'bool' = False, strict: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#wnba_schedule_crosswalk}
+### wnba_schedule_crosswalk {#wnba_schedule_crosswalk}
+
+`wnba_schedule_crosswalk(season: 'Optional[int]' = None, *, stats_games: 'Optional[pl.DataFrame]' = None, return_as_pandas: 'bool' = False, strict: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame']"`
 
 Build the WNBA cross-source schedule crosswalk (ESPN / WNBA Stats).
 
@@ -2524,7 +2664,9 @@ print(df["match_method"].value_counts())
 df.filter(pl.col("match_method") == "both").select("espn_game_id", "wnba_game_id").head()
 ```
 
-### `wnba_shot_value(player_ids: "'list[int]'", season: 'str', *, include_context: 'bool' = False, return_as_pandas: 'bool' = False) -> "'dict[str, Union[pl.DataFrame, pd.DataFrame]]'"` {#wnba_shot_value}
+### wnba_shot_value {#wnba_shot_value}
+
+`wnba_shot_value(player_ids: "'list[int]'", season: 'str', *, include_context: 'bool' = False, return_as_pandas: 'bool' = False) -> "'dict[str, Union[pl.DataFrame, pd.DataFrame]]'"`
 
 WNBA one-call shot-value spine (`league_id="10"`).
 
@@ -2557,7 +2699,9 @@ out = wnba_shot_value([1628886], "2024")
 out["talent"].head()
 ```
 
-### `wnba_team_clutch(season: 'int', *, league_id: 'str' = '00', return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#wnba_team_clutch}
+### wnba_team_clutch {#wnba_team_clutch}
+
+`wnba_team_clutch(season: 'int', *, league_id: 'str' = '00', return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
 
 WNBA clutch skill (league_id='10'). See sportsdataverse.nba.nba_clutch.nba_team_clutch.
 
@@ -2569,7 +2713,9 @@ WNBA clutch skill (league_id='10'). See sportsdataverse.nba.nba_clutch.nba_team_
 | `league_id` | `str` | `'00'` |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
-### `wnba_team_crosswalk(season: 'Optional[int]' = None, *, stats: 'Optional[pl.DataFrame]' = None, fox: 'Optional[pl.DataFrame]' = None, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#wnba_team_crosswalk}
+### wnba_team_crosswalk {#wnba_team_crosswalk}
+
+`wnba_team_crosswalk(season: 'Optional[int]' = None, *, stats: 'Optional[pl.DataFrame]' = None, fox: 'Optional[pl.DataFrame]' = None, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame']"`
 
 Build the WNBA cross-source team crosswalk (ESPN / WNBA Stats / Fox).
 
@@ -2606,7 +2752,9 @@ df = wnba_team_crosswalk(season=2026, stats=my_stats, fox=my_fox)
 df.select("espn_team_id", "wnba_team_id", "match_method").head()
 ```
 
-### `wnba_team_ratings(seasons: 'Union[int, list[int]]', *, league_id: 'str' = '00', as_of_date: 'Union[dt.date, None]' = None, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"` {#wnba_team_ratings}
+### wnba_team_ratings {#wnba_team_ratings}
+
+`wnba_team_ratings(seasons: 'Union[int, list[int]]', *, league_id: 'str' = '00', as_of_date: 'Union[dt.date, None]' = None, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"`
 
 WNBA team ratings (league_id='10'). See sportsdataverse.nba.nba_team_ratings.nba_team_ratings.
 
@@ -2619,7 +2767,9 @@ WNBA team ratings (league_id='10'). See sportsdataverse.nba.nba_team_ratings.nba
 | `as_of_date` | `Union[date, None]` | `None` |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
-### `wnba_tracking_drive_value(seasons: "'int | str | list'", *, league_id: 'str' = '10', per_mode: 'str' = 'Totals', by_position: 'bool' = True, positions: 'Optional[pl.DataFrame]' = None, return_as_pandas: 'bool' = False, _get_fn: 'Optional[Callable[..., dict]]' = None) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#wnba_tracking_drive_value}
+### wnba_tracking_drive_value {#wnba_tracking_drive_value}
+
+`wnba_tracking_drive_value(seasons: "'int | str | list'", *, league_id: 'str' = '10', per_mode: 'str' = 'Totals', by_position: 'bool' = True, positions: 'Optional[pl.DataFrame]' = None, return_as_pandas: 'bool' = False, _get_fn: 'Optional[Callable[..., dict]]' = None) -> "'Union[pl.DataFrame, pd.DataFrame]'"`
 
 WNBA drive value + rim-pressure (`league_id="10"` by-reference shim).
 
@@ -2650,7 +2800,9 @@ df = wnba_tracking_drive_value(2024)
 print(df.sort("drive_pts_oe", descending=True).head())
 ```
 
-### `wnba_tracking_pass_value(seasons: "'int | str | list'", *, league_id: 'str' = '10', per_mode: 'str' = 'Totals', by_position: 'bool' = True, positions: 'Optional[pl.DataFrame]' = None, fetch_potential_assists: 'bool' = False, max_players: 'int' = 0, return_as_pandas: 'bool' = False, _get_fn: 'Optional[Callable[..., dict]]' = None, _pass_get_fn: 'Optional[Callable[..., dict]]' = None) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#wnba_tracking_pass_value}
+### wnba_tracking_pass_value {#wnba_tracking_pass_value}
+
+`wnba_tracking_pass_value(seasons: "'int | str | list'", *, league_id: 'str' = '10', per_mode: 'str' = 'Totals', by_position: 'bool' = True, positions: 'Optional[pl.DataFrame]' = None, fetch_potential_assists: 'bool' = False, max_players: 'int' = 0, return_as_pandas: 'bool' = False, _get_fn: 'Optional[Callable[..., dict]]' = None, _pass_get_fn: 'Optional[Callable[..., dict]]' = None) -> "'Union[pl.DataFrame, pd.DataFrame]'"`
 
 WNBA expected-assists / passer value (`league_id="10"` by-reference shim).
 
@@ -2685,7 +2837,9 @@ df = wnba_tracking_pass_value(2024)
 print(df.sort("ast_oe", descending=True).head())
 ```
 
-### `wnba_tracking_reb_oe(seasons: "'int | str | list'", *, league_id: 'str' = '10', per_mode: 'str' = 'Totals', by_position: 'bool' = True, positions: 'Optional[pl.DataFrame]' = None, return_as_pandas: 'bool' = False, _get_fn: 'Optional[Callable[..., dict]]' = None) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#wnba_tracking_reb_oe}
+### wnba_tracking_reb_oe {#wnba_tracking_reb_oe}
+
+`wnba_tracking_reb_oe(seasons: "'int | str | list'", *, league_id: 'str' = '10', per_mode: 'str' = 'Totals', by_position: 'bool' = True, positions: 'Optional[pl.DataFrame]' = None, return_as_pandas: 'bool' = False, _get_fn: 'Optional[Callable[..., dict]]' = None) -> "'Union[pl.DataFrame, pd.DataFrame]'"`
 
 WNBA rebounding-over-expected (`league_id="10"` by-reference shim).
 
@@ -2717,7 +2871,9 @@ df = wnba_tracking_reb_oe(2024)
 print(df.sort("reb_oe", descending=True).head())
 ```
 
-### `wnba_tracking_rim_protect_value(seasons: "'int | str | list'", *, league_id: 'str' = '10', per_mode: 'str' = 'Totals', by_position: 'bool' = True, positions: 'Optional[pl.DataFrame]' = None, source: 'str' = 'leaguedash', max_players: 'int' = 0, return_as_pandas: 'bool' = False, _get_fn: 'Optional[Callable[..., dict]]' = None, _defend_get_fn: 'Optional[Callable[..., dict]]' = None) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#wnba_tracking_rim_protect_value}
+### wnba_tracking_rim_protect_value {#wnba_tracking_rim_protect_value}
+
+`wnba_tracking_rim_protect_value(seasons: "'int | str | list'", *, league_id: 'str' = '10', per_mode: 'str' = 'Totals', by_position: 'bool' = True, positions: 'Optional[pl.DataFrame]' = None, source: 'str' = 'leaguedash', max_players: 'int' = 0, return_as_pandas: 'bool' = False, _get_fn: 'Optional[Callable[..., dict]]' = None, _defend_get_fn: 'Optional[Callable[..., dict]]' = None) -> "'Union[pl.DataFrame, pd.DataFrame]'"`
 
 WNBA rim-protection / shot-defend points-saved (`league_id="10"`
 
@@ -2754,7 +2910,9 @@ df = wnba_tracking_rim_protect_value(2024)
 print(df.sort("rim_protect_pts_saved", descending=True).head())
 ```
 
-### `wnba_tracking_shot_diet_value(seasons: "'int | str | list'", *, league_id: 'str' = '10', per_mode: 'str' = 'Totals', by_position: 'bool' = True, positions: 'Optional[pl.DataFrame]' = None, return_as_pandas: 'bool' = False, _get_fn: 'Optional[Callable[..., dict]]' = None) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#wnba_tracking_shot_diet_value}
+### wnba_tracking_shot_diet_value {#wnba_tracking_shot_diet_value}
+
+`wnba_tracking_shot_diet_value(seasons: "'int | str | list'", *, league_id: 'str' = '10', per_mode: 'str' = 'Totals', by_position: 'bool' = True, positions: 'Optional[pl.DataFrame]' = None, return_as_pandas: 'bool' = False, _get_fn: 'Optional[Callable[..., dict]]' = None) -> "'Union[pl.DataFrame, pd.DataFrame]'"`
 
 WNBA catch-&-shoot vs pull-up points-over-expected (`league_id="10"`
 
@@ -2787,7 +2945,9 @@ df = wnba_tracking_shot_diet_value(2024)
 print(df.sort("cs_pts_oe", descending=True).head())
 ```
 
-### `wnba_tracking_touch_value(seasons: "'int | str | list'", *, league_id: 'str' = '10', per_mode: 'str' = 'Totals', by_position: 'bool' = True, positions: 'Optional[pl.DataFrame]' = None, return_as_pandas: 'bool' = False, _get_fn: 'Optional[Callable[..., dict]]' = None) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#wnba_tracking_touch_value}
+### wnba_tracking_touch_value {#wnba_tracking_touch_value}
+
+`wnba_tracking_touch_value(seasons: "'int | str | list'", *, league_id: 'str' = '10', per_mode: 'str' = 'Totals', by_position: 'bool' = True, positions: 'Optional[pl.DataFrame]' = None, return_as_pandas: 'bool' = False, _get_fn: 'Optional[Callable[..., dict]]' = None) -> "'Union[pl.DataFrame, pd.DataFrame]'"`
 
 WNBA touch / possession-time value (`league_id="10"` by-reference shim).
 
@@ -2818,7 +2978,9 @@ df = wnba_tracking_touch_value(2024)
 print(df.sort("pts_per_touch_oe", descending=True).head())
 ```
 
-### `wnba_win_prob_from_margin(exp_margin: 'float', *, league_id: 'str' = '00') -> 'float'` {#wnba_win_prob_from_margin}
+### wnba_win_prob_from_margin {#wnba_win_prob_from_margin}
+
+`wnba_win_prob_from_margin(exp_margin: 'float', *, league_id: 'str' = '00') -> 'float'`
 
 WNBA home win probability (league_id='10'). See sportsdataverse.nba.nba_game_predict.win_prob_from_margin.
 
@@ -2829,7 +2991,9 @@ WNBA home win probability (league_id='10'). See sportsdataverse.nba.nba_game_pre
 | `exp_margin` | `float` |  |  |
 | `league_id` | `str` | `'00'` |  |
 
-### `zone_value_map(scored_shots: 'pl.DataFrame', *, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"` {#zone_value_map}
+### zone_value_map {#zone_value_map}
+
+`zone_value_map(scored_shots: 'pl.DataFrame', *, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"`
 
 Per-player per-zone value map: points and expected points per shot.
 

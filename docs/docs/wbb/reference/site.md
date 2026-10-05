@@ -3,12 +3,13 @@ title: WBB — ESPN site API (v2)
 sidebar_label: ESPN site API (v2)
 description: "WBB — ESPN site API (v2) — endpoint reference in sdv-py, the SportsDataverse Python package."
 sidebar_position: 20
+toc_max_heading_level: 2
 ---
 # WBB — ESPN site API (v2)
 
 `sportsdataverse.wbb` — 25 endpoints.
 
-## `espn_wbb_scoreboard`
+## espn_wbb_scoreboard
 
 ESPN endpoint.
 
@@ -24,7 +25,7 @@ ESPN endpoint.
 | `groups` | `groups` |  |  | `Y` | Conference or group id filter (e.g. an ESPN conference id). |
 | `limit` | `limit` |  |  | `Y` | Maximum number of items to return. |
 
-### Returns
+### Returns {#espn_wbb_scoreboard-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -82,7 +83,7 @@ ESPN endpoint.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#espn_wbb_scoreboard-example}
 
 ```python
 espn_wbb_scoreboard(dates='20240115')
@@ -90,7 +91,7 @@ espn_wbb_scoreboard(dates='20240115')
 
 _Last validated n/a._
 
-## `espn_wbb_summary`
+## espn_wbb_summary
 
 ESPN endpoint.
 
@@ -102,7 +103,7 @@ ESPN endpoint.
 |---|---|:---:|:---:|:---:|---|
 | `event` | `event_id` |  |  | `Y` | event query parameter. |
 
-### Returns
+### Returns {#espn_wbb_summary-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **boxscore_player**
@@ -320,7 +321,7 @@ ESPN endpoint.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#espn_wbb_summary-example}
 
 ```python
 espn_wbb_summary()
@@ -328,7 +329,7 @@ espn_wbb_summary()
 
 _Last validated n/a._
 
-## `espn_wbb_calendar`
+## espn_wbb_calendar
 
 ESPN endpoint.
 
@@ -339,12 +340,12 @@ ESPN endpoint.
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 
-### Returns
+### Returns {#espn_wbb_calendar-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_items`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#espn_wbb_calendar-example}
 
 ```python
 espn_wbb_calendar()
@@ -352,7 +353,7 @@ espn_wbb_calendar()
 
 _Last validated n/a._
 
-## `espn_wbb_news`
+## espn_wbb_news
 
 ESPN endpoint.
 
@@ -364,7 +365,7 @@ ESPN endpoint.
 |---|---|:---:|:---:|:---:|---|
 | `limit` | `limit` |  |  | `Y` | Maximum number of items to return. |
 
-### Returns
+### Returns {#espn_wbb_news-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -389,7 +390,7 @@ ESPN endpoint.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#espn_wbb_news-example}
 
 ```python
 espn_wbb_news()
@@ -397,7 +398,7 @@ espn_wbb_news()
 
 _Last validated n/a._
 
-## `espn_wbb_injuries`
+## espn_wbb_injuries
 
 ESPN endpoint.
 
@@ -408,7 +409,7 @@ ESPN endpoint.
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 
-### Returns
+### Returns {#espn_wbb_injuries-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -419,7 +420,7 @@ ESPN endpoint.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#espn_wbb_injuries-example}
 
 ```python
 espn_wbb_injuries()
@@ -427,7 +428,7 @@ espn_wbb_injuries()
 
 _Last validated n/a._
 
-## `espn_wbb_transactions`
+## espn_wbb_transactions
 
 ESPN endpoint.
 
@@ -439,12 +440,12 @@ ESPN endpoint.
 |---|---|:---:|:---:|:---:|---|
 | `limit` | `limit` |  |  | `Y` | Maximum number of items to return. |
 
-### Returns
+### Returns {#espn_wbb_transactions-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_items`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#espn_wbb_transactions-example}
 
 ```python
 espn_wbb_transactions()
@@ -452,7 +453,7 @@ espn_wbb_transactions()
 
 _Last validated n/a._
 
-## `espn_wbb_conferences`
+## espn_wbb_conferences
 
 ESPN endpoint.
 
@@ -463,12 +464,12 @@ ESPN endpoint.
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 
-### Returns
+### Returns {#espn_wbb_conferences-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_groups`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#espn_wbb_conferences-example}
 
 ```python
 espn_wbb_conferences()
@@ -476,7 +477,7 @@ espn_wbb_conferences()
 
 _Last validated n/a._
 
-## `espn_wbb_statistics_league`
+## espn_wbb_statistics_league
 
 ESPN endpoint.
 
@@ -487,12 +488,12 @@ ESPN endpoint.
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 
-### Returns
+### Returns {#espn_wbb_statistics_league-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_items`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#espn_wbb_statistics_league-example}
 
 ```python
 espn_wbb_statistics_league()
@@ -500,7 +501,7 @@ espn_wbb_statistics_league()
 
 _Last validated n/a._
 
-## `espn_wbb_draft`
+## espn_wbb_draft
 
 ESPN endpoint.
 
@@ -511,12 +512,12 @@ ESPN endpoint.
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 
-### Returns
+### Returns {#espn_wbb_draft-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_items`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#espn_wbb_draft-example}
 
 ```python
 espn_wbb_draft()
@@ -524,7 +525,7 @@ espn_wbb_draft()
 
 _Last validated n/a._
 
-## `espn_wbb_teams_site`
+## espn_wbb_teams_site
 
 ESPN endpoint.
 
@@ -536,7 +537,7 @@ ESPN endpoint.
 |---|---|:---:|:---:|:---:|---|
 | `limit` | `limit` |  |  | `Y` | Maximum number of items to return. |
 
-### Returns
+### Returns {#espn_wbb_teams_site-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -558,7 +559,7 @@ ESPN endpoint.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#espn_wbb_teams_site-example}
 
 ```python
 espn_wbb_teams_site()
@@ -566,7 +567,7 @@ espn_wbb_teams_site()
 
 _Last validated n/a._
 
-## `espn_wbb_team`
+## espn_wbb_team
 
 ESPN endpoint.
 
@@ -578,12 +579,12 @@ ESPN endpoint.
 |---|---|:---:|:---:|:---:|---|
 | `team_id` | `team_id` |  | `Y` |  | team_id path parameter. |
 
-### Returns
+### Returns {#espn_wbb_team-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_single_entity`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#espn_wbb_team-example}
 
 ```python
 espn_wbb_team(team_id='4')
@@ -591,7 +592,7 @@ espn_wbb_team(team_id='4')
 
 _Last validated n/a._
 
-## `espn_wbb_team_roster`
+## espn_wbb_team_roster
 
 ESPN endpoint.
 
@@ -604,7 +605,7 @@ ESPN endpoint.
 | `team_id` | `team_id` |  | `Y` |  | ESPN team identifier (e.g. `2509` for UConn). |
 | `limit` | `limit` |  |  | `Y` | Maximum number of items to return. |
 
-### Returns
+### Returns {#espn_wbb_team_roster-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -654,7 +655,7 @@ ESPN endpoint.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#espn_wbb_team_roster-example}
 
 ```python
 espn_wbb_team_roster(team_id='4')
@@ -662,7 +663,7 @@ espn_wbb_team_roster(team_id='4')
 
 _Last validated n/a._
 
-## `espn_wbb_team_schedule`
+## espn_wbb_team_schedule
 
 ESPN endpoint.
 
@@ -675,7 +676,7 @@ ESPN endpoint.
 | `team_id` | `team_id` |  | `Y` |  | team_id path parameter. |
 | `season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
 
-### Returns
+### Returns {#espn_wbb_team_schedule-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -698,7 +699,7 @@ ESPN endpoint.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#espn_wbb_team_schedule-example}
 
 ```python
 espn_wbb_team_schedule(team_id='4')
@@ -706,7 +707,7 @@ espn_wbb_team_schedule(team_id='4')
 
 _Last validated n/a._
 
-## `espn_wbb_team_record`
+## espn_wbb_team_record
 
 ESPN endpoint.
 
@@ -718,12 +719,12 @@ ESPN endpoint.
 |---|---|:---:|:---:|:---:|---|
 | `team_id` | `team_id` |  | `Y` |  | team_id path parameter. |
 
-### Returns
+### Returns {#espn_wbb_team_record-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_items`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#espn_wbb_team_record-example}
 
 ```python
 espn_wbb_team_record(team_id='4')
@@ -731,7 +732,7 @@ espn_wbb_team_record(team_id='4')
 
 _Last validated n/a._
 
-## `espn_wbb_team_depthcharts`
+## espn_wbb_team_depthcharts
 
 ESPN endpoint.
 
@@ -743,12 +744,12 @@ ESPN endpoint.
 |---|---|:---:|:---:|:---:|---|
 | `team_id` | `team_id` |  | `Y` |  | team_id path parameter. |
 
-### Returns
+### Returns {#espn_wbb_team_depthcharts-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_items`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#espn_wbb_team_depthcharts-example}
 
 ```python
 espn_wbb_team_depthcharts(team_id='4')
@@ -756,7 +757,7 @@ espn_wbb_team_depthcharts(team_id='4')
 
 _Last validated n/a._
 
-## `espn_wbb_team_injuries`
+## espn_wbb_team_injuries
 
 ESPN endpoint.
 
@@ -768,7 +769,7 @@ ESPN endpoint.
 |---|---|:---:|:---:|:---:|---|
 | `team_id` | `team_id` |  | `Y` |  | team_id path parameter. |
 
-### Returns
+### Returns {#espn_wbb_team_injuries-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -779,7 +780,7 @@ ESPN endpoint.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#espn_wbb_team_injuries-example}
 
 ```python
 espn_wbb_team_injuries(team_id='4')
@@ -787,7 +788,7 @@ espn_wbb_team_injuries(team_id='4')
 
 _Last validated n/a._
 
-## `espn_wbb_team_transactions`
+## espn_wbb_team_transactions
 
 ESPN endpoint.
 
@@ -799,12 +800,12 @@ ESPN endpoint.
 |---|---|:---:|:---:|:---:|---|
 | `team_id` | `team_id` |  | `Y` |  | team_id path parameter. |
 
-### Returns
+### Returns {#espn_wbb_team_transactions-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_items`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#espn_wbb_team_transactions-example}
 
 ```python
 espn_wbb_team_transactions(team_id='4')
@@ -812,7 +813,7 @@ espn_wbb_team_transactions(team_id='4')
 
 _Last validated n/a._
 
-## `espn_wbb_team_history`
+## espn_wbb_team_history
 
 ESPN endpoint.
 
@@ -824,12 +825,12 @@ ESPN endpoint.
 |---|---|:---:|:---:|:---:|---|
 | `team_id` | `team_id` |  | `Y` |  | team_id path parameter. |
 
-### Returns
+### Returns {#espn_wbb_team_history-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_items`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#espn_wbb_team_history-example}
 
 ```python
 espn_wbb_team_history(team_id='4')
@@ -837,7 +838,7 @@ espn_wbb_team_history(team_id='4')
 
 _Last validated n/a._
 
-## `espn_wbb_team_news`
+## espn_wbb_team_news
 
 ESPN endpoint.
 
@@ -850,7 +851,7 @@ ESPN endpoint.
 | `team_id` | `team_id` |  | `Y` |  | team_id path parameter. |
 | `limit` | `limit` |  |  | `Y` | Maximum number of items to return. |
 
-### Returns
+### Returns {#espn_wbb_team_news-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -875,7 +876,7 @@ ESPN endpoint.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#espn_wbb_team_news-example}
 
 ```python
 espn_wbb_team_news(team_id='4')
@@ -883,7 +884,7 @@ espn_wbb_team_news(team_id='4')
 
 _Last validated n/a._
 
-## `espn_wbb_team_leaders`
+## espn_wbb_team_leaders
 
 ESPN endpoint.
 
@@ -895,12 +896,12 @@ ESPN endpoint.
 |---|---|:---:|:---:|:---:|---|
 | `team_id` | `team_id` |  | `Y` |  | team_id path parameter. |
 
-### Returns
+### Returns {#espn_wbb_team_leaders-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_items`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#espn_wbb_team_leaders-example}
 
 ```python
 espn_wbb_team_leaders(team_id='4')
@@ -908,7 +909,7 @@ espn_wbb_team_leaders(team_id='4')
 
 _Last validated n/a._
 
-## `espn_wbb_player_info`
+## espn_wbb_player_info
 
 ESPN endpoint.
 
@@ -920,12 +921,12 @@ ESPN endpoint.
 |---|---|:---:|:---:|:---:|---|
 | `athlete_id` | `athlete_id` |  | `Y` |  | athlete_id path parameter. |
 
-### Returns
+### Returns {#espn_wbb_player_info-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_single_entity`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#espn_wbb_player_info-example}
 
 ```python
 espn_wbb_player_info(athlete_id='4239')
@@ -933,7 +934,7 @@ espn_wbb_player_info(athlete_id='4239')
 
 _Last validated n/a._
 
-## `espn_wbb_player_bio`
+## espn_wbb_player_bio
 
 ESPN endpoint.
 
@@ -945,12 +946,12 @@ ESPN endpoint.
 |---|---|:---:|:---:|:---:|---|
 | `athlete_id` | `athlete_id` |  | `Y` |  | athlete_id path parameter. |
 
-### Returns
+### Returns {#espn_wbb_player_bio-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_single_entity`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#espn_wbb_player_bio-example}
 
 ```python
 espn_wbb_player_bio(athlete_id='4239')
@@ -958,7 +959,7 @@ espn_wbb_player_bio(athlete_id='4239')
 
 _Last validated n/a._
 
-## `espn_wbb_player_news`
+## espn_wbb_player_news
 
 ESPN endpoint.
 
@@ -970,7 +971,7 @@ ESPN endpoint.
 |---|---|:---:|:---:|:---:|---|
 | `athlete_id` | `athlete_id` |  | `Y` |  | athlete_id path parameter. |
 
-### Returns
+### Returns {#espn_wbb_player_news-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -995,7 +996,7 @@ ESPN endpoint.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#espn_wbb_player_news-example}
 
 ```python
 espn_wbb_player_news(athlete_id='4239')
@@ -1003,7 +1004,7 @@ espn_wbb_player_news(athlete_id='4239')
 
 _Last validated n/a._
 
-## `espn_wbb_standings`
+## espn_wbb_standings
 
 ESPN endpoint.
 
@@ -1017,7 +1018,7 @@ ESPN endpoint.
 | `group` | `group` |  |  | `Y` | Conference or group id filter (e.g. an ESPN conference id). |
 | `type` | `standings_type` |  |  | `Y` | Standings variant (e.g. 'by-division' or 'by-conference'). |
 
-### Returns
+### Returns {#espn_wbb_standings-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1052,7 +1053,7 @@ ESPN endpoint.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#espn_wbb_standings-example}
 
 ```python
 espn_wbb_standings()
@@ -1060,7 +1061,7 @@ espn_wbb_standings()
 
 _Last validated n/a._
 
-## `espn_wbb_rankings`
+## espn_wbb_rankings
 
 ESPN endpoint.
 
@@ -1071,12 +1072,12 @@ ESPN endpoint.
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 
-### Returns
+### Returns {#espn_wbb_rankings-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_items`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#espn_wbb_rankings-example}
 
 ```python
 espn_wbb_rankings()

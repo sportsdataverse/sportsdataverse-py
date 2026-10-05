@@ -467,8 +467,8 @@ _R_PKGDOWN_BASE = {
     "nflfastR": "https://www.nflfastr.com/reference",
 }
 
-# Level-2 endpoint/loader function header: ``## `fn` `` (name only, no signature).
-_DOC_L2_FN = re.compile(r"(?m)^## `([A-Za-z_][A-Za-z0-9_]*)`\s*$")
+# Level-2 endpoint/loader function header: ``## fn`` (the plain name; "## Automation status" has a space, so it never matches).
+_DOC_L2_FN = re.compile(r"(?m)^## ([A-Za-z_][A-Za-z0-9_]*)\s*$")
 
 
 @functools.lru_cache(maxsize=1)

@@ -3,12 +3,13 @@ title: NFL — nflpro
 sidebar_label: nflpro
 description: "NFL — nflpro — endpoint reference in sdv-py, the SportsDataverse Python package."
 sidebar_position: 11
+toc_max_heading_level: 2
 ---
 # NFL — nflpro
 
 `sportsdataverse.nfl` — 16 endpoints.
 
-## `nfl_pro_players_offense_passing_season`
+## nfl_pro_players_offense_passing_season
 
 GET /api/secured/stats/players-offense/passing/season — one row per passer for the season — quarterback passing incl. Next Gen time-to-throw, aggressiveness and CPOE.
 
@@ -26,7 +27,7 @@ GET /api/secured/stats/players-offense/passing/season — one row per passer for
 | `sortValue` | `sort_value` |  |  | `Y` | Sort direction: ``ASC`` or ``DESC``. |
 | `qualifiedPasser` | `qualified` |  |  | `Y` | Restrict to players meeting the league qualifying threshold. |
 
-### Returns
+### Returns {#nfl_pro_players_offense_passing_season-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -91,7 +92,7 @@ GET /api/secured/stats/players-offense/passing/season — one row per passer for
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nfl_pro_players_offense_passing_season-example}
 
 ```python
 nfl_pro_players_offense_passing_season(season=2024, season_type='REG')
@@ -99,7 +100,7 @@ nfl_pro_players_offense_passing_season(season=2024, season_type='REG')
 
 _Last validated n/a._
 
-## `nfl_pro_players_offense_passing_week`
+## nfl_pro_players_offense_passing_week
 
 GET /api/secured/stats/players-offense/passing/week — one row per passer per week — quarterback passing incl. Next Gen time-to-throw, aggressiveness and CPOE.
 
@@ -118,7 +119,7 @@ GET /api/secured/stats/players-offense/passing/week — one row per passer per w
 | `qualifiedPasser` | `qualified` |  |  | `Y` | Restrict to players meeting the league qualifying threshold. |
 | `nflId` | `nfl_id` |  |  | `Y` | Optional player filter; omit for the whole league-week table. Note ``week`` is a path scope here, not a query param. |
 
-### Returns
+### Returns {#nfl_pro_players_offense_passing_week-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -190,7 +191,7 @@ GET /api/secured/stats/players-offense/passing/week — one row per passer per w
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nfl_pro_players_offense_passing_week-example}
 
 ```python
 nfl_pro_players_offense_passing_week(season=2024, season_type='REG')
@@ -198,7 +199,7 @@ nfl_pro_players_offense_passing_week(season=2024, season_type='REG')
 
 _Last validated n/a._
 
-## `nfl_pro_players_offense_rushing_season`
+## nfl_pro_players_offense_rushing_season
 
 GET /api/secured/stats/players-offense/rushing/season — one row per rusher for the season — rushing incl. Next Gen efficiency, yards over expected and defenders-in-box.
 
@@ -216,7 +217,7 @@ GET /api/secured/stats/players-offense/rushing/season — one row per rusher for
 | `sortValue` | `sort_value` |  |  | `Y` | Sort direction: ``ASC`` or ``DESC``. |
 | `qualifiedRusher` | `qualified` |  |  | `Y` | Restrict to players meeting the league qualifying threshold. |
 
-### Returns
+### Returns {#nfl_pro_players_offense_rushing_season-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -276,7 +277,7 @@ GET /api/secured/stats/players-offense/rushing/season — one row per rusher for
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nfl_pro_players_offense_rushing_season-example}
 
 ```python
 nfl_pro_players_offense_rushing_season(season=2024, season_type='REG')
@@ -284,7 +285,7 @@ nfl_pro_players_offense_rushing_season(season=2024, season_type='REG')
 
 _Last validated n/a._
 
-## `nfl_pro_players_offense_rushing_week`
+## nfl_pro_players_offense_rushing_week
 
 GET /api/secured/stats/players-offense/rushing/week — one row per rusher per week — rushing incl. Next Gen efficiency, yards over expected and defenders-in-box.
 
@@ -303,7 +304,7 @@ GET /api/secured/stats/players-offense/rushing/week — one row per rusher per w
 | `qualifiedRusher` | `qualified` |  |  | `Y` | Restrict to players meeting the league qualifying threshold. |
 | `nflId` | `nfl_id` |  |  | `Y` | Optional player filter; omit for the whole league-week table. Note ``week`` is a path scope here, not a query param. |
 
-### Returns
+### Returns {#nfl_pro_players_offense_rushing_week-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -370,7 +371,7 @@ GET /api/secured/stats/players-offense/rushing/week — one row per rusher per w
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nfl_pro_players_offense_rushing_week-example}
 
 ```python
 nfl_pro_players_offense_rushing_week(season=2024, season_type='REG')
@@ -378,7 +379,7 @@ nfl_pro_players_offense_rushing_week(season=2024, season_type='REG')
 
 _Last validated n/a._
 
-## `nfl_pro_players_offense_receiving_season`
+## nfl_pro_players_offense_receiving_season
 
 GET /api/secured/stats/players-offense/receiving/season — one row per receiver for the season — receiving incl. Next Gen separation, cushion and catch rate over expected.
 
@@ -396,7 +397,7 @@ GET /api/secured/stats/players-offense/receiving/season — one row per receiver
 | `sortValue` | `sort_value` |  |  | `Y` | Sort direction: ``ASC`` or ``DESC``. |
 | `qualifiedReceiver` | `qualified` |  |  | `Y` | Restrict to players meeting the league qualifying threshold. |
 
-### Returns
+### Returns {#nfl_pro_players_offense_receiving_season-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -463,7 +464,7 @@ GET /api/secured/stats/players-offense/receiving/season — one row per receiver
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nfl_pro_players_offense_receiving_season-example}
 
 ```python
 nfl_pro_players_offense_receiving_season(season=2024, season_type='REG')
@@ -471,7 +472,7 @@ nfl_pro_players_offense_receiving_season(season=2024, season_type='REG')
 
 _Last validated n/a._
 
-## `nfl_pro_players_offense_receiving_week`
+## nfl_pro_players_offense_receiving_week
 
 GET /api/secured/stats/players-offense/receiving/week — one row per receiver per week — receiving incl. Next Gen separation, cushion and catch rate over expected.
 
@@ -490,7 +491,7 @@ GET /api/secured/stats/players-offense/receiving/week — one row per receiver p
 | `qualifiedReceiver` | `qualified` |  |  | `Y` | Restrict to players meeting the league qualifying threshold. |
 | `nflId` | `nfl_id` |  |  | `Y` | Optional player filter; omit for the whole league-week table. Note ``week`` is a path scope here, not a query param. |
 
-### Returns
+### Returns {#nfl_pro_players_offense_receiving_week-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -564,7 +565,7 @@ GET /api/secured/stats/players-offense/receiving/week — one row per receiver p
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nfl_pro_players_offense_receiving_week-example}
 
 ```python
 nfl_pro_players_offense_receiving_week(season=2024, season_type='REG')
@@ -572,7 +573,7 @@ nfl_pro_players_offense_receiving_week(season=2024, season_type='REG')
 
 _Last validated n/a._
 
-## `nfl_pro_defense_overview_season`
+## nfl_pro_defense_overview_season
 
 GET /api/secured/stats/defense/overview/season — one row per defender for the season — defensive overview incl. snap counts, pressures and havoc stops.
 
@@ -590,7 +591,7 @@ GET /api/secured/stats/defense/overview/season — one row per defender for the 
 | `sortValue` | `sort_value` |  |  | `Y` | Sort direction: ``ASC`` or ``DESC``. |
 | `qualifiedDefender` | `qualified` |  |  | `Y` | Restrict to players meeting the league qualifying threshold. |
 
-### Returns
+### Returns {#nfl_pro_defense_overview_season-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -631,7 +632,7 @@ GET /api/secured/stats/defense/overview/season — one row per defender for the 
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nfl_pro_defense_overview_season-example}
 
 ```python
 nfl_pro_defense_overview_season(season=2024, season_type='REG')
@@ -639,7 +640,7 @@ nfl_pro_defense_overview_season(season=2024, season_type='REG')
 
 _Last validated n/a._
 
-## `nfl_pro_defense_overview_week`
+## nfl_pro_defense_overview_week
 
 GET /api/secured/stats/defense/overview/week — one row per defender per week — defensive overview incl. snap counts, pressures and havoc stops.
 
@@ -658,7 +659,7 @@ GET /api/secured/stats/defense/overview/week — one row per defender per week �
 | `qualifiedDefender` | `qualified` |  |  | `Y` | Restrict to players meeting the league qualifying threshold. |
 | `nflId` | `nfl_id` |  |  | `Y` | Optional player filter; omit for the whole league-week table. Note ``week`` is a path scope here, not a query param. |
 
-### Returns
+### Returns {#nfl_pro_defense_overview_week-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -706,7 +707,7 @@ GET /api/secured/stats/defense/overview/week — one row per defender per week �
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nfl_pro_defense_overview_week-example}
 
 ```python
 nfl_pro_defense_overview_week(season=2024, season_type='REG')
@@ -714,7 +715,7 @@ nfl_pro_defense_overview_week(season=2024, season_type='REG')
 
 _Last validated n/a._
 
-## `nfl_pro_defense_nearest_season`
+## nfl_pro_defense_nearest_season
 
 GET /api/secured/stats/defense/nearest/season — one row per defender for the season — nearest-defender coverage incl. targets, catch rate and CROE allowed.
 
@@ -732,7 +733,7 @@ GET /api/secured/stats/defense/nearest/season — one row per defender for the s
 | `sortValue` | `sort_value` |  |  | `Y` | Sort direction: ``ASC`` or ``DESC``. |
 | `qualifiedDefender` | `qualified` |  |  | `Y` | Restrict to players meeting the league qualifying threshold. |
 
-### Returns
+### Returns {#nfl_pro_defense_nearest_season-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -773,7 +774,7 @@ GET /api/secured/stats/defense/nearest/season — one row per defender for the s
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nfl_pro_defense_nearest_season-example}
 
 ```python
 nfl_pro_defense_nearest_season(season=2024, season_type='REG')
@@ -781,7 +782,7 @@ nfl_pro_defense_nearest_season(season=2024, season_type='REG')
 
 _Last validated n/a._
 
-## `nfl_pro_defense_nearest_week`
+## nfl_pro_defense_nearest_week
 
 GET /api/secured/stats/defense/nearest/week — one row per defender per week — nearest-defender coverage incl. targets, catch rate and CROE allowed.
 
@@ -800,7 +801,7 @@ GET /api/secured/stats/defense/nearest/week — one row per defender per week �
 | `qualifiedDefender` | `qualified` |  |  | `Y` | Restrict to players meeting the league qualifying threshold. |
 | `nflId` | `nfl_id` |  |  | `Y` | Optional player filter; omit for the whole league-week table. Note ``week`` is a path scope here, not a query param. |
 
-### Returns
+### Returns {#nfl_pro_defense_nearest_week-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -848,7 +849,7 @@ GET /api/secured/stats/defense/nearest/week — one row per defender per week �
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nfl_pro_defense_nearest_week-example}
 
 ```python
 nfl_pro_defense_nearest_week(season=2024, season_type='REG')
@@ -856,7 +857,7 @@ nfl_pro_defense_nearest_week(season=2024, season_type='REG')
 
 _Last validated n/a._
 
-## `nfl_pro_team_offense_overview_season`
+## nfl_pro_team_offense_overview_season
 
 GET /api/secured/stats/team-offense/overview/season — one row per team for the season — team offensive overview incl. EPA per play, pass and rush splits.
 
@@ -873,7 +874,7 @@ GET /api/secured/stats/team-offense/overview/season — one row per team for the
 | `sortKey` | `sort_key` |  |  | `Y` | Field name to sort by, e.g. ``epa``. |
 | `sortValue` | `sort_value` |  |  | `Y` | Sort direction: ``ASC`` or ``DESC``. |
 
-### Returns
+### Returns {#nfl_pro_team_offense_overview_season-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -910,7 +911,7 @@ GET /api/secured/stats/team-offense/overview/season — one row per team for the
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nfl_pro_team_offense_overview_season-example}
 
 ```python
 nfl_pro_team_offense_overview_season(season=2024, season_type='REG')
@@ -918,7 +919,7 @@ nfl_pro_team_offense_overview_season(season=2024, season_type='REG')
 
 _Last validated n/a._
 
-## `nfl_pro_team_offense_overview_week`
+## nfl_pro_team_offense_overview_week
 
 GET /api/secured/stats/team-offense/overview/week — one row per team per week — team offensive overview incl. EPA per play, pass and rush splits.
 
@@ -935,7 +936,7 @@ GET /api/secured/stats/team-offense/overview/week — one row per team per week 
 | `sortKey` | `sort_key` |  |  | `Y` | Field name to sort by, e.g. ``epa``. |
 | `sortValue` | `sort_value` |  |  | `Y` | Sort direction: ``ASC`` or ``DESC``. |
 
-### Returns
+### Returns {#nfl_pro_team_offense_overview_week-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -979,7 +980,7 @@ GET /api/secured/stats/team-offense/overview/week — one row per team per week 
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nfl_pro_team_offense_overview_week-example}
 
 ```python
 nfl_pro_team_offense_overview_week(season=2024, season_type='REG')
@@ -987,7 +988,7 @@ nfl_pro_team_offense_overview_week(season=2024, season_type='REG')
 
 _Last validated n/a._
 
-## `nfl_pro_team_defense_overview_season`
+## nfl_pro_team_defense_overview_season
 
 GET /api/secured/stats/team-defense/overview/season — one row per team for the season — team defensive overview incl. EPA allowed per play and takeaways.
 
@@ -1004,7 +1005,7 @@ GET /api/secured/stats/team-defense/overview/season — one row per team for the
 | `sortKey` | `sort_key` |  |  | `Y` | Field name to sort by, e.g. ``epa``. |
 | `sortValue` | `sort_value` |  |  | `Y` | Sort direction: ``ASC`` or ``DESC``. |
 
-### Returns
+### Returns {#nfl_pro_team_defense_overview_season-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1048,7 +1049,7 @@ GET /api/secured/stats/team-defense/overview/season — one row per team for the
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nfl_pro_team_defense_overview_season-example}
 
 ```python
 nfl_pro_team_defense_overview_season(season=2024, season_type='REG')
@@ -1056,7 +1057,7 @@ nfl_pro_team_defense_overview_season(season=2024, season_type='REG')
 
 _Last validated n/a._
 
-## `nfl_pro_team_defense_overview_week`
+## nfl_pro_team_defense_overview_week
 
 GET /api/secured/stats/team-defense/overview/week — one row per team per week — team defensive overview incl. EPA allowed per play and takeaways.
 
@@ -1073,7 +1074,7 @@ GET /api/secured/stats/team-defense/overview/week — one row per team per week 
 | `sortKey` | `sort_key` |  |  | `Y` | Field name to sort by, e.g. ``epa``. |
 | `sortValue` | `sort_value` |  |  | `Y` | Sort direction: ``ASC`` or ``DESC``. |
 
-### Returns
+### Returns {#nfl_pro_team_defense_overview_week-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1124,7 +1125,7 @@ GET /api/secured/stats/team-defense/overview/week — one row per team per week 
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nfl_pro_team_defense_overview_week-example}
 
 ```python
 nfl_pro_team_defense_overview_week(season=2024, season_type='REG')
@@ -1132,7 +1133,7 @@ nfl_pro_team_defense_overview_week(season=2024, season_type='REG')
 
 _Last validated n/a._
 
-## `nfl_pro_fantasy_season`
+## nfl_pro_fantasy_season
 
 GET /api/secured/stats/fantasy/season — one row per player for the season — fantasy points, opportunity and usage.
 
@@ -1151,7 +1152,7 @@ GET /api/secured/stats/fantasy/season — one row per player for the season — 
 | `sortKey` | `sort_key` |  |  | `Y` | Field name to sort by, e.g. ``fpHalfPPR``. |
 | `sortValue` | `sort_value` |  |  | `Y` | Sort direction: ``ASC`` or ``DESC``. |
 
-### Returns
+### Returns {#nfl_pro_fantasy_season-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1350,7 +1351,7 @@ GET /api/secured/stats/fantasy/season — one row per player for the season — 
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nfl_pro_fantasy_season-example}
 
 ```python
 nfl_pro_fantasy_season(season=2024, season_type='REG')
@@ -1358,7 +1359,7 @@ nfl_pro_fantasy_season(season=2024, season_type='REG')
 
 _Last validated n/a._
 
-## `nfl_pro_fantasy_game`
+## nfl_pro_fantasy_game
 
 GET /api/secured/stats/fantasy/game — one row per player-game — fantasy scoring by game. Requires `position_group`.
 
@@ -1377,7 +1378,7 @@ GET /api/secured/stats/fantasy/game — one row per player-game — fantasy scor
 | `sortKey` | `sort_key` |  |  | `Y` | Field name to sort by, e.g. ``fpHalfPPR``. |
 | `sortValue` | `sort_value` |  |  | `Y` | Sort direction: ``ASC`` or ``DESC``. |
 
-### Returns
+### Returns {#nfl_pro_fantasy_game-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1583,7 +1584,7 @@ GET /api/secured/stats/fantasy/game — one row per player-game — fantasy scor
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nfl_pro_fantasy_game-example}
 
 ```python
 nfl_pro_fantasy_game(season=2024, season_type='REG', position_group='QB')

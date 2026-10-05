@@ -11,7 +11,9 @@ not covered by the generated API-endpoint reference above.
 
 ## Play-by-play, schedule & rosters
 
-### `espn_nhl_game_rosters(game_id: 'int', raw=False, return_as_pandas=False, **kwargs) -> 'pl.DataFrame'` {#espn_nhl_game_rosters}
+### espn_nhl_game_rosters {#espn_nhl_game_rosters}
+
+`espn_nhl_game_rosters(game_id: 'int', raw=False, return_as_pandas=False, **kwargs) -> 'pl.DataFrame'`
 
 espn_nhl_game_rosters() - Pull the game by id.
 
@@ -119,7 +121,9 @@ rosters_pd = espn_nhl_game_rosters(game_id=401559395, return_as_pandas=True)
 rosters_pd[["athlete_display_name", "team_abbreviation", "did_not_play"]].head()
 ```
 
-### `espn_nhl_pbp(game_id: 'int', raw=False, **kwargs) -> 'Dict'` {#espn_nhl_pbp}
+### espn_nhl_pbp {#espn_nhl_pbp}
+
+`espn_nhl_pbp(game_id: 'int', raw=False, **kwargs) -> 'Dict'`
 
 espn_nhl_pbp() - Pull the game by id. Data from API endpoints - `nhl/playbyplay`, `nhl/summary`
 
@@ -155,7 +159,9 @@ raw = espn_nhl_pbp(game_id=401559395, raw=True)
 sorted(raw.keys())[:5]
 ```
 
-### `espn_nhl_player_stats(athlete_id: 'int', season: 'int', *, season_type: 'str' = 'regular', total: 'bool' = False, raw: 'bool' = False, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'pl.DataFrame | pd.DataFrame | dict[str, Any]'` {#espn_nhl_player_stats}
+### espn_nhl_player_stats {#espn_nhl_player_stats}
+
+`espn_nhl_player_stats(athlete_id: 'int', season: 'int', *, season_type: 'str' = 'regular', total: 'bool' = False, raw: 'bool' = False, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'pl.DataFrame | pd.DataFrame | dict[str, Any]'`
 
 Pull an NHL athlete's ESPN **season** stat line as one wide row.
 
@@ -317,7 +323,9 @@ df = espn_nhl_player_stats(athlete_id=3895074, season=2023)
 df.select(["full_name", "team_display_name", "offensive_goals"])
 ```
 
-### `espn_nhl_schedule(dates=None, season_type=None, limit=500, return_as_pandas=False, **kwargs) -> 'pl.DataFrame'` {#espn_nhl_schedule}
+### espn_nhl_schedule {#espn_nhl_schedule}
+
+`espn_nhl_schedule(dates=None, season_type=None, limit=500, return_as_pandas=False, **kwargs) -> 'pl.DataFrame'`
 
 espn_nhl_schedule - look up the NHL schedule for a given date
 
@@ -424,7 +432,9 @@ espn_nhl_schedule(dates=20230613, return_as_pandas=True).head()
 
 ## NHL native
 
-### `nhl_edge_skating_value(*, season: 'int', league: 'str' = 'nhl', detail_frames: 'pl.DataFrame | None' = None, method: "Literal['zscore', 'percentile']" = 'zscore', include_zone_balance: 'bool' = False, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'` {#nhl_edge_skating_value}
+### nhl_edge_skating_value {#nhl_edge_skating_value}
+
+`nhl_edge_skating_value(*, season: 'int', league: 'str' = 'nhl', detail_frames: 'pl.DataFrame | None' = None, method: "Literal['zscore', 'percentile']" = 'zscore', include_zone_balance: 'bool' = False, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
 
 Per-skater EDGE skating-value composite (z-score or percentile blend).
 
@@ -457,7 +467,9 @@ out = nhl_edge_skating_value(
 )
 ```
 
-### `nhl_expected_assists(pbp: 'pl.DataFrame', *, league: 'str' = 'nhl', xg_model: 'ShotXGModel | None' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'` {#nhl_expected_assists}
+### nhl_expected_assists {#nhl_expected_assists}
+
+`nhl_expected_assists(pbp: 'pl.DataFrame', *, league: 'str' = 'nhl', xg_model: 'ShotXGModel | None' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
 
 Per-player expected primary/secondary assists from xG-weighted goal credit.
 
@@ -500,7 +512,9 @@ out = nhl_expected_assists(pbp)
 out_pwhl = nhl_expected_assists(pwhl_pbp, league="pwhl")
 ```
 
-### `nhl_faceoff_value(pbp: 'pl.DataFrame', *, league: 'str' = 'nhl', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'` {#nhl_faceoff_value}
+### nhl_faceoff_value {#nhl_faceoff_value}
+
+`nhl_faceoff_value(pbp: 'pl.DataFrame', *, league: 'str' = 'nhl', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
 
 Per-player context-adjusted faceoff-win value.
 
@@ -533,7 +547,9 @@ out = nhl_faceoff_value(pbp)
 out_pwhl = nhl_faceoff_value(pwhl_pbp, league="pwhl")
 ```
 
-### `nhl_game_total(games: 'pl.DataFrame', ratings: 'pl.DataFrame', *, league: 'str' = 'nhl', return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#nhl_game_total}
+### nhl_game_total {#nhl_game_total}
+
+`nhl_game_total(games: 'pl.DataFrame', ratings: 'pl.DataFrame', *, league: 'str' = 'nhl', return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
 
 Per-game expected total goals -- a thin re-export of model ②'s expected-goals helper.
 
@@ -562,7 +578,9 @@ from sportsdataverse.nhl.nhl_player_props import nhl_game_total
 nhl_game_total(games, ratings)
 ```
 
-### `nhl_goalie_gsax(pbp: 'pl.DataFrame', shifts: 'pl.DataFrame', *, model_dir: "'str | None'" = None, league: 'str' = 'nhl', return_as_pandas: 'bool' = False) -> "'pl.DataFrame | pd.DataFrame'"` {#nhl_goalie_gsax}
+### nhl_goalie_gsax {#nhl_goalie_gsax}
+
+`nhl_goalie_gsax(pbp: 'pl.DataFrame', shifts: 'pl.DataFrame', *, model_dir: "'str | None'" = None, league: 'str' = 'nhl', return_as_pandas: 'bool' = False) -> "'pl.DataFrame | pd.DataFrame'"`
 
 Per-goalie goals-saved-above-expected (GSAx) for the games in `pbp`.
 
@@ -601,7 +619,9 @@ print(gsax.sort("gsax", descending=True))
 gsax.filter(pl.col("shots") >= 10).sort("gsax_per_60", descending=True).head()
 ```
 
-### `nhl_in_game_win_prob(pbp: 'pl.DataFrame', pregame_home_prob: 'float', *, league: 'str' = 'nhl', return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#nhl_in_game_win_prob}
+### nhl_in_game_win_prob {#nhl_in_game_win_prob}
+
+`nhl_in_game_win_prob(pbp: 'pl.DataFrame', pregame_home_prob: 'float', *, league: 'str' = 'nhl', return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
 
 Per-play live home win probability from the bundled in-game logistic.
 
@@ -634,7 +654,9 @@ wp = nhl_in_game_win_prob(pbp, pregame_home_prob=pregame_p)
 print(wp.tail())
 ```
 
-### `nhl_pbp_disk(game_id, path_to_json)` {#nhl_pbp_disk}
+### nhl_pbp_disk {#nhl_pbp_disk}
+
+`nhl_pbp_disk(game_id, path_to_json)`
 
 _No description available._
 
@@ -645,7 +667,9 @@ _No description available._
 | `game_id` |  |  |  |
 | `path_to_json` |  |  |  |
 
-### `nhl_penalty_value(pbp: 'pl.DataFrame', *, league: 'str' = 'nhl', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'` {#nhl_penalty_value}
+### nhl_penalty_value {#nhl_penalty_value}
+
+`nhl_penalty_value(pbp: 'pl.DataFrame', *, league: 'str' = 'nhl', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
 
 Per-player net penalty drawn/taken value.
 
@@ -680,7 +704,9 @@ out = nhl_penalty_value(pbp)
 out_pwhl = nhl_penalty_value(pwhl_pbp, league="pwhl")
 ```
 
-### `nhl_player_props(seasons: 'Union[int, list[int]]', *, league: 'str' = 'nhl', as_of_date: '_dt.date | None' = None, stats: 'tuple[str, ...]' = ('shots', 'points'), return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#nhl_player_props}
+### nhl_player_props {#nhl_player_props}
+
+`nhl_player_props(seasons: 'Union[int, list[int]]', *, league: 'str' = 'nhl', as_of_date: '_dt.date | None' = None, stats: 'tuple[str, ...]' = ('shots', 'points'), return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
 
 Empirical-Bayes shots/points player-prop projections.
 
@@ -721,7 +747,9 @@ print(props.sort("proj_mean", descending=True).head())
 props.filter(pl.col("player_id") == "8478402")
 ```
 
-### `nhl_predict_games(games: 'pl.DataFrame', ratings: 'pl.DataFrame', *, league: 'str' = 'nhl', odds: 'Optional[pl.DataFrame]' = None, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#nhl_predict_games}
+### nhl_predict_games {#nhl_predict_games}
+
+`nhl_predict_games(games: 'pl.DataFrame', ratings: 'pl.DataFrame', *, league: 'str' = 'nhl', odds: 'Optional[pl.DataFrame]' = None, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
 
 Vectorized pregame margin/win-prob/total (+ market edge) over a schedule.
 
@@ -747,7 +775,9 @@ preds = nhl_predict_games(games, ratings)
 print(preds.sort("home_win_prob", descending=True).head())
 ```
 
-### `nhl_records_coach_milestone_wins(wins: 'int', playoffs: 'bool' = False, **filters) -> 'Dict'` {#nhl_records_coach_milestone_wins}
+### nhl_records_coach_milestone_wins {#nhl_records_coach_milestone_wins}
+
+`nhl_records_coach_milestone_wins(wins: 'int', playoffs: 'bool' = False, **filters) -> 'Dict'`
 
 Coaches who reached a wins milestone in fewest games.
 
@@ -768,7 +798,9 @@ Supported *wins* values: `50, 100, 150, 200, 300, 400, 500, 600, 700,
 
 Coaches who hit the milestone, sorted by games needed.
 
-### `nhl_records_comeback_wins(scope: 'str' = 'league', **filters) -> 'Dict'` {#nhl_records_comeback_wins}
+### nhl_records_comeback_wins {#nhl_records_comeback_wins}
+
+`nhl_records_comeback_wins(scope: 'str' = 'league', **filters) -> 'Dict'`
 
 Comeback wins from a multi-goal deficit.
 
@@ -786,7 +818,9 @@ Wraps:
 
 Games where the team overcame a deficit to win.
 
-### `nhl_records_consecutive_goal_seasons(goals: 'int' = 50, **filters) -> 'Dict'` {#nhl_records_consecutive_goal_seasons}
+### nhl_records_consecutive_goal_seasons {#nhl_records_consecutive_goal_seasons}
+
+`nhl_records_consecutive_goal_seasons(goals: 'int' = 50, **filters) -> 'Dict'`
 
 Skaters with the most consecutive N-goal seasons.
 
@@ -807,7 +841,9 @@ Wraps one of:
 
 Skaters sorted by consecutive-season streak.
 
-### `nhl_records_fastest_goals(n_goals: 'int' = 2, **filters) -> 'Dict'` {#nhl_records_fastest_goals}
+### nhl_records_fastest_goals {#nhl_records_fastest_goals}
+
+`nhl_records_fastest_goals(n_goals: 'int' = 2, **filters) -> 'Dict'`
 
 Fastest N goals by one team in a single game.
 
@@ -827,7 +863,9 @@ Wraps one of:
 
 Games where the milestone was set, sorted by elapsed time (fastest first).
 
-### `nhl_records_fastest_goals_both_teams(n_goals: 'int' = 2, **filters) -> 'Dict'` {#nhl_records_fastest_goals_both_teams}
+### nhl_records_fastest_goals_both_teams {#nhl_records_fastest_goals_both_teams}
+
+`nhl_records_fastest_goals_both_teams(n_goals: 'int' = 2, **filters) -> 'Dict'`
 
 Fastest N goals combined (both teams) in a single game.
 
@@ -848,7 +886,9 @@ Wraps one of:
 
 Sorted by elapsed time (fastest first).
 
-### `nhl_records_games_played_streak_skaters(active_only: 'bool' = False, **filters) -> 'Dict'` {#nhl_records_games_played_streak_skaters}
+### nhl_records_games_played_streak_skaters {#nhl_records_games_played_streak_skaters}
+
+`nhl_records_games_played_streak_skaters(active_only: 'bool' = False, **filters) -> 'Dict'`
 
 Consecutive games-played streaks for skaters.
 
@@ -865,7 +905,9 @@ Wraps `GET /games-played-streak-skaters` (career) or
 
 Skaters sorted by streak length.
 
-### `nhl_scoreboard(date: 'Optional[str]' = None, team: 'Optional[str]' = None, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Dict'` {#nhl_scoreboard}
+### nhl_scoreboard {#nhl_scoreboard}
+
+`nhl_scoreboard(date: 'Optional[str]' = None, team: 'Optional[str]' = None, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs) -> 'Dict'`
 
 In-game scoreboard payload (renamed from `nhl_web_scoreboard`).
 
@@ -949,7 +991,9 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 nhl_scoreboard(date="2024-03-01")
 ```
 
-### `nhl_skater_rapm(pbp: 'pl.DataFrame', shifts: 'pl.DataFrame', *, model_dir: "'str | None'" = None, league: 'str' = 'nhl', lam: 'float | None' = None, as_of: 'int | None' = None, strength_states: 'list[str] | None' = None, return_as_pandas: 'bool' = False, _stints: 'pl.DataFrame | None' = None) -> "'pl.DataFrame | pd.DataFrame'"` {#nhl_skater_rapm}
+### nhl_skater_rapm {#nhl_skater_rapm}
+
+`nhl_skater_rapm(pbp: 'pl.DataFrame', shifts: 'pl.DataFrame', *, model_dir: "'str | None'" = None, league: 'str' = 'nhl', lam: 'float | None' = None, as_of: 'int | None' = None, strength_states: 'list[str] | None' = None, return_as_pandas: 'bool' = False, _stints: 'pl.DataFrame | None' = None) -> "'pl.DataFrame | pd.DataFrame'"`
 
 Per-skater xG-based Regularized Adjusted Plus-Minus (RAPM), per 60 minutes.
 
@@ -988,7 +1032,9 @@ rapm = nhl_skater_rapm(pbp, shifts, model_dir="tests/fixtures/nhl_player_impact/
 print(rapm.sort("xg_rapm", descending=True).head(10))
 ```
 
-### `nhl_skater_war(pbp: 'pl.DataFrame', shifts: 'pl.DataFrame', *, model_dir: "'str | None'" = None, league: 'str' = 'nhl', return_as_pandas: 'bool' = False) -> "'pl.DataFrame | pd.DataFrame'"` {#nhl_skater_war}
+### nhl_skater_war {#nhl_skater_war}
+
+`nhl_skater_war(pbp: 'pl.DataFrame', shifts: 'pl.DataFrame', *, model_dir: "'str | None'" = None, league: 'str' = 'nhl', return_as_pandas: 'bool' = False) -> "'pl.DataFrame | pd.DataFrame'"`
 
 Per-skater GAR/WAR composite -- EV + special-teams + faceoffs + penalties.
 
@@ -1017,7 +1063,9 @@ war = nhl_skater_war(pbp, shifts, model_dir="tests/fixtures/nhl_player_impact/xg
 print(war.sort("war", descending=True).head(10))
 ```
 
-### `nhl_special_teams_value(pbp: 'pl.DataFrame', shifts: 'pl.DataFrame', *, model_dir: "'str | None'" = None, league: 'str' = 'nhl', return_as_pandas: 'bool' = False, _stints: 'pl.DataFrame | None' = None) -> "'pl.DataFrame | pd.DataFrame'"` {#nhl_special_teams_value}
+### nhl_special_teams_value {#nhl_special_teams_value}
+
+`nhl_special_teams_value(pbp: 'pl.DataFrame', shifts: 'pl.DataFrame', *, model_dir: "'str | None'" = None, league: 'str' = 'nhl', return_as_pandas: 'bool' = False, _stints: 'pl.DataFrame | None' = None) -> "'pl.DataFrame | pd.DataFrame'"`
 
 Per-skater power-play/penalty-kill value (goals) above/below league baseline.
 
@@ -1047,7 +1095,9 @@ st = nhl_special_teams_value(pbp, shifts, model_dir="tests/fixtures/nhl_player_i
 print(st.sort("pp_value", descending=True).head(10))
 ```
 
-### `nhl_team_ratings(seasons: 'Union[int, list[int]]', *, league: 'str' = 'nhl', as_of_date: '_dt.date | None' = None, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'` {#nhl_team_ratings}
+### nhl_team_ratings {#nhl_team_ratings}
+
+`nhl_team_ratings(seasons: 'Union[int, list[int]]', *, league: 'str' = 'nhl', as_of_date: '_dt.date | None' = None, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
 
 Opponent-adjusted, shrunk even-strength xG (+ goal) team ratings.
 
@@ -1087,7 +1137,9 @@ ratings = nhl_team_ratings(2023, as_of_date=dt.date(2023, 1, 1))
 ratings.filter(pl.col("team") == "TOR")
 ```
 
-### `nhl_unit_ratings(pbp: 'pl.DataFrame', shifts: 'pl.DataFrame', *, model_dir: "'str | None'" = None, league: 'str' = 'nhl', unit_type: 'str' = 'forward_line', min_toi: 'float' = 20.0, return_as_pandas: 'bool' = False, _stints: 'pl.DataFrame | None' = None, _rapm: 'pl.DataFrame | None' = None) -> "'pl.DataFrame | pd.DataFrame'"` {#nhl_unit_ratings}
+### nhl_unit_ratings {#nhl_unit_ratings}
+
+`nhl_unit_ratings(pbp: 'pl.DataFrame', shifts: 'pl.DataFrame', *, model_dir: "'str | None'" = None, league: 'str' = 'nhl', unit_type: 'str' = 'forward_line', min_toi: 'float' = 20.0, return_as_pandas: 'bool' = False, _stints: 'pl.DataFrame | None' = None, _rapm: 'pl.DataFrame | None' = None) -> "'pl.DataFrame | pd.DataFrame'"`
 
 Per on-ice skater combination: observed xGF/xGA + shrinkage-blended summed RAPM.
 
@@ -1120,7 +1172,9 @@ units = nhl_unit_ratings(pbp, shifts, model_dir="tests/fixtures/nhl_player_impac
 print(units.sort("unit_value", descending=True).head(10))
 ```
 
-### `nhl_xg(pbp: 'pl.DataFrame', *, model_dir: 'str | Path | None' = None, league: 'str' = 'nhl', return_as_pandas: 'bool' = False) -> "'pl.DataFrame | pd.DataFrame'"` {#nhl_xg}
+### nhl_xg {#nhl_xg}
+
+`nhl_xg(pbp: 'pl.DataFrame', *, model_dir: 'str | Path | None' = None, league: 'str' = 'nhl', return_as_pandas: 'bool' = False) -> "'pl.DataFrame | pd.DataFrame'"`
 
 Score every unblocked shot in `pbp` with the published `nhl_xg_models` boosters.
 
@@ -1190,7 +1244,9 @@ print(scored.filter(pl.col("xg").is_not_null()).height)
 scored_pd = nhl_xg(pbp, return_as_pandas=True)
 ```
 
-### `nhl_zone_transitions(pbp: 'pl.DataFrame', *, league: 'str' = 'nhl', tags: 'pl.DataFrame | None' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'` {#nhl_zone_transitions}
+### nhl_zone_transitions {#nhl_zone_transitions}
+
+`nhl_zone_transitions(pbp: 'pl.DataFrame', *, league: 'str' = 'nhl', tags: 'pl.DataFrame | None' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
 
 Per-player controlled/dump entry & exit rates + xG-weighted values.
 
@@ -1225,7 +1281,9 @@ out_pwhl = nhl_zone_transitions(pwhl_pbp, league="pwhl")
 
 ## Dataset loaders
 
-### `load_nhl_games(return_as_pandas: 'bool' = False)` {#load_nhl_games}
+### load_nhl_games {#load_nhl_games}
+
+`load_nhl_games(return_as_pandas: 'bool' = False)`
 
 Load the NHL games-in-data-repo manifest (no `seasons` argument).
 
@@ -1289,7 +1347,9 @@ A polars (or pandas) DataFrame of all games in the data repository.
 load_nhl_games()
 ```
 
-### `load_nhl_goalie_box(seasons, return_as_pandas: 'bool' = False)` {#load_nhl_goalie_box}
+### load_nhl_goalie_box {#load_nhl_goalie_box}
+
+`load_nhl_goalie_box(seasons, return_as_pandas: 'bool' = False)`
 
 Alias of load_nhl_goalie_boxscores() for naming parity with fastRhockey (R).
 
@@ -1300,7 +1360,9 @@ Alias of load_nhl_goalie_boxscores() for naming parity with fastRhockey (R).
 | `seasons` |  |  |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
-### `load_nhl_player_box(seasons, return_as_pandas: 'bool' = False)` {#load_nhl_player_box}
+### load_nhl_player_box {#load_nhl_player_box}
+
+`load_nhl_player_box(seasons, return_as_pandas: 'bool' = False)`
 
 Alias of load_nhl_player_boxscore() for naming parity with fastRhockey (R).
 
@@ -1311,7 +1373,9 @@ Alias of load_nhl_player_boxscore() for naming parity with fastRhockey (R).
 | `seasons` |  |  |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
-### `load_nhl_skater_box(seasons, return_as_pandas: 'bool' = False)` {#load_nhl_skater_box}
+### load_nhl_skater_box {#load_nhl_skater_box}
+
+`load_nhl_skater_box(seasons, return_as_pandas: 'bool' = False)`
 
 Alias of load_nhl_skater_boxscores() for naming parity with fastRhockey (R).
 
@@ -1322,7 +1386,9 @@ Alias of load_nhl_skater_boxscores() for naming parity with fastRhockey (R).
 | `seasons` |  |  |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
-### `load_nhl_team_box(seasons, return_as_pandas: 'bool' = False)` {#load_nhl_team_box}
+### load_nhl_team_box {#load_nhl_team_box}
+
+`load_nhl_team_box(seasons, return_as_pandas: 'bool' = False)`
 
 Alias of load_nhl_team_boxscore() for naming parity with fastRhockey (R).
 
@@ -1333,7 +1399,9 @@ Alias of load_nhl_team_boxscore() for naming parity with fastRhockey (R).
 | `seasons` |  |  |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
-### `load_xg_models(model_dir: 'str | Path | None' = None) -> 'dict'` {#load_xg_models}
+### load_xg_models {#load_xg_models}
+
+`load_xg_models(model_dir: 'str | Path | None' = None) -> 'dict'`
 
 Load the two published boosters (+ embedded feature names) and the penalty-shot constant.
 
@@ -1356,7 +1424,9 @@ models = load_xg_models("tests/fixtures/nhl_player_impact/xg_models")
 
 ## Utilities & helpers
 
-### `most_recent_nhl_season()` {#most_recent_nhl_season}
+### most_recent_nhl_season {#most_recent_nhl_season}
+
+`most_recent_nhl_season()`
 
 most_recent_nhl_season - return the season year for "today".
 
@@ -1377,7 +1447,9 @@ cal = espn_nhl_calendar(season=season)
 print(season, cal.height)
 ```
 
-### `year_to_season(year)` {#year_to_season}
+### year_to_season {#year_to_season}
+
+`year_to_season(year)`
 
 year_to_season - format a starting year as the canonical `YYYY-YY` season string.
 
@@ -1405,7 +1477,9 @@ year_to_season(1999)  # '1999-00'
 
 ## Other
 
-### `ImpactConfig(goals_per_win: 'float', replacement_ev_off: 'float', replacement_ev_def: 'float', league_xg_rate_ev: 'float', league_xg_rate_pp: 'float', league_xg_rate_pk: 'float', rapm_lambda_grid: 'list[float]' = <factory>, penalty_goal_weight: 'float' = 0.18, faceoff_goal_weight: 'float' = 0.02, rink_x_goal_line: 'float' = 89.0, danger_high: 'dict' = <factory>, danger_medium: 'dict' = <factory>, xg_booster_league: 'str' = 'nhl') -> None` {#ImpactConfig}
+### ImpactConfig {#ImpactConfig}
+
+`ImpactConfig(goals_per_win: 'float', replacement_ev_off: 'float', replacement_ev_def: 'float', league_xg_rate_ev: 'float', league_xg_rate_pp: 'float', league_xg_rate_pk: 'float', rapm_lambda_grid: 'list[float]' = <factory>, penalty_goal_weight: 'float' = 0.18, faceoff_goal_weight: 'float' = 0.02, rink_x_goal_line: 'float' = 89.0, danger_high: 'dict' = <factory>, danger_medium: 'dict' = <factory>, xg_booster_league: 'str' = 'nhl') -> None`
 
 League-specific constants consumed by every player-impact engine function.
 
@@ -1427,7 +1501,9 @@ League-specific constants consumed by every player-impact engine function.
 | `danger_medium` | `dict` | `<factory>` | same shape, wider band for "medium" danger; outside both -> "low". |
 | `xg_booster_league` | `str` | `'nhl'` | which league's published boosters back this league's `nhl_xg` scoring (the PWHL borrows the NHL boosters -- a documented approximation). |
 
-### `LeagueConstants(hfa: 'float', margin_sd: 'float', avg_xgf: 'float', avg_total_goals: 'float', total_scale: 'float', shrink_k: 'float', prop_kappa: 'dict', pos_priors: 'dict', prop_team_volume_slope: 'float', in_game_wp_artifact: 'str', min_season: 'int') -> None` {#LeagueConstants}
+### LeagueConstants {#LeagueConstants}
+
+`LeagueConstants(hfa: 'float', margin_sd: 'float', avg_xgf: 'float', avg_total_goals: 'float', total_scale: 'float', shrink_k: 'float', prop_kappa: 'dict', pos_priors: 'dict', prop_team_volume_slope: 'float', in_game_wp_artifact: 'str', min_season: 'int') -> None`
 
 Fitted, league-specific constants for the NHL/PWHL prediction spine.
 
@@ -1447,7 +1523,9 @@ Fitted, league-specific constants for the NHL/PWHL prediction spine.
 | `in_game_wp_artifact` | `str` |  | filename of the bundled in-game win-probability model under `sportsdataverse/nhl/models/`. |
 | `min_season` | `int` |  | earliest season this league's prediction spine supports. |
 
-### `add_shot_geometry(df: 'pl.DataFrame', *, league: 'str' = 'nhl') -> 'pl.DataFrame'` {#add_shot_geometry}
+### add_shot_geometry {#add_shot_geometry}
+
+`add_shot_geometry(df: 'pl.DataFrame', *, league: 'str' = 'nhl') -> 'pl.DataFrame'`
 
 Attach `distance_to_net` / `shot_angle` / `shot_danger` (descriptive output only).
 
@@ -1476,7 +1554,9 @@ from sportsdataverse.nhl.nhl_xg import add_shot_geometry
 out = add_shot_geometry(pl.DataFrame({"x_fixed": [80], "y": [0]}))
 ```
 
-### `adjust_rate_opponent(game_rates: 'pl.DataFrame', *, for_col: 'str', against_col: 'str', hfa: 'float', avg: 'float', shrink_k: 'float', max_iter: 'int' = 100, tol: 'float' = 0.0001) -> 'pl.DataFrame'` {#adjust_rate_opponent}
+### adjust_rate_opponent {#adjust_rate_opponent}
+
+`adjust_rate_opponent(game_rates: 'pl.DataFrame', *, for_col: 'str', against_col: 'str', hfa: 'float', avg: 'float', shrink_k: 'float', max_iter: 'int' = 100, tol: 'float' = 0.0001) -> 'pl.DataFrame'`
 
 Opponent-adjust a per-game for/against rate by iterative fixed-point, then shrink.
 
@@ -1513,7 +1593,9 @@ adjust_rate_opponent(
 )
 ```
 
-### `as_of_ratings_split(df: 'pl.DataFrame', cutoff_date: '_dt.date', *, date_col: 'str' = 'date') -> 'pl.DataFrame'` {#as_of_ratings_split}
+### as_of_ratings_split {#as_of_ratings_split}
+
+`as_of_ratings_split(df: 'pl.DataFrame', cutoff_date: '_dt.date', *, date_col: 'str' = 'date') -> 'pl.DataFrame'`
 
 Filter a frame to rows strictly before `cutoff_date` (the leakage boundary).
 
@@ -1539,7 +1621,9 @@ df = pl.DataFrame({"date": [dt.date(2023, 1, 1), dt.date(2023, 1, 2)]})
 as_of_ratings_split(df, dt.date(2023, 1, 2))
 ```
 
-### `booster_cache_dir(override: 'str | Path | None' = None) -> 'Path'` {#booster_cache_dir}
+### booster_cache_dir {#booster_cache_dir}
+
+`booster_cache_dir(override: 'str | Path | None' = None) -> 'Path'`
 
 Resolve the local cache directory for the downloaded `nhl_xg_models` boosters.
 
@@ -1563,7 +1647,9 @@ from sportsdataverse.nhl.nhl_player_impact_constants import booster_cache_dir
 d = booster_cache_dir()
 ```
 
-### `brier_score(y_true: 'np.ndarray', p_pred: 'np.ndarray') -> 'float'` {#brier_score}
+### brier_score {#brier_score}
+
+`brier_score(y_true: 'np.ndarray', p_pred: 'np.ndarray') -> 'float'`
 
 Mean squared error between predicted probabilities and binary outcomes.
 
@@ -1586,7 +1672,9 @@ from sportsdataverse._common.metrics import brier_score
 brier_score(np.array([1, 0]), np.array([0.9, 0.1]))
 ```
 
-### `build_design(stints: 'pl.DataFrame') -> "tuple['sp.csr_matrix', np.ndarray, np.ndarray, list[int]]"` {#build_design}
+### build_design {#build_design}
+
+`build_design(stints: 'pl.DataFrame') -> "tuple['sp.csr_matrix', np.ndarray, np.ndarray, list[int]]"`
 
 Build the sparse RAPM design matrix -- two rows per stint (one per attacking team).
 
@@ -1607,7 +1695,9 @@ from sportsdataverse.nhl.nhl_rapm import build_design
 X, y, w, player_index = build_design(stints)
 ```
 
-### `build_stints(shifts: 'pl.DataFrame', scored: 'pl.DataFrame', *, as_of: 'int | None' = None) -> 'pl.DataFrame'` {#build_stints}
+### build_stints {#build_stints}
+
+`build_stints(shifts: 'pl.DataFrame', scored: 'pl.DataFrame', *, as_of: 'int | None' = None) -> 'pl.DataFrame'`
 
 Fold `load_nhl_shifts` CHANGE events into contiguous constant-personnel intervals.
 
@@ -1647,7 +1737,9 @@ scored = nhl_xg(pbp, model_dir="tests/fixtures/nhl_player_impact/xg_models")
 stints = build_stints(shifts, scored)
 ```
 
-### `calibration_table(y_true: 'np.ndarray', p_pred: 'np.ndarray', n_bins: 'int' = 10) -> 'pl.DataFrame'` {#calibration_table}
+### calibration_table {#calibration_table}
+
+`calibration_table(y_true: 'np.ndarray', p_pred: 'np.ndarray', n_bins: 'int' = 10) -> 'pl.DataFrame'`
 
 Bucket predicted probabilities into bins and compare to actual outcome rates.
 
@@ -1671,7 +1763,9 @@ from sportsdataverse._common.metrics import calibration_table
 calibration_table(np.array([1, 0, 1, 0]), np.array([0.9, 0.1, 0.8, 0.2]))
 ```
 
-### `ensure_xg_models(model_dir: 'str | Path | None' = None) -> 'Path'` {#ensure_xg_models}
+### ensure_xg_models {#ensure_xg_models}
+
+`ensure_xg_models(model_dir: 'str | Path | None' = None) -> 'Path'`
 
 Return a dir holding the 3 published booster files, downloading any missing ones.
 
@@ -1698,7 +1792,9 @@ from sportsdataverse.nhl.nhl_xg import ensure_xg_models
 d = ensure_xg_models()  # downloads on first use, cached after
 ```
 
-### `espn_nhl_teams(return_as_pandas=False, **kwargs) -> 'pl.DataFrame'` {#espn_nhl_teams}
+### espn_nhl_teams {#espn_nhl_teams}
+
+`espn_nhl_teams(return_as_pandas=False, **kwargs) -> 'pl.DataFrame'`
 
 espn_nhl_teams - look up NHL teams
 
@@ -1749,7 +1845,9 @@ teams_pd = espn_nhl_teams(return_as_pandas=True)
 teams_pd[["team_id", "team_abbreviation", "team_display_name"]].head()
 ```
 
-### `expected_goals(adj_xgf_home: 'float', adj_xga_home: 'float', adj_xgf_away: 'float', adj_xga_away: 'float', neutral: 'bool', *, league: 'str' = 'nhl') -> 'tuple[float, float]'` {#expected_goals}
+### expected_goals {#expected_goals}
+
+`expected_goals(adj_xgf_home: 'float', adj_xga_home: 'float', adj_xgf_away: 'float', adj_xga_away: 'float', neutral: 'bool', *, league: 'str' = 'nhl') -> 'tuple[float, float]'`
 
 Per-team expected goals, blending own offense with opponent defense.
 
@@ -1775,7 +1873,9 @@ from sportsdataverse.nhl.nhl_market import expected_goals
 expected_goals(2.8, 2.2, 2.5, 2.4, False)
 ```
 
-### `fox_nhl_boxscore(game_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#fox_nhl_boxscore}
+### fox_nhl_boxscore {#fox_nhl_boxscore}
+
+`fox_nhl_boxscore(game_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"`
 
 NHL boxscore (long: one row per player-stat).
 
@@ -1798,7 +1898,9 @@ from sportsdataverse.nhl import fox_nhl_boxscore
 df = fox_nhl_boxscore("...")
 ```
 
-### `fox_nhl_event_matchup(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_nhl_event_matchup}
+### fox_nhl_event_matchup {#fox_nhl_event_matchup}
+
+`fox_nhl_event_matchup(*args: 'Any', **kwargs: 'Any') -> 'Any'`
 
 Fox Sports nhl pregame team-stat comparison (one row per stat).
 
@@ -1815,7 +1917,9 @@ from sportsdataverse.nhl import fox_nhl_event_matchup
 df = fox_nhl_event_matchup("...")
 ```
 
-### `fox_nhl_event_recap(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_nhl_event_recap}
+### fox_nhl_event_recap {#fox_nhl_event_recap}
+
+`fox_nhl_event_recap(*args: 'Any', **kwargs: 'Any') -> 'Any'`
 
 Fox Sports nhl postgame top performers (one row per player).
 
@@ -1832,7 +1936,9 @@ from sportsdataverse.nhl import fox_nhl_event_recap
 df = fox_nhl_event_recap("...")
 ```
 
-### `fox_nhl_event_standings(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_nhl_event_standings}
+### fox_nhl_event_standings {#fox_nhl_event_standings}
+
+`fox_nhl_event_standings(*args: 'Any', **kwargs: 'Any') -> 'Any'`
 
 Fox Sports nhl the two teams' standings context.
 
@@ -1849,7 +1955,9 @@ from sportsdataverse.nhl import fox_nhl_event_standings
 df = fox_nhl_event_standings("...")
 ```
 
-### `fox_nhl_league_conferences(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_nhl_league_conferences}
+### fox_nhl_league_conferences {#fox_nhl_league_conferences}
+
+`fox_nhl_league_conferences(*args: 'Any', **kwargs: 'Any') -> 'Any'`
 
 Fox Sports nhl conference / group directory.
 
@@ -1866,7 +1974,9 @@ from sportsdataverse.nhl import fox_nhl_league_conferences
 df = fox_nhl_league_conferences()
 ```
 
-### `fox_nhl_league_header(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_nhl_league_header}
+### fox_nhl_league_header {#fox_nhl_league_header}
+
+`fox_nhl_league_header(*args: 'Any', **kwargs: 'Any') -> 'Any'`
 
 Fox Sports nhl league header (one row).
 
@@ -1896,7 +2006,9 @@ from sportsdataverse.nhl import fox_nhl_league_header
 df = fox_nhl_league_header()
 ```
 
-### `fox_nhl_league_leaders(category: 'str' = 'scoring', who: 'str' = 'player', page: 'int' = 0, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#fox_nhl_league_leaders}
+### fox_nhl_league_leaders {#fox_nhl_league_leaders}
+
+`fox_nhl_league_leaders(category: 'str' = 'scoring', who: 'str' = 'player', page: 'int' = 0, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"`
 
 NHL statistical leaders (`stats-con`); who=player|team.
 
@@ -1931,7 +2043,9 @@ from sportsdataverse.nhl import fox_nhl_league_leaders
 df = fox_nhl_league_leaders("scoring")
 ```
 
-### `fox_nhl_league_odds(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_nhl_league_odds}
+### fox_nhl_league_odds {#fox_nhl_league_odds}
+
+`fox_nhl_league_odds(*args: 'Any', **kwargs: 'Any') -> 'Any'`
 
 Fox Sports nhl league odds board (one row per team per game).
 
@@ -1948,7 +2062,9 @@ from sportsdataverse.nhl import fox_nhl_league_odds
 df = fox_nhl_league_odds()
 ```
 
-### `fox_nhl_league_player_news(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_nhl_league_player_news}
+### fox_nhl_league_player_news {#fox_nhl_league_player_news}
+
+`fox_nhl_league_player_news(*args: 'Any', **kwargs: 'Any') -> 'Any'`
 
 Fox Sports nhl league-wide player news feed.
 
@@ -1979,7 +2095,9 @@ from sportsdataverse.nhl import fox_nhl_league_player_news
 df = fox_nhl_league_player_news()
 ```
 
-### `fox_nhl_league_polls(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_nhl_league_polls}
+### fox_nhl_league_polls {#fox_nhl_league_polls}
+
+`fox_nhl_league_polls(*args: 'Any', **kwargs: 'Any') -> 'Any'`
 
 Fox Sports nhl rankings / polls rendered as standings tables.
 
@@ -1996,7 +2114,9 @@ from sportsdataverse.nhl import fox_nhl_league_polls
 df = fox_nhl_league_polls()
 ```
 
-### `fox_nhl_league_schedule(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_nhl_league_schedule}
+### fox_nhl_league_schedule {#fox_nhl_league_schedule}
+
+`fox_nhl_league_schedule(*args: 'Any', **kwargs: 'Any') -> 'Any'`
 
 Fox Sports nhl league schedule nav selections.
 
@@ -2024,7 +2144,9 @@ from sportsdataverse.nhl import fox_nhl_league_schedule
 df = fox_nhl_league_schedule()
 ```
 
-### `fox_nhl_league_scores(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_nhl_league_scores}
+### fox_nhl_league_scores {#fox_nhl_league_scores}
+
+`fox_nhl_league_scores(*args: 'Any', **kwargs: 'Any') -> 'Any'`
 
 Fox Sports nhl league scores nav selections.
 
@@ -2052,7 +2174,9 @@ from sportsdataverse.nhl import fox_nhl_league_scores
 df = fox_nhl_league_scores()
 ```
 
-### `fox_nhl_league_standings(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_nhl_league_standings}
+### fox_nhl_league_standings {#fox_nhl_league_standings}
+
+`fox_nhl_league_standings(*args: 'Any', **kwargs: 'Any') -> 'Any'`
 
 Fox Sports nhl league-wide standings tables.
 
@@ -2095,7 +2219,9 @@ from sportsdataverse.nhl import fox_nhl_league_standings
 df = fox_nhl_league_standings()
 ```
 
-### `fox_nhl_league_stat_leaders(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_nhl_league_stat_leaders}
+### fox_nhl_league_stat_leaders {#fox_nhl_league_stat_leaders}
+
+`fox_nhl_league_stat_leaders(*args: 'Any', **kwargs: 'Any') -> 'Any'`
 
 Fox Sports nhl league stats landing leaders.
 
@@ -2120,7 +2246,9 @@ from sportsdataverse.nhl import fox_nhl_league_stat_leaders
 df = fox_nhl_league_stat_leaders()
 ```
 
-### `fox_nhl_odds(game_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#fox_nhl_odds}
+### fox_nhl_odds {#fox_nhl_odds}
+
+`fox_nhl_odds(game_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"`
 
 NHL game odds six-pack (spread / to-win / total per team).
 
@@ -2143,7 +2271,9 @@ from sportsdataverse.nhl import fox_nhl_odds
 df = fox_nhl_odds("...")
 ```
 
-### `fox_nhl_pbp(game_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#fox_nhl_pbp}
+### fox_nhl_pbp {#fox_nhl_pbp}
+
+`fox_nhl_pbp(game_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"`
 
 NHL play-by-play (one row per play; period-based).
 
@@ -2166,7 +2296,9 @@ from sportsdataverse.nhl import fox_nhl_pbp
 df = fox_nhl_pbp("...")
 ```
 
-### `fox_nhl_scoreboard(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_nhl_scoreboard}
+### fox_nhl_scoreboard {#fox_nhl_scoreboard}
+
+`fox_nhl_scoreboard(*args: 'Any', **kwargs: 'Any') -> 'Any'`
 
 Fox Sports nhl scoreboard nav selections (weeks / dates / groups).
 
@@ -2194,7 +2326,9 @@ from sportsdataverse.nhl import fox_nhl_scoreboard
 df = fox_nhl_scoreboard()
 ```
 
-### `fox_nhl_scorechip(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_nhl_scorechip}
+### fox_nhl_scorechip {#fox_nhl_scorechip}
+
+`fox_nhl_scorechip(*args: 'Any', **kwargs: 'Any') -> 'Any'`
 
 Fox Sports nhl compact live score chip (raw dict -- live-only, uncaptured shape).
 
@@ -2211,7 +2345,9 @@ from sportsdataverse.nhl import fox_nhl_scorechip
 df = fox_nhl_scorechip("nfl12345")
 ```
 
-### `fox_nhl_scores_segment(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_nhl_scores_segment}
+### fox_nhl_scores_segment {#fox_nhl_scores_segment}
+
+`fox_nhl_scores_segment(*args: 'Any', **kwargs: 'Any') -> 'Any'`
 
 Fox Sports nhl one row per game in a scoreboard segment.
 
@@ -2228,7 +2364,9 @@ from sportsdataverse.nhl import fox_nhl_scores_segment
 df = fox_nhl_scores_segment("...")
 ```
 
-### `fox_nhl_standings(team_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#fox_nhl_standings}
+### fox_nhl_standings {#fox_nhl_standings}
+
+`fox_nhl_standings(team_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"`
 
 NHL standings for a team's conference/division.
 
@@ -2251,7 +2389,9 @@ from sportsdataverse.nhl import fox_nhl_standings
 df = fox_nhl_standings("...")
 ```
 
-### `fox_nhl_team_gamelog(team_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#fox_nhl_team_gamelog}
+### fox_nhl_team_gamelog {#fox_nhl_team_gamelog}
+
+`fox_nhl_team_gamelog(team_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"`
 
 NHL team game log (long: one row per game-stat).
 
@@ -2274,7 +2414,9 @@ from sportsdataverse.nhl import fox_nhl_team_gamelog
 df = fox_nhl_team_gamelog("...")
 ```
 
-### `fox_nhl_team_header(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_nhl_team_header}
+### fox_nhl_team_header {#fox_nhl_team_header}
+
+`fox_nhl_team_header(*args: 'Any', **kwargs: 'Any') -> 'Any'`
 
 Fox Sports nhl team header (one row).
 
@@ -2291,7 +2433,9 @@ from sportsdataverse.nhl import fox_nhl_team_header
 df = fox_nhl_team_header("...")
 ```
 
-### `fox_nhl_team_roster(team_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#fox_nhl_team_roster}
+### fox_nhl_team_roster {#fox_nhl_team_roster}
+
+`fox_nhl_team_roster(team_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"`
 
 NHL team roster (one row per player).
 
@@ -2314,7 +2458,9 @@ from sportsdataverse.nhl import fox_nhl_team_roster
 df = fox_nhl_team_roster("...")
 ```
 
-### `fox_nhl_team_stats(team_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"` {#fox_nhl_team_stats}
+### fox_nhl_team_stats {#fox_nhl_team_stats}
+
+`fox_nhl_team_stats(team_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"`
 
 NHL team stat leaders by category.
 
@@ -2337,7 +2483,9 @@ from sportsdataverse.nhl import fox_nhl_team_stats
 df = fox_nhl_team_stats("...")
 ```
 
-### `fox_nhl_teamnav(*args: 'Any', **kwargs: 'Any') -> 'Any'` {#fox_nhl_teamnav}
+### fox_nhl_teamnav {#fox_nhl_teamnav}
+
+`fox_nhl_teamnav(*args: 'Any', **kwargs: 'Any') -> 'Any'`
 
 Fox Sports nhl team directory (one row per team).
 
@@ -2366,7 +2514,9 @@ from sportsdataverse.nhl import fox_nhl_teamnav
 df = fox_nhl_teamnav()
 ```
 
-### `get_constants(league: 'str') -> 'LeagueConstants'` {#get_constants}
+### get_constants {#get_constants}
+
+`get_constants(league: 'str') -> 'LeagueConstants'`
 
 Resolve the fitted-constants row for a league.
 
@@ -2387,7 +2537,9 @@ from sportsdataverse.nhl.nhl_prediction_constants import get_constants
 get_constants("nhl").margin_sd
 ```
 
-### `in_game_features(pbp: 'pl.DataFrame', pregame_home_prob: 'float') -> 'pl.DataFrame'` {#in_game_features}
+### in_game_features {#in_game_features}
+
+`in_game_features(pbp: 'pl.DataFrame', pregame_home_prob: 'float') -> 'pl.DataFrame'`
 
 Per-play in-game win-probability features from game state.
 
@@ -2417,7 +2569,9 @@ pregame_p = win_prob_from_margin(0.3)
 feats = in_game_features(pbp, pregame_home_prob=pregame_p)
 ```
 
-### `log_loss_score(y_true: 'np.ndarray', p_pred: 'np.ndarray', eps: 'float' = 1e-15) -> 'float'` {#log_loss_score}
+### log_loss_score {#log_loss_score}
+
+`log_loss_score(y_true: 'np.ndarray', p_pred: 'np.ndarray', eps: 'float' = 1e-15) -> 'float'`
 
 Binary cross-entropy loss between predicted probabilities and outcomes.
 
@@ -2441,7 +2595,9 @@ from sportsdataverse._common.metrics import log_loss_score
 log_loss_score(np.array([1, 0]), np.array([0.9, 0.1]))
 ```
 
-### `mae(a: 'np.ndarray', b: 'np.ndarray') -> 'float'` {#mae}
+### mae {#mae}
+
+`mae(a: 'np.ndarray', b: 'np.ndarray') -> 'float'`
 
 Mean absolute error between two arrays.
 
@@ -2464,7 +2620,9 @@ from sportsdataverse._common.metrics import mae
 mae(np.array([1.0, 2.0]), np.array([1.5, 2.5]))
 ```
 
-### `predict_margin(adj_xgf_home: 'float', adj_xga_home: 'float', adj_xgf_away: 'float', adj_xga_away: 'float', neutral: 'bool', *, league: 'str' = 'nhl') -> 'float'` {#predict_margin}
+### predict_margin {#predict_margin}
+
+`predict_margin(adj_xgf_home: 'float', adj_xga_home: 'float', adj_xgf_away: 'float', adj_xga_away: 'float', neutral: 'bool', *, league: 'str' = 'nhl') -> 'float'`
 
 Expected home-minus-away goal margin.
 
@@ -2490,7 +2648,9 @@ from sportsdataverse.nhl.nhl_market import predict_margin
 predict_margin(2.8, 2.2, 2.5, 2.4, False)
 ```
 
-### `predict_total(adj_xgf_home: 'float', adj_xga_home: 'float', adj_xgf_away: 'float', adj_xga_away: 'float', neutral: 'bool', *, league: 'str' = 'nhl') -> 'float'` {#predict_total}
+### predict_total {#predict_total}
+
+`predict_total(adj_xgf_home: 'float', adj_xga_home: 'float', adj_xgf_away: 'float', adj_xga_away: 'float', neutral: 'bool', *, league: 'str' = 'nhl') -> 'float'`
 
 Expected total goals, variance-corrected by the fitted `total_scale`.
 
@@ -2523,7 +2683,9 @@ from sportsdataverse.nhl.nhl_market import predict_total
 predict_total(2.8, 2.2, 2.5, 2.4, False)
 ```
 
-### `prepare_xg_features(pbp: 'pl.DataFrame') -> 'pl.DataFrame'` {#prepare_xg_features}
+### prepare_xg_features {#prepare_xg_features}
+
+`prepare_xg_features(pbp: 'pl.DataFrame') -> 'pl.DataFrame'`
 
 Port of `helper_nhl_prepare_xg_data` -- one row per unblocked shot, model features.
 
@@ -2547,7 +2709,9 @@ feat = prepare_xg_features(pbp)
 print(feat.shape)
 ```
 
-### `scoreboard_event_parsing(event)` {#scoreboard_event_parsing}
+### scoreboard_event_parsing {#scoreboard_event_parsing}
+
+`scoreboard_event_parsing(event)`
 
 _No description available._
 
@@ -2557,7 +2721,9 @@ _No description available._
 |---|---|---|---|
 | `event` |  |  |  |
 
-### `spearman_corr(a: 'np.ndarray', b: 'np.ndarray') -> 'float'` {#spearman_corr}
+### spearman_corr {#spearman_corr}
+
+`spearman_corr(a: 'np.ndarray', b: 'np.ndarray') -> 'float'`
 
 Spearman rank correlation between two arrays.
 
@@ -2580,7 +2746,9 @@ from sportsdataverse._common.metrics import spearman_corr
 spearman_corr(np.array([1, 2, 3]), np.array([3, 1, 2]))
 ```
 
-### `team_fullname_to_abbr(name: 'str') -> 'str | None'` {#team_fullname_to_abbr}
+### team_fullname_to_abbr {#team_fullname_to_abbr}
+
+`team_fullname_to_abbr(name: 'str') -> 'str | None'`
 
 Map an NHL full team display name to its abbreviation, or `None` if unknown.
 
@@ -2601,7 +2769,9 @@ from sportsdataverse.nhl.nhl_player_impact_constants import team_fullname_to_abb
 team_fullname_to_abbr("Buffalo Sabres")  # "BUF"
 ```
 
-### `team_game_xg_rates(pbp: 'pl.DataFrame', schedule: 'pl.DataFrame', *, even_strength_only: 'bool' = True) -> 'pl.DataFrame'` {#team_game_xg_rates}
+### team_game_xg_rates {#team_game_xg_rates}
+
+`team_game_xg_rates(pbp: 'pl.DataFrame', schedule: 'pl.DataFrame', *, even_strength_only: 'bool' = True) -> 'pl.DataFrame'`
 
 Per-(game, team) even-strength xG-for/against + realized goals.
 
@@ -2629,7 +2799,9 @@ rates = team_game_xg_rates(pbp, sched)
 print(rates.filter(pl.col("team") == "TOR").head())
 ```
 
-### `weighted_ridge(X: 'Any', y: 'np.ndarray', w: 'np.ndarray', lam: 'float') -> 'np.ndarray'` {#weighted_ridge}
+### weighted_ridge {#weighted_ridge}
+
+`weighted_ridge(X: 'Any', y: 'np.ndarray', w: 'np.ndarray', lam: 'float') -> 'np.ndarray'`
 
 Solve the weighted ridge normal equations `(X'WX + lam*I)^-1 X'Wy`.
 
@@ -2660,7 +2832,9 @@ y = np.array([2.0, -1.0, 1.0])
 beta = weighted_ridge(X, y, np.ones(3), lam=1e-6)
 ```
 
-### `win_prob_from_margin(exp_margin: 'float', *, league: 'str' = 'nhl') -> 'float'` {#win_prob_from_margin}
+### win_prob_from_margin {#win_prob_from_margin}
+
+`win_prob_from_margin(exp_margin: 'float', *, league: 'str' = 'nhl') -> 'float'`
 
 Convert an expected goal margin to a home win probability via Phi(margin/sigma).
 

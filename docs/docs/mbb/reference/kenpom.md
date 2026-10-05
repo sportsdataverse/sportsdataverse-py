@@ -3,12 +3,13 @@ title: MBB — KenPom (kenpom.com, subscription)
 sidebar_label: KenPom (kenpom.com, subscription)
 description: "MBB — KenPom (kenpom.com, subscription) — endpoint reference in sdv-py, the SportsDataverse Python package."
 sidebar_position: 11
+toc_max_heading_level: 2
 ---
 # MBB — KenPom (kenpom.com, subscription)
 
 `sportsdataverse.mbb` — 30 endpoints.
 
-## `kenpom_ratings`
+## kenpom_ratings
 
 GET /index.php - Pomeroy season ratings (AdjEM/AdjO/AdjD/AdjT plus SOS, one row per team). Port of hoopR kp_pomeroy_ratings().
 
@@ -20,12 +21,12 @@ GET /index.php - Pomeroy season ratings (AdjEM/AdjO/AdjD/AdjT plus SOS, one row 
 |---|---|:---:|:---:|:---:|---|
 | `y` | `year` |  | `Y` |  | Season as a 4-digit ENDING year (2025 = the 2024-25 season). Data begins at 2002. |
 
-### Returns
+### Returns {#kenpom_ratings-returns}
 
 **`return_parsed=True`** (default) — A `dict` of polars DataFrames, one per HTML table on the page, keyed by the table's HTML id (a KenPom page often carries several -- `team.php` alone holds the schedule, roster, depth chart and lineup tables); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **`return_parsed=False`** — the raw page HTML (`str`).
 
-### Example
+### Example {#kenpom_ratings-example}
 
 ```python
 kenpom_ratings(year=2025)
@@ -33,7 +34,7 @@ kenpom_ratings(year=2025)
 
 _Last validated n/a._
 
-## `kenpom_efficiency`
+## kenpom_efficiency
 
 GET /summary.php - efficiency and tempo summary (adjusted and raw O/D/T, average possession length). Port of hoopR kp_efficiency().
 
@@ -45,12 +46,12 @@ GET /summary.php - efficiency and tempo summary (adjusted and raw O/D/T, average
 |---|---|:---:|:---:|:---:|---|
 | `y` | `year` |  | `Y` |  | Season as a 4-digit ENDING year. Columns are narrower before 2010. |
 
-### Returns
+### Returns {#kenpom_efficiency-returns}
 
 **`return_parsed=True`** (default) — A `dict` of polars DataFrames, one per HTML table on the page, keyed by the table's HTML id (a KenPom page often carries several -- `team.php` alone holds the schedule, roster, depth chart and lineup tables); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **`return_parsed=False`** — the raw page HTML (`str`).
 
-### Example
+### Example {#kenpom_efficiency-example}
 
 ```python
 kenpom_efficiency(year=2025)
@@ -58,7 +59,7 @@ kenpom_efficiency(year=2025)
 
 _Last validated n/a._
 
-## `kenpom_four_factors`
+## kenpom_four_factors
 
 GET /stats.php - four-factors rankings (eFG%, TO%, OR%, FTRate on offense and defense). Port of hoopR kp_fourfactors().
 
@@ -70,12 +71,12 @@ GET /stats.php - four-factors rankings (eFG%, TO%, OR%, FTRate on offense and de
 |---|---|:---:|:---:|:---:|---|
 | `y` | `year` |  | `Y` |  | Season as a 4-digit ENDING year. |
 
-### Returns
+### Returns {#kenpom_four_factors-returns}
 
 **`return_parsed=True`** (default) — A `dict` of polars DataFrames, one per HTML table on the page, keyed by the table's HTML id (a KenPom page often carries several -- `team.php` alone holds the schedule, roster, depth chart and lineup tables); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **`return_parsed=False`** — the raw page HTML (`str`).
 
-### Example
+### Example {#kenpom_four_factors-example}
 
 ```python
 kenpom_four_factors(year=2025)
@@ -83,7 +84,7 @@ kenpom_four_factors(year=2025)
 
 _Last validated n/a._
 
-## `kenpom_point_distribution`
+## kenpom_point_distribution
 
 GET /pointdist.php - share of points scored from 2s, 3s and free throws, offense and defense. Port of hoopR kp_pointdist().
 
@@ -95,12 +96,12 @@ GET /pointdist.php - share of points scored from 2s, 3s and free throws, offense
 |---|---|:---:|:---:|:---:|---|
 | `y` | `year` |  | `Y` |  | Season as a 4-digit ENDING year. |
 
-### Returns
+### Returns {#kenpom_point_distribution-returns}
 
 **`return_parsed=True`** (default) — A `dict` of polars DataFrames, one per HTML table on the page, keyed by the table's HTML id (a KenPom page often carries several -- `team.php` alone holds the schedule, roster, depth chart and lineup tables); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **`return_parsed=False`** — the raw page HTML (`str`).
 
-### Example
+### Example {#kenpom_point_distribution-example}
 
 ```python
 kenpom_point_distribution(year=2025)
@@ -108,7 +109,7 @@ kenpom_point_distribution(year=2025)
 
 _Last validated n/a._
 
-## `kenpom_height`
+## kenpom_height
 
 GET /height.php - team height, effective height, experience, bench minutes and continuity. Port of hoopR kp_height().
 
@@ -120,12 +121,12 @@ GET /height.php - team height, effective height, experience, bench minutes and c
 |---|---|:---:|:---:|:---:|---|
 | `y` | `year` |  | `Y` |  | Season as a 4-digit ENDING year. Columns are narrower before 2008. |
 
-### Returns
+### Returns {#kenpom_height-returns}
 
 **`return_parsed=True`** (default) — A `dict` of polars DataFrames, one per HTML table on the page, keyed by the table's HTML id (a KenPom page often carries several -- `team.php` alone holds the schedule, roster, depth chart and lineup tables); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **`return_parsed=False`** — the raw page HTML (`str`).
 
-### Example
+### Example {#kenpom_height-example}
 
 ```python
 kenpom_height(year=2025)
@@ -133,7 +134,7 @@ kenpom_height(year=2025)
 
 _Last validated n/a._
 
-## `kenpom_foul_trouble`
+## kenpom_foul_trouble
 
 GET /foul_trouble.php - team foul-trouble splits (minutes and efficiency with starters in foul trouble). Port of hoopR kp_foul_trouble().
 
@@ -145,12 +146,12 @@ GET /foul_trouble.php - team foul-trouble splits (minutes and efficiency with st
 |---|---|:---:|:---:|:---:|---|
 | `y` | `year` |  | `Y` |  | Season as a 4-digit ENDING year. |
 
-### Returns
+### Returns {#kenpom_foul_trouble-returns}
 
 **`return_parsed=True`** (default) — A `dict` of polars DataFrames, one per HTML table on the page, keyed by the table's HTML id (a KenPom page often carries several -- `team.php` alone holds the schedule, roster, depth chart and lineup tables); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **`return_parsed=False`** — the raw page HTML (`str`).
 
-### Example
+### Example {#kenpom_foul_trouble-example}
 
 ```python
 kenpom_foul_trouble(year=2025)
@@ -158,7 +159,7 @@ kenpom_foul_trouble(year=2025)
 
 _Last validated n/a._
 
-## `kenpom_team_stats`
+## kenpom_team_stats
 
 GET /teamstats.php - team shooting and style splits; side='o' for offense, 'd' for defense. Port of hoopR kp_teamstats().
 
@@ -171,12 +172,12 @@ GET /teamstats.php - team shooting and style splits; side='o' for offense, 'd' f
 | `y` | `year` |  | `Y` |  | Season as a 4-digit ENDING year. |
 | `od` | `side` |  |  | `Y` | Side of the ball: 'o' (offense, hoopR's default) or 'd' (defense). |
 
-### Returns
+### Returns {#kenpom_team_stats-returns}
 
 **`return_parsed=True`** (default) — A `dict` of polars DataFrames, one per HTML table on the page, keyed by the table's HTML id (a KenPom page often carries several -- `team.php` alone holds the schedule, roster, depth chart and lineup tables); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **`return_parsed=False`** — the raw page HTML (`str`).
 
-### Example
+### Example {#kenpom_team_stats-example}
 
 ```python
 kenpom_team_stats(year=2025, side='o')
@@ -184,7 +185,7 @@ kenpom_team_stats(year=2025, side='o')
 
 _Last validated n/a._
 
-## `kenpom_player_stats`
+## kenpom_player_stats
 
 GET /playerstats.php - national player leaderboard for one metric. Port of hoopR kp_playerstats().
 
@@ -199,12 +200,12 @@ GET /playerstats.php - national player leaderboard for one metric. Port of hoopR
 | `f` | `conf` |  |  | `Y` | Conference filter (KenPom abbreviation, e.g. 'ACC', 'B10'); omit for all of Division I. |
 | `c` | `conf_only` |  |  | `Y` | Conference-games-only toggle: 'c' restricts the leaderboard to conference play. |
 
-### Returns
+### Returns {#kenpom_player_stats-returns}
 
 **`return_parsed=True`** (default) — A `dict` of polars DataFrames, one per HTML table on the page, keyed by the table's HTML id (a KenPom page often carries several -- `team.php` alone holds the schedule, roster, depth chart and lineup tables); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **`return_parsed=False`** — the raw page HTML (`str`).
 
-### Example
+### Example {#kenpom_player_stats-example}
 
 ```python
 kenpom_player_stats(year=2025, metric='eFG')
@@ -212,7 +213,7 @@ kenpom_player_stats(year=2025, metric='eFG')
 
 _Last validated n/a._
 
-## `kenpom_kpoy`
+## kenpom_kpoy
 
 GET /kpoy.php - KenPom Player of the Year standings and the game-MVP table. Port of hoopR kp_kpoy().
 
@@ -224,12 +225,12 @@ GET /kpoy.php - KenPom Player of the Year standings and the game-MVP table. Port
 |---|---|:---:|:---:|:---:|---|
 | `y` | `year` |  | `Y` |  | Season as a 4-digit ENDING year. |
 
-### Returns
+### Returns {#kenpom_kpoy-returns}
 
 **`return_parsed=True`** (default) — A `dict` of polars DataFrames, one per HTML table on the page, keyed by the table's HTML id (a KenPom page often carries several -- `team.php` alone holds the schedule, roster, depth chart and lineup tables); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **`return_parsed=False`** — the raw page HTML (`str`).
 
-### Example
+### Example {#kenpom_kpoy-example}
 
 ```python
 kenpom_kpoy(year=2025)
@@ -237,7 +238,7 @@ kenpom_kpoy(year=2025)
 
 _Last validated n/a._
 
-## `kenpom_team`
+## kenpom_team
 
 GET /team.php - a team's full season page. Returns EVERY table on it, so one call covers hoopR's kp_team_schedule(), kp_team_players() and kp_team_lineups(), which each fetch this same page separately -- plus kp_team_depth_chart(), recovered under a "depth_chart" key from an embedded script tag rather than a table (KenPom dropped the static depth-chart table; see kp_team_depth_chart()'s R source).
 
@@ -250,12 +251,12 @@ GET /team.php - a team's full season page. Returns EVERY table on it, so one cal
 | `team` | `team` |  | `Y` |  | KenPom team name, spelled as the site does (e.g. 'Duke', 'Michigan St.'). |
 | `y` | `year` |  | `Y` |  | Season as a 4-digit ENDING year. Lineup tables begin at 2011. |
 
-### Returns
+### Returns {#kenpom_team-returns}
 
 **`return_parsed=True`** (default) — A `dict` of polars DataFrames, one per HTML table on the page, keyed by the table's HTML id (a KenPom page often carries several -- `team.php` alone holds the schedule, roster, depth chart and lineup tables); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **`return_parsed=False`** — the raw page HTML (`str`).
 
-### Example
+### Example {#kenpom_team-example}
 
 ```python
 kenpom_team(team='Duke', year=2025)
@@ -263,7 +264,7 @@ kenpom_team(team='Duke', year=2025)
 
 _Last validated n/a._
 
-## `kenpom_team_players_expanded`
+## kenpom_team_players_expanded
 
 GET /player-expanded.php - a team's expanded per-player table plus the minutes matrix. Covers hoopR's kp_team_player_stats() and kp_minutes_matrix() in one fetch.
 
@@ -276,12 +277,12 @@ GET /player-expanded.php - a team's expanded per-player table plus the minutes m
 | `team` | `team` |  | `Y` |  | KenPom team name, spelled as the site does. |
 | `y` | `year` |  | `Y` |  | Season as a 4-digit ENDING year. Starts ('S') are available from 2014. |
 
-### Returns
+### Returns {#kenpom_team_players_expanded-returns}
 
 **`return_parsed=True`** (default) — A `dict` of polars DataFrames, one per HTML table on the page, keyed by the table's HTML id (a KenPom page often carries several -- `team.php` alone holds the schedule, roster, depth chart and lineup tables); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **`return_parsed=False`** — the raw page HTML (`str`).
 
-### Example
+### Example {#kenpom_team_players_expanded-example}
 
 ```python
 kenpom_team_players_expanded(team='Duke', year=2025)
@@ -289,7 +290,7 @@ kenpom_team_players_expanded(team='Duke', year=2025)
 
 _Last validated n/a._
 
-## `kenpom_game_plan`
+## kenpom_game_plan
 
 GET /gameplan.php - a team's game-plan page (per-game four factors and personnel splits). Port of hoopR kp_gameplan().
 
@@ -302,12 +303,12 @@ GET /gameplan.php - a team's game-plan page (per-game four factors and personnel
 | `team` | `team` |  | `Y` |  | KenPom team name, spelled as the site does. |
 | `y` | `year` |  | `Y` |  | Season as a 4-digit ENDING year. |
 
-### Returns
+### Returns {#kenpom_game_plan-returns}
 
 **`return_parsed=True`** (default) — A `dict` of polars DataFrames, one per HTML table on the page, keyed by the table's HTML id (a KenPom page often carries several -- `team.php` alone holds the schedule, roster, depth chart and lineup tables); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **`return_parsed=False`** — the raw page HTML (`str`).
 
-### Example
+### Example {#kenpom_game_plan-example}
 
 ```python
 kenpom_game_plan(team='Duke', year=2025)
@@ -315,7 +316,7 @@ kenpom_game_plan(team='Duke', year=2025)
 
 _Last validated n/a._
 
-## `kenpom_opponent_tracker`
+## kenpom_opponent_tracker
 
 GET /opptracker.php - opponent tracker; side='o' for offense, 'd' for defense. Port of hoopR kp_opptracker().
 
@@ -329,12 +330,12 @@ GET /opptracker.php - opponent tracker; side='o' for offense, 'd' for defense. P
 | `y` | `year` |  | `Y` |  | Season as a 4-digit ENDING year. Columns are narrower before 2010. |
 | `t` | `side` |  |  | `Y` | Side of the ball: 'o' (offense) or 'd' (defense). |
 
-### Returns
+### Returns {#kenpom_opponent_tracker-returns}
 
 **`return_parsed=True`** (default) — A `dict` of polars DataFrames, one per HTML table on the page, keyed by the table's HTML id (a KenPom page often carries several -- `team.php` alone holds the schedule, roster, depth chart and lineup tables); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **`return_parsed=False`** — the raw page HTML (`str`).
 
-### Example
+### Example {#kenpom_opponent_tracker-example}
 
 ```python
 kenpom_opponent_tracker(team='Duke', year=2025, side='o')
@@ -342,7 +343,7 @@ kenpom_opponent_tracker(team='Duke', year=2025, side='o')
 
 _Last validated n/a._
 
-## `kenpom_player_career`
+## kenpom_player_career
 
 GET /player.php - one player's career page (season-by-season stats and game log). Port of hoopR kp_player_career().
 
@@ -354,12 +355,12 @@ GET /player.php - one player's career page (season-by-season stats and game log)
 |---|---|:---:|:---:|:---:|---|
 | `p` | `player_id` |  | `Y` |  | KenPom player id - the `p=` value on a player-page URL. |
 
-### Returns
+### Returns {#kenpom_player_career-returns}
 
 **`return_parsed=True`** (default) — A `dict` of polars DataFrames, one per HTML table on the page, keyed by the table's HTML id (a KenPom page often carries several -- `team.php` alone holds the schedule, roster, depth chart and lineup tables); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **`return_parsed=False`** — the raw page HTML (`str`).
 
-### Example
+### Example {#kenpom_player_career-example}
 
 ```python
 kenpom_player_career(player_id=51234)
@@ -367,7 +368,7 @@ kenpom_player_career(player_id=51234)
 
 _Last validated n/a._
 
-## `kenpom_box`
+## kenpom_box
 
 GET /box.php - box-score detail for one game (per-team four factors, player lines, scoring runs). Port of hoopR kp_box().
 
@@ -380,12 +381,12 @@ GET /box.php - box-score detail for one game (per-team four factors, player line
 | `g` | `game_id` |  | `Y` |  | KenPom game id - the `g=` value on a FanMatch game link. |
 | `y` | `year` |  | `Y` |  | Season (4-digit ENDING year) the game belongs to. |
 
-### Returns
+### Returns {#kenpom_box-returns}
 
 **`return_parsed=True`** (default) — A `dict` of polars DataFrames, one per HTML table on the page, keyed by the table's HTML id (a KenPom page often carries several -- `team.php` alone holds the schedule, roster, depth chart and lineup tables); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **`return_parsed=False`** — the raw page HTML (`str`).
 
-### Example
+### Example {#kenpom_box-example}
 
 ```python
 kenpom_box(game_id=20250401, year=2025)
@@ -393,7 +394,7 @@ kenpom_box(game_id=20250401, year=2025)
 
 _Last validated n/a._
 
-## `kenpom_win_probability`
+## kenpom_win_probability
 
 GET /winprob.php - in-game win-probability table for one game. Port of hoopR kp_winprob().
 
@@ -406,12 +407,12 @@ GET /winprob.php - in-game win-probability table for one game. Port of hoopR kp_
 | `g` | `game_id` |  | `Y` |  | KenPom game id. |
 | `y` | `year` |  | `Y` |  | Season (4-digit ENDING year) the game belongs to. |
 
-### Returns
+### Returns {#kenpom_win_probability-returns}
 
 **`return_parsed=True`** (default) — A `dict` of polars DataFrames, one per HTML table on the page, keyed by the table's HTML id (a KenPom page often carries several -- `team.php` alone holds the schedule, roster, depth chart and lineup tables); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **`return_parsed=False`** — the raw page HTML (`str`).
 
-### Example
+### Example {#kenpom_win_probability-example}
 
 ```python
 kenpom_win_probability(game_id=20250401, year=2025)
@@ -419,7 +420,7 @@ kenpom_win_probability(game_id=20250401, year=2025)
 
 _Last validated n/a._
 
-## `kenpom_fan_match`
+## kenpom_fan_match
 
 GET /fanmatch.php - the FanMatch slate for one date (predictions, thrill score, results). Port of hoopR kp_fanmatch().
 
@@ -431,12 +432,12 @@ GET /fanmatch.php - the FanMatch slate for one date (predictions, thrill score, 
 |---|---|:---:|:---:|:---:|---|
 | `d` | `date` |  | `Y` |  | Slate date as YYYY-MM-DD. |
 
-### Returns
+### Returns {#kenpom_fan_match-returns}
 
 **`return_parsed=True`** (default) — A `dict` of polars DataFrames, one per HTML table on the page, keyed by the table's HTML id (a KenPom page often carries several -- `team.php` alone holds the schedule, roster, depth chart and lineup tables); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **`return_parsed=False`** — the raw page HTML (`str`).
 
-### Example
+### Example {#kenpom_fan_match-example}
 
 ```python
 kenpom_fan_match(date='2025-02-01')
@@ -444,7 +445,7 @@ kenpom_fan_match(date='2025-02-01')
 
 _Last validated n/a._
 
-## `kenpom_team_history`
+## kenpom_team_history
 
 GET /history.php?t= - a program's season-by-season history. Port of hoopR kp_team_history().
 
@@ -456,12 +457,12 @@ GET /history.php?t= - a program's season-by-season history. Port of hoopR kp_tea
 |---|---|:---:|:---:|:---:|---|
 | `t` | `team` |  | `Y` |  | KenPom team name, spelled as the site does. |
 
-### Returns
+### Returns {#kenpom_team_history-returns}
 
 **`return_parsed=True`** (default) — A `dict` of polars DataFrames, one per HTML table on the page, keyed by the table's HTML id (a KenPom page often carries several -- `team.php` alone holds the schedule, roster, depth chart and lineup tables); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **`return_parsed=False`** — the raw page HTML (`str`).
 
-### Example
+### Example {#kenpom_team_history-example}
 
 ```python
 kenpom_team_history(team='Duke')
@@ -469,7 +470,7 @@ kenpom_team_history(team='Duke')
 
 _Last validated n/a._
 
-## `kenpom_coach_history`
+## kenpom_coach_history
 
 GET /history.php?c= - a coach's season-by-season history. Port of hoopR kp_coach_history().
 
@@ -481,12 +482,12 @@ GET /history.php?c= - a coach's season-by-season history. Port of hoopR kp_coach
 |---|---|:---:|:---:|:---:|---|
 | `c` | `coach` |  | `Y` |  | Coach name as KenPom spells it (e.g. 'Jon Scheyer'). |
 
-### Returns
+### Returns {#kenpom_coach_history-returns}
 
 **`return_parsed=True`** (default) — A `dict` of polars DataFrames, one per HTML table on the page, keyed by the table's HTML id (a KenPom page often carries several -- `team.php` alone holds the schedule, roster, depth chart and lineup tables); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **`return_parsed=False`** — the raw page HTML (`str`).
 
-### Example
+### Example {#kenpom_coach_history-example}
 
 ```python
 kenpom_coach_history(coach='Jon Scheyer')
@@ -494,7 +495,7 @@ kenpom_coach_history(coach='Jon Scheyer')
 
 _Last validated n/a._
 
-## `kenpom_program_ratings`
+## kenpom_program_ratings
 
 GET /programs.php - program-level ratings across the full KenPom era. Port of hoopR kp_program_ratings().
 
@@ -505,12 +506,12 @@ GET /programs.php - program-level ratings across the full KenPom era. Port of ho
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 
-### Returns
+### Returns {#kenpom_program_ratings-returns}
 
 **`return_parsed=True`** (default) — A `dict` of polars DataFrames, one per HTML table on the page, keyed by the table's HTML id (a KenPom page often carries several -- `team.php` alone holds the schedule, roster, depth chart and lineup tables); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **`return_parsed=False`** — the raw page HTML (`str`).
 
-### Example
+### Example {#kenpom_program_ratings-example}
 
 ```python
 kenpom_program_ratings()
@@ -518,7 +519,7 @@ kenpom_program_ratings()
 
 _Last validated n/a._
 
-## `kenpom_archive_ratings`
+## kenpom_archive_ratings
 
 GET /archive.php - the Pomeroy ratings as they stood on a past date. Port of hoopR kp_pomeroy_archive_ratings().
 
@@ -530,12 +531,12 @@ GET /archive.php - the Pomeroy ratings as they stood on a past date. Port of hoo
 |---|---|:---:|:---:|:---:|---|
 | `d` | `date` |  | `Y` |  | Snapshot date as YYYY-MM-DD. |
 
-### Returns
+### Returns {#kenpom_archive_ratings-returns}
 
 **`return_parsed=True`** (default) — A `dict` of polars DataFrames, one per HTML table on the page, keyed by the table's HTML id (a KenPom page often carries several -- `team.php` alone holds the schedule, roster, depth chart and lineup tables); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **`return_parsed=False`** — the raw page HTML (`str`).
 
-### Example
+### Example {#kenpom_archive_ratings-example}
 
 ```python
 kenpom_archive_ratings(date='2025-02-01')
@@ -543,7 +544,7 @@ kenpom_archive_ratings(date='2025-02-01')
 
 _Last validated n/a._
 
-## `kenpom_conference`
+## kenpom_conference
 
 GET /conf.php - one conference's season page (standings, efficiency, per-team splits). Port of hoopR kp_conf().
 
@@ -556,12 +557,12 @@ GET /conf.php - one conference's season page (standings, efficiency, per-team sp
 | `c` | `conf` |  | `Y` |  | KenPom conference abbreviation (e.g. 'ACC', 'B10', 'SEC'). |
 | `y` | `year` |  | `Y` |  | Season as a 4-digit ENDING year. |
 
-### Returns
+### Returns {#kenpom_conference-returns}
 
 **`return_parsed=True`** (default) — A `dict` of polars DataFrames, one per HTML table on the page, keyed by the table's HTML id (a KenPom page often carries several -- `team.php` alone holds the schedule, roster, depth chart and lineup tables); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **`return_parsed=False`** — the raw page HTML (`str`).
 
-### Example
+### Example {#kenpom_conference-example}
 
 ```python
 kenpom_conference(conf='ACC', year=2025)
@@ -569,7 +570,7 @@ kenpom_conference(conf='ACC', year=2025)
 
 _Last validated n/a._
 
-## `kenpom_conference_stats`
+## kenpom_conference_stats
 
 GET /confstats.php - league-wide conference comparison for one season. Port of hoopR kp_confstats().
 
@@ -581,12 +582,12 @@ GET /confstats.php - league-wide conference comparison for one season. Port of h
 |---|---|:---:|:---:|:---:|---|
 | `y` | `year` |  | `Y` |  | Season as a 4-digit ENDING year. |
 
-### Returns
+### Returns {#kenpom_conference_stats-returns}
 
 **`return_parsed=True`** (default) — A `dict` of polars DataFrames, one per HTML table on the page, keyed by the table's HTML id (a KenPom page often carries several -- `team.php` alone holds the schedule, roster, depth chart and lineup tables); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **`return_parsed=False`** — the raw page HTML (`str`).
 
-### Example
+### Example {#kenpom_conference_stats-example}
 
 ```python
 kenpom_conference_stats(year=2025)
@@ -594,7 +595,7 @@ kenpom_conference_stats(year=2025)
 
 _Last validated n/a._
 
-## `kenpom_conference_history`
+## kenpom_conference_history
 
 GET /confhistory.php - one conference's season-by-season history. Port of hoopR kp_confhistory().
 
@@ -606,12 +607,12 @@ GET /confhistory.php - one conference's season-by-season history. Port of hoopR 
 |---|---|:---:|:---:|:---:|---|
 | `c` | `conf` |  | `Y` |  | KenPom conference abbreviation. |
 
-### Returns
+### Returns {#kenpom_conference_history-returns}
 
 **`return_parsed=True`** (default) — A `dict` of polars DataFrames, one per HTML table on the page, keyed by the table's HTML id (a KenPom page often carries several -- `team.php` alone holds the schedule, roster, depth chart and lineup tables); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **`return_parsed=False`** — the raw page HTML (`str`).
 
-### Example
+### Example {#kenpom_conference_history-example}
 
 ```python
 kenpom_conference_history(conf='ACC')
@@ -619,7 +620,7 @@ kenpom_conference_history(conf='ACC')
 
 _Last validated n/a._
 
-## `kenpom_trends`
+## kenpom_trends
 
 GET /trends.php - national Division I trends by season (tempo, efficiency, shooting, fouls). Port of hoopR kp_trends().
 
@@ -630,12 +631,12 @@ GET /trends.php - national Division I trends by season (tempo, efficiency, shoot
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 
-### Returns
+### Returns {#kenpom_trends-returns}
 
 **`return_parsed=True`** (default) — A `dict` of polars DataFrames, one per HTML table on the page, keyed by the table's HTML id (a KenPom page often carries several -- `team.php` alone holds the schedule, roster, depth chart and lineup tables); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **`return_parsed=False`** — the raw page HTML (`str`).
 
-### Example
+### Example {#kenpom_trends-example}
 
 ```python
 kenpom_trends()
@@ -643,7 +644,7 @@ kenpom_trends()
 
 _Last validated n/a._
 
-## `kenpom_home_court_advantage`
+## kenpom_home_court_advantage
 
 GET /hca.php - per-team home-court advantage estimates. Port of hoopR kp_hca().
 
@@ -654,12 +655,12 @@ GET /hca.php - per-team home-court advantage estimates. Port of hoopR kp_hca().
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 
-### Returns
+### Returns {#kenpom_home_court_advantage-returns}
 
 **`return_parsed=True`** (default) — A `dict` of polars DataFrames, one per HTML table on the page, keyed by the table's HTML id (a KenPom page often carries several -- `team.php` alone holds the schedule, roster, depth chart and lineup tables); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **`return_parsed=False`** — the raw page HTML (`str`).
 
-### Example
+### Example {#kenpom_home_court_advantage-example}
 
 ```python
 kenpom_home_court_advantage()
@@ -667,7 +668,7 @@ kenpom_home_court_advantage()
 
 _Last validated n/a._
 
-## `kenpom_arenas`
+## kenpom_arenas
 
 GET /arenas.php - arena reference (name, capacity, average attendance) by team. Port of hoopR kp_arenas().
 
@@ -679,12 +680,12 @@ GET /arenas.php - arena reference (name, capacity, average attendance) by team. 
 |---|---|:---:|:---:|:---:|---|
 | `y` | `year` |  | `Y` |  | Season as a 4-digit ENDING year. |
 
-### Returns
+### Returns {#kenpom_arenas-returns}
 
 **`return_parsed=True`** (default) — A `dict` of polars DataFrames, one per HTML table on the page, keyed by the table's HTML id (a KenPom page often carries several -- `team.php` alone holds the schedule, roster, depth chart and lineup tables); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **`return_parsed=False`** — the raw page HTML (`str`).
 
-### Example
+### Example {#kenpom_arenas-example}
 
 ```python
 kenpom_arenas(year=2025)
@@ -692,7 +693,7 @@ kenpom_arenas(year=2025)
 
 _Last validated n/a._
 
-## `kenpom_officials`
+## kenpom_officials
 
 GET /officials.php - referee ratings for one season. Port of hoopR kp_officials().
 
@@ -704,12 +705,12 @@ GET /officials.php - referee ratings for one season. Port of hoopR kp_officials(
 |---|---|:---:|:---:|:---:|---|
 | `y` | `year` |  | `Y` |  | Season as a 4-digit ENDING year. |
 
-### Returns
+### Returns {#kenpom_officials-returns}
 
 **`return_parsed=True`** (default) — A `dict` of polars DataFrames, one per HTML table on the page, keyed by the table's HTML id (a KenPom page often carries several -- `team.php` alone holds the schedule, roster, depth chart and lineup tables); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **`return_parsed=False`** — the raw page HTML (`str`).
 
-### Example
+### Example {#kenpom_officials-example}
 
 ```python
 kenpom_officials(year=2025)
@@ -717,7 +718,7 @@ kenpom_officials(year=2025)
 
 _Last validated n/a._
 
-## `kenpom_referee`
+## kenpom_referee
 
 GET /referee.php - one referee's game log and splits for a season. Port of hoopR kp_referee().
 
@@ -730,12 +731,12 @@ GET /referee.php - one referee's game log and splits for a season. Port of hoopR
 | `r` | `referee` |  | `Y` |  | Referee name as KenPom spells it (take it from the officials table). |
 | `y` | `year` |  | `Y` |  | Season as a 4-digit ENDING year. |
 
-### Returns
+### Returns {#kenpom_referee-returns}
 
 **`return_parsed=True`** (default) — A `dict` of polars DataFrames, one per HTML table on the page, keyed by the table's HTML id (a KenPom page often carries several -- `team.php` alone holds the schedule, roster, depth chart and lineup tables); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **`return_parsed=False`** — the raw page HTML (`str`).
 
-### Example
+### Example {#kenpom_referee-example}
 
 ```python
 kenpom_referee(referee='Ron Groover', year=2025)
@@ -743,7 +744,7 @@ kenpom_referee(referee='Ron Groover', year=2025)
 
 _Last validated n/a._
 
-## `kenpom_game_attributes`
+## kenpom_game_attributes
 
 GET /game_attrs.php - season game leaderboards by attribute (thrill score, comebacks, upsets, ...). Port of hoopR kp_game_attrs().
 
@@ -756,12 +757,12 @@ GET /game_attrs.php - season game leaderboards by attribute (thrill score, comeb
 | `y` | `year` |  | `Y` |  | Season as a 4-digit ENDING year. |
 | `s` | `attribute` |  |  | `Y` | Attribute slug, e.g. ThrillScore, Comeback, FanMatch, Upsets, Busts, MinutesPlayed, PossessionLength, LeadChanges. |
 
-### Returns
+### Returns {#kenpom_game_attributes-returns}
 
 **`return_parsed=True`** (default) — A `dict` of polars DataFrames, one per HTML table on the page, keyed by the table's HTML id (a KenPom page often carries several -- `team.php` alone holds the schedule, roster, depth chart and lineup tables); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **`return_parsed=False`** — the raw page HTML (`str`).
 
-### Example
+### Example {#kenpom_game_attributes-example}
 
 ```python
 kenpom_game_attributes(year=2025, attribute='ThrillScore')

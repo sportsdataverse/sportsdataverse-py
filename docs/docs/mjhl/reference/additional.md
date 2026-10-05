@@ -11,13 +11,17 @@ not covered by the generated API-endpoint reference above.
 
 ## Utilities & helpers
 
-### `most_recent_mjhl_season() -> 'int'` {#most_recent_mjhl_season}
+### most_recent_mjhl_season {#most_recent_mjhl_season}
+
+`most_recent_mjhl_season() -> 'int'`
 
 Most-recent MJHL season as an end-year integer (max `season_yr`), or 2026.
 
 ## Other
 
-### `build_family(league: 'str') -> 'dict[str, Any]'` {#build_family}
+### build_family {#build_family}
+
+`build_family(league: 'str') -> 'dict[str, Any]'`
 
 Return a dict of public callables for *league*.
 
@@ -35,7 +39,9 @@ a module namespace via `globals().update(...)`.
 
 Keys are the public function names (e.g. `"ahl_schedule"`).
 
-### `mjhl_game_corsi(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'` {#mjhl_game_corsi}
+### mjhl_game_corsi {#mjhl_game_corsi}
+
+`mjhl_game_corsi(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'`
 
 Player-level on-ice Corsi and Fenwick for a single MJHL game.
 
@@ -46,7 +52,9 @@ Player-level on-ice Corsi and Fenwick for a single MJHL game.
 | `game_id` | `int` |  |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
-### `mjhl_game_shifts(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'` {#mjhl_game_shifts}
+### mjhl_game_shifts {#mjhl_game_shifts}
+
+`mjhl_game_shifts(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'`
 
 Parsed shift stints for a single MJHL game.
 
@@ -57,7 +65,9 @@ Parsed shift stints for a single MJHL game.
 | `game_id` | `int` |  |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
-### `mjhl_game_summary(game_id: 'int') -> 'dict'` {#mjhl_game_summary}
+### mjhl_game_summary {#mjhl_game_summary}
+
+`mjhl_game_summary(game_id: 'int') -> 'dict'`
 
 MJHL game summary — dict of frames (game/goals/penalties/shots_by_period/three_stars).
 
@@ -67,7 +77,9 @@ MJHL game summary — dict of frames (game/goals/penalties/shots_by_period/three
 |---|---|---|---|
 | `game_id` | `int` |  |  |
 
-### `mjhl_leaders(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'` {#mjhl_leaders}
+### mjhl_leaders {#mjhl_leaders}
+
+`mjhl_leaders(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'`
 
 MJHL statistical leaders for a given season.
 
@@ -100,7 +112,9 @@ MJHL statistical leaders for a given season.
 | `position` | character | Listed roster position (G, F, C, etc.). |
 | `division` | character | Team division. |
 
-### `mjhl_pbp(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'` {#mjhl_pbp}
+### mjhl_pbp {#mjhl_pbp}
+
+`mjhl_pbp(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'`
 
 MJHL play-by-play — one row per event, fully enriched.
 
@@ -111,7 +125,9 @@ MJHL play-by-play — one row per event, fully enriched.
 | `game_id` | `int` |  |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
-### `mjhl_player_stats(player_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'` {#mjhl_player_stats}
+### mjhl_player_stats {#mjhl_player_stats}
+
+`mjhl_player_stats(player_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'`
 
 MJHL player season stats across all seasons.
 
@@ -122,7 +138,9 @@ MJHL player season stats across all seasons.
 | `player_id` | `int` |  |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
-### `mjhl_player_toi(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'` {#mjhl_player_toi}
+### mjhl_player_toi {#mjhl_player_toi}
+
+`mjhl_player_toi(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'`
 
 Per-player time-on-ice totals for a single MJHL game.
 
@@ -133,7 +151,9 @@ Per-player time-on-ice totals for a single MJHL game.
 | `game_id` | `int` |  |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
-### `mjhl_schedule(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'` {#mjhl_schedule}
+### mjhl_schedule {#mjhl_schedule}
+
+`mjhl_schedule(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'`
 
 MJHL schedule — one row per game.
 
@@ -163,7 +183,9 @@ MJHL schedule — one row per game.
 | `season_id` | character | Unique season identifier. |
 | `game_type` | character | The most recent game type of that season that a player appeared on the roster. |
 
-### `mjhl_season_id(return_as_pandas: 'bool' = False) -> 'Any'` {#mjhl_season_id}
+### mjhl_season_id {#mjhl_season_id}
+
+`mjhl_season_id(return_as_pandas: 'bool' = False) -> 'Any'`
 
 All MJHL seasons with end-year + game-type labels.
 
@@ -188,7 +210,9 @@ All MJHL seasons with end-year + game-type labels.
 | `season_yr` | integer | Year derived from the season name (concluding year). |
 | `game_type_label` | character | Game type: "preseason", "regular", or "playoffs". |
 
-### `mjhl_standings(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'` {#mjhl_standings}
+### mjhl_standings {#mjhl_standings}
+
+`mjhl_standings(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'`
 
 MJHL standings — one row per team.
 
@@ -221,7 +245,9 @@ MJHL standings — one row per team.
 | `team_rank` | integer | Team rank in the standings. |
 | `team` | character | Team-side label or team identifier. |
 
-### `mjhl_team_roster(team_id: 'int', season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'` {#mjhl_team_roster}
+### mjhl_team_roster {#mjhl_team_roster}
+
+`mjhl_team_roster(team_id: 'int', season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'`
 
 MJHL team roster for a given team + season.
 
@@ -234,7 +260,9 @@ MJHL team roster for a given team + season.
 | `season_id` | `Optional[int]` | `None` |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
-### `mjhl_teams(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'` {#mjhl_teams}
+### mjhl_teams {#mjhl_teams}
+
+`mjhl_teams(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'`
 
 MJHL teams for a given season.
 

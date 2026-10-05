@@ -3,12 +3,13 @@ title: NHL — NHL EDGE API
 sidebar_label: NHL EDGE API
 description: "NHL — NHL EDGE API — endpoint reference in sdv-py, the SportsDataverse Python package."
 sidebar_position: 11
+toc_max_heading_level: 2
 ---
 # NHL — NHL EDGE API
 
 `sportsdataverse.nhl` — 35 endpoints.
 
-## `nhl_edge_skater_detail`
+## nhl_edge_skater_detail
 
 Pull EDGE detail stats for a single skater.
 
@@ -22,7 +23,7 @@ Pull EDGE detail stats for a single skater.
 | `season` | `season` |  |  | `Y` | season path parameter. |
 | `game_type` | `game_type` |  |  | `Y` | game_type path parameter. |
 
-### Returns
+### Returns {#nhl_edge_skater_detail-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -126,7 +127,7 @@ Pull EDGE detail stats for a single skater.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nhl_edge_skater_detail-example}
 
 ```python
 nhl_edge_skater_detail(player_id=8480801)
@@ -134,7 +135,7 @@ nhl_edge_skater_detail(player_id=8480801)
 
 _Last validated n/a._
 
-## `nhl_edge_skater_comparison`
+## nhl_edge_skater_comparison
 
 Pull EDGE comparison data for a single skater.
 
@@ -148,7 +149,7 @@ Pull EDGE comparison data for a single skater.
 | `season` | `season` |  |  | `Y` | season path parameter. |
 | `game_type` | `game_type` |  |  | `Y` | game_type path parameter. |
 
-### Returns
+### Returns {#nhl_edge_skater_comparison-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -261,7 +262,7 @@ Pull EDGE comparison data for a single skater.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nhl_edge_skater_comparison-example}
 
 ```python
 nhl_edge_skater_comparison(player_id=8480801)
@@ -269,7 +270,7 @@ nhl_edge_skater_comparison(player_id=8480801)
 
 _Last validated n/a._
 
-## `nhl_edge_skater_shot_location_detail`
+## nhl_edge_skater_shot_location_detail
 
 Pull EDGE shot-location detail for a single skater.
 
@@ -283,7 +284,7 @@ Pull EDGE shot-location detail for a single skater.
 | `season` | `season` |  |  | `Y` | season path parameter. |
 | `game_type` | `game_type` |  |  | `Y` | game_type path parameter. |
 
-### Returns
+### Returns {#nhl_edge_skater_shot_location_detail-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -298,7 +299,7 @@ Pull EDGE shot-location detail for a single skater.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nhl_edge_skater_shot_location_detail-example}
 
 ```python
 nhl_edge_skater_shot_location_detail(player_id=8480801)
@@ -306,7 +307,7 @@ nhl_edge_skater_shot_location_detail(player_id=8480801)
 
 _Last validated n/a._
 
-## `nhl_edge_skater_shot_location_top_10`
+## nhl_edge_skater_shot_location_top_10
 
 Pull the EDGE top-10 skaters for a shot-location category.
 
@@ -322,12 +323,12 @@ Pull the EDGE top-10 skaters for a shot-location category.
 | `season` | `season` |  |  | `Y` | season path parameter. |
 | `game_type` | `game_type` |  |  | `Y` | game_type path parameter. |
 
-### Returns
+### Returns {#nhl_edge_skater_shot_location_top_10-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_edge_top10`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nhl_edge_skater_shot_location_top_10-example}
 
 ```python
 nhl_edge_skater_shot_location_top_10(position='forwards', category='shots', sort_by='points')
@@ -335,7 +336,7 @@ nhl_edge_skater_shot_location_top_10(position='forwards', category='shots', sort
 
 _Last validated n/a._
 
-## `nhl_edge_skater_shot_speed_detail`
+## nhl_edge_skater_shot_speed_detail
 
 Pull EDGE shot-speed detail for a single skater.
 
@@ -349,7 +350,7 @@ Pull EDGE shot-speed detail for a single skater.
 | `season` | `season` |  |  | `Y` | season path parameter. |
 | `game_type` | `game_type` |  |  | `Y` | game_type path parameter. |
 
-### Returns
+### Returns {#nhl_edge_skater_shot_speed_detail-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -393,7 +394,7 @@ Pull EDGE shot-speed detail for a single skater.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nhl_edge_skater_shot_speed_detail-example}
 
 ```python
 nhl_edge_skater_shot_speed_detail(player_id=8480801)
@@ -401,7 +402,7 @@ nhl_edge_skater_shot_speed_detail(player_id=8480801)
 
 _Last validated n/a._
 
-## `nhl_edge_skater_shot_speed_top_10`
+## nhl_edge_skater_shot_speed_top_10
 
 Pull the EDGE top-10 skaters by shot speed.
 
@@ -416,12 +417,12 @@ Pull the EDGE top-10 skaters by shot speed.
 | `season` | `season` |  |  | `Y` | season path parameter. |
 | `game_type` | `game_type` |  |  | `Y` | game_type path parameter. |
 
-### Returns
+### Returns {#nhl_edge_skater_shot_speed_top_10-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_edge_top10`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nhl_edge_skater_shot_speed_top_10-example}
 
 ```python
 nhl_edge_skater_shot_speed_top_10(positions='defense', sort_by='points')
@@ -429,7 +430,7 @@ nhl_edge_skater_shot_speed_top_10(positions='defense', sort_by='points')
 
 _Last validated n/a._
 
-## `nhl_edge_skater_skating_distance_detail`
+## nhl_edge_skater_skating_distance_detail
 
 Pull EDGE skating-distance detail for a single skater.
 
@@ -443,7 +444,7 @@ Pull EDGE skating-distance detail for a single skater.
 | `season` | `season` |  |  | `Y` | season path parameter. |
 | `game_type` | `game_type` |  |  | `Y` | game_type path parameter. |
 
-### Returns
+### Returns {#nhl_edge_skater_skating_distance_detail-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -453,7 +454,7 @@ Pull EDGE skating-distance detail for a single skater.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nhl_edge_skater_skating_distance_detail-example}
 
 ```python
 nhl_edge_skater_skating_distance_detail(player_id=8480801)
@@ -461,7 +462,7 @@ nhl_edge_skater_skating_distance_detail(player_id=8480801)
 
 _Last validated n/a._
 
-## `nhl_edge_skater_skating_speed_detail`
+## nhl_edge_skater_skating_speed_detail
 
 Pull EDGE skating-speed detail for a single skater.
 
@@ -475,7 +476,7 @@ Pull EDGE skating-speed detail for a single skater.
 | `season` | `season` |  |  | `Y` | season path parameter. |
 | `game_type` | `game_type` |  |  | `Y` | game_type path parameter. |
 
-### Returns
+### Returns {#nhl_edge_skater_skating_speed_detail-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -511,7 +512,7 @@ Pull EDGE skating-speed detail for a single skater.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nhl_edge_skater_skating_speed_detail-example}
 
 ```python
 nhl_edge_skater_skating_speed_detail(player_id=8480801)
@@ -519,7 +520,7 @@ nhl_edge_skater_skating_speed_detail(player_id=8480801)
 
 _Last validated n/a._
 
-## `nhl_edge_skater_speed_top_10`
+## nhl_edge_skater_speed_top_10
 
 Pull the EDGE top-10 skaters by skating speed.
 
@@ -534,12 +535,12 @@ Pull the EDGE top-10 skaters by skating speed.
 | `season` | `season` |  |  | `Y` | season path parameter. |
 | `game_type` | `game_type` |  |  | `Y` | game_type path parameter. |
 
-### Returns
+### Returns {#nhl_edge_skater_speed_top_10-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_edge_top10`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nhl_edge_skater_speed_top_10-example}
 
 ```python
 nhl_edge_skater_speed_top_10(positions='defense', sort_by='points')
@@ -547,7 +548,7 @@ nhl_edge_skater_speed_top_10(positions='defense', sort_by='points')
 
 _Last validated n/a._
 
-## `nhl_edge_skater_distance_top_10`
+## nhl_edge_skater_distance_top_10
 
 Pull the EDGE top-10 skaters by skating distance.
 
@@ -563,12 +564,12 @@ Pull the EDGE top-10 skaters by skating distance.
 | `season` | `season` |  |  | `Y` | season path parameter. |
 | `game_type` | `game_type` |  |  | `Y` | game_type path parameter. |
 
-### Returns
+### Returns {#nhl_edge_skater_distance_top_10-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_edge_top10`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nhl_edge_skater_distance_top_10-example}
 
 ```python
 nhl_edge_skater_distance_top_10(positions='defense', strength='ev', sort_by='points')
@@ -576,7 +577,7 @@ nhl_edge_skater_distance_top_10(positions='defense', strength='ev', sort_by='poi
 
 _Last validated n/a._
 
-## `nhl_edge_skater_zone_time`
+## nhl_edge_skater_zone_time
 
 Pull EDGE zone-time detail for a single skater.
 
@@ -590,7 +591,7 @@ Pull EDGE zone-time detail for a single skater.
 | `season` | `season` |  |  | `Y` | season path parameter. |
 | `game_type` | `game_type` |  |  | `Y` | game_type path parameter. |
 
-### Returns
+### Returns {#nhl_edge_skater_zone_time-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -608,7 +609,7 @@ Pull EDGE zone-time detail for a single skater.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nhl_edge_skater_zone_time-example}
 
 ```python
 nhl_edge_skater_zone_time(player_id=8480801)
@@ -616,7 +617,7 @@ nhl_edge_skater_zone_time(player_id=8480801)
 
 _Last validated n/a._
 
-## `nhl_edge_skater_zone_time_top_10`
+## nhl_edge_skater_zone_time_top_10
 
 Pull the EDGE top-10 skaters by zone time.
 
@@ -632,12 +633,12 @@ Pull the EDGE top-10 skaters by zone time.
 | `season` | `season` |  |  | `Y` | season path parameter. |
 | `game_type` | `game_type` |  |  | `Y` | game_type path parameter. |
 
-### Returns
+### Returns {#nhl_edge_skater_zone_time_top_10-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_edge_top10`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nhl_edge_skater_zone_time_top_10-example}
 
 ```python
 nhl_edge_skater_zone_time_top_10(positions='defense', strength='ev', sort_by='points')
@@ -645,7 +646,7 @@ nhl_edge_skater_zone_time_top_10(positions='defense', strength='ev', sort_by='po
 
 _Last validated n/a._
 
-## `nhl_edge_skater_landing`
+## nhl_edge_skater_landing
 
 Pull the EDGE skater landing page (summary across all skaters).
 
@@ -658,7 +659,7 @@ Pull the EDGE skater landing page (summary across all skaters).
 | `season` | `season` |  |  | `Y` | season path parameter. |
 | `game_type` | `game_type` |  |  | `Y` | game_type path parameter. |
 
-### Returns
+### Returns {#nhl_edge_skater_landing-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -811,7 +812,7 @@ Pull the EDGE skater landing page (summary across all skaters).
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nhl_edge_skater_landing-example}
 
 ```python
 nhl_edge_skater_landing()
@@ -819,7 +820,7 @@ nhl_edge_skater_landing()
 
 _Last validated n/a._
 
-## `nhl_edge_goalie_detail`
+## nhl_edge_goalie_detail
 
 Pull EDGE detail stats for a single goalie.
 
@@ -833,7 +834,7 @@ Pull EDGE detail stats for a single goalie.
 | `season` | `season` |  |  | `Y` | season path parameter. |
 | `game_type` | `game_type` |  |  | `Y` | game_type path parameter. |
 
-### Returns
+### Returns {#nhl_edge_goalie_detail-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -879,7 +880,7 @@ Pull EDGE detail stats for a single goalie.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nhl_edge_goalie_detail-example}
 
 ```python
 nhl_edge_goalie_detail(player_id=8480801)
@@ -887,7 +888,7 @@ nhl_edge_goalie_detail(player_id=8480801)
 
 _Last validated n/a._
 
-## `nhl_edge_goalie_5v5_detail`
+## nhl_edge_goalie_5v5_detail
 
 Pull EDGE 5-on-5 detail stats for a single goalie.
 
@@ -901,7 +902,7 @@ Pull EDGE 5-on-5 detail stats for a single goalie.
 | `season` | `season` |  |  | `Y` | season path parameter. |
 | `game_type` | `game_type` |  |  | `Y` | game_type path parameter. |
 
-### Returns
+### Returns {#nhl_edge_goalie_5v5_detail-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -922,7 +923,7 @@ Pull EDGE 5-on-5 detail stats for a single goalie.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nhl_edge_goalie_5v5_detail-example}
 
 ```python
 nhl_edge_goalie_5v5_detail(player_id=8480801)
@@ -930,7 +931,7 @@ nhl_edge_goalie_5v5_detail(player_id=8480801)
 
 _Last validated n/a._
 
-## `nhl_edge_goalie_5v5_top_10`
+## nhl_edge_goalie_5v5_top_10
 
 Pull the EDGE top-10 goalies by 5-on-5 metrics.
 
@@ -944,12 +945,12 @@ Pull the EDGE top-10 goalies by 5-on-5 metrics.
 | `season` | `season` |  |  | `Y` | season path parameter. |
 | `game_type` | `game_type` |  |  | `Y` | game_type path parameter. |
 
-### Returns
+### Returns {#nhl_edge_goalie_5v5_top_10-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_edge_top10`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nhl_edge_goalie_5v5_top_10-example}
 
 ```python
 nhl_edge_goalie_5v5_top_10(sort_by='points')
@@ -957,7 +958,7 @@ nhl_edge_goalie_5v5_top_10(sort_by='points')
 
 _Last validated n/a._
 
-## `nhl_edge_goalie_comparison`
+## nhl_edge_goalie_comparison
 
 Pull EDGE comparison data for a single goalie.
 
@@ -971,7 +972,7 @@ Pull EDGE comparison data for a single goalie.
 | `season` | `season` |  |  | `Y` | season path parameter. |
 | `game_type` | `game_type` |  |  | `Y` | game_type path parameter. |
 
-### Returns
+### Returns {#nhl_edge_goalie_comparison-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1013,7 +1014,7 @@ Pull EDGE comparison data for a single goalie.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nhl_edge_goalie_comparison-example}
 
 ```python
 nhl_edge_goalie_comparison(player_id=8480801)
@@ -1021,7 +1022,7 @@ nhl_edge_goalie_comparison(player_id=8480801)
 
 _Last validated n/a._
 
-## `nhl_edge_goalie_save_percentage_detail`
+## nhl_edge_goalie_save_percentage_detail
 
 Pull EDGE save-percentage detail for a single goalie.
 
@@ -1035,7 +1036,7 @@ Pull EDGE save-percentage detail for a single goalie.
 | `season` | `season` |  |  | `Y` | season path parameter. |
 | `game_type` | `game_type` |  |  | `Y` | game_type path parameter. |
 
-### Returns
+### Returns {#nhl_edge_goalie_save_percentage_detail-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1050,7 +1051,7 @@ Pull EDGE save-percentage detail for a single goalie.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nhl_edge_goalie_save_percentage_detail-example}
 
 ```python
 nhl_edge_goalie_save_percentage_detail(player_id=8480801)
@@ -1058,7 +1059,7 @@ nhl_edge_goalie_save_percentage_detail(player_id=8480801)
 
 _Last validated n/a._
 
-## `nhl_edge_goalie_edge_save_pctg_top_10`
+## nhl_edge_goalie_edge_save_pctg_top_10
 
 Pull the EDGE top-10 goalies by save-percentage.
 
@@ -1072,12 +1073,12 @@ Pull the EDGE top-10 goalies by save-percentage.
 | `season` | `season` |  |  | `Y` | season path parameter. |
 | `game_type` | `game_type` |  |  | `Y` | game_type path parameter. |
 
-### Returns
+### Returns {#nhl_edge_goalie_edge_save_pctg_top_10-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_edge_top10`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nhl_edge_goalie_edge_save_pctg_top_10-example}
 
 ```python
 nhl_edge_goalie_edge_save_pctg_top_10(sort_by='points')
@@ -1085,7 +1086,7 @@ nhl_edge_goalie_edge_save_pctg_top_10(sort_by='points')
 
 _Last validated n/a._
 
-## `nhl_edge_goalie_shot_location_detail`
+## nhl_edge_goalie_shot_location_detail
 
 Pull EDGE shot-location detail for a single goalie.
 
@@ -1099,7 +1100,7 @@ Pull EDGE shot-location detail for a single goalie.
 | `season` | `season` |  |  | `Y` | season path parameter. |
 | `game_type` | `game_type` |  |  | `Y` | game_type path parameter. |
 
-### Returns
+### Returns {#nhl_edge_goalie_shot_location_detail-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1116,7 +1117,7 @@ Pull EDGE shot-location detail for a single goalie.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nhl_edge_goalie_shot_location_detail-example}
 
 ```python
 nhl_edge_goalie_shot_location_detail(player_id=8480801)
@@ -1124,7 +1125,7 @@ nhl_edge_goalie_shot_location_detail(player_id=8480801)
 
 _Last validated n/a._
 
-## `nhl_edge_goalie_shot_location_top_10`
+## nhl_edge_goalie_shot_location_top_10
 
 Pull the EDGE top-10 goalies for a shot-location category.
 
@@ -1139,12 +1140,12 @@ Pull the EDGE top-10 goalies for a shot-location category.
 | `season` | `season` |  |  | `Y` | season path parameter. |
 | `game_type` | `game_type` |  |  | `Y` | game_type path parameter. |
 
-### Returns
+### Returns {#nhl_edge_goalie_shot_location_top_10-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_edge_top10`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nhl_edge_goalie_shot_location_top_10-example}
 
 ```python
 nhl_edge_goalie_shot_location_top_10(category='shots', sort_by='points')
@@ -1152,7 +1153,7 @@ nhl_edge_goalie_shot_location_top_10(category='shots', sort_by='points')
 
 _Last validated n/a._
 
-## `nhl_edge_goalie_landing`
+## nhl_edge_goalie_landing
 
 Pull the EDGE goalie landing page (summary across all goalies).
 
@@ -1165,7 +1166,7 @@ Pull the EDGE goalie landing page (summary across all goalies).
 | `season` | `season` |  |  | `Y` | season path parameter. |
 | `game_type` | `game_type` |  |  | `Y` | game_type path parameter. |
 
-### Returns
+### Returns {#nhl_edge_goalie_landing-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1251,7 +1252,7 @@ Pull the EDGE goalie landing page (summary across all goalies).
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nhl_edge_goalie_landing-example}
 
 ```python
 nhl_edge_goalie_landing()
@@ -1259,7 +1260,7 @@ nhl_edge_goalie_landing()
 
 _Last validated n/a._
 
-## `nhl_edge_team_detail`
+## nhl_edge_team_detail
 
 Pull EDGE detail stats for a single team.
 
@@ -1273,7 +1274,7 @@ Pull EDGE detail stats for a single team.
 | `season` | `season` |  |  | `Y` | season path parameter. |
 | `game_type` | `game_type` |  |  | `Y` | game_type path parameter. |
 
-### Returns
+### Returns {#nhl_edge_team_detail-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1360,7 +1361,7 @@ Pull EDGE detail stats for a single team.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nhl_edge_team_detail-example}
 
 ```python
 nhl_edge_team_detail(team_id=10)
@@ -1368,7 +1369,7 @@ nhl_edge_team_detail(team_id=10)
 
 _Last validated n/a._
 
-## `nhl_edge_team_landing`
+## nhl_edge_team_landing
 
 Pull the EDGE team landing page (summary across all teams).
 
@@ -1381,7 +1382,7 @@ Pull the EDGE team landing page (summary across all teams).
 | `season` | `season` |  |  | `Y` | season path parameter. |
 | `game_type` | `game_type` |  |  | `Y` | game_type path parameter. |
 
-### Returns
+### Returns {#nhl_edge_team_landing-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1476,7 +1477,7 @@ Pull the EDGE team landing page (summary across all teams).
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nhl_edge_team_landing-example}
 
 ```python
 nhl_edge_team_landing()
@@ -1484,7 +1485,7 @@ nhl_edge_team_landing()
 
 _Last validated n/a._
 
-## `nhl_edge_team_shot_location_detail`
+## nhl_edge_team_shot_location_detail
 
 Pull EDGE shot-location detail for a single team.
 
@@ -1498,7 +1499,7 @@ Pull EDGE shot-location detail for a single team.
 | `season` | `season` |  |  | `Y` | season path parameter. |
 | `game_type` | `game_type` |  |  | `Y` | game_type path parameter. |
 
-### Returns
+### Returns {#nhl_edge_team_shot_location_detail-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1513,7 +1514,7 @@ Pull EDGE shot-location detail for a single team.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nhl_edge_team_shot_location_detail-example}
 
 ```python
 nhl_edge_team_shot_location_detail(team_id=10)
@@ -1521,7 +1522,7 @@ nhl_edge_team_shot_location_detail(team_id=10)
 
 _Last validated n/a._
 
-## `nhl_edge_team_shot_location_top_10`
+## nhl_edge_team_shot_location_top_10
 
 Pull the EDGE top-10 teams for a shot-location category.
 
@@ -1537,12 +1538,12 @@ Pull the EDGE top-10 teams for a shot-location category.
 | `season` | `season` |  |  | `Y` | season path parameter. |
 | `game_type` | `game_type` |  |  | `Y` | game_type path parameter. |
 
-### Returns
+### Returns {#nhl_edge_team_shot_location_top_10-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_edge_top10`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nhl_edge_team_shot_location_top_10-example}
 
 ```python
 nhl_edge_team_shot_location_top_10(position='forwards', category='shots', sort_by='points')
@@ -1550,7 +1551,7 @@ nhl_edge_team_shot_location_top_10(position='forwards', category='shots', sort_b
 
 _Last validated n/a._
 
-## `nhl_edge_team_shot_speed_detail`
+## nhl_edge_team_shot_speed_detail
 
 Pull EDGE shot-speed detail for a single team.
 
@@ -1564,7 +1565,7 @@ Pull EDGE shot-speed detail for a single team.
 | `season` | `season` |  |  | `Y` | season path parameter. |
 | `game_type` | `game_type` |  |  | `Y` | game_type path parameter. |
 
-### Returns
+### Returns {#nhl_edge_team_shot_speed_detail-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1574,7 +1575,7 @@ Pull EDGE shot-speed detail for a single team.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nhl_edge_team_shot_speed_detail-example}
 
 ```python
 nhl_edge_team_shot_speed_detail(team_id=10)
@@ -1582,7 +1583,7 @@ nhl_edge_team_shot_speed_detail(team_id=10)
 
 _Last validated n/a._
 
-## `nhl_edge_team_skating_distance_detail`
+## nhl_edge_team_skating_distance_detail
 
 Pull EDGE skating-distance detail for a single team.
 
@@ -1596,11 +1597,11 @@ Pull EDGE skating-distance detail for a single team.
 | `season` | `season` |  |  | `Y` | season path parameter. |
 | `game_type` | `game_type` |  |  | `Y` | game_type path parameter. |
 
-### Returns
+### Returns {#nhl_edge_team_skating_distance_detail-returns}
 
 Pull EDGE skating-distance detail for a single team.
 
-### Example
+### Example {#nhl_edge_team_skating_distance_detail-example}
 
 ```python
 nhl_edge_team_skating_distance_detail(team_id=10)
@@ -1608,7 +1609,7 @@ nhl_edge_team_skating_distance_detail(team_id=10)
 
 _Last validated n/a._
 
-## `nhl_edge_team_skating_distance_top_10`
+## nhl_edge_team_skating_distance_top_10
 
 Pull the EDGE top-10 teams by skating distance.
 
@@ -1624,12 +1625,12 @@ Pull the EDGE top-10 teams by skating distance.
 | `season` | `season` |  |  | `Y` | season path parameter. |
 | `game_type` | `game_type` |  |  | `Y` | game_type path parameter. |
 
-### Returns
+### Returns {#nhl_edge_team_skating_distance_top_10-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_edge_top10`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nhl_edge_team_skating_distance_top_10-example}
 
 ```python
 nhl_edge_team_skating_distance_top_10(positions='defense', strength='ev', sort_by='points')
@@ -1637,7 +1638,7 @@ nhl_edge_team_skating_distance_top_10(positions='defense', strength='ev', sort_b
 
 _Last validated n/a._
 
-## `nhl_edge_team_skating_speed_detail`
+## nhl_edge_team_skating_speed_detail
 
 Pull EDGE skating-speed detail for a single team.
 
@@ -1651,11 +1652,11 @@ Pull EDGE skating-speed detail for a single team.
 | `season` | `season` |  |  | `Y` | season path parameter. |
 | `game_type` | `game_type` |  |  | `Y` | game_type path parameter. |
 
-### Returns
+### Returns {#nhl_edge_team_skating_speed_detail-returns}
 
 Pull EDGE skating-speed detail for a single team.
 
-### Example
+### Example {#nhl_edge_team_skating_speed_detail-example}
 
 ```python
 nhl_edge_team_skating_speed_detail(team_id=10)
@@ -1663,7 +1664,7 @@ nhl_edge_team_skating_speed_detail(team_id=10)
 
 _Last validated n/a._
 
-## `nhl_edge_team_skating_speed_top_10`
+## nhl_edge_team_skating_speed_top_10
 
 Pull the EDGE top-10 teams by skating speed.
 
@@ -1678,12 +1679,12 @@ Pull the EDGE top-10 teams by skating speed.
 | `season` | `season` |  |  | `Y` | season path parameter. |
 | `game_type` | `game_type` |  |  | `Y` | game_type path parameter. |
 
-### Returns
+### Returns {#nhl_edge_team_skating_speed_top_10-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_edge_top10`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nhl_edge_team_skating_speed_top_10-example}
 
 ```python
 nhl_edge_team_skating_speed_top_10(positions='defense', sort_by='points')
@@ -1691,7 +1692,7 @@ nhl_edge_team_skating_speed_top_10(positions='defense', sort_by='points')
 
 _Last validated n/a._
 
-## `nhl_edge_team_zone_time_details`
+## nhl_edge_team_zone_time_details
 
 Pull EDGE zone-time details for a single team.
 
@@ -1705,7 +1706,7 @@ Pull EDGE zone-time details for a single team.
 | `season` | `season` |  |  | `Y` | season path parameter. |
 | `game_type` | `game_type` |  |  | `Y` | game_type path parameter. |
 
-### Returns
+### Returns {#nhl_edge_team_zone_time_details-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1723,7 +1724,7 @@ Pull EDGE zone-time details for a single team.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nhl_edge_team_zone_time_details-example}
 
 ```python
 nhl_edge_team_zone_time_details(team_id=10)
@@ -1731,7 +1732,7 @@ nhl_edge_team_zone_time_details(team_id=10)
 
 _Last validated n/a._
 
-## `nhl_edge_team_zone_time_top_10`
+## nhl_edge_team_zone_time_top_10
 
 Pull the EDGE top-10 teams by zone time.
 
@@ -1746,12 +1747,12 @@ Pull the EDGE top-10 teams by zone time.
 | `season` | `season` |  |  | `Y` | season path parameter. |
 | `game_type` | `game_type` |  |  | `Y` | game_type path parameter. |
 
-### Returns
+### Returns {#nhl_edge_team_zone_time_top_10-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_edge_top10`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nhl_edge_team_zone_time_top_10-example}
 
 ```python
 nhl_edge_team_zone_time_top_10(strength='ev', sort_by='points')
@@ -1759,7 +1760,7 @@ nhl_edge_team_zone_time_top_10(strength='ev', sort_by='points')
 
 _Last validated n/a._
 
-## `nhl_edge_cat_skater_detail`
+## nhl_edge_cat_skater_detail
 
 Pull categorized (cat) EDGE detail stats for a single skater.
 
@@ -1773,7 +1774,7 @@ Pull categorized (cat) EDGE detail stats for a single skater.
 | `season` | `season` |  |  | `Y` | season path parameter. |
 | `game_type` | `game_type` |  |  | `Y` | game_type path parameter. |
 
-### Returns
+### Returns {#nhl_edge_cat_skater_detail-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1833,7 +1834,7 @@ Pull categorized (cat) EDGE detail stats for a single skater.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nhl_edge_cat_skater_detail-example}
 
 ```python
 nhl_edge_cat_skater_detail(player_id=8480801)
@@ -1841,7 +1842,7 @@ nhl_edge_cat_skater_detail(player_id=8480801)
 
 _Last validated n/a._
 
-## `nhl_edge_cat_goalie_detail`
+## nhl_edge_cat_goalie_detail
 
 Pull categorized (cat) EDGE detail stats for a single goalie.
 
@@ -1855,7 +1856,7 @@ Pull categorized (cat) EDGE detail stats for a single goalie.
 | `season` | `season` |  |  | `Y` | season path parameter. |
 | `game_type` | `game_type` |  |  | `Y` | game_type path parameter. |
 
-### Returns
+### Returns {#nhl_edge_cat_goalie_detail-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1901,7 +1902,7 @@ Pull categorized (cat) EDGE detail stats for a single goalie.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#nhl_edge_cat_goalie_detail-example}
 
 ```python
 nhl_edge_cat_goalie_detail(player_id=8480801)

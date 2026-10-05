@@ -3,12 +3,13 @@ title: WNBA — WNBA Stats API (stats.wnba.com)
 sidebar_label: WNBA Stats API (stats.wnba.com)
 description: "WNBA — WNBA Stats API (stats.wnba.com) — endpoint reference in sdv-py, the SportsDataverse Python package."
 sidebar_position: 10
+toc_max_heading_level: 2
 ---
 # WNBA — WNBA Stats API (stats.wnba.com)
 
 `sportsdataverse.wnba` — 111 endpoints.
 
-## `wnba_stats_alltimeleadersgrids`
+## wnba_stats_alltimeleadersgrids
 
 GET /stats/alltimeleadersgrids
 
@@ -23,7 +24,7 @@ GET /stats/alltimeleadersgrids
 | `SeasonType` | `season_type` |  |  | `Y` | Season phase: 1=preseason, 2=regular season, 3=postseason. |
 | `TopX` | `topx` |  |  | `Y` |  |
 
-### Returns
+### Returns {#wnba_stats_alltimeleadersgrids-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -36,7 +37,7 @@ GET /stats/alltimeleadersgrids
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#wnba_stats_alltimeleadersgrids-example}
 
 ```python
 wnba_stats_alltimeleadersgrids(league_id='10')
@@ -44,7 +45,7 @@ wnba_stats_alltimeleadersgrids(league_id='10')
 
 _Last validated n/a._
 
-## `wnba_stats_assistleaders`
+## wnba_stats_assistleaders
 
 GET /stats/assistleaders
 
@@ -60,7 +61,7 @@ GET /stats/assistleaders
 | `Season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
 | `SeasonType` | `season_type_playoffs` |  |  | `Y` |  |
 
-### Returns
+### Returns {#wnba_stats_assistleaders-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -77,7 +78,7 @@ GET /stats/assistleaders
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#wnba_stats_assistleaders-example}
 
 ```python
 wnba_stats_assistleaders(league_id='10')
@@ -85,7 +86,7 @@ wnba_stats_assistleaders(league_id='10')
 
 _Last validated n/a._
 
-## `wnba_stats_assisttracker`
+## wnba_stats_assisttracker
 
 GET /stats/assisttracker
 
@@ -124,7 +125,7 @@ GET /stats/assisttracker
 | `VsDivision` | `vs_division_nullable` |  |  | `Y` |  |
 | `Weight` | `weight_nullable` |  |  | `Y` |  |
 
-### Returns
+### Returns {#wnba_stats_assisttracker-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -133,7 +134,7 @@ GET /stats/assisttracker
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#wnba_stats_assisttracker-example}
 
 ```python
 wnba_stats_assisttracker(league_id='10')
@@ -141,7 +142,7 @@ wnba_stats_assisttracker(league_id='10')
 
 _Last validated n/a._
 
-## `wnba_stats_boxscoreadvancedv2`
+## wnba_stats_boxscoreadvancedv2
 
 GET /stats/boxscoreadvancedv2
 
@@ -158,7 +159,7 @@ GET /stats/boxscoreadvancedv2
 | `StartPeriod` | `start_period` |  |  | `Y` |  |
 | `StartRange` | `start_range` |  |  | `Y` |  |
 
-### Returns
+### Returns {#wnba_stats_boxscoreadvancedv2-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -198,7 +199,7 @@ GET /stats/boxscoreadvancedv2
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#wnba_stats_boxscoreadvancedv2-example}
 
 ```python
 wnba_stats_boxscoreadvancedv2()
@@ -206,7 +207,7 @@ wnba_stats_boxscoreadvancedv2()
 
 _Last validated n/a._
 
-## `wnba_stats_boxscoreadvancedv3`
+## wnba_stats_boxscoreadvancedv3
 
 GET /stats/boxscoreadvancedv3
 
@@ -223,7 +224,7 @@ GET /stats/boxscoreadvancedv3
 | `StartPeriod` | `start_period` |  |  | `Y` |  |
 | `StartRange` | `start_range` |  |  | `Y` |  |
 
-### Returns
+### Returns {#wnba_stats_boxscoreadvancedv3-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -268,7 +269,7 @@ GET /stats/boxscoreadvancedv3
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#wnba_stats_boxscoreadvancedv3-example}
 
 ```python
 wnba_stats_boxscoreadvancedv3()
@@ -276,7 +277,7 @@ wnba_stats_boxscoreadvancedv3()
 
 _Last validated n/a._
 
-## `wnba_stats_boxscoredefensivev2`
+## wnba_stats_boxscoredefensivev2
 
 GET /stats/boxscoredefensivev2
 
@@ -288,7 +289,7 @@ GET /stats/boxscoredefensivev2
 |---|---|:---:|:---:|:---:|---|
 | `GameID` | `game_id` |  |  | `Y` |  |
 
-### Returns
+### Returns {#wnba_stats_boxscoredefensivev2-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -325,7 +326,7 @@ GET /stats/boxscoredefensivev2
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#wnba_stats_boxscoredefensivev2-example}
 
 ```python
 wnba_stats_boxscoredefensivev2()
@@ -333,7 +334,7 @@ wnba_stats_boxscoredefensivev2()
 
 _Last validated n/a._
 
-## `wnba_stats_boxscorefourfactorsv2`
+## wnba_stats_boxscorefourfactorsv2
 
 GET /stats/boxscorefourfactorsv2
 
@@ -350,7 +351,7 @@ GET /stats/boxscorefourfactorsv2
 | `StartPeriod` | `start_period` |  |  | `Y` |  |
 | `StartRange` | `start_range` |  |  | `Y` |  |
 
-### Returns
+### Returns {#wnba_stats_boxscorefourfactorsv2-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -376,7 +377,7 @@ GET /stats/boxscorefourfactorsv2
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#wnba_stats_boxscorefourfactorsv2-example}
 
 ```python
 wnba_stats_boxscorefourfactorsv2()
@@ -384,7 +385,7 @@ wnba_stats_boxscorefourfactorsv2()
 
 _Last validated n/a._
 
-## `wnba_stats_boxscorefourfactorsv3`
+## wnba_stats_boxscorefourfactorsv3
 
 GET /stats/boxscorefourfactorsv3
 
@@ -401,7 +402,7 @@ GET /stats/boxscorefourfactorsv3
 | `StartPeriod` | `start_period` |  |  | `Y` |  |
 | `StartRange` | `start_range` |  |  | `Y` |  |
 
-### Returns
+### Returns {#wnba_stats_boxscorefourfactorsv3-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -432,7 +433,7 @@ GET /stats/boxscorefourfactorsv3
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#wnba_stats_boxscorefourfactorsv3-example}
 
 ```python
 wnba_stats_boxscorefourfactorsv3()
@@ -440,7 +441,7 @@ wnba_stats_boxscorefourfactorsv3()
 
 _Last validated n/a._
 
-## `wnba_stats_boxscorehustlev2`
+## wnba_stats_boxscorehustlev2
 
 GET /stats/boxscorehustlev2
 
@@ -452,7 +453,7 @@ GET /stats/boxscorehustlev2
 |---|---|:---:|:---:|:---:|---|
 | `GameID` | `game_id` |  |  | `Y` |  |
 
-### Returns
+### Returns {#wnba_stats_boxscorehustlev2-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -491,7 +492,7 @@ GET /stats/boxscorehustlev2
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#wnba_stats_boxscorehustlev2-example}
 
 ```python
 wnba_stats_boxscorehustlev2()
@@ -499,7 +500,7 @@ wnba_stats_boxscorehustlev2()
 
 _Last validated n/a._
 
-## `wnba_stats_boxscorematchupsv3`
+## wnba_stats_boxscorematchupsv3
 
 GET /stats/boxscorematchupsv3
 
@@ -511,7 +512,7 @@ GET /stats/boxscorematchupsv3
 |---|---|:---:|:---:|:---:|---|
 | `GameID` | `game_id` |  |  | `Y` |  |
 
-### Returns
+### Returns {#wnba_stats_boxscorematchupsv3-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -533,7 +534,7 @@ GET /stats/boxscorematchupsv3
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#wnba_stats_boxscorematchupsv3-example}
 
 ```python
 wnba_stats_boxscorematchupsv3()
@@ -541,7 +542,7 @@ wnba_stats_boxscorematchupsv3()
 
 _Last validated n/a._
 
-## `wnba_stats_boxscoremiscv2`
+## wnba_stats_boxscoremiscv2
 
 GET /stats/boxscoremiscv2
 
@@ -558,7 +559,7 @@ GET /stats/boxscoremiscv2
 | `StartPeriod` | `start_period` |  |  | `Y` |  |
 | `StartRange` | `start_range` |  |  | `Y` |  |
 
-### Returns
+### Returns {#wnba_stats_boxscoremiscv2-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -588,7 +589,7 @@ GET /stats/boxscoremiscv2
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#wnba_stats_boxscoremiscv2-example}
 
 ```python
 wnba_stats_boxscoremiscv2()
@@ -596,7 +597,7 @@ wnba_stats_boxscoremiscv2()
 
 _Last validated n/a._
 
-## `wnba_stats_boxscoremiscv3`
+## wnba_stats_boxscoremiscv3
 
 GET /stats/boxscoremiscv3
 
@@ -613,7 +614,7 @@ GET /stats/boxscoremiscv3
 | `StartPeriod` | `start_period` |  |  | `Y` |  |
 | `StartRange` | `start_range` |  |  | `Y` |  |
 
-### Returns
+### Returns {#wnba_stats_boxscoremiscv3-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -648,7 +649,7 @@ GET /stats/boxscoremiscv3
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#wnba_stats_boxscoremiscv3-example}
 
 ```python
 wnba_stats_boxscoremiscv3()
@@ -656,7 +657,7 @@ wnba_stats_boxscoremiscv3()
 
 _Last validated n/a._
 
-## `wnba_stats_boxscoreplayertrackv3`
+## wnba_stats_boxscoreplayertrackv3
 
 GET /stats/boxscoreplayertrackv3
 
@@ -668,7 +669,7 @@ GET /stats/boxscoreplayertrackv3
 |---|---|:---:|:---:|:---:|---|
 | `GameID` | `game_id` |  |  | `Y` |  |
 
-### Returns
+### Returns {#wnba_stats_boxscoreplayertrackv3-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -711,7 +712,7 @@ GET /stats/boxscoreplayertrackv3
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#wnba_stats_boxscoreplayertrackv3-example}
 
 ```python
 wnba_stats_boxscoreplayertrackv3()
@@ -719,7 +720,7 @@ wnba_stats_boxscoreplayertrackv3()
 
 _Last validated n/a._
 
-## `wnba_stats_boxscorescoringv2`
+## wnba_stats_boxscorescoringv2
 
 GET /stats/boxscorescoringv2
 
@@ -736,7 +737,7 @@ GET /stats/boxscorescoringv2
 | `StartPeriod` | `start_period` |  |  | `Y` |  |
 | `StartRange` | `start_range` |  |  | `Y` |  |
 
-### Returns
+### Returns {#wnba_stats_boxscorescoringv2-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -769,7 +770,7 @@ GET /stats/boxscorescoringv2
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#wnba_stats_boxscorescoringv2-example}
 
 ```python
 wnba_stats_boxscorescoringv2()
@@ -777,7 +778,7 @@ wnba_stats_boxscorescoringv2()
 
 _Last validated n/a._
 
-## `wnba_stats_boxscorescoringv3`
+## wnba_stats_boxscorescoringv3
 
 GET /stats/boxscorescoringv3
 
@@ -794,7 +795,7 @@ GET /stats/boxscorescoringv3
 | `StartPeriod` | `start_period` |  |  | `Y` |  |
 | `StartRange` | `start_range` |  |  | `Y` |  |
 
-### Returns
+### Returns {#wnba_stats_boxscorescoringv3-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -832,7 +833,7 @@ GET /stats/boxscorescoringv3
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#wnba_stats_boxscorescoringv3-example}
 
 ```python
 wnba_stats_boxscorescoringv3()
@@ -840,7 +841,7 @@ wnba_stats_boxscorescoringv3()
 
 _Last validated n/a._
 
-## `wnba_stats_boxscoresummaryv2`
+## wnba_stats_boxscoresummaryv2
 
 GET /stats/boxscoresummaryv2
 
@@ -852,7 +853,7 @@ GET /stats/boxscoresummaryv2
 |---|---|:---:|:---:|:---:|---|
 | `GameID` | `game_id` |  |  | `Y` |  |
 
-### Returns
+### Returns {#wnba_stats_boxscoresummaryv2-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -883,7 +884,7 @@ GET /stats/boxscoresummaryv2
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#wnba_stats_boxscoresummaryv2-example}
 
 ```python
 wnba_stats_boxscoresummaryv2()
@@ -891,7 +892,7 @@ wnba_stats_boxscoresummaryv2()
 
 _Last validated n/a._
 
-## `wnba_stats_boxscoresummaryv3`
+## wnba_stats_boxscoresummaryv3
 
 GET /stats/boxscoresummaryv3
 
@@ -903,7 +904,7 @@ GET /stats/boxscoresummaryv3
 |---|---|:---:|:---:|:---:|---|
 | `GameID` | `game_id` |  |  | `Y` |  |
 
-### Returns
+### Returns {#wnba_stats_boxscoresummaryv3-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -924,7 +925,7 @@ GET /stats/boxscoresummaryv3
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#wnba_stats_boxscoresummaryv3-example}
 
 ```python
 wnba_stats_boxscoresummaryv3()
@@ -932,7 +933,7 @@ wnba_stats_boxscoresummaryv3()
 
 _Last validated n/a._
 
-## `wnba_stats_boxscoretraditionalv2`
+## wnba_stats_boxscoretraditionalv2
 
 GET /stats/boxscoretraditionalv2
 
@@ -949,7 +950,7 @@ GET /stats/boxscoretraditionalv2
 | `StartPeriod` | `start_period` |  |  | `Y` |  |
 | `StartRange` | `start_range` |  |  | `Y` |  |
 
-### Returns
+### Returns {#wnba_stats_boxscoretraditionalv2-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -986,7 +987,7 @@ GET /stats/boxscoretraditionalv2
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#wnba_stats_boxscoretraditionalv2-example}
 
 ```python
 wnba_stats_boxscoretraditionalv2()
@@ -994,7 +995,7 @@ wnba_stats_boxscoretraditionalv2()
 
 _Last validated n/a._
 
-## `wnba_stats_boxscoretraditionalv3`
+## wnba_stats_boxscoretraditionalv3
 
 GET /stats/boxscoretraditionalv3
 
@@ -1011,7 +1012,7 @@ GET /stats/boxscoretraditionalv3
 | `StartPeriod` | `start_period` |  |  | `Y` |  |
 | `StartRange` | `start_range` |  |  | `Y` |  |
 
-### Returns
+### Returns {#wnba_stats_boxscoretraditionalv3-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1091,7 +1092,7 @@ GET /stats/boxscoretraditionalv3
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#wnba_stats_boxscoretraditionalv3-example}
 
 ```python
 wnba_stats_boxscoretraditionalv3()
@@ -1099,7 +1100,7 @@ wnba_stats_boxscoretraditionalv3()
 
 _Last validated n/a._
 
-## `wnba_stats_boxscoreusagev2`
+## wnba_stats_boxscoreusagev2
 
 GET /stats/boxscoreusagev2
 
@@ -1116,7 +1117,7 @@ GET /stats/boxscoreusagev2
 | `StartPeriod` | `start_period` |  |  | `Y` |  |
 | `StartRange` | `start_range` |  |  | `Y` |  |
 
-### Returns
+### Returns {#wnba_stats_boxscoreusagev2-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1152,7 +1153,7 @@ GET /stats/boxscoreusagev2
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#wnba_stats_boxscoreusagev2-example}
 
 ```python
 wnba_stats_boxscoreusagev2()
@@ -1160,7 +1161,7 @@ wnba_stats_boxscoreusagev2()
 
 _Last validated n/a._
 
-## `wnba_stats_boxscoreusagev3`
+## wnba_stats_boxscoreusagev3
 
 GET /stats/boxscoreusagev3
 
@@ -1177,7 +1178,7 @@ GET /stats/boxscoreusagev3
 | `StartPeriod` | `start_period` |  |  | `Y` |  |
 | `StartRange` | `start_range` |  |  | `Y` |  |
 
-### Returns
+### Returns {#wnba_stats_boxscoreusagev3-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1218,7 +1219,7 @@ GET /stats/boxscoreusagev3
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#wnba_stats_boxscoreusagev3-example}
 
 ```python
 wnba_stats_boxscoreusagev3()
@@ -1226,7 +1227,7 @@ wnba_stats_boxscoreusagev3()
 
 _Last validated n/a._
 
-## `wnba_stats_commonallplayers`
+## wnba_stats_commonallplayers
 
 GET /stats/commonallplayers
 
@@ -1240,7 +1241,7 @@ GET /stats/commonallplayers
 | `LeagueID` | `league_id` |  |  | `Y` |  |
 | `Season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
 
-### Returns
+### Returns {#wnba_stats_commonallplayers-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1266,7 +1267,7 @@ GET /stats/commonallplayers
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#wnba_stats_commonallplayers-example}
 
 ```python
 wnba_stats_commonallplayers(league_id='10')
@@ -1274,7 +1275,7 @@ wnba_stats_commonallplayers(league_id='10')
 
 _Last validated n/a._
 
-## `wnba_stats_commonplayerinfo`
+## wnba_stats_commonplayerinfo
 
 GET /stats/commonplayerinfo
 
@@ -1287,7 +1288,7 @@ GET /stats/commonplayerinfo
 | `LeagueID` | `league_id` |  |  | `Y` |  |
 | `PlayerID` | `player_id` |  |  | `Y` |  |
 
-### Returns
+### Returns {#wnba_stats_commonplayerinfo-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1328,7 +1329,7 @@ GET /stats/commonplayerinfo
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#wnba_stats_commonplayerinfo-example}
 
 ```python
 wnba_stats_commonplayerinfo(league_id='10')
@@ -1336,7 +1337,7 @@ wnba_stats_commonplayerinfo(league_id='10')
 
 _Last validated n/a._
 
-## `wnba_stats_commonplayoffseries`
+## wnba_stats_commonplayoffseries
 
 GET /stats/commonplayoffseries
 
@@ -1350,7 +1351,7 @@ GET /stats/commonplayoffseries
 | `Season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
 | `SeriesID` | `series_id_nullable` |  |  | `Y` |  |
 
-### Returns
+### Returns {#wnba_stats_commonplayoffseries-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1363,7 +1364,7 @@ GET /stats/commonplayoffseries
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#wnba_stats_commonplayoffseries-example}
 
 ```python
 wnba_stats_commonplayoffseries(league_id='10')
@@ -1371,7 +1372,7 @@ wnba_stats_commonplayoffseries(league_id='10')
 
 _Last validated n/a._
 
-## `wnba_stats_commonteamroster`
+## wnba_stats_commonteamroster
 
 GET /stats/commonteamroster
 
@@ -1385,7 +1386,7 @@ GET /stats/commonteamroster
 | `Season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
 | `TeamID` | `team_id` |  |  | `Y` |  |
 
-### Returns
+### Returns {#wnba_stats_commonteamroster-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1409,7 +1410,7 @@ GET /stats/commonteamroster
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#wnba_stats_commonteamroster-example}
 
 ```python
 wnba_stats_commonteamroster(league_id='10')
@@ -1417,7 +1418,7 @@ wnba_stats_commonteamroster(league_id='10')
 
 _Last validated n/a._
 
-## `wnba_stats_commonteamyears`
+## wnba_stats_commonteamyears
 
 GET /stats/commonteamyears
 
@@ -1429,7 +1430,7 @@ GET /stats/commonteamyears
 |---|---|:---:|:---:|:---:|---|
 | `LeagueID` | `league_id` |  |  | `Y` |  |
 
-### Returns
+### Returns {#wnba_stats_commonteamyears-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1442,7 +1443,7 @@ GET /stats/commonteamyears
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#wnba_stats_commonteamyears-example}
 
 ```python
 wnba_stats_commonteamyears(league_id='10')
@@ -1450,7 +1451,7 @@ wnba_stats_commonteamyears(league_id='10')
 
 _Last validated n/a._
 
-## `wnba_stats_cumestatsplayer`
+## wnba_stats_cumestatsplayer
 
 GET /stats/cumestatsplayer
 
@@ -1466,7 +1467,7 @@ GET /stats/cumestatsplayer
 | `Season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
 | `SeasonType` | `season_type_all_star` |  |  | `Y` |  |
 
-### Returns
+### Returns {#wnba_stats_cumestatsplayer-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1522,7 +1523,7 @@ GET /stats/cumestatsplayer
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#wnba_stats_cumestatsplayer-example}
 
 ```python
 wnba_stats_cumestatsplayer(league_id='10')
@@ -1530,7 +1531,7 @@ wnba_stats_cumestatsplayer(league_id='10')
 
 _Last validated n/a._
 
-## `wnba_stats_cumestatsplayergames`
+## wnba_stats_cumestatsplayergames
 
 GET /stats/cumestatsplayergames
 
@@ -1550,7 +1551,7 @@ GET /stats/cumestatsplayergames
 | `VsDivision` | `vs_division_nullable` |  |  | `Y` |  |
 | `VsTeamID` | `vs_team_id_nullable` |  |  | `Y` |  |
 
-### Returns
+### Returns {#wnba_stats_cumestatsplayergames-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1560,7 +1561,7 @@ GET /stats/cumestatsplayergames
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#wnba_stats_cumestatsplayergames-example}
 
 ```python
 wnba_stats_cumestatsplayergames(league_id='10')
@@ -1568,7 +1569,7 @@ wnba_stats_cumestatsplayergames(league_id='10')
 
 _Last validated n/a._
 
-## `wnba_stats_cumestatsteam`
+## wnba_stats_cumestatsteam
 
 GET /stats/cumestatsteam
 
@@ -1584,7 +1585,7 @@ GET /stats/cumestatsteam
 | `SeasonType` | `season_type_all_star` |  |  | `Y` |  |
 | `TeamID` | `team_id` |  |  | `Y` |  |
 
-### Returns
+### Returns {#wnba_stats_cumestatsteam-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1641,7 +1642,7 @@ GET /stats/cumestatsteam
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#wnba_stats_cumestatsteam-example}
 
 ```python
 wnba_stats_cumestatsteam(league_id='10')
@@ -1649,7 +1650,7 @@ wnba_stats_cumestatsteam(league_id='10')
 
 _Last validated n/a._
 
-## `wnba_stats_cumestatsteamgames`
+## wnba_stats_cumestatsteamgames
 
 GET /stats/cumestatsteamgames
 
@@ -1670,7 +1671,7 @@ GET /stats/cumestatsteamgames
 | `VsDivision` | `vs_division_nullable` |  |  | `Y` |  |
 | `VsTeamID` | `vs_team_id_nullable` |  |  | `Y` |  |
 
-### Returns
+### Returns {#wnba_stats_cumestatsteamgames-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1680,7 +1681,7 @@ GET /stats/cumestatsteamgames
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#wnba_stats_cumestatsteamgames-example}
 
 ```python
 wnba_stats_cumestatsteamgames(league_id='10')
@@ -1688,7 +1689,7 @@ wnba_stats_cumestatsteamgames(league_id='10')
 
 _Last validated n/a._
 
-## `wnba_stats_draftcombinestats`
+## wnba_stats_draftcombinestats
 
 GET /stats/draftcombinestats
 
@@ -1701,7 +1702,7 @@ GET /stats/draftcombinestats
 | `LeagueID` | `league_id` |  |  | `Y` |  |
 | `SeasonYear` | `season_all_time` |  |  | `Y` |  |
 
-### Returns
+### Returns {#wnba_stats_draftcombinestats-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1756,7 +1757,7 @@ GET /stats/draftcombinestats
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#wnba_stats_draftcombinestats-example}
 
 ```python
 wnba_stats_draftcombinestats(league_id='10')
@@ -1764,7 +1765,7 @@ wnba_stats_draftcombinestats(league_id='10')
 
 _Last validated n/a._
 
-## `wnba_stats_drafthistory`
+## wnba_stats_drafthistory
 
 GET /stats/drafthistory
 
@@ -1783,7 +1784,7 @@ GET /stats/drafthistory
 | `TeamID` | `team_id_nullable` |  |  | `Y` |  |
 | `TopX` | `topx_nullable` |  |  | `Y` |  |
 
-### Returns
+### Returns {#wnba_stats_drafthistory-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1805,7 +1806,7 @@ GET /stats/drafthistory
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#wnba_stats_drafthistory-example}
 
 ```python
 wnba_stats_drafthistory(league_id='10', season_year_nullable='2024')
@@ -1813,7 +1814,7 @@ wnba_stats_drafthistory(league_id='10', season_year_nullable='2024')
 
 _Last validated n/a._
 
-## `wnba_stats_fantasywidget`
+## wnba_stats_fantasywidget
 
 GET /stats/fantasywidget
 
@@ -1843,7 +1844,7 @@ GET /stats/fantasywidget
 | `VsConference` | `vs_conference_nullable` |  |  | `Y` |  |
 | `VsDivision` | `vs_division_nullable` |  |  | `Y` |  |
 
-### Returns
+### Returns {#wnba_stats_fantasywidget-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1871,7 +1872,7 @@ GET /stats/fantasywidget
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#wnba_stats_fantasywidget-example}
 
 ```python
 wnba_stats_fantasywidget(league_id='10')
@@ -1879,7 +1880,7 @@ wnba_stats_fantasywidget(league_id='10')
 
 _Last validated n/a._
 
-## `wnba_stats_franchisehistory`
+## wnba_stats_franchisehistory
 
 GET /stats/franchisehistory
 
@@ -1891,7 +1892,7 @@ GET /stats/franchisehistory
 |---|---|:---:|:---:|:---:|---|
 | `LeagueID` | `league_id` |  |  | `Y` |  |
 
-### Returns
+### Returns {#wnba_stats_franchisehistory-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1914,7 +1915,7 @@ GET /stats/franchisehistory
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#wnba_stats_franchisehistory-example}
 
 ```python
 wnba_stats_franchisehistory(league_id='10')
@@ -1922,7 +1923,7 @@ wnba_stats_franchisehistory(league_id='10')
 
 _Last validated n/a._
 
-## `wnba_stats_franchiseleaders`
+## wnba_stats_franchiseleaders
 
 GET /stats/franchiseleaders
 
@@ -1935,7 +1936,7 @@ GET /stats/franchiseleaders
 | `LeagueID` | `league_id` |  |  | `Y` |  |
 | `TeamID` | `team_id` |  |  | `Y` |  |
 
-### Returns
+### Returns {#wnba_stats_franchiseleaders-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -1959,7 +1960,7 @@ GET /stats/franchiseleaders
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#wnba_stats_franchiseleaders-example}
 
 ```python
 wnba_stats_franchiseleaders(league_id='10')
@@ -1967,7 +1968,7 @@ wnba_stats_franchiseleaders(league_id='10')
 
 _Last validated n/a._
 
-## `wnba_stats_franchiseleaderswrank`
+## wnba_stats_franchiseleaderswrank
 
 GET /stats/franchiseleaderswrank
 
@@ -1982,7 +1983,7 @@ GET /stats/franchiseleaderswrank
 | `SeasonType` | `season_type` |  |  | `Y` | Season phase: 1=preseason, 2=regular season, 3=postseason. |
 | `TeamID` | `team_id` |  |  | `Y` |  |
 
-### Returns
+### Returns {#wnba_stats_franchiseleaderswrank-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -2037,7 +2038,7 @@ GET /stats/franchiseleaderswrank
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#wnba_stats_franchiseleaderswrank-example}
 
 ```python
 wnba_stats_franchiseleaderswrank(league_id='10')
@@ -2045,7 +2046,7 @@ wnba_stats_franchiseleaderswrank(league_id='10')
 
 _Last validated n/a._
 
-## `wnba_stats_franchiseplayers`
+## wnba_stats_franchiseplayers
 
 GET /stats/franchiseplayers
 
@@ -2060,7 +2061,7 @@ GET /stats/franchiseplayers
 | `SeasonType` | `season_type_all_star` |  |  | `Y` |  |
 | `TeamID` | `team_id` |  |  | `Y` |  |
 
-### Returns
+### Returns {#wnba_stats_franchiseplayers-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -2094,7 +2095,7 @@ GET /stats/franchiseplayers
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#wnba_stats_franchiseplayers-example}
 
 ```python
 wnba_stats_franchiseplayers(league_id='10')
@@ -2102,7 +2103,7 @@ wnba_stats_franchiseplayers(league_id='10')
 
 _Last validated n/a._
 
-## `wnba_stats_gamerotation`
+## wnba_stats_gamerotation
 
 GET /stats/gamerotation
 
@@ -2115,7 +2116,7 @@ GET /stats/gamerotation
 | `GameID` | `game_id` |  |  | `Y` |  |
 | `LeagueID` | `league_id` |  |  | `Y` |  |
 
-### Returns
+### Returns {#wnba_stats_gamerotation-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -2135,7 +2136,7 @@ GET /stats/gamerotation
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#wnba_stats_gamerotation-example}
 
 ```python
 wnba_stats_gamerotation(league_id='10')
@@ -2143,7 +2144,7 @@ wnba_stats_gamerotation(league_id='10')
 
 _Last validated n/a._
 
-## `wnba_stats_homepageleaders`
+## wnba_stats_homepageleaders
 
 GET /stats/homepageleaders
 
@@ -2161,7 +2162,7 @@ GET /stats/homepageleaders
 | `SeasonType` | `season_type_playoffs` |  |  | `Y` |  |
 | `StatCategory` | `stat_category` |  |  | `Y` |  |
 
-### Returns
+### Returns {#wnba_stats_homepageleaders-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -2180,7 +2181,7 @@ GET /stats/homepageleaders
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#wnba_stats_homepageleaders-example}
 
 ```python
 wnba_stats_homepageleaders(league_id='10')
@@ -2188,7 +2189,7 @@ wnba_stats_homepageleaders(league_id='10')
 
 _Last validated n/a._
 
-## `wnba_stats_homepagev2`
+## wnba_stats_homepagev2
 
 GET /stats/homepagev2
 
@@ -2206,7 +2207,7 @@ GET /stats/homepagev2
 | `SeasonType` | `season_type_playoffs` |  |  | `Y` |  |
 | `StatType` | `stat_type` |  |  | `Y` |  |
 
-### Returns
+### Returns {#wnba_stats_homepagev2-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -2223,7 +2224,7 @@ GET /stats/homepagev2
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#wnba_stats_homepagev2-example}
 
 ```python
 wnba_stats_homepagev2(league_id='10')
@@ -2231,7 +2232,7 @@ wnba_stats_homepagev2(league_id='10')
 
 _Last validated n/a._
 
-## `wnba_stats_hustlestatsboxscore`
+## wnba_stats_hustlestatsboxscore
 
 GET /stats/hustlestatsboxscore
 
@@ -2243,7 +2244,7 @@ GET /stats/hustlestatsboxscore
 |---|---|:---:|:---:|:---:|---|
 | `GameID` | `game_id` |  |  | `Y` |  |
 
-### Returns
+### Returns {#wnba_stats_hustlestatsboxscore-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -2276,7 +2277,7 @@ GET /stats/hustlestatsboxscore
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#wnba_stats_hustlestatsboxscore-example}
 
 ```python
 wnba_stats_hustlestatsboxscore()
@@ -2284,7 +2285,7 @@ wnba_stats_hustlestatsboxscore()
 
 _Last validated n/a._
 
-## `wnba_stats_infographicfanduelplayer`
+## wnba_stats_infographicfanduelplayer
 
 GET /stats/infographicfanduelplayer
 
@@ -2296,7 +2297,7 @@ GET /stats/infographicfanduelplayer
 |---|---|:---:|:---:|:---:|---|
 | `GameID` | `game_id` |  |  | `Y` |  |
 
-### Returns
+### Returns {#wnba_stats_infographicfanduelplayer-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -2337,7 +2338,7 @@ GET /stats/infographicfanduelplayer
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#wnba_stats_infographicfanduelplayer-example}
 
 ```python
 wnba_stats_infographicfanduelplayer()
@@ -2345,7 +2346,7 @@ wnba_stats_infographicfanduelplayer()
 
 _Last validated n/a._
 
-## `wnba_stats_leaderstiles`
+## wnba_stats_leaderstiles
 
 GET /stats/leaderstiles
 
@@ -2363,7 +2364,7 @@ GET /stats/leaderstiles
 | `SeasonType` | `season_type_playoffs` |  |  | `Y` |  |
 | `Stat` | `stat` |  |  | `Y` |  |
 
-### Returns
+### Returns {#wnba_stats_leaderstiles-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -2378,7 +2379,7 @@ GET /stats/leaderstiles
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#wnba_stats_leaderstiles-example}
 
 ```python
 wnba_stats_leaderstiles(league_id='10')
@@ -2386,7 +2387,7 @@ wnba_stats_leaderstiles(league_id='10')
 
 _Last validated n/a._
 
-## `wnba_stats_leaguedashlineups`
+## wnba_stats_leaguedashlineups
 
 GET /stats/leaguedashlineups
 
@@ -2423,7 +2424,7 @@ GET /stats/leaguedashlineups
 | `VsConference` | `vs_conference_nullable` |  |  | `Y` |  |
 | `VsDivision` | `vs_division_nullable` |  |  | `Y` |  |
 
-### Returns
+### Returns {#wnba_stats_leaguedashlineups-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -2489,7 +2490,7 @@ GET /stats/leaguedashlineups
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#wnba_stats_leaguedashlineups-example}
 
 ```python
 wnba_stats_leaguedashlineups(league_id='10')
@@ -2497,7 +2498,7 @@ wnba_stats_leaguedashlineups(league_id='10')
 
 _Last validated n/a._
 
-## `wnba_stats_leaguedashplayerbiostats`
+## wnba_stats_leaguedashplayerbiostats
 
 GET /stats/leaguedashplayerbiostats
 
@@ -2539,7 +2540,7 @@ GET /stats/leaguedashplayerbiostats
 | `VsDivision` | `vs_division_nullable` |  |  | `Y` |  |
 | `Weight` | `weight_nullable` |  |  | `Y` |  |
 
-### Returns
+### Returns {#wnba_stats_leaguedashplayerbiostats-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -2570,7 +2571,7 @@ GET /stats/leaguedashplayerbiostats
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#wnba_stats_leaguedashplayerbiostats-example}
 
 ```python
 wnba_stats_leaguedashplayerbiostats(league_id='10')
@@ -2578,7 +2579,7 @@ wnba_stats_leaguedashplayerbiostats(league_id='10')
 
 _Last validated n/a._
 
-## `wnba_stats_leaguedashplayerclutch`
+## wnba_stats_leaguedashplayerclutch
 
 GET /stats/leaguedashplayerclutch
 
@@ -2627,7 +2628,7 @@ GET /stats/leaguedashplayerclutch
 | `VsDivision` | `vs_division_nullable` |  |  | `Y` |  |
 | `Weight` | `weight_nullable` |  |  | `Y` |  |
 
-### Returns
+### Returns {#wnba_stats_leaguedashplayerclutch-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -2703,7 +2704,7 @@ GET /stats/leaguedashplayerclutch
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#wnba_stats_leaguedashplayerclutch-example}
 
 ```python
 wnba_stats_leaguedashplayerclutch(league_id='10')
@@ -2711,7 +2712,7 @@ wnba_stats_leaguedashplayerclutch(league_id='10')
 
 _Last validated n/a._
 
-## `wnba_stats_leaguedashplayershotlocations`
+## wnba_stats_leaguedashplayershotlocations
 
 GET /stats/leaguedashplayershotlocations
 
@@ -2758,7 +2759,7 @@ GET /stats/leaguedashplayershotlocations
 | `VsDivision` | `vs_division_nullable` |  |  | `Y` |  |
 | `Weight` | `weight_nullable` |  |  | `Y` |  |
 
-### Returns
+### Returns {#wnba_stats_leaguedashplayershotlocations-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -2799,7 +2800,7 @@ GET /stats/leaguedashplayershotlocations
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#wnba_stats_leaguedashplayershotlocations-example}
 
 ```python
 wnba_stats_leaguedashplayershotlocations(league_id='10')
@@ -2807,7 +2808,7 @@ wnba_stats_leaguedashplayershotlocations(league_id='10')
 
 _Last validated n/a._
 
-## `wnba_stats_leaguedashplayerstats`
+## wnba_stats_leaguedashplayerstats
 
 GET /stats/leaguedashplayerstats
 
@@ -2854,7 +2855,7 @@ GET /stats/leaguedashplayerstats
 | `VsDivision` | `vs_division_nullable` |  |  | `Y` |  |
 | `Weight` | `weight_nullable` |  |  | `Y` |  |
 
-### Returns
+### Returns {#wnba_stats_leaguedashplayerstats-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -2929,7 +2930,7 @@ GET /stats/leaguedashplayerstats
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#wnba_stats_leaguedashplayerstats-example}
 
 ```python
 wnba_stats_leaguedashplayerstats(league_id='10')
@@ -2937,7 +2938,7 @@ wnba_stats_leaguedashplayerstats(league_id='10')
 
 _Last validated n/a._
 
-## `wnba_stats_leaguedashptdefend`
+## wnba_stats_leaguedashptdefend
 
 GET /stats/leaguedashptdefend
 
@@ -2979,7 +2980,7 @@ GET /stats/leaguedashptdefend
 | `VsDivision` | `vs_division_nullable` |  |  | `Y` |  |
 | `Weight` | `weight_nullable` |  |  | `Y` |  |
 
-### Returns
+### Returns {#wnba_stats_leaguedashptdefend-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -3001,7 +3002,7 @@ GET /stats/leaguedashptdefend
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#wnba_stats_leaguedashptdefend-example}
 
 ```python
 wnba_stats_leaguedashptdefend(league_id='10')
@@ -3009,7 +3010,7 @@ wnba_stats_leaguedashptdefend(league_id='10')
 
 _Last validated n/a._
 
-## `wnba_stats_leaguedashteamclutch`
+## wnba_stats_leaguedashteamclutch
 
 GET /stats/leaguedashteamclutch
 
@@ -3052,7 +3053,7 @@ GET /stats/leaguedashteamclutch
 | `VsConference` | `vs_conference_nullable` |  |  | `Y` |  |
 | `VsDivision` | `vs_division_nullable` |  |  | `Y` |  |
 
-### Returns
+### Returns {#wnba_stats_leaguedashteamclutch-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -3114,7 +3115,7 @@ GET /stats/leaguedashteamclutch
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#wnba_stats_leaguedashteamclutch-example}
 
 ```python
 wnba_stats_leaguedashteamclutch(league_id='10')
@@ -3122,7 +3123,7 @@ wnba_stats_leaguedashteamclutch(league_id='10')
 
 _Last validated n/a._
 
-## `wnba_stats_leaguedashteamshotlocations`
+## wnba_stats_leaguedashteamshotlocations
 
 GET /stats/leaguedashteamshotlocations
 
@@ -3163,7 +3164,7 @@ GET /stats/leaguedashteamshotlocations
 | `VsConference` | `vs_conference_nullable` |  |  | `Y` |  |
 | `VsDivision` | `vs_division_nullable` |  |  | `Y` |  |
 
-### Returns
+### Returns {#wnba_stats_leaguedashteamshotlocations-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -3200,7 +3201,7 @@ GET /stats/leaguedashteamshotlocations
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#wnba_stats_leaguedashteamshotlocations-example}
 
 ```python
 wnba_stats_leaguedashteamshotlocations(league_id='10')
@@ -3208,7 +3209,7 @@ wnba_stats_leaguedashteamshotlocations(league_id='10')
 
 _Last validated n/a._
 
-## `wnba_stats_leaguedashteamstats`
+## wnba_stats_leaguedashteamstats
 
 GET /stats/leaguedashteamstats
 
@@ -3249,7 +3250,7 @@ GET /stats/leaguedashteamstats
 | `VsConference` | `vs_conference_nullable` |  |  | `Y` |  |
 | `VsDivision` | `vs_division_nullable` |  |  | `Y` |  |
 
-### Returns
+### Returns {#wnba_stats_leaguedashteamstats-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -3311,7 +3312,7 @@ GET /stats/leaguedashteamstats
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#wnba_stats_leaguedashteamstats-example}
 
 ```python
 wnba_stats_leaguedashteamstats(league_id='10')
@@ -3319,7 +3320,7 @@ wnba_stats_leaguedashteamstats(league_id='10')
 
 _Last validated n/a._
 
-## `wnba_stats_leaguegamefinder`
+## wnba_stats_leaguegamefinder
 
 GET /stats/leaguegamefinder
 
@@ -3418,7 +3419,7 @@ GET /stats/leaguegamefinder
 | `VsTeamID` | `vs_team_id_nullable` |  |  | `Y` |  |
 | `YearsExperience` | `years_experience_nullable` |  |  | `Y` |  |
 
-### Returns
+### Returns {#wnba_stats_leaguegamefinder-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -3454,7 +3455,7 @@ GET /stats/leaguegamefinder
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#wnba_stats_leaguegamefinder-example}
 
 ```python
 wnba_stats_leaguegamefinder(league_id='10')
@@ -3462,7 +3463,7 @@ wnba_stats_leaguegamefinder(league_id='10')
 
 _Last validated n/a._
 
-## `wnba_stats_leaguegamelog`
+## wnba_stats_leaguegamelog
 
 GET /stats/leaguegamelog
 
@@ -3482,7 +3483,7 @@ GET /stats/leaguegamelog
 | `SeasonType` | `season_type_all_star` |  |  | `Y` |  |
 | `Sorter` | `sorter` |  |  | `Y` |  |
 
-### Returns
+### Returns {#wnba_stats_leaguegamelog-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -3519,7 +3520,7 @@ GET /stats/leaguegamelog
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#wnba_stats_leaguegamelog-example}
 
 ```python
 wnba_stats_leaguegamelog(league_id='10')
@@ -3527,7 +3528,7 @@ wnba_stats_leaguegamelog(league_id='10')
 
 _Last validated n/a._
 
-## `wnba_stats_leagueleaders`
+## wnba_stats_leagueleaders
 
 GET /stats/leagueleaders
 
@@ -3545,7 +3546,7 @@ GET /stats/leagueleaders
 | `SeasonType` | `season_type_all_star` |  |  | `Y` |  |
 | `StatCategory` | `stat_category_abbreviation` |  |  | `Y` |  |
 
-### Returns
+### Returns {#wnba_stats_leagueleaders-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -3579,7 +3580,7 @@ GET /stats/leagueleaders
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#wnba_stats_leagueleaders-example}
 
 ```python
 wnba_stats_leagueleaders(league_id='10')
@@ -3587,7 +3588,7 @@ wnba_stats_leagueleaders(league_id='10')
 
 _Last validated n/a._
 
-## `wnba_stats_leaguelineupviz`
+## wnba_stats_leaguelineupviz
 
 GET /stats/leaguelineupviz
 
@@ -3625,7 +3626,7 @@ GET /stats/leaguelineupviz
 | `VsConference` | `vs_conference_nullable` |  |  | `Y` |  |
 | `VsDivision` | `vs_division_nullable` |  |  | `Y` |  |
 
-### Returns
+### Returns {#wnba_stats_leaguelineupviz-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -3658,7 +3659,7 @@ GET /stats/leaguelineupviz
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#wnba_stats_leaguelineupviz-example}
 
 ```python
 wnba_stats_leaguelineupviz(league_id='10')
@@ -3666,7 +3667,7 @@ wnba_stats_leaguelineupviz(league_id='10')
 
 _Last validated n/a._
 
-## `wnba_stats_leagueplayerondetails`
+## wnba_stats_leagueplayerondetails
 
 GET /stats/leagueplayerondetails
 
@@ -3698,7 +3699,7 @@ GET /stats/leagueplayerondetails
 | `VsConference` | `vs_conference_nullable` |  |  | `Y` |  |
 | `VsDivision` | `vs_division_nullable` |  |  | `Y` |  |
 
-### Returns
+### Returns {#wnba_stats_leagueplayerondetails-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -3765,7 +3766,7 @@ GET /stats/leagueplayerondetails
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#wnba_stats_leagueplayerondetails-example}
 
 ```python
 wnba_stats_leagueplayerondetails(league_id='10')
@@ -3773,7 +3774,7 @@ wnba_stats_leagueplayerondetails(league_id='10')
 
 _Last validated n/a._
 
-## `wnba_stats_leagueseasonmatchups`
+## wnba_stats_leagueseasonmatchups
 
 GET /stats/leagueseasonmatchups
 
@@ -3792,7 +3793,7 @@ GET /stats/leagueseasonmatchups
 | `Season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
 | `SeasonType` | `season_type_playoffs` |  |  | `Y` |  |
 
-### Returns
+### Returns {#wnba_stats_leagueseasonmatchups-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -3826,7 +3827,7 @@ GET /stats/leagueseasonmatchups
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#wnba_stats_leagueseasonmatchups-example}
 
 ```python
 wnba_stats_leagueseasonmatchups(league_id='10')
@@ -3834,7 +3835,7 @@ wnba_stats_leagueseasonmatchups(league_id='10')
 
 _Last validated n/a._
 
-## `wnba_stats_leaguestandingsv3`
+## wnba_stats_leaguestandingsv3
 
 GET /stats/leaguestandingsv3
 
@@ -3849,7 +3850,7 @@ GET /stats/leaguestandingsv3
 | `SeasonType` | `season_type` |  |  | `Y` | Season phase: 1=preseason, 2=regular season, 3=postseason. |
 | `SeasonYear` | `season_nullable` |  |  | `Y` |  |
 
-### Returns
+### Returns {#wnba_stats_leaguestandingsv3-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -3949,7 +3950,7 @@ GET /stats/leaguestandingsv3
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#wnba_stats_leaguestandingsv3-example}
 
 ```python
 wnba_stats_leaguestandingsv3(league_id='10')
@@ -3957,7 +3958,7 @@ wnba_stats_leaguestandingsv3(league_id='10')
 
 _Last validated n/a._
 
-## `wnba_stats_playbyplayv2`
+## wnba_stats_playbyplayv2
 
 GET /stats/playbyplayv2
 
@@ -3971,7 +3972,7 @@ GET /stats/playbyplayv2
 | `GameID` | `game_id` |  |  | `Y` |  |
 | `StartPeriod` | `start_period` |  |  | `Y` |  |
 
-### Returns
+### Returns {#wnba_stats_playbyplayv2-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -4013,7 +4014,7 @@ GET /stats/playbyplayv2
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#wnba_stats_playbyplayv2-example}
 
 ```python
 wnba_stats_playbyplayv2()
@@ -4021,7 +4022,7 @@ wnba_stats_playbyplayv2()
 
 _Last validated n/a._
 
-## `wnba_stats_playbyplayv3`
+## wnba_stats_playbyplayv3
 
 GET /stats/playbyplayv3
 
@@ -4035,7 +4036,7 @@ GET /stats/playbyplayv3
 | `GameID` | `game_id` |  |  | `Y` |  |
 | `StartPeriod` | `start_period` |  |  | `Y` |  |
 
-### Returns
+### Returns {#wnba_stats_playbyplayv3-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -4067,7 +4068,7 @@ GET /stats/playbyplayv3
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#wnba_stats_playbyplayv3-example}
 
 ```python
 wnba_stats_playbyplayv3()
@@ -4075,7 +4076,7 @@ wnba_stats_playbyplayv3()
 
 _Last validated n/a._
 
-## `wnba_stats_playerawards`
+## wnba_stats_playerawards
 
 GET /stats/playerawards
 
@@ -4087,7 +4088,7 @@ GET /stats/playerawards
 |---|---|:---:|:---:|:---:|---|
 | `PlayerID` | `player_id` |  |  | `Y` |  |
 
-### Returns
+### Returns {#wnba_stats_playerawards-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -4109,7 +4110,7 @@ GET /stats/playerawards
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#wnba_stats_playerawards-example}
 
 ```python
 wnba_stats_playerawards()
@@ -4117,7 +4118,7 @@ wnba_stats_playerawards()
 
 _Last validated n/a._
 
-## `wnba_stats_playercareerbycollegerollup`
+## wnba_stats_playercareerbycollegerollup
 
 GET /stats/playercareerbycollegerollup
 
@@ -4132,7 +4133,7 @@ GET /stats/playercareerbycollegerollup
 | `Season` | `season_nullable` |  |  | `Y` |  |
 | `SeasonType` | `season_type_all_star` |  |  | `Y` |  |
 
-### Returns
+### Returns {#wnba_stats_playercareerbycollegerollup-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -4164,7 +4165,7 @@ GET /stats/playercareerbycollegerollup
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#wnba_stats_playercareerbycollegerollup-example}
 
 ```python
 wnba_stats_playercareerbycollegerollup(league_id='10')
@@ -4172,7 +4173,7 @@ wnba_stats_playercareerbycollegerollup(league_id='10')
 
 _Last validated n/a._
 
-## `wnba_stats_playercareerstats`
+## wnba_stats_playercareerstats
 
 GET /stats/playercareerstats
 
@@ -4186,7 +4187,7 @@ GET /stats/playercareerstats
 | `PerMode` | `per_mode36` |  |  | `Y` |  |
 | `PlayerID` | `player_id` |  |  | `Y` |  |
 
-### Returns
+### Returns {#wnba_stats_playercareerstats-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -4221,7 +4222,7 @@ GET /stats/playercareerstats
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#wnba_stats_playercareerstats-example}
 
 ```python
 wnba_stats_playercareerstats(league_id='10')
@@ -4229,7 +4230,7 @@ wnba_stats_playercareerstats(league_id='10')
 
 _Last validated n/a._
 
-## `wnba_stats_playercompare`
+## wnba_stats_playercompare
 
 GET /stats/playercompare
 
@@ -4265,7 +4266,7 @@ GET /stats/playercompare
 | `VsDivision` | `vs_division_nullable` |  |  | `Y` |  |
 | `VsPlayerIDList` | `vs_player_id_list` |  |  | `Y` |  |
 
-### Returns
+### Returns {#wnba_stats_playercompare-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -4297,7 +4298,7 @@ GET /stats/playercompare
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#wnba_stats_playercompare-example}
 
 ```python
 wnba_stats_playercompare(league_id='10')
@@ -4305,7 +4306,7 @@ wnba_stats_playercompare(league_id='10')
 
 _Last validated n/a._
 
-## `wnba_stats_playerdashboardbyclutch`
+## wnba_stats_playerdashboardbyclutch
 
 GET /stats/playerdashboardbyclutch
 
@@ -4339,7 +4340,7 @@ GET /stats/playerdashboardbyclutch
 | `VsConference` | `vs_conference_nullable` |  |  | `Y` |  |
 | `VsDivision` | `vs_division_nullable` |  |  | `Y` |  |
 
-### Returns
+### Returns {#wnba_stats_playerdashboardbyclutch-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -4410,7 +4411,7 @@ GET /stats/playerdashboardbyclutch
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#wnba_stats_playerdashboardbyclutch-example}
 
 ```python
 wnba_stats_playerdashboardbyclutch(league_id='10')
@@ -4418,7 +4419,7 @@ wnba_stats_playerdashboardbyclutch(league_id='10')
 
 _Last validated n/a._
 
-## `wnba_stats_playerdashboardbygamesplits`
+## wnba_stats_playerdashboardbygamesplits
 
 GET /stats/playerdashboardbygamesplits
 
@@ -4452,7 +4453,7 @@ GET /stats/playerdashboardbygamesplits
 | `VsConference` | `vs_conference_nullable` |  |  | `Y` |  |
 | `VsDivision` | `vs_division_nullable` |  |  | `Y` |  |
 
-### Returns
+### Returns {#wnba_stats_playerdashboardbygamesplits-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -4523,7 +4524,7 @@ GET /stats/playerdashboardbygamesplits
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#wnba_stats_playerdashboardbygamesplits-example}
 
 ```python
 wnba_stats_playerdashboardbygamesplits(league_id='10')
@@ -4531,7 +4532,7 @@ wnba_stats_playerdashboardbygamesplits(league_id='10')
 
 _Last validated n/a._
 
-## `wnba_stats_playerdashboardbygeneralsplits`
+## wnba_stats_playerdashboardbygeneralsplits
 
 GET /stats/playerdashboardbygeneralsplits
 
@@ -4565,7 +4566,7 @@ GET /stats/playerdashboardbygeneralsplits
 | `VsConference` | `vs_conference_nullable` |  |  | `Y` |  |
 | `VsDivision` | `vs_division_nullable` |  |  | `Y` |  |
 
-### Returns
+### Returns {#wnba_stats_playerdashboardbygeneralsplits-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -4636,7 +4637,7 @@ GET /stats/playerdashboardbygeneralsplits
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#wnba_stats_playerdashboardbygeneralsplits-example}
 
 ```python
 wnba_stats_playerdashboardbygeneralsplits(league_id='10')
@@ -4644,7 +4645,7 @@ wnba_stats_playerdashboardbygeneralsplits(league_id='10')
 
 _Last validated n/a._
 
-## `wnba_stats_playerdashboardbylastngames`
+## wnba_stats_playerdashboardbylastngames
 
 GET /stats/playerdashboardbylastngames
 
@@ -4678,7 +4679,7 @@ GET /stats/playerdashboardbylastngames
 | `VsConference` | `vs_conference_nullable` |  |  | `Y` |  |
 | `VsDivision` | `vs_division_nullable` |  |  | `Y` |  |
 
-### Returns
+### Returns {#wnba_stats_playerdashboardbylastngames-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -4749,7 +4750,7 @@ GET /stats/playerdashboardbylastngames
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#wnba_stats_playerdashboardbylastngames-example}
 
 ```python
 wnba_stats_playerdashboardbylastngames(league_id='10')
@@ -4757,7 +4758,7 @@ wnba_stats_playerdashboardbylastngames(league_id='10')
 
 _Last validated n/a._
 
-## `wnba_stats_playerdashboardbyopponent`
+## wnba_stats_playerdashboardbyopponent
 
 GET /stats/playerdashboardbyopponent
 
@@ -4791,7 +4792,7 @@ GET /stats/playerdashboardbyopponent
 | `VsConference` | `vs_conference` |  |  | `Y` |  |
 | `VsDivision` | `vs_division` |  |  | `Y` |  |
 
-### Returns
+### Returns {#wnba_stats_playerdashboardbyopponent-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -4862,7 +4863,7 @@ GET /stats/playerdashboardbyopponent
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#wnba_stats_playerdashboardbyopponent-example}
 
 ```python
 wnba_stats_playerdashboardbyopponent(league_id='10')
@@ -4870,7 +4871,7 @@ wnba_stats_playerdashboardbyopponent(league_id='10')
 
 _Last validated n/a._
 
-## `wnba_stats_playerdashboardbyshootingsplits`
+## wnba_stats_playerdashboardbyshootingsplits
 
 GET /stats/playerdashboardbyshootingsplits
 
@@ -4904,7 +4905,7 @@ GET /stats/playerdashboardbyshootingsplits
 | `VsConference` | `vs_conference_nullable` |  |  | `Y` |  |
 | `VsDivision` | `vs_division_nullable` |  |  | `Y` |  |
 
-### Returns
+### Returns {#wnba_stats_playerdashboardbyshootingsplits-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -4943,7 +4944,7 @@ GET /stats/playerdashboardbyshootingsplits
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#wnba_stats_playerdashboardbyshootingsplits-example}
 
 ```python
 wnba_stats_playerdashboardbyshootingsplits(league_id='10')
@@ -4951,7 +4952,7 @@ wnba_stats_playerdashboardbyshootingsplits(league_id='10')
 
 _Last validated n/a._
 
-## `wnba_stats_playerdashboardbyteamperformance`
+## wnba_stats_playerdashboardbyteamperformance
 
 GET /stats/playerdashboardbyteamperformance
 
@@ -4985,7 +4986,7 @@ GET /stats/playerdashboardbyteamperformance
 | `VsConference` | `vs_conference_nullable` |  |  | `Y` |  |
 | `VsDivision` | `vs_division_nullable` |  |  | `Y` |  |
 
-### Returns
+### Returns {#wnba_stats_playerdashboardbyteamperformance-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -5058,7 +5059,7 @@ GET /stats/playerdashboardbyteamperformance
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#wnba_stats_playerdashboardbyteamperformance-example}
 
 ```python
 wnba_stats_playerdashboardbyteamperformance(league_id='10')
@@ -5066,7 +5067,7 @@ wnba_stats_playerdashboardbyteamperformance(league_id='10')
 
 _Last validated n/a._
 
-## `wnba_stats_playerdashboardbyyearoveryear`
+## wnba_stats_playerdashboardbyyearoveryear
 
 GET /stats/playerdashboardbyyearoveryear
 
@@ -5100,7 +5101,7 @@ GET /stats/playerdashboardbyyearoveryear
 | `VsConference` | `vs_conference_nullable` |  |  | `Y` |  |
 | `VsDivision` | `vs_division_nullable` |  |  | `Y` |  |
 
-### Returns
+### Returns {#wnba_stats_playerdashboardbyyearoveryear-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -5174,7 +5175,7 @@ GET /stats/playerdashboardbyyearoveryear
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#wnba_stats_playerdashboardbyyearoveryear-example}
 
 ```python
 wnba_stats_playerdashboardbyyearoveryear(league_id='10')
@@ -5182,7 +5183,7 @@ wnba_stats_playerdashboardbyyearoveryear(league_id='10')
 
 _Last validated n/a._
 
-## `wnba_stats_playerdashptshotdefend`
+## wnba_stats_playerdashptshotdefend
 
 GET /stats/playerdashptshotdefend
 
@@ -5211,7 +5212,7 @@ GET /stats/playerdashptshotdefend
 | `VsConference` | `vs_conference_nullable` |  |  | `Y` |  |
 | `VsDivision` | `vs_division_nullable` |  |  | `Y` |  |
 
-### Returns
+### Returns {#wnba_stats_playerdashptshotdefend-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -5229,7 +5230,7 @@ GET /stats/playerdashptshotdefend
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#wnba_stats_playerdashptshotdefend-example}
 
 ```python
 wnba_stats_playerdashptshotdefend(league_id='10')
@@ -5237,7 +5238,7 @@ wnba_stats_playerdashptshotdefend(league_id='10')
 
 _Last validated n/a._
 
-## `wnba_stats_playerestimatedmetrics`
+## wnba_stats_playerestimatedmetrics
 
 GET /stats/playerestimatedmetrics
 
@@ -5251,7 +5252,7 @@ GET /stats/playerestimatedmetrics
 | `Season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
 | `SeasonType` | `season_type` |  |  | `Y` | Season phase: 1=preseason, 2=regular season, 3=postseason. |
 
-### Returns
+### Returns {#wnba_stats_playerestimatedmetrics-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -5291,7 +5292,7 @@ GET /stats/playerestimatedmetrics
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#wnba_stats_playerestimatedmetrics-example}
 
 ```python
 wnba_stats_playerestimatedmetrics(league_id='10')
@@ -5299,7 +5300,7 @@ wnba_stats_playerestimatedmetrics(league_id='10')
 
 _Last validated n/a._
 
-## `wnba_stats_playerfantasyprofile`
+## wnba_stats_playerfantasyprofile
 
 GET /stats/playerfantasyprofile
 
@@ -5319,7 +5320,7 @@ GET /stats/playerfantasyprofile
 | `Season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
 | `SeasonType` | `season_type` |  |  | `Y` | Season phase: 1=preseason, 2=regular season, 3=postseason. |
 
-### Returns
+### Returns {#wnba_stats_playerfantasyprofile-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -5360,7 +5361,7 @@ GET /stats/playerfantasyprofile
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#wnba_stats_playerfantasyprofile-example}
 
 ```python
 wnba_stats_playerfantasyprofile(league_id='10')
@@ -5368,7 +5369,7 @@ wnba_stats_playerfantasyprofile(league_id='10')
 
 _Last validated n/a._
 
-## `wnba_stats_playerfantasyprofilebargraph`
+## wnba_stats_playerfantasyprofilebargraph
 
 GET /stats/playerfantasyprofilebargraph
 
@@ -5383,7 +5384,7 @@ GET /stats/playerfantasyprofilebargraph
 | `Season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
 | `SeasonType` | `season_type_all_star_nullable` |  |  | `Y` |  |
 
-### Returns
+### Returns {#wnba_stats_playerfantasyprofilebargraph-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -5406,7 +5407,7 @@ GET /stats/playerfantasyprofilebargraph
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#wnba_stats_playerfantasyprofilebargraph-example}
 
 ```python
 wnba_stats_playerfantasyprofilebargraph(league_id='10')
@@ -5414,7 +5415,7 @@ wnba_stats_playerfantasyprofilebargraph(league_id='10')
 
 _Last validated n/a._
 
-## `wnba_stats_playergamelog`
+## wnba_stats_playergamelog
 
 GET /stats/playergamelog
 
@@ -5431,7 +5432,7 @@ GET /stats/playergamelog
 | `Season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
 | `SeasonType` | `season_type_all_star` |  |  | `Y` |  |
 
-### Returns
+### Returns {#wnba_stats_playergamelog-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -5466,7 +5467,7 @@ GET /stats/playergamelog
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#wnba_stats_playergamelog-example}
 
 ```python
 wnba_stats_playergamelog(league_id='10')
@@ -5474,7 +5475,7 @@ wnba_stats_playergamelog(league_id='10')
 
 _Last validated n/a._
 
-## `wnba_stats_playergamelogs`
+## wnba_stats_playergamelogs
 
 GET /stats/playergamelogs
 
@@ -5506,7 +5507,7 @@ GET /stats/playergamelogs
 | `VsConference` | `vs_conference_nullable` |  |  | `Y` |  |
 | `VsDivision` | `vs_division_nullable` |  |  | `Y` |  |
 
-### Returns
+### Returns {#wnba_stats_playergamelogs-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -5584,7 +5585,7 @@ GET /stats/playergamelogs
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#wnba_stats_playergamelogs-example}
 
 ```python
 wnba_stats_playergamelogs(league_id='10')
@@ -5592,7 +5593,7 @@ wnba_stats_playergamelogs(league_id='10')
 
 _Last validated n/a._
 
-## `wnba_stats_playergamestreakfinder`
+## wnba_stats_playergamestreakfinder
 
 GET /stats/playergamestreakfinder
 
@@ -5692,7 +5693,7 @@ GET /stats/playergamestreakfinder
 | `VsTeamID` | `vs_team_id_nullable` |  |  | `Y` |  |
 | `YearsExperience` | `years_experience_nullable` |  |  | `Y` |  |
 
-### Returns
+### Returns {#wnba_stats_playergamestreakfinder-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -5709,7 +5710,7 @@ GET /stats/playergamestreakfinder
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#wnba_stats_playergamestreakfinder-example}
 
 ```python
 wnba_stats_playergamestreakfinder(league_id='10')
@@ -5717,7 +5718,7 @@ wnba_stats_playergamestreakfinder(league_id='10')
 
 _Last validated n/a._
 
-## `wnba_stats_playerindex`
+## wnba_stats_playerindex
 
 GET /stats/playerindex
 
@@ -5741,7 +5742,7 @@ GET /stats/playerindex
 | `TeamID` | `team_id_nullable` |  |  | `Y` |  |
 | `Weight` | `weight_nullable` |  |  | `Y` |  |
 
-### Returns
+### Returns {#wnba_stats_playerindex-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -5775,7 +5776,7 @@ GET /stats/playerindex
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#wnba_stats_playerindex-example}
 
 ```python
 wnba_stats_playerindex(league_id='10')
@@ -5783,7 +5784,7 @@ wnba_stats_playerindex(league_id='10')
 
 _Last validated n/a._
 
-## `wnba_stats_playernextngames`
+## wnba_stats_playernextngames
 
 GET /stats/playernextngames
 
@@ -5799,7 +5800,7 @@ GET /stats/playernextngames
 | `Season` | `season_all` |  |  | `Y` |  |
 | `SeasonType` | `season_type_all_star` |  |  | `Y` |  |
 
-### Returns
+### Returns {#wnba_stats_playernextngames-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -5820,7 +5821,7 @@ GET /stats/playernextngames
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#wnba_stats_playernextngames-example}
 
 ```python
 wnba_stats_playernextngames(league_id='10')
@@ -5828,7 +5829,7 @@ wnba_stats_playernextngames(league_id='10')
 
 _Last validated n/a._
 
-## `wnba_stats_playerprofilev2`
+## wnba_stats_playerprofilev2
 
 GET /stats/playerprofilev2
 
@@ -5842,7 +5843,7 @@ GET /stats/playerprofilev2
 | `PerMode` | `per_mode36` |  |  | `Y` |  |
 | `PlayerID` | `player_id` |  |  | `Y` |  |
 
-### Returns
+### Returns {#wnba_stats_playerprofilev2-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -5877,7 +5878,7 @@ GET /stats/playerprofilev2
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#wnba_stats_playerprofilev2-example}
 
 ```python
 wnba_stats_playerprofilev2(league_id='10')
@@ -5885,7 +5886,7 @@ wnba_stats_playerprofilev2(league_id='10')
 
 _Last validated n/a._
 
-## `wnba_stats_playervsplayer`
+## wnba_stats_playervsplayer
 
 GET /stats/playervsplayer
 
@@ -5918,7 +5919,7 @@ GET /stats/playervsplayer
 | `VsDivision` | `vs_division_nullable` |  |  | `Y` |  |
 | `VsPlayerID` | `vs_player_id` |  |  | `Y` |  |
 
-### Returns
+### Returns {#wnba_stats_playervsplayer-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -5959,7 +5960,7 @@ GET /stats/playervsplayer
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#wnba_stats_playervsplayer-example}
 
 ```python
 wnba_stats_playervsplayer(league_id='10')
@@ -5967,7 +5968,7 @@ wnba_stats_playervsplayer(league_id='10')
 
 _Last validated n/a._
 
-## `wnba_stats_scheduleleaguev2`
+## wnba_stats_scheduleleaguev2
 
 GET /stats/scheduleleaguev2
 
@@ -5980,7 +5981,7 @@ GET /stats/scheduleleaguev2
 | `LeagueID` | `league_id` |  |  | `Y` |  |
 | `Season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
 
-### Returns
+### Returns {#wnba_stats_scheduleleaguev2-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -6040,7 +6041,7 @@ GET /stats/scheduleleaguev2
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#wnba_stats_scheduleleaguev2-example}
 
 ```python
 wnba_stats_scheduleleaguev2(league_id='10')
@@ -6048,7 +6049,7 @@ wnba_stats_scheduleleaguev2(league_id='10')
 
 _Last validated n/a._
 
-## `wnba_stats_scheduleleaguev2int`
+## wnba_stats_scheduleleaguev2int
 
 GET /stats/scheduleleaguev2int
 
@@ -6061,7 +6062,7 @@ GET /stats/scheduleleaguev2int
 | `LeagueID` | `league_id` |  |  | `Y` |  |
 | `Season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
 
-### Returns
+### Returns {#wnba_stats_scheduleleaguev2int-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -6121,7 +6122,7 @@ GET /stats/scheduleleaguev2int
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#wnba_stats_scheduleleaguev2int-example}
 
 ```python
 wnba_stats_scheduleleaguev2int(league_id='10')
@@ -6129,7 +6130,7 @@ wnba_stats_scheduleleaguev2int(league_id='10')
 
 _Last validated n/a._
 
-## `wnba_stats_scoreboardv2`
+## wnba_stats_scoreboardv2
 
 GET /stats/scoreboardv2
 
@@ -6143,7 +6144,7 @@ GET /stats/scoreboardv2
 | `GameDate` | `game_date` |  |  | `Y` |  |
 | `LeagueID` | `league_id` |  |  | `Y` |  |
 
-### Returns
+### Returns {#wnba_stats_scoreboardv2-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -6180,7 +6181,7 @@ GET /stats/scoreboardv2
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#wnba_stats_scoreboardv2-example}
 
 ```python
 wnba_stats_scoreboardv2(league_id='10')
@@ -6188,7 +6189,7 @@ wnba_stats_scoreboardv2(league_id='10')
 
 _Last validated n/a._
 
-## `wnba_stats_scoreboardv3`
+## wnba_stats_scoreboardv3
 
 GET /stats/scoreboardv3
 
@@ -6201,7 +6202,7 @@ GET /stats/scoreboardv3
 | `GameDate` | `game_date` |  |  | `Y` |  |
 | `LeagueID` | `league_id` |  |  | `Y` |  |
 
-### Returns
+### Returns {#wnba_stats_scoreboardv3-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -6289,7 +6290,7 @@ GET /stats/scoreboardv3
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#wnba_stats_scoreboardv3-example}
 
 ```python
 wnba_stats_scoreboardv3(league_id='10')
@@ -6297,7 +6298,7 @@ wnba_stats_scoreboardv3(league_id='10')
 
 _Last validated n/a._
 
-## `wnba_stats_shotchartdetail`
+## wnba_stats_shotchartdetail
 
 GET /stats/shotchartdetail
 
@@ -6339,7 +6340,7 @@ GET /stats/shotchartdetail
 | `VsConference` | `vs_conference_nullable` |  |  | `Y` |  |
 | `VsDivision` | `vs_division_nullable` |  |  | `Y` |  |
 
-### Returns
+### Returns {#wnba_stats_shotchartdetail-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -6371,7 +6372,7 @@ GET /stats/shotchartdetail
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#wnba_stats_shotchartdetail-example}
 
 ```python
 wnba_stats_shotchartdetail(league_id='10')
@@ -6379,7 +6380,7 @@ wnba_stats_shotchartdetail(league_id='10')
 
 _Last validated n/a._
 
-## `wnba_stats_shotchartleaguewide`
+## wnba_stats_shotchartleaguewide
 
 GET /stats/shotchartleaguewide
 
@@ -6392,7 +6393,7 @@ GET /stats/shotchartleaguewide
 | `LeagueID` | `league_id` |  |  | `Y` |  |
 | `Season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
 
-### Returns
+### Returns {#wnba_stats_shotchartleaguewide-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -6407,7 +6408,7 @@ GET /stats/shotchartleaguewide
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#wnba_stats_shotchartleaguewide-example}
 
 ```python
 wnba_stats_shotchartleaguewide(league_id='10')
@@ -6415,7 +6416,7 @@ wnba_stats_shotchartleaguewide(league_id='10')
 
 _Last validated n/a._
 
-## `wnba_stats_shotchartlineupdetail`
+## wnba_stats_shotchartlineupdetail
 
 GET /stats/shotchartlineupdetail
 
@@ -6446,7 +6447,7 @@ GET /stats/shotchartlineupdetail
 | `VsConference` | `vs_conference_nullable` |  |  | `Y` |  |
 | `VsDivision` | `vs_division_nullable` |  |  | `Y` |  |
 
-### Returns
+### Returns {#wnba_stats_shotchartlineupdetail-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -6480,7 +6481,7 @@ GET /stats/shotchartlineupdetail
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#wnba_stats_shotchartlineupdetail-example}
 
 ```python
 wnba_stats_shotchartlineupdetail(league_id='10')
@@ -6488,7 +6489,7 @@ wnba_stats_shotchartlineupdetail(league_id='10')
 
 _Last validated n/a._
 
-## `wnba_stats_teamdashboardbyclutch`
+## wnba_stats_teamdashboardbyclutch
 
 GET /stats/teamdashboardbyclutch
 
@@ -6522,7 +6523,7 @@ GET /stats/teamdashboardbyclutch
 | `VsConference` | `vs_conference` |  |  | `Y` |  |
 | `VsDivision` | `vs_division` |  |  | `Y` |  |
 
-### Returns
+### Returns {#wnba_stats_teamdashboardbyclutch-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -6584,7 +6585,7 @@ GET /stats/teamdashboardbyclutch
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#wnba_stats_teamdashboardbyclutch-example}
 
 ```python
 wnba_stats_teamdashboardbyclutch(league_id='10')
@@ -6592,7 +6593,7 @@ wnba_stats_teamdashboardbyclutch(league_id='10')
 
 _Last validated n/a._
 
-## `wnba_stats_teamdashboardbygamesplits`
+## wnba_stats_teamdashboardbygamesplits
 
 GET /stats/teamdashboardbygamesplits
 
@@ -6626,7 +6627,7 @@ GET /stats/teamdashboardbygamesplits
 | `VsConference` | `vs_conference` |  |  | `Y` |  |
 | `VsDivision` | `vs_division` |  |  | `Y` |  |
 
-### Returns
+### Returns {#wnba_stats_teamdashboardbygamesplits-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -6688,7 +6689,7 @@ GET /stats/teamdashboardbygamesplits
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#wnba_stats_teamdashboardbygamesplits-example}
 
 ```python
 wnba_stats_teamdashboardbygamesplits(league_id='10')
@@ -6696,7 +6697,7 @@ wnba_stats_teamdashboardbygamesplits(league_id='10')
 
 _Last validated n/a._
 
-## `wnba_stats_teamdashboardbygeneralsplits`
+## wnba_stats_teamdashboardbygeneralsplits
 
 GET /stats/teamdashboardbygeneralsplits
 
@@ -6730,7 +6731,7 @@ GET /stats/teamdashboardbygeneralsplits
 | `VsConference` | `vs_conference_nullable` |  |  | `Y` |  |
 | `VsDivision` | `vs_division_nullable` |  |  | `Y` |  |
 
-### Returns
+### Returns {#wnba_stats_teamdashboardbygeneralsplits-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -6793,7 +6794,7 @@ GET /stats/teamdashboardbygeneralsplits
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#wnba_stats_teamdashboardbygeneralsplits-example}
 
 ```python
 wnba_stats_teamdashboardbygeneralsplits(league_id='10')
@@ -6801,7 +6802,7 @@ wnba_stats_teamdashboardbygeneralsplits(league_id='10')
 
 _Last validated n/a._
 
-## `wnba_stats_teamdashboardbylastngames`
+## wnba_stats_teamdashboardbylastngames
 
 GET /stats/teamdashboardbylastngames
 
@@ -6835,7 +6836,7 @@ GET /stats/teamdashboardbylastngames
 | `VsConference` | `vs_conference` |  |  | `Y` |  |
 | `VsDivision` | `vs_division` |  |  | `Y` |  |
 
-### Returns
+### Returns {#wnba_stats_teamdashboardbylastngames-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -6897,7 +6898,7 @@ GET /stats/teamdashboardbylastngames
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#wnba_stats_teamdashboardbylastngames-example}
 
 ```python
 wnba_stats_teamdashboardbylastngames(league_id='10')
@@ -6905,7 +6906,7 @@ wnba_stats_teamdashboardbylastngames(league_id='10')
 
 _Last validated n/a._
 
-## `wnba_stats_teamdashboardbyopponent`
+## wnba_stats_teamdashboardbyopponent
 
 GET /stats/teamdashboardbyopponent
 
@@ -6939,7 +6940,7 @@ GET /stats/teamdashboardbyopponent
 | `VsConference` | `vs_conference` |  |  | `Y` |  |
 | `VsDivision` | `vs_division` |  |  | `Y` |  |
 
-### Returns
+### Returns {#wnba_stats_teamdashboardbyopponent-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -7001,7 +7002,7 @@ GET /stats/teamdashboardbyopponent
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#wnba_stats_teamdashboardbyopponent-example}
 
 ```python
 wnba_stats_teamdashboardbyopponent(league_id='10')
@@ -7009,7 +7010,7 @@ wnba_stats_teamdashboardbyopponent(league_id='10')
 
 _Last validated n/a._
 
-## `wnba_stats_teamdashboardbyshootingsplits`
+## wnba_stats_teamdashboardbyshootingsplits
 
 GET /stats/teamdashboardbyshootingsplits
 
@@ -7043,7 +7044,7 @@ GET /stats/teamdashboardbyshootingsplits
 | `VsConference` | `vs_conference_nullable` |  |  | `Y` |  |
 | `VsDivision` | `vs_division_nullable` |  |  | `Y` |  |
 
-### Returns
+### Returns {#wnba_stats_teamdashboardbyshootingsplits-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -7082,7 +7083,7 @@ GET /stats/teamdashboardbyshootingsplits
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#wnba_stats_teamdashboardbyshootingsplits-example}
 
 ```python
 wnba_stats_teamdashboardbyshootingsplits(league_id='10')
@@ -7090,7 +7091,7 @@ wnba_stats_teamdashboardbyshootingsplits(league_id='10')
 
 _Last validated n/a._
 
-## `wnba_stats_teamdashboardbyteamperformance`
+## wnba_stats_teamdashboardbyteamperformance
 
 GET /stats/teamdashboardbyteamperformance
 
@@ -7124,7 +7125,7 @@ GET /stats/teamdashboardbyteamperformance
 | `VsConference` | `vs_conference` |  |  | `Y` |  |
 | `VsDivision` | `vs_division` |  |  | `Y` |  |
 
-### Returns
+### Returns {#wnba_stats_teamdashboardbyteamperformance-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -7188,7 +7189,7 @@ GET /stats/teamdashboardbyteamperformance
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#wnba_stats_teamdashboardbyteamperformance-example}
 
 ```python
 wnba_stats_teamdashboardbyteamperformance(league_id='10')
@@ -7196,7 +7197,7 @@ wnba_stats_teamdashboardbyteamperformance(league_id='10')
 
 _Last validated n/a._
 
-## `wnba_stats_teamdashboardbyyearoveryear`
+## wnba_stats_teamdashboardbyyearoveryear
 
 GET /stats/teamdashboardbyyearoveryear
 
@@ -7230,7 +7231,7 @@ GET /stats/teamdashboardbyyearoveryear
 | `VsConference` | `vs_conference` |  |  | `Y` |  |
 | `VsDivision` | `vs_division` |  |  | `Y` |  |
 
-### Returns
+### Returns {#wnba_stats_teamdashboardbyyearoveryear-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -7292,7 +7293,7 @@ GET /stats/teamdashboardbyyearoveryear
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#wnba_stats_teamdashboardbyyearoveryear-example}
 
 ```python
 wnba_stats_teamdashboardbyyearoveryear(league_id='10')
@@ -7300,7 +7301,7 @@ wnba_stats_teamdashboardbyyearoveryear(league_id='10')
 
 _Last validated n/a._
 
-## `wnba_stats_teamdashlineups`
+## wnba_stats_teamdashlineups
 
 GET /stats/teamdashlineups
 
@@ -7336,7 +7337,7 @@ GET /stats/teamdashlineups
 | `VsConference` | `vs_conference_nullable` |  |  | `Y` |  |
 | `VsDivision` | `vs_division_nullable` |  |  | `Y` |  |
 
-### Returns
+### Returns {#wnba_stats_teamdashlineups-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -7401,7 +7402,7 @@ GET /stats/teamdashlineups
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#wnba_stats_teamdashlineups-example}
 
 ```python
 wnba_stats_teamdashlineups(league_id='10')
@@ -7409,7 +7410,7 @@ wnba_stats_teamdashlineups(league_id='10')
 
 _Last validated n/a._
 
-## `wnba_stats_teamdetails`
+## wnba_stats_teamdetails
 
 GET /stats/teamdetails
 
@@ -7421,7 +7422,7 @@ GET /stats/teamdetails
 |---|---|:---:|:---:|:---:|---|
 | `TeamID` | `team_id` |  |  | `Y` |  |
 
-### Returns
+### Returns {#wnba_stats_teamdetails-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -7440,7 +7441,7 @@ GET /stats/teamdetails
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#wnba_stats_teamdetails-example}
 
 ```python
 wnba_stats_teamdetails()
@@ -7448,7 +7449,7 @@ wnba_stats_teamdetails()
 
 _Last validated n/a._
 
-## `wnba_stats_teamestimatedmetrics`
+## wnba_stats_teamestimatedmetrics
 
 GET /stats/teamestimatedmetrics
 
@@ -7462,7 +7463,7 @@ GET /stats/teamestimatedmetrics
 | `Season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
 | `SeasonType` | `season_type` |  |  | `Y` | Season phase: 1=preseason, 2=regular season, 3=postseason. |
 
-### Returns
+### Returns {#wnba_stats_teamestimatedmetrics-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -7500,7 +7501,7 @@ GET /stats/teamestimatedmetrics
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#wnba_stats_teamestimatedmetrics-example}
 
 ```python
 wnba_stats_teamestimatedmetrics(league_id='10')
@@ -7508,7 +7509,7 @@ wnba_stats_teamestimatedmetrics(league_id='10')
 
 _Last validated n/a._
 
-## `wnba_stats_teamgamelog`
+## wnba_stats_teamgamelog
 
 GET /stats/teamgamelog
 
@@ -7525,7 +7526,7 @@ GET /stats/teamgamelog
 | `SeasonType` | `season_type_all_star` |  |  | `Y` |  |
 | `TeamID` | `team_id` |  |  | `Y` |  |
 
-### Returns
+### Returns {#wnba_stats_teamgamelog-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -7560,7 +7561,7 @@ GET /stats/teamgamelog
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#wnba_stats_teamgamelog-example}
 
 ```python
 wnba_stats_teamgamelog(league_id='10')
@@ -7568,7 +7569,7 @@ wnba_stats_teamgamelog(league_id='10')
 
 _Last validated n/a._
 
-## `wnba_stats_teamgamelogs`
+## wnba_stats_teamgamelogs
 
 GET /stats/teamgamelogs
 
@@ -7600,7 +7601,7 @@ GET /stats/teamgamelogs
 | `VsConference` | `vs_conference_nullable` |  |  | `Y` |  |
 | `VsDivision` | `vs_division_nullable` |  |  | `Y` |  |
 
-### Returns
+### Returns {#wnba_stats_teamgamelogs-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -7665,7 +7666,7 @@ GET /stats/teamgamelogs
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#wnba_stats_teamgamelogs-example}
 
 ```python
 wnba_stats_teamgamelogs(league_id='10')
@@ -7673,7 +7674,7 @@ wnba_stats_teamgamelogs(league_id='10')
 
 _Last validated n/a._
 
-## `wnba_stats_teaminfocommon`
+## wnba_stats_teaminfocommon
 
 GET /stats/teaminfocommon
 
@@ -7688,7 +7689,7 @@ GET /stats/teaminfocommon
 | `SeasonType` | `season_type_nullable` |  |  | `Y` |  |
 | `TeamID` | `team_id` |  |  | `Y` |  |
 
-### Returns
+### Returns {#wnba_stats_teaminfocommon-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -7712,7 +7713,7 @@ GET /stats/teaminfocommon
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#wnba_stats_teaminfocommon-example}
 
 ```python
 wnba_stats_teaminfocommon(league_id='10')
@@ -7720,7 +7721,7 @@ wnba_stats_teaminfocommon(league_id='10')
 
 _Last validated n/a._
 
-## `wnba_stats_teamplayerdashboard`
+## wnba_stats_teamplayerdashboard
 
 GET /stats/teamplayerdashboard
 
@@ -7754,7 +7755,7 @@ GET /stats/teamplayerdashboard
 | `VsConference` | `vs_conference_nullable` |  |  | `Y` |  |
 | `VsDivision` | `vs_division_nullable` |  |  | `Y` |  |
 
-### Returns
+### Returns {#wnba_stats_teamplayerdashboard-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -7827,7 +7828,7 @@ GET /stats/teamplayerdashboard
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#wnba_stats_teamplayerdashboard-example}
 
 ```python
 wnba_stats_teamplayerdashboard(league_id='10')
@@ -7835,7 +7836,7 @@ wnba_stats_teamplayerdashboard(league_id='10')
 
 _Last validated n/a._
 
-## `wnba_stats_teamplayeronoffdetails`
+## wnba_stats_teamplayeronoffdetails
 
 GET /stats/teamplayeronoffdetails
 
@@ -7867,7 +7868,7 @@ GET /stats/teamplayeronoffdetails
 | `VsConference` | `vs_conference_nullable` |  |  | `Y` |  |
 | `VsDivision` | `vs_division_nullable` |  |  | `Y` |  |
 
-### Returns
+### Returns {#wnba_stats_teamplayeronoffdetails-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -7934,7 +7935,7 @@ GET /stats/teamplayeronoffdetails
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#wnba_stats_teamplayeronoffdetails-example}
 
 ```python
 wnba_stats_teamplayeronoffdetails(league_id='10')
@@ -7942,7 +7943,7 @@ wnba_stats_teamplayeronoffdetails(league_id='10')
 
 _Last validated n/a._
 
-## `wnba_stats_teamplayeronoffsummary`
+## wnba_stats_teamplayeronoffsummary
 
 GET /stats/teamplayeronoffsummary
 
@@ -7974,7 +7975,7 @@ GET /stats/teamplayeronoffsummary
 | `VsConference` | `vs_conference_nullable` |  |  | `Y` |  |
 | `VsDivision` | `vs_division_nullable` |  |  | `Y` |  |
 
-### Returns
+### Returns {#wnba_stats_teamplayeronoffsummary-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -8039,7 +8040,7 @@ GET /stats/teamplayeronoffsummary
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#wnba_stats_teamplayeronoffsummary-example}
 
 ```python
 wnba_stats_teamplayeronoffsummary(league_id='10')
@@ -8047,7 +8048,7 @@ wnba_stats_teamplayeronoffsummary(league_id='10')
 
 _Last validated n/a._
 
-## `wnba_stats_teamvsplayer`
+## wnba_stats_teamvsplayer
 
 GET /stats/teamvsplayer
 
@@ -8081,7 +8082,7 @@ GET /stats/teamvsplayer
 | `VsDivision` | `vs_division_nullable` |  |  | `Y` |  |
 | `VsPlayerID` | `vs_player_id` |  |  | `Y` |  |
 
-### Returns
+### Returns {#wnba_stats_teamvsplayer-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -8153,7 +8154,7 @@ GET /stats/teamvsplayer
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#wnba_stats_teamvsplayer-example}
 
 ```python
 wnba_stats_teamvsplayer(league_id='10')
@@ -8161,7 +8162,7 @@ wnba_stats_teamvsplayer(league_id='10')
 
 _Last validated n/a._
 
-## `wnba_stats_teamyearbyyearstats`
+## wnba_stats_teamyearbyyearstats
 
 GET /stats/teamyearbyyearstats
 
@@ -8176,7 +8177,7 @@ GET /stats/teamyearbyyearstats
 | `SeasonType` | `season_type_all_star` |  |  | `Y` |  |
 | `TeamID` | `team_id` |  |  | `Y` |  |
 
-### Returns
+### Returns {#wnba_stats_teamyearbyyearstats-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -8218,7 +8219,7 @@ GET /stats/teamyearbyyearstats
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#wnba_stats_teamyearbyyearstats-example}
 
 ```python
 wnba_stats_teamyearbyyearstats(league_id='10')
@@ -8226,7 +8227,7 @@ wnba_stats_teamyearbyyearstats(league_id='10')
 
 _Last validated n/a._
 
-## `wnba_stats_videostatus`
+## wnba_stats_videostatus
 
 GET /stats/videostatus
 
@@ -8239,7 +8240,7 @@ GET /stats/videostatus
 | `GameDate` | `game_date` |  |  | `Y` |  |
 | `LeagueID` | `league_id` |  |  | `Y` |  |
 
-### Returns
+### Returns {#wnba_stats_videostatus-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -8261,7 +8262,7 @@ GET /stats/videostatus
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#wnba_stats_videostatus-example}
 
 ```python
 wnba_stats_videostatus(league_id='10')

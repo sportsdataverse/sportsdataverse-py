@@ -3,12 +3,13 @@ title: CRICKET — ESPN site API (v2)
 sidebar_label: ESPN site API (v2)
 description: "CRICKET — ESPN site API (v2) — endpoint reference in sdv-py, the SportsDataverse Python package."
 sidebar_position: 20
+toc_max_heading_level: 2
 ---
 # CRICKET — ESPN site API (v2)
 
 `sportsdataverse.cricket` — 24 endpoints.
 
-## `espn_cricket_scoreboard`
+## espn_cricket_scoreboard
 
 ESPN endpoint.
 
@@ -24,7 +25,7 @@ ESPN endpoint.
 | `groups` | `groups` |  |  | `Y` | Conference or group id filter (e.g. an ESPN conference id). |
 | `limit` | `limit` |  |  | `Y` | Maximum number of items to return. |
 
-### Returns
+### Returns {#espn_cricket_scoreboard-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -46,7 +47,7 @@ ESPN endpoint.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#espn_cricket_scoreboard-example}
 
 ```python
 espn_cricket_scoreboard(dates='20240115')
@@ -54,7 +55,7 @@ espn_cricket_scoreboard(dates='20240115')
 
 _Last validated n/a._
 
-## `espn_cricket_summary`
+## espn_cricket_summary
 
 ESPN endpoint.
 
@@ -66,7 +67,7 @@ ESPN endpoint.
 |---|---|:---:|:---:|:---:|---|
 | `event` | `event_id` |  |  | `Y` | event query parameter. |
 
-### Returns
+### Returns {#espn_cricket_summary-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **header**
@@ -183,7 +184,7 @@ ESPN endpoint.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#espn_cricket_summary-example}
 
 ```python
 espn_cricket_summary()
@@ -191,7 +192,7 @@ espn_cricket_summary()
 
 _Last validated n/a._
 
-## `espn_cricket_calendar`
+## espn_cricket_calendar
 
 ESPN endpoint.
 
@@ -202,12 +203,12 @@ ESPN endpoint.
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 
-### Returns
+### Returns {#espn_cricket_calendar-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_items`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#espn_cricket_calendar-example}
 
 ```python
 espn_cricket_calendar()
@@ -215,7 +216,7 @@ espn_cricket_calendar()
 
 _Last validated n/a._
 
-## `espn_cricket_news`
+## espn_cricket_news
 
 ESPN endpoint.
 
@@ -227,7 +228,7 @@ ESPN endpoint.
 |---|---|:---:|:---:|:---:|---|
 | `limit` | `limit` |  |  | `Y` | Maximum number of items to return. |
 
-### Returns
+### Returns {#espn_cricket_news-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -252,7 +253,7 @@ ESPN endpoint.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#espn_cricket_news-example}
 
 ```python
 espn_cricket_news()
@@ -260,7 +261,7 @@ espn_cricket_news()
 
 _Last validated n/a._
 
-## `espn_cricket_injuries`
+## espn_cricket_injuries
 
 ESPN endpoint.
 
@@ -271,7 +272,7 @@ ESPN endpoint.
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 
-### Returns
+### Returns {#espn_cricket_injuries-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -282,7 +283,7 @@ ESPN endpoint.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#espn_cricket_injuries-example}
 
 ```python
 espn_cricket_injuries()
@@ -290,7 +291,7 @@ espn_cricket_injuries()
 
 _Last validated n/a._
 
-## `espn_cricket_transactions`
+## espn_cricket_transactions
 
 ESPN endpoint.
 
@@ -302,12 +303,12 @@ ESPN endpoint.
 |---|---|:---:|:---:|:---:|---|
 | `limit` | `limit` |  |  | `Y` | Maximum number of items to return. |
 
-### Returns
+### Returns {#espn_cricket_transactions-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_items`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#espn_cricket_transactions-example}
 
 ```python
 espn_cricket_transactions()
@@ -315,7 +316,7 @@ espn_cricket_transactions()
 
 _Last validated n/a._
 
-## `espn_cricket_conferences`
+## espn_cricket_conferences
 
 ESPN endpoint.
 
@@ -326,12 +327,12 @@ ESPN endpoint.
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 
-### Returns
+### Returns {#espn_cricket_conferences-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_groups`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#espn_cricket_conferences-example}
 
 ```python
 espn_cricket_conferences()
@@ -339,7 +340,7 @@ espn_cricket_conferences()
 
 _Last validated n/a._
 
-## `espn_cricket_statistics_league`
+## espn_cricket_statistics_league
 
 ESPN endpoint.
 
@@ -350,12 +351,12 @@ ESPN endpoint.
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 
-### Returns
+### Returns {#espn_cricket_statistics_league-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_items`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#espn_cricket_statistics_league-example}
 
 ```python
 espn_cricket_statistics_league()
@@ -363,7 +364,7 @@ espn_cricket_statistics_league()
 
 _Last validated n/a._
 
-## `espn_cricket_draft`
+## espn_cricket_draft
 
 ESPN endpoint.
 
@@ -374,12 +375,12 @@ ESPN endpoint.
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 
-### Returns
+### Returns {#espn_cricket_draft-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_items`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#espn_cricket_draft-example}
 
 ```python
 espn_cricket_draft()
@@ -387,7 +388,7 @@ espn_cricket_draft()
 
 _Last validated n/a._
 
-## `espn_cricket_teams_site`
+## espn_cricket_teams_site
 
 ESPN endpoint.
 
@@ -399,7 +400,7 @@ ESPN endpoint.
 |---|---|:---:|:---:|:---:|---|
 | `limit` | `limit` |  |  | `Y` | Maximum number of items to return. |
 
-### Returns
+### Returns {#espn_cricket_teams_site-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -421,7 +422,7 @@ ESPN endpoint.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#espn_cricket_teams_site-example}
 
 ```python
 espn_cricket_teams_site()
@@ -429,7 +430,7 @@ espn_cricket_teams_site()
 
 _Last validated n/a._
 
-## `espn_cricket_team`
+## espn_cricket_team
 
 ESPN endpoint.
 
@@ -441,12 +442,12 @@ ESPN endpoint.
 |---|---|:---:|:---:|:---:|---|
 | `team_id` | `team_id` |  | `Y` |  | team_id path parameter. |
 
-### Returns
+### Returns {#espn_cricket_team-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_single_entity`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#espn_cricket_team-example}
 
 ```python
 espn_cricket_team(team_id='4')
@@ -454,7 +455,7 @@ espn_cricket_team(team_id='4')
 
 _Last validated n/a._
 
-## `espn_cricket_team_roster`
+## espn_cricket_team_roster
 
 ESPN endpoint.
 
@@ -467,7 +468,7 @@ ESPN endpoint.
 | `team_id` | `team_id` |  | `Y` |  | team_id path parameter. |
 | `limit` | `limit` |  |  | `Y` | Maximum number of items to return. |
 
-### Returns
+### Returns {#espn_cricket_team_roster-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -543,7 +544,7 @@ ESPN endpoint.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#espn_cricket_team_roster-example}
 
 ```python
 espn_cricket_team_roster(team_id='4')
@@ -551,7 +552,7 @@ espn_cricket_team_roster(team_id='4')
 
 _Last validated n/a._
 
-## `espn_cricket_team_schedule`
+## espn_cricket_team_schedule
 
 ESPN endpoint.
 
@@ -564,7 +565,7 @@ ESPN endpoint.
 | `team_id` | `team_id` |  | `Y` |  | team_id path parameter. |
 | `season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
 
-### Returns
+### Returns {#espn_cricket_team_schedule-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -585,7 +586,7 @@ ESPN endpoint.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#espn_cricket_team_schedule-example}
 
 ```python
 espn_cricket_team_schedule(team_id='4')
@@ -593,7 +594,7 @@ espn_cricket_team_schedule(team_id='4')
 
 _Last validated n/a._
 
-## `espn_cricket_team_record`
+## espn_cricket_team_record
 
 ESPN endpoint.
 
@@ -605,12 +606,12 @@ ESPN endpoint.
 |---|---|:---:|:---:|:---:|---|
 | `team_id` | `team_id` |  | `Y` |  | team_id path parameter. |
 
-### Returns
+### Returns {#espn_cricket_team_record-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_items`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#espn_cricket_team_record-example}
 
 ```python
 espn_cricket_team_record(team_id='4')
@@ -618,7 +619,7 @@ espn_cricket_team_record(team_id='4')
 
 _Last validated n/a._
 
-## `espn_cricket_team_depthcharts`
+## espn_cricket_team_depthcharts
 
 ESPN endpoint.
 
@@ -630,12 +631,12 @@ ESPN endpoint.
 |---|---|:---:|:---:|:---:|---|
 | `team_id` | `team_id` |  | `Y` |  | team_id path parameter. |
 
-### Returns
+### Returns {#espn_cricket_team_depthcharts-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_items`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#espn_cricket_team_depthcharts-example}
 
 ```python
 espn_cricket_team_depthcharts(team_id='4')
@@ -643,7 +644,7 @@ espn_cricket_team_depthcharts(team_id='4')
 
 _Last validated n/a._
 
-## `espn_cricket_team_injuries`
+## espn_cricket_team_injuries
 
 ESPN endpoint.
 
@@ -655,7 +656,7 @@ ESPN endpoint.
 |---|---|:---:|:---:|:---:|---|
 | `team_id` | `team_id` |  | `Y` |  | team_id path parameter. |
 
-### Returns
+### Returns {#espn_cricket_team_injuries-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -666,7 +667,7 @@ ESPN endpoint.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#espn_cricket_team_injuries-example}
 
 ```python
 espn_cricket_team_injuries(team_id='4')
@@ -674,7 +675,7 @@ espn_cricket_team_injuries(team_id='4')
 
 _Last validated n/a._
 
-## `espn_cricket_team_transactions`
+## espn_cricket_team_transactions
 
 ESPN endpoint.
 
@@ -686,12 +687,12 @@ ESPN endpoint.
 |---|---|:---:|:---:|:---:|---|
 | `team_id` | `team_id` |  | `Y` |  | team_id path parameter. |
 
-### Returns
+### Returns {#espn_cricket_team_transactions-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_items`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#espn_cricket_team_transactions-example}
 
 ```python
 espn_cricket_team_transactions(team_id='4')
@@ -699,7 +700,7 @@ espn_cricket_team_transactions(team_id='4')
 
 _Last validated n/a._
 
-## `espn_cricket_team_history`
+## espn_cricket_team_history
 
 ESPN endpoint.
 
@@ -711,12 +712,12 @@ ESPN endpoint.
 |---|---|:---:|:---:|:---:|---|
 | `team_id` | `team_id` |  | `Y` |  | team_id path parameter. |
 
-### Returns
+### Returns {#espn_cricket_team_history-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_items`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#espn_cricket_team_history-example}
 
 ```python
 espn_cricket_team_history(team_id='4')
@@ -724,7 +725,7 @@ espn_cricket_team_history(team_id='4')
 
 _Last validated n/a._
 
-## `espn_cricket_team_news`
+## espn_cricket_team_news
 
 ESPN endpoint.
 
@@ -737,7 +738,7 @@ ESPN endpoint.
 | `team_id` | `team_id` |  | `Y` |  | team_id path parameter. |
 | `limit` | `limit` |  |  | `Y` | Maximum number of items to return. |
 
-### Returns
+### Returns {#espn_cricket_team_news-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -762,7 +763,7 @@ ESPN endpoint.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#espn_cricket_team_news-example}
 
 ```python
 espn_cricket_team_news(team_id='4')
@@ -770,7 +771,7 @@ espn_cricket_team_news(team_id='4')
 
 _Last validated n/a._
 
-## `espn_cricket_team_leaders`
+## espn_cricket_team_leaders
 
 ESPN endpoint.
 
@@ -782,12 +783,12 @@ ESPN endpoint.
 |---|---|:---:|:---:|:---:|---|
 | `team_id` | `team_id` |  | `Y` |  | team_id path parameter. |
 
-### Returns
+### Returns {#espn_cricket_team_leaders-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_items`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#espn_cricket_team_leaders-example}
 
 ```python
 espn_cricket_team_leaders(team_id='4')
@@ -795,7 +796,7 @@ espn_cricket_team_leaders(team_id='4')
 
 _Last validated n/a._
 
-## `espn_cricket_player_info`
+## espn_cricket_player_info
 
 ESPN endpoint.
 
@@ -807,12 +808,12 @@ ESPN endpoint.
 |---|---|:---:|:---:|:---:|---|
 | `athlete_id` | `athlete_id` |  | `Y` |  | athlete_id path parameter. |
 
-### Returns
+### Returns {#espn_cricket_player_info-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_single_entity`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#espn_cricket_player_info-example}
 
 ```python
 espn_cricket_player_info(athlete_id='4239')
@@ -820,7 +821,7 @@ espn_cricket_player_info(athlete_id='4239')
 
 _Last validated n/a._
 
-## `espn_cricket_player_bio`
+## espn_cricket_player_bio
 
 ESPN endpoint.
 
@@ -832,12 +833,12 @@ ESPN endpoint.
 |---|---|:---:|:---:|:---:|---|
 | `athlete_id` | `athlete_id` |  | `Y` |  | athlete_id path parameter. |
 
-### Returns
+### Returns {#espn_cricket_player_bio-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_single_entity`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#espn_cricket_player_bio-example}
 
 ```python
 espn_cricket_player_bio(athlete_id='4239')
@@ -845,7 +846,7 @@ espn_cricket_player_bio(athlete_id='4239')
 
 _Last validated n/a._
 
-## `espn_cricket_player_news`
+## espn_cricket_player_news
 
 ESPN endpoint.
 
@@ -857,7 +858,7 @@ ESPN endpoint.
 |---|---|:---:|:---:|:---:|---|
 | `athlete_id` | `athlete_id` |  | `Y` |  | athlete_id path parameter. |
 
-### Returns
+### Returns {#espn_cricket_player_news-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -882,7 +883,7 @@ ESPN endpoint.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#espn_cricket_player_news-example}
 
 ```python
 espn_cricket_player_news(athlete_id='4239')
@@ -890,7 +891,7 @@ espn_cricket_player_news(athlete_id='4239')
 
 _Last validated n/a._
 
-## `espn_cricket_standings`
+## espn_cricket_standings
 
 ESPN endpoint.
 
@@ -904,7 +905,7 @@ ESPN endpoint.
 | `group` | `group` |  |  | `Y` | Conference or group id filter (e.g. an ESPN conference id). |
 | `type` | `standings_type` |  |  | `Y` | Standings variant (e.g. 'by-division' or 'by-conference'). |
 
-### Returns
+### Returns {#espn_cricket_standings-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -927,7 +928,7 @@ ESPN endpoint.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Example
+### Example {#espn_cricket_standings-example}
 
 ```python
 espn_cricket_standings()

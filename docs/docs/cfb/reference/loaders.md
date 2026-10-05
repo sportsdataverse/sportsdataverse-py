@@ -3,6 +3,7 @@ title: CFB dataset loaders
 sidebar_label: Loaders
 description: "CFB dataset loaders in sdv-py: the load_* functions that read the SportsDataverse release assets."
 sidebar_position: 1
+toc_max_heading_level: 2
 ---
 # CFB dataset loaders
 
@@ -84,10 +85,10 @@ Pipeline: scrape / raw → enrich → release asset → `load_*()`
 | `load_cfb_group_aliases` | [cfb_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/cfb_groups) | — |
 | `load_cfb_team_group_seasons` | [cfb_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/cfb_groups) | — |
 
-## `load_cfb_pbp`
+## load_cfb_pbp
 
 Release: [espn_cfb_pbp](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_pbp) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_pbp/play_by_play_{season}.parquet`
-### Returns
+### Returns {#load_cfb_pbp-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -602,10 +603,10 @@ Release: [espn_cfb_pbp](https://github.com/sportsdataverse/sportsdataverse-data/
 load_cfb_pbp(seasons=2024)
 ```
 
-## `load_cfb_ratings`
+## load_cfb_ratings
 
 Release: [cfb_ratings](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/cfb_ratings) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/cfb_ratings/cfb_ratings_{season}.parquet`
-### Returns
+### Returns {#load_cfb_ratings-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -632,10 +633,10 @@ Release: [cfb_ratings](https://github.com/sportsdataverse/sportsdataverse-data/r
 load_cfb_ratings(seasons=2024)
 ```
 
-## `load_cfb_recruiting_proj`
+## load_cfb_recruiting_proj
 
 Release: [cfb_recruiting_proj](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/cfb_recruiting_proj) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/cfb_recruiting_proj/cfb_recruiting_proj_{season}.parquet`
-### Returns
+### Returns {#load_cfb_recruiting_proj-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -649,10 +650,10 @@ Release: [cfb_recruiting_proj](https://github.com/sportsdataverse/sportsdatavers
 load_cfb_recruiting_proj(seasons=2024)
 ```
 
-## `load_cfb_recruits`
+## load_cfb_recruits
 
 Release: [cfb_recruits](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/cfb_recruits) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/cfb_recruits/cfb_recruits_{season}.parquet`
-### Returns
+### Returns {#load_cfb_recruits-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -670,10 +671,10 @@ Release: [cfb_recruits](https://github.com/sportsdataverse/sportsdataverse-data/
 load_cfb_recruits(seasons=2024)
 ```
 
-## `load_cfb_returning_production`
+## load_cfb_returning_production
 
 Release: [cfb_returning_production](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/cfb_returning_production) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/cfb_returning_production/cfb_returning_production_{season}.parquet`
-### Returns
+### Returns {#load_cfb_returning_production-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -691,10 +692,10 @@ Release: [cfb_returning_production](https://github.com/sportsdataverse/sportsdat
 load_cfb_returning_production(seasons=2024)
 ```
 
-## `load_cfb_rosters`
+## load_cfb_rosters
 
 Release: [espn_cfb_rosters](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_rosters) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_rosters/cfb_rosters_{season}.parquet`
-### Returns
+### Returns {#load_cfb_rosters-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -788,10 +789,10 @@ Release: [espn_cfb_rosters](https://github.com/sportsdataverse/sportsdataverse-d
 load_cfb_rosters(seasons=2024)
 ```
 
-## `load_cfb_rosters_cfbd`
+## load_cfb_rosters_cfbd
 
 Release: [cfbfastR-data](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/cfbfastR-data) · asset `https://raw.githubusercontent.com/sportsdataverse/cfbfastR-data/main/rosters/parquet/cfb_rosters_{season}.parquet`
-### Returns
+### Returns {#load_cfb_rosters_cfbd-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -818,10 +819,10 @@ Release: [cfbfastR-data](https://github.com/sportsdataverse/sportsdataverse-data
 load_cfb_rosters_cfbd(seasons=2024)
 ```
 
-## `load_cfb_schedule`
+## load_cfb_schedule
 
 Release: [cfb_schedules](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/cfb_schedules) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/cfb_schedules/cfb_schedules_{season}.parquet`
-### Returns
+### Returns {#load_cfb_schedule-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -873,10 +874,10 @@ Release: [cfb_schedules](https://github.com/sportsdataverse/sportsdataverse-data
 load_cfb_schedule(seasons=2024)
 ```
 
-## `load_cfb_team_info`
+## load_cfb_team_info
 
 Release: [cfb_team_info](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/cfb_team_info) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/cfb_team_info/cfb_team_info_{season}.parquet`
-### Returns
+### Returns {#load_cfb_team_info-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -928,10 +929,10 @@ Release: [cfb_team_info](https://github.com/sportsdataverse/sportsdataverse-data
 load_cfb_team_info(seasons=2024)
 ```
 
-## `load_cfb_teams`
+## load_cfb_teams
 
 Release: [espn_cfb_teams](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_teams) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_teams/cfb_teams_{season}.parquet`
-### Returns
+### Returns {#load_cfb_teams-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -994,15 +995,15 @@ Release: [espn_cfb_teams](https://github.com/sportsdataverse/sportsdataverse-dat
 load_cfb_teams(seasons=2024)
 ```
 
-## `load_cfb_team_portal`
+## load_cfb_team_portal
 
 Release: [cfb_team_portal](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/cfb_team_portal) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/cfb_team_portal/cfb_team_portal_{season}.parquet`
 
-:::caution Coverage
+:::caution[Coverage]
 Portal counts are D-I to D-I moves visible in ESPN rosters (FBS and FCS mixed): an athlete id on a different team's roster the prior season. JUCO and non-D-I arrivals are not counted. Talent points name-join players to the cfb_recruits release, so an unmatched player carries the 0-star default.
 :::
 
-### Returns
+### Returns {#load_cfb_team_portal-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -1020,10 +1021,10 @@ Portal counts are D-I to D-I moves visible in ESPN rosters (FBS and FCS mixed): 
 load_cfb_team_portal(seasons=2024)
 ```
 
-## `load_cfb_team_talent`
+## load_cfb_team_talent
 
 Release: [cfb_team_talent](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/cfb_team_talent) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/cfb_team_talent/cfb_team_talent_{season}.parquet`
-### Returns
+### Returns {#load_cfb_team_talent-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -1039,10 +1040,10 @@ Release: [cfb_team_talent](https://github.com/sportsdataverse/sportsdataverse-da
 load_cfb_team_talent(seasons=2024)
 ```
 
-## `load_cfb_teams_crosswalk`
+## load_cfb_teams_crosswalk
 
 Release: [cfb_crosswalk](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/cfb_crosswalk) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/cfb_crosswalk/cfb_teams_crosswalk_{season}.parquet`
-### Returns
+### Returns {#load_cfb_teams_crosswalk-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -1062,10 +1063,10 @@ Release: [cfb_crosswalk](https://github.com/sportsdataverse/sportsdataverse-data
 load_cfb_teams_crosswalk(seasons=2024)
 ```
 
-## `load_cfb_schedule_crosswalk`
+## load_cfb_schedule_crosswalk
 
 Release: [cfb_crosswalk](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/cfb_crosswalk) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/cfb_crosswalk/cfb_schedule_crosswalk_{season}.parquet`
-### Returns
+### Returns {#load_cfb_schedule_crosswalk-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -1085,10 +1086,10 @@ Release: [cfb_crosswalk](https://github.com/sportsdataverse/sportsdataverse-data
 load_cfb_schedule_crosswalk(seasons=2024)
 ```
 
-## `load_cfb_team_box`
+## load_cfb_team_box
 
 Release: [espn_cfb_team_box](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_team_box) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_team_box/team_box_{season}.parquet`
-### Returns
+### Returns {#load_cfb_team_box-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -1118,10 +1119,10 @@ Release: [espn_cfb_team_box](https://github.com/sportsdataverse/sportsdataverse-
 load_cfb_team_box(seasons=2024)
 ```
 
-## `load_cfb_player_box`
+## load_cfb_player_box
 
 Release: [espn_cfb_player_box](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_player_box) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_player_box/player_box_{season}.parquet`
-### Returns
+### Returns {#load_cfb_player_box-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -1191,10 +1192,10 @@ Release: [espn_cfb_player_box](https://github.com/sportsdataverse/sportsdatavers
 load_cfb_player_box(seasons=2024)
 ```
 
-## `load_cfb_drives`
+## load_cfb_drives
 
 Release: [espn_cfb_drives](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_drives) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_drives/drives_{season}.parquet`
-### Returns
+### Returns {#load_cfb_drives-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -1223,10 +1224,10 @@ Release: [espn_cfb_drives](https://github.com/sportsdataverse/sportsdataverse-da
 load_cfb_drives(seasons=2024)
 ```
 
-## `load_cfb_play_participants`
+## load_cfb_play_participants
 
 Release: [espn_cfb_play_participants](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_play_participants) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_play_participants/play_participants_{season}.parquet`
-### Returns
+### Returns {#load_cfb_play_participants-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -1324,10 +1325,10 @@ Release: [espn_cfb_play_participants](https://github.com/sportsdataverse/sportsd
 load_cfb_play_participants(seasons=2024)
 ```
 
-## `load_cfb_game_rosters`
+## load_cfb_game_rosters
 
 Release: [espn_cfb_game_rosters](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_game_rosters) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_game_rosters/game_rosters_{season}.parquet`
-### Returns
+### Returns {#load_cfb_game_rosters-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -1414,10 +1415,10 @@ Release: [espn_cfb_game_rosters](https://github.com/sportsdataverse/sportsdatave
 load_cfb_game_rosters(seasons=2024)
 ```
 
-## `load_cfb_linescores`
+## load_cfb_linescores
 
 Release: [espn_cfb_linescores](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_linescores) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_linescores/linescores_{season}.parquet`
-### Returns
+### Returns {#load_cfb_linescores-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -1431,10 +1432,10 @@ Release: [espn_cfb_linescores](https://github.com/sportsdataverse/sportsdatavers
 load_cfb_linescores(seasons=2024)
 ```
 
-## `load_cfb_betting`
+## load_cfb_betting
 
 Release: [espn_cfb_betting](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_betting) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_betting/betting_{season}.parquet`
-### Returns
+### Returns {#load_cfb_betting-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -1452,10 +1453,10 @@ Release: [espn_cfb_betting](https://github.com/sportsdataverse/sportsdataverse-d
 load_cfb_betting(seasons=2024)
 ```
 
-## `load_cfb_fpi_weekly`
+## load_cfb_fpi_weekly
 
 Release: [cfb_fpi_weekly](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/cfb_fpi_weekly) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/cfb_fpi_weekly/cfb_fpi_weekly_{season}.parquet`
-### Returns
+### Returns {#load_cfb_fpi_weekly-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -1515,10 +1516,10 @@ Release: [cfb_fpi_weekly](https://github.com/sportsdataverse/sportsdataverse-dat
 load_cfb_fpi_weekly(seasons=2024)
 ```
 
-## `load_cfb_power_index`
+## load_cfb_power_index
 
 Release: [espn_cfb_power_index](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_power_index) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_power_index/power_index_{season}.parquet`
-### Returns
+### Returns {#load_cfb_power_index-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -1534,10 +1535,10 @@ Release: [espn_cfb_power_index](https://github.com/sportsdataverse/sportsdataver
 load_cfb_power_index(seasons=2024)
 ```
 
-## `load_cfb_adv_team`
+## load_cfb_adv_team
 
 Release: [espn_cfb_adv_team](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_adv_team) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_adv_team/adv_team_{season}.parquet`
-### Returns
+### Returns {#load_cfb_adv_team-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -1626,10 +1627,10 @@ Release: [espn_cfb_adv_team](https://github.com/sportsdataverse/sportsdataverse-
 load_cfb_adv_team(seasons=2024)
 ```
 
-## `load_cfb_adv_passing`
+## load_cfb_adv_passing
 
 Release: [espn_cfb_adv_passing](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_adv_passing) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_adv_passing/adv_passing_{season}.parquet`
-### Returns
+### Returns {#load_cfb_adv_passing-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -1675,10 +1676,10 @@ Release: [espn_cfb_adv_passing](https://github.com/sportsdataverse/sportsdataver
 load_cfb_adv_passing(seasons=2024)
 ```
 
-## `load_cfb_adv_rushing`
+## load_cfb_adv_rushing
 
 Release: [espn_cfb_adv_rushing](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_adv_rushing) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_adv_rushing/adv_rushing_{season}.parquet`
-### Returns
+### Returns {#load_cfb_adv_rushing-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -1703,10 +1704,10 @@ Release: [espn_cfb_adv_rushing](https://github.com/sportsdataverse/sportsdataver
 load_cfb_adv_rushing(seasons=2024)
 ```
 
-## `load_cfb_adv_receiving`
+## load_cfb_adv_receiving
 
 Release: [espn_cfb_adv_receiving](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_adv_receiving) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_adv_receiving/adv_receiving_{season}.parquet`
-### Returns
+### Returns {#load_cfb_adv_receiving-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -1737,10 +1738,10 @@ Release: [espn_cfb_adv_receiving](https://github.com/sportsdataverse/sportsdatav
 load_cfb_adv_receiving(seasons=2024)
 ```
 
-## `load_cfb_adv_defensive`
+## load_cfb_adv_defensive
 
 Release: [espn_cfb_adv_defensive](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_adv_defensive) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_adv_defensive/adv_defensive_{season}.parquet`
-### Returns
+### Returns {#load_cfb_adv_defensive-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -1771,10 +1772,10 @@ Release: [espn_cfb_adv_defensive](https://github.com/sportsdataverse/sportsdatav
 load_cfb_adv_defensive(seasons=2024)
 ```
 
-## `load_cfb_adv_defensive_players`
+## load_cfb_adv_defensive_players
 
 Release: [espn_cfb_adv_defensive_players](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_adv_defensive_players) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_adv_defensive_players/adv_defensive_players_{season}.parquet`
-### Returns
+### Returns {#load_cfb_adv_defensive_players-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -1797,10 +1798,10 @@ Release: [espn_cfb_adv_defensive_players](https://github.com/sportsdataverse/spo
 load_cfb_adv_defensive_players(seasons=2024)
 ```
 
-## `load_cfb_adv_drives`
+## load_cfb_adv_drives
 
 Release: [espn_cfb_adv_drives](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_adv_drives) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_adv_drives/adv_drives_{season}.parquet`
-### Returns
+### Returns {#load_cfb_adv_drives-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -1821,10 +1822,10 @@ Release: [espn_cfb_adv_drives](https://github.com/sportsdataverse/sportsdatavers
 load_cfb_adv_drives(seasons=2024)
 ```
 
-## `load_cfb_adv_situational`
+## load_cfb_adv_situational
 
 Release: [espn_cfb_adv_situational](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_adv_situational) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_adv_situational/adv_situational_{season}.parquet`
-### Returns
+### Returns {#load_cfb_adv_situational-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -1907,10 +1908,10 @@ Release: [espn_cfb_adv_situational](https://github.com/sportsdataverse/sportsdat
 load_cfb_adv_situational(seasons=2024)
 ```
 
-## `load_cfb_adv_specialists`
+## load_cfb_adv_specialists
 
 Release: [espn_cfb_adv_specialists](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_adv_specialists) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_adv_specialists/adv_specialists_{season}.parquet`
-### Returns
+### Returns {#load_cfb_adv_specialists-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -1933,10 +1934,10 @@ Release: [espn_cfb_adv_specialists](https://github.com/sportsdataverse/sportsdat
 load_cfb_adv_specialists(seasons=2024)
 ```
 
-## `load_cfb_adv_turnover`
+## load_cfb_adv_turnover
 
 Release: [espn_cfb_adv_turnover](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_adv_turnover) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_adv_turnover/adv_turnover_{season}.parquet`
-### Returns
+### Returns {#load_cfb_adv_turnover-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -1969,10 +1970,10 @@ Release: [espn_cfb_adv_turnover](https://github.com/sportsdataverse/sportsdatave
 load_cfb_adv_turnover(seasons=2024)
 ```
 
-## `load_cfb_model_pbp`
+## load_cfb_model_pbp
 
 Release: [espn_cfb_model_pbp](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_model_pbp) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_model_pbp/model_pbp_{season}.parquet`
-### Returns
+### Returns {#load_cfb_model_pbp-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -2024,10 +2025,10 @@ Release: [espn_cfb_model_pbp](https://github.com/sportsdataverse/sportsdataverse
 load_cfb_model_pbp(seasons=2024)
 ```
 
-## `load_cfb_passing`
+## load_cfb_passing
 
 Release: [espn_cfb_passing](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_passing) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_passing/cfb_passing_{season}.parquet`
-### Returns
+### Returns {#load_cfb_passing-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -2125,10 +2126,10 @@ Release: [espn_cfb_passing](https://github.com/sportsdataverse/sportsdataverse-d
 load_cfb_passing(seasons=2024)
 ```
 
-## `load_cfb_percentiles`
+## load_cfb_percentiles
 
 Release: [espn_cfb_percentiles](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_percentiles) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_percentiles/cfb_percentiles_{season}.parquet`
-### Returns
+### Returns {#load_cfb_percentiles-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -2164,10 +2165,10 @@ Release: [espn_cfb_percentiles](https://github.com/sportsdataverse/sportsdataver
 load_cfb_percentiles(seasons=2024)
 ```
 
-## `load_cfb_receiving`
+## load_cfb_receiving
 
 Release: [espn_cfb_receiving](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_receiving) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_receiving/cfb_receiving_{season}.parquet`
-### Returns
+### Returns {#load_cfb_receiving-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -2244,10 +2245,10 @@ Release: [espn_cfb_receiving](https://github.com/sportsdataverse/sportsdataverse
 load_cfb_receiving(seasons=2024)
 ```
 
-## `load_cfb_rushing`
+## load_cfb_rushing
 
 Release: [espn_cfb_rushing](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_rushing) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_rushing/cfb_rushing_{season}.parquet`
-### Returns
+### Returns {#load_cfb_rushing-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -2314,10 +2315,10 @@ Release: [espn_cfb_rushing](https://github.com/sportsdataverse/sportsdataverse-d
 load_cfb_rushing(seasons=2024)
 ```
 
-## `load_cfb_team_summaries`
+## load_cfb_team_summaries
 
 Release: [espn_cfb_team_summaries](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_team_summaries) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_team_summaries/cfb_team_summaries_{season}.parquet`
-### Returns
+### Returns {#load_cfb_team_summaries-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -3107,10 +3108,10 @@ Release: [espn_cfb_team_summaries](https://github.com/sportsdataverse/sportsdata
 load_cfb_team_summaries(seasons=2024)
 ```
 
-## `load_cfb_adv_team_gamelog`
+## load_cfb_adv_team_gamelog
 
 Release: [espn_cfb_adv_team_gamelog](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_adv_team_gamelog) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_adv_team_gamelog/adv_team_gamelog_{season}.parquet`
-### Returns
+### Returns {#load_cfb_adv_team_gamelog-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -3209,10 +3210,10 @@ Release: [espn_cfb_adv_team_gamelog](https://github.com/sportsdataverse/sportsda
 load_cfb_adv_team_gamelog(seasons=2024)
 ```
 
-## `load_cfb_ratings_weekly`
+## load_cfb_ratings_weekly
 
 Release: [cfb_ratings_weekly](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/cfb_ratings_weekly) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/cfb_ratings_weekly/cfb_ratings_weekly_{season}.parquet`
-### Returns
+### Returns {#load_cfb_ratings_weekly-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -3240,10 +3241,10 @@ Release: [cfb_ratings_weekly](https://github.com/sportsdataverse/sportsdataverse
 load_cfb_ratings_weekly(seasons=2024)
 ```
 
-## `load_cfb_team_summaries_weekly`
+## load_cfb_team_summaries_weekly
 
 Release: [cfb_team_summaries_weekly](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/cfb_team_summaries_weekly) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/cfb_team_summaries_weekly/cfb_team_summaries_weekly_{season}.parquet`
-### Returns
+### Returns {#load_cfb_team_summaries_weekly-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -4034,15 +4035,15 @@ Release: [cfb_team_summaries_weekly](https://github.com/sportsdataverse/sportsda
 load_cfb_team_summaries_weekly(seasons=2024)
 ```
 
-## `load_cfb_usage_players`
+## load_cfb_usage_players
 
 Release: [espn_cfb_usage_players](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_usage_players) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_usage_players/usage_players_{season}.parquet`
 
-:::caution Coverage
+:::caution[Coverage]
 position_group is null for seasons whose play-by-play carried no participant positions.
 :::
 
-### Returns
+### Returns {#load_cfb_usage_players-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -4096,15 +4097,15 @@ position_group is null for seasons whose play-by-play carried no participant pos
 load_cfb_usage_players(seasons=2024)
 ```
 
-## `load_cfb_usage_position_groups`
+## load_cfb_usage_position_groups
 
 Release: [espn_cfb_usage_position_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_usage_position_groups) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_usage_position_groups/usage_position_groups_{season}.parquet`
 
-:::caution Coverage
+:::caution[Coverage]
 Needs ESPN play participants: rows exist only for seasons whose play-by-play carried player positions.
 :::
 
-### Returns
+### Returns {#load_cfb_usage_position_groups-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -4156,15 +4157,15 @@ Needs ESPN play participants: rows exist only for seasons whose play-by-play car
 load_cfb_usage_position_groups(seasons=2024)
 ```
 
-## `load_cfb_usage_tackles`
+## load_cfb_usage_tackles
 
 Release: [espn_cfb_usage_tackles](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_usage_tackles) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_usage_tackles/usage_tackles_{season}.parquet`
 
-:::caution Coverage
+:::caution[Coverage]
 Needs ESPN play participants (tackler / assist ids); a season without them has no rows, and position_group is null when no participant carried a position.
 :::
 
-### Returns
+### Returns {#load_cfb_usage_tackles-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -4185,15 +4186,15 @@ Needs ESPN play participants (tackler / assist ids); a season without them has n
 load_cfb_usage_tackles(seasons=2024)
 ```
 
-## `load_cfb_usage_position_group_tackles`
+## load_cfb_usage_position_group_tackles
 
 Release: [espn_cfb_usage_position_group_tackles](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_usage_position_group_tackles) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_usage_position_group_tackles/usage_position_group_tackles_{season}.parquet`
 
-:::caution Coverage
+:::caution[Coverage]
 Needs ESPN play participants with player positions; a season without them has no rows.
 :::
 
-### Returns
+### Returns {#load_cfb_usage_position_group_tackles-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -4212,10 +4213,10 @@ Needs ESPN play participants with player positions; a season without them has no
 load_cfb_usage_position_group_tackles(seasons=2024)
 ```
 
-## `load_cfb_usage_teams`
+## load_cfb_usage_teams
 
 Release: [espn_cfb_usage_teams](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_usage_teams) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_usage_teams/usage_teams_{season}.parquet`
-### Returns
+### Returns {#load_cfb_usage_teams-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -4269,10 +4270,10 @@ Release: [espn_cfb_usage_teams](https://github.com/sportsdataverse/sportsdataver
 load_cfb_usage_teams(seasons=2024)
 ```
 
-## `load_cfb_usage_drive_scripting`
+## load_cfb_usage_drive_scripting
 
 Release: [espn_cfb_usage_drive_scripting](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_usage_drive_scripting) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_usage_drive_scripting/usage_drive_scripting_{season}.parquet`
-### Returns
+### Returns {#load_cfb_usage_drive_scripting-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -4300,10 +4301,10 @@ Release: [espn_cfb_usage_drive_scripting](https://github.com/sportsdataverse/spo
 load_cfb_usage_drive_scripting(seasons=2024)
 ```
 
-## `load_cfb_usage_st_kickers`
+## load_cfb_usage_st_kickers
 
 Release: [espn_cfb_usage_st_kickers](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_usage_st_kickers) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_usage_st_kickers/usage_st_kickers_{season}.parquet`
-### Returns
+### Returns {#load_cfb_usage_st_kickers-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -4345,10 +4346,10 @@ Release: [espn_cfb_usage_st_kickers](https://github.com/sportsdataverse/sportsda
 load_cfb_usage_st_kickers(seasons=2024)
 ```
 
-## `load_cfb_usage_st_punters`
+## load_cfb_usage_st_punters
 
 Release: [espn_cfb_usage_st_punters](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_usage_st_punters) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_usage_st_punters/usage_st_punters_{season}.parquet`
-### Returns
+### Returns {#load_cfb_usage_st_punters-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -4381,10 +4382,10 @@ Release: [espn_cfb_usage_st_punters](https://github.com/sportsdataverse/sportsda
 load_cfb_usage_st_punters(seasons=2024)
 ```
 
-## `load_cfb_usage_st_returners`
+## load_cfb_usage_st_returners
 
 Release: [espn_cfb_usage_st_returners](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_usage_st_returners) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_usage_st_returners/usage_st_returners_{season}.parquet`
-### Returns
+### Returns {#load_cfb_usage_st_returners-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -4411,10 +4412,10 @@ Release: [espn_cfb_usage_st_returners](https://github.com/sportsdataverse/sports
 load_cfb_usage_st_returners(seasons=2024)
 ```
 
-## `load_cfb_usage_st_blocks`
+## load_cfb_usage_st_blocks
 
 Release: [espn_cfb_usage_st_blocks](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_usage_st_blocks) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_usage_st_blocks/usage_st_blocks_{season}.parquet`
-### Returns
+### Returns {#load_cfb_usage_st_blocks-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -4432,10 +4433,10 @@ Release: [espn_cfb_usage_st_blocks](https://github.com/sportsdataverse/sportsdat
 load_cfb_usage_st_blocks(seasons=2024)
 ```
 
-## `load_cfb_usage_st_team`
+## load_cfb_usage_st_team
 
 Release: [espn_cfb_usage_st_team](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_usage_st_team) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_usage_st_team/usage_st_team_{season}.parquet`
-### Returns
+### Returns {#load_cfb_usage_st_team-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -4485,10 +4486,10 @@ Release: [espn_cfb_usage_st_team](https://github.com/sportsdataverse/sportsdatav
 load_cfb_usage_st_team(seasons=2024)
 ```
 
-## `load_cfb_team_tendencies`
+## load_cfb_team_tendencies
 
 Release: [espn_cfb_team_tendencies](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_team_tendencies) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_team_tendencies/team_tendencies_{season}.parquet`
-### Returns
+### Returns {#load_cfb_team_tendencies-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -5095,15 +5096,15 @@ Release: [espn_cfb_team_tendencies](https://github.com/sportsdataverse/sportsdat
 load_cfb_team_tendencies(seasons=2024)
 ```
 
-## `load_cfb_coach_tendencies`
+## load_cfb_coach_tendencies
 
 Release: [espn_cfb_coach_tendencies](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_coach_tendencies) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_coach_tendencies/coach_tendencies_{season}.parquet`
 
-:::caution Coverage
+:::caution[Coverage]
 One row per (season, team, head coach). The coach comes from the producer's vendored CFBD coach roster (team-season attribution), so role is always "HC".
 :::
 
-### Returns
+### Returns {#load_cfb_coach_tendencies-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -5712,15 +5713,15 @@ One row per (season, team, head coach). The coach comes from the producer's vend
 load_cfb_coach_tendencies(seasons=2024)
 ```
 
-## `load_cfb_coach_careers`
+## load_cfb_coach_careers
 
 Release: [espn_cfb_coach_careers](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_coach_careers) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_coach_careers/coach_careers.parquet`
 
-:::caution Coverage
+:::caution[Coverage]
 One season-less file: every published coach_tendencies season summed per head coach with the rates recomputed (play-weighted, never averaged averages). Careers therefore cover exactly the seasons published under the coach_tendencies tag.
 :::
 
-### Returns
+### Returns {#load_cfb_coach_careers-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -6330,10 +6331,10 @@ One season-less file: every published coach_tendencies season summed per head co
 load_cfb_coach_careers()
 ```
 
-## `load_cfb_pbp_r`
+## load_cfb_pbp_r
 
 Release: [cfbfastR_cfb_pbp](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/cfbfastR_cfb_pbp) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/cfbfastR_cfb_pbp/play_by_play_{season}.parquet`
-### Returns
+### Returns {#load_cfb_pbp_r-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -6704,10 +6705,10 @@ Release: [cfbfastR_cfb_pbp](https://github.com/sportsdataverse/sportsdataverse-d
 load_cfb_pbp_r(seasons=2024)
 ```
 
-## `load_ncaa_mfb_pbp`
+## load_ncaa_mfb_pbp
 
 Release: [ncaa_mfb_pbp](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/ncaa_mfb_pbp) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/ncaa_mfb_pbp/ncaa_mfb_pbp_{season}.parquet`
-### Returns
+### Returns {#load_ncaa_mfb_pbp-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -6767,10 +6768,10 @@ Release: [ncaa_mfb_pbp](https://github.com/sportsdataverse/sportsdataverse-data/
 load_ncaa_mfb_pbp(seasons=2024)
 ```
 
-## `load_ncaa_mfb_pbp_cfbfastr`
+## load_ncaa_mfb_pbp_cfbfastr
 
 Release: [ncaa_mfb_pbp_cfbfastr](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/ncaa_mfb_pbp_cfbfastr) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/ncaa_mfb_pbp_cfbfastr/ncaa_mfb_pbp_cfbfastr_{season}.parquet`
-### Returns
+### Returns {#load_ncaa_mfb_pbp_cfbfastr-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -6884,10 +6885,10 @@ Release: [ncaa_mfb_pbp_cfbfastr](https://github.com/sportsdataverse/sportsdatave
 load_ncaa_mfb_pbp_cfbfastr(seasons=2024)
 ```
 
-## `load_ncaa_mfb_drives`
+## load_ncaa_mfb_drives
 
 Release: [ncaa_mfb_drives](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/ncaa_mfb_drives) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/ncaa_mfb_drives/ncaa_mfb_drives_{season}.parquet`
-### Returns
+### Returns {#load_ncaa_mfb_drives-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -6913,10 +6914,10 @@ Release: [ncaa_mfb_drives](https://github.com/sportsdataverse/sportsdataverse-da
 load_ncaa_mfb_drives(seasons=2024)
 ```
 
-## `load_ncaa_mfb_schedule`
+## load_ncaa_mfb_schedule
 
 Release: [ncaa_mfb_schedule](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/ncaa_mfb_schedule) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/ncaa_mfb_schedule/ncaa_mfb_schedule_{season}.parquet`
-### Returns
+### Returns {#load_ncaa_mfb_schedule-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -6939,10 +6940,10 @@ Release: [ncaa_mfb_schedule](https://github.com/sportsdataverse/sportsdataverse-
 load_ncaa_mfb_schedule(seasons=2024)
 ```
 
-## `load_ncaa_mfb_rosters`
+## load_ncaa_mfb_rosters
 
 Release: [ncaa_mfb_rosters](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/ncaa_mfb_rosters) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/ncaa_mfb_rosters/ncaa_mfb_rosters_{season}.parquet`
-### Returns
+### Returns {#load_ncaa_mfb_rosters-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -6967,15 +6968,15 @@ Release: [ncaa_mfb_rosters](https://github.com/sportsdataverse/sportsdataverse-d
 load_ncaa_mfb_rosters(seasons=2024)
 ```
 
-## `load_ncaa_mfb_teams`
+## load_ncaa_mfb_teams
 
 Release: [ncaa_mfb_teams](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/ncaa_mfb_teams) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/ncaa_mfb_teams/ncaa_mfb_teams_{season}.parquet`
 
-:::caution Coverage
+:::caution[Coverage]
 No conference column: for conference membership by season use load_cfb_team_group_seasons (the cfb_groups release).
 :::
 
-### Returns
+### Returns {#load_ncaa_mfb_teams-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -6989,10 +6990,10 @@ No conference column: for conference membership by season use load_cfb_team_grou
 load_ncaa_mfb_teams(seasons=2024)
 ```
 
-## `load_ncaa_mfb_team_stats`
+## load_ncaa_mfb_team_stats
 
 Release: [ncaa_mfb_team_stats](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/ncaa_mfb_team_stats) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/ncaa_mfb_team_stats/ncaa_mfb_team_stats_{season}.parquet`
-### Returns
+### Returns {#load_ncaa_mfb_team_stats-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -7011,10 +7012,10 @@ Release: [ncaa_mfb_team_stats](https://github.com/sportsdataverse/sportsdatavers
 load_ncaa_mfb_team_stats(seasons=2024)
 ```
 
-## `load_ncaa_mfb_player_stats`
+## load_ncaa_mfb_player_stats
 
 Release: [ncaa_mfb_player_stats](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/ncaa_mfb_player_stats) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/ncaa_mfb_player_stats/ncaa_mfb_player_stats_{season}.parquet`
-### Returns
+### Returns {#load_ncaa_mfb_player_stats-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -7073,10 +7074,10 @@ Release: [ncaa_mfb_player_stats](https://github.com/sportsdataverse/sportsdatave
 load_ncaa_mfb_player_stats(seasons=2024)
 ```
 
-## `load_ncaa_mfb_officials`
+## load_ncaa_mfb_officials
 
 Release: [ncaa_mfb_officials](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/ncaa_mfb_officials) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/ncaa_mfb_officials/ncaa_mfb_officials_{season}.parquet`
-### Returns
+### Returns {#load_ncaa_mfb_officials-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -7090,10 +7091,10 @@ Release: [ncaa_mfb_officials](https://github.com/sportsdataverse/sportsdataverse
 load_ncaa_mfb_officials(seasons=2024)
 ```
 
-## `load_ncaa_mfb_linescore`
+## load_ncaa_mfb_linescore
 
 Release: [ncaa_mfb_linescore](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/ncaa_mfb_linescore) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/ncaa_mfb_linescore/ncaa_mfb_linescore_{season}.parquet`
-### Returns
+### Returns {#load_ncaa_mfb_linescore-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -7113,15 +7114,15 @@ Release: [ncaa_mfb_linescore](https://github.com/sportsdataverse/sportsdataverse
 load_ncaa_mfb_linescore(seasons=2024)
 ```
 
-## `load_cfb_groups`
+## load_cfb_groups
 
 Release: [cfb_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/cfb_groups) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/cfb_groups/cfb_groups.parquet`
 
-:::caution Coverage
+:::caution[Coverage]
 One season-less file: one row per group lineage (the league, subdivisions, conferences, divisions) with the first and last season it had members. group_id is SDV's own id (e.g. cfb:big-ten) and names a lineage: a rename that keeps continuity keeps the id, a new body gets a new one, and notes records each call. Seasons are the STARTING year (2025 = the fall 2025 season).
 :::
 
-### Returns
+### Returns {#load_cfb_groups-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -7136,15 +7137,15 @@ One season-less file: one row per group lineage (the league, subdivisions, confe
 load_cfb_groups()
 ```
 
-## `load_cfb_group_seasons`
+## load_cfb_group_seasons
 
 Release: [cfb_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/cfb_groups) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/cfb_groups/cfb_group_seasons.parquet`
 
-:::caution Coverage
+:::caution[Coverage]
 One season-less file: one row per group per season it existed, with its name, short name, abbreviation and parent group AS OF that season (never today's label applied to the past) and its member count. season is the STARTING year (2025 = the fall 2025 season).
 :::
 
-### Returns
+### Returns {#load_cfb_group_seasons-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -7162,15 +7163,15 @@ One season-less file: one row per group per season it existed, with its name, sh
 load_cfb_group_seasons()
 ```
 
-## `load_cfb_group_aliases`
+## load_cfb_group_aliases
 
 Release: [cfb_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/cfb_groups) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/cfb_groups/cfb_group_aliases.parquet`
 
-:::caution Coverage
+:::caution[Coverage]
 One season-less file: every name, abbreviation, slug and source id that a source (cfbd, espn, sdv) uses for a group, each with the seasons it is valid for (valid_from / valid_to, inclusive; null = unbounded). Match a source's conference or division label here to reach group_id.
 :::
 
-### Returns
+### Returns {#load_cfb_group_aliases-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -7187,15 +7188,15 @@ One season-less file: every name, abbreviation, slug and source id that a source
 load_cfb_group_aliases()
 ```
 
-## `load_cfb_team_group_seasons`
+## load_cfb_team_group_seasons
 
 Release: [cfb_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/cfb_groups) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/cfb_groups/cfb_team_group_seasons_{season}.parquet`
 
-:::caution Coverage
+:::caution[Coverage]
 One row per team per season: the SDV subdivision, conference and division group ids the team belonged to that season (null where a level does not apply), the team name as of that season, where the membership came from, and whether a second source agreed (null when only one source covers the season). team_id is a string: the ESPN team id where ESPN covers the team, otherwise the CFBD id; team_id_source names the id space. season is the STARTING year (2025 = the fall 2025 season); seasons 1869-2026. No 1871 asset.
 :::
 
-### Returns
+### Returns {#load_cfb_team_group_seasons-returns}
 
 | col_name | type | description |
 |---|---|---|

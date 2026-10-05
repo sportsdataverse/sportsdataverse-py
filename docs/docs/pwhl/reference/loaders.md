@@ -3,6 +3,7 @@ title: PWHL dataset loaders
 sidebar_label: Loaders
 description: "PWHL dataset loaders in sdv-py: the load_* functions that read the SportsDataverse release assets."
 sidebar_position: 1
+toc_max_heading_level: 2
 ---
 # PWHL dataset loaders
 
@@ -34,10 +35,10 @@ Pipeline: scrape / raw → enrich → release asset → `load_*()`
 | `load_pwhl_team_boxscores` | [pwhl_team_boxscores](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/pwhl_team_boxscores) | — |
 | `load_pwhl_three_stars` | [pwhl_three_stars](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/pwhl_three_stars) | — |
 
-## `load_phf_pbp`
+## load_phf_pbp
 
 Release: [phf_pbp](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/phf_pbp) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/phf_pbp/play_by_play_{season}.parquet`
-### Returns
+### Returns {#load_phf_pbp-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -125,10 +126,10 @@ Release: [phf_pbp](https://github.com/sportsdataverse/sportsdataverse-data/relea
 load_phf_pbp(seasons=2023)
 ```
 
-## `load_phf_player_boxscores`
+## load_phf_player_boxscores
 
 Release: [phf_player_boxscores](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/phf_player_boxscores) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/phf_player_boxscores/player_box_{season}.parquet`
-### Returns
+### Returns {#load_phf_player_boxscores-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -168,10 +169,10 @@ Release: [phf_player_boxscores](https://github.com/sportsdataverse/sportsdataver
 load_phf_player_boxscores(seasons=2023)
 ```
 
-## `load_phf_schedules`
+## load_phf_schedules
 
 Release: [phf_schedules](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/phf_schedules) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/phf_schedules/phf_schedule_{season}.parquet`
-### Returns
+### Returns {#load_phf_schedules-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -248,10 +249,10 @@ Release: [phf_schedules](https://github.com/sportsdataverse/sportsdataverse-data
 load_phf_schedules(seasons=2023)
 ```
 
-## `load_phf_team_boxscores`
+## load_phf_team_boxscores
 
 Release: [phf_team_boxscores](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/phf_team_boxscores) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/phf_team_boxscores/team_box_{season}.parquet`
-### Returns
+### Returns {#load_phf_team_boxscores-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -286,10 +287,10 @@ Release: [phf_team_boxscores](https://github.com/sportsdataverse/sportsdataverse
 load_phf_team_boxscores(seasons=2023)
 ```
 
-## `load_pwhl_game_info`
+## load_pwhl_game_info
 
 Release: [pwhl_game_info](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/pwhl_game_info) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/pwhl_game_info/game_info_{season}.parquet`
-### Returns
+### Returns {#load_pwhl_game_info-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -322,10 +323,10 @@ Release: [pwhl_game_info](https://github.com/sportsdataverse/sportsdataverse-dat
 load_pwhl_game_info(seasons=2024)
 ```
 
-## `load_pwhl_game_rosters`
+## load_pwhl_game_rosters
 
 Release: [pwhl_game_rosters](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/pwhl_game_rosters) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/pwhl_game_rosters/game_rosters_{season}.parquet`
-### Returns
+### Returns {#load_pwhl_game_rosters-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -348,10 +349,10 @@ Release: [pwhl_game_rosters](https://github.com/sportsdataverse/sportsdataverse-
 load_pwhl_game_rosters(seasons=2024)
 ```
 
-## `load_pwhl_shifts`
+## load_pwhl_shifts
 
 Release: [pwhl_shifts](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/pwhl_shifts) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/pwhl_shifts/shifts_{season}.parquet`
-### Returns
+### Returns {#load_pwhl_shifts-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -374,10 +375,10 @@ Release: [pwhl_shifts](https://github.com/sportsdataverse/sportsdataverse-data/r
 load_pwhl_shifts(seasons=2025)
 ```
 
-## `load_pwhl_goalie_boxscores`
+## load_pwhl_goalie_boxscores
 
 Release: [pwhl_goalie_boxscores](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/pwhl_goalie_boxscores) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/pwhl_goalie_boxscores/goalie_box_{season}.parquet`
-### Returns
+### Returns {#load_pwhl_goalie_boxscores-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -407,10 +408,10 @@ Release: [pwhl_goalie_boxscores](https://github.com/sportsdataverse/sportsdatave
 load_pwhl_goalie_boxscores(seasons=2024)
 ```
 
-## `load_pwhl_officials`
+## load_pwhl_officials
 
 Release: [pwhl_officials](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/pwhl_officials) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/pwhl_officials/officials_{season}.parquet`
-### Returns
+### Returns {#load_pwhl_officials-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -425,10 +426,10 @@ Release: [pwhl_officials](https://github.com/sportsdataverse/sportsdataverse-dat
 load_pwhl_officials(seasons=2024)
 ```
 
-## `load_pwhl_pbp`
+## load_pwhl_pbp
 
 Release: [pwhl_pbp](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/pwhl_pbp) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/pwhl_pbp/play_by_play_{season}.parquet`
-### Returns
+### Returns {#load_pwhl_pbp-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -541,10 +542,10 @@ Release: [pwhl_pbp](https://github.com/sportsdataverse/sportsdataverse-data/rele
 load_pwhl_pbp(seasons=2024)
 ```
 
-## `load_pwhl_xg_pbp`
+## load_pwhl_xg_pbp
 
 Release: [pwhl_xg_pbp](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/pwhl_xg_pbp) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/pwhl_xg_pbp/pwhl_xg_pbp_{season}.parquet`
-### Returns
+### Returns {#load_pwhl_xg_pbp-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -574,10 +575,10 @@ Release: [pwhl_xg_pbp](https://github.com/sportsdataverse/sportsdataverse-data/r
 load_pwhl_xg_pbp(seasons=2025)
 ```
 
-## `load_pwhl_penalty_summary`
+## load_pwhl_penalty_summary
 
 Release: [pwhl_penalty_summary](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/pwhl_penalty_summary) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/pwhl_penalty_summary/penalty_summary_{season}.parquet`
-### Returns
+### Returns {#load_pwhl_penalty_summary-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -606,10 +607,10 @@ Release: [pwhl_penalty_summary](https://github.com/sportsdataverse/sportsdataver
 load_pwhl_penalty_summary(seasons=2024)
 ```
 
-## `load_pwhl_player_boxscores`
+## load_pwhl_player_boxscores
 
 Release: [pwhl_player_boxscores](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/pwhl_player_boxscores) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/pwhl_player_boxscores/player_box_{season}.parquet`
-### Returns
+### Returns {#load_pwhl_player_boxscores-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -644,10 +645,10 @@ Release: [pwhl_player_boxscores](https://github.com/sportsdataverse/sportsdatave
 load_pwhl_player_boxscores(seasons=2024)
 ```
 
-## `load_pwhl_rosters`
+## load_pwhl_rosters
 
 Release: [pwhl_rosters](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/pwhl_rosters) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/pwhl_rosters/rosters_{season}.parquet`
-### Returns
+### Returns {#load_pwhl_rosters-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -668,10 +669,10 @@ Release: [pwhl_rosters](https://github.com/sportsdataverse/sportsdataverse-data/
 load_pwhl_rosters(seasons=2024)
 ```
 
-## `load_pwhl_schedules`
+## load_pwhl_schedules
 
 Release: [pwhl_schedules](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/pwhl_schedules) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/pwhl_schedules/pwhl_schedule_{season}.parquet`
-### Returns
+### Returns {#load_pwhl_schedules-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -709,10 +710,10 @@ Release: [pwhl_schedules](https://github.com/sportsdataverse/sportsdataverse-dat
 load_pwhl_schedules(seasons=2024)
 ```
 
-## `load_pwhl_scoring_summary`
+## load_pwhl_scoring_summary
 
 Release: [pwhl_scoring_summary](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/pwhl_scoring_summary) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/pwhl_scoring_summary/scoring_summary_{season}.parquet`
-### Returns
+### Returns {#load_pwhl_scoring_summary-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -748,10 +749,10 @@ Release: [pwhl_scoring_summary](https://github.com/sportsdataverse/sportsdataver
 load_pwhl_scoring_summary(seasons=2024)
 ```
 
-## `load_pwhl_shootout`
+## load_pwhl_shootout
 
 Release: [pwhl_shootout](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/pwhl_shootout) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/pwhl_shootout/shootout_summary_{season}.parquet`
-### Returns
+### Returns {#load_pwhl_shootout-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -770,10 +771,10 @@ Release: [pwhl_shootout](https://github.com/sportsdataverse/sportsdataverse-data
 load_pwhl_shootout(seasons=2026)
 ```
 
-## `load_pwhl_shots_by_period`
+## load_pwhl_shots_by_period
 
 Release: [pwhl_shots_by_period](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/pwhl_shots_by_period) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/pwhl_shots_by_period/shots_by_period_{season}.parquet`
-### Returns
+### Returns {#load_pwhl_shots_by_period-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -789,10 +790,10 @@ Release: [pwhl_shots_by_period](https://github.com/sportsdataverse/sportsdataver
 load_pwhl_shots_by_period(seasons=2024)
 ```
 
-## `load_pwhl_skater_boxscores`
+## load_pwhl_skater_boxscores
 
 Release: [pwhl_skater_boxscores](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/pwhl_skater_boxscores) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/pwhl_skater_boxscores/skater_box_{season}.parquet`
-### Returns
+### Returns {#load_pwhl_skater_boxscores-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -823,10 +824,10 @@ Release: [pwhl_skater_boxscores](https://github.com/sportsdataverse/sportsdatave
 load_pwhl_skater_boxscores(seasons=2024)
 ```
 
-## `load_pwhl_team_boxscores`
+## load_pwhl_team_boxscores
 
 Release: [pwhl_team_boxscores](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/pwhl_team_boxscores) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/pwhl_team_boxscores/team_box_{season}.parquet`
-### Returns
+### Returns {#load_pwhl_team_boxscores-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -858,10 +859,10 @@ Release: [pwhl_team_boxscores](https://github.com/sportsdataverse/sportsdatavers
 load_pwhl_team_boxscores(seasons=2024)
 ```
 
-## `load_pwhl_three_stars`
+## load_pwhl_three_stars
 
 Release: [pwhl_three_stars](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/pwhl_three_stars) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/pwhl_three_stars/three_stars_{season}.parquet`
-### Returns
+### Returns {#load_pwhl_three_stars-returns}
 
 | col_name | type | description |
 |---|---|---|

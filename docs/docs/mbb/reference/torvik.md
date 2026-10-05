@@ -3,12 +3,13 @@ title: MBB — Bart Torvik T-Rank (barttorvik.com)
 sidebar_label: Bart Torvik T-Rank (barttorvik.com)
 description: "MBB — Bart Torvik T-Rank (barttorvik.com) — endpoint reference in sdv-py, the SportsDataverse Python package."
 sidebar_position: 10
+toc_max_heading_level: 2
 ---
 # MBB — Bart Torvik T-Rank (barttorvik.com)
 
 `sportsdataverse.mbb` — 2 endpoints.
 
-## `torvik_ratings`
+## torvik_ratings
 
 GET /{year}_team_results.csv — men's T-Rank team ratings (adjoe/adjde/barthag, one row per team; the team/conf pair feeds the MBB crosswalk).
 
@@ -20,7 +21,7 @@ GET /{year}_team_results.csv — men's T-Rank team ratings (adjoe/adjde/barthag,
 |---|---|:---:|:---:|:---:|---|
 | `year` | `year` |  | `Y` |  | year path parameter. |
 
-### Returns
+### Returns {#torvik_ratings-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -73,7 +74,7 @@ GET /{year}_team_results.csv — men's T-Rank team ratings (adjoe/adjde/barthag,
 
 **`return_parsed=False`** — the raw CSV response body (`str`).
 
-### Example
+### Example {#torvik_ratings-example}
 
 ```python
 torvik_ratings(year=2025)
@@ -81,7 +82,7 @@ torvik_ratings(year=2025)
 
 _Last validated n/a._
 
-## `torvik_team_factors`
+## torvik_team_factors
 
 GET /{year}_fffinal.csv — men's four-factors splits (eFG%/FTR/OR%/TO% offense + defense, with per-stat ranks).
 
@@ -93,7 +94,7 @@ GET /{year}_fffinal.csv — men's four-factors splits (eFG%/FTR/OR%/TO% offense 
 |---|---|:---:|:---:|:---:|---|
 | `year` | `year` |  | `Y` |  | year path parameter. |
 
-### Returns
+### Returns {#torvik_team_factors-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
@@ -142,7 +143,7 @@ GET /{year}_fffinal.csv — men's four-factors splits (eFG%/FTR/OR%/TO% offense 
 
 **`return_parsed=False`** — the raw CSV response body (`str`).
 
-### Example
+### Example {#torvik_team_factors-example}
 
 ```python
 torvik_team_factors(year=2025)

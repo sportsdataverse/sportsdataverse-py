@@ -11,13 +11,17 @@ not covered by the generated API-endpoint reference above.
 
 ## Utilities & helpers
 
-### `most_recent_whl_season() -> 'int'` {#most_recent_whl_season}
+### most_recent_whl_season {#most_recent_whl_season}
+
+`most_recent_whl_season() -> 'int'`
 
 Most-recent WHL season as an end-year integer (max `season_yr`), or 2026.
 
 ## Other
 
-### `whl_game_corsi(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'` {#whl_game_corsi}
+### whl_game_corsi {#whl_game_corsi}
+
+`whl_game_corsi(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'`
 
 Player-level on-ice Corsi and Fenwick for a single WHL game.
 
@@ -28,7 +32,9 @@ Player-level on-ice Corsi and Fenwick for a single WHL game.
 | `game_id` | `int` |  |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
-### `whl_game_shifts(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'` {#whl_game_shifts}
+### whl_game_shifts {#whl_game_shifts}
+
+`whl_game_shifts(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'`
 
 Parsed shift stints for a single WHL game.
 
@@ -39,7 +45,9 @@ Parsed shift stints for a single WHL game.
 | `game_id` | `int` |  |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
-### `whl_game_summary(game_id: 'int') -> 'dict'` {#whl_game_summary}
+### whl_game_summary {#whl_game_summary}
+
+`whl_game_summary(game_id: 'int') -> 'dict'`
 
 WHL game summary — dict of frames (game/goals/penalties/shots_by_period/three_stars).
 
@@ -49,7 +57,9 @@ WHL game summary — dict of frames (game/goals/penalties/shots_by_period/three_
 |---|---|---|---|
 | `game_id` | `int` |  |  |
 
-### `whl_leaders(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'` {#whl_leaders}
+### whl_leaders {#whl_leaders}
+
+`whl_leaders(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'`
 
 WHL statistical leaders for a given season.
 
@@ -82,7 +92,9 @@ WHL statistical leaders for a given season.
 | `position` | character | Player position. |
 | `division` | character | Division identifier. |
 
-### `whl_pbp(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'` {#whl_pbp}
+### whl_pbp {#whl_pbp}
+
+`whl_pbp(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'`
 
 WHL play-by-play — one row per event, fully enriched.
 
@@ -93,7 +105,9 @@ WHL play-by-play — one row per event, fully enriched.
 | `game_id` | `int` |  |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
-### `whl_player_stats(player_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'` {#whl_player_stats}
+### whl_player_stats {#whl_player_stats}
+
+`whl_player_stats(player_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'`
 
 WHL player season stats across all seasons.
 
@@ -160,7 +174,9 @@ WHL player season stats across all seasons.
 | `shots_blocked_by_player` | character | Shots blocked by the player. |
 | `stat_type` | character | Statistic type ("regular"/"playoff"). |
 
-### `whl_player_toi(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'` {#whl_player_toi}
+### whl_player_toi {#whl_player_toi}
+
+`whl_player_toi(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'`
 
 Per-player time-on-ice totals for a single WHL game.
 
@@ -171,7 +187,9 @@ Per-player time-on-ice totals for a single WHL game.
 | `game_id` | `int` |  |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
-### `whl_schedule(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'` {#whl_schedule}
+### whl_schedule {#whl_schedule}
+
+`whl_schedule(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'`
 
 WHL schedule — one row per game.
 
@@ -201,7 +219,9 @@ WHL schedule — one row per game.
 | `season_id` | character | Season identifier. |
 | `game_type` | character | Game type the row belongs to. |
 
-### `whl_season_id(return_as_pandas: 'bool' = False) -> 'Any'` {#whl_season_id}
+### whl_season_id {#whl_season_id}
+
+`whl_season_id(return_as_pandas: 'bool' = False) -> 'Any'`
 
 All WHL seasons with end-year + game-type labels.
 
@@ -226,7 +246,9 @@ All WHL seasons with end-year + game-type labels.
 | `season_yr` | double | Year derived from the season name (concluding year). |
 | `game_type_label` | character | Game type: "preseason", "regular", or "playoffs". |
 
-### `whl_standings(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'` {#whl_standings}
+### whl_standings {#whl_standings}
+
+`whl_standings(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'`
 
 WHL standings — one row per team.
 
@@ -265,7 +287,9 @@ WHL standings — one row per team.
 | `past_10` | character | Record over the team's most recent 10 games (feed header 'Past 10 Games') as a hyphenated string: W-L-OTL-SOL when four parts are shipped (e.g. '2-0-0-1'), W-L-OTL when three are (e.g. '0-2-1'). |
 | `team` | character | Team name. |
 
-### `whl_team_roster(team_id: 'int', season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'` {#whl_team_roster}
+### whl_team_roster {#whl_team_roster}
+
+`whl_team_roster(team_id: 'int', season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'`
 
 WHL team roster for a given team + season.
 
@@ -278,7 +302,9 @@ WHL team roster for a given team + season.
 | `season_id` | `Optional[int]` | `None` |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
-### `whl_teams(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'` {#whl_teams}
+### whl_teams {#whl_teams}
+
+`whl_teams(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'`
 
 WHL teams for a given season.
 

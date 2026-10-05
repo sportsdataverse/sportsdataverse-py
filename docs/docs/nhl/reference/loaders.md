@@ -3,6 +3,7 @@ title: NHL dataset loaders
 sidebar_label: Loaders
 description: "NHL dataset loaders in sdv-py: the load_* functions that read the SportsDataverse release assets."
 sidebar_position: 1
+toc_max_heading_level: 2
 ---
 # NHL dataset loaders
 
@@ -40,10 +41,10 @@ Pipeline: scrape / raw → enrich → release asset → `load_*()`
 | `load_nhl_group_aliases` | [nhl_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nhl_groups) | — |
 | `load_nhl_team_group_seasons` | [nhl_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nhl_groups) | — |
 
-## `load_nhl_pbp`
+## load_nhl_pbp
 
 Release: [nhl_pbp_full](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nhl_pbp_full) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nhl_pbp_full/play_by_play_{season}.parquet`
-### Returns
+### Returns {#load_nhl_pbp-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -146,10 +147,10 @@ Release: [nhl_pbp_full](https://github.com/sportsdataverse/sportsdataverse-data/
 load_nhl_pbp(seasons=2024)
 ```
 
-## `load_nhl_player_boxscore`
+## load_nhl_player_boxscore
 
 Release: [nhl_player_boxscores](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nhl_player_boxscores) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nhl_player_boxscores/player_box_{season}.parquet`
-### Returns
+### Returns {#load_nhl_player_boxscore-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -195,10 +196,10 @@ Release: [nhl_player_boxscores](https://github.com/sportsdataverse/sportsdataver
 load_nhl_player_boxscore(seasons=2024)
 ```
 
-## `load_nhl_schedule`
+## load_nhl_schedule
 
 Release: [nhl_schedules](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nhl_schedules) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nhl_schedules/nhl_schedule_{season}.parquet`
-### Returns
+### Returns {#load_nhl_schedule-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -242,10 +243,10 @@ Release: [nhl_schedules](https://github.com/sportsdataverse/sportsdataverse-data
 load_nhl_schedule(seasons=2024)
 ```
 
-## `load_nhl_team_boxscore`
+## load_nhl_team_boxscore
 
 Release: [nhl_team_boxscores](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nhl_team_boxscores) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nhl_team_boxscores/team_box_{season}.parquet`
-### Returns
+### Returns {#load_nhl_team_boxscore-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -273,10 +274,10 @@ Release: [nhl_team_boxscores](https://github.com/sportsdataverse/sportsdataverse
 load_nhl_team_boxscore(seasons=2024)
 ```
 
-## `load_nhl_game_info`
+## load_nhl_game_info
 
 Release: [nhl_game_info](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nhl_game_info) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nhl_game_info/game_info_{season}.parquet`
-### Returns
+### Returns {#load_nhl_game_info-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -295,10 +296,10 @@ Release: [nhl_game_info](https://github.com/sportsdataverse/sportsdataverse-data
 load_nhl_game_info(seasons=2024)
 ```
 
-## `load_nhl_game_rosters`
+## load_nhl_game_rosters
 
 Release: [nhl_game_rosters](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nhl_game_rosters) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nhl_game_rosters/game_rosters_{season}.parquet`
-### Returns
+### Returns {#load_nhl_game_rosters-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -319,10 +320,10 @@ Release: [nhl_game_rosters](https://github.com/sportsdataverse/sportsdataverse-d
 load_nhl_game_rosters(seasons=2024)
 ```
 
-## `load_nhl_goalie_boxscores`
+## load_nhl_goalie_boxscores
 
 Release: [nhl_goalie_boxscores](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nhl_goalie_boxscores) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nhl_goalie_boxscores/goalie_box_{season}.parquet`
-### Returns
+### Returns {#load_nhl_goalie_boxscores-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -355,10 +356,10 @@ Release: [nhl_goalie_boxscores](https://github.com/sportsdataverse/sportsdataver
 load_nhl_goalie_boxscores(seasons=2024)
 ```
 
-## `load_nhl_linescore`
+## load_nhl_linescore
 
 Release: [nhl_linescore](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nhl_linescore) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nhl_linescore/linescore_{season}.parquet`
-### Returns
+### Returns {#load_nhl_linescore-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -377,10 +378,10 @@ Release: [nhl_linescore](https://github.com/sportsdataverse/sportsdataverse-data
 load_nhl_linescore(seasons=2024)
 ```
 
-## `load_nhl_officials`
+## load_nhl_officials
 
 Release: [nhl_officials](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nhl_officials) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nhl_officials/officials_{season}.parquet`
-### Returns
+### Returns {#load_nhl_officials-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -394,10 +395,10 @@ Release: [nhl_officials](https://github.com/sportsdataverse/sportsdataverse-data
 load_nhl_officials(seasons=2025)
 ```
 
-## `load_nhl_pbp_full`
+## load_nhl_pbp_full
 
 Release: [nhl_pbp_full](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nhl_pbp_full) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nhl_pbp_full/play_by_play_{season}.parquet`
-### Returns
+### Returns {#load_nhl_pbp_full-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -500,10 +501,10 @@ Release: [nhl_pbp_full](https://github.com/sportsdataverse/sportsdataverse-data/
 load_nhl_pbp_full(seasons=2010)
 ```
 
-## `load_nhl_pbp_lite`
+## load_nhl_pbp_lite
 
 Release: [nhl_pbp_lite](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nhl_pbp_lite) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nhl_pbp_lite/play_by_play_{season}_lite.parquet`
-### Returns
+### Returns {#load_nhl_pbp_lite-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -605,10 +606,10 @@ Release: [nhl_pbp_lite](https://github.com/sportsdataverse/sportsdataverse-data/
 load_nhl_pbp_lite(seasons=2010)
 ```
 
-## `load_nhl_penalties`
+## load_nhl_penalties
 
 Release: [nhl_penalties](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nhl_penalties) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nhl_penalties/penalties_{season}.parquet`
-### Returns
+### Returns {#load_nhl_penalties-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -666,10 +667,10 @@ Release: [nhl_penalties](https://github.com/sportsdataverse/sportsdataverse-data
 load_nhl_penalties(seasons=2024)
 ```
 
-## `load_nhl_player_boxscores`
+## load_nhl_player_boxscores
 
 Release: [nhl_player_boxscores](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nhl_player_boxscores) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nhl_player_boxscores/player_box_{season}.parquet`
-### Returns
+### Returns {#load_nhl_player_boxscores-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -715,10 +716,10 @@ Release: [nhl_player_boxscores](https://github.com/sportsdataverse/sportsdataver
 load_nhl_player_boxscores(seasons=2010)
 ```
 
-## `load_nhl_rosters`
+## load_nhl_rosters
 
 Release: [nhl_rosters](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nhl_rosters) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nhl_rosters/rosters_{season}.parquet`
-### Returns
+### Returns {#load_nhl_rosters-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -737,10 +738,10 @@ Release: [nhl_rosters](https://github.com/sportsdataverse/sportsdataverse-data/r
 load_nhl_rosters(seasons=2010)
 ```
 
-## `load_nhl_schedules`
+## load_nhl_schedules
 
 Release: [nhl_schedules](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nhl_schedules) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nhl_schedules/nhl_schedule_{season}.parquet`
-### Returns
+### Returns {#load_nhl_schedules-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -784,10 +785,10 @@ Release: [nhl_schedules](https://github.com/sportsdataverse/sportsdataverse-data
 load_nhl_schedules(seasons=2010)
 ```
 
-## `load_nhl_scoring`
+## load_nhl_scoring
 
 Release: [nhl_scoring](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nhl_scoring) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nhl_scoring/scoring_{season}.parquet`
-### Returns
+### Returns {#load_nhl_scoring-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -847,10 +848,10 @@ Release: [nhl_scoring](https://github.com/sportsdataverse/sportsdataverse-data/r
 load_nhl_scoring(seasons=2024)
 ```
 
-## `load_nhl_scratches`
+## load_nhl_scratches
 
 Release: [nhl_scratches](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nhl_scratches) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nhl_scratches/scratches_{season}.parquet`
-### Returns
+### Returns {#load_nhl_scratches-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -863,10 +864,10 @@ Release: [nhl_scratches](https://github.com/sportsdataverse/sportsdataverse-data
 load_nhl_scratches(seasons=2024)
 ```
 
-## `load_nhl_shifts`
+## load_nhl_shifts
 
 Release: [nhl_shifts](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nhl_shifts) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nhl_shifts/shifts_{season}.parquet`
-### Returns
+### Returns {#load_nhl_shifts-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -892,10 +893,10 @@ Release: [nhl_shifts](https://github.com/sportsdataverse/sportsdataverse-data/re
 load_nhl_shifts(seasons=2025)
 ```
 
-## `load_nhl_shootout`
+## load_nhl_shootout
 
 Release: [nhl_shootout](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nhl_shootout) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nhl_shootout/shootout_summary_{season}.parquet`
-### Returns
+### Returns {#load_nhl_shootout-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -936,10 +937,10 @@ Release: [nhl_shootout](https://github.com/sportsdataverse/sportsdataverse-data/
 load_nhl_shootout(seasons=2025)
 ```
 
-## `load_nhl_shots_by_period`
+## load_nhl_shots_by_period
 
 Release: [nhl_shots_by_period](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nhl_shots_by_period) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nhl_shots_by_period/shots_by_period_{season}.parquet`
-### Returns
+### Returns {#load_nhl_shots_by_period-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -957,10 +958,10 @@ Release: [nhl_shots_by_period](https://github.com/sportsdataverse/sportsdatavers
 load_nhl_shots_by_period(seasons=2025)
 ```
 
-## `load_nhl_skater_boxscores`
+## load_nhl_skater_boxscores
 
 Release: [nhl_skater_boxscores](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nhl_skater_boxscores) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nhl_skater_boxscores/skater_box_{season}.parquet`
-### Returns
+### Returns {#load_nhl_skater_boxscores-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -993,10 +994,10 @@ Release: [nhl_skater_boxscores](https://github.com/sportsdataverse/sportsdataver
 load_nhl_skater_boxscores(seasons=2024)
 ```
 
-## `load_nhl_team_boxscores`
+## load_nhl_team_boxscores
 
 Release: [nhl_team_boxscores](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nhl_team_boxscores) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nhl_team_boxscores/team_box_{season}.parquet`
-### Returns
+### Returns {#load_nhl_team_boxscores-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -1024,10 +1025,10 @@ Release: [nhl_team_boxscores](https://github.com/sportsdataverse/sportsdataverse
 load_nhl_team_boxscores(seasons=2010)
 ```
 
-## `load_nhl_three_stars`
+## load_nhl_three_stars
 
 Release: [nhl_three_stars](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nhl_three_stars) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nhl_three_stars/three_stars_{season}.parquet`
-### Returns
+### Returns {#load_nhl_three_stars-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -1060,15 +1061,15 @@ Release: [nhl_three_stars](https://github.com/sportsdataverse/sportsdataverse-da
 load_nhl_three_stars(seasons=2024)
 ```
 
-## `load_nhl_groups`
+## load_nhl_groups
 
 Release: [nhl_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nhl_groups) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nhl_groups/nhl_groups.parquet`
 
-:::caution Coverage
+:::caution[Coverage]
 One season-less file: one row per group lineage (the league, subdivisions, conferences, divisions) with the first and last season it had members. group_id is SDV's own id (e.g. nhl:metropolitan) and names a lineage: a rename that keeps continuity keeps the id, a new body gets a new one, and notes records each call. Seasons are the ENDING year (2025 = the 2024-25 season).
 :::
 
-### Returns
+### Returns {#load_nhl_groups-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -1083,15 +1084,15 @@ One season-less file: one row per group lineage (the league, subdivisions, confe
 load_nhl_groups()
 ```
 
-## `load_nhl_group_seasons`
+## load_nhl_group_seasons
 
 Release: [nhl_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nhl_groups) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nhl_groups/nhl_group_seasons.parquet`
 
-:::caution Coverage
+:::caution[Coverage]
 One season-less file: one row per group per season it existed, with its name, short name, abbreviation and parent group AS OF that season (never today's label applied to the past) and its member count. season is the ENDING year (2025 = the 2024-25 season).
 :::
 
-### Returns
+### Returns {#load_nhl_group_seasons-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -1109,15 +1110,15 @@ One season-less file: one row per group per season it existed, with its name, sh
 load_nhl_group_seasons()
 ```
 
-## `load_nhl_group_aliases`
+## load_nhl_group_aliases
 
 Release: [nhl_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nhl_groups) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nhl_groups/nhl_group_aliases.parquet`
 
-:::caution Coverage
+:::caution[Coverage]
 One season-less file: every name, abbreviation, slug and source id that a source (espn, nhl) uses for a group, each with the seasons it is valid for (valid_from / valid_to, inclusive; null = unbounded). Match a source's conference or division label here to reach group_id.
 :::
 
-### Returns
+### Returns {#load_nhl_group_aliases-returns}
 
 | col_name | type | description |
 |---|---|---|
@@ -1134,15 +1135,15 @@ One season-less file: every name, abbreviation, slug and source id that a source
 load_nhl_group_aliases()
 ```
 
-## `load_nhl_team_group_seasons`
+## load_nhl_team_group_seasons
 
 Release: [nhl_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nhl_groups) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nhl_groups/nhl_team_group_seasons_{season}.parquet`
 
-:::caution Coverage
+:::caution[Coverage]
 One row per team per season: the SDV subdivision, conference and division group ids the team belonged to that season (null where a level does not apply), the team name as of that season, where the membership came from, and whether a second source agreed (null when only one source covers the season). team_id is a string: the ESPN team id where ESPN covers the team, otherwise the NHL id; team_id_source names the id space. season is the ENDING year (2025 = the 2024-25 season); seasons 1918-2026. No 2005 asset (the 2004-05 lockout).
 :::
 
-### Returns
+### Returns {#load_nhl_team_group_seasons-returns}
 
 | col_name | type | description |
 |---|---|---|
