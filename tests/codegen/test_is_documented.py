@@ -44,3 +44,16 @@ def test_word_set_agrees_with_the_regex(name: str) -> None:
 
 def test_corpus_words_are_the_maximal_word_runs() -> None:
     assert generate._corpus_words("a_b, c-d `e`") == frozenset({"a_b", "c", "d", "e"})
+
+
+@pytest.mark.parametrize("name", ["a-b", "x.y", "x.y()"])
+def test_a_name_with_non_word_characters_found_by_the_regex_fallback(name: str) -> None:
+    # not one word run, so the word set alone would say "absent"; the regex fallback finds it
+    corpus = "see a-b and x.y() here"
+    assert generate._is_documented(name, corpus) is _regex(name, corpus)
+    assert generate._is_documented("a-b", corpus) is True
+
+
+def test_a_changed_corpus_is_read_again() -> None:
+    assert generate._is_documented("n", "a n") is True
+    assert generate._is_documented("n", "a") is False
