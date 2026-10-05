@@ -188,6 +188,37 @@ def test_resolve_season_id_pwhl_falls_back_on_failed_fetch(monkeypatch):
         resolve_season_id("pwhl", season=2031)
 
 
+@pytest.mark.parametrize(
+    "season, game_type, expected",
+    [(2026, "regular", 90), (2026, "playoffs", 92), (2027, "regular", 94), (2025, "regular", 86)],
+)
+def test_resolve_season_id_skips_all_star_seasons(monkeypatch, season, game_type, expected):
+    """The real AHL list puts "2026 All-Star Challenge" (91) ahead of "2025-26 Regular Season" (90)."""
+    from sportsdataverse.hockeytech._leagues import resolve_season_id
+
+    _patch_all(monkeypatch, _seasons_fake(load_fixture("hockeytech", "ahl_seasons")))
+    assert resolve_season_id("ahl", season=season, game_type=game_type) == expected
+
+
+def test_resolve_season_id_keeps_a_preseason_exhibition(monkeypatch):
+    """Names from the SJHL seasons capture (sdv-internal-refs, 2026-07-12): an exhibition
+    preseason is still a preseason; an all-star showcase is never the regular season."""
+    from sportsdataverse.hockeytech._leagues import resolve_season_id
+
+    rows = [
+        {"season_id": "67", "season_name": "2025 Western All Star Challenge"},
+        {"season_id": "65", "season_name": "2025-26 Regular Season"},
+        {"season_id": "66", "season_name": "2025-26 Preseason Exhibition"},
+        {"season_id": "63", "season_name": "2024 Western All-Star Showcase"},
+        {"season_id": "61", "season_name": "2024-25 Regular Season"},
+    ]
+    _patch_all(monkeypatch, _seasons_fake({"SiteKit": {"Seasons": rows}}))
+    assert resolve_season_id("sjhl", season=2026, game_type="preseason") == 66
+    assert resolve_season_id("sjhl", season=2025) == 61
+    with pytest.raises(ValueError):
+        resolve_season_id("sjhl", season=2024)  # only the showcase carries 2024
+
+
 def test_pwhl_fallback_table_matches_the_real_seasons_list():
     """Every id in the committed PWHL seasons capture is in the fallback, with the same labels."""
     from sportsdataverse.hockeytech._leagues import _PWHL_SEASON_FALLBACK

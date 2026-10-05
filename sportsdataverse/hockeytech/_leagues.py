@@ -133,6 +133,14 @@ _PWHL_SEASON_FALLBACK = [
 ]
 
 
+# Season names that are one-off events, not a league's regular season or playoffs: the
+# feed lists them as seasons too ("2026 All-Star Challenge", "2025 Top Prospects",
+# "CCHL Pre-Draft Combine 2026", "2026 Exhibition Season", ...), and parse_seasons labels
+# them "regular" because the name says neither playoff nor preseason. Seen in the
+# 17-league seasons captures (sdv-internal-refs hockeytech/, 2026-07-12).
+SPECIAL_EVENT_SEASON_RE = r"(?i)all[- ]?star|showcase|prospect|combine|special event|exhibition|play[- ]?in\b"
+
+
 def most_recent_season_yr(seasons, league: str) -> int:
     """Max ``season_yr`` of a parsed seasons frame (the ``<lg>_season_id`` output).
 
@@ -176,6 +184,8 @@ def resolve_season_id(league: str, season=None, game_type: str = "regular", seas
     df = parse_seasons(payload)
     if df.height:
         hit = df.filter((df["season_yr"] == int(season)) & (df["game_type_label"] == game_type))
+        if game_type != "preseason":  # "2025-26 Preseason Exhibition" is a real preseason
+            hit = hit.filter(~hit["season_name"].fill_null("").str.contains(SPECIAL_EVENT_SEASON_RE))
         if hit.height:
             return int(hit["season_id"][0])
     if league == "pwhl":

@@ -23,6 +23,7 @@ Captured JSON payloads from `lscluster.hockeytech.com` / `cluster.leaguestat.com
 | pwhl_player_stats_27 | pwhl | modulekit/player seasonstats | player 27 |
 | pwhl_leaders_5 | pwhl | statviewfeed/leadersExtended | season_id 5 |
 | pwhl_game_summary_42 | pwhl | gc/gamesummary | game_id 42 |
+| ahl_seasons | ahl | modulekit/seasons | all; sdv-internal-refs `hockeytech/captures/samples/ahl/seasons.json` (b78eb2c, live 2026-07-12), trim marker dropped, key redacted |
 | ahl_pbp\_\* / ohl_pbp\_\* / whl_pbp\_\* / qmjhl_pbp\_\* | (juniors) | gameCenterPlayByPlay (dialect b) | per league |
 
 HTTP-200 reply bodies that are not data, used by `tests/hockeytech/test_client.py`
