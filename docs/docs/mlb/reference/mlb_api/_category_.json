@@ -1,0 +1,6 @@
+{
+  "label": "MLB Stats API",
+  "position": 10,
+  "collapsed": true,
+  "link": {"type": "doc", "id": "mlb/reference/mlb_api"}
+}

@@ -1,0 +1,6 @@
+{
+  "label": "PFF Premium Stats -- LEGACY (premium.pff.com, cookie auth; use the PFF Developer API)",
+  "position": 12,
+  "collapsed": true,
+  "link": {"type": "doc", "id": "nfl/reference/pff_core"}
+}

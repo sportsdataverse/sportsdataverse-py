@@ -1,0 +1,595 @@
+---
+title: "SOCCER — ESPN core API (v2) — Other"
+sidebar_label: "Other"
+sidebar_position: 4
+description: "SOCCER — ESPN core API (v2) — Other — function reference in sdv-py, the SportsDataverse Python package."
+toc_max_heading_level: 2
+---
+# SOCCER — ESPN core API (v2) — Other
+
+## espn_soccer_league_root
+
+ESPN endpoint.
+
+**Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1`
+
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1](https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+
+### Returns {#espn_soccer_league_root-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_single_entity`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example {#espn_soccer_league_root-example}
+
+```python
+espn_soccer_league_root()
+```
+
+_Last validated n/a._
+
+## espn_soccer_seasons
+
+ESPN endpoint.
+
+**Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/seasons`
+
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/seasons](https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/seasons)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `limit` | `limit` |  |  | `Y` | Maximum number of items to return. |
+
+### Returns {#espn_soccer_seasons-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_items`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example {#espn_soccer_seasons-example}
+
+```python
+espn_soccer_seasons()
+```
+
+_Last validated n/a._
+
+## espn_soccer_games
+
+ESPN endpoint.
+
+**Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events`
+
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events](https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `dates` | `dates` |  |  | `Y` | Date or date range filter (YYYYMMDD or YYYYMMDD-YYYYMMDD). |
+| `limit` | `limit` |  |  | `Y` | Maximum number of items to return. |
+
+### Returns {#espn_soccer_games-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_items`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example {#espn_soccer_games-example}
+
+```python
+espn_soccer_games()
+```
+
+_Last validated n/a._
+
+## espn_soccer_game
+
+ESPN endpoint.
+
+**Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/{event_id}`
+
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793](https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/events/401584793)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `event_id` | `event_id` |  | `Y` |  | event_id path parameter. |
+
+### Returns {#espn_soccer_game-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_single_entity`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example {#espn_soccer_game-example}
+
+```python
+espn_soccer_game(event_id='401584793')
+```
+
+_Last validated n/a._
+
+## espn_soccer_teams_core
+
+ESPN endpoint.
+
+**Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/teams`
+
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/teams](https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/teams)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `limit` | `limit` |  |  | `Y` | Maximum number of items to return. |
+| `page` | `page` |  |  | `Y` | page query parameter. |
+
+### Returns {#espn_soccer_teams_core-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `team_id` | character | ESPN numeric identifier for the team. |
+| `display_name` | character | Full display name of the team (e.g. 'Los Angeles Lakers'). |
+| `abbreviation` | character | Team abbreviation. |
+| `location` | character | Team location/city. |
+| `name` | character | Short team name, typically the mascot (e.g. 'Lakers'). |
+| `short_display_name` | character | Short team display name. |
+| `nickname` | character | Alternative nickname used by ESPN for the team. |
+| `slug` | character | URL slug for the team. |
+| `uid` | character | ESPN universal id for the team. |
+| `color` | character | Primary team color (hex). |
+| `alternate_color` | character | Secondary team color (hex). |
+| `is_active` | logical | Whether the team is currently active. |
+| `is_all_star` | logical | Whether the team is an all-star side. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example {#espn_soccer_teams_core-example}
+
+```python
+espn_soccer_teams_core()
+```
+
+_Last validated n/a._
+
+## espn_soccer_team_core
+
+ESPN endpoint.
+
+**Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/teams/{team_id}`
+
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/teams/4](https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/teams/4)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `team_id` | `team_id` |  | `Y` |  | team_id path parameter. |
+
+### Returns {#espn_soccer_team_core-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_single_entity`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example {#espn_soccer_team_core-example}
+
+```python
+espn_soccer_team_core(team_id='4')
+```
+
+_Last validated n/a._
+
+## espn_soccer_venues
+
+ESPN endpoint.
+
+**Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/venues`
+
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/venues](https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/venues)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `limit` | `limit` |  |  | `Y` | Maximum number of items to return. |
+
+### Returns {#espn_soccer_venues-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_items`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example {#espn_soccer_venues-example}
+
+```python
+espn_soccer_venues()
+```
+
+_Last validated n/a._
+
+## espn_soccer_venue
+
+ESPN endpoint.
+
+**Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/venues/{venue_id}`
+
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/venues/3663](https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/venues/3663)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `venue_id` | `venue_id` |  | `Y` |  | venue_id path parameter. |
+
+### Returns {#espn_soccer_venue-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_single_entity`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example {#espn_soccer_venue-example}
+
+```python
+espn_soccer_venue(venue_id='3663')
+```
+
+_Last validated n/a._
+
+## espn_soccer_franchises
+
+ESPN endpoint.
+
+**Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/franchises`
+
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/franchises](https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/franchises)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `limit` | `limit` |  |  | `Y` | Maximum number of items to return. |
+
+### Returns {#espn_soccer_franchises-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_items`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example {#espn_soccer_franchises-example}
+
+```python
+espn_soccer_franchises()
+```
+
+_Last validated n/a._
+
+## espn_soccer_franchise
+
+ESPN endpoint.
+
+**Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/franchises/{franchise_id}`
+
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/franchises/2](https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/franchises/2)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `franchise_id` | `franchise_id` |  | `Y` |  | franchise_id path parameter. |
+
+### Returns {#espn_soccer_franchise-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_single_entity`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example {#espn_soccer_franchise-example}
+
+```python
+espn_soccer_franchise(franchise_id='2')
+```
+
+_Last validated n/a._
+
+## espn_soccer_coach
+
+ESPN endpoint.
+
+**Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/coaches/{coach_id}`
+
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/coaches/1](https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/coaches/1)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `coach_id` | `coach_id` |  | `Y` |  | coach_id path parameter. |
+
+### Returns {#espn_soccer_coach-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_single_entity`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example {#espn_soccer_coach-example}
+
+```python
+espn_soccer_coach(coach_id='1')
+```
+
+_Last validated n/a._
+
+## espn_soccer_coach_record
+
+ESPN endpoint.
+
+**Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/coaches/{coach_id}/record/{record_type}`
+
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/coaches/1/record](https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/coaches/1/record)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `coach_id` | `coach_id` |  | `Y` |  | coach_id path parameter. |
+| `record_type` | `record_type` |  |  | `Y` | record_type path parameter. |
+
+### Returns {#espn_soccer_coach_record-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_single_entity`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example {#espn_soccer_coach_record-example}
+
+```python
+espn_soccer_coach_record(coach_id='1')
+```
+
+_Last validated n/a._
+
+## espn_soccer_coach_season
+
+ESPN endpoint.
+
+**Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/coaches/{coach_id}/seasons/{season}`
+
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/coaches/1/seasons/2024](https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/coaches/1/seasons/2024)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `coach_id` | `coach_id` |  | `Y` |  | coach_id path parameter. |
+| `season` | `season` |  | `Y` |  | season path parameter. |
+
+### Returns {#espn_soccer_coach_season-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_single_entity`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example {#espn_soccer_coach_season-example}
+
+```python
+espn_soccer_coach_season(coach_id='1', season=2024)
+```
+
+_Last validated n/a._
+
+## espn_soccer_positions
+
+ESPN endpoint.
+
+**Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/positions`
+
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/positions](https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/positions)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `limit` | `limit` |  |  | `Y` | Maximum number of items to return. |
+
+### Returns {#espn_soccer_positions-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_items`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example {#espn_soccer_positions-example}
+
+```python
+espn_soccer_positions()
+```
+
+_Last validated n/a._
+
+## espn_soccer_position
+
+ESPN endpoint.
+
+**Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/positions/{position_id}`
+
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/positions/1](https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/positions/1)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `position_id` | `position_id` |  | `Y` |  | position_id path parameter. |
+
+### Returns {#espn_soccer_position-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_single_entity`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example {#espn_soccer_position-example}
+
+```python
+espn_soccer_position(position_id='1')
+```
+
+_Last validated n/a._
+
+## espn_soccer_tournaments
+
+ESPN endpoint.
+
+**Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/tournaments`
+
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/tournaments](https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/tournaments)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `limit` | `limit` |  |  | `Y` | Maximum number of items to return. |
+
+### Returns {#espn_soccer_tournaments-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_items`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example {#espn_soccer_tournaments-example}
+
+```python
+espn_soccer_tournaments()
+```
+
+_Last validated n/a._
+
+## espn_soccer_awards
+
+ESPN endpoint.
+
+**Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/awards`
+
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/awards](https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/awards)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `limit` | `limit` |  |  | `Y` | Maximum number of items to return. |
+
+### Returns {#espn_soccer_awards-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_items`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example {#espn_soccer_awards-example}
+
+```python
+espn_soccer_awards()
+```
+
+_Last validated n/a._
+
+## espn_soccer_award
+
+ESPN endpoint.
+
+**Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/awards/{award_id}`
+
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/awards/1](https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/awards/1)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `award_id` | `award_id` |  | `Y` |  | award_id path parameter. |
+
+### Returns {#espn_soccer_award-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_single_entity`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example {#espn_soccer_award-example}
+
+```python
+espn_soccer_award(award_id='1')
+```
+
+_Last validated n/a._
+
+## espn_soccer_standings_core
+
+ESPN endpoint.
+
+**Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/standings`
+
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/standings](https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/standings)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+
+### Returns {#espn_soccer_standings_core-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `group` | character | Conference/group/table the row belongs to, flattened from the standings children hierarchy. |
+| `team` | character | Display name of the team in this standings row. |
+| `team_id` | character | ESPN numeric identifier for the team. |
+| `team_abbreviation` | character | Team abbreviation. |
+| `note` | character | Standings note (e.g. qualification/relegation marker). |
+| `games_played` | double | Matches played. |
+| `losses` | double | Number of matches the team has lost. |
+| `point_differential` | double | Goal difference (for minus against). |
+| `points` | double | Competition points. |
+| `points_against` | double | Goals conceded. |
+| `points_for` | double | Goals (or runs) scored by the team. |
+| `ties` | double | Number of matches the team has drawn. |
+| `wins` | double | Number of matches the team has won. |
+| `advanced` | double | Whether the team has advanced/qualified. |
+| `deductions` | double | Points deducted. |
+| `ppg` | double | Points per game. |
+| `rank` | double | Position within the group/table. |
+| `rank_change` | double | Change in rank versus the previous update. |
+| `overall` | character | Overall record summary as published by ESPN. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example {#espn_soccer_standings_core-example}
+
+```python
+espn_soccer_standings_core()
+```
+
+_Last validated n/a._
+
+## espn_soccer_leaders_core
+
+ESPN endpoint.
+
+**Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/leaders`
+
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/leaders](https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/leaders)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+
+### Returns {#espn_soccer_leaders_core-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_items`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example {#espn_soccer_leaders_core-example}
+
+```python
+espn_soccer_leaders_core()
+```
+
+_Last validated n/a._
+
+## espn_soccer_league_notes
+
+ESPN endpoint.
+
+**Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/notes`
+
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/notes](https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/notes)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+
+### Returns {#espn_soccer_league_notes-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_items`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example {#espn_soccer_league_notes-example}
+
+```python
+espn_soccer_league_notes()
+```
+
+_Last validated n/a._
+
+## espn_soccer_talentpicks
+
+ESPN endpoint.
+
+**Endpoint URL:** `GET https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/talentpicks`
+
+**Valid URL:** [https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/talentpicks](https://sports.core.api.espn.com/v2/sports/soccer/leagues/eng.1/talentpicks)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+
+### Returns {#espn_soccer_talentpicks-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_items`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example {#espn_soccer_talentpicks-example}
+
+```python
+espn_soccer_talentpicks()
+```
+
+_Last validated n/a._

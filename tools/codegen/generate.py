@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import functools
+import json
 import re
 import shutil
 import subprocess
@@ -522,12 +523,13 @@ def _r_parity_aliases() -> dict:
     return yaml.safe_load(_R_PARITY_ALIASES_FILE.read_text(encoding="utf-8")) or {}
 
 
-def _r_parity_rows(prefix: str, ref_pages: dict, autodoc_names: list[str]) -> list[dict]:
+def _r_parity_rows(prefix: str, ref_pages: dict, autodoc_names: list[str], moved: dict | None = None) -> list[dict]:
     """``[{py, py_url, r, r_url}]`` linking each league function to its R equivalent.
 
     ``ref_pages`` is ``{slug: rendered_markdown}`` for the league's reference pages
     (used to find each endpoint/loader function's anchor); ``autodoc_names`` are the
-    hand-written functions documented on ``reference/additional``. A row is emitted
+    hand-written functions documented on ``reference/additional``; ``moved`` maps a function
+    that the family split moved to its ``<page>/<family>`` path. A row is emitted
     only when an R equivalent exists (curated alias first, else same-named export),
     so every link resolves. Sorted by Python function name."""
     pkg = _R_PARITY_PACKAGE.get(prefix)
@@ -553,7 +555,7 @@ def _r_parity_rows(prefix: str, ref_pages: dict, autodoc_names: list[str]) -> li
         rows.append(
             {
                 "py": name,
-                "py_url": f"reference/{name_slug[name]}#{name}",
+                "py_url": f"reference/{(moved or {}).get(name, name_slug[name])}#{name}",
                 "r": r_fn,
                 "r_url": f"{base}/{r_fn}.html",
             },
@@ -3622,10 +3624,13 @@ def refresh_autodoc_schemas() -> int:
     return 0
 
 
-def render_category(label: str, position: int, collapsed: bool) -> str:
-    """Render a Docusaurus ``_category_.json`` sidebar descriptor."""
+def render_category(label: str, position: int, collapsed: bool, link_doc: str | None = None) -> str:
+    """Render a Docusaurus ``_category_.json`` sidebar descriptor.
+
+    ``link_doc`` makes the category open that doc (a split page's overview, which sits next to the
+    folder and keeps the old URL)."""
     template = render.ENV.get_template("category_json.jinja")
-    return template.render(label=label, position=position, collapsed=collapsed)
+    return template.render(label=label, position=position, collapsed=collapsed, link_doc=link_doc)
 
 
 def render_packages_page() -> str | None:
@@ -3680,9 +3685,234 @@ def _preserved_docs_corpus() -> str:
     return "\n".join(parts)
 
 
+# ===========================================================================
+# Family pages (sub-project 3): a reference page whose markdown is over the size budget keeps its path
+# and URL as an overview (every function, one line each, under its family) and its function blocks move to
+# one page per family under reference/<page>/. The budget is a markdown proxy for 300 KB of built HTML:
+# on the 2026-10-04 build every reference page measured html <= 40 KB + 3.22 x its markdown.
+# ===========================================================================
+
+_PAGE_MD_BUDGET = 70_000
+# A family with one function, or under this many markdown bytes, joins "other" (no one-function pages).
+_FAMILY_MIN_BYTES = 10_000
+# Written next to the docs tree, served at /anchor-map.json: {old page URL: {anchor: family slug}}.
+_ANCHOR_MAP_REL = "../static/anchor-map.json"
+# Endpoint names with no word breaks (stats.nba.com slugs): the family is the first prefix that matches.
+_GLUED_FAMILIES = (
+    "boxscore",
+    "leaguedash",
+    "playerdash",
+    "teamdash",
+    "teamplayer",
+    "draftcombine",
+    "draft",
+    "shotchart",
+    "scoreboard",
+    "schedule",
+    "cumestats",
+    "franchise",
+    "common",
+    "video",
+    "league",
+    "player",
+    "team",
+)
+_FAMILY_LABELS = {
+    "adv": "Advanced stats",
+    "boxscore": "Box scores",
+    "cumestats": "Cumulative stats",
+    "draftcombine": "Draft combine",
+    "leaguedash": "League dashboards",
+    "ncaa": "NCAA (stats.ncaa.org)",
+    "other": "Other",
+    "pbp": "Play-by-play",
+    "playerdash": "Player dashboards",
+    "shotchart": "Shot charts",
+    "teamdash": "Team dashboards",
+    "teamplayer": "Team and player",
+}
+_FRONTMATTER = re.compile(r"\A---\n(.*?)\n---\n", re.S)
+_FN_H2_LINE = re.compile(r"(?m)^## ([A-Za-z_]\w*)$")
+_FN_H3_LINE = re.compile(r"(?m)^### ([A-Za-z_]\w*) \{#\1\}$")
+_FAMILY_H2_LINE = re.compile(r"(?m)^## (.+)$")
+_MD_LINK = re.compile(r"\[([^\]]*)\]\([^)]*\)")
+
+
+def _slugify(text: str) -> str:
+    return re.sub(r"[^a-z0-9]+", "-", text.lower()).strip("-") or "other"
+
+
+def _name_families(names: list[str]) -> list[str]:
+    """Family key per endpoint name: the first word after the words every name on the page shares
+    (``espn_cfb_season_types`` -> ``season``); a name with no word after it is matched against
+    :data:`_GLUED_FAMILIES` (``nba_stats_boxscoreadvancedv3`` -> ``boxscore``), else ``other``."""
+    words = [n.split("_") for n in names]
+    shared = 0
+    while all(len(w) > shared + 1 for w in words) and len({w[shared] for w in words}) == 1:
+        shared += 1
+    keys = []
+    for w in words:
+        rest = w[shared:]
+        if len(rest) > 1:
+            keys.append(rest[0].lower())
+        else:
+            keys.append(next((p for p in _GLUED_FAMILIES if rest[0].startswith(p)), "other"))
+    return keys
+
+
+def _loader_families(names: list[str], prefix: str | None) -> list[str]:
+    """``load_cfb_adv_passing`` -> ``adv``; a loader of another source (``load_ncaa_mfb_pbp``) -> ``ncaa``."""
+    own = f"load_{prefix}_"
+    return [n[len(own) :].split("_")[0] if n.startswith(own) else n.split("_")[1] for n in names]
+
+
+def _pack_families(items: list[tuple[str, str, int]]) -> list[tuple[str, str, int, list[str]]]:
+    """``[(name, family key, markdown bytes)]`` in page order -> ``[(slug, label, part, [names])]``.
+
+    A plural key folds into its singular (``teams`` -> ``team``); a family with one function or under
+    :data:`_FAMILY_MIN_BYTES` joins ``other``; a family over :data:`_PAGE_MD_BUDGET` continues on
+    ``<slug>-2``, ``<slug>-3`` ... (a single function over the budget gets a page to itself). Families
+    are ordered by label, ``other`` last."""
+    keys = {k for _, k, _ in items}
+    fold = {k: k[:-1] if k.endswith("s") and k[:-1] in keys else k for k in keys}
+    items = [(n, fold[k], s) for n, k, s in items]
+    count: dict[str, int] = {}
+    size: dict[str, int] = {}
+    for _, k, s in items:
+        count[k] = count.get(k, 0) + 1
+        size[k] = size.get(k, 0) + s
+    small = {k for k in count if count[k] < 2 or size[k] < _FAMILY_MIN_BYTES}
+    if len(small) < len(count):
+        items = [(n, "other" if k in small else k, s) for n, k, s in items]
+    families: dict[str, list[tuple[str, int]]] = {}
+    for n, k, s in items:
+        families.setdefault(k, []).append((n, s))
+    label = {k: _FAMILY_LABELS.get(k, k[:1].upper() + k[1:]) for k in families}
+    pages = []
+    for k in sorted(families, key=lambda k: (k == "other", label[k].lower())):
+        part: list[str] = []
+        used, n_part = 0, 1
+        for n, s in families[k]:
+            if part and used + s > _PAGE_MD_BUDGET:
+                pages.append((_slugify(k) + ("" if n_part == 1 else f"-{n_part}"), label[k], n_part, part))
+                part, used, n_part = [], 0, n_part + 1
+            part.append(n)
+            used += s
+        pages.append((_slugify(k) + ("" if n_part == 1 else f"-{n_part}"), label[k], n_part, part))
+    return pages
+
+
+def _summary_line(block: str) -> str:
+    """The first prose line of a function block, links reduced to their text, at most 160 characters."""
+    for line in block.split("\n")[1:]:
+        line = line.strip()
+        if not line or line.startswith(("`", "|", "#", ":::", "**", ">")):
+            continue
+        line = _MD_LINK.sub(r"\1", line).replace("|", "\\|")
+        if len(line) > 160:
+            line = line[:160].rsplit(" ", 1)[0] + " …"
+            if line.count("`") % 2:
+                line += "`"
+        return line
+    return ""
+
+
+def _family_pages(rel: str, content: str, prefix: str | None) -> tuple[str, dict[str, str], dict[str, str]] | None:
+    """Split one reference page: ``(overview, {slug: family page}, {anchor: slug})``, or None when it holds
+    fewer than two functions. A function's anchor is its heading id: the name itself on an autodoc page
+    (``{#name}``), the lower-cased name elsewhere."""
+    front = _FRONTMATTER.match(content)
+    assert front is not None, rel
+    meta = dict(line.split(": ", 1) for line in front.group(1).split("\n") if ": " in line)
+    body = content[front.end() :]
+    page = rel.rsplit("/", 1)[1][:-3]
+    blocks: dict[str, str] = {}
+    keys: list[str] = []
+    autodoc = page in (_AUTODOC_PAGE[:-3], _AUTODOC_GLOBAL_PAGE[:-3])
+    if autodoc:
+        sections = list(_FAMILY_H2_LINE.finditer(body))
+        preamble = body[: sections[0].start()] if sections else body
+        for i, sec in enumerate(sections):
+            text = body[sec.start() : sections[i + 1].start() if i + 1 < len(sections) else len(body)]
+            heads = list(_FN_H3_LINE.finditer(text))
+            for j, h in enumerate(heads):
+                name = h.group(1)
+                blocks[name] = text[h.start() : heads[j + 1].start() if j + 1 < len(heads) else len(text)]
+                family = sec.group(1).strip()
+                keys.append(family if family != "Other" else name.split("_")[0])
+    else:
+        heads = list(_FN_H2_LINE.finditer(body))
+        preamble = body[: heads[0].start()] if heads else body
+        for j, h in enumerate(heads):
+            blocks[h.group(1)] = body[h.start() : heads[j + 1].start() if j + 1 < len(heads) else len(body)]
+        names = list(blocks)
+        keys = _loader_families(names, prefix) if page == "loaders" else _name_families(names)
+    if len(blocks) < 2:  # nothing to split: one function over the budget stays as it is
+        return None
+    pages = _pack_families([(n, k, len(blocks[n].encode())) for n, k in zip(blocks, keys)])
+    title = meta.get("title", page).strip('"')
+    toc = "toc_max_heading_level: 2\n" if "toc_max_heading_level" in meta else ""
+    family_pages: dict[str, str] = {}
+    fn_slug: dict[str, str] = {}
+    rows: dict[str, list[str]] = {}
+    for position, (slug, label, part, names) in enumerate(pages, start=1):
+        shown = label if part == 1 else f"{label} ({part})"
+        heading = f"{title} — {shown}"
+        family_pages[slug] = (
+            f"---\ntitle: {json.dumps(heading, ensure_ascii=False)}\n"
+            f"sidebar_label: {json.dumps(shown, ensure_ascii=False)}\n"
+            f"sidebar_position: {position}\n"
+            f"description: {json.dumps(heading + ' — function reference in sdv-py, the SportsDataverse Python package.', ensure_ascii=False)}\n"
+            f"{toc}---\n# {heading}\n\n" + "\n".join(blocks[n].rstrip() + "\n" for n in names)
+        )
+        for n in names:
+            anchor = n if autodoc else n.lower()
+            fn_slug[anchor] = slug
+            rows.setdefault(label, []).append(f"| [{n}]({page}/{slug}.md#{anchor}) | {_summary_line(blocks[n])} |")
+    overview = (
+        front.group(0)
+        + preamble.rstrip()
+        + "\n\n"
+        + "\n".join(
+            f"## {label}\n\n| Function | Summary |\n|---|---|\n" + "\n".join(r) + "\n" for label, r in rows.items()
+        )
+    )
+    return overview, family_pages, fn_slug
+
+
+def _split_family_pages(
+    out: dict[str, str], prefix: str | None, anchor_map: dict[str, dict[str, str]]
+) -> dict[str, str]:
+    """Split each of ``prefix``'s reference pages over the budget in ``out``, in place.
+
+    ``prefix`` None is the package-level ``reference/`` directory. Returns ``{function: "<page>/<slug>"}``
+    for the functions that moved, and records them in ``anchor_map`` under the old page URL."""
+    ref_dir = f"{prefix}/reference/" if prefix else "reference/"
+    moved: dict[str, str] = {}
+    for rel in [r for r in out if r.startswith(ref_dir) and r.endswith(".md") and "/" not in r[len(ref_dir) :]]:
+        split = _family_pages(rel, out[rel], prefix) if len(out[rel].encode()) > _PAGE_MD_BUDGET else None
+        if split is None:
+            continue
+        overview, family_pages, fn_slug = split
+        page = rel[len(ref_dir) : -3]
+        out[rel] = overview
+        meta = dict(line.split(": ", 1) for line in _FRONTMATTER.match(overview).group(1).split("\n") if ": " in line)
+        out[f"{rel[:-3]}/_category_.json"] = render_category(
+            meta.get("sidebar_label", page), int(meta.get("sidebar_position", 1)), True, link_doc=rel[:-3]
+        )
+        for slug, text in family_pages.items():
+            out[f"{rel[:-3]}/{slug}.md"] = text
+        anchor_map[f"/docs/{rel[:-3]}"] = fn_slug
+        moved.update({anchor: f"{page}/{slug}" for anchor, slug in fn_slug.items()})
+    return moved
+
+
 def _render_docs_all() -> dict[str, str]:
-    """{relpath: content} for the full generated docs staging tree."""
+    """{relpath: content} for the full generated docs staging tree.
+
+    Keys are relative to ``docs/docs``; :data:`_ANCHOR_MAP_REL` points outside it, at ``docs/static``."""
     out: dict[str, str] = {}
+    anchor_map: dict[str, dict[str, str]] = {}
     preserved = _preserved_docs_corpus()
     for i, prefix in enumerate(_doc_leagues()):
         apis = _apis_for(prefix)
@@ -3723,17 +3953,6 @@ def _render_docs_all() -> dict[str, str]:
         ref_pages = {
             rel[len(ref_prefix) : -3]: c for rel, c in out.items() if rel.startswith(ref_prefix) and rel.endswith(".md")
         }
-        highlights_count = len(_highlighted_names(prefix, autodoc_names_list))
-        remaining_count = len(autodoc_names_list) - highlights_count
-        out[f"{prefix}/index.md"] = render_league_index(
-            prefix,
-            has_additional=bool(remaining_count),
-            additional_count=remaining_count,
-            has_highlights=bool(highlights_count),
-            highlights_count=highlights_count,
-            r_parity=_r_parity_rows(prefix, ref_pages, autodoc_names_list),
-            r_pkg=_R_PARITY_PACKAGE.get(prefix),
-        )
         # Compute the autodoc page against the reference-pages corpus only -- the
         # SAME corpus as autodoc_names_list above -- NOT the index. The index now
         # carries the Python<->R parity table, which mentions autodoc function names;
@@ -3742,9 +3961,23 @@ def _render_docs_all() -> dict[str, str]:
         # links that point at additional#<fn>. Excluding the index keeps the autodoc
         # page in lockstep with autodoc_names_list (the index has no function-name
         # headers of its own, so this doesn't lose any real documentation signal).
+        # Rendered before the index so the family split below covers it and the
+        # parity table can link each function's family page.
         autodoc = render_autodoc_page(prefix, ref_corpus)
         if autodoc is not None:
             out[f"{prefix}/reference/{_AUTODOC_PAGE}"] = autodoc
+        moved = _split_family_pages(out, prefix, anchor_map)
+        highlights_count = len(_highlighted_names(prefix, autodoc_names_list))
+        remaining_count = len(autodoc_names_list) - highlights_count
+        out[f"{prefix}/index.md"] = render_league_index(
+            prefix,
+            has_additional=bool(remaining_count),
+            additional_count=remaining_count,
+            has_highlights=bool(highlights_count),
+            highlights_count=highlights_count,
+            r_parity=_r_parity_rows(prefix, ref_pages, autodoc_names_list, moved),
+            r_pkg=_R_PARITY_PACKAGE.get(prefix),
+        )
         if apis or loaders or autodoc is not None:
             out[f"{prefix}/reference/_category_.json"] = render_category("Reference", 1, True)
     out["reference/parameters.md"] = render_parameters_page()
@@ -3755,6 +3988,8 @@ def _render_docs_all() -> dict[str, str]:
     global_autodoc = render_autodoc_page(None, global_corpus)
     if global_autodoc is not None:
         out[f"reference/{_AUTODOC_GLOBAL_PAGE}"] = global_autodoc
+    _split_family_pages(out, None, anchor_map)
+    out[_ANCHOR_MAP_REL] = json.dumps(anchor_map, indent=1, sort_keys=True)
     pkgs = render_packages_page()
     if pkgs is not None:
         out["packages.mdx"] = pkgs

@@ -1,5 +1,6 @@
 {
   "label": "{{ label }}",
   "position": {{ position }},
-  "collapsed": {{ collapsed|lower }}
+  "collapsed": {{ collapsed|lower }}{% if link_doc %},
+  "link": {"type": "doc", "id": "{{ link_doc }}"}{% endif +%}
 }
