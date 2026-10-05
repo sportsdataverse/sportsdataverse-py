@@ -9,6 +9,8 @@ import numpy as np
 import pandas as pd
 import polars as pl
 
+from sportsdataverse._espn_basketball_pbp import pickcenter_odds as _pickcenter_odds
+from sportsdataverse._espn_basketball_pbp import team_timeout_called as _team_timeout_called
 from sportsdataverse.dl_utils import download, flatten_json_iterative
 
 
@@ -234,37 +236,7 @@ def helper_mbb_game_data(pbp_txt, init):
 
 
 def helper_mbb_pickcenter(pbp_txt):
-    # Spread definition
-    if len(pbp_txt.get("pickcenter", [])) > 1:
-        pickcenter = pd.json_normalize(data=pbp_txt, record_path="pickcenter")
-        pickcenter = pickcenter.sort_values(by=["provider.id"])
-        homeFavorite = (
-            pickcenter[pickcenter["homeTeamOdds.favorite"].notnull()][["homeTeamOdds.favorite"]].values[0]
-            if "homeTeamOdds.favorite" in pickcenter.columns
-            else True
-        )
-        gameSpread = (
-            pickcenter[pickcenter["spread"].notnull()][["spread"]].values[0] if "spread" in pickcenter.columns else 2.5
-        )
-        overUnder = (
-            pickcenter[pickcenter["overUnder"].notnull()][["overUnder"]].values[0]
-            if "overUnder" in pickcenter.columns
-            else 142.0
-        )
-        gameSpreadAvailable = True
-        # self.logger.info(f"Spread: {gameSpread}, home Favorite: {homeFavorite}, ou: {overUnder}")
-    else:
-        gameSpread = 2.5
-        overUnder = 142.0
-        homeFavorite = True
-        gameSpreadAvailable = False
-
-    return {
-        "gameSpread": gameSpread,
-        "overUnder": overUnder,
-        "homeFavorite": homeFavorite,
-        "gameSpreadAvailable": gameSpreadAvailable,
-    }
+    return _pickcenter_odds(pbp_txt.get("pickcenter"), 142.0)
 
 
 def helper_mbb_pbp_features(game_id, pbp_txt, init):
@@ -314,45 +286,22 @@ def helper_mbb_pbp_features(game_id, pbp_txt, init):
             # game clocks always split into exactly 2 fields, so
             # `upper_bound=2` is correct + tighter than the legacy
             # heuristic.
-            pl.col("clock.displayValue").str.split(":").list.to_struct(upper_bound=2).alias("clock.mm"),
+            # A bare sub-minute clock ("23.4", as the NBA/WNBA/WBB paths accept)
+            # reads as 0:23; whole-second MM:SS clocks parse exactly as before.
+            pl.when(pl.col("clock.displayValue").str.contains(":"))
+            .then(pl.col("clock.displayValue"))
+            .otherwise("0:" + pl.col("clock.displayValue"))
+            .str.split(":")
+            .list.to_struct(upper_bound=2)
+            .alias("clock.mm"),
         )
         .with_columns(pl.col("clock.mm").struct.rename_fields(["clock.minutes", "clock.seconds"]))
         .unnest("clock.mm")
         .with_columns(
-            pl.col("clock.minutes").cast(pl.Int32),
-            pl.col("clock.seconds").cast(pl.Int32),
-            pl.when(
-                (pl.col("type.text") == "ShortTimeOut").and_(
-                    pl.col("text")
-                    .str.to_lowercase()
-                    .str.contains(str(init["homeTeamAbbrev"]).lower())
-                    .or_(
-                        pl.col("text").str.to_lowercase().str.contains(str(init["homeTeamAbbrev"]).lower()),
-                        pl.col("text").str.to_lowercase().str.contains(str(init["homeTeamName"]).lower()),
-                        pl.col("text").str.to_lowercase().str.contains(str(init["homeTeamMascot"]).lower()),
-                        pl.col("text").str.to_lowercase().str.contains(str(init["homeTeamNameAlt"]).lower()),
-                    ),
-                ),
-            )
-            .then(True)
-            .otherwise(False)
-            .alias("homeTimeoutCalled"),
-            pl.when(
-                (pl.col("type.text") == "ShortTimeOut").and_(
-                    pl.col("text")
-                    .str.to_lowercase()
-                    .str.contains(str(init["awayTeamAbbrev"]).lower())
-                    .or_(
-                        pl.col("text").str.to_lowercase().str.contains(str(init["awayTeamAbbrev"]).lower()),
-                        pl.col("text").str.to_lowercase().str.contains(str(init["awayTeamName"]).lower()),
-                        pl.col("text").str.to_lowercase().str.contains(str(init["awayTeamMascot"]).lower()),
-                        pl.col("text").str.to_lowercase().str.contains(str(init["awayTeamNameAlt"]).lower()),
-                    ),
-                ),
-            )
-            .then(True)
-            .otherwise(False)
-            .alias("awayTimeoutCalled"),
+            pl.col("clock.minutes").cast(pl.Float64).cast(pl.Int32),
+            pl.col("clock.seconds").cast(pl.Float64).cast(pl.Int32),
+            _team_timeout_called(pbp_txt["plays"].columns, init, "home").alias("homeTimeoutCalled"),
+            _team_timeout_called(pbp_txt["plays"].columns, init, "away").alias("awayTimeoutCalled"),
         )
         .with_columns(
             lag_period=pl.col("period.number").shift(1),
@@ -406,7 +355,9 @@ def helper_mbb_pbp_features(game_id, pbp_txt, init):
     pbp_txt["plays"] = pbp_txt["plays"].with_columns(
         pl.when((pl.col("game_play_number") == 1).or_((pl.col("lag_period") == 1).and_(pl.col("period.number") == 2)))
         .then(1200)
-        .when((pl.col("lag_period") == 2).and_(pl.col("period.number") == 3))
+        # every OT, not just the first: same rule as end.game_seconds_remaining
+        # below (and the NBA/WNBA/WBB OT handling), so the two agree in 2OT+
+        .when((pl.col("lag_period") == (pl.col("period.number") - 1)).and_(pl.col("period.number") >= 3))
         .then(300)
         .otherwise(pl.col("end.period_seconds_remaining"))
         .alias("end.period_seconds_remaining"),
