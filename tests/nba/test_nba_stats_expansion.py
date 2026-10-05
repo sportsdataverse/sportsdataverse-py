@@ -133,7 +133,7 @@ def test_game_id_reaches_the_request_for_every_wrapper():
 
         def transport(url, params, headers, proxy_url, sent=sent):
             sent.update(params)
-            return 200, "{}"
+            return 200, '{"resultSets": []}'
 
         fn(game_id="0022501230", return_parsed=False, transport=transport)
         assert sent["GameID"] == "0022501230", fn.__name__
