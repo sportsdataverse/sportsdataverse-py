@@ -2,9 +2,20 @@
 
 from __future__ import annotations
 
+import re
 from typing import Any
 
 import pandas as pd
+import polars as pl
+
+# ESPN play types for a timeout a team called (NCAA 578/579, NBA/WNBA 15/16/17/283).
+# Official / TV timeouts (580, 581, 19) belong to no team and are left out. The
+# timeouts map built from these holds timeouts CALLED as ESPN logs them, not
+# timeouts CHARGED: a coach's challenge outcome is not applied, because ESPN logs
+# the challenge's own timeout too inconsistently to correct for (a team timeout
+# precedes 90% of charged and 56% of retained NBA 2020-26 challenges, 84% / 22% in
+# the WNBA 2023-26, about 5% in NCAA 2025-26). Challenge plays are not timeouts.
+TEAM_TIMEOUT_TYPES = ["RegularTimeOut", "ShortTimeOut", "Full Timeout", "Short Timeout", "No Timeout", "Reset Timeout"]
 
 
 def pickcenter_odds(pickcenter: Any, default_over_under: float) -> dict[str, Any]:
@@ -37,3 +48,21 @@ def pickcenter_odds(pickcenter: Any, default_over_under: float) -> dict[str, Any
         "homeFavorite": home_favorite,
         "gameSpreadAvailable": True,
     }
+
+
+def team_timeout_called(columns: list[str], init: dict[str, Any], side: str) -> pl.Expr:
+    """True on a team-timeout play the ``side`` ("home" / "away") team called.
+
+    The play's own ``team.id`` decides. Only a play without one falls back to the
+    team's abbreviation / location / mascot appearing as a whole word in the text
+    (a bare substring test credits "Memphis" to PHI and "timeout" to ME).
+    """
+    team_id = pl.col("team.id").cast(pl.Int64, strict=False) if "team.id" in columns else pl.lit(None, dtype=pl.Int64)
+    names = {str(init[f"{side}Team{part}"]) for part in ("Abbrev", "Name", "Mascot", "NameAlt")} - {"", "None"}
+    if names:
+        alternation = "|".join(re.escape(n) for n in sorted(names))
+        name_match = pl.col("text").str.contains(rf"(?i)(?:^|\W)(?:{alternation})(?:\W|$)")
+    else:
+        name_match = pl.lit(False)
+    called = pl.col("type.text").is_in(TEAM_TIMEOUT_TYPES) & pl.coalesce(team_id == init[f"{side}TeamId"], name_match)
+    return called.fill_null(False)
