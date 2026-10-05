@@ -1,0 +1,62 @@
+{
+ "resource": "videostatus",
+ "parameters": {
+  "LeagueID": "10",
+  "GameDate": "08/15/2024"
+ },
+ "resultSets": [
+  {
+   "name": "VideoStatus",
+   "headers": [
+    "GAME_ID",
+    "GAME_DATE",
+    "VISITOR_TEAM_ID",
+    "VISITOR_TEAM_CITY",
+    "VISITOR_TEAM_NAME",
+    "VISITOR_TEAM_ABBREVIATION",
+    "HOME_TEAM_ID",
+    "HOME_TEAM_CITY",
+    "HOME_TEAM_NAME",
+    "HOME_TEAM_ABBREVIATION",
+    "GAME_STATUS",
+    "GAME_STATUS_TEXT",
+    "IS_AVAILABLE",
+    "PT_XYZ_AVAILABLE"
+   ],
+   "rowSet": [
+    [
+     "1022400149",
+     "08/15/2024",
+     1611661317,
+     "Phoenix",
+     "Mercury",
+     "PHO",
+     1611661329,
+     "Chicago",
+     "Sky",
+     "CHI",
+     3,
+     "Final",
+     1,
+     0
+    ],
+    [
+     "1022400150",
+     "08/15/2024",
+     1611661322,
+     "Washington",
+     "Mystics",
+     "WAS",
+     1611661324,
+     "Minnesota",
+     "Lynx",
+     "MIN",
+     3,
+     "Final",
+     1,
+     0
+    ]
+   ]
+  }
+ ]
+}

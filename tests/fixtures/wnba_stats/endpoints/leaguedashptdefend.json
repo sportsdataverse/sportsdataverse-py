@@ -1,0 +1,76 @@
+{
+ "resource": "leaguedashptdefend",
+ "parameters": {
+  "PerMode": "PerGame",
+  "LeagueID": "10",
+  "Season": "2023",
+  "SeasonType": "Regular Season",
+  "PlayerID": 203826,
+  "TeamID": 0,
+  "Outcome": null,
+  "Location": null,
+  "Month": 0,
+  "SeasonSegment": null,
+  "DateFrom": "",
+  "DateTo": "",
+  "OpponentTeamID": 0,
+  "vsConfernce": null,
+  "vsDivision": null,
+  "Conference": null,
+  "Division": null,
+  "GameSegment": null,
+  "Period": 0,
+  "LastNGames": 0,
+  "DraftYear": null,
+  "DraftPick": null,
+  "College": null,
+  "Country": null,
+  "Height": null,
+  "Weight": null,
+  "PlayerExperience": null,
+  "PlayerPosition": null,
+  "StarterBench": null,
+  "PORound": null,
+  "DefenseCategory": "Overall",
+  "ISTRound": null
+ },
+ "resultSets": [
+  {
+   "name": "LeagueDashPTDefend",
+   "headers": [
+    "CLOSE_DEF_PERSON_ID",
+    "PLAYER_NAME",
+    "PLAYER_LAST_TEAM_ID",
+    "PLAYER_LAST_TEAM_ABBREVIATION",
+    "PLAYER_POSITION",
+    "AGE",
+    "GP",
+    "G",
+    "FREQ",
+    "D_FGM",
+    "D_FGA",
+    "D_FG_PCT",
+    "NORMAL_FG_PCT",
+    "PCT_PLUSMINUS"
+   ],
+   "rowSet": [
+    [
+     203826,
+     "Alyssa Thomas",
+     1611661323,
+     "CON",
+     "F",
+     32.0,
+     22,
+     22,
+     1.0,
+     5.45,
+     12.05,
+     0.453,
+     0.462,
+     -0.01
+    ]
+   ]
+  }
+ ]
+}

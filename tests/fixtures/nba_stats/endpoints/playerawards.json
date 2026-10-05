@@ -1,0 +1,125 @@
+{
+ "resource": "playerawards",
+ "parameters": {
+  "PlayerID": 2544
+ },
+ "resultSets": [
+  {
+   "name": "PlayerAwards",
+   "headers": [
+    "PERSON_ID",
+    "FIRST_NAME",
+    "LAST_NAME",
+    "TEAM",
+    "DESCRIPTION",
+    "ALL_NBA_TEAM_NUMBER",
+    "SEASON",
+    "MONTH",
+    "WEEK",
+    "CONFERENCE",
+    "TYPE",
+    "SUBTYPE1",
+    "SUBTYPE2",
+    "SUBTYPE3"
+   ],
+   "rowSet": [
+    [
+     2544,
+     "LeBron",
+     "James",
+     "Cleveland Cavaliers",
+     "All-Defensive Team",
+     "1",
+     "2008-09",
+     null,
+     null,
+     "1610612739",
+     "Award",
+     "Kia Motors",
+     "KIADT",
+     null
+    ],
+    [
+     2544,
+     "LeBron",
+     "James",
+     "Cleveland Cavaliers",
+     "All-Defensive Team",
+     "1",
+     "2009-10",
+     null,
+     null,
+     "1610612739",
+     "Award",
+     "Kia Motors",
+     "KIADT",
+     null
+    ],
+    [
+     2544,
+     "LeBron",
+     "James",
+     null,
+     "NBA All-Star",
+     null,
+     "2004-05",
+     null,
+     null,
+     null,
+     "Award",
+     "All-Star",
+     null,
+     null
+    ],
+    [
+     2544,
+     "LeBron",
+     "James",
+     "Cleveland Cavaliers",
+     "NBA All-Star Most Valuable Player",
+     " ",
+     "2017-18",
+     null,
+     null,
+     " ",
+     "Award",
+     "Kia Motors",
+     "KAMVP",
+     " "
+    ],
+    [
+     2544,
+     "LeBron",
+     "James",
+     "Cleveland Cavaliers",
+     "NBA Player of the Month",
+     null,
+     "2004-05",
+     "01/01/2005",
+     null,
+     "East",
+     "Award",
+     "Kia Motors",
+     "KIPMO",
+     null
+    ],
+    [
+     2544,
+     "LeBron",
+     "James",
+     "Cleveland Cavaliers",
+     "NBA Player of the Week",
+     null,
+     "2004-05",
+     null,
+     "2004-11-14T00:00:00",
+     "East",
+     "Award",
+     "Kia Motors",
+     "KIPWK",
+     null
+    ]
+   ]
+  }
+ ]
+}

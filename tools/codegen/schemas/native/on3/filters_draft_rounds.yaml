@@ -1,3 +1,6 @@
-columns: []
+columns:
+- description: ''
+  name: round
+  type: integer
 kind: dataframe
 schema: filters_draft_rounds

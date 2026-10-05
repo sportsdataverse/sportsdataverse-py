@@ -1,0 +1,124 @@
+{
+ "resource": "leaderstiles",
+ "parameters": {
+  "LeagueID": "10",
+  "Season": "2023",
+  "SeasonType": "Regular Season",
+  "GameScope": null,
+  "PlayerScope": "All Players",
+  "PlayerOrTeam": "Player",
+  "Stat": "PTS"
+ },
+ "resultSet": [
+  {
+   "name": "LeadersTiles",
+   "headers": [
+    "RANK",
+    "PLAYER_ID",
+    "PLAYER",
+    "TEAM_ID",
+    "TEAM_ABBREVIATION",
+    "TEAM_NAME",
+    "PTS"
+   ],
+   "rowSet": [
+    [
+     1,
+     204319,
+     "Jewell Loyd",
+     1611661328,
+     "SEA",
+     "Seattle Storm",
+     24.7
+    ],
+    [
+     2,
+     1627668,
+     "Breanna Stewart",
+     1611661313,
+     "NYL",
+     "New York Liberty",
+     23.0
+    ]
+   ]
+  },
+  {
+   "name": "AllTimeSeasonHigh",
+   "headers": [
+    "PLAYER_ID",
+    "PLAYER_NAME",
+    "PTS",
+    "SEASON_YEAR",
+    "TEAM_ID",
+    "TEAM_ABBREVIATION",
+    "TEAM_NAME"
+   ],
+   "rowSet": [
+    [
+     1628932,
+     "A'ja Wilson",
+     26.9,
+     "2024",
+     1611661319,
+     "LVA",
+     "Aces"
+    ]
+   ]
+  },
+  {
+   "name": "LastSeasonHigh",
+   "headers": [
+    "RANK",
+    "PLAYER_ID",
+    "PLAYER",
+    "TEAM_ID",
+    "TEAM_ABBREVIATION",
+    "TEAM_NAME",
+    "PTS"
+   ],
+   "rowSet": [
+    [
+     1,
+     1627668,
+     "Breanna Stewart",
+     1611661328,
+     "SEA",
+     "Seattle Storm",
+     21.8
+    ],
+    [
+     2,
+     1628276,
+     "Kelsey Plum",
+     1611661319,
+     "LVA",
+     "Las Vegas Aces",
+     20.2
+    ]
+   ]
+  },
+  {
+   "name": "LowSeasonHigh",
+   "headers": [
+    "PLAYER_ID",
+    "PLAYER_NAME",
+    "PTS",
+    "SEASON_YEAR",
+    "TEAM_ID",
+    "TEAM_ABBREVIATION",
+    "TEAM_NAME"
+   ],
+   "rowSet": [
+    [
+     100646,
+     "Tamika Catchings",
+     18.6,
+     "2002",
+     1611661325,
+     "IND",
+     "Fever"
+    ]
+   ]
+  }
+ ]
+}

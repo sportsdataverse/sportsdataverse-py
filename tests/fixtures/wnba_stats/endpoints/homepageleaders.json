@@ -1,0 +1,104 @@
+{
+ "resource": "homepageleaders",
+ "parameters": {
+  "LeagueID": "10",
+  "Season": "2024",
+  "SeasonType": "Regular Season",
+  "GameScope": "Season",
+  "PlayerScope": "All Players",
+  "PlayerOrTeam": "Team",
+  "StatCategory": "Points"
+ },
+ "resultSets": [
+  {
+   "name": "HomePageLeaders",
+   "headers": [
+    "RANK",
+    "TEAM_ID",
+    "TEAM_NAME",
+    "TEAM_ABBREVIATION",
+    "PTS",
+    "FG_PCT",
+    "FG3_PCT",
+    "FT_PCT",
+    "EFG_PCT",
+    "TS_PCT",
+    "PTS_PER48"
+   ],
+   "rowSet": [
+    [
+     1,
+     1611661319,
+     "Las Vegas Aces",
+     "LVA",
+     86.4,
+     0.454,
+     0.355,
+     0.828,
+     0.523,
+     0.567,
+     103.3
+    ],
+    [
+     2,
+     1611661313,
+     "New York Liberty",
+     "NYL",
+     85.6,
+     0.448,
+     0.349,
+     0.814,
+     0.521,
+     0.561,
+     102.7
+    ]
+   ]
+  },
+  {
+   "name": "LeagueAverage",
+   "headers": [
+    "PTS",
+    "FG_PCT",
+    "FG3_PCT",
+    "FT_PCT",
+    "EFG_PCT",
+    "TS_PCT",
+    "PTS_PER48"
+   ],
+   "rowSet": [
+    [
+     81.7,
+     0.438,
+     0.335,
+     0.786,
+     0.495,
+     0.536,
+     97.5
+    ]
+   ]
+  },
+  {
+   "name": "LeagueMax",
+   "headers": [
+    "PTS",
+    "FG_PCT",
+    "FG3_PCT",
+    "FT_PCT",
+    "EFG_PCT",
+    "TS_PCT",
+    "PTS_PER48"
+   ],
+   "rowSet": [
+    [
+     86.4,
+     0.456,
+     0.38,
+     0.84,
+     0.523,
+     0.567,
+     103.3
+    ]
+   ]
+  }
+ ]
+}

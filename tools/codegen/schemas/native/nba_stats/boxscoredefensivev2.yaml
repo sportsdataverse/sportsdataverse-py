@@ -1,90 +1,127 @@
-columns:
-- description: ''
-  name: blocks
-  type: integer
-- description: ''
-  name: comment
-  type: character
-- description: ''
-  name: defensiverebounds
-  type: integer
-- description: ''
-  name: familyname
-  type: character
-- description: ''
-  name: firstname
-  type: character
-- description: ''
-  name: gameid
-  type: character
-- description: ''
-  name: jerseynum
-  type: character
-- description: ''
-  name: matchupassists
-  type: integer
-- description: ''
-  name: matchupfieldgoalpercentage
-  type: numeric
-- description: ''
-  name: matchupfieldgoalsattempted
-  type: integer
-- description: ''
-  name: matchupfieldgoalsmade
-  type: integer
-- description: ''
-  name: matchupminutes
-  type: character
-- description: ''
-  name: matchupthreepointerpercentage
-  type: numeric
-- description: ''
-  name: matchupthreepointersattempted
-  type: integer
-- description: ''
-  name: matchupthreepointersmade
-  type: integer
-- description: ''
-  name: matchupturnovers
-  type: integer
-- description: ''
-  name: namei
-  type: character
-- description: ''
-  name: partialpossessions
-  type: numeric
-- description: ''
-  name: personid
-  type: integer
-- description: ''
-  name: playerpoints
-  type: integer
-- description: ''
-  name: playerslug
-  type: character
-- description: ''
-  name: position
-  type: character
-- description: ''
-  name: steals
-  type: integer
-- description: ''
-  name: switcheson
-  type: integer
-- description: ''
-  name: teamcity
-  type: character
-- description: ''
-  name: teamid
-  type: integer
-- description: ''
-  name: teamname
-  type: character
-- description: ''
-  name: teamslug
-  type: character
-- description: ''
-  name: teamtricode
-  type: character
-kind: dataframe
+frames:
+- columns:
+  - description: ''
+    name: game_id
+    type: character
+  - description: ''
+    name: away_team_id
+    type: integer
+  - description: ''
+    name: home_team_id
+    type: integer
+  - description: ''
+    name: team_id
+    type: integer
+  - description: ''
+    name: team_city
+    type: character
+  - description: ''
+    name: team_name
+    type: character
+  - description: ''
+    name: team_tricode
+    type: character
+  - description: ''
+    name: team_slug
+    type: character
+  - description: ''
+    name: person_id
+    type: integer
+  - description: ''
+    name: first_name
+    type: character
+  - description: ''
+    name: family_name
+    type: character
+  - description: ''
+    name: name_i
+    type: character
+  - description: ''
+    name: player_slug
+    type: character
+  - description: ''
+    name: position
+    type: character
+  - description: ''
+    name: comment
+    type: character
+  - description: ''
+    name: jersey_num
+    type: character
+  - description: ''
+    name: matchup_minutes
+    type: character
+  - description: ''
+    name: partial_possessions
+    type: numeric
+  - description: ''
+    name: switches_on
+    type: integer
+  - description: ''
+    name: player_points
+    type: integer
+  - description: ''
+    name: defensive_rebounds
+    type: integer
+  - description: ''
+    name: matchup_assists
+    type: integer
+  - description: ''
+    name: matchup_turnovers
+    type: integer
+  - description: ''
+    name: steals
+    type: integer
+  - description: ''
+    name: blocks
+    type: integer
+  - description: ''
+    name: matchup_field_goals_made
+    type: integer
+  - description: ''
+    name: matchup_field_goals_attempted
+    type: integer
+  - description: ''
+    name: matchup_field_goal_percentage
+    type: numeric
+  - description: ''
+    name: matchup_three_pointers_made
+    type: integer
+  - description: ''
+    name: matchup_three_pointers_attempted
+    type: integer
+  - description: ''
+    name: matchup_three_pointer_percentage
+    type: numeric
+  section: PlayerStats
+- columns:
+  - description: ''
+    name: game_id
+    type: character
+  - description: ''
+    name: away_team_id
+    type: integer
+  - description: ''
+    name: home_team_id
+    type: integer
+  - description: ''
+    name: team_id
+    type: integer
+  - description: ''
+    name: team_city
+    type: character
+  - description: ''
+    name: team_name
+    type: character
+  - description: ''
+    name: team_tricode
+    type: character
+  - description: ''
+    name: team_slug
+    type: character
+  - description: ''
+    name: minutes
+    type: character
+  section: TeamStats
+kind: frames
 schema: boxscoredefensivev2

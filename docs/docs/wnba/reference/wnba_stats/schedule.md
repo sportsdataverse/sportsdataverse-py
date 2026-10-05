@@ -1,7 +1,7 @@
 ---
 title: "WNBA — WNBA Stats API (stats.wnba.com) — Schedule"
 sidebar_label: "Schedule"
-sidebar_position: 9
+sidebar_position: 16
 description: "WNBA — WNBA Stats API (stats.wnba.com) — Schedule — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---
@@ -65,7 +65,7 @@ GET /stats/scheduleleaguev2
 | `home_team_time` | character | Scheduled tip-off in the home team's local time zone. |
 | `home_team_tricode` | character | Three-letter abbreviation of the home team. |
 | `home_team_wins` | integer | Home team's wins entering the game. |
-| `if_necessary` | character | Whether the game is a conditional series game that may not be played. |
+| `if_necessary` | logical | Whether the game is a conditional series game that may not be played. |
 | `is_neutral` | logical | Whether the game is played at a neutral site. |
 | `league_id` | character | League id of the schedule: '00' NBA, '10' WNBA, '20' G-League. |
 | `month_num` | integer | Calendar month number of the game date. |

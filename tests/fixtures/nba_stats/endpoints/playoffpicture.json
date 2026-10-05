@@ -1,0 +1,327 @@
+{
+ "resource": "playoffpicture",
+ "parameters": {
+  "LeagueID": "00",
+  "SeasonID": "22023"
+ },
+ "resultSets": [
+  {
+   "name": "EastConfPlayoffPicture",
+   "headers": [
+    "CONFERENCE",
+    "HIGH_SEED_RANK",
+    "HIGH_SEED_TEAM",
+    "HIGH_SEED_TEAM_ID",
+    "LOW_SEED_RANK",
+    "LOW_SEED_TEAM",
+    "LOW_SEED_TEAM_ID",
+    "HIGH_SEED_SERIES_W",
+    "HIGH_SEED_SERIES_L",
+    "HIGH_SEED_SERIES_REMAINING_G",
+    "HIGH_SEED_SERIES_REMAINING_HOME_G",
+    "HIGH_SEED_SERIES_REMAINING_AWAY_G"
+   ],
+   "rowSet": [
+    [
+     "East",
+     1,
+     "Boston",
+     1610612738,
+     8,
+     "Miami",
+     1610612748,
+     3,
+     0,
+     0,
+     0,
+     0
+    ],
+    [
+     "East",
+     2,
+     "New York",
+     1610612752,
+     7,
+     "Philadelphia",
+     1610612755,
+     3,
+     1,
+     0,
+     0,
+     0
+    ]
+   ]
+  },
+  {
+   "name": "WestConfPlayoffPicture",
+   "headers": [
+    "CONFERENCE",
+    "HIGH_SEED_RANK",
+    "HIGH_SEED_TEAM",
+    "HIGH_SEED_TEAM_ID",
+    "LOW_SEED_RANK",
+    "LOW_SEED_TEAM",
+    "LOW_SEED_TEAM_ID",
+    "HIGH_SEED_SERIES_W",
+    "HIGH_SEED_SERIES_L",
+    "HIGH_SEED_SERIES_REMAINING_G",
+    "HIGH_SEED_SERIES_REMAINING_HOME_G",
+    "HIGH_SEED_SERIES_REMAINING_AWAY_G"
+   ],
+   "rowSet": [
+    [
+     "West",
+     1,
+     "Oklahoma City",
+     1610612760,
+     8,
+     "L.A. Lakers",
+     1610612747,
+     1,
+     3,
+     0,
+     0,
+     0
+    ],
+    [
+     "West",
+     2,
+     "Denver",
+     1610612743,
+     7,
+     "New Orleans",
+     1610612740,
+     2,
+     1,
+     0,
+     0,
+     0
+    ]
+   ]
+  },
+  {
+   "name": "EastConfStandings",
+   "headers": [
+    "CONFERENCE",
+    "RANK",
+    "TEAM",
+    "TEAM_SLUG",
+    "TEAM_ID",
+    "WINS",
+    "LOSSES",
+    "PCT",
+    "DIV",
+    "CONF",
+    "HOME",
+    "AWAY",
+    "GB",
+    "GR_OVER_500",
+    "GR_OVER_500_HOME",
+    "GR_OVER_500_AWAY",
+    "GR_UNDER_500",
+    "GR_UNDER_500_HOME",
+    "GR_UNDER_500_AWAY",
+    "RANKING_CRITERIA",
+    "CLINCHED_PLAYOFFS",
+    "CLINCHED_CONFERENCE",
+    "CLINCHED_DIVISION",
+    "ELIMINATED_PLAYOFFS",
+    "SOSA_REMAINING"
+   ],
+   "rowSet": [
+    [
+     "East",
+     1,
+     "Boston",
+     "celtics",
+     1610612738,
+     64,
+     18,
+     0.78,
+     "15-2",
+     "41-11",
+     "37-4",
+     "27-14",
+     0.0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     1,
+     1,
+     1,
+     0,
+     null
+    ],
+    [
+     "East",
+     2,
+     "New York",
+     "knicks",
+     1610612752,
+     50,
+     32,
+     0.61,
+     "12-5",
+     "35-17",
+     "27-14",
+     "23-18",
+     14.0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     0,
+     0,
+     null
+    ]
+   ]
+  },
+  {
+   "name": "WestConfStandings",
+   "headers": [
+    "CONFERENCE",
+    "RANK",
+    "TEAM",
+    "TEAM_SLUG",
+    "TEAM_ID",
+    "WINS",
+    "LOSSES",
+    "PCT",
+    "DIV",
+    "CONF",
+    "HOME",
+    "AWAY",
+    "GB",
+    "GR_OVER_500",
+    "GR_OVER_500_HOME",
+    "GR_OVER_500_AWAY",
+    "GR_UNDER_500",
+    "GR_UNDER_500_HOME",
+    "GR_UNDER_500_AWAY",
+    "RANKING_CRITERIA",
+    "CLINCHED_PLAYOFFS",
+    "CLINCHED_CONFERENCE",
+    "CLINCHED_DIVISION",
+    "ELIMINATED_PLAYOFFS",
+    "SOSA_REMAINING"
+   ],
+   "rowSet": [
+    [
+     "West",
+     1,
+     "Oklahoma City",
+     "thunder",
+     1610612760,
+     57,
+     25,
+     0.695,
+     "12-4",
+     "36-16",
+     "33-8",
+     "24-17",
+     0.0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     1,
+     1,
+     1,
+     1,
+     0,
+     null
+    ],
+    [
+     "West",
+     2,
+     "Denver",
+     "nuggets",
+     1610612743,
+     57,
+     25,
+     0.695,
+     "10-6",
+     "33-19",
+     "33-8",
+     "24-17",
+     0.0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     1,
+     0,
+     0,
+     0,
+     null
+    ]
+   ]
+  },
+  {
+   "name": "EastConfRemainingGames",
+   "headers": [
+    "TEAM",
+    "TEAM_ID",
+    "REMAINING_G",
+    "REMAINING_HOME_G",
+    "REMAINING_AWAY_G"
+   ],
+   "rowSet": [
+    [
+     "Atlanta",
+     1610612737,
+     0,
+     0,
+     0
+    ],
+    [
+     "Boston",
+     1610612738,
+     0,
+     0,
+     0
+    ]
+   ]
+  },
+  {
+   "name": "WestConfRemainingGames",
+   "headers": [
+    "TEAM",
+    "TEAM_ID",
+    "REMAINING_G",
+    "REMAINING_HOME_G",
+    "REMAINING_AWAY_G"
+   ],
+   "rowSet": [
+    [
+     "Dallas",
+     1610612742,
+     0,
+     0,
+     0
+    ],
+    [
+     "Denver",
+     1610612743,
+     0,
+     0,
+     0
+    ]
+   ]
+  }
+ ]
+}

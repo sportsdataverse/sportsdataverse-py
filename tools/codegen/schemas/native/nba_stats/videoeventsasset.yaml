@@ -1,42 +1,97 @@
-columns:
-- description: ''
-  name: uuid
-  type: character
-- description: ''
-  name: sdur
-  type: integer
-- description: ''
-  name: surl
-  type: character
-- description: ''
-  name: sth
-  type: character
-- description: ''
-  name: mdur
-  type: integer
-- description: ''
-  name: murl
-  type: character
-- description: ''
-  name: mth
-  type: character
-- description: ''
-  name: ldur
-  type: integer
-- description: ''
-  name: lurl
-  type: character
-- description: ''
-  name: lth
-  type: character
-- description: ''
-  name: vtt
-  type: character
-- description: ''
-  name: scc
-  type: character
-- description: ''
-  name: srt
-  type: character
-kind: dataframe
+frames:
+- columns:
+  - description: ''
+    name: uuid
+    type: character
+  - description: ''
+    name: sdur
+    type: integer
+  - description: ''
+    name: surl
+    type: character
+  - description: ''
+    name: sth
+    type: character
+  - description: ''
+    name: mdur
+    type: integer
+  - description: ''
+    name: murl
+    type: character
+  - description: ''
+    name: mth
+    type: character
+  - description: ''
+    name: ldur
+    type: integer
+  - description: ''
+    name: lurl
+    type: character
+  - description: ''
+    name: lth
+    type: character
+  - description: ''
+    name: vtt
+    type: character
+  - description: ''
+    name: scc
+    type: character
+  - description: ''
+    name: srt
+    type: character
+  section: videoUrls
+- columns:
+  - description: ''
+    name: gi
+    type: character
+  - description: ''
+    name: ei
+    type: integer
+  - description: ''
+    name: y
+    type: integer
+  - description: ''
+    name: m
+    type: character
+  - description: ''
+    name: d
+    type: character
+  - description: ''
+    name: gc
+    type: character
+  - description: ''
+    name: p
+    type: integer
+  - description: ''
+    name: dsc
+    type: character
+  - description: ''
+    name: ha
+    type: character
+  - description: ''
+    name: hid
+    type: integer
+  - description: ''
+    name: va
+    type: character
+  - description: ''
+    name: vid
+    type: integer
+  - description: ''
+    name: hpb
+    type: integer
+  - description: ''
+    name: hpa
+    type: integer
+  - description: ''
+    name: vpb
+    type: integer
+  - description: ''
+    name: vpa
+    type: integer
+  - description: ''
+    name: pta
+    type: integer
+  section: playlist
+kind: frames
 schema: videoeventsasset

@@ -1,72 +1,300 @@
-columns:
-- description: ''
-  name: game_date_est
-  type: character
-- description: ''
-  name: game_sequence
-  type: integer
-- description: ''
-  name: game_id
-  type: character
-- description: ''
-  name: team_id
-  type: integer
-- description: ''
-  name: team_abbreviation
-  type: character
-- description: ''
-  name: team_city_name
-  type: character
-- description: ''
-  name: team_nickname
-  type: character
-- description: ''
-  name: team_wins_losses
-  type: character
-- description: ''
-  name: pts_qtr1
-  type: integer
-- description: ''
-  name: pts_qtr2
-  type: integer
-- description: ''
-  name: pts_qtr3
-  type: integer
-- description: ''
-  name: pts_qtr4
-  type: integer
-- description: ''
-  name: pts_ot1
-  type: integer
-- description: ''
-  name: pts_ot2
-  type: integer
-- description: ''
-  name: pts_ot3
-  type: integer
-- description: ''
-  name: pts_ot4
-  type: integer
-- description: ''
-  name: pts_ot5
-  type: integer
-- description: ''
-  name: pts_ot6
-  type: integer
-- description: ''
-  name: pts_ot7
-  type: integer
-- description: ''
-  name: pts_ot8
-  type: integer
-- description: ''
-  name: pts_ot9
-  type: integer
-- description: ''
-  name: pts_ot10
-  type: integer
-- description: ''
-  name: pts
-  type: integer
-kind: dataframe
+frames:
+- columns:
+  - description: ''
+    name: game_date_est
+    type: character
+  - description: ''
+    name: game_sequence
+    type: integer
+  - description: ''
+    name: game_id
+    type: character
+  - description: ''
+    name: game_status_id
+    type: integer
+  - description: ''
+    name: game_status_text
+    type: character
+  - description: ''
+    name: gamecode
+    type: character
+  - description: ''
+    name: home_team_id
+    type: integer
+  - description: ''
+    name: visitor_team_id
+    type: integer
+  - description: ''
+    name: season
+    type: character
+  - description: ''
+    name: live_period
+    type: integer
+  - description: ''
+    name: live_pc_time
+    type: character
+  - description: ''
+    name: natl_tv_broadcaster_abbreviation
+    type: character
+  - description: ''
+    name: live_period_time_bcast
+    type: character
+  - description: ''
+    name: wh_status
+    type: integer
+  section: GameSummary
+- columns:
+  - description: ''
+    name: league_id
+    type: character
+  - description: ''
+    name: team_id
+    type: integer
+  - description: ''
+    name: team_abbreviation
+    type: character
+  - description: ''
+    name: team_city
+    type: character
+  - description: ''
+    name: pts_paint
+    type: integer
+  - description: ''
+    name: pts_2_nd_chance
+    type: integer
+  - description: ''
+    name: pts_fb
+    type: integer
+  - description: ''
+    name: largest_lead
+    type: integer
+  - description: ''
+    name: lead_changes
+    type: integer
+  - description: ''
+    name: times_tied
+    type: integer
+  - description: ''
+    name: team_turnovers
+    type: integer
+  - description: ''
+    name: total_turnovers
+    type: integer
+  - description: ''
+    name: team_rebounds
+    type: integer
+  - description: ''
+    name: pts_off_to
+    type: integer
+  section: OtherStats
+- columns:
+  - description: ''
+    name: official_id
+    type: integer
+  - description: ''
+    name: first_name
+    type: character
+  - description: ''
+    name: last_name
+    type: character
+  - description: ''
+    name: jersey_num
+    type: character
+  section: Officials
+- columns:
+  - description: ''
+    name: player_id
+    type: integer
+  - description: ''
+    name: first_name
+    type: character
+  - description: ''
+    name: last_name
+    type: character
+  - description: ''
+    name: jersey_num
+    type: character
+  - description: ''
+    name: team_id
+    type: integer
+  - description: ''
+    name: team_city
+    type: character
+  - description: ''
+    name: team_name
+    type: character
+  - description: ''
+    name: team_abbreviation
+    type: character
+  section: InactivePlayers
+- columns:
+  - description: ''
+    name: game_date
+    type: character
+  - description: ''
+    name: attendance
+    type: integer
+  - description: ''
+    name: game_time
+    type: character
+  section: GameInfo
+- columns:
+  - description: ''
+    name: game_date_est
+    type: character
+  - description: ''
+    name: game_sequence
+    type: integer
+  - description: ''
+    name: game_id
+    type: character
+  - description: ''
+    name: team_id
+    type: integer
+  - description: ''
+    name: team_abbreviation
+    type: character
+  - description: ''
+    name: team_city_name
+    type: character
+  - description: ''
+    name: team_nickname
+    type: character
+  - description: ''
+    name: team_wins_losses
+    type: character
+  - description: ''
+    name: pts_qtr1
+    type: integer
+  - description: ''
+    name: pts_qtr2
+    type: integer
+  - description: ''
+    name: pts_qtr3
+    type: integer
+  - description: ''
+    name: pts_qtr4
+    type: integer
+  - description: ''
+    name: pts_ot1
+    type: integer
+  - description: ''
+    name: pts_ot2
+    type: integer
+  - description: ''
+    name: pts_ot3
+    type: integer
+  - description: ''
+    name: pts_ot4
+    type: integer
+  - description: ''
+    name: pts_ot5
+    type: integer
+  - description: ''
+    name: pts_ot6
+    type: integer
+  - description: ''
+    name: pts_ot7
+    type: integer
+  - description: ''
+    name: pts_ot8
+    type: integer
+  - description: ''
+    name: pts_ot9
+    type: integer
+  - description: ''
+    name: pts_ot10
+    type: integer
+  - description: ''
+    name: pts
+    type: integer
+  section: LineScore
+- columns:
+  - description: ''
+    name: game_id
+    type: character
+  - description: ''
+    name: last_game_id
+    type: character
+  - description: ''
+    name: last_game_date_est
+    type: character
+  - description: ''
+    name: last_game_home_team_id
+    type: integer
+  - description: ''
+    name: last_game_home_team_city
+    type: character
+  - description: ''
+    name: last_game_home_team_name
+    type: character
+  - description: ''
+    name: last_game_home_team_abbreviation
+    type: character
+  - description: ''
+    name: last_game_home_team_points
+    type: integer
+  - description: ''
+    name: last_game_visitor_team_id
+    type: integer
+  - description: ''
+    name: last_game_visitor_team_city
+    type: character
+  - description: ''
+    name: last_game_visitor_team_name
+    type: character
+  - description: ''
+    name: last_game_visitor_team_city1
+    type: character
+  - description: ''
+    name: last_game_visitor_team_points
+    type: integer
+  section: LastMeeting
+- columns:
+  - description: ''
+    name: game_id
+    type: character
+  - description: ''
+    name: home_team_id
+    type: integer
+  - description: ''
+    name: visitor_team_id
+    type: integer
+  - description: ''
+    name: game_date_est
+    type: character
+  - description: ''
+    name: home_team_wins
+    type: integer
+  - description: ''
+    name: home_team_losses
+    type: integer
+  - description: ''
+    name: series_leader
+    type: character
+  section: SeasonSeries
+- columns:
+  - description: ''
+    name: game_id
+    type: character
+  - description: ''
+    name: video_available_flag
+    type: integer
+  - description: ''
+    name: pt_available
+    type: integer
+  - description: ''
+    name: pt_xyz_available
+    type: integer
+  - description: ''
+    name: wh_status
+    type: integer
+  - description: ''
+    name: hustle_status
+    type: integer
+  - description: ''
+    name: historical_status
+    type: integer
+  section: AvailableVideo
+kind: frames
 schema: boxscoresummaryv2

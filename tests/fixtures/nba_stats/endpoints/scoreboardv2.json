@@ -1,0 +1,427 @@
+{
+ "resource": "scoreboardV2",
+ "parameters": {
+  "GameDate": "2025-01-15",
+  "LeagueID": "00",
+  "DayOffset": "0"
+ },
+ "resultSets": [
+  {
+   "name": "GameHeader",
+   "headers": [
+    "GAME_DATE_EST",
+    "GAME_SEQUENCE",
+    "GAME_ID",
+    "GAME_STATUS_ID",
+    "GAME_STATUS_TEXT",
+    "GAMECODE",
+    "HOME_TEAM_ID",
+    "VISITOR_TEAM_ID",
+    "SEASON",
+    "LIVE_PERIOD",
+    "LIVE_PC_TIME",
+    "NATL_TV_BROADCASTER_ABBREVIATION",
+    "HOME_TV_BROADCASTER_ABBREVIATION",
+    "AWAY_TV_BROADCASTER_ABBREVIATION",
+    "LIVE_PERIOD_TIME_BCAST",
+    "ARENA_NAME",
+    "WH_STATUS",
+    "WNBA_COMMISSIONER_FLAG"
+   ],
+   "rowSet": [
+    [
+     "2025-01-15T00:00:00",
+     1,
+     "0022400561",
+     3,
+     "Final",
+     "20250115/NYKPHI",
+     1610612755,
+     1610612752,
+     "2024",
+     5,
+     "     ",
+     "ESPN",
+     "NBCSP",
+     "MSG",
+     "Q5       - ESPN",
+     "Wells Fargo Center",
+     1,
+     0
+    ],
+    [
+     "2025-01-15T00:00:00",
+     2,
+     "0022400562",
+     3,
+     "Final",
+     "20250115/BOSTOR",
+     1610612761,
+     1610612738,
+     "2024",
+     4,
+     "     ",
+     null,
+     "SN",
+     "NBCSB",
+     "Q4       - ",
+     "Scotiabank Arena",
+     1,
+     0
+    ]
+   ]
+  },
+  {
+   "name": "LineScore",
+   "headers": [
+    "GAME_DATE_EST",
+    "GAME_SEQUENCE",
+    "GAME_ID",
+    "TEAM_ID",
+    "TEAM_ABBREVIATION",
+    "TEAM_CITY_NAME",
+    "TEAM_NAME",
+    "TEAM_WINS_LOSSES",
+    "PTS_QTR1",
+    "PTS_QTR2",
+    "PTS_QTR3",
+    "PTS_QTR4",
+    "PTS_OT1",
+    "PTS_OT2",
+    "PTS_OT3",
+    "PTS_OT4",
+    "PTS_OT5",
+    "PTS_OT6",
+    "PTS_OT7",
+    "PTS_OT8",
+    "PTS_OT9",
+    "PTS_OT10",
+    "PTS",
+    "FG_PCT",
+    "FT_PCT",
+    "FG3_PCT",
+    "AST",
+    "REB",
+    "TOV"
+   ],
+   "rowSet": [
+    [
+     "2025-01-15T00:00:00",
+     1,
+     "0022400561",
+     1610612752,
+     "NYK",
+     "New York",
+     "Knicks",
+     "27-15",
+     30,
+     30,
+     25,
+     24,
+     16,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     125,
+     0.535,
+     0.708,
+     0.432,
+     28,
+     45,
+     13
+    ],
+    [
+     "2025-01-15T00:00:00",
+     1,
+     "0022400561",
+     1610612755,
+     "PHI",
+     "Philadelphia",
+     "76ers",
+     "15-24",
+     21,
+     26,
+     38,
+     24,
+     10,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     119,
+     0.5,
+     1.0,
+     0.371,
+     27,
+     35,
+     12
+    ]
+   ]
+  },
+  {
+   "name": "SeriesStandings",
+   "headers": [
+    "GAME_ID",
+    "HOME_TEAM_ID",
+    "VISITOR_TEAM_ID",
+    "GAME_DATE_EST",
+    "HOME_TEAM_WINS",
+    "HOME_TEAM_LOSSES",
+    "SERIES_LEADER"
+   ],
+   "rowSet": [
+    [
+     "0022400561",
+     1610612755,
+     1610612752,
+     "2025-01-15T00:00:00",
+     0,
+     4,
+     "New York"
+    ],
+    [
+     "0022400562",
+     1610612761,
+     1610612738,
+     "2025-01-15T00:00:00",
+     1,
+     3,
+     "Boston"
+    ]
+   ]
+  },
+  {
+   "name": "LastMeeting",
+   "headers": [
+    "GAME_ID",
+    "LAST_GAME_ID",
+    "LAST_GAME_DATE_EST",
+    "LAST_GAME_HOME_TEAM_ID",
+    "LAST_GAME_HOME_TEAM_CITY",
+    "LAST_GAME_HOME_TEAM_NAME",
+    "LAST_GAME_HOME_TEAM_ABBREVIATION",
+    "LAST_GAME_HOME_TEAM_POINTS",
+    "LAST_GAME_VISITOR_TEAM_ID",
+    "LAST_GAME_VISITOR_TEAM_CITY",
+    "LAST_GAME_VISITOR_TEAM_NAME",
+    "LAST_GAME_VISITOR_TEAM_CITY1",
+    "LAST_GAME_VISITOR_TEAM_POINTS"
+   ],
+   "rowSet": [
+    [
+     "0022400561",
+     "0022400004",
+     "2024-11-12T00:00:00",
+     1610612755,
+     "Philadelphia",
+     "76ers",
+     "PHI",
+     99,
+     1610612752,
+     "New York",
+     "Knicks",
+     "NYK",
+     111
+    ],
+    [
+     "0022400562",
+     "0022400449",
+     "2024-12-31T00:00:00",
+     1610612761,
+     "Toronto",
+     "Raptors",
+     "TOR",
+     71,
+     1610612738,
+     "Boston",
+     "Celtics",
+     "BOS",
+     125
+    ]
+   ]
+  },
+  {
+   "name": "EastConfStandingsByDay",
+   "headers": [
+    "TEAM_ID",
+    "LEAGUE_ID",
+    "SEASON_ID",
+    "STANDINGSDATE",
+    "CONFERENCE",
+    "TEAM",
+    "G",
+    "W",
+    "L",
+    "W_PCT",
+    "HOME_RECORD",
+    "ROAD_RECORD"
+   ],
+   "rowSet": [
+    [
+     1610612739,
+     "00",
+     "22024",
+     "2025-01-15",
+     "East",
+     "Cleveland",
+     39,
+     34,
+     5,
+     0.872,
+     "20-2",
+     "14-3"
+    ],
+    [
+     1610612738,
+     "00",
+     "22024",
+     "2025-01-15",
+     "East",
+     "Boston",
+     40,
+     28,
+     12,
+     0.7,
+     "14-7",
+     "14-5"
+    ]
+   ]
+  },
+  {
+   "name": "WestConfStandingsByDay",
+   "headers": [
+    "TEAM_ID",
+    "LEAGUE_ID",
+    "SEASON_ID",
+    "STANDINGSDATE",
+    "CONFERENCE",
+    "TEAM",
+    "G",
+    "W",
+    "L",
+    "W_PCT",
+    "HOME_RECORD",
+    "ROAD_RECORD"
+   ],
+   "rowSet": [
+    [
+     1610612760,
+     "00",
+     "22024",
+     "2025-01-15",
+     "West",
+     "Oklahoma City",
+     39,
+     33,
+     6,
+     0.846,
+     "16-2",
+     "16-4"
+    ],
+    [
+     1610612745,
+     "00",
+     "22024",
+     "2025-01-15",
+     "West",
+     "Houston",
+     39,
+     27,
+     12,
+     0.692,
+     "14-6",
+     "13-5"
+    ]
+   ]
+  },
+  {
+   "name": "Available",
+   "headers": [
+    "GAME_ID",
+    "PT_AVAILABLE"
+   ],
+   "rowSet": [
+    [
+     "0022400561",
+     0
+    ],
+    [
+     "0022400562",
+     0
+    ]
+   ]
+  },
+  {
+   "name": "TeamLeaders",
+   "headers": [
+    "GAME_ID",
+    "TEAM_ID",
+    "TEAM_CITY",
+    "TEAM_NICKNAME",
+    "TEAM_ABBREVIATION",
+    "PTS_PLAYER_ID",
+    "PTS_PLAYER_NAME",
+    "PTS",
+    "REB_PLAYER_ID",
+    "REB_PLAYER_NAME",
+    "REB",
+    "AST_PLAYER_ID",
+    "AST_PLAYER_NAME",
+    "AST"
+   ],
+   "rowSet": [
+    [
+     "0022400561",
+     1610612752,
+     "New York",
+     "Knicks",
+     "NYK",
+     1628973,
+     "Jalen Brunson",
+     38,
+     1628404,
+     "Josh Hart",
+     17,
+     1628404,
+     "Josh Hart",
+     12
+    ],
+    [
+     "0022400561",
+     1610612755,
+     "Philadelphia",
+     "76ers",
+     "PHI",
+     1630178,
+     "Tyrese Maxey",
+     33,
+     1626162,
+     "Kelly Oubre Jr.",
+     10,
+     202331,
+     "Paul George",
+     6
+    ]
+   ]
+  },
+  {
+   "name": "TicketLinks",
+   "headers": [
+    "GAME_ID",
+    "LEAG_TIX"
+   ],
+   "rowSet": []
+  }
+ ]
+}

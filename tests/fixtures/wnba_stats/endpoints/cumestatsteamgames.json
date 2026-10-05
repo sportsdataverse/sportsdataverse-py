@@ -1,0 +1,33 @@
+{
+ "resource": "cumestatsteamgames",
+ "parameters": {
+  "LeagueID": "10",
+  "SeasonID": "2023",
+  "SeasonType": "Regular Season",
+  "TeamID": 1611661319,
+  "Location": null,
+  "Outcome": null,
+  "VsTeamID": 1611661320,
+  "VsDivision": null,
+  "VsConference": null
+ },
+ "resultSets": [
+  {
+   "name": "CumeStatsTeamGames",
+   "headers": [
+    "MATCHUP",
+    "GAME_ID"
+   ],
+   "rowSet": [
+    [
+     "08/19/2023 Sparks at Aces",
+     "1022300188"
+    ],
+    [
+     "07/12/2023 Aces at Sparks",
+     "1022300119"
+    ]
+   ]
+  }
+ ]
+}

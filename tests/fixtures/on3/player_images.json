@@ -1,0 +1,54 @@
+{
+ "pagination": {
+  "count": 4,
+  "offset": 0,
+  "limit": 25,
+  "itemsPerPage": 25,
+  "currentPage": 1,
+  "pageCount": 1
+ },
+ "list": [
+  {
+   "key": 571348,
+   "domainOverride": null,
+   "domain": "on3static.com",
+   "sourceOverride": null,
+   "source": "/uploads/assets/348/571/571348.png",
+   "title": "player headshot",
+   "description": null,
+   "caption": null,
+   "category": null,
+   "altText": null,
+   "height": 176,
+   "width": 174,
+   "assetType": "Image",
+   "fileSystem": "s3",
+   "path": "/uploads/assets/348/571",
+   "type": "png",
+   "thumbnail": null,
+   "duration": 0,
+   "mimeType": "image/png"
+  },
+  {
+   "key": 468451,
+   "domainOverride": null,
+   "domain": "on3static.com",
+   "sourceOverride": null,
+   "source": "/uploads/assets/451/468/468451.PNG",
+   "title": "player headshot",
+   "description": null,
+   "caption": null,
+   "category": null,
+   "altText": null,
+   "height": 270,
+   "width": 180,
+   "assetType": "Image",
+   "fileSystem": "s3",
+   "path": "/uploads/assets/451/468",
+   "type": "PNG",
+   "thumbnail": null,
+   "duration": 0,
+   "mimeType": "image/webp"
+  }
+ ]
+}

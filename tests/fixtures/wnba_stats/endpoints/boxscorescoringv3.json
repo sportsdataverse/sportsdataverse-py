@@ -1,0 +1,178 @@
+{
+ "meta": {
+  "version": 1,
+  "request": "http://nba.cloud/games/1022600128/boxscorescoring?Format=json",
+  "time": "2026-06-29T01:55:43.5543Z"
+ },
+ "boxScoreScoring": {
+  "gameId": "1022600128",
+  "awayTeamId": 1611661317,
+  "homeTeamId": 1611661325,
+  "homeTeam": {
+   "teamId": 1611661325,
+   "teamCity": "Indiana",
+   "teamName": "Fever",
+   "teamTricode": "IND",
+   "teamSlug": "fever",
+   "players": [
+    {
+     "personId": 1631086,
+     "firstName": "Lexie",
+     "familyName": "Hull",
+     "nameI": "L. Hull",
+     "playerSlug": "lexie-hull",
+     "position": "F",
+     "comment": "",
+     "jerseyNum": "",
+     "statistics": {
+      "minutes": "24:29",
+      "percentageFieldGoalsAttempted2pt": 0.5,
+      "percentageFieldGoalsAttempted3pt": 0.5,
+      "percentagePoints2pt": 0.667,
+      "percentagePointsMidrange2pt": 0.222,
+      "percentagePoints3pt": 0.333,
+      "percentagePointsFastBreak": 0.0,
+      "percentagePointsFreeThrow": 0.0,
+      "percentagePointsOffTurnovers": 0.0,
+      "percentagePointsPaint": 0.444,
+      "percentageAssisted2pt": 1.0,
+      "percentageUnassisted2pt": 0.0,
+      "percentageAssisted3pt": 1.0,
+      "percentageUnassisted3pt": 0.0,
+      "percentageAssistedFGM": 1.0,
+      "percentageUnassistedFGM": 0.0
+     }
+    },
+    {
+     "personId": 1628881,
+     "firstName": "Monique",
+     "familyName": "Billings",
+     "nameI": "M. Billings",
+     "playerSlug": "monique-billings",
+     "position": "F",
+     "comment": "",
+     "jerseyNum": "",
+     "statistics": {
+      "minutes": "19:55",
+      "percentageFieldGoalsAttempted2pt": 1.0,
+      "percentageFieldGoalsAttempted3pt": 0.0,
+      "percentagePoints2pt": 0.5,
+      "percentagePointsMidrange2pt": 0.0,
+      "percentagePoints3pt": 0.0,
+      "percentagePointsFastBreak": 0.0,
+      "percentagePointsFreeThrow": 0.5,
+      "percentagePointsOffTurnovers": 0.0,
+      "percentagePointsPaint": 0.5,
+      "percentageAssisted2pt": 0.5,
+      "percentageUnassisted2pt": 0.5,
+      "percentageAssisted3pt": 0.0,
+      "percentageUnassisted3pt": 0.0,
+      "percentageAssistedFGM": 0.5,
+      "percentageUnassistedFGM": 0.5
+     }
+    }
+   ],
+   "statistics": {
+    "minutes": "200:00",
+    "percentageFieldGoalsAttempted2pt": 0.591,
+    "percentageFieldGoalsAttempted3pt": 0.409,
+    "percentagePoints2pt": 0.477,
+    "percentagePointsMidrange2pt": 0.037,
+    "percentagePoints3pt": 0.358,
+    "percentagePointsFastBreak": 0.037,
+    "percentagePointsFreeThrow": 0.165,
+    "percentagePointsOffTurnovers": 0.092,
+    "percentagePointsPaint": 0.44,
+    "percentageAssisted2pt": 0.808,
+    "percentageUnassisted2pt": 0.192,
+    "percentageAssisted3pt": 0.692,
+    "percentageUnassisted3pt": 0.308,
+    "percentageAssistedFGM": 0.769,
+    "percentageUnassistedFGM": 0.231
+   }
+  },
+  "awayTeam": {
+   "teamId": 1611661317,
+   "teamCity": "Phoenix",
+   "teamName": "Mercury",
+   "teamTricode": "PHX",
+   "teamSlug": "mercury",
+   "players": [
+    {
+     "personId": 1643493,
+     "firstName": "Noemie",
+     "familyName": "Brochant",
+     "nameI": "N. Brochant",
+     "playerSlug": "noemie-brochant",
+     "position": "F",
+     "comment": "",
+     "jerseyNum": "",
+     "statistics": {
+      "minutes": "33:06",
+      "percentageFieldGoalsAttempted2pt": 0.556,
+      "percentageFieldGoalsAttempted3pt": 0.444,
+      "percentagePoints2pt": 0.5,
+      "percentagePointsMidrange2pt": 0.167,
+      "percentagePoints3pt": 0.5,
+      "percentagePointsFastBreak": 0.583,
+      "percentagePointsFreeThrow": 0.0,
+      "percentagePointsOffTurnovers": 0.333,
+      "percentagePointsPaint": 0.333,
+      "percentageAssisted2pt": 0.0,
+      "percentageUnassisted2pt": 1.0,
+      "percentageAssisted3pt": 0.5,
+      "percentageUnassisted3pt": 0.5,
+      "percentageAssistedFGM": 0.2,
+      "percentageUnassistedFGM": 0.8
+     }
+    },
+    {
+     "personId": 201886,
+     "firstName": "DeWanna",
+     "familyName": "Bonner",
+     "nameI": "D. Bonner",
+     "playerSlug": "dewanna-bonner",
+     "position": "F",
+     "comment": "",
+     "jerseyNum": "",
+     "statistics": {
+      "minutes": "32:43",
+      "percentageFieldGoalsAttempted2pt": 0.455,
+      "percentageFieldGoalsAttempted3pt": 0.545,
+      "percentagePoints2pt": 0.462,
+      "percentagePointsMidrange2pt": 0.0,
+      "percentagePoints3pt": 0.462,
+      "percentagePointsFastBreak": 0.0,
+      "percentagePointsFreeThrow": 0.077,
+      "percentagePointsOffTurnovers": 0.231,
+      "percentagePointsPaint": 0.462,
+      "percentageAssisted2pt": 0.667,
+      "percentageUnassisted2pt": 0.333,
+      "percentageAssisted3pt": 1.0,
+      "percentageUnassisted3pt": 0.0,
+      "percentageAssistedFGM": 0.8,
+      "percentageUnassistedFGM": 0.2
+     }
+    }
+   ],
+   "statistics": {
+    "minutes": "200:00",
+    "percentageFieldGoalsAttempted2pt": 0.697,
+    "percentageFieldGoalsAttempted3pt": 0.303,
+    "percentagePoints2pt": 0.577,
+    "percentagePointsMidrange2pt": 0.108,
+    "percentagePoints3pt": 0.189,
+    "percentagePointsFastBreak": 0.153,
+    "percentagePointsFreeThrow": 0.234,
+    "percentagePointsOffTurnovers": 0.225,
+    "percentagePointsPaint": 0.468,
+    "percentageAssisted2pt": 0.469,
+    "percentageUnassisted2pt": 0.531,
+    "percentageAssisted3pt": 0.857,
+    "percentageUnassisted3pt": 0.143,
+    "percentageAssistedFGM": 0.538,
+    "percentageUnassistedFGM": 0.462
+   }
+  }
+ }
+}

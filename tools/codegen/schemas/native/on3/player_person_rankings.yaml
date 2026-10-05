@@ -7,7 +7,7 @@ columns:
   type: integer
 - description: ''
   name: rating
-  type: numeric
+  type: integer
 - description: ''
   name: state_rank
   type: integer
@@ -27,9 +27,6 @@ columns:
   name: stars
   type: integer
 - description: ''
-  name: change
-  type: character
-- description: ''
   name: consensus_rating
   type: numeric
 - description: ''
@@ -45,9 +42,6 @@ columns:
   name: consensus_stars
   type: integer
 - description: ''
-  name: consensus_change
-  type: character
-- description: ''
   name: strength
   type: integer
 - description: ''
@@ -55,6 +49,27 @@ columns:
   type: logical
 - description: ''
   name: ranking_type
+  type: character
+- description: ''
+  name: ranking_key_2
+  type: integer
+- description: ''
+  name: ranking_sport_key
+  type: integer
+- description: ''
+  name: ranking_sport_key_2
+  type: integer
+- description: ''
+  name: ranking_sport_name
+  type: character
+- description: ''
+  name: ranking_year
+  type: integer
+- description: ''
+  name: change_38
+  type: character
+- description: ''
+  name: consensus_change_41
   type: character
 kind: dataframe
 schema: player_person_rankings

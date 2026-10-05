@@ -314,6 +314,7 @@ datasets:
   # ... one block per SUMMARY_SECTION_PARSERS key
 ```
 
+- **`unverified: <reason>`** (optional, top level) — set by a generator when no committed real capture shows what the parser emits, so the names would be guesses. The schema then carries `columns: []`, and the reference docs render the reason as a one-line caveat in place of a table. Today `gen_on3.py` sets it for capture-less On3 endpoints, and `gen_nba_stats.py` for an endpoint whose capture the parser turns into no columns (`playbyplayv3`). `test_stats_on3_schemas_match_parser.py` asserts that every schema without the key matches the parser.
 - **Sharing:** specific parsers (`parse_scoreboard`, `parse_team_roster`) → one schema reused by every endpoint that uses them. Generic parsers (`parse_items`, `parse_single_entity`) → a per-endpoint schema (columns reflect that endpoint's payload).
 - **Bootstrapping (two sources, merged):**
   1. **Live/fixture introspection** — `extract.py --schemas` calls each parser (or flattens the raw JSON for parser-less endpoints) against a captured payload → emits `name` + inferred `type` for every column.

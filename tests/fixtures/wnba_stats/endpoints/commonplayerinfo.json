@@ -1,0 +1,125 @@
+{
+ "resource": "commonplayerinfo",
+ "parameters": [
+  {
+   "PlayerID": 203826
+  },
+  {
+   "LeagueID": "10"
+  }
+ ],
+ "resultSets": [
+  {
+   "name": "CommonPlayerInfo",
+   "headers": [
+    "PERSON_ID",
+    "FIRST_NAME",
+    "LAST_NAME",
+    "DISPLAY_FIRST_LAST",
+    "DISPLAY_LAST_COMMA_FIRST",
+    "DISPLAY_FI_LAST",
+    "PLAYER_SLUG",
+    "BIRTHDATE",
+    "SCHOOL",
+    "COUNTRY",
+    "LAST_AFFILIATION",
+    "HEIGHT",
+    "WEIGHT",
+    "SEASON_EXP",
+    "JERSEY",
+    "POSITION",
+    "ROSTERSTATUS",
+    "GAMES_PLAYED_CURRENT_SEASON_FLAG",
+    "TEAM_ID",
+    "TEAM_NAME",
+    "TEAM_ABBREVIATION",
+    "TEAM_CODE",
+    "TEAM_CITY",
+    "PLAYERCODE",
+    "FROM_YEAR",
+    "TO_YEAR",
+    "DLEAGUE_FLAG",
+    "NBA_FLAG",
+    "GAMES_PLAYED_FLAG",
+    "DRAFT_YEAR",
+    "DRAFT_ROUND",
+    "DRAFT_NUMBER",
+    "GREATEST_75_FLAG"
+   ],
+   "rowSet": [
+    [
+     203826,
+     "Alyssa",
+     "Thomas",
+     "Alyssa Thomas",
+     "Thomas, Alyssa",
+     "A. Thomas",
+     "alyssa-thomas",
+     "1992-04-12T00:00:00",
+     "Maryland",
+     "USA",
+     "Maryland/USA",
+     "6-2",
+     "203",
+     12,
+     "25",
+     "Forward",
+     "Active",
+     "Y",
+     1611661317,
+     "Mercury",
+     "PHX",
+     "mercury",
+     "Phoenix",
+     "alyssa_thomas",
+     2014,
+     2026,
+     "N",
+     "N",
+     "Y",
+     "2014",
+     "1",
+     "4",
+     "N"
+    ]
+   ]
+  },
+  {
+   "name": "PlayerHeadlineStats",
+   "headers": [
+    "PLAYER_ID",
+    "PLAYER_NAME",
+    "TimeFrame",
+    "PTS",
+    "AST",
+    "REB",
+    "PIE"
+   ],
+   "rowSet": [
+    [
+     203826,
+     "Alyssa Thomas",
+     "2026",
+     14.7,
+     8.4,
+     6.6,
+     0
+    ]
+   ]
+  },
+  {
+   "name": "AvailableSeasons",
+   "headers": [
+    "SEASON_ID"
+   ],
+   "rowSet": [
+    [
+     "12014"
+    ],
+    [
+     "22014"
+    ]
+   ]
+  }
+ ]
+}

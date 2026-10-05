@@ -4,6 +4,7 @@
 
 - [Unreleased](#unreleased)
   - [Added — ESPN NBA G League wrappers (`espn_nbagl_*`)](#added--espn-nba-g-league-wrappers-espn_nbagl_)
+  - [Fixed — nba_stats, wnba_stats and on3 return tables now match what the parsers return](#fixed--nba_stats-wnba_stats-and-on3-return-tables-now-match-what-the-parsers-return)
   - [Fixed — CFB scores ESPN marks but no text rule named, textless copies, untyped admin rows](#fixed--cfb-scores-espn-marks-but-no-text-rule-named-textless-copies-untyped-admin-rows)
   - [Fixed — CFB plays that end a half leave a possession worth nothing](#fixed--cfb-plays-that-end-a-half-leave-a-possession-worth-nothing)
   - [Fixed — CFB returned kickoffs end at the receiving team's first down](#fixed--cfb-returned-kickoffs-end-at-the-receiving-teams-first-down)
@@ -329,6 +330,30 @@ default) routes through the shared ESPN parsers. Before this, G League standings
 private `sportsdataverse._common_espn_parsers` and a hand-built URL. Offline tests drive the
 standings, teams, and scoreboard wrappers through real captured 2025-26 G League payloads;
 a gated live smoke test checks the teams and standings endpoints.
+
+### Fixed — nba_stats, wnba_stats and on3 return tables now match what the parsers return
+
+The reference-docs return tables for these families named columns from the stats-API catalog
+and the On3 OpenAPI spec, not from the parser output. Many of those names never appear in a
+parsed frame. The tables are now generated from the parser's output on a committed real
+capture of each endpoint.
+
+- **Renamed columns.** Examples: `fg3m` → `fg3_m`, `leagueid` → `league_id`,
+  `5-9_ft_fgm` → `5_9_ft_fgm`.
+- **Result sets.** 67 NBA and 63 WNBA endpoints return a dict of result sets. Their docs now
+  show every set, and their docstrings say they return a dict.
+- **On3 tables.** These show the flattened nested-object columns that `parse_on3_rdb` returns.
+- **On3 without a capture.** 48 On3 endpoints have no capture with rows. Each is marked
+  `unverified`, and its docs carry a one-line caveat in place of a table. The OpenAPI response
+  types were not used as a fallback: on the 9 endpoints where they could be checked against a
+  capture, their field names matched the parser on only 7.
+- **`nba_stats_playbyplayv3` / `wnba_stats_playbyplayv3`** are marked `unverified`. The generic
+  parser returns no columns for their `{meta, game}` payload.
+- **`on3_people_measurements`** shows a single `player_measurements` column. `parse_on3_rdb` does
+  not unwrap the `{playerMeasurements: [...]}` envelope, and the table documents what the parser
+  returns.
+
+Wrapper behaviour is unchanged.
 
 ### Fixed — CFB scores ESPN marks but no text rule named, textless copies, untyped admin rows
 

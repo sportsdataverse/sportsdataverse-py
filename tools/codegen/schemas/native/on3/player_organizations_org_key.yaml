@@ -1,24 +1,6 @@
-columns:
-- description: ''
-  name: organization
-  type: character
-- description: ''
-  name: rating
-  type: character
-- description: ''
-  name: position_abbr
-  type: character
-- description: ''
-  name: exp_min
-  type: integer
-- description: ''
-  name: exp_max
-  type: integer
-- description: ''
-  name: year
-  type: character
-- description: ''
-  name: age
-  type: integer
+columns: []
 kind: dataframe
 schema: player_organizations_org_key
+unverified: no committed capture with rows; names derived from the OpenAPI response
+  type matched parse_on3_rdb's output on only 7 of the 9 checkable endpoints, so none
+  are published

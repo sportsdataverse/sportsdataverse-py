@@ -1,0 +1,87 @@
+{
+ "resource": "commonallplayers",
+ "parameters": {
+  "LeagueID": "00",
+  "Season": "2023-24",
+  "IsOnlyCurrentSeason": 0
+ },
+ "resultSets": [
+  {
+   "name": "CommonAllPlayers",
+   "headers": [
+    "PERSON_ID",
+    "DISPLAY_LAST_COMMA_FIRST",
+    "DISPLAY_FIRST_LAST",
+    "ROSTERSTATUS",
+    "FROM_YEAR",
+    "TO_YEAR",
+    "PLAYERCODE",
+    "PLAYER_SLUG",
+    "TEAM_ID",
+    "TEAM_CITY",
+    "TEAM_NAME",
+    "TEAM_ABBREVIATION",
+    "TEAM_CODE",
+    "TEAM_SLUG",
+    "GAMES_PLAYED_FLAG",
+    "OTHERLEAGUE_EXPERIENCE_CH"
+   ],
+   "rowSet": [
+    [
+     76001,
+     "Abdelnaby, Alaa",
+     "Alaa Abdelnaby",
+     0,
+     "1990",
+     "1994",
+     "HISTADD_alaa_abdelnaby",
+     "alaa_abdelnaby",
+     0,
+     "",
+     "",
+     "",
+     "",
+     null,
+     "Y",
+     "00"
+    ],
+    [
+     76002,
+     "Abdul-Aziz, Zaid",
+     "Zaid Abdul-Aziz",
+     0,
+     "1968",
+     "1977",
+     "HISTADD_zaid_abdul-aziz",
+     "zaid_abdul-aziz",
+     0,
+     "",
+     "",
+     "",
+     "",
+     null,
+     "Y",
+     "00"
+    ],
+    [
+     1630173,
+     "Achiuwa, Precious",
+     "Precious Achiuwa",
+     1,
+     "2020",
+     "2026",
+     "precious_achiuwa",
+     "precious_achiuwa",
+     1610612752,
+     "New York",
+     "Knicks",
+     "NYK",
+     "knicks",
+     "knicks",
+     "Y",
+     "00"
+    ]
+   ]
+  }
+ ]
+}

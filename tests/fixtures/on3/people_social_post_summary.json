@@ -1,0 +1,22 @@
+{
+ "pagination": {
+  "count": 3,
+  "offset": 0,
+  "limit": 3,
+  "itemsPerPage": 3,
+  "currentPage": 1,
+  "pageCount": 1
+ },
+ "list": [
+  {
+   "socialType": "Instagram",
+   "type": "Instagram",
+   "followers": 13624
+  },
+  {
+   "socialType": "TikTok",
+   "type": "TikTok",
+   "followers": 1328
+  }
+ ]
+}

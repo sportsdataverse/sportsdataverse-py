@@ -12,13 +12,43 @@ columns:
   name: person_key
   type: integer
 - description: ''
-  name: person
-  type: character
-- description: ''
   name: date_added
   type: character
 - description: ''
   name: date_updated
+  type: character
+- description: ''
+  name: person_key_2
+  type: integer
+- description: ''
+  name: person_known_as_name
+  type: character
+- description: ''
+  name: person_first_name
+  type: character
+- description: ''
+  name: person_last_name
+  type: character
+- description: ''
+  name: person_twitter_handle
+  type: character
+- description: ''
+  name: person_instagram_profile
+  type: character
+- description: ''
+  name: person_tik_tok_handle
+  type: character
+- description: ''
+  name: person_espn_profile
+  type: character
+- description: ''
+  name: person_class_year
+  type: integer
+- description: ''
+  name: person_two_four_seven_profile
+  type: character
+- description: ''
+  name: person_rivals_profile
   type: character
 kind: dataframe
 schema: quotes

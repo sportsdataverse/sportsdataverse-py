@@ -3,9 +3,6 @@ columns:
   name: key
   type: integer
 - description: ''
-  name: person_key
-  type: integer
-- description: ''
   name: source_url
   type: character
 - description: ''
@@ -15,11 +12,14 @@ columns:
   name: thumbnail
   type: character
 - description: ''
-  name: category
-  type: character
-- description: ''
   name: description
   type: character
+- description: ''
+  name: date
+  type: integer
+- description: ''
+  name: person_key
+  type: integer
 - description: ''
   name: person_sport
   type: character
@@ -27,7 +27,13 @@ columns:
   name: is_featured
   type: logical
 - description: ''
-  name: date
+  name: featured_order
+  type: character
+- description: ''
+  name: category_key
   type: integer
+- description: ''
+  name: category_value
+  type: character
 kind: dataframe
 schema: player_videos

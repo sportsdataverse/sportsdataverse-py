@@ -1,0 +1,125 @@
+{
+ "resource": "commonplayerinfo",
+ "parameters": [
+  {
+   "PlayerID": 2544
+  },
+  {
+   "LeagueID": "00"
+  }
+ ],
+ "resultSets": [
+  {
+   "name": "CommonPlayerInfo",
+   "headers": [
+    "PERSON_ID",
+    "FIRST_NAME",
+    "LAST_NAME",
+    "DISPLAY_FIRST_LAST",
+    "DISPLAY_LAST_COMMA_FIRST",
+    "DISPLAY_FI_LAST",
+    "PLAYER_SLUG",
+    "BIRTHDATE",
+    "SCHOOL",
+    "COUNTRY",
+    "LAST_AFFILIATION",
+    "HEIGHT",
+    "WEIGHT",
+    "SEASON_EXP",
+    "JERSEY",
+    "POSITION",
+    "ROSTERSTATUS",
+    "GAMES_PLAYED_CURRENT_SEASON_FLAG",
+    "TEAM_ID",
+    "TEAM_NAME",
+    "TEAM_ABBREVIATION",
+    "TEAM_CODE",
+    "TEAM_CITY",
+    "PLAYERCODE",
+    "FROM_YEAR",
+    "TO_YEAR",
+    "DLEAGUE_FLAG",
+    "NBA_FLAG",
+    "GAMES_PLAYED_FLAG",
+    "DRAFT_YEAR",
+    "DRAFT_ROUND",
+    "DRAFT_NUMBER",
+    "GREATEST_75_FLAG"
+   ],
+   "rowSet": [
+    [
+     2544,
+     "LeBron",
+     "James",
+     "LeBron James",
+     "James, LeBron",
+     "L. James",
+     "lebron-james",
+     "1984-12-30T00:00:00",
+     "St. Vincent-St. Mary HS (OH)",
+     "USA",
+     "St. Vincent-St. Mary HS (OH)/USA",
+     "6-9",
+     "250",
+     23,
+     "23",
+     "Forward",
+     "Active",
+     "N",
+     1610612747,
+     "Lakers",
+     "LAL",
+     "lakers",
+     "Los Angeles",
+     "lebron_james",
+     2003,
+     2026,
+     "N",
+     "Y",
+     "Y",
+     "2003",
+     "1",
+     "1",
+     "Y"
+    ]
+   ]
+  },
+  {
+   "name": "PlayerHeadlineStats",
+   "headers": [
+    "PLAYER_ID",
+    "PLAYER_NAME",
+    "TimeFrame",
+    "PTS",
+    "AST",
+    "REB",
+    "PIE"
+   ],
+   "rowSet": [
+    [
+     2544,
+     "LeBron James",
+     "2025-26",
+     20.9,
+     7.2,
+     6.1,
+     0
+    ]
+   ]
+  },
+  {
+   "name": "AvailableSeasons",
+   "headers": [
+    "SEASON_ID"
+   ],
+   "rowSet": [
+    [
+     "12003"
+    ],
+    [
+     "22003"
+    ]
+   ]
+  }
+ ]
+}

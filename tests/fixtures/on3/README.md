@@ -28,6 +28,17 @@ Two families live here:
 | `player_profile.json` | `GET /public/rdb/v1/player/89617/profile` | RDB **single-object** envelope (`On3PlayerProfileLive`); 1 row |
 | `player_all_rankings.json` | `GET /public/rdb/v1/player/89617/all-rankings` | RDB **bare-array** envelope; 3 of 6 ranking rows |
 | `filters_status.json` | `GET /public/rdb/v1/filters/status` | RDB bare array of status strings |
+| every other `<short>.json` | the manifest row's URL | RDB capture of the same date, trimmed by `tools/codegen/vendor_captures.py` (rule in `../nba_stats/README.md`) |
+
+The returns-table schemas under `tools/codegen/schemas/native/on3/` are
+generated from what `parse_on3_rdb` emits on these files (`gen_on3.py`). An
+endpoint without a capture that has rows publishes no columns; its schema
+carries an `unverified` reason instead. The OpenAPI response types were not used
+as a fallback: on the 9 checkable endpoints, their field names matched the
+parser's output on only 7.
+
+The 31 non-legacy captures beyond the four listed above were copied from
+`sdv-internal-refs/on3/captures/_sample/` (commit `0d900c2`).
 
 Provenance notes:
 

@@ -1,0 +1,68 @@
+{
+ "resource": "drafthistory",
+ "parameters": {
+  "LeagueID": "10",
+  "Season": "2023",
+  "TeamID": 0,
+  "RoundNum": null,
+  "RoundPick": null,
+  "OverallPick": null,
+  "TopX": null,
+  "College": null
+ },
+ "resultSets": [
+  {
+   "name": "DraftHistory",
+   "headers": [
+    "PERSON_ID",
+    "PLAYER_NAME",
+    "SEASON",
+    "ROUND_NUMBER",
+    "ROUND_PICK",
+    "OVERALL_PICK",
+    "DRAFT_TYPE",
+    "TEAM_ID",
+    "TEAM_CITY",
+    "TEAM_NAME",
+    "TEAM_ABBREVIATION",
+    "ORGANIZATION",
+    "ORGANIZATION_TYPE",
+    "PLAYER_PROFILE_FLAG"
+   ],
+   "rowSet": [
+    [
+     1641648,
+     "Aliyah Boston",
+     "2023",
+     1,
+     1,
+     1,
+     "Draft",
+     1611661325,
+     "Indiana",
+     "Fever",
+     "IND",
+     "",
+     "",
+     1
+    ],
+    [
+     1641649,
+     "Diamond Miller",
+     "2023",
+     1,
+     2,
+     2,
+     "Draft",
+     1611661324,
+     "Minnesota",
+     "Lynx",
+     "MIN",
+     "",
+     "",
+     1
+    ]
+   ]
+  }
+ ]
+}

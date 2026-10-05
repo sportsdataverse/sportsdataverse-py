@@ -1,0 +1,67 @@
+{
+ "resource": "playerdashptshotdefend",
+ "parameters": {
+  "PerMode": "PerGame",
+  "LeagueID": "00",
+  "Season": "2023-24",
+  "SeasonType": "Regular Season",
+  "PlayerID": 2544,
+  "TeamID": 0,
+  "Outcome": null,
+  "Location": null,
+  "Month": 0,
+  "SeasonSegment": null,
+  "DateFrom": "",
+  "DateTo": "",
+  "OpponentTeamID": 0,
+  "VsConference": null,
+  "VsDivision": null,
+  "GameSegment": null,
+  "Period": 0,
+  "LastNGames": 0,
+  "ISTRound": null
+ },
+ "resultSets": [
+  {
+   "name": "DefendingShots",
+   "headers": [
+    "MATCHUPID",
+    "GP",
+    "G",
+    "DEFENSE_CATEGORY",
+    "FREQ",
+    "D_FGM",
+    "D_FGA",
+    "D_FG_PCT",
+    "NORMAL_FG_PCT",
+    "PCT_PLUSMINUS"
+   ],
+   "rowSet": [
+    [
+     2544,
+     70,
+     70,
+     "Overall",
+     1.0,
+     4.69,
+     10.14,
+     0.462,
+     0.48,
+     -0.019
+    ],
+    [
+     2544,
+     70,
+     70,
+     "Greater Than 15 Ft",
+     0.508,
+     1.91,
+     5.16,
+     0.371,
+     0.371,
+     0.0
+    ]
+   ]
+  }
+ ]
+}

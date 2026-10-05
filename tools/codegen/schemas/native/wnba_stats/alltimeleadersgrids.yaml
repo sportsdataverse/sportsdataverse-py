@@ -1,18 +1,326 @@
-columns:
-- description: ''
-  name: player_id
-  type: integer
-- description: ''
-  name: player_name
-  type: character
-- description: ''
-  name: tov
-  type: numeric
-- description: ''
-  name: tov_rank
-  type: integer
-- description: ''
-  name: is_active_flag
-  type: character
-kind: dataframe
+frames:
+- columns:
+  - description: ''
+    name: player_id
+    type: integer
+  - description: ''
+    name: player_name
+    type: character
+  - description: ''
+    name: gp
+    type: integer
+  - description: ''
+    name: gp_rank
+    type: integer
+  - description: ''
+    name: is_active_flag
+    type: character
+  section: GPLeaders
+- columns:
+  - description: ''
+    name: player_id
+    type: integer
+  - description: ''
+    name: player_name
+    type: character
+  - description: ''
+    name: pts
+    type: numeric
+  - description: ''
+    name: pts_rank
+    type: integer
+  - description: ''
+    name: is_active_flag
+    type: character
+  section: PTSLeaders
+- columns:
+  - description: ''
+    name: player_id
+    type: integer
+  - description: ''
+    name: player_name
+    type: character
+  - description: ''
+    name: ast
+    type: numeric
+  - description: ''
+    name: ast_rank
+    type: integer
+  - description: ''
+    name: is_active_flag
+    type: character
+  section: ASTLeaders
+- columns:
+  - description: ''
+    name: player_id
+    type: integer
+  - description: ''
+    name: player_name
+    type: character
+  - description: ''
+    name: stl
+    type: numeric
+  - description: ''
+    name: stl_rank
+    type: integer
+  - description: ''
+    name: is_active_flag
+    type: character
+  section: STLLeaders
+- columns:
+  - description: ''
+    name: player_id
+    type: integer
+  - description: ''
+    name: player_name
+    type: character
+  - description: ''
+    name: oreb
+    type: numeric
+  - description: ''
+    name: oreb_rank
+    type: integer
+  - description: ''
+    name: is_active_flag
+    type: character
+  section: OREBLeaders
+- columns:
+  - description: ''
+    name: player_id
+    type: integer
+  - description: ''
+    name: player_name
+    type: character
+  - description: ''
+    name: dreb
+    type: numeric
+  - description: ''
+    name: dreb_rank
+    type: integer
+  - description: ''
+    name: is_active_flag
+    type: character
+  section: DREBLeaders
+- columns:
+  - description: ''
+    name: player_id
+    type: integer
+  - description: ''
+    name: player_name
+    type: character
+  - description: ''
+    name: reb
+    type: numeric
+  - description: ''
+    name: reb_rank
+    type: integer
+  - description: ''
+    name: is_active_flag
+    type: character
+  section: REBLeaders
+- columns:
+  - description: ''
+    name: player_id
+    type: integer
+  - description: ''
+    name: player_name
+    type: character
+  - description: ''
+    name: blk
+    type: numeric
+  - description: ''
+    name: blk_rank
+    type: integer
+  - description: ''
+    name: is_active_flag
+    type: character
+  section: BLKLeaders
+- columns:
+  - description: ''
+    name: player_id
+    type: integer
+  - description: ''
+    name: player_name
+    type: character
+  - description: ''
+    name: fgm
+    type: numeric
+  - description: ''
+    name: fgm_rank
+    type: integer
+  - description: ''
+    name: is_active_flag
+    type: character
+  section: FGMLeaders
+- columns:
+  - description: ''
+    name: player_id
+    type: integer
+  - description: ''
+    name: player_name
+    type: character
+  - description: ''
+    name: fga
+    type: numeric
+  - description: ''
+    name: fga_rank
+    type: integer
+  - description: ''
+    name: is_active_flag
+    type: character
+  section: FGALeaders
+- columns:
+  - description: ''
+    name: player_id
+    type: integer
+  - description: ''
+    name: player_name
+    type: character
+  - description: ''
+    name: fg_pct
+    type: numeric
+  - description: ''
+    name: fg_pct_rank
+    type: integer
+  - description: ''
+    name: is_active_flag
+    type: character
+  section: FG_PCTLeaders
+- columns:
+  - description: ''
+    name: player_id
+    type: integer
+  - description: ''
+    name: player_name
+    type: character
+  - description: ''
+    name: tov
+    type: numeric
+  - description: ''
+    name: tov_rank
+    type: integer
+  - description: ''
+    name: is_active_flag
+    type: character
+  section: TOVLeaders
+- columns:
+  - description: ''
+    name: player_id
+    type: integer
+  - description: ''
+    name: player_name
+    type: character
+  - description: ''
+    name: fg3_m
+    type: numeric
+  - description: ''
+    name: fg3_m_rank
+    type: integer
+  - description: ''
+    name: is_active_flag
+    type: character
+  section: FG3MLeaders
+- columns:
+  - description: ''
+    name: player_id
+    type: integer
+  - description: ''
+    name: player_name
+    type: character
+  - description: ''
+    name: fg3_a
+    type: numeric
+  - description: ''
+    name: fg3_a_rank
+    type: integer
+  - description: ''
+    name: is_active_flag
+    type: character
+  section: FG3ALeaders
+- columns:
+  - description: ''
+    name: player_id
+    type: integer
+  - description: ''
+    name: player_name
+    type: character
+  - description: ''
+    name: fg3_pct
+    type: numeric
+  - description: ''
+    name: fg3_pct_rank
+    type: integer
+  - description: ''
+    name: is_active_flag
+    type: character
+  section: FG3_PCTLeaders
+- columns:
+  - description: ''
+    name: player_id
+    type: integer
+  - description: ''
+    name: player_name
+    type: character
+  - description: ''
+    name: pf
+    type: numeric
+  - description: ''
+    name: pf_rank
+    type: integer
+  - description: ''
+    name: is_active_flag
+    type: character
+  section: PFLeaders
+- columns:
+  - description: ''
+    name: player_id
+    type: integer
+  - description: ''
+    name: player_name
+    type: character
+  - description: ''
+    name: ftm
+    type: numeric
+  - description: ''
+    name: ftm_rank
+    type: integer
+  - description: ''
+    name: is_active_flag
+    type: character
+  section: FTMLeaders
+- columns:
+  - description: ''
+    name: player_id
+    type: integer
+  - description: ''
+    name: player_name
+    type: character
+  - description: ''
+    name: fta
+    type: numeric
+  - description: ''
+    name: fta_rank
+    type: integer
+  - description: ''
+    name: is_active_flag
+    type: character
+  section: FTALeaders
+- columns:
+  - description: ''
+    name: player_id
+    type: integer
+  - description: ''
+    name: player_name
+    type: character
+  - description: ''
+    name: ft_pct
+    type: numeric
+  - description: ''
+    name: ft_pct_rank
+    type: integer
+  - description: ''
+    name: is_active_flag
+    type: character
+  section: FT_PCTLeaders
+kind: frames
 schema: alltimeleadersgrids

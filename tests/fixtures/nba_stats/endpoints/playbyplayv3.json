@@ -1,0 +1,63 @@
+{
+ "meta": {
+  "version": 1,
+  "request": "http://nba.cloud/games/0022300061/playbyplay?Format=json",
+  "time": "2025-02-17T21:06:26.626Z"
+ },
+ "game": {
+  "gameId": "0022300061",
+  "videoAvailable": 1,
+  "actions": [
+   {
+    "actionNumber": 2,
+    "clock": "PT12M00.00S",
+    "period": 1,
+    "teamId": 0,
+    "teamTricode": "",
+    "personId": 0,
+    "playerName": "",
+    "playerNameI": "",
+    "xLegacy": 0,
+    "yLegacy": 0,
+    "shotDistance": 0,
+    "shotResult": "",
+    "isFieldGoal": 0,
+    "scoreHome": "0",
+    "scoreAway": "0",
+    "pointsTotal": 0,
+    "location": "",
+    "description": "Start of 1st Period (7:36 PM EST)",
+    "actionType": "period",
+    "subType": "start",
+    "videoAvailable": 0,
+    "shotValue": 0,
+    "actionId": 1
+   },
+   {
+    "actionNumber": 4,
+    "clock": "PT12M00.00S",
+    "period": 1,
+    "teamId": 1610612743,
+    "teamTricode": "DEN",
+    "personId": 203999,
+    "playerName": "Jokić",
+    "playerNameI": "N. Jokić",
+    "xLegacy": 0,
+    "yLegacy": 0,
+    "shotDistance": 0,
+    "shotResult": "",
+    "isFieldGoal": 0,
+    "scoreHome": "",
+    "scoreAway": "",
+    "pointsTotal": 0,
+    "location": "h",
+    "description": "Jump Ball Jokic vs. Davis: Tip to James",
+    "actionType": "Jump Ball",
+    "subType": "",
+    "videoAvailable": 1,
+    "shotValue": 0,
+    "actionId": 2
+   }
+  ]
+ }
+}

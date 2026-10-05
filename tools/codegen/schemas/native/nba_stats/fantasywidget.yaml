@@ -45,7 +45,7 @@ columns:
   name: tov
   type: numeric
 - description: ''
-  name: fg3m
+  name: fg3_m
   type: numeric
 - description: ''
   name: fga

@@ -24,10 +24,10 @@ columns:
   name: contested_shots
   type: numeric
 - description: ''
-  name: contested_shots_2pt
+  name: contested_shots_2_pt
   type: numeric
 - description: ''
-  name: contested_shots_3pt
+  name: contested_shots_3_pt
   type: numeric
 - description: ''
   name: deflections

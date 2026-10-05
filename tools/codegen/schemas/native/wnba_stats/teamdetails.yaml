@@ -1,36 +1,135 @@
-columns:
-- description: ''
-  name: team_id
-  type: integer
-- description: ''
-  name: abbreviation
-  type: character
-- description: ''
-  name: nickname
-  type: character
-- description: ''
-  name: yearfounded
-  type: integer
-- description: ''
-  name: city
-  type: character
-- description: ''
-  name: arena
-  type: character
-- description: ''
-  name: arenacapacity
-  type: character
-- description: ''
-  name: owner
-  type: character
-- description: ''
-  name: generalmanager
-  type: character
-- description: ''
-  name: headcoach
-  type: character
-- description: ''
-  name: dleagueaffiliation
-  type: character
-kind: dataframe
+frames:
+- columns:
+  - description: ''
+    name: team_id
+    type: integer
+  - description: ''
+    name: abbreviation
+    type: character
+  - description: ''
+    name: nickname
+    type: character
+  - description: ''
+    name: yearfounded
+    type: integer
+  - description: ''
+    name: city
+    type: character
+  - description: ''
+    name: arena
+    type: character
+  - description: ''
+    name: arenacapacity
+    type: character
+  - description: ''
+    name: owner
+    type: character
+  - description: ''
+    name: generalmanager
+    type: character
+  - description: ''
+    name: headcoach
+    type: character
+  - description: ''
+    name: dleagueaffiliation
+    type: character
+  section: TeamBackground
+- columns:
+  - description: ''
+    name: team_id
+    type: integer
+  - description: ''
+    name: city
+    type: character
+  - description: ''
+    name: nickname
+    type: character
+  - description: ''
+    name: yearfounded
+    type: integer
+  - description: ''
+    name: yearactivetill
+    type: integer
+  section: TeamHistory
+- columns:
+  - description: ''
+    name: accounttype
+    type: character
+  - description: ''
+    name: website_link
+    type: character
+  section: TeamSocialSites
+- columns:
+  - description: ''
+    name: yearawarded
+    type: integer
+  - description: ''
+    name: oppositeteam
+    type: character
+  section: TeamAwardsChampionships
+- columns:
+  - description: ''
+    name: yearawarded
+    type: integer
+  - description: ''
+    name: oppositeteam
+    type: character
+  section: TeamAwardsConf
+- columns:
+  - description: ''
+    name: yearawarded
+    type: integer
+  - description: ''
+    name: oppositeteam
+    type: character
+  section: TeamAwardsDiv
+- columns:
+  - description: ''
+    name: playerid
+    type: integer
+  - description: ''
+    name: player
+    type: character
+  - description: ''
+    name: position
+    type: character
+  - description: ''
+    name: jersey
+    type: character
+  - description: ''
+    name: seasonswithteam
+    type: character
+  - description: ''
+    name: year
+    type: integer
+  section: TeamHof
+- columns:
+  - description: ''
+    name: playerid
+    type: integer
+  - description: ''
+    name: player
+    type: character
+  - description: ''
+    name: position
+    type: character
+  - description: ''
+    name: jersey
+    type: character
+  - description: ''
+    name: seasonswithteam
+    type: character
+  - description: ''
+    name: year
+    type: integer
+  section: TeamRetired
+- columns:
+  - description: ''
+    name: yearawarded
+    type: integer
+  - description: ''
+    name: oppositeteam
+    type: character
+  section: TeamAwardsCommCup
+kind: frames
 schema: teamdetails

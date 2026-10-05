@@ -1,0 +1,46 @@
+{
+ "resource": "assisttracker",
+ "parameters": {
+  "PerMode": "PerGame",
+  "LeagueID": "10",
+  "Season": "2023",
+  "SeasonType": "Regular Season",
+  "PORound": null,
+  "Outcome": null,
+  "Location": null,
+  "Month": 0,
+  "SeasonSegment": null,
+  "DateFrom": "",
+  "DateTo": "",
+  "OpponentTeamID": 0,
+  "VsConference": null,
+  "VsDivision": null,
+  "TeamID": 0,
+  "Conference": null,
+  "Division": null,
+  "LastNGames": 0,
+  "GameScope": null,
+  "PlayerExperience": null,
+  "PlayerPosition": null,
+  "StarterBench": null,
+  "DraftYear": null,
+  "DraftPick": null,
+  "College": null,
+  "Country": null,
+  "Height": null,
+  "Weight": null
+ },
+ "resultSets": [
+  {
+   "name": "AssistTracker",
+   "headers": [
+    "ASSISTS"
+   ],
+   "rowSet": [
+    [
+     39.7
+    ]
+   ]
+  }
+ ]
+}

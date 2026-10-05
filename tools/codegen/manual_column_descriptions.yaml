@@ -649,6 +649,8 @@ _global:
   event_extended_display_name: Long-form event title used for marquee games, such as a bowl or rivalry name.
   event_group_id: Yahoo identifier that groups the rounds or legs making up a single tournament.
   external_id: Provider-side identifier for the media item, matching the play id it accompanies.
+  fg3_a: Three-point field goal attempts.
+  fg3_m: Three-point field goals made.
   field_position: Ball spot expressed on Yahoo's 0-100 field scale, measured toward the offense's target goal line.
   field_position_display_name: Ball spot rendered the way a scoreboard shows it (e.g., "MICH 35").
   first_play: JSON-encoded first play of the game or of the current period.
@@ -1684,56 +1686,56 @@ boxscoreadvancedv2:
   tm_tov_pct: Turnovers committed per 100 possessions.
   usg_pct: Percentage of team plays used while on the floor.
 boxscoreadvancedv3:
-  assistpercentage: Percentage of teammate field goals assisted while on the floor, as a decimal.
-  assistratio: Assists per 100 possessions used (assist ratio).
-  assisttoturnover: Ratio of assists to turnovers.
-  defensiverating: Points allowed per 100 possessions while on the floor (defensive rating).
-  defensivereboundpercentage: Percentage of available defensive rebounds secured while on the floor, as a decimal.
-  effectivefieldgoalpercentage: Effective field goal percentage (weights made threes at 1.5), as a decimal.
-  estimateddefensiverating: Estimated defensive rating from the stats API's estimated-metrics family.
-  estimatednetrating: Estimated net rating (estimated offensive minus defensive rating) from the stats API's estimated-metrics
+  assist_percentage: Percentage of teammate field goals assisted while on the floor, as a decimal.
+  assist_ratio: Assists per 100 possessions used (assist ratio).
+  assist_to_turnover: Ratio of assists to turnovers.
+  defensive_rating: Points allowed per 100 possessions while on the floor (defensive rating).
+  defensive_rebound_percentage: Percentage of available defensive rebounds secured while on the floor, as a decimal.
+  effective_field_goal_percentage: Effective field goal percentage (weights made threes at 1.5), as a decimal.
+  estimated_defensive_rating: Estimated defensive rating from the stats API's estimated-metrics family.
+  estimated_net_rating: Estimated net rating (estimated offensive minus defensive rating) from the stats API's estimated-metrics
     family.
-  estimatedoffensiverating: Estimated offensive rating from the stats API's estimated-metrics family.
-  estimatedpace: Estimated pace (possessions per 48 minutes) from the stats API's estimated-metrics family.
-  estimatedusagepercentage: Estimated percentage of team plays used by the player while on the floor, as a decimal.
-  familyname: Player's family (last) name.
-  gameid: Unique 10-character game identifier from the league's stats API.
-  jerseynum: Player's jersey number.
-  namei: Abbreviated player name (first initial and last name).
-  netrating: Offensive rating minus defensive rating while on the floor (net rating).
-  offensiverating: Points scored per 100 possessions while on the floor (offensive rating).
-  offensivereboundpercentage: Percentage of available offensive rebounds secured while on the floor, as a decimal.
-  paceper40: Pace normalized to possessions per 40 minutes.
-  personid: Player identifier from the league's stats API.
-  playerslug: URL-friendly slug for the player's name.
-  reboundpercentage: Percentage of all available rebounds secured while on the floor, as a decimal.
-  teamslug: URL-friendly slug for the team name.
-  teamtricode: Three-letter team abbreviation.
-  trueshootingpercentage: True shooting percentage (accounts for threes and free throws), as a decimal.
-  turnoverratio: Turnovers per 100 possessions used (turnover ratio).
-  usagepercentage: Percentage of team plays used by the player while on the floor, as a decimal.
+  estimated_offensive_rating: Estimated offensive rating from the stats API's estimated-metrics family.
+  estimated_pace: Estimated pace (possessions per 48 minutes) from the stats API's estimated-metrics family.
+  estimated_usage_percentage: Estimated percentage of team plays used by the player while on the floor, as a decimal.
+  family_name: Player's family (last) name.
+  game_id: Unique 10-character game identifier from the league's stats API.
+  jersey_num: Player's jersey number.
+  name_i: Abbreviated player name (first initial and last name).
+  net_rating: Offensive rating minus defensive rating while on the floor (net rating).
+  offensive_rating: Points scored per 100 possessions while on the floor (offensive rating).
+  offensive_rebound_percentage: Percentage of available offensive rebounds secured while on the floor, as a decimal.
+  pace_per40: Pace normalized to possessions per 40 minutes.
+  person_id: Player identifier from the league's stats API.
+  player_slug: URL-friendly slug for the player's name.
+  rebound_percentage: Percentage of all available rebounds secured while on the floor, as a decimal.
+  team_slug: URL-friendly slug for the team name.
+  team_tricode: Three-letter team abbreviation.
+  true_shooting_percentage: True shooting percentage (accounts for threes and free throws), as a decimal.
+  turnover_ratio: Turnovers per 100 possessions used (turnover ratio).
+  usage_percentage: Percentage of team plays used by the player while on the floor, as a decimal.
 boxscoredefensivev2:
-  defensiverebounds: Rebounding metric for defensiverebounds in the requested NBA or WNBA Stats split.
-  familyname: Display name for familyname associated with this NBA or WNBA Stats row.
-  gameid: Unique stats.nba.com game identifier in endpoints that use compact schedule field names.
-  jerseynum: NBA or WNBA Stats value for jerseynum in the boxscoredefensivev2 result set.
-  matchupassists: Passing or assist metric for matchupassists in the requested NBA or WNBA Stats split.
-  matchupfieldgoalpercentage: Percentage or rate for matchupfieldgoalpercentage in the requested NBA or WNBA Stats split.
-  matchupfieldgoalsattempted: Shooting metric for matchupfieldgoalsattempted in the requested NBA or WNBA Stats split.
-  matchupfieldgoalsmade: Shooting metric for matchupfieldgoalsmade in the requested NBA or WNBA Stats split.
-  matchupminutes: NBA or WNBA Stats value for matchupminutes in the boxscoredefensivev2 result set.
-  matchupthreepointerpercentage: Percentage or rate for matchupthreepointerpercentage in the requested NBA or WNBA Stats split.
-  matchupthreepointersattempted: Shooting metric for matchupthreepointersattempted in the requested NBA or WNBA Stats split.
-  matchupthreepointersmade: Shooting metric for matchupthreepointersmade in the requested NBA or WNBA Stats split.
-  matchupturnovers: Turnover or loose-ball metric for matchupturnovers in the requested NBA or WNBA Stats split.
-  namei: NBA or WNBA Stats value for namei in the boxscoredefensivev2 result set.
-  partialpossessions: Estimated partial possessions credited to the stint or rotation interval.
-  personid: Stats API identifier for personid associated with this NBA or WNBA Stats row.
-  playerpoints: Scoring or score-margin metric for playerpoints in the requested NBA or WNBA Stats split.
-  playerslug: URL slug for playerslug used by NBA or WNBA Stats pages.
-  switcheson: NBA or WNBA Stats value for switcheson in the boxscoredefensivev2 result set.
-  teamslug: URL slug for teamslug used by NBA or WNBA Stats pages.
-  teamtricode: Three-letter team code used by NBA or WNBA Stats schedule and scoreboard feeds.
+  defensive_rebounds: Rebounding metric for defensiverebounds in the requested NBA or WNBA Stats split.
+  family_name: Display name for familyname associated with this NBA or WNBA Stats row.
+  game_id: Unique stats.nba.com game identifier in endpoints that use compact schedule field names.
+  jersey_num: NBA or WNBA Stats value for jerseynum in the boxscoredefensivev2 result set.
+  matchup_assists: Passing or assist metric for matchupassists in the requested NBA or WNBA Stats split.
+  matchup_field_goal_percentage: Percentage or rate for matchupfieldgoalpercentage in the requested NBA or WNBA Stats split.
+  matchup_field_goals_attempted: Shooting metric for matchupfieldgoalsattempted in the requested NBA or WNBA Stats split.
+  matchup_field_goals_made: Shooting metric for matchupfieldgoalsmade in the requested NBA or WNBA Stats split.
+  matchup_minutes: NBA or WNBA Stats value for matchupminutes in the boxscoredefensivev2 result set.
+  matchup_three_pointer_percentage: Percentage or rate for matchupthreepointerpercentage in the requested NBA or WNBA Stats split.
+  matchup_three_pointers_attempted: Shooting metric for matchupthreepointersattempted in the requested NBA or WNBA Stats split.
+  matchup_three_pointers_made: Shooting metric for matchupthreepointersmade in the requested NBA or WNBA Stats split.
+  matchup_turnovers: Turnover or loose-ball metric for matchupturnovers in the requested NBA or WNBA Stats split.
+  name_i: NBA or WNBA Stats value for namei in the boxscoredefensivev2 result set.
+  partial_possessions: Estimated partial possessions credited to the stint or rotation interval.
+  person_id: Stats API identifier for personid associated with this NBA or WNBA Stats row.
+  player_points: Scoring or score-margin metric for playerpoints in the requested NBA or WNBA Stats split.
+  player_slug: URL slug for playerslug used by NBA or WNBA Stats pages.
+  switches_on: NBA or WNBA Stats value for switcheson in the boxscoredefensivev2 result set.
+  team_slug: URL slug for teamslug used by NBA or WNBA Stats pages.
+  team_tricode: Three-letter team code used by NBA or WNBA Stats schedule and scoreboard feeds.
 boxscorefourfactorsv2:
   efg_pct: 'Effective field goal percentage: (FGM + 0.5 * FG3M) / FGA.'
   fta_rate: 'Free throw attempt rate: free throw attempts per field goal attempt.'
@@ -1745,154 +1747,154 @@ boxscorefourfactorsv2:
   start_position: Position the player started the game at ('F', 'C', or 'G'); empty for bench players.
   tm_tov_pct: Turnovers committed per 100 possessions.
 boxscorefourfactorsv3:
-  effectivefieldgoalpercentage: Effective field goal percentage four-factor, as a decimal.
-  familyname: Player's family (last) name.
-  freethrowattemptrate: Free throw attempts per field goal attempt (free throw rate four-factor).
-  gameid: Unique 10-character game identifier from the league's stats API.
-  jerseynum: Player's jersey number.
-  namei: Abbreviated player name (first initial and last name).
-  offensivereboundpercentage: Offensive rebound percentage four-factor, as a decimal.
-  oppeffectivefieldgoalpercentage: Opponent's effective field goal percentage while on the floor, as a decimal.
-  oppfreethrowattemptrate: Opponent's free throw attempt rate while on the floor.
-  oppoffensivereboundpercentage: Opponent's offensive rebound percentage while on the floor, as a decimal.
-  oppteamturnoverpercentage: Opponent turnovers forced per 100 possessions while on the floor.
-  personid: Player identifier from the league's stats API.
-  playerslug: URL-friendly slug for the player's name.
-  teamslug: URL-friendly slug for the team name.
-  teamtricode: Three-letter team abbreviation.
-  teamturnoverpercentage: Turnovers committed per 100 possessions (turnover four-factor).
+  effective_field_goal_percentage: Effective field goal percentage four-factor, as a decimal.
+  family_name: Player's family (last) name.
+  free_throw_attempt_rate: Free throw attempts per field goal attempt (free throw rate four-factor).
+  game_id: Unique 10-character game identifier from the league's stats API.
+  jersey_num: Player's jersey number.
+  name_i: Abbreviated player name (first initial and last name).
+  offensive_rebound_percentage: Offensive rebound percentage four-factor, as a decimal.
+  opp_effective_field_goal_percentage: Opponent's effective field goal percentage while on the floor, as a decimal.
+  opp_free_throw_attempt_rate: Opponent's free throw attempt rate while on the floor.
+  opp_offensive_rebound_percentage: Opponent's offensive rebound percentage while on the floor, as a decimal.
+  opp_team_turnover_percentage: Opponent turnovers forced per 100 possessions while on the floor.
+  person_id: Player identifier from the league's stats API.
+  player_slug: URL-friendly slug for the player's name.
+  team_slug: URL-friendly slug for the team name.
+  team_tricode: Three-letter team abbreviation.
+  team_turnover_percentage: Turnovers committed per 100 possessions (turnover four-factor).
 boxscorehustlev2:
-  boxoutplayerrebounds: Rebounds the player secured directly off their own box-outs.
-  boxoutplayerteamrebounds: Team rebounds secured following the player's box-outs.
-  boxouts: Total box-outs recorded in the game (hustle stats tracking).
-  chargesdrawn: Offensive charges drawn.
-  contestedshots: Opponent shot attempts contested in the game.
-  contestedshots2pt: Opponent two-point attempts contested.
-  contestedshots3pt: Opponent three-point attempts contested.
-  defensiveboxouts: Box-outs recorded on the defensive glass.
-  familyname: Player's family (last) name.
-  gameid: Unique 10-character game identifier from the league's stats API.
-  jerseynum: Player's jersey number.
-  looseballsrecovereddefensive: Loose balls recovered while on defense.
-  looseballsrecoveredoffensive: Loose balls recovered while on offense.
-  looseballsrecoveredtotal: Total loose balls recovered in the game.
-  namei: Abbreviated player name (first initial and last name).
-  offensiveboxouts: Box-outs recorded on the offensive glass.
-  personid: Player identifier from the league's stats API.
-  playerslug: URL-friendly slug for the player's name.
-  screenassistpoints: Points teammates scored directly off the player's screen assists.
-  screenassists: Screens that led directly to a teammate's made field goal (screen assists).
-  teamslug: URL-friendly slug for the team name.
-  teamtricode: Three-letter team abbreviation.
+  box_out_player_rebounds: Rebounds the player secured directly off their own box-outs.
+  box_out_player_team_rebounds: Team rebounds secured following the player's box-outs.
+  box_outs: Total box-outs recorded in the game (hustle stats tracking).
+  charges_drawn: Offensive charges drawn.
+  contested_shots: Opponent shot attempts contested in the game.
+  contested_shots2pt: Opponent two-point attempts contested.
+  contested_shots3pt: Opponent three-point attempts contested.
+  defensive_box_outs: Box-outs recorded on the defensive glass.
+  family_name: Player's family (last) name.
+  game_id: Unique 10-character game identifier from the league's stats API.
+  jersey_num: Player's jersey number.
+  loose_balls_recovered_defensive: Loose balls recovered while on defense.
+  loose_balls_recovered_offensive: Loose balls recovered while on offense.
+  loose_balls_recovered_total: Total loose balls recovered in the game.
+  name_i: Abbreviated player name (first initial and last name).
+  offensive_box_outs: Box-outs recorded on the offensive glass.
+  person_id: Player identifier from the league's stats API.
+  player_slug: URL-friendly slug for the player's name.
+  screen_assist_points: Points teammates scored directly off the player's screen assists.
+  screen_assists: Screens that led directly to a teammate's made field goal (screen assists).
+  team_slug: URL-friendly slug for the team name.
+  team_tricode: Three-letter team abbreviation.
 boxscorematchupsv3:
-  familyname: Player's family name in the NBA or WNBA Stats matchup boxscore row.
-  gameid: Unique stats.nba.com game identifier in endpoints that use compact schedule field names.
-  jerseynum: Player jersey number shown in the NBA or WNBA Stats matchup boxscore row.
-  namei: Abbreviated player display name used in the NBA or WNBA Stats matchup boxscore row.
-  personid: NBA or WNBA Stats player identifier associated with the matchup boxscore row.
-  playerslug: URL slug for the player on NBA or WNBA Stats pages.
-  teamslug: URL slug for teamslug used by NBA or WNBA Stats pages.
-  teamtricode: Three-letter team code used by NBA or WNBA Stats schedule and scoreboard feeds.
+  family_name: Player's family name in the NBA or WNBA Stats matchup boxscore row.
+  game_id: Unique stats.nba.com game identifier in endpoints that use compact schedule field names.
+  jersey_num: Player jersey number shown in the NBA or WNBA Stats matchup boxscore row.
+  name_i: Abbreviated player display name used in the NBA or WNBA Stats matchup boxscore row.
+  person_id: NBA or WNBA Stats player identifier associated with the matchup boxscore row.
+  player_slug: URL slug for the player on NBA or WNBA Stats pages.
+  team_slug: URL slug for teamslug used by NBA or WNBA Stats pages.
+  team_tricode: Three-letter team code used by NBA or WNBA Stats schedule and scoreboard feeds.
 boxscoremiscv2:
   blka: Number of own field goal attempts that were blocked by opponents.
-  opp_pts_2nd_chance: Opponent second-chance points scored while on the floor.
+  opp_pts_2_nd_chance: Opponent second-chance points scored while on the floor.
   opp_pts_fb: Opponent fast-break points scored while on the floor.
   opp_pts_off_tov: Opponent points scored off turnovers while on the floor.
   opp_pts_paint: Opponent points in the paint scored while on the floor.
   pfd: Personal fouls drawn.
-  pts_2nd_chance: Second-chance points scored after offensive rebounds.
+  pts_2_nd_chance: Second-chance points scored after offensive rebounds.
   pts_fb: Fast-break points scored.
   pts_off_tov: Points scored following opponent turnovers.
   pts_paint: Points scored in the paint.
   start_position: Position the player started the game at ('F', 'C', or 'G'); empty for bench players.
 boxscoremiscv3:
-  blocksagainst: Player's shot attempts that were blocked by opponents.
-  familyname: Player's family (last) name.
-  foulsdrawn: Personal fouls drawn.
-  foulspersonal: Personal fouls committed.
-  gameid: Unique 10-character game identifier from the league's stats API.
-  jerseynum: Player's jersey number.
-  namei: Abbreviated player name (first initial and last name).
-  opppointsfastbreak: Opponent fast-break points scored while on the floor.
-  opppointsoffturnovers: Opponent points off turnovers scored while on the floor.
-  opppointspaint: Opponent points in the paint scored while on the floor.
-  opppointssecondchance: Opponent second-chance points scored while on the floor.
-  personid: Player identifier from the league's stats API.
-  playerslug: URL-friendly slug for the player's name.
-  pointsfastbreak: Fast-break points scored.
-  pointsoffturnovers: Points scored off opponent turnovers.
-  pointspaint: Points scored in the paint.
-  pointssecondchance: Second-chance points scored after offensive rebounds.
-  teamslug: URL-friendly slug for the team name.
-  teamtricode: Three-letter team abbreviation.
+  blocks_against: Player's shot attempts that were blocked by opponents.
+  family_name: Player's family (last) name.
+  fouls_drawn: Personal fouls drawn.
+  fouls_personal: Personal fouls committed.
+  game_id: Unique 10-character game identifier from the league's stats API.
+  jersey_num: Player's jersey number.
+  name_i: Abbreviated player name (first initial and last name).
+  opp_points_fast_break: Opponent fast-break points scored while on the floor.
+  opp_points_off_turnovers: Opponent points off turnovers scored while on the floor.
+  opp_points_paint: Opponent points in the paint scored while on the floor.
+  opp_points_second_chance: Opponent second-chance points scored while on the floor.
+  person_id: Player identifier from the league's stats API.
+  player_slug: URL-friendly slug for the player's name.
+  points_fast_break: Fast-break points scored.
+  points_off_turnovers: Points scored off opponent turnovers.
+  points_paint: Points scored in the paint.
+  points_second_chance: Second-chance points scored after offensive rebounds.
+  team_slug: URL-friendly slug for the team name.
+  team_tricode: Three-letter team abbreviation.
 boxscoreplayertrackv3:
-  contestedfieldgoalpercentage: Percentage or rate for contestedfieldgoalpercentage in the requested NBA or WNBA Stats split.
-  contestedfieldgoalsattempted: Shooting metric for contestedfieldgoalsattempted in the requested NBA or WNBA Stats split.
-  contestedfieldgoalsmade: Shooting metric for contestedfieldgoalsmade in the requested NBA or WNBA Stats split.
-  defendedatrimfieldgoalpercentage: Percentage or rate for defendedatrimfieldgoalpercentage in the requested NBA or WNBA Stats
+  contested_field_goal_percentage: Percentage or rate for contestedfieldgoalpercentage in the requested NBA or WNBA Stats split.
+  contested_field_goals_attempted: Shooting metric for contestedfieldgoalsattempted in the requested NBA or WNBA Stats split.
+  contested_field_goals_made: Shooting metric for contestedfieldgoalsmade in the requested NBA or WNBA Stats split.
+  defended_at_rim_field_goal_percentage: Percentage or rate for defendedatrimfieldgoalpercentage in the requested NBA or WNBA Stats
     split.
-  defendedatrimfieldgoalsattempted: Shooting metric for defendedatrimfieldgoalsattempted in the requested NBA or WNBA Stats
+  defended_at_rim_field_goals_attempted: Shooting metric for defendedatrimfieldgoalsattempted in the requested NBA or WNBA Stats
     split.
-  defendedatrimfieldgoalsmade: Shooting metric for defendedatrimfieldgoalsmade in the requested NBA or WNBA Stats split.
-  familyname: Display name for familyname associated with this NBA or WNBA Stats row.
-  fieldgoalpercentage: Percentage or rate for fieldgoalpercentage in the requested NBA or WNBA Stats split.
-  freethrowassists: Shooting metric for freethrowassists in the requested NBA or WNBA Stats split.
-  gameid: Unique stats.nba.com game identifier in endpoints that use compact schedule field names.
-  jerseynum: NBA or WNBA Stats value for jerseynum in the boxscoreplayertrackv3 result set.
-  namei: NBA or WNBA Stats value for namei in the boxscoreplayertrackv3 result set.
-  personid: Stats API identifier for personid associated with this NBA or WNBA Stats row.
-  playerslug: URL slug for playerslug used by NBA or WNBA Stats pages.
-  reboundchancesdefensive: Rebounding metric for reboundchancesdefensive in the requested NBA or WNBA Stats split.
-  reboundchancesoffensive: Rebounding metric for reboundchancesoffensive in the requested NBA or WNBA Stats split.
-  reboundchancestotal: Rebounding metric for reboundchancestotal in the requested NBA or WNBA Stats split.
-  secondaryassists: Passing or assist metric for secondaryassists in the requested NBA or WNBA Stats split.
-  teamslug: URL slug for teamslug used by NBA or WNBA Stats pages.
-  teamtricode: Three-letter team code used by NBA or WNBA Stats schedule and scoreboard feeds.
-  uncontestedfieldgoalsattempted: Shooting metric for uncontestedfieldgoalsattempted in the requested NBA or WNBA Stats split.
-  uncontestedfieldgoalsmade: Shooting metric for uncontestedfieldgoalsmade in the requested NBA or WNBA Stats split.
-  uncontestedfieldgoalspercentage: Percentage or rate for uncontestedfieldgoalspercentage in the requested NBA or WNBA Stats
+  defended_at_rim_field_goals_made: Shooting metric for defendedatrimfieldgoalsmade in the requested NBA or WNBA Stats split.
+  family_name: Display name for familyname associated with this NBA or WNBA Stats row.
+  field_goal_percentage: Percentage or rate for fieldgoalpercentage in the requested NBA or WNBA Stats split.
+  free_throw_assists: Shooting metric for freethrowassists in the requested NBA or WNBA Stats split.
+  game_id: Unique stats.nba.com game identifier in endpoints that use compact schedule field names.
+  jersey_num: NBA or WNBA Stats value for jerseynum in the boxscoreplayertrackv3 result set.
+  name_i: NBA or WNBA Stats value for namei in the boxscoreplayertrackv3 result set.
+  person_id: Stats API identifier for personid associated with this NBA or WNBA Stats row.
+  player_slug: URL slug for playerslug used by NBA or WNBA Stats pages.
+  rebound_chances_defensive: Rebounding metric for reboundchancesdefensive in the requested NBA or WNBA Stats split.
+  rebound_chances_offensive: Rebounding metric for reboundchancesoffensive in the requested NBA or WNBA Stats split.
+  rebound_chances_total: Rebounding metric for reboundchancestotal in the requested NBA or WNBA Stats split.
+  secondary_assists: Passing or assist metric for secondaryassists in the requested NBA or WNBA Stats split.
+  team_slug: URL slug for teamslug used by NBA or WNBA Stats pages.
+  team_tricode: Three-letter team code used by NBA or WNBA Stats schedule and scoreboard feeds.
+  uncontested_field_goals_attempted: Shooting metric for uncontestedfieldgoalsattempted in the requested NBA or WNBA Stats split.
+  uncontested_field_goals_made: Shooting metric for uncontestedfieldgoalsmade in the requested NBA or WNBA Stats split.
+  uncontested_field_goals_percentage: Percentage or rate for uncontestedfieldgoalspercentage in the requested NBA or WNBA Stats
     split.
 boxscorescoringv2:
-  pct_ast_2pm: Share of made two-point field goals that were assisted.
-  pct_ast_3pm: Share of made three-point field goals that were assisted.
+  pct_ast_2_pm: Share of made two-point field goals that were assisted.
+  pct_ast_3_pm: Share of made three-point field goals that were assisted.
   pct_ast_fgm: Share of all made field goals that were assisted.
-  pct_fga_2pt: Share of field goal attempts taken as two-pointers.
-  pct_fga_3pt: Share of field goal attempts taken as three-pointers.
-  pct_pts_2pt: Share of points scored on two-point field goals.
-  pct_pts_2pt_mr: Share of points scored on mid-range two-point field goals.
-  pct_pts_3pt: Share of points scored on three-point field goals.
+  pct_fga_2_pt: Share of field goal attempts taken as two-pointers.
+  pct_fga_3_pt: Share of field goal attempts taken as three-pointers.
+  pct_pts_2_pt: Share of points scored on two-point field goals.
+  pct_pts_2_pt_mr: Share of points scored on mid-range two-point field goals.
+  pct_pts_3_pt: Share of points scored on three-point field goals.
   pct_pts_fb: Share of points scored on the fast break.
   pct_pts_ft: Share of points scored on free throws.
   pct_pts_off_tov: Share of points scored off opponent turnovers.
   pct_pts_paint: Share of points scored in the paint.
-  pct_uast_2pm: Share of made two-point field goals that were unassisted.
-  pct_uast_3pm: Share of made three-point field goals that were unassisted.
+  pct_uast_2_pm: Share of made two-point field goals that were unassisted.
+  pct_uast_3_pm: Share of made three-point field goals that were unassisted.
   pct_uast_fgm: Share of all made field goals that were unassisted.
   start_position: Position the player started the game at ('F', 'C', or 'G'); empty for bench players.
 boxscorescoringv3:
-  familyname: Player's family (last) name.
-  gameid: Unique 10-character game identifier from the league's stats API.
-  jerseynum: Player's jersey number.
-  namei: Abbreviated player name (first initial and last name).
-  percentageassisted2pt: Percentage of made two-pointers that were assisted, as a decimal.
-  percentageassisted3pt: Percentage of made three-pointers that were assisted, as a decimal.
-  percentageassistedfgm: Percentage of made field goals that were assisted, as a decimal.
-  percentagefieldgoalsattempted2pt: Share of field goal attempts taken as two-pointers, as a decimal.
-  percentagefieldgoalsattempted3pt: Share of field goal attempts taken as three-pointers, as a decimal.
-  percentagepoints2pt: Share of points scored on two-pointers, as a decimal.
-  percentagepoints3pt: Share of points scored on three-pointers, as a decimal.
-  percentagepointsfastbreak: Share of points scored on fast breaks, as a decimal.
-  percentagepointsfreethrow: Share of points scored at the free throw line, as a decimal.
-  percentagepointsmidrange2pt: Share of points scored on mid-range two-pointers, as a decimal.
-  percentagepointsoffturnovers: Share of points scored off opponent turnovers, as a decimal.
-  percentagepointspaint: Share of points scored in the paint, as a decimal.
-  percentageunassisted2pt: Percentage of made two-pointers that were unassisted, as a decimal.
-  percentageunassisted3pt: Percentage of made three-pointers that were unassisted, as a decimal.
-  percentageunassistedfgm: Percentage of made field goals that were unassisted, as a decimal.
-  personid: Player identifier from the league's stats API.
-  playerslug: URL-friendly slug for the player's name.
-  teamslug: URL-friendly slug for the team name.
-  teamtricode: Three-letter team abbreviation.
+  family_name: Player's family (last) name.
+  game_id: Unique 10-character game identifier from the league's stats API.
+  jersey_num: Player's jersey number.
+  name_i: Abbreviated player name (first initial and last name).
+  percentage_assisted2pt: Percentage of made two-pointers that were assisted, as a decimal.
+  percentage_assisted3pt: Percentage of made three-pointers that were assisted, as a decimal.
+  percentage_assisted_fgm: Percentage of made field goals that were assisted, as a decimal.
+  percentage_field_goals_attempted2pt: Share of field goal attempts taken as two-pointers, as a decimal.
+  percentage_field_goals_attempted3pt: Share of field goal attempts taken as three-pointers, as a decimal.
+  percentage_points2pt: Share of points scored on two-pointers, as a decimal.
+  percentage_points3pt: Share of points scored on three-pointers, as a decimal.
+  percentage_points_fast_break: Share of points scored on fast breaks, as a decimal.
+  percentage_points_free_throw: Share of points scored at the free throw line, as a decimal.
+  percentage_points_midrange2pt: Share of points scored on mid-range two-pointers, as a decimal.
+  percentage_points_off_turnovers: Share of points scored off opponent turnovers, as a decimal.
+  percentage_points_paint: Share of points scored in the paint, as a decimal.
+  percentage_unassisted2pt: Percentage of made two-pointers that were unassisted, as a decimal.
+  percentage_unassisted3pt: Percentage of made three-pointers that were unassisted, as a decimal.
+  percentage_unassisted_fgm: Percentage of made field goals that were unassisted, as a decimal.
+  person_id: Player identifier from the league's stats API.
+  player_slug: URL-friendly slug for the player's name.
+  team_slug: URL-friendly slug for the team name.
+  team_tricode: Three-letter team abbreviation.
 boxscoresummaryv2:
   pts_ot10: Scoring or score-margin metric for points ot10 in the requested NBA or WNBA Stats split.
   pts_ot2: Scoring or score-margin metric for points ot2 in the requested NBA or WNBA Stats split.
@@ -1903,85 +1905,50 @@ boxscoresummaryv2:
   pts_ot7: Scoring or score-margin metric for points ot7 in the requested NBA or WNBA Stats split.
   pts_ot8: Scoring or score-margin metric for points ot8 in the requested NBA or WNBA Stats split.
   pts_ot9: Scoring or score-margin metric for points ot9 in the requested NBA or WNBA Stats split.
+  pts_paint: Points scored in the paint.
+  team_rebounds: Team rebounds (rebounds credited to the team rather than a player).
 boxscoresummaryv3:
-  dummykey: Placeholder key emitted by the stats API's box score summary payload; carries no data.
-  gameid: Unique 10-character game identifier from the league's stats API.
-  inbonus: Whether the team is currently in the bonus (penalty) foul situation, as reported by the stats API.
+  dummy_key: Placeholder key emitted by the stats API's box score summary payload; carries no data.
+  game_id: Unique 10-character game identifier from the league's stats API.
+  in_bonus: Whether the team is currently in the bonus (penalty) foul situation, as reported by the stats API.
   seed: Team's playoff seed, populated for postseason games.
-  teamlosses: Team's loss total entering the game.
-  teamslug: URL-friendly slug for the team name.
-  teamtricode: Three-letter team abbreviation.
-  teamwins: Team's win total entering the game.
-  timeoutsremaining: Timeouts the team has remaining.
+  team_losses: Team's loss total entering the game.
+  team_slug: URL-friendly slug for the team name.
+  team_tricode: Three-letter team abbreviation.
+  team_wins: Team's win total entering the game.
+  timeouts_remaining: Timeouts the team has remaining.
 boxscoretraditionalv2:
   start_position: Position the player started the game at (F, C, or G); empty for reserves.
 boxscoretraditionalv3:
-  bench_assists: Total assists by the team's bench players.
-  bench_blocks: Total blocked shots by the team's bench players.
-  bench_fieldgoalsattempted: Total field goal attempts by the team's bench players.
-  bench_fieldgoalsmade: Total field goals made by the team's bench players.
-  bench_fieldgoalspercentage: Combined field goal percentage of the team's bench players.
-  bench_foulspersonal: Total personal fouls by the team's bench players.
-  bench_freethrowsattempted: Total free throw attempts by the team's bench players.
-  bench_freethrowsmade: Total free throws made by the team's bench players.
-  bench_freethrowspercentage: Combined free throw percentage of the team's bench players.
-  bench_minutes: Total minutes played by the team's bench players.
-  bench_reboundsdefensive: Total defensive rebounds by the team's bench players.
-  bench_reboundsoffensive: Total offensive rebounds by the team's bench players.
-  bench_reboundstotal: Total rebounds by the team's bench players.
-  bench_steals: Total steals by the team's bench players.
-  bench_threepointersattempted: Total three-point attempts by the team's bench players.
-  bench_threepointersmade: Total three-pointers made by the team's bench players.
-  bench_threepointerspercentage: Combined three-point percentage of the team's bench players.
-  bench_turnovers: Total turnovers by the team's bench players.
-  familyname: Player's family (last) name.
-  fieldgoalsattempted: Field goal attempts recorded in the game.
-  fieldgoalsmade: Field goals made recorded in the game.
-  fieldgoalspercentage: Field goal percentage for the game, as a decimal.
-  foulspersonal: Personal fouls recorded in the game.
-  freethrowsattempted: Free throw attempts recorded in the game.
-  freethrowsmade: Free throws made recorded in the game.
-  freethrowspercentage: Free throw percentage for the game, as a decimal.
-  gameid: Unique 10-character game identifier from the league's stats API.
-  jerseynum: Player's jersey number.
-  namei: Abbreviated player name (first initial and last name).
-  personid: Player identifier from the league's stats API.
-  playerslug: URL-friendly slug for the player's name.
-  plusminuspoints: Team point differential while the player was on the floor (plus-minus).
-  reboundsdefensive: Defensive rebounds recorded in the game.
-  reboundsoffensive: Offensive rebounds recorded in the game.
-  reboundstotal: Total rebounds recorded in the game.
-  starters_assists: Total assists by the team's starters.
-  starters_blocks: Total blocked shots by the team's starters.
-  starters_fieldgoalsattempted: Total field goal attempts by the team's starters.
-  starters_fieldgoalsmade: Total field goals made by the team's starters.
-  starters_fieldgoalspercentage: Combined field goal percentage of the team's starters.
-  starters_foulspersonal: Total personal fouls by the team's starters.
-  starters_freethrowsattempted: Total free throw attempts by the team's starters.
-  starters_freethrowsmade: Total free throws made by the team's starters.
-  starters_freethrowspercentage: Combined free throw percentage of the team's starters.
-  starters_minutes: Total minutes played by the team's starters.
-  starters_points: Total points by the team's starters.
-  starters_reboundsdefensive: Total defensive rebounds by the team's starters.
-  starters_reboundsoffensive: Total offensive rebounds by the team's starters.
-  starters_reboundstotal: Total rebounds by the team's starters.
-  starters_steals: Total steals by the team's starters.
-  starters_threepointersattempted: Total three-point attempts by the team's starters.
-  starters_threepointersmade: Total three-pointers made by the team's starters.
-  starters_threepointerspercentage: Combined three-point percentage of the team's starters.
-  starters_turnovers: Total turnovers by the team's starters.
-  teamslug: URL-friendly slug for the team name.
-  teamtricode: Three-letter team abbreviation.
-  threepointersattempted: Three-point attempts recorded in the game.
-  threepointersmade: Three-pointers made recorded in the game.
-  threepointerspercentage: Three-point percentage for the game, as a decimal.
+  family_name: Player's family (last) name.
+  field_goals_attempted: Field goal attempts recorded in the game.
+  field_goals_made: Field goals made recorded in the game.
+  field_goals_percentage: Field goal percentage for the game, as a decimal.
+  fouls_personal: Personal fouls recorded in the game.
+  free_throws_attempted: Free throw attempts recorded in the game.
+  free_throws_made: Free throws made recorded in the game.
+  free_throws_percentage: Free throw percentage for the game, as a decimal.
+  game_id: Unique 10-character game identifier from the league's stats API.
+  jersey_num: Player's jersey number.
+  name_i: Abbreviated player name (first initial and last name).
+  person_id: Player identifier from the league's stats API.
+  player_slug: URL-friendly slug for the player's name.
+  plus_minus_points: Team point differential while the player was on the floor (plus-minus).
+  rebounds_defensive: Defensive rebounds recorded in the game.
+  rebounds_offensive: Offensive rebounds recorded in the game.
+  rebounds_total: Total rebounds recorded in the game.
+  team_slug: URL-friendly slug for the team name.
+  team_tricode: Three-letter team abbreviation.
+  three_pointers_attempted: Three-point attempts recorded in the game.
+  three_pointers_made: Three-pointers made recorded in the game.
+  three_pointers_percentage: Three-point percentage for the game, as a decimal.
 boxscoreusagev2:
   pct_ast: Share of the team's assists accounted for while on the floor.
   pct_blk: Share of the team's blocks accounted for while on the floor.
   pct_blka: Share of the team's blocked own attempts accounted for while on the floor.
   pct_dreb: Share of the team's defensive rebounds accounted for while on the floor.
-  pct_fg3a: Share of the team's three-point attempts accounted for while on the floor.
-  pct_fg3m: Share of the team's made three-pointers accounted for while on the floor.
+  pct_fg3_a: Share of the team's three-point attempts accounted for while on the floor.
+  pct_fg3_m: Share of the team's made three-pointers accounted for while on the floor.
   pct_fga: Share of the team's field goal attempts accounted for while on the floor.
   pct_fgm: Share of the team's field goals made accounted for while on the floor.
   pct_fta: Share of the team's free throw attempts accounted for while on the floor.
@@ -1996,40 +1963,40 @@ boxscoreusagev2:
   start_position: Position the player started the game at ('F', 'C', or 'G'); empty for bench players.
   usg_pct: Percentage of team plays used while on the floor.
 boxscoreusagev3:
-  familyname: Player's family (last) name.
-  gameid: Unique 10-character game identifier from the league's stats API.
-  jerseynum: Player's jersey number.
-  namei: Abbreviated player name (first initial and last name).
-  percentageassists: Share of the team's assists accounted for by the player while on the floor, as a decimal.
-  percentageblocks: Share of the team's blocked shots accounted for by the player while on the floor, as a decimal.
-  percentageblocksallowed: Share of the team's shot attempts blocked by opponents accounted for by the player while on the
+  family_name: Player's family (last) name.
+  game_id: Unique 10-character game identifier from the league's stats API.
+  jersey_num: Player's jersey number.
+  name_i: Abbreviated player name (first initial and last name).
+  percentage_assists: Share of the team's assists accounted for by the player while on the floor, as a decimal.
+  percentage_blocks: Share of the team's blocked shots accounted for by the player while on the floor, as a decimal.
+  percentage_blocks_allowed: Share of the team's shot attempts blocked by opponents accounted for by the player while on the
     floor, as a decimal.
-  percentagefieldgoalsattempted: Share of the team's field goal attempts accounted for by the player while on the floor, as
+  percentage_field_goals_attempted: Share of the team's field goal attempts accounted for by the player while on the floor, as
     a decimal.
-  percentagefieldgoalsmade: Share of the team's field goals made accounted for by the player while on the floor, as a decimal.
-  percentagefreethrowsattempted: Share of the team's free throw attempts accounted for by the player while on the floor, as
+  percentage_field_goals_made: Share of the team's field goals made accounted for by the player while on the floor, as a decimal.
+  percentage_free_throws_attempted: Share of the team's free throw attempts accounted for by the player while on the floor, as
     a decimal.
-  percentagefreethrowsmade: Share of the team's free throws made accounted for by the player while on the floor, as a decimal.
-  percentagepersonalfouls: Share of the team's personal fouls accounted for by the player while on the floor, as a decimal.
-  percentagepersonalfoulsdrawn: Share of the team's personal fouls drawn accounted for by the player while on the floor, as
+  percentage_free_throws_made: Share of the team's free throws made accounted for by the player while on the floor, as a decimal.
+  percentage_personal_fouls: Share of the team's personal fouls accounted for by the player while on the floor, as a decimal.
+  percentage_personal_fouls_drawn: Share of the team's personal fouls drawn accounted for by the player while on the floor, as
     a decimal.
-  percentagepoints: Share of the team's points accounted for by the player while on the floor, as a decimal.
-  percentagereboundsdefensive: Share of the team's defensive rebounds accounted for by the player while on the floor, as a
+  percentage_points: Share of the team's points accounted for by the player while on the floor, as a decimal.
+  percentage_rebounds_defensive: Share of the team's defensive rebounds accounted for by the player while on the floor, as a
     decimal.
-  percentagereboundsoffensive: Share of the team's offensive rebounds accounted for by the player while on the floor, as a
+  percentage_rebounds_offensive: Share of the team's offensive rebounds accounted for by the player while on the floor, as a
     decimal.
-  percentagereboundstotal: Share of the team's total rebounds accounted for by the player while on the floor, as a decimal.
-  percentagesteals: Share of the team's steals accounted for by the player while on the floor, as a decimal.
-  percentagethreepointersattempted: Share of the team's three-point attempts accounted for by the player while on the floor,
+  percentage_rebounds_total: Share of the team's total rebounds accounted for by the player while on the floor, as a decimal.
+  percentage_steals: Share of the team's steals accounted for by the player while on the floor, as a decimal.
+  percentage_three_pointers_attempted: Share of the team's three-point attempts accounted for by the player while on the floor,
     as a decimal.
-  percentagethreepointersmade: Share of the team's three-pointers made accounted for by the player while on the floor, as
+  percentage_three_pointers_made: Share of the team's three-pointers made accounted for by the player while on the floor, as
     a decimal.
-  percentageturnovers: Share of the team's turnovers accounted for by the player while on the floor, as a decimal.
-  personid: Player identifier from the league's stats API.
-  playerslug: URL-friendly slug for the player's name.
-  teamslug: URL-friendly slug for the team name.
-  teamtricode: Three-letter team abbreviation.
-  usagepercentage: Percentage of team plays used by the player while on the floor, as a decimal.
+  percentage_turnovers: Share of the team's turnovers accounted for by the player while on the floor, as a decimal.
+  person_id: Player identifier from the league's stats API.
+  player_slug: URL-friendly slug for the player's name.
+  team_slug: URL-friendly slug for the team name.
+  team_tricode: Three-letter team abbreviation.
+  usage_percentage: Percentage of team plays used by the player while on the floor, as a decimal.
 bref_draft:
   ast_per_g: Career assists per game for the drafted player, from Basketball-Reference's draft table. Every value is an empty
     string in the sampled 2026 draft, whose picks had no NBA stats yet, so the column stays text there.
@@ -2570,29 +2537,10 @@ coaches:
   top100_player_link: URL to the coach's NHL Top 100 players recognition page, if applicable.
   twitter: Twitter/X handle or profile URL for the coach's official social media presence.
 coaches_history:
-  end_of_team: On3 RDB flag that the stint ended because the team or program itself ended.
-  fired: Whether the stint ended with the coach being fired.
-  is_present: Whether this is the coach's current (ongoing) stint.
-  latest_pso_key: On3 player-sport-organization (PSO) key for the most recent season of the stint.
-  latest_year: Most recent year of the coaching stint.
-  promoted: Whether the stint ended with the coach being promoted within the organization.
-  resigned: Whether the stint ended with the coach resigning.
-  start_pso_key: On3 player-sport-organization (PSO) key for the first season of the coaching stint.
 coaches_profile:
-  alma_mater: School the coach graduated from.
-  alma_mater_class_year: Coach's graduating class year at their alma mater.
-  default_asset: Nested On3 asset object for the coach's headshot (stringified).
-  degree: Degree the coach earned, when listed.
-  home_town_name: Coach's hometown, as listed by On3.
-  key: On3 RDB key for the coach profile.
-  known_as_name: Name the coach publicly goes by, when it differs from the legal name.
-  org_season_count: Number of seasons the coach has spent with the current organization.
-  primary_position: Nested On3 object for the coach's primary coaching role (stringified).
-  years_active: Span of years the coach has been active, per On3.
 collective_groups:
   annual_goal_amount: Collective's annual fundraising goal in dollars, as reported to On3.
   confirmed_raised_amount: Dollar amount the collective has confirmed raising, per On3.
-  default_asset: Nested On3 asset object for the collective's primary logo (stringified).
   default_asset_key: On3 asset key for the collective's primary logo image.
   founders: Founders of the collective, as a stringified list.
   instagram_handle: Collective's Instagram account handle.
@@ -2603,7 +2551,6 @@ collective_groups:
   merged_into_group_key: On3 key of the collective this group merged into, when applicable.
   mission_statement: Collective's stated mission, as published to On3.
   organization_key: On3 organization key of the school the collective supports.
-  social_asset: Nested On3 asset object for the collective's social-media image (stringified).
   social_asset_key: On3 asset key for the collective's social-media image.
   sports: Sports the collective funds, as a stringified list.
   tik_tok_handle: Collective's TikTok account handle.
@@ -2612,40 +2559,7 @@ collective_groups:
   website_url: URL of the collective's website.
   youtube_handle: Collective's YouTube channel handle.
 collective_groups_deals:
-  amount: Reported dollar amount of the NIL deal.
-  collective_group: Nested On3 record for the collective brokering the deal (stringified).
-  company: Nested On3 record for the company on the other side of the NIL deal (stringified).
-  date: Date of the NIL collective deal, per On3.
-  key: On3 RDB key for the NIL deal record.
-  nil_status: Status of the athlete's On3 NIL valuation (e.g. active, inactive).
-  nil_value: Athlete's On3 NIL valuation in dollars.
-  person: Nested On3 person object for the athlete in the deal (stringified).
-  roster_rating: Nested On3 roster rating object for the athlete at deal time (stringified).
-  rpm: Nested On3 Recruiting Prediction Machine (RPM) data for the athlete (stringified).
-  source_url: URL of the source reporting the deal.
-  verified: Whether On3 verified the deal.
 collective_groups_key:
-  annual_goal_amount: Collective's annual fundraising goal in dollars, as reported to On3.
-  confirmed_raised_amount: Dollar amount the collective has confirmed raising, per On3.
-  default_asset: Nested On3 asset object for the collective's primary logo (stringified).
-  default_asset_key: On3 asset key for the collective's primary logo image.
-  founders: Founders of the collective, as a stringified list.
-  instagram_handle: Collective's Instagram account handle.
-  key: On3 RDB key for the NIL collective group.
-  launch_date: Date the NIL collective launched.
-  linked_in_handle: Collective's LinkedIn account handle.
-  merged_into_group: Nested On3 record for the collective this group merged into (stringified).
-  merged_into_group_key: On3 key of the collective this group merged into, when applicable.
-  mission_statement: Collective's stated mission, as published to On3.
-  organization_key: On3 organization key of the school the collective supports.
-  social_asset: Nested On3 asset object for the collective's social-media image (stringified).
-  social_asset_key: On3 asset key for the collective's social-media image.
-  sports: Sports the collective funds, as a stringified list.
-  tik_tok_handle: Collective's TikTok account handle.
-  twitter_handle: Collective's Twitter/X account handle.
-  website_name: Display name of the collective's website.
-  website_url: URL of the collective's website.
-  youtube_handle: Collective's YouTube channel handle.
 college_baseball_re24:
   base_state: 3-char base occupancy code ("_" = empty, "1"/"2"/"3" = occupied), e.g. "1_3" for runners on first and third.
   n: Number of plate appearances observed starting in this base-out state.
@@ -2673,8 +2587,6 @@ college_softball_wpa:
 commits_latest:
   athlete_verified: Whether On3 has verified the recruit's athletic identity.
   class_year: Recruiting class (graduation) year of the recruit.
-  commit_status: Nested commitment status (committed organization, dates, flags) for the recruit.
-  default_asset: Nested primary media asset (headshot) object for the recruit.
   default_asset_url: URL of the recruit's primary headshot image.
   early_enrollee: Whether the recruit early-enrolled at their college.
   early_signee: Whether the recruit signed during the early signing period.
@@ -2692,12 +2604,9 @@ commits_latest:
   recruitment_key: On3 recruitment key for the recruit's active recruitment.
   roster_rating: On3 roster (transfer-portal-adjusted) rating for the recruit.
   slug: URL slug for the recruit's On3 profile.
-  sport: Nested sport object (key/name/slug) the ranking pertains to.
   weight: Recruit weight in pounds.
 commits_organizations_latest_commits:
-  commits: Number of commitments in the organization's latest recruiting class.
 commits_organizations_org_key:
-  commits: Number of commitments in the organization's recruiting class for the season.
 commonallplayers:
   display_first_last: Player name formatted as "First Last".
   display_last_comma_first: Player name formatted as "Last, First".
@@ -2726,7 +2635,7 @@ commonplayoffseries:
   game_num: NBA or WNBA Stats value for game number in the commonplayoffseries result set.
 commonteamroster:
   how_acquired: How the team acquired the player (e.g. draft, trade, free agency).
-  leagueid: League identifier from the stats API ("00" = NBA, "10" = WNBA, "20" = G League).
+  league_id: League identifier from the stats API ("00" = NBA, "10" = WNBA, "20" = G League).
 compose_counting_projection:
   player_id: nflverse gsis player id (character join key; asserted Utf8 on both sides of the join).
   proj_availability: Projected availability rate in [0, 1] from nfl_availability_projection.
@@ -2927,6 +2836,7 @@ cumestatsteam:
   per_min_reb: Rebounds per minute played over the aggregated games.
   per_min_stl: Steals per minute played over the aggregated games.
   per_min_turnovers: Turnovers per minute played over the aggregated games.
+  team_rebounds: Team rebounds (rebounds credited to the team rather than a player).
   tot_reb: Total rebounds over the aggregated games.
 defense_summary:
   assists: Assisted tackles.
@@ -3114,16 +3024,7 @@ draft_latest:
   pick_team_venue_name: Name of the team's regular-season home ballpark (e.g., Yankee Stadium).
   pick_year: MLB draft year for which this pick record applies.
 draft_organization_rank:
-  draft_rate: Organization's draft-production rate used in On3's draft ranking.
-  five_stars: Number of five-star recruits the organization signed over the ranking window.
-  four_stars: Number of four-star recruits the organization signed over the ranking window.
-  percent_drafted: Share of the organization's recruits who went on to be drafted.
-  three_stars: Number of three-star recruits the organization signed over the ranking window.
 draft_pick_organization_rank:
-  first_round: Number of the organization's players drafted in the first round.
-  fourth_through_seventh_round: Number of the organization's players drafted in rounds four through seven.
-  second_round: Number of the organization's players drafted in the second round.
-  third_round: Number of the organization's players drafted in the third round.
 draft_picks:
   display_abbrev_default: Short display abbreviation for the selected player's nationality or amateur league affiliation shown
     in the NHL draft picks listing.
@@ -3355,57 +3256,16 @@ draftcombinestats:
 drafthistory:
   draft_type: NBA or WNBA Stats value for draft type in the drafthistory result set.
 drafts:
-  college_organization: Nested On3 organization object for the college the player attended (stringified).
-  compensatory: Whether the selection was a compensatory draft pick.
-  drafted_from_organization: Nested On3 organization object for the school the player was drafted out of (stringified).
-  forfeited: Whether the pick was forfeited.
-  high_school_organization: Nested On3 organization object for the player's high school (stringified).
-  key: On3 RDB key for the draft-pick record.
-  person: Nested On3 person object for the drafted player (stringified).
-  recruitment_key: On3 RDB recruitment key linking the draft pick back to the player's recruitment record.
-  state: Home state of the drafted player, per On3.
-  supplementary: Whether the selection came in a supplemental draft.
-  through_organization_one: First intermediate organization the pick passed through in trades before being exercised (On3
-    RDB).
-  through_organization_three: Third intermediate organization the pick passed through in trades before being exercised (On3
-    RDB).
-  through_organization_two: Second intermediate organization the pick passed through in trades before being exercised (On3
-    RDB).
-  trading_organization: Pro organization that traded the pick away, when it changed hands (On3 RDB).
 drafts_by_stars:
   blue_chip_percent: Percent of the drafted group who were blue-chip (four- or five-star) recruits.
   five_stars: Number of drafted players who were five-star recruits.
   four_stars: Number of drafted players who were four-star recruits.
   population_percent: Percent of the overall recruit population holding this star rating.
-  state: Home state associated with the draft row, per On3.
   talent_ratio: Ratio of the star tier's draft share to its population share (On3's talent ratio).
   three_stars: Number of drafted players who were three-star recruits.
   zero_stars: Number of drafted players who were unrated (zero-star) recruits.
 drafts_by_stars_summary:
-  five_stars: Number of drafted players who were five-star recruits.
-  four_stars: Number of drafted players who were four-star recruits.
-  three_stars: Number of drafted players who were three-star recruits.
-  total_drafted: Total number of players drafted in the summarized group.
-  total_recruited: Total number of recruits in the summarized group.
-  zero_stars: Number of drafted players who were unrated (zero-star) recruits.
 drafts_players:
-  college_organization: Nested On3 organization object for the college the player attended (stringified).
-  compensatory: Whether the selection was a compensatory draft pick.
-  drafted_from_organization: Nested On3 organization object for the school the player was drafted out of (stringified).
-  forfeited: Whether the pick was forfeited.
-  high_school_organization: Nested On3 organization object for the player's high school (stringified).
-  key: On3 RDB key for the draft-pick record.
-  person: Nested On3 person object for the drafted player (stringified).
-  recruitment_key: On3 RDB recruitment key linking the draft pick back to the player's recruitment record.
-  state: Home state of the drafted player, per On3.
-  supplementary: Whether the selection came in a supplemental draft.
-  through_organization_one: First intermediate organization the pick passed through in trades before being exercised (On3
-    RDB).
-  through_organization_three: Third intermediate organization the pick passed through in trades before being exercised (On3
-    RDB).
-  through_organization_two: Second intermediate organization the pick passed through in trades before being exercised (On3
-    RDB).
-  trading_organization: Pro organization that traded the pick away, when it changed hands (On3 RDB).
 echl_standings:
   past_10: 'Record over the team''s most recent 10 games (feed header ''Past 10 Games'') as a hyphenated string: W-L-OTL-SOL
     when four parts are shipped (e.g. ''2-0-0-1''), W-L-OTL when three are (e.g. ''0-2-1'').'
@@ -4207,13 +4067,9 @@ field_goal_summary:
   twenty_made: Field goals made from 20-29 yards.
   twenty_percent: Field-goal percentage from 20-29 yards.
 filters_conferences:
-  key: On3 RDB key for the conference filter option.
 filters_positions:
-  key: On3 RDB key for the position filter option.
 filters_sports:
-  key: On3 RDB key for the sport filter option.
 filters_teams:
-  conference_key: On3 RDB key of the conference the team belongs to.
 fit_field_position_ep:
   ep: Fitted expected points for a drive starting at this yard line (isotonic, non-decreasing).
   yardline_own: Starting yard line from the offense's own goal (1-99).
@@ -4850,8 +4706,8 @@ franchiseleaderswrank:
   f_rank_blk: Franchise all-time rank of the player's career blocked shots.
   f_rank_dreb: Franchise all-time rank of the player's career defensive rebounds.
   f_rank_fg3_pct: Franchise all-time rank of the player's career three-point field goal percentage.
-  f_rank_fg3a: Franchise all-time rank of the player's career three-point field goals attempted.
-  f_rank_fg3m: Franchise all-time rank of the player's career three-point field goals made.
+  f_rank_fg3_a: Franchise all-time rank of the player's career three-point field goals attempted.
+  f_rank_fg3_m: Franchise all-time rank of the player's career three-point field goals made.
   f_rank_fg_pct: Franchise all-time rank of the player's career field goal percentage.
   f_rank_fga: Franchise all-time rank of the player's career field goals attempted.
   f_rank_fgm: Franchise all-time rank of the player's career field goals made.
@@ -5434,8 +5290,8 @@ homepageleaders:
 hustlestatsboxscore:
   box_out_player_rebs: Rebounds the player secured directly off their own box-outs.
   box_out_player_team_rebs: Team rebounds secured following the row's box-outs.
-  contested_shots_2pt: Opponent two-point attempts contested.
-  contested_shots_3pt: Opponent three-point attempts contested.
+  contested_shots_2_pt: Opponent two-point attempts contested.
+  contested_shots_3_pt: Opponent three-point attempts contested.
   def_boxouts: Box-outs recorded on the defensive glass.
   def_loose_balls_recovered: Loose balls recovered while on defense.
   loose_balls_recovered: Total loose balls recovered.
@@ -5529,9 +5385,9 @@ leaguedashlineups:
   dreb_rank: Rank for defensive rebounds within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader.
   fg3_pct_rank: Rank for three-point field-goal percentage within the requested NBA or WNBA Stats leaderboard or split, where
     1 is the leader.
-  fg3a_rank: Rank for three-point field goals attempted within the requested NBA or WNBA Stats leaderboard or split, where
+  fg3_a_rank: Rank for three-point field goals attempted within the requested NBA or WNBA Stats leaderboard or split, where
     1 is the leader.
-  fg3m_rank: Rank for three-point field goals made within the requested NBA or WNBA Stats leaderboard or split, where 1 is
+  fg3_m_rank: Rank for three-point field goals made within the requested NBA or WNBA Stats leaderboard or split, where 1 is
     the leader.
   fg_pct_rank: Rank for field-goal percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the
     leader.
@@ -5560,10 +5416,10 @@ leaguedashlineups:
 leaguedashoppptshot:
   efg_pct: Percentage or rate for efg percentage in the requested NBA or WNBA Stats split.
   fg2_pct: Percentage or rate for two-point field goals percentage in the requested NBA or WNBA Stats split.
-  fg2a: Shooting metric for fg2a in the requested NBA or WNBA Stats split.
-  fg2a_frequency: Shooting metric for fg2a frequency in the requested NBA or WNBA Stats split.
-  fg2m: Shooting metric for fg2m in the requested NBA or WNBA Stats split.
-  fg3a_frequency: Shooting metric for fg3a frequency in the requested NBA or WNBA Stats split.
+  fg2_a: Shooting metric for fg2a in the requested NBA or WNBA Stats split.
+  fg2_a_frequency: Shooting metric for fg2a frequency in the requested NBA or WNBA Stats split.
+  fg2_m: Shooting metric for fg2m in the requested NBA or WNBA Stats split.
+  fg3_a_frequency: Shooting metric for fg3a frequency in the requested NBA or WNBA Stats split.
   fga_frequency: Shooting metric for fga frequency in the requested NBA or WNBA Stats split.
 leaguedashplayerbiostats:
   dreb_pct: Percentage or rate for defensive rebounds percentage in the requested NBA or WNBA Stats split.
@@ -5579,8 +5435,8 @@ leaguedashplayerclutch:
   dd2_rank: League rank of the row's double-doubles for the season and split.
   dreb_rank: League rank of the row's defensive rebounds for the season and split.
   fg3_pct_rank: League rank of the row's three-point field goal percentage for the season and split.
-  fg3a_rank: League rank of the row's three-point field goals attempted for the season and split.
-  fg3m_rank: League rank of the row's three-point field goals made for the season and split.
+  fg3_a_rank: League rank of the row's three-point field goals attempted for the season and split.
+  fg3_m_rank: League rank of the row's three-point field goals made for the season and split.
   fg_pct_rank: League rank of the row's field goal percentage for the season and split.
   fga_rank: League rank of the row's field goals attempted for the season and split.
   fgm_rank: League rank of the row's field goals made for the season and split.
@@ -5612,39 +5468,39 @@ leaguedashplayerclutch:
 leaguedashplayerptshot:
   efg_pct: Percentage or rate for efg percentage in the requested NBA or WNBA Stats split.
   fg2_pct: Percentage or rate for two-point field goals percentage in the requested NBA or WNBA Stats split.
-  fg2a: Shooting metric for fg2a in the requested NBA or WNBA Stats split.
-  fg2a_frequency: Shooting metric for fg2a frequency in the requested NBA or WNBA Stats split.
-  fg2m: Shooting metric for fg2m in the requested NBA or WNBA Stats split.
-  fg3a_frequency: Shooting metric for fg3a frequency in the requested NBA or WNBA Stats split.
+  fg2_a: Shooting metric for fg2a in the requested NBA or WNBA Stats split.
+  fg2_a_frequency: Shooting metric for fg2a frequency in the requested NBA or WNBA Stats split.
+  fg2_m: Shooting metric for fg2m in the requested NBA or WNBA Stats split.
+  fg3_a_frequency: Shooting metric for fg3a frequency in the requested NBA or WNBA Stats split.
   fga_frequency: Shooting metric for fga frequency in the requested NBA or WNBA Stats split.
   player_last_team_abbreviation: NBA or WNBA Stats value for player last team abbreviation in the leaguedashplayerptshot result
     set.
   player_last_team_id: Stats API identifier for player last team identifier associated with this NBA or WNBA Stats row.
 leaguedashplayershotlocations:
-  10-14_ft_fg_pct: Field goal percentage on shots from 10-14-f feet, as a decimal.
-  10-14_ft_fga: Field goals attempted from 10-14 feet.
-  10-14_ft_fgm: Field goals made from 10-14 feet.
-  15-19_ft_fg_pct: Field goal percentage on shots from 15-19-f feet, as a decimal.
-  15-19_ft_fga: Field goals attempted from 15-19 feet.
-  15-19_ft_fgm: Field goals made from 15-19 feet.
-  20-24_ft_fg_pct: Field goal percentage on shots from 20-24-f feet, as a decimal.
-  20-24_ft_fga: Field goals attempted from 20-24 feet.
-  20-24_ft_fgm: Field goals made from 20-24 feet.
-  25-29_ft_fg_pct: Field goal percentage on shots from 25-29-f feet, as a decimal.
-  25-29_ft_fga: Field goals attempted from 25-29 feet.
-  25-29_ft_fgm: Field goals made from 25-29 feet.
-  30-34_ft_fg_pct: Field goal percentage on shots from 30-34-f feet, as a decimal.
-  30-34_ft_fga: Field goals attempted from 30-34 feet.
-  30-34_ft_fgm: Field goals made from 30-34 feet.
-  35-39_ft_fg_pct: Field goal percentage on shots from 35-39-f feet, as a decimal.
-  35-39_ft_fga: Field goals attempted from 35-39 feet.
-  35-39_ft_fgm: Field goals made from 35-39 feet.
+  10_14_ft_fg_pct: Field goal percentage on shots from 10-14-f feet, as a decimal.
+  10_14_ft_fga: Field goals attempted from 10-14 feet.
+  10_14_ft_fgm: Field goals made from 10-14 feet.
+  15_19_ft_fg_pct: Field goal percentage on shots from 15-19-f feet, as a decimal.
+  15_19_ft_fga: Field goals attempted from 15-19 feet.
+  15_19_ft_fgm: Field goals made from 15-19 feet.
+  20_24_ft_fg_pct: Field goal percentage on shots from 20-24-f feet, as a decimal.
+  20_24_ft_fga: Field goals attempted from 20-24 feet.
+  20_24_ft_fgm: Field goals made from 20-24 feet.
+  25_29_ft_fg_pct: Field goal percentage on shots from 25-29-f feet, as a decimal.
+  25_29_ft_fga: Field goals attempted from 25-29 feet.
+  25_29_ft_fgm: Field goals made from 25-29 feet.
+  30_34_ft_fg_pct: Field goal percentage on shots from 30-34-f feet, as a decimal.
+  30_34_ft_fga: Field goals attempted from 30-34 feet.
+  30_34_ft_fgm: Field goals made from 30-34 feet.
+  35_39_ft_fg_pct: Field goal percentage on shots from 35-39-f feet, as a decimal.
+  35_39_ft_fga: Field goals attempted from 35-39 feet.
+  35_39_ft_fgm: Field goals made from 35-39 feet.
   40+_ft_fg_pct: Field-goal percentage on attempts from 40 feet and beyond, as a decimal.
   40+_ft_fga: Field goals attempted from 40 feet and beyond, per the stats API's shot-location distance bands.
   40+_ft_fgm: Field goals made from 40 feet and beyond, per the stats API's shot-location distance bands.
-  5-9_ft_fg_pct: Field goal percentage on shots from 5-9-f feet, as a decimal.
-  5-9_ft_fga: Field goals attempted from 5-9 feet.
-  5-9_ft_fgm: Field goals made from 5-9 feet.
+  5_9_ft_fg_pct: Field goal percentage on shots from 5-9-f feet, as a decimal.
+  5_9_ft_fga: Field goals attempted from 5-9 feet.
+  5_9_ft_fgm: Field goals made from 5-9 feet.
   less_than_5_ft_fg_pct: Field goal percentage on shots from less than 5 feet, as a decimal.
   less_than_5_ft_fga: Field goals attempted from less than 5 feet.
   less_than_5_ft_fgm: Field goals made from less than 5 feet.
@@ -5657,8 +5513,8 @@ leaguedashplayerstats:
   dd2_rank: Player's league rank for double-doubles recorded (1 = most double-doubles).
   dreb_rank: Player's league rank for defensive rebounds (1 = most defensive rebounds).
   fg3_pct_rank: Player's league rank for three-point percentage (1 = highest pct).
-  fg3a_rank: Player's league rank for three-point field goal attempts (1 = most attempts).
-  fg3m_rank: Player's league rank for three-point field goals made (1 = most made).
+  fg3_a_rank: Player's league rank for three-point field goal attempts (1 = most attempts).
+  fg3_m_rank: Player's league rank for three-point field goals made (1 = most made).
   fg_pct_rank: Player's league rank for field goal percentage (1 = highest pct).
   fga_rank: Player's league rank for field goal attempts (1 = most attempts).
   fgm_rank: Player's league rank for field goals made (1 = most made).
@@ -5719,8 +5575,8 @@ leaguedashteamclutch:
   blka_rank: League rank of the row's shot attempts blocked by opponents (blocks against) for the season and split.
   dreb_rank: League rank of the row's defensive rebounds for the season and split.
   fg3_pct_rank: League rank of the row's three-point field goal percentage for the season and split.
-  fg3a_rank: League rank of the row's three-point field goals attempted for the season and split.
-  fg3m_rank: League rank of the row's three-point field goals made for the season and split.
+  fg3_a_rank: League rank of the row's three-point field goals attempted for the season and split.
+  fg3_m_rank: League rank of the row's three-point field goals made for the season and split.
   fg_pct_rank: League rank of the row's field goal percentage for the season and split.
   fga_rank: League rank of the row's field goals attempted for the season and split.
   fgm_rank: League rank of the row's field goals made for the season and split.
@@ -5744,36 +5600,36 @@ leaguedashteamclutch:
 leaguedashteamptshot:
   efg_pct: Percentage or rate for efg percentage in the requested NBA or WNBA Stats split.
   fg2_pct: Percentage or rate for two-point field goals percentage in the requested NBA or WNBA Stats split.
-  fg2a: Shooting metric for fg2a in the requested NBA or WNBA Stats split.
-  fg2a_frequency: Shooting metric for fg2a frequency in the requested NBA or WNBA Stats split.
-  fg2m: Shooting metric for fg2m in the requested NBA or WNBA Stats split.
-  fg3a_frequency: Shooting metric for fg3a frequency in the requested NBA or WNBA Stats split.
+  fg2_a: Shooting metric for fg2a in the requested NBA or WNBA Stats split.
+  fg2_a_frequency: Shooting metric for fg2a frequency in the requested NBA or WNBA Stats split.
+  fg2_m: Shooting metric for fg2m in the requested NBA or WNBA Stats split.
+  fg3_a_frequency: Shooting metric for fg3a frequency in the requested NBA or WNBA Stats split.
   fga_frequency: Shooting metric for fga frequency in the requested NBA or WNBA Stats split.
 leaguedashteamshotlocations:
-  10-14_ft_fg_pct: Field goal percentage on shots from 10-14-f feet, as a decimal.
-  10-14_ft_fga: Field goals attempted from 10-14 feet.
-  10-14_ft_fgm: Field goals made from 10-14 feet.
-  15-19_ft_fg_pct: Field goal percentage on shots from 15-19-f feet, as a decimal.
-  15-19_ft_fga: Field goals attempted from 15-19 feet.
-  15-19_ft_fgm: Field goals made from 15-19 feet.
-  20-24_ft_fg_pct: Field goal percentage on shots from 20-24-f feet, as a decimal.
-  20-24_ft_fga: Field goals attempted from 20-24 feet.
-  20-24_ft_fgm: Field goals made from 20-24 feet.
-  25-29_ft_fg_pct: Field goal percentage on shots from 25-29-f feet, as a decimal.
-  25-29_ft_fga: Field goals attempted from 25-29 feet.
-  25-29_ft_fgm: Field goals made from 25-29 feet.
-  30-34_ft_fg_pct: Field goal percentage on shots from 30-34-f feet, as a decimal.
-  30-34_ft_fga: Field goals attempted from 30-34 feet.
-  30-34_ft_fgm: Field goals made from 30-34 feet.
-  35-39_ft_fg_pct: Field goal percentage on shots from 35-39-f feet, as a decimal.
-  35-39_ft_fga: Field goals attempted from 35-39 feet.
-  35-39_ft_fgm: Field goals made from 35-39 feet.
+  10_14_ft_fg_pct: Field goal percentage on shots from 10-14-f feet, as a decimal.
+  10_14_ft_fga: Field goals attempted from 10-14 feet.
+  10_14_ft_fgm: Field goals made from 10-14 feet.
+  15_19_ft_fg_pct: Field goal percentage on shots from 15-19-f feet, as a decimal.
+  15_19_ft_fga: Field goals attempted from 15-19 feet.
+  15_19_ft_fgm: Field goals made from 15-19 feet.
+  20_24_ft_fg_pct: Field goal percentage on shots from 20-24-f feet, as a decimal.
+  20_24_ft_fga: Field goals attempted from 20-24 feet.
+  20_24_ft_fgm: Field goals made from 20-24 feet.
+  25_29_ft_fg_pct: Field goal percentage on shots from 25-29-f feet, as a decimal.
+  25_29_ft_fga: Field goals attempted from 25-29 feet.
+  25_29_ft_fgm: Field goals made from 25-29 feet.
+  30_34_ft_fg_pct: Field goal percentage on shots from 30-34-f feet, as a decimal.
+  30_34_ft_fga: Field goals attempted from 30-34 feet.
+  30_34_ft_fgm: Field goals made from 30-34 feet.
+  35_39_ft_fg_pct: Field goal percentage on shots from 35-39-f feet, as a decimal.
+  35_39_ft_fga: Field goals attempted from 35-39 feet.
+  35_39_ft_fgm: Field goals made from 35-39 feet.
   40+_ft_fg_pct: Team field-goal percentage on attempts from 40 feet and beyond, as a decimal.
   40+_ft_fga: Team field goals attempted from 40 feet and beyond, per the stats API's shot-location distance bands.
   40+_ft_fgm: Team field goals made from 40 feet and beyond, per the stats API's shot-location distance bands.
-  5-9_ft_fg_pct: Field goal percentage on shots from 5-9-f feet, as a decimal.
-  5-9_ft_fga: Field goals attempted from 5-9 feet.
-  5-9_ft_fgm: Field goals made from 5-9 feet.
+  5_9_ft_fg_pct: Field goal percentage on shots from 5-9-f feet, as a decimal.
+  5_9_ft_fga: Field goals attempted from 5-9 feet.
+  5_9_ft_fgm: Field goals made from 5-9 feet.
   less_than_5_ft_fg_pct: Field goal percentage on shots from less than 5 feet, as a decimal.
   less_than_5_ft_fga: Field goals attempted from less than 5 feet.
   less_than_5_ft_fgm: Field goals made from less than 5 feet.
@@ -5786,9 +5642,9 @@ leaguedashteamstats:
   dreb_rank: Rank for defensive rebounds within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader.
   fg3_pct_rank: Rank for three-point field-goal percentage within the requested NBA or WNBA Stats leaderboard or split, where
     1 is the leader.
-  fg3a_rank: Rank for three-point field goals attempted within the requested NBA or WNBA Stats leaderboard or split, where
+  fg3_a_rank: Rank for three-point field goals attempted within the requested NBA or WNBA Stats leaderboard or split, where
     1 is the leader.
-  fg3m_rank: Rank for three-point field goals made within the requested NBA or WNBA Stats leaderboard or split, where 1 is
+  fg3_m_rank: Rank for three-point field goals made within the requested NBA or WNBA Stats leaderboard or split, where 1 is
     the leader.
   fg_pct_rank: Rank for field-goal percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the
     leader.
@@ -5815,8 +5671,8 @@ leaguedashteamstats:
 leaguehustlestatsplayer:
   box_out_player_rebs: Rebounds the player secured directly off their own box-outs.
   box_out_player_team_rebs: Team rebounds secured following the row's box-outs.
-  contested_shots_2pt: Opponent two-point attempts contested.
-  contested_shots_3pt: Opponent three-point attempts contested.
+  contested_shots_2_pt: Opponent two-point attempts contested.
+  contested_shots_3_pt: Opponent three-point attempts contested.
   def_boxouts: Box-outs recorded on the defensive glass.
   def_loose_balls_recovered: Loose balls recovered while on defense.
   loose_balls_recovered: Total loose balls recovered.
@@ -5830,8 +5686,8 @@ leaguehustlestatsplayer:
   pct_loose_balls_recovered_off: Share of recovered loose balls that came on offense, as a decimal.
   screen_ast_pts: Points teammates scored directly off the row's screen assists.
 leaguehustlestatsteam:
-  contested_shots_2pt: Opponent two-point attempts contested.
-  contested_shots_3pt: Opponent three-point attempts contested.
+  contested_shots_2_pt: Opponent two-point attempts contested.
+  contested_shots_3_pt: Opponent three-point attempts contested.
   def_boxouts: Box-outs recorded on the defensive glass.
   def_loose_balls_recovered: Loose balls recovered while on defense.
   loose_balls_recovered: Total loose balls recovered.
@@ -5851,9 +5707,9 @@ leaguelineupviz:
   opp_fta_rate: Opponent free throw attempt rate against the lineup.
   opp_tov_pct: Opponent turnover percentage forced by the lineup.
   pct_ast_fgm: Percentage of made field goals that were assisted, as a decimal.
-  pct_fga_2pt: Share of field goal attempts taken as two-pointers, as a decimal.
-  pct_fga_3pt: Share of field goal attempts taken as three-pointers, as a decimal.
-  pct_pts_2pt_mr: Share of points scored on mid-range two-pointers, as a decimal.
+  pct_fga_2_pt: Share of field goal attempts taken as two-pointers, as a decimal.
+  pct_fga_3_pt: Share of field goal attempts taken as three-pointers, as a decimal.
+  pct_pts_2_pt_mr: Share of points scored on mid-range two-pointers, as a decimal.
   pct_pts_fb: Share of points scored on fast breaks, as a decimal.
   pct_pts_ft: Share of points scored at the free throw line, as a decimal.
   pct_pts_paint: Share of points scored in the paint, as a decimal.
@@ -5870,9 +5726,9 @@ leagueplayerondetails:
   dreb_rank: Rank for defensive rebounds within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader.
   fg3_pct_rank: Rank for three-point field-goal percentage within the requested NBA or WNBA Stats leaderboard or split, where
     1 is the leader.
-  fg3a_rank: Rank for three-point field goals attempted within the requested NBA or WNBA Stats leaderboard or split, where
+  fg3_a_rank: Rank for three-point field goals attempted within the requested NBA or WNBA Stats leaderboard or split, where
     1 is the leader.
-  fg3m_rank: Rank for three-point field goals made within the requested NBA or WNBA Stats leaderboard or split, where 1 is
+  fg3_m_rank: Rank for three-point field goals made within the requested NBA or WNBA Stats leaderboard or split, where 1 is
     the leader.
   fg_pct_rank: Rank for field-goal percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the
     leader.
@@ -5925,8 +5781,8 @@ leagueseasonmatchups:
   matchup_ast: NBA or WNBA Stats value for matchup assists in the leagueseasonmatchups result set.
   matchup_blk: NBA or WNBA Stats value for matchup blocks in the leagueseasonmatchups result set.
   matchup_fg3_pct: Percentage or rate for matchup three-point field goals percentage in the requested NBA or WNBA Stats split.
-  matchup_fg3a: Shooting metric for matchup fg3a in the requested NBA or WNBA Stats split.
-  matchup_fg3m: Shooting metric for matchup fg3m in the requested NBA or WNBA Stats split.
+  matchup_fg3_a: Shooting metric for matchup fg3a in the requested NBA or WNBA Stats split.
+  matchup_fg3_m: Shooting metric for matchup fg3m in the requested NBA or WNBA Stats split.
   matchup_fg_pct: Percentage or rate for matchup field goals percentage in the requested NBA or WNBA Stats split.
   matchup_fga: Shooting metric for matchup fga in the requested NBA or WNBA Stats split.
   matchup_fgm: Shooting metric for matchup fgm in the requested NBA or WNBA Stats split.
@@ -5941,153 +5797,153 @@ leagueseasonmatchups:
   sfl: NBA or WNBA Stats value for sfl in the leagueseasonmatchups result set.
   team_pts: Scoring or score-margin metric for team points in the requested NBA or WNBA Stats split.
 leaguestandings:
-  aheadathalf: NBA or WNBA Stats value for aheadathalf in the leaguestandings result set.
-  aheadatthird: NBA or WNBA Stats value for aheadatthird in the leaguestandings result set.
+  ahead_at_half: NBA or WNBA Stats value for aheadathalf in the leaguestandings result set.
+  ahead_at_third: NBA or WNBA Stats value for aheadatthird in the leaguestandings result set.
   apr: Value for April in the endpoint's monthly NBA or WNBA Stats split.
   aug: Value for August in the endpoint's monthly NBA or WNBA Stats split.
-  behindathalf: NBA or WNBA Stats value for behindathalf in the leaguestandings result set.
-  behindatthird: NBA or WNBA Stats value for behindatthird in the leaguestandings result set.
-  clinchedconferencetitle: Flag indicating clinchedconferencetitle for the requested NBA or WNBA Stats context.
-  clincheddivisiontitle: Flag indicating clincheddivisiontitle for the requested NBA or WNBA Stats context.
-  clinchedplayoffbirth: Flag indicating clinchedplayoffbirth for the requested NBA or WNBA Stats context.
-  clinchindicator: NBA or WNBA Stats value for clinchindicator in the leaguestandings result set.
-  conferencegamesback: NBA or WNBA Stats value for conferencegamesback in the leaguestandings result set.
-  conferencerecord: NBA or WNBA Stats value for conferencerecord in the leaguestandings result set.
-  currenthomestreak: NBA or WNBA Stats value for currenthomestreak in the leaguestandings result set.
-  currentroadstreak: NBA or WNBA Stats value for currentroadstreak in the leaguestandings result set.
-  currentstreak: NBA or WNBA Stats value for currentstreak in the leaguestandings result set.
+  behind_at_half: NBA or WNBA Stats value for behindathalf in the leaguestandings result set.
+  behind_at_third: NBA or WNBA Stats value for behindatthird in the leaguestandings result set.
+  clinched_conference_title: Flag indicating clinchedconferencetitle for the requested NBA or WNBA Stats context.
+  clinched_division_title: Flag indicating clincheddivisiontitle for the requested NBA or WNBA Stats context.
+  clinched_playoff_birth: Flag indicating clinchedplayoffbirth for the requested NBA or WNBA Stats context.
+  clinch_indicator: NBA or WNBA Stats value for clinchindicator in the leaguestandings result set.
+  conference_games_back: NBA or WNBA Stats value for conferencegamesback in the leaguestandings result set.
+  conference_record: NBA or WNBA Stats value for conferencerecord in the leaguestandings result set.
+  current_home_streak: NBA or WNBA Stats value for currenthomestreak in the leaguestandings result set.
+  current_road_streak: NBA or WNBA Stats value for currentroadstreak in the leaguestandings result set.
+  current_streak: NBA or WNBA Stats value for currentstreak in the leaguestandings result set.
   dec: Value for December in the endpoint's monthly NBA or WNBA Stats split.
-  diffpointspg: Scoring or score-margin metric for diffpointspg in the requested NBA or WNBA Stats split.
-  divisiongamesback: NBA or WNBA Stats value for divisiongamesback in the leaguestandings result set.
-  divisionrank: NBA or WNBA Stats value for divisionrank in the leaguestandings result set.
-  divisionrecord: NBA or WNBA Stats value for divisionrecord in the leaguestandings result set.
-  eliminatedconference: Flag indicating eliminatedconference for the requested NBA or WNBA Stats context.
-  eliminateddivision: Flag indicating eliminateddivision for the requested NBA or WNBA Stats context.
+  diff_points_pg: Scoring or score-margin metric for diffpointspg in the requested NBA or WNBA Stats split.
+  division_games_back: NBA or WNBA Stats value for divisiongamesback in the leaguestandings result set.
+  division_rank: NBA or WNBA Stats value for divisionrank in the leaguestandings result set.
+  division_record: NBA or WNBA Stats value for divisionrecord in the leaguestandings result set.
+  eliminated_conference: Flag indicating eliminatedconference for the requested NBA or WNBA Stats context.
+  eliminated_division: Flag indicating eliminateddivision for the requested NBA or WNBA Stats context.
   feb: Value for February in the endpoint's monthly NBA or WNBA Stats split.
-  fewerturnovers: Turnover or loose-ball metric for fewerturnovers in the requested NBA or WNBA Stats split.
+  fewer_turnovers: Turnover or loose-ball metric for fewerturnovers in the requested NBA or WNBA Stats split.
   jan: Value for January in the endpoint's monthly NBA or WNBA Stats split.
   jul: Value for July in the endpoint's monthly NBA or WNBA Stats split.
   jun: Value for June in the endpoint's monthly NBA or WNBA Stats split.
-  last10home: NBA or WNBA Stats value for last10home in the leaguestandings result set.
-  last10road: NBA or WNBA Stats value for last10road in the leaguestandings result set.
-  leadinfgpct: Shooting metric for leadinfgpct in the requested NBA or WNBA Stats split.
-  leadinreb: Rebounding metric for leadinreb in the requested NBA or WNBA Stats split.
-  leagueid: League identifier used in compact NBA Stats schedule and scoreboard result sets.
-  leaguerank: NBA or WNBA Stats value for leaguerank in the leaguestandings result set.
-  longhomestreak: NBA or WNBA Stats value for longhomestreak in the leaguestandings result set.
-  longlossstreak: NBA or WNBA Stats value for longlossstreak in the leaguestandings result set.
-  longroadstreak: NBA or WNBA Stats value for longroadstreak in the leaguestandings result set.
-  longwinstreak: NBA or WNBA Stats value for longwinstreak in the leaguestandings result set.
+  last10_home: NBA or WNBA Stats value for last10home in the leaguestandings result set.
+  last10_road: NBA or WNBA Stats value for last10road in the leaguestandings result set.
+  lead_in_fgpct: Shooting metric for leadinfgpct in the requested NBA or WNBA Stats split.
+  lead_in_reb: Rebounding metric for leadinreb in the requested NBA or WNBA Stats split.
+  league_id: League identifier used in compact NBA Stats schedule and scoreboard result sets.
+  league_rank: NBA or WNBA Stats value for leaguerank in the leaguestandings result set.
+  long_home_streak: NBA or WNBA Stats value for longhomestreak in the leaguestandings result set.
+  long_loss_streak: NBA or WNBA Stats value for longlossstreak in the leaguestandings result set.
+  long_road_streak: NBA or WNBA Stats value for longroadstreak in the leaguestandings result set.
+  long_win_streak: NBA or WNBA Stats value for longwinstreak in the leaguestandings result set.
   mar: Value for March in the endpoint's monthly NBA or WNBA Stats split.
   may: Value for May in the endpoint's monthly NBA or WNBA Stats split.
   nov: Value for November in the endpoint's monthly NBA or WNBA Stats split.
   oct: Value for October in the endpoint's monthly NBA or WNBA Stats split.
-  oppover500: NBA or WNBA Stats value for oppover500 in the leaguestandings result set.
-  opppointspg: Scoring or score-margin metric for opppointspg in the requested NBA or WNBA Stats split.
-  oppscore100pts: Scoring or score-margin metric for oppscore100pts in the requested NBA or WNBA Stats split.
-  playoffrank: NBA or WNBA Stats value for playoffrank in the leaguestandings result set.
-  pointspg: Scoring or score-margin metric for pointspg in the requested NBA or WNBA Stats split.
-  postas: NBA or WNBA Stats value for postas in the leaguestandings result set.
-  preas: NBA or WNBA Stats value for preas in the leaguestandings result set.
-  score100pts: Scoring or score-margin metric for score100pts in the requested NBA or WNBA Stats split.
-  seasonid: Stats API identifier for seasonid associated with this NBA or WNBA Stats row.
+  opp_over500: NBA or WNBA Stats value for oppover500 in the leaguestandings result set.
+  opp_points_pg: Scoring or score-margin metric for opppointspg in the requested NBA or WNBA Stats split.
+  opp_score100_pts: Scoring or score-margin metric for oppscore100pts in the requested NBA or WNBA Stats split.
+  playoff_rank: NBA or WNBA Stats value for playoffrank in the leaguestandings result set.
+  points_pg: Scoring or score-margin metric for pointspg in the requested NBA or WNBA Stats split.
+  post_as: NBA or WNBA Stats value for postas in the leaguestandings result set.
+  pre_as: NBA or WNBA Stats value for preas in the leaguestandings result set.
+  score100_pts: Scoring or score-margin metric for score100pts in the requested NBA or WNBA Stats split.
+  season_id: Stats API identifier for seasonid associated with this NBA or WNBA Stats row.
   sep: Value for September in the endpoint's monthly NBA or WNBA Stats split.
-  strcurrenthomestreak: NBA or WNBA Stats value for strcurrenthomestreak in the leaguestandings result set.
-  strcurrentroadstreak: NBA or WNBA Stats value for strcurrentroadstreak in the leaguestandings result set.
-  strlonghomestreak: NBA or WNBA Stats value for strlonghomestreak in the leaguestandings result set.
-  strlongroadstreak: NBA or WNBA Stats value for strlongroadstreak in the leaguestandings result set.
-  tenptsormore: Scoring or score-margin metric for tenptsormore in the requested NBA or WNBA Stats split.
-  threeptsorless: Scoring or score-margin metric for threeptsorless in the requested NBA or WNBA Stats split.
-  tiedathalf: NBA or WNBA Stats value for tiedathalf in the leaguestandings result set.
-  tiedatthird: NBA or WNBA Stats value for tiedatthird in the leaguestandings result set.
-  vsatlantic: NBA or WNBA Stats value for vsatlantic in the leaguestandings result set.
-  vscentral: NBA or WNBA Stats value for vscentral in the leaguestandings result set.
-  vseast: NBA or WNBA Stats value for vseast in the leaguestandings result set.
-  vsnorthwest: NBA or WNBA Stats value for vsnorthwest in the leaguestandings result set.
-  vspacific: NBA or WNBA Stats value for vspacific in the leaguestandings result set.
-  vssoutheast: NBA or WNBA Stats value for vssoutheast in the leaguestandings result set.
-  vssouthwest: NBA or WNBA Stats value for vssouthwest in the leaguestandings result set.
-  vswest: NBA or WNBA Stats value for vswest in the leaguestandings result set.
-  winpct: Winning percentage for the team or split represented by this row.
+  str_current_home_streak: NBA or WNBA Stats value for strcurrenthomestreak in the leaguestandings result set.
+  str_current_road_streak: NBA or WNBA Stats value for strcurrentroadstreak in the leaguestandings result set.
+  str_long_home_streak: NBA or WNBA Stats value for strlonghomestreak in the leaguestandings result set.
+  str_long_road_streak: NBA or WNBA Stats value for strlongroadstreak in the leaguestandings result set.
+  ten_pts_or_more: Scoring or score-margin metric for tenptsormore in the requested NBA or WNBA Stats split.
+  three_pts_or_less: Scoring or score-margin metric for threeptsorless in the requested NBA or WNBA Stats split.
+  tied_at_half: NBA or WNBA Stats value for tiedathalf in the leaguestandings result set.
+  tied_at_third: NBA or WNBA Stats value for tiedatthird in the leaguestandings result set.
+  vs_atlantic: NBA or WNBA Stats value for vsatlantic in the leaguestandings result set.
+  vs_central: NBA or WNBA Stats value for vscentral in the leaguestandings result set.
+  vs_east: NBA or WNBA Stats value for vseast in the leaguestandings result set.
+  vs_northwest: NBA or WNBA Stats value for vsnorthwest in the leaguestandings result set.
+  vs_pacific: NBA or WNBA Stats value for vspacific in the leaguestandings result set.
+  vs_southeast: NBA or WNBA Stats value for vssoutheast in the leaguestandings result set.
+  vs_southwest: NBA or WNBA Stats value for vssouthwest in the leaguestandings result set.
+  vs_west: NBA or WNBA Stats value for vswest in the leaguestandings result set.
+  win_pct: Winning percentage for the team or split represented by this row.
 leaguestandingsv3:
-  aheadathalf: NBA or WNBA Stats value for aheadathalf in the leaguestandingsv3 result set.
-  aheadatthird: NBA or WNBA Stats value for aheadatthird in the leaguestandingsv3 result set.
+  ahead_at_half: NBA or WNBA Stats value for aheadathalf in the leaguestandingsv3 result set.
+  ahead_at_third: NBA or WNBA Stats value for aheadatthird in the leaguestandingsv3 result set.
   apr: Value for April in the endpoint's monthly NBA or WNBA Stats split.
   aug: Value for August in the endpoint's monthly NBA or WNBA Stats split.
-  behindathalf: NBA or WNBA Stats value for behindathalf in the leaguestandingsv3 result set.
-  behindatthird: NBA or WNBA Stats value for behindatthird in the leaguestandingsv3 result set.
-  clinchedconferencetitle: Flag indicating clinchedconferencetitle for the requested NBA or WNBA Stats context.
-  clincheddivisiontitle: Flag indicating clincheddivisiontitle for the requested NBA or WNBA Stats context.
-  clinchedplayin: Flag indicating clinchedplayin for the requested NBA or WNBA Stats context.
-  clinchedplayoffbirth: Flag indicating clinchedplayoffbirth for the requested NBA or WNBA Stats context.
-  clinchedpostseason: Flag indicating clinchedpostseason for the requested NBA or WNBA Stats context.
-  clinchindicator: NBA or WNBA Stats value for clinchindicator in the leaguestandingsv3 result set.
-  conferencegamesback: NBA or WNBA Stats value for conferencegamesback in the leaguestandingsv3 result set.
-  conferencerecord: NBA or WNBA Stats value for conferencerecord in the leaguestandingsv3 result set.
-  currenthomestreak: NBA or WNBA Stats value for currenthomestreak in the leaguestandingsv3 result set.
-  currentroadstreak: NBA or WNBA Stats value for currentroadstreak in the leaguestandingsv3 result set.
-  currentstreak: NBA or WNBA Stats value for currentstreak in the leaguestandingsv3 result set.
+  behind_at_half: NBA or WNBA Stats value for behindathalf in the leaguestandingsv3 result set.
+  behind_at_third: NBA or WNBA Stats value for behindatthird in the leaguestandingsv3 result set.
+  clinched_conference_title: Flag indicating clinchedconferencetitle for the requested NBA or WNBA Stats context.
+  clinched_division_title: Flag indicating clincheddivisiontitle for the requested NBA or WNBA Stats context.
+  clinched_play_in: Flag indicating clinchedplayin for the requested NBA or WNBA Stats context.
+  clinched_playoff_birth: Flag indicating clinchedplayoffbirth for the requested NBA or WNBA Stats context.
+  clinched_post_season: Flag indicating clinchedpostseason for the requested NBA or WNBA Stats context.
+  clinch_indicator: NBA or WNBA Stats value for clinchindicator in the leaguestandingsv3 result set.
+  conference_games_back: NBA or WNBA Stats value for conferencegamesback in the leaguestandingsv3 result set.
+  conference_record: NBA or WNBA Stats value for conferencerecord in the leaguestandingsv3 result set.
+  current_home_streak: NBA or WNBA Stats value for currenthomestreak in the leaguestandingsv3 result set.
+  current_road_streak: NBA or WNBA Stats value for currentroadstreak in the leaguestandingsv3 result set.
+  current_streak: NBA or WNBA Stats value for currentstreak in the leaguestandingsv3 result set.
   dec: Value for December in the endpoint's monthly NBA or WNBA Stats split.
-  diffpointspg: Scoring or score-margin metric for diffpointspg in the requested NBA or WNBA Stats split.
-  difftotalpoints: Scoring or score-margin metric for difftotalpoints in the requested NBA or WNBA Stats split.
-  divisiongamesback: NBA or WNBA Stats value for divisiongamesback in the leaguestandingsv3 result set.
-  divisionrank: NBA or WNBA Stats value for divisionrank in the leaguestandingsv3 result set.
-  divisionrecord: NBA or WNBA Stats value for divisionrecord in the leaguestandingsv3 result set.
-  eliminatedconference: Flag indicating eliminatedconference for the requested NBA or WNBA Stats context.
-  eliminateddivision: Flag indicating eliminateddivision for the requested NBA or WNBA Stats context.
+  diff_points_pg: Scoring or score-margin metric for diffpointspg in the requested NBA or WNBA Stats split.
+  diff_total_points: Scoring or score-margin metric for difftotalpoints in the requested NBA or WNBA Stats split.
+  division_games_back: NBA or WNBA Stats value for divisiongamesback in the leaguestandingsv3 result set.
+  division_rank: NBA or WNBA Stats value for divisionrank in the leaguestandingsv3 result set.
+  division_record: NBA or WNBA Stats value for divisionrecord in the leaguestandingsv3 result set.
+  eliminated_conference: Flag indicating eliminatedconference for the requested NBA or WNBA Stats context.
+  eliminated_division: Flag indicating eliminateddivision for the requested NBA or WNBA Stats context.
   feb: Value for February in the endpoint's monthly NBA or WNBA Stats split.
-  fewerturnovers: Turnover or loose-ball metric for fewerturnovers in the requested NBA or WNBA Stats split.
+  fewer_turnovers: Turnover or loose-ball metric for fewerturnovers in the requested NBA or WNBA Stats split.
   jan: Value for January in the endpoint's monthly NBA or WNBA Stats split.
   jul: Value for July in the endpoint's monthly NBA or WNBA Stats split.
   jun: Value for June in the endpoint's monthly NBA or WNBA Stats split.
-  last10home: NBA or WNBA Stats value for last10home in the leaguestandingsv3 result set.
-  last10road: NBA or WNBA Stats value for last10road in the leaguestandingsv3 result set.
-  leadinfgpct: Shooting metric for leadinfgpct in the requested NBA or WNBA Stats split.
-  leadinreb: Rebounding metric for leadinreb in the requested NBA or WNBA Stats split.
-  leaguegamesback: NBA or WNBA Stats value for leaguegamesback in the leaguestandingsv3 result set.
-  leagueid: League identifier used in compact NBA Stats schedule and scoreboard result sets.
-  leaguerank: NBA or WNBA Stats value for leaguerank in the leaguestandingsv3 result set.
-  longhomestreak: NBA or WNBA Stats value for longhomestreak in the leaguestandingsv3 result set.
-  longlossstreak: NBA or WNBA Stats value for longlossstreak in the leaguestandingsv3 result set.
-  longroadstreak: NBA or WNBA Stats value for longroadstreak in the leaguestandingsv3 result set.
-  longwinstreak: NBA or WNBA Stats value for longwinstreak in the leaguestandingsv3 result set.
+  last10_home: NBA or WNBA Stats value for last10home in the leaguestandingsv3 result set.
+  last10_road: NBA or WNBA Stats value for last10road in the leaguestandingsv3 result set.
+  lead_in_fgpct: Shooting metric for leadinfgpct in the requested NBA or WNBA Stats split.
+  lead_in_reb: Rebounding metric for leadinreb in the requested NBA or WNBA Stats split.
+  league_games_back: NBA or WNBA Stats value for leaguegamesback in the leaguestandingsv3 result set.
+  league_id: League identifier used in compact NBA Stats schedule and scoreboard result sets.
+  league_rank: NBA or WNBA Stats value for leaguerank in the leaguestandingsv3 result set.
+  long_home_streak: NBA or WNBA Stats value for longhomestreak in the leaguestandingsv3 result set.
+  long_loss_streak: NBA or WNBA Stats value for longlossstreak in the leaguestandingsv3 result set.
+  long_road_streak: NBA or WNBA Stats value for longroadstreak in the leaguestandingsv3 result set.
+  long_win_streak: NBA or WNBA Stats value for longwinstreak in the leaguestandingsv3 result set.
   mar: Value for March in the endpoint's monthly NBA or WNBA Stats split.
   may: Value for May in the endpoint's monthly NBA or WNBA Stats split.
   nov: Value for November in the endpoint's monthly NBA or WNBA Stats split.
   oct: Value for October in the endpoint's monthly NBA or WNBA Stats split.
   opp_score_80_plus: Opponent score 80 plus for the requested NBA or WNBA team, player, lineup, or game split.
   opp_score_below_80: Opponent score below 80 for the requested NBA or WNBA team, player, lineup, or game split.
-  oppover500: NBA or WNBA Stats value for oppover500 in the leaguestandingsv3 result set.
-  opppointspg: Scoring or score-margin metric for opppointspg in the requested NBA or WNBA Stats split.
-  oppscore100pts: Scoring or score-margin metric for oppscore100pts in the requested NBA or WNBA Stats split.
-  opptotalpoints: Scoring or score-margin metric for opptotalpoints in the requested NBA or WNBA Stats split.
-  playoffrank: NBA or WNBA Stats value for playoffrank in the leaguestandingsv3 result set.
-  playoffseeding: NBA or WNBA Stats value for playoffseeding in the leaguestandingsv3 result set.
-  pointspg: Scoring or score-margin metric for pointspg in the requested NBA or WNBA Stats split.
-  score100pts: Scoring or score-margin metric for score100pts in the requested NBA or WNBA Stats split.
+  opp_over500: NBA or WNBA Stats value for oppover500 in the leaguestandingsv3 result set.
+  opp_points_pg: Scoring or score-margin metric for opppointspg in the requested NBA or WNBA Stats split.
+  opp_score100_pts: Scoring or score-margin metric for oppscore100pts in the requested NBA or WNBA Stats split.
+  opp_total_points: Scoring or score-margin metric for opptotalpoints in the requested NBA or WNBA Stats split.
+  playoff_rank: NBA or WNBA Stats value for playoffrank in the leaguestandingsv3 result set.
+  playoff_seeding: NBA or WNBA Stats value for playoffseeding in the leaguestandingsv3 result set.
+  points_pg: Scoring or score-margin metric for pointspg in the requested NBA or WNBA Stats split.
+  score100_pts: Scoring or score-margin metric for score100pts in the requested NBA or WNBA Stats split.
   score_80_plus: Scoring or score-margin metric for score 80 plus in the requested NBA or WNBA Stats split.
   score_below_80: Scoring or score-margin metric for score below 80 in the requested NBA or WNBA Stats split.
-  seasonid: Stats API identifier for seasonid associated with this NBA or WNBA Stats row.
+  season_id: Stats API identifier for seasonid associated with this NBA or WNBA Stats row.
   sep: Value for September in the endpoint's monthly NBA or WNBA Stats split.
-  strcurrenthomestreak: NBA or WNBA Stats value for strcurrenthomestreak in the leaguestandingsv3 result set.
-  strcurrentroadstreak: NBA or WNBA Stats value for strcurrentroadstreak in the leaguestandingsv3 result set.
-  strlonghomestreak: NBA or WNBA Stats value for strlonghomestreak in the leaguestandingsv3 result set.
-  strlongroadstreak: NBA or WNBA Stats value for strlongroadstreak in the leaguestandingsv3 result set.
-  teamslug: URL slug for teamslug used by NBA or WNBA Stats pages.
-  tenptsormore: Scoring or score-margin metric for tenptsormore in the requested NBA or WNBA Stats split.
-  threeptsorless: Scoring or score-margin metric for threeptsorless in the requested NBA or WNBA Stats split.
-  tiedathalf: NBA or WNBA Stats value for tiedathalf in the leaguestandingsv3 result set.
-  tiedatthird: NBA or WNBA Stats value for tiedatthird in the leaguestandingsv3 result set.
-  totalpoints: Scoring or score-margin metric for totalpoints in the requested NBA or WNBA Stats split.
-  vsatlantic: NBA or WNBA Stats value for vsatlantic in the leaguestandingsv3 result set.
-  vscentral: NBA or WNBA Stats value for vscentral in the leaguestandingsv3 result set.
-  vseast: NBA or WNBA Stats value for vseast in the leaguestandingsv3 result set.
-  vsnorthwest: NBA or WNBA Stats value for vsnorthwest in the leaguestandingsv3 result set.
-  vspacific: NBA or WNBA Stats value for vspacific in the leaguestandingsv3 result set.
-  vssoutheast: NBA or WNBA Stats value for vssoutheast in the leaguestandingsv3 result set.
-  vssouthwest: NBA or WNBA Stats value for vssouthwest in the leaguestandingsv3 result set.
-  vswest: NBA or WNBA Stats value for vswest in the leaguestandingsv3 result set.
-  winpct: Winning percentage for the team or split represented by this row.
+  str_current_home_streak: NBA or WNBA Stats value for strcurrenthomestreak in the leaguestandingsv3 result set.
+  str_current_road_streak: NBA or WNBA Stats value for strcurrentroadstreak in the leaguestandingsv3 result set.
+  str_long_home_streak: NBA or WNBA Stats value for strlonghomestreak in the leaguestandingsv3 result set.
+  str_long_road_streak: NBA or WNBA Stats value for strlongroadstreak in the leaguestandingsv3 result set.
+  team_slug: URL slug for teamslug used by NBA or WNBA Stats pages.
+  ten_pts_or_more: Scoring or score-margin metric for tenptsormore in the requested NBA or WNBA Stats split.
+  three_pts_or_less: Scoring or score-margin metric for threeptsorless in the requested NBA or WNBA Stats split.
+  tied_at_half: NBA or WNBA Stats value for tiedathalf in the leaguestandingsv3 result set.
+  tied_at_third: NBA or WNBA Stats value for tiedatthird in the leaguestandingsv3 result set.
+  total_points: Scoring or score-margin metric for totalpoints in the requested NBA or WNBA Stats split.
+  vs_atlantic: NBA or WNBA Stats value for vsatlantic in the leaguestandingsv3 result set.
+  vs_central: NBA or WNBA Stats value for vscentral in the leaguestandingsv3 result set.
+  vs_east: NBA or WNBA Stats value for vseast in the leaguestandingsv3 result set.
+  vs_northwest: NBA or WNBA Stats value for vsnorthwest in the leaguestandingsv3 result set.
+  vs_pacific: NBA or WNBA Stats value for vspacific in the leaguestandingsv3 result set.
+  vs_southeast: NBA or WNBA Stats value for vssoutheast in the leaguestandingsv3 result set.
+  vs_southwest: NBA or WNBA Stats value for vssouthwest in the leaguestandingsv3 result set.
+  vs_west: NBA or WNBA Stats value for vswest in the leaguestandingsv3 result set.
+  win_pct: Winning percentage for the team or split represented by this row.
 load_cfb_adv_defensive:
   TFL: Count of scrimmage plays the defense held to negative yardage (non-penalty, non-special-teams, ESPN statYardage below
     zero) plus every sack.
@@ -23673,8 +23529,8 @@ matchupsrollup:
   matchup_ast: NBA or WNBA Stats value for matchup assists in the matchupsrollup result set.
   matchup_blk: NBA or WNBA Stats value for matchup blocks in the matchupsrollup result set.
   matchup_fg3_pct: Percentage or rate for matchup three-point field goals percentage in the requested NBA or WNBA Stats split.
-  matchup_fg3a: Shooting metric for matchup fg3a in the requested NBA or WNBA Stats split.
-  matchup_fg3m: Shooting metric for matchup fg3m in the requested NBA or WNBA Stats split.
+  matchup_fg3_a: Shooting metric for matchup fg3a in the requested NBA or WNBA Stats split.
+  matchup_fg3_m: Shooting metric for matchup fg3m in the requested NBA or WNBA Stats split.
   matchup_fg_pct: Percentage or rate for matchup field goals percentage in the requested NBA or WNBA Stats split.
   matchup_fga: Shooting metric for matchup fga in the requested NBA or WNBA Stats split.
   matchup_fgm: Shooting metric for matchup fgm in the requested NBA or WNBA Stats split.
@@ -25236,22 +25092,9 @@ nhl_scoreboard:
   tickets_link: URL to the English-language ticket purchase page for the game, as provided by the NHL api-web scoreboard.
   tickets_link_fr: URL to the French-language ticket purchase page for the game, as provided by the NHL api-web scoreboard.
 nil_100:
-  person: Nested On3 person object for the ranked athlete (stringified).
-  valuation: Athlete's On3 NIL valuation in dollars.
 nil_100_v2:
-  person: Nested On3 person object for the ranked athlete (stringified).
-  valuation: Athlete's On3 NIL valuation in dollars.
 nil_compliances_state:
-  current_rules: Text of the state's current NIL rules, as tracked by On3.
-  governing_rule_label: Name of the governing body or rule for NIL in the state.
-  governing_rule_url: URL of the governing NIL rule or policy document.
-  key: On3 RDB key for the state NIL-compliance record.
-  monetization_allowed: Whether the state allows high-school athletes to monetize their NIL.
-  state: U.S. state whose NIL compliance rules the record describes.
-  state_key: On3 key of the U.S. state the compliance record covers.
 nil_rankings:
-  person: Nested On3 person object for the ranked athlete (stringified).
-  valuation: Athlete's On3 NIL valuation in dollars.
 nojhl_leaders:
   photo_small: URL of the player's 60x60 headshot on assets.leaguestat.com, keyed by league and player_id (e.g. 'https://assets.leaguestat.com/<league>/60x60/<player_id>.jpg'),
     or the generic placeholder 'https://lscluster.hockeytech.com/img/nophoto.png'.
@@ -25595,48 +25438,11 @@ on3_team_rankings:
   three_stars: Count of On3 three-star commits.
   year: Recruiting class year of the ranking.
 organizations_draft_class_by_state:
-  state: U.S. state the draft-class grouping covers.
 organizations_draft_count_by_stars:
-  five_stars: Number of the organization's drafted players who were five-star recruits.
-  four_stars: Number of the organization's drafted players who were four-star recruits.
-  three_stars: Number of the organization's drafted players who were three-star recruits.
-  zero_stars: Number of the organization's drafted players who were unrated (zero-star) recruits.
 organizations_draft_count_by_year:
-  blue_chip_percent: Percent of the year's drafted players who were blue-chip (four- or five-star) recruits.
-  five_stars: Number of the organization's players drafted that year who were five-star recruits.
-  four_stars: Number of the organization's players drafted that year who were four-star recruits.
-  talent_ratio: Ratio of the group's draft share to its recruit-population share for the year (On3's talent ratio).
-  three_stars: Number of the organization's players drafted that year who were three-star recruits.
-  zero_stars: Number of the organization's players drafted that year who were unrated (zero-star) recruits.
 organizations_draft_ranking_summary:
-  span_summary: Nested summary of the organization's draft ranking over the multi-year span (stringified).
-  year_summary: Nested summary of the organization's draft ranking for the single year (stringified).
 organizations_drafted_players:
-  college_organization: Nested On3 organization object for the college the player attended (stringified).
-  compensatory: Whether the selection was a compensatory draft pick.
-  drafted_from_organization: Nested On3 organization object for the school the player was drafted out of (stringified).
-  forfeited: Whether the pick was forfeited.
-  high_school_organization: Nested On3 organization object for the player's high school (stringified).
-  key: On3 RDB key for the draft-pick record.
-  person: Nested On3 person object for the drafted player (stringified).
-  recruitment_key: On3 RDB recruitment key linking the draft pick back to the player's recruitment record.
-  state: Home state of the drafted player, per On3.
-  supplementary: Whether the selection came in a supplemental draft.
-  through_organization_one: First intermediate organization the pick passed through in trades before being exercised (On3
-    RDB).
-  through_organization_three: Third intermediate organization the pick passed through in trades before being exercised (On3
-    RDB).
-  through_organization_two: Second intermediate organization the pick passed through in trades before being exercised (On3
-    RDB).
-  trading_organization: Pro organization that traded the pick away, when it changed hands (On3 RDB).
 organizations_drafts_by_stars_summary:
-  draft_rank: Organization's national rank by draft production.
-  five_star_summary: Nested draft summary for the organization's five-star recruits (stringified).
-  four_star_summary: Nested draft summary for the organization's four-star recruits (stringified).
-  nat_total_drafted: National total of drafted players in the comparison set.
-  overall_star_summary: Nested draft summary across all star tiers (stringified).
-  three_star_summary: Nested draft summary for the organization's three-star recruits (stringified).
-  total_drafted: Total number of the organization's players drafted.
 organizations_roster:
   industry_comparison: Nested comparison of the player's On3 rating against the industry-consensus rating (stringified).
   nil_value: Player's On3 NIL valuation in dollars.
@@ -25647,7 +25453,6 @@ organizations_roster_header:
   average_nil_value: Average On3 NIL valuation across the roster, in dollars.
   average_rating: Average On3 rating across the roster.
   conference_rank: Program's roster-talent rank within its conference.
-  head_coach: Nested On3 person object for the program's head coach (stringified).
   prev_average_rating: Average On3 roster rating in the previous cycle.
   prev_conference_rank: Program's conference roster-talent rank in the previous cycle.
   prev_talent_rank: Program's roster-talent rank in the previous cycle.
@@ -28495,8 +28300,6 @@ pbp:
   type_desc_key: String key describing the event type category (e.g., 'goal', 'shot-on-goal', 'hit', 'faceoff') in the NHL
     api-web play-by-play feed.
 people_combine_measurements:
-  measurement_type: Measurement category (e.g. height, weight, 40-yard dash) per On3's measurement taxonomy.
-  measurement_type_key: On3 key for the measurement category.
 people_latest_valuation:
   followers: Total social-media followers counted toward the valuation.
   nil_status: Status of the athlete's On3 NIL valuation (e.g. active, inactive).
@@ -28504,24 +28307,6 @@ people_latest_valuation:
   valuation: Athlete's latest On3 NIL valuation in dollars.
   valuation_change: Change in the NIL valuation since the previous update, in dollars.
 people_measurements:
-  age_measurement_occurred: Athlete's age when the measurement was taken.
-  date_added: Date the measurement record was added to the On3 database.
-  date_occurred: Date the measurement was actually taken.
-  delta: Change in the measured value versus the player's previous measurement of the same type.
-  draft_change_percent: Percent difference between the athlete's value and the drafted-player average.
-  drafted_average: Average value of this measurement among drafted players at the combine.
-  elite: Whether On3 flags the result as elite for this measurement type.
-  event_key: On3 key of the camp or combine event where the measurement was taken.
-  is_current: Whether this is the athlete's current (most recent) measurement of the type.
-  key: On3 RDB key for the measurement record.
-  measurement_type: Measurement category (e.g. height, weight, 40-yard dash) per On3's measurement taxonomy.
-  measurement_type_key: On3 key for the measurement category.
-  person_key: On3 person key of the measured athlete.
-  person_sport_org_key: On3 player-sport-organization (PSO) key the measurement is attached to.
-  top300_average: Average value of this measurement among On3 Top300-ranked players.
-  top_average_change_percent: Percent difference between the athlete's value and the Top300 average.
-  verified: Whether On3 verified the measurement.
-  verified_by_user_key: On3 user key of the staffer who verified the measurement.
 people_measurements_averages:
   combine_drafted_average: Average combine value of the measurement among drafted players.
   combine_drafted_difference: Difference between the athlete's value and the drafted-player combine average.
@@ -28534,12 +28319,6 @@ people_measurements_averages:
   top300_average: Average value of the measurement among On3 Top300-ranked players.
   top300_difference: Difference between the athlete's value and the On3 Top300 average.
 people_person_connections:
-  connected_college_organization: Nested On3 organization object for the connected player's college (stringified).
-  connected_draft: Nested On3 draft record for the connected player, when drafted (stringified).
-  connected_player: Nested On3 person object for the connected player (stringified).
-  connected_rating: Nested On3 recruiting rating object for the connected player (stringified).
-  connected_roster_rating: Nested On3 roster rating object for the connected player (stringified).
-  connection: Relationship type linking the two people (e.g. sibling, parent, teammate) per On3.
 people_social:
   handle: Athlete's account handle on the social platform.
   handshake: On3 RDB handshake field on the social-account record (platform link/verification metadata).
@@ -28547,24 +28326,6 @@ people_social_post_summary:
   followers: Athlete's follower count on the platform.
   social_type: Social platform the post summary covers (e.g. Twitter/X, Instagram).
 people_track_and_field_measurements:
-  age_measurement_occurred: Athlete's age when the measurement was taken.
-  date_added: Date the measurement record was added to the On3 database.
-  date_occurred: Date the measurement was actually taken.
-  delta: Change in the measured value versus the player's previous measurement of the same type.
-  draft_change_percent: Percent difference between the athlete's value and the drafted-player average.
-  drafted_average: Average value of this measurement among drafted players at the combine.
-  elite: Whether On3 flags the result as elite for this measurement type.
-  event_key: On3 key of the camp or combine event where the measurement was taken.
-  is_current: Whether this is the athlete's current (most recent) measurement of the type.
-  key: On3 RDB key for the measurement record.
-  measurement_type: Measurement category (e.g. height, weight, 40-yard dash) per On3's measurement taxonomy.
-  measurement_type_key: On3 key for the measurement category.
-  person_key: On3 person key of the measured athlete.
-  person_sport_org_key: On3 player-sport-organization (PSO) key the measurement is attached to.
-  top300_average: Average value of this measurement among On3 Top300-ranked players.
-  top_average_change_percent: Percent difference between the athlete's value and the Top300 average.
-  verified: Whether On3 verified the measurement.
-  verified_by_user_key: On3 user key of the staffer who verified the measurement.
 people_valuation_growth:
   date: Date of the On3 NIL valuation snapshot.
   date_unix: Unix timestamp of the valuation snapshot.
@@ -28572,51 +28333,12 @@ people_valuation_growth:
   valuation: Athlete's On3 NIL valuation in dollars at the snapshot.
   valuation_change: Change in the NIL valuation versus the previous snapshot, in dollars.
 person_connections_connection_key:
-  connected_person_key: On3 person key of the connected person.
-  connected_person_sport: Nested athlete-sport profile of the connected person (stringified).
-  key: On3 RDB key for the person-connection record.
-  person_key: On3 person key of the profile the connection belongs to.
-  sport_key: On3 sport key the connection is scoped to.
 person_game_stats:
   exemptions: Serialized list of statistical exemptions or special-case flags applied to this player's game-log splits.
 person_primary_recruitment_evaluation:
-  author_key: On3 user key of the evaluation's author.
-  author_name: Name of the On3 scout who wrote the evaluation.
-  author_title: Job title of the On3 scout who wrote the evaluation.
-  body: Full text of the scouting evaluation.
-  date_added: Date the evaluation was added.
-  date_updated: Date the evaluation was last updated.
-  date_updated_unix: Unix timestamp of the evaluation's last update.
-  key: On3 RDB key for the scouting evaluation.
-  primary: Whether this is the primary (featured) evaluation for the recruitment.
-  recruitment_key: On3 recruitment key the evaluation is attached to.
 person_recruitment_evaluations:
-  author_key: On3 user key of the evaluation's author.
-  author_name: Name of the On3 scout who wrote the evaluation.
-  author_title: Job title of the On3 scout who wrote the evaluation.
-  body: Full text of the scouting evaluation.
-  date_added: Date the evaluation was added.
-  date_updated: Date the evaluation was last updated.
-  date_updated_unix: Unix timestamp of the evaluation's last update.
-  key: On3 RDB key for the scouting evaluation.
-  primary: Whether this is the primary (featured) evaluation for the recruitment.
-  recruitment_key: On3 recruitment key the evaluation is attached to.
 person_sport_profile_recruit:
-  change: Rank movement since the previous ranking cycle.
-  consensus_change: Consensus rank movement since the previous cycle.
-  consensus_overall_rank: Player's national consensus rank.
-  consensus_position_rank: Player's consensus rank at their position.
-  consensus_rating: Player's industry-consensus rating (blend of the major recruiting services).
-  consensus_stars: Player's star rating under the industry consensus.
-  consensus_state_rank: Player's consensus rank within their home state.
-  five_star_plus: Whether On3 designates the player a Five-Star Plus+ prospect.
-  key: On3 RDB key for the player's ranking row.
-  ranking_key: On3 key of the ranking cycle the row belongs to.
-  state_abbr: Two-letter abbreviation of the player's home state.
 person_sport_rankings:
-  nil_value: Athlete's On3 NIL valuation in dollars.
-  person: Nested On3 person object for the ranked athlete (stringified).
-  ratings: Athlete's ratings across ranking cycles, as a stringified list.
 pff_api_position_report:
   accuracy_oe: Accuracy percentage over expectation, in percentage points (PFF-charted accuracy minus its expected value).
   accuracy_percent: Charted accuracy percentage.
@@ -32431,25 +32153,6 @@ playbyplayv2:
   visitordescription: Text description of the event from the visiting team's perspective; empty when not a visitor action.
   wctimestring: Wall-clock time of day when the event occurred.
 playbyplayv3:
-  actionid: NBA or WNBA Stats action identifier for the play event.
-  actionnumber: Sequential action number for the play within the game feed.
-  actiontype: Normalized play action type reported by NBA or WNBA Stats.
-  gameid: Unique NBA or WNBA Stats game identifier for the play event.
-  isfieldgoal: Flag indicating whether the play event is a field-goal attempt.
-  personid: NBA or WNBA Stats player identifier associated with the play, when present.
-  playername: Full display name for the player associated with the play event.
-  playernamei: Abbreviated player display name used by the play feed.
-  pointstotal: Running points total credited to the player after the play, when reported.
-  scoreaway: Away team's score after the play, when reported by the feed.
-  scorehome: Home team's score after the play, when reported by the feed.
-  shotdistance: Shot distance in feet for shot attempts, when available.
-  shotresult: Result of the shot attempt, such as made or missed.
-  shotvalue: Point value of the shot attempt, usually two or three points.
-  subtype: Secondary play subtype reported by NBA or WNBA Stats.
-  teamtricode: Three-letter code for the team associated with the play event.
-  videoavailable: Flag indicating whether video is available for the play or game row.
-  xlegacy: Legacy NBA Stats x-coordinate for shot-location play events.
-  ylegacy: Legacy NBA Stats y-coordinate for shot-location play events.
 playcall_features:
   down: Down (1-4) at the snap.
   family: 5-class play-call label (inside_run, outside_run, short_pass, deep_pass, scramble).
@@ -32473,7 +32176,6 @@ playcall_features:
   yardline_100: Yards from the opponent end zone at the snap.
   ydstogo: Yards to go for a first down.
 player_all_rankings:
-  change: Rank movement since the previous ranking cycle.
   class_year: Recruiting class year the ranking covers.
   five_star_plus: Whether On3 designates the player a Five-Star Plus+ prospect.
   nearly_five_star_plus: On3 flag that the player narrowly missed the Five-Star Plus+ designation.
@@ -32690,14 +32392,8 @@ player_landing:
   twitter_link: URL to the player's official Twitter/X account as listed on their NHL api-web profile.
   watch_link: URL to the NHL.tv or league streaming page where the player's games can be watched.
 player_organizations:
-  draft: Nested On3 draft record for the player, when drafted (stringified).
-  organizations: Player's organization stints (high school, college, pro) as a stringified list of nested objects.
 player_organizations_org_key:
-  exp_max: Maximum years of experience listed for the player's stint with the organization (On3 RDB).
-  exp_min: Minimum years of experience listed for the player's stint with the organization (On3 RDB).
 player_person_rankings:
-  change: Rank movement since the previous ranking cycle.
-  consensus_change: Consensus rank movement since the previous cycle.
   consensus_overall_rank: Player's national consensus rank.
   consensus_position_rank: Player's consensus rank at their position.
   consensus_rating: Player's industry-consensus rating (blend of the major recruiting services).
@@ -32716,8 +32412,6 @@ player_profile:
   class_year: Player's recruiting class year.
   class_year_recruitment_key: On3 recruitment key for the player's recruiting-class cycle.
   college_org_key: On3 organization key of the player's college.
-  default_asset: Nested On3 asset object for the player's headshot (stringified).
-  default_sport: Nested On3 object for the player's primary sport (stringified).
   degree: Degree the player earned or is pursuing, when listed.
   high_school_org_key: On3 organization key of the player's high school.
   hometown_name: Player's hometown, as listed by On3.
@@ -32732,9 +32426,7 @@ player_profile:
   organization_level: Level of the player's current organization (e.g. high school, college, professional).
   person_can_manage_recruitment: Whether the athlete can self-manage the recruitment on On3.
   person_sport_key: On3 key of the athlete-sport profile (person x sport).
-  player_status: Player's current status per On3 (e.g. active, transfer portal).
   prep_school_org_key: On3 organization key of the player's prep school, when attended.
-  primary_position: Nested On3 object for the player's primary position (stringified).
   prospect_verified: Whether On3 has verified the prospect's profile information.
   ranking_key: On3 key of the ranking cycle the profile's rating belongs to.
   recruitment_key: On3 key of the player's active recruitment record.
@@ -32743,16 +32435,6 @@ player_profile:
   tier: On3 profile tier classification for the player.
   visibility: Profile visibility setting on On3.
 player_team_targets:
-  class_rank: Recruit's rank within their recruiting class.
-  coaches: Recruiting coaches at the target school tied to the recruitment (stringified list).
-  committed_date: Date the recruit committed to the school, when applicable.
-  draft_position_count: Number of players at the recruit's position the school has had drafted.
-  draft_total: Total number of players the school has had drafted.
-  interest: Recruit's interest level in the target school, per On3.
-  official_visit_count: Number of official visits the recruit has taken to the school.
-  position_key: On3 key of the recruit's position.
-  sport: Nested On3 sport object for the target entry (stringified).
-  un_official_visit_count: Number of unofficial visits the recruit has taken to the school.
 player_verified:
   athlete_verified: Whether the athlete has verified their own On3 profile.
   badge: Profile badge assigned by On3, when any.
@@ -32762,8 +32444,6 @@ player_verified:
   class_year: Player's recruiting class year.
   class_year_recruitment_key: On3 recruitment key for the player's recruiting-class cycle.
   college_org_key: On3 organization key of the player's college.
-  default_asset: Nested On3 asset object for the player's headshot (stringified).
-  default_sport: Nested On3 object for the player's primary sport (stringified).
   degree: Degree the player earned or is pursuing, when listed.
   high_school_org_key: On3 organization key of the player's high school.
   hometown_name: Player's hometown, as listed by On3.
@@ -32797,9 +32477,6 @@ player_videos:
   source_url: Source URL of the hosted video.
   thumbnail: URL of the video's thumbnail image.
 player_visit_center:
-  sport: Nested On3 sport object for the visit-center entry (stringified).
-  total_visits: Total number of school visits logged for the recruit.
-  visits: The recruit's school visits with dates and types, as a stringified list.
 playerawards:
   all_nba_team_number: NBA or WNBA Stats value for all NBA team number in the playerawards result set.
   month: NBA or WNBA Stats value for month in the playerawards result set.
@@ -32825,9 +32502,9 @@ playerdashboardbyclutch:
   dreb_rank: Rank for defensive rebounds within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader.
   fg3_pct_rank: Rank for three-point field-goal percentage within the requested NBA or WNBA Stats leaderboard or split, where
     1 is the leader.
-  fg3a_rank: Rank for three-point field goals attempted within the requested NBA or WNBA Stats leaderboard or split, where
+  fg3_a_rank: Rank for three-point field goals attempted within the requested NBA or WNBA Stats leaderboard or split, where
     1 is the leader.
-  fg3m_rank: Rank for three-point field goals made within the requested NBA or WNBA Stats leaderboard or split, where 1 is
+  fg3_m_rank: Rank for three-point field goals made within the requested NBA or WNBA Stats leaderboard or split, where 1 is
     the leader.
   fg_pct_rank: Rank for field-goal percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the
     leader.
@@ -32873,9 +32550,9 @@ playerdashboardbygamesplits:
   dreb_rank: Rank for defensive rebounds within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader.
   fg3_pct_rank: Rank for three-point field-goal percentage within the requested NBA or WNBA Stats leaderboard or split, where
     1 is the leader.
-  fg3a_rank: Rank for three-point field goals attempted within the requested NBA or WNBA Stats leaderboard or split, where
+  fg3_a_rank: Rank for three-point field goals attempted within the requested NBA or WNBA Stats leaderboard or split, where
     1 is the leader.
-  fg3m_rank: Rank for three-point field goals made within the requested NBA or WNBA Stats leaderboard or split, where 1 is
+  fg3_m_rank: Rank for three-point field goals made within the requested NBA or WNBA Stats leaderboard or split, where 1 is
     the leader.
   fg_pct_rank: Rank for field-goal percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the
     leader.
@@ -32921,9 +32598,9 @@ playerdashboardbygeneralsplits:
   dreb_rank: Rank for defensive rebounds within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader.
   fg3_pct_rank: Rank for three-point field-goal percentage within the requested NBA or WNBA Stats leaderboard or split, where
     1 is the leader.
-  fg3a_rank: Rank for three-point field goals attempted within the requested NBA or WNBA Stats leaderboard or split, where
+  fg3_a_rank: Rank for three-point field goals attempted within the requested NBA or WNBA Stats leaderboard or split, where
     1 is the leader.
-  fg3m_rank: Rank for three-point field goals made within the requested NBA or WNBA Stats leaderboard or split, where 1 is
+  fg3_m_rank: Rank for three-point field goals made within the requested NBA or WNBA Stats leaderboard or split, where 1 is
     the leader.
   fg_pct_rank: Rank for field-goal percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the
     leader.
@@ -32969,9 +32646,9 @@ playerdashboardbylastngames:
   dreb_rank: Rank for defensive rebounds within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader.
   fg3_pct_rank: Rank for three-point field-goal percentage within the requested NBA or WNBA Stats leaderboard or split, where
     1 is the leader.
-  fg3a_rank: Rank for three-point field goals attempted within the requested NBA or WNBA Stats leaderboard or split, where
+  fg3_a_rank: Rank for three-point field goals attempted within the requested NBA or WNBA Stats leaderboard or split, where
     1 is the leader.
-  fg3m_rank: Rank for three-point field goals made within the requested NBA or WNBA Stats leaderboard or split, where 1 is
+  fg3_m_rank: Rank for three-point field goals made within the requested NBA or WNBA Stats leaderboard or split, where 1 is
     the leader.
   fg_pct_rank: Rank for field-goal percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the
     leader.
@@ -33015,8 +32692,8 @@ playerdashboardbyopponent:
   dd2_rank: League rank of the row's double-doubles for the season and split.
   dreb_rank: League rank of the row's defensive rebounds for the season and split.
   fg3_pct_rank: League rank of the row's three-point field goal percentage for the season and split.
-  fg3a_rank: League rank of the row's three-point field goals attempted for the season and split.
-  fg3m_rank: League rank of the row's three-point field goals made for the season and split.
+  fg3_a_rank: League rank of the row's three-point field goals attempted for the season and split.
+  fg3_m_rank: League rank of the row's three-point field goals made for the season and split.
   fg_pct_rank: League rank of the row's field goal percentage for the season and split.
   fga_rank: League rank of the row's field goals attempted for the season and split.
   fgm_rank: League rank of the row's field goals made for the season and split.
@@ -33055,29 +32732,29 @@ playerdashboardbyshootingsplits:
     1 is the leader.
   fg3_pct_rank: Rank for three-point field-goal percentage within the requested NBA or WNBA Stats leaderboard or split, where
     1 is the leader.
-  fg3a_rank: Rank for three-point field goals attempted within the requested NBA or WNBA Stats leaderboard or split, where
+  fg3_a_rank: Rank for three-point field goals attempted within the requested NBA or WNBA Stats leaderboard or split, where
     1 is the leader.
-  fg3m_rank: Rank for three-point field goals made within the requested NBA or WNBA Stats leaderboard or split, where 1 is
+  fg3_m_rank: Rank for three-point field goals made within the requested NBA or WNBA Stats leaderboard or split, where 1 is
     the leader.
   fg_pct_rank: Rank for field-goal percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the
     leader.
   fga_rank: Rank for field goals attempted within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader.
   fgm_rank: Rank for field goals made within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader.
   group_set: Name of the grouping family used for this dashboard or split row.
-  pct_ast_2pm: Percentage share of assists 2pm for the requested NBA or WNBA Stats split.
-  pct_ast_2pm_rank: Rank for percentage assists 2pm within the requested NBA or WNBA Stats leaderboard or split, where 1 is
+  pct_ast_2_pm: Percentage share of assists 2pm for the requested NBA or WNBA Stats split.
+  pct_ast_2_pm_rank: Rank for percentage assists 2pm within the requested NBA or WNBA Stats leaderboard or split, where 1 is
     the leader.
-  pct_ast_3pm: Percentage share of assists 3pm for the requested NBA or WNBA Stats split.
-  pct_ast_3pm_rank: Rank for percentage assists 3pm within the requested NBA or WNBA Stats leaderboard or split, where 1 is
+  pct_ast_3_pm: Percentage share of assists 3pm for the requested NBA or WNBA Stats split.
+  pct_ast_3_pm_rank: Rank for percentage assists 3pm within the requested NBA or WNBA Stats leaderboard or split, where 1 is
     the leader.
   pct_ast_fgm: Percentage share of assists fgm for the requested NBA or WNBA Stats split.
   pct_ast_fgm_rank: Rank for percentage assists fgm within the requested NBA or WNBA Stats leaderboard or split, where 1 is
     the leader.
-  pct_uast_2pm: Percentage share of uast 2pm for the requested NBA or WNBA Stats split.
-  pct_uast_2pm_rank: Rank for percentage uast 2pm within the requested NBA or WNBA Stats leaderboard or split, where 1 is
+  pct_uast_2_pm: Percentage share of uast 2pm for the requested NBA or WNBA Stats split.
+  pct_uast_2_pm_rank: Rank for percentage uast 2pm within the requested NBA or WNBA Stats leaderboard or split, where 1 is
     the leader.
-  pct_uast_3pm: Percentage share of uast 3pm for the requested NBA or WNBA Stats split.
-  pct_uast_3pm_rank: Rank for percentage uast 3pm within the requested NBA or WNBA Stats leaderboard or split, where 1 is
+  pct_uast_3_pm: Percentage share of uast 3pm for the requested NBA or WNBA Stats split.
+  pct_uast_3_pm_rank: Rank for percentage uast 3pm within the requested NBA or WNBA Stats leaderboard or split, where 1 is
     the leader.
   pct_uast_fgm: Percentage share of uast fgm for the requested NBA or WNBA Stats split.
   pct_uast_fgm_rank: Rank for percentage uast fgm within the requested NBA or WNBA Stats leaderboard or split, where 1 is
@@ -33093,9 +32770,9 @@ playerdashboardbyteamperformance:
   dreb_rank: Rank for defensive rebounds within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader.
   fg3_pct_rank: Rank for three-point field-goal percentage within the requested NBA or WNBA Stats leaderboard or split, where
     1 is the leader.
-  fg3a_rank: Rank for three-point field goals attempted within the requested NBA or WNBA Stats leaderboard or split, where
+  fg3_a_rank: Rank for three-point field goals attempted within the requested NBA or WNBA Stats leaderboard or split, where
     1 is the leader.
-  fg3m_rank: Rank for three-point field goals made within the requested NBA or WNBA Stats leaderboard or split, where 1 is
+  fg3_m_rank: Rank for three-point field goals made within the requested NBA or WNBA Stats leaderboard or split, where 1 is
     the leader.
   fg_pct_rank: Rank for field-goal percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the
     leader.
@@ -33143,9 +32820,9 @@ playerdashboardbyyearoveryear:
   dreb_rank: Rank for defensive rebounds within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader.
   fg3_pct_rank: Rank for three-point field-goal percentage within the requested NBA or WNBA Stats leaderboard or split, where
     1 is the leader.
-  fg3a_rank: Rank for three-point field goals attempted within the requested NBA or WNBA Stats leaderboard or split, where
+  fg3_a_rank: Rank for three-point field goals attempted within the requested NBA or WNBA Stats leaderboard or split, where
     1 is the leader.
-  fg3m_rank: Rank for three-point field goals made within the requested NBA or WNBA Stats leaderboard or split, where 1 is
+  fg3_m_rank: Rank for three-point field goals made within the requested NBA or WNBA Stats leaderboard or split, where 1 is
     the leader.
   fg_pct_rank: Rank for field-goal percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the
     leader.
@@ -33183,8 +32860,8 @@ playerdashboardbyyearoveryear:
     is the leader.
 playerdashptpass:
   fg2_pct: Percentage or rate for two-point field goals percentage in the requested NBA or WNBA Stats split.
-  fg2a: Shooting metric for fg2a in the requested NBA or WNBA Stats split.
-  fg2m: Shooting metric for fg2m in the requested NBA or WNBA Stats split.
+  fg2_a: Shooting metric for fg2a in the requested NBA or WNBA Stats split.
+  fg2_m: Shooting metric for fg2m in the requested NBA or WNBA Stats split.
   frequency: NBA or WNBA Stats value for frequency in the playerdashptpass result set.
   pass_from: Passing or assist metric for pass from in the requested NBA or WNBA Stats split.
   pass_teammate_player_id: Stats API identifier for pass teammate player identifier associated with this NBA or WNBA Stats
@@ -33215,10 +32892,10 @@ playerdashptshotdefend:
 playerdashptshots:
   efg_pct: Percentage or rate for efg percentage in the requested NBA or WNBA Stats split.
   fg2_pct: Percentage or rate for two-point field goals percentage in the requested NBA or WNBA Stats split.
-  fg2a: Shooting metric for fg2a in the requested NBA or WNBA Stats split.
-  fg2a_frequency: Shooting metric for fg2a frequency in the requested NBA or WNBA Stats split.
-  fg2m: Shooting metric for fg2m in the requested NBA or WNBA Stats split.
-  fg3a_frequency: Shooting metric for fg3a frequency in the requested NBA or WNBA Stats split.
+  fg2_a: Shooting metric for fg2a in the requested NBA or WNBA Stats split.
+  fg2_a_frequency: Shooting metric for fg2a frequency in the requested NBA or WNBA Stats split.
+  fg2_m: Shooting metric for fg2m in the requested NBA or WNBA Stats split.
+  fg3_a_frequency: Shooting metric for fg3a frequency in the requested NBA or WNBA Stats split.
   fga_frequency: Shooting metric for fga frequency in the requested NBA or WNBA Stats split.
   player_name_last_first: Player display name formatted as Last, First for sorting in NBA or WNBA Stats tables.
   touch_time_range: Time value for touch time range in the NBA or WNBA Stats result set.
@@ -33279,9 +32956,9 @@ playergamelogs:
   dreb_rank: Rank for defensive rebounds within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader.
   fg3_pct_rank: Rank for three-point field-goal percentage within the requested NBA or WNBA Stats leaderboard or split, where
     1 is the leader.
-  fg3a_rank: Rank for three-point field goals attempted within the requested NBA or WNBA Stats leaderboard or split, where
+  fg3_a_rank: Rank for three-point field goals attempted within the requested NBA or WNBA Stats leaderboard or split, where
     1 is the leader.
-  fg3m_rank: Rank for three-point field goals made within the requested NBA or WNBA Stats leaderboard or split, where 1 is
+  fg3_m_rank: Rank for three-point field goals made within the requested NBA or WNBA Stats leaderboard or split, where 1 is
     the leader.
   fg_pct_rank: Rank for field-goal percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the
     leader.
@@ -33341,12 +33018,8 @@ players:
   draft: Nested draft-selection details for the player (year, round, pick, and franchise) as returned by the source API.
 players_industry_comparision:
   nil_value: On3 NIL valuation for the player (US dollars).
-  person: Nested person object (identity, school, position, status) for the player.
   ratings: List of per-service rating entries (On3, Rivals, 247, ESPN) composing the industry comparison.
 players_industry_comparision_list:
-  nil_value: Player's On3 NIL valuation in dollars.
-  person: Nested On3 person object for the compared player (stringified).
-  ratings: Player's ratings across the industry services, as a stringified list.
 playervsplayer:
   blka: Shot attempts blocked by opponents (blocks against).
   court_status: Whether the split covers minutes with the vs. player on or off the court.
@@ -33619,15 +33292,8 @@ quotes:
   date_added: Date the quote was added to the On3 database.
   date_updated: Date the quote was last updated.
   key: On3 RDB key for the quote record.
-  person: Nested On3 person object for the quote's subject (stringified).
   person_key: On3 person key of the person quoted or quoted about.
 quotes_key:
-  body: Full text of the quote.
-  date_added: Date the quote was added to the On3 database.
-  date_updated: Date the quote was last updated.
-  key: On3 RDB key for the quote record.
-  person: Nested On3 person object for the quote's subject (stringified).
-  person_key: On3 person key of the person quoted or quoted about.
 receiving_concept:
   base_targets: Total targets from the facet's unsplit base row, across all concepts.
   declined_penalties: Penalties committed by the player that were declined.
@@ -34624,43 +34290,10 @@ receiving_summary:
   yards_per_reception: Average yards per reception.
   yprr: Yards per route run.
 recruitment_primary_recruitment_evaluation:
-  author_key: On3 user key of the evaluation's author.
-  author_name: Name of the On3 scout who wrote the evaluation.
-  author_title: Job title of the On3 scout who wrote the evaluation.
-  body: Full text of the scouting evaluation.
-  date_added: Date the evaluation was added.
-  date_updated: Date the evaluation was last updated.
-  date_updated_unix: Unix timestamp of the evaluation's last update.
-  key: On3 RDB key for the scouting evaluation.
-  primary: Whether this is the primary (featured) evaluation for the recruitment.
-  recruitment_key: On3 recruitment key the evaluation is attached to.
 recruitment_recruitment_evaluations:
-  author_key: On3 user key of the evaluation's author.
-  author_name: Name of the On3 scout who wrote the evaluation.
-  author_title: Job title of the On3 scout who wrote the evaluation.
-  body: Full text of the scouting evaluation.
-  date_added: Date the evaluation was added.
-  date_updated: Date the evaluation was last updated.
-  date_updated_unix: Unix timestamp of the evaluation's last update.
-  key: On3 RDB key for the scouting evaluation.
-  primary: Whether this is the primary (featured) evaluation for the recruitment.
-  recruitment_key: On3 recruitment key the evaluation is attached to.
 recruitments_profile:
   class_year: Recruiting class year of the recruitment.
-  committed_status: Nested commitment status of the recruitment (stringified).
-  high_school_org: Nested On3 organization object for the recruit's high school (stringified).
 recruitments_rpm_picks:
-  article_link: Link to the On3 article accompanying the pick, when any.
-  confidence: Expert's confidence level in the prediction.
-  correct: Whether the pick proved correct.
-  date_added: Date the expert logged the RPM pick.
-  days_correct: Number of days the pick stood as correct.
-  expert: Nested On3 record for the expert who logged the pick (stringified).
-  flipped_from_organization: Organization the expert's pick flipped from, when the prediction changed (stringified).
-  key: On3 RDB key for the RPM pick.
-  previous_confidence: Expert's confidence level on their previous pick for this recruitment.
-  previous_date_added: Date the expert's previous pick was logged.
-  top_teams: Teams currently leading for the recruit per the pick, as a stringified list.
 recruitments_rpm_summary:
   locked: Whether the RPM prediction for the recruitment is locked (no longer updating).
   predictions: Per-team RPM prediction percentages for the recruitment, as a stringified list.
@@ -37260,75 +36893,9 @@ team_pressure_rates:
   season: Season of the aggregate.
   team: Team abbreviation.
 team_ranking:
-  applied_average_consensus_rating: Average industry-consensus rating across the counted commits.
-  applied_average_rating: Average On3 rating across the counted commits.
-  applied_commits: Number of commits counted toward the class score.
-  applied_total_consensus_rating: Sum of counted commits' industry-consensus ratings applied to the class score.
-  applied_total_rating: Sum of counted commits' On3 ratings applied to the class score.
-  average_nil_value: Average On3 NIL valuation across the class's commits, in dollars.
-  commits: Number of commits in the team's recruiting class.
-  conference_consensus_rank: Team's class rank within its conference by consensus score.
-  conference_rank: Team's class rank within its conference by On3 score.
-  consensus_five_stars: Number of five-star commits by industry-consensus rating.
-  consensus_four_stars: Number of four-star commits by industry-consensus rating.
-  consensus_three_stars: Number of three-star commits by industry-consensus rating.
-  deductions: Points deducted from the team's class score (On3 ranking formula).
-  deductions_description: Explanation of the deductions applied to the class score.
-  dispay_consensus_score: Display-formatted consensus class score (the 'dispay' spelling is On3's own field name).
-  dispay_on3_score: Display-formatted On3 class score (the 'dispay' spelling is On3's own field name).
-  five_stars: Number of five-star commits by On3's own rating.
-  four_stars: Number of four-star commits by On3's own rating.
-  key: On3 RDB key for the team's class-ranking row.
-  overall_consensus_rank: Team's national class rank by industry-consensus score.
-  three_stars: Number of three-star commits by On3's own rating.
 team_ranking_bluechips_team_rankings:
-  average_distance: Average distance from the commits' hometowns to campus, in miles.
-  blue_chips: Number of blue-chip (four- or five-star) commits in the class.
-  conference_rank: Team's blue-chip class rank within its conference.
-  in_state_count: Number of commits from the school's home state.
-  social_nil_values: Nested aggregate of the class's social/NIL values (stringified).
-  total_commits: Total number of commits in the class.
 team_ranking_consensus_team_rankings:
-  applied_average_consensus_rating: Average industry-consensus rating across the counted commits.
-  applied_average_rating: Average On3 rating across the counted commits.
-  applied_commits: Number of commits counted toward the class score.
-  applied_total_consensus_rating: Sum of counted commits' industry-consensus ratings applied to the class score.
-  applied_total_rating: Sum of counted commits' On3 ratings applied to the class score.
-  average_nil_value: Average On3 NIL valuation across the class's commits, in dollars.
-  commits: Number of commits in the team's recruiting class.
-  conference_consensus_rank: Team's class rank within its conference by consensus score.
-  conference_rank: Team's class rank within its conference by On3 score.
-  consensus_five_stars: Number of five-star commits by industry-consensus rating.
-  consensus_four_stars: Number of four-star commits by industry-consensus rating.
-  consensus_three_stars: Number of three-star commits by industry-consensus rating.
-  deductions: Points deducted from the team's class score (On3 ranking formula).
-  deductions_description: Explanation of the deductions applied to the class score.
-  dispay_consensus_score: Display-formatted consensus class score (the 'dispay' spelling is On3's own field name).
-  dispay_on3_score: Display-formatted On3 class score (the 'dispay' spelling is On3's own field name).
-  five_stars: Number of five-star commits by On3's own rating.
-  four_stars: Number of four-star commits by On3's own rating.
-  key: On3 RDB key for the team's class-ranking row.
-  overall_consensus_rank: Team's national class rank by industry-consensus score.
-  three_stars: Number of three-star commits by the On3 consensus rating.
 team_ranking_organizations_summary:
-  average_nil_value: Average On3 NIL valuation across the class's commits, in dollars.
-  blue_chips: Number of blue-chip (four- or five-star) commits in the class.
-  class_rating_change: Change in the class rating versus the previous cycle.
-  class_rating_current: Team's current On3 class rating.
-  class_rating_previous: Team's class rating in the previous cycle.
-  conference_consensus_rank_change: Change in conference consensus class rank versus the previous cycle.
-  conference_consensus_rank_current: Team's current conference class rank by consensus score.
-  conference_consensus_rank_previous: Team's conference consensus class rank in the previous cycle.
-  conference_rank_change: Change in conference class rank versus the previous cycle.
-  conference_rank_current: Team's current class rank within its conference.
-  conference_rank_previous: Team's conference class rank in the previous cycle.
-  director_personnel: Nested On3 person object for the program's director of player personnel (stringified).
-  head_coach: Nested On3 person object for the program's head coach (stringified).
-  in_state: Number of commits from the school's home state.
-  national_rank_change: Change in national class rank versus the previous cycle.
-  national_rank_current: Team's current national class rank.
-  national_rank_previous: Team's national class rank in the previous cycle.
-  total_commits: Total number of commits in the class.
 team_ranking_team_rankings:
   applied_average_consensus_rating: Average consensus rating applied to the class after deductions.
   applied_average_rating: Average On3 rating applied to the class after deductions.
@@ -37349,7 +36916,6 @@ team_ranking_team_rankings:
   five_stars: Count of On3 five-star commits in the class.
   four_stars: Count of On3 four-star commits in the class.
   key: On3 organization-ranking key for the class row.
-  organization: Nested organization object (school identity, logo, colors) for the class.
   overall_consensus_rank: National rank of the class by consensus score.
   overall_rank: National rank of the class by On3 score.
   three_stars: Count of On3 three-star commits in the class.
@@ -37565,8 +37131,8 @@ teamdashboardbyclutch:
   blka_rank: League rank of the row's shot attempts blocked by opponents (blocks against) for the season and split.
   dreb_rank: League rank of the row's defensive rebounds for the season and split.
   fg3_pct_rank: League rank of the row's three-point field goal percentage for the season and split.
-  fg3a_rank: League rank of the row's three-point field goals attempted for the season and split.
-  fg3m_rank: League rank of the row's three-point field goals made for the season and split.
+  fg3_a_rank: League rank of the row's three-point field goals attempted for the season and split.
+  fg3_m_rank: League rank of the row's three-point field goals made for the season and split.
   fg_pct_rank: League rank of the row's field goal percentage for the season and split.
   fga_rank: League rank of the row's field goals attempted for the season and split.
   fgm_rank: League rank of the row's field goals made for the season and split.
@@ -37596,8 +37162,8 @@ teamdashboardbygamesplits:
   blka_rank: League rank of the row's shot attempts blocked by opponents (blocks against) for the season and split.
   dreb_rank: League rank of the row's defensive rebounds for the season and split.
   fg3_pct_rank: League rank of the row's three-point field goal percentage for the season and split.
-  fg3a_rank: League rank of the row's three-point field goals attempted for the season and split.
-  fg3m_rank: League rank of the row's three-point field goals made for the season and split.
+  fg3_a_rank: League rank of the row's three-point field goals attempted for the season and split.
+  fg3_m_rank: League rank of the row's three-point field goals made for the season and split.
   fg_pct_rank: League rank of the row's field goal percentage for the season and split.
   fga_rank: League rank of the row's field goals attempted for the season and split.
   fgm_rank: League rank of the row's field goals made for the season and split.
@@ -37629,9 +37195,9 @@ teamdashboardbygeneralsplits:
   dreb_rank: Rank for defensive rebounds within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader.
   fg3_pct_rank: Rank for three-point field-goal percentage within the requested NBA or WNBA Stats leaderboard or split, where
     1 is the leader.
-  fg3a_rank: Rank for three-point field goals attempted within the requested NBA or WNBA Stats leaderboard or split, where
+  fg3_a_rank: Rank for three-point field goals attempted within the requested NBA or WNBA Stats leaderboard or split, where
     1 is the leader.
-  fg3m_rank: Rank for three-point field goals made within the requested NBA or WNBA Stats leaderboard or split, where 1 is
+  fg3_m_rank: Rank for three-point field goals made within the requested NBA or WNBA Stats leaderboard or split, where 1 is
     the leader.
   fg_pct_rank: Rank for field-goal percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the
     leader.
@@ -37653,6 +37219,7 @@ teamdashboardbygeneralsplits:
   plus_minus_rank: Rank for plus-minus within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader.
   pts_rank: Rank for points within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader.
   reb_rank: Rank for total rebounds within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader.
+  season_segment: Season segment filter ('Pre All-Star' / 'Post All-Star').
   stl_rank: Rank for steals within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader.
   tov_rank: Rank for turnovers within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader.
   w_pct_rank: Rank for winning percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader.
@@ -37664,8 +37231,8 @@ teamdashboardbylastngames:
   blka_rank: League rank of the row's shot attempts blocked by opponents (blocks against) for the season and split.
   dreb_rank: League rank of the row's defensive rebounds for the season and split.
   fg3_pct_rank: League rank of the row's three-point field goal percentage for the season and split.
-  fg3a_rank: League rank of the row's three-point field goals attempted for the season and split.
-  fg3m_rank: League rank of the row's three-point field goals made for the season and split.
+  fg3_a_rank: League rank of the row's three-point field goals attempted for the season and split.
+  fg3_m_rank: League rank of the row's three-point field goals made for the season and split.
   fg_pct_rank: League rank of the row's field goal percentage for the season and split.
   fga_rank: League rank of the row's field goals attempted for the season and split.
   fgm_rank: League rank of the row's field goals made for the season and split.
@@ -37695,8 +37262,8 @@ teamdashboardbyopponent:
   blka_rank: League rank of the row's shot attempts blocked by opponents (blocks against) for the season and split.
   dreb_rank: League rank of the row's defensive rebounds for the season and split.
   fg3_pct_rank: League rank of the row's three-point field goal percentage for the season and split.
-  fg3a_rank: League rank of the row's three-point field goals attempted for the season and split.
-  fg3m_rank: League rank of the row's three-point field goals made for the season and split.
+  fg3_a_rank: League rank of the row's three-point field goals attempted for the season and split.
+  fg3_m_rank: League rank of the row's three-point field goals made for the season and split.
   fg_pct_rank: League rank of the row's field goal percentage for the season and split.
   fga_rank: League rank of the row's field goals attempted for the season and split.
   fgm_rank: League rank of the row's field goals made for the season and split.
@@ -37728,29 +37295,29 @@ teamdashboardbyshootingsplits:
     1 is the leader.
   fg3_pct_rank: Rank for three-point field-goal percentage within the requested NBA or WNBA Stats leaderboard or split, where
     1 is the leader.
-  fg3a_rank: Rank for three-point field goals attempted within the requested NBA or WNBA Stats leaderboard or split, where
+  fg3_a_rank: Rank for three-point field goals attempted within the requested NBA or WNBA Stats leaderboard or split, where
     1 is the leader.
-  fg3m_rank: Rank for three-point field goals made within the requested NBA or WNBA Stats leaderboard or split, where 1 is
+  fg3_m_rank: Rank for three-point field goals made within the requested NBA or WNBA Stats leaderboard or split, where 1 is
     the leader.
   fg_pct_rank: Rank for field-goal percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the
     leader.
   fga_rank: Rank for field goals attempted within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader.
   fgm_rank: Rank for field goals made within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader.
   group_set: Name of the grouping family used for this dashboard or split row.
-  pct_ast_2pm: Percentage share of assists 2pm for the requested NBA or WNBA Stats split.
-  pct_ast_2pm_rank: Rank for percentage assists 2pm within the requested NBA or WNBA Stats leaderboard or split, where 1 is
+  pct_ast_2_pm: Percentage share of assists 2pm for the requested NBA or WNBA Stats split.
+  pct_ast_2_pm_rank: Rank for percentage assists 2pm within the requested NBA or WNBA Stats leaderboard or split, where 1 is
     the leader.
-  pct_ast_3pm: Percentage share of assists 3pm for the requested NBA or WNBA Stats split.
-  pct_ast_3pm_rank: Rank for percentage assists 3pm within the requested NBA or WNBA Stats leaderboard or split, where 1 is
+  pct_ast_3_pm: Percentage share of assists 3pm for the requested NBA or WNBA Stats split.
+  pct_ast_3_pm_rank: Rank for percentage assists 3pm within the requested NBA or WNBA Stats leaderboard or split, where 1 is
     the leader.
   pct_ast_fgm: Percentage share of assists fgm for the requested NBA or WNBA Stats split.
   pct_ast_fgm_rank: Rank for percentage assists fgm within the requested NBA or WNBA Stats leaderboard or split, where 1 is
     the leader.
-  pct_uast_2pm: Percentage share of uast 2pm for the requested NBA or WNBA Stats split.
-  pct_uast_2pm_rank: Rank for percentage uast 2pm within the requested NBA or WNBA Stats leaderboard or split, where 1 is
+  pct_uast_2_pm: Percentage share of uast 2pm for the requested NBA or WNBA Stats split.
+  pct_uast_2_pm_rank: Rank for percentage uast 2pm within the requested NBA or WNBA Stats leaderboard or split, where 1 is
     the leader.
-  pct_uast_3pm: Percentage share of uast 3pm for the requested NBA or WNBA Stats split.
-  pct_uast_3pm_rank: Rank for percentage uast 3pm within the requested NBA or WNBA Stats leaderboard or split, where 1 is
+  pct_uast_3_pm: Percentage share of uast 3pm for the requested NBA or WNBA Stats split.
+  pct_uast_3_pm_rank: Rank for percentage uast 3pm within the requested NBA or WNBA Stats leaderboard or split, where 1 is
     the leader.
   pct_uast_fgm: Percentage share of uast fgm for the requested NBA or WNBA Stats split.
   pct_uast_fgm_rank: Rank for percentage uast fgm within the requested NBA or WNBA Stats leaderboard or split, where 1 is
@@ -37762,8 +37329,8 @@ teamdashboardbyteamperformance:
   blka_rank: League rank of the row's shot attempts blocked by opponents (blocks against) for the season and split.
   dreb_rank: League rank of the row's defensive rebounds for the season and split.
   fg3_pct_rank: League rank of the row's three-point field goal percentage for the season and split.
-  fg3a_rank: League rank of the row's three-point field goals attempted for the season and split.
-  fg3m_rank: League rank of the row's three-point field goals made for the season and split.
+  fg3_a_rank: League rank of the row's three-point field goals attempted for the season and split.
+  fg3_m_rank: League rank of the row's three-point field goals made for the season and split.
   fg_pct_rank: League rank of the row's field goal percentage for the season and split.
   fga_rank: League rank of the row's field goals attempted for the season and split.
   fgm_rank: League rank of the row's field goals made for the season and split.
@@ -37795,8 +37362,8 @@ teamdashboardbyyearoveryear:
   blka_rank: League rank of the row's shot attempts blocked by opponents (blocks against) for the season and split.
   dreb_rank: League rank of the row's defensive rebounds for the season and split.
   fg3_pct_rank: League rank of the row's three-point field goal percentage for the season and split.
-  fg3a_rank: League rank of the row's three-point field goals attempted for the season and split.
-  fg3m_rank: League rank of the row's three-point field goals made for the season and split.
+  fg3_a_rank: League rank of the row's three-point field goals attempted for the season and split.
+  fg3_m_rank: League rank of the row's three-point field goals made for the season and split.
   fg_pct_rank: League rank of the row's field goal percentage for the season and split.
   fga_rank: League rank of the row's field goals attempted for the season and split.
   fgm_rank: League rank of the row's field goals made for the season and split.
@@ -37828,9 +37395,9 @@ teamdashlineups:
   dreb_rank: Rank for defensive rebounds within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader.
   fg3_pct_rank: Rank for three-point field-goal percentage within the requested NBA or WNBA Stats leaderboard or split, where
     1 is the leader.
-  fg3a_rank: Rank for three-point field goals attempted within the requested NBA or WNBA Stats leaderboard or split, where
+  fg3_a_rank: Rank for three-point field goals attempted within the requested NBA or WNBA Stats leaderboard or split, where
     1 is the leader.
-  fg3m_rank: Rank for three-point field goals made within the requested NBA or WNBA Stats leaderboard or split, where 1 is
+  fg3_m_rank: Rank for three-point field goals made within the requested NBA or WNBA Stats leaderboard or split, where 1 is
     the leader.
   fg_pct_rank: Rank for field-goal percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the
     leader.
@@ -37858,8 +37425,8 @@ teamdashlineups:
   w_rank: Rank for wins within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader.
 teamdashptpass:
   fg2_pct: Percentage or rate for two-point field goals percentage in the requested NBA or WNBA Stats split.
-  fg2a: Shooting metric for fg2a in the requested NBA or WNBA Stats split.
-  fg2m: Shooting metric for fg2m in the requested NBA or WNBA Stats split.
+  fg2_a: Shooting metric for fg2a in the requested NBA or WNBA Stats split.
+  fg2_m: Shooting metric for fg2m in the requested NBA or WNBA Stats split.
   frequency: NBA or WNBA Stats value for frequency in the teamdashptpass result set.
   pass_teammate_player_id: Stats API identifier for pass teammate player identifier associated with this NBA or WNBA Stats
     row.
@@ -37879,10 +37446,10 @@ teamdashptreb:
 teamdashptshots:
   efg_pct: Percentage or rate for efg percentage in the requested NBA or WNBA Stats split.
   fg2_pct: Percentage or rate for two-point field goals percentage in the requested NBA or WNBA Stats split.
-  fg2a: Shooting metric for fg2a in the requested NBA or WNBA Stats split.
-  fg2a_frequency: Shooting metric for fg2a frequency in the requested NBA or WNBA Stats split.
-  fg2m: Shooting metric for fg2m in the requested NBA or WNBA Stats split.
-  fg3a_frequency: Shooting metric for fg3a frequency in the requested NBA or WNBA Stats split.
+  fg2_a: Shooting metric for fg2a in the requested NBA or WNBA Stats split.
+  fg2_a_frequency: Shooting metric for fg2a frequency in the requested NBA or WNBA Stats split.
+  fg2_m: Shooting metric for fg2m in the requested NBA or WNBA Stats split.
+  fg3_a_frequency: Shooting metric for fg3a frequency in the requested NBA or WNBA Stats split.
   fga_frequency: Shooting metric for fga frequency in the requested NBA or WNBA Stats split.
   touch_time_range: Time value for touch time range in the NBA or WNBA Stats result set.
 teamdetails:
@@ -37932,9 +37499,9 @@ teamgamelogs:
   dreb_rank: Rank for defensive rebounds within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader.
   fg3_pct_rank: Rank for three-point field-goal percentage within the requested NBA or WNBA Stats leaderboard or split, where
     1 is the leader.
-  fg3a_rank: Rank for three-point field goals attempted within the requested NBA or WNBA Stats leaderboard or split, where
+  fg3_a_rank: Rank for three-point field goals attempted within the requested NBA or WNBA Stats leaderboard or split, where
     1 is the leader.
-  fg3m_rank: Rank for three-point field goals made within the requested NBA or WNBA Stats leaderboard or split, where 1 is
+  fg3_m_rank: Rank for three-point field goals made within the requested NBA or WNBA Stats leaderboard or split, where 1 is
     the leader.
   fg_pct_rank: Rank for field-goal percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the
     leader.
@@ -37974,9 +37541,9 @@ teamplayerdashboard:
   dreb_rank: Rank for defensive rebounds within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader.
   fg3_pct_rank: Rank for three-point field-goal percentage within the requested NBA or WNBA Stats leaderboard or split, where
     1 is the leader.
-  fg3a_rank: Rank for three-point field goals attempted within the requested NBA or WNBA Stats leaderboard or split, where
+  fg3_a_rank: Rank for three-point field goals attempted within the requested NBA or WNBA Stats leaderboard or split, where
     1 is the leader.
-  fg3m_rank: Rank for three-point field goals made within the requested NBA or WNBA Stats leaderboard or split, where 1 is
+  fg3_m_rank: Rank for three-point field goals made within the requested NBA or WNBA Stats leaderboard or split, where 1 is
     the leader.
   fg_pct_rank: Rank for field-goal percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the
     leader.
@@ -38020,9 +37587,9 @@ teamplayeronoffdetails:
   dreb_rank: Rank for defensive rebounds within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader.
   fg3_pct_rank: Rank for three-point field-goal percentage within the requested NBA or WNBA Stats leaderboard or split, where
     1 is the leader.
-  fg3a_rank: Rank for three-point field goals attempted within the requested NBA or WNBA Stats leaderboard or split, where
+  fg3_a_rank: Rank for three-point field goals attempted within the requested NBA or WNBA Stats leaderboard or split, where
     1 is the leader.
-  fg3m_rank: Rank for three-point field goals made within the requested NBA or WNBA Stats leaderboard or split, where 1 is
+  fg3_m_rank: Rank for three-point field goals made within the requested NBA or WNBA Stats leaderboard or split, where 1 is
     the leader.
   fg_pct_rank: Rank for field-goal percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the
     leader.
@@ -38055,12 +37622,13 @@ teamplayeronoffsummary:
   blka: Blocked field-goal attempts against for the requested NBA or WNBA Stats split.
   blka_rank: Rank for blocked field-goal attempts against within the requested NBA or WNBA Stats leaderboard or split, where
     1 is the leader.
+  def_rating: Defensive rating (points allowed per 100 possessions).
   dreb_rank: Rank for defensive rebounds within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader.
   fg3_pct_rank: Rank for three-point field-goal percentage within the requested NBA or WNBA Stats leaderboard or split, where
     1 is the leader.
-  fg3a_rank: Rank for three-point field goals attempted within the requested NBA or WNBA Stats leaderboard or split, where
+  fg3_a_rank: Rank for three-point field goals attempted within the requested NBA or WNBA Stats leaderboard or split, where
     1 is the leader.
-  fg3m_rank: Rank for three-point field goals made within the requested NBA or WNBA Stats leaderboard or split, where 1 is
+  fg3_m_rank: Rank for three-point field goals made within the requested NBA or WNBA Stats leaderboard or split, where 1 is
     the leader.
   fg_pct_rank: Rank for field-goal percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the
     leader.
@@ -38075,6 +37643,7 @@ teamplayeronoffsummary:
   group_value: Specific grouping value for this dashboard or split row.
   l_rank: Rank for losses within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader.
   min_rank: Rank for minutes played within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader.
+  off_rating: Offensive rating (points produced per 100 possessions).
   oreb_rank: Rank for offensive rebounds within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader.
   pf_rank: Rank for personal fouls within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader.
   pfd: Personal fouls drawn for the requested NBA or WNBA Stats split.
@@ -38115,8 +37684,8 @@ teamvsplayer:
   dd2_rank: League rank of the row's double-doubles for the season and split.
   dreb_rank: League rank of the row's defensive rebounds for the season and split.
   fg3_pct_rank: League rank of the row's three-point field goal percentage for the season and split.
-  fg3a_rank: League rank of the row's three-point field goals attempted for the season and split.
-  fg3m_rank: League rank of the row's three-point field goals made for the season and split.
+  fg3_a_rank: League rank of the row's three-point field goals attempted for the season and split.
+  fg3_m_rank: League rank of the row's three-point field goals made for the season and split.
   fg_pct_rank: League rank of the row's field goal percentage for the season and split.
   fga_rank: League rank of the row's field goals attempted for the season and split.
   fgm_rank: League rank of the row's field goals made for the season and split.
@@ -38563,9 +38132,7 @@ torvik_player_stats:
 transfers_best_available:
   athlete_verified: Whether the athlete has verified their own On3 profile.
   class_year: Player's original recruiting class year.
-  commit_status: Nested commitment status of the transfer recruitment (stringified).
   committed_article: On3 article link covering the player's transfer commitment (stringified).
-  default_asset: Nested On3 asset object for the player's headshot (stringified).
   default_asset_url: URL of the player's headshot image.
   early_enrollee: Whether the player is an early enrollee.
   early_signee: Whether the player signed in the early signing period.
@@ -38573,20 +38140,16 @@ transfers_best_available:
   exited_article: On3 article link covering the player exiting the portal (stringified).
   home_town_name: Player's hometown, as listed by On3.
   key: On3 RDB key for the transfer entry.
-  last_team: Nested On3 record for the team the player is transferring from (stringified).
   nil_status: Status of the player's On3 NIL valuation (e.g. active, inactive).
   nil_value: Player's On3 NIL valuation in dollars.
   predictions: RPM prediction entries for the transfer destination, as a stringified list.
   prospect_verified: Whether On3 has verified the prospect's profile information.
   recruitment_key: On3 recruitment key of the player's transfer recruitment.
-  roster_rating: Nested On3 roster rating object for the player (stringified).
   sport: Nested On3 sport object for the transfer entry (stringified).
 transfers_latest:
   athlete_verified: Whether the athlete has verified their own On3 profile.
   class_year: Player's original recruiting class year.
-  commit_status: Nested commitment status of the transfer recruitment (stringified).
   committed_article: On3 article link covering the player's transfer commitment (stringified).
-  default_asset: Nested On3 asset object for the player's headshot (stringified).
   default_asset_url: URL of the player's headshot image.
   early_enrollee: Whether the player is an early enrollee.
   early_signee: Whether the player signed in the early signing period.
@@ -38594,13 +38157,11 @@ transfers_latest:
   exited_article: On3 article link covering the player exiting the portal (stringified).
   home_town_name: Player's hometown, as listed by On3.
   key: On3 RDB key for the transfer entry.
-  last_team: Nested On3 record for the team the player is transferring from (stringified).
   nil_status: Status of the player's On3 NIL valuation (e.g. active, inactive).
   nil_value: Player's On3 NIL valuation in dollars.
   predictions: RPM prediction entries for the transfer destination, as a stringified list.
   prospect_verified: Whether On3 has verified the prospect's profile information.
   recruitment_key: On3 recruitment key of the player's transfer recruitment.
-  roster_rating: Nested On3 roster rating object for the player (stringified).
   sport: Nested On3 sport object for the transfer entry (stringified).
 tto_penalty_table:
   mean_run_value: Mean observed run value for pitches at this TTO level.
@@ -38622,13 +38183,6 @@ ushl_standings:
   percentage: 'Points percentage (feed header ''Percentage''): points earned divided by the maximum points available from games
     played, as a three-decimal string, e.g. ''0.833'' for 5 of 6 possible points; ''0.000'' before a team has played.'
 videos_video_key:
-  date: Publication date of the video, per On3.
-  is_featured: Whether the video is featured on the player's On3 profile.
-  key: On3 RDB key for the video record.
-  person_key: On3 person key of the featured athlete.
-  person_sport: Nested athlete-sport profile the video is attached to (stringified).
-  source_url: Source URL of the hosted video.
-  thumbnail: URL of the video's thumbnail image.
 videostatus:
   is_available: Flag indicating whether game video is available in the league's stats video system.
   visitor_team_abbreviation: Abbreviation of the visiting team.

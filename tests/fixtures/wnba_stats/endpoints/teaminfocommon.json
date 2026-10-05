@@ -1,0 +1,97 @@
+{
+ "resource": "teaminfocommon",
+ "parameters": {
+  "LeagueID": "10",
+  "Season": null,
+  "SeasonType": null,
+  "TeamID": 1611661319
+ },
+ "resultSets": [
+  {
+   "name": "TeamInfoCommon",
+   "headers": [
+    "TEAM_ID",
+    "SEASON_YEAR",
+    "TEAM_CITY",
+    "TEAM_NAME",
+    "TEAM_ABBREVIATION",
+    "TEAM_CONFERENCE",
+    "TEAM_DIVISION",
+    "TEAM_CODE",
+    "TEAM_SLUG",
+    "W",
+    "L",
+    "PCT",
+    "CONF_RANK",
+    "DIV_RANK",
+    "MIN_YEAR",
+    "MAX_YEAR"
+   ],
+   "rowSet": [
+    [
+     1611661319,
+     "2026",
+     "Las Vegas",
+     "Aces",
+     "LVA",
+     "West",
+     null,
+     "aces",
+     "aces",
+     14,
+     5,
+     0.737,
+     2,
+     0,
+     "1997",
+     "2026"
+    ]
+   ]
+  },
+  {
+   "name": "TeamSeasonRanks",
+   "headers": [
+    "LEAGUE_ID",
+    "SEASON_ID",
+    "TEAM_ID",
+    "PTS_RANK",
+    "PTS_PG",
+    "REB_RANK",
+    "REB_PG",
+    "AST_RANK",
+    "AST_PG",
+    "OPP_PTS_RANK",
+    "OPP_PTS_PG"
+   ],
+   "rowSet": [
+    [
+     "10",
+     "22026",
+     1611661319,
+     3,
+     90.7,
+     3,
+     35.3,
+     1,
+     22.9,
+     8,
+     86.4
+    ]
+   ]
+  },
+  {
+   "name": "AvailableSeasons",
+   "headers": [
+    "SEASON_ID"
+   ],
+   "rowSet": [
+    [
+     "11997"
+    ],
+    [
+     "21997"
+    ]
+   ]
+  }
+ ]
+}

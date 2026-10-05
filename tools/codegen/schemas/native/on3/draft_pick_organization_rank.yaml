@@ -1,24 +1,6 @@
-columns:
-- description: ''
-  name: organization
-  type: character
-- description: ''
-  name: rank
-  type: integer
-- description: ''
-  name: first_round
-  type: integer
-- description: ''
-  name: second_round
-  type: integer
-- description: ''
-  name: third_round
-  type: integer
-- description: ''
-  name: fourth_through_seventh_round
-  type: integer
-- description: ''
-  name: total
-  type: integer
+columns: []
 kind: dataframe
 schema: draft_pick_organization_rank
+unverified: no committed capture with rows; names derived from the OpenAPI response
+  type matched parse_on3_rdb's output on only 7 of the 9 checkable endpoints, so none
+  are published

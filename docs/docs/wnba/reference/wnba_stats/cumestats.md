@@ -1,7 +1,7 @@
 ---
 title: "WNBA — WNBA Stats API (stats.wnba.com) — Cumulative stats"
 sidebar_label: "Cumulative stats"
-sidebar_position: 3
+sidebar_position: 4
 description: "WNBA — WNBA Stats API (stats.wnba.com) — Cumulative stats — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---
@@ -25,7 +25,42 @@ GET /stats/cumestatsplayer
 
 ### Returns {#wnba_stats_cumestatsplayer-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`GameByGameStats`, `TotalPlayerStats`) (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**GameByGameStats**
+
+| col_name | type | description |
+|---|---|---|
+| `date_est` | character |  |
+| `visitor_team` | character |  |
+| `home_team` | character | Home team name. |
+| `gp` | integer | Games played. |
+| `gs` | integer | Games started. |
+| `actual_minutes` | integer | Whole minutes of actual playing time accumulated over the aggregated games. |
+| `actual_seconds` | integer | Leftover seconds of actual playing time beyond the whole minutes. |
+| `fg` | integer | Field goals made over the aggregated games. |
+| `fga` | integer | Field goal attempts. |
+| `fg_pct` | numeric | Field goal percentage (0-1). |
+| `fg3` | integer | Three-point field goals made over the aggregated games. |
+| `fg3_a` | integer | Three-point field goal attempts. |
+| `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
+| `ft` | integer | Free throws made over the aggregated games. |
+| `fta` | integer | Free throw attempts. |
+| `ft_pct` | numeric | Free throw percentage (0-1). |
+| `off_reb` | integer | Offensive rebounds over the aggregated games. |
+| `def_reb` | integer | Defensive rebounds over the aggregated games. |
+| `tot_reb` | integer | Total rebounds over the aggregated games. |
+| `avg_tot_reb` | numeric | Average total rebounds per game over the aggregated games. |
+| `ast` | integer | Assists. |
+| `pf` | integer | Personal fouls. |
+| `dq` | integer | Disqualifications (fouled out) over the aggregated games. |
+| `stl` | integer | Steals. |
+| `turnovers` | integer | Total turnovers. |
+| `blk` | integer | Blocks. |
+| `pts` | integer | Points scored. |
+| `avg_pts` | numeric | Average points per game over the aggregated games. |
+
+**TotalPlayerStats**
+
 | col_name | type | description |
 |---|---|---|
 | `display_fi_last` | character | Abbreviated player name (first initial and last name). |
@@ -39,7 +74,7 @@ GET /stats/cumestatsplayer
 | `fga` | integer | Field goal attempts. |
 | `fg_pct` | numeric | Field goal percentage (0-1). |
 | `fg3` | integer | Three-point field goals made over the aggregated games. |
-| `fg3a` | integer | Three-point field goal attempts. |
+| `fg3_a` | integer | Three-point field goal attempts. |
 | `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
 | `ft` | integer | Free throws made over the aggregated games. |
 | `fta` | integer | Free throw attempts. |
@@ -143,7 +178,9 @@ GET /stats/cumestatsteam
 
 ### Returns {#wnba_stats_cumestatsteam-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`GameByGameStats`, `TotalTeamStats`) (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**GameByGameStats**
+
 | col_name | type | description |
 |---|---|---|
 | `jersey_num` | character | Jersey number worn by the player. |
@@ -158,7 +195,7 @@ GET /stats/cumestatsteam
 | `fga` | character | Field goal attempts. |
 | `fg_pct` | character | Field goal percentage (0-1). |
 | `fg3` | character | Three-point field goals made over the aggregated games. |
-| `fg3a` | character | Three-point field goal attempts. |
+| `fg3_a` | character | Three-point field goal attempts. |
 | `fg3_pct` | character | Three-point field goal percentage (0-1). |
 | `ft` | character | Free throws made over the aggregated games. |
 | `fta` | character | Free throw attempts. |
@@ -195,6 +232,47 @@ GET /stats/cumestatsteam
 | `per_min_turnovers` | character | Turnovers per minute played over the aggregated games. |
 | `per_min_blk` | character | Blocked shots per minute played over the aggregated games. |
 | `per_min_pts` | character | Points per minute played over the aggregated games. |
+
+**TotalTeamStats**
+
+| col_name | type | description |
+|---|---|---|
+| `city` | character | Venue city. |
+| `nickname` | character | Team or athlete nickname. |
+| `team_id` | integer | Unique team identifier. |
+| `w` | integer | Wins. |
+| `l` | integer | Losses. |
+| `w_home` | integer |  |
+| `l_home` | integer |  |
+| `w_road` | integer |  |
+| `l_road` | integer |  |
+| `team_turnovers` | integer | Team turnovers (turnovers credited to the team rather than a player). |
+| `team_rebounds` | integer | Team rebounds (rebounds credited to the team rather than a player). |
+| `gp` | integer | Games played. |
+| `gs` | integer | Games started. |
+| `actual_minutes` | integer | Whole minutes of actual playing time accumulated over the aggregated games. |
+| `actual_seconds` | integer | Leftover seconds of actual playing time beyond the whole minutes. |
+| `fg` | integer | Field goals made over the aggregated games. |
+| `fga` | integer | Field goal attempts. |
+| `fg_pct` | numeric | Field goal percentage (0-1). |
+| `fg3` | integer | Three-point field goals made over the aggregated games. |
+| `fg3_a` | integer | Three-point field goal attempts. |
+| `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
+| `ft` | integer | Free throws made over the aggregated games. |
+| `fta` | integer | Free throw attempts. |
+| `ft_pct` | numeric | Free throw percentage (0-1). |
+| `off_reb` | integer | Offensive rebounds over the aggregated games. |
+| `def_reb` | integer | Defensive rebounds over the aggregated games. |
+| `tot_reb` | integer | Total rebounds over the aggregated games. |
+| `ast` | integer | Assists. |
+| `pf` | integer | Personal fouls. |
+| `stl` | integer | Steals. |
+| `total_turnovers` | integer | Total turnovers (player + team). |
+| `blk` | integer | Blocks. |
+| `pts` | integer | Points scored. |
+| `avg_reb` | numeric | Average rebounds per game over the aggregated games. |
+| `avg_pts` | numeric | Average points per game over the aggregated games. |
+| `dq` | integer | Disqualifications (fouled out) over the aggregated games. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 

@@ -26,7 +26,7 @@ Scoreboard: games + teams + leagues + odds (fat payload)
 
 ### Returns {#yahoo_editorial_scoreboard-returns}
 
-**`return_parsed=True`** (default) — A dict of polars/pandas DataFrames keyed by the feed's id-keyed collections (representative columns below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — A dict of polars/pandas DataFrames keyed by the feed's id-keyed collections (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **games**
 
 | col_name | type | description |

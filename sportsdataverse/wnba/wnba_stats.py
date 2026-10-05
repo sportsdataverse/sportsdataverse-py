@@ -148,11 +148,12 @@ def wnba_stats_alltimeleadersgrids(
         per_mode_simple: PerMode query parameter.
         season_type: SeasonType query parameter.
         topx: TopX query parameter.
-        return_parsed: parse the payload through parse_wnba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
-        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        return_parsed: parse the payload through parse_wnba_stats_result_sets -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
-        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+        A dict of DataFrames keyed by result-set name (``GPLeaders``, ``PTSLeaders``, ``ASTLeaders``, ``STLLeaders``, ``OREBLeaders``, ``DREBLeaders``, ``REBLeaders``, ``BLKLeaders``, ``FGMLeaders``, ``FGALeaders``, ``FG_PCTLeaders``, ``TOVLeaders``, ``FG3MLeaders``, ``FG3ALeaders``, ``FG3_PCTLeaders``, ``PFLeaders``, ``FTMLeaders``, ``FTALeaders``, ``FT_PCTLeaders``) by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         Quick start::
@@ -374,11 +375,12 @@ def wnba_stats_boxscoreadvancedv2(
         range_type: RangeType query parameter.
         start_period: StartPeriod query parameter.
         start_range: StartRange query parameter.
-        return_parsed: parse the payload through parse_wnba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
-        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        return_parsed: parse the payload through parse_wnba_stats_result_sets -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
-        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+        A dict of DataFrames keyed by result-set name (``PlayerStats``, ``TeamStats``) by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         Quick start::
@@ -429,11 +431,12 @@ def wnba_stats_boxscoreadvancedv3(
         range_type: RangeType query parameter.
         start_period: StartPeriod query parameter.
         start_range: StartRange query parameter.
-        return_parsed: parse the payload through parse_wnba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
-        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        return_parsed: parse the payload through parse_wnba_stats_result_sets -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
-        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+        A dict of DataFrames keyed by result-set name (``PlayerStats``, ``TeamStats``) by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         Quick start::
@@ -474,11 +477,12 @@ def wnba_stats_boxscoredefensivev2(
 
     Args:
         game_id: GameID query parameter.
-        return_parsed: parse the payload through parse_wnba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
-        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        return_parsed: parse the payload through parse_wnba_stats_result_sets -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
-        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+        A dict of DataFrames keyed by result-set name (``PlayerStats``, ``TeamStats``) by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         Quick start::
@@ -524,11 +528,12 @@ def wnba_stats_boxscorefourfactorsv2(
         range_type: RangeType query parameter.
         start_period: StartPeriod query parameter.
         start_range: StartRange query parameter.
-        return_parsed: parse the payload through parse_wnba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
-        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        return_parsed: parse the payload through parse_wnba_stats_result_sets -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
-        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+        A dict of DataFrames keyed by result-set name (``sqlPlayersFourFactors``, ``sqlTeamsFourFactors``) by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         Quick start::
@@ -579,11 +584,12 @@ def wnba_stats_boxscorefourfactorsv3(
         range_type: RangeType query parameter.
         start_period: StartPeriod query parameter.
         start_range: StartRange query parameter.
-        return_parsed: parse the payload through parse_wnba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
-        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        return_parsed: parse the payload through parse_wnba_stats_result_sets -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
-        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+        A dict of DataFrames keyed by result-set name (``PlayerStats``, ``TeamStats``) by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         Quick start::
@@ -624,11 +630,12 @@ def wnba_stats_boxscorehustlev2(
 
     Args:
         game_id: GameID query parameter.
-        return_parsed: parse the payload through parse_wnba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
-        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        return_parsed: parse the payload through parse_wnba_stats_result_sets -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
-        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+        A dict of DataFrames keyed by result-set name (``PlayerStats``, ``TeamStats``) by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         Quick start::
@@ -664,11 +671,12 @@ def wnba_stats_boxscorematchupsv3(
 
     Args:
         game_id: GameID query parameter.
-        return_parsed: parse the payload through parse_wnba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
-        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        return_parsed: parse the payload through parse_wnba_stats_result_sets -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
-        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+        A dict of DataFrames keyed by result-set name (``PlayerStats``, ``TeamStats``) by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         Quick start::
@@ -714,11 +722,12 @@ def wnba_stats_boxscoremiscv2(
         range_type: RangeType query parameter.
         start_period: StartPeriod query parameter.
         start_range: StartRange query parameter.
-        return_parsed: parse the payload through parse_wnba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
-        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        return_parsed: parse the payload through parse_wnba_stats_result_sets -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
-        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+        A dict of DataFrames keyed by result-set name (``sqlPlayersMisc``, ``sqlTeamsMisc``) by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         Quick start::
@@ -769,11 +778,12 @@ def wnba_stats_boxscoremiscv3(
         range_type: RangeType query parameter.
         start_period: StartPeriod query parameter.
         start_range: StartRange query parameter.
-        return_parsed: parse the payload through parse_wnba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
-        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        return_parsed: parse the payload through parse_wnba_stats_result_sets -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
-        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+        A dict of DataFrames keyed by result-set name (``PlayerStats``, ``TeamStats``) by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         Quick start::
@@ -814,11 +824,12 @@ def wnba_stats_boxscoreplayertrackv3(
 
     Args:
         game_id: GameID query parameter.
-        return_parsed: parse the payload through parse_wnba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
-        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        return_parsed: parse the payload through parse_wnba_stats_result_sets -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
-        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+        A dict of DataFrames keyed by result-set name (``PlayerStats``, ``TeamStats``) by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         Quick start::
@@ -864,11 +875,12 @@ def wnba_stats_boxscorescoringv2(
         range_type: RangeType query parameter.
         start_period: StartPeriod query parameter.
         start_range: StartRange query parameter.
-        return_parsed: parse the payload through parse_wnba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
-        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        return_parsed: parse the payload through parse_wnba_stats_result_sets -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
-        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+        A dict of DataFrames keyed by result-set name (``sqlPlayersScoring``, ``sqlTeamsScoring``) by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         Quick start::
@@ -919,11 +931,12 @@ def wnba_stats_boxscorescoringv3(
         range_type: RangeType query parameter.
         start_period: StartPeriod query parameter.
         start_range: StartRange query parameter.
-        return_parsed: parse the payload through parse_wnba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
-        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        return_parsed: parse the payload through parse_wnba_stats_result_sets -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
-        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+        A dict of DataFrames keyed by result-set name (``PlayerStats``, ``TeamStats``) by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         Quick start::
@@ -964,11 +977,12 @@ def wnba_stats_boxscoresummaryv2(
 
     Args:
         game_id: GameID query parameter.
-        return_parsed: parse the payload through parse_wnba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
-        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        return_parsed: parse the payload through parse_wnba_stats_result_sets -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
-        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+        A dict of DataFrames keyed by result-set name (``GameSummary``, ``OtherStats``, ``Officials``, ``InactivePlayers``, ``GameInfo``, ``LineScore``, ``LastMeeting``, ``SeasonSeries``, ``AvailableVideo``) by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         Quick start::
@@ -1004,11 +1018,12 @@ def wnba_stats_boxscoresummaryv3(
 
     Args:
         game_id: GameID query parameter.
-        return_parsed: parse the payload through parse_wnba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
-        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        return_parsed: parse the payload through parse_wnba_stats_result_sets -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
-        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+        A dict of DataFrames keyed by result-set name (``PlayerStats``, ``TeamStats``, ``Officials``) by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         Quick start::
@@ -1054,11 +1069,12 @@ def wnba_stats_boxscoretraditionalv2(
         range_type: RangeType query parameter.
         start_period: StartPeriod query parameter.
         start_range: StartRange query parameter.
-        return_parsed: parse the payload through parse_wnba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
-        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        return_parsed: parse the payload through parse_wnba_stats_result_sets -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
-        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+        A dict of DataFrames keyed by result-set name (``PlayerStats``, ``TeamStats``, ``TeamStarterBenchStats``) by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         Quick start::
@@ -1109,11 +1125,12 @@ def wnba_stats_boxscoretraditionalv3(
         range_type: RangeType query parameter.
         start_period: StartPeriod query parameter.
         start_range: StartRange query parameter.
-        return_parsed: parse the payload through parse_wnba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
-        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        return_parsed: parse the payload through parse_wnba_stats_result_sets -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
-        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+        A dict of DataFrames keyed by result-set name (``PlayerStats``, ``TeamStats``) by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         Quick start::
@@ -1164,11 +1181,12 @@ def wnba_stats_boxscoreusagev2(
         range_type: RangeType query parameter.
         start_period: StartPeriod query parameter.
         start_range: StartRange query parameter.
-        return_parsed: parse the payload through parse_wnba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
-        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        return_parsed: parse the payload through parse_wnba_stats_result_sets -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
-        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+        A dict of DataFrames keyed by result-set name (``sqlPlayersUsage``, ``sqlTeamsUsage``) by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         Quick start::
@@ -1219,11 +1237,12 @@ def wnba_stats_boxscoreusagev3(
         range_type: RangeType query parameter.
         start_period: StartPeriod query parameter.
         start_range: StartRange query parameter.
-        return_parsed: parse the payload through parse_wnba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
-        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        return_parsed: parse the payload through parse_wnba_stats_result_sets -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
-        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+        A dict of DataFrames keyed by result-set name (``PlayerStats``, ``TeamStats``) by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         Quick start::
@@ -1312,11 +1331,12 @@ def wnba_stats_commonplayerinfo(
     Args:
         league_id: LeagueID query parameter.
         player_id: PlayerID query parameter.
-        return_parsed: parse the payload through parse_wnba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
-        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        return_parsed: parse the payload through parse_wnba_stats_result_sets -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
-        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+        A dict of DataFrames keyed by result-set name (``CommonPlayerInfo``, ``PlayerHeadlineStats``, ``AvailableSeasons``) by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         Quick start::
@@ -1403,11 +1423,12 @@ def wnba_stats_commonteamroster(
         league_id: LeagueID query parameter.
         season: Season query parameter.
         team_id: TeamID query parameter.
-        return_parsed: parse the payload through parse_wnba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
-        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        return_parsed: parse the payload through parse_wnba_stats_result_sets -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
-        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+        A dict of DataFrames keyed by result-set name (``CommonTeamRoster``, ``Coaches``) by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         Quick start::
@@ -1493,11 +1514,12 @@ def wnba_stats_cumestatsplayer(
         player_id: PlayerID query parameter.
         season: Season query parameter.
         season_type_all_star: SeasonType query parameter.
-        return_parsed: parse the payload through parse_wnba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
-        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        return_parsed: parse the payload through parse_wnba_stats_result_sets -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
-        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+        A dict of DataFrames keyed by result-set name (``GameByGameStats``, ``TotalPlayerStats``) by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         Quick start::
@@ -1609,11 +1631,12 @@ def wnba_stats_cumestatsteam(
         season: Season query parameter.
         season_type_all_star: SeasonType query parameter.
         team_id: TeamID query parameter.
-        return_parsed: parse the payload through parse_wnba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
-        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        return_parsed: parse the payload through parse_wnba_stats_result_sets -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
-        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+        A dict of DataFrames keyed by result-set name (``GameByGameStats``, ``TotalTeamStats``) by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         Quick start::
@@ -1933,11 +1956,12 @@ def wnba_stats_franchisehistory(
 
     Args:
         league_id: LeagueID query parameter.
-        return_parsed: parse the payload through parse_wnba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
-        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        return_parsed: parse the payload through parse_wnba_stats_result_sets -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
-        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+        A dict of DataFrames keyed by result-set name (``FranchiseHistory``, ``DefunctTeams``) by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         Quick start::
@@ -2116,11 +2140,12 @@ def wnba_stats_gamerotation(
     Args:
         game_id: GameID query parameter.
         league_id: LeagueID query parameter.
-        return_parsed: parse the payload through parse_wnba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
-        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        return_parsed: parse the payload through parse_wnba_stats_result_sets -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
-        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+        A dict of DataFrames keyed by result-set name (``AwayTeam``, ``HomeTeam``) by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         Quick start::
@@ -2169,11 +2194,12 @@ def wnba_stats_homepageleaders(
         season: Season query parameter.
         season_type_playoffs: SeasonType query parameter.
         stat_category: StatCategory query parameter.
-        return_parsed: parse the payload through parse_wnba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
-        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        return_parsed: parse the payload through parse_wnba_stats_result_sets -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
-        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+        A dict of DataFrames keyed by result-set name (``HomePageLeaders``, ``LeagueAverage``, ``LeagueMax``) by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         Quick start::
@@ -2227,11 +2253,12 @@ def wnba_stats_homepagev2(
         season: Season query parameter.
         season_type_playoffs: SeasonType query parameter.
         stat_type: StatType query parameter.
-        return_parsed: parse the payload through parse_wnba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
-        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        return_parsed: parse the payload through parse_wnba_stats_result_sets -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
-        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+        A dict of DataFrames keyed by result-set name (``HomePageStat1``, ``HomePageStat2``, ``HomePageStat3``, ``HomePageStat4``, ``HomePageStat5``, ``HomePageStat6``, ``HomePageStat7``, ``HomePageStat8``) by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         Quick start::
@@ -2273,11 +2300,12 @@ def wnba_stats_hustlestatsboxscore(
 
     Args:
         game_id: GameID query parameter.
-        return_parsed: parse the payload through parse_wnba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
-        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        return_parsed: parse the payload through parse_wnba_stats_result_sets -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
-        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+        A dict of DataFrames keyed by result-set name (``HustleStatsAvailable``, ``PlayerStats``, ``TeamStats``) by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         Quick start::
@@ -2365,11 +2393,12 @@ def wnba_stats_leaderstiles(
         season: Season query parameter.
         season_type_playoffs: SeasonType query parameter.
         stat: Stat query parameter.
-        return_parsed: parse the payload through parse_wnba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
-        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        return_parsed: parse the payload through parse_wnba_stats_result_sets -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
-        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+        A dict of DataFrames keyed by result-set name (``LeadersTiles``, ``AllTimeSeasonHigh``, ``LastSeasonHigh``, ``LowSeasonHigh``) by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         Quick start::
@@ -4369,11 +4398,12 @@ def wnba_stats_playbyplayv2(
         end_period: EndPeriod query parameter.
         game_id: GameID query parameter.
         start_period: StartPeriod query parameter.
-        return_parsed: parse the payload through parse_wnba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
-        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        return_parsed: parse the payload through parse_wnba_stats_result_sets -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
-        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+        A dict of DataFrames keyed by result-set name (``PlayByPlay``, ``AvailableVideo``) by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         Quick start::
@@ -4503,11 +4533,12 @@ def wnba_stats_playercareerbycollegerollup(
         per_mode_simple: PerMode query parameter.
         season_nullable: Season query parameter.
         season_type_all_star: SeasonType query parameter.
-        return_parsed: parse the payload through parse_wnba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
-        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        return_parsed: parse the payload through parse_wnba_stats_result_sets -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
-        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+        A dict of DataFrames keyed by result-set name (``East``, ``South``, ``Midwest``, ``West``) by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         Quick start::
@@ -4550,11 +4581,12 @@ def wnba_stats_playercareerstats(
         league_id: LeagueID query parameter.
         per_mode36: PerMode query parameter.
         player_id: PlayerID query parameter.
-        return_parsed: parse the payload through parse_wnba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
-        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        return_parsed: parse the payload through parse_wnba_stats_result_sets -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
-        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+        A dict of DataFrames keyed by result-set name (``SeasonTotalsRegularSeason``, ``CareerTotalsRegularSeason``, ``SeasonTotalsPostSeason``, ``CareerTotalsPostSeason``, ``SeasonTotalsAllStarSeason``, ``CareerTotalsAllStarSeason``, ``SeasonTotalsCollegeSeason``, ``CareerTotalsCollegeSeason``, ``SeasonTotalsShowcaseSeason``, ``CareerTotalsShowcaseSeason``, ``SeasonRankingsRegularSeason``, ``SeasonRankingsPostSeason``, ``SeasonHighs``, ``CareerHighs``) by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         Quick start::
@@ -4640,11 +4672,12 @@ def wnba_stats_playercompare(
         vs_conference_nullable: VsConference query parameter.
         vs_division_nullable: VsDivision query parameter.
         vs_player_id_list: VsPlayerIDList query parameter.
-        return_parsed: parse the payload through parse_wnba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
-        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        return_parsed: parse the payload through parse_wnba_stats_result_sets -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
-        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+        A dict of DataFrames keyed by result-set name (``OverallCompare``, ``Individual``) by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         Quick start::
@@ -4748,11 +4781,12 @@ def wnba_stats_playerdashboardbyclutch(
         shot_clock_range_nullable: ShotClockRange query parameter.
         vs_conference_nullable: VsConference query parameter.
         vs_division_nullable: VsDivision query parameter.
-        return_parsed: parse the payload through parse_wnba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
-        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        return_parsed: parse the payload through parse_wnba_stats_result_sets -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
-        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+        A dict of DataFrames keyed by result-set name (``OverallPlayerDashboard``, ``Last5Min5PointPlayerDashboard``, ``Last3Min5PointPlayerDashboard``, ``Last1Min5PointPlayerDashboard``, ``Last30Sec3PointPlayerDashboard``, ``Last10Sec3PointPlayerDashboard``, ``Last5MinPlusMinus5PointPlayerDashboard``, ``Last3MinPlusMinus5PointPlayerDashboard``, ``Last1MinPlusMinus5PointPlayerDashboard``, ``Last30Sec3Point2PlayerDashboard``, ``Last10Sec3Point2PlayerDashboard``) by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         Quick start::
@@ -4854,11 +4888,12 @@ def wnba_stats_playerdashboardbygamesplits(
         shot_clock_range_nullable: ShotClockRange query parameter.
         vs_conference_nullable: VsConference query parameter.
         vs_division_nullable: VsDivision query parameter.
-        return_parsed: parse the payload through parse_wnba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
-        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        return_parsed: parse the payload through parse_wnba_stats_result_sets -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
-        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+        A dict of DataFrames keyed by result-set name (``OverallPlayerDashboard``, ``ByHalfPlayerDashboard``, ``ByPeriodPlayerDashboard``, ``ByScoreMarginPlayerDashboard``, ``ByActualMarginPlayerDashboard``) by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         Quick start::
@@ -4960,11 +4995,12 @@ def wnba_stats_playerdashboardbygeneralsplits(
         shot_clock_range_nullable: ShotClockRange query parameter.
         vs_conference_nullable: VsConference query parameter.
         vs_division_nullable: VsDivision query parameter.
-        return_parsed: parse the payload through parse_wnba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
-        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        return_parsed: parse the payload through parse_wnba_stats_result_sets -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
-        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+        A dict of DataFrames keyed by result-set name (``OverallPlayerDashboard``, ``LocationPlayerDashboard``, ``WinsLossesPlayerDashboard``, ``MonthPlayerDashboard``, ``PrePostAllStarPlayerDashboard``, ``StartingPosition``, ``DaysRestPlayerDashboard``) by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         Quick start::
@@ -5066,11 +5102,12 @@ def wnba_stats_playerdashboardbylastngames(
         shot_clock_range_nullable: ShotClockRange query parameter.
         vs_conference_nullable: VsConference query parameter.
         vs_division_nullable: VsDivision query parameter.
-        return_parsed: parse the payload through parse_wnba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
-        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        return_parsed: parse the payload through parse_wnba_stats_result_sets -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
-        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+        A dict of DataFrames keyed by result-set name (``OverallPlayerDashboard``, ``Last5PlayerDashboard``, ``Last10PlayerDashboard``, ``Last15PlayerDashboard``, ``Last20PlayerDashboard``, ``GameNumberPlayerDashboard``) by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         Quick start::
@@ -5172,11 +5209,12 @@ def wnba_stats_playerdashboardbyopponent(
         shot_clock_range: ShotClockRange query parameter.
         vs_conference: VsConference query parameter.
         vs_division: VsDivision query parameter.
-        return_parsed: parse the payload through parse_wnba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
-        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        return_parsed: parse the payload through parse_wnba_stats_result_sets -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
-        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+        A dict of DataFrames keyed by result-set name (``OverallPlayerDashboard``, ``ConferencePlayerDashboard``, ``DivisionPlayerDashboard``, ``OpponentPlayerDashboard``) by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         Quick start::
@@ -5278,11 +5316,12 @@ def wnba_stats_playerdashboardbyshootingsplits(
         shot_clock_range_nullable: ShotClockRange query parameter.
         vs_conference_nullable: VsConference query parameter.
         vs_division_nullable: VsDivision query parameter.
-        return_parsed: parse the payload through parse_wnba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
-        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        return_parsed: parse the payload through parse_wnba_stats_result_sets -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
-        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+        A dict of DataFrames keyed by result-set name (``OverallPlayerDashboard``, ``Shot5FTPlayerDashboard``, ``Shot8FTPlayerDashboard``, ``ShotAreaPlayerDashboard``, ``AssitedShotPlayerDashboard``, ``ShotTypeSummaryPlayerDashboard``, ``ShotTypePlayerDashboard``, ``AssistedBy``) by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         Quick start::
@@ -5384,11 +5423,12 @@ def wnba_stats_playerdashboardbyteamperformance(
         shot_clock_range_nullable: ShotClockRange query parameter.
         vs_conference_nullable: VsConference query parameter.
         vs_division_nullable: VsDivision query parameter.
-        return_parsed: parse the payload through parse_wnba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
-        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        return_parsed: parse the payload through parse_wnba_stats_result_sets -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
-        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+        A dict of DataFrames keyed by result-set name (``OverallPlayerDashboard``, ``ScoreDifferentialPlayerDashboard``, ``PointsScoredPlayerDashboard``, ``PontsAgainstPlayerDashboard``) by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         Quick start::
@@ -5490,11 +5530,12 @@ def wnba_stats_playerdashboardbyyearoveryear(
         shot_clock_range_nullable: ShotClockRange query parameter.
         vs_conference_nullable: VsConference query parameter.
         vs_division_nullable: VsDivision query parameter.
-        return_parsed: parse the payload through parse_wnba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
-        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        return_parsed: parse the payload through parse_wnba_stats_result_sets -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
-        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+        A dict of DataFrames keyed by result-set name (``OverallPlayerDashboard``, ``ByYearPlayerDashboard``) by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         Quick start::
@@ -5705,11 +5746,12 @@ def wnba_stats_playerfantasyprofile(
         rank: Rank query parameter.
         season: Season query parameter.
         season_type: SeasonType query parameter.
-        return_parsed: parse the payload through parse_wnba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
-        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        return_parsed: parse the payload through parse_wnba_stats_result_sets -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
-        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+        A dict of DataFrames keyed by result-set name (``Overall``, ``Location``, ``LastNGames``, ``DaysRestModified``, ``Opponent``) by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         Quick start::
@@ -5759,11 +5801,12 @@ def wnba_stats_playerfantasyprofilebargraph(
         player_id: PlayerID query parameter.
         season: Season query parameter.
         season_type_all_star_nullable: SeasonType query parameter.
-        return_parsed: parse the payload through parse_wnba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
-        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        return_parsed: parse the payload through parse_wnba_stats_result_sets -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
-        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+        A dict of DataFrames keyed by result-set name (``SeasonAvg``, ``LastFiveGamesAvg``) by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         Quick start::
@@ -6393,11 +6436,12 @@ def wnba_stats_playerprofilev2(
         league_id: LeagueID query parameter.
         per_mode36: PerMode query parameter.
         player_id: PlayerID query parameter.
-        return_parsed: parse the payload through parse_wnba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
-        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        return_parsed: parse the payload through parse_wnba_stats_result_sets -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
-        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+        A dict of DataFrames keyed by result-set name (``SeasonTotalsRegularSeason``, ``CareerTotalsRegularSeason``, ``SeasonTotalsPostSeason``, ``CareerTotalsPostSeason``, ``SeasonTotalsAllStarSeason``, ``CareerTotalsAllStarSeason``, ``SeasonTotalsCollegeSeason``, ``CareerTotalsCollegeSeason``, ``SeasonTotalsPreseason``, ``CareerTotalsPreseason``, ``SeasonRankingsRegularSeason``, ``SeasonRankingsPostSeason``, ``SeasonHighs``, ``CareerHighs``, ``NextGame``) by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         Quick start::
@@ -6477,11 +6521,12 @@ def wnba_stats_playervsplayer(
         vs_conference_nullable: VsConference query parameter.
         vs_division_nullable: VsDivision query parameter.
         vs_player_id: VsPlayerID query parameter.
-        return_parsed: parse the payload through parse_wnba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
-        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        return_parsed: parse the payload through parse_wnba_stats_result_sets -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
-        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+        A dict of DataFrames keyed by result-set name (``Overall``, ``OnOffCourt``, ``ShotDistanceOverall``, ``ShotDistanceOnCourt``, ``ShotDistanceOffCourt``, ``ShotAreaOverall``, ``ShotAreaOnCourt``, ``ShotAreaOffCourt``, ``PlayerInfo``, ``VsPlayerInfo``) by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         Quick start::
@@ -6628,11 +6673,12 @@ def wnba_stats_scoreboardv2(
         day_offset: DayOffset query parameter.
         game_date: GameDate query parameter.
         league_id: LeagueID query parameter.
-        return_parsed: parse the payload through parse_wnba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
-        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        return_parsed: parse the payload through parse_wnba_stats_result_sets -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
-        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+        A dict of DataFrames keyed by result-set name (``GameHeader``, ``LineScore``, ``SeriesStandings``, ``LastMeeting``, ``EastConfStandingsByDay``, ``WestConfStandingsByDay``, ``Available``, ``TeamLeaders``, ``TicketLinks``, ``WinProbability``) by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         Quick start::
@@ -6773,11 +6819,12 @@ def wnba_stats_shotchartdetail(
         team_id: TeamID query parameter.
         vs_conference_nullable: VsConference query parameter.
         vs_division_nullable: VsDivision query parameter.
-        return_parsed: parse the payload through parse_wnba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
-        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        return_parsed: parse the payload through parse_wnba_stats_result_sets -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
-        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+        A dict of DataFrames keyed by result-set name (``Shot_Chart_Detail``, ``LeagueAverages``) by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         Quick start::
@@ -6924,11 +6971,12 @@ def wnba_stats_shotchartlineupdetail(
         team_id_nullable: TeamID query parameter.
         vs_conference_nullable: VsConference query parameter.
         vs_division_nullable: VsDivision query parameter.
-        return_parsed: parse the payload through parse_wnba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
-        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        return_parsed: parse the payload through parse_wnba_stats_result_sets -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
-        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+        A dict of DataFrames keyed by result-set name (``ShotChartLineupDetail``, ``ShotChartLineupLeagueAverage``) by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         Quick start::
@@ -7027,11 +7075,12 @@ def wnba_stats_teamdashboardbyclutch(
         team_id: TeamID query parameter.
         vs_conference: VsConference query parameter.
         vs_division: VsDivision query parameter.
-        return_parsed: parse the payload through parse_wnba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
-        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        return_parsed: parse the payload through parse_wnba_stats_result_sets -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
-        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+        A dict of DataFrames keyed by result-set name (``OverallTeamDashboard``, ``Last5Min5PointTeamDashboard``, ``Last3Min5PointTeamDashboard``, ``Last1Min5PointTeamDashboard``, ``Last30Sec3PointTeamDashboard``, ``Last10Sec3PointTeamDashboard``, ``Last5MinPlusMinus5PointTeamDashboard``, ``Last3MinPlusMinus5PointTeamDashboard``, ``Last1MinPlusMinus5PointTeamDashboard``, ``Last30Sec3Point2TeamDashboard``, ``Last10Sec3Point2TeamDashboard``) by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         Quick start::
@@ -7133,11 +7182,12 @@ def wnba_stats_teamdashboardbygamesplits(
         team_id: TeamID query parameter.
         vs_conference: VsConference query parameter.
         vs_division: VsDivision query parameter.
-        return_parsed: parse the payload through parse_wnba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
-        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        return_parsed: parse the payload through parse_wnba_stats_result_sets -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
-        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+        A dict of DataFrames keyed by result-set name (``OverallTeamDashboard``, ``ByHalfTeamDashboard``, ``ByPeriodTeamDashboard``, ``ByScoreMarginTeamDashboard``, ``ByActualMarginTeamDashboard``) by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         Quick start::
@@ -7239,11 +7289,12 @@ def wnba_stats_teamdashboardbygeneralsplits(
         team_id: TeamID query parameter.
         vs_conference_nullable: VsConference query parameter.
         vs_division_nullable: VsDivision query parameter.
-        return_parsed: parse the payload through parse_wnba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
-        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        return_parsed: parse the payload through parse_wnba_stats_result_sets -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
-        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+        A dict of DataFrames keyed by result-set name (``OverallTeamDashboard``, ``LocationTeamDashboard``, ``WinsLossesTeamDashboard``, ``MonthTeamDashboard``, ``PrePostAllStarTeamDashboard``, ``DaysRestTeamDashboard``) by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         Quick start::
@@ -7345,11 +7396,12 @@ def wnba_stats_teamdashboardbylastngames(
         team_id: TeamID query parameter.
         vs_conference: VsConference query parameter.
         vs_division: VsDivision query parameter.
-        return_parsed: parse the payload through parse_wnba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
-        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        return_parsed: parse the payload through parse_wnba_stats_result_sets -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
-        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+        A dict of DataFrames keyed by result-set name (``OverallTeamDashboard``, ``Last5TeamDashboard``, ``Last10TeamDashboard``, ``Last15TeamDashboard``, ``Last20TeamDashboard``, ``GameNumberTeamDashboard``) by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         Quick start::
@@ -7451,11 +7503,12 @@ def wnba_stats_teamdashboardbyopponent(
         team_id: TeamID query parameter.
         vs_conference: VsConference query parameter.
         vs_division: VsDivision query parameter.
-        return_parsed: parse the payload through parse_wnba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
-        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        return_parsed: parse the payload through parse_wnba_stats_result_sets -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
-        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+        A dict of DataFrames keyed by result-set name (``OverallTeamDashboard``, ``ConferenceTeamDashboard``, ``DivisionTeamDashboard``, ``OpponentTeamDashboard``) by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         Quick start::
@@ -7557,11 +7610,12 @@ def wnba_stats_teamdashboardbyshootingsplits(
         team_id: TeamID query parameter.
         vs_conference_nullable: VsConference query parameter.
         vs_division_nullable: VsDivision query parameter.
-        return_parsed: parse the payload through parse_wnba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
-        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        return_parsed: parse the payload through parse_wnba_stats_result_sets -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
-        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+        A dict of DataFrames keyed by result-set name (``OverallTeamDashboard``, ``Shot5FTTeamDashboard``, ``Shot8FTTeamDashboard``, ``ShotAreaTeamDashboard``, ``AssitedShotTeamDashboard``, ``ShotTypeTeamDashboard``, ``AssistedBy``) by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         Quick start::
@@ -7663,11 +7717,12 @@ def wnba_stats_teamdashboardbyteamperformance(
         team_id: TeamID query parameter.
         vs_conference: VsConference query parameter.
         vs_division: VsDivision query parameter.
-        return_parsed: parse the payload through parse_wnba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
-        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        return_parsed: parse the payload through parse_wnba_stats_result_sets -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
-        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+        A dict of DataFrames keyed by result-set name (``OverallTeamDashboard``, ``ScoreDifferentialTeamDashboard``, ``PointsScoredTeamDashboard``, ``PontsAgainstTeamDashboard``) by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         Quick start::
@@ -7769,11 +7824,12 @@ def wnba_stats_teamdashboardbyyearoveryear(
         team_id: TeamID query parameter.
         vs_conference: VsConference query parameter.
         vs_division: VsDivision query parameter.
-        return_parsed: parse the payload through parse_wnba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
-        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        return_parsed: parse the payload through parse_wnba_stats_result_sets -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
-        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+        A dict of DataFrames keyed by result-set name (``OverallTeamDashboard``, ``ByYearTeamDashboard``) by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         Quick start::
@@ -7879,11 +7935,12 @@ def wnba_stats_teamdashlineups(
         team_id: TeamID query parameter.
         vs_conference_nullable: VsConference query parameter.
         vs_division_nullable: VsDivision query parameter.
-        return_parsed: parse the payload through parse_wnba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
-        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        return_parsed: parse the payload through parse_wnba_stats_result_sets -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
-        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+        A dict of DataFrames keyed by result-set name (``Overall``, ``Lineups``) by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         Quick start::
@@ -7943,11 +8000,12 @@ def wnba_stats_teamdetails(
 
     Args:
         team_id: TeamID query parameter.
-        return_parsed: parse the payload through parse_wnba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
-        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        return_parsed: parse the payload through parse_wnba_stats_result_sets -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
-        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+        A dict of DataFrames keyed by result-set name (``TeamBackground``, ``TeamHistory``, ``TeamSocialSites``, ``TeamAwardsChampionships``, ``TeamAwardsConf``, ``TeamAwardsDiv``, ``TeamHof``, ``TeamRetired``, ``TeamAwardsCommCup``) by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         Quick start::
@@ -8190,11 +8248,12 @@ def wnba_stats_teaminfocommon(
         season_nullable: Season query parameter.
         season_type_nullable: SeasonType query parameter.
         team_id: TeamID query parameter.
-        return_parsed: parse the payload through parse_wnba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
-        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        return_parsed: parse the payload through parse_wnba_stats_result_sets -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
-        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+        A dict of DataFrames keyed by result-set name (``TeamInfoCommon``, ``TeamSeasonRanks``, ``AvailableSeasons``) by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         Quick start::
@@ -8277,11 +8336,12 @@ def wnba_stats_teamplayerdashboard(
         team_id: TeamID query parameter.
         vs_conference_nullable: VsConference query parameter.
         vs_division_nullable: VsDivision query parameter.
-        return_parsed: parse the payload through parse_wnba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
-        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        return_parsed: parse the payload through parse_wnba_stats_result_sets -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
-        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+        A dict of DataFrames keyed by result-set name (``TeamOverall``, ``PlayersSeasonTotals``) by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         Quick start::
@@ -8379,11 +8439,12 @@ def wnba_stats_teamplayeronoffdetails(
         team_id: TeamID query parameter.
         vs_conference_nullable: VsConference query parameter.
         vs_division_nullable: VsDivision query parameter.
-        return_parsed: parse the payload through parse_wnba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
-        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        return_parsed: parse the payload through parse_wnba_stats_result_sets -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
-        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+        A dict of DataFrames keyed by result-set name (``OverallTeamPlayerOnOffDetails``, ``PlayersOnCourtTeamPlayerOnOffDetails``, ``PlayersOffCourtTeamPlayerOnOffDetails``) by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         Quick start::
@@ -8479,11 +8540,12 @@ def wnba_stats_teamplayeronoffsummary(
         team_id: TeamID query parameter.
         vs_conference_nullable: VsConference query parameter.
         vs_division_nullable: VsDivision query parameter.
-        return_parsed: parse the payload through parse_wnba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
-        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        return_parsed: parse the payload through parse_wnba_stats_result_sets -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
-        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+        A dict of DataFrames keyed by result-set name (``OverallTeamPlayerOnOffSummary``, ``PlayersOnCourtTeamPlayerOnOffSummary``, ``PlayersOffCourtTeamPlayerOnOffSummary``) by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         Quick start::
@@ -8583,11 +8645,12 @@ def wnba_stats_teamvsplayer(
         vs_conference_nullable: VsConference query parameter.
         vs_division_nullable: VsDivision query parameter.
         vs_player_id: VsPlayerID query parameter.
-        return_parsed: parse the payload through parse_wnba_stats_result_sets -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
-        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        return_parsed: parse the payload through parse_wnba_stats_result_sets -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
-        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+        A dict of DataFrames keyed by result-set name (``Overall``, ``vsPlayerOverall``, ``OnOffCourt``, ``ShotDistanceOverall``, ``ShotDistanceOnCourt``, ``ShotDistanceOffCourt``, ``ShotAreaOverall``, ``ShotAreaOnCourt``, ``ShotAreaOffCourt``) by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         Quick start::

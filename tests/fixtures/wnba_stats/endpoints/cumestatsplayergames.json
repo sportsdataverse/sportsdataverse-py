@@ -1,0 +1,33 @@
+{
+ "resource": "cumestatsplayergames",
+ "parameters": {
+  "LeagueID": "10",
+  "Season": "2023",
+  "SeasonType": "Regular Season",
+  "PlayerID": 203826,
+  "Location": null,
+  "Outcome": null,
+  "VsTeamID": 0,
+  "VsDivision": null,
+  "VsConference": null
+ },
+ "resultSets": [
+  {
+   "name": "CumeStatsPlayerGames",
+   "headers": [
+    "MATCHUP",
+    "GAME_ID"
+   ],
+   "rowSet": [
+    [
+     "09/10/2023 Sky at Sun",
+     "1022300236"
+    ],
+    [
+     "09/08/2023 Fever at Sun",
+     "1022300230"
+    ]
+   ]
+  }
+ ]
+}

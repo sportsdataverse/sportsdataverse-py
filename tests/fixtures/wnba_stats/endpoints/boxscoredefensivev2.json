@@ -1,0 +1,144 @@
+{
+ "meta": {
+  "version": 1,
+  "request": "http://nba.cloud/games/1022600128/boxscoredefensive?Format=json",
+  "time": "2026-06-28T20:11:52.1152Z"
+ },
+ "boxScoreDefensive": {
+  "gameId": "1022600128",
+  "awayTeamId": 1611661317,
+  "homeTeamId": 1611661325,
+  "homeTeam": {
+   "teamId": 1611661325,
+   "teamCity": "Indiana",
+   "teamName": "Fever",
+   "teamTricode": "IND",
+   "teamSlug": "fever",
+   "players": [
+    {
+     "personId": 1631086,
+     "firstName": "Lexie",
+     "familyName": "Hull",
+     "nameI": "L. Hull",
+     "playerSlug": "lexie-hull",
+     "position": "F",
+     "comment": "",
+     "jerseyNum": "",
+     "statistics": {
+      "matchupMinutes": "8:59",
+      "partialPossessions": 50.0,
+      "switchesOn": 0,
+      "playerPoints": 5,
+      "defensiveRebounds": 2,
+      "matchupAssists": 1,
+      "matchupTurnovers": 0,
+      "steals": 1,
+      "blocks": 0,
+      "matchupFieldGoalsMade": 2,
+      "matchupFieldGoalsAttempted": 6,
+      "matchupFieldGoalPercentage": 0.333,
+      "matchupThreePointersMade": 0,
+      "matchupThreePointersAttempted": 1,
+      "matchupThreePointerPercentage": 0.0
+     }
+    },
+    {
+     "personId": 1628881,
+     "firstName": "Monique",
+     "familyName": "Billings",
+     "nameI": "M. Billings",
+     "playerSlug": "monique-billings",
+     "position": "F",
+     "comment": "",
+     "jerseyNum": "",
+     "statistics": {
+      "matchupMinutes": "7:48",
+      "partialPossessions": 42.7,
+      "switchesOn": 0,
+      "playerPoints": 12,
+      "defensiveRebounds": 3,
+      "matchupAssists": 2,
+      "matchupTurnovers": 1,
+      "steals": 0,
+      "blocks": 0,
+      "matchupFieldGoalsMade": 4,
+      "matchupFieldGoalsAttempted": 9,
+      "matchupFieldGoalPercentage": 0.444,
+      "matchupThreePointersMade": 2,
+      "matchupThreePointersAttempted": 6,
+      "matchupThreePointerPercentage": 0.333
+     }
+    }
+   ],
+   "statistics": {
+    "minutes": null
+   }
+  },
+  "awayTeam": {
+   "teamId": 1611661317,
+   "teamCity": "Phoenix",
+   "teamName": "Mercury",
+   "teamTricode": "PHX",
+   "teamSlug": "mercury",
+   "players": [
+    {
+     "personId": 1643493,
+     "firstName": "Noemie",
+     "familyName": "Brochant",
+     "nameI": "N. Brochant",
+     "playerSlug": "noemie-brochant",
+     "position": "F",
+     "comment": "",
+     "jerseyNum": "",
+     "statistics": {
+      "matchupMinutes": "14:13",
+      "partialPossessions": 66.9,
+      "switchesOn": 0,
+      "playerPoints": 24,
+      "defensiveRebounds": 4,
+      "matchupAssists": 5,
+      "matchupTurnovers": 3,
+      "steals": 3,
+      "blocks": 0,
+      "matchupFieldGoalsMade": 10,
+      "matchupFieldGoalsAttempted": 15,
+      "matchupFieldGoalPercentage": 0.667,
+      "matchupThreePointersMade": 4,
+      "matchupThreePointersAttempted": 7,
+      "matchupThreePointerPercentage": 0.571
+     }
+    },
+    {
+     "personId": 201886,
+     "firstName": "DeWanna",
+     "familyName": "Bonner",
+     "nameI": "D. Bonner",
+     "playerSlug": "dewanna-bonner",
+     "position": "F",
+     "comment": "",
+     "jerseyNum": "",
+     "statistics": {
+      "matchupMinutes": "14:07",
+      "partialPossessions": 66.1,
+      "switchesOn": 0,
+      "playerPoints": 21,
+      "defensiveRebounds": 8,
+      "matchupAssists": 1,
+      "matchupTurnovers": 1,
+      "steals": 2,
+      "blocks": 1,
+      "matchupFieldGoalsMade": 8,
+      "matchupFieldGoalsAttempted": 12,
+      "matchupFieldGoalPercentage": 0.667,
+      "matchupThreePointersMade": 1,
+      "matchupThreePointersAttempted": 3,
+      "matchupThreePointerPercentage": 0.333
+     }
+    }
+   ],
+   "statistics": {
+    "minutes": null
+   }
+  }
+ }
+}
