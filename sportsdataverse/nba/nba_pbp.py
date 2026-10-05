@@ -9,6 +9,7 @@ import numpy as np
 import pandas as pd
 import polars as pl
 
+from sportsdataverse._espn_basketball_pbp import pickcenter_odds as _pickcenter_odds
 from sportsdataverse.dl_utils import download, flatten_json_iterative
 
 # ESPN play types for a timeout a team called (NCAA 578/579, NBA/WNBA 15/16/17/283).
@@ -528,37 +529,4 @@ def helper_nba_pickcenter(pbp_txt):
             from sportsdataverse.nba import espn_nba_pbp
             pbp = espn_nba_pbp(game_id=401585183)
     """
-    # Spread definition
-    # One provider is enough: modern summaries carry only DraftKings, and the old
-    # `> 1` guard sent every such game to the defaults. No spread at all (e.g. a
-    # lone teamrankings record-only entry) still means the defaults.
-    pickcenter = pd.json_normalize(pbp_txt.get("pickcenter") or [])
-    if "spread" in pickcenter.columns and pickcenter["spread"].notnull().any():
-        pickcenter = pickcenter.sort_values(by=["provider.id"])
-        homeFavorite = (
-            pickcenter[pickcenter["homeTeamOdds.favorite"].notnull()][["homeTeamOdds.favorite"]].values[0]
-            if "homeTeamOdds.favorite" in pickcenter.columns and pickcenter["homeTeamOdds.favorite"].notnull().any()
-            else True
-        )
-        gameSpread = (
-            pickcenter[pickcenter["spread"].notnull()][["spread"]].values[0] if "spread" in pickcenter.columns else 2.5
-        )
-        overUnder = (
-            pickcenter[pickcenter["overUnder"].notnull()][["overUnder"]].values[0]
-            if "overUnder" in pickcenter.columns and pickcenter["overUnder"].notnull().any()
-            else 215.5
-        )
-        gameSpreadAvailable = True
-        # self.logger.info(f"Spread: {gameSpread}, home Favorite: {homeFavorite}, ou: {overUnder}")
-    else:
-        gameSpread = 2.5
-        overUnder = 215.5
-        homeFavorite = True
-        gameSpreadAvailable = False
-
-    return {
-        "gameSpread": gameSpread,
-        "overUnder": overUnder,
-        "homeFavorite": homeFavorite,
-        "gameSpreadAvailable": gameSpreadAvailable,
-    }
+    return _pickcenter_odds(pbp_txt.get("pickcenter"), 215.5)
