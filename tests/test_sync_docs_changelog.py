@@ -61,7 +61,9 @@ def test_committed_pages_match_the_changelog():
     """Catches a GitHub-UI edit, a --no-verify commit or a changed RECENT_BYTES: the hook alone cannot."""
     pages = sync.render((ROOT / "CHANGELOG.md").read_text(encoding="utf-8"))
     for name, content in pages.items():
-        assert (sync.PAGES / name).read_text(encoding="utf-8") == content, f"{name} is stale: run the hook"
+        assert (sync.PAGES / name).read_text(encoding="utf-8") == content, (
+            f"{name} is stale: run `uv run python tools/codegen/generate.py` (or `python tools/hooks/sync_docs_changelog.py`)"
+        )
 
 
 def test_unrecognised_heading_is_an_error_naming_its_line():

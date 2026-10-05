@@ -224,7 +224,9 @@ and are never touched by edits to `current`.
    - **Changelog**: edit the repo-root `CHANGELOG.md`; the
      `sync-docs-changelog` pre-commit hook splits it into
      `docs/src/pages/CHANGELOG.md` (the newest releases, served at `/CHANGELOG`),
-     `changelog-unreleased.md` and `changelog-archive.md`.
+     `changelog-unreleased.md` and `changelog-archive.md`. If the pages drift (no
+     hook ran), `uv run python tools/codegen/generate.py` (or
+     `python tools/hooks/sync_docs_changelog.py`) rewrites them.
 2. Commit (pre-commit runs the drift gate, doctoc, markdownlint, and the
    changelog sync). Preview locally with `cd docs && yarn build` if you like.
 3. Push to `main`. Vercel rebuilds and the change is live at the default
