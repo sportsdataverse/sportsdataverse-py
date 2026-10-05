@@ -329,13 +329,20 @@ def helper_mbb_pbp_features(game_id, pbp_txt, init):
             # game clocks always split into exactly 2 fields, so
             # `upper_bound=2` is correct + tighter than the legacy
             # heuristic.
-            pl.col("clock.displayValue").str.split(":").list.to_struct(upper_bound=2).alias("clock.mm"),
+            # A bare sub-minute clock ("23.4", as the NBA/WNBA/WBB paths accept)
+            # reads as 0:23; whole-second MM:SS clocks parse exactly as before.
+            pl.when(pl.col("clock.displayValue").str.contains(":"))
+            .then(pl.col("clock.displayValue"))
+            .otherwise("0:" + pl.col("clock.displayValue"))
+            .str.split(":")
+            .list.to_struct(upper_bound=2)
+            .alias("clock.mm"),
         )
         .with_columns(pl.col("clock.mm").struct.rename_fields(["clock.minutes", "clock.seconds"]))
         .unnest("clock.mm")
         .with_columns(
-            pl.col("clock.minutes").cast(pl.Int32),
-            pl.col("clock.seconds").cast(pl.Int32),
+            pl.col("clock.minutes").cast(pl.Float64).cast(pl.Int32),
+            pl.col("clock.seconds").cast(pl.Float64).cast(pl.Int32),
             pl.when(
                 pl.col("type.text")
                 .is_in(_TEAM_TIMEOUT_TYPES)
@@ -431,7 +438,9 @@ def helper_mbb_pbp_features(game_id, pbp_txt, init):
     pbp_txt["plays"] = pbp_txt["plays"].with_columns(
         pl.when((pl.col("game_play_number") == 1).or_((pl.col("lag_period") == 1).and_(pl.col("period.number") == 2)))
         .then(1200)
-        .when((pl.col("lag_period") == 2).and_(pl.col("period.number") == 3))
+        # every OT, not just the first: same rule as end.game_seconds_remaining
+        # below (and the NBA/WNBA/WBB OT handling), so the two agree in 2OT+
+        .when((pl.col("lag_period") == (pl.col("period.number") - 1)).and_(pl.col("period.number") >= 3))
         .then(300)
         .otherwise(pl.col("end.period_seconds_remaining"))
         .alias("end.period_seconds_remaining"),
