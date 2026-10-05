@@ -43,7 +43,10 @@ def _refs_cbs() -> Path | None:
     """The ``sdv-internal-refs/cbs`` dir, or None when the checkout is absent."""
     env = os.environ.get("SDV_INTERNAL_REFS_REPO")
     candidates = [Path(env)] if env else []
-    candidates += [REPO_ROOT.parent / "sdv-internal-refs", Path("C:/Users/saiem/Documents/sdv-internal-refs")]
+    candidates += [
+        REPO_ROOT.parent / "sdv-internal-refs",
+        Path("C:/Users/saiem/Documents/GitHub-Data/sdv-dev/sdv-internal-refs"),
+    ]
     for base in candidates:
         if (base / "cbs" / "captures" / "_sample").is_dir():
             return base / "cbs"

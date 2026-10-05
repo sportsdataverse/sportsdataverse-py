@@ -9,7 +9,8 @@
 # Fox Sports API fixtures
 
 Real responses from the public `api.foxsports.com` (public `apikey` + `api-version=1.1`
-query pair shipped in the foxsports.com web bundle; no account). Captured 2026-10-05
+query pair shipped in the foxsports.com web bundle; no account; every route below takes both
+except `scorechip`, which takes the `apikey` alone). Captured 2026-10-05
 with `curl`; `trending_*` and `foxpolls` are sliced to their first 2 / 5 / 5 records
 (rows sliced, nothing edited).
 
@@ -30,7 +31,6 @@ with `curl`; `trending_*` and `foxpolls` are sliced to their first 2 / 5 / 5 rec
 | `trending_articles.json` | `/bifrost/v1/general/trending/articles?duration=4` (feed key) |
 | `trending_videos.json` | `/bifrost/v1/general/trending/videos?duration=4&maxItems=12` (feed key) |
 | `foxpolls.json` | `/foxpolls/v1/polls?includeAnswers=true` (feed key) |
-
 | `nfl_scorechip.json` | `/bifrost/v1/nfl/scorechip/nfl11195?apikey=...` (NO `api-version`: the route 400s with it) |
 | `topevents_segment.json` | `/bifrost/v1/topevents/scoreboard/segment/1` (segment id from `topevents/scoreboard/main`) |
 
