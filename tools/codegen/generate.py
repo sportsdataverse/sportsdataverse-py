@@ -2242,13 +2242,29 @@ def _docs_corpus(league: str | None) -> str:
     return "\n".join(f.read_text(encoding="utf-8") for f in sorted(base.rglob("*.md")))
 
 
+@functools.lru_cache(maxsize=8)
+def _corpus_words(corpus: str) -> frozenset[str]:
+    """Every maximal run of word characters in ``corpus``, computed once per corpus.
+
+    A handful of corpora (one per league, the whole tree, the per-league render) are each
+    queried thousands of times, so one scan per corpus replaces one regex pass per name.
+    The cache is keyed on the string itself: Python caches a str's hash, so a hit on the
+    same object costs nothing, and 8 entries bound the memory to 8 corpora."""
+    return frozenset(re.findall(r"\w+", corpus))
+
+
 def _is_documented(name: str, corpus: str) -> bool:
     """True when ``name`` appears as a whole word in ``corpus``.
 
-    A word-boundary search (``_`` counts as a word character) so ``player_stats``
+    A word-boundary match (``_`` counts as a word character) so ``player_stats``
     is NOT considered documented merely because ``player_stats_v3`` appears, while
-    surrounding punctuation/backticks/whitespace still count as a match."""
-    return re.search(r"\b" + re.escape(name) + r"\b", corpus) is not None
+    surrounding punctuation/backticks/whitespace still count as a match. For a name
+    made only of word characters (every Python identifier), ``\\bname\\b`` matches exactly
+    when ``name`` is one of the corpus's maximal word runs, so a set lookup gives the
+    same answer as the regex; any other name keeps the regex."""
+    if re.fullmatch(r"\w+", name) is None:
+        return re.search(r"\b" + re.escape(name) + r"\b", corpus) is not None
+    return name in _corpus_words(corpus)
 
 
 def _coverage_gaps() -> list[tuple[str, list[str]]]:
