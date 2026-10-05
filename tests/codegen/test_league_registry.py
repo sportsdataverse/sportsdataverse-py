@@ -28,3 +28,9 @@ def test_registry_sports_and_labels():
         "cbs": "CBS Sports",
         "yahoo": "Yahoo Sports",
     }
+
+
+def test_the_committed_registry_is_current():
+    """The sidebar, home grid and search contexts read the committed file: a stale one hides a new league everywhere."""
+    committed = (generate.ROOT / "docs" / "src" / "data" / "leagues.json").read_text(encoding="utf-8")
+    assert committed.rstrip("\n") == generate.render_leagues_json().rstrip("\n")
