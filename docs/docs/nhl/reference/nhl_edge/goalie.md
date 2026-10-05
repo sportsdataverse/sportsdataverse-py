@@ -24,6 +24,7 @@ Pull EDGE detail stats for a single goalie.
 ### Returns {#nhl_edge_goalie_detail-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `seasons_with_edge_stats` | character | Serialized list of seasons for which NHL EDGE player-tracking data is available for this goalie. |
@@ -92,6 +93,7 @@ Pull EDGE 5-on-5 detail stats for a single goalie.
 ### Returns {#nhl_edge_goalie_5v5_detail-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `save_pctg5v5_last10` | character | Serialized last-10-game 5-on-5 save percentage trend data for the goalie. |
@@ -162,6 +164,7 @@ Pull EDGE comparison data for a single goalie.
 ### Returns {#nhl_edge_goalie_comparison-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `seasons_with_edge_stats` | character | Serialized list of season identifiers for which EDGE player-tracking data is available for this goalie. |
@@ -226,6 +229,7 @@ Pull EDGE save-percentage detail for a single goalie.
 ### Returns {#nhl_edge_goalie_save_percentage_detail-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `save_pctg_last10` | character | Serialized summary of the goalie's save percentage across their most recent 10 games. |
@@ -290,6 +294,7 @@ Pull EDGE shot-location detail for a single goalie.
 ### Returns {#nhl_edge_goalie_shot_location_detail-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `area` | character | Net/ice zone the shots were taken from. |
@@ -356,6 +361,7 @@ Pull the EDGE goalie landing page (summary across all goalies).
 ### Returns {#nhl_edge_goalie_landing-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `seasons_with_edge_stats` | character | Serialized list of season identifiers for which EDGE player-tracking data is available on this landing page. |

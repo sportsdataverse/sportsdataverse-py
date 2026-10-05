@@ -29,6 +29,7 @@ GET /api/secured/stats/fantasy/season — one row per player for the season — 
 ### Returns {#nfl_pro_fantasy_season-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `nfl_id` | character | NFL ID of player (this is used in Big Data Bowl Data) |
@@ -255,6 +256,7 @@ GET /api/secured/stats/fantasy/game — one row per player-game — fantasy scor
 ### Returns {#nfl_pro_fantasy_game-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `nfl_id` | character | NFL ID of player (this is used in Big Data Bowl Data) |

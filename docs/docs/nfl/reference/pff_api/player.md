@@ -25,6 +25,7 @@ List the seasons a player has data for
 ### Returns {#pff_api_player_seasons-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `value` | integer | A season (starting year) PFF has data for the player in, newest first. |
@@ -57,6 +58,7 @@ Snap counts for a player, broken out by position
 ### Returns {#pff_api_player_snaps_summary-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `season` | integer | Season (starting year) the snap totals cover. |
@@ -111,6 +113,7 @@ Player snap counts pivoted by position
 ### Returns {#pff_api_player_position_pivot-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `group` | character | Display position group (e.g. "QB", "WR"); one row per group. |
@@ -146,6 +149,7 @@ Offense summary for one player
 ### Returns {#pff_api_player_offense_summary-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `away_franchise_id` | integer | PFF franchise id of the away team. |
@@ -217,6 +221,7 @@ Blocking report for one player
 ### Returns {#pff_api_player_offense_blocking-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `grades_pass_block` | numeric | PFF pass-blocking grade, 0-100. |
@@ -297,6 +302,7 @@ Pass-blocking report for one player
 ### Returns {#pff_api_player_offense_pass_blocking-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `true_pass_set_non_spike_pass_block_percentage` | numeric | Share of non-spike pass-play snaps spent pass blocking on PFF-designated true pass sets. |
@@ -376,6 +382,7 @@ Run-blocking report for one player
 ### Returns {#pff_api_player_offense_run_blocking-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `away_franchise_id` | integer | PFF franchise id of the away team. |
@@ -444,6 +451,7 @@ Passing summary for one player
 ### Returns {#pff_api_player_passing_summary-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `grades_offense` | numeric | PFF overall offense grade (0-100). |
@@ -541,6 +549,7 @@ Passing by play concept for one player
 ### Returns {#pff_api_player_passing_concept-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `comp_pct_diff` | numeric | Difference in completion percentage between play-action and non-play-action attempts (PA minus non-PA), from the PFF passing-concept split. |

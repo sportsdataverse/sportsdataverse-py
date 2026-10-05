@@ -14,7 +14,11 @@ import yaml
 
 ROOT = Path(__file__).resolve().parents[2]
 YAML = ROOT / "tools/codegen/endpoints/pff_api.yaml"
-_REFS = Path(os.environ.get("SDV_INTERNAL_REFS_REPO", str(ROOT.parent / "sdv-internal-refs")))
+_REAL_REFS = Path("C:/Users/saiem/Documents/GitHub-Data/sdv-dev/sdv-internal-refs")
+_REFS = Path(
+    os.environ.get("SDV_INTERNAL_REFS_REPO")
+    or next((str(c) for c in (ROOT.parent / "sdv-internal-refs", _REAL_REFS) if c.exists()), str(_REAL_REFS))
+)
 _SPEC = _REFS / "pff" / "developer" / "pff-developer.openapi.json"
 
 

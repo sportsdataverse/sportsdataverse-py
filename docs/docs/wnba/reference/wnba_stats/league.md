@@ -109,6 +109,7 @@ GET /stats/leaguegamefinder
 ### Returns {#wnba_stats_leaguegamefinder-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `season_id` | character | Unique season identifier. |
@@ -173,6 +174,7 @@ GET /stats/leaguegamelog
 ### Returns {#wnba_stats_leaguegamelog-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `season_id` | character | Unique season identifier. |
@@ -236,6 +238,7 @@ GET /stats/leagueleaders
 ### Returns {#wnba_stats_leagueleaders-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `player_id` | integer | Unique player identifier. |
@@ -315,6 +318,7 @@ GET /stats/leaguelineupviz
 ### Returns {#wnba_stats_leaguelineupviz-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `group_id` | character | ESPN group id. |
@@ -388,6 +392,7 @@ GET /stats/leagueplayerondetails
 ### Returns {#wnba_stats_leagueplayerondetails-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `group_set` | character | Name of the grouping family used for this dashboard or split row. |
@@ -482,6 +487,7 @@ GET /stats/leagueseasonmatchups
 ### Returns {#wnba_stats_leagueseasonmatchups-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `season_id` | character | Unique season identifier. |
@@ -539,6 +545,7 @@ GET /stats/leaguestandingsv3
 ### Returns {#wnba_stats_leaguestandingsv3-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `league_id` | character | League identifier used in compact NBA Stats schedule and scoreboard result sets. |

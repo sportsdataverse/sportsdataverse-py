@@ -21,6 +21,7 @@ GET /api/v1/jobs/umpires — current umpire crew assignments.
 ### Returns {#mlb_umpires-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `jersey_number` | character | Jersey number worn (often blank for non-uniformed roles). |
@@ -58,6 +59,7 @@ View all PCL conferences.
 ### Returns {#mlb_conferences-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `id` | integer | Id. |
@@ -98,6 +100,7 @@ View PCL conferences by conferenceId.
 ### Returns {#mlb_conference-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `id` | integer | Id. |
@@ -207,6 +210,7 @@ View high/low stats by player or team.
 ### Returns {#mlb_high_low-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `total_splits` | integer | Total number of splits in the leaderboard. |
@@ -256,6 +260,7 @@ View biographical information and stats for Free Agents.
 ### Returns {#mlb_free_agents-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `notes` | character | Notes. |
@@ -304,6 +309,7 @@ View directory by jobType.
 ### Returns {#mlb_jobs-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `jersey_number` | character | Jersey number worn (often blank for non-uniformed roles). |
@@ -342,6 +348,7 @@ View datacasters directory.
 ### Returns {#mlb_datacasters-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `jersey_number` | character | Jersey number worn (often blank for non-uniformed roles). |
@@ -380,6 +387,7 @@ View official scorer directory.
 ### Returns {#mlb_official_scorers-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `jersey_number` | character | Jersey number worn (often blank for non-uniformed roles). |
@@ -447,6 +455,7 @@ View information for all seasons based on id.
 ### Returns {#mlb_seasons_all-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `season_id` | character | stats.ncaa.org season identifier. |
@@ -497,6 +506,7 @@ View information for any given sportId.
 ### Returns {#mlb_sport-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `id` | integer | Id. |

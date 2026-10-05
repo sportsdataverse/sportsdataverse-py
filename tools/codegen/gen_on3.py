@@ -205,10 +205,38 @@ def _captured_columns(short: str, spec_types: Dict[str, str]) -> List[Dict[str, 
 # -- the best case -- the spec's field names matched parse_on3_rdb's columns on only 7
 # (filters_draft_rounds emits ``round``, not ``value``; people_latest_valuation emits 5
 # fields the spec lacks), and nullable integers come back Float64.
-_UNVERIFIED = (
-    "no committed capture with rows; names derived from the OpenAPI response type matched "
-    "parse_on3_rdb's output on only 7 of the 9 checkable endpoints, so none are published"
+_MEASURED = (
+    "names derived from the OpenAPI response type matched parse_on3_rdb's output on only "
+    "7 of the 9 checkable endpoints, so none are published"
 )
+
+
+def _has_nested(spec: dict, schema: dict) -> bool:
+    """True when a row has a nested object or free-form map, whose flattened column names
+    depend on which of them are null in the data."""
+    for pv in (schema.get("properties") or {}).values():
+        pv = pv or {}
+        if len(pv.get("allOf") or []) == 1:
+            pv = pv["allOf"][0]
+        node = _resolve_ref(spec, pv)
+        if node.get("properties") or "additionalProperties" in node:
+            return True
+    return False
+
+
+def _unverified_reason(short: str, op: dict, spec: dict) -> str:
+    """Why this endpoint publishes no table -- the specific cause, then the measurement."""
+    if (FIXTURE_DIR / f"{short}.json").exists():
+        why = "its committed capture has 0 rows, so the parser emits no columns"
+    elif op.get("x-source") != "on3_ts_api":
+        why = f"no committed capture with rows, and the response type is only heuristically mapped (x-source: {op.get('x-source')})"
+    elif not _row_schema(op, spec).get("properties"):
+        why = "no committed capture with rows, and each row is a bare scalar with no named fields"
+    elif _has_nested(spec, _row_schema(op, spec)):
+        why = "no committed capture with rows, and the row has nested objects whose flattened column names depend on which are null in the data"
+    else:
+        why = "no committed capture with rows"
+    return f"{why}; {_MEASURED}"
 
 
 def _schema(short: str, op: dict, spec: dict) -> Dict[str, Any]:
@@ -216,7 +244,7 @@ def _schema(short: str, op: dict, spec: dict) -> Dict[str, Any]:
     doc: Dict[str, Any] = {"schema": short, "kind": "dataframe"}
     doc["columns"] = _captured_columns(short, _spec_types(spec, _row_schema(op, spec)))
     if not doc["columns"]:
-        doc["unverified"] = _UNVERIFIED
+        doc["unverified"] = _unverified_reason(short, op, spec)
     return doc
 
 

@@ -136,6 +136,16 @@ endpoints:
   example_args:
     date: '20250115'
   league_example_args:
+    ufl:
+      date: '20250405'
+    wnba:
+      date: '20250715'
+    mlb:
+      date: '20250415'
+    college_baseball:
+      date: '20250315'
+    college_softball:
+      date: '20250315'
     cfb:
       season: 2024
       week: 12
@@ -173,6 +183,12 @@ endpoints:
   example_args:
     date: '20250115'
   league_example_args:
+    wnba:
+      date: '20250715'
+    mlb:
+      date: '20250415'
+    college_baseball:
+      date: '20250315'
     cfb:
       season: 2024
       week: 12

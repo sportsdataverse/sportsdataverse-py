@@ -27,6 +27,7 @@ League-wide passing-under-pressure leaderboard
 ### Returns {#pff_api_facet_passing_pressure-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `no_blitz_completion_percent` | numeric | Percentage of pass attempts completed when not blitzed. |
@@ -273,6 +274,7 @@ League-wide passing summary leaderboard
 ### Returns {#pff_api_facet_passing_summary-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `grades_offense` | numeric | PFF overall offense grade (0-100). |
@@ -354,6 +356,7 @@ League-wide receiving-by-concept leaderboard
 ### Returns {#pff_api_facet_receiving_concept-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `screen_caught_percent` | numeric | Percentage of targets caught on screen concepts. |
@@ -461,7 +464,8 @@ League-wide receiving-versus-coverage leaderboard
 
 ### Returns {#pff_api_facet_receiving_coverage-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a dict of `polars.DataFrame`s (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+
 **defenders**
 
 | col_name | type | description |

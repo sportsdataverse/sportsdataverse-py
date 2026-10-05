@@ -26,6 +26,7 @@ Receiving summary for one player
 ### Returns {#pff_api_player_receiving_summary-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `targets` | integer | Times targeted. |
@@ -123,6 +124,7 @@ Defense summary for one player
 ### Returns {#pff_api_player_defense_summary-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `targets` | integer | Passes thrown into the player's coverage (targets allowed). |
@@ -226,6 +228,7 @@ Field-goal kicking for one player
 ### Returns {#pff_api_player_field_goal_summary-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `twenty_attempts` | integer | Field goals attempted from 20-29 yards. |
@@ -302,6 +305,7 @@ Kickoffs for one player
 ### Returns {#pff_api_player_kickoff_summary-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `attempts` | integer | Kickoffs by the player. |
@@ -371,6 +375,7 @@ Punting for one player
 ### Returns {#pff_api_player_punting_summary-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `game_id` | integer | PFF game id of the game (integer join key). |
@@ -446,6 +451,7 @@ Kick and punt returns for one player
 ### Returns {#pff_api_player_return_summary-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `away_franchise_id` | integer | PFF franchise id of the away team. |
@@ -520,6 +526,7 @@ Special-teams summary for one player
 ### Returns {#pff_api_player_special_summary-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `assists` | integer | Assisted tackles credited to the player on special-teams plays. |

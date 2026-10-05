@@ -24,6 +24,7 @@ View All-Star Ballots per league.
 ### Returns {#mlb_all_star_ballot-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `id` | integer | Id. |
@@ -101,6 +102,7 @@ View All-Star Write-ins per league.
 ### Returns {#mlb_all_star_write_ins-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `id` | integer | Id. |
@@ -174,6 +176,7 @@ View All-Star Final Vote per league.
 ### Returns {#mlb_all_star_final_vote-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `id` | integer | Id. |

@@ -120,6 +120,7 @@ Retrieve the list of countries used in NHL data.
 ### Returns {#nhl_stats_rest_country-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `id` | character | Unique player identifier. |
@@ -159,6 +160,7 @@ Retrieve draft data, optionally filtered with Cayenne expressions.
 ### Returns {#nhl_stats_rest_draft-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `id` | integer | Unique player identifier. |
@@ -190,6 +192,7 @@ Retrieve franchise data.
 ### Returns {#nhl_stats_rest_franchise-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `id` | integer | Unique player identifier. |
@@ -222,6 +225,7 @@ Retrieve game-level data.
 ### Returns {#nhl_stats_rest_game-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `id` | integer | Unique player identifier. |
@@ -263,6 +267,7 @@ Retrieve the NHL Stats glossary of stat definitions.
 ### Returns {#nhl_stats_rest_glossary-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `id` | integer | Unique player identifier. |
@@ -299,6 +304,7 @@ Retrieve a goalie statistical report.
 ### Returns {#nhl_stats_rest_goalie_report-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `assists` | integer | Assists. |
@@ -351,6 +357,7 @@ Retrieve league leaders for a goalie statistical attribute.
 ### Returns {#nhl_stats_rest_leaders_goalies-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `save_pctg` | double | Save percentage. |
@@ -395,6 +402,7 @@ Retrieve league leaders for a skater statistical attribute.
 ### Returns {#nhl_stats_rest_leaders_skaters-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `goals` | integer | Goals scored. |
@@ -438,6 +446,7 @@ Retrieve milestone data for goalies.
 ### Returns {#nhl_stats_rest_milestones_goalies-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `id` | integer | Unique player identifier. |
@@ -483,6 +492,7 @@ Retrieve milestone data for skaters.
 ### Returns {#nhl_stats_rest_milestones_skaters-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `id` | integer | Unique player identifier. |
@@ -553,6 +563,7 @@ Retrieve the list of all NHL seasons.
 ### Returns {#nhl_stats_rest_season-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `id` | integer | Unique player identifier. |
@@ -604,6 +615,7 @@ Retrieve shift-chart data.
 ### Returns {#nhl_stats_rest_shiftcharts-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `id` | integer | Unique player identifier. |
@@ -652,6 +664,7 @@ Retrieve a skater statistical report.
 ### Returns {#nhl_stats_rest_skater_report-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `assists` | integer | Assists. |
@@ -706,6 +719,7 @@ Retrieve the list of all NHL teams.
 ### Returns {#nhl_stats_rest_team-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `id` | integer | Unique player identifier. |
@@ -741,6 +755,7 @@ Retrieve a single team by its numeric ID.
 ### Returns {#nhl_stats_rest_team_by_id-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `id` | integer | Unique player identifier. |
@@ -776,6 +791,7 @@ Retrieve a team statistical report.
 ### Returns {#nhl_stats_rest_team_report-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `faceoff_win_pct` | double | Faceoff win percentage. |

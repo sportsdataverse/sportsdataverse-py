@@ -123,6 +123,7 @@ ESPN endpoint.
 ### Returns {#espn_cricket_teams_core-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `team_abbreviation` | character | Short team abbreviation (e.g. "BOS"). |
@@ -491,6 +492,7 @@ ESPN endpoint.
 ### Returns {#espn_cricket_standings_core-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `group` | character | Conference/group/table the row belongs to, flattened from the standings children hierarchy. |

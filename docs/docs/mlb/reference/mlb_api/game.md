@@ -73,6 +73,7 @@ Retrieve all of the play timecodes for a game in GUMBO feed.
 ### Returns {#mlb_game_timestamps-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `timecode` | character | A timestamp string representing a specific point in time used to query the MLB Stats API for game state changes. |
@@ -104,6 +105,7 @@ View corrected non Statcast information for games
 ### Returns {#mlb_game_changes-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `schedule_date` | character | The calendar date for which schedule changes are being reported, identifying when rescheduled or suspended games occurred. |
@@ -319,6 +321,7 @@ View time of game info.
 ### Returns {#mlb_game_pace-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `hits_per9_inn` | double | Average number of hits allowed per nine innings across all games in the sample period. |

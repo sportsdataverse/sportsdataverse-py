@@ -27,6 +27,7 @@ League-wide receiving-by-scheme leaderboard
 ### Returns {#pff_api_facet_receiving_scheme-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `man_contested_catch_rate` | numeric | Percentage of PFF-charted contested targets caught against man coverage. |
@@ -135,6 +136,7 @@ League-wide receiving summary leaderboard
 ### Returns {#pff_api_facet_receiving_summary-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `targets` | numeric | Times targeted. |
@@ -219,6 +221,7 @@ League-wide rushing-by-direction leaderboard
 ### Returns {#pff_api_facet_rushing_direction-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `directions` | list | Nested per-direction rushing splits (attempts and results by run direction) as returned by the PFF API. |
@@ -263,6 +266,7 @@ League-wide rushing summary leaderboard
 ### Returns {#pff_api_facet_rushing_summary-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `targets` | numeric | Passes thrown to the ball carrier (targets). |
@@ -347,6 +351,7 @@ League-wide coverage leaderboard
 ### Returns {#pff_api_facet_defense_coverage-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `targets` | numeric | Passes thrown into the player's coverage (targets allowed). |
@@ -424,6 +429,7 @@ League-wide coverage-by-scheme leaderboard
 ### Returns {#pff_api_facet_defense_coverage_scheme-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `man_touchdowns` | numeric | Touchdowns allowed into the player's coverage when in man coverage. |
@@ -525,7 +531,8 @@ League-wide coverage matchup leaderboard
 
 ### Returns {#pff_api_facet_defense_coverage_matchup-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a dict of `polars.DataFrame`s (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+
 **defenders**
 
 | col_name | type | description |
@@ -646,6 +653,7 @@ League-wide pass-rush leaderboard
 ### Returns {#pff_api_facet_defense_pass_rush-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `true_pass_set_total_pressures` | numeric | Total pressures generated (sacks, hits, and hurries) on PFF-designated true pass sets. |
@@ -717,6 +725,7 @@ League-wide run-defense leaderboard
 ### Returns {#pff_api_facet_defense_run-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `assists` | numeric | Assisted tackles credited to the player. |
@@ -778,6 +787,7 @@ League-wide defense summary leaderboard
 ### Returns {#pff_api_facet_defense_summary-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `targets` | numeric | Passes thrown into the player's coverage (targets allowed). |
@@ -870,6 +880,7 @@ League-wide field-goal kicking leaderboard
 ### Returns {#pff_api_facet_field_goal_summary-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `twenty_attempts` | numeric | Field goals attempted from 20-29 yards. |
@@ -937,6 +948,7 @@ League-wide kickoff leaderboard
 ### Returns {#pff_api_facet_kickoff_summary-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `attempts` | numeric | Kickoffs by the player. |
