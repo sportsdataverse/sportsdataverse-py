@@ -532,7 +532,7 @@ League-wide receiving-versus-coverage leaderboard
 | `grades_coverage_defense` | numeric | The player's PFF coverage grade (0-100). |
 | `grades_overall_tackle` | numeric | The player's PFF overall tackling grade (0-100). |
 | `grades_tackle` | numeric | The player's PFF tackling grade (0-100). |
-| `grades_snap` | numeric | The player's PFF snapping grade (0-100), present only for players charted as snapping the ball. |
+| `grades_snap` | numeric | PFF grade reported as grades_snap (0-100); PFF does not document it, and the capture shows it only in the ncaa receivers frame. |
 
 **versus**
 

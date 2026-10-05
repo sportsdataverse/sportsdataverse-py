@@ -72,7 +72,7 @@ Receiving summary for one player
 | `pass_plays` | integer | Pass-play snaps. |
 | `yards_per_reception` | numeric | Average yards per reception. |
 | `targets_percent` | numeric | Targets per route run, as a percentage (targets / routes x 100). |
-| `positive_epa_percent` | numeric | Percentage of the player's targets producing positive expected points added. |
+| `positive_epa_percent` | numeric | Percentage of the receiver's plays with an EPA value (in practice their routes run) producing positive expected points added (positive_epa_plays / plays_with_epa x 100). |
 | `contested_receptions` | integer | Contested catches made. |
 | `yards_after_catch` | integer | Yards after the catch. |
 | `home_franchise_id` | integer | PFF franchise id of the home team. |

@@ -79,10 +79,15 @@ def test_v1_single_object_bodies_parse_to_rows_not_an_empty_frame():
     rd = parse_pff_report(raw)
     assert rd.height == len(raw["rushing_direction_stats"]["directions"]) > 0
     assert {"direction", "attempts", "yards"} <= set(rd.columns) and rd.schema["player_id"] == pl.Int64
+    rows = raw["rushing_direction_stats"]["directions"]
+    assert rd["direction"].to_list() == [d["direction"] for d in rows]
+    assert rd["attempts"].to_list() == [d["attempts"] for d in rows]
+    assert rd["yards"].to_list() == [d["yards"] for d in rows]
     raw = load("player_snaps_summary")
     snaps = parse_pff_report(raw)
     assert snaps.height == 1 and snaps["season"].to_list() == [raw["snaps"]["season"]]
     assert snaps.columns[1:] == [f"snap_counts_{k}" for k in raw["snaps"]["snap_counts"]]
+    assert snaps.row(0)[1:] == tuple(raw["snaps"]["snap_counts"].values())
     # a player-detail envelope routed here still yields the documented zero-row frame
     assert parse_pff_report(load("player_offense_pass_blocking")).height == 0
 

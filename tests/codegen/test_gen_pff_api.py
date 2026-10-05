@@ -18,6 +18,14 @@ _REFS = Path(os.environ.get("SDV_INTERNAL_REFS_REPO", str(ROOT.parent / "sdv-int
 _SPEC = _REFS / "pff" / "developer" / "pff-developer.openapi.json"
 
 
+def _gen():
+    """A fresh import of the generator (its paths read ``SDV_INTERNAL_REFS_REPO`` at import)."""
+    spec = importlib.util.spec_from_file_location("gen_pff_api", ROOT / "tools/codegen/gen_pff_api.py")
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+
 def _eps() -> dict:
     return {e["short"]: e for e in yaml.safe_load(YAML.read_text(encoding="utf-8"))["endpoints"]}
 
@@ -87,12 +95,43 @@ def test_every_parsed_route_documents_its_columns():
     assert [f["section"] for f in d["frames"]] == ["defenders", "receivers", "versus"]
 
 
+def test_generator_refuses_a_checkout_without_union_captures(tmp_path, monkeypatch):
+    """Against an internal-refs commit older than the /v1 union captures, build() would quietly
+    rebuild the old EMPTY schemas and main() would delete the parsed ones: it must stop instead."""
+    dev = tmp_path / "pff" / "developer"
+    (dev / "captures").mkdir(parents=True)
+    (dev / "pff-developer.openapi.json").write_text('{"paths": {}}', encoding="utf-8")
+    (dev / "captures" / "schemas_v1.json").write_text('{"v1/nfl/player_seasons": {"tables": {}}}', encoding="utf-8")
+    (dev / "captures" / "schemas_v2.json").write_text("{}", encoding="utf-8")
+    monkeypatch.setenv("SDV_INTERNAL_REFS_REPO", str(tmp_path))
+    mod = _gen()
+    with pytest.raises(SystemExit, match="predates the /v1 union captures") as exc:
+        mod.build()
+    assert str(tmp_path) in str(exc.value) and "sdv-internal-refs#27" in str(exc.value)
+    # with a union body present the guard lets it through (an empty spec -> no endpoints)
+    (dev / "captures" / "schemas_v1.json").write_text('{"v1/nfl/player_seasons": {"union": {}}}', encoding="utf-8")
+    assert mod.build()[0]["endpoints"] == []
+
+
+def test_league_dtypes_widen_instead_of_first_league_winning():
+    mod = _gen()
+    assert mod._widen("Int64", "Float64") == mod._widen("Float64", "Int64") == "Float64"
+    assert mod._widen("Null", "Int64") == "Int64" and mod._widen("Int64", "Null") == "Int64"
+    bodies = [  # nfl: an integral stat, a column null in every nfl row; ncaa: the same stat fractional
+        {"passing_summary": [{"player_id": 1, "ypa": 8, "one_percent": None}]},
+        {"passing_summary": [{"player_id": 2, "ypa": 7.5, "one_percent": 50.0}]},
+    ]
+    cols = {c["name"]: c["type"] for c in mod._parsed_schema("x", "parse_pff_report", bodies)["columns"]}
+    assert cols == {"player_id": "integer", "ypa": "numeric", "one_percent": "numeric"}
+
+
 @pytest.mark.skipif(not _SPEC.exists(), reason="sdv-internal-refs pff/developer spec not present (local-only source)")
 def test_generator_reproduces_the_committed_yaml():
-    spec = importlib.util.spec_from_file_location("gen_pff_api", ROOT / "tools/codegen/gen_pff_api.py")
-    mod = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(mod)
-    doc, schemas = mod.build()
+    mod = _gen()
+    try:
+        doc, schemas = mod.build()
+    except SystemExit as exc:  # a checkout older than the union captures: say so, not a dict diff
+        pytest.fail(str(exc))
     assert doc == yaml.safe_load(YAML.read_text(encoding="utf-8"))
     for slug, schema in schemas.items():
         path = ROOT / f"tools/codegen/schemas/native/pff_api/{slug}.yaml"

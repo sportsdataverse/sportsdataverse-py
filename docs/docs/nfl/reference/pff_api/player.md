@@ -487,7 +487,7 @@ Passing summary for one player
 | `drops` | integer | Passes dropped by the passer's receivers. |
 | `position` | character | PFF position code the player was charted at in the game (e.g. QB, HB, WR, T, LB, K). |
 | `grades_hands_fumble` | numeric | PFF hands (fumble) grade for the player, reflecting ball security (0-100). |
-| `avg_time_to_throw` | numeric | Average time to throw, in seconds from snap to release, on the passer's attempts. |
+| `avg_time_to_throw` | numeric | Average time to throw per dropback, in seconds from snap to release (ttt_total_time / dropbacks). |
 | `away_franchise_id` | integer | PFF franchise id of the away team. |
 | `big_time_throws` | integer | Number of big-time throws, per PFF's highest-value, highest-difficulty throw designation. |
 | `positive_epa_percent` | numeric | Percentage of dropbacks with positive expected points added. |

@@ -28699,7 +28699,7 @@ pff_api_player_passing_summary:
   all_dropbacks: All dropbacks, equal to passing_snaps; dropbacks counts a subset of these.
   attempts: Pass attempts thrown by the passer.
   avg_depth_of_target: Average depth of target in air yards.
-  avg_time_to_throw: Average time to throw, in seconds from snap to release, on the passer's attempts.
+  avg_time_to_throw: Average time to throw per dropback, in seconds from snap to release (ttt_total_time / dropbacks).
   away_franchise_id: PFF franchise id of the away team.
   away_team_name: Abbreviation of the away team (e.g. "LV").
   bats: Passes batted at the line.
@@ -28862,7 +28862,8 @@ pff_api_player_receiving_summary:
   player_id: PFF player id (integer join key) of the player the report is about.
   plays_with_epa: Plays with an expected-points-added value, the denominator of positive_epa_percent.
   position: PFF position code the player was charted at in the game (e.g. QB, HB, WR, T, LB, K).
-  positive_epa_percent: Percentage of the player's targets producing positive expected points added.
+  positive_epa_percent: Percentage of the receiver's plays with an EPA value (in practice their routes run) producing positive
+    expected points added (positive_epa_plays / plays_with_epa x 100).
   positive_epa_plays: Plays with positive expected points added (positive_epa_percent = positive_epa_plays / plays_with_epa
     x 100).
   receptions: Passes caught by the receiver.
@@ -30621,7 +30622,8 @@ pff_api_receiving_coverage_stats:
   grades_run_block: The player's PFF run-blocking grade (0-100).
   grades_run_defense: The player's PFF run-defense grade (0-100).
   grades_screen_block: The player's PFF screen-blocking grade (0-100).
-  grades_snap: The player's PFF snapping grade (0-100), present only for players charted as snapping the ball.
+  grades_snap: PFF grade reported as grades_snap (0-100); PFF does not document it, and the capture shows it only in the ncaa
+    receivers frame.
   grades_tackle: The player's PFF tackling grade (0-100).
   interceptions: Interceptions on throws in the row's coverage matchups.
   longest: 'Longest reception, in yards (defenders: allowed in the defender''s coverage; receivers / versus: by the receiver).'
