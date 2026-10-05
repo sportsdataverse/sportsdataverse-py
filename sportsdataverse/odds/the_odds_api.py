@@ -24,6 +24,7 @@ import os
 from typing import TYPE_CHECKING, Dict, List, Optional, Union
 
 from sportsdataverse.dl_utils import download
+from sportsdataverse.errors import AssetFetchError
 from sportsdataverse.odds.the_odds_api_parsers import (
     parse_toa_event_markets,
     parse_toa_event_odds,
@@ -96,6 +97,12 @@ def _toa_get(path: str, params: Optional[Dict] = None, api_key: Optional[str] = 
     Returns:
         The parsed JSON body (a ``list`` for the list endpoints, a ``dict`` for the
         per-event and historical-snapshot endpoints).
+
+    Raises:
+        NoDataError: The API answered 404.
+        AssetFetchError: Any other non-2xx answer -- a rejected key (401), spent
+            quota (429), or a 5xx that outlived the retries. Its error body is not
+            data, so it never reaches a parser.
     """
     merged = {"apiKey": _toa_key(api_key)}
     merged.update({k: v for k, v in (params or {}).items() if v is not None})
@@ -113,6 +120,8 @@ def _toa_get(path: str, params: Optional[Dict] = None, api_key: Optional[str] = 
         _USAGE["last_cost"] = int(cost)
     except (TypeError, ValueError):
         pass
+    if not 200 <= resp.status_code < 300:
+        raise AssetFetchError(f"The Odds API /v4/{path} answered HTTP {resp.status_code}: {(resp.text or '')[:200]}")
     return resp.json()
 
 

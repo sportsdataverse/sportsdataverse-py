@@ -12,7 +12,9 @@ from __future__ import annotations
 import pandas as pd
 import polars as pl
 import pytest
+import requests
 
+from sportsdataverse.errors import AssetFetchError, NoDataError
 from sportsdataverse.odds import the_odds_api as toa
 from sportsdataverse.odds import the_odds_api_parsers as toap
 
@@ -44,6 +46,9 @@ _ODDS_EVENT = {
 
 
 class _FakeResp:
+    status_code = 200
+    text = ""
+
     def __init__(self, payload, headers=None):
         self._payload = payload
         self.headers = headers or {"x-requests-remaining": "491", "x-requests-used": "9", "x-requests-last": "1"}
@@ -175,3 +180,36 @@ def test_bool_str():
     assert toa._bool_str(True) == "true"
     assert toa._bool_str(False) == "false"
     assert toa._bool_str(None) is None
+
+
+def _serve(monkeypatch, status, body):
+    """Answer every request through the real ``download`` with ``status``."""
+    import sportsdataverse.cache as _cache
+
+    def get(self, url, params=None, **kwargs):
+        resp = requests.Response()
+        resp.status_code = status
+        resp._content = body.encode()
+        resp.url = requests.Request("GET", url, params=params).prepare().url
+        resp.headers.update({"x-requests-remaining": "0", "x-requests-used": "500"})
+        return resp
+
+    monkeypatch.setattr(_cache, "get_cache_mode", lambda: "off")
+    monkeypatch.setattr("sportsdataverse.dl_utils.time.sleep", lambda *a, **k: None)
+    monkeypatch.setattr(requests.Session, "get", get)
+
+
+@pytest.mark.parametrize("status", [401, 429, 503])
+def test_non_2xx_is_a_failed_fetch_not_data(monkeypatch, status):
+    # 429 and 503 outlive the retries; 401 is not retried. Before, each body came
+    # back as if it were the payload.
+    _serve(monkeypatch, status, '{"message": "Usage quota has been reached", "error_code": "OUT_OF_USAGE_CREDITS"}')
+    with pytest.raises(AssetFetchError, match=f"HTTP {status}: .*OUT_OF_USAGE_CREDITS"):
+        toa.toa_sports(return_parsed=False, num_retries=1)
+    assert toa._USAGE["requests_remaining"] == 0  # the quota headers are still read
+
+
+def test_404_is_no_data(monkeypatch):
+    _serve(monkeypatch, 404, '{"message": "Unknown sport"}')
+    with pytest.raises(NoDataError):
+        toa.toa_sports_odds(sport="not_a_sport", return_parsed=False)
