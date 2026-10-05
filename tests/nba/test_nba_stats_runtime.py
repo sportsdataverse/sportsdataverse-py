@@ -50,6 +50,19 @@ def test_get_names_a_non_json_body():
         assert _get("x", {}, transport=lambda *a: (200, "<html>blocked</html>")) == {}
 
 
+def test_a_full_url_names_its_own_host():
+    seen = {}
+
+    def transport(url, params, headers, proxy_url):
+        seen.update(headers)
+        return 500, ""
+
+    # the host= keyword keeps its stats.nba.com default; the URL is stats.wnba.com
+    with pytest.warns(EmptyResponseWarning, match="stats.wnba.com answers this way"):
+        _get("https://stats.wnba.com/stats/x", {}, transport=transport)
+    assert seen["Host"] == "stats.wnba.com"
+
+
 def test_wnba_warning_names_its_host_and_points_at_the_caller():
     from sportsdataverse.wnba.wnba_stats_runtime import _get as wnba_get
 
@@ -87,7 +100,7 @@ def test_wnba_runtime_fixes_host():
     def transport(url, params, headers, proxy_url):
         captured["url"] = url
         captured["host_header"] = headers.get("Host")
-        return 200, "{}"
+        return 200, '{"resultSets": []}'
 
     wget("leaguedashplayerstats", {}, transport=transport)
     assert captured["url"] == "https://stats.wnba.com/stats/leaguedashplayerstats"
@@ -105,7 +118,8 @@ def test_get_no_retry_by_default(monkeypatch):
         calls["n"] += 1
         return 200, "{}"  # blank envelope
 
-    assert _get("gamerotation", {}, transport=transport) == {}
+    with pytest.warns(EmptyResponseWarning):
+        assert _get("gamerotation", {}, transport=transport) == {}
     assert calls["n"] == 1  # single shot, no retry
 
 
@@ -158,5 +172,6 @@ def test_get_exhausted_empty_returns_blank(monkeypatch):
         calls["n"] += 1
         return 200, "{}"
 
-    assert _get("gamerotation", {}, transport=transport) == {}
+    with pytest.warns(EmptyResponseWarning):
+        assert _get("gamerotation", {}, transport=transport) == {}
     assert calls["n"] == 3  # 1 + 2 retries, then gives up

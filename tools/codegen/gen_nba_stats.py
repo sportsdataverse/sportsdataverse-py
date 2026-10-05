@@ -201,12 +201,15 @@ def _stats_eps(league_id: str) -> List[dict]:
 
 
 # Season / SeasonYear params whose hoopR/wehoop default is a call (``year_to_season(
-# most_recent_nba_season() - 1)``, ``most_recent_wnba_season()``) get the previous season at call
-# time via the runtime ``season_or_previous`` transform: the API answers a request without one with
-# an empty HTTP 500 that the runtime turns into ``{}``. The endpoints below are the exception. A
-# live sweep on 2026-10-05 (every wrapper with a None season, example args, no season, through the
-# proxy pool) found they answer 200 with data WITHOUT a season, so they keep the API's own default,
-# which for drafthistory and the finders is ALL seasons. teaminfocommon was re-probed after its NBA
+# most_recent_nba_season() - 1)``, ``most_recent_wnba_season()``) get the latest season that has
+# data, at call time, via the runtime ``season_latest_with_data`` transform (the per-league and
+# per-endpoint rollover months live in ``nba_stats_runtime._FIRST_ROWS``): the API answers a request
+# without one with an empty HTTP 500 that the runtime turns into ``{}``. The endpoints below are the
+# exception. A live sweep on 2026-10-05 (every wrapper with a None season, example args, no season,
+# through the proxy pool) found they answer 200 with data WITHOUT a season, so they keep the API's
+# own default, which for drafthistory and the finders is ALL seasons. Re-checked by ROW count the
+# same day (an envelope with empty rowSets would not count): NBA leaguedashteamstats 38 rows,
+# leaguedashptstats 3,805. teaminfocommon was re-probed after its NBA
 # team default was fixed. Re-measure when the catalog grows: call every wrapper with its example args and
 # no season through the proxy pool (tests/nba/test_nba_stats_season_defaults.py::test_live_defaults_return_data
 # covers a sample).
@@ -283,14 +286,16 @@ _SEASON_DOC = {
     # Never name the date helpers here: generate.py treats a whole-word mention on a reference
     # row as "already documented" and drops the helper's own section from the docs.
     "nba_stats": (
-        "Season label, e.g. ``2024-25``. Defaults to the previous season at call time "
-        "(``2025-26`` from October 2026), the latest one that is sure to have data; "
-        "stats.nba.com answers a request without a season with an empty HTTP 500."
+        "Season label, e.g. ``2024-25``. Defaults at call time to the latest season that has rows: "
+        "an NBA season from the November it tips off (``2025-26`` until October 2026), a G League "
+        "season from the January after, a Summer League from its August (July 2026's is ``2026-27``), "
+        "a draft combine from June, playoff series from May. stats.nba.com answers a request without "
+        "a season with an empty HTTP 500."
     ),
     "wnba_stats": (
-        "Season year, e.g. ``2024``. Defaults to the previous WNBA season at call time "
-        "(``2025`` during 2026), as wehoop does; stats.wnba.com answers a request without a "
-        "season with an empty HTTP 500."
+        "Season year, e.g. ``2024``. Defaults at call time to the latest WNBA season that has rows: "
+        "the current year from June (``2026`` from June 2026, ``2025`` before), playoff series from "
+        "October. stats.wnba.com answers a request without a season with an empty HTTP 500."
     ),
 }
 
@@ -370,15 +375,16 @@ def _endpoint_entry(
             }
             if isinstance(default, str) and default.startswith("="):
                 if p["query_key"] in _SEASON_KEYS and ep["slug"] not in _SEASON_OPTIONAL[stem]:
-                    # the previous season, not the current one: it always has data, while the
-                    # current season returns empty frames until it tips off
-                    param["transform"] = "season_or_previous"
+                    # the latest season with rows, re-dated per league/endpoint by the runtime
+                    param["transform"] = "season_latest_with_data"
                     param["description"] = _SEASON_DOC[stem]
                 default = None  # an R call has no literal; the transform (if any) resolves it per call
             param["default"] = _clean_default(p["name"], p["query_key"], default)
             extra.append(param)
     example_args: Dict[str, Any] = {"league_id": default_league} if has_league else {}
-    example_args.update({p["name"]: _SEASON_EXAMPLE[stem] for p in extra if p.get("transform") == "season_or_previous"})
+    example_args.update(
+        {p["name"]: _SEASON_EXAMPLE[stem] for p in extra if p.get("transform") == "season_latest_with_data"}
+    )
     example_args.update(_EXAMPLE_ARGS.get(ep["slug"], {}))
     entry: Dict[str, Any] = {
         "short": ep["slug"],

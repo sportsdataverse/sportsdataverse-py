@@ -22,11 +22,27 @@ now (live sweep through the proxy pool, 2026-10-05; no wrapper went from working
   `teamgamelogs`, `commonteamroster`, `commonallplayers`, `leaguedashplayerstats` and
   `leaguestandingsv3`; `synergyplaytypes`, the draft-combine family, `cumestats*`,
   `videodetailsasset`, `commonplayoffseries` and WNBA `playercompare` need theirs too.
-  These arguments now default to the **previous season**, resolved at call time: `"2025-26"`
-  for NBA, G League and Summer League from October 2026, and `"2025"` for WNBA during 2026
-  (wehoop's own `most_recent_wnba_season() - 1`). The previous season always has data; a
-  current-season default returned empty frames in the preseason. An explicit value, including
-  `""`, is sent as given.
+  These arguments now default to the **latest season that has rows**, resolved at call time for
+  the league and endpoint asked for:
+  - NBA: from November of the season's first year (`"2025-26"` until October 2026, `"2026-27"`
+    from November 2026).
+  - G League (`league_id="20"`): from the January after it tips off. Its regular season, the
+    default `SeasonType`, starts in late December (2025-26 ran 2025-12-19 to 2026-03-28).
+  - Summer League (`league_id="15"`): from August. stats.nba.com labels a Summer League by its own
+    July, so July 2026's is `"2026-27"`, a season ahead of the NBA label.
+  - Draft combine (`SeasonYear`, read by its leading year: `"2026-27"` is the May 2026 combine):
+    from June.
+  - `commonplayoffseries`: from May of the season's second year for the NBA and from October for
+    the WNBA, once the playoffs have started.
+  - WNBA: the current year from June, the previous year before.
+
+  Until a rollover the previous season is sent. It has rows, but for a few weeks after the newest
+  season's first games (late October for the NBA, late December for the G League, July for the
+  Summer League, late May for the WNBA and the combine) it is not the newest. The NBA default is
+  hoopR's current season (`year_to_season(most_recent_nba_season() - 1)`) except in October, and
+  the WNBA default is wehoop's `most_recent_wnba_season()` except in May; wehoop's own
+  `wnba_stats_*` defaults, `most_recent_wnba_season() - 1`, are a season behind from June to
+  December. An explicit value, including `""`, is sent as given.
 - **Endpoints that work without a season keep the API's default.** For `drafthistory`,
   `leaguegamefinder`, `playergamestreakfinder`, `playercareerbycollegerollup` and
   `shotchartdetail` that default is every season, which a season default would silently narrow.
