@@ -115,14 +115,44 @@ def get_config(league: str) -> LeagueConfig:
 
 
 # Hardcoded PWHL fallback (ported from fastRhockey pwhl_season_id) used when the
-# live seasons feed is unreachable.
+# live seasons feed is unreachable. Ids 1-10 match the committed seasons fixture
+# (tests/fixtures/hockeytech/pwhl_seasons.json, a test locks it); 11 is the live
+# feed's "2026-27 Regular Season" (2026-10-05). Extend it when a season starts.
 _PWHL_SEASON_FALLBACK = [
     {"season_id": 1, "season_yr": 2024, "game_type_label": "regular"},
+    {"season_id": 2, "season_yr": 2024, "game_type_label": "preseason"},
     {"season_id": 3, "season_yr": 2024, "game_type_label": "playoffs"},
+    {"season_id": 4, "season_yr": 2025, "game_type_label": "preseason"},
     {"season_id": 5, "season_yr": 2025, "game_type_label": "regular"},
     {"season_id": 6, "season_yr": 2025, "game_type_label": "playoffs"},
+    {"season_id": 7, "season_yr": 2026, "game_type_label": "preseason"},
     {"season_id": 8, "season_yr": 2026, "game_type_label": "regular"},
+    {"season_id": 9, "season_yr": 2026, "game_type_label": "playoffs"},
+    {"season_id": 10, "season_yr": 2027, "game_type_label": "preseason"},
+    {"season_id": 11, "season_yr": 2027, "game_type_label": "regular"},
 ]
+
+
+# Season names that are one-off events, not a league's regular season or playoffs: the
+# feed lists them as seasons too ("2026 All-Star Challenge", "2025 Top Prospects",
+# "CCHL Pre-Draft Combine 2026", "2026 Exhibition Season", ...), and parse_seasons labels
+# them "regular" because the name says neither playoff nor preseason. Seen in the
+# 17-league seasons captures (sdv-internal-refs hockeytech/, 2026-07-12).
+SPECIAL_EVENT_SEASON_RE = r"(?i)all[- ]?star|showcase|prospect|combine|special event|exhibition|play[- ]?in\b"
+
+
+def most_recent_season_yr(seasons, league: str) -> int:
+    """Max ``season_yr`` of a parsed seasons frame (the ``<lg>_season_id`` output).
+
+    A seasons list the feed answered with no usable season is ``NoDataError``;
+    there is no hard-coded default year to go stale.
+    """
+    yrs = seasons["season_yr"].drop_nulls() if "season_yr" in seasons.columns else []
+    if not len(yrs):
+        from sportsdataverse.errors import NoDataError
+
+        raise NoDataError(f"HockeyTech {league}: the seasons feed lists no season")
+    return int(yrs.max())
 
 
 def _fetch_seasons_raw(league: str):
@@ -134,19 +164,28 @@ def _fetch_seasons_raw(league: str):
 def resolve_season_id(league: str, season=None, game_type: str = "regular", season_id=None):
     """Resolve an end-year ``season`` (e.g. 2025) to the integer HockeyTech
     ``season_id``. An explicit ``season_id`` short-circuits. PWHL falls back to a
-    hardcoded table if the live feed is unreachable.
+    hardcoded table if the live feed is unreachable or lacks the season; every
+    other league re-raises the fetch error (``AssetFetchError`` / ``NoDataError``).
     """
     if season_id is not None:
         return int(season_id)
     if season is None:
         raise ValueError("Provide either season (end-year) or season_id")
 
+    from sportsdataverse.errors import SportsDataverseError
     from sportsdataverse.hockeytech._parsers import parse_seasons
 
-    payload = _fetch_seasons_raw(league)
+    try:
+        payload = _fetch_seasons_raw(league)
+    except SportsDataverseError:
+        if league != "pwhl":
+            raise
+        payload = None
     df = parse_seasons(payload)
     if df.height:
         hit = df.filter((df["season_yr"] == int(season)) & (df["game_type_label"] == game_type))
+        if game_type != "preseason":  # "2025-26 Preseason Exhibition" is a real preseason
+            hit = hit.filter(~hit["season_name"].fill_null("").str.contains(SPECIAL_EVENT_SEASON_RE))
         if hit.height:
             return int(hit["season_id"][0])
     if league == "pwhl":

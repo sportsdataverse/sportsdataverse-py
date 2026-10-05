@@ -60,6 +60,130 @@ Column descriptions mined from hoopR / wehoop said "`team_detail = TRUE` only" (
 Python parsers always return those columns and have no such argument, so the condition is dropped
 from 131 descriptions.
 
+### Fixed — a failed HockeyTech fetch raises instead of returning an empty frame (BREAKING)
+
+`hockeytech_api`, the one HTTP entry point behind the PWHL surface and the 19 other HockeyTech
+league families, caught every exception and returned `None`. A 403, a 5xx, a timeout or an
+unparseable body therefore parsed to a zero-row frame, so a failed fetch read as "no games".
+It now follows the package error vocabulary:
+
+- **HTTP 404** raises `NoDataError`.
+- **A failed fetch** raises `AssetFetchError`: a transport error, a non-2xx status that outlived
+  the retries, an empty or unparseable body, or one of the HTTP-200 error sentinels
+  (`Undefined Tab <view>`, or any top-level `{"error": "..."}` such as
+  `InvalidView error: <view>`). The sentinels used to warn and then parse to an empty frame.
+  The error text never carries the feed key: it is masked, and the URL-bearing transport
+  exception is not chained.
+- **`Feed type access denied.`**, the plain-text reply MJHL's public key gets on `gc`, is still
+  a graceful empty: `mjhl_game_summary` returns empty frames and `mjhl_pbp` returns plays without
+  game metadata.
+
+Every `<lg>_*` family function, the `pwhl_*` functions and the analytics fetches pass these errors
+to the caller. `resolve_season_id` keeps PWHL's fallback table for a failed seasons fetch and for
+a season the list lacks; other leagues re-raise. The table now runs through 2026-27 (ids 1-11,
+preseasons and the 2026 playoffs included). `pwhl_streaks` (deprecated, no such upstream view) no
+longer sends a request; it still warns and returns an empty frame.
+
+Season resolution also skips the one-off events HockeyTech lists as seasons (all-star games,
+showcases, prospect games, combines, special events, exhibitions, play-ins):
+`resolve_season_id("ahl", season=2026)` returned 91, the "2026 All-Star Challenge", instead of 90,
+the "2025-26 Regular Season". An explicit `season_id=` never asks for the seasons list, so a dead
+seasons feed cannot break `pwhl_stats(season_id=11)`. `pwhl_playoff_bracket()` with no arguments
+now uses the newest season that has playoffs, not the newest season (which usually has none yet).
+
+`most_recent_<lg>_season` / `most_recent_pwhl_season` no longer return a hard-coded 2026, which was
+already stale (the live PWHL seasons feed lists 2026-27, end-year 2027). A seasons list the feed
+answered with no season raises `NoDataError`; a failed fetch raises `AssetFetchError`. This
+matches sportsdataverse-js.
+
+**Breaking:** code that checked for `None` or an empty frame to detect a HockeyTech failure now
+gets `AssetFetchError` / `NoDataError`. Wrappers that default the season (`<lg>_standings`,
+`_teams`, `_team_roster`, `_leaders`, `pwhl_stats`, `pwhl_playoff_bracket`) raise the same way when
+they need the seasons lookup and it fails; pass `season_id=` to skip the lookup. Catch them as:
+
+```python
+import sportsdataverse as sdv
+from sportsdataverse.errors import AssetFetchError, NoDataError
+
+try:
+    df = sdv.ahl_schedule()
+except NoDataError:
+    df = None  # the fetch worked and there is nothing there: skip it
+except AssetFetchError:
+    raise  # the fetch failed and the answer is unknown: retry later, never record it as empty
+```
+
+Both subclass `SportsDataverseError`. A season that the list does not carry is still `ValueError`
+("No ahl season for season=..."), as before.
+
+34 PWHL return-column descriptions were also wrong and are corrected from real values. In
+`pwhl_scorebar`: `id` is the game id, `home_id` is the HockeyTech team id, `game_status` is the
+numeric code, `quick_score` is always `'0'`, `game_summary_url` is a game id or a site path,
+`game_letter` is the playoff-series letter, `game_date_iso8601` carries the start time and UTC
+offset, `date` is a date only, `home_city` / `timezone` / `home_goals` / `league_id` say what they
+hold, and the eight W/L columns are the team's season record as fetched, not as of the game. In
+`pwhl_player_search`: `score` is a search relevance score, `profile_image` is a file name, and
+`role_id` / `role_name` are the person's role, not a position. In `pwhl_stats`: `height` is
+feet-and-inches text, `rank` is the table rank, `namelink` is plain text, `division` is a name,
+`veteran` is a code, and `name` (also in `pwhl_leaders` and `pwhl_team_roster`) is the player's
+name, not a team mascot.
+
+### Fixed — ESPN basketball pbp: one-provider spreads, paired spread signs, team timeouts, MBB double-overtime seconds
+
+Four fixes to `espn_nba_pbp`, `espn_wnba_pbp`, `espn_mbb_pbp` and `espn_wbb_pbp` (and their
+`helper_<lg>_pbp` reprocess path). The shared logic now lives in one private module,
+`sportsdataverse/_espn_basketball_pbp.py`.
+
+- **The spread from a one-provider pickcenter.** The pickcenter helper read the odds only when
+  ESPN listed more than one provider. Modern summaries list one (DraftKings), so every such game
+  got the default spread (2.5, home favored, `gameSpreadAvailable=False`). The 2026 men's title
+  game (401856600) shipped 2.5 when DraftKings had MICH -6.5. One provider is now enough. A
+  pickcenter with no spread (a lone teamrankings record entry) still gets the defaults, and an
+  all-null over/under column no longer raises.
+- **The spread and the home favorite come from the same provider.** They used to be taken
+  independently, each as the first non-null value across providers. A record-only teamrankings
+  row has no spread and sorts first, and its favorite flag (False for both teams) was paired
+  with consensus' spread. UNC Asheville, a 17.5-point home favorite (330582427), got a home line
+  of -17.5; it is now +17.5. MIA in NBA 401430219 goes from -4.5 to +4.5. Both now come from the
+  first provider with a spread, and the favorite is the spread's sign (ESPN's spread is the home
+  line). The provider order is now explicit and unchanged: `str(provider.id)`, so teamrankings
+  ("1002") reads ahead of consensus ("1004") and Caesars ("45"). Where teamrankings and consensus
+  disagree, teamrankings matches the winner more often, and an integer sort would move MBB
+  2021-22 to Caesars' line. A spread of exactly 0 takes that row's favorite flag (home if unset).
+  `helper_<lg>_pickcenter` now returns plain floats/bools for `gameSpread`, `overUnder` and
+  `homeFavorite`; a found line used to come back as a 1-element numpy array.
+- **Every team timeout.** The timeout flags matched only ESPN's NCAA `ShortTimeOut` type, so the
+  NBA/WNBA `timeouts` map was always empty and NCAA full timeouts (`RegularTimeOut`) were
+  dropped. The flags now cover `RegularTimeOut`, `ShortTimeOut`, `Full Timeout`, `Short Timeout`,
+  `No Timeout` and `Reset Timeout`. Official and TV timeouts belong to no team and stay out. The
+  calling team comes from the play's own `team.id`. The team-name match that used to decide it is
+  a fallback for plays without one, and now matches whole words: as a substring test it credited
+  "Memphis" to PHI and "timeout" to ME. The map holds timeouts *called* as ESPN logs them, not
+  timeouts *charged*. A coach's challenge outcome is not applied because ESPN logs the
+  challenge's own timeout too inconsistently: a team timeout precedes 90% of charged and 56% of
+  retained NBA challenges, and about 5% of NCAA ones.
+- **MBB end-of-period seconds in the second and later overtimes.** On the first play of 2OT and
+  later, `end.period_seconds_remaining` took the next play's start while
+  `end.game_seconds_remaining` was set to 300. Both are now 300, matching the first overtime and
+  the other leagues. A bare-seconds MBB clock ("23.4") now parses as 0:23 instead of raising.
+
+`tests/test_basketball_pbp_offline.py` checks each fix against real summaries in
+`tests/fixtures/espn/basketball_pbp/`. The spread does not feed the shipped basketball
+win-probability models, which are ratings-based, so a reprocess changes only the published
+spread columns (`game_spread`, `home_team_spread`, `game_spread_available`, `home_favorite`)
+and the timeout flags. Published data changes only after a release reprocess, and its scope is
+the owner's call:
+
+- **One-provider games only.** About 9,150 games in the raw stores have a one-provider pickcenter
+  with a spread: MBB about 5,300 (4,766 of them in 2025-26), NBA 1,078 (2025-26), WBB 1,855
+  (mostly 2022-23 and 2025-26) and WNBA 911 (2020-22 and 2026). Add the 128 mixed-row sign
+  games (127 MBB, 107 of them in 2012-13, and NBA 401430219).
+- **Full history.** Older MBB and NBA `final.json` files were built by the pickcenter helper as
+  it stood before August 2023. A full reprocess also changes about 27% of MBB 2013-22
+  multi-provider games (about 13,000; 2.3% change sign, median change 0.5 point) and about 32% of
+  NBA 2013-19 (about 2,900; about 1% change sign). Most changes are improvements: where the
+  signs disagree, the current code matches the winner in MBB 22 of 35 and NBA 12 of 15.
+
 ### Fixed — pff_api return tables for the per-player and coverage-matrix routes
 
 19 `pff_api_*` routes had no columns in their return tables. The capture they were generated

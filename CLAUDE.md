@@ -733,10 +733,13 @@ from sportsdataverse.hockey.bchl import bchl_pbp   # per-league module
 - **Per-league PBP caveats:** `ushl` gamecenter ships goals/penalties/goalie
   changes only (no coordinates); `mjhl` (probed 2026-10-05) is the same: its
   `gameCenterPlayByPlay` returns goals/penalties/goalie changes only (no
-  shots/coordinates), shifts return a valid empty envelope, and only the game
-  summary is denied (plain-text body `Feed type access denied.`, which
-  `hockeytech_api` turns into None, so `mjhl_game_summary` is empty — graceful,
-  not an error).
+  coordinates), shifts return a valid envelope, and only `gc/gamesummary` is
+  denied — the plain-text HTTP-200 `Feed type access denied.`, which
+  `hockeytech_api` returns as `{}`, so `mjhl_game_summary` gives empty event
+  frames (plus the `game_id` stub row) and `mjhl_pbp` returns plays without
+  game metadata. Every other unusable reply (non-2xx, an empty/unparseable body
+  such as a bad key's `Invalid key.`, an `Undefined Tab`/`InvalidView`
+  sentinel) raises `AssetFetchError`; a 404 raises `NoDataError`.
 - **Keys are per-league and public** (shipped in each site's JS); no shared master
   key. They rotate by *addition* — old generations keep working. Override any
   league's key with env `SDV_<LEAGUE>_API_KEY` (wins for every view). PWHL's

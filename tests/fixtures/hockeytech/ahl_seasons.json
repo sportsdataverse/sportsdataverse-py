@@ -1,0 +1,248 @@
+{
+  "SiteKit": {
+    "Parameters": {
+      "feed": "modulekit",
+      "key": "REDACTED",
+      "client_code": "ahl",
+      "site_id": "3",
+      "lang": "en",
+      "view": "seasons",
+      "lang_id": 1,
+      "league_id": "4",
+      "season_id": "94"
+    },
+    "Seasons": [
+      {
+        "season_id": "94",
+        "season_name": "2026-27 Regular Season",
+        "shortname": "2026-27",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2026-10-02",
+        "end_date": "2027-04-11"
+      },
+      {
+        "season_id": "92",
+        "season_name": "2026 Calder Cup Playoffs",
+        "shortname": "26 Playoffs",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "2026-04-20",
+        "end_date": "2026-06-20"
+      },
+      {
+        "season_id": "91",
+        "season_name": "2026 All-Star Challenge",
+        "shortname": "26 All-Star",
+        "career": "0",
+        "playoff": "0",
+        "start_date": "2026-02-10",
+        "end_date": "2026-02-12"
+      },
+      {
+        "season_id": "90",
+        "season_name": "2025-26 Regular Season",
+        "shortname": "2025-26",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2025-10-07",
+        "end_date": "2026-04-19"
+      },
+      {
+        "season_id": "88",
+        "season_name": "2025 Calder Cup Playoffs",
+        "shortname": "25 Playoffs",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "2025-04-21",
+        "end_date": "2025-06-24"
+      },
+      {
+        "season_id": "87",
+        "season_name": "2025 All-Star Challenge",
+        "shortname": "25 All-Star",
+        "career": "0",
+        "playoff": "0",
+        "start_date": "2025-02-03",
+        "end_date": "2025-02-04"
+      },
+      {
+        "season_id": "86",
+        "season_name": "2024-25 Regular Season",
+        "shortname": "2024-25",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2024-10-09",
+        "end_date": "2025-04-20"
+      },
+      {
+        "season_id": "84",
+        "season_name": "2024 Calder Cup Playoffs",
+        "shortname": "24 Playoffs",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "2024-04-22",
+        "end_date": "2024-06-27"
+      },
+      {
+        "season_id": "83",
+        "season_name": "2024 All-Star Challenge",
+        "shortname": "24 All-Star",
+        "career": "0",
+        "playoff": "0",
+        "start_date": "2024-02-05",
+        "end_date": "2024-02-06"
+      },
+      {
+        "season_id": "81",
+        "season_name": "2023-24 Regular Season",
+        "shortname": "2023-24",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2023-10-12",
+        "end_date": "2024-04-22"
+      },
+      {
+        "season_id": "80",
+        "season_name": "2023 Calder Cup Playoffs",
+        "shortname": "23 Playoffs",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "2023-04-17",
+        "end_date": "2023-06-23"
+      },
+      {
+        "season_id": "79",
+        "season_name": "2023 All-Star Challenge",
+        "shortname": "23 All-Star",
+        "career": "0",
+        "playoff": "0",
+        "start_date": "2023-02-05",
+        "end_date": "2023-02-07"
+      },
+      {
+        "season_id": "77",
+        "season_name": "2022-23 Regular Season",
+        "shortname": "2022-23",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2022-10-11",
+        "end_date": "2023-04-17"
+      },
+      {
+        "season_id": "76",
+        "season_name": "2022 Calder Cup Playoffs",
+        "shortname": "22 Playoffs",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "2022-05-01",
+        "end_date": "2022-06-30"
+      },
+      {
+        "season_id": "73",
+        "season_name": "2021-22 Regular Season",
+        "shortname": "2021-22",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2021-10-14",
+        "end_date": "2022-05-03"
+      },
+      {
+        "season_id": "72",
+        "season_name": "2021 Pacific Division Playoffs",
+        "shortname": "21 Playoffs",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "2021-05-18",
+        "end_date": "2021-05-30"
+      },
+      {
+        "season_id": "68",
+        "season_name": "2020-21 Regular Season",
+        "shortname": "2020-21",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2021-02-04",
+        "end_date": "2021-05-20"
+      },
+      {
+        "season_id": "67",
+        "season_name": "2020 All-Star Challenge",
+        "shortname": "20 All-Star",
+        "career": "0",
+        "playoff": "0",
+        "start_date": "2020-01-27",
+        "end_date": "2020-01-28"
+      },
+      {
+        "season_id": "65",
+        "season_name": "2019-20 Regular Season",
+        "shortname": "2019-20",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2019-10-01",
+        "end_date": "2020-05-08"
+      },
+      {
+        "season_id": "64",
+        "season_name": "2019 Calder Cup Playoffs",
+        "shortname": "19 Playoffs",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "2019-04-16",
+        "end_date": "2019-06-09"
+      },
+      {
+        "season_id": "63",
+        "season_name": "2019 All-Star Challenge",
+        "shortname": "19 All-Star",
+        "career": "0",
+        "playoff": "0",
+        "start_date": "2019-01-28",
+        "end_date": "2019-01-29"
+      },
+      {
+        "season_id": "61",
+        "season_name": "2018-19 Regular Season",
+        "shortname": "2018-19",
+        "career": "1",
+        "playoff": "0",
+        "start_date": "2018-10-02",
+        "end_date": "2019-04-15"
+      },
+      {
+        "season_id": "60",
+        "season_name": "2018 Calder Cup Playoffs",
+        "shortname": "18 Playoffs",
+        "career": "1",
+        "playoff": "1",
+        "start_date": "2018-04-18",
+        "end_date": "2018-06-17"
+      },
+      {
+        "season_id": "58",
+        "season_name": "2017-18 Exhibition",
+        "shortname": "17-18 Ex",
+        "career": "0",
+        "playoff": "0",
+        "start_date": "2018-02-13",
+        "end_date": "2018-09-29"
+      },
+      {
+        "season_id": "59",
+        "season_name": "2018 All-Star Challenge",
+        "shortname": "18 All-Star",
+        "career": "0",
+        "playoff": "0",
+        "start_date": "2018-01-29",
+        "end_date": "2018-01-30"
+      }
+    ],
+    "Copyright": {
+      "required_copyright": "Official statistics provided by American Hockey League",
+      "required_link": "http://leaguestat.com",
+      "powered_by": "Powered by HockeyTech.com",
+      "powered_by_url": "http://hockeytech.com"
+    }
+  }
+}
