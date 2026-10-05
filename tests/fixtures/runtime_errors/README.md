@@ -22,6 +22,19 @@ instead of reaching a parser as data.
 | `cbs_napi_404.json` | `GET https://api.cbssports.com/napi/resource/notarealresource` | 404 | `application/json; charset=utf-8` |
 | `nhl_api_web_404.html` | `GET https://api-web.nhle.com/v1/gamecenter/1/play-by-play` | 404 | `text/html;charset=iso-8859-1` |
 
+The stats.nba.com bodies were captured on 2026-10-05 from a residential IP with
+`curl_cffi` (`impersonate="chrome"`, the `stats_headers()` set, 4 s apart) and are
+served through an injected transport by `tests/nba/test_nba_stats_runtime.py`:
+
+| File | Request | Status | Content-Type |
+|---|---|---|---|
+| `nba_stats_400_bad_measuretype.json` | `GET https://stats.nba.com/stats/leaguedashplayerstats` with `MeasureType=Bogus`, `Season=2024-25` | 400 | `application/json; charset=utf-8` |
+| `nba_stats_404_unknown_endpoint.html` | `GET https://stats.nba.com/stats/notarealendpoint?LeagueID=00` | 404 | `text/html; charset=utf-8` |
+| (none: 0 bytes) | `GET https://stats.nba.com/stats/leaguedashplayerstats` with every default parameter but no `Season` | 500 | (none) |
+
+The missing-`Season` answer is an EMPTY HTTP 500 (0 bytes, no Content-Type, 2.1 s),
+so its test serves `""`.
+
 ESPN answered the summary with a real HTTP 404 here; the legacy 200-with-`code: 404`
 envelope could not be reproduced live, so that test serves the real
 `espn_site_summary_404.json` body with a 200 status. No 5xx or non-JSON 200 could be

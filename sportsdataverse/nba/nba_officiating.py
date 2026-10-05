@@ -17,6 +17,7 @@ import pandas as pd
 import polars as pl
 import requests
 
+from sportsdataverse._codegen_runtime import _check_status, _json_body, _where
 from sportsdataverse.dl_utils import download
 from sportsdataverse.errors import AssetFetchError, NoDataError
 
@@ -58,13 +59,14 @@ def _official_get(url: str, *, params: dict | None = None, proxy: dict | None = 
             :func:`sportsdataverse.dl_utils.download`.
 
     Returns:
-        The successful (200) ``requests.Response``.
+        The successful (2xx) ``requests.Response``.
 
     Raises:
         NoDataError: The response is a 404 (raised by ``download()``), or a 403 with
             an S3 ``AccessDenied`` XML body -- official.nba.com's way of saying no
             report exists for the request.
-        AssetFetchError: The response is any other non-200 status, including an
+        ValueError: The response is a 400 / 422 (the request is wrong).
+        AssetFetchError: The response is any other non-2xx status, including an
             Akamai WAF block (403 HTML) or a 5xx that outlived the retry budget;
             also raised (chained via ``from exc``) when ``download()`` exhausts
             its retry budget on a connection-level failure (``ProxyError``,
@@ -82,12 +84,11 @@ def _official_get(url: str, *, params: dict | None = None, proxy: dict | None = 
         resp = download(url, params=params, headers=_OFFICIAL_HEADERS, proxy=proxy, retry_statuses=_RETRY_NO_403)
     except requests.exceptions.RequestException as exc:
         raise AssetFetchError(f"official.nba.com fetch failed (transport error) for {url}: {exc}") from exc
-    if resp.status_code == 200:
-        return resp
     if resp.status_code == 403 and "<Code>AccessDenied</Code>" in resp.text[:500]:
         raise NoDataError(f"official.nba.com has no object at {url}")
-    ctype = resp.headers.get("Content-Type", "")
-    raise AssetFetchError(f"official.nba.com fetch failed ({resp.status_code}, {ctype!r}) for {url}")
+    # "fetch failed" marks a failed fetch: the live tests skip on it, never on drift.
+    _check_status(url, resp.status_code, resp.text, label=f"fetch failed: {_where(url)}")
+    return resp
 
 
 def _official_json(resp: requests.Response, url: str) -> dict:
@@ -103,16 +104,13 @@ def _official_json(resp: requests.Response, url: str) -> dict:
         url: The URL that was fetched, for the error message.
 
     Returns:
-        The decoded JSON payload (dict).
+        The decoded JSON payload (dict); ``{}`` for a 204 / 205.
 
     Raises:
-        AssetFetchError: The body is not valid JSON, or is JSON but not an object
+        AssetFetchError: The body is blank or not valid JSON, or is JSON but not an object
             (``null``, a list, a bare string) -- every official.nba.com payload is one.
     """
-    try:
-        data = resp.json()
-    except ValueError as exc:
-        raise AssetFetchError(f"official.nba.com returned a non-JSON 200 body for {url}") from exc
+    data = _json_body(resp, url)  # a 204/205 is {}; a blank or non-JSON body raises AssetFetchError
     if not isinstance(data, dict):
         raise AssetFetchError(f"official.nba.com returned a JSON {type(data).__name__}, not an object, for {url}")
     return data

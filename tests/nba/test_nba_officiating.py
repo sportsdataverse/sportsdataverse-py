@@ -252,6 +252,38 @@ def test_only_failed_fetches_say_fetch_failed(monkeypatch, status, body, call, b
     assert ("fetch failed" in str(err.value)) is blocked
 
 
+_L2M_URL = "https://official.nba.com/l2m/json/0042500405.json"
+
+
+@pytest.mark.parametrize(
+    ("status", "body", "exc", "match"),
+    [
+        (404, "", NoDataError, "answered HTTP 404"),
+        (400, '{"error": "bad"}', ValueError, "rejected the request: HTTP 400"),
+        (422, "", ValueError, "rejected the request: HTTP 422"),
+        (401, "Unauthorized", AssetFetchError, "answered HTTP 401: Unauthorized"),
+        (429, "", AssetFetchError, "answered HTTP 429"),
+        (500, "", AssetFetchError, "answered HTTP 500"),
+    ],
+)
+def test_official_get_status_vocabulary(monkeypatch, status, body, exc, match):
+    _patch(monkeypatch, _Resp(status, body, "text/plain"))
+    with pytest.raises(exc, match=f"fetch failed: official.nba.com/l2m/json/0042500405.json {match}"):
+        mod._official_get(_L2M_URL)
+
+
+@pytest.mark.parametrize(("status", "body", "expected"), [(200, '{"game": []}', {"game": []}), (204, "", {})])
+def test_official_json_answers(monkeypatch, status, body, expected):
+    _patch(monkeypatch, _Resp(status, body, "application/json"))
+    assert mod._official_json(mod._official_get(_L2M_URL), _L2M_URL) == expected
+
+
+def test_official_json_blank_200_is_asset_fetch_error(monkeypatch):
+    _patch(monkeypatch, _Resp(200, "", "application/json"))
+    with pytest.raises(AssetFetchError, match="answered HTTP 200 with an empty body"):
+        mod._official_json(mod._official_get(_L2M_URL), _L2M_URL)
+
+
 def test_l2m_non_json_200_body_is_asset_fetch_error(monkeypatch):
     _patch(monkeypatch, _Resp(200, "<html>not json</html>", "text/html"))
     with pytest.raises(AssetFetchError):

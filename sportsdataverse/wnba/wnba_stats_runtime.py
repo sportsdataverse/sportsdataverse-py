@@ -78,8 +78,14 @@ def _get(
             (``headers``, ``transport``, ``proxy_url``, etc.).
 
     Returns:
-        Parsed JSON dict, or ``{}`` on non-200 status, blank body, or JSON error, which also
+        Parsed JSON dict. A 2xx with an empty JSON object (or a 204 / 205) returns ``{}`` and
         warns :class:`~sportsdataverse.errors.EmptyResponseWarning`.
+
+    Raises:
+        NoDataError: The host answered HTTP 404.
+        ValueError: The host answered HTTP 400 / 422.
+        AssetFetchError: Any other non-2xx (an empty HTTP 500 included), a blank or non-JSON
+            2xx body, or a connection failure, once ``SDV_PY_NBA_STATS_RETRIES`` is spent.
 
     Example:
         Quick start (offline — inject a transport)::
