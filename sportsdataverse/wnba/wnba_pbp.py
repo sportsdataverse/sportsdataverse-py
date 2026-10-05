@@ -11,6 +11,11 @@ import polars as pl
 
 from sportsdataverse.dl_utils import download, flatten_json_iterative
 
+# ESPN play types for a timeout a team called (NCAA 578/579, NBA/WNBA 15/16/17/283).
+# Official / TV timeouts (580, 581, 19) are charged to no team, and a coach's
+# challenge spends the Full Timeout logged just before it, so neither is listed.
+_TEAM_TIMEOUT_TYPES = ["RegularTimeOut", "ShortTimeOut", "Full Timeout", "Short Timeout", "No Timeout", "Reset Timeout"]
+
 
 def espn_wnba_pbp(game_id: int, raw=False, **kwargs) -> Dict:
     """espn_wnba_pbp() - Pull the game by id. Data from API endpoints - `wnba/playbyplay`, `wnba/summary`
@@ -221,6 +226,13 @@ def helper_wnba_pbp_features(game_id, pbp_txt, init):
         p = flatten_json_iterative(play)
         pbp_txt["plays_mod"].append(p)
     pbp_txt["plays"] = pl.from_pandas(pd.json_normalize(pbp_txt, "plays_mod"))
+    # A team timeout belongs to the play's own team.id; the name match below only
+    # covers plays without one (it is a substring test: "PHI" matches "Memphis").
+    team_id = (
+        pl.col("team.id").cast(pl.Int64, strict=False)
+        if "team.id" in pbp_txt["plays"].columns
+        else pl.lit(None, dtype=pl.Int64)
+    )
     # WNBA played 2x20-minute halves through 2005 and switched to 10-minute
     # quarters in 2006 (OT is 5:00 in both eras). Pre-2006 ESPN's period IS
     # the half, so the half/seconds-remaining columns need era-aware math. The summary
@@ -306,15 +318,20 @@ def helper_wnba_pbp_features(game_id, pbp_txt, init):
             pl.col("clock.minutes").cast(pl.Float32),
             pl.col("clock.seconds").cast(pl.Float32),
             pl.when(
-                (pl.col("type.text") == "ShortTimeOut").and_(
-                    pl.col("text")
-                    .str.to_lowercase()
-                    .str.contains(str(init["homeTeamAbbrev"]).lower())
-                    .or_(
-                        pl.col("text").str.to_lowercase().str.contains(str(init["homeTeamAbbrev"]).lower()),
-                        pl.col("text").str.to_lowercase().str.contains(str(init["homeTeamName"]).lower()),
-                        pl.col("text").str.to_lowercase().str.contains(str(init["homeTeamMascot"]).lower()),
-                        pl.col("text").str.to_lowercase().str.contains(str(init["homeTeamNameAlt"]).lower()),
+                pl.col("type.text")
+                .is_in(_TEAM_TIMEOUT_TYPES)
+                .and_(
+                    pl.coalesce(
+                        team_id == init["homeTeamId"],
+                        pl.col("text")
+                        .str.to_lowercase()
+                        .str.contains(str(init["homeTeamAbbrev"]).lower())
+                        .or_(
+                            pl.col("text").str.to_lowercase().str.contains(str(init["homeTeamAbbrev"]).lower()),
+                            pl.col("text").str.to_lowercase().str.contains(str(init["homeTeamName"]).lower()),
+                            pl.col("text").str.to_lowercase().str.contains(str(init["homeTeamMascot"]).lower()),
+                            pl.col("text").str.to_lowercase().str.contains(str(init["homeTeamNameAlt"]).lower()),
+                        ),
                     ),
                 ),
             )
@@ -322,15 +339,20 @@ def helper_wnba_pbp_features(game_id, pbp_txt, init):
             .otherwise(False)
             .alias("homeTimeoutCalled"),
             pl.when(
-                (pl.col("type.text") == "ShortTimeOut").and_(
-                    pl.col("text")
-                    .str.to_lowercase()
-                    .str.contains(str(init["awayTeamAbbrev"]).lower())
-                    .or_(
-                        pl.col("text").str.to_lowercase().str.contains(str(init["awayTeamAbbrev"]).lower()),
-                        pl.col("text").str.to_lowercase().str.contains(str(init["awayTeamName"]).lower()),
-                        pl.col("text").str.to_lowercase().str.contains(str(init["awayTeamMascot"]).lower()),
-                        pl.col("text").str.to_lowercase().str.contains(str(init["awayTeamNameAlt"]).lower()),
+                pl.col("type.text")
+                .is_in(_TEAM_TIMEOUT_TYPES)
+                .and_(
+                    pl.coalesce(
+                        team_id == init["awayTeamId"],
+                        pl.col("text")
+                        .str.to_lowercase()
+                        .str.contains(str(init["awayTeamAbbrev"]).lower())
+                        .or_(
+                            pl.col("text").str.to_lowercase().str.contains(str(init["awayTeamAbbrev"]).lower()),
+                            pl.col("text").str.to_lowercase().str.contains(str(init["awayTeamName"]).lower()),
+                            pl.col("text").str.to_lowercase().str.contains(str(init["awayTeamMascot"]).lower()),
+                            pl.col("text").str.to_lowercase().str.contains(str(init["awayTeamNameAlt"]).lower()),
+                        ),
                     ),
                 ),
             )
