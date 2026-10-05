@@ -21,9 +21,6 @@ from sportsdataverse import _common_espn as ce
 if not hasattr(ce, "_site_v2_scoreboard"):
     pytest.skip("ESPN factory retired; parity is a pre-retirement migration gate", allow_module_level=True)
 
-from tools.codegen import generate  # noqa: E402
-
-OUT = Path("tools/codegen/_generated")
 
 # generated fn name -> the core fn it should reproduce
 CORE = {
@@ -48,9 +45,8 @@ def _named_params(fn, drop=()):
     ]
 
 
-def test_generated_nba_params_match_core_functions():
-    generate.build()
-    gen = _load(OUT / "nba_espn_ext.py", "_gen_parity")
+def test_generated_nba_params_match_core_functions(espn_ext_dir):
+    gen = _load(espn_ext_dir / "nba_espn_ext.py", "_gen_parity")
     for gen_name, core_fn in CORE.items():
         assert hasattr(gen, gen_name), f"generated missing {gen_name}"
         core_params = _named_params(core_fn, drop=("sport", "league"))

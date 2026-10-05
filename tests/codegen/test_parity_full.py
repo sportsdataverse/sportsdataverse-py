@@ -23,9 +23,8 @@ from sportsdataverse import _common_espn as ce
 if not hasattr(ce, "_UNIVERSAL_WRAPPERS"):
     pytest.skip("ESPN factory retired; parity is a pre-retirement migration gate", allow_module_level=True)
 
-from tools.codegen import extract, generate  # noqa: E402
+from tools.codegen import extract  # noqa: E402
 
-OUT = Path("tools/codegen/_generated")
 _ALL_SHORTS = set(extract._table().keys())
 _RENAME = yaml.safe_load((Path("tools/codegen/rename_map.yaml")).read_text(encoding="utf-8")) or {}
 # nhl is additive (new espn_nhl_* surface); the other 7 must reproduce the factory exactly
@@ -92,14 +91,9 @@ def _cap_gen(gen_fn, gen_mod, args):
     return box
 
 
-@pytest.fixture(scope="module", autouse=True)
-def _build():
-    generate.build()
-
-
 @pytest.mark.parametrize("prefix,sport,league,scopes", _LEAGUES)
-def test_generated_requests_match_core(prefix, sport, league, scopes):
-    gen = _load(OUT / f"{prefix}_espn_ext.py", f"_gen_{prefix}")
+def test_generated_requests_match_core(espn_ext_dir, prefix, sport, league, scopes):
+    gen = _load(espn_ext_dir / f"{prefix}_espn_ext.py", f"_gen_{prefix}")
     mismatches = []
     for scope in scopes:
         for short, core_fn in _TABLE_BY_SCOPE[scope]:
@@ -124,13 +118,13 @@ def test_generated_requests_match_core(prefix, sport, league, scopes):
 
 
 @pytest.mark.parametrize("prefix", _EXISTING_PREFIXES)
-def test_no_factory_name_lost(prefix):
+def test_no_factory_name_lost(espn_ext_dir, prefix):
     """Every live *factory* espn_<prefix>_* name maps (via rename_map) to a generated fn.
 
     Scoped to the ``{prefix}_espn_ext`` module (the factory surface) so hand-written
     league functions in sibling modules (e.g. espn_mlb_pbp) aren't falsely counted.
     """
-    gen = _load(OUT / f"{prefix}_espn_ext.py", f"_inv_{prefix}")
+    gen = _load(espn_ext_dir / f"{prefix}_espn_ext.py", f"_inv_{prefix}")
     live_ext = __import__(f"sportsdataverse.{prefix}.{prefix}_espn_ext", fromlist=["x"])
     live_names = [n for n in getattr(live_ext, "__all__", []) if n.startswith(f"espn_{prefix}_")]
     assert live_names, f"no factory names found on sportsdataverse.{prefix}.{prefix}_espn_ext"

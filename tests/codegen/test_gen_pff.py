@@ -2,11 +2,13 @@
 
 These regenerate the endpoint YAML + returns-schemas from the committed OpenAPI and assert
 the flat-stem contract (normal stem, ``league`` as an extra_param, no ``league_shims``).
+
+The generator runs in-process with its ``ROOT`` pointed at ``tmp_path``: it wipes and
+rewrites ``schemas/native/pff/``, so running it against the real tree raced every
+parallel test that reads those files.
 """
 
 import os
-import subprocess
-import sys
 from pathlib import Path
 
 import pytest
@@ -21,9 +23,18 @@ _SPEC = (
 pytestmark = pytest.mark.skipif(not _SPEC.exists(), reason="sdv-internal-refs pff spec not present (local-only source)")
 
 
-def test_gen_pff_emits_yaml_and_schemas():
-    subprocess.run([sys.executable, "tools/codegen/gen_pff.py"], cwd=ROOT, check=True)
-    doc = yaml.safe_load((ROOT / "tools/codegen/endpoints/pff.yaml").read_text(encoding="utf-8"))
+@pytest.fixture
+def gen_pff(tmp_path, monkeypatch):
+    """``gen_pff`` with its output root redirected to ``tmp_path``."""
+    import tools.codegen.gen_pff as gen
+
+    monkeypatch.setattr(gen, "ROOT", tmp_path)
+    return gen
+
+
+def test_gen_pff_emits_yaml_and_schemas(gen_pff, tmp_path):
+    gen_pff.main()
+    doc = yaml.safe_load((tmp_path / "tools/codegen/endpoints/pff.yaml").read_text(encoding="utf-8"))
     assert doc["api"] == "pff"
     assert doc["module"] == "pff_core"
     assert doc["auth"] is True
@@ -52,7 +63,7 @@ def test_gen_pff_emits_yaml_and_schemas():
     assert "facet_receiving_coverage_stats" in eps or "facet_defense_coverage_matchup" in eps
 
     # returns-schema files exist for a flat report
-    assert (ROOT / "tools/codegen/schemas/native/pff/passing_summary.yaml").exists()
+    assert (tmp_path / "tools/codegen/schemas/native/pff/passing_summary.yaml").exists()
 
 
 def test_pff_registered_in_flat_apis():
@@ -74,9 +85,11 @@ def test_pff_descriptions_seeded():
     assert m["passing_summary"]["player_id"]  # non-empty
 
 
-def test_gen_pff_idempotent():
-    subprocess.run([sys.executable, "tools/codegen/gen_pff.py"], cwd=ROOT, check=True)
-    first = (ROOT / "tools/codegen/endpoints/pff.yaml").read_text(encoding="utf-8")
-    subprocess.run([sys.executable, "tools/codegen/gen_pff.py"], cwd=ROOT, check=True)
-    second = (ROOT / "tools/codegen/endpoints/pff.yaml").read_text(encoding="utf-8")
-    assert first == second
+def test_gen_pff_idempotent(gen_pff, tmp_path):
+    out = tmp_path / "tools/codegen/endpoints/pff.yaml"
+    gen_pff.main()
+    first = out.read_text(encoding="utf-8")
+    gen_pff.main()
+    assert out.read_text(encoding="utf-8") == first
+    # and it reproduces the committed YAML, so the real tree never needs rewriting
+    assert first == (ROOT / "tools/codegen/endpoints/pff.yaml").read_text(encoding="utf-8")

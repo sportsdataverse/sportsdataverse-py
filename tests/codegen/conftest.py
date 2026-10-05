@@ -25,6 +25,7 @@ share one worker -- and one cache -- while the rest of the suite still spreads o
 
 from __future__ import annotations
 
+from pathlib import Path
 from typing import Callable, Dict
 
 import pytest
@@ -46,3 +47,22 @@ def first_render() -> Callable[[Callable[[], Dict[str, str]]], Dict[str, str]]:
         return cache[render]
 
     return get
+
+
+@pytest.fixture(scope="session")
+def espn_ext_dir(tmp_path_factory: pytest.TempPathFactory) -> Path:
+    """``generate.build()`` output, built once per worker into a temp dir.
+
+    ``build()`` rewrites the committed staging tree ``tools/codegen/_generated/``;
+    run against the real tree it raced every parallel test reading those modules.
+
+    Returns:
+        The directory holding ``__init__.py`` and one ``<prefix>_espn_ext.py`` per league.
+    """
+    from tools.codegen import generate
+
+    out = tmp_path_factory.mktemp("_generated")
+    with pytest.MonkeyPatch.context() as mp:
+        mp.setattr(generate, "OUT", out)
+        generate.build()
+    return out
