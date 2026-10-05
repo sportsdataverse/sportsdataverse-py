@@ -15,7 +15,7 @@ One game's espn.com play-by-play page data. The gamepackageJSON block is a Site 
 
 **Endpoint URL:** `GET https://cdn.espn.com/core/nfl/playbyplay`
 
-**Valid URL:** [https://cdn.espn.com/core/nfl/playbyplay?xhr=1&gameId=401705127](https://cdn.espn.com/core/nfl/playbyplay?xhr=1&gameId=401705127)
+**Valid URL:** [https://cdn.espn.com/core/nfl/playbyplay?xhr=1&gameId=401671881](https://cdn.espn.com/core/nfl/playbyplay?xhr=1&gameId=401671881)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -23,7 +23,7 @@ One game's espn.com play-by-play page data. The gamepackageJSON block is a Site 
 
 ### Returns {#espn_nfl_cdn_playbyplay-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a dict of `polars.DataFrame`s keyed by summary section (representative columns below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **boxscore_player**
 
 | col_name | type | description |
@@ -392,7 +392,7 @@ One game's espn.com play-by-play page data. The gamepackageJSON block is a Site 
 ### Example {#espn_nfl_cdn_playbyplay-example}
 
 ```python
-espn_nfl_cdn_playbyplay(game_id='401705127')
+espn_nfl_cdn_playbyplay(game_id='401671881')
 ```
 
 _Last validated n/a._
@@ -403,7 +403,7 @@ One game's espn.com box-score page data, parsed like a Site v2 summary. For foot
 
 **Endpoint URL:** `GET https://cdn.espn.com/core/nfl/boxscore`
 
-**Valid URL:** [https://cdn.espn.com/core/nfl/boxscore?xhr=1&gameId=401705127](https://cdn.espn.com/core/nfl/boxscore?xhr=1&gameId=401705127)
+**Valid URL:** [https://cdn.espn.com/core/nfl/boxscore?xhr=1&gameId=401671881](https://cdn.espn.com/core/nfl/boxscore?xhr=1&gameId=401671881)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -411,7 +411,7 @@ One game's espn.com box-score page data, parsed like a Site v2 summary. For foot
 
 ### Returns {#espn_nfl_cdn_boxscore-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a dict of `polars.DataFrame`s keyed by summary section (representative columns below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **boxscore_player**
 
 | col_name | type | description |
@@ -780,7 +780,7 @@ One game's espn.com box-score page data, parsed like a Site v2 summary. For foot
 ### Example {#espn_nfl_cdn_boxscore-example}
 
 ```python
-espn_nfl_cdn_boxscore(game_id='401705127')
+espn_nfl_cdn_boxscore(game_id='401671881')
 ```
 
 _Last validated n/a._
@@ -791,7 +791,7 @@ espn.com schedule page data, one row per game: up to 7 days starting at `date` (
 
 **Endpoint URL:** `GET https://cdn.espn.com/core/nfl/schedule`
 
-**Valid URL:** [https://cdn.espn.com/core/nfl/schedule?xhr=1&date=20250115](https://cdn.espn.com/core/nfl/schedule?xhr=1&date=20250115)
+**Valid URL:** [https://cdn.espn.com/core/nfl/schedule?xhr=1&week=5&year=2024&seasontype=2](https://cdn.espn.com/core/nfl/schedule?xhr=1&week=5&year=2024&seasontype=2)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -861,7 +861,7 @@ espn.com schedule page data, one row per game: up to 7 days starting at `date` (
 ### Example {#espn_nfl_cdn_schedule-example}
 
 ```python
-espn_nfl_cdn_schedule(date='20250115')
+espn_nfl_cdn_schedule(season=2024, week=5, season_type=2)
 ```
 
 _Last validated n/a._
@@ -872,7 +872,7 @@ espn.com scoreboard page data for one day (one week for football), one row per g
 
 **Endpoint URL:** `GET https://cdn.espn.com/core/nfl/scoreboard`
 
-**Valid URL:** [https://cdn.espn.com/core/nfl/scoreboard?xhr=1&date=20250115](https://cdn.espn.com/core/nfl/scoreboard?xhr=1&date=20250115)
+**Valid URL:** [https://cdn.espn.com/core/nfl/scoreboard?xhr=1&week=5&year=2024&seasontype=2](https://cdn.espn.com/core/nfl/scoreboard?xhr=1&week=5&year=2024&seasontype=2)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -942,7 +942,7 @@ espn.com scoreboard page data for one day (one week for football), one row per g
 ### Example {#espn_nfl_cdn_scoreboard-example}
 
 ```python
-espn_nfl_cdn_scoreboard(date='20250115')
+espn_nfl_cdn_scoreboard(season=2024, week=5, season_type=2)
 ```
 
 _Last validated n/a._

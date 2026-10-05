@@ -15,7 +15,7 @@ One game's espn.com play-by-play page data. The gamepackageJSON block is a Site 
 
 **Endpoint URL:** `GET https://cdn.espn.com/core/womens-college-basketball/playbyplay`
 
-**Valid URL:** [https://cdn.espn.com/core/womens-college-basketball/playbyplay?xhr=1&gameId=401705127](https://cdn.espn.com/core/womens-college-basketball/playbyplay?xhr=1&gameId=401705127)
+**Valid URL:** [https://cdn.espn.com/core/womens-college-basketball/playbyplay?xhr=1&gameId=401725017](https://cdn.espn.com/core/womens-college-basketball/playbyplay?xhr=1&gameId=401725017)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -23,7 +23,7 @@ One game's espn.com play-by-play page data. The gamepackageJSON block is a Site 
 
 ### Returns {#espn_wbb_cdn_playbyplay-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a dict of `polars.DataFrame`s keyed by summary section (representative columns below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **boxscore_player**
 
 | col_name | type | description |
@@ -242,7 +242,7 @@ One game's espn.com play-by-play page data. The gamepackageJSON block is a Site 
 ### Example {#espn_wbb_cdn_playbyplay-example}
 
 ```python
-espn_wbb_cdn_playbyplay(game_id='401705127')
+espn_wbb_cdn_playbyplay(game_id='401725017')
 ```
 
 _Last validated n/a._
@@ -253,7 +253,7 @@ One game's espn.com box-score page data, parsed like a Site v2 summary. For foot
 
 **Endpoint URL:** `GET https://cdn.espn.com/core/womens-college-basketball/boxscore`
 
-**Valid URL:** [https://cdn.espn.com/core/womens-college-basketball/boxscore?xhr=1&gameId=401705127](https://cdn.espn.com/core/womens-college-basketball/boxscore?xhr=1&gameId=401705127)
+**Valid URL:** [https://cdn.espn.com/core/womens-college-basketball/boxscore?xhr=1&gameId=401725017](https://cdn.espn.com/core/womens-college-basketball/boxscore?xhr=1&gameId=401725017)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -261,7 +261,7 @@ One game's espn.com box-score page data, parsed like a Site v2 summary. For foot
 
 ### Returns {#espn_wbb_cdn_boxscore-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a dict of `polars.DataFrame`s keyed by summary section (representative columns below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **boxscore_player**
 
 | col_name | type | description |
@@ -480,7 +480,7 @@ One game's espn.com box-score page data, parsed like a Site v2 summary. For foot
 ### Example {#espn_wbb_cdn_boxscore-example}
 
 ```python
-espn_wbb_cdn_boxscore(game_id='401705127')
+espn_wbb_cdn_boxscore(game_id='401725017')
 ```
 
 _Last validated n/a._
@@ -543,7 +543,7 @@ espn.com schedule page data, one row per game: up to 7 days starting at `date` (
 | `home_logo` | character | Home team logo URL. |
 | `home_score` | character | Home team's score. For cricket, the innings string (e.g. '161/5 (18/20 ov, target 156)'). |
 | `home_winner` | logical | Home team's winner. |
-| `home_rank` | integer | Home team rank (if ranked). |
+| `home_rank` | character | Home team rank (if ranked). |
 | `away_id` | character | Unique identifier for away. |
 | `away_name` | character | Away name. |
 | `away_abbreviation` | character | Away team's abbreviation. |
@@ -554,7 +554,7 @@ espn.com schedule page data, one row per game: up to 7 days starting at `date` (
 | `away_logo` | character | Away team logo URL. |
 | `away_score` | character | Away team's score. For cricket, the innings string. |
 | `away_winner` | logical | Away team's winner. |
-| `away_rank` | integer | Away team rank (if ranked). |
+| `away_rank` | character | Away team rank (if ranked). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -624,7 +624,7 @@ espn.com scoreboard page data for one day (one week for football), one row per g
 | `home_logo` | character | Home team logo URL. |
 | `home_score` | character | Home team's score. For cricket, the innings string (e.g. '161/5 (18/20 ov, target 156)'). |
 | `home_winner` | logical | Home team's winner. |
-| `home_rank` | integer | Home team rank (if ranked). |
+| `home_rank` | character | Home team rank (if ranked). |
 | `away_id` | character | Unique identifier for away. |
 | `away_name` | character | Away name. |
 | `away_abbreviation` | character | Away team's abbreviation. |
@@ -635,7 +635,7 @@ espn.com scoreboard page data for one day (one week for football), one row per g
 | `away_logo` | character | Away team logo URL. |
 | `away_score` | character | Away team's score. For cricket, the innings string. |
 | `away_winner` | logical | Away team's winner. |
-| `away_rank` | integer | Away team rank (if ranked). |
+| `away_rank` | character | Away team rank (if ranked). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 

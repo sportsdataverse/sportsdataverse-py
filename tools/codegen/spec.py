@@ -63,6 +63,11 @@ class Endpoint:
     # block rewrites every wrapper in the family, this one changes only its own.
     # Takes precedence over the family block when both are present.
     docstring: Dict[str, object] = field(default_factory=dict)
+    # Per-league override of ``example_args`` for the generated docs/examples, keyed
+    # by league prefix (``{"cfb": {"week": 12, ...}}``). A league listed here uses
+    # that dict INSTEAD of ``example_args`` (not merged), so a league that ignores a
+    # default example param (football and ``date``) can swap in ones it honours.
+    league_example_args: Dict[str, Dict[str, object]] = field(default_factory=dict)
 
 
 @dataclass(frozen=True)
@@ -291,6 +296,7 @@ def _parse_endpoint(e: dict, registry: Dict[str, Param], path: Path) -> Endpoint
         include_prefixes=list(e.get("include_prefixes", [])),
         fixed_params=dict(e.get("fixed_params") or {}),
         docstring=dict(e.get("docstring") or {}),
+        league_example_args={k: dict(v or {}) for k, v in (e.get("league_example_args") or {}).items()},
     )
     # validate path tokens (excluding the {sport}/{league} slugs) have a known param;
     # strip optional-segment brackets first so "[/{token}]" tokens are seen.

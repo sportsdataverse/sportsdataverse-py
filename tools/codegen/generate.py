@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+import dataclasses
 import functools
 import json
 import re
@@ -629,6 +630,9 @@ class _EndpointView:
         raw_types: list[str] | None = None,
         doc_extras: dict | None = None,
     ):
+        # A league-specific example (spec.Endpoint.league_example_args) replaces the default.
+        if league.prefix in ep.league_example_args:
+            ep = dataclasses.replace(ep, example_args=ep.league_example_args[league.prefix])
         # Raw (``return_parsed=False``) payload types: JSON-only unless the family's
         # getter is content-type aware (Torvik CSV data files -> ``Dict | str``).
         rt = list(raw_types or ["Dict"])
@@ -945,7 +949,7 @@ def _espn_league_views(league: spec.League, apis, hosts) -> list[_EndpointView]:
             else:
                 fn_name = new
         used.add(fn_name)
-        view = _EndpointView(ep, fn_name, ep_host, league)
+        view = _EndpointView(ep, fn_name, ep_host, league, doc_extras=ep.docstring)
         view.api_name = api_name
         views.append(view)
     overrides = _SPORT_PARSER_OVERRIDES.get(league.sport, {})

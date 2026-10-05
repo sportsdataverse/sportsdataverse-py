@@ -5312,20 +5312,21 @@ def espn_cfb_cdn_playbyplay(
     Bound to sport='football', league='college-football'.
 
     Endpoint: ``GET https://cdn.espn.com/core/{league}/playbyplay``
-    Example URL: https://cdn.espn.com/core/college-football/playbyplay?xhr=1&gameId=401705127
+    Example URL: https://cdn.espn.com/core/college-football/playbyplay?xhr=1&gameId=401628551
 
     Args:
         game_id: ESPN game (event) id.
-        return_parsed: parse the payload through parse_cdn_game -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
-        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        return_parsed: parse the payload through parse_cdn_game -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
-        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+        a dict of `polars.DataFrame`s keyed by summary section by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         Quick start::
 
-            espn_cfb_cdn_playbyplay(game_id='401705127')
+            espn_cfb_cdn_playbyplay(game_id='401628551')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -5355,20 +5356,21 @@ def espn_cfb_cdn_boxscore(
     Bound to sport='football', league='college-football'.
 
     Endpoint: ``GET https://cdn.espn.com/core/{league}/boxscore``
-    Example URL: https://cdn.espn.com/core/college-football/boxscore?xhr=1&gameId=401705127
+    Example URL: https://cdn.espn.com/core/college-football/boxscore?xhr=1&gameId=401628551
 
     Args:
         game_id: ESPN game (event) id.
-        return_parsed: parse the payload through parse_cdn_game -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
-        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        return_parsed: parse the payload through parse_cdn_game -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
-        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+        a dict of `polars.DataFrame`s keyed by summary section by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Example:
         Quick start::
 
-            espn_cfb_cdn_boxscore(game_id='401705127')
+            espn_cfb_cdn_boxscore(game_id='401628551')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -5401,7 +5403,7 @@ def espn_cfb_cdn_schedule(
     Bound to sport='football', league='college-football'.
 
     Endpoint: ``GET https://cdn.espn.com/core/{league}/schedule``
-    Example URL: https://cdn.espn.com/core/college-football/schedule?xhr=1&date=20250115
+    Example URL: https://cdn.espn.com/core/college-football/schedule?xhr=1&week=12&year=2024&seasontype=2
 
     Args:
         date: Single date (YYYYMMDD). Ignored by cfb and nfl, which are week-oriented. Defaults to today.
@@ -5417,7 +5419,7 @@ def espn_cfb_cdn_schedule(
     Example:
         Quick start::
 
-            espn_cfb_cdn_schedule(date='20250115')
+            espn_cfb_cdn_schedule(season=2024, week=12, season_type=2)
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -5453,7 +5455,7 @@ def espn_cfb_cdn_scoreboard(
     Bound to sport='football', league='college-football'.
 
     Endpoint: ``GET https://cdn.espn.com/core/{league}/scoreboard``
-    Example URL: https://cdn.espn.com/core/college-football/scoreboard?xhr=1&date=20250115
+    Example URL: https://cdn.espn.com/core/college-football/scoreboard?xhr=1&week=12&year=2024&seasontype=2
 
     Args:
         date: Single date (YYYYMMDD). Ignored by cfb and nfl, which are week-oriented. Defaults to today.
@@ -5469,7 +5471,7 @@ def espn_cfb_cdn_scoreboard(
     Example:
         Quick start::
 
-            espn_cfb_cdn_scoreboard(date='20250115')
+            espn_cfb_cdn_scoreboard(season=2024, week=12, season_type=2)
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {

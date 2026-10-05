@@ -50,8 +50,27 @@ endpoints:
     description: ESPN game (event) id.
   parser: parse_cdn_game
   returns_schema: summary
+  docstring:
+    parsed_doc: a dict of `polars.DataFrame`s keyed by summary section
   example_args:
     game_id: '401705127'
+  league_example_args:
+    wnba:
+      game_id: '401736179'
+    wbb:
+      game_id: '401725017'
+    mbb:
+      game_id: '401708348'
+    nfl:
+      game_id: '401671881'
+    cfb:
+      game_id: '401628551'
+    mlb:
+      game_id: '401696358'
+    college_baseball:
+      game_id: '401770148'
+    college_softball:
+      game_id: '401772530'
 - short: cdn_boxscore
   scope: universal
   include_prefixes: [nba, wnba, mbb, wbb, cfb, nfl, mlb, college_baseball, college_softball]
@@ -67,8 +86,27 @@ endpoints:
     description: ESPN game (event) id.
   parser: parse_cdn_game
   returns_schema: summary
+  docstring:
+    parsed_doc: a dict of `polars.DataFrame`s keyed by summary section
   example_args:
     game_id: '401705127'
+  league_example_args:
+    wnba:
+      game_id: '401736179'
+    wbb:
+      game_id: '401725017'
+    mbb:
+      game_id: '401708348'
+    nfl:
+      game_id: '401671881'
+    cfb:
+      game_id: '401628551'
+    mlb:
+      game_id: '401696358'
+    college_baseball:
+      game_id: '401770148'
+    college_softball:
+      game_id: '401772530'
 - short: cdn_schedule
   scope: universal
   include_prefixes: [nba, wnba, mbb, wbb, cfb, nfl, mlb, nhl, college_baseball, college_softball, ufl]
@@ -94,9 +132,18 @@ endpoints:
     type: int
     description: 'Season phase for `week`: 1=preseason, 2=regular season, 3=postseason (cfb and nfl).'
   parser: parse_cdn_schedule
-  returns_schema: scoreboard
+  returns_schema: cdn_scoreboard
   example_args:
     date: '20250115'
+  league_example_args:
+    cfb:
+      season: 2024
+      week: 12
+      season_type: 2
+    nfl:
+      season: 2024
+      week: 5
+      season_type: 2
 - short: cdn_scoreboard
   scope: universal
   include_prefixes: [nba, wnba, mbb, wbb, cfb, nfl, mlb, college_baseball, epl, mls, ucl]
@@ -122,9 +169,18 @@ endpoints:
     type: int
     description: 'Season phase for `week`: 1=preseason, 2=regular season, 3=postseason (cfb and nfl).'
   parser: parse_cdn_scoreboard
-  returns_schema: scoreboard
+  returns_schema: cdn_scoreboard
   example_args:
     date: '20250115'
+  league_example_args:
+    cfb:
+      season: 2024
+      week: 12
+      season_type: 2
+    nfl:
+      season: 2024
+      week: 5
+      season_type: 2
 - short: cdn_rankings
   scope: universal
   include_prefixes: [cfb]

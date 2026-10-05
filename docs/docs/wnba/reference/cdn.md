@@ -15,7 +15,7 @@ One game's espn.com play-by-play page data. The gamepackageJSON block is a Site 
 
 **Endpoint URL:** `GET https://cdn.espn.com/core/wnba/playbyplay`
 
-**Valid URL:** [https://cdn.espn.com/core/wnba/playbyplay?xhr=1&gameId=401705127](https://cdn.espn.com/core/wnba/playbyplay?xhr=1&gameId=401705127)
+**Valid URL:** [https://cdn.espn.com/core/wnba/playbyplay?xhr=1&gameId=401736179](https://cdn.espn.com/core/wnba/playbyplay?xhr=1&gameId=401736179)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -23,7 +23,7 @@ One game's espn.com play-by-play page data. The gamepackageJSON block is a Site 
 
 ### Returns {#espn_wnba_cdn_playbyplay-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a dict of `polars.DataFrame`s keyed by summary section (representative columns below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **boxscore_player**
 
 | col_name | type | description |
@@ -288,7 +288,7 @@ One game's espn.com play-by-play page data. The gamepackageJSON block is a Site 
 ### Example {#espn_wnba_cdn_playbyplay-example}
 
 ```python
-espn_wnba_cdn_playbyplay(game_id='401705127')
+espn_wnba_cdn_playbyplay(game_id='401736179')
 ```
 
 _Last validated n/a._
@@ -299,7 +299,7 @@ One game's espn.com box-score page data, parsed like a Site v2 summary. For foot
 
 **Endpoint URL:** `GET https://cdn.espn.com/core/wnba/boxscore`
 
-**Valid URL:** [https://cdn.espn.com/core/wnba/boxscore?xhr=1&gameId=401705127](https://cdn.espn.com/core/wnba/boxscore?xhr=1&gameId=401705127)
+**Valid URL:** [https://cdn.espn.com/core/wnba/boxscore?xhr=1&gameId=401736179](https://cdn.espn.com/core/wnba/boxscore?xhr=1&gameId=401736179)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -307,7 +307,7 @@ One game's espn.com box-score page data, parsed like a Site v2 summary. For foot
 
 ### Returns {#espn_wnba_cdn_boxscore-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a dict of `polars.DataFrame`s keyed by summary section (representative columns below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **boxscore_player**
 
 | col_name | type | description |
@@ -572,7 +572,7 @@ One game's espn.com box-score page data, parsed like a Site v2 summary. For foot
 ### Example {#espn_wnba_cdn_boxscore-example}
 
 ```python
-espn_wnba_cdn_boxscore(game_id='401705127')
+espn_wnba_cdn_boxscore(game_id='401736179')
 ```
 
 _Last validated n/a._
