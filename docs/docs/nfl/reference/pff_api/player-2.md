@@ -46,7 +46,7 @@ Passing by target depth for one player
 | `medium_interceptions` | numeric | Number of passes intercepted on medium (10-19 air yards) throws. |
 | `left_deep_completions` | numeric | Number of completed passes on deep (20+ air yards) throws to the left side of the field. |
 | `behind_los_spikes` | numeric | Number of clock-stopping spikes on throws behind the line of scrimmage. |
-| `medium_aimed_passes` | numeric | Number of aimed passes (attempts excluding spikes and throwaways) on medium (10-19 air yards) throws, as charted by PFF. |
+| `medium_aimed_passes` | numeric | Number of aimed passes (attempts excluding throwaways, spikes, batted passes and throws made while hit) on medium (10-19 air yards) throws, as charted by PFF. |
 | `center_behind_los_drops` | numeric | Number of catchable passes dropped by receivers on throws behind the line of scrimmage to the center of the field. |
 | `center_behind_los_interceptions` | numeric | Number of passes intercepted on throws behind the line of scrimmage to the center of the field. |
 | `behind_los_dropbacks` | numeric | Number of dropbacks on throws behind the line of scrimmage. |
@@ -62,7 +62,7 @@ Passing by target depth for one player
 | `center_deep_attempts` | numeric | Number of pass attempts on deep (20+ air yards) throws to the center of the field. |
 | `center_behind_los_attempts` | numeric | Number of pass attempts on throws behind the line of scrimmage to the center of the field. |
 | `right_short_positive_epa_percent` | numeric | Percentage of dropbacks with positive expected points added on short (0-9 air yards) throws to the right side of the field. |
-| `center_deep_aimed_passes` | numeric | Number of aimed passes (attempts excluding spikes and throwaways) on deep (20+ air yards) throws to the center of the field, as charted by PFF. |
+| `center_deep_aimed_passes` | numeric | Number of aimed passes (attempts excluding throwaways, spikes, batted passes and throws made while hit) on deep (20+ air yards) throws to the center of the field, as charted by PFF. |
 | `right_deep_grades_pass` | numeric | PFF passing grade (0-100) on deep (20+ air yards) throws to the right side of the field. |
 | `right_medium_big_time_throws` | numeric | Number of big-time throws on medium (10-19 air yards) throws to the right side of the field, per PFF's highest-value, highest-difficulty throw designation. |
 | `deep_sack_percent` | numeric | Percentage of dropbacks that ended in a sack on deep (20+ air yards) throws. |
@@ -103,7 +103,7 @@ Passing by target depth for one player
 | `deep_grades_pass` | numeric | PFF passing grade (0-100) on deep (20+ air yards) throws. |
 | `center_short_turnover_worthy_plays` | numeric | Number of turnover-worthy plays on short (0-9 air yards) throws to the center of the field, plays PFF charts as deserving of a turnover. |
 | `center_behind_los_scrambles` | numeric | Number of scrambles on throws behind the line of scrimmage to the center of the field. |
-| `right_short_aimed_passes` | numeric | Number of aimed passes (attempts excluding spikes and throwaways) on short (0-9 air yards) throws to the right side of the field, as charted by PFF. |
+| `right_short_aimed_passes` | numeric | Number of aimed passes (attempts excluding throwaways, spikes, batted passes and throws made while hit) on short (0-9 air yards) throws to the right side of the field, as charted by PFF. |
 | `center_short_dropbacks` | numeric | Number of dropbacks on short (0-9 air yards) throws to the center of the field. |
 | `medium_epa` | numeric | Total expected points added (EPA) on the player's dropbacks on medium (10-19 air yards) throws. |
 | `right_short_ypa` | numeric | Yards gained per pass attempt on short (0-9 air yards) throws to the right side of the field. |
@@ -117,7 +117,7 @@ Passing by target depth for one player
 | `team_name` | character | Team abbreviation the player is credited to for the range. |
 | `short_touchdowns` | numeric | Number of passing touchdowns thrown on short (0-9 air yards) throws. |
 | `center_medium_drops` | numeric | Number of catchable passes dropped by receivers on medium (10-19 air yards) throws to the center of the field. |
-| `left_behind_los_aimed_passes` | numeric | Number of aimed passes (attempts excluding spikes and throwaways) on throws behind the line of scrimmage to the left side of the field, as charted by PFF. |
+| `left_behind_los_aimed_passes` | numeric | Number of aimed passes (attempts excluding throwaways, spikes, batted passes and throws made while hit) on throws behind the line of scrimmage to the left side of the field, as charted by PFF. |
 | `deep_attempts` | numeric | Number of pass attempts on deep (20+ air yards) throws. |
 | `right_behind_los_sack_percent` | numeric | Percentage of dropbacks that ended in a sack on throws behind the line of scrimmage to the right side of the field. |
 | `center_short_positive_epa_percent` | numeric | Percentage of dropbacks with positive expected points added on short (0-9 air yards) throws to the center of the field. |
@@ -127,7 +127,7 @@ Passing by target depth for one player
 | `center_behind_los_avg_depth_of_target` | numeric | Average depth of target in air yards on throws behind the line of scrimmage to the center of the field. |
 | `short_attempts_percent` | numeric | Share of the player's total pass attempts that came on short (0-9 air yards) throws, expressed as a percentage. |
 | `right_behind_los_sacks` | numeric | Number of sacks taken on throws behind the line of scrimmage to the right side of the field. |
-| `center_medium_avg_time_to_throw` | numeric | Average time from snap to release in seconds on medium (10-19 air yards) throws to the center of the field. |
+| `center_medium_avg_time_to_throw` | numeric | Average time to throw per dropback, in seconds from snap to release, on medium (10-19 air yards) throws to the center of the field. |
 | `left_short_pressure_to_sack_rate` | numeric | Percentage of pressured dropbacks that ended in a sack on short (0-9 air yards) throws to the left side of the field. |
 | `center_deep_sack_percent` | numeric | Percentage of dropbacks that ended in a sack on deep (20+ air yards) throws to the center of the field. |
 | `center_deep_ypa` | numeric | Yards gained per pass attempt on deep (20+ air yards) throws to the center of the field. |
@@ -157,7 +157,7 @@ Passing by target depth for one player
 | `left_short_positive_epa_percent` | numeric | Percentage of dropbacks with positive expected points added on short (0-9 air yards) throws to the left side of the field. |
 | `left_short_attempts` | numeric | Number of pass attempts on short (0-9 air yards) throws to the left side of the field. |
 | `center_deep_twp_rate` | numeric | Turnover-worthy plays as a percentage of qualifying attempts on deep (20+ air yards) throws to the center of the field, per PFF charting. |
-| `right_medium_avg_time_to_throw` | numeric | Average time from snap to release in seconds on medium (10-19 air yards) throws to the right side of the field. |
+| `right_medium_avg_time_to_throw` | numeric | Average time to throw per dropback, in seconds from snap to release, on medium (10-19 air yards) throws to the right side of the field. |
 | `left_behind_los_qb_rating` | numeric | Traditional NFL passer rating on throws behind the line of scrimmage to the left side of the field. |
 | `left_behind_los_dropbacks` | numeric | Number of dropbacks on throws behind the line of scrimmage to the left side of the field. |
 | `deep_dropbacks` | numeric | Number of dropbacks on deep (20+ air yards) throws. |
@@ -172,14 +172,14 @@ Passing by target depth for one player
 | `right_behind_los_pressure_to_sack_rate` | numeric | Percentage of pressured dropbacks that ended in a sack on throws behind the line of scrimmage to the right side of the field. |
 | `deep_spikes` | numeric | Number of clock-stopping spikes on deep (20+ air yards) throws. |
 | `center_medium_spikes` | numeric | Number of clock-stopping spikes on medium (10-19 air yards) throws to the center of the field. |
-| `behind_los_aimed_passes` | numeric | Number of aimed passes (attempts excluding spikes and throwaways) on throws behind the line of scrimmage, as charted by PFF. |
+| `behind_los_aimed_passes` | numeric | Number of aimed passes (attempts excluding throwaways, spikes, batted passes and throws made while hit) on throws behind the line of scrimmage, as charted by PFF. |
 | `right_behind_los_touchdowns` | numeric | Number of passing touchdowns thrown on throws behind the line of scrimmage to the right side of the field. |
 | `right_medium_pressure_to_sack_rate` | numeric | Percentage of pressured dropbacks that ended in a sack on medium (10-19 air yards) throws to the right side of the field. |
 | `medium_thrown_aways` | numeric | Number of intentional throwaways on medium (10-19 air yards) throws. |
 | `short_sacks` | numeric | Number of sacks taken on short (0-9 air yards) throws. |
 | `center_behind_los_twp_rate` | numeric | Turnover-worthy plays as a percentage of qualifying attempts on throws behind the line of scrimmage to the center of the field, per PFF charting. |
 | `left_behind_los_attempts` | numeric | Number of pass attempts on throws behind the line of scrimmage to the left side of the field. |
-| `short_aimed_passes` | numeric | Number of aimed passes (attempts excluding spikes and throwaways) on short (0-9 air yards) throws, as charted by PFF. |
+| `short_aimed_passes` | numeric | Number of aimed passes (attempts excluding throwaways, spikes, batted passes and throws made while hit) on short (0-9 air yards) throws, as charted by PFF. |
 | `short_completions` | numeric | Number of completed passes on short (0-9 air yards) throws. |
 | `right_short_pressure_to_sack_rate` | numeric | Percentage of pressured dropbacks that ended in a sack on short (0-9 air yards) throws to the right side of the field. |
 | `medium_avg_depth_of_target` | numeric | Average depth of target in air yards on medium (10-19 air yards) throws. |
@@ -187,7 +187,7 @@ Passing by target depth for one player
 | `center_medium_attempts_percent` | numeric | Share of the player's total pass attempts that came on medium (10-19 air yards) throws to the center of the field, expressed as a percentage. |
 | `left_medium_touchdowns` | numeric | Number of passing touchdowns thrown on medium (10-19 air yards) throws to the left side of the field. |
 | `center_short_bats` | numeric | Number of pass attempts batted down at the line of scrimmage on short (0-9 air yards) throws to the center of the field. |
-| `left_deep_avg_time_to_throw` | numeric | Average time from snap to release in seconds on deep (20+ air yards) throws to the left side of the field. |
+| `left_deep_avg_time_to_throw` | numeric | Average time to throw per dropback, in seconds from snap to release, on deep (20+ air yards) throws to the left side of the field. |
 | `center_behind_los_passing_snaps` | numeric | Number of passing snaps played on throws behind the line of scrimmage to the center of the field. |
 | `center_short_yards` | numeric | Passing yards gained on short (0-9 air yards) throws to the center of the field. |
 | `right_medium_btt_rate` | numeric | Big-time throws as a percentage of qualifying attempts on medium (10-19 air yards) throws to the right side of the field, per PFF charting. |
@@ -225,7 +225,7 @@ Passing by target depth for one player
 | `center_medium_turnover_worthy_plays` | numeric | Number of turnover-worthy plays on medium (10-19 air yards) throws to the center of the field, plays PFF charts as deserving of a turnover. |
 | `behind_los_drop_rate` | numeric | Percentage of catchable passes dropped by receivers on throws behind the line of scrimmage. |
 | `right_behind_los_epa` | numeric | Total expected points added (EPA) on the player's dropbacks on throws behind the line of scrimmage to the right side of the field. |
-| `right_medium_aimed_passes` | numeric | Number of aimed passes (attempts excluding spikes and throwaways) on medium (10-19 air yards) throws to the right side of the field, as charted by PFF. |
+| `right_medium_aimed_passes` | numeric | Number of aimed passes (attempts excluding throwaways, spikes, batted passes and throws made while hit) on medium (10-19 air yards) throws to the right side of the field, as charted by PFF. |
 | `short_accuracy_percent` | numeric | Percentage of aimed passes charted as accurate by PFF on short (0-9 air yards) throws. |
 | `player_game_count` | numeric | Number of games the player appeared in during the period covered. |
 | `short_btt_rate` | numeric | Big-time throws as a percentage of qualifying attempts on short (0-9 air yards) throws, per PFF charting. |
@@ -292,7 +292,7 @@ Passing by target depth for one player
 | `center_behind_los_grades_pass` | numeric | PFF passing grade (0-100) on throws behind the line of scrimmage to the center of the field. |
 | `left_deep_dropbacks` | numeric | Number of dropbacks on deep (20+ air yards) throws to the left side of the field. |
 | `center_behind_los_spikes` | numeric | Number of clock-stopping spikes on throws behind the line of scrimmage to the center of the field. |
-| `right_behind_los_aimed_passes` | numeric | Number of aimed passes (attempts excluding spikes and throwaways) on throws behind the line of scrimmage to the right side of the field, as charted by PFF. |
+| `right_behind_los_aimed_passes` | numeric | Number of aimed passes (attempts excluding throwaways, spikes, batted passes and throws made while hit) on throws behind the line of scrimmage to the right side of the field, as charted by PFF. |
 | `left_short_interceptions` | numeric | Number of passes intercepted on short (0-9 air yards) throws to the left side of the field. |
 | `right_medium_interceptions` | numeric | Number of passes intercepted on medium (10-19 air yards) throws to the right side of the field. |
 | `left_behind_los_yards` | numeric | Passing yards gained on throws behind the line of scrimmage to the left side of the field. |
@@ -318,7 +318,7 @@ Passing by target depth for one player
 | `behind_los_completions` | numeric | Number of completed passes on throws behind the line of scrimmage. |
 | `behind_los_sack_percent` | numeric | Percentage of dropbacks that ended in a sack on throws behind the line of scrimmage. |
 | `left_deep_yards` | numeric | Passing yards gained on deep (20+ air yards) throws to the left side of the field. |
-| `left_short_aimed_passes` | numeric | Number of aimed passes (attempts excluding spikes and throwaways) on short (0-9 air yards) throws to the left side of the field, as charted by PFF. |
+| `left_short_aimed_passes` | numeric | Number of aimed passes (attempts excluding throwaways, spikes, batted passes and throws made while hit) on short (0-9 air yards) throws to the left side of the field, as charted by PFF. |
 | `center_behind_los_completions` | numeric | Number of completed passes on throws behind the line of scrimmage to the center of the field. |
 | `left_short_thrown_aways` | numeric | Number of intentional throwaways on short (0-9 air yards) throws to the left side of the field. |
 | `left_short_sack_percent` | numeric | Percentage of dropbacks that ended in a sack on short (0-9 air yards) throws to the left side of the field. |
@@ -342,15 +342,15 @@ Passing by target depth for one player
 | `right_short_big_time_throws` | numeric | Number of big-time throws on short (0-9 air yards) throws to the right side of the field, per PFF's highest-value, highest-difficulty throw designation. |
 | `center_short_big_time_throws` | numeric | Number of big-time throws on short (0-9 air yards) throws to the center of the field, per PFF's highest-value, highest-difficulty throw designation. |
 | `short_positive_epa_percent` | numeric | Percentage of dropbacks with positive expected points added on short (0-9 air yards) throws. |
-| `left_behind_los_avg_time_to_throw` | numeric | Average time from snap to release in seconds on throws behind the line of scrimmage to the left side of the field. |
+| `left_behind_los_avg_time_to_throw` | numeric | Average time to throw per dropback, in seconds from snap to release, on throws behind the line of scrimmage to the left side of the field. |
 | `right_deep_passing_snaps` | numeric | Number of passing snaps played on deep (20+ air yards) throws to the right side of the field. |
 | `right_short_twp_rate` | numeric | Turnover-worthy plays as a percentage of qualifying attempts on short (0-9 air yards) throws to the right side of the field, per PFF charting. |
 | `center_medium_attempts` | numeric | Number of pass attempts on medium (10-19 air yards) throws to the center of the field. |
-| `right_deep_avg_time_to_throw` | numeric | Average time from snap to release in seconds on deep (20+ air yards) throws to the right side of the field. |
+| `right_deep_avg_time_to_throw` | numeric | Average time to throw per dropback, in seconds from snap to release, on deep (20+ air yards) throws to the right side of the field. |
 | `center_deep_def_gen_pressures` | numeric | Number of defense-generated pressures on the player's dropbacks on deep (20+ air yards) throws to the center of the field, as charted by PFF. |
 | `behind_los_epa` | numeric | Total expected points added (EPA) on the player's dropbacks on throws behind the line of scrimmage. |
 | `right_medium_twp_rate` | numeric | Turnover-worthy plays as a percentage of qualifying attempts on medium (10-19 air yards) throws to the right side of the field, per PFF charting. |
-| `right_deep_aimed_passes` | numeric | Number of aimed passes (attempts excluding spikes and throwaways) on deep (20+ air yards) throws to the right side of the field, as charted by PFF. |
+| `right_deep_aimed_passes` | numeric | Number of aimed passes (attempts excluding throwaways, spikes, batted passes and throws made while hit) on deep (20+ air yards) throws to the right side of the field, as charted by PFF. |
 | `right_deep_scrambles` | numeric | Number of scrambles on deep (20+ air yards) throws to the right side of the field. |
 | `deep_big_time_throws` | numeric | Number of big-time throws on deep (20+ air yards) throws, per PFF's highest-value, highest-difficulty throw designation. |
 | `left_short_turnover_worthy_plays` | numeric | Number of turnover-worthy plays on short (0-9 air yards) throws to the left side of the field, plays PFF charts as deserving of a turnover. |
@@ -360,14 +360,14 @@ Passing by target depth for one player
 | `short_ypa` | numeric | Yards gained per pass attempt on short (0-9 air yards) throws. |
 | `medium_pressure_to_sack_rate` | numeric | Percentage of pressured dropbacks that ended in a sack on medium (10-19 air yards) throws. |
 | `left_medium_thrown_aways` | numeric | Number of intentional throwaways on medium (10-19 air yards) throws to the left side of the field. |
-| `right_behind_los_avg_time_to_throw` | numeric | Average time from snap to release in seconds on throws behind the line of scrimmage to the right side of the field. |
+| `right_behind_los_avg_time_to_throw` | numeric | Average time to throw per dropback, in seconds from snap to release, on throws behind the line of scrimmage to the right side of the field. |
 | `behind_los_btt_rate` | numeric | Big-time throws as a percentage of qualifying attempts on throws behind the line of scrimmage, per PFF charting. |
-| `medium_avg_time_to_throw` | numeric | Average time from snap to release in seconds on medium (10-19 air yards) throws. |
+| `medium_avg_time_to_throw` | numeric | Average time to throw per dropback, in seconds from snap to release, on medium (10-19 air yards) throws. |
 | `center_deep_completion_percent` | numeric | Percentage of pass attempts completed on deep (20+ air yards) throws to the center of the field. |
-| `behind_los_avg_time_to_throw` | numeric | Average time from snap to release in seconds on throws behind the line of scrimmage. |
+| `behind_los_avg_time_to_throw` | numeric | Average time to throw per dropback, in seconds from snap to release, on throws behind the line of scrimmage. |
 | `right_medium_touchdowns` | numeric | Number of passing touchdowns thrown on medium (10-19 air yards) throws to the right side of the field. |
-| `center_short_avg_time_to_throw` | numeric | Average time from snap to release in seconds on short (0-9 air yards) throws to the center of the field. |
-| `left_deep_aimed_passes` | numeric | Number of aimed passes (attempts excluding spikes and throwaways) on deep (20+ air yards) throws to the left side of the field, as charted by PFF. |
+| `center_short_avg_time_to_throw` | numeric | Average time to throw per dropback, in seconds from snap to release, on short (0-9 air yards) throws to the center of the field. |
+| `left_deep_aimed_passes` | numeric | Number of aimed passes (attempts excluding throwaways, spikes, batted passes and throws made while hit) on deep (20+ air yards) throws to the left side of the field, as charted by PFF. |
 | `left_medium_yards` | numeric | Passing yards gained on medium (10-19 air yards) throws to the left side of the field. |
 | `center_medium_touchdowns` | numeric | Number of passing touchdowns thrown on medium (10-19 air yards) throws to the center of the field. |
 | `center_short_drop_rate` | numeric | Percentage of catchable passes dropped by receivers on short (0-9 air yards) throws to the center of the field. |
@@ -379,7 +379,7 @@ Passing by target depth for one player
 | `center_deep_yards` | numeric | Passing yards gained on deep (20+ air yards) throws to the center of the field. |
 | `short_dropbacks` | numeric | Number of dropbacks on short (0-9 air yards) throws. |
 | `left_deep_sack_percent` | numeric | Percentage of dropbacks that ended in a sack on deep (20+ air yards) throws to the left side of the field. |
-| `center_behind_los_avg_time_to_throw` | numeric | Average time from snap to release in seconds on throws behind the line of scrimmage to the center of the field. |
+| `center_behind_los_avg_time_to_throw` | numeric | Average time to throw per dropback, in seconds from snap to release, on throws behind the line of scrimmage to the center of the field. |
 | `behind_los_avg_depth_of_target` | numeric | Average depth of target in air yards on throws behind the line of scrimmage. |
 | `left_behind_los_epa` | numeric | Total expected points added (EPA) on the player's dropbacks on throws behind the line of scrimmage to the left side of the field. |
 | `medium_twp_rate` | numeric | Turnover-worthy plays as a percentage of qualifying attempts on medium (10-19 air yards) throws, per PFF charting. |
@@ -423,7 +423,7 @@ Passing by target depth for one player
 | `left_behind_los_pressure_to_sack_rate` | numeric | Percentage of pressured dropbacks that ended in a sack on throws behind the line of scrimmage to the left side of the field. |
 | `right_short_def_gen_pressures` | numeric | Number of defense-generated pressures on the player's dropbacks on short (0-9 air yards) throws to the right side of the field, as charted by PFF. |
 | `right_short_attempts_percent` | numeric | Share of the player's total pass attempts that came on short (0-9 air yards) throws to the right side of the field, expressed as a percentage. |
-| `center_short_aimed_passes` | numeric | Number of aimed passes (attempts excluding spikes and throwaways) on short (0-9 air yards) throws to the center of the field, as charted by PFF. |
+| `center_short_aimed_passes` | numeric | Number of aimed passes (attempts excluding throwaways, spikes, batted passes and throws made while hit) on short (0-9 air yards) throws to the center of the field, as charted by PFF. |
 | `short_hit_as_threw` | numeric | Number of attempts on which the passer was hit as he threw on short (0-9 air yards) throws, as charted by PFF. |
 | `right_medium_turnover_worthy_plays` | numeric | Number of turnover-worthy plays on medium (10-19 air yards) throws to the right side of the field, plays PFF charts as deserving of a turnover. |
 | `left_short_epa` | numeric | Total expected points added (EPA) on the player's dropbacks on short (0-9 air yards) throws to the left side of the field. |
@@ -446,7 +446,7 @@ Passing by target depth for one player
 | `left_medium_attempts` | numeric | Number of pass attempts on medium (10-19 air yards) throws to the left side of the field. |
 | `medium_accuracy_percent` | numeric | Percentage of aimed passes charted as accurate by PFF on medium (10-19 air yards) throws. |
 | `left_medium_drops` | numeric | Number of catchable passes dropped by receivers on medium (10-19 air yards) throws to the left side of the field. |
-| `left_short_avg_time_to_throw` | numeric | Average time from snap to release in seconds on short (0-9 air yards) throws to the left side of the field. |
+| `left_short_avg_time_to_throw` | numeric | Average time to throw per dropback, in seconds from snap to release, on short (0-9 air yards) throws to the left side of the field. |
 | `medium_passing_snaps` | numeric | Number of passing snaps played on medium (10-19 air yards) throws. |
 | `center_short_epa` | numeric | Total expected points added (EPA) on the player's dropbacks on short (0-9 air yards) throws to the center of the field. |
 | `left_behind_los_passing_snaps` | numeric | Number of passing snaps played on throws behind the line of scrimmage to the left side of the field. |
@@ -463,7 +463,7 @@ Passing by target depth for one player
 | `right_deep_dropbacks` | numeric | Number of dropbacks on deep (20+ air yards) throws to the right side of the field. |
 | `deep_ypa` | numeric | Yards gained per pass attempt on deep (20+ air yards) throws. |
 | `center_medium_completions` | numeric | Number of completed passes on medium (10-19 air yards) throws to the center of the field. |
-| `left_medium_avg_time_to_throw` | numeric | Average time from snap to release in seconds on medium (10-19 air yards) throws to the left side of the field. |
+| `left_medium_avg_time_to_throw` | numeric | Average time to throw per dropback, in seconds from snap to release, on medium (10-19 air yards) throws to the left side of the field. |
 | `left_short_sacks` | numeric | Number of sacks taken on short (0-9 air yards) throws to the left side of the field. |
 | `left_behind_los_spikes` | numeric | Number of clock-stopping spikes on throws behind the line of scrimmage to the left side of the field. |
 | `left_deep_def_gen_pressures` | numeric | Number of defense-generated pressures on the player's dropbacks on deep (20+ air yards) throws to the left side of the field, as charted by PFF. |
@@ -489,7 +489,7 @@ Passing by target depth for one player
 | `left_medium_avg_depth_of_target` | numeric | Average depth of target in air yards on medium (10-19 air yards) throws to the left side of the field. |
 | `behind_los_thrown_aways` | numeric | Number of intentional throwaways on throws behind the line of scrimmage. |
 | `center_medium_def_gen_pressures` | numeric | Number of defense-generated pressures on the player's dropbacks on medium (10-19 air yards) throws to the center of the field, as charted by PFF. |
-| `short_avg_time_to_throw` | numeric | Average time from snap to release in seconds on short (0-9 air yards) throws. |
+| `short_avg_time_to_throw` | numeric | Average time to throw per dropback, in seconds from snap to release, on short (0-9 air yards) throws. |
 | `left_deep_twp_rate` | numeric | Turnover-worthy plays as a percentage of qualifying attempts on deep (20+ air yards) throws to the left side of the field, per PFF charting. |
 | `center_behind_los_epa` | numeric | Total expected points added (EPA) on the player's dropbacks on throws behind the line of scrimmage to the center of the field. |
 | `left_behind_los_big_time_throws` | numeric | Number of big-time throws on throws behind the line of scrimmage to the left side of the field, per PFF's highest-value, highest-difficulty throw designation. |
@@ -515,24 +515,24 @@ Passing by target depth for one player
 | `left_medium_def_gen_pressures` | numeric | Number of defense-generated pressures on the player's dropbacks on medium (10-19 air yards) throws to the left side of the field, as charted by PFF. |
 | `right_deep_turnover_worthy_plays` | numeric | Number of turnover-worthy plays on deep (20+ air yards) throws to the right side of the field, plays PFF charts as deserving of a turnover. |
 | `left_short_spikes` | numeric | Number of clock-stopping spikes on short (0-9 air yards) throws to the left side of the field. |
-| `left_medium_aimed_passes` | numeric | Number of aimed passes (attempts excluding spikes and throwaways) on medium (10-19 air yards) throws to the left side of the field, as charted by PFF. |
+| `left_medium_aimed_passes` | numeric | Number of aimed passes (attempts excluding throwaways, spikes, batted passes and throws made while hit) on medium (10-19 air yards) throws to the left side of the field, as charted by PFF. |
 | `left_behind_los_twp_rate` | numeric | Turnover-worthy plays as a percentage of qualifying attempts on throws behind the line of scrimmage to the left side of the field, per PFF charting. |
 | `short_grades_pass` | numeric | PFF passing grade (0-100) on short (0-9 air yards) throws. |
 | `right_short_drops` | numeric | Number of catchable passes dropped by receivers on short (0-9 air yards) throws to the right side of the field. |
-| `right_short_avg_time_to_throw` | numeric | Average time from snap to release in seconds on short (0-9 air yards) throws to the right side of the field. |
+| `right_short_avg_time_to_throw` | numeric | Average time to throw per dropback, in seconds from snap to release, on short (0-9 air yards) throws to the right side of the field. |
 | `right_medium_thrown_aways` | numeric | Number of intentional throwaways on medium (10-19 air yards) throws to the right side of the field. |
 | `center_short_sack_percent` | numeric | Percentage of dropbacks that ended in a sack on short (0-9 air yards) throws to the center of the field. |
 | `right_short_passing_snaps` | numeric | Number of passing snaps played on short (0-9 air yards) throws to the right side of the field. |
 | `center_short_def_gen_pressures` | numeric | Number of defense-generated pressures on the player's dropbacks on short (0-9 air yards) throws to the center of the field, as charted by PFF. |
 | `center_medium_positive_epa_percent` | numeric | Percentage of dropbacks with positive expected points added on medium (10-19 air yards) throws to the center of the field. |
 | `medium_drops` | numeric | Number of catchable passes dropped by receivers on medium (10-19 air yards) throws. |
-| `center_medium_aimed_passes` | numeric | Number of aimed passes (attempts excluding spikes and throwaways) on medium (10-19 air yards) throws to the center of the field, as charted by PFF. |
+| `center_medium_aimed_passes` | numeric | Number of aimed passes (attempts excluding throwaways, spikes, batted passes and throws made while hit) on medium (10-19 air yards) throws to the center of the field, as charted by PFF. |
 | `center_short_sacks` | numeric | Number of sacks taken on short (0-9 air yards) throws to the center of the field. |
 | `deep_attempts_percent` | numeric | Share of the player's total pass attempts that came on deep (20+ air yards) throws, expressed as a percentage. |
 | `center_behind_los_def_gen_pressures` | numeric | Number of defense-generated pressures on the player's dropbacks on throws behind the line of scrimmage to the center of the field, as charted by PFF. |
 | `left_short_passing_snaps` | numeric | Number of passing snaps played on short (0-9 air yards) throws to the left side of the field. |
 | `center_medium_grades_pass` | numeric | PFF passing grade (0-100) on medium (10-19 air yards) throws to the center of the field. |
-| `center_deep_avg_time_to_throw` | numeric | Average time from snap to release in seconds on deep (20+ air yards) throws to the center of the field. |
+| `center_deep_avg_time_to_throw` | numeric | Average time to throw per dropback, in seconds from snap to release, on deep (20+ air yards) throws to the center of the field. |
 | `behind_los_positive_epa_percent` | numeric | Percentage of dropbacks with positive expected points added on throws behind the line of scrimmage. |
 | `center_short_completion_percent` | numeric | Percentage of pass attempts completed on short (0-9 air yards) throws to the center of the field. |
 | `left_deep_hit_as_threw` | numeric | Number of attempts on which the passer was hit as he threw on deep (20+ air yards) throws to the left side of the field, as charted by PFF. |
@@ -540,10 +540,10 @@ Passing by target depth for one player
 | `left_short_attempts_percent` | numeric | Share of the player's total pass attempts that came on short (0-9 air yards) throws to the left side of the field, expressed as a percentage. |
 | `left_deep_scrambles` | numeric | Number of scrambles on deep (20+ air yards) throws to the left side of the field. |
 | `right_short_completions` | numeric | Number of completed passes on short (0-9 air yards) throws to the right side of the field. |
-| `center_behind_los_aimed_passes` | numeric | Number of aimed passes (attempts excluding spikes and throwaways) on throws behind the line of scrimmage to the center of the field, as charted by PFF. |
+| `center_behind_los_aimed_passes` | numeric | Number of aimed passes (attempts excluding throwaways, spikes, batted passes and throws made while hit) on throws behind the line of scrimmage to the center of the field, as charted by PFF. |
 | `right_short_scrambles` | numeric | Number of scrambles on short (0-9 air yards) throws to the right side of the field. |
 | `center_medium_qb_rating` | numeric | Traditional NFL passer rating on medium (10-19 air yards) throws to the center of the field. |
-| `deep_avg_time_to_throw` | numeric | Average time from snap to release in seconds on deep (20+ air yards) throws. |
+| `deep_avg_time_to_throw` | numeric | Average time to throw per dropback, in seconds from snap to release, on deep (20+ air yards) throws. |
 | `left_deep_drops` | numeric | Number of catchable passes dropped by receivers on deep (20+ air yards) throws to the left side of the field. |
 | `right_behind_los_def_gen_pressures` | numeric | Number of defense-generated pressures on the player's dropbacks on throws behind the line of scrimmage to the right side of the field, as charted by PFF. |
 | `center_deep_positive_epa_percent` | numeric | Percentage of dropbacks with positive expected points added on deep (20+ air yards) throws to the center of the field. |
@@ -552,7 +552,7 @@ Passing by target depth for one player
 | `right_behind_los_completions` | numeric | Number of completed passes on throws behind the line of scrimmage to the right side of the field. |
 | `center_behind_los_drop_rate` | numeric | Percentage of catchable passes dropped by receivers on throws behind the line of scrimmage to the center of the field. |
 | `short_drops` | numeric | Number of catchable passes dropped by receivers on short (0-9 air yards) throws. |
-| `deep_aimed_passes` | numeric | Number of aimed passes (attempts excluding spikes and throwaways) on deep (20+ air yards) throws, as charted by PFF. |
+| `deep_aimed_passes` | numeric | Number of aimed passes (attempts excluding throwaways, spikes, batted passes and throws made while hit) on deep (20+ air yards) throws, as charted by PFF. |
 | `right_medium_avg_depth_of_target` | numeric | Average depth of target in air yards on medium (10-19 air yards) throws to the right side of the field. |
 | `short_pressure_to_sack_rate` | numeric | Percentage of pressured dropbacks that ended in a sack on short (0-9 air yards) throws. |
 | `center_deep_qb_rating` | numeric | Traditional NFL passer rating on deep (20+ air yards) throws to the center of the field. |

@@ -8,6 +8,26 @@ Merged to `main` since 0.1.4 and not yet released. Released versions are on the 
 
 ## Unreleased
 
+### Fixed — PFF time to throw, aimed passes and receiving positive-EPA descriptions
+
+The return tables of the legacy `pff_*` passing and receiving reports, and the `pff_api` position
+and team reports, described three PFF stats wrongly. These are the same texts that #689 corrected
+for the `pff_api` player summaries. Each of the 210 descriptions was checked against real nfl and
+ncaa rows:
+
+- `avg_time_to_throw` and every `*_avg_time_to_throw` is per dropback (`ttt_total_time / dropbacks`
+  on all 74 rows that carry both, 41 of them with dropbacks different from attempts), not "on the
+  passer's attempts".
+- `aimed_passes` and every `*_aimed_passes` also excludes batted passes and throws made while hit:
+  `attempts − throwaways − spikes − bats − hit_as_threw` on 478 of 478 rows. The old formula
+  matched 331.
+- Receiving `positive_epa_percent` and its depth, concept and scheme splits are a share of the
+  receiver's plays with an EPA value, in practice their routes run, not of their targets. The
+  published percentage is a whole number of plays out of routes run on 83 of 85 rows, but out of
+  targets on only 21 of 76.
+
+Text only; no column or value changes.
+
 ### Fixed — nba_stats / wnba_stats defaults: a season where the API needs one, each league's own ids
 
 The `nba_stats_*` / `wnba_stats_*` defaults are mined from hoopR / wehoop through the

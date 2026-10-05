@@ -40,7 +40,7 @@ League-wide receiving-by-scheme leaderboard
 | `zone_avoided_tackles` | numeric | Tackles avoided after the catch against zone coverage. |
 | `man_targeted_qb_rating` | numeric | NFL passer rating on throws targeting the player against man coverage. |
 | `draft_season` | numeric | Season of the player's NFL draft class, per PFF. |
-| `zone_positive_epa_percent` | numeric | Percentage of the player's targets producing positive expected points added against zone coverage. |
+| `zone_positive_epa_percent` | numeric | Percentage of the receiver's plays with an EPA value (in practice their routes run) producing positive expected points added against zone coverage. |
 | `man_targets_percent` | numeric | Share of the team's targets thrown to the player against man coverage. |
 | `man_yards_per_reception` | numeric | Average yards per reception against man coverage. |
 | `team_name` | character | Team abbreviation the player is credited to for the range. |
@@ -102,7 +102,7 @@ League-wide receiving-by-scheme leaderboard
 | `man_caught_percent` | numeric | Percentage of targets caught against man coverage. |
 | `zone_drop_rate` | numeric | Share of catchable targets the player dropped against zone coverage. |
 | `zone_interceptions` | numeric | Interceptions thrown on passes targeting the player against zone coverage. |
-| `man_positive_epa_percent` | numeric | Percentage of the player's targets producing positive expected points added against man coverage. |
+| `man_positive_epa_percent` | numeric | Percentage of the receiver's plays with an EPA value (in practice their routes run) producing positive expected points added against man coverage. |
 | `zone_routes` | numeric | Pass routes run by the player against zone coverage. |
 | `player_id` | numeric | PFF player id (integer; matches the /players id and every player_id join key). |
 
@@ -181,7 +181,7 @@ League-wide receiving summary leaderboard
 | `pass_plays` | numeric | Pass-play snaps. |
 | `yards_per_reception` | numeric | Average yards per reception. |
 | `player` | character | Player's display name as PFF lists it. |
-| `positive_epa_percent` | numeric | Percentage of the player's targets producing positive expected points added. |
+| `positive_epa_percent` | numeric | Percentage of the receiver's plays with an EPA value (in practice their routes run) producing positive expected points added. |
 | `franchise_id` | numeric | PFF franchise (team) id (integer join key). |
 | `contested_receptions` | numeric | Contested catches made. |
 | `yards_after_catch` | numeric | Yards after the catch. |
