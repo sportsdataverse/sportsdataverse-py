@@ -37,7 +37,7 @@ endpoints:
     query_key: language
     type: str
   - name: timecode
-    query_key: language
+    query_key: timecode
     type: str
   - name: hydrate
     query_key: hydrate

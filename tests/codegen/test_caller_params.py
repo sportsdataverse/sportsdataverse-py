@@ -88,3 +88,15 @@ def test_no_generated_module_pins_params_at_the_call_site():
 
 if __name__ == "__main__":  # pragma: no cover
     raise SystemExit(pytest.main([__file__, "-q"]))
+
+
+def test_mlb_pbp_sends_timecode_under_its_own_key():
+    """``pbp.timecode`` was declared ``query_key: language`` (copy-paste), so the
+    request carried ``language=<timecode>`` and never ``timecode=``."""
+    from sportsdataverse.mlb.mlb_api import mlb_pbp
+
+    with _download_spy() as dl:
+        mlb_pbp(game_pk=716390, timecode="20240401_190000", return_parsed=False)
+    sent = dl.call_args.kwargs["params"]
+    assert sent["timecode"] == "20240401_190000"
+    assert "language" not in sent
