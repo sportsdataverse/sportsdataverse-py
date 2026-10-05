@@ -4,10 +4,57 @@ Custom exceptions for sportsdataverse module
 
 from __future__ import annotations
 
+import re as _re
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     import requests
+
+
+# A credential's ``name=value`` pair: the query-string form, its URL-encoded form
+# (``apiKey%3D...``, also after an escaped ``%26``), and the dict / JSON form
+# (``'key': '...'``). Same names as sportsdataverse-js ``redactSecrets``. Linear in
+# the input: the name is a bounded alternation behind a fixed-width lookbehind, and
+# each repeat stops at a character the next part cannot start with. The leading
+# lookahead (every name's first letter) only makes the scan cheaper.
+_SECRET_PAIR = _re.compile(
+    r"(?=[ACIJKPRSTacijkprst])(?:(?<![A-Za-z0-9])|(?<=%[0-9A-Fa-f]{2}))"
+    r"((password|passwd|pwd|(?:(?:access|refresh|id|auth|session)[_-]?)?token|client[_-]?secret|secret"
+    r"|api[_-]?key|key|jwt)"
+    r"[\"']?\s*(?:[:=]|%3[AD])\s*[\"']?)"
+    # A quoted value runs to its closing quote (it may hold spaces); an unquoted one
+    # stops at the first separator.
+    r"((?<=\")[^\"\n]*|(?<=')[^'\n]*|[^&\s\"'<>]+)",
+    _re.IGNORECASE,
+)
+
+
+def _redact_pair(match: _re.Match[str]) -> str:
+    prefix, name, value = match.groups()
+    # An unquoted value (``{'key': 1234}``, ``(token=abc)``) runs into the
+    # punctuation that closes it; keep that punctuation out of the redaction. A
+    # quoted value already stopped at its quote, so all of it is the secret.
+    secret = value if prefix.endswith(('"', "'")) else value.rstrip(",;)]}")
+    tail = value[len(secret) :]
+    # A bare ``key`` must look like a credential (16+ characters, as every
+    # HockeyTech key is), so "primary key=player_id" survives. The short value is
+    # still scanned: it may hold an escaped pair of its own.
+    if name.lower() == "key" and len(secret) < 16:
+        return prefix + _SECRET_PAIR.sub(_redact_pair, value)
+    return prefix + "REDACTED" + tail
+
+
+def _redact_secrets(text: str) -> str:
+    """Replace the value of every credential pair in ``text`` with ``REDACTED``.
+
+    Covers ``apiKey`` / ``api_key`` / ``apikey`` / ``key`` / ``token`` /
+    ``access_token`` / ``password`` / ``secret`` / ``client_secret`` (and the other
+    names sportsdataverse-js redacts), case-insensitively, as ``name=value``, as
+    ``name%3Dvalue``, and as ``'name': 'value'``. Everything else -- host, path,
+    status, the other params -- is left as it was, so the line still says which
+    request failed.
+    """
+    return _SECRET_PAIR.sub(_redact_pair, text)
 
 
 class SportsDataverseError(Exception):
@@ -26,7 +73,13 @@ class SportsDataverseError(Exception):
 
     Re-parenting the existing errors under this base is backwards compatible:
     code catching ``Exception`` or the specific subclasses keeps working.
+
+    Every message is passed through :func:`_redact_secrets`: these messages quote
+    request URLs, and a URL can carry an API key in its query string.
     """
+
+    def __init__(self, *args: object) -> None:
+        super().__init__(*(_redact_secrets(a) if isinstance(a, str) else a for a in args))
 
 
 class SeasonNotFoundError(SportsDataverseError):
@@ -298,8 +351,6 @@ def no_espn_data(response: "requests.Response") -> "requests.Response":
 # ---------------------------------------------------------------------------
 # Suggestion engine — turn 404 URLs into actionable hints
 # ---------------------------------------------------------------------------
-
-import re as _re  # noqa: E402  (placed here to keep the file's existing top intact)
 
 _SPORT_TO_LEAGUE = {
     "basketball/nba": "nba",
