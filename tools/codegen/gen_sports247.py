@@ -601,7 +601,7 @@ def _load_spec() -> Optional[Dict[str, Any]]:
         candidates.append(Path(env) / "247sports/recruit-database.openapi.yaml")
     candidates += [
         ROOT.parents[2] / "sdv-internal-refs/247sports/recruit-database.openapi.yaml",
-        Path.home() / "Documents/sdv-internal-refs/247sports/recruit-database.openapi.yaml",
+        Path.home() / "Documents/GitHub-Data/sdv-dev/sdv-internal-refs/247sports/recruit-database.openapi.yaml",
     ]
     for path in candidates:
         if path.is_file():

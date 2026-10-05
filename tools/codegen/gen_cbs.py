@@ -112,7 +112,10 @@ def _refs_dir() -> Path:
     """Resolve the ``sdv-internal-refs/cbs`` directory (env -> sibling -> default)."""
     env = os.environ.get("SDV_INTERNAL_REFS_REPO")
     candidates = [Path(env)] if env else []
-    candidates += [ROOT.parent / "sdv-internal-refs", Path("C:/Users/saiem/Documents/sdv-internal-refs")]
+    candidates += [
+        ROOT.parent / "sdv-internal-refs",
+        Path("C:/Users/saiem/Documents/GitHub-Data/sdv-dev/sdv-internal-refs"),
+    ]
     for base in candidates:
         if (base / "cbs" / "cbssports-napi.openapi.yaml").exists():
             return base / "cbs"
