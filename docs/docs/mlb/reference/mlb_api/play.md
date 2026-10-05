@@ -24,6 +24,7 @@ GET /api/v1/game/{gamePk}/playByPlay — play-by-play with at-bat detail.
 ### Returns {#mlb_play_by_play-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `pitch_index` | character | A serialized list of indices identifying individual pitch events that occurred within this at-bat. |

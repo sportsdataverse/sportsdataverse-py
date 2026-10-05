@@ -23,13 +23,14 @@
 
 ### Returns {{ "{#" ~ ep.fn_name ~ "-returns}" }}
 
-{% if ep.parser %}**`return_parsed=True`** (default) — {% if ep.parsed_doc_md %}{{ ep.parsed_doc_md }}{% if ep.return_table %} ({% if ep.return_frames %}one table per key below{% else %}representative columns below{% endif %}){% endif %}{% elif ep.unverified %}the output of `{{ ep.parser }}`{% else %}a tidy `polars.DataFrame`{% if ep.return_table %} with the columns below{% else %} (parser: `{{ ep.parser }}`){% endif %}{% endif %}; pass `return_as_pandas=True` for {% if ep.parsed_doc_md %}a dict of `pandas.DataFrame`s (same keys){% else %}a `pandas.DataFrame`{% endif %}.
+{% if ep.parser %}**`return_parsed=True`** (default) — {% if ep.parsed_doc_md %}{{ ep.parsed_doc_md }}{% if ep.return_table %} ({% if ep.return_frames %}one table per documented key below{% else %}representative columns below{% endif %}){% endif %}{% elif ep.unverified %}the output of `{{ ep.parser }}`{% elif ep.returns_dict %}a dict of `polars.DataFrame`s{% if ep.return_table %} (one table per documented key below){% else %} (parser: `{{ ep.parser }}`){% endif %}{% elif ep.frames_by %}a tidy `polars.DataFrame` whose columns depend on `{{ ep.frames_by }}`{% if ep.return_table %} (one table per value below){% else %} (parser: `{{ ep.parser }}`){% endif %}{% else %}a tidy `polars.DataFrame`{% if ep.return_table %} with the columns below{% else %} (parser: `{{ ep.parser }}`){% endif %}{% endif %}; pass `return_as_pandas=True` for {% if ep.parsed_doc_md or ep.returns_dict %}a dict of `pandas.DataFrame`s (same keys){% else %}a `pandas.DataFrame`{% endif %}.
 {% if ep.unverified %}
 
 No returns table is published for this endpoint: {{ ep.unverified }}.
 
 {% endif %}
 {% if ep.return_table %}
+
 {{ ep.return_table }}
 {% endif %}
 **`return_parsed=False`** — {{ ep.raw_doc_md or "the raw JSON `Dict` payload, unparsed" }}.

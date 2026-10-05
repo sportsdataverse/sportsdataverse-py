@@ -51,7 +51,7 @@ GET /rdb/v1/recruitment/{recruitmentKey}/recruitment-evaluations
 
 **`return_parsed=True`** (default) — the output of `parse_on3_rdb`; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 
-No returns table is published for this endpoint: no committed capture with rows; names derived from the OpenAPI response type matched parse_on3_rdb's output on only 7 of the 9 checkable endpoints, so none are published.
+No returns table is published for this endpoint: its committed capture has 0 rows, so the parser emits no columns; names derived from the OpenAPI response type matched parse_on3_rdb's output on only 7 of the 9 checkable endpoints, so none are published.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -81,6 +81,7 @@ Latest RPM (prediction) picks feed — paged {list,pagination}
 ### Returns {#on3_recruitments_latest_rpm_picks-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `pick_key` | integer |  |
@@ -352,6 +353,7 @@ GET /rdb/v1/recruitments/{recKey}/profile
 ### Returns {#on3_recruitments_profile-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `class_year` | integer | Recruiting class year of the recruitment. |
@@ -472,7 +474,7 @@ GET /rdb/v1/recruitments/{recKey}/rpm-picks
 
 **`return_parsed=True`** (default) — the output of `parse_on3_rdb`; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 
-No returns table is published for this endpoint: no committed capture with rows; names derived from the OpenAPI response type matched parse_on3_rdb's output on only 7 of the 9 checkable endpoints, so none are published.
+No returns table is published for this endpoint: its committed capture has 0 rows, so the parser emits no columns; names derived from the OpenAPI response type matched parse_on3_rdb's output on only 7 of the 9 checkable endpoints, so none are published.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -499,6 +501,7 @@ GET /rdb/v1/recruitments/{recKey}/rpm-summary
 ### Returns {#on3_recruitments_rpm_summary-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `predictions` | character | Per-team RPM prediction percentages for the recruitment, as a stringified list. |

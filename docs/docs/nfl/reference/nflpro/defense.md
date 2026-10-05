@@ -28,6 +28,7 @@ GET /api/secured/stats/defense/overview/season — one row per defender for the 
 ### Returns {#nfl_pro_defense_overview_season-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `nfl_id` | character | NFL ID of player (this is used in Big Data Bowl Data) |
@@ -96,6 +97,7 @@ GET /api/secured/stats/defense/overview/week — one row per defender per week �
 ### Returns {#nfl_pro_defense_overview_week-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `nfl_id` | character | NFL ID of player (this is used in Big Data Bowl Data) |
@@ -170,6 +172,7 @@ GET /api/secured/stats/defense/nearest/season — one row per defender for the s
 ### Returns {#nfl_pro_defense_nearest_season-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `nfl_id` | character | NFL ID of player (this is used in Big Data Bowl Data) |
@@ -238,6 +241,7 @@ GET /api/secured/stats/defense/nearest/week — one row per defender per week �
 ### Returns {#nfl_pro_defense_nearest_week-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `nfl_id` | character | NFL ID of player (this is used in Big Data Bowl Data) |

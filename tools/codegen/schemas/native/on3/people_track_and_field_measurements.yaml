@@ -1,6 +1,6 @@
 columns: []
 kind: dataframe
 schema: people_track_and_field_measurements
-unverified: no committed capture with rows; names derived from the OpenAPI response
-  type matched parse_on3_rdb's output on only 7 of the 9 checkable endpoints, so none
-  are published
+unverified: 'no committed capture with rows, and the response type is only heuristically
+  mapped (x-source: call-site); names derived from the OpenAPI response type matched
+  parse_on3_rdb''s output on only 7 of the 9 checkable endpoints, so none are published'

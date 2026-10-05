@@ -27,6 +27,7 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 ### Returns {#pff_facet_coverage_scheme-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `man_touchdowns` | numeric | Touchdowns allowed into the player's coverage when in man coverage. |

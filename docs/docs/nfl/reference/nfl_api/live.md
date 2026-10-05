@@ -22,6 +22,7 @@ GET /football/v2/stats/live/team-statistics/{game_id} — one row per side (away
 ### Returns {#nfl_live_team_statistics-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `game_id` | character | NFL.com Shield GUID for the game. |
@@ -159,6 +160,7 @@ GET /football/v2/stats/live/player-statistics/{game_id} — one row per player p
 ### Returns {#nfl_live_player_statistics-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `game_id` | character | NFL.com Shield GUID for the game. |

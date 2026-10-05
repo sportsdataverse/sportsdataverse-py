@@ -4951,7 +4951,7 @@ def espn_ufl_cdn_schedule(
     Bound to sport='football', league='ufl'.
 
     Endpoint: ``GET https://cdn.espn.com/core/{league}/schedule``
-    Example URL: https://cdn.espn.com/core/ufl/schedule?xhr=1&date=20250115
+    Example URL: https://cdn.espn.com/core/ufl/schedule?xhr=1&date=20250405
 
     Args:
         date: Single date (YYYYMMDD). Ignored by cfb and nfl, which are week-oriented. Defaults to today.
@@ -4967,7 +4967,7 @@ def espn_ufl_cdn_schedule(
     Example:
         Quick start::
 
-            espn_ufl_cdn_schedule(date='20250115')
+            espn_ufl_cdn_schedule(date='20250405')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {

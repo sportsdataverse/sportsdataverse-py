@@ -25,6 +25,7 @@ GET /leaderboard/expected_statistics — xBA/xSLG/xwOBA/xISO expected-statistics
 ### Returns {#mlb_statcast_leaderboard_expected_stats-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `last_name, first_name` | character | Last name, first name. |
@@ -70,6 +71,7 @@ GET /leaderboard/percentile-rankings — player percentile-ranking sliders (xwOB
 ### Returns {#mlb_statcast_leaderboard_percentile_rankings-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `player_name` | character | Player name. |
@@ -124,6 +126,7 @@ GET /leaderboard/sprint_speed — sprint-speed (ft/sec) leaderboard.
 ### Returns {#mlb_statcast_leaderboard_sprint_speed-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `last_name, first_name` | character | Last name, first name. |
@@ -165,6 +168,7 @@ GET /leaderboard/running_splits — 90-foot running splits leaderboard.
 ### Returns {#mlb_statcast_leaderboard_running_splits-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `last_name, first_name` | character | Last name, first name. |
@@ -222,6 +226,7 @@ GET /leaderboard/bat-tracking — bat-tracking (swing speed / squared-up) leader
 ### Returns {#mlb_statcast_leaderboard_bat_tracking-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `id` | integer | MLBAM player id. |
@@ -271,6 +276,7 @@ GET /leaderboard/bat-tracking/swing-path-attack-angle — swing path & attack-an
 ### Returns {#mlb_statcast_leaderboard_swing_path-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `id` | integer | MLBAM player id. |
@@ -315,6 +321,7 @@ GET /leaderboard/bat-tracking/swing-timing-miss-distance — swing timing & miss
 ### Returns {#mlb_statcast_leaderboard_swing_timing-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `id` | integer | MLBAM player id. |
@@ -372,6 +379,7 @@ GET /leaderboard/swing-take — swing/take run-value leaderboard.
 ### Returns {#mlb_statcast_leaderboard_swing_take-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `year` | character | Season year. |
@@ -414,6 +422,7 @@ GET /leaderboard/statcast — exit velocity & barrels leaderboard.
 ### Returns {#mlb_statcast_leaderboard_exit_velocity_barrels-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `last_name, first_name` | character | Last name, first name. |
@@ -463,6 +472,7 @@ GET /leaderboard/batted-ball — batted-ball profile leaderboard.
 ### Returns {#mlb_statcast_leaderboard_batted_ball-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `id` | integer | MLBAM player id. |
@@ -512,6 +522,7 @@ GET /leaderboard/home-runs — Statcast home-runs leaderboard.
 ### Returns {#mlb_statcast_leaderboard_home_runs-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `player` | character | Player. |
@@ -556,6 +567,7 @@ GET /leaderboard/pitch-arsenals — pitch arsenals (velo/spin/movement) leaderbo
 ### Returns {#mlb_statcast_leaderboard_pitch_arsenals-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `last_name, first_name` | character | Last name, first name. |
@@ -599,6 +611,7 @@ GET /leaderboard/pitch-arsenal-stats — per-pitch-type outcome stats leaderboar
 ### Returns {#mlb_statcast_leaderboard_pitch_arsenal_stats-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `last_name, first_name` | character | Last name, first name. |
@@ -650,6 +663,7 @@ GET /leaderboard/pitch-movement — pitch-movement leaderboard.
 ### Returns {#mlb_statcast_leaderboard_pitch_movement-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `year` | integer | Season year. |
@@ -705,6 +719,7 @@ GET /leaderboard/pitch-tempo — pitch-tempo leaderboard.
 ### Returns {#mlb_statcast_leaderboard_pitch_tempo-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `entity_id` | integer | MLBAM id of the player/team entity. |
@@ -747,6 +762,7 @@ GET /leaderboard/active-spin — active-spin leaderboard.
 ### Returns {#mlb_statcast_leaderboard_active_spin-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `entity_name` | character | Player (or team) entity name. |
@@ -790,6 +806,7 @@ GET /leaderboard/spin-direction-pitches — spin-direction (per-pitch) leaderboa
 ### Returns {#mlb_statcast_leaderboard_spin_direction-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `year` | integer | Season year. |
@@ -850,6 +867,7 @@ GET /leaderboard/pitcher-arm-angles — pitcher arm-angle leaderboard.
 ### Returns {#mlb_statcast_leaderboard_arm_angles-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `pitcher` | integer | MLBAM id of the pitcher. |
@@ -891,6 +909,7 @@ GET /leaderboard/pitcher-running-game — pitcher running-game (holding runners)
 ### Returns {#mlb_statcast_leaderboard_pitcher_running_game-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `player_id` | integer | MLBAM player id. |
@@ -947,6 +966,7 @@ GET /leaderboard/outs_above_average — Outs Above Average (OAA) fielding leader
 ### Returns {#mlb_statcast_leaderboard_outs_above_average-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `last_name, first_name` | character | Last name, first name. |
@@ -994,6 +1014,7 @@ GET /leaderboard/outfield_directional_outs_above_average — outfield directiona
 ### Returns {#mlb_statcast_leaderboard_outfield_directional_oaa-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `last_name, first_name` | character | Last name, first name. |
@@ -1037,6 +1058,7 @@ GET /leaderboard/outfield_jump — outfielder jump leaderboard.
 ### Returns {#mlb_statcast_leaderboard_outfield_jump-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `last_name, first_name` | character | Last name, first name. |
@@ -1080,6 +1102,7 @@ GET /leaderboard/catch_probability — outfielder catch-probability leaderboard.
 ### Returns {#mlb_statcast_leaderboard_catch_probability-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `last_name, first_name` | character | Last name, first name. |
@@ -1129,6 +1152,7 @@ GET /leaderboard/arm-strength — fielder arm-strength leaderboard.
 ### Returns {#mlb_statcast_leaderboard_arm_strength-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `fielder_name` | character | Fielder name. |
@@ -1186,6 +1210,7 @@ GET /leaderboard/poptime — catcher pop-time leaderboard.
 ### Returns {#mlb_statcast_leaderboard_poptime-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `entity_name` | character | Player (or team) entity name. |
@@ -1231,6 +1256,7 @@ GET /leaderboard/catcher-framing — catcher framing leaderboard.
 ### Returns {#mlb_statcast_leaderboard_catcher_framing-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `id` | integer | MLBAM player id. |
@@ -1283,6 +1309,7 @@ GET /leaderboard/catcher-blocking — catcher blocking leaderboard.
 ### Returns {#mlb_statcast_leaderboard_catcher_blocking-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `player_id` | integer | MLBAM player id. |
@@ -1331,6 +1358,7 @@ GET /leaderboard/catcher-throwing — catcher throwing leaderboard.
 ### Returns {#mlb_statcast_leaderboard_catcher_throwing-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `player_id` | integer | MLBAM player id. |
@@ -1385,6 +1413,7 @@ GET /leaderboard/catcher-stance — catcher stance leaderboard.
 ### Returns {#mlb_statcast_leaderboard_catcher_stance-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `id` | integer | MLBAM player id. |
@@ -1443,6 +1472,7 @@ GET /leaderboard/basestealing-run-value — basestealing run-value leaderboard.
 ### Returns {#mlb_statcast_leaderboard_basestealing_run_value-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `player_id` | integer | MLBAM player id. |
@@ -1498,6 +1528,7 @@ GET /leaderboard/baserunning-run-value — baserunning run-value leaderboard.
 ### Returns {#mlb_statcast_leaderboard_baserunning_run_value-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `player_id` | integer | MLBAM player id. |
@@ -1547,6 +1578,7 @@ GET /leaderboard/baserunning — extra-bases-taken run-value leaderboard.
 ### Returns {#mlb_statcast_leaderboard_baserunning-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `entity_name` | character | Player (or team) entity name. |

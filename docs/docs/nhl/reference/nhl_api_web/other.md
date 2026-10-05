@@ -22,6 +22,7 @@ Pull the boxscore for one NHL game.
 ### Returns {#nhl_boxscore-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `home_away` | character | Home or away indicator. |
@@ -86,6 +87,7 @@ Pull the gamecenter landing payload for one NHL game.
 ### Returns {#nhl_landing-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `id` | integer | Unique player identifier. |
@@ -188,6 +190,7 @@ Pull the single-day scoreboard for `date`.
 ### Returns {#nhl_score-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `id` | integer | Unique player identifier. |
@@ -290,6 +293,7 @@ Pull a single playoff series payload.
 ### Returns {#nhl_playoff_series-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `round` | integer | Shootout round number. |
@@ -362,6 +366,7 @@ Pull the NHL standings.
 ### Returns {#nhl_standings-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `clinch_indicator` | character | Playoff clinch indicator (e.g. 'x' clinched playoff, 'e' eliminated). |
@@ -473,6 +478,7 @@ Pull the per-season standings cutover dates.
 ### Returns {#nhl_standings_season-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `id` | integer | Unique player identifier. |
@@ -512,6 +518,7 @@ Pull a team's roster.
 ### Returns {#nhl_roster-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `position_group` | character | Position group name (e.g. Centers). |
@@ -587,6 +594,7 @@ Pull skater stat leaders.
 ### Returns {#nhl_skater_leaders-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `category` | character | Stat leader category. |
@@ -636,6 +644,7 @@ Pull goalie stat leaders.
 ### Returns {#nhl_goalie_leaders-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `category` | character | Stat leader category. |

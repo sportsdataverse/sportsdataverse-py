@@ -42,7 +42,11 @@ import yaml
 from sportsdataverse.dl_utils import underscore
 
 ROOT = Path(__file__).resolve().parents[2]
-_REFS = Path(os.environ.get("SDV_INTERNAL_REFS_REPO", str(ROOT.parent / "sdv-internal-refs")))
+_REAL_REFS = Path("C:/Users/saiem/Documents/GitHub-Data/sdv-dev/sdv-internal-refs")
+_REFS = Path(
+    os.environ.get("SDV_INTERNAL_REFS_REPO")
+    or next((str(c) for c in (ROOT.parent / "sdv-internal-refs", _REAL_REFS) if c.exists()), str(_REAL_REFS))
+)
 DEV = _REFS / "pff" / "developer"
 SPEC_PATH = DEV / "pff-developer.openapi.json"
 CAPTURES = DEV / "captures"
@@ -130,11 +134,18 @@ def _schema_name(short: str) -> str:
     return f"pff_api_{short}"
 
 
-def _v2_schema(s2: dict, short: str, variants: List[str] | None, prefix: str) -> Dict[str, Any]:
+def _v2_schema(s2: dict, short: str, variants: List[str] | None, prefix: str, by: str = "") -> Dict[str, Any]:
     if variants is None:
         return {"schema": _schema_name(short), "kind": "dataframe", "columns": _v2_union(s2, prefix)}
     frames = [{"section": v, "columns": _v2_union(s2, f"{prefix}__{v}")} for v in variants]
-    return {"schema": _schema_name(short), "kind": "frames", "frames": [f for f in frames if f["columns"]]}
+    # ``frames_by`` = the request parameter whose value picks the table: the function returns
+    # ONE DataFrame, not a dict of them (generate.py reads the marker).
+    return {
+        "schema": _schema_name(short),
+        "kind": "frames",
+        "frames_by": by,
+        "frames": [f for f in frames if f["columns"]],
+    }
 
 
 def _v1_schema(s1: dict, short: str, target: str, shape: Dict[str, str]) -> Dict[str, Any]:
@@ -211,15 +222,17 @@ def build() -> tuple[dict, Dict[str, dict]]:
         if path in legacy_schema:
             ep["returns_schema"] = legacy_schema[path]  # identical wire format -> legacy schema
         elif path.startswith("/v2"):
-            variants = None
+            variants, by = None, ""
             if short in ("team_report", "position_report"):
-                variants = next(p for p in params if p["name"] == "report")["schema"]["enum"]
+                by = "report"
             elif short == "team_stats":
-                variants = next(p for p in params if p["name"] == "category")["schema"]["enum"]
+                by = "category"
             elif short == "team_leaders":
-                variants = next(p for p in params if p["name"] == "group")["schema"]["enum"]
+                by = "group"
+            if by:
+                variants = next(p for p in params if p["name"] == by)["schema"]["enum"]
             capture_id = {"team_directory": "team_directory"}.get(short, short)
-            schemas[short] = _v2_schema(s2, short, variants, capture_id)
+            schemas[short] = _v2_schema(s2, short, variants, capture_id, by)
             ep["returns_schema"] = f"native/pff_api/{short}"
         elif parser:
             env = next((k for k in shape if k != "restricted"), "")

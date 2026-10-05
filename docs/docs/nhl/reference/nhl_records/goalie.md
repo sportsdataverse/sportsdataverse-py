@@ -21,6 +21,7 @@ Goaltender career statistics (regular season).
 ### Returns {#nhl_records_goalie_career_stats-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `id` | integer | Unique player identifier. |
@@ -85,6 +86,7 @@ Goaltender career stats inclusive of regular season and playoffs.
 ### Returns {#nhl_records_goalie_career_stats_with_playoffs-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `id` | integer | Unique player identifier. |
@@ -134,6 +136,7 @@ Goaltender single-season statistics.
 ### Returns {#nhl_records_goalie_season_stats-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `id` | integer | Unique player identifier. |
@@ -195,6 +198,7 @@ Goaltenders with the longest consecutive-win streaks.
 ### Returns {#nhl_records_goalie_win_streak-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `id` | integer | Unique player identifier. |
@@ -238,6 +242,7 @@ Goaltenders with the longest consecutive-shutout streaks.
 ### Returns {#nhl_records_goalie_shutout_streak-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `id` | integer | Unique player identifier. |
@@ -282,6 +287,7 @@ Goaltenders who reached each win plateau (100, 200, 300 …).
 ### Returns {#nhl_records_goalie_win_plateaus-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `id` | integer | Unique player identifier. |
@@ -321,6 +327,7 @@ Goaltender consecutive playoff-win streaks.
 ### Returns {#nhl_records_goalie_playoff_streak-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `id` | integer | Unique player identifier. |
@@ -361,6 +368,7 @@ Goaltender longest undefeated streaks (wins + ties).
 ### Returns {#nhl_records_goalie_undefeated_streak-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `id` | integer | Unique player identifier. |

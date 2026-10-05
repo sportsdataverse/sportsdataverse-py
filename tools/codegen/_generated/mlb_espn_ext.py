@@ -5085,7 +5085,7 @@ def espn_mlb_cdn_schedule(
     Bound to sport='baseball', league='mlb'.
 
     Endpoint: ``GET https://cdn.espn.com/core/{league}/schedule``
-    Example URL: https://cdn.espn.com/core/mlb/schedule?xhr=1&date=20250115
+    Example URL: https://cdn.espn.com/core/mlb/schedule?xhr=1&date=20250415
 
     Args:
         date: Single date (YYYYMMDD). Ignored by cfb and nfl, which are week-oriented. Defaults to today.
@@ -5101,7 +5101,7 @@ def espn_mlb_cdn_schedule(
     Example:
         Quick start::
 
-            espn_mlb_cdn_schedule(date='20250115')
+            espn_mlb_cdn_schedule(date='20250415')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -5137,7 +5137,7 @@ def espn_mlb_cdn_scoreboard(
     Bound to sport='baseball', league='mlb'.
 
     Endpoint: ``GET https://cdn.espn.com/core/{league}/scoreboard``
-    Example URL: https://cdn.espn.com/core/mlb/scoreboard?xhr=1&date=20250115
+    Example URL: https://cdn.espn.com/core/mlb/scoreboard?xhr=1&date=20250415
 
     Args:
         date: Single date (YYYYMMDD). Ignored by cfb and nfl, which are week-oriented. Defaults to today.
@@ -5153,7 +5153,7 @@ def espn_mlb_cdn_scoreboard(
     Example:
         Quick start::
 
-            espn_mlb_cdn_scoreboard(date='20250115')
+            espn_mlb_cdn_scoreboard(date='20250415')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {

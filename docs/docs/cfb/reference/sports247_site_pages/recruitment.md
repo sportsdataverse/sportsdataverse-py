@@ -22,6 +22,7 @@ Final-choice PlayerSport/commit for a recruitment.
 ### Returns {#sports247_site_pages_recruitment_final_choice-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `key` | integer | Primary key of this entity (the id used in its `.json` route). |
@@ -87,6 +88,7 @@ Committed institution for a recruitment.
 ### Returns {#sports247_site_pages_recruitment_institution-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `key` | integer | Primary key of this entity (the id used in its `.json` route). |
@@ -137,6 +139,7 @@ All institutions the recruit has interest links with.
 ### Returns {#sports247_site_pages_recruitment_interests-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `key` | integer | Primary key of this entity (the id used in its `.json` route). |
@@ -187,6 +190,7 @@ Institutions that have offered the recruit.
 ### Returns {#sports247_site_pages_recruitment_offers-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `key` | integer | Primary key of this entity (the id used in its `.json` route). |
@@ -237,6 +241,7 @@ PlayerSport underlying a recruitment.
 ### Returns {#sports247_site_pages_recruitment_player_sport-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `key` | integer | Primary key of this entity (the id used in its `.json` route). |

@@ -24,6 +24,7 @@ Pull categorized (cat) EDGE detail stats for a single skater.
 ### Returns {#nhl_edge_cat_skater_detail-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `seasons_with_edge_stats` | character | JSON-serialized list of NHL season identifiers for which EDGE puck-and-player tracking data is available for this skater. |
@@ -106,6 +107,7 @@ Pull categorized (cat) EDGE detail stats for a single goalie.
 ### Returns {#nhl_edge_cat_goalie_detail-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `seasons_with_edge_stats` | character | JSON-serialized list of NHL season identifiers for which EDGE puck-and-player tracking data is available for this goalie. |

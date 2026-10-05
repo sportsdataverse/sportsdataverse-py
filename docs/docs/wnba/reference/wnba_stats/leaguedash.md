@@ -47,6 +47,7 @@ GET /stats/leaguedashlineups
 ### Returns {#wnba_stats_leaguedashlineups-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `group_set` | character | Name of the grouping family used for this dashboard or split row. |
@@ -163,6 +164,7 @@ GET /stats/leaguedashplayerbiostats
 ### Returns {#wnba_stats_leaguedashplayerbiostats-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `player_id` | integer | Unique player identifier. |
@@ -251,6 +253,7 @@ GET /stats/leaguedashplayerclutch
 ### Returns {#wnba_stats_leaguedashplayerclutch-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `group_set` | character | Name of the split group the row belongs to (e.g. Overall, By Opponent, By Month). |
@@ -382,6 +385,7 @@ GET /stats/leaguedashplayershotlocations
 ### Returns {#wnba_stats_leaguedashplayershotlocations-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `player_id` | integer | Unique player identifier. |
@@ -478,6 +482,7 @@ GET /stats/leaguedashplayerstats
 ### Returns {#wnba_stats_leaguedashplayerstats-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `player_id` | integer | Unique player identifier. |
@@ -603,6 +608,7 @@ GET /stats/leaguedashptdefend
 ### Returns {#wnba_stats_leaguedashptdefend-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `close_def_person_id` | integer | Stats API identifier for close defensive person identifier associated with this NBA or WNBA Stats row. |
@@ -676,6 +682,7 @@ GET /stats/leaguedashteamclutch
 ### Returns {#wnba_stats_leaguedashteamclutch-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `team_id` | integer | Unique team identifier. |
@@ -787,6 +794,7 @@ GET /stats/leaguedashteamshotlocations
 ### Returns {#wnba_stats_leaguedashteamshotlocations-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `team_id` | integer | Unique team identifier. |
@@ -873,6 +881,7 @@ GET /stats/leaguedashteamstats
 ### Returns {#wnba_stats_leaguedashteamstats-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `team_id` | integer | Unique team identifier. |

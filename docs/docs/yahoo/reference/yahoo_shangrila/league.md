@@ -23,6 +23,7 @@ Yahoo shangrila persisted query `leagueConferences` -> one row per `leagues` ent
 ### Returns {#yahoo_league_conferences-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `short_name` | character | Short display name. |
@@ -56,6 +57,7 @@ Yahoo shangrila persisted query `leagueFiltersData` -> one row per `leagues` ent
 ### Returns {#yahoo_league_filters_data-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `sport_sport_id` | character | Yahoo identifier of the sport the league belongs to. |
@@ -102,6 +104,7 @@ Yahoo shangrila persisted query `leagueFutureOdds` -> one row per `leagues` entr
 ### Returns {#yahoo_league_future_odds-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `bets` | character | JSON-encoded list of the betting markets offered on the event (spread, moneyline and total). |
@@ -143,6 +146,7 @@ Yahoo shangrila persisted query `leagueGameIds` -> one row per `leagues` entry
 ### Returns {#yahoo_league_game_ids-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `alias_url` | character | Absolute sports.yahoo.com URL of the entity's page (e.g., "https://sports.yahoo.com/ncaaf/players/464024/"). |
@@ -186,6 +190,7 @@ Yahoo shangrila persisted query `leagueGameIdsByDate` -> one row per `leagues` e
 ### Returns {#yahoo_league_game_ids_by_date-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `display_short` | character | Short league label used in navigation and compact UI (e.g., "NCAA FB"). |
@@ -248,6 +253,7 @@ Yahoo shangrila persisted query `leagueInfo` -> one row per `leagues` entry
 ### Returns {#yahoo_league_info-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `display_short` | character | Short league label used in navigation and compact UI (e.g., "NCAA FB"). |
@@ -280,6 +286,7 @@ Yahoo shangrila persisted query `leagueInjuries` -> one row per `leagues.teams` 
 ### Returns {#yahoo_league_injuries-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `team_id` | character | Unique team identifier. |
@@ -319,6 +326,7 @@ Yahoo shangrila persisted query `leagueNames` -> one row per `leagues` entry
 ### Returns {#yahoo_league_names-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `league_id` | integer | League identifier ('10' = WNBA). |
@@ -386,6 +394,7 @@ Yahoo shangrila persisted query `leagueStandings` -> one row per `leagues` entry
 ### Returns {#yahoo_league_standings-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `sport_name` | character | Sport name (e.g., Major League Baseball). |
@@ -427,6 +436,7 @@ Yahoo shangrila persisted query `leagueStatsByTeam` -> one row per `leagues` ent
 ### Returns {#yahoo_league_stats_by_team-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `sport_sport_id` | character | Yahoo identifier of the sport the league belongs to. |
@@ -476,6 +486,7 @@ Yahoo shangrila persisted query `leagueStatsIndividual` -> one row per `leagues`
 ### Returns {#yahoo_league_stats_individual-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `sport_sport_id` | character | Yahoo identifier of the sport the league belongs to. |
@@ -548,6 +559,7 @@ Yahoo shangrila persisted query `leagueStatsWeekly` -> one row per `leagues` ent
 ### Returns {#yahoo_league_stats_weekly-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `sport_sport_id` | character | Yahoo identifier of the sport the league belongs to. |
@@ -584,6 +596,7 @@ Yahoo shangrila persisted query `leagueTeamIds` -> one row per `leagues` entry
 ### Returns {#yahoo_league_team_ids-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `short_name` | character | Short display name. |
@@ -617,6 +630,7 @@ Yahoo shangrila persisted query `leagueTeams` -> one row per `leagues` entry
 ### Returns {#yahoo_league_teams-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `short_name` | character | Short display name. |
@@ -647,6 +661,7 @@ Yahoo shangrila persisted query `leaguesSeasonStates` -> one row per `leagues` e
 ### Returns {#yahoo_leagues_season_states-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `name` | character | Display name. |

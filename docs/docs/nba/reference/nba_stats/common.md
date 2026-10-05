@@ -24,6 +24,7 @@ GET /stats/commonallplayers
 ### Returns {#nba_stats_commonallplayers-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `person_id` | integer | Unique player identifier (V3 endpoints). |
@@ -68,7 +69,8 @@ GET /stats/commonplayerinfo
 
 ### Returns {#nba_stats_commonplayerinfo-returns}
 
-**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`CommonPlayerInfo`, `PlayerHeadlineStats`, `AvailableSeasons`) (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`CommonPlayerInfo`, `PlayerHeadlineStats`, `AvailableSeasons`) (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+
 **CommonPlayerInfo**
 
 | col_name | type | description |
@@ -152,6 +154,7 @@ GET /stats/commonplayoffseries
 ### Returns {#nba_stats_commonplayoffseries-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `game_id` | character | Unique game identifier. |
@@ -186,7 +189,8 @@ GET /stats/commonteamroster
 
 ### Returns {#nba_stats_commonteamroster-returns}
 
-**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`CommonTeamRoster`, `Coaches`) (one table per key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`CommonTeamRoster`, `Coaches`) (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+
 **CommonTeamRoster**
 
 | col_name | type | description |
@@ -248,6 +252,7 @@ GET /stats/commonteamyears
 ### Returns {#nba_stats_commonteamyears-returns}
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
 | col_name | type | description |
 |---|---|---|
 | `league_id` | character | League identifier ('10' = WNBA). |
