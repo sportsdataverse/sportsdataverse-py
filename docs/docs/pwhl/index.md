@@ -8,7 +8,7 @@ description: "sdv-py PWHL: endpoint references, dataset loaders and parsers for 
 | Reference | Functions | Base URL |
 |---|---:|---|
 | [Dataset loaders](reference/loaders) | 21 | sportsdataverse-data releases |
-| [Additional functions](reference/additional) | 43 | hand-written wrappers, loaders & helpers |
+| [Additional functions](reference/additional) | 45 | hand-written wrappers, loaders & helpers |
 
 ## Examples
 
@@ -48,9 +48,11 @@ Each `sportsdataverse` function and its equivalent in the sister R package, [`fa
 | [`load_pwhl_xg_pbp`](reference/loaders#load_pwhl_xg_pbp) | [`load_pwhl_xg_pbp`](https://fastRhockey.sportsdataverse.org/reference/load_pwhl_xg_pbp.html) |
 | [`most_recent_pwhl_season`](reference/additional#most_recent_pwhl_season) | [`most_recent_pwhl_season`](https://fastRhockey.sportsdataverse.org/reference/most_recent_pwhl_season.html) |
 | [`pwhl_game_corsi`](reference/additional#pwhl_game_corsi) | [`pwhl_game_corsi`](https://fastRhockey.sportsdataverse.org/reference/pwhl_game_corsi.html) |
+| [`pwhl_game_info`](reference/additional#pwhl_game_info) | [`pwhl_game_info`](https://fastRhockey.sportsdataverse.org/reference/pwhl_game_info.html) |
 | [`pwhl_game_shifts`](reference/additional#pwhl_game_shifts) | [`pwhl_game_shifts`](https://fastRhockey.sportsdataverse.org/reference/pwhl_game_shifts.html) |
 | [`pwhl_game_summary`](reference/additional#pwhl_game_summary) | [`pwhl_game_summary`](https://fastRhockey.sportsdataverse.org/reference/pwhl_game_summary.html) |
 | [`pwhl_leaders`](reference/additional#pwhl_leaders) | [`pwhl_leaders`](https://fastRhockey.sportsdataverse.org/reference/pwhl_leaders.html) |
+| [`pwhl_pbp`](reference/additional#pwhl_pbp) | [`pwhl_pbp`](https://fastRhockey.sportsdataverse.org/reference/pwhl_pbp.html) |
 | [`pwhl_player_box`](reference/additional#pwhl_player_box) | [`pwhl_player_box`](https://fastRhockey.sportsdataverse.org/reference/pwhl_player_box.html) |
 | [`pwhl_player_game_log`](reference/additional#pwhl_player_game_log) | [`pwhl_player_game_log`](https://fastRhockey.sportsdataverse.org/reference/pwhl_player_game_log.html) |
 | [`pwhl_player_info`](reference/additional#pwhl_player_info) | [`pwhl_player_info`](https://fastRhockey.sportsdataverse.org/reference/pwhl_player_info.html) |

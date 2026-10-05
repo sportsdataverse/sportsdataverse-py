@@ -93,6 +93,8 @@ const config: Config = {
   markdown: {
     format: 'detect',
   },
+  // Forwards an old #anchor on a split reference page to the family page that now holds it.
+  clientModules: [require.resolve('./src/clientModules/anchorForward.ts')],
   scripts: [
     {src: 'https://plausible.io/js/pa-weWpHgIcVfaVUEgwwTBHX.js', async: true},
   ],
@@ -129,6 +131,20 @@ const config: Config = {
           // Auto-derived from versions.json so new releases never re-break the
           // Vercel build by accumulating versioned-docs copies.
           onlyIncludeVersions: builtVersions,
+          // A split reference page sits next to its folder of family pages, and the folder's
+          // _category_.json links the category to it: drop the page's own sidebar entry so it is listed once.
+          async sidebarItemsGenerator({defaultSidebarItemsGenerator, ...args}) {
+            const items = await defaultSidebarItemsGenerator(args);
+            const listOnce = (list: typeof items): typeof items => {
+              const linked = new Set(
+                list.flatMap((i) => (i.type === 'category' && i.link?.type === 'doc' ? [i.link.id] : [])),
+              );
+              return list
+                .filter((i) => !(i.type === 'doc' && linked.has(i.id)))
+                .map((i) => (i.type === 'category' ? {...i, items: listOnce(i.items)} : i));
+            };
+            return listOnce(items);
+          },
           versions: {
             current: {
               label: 'main',

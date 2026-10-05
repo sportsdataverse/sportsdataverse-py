@@ -1,0 +1,910 @@
+---
+title: "NBA — NBA Stats API (stats.nba.com) — League"
+sidebar_label: "League"
+sidebar_position: 6
+description: "NBA — NBA Stats API (stats.nba.com) — League — function reference in sdv-py, the SportsDataverse Python package."
+toc_max_heading_level: 2
+---
+# NBA — NBA Stats API (stats.nba.com) — League
+
+## nba_stats_leaguegamefinder
+
+GET /stats/leaguegamefinder
+
+**Endpoint URL:** `GET https://stats.nba.com/stats/leaguegamefinder`
+
+**Valid URL:** [https://stats.nba.com/stats/leaguegamefinder?LeagueID=00](https://stats.nba.com/stats/leaguegamefinder?LeagueID=00)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `Conference` | `conference_nullable` |  |  | `Y` |  |
+| `DateFrom` | `date_from_nullable` |  |  | `Y` |  |
+| `DateTo` | `date_to_nullable` |  |  | `Y` |  |
+| `Division` | `division_simple_nullable` |  |  | `Y` |  |
+| `DraftNumber` | `draft_number_nullable` |  |  | `Y` |  |
+| `DraftRound` | `draft_round_nullable` |  |  | `Y` |  |
+| `DraftTeamID` | `draft_team_id_nullable` |  |  | `Y` |  |
+| `DraftYear` | `draft_year_nullable` |  |  | `Y` |  |
+| `EqAST` | `eq_ast_nullable` |  |  | `Y` |  |
+| `EqBLK` | `eq_blk_nullable` |  |  | `Y` |  |
+| `EqDD` | `eq_dd_nullable` |  |  | `Y` |  |
+| `EqDREB` | `eq_dreb_nullable` |  |  | `Y` |  |
+| `EqFG3A` | `eq_fg3a_nullable` |  |  | `Y` |  |
+| `EqFG3M` | `eq_fg3m_nullable` |  |  | `Y` |  |
+| `EqFG3_PCT` | `eq_fg3_pct_nullable` |  |  | `Y` |  |
+| `EqFGA` | `eq_fga_nullable` |  |  | `Y` |  |
+| `EqFGM` | `eq_fgm_nullable` |  |  | `Y` |  |
+| `EqFG_PCT` | `eq_fg_pct_nullable` |  |  | `Y` |  |
+| `EqFTA` | `eq_fta_nullable` |  |  | `Y` |  |
+| `EqFTM` | `eq_ftm_nullable` |  |  | `Y` |  |
+| `EqFT_PCT` | `eq_ft_pct_nullable` |  |  | `Y` |  |
+| `EqMINUTES` | `eq_minutes_nullable` |  |  | `Y` |  |
+| `EqOREB` | `eq_oreb_nullable` |  |  | `Y` |  |
+| `EqPF` | `eq_pf_nullable` |  |  | `Y` |  |
+| `EqPTS` | `eq_pts_nullable` |  |  | `Y` |  |
+| `EqREB` | `eq_reb_nullable` |  |  | `Y` |  |
+| `EqSTL` | `eq_stl_nullable` |  |  | `Y` |  |
+| `EqTD` | `eq_td_nullable` |  |  | `Y` |  |
+| `EqTOV` | `eq_tov_nullable` |  |  | `Y` |  |
+| `GameID` | `game_id_nullable` |  |  | `Y` |  |
+| `GtAST` | `gt_ast_nullable` |  |  | `Y` |  |
+| `GtBLK` | `gt_blk_nullable` |  |  | `Y` |  |
+| `GtDD` | `gt_dd_nullable` |  |  | `Y` |  |
+| `GtDREB` | `gt_dreb_nullable` |  |  | `Y` |  |
+| `GtFG3A` | `gt_fg3a_nullable` |  |  | `Y` |  |
+| `GtFG3M` | `gt_fg3m_nullable` |  |  | `Y` |  |
+| `GtFG3_PCT` | `gt_fg3_pct_nullable` |  |  | `Y` |  |
+| `GtFGA` | `gt_fga_nullable` |  |  | `Y` |  |
+| `GtFGM` | `gt_fgm_nullable` |  |  | `Y` |  |
+| `GtFG_PCT` | `gt_fg_pct_nullable` |  |  | `Y` |  |
+| `GtFTA` | `gt_fta_nullable` |  |  | `Y` |  |
+| `GtFTM` | `gt_ftm_nullable` |  |  | `Y` |  |
+| `GtFT_PCT` | `gt_ft_pct_nullable` |  |  | `Y` |  |
+| `GtMINUTES` | `gt_minutes_nullable` |  |  | `Y` |  |
+| `GtOREB` | `gt_oreb_nullable` |  |  | `Y` |  |
+| `GtPF` | `gt_pf_nullable` |  |  | `Y` |  |
+| `GtPTS` | `gt_pts_nullable` |  |  | `Y` |  |
+| `GtREB` | `gt_reb_nullable` |  |  | `Y` |  |
+| `GtSTL` | `gt_stl_nullable` |  |  | `Y` |  |
+| `GtTD` | `gt_td_nullable` |  |  | `Y` |  |
+| `GtTOV` | `gt_tov_nullable` |  |  | `Y` |  |
+| `LeagueID` | `league_id` |  |  | `Y` |  |
+| `Location` | `location_nullable` |  |  | `Y` |  |
+| `LtAST` | `lt_ast_nullable` |  |  | `Y` |  |
+| `LtBLK` | `lt_blk_nullable` |  |  | `Y` |  |
+| `LtDD` | `lt_dd_nullable` |  |  | `Y` |  |
+| `LtDREB` | `lt_dreb_nullable` |  |  | `Y` |  |
+| `LtFG3A` | `lt_fg3a_nullable` |  |  | `Y` |  |
+| `LtFG3M` | `lt_fg3m_nullable` |  |  | `Y` |  |
+| `LtFG3_PCT` | `lt_fg3_pct_nullable` |  |  | `Y` |  |
+| `LtFGA` | `lt_fga_nullable` |  |  | `Y` |  |
+| `LtFGM` | `lt_fgm_nullable` |  |  | `Y` |  |
+| `LtFG_PCT` | `lt_fg_pct_nullable` |  |  | `Y` |  |
+| `LtFTA` | `lt_fta_nullable` |  |  | `Y` |  |
+| `LtFTM` | `lt_ftm_nullable` |  |  | `Y` |  |
+| `LtFT_PCT` | `lt_ft_pct_nullable` |  |  | `Y` |  |
+| `LtMINUTES` | `lt_minutes_nullable` |  |  | `Y` |  |
+| `LtOREB` | `lt_oreb_nullable` |  |  | `Y` |  |
+| `LtPF` | `lt_pf_nullable` |  |  | `Y` |  |
+| `LtPTS` | `lt_pts_nullable` |  |  | `Y` |  |
+| `LtREB` | `lt_reb_nullable` |  |  | `Y` |  |
+| `LtSTL` | `lt_stl_nullable` |  |  | `Y` |  |
+| `LtTD` | `lt_td_nullable` |  |  | `Y` |  |
+| `LtTOV` | `lt_tov_nullable` |  |  | `Y` |  |
+| `Outcome` | `outcome_nullable` |  |  | `Y` |  |
+| `PORound` | `po_round_nullable` |  |  | `Y` |  |
+| `PlayerID` | `player_id_nullable` |  |  | `Y` |  |
+| `PlayerOrTeam` | `player_or_team_abbreviation` |  |  | `Y` |  |
+| `RookieYear` | `rookie_year_nullable` |  |  | `Y` |  |
+| `Season` | `season_nullable` |  |  | `Y` |  |
+| `SeasonSegment` | `season_segment_nullable` |  |  | `Y` |  |
+| `SeasonType` | `season_type_nullable` |  |  | `Y` |  |
+| `StarterBench` | `starter_bench_nullable` |  |  | `Y` |  |
+| `TeamID` | `team_id_nullable` |  |  | `Y` |  |
+| `VsConference` | `vs_conference_nullable` |  |  | `Y` |  |
+| `VsDivision` | `vs_division_nullable` |  |  | `Y` |  |
+| `VsTeamID` | `vs_team_id_nullable` |  |  | `Y` |  |
+| `YearsExperience` | `years_experience_nullable` |  |  | `Y` |  |
+
+### Returns {#nba_stats_leaguegamefinder-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `season_id` | character | Unique season identifier. |
+| `team_id` | integer | Unique team identifier. |
+| `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
+| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
+| `game_id` | character | Unique game identifier. |
+| `game_date` | character | Game date (YYYY-MM-DD). |
+| `matchup` | character | Matchup. |
+| `wl` | character | Wl. |
+| `min` | integer | Minutes played. |
+| `pts` | integer | Points scored. |
+| `fgm` | integer | Field goals made. |
+| `fga` | integer | Field goal attempts. |
+| `fg_pct` | numeric | Field goal percentage (0-1). |
+| `fg3m` | integer | Three-point field goals made. |
+| `fg3a` | integer | Three-point field goal attempts. |
+| `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
+| `ftm` | integer | Free throws made. |
+| `fta` | integer | Free throw attempts. |
+| `ft_pct` | numeric | Free throw percentage (0-1). |
+| `oreb` | integer | Offensive rebounds. |
+| `dreb` | integer | Defensive rebounds. |
+| `reb` | integer | Rebounds per game. |
+| `ast` | integer | Assists. |
+| `stl` | integer | Steals. |
+| `blk` | integer | Blocks. |
+| `tov` | integer | Turnovers. |
+| `pf` | integer | Personal fouls. |
+| `plus_minus` | numeric | Plus/minus point differential while on court. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example {#nba_stats_leaguegamefinder-example}
+
+```python
+nba_stats_leaguegamefinder(league_id='00')
+```
+
+_Last validated n/a._
+
+## nba_stats_leaguegamelog
+
+GET /stats/leaguegamelog
+
+**Endpoint URL:** `GET https://stats.nba.com/stats/leaguegamelog`
+
+**Valid URL:** [https://stats.nba.com/stats/leaguegamelog?LeagueID=00](https://stats.nba.com/stats/leaguegamelog?LeagueID=00)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `Counter` | `counter` |  |  | `Y` |  |
+| `DateFrom` | `date_from_nullable` |  |  | `Y` |  |
+| `DateTo` | `date_to_nullable` |  |  | `Y` |  |
+| `Direction` | `direction` |  |  | `Y` |  |
+| `LeagueID` | `league_id` |  |  | `Y` |  |
+| `PlayerOrTeam` | `player_or_team_abbreviation` |  |  | `Y` |  |
+| `Season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
+| `SeasonType` | `season_type_all_star` |  |  | `Y` |  |
+| `Sorter` | `sorter` |  |  | `Y` |  |
+
+### Returns {#nba_stats_leaguegamelog-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `season_id` | character | Unique season identifier. |
+| `team_id` | integer | Unique team identifier. |
+| `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
+| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
+| `game_id` | character | Unique game identifier. |
+| `game_date` | character | Game date (YYYY-MM-DD). |
+| `matchup` | character | Matchup. |
+| `wl` | character | Wl. |
+| `min` | integer | Minutes played. |
+| `fgm` | integer | Field goals made. |
+| `fga` | integer | Field goal attempts. |
+| `fg_pct` | numeric | Field goal percentage (0-1). |
+| `fg3m` | integer | Three-point field goals made. |
+| `fg3a` | integer | Three-point field goal attempts. |
+| `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
+| `ftm` | integer | Free throws made. |
+| `fta` | integer | Free throw attempts. |
+| `ft_pct` | numeric | Free throw percentage (0-1). |
+| `oreb` | integer | Offensive rebounds. |
+| `dreb` | integer | Defensive rebounds. |
+| `reb` | integer | Rebounds per game. |
+| `ast` | integer | Assists. |
+| `stl` | integer | Steals. |
+| `blk` | integer | Blocks. |
+| `tov` | integer | Turnovers. |
+| `pf` | integer | Personal fouls. |
+| `pts` | integer | Points scored. |
+| `plus_minus` | integer | Plus/minus point differential while on court. |
+| `video_available` | integer | Video available. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example {#nba_stats_leaguegamelog-example}
+
+```python
+nba_stats_leaguegamelog(league_id='00')
+```
+
+_Last validated n/a._
+
+## nba_stats_leaguehustlestatsplayer
+
+GET /stats/leaguehustlestatsplayer
+
+**Endpoint URL:** `GET https://stats.nba.com/stats/leaguehustlestatsplayer`
+
+**Valid URL:** [https://stats.nba.com/stats/leaguehustlestatsplayer?LeagueID=00](https://stats.nba.com/stats/leaguehustlestatsplayer?LeagueID=00)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `College` | `college_nullable` |  |  | `Y` |  |
+| `Conference` | `conference_nullable` |  |  | `Y` |  |
+| `Country` | `country_nullable` |  |  | `Y` |  |
+| `DateFrom` | `date_from_nullable` |  |  | `Y` |  |
+| `DateTo` | `date_to_nullable` |  |  | `Y` |  |
+| `Division` | `division_simple_nullable` |  |  | `Y` |  |
+| `DraftPick` | `draft_pick_nullable` |  |  | `Y` |  |
+| `DraftYear` | `draft_year_nullable` |  |  | `Y` |  |
+| `Height` | `height_nullable` |  |  | `Y` |  |
+| `LeagueID` | `league_id` |  |  | `Y` |  |
+| `Location` | `location_nullable` |  |  | `Y` |  |
+| `Month` | `month_nullable` |  |  | `Y` |  |
+| `OpponentTeamID` | `opponent_team_id_nullable` |  |  | `Y` |  |
+| `Outcome` | `outcome_nullable` |  |  | `Y` |  |
+| `PORound` | `po_round_nullable` |  |  | `Y` |  |
+| `PerMode` | `per_mode_time` |  |  | `Y` |  |
+| `PlayerExperience` | `player_experience_nullable` |  |  | `Y` |  |
+| `PlayerPosition` | `player_position_nullable` |  |  | `Y` |  |
+| `Season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
+| `SeasonSegment` | `season_segment_nullable` |  |  | `Y` |  |
+| `SeasonType` | `season_type_all_star` |  |  | `Y` |  |
+| `TeamID` | `team_id_nullable` |  |  | `Y` |  |
+| `VsConference` | `vs_conference_nullable` |  |  | `Y` |  |
+| `VsDivision` | `vs_division_nullable` |  |  | `Y` |  |
+| `Weight` | `weight_nullable` |  |  | `Y` |  |
+
+### Returns {#nba_stats_leaguehustlestatsplayer-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `player_id` | integer | Unique player identifier. |
+| `player_name` | character | Player name. |
+| `team_id` | integer | Unique team identifier. |
+| `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
+| `age` | numeric | Player age (in years). |
+| `g` | integer | Games played. |
+| `min` | numeric | Minutes played. |
+| `contested_shots` | numeric | Defensively contested shots. |
+| `contested_shots_2pt` | numeric | Opponent two-point attempts contested. |
+| `contested_shots_3pt` | numeric | Opponent three-point attempts contested. |
+| `deflections` | numeric | Defensive deflections. |
+| `charges_drawn` | numeric | Charges drawn. |
+| `screen_assists` | numeric | Screen assists (resulting in a basket). |
+| `screen_ast_pts` | numeric | Points teammates scored directly off the row's screen assists. |
+| `off_loose_balls_recovered` | numeric | Loose balls recovered while on offense. |
+| `def_loose_balls_recovered` | numeric | Loose balls recovered while on defense. |
+| `loose_balls_recovered` | numeric | Total loose balls recovered. |
+| `pct_loose_balls_recovered_off` | numeric | Share of recovered loose balls that came on offense, as a decimal. |
+| `pct_loose_balls_recovered_def` | numeric | Share of recovered loose balls that came on defense, as a decimal. |
+| `off_boxouts` | numeric | Box-outs recorded on the offensive glass. |
+| `def_boxouts` | numeric | Box-outs recorded on the defensive glass. |
+| `box_outs` | numeric | Box-outs executed. |
+| `box_out_player_team_rebs` | numeric | Team rebounds secured following the row's box-outs. |
+| `box_out_player_rebs` | numeric | Rebounds the player secured directly off their own box-outs. |
+| `pct_box_outs_off` | numeric | Share of box-outs recorded on the offensive glass, as a decimal. |
+| `pct_box_outs_def` | numeric | Share of box-outs recorded on the defensive glass, as a decimal. |
+| `pct_box_outs_team_reb` | numeric | Share of box-outs after which the team secured the rebound, as a decimal. |
+| `pct_box_outs_reb` | numeric | Share of box-outs after which the player secured the rebound, as a decimal. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example {#nba_stats_leaguehustlestatsplayer-example}
+
+```python
+nba_stats_leaguehustlestatsplayer(league_id='00')
+```
+
+_Last validated n/a._
+
+## nba_stats_leaguehustlestatsteam
+
+GET /stats/leaguehustlestatsteam
+
+**Endpoint URL:** `GET https://stats.nba.com/stats/leaguehustlestatsteam`
+
+**Valid URL:** [https://stats.nba.com/stats/leaguehustlestatsteam?LeagueID=00](https://stats.nba.com/stats/leaguehustlestatsteam?LeagueID=00)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `College` | `college_nullable` |  |  | `Y` |  |
+| `Conference` | `conference_nullable` |  |  | `Y` |  |
+| `Country` | `country_nullable` |  |  | `Y` |  |
+| `DateFrom` | `date_from_nullable` |  |  | `Y` |  |
+| `DateTo` | `date_to_nullable` |  |  | `Y` |  |
+| `Division` | `division_simple_nullable` |  |  | `Y` |  |
+| `DraftPick` | `draft_pick_nullable` |  |  | `Y` |  |
+| `DraftYear` | `draft_year_nullable` |  |  | `Y` |  |
+| `Height` | `height_nullable` |  |  | `Y` |  |
+| `LeagueID` | `league_id` |  |  | `Y` |  |
+| `Location` | `location_nullable` |  |  | `Y` |  |
+| `Month` | `month_nullable` |  |  | `Y` |  |
+| `OpponentTeamID` | `opponent_team_id_nullable` |  |  | `Y` |  |
+| `Outcome` | `outcome_nullable` |  |  | `Y` |  |
+| `PORound` | `po_round_nullable` |  |  | `Y` |  |
+| `PerMode` | `per_mode_time` |  |  | `Y` |  |
+| `PlayerExperience` | `player_experience_nullable` |  |  | `Y` |  |
+| `PlayerPosition` | `player_position_nullable` |  |  | `Y` |  |
+| `Season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
+| `SeasonSegment` | `season_segment_nullable` |  |  | `Y` |  |
+| `SeasonType` | `season_type_all_star` |  |  | `Y` |  |
+| `TeamID` | `team_id_nullable` |  |  | `Y` |  |
+| `VsConference` | `vs_conference_nullable` |  |  | `Y` |  |
+| `VsDivision` | `vs_division_nullable` |  |  | `Y` |  |
+| `Weight` | `weight_nullable` |  |  | `Y` |  |
+
+### Returns {#nba_stats_leaguehustlestatsteam-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `team_id` | integer | Unique team identifier. |
+| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
+| `min` | numeric | Minutes played. |
+| `contested_shots` | numeric | Defensively contested shots. |
+| `contested_shots_2pt` | numeric | Opponent two-point attempts contested. |
+| `contested_shots_3pt` | numeric | Opponent three-point attempts contested. |
+| `deflections` | numeric | Defensive deflections. |
+| `charges_drawn` | numeric | Charges drawn. |
+| `screen_assists` | numeric | Screen assists (resulting in a basket). |
+| `screen_ast_pts` | numeric | Points teammates scored directly off the row's screen assists. |
+| `off_loose_balls_recovered` | numeric | Loose balls recovered while on offense. |
+| `def_loose_balls_recovered` | numeric | Loose balls recovered while on defense. |
+| `loose_balls_recovered` | numeric | Total loose balls recovered. |
+| `pct_loose_balls_recovered_off` | numeric | Share of recovered loose balls that came on offense, as a decimal. |
+| `pct_loose_balls_recovered_def` | numeric | Share of recovered loose balls that came on defense, as a decimal. |
+| `off_boxouts` | numeric | Box-outs recorded on the offensive glass. |
+| `def_boxouts` | numeric | Box-outs recorded on the defensive glass. |
+| `box_outs` | numeric | Box-outs executed. |
+| `pct_box_outs_off` | numeric | Share of box-outs recorded on the offensive glass, as a decimal. |
+| `pct_box_outs_def` | numeric | Share of box-outs recorded on the defensive glass, as a decimal. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example {#nba_stats_leaguehustlestatsteam-example}
+
+```python
+nba_stats_leaguehustlestatsteam(league_id='00')
+```
+
+_Last validated n/a._
+
+## nba_stats_leagueleaders
+
+GET /stats/leagueleaders
+
+**Endpoint URL:** `GET https://stats.nba.com/stats/leagueleaders`
+
+**Valid URL:** [https://stats.nba.com/stats/leagueleaders?LeagueID=00](https://stats.nba.com/stats/leagueleaders?LeagueID=00)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `ActiveFlag` | `active_flag_nullable` |  |  | `Y` |  |
+| `LeagueID` | `league_id` |  |  | `Y` |  |
+| `PerMode` | `per_mode48` |  |  | `Y` |  |
+| `Scope` | `scope` |  |  | `Y` |  |
+| `Season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
+| `SeasonType` | `season_type_all_star` |  |  | `Y` |  |
+| `StatCategory` | `stat_category_abbreviation` |  |  | `Y` |  |
+
+### Returns {#nba_stats_leagueleaders-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `player_id` | integer | Unique player identifier. |
+| `rank` | integer | Rank. |
+| `player` | character | Player name. |
+| `team_id` | integer | Unique team identifier. |
+| `team` | character | Team-side label or team identifier. |
+| `gp` | integer | Games played. |
+| `min` | numeric | Minutes played. |
+| `fgm` | numeric | Field goals made. |
+| `fga` | numeric | Field goal attempts. |
+| `fg_pct` | numeric | Field goal percentage (0-1). |
+| `fg3m` | numeric | Three-point field goals made. |
+| `fg3a` | numeric | Three-point field goal attempts. |
+| `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
+| `ftm` | numeric | Free throws made. |
+| `fta` | numeric | Free throw attempts. |
+| `ft_pct` | numeric | Free throw percentage (0-1). |
+| `oreb` | numeric | Offensive rebounds. |
+| `dreb` | numeric | Defensive rebounds. |
+| `reb` | numeric | Rebounds per game. |
+| `ast` | numeric | Assists. |
+| `stl` | numeric | Steals. |
+| `blk` | numeric | Blocks. |
+| `tov` | numeric | Turnovers. |
+| `pts` | numeric | Points scored. |
+| `eff` | numeric | Eff. |
+| `nickname` | character | Team or athlete nickname. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example {#nba_stats_leagueleaders-example}
+
+```python
+nba_stats_leagueleaders(league_id='00')
+```
+
+_Last validated n/a._
+
+## nba_stats_leaguelineupviz
+
+GET /stats/leaguelineupviz
+
+**Endpoint URL:** `GET https://stats.nba.com/stats/leaguelineupviz`
+
+**Valid URL:** [https://stats.nba.com/stats/leaguelineupviz?LeagueID=00](https://stats.nba.com/stats/leaguelineupviz?LeagueID=00)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `Conference` | `conference_nullable` |  |  | `Y` |  |
+| `DateFrom` | `date_from_nullable` |  |  | `Y` |  |
+| `DateTo` | `date_to_nullable` |  |  | `Y` |  |
+| `Division` | `division_simple_nullable` |  |  | `Y` |  |
+| `GameSegment` | `game_segment_nullable` |  |  | `Y` |  |
+| `GroupQuantity` | `group_quantity` |  |  | `Y` |  |
+| `LastNGames` | `last_n_games` |  |  | `Y` |  |
+| `LeagueID` | `league_id` |  |  | `Y` |  |
+| `Location` | `location_nullable` |  |  | `Y` |  |
+| `MeasureType` | `measure_type_detailed_defense` |  |  | `Y` |  |
+| `MinutesMin` | `minutes_min` |  |  | `Y` |  |
+| `Month` | `month` |  |  | `Y` |  |
+| `OpponentTeamID` | `opponent_team_id` |  |  | `Y` |  |
+| `Outcome` | `outcome_nullable` |  |  | `Y` |  |
+| `PORound` | `po_round_nullable` |  |  | `Y` |  |
+| `PaceAdjust` | `pace_adjust` |  |  | `Y` |  |
+| `PerMode` | `per_mode_detailed` |  |  | `Y` |  |
+| `Period` | `period` |  |  | `Y` |  |
+| `PlusMinus` | `plus_minus` |  |  | `Y` |  |
+| `Rank` | `rank` |  |  | `Y` |  |
+| `Season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
+| `SeasonSegment` | `season_segment_nullable` |  |  | `Y` |  |
+| `SeasonType` | `season_type_all_star` |  |  | `Y` |  |
+| `ShotClockRange` | `shot_clock_range_nullable` |  |  | `Y` |  |
+| `TeamID` | `team_id_nullable` |  |  | `Y` |  |
+| `VsConference` | `vs_conference_nullable` |  |  | `Y` |  |
+| `VsDivision` | `vs_division_nullable` |  |  | `Y` |  |
+
+### Returns {#nba_stats_leaguelineupviz-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `group_id` | character | ESPN group id. |
+| `group_name` | character | Group name (conference / division). |
+| `team_id` | integer | Unique team identifier. |
+| `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
+| `min` | numeric | Minutes played. |
+| `off_rating` | numeric | Points scored per 100 possessions with the lineup on the floor (offensive rating). |
+| `def_rating` | numeric | Points allowed per 100 possessions with the lineup on the floor (defensive rating). |
+| `net_rating` | numeric | Net rating (off rating - def rating). |
+| `pace` | numeric | Possessions per 48 minutes. |
+| `ts_pct` | numeric | True shooting percentage (0-1). |
+| `fta_rate` | numeric | Free throw attempts per field goal attempt for the lineup. |
+| `tm_ast_pct` | numeric | Percentage of the lineup's made field goals that were assisted, as a decimal. |
+| `pct_fga_2pt` | numeric | Share of field goal attempts taken as two-pointers, as a decimal. |
+| `pct_fga_3pt` | numeric | Share of field goal attempts taken as three-pointers, as a decimal. |
+| `pct_pts_2pt_mr` | numeric | Share of points scored on mid-range two-pointers, as a decimal. |
+| `pct_pts_fb` | numeric | Share of points scored on fast breaks, as a decimal. |
+| `pct_pts_ft` | numeric | Share of points scored at the free throw line, as a decimal. |
+| `pct_pts_paint` | numeric | Share of points scored in the paint, as a decimal. |
+| `pct_ast_fgm` | numeric | Percentage of made field goals that were assisted, as a decimal. |
+| `pct_uast_fgm` | numeric | Percentage of made field goals that were unassisted, as a decimal. |
+| `opp_fg3_pct` | numeric | Opponent three-point percentage against the lineup, as a decimal. |
+| `opp_efg_pct` | numeric | Opponent effective field goal percentage against the lineup, as a decimal. |
+| `opp_fta_rate` | numeric | Opponent free throw attempt rate against the lineup. |
+| `opp_tov_pct` | numeric | Opponent turnover percentage forced by the lineup. |
+| `sum_tm_min` | numeric | Total team minutes summed across the lineup's stints on the floor. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example {#nba_stats_leaguelineupviz-example}
+
+```python
+nba_stats_leaguelineupviz(league_id='00')
+```
+
+_Last validated n/a._
+
+## nba_stats_leagueplayerondetails
+
+GET /stats/leagueplayerondetails
+
+**Endpoint URL:** `GET https://stats.nba.com/stats/leagueplayerondetails`
+
+**Valid URL:** [https://stats.nba.com/stats/leagueplayerondetails?LeagueID=00](https://stats.nba.com/stats/leagueplayerondetails?LeagueID=00)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `DateFrom` | `date_from_nullable` |  |  | `Y` |  |
+| `DateTo` | `date_to_nullable` |  |  | `Y` |  |
+| `GameSegment` | `game_segment_nullable` |  |  | `Y` |  |
+| `LastNGames` | `last_n_games` |  |  | `Y` |  |
+| `LeagueID` | `league_id` |  |  | `Y` |  |
+| `Location` | `location_nullable` |  |  | `Y` |  |
+| `MeasureType` | `measure_type_detailed_defense` |  |  | `Y` |  |
+| `Month` | `month` |  |  | `Y` |  |
+| `OpponentTeamID` | `opponent_team_id` |  |  | `Y` |  |
+| `Outcome` | `outcome_nullable` |  |  | `Y` |  |
+| `PaceAdjust` | `pace_adjust` |  |  | `Y` |  |
+| `PerMode` | `per_mode_detailed` |  |  | `Y` |  |
+| `Period` | `period` |  |  | `Y` |  |
+| `PlusMinus` | `plus_minus` |  |  | `Y` |  |
+| `Rank` | `rank` |  |  | `Y` |  |
+| `Season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
+| `SeasonSegment` | `season_segment_nullable` |  |  | `Y` |  |
+| `SeasonType` | `season_type_all_star` |  |  | `Y` |  |
+| `TeamID` | `team_id` |  |  | `Y` |  |
+| `VsConference` | `vs_conference_nullable` |  |  | `Y` |  |
+| `VsDivision` | `vs_division_nullable` |  |  | `Y` |  |
+
+### Returns {#nba_stats_leagueplayerondetails-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `group_set` | character | Name of the grouping family used for this dashboard or split row. |
+| `team_id` | integer | Unique team identifier. |
+| `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
+| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
+| `vs_player_id` | integer | Stats API identifier for vs player identifier associated with this NBA or WNBA Stats row. |
+| `vs_player_name` | character | Display name for vs player name associated with this NBA or WNBA Stats row. |
+| `court_status` | character | Indicates whether the compared player was on court or off court for the split row. |
+| `gp` | integer | Games played. |
+| `w` | integer | Wins. |
+| `l` | integer | Losses. |
+| `w_pct` | numeric | Wins percentage (0-1 decimal). |
+| `min` | numeric | Minutes played. |
+| `fgm` | numeric | Field goals made. |
+| `fga` | numeric | Field goal attempts. |
+| `fg_pct` | numeric | Field goal percentage (0-1). |
+| `fg3m` | numeric | Three-point field goals made. |
+| `fg3a` | numeric | Three-point field goal attempts. |
+| `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
+| `ftm` | numeric | Free throws made. |
+| `fta` | numeric | Free throw attempts. |
+| `ft_pct` | numeric | Free throw percentage (0-1). |
+| `oreb` | numeric | Offensive rebounds. |
+| `dreb` | numeric | Defensive rebounds. |
+| `reb` | numeric | Rebounds per game. |
+| `ast` | numeric | Assists. |
+| `tov` | numeric | Turnovers. |
+| `stl` | numeric | Steals. |
+| `blk` | numeric | Blocks. |
+| `blka` | numeric | Blocked field-goal attempts against for the requested NBA or WNBA Stats split. |
+| `pf` | numeric | Personal fouls. |
+| `pfd` | numeric | Personal fouls drawn for the requested NBA or WNBA Stats split. |
+| `pts` | numeric | Points scored. |
+| `plus_minus` | numeric | Plus/minus point differential while on court. |
+| `gp_rank` | integer | Rank for games played within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `w_rank` | integer | Rank for wins within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `l_rank` | integer | Rank for losses within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `w_pct_rank` | integer | Rank for winning percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `min_rank` | integer | Rank for minutes played within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fgm_rank` | integer | Rank for field goals made within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fga_rank` | integer | Rank for field goals attempted within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fg_pct_rank` | integer | Rank for field-goal percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fg3m_rank` | integer | Rank for three-point field goals made within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fg3a_rank` | integer | Rank for three-point field goals attempted within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fg3_pct_rank` | integer | Rank for three-point field-goal percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `ftm_rank` | integer | Rank for free throws made within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fta_rank` | integer | Rank for free throws attempted within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `ft_pct_rank` | integer | Rank for free-throw percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `oreb_rank` | integer | Rank for offensive rebounds within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `dreb_rank` | integer | Rank for defensive rebounds within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `reb_rank` | integer | Rank for total rebounds within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `ast_rank` | integer | Rank for assists within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `tov_rank` | integer | Rank for turnovers within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `stl_rank` | integer | Rank for steals within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `blk_rank` | integer | Rank for blocks within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `blka_rank` | integer | Rank for blocked field-goal attempts against within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `pf_rank` | integer | Rank for personal fouls within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `pfd_rank` | integer | Rank for personal fouls drawn within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `pts_rank` | integer | Rank for points within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `plus_minus_rank` | integer | Rank for plus-minus within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example {#nba_stats_leagueplayerondetails-example}
+
+```python
+nba_stats_leagueplayerondetails(league_id='00')
+```
+
+_Last validated n/a._
+
+## nba_stats_leagueseasonmatchups
+
+GET /stats/leagueseasonmatchups
+
+**Endpoint URL:** `GET https://stats.nba.com/stats/leagueseasonmatchups`
+
+**Valid URL:** [https://stats.nba.com/stats/leagueseasonmatchups?LeagueID=00](https://stats.nba.com/stats/leagueseasonmatchups?LeagueID=00)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `DefPlayerID` | `def_player_id_nullable` |  |  | `Y` |  |
+| `DefTeamID` | `def_team_id_nullable` |  |  | `Y` |  |
+| `LeagueID` | `league_id` |  |  | `Y` |  |
+| `OffPlayerID` | `off_player_id_nullable` |  |  | `Y` |  |
+| `OffTeamID` | `off_team_id_nullable` |  |  | `Y` |  |
+| `PerMode` | `per_mode_simple` |  |  | `Y` |  |
+| `Season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
+| `SeasonType` | `season_type_playoffs` |  |  | `Y` |  |
+
+### Returns {#nba_stats_leagueseasonmatchups-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `season_id` | character | Unique season identifier. |
+| `off_player_id` | integer | Stats API identifier for offensive player identifier associated with this NBA or WNBA Stats row. |
+| `off_player_name` | character | Display name for offensive player name associated with this NBA or WNBA Stats row. |
+| `def_player_id` | integer | Stats API identifier for defensive player identifier associated with this NBA or WNBA Stats row. |
+| `def_player_name` | character | Display name for defensive player name associated with this NBA or WNBA Stats row. |
+| `gp` | integer | Games played. |
+| `matchup_min` | numeric | NBA or WNBA Stats value for matchup minutes in the leagueseasonmatchups result set. |
+| `partial_poss` | numeric | Estimated partial possessions credited to the stint or rotation interval. |
+| `player_pts` | numeric | Scoring or score-margin metric for player points in the requested NBA or WNBA Stats split. |
+| `team_pts` | numeric | Scoring or score-margin metric for team points in the requested NBA or WNBA Stats split. |
+| `matchup_ast` | numeric | NBA or WNBA Stats value for matchup assists in the leagueseasonmatchups result set. |
+| `matchup_tov` | numeric | Turnover or loose-ball metric for matchup turnovers in the requested NBA or WNBA Stats split. |
+| `matchup_blk` | numeric | NBA or WNBA Stats value for matchup blocks in the leagueseasonmatchups result set. |
+| `matchup_fgm` | numeric | Shooting metric for matchup fgm in the requested NBA or WNBA Stats split. |
+| `matchup_fga` | numeric | Shooting metric for matchup fga in the requested NBA or WNBA Stats split. |
+| `matchup_fg_pct` | numeric | Percentage or rate for matchup field goals percentage in the requested NBA or WNBA Stats split. |
+| `matchup_fg3m` | numeric | Shooting metric for matchup fg3m in the requested NBA or WNBA Stats split. |
+| `matchup_fg3a` | numeric | Shooting metric for matchup fg3a in the requested NBA or WNBA Stats split. |
+| `matchup_fg3_pct` | numeric | Percentage or rate for matchup three-point field goals percentage in the requested NBA or WNBA Stats split. |
+| `help_blk` | integer | NBA or WNBA Stats value for help blocks in the leagueseasonmatchups result set. |
+| `help_fgm` | integer | Shooting metric for help fgm in the requested NBA or WNBA Stats split. |
+| `help_fga` | integer | Shooting metric for help fga in the requested NBA or WNBA Stats split. |
+| `help_fg_perc` | integer | Shooting metric for help field goals perc in the requested NBA or WNBA Stats split. |
+| `matchup_ftm` | numeric | NBA or WNBA Stats value for matchup ftm in the leagueseasonmatchups result set. |
+| `matchup_fta` | numeric | NBA or WNBA Stats value for matchup fta in the leagueseasonmatchups result set. |
+| `sfl` | numeric | NBA or WNBA Stats value for sfl in the leagueseasonmatchups result set. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example {#nba_stats_leagueseasonmatchups-example}
+
+```python
+nba_stats_leagueseasonmatchups(league_id='00')
+```
+
+_Last validated n/a._
+
+## nba_stats_leaguestandings
+
+GET /stats/leaguestandings
+
+**Endpoint URL:** `GET https://stats.nba.com/stats/leaguestandings`
+
+**Valid URL:** [https://stats.nba.com/stats/leaguestandings?LeagueID=00](https://stats.nba.com/stats/leaguestandings?LeagueID=00)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `LeagueID` | `league_id` |  |  | `Y` |  |
+| `Season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
+| `SeasonType` | `season_type` |  |  | `Y` | Season phase: 1=preseason, 2=regular season, 3=postseason. |
+| `SeasonYear` | `season_nullable` |  |  | `Y` |  |
+
+### Returns {#nba_stats_leaguestandings-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `leagueid` | character | League identifier used in compact NBA Stats schedule and scoreboard result sets. |
+| `seasonid` | character | Stats API identifier for seasonid associated with this NBA or WNBA Stats row. |
+| `teamid` | integer | Teamid. |
+| `teamcity` | character | Teamcity. |
+| `teamname` | character | Teamname. |
+| `conference` | character | Conference name. |
+| `conferencerecord` | character | NBA or WNBA Stats value for conferencerecord in the leaguestandings result set. |
+| `playoffrank` | integer | NBA or WNBA Stats value for playoffrank in the leaguestandings result set. |
+| `clinchindicator` | character | NBA or WNBA Stats value for clinchindicator in the leaguestandings result set. |
+| `division` | character | Team division. |
+| `divisionrecord` | character | NBA or WNBA Stats value for divisionrecord in the leaguestandings result set. |
+| `divisionrank` | integer | NBA or WNBA Stats value for divisionrank in the leaguestandings result set. |
+| `wins` | integer | Total wins. |
+| `losses` | integer | Total losses. |
+| `winpct` | numeric | Winning percentage for the team or split represented by this row. |
+| `leaguerank` | integer | NBA or WNBA Stats value for leaguerank in the leaguestandings result set. |
+| `record` | character | Overall win-loss record. |
+| `home` | character | Home. |
+| `road` | character | Road. |
+| `l10` | character | Last-ten record. |
+| `last10home` | character | NBA or WNBA Stats value for last10home in the leaguestandings result set. |
+| `last10road` | character | NBA or WNBA Stats value for last10road in the leaguestandings result set. |
+| `ot` | character | Ot. |
+| `threeptsorless` | character | Scoring or score-margin metric for threeptsorless in the requested NBA or WNBA Stats split. |
+| `tenptsormore` | character | Scoring or score-margin metric for tenptsormore in the requested NBA or WNBA Stats split. |
+| `longhomestreak` | integer | NBA or WNBA Stats value for longhomestreak in the leaguestandings result set. |
+| `strlonghomestreak` | character | NBA or WNBA Stats value for strlonghomestreak in the leaguestandings result set. |
+| `longroadstreak` | integer | NBA or WNBA Stats value for longroadstreak in the leaguestandings result set. |
+| `strlongroadstreak` | character | NBA or WNBA Stats value for strlongroadstreak in the leaguestandings result set. |
+| `longwinstreak` | integer | NBA or WNBA Stats value for longwinstreak in the leaguestandings result set. |
+| `longlossstreak` | integer | NBA or WNBA Stats value for longlossstreak in the leaguestandings result set. |
+| `currenthomestreak` | integer | NBA or WNBA Stats value for currenthomestreak in the leaguestandings result set. |
+| `strcurrenthomestreak` | character | NBA or WNBA Stats value for strcurrenthomestreak in the leaguestandings result set. |
+| `currentroadstreak` | integer | NBA or WNBA Stats value for currentroadstreak in the leaguestandings result set. |
+| `strcurrentroadstreak` | character | NBA or WNBA Stats value for strcurrentroadstreak in the leaguestandings result set. |
+| `currentstreak` | integer | NBA or WNBA Stats value for currentstreak in the leaguestandings result set. |
+| `strcurrentstreak` | character | Strcurrentstreak. |
+| `conferencegamesback` | numeric | NBA or WNBA Stats value for conferencegamesback in the leaguestandings result set. |
+| `divisiongamesback` | numeric | NBA or WNBA Stats value for divisiongamesback in the leaguestandings result set. |
+| `clinchedconferencetitle` | integer | Flag indicating clinchedconferencetitle for the requested NBA or WNBA Stats context. |
+| `clincheddivisiontitle` | integer | Flag indicating clincheddivisiontitle for the requested NBA or WNBA Stats context. |
+| `clinchedplayoffbirth` | integer | Flag indicating clinchedplayoffbirth for the requested NBA or WNBA Stats context. |
+| `eliminatedconference` | integer | Flag indicating eliminatedconference for the requested NBA or WNBA Stats context. |
+| `eliminateddivision` | integer | Flag indicating eliminateddivision for the requested NBA or WNBA Stats context. |
+| `aheadathalf` | character | NBA or WNBA Stats value for aheadathalf in the leaguestandings result set. |
+| `behindathalf` | character | NBA or WNBA Stats value for behindathalf in the leaguestandings result set. |
+| `tiedathalf` | character | NBA or WNBA Stats value for tiedathalf in the leaguestandings result set. |
+| `aheadatthird` | character | NBA or WNBA Stats value for aheadatthird in the leaguestandings result set. |
+| `behindatthird` | character | NBA or WNBA Stats value for behindatthird in the leaguestandings result set. |
+| `tiedatthird` | character | NBA or WNBA Stats value for tiedatthird in the leaguestandings result set. |
+| `score100pts` | character | Scoring or score-margin metric for score100pts in the requested NBA or WNBA Stats split. |
+| `oppscore100pts` | character | Scoring or score-margin metric for oppscore100pts in the requested NBA or WNBA Stats split. |
+| `oppover500` | character | NBA or WNBA Stats value for oppover500 in the leaguestandings result set. |
+| `leadinfgpct` | character | Shooting metric for leadinfgpct in the requested NBA or WNBA Stats split. |
+| `leadinreb` | character | Rebounding metric for leadinreb in the requested NBA or WNBA Stats split. |
+| `fewerturnovers` | character | Turnover or loose-ball metric for fewerturnovers in the requested NBA or WNBA Stats split. |
+| `pointspg` | numeric | Scoring or score-margin metric for pointspg in the requested NBA or WNBA Stats split. |
+| `opppointspg` | numeric | Scoring or score-margin metric for opppointspg in the requested NBA or WNBA Stats split. |
+| `diffpointspg` | numeric | Scoring or score-margin metric for diffpointspg in the requested NBA or WNBA Stats split. |
+| `vseast` | character | NBA or WNBA Stats value for vseast in the leaguestandings result set. |
+| `vsatlantic` | character | NBA or WNBA Stats value for vsatlantic in the leaguestandings result set. |
+| `vscentral` | character | NBA or WNBA Stats value for vscentral in the leaguestandings result set. |
+| `vssoutheast` | character | NBA or WNBA Stats value for vssoutheast in the leaguestandings result set. |
+| `vswest` | character | NBA or WNBA Stats value for vswest in the leaguestandings result set. |
+| `vsnorthwest` | character | NBA or WNBA Stats value for vsnorthwest in the leaguestandings result set. |
+| `vspacific` | character | NBA or WNBA Stats value for vspacific in the leaguestandings result set. |
+| `vssouthwest` | character | NBA or WNBA Stats value for vssouthwest in the leaguestandings result set. |
+| `jan` | character | Value for January in the endpoint's monthly NBA or WNBA Stats split. |
+| `feb` | character | Value for February in the endpoint's monthly NBA or WNBA Stats split. |
+| `mar` | character | Value for March in the endpoint's monthly NBA or WNBA Stats split. |
+| `apr` | character | Value for April in the endpoint's monthly NBA or WNBA Stats split. |
+| `may` | character | Value for May in the endpoint's monthly NBA or WNBA Stats split. |
+| `jun` | character | Value for June in the endpoint's monthly NBA or WNBA Stats split. |
+| `jul` | character | Value for July in the endpoint's monthly NBA or WNBA Stats split. |
+| `aug` | character | Value for August in the endpoint's monthly NBA or WNBA Stats split. |
+| `sep` | character | Value for September in the endpoint's monthly NBA or WNBA Stats split. |
+| `oct` | character | Value for October in the endpoint's monthly NBA or WNBA Stats split. |
+| `nov` | character | Value for November in the endpoint's monthly NBA or WNBA Stats split. |
+| `dec` | character | Value for December in the endpoint's monthly NBA or WNBA Stats split. |
+| `preas` | character | NBA or WNBA Stats value for preas in the leaguestandings result set. |
+| `postas` | character | NBA or WNBA Stats value for postas in the leaguestandings result set. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example {#nba_stats_leaguestandings-example}
+
+```python
+nba_stats_leaguestandings(league_id='00')
+```
+
+_Last validated n/a._
+
+## nba_stats_leaguestandingsv3
+
+GET /stats/leaguestandingsv3
+
+**Endpoint URL:** `GET https://stats.nba.com/stats/leaguestandingsv3`
+
+**Valid URL:** [https://stats.nba.com/stats/leaguestandingsv3?LeagueID=00](https://stats.nba.com/stats/leaguestandingsv3?LeagueID=00)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `LeagueID` | `league_id` |  |  | `Y` |  |
+| `Season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
+| `SeasonType` | `season_type` |  |  | `Y` | Season phase: 1=preseason, 2=regular season, 3=postseason. |
+| `SeasonYear` | `season_nullable` |  |  | `Y` |  |
+
+### Returns {#nba_stats_leaguestandingsv3-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+| col_name | type | description |
+|---|---|---|
+| `leagueid` | character | League identifier used in compact NBA Stats schedule and scoreboard result sets. |
+| `seasonid` | character | Stats API identifier for seasonid associated with this NBA or WNBA Stats row. |
+| `teamid` | integer | Teamid. |
+| `teamcity` | character | Teamcity. |
+| `teamname` | character | Teamname. |
+| `teamslug` | character | URL slug for teamslug used by NBA or WNBA Stats pages. |
+| `conference` | character | Conference name. |
+| `conferencerecord` | character | NBA or WNBA Stats value for conferencerecord in the leaguestandingsv3 result set. |
+| `playoffrank` | integer | NBA or WNBA Stats value for playoffrank in the leaguestandingsv3 result set. |
+| `clinchindicator` | character | NBA or WNBA Stats value for clinchindicator in the leaguestandingsv3 result set. |
+| `division` | character | Team division. |
+| `divisionrecord` | character | NBA or WNBA Stats value for divisionrecord in the leaguestandingsv3 result set. |
+| `divisionrank` | integer | NBA or WNBA Stats value for divisionrank in the leaguestandingsv3 result set. |
+| `wins` | integer | Total wins. |
+| `losses` | integer | Total losses. |
+| `winpct` | numeric | Winning percentage for the team or split represented by this row. |
+| `leaguerank` | integer | NBA or WNBA Stats value for leaguerank in the leaguestandingsv3 result set. |
+| `record` | character | Overall win-loss record. |
+| `home` | character | Home. |
+| `road` | character | Road. |
+| `l10` | character | Last-ten record. |
+| `last10home` | character | NBA or WNBA Stats value for last10home in the leaguestandingsv3 result set. |
+| `last10road` | character | NBA or WNBA Stats value for last10road in the leaguestandingsv3 result set. |
+| `ot` | character | Ot. |
+| `threeptsorless` | character | Scoring or score-margin metric for threeptsorless in the requested NBA or WNBA Stats split. |
+| `tenptsormore` | character | Scoring or score-margin metric for tenptsormore in the requested NBA or WNBA Stats split. |
+| `longhomestreak` | integer | NBA or WNBA Stats value for longhomestreak in the leaguestandingsv3 result set. |
+| `strlonghomestreak` | character | NBA or WNBA Stats value for strlonghomestreak in the leaguestandingsv3 result set. |
+| `longroadstreak` | integer | NBA or WNBA Stats value for longroadstreak in the leaguestandingsv3 result set. |
+| `strlongroadstreak` | character | NBA or WNBA Stats value for strlongroadstreak in the leaguestandingsv3 result set. |
+| `longwinstreak` | integer | NBA or WNBA Stats value for longwinstreak in the leaguestandingsv3 result set. |
+| `longlossstreak` | integer | NBA or WNBA Stats value for longlossstreak in the leaguestandingsv3 result set. |
+| `currenthomestreak` | integer | NBA or WNBA Stats value for currenthomestreak in the leaguestandingsv3 result set. |
+| `strcurrenthomestreak` | character | NBA or WNBA Stats value for strcurrenthomestreak in the leaguestandingsv3 result set. |
+| `currentroadstreak` | integer | NBA or WNBA Stats value for currentroadstreak in the leaguestandingsv3 result set. |
+| `strcurrentroadstreak` | character | NBA or WNBA Stats value for strcurrentroadstreak in the leaguestandingsv3 result set. |
+| `currentstreak` | integer | NBA or WNBA Stats value for currentstreak in the leaguestandingsv3 result set. |
+| `strcurrentstreak` | character | Strcurrentstreak. |
+| `conferencegamesback` | numeric | NBA or WNBA Stats value for conferencegamesback in the leaguestandingsv3 result set. |
+| `divisiongamesback` | numeric | NBA or WNBA Stats value for divisiongamesback in the leaguestandingsv3 result set. |
+| `clinchedconferencetitle` | integer | Flag indicating clinchedconferencetitle for the requested NBA or WNBA Stats context. |
+| `clincheddivisiontitle` | integer | Flag indicating clincheddivisiontitle for the requested NBA or WNBA Stats context. |
+| `clinchedplayoffbirth` | integer | Flag indicating clinchedplayoffbirth for the requested NBA or WNBA Stats context. |
+| `clinchedplayin` | integer | Flag indicating clinchedplayin for the requested NBA or WNBA Stats context. |
+| `eliminatedconference` | integer | Flag indicating eliminatedconference for the requested NBA or WNBA Stats context. |
+| `eliminateddivision` | integer | Flag indicating eliminateddivision for the requested NBA or WNBA Stats context. |
+| `aheadathalf` | character | NBA or WNBA Stats value for aheadathalf in the leaguestandingsv3 result set. |
+| `behindathalf` | character | NBA or WNBA Stats value for behindathalf in the leaguestandingsv3 result set. |
+| `tiedathalf` | character | NBA or WNBA Stats value for tiedathalf in the leaguestandingsv3 result set. |
+| `aheadatthird` | character | NBA or WNBA Stats value for aheadatthird in the leaguestandingsv3 result set. |
+| `behindatthird` | character | NBA or WNBA Stats value for behindatthird in the leaguestandingsv3 result set. |
+| `tiedatthird` | character | NBA or WNBA Stats value for tiedatthird in the leaguestandingsv3 result set. |
+| `score100pts` | character | Scoring or score-margin metric for score100pts in the requested NBA or WNBA Stats split. |
+| `oppscore100pts` | character | Scoring or score-margin metric for oppscore100pts in the requested NBA or WNBA Stats split. |
+| `oppover500` | character | NBA or WNBA Stats value for oppover500 in the leaguestandingsv3 result set. |
+| `leadinfgpct` | character | Shooting metric for leadinfgpct in the requested NBA or WNBA Stats split. |
+| `leadinreb` | character | Rebounding metric for leadinreb in the requested NBA or WNBA Stats split. |
+| `fewerturnovers` | character | Turnover or loose-ball metric for fewerturnovers in the requested NBA or WNBA Stats split. |
+| `pointspg` | numeric | Scoring or score-margin metric for pointspg in the requested NBA or WNBA Stats split. |
+| `opppointspg` | numeric | Scoring or score-margin metric for opppointspg in the requested NBA or WNBA Stats split. |
+| `diffpointspg` | numeric | Scoring or score-margin metric for diffpointspg in the requested NBA or WNBA Stats split. |
+| `vseast` | character | NBA or WNBA Stats value for vseast in the leaguestandingsv3 result set. |
+| `vsatlantic` | character | NBA or WNBA Stats value for vsatlantic in the leaguestandingsv3 result set. |
+| `vscentral` | character | NBA or WNBA Stats value for vscentral in the leaguestandingsv3 result set. |
+| `vssoutheast` | character | NBA or WNBA Stats value for vssoutheast in the leaguestandingsv3 result set. |
+| `vswest` | character | NBA or WNBA Stats value for vswest in the leaguestandingsv3 result set. |
+| `vsnorthwest` | character | NBA or WNBA Stats value for vsnorthwest in the leaguestandingsv3 result set. |
+| `vspacific` | character | NBA or WNBA Stats value for vspacific in the leaguestandingsv3 result set. |
+| `vssouthwest` | character | NBA or WNBA Stats value for vssouthwest in the leaguestandingsv3 result set. |
+| `jan` | character | Value for January in the endpoint's monthly NBA or WNBA Stats split. |
+| `feb` | character | Value for February in the endpoint's monthly NBA or WNBA Stats split. |
+| `mar` | character | Value for March in the endpoint's monthly NBA or WNBA Stats split. |
+| `apr` | character | Value for April in the endpoint's monthly NBA or WNBA Stats split. |
+| `may` | character | Value for May in the endpoint's monthly NBA or WNBA Stats split. |
+| `jun` | character | Value for June in the endpoint's monthly NBA or WNBA Stats split. |
+| `jul` | character | Value for July in the endpoint's monthly NBA or WNBA Stats split. |
+| `aug` | character | Value for August in the endpoint's monthly NBA or WNBA Stats split. |
+| `sep` | character | Value for September in the endpoint's monthly NBA or WNBA Stats split. |
+| `oct` | character | Value for October in the endpoint's monthly NBA or WNBA Stats split. |
+| `nov` | character | Value for November in the endpoint's monthly NBA or WNBA Stats split. |
+| `dec` | character | Value for December in the endpoint's monthly NBA or WNBA Stats split. |
+| `score_80_plus` | character | Scoring or score-margin metric for score 80 plus in the requested NBA or WNBA Stats split. |
+| `opp_score_80_plus` | character | Opponent score 80 plus for the requested NBA or WNBA team, player, lineup, or game split. |
+| `score_below_80` | character | Scoring or score-margin metric for score below 80 in the requested NBA or WNBA Stats split. |
+| `opp_score_below_80` | character | Opponent score below 80 for the requested NBA or WNBA team, player, lineup, or game split. |
+| `totalpoints` | integer | Scoring or score-margin metric for totalpoints in the requested NBA or WNBA Stats split. |
+| `opptotalpoints` | integer | Scoring or score-margin metric for opptotalpoints in the requested NBA or WNBA Stats split. |
+| `difftotalpoints` | integer | Scoring or score-margin metric for difftotalpoints in the requested NBA or WNBA Stats split. |
+| `leaguegamesback` | numeric | NBA or WNBA Stats value for leaguegamesback in the leaguestandingsv3 result set. |
+| `playoffseeding` | integer | NBA or WNBA Stats value for playoffseeding in the leaguestandingsv3 result set. |
+| `clinchedpostseason` | integer | Flag indicating clinchedpostseason for the requested NBA or WNBA Stats context. |
+| `neutral` | character | Neutral. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example {#nba_stats_leaguestandingsv3-example}
+
+```python
+nba_stats_leaguestandingsv3(league_id='00')
+```
+
+_Last validated n/a._

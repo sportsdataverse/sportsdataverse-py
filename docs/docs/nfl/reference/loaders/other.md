@@ -1,0 +1,721 @@
+---
+title: "NFL dataset loaders — Other"
+sidebar_label: "Other"
+sidebar_position: 7
+description: "NFL dataset loaders — Other — function reference in sdv-py, the SportsDataverse Python package."
+toc_max_heading_level: 2
+---
+# NFL dataset loaders — Other
+
+## load_nfl_model_pbp
+
+Release: [nfl_model_pbp](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nfl_model_pbp) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nfl_model_pbp/model_pbp_{season}.parquet`
+### Returns {#load_nfl_model_pbp-returns}
+
+| col_name | type | description |
+|---|---|---|
+| `game_id` | String | Ten digit identifier for NFL game. |
+| `season` | Int64 | 4 digit number indicating to which season(s) the specified timeframe belongs to. |
+| `week` | Int64 | Season week. |
+| `season_type` | String | REG or POST indicating if the timeframe belongs to regular or post season. |
+| `play_id` | Int64 | Numeric play id that when used with game_id and drive provides the unique identifier for a single play. |
+| `play_seq` | Float64 | Game-global sequential play order from the NFL.com Shield feed; ordering key within a game (game_id + play_seq is unique). |
+| `posteam` | String | String abbreviation for the team with possession. |
+| `defteam` | String | String abbreviation for the team on defense. |
+| `home_team` | String | The home team. Note that this contains the designated home team for games which no team is playing at home such as Super Bowls or NFL International games. |
+| `away_team` | String | String abbreviation for the away team. |
+| `home` | Int64 | Home team name. |
+| `qtr` | Int64 | Quarter of the game (5 is overtime). |
+| `game_half` | String | String indicating which half the play is in, either Half1, Half2, or Overtime. |
+| `down` | Int64 | The down for the given play. |
+| `ydstogo` | Int64 | Numeric yards in distance from either the first down marker or the endzone in goal down situations. |
+| `yardline_100` | Int64 | Numeric distance in the number of yards from the opponent's endzone for the posteam. |
+| `goal_to_go` | Int64 | Binary indicator for whether or not the posteam is in a goal down situation. |
+| `quarter_seconds_remaining` | Int64 | Numeric seconds remaining in the quarter. |
+| `half_seconds_remaining` | Int64 | Numeric seconds remaining in the half. |
+| `game_seconds_remaining` | Int64 | Numeric seconds remaining in the game. |
+| `play_type` | String | String indicating the type of play: pass (includes sacks), run (includes scrambles), punt, field_goal, kickoff, extra_point, qb_kneel, qb_spike, no_play (timeouts and penalties), and missing for rows indicating end of play. |
+| `yards_gained` | Int64 | Numeric yards gained (or lost) by the possessing team, excluding yards gained via fumble recoveries and laterals. |
+| `desc` | String | Detailed string description for the given play. |
+| `shield_play_type` | String | Raw NFL.com Shield play-type enum for the play (e.g. RUSH, PASS, FIELD_GOAL, KICK_OFF, PENALTY, END_QUARTER, GAME_START, COMMENT) -- the unmapped upstream value behind the nflfastR-style play_type. |
+| `special_teams_play_type` | String | Shield special-teams sub-type qualifier; UNSPECIFIED on ordinary plays and PENALTY when the special-teams play resolved to a penalty. |
+| `sp` | Int64 | Binary indicator for whether or not a score occurred on the play. |
+| `pass_attempt` | Int64 | Binary indicator for if the play was a pass attempt (includes sacks). |
+| `complete_pass` | Int64 | Binary indicator for if the pass was completed. |
+| `incomplete_pass` | Int64 | Binary indicator for if the pass was incomplete. |
+| `interception` | Int64 | Binary indicator for if the pass was intercepted. |
+| `rush_attempt` | Int64 | Binary indicator for if the play was a run. |
+| `sack` | Int64 | Binary indicator for if the play ended in a sack. |
+| `touchdown` | Int64 | Binary indicator for if the play resulted in a TD. |
+| `pass_touchdown` | Int64 | Binary indicator for if the play resulted in a passing TD. |
+| `rush_touchdown` | Int64 | Binary indicator for if the play resulted in a rushing TD. |
+| `return_touchdown` | Int64 | Binary indicator for if the play resulted in a return TD. Returns may occur on any of: interception, fumble, kickoff, punt, or blocked kicks. |
+| `field_goal_attempt` | Int64 | Binary indicator for field goal attempt. |
+| `field_goal_made` | Int64 | Binary indicator (1/0) that the field-goal attempt on this play was good. |
+| `field_goal_missed` | Int64 | Binary indicator (1/0) that the field-goal attempt on this play was missed (not blocked). |
+| `field_goal_blocked` | Int64 | Binary indicator (1/0) that the field-goal attempt on this play was blocked. |
+| `extra_point_attempt` | Int64 | Binary indicator for extra point attempt. |
+| `two_point_attempt` | Int64 | Binary indicator for two point conversion attempt. |
+| `punt_attempt` | Int64 | Binary indicator for punts. |
+| `kickoff_attempt` | Int64 | Binary indicator for kickoff. |
+| `penalty` | Int64 | Binary indicator for whether or not a penalty occurred. |
+| `fumble` | Int64 | Binary indicator for if a fumble occurred. |
+| `fumble_lost` | Int64 | Binary indicator for if the fumble was lost. |
+| `qb_hit` | Int64 | Binary indicator if the QB was hit on the play. |
+| `safety` | Int64 | Binary indicator for whether or not a safety occurred. |
+| `timeout` | Int64 | Binary indicator for whether or not a timeout was called by either team. |
+| `first_down_rush` | Int64 | Binary indicator for if a running play converted the first down. |
+| `first_down_pass` | Int64 | Binary indicator for if a passing play converted the first down. |
+| `first_down_penalty` | Int64 | Binary indicator for if a penalty converted the first down. |
+| `solo_tackle` | Int64 | Binary indicator if the play had a solo tackle (could be multiple due to fumbles). |
+| `assist_tackle` | Int64 | Binary indicator for if an assist tackle occurred. |
+| `tackle_with_assist` | Int64 | Binary indicator for if there has been a tackle with assist. |
+| `tackled_for_loss` | Int64 | Binary indicator for whether or not a tackle for loss on a run play occurred. |
+| `fumble_forced` | Int64 | Binary indicator for if the fumble was forced. |
+| `fumble_not_forced` | Int64 | Binary indicator for if the fumble was not forced. |
+| `fumble_out_of_bounds` | Int64 | Binary indicator for if the fumble went out of bounds. |
+| `punt_fair_catch` | Int64 | Binary indicator for if the punt was caught with a fair catch. |
+| `punt_downed` | Int64 | Binary indicator for if the punt was downed. |
+| `punt_out_of_bounds` | Int64 | Binary indicator for if the punt went out of bounds. |
+| `kickoff_fair_catch` | Int64 | Binary indicator for if the kickoff was caught with a fair catch. |
+| `kickoff_out_of_bounds` | Int64 | Binary indicator for if the kickoff went out of bounds. |
+| `extra_point_good` | Int64 | Binary indicator (1/0) that the extra-point kick on this play was good. |
+| `extra_point_failed` | Int64 | Binary indicator (1/0) that the extra-point kick on this play was missed (not blocked or aborted). |
+| `extra_point_blocked` | Int64 | Binary indicator (1/0) that the extra-point kick on this play was blocked. |
+| `extra_point_safety` | Int64 | Binary indicator (1/0) that the extra-point attempt on this play resulted in a defensive safety (one point for the defense). |
+| `extra_point_aborted` | Int64 | Binary indicator (1/0) that the extra-point attempt on this play was aborted (botched snap or hold, no kick attempted). |
+| `two_point_rush_good` | Int64 | Binary indicator (1/0) that the two-point conversion attempt was a rush that converted. |
+| `two_point_rush_failed` | Int64 | Binary indicator (1/0) that the two-point conversion attempt was a rush that failed. |
+| `two_point_rush_safety` | Int64 | Binary indicator (1/0) that a rushing two-point conversion attempt ended in a safety for the defense. |
+| `two_point_pass_good` | Int64 | Binary indicator (1/0) that the two-point conversion attempt was a pass that converted. |
+| `two_point_pass_failed` | Int64 | Binary indicator (1/0) that the two-point conversion attempt was a pass that failed. |
+| `two_point_pass_safety` | Int64 | Binary indicator (1/0) that a passing two-point conversion attempt ended in a safety for the defense. |
+| `two_point_pass_reception_good` | Int64 | Binary indicator (1/0) that the two-point conversion was completed and credited as a reception. |
+| `two_point_pass_reception_failed` | Int64 | Binary indicator (1/0) that the two-point conversion pass was thrown but not completed for the conversion. |
+| `two_point_return` | Int64 | Binary indicator (1/0) that the defense returned a failed conversion attempt for two points. |
+| `def_tackles_for_loss` | Int64 | Number of tackles for loss (TFL) for this player |
+| `def_tackles_for_loss_yards` | Int64 | Yards lost from TFLs involving this player |
+| `td_ids_touchdown` | Int64 | Count of touchdowns credited on the play from the Shield scoring-participant ids (2 on the rare multi-score bookkeeping rows). |
+| `misc_yards` | Int64 | Yards gained or lost on the play that are not attributed to a rush, pass, or return (miscellaneous Shield yardage bucket). |
+| `fumble_recovery_own_lateral_yards` | Int64 | Yards gained or lost after an own-team fumble recovery that came via a lateral. |
+| `fumble_recovery_opp_lateral_yards` | Int64 | Yards gained or lost after an opponent fumble recovery that came via a lateral. |
+| `air_yards` | Int64 | Numeric value for distance in yards perpendicular to the line of scrimmage at where the targeted receiver either caught or didn't catch the ball. |
+| `yards_after_catch` | Int64 | Numeric value for distance in yards perpendicular to the yard line where the receiver made the reception to where the play ended. |
+| `passing_yards` | Int64 | Numeric yards by the passer_player_name, including yards gained in pass plays with laterals. This should equal official passing statistics. |
+| `rushing_yards` | Int64 | Numeric yards by the rusher_player_name, excluding yards gained in rush plays with laterals. This should equal official rushing statistics but could miss yards gained in rush plays with laterals. Please see the description of `lateral_rusher_player_name` for further information. |
+| `receiving_yards` | Int64 | Numeric yards by the receiver_player_name, excluding yards gained in pass plays with laterals. This should equal official receiving statistics but could miss yards gained in pass plays with laterals. Please see the description of `lateral_receiver_player_name` for further information. |
+| `penalty_yards` | Int64 | Yards gained (or lost) by the posteam from the penalty. |
+| `kick_distance` | Int64 | Numeric distance in yards for kickoffs, field goals, and punts. |
+| `return_yards` | Int64 | Yards gained by the return team. Returns may occur on any of: interception, fumble, kickoff, punt, or blocked kicks. |
+| `lateral_rushing_yards` | Null | Numeric yards by the `lateral_rusher_player_name` in run plays with laterals. Please see the description of `lateral_rusher_player_name` for further information. |
+| `lateral_receiving_yards` | Int64 | Numeric yards by the `lateral_receiver_player_name` in pass plays with laterals. Please see the description of `lateral_receiver_player_name` for further information. |
+| `passer_player_id` | String | Unique identifier for the player that attempted the pass. |
+| `passer_player_name` | String | String name for the player that attempted the pass. |
+| `rusher_player_id` | String | Unique identifier for the player that attempted the run. |
+| `rusher_player_name` | String | String name for the player that attempted the run. |
+| `receiver_player_id` | String | Unique identifier for the receiver that was targeted on the pass. |
+| `receiver_player_name` | String | String name for the targeted receiver. |
+| `td_player_id` | String | Unique identifier of the player who scored a touchdown. |
+| `td_player_name` | String | String name of the player who scored a touchdown. |
+| `td_team` | String | String abbreviation for which team scored the touchdown. |
+| `penalty_team` | String | String abbreviation of the team with the penalty. |
+| `timeout_team` | String | String abbreviation for which team called the timeout. |
+| `kicker_player_id` | String | Unique identifier for the kicker on FG or kickoff. |
+| `kicker_player_name` | String | String name for the kicker on FG or kickoff. |
+| `punter_player_id` | String | Unique identifier for the punter. |
+| `punter_player_name` | String | String name for the punter. |
+| `punt_returner_player_id` | String | Unique identifier for the punt returner. |
+| `punt_returner_player_name` | String | String name for the punt returner. |
+| `kickoff_returner_player_id` | String | Unique identifier for the kickoff returner. |
+| `kickoff_returner_player_name` | String | String name for the kickoff returner. |
+| `return_team` | String | String abbreviation of the return team. Returns may occur on any of: interception, fumble, kickoff, punt, or blocked kicks. |
+| `interception_player_id` | String | Unique identifier for the player that intercepted the pass. |
+| `interception_player_name` | String | String name for the player that intercepted the pass. |
+| `sack_player_id` | String | Unique identifier of the player who recorded a solo sack. |
+| `sack_player_name` | String | String name of the player who recorded a solo sack. |
+| `safety_player_id` | Null | Unique identifier for the player who scored a safety. |
+| `safety_player_name` | Null | String name for the player who scored a safety. |
+| `blocked_player_id` | String | Unique identifier for the player that blocked the punt or FG. |
+| `blocked_player_name` | String | String name for the player that blocked the punt or FG. |
+| `penalty_player_id` | String | Unique identifier for the player with the penalty. |
+| `penalty_player_name` | String | String name for the player with the penalty. |
+| `solo_tackle_1_player_id` | String | Unique identifier of one of the players with a solo tackle. |
+| `solo_tackle_1_player_name` | String | String name of one of the players with a solo tackle. |
+| `solo_tackle_1_team` | String | Team of one of the players with a solo tackle. |
+| `solo_tackle_2_player_id` | String | Unique identifier of one of the players with a solo tackle. |
+| `solo_tackle_2_player_name` | String | String name of one of the players with a solo tackle. |
+| `solo_tackle_2_team` | String | Team of one of the players with a solo tackle. |
+| `assist_tackle_1_player_id` | String | Unique identifier of one of the players with a tackle assist. |
+| `assist_tackle_1_player_name` | String | String name of one of the players with a tackle assist. |
+| `assist_tackle_1_team` | String | Team of one of the players with a tackle assist. |
+| `assist_tackle_2_player_id` | String | Unique identifier of one of the players with a tackle assist. |
+| `assist_tackle_2_player_name` | String | String name of one of the players with a tackle assist. |
+| `assist_tackle_2_team` | String | Team of one of the players with a tackle assist. |
+| `assist_tackle_3_player_id` | Null | Unique identifier of one of the players with a tackle assist. |
+| `assist_tackle_3_player_name` | Null | String name of one of the players with a tackle assist. |
+| `assist_tackle_3_team` | Null | Team of one of the players with a tackle assist. |
+| `assist_tackle_4_player_id` | Null | Unique identifier of one of the players with a tackle assist. |
+| `assist_tackle_4_player_name` | Null | String name of one of the players with a tackle assist. |
+| `assist_tackle_4_team` | Null | Team of one of the players with a tackle assist. |
+| `tackle_with_assist_1_player_id` | String | Unique identifier of one of the players with a tackle with assist. |
+| `tackle_with_assist_1_player_name` | String | String name of one of the players with a tackle with assist. |
+| `tackle_with_assist_1_team` | String | Team of one of the players with a tackle with assist. |
+| `tackle_with_assist_2_player_id` | Null | Unique identifier of one of the players with a tackle with assist. |
+| `tackle_with_assist_2_player_name` | Null | String name of one of the players with a tackle with assist. |
+| `tackle_with_assist_2_team` | Null | Team of one of the players with a tackle with assist. |
+| `tackle_for_loss_1_player_id` | String | Unique identifier for one of the potential players with the tackle for loss. |
+| `tackle_for_loss_1_player_name` | String | String name for one of the potential players with the tackle for loss. |
+| `tackle_for_loss_2_player_id` | Null | Unique identifier for one of the potential players with the tackle for loss. |
+| `tackle_for_loss_2_player_name` | Null | String name for one of the potential players with the tackle for loss. |
+| `half_sack_1_player_id` | String | Unique identifier of the first player who recorded half a sack. |
+| `half_sack_1_player_name` | String | String name of the first player who recorded half a sack. |
+| `half_sack_2_player_id` | String | Unique identifier of the second player who recorded half a sack. |
+| `half_sack_2_player_name` | String | String name of the second player who recorded half a sack. |
+| `qb_hit_1_player_id` | String | Unique identifier for one of the potential players that hit the QB. No sack as the QB was not the ball carrier. For sacks please see `sack_player` or `half_sack_*_player`. |
+| `qb_hit_1_player_name` | String | String name for one of the potential players that hit the QB. No sack as the QB was not the ball carrier. For sacks please see `sack_player` or `half_sack_*_player`. |
+| `qb_hit_2_player_id` | String | Unique identifier for one of the potential players that hit the QB. No sack as the QB was not the ball carrier. For sacks please see `sack_player` or `half_sack_*_player`. |
+| `qb_hit_2_player_name` | String | String name for one of the potential players that hit the QB. No sack as the QB was not the ball carrier. For sacks please see `sack_player` or `half_sack_*_player`. |
+| `pass_defense_1_player_id` | String | Unique identifier of one of the players with a pass defense. |
+| `pass_defense_1_player_name` | String | String name of one of the players with a pass defense. |
+| `pass_defense_2_player_id` | String | Unique identifier of one of the players with a pass defense. |
+| `pass_defense_2_player_name` | String | String name of one of the players with a pass defense. |
+| `forced_fumble_player_1_player_id` | String | Unique identifier of one of the players with a forced fumble. |
+| `forced_fumble_player_1_player_name` | String | String name of one of the players with a forced fumble. |
+| `forced_fumble_player_1_team` | String | Team of one of the players with a forced fumble. |
+| `forced_fumble_player_2_player_id` | String | Unique identifier of one of the players with a forced fumble. |
+| `forced_fumble_player_2_player_name` | String | String name of one of the players with a forced fumble. |
+| `forced_fumble_player_2_team` | String | Team of one of the players with a forced fumble. |
+| `fumbled_1_player_id` | String | Unique identifier of the first player who fumbled on the play. |
+| `fumbled_1_player_name` | String | String name of one of the first player who fumbled on the play. |
+| `fumbled_1_team` | String | Team of one of the first player with a fumble. |
+| `fumbled_2_player_id` | String | Unique identifier of the second player who fumbled on the play. |
+| `fumbled_2_player_name` | String | String name of one of the second player who fumbled on the play. |
+| `fumbled_2_team` | String | Team of one of the second player with a fumble. |
+| `fumble_recovery_1_player_id` | String | Unique identifier of one of the players with a fumble recovery. |
+| `fumble_recovery_1_player_name` | String | String name of one of the players with a fumble recovery. |
+| `fumble_recovery_1_team` | String | Team of one of the players with a fumble recovery. |
+| `fumble_recovery_1_yards` | Int64 | Yards gained by one of the players with a fumble recovery. |
+| `fumble_recovery_2_player_id` | String | Unique identifier of one of the players with a fumble recovery. |
+| `fumble_recovery_2_player_name` | String | String name of one of the players with a fumble recovery. |
+| `fumble_recovery_2_team` | String | Team of one of the players with a fumble recovery. |
+| `fumble_recovery_2_yards` | Int64 | Yards gained by one of the players with a fumble recovery. |
+| `two_point_conv_result` | String | String indicator for result of two point conversion attempt: success, failure, safety (touchback in defensive endzone is 1 point apparently), or return. |
+| `extra_point_result` | String | String indicator for the result of the extra point attempt: good, failed, blocked, safety (touchback in defensive endzone is 1 point apparently), or aborted. |
+| `special` | Int64 | Binary indicator if "play_type" is one of "extra_point", "field_goal", "kickoff", or "punt". |
+| `pass_length` | String | String indicator for pass length: short or deep. |
+| `pass_location` | String | String indicator for pass location: left, middle, or right. |
+| `qb_kneel` | Int64 | Binary indicator for whether or not the QB took a knee. |
+| `qb_spike` | Int64 | Binary indicator for whether or not the QB spiked the ball. |
+| `qb_scramble` | Int64 | Binary indicator for whether or not the QB scrambled. |
+| `shotgun` | Int64 | Binary indicator for whether or not the play was in shotgun formation. |
+| `no_huddle` | Int64 | Binary indicator for whether or not the play was in no_huddle formation. |
+| `run_location` | String | String indicator for location of run: left, middle, or right. |
+| `run_gap` | String | String indicator for line gap of run: end, guard, or tackle |
+| `pass` | Int64 | Binary indicator if the play was a pass play (sacks and scrambles included). |
+| `rush` | Int64 | Binary indicator if the play was a rushing play. |
+| `qb_dropback` | Int32 | Binary indicator for whether or not the QB dropped back on the play (pass attempt, sack, or scrambled). |
+| `posteam_score` | Int64 | Score the posteam at the start of the play. |
+| `defteam_score` | Int64 | Score the defteam at the start of the play. |
+| `score_differential` | Int64 | Score differential between the posteam and defteam at the start of the play. |
+| `posteam_timeouts_remaining` | Int64 | Number of timeouts remaining for the possession team. |
+| `defteam_timeouts_remaining` | Int64 | Number of timeouts remaining for the team on defense. |
+| `roof` | String | One of 'dome', 'outdoors', 'closed', 'open' indicating indicating the roof status of the stadium the game was played in. (Source: Pro-Football-Reference) |
+| `spread_line` | Float64 | The closing spread line for the game. A positive number means the home team was favored by that many points, a negative number means the away team was favored by that many points. (Source: Pro-Football-Reference) |
+| `total_line` | Float64 | The closing total line for the game. (Source: Pro-Football-Reference) |
+| `field_goal_result` | String | String indicator for result of field goal attempt: made, missed, or blocked. |
+| `home_score` | Int64 | The number of points the home team scored. Is NA for games which haven't yet been played. |
+| `away_score` | Int64 | The number of points the away team scored. Is NA for games which haven't yet been played. |
+| `result` | Int64 | The number of points the home team scored minus the number of points the visiting team scored. Equals h_score - v_score. Is NA for games which haven't yet been played. Convenient for evaluating against the spread bets. |
+| `fixed_drive` | Int64 | Manually created drive number in a game. |
+| `fixed_drive_result` | String | Manually created drive result. |
+| `drive_play_count` | Int64 | Numeric value of how many regular plays happened in a given drive. |
+| `drive_first_downs` | Int64 | Number of first downs in a given drive. |
+| `drive_inside20` | Int64 | Binary indicator if the offense was able to get inside the opponents 20 yard line. |
+| `drive_ended_with_score` | Int64 | Binary indicator the drive ended with a score. |
+| `drive_quarter_start` | Int64 | Numeric value indicating in which quarter the given drive has started. |
+| `drive_quarter_end` | Int64 | Numeric value indicating in which quarter the given drive has ended. |
+| `drive_yards_penalized` | Int64 | Numeric value of how many yards the offense gained or lost through penalties in the given drive. |
+| `drive_start_transition` | String | String indicating how the offense got the ball. |
+| `drive_end_transition` | String | String indicating how the offense lost the ball. |
+| `drive_game_clock_start` | String | Game time at the beginning of a given drive. |
+| `drive_game_clock_end` | String | Game time at the end of a given drive. |
+| `drive_start_yard_line` | Int64 | Yards from the offense's line of scrimmage to the opponent's end zone (yardline_100) on the drive's first play, 1-99; the model-pbp parquet stores the numeric spot, not the 'OWN 20' text load_nfl_pbp carries. |
+| `drive_end_yard_line` | Int64 | Yards from the offense's line of scrimmage to the opponent's end zone (yardline_100) on the drive's last play; the model-pbp parquet stores the numeric spot, not the 'OPP 45' text load_nfl_pbp carries. |
+| `drive_play_id_started` | Int64 | Play_id of the first play in the given drive. |
+| `drive_play_id_ended` | Int64 | Play_id of the last play in the given drive. |
+| `drive_time_of_possession` | String | Time of possession in a given drive. |
+| `series` | Int32 | Starts at 1, each new first down increments, numbers shared across both teams NA: kickoffs, extra point/two point conversion attempts, non-plays, no posteam |
+| `series_result` | String | Possible values: First down, Touchdown, Opp touchdown, Field goal, Missed field goal, Safety, Turnover, Punt, Turnover on downs, QB kneel, End of half |
+| `series_success` | Int32 | 1: scored touchdown, gained enough yards for first down. |
+| `ep` | Float64 | Using the scoring event probabilities, the estimated expected points with respect to the possession team for the given play. |
+| `td_prob` | Float64 | Predicted probability of the posteam scoring a TD next. 'Next' in this context means the next score in the same game half. |
+| `opp_td_prob` | Float64 | Predicted probability of the defteam scoring a TD next. 'Next' in this context means the next score in the same game half. |
+| `fg_prob` | Float64 | Predicted probability of the posteam scoring a FG next. 'Next' in this context means the next score in the same game half. |
+| `opp_fg_prob` | Float64 | Predicted probability of the defteam scoring a FG next. 'Next' in this context means the next score in the same game half. |
+| `safety_prob` | Float64 | Predicted probability of the posteam scoring a safety next. 'Next' in this context means the next score in the same game half. |
+| `opp_safety_prob` | Float64 | Predicted probability of the defteam scoring a safety next. 'Next' in this context means the next score in the same game half. |
+| `no_score_prob` | Float64 | Predicted probability of no score occurring for the rest of the half based on the expected points model. |
+| `epa` | Float64 | Expected points added (EPA) by the posteam for the given play. |
+| `total_home_epa` | Float64 | Cumulative total EPA for the home team in the game so far. |
+| `total_away_epa` | Float64 | Cumulative total EPA for the away team in the game so far. |
+| `total_home_rush_epa` | Float64 | Cumulative total rushing EPA for the home team in the game so far. |
+| `total_away_rush_epa` | Float64 | Cumulative total rushing EPA for the away team in the game so far. |
+| `total_home_pass_epa` | Float64 | Cumulative total passing EPA for the home team in the game so far. |
+| `total_away_pass_epa` | Float64 | Cumulative total passing EPA for the away team in the game so far. |
+| `qb_epa` | Float64 | Gives QB credit for EPA for up to the point where a receiver lost a fumble after a completed catch and makes EPA work more like passing yards on plays with fumbles. |
+| `air_epa` | Float64 | EPA from the air yards alone. For completions this represents the actual value provided through the air. For incompletions this represents the hypothetical value that could've been added through the air if the pass was completed. |
+| `yac_epa` | Float64 | EPA from the yards after catch alone. For completions this represents the actual value provided after the catch. For incompletions this represents the difference between the hypothetical air_epa and the play's raw observed EPA (how much the incomplete pass cost the posteam). |
+| `comp_air_epa` | Float64 | EPA from the air yards alone only for completions. |
+| `comp_yac_epa` | Float64 | EPA from the yards after catch alone only for completions. |
+| `total_home_comp_air_epa` | Float64 | Cumulative total completions air EPA for the home team in the game so far. |
+| `total_away_comp_air_epa` | Float64 | Cumulative total completions air EPA for the away team in the game so far. |
+| `total_home_comp_yac_epa` | Float64 | Cumulative total completions yac EPA for the home team in the game so far. |
+| `total_away_comp_yac_epa` | Float64 | Cumulative total completions yac EPA for the away team in the game so far. |
+| `total_home_raw_air_epa` | Float64 | Cumulative total raw air EPA for the home team in the game so far. |
+| `total_away_raw_air_epa` | Float64 | Cumulative total raw air EPA for the away team in the game so far. |
+| `total_home_raw_yac_epa` | Float64 | Cumulative total raw yac EPA for the home team in the game so far. |
+| `total_away_raw_yac_epa` | Float64 | Cumulative total raw yac EPA for the away team in the game so far. |
+| `receive_2h_ko` | Int32 | Binary indicator (1/0) that the play is in the first half and the possession team is the team receiving the second-half kickoff (the game's opening defense); mirrors nflfastR helper_add_ep_wp.R. |
+| `posteam_spread` | Float64 | Vegas point spread from the possession team's perspective (spread_line when the posteam is home, negated when it is away). |
+| `elapsed_share` | Float64 | Share of regulation elapsed at the start of the play, (3600 - game_seconds_remaining) / 3600, clipped to [0, 1]. |
+| `spread_time` | Float64 | WP-model feature: posteam_spread decayed by elapsed time, posteam_spread * exp(SPREAD_TIME_DECAY_EXPONENT * elapsed_share); set to 0 when no spread is available (use the naive WP model instead). |
+| `Diff_Time_Ratio` | Float64 | WP-model feature: score_differential inflated by elapsed time, score_differential / exp(SPREAD_TIME_DECAY_EXPONENT * elapsed_share). |
+| `wp` | Float64 | Estimated win probability for the posteam given the current situation at the start of the given play. |
+| `vegas_wp` | Float64 | Estimated win probability for the posteam given the current situation at the start of the given play, incorporating pre-game Vegas line. |
+| `home_wp` | Float64 | Estimated win probability for the home team. |
+| `away_wp` | Float64 | Estimated win probability for the away team. |
+| `def_wp` | Float64 | Estimated win probability for the defteam. |
+| `vegas_home_wpa` | Float64 | Win probability added (WPA) for the home team: spread_adjusted model. |
+| `vegas_wpa` | Float64 | Win probability added (WPA) for the posteam: spread_adjusted model. |
+| `wpa` | Float64 | Win probability added (WPA) for the posteam. |
+| `total_home_rush_wpa` | Float64 | Cumulative total rushing WPA for the home team in the game so far. |
+| `total_away_rush_wpa` | Float64 | Cumulative total rushing WPA for the away team in the game so far. |
+| `total_home_pass_wpa` | Float64 | Cumulative total passing WPA for the home team in the game so far. |
+| `total_away_pass_wpa` | Float64 | Cumulative total passing WPA for the away team in the game so far. |
+| `air_wpa` | Float64 | WPA through the air (same logic as air_epa). |
+| `yac_wpa` | Float64 | WPA from yards after the catch (same logic as yac_epa). |
+| `comp_air_wpa` | Float64 | The air_wpa for completions only. |
+| `comp_yac_wpa` | Float64 | The yac_wpa for completions only. |
+| `total_home_comp_air_wpa` | Float64 | Cumulative total completions air WPA for the home team in the game so far. |
+| `total_away_comp_air_wpa` | Float64 | Cumulative total completions air WPA for the away team in the game so far. |
+| `total_home_comp_yac_wpa` | Float64 | Cumulative total completions yac WPA for the home team in the game so far. |
+| `total_away_comp_yac_wpa` | Float64 | Cumulative total completions yac WPA for the away team in the game so far. |
+| `total_home_raw_air_wpa` | Float64 | Cumulative total raw air WPA for the home team in the game so far. |
+| `total_away_raw_air_wpa` | Float64 | Cumulative total raw air WPA for the away team in the game so far. |
+| `total_home_raw_yac_wpa` | Float64 | Cumulative total raw yac WPA for the home team in the game so far. |
+| `total_away_raw_yac_wpa` | Float64 | Cumulative total raw yac WPA for the away team in the game so far. |
+| `cp` | Float64 | Numeric value indicating the probability for a complete pass based on comparable game situations. |
+| `cpoe` | Float64 | For a single pass play this is 1 - cp when the pass was completed or 0 - cp when the pass was incomplete. Analyzed for a whole game or season an indicator for the passer how much over or under expectation his completion percentage was. |
+| `xpass` | Float64 | Probability of dropback scaled from 0 to 1. |
+| `pass_oe` | Float64 | Dropback percent over expected on a given play scaled from 0 to 100. |
+| `xyac_epa` | Float64 | Expected value of EPA gained after the catch, starting from where the catch was made. Zero yards after the catch would be listed as zero EPA. |
+| `xyac_mean_yardage` | Float64 | Average expected yards after the catch based on where the ball was caught. |
+| `xyac_median_yardage` | Float64 | Median expected yards after the catch based on where the ball was caught. |
+| `xyac_success` | Float64 | Probability play earns positive EPA (relative to where play started) based on where ball was caught. |
+| `xyac_fd` | Float64 | Probability play earns a first down based on where the ball was caught. |
+| `qbr_epa` | Float64 | EPA input used by the QBR calculation for the play (clipped at -5). |
+| `weight` | Float64 | Official weight, in pounds |
+| `non_fumble_sack` | Boolean | Whether the play was a sack that did not involve a fumble. |
+| `sack_epa` | Float64 | EPA credited to the play's sack component (clipped at -5). |
+| `pass_epa` | Float64 | EPA credited to the play's passing component (clipped at -5). |
+| `rush_epa` | Float64 | EPA credited to the play's rushing component (clipped at -5). |
+| `pen_epa` | Float64 | EPA credited to the play's penalty component (clipped at -5). |
+| `sack_weight` | Float64 | Weight applied to the paired EPA term when aggregating (observed 0.6, 0.9, 1.0). |
+| `pass_weight` | Float64 | Weight applied to the paired EPA term when aggregating (observed 0.6, 0.9, 1.0). |
+| `rush_weight` | Float64 | Weight applied to the paired EPA term when aggregating (observed 0.6, 0.9, 1.0). |
+| `pen_weight` | Float64 | Weight applied to the paired EPA term when aggregating (observed 0.6, 0.9, 1.0). |
+| `action_play` | Boolean | Whether the row is an action play -- a live-ball play rather than a timeout, penalty-only or administrative row. |
+| `home_opening_kickoff` | Float64 | 1 if the home team received the opening kickoff, 0 otherwise. |
+| `go_wp` | Float64 | Probability-weighted win probability of going for it on fourth down, first_down_prob * wp_succeed + (1 - first_down_prob) * wp_fail. |
+| `first_down_prob` | Float32 | Modeled probability of converting the fourth down if the offense goes for it. |
+| `wp_succeed` | Float64 | Mean win probability across the conversion outcomes, i.e. the WP conditional on converting the fourth down. |
+| `wp_fail` | Float64 | Mean win probability across the failure outcomes, i.e. the WP conditional on failing to convert. |
+| `fg_make_prob` | Float64 | Predicted probability of making the field goal (cfbfastR FG model, 0-1). |
+| `make_fg_wp` | Float64 | Win probability conditional on the field-goal attempt being good. |
+| `miss_fg_wp` | Float64 | Win probability conditional on the field-goal attempt being missed (opponent takes over at the spot). |
+| `fg_wp` | Float64 | Probability-weighted win probability of attempting the field goal, from the kicking team's perspective. |
+| `punt_wp` | Float64 | Probability-weighted win probability of punting, integrated over the modeled punt-landing distribution. |
+| `go_boost` | Float64 | nfl4th's headline number: 100 * (go_wp - max(fg_wp, punt_wp)), in win-probability percentage points. Positive means going for it is the higher-WP choice. |
+| `go_wp_diff` | Float64 | go_wp minus the best available option's WP, in win-probability units. 0 when going for it is the recommendation and <= 0 otherwise. |
+| `punt_wp_diff` | Float64 | punt_wp minus the best available option's WP, in win-probability units. 0 when punting is the recommendation and <= 0 otherwise. |
+| `fg_wp_diff` | Float64 | fg_wp minus the best available option's WP, in win-probability units. 0 when kicking is the recommendation and <= 0 otherwise. |
+| `fourth_down_recommendation` | String | The max-WP choice among go / punt / field_goal for the fourth-down state; null when the fourth-down or WP models are unavailable. |
+
+```python
+load_nfl_model_pbp(seasons=2024)
+```
+
+## load_nfl_ratings_weekly
+
+Release: [nfl_ratings_weekly](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nfl_ratings_weekly) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nfl_ratings_weekly/nfl_ratings_weekly_{season}.parquet`
+### Returns {#load_nfl_ratings_weekly-returns}
+
+| col_name | type | description |
+|---|---|---|
+| `season` | Int64 | 4 digit number indicating to which season(s) the specified timeframe belongs to. |
+| `team_id` | String | ESPN team id. |
+| `adj_off_epa` | Float64 | Opponent-adjusted offensive EPA per play for the team as of this week. |
+| `adj_def_epa` | Float64 | Opponent-adjusted defensive EPA per play for the team as of this week (negative is better for the defense). |
+| `adj_st_epa` | Float64 | Opponent-adjusted special-teams EPA per play for the team as of this week. |
+| `adj_net` | Float64 | Opponent-adjusted net EPA per play -- the team's offensive rating less its defensive rating. |
+| `games` | Int64 | Games the team played in the fitted window: those with a gameday strictly before as_of_week's first kickoff, the only games the rating for that week saw. |
+| `off_rank` | Int64 | Team's rank (1-32) on adjusted offensive EPA as of this week. |
+| `def_rank` | Int64 | Team's rank (1-32) on adjusted defensive EPA as of this week. |
+| `net_rank` | Int64 | Team's rank (1-32) on adjusted net EPA as of this week. |
+| `net_z` | Float64 | Adjusted net rating expressed as a z-score across the league that week. |
+| `as_of_week` | Int32 | Week through which the rating was computed; the row is the team's standing at that point in the season. |
+
+```python
+load_nfl_ratings_weekly(seasons=2024)
+```
+
+## load_nfl_ngs
+
+Release: [nfl_ngs_passing](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nfl_ngs_passing) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nfl_ngs_passing/ngs_passing_{season}.parquet`
+### Returns {#load_nfl_ngs-returns}
+
+| col_name | type | description |
+|---|---|---|
+| `season` | Int64 | 4 digit number indicating to which season(s) the specified timeframe belongs to. |
+| `season_type` | String | REG or POST indicating if the timeframe belongs to regular or post season. |
+| `week` | Int64 | Season week. |
+| `scope` | String | Aggregation scope of the row -- "season" for the season-to-date aggregate (always week 0) or "week" for a single week's statboard (week 0 is preseason week 0). |
+| `threshold` | Int64 | Minimum-attempts qualifying threshold NGS applied to the statboard the row came from (differs between weekly and season scopes). |
+| `games_played` | Int64 | Games played. |
+| `player_name` | String | Full name of player |
+| `position` | String | Primary position as reported by NFL.com |
+| `team_id` | String | ESPN team id. |
+| `player_gsis_id` | String | Unique identifier of the player |
+| `player_display_name` | String | Full name of the player |
+| `player_short_name` | String | Short version of player's name |
+| `player_esb_id` | String | NFL Elias Sports Bureau (ESB) player id, a letter-digit key such as "MAH047439" shared across NFL data products. |
+| `player_position_group` | String | Roster position group the player is listed under (e.g. "QB", "WR", "RB"). |
+| `player_position` | String | Position of the player accordinng to NGS |
+| `player_jersey_number` | Int64 | Player's jersey number |
+| `player_current_team_id` | String | Player's current team identifier. |
+| `player_season` | Int64 | Season the embedded player record was resolved against; mirrors season. |
+| `player_gsis_it_id` | Int64 | Integer NFL GSIS "IT" player id used by the league's internal tracking systems; a second id alongside the string player_gsis_id. |
+| `player_smart_id` | String | NFL "smart id", a UUID-style player identifier shared across NFL data products. |
+| `player_first_name` | String | Player's first name |
+| `player_last_name` | String | Player's last name |
+| `player_football_name` | String | Name the player goes by on the field and in broadcasts (e.g. "Patrick"), which can differ from the legal first name. |
+| `player_ngs_position` | String | Position as classified by the Next Gen Stats tracking model, which can differ from the roster position. |
+| `player_ngs_position_group` | String | Position group the Next Gen Stats tracking model assigns the player to (e.g. "QB", "WR"). |
+| `player_uniform_number` | String | Jersey number as the zero-padded string NGS lists it (e.g. "07"). |
+| `player_status` | String | Roster status code of the player at capture time (e.g. "ACT" active, "RES" reserve, "CUT", "DEV" practice squad). |
+| `player_headshot` | String | URL to the player headshot image. |
+| `attempts` | Int64 | The number of pass attempts as defined by the NFL. |
+| `completions` | Int64 | The number of completed passes. |
+| `interceptions` | Int64 | The number of interceptions thrown. |
+| `completion_percentage` | Float64 | Percentage of completed passes |
+| `expected_completion_percentage` | Float64 | Using a passer's Completion Probability on every play, determine what a passer's completion percentage is expected to be. |
+| `completion_percentage_above_expectation` | Float64 | A passer's actual completion percentage compared to their Expected Completion Percentage. |
+| `pass_yards` | Int64 | Number of yards gained on pass plays |
+| `pass_touchdowns` | Int64 | Number of touchdowns scored on pass plays |
+| `passer_rating` | Float64 | Overall NFL passer rating |
+| `avg_time_to_throw` | Float64 | Average time elapsed from the time of snap to throw on every pass attempt for a passer (sacks excluded). |
+| `avg_intended_air_yards` | Float64 | Average air yards on all attempted passes |
+| `avg_completed_air_yards` | Float64 | Average air yards on completed passes |
+| `avg_air_yards_differential` | Float64 | Air Yards Differential is calculated by subtracting the passer's average Intended Air Yards from his average Completed Air Yards. This stat indicates if he is on average attempting deep passes than he on average completes. |
+| `avg_air_distance` | Float64 | A receiver's average depth of target |
+| `max_air_distance` | Float64 | A receiver's maximum depth of target |
+| `max_completed_air_distance` | Float64 | Air Distance is the amount of yards the ball has traveled on a pass, from the point of release to the point of reception (as the crow flies). Unlike Air Yards, Air Distance measures the actual distance the passer throws the ball. |
+| `avg_air_yards_to_sticks` | Float64 | Air Yards to the Sticks shows the amount of Air Yards ahead or behind the first down marker on all attempts for a passer. The metric indicates if the passer is attempting his passes past the 1st down marker, or if he is relying on his skill position players to make yards after catch. |
+| `aggressiveness` | Float64 | Aggressiveness tracks the amount of passing attempts a quarterback makes that are into tight coverage, where there is a defender within 1 yard or less of the receiver at the time of completion or incompletion. AGG is shown as a % of attempts into tight windows over all passing attempts. |
+| `player_season_type` | String | Season type (PRE, REG, POST) of the embedded player record; mirrors season_type. |
+| `player_week` | Int64 | Week of the embedded player record; mirrors week. |
+
+```python
+load_nfl_ngs(seasons=2024)
+```
+
+## load_nfl_rosters
+
+Release: [rosters](https://github.com/nflverse/nflverse-data/releases/tag/rosters) · asset `https://github.com/nflverse/nflverse-data/releases/download/rosters/roster_{season}.parquet`
+### Returns {#load_nfl_rosters-returns}
+
+| col_name | type | description |
+|---|---|---|
+| `season` | Int32 | NFL season (year) the roster entry applies to. |
+| `team` | String | Team abbreviation in the nflverse standard (relocations folded, e.g. 'OAK' -> 'LV', 'SD' -> 'LAC', 'STL' -> 'LA'). |
+| `position` | String | Position the player is listed at on the roster (e.g. 'QB', 'WR', 'CB'). |
+| `depth_chart_position` | String | Fine-grained depth-chart position label, which may differ from the broader position group. |
+| `jersey_number` | Int32 | Uniform (jersey) number the player wears. |
+| `status` | String | Roster status code for the player (e.g. 'ACT' active, 'INA' inactive, 'RES' reserve/injured). |
+| `full_name` | String | Player's full display name. |
+| `first_name` | String | Player's first (given) name. |
+| `last_name` | String | Player's last (family) name. |
+| `birth_date` | Date | Player's date of birth (YYYY-MM-DD). |
+| `height` | Int32 | Player's height in inches. |
+| `weight` | Int32 | Player's listed weight in pounds. |
+| `college` | String | College or university the player attended. |
+| `gsis_id` | String | NFL GSIS player identifier — the canonical nflverse player key used to join across datasets. |
+| `espn_id` | String | ESPN player identifier for cross-system joins. |
+| `sportradar_id` | String | Sportradar player identifier for cross-system joins. |
+| `yahoo_id` | String | Yahoo Sports player identifier for cross-system joins. |
+| `rotowire_id` | String | RotoWire player identifier for cross-system joins. |
+| `pff_id` | String | Pro Football Focus (PFF) player identifier for cross-system joins. |
+| `pfr_id` | String | Pro Football Reference (PFR) player identifier for cross-system joins. |
+| `fantasy_data_id` | String | FantasyData player identifier for cross-system joins. |
+| `sleeper_id` | String | Sleeper player identifier for cross-system joins. |
+| `years_exp` | Int32 | Number of accrued NFL seasons of experience for the player. |
+| `headshot_url` | String | URL of the player's headshot image. |
+| `ngs_position` | String | Player's position as classified by NFL Next Gen Stats. |
+| `week` | Int32 | Week of the season the roster snapshot applies to (weekly rosters only). |
+| `game_type` | String | Type of game the roster snapshot applies to (e.g. 'REG', 'POST'). |
+| `status_description_abbr` | String | Abbreviated roster status description code from the source feed. |
+| `football_name` | String | Player's preferred football (commonly used) first name. |
+| `esb_id` | String | Elias Sports Bureau (ESB) player identifier used for official NFL record-keeping. |
+| `gsis_it_id` | String | NFL GSIS internal tracking identifier for the player. |
+| `smart_id` | String | NFL SMART player identifier (GUID) used across modern NFL data feeds. |
+| `entry_year` | Int32 | Calendar year the player first entered the NFL. |
+| `rookie_year` | Int32 | Calendar year of the player's rookie season. |
+| `draft_club` | String | Team abbreviation of the club that drafted the player. |
+| `draft_number` | Int32 | Overall pick number at which the player was selected in the NFL draft. |
+
+```python
+load_nfl_rosters(seasons=2024)
+```
+
+## load_nfl_weekly_rosters
+
+Release: [weekly_rosters](https://github.com/nflverse/nflverse-data/releases/tag/weekly_rosters) · asset `https://github.com/nflverse/nflverse-data/releases/download/weekly_rosters/roster_weekly_{season}.parquet`
+### Returns {#load_nfl_weekly_rosters-returns}
+
+| col_name | type | description |
+|---|---|---|
+| `season` | Int32 | NFL season (year) the weekly roster snapshot applies to. |
+| `team` | String | Team abbreviation in the nflverse standard (relocations folded, e.g. 'OAK' -> 'LV', 'SD' -> 'LAC', 'STL' -> 'LA'). |
+| `position` | String | Position the player is listed at on the roster (e.g. 'QB', 'WR', 'CB'). |
+| `depth_chart_position` | String | Fine-grained depth-chart position label, which may differ from the broader position group. |
+| `jersey_number` | Int32 | Uniform (jersey) number the player wears. |
+| `status` | String | Roster status code for the player (e.g. 'ACT' active, 'INA' inactive, 'RES' reserve/injured). |
+| `full_name` | String | Player's full display name. |
+| `first_name` | String | Player's first (given) name. |
+| `last_name` | String | Player's last (family) name. |
+| `birth_date` | Date | Player's date of birth (YYYY-MM-DD). |
+| `height` | Int32 | Player's height in inches. |
+| `weight` | Int32 | Player's listed weight in pounds. |
+| `college` | String | College or university the player attended. |
+| `gsis_id` | String | NFL GSIS player identifier — the canonical nflverse player key used to join across datasets. |
+| `espn_id` | String | ESPN player identifier for cross-system joins. |
+| `sportradar_id` | String | Sportradar player identifier for cross-system joins. |
+| `yahoo_id` | String | Yahoo Sports player identifier for cross-system joins. |
+| `rotowire_id` | String | RotoWire player identifier for cross-system joins. |
+| `pff_id` | String | Pro Football Focus (PFF) player identifier for cross-system joins. |
+| `pfr_id` | String | Pro Football Reference (PFR) player identifier for cross-system joins. |
+| `fantasy_data_id` | String | FantasyData player identifier for cross-system joins. |
+| `sleeper_id` | String | Sleeper player identifier for cross-system joins. |
+| `years_exp` | Int32 | Number of accrued NFL seasons of experience for the player. |
+| `headshot_url` | String | URL of the player's headshot image. |
+| `ngs_position` | String | Player's position as classified by NFL Next Gen Stats. |
+| `week` | Int32 | Week of the season the weekly roster snapshot applies to. |
+| `game_type` | String | Type of game the weekly roster snapshot applies to (e.g. 'REG', 'POST'). |
+| `status_description_abbr` | String | Abbreviated roster status description code from the source feed. |
+| `football_name` | String | Player's preferred football (commonly used) first name. |
+| `esb_id` | String | Elias Sports Bureau (ESB) player identifier used for official NFL record-keeping. |
+| `gsis_it_id` | String | NFL GSIS internal tracking identifier for the player. |
+| `smart_id` | String | NFL SMART player identifier (GUID) used across modern NFL data feeds. |
+| `entry_year` | Int32 | Calendar year the player first entered the NFL. |
+| `rookie_year` | Int32 | Calendar year of the player's rookie season. |
+| `draft_club` | String | Team abbreviation of the club that drafted the player. |
+| `draft_number` | Int32 | Overall pick number at which the player was selected in the NFL draft. |
+
+```python
+load_nfl_weekly_rosters(seasons=2024)
+```
+
+## load_nfl_depth_charts
+
+Release: [depth_charts](https://github.com/nflverse/nflverse-data/releases/tag/depth_charts) · asset `https://github.com/nflverse/nflverse-data/releases/download/depth_charts/depth_charts_{season}.parquet`
+### Returns {#load_nfl_depth_charts-returns}
+
+| col_name | type | description |
+|---|---|---|
+| `dt` | String | The timestamp (ISO8601-formatted text) indicating when the data record was loaded. Can be used to assign the data set to a specific point in time during the season. |
+| `team` | String | NFL team. Uses official abbreviations as per NFL.com |
+| `player_name` | String | Full name of player |
+| `espn_id` | String | ESPN ID - usual format is an integer with ~5 digits |
+| `gsis_id` | String | Game Stats and Info Service ID: the primary ID for play-by-play data. |
+| `pos_grp_id` | String | Player position group identifier |
+| `pos_grp` | String | Player position group: formation of offense, defense, or special teams |
+| `pos_id` | String | Player position identifier |
+| `pos_name` | String | Player position name |
+| `pos_abb` | String | Player position abbreviation |
+| `pos_slot` | Int32 | A number assigned to each position in a formation |
+| `pos_rank` | Int32 | Player's rank on depth chart grouped by pos_slot |
+
+```python
+load_nfl_depth_charts(seasons=2024)
+```
+
+## load_nfl_injuries
+
+Release: [injuries](https://github.com/nflverse/nflverse-data/releases/tag/injuries) · asset `https://github.com/nflverse/nflverse-data/releases/download/injuries/injuries_{season}.parquet`
+### Returns {#load_nfl_injuries-returns}
+
+| col_name | type | description |
+|---|---|---|
+| `season` | Int32 | 4 digit number indicating to which season(s) the specified timeframe belongs to. |
+| `season_type` | String | REG or POST indicating if the timeframe belongs to regular or post season. |
+| `game_type` | String | The most recent game type of that season that a player appeared on the roster. |
+| `team` | String | NFL team. Uses official abbreviations as per NFL.com |
+| `week` | Int32 | Season week. |
+| `gsis_id` | String | Game Stats and Info Service ID: the primary ID for play-by-play data. |
+| `position` | String | Primary position as reported by NFL.com |
+| `full_name` | String | Full name as per NFL.com |
+| `first_name` | String | First name of player |
+| `last_name` | String | Last name of player |
+| `report_primary_injury` | String | Primary injury listed on official injury report |
+| `report_secondary_injury` | String | Secondary injury listed on official injury report |
+| `report_status` | String | Player's status for game on official injury report |
+| `practice_primary_injury` | String | Primary injury listed on practice injury report |
+| `practice_secondary_injury` | String | Secondary injury listed on practice injury report |
+| `practice_status` | String | Player's participation in practice |
+
+```python
+load_nfl_injuries(seasons=2024)
+```
+
+## load_nfl_snap_counts
+
+Release: [snap_counts](https://github.com/nflverse/nflverse-data/releases/tag/snap_counts) · asset `https://github.com/nflverse/nflverse-data/releases/download/snap_counts/snap_counts_{season}.parquet`
+### Returns {#load_nfl_snap_counts-returns}
+
+| col_name | type | description |
+|---|---|---|
+| `game_id` | String | Ten digit identifier for NFL game. |
+| `pfr_game_id` | String | PFR game ID |
+| `season` | Int32 | 4 digit number indicating to which season(s) the specified timeframe belongs to. |
+| `game_type` | String | The most recent game type of that season that a player appeared on the roster. |
+| `week` | Int32 | Season week. |
+| `player` | String | Player name |
+| `pfr_player_id` | String | ID from Pro Football Reference |
+| `position` | String | Primary position as reported by NFL.com |
+| `team` | String | NFL team. Uses official abbreviations as per NFL.com |
+| `opponent` | String | Opposing team of player |
+| `offense_snaps` | Float64 | Number of snaps on offense |
+| `offense_pct` | Float64 | Percent of offensive snaps taken |
+| `defense_snaps` | Float64 | Number of snaps on defense |
+| `defense_pct` | Float64 | Percent of defensive snaps taken |
+| `st_snaps` | Float64 | Number of snaps on special teams |
+| `st_pct` | Float64 | Percent of special teams snaps taken |
+
+```python
+load_nfl_snap_counts(seasons=2024)
+```
+
+## load_nfl_ftn_charting
+
+Release: [ftn_charting](https://github.com/nflverse/nflverse-data/releases/tag/ftn_charting) · asset `https://github.com/nflverse/nflverse-data/releases/download/ftn_charting/ftn_charting_{season}.parquet`
+### Returns {#load_nfl_ftn_charting-returns}
+
+| col_name | type | description |
+|---|---|---|
+| `ftn_game_id` | Int32 | FTN game ID |
+| `nflverse_game_id` | String | nflverse identifier for games. Format is season, week, away_team, home_team |
+| `season` | Int32 | 4 digit number indicating to which season(s) the specified timeframe belongs to. |
+| `week` | Int32 | Season week. |
+| `ftn_play_id` | Int32 | FTN play ID |
+| `nflverse_play_id` | Int32 | Play ID used by nflverse, corresponds to GSIS play ID |
+| `starting_hash` | String | hash the ball was place(L = left, M = middle, R = right) |
+| `qb_location` | String | pre-snap position of quarterback(U = under center, S = shotgun, P = pistol) |
+| `n_offense_backfield` | Int32 | number of players in the backfield at the snap |
+| `n_defense_box` | Int32 | Number of defenders aligned in the box at the time of the snap, as charted by FTN Data. |
+| `is_no_huddle` | Boolean | no huddle |
+| `is_motion` | Boolean | motion occurred on the play before or at the time of the snap |
+| `is_play_action` | Boolean | play-action pass |
+| `is_screen_pass` | Boolean | screen pass |
+| `is_rpo` | Boolean | play is considered run-pass option |
+| `is_trick_play` | Boolean | trick play |
+| `is_qb_out_of_pocket` | Boolean | quarterback moved out of pocket |
+| `is_interception_worthy` | Boolean | interception worthy pass |
+| `is_throw_away` | Boolean | quarterback thrown away |
+| `read_thrown` | String | read the ball was thrown |
+| `is_catchable_ball` | Boolean | catchable ball(defined by throws that are generally on target that are not defended away) |
+| `is_contested_ball` | Boolean | contested ball(defined by whether or not the receiver is facing physical contact at the time of the catch) |
+| `is_created_reception` | Boolean | created reception(defined by a reception that only occurs due to an exceptional play by the receiver) |
+| `is_drop` | Boolean | receiver drop |
+| `is_qb_sneak` | Boolean | quarterback sneak |
+| `n_blitzers` | Int32 | number of blitzers |
+| `n_pass_rushers` | Int32 | number of pass rushers |
+| `is_qb_fault_sack` | Boolean | sack that is the fault of the quarterback |
+| `date_pulled` | Datetime(time_unit='us', time_zone='UTC') | Date the data was retrieved from the FTN Data API by nflverse jobs |
+
+```python
+load_nfl_ftn_charting(seasons=2024)
+```
+
+## load_nfl_groups
+
+Release: [nfl_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nfl_groups) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nfl_groups/nfl_groups.parquet`
+
+:::caution[Coverage]
+One season-less file: one row per group lineage (the league, subdivisions, conferences, divisions) with the first and last season it had members. group_id is SDV's own id (e.g. nfl:afc-east) and names a lineage: a rename that keeps continuity keeps the id, a new body gets a new one, and notes records each call. Seasons are the STARTING year (2025 = the 2025-26 season).
+:::
+
+### Returns {#load_nfl_groups-returns}
+
+| col_name | type | description |
+|---|---|---|
+| `league` | String | League code of the table ("nfl"); the prefix of every group_id in it. |
+| `group_id` | String | SDV group id, {league}:{slug}. It names a lineage: renames that keep continuity keep the id, and a new body (a new conference, or a merger the sources treat as new) gets a new one. |
+| `level` | String | Hierarchy level of the group: "league", "subdivision", "conference" or "division". |
+| `first_season` | Int32 | First season in which the group had at least one member (STARTING year: 2025 = the 2025-26 season). |
+| `last_season` | Int32 | Last season in which the group had at least one member (STARTING year: 2025 = the 2025-26 season). |
+| `notes` | String | Builder notes on the group: the lineage decisions behind its group_id and any source caveats. |
+
+```python
+load_nfl_groups()
+```
+
+## load_nfl_group_seasons
+
+Release: [nfl_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nfl_groups) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nfl_groups/nfl_group_seasons.parquet`
+
+:::caution[Coverage]
+One season-less file: one row per group per season it existed, with its name, short name, abbreviation and parent group AS OF that season (never today's label applied to the past) and its member count. season is the STARTING year (2025 = the 2025-26 season).
+:::
+
+### Returns {#load_nfl_group_seasons-returns}
+
+| col_name | type | description |
+|---|---|---|
+| `league` | String | League code of the table ("nfl"); the prefix of every group_id in it. |
+| `group_id` | String | SDV group id, {league}:{slug}. It names a lineage: renames that keep continuity keep the id, and a new body (a new conference, or a merger the sources treat as new) gets a new one. |
+| `season` | Int32 | Season the row describes (STARTING year: 2025 = the 2025-26 season). |
+| `level` | String | Hierarchy level of the group: "league", "subdivision", "conference" or "division". |
+| `name` | String | Full name of the group as of that season -- the label in use then, not today's name. |
+| `short_name` | String | Short display name of the group as of that season. |
+| `abbreviation` | String | Abbreviation of the group as of that season. |
+| `parent_group_id` | String | group_id one level up as of that season (division -> conference -> subdivision -> league); null at the top level or where no higher group applied that season. |
+| `n_teams` | Int32 | Number of member teams in the group that season. |
+
+```python
+load_nfl_group_seasons()
+```
+
+## load_nfl_group_aliases
+
+Release: [nfl_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nfl_groups) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nfl_groups/nfl_group_aliases.parquet`
+
+:::caution[Coverage]
+One season-less file: every name, abbreviation, slug and source id that a source (espn, nflverse, sdv) uses for a group, each with the seasons it is valid for (valid_from / valid_to, inclusive; null = unbounded). Match a source's conference or division label here to reach group_id.
+:::
+
+### Returns {#load_nfl_group_aliases-returns}
+
+| col_name | type | description |
+|---|---|---|
+| `league` | String | League code of the table ("nfl"); the prefix of every group_id in it. |
+| `group_id` | String | SDV group id, {league}:{slug}. It names a lineage: renames that keep continuity keep the id, and a new body (a new conference, or a merger the sources treat as new) gets a new one. |
+| `source` | String | Source that uses this label or id (in this table: espn, nflverse, sdv); "sdv" marks SDV's own labels. |
+| `source_id` | String | The source's own id for the group (ESPN group id, NCAA conf_id, CFBD id, MLB division id) when it has one; null otherwise. |
+| `name_kind` | String | Kind of label in value: "name", "short_name", "abbreviation", "slug" or "code". |
+| `value` | String | The label exactly as the source writes it; match a source's conference or division label against it to reach group_id. |
+| `valid_from` | Int32 | First season the alias is valid for, inclusive (STARTING year: 2025 = the 2025-26 season); null = unbounded. |
+| `valid_to` | Int32 | Last season the alias is valid for, inclusive (STARTING year: 2025 = the 2025-26 season); null = unbounded (still in use). |
+
+```python
+load_nfl_group_aliases()
+```
