@@ -9,6 +9,8 @@ graceful empty (MJHL's access-denied ``gc`` reply) is driven end to end.
 
 from __future__ import annotations
 
+from types import SimpleNamespace
+
 import importlib
 import pathlib
 
@@ -339,7 +341,7 @@ def _serve_by_view(monkeypatch, bodies):
         r.url = url
         return r
 
-    monkeypatch.setattr(dl_utils._SHARED_SESSION, "get", fake_get)
+    monkeypatch.setattr(dl_utils, "_SHARED_SESSION", SimpleNamespace(get=fake_get))
     monkeypatch.setattr(_client.time, "sleep", lambda *_a, **_k: None)
 
 

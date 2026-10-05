@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from types import SimpleNamespace
+
 import pathlib
 import traceback
 
@@ -113,7 +115,7 @@ def _serve(monkeypatch, status, body):
         r.url = url
         return r
 
-    monkeypatch.setattr(dl_utils._SHARED_SESSION, "get", fake_get)
+    monkeypatch.setattr(dl_utils, "_SHARED_SESSION", SimpleNamespace(get=fake_get))
     monkeypatch.setattr(dl_utils.time, "sleep", lambda *_a, **_k: None)
     monkeypatch.setattr(client.time, "sleep", lambda *_a, **_k: None)
     return calls
@@ -180,7 +182,7 @@ def test_transport_error_is_a_failed_fetch(monkeypatch):
     def boom(url, **_k):
         raise requests.exceptions.ConnectTimeout("timed out")
 
-    monkeypatch.setattr(dl_utils._SHARED_SESSION, "get", boom)
+    monkeypatch.setattr(dl_utils, "_SHARED_SESSION", SimpleNamespace(get=boom))
     with pytest.raises(AssetFetchError, match="timed out"):
         _call()
 
@@ -219,7 +221,7 @@ def test_transport_error_text_never_carries_the_key(monkeypatch):
             f"with url: {path} (Caused by NewConnectionError('Failed to establish a new connection'))"
         )
 
-    monkeypatch.setattr(dl_utils._SHARED_SESSION, "get", refuse)
+    monkeypatch.setattr(dl_utils, "_SHARED_SESSION", SimpleNamespace(get=refuse))
     with pytest.raises(AssetFetchError) as ei:
         _call()
     err = ei.value
