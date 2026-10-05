@@ -6,8 +6,6 @@ from unittest.mock import patch
 
 from tools.codegen import generate
 
-OUT = Path("tools/codegen/_generated")
-
 
 def _load(mod_path: Path, name: str):
     spec = importlib.util.spec_from_file_location(name, mod_path)
@@ -16,24 +14,21 @@ def _load(mod_path: Path, name: str):
     return mod
 
 
-def test_build_emits_one_module_per_league():
-    generate.build()
+def test_build_emits_one_module_per_league(espn_ext_dir):
     for prefix in ("nba", "wnba", "mbb", "wbb", "cfb", "nfl", "mlb", "nhl"):
-        assert (OUT / f"{prefix}_espn_ext.py").exists()
+        assert (espn_ext_dir / f"{prefix}_espn_ext.py").exists()
 
 
-def test_generated_nba_module_imports_and_exposes_functions():
-    generate.build()
-    mod = _load(OUT / "nba_espn_ext.py", "_gen_nba")
+def test_generated_nba_module_imports_and_exposes_functions(espn_ext_dir):
+    mod = _load(espn_ext_dir / "nba_espn_ext.py", "_gen_nba")
     assert hasattr(mod, "espn_nba_scoreboard")
     assert hasattr(mod, "espn_nba_teams_site")
     assert hasattr(mod, "espn_nba_standings")
     assert "espn_nba_scoreboard" in mod.__all__
 
 
-def test_generated_function_builds_correct_url_and_strips_none():
-    generate.build()
-    mod = _load(OUT / "nba_espn_ext.py", "_gen_nba2")
+def test_generated_function_builds_correct_url_and_strips_none(espn_ext_dir):
+    mod = _load(espn_ext_dir / "nba_espn_ext.py", "_gen_nba2")
 
     class FakeResp:
         def json(self):
@@ -69,9 +64,8 @@ def test_summary_schema_has_frames():
     assert all(f["columns"] for f in d["frames"] if f["section"] in ("header", "game_info"))
 
 
-def test_standings_uses_alt_host():
-    generate.build()
-    mod = _load(OUT / "nba_espn_ext.py", "_gen_nba3")
+def test_standings_uses_alt_host(espn_ext_dir):
+    mod = _load(espn_ext_dir / "nba_espn_ext.py", "_gen_nba3")
 
     class FakeResp:
         def json(self):
