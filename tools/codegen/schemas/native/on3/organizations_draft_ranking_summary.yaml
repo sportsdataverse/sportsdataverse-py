@@ -1,12 +1,5 @@
-columns:
-- description: ''
-  name: conference
-  type: character
-- description: ''
-  name: year_summary
-  type: character
-- description: ''
-  name: span_summary
-  type: character
+columns: []
 kind: dataframe
 schema: organizations_draft_ranking_summary
+unverified: 'no committed capture with rows, and the response type is only heuristically
+  mapped (x-source: call-site)'

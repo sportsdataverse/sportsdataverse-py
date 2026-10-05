@@ -1,24 +1,5 @@
-columns:
-- description: ''
-  name: organization
-  type: character
-- description: ''
-  name: rating
-  type: character
-- description: ''
-  name: position_abbr
-  type: character
-- description: ''
-  name: exp_min
-  type: integer
-- description: ''
-  name: exp_max
-  type: integer
-- description: ''
-  name: year
-  type: character
-- description: ''
-  name: age
-  type: integer
+columns: []
 kind: dataframe
 schema: player_organizations_org_key
+unverified: no committed capture with rows, and the row has nested objects whose flattened
+  column names depend on which of them are null in the data

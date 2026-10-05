@@ -1,9 +1,5 @@
-columns:
-- description: ''
-  name: organizations
-  type: character
-- description: ''
-  name: draft
-  type: character
+columns: []
 kind: dataframe
 schema: player_organizations
+unverified: 'no committed capture with rows, and the response type is only heuristically
+  mapped (x-source: call-site)'

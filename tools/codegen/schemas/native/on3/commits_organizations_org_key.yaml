@@ -5,5 +5,7 @@ columns:
 - description: ''
   name: commits
   type: character
+derived_by_rule: no committed capture with rows; names are the response type's own
+  flat fields through the parser's underscore rule
 kind: dataframe
 schema: commits_organizations_org_key

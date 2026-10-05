@@ -1,7 +1,7 @@
 ---
 title: "CFB — On3 Recruit Database (api.on3.com) — Player"
 sidebar_label: "Player"
-sidebar_position: 4
+sidebar_position: 5
 description: "CFB — On3 Recruit Database (api.on3.com) — Player — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---
@@ -27,6 +27,7 @@ GET /rdb/v1/player/{personKey}/all-rankings
 | `type` | character | Record-type category (e.g. `total`, `home`, `road`). |
 | `link` | character | API link to the game feed. |
 | `ranking_key` | integer | On3 key of the ranking cycle the row belongs to. |
+| `ranking_year` | integer |  |
 | `ranking_type` | character | Poll type code (e.g. `ap`, `coaches`, `cfp`). |
 | `rating` | numeric | Overall SP+ rating (Bill Connelly methodology, in points per game). |
 | `sport` | character | Nested On3 sport object for the ranking row (stringified). |
@@ -39,7 +40,7 @@ GET /rdb/v1/player/{personKey}/all-rankings
 | `stars` | integer | Recruit star rating on the 247Sports scale (2-5). |
 | `five_star_plus` | logical | Whether On3 designates the player a Five-Star Plus+ prospect. |
 | `nearly_five_star_plus` | logical | On3 flag that the player narrowly missed the Five-Star Plus+ designation. |
-| `change` | character | Rank movement since the previous ranking cycle. |
+| `change_1` | character |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -151,12 +152,7 @@ GET /rdb/v1/player/{personKey}/organizations
 
 ### Returns {#on3_player_organizations-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
-| col_name | type | description |
-|---|---|---|
-| `organizations` | character | Player's organization stints (high school, college, pro) as a stringified list of nested objects. |
-| `draft` | character | Nested On3 draft record for the player, when drafted (stringified). |
-
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_on3_rdb`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#on3_player_organizations-example}
@@ -182,17 +178,7 @@ GET /rdb/v1/player/{playerKey}/organizations/{orgKey}
 
 ### Returns {#on3_player_organizations_org_key-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
-| col_name | type | description |
-|---|---|---|
-| `organization` | character | Organization. |
-| `rating` | character | Overall SP+ rating (Bill Connelly methodology, in points per game). |
-| `position_abbr` | character | Position abbreviation. |
-| `exp_min` | integer | Minimum years of experience listed for the player's stint with the organization (On3 RDB). |
-| `exp_max` | integer | Maximum years of experience listed for the player's stint with the organization (On3 RDB). |
-| `year` | character | Four-digit season year (e.g. 2019). |
-| `age` | integer | Age as of last pipeline build, rounded to one decimal. Pipeline is built on a weekly basis. |
-
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_on3_rdb`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#on3_player_organizations_org_key-example}
@@ -222,23 +208,28 @@ GET /rdb/v1/player/{personKey}/rankings
 |---|---|---|
 | `key` | integer | On3 RDB key for the player's ranking row. |
 | `ranking_key` | integer | On3 key of the ranking cycle the row belongs to. |
-| `rating` | numeric | Overall SP+ rating (Bill Connelly methodology, in points per game). |
+| `rating` | integer | Overall SP+ rating (Bill Connelly methodology, in points per game). |
 | `state_rank` | integer | State ranking. |
 | `state_abbr` | character | Two-letter abbreviation of the player's home state. |
 | `position_rank` | integer | Position ranking. |
 | `position_abbr` | character | Position abbreviation. |
 | `overall_rank` | integer | Overall recruit ranking (top recruits only; may be `NA`). |
 | `stars` | integer | Recruit star rating on the 247Sports scale (2-5). |
-| `change` | character | Rank movement since the previous ranking cycle. |
 | `consensus_rating` | numeric | Player's industry-consensus rating (blend of the major recruiting services). |
 | `consensus_state_rank` | integer | Player's consensus rank within their home state. |
 | `consensus_position_rank` | integer | Player's consensus rank at their position. |
 | `consensus_overall_rank` | integer | Player's national consensus rank. |
 | `consensus_stars` | integer | Player's star rating under the industry consensus. |
-| `consensus_change` | character | Consensus rank movement since the previous cycle. |
 | `strength` | integer | Strength label (Even, Power Play, Shorthanded). |
 | `five_star_plus` | logical | Whether On3 designates the player a Five-Star Plus+ prospect. |
 | `ranking_type` | character | Poll type code (e.g. `ap`, `coaches`, `cfp`). |
+| `ranking_key_2` | integer |  |
+| `ranking_sport_key` | integer |  |
+| `ranking_sport_key_2` | integer |  |
+| `ranking_sport_name` | character |  |
+| `ranking_year` | integer |  |
+| `change_38` | character |  |
+| `consensus_change_41` | character |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -268,30 +259,23 @@ GET /rdb/v1/player/{personKey}/profile
 | col_name | type | description |
 |---|---|---|
 | `key` | integer | On3 RDB key for the player profile. |
-| `class_year_recruitment_key` | character | On3 recruitment key for the player's recruiting-class cycle. |
+| `class_year_recruitment_key` | integer | On3 recruitment key for the player's recruiting-class cycle. |
 | `recruitment_key` | integer | On3 key of the player's active recruitment record. |
-| `person_can_manage_recruitment` | character | Whether the athlete can self-manage the recruitment on On3. |
+| `person_can_manage_recruitment` | logical | Whether the athlete can self-manage the recruitment on On3. |
 | `ranking_key` | integer | On3 key of the ranking cycle the profile's rating belongs to. |
 | `person_sport_key` | integer | On3 key of the athlete-sport profile (person x sport). |
-| `ranking` | character | National rank of the team's overall SP+ rating (1 = best). |
 | `oracle_key` | character | On3's internal oracle identifier for the player record. |
 | `name` | character | Position name (e.g. `Quarterback`). |
 | `slug` | character | URL slug for the team. |
 | `high_school_name` | character | Recruit high-school name. |
-| `high_school` | character | High school |
 | `hometown_name` | character | Player's hometown, as listed by On3. |
-| `hometown_state` | character | Recruit hometown state. |
-| `current_state` | character | Current home venue state. |
-| `default_asset` | character | Nested On3 asset object for the player's headshot (stringified). |
 | `position_abbreviation` | character | Position abbreviation (e.g. `QB`); `position_detail = TRUE` only. |
-| `primary_position` | character | Nested On3 object for the player's primary position (stringified). |
 | `class_rank` | character | Player's rank within their recruiting class. |
 | `height` | character | Listed height (inches). |
 | `weight` | integer | Listed weight (lbs). |
 | `class_year` | integer | Player's recruiting class year. |
 | `degree` | character | Degree the player earned or is pursuing, when listed. |
 | `age` | integer | Age as of last pipeline build, rounded to one decimal. Pipeline is built on a weekly basis. |
-| `default_sport` | character | Nested On3 object for the player's primary sport (stringified). |
 | `sports` | character | Sports the player is profiled in, as a stringified list. |
 | `description` | character | ESPN's description of the stat. |
 | `bio_pro_prospect` | character | Bio text framing the player as a pro prospect (On3 RDB). |
@@ -300,20 +284,187 @@ GET /rdb/v1/player/{personKey}/profile
 | `high_school_org_key` | integer | On3 organization key of the player's high school. |
 | `prep_school_org_key` | character | On3 organization key of the player's prep school, when attended. |
 | `junior_college_org_key` | character | On3 organization key of the player's junior college, when attended. |
-| `college_org_key` | character | On3 organization key of the player's college. |
+| `college_org_key` | integer | On3 organization key of the player's college. |
 | `nil_value` | integer | Player's On3 NIL valuation in dollars. |
 | `athlete_verified` | logical | Whether the athlete has verified their own On3 profile. |
 | `prospect_verified` | logical | Whether On3 has verified the prospect's profile information. |
-| `player_status` | character | Player's current status per On3 (e.g. active, transfer portal). |
 | `is_coach` | logical | Whether the person record is a coach. |
 | `is_athlete` | logical | Whether the person record is an athlete. |
 | `visibility` | character | Profile visibility setting on On3. |
 | `tier` | character | On3 profile tier classification for the player. |
 | `review_status` | character | Editorial review status of the profile in the On3 database. |
-| `jersey_number` | character | Jersey number. Often useful for joins by name/team/jersey. |
+| `jersey_number` | integer | Jersey number. Often useful for joins by name/team/jersey. |
 | `badge` | character | Profile badge assigned by On3, when any. |
 | `ncaa_id` | character | Player's NCAA identifier, when known to On3. |
 | `managed_by_user` | logical | On3 user account that manages the player's profile, when claimed. |
+| `ranking_key_2` | integer |  |
+| `ranking_rating` | numeric |  |
+| `ranking_stars` | integer |  |
+| `ranking_national_rank` | integer |  |
+| `ranking_position_rank` | integer |  |
+| `ranking_state_rank` | integer |  |
+| `ranking_position_abbr` | character |  |
+| `ranking_state_abbr` | character |  |
+| `ranking_five_star_plus` | logical |  |
+| `high_school_key` | integer |  |
+| `high_school_full_name` | character |  |
+| `high_school_name_2` | character |  |
+| `high_school_known_as` | character |  |
+| `high_school_mascot` | character |  |
+| `high_school_abbreviation` | character |  |
+| `high_school_asset_url` | character |  |
+| `high_school_default_asset_key` | integer |  |
+| `high_school_default_asset_domain_override` | character |  |
+| `high_school_default_asset_domain` | character |  |
+| `high_school_default_asset_source_override` | character |  |
+| `high_school_default_asset_source` | character |  |
+| `high_school_default_asset_title` | character |  |
+| `high_school_default_asset_description` | character |  |
+| `high_school_default_asset_caption` | character |  |
+| `high_school_default_asset_category` | character |  |
+| `high_school_default_asset_alt_text` | character |  |
+| `high_school_default_asset_height` | integer |  |
+| `high_school_default_asset_width` | integer |  |
+| `high_school_default_asset_asset_type` | character |  |
+| `high_school_default_asset_file_system` | character |  |
+| `high_school_default_asset_path` | character |  |
+| `high_school_default_asset_type` | character |  |
+| `high_school_default_asset_thumbnail` | character |  |
+| `high_school_default_asset_duration` | integer |  |
+| `high_school_default_asset_mime_type` | character |  |
+| `high_school_slug` | character |  |
+| `high_school_primary_color` | character |  |
+| `high_school_org_type` | character |  |
+| `high_school_org_type_enum` | character |  |
+| `high_school_division` | character |  |
+| `high_school_site_keys` | character |  |
+| `high_school_url_slug` | character |  |
+| `hometown_state_key` | integer |  |
+| `hometown_state_name` | character |  |
+| `hometown_state_abbreviation` | character | Recruit hometown state abbreviation. |
+| `hometown_state_country_key` | integer |  |
+| `current_state_key` | integer |  |
+| `current_state_name` | character |  |
+| `current_state_abbreviation` | character |  |
+| `current_state_country_key` | integer |  |
+| `default_asset_key` | integer |  |
+| `default_asset_domain_override` | character |  |
+| `default_asset_domain` | character |  |
+| `default_asset_source_override` | character |  |
+| `default_asset_source` | character |  |
+| `default_asset_title` | character |  |
+| `default_asset_description` | character |  |
+| `default_asset_caption` | character |  |
+| `default_asset_category` | character |  |
+| `default_asset_alt_text` | character |  |
+| `default_asset_height` | integer |  |
+| `default_asset_width` | integer |  |
+| `default_asset_asset_type` | character |  |
+| `default_asset_file_system` | character |  |
+| `default_asset_path` | character |  |
+| `default_asset_type` | character |  |
+| `default_asset_thumbnail` | character |  |
+| `default_asset_duration` | integer |  |
+| `default_asset_mime_type` | character |  |
+| `primary_position_key` | integer |  |
+| `primary_position_name` | character | Primary fielding position name. |
+| `primary_position_abbreviation` | character | Primary position abbreviation. |
+| `primary_position_sport_key` | integer |  |
+| `primary_position_sport_key_2` | integer |  |
+| `primary_position_sport_name` | character |  |
+| `primary_position_sport_slug` | character |  |
+| `primary_position_sport_abbreviation` | character |  |
+| `primary_position_sport_is_rankable` | logical |  |
+| `primary_position_sport_is_industry_rankable` | logical |  |
+| `primary_position_sport_is_scoutable` | logical |  |
+| `primary_position_position_type` | character |  |
+| `default_sport_key` | integer |  |
+| `default_sport_name` | character |  |
+| `player_status_type` | character |  |
+| `player_status_short_term_signee` | logical |  |
+| `player_status_date` | character |  |
+| `player_status_committed_asset_key` | integer |  |
+| `player_status_committed_asset_url` | character |  |
+| `player_status_committed_asset_slug` | character |  |
+| `player_status_committed_asset_full_name` | character |  |
+| `player_status_committed_asset_res_key` | integer |  |
+| `player_status_committed_asset_res_domain_override` | character |  |
+| `player_status_committed_asset_res_domain` | character |  |
+| `player_status_committed_asset_res_source_override` | character |  |
+| `player_status_committed_asset_res_source` | character |  |
+| `player_status_committed_asset_res_title` | character |  |
+| `player_status_committed_asset_res_description` | character |  |
+| `player_status_committed_asset_res_caption` | character |  |
+| `player_status_committed_asset_res_category` | character |  |
+| `player_status_committed_asset_res_alt_text` | character |  |
+| `player_status_committed_asset_res_height` | integer |  |
+| `player_status_committed_asset_res_width` | integer |  |
+| `player_status_committed_asset_res_asset_type` | character |  |
+| `player_status_committed_asset_res_file_system` | character |  |
+| `player_status_committed_asset_res_path` | character |  |
+| `player_status_committed_asset_res_type` | character |  |
+| `player_status_committed_asset_res_thumbnail` | character |  |
+| `player_status_committed_asset_res_duration` | integer |  |
+| `player_status_committed_asset_res_mime_type` | character |  |
+| `player_status_transferred_asset_key` | integer |  |
+| `player_status_transferred_asset_url` | character |  |
+| `player_status_transferred_asset_slug` | character |  |
+| `player_status_transferred_asset_full_name` | character |  |
+| `player_status_transferred_asset_res_key` | integer |  |
+| `player_status_transferred_asset_res_domain_override` | character |  |
+| `player_status_transferred_asset_res_domain` | character |  |
+| `player_status_transferred_asset_res_source_override` | character |  |
+| `player_status_transferred_asset_res_source` | character |  |
+| `player_status_transferred_asset_res_title` | character |  |
+| `player_status_transferred_asset_res_description` | character |  |
+| `player_status_transferred_asset_res_caption` | character |  |
+| `player_status_transferred_asset_res_category` | character |  |
+| `player_status_transferred_asset_res_alt_text` | character |  |
+| `player_status_transferred_asset_res_height` | integer |  |
+| `player_status_transferred_asset_res_width` | integer |  |
+| `player_status_transferred_asset_res_asset_type` | character |  |
+| `player_status_transferred_asset_res_file_system` | character |  |
+| `player_status_transferred_asset_res_path` | character |  |
+| `player_status_transferred_asset_res_type` | character |  |
+| `player_status_transferred_asset_res_thumbnail` | character |  |
+| `player_status_transferred_asset_res_duration` | integer |  |
+| `player_status_transferred_asset_res_mime_type` | character |  |
+| `player_status_committed_organization_key` | integer |  |
+| `player_status_committed_organization_full_name` | character |  |
+| `player_status_committed_organization_name` | character |  |
+| `player_status_committed_organization_mascot` | character |  |
+| `player_status_committed_organization_abbreviation` | character |  |
+| `player_status_committed_organization_asset_url` | character |  |
+| `player_status_committed_organization_asset_key` | integer |  |
+| `player_status_committed_organization_asset_domain_override` | character |  |
+| `player_status_committed_organization_asset_domain` | character |  |
+| `player_status_committed_organization_asset_source_override` | character |  |
+| `player_status_committed_organization_asset_source` | character |  |
+| `player_status_committed_organization_asset_title` | character |  |
+| `player_status_committed_organization_asset_description` | character |  |
+| `player_status_committed_organization_asset_caption` | character |  |
+| `player_status_committed_organization_asset_category` | character |  |
+| `player_status_committed_organization_asset_alt_text` | character |  |
+| `player_status_committed_organization_asset_height` | integer |  |
+| `player_status_committed_organization_asset_width` | integer |  |
+| `player_status_committed_organization_asset_asset_type` | character |  |
+| `player_status_committed_organization_asset_file_system` | character |  |
+| `player_status_committed_organization_asset_path` | character |  |
+| `player_status_committed_organization_asset_type` | character |  |
+| `player_status_committed_organization_asset_thumbnail` | character |  |
+| `player_status_committed_organization_asset_duration` | integer |  |
+| `player_status_committed_organization_asset_mime_type` | character |  |
+| `player_status_committed_organization_slug` | character |  |
+| `player_status_committed_organization_primary_color` | character |  |
+| `player_status_class_rank` | character |  |
+| `player_status_transfer_entered` | character |  |
+| `player_status_recruitment_year` | character |  |
+| `player_status_decommitted_asset` | character |  |
+| `player_status_transfer` | logical |  |
+| `player_status_expected_to_transfer` | logical |  |
+| `player_status_recruitment_key` | integer |  |
+| `player_status_withdrawn_transfer` | logical |  |
+| `player_status_withdrawn_transfer_date` | character |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -339,26 +490,7 @@ GET /rdb/v1/player/{playerKey}/team-targets
 
 ### Returns {#on3_player_team_targets-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
-| col_name | type | description |
-|---|---|---|
-| `team` | character | Team name. |
-| `year` | integer | Four-digit season year (e.g. 2019). |
-| `sport` | character | Nested On3 sport object for the target entry (stringified). |
-| `coaches` | character | Recruiting coaches at the target school tied to the recruitment (stringified list). |
-| `status` | character | Game status (e.g. "scheduled", "in_progress", "completed"). |
-| `interest` | integer | Recruit's interest level in the target school, per On3. |
-| `distance` | numeric | Yards to gain for a first down (or to the goal line in goal-to-go situations). |
-| `class_rank` | integer | Recruit's rank within their recruiting class. |
-| `official_visit_count` | integer | Number of official visits the recruit has taken to the school. |
-| `un_official_visit_count` | integer | Number of unofficial visits the recruit has taken to the school. |
-| `prediction` | numeric | Pre-game prediction (favorite, score, win %). |
-| `committed_date` | character | Date the recruit committed to the school, when applicable. |
-| `draft_position_count` | integer | Number of players at the recruit's position the school has had drafted. |
-| `draft_total` | integer | Total number of players the school has had drafted. |
-| `position_abbreviation` | character | Position abbreviation (e.g. `QB`); `position_detail = TRUE` only. |
-| `position_key` | integer | On3 key of the recruit's position. |
-
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_on3_rdb`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#on3_player_team_targets-example}
@@ -399,11 +531,9 @@ GET /rdb/v1/player/verified
 | `name` | character | Position name (e.g. `Quarterback`). |
 | `slug` | character | URL slug for the team. |
 | `high_school_name` | character | Recruit high-school name. |
-| `high_school` | character | High school |
 | `hometown_name` | character | Player's hometown, as listed by On3. |
 | `hometown_state` | character | Recruit hometown state. |
 | `current_state` | character | Current home venue state. |
-| `default_asset` | character | Nested On3 asset object for the player's headshot (stringified). |
 | `position_abbreviation` | character | Position abbreviation (e.g. `QB`); `position_detail = TRUE` only. |
 | `primary_position` | character | Nested On3 object for the player's primary position (stringified). |
 | `class_rank` | character | Player's rank within their recruiting class. |
@@ -412,13 +542,12 @@ GET /rdb/v1/player/verified
 | `class_year` | integer | Player's recruiting class year. |
 | `degree` | character | Degree the player earned or is pursuing, when listed. |
 | `age` | integer | Age as of last pipeline build, rounded to one decimal. Pipeline is built on a weekly basis. |
-| `default_sport` | character | Nested On3 object for the player's primary sport (stringified). |
 | `sports` | character | Sports the player is profiled in, as a stringified list. |
 | `description` | character | ESPN's description of the stat. |
 | `bio_pro_prospect` | character | Bio text framing the player as a pro prospect (On3 RDB). |
 | `bio_college_recruit` | character | Bio text framing the player as a college recruit (On3 RDB). |
 | `organization_level` | character | Level of the player's current organization (e.g. high school, college, professional). |
-| `high_school_org_key` | integer | On3 organization key of the player's high school. |
+| `high_school_org_key` | numeric | On3 organization key of the player's high school. |
 | `prep_school_org_key` | character | On3 organization key of the player's prep school, when attended. |
 | `junior_college_org_key` | character | On3 organization key of the player's junior college, when attended. |
 | `college_org_key` | character | On3 organization key of the player's college. |
@@ -435,6 +564,80 @@ GET /rdb/v1/player/verified
 | `badge` | character | Profile badge assigned by On3, when any. |
 | `ncaa_id` | character | Player's NCAA identifier, when known to On3. |
 | `managed_by_user` | logical | On3 user account that manages the player's profile, when claimed. |
+| `high_school_key` | integer |  |
+| `high_school_full_name` | character |  |
+| `high_school_name_2` | character |  |
+| `high_school_known_as` | character |  |
+| `high_school_mascot` | character |  |
+| `high_school_abbreviation` | character |  |
+| `high_school_asset_url` | character |  |
+| `high_school_default_asset_key` | integer |  |
+| `high_school_default_asset_domain_override` | character |  |
+| `high_school_default_asset_domain` | character |  |
+| `high_school_default_asset_source_override` | character |  |
+| `high_school_default_asset_source` | character |  |
+| `high_school_default_asset_title` | character |  |
+| `high_school_default_asset_description` | character |  |
+| `high_school_default_asset_caption` | character |  |
+| `high_school_default_asset_category` | character |  |
+| `high_school_default_asset_alt_text` | character |  |
+| `high_school_default_asset_height` | integer |  |
+| `high_school_default_asset_width` | integer |  |
+| `high_school_default_asset_asset_type` | character |  |
+| `high_school_default_asset_file_system` | character |  |
+| `high_school_default_asset_path` | character |  |
+| `high_school_default_asset_type` | character |  |
+| `high_school_default_asset_thumbnail` | character |  |
+| `high_school_default_asset_duration` | integer |  |
+| `high_school_default_asset_mime_type` | character |  |
+| `high_school_slug` | character |  |
+| `high_school_primary_color` | character |  |
+| `high_school_org_type` | character |  |
+| `high_school_org_type_enum` | character |  |
+| `high_school_division` | character |  |
+| `high_school_site_keys` | character |  |
+| `high_school_url_slug` | character |  |
+| `default_asset_key` | integer |  |
+| `default_asset_domain_override` | character |  |
+| `default_asset_domain` | character |  |
+| `default_asset_source_override` | character |  |
+| `default_asset_source` | character |  |
+| `default_asset_title` | character |  |
+| `default_asset_description` | character |  |
+| `default_asset_caption` | character |  |
+| `default_asset_category` | character |  |
+| `default_asset_alt_text` | character |  |
+| `default_asset_height` | integer |  |
+| `default_asset_width` | integer |  |
+| `default_asset_asset_type` | character |  |
+| `default_asset_file_system` | character |  |
+| `default_asset_path` | character |  |
+| `default_asset_type` | character |  |
+| `default_asset_thumbnail` | character |  |
+| `default_asset_duration` | integer |  |
+| `default_asset_mime_type` | character |  |
+| `default_sport_key` | integer |  |
+| `default_sport_name` | character |  |
+| `hometown_state_key` | numeric |  |
+| `hometown_state_name` | character |  |
+| `hometown_state_abbreviation` | character | Recruit hometown state abbreviation. |
+| `hometown_state_country_key` | numeric |  |
+| `current_state_key` | numeric |  |
+| `current_state_name` | character |  |
+| `current_state_abbreviation` | character |  |
+| `current_state_country_key` | numeric |  |
+| `primary_position_key` | numeric |  |
+| `primary_position_name` | character | Primary fielding position name. |
+| `primary_position_abbreviation` | character | Primary position abbreviation. |
+| `primary_position_sport_key` | numeric |  |
+| `primary_position_sport_key_2` | numeric |  |
+| `primary_position_sport_name` | character |  |
+| `primary_position_sport_slug` | character |  |
+| `primary_position_sport_abbreviation` | character |  |
+| `primary_position_sport_is_rankable` | character |  |
+| `primary_position_sport_is_industry_rankable` | character |  |
+| `primary_position_sport_is_scoutable` | character |  |
+| `primary_position_position_type` | character |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -464,15 +667,17 @@ GET /rdb/v1/player/{personKey}/videos
 | col_name | type | description |
 |---|---|---|
 | `key` | integer | On3 RDB key for the video record. |
-| `person_key` | integer | On3 person key of the featured athlete. |
 | `source_url` | character | Source URL of the hosted video. |
 | `title` | character | Specific role title for the assignment. |
 | `thumbnail` | character | URL of the video's thumbnail image. |
-| `category` | character | CFBD stats category name (e.g. passing, rushing, defensive). |
 | `description` | character | ESPN's description of the stat. |
+| `date` | integer | Publication date of the video, per On3. |
+| `person_key` | integer | On3 person key of the featured athlete. |
 | `person_sport` | character | Nested athlete-sport profile the video is attached to (stringified). |
 | `is_featured` | logical | Whether the video is featured on the player's On3 profile. |
-| `date` | integer | Publication date of the video, per On3. |
+| `featured_order` | character |  |
+| `category_key` | integer |  |
+| `category_value` | character |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -498,14 +703,7 @@ GET /rdb/v1/player/{playerKey}/visit-center
 
 ### Returns {#on3_player_visit_center-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
-| col_name | type | description |
-|---|---|---|
-| `sport` | character | Nested On3 sport object for the visit-center entry (stringified). |
-| `year` | integer | Four-digit season year (e.g. 2019). |
-| `total_visits` | integer | Total number of school visits logged for the recruit. |
-| `visits` | character | The recruit's school visits with dates and types, as a stringified list. |
-
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_on3_rdb`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#on3_player_visit_center-example}
@@ -539,8 +737,77 @@ GET /rdb/v1/players/industry-comparision
 | col_name | type | description |
 |---|---|---|
 | `ratings` | character | List of per-service rating entries (On3, Rivals, 247, ESPN) composing the industry comparison. |
-| `person` | character | Nested person object (identity, school, position, status) for the player. |
 | `nil_value` | integer | On3 NIL valuation for the player (US dollars). |
+| `person_key` | integer |  |
+| `person_name` | character |  |
+| `person_slug` | character |  |
+| `person_high_school_name` | character |  |
+| `person_high_school_key` | integer |  |
+| `person_high_school_full_name` | character |  |
+| `person_high_school_name_2` | character |  |
+| `person_high_school_known_as` | character |  |
+| `person_high_school_mascot` | character |  |
+| `person_high_school_abbreviation` | character |  |
+| `person_high_school_asset_url` | character |  |
+| `person_high_school_default_asset_key` | integer |  |
+| `person_high_school_default_asset_domain_override` | character |  |
+| `person_high_school_default_asset_domain` | character |  |
+| `person_high_school_default_asset_source_override` | character |  |
+| `person_high_school_default_asset_source` | character |  |
+| `person_high_school_default_asset_title` | character |  |
+| `person_high_school_default_asset_description` | character |  |
+| `person_high_school_default_asset_caption` | character |  |
+| `person_high_school_default_asset_category` | character |  |
+| `person_high_school_default_asset_alt_text` | character |  |
+| `person_high_school_default_asset_height` | integer |  |
+| `person_high_school_default_asset_width` | integer |  |
+| `person_high_school_default_asset_asset_type` | character |  |
+| `person_high_school_default_asset_file_system` | character |  |
+| `person_high_school_default_asset_path` | character |  |
+| `person_high_school_default_asset_type` | character |  |
+| `person_high_school_default_asset_thumbnail` | character |  |
+| `person_high_school_default_asset_duration` | integer |  |
+| `person_high_school_default_asset_mime_type` | character |  |
+| `person_high_school_slug` | character |  |
+| `person_high_school_primary_color` | character |  |
+| `person_high_school_org_type` | character |  |
+| `person_high_school_org_type_enum` | character |  |
+| `person_high_school_division` | character |  |
+| `person_high_school_site_keys` | character |  |
+| `person_high_school_url_slug` | character |  |
+| `person_home_town_name` | character |  |
+| `person_default_asset_url` | character |  |
+| `person_default_asset_key` | integer |  |
+| `person_default_asset_domain_override` | character |  |
+| `person_default_asset_domain` | character |  |
+| `person_default_asset_source_override` | character |  |
+| `person_default_asset_source` | character |  |
+| `person_default_asset_title` | character |  |
+| `person_default_asset_description` | character |  |
+| `person_default_asset_caption` | character |  |
+| `person_default_asset_category` | character |  |
+| `person_default_asset_alt_text` | character |  |
+| `person_default_asset_height` | integer |  |
+| `person_default_asset_width` | integer |  |
+| `person_default_asset_asset_type` | character |  |
+| `person_default_asset_file_system` | character |  |
+| `person_default_asset_path` | character |  |
+| `person_default_asset_type` | character |  |
+| `person_default_asset_thumbnail` | character |  |
+| `person_default_asset_duration` | integer |  |
+| `person_default_asset_mime_type` | character |  |
+| `person_early_signee` | logical |  |
+| `person_early_enrollee` | logical |  |
+| `person_position_abbreviation` | character |  |
+| `person_height` | numeric | Height (feet and inches). |
+| `person_formatted_height` | character |  |
+| `person_weight` | integer | Weight in pounds. |
+| `person_class_year` | integer |  |
+| `person_athlete_verified` | logical |  |
+| `person_prospect_verified` | logical |  |
+| `person_class_rank` | character |  |
+| `person_recruitment_key` | integer |  |
+| `person_age` | integer |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -569,13 +836,7 @@ GET /rdb/v1/players/industry-comparision-list
 
 ### Returns {#on3_players_industry_comparision_list-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
-| col_name | type | description |
-|---|---|---|
-| `ratings` | character | Player's ratings across the industry services, as a stringified list. |
-| `person` | character | Nested On3 person object for the compared player (stringified). |
-| `nil_value` | integer | Player's On3 NIL valuation in dollars. |
-
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_on3_rdb`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#on3_players_industry_comparision_list-example}

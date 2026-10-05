@@ -1,30 +1,235 @@
-columns:
-- description: ''
-  name: rank
-  type: integer
-- description: ''
-  name: player_id
-  type: integer
-- description: ''
-  name: player
-  type: character
-- description: ''
-  name: team_id
-  type: integer
-- description: ''
-  name: team_abbreviation
-  type: character
-- description: ''
-  name: team_name
-  type: character
-- description: ''
-  name: jersey_num
-  type: character
-- description: ''
-  name: player_position
-  type: character
-- description: ''
-  name: blk
-  type: numeric
-kind: dataframe
+frames:
+- columns:
+  - description: ''
+    name: rank
+    type: integer
+  - description: ''
+    name: player_id
+    type: integer
+  - description: ''
+    name: player
+    type: character
+  - description: ''
+    name: team_id
+    type: integer
+  - description: ''
+    name: team_abbreviation
+    type: character
+  - description: ''
+    name: team_name
+    type: character
+  - description: ''
+    name: jersey_num
+    type: character
+  - description: ''
+    name: player_position
+    type: character
+  - description: ''
+    name: pts
+    type: numeric
+  section: HomePageStat1
+- columns:
+  - description: ''
+    name: rank
+    type: integer
+  - description: ''
+    name: player_id
+    type: integer
+  - description: ''
+    name: player
+    type: character
+  - description: ''
+    name: team_id
+    type: integer
+  - description: ''
+    name: team_abbreviation
+    type: character
+  - description: ''
+    name: team_name
+    type: character
+  - description: ''
+    name: jersey_num
+    type: character
+  - description: ''
+    name: player_position
+    type: character
+  - description: ''
+    name: reb
+    type: numeric
+  section: HomePageStat2
+- columns:
+  - description: ''
+    name: rank
+    type: integer
+  - description: ''
+    name: player_id
+    type: integer
+  - description: ''
+    name: player
+    type: character
+  - description: ''
+    name: team_id
+    type: integer
+  - description: ''
+    name: team_abbreviation
+    type: character
+  - description: ''
+    name: team_name
+    type: character
+  - description: ''
+    name: jersey_num
+    type: character
+  - description: ''
+    name: player_position
+    type: character
+  - description: ''
+    name: ast
+    type: numeric
+  section: HomePageStat3
+- columns:
+  - description: ''
+    name: rank
+    type: integer
+  - description: ''
+    name: player_id
+    type: integer
+  - description: ''
+    name: player
+    type: character
+  - description: ''
+    name: team_id
+    type: integer
+  - description: ''
+    name: team_abbreviation
+    type: character
+  - description: ''
+    name: team_name
+    type: character
+  - description: ''
+    name: jersey_num
+    type: character
+  - description: ''
+    name: player_position
+    type: character
+  - description: ''
+    name: stl
+    type: numeric
+  section: HomePageStat4
+- columns:
+  - description: ''
+    name: rank
+    type: integer
+  - description: ''
+    name: player_id
+    type: integer
+  - description: ''
+    name: player
+    type: character
+  - description: ''
+    name: team_id
+    type: integer
+  - description: ''
+    name: team_abbreviation
+    type: character
+  - description: ''
+    name: team_name
+    type: character
+  - description: ''
+    name: jersey_num
+    type: character
+  - description: ''
+    name: player_position
+    type: character
+  - description: ''
+    name: fg_pct
+    type: numeric
+  section: HomePageStat5
+- columns:
+  - description: ''
+    name: rank
+    type: integer
+  - description: ''
+    name: player_id
+    type: integer
+  - description: ''
+    name: player
+    type: character
+  - description: ''
+    name: team_id
+    type: integer
+  - description: ''
+    name: team_abbreviation
+    type: character
+  - description: ''
+    name: team_name
+    type: character
+  - description: ''
+    name: jersey_num
+    type: character
+  - description: ''
+    name: player_position
+    type: character
+  - description: ''
+    name: ft_pct
+    type: numeric
+  section: HomePageStat6
+- columns:
+  - description: ''
+    name: rank
+    type: integer
+  - description: ''
+    name: player_id
+    type: integer
+  - description: ''
+    name: player
+    type: character
+  - description: ''
+    name: team_id
+    type: integer
+  - description: ''
+    name: team_abbreviation
+    type: character
+  - description: ''
+    name: team_name
+    type: character
+  - description: ''
+    name: jersey_num
+    type: character
+  - description: ''
+    name: player_position
+    type: character
+  - description: ''
+    name: fg3_pct
+    type: numeric
+  section: HomePageStat7
+- columns:
+  - description: ''
+    name: rank
+    type: integer
+  - description: ''
+    name: player_id
+    type: integer
+  - description: ''
+    name: player
+    type: character
+  - description: ''
+    name: team_id
+    type: integer
+  - description: ''
+    name: team_abbreviation
+    type: character
+  - description: ''
+    name: team_name
+    type: character
+  - description: ''
+    name: jersey_num
+    type: character
+  - description: ''
+    name: player_position
+    type: character
+  - description: ''
+    name: blk
+    type: numeric
+  section: HomePageStat8
+kind: frames
 schema: homepagev2

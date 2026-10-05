@@ -1,12 +1,5 @@
-columns:
-- description: ''
-  name: ratings
-  type: character
-- description: ''
-  name: person
-  type: character
-- description: ''
-  name: nil_value
-  type: integer
+columns: []
 kind: dataframe
 schema: person_sport_rankings
+unverified: 'no committed capture with rows, and the response type is only heuristically
+  mapped (x-source: call-site)'

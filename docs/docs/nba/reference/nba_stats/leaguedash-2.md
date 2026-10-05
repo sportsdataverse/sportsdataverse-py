@@ -1,7 +1,7 @@
 ---
 title: "NBA — NBA Stats API (stats.nba.com) — League dashboards: leaguedashteamstats"
 sidebar_label: "League dashboards: leaguedashteamstats"
-sidebar_position: 8
+sidebar_position: 9
 description: "NBA — NBA Stats API (stats.nba.com) — League dashboards: leaguedashteamstats — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---
@@ -63,8 +63,8 @@ GET /stats/leaguedashteamstats
 | `fgm` | numeric | Field goals made. |
 | `fga` | numeric | Field goal attempts. |
 | `fg_pct` | numeric | Field goal percentage (0-1). |
-| `fg3m` | numeric | Three-point field goals made. |
-| `fg3a` | numeric | Three-point field goal attempts. |
+| `fg3_m` | numeric | Three-point field goals made. |
+| `fg3_a` | numeric | Three-point field goal attempts. |
 | `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
 | `ftm` | numeric | Free throws made. |
 | `fta` | numeric | Free throw attempts. |
@@ -89,8 +89,8 @@ GET /stats/leaguedashteamstats
 | `fgm_rank` | integer | Rank for field goals made within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
 | `fga_rank` | integer | Rank for field goals attempted within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
 | `fg_pct_rank` | integer | Rank for field-goal percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `fg3m_rank` | integer | Rank for three-point field goals made within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
-| `fg3a_rank` | integer | Rank for three-point field goals attempted within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fg3_m_rank` | integer | Rank for three-point field goals made within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
+| `fg3_a_rank` | integer | Rank for three-point field goals attempted within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
 | `fg3_pct_rank` | integer | Rank for three-point field-goal percentage within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
 | `ftm_rank` | integer | Rank for free throws made within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |
 | `fta_rank` | integer | Rank for free throws attempted within the requested NBA or WNBA Stats leaderboard or split, where 1 is the leader. |

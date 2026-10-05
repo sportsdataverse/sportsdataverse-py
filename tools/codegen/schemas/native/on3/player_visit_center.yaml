@@ -1,15 +1,5 @@
-columns:
-- description: ''
-  name: sport
-  type: character
-- description: ''
-  name: year
-  type: integer
-- description: ''
-  name: total_visits
-  type: integer
-- description: ''
-  name: visits
-  type: character
+columns: []
 kind: dataframe
 schema: player_visit_center
+unverified: no committed capture with rows, and the row has nested objects whose flattened
+  column names depend on which of them are null in the data

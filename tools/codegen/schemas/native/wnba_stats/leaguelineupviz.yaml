@@ -36,13 +36,13 @@ columns:
   name: tm_ast_pct
   type: numeric
 - description: ''
-  name: pct_fga_2pt
+  name: pct_fga_2_pt
   type: numeric
 - description: ''
-  name: pct_fga_3pt
+  name: pct_fga_3_pt
   type: numeric
 - description: ''
-  name: pct_pts_2pt_mr
+  name: pct_pts_2_pt_mr
   type: numeric
 - description: ''
   name: pct_pts_fb

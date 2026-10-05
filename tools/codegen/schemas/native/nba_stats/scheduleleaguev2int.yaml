@@ -121,7 +121,7 @@ columns:
   type: integer
 - description: ''
   name: if_necessary
-  type: character
+  type: logical
 - description: ''
   name: is_neutral
   type: logical

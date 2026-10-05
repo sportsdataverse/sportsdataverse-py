@@ -48,10 +48,10 @@ columns:
   name: matchup_fg_pct
   type: numeric
 - description: ''
-  name: matchup_fg3m
+  name: matchup_fg3_m
   type: numeric
 - description: ''
-  name: matchup_fg3a
+  name: matchup_fg3_a
   type: numeric
 - description: ''
   name: matchup_fg3_pct

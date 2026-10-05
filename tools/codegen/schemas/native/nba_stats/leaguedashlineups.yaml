@@ -39,10 +39,10 @@ columns:
   name: fg_pct
   type: numeric
 - description: ''
-  name: fg3m
+  name: fg3_m
   type: numeric
 - description: ''
-  name: fg3a
+  name: fg3_a
   type: numeric
 - description: ''
   name: fg3_pct
@@ -117,10 +117,10 @@ columns:
   name: fg_pct_rank
   type: integer
 - description: ''
-  name: fg3m_rank
+  name: fg3_m_rank
   type: integer
 - description: ''
-  name: fg3a_rank
+  name: fg3_a_rank
   type: integer
 - description: ''
   name: fg3_pct_rank

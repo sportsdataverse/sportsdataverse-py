@@ -1,9 +1,5 @@
-columns:
-- description: ''
-  name: year
-  type: integer
-- description: ''
-  name: count
-  type: integer
+columns: []
 kind: dataframe
 schema: organizations_draft_class_by_year
+unverified: 'no committed capture with rows, and the response type is only heuristically
+  mapped (x-source: call-site)'

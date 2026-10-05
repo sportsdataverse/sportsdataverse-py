@@ -18,6 +18,12 @@ columns:
   name: last_updated
   type: integer
 - description: ''
+  name: whisper
+  type: numeric
+- description: ''
+  name: whisper_change
+  type: numeric
+- description: ''
   name: social_valuations
   type: character
 - description: ''
@@ -25,6 +31,15 @@ columns:
   type: integer
 - description: ''
   name: group_name
+  type: character
+- description: ''
+  name: tags
+  type: character
+- description: ''
+  name: roster_value
+  type: character
+- description: ''
+  name: nil_value
   type: character
 kind: dataframe
 schema: people_latest_valuation

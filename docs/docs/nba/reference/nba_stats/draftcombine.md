@@ -1,7 +1,7 @@
 ---
 title: "NBA — NBA Stats API (stats.nba.com) — Draft combine"
 sidebar_label: "Draft combine"
-sidebar_position: 4
+sidebar_position: 5
 description: "NBA — NBA Stats API (stats.nba.com) — Draft combine — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---

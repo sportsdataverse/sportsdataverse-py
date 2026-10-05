@@ -30,10 +30,10 @@ columns:
   name: fg_pct
   type: numeric
 - description: ''
-  name: fg3m
+  name: fg3_m
   type: integer
 - description: ''
-  name: fg3a
+  name: fg3_a
   type: integer
 - description: ''
   name: fg3_pct

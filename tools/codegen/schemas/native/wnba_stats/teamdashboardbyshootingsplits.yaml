@@ -1,96 +1,650 @@
-columns:
-- description: ''
-  name: group_set
-  type: character
-- description: ''
-  name: player_id
-  type: integer
-- description: ''
-  name: player_name
-  type: character
-- description: ''
-  name: fgm
-  type: integer
-- description: ''
-  name: fga
-  type: integer
-- description: ''
-  name: fg_pct
-  type: numeric
-- description: ''
-  name: fg3m
-  type: integer
-- description: ''
-  name: fg3a
-  type: integer
-- description: ''
-  name: fg3_pct
-  type: numeric
-- description: ''
-  name: efg_pct
-  type: numeric
-- description: ''
-  name: blka
-  type: integer
-- description: ''
-  name: pct_ast_2pm
-  type: numeric
-- description: ''
-  name: pct_uast_2pm
-  type: numeric
-- description: ''
-  name: pct_ast_3pm
-  type: numeric
-- description: ''
-  name: pct_uast_3pm
-  type: numeric
-- description: ''
-  name: pct_ast_fgm
-  type: numeric
-- description: ''
-  name: pct_uast_fgm
-  type: numeric
-- description: ''
-  name: fgm_rank
-  type: integer
-- description: ''
-  name: fga_rank
-  type: integer
-- description: ''
-  name: fg_pct_rank
-  type: integer
-- description: ''
-  name: fg3m_rank
-  type: integer
-- description: ''
-  name: fg3a_rank
-  type: integer
-- description: ''
-  name: fg3_pct_rank
-  type: integer
-- description: ''
-  name: efg_pct_rank
-  type: integer
-- description: ''
-  name: blka_rank
-  type: integer
-- description: ''
-  name: pct_ast_2pm_rank
-  type: integer
-- description: ''
-  name: pct_uast_2pm_rank
-  type: integer
-- description: ''
-  name: pct_ast_3pm_rank
-  type: integer
-- description: ''
-  name: pct_uast_3pm_rank
-  type: integer
-- description: ''
-  name: pct_ast_fgm_rank
-  type: integer
-- description: ''
-  name: pct_uast_fgm_rank
-  type: integer
-kind: dataframe
+frames:
+- columns:
+  - description: ''
+    name: group_set
+    type: character
+  - description: ''
+    name: group_value
+    type: character
+  - description: ''
+    name: fgm
+    type: integer
+  - description: ''
+    name: fga
+    type: integer
+  - description: ''
+    name: fg_pct
+    type: numeric
+  - description: ''
+    name: fg3_m
+    type: integer
+  - description: ''
+    name: fg3_a
+    type: integer
+  - description: ''
+    name: fg3_pct
+    type: numeric
+  - description: ''
+    name: efg_pct
+    type: numeric
+  - description: ''
+    name: blka
+    type: integer
+  - description: ''
+    name: pct_ast_2_pm
+    type: numeric
+  - description: ''
+    name: pct_uast_2_pm
+    type: numeric
+  - description: ''
+    name: pct_ast_3_pm
+    type: numeric
+  - description: ''
+    name: pct_uast_3_pm
+    type: numeric
+  - description: ''
+    name: pct_ast_fgm
+    type: numeric
+  - description: ''
+    name: pct_uast_fgm
+    type: numeric
+  - description: ''
+    name: fgm_rank
+    type: integer
+  - description: ''
+    name: fga_rank
+    type: integer
+  - description: ''
+    name: fg_pct_rank
+    type: integer
+  - description: ''
+    name: fg3_m_rank
+    type: integer
+  - description: ''
+    name: fg3_a_rank
+    type: integer
+  - description: ''
+    name: fg3_pct_rank
+    type: integer
+  - description: ''
+    name: efg_pct_rank
+    type: integer
+  - description: ''
+    name: blka_rank
+    type: integer
+  - description: ''
+    name: pct_ast_2_pm_rank
+    type: integer
+  - description: ''
+    name: pct_uast_2_pm_rank
+    type: integer
+  - description: ''
+    name: pct_ast_3_pm_rank
+    type: integer
+  - description: ''
+    name: pct_uast_3_pm_rank
+    type: integer
+  - description: ''
+    name: pct_ast_fgm_rank
+    type: integer
+  - description: ''
+    name: pct_uast_fgm_rank
+    type: integer
+  section: OverallTeamDashboard
+- columns:
+  - description: ''
+    name: group_set
+    type: character
+  - description: ''
+    name: group_value
+    type: character
+  - description: ''
+    name: fgm
+    type: integer
+  - description: ''
+    name: fga
+    type: integer
+  - description: ''
+    name: fg_pct
+    type: numeric
+  - description: ''
+    name: fg3_m
+    type: integer
+  - description: ''
+    name: fg3_a
+    type: integer
+  - description: ''
+    name: fg3_pct
+    type: numeric
+  - description: ''
+    name: efg_pct
+    type: numeric
+  - description: ''
+    name: blka
+    type: integer
+  - description: ''
+    name: pct_ast_2_pm
+    type: numeric
+  - description: ''
+    name: pct_uast_2_pm
+    type: numeric
+  - description: ''
+    name: pct_ast_3_pm
+    type: numeric
+  - description: ''
+    name: pct_uast_3_pm
+    type: numeric
+  - description: ''
+    name: pct_ast_fgm
+    type: numeric
+  - description: ''
+    name: pct_uast_fgm
+    type: numeric
+  - description: ''
+    name: fgm_rank
+    type: integer
+  - description: ''
+    name: fga_rank
+    type: integer
+  - description: ''
+    name: fg_pct_rank
+    type: integer
+  - description: ''
+    name: fg3_m_rank
+    type: integer
+  - description: ''
+    name: fg3_a_rank
+    type: integer
+  - description: ''
+    name: fg3_pct_rank
+    type: integer
+  - description: ''
+    name: efg_pct_rank
+    type: integer
+  - description: ''
+    name: blka_rank
+    type: integer
+  - description: ''
+    name: pct_ast_2_pm_rank
+    type: integer
+  - description: ''
+    name: pct_uast_2_pm_rank
+    type: integer
+  - description: ''
+    name: pct_ast_3_pm_rank
+    type: integer
+  - description: ''
+    name: pct_uast_3_pm_rank
+    type: integer
+  - description: ''
+    name: pct_ast_fgm_rank
+    type: integer
+  - description: ''
+    name: pct_uast_fgm_rank
+    type: integer
+  section: Shot5FTTeamDashboard
+- columns:
+  - description: ''
+    name: group_set
+    type: character
+  - description: ''
+    name: group_value
+    type: character
+  - description: ''
+    name: fgm
+    type: integer
+  - description: ''
+    name: fga
+    type: integer
+  - description: ''
+    name: fg_pct
+    type: numeric
+  - description: ''
+    name: fg3_m
+    type: integer
+  - description: ''
+    name: fg3_a
+    type: integer
+  - description: ''
+    name: fg3_pct
+    type: numeric
+  - description: ''
+    name: efg_pct
+    type: numeric
+  - description: ''
+    name: blka
+    type: integer
+  - description: ''
+    name: pct_ast_2_pm
+    type: numeric
+  - description: ''
+    name: pct_uast_2_pm
+    type: numeric
+  - description: ''
+    name: pct_ast_3_pm
+    type: numeric
+  - description: ''
+    name: pct_uast_3_pm
+    type: numeric
+  - description: ''
+    name: pct_ast_fgm
+    type: numeric
+  - description: ''
+    name: pct_uast_fgm
+    type: numeric
+  - description: ''
+    name: fgm_rank
+    type: integer
+  - description: ''
+    name: fga_rank
+    type: integer
+  - description: ''
+    name: fg_pct_rank
+    type: integer
+  - description: ''
+    name: fg3_m_rank
+    type: integer
+  - description: ''
+    name: fg3_a_rank
+    type: integer
+  - description: ''
+    name: fg3_pct_rank
+    type: integer
+  - description: ''
+    name: efg_pct_rank
+    type: integer
+  - description: ''
+    name: blka_rank
+    type: integer
+  - description: ''
+    name: pct_ast_2_pm_rank
+    type: integer
+  - description: ''
+    name: pct_uast_2_pm_rank
+    type: integer
+  - description: ''
+    name: pct_ast_3_pm_rank
+    type: integer
+  - description: ''
+    name: pct_uast_3_pm_rank
+    type: integer
+  - description: ''
+    name: pct_ast_fgm_rank
+    type: integer
+  - description: ''
+    name: pct_uast_fgm_rank
+    type: integer
+  section: Shot8FTTeamDashboard
+- columns:
+  - description: ''
+    name: group_set
+    type: character
+  - description: ''
+    name: group_value
+    type: character
+  - description: ''
+    name: fgm
+    type: integer
+  - description: ''
+    name: fga
+    type: integer
+  - description: ''
+    name: fg_pct
+    type: numeric
+  - description: ''
+    name: fg3_m
+    type: integer
+  - description: ''
+    name: fg3_a
+    type: integer
+  - description: ''
+    name: fg3_pct
+    type: numeric
+  - description: ''
+    name: efg_pct
+    type: numeric
+  - description: ''
+    name: blka
+    type: integer
+  - description: ''
+    name: pct_ast_2_pm
+    type: numeric
+  - description: ''
+    name: pct_uast_2_pm
+    type: numeric
+  - description: ''
+    name: pct_ast_3_pm
+    type: numeric
+  - description: ''
+    name: pct_uast_3_pm
+    type: numeric
+  - description: ''
+    name: pct_ast_fgm
+    type: numeric
+  - description: ''
+    name: pct_uast_fgm
+    type: numeric
+  - description: ''
+    name: fgm_rank
+    type: integer
+  - description: ''
+    name: fga_rank
+    type: integer
+  - description: ''
+    name: fg_pct_rank
+    type: integer
+  - description: ''
+    name: fg3_m_rank
+    type: integer
+  - description: ''
+    name: fg3_a_rank
+    type: integer
+  - description: ''
+    name: fg3_pct_rank
+    type: integer
+  - description: ''
+    name: efg_pct_rank
+    type: integer
+  - description: ''
+    name: blka_rank
+    type: integer
+  - description: ''
+    name: pct_ast_2_pm_rank
+    type: integer
+  - description: ''
+    name: pct_uast_2_pm_rank
+    type: integer
+  - description: ''
+    name: pct_ast_3_pm_rank
+    type: integer
+  - description: ''
+    name: pct_uast_3_pm_rank
+    type: integer
+  - description: ''
+    name: pct_ast_fgm_rank
+    type: integer
+  - description: ''
+    name: pct_uast_fgm_rank
+    type: integer
+  section: ShotAreaTeamDashboard
+- columns:
+  - description: ''
+    name: group_set
+    type: character
+  - description: ''
+    name: group_value
+    type: character
+  - description: ''
+    name: fgm
+    type: integer
+  - description: ''
+    name: fga
+    type: integer
+  - description: ''
+    name: fg_pct
+    type: numeric
+  - description: ''
+    name: fg3_m
+    type: integer
+  - description: ''
+    name: fg3_a
+    type: integer
+  - description: ''
+    name: fg3_pct
+    type: numeric
+  - description: ''
+    name: efg_pct
+    type: numeric
+  - description: ''
+    name: blka
+    type: integer
+  - description: ''
+    name: pct_ast_2_pm
+    type: numeric
+  - description: ''
+    name: pct_uast_2_pm
+    type: numeric
+  - description: ''
+    name: pct_ast_3_pm
+    type: numeric
+  - description: ''
+    name: pct_uast_3_pm
+    type: numeric
+  - description: ''
+    name: pct_ast_fgm
+    type: numeric
+  - description: ''
+    name: pct_uast_fgm
+    type: numeric
+  - description: ''
+    name: fgm_rank
+    type: integer
+  - description: ''
+    name: fga_rank
+    type: integer
+  - description: ''
+    name: fg_pct_rank
+    type: integer
+  - description: ''
+    name: fg3_m_rank
+    type: integer
+  - description: ''
+    name: fg3_a_rank
+    type: integer
+  - description: ''
+    name: fg3_pct_rank
+    type: integer
+  - description: ''
+    name: efg_pct_rank
+    type: integer
+  - description: ''
+    name: blka_rank
+    type: integer
+  - description: ''
+    name: pct_ast_2_pm_rank
+    type: integer
+  - description: ''
+    name: pct_uast_2_pm_rank
+    type: integer
+  - description: ''
+    name: pct_ast_3_pm_rank
+    type: integer
+  - description: ''
+    name: pct_uast_3_pm_rank
+    type: integer
+  - description: ''
+    name: pct_ast_fgm_rank
+    type: integer
+  - description: ''
+    name: pct_uast_fgm_rank
+    type: integer
+  section: AssitedShotTeamDashboard
+- columns:
+  - description: ''
+    name: group_set
+    type: character
+  - description: ''
+    name: group_value
+    type: character
+  - description: ''
+    name: fgm
+    type: integer
+  - description: ''
+    name: fga
+    type: integer
+  - description: ''
+    name: fg_pct
+    type: numeric
+  - description: ''
+    name: fg3_m
+    type: integer
+  - description: ''
+    name: fg3_a
+    type: integer
+  - description: ''
+    name: fg3_pct
+    type: numeric
+  - description: ''
+    name: efg_pct
+    type: numeric
+  - description: ''
+    name: blka
+    type: integer
+  - description: ''
+    name: pct_ast_2_pm
+    type: numeric
+  - description: ''
+    name: pct_uast_2_pm
+    type: numeric
+  - description: ''
+    name: pct_ast_3_pm
+    type: numeric
+  - description: ''
+    name: pct_uast_3_pm
+    type: numeric
+  - description: ''
+    name: pct_ast_fgm
+    type: numeric
+  - description: ''
+    name: pct_uast_fgm
+    type: numeric
+  - description: ''
+    name: fgm_rank
+    type: integer
+  - description: ''
+    name: fga_rank
+    type: integer
+  - description: ''
+    name: fg_pct_rank
+    type: integer
+  - description: ''
+    name: fg3_m_rank
+    type: integer
+  - description: ''
+    name: fg3_a_rank
+    type: integer
+  - description: ''
+    name: fg3_pct_rank
+    type: integer
+  - description: ''
+    name: efg_pct_rank
+    type: integer
+  - description: ''
+    name: blka_rank
+    type: integer
+  - description: ''
+    name: pct_ast_2_pm_rank
+    type: integer
+  - description: ''
+    name: pct_uast_2_pm_rank
+    type: integer
+  - description: ''
+    name: pct_ast_3_pm_rank
+    type: integer
+  - description: ''
+    name: pct_uast_3_pm_rank
+    type: integer
+  - description: ''
+    name: pct_ast_fgm_rank
+    type: integer
+  - description: ''
+    name: pct_uast_fgm_rank
+    type: integer
+  section: ShotTypeTeamDashboard
+- columns:
+  - description: ''
+    name: group_set
+    type: character
+  - description: ''
+    name: player_id
+    type: integer
+  - description: ''
+    name: player_name
+    type: character
+  - description: ''
+    name: fgm
+    type: integer
+  - description: ''
+    name: fga
+    type: integer
+  - description: ''
+    name: fg_pct
+    type: numeric
+  - description: ''
+    name: fg3_m
+    type: integer
+  - description: ''
+    name: fg3_a
+    type: integer
+  - description: ''
+    name: fg3_pct
+    type: numeric
+  - description: ''
+    name: efg_pct
+    type: numeric
+  - description: ''
+    name: blka
+    type: integer
+  - description: ''
+    name: pct_ast_2_pm
+    type: numeric
+  - description: ''
+    name: pct_uast_2_pm
+    type: numeric
+  - description: ''
+    name: pct_ast_3_pm
+    type: numeric
+  - description: ''
+    name: pct_uast_3_pm
+    type: numeric
+  - description: ''
+    name: pct_ast_fgm
+    type: numeric
+  - description: ''
+    name: pct_uast_fgm
+    type: numeric
+  - description: ''
+    name: fgm_rank
+    type: integer
+  - description: ''
+    name: fga_rank
+    type: integer
+  - description: ''
+    name: fg_pct_rank
+    type: integer
+  - description: ''
+    name: fg3_m_rank
+    type: integer
+  - description: ''
+    name: fg3_a_rank
+    type: integer
+  - description: ''
+    name: fg3_pct_rank
+    type: integer
+  - description: ''
+    name: efg_pct_rank
+    type: integer
+  - description: ''
+    name: blka_rank
+    type: integer
+  - description: ''
+    name: pct_ast_2_pm_rank
+    type: integer
+  - description: ''
+    name: pct_uast_2_pm_rank
+    type: integer
+  - description: ''
+    name: pct_ast_3_pm_rank
+    type: integer
+  - description: ''
+    name: pct_uast_3_pm_rank
+    type: integer
+  - description: ''
+    name: pct_ast_fgm_rank
+    type: integer
+  - description: ''
+    name: pct_uast_fgm_rank
+    type: integer
+  section: AssistedBy
+kind: frames
 schema: teamdashboardbyshootingsplits

@@ -1,15 +1,5 @@
-columns:
-- description: ''
-  name: measurement_type_key
-  type: integer
-- description: ''
-  name: measurement_type
-  type: character
-- description: ''
-  name: value
-  type: numeric
-- description: ''
-  name: is_verified
-  type: logical
+columns: []
 kind: dataframe
 schema: people_combine_measurements
+unverified: 'no committed capture with rows, and the response type is only heuristically
+  mapped (x-source: call-site)'

@@ -18,9 +18,6 @@ columns:
   name: team_slug
   type: character
 - description: ''
-  name: is_defunct
-  type: integer
-- description: ''
   name: team_city
   type: character
 - description: ''

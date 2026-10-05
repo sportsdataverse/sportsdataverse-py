@@ -9,6 +9,9 @@ columns:
   name: ranking_key
   type: integer
 - description: ''
+  name: ranking_year
+  type: integer
+- description: ''
   name: ranking_type
   type: character
 - description: ''
@@ -45,7 +48,7 @@ columns:
   name: nearly_five_star_plus
   type: logical
 - description: ''
-  name: change
+  name: change_1
   type: character
 kind: dataframe
 schema: player_all_rankings

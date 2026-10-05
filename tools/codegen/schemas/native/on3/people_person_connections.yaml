@@ -1,21 +1,5 @@
-columns:
-- description: ''
-  name: connection
-  type: character
-- description: ''
-  name: connected_player
-  type: character
-- description: ''
-  name: connected_roster_rating
-  type: character
-- description: ''
-  name: connected_rating
-  type: character
-- description: ''
-  name: connected_college_organization
-  type: character
-- description: ''
-  name: connected_draft
-  type: character
+columns: []
 kind: dataframe
 schema: people_person_connections
+unverified: 'no committed capture with rows, and the response type is only heuristically
+  mapped (x-source: call-site)'

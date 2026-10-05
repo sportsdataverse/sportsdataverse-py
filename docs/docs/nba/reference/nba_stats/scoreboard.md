@@ -1,7 +1,7 @@
 ---
 title: "NBA — NBA Stats API (stats.nba.com) — Scoreboard"
 sidebar_label: "Scoreboard"
-sidebar_position: 13
+sidebar_position: 19
 description: "NBA — NBA Stats API (stats.nba.com) — Scoreboard — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---
@@ -23,38 +23,160 @@ GET /stats/scoreboardv2
 
 ### Returns {#nba_stats_scoreboardv2-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`GameHeader`, `LineScore`, `SeriesStandings`, `LastMeeting`, `EastConfStandingsByDay`, `WestConfStandingsByDay`, `Available`, `TeamLeaders`, `TicketLinks`) (representative columns below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+**GameHeader**
+
 | col_name | type | description |
 |---|---|---|
 | `game_date_est` | character | Game date est. |
-| `game_sequence` | character | Game sequence. |
-| `game_id` | integer | Unique game identifier. |
+| `game_sequence` | integer | Game sequence. |
+| `game_id` | character | Unique game identifier. |
+| `game_status_id` | integer | Numeric game status identifier. |
+| `game_status_text` | character | Game status display text (e.g. 'Final', '4:32 - 4th'). |
+| `gamecode` | character | Gamecode. |
+| `home_team_id` | integer | Unique identifier for the home team. |
+| `visitor_team_id` | integer | Unique identifier for visitor team. |
+| `season` | character | Season year. |
+| `live_period` | integer | Live period. |
+| `live_pc_time` | character | Time / clock value. |
+| `natl_tv_broadcaster_abbreviation` | character | Natl tv broadcaster abbreviation. |
+| `home_tv_broadcaster_abbreviation` | character | Home team's tv broadcaster abbreviation. |
+| `away_tv_broadcaster_abbreviation` | character | Away team's tv broadcaster abbreviation. |
+| `live_period_time_bcast` | character | Live period time bcast. |
+| `arena_name` | character | Arena name. |
+| `wh_status` | integer | Wh status. |
+| `wnba_commissioner_flag` | integer |  |
+
+**LineScore**
+
+| col_name | type | description |
+|---|---|---|
+| `game_date_est` | character | Game date est. |
+| `game_sequence` | integer | Game sequence. |
+| `game_id` | character | Unique game identifier. |
 | `team_id` | integer | Unique team identifier. |
 | `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
 | `team_city_name` | character | Team city name. |
 | `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
 | `team_wins_losses` | character | Team wins losses. |
-| `pts_qtr1` | character | Pts qtr1. |
-| `pts_qtr2` | character | Pts qtr2. |
-| `pts_qtr3` | character | Pts qtr3. |
-| `pts_qtr4` | character | Pts qtr4. |
-| `pts_ot1` | character | Pts ot1. |
-| `pts_ot2` | character | Points scored by the team in overtime period 2. |
-| `pts_ot3` | character | Points scored by the team in overtime period 3. |
-| `pts_ot4` | character | Points scored by the team in overtime period 4. |
-| `pts_ot5` | character | Points scored by the team in overtime period 5. |
-| `pts_ot6` | character | Points scored by the team in overtime period 6. |
-| `pts_ot7` | character | Points scored by the team in overtime period 7. |
-| `pts_ot8` | character | Points scored by the team in overtime period 8. |
-| `pts_ot9` | character | Points scored by the team in overtime period 9. |
-| `pts_ot10` | character | Points scored by the team in overtime period 10. |
-| `pts` | character | Points scored. |
+| `pts_qtr1` | integer | Pts qtr1. |
+| `pts_qtr2` | integer | Pts qtr2. |
+| `pts_qtr3` | integer | Pts qtr3. |
+| `pts_qtr4` | integer | Pts qtr4. |
+| `pts_ot1` | integer | Pts ot1. |
+| `pts_ot2` | integer | Points scored by the team in overtime period 2. |
+| `pts_ot3` | integer | Points scored by the team in overtime period 3. |
+| `pts_ot4` | integer | Points scored by the team in overtime period 4. |
+| `pts_ot5` | integer | Points scored by the team in overtime period 5. |
+| `pts_ot6` | integer | Points scored by the team in overtime period 6. |
+| `pts_ot7` | integer | Points scored by the team in overtime period 7. |
+| `pts_ot8` | integer | Points scored by the team in overtime period 8. |
+| `pts_ot9` | integer | Points scored by the team in overtime period 9. |
+| `pts_ot10` | integer | Points scored by the team in overtime period 10. |
+| `pts` | integer | Points scored. |
 | `fg_pct` | numeric | Field goal percentage (0-1). |
 | `ft_pct` | numeric | Free throw percentage (0-1). |
 | `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
-| `ast` | character | Assists. |
-| `reb` | character | Rebounds per game. |
-| `tov` | character | Turnovers. |
+| `ast` | integer | Assists. |
+| `reb` | integer | Rebounds per game. |
+| `tov` | integer | Turnovers. |
+
+**SeriesStandings**
+
+| col_name | type | description |
+|---|---|---|
+| `game_id` | character | Unique game identifier. |
+| `home_team_id` | integer | Unique identifier for the home team. |
+| `visitor_team_id` | integer | Unique identifier for visitor team. |
+| `game_date_est` | character | Game date est. |
+| `home_team_wins` | integer | Home team's team wins. |
+| `home_team_losses` | integer | Home team's team losses. |
+| `series_leader` | character |  |
+
+**LastMeeting**
+
+| col_name | type | description |
+|---|---|---|
+| `game_id` | character | Unique game identifier. |
+| `last_game_id` | character |  |
+| `last_game_date_est` | character |  |
+| `last_game_home_team_id` | integer |  |
+| `last_game_home_team_city` | character |  |
+| `last_game_home_team_name` | character |  |
+| `last_game_home_team_abbreviation` | character |  |
+| `last_game_home_team_points` | integer |  |
+| `last_game_visitor_team_id` | integer |  |
+| `last_game_visitor_team_city` | character |  |
+| `last_game_visitor_team_name` | character |  |
+| `last_game_visitor_team_city1` | character |  |
+| `last_game_visitor_team_points` | integer |  |
+
+**EastConfStandingsByDay**
+
+| col_name | type | description |
+|---|---|---|
+| `team_id` | integer | Unique team identifier. |
+| `league_id` | character | League identifier ('10' = WNBA). |
+| `season_id` | character | Unique season identifier. |
+| `standingsdate` | character |  |
+| `conference` | character | Conference name. |
+| `team` | character | Team-side label or team identifier. |
+| `g` | integer | Games played. |
+| `w` | integer | Wins. |
+| `l` | integer | Losses. |
+| `w_pct` | numeric | Wins percentage (0-1 decimal). |
+| `home_record` | character | Home win-loss record. |
+| `road_record` | character | Win-loss record for road. |
+
+**WestConfStandingsByDay**
+
+| col_name | type | description |
+|---|---|---|
+| `team_id` | integer | Unique team identifier. |
+| `league_id` | character | League identifier ('10' = WNBA). |
+| `season_id` | character | Unique season identifier. |
+| `standingsdate` | character |  |
+| `conference` | character | Conference name. |
+| `team` | character | Team-side label or team identifier. |
+| `g` | integer | Games played. |
+| `w` | integer | Wins. |
+| `l` | integer | Losses. |
+| `w_pct` | numeric | Wins percentage (0-1 decimal). |
+| `home_record` | character | Home win-loss record. |
+| `road_record` | character | Win-loss record for road. |
+
+**Available**
+
+| col_name | type | description |
+|---|---|---|
+| `game_id` | character | Unique game identifier. |
+| `pt_available` | integer | Pt available. |
+
+**TeamLeaders**
+
+| col_name | type | description |
+|---|---|---|
+| `game_id` | character | Unique game identifier. |
+| `team_id` | integer | Unique team identifier. |
+| `team_city` | character | Team city or region (e.g. 'Las Vegas'). |
+| `team_nickname` | character | Team nickname. |
+| `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
+| `pts_player_id` | integer |  |
+| `pts_player_name` | character |  |
+| `pts` | integer | Points scored. |
+| `reb_player_id` | integer |  |
+| `reb_player_name` | character |  |
+| `reb` | integer | Rebounds per game. |
+| `ast_player_id` | integer |  |
+| `ast_player_name` | character |  |
+| `ast` | integer | Assists. |
+
+**TicketLinks**
+
+| col_name | type | description |
+|---|---|---|
+| `game_id` | integer | Unique game identifier. |
+| `leag_tix` | character |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 

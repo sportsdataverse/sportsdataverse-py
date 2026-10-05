@@ -89,8 +89,22 @@ def _bucket_of(path: str) -> str:
 # manufacture authority the capture does not carry. See
 # sdv-internal-refs/nfl/nflpro/catalogs/nfl_pro_secured_returns.md for the full
 # provenance note and the identified (partial) load_nfl_nextgen_stats cross-walk.
+#
+# native/nba_stats, native/wnba_stats and native/on3 are deferred AGAIN (2026-10-05)
+# because their tables were regenerated from what the parsers emit on real captures
+# instead of from the canonical catalog / OpenAPI spec. That renamed columns
+# (fg3m -> fg3_m, leagueid -> league_id; descriptions re-keyed where the rename was
+# unambiguous), documented every result set of a multi-set stats endpoint instead of
+# one representative set, and replaced On3's single object columns with the
+# json_normalize-flattened ones the parser actually returns. The newly surfaced
+# columns had no description to carry over: 312 nba_stats + 269 wnba_stats + 1841
+# on3 cells at that date (``deferred_columns()`` reports the live count). Promote a
+# bucket out again once its columns are authored.
 _DEFERRED_BUCKETS = {
     "native/nflpro",
+    "native/nba_stats",
+    "native/wnba_stats",
+    "native/on3",
 }
 
 

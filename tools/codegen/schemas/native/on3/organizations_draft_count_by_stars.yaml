@@ -1,18 +1,5 @@
-columns:
-- description: ''
-  name: five_stars
-  type: integer
-- description: ''
-  name: four_stars
-  type: integer
-- description: ''
-  name: three_stars
-  type: integer
-- description: ''
-  name: zero_stars
-  type: integer
-- description: ''
-  name: total
-  type: integer
+columns: []
 kind: dataframe
 schema: organizations_draft_count_by_stars
+unverified: 'no committed capture with rows, and the response type is only heuristically
+  mapped (x-source: call-site)'

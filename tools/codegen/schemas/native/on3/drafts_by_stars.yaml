@@ -1,8 +1,5 @@
 columns:
 - description: ''
-  name: state
-  type: character
-- description: ''
   name: blue_chip_percent
   type: numeric
 - description: ''
@@ -25,6 +22,18 @@ columns:
   type: integer
 - description: ''
   name: total
+  type: integer
+- description: ''
+  name: state_key
+  type: integer
+- description: ''
+  name: state_name
+  type: character
+- description: ''
+  name: state_abbreviation
+  type: character
+- description: ''
+  name: state_country_key
   type: integer
 kind: dataframe
 schema: drafts_by_stars

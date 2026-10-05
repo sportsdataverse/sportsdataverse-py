@@ -1,7 +1,7 @@
 ---
 title: "CFB — On3 Recruit Database (api.on3.com) — People"
 sidebar_label: "People"
-sidebar_position: 3
+sidebar_position: 4
 description: "CFB — On3 Recruit Database (api.on3.com) — People — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---
@@ -21,14 +21,7 @@ GET /rdb/v1/people/{personKey}/combine-measurements
 
 ### Returns {#on3_people_combine_measurements-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
-| col_name | type | description |
-|---|---|---|
-| `measurement_type_key` | integer | On3 key for the measurement category. |
-| `measurement_type` | character | Measurement category (e.g. height, weight, 40-yard dash) per On3's measurement taxonomy. |
-| `value` | numeric | Metric value. |
-| `is_verified` | logical | Whether the player profile is verified. |
-
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_on3_rdb`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#on3_people_combine_measurements-example}
@@ -62,9 +55,14 @@ GET /rdb/v1/people/{personKey}/latest-valuation
 | `followers` | integer | Total social-media followers counted toward the valuation. |
 | `rank` | integer | Position of the school within the poll for the given week (1 = top-ranked). |
 | `last_updated` | integer | Timestamp ESPN last refreshed the power index. |
+| `whisper` | numeric |  |
+| `whisper_change` | numeric |  |
 | `social_valuations` | character | Per-platform breakdown of the social components of the valuation (stringified list). |
 | `group_rank` | integer | League/season rank for group. |
 | `group_name` | character | Group name (conference / division). |
+| `tags` | character |  |
+| `roster_value` | character |  |
+| `nil_value` | character |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -93,31 +91,7 @@ GET /rdb/v1/people/{personKey}/measurements
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 | col_name | type | description |
 |---|---|---|
-| `key` | integer | On3 RDB key for the measurement record. |
-| `measurement_type` | character | Measurement category (e.g. height, weight, 40-yard dash) per On3's measurement taxonomy. |
-| `measurement_type_key` | integer | On3 key for the measurement category. |
-| `type` | character | Record-type category (e.g. `total`, `home`, `road`). |
-| `value` | numeric | Metric value. |
-| `delta` | numeric | Change in the measured value versus the player's previous measurement of the same type. |
-| `person_key` | integer | On3 person key of the measured athlete. |
-| `verified` | logical | Whether On3 verified the measurement. |
-| `verified_by_user_key` | integer | On3 user key of the staffer who verified the measurement. |
-| `elite` | logical | Whether On3 flags the result as elite for this measurement type. |
-| `event_key` | integer | On3 key of the camp or combine event where the measurement was taken. |
-| `event_name` | character | Event name (e.g. 'All-Star Workout Day: Home Run Derby'). |
-| `event` | character | Binary flag indicating the row is a counted game event (excludes end markers). |
-| `age_measurement_occurred` | numeric | Athlete's age when the measurement was taken. |
-| `top300_average` | numeric | Average value of this measurement among On3 Top300-ranked players. |
-| `top_average_change_percent` | numeric | Percent difference between the athlete's value and the Top300 average. |
-| `drafted_average` | numeric | Average value of this measurement among drafted players at the combine. |
-| `record` | character | Team win-loss record for the season. |
-| `draft_change_percent` | numeric | Percent difference between the athlete's value and the drafted-player average. |
-| `date_added` | integer | Date the measurement record was added to the On3 database. |
-| `date_modified` | integer | Date and time that injury information was updated |
-| `date_occurred` | integer | Date the measurement was actually taken. |
-| `is_current` | logical | Whether this is the athlete's current (most recent) measurement of the type. |
-| `person_sport_org_key` | integer | On3 player-sport-organization (PSO) key the measurement is attached to. |
-| `organization` | character | Organization. |
+| `player_measurements` | character |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -151,7 +125,7 @@ GET /rdb/v1/people/{personKey}/measurements/averages
 | `measurement_key` | integer | On3 key for the measurement category being averaged. |
 | `measurement_name` | character | Name of the measurement category (e.g. height, 40-yard dash). |
 | `current_person_measurement` | numeric | Athlete's current value for the measurement. |
-| `current_measurement_verified` | logical | Whether the athlete's current measurement is verified by On3. |
+| `current_measurement_verified` | character | Whether the athlete's current measurement is verified by On3. |
 | `top300_difference` | numeric | Difference between the athlete's value and the On3 Top300 average. |
 | `top300_average` | numeric | Average value of the measurement among On3 Top300-ranked players. |
 | `combine_drafted_average` | numeric | Average combine value of the measurement among drafted players. |
@@ -185,16 +159,7 @@ GET /rdb/v1/people/{personKey}/person-connections
 
 ### Returns {#on3_people_person_connections-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
-| col_name | type | description |
-|---|---|---|
-| `connection` | character | Relationship type linking the two people (e.g. sibling, parent, teammate) per On3. |
-| `connected_player` | character | Nested On3 person object for the connected player (stringified). |
-| `connected_roster_rating` | character | Nested On3 roster rating object for the connected player (stringified). |
-| `connected_rating` | character | Nested On3 recruiting rating object for the connected player (stringified). |
-| `connected_college_organization` | character | Nested On3 organization object for the connected player's college (stringified). |
-| `connected_draft` | character | Nested On3 draft record for the connected player, when drafted (stringified). |
-
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_on3_rdb`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#on3_people_person_connections-example}
@@ -281,35 +246,7 @@ GET /rdb/v1/people/{personKey}/track-and-field-measurements
 
 ### Returns {#on3_people_track_and_field_measurements-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
-| col_name | type | description |
-|---|---|---|
-| `key` | integer | On3 RDB key for the measurement record. |
-| `measurement_type` | character | Measurement category (e.g. height, weight, 40-yard dash) per On3's measurement taxonomy. |
-| `measurement_type_key` | integer | On3 key for the measurement category. |
-| `type` | character | Record-type category (e.g. `total`, `home`, `road`). |
-| `value` | numeric | Metric value. |
-| `delta` | numeric | Change in the measured value versus the player's previous measurement of the same type. |
-| `person_key` | integer | On3 person key of the measured athlete. |
-| `verified` | logical | Whether On3 verified the measurement. |
-| `verified_by_user_key` | integer | On3 user key of the staffer who verified the measurement. |
-| `elite` | logical | Whether On3 flags the result as elite for this measurement type. |
-| `event_key` | integer | On3 key of the camp or combine event where the measurement was taken. |
-| `event_name` | character | Event name (e.g. 'All-Star Workout Day: Home Run Derby'). |
-| `event` | character | Binary flag indicating the row is a counted game event (excludes end markers). |
-| `age_measurement_occurred` | numeric | Athlete's age when the measurement was taken. |
-| `top300_average` | numeric | Average value of this measurement among On3 Top300-ranked players. |
-| `top_average_change_percent` | numeric | Percent difference between the athlete's value and the Top300 average. |
-| `drafted_average` | numeric | Average value of this measurement among drafted players at the combine. |
-| `record` | character | Team win-loss record for the season. |
-| `draft_change_percent` | numeric | Percent difference between the athlete's value and the drafted-player average. |
-| `date_added` | integer | Date the measurement record was added to the On3 database. |
-| `date_modified` | integer | Date and time that injury information was updated |
-| `date_occurred` | integer | Date the measurement was actually taken. |
-| `is_current` | logical | Whether this is the athlete's current (most recent) measurement of the type. |
-| `person_sport_org_key` | integer | On3 player-sport-organization (PSO) key the measurement is attached to. |
-| `organization` | character | Organization. |
-
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_on3_rdb`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#on3_people_track_and_field_measurements-example}
@@ -339,7 +276,7 @@ GET /rdb/v1/people/{personKey}/valuation-growth
 |---|---|---|
 | `nil_status` | character | Status of the athlete's On3 NIL valuation at the snapshot (e.g. active, inactive). |
 | `valuation` | integer | Athlete's On3 NIL valuation in dollars at the snapshot. |
-| `valuation_change` | integer | Change in the NIL valuation versus the previous snapshot, in dollars. |
+| `valuation_change` | numeric | Change in the NIL valuation versus the previous snapshot, in dollars. |
 | `date` | character | Date of the On3 NIL valuation snapshot. |
 | `date_unix` | integer | Unix timestamp of the valuation snapshot. |
 

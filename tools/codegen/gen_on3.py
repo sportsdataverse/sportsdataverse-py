@@ -9,17 +9,20 @@ env, default ``C:/Users/saiem/Documents/sdv-internal-refs``) and emits:
 * ``tools/codegen/endpoints/on3.yaml`` -- one endpoint per usable GET op, host
   ``https://api.on3.com/public/rdb/v1`` (the single ``/rdb/v2`` op carries an
   endpoint-level ``host`` override so ``host + path`` == the real URL for both).
-* ``tools/codegen/schemas/native/on3/<short>.yaml`` -- returns-schema per endpoint,
-  columns resolved from the 200 response component (array / PagedData ``list`` /
-  plain object). The two legacy scrape schemas (``on3_player_rankings`` /
-  ``on3_team_rankings``) that back the demoted ``_next/data`` rankings shim are
-  PRESERVED, never clobbered.
+* ``tools/codegen/schemas/native/on3/<short>.yaml`` -- returns-schema per endpoint
+  (see ``_schema``): the columns ``parse_on3_rdb`` emits on the committed capture
+  ``tests/fixtures/on3/<short>.json``; without one, the response type's own fields
+  when the parser's naming rule maps them unambiguously (``derived_by_rule``); else
+  no columns and an ``unverified`` reason. The two legacy scrape schemas
+  (``on3_player_rankings`` / ``on3_team_rankings``) that back the demoted
+  ``_next/data`` rankings shim are PRESERVED, never clobbered.
 
 Run: ``python tools/codegen/gen_on3.py``
 """
 
 from __future__ import annotations
 
+import json
 import os
 import re
 from pathlib import Path
@@ -27,9 +30,12 @@ from typing import Any, Dict, List, Tuple
 
 import yaml
 
+from sportsdataverse.cfb.on3_parsers import parse_on3_rdb
 from sportsdataverse.dl_utils import underscore
 
 ROOT = Path(__file__).resolve().parents[2]
+FIXTURE_DIR = ROOT / "tests/fixtures/on3"
+_POLARS_TO_R = {"Int64": "integer", "Float64": "numeric", "Boolean": "logical"}
 
 HOST = "https://api.on3.com/public/rdb/v1"
 HOST_V2 = "https://api.on3.com/public/rdb/v2"
@@ -142,32 +148,88 @@ def _resolve_ref(spec: dict, schema: Any) -> dict:
     return schema if isinstance(schema, dict) else {}
 
 
-def _props_to_cols(obj: dict) -> List[Dict[str, str]]:
-    cols: List[Dict[str, str]] = []
-    for name, pv in (obj or {}).get("properties", {}).items():
-        jtype = (pv or {}).get("type") or "unknown"
-        cols.append({"name": underscore(name), "type": _DTYPE.get(jtype, "character"), "description": ""})
-    return cols
-
-
-def _response_columns(op: dict, spec: dict) -> List[Dict[str, str]]:
-    """Resolve the 200-response schema to a flat returns-column list.
+def _row_schema(op: dict, spec: dict) -> dict:
+    """Resolve the 200-response schema to the schema of ONE parsed row.
 
     Handles the three RDB shapes: a top-level array (unwrap ``items``), a
     ``*PagedData`` object (unwrap the ``list`` array's ``items``), or a plain
-    object / ``On3*Live`` component (use its ``properties`` directly).
+    object / ``On3*Live`` component (the object itself is the row).
     """
     resp = op.get("responses", {}).get("200") or op.get("responses", {}).get(200) or {}
-    schema = resp.get("content", {}).get("application/json", {}).get("schema")
-    if not schema:
-        return []
-    schema = _resolve_ref(spec, schema)
+    schema = _resolve_ref(spec, resp.get("content", {}).get("application/json", {}).get("schema") or {})
     if schema.get("type") == "array":
-        return _props_to_cols(_resolve_ref(spec, schema.get("items", {})))
+        return _resolve_ref(spec, schema.get("items", {}))
     lst = schema.get("properties", {}).get("list")
     if isinstance(lst, dict) and lst.get("type") == "array":
-        return _props_to_cols(_resolve_ref(spec, lst.get("items", {})))
-    return _props_to_cols(schema)
+        return _resolve_ref(spec, lst.get("items", {}))
+    return schema
+
+
+def _leaves(spec: dict, schema: dict, prefix: str = "", seen: frozenset = frozenset()) -> List[Tuple[str, str, bool]]:
+    """``(column, json type, nested)`` per leaf of a row schema, named the way
+    ``parse_on3_rdb`` names them: nested objects flatten with ``_`` (pandas
+    ``json_normalize(sep="_")``), then ``underscore``. ``nested`` marks a leaf whose
+    name depends on the data -- the parser only flattens an object that is non-null,
+    and a free-form map (``additionalProperties``) flattens to its runtime keys."""
+    if not schema.get("properties") and schema.get("type") in ("integer", "number", "string", "boolean"):
+        return [("value", "string", False)]  # bare scalar array -> one stringified `value` column
+    out: List[Tuple[str, str, bool]] = []
+    for name, pv in schema.get("properties", {}).items():
+        pv = pv or {}
+        if len(pv.get("allOf") or []) == 1:
+            pv = pv["allOf"][0]
+        ref = pv.get("$ref", "")
+        node = _resolve_ref(spec, pv)
+        if node.get("properties") and ref not in seen:
+            out += [(n, t, True) for n, t, _ in _leaves(spec, node, f"{prefix}{name}_", seen | {ref})]
+        else:
+            out.append((underscore(f"{prefix}{name}"), node.get("type") or "unknown", "additionalProperties" in node))
+    return out
+
+
+def _captured_columns(short: str, spec_types: Dict[str, str]) -> List[Dict[str, str]]:
+    """Columns ``parse_on3_rdb`` emits on the committed capture (``[]`` when there is
+    none, or it parses to no columns). An all-null column carries no type signal, so
+    it takes the response type's declared type."""
+    path = FIXTURE_DIR / f"{short}.json"
+    if not path.exists():
+        return []
+    df = parse_on3_rdb(json.loads(path.read_text(encoding="utf-8")))
+    cols = []
+    for col, dtype in df.schema.items():
+        if df[col].null_count() < df.height:
+            rtype = _POLARS_TO_R.get(str(dtype), "character")
+        else:
+            rtype = _DTYPE.get(spec_types.get(col, "unknown"), "character")
+        cols.append({"name": col, "type": rtype, "description": ""})
+    return cols
+
+
+def _schema(short: str, op: dict, spec: dict) -> Dict[str, Any]:
+    """Returns-schema from the committed capture; else from the response type when the
+    parser's naming rule maps it unambiguously; else marked ``unverified``."""
+    leaves = _leaves(spec, _row_schema(op, spec))
+    doc: Dict[str, Any] = {"schema": short, "kind": "dataframe"}
+    doc["columns"] = _captured_columns(short, {n: t for n, t, _ in leaves})
+    if doc["columns"]:
+        return doc
+    if op.get("x-source") != "on3_ts_api":
+        doc["unverified"] = (
+            "no committed capture with rows, and the response type is only heuristically mapped "
+            f"(x-source: {op.get('x-source')})"
+        )
+    elif not leaves or any(nested for *_, nested in leaves):
+        doc["unverified"] = (
+            "no committed capture with rows, and the row has nested objects whose flattened "
+            "column names depend on which of them are null in the data"
+        )
+    else:
+        doc["columns"] = [{"name": n, "type": _DTYPE.get(t, "character"), "description": ""} for n, t, _ in leaves]
+        doc["derived_by_rule"] = (
+            "no committed capture with rows; names are the response type's own flat fields "
+            "through the parser's underscore rule"
+        )
+    return doc
 
 
 def _path_params(path: str) -> List[Dict[str, Any]]:
@@ -269,8 +331,7 @@ def main() -> None:
         short = _short_from_path(path)
         if short in _PRESERVE:
             continue
-        schema = {"schema": short, "kind": "dataframe", "columns": _response_columns(op, spec)}
-        _write_yaml(schema_dir / f"{short}.yaml", schema)
+        _write_yaml(schema_dir / f"{short}.yaml", _schema(short, op, spec))
     print(f"on3: {len(ops)} endpoints")
 
 
