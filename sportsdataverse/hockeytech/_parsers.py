@@ -84,12 +84,24 @@ def _derive_season_year(name: str) -> Optional[int]:
 
 
 def _game_type_label(name: str) -> str:
+    """Game type of a season name; the first case-insensitive match wins.
+
+    ``pre[- ]?season`` -> preseason ("2025-26 Preseason Exhibition" stays a preseason),
+    ``playoff|post`` -> playoffs, ``exhibition`` -> exhibition, anything else regular.
+    """
     n = (name or "").lower()
     if re.search(r"pre[- ]?season", n):
         return "preseason"
     if re.search(r"playoff|post", n):
         return "playoffs"
+    if "exhibition" in n:
+        return "exhibition"
     return "regular"
+
+
+# A name spanning two years ("2025-26", "2025/2026", "2026 - 27", "26-27"). Shared with
+# resolve_season_id's ranking; no lookaround, so polars can run it too.
+TWO_YEAR_NAME_RE = r"\d{2}\s*[-/]\s*\d{2}"
 
 
 _SCOREBAR_RENAME = {
@@ -813,11 +825,17 @@ def parse_seasons(payload: Any, return_as_pandas: bool = False) -> Any:
     for s in raw:
         name = s.get("season_name")
         yr, label = _derive_season_year(name), _game_type_label(name)
-        # A one-year preseason name gives the camp's calendar year: "2026 Pre-season" starts
-        # 2026-08-11 and opens 2026-27, so it is 2027. So is every preseason that starts in
-        # the year its name gives (all 20 feeds, 2026-10-05). PWHL's "2024 Preseason" started
-        # 2023-11-01 and stays 2024, the season it opened.
-        if label == "preseason" and yr is not None and str(s.get("start_date") or "")[:4] == str(yr):
+        # A one-year preseason or exhibition name gives the camp's calendar year: "2026
+        # Pre-season" starts 2026-08-11 and opens 2026-27, so it is 2027, like "2026-27 MHL
+        # Exhibition Season". Shifted only when the name spans no two years and the row starts
+        # in the year the name gives (all 20 feeds, 2026-10-05). PWHL's "2024 Preseason"
+        # started 2023-11-01 and stays 2024, the season it opened.
+        if (
+            label in ("preseason", "exhibition")
+            and yr is not None
+            and not re.search(TWO_YEAR_NAME_RE, name or "")
+            and str(s.get("start_date") or "")[:4] == str(yr)
+        ):
             yr += 1
         rows.append(
             {
@@ -832,4 +850,11 @@ def parse_seasons(payload: Any, return_as_pandas: bool = False) -> Any:
                 "game_type_label": label,
             }
         )
-    return _to_frame(rows, return_as_pandas)
+    df = _to_frame(rows, return_as_pandas)
+    if not len(df):
+        return df
+    # pandas turns an int column holding a None into float64: cast back at the boundary
+    if return_as_pandas:
+        df["season_yr"] = df["season_yr"].astype("Int64")
+        return df
+    return df.with_columns(pl.col("season_yr").cast(pl.Int64))

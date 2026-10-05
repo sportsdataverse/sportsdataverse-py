@@ -16,7 +16,7 @@ Captured JSON payloads from `lscluster.hockeytech.com` / `cluster.leaguestat.com
 | pwhl_schedule_2025 | pwhl | modulekit/scorebar | season_id 5 |
 | pwhl_pbp_42 | pwhl | statviewfeed/gameCenterPlayByPlay | game_id 42 |
 | pwhl_gameshifts_42 | pwhl | modulekit/gameshifts | game_id 42 |
-| pwhl_seasons | pwhl | modulekit/seasons | all |
+| pwhl_seasons | pwhl | modulekit/seasons | all as committed 2026-06-09 (#95): ids 1-10, ending at the "2026-27 Pre-Season" (the live feed added id 11, the 2026-27 regular season, later). Kept as a real preseason-before-regular-season snapshot |
 | pwhl_standings_5 | pwhl | statviewfeed/teams | season_id 5 |
 | pwhl_teams_5 | pwhl | modulekit/teamsbyseason | season_id 5 |
 | pwhl_roster_1_5 | pwhl | modulekit/roster | team 1 season 5 |
@@ -24,7 +24,7 @@ Captured JSON payloads from `lscluster.hockeytech.com` / `cluster.leaguestat.com
 | pwhl_leaders_5 | pwhl | statviewfeed/leadersExtended | season_id 5 |
 | pwhl_game_summary_42 | pwhl | gc/gamesummary | game_id 42 |
 | ahl_seasons | ahl | modulekit/seasons | all; sdv-internal-refs `hockeytech/captures/samples/ahl/seasons.json` (b78eb2c, live 2026-07-12), trim marker dropped, key redacted |
-| ohl / whl / qmjhl / echl / sphl / chl / ushl / bchl / ajhl / sjhl / ojhl / cchl / gojhl / mhl / nojhl / vijhl / kijhl / mjhl `_seasons` | (18 leagues) | modulekit/seasons | all; live 2026-10-05 via `hockeytech_api(lg, "modulekit", "seasons", {})`, untrimmed, key redacted. `tests/hockeytech/test_season_names.py` reads every league's season names from these |
+| ohl / whl / qmjhl / echl / sphl / chl / ushl / bchl / ajhl / sjhl / ojhl / cchl / gojhl / mhl / nojhl / vijhl / kijhl / mjhl `_seasons` | (18 leagues) | modulekit/seasons | all; live 2026-10-05 via `hockeytech_api(lg, "modulekit", "seasons", {})`, untrimmed, key redacted. `tests/hockeytech/test_season_names.py` reads every league's season names from these and from `ahl_seasons` / `pwhl_seasons` |
 | ahl_pbp\_\* / ohl_pbp\_\* / whl_pbp\_\* / qmjhl_pbp\_\* | (juniors) | gameCenterPlayByPlay (dialect b) | per league |
 
 HTTP-200 reply bodies that are not data, used by `tests/hockeytech/test_client.py`

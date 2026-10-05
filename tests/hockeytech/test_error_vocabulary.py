@@ -148,12 +148,14 @@ def _seasons_fake(payload):
     return lambda league, feed, view, *a, **k: payload if view == "seasons" else {}
 
 
-@pytest.mark.parametrize("lg", ["pwhl", "ahl", "mjhl"])
-def test_most_recent_season_is_the_max_listed(monkeypatch, lg):
-    """The real PWHL feed lists 2026-27, so the old hard-coded 2026 was stale."""
-    _patch_all(monkeypatch, _seasons_fake(load_fixture("hockeytech", "pwhl_seasons")))
+@pytest.mark.parametrize("lg, expected", [("pwhl", 2026), ("ahl", 2027), ("mjhl", 2027)])
+def test_most_recent_season_is_the_newest_regular_season(monkeypatch, lg, expected):
+    """AHL and MJHL list a 2026-27 regular season, so the old hard-coded 2026 was stale. The
+    June PWHL capture ends at the "2026-27 Pre-Season" (id 10): its newest regular season is
+    still 2025-26."""
+    _patch_all(monkeypatch, _seasons_fake(load_fixture("hockeytech", f"{lg}_seasons")))
     mod = importlib.import_module("sportsdataverse.pwhl.pwhl_api" if lg == "pwhl" else f"sportsdataverse.hockey.{lg}")
-    assert getattr(mod, f"most_recent_{lg}_season")() == 2027
+    assert getattr(mod, f"most_recent_{lg}_season")() == expected
 
 
 @pytest.mark.parametrize("lg", ["pwhl", "ahl"])

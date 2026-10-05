@@ -15,7 +15,7 @@ not covered by the generated API-endpoint reference above.
 
 `most_recent_echl_season() -> 'int'`
 
-Most-recent ECHL season as an end-year integer (max `season_yr`). Raises `NoDataError` when the seasons feed lists none, `AssetFetchError` when it fails.
+Newest ECHL regular season as an end-year integer: the highest `season_yr` of a regular season that is not a one-off event, so a preseason listed first is not a default. Raises `NoDataError` when the seasons feed lists none, `AssetFetchError` when it fails.
 
 ## Other
 
@@ -186,8 +186,8 @@ All ECHL seasons with end-year + game-type labels.
 | `playoff` | character | Whether the row is playoff statistics. |
 | `start_date` | character | Start date (YYYY-MM-DD). |
 | `end_date` | character | End date (YYYY-MM-DD). |
-| `season_yr` | integer | Year derived from the season name (concluding year). |
-| `game_type_label` | character | Game type: "preseason", "regular", or "playoffs". |
+| `season_yr` | integer | End year of the season the row belongs to, read from its name: "2025-26", "2025/26" and "2025-2026" are 2026, "26-27" is 2027, a compact "2425" is 2025. A preseason or exhibition named with the one year it starts in belongs to the next season ("2026 Pre-season" is 2027). Null when the name holds no year. |
+| `game_type_label` | character | Game type read from the season name, first match wins: "preseason" (pre-season, preseason), "playoffs" (playoff, post), "exhibition", else "regular". One-off events such as all-star games are labelled "regular" too; season resolution skips them. |
 
 ### echl_standings {#echl_standings}
 

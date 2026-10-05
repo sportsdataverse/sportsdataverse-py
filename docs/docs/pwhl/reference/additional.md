@@ -142,7 +142,10 @@ Alias of load_pwhl_team_boxscores() for naming parity with fastRhockey (R).
 
 `most_recent_pwhl_season() -> 'int'`
 
-Most-recent PWHL season as an end-year integer (max `season_yr`).
+Newest PWHL regular season as an end-year integer.
+
+The highest `season_yr` of a regular season that is not a one-off event, so a
+preseason the feed lists before its regular season is not a default.
 
 Raises `NoDataError` when the seasons feed lists none, `AssetFetchError` when it fails.
 
@@ -939,8 +942,8 @@ All PWHL seasons with end-year + game-type labels (HockeyTech `seasons`).
 | `playoff` | character | Whether the row is playoff statistics. |
 | `start_date` | character | Season start date. |
 | `end_date` | character | Season end date. |
-| `season_yr` | integer | Year derived from the season name (concluding year). |
-| `game_type_label` | character | Game type: "preseason", "regular", or "playoffs". |
+| `season_yr` | integer | End year of the season the row belongs to, read from its name: "2025-26", "2025/26" and "2025-2026" are 2026, "26-27" is 2027, a compact "2425" is 2025. A preseason or exhibition named with the one year it starts in belongs to the next season ("2026 Pre-season" is 2027). Null when the name holds no year. |
+| `game_type_label` | character | Game type read from the season name, first match wins: "preseason" (pre-season, preseason), "playoffs" (playoff, post), "exhibition", else "regular". One-off events such as all-star games are labelled "regular" too; season resolution skips them. |
 
 ### pwhl_skater_rapm {#pwhl_skater_rapm}
 
