@@ -615,13 +615,59 @@ def test_fox_games_projection(monkeypatch: pytest.MonkeyPatch) -> None:
     assert out[0]["matchup_key"] == _matchup_key("ohio state buckeyes", "akron zips")
 
 
-def test_fox_games_swallows_errors(monkeypatch: pytest.MonkeyPatch) -> None:
-    # Fox is best-effort: a failure must yield [] so the ESPN/Yahoo core survives.
-    def boom(**k: Any) -> pl.DataFrame:
-        raise RuntimeError("fox is down")
+def test_fox_games_surfaces_a_failed_fetch(monkeypatch: pytest.MonkeyPatch) -> None:
+    # A failed Fox fetch is not "no Fox games": it raises instead of leaving every
+    # fox_* column null in a well-formed result (was: swallowed into []).
+    from sportsdataverse._crosswalk_basketball_sources import CrosswalkSourceError
+    from sportsdataverse.errors import AssetFetchError
+
+    def boom(*a: Any, **k: Any) -> pl.DataFrame:
+        raise AssetFetchError("api.foxsports.com/bifrost/v1/cfb/... answered HTTP 503")
 
     monkeypatch.setattr(cw, "fox_cfb_schedule", boom)
+    with pytest.raises(CrosswalkSourceError, match="fox_cfb_schedule"):
+        cw._fox_games(2024, 1)
+    with pytest.raises(CrosswalkSourceError, match="fox_cfb_schedule"):
+        cw._fox_season_games(2024)
+
+
+def test_fox_games_404_is_no_fox_games(monkeypatch: pytest.MonkeyPatch) -> None:
+    from sportsdataverse.errors import NoDataError
+
+    def gone(*a: Any, **k: Any) -> pl.DataFrame:
+        raise NoDataError("api.foxsports.com/bifrost/v1/cfb/league/scores-segment/2024-1-1 answered HTTP 404")
+
+    monkeypatch.setattr(cw, "fox_cfb_schedule", gone)
     assert cw._fox_games(2024, 1) == []
+    assert cw._fox_season_games(2024) == []
+
+
+def test_weekly_loops_skip_isolated_failures_and_refuse_all_failed(monkeypatch: pytest.MonkeyPatch) -> None:
+    # One failed Yahoo week is skipped (and logged); every week failing raises.
+    from sportsdataverse._crosswalk_basketball_sources import CrosswalkSourceError
+    from sportsdataverse.errors import AssetFetchError
+
+    def some(season: int, week: int, **k: Any) -> list:
+        if week == 3:
+            raise AssetFetchError("graphite-secure.sports.yahoo.com/... answered HTTP 503")
+        return [{"game_id": f"g{week}", "matchup_key": "a|b"}]
+
+    monkeypatch.setattr(cw, "_yahoo_games", some)
+    rows = cw._yahoo_season_games(2024)
+    assert len(rows) == 22 and "g3" not in {r["game_id"] for r in rows}
+
+    def none(season: int, week: int, **k: Any) -> list:
+        raise AssetFetchError("graphite-secure.sports.yahoo.com/... answered HTTP 503")
+
+    monkeypatch.setattr(cw, "_yahoo_games", none)
+    with pytest.raises(CrosswalkSourceError, match="all 23 per-item fetches failed"):
+        cw._yahoo_season_games(2024)
+
+    # ESPN: a failed calendar falls back to the default slots; all weeks failing raises.
+    monkeypatch.setattr(cw, "espn_cfb_calendar", lambda **k: (_ for _ in ()).throw(AssetFetchError("cal 503")))
+    monkeypatch.setattr(cw, "espn_cfb_schedule", lambda **k: (_ for _ in ()).throw(AssetFetchError("sched 503")))
+    with pytest.raises(CrosswalkSourceError, match="espn_cfb_calendar/espn_cfb_schedule"):
+        cw._espn_season_games(2024)
 
 
 def test_fox_cfb_schedule_parses_segment(monkeypatch: pytest.MonkeyPatch) -> None:
