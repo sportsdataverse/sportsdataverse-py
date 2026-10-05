@@ -291,6 +291,33 @@ def test_explicit_season_id_never_asks_for_seasons(monkeypatch, module, name, ar
     assert views and "seasons" not in views
 
 
+def test_pwhl_playoff_bracket_defaults_to_newest_season_with_playoffs(monkeypatch):
+    """The real list's newest season is 2026-27 (preseason only); the bracket is 2026's (9)."""
+    from sportsdataverse.pwhl import pwhl_api
+
+    sent = []
+
+    def fake(league, feed, view, params=None, **k):
+        if view == "seasons":
+            return load_fixture("hockeytech", "pwhl_seasons")
+        sent.append((view, dict(params or {})))
+        return {}
+
+    _patch_all(monkeypatch, fake)
+    pwhl_api.pwhl_playoff_bracket()
+    assert sent == [("brackets", {"season_id": 9, "league_id": 1})]
+
+
+def test_pwhl_playoff_bracket_no_playoff_season_is_no_data(monkeypatch):
+    seasons = load_fixture("hockeytech", "pwhl_seasons")
+    seasons["SiteKit"]["Seasons"] = [s for s in seasons["SiteKit"]["Seasons"] if "Playoff" not in s["season_name"]]
+    _patch_all(monkeypatch, _seasons_fake(seasons))
+    from sportsdataverse.pwhl import pwhl_api
+
+    with pytest.raises(NoDataError, match="no playoff season"):
+        pwhl_api.pwhl_playoff_bracket()
+
+
 # ---------------------------------------------------------------------------
 # The documented graceful empty, end to end through the real client.
 # ---------------------------------------------------------------------------

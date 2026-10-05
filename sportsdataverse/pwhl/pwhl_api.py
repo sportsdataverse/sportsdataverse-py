@@ -13,6 +13,7 @@ import warnings
 from typing import Any, Optional
 
 
+from sportsdataverse.errors import NoDataError
 from sportsdataverse.hockeytech import hockeytech_api, resolve_season_id
 from sportsdataverse.hockeytech import _parsers as P
 from sportsdataverse.hockeytech._analytics import enrich_pbp
@@ -337,13 +338,19 @@ def pwhl_playoff_bracket(
     season_id: Optional[int] = None,
     return_as_pandas: bool = False,
 ) -> Any:
-    """PWHL playoff bracket for a given season."""
-    sid = resolve_season_id(
-        _LG,
-        season=_season_or_latest(season, season_id),
-        game_type="playoffs",
-        season_id=season_id,
-    )
+    """PWHL playoff bracket for a given season.
+
+    With neither ``season`` nor ``season_id``, the newest season that has playoffs:
+    the newest season overall is usually still before its playoffs, with no bracket.
+    Raises ``NoDataError`` when the seasons feed lists no playoff season.
+    """
+    if season is None and season_id is None:
+        seasons = pwhl_season_id()
+        playoffs = seasons.filter(seasons["game_type_label"] == "playoffs") if seasons.height else seasons
+        if not playoffs.height:
+            raise NoDataError("PWHL: the seasons feed lists no playoff season")
+        season_id = int(playoffs.sort(["season_yr", "season_id"])["season_id"][-1])
+    sid = resolve_season_id(_LG, season=season, game_type="playoffs", season_id=season_id)
     return P.parse_playoff_bracket(
         hockeytech_api(_LG, "modulekit", "brackets", {"season_id": sid, "league_id": 1}),
         return_as_pandas,

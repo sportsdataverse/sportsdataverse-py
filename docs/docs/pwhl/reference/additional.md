@@ -760,6 +760,10 @@ One row per player with `player_id`, `first_name`, `last_name`, `toi_seconds`, `
 
 PWHL playoff bracket for a given season.
 
+With neither `season` nor `season_id`, the newest season that has playoffs:
+the newest season overall is usually still before its playoffs, with no bracket.
+Raises `NoDataError` when the seasons feed lists no playoff season.
+
 **Parameters**
 
 | Parameter | Type | Default | Description |
