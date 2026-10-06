@@ -39,7 +39,7 @@ offline parser tests; sdv-py never republishes Jolpica payloads as release asset
 | `status.json` | `/status.json` |
 | `drivers__max_verstappen.json` | `/drivers/max_verstappen.json` |
 
-`f1-returns.md` is a byte copy of the recon's generated returns tables (the per-route flattened
+`f1-returns.md` is a copy of the recon's generated returns tables (doctoc prepends a table of contents on commit) (the per-route flattened
 column lists); `tests/f1/test_f1.py` anchors the generated schemas to it, names and order.
 
 Every body is `{"MRData": {..., "<Table>": {...}}}`; every value is a string on the
