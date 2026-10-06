@@ -113,6 +113,10 @@ class FlatApi:
     # "Exception: description"), ``see_also`` (list of {name, url, note}) and
     # ``example_import`` (bool -- prepend the import line to the Example block).
     docstring: Dict[str, object] = field(default_factory=dict)
+    # When True, every wrapper passes its returns-schema column names to the parser as
+    # ``columns=[...]`` (and the module carries them as ``_PARSER_COLUMNS``), so an empty
+    # payload parses to a zero-row frame WITH the documented schema (f1).
+    parser_columns: bool = False
 
     @property
     def prefix(self) -> str:
@@ -383,4 +387,5 @@ def load_flat_api(path: Path, registry: Dict[str, Param]) -> FlatApi:
         auth=bool(raw.get("auth", False)),
         raw_types=list(raw.get("raw_types") or ["Dict"]),
         docstring=dict(raw.get("docstring") or {}),
+        parser_columns=bool(raw.get("parser_columns", False)),
     )

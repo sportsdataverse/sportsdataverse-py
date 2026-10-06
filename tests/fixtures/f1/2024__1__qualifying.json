@@ -1,0 +1,106 @@
+{
+  "MRData": {
+    "xmlns": "",
+    "series": "f1",
+    "url": "https://api.jolpi.ca/ergast/f1/2024/1/qualifying.json",
+    "limit": "30",
+    "offset": "0",
+    "total": "20",
+    "RaceTable": {
+      "season": "2024",
+      "round": "1",
+      "Races": [
+        {
+          "season": "2024",
+          "round": "1",
+          "url": "https://en.wikipedia.org/wiki/2024_Bahrain_Grand_Prix",
+          "raceName": "Bahrain Grand Prix",
+          "Circuit": {
+            "circuitId": "bahrain",
+            "url": "https://en.wikipedia.org/wiki/Bahrain_International_Circuit",
+            "circuitName": "Bahrain International Circuit",
+            "Location": {
+              "lat": "26.0325",
+              "long": "50.5106",
+              "locality": "Sakhir",
+              "country": "Bahrain"
+            }
+          },
+          "date": "2024-03-02",
+          "time": "15:00:00Z",
+          "QualifyingResults": [
+            {
+              "number": "1",
+              "position": "1",
+              "Driver": {
+                "driverId": "max_verstappen",
+                "permanentNumber": "3",
+                "code": "VER",
+                "url": "http://en.wikipedia.org/wiki/Max_Verstappen",
+                "givenName": "Max",
+                "familyName": "Verstappen",
+                "dateOfBirth": "1997-09-30",
+                "nationality": "Dutch"
+              },
+              "Constructor": {
+                "constructorId": "red_bull",
+                "url": "https://en.wikipedia.org/wiki/Red_Bull_Racing",
+                "name": "Red Bull",
+                "nationality": "Austrian"
+              },
+              "Q1": "1:30.031",
+              "Q2": "1:29.374",
+              "Q3": "1:29.179"
+            },
+            {
+              "number": "16",
+              "position": "2",
+              "Driver": {
+                "driverId": "leclerc",
+                "permanentNumber": "16",
+                "code": "LEC",
+                "url": "http://en.wikipedia.org/wiki/Charles_Leclerc",
+                "givenName": "Charles",
+                "familyName": "Leclerc",
+                "dateOfBirth": "1997-10-16",
+                "nationality": "Monegasque"
+              },
+              "Constructor": {
+                "constructorId": "ferrari",
+                "url": "https://en.wikipedia.org/wiki/Scuderia_Ferrari",
+                "name": "Ferrari",
+                "nationality": "Italian"
+              },
+              "Q1": "1:30.243",
+              "Q2": "1:29.165",
+              "Q3": "1:29.407"
+            },
+            {
+              "number": "63",
+              "position": "3",
+              "Driver": {
+                "driverId": "russell",
+                "permanentNumber": "63",
+                "code": "RUS",
+                "url": "http://en.wikipedia.org/wiki/George_Russell_(racing_driver)",
+                "givenName": "George",
+                "familyName": "Russell",
+                "dateOfBirth": "1998-02-15",
+                "nationality": "British"
+              },
+              "Constructor": {
+                "constructorId": "mercedes",
+                "url": "https://en.wikipedia.org/wiki/Mercedes-Benz_in_Formula_One",
+                "name": "Mercedes",
+                "nationality": "German"
+              },
+              "Q1": "1:30.350",
+              "Q2": "1:29.922",
+              "Q3": "1:29.485"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

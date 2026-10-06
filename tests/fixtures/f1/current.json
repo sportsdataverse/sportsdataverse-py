@@ -1,0 +1,120 @@
+{
+  "MRData": {
+    "xmlns": "",
+    "series": "f1",
+    "url": "https://api.jolpi.ca/ergast/f1/current.json",
+    "limit": "30",
+    "offset": "0",
+    "total": "23",
+    "RaceTable": {
+      "season": "2026",
+      "Races": [
+        {
+          "season": "2026",
+          "round": "1",
+          "url": "https://en.wikipedia.org/wiki/2026_Australian_Grand_Prix",
+          "raceName": "Australian Grand Prix",
+          "Circuit": {
+            "circuitId": "albert_park",
+            "url": "https://en.wikipedia.org/wiki/Albert_Park_Circuit",
+            "circuitName": "Albert Park Grand Prix Circuit",
+            "Location": {
+              "lat": "-37.8497",
+              "long": "144.968",
+              "locality": "Melbourne",
+              "country": "Australia"
+            }
+          },
+          "date": "2026-03-08",
+          "time": "04:00:00Z",
+          "FirstPractice": {
+            "date": "2026-03-06",
+            "time": "01:30:00Z"
+          },
+          "SecondPractice": {
+            "date": "2026-03-06",
+            "time": "05:00:00Z"
+          },
+          "ThirdPractice": {
+            "date": "2026-03-07",
+            "time": "01:30:00Z"
+          },
+          "Qualifying": {
+            "date": "2026-03-07",
+            "time": "05:00:00Z"
+          }
+        },
+        {
+          "season": "2026",
+          "round": "2",
+          "url": "https://en.wikipedia.org/wiki/2026_Chinese_Grand_Prix",
+          "raceName": "Chinese Grand Prix",
+          "Circuit": {
+            "circuitId": "shanghai",
+            "url": "https://en.wikipedia.org/wiki/Shanghai_International_Circuit",
+            "circuitName": "Shanghai International Circuit",
+            "Location": {
+              "lat": "31.3389",
+              "long": "121.22",
+              "locality": "Shanghai",
+              "country": "China"
+            }
+          },
+          "date": "2026-03-15",
+          "time": "07:00:00Z",
+          "FirstPractice": {
+            "date": "2026-03-13",
+            "time": "03:30:00Z"
+          },
+          "Qualifying": {
+            "date": "2026-03-14",
+            "time": "07:00:00Z"
+          },
+          "Sprint": {
+            "date": "2026-03-14",
+            "time": "03:00:00Z"
+          },
+          "SprintQualifying": {
+            "date": "2026-03-13",
+            "time": "07:30:00Z"
+          }
+        },
+        {
+          "season": "2026",
+          "round": "3",
+          "url": "https://en.wikipedia.org/wiki/2026_Japanese_Grand_Prix",
+          "raceName": "Japanese Grand Prix",
+          "Circuit": {
+            "circuitId": "suzuka",
+            "url": "https://en.wikipedia.org/wiki/Suzuka_International_Racing_Course",
+            "circuitName": "Suzuka Circuit",
+            "Location": {
+              "lat": "34.8431",
+              "long": "136.541",
+              "locality": "Suzuka",
+              "country": "Japan"
+            }
+          },
+          "date": "2026-03-29",
+          "time": "05:00:00Z",
+          "FirstPractice": {
+            "date": "2026-03-27",
+            "time": "02:30:00Z"
+          },
+          "SecondPractice": {
+            "date": "2026-03-27",
+            "time": "06:00:00Z"
+          },
+          "ThirdPractice": {
+            "date": "2026-03-28",
+            "time": "02:30:00Z"
+          },
+          "Qualifying": {
+            "date": "2026-03-28",
+            "time": "06:00:00Z"
+          }
+        }
+      ]
+    }
+  }
+}

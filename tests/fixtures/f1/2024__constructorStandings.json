@@ -1,0 +1,58 @@
+{
+  "MRData": {
+    "xmlns": "",
+    "series": "f1",
+    "url": "https://api.jolpi.ca/ergast/f1/2024/constructorstandings.json",
+    "limit": "30",
+    "offset": "0",
+    "total": "10",
+    "StandingsTable": {
+      "season": "2024",
+      "round": "24",
+      "StandingsLists": [
+        {
+          "season": "2024",
+          "round": "24",
+          "ConstructorStandings": [
+            {
+              "position": "1",
+              "positionText": "1",
+              "points": "666",
+              "wins": "6",
+              "Constructor": {
+                "constructorId": "mclaren",
+                "url": "https://en.wikipedia.org/wiki/McLaren",
+                "name": "McLaren",
+                "nationality": "British"
+              }
+            },
+            {
+              "position": "2",
+              "positionText": "2",
+              "points": "652",
+              "wins": "5",
+              "Constructor": {
+                "constructorId": "ferrari",
+                "url": "https://en.wikipedia.org/wiki/Scuderia_Ferrari",
+                "name": "Ferrari",
+                "nationality": "Italian"
+              }
+            },
+            {
+              "position": "3",
+              "positionText": "3",
+              "points": "589",
+              "wins": "9",
+              "Constructor": {
+                "constructorId": "red_bull",
+                "url": "https://en.wikipedia.org/wiki/Red_Bull_Racing",
+                "name": "Red Bull",
+                "nationality": "Austrian"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

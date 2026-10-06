@@ -1,0 +1,45 @@
+{
+  "MRData": {
+    "xmlns": "",
+    "series": "f1",
+    "url": "https://api.jolpi.ca/ergast/f1/2024/drivers.json",
+    "limit": "30",
+    "offset": "0",
+    "total": "25",
+    "DriverTable": {
+      "season": "2024",
+      "Drivers": [
+        {
+          "driverId": "albon",
+          "permanentNumber": "23",
+          "code": "ALB",
+          "url": "http://en.wikipedia.org/wiki/Alexander_Albon",
+          "givenName": "Alexander",
+          "familyName": "Albon",
+          "dateOfBirth": "1996-03-23",
+          "nationality": "Thai"
+        },
+        {
+          "driverId": "alonso",
+          "permanentNumber": "14",
+          "code": "ALO",
+          "url": "http://en.wikipedia.org/wiki/Fernando_Alonso",
+          "givenName": "Fernando",
+          "familyName": "Alonso",
+          "dateOfBirth": "1981-07-29",
+          "nationality": "Spanish"
+        },
+        {
+          "driverId": "antonelli",
+          "permanentNumber": "12",
+          "code": "ANT",
+          "url": "https://en.wikipedia.org/wiki/Andrea_Kimi_Antonelli",
+          "givenName": "Andrea Kimi",
+          "familyName": "Antonelli",
+          "dateOfBirth": "2006-08-25",
+          "nationality": "Italian"
+        }
+      ]
+    }
+  }
+}

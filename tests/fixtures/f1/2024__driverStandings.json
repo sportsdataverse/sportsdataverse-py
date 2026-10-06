@@ -1,0 +1,94 @@
+{
+  "MRData": {
+    "xmlns": "",
+    "series": "f1",
+    "url": "https://api.jolpi.ca/ergast/f1/2024/driverstandings.json",
+    "limit": "30",
+    "offset": "0",
+    "total": "24",
+    "StandingsTable": {
+      "season": "2024",
+      "round": "24",
+      "StandingsLists": [
+        {
+          "season": "2024",
+          "round": "24",
+          "DriverStandings": [
+            {
+              "position": "1",
+              "positionText": "1",
+              "points": "437",
+              "wins": "9",
+              "Driver": {
+                "driverId": "max_verstappen",
+                "permanentNumber": "3",
+                "code": "VER",
+                "url": "http://en.wikipedia.org/wiki/Max_Verstappen",
+                "givenName": "Max",
+                "familyName": "Verstappen",
+                "dateOfBirth": "1997-09-30",
+                "nationality": "Dutch"
+              },
+              "Constructors": [
+                {
+                  "constructorId": "red_bull",
+                  "url": "https://en.wikipedia.org/wiki/Red_Bull_Racing",
+                  "name": "Red Bull",
+                  "nationality": "Austrian"
+                }
+              ]
+            },
+            {
+              "position": "2",
+              "positionText": "2",
+              "points": "374",
+              "wins": "4",
+              "Driver": {
+                "driverId": "norris",
+                "permanentNumber": "1",
+                "code": "NOR",
+                "url": "http://en.wikipedia.org/wiki/Lando_Norris",
+                "givenName": "Lando",
+                "familyName": "Norris",
+                "dateOfBirth": "1999-11-13",
+                "nationality": "British"
+              },
+              "Constructors": [
+                {
+                  "constructorId": "mclaren",
+                  "url": "https://en.wikipedia.org/wiki/McLaren",
+                  "name": "McLaren",
+                  "nationality": "British"
+                }
+              ]
+            },
+            {
+              "position": "3",
+              "positionText": "3",
+              "points": "356",
+              "wins": "3",
+              "Driver": {
+                "driverId": "leclerc",
+                "permanentNumber": "16",
+                "code": "LEC",
+                "url": "http://en.wikipedia.org/wiki/Charles_Leclerc",
+                "givenName": "Charles",
+                "familyName": "Leclerc",
+                "dateOfBirth": "1997-10-16",
+                "nationality": "Monegasque"
+              },
+              "Constructors": [
+                {
+                  "constructorId": "ferrari",
+                  "url": "https://en.wikipedia.org/wiki/Scuderia_Ferrari",
+                  "name": "Ferrari",
+                  "nationality": "Italian"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

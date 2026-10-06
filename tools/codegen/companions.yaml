@@ -32,3 +32,13 @@ soccer:
   - name: mplsoccer
     url: https://mplsoccer.readthedocs.io
     note: matplotlib pitches and StatsBomb helpers that sdvplot's pitch frame interoperates with
+f1:
+  - name: f1dataR
+    url: https://scottyd22.github.io/f1dataR/
+    note: the R twin over the same Jolpica (Ergast-compatible) API; wrapper and column names follow it
+  - name: FastF1
+    url: https://docs.fastf1.dev/
+    note: session timing, telemetry and tire data that sdv-py does not wrap
+  - name: Jolpica F1 API
+    url: https://github.com/jolpica/jolpica-f1
+    note: the API itself (docs, CC BY-NC-SA 4.0 terms, 500 requests/hour limit)

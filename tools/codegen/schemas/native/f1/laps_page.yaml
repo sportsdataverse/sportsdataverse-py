@@ -1,0 +1,56 @@
+columns:
+- description: Round number within the season (integer); on standings routes the round
+    the standings are computed after.
+  name: round
+  type: integer
+- description: Season year (integer).
+  name: season
+  type: integer
+- description: Circuit country.
+  name: race_circuit_location_country
+  type: character
+- description: Circuit latitude (decimal degrees).
+  name: race_circuit_location_lat
+  type: numeric
+- description: Circuit city / locality.
+  name: race_circuit_location_locality
+  type: character
+- description: Circuit longitude (decimal degrees).
+  name: race_circuit_location_long
+  type: numeric
+- description: Ergast circuit id (join key to `/circuits`).
+  name: race_circuit_id
+  type: character
+- description: Circuit name.
+  name: race_circuit_name
+  type: character
+- description: Wikipedia URL of the circuit.
+  name: race_circuit_url
+  type: character
+- description: Race date (YYYY-MM-DD).
+  name: race_date
+  type: character
+- description: Grand Prix name.
+  name: race_name
+  type: character
+- description: Race start time (HH:MM:SSZ, UTC); absent for older seasons.
+  name: race_time
+  type: character
+- description: Wikipedia URL of the race.
+  name: race_url
+  type: character
+- description: Lap number (integer).
+  name: lap_number
+  type: integer
+- description: Ergast driver id (join key to `/drivers`).
+  name: driver_id
+  type: character
+- description: Classified position (integer).
+  name: position
+  type: integer
+- description: Lap time (`M:SS.mmm`) on laps; race-finish time on results (winner
+    elapsed, others as a gap); local wall-clock on pit stops.
+  name: time
+  type: character
+kind: dataframe
+schema: laps_page
