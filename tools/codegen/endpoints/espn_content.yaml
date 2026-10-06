@@ -1,0 +1,70 @@
+api: espn_content
+docstring:
+  example_import: true
+  raises:
+  - 'sportsdataverse.errors.NoDataError: content.core answered 404 (unknown story
+    id, sport or league slug).'
+  see_also:
+  - name: ESPN content.core endpoints
+    note: keyless; list routes page with limit/offset, and team=/athlete= filters
+      are ignored by the host
+    url: https://content.core.api.espn.com/v1/sports/news
+endpoints:
+- example_args:
+    league_slug: nfl
+    sport_slug: football
+  extra_params:
+  - description: Page size (default 10; the body echoes resultsLimit).
+    name: limit
+    query_key: limit
+    type: str
+  - description: Page offset (body echoes resultsOffset).
+    name: offset
+    query_key: offset
+    type: str
+  parser: parse_espn_content
+  path: /sports/{sport_slug}/{league_slug}/news
+  path_params:
+  - name: sport_slug
+    required: true
+    type: str
+  - name: league_slug
+    required: true
+    type: str
+  returns_schema: native/espn_content/league_news
+  short: league_news
+  summary: Headlines for one league (limit, offset).
+- example_args: {}
+  extra_params:
+  - description: Page size (default 10; the body echoes resultsLimit).
+    name: limit
+    query_key: limit
+    type: str
+  - description: Page offset (body echoes resultsOffset).
+    name: offset
+    query_key: offset
+    type: str
+  parser: parse_espn_content
+  path: /sports/news
+  returns_schema: native/espn_content/news
+  short: news
+  summary: Cross-sport headlines (limit, offset).
+- example_args:
+    id: '49778940'
+  parser: parse_espn_content
+  path: /sports/news/{id}
+  path_params:
+  - name: id
+    required: true
+    type: str
+  returns_schema: native/espn_content/story
+  short: story
+  summary: One story (same envelope, one headline).
+host: https://content.core.api.espn.com/v1
+module: espn_content
+name_pattern: espn_content_{short}
+parser_module: espn_content.espn_content_parsers
+passthrough_query: false
+qualifier: ''
+runtime_imports:
+- _get
