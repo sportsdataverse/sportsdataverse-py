@@ -1,0 +1,6 @@
+columns:
+- description: ''
+  name: mid
+  type: character
+kind: dataframe
+schema: clob_midpoint

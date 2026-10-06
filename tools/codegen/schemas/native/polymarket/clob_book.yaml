@@ -1,0 +1,36 @@
+columns:
+- description: ''
+  name: market
+  type: character
+- description: ''
+  name: asset_id
+  type: character
+- description: ''
+  name: timestamp
+  type: character
+- description: ''
+  name: hash
+  type: character
+- description: ''
+  name: min_order_size
+  type: character
+- description: ''
+  name: tick_size
+  type: character
+- description: ''
+  name: neg_risk
+  type: logical
+- description: ''
+  name: last_trade_price
+  type: character
+- description: ''
+  name: side
+  type: character
+- description: ''
+  name: price
+  type: character
+- description: ''
+  name: size
+  type: character
+kind: dataframe
+schema: clob_book
