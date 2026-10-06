@@ -1,0 +1,165 @@
+api: polymarket
+docstring:
+  example_import: true
+  raises:
+  - 'sportsdataverse.errors.NoDataError: Polymarket answered 404 (unknown market id
+    or token id).'
+  see_also:
+  - name: Polymarket docs
+    note: gamma = market/event/tag metadata, clob = order books and prices; reads
+      are keyless, trading needs keys
+    url: https://docs.polymarket.com/
+endpoints:
+- example_args:
+    closed: 'false'
+    limit: '3'
+    tag_slug: sports
+  extra_params:
+  - description: Page size.
+    name: limit
+    query_key: limit
+    type: str
+  - description: Filter closed markets/events (true/false).
+    name: closed
+    query_key: closed
+    type: str
+  - description: Filter events by tag slug (e.g. sports; see /tags).
+    name: tag_slug
+    query_key: tag_slug
+    type: str
+  - description: Row offset; offset=1 shifts the first row by one (verified 2026-10-06).
+    name: offset
+    query_key: offset
+    type: str
+  parser: parse_polymarket
+  path: /events
+  returns_schema: native/polymarket/gamma_events
+  short: gamma_events
+  summary: gamma-api.polymarket.com/events.
+- example_args:
+    id: '608565'
+  parser: parse_polymarket
+  path: /markets/{id}
+  path_params:
+  - name: id
+    required: true
+    type: str
+  returns_schema: native/polymarket/gamma_market
+  short: gamma_market
+  summary: gamma-api.polymarket.com/markets/{id}.
+- example_args:
+    ascending: 'false'
+    closed: 'false'
+    limit: '3'
+    order: volume24hr
+  extra_params:
+  - description: Page size.
+    name: limit
+    query_key: limit
+    type: str
+  - description: Filter closed markets/events (true/false).
+    name: closed
+    query_key: closed
+    type: str
+  - description: Sort field, e.g. volume24hr, liquidity, startDate.
+    name: order
+    query_key: order
+    type: str
+  - description: Sort direction (true/false).
+    name: ascending
+    query_key: ascending
+    type: str
+  - description: Row offset; offset=1 shifts the first row by one (verified 2026-10-06).
+    name: offset
+    query_key: offset
+    type: str
+  parser: parse_polymarket
+  path: /markets
+  returns_schema: native/polymarket/gamma_markets
+  short: gamma_markets
+  summary: gamma-api.polymarket.com/markets.
+- example_args:
+    limit: '3'
+  extra_params:
+  - description: Page size.
+    name: limit
+    query_key: limit
+    type: str
+  - description: Row offset; offset=1 shifts the first row by one (verified 2026-10-06).
+    name: offset
+    query_key: offset
+    type: str
+  parser: parse_polymarket
+  path: /tags
+  returns_schema: native/polymarket/gamma_tags
+  short: gamma_tags
+  summary: gamma-api.polymarket.com/tags.
+- example_args:
+    token_id: '14940935985254400645996902276818598247231942791302218826999289776538227075176'
+  extra_params:
+  - description: Required. CLOB token id (uint256 as a decimal string) = one entry
+      of a Gamma market's clobTokenIds.
+    name: token_id
+    query_key: token_id
+    type: str
+  host: https://clob.polymarket.com
+  parser: parse_polymarket
+  path: /book
+  returns_schema: native/polymarket/clob_book
+  short: clob_book
+  summary: clob.polymarket.com/book.
+- example_args:
+    next_cursor: MA==
+  extra_params:
+  - description: Page cursor from the previous response; MA== (base64 0) or empty
+      is the first page, LTE= means no more pages.
+    name: next_cursor
+    query_key: next_cursor
+    type: str
+  host: https://clob.polymarket.com
+  parser: parse_polymarket
+  path: /markets
+  returns_schema: native/polymarket/clob_markets
+  short: clob_markets
+  summary: clob.polymarket.com/markets.
+- example_args:
+    token_id: '14940935985254400645996902276818598247231942791302218826999289776538227075176'
+  extra_params:
+  - description: Required. CLOB token id (uint256 as a decimal string) = one entry
+      of a Gamma market's clobTokenIds.
+    name: token_id
+    query_key: token_id
+    type: str
+  host: https://clob.polymarket.com
+  parser: parse_polymarket
+  path: /midpoint
+  returns_schema: native/polymarket/clob_midpoint
+  short: clob_midpoint
+  summary: clob.polymarket.com/midpoint.
+- example_args:
+    side: buy
+    token_id: '14940935985254400645996902276818598247231942791302218826999289776538227075176'
+  extra_params:
+  - description: Required. CLOB token id (uint256 as a decimal string) = one entry
+      of a Gamma market's clobTokenIds.
+    name: token_id
+    query_key: token_id
+    type: str
+  - description: Required. buy or sell.
+    name: side
+    query_key: side
+    type: str
+  host: https://clob.polymarket.com
+  parser: parse_polymarket
+  path: /price
+  returns_schema: native/polymarket/clob_price
+  short: clob_price
+  summary: clob.polymarket.com/price.
+host: https://gamma-api.polymarket.com
+module: polymarket
+name_pattern: polymarket_{short}
+parser_module: odds.polymarket_parsers
+passthrough_query: false
+qualifier: ''
+runtime_imports:
+- _get
