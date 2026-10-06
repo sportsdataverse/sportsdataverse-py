@@ -193,6 +193,46 @@ def test_parse_pkgdown_llms_reads_inline_colon_titles():
     ]
 
 
+def test_parse_pkgdown_llms_joins_wrapped_bold_titles():
+    # Real hoopR excerpt (2026-10-05): a long bold title wraps onto a second line.
+    text = (
+        "# hoopR\n\n# Package index\n\n## ESPN MBB\n\n"
+        "- [`espn_mbb_rankings()`](https://hoopR.sportsdataverse.org/reference/espn_mbb_rankings.md)\n"
+        "  :\n\n"
+        "  **Get men's college basketball AP and Coaches Poll rankings from\n"
+        "  ESPN**\n\n"
+        "- [`espn_mbb_scoreboard()`](https://hoopR.sportsdataverse.org/reference/espn_mbb_scoreboard.md)\n"
+        "  :\n\n"
+        "  **Get ESPN men's college basketball schedule for a specific year**\n"
+    )
+    rows = B.Rows()
+    assert B.parse_pkgdown_llms("hoopR", text, rows) == 2
+    assert [(f[0], f[7]) for f in rows.functions] == [
+        ("espn_mbb_rankings", "Get men's college basketball AP and Coaches Poll rankings from ESPN"),
+        ("espn_mbb_scoreboard", "Get ESPN men's college basketball schedule for a specific year"),
+    ]
+
+
+def test_parse_pkgdown_llms_keeps_the_first_listing_of_a_page():
+    # pkgdown lists some help pages in two sections; one row per (package, name), first section wins.
+    item = "- [`load_x()`](https://example.test/reference/load_x.md)\n  : Load x\n"
+    text = "# p\n\n# Package index\n\n## Loaders\n\n" + item + "\n## All functions\n\n" + item
+    rows = B.Rows()
+    assert B.parse_pkgdown_llms("p", text, rows) == 1
+    assert [(f[0], f[6]) for f in rows.functions] == [("load_x", "Loaders")]
+
+
+def test_parse_pkgdown_llms_fails_when_aliases_go_unparsed():
+    text = (
+        "# p\n\n# Package index\n\n## Loaders\n\n"
+        "- [`load_a()`](https://example.test/reference/load_a.md)\n  : Load a\n"
+        "- [`load_b()`](https://example.test/reference/load_b.md)\n"
+        "- [`load_c()`](https://example.test/reference/load_c.md)\n  : Load c\n"
+    )
+    with pytest.raises(RuntimeError, match=r"p: 1 of 3 pkgdown aliases unparsed .*load_b"):
+        B.parse_pkgdown_llms("p", text, B.Rows())
+
+
 def _meta_rows():
     return B.Rows(meta={"schema_version": "1", "built_at": "2026-01-01T00:00:00Z", "sdv_py_commit": "abc"})
 

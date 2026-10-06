@@ -423,34 +423,60 @@ def openapi_rows(specs: dict[str, dict], sha: str, rows: Rows) -> None:
 
 
 _R_ALIAS = re.compile(r"\[`([^`]+?)`\]\((\S+?)\)")
-# pkgdown writes a help page's title in two layouts: inline after the colon ("  : Title"),
-# or a bare "  :" line followed by a bold "  **Title**" line (hoopR, 2026-10-05).
-_R_TITLE = re.compile(r"^\s*(?::\s+(\S.*?)|\*\*(.+?)\*\*)\s*$")
+# pkgdown writes each help page as a definition: its aliases, a ":" marker (on its own line,
+# after the aliases, or after a "**\[deprecated\]**" badge), then the title. The title follows
+# the colon ("  : Title") or, after a bare ":", is the next paragraph: bold ("**Title**",
+# hoopR), plain (sdvplotR) or bold plus a sentence (wehoop). Either form can wrap over lines.
+_R_COLON = re.compile(r"(?:^|\s):(?:\s+(\S.*))?$")
+_R_BOLD = re.compile(r"^\*\*(.+?)\*\*")
+R_UNPARSED_MAX = 0.02  # fail the build when more of a package's index aliases than this go unparsed
 
 
 def parse_pkgdown_llms(package: str, text: str, rows: Rows) -> int:
     """R functions from the ``# Package index`` of a pkgdown llms.txt. One help page = aliases + its title."""
     _, _, index = text.partition("\n# Package index")
-    category: Optional[str] = None
-    pending: list[tuple[str, str]] = []
-    added = 0
+    lines = []
     for line in index.splitlines():
         if line.startswith("# "):
             break
+        lines.append(line)
+    category: Optional[str] = None
+    pending: list[tuple[str, str]] = []
+    title: Optional[list[str]] = None  # the current page's title lines, once its ":" is seen
+    seen: set[str] = set()  # pkgdown lists some pages in two sections; the first listing wins
+    for line in [*lines, ""]:
+        if title is not None:
+            if line.strip() and not line.startswith(("- ", "#")):
+                title.append(line.strip())
+                continue
+            if not line.strip() and not title:  # the blank line between a bare ":" and its title
+                continue
+            joined = " ".join(title)
+            bold = _R_BOLD.match(joined)
+            for n, u in pending if joined else []:
+                if n not in seen:
+                    seen.add(n)
+                    rows.functions.append(
+                        (n, "r", package, None, None, "function", category, bold.group(1) if bold else joined, None, u)
+                    )
+            pending, title = [], None
         if line.startswith(("## ", "### ")):
             category, pending = line.lstrip("#").strip(), []
             continue
         if line.startswith("- "):
             pending = []
         pending += [(n.removesuffix("()"), u) for n, u in _R_ALIAS.findall(line)]
-        m = _R_TITLE.match(line)
+        m = _R_COLON.search(line.rstrip())
         if m and pending:
-            title = (m.group(1) or m.group(2)).strip()
-            for n, u in pending:
-                rows.functions.append((n, "r", package, None, None, "function", category, title, None, u))
-                added += 1
-            pending = []
-    return added
+            title = [m.group(1)] if m.group(1) else []
+    listed = {n.removesuffix("()") for n, _ in _R_ALIAS.findall("\n".join(lines))}
+    missed = sorted(listed - seen)
+    if listed and len(missed) > R_UNPARSED_MAX * len(listed):
+        raise RuntimeError(
+            f"{package}: {len(missed)} of {len(listed)} pkgdown aliases unparsed (e.g. {', '.join(missed[:5])}); "
+            "the llms.txt layout changed"
+        )
+    return len(seen)
 
 
 def build(out_dir: Path, offline: bool = False) -> Path:
