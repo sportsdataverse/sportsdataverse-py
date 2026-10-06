@@ -5,6 +5,7 @@ from datetime import datetime
 import pandas as pd
 import polars as pl
 
+from sportsdataverse._codegen_runtime import _download_json
 from sportsdataverse.dl_utils import download
 
 
@@ -47,10 +48,8 @@ def espn_wnba_schedule(dates=None, season_type=None, limit=500, return_as_pandas
     """
     url = "http://site.api.espn.com/apis/site/v2/sports/basketball/wnba/scoreboard"
     params = {"dates": dates, "seasonType": season_type, "limit": limit}
-    resp = download(url=url, params=params, **kwargs)
-
     ev = pd.DataFrame()
-    events_txt = resp.json()
+    events_txt = _download_json(download, url, params=params, **kwargs)
     events = events_txt.get("events")
     if events is None:
         return pd.DataFrame() if return_as_pandas else pl.DataFrame()
@@ -192,8 +191,7 @@ def espn_wnba_calendar(season=None, ondays=None, return_as_pandas=False, **kwarg
         full_schedule = __ondays_wnba_calendar(season, **kwargs)
     else:
         url = f"http://site.api.espn.com/apis/site/v2/sports/basketball/wnba/scoreboard?dates={season}"
-        resp = download(url=url, **kwargs)
-        txt = resp.json().get("leagues")[0].get("calendar")
+        txt = _download_json(download, url, **kwargs).get("leagues")[0].get("calendar")
         datenum = list(map(lambda x: x[:10].replace("-", ""), txt))
         date = list(map(lambda x: x[:10], txt))
         year = list(map(lambda x: x[:4], txt))
@@ -217,8 +215,7 @@ def espn_wnba_calendar(season=None, ondays=None, return_as_pandas=False, **kwarg
 
 def __ondays_wnba_calendar(season, **kwargs):
     url = f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/seasons/{season}/types/2/calendar/ondays"
-    resp = download(url=url, **kwargs)
-    txt = resp.json().get("eventDate").get("dates")
+    txt = _download_json(download, url, **kwargs).get("eventDate").get("dates")
     result = pl.DataFrame(txt, schema=["dates"])
     result = result.with_columns(dateURL=pl.col("dates").str.slice(0, 10))
     result = result.with_columns(

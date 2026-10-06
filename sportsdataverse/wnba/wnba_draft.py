@@ -24,6 +24,7 @@ from typing import Any, Literal, overload
 import pandas as pd
 import polars as pl
 
+from sportsdataverse._codegen_runtime import _download_json
 from sportsdataverse.dl_utils import download
 
 _OUTPUT_COLUMNS: list[str] = [
@@ -151,8 +152,7 @@ def espn_wnba_draft(
         .. _hoopR: https://hoopR.sportsdataverse.org
     """
     url = f"https://site.web.api.espn.com/apis/site/v2/sports/basketball/wnba/draft?season={season}"
-    resp = download(url, **kwargs)
-    payload: dict[str, Any] = resp.json()
+    payload: dict[str, Any] = _download_json(download, url, **kwargs)
 
     if raw:
         return payload

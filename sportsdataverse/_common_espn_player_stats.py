@@ -41,6 +41,7 @@ from typing import Any
 import pandas as pd
 import polars as pl
 
+from sportsdataverse._codegen_runtime import _download_json
 from sportsdataverse.dl_utils import download, underscore
 
 _CORE_V2_HOST: str = "https://sports.core.api.espn.com/v2/sports"
@@ -149,7 +150,7 @@ def _espn_player_stats(
     athlete_url = f"{base}/{season}/athletes/{athlete_id}"
 
     # Statistics node is authoritative: a 404 here raises (NoDataError).
-    stats_payload: dict[str, Any] = download(stats_url, **kwargs).json()
+    stats_payload: dict[str, Any] = _download_json(download, stats_url, **kwargs)
 
     if raw:
         return stats_payload
@@ -192,7 +193,7 @@ def _safe_json(url: str | None, **kwargs: Any) -> dict[str, Any] | None:
     if not url:
         return None
     try:
-        return download(url, **kwargs).json()
+        return _download_json(download, url, **kwargs)
     except Exception:
         return None
 

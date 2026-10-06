@@ -46,6 +46,7 @@ def _team_mascot(team: dict) -> str:
     return display or location
 
 
+from sportsdataverse._codegen_runtime import _download_json
 from sportsdataverse.dl_utils import download
 from sportsdataverse.football.attribution import (
     _abbr_compat,
@@ -608,8 +609,7 @@ class NFLPlayProcess(object):
             summary_url = (
                 f"http://site.api.espn.com/apis/site/v2/sports/football/nfl/summary?event={self.gameId}&{cache_buster}"
             )
-            summary_resp = download(url=summary_url, **kwargs)
-            summary = summary_resp.json()
+            summary = _download_json(download, summary_url, **kwargs)
         incoming_keys_expected = [
             "boxscore",
             "format",
@@ -1308,8 +1308,7 @@ class NFLPlayProcess(object):
             f"odds?limit=100&{cache_buster}"
         )
         try:
-            odds_resp = download(odds_url)
-            odds = odds_resp.json()
+            odds = _download_json(download, odds_url)
         except Exception as e:
             logger.warning(
                 "%s: odds fetch failed (%r); falling back to defaults",

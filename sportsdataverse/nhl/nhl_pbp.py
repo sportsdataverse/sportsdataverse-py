@@ -9,6 +9,7 @@ import numpy as np
 import pandas as pd
 import polars as pl
 
+from sportsdataverse._codegen_runtime import _download_json
 from sportsdataverse.dl_utils import download, flatten_json_iterative, key_check
 
 
@@ -74,8 +75,7 @@ def espn_nhl_pbp(game_id: int, raw=False, **kwargs) -> Dict:
     """
     pbp_txt = {}
     summary_url = f"http://site.api.espn.com/apis/site/v2/sports/hockey/nhl/summary?event={game_id}"
-    summary_resp = download(summary_url, **kwargs)
-    summary = summary_resp.json()
+    summary = _download_json(download, summary_url, **kwargs)
     for k in [
         "plays",
         "seasonseries",

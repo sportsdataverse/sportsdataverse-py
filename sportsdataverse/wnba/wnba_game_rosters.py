@@ -3,6 +3,7 @@ from __future__ import annotations
 import pandas as pd
 import polars as pl
 
+from sportsdataverse._codegen_runtime import _download_json
 from sportsdataverse.dl_utils import download, normalize_team_roster_columns, underscore
 
 
@@ -63,8 +64,7 @@ def espn_wnba_game_rosters(game_id: int, raw=False, return_as_pandas=False, **kw
     summary_url = "https://sports.core.api.espn.com/v2/sports/basketball/leagues/wnba/events/{x}/competitions/{x}/competitors".format(
         x=game_id,
     )
-    summary_resp = download(summary_url, **kwargs)
-    summary = summary_resp.json()
+    summary = _download_json(download, summary_url, **kwargs)
     items = helper_wnba_game_items(summary)
     team_rosters = helper_wnba_roster_items(items=items, summary_url=summary_url, **kwargs)
     team_rosters = team_rosters.join(items[["team_id", "order", "home_away", "winner"]], how="left", on="team_id")
@@ -117,7 +117,7 @@ def helper_wnba_team_items(items, **kwargs):
     ]
     teams_df = pl.DataFrame()
     for x in items["team_href"]:
-        team = download(x, **kwargs).json()
+        team = _download_json(download, x, **kwargs)
         for k in pop_cols:
             team.pop(k, None)
         team_row = pl.from_pandas(pd.json_normalize(team, sep="_"))
@@ -146,13 +146,12 @@ def helper_wnba_roster_items(items, summary_url, **kwargs):
     for tm in team_ids:
         team_roster_url = "{x}/{t}/roster".format(x=summary_url, t=tm)
         try:
-            team_roster_resp = download(team_roster_url, **kwargs)
+            entries = _download_json(download, team_roster_url, **kwargs).get("entries", [])
         except NoDataError:
             # ESPN has no roster resource for this team in this game (a 404 —
             # common for older games). Skip it so the other team's roster is
             # still recovered instead of failing the whole game.
             continue
-        entries = team_roster_resp.json().get("entries", [])
         if not entries:
             continue
         team_roster = pl.from_pandas(pd.json_normalize(entries, sep="_"))
@@ -188,8 +187,7 @@ def helper_wnba_athlete_items(teams_rosters, **kwargs):
         "position",
     ]
     for athlete_href in athlete_hrefs:
-        athlete_res = download(athlete_href, **kwargs)
-        athlete_resp = athlete_res.json()
+        athlete_resp = _download_json(download, athlete_href, **kwargs)
         for k in pop_cols:
             athlete_resp.pop(k, None)
         athlete = pl.from_pandas(pd.json_normalize(athlete_resp, sep="_"))

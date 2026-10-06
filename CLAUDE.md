@@ -835,8 +835,12 @@ JSON-fetching wrapper layer (ESPN, MLB, NHL, NFL.com, HockeyTech, stats.ncaa.org
 and every hand-rolled `requests` call. As of May 2026 it's type-hinted, iterative
 (no recursion), initializes `response = None` defensively, and re-raises the most
 recent exception when the retry budget is exhausted (instead of returning an
-unbound variable). Wrappers do NOT wrap the call in try/except — they trust
-`download()` to either return a usable `requests.Response` or raise.
+unbound variable). It raises `NoDataError` on a 404 (and ESPN's 200-with-`code:404`)
+and re-raises a connection error, but after the status-retry budget for
+403/408/429/5xx it **returns the last response** — so never call `.json()` on its
+result directly. Read JSON through `_codegen_runtime._download_json(download, url)`
+(or `_get`), which applies the error vocabulary below through `_check_status`,
+`_json_body` and `_transport_errors`; HTML/text sites use `_text_body` / `_check_response`.
 
 **Exception — remote columnar reads.** `_fetch_release_parquet()` in
 `_codegen_runtime.py` hands the release URL straight to Arrow rather than

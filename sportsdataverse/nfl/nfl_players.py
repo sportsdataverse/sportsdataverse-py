@@ -37,6 +37,8 @@ from typing import TYPE_CHECKING, Dict, List, Optional, Union, overload
 
 import polars as pl
 
+from sportsdataverse._codegen_runtime import _download_json
+from sportsdataverse._crosswalk_basketball_sources import FetchTally
 from sportsdataverse.dl_utils import download
 
 if TYPE_CHECKING:  # pragma: no cover -- annotation-only import (PEP 563 defers eval)
@@ -143,20 +145,16 @@ def _fetch_athletes(limit: Optional[int] = None) -> List[Dict]:
     Walks the paginated ``$ref`` index at :data:`_ATHLETES_URL`, then resolves
     each athlete's detail resource (one round trip per athlete). ``limit`` caps
     the number of athletes resolved (``None`` = all). All HTTP goes through the
-    package gateway :func:`sportsdataverse.dl_utils.download`; a failed page /
-    athlete is skipped rather than raising, so a partial/empty fetch degrades to
-    a smaller (or zero-row) frame.
+    package gateway :func:`sportsdataverse.dl_utils.download`. A failed index
+    page raises: a truncated index is a silently partial player list. A failed
+    athlete detail is skipped and tallied (:class:`FetchTally`): isolated
+    failures are logged once the pool ends, and every athlete failing raises.
     """
     refs: List[str] = []
     page = 1
     while True:
-        resp = download(url=_ATHLETES_URL, params={"limit": _PAGE_LIMIT, "page": page, "active": "true"})
-        payload = {}
-        if resp is not None:
-            try:
-                payload = resp.json()
-            except Exception:  # noqa: BLE001 -- malformed page degrades to empty
-                payload = {}
+        params = {"limit": _PAGE_LIMIT, "page": page, "active": "true"}
+        payload = _download_json(download, _ATHLETES_URL, params=params)
         items = payload.get("items") or []
         for item in items:
             ref = item.get("$ref") if isinstance(item, dict) else None
@@ -169,14 +167,11 @@ def _fetch_athletes(limit: Optional[int] = None) -> List[Dict]:
             break
         page += 1
 
+    tally = FetchTally("espn_nfl_athlete")
+
     def _resolve(ref: str) -> Optional[Dict]:
-        resp = download(url=ref)
-        if resp is None:
-            return None
-        try:
-            detail = resp.json()
-        except Exception:  # noqa: BLE001 -- malformed athlete degrades to skip
-            return None
+        # The label reaches warnings / errors: keep a $ref's query string (it may carry a key) out of it.
+        detail = tally.fetch(ref.split("?", 1)[0], lambda: _download_json(download, ref))
         return detail if isinstance(detail, dict) else None
 
     athletes: List[Dict] = []
@@ -186,9 +181,10 @@ def _fetch_athletes(limit: Optional[int] = None) -> List[Dict]:
         # download() owns its own pooled session + Retry-After backoff, so a
         # bounded pool resolves the ~7.5k athlete $refs concurrently without
         # tripping ESPN's rate limit. ex.map preserves input order; failures
-        # come back as None and are dropped.
+        # come back as None, are dropped, and are reported by tally.finish().
         with ThreadPoolExecutor(max_workers=min(_FETCH_WORKERS, len(refs))) as ex:
             athletes = [d for d in ex.map(_resolve, refs) if d is not None]
+        tally.finish()
     return athletes
 
 
@@ -318,9 +314,14 @@ def build_nfl_players(
         (``espn_id``, ``full_name``, ``first_name``, ``last_name``,
         ``position``, ``team``, ``jersey``, ``height``, ``weight``,
         ``birth_date``, ``status``, ``headshot_url``, ``gsis_id``, ``esb_id``,
-        ``pfr_id``, ``pff_id``, ``smart_id``, ``college``). An empty / failed
-        fetch yields a zero-row frame carrying the same column set (never a
-        raise).
+        ``pfr_id``, ``pff_id``, ``smart_id``, ``college``). An empty fetch
+        yields a zero-row frame carrying the same column set.
+
+    Raises:
+        AssetFetchError: An athletes index page failed after retries (a 403,
+            429 or 5xx, an empty or non-JSON 200, or a connection failure).
+        CrosswalkSourceError: Every athlete detail fetch failed; isolated
+            failures are skipped and logged instead.
 
     Example:
         Quick start::

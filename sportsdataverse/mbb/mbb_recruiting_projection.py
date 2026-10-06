@@ -11,6 +11,7 @@ id, so the realized join is by (normalized name, team, season).
 from __future__ import annotations
 
 import re
+from functools import partial
 from typing import Literal, Union, overload
 
 import numpy as np
@@ -44,24 +45,28 @@ def _load_recruits(seasons: "list[int]", league: str = "mens") -> pl.DataFrame:
 
     HS class C arrives college in season C+1; the ``rank`` attribute is only
     trustworthy alongside a non-null composite grade (ungraded players carry
-    bogus low ranks), so it is nulled there.
+    bogus low ranks), so it is nulled there. A recruit whose ``$ref`` 404s is
+    skipped; a failed fetch is skipped and tallied, and raises once every
+    recruit of the run failed.
     """
+    from sportsdataverse._codegen_runtime import _download_json  # noqa: PLC0415
+    from sportsdataverse._crosswalk_basketball_sources import FetchTally  # noqa: PLC0415
     from sportsdataverse.dl_utils import download  # noqa: PLC0415
-    from sportsdataverse.errors import NoDataError  # noqa: PLC0415
 
     if league == "womens":
         from sportsdataverse.wbb import espn_wbb_season_recruits as season_recruits  # noqa: PLC0415
     else:
         from sportsdataverse.mbb import espn_mbb_season_recruits as season_recruits  # noqa: PLC0415
 
+    tally = FetchTally(f"espn_{'wbb' if league == 'womens' else 'mbb'}_recruit")
     rows = []
     for season in seasons:
         refs = season_recruits(season - 1, limit=1000)
         ref_list = refs["$ref"].to_list() if "$ref" in refs.columns else []
         for url in ref_list:
-            try:
-                payload = download(url).json()
-            except NoDataError:  # $ref resolves to no data — skip this recruit
+            # query-free label: it reaches warnings / errors, the $ref query may carry a key
+            payload = tally.fetch(url.split("?", 1)[0], partial(_download_json, download, url))
+            if payload is None:  # $ref 404'd (no data) or the fetch failed
                 continue
             ath = payload.get("athlete") or {}
             school_ref = ((payload.get("schools") or [{}])[0].get("team") or {}).get("$ref", "")
@@ -80,6 +85,7 @@ def _load_recruits(seasons: "list[int]", league: str = "mens") -> pl.DataFrame:
                     "height_in": float(ath.get("height") or 0) or None,
                 }
             )
+    tally.finish()
     if not rows:
         return pl.DataFrame()
     return pl.DataFrame(rows).with_columns(

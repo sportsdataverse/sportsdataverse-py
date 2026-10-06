@@ -5,6 +5,7 @@ from functools import lru_cache
 import pandas as pd
 import polars as pl
 
+from sportsdataverse._codegen_runtime import _download_json
 from sportsdataverse.dl_utils import download, underscore
 
 
@@ -48,15 +49,13 @@ def espn_nhl_teams(return_as_pandas=False, **kwargs) -> pl.DataFrame:
     """
     url = "http://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams"
     params = {"limit": 1000}
-    resp = download(url=url, params=params, **kwargs)
-    if resp is not None:
-        events_txt = resp.json()
+    events_txt = _download_json(download, url, params=params, **kwargs)
 
-        teams = events_txt.get("sports")[0].get("leagues")[0].get("teams")
-        del_keys = ["record", "links"]
-        for team in teams:
-            for k in del_keys:
-                team.get("team").pop(k, None)
-        teams = pd.json_normalize(teams, sep="_")
+    teams = events_txt.get("sports")[0].get("leagues")[0].get("teams")
+    del_keys = ["record", "links"]
+    for team in teams:
+        for k in del_keys:
+            team.get("team").pop(k, None)
+    teams = pd.json_normalize(teams, sep="_")
     teams.columns = [underscore(c) for c in teams.columns.tolist()]
     return teams if return_as_pandas else pl.from_pandas(teams)

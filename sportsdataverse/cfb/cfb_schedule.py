@@ -5,6 +5,7 @@ import datetime
 import pandas as pd
 import polars as pl
 
+from sportsdataverse._codegen_runtime import _download_json
 from sportsdataverse.dl_utils import download
 
 
@@ -75,11 +76,9 @@ def espn_cfb_schedule(
 
     url = "http://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard"
 
-    resp = download(url=url, params=params, **kwargs)
-
     ev = pd.DataFrame()
 
-    events_txt = resp.json()
+    events_txt = _download_json(download, url, params=params, **kwargs)
 
     events = events_txt.get("events")
 
@@ -276,9 +275,7 @@ def espn_cfb_calendar(season=None, groups=None, ondays=None, return_as_pandas=Fa
 
         params = {"dates": season, "groups": groups if groups is not None else "80"}
 
-        resp = download(url=url, params=params, **kwargs)
-
-        txt = resp.json()
+        txt = _download_json(download, url, params=params, **kwargs)
 
         txt = txt.get("leagues")[0].get("calendar")
 
@@ -315,19 +312,16 @@ def espn_cfb_calendar(season=None, groups=None, ondays=None, return_as_pandas=Fa
 def __ondays_cfb_calendar(season, **kwargs):
     url = f"https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/{season}/types/2/calendar/ondays"
 
-    resp = download(url=url, **kwargs)
+    txt = _download_json(download, url, **kwargs).get("eventDate").get("dates")
 
-    if resp is not None:
-        txt = resp.json().get("eventDate").get("dates")
+    result = pl.DataFrame(txt, schema=["dates"])
 
-        result = pl.DataFrame(txt, schema=["dates"])
+    result = result.with_columns(dateURL=pl.col("dates").str.slice(0, 10))
 
-        result = result.with_columns(dateURL=pl.col("dates").str.slice(0, 10))
-
-        result = result.with_columns(
-            url="http://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?dates="
-            + pl.col("dateURL"),
-        )
+    result = result.with_columns(
+        url="http://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?dates="
+        + pl.col("dateURL"),
+    )
 
     return result
 
