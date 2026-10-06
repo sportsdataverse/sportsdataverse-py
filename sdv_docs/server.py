@@ -78,8 +78,8 @@ def search(
         hits = ix.search(query, kind=kind, league=league, lang=lang, limit=_clamp(limit))
         if not hits:
             filters = {"kind": kind, "league": league, "lang": lang}
-            anywhere = ix.search(query, limit=100) if any(filters.values()) else []
-            if anywhere:
+            anywhere = ix.search(query, limit=100) if any(filters.values()) else None
+            if anywhere and anywhere.op == "AND":  # an OR hit is a partial match: it proves nothing exists elsewhere
                 keys = [k for k, v in filters.items() if v]
                 found = sorted({" · ".join(str(h[k] or "none") for k in keys) for h in anywhere})
                 return f"Results for {query!r} exist, but " + _elsewhere(filters, found)
@@ -161,7 +161,7 @@ def _function_block(ix: Index, f: Any, columns: bool) -> str:
                 used += len(row) + 1
                 if used > TABLE_BUDGET:  # 1,549-column functions reach 210 KB, over the MCP output limit
                     rest = f"full table: {f['doc_url']} (or use find_columns)" if f["doc_url"] else "use find_columns"
-                    lines.append(f"_first {i} of {len(cols)} columns; {rest}_")
+                    lines += ["", f"_first {i} of {len(cols)} columns; {rest}_"]
                     break
                 lines.append(row)
     else:
@@ -169,6 +169,8 @@ def _function_block(ix: Index, f: Any, columns: bool) -> str:
         if eq:
             lines.append("**Python equivalent**: " + ", ".join(f"`{e['py_function']}`" for e in eq))
     if f["doc_url"]:
+        if lines[-1].startswith("|") or lines[-1].startswith("_first "):
+            lines.append("")  # a GFM table swallows an adjacent line
         lines.append(f"Docs: {f['doc_url']}")
     return "\n".join(lines)
 
@@ -222,8 +224,8 @@ def find_endpoints(query: str, api: Optional[str] = None, limit: int = 10) -> st
     def run(ix: Index) -> str:
         rows = ix.endpoints(query, api=api, limit=_clamp(limit))
         if not rows:
-            anywhere = ix.endpoints(query, limit=100) if api else []
-            if anywhere:
+            anywhere = ix.endpoints(query, limit=100) if api else None
+            if anywhere and anywhere.op == "AND":
                 found = sorted({e["api"] for e in anywhere})
                 return f"Endpoints matching {query!r} exist, but " + _elsewhere({"api": api}, found)
             return f"No endpoints match {query!r}" + (f" in api {api!r}" if api else "") + "."
@@ -264,8 +266,8 @@ def list_datasets(league: Optional[str] = None, query: Optional[str] = None, lim
         limit_ = _clamp(limit)
         rows = ix.datasets(league=league, query=query, limit=-1)  # -1: no LIMIT, to count what is cut
         if not rows:
-            anywhere = ix.datasets(query=query, limit=-1) if league else []  # -1: no LIMIT
-            if anywhere:
+            anywhere = ix.datasets(query=query, limit=-1) if league else None  # -1: no LIMIT
+            if anywhere and anywhere.op == "AND":
                 what = f"Datasets matching {query!r} exist" if query else "Datasets exist"
                 return f"{what}, but " + _elsewhere({"league": league}, sorted({d["league"] for d in anywhere}))
             return (

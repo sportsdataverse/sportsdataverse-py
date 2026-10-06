@@ -10,7 +10,6 @@ import hashlib
 import json
 import os
 import re
-import shutil
 import sqlite3
 import tempfile
 import threading
@@ -18,7 +17,7 @@ import time
 import urllib.request
 import zlib
 from pathlib import Path
-from typing import Callable, Iterable, Optional
+from typing import IO, Callable, Iterable, Optional
 
 from sdv_docs.schema import ASSET, MANIFEST, RELEASE_ASSET, RELEASE_BASE, SCHEMA_VERSION
 
@@ -201,6 +200,16 @@ def _check(path: Path, size: Optional[int], digest: Optional[str], what: str) ->
         raise IndexUnavailable(f"downloaded {what} failed its sha256 check")
 
 
+def _copy_bounded(src: gzip.GzipFile, dst: IO[bytes], limit: Optional[int]) -> None:
+    """Copy src to dst; with a limit, fail once more than ``limit`` bytes arrive (no oversized stream fills the disk)."""
+    total = 0
+    while chunk := src.read(1 << 20):
+        total += len(chunk)
+        if limit is not None and total > limit:
+            raise IndexUnavailable("downloaded index has the wrong size")
+        dst.write(chunk)
+
+
 def verify(path: Path, manifest: dict) -> None:
     """Raise IndexUnavailable unless the decompressed ``path`` matches the manifest's db_size / db_sha256
     (when present) and is a sound index of our schema."""
@@ -243,7 +252,7 @@ def refresh(db: Path, fetch: Fetch = http_fetch, timeout: float = 30.0) -> bool:
             tmp = Path(name)
             try:
                 with os.fdopen(fd, "wb") as dst, gzip.open(gz, "rb") as src:
-                    shutil.copyfileobj(src, dst, 1 << 20)
+                    _copy_bounded(src, dst, manifest.get("db_size"))
             except (gzip.BadGzipFile, EOFError, zlib.error) as e:
                 raise IndexUnavailable(f"downloaded asset is not a valid gzip file ({e})") from e
             verify(tmp, manifest)

@@ -176,6 +176,7 @@ def test_first_use_without_network_is_a_clear_error(cache):
         ("sha", "asset failed its sha256 check"),
         ("not_gzip", "not a valid gzip file"),
         ("db_size", "index has the wrong size"),
+        ("oversize", "index has the wrong size"),
         ("db_sha", "index failed its sha256 check"),
         ("schema", "schema"),
         ("garbage", "not a SQLite file"),
@@ -195,6 +196,8 @@ def test_bad_downloads_are_rejected_and_old_index_kept(tmp_path, cache, tamper, 
         man = {**man, "sha256": "0" * 64}
     if tamper == "db_size":
         man = {**man, "db_size": man["db_size"] + 1}
+    if tamper == "oversize":  # the stream decompresses past db_size: stop there, never write it all
+        man = {**man, "db_size": man["db_size"] - 1}
     if tamper == "db_sha":
         man = {**man, "db_sha256": "0" * 64}
     if tamper in ("not_gzip", "garbage"):  # a manifest that matches the bytes served, so only the content fails

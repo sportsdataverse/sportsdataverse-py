@@ -40,6 +40,13 @@ def test_partial_matches_are_labelled():
         assert "partial matches" not in out
 
 
+def test_a_word_found_nowhere_is_not_reported_as_existing_elsewhere():
+    # "zamboni" is in no row: the unfiltered re-run only matches by OR, so it must not claim a match exists
+    assert "exist" not in server.search("shift zamboni", league="nba")
+    assert "exist" not in server.find_endpoints("athlete zamboni", api="espn_cdn")
+    assert "exist" not in server.list_datasets(league="mlb", query="shifts zamboni")
+
+
 def test_get_function_full_block():
     out = server.get_function("load_nhl_pbp")
     for s in (
@@ -180,7 +187,10 @@ def test_get_function_caps_a_wide_returns_table(tmp_path, monkeypatch):
     assert 0 < len(table) < 1550 and sum(len(line) + 1 for line in table) <= server.TABLE_BUDGET
     assert f"_first {len(table)} of 1550 columns; full table: {DOCS}nhl/reference/loaders/other#load_nhl_shifts" in out
     assert "(or use find_columns)_" in out
+    assert "\n\n_first " in out  # a blank line keeps the note out of the GFM table
+    assert f"_\n\nDocs: {DOCS}" in out
     assert "_first" not in server.get_function("load_nhl_pbp")  # a narrow table is shown whole
+    assert "|\n\nDocs: " in server.get_function("load_nhl_pbp")
 
 
 def test_find_endpoints():
