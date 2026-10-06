@@ -253,3 +253,56 @@ def test_failed_model_download_is_not_cached(monkeypatch, tmp_path):
         ep_wp._load_model("xyac_model.ubj")
     # before: the 503 page was written as the model, so every later load failed on it
     assert list(tmp_path.iterdir()) == []
+
+
+def test_empty_model_download_is_not_cached(monkeypatch, tmp_path):
+    # an empty 200 passes the status check; it must not be cached as the model either
+    from sportsdataverse.nfl import ep_wp
+
+    monkeypatch.setattr(ep_wp, "_model_cache_dir", lambda: tmp_path)
+    _serve(monkeypatch, 200, "", "application/octet-stream")
+    with pytest.raises(FileNotFoundError, match="empty body"):
+        ep_wp._load_model("xyac_model.ubj")
+    assert list(tmp_path.iterdir()) == []
+
+
+def test_mlb_game_rosters_skips_one_sides_404_roster(monkeypatch):
+    from sportsdataverse.mlb.mlb_game_rosters import espn_mlb_game_rosters
+
+    base = "https://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/events/9/competitions/9/competitors"
+
+    def answer(url: str) -> Any:
+        if url.endswith("/competitors"):
+            items = [
+                {"id": t, "homeAway": ha, "team": {"id": t}, "roster": {"$ref": f"{base}/{t}/roster"}}
+                for t, ha in (("1", "home"), ("2", "away"))
+            ]
+            return (200, json.dumps({"items": items}), "application/json")
+        if "/1/roster" in url:
+            return (404, _body("espn_core_event_404.json"), "application/json")
+        return (200, json.dumps({"entries": [{"athlete": {"id": "7", "fullName": "P Seven"}}]}), "application/json")
+
+    _route(monkeypatch, answer)
+    out = espn_mlb_game_rosters(9)
+    assert out["team_id"].to_list() == ["2"]
+
+
+def test_tally_labels_carry_no_query_string(monkeypatch, caplog):
+    # the per-item label reaches warnings / errors; a $ref query string may carry a key
+    from sportsdataverse.nfl.nfl_players import _fetch_athletes
+
+    base = "https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/athletes"
+
+    def answer(url: str) -> Any:
+        if "page=" in url:
+            refs = [{"$ref": f"{base}/{i}?apikey=SECRETKEY123"} for i in (1, 2)]
+            return (200, json.dumps({"items": refs, "pageCount": 1}), "application/json")
+        aid = int(url.split("?", 1)[0].rsplit("/", 1)[-1])
+        if aid == 2:
+            return (503, '{"message": "Service Unavailable"}', "application/json")
+        return (200, json.dumps({"id": str(aid)}), "application/json")
+
+    _route(monkeypatch, answer)
+    with caplog.at_level("WARNING"):
+        _fetch_athletes()
+    assert "skipped 1 of 2" in caplog.text and "SECRETKEY123" not in caplog.text

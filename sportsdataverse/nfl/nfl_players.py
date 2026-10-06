@@ -170,7 +170,8 @@ def _fetch_athletes(limit: Optional[int] = None) -> List[Dict]:
     tally = FetchTally("espn_nfl_athlete")
 
     def _resolve(ref: str) -> Optional[Dict]:
-        detail = tally.fetch(ref, lambda: _download_json(download, ref))
+        # The label reaches warnings / errors: keep a $ref's query string (it may carry a key) out of it.
+        detail = tally.fetch(ref.split("?", 1)[0], lambda: _download_json(download, ref))
         return detail if isinstance(detail, dict) else None
 
     athletes: List[Dict] = []

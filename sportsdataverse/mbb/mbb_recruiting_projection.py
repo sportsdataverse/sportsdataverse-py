@@ -64,7 +64,8 @@ def _load_recruits(seasons: "list[int]", league: str = "mens") -> pl.DataFrame:
         refs = season_recruits(season - 1, limit=1000)
         ref_list = refs["$ref"].to_list() if "$ref" in refs.columns else []
         for url in ref_list:
-            payload = tally.fetch(url, partial(_download_json, download, url))
+            # query-free label: it reaches warnings / errors, the $ref query may carry a key
+            payload = tally.fetch(url.split("?", 1)[0], partial(_download_json, download, url))
             if payload is None:  # $ref 404'd (no data) or the fetch failed
                 continue
             ath = payload.get("athlete") or {}

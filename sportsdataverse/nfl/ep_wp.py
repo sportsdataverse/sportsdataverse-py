@@ -370,6 +370,8 @@ def _load_model(name: str, models_dir: Optional[Union[str, Path]] = None) -> "Bo
             resp = download(url, timeout=cfg.timeout, num_retries=5)
             _check_response(resp, url)  # a 403/5xx body cached as the model poisons every later load
             content = resp.content
+            if not content:  # so would an empty 200
+                raise ValueError(f"{url} answered HTTP {resp.status_code} with an empty body")
             tmp = dest.with_suffix(dest.suffix + ".tmp")
             with open(tmp, "wb") as fh:
                 fh.write(content)

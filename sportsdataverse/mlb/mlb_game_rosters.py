@@ -5,6 +5,7 @@ import polars as pl
 
 from sportsdataverse._codegen_runtime import _download_json
 from sportsdataverse.dl_utils import download, underscore
+from sportsdataverse.errors import NoDataError
 
 
 def espn_mlb_game_rosters(game_id: int, raw: bool = False, return_as_pandas: bool = False, **kwargs):
@@ -51,7 +52,10 @@ def espn_mlb_game_rosters(game_id: int, raw: bool = False, return_as_pandas: boo
         roster_ref = (c.get("roster") or {}).get("$ref")
         if not roster_ref:
             continue
-        roster_payload = _download_json(download, roster_ref, **kwargs)
+        try:
+            roster_payload = _download_json(download, roster_ref, **kwargs)
+        except NoDataError:  # one side's roster 404s: keep the other; a FAILED fetch still raises
+            continue
         entries = roster_payload.get("entries") or []
         for e in entries:
             athlete = e.get("athlete") or {}
