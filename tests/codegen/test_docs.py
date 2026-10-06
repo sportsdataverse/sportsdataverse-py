@@ -187,8 +187,11 @@ def test_companions_yaml_entries_are_well_formed():
 
 def test_companion_notes_do_not_shadow_autodoc_names():
     """A bare function name in a companion note reads as "already documented" to the
-    autodoc corpus scan and silently drops that function from its helpers page."""
+    autodoc corpus scan (``_is_documented``) and silently drops that function from its
+    helpers page, so check every in-scope name against the notes with the generator's
+    own predicate -- not against the autodoc survivors, which would no longer list it."""
     notes = " ".join(e["note"] for entries in generate._companions_map().values() for e in entries)
-    for scope_names in generate._autodoc_names_by_scope().values():
-        for name in scope_names:
-            assert name not in notes, name
+    per_league, global_names = generate._coverage_scope_names()
+    in_scope = set(global_names).union(*per_league.values())
+    shadowed = sorted(n for n in in_scope if generate._is_documented(n, notes))
+    assert shadowed == [], shadowed

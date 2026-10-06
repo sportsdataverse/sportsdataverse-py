@@ -16,7 +16,7 @@
 soccer:
   - name: kloppy
     url: https://kloppy.pysport.org
-    note: reads ~15 event and tracking providers; the `soccer` extra's open-data loader sits on it
+    note: reads ~15 event and tracking providers behind the `soccer` extra's open-data loader
   - name: sdvplot
     url: https://github.com/sportsdataverse/sdvplot
     note: "`pitch_coords()` puts any provider's events on the 105 x 68 pitch"
@@ -31,4 +31,4 @@ soccer:
     note: FBref, Understat, WhoScored and Sofascore scrapers that sdv-py does not wrap
   - name: mplsoccer
     url: https://mplsoccer.readthedocs.io
-    note: matplotlib pitches and StatsBomb helpers; sdvplot's pitch frame interoperates with it
+    note: matplotlib pitches and StatsBomb helpers that sdvplot's pitch frame interoperates with
