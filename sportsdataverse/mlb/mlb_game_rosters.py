@@ -5,7 +5,6 @@ import polars as pl
 
 from sportsdataverse._codegen_runtime import _download_json
 from sportsdataverse.dl_utils import download, underscore
-from sportsdataverse.errors import NoDataError
 
 
 def espn_mlb_game_rosters(game_id: int, raw: bool = False, return_as_pandas: bool = False, **kwargs):
@@ -36,6 +35,10 @@ def espn_mlb_game_rosters(game_id: int, raw: bool = False, return_as_pandas: boo
             print(ros.shape)
             ros.group_by("home_away").len()
     """
+    # Local: this module has no __all__, so a top-level import would be star-exported
+    # from sportsdataverse.mlb as an undocumented public name.
+    from sportsdataverse.errors import NoDataError
+
     competitors_url = (
         "https://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/"
         f"events/{game_id}/competitions/{game_id}/competitors"
