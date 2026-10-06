@@ -3824,6 +3824,8 @@
   "set_default_ttl": "other",
   "shot_attempts": "other",
   "shot_events": "other",
+  "soccer_events_to_frame": "other",
+  "soccer_open_events": "other",
   "ufl_pbp": "other",
   "validate_game": "other",
   "wch_ratings": "other",

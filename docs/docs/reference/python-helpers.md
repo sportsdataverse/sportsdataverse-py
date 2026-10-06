@@ -233,6 +233,8 @@ not covered by the generated API-endpoint reference above.
 | [set_default_ttl](python-helpers/other.md#set_default_ttl) | Override the default TTL for endpoints not matched by the tier rules. |
 | [shot_attempts](python-helpers/other.md#shot_attempts) | Regular-season (`season_type_id` `"2"`) and playoff (`"4"`) shots; success = |
 | [shot_events](python-helpers/other.md#shot_events) | Field-goal-attempt events from released `{nba,wnba}_stats_shots`. |
+| [soccer_events_to_frame](python-helpers/other.md#soccer_events_to_frame) | Turn a kloppy dataset (any provider, any file) into a tidy frame. |
+| [soccer_open_events](python-helpers/other.md#soccer_open_events) | Load one match of a provider's free open event data as a tidy frame. |
 | [ufl_pbp](python-helpers/other.md#ufl_pbp) | Enriched UFL play-by-play (EP/EPA/WP/WPA/CP/CPOE). |
 | [validate_game](python-helpers/other.md#validate_game) | Validate one processed game against the packaged invariant rules. |
 | [wch_ratings](python-helpers/other.md#wch_ratings) | WCH opponent-adjusted goal-margin ratings over a set of scoreboard dates. |
