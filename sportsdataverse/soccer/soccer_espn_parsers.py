@@ -308,7 +308,7 @@ def _build_commentary(payload: dict) -> pl.DataFrame:
             )
         if not rows:
             return pl.DataFrame()
-        return _float_coords(pl.DataFrame(_stringify_lists(rows)))
+        return _float_coords(pl.DataFrame(_stringify_lists(rows))).with_columns(pl.col("scoring_play").cast(pl.Boolean))
     except Exception:
         return pl.DataFrame()
 

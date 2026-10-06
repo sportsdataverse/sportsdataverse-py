@@ -187,7 +187,7 @@ ESPN endpoint.
 | `period` | integer | Period of the game (1-4 quarters; 5+ for OT). |
 | `clock` | character | Game clock value. |
 | `clock_value` | double | Clock value in seconds. |
-| `scoring_play` | character | TRUE if the play resulted in points scored. |
+| `scoring_play` | logical | TRUE if the play resulted in points scored. |
 | `team_name` | character | Full display name of the team. |
 | `athlete_id` | character | Unique athlete identifier (ESPN). |
 | `athlete_name` | character | Athlete display name (ESPN). |

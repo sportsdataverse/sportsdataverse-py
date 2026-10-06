@@ -216,5 +216,7 @@ def test_key_events_and_commentary_coordinates_agree():
     ke = parse_soccer_summary(raw, section="key_events")
     cm = parse_soccer_summary(raw, section="commentary")
     j = ke.join(cm.drop_nulls("play_id"), left_on="id", right_on="play_id", suffix="_cm")
+    assert j.height > 0
     for c in ("field_position_x", "field_position_y"):
+        assert j[c].null_count() == 0 and j[c + "_cm"].null_count() == 0
         assert (j[c] == j[c + "_cm"]).all()

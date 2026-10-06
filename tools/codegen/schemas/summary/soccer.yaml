@@ -291,7 +291,7 @@ frames:
     type: double
     description: ''
   - name: scoring_play
-    type: character
+    type: logical
     description: ''
   - name: team_name
     type: character
