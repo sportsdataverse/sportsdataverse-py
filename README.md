@@ -245,7 +245,7 @@ under [`examples/notebooks/`](examples/notebooks):
   That works from the next release (0.1.5+); until then install from GitHub main:
   `claude mcp add sdv-docs -- uvx --from 'sportsdataverse[mcp] @ git+https://github.com/sportsdataverse/sportsdataverse-py' sdv-docs`.
 
-  Needs Python 3.10+. The server downloads its index from the [`docs-index` release](https://github.com/sportsdataverse/sportsdataverse-py/releases/tag/docs-index), checking at most once a day, and sends no queries anywhere. Set `SDV_DOCS_DB=/path/to/sdv_docs_v1.sqlite` to use a local build (`uv run python tools/codegen/build_docs_index.py`).
+  Needs Python 3.10+. The server downloads its index (`sdv_docs_v1.sqlite.gz`, about 10 MB) from the [`docs-index` release](https://github.com/sportsdataverse/sportsdataverse-py/releases/tag/docs-index), checking at most once a day, and sends no queries anywhere. Set `SDV_DOCS_DB=/path/to/sdv_docs_v1.sqlite` to use a local build (`uv run python tools/codegen/build_docs_index.py`). `sdv-docs --version` prints the installed version.
 
 ## Companion packages
 

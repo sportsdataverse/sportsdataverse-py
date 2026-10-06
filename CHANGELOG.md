@@ -344,17 +344,27 @@ from GitHub main: `uvx --from 'sportsdataverse[mcp] @ git+https://github.com/spo
 package ships in the same wheel but never imports `sportsdataverse`, so a bare server starts in
 about 1.5 s and ~70 MB rather than the 4-12 s and ~320 MB of loading every league.
 
-The index (`sdv_docs_v1.sqlite` plus `manifest_v1.json`) is built by
+The index is built by
 `uv run python tools/codegen/build_docs_index.py [--out DIR] [--offline]` from the codegen model,
-the sdv-swagger OpenAPI specs and the R packages' pkgdown `llms.txt`. A full build holds 8,935
-functions (Python plus 13 R packages), 92,339 columns, 3,472 endpoints, 323 datasets and 1,080
-Python-R equivalents, in 72.7 MB. `.github/workflows/docs-index.yml` runs the tests and a 28-case
-retrieval gate in a read-only job, then publishes to the rolling `docs-index` release from a
-separate write-permission job; `python-publish.yml` skips that release. The client caches the
-index under `$SDV_PY_CACHE_DIR/docs-index/` (else `~/.cache/sportsdataverse/docs-index/`), checks
-the manifest at most once a day, and verifies sha256, `integrity_check` and the schema version
-before swapping a new file in. No queries leave the machine. `SDV_DOCS_DB=<file>` points the
-server at a local build and never downloads.
+the sdv-swagger OpenAPI specs and the R packages' pkgdown `llms.txt`. It writes
+`sdv_docs_v1.sqlite`, the gzipped `sdv_docs_v1.sqlite.gz` the release serves, and
+`manifest_v1.json`, which gives the sha256 and size of both. A full build holds 8,923 functions
+(Python plus 13 R packages), 92,339 columns, 3,472 endpoints, 323 datasets and 1,080 Python-R
+equivalents, in 73.5 MB (10.2 MB gzipped). The build fails if more than 2% of an R package's
+pkgdown index entries go unparsed. `.github/workflows/docs-index.yml` runs the tests and a
+30-case retrieval gate (on pull requests too) in a read-only job, then publishes the `.gz` and
+the manifest to the rolling `docs-index` release from a separate write-permission job;
+`python-publish.yml` skips that release. The client caches the index under
+`$SDV_PY_CACHE_DIR/docs-index/` (else `~/.cache/sportsdataverse/docs-index/`), checks the
+manifest at most once a day, and verifies the download's sha256, then the decompressed index's
+sha256, `integrity_check` and schema version, before swapping a new file in. No queries leave the
+machine. `SDV_DOCS_DB=<file>` points the server at a local plain `.sqlite` and never downloads.
+
+Filters (`league`, `kind`, `lang`, `api`) are case-insensitive. A lookup that misses only
+because of a filter says where the name does exist, and results that match only some of the
+query's words are labelled as partial matches. `limit` is capped at 100, and a returns table is
+cut at about 40,000 characters with a link to the full table. `sdv-docs --help` and
+`sdv-docs --version` exit without starting the server.
 
 ### Fixed — a failed fetch in the hand-written ESPN scrapers raises instead of being parsed (BREAKING)
 
