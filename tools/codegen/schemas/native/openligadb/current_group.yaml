@@ -1,0 +1,12 @@
+columns:
+- description: ''
+  name: group_name
+  type: character
+- description: ''
+  name: group_order_id
+  type: character
+- description: ''
+  name: group_id
+  type: character
+kind: dataframe
+schema: current_group

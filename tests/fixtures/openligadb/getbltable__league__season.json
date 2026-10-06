@@ -1,0 +1,44 @@
+[
+  {
+    "teamInfoId": 40,
+    "teamName": "FC Bayern München",
+    "shortName": "Bayern",
+    "teamIconUrl": "https://upload.wikimedia.org/wikipedia/commons/1/1f/Logo_FC_Bayern_M%C3%BCnchen_%282002%E2%80%932017%29.svg",
+    "points": 89,
+    "opponentGoals": 36,
+    "goals": 122,
+    "matches": 34,
+    "won": 28,
+    "lost": 1,
+    "draw": 5,
+    "goalDiff": 86
+  },
+  {
+    "teamInfoId": 7,
+    "teamName": "Borussia Dortmund",
+    "shortName": "Dortmund",
+    "teamIconUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/67/Borussia_Dortmund_logo.svg/960px-Borussia_Dortmund_logo.svg.png",
+    "points": 73,
+    "opponentGoals": 34,
+    "goals": 70,
+    "matches": 34,
+    "won": 22,
+    "lost": 5,
+    "draw": 7,
+    "goalDiff": 36
+  },
+  {
+    "teamInfoId": 1635,
+    "teamName": "RB Leipzig",
+    "shortName": "Leipzig",
+    "teamIconUrl": "https://i.imgur.com/Rpwsjz1.png",
+    "points": 65,
+    "opponentGoals": 47,
+    "goals": 66,
+    "matches": 34,
+    "won": 20,
+    "lost": 9,
+    "draw": 5,
+    "goalDiff": 19
+  }
+]

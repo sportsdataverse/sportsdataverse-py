@@ -1,0 +1,17 @@
+[
+  {
+    "groupName": "1. Spieltag",
+    "groupOrderID": 1,
+    "groupID": 47611
+  },
+  {
+    "groupName": "2. Spieltag",
+    "groupOrderID": 2,
+    "groupID": 47612
+  },
+  {
+    "groupName": "3. Spieltag",
+    "groupOrderID": 3,
+    "groupID": 47613
+  }
+]

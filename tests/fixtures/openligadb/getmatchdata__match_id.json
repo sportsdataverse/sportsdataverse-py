@@ -1,0 +1,96 @@
+{
+  "matchID": 77264,
+  "matchDateTime": "2025-08-23T15:30:00",
+  "timeZoneID": "W. Europe Standard Time",
+  "leagueId": 4821,
+  "leagueName": "1. Fußball-Bundesliga 2025/2026",
+  "leagueSeason": 2025,
+  "leagueShortcut": "bl1",
+  "matchDateTimeUTC": "2025-08-23T13:30:00Z",
+  "group": {
+    "groupName": "1. Spieltag",
+    "groupOrderID": 1,
+    "groupID": 47611
+  },
+  "team1": {
+    "teamId": 199,
+    "teamName": "1. FC Heidenheim 1846",
+    "shortName": "Heidenheim",
+    "teamIconUrl": "https://upload.wikimedia.org/wikipedia/commons/9/9d/1._FC_Heidenheim_1846.svg",
+    "teamGroupName": null
+  },
+  "team2": {
+    "teamId": 131,
+    "teamName": "VfL Wolfsburg",
+    "shortName": "Wolfsburg",
+    "teamIconUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/VfL_Wolfsburg_logo_2026.svg/960px-VfL_Wolfsburg_logo_2026.svg.png",
+    "teamGroupName": null
+  },
+  "lastUpdateDateTime": "2025-08-23T22:58:40.453",
+  "matchIsFinished": true,
+  "matchResults": [
+    {
+      "resultID": 118512,
+      "resultName": "Halbzeit",
+      "pointsTeam1": 1,
+      "pointsTeam2": 1,
+      "resultOrderID": 1,
+      "resultTypeID": 1,
+      "resultTypeKind": "HalfTime",
+      "resultDescription": "Ergebnis nach Ende der ersten Halbzeit"
+    },
+    {
+      "resultID": 118513,
+      "resultName": "Endergebnis",
+      "pointsTeam1": 1,
+      "pointsTeam2": 3,
+      "resultOrderID": 2,
+      "resultTypeID": 2,
+      "resultTypeKind": "After90Minutes",
+      "resultDescription": "Ergebnis nach Ende der offiziellen Spielzeit"
+    }
+  ],
+  "goals": [
+    {
+      "goalID": 130570,
+      "scoreTeam1": 0,
+      "scoreTeam2": 1,
+      "matchMinute": 20,
+      "goalGetterID": 23587,
+      "goalGetterName": "A. Skov Olsen",
+      "scoringTeamId": 131,
+      "isPenalty": false,
+      "isOwnGoal": false,
+      "isOvertime": false,
+      "comment": null
+    },
+    {
+      "goalID": 130573,
+      "scoreTeam1": 1,
+      "scoreTeam2": 1,
+      "matchMinute": 29,
+      "goalGetterID": 21381,
+      "goalGetterName": "L. Scienza",
+      "scoringTeamId": 199,
+      "isPenalty": false,
+      "isOwnGoal": false,
+      "isOvertime": false,
+      "comment": null
+    },
+    {
+      "goalID": 130582,
+      "scoreTeam1": 1,
+      "scoreTeam2": 2,
+      "matchMinute": 66,
+      "goalGetterID": 19593,
+      "goalGetterName": "M. Svanberg",
+      "scoringTeamId": 131,
+      "isPenalty": false,
+      "isOwnGoal": false,
+      "isOvertime": false,
+      "comment": null
+    }
+  ],
+  "location": null,
+  "numberOfViewers": null
+}
