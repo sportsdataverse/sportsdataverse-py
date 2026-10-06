@@ -91,9 +91,6 @@ pl.Config.set_tbl_rows(10)
 print('sportsdataverse loaded — seven ESPN expansion leagues ready 🚀')
 ```
 
-    sportsdataverse loaded — seven ESPN expansion leagues ready 🚀
-
-
 ESPN's live endpoints are seasonal and occasionally rate-limited, so a tiny
 `safe()` helper runs each call defensively — you get the result when the feed
 is up, and a friendly one-liner when it isn't (never a scary traceback). 🛟
@@ -136,9 +133,6 @@ SAMPLE_SEASON = 2024
 print('reference constants set')
 ```
 
-    reference constants set
-
-
 ---
 
 ## 🏈 Part 1 — Spring & Pro Football: UFL, XFL, CFL
@@ -163,10 +157,6 @@ board_raw = safe('UFL scoreboard (raw)', lambda: ufl.espn_ufl_scoreboard(dates=U
 _keys(board_raw)
 ```
 
-    ✅ UFL scoreboard (raw)
-    <class 'polars.dataframe.frame.DataFrame'>
-
-
 
 ```python
 # Parsed frame — one row per game
@@ -183,9 +173,6 @@ if board is not None and getattr(board, 'height', 0):
 else:
     'scoreboard unavailable for that date'
 ```
-
-    ✅ UFL scoreboard (parsed)
-
 
 ### 🏫 UFL: teams
 
@@ -206,9 +193,6 @@ else:
     'teams unavailable'
 ```
 
-    ✅ UFL teams
-
-
 ### 📊 UFL: standings
 
 [`espn_ufl_standings()`](../football/reference/ufl.md#espn_ufl_standings)
@@ -226,9 +210,6 @@ if standings_ufl is not None and standings_ufl.height:
 else:
     'standings unavailable'
 ```
-
-    ✅ UFL standings
-
 
 ### 📅 UFL: team schedule
 
@@ -254,9 +235,6 @@ else:
     'schedule unavailable'
 ```
 
-    ✅ UFL team schedule
-
-
 ### 🏟️ UFL: game summary & play-by-play
 
 [`espn_ufl_summary(event_id=)`](../football/reference/ufl.md#espn_ufl_summary)
@@ -281,10 +259,6 @@ summary_ufl = safe(
 _keys(summary_ufl)
 ```
 
-    ⏭️  UFL game summary (raw): unavailable right now (NoDataError)
-    (no data)
-
-
 
 ```python
 # Quick play-by-play via the lightweight plays endpoint
@@ -294,10 +268,6 @@ plays_ufl = safe(
 )
 _keys(plays_ufl)
 ```
-
-    ⏭️  UFL game plays (raw): unavailable right now (NoDataError)
-    (no data)
-
 
 ---
 
@@ -319,9 +289,6 @@ else:
     'XFL teams unavailable'
 ```
 
-    ✅ XFL teams
-
-
 
 ```python
 # XFL championship scoreboard — May 2023
@@ -339,9 +306,6 @@ else:
     'XFL scoreboard unavailable'
 ```
 
-    ✅ XFL scoreboard (parsed)
-
-
 
 ```python
 # XFL standings (2023)
@@ -354,9 +318,6 @@ if standings_xfl is not None and standings_xfl.height:
 else:
     'XFL standings unavailable'
 ```
-
-    ✅ XFL standings
-
 
 ---
 
@@ -384,9 +345,6 @@ else:
     'CFL scoreboard unavailable'
 ```
 
-    ✅ CFL scoreboard (parsed)
-
-
 
 ```python
 # CFL teams
@@ -398,9 +356,6 @@ if teams_cfl is not None and teams_cfl.height:
 else:
     'CFL teams unavailable'
 ```
-
-    ✅ CFL teams
-
 
 
 ```python
@@ -414,9 +369,6 @@ if standings_cfl is not None and standings_cfl.height:
 else:
     'CFL standings unavailable'
 ```
-
-    ✅ CFL standings
-
 
 
 ```python
@@ -434,9 +386,6 @@ if schedule_cfl is not None and schedule_cfl.height:
 else:
     'CFL schedule unavailable'
 ```
-
-    ✅ CFL team schedule
-
 
 ---
 
@@ -472,9 +421,6 @@ else:
     'college baseball scoreboard unavailable'
 ```
 
-    ✅ college baseball scoreboard (parsed)
-
-
 
 ```python
 # All NCAA baseball teams with their team_id
@@ -490,10 +436,6 @@ if teams_cbb is not None and teams_cbb.height:
 else:
     'teams unavailable'
 ```
-
-    ✅ college baseball teams
-    Total teams: 437
-
 
 ### 📊 College baseball: standings & rankings
 
@@ -518,9 +460,6 @@ else:
     'standings unavailable'
 ```
 
-    ✅ college baseball standings
-
-
 
 ```python
 # National polls — AP / USA Today baseball rankings
@@ -536,9 +475,6 @@ if rankings_cbb is not None and rankings_cbb.height:
 else:
     'rankings unavailable (only current during the season)'
 ```
-
-    ⏭️  college baseball rankings: unavailable right now (NoDataError)
-
 
 ### 📅 College baseball: team schedule
 
@@ -564,9 +500,6 @@ else:
     'schedule unavailable'
 ```
 
-    ✅ college baseball team schedule
-
-
 ### 🥎 College softball: scoreboard & teams
 
 The `college_softball` module mirrors `college_baseball` exactly — same wrapper
@@ -590,9 +523,6 @@ else:
     'college softball scoreboard unavailable'
 ```
 
-    ✅ college softball scoreboard (parsed)
-
-
 
 ```python
 # College softball teams
@@ -609,10 +539,6 @@ else:
     'teams unavailable'
 ```
 
-    ✅ college softball teams
-    Total teams: 446
-
-
 
 ```python
 # College softball rankings
@@ -628,9 +554,6 @@ if rankings_cbs is not None and rankings_cbs.height:
 else:
     'rankings unavailable (only current during the season)'
 ```
-
-    ⏭️  college softball rankings: unavailable right now (NoDataError)
-
 
 ### 🥎 College softball: game summary
 
@@ -650,10 +573,6 @@ summary_cbs = safe(
 )
 _keys(summary_cbs)
 ```
-
-    ⏭️  college softball game summary (raw): unavailable right now (NoDataError)
-    (no data)
-
 
 ---
 
@@ -686,9 +605,6 @@ else:
     'men\'s college hockey scoreboard unavailable'
 ```
 
-    ✅ men's college hockey scoreboard (parsed)
-
-
 
 ```python
 # Men's college hockey teams
@@ -704,10 +620,6 @@ if teams_mch is not None and teams_mch.height:
 else:
     'teams unavailable'
 ```
-
-    ✅ men's college hockey teams
-    Total D-I men's programs: 116
-
 
 ### 📊 Men's college hockey: standings & rankings
 
@@ -731,9 +643,6 @@ else:
     'standings unavailable'
 ```
 
-    ✅ men's college hockey standings
-
-
 
 ```python
 # National rankings
@@ -749,9 +658,6 @@ if rankings_mch is not None and rankings_mch.height:
 else:
     'rankings unavailable (only current during the season)'
 ```
-
-    ✅ men's college hockey rankings
-
 
 ### 📅 Men's college hockey: team schedule & roster
 
@@ -780,9 +686,6 @@ else:
     'schedule unavailable'
 ```
 
-    ✅ men's college hockey team schedule
-
-
 
 ```python
 # BU Terriers roster 2023-24
@@ -799,9 +702,6 @@ if roster_mch is not None and roster_mch.height:
 else:
     'roster unavailable'
 ```
-
-    ⏭️  men's college hockey roster: unavailable right now (TypeError)
-
 
 ---
 
@@ -827,9 +727,6 @@ else:
     "women's college hockey scoreboard unavailable"
 ```
 
-    ✅ women's college hockey scoreboard (parsed)
-
-
 
 ```python
 # Women's college hockey teams
@@ -845,10 +742,6 @@ if teams_wch is not None and teams_wch.height:
 else:
     'teams unavailable'
 ```
-
-    ✅ women's college hockey teams
-    Total women's D-I programs: 47
-
 
 
 ```python
@@ -868,9 +761,6 @@ else:
     'schedule unavailable'
 ```
 
-    ✅ women's college hockey team schedule
-
-
 
 ```python
 # Women's college hockey rankings
@@ -886,9 +776,6 @@ if rankings_wch is not None and rankings_wch.height:
 else:
     "rankings unavailable (only current during the season)"
 ```
-
-    ✅ women's college hockey rankings
-
 
 ---
 
@@ -937,26 +824,6 @@ else:
     'no team data available right now'
 ```
 
-    ✅ ufl teams
-
-
-    ✅ xfl teams
-    ✅ cfl teams
-
-
-    ✅ college_baseball teams
-
-
-    ✅ college_softball teams
-
-
-    ✅ mch teams
-
-
-    ✅ wch teams
-    Total teams across all 7 leagues: 1067
-
-
 ### Recipe 2 — Today's slate for any league 📅
 
 Pass `dates=` as `YYYYMMDD` to any scoreboard wrapper. Omitting the argument
@@ -980,9 +847,6 @@ if todays_cfl is not None and getattr(todays_cfl, 'height', 0):
 else:
     'no CFL games today (or offseason)'
 ```
-
-    ✅ today's CFL slate (20260928)
-
 
 ### Recipe 3 — Player info for any athlete 🧑‍💻
 
@@ -1010,9 +874,6 @@ else:
     print('roster not loaded — skipping player info example')
 ```
 
-    roster not loaded — skipping player info example
-
-
 ### Recipe 4 — News & injuries for any league 📰
 
 [`espn_{prefix}_news()`](../football/reference/ufl.md#espn_ufl_news) and
@@ -1030,14 +891,6 @@ _keys(news_ufl)
 injuries_cfl = safe('CFL injuries', lambda: cfl.espn_cfl_injuries())
 _keys(injuries_cfl)
 ```
-
-    ✅ UFL news
-    <class 'polars.dataframe.frame.DataFrame'>
-
-
-    ✅ CFL injuries
-    <class 'polars.dataframe.frame.DataFrame'>
-
 
 ---
 
@@ -1088,10 +941,6 @@ print(f'{len(ufl_fns)} functions on sportsdataverse.football.ufl')
 print('sample:', ufl_fns[:8], '...')
 ```
 
-    112 functions on sportsdataverse.football.ufl
-    sample: ['espn_ufl_award', 'espn_ufl_awards', 'espn_ufl_calendar', 'espn_ufl_coach', 'espn_ufl_coach_record', 'espn_ufl_coach_season', 'espn_ufl_conferences', 'espn_ufl_draft'] ...
-
-
 
 ```python
 # Quick cross-league count
@@ -1101,15 +950,6 @@ for name, mod in [('ufl', ufl), ('xfl', xfl), ('cfl', cfl),
     n = len([f for f in dir(mod) if f.startswith('espn_')])
     print(f'  {name:20s}: {n} wrappers')
 ```
-
-      ufl                 : 112 wrappers
-      xfl                 : 112 wrappers
-      cfl                 : 112 wrappers
-      college_baseball    : 118 wrappers
-      college_softball    : 118 wrappers
-      mch                 : 118 wrappers
-      wch                 : 118 wrappers
-
 
 ---
 

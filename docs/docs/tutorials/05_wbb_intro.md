@@ -19,15 +19,15 @@ Every accessor returns a tidy **polars** `DataFrame` by default — pass `return
 
 | Function | What it gives you | Source |
 |---|---|---|
-| [`espn_wbb_teams`](../wbb/reference/additional/other-2.md#espn_wbb_teams) | Every D-I program, one wide row each | ESPN |
+| [`espn_wbb_teams`](../wbb/reference/additional/espn.md#espn_wbb_teams) | Every D-I program, one wide row each | ESPN |
 | [`espn_wbb_team_roster`](../wbb/reference/site.md#espn_wbb_team_roster) | A team's roster, one row per player | ESPN |
-| [`espn_wbb_schedule`](../wbb/reference/additional/play-by-play-schedule-rosters.md#espn_wbb_schedule) | Games for a date / date-range | ESPN |
+| [`espn_wbb_schedule`](../wbb/reference/additional/espn.md#espn_wbb_schedule) | Games for a date / date-range | ESPN |
 | [`espn_wbb_team_schedule`](../wbb/reference/site.md#espn_wbb_team_schedule) | One program's full season slate | ESPN |
 | [`espn_wbb_scoreboard`](../wbb/reference/site.md#espn_wbb_scoreboard) | ⭐ Live + final scoreboard, one row per game | ESPN |
-| [`espn_wbb_pbp`](../wbb/reference/additional/play-by-play-schedule-rosters.md#espn_wbb_pbp) | Full play-by-play + boxscore for a game | ESPN |
+| [`espn_wbb_pbp`](../wbb/reference/additional/play-by-play-processing.md#espn_wbb_pbp) | Full play-by-play + boxscore for a game | ESPN |
 | [`espn_wbb_player_gamelog`](../wbb/reference/web.md#espn_wbb_player_gamelog) | A player's game-by-game log | ESPN |
 | [`espn_wbb_player_splits`](../wbb/reference/web.md#espn_wbb_player_splits) | A player's situational stat splits | ESPN |
-| [`espn_wbb_team_stats`](../wbb/reference/additional/play-by-play-schedule-rosters.md#espn_wbb_team_stats) | A team's season stat splits | ESPN |
+| [`espn_wbb_team_stats`](../wbb/reference/additional/espn.md#espn_wbb_team_stats) | A team's season stat splits | ESPN |
 | [`espn_wbb_standings`](../wbb/reference/site.md#espn_wbb_standings) | Conference standings + records | ESPN |
 | [`espn_wbb_conferences`](../wbb/reference/site.md#espn_wbb_conferences) | Conference groups + group ids | ESPN |
 | [`espn_wbb_rankings`](../wbb/reference/site.md#espn_wbb_rankings) | ⭐ AP / Coaches poll rankings | ESPN |
@@ -61,9 +61,6 @@ SEASON = 2025  # the 2024-25 season — UConn's title run
 print('most recent wbb season:', wbb.most_recent_wbb_season())
 ```
 
-    most recent wbb season: 2026
-
-
 ESPN's live endpoints are **seasonal** — polls, injuries, and live scoreboards go quiet in the offseason, and any network call can hiccup. So we use a tiny `safe()` helper: you get the frame when the feed is up, and a friendly one-liner when it isn't (never a scary traceback). 🛟 The `load_wbb_*` parquet loaders are rock-solid year-round, so we lean on those for anything historical.
 
 
@@ -86,7 +83,7 @@ def has_rows(df):
 
 ## 🏟️ Teams
 
-[`espn_wbb_teams`](../wbb/reference/additional/other-2.md#espn_wbb_teams) returns one wide row per Division-I program. The `team_id` here is the key you'll feed to roster, stats, and leader endpoints. (NCAA team frames carry no conference column — that comes from `espn_wbb_standings()` / `espn_wbb_conferences()` below.)
+[`espn_wbb_teams`](../wbb/reference/additional/espn.md#espn_wbb_teams) returns one wide row per Division-I program. The `team_id` here is the key you'll feed to roster, stats, and leader endpoints. (NCAA team frames carry no conference column — that comes from `espn_wbb_standings()` / `espn_wbb_conferences()` below.)
 
 
 ```python
@@ -94,32 +91,6 @@ teams = safe('teams', wbb.espn_wbb_teams)
 (teams.select(['team_id', 'team_location', 'team_name', 'team_abbreviation', 'team_display_name']).head(10)
  if has_rows(teams) else 'teams unavailable')
 ```
-
-    ✅ teams
-
-
-
-
-
-    shape: (10, 5)
-    ┌─────────┬─────────────────────┬──────────────┬───────────────────┬────────────────────────────┐
-    │ team_id ┆ team_location       ┆ team_name    ┆ team_abbreviation ┆ team_display_name          │
-    │ ---     ┆ ---                 ┆ ---          ┆ ---               ┆ ---                        │
-    │ str     ┆ str                 ┆ str          ┆ str               ┆ str                        │
-    ╞═════════╪═════════════════════╪══════════════╪═══════════════════╪════════════════════════════╡
-    │ 2000    ┆ Abilene Christian   ┆ Wildcats     ┆ ACU               ┆ Abilene Christian Wildcats │
-    │ 2005    ┆ Air Force           ┆ Falcons      ┆ AF                ┆ Air Force Falcons          │
-    │ 2006    ┆ Akron               ┆ Zips         ┆ AKR               ┆ Akron Zips                 │
-    │ 2010    ┆ Alabama A&M         ┆ Bulldogs     ┆ AAMU              ┆ Alabama A&M Bulldogs       │
-    │ 333     ┆ Alabama             ┆ Crimson Tide ┆ ALA               ┆ Alabama Crimson Tide       │
-    │ 2011    ┆ Alabama State       ┆ Lady Hornets ┆ ALST              ┆ Alabama State Lady Hornets │
-    │ 2016    ┆ Alcorn State        ┆ Lady Braves  ┆ ALCN              ┆ Alcorn State Lady Braves   │
-    │ 44      ┆ American University ┆ Eagles       ┆ AMER              ┆ American University Eagles │
-    │ 2026    ┆ App State           ┆ Mountaineers ┆ APP               ┆ App State Mountaineers     │
-    │ 9       ┆ Arizona State       ┆ Sun Devils   ┆ ASU               ┆ Arizona State Sun Devils   │
-    └─────────┴─────────────────────┴──────────────┴───────────────────┴────────────────────────────┘
-
-
 
 ## 👥 Team roster
 
@@ -132,41 +103,13 @@ uconn = safe('UConn roster', lambda: wbb.espn_wbb_team_roster(team_id=2509, seas
  if has_rows(uconn) else 'roster unavailable')
 ```
 
-    ✅ UConn roster
-
-
-
-
-
-    shape: (12, 6)
-    ┌────────────┬────────────────────┬────────┬─────────────────────┬────────────────┬────────────────┐
-    │ athlete_id ┆ full_name          ┆ jersey ┆ position_abbreviati ┆ display_height ┆ display_weight │
-    │ ---        ┆ ---                ┆ ---    ┆ on                  ┆ ---            ┆ ---            │
-    │ str        ┆ str                ┆ str    ┆ ---                 ┆ str            ┆ str            │
-    │            ┆                    ┆        ┆ str                 ┆                ┆                │
-    ╞════════════╪════════════════════╪════════╪═════════════════════╪════════════════╪════════════════╡
-    │ 5311737    ┆ Carley Barrett     ┆ 24     ┆ G                   ┆ 5' 7"          ┆ null           │
-    │ 5106182    ┆ Tara Daye          ┆ 44     ┆ G                   ┆ 5' 10"         ┆ null           │
-    │ 5107710    ┆ Taylor Feldman     ┆ 5      ┆ G                   ┆ 5' 8"          ┆ null           │
-    │ 5311739    ┆ Avery Gordon       ┆ 55     ┆ F                   ┆ 6' 7"          ┆ null           │
-    │ 5108895    ┆ Taylor Henderson   ┆ 2      ┆ G                   ┆ 5' 11"         ┆ null           │
-    │ …          ┆ …                  ┆ …      ┆ …                   ┆ …              ┆ …              │
-    │ 4433438    ┆ Madison Layden-Zay ┆ 33     ┆ G                   ┆ 6' 1"          ┆ null           │
-    │ 5240041    ┆ Lana McCarthy      ┆ 35     ┆ F                   ┆ 6' 4"          ┆ null           │
-    │ 5240040    ┆ Kendall Puryear    ┆ 22     ┆ F                   ┆ 6' 3"          ┆ null           │
-    │ 5239064    ┆ Kiki Smith         ┆ 23     ┆ G                   ┆ 5' 7"          ┆ null           │
-    │ 5243531    ┆ Nya Smith          ┆ 3      ┆ G                   ┆ 5' 9"          ┆ null           │
-    └────────────┴────────────────────┴────────┴─────────────────────┴────────────────┴────────────────┘
-
-
-
 ## 📅 Schedule & scoreboard
 
 Two complementary views of a slate:
 
 | Function | Best for |
 |---|---|
-| [`espn_wbb_schedule`](../wbb/reference/additional/play-by-play-schedule-rosters.md#espn_wbb_schedule) | a clean game list for a date or `'YYYYMMDD-YYYYMMDD'` range |
+| [`espn_wbb_schedule`](../wbb/reference/additional/espn.md#espn_wbb_schedule) | a clean game list for a date or `'YYYYMMDD-YYYYMMDD'` range |
 | [`espn_wbb_scoreboard`](../wbb/reference/site.md#espn_wbb_scoreboard) | ⭐ a richer live/final scoreboard (status, venue, scores) |
 
 April 4, 2025 was the women's **Final Four**. Note: `home_score` / `away_score` from `espn_wbb_schedule` arrive as **strings**, so cast before arithmetic.
@@ -178,28 +121,6 @@ final_four = safe('Final Four schedule', lambda: wbb.espn_wbb_schedule(dates=202
  if has_rows(final_four) else 'schedule unavailable')
 ```
 
-    ✅ Final Four schedule
-
-
-
-
-
-    shape: (2, 7)
-    ┌───────────┬───────────────┬──────────────┬────────────┬──────────────┬────────────┬──────────────┐
-    │ id        ┆ date          ┆ away_display ┆ away_score ┆ home_display ┆ home_score ┆ status_type_ │
-    │ ---       ┆ ---           ┆ _name        ┆ ---        ┆ _name        ┆ ---        ┆ completed    │
-    │ str       ┆ str           ┆ ---          ┆ str        ┆ ---          ┆ str        ┆ ---          │
-    │           ┆               ┆ str          ┆            ┆ str          ┆            ┆ bool         │
-    ╞═══════════╪═══════════════╪══════════════╪════════════╪══════════════╪════════════╪══════════════╡
-    │ 401746073 ┆ 2025-04-04T23 ┆ Texas        ┆ 57         ┆ South        ┆ 74         ┆ true         │
-    │           ┆ :00Z          ┆ Longhorns    ┆            ┆ Carolina     ┆            ┆              │
-    │           ┆               ┆              ┆            ┆ Gamecocks    ┆            ┆              │
-    │ 401746074 ┆ 2025-04-05T01 ┆ UConn        ┆ 85         ┆ UCLA Bruins  ┆ 51         ┆ true         │
-    │           ┆ :30Z          ┆ Huskies      ┆            ┆              ┆            ┆              │
-    └───────────┴───────────────┴──────────────┴────────────┴──────────────┴────────────┴──────────────┘
-
-
-
 
 ```python
 # ⭐ The scoreboard view of the same date — richer game-state columns
@@ -210,27 +131,9 @@ keep = ['game_id', 'short_name', 'status_type_completed', 'home_team_short_displ
  if has_rows(board) else 'scoreboard unavailable')
 ```
 
-    ✅ Final Four scoreboard
-
-
-
-
-
-    shape: (2, 3)
-    ┌───────────┬──────────────┬───────────────────────┐
-    │ game_id   ┆ short_name   ┆ status_type_completed │
-    │ ---       ┆ ---          ┆ ---                   │
-    │ str       ┆ str          ┆ bool                  │
-    ╞═══════════╪══════════════╪═══════════════════════╡
-    │ 401746073 ┆ TEX VS SC    ┆ true                  │
-    │ 401746074 ┆ CONN VS UCLA ┆ true                  │
-    └───────────┴──────────────┴───────────────────────┘
-
-
-
 ## 🎬 Play-by-play
 
-[`espn_wbb_pbp`](../wbb/reference/additional/play-by-play-schedule-rosters.md#espn_wbb_pbp) returns a **dict** of game components (`plays`, `boxscore`, `header`, `winprobability`, …). The `plays` value is a list of dicts — build a frame with `pl.DataFrame(pbp['plays'], infer_schema_length=None)`. Columns use ESPN dot-notation (`period.number`, `clock.displayValue`, `type.text`, `scoringPlay`).
+[`espn_wbb_pbp`](../wbb/reference/additional/play-by-play-processing.md#espn_wbb_pbp) returns a **dict** of game components (`plays`, `boxscore`, `header`, `winprobability`, …). The `plays` value is a list of dicts — build a frame with `pl.DataFrame(pbp['plays'], infer_schema_length=None)`. Columns use ESPN dot-notation (`period.number`, `clock.displayValue`, `type.text`, `scoringPlay`).
 
 Game `401746075` is the **2025 national championship**: South Carolina vs. UConn.
 
@@ -245,31 +148,6 @@ if pbp is not None and isinstance(pbp, dict) and pbp.get('plays'):
  if plays is not None else 'pbp unavailable')
 ```
 
-    ✅ championship pbp
-    plays shape: (443, 58) | components: ['gameId', 'plays', 'winprobability', 'boxscore', 'header', 'format', 'broadcasts', 'videos']
-
-
-
-
-
-    shape: (5, 5)
-    ┌───────────────┬────────────────────┬───────────────────┬─────────────┬───────────────────────────┐
-    │ period.number ┆ clock.displayValue ┆ type.text         ┆ scoringPlay ┆ text                      │
-    │ ---           ┆ ---                ┆ ---               ┆ ---         ┆ ---                       │
-    │ i64           ┆ str                ┆ str               ┆ bool        ┆ str                       │
-    ╞═══════════════╪════════════════════╪═══════════════════╪═════════════╪═══════════════════════════╡
-    │ 1             ┆ 10:00              ┆ Jumpball          ┆ false       ┆ Start game                │
-    │ 1             ┆ 9:57               ┆ Jumpball          ┆ false       ┆ Jump Ball won by UConn    │
-    │ 1             ┆ 9:57               ┆ Jumpball          ┆ false       ┆ Jump Ball lost by South   │
-    │               ┆                    ┆                   ┆             ┆ Caroli…                   │
-    │ 1             ┆ 9:40               ┆ JumpShot          ┆ false       ┆ Kaitlyn Chen missed Three │
-    │               ┆                    ┆                   ┆             ┆ Poin…                     │
-    │ 1             ┆ 9:33               ┆ Offensive Rebound ┆ false       ┆ Paige Bueckers Offensive  │
-    │               ┆                    ┆                   ┆             ┆ Rebou…                    │
-    └───────────────┴────────────────────┴───────────────────┴─────────────┴───────────────────────────┘
-
-
-
 
 ```python
 # Scoring plays only, with the running score
@@ -277,27 +155,6 @@ if pbp is not None and isinstance(pbp, dict) and pbp.get('plays'):
       .select(['period.number', 'clock.displayValue', 'awayScore', 'homeScore', 'text']).head(8)
  if plays is not None else 'pbp unavailable')
 ```
-
-
-
-
-    shape: (8, 5)
-    ┌───────────────┬────────────────────┬───────────┬───────────┬─────────────────────────────────┐
-    │ period.number ┆ clock.displayValue ┆ awayScore ┆ homeScore ┆ text                            │
-    │ ---           ┆ ---                ┆ ---       ┆ ---       ┆ ---                             │
-    │ i64           ┆ str                ┆ i64       ┆ i64       ┆ str                             │
-    ╞═══════════════╪════════════════════╪═══════════╪═══════════╪═════════════════════════════════╡
-    │ 1             ┆ 9:18               ┆ 0         ┆ 3         ┆ Te-Hina Paopao made Three Poin… │
-    │ 1             ┆ 8:58               ┆ 2         ┆ 3         ┆ Sarah Strong made Jumper.       │
-    │ 1             ┆ 8:36               ┆ 2         ┆ 5         ┆ Chloe Kitts made Jumper.        │
-    │ 1             ┆ 8:13               ┆ 4         ┆ 5         ┆ Paige Bueckers made Jumper.     │
-    │ 1             ┆ 7:24               ┆ 6         ┆ 5         ┆ Azzi Fudd made Jumper. Assiste… │
-    │ 1             ┆ 7:00               ┆ 6         ┆ 7         ┆ Raven Johnson made Layup. Assi… │
-    │ 1             ┆ 6:40               ┆ 8         ┆ 7         ┆ Kaitlyn Chen made Jumper.       │
-    │ 1             ┆ 6:23               ┆ 8         ┆ 9         ┆ Bree Hall made Jumper.          │
-    └───────────────┴────────────────────┴───────────┴───────────┴─────────────────────────────────┘
-
-
 
 ## ⭐ Premium ESPN analytics
 
@@ -318,32 +175,12 @@ rankings = safe('rankings (AP/Coaches poll)', wbb.espn_wbb_rankings)
  else 'no poll published right now (offseason) — try during the season')
 ```
 
-    🟡 rankings (AP/Coaches poll) (no rows right now)
-
-
-
-
-
-    'no poll published right now (offseason) — try during the season'
-
-
-
 
 ```python
 injuries = safe('injury report', wbb.espn_wbb_injuries)
 (injuries.head(10) if has_rows(injuries)
  else 'no active injuries posted right now (offseason)')
 ```
-
-    🟡 injury report (no rows right now)
-
-
-
-
-
-    'no active injuries posted right now (offseason)'
-
-
 
 ## 📊 Basketball Power Index (BPI)
 
@@ -385,33 +222,6 @@ else:
 out
 ```
 
-    ✅ season BPI
-
-
-
-
-
-    shape: (12, 4)
-    ┌──────────┬─────────┬───────────────┬─────────────────────────────────┐
-    │ bpi_rank ┆ bpi     ┆ conference_id ┆ team_ref                        │
-    │ ---      ┆ ---     ┆ ---           ┆ ---                             │
-    │ f64      ┆ f64     ┆ i64           ┆ str                             │
-    ╞══════════╪═════════╪═══════════════╪═════════════════════════════════╡
-    │ 1.0      ┆ 38.1724 ┆ 4             ┆ http://sports.core.api.espn.co… │
-    │ 2.0      ┆ 36.4436 ┆ 23            ┆ http://sports.core.api.espn.co… │
-    │ 3.0      ┆ 33.1668 ┆ 23            ┆ http://sports.core.api.espn.co… │
-    │ 4.0      ┆ 32.1685 ┆ 2             ┆ http://sports.core.api.espn.co… │
-    │ 5.0      ┆ 31.8751 ┆ 7             ┆ http://sports.core.api.espn.co… │
-    │ …        ┆ …       ┆ …             ┆ …                               │
-    │ 8.0      ┆ 28.45   ┆ 23            ┆ http://sports.core.api.espn.co… │
-    │ 9.0      ┆ 26.9175 ┆ 8             ┆ http://sports.core.api.espn.co… │
-    │ 10.0     ┆ 26.1062 ┆ 23            ┆ http://sports.core.api.espn.co… │
-    │ 11.0     ┆ 25.8556 ┆ 23            ┆ http://sports.core.api.espn.co… │
-    │ 12.0     ┆ 25.5795 ┆ 8             ┆ http://sports.core.api.espn.co… │
-    └──────────┴─────────┴───────────────┴─────────────────────────────────┘
-
-
-
 And [`espn_wbb_season_powerindex_leaders`](../wbb/reference/core/season.md#espn_wbb_season_powerindex_leaders) lists the category leaders — who tops BPI, strength-of-schedule, strength-of-record, and more.
 
 
@@ -420,31 +230,6 @@ spi_leaders = safe('BPI category leaders', lambda: wbb.espn_wbb_season_powerinde
 (spi_leaders.select(['name', 'display_name']).head(10)
  if has_rows(spi_leaders) else 'BPI leaders unavailable')
 ```
-
-    ✅ BPI category leaders
-
-
-
-
-
-    shape: (9, 2)
-    ┌───────────────────────┬─────────────────────┐
-    │ name                  ┆ display_name        │
-    │ ---                   ┆ ---                 │
-    │ str                   ┆ str                 │
-    ╞═══════════════════════╪═════════════════════╡
-    │ bpi                   ┆ BPI Leader          │
-    │ rpirank               ┆ NCAAM RPI Leader    │
-    │ sospast               ┆ SOS Leader          │
-    │ sor                   ┆ SOR Leader          │
-    │ bpioffense            ┆ BPI Off Leader      │
-    │ bpidefense            ┆ BPI Def Leader      │
-    │ bpisevendaychangerank ┆ 7-Day RK CHG Leader │
-    │ top50bpiwins          ┆ Most Quality Wins   │
-    │ sosoutofconfpast      ┆ Non-Conf SOS Leader │
-    └───────────────────────┴─────────────────────┘
-
-
 
 ## 🏆 Standings & conferences
 
@@ -458,73 +243,12 @@ standings = safe('2025 standings', lambda: wbb.espn_wbb_standings(season=SEASON)
  if has_rows(standings) else 'standings unavailable')
 ```
 
-    ✅ 2025 standings
-
-
-
-
-
-    shape: (10, 7)
-    ┌───────────────────┬──────────────────┬──────┬────────┬─────────────┬────────────┬────────────────┐
-    │ team_display_name ┆ conference_abbre ┆ wins ┆ losses ┆ win_percent ┆ points_for ┆ points_against │
-    │ ---               ┆ viation          ┆ ---  ┆ ---    ┆ ---         ┆ ---        ┆ ---            │
-    │ str               ┆ ---              ┆ i64  ┆ i64    ┆ f64         ┆ f64        ┆ f64            │
-    │                   ┆ str              ┆      ┆        ┆             ┆            ┆                │
-    ╞═══════════════════╪══════════════════╪══════╪════════╪═════════════╪════════════╪════════════════╡
-    │ Florida Gulf      ┆ ASUN             ┆ 18   ┆ 0      ┆ 1.0         ┆ 1367.0     ┆ 983.0          │
-    │ Coast Eagles      ┆                  ┆      ┆        ┆             ┆            ┆                │
-    │ UConn Huskies     ┆ bige             ┆ 18   ┆ 0      ┆ 1.0         ┆ 1480.0     ┆ 866.0          │
-    │ Norfolk State     ┆ meac             ┆ 14   ┆ 0      ┆ 1.0         ┆ 1145.0     ┆ 747.0          │
-    │ Spartans          ┆                  ┆      ┆        ┆             ┆            ┆                │
-    │ Fairleigh         ┆ neast            ┆ 16   ┆ 0      ┆ 1.0         ┆ 1086.0     ┆ 805.0          │
-    │ Dickinson Knights ┆                  ┆      ┆        ┆             ┆            ┆                │
-    │ South Dakota      ┆ summ             ┆ 16   ┆ 0      ┆ 1.0         ┆ 1258.0     ┆ 933.0          │
-    │ State Jackrabbits ┆                  ┆      ┆        ┆             ┆            ┆                │
-    │ James Madison     ┆ belt             ┆ 18   ┆ 0      ┆ 1.0         ┆ 1358.0     ┆ 1072.0         │
-    │ Dukes             ┆                  ┆      ┆        ┆             ┆            ┆                │
-    │ Grand Canyon      ┆ UAC              ┆ 16   ┆ 0      ┆ 1.0         ┆ 1219.0     ┆ 894.0          │
-    │ Lopes             ┆                  ┆      ┆        ┆             ┆            ┆                │
-    │ Green Bay Phoenix ┆ hor              ┆ 19   ┆ 1      ┆ 0.95        ┆ 1408.0     ┆ 1037.0         │
-    │ Fairfield Stags   ┆ Metro            ┆ 19   ┆ 1      ┆ 0.95        ┆ 1498.0     ┆ 1034.0         │
-    │ SE Louisiana Lady ┆ land             ┆ 19   ┆ 1      ┆ 0.95        ┆ 1330.0     ┆ 1013.0         │
-    │ Lions             ┆                  ┆      ┆        ┆             ┆            ┆                │
-    └───────────────────┴──────────────────┴──────┴────────┴─────────────┴────────────┴────────────────┘
-
-
-
 
 ```python
 conferences = safe('conferences', wbb.espn_wbb_conferences)
 (conferences.select(['group_id', 'name', 'abbreviation', 'short_name']).head(12)
  if has_rows(conferences) else 'conferences unavailable')
 ```
-
-    ✅ conferences
-
-
-
-
-
-    shape: (12, 4)
-    ┌──────────┬───────────────────────────┬──────────────┬────────────┐
-    │ group_id ┆ name                      ┆ abbreviation ┆ short_name │
-    │ ---      ┆ ---                       ┆ ---          ┆ ---        │
-    │ str      ┆ str                       ┆ str          ┆ str        │
-    ╞══════════╪═══════════════════════════╪══════════════╪════════════╡
-    │ null     ┆ NCAA Division I           ┆ NCAA         ┆ null       │
-    │ null     ┆ America East Conference   ┆ aeast        ┆ null       │
-    │ null     ┆ American Conference       ┆ American     ┆ null       │
-    │ null     ┆ Atlantic 10 Conference    ┆ atl10        ┆ null       │
-    │ null     ┆ Atlantic Coast Conference ┆ acc          ┆ null       │
-    │ …        ┆ …                         ┆ …            ┆ …          │
-    │ null     ┆ Big East Conference       ┆ bige         ┆ null       │
-    │ null     ┆ Big Sky Conference        ┆ bsky         ┆ null       │
-    │ null     ┆ Big South Conference      ┆ bsou         ┆ null       │
-    │ null     ┆ Big Ten Conference        ┆ big10        ┆ null       │
-    │ null     ┆ Big West Conference       ┆ bigw         ┆ null       │
-    └──────────┴───────────────────────────┴──────────────┴────────────┘
-
-
 
 ## 🍳 Cookbook: common WBB tasks
 
@@ -541,9 +265,6 @@ team_box = wbb.load_wbb_team_boxscore(seasons=[2024])
 season_pbp = wbb.load_wbb_pbp(seasons=[2024])
 print('player_box:', player_box.shape, '| team_box:', team_box.shape, '| pbp:', season_pbp.shape)
 ```
-
-    player_box: (167412, 55) | team_box: (11796, 56) | pbp: (1908679, 66)
-
 
 ### Recipe 1 — Win-probability ride of a championship 📈
 
@@ -562,29 +283,6 @@ else:
     out = 'win probability unavailable'
 out
 ```
-
-    ✅ win probability
-    snapshots: 300 | opening home win%: 42.9 | final home win%: 2.1
-
-
-
-
-
-    shape: (6, 4)
-    ┌─────────────────┬─────────────────────┬─────────────────────┬────────────────┐
-    │ sequence_number ┆ home_win_percentage ┆ away_win_percentage ┆ tie_percentage │
-    │ ---             ┆ ---                 ┆ ---                 ┆ ---            │
-    │ str             ┆ f64                 ┆ f64                 ┆ f64            │
-    ╞═════════════════╪═════════════════════╪═════════════════════╪════════════════╡
-    │ 113521784       ┆ 0.429               ┆ 0.571               ┆ 0.0            │
-    │ 113521785       ┆ 0.416               ┆ 0.584               ┆ 0.0            │
-    │ 113521801       ┆ 0.468               ┆ 0.532               ┆ 0.0            │
-    │ 113521802       ┆ 0.473               ┆ 0.527               ┆ 0.0            │
-    │ 113521803       ┆ 0.514               ┆ 0.486               ┆ 0.0            │
-    │ 113521804       ┆ 0.474               ┆ 0.526               ┆ 0.0            │
-    └─────────────────┴─────────────────────┴─────────────────────┴────────────────┘
-
-
 
 ### Recipe 2 — BPI matchup preview for a game 🔮
 
@@ -607,30 +305,6 @@ else:
 out
 ```
 
-    ✅ game predictor (BPI)
-
-
-
-
-
-    shape: (8, 2)
-    ┌───────────────────┬───────┐
-    │ stat              ┆ value │
-    │ ---               ┆ ---   │
-    │ str               ┆ str   │
-    ╞═══════════════════╪═══════╡
-    │ MATCHUP QUALITY   ┆ 99.0  │
-    │ GAME SCORE        ┆       │
-    │ WIN PROB          ┆ 42.9% │
-    │ PRED PT DIFF      ┆ -1.9  │
-    │ OPPONENT WIN PROB ┆ 57.1% │
-    │ WIN PROB          ┆ 42.9  │
-    │ OPPONENT WIN PROB ┆ 57.1  │
-    │ null              ┆ 0.0   │
-    └───────────────────┴───────┘
-
-
-
 ### Recipe 3 — Top scorers of a full season 🥇
 
 Take the season-long player boxscore and aggregate with polars to find the highest per-game scorers (min. 20 games).
@@ -652,29 +326,6 @@ top_scorers = (
 top_scorers
 ```
 
-
-
-
-    shape: (10, 6)
-    ┌────────────┬──────────────────────┬─────────────────────────┬───────┬──────────────┬──────┐
-    │ athlete_id ┆ athlete_display_name ┆ team_short_display_name ┆ games ┆ total_points ┆ ppg  │
-    │ ---        ┆ ---                  ┆ ---                     ┆ ---   ┆ ---          ┆ ---  │
-    │ i32        ┆ str                  ┆ str                     ┆ u32   ┆ i32          ┆ f64  │
-    ╞════════════╪══════════════════════╪═════════════════════════╪═══════╪══════════════╪══════╡
-    │ 4596343    ┆ Demeara Hinds        ┆ Wake Forest             ┆ 32    ┆ 0            ┆ null │
-    │ 5178514    ┆ McKenna Macon        ┆ W Michigan              ┆ 30    ┆ 0            ┆ null │
-    │ 4714498    ┆ Allie Palmieri       ┆ UMass                   ┆ 32    ┆ 0            ┆ null │
-    │ 4900386    ┆ Debbie Reese         ┆ South Alabama           ┆ 32    ┆ 0            ┆ null │
-    │ 4433532    ┆ Kiya Dorroh          ┆ UT Martin               ┆ 33    ┆ 0            ┆ null │
-    │ 4702867    ┆ Vanessa de Jesus     ┆ Duke                    ┆ 34    ┆ 0            ┆ null │
-    │ 5178483    ┆ Hilary Behrens       ┆ S Dakota St             ┆ 33    ┆ 0            ┆ null │
-    │ 5181593    ┆ Michaela Bosmans     ┆ North Texas             ┆ 32    ┆ 0            ┆ null │
-    │ 5175916    ┆ Susana Yepes         ┆ Oregon St               ┆ 35    ┆ 0            ┆ null │
-    │ 4433737    ┆ Mir McLean           ┆ Virginia                ┆ 32    ┆ 0            ┆ null │
-    └────────────┴──────────────────────┴─────────────────────────┴───────┴──────────────┴──────┘
-
-
-
 ### Recipe 4 — Best scoring offenses, joined to records 🤝
 
 Aggregate the team boxscore to rank programs by points per game, then attach each team's W-L from the live standings.
@@ -695,29 +346,6 @@ if has_rows(standings):
 offense
 ```
 
-
-
-
-    shape: (10, 6)
-    ┌─────────┬────────────────────────────┬───────┬──────┬──────┬────────┐
-    │ team_id ┆ team_display_name          ┆ games ┆ ppg  ┆ wins ┆ losses │
-    │ ---     ┆ ---                        ┆ ---   ┆ ---  ┆ ---  ┆ ---    │
-    │ i64     ┆ str                        ┆ u32   ┆ f64  ┆ i64  ┆ i64    │
-    ╞═════════╪════════════════════════════╪═══════╪══════╪══════╪════════╡
-    │ 2294    ┆ Iowa Hawkeyes              ┆ 39    ┆ 91.0 ┆ 10   ┆ 8      │
-    │ 99      ┆ LSU Tigers                 ┆ 37    ┆ 85.9 ┆ 12   ┆ 4      │
-    │ 2579    ┆ South Carolina Gamecocks   ┆ 38    ┆ 85.4 ┆ 15   ┆ 1      │
-    │ 276     ┆ Marshall Thundering Herd   ┆ 33    ┆ 85.3 ┆ 6    ┆ 12     │
-    │ 93      ┆ Murray State Racers        ┆ 32    ┆ 84.5 ┆ 16   ┆ 4      │
-    │ 127     ┆ Michigan State Spartans    ┆ 31    ┆ 82.8 ┆ 11   ┆ 7      │
-    │ 213     ┆ Penn State Lady Lions      ┆ 35    ┆ 82.7 ┆ 1    ┆ 17     │
-    │ 198     ┆ Oral Roberts Golden Eagles ┆ 32    ┆ 82.1 ┆ 12   ┆ 4      │
-    │ 2181    ┆ Drake Bulldogs             ┆ 35    ┆ 81.2 ┆ 15   ┆ 5      │
-    │ 2653    ┆ Troy Trojans               ┆ 34    ┆ 80.9 ┆ 13   ┆ 5      │
-    └─────────┴────────────────────────────┴───────┴──────┴──────┴────────┘
-
-
-
 ### Recipe 5 — A program's full season slate 🗓️
 
 [`espn_wbb_team_schedule`](../wbb/reference/site.md#espn_wbb_team_schedule) returns one program's complete season — every game with its date, matchup short name, and season type. Here's UConn's 2024-25 road to the title (`team_id=2509`).
@@ -733,34 +361,6 @@ else:
     out = 'team schedule unavailable (offseason) — try during the season'
 out
 ```
-
-    ✅ UConn team schedule
-    games on the slate: 29
-
-
-
-
-
-    shape: (12, 5)
-    ┌───────────┬───────────────────┬────────────┬──────────────────┬───────────┐
-    │ id        ┆ date              ┆ short_name ┆ season_type_name ┆ week_text │
-    │ ---       ┆ ---               ┆ ---        ┆ ---              ┆ ---       │
-    │ str       ┆ str               ┆ str        ┆ str              ┆ str       │
-    ╞═══════════╪═══════════════════╪════════════╪══════════════════╪═══════════╡
-    │ 401713616 ┆ 2024-11-07T00:00Z ┆ PFW @ PUR  ┆ Regular Season   ┆ Week 1    │
-    │ 401703046 ┆ 2024-11-11T00:00Z ┆ ND @ PUR   ┆ Regular Season   ┆ Week 1    │
-    │ 401713617 ┆ 2024-11-15T00:30Z ┆ IUIN @ PUR ┆ Regular Season   ┆ Week 2    │
-    │ 401713618 ┆ 2024-11-19T00:00Z ┆ BELL @ PUR ┆ Regular Season   ┆ Week 3    │
-    │ 401713619 ┆ 2024-11-24T18:00Z ┆ UTA @ PUR  ┆ Regular Season   ┆ Week 3    │
-    │ …         ┆ …                 ┆ …          ┆ …                ┆ …         │
-    │ 401713620 ┆ 2024-12-05T00:00Z ┆ ME @ PUR   ┆ Regular Season   ┆ Week 5    │
-    │ 401721485 ┆ 2024-12-07T19:00Z ┆ MD @ PUR   ┆ Regular Season   ┆ Week 5    │
-    │ 401703049 ┆ 2024-12-14T22:00Z ┆ UK @ PUR   ┆ Regular Season   ┆ Week 6    │
-    │ 401713615 ┆ 2024-12-18T00:00Z ┆ PUR @ M-OH ┆ Regular Season   ┆ Week 7    │
-    │ 401713621 ┆ 2024-12-21T19:00Z ┆ INST @ PUR ┆ Regular Season   ┆ Week 7    │
-    └───────────┴───────────────────┴────────────┴──────────────────┴───────────┘
-
-
 
 ### Recipe 6 — Deadliest three-point shooting teams 🎯
 
@@ -783,29 +383,6 @@ three_pt = (
 )
 three_pt
 ```
-
-
-
-
-    shape: (10, 6)
-    ┌─────────┬────────────────────────────────┬───────┬─────┬──────┬───────────┐
-    │ team_id ┆ team_display_name              ┆ games ┆ tpm ┆ tpa  ┆ three_pct │
-    │ ---     ┆ ---                            ┆ ---   ┆ --- ┆ ---  ┆ ---       │
-    │ i32     ┆ str                            ┆ u32   ┆ i32 ┆ i32  ┆ f64       │
-    ╞═════════╪════════════════════════════════╪═══════╪═════╪══════╪═══════════╡
-    │ 84      ┆ Indiana Hoosiers               ┆ 32    ┆ 268 ┆ 677  ┆ 39.6      │
-    │ 2250    ┆ Gonzaga Bulldogs               ┆ 36    ┆ 336 ┆ 849  ┆ 39.6      │
-    │ 2579    ┆ South Carolina Gamecocks       ┆ 38    ┆ 253 ┆ 640  ┆ 39.5      │
-    │ 149     ┆ Montana Lady Griz              ┆ 33    ┆ 357 ┆ 927  ┆ 38.5      │
-    │ 66      ┆ Iowa State Cyclones            ┆ 33    ┆ 285 ┆ 745  ┆ 38.3      │
-    │ 2086    ┆ Butler Bulldogs                ┆ 32    ┆ 266 ┆ 694  ┆ 38.3      │
-    │ 257     ┆ Richmond Spiders               ┆ 35    ┆ 320 ┆ 840  ┆ 38.1      │
-    │ 2571    ┆ South Dakota State Jackrabbits ┆ 33    ┆ 223 ┆ 586  ┆ 38.1      │
-    │ 2294    ┆ Iowa Hawkeyes                  ┆ 39    ┆ 426 ┆ 1132 ┆ 37.6      │
-    │ 213     ┆ Penn State Lady Lions          ┆ 35    ┆ 294 ┆ 787  ┆ 37.4      │
-    └─────────┴────────────────────────────────┴───────┴─────┴──────┴───────────┘
-
-
 
 ### Recipe 7 — Clutch shot-makers ⏱️
 
@@ -836,29 +413,6 @@ clutch = (
 clutch
 ```
 
-
-
-
-    shape: (10, 4)
-    ┌──────────────────────┬─────────────────────────┬──────────────┬───────────────┐
-    │ athlete_display_name ┆ team_short_display_name ┆ clutch_plays ┆ clutch_points │
-    │ ---                  ┆ ---                     ┆ ---          ┆ ---           │
-    │ str                  ┆ str                     ┆ u32          ┆ i32           │
-    ╞══════════════════════╪═════════════════════════╪══════════════╪═══════════════╡
-    │ Maya Wong            ┆ Illinois St             ┆ 63           ┆ 81            │
-    │ Dyaisha Fair         ┆ Syracuse                ┆ 59           ┆ 80            │
-    │ Jada Guinn           ┆ Chattanooga             ┆ 63           ┆ 77            │
-    │ Alyssa Fisher        ┆ Loyola Chicago          ┆ 38           ┆ 71            │
-    │ Daisha Bradford      ┆ UL Monroe               ┆ 51           ┆ 68            │
-    │ Ta'Niya Latson       ┆ Florida St              ┆ 47           ┆ 65            │
-    │ Cheyenne Stubbs      ┆ Utah State              ┆ 36           ┆ 62            │
-    │ Chellia Watson       ┆ Buffalo                 ┆ 38           ┆ 61            │
-    │ Lucy Olsen           ┆ Villanova               ┆ 39           ┆ 59            │
-    │ Deja Kelly           ┆ North Carolina          ┆ 51           ┆ 59            │
-    └──────────────────────┴─────────────────────────┴──────────────┴───────────────┘
-
-
-
 ### Recipe 8 — Where the buckets come from (shot-zone mix) 🗺️
 
 The play-by-play carries `coordinate_x` / `coordinate_y` for shots and a `score_value` (2 or 3). Bucket every made field goal into a zone and see how a season's points break down by shot location.
@@ -887,22 +441,6 @@ shot_zones = (
 shot_zones
 ```
 
-
-
-
-    shape: (3, 4)
-    ┌──────────────────┬──────────────────┬────────┬───────────┐
-    │ shot_zone        ┆ made_field_goals ┆ points ┆ share_pct │
-    │ ---              ┆ ---              ┆ ---    ┆ ---       │
-    │ str              ┆ u32              ┆ i32    ┆ f64       │
-    ╞══════════════════╪══════════════════╪════════╪═══════════╡
-    │ 2pt — at the rim ┆ 9108             ┆ 18216  ┆ 70.6      │
-    │ 3-pointer        ┆ 3314             ┆ 9942   ┆ 25.7      │
-    │ 2pt — jumper     ┆ 471              ┆ 942    ┆ 3.7       │
-    └──────────────────┴──────────────────┴────────┴───────────┘
-
-
-
 ### Recipe 9 — Double-double machines 🔄
 
 Flag every player-game with at least two double-digit categories (points / rebounds / assists), then count who racked up the most double-doubles across the season.
@@ -927,29 +465,6 @@ dd = (
 dd
 ```
 
-
-
-
-    shape: (10, 4)
-    ┌────────────┬──────────────────────┬─────────────────────────┬────────────────┐
-    │ athlete_id ┆ athlete_display_name ┆ team_short_display_name ┆ double_doubles │
-    │ ---        ┆ ---                  ┆ ---                     ┆ ---            │
-    │ i32        ┆ str                  ┆ str                     ┆ u32            │
-    ╞════════════╪══════════════════════╪═════════════════════════╪════════════════╡
-    │ 4595746    ┆ Lauren Gustin        ┆ BYU                     ┆ 30             │
-    │ 4433402    ┆ Angel Reese          ┆ LSU                     ┆ 27             │
-    │ 4705101    ┆ Macy McGlone         ┆ E Illinois              ┆ 26             │
-    │ 4433403    ┆ Caitlin Clark        ┆ Iowa                    ┆ 24             │
-    │ 4684384    ┆ Aneesah Morrow       ┆ LSU                     ┆ 22             │
-    │ 4898966    ┆ Adrianna Smith       ┆ Maine                   ┆ 22             │
-    │ 5108550    ┆ Serah Williams       ┆ Wisconsin               ┆ 20             │
-    │ 4433404    ┆ Cameron Brink        ┆ Stanford                ┆ 20             │
-    │ 4898391    ┆ Phillipina Kyei      ┆ Oregon                  ┆ 20             │
-    │ 4899516    ┆ Akasha Davis         ┆ Lamar                   ┆ 20             │
-    └────────────┴──────────────────────┴─────────────────────────┴────────────────┘
-
-
-
 ### Recipe 10 — Find the best defenses (fewest points allowed) 🛡️
 
 Every team boxscore row carries the **opponent's** score, so a single group-by yields points allowed per game. Lowest-scoring opponents = stingiest defenses.
@@ -972,29 +487,6 @@ defense = (
 defense
 ```
 
-
-
-
-    shape: (10, 6)
-    ┌─────────┬───────────────────────────┬───────┬─────────┬─────────┬─────────┐
-    │ team_id ┆ team_display_name         ┆ games ┆ opp_ppg ┆ own_ppg ┆ net_ppg │
-    │ ---     ┆ ---                       ┆ ---   ┆ ---     ┆ ---     ┆ ---     │
-    │ i32     ┆ str                       ┆ u32   ┆ f64     ┆ f64     ┆ f64     │
-    ╞═════════╪═══════════════════════════╪═══════╪═════════╪═════════╪═════════╡
-    │ 399     ┆ UAlbany Great Danes       ┆ 32    ┆ 51.3    ┆ 60.9    ┆ 9.6     │
-    │ 261     ┆ Vermont Catamounts        ┆ 37    ┆ 52.8    ┆ 59.4    ┆ 6.6     │
-    │ 2450    ┆ Norfolk State Spartans    ┆ 33    ┆ 53.1    ┆ 67.0    ┆ 13.9    │
-    │ 2670    ┆ VCU Rams                  ┆ 32    ┆ 53.2    ┆ 63.3    ┆ 10.1    │
-    │ 2603    ┆ Saint Joseph's Hawks      ┆ 34    ┆ 54.5    ┆ 65.3    ┆ 10.8    │
-    │ 236     ┆ Chattanooga Mocs          ┆ 33    ┆ 54.5    ┆ 64.2    ┆ 9.7     │
-    │ 526     ┆ Florida Gulf Coast Eagles ┆ 34    ┆ 55.0    ┆ 74.9    ┆ 19.9    │
-    │ 2097    ┆ Campbell Fighting Camels  ┆ 31    ┆ 55.1    ┆ 60.8    ┆ 5.7     │
-    │ 46      ┆ Georgetown Hoyas          ┆ 35    ┆ 55.1    ┆ 57.9    ┆ 2.8     │
-    │ 2217    ┆ Fairfield Stags           ┆ 33    ┆ 55.2    ┆ 72.5    ┆ 17.3    │
-    └─────────┴───────────────────────────┴───────┴─────────┴─────────┴─────────┘
-
-
-
 ### Recipe 11 — Rolling form: a team's last 10 games 📊
 
 Filter the team boxscore to one program, sort by date, and take the tail — a quick "how did they finish the year?" view with the scoring margin per game. Here's UConn (`team_id=2509`).
@@ -1012,32 +504,6 @@ last10 = (
 print('average margin over last 10:', round(last10['margin'].mean(), 1) if last10.height else 'n/a')
 last10
 ```
-
-    average margin over last 10: 1.6
-
-
-
-
-
-    shape: (10, 5)
-    ┌────────────┬─────────────────────────────────┬────────────┬─────────────────────┬────────┐
-    │ game_date  ┆ opponent_team_short_display_na… ┆ team_score ┆ opponent_team_score ┆ margin │
-    │ ---        ┆ ---                             ┆ ---        ┆ ---                 ┆ ---    │
-    │ date       ┆ str                             ┆ i32        ┆ i32                 ┆ i32    │
-    ╞════════════╪═════════════════════════════════╪════════════╪═════════════════════╪════════╡
-    │ 2024-02-17 ┆ Nebraska                        ┆ 65         ┆ 77                  ┆ -12    │
-    │ 2024-02-21 ┆ Michigan St                     ┆ 59         ┆ 68                  ┆ -9     │
-    │ 2024-02-25 ┆ Wisconsin                       ┆ 79         ┆ 55                  ┆ 24     │
-    │ 2024-02-28 ┆ Penn State                      ┆ 88         ┆ 93                  ┆ -5     │
-    │ 2024-03-03 ┆ Michigan                        ┆ 60         ┆ 64                  ┆ -4     │
-    │ 2024-03-06 ┆ Northwestern                    ┆ 78         ┆ 72                  ┆ 6      │
-    │ 2024-03-07 ┆ Nebraska                        ┆ 56         ┆ 64                  ┆ -8     │
-    │ 2024-03-25 ┆ Butler                          ┆ 62         ┆ 51                  ┆ 11     │
-    │ 2024-03-28 ┆ Duquesne                        ┆ 71         ┆ 50                  ┆ 21     │
-    │ 2024-04-01 ┆ Vermont                         ┆ 59         ┆ 67                  ┆ -8     │
-    └────────────┴─────────────────────────────────┴────────────┴─────────────────────┴────────┘
-
-
 
 ### Recipe 12 — Pandas interop: a season's play-type mix 🐼
 
@@ -1058,23 +524,6 @@ play_mix = (
 play_mix
 ```
 
-
-
-
-                play_type   count
-    0            JumpShot  427608
-    1   Defensive Rebound  293368
-    2           LayUpShot  250960
-    3        PersonalFoul  192322
-    4       MadeFreeThrow  188762
-    5  Lost Ball Turnover  183859
-    6   Offensive Rebound  151143
-    7               Steal   89517
-    8          Block Shot   36019
-    9   OfficialTVTimeOut   24582
-
-
-
 ## 🏛️ stats.ncaa.org — the `ncaa_wbb_*` family (bigballR parity)
 
 New in 0.0.72: a 16-function port of bigballR/wbigballR wired to
@@ -1092,27 +541,6 @@ ids = ncaa_wbb_team_ids()
 print("team-id crosswalk:", ids.shape)
 ids.filter(pl.col("season") == "2025-26").head()
 ```
-
-    team-id crosswalk: (5972, 4)
-
-
-
-
-
-    shape: (5, 4)
-    ┌────────────────────┬────────────┬────────┬─────────┐
-    │ team               ┆ conference ┆ id     ┆ season  │
-    │ ---                ┆ ---        ┆ ---    ┆ ---     │
-    │ str                ┆ str        ┆ i64    ┆ str     │
-    ╞════════════════════╪════════════╪════════╪═════════╡
-    │ A&M-Corpus Christi ┆ Southland  ┆ 610016 ┆ 2025-26 │
-    │ Abilene Christian  ┆ WAC        ┆ 610128 ┆ 2025-26 │
-    │ Air Force          ┆ MWC        ┆ 609930 ┆ 2025-26 │
-    │ Akron              ┆ MAC        ┆ 610133 ┆ 2025-26 │
-    │ Alabama            ┆ SEC        ┆ 610143 ┆ 2025-26 │
-    └────────────────────┴────────────┴────────┴─────────┘
-
-
 
 Live game fetches go through the shared proxy-bound NCAA fetch layer
 (stats.ncaa.org is IP-ban-happy — configure `SDV_PY_NCAA_*` /
