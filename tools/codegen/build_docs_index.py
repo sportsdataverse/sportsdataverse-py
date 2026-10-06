@@ -409,7 +409,13 @@ def openapi_rows(specs: dict[str, dict], sha: str, rows: Rows) -> None:
                 op = item.get(method)
                 if not isinstance(op, dict):
                     continue
-                params = [q for q in (_param(doc, p) for p in (*shared, *(op.get("parameters") or []))) if q]
+                merged: dict[
+                    tuple, dict
+                ] = {}  # operation-level parameters override path-level ones with the same (name, in)
+                for q in (_param(doc, p) for p in (*shared, *(op.get("parameters") or []))):
+                    if q:
+                        merged[(q["name"], q["in"])] = q
+                params = list(merged.values())
                 rows.endpoints.append(
                     (
                         title,

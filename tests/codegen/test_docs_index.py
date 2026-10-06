@@ -121,6 +121,33 @@ def test_openapi_rows_resolve_refs_and_servers():
     assert url == "https://github.com/saiemgilani/sdv-swagger/blob/abc123/mini.openapi.yaml"
 
 
+def test_openapi_operation_parameters_override_path_level_by_name_and_in():
+    doc = {
+        "openapi": "3.0.0",
+        "paths": {
+            "/t/{id}": {
+                "parameters": [
+                    {"name": "id", "in": "path", "required": True, "description": "path-level"},
+                    {"name": "id", "in": "query", "description": "other location"},
+                    {"$ref": "#/components/parameters/Missing"},
+                ],
+                "get": {
+                    "parameters": [{"name": "id", "in": "path", "required": True, "description": "operation-level"}]
+                },
+                "delete": {},
+            }
+        },
+    }
+    rows = B.Rows()
+    B.openapi_rows({"m.openapi.yaml": doc}, "abc", rows)
+    by_method = {r[1]: json.loads(r[4]) for r in rows.endpoints}
+    assert [(p["name"], p["in"], p["description"]) for p in by_method["GET"]] == [
+        ("id", "path", "operation-level"),
+        ("id", "query", "other location"),
+    ]
+    assert len(by_method["DELETE"]) == 2  # no override: both path-level entries kept, unusable ones dropped
+
+
 def test_parse_pkgdown_llms_reads_the_package_index_only():
     rows = B.Rows()
     n = B.parse_pkgdown_llms("hoopR", (FIX / "hoopr_llms_excerpt.txt").read_text(encoding="utf-8"), rows)
