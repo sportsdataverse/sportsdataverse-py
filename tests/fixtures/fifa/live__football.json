@@ -1,0 +1,1268 @@
+{
+  "ContinuationToken": "W3sidG9rZW4iOiIrUklEOn5XYWs3QU1jbWpjYjVRRUVBQUFBQUFBPT0jUlQ6MSNUUkM6NTAjSVNWOjIjSUVPOjY1NTY3I1FDRjo4IiwicmFuZ2UiOnsibWluIjoiIiwibWF4IjoiRkYifX1d",
+  "ContinuationHash": "1185742878",
+  "Results": [
+    {
+      "IdMatch": "23axvx0d1pik1gdlqmvpi000k",
+      "IdStage": "8km5lcwj1b22onr594sv9u7f8",
+      "IdGroup": null,
+      "IdSeason": "8v84l9nq3d5t0j4gb781i3llg",
+      "CoverageLevel": 13,
+      "IdCompetition": "2000000128",
+      "CompetitionName": [
+        {
+          "Locale": "en-gb",
+          "Description": "Liga Profesional Argentina"
+        }
+      ],
+      "SeasonName": [
+        {
+          "Locale": "en-gb",
+          "Description": "Liga Profesional Argentina 2026"
+        }
+      ],
+      "SeasonShortName": [],
+      "Stadium": {
+        "IdStadium": null,
+        "Name": [
+          {
+            "Locale": "en-gb",
+            "Description": "Estadio Florencio Solá"
+          }
+        ],
+        "Capacity": 34901,
+        "WebAddress": null,
+        "Built": "1940-01-01T00:00:00Z",
+        "Roof": false,
+        "Turf": null,
+        "IdCity": "400241645",
+        "CityName": [
+          {
+            "Locale": "en-GB",
+            "Description": "Lomas de Zamora, Provincia de Buenos Aires"
+          }
+        ],
+        "IdCountry": "ARG",
+        "PostalCode": null,
+        "Street": "Calle General Arenales y Peña",
+        "Email": null,
+        "Fax": null,
+        "Phone": null,
+        "AffiliationCountry": null,
+        "AffiliationRegion": null,
+        "Latitude": -34.750877816,
+        "Longitude": -58.387538195,
+        "Length": null,
+        "Width": null,
+        "Properties": {},
+        "IsUpdateable": null
+      },
+      "ResultType": 1,
+      "MatchDay": "11",
+      "MatchNumber": null,
+      "HomeTeamPenaltyScore": null,
+      "AwayTeamPenaltyScore": null,
+      "AggregateHomeTeamScore": null,
+      "AggregateAwayTeamScore": null,
+      "Weather": null,
+      "Attendance": null,
+      "Date": "2026-10-06T00:15:00Z",
+      "LocalDate": "2026-10-05T21:15:00Z",
+      "MatchTime": "0'",
+      "SecondHalfTime": null,
+      "FirstHalfTime": null,
+      "FirstHalfExtraTime": 4,
+      "SecondHalfExtraTime": 3,
+      "Winner": null,
+      "Period": 10,
+      "HomeTeam": {
+        "Score": 1,
+        "Side": null,
+        "IdTeam": "1885122",
+        "PictureUrl": "https://api.fifa.com/api/v3/picture/teams-{format}-{size}/1885122",
+        "IdCountry": "ARG",
+        "TeamType": 0,
+        "AgeType": 7,
+        "Tactics": "4-2-3-1",
+        "TeamName": [
+          {
+            "Locale": "en-GB",
+            "Description": "Banfield"
+          }
+        ],
+        "Abbreviation": "BAN",
+        "Coaches": [
+          {
+            "IdCoach": "44704",
+            "IdCountry": "ARG",
+            "PictureUrl": null,
+            "Name": [
+              {
+                "Locale": "en-gb",
+                "Description": "Pedro Troglio"
+              }
+            ],
+            "Alias": [
+              {
+                "Locale": "en-gb",
+                "Description": "P. Troglio"
+              }
+            ],
+            "Role": 0,
+            "SpecialStatus": null
+          }
+        ],
+        "Players": [
+          {
+            "IdPlayer": "2gi1aiy07z8sn6tlin49l2p5h",
+            "IdTeam": "1885122",
+            "ShirtNumber": 50,
+            "Status": 1,
+            "SpecialStatus": null,
+            "Captain": true,
+            "PlayerName": [
+              {
+                "Locale": "en-gb",
+                "Description": "Diego Rodríguez"
+              }
+            ],
+            "ShortName": [
+              {
+                "Locale": "en-gb",
+                "Description": "D. Rodríguez"
+              }
+            ],
+            "Position": 0,
+            "PlayerPicture": null,
+            "FieldStatus": 1,
+            "LineupX": null,
+            "LineupY": null
+          },
+          {
+            "IdPlayer": "ajr0i5cx8zoivpqjr0b1cw5xw",
+            "IdTeam": "1885122",
+            "ShirtNumber": 2,
+            "Status": 1,
+            "SpecialStatus": null,
+            "Captain": false,
+            "PlayerName": [
+              {
+                "Locale": "en-gb",
+                "Description": "Santiago Daniele"
+              }
+            ],
+            "ShortName": [
+              {
+                "Locale": "en-gb",
+                "Description": "S. Daniele"
+              }
+            ],
+            "Position": 1,
+            "PlayerPicture": null,
+            "FieldStatus": 1,
+            "LineupX": null,
+            "LineupY": null
+          },
+          {
+            "IdPlayer": "crl0tn4v7wtlgwe6s6byi7f56",
+            "IdTeam": "1885122",
+            "ShirtNumber": 4,
+            "Status": 1,
+            "SpecialStatus": null,
+            "Captain": false,
+            "PlayerName": [
+              {
+                "Locale": "en-gb",
+                "Description": "Juan Luis Alfaro"
+              }
+            ],
+            "ShortName": [
+              {
+                "Locale": "en-gb",
+                "Description": "J. Alfaro"
+              }
+            ],
+            "Position": 1,
+            "PlayerPicture": null,
+            "FieldStatus": 1,
+            "LineupX": null,
+            "LineupY": null
+          }
+        ],
+        "Bookings": [
+          {
+            "Card": 1,
+            "Period": 3,
+            "IdEvent": null,
+            "EventNumber": null,
+            "IdPlayer": "el01ls3ynd30xayaky5dwx0r8",
+            "IdCoach": null,
+            "IdStaff": null,
+            "IdTeam": "1885122",
+            "Minute": "12'",
+            "Reason": "Foul"
+          },
+          {
+            "Card": 1,
+            "Period": 5,
+            "IdEvent": null,
+            "EventNumber": null,
+            "IdPlayer": "bhwmkjb4mzrue5ffcnlznruhg",
+            "IdCoach": null,
+            "IdStaff": null,
+            "IdTeam": "1885122",
+            "Minute": "83'",
+            "Reason": "Foul"
+          }
+        ],
+        "Goals": [
+          {
+            "Type": 2,
+            "IdPlayer": "el01ls3ynd30xayaky5dwx0r8",
+            "Minute": "41'",
+            "IdAssistPlayer": "fkvjvs4o3rzpskz1yi8mxz4k",
+            "Period": 3,
+            "IdGoal": null,
+            "IdTeam": "1885122"
+          }
+        ],
+        "Substitutions": [
+          {
+            "IdEvent": null,
+            "Period": 3,
+            "Reason": 1,
+            "SubstitutePosition": 3,
+            "IdPlayerOff": "a8cfjow8uojkbs0vkts0jxgr8",
+            "IdPlayerOn": "48x5uv5hbrhu5vf0uhkl8axw4",
+            "PlayerOffName": [
+              {
+                "Locale": "en-gb",
+                "Description": "Lautaro Gómez"
+              }
+            ],
+            "PlayerOnName": [
+              {
+                "Locale": "en-gb",
+                "Description": "Lisandro Piñero"
+              }
+            ],
+            "Minute": "24'",
+            "IdTeam": "1885122"
+          },
+          {
+            "IdEvent": null,
+            "Period": 5,
+            "Reason": 1,
+            "SubstitutePosition": 2,
+            "IdPlayerOff": "fkvjvs4o3rzpskz1yi8mxz4k",
+            "IdPlayerOn": "73zs770cpqtddk3t8a08qxfdg",
+            "PlayerOffName": [
+              {
+                "Locale": "en-gb",
+                "Description": "David Zalazar"
+              }
+            ],
+            "PlayerOnName": [
+              {
+                "Locale": "en-gb",
+                "Description": "Lautaro Villegas"
+              }
+            ],
+            "Minute": "68'",
+            "IdTeam": "1885122"
+          },
+          {
+            "IdEvent": null,
+            "Period": 5,
+            "Reason": 1,
+            "SubstitutePosition": 2,
+            "IdPlayerOff": "el01ls3ynd30xayaky5dwx0r8",
+            "IdPlayerOn": "ioyzvuv3nt688a2gawdayind",
+            "PlayerOffName": [
+              {
+                "Locale": "en-gb",
+                "Description": "Tomás Adoryán"
+              }
+            ],
+            "PlayerOnName": [
+              {
+                "Locale": "en-gb",
+                "Description": "Nacho Pais"
+              }
+            ],
+            "Minute": "83'",
+            "IdTeam": "1885122"
+          }
+        ],
+        "Staffs": [],
+        "FootballType": 0,
+        "Gender": 1,
+        "IdAssociation": "ARG",
+        "ShortClubName": "Banfield"
+      },
+      "AwayTeam": {
+        "Score": 1,
+        "Side": null,
+        "IdTeam": "205",
+        "PictureUrl": "https://api.fifa.com/api/v3/picture/teams-{format}-{size}/205",
+        "IdCountry": "ARG",
+        "TeamType": 0,
+        "AgeType": 7,
+        "Tactics": "4-2-3-1",
+        "TeamName": [
+          {
+            "Locale": "en-gb",
+            "Description": "Rosario Central"
+          }
+        ],
+        "Abbreviation": "ROS",
+        "Coaches": [
+          {
+            "IdCoach": "408154",
+            "IdCountry": "ARG",
+            "PictureUrl": null,
+            "Name": [
+              {
+                "Locale": "en-gb",
+                "Description": "Pablo Manusovich"
+              }
+            ],
+            "Alias": [
+              {
+                "Locale": "en-gb",
+                "Description": "P. Manusovich"
+              }
+            ],
+            "Role": 1,
+            "SpecialStatus": null
+          },
+          {
+            "IdCoach": "408139",
+            "IdCountry": "ARG",
+            "PictureUrl": null,
+            "Name": [
+              {
+                "Locale": "en-GB",
+                "Description": "Jorge Francisco Almirón Quintana"
+              }
+            ],
+            "Alias": [
+              {
+                "Locale": "en-gb",
+                "Description": "J. Almirón"
+              }
+            ],
+            "Role": 0,
+            "SpecialStatus": null
+          },
+          {
+            "IdCoach": "408160",
+            "IdCountry": "ARG",
+            "PictureUrl": null,
+            "Name": [
+              {
+                "Locale": "en-gb",
+                "Description": "Pablo Javier Ricchetti"
+              }
+            ],
+            "Alias": [
+              {
+                "Locale": "en-gb",
+                "Description": "P. Ricchetti"
+              }
+            ],
+            "Role": 1,
+            "SpecialStatus": null
+          }
+        ],
+        "Players": [
+          {
+            "IdPlayer": "430637",
+            "IdTeam": "205",
+            "ShirtNumber": 23,
+            "Status": 1,
+            "SpecialStatus": null,
+            "Captain": false,
+            "PlayerName": [
+              {
+                "Locale": "en-GB",
+                "Description": "Jeremias LEDESMA"
+              }
+            ],
+            "ShortName": [
+              {
+                "Locale": "en-GB",
+                "Description": "LEDESMA"
+              }
+            ],
+            "Position": 0,
+            "PlayerPicture": null,
+            "FieldStatus": 1,
+            "LineupX": null,
+            "LineupY": null
+          },
+          {
+            "IdPlayer": "429543",
+            "IdTeam": "205",
+            "ShirtNumber": 13,
+            "Status": 1,
+            "SpecialStatus": null,
+            "Captain": false,
+            "PlayerName": [
+              {
+                "Locale": "en-GB",
+                "Description": "Gaston AVILA"
+              }
+            ],
+            "ShortName": [
+              {
+                "Locale": "en-gb",
+                "Description": "G. Ávila"
+              }
+            ],
+            "Position": 1,
+            "PlayerPicture": null,
+            "FieldStatus": 1,
+            "LineupX": null,
+            "LineupY": null
+          },
+          {
+            "IdPlayer": "4uudnmhj71hnml7lne4z8fywa",
+            "IdTeam": "205",
+            "ShirtNumber": 32,
+            "Status": 1,
+            "SpecialStatus": null,
+            "Captain": false,
+            "PlayerName": [
+              {
+                "Locale": "en-gb",
+                "Description": "Emanuel Coronel"
+              }
+            ],
+            "ShortName": [
+              {
+                "Locale": "en-gb",
+                "Description": "E. Coronel"
+              }
+            ],
+            "Position": 1,
+            "PlayerPicture": null,
+            "FieldStatus": 2,
+            "LineupX": null,
+            "LineupY": null
+          }
+        ],
+        "Bookings": [
+          {
+            "Card": 1,
+            "Period": 3,
+            "IdEvent": null,
+            "EventNumber": null,
+            "IdPlayer": "430627",
+            "IdCoach": null,
+            "IdStaff": null,
+            "IdTeam": "205",
+            "Minute": "30'",
+            "Reason": "Foul"
+          },
+          {
+            "Card": 1,
+            "Period": 5,
+            "IdEvent": null,
+            "EventNumber": null,
+            "IdPlayer": "4uudnmhj71hnml7lne4z8fywa",
+            "IdCoach": null,
+            "IdStaff": null,
+            "IdTeam": "205",
+            "Minute": "76'",
+            "Reason": "Foul"
+          }
+        ],
+        "Goals": [
+          {
+            "Type": 2,
+            "IdPlayer": "3k4gxbukg04j5i6szvwvmtyj8",
+            "Minute": "80'",
+            "IdAssistPlayer": "esejxbb5upv0nofhq1qfnex62",
+            "Period": 5,
+            "IdGoal": null,
+            "IdTeam": "205"
+          }
+        ],
+        "Substitutions": [
+          {
+            "IdEvent": null,
+            "Period": 3,
+            "Reason": 1,
+            "SubstitutePosition": 3,
+            "IdPlayerOff": "7zk0lfnwhtccx7nsmfkyx1qms",
+            "IdPlayerOn": "bcqm1336567dby1unnafdx638",
+            "PlayerOffName": [
+              {
+                "Locale": "en-gb",
+                "Description": "Gaspar Duarte"
+              }
+            ],
+            "PlayerOnName": [
+              {
+                "Locale": "en-gb",
+                "Description": "Julián Fernández"
+              }
+            ],
+            "Minute": "17'",
+            "IdTeam": "205"
+          },
+          {
+            "IdEvent": null,
+            "Period": 5,
+            "Reason": 2,
+            "SubstitutePosition": 3,
+            "IdPlayerOff": "bcqm1336567dby1unnafdx638",
+            "IdPlayerOn": "7x76zuu0av3rycuhlnn2ldcl",
+            "PlayerOffName": [
+              {
+                "Locale": "en-gb",
+                "Description": "Julián Fernández"
+              }
+            ],
+            "PlayerOnName": [
+              {
+                "Locale": "en-gb",
+                "Description": "Marco Ruben"
+              }
+            ],
+            "Minute": "82'",
+            "IdTeam": "205"
+          },
+          {
+            "IdEvent": null,
+            "Period": 5,
+            "Reason": 2,
+            "SubstitutePosition": 1,
+            "IdPlayerOff": "4uudnmhj71hnml7lne4z8fywa",
+            "IdPlayerOn": "7wuc767e5zcc0x0hkkorc0lqs",
+            "PlayerOffName": [
+              {
+                "Locale": "en-gb",
+                "Description": "Emanuel Coronel"
+              }
+            ],
+            "PlayerOnName": [
+              {
+                "Locale": "en-gb",
+                "Description": "Elías Verón"
+              }
+            ],
+            "Minute": "82'",
+            "IdTeam": "205"
+          }
+        ],
+        "Staffs": [],
+        "FootballType": 0,
+        "Gender": 1,
+        "IdAssociation": "ARG",
+        "ShortClubName": "Rosario"
+      },
+      "BallPossession": {
+        "Intervals": [],
+        "LastX": [],
+        "OverallHome": 34.9,
+        "OverallAway": 65.1
+      },
+      "TerritorialPossesion": null,
+      "TerritorialThirdPossesion": null,
+      "Officials": [
+        {
+          "IdCountry": "ARG",
+          "OfficialId": "3zkitdeyhb28ljinxh80l5j2t",
+          "NameShort": [
+            {
+              "Locale": "en-gb",
+              "Description": "L. Rey Hilfer"
+            }
+          ],
+          "Name": [
+            {
+              "Locale": "en-gb",
+              "Description": "Leandro Rey Hilfer"
+            }
+          ],
+          "OfficialType": 1,
+          "TypeLocalized": [
+            {
+              "Locale": "en-GB",
+              "Description": "Referee"
+            }
+          ]
+        },
+        {
+          "IdCountry": "ARG",
+          "OfficialId": "bfx8abiri6rm590iazbr2knah",
+          "NameShort": [
+            {
+              "Locale": "en-gb",
+              "Description": "W. Ferreyra"
+            }
+          ],
+          "Name": [
+            {
+              "Locale": "en-gb",
+              "Description": "Walter Ferreyra"
+            }
+          ],
+          "OfficialType": 2,
+          "TypeLocalized": [
+            {
+              "Locale": "en-GB",
+              "Description": "Assistant Referee 1"
+            }
+          ]
+        },
+        {
+          "IdCountry": "ARG",
+          "OfficialId": "e3c61iogubhdq8qzl7hurdpn8",
+          "NameShort": [
+            {
+              "Locale": "en-gb",
+              "Description": "L. Ripoli"
+            }
+          ],
+          "Name": [
+            {
+              "Locale": "en-gb",
+              "Description": "Lucas Ripoli"
+            }
+          ],
+          "OfficialType": 3,
+          "TypeLocalized": [
+            {
+              "Locale": "en-GB",
+              "Description": "Assistant Referee 2"
+            }
+          ]
+        }
+      ],
+      "MatchStatus": 0,
+      "GroupName": [],
+      "StageName": [
+        {
+          "Locale": "en-gb",
+          "Description": "Clausura"
+        }
+      ],
+      "OfficialityStatus": 2,
+      "TimeDefined": true,
+      "Properties": {
+        "IdStatsPerform": "23axvx0d1pik1gdlqmvpi000k"
+      },
+      "IsUpdateable": null
+    },
+    {
+      "IdMatch": "bcx8ol0xzm31w5em65rixyhhw",
+      "IdStage": "7qcaa39x1bmdu2m7apl0hak9g",
+      "IdGroup": null,
+      "IdSeason": "7pt8trpd4rbju1v568nuskdn8",
+      "CoverageLevel": 13,
+      "IdCompetition": "5zr0b05eyx25km7z1k03ca9jx",
+      "CompetitionName": [
+        {
+          "Locale": "en-gb",
+          "Description": "Serie B"
+        }
+      ],
+      "SeasonName": [
+        {
+          "Locale": "en-gb",
+          "Description": "Serie B 2026"
+        }
+      ],
+      "SeasonShortName": [],
+      "Stadium": {
+        "IdStadium": null,
+        "Name": [
+          {
+            "Locale": "en-gb",
+            "Description": "Estádio de Hailé Pinheiro"
+          }
+        ],
+        "Capacity": 14525,
+        "WebAddress": null,
+        "Built": "1995-01-01T00:00:00Z",
+        "Roof": false,
+        "Turf": null,
+        "IdCity": "400249254",
+        "CityName": [
+          {
+            "Locale": "en-GB",
+            "Description": "Goiânia"
+          }
+        ],
+        "IdCountry": "BRA",
+        "PostalCode": null,
+        "Street": "Avenida Edmundo Pinheiro de Abreu 721, Setor Bela Vista",
+        "Email": null,
+        "Fax": null,
+        "Phone": null,
+        "AffiliationCountry": null,
+        "AffiliationRegion": null,
+        "Latitude": -16.711209057,
+        "Longitude": -49.261252284,
+        "Length": null,
+        "Width": null,
+        "Properties": {},
+        "IsUpdateable": null
+      },
+      "ResultType": 1,
+      "MatchDay": "32",
+      "MatchNumber": null,
+      "HomeTeamPenaltyScore": null,
+      "AwayTeamPenaltyScore": null,
+      "AggregateHomeTeamScore": null,
+      "AggregateAwayTeamScore": null,
+      "Weather": null,
+      "Attendance": null,
+      "Date": "2026-10-06T23:30:00Z",
+      "LocalDate": "2026-10-06T20:30:00Z",
+      "MatchTime": "0'",
+      "SecondHalfTime": null,
+      "FirstHalfTime": null,
+      "FirstHalfExtraTime": null,
+      "SecondHalfExtraTime": null,
+      "Winner": null,
+      "Period": 2,
+      "HomeTeam": {
+        "Score": null,
+        "Side": null,
+        "IdTeam": "242",
+        "PictureUrl": "https://api.fifa.com/api/v3/picture/teams-{format}-{size}/242",
+        "IdCountry": "BRA",
+        "TeamType": 0,
+        "AgeType": 7,
+        "Tactics": null,
+        "TeamName": [
+          {
+            "Locale": "en-GB",
+            "Description": "Goiás"
+          }
+        ],
+        "Abbreviation": "GOI",
+        "Coaches": [
+          {
+            "IdCoach": "178357",
+            "IdCountry": "BRA",
+            "PictureUrl": null,
+            "Name": [
+              {
+                "Locale": "en-gb",
+                "Description": "Mozart"
+              }
+            ],
+            "Alias": [
+              {
+                "Locale": "en-gb",
+                "Description": "Mozart"
+              }
+            ],
+            "Role": 0,
+            "SpecialStatus": null
+          }
+        ],
+        "Players": [],
+        "Bookings": [],
+        "Goals": [],
+        "Substitutions": [],
+        "Staffs": [],
+        "FootballType": 0,
+        "Gender": 1,
+        "IdAssociation": "BRA",
+        "ShortClubName": "Goiás"
+      },
+      "AwayTeam": {
+        "Score": null,
+        "Side": null,
+        "IdTeam": "9snrf8lxwl8ih0ko7xaz88xrd",
+        "PictureUrl": null,
+        "IdCountry": "BRA",
+        "TeamType": 0,
+        "AgeType": 7,
+        "Tactics": null,
+        "TeamName": [
+          {
+            "Locale": "en-gb",
+            "Description": "Athletic Club MG"
+          }
+        ],
+        "Abbreviation": "ATH",
+        "Coaches": [
+          {
+            "IdCoach": "3245",
+            "IdCountry": "BRA",
+            "PictureUrl": null,
+            "Name": [
+              {
+                "Locale": "en-gb",
+                "Description": "Alex"
+              }
+            ],
+            "Alias": [
+              {
+                "Locale": "en-gb",
+                "Description": "Alex de Souza"
+              }
+            ],
+            "Role": 0,
+            "SpecialStatus": null
+          },
+          {
+            "IdCoach": "6l2ug8p7clvrbz6qjffgk5zbo",
+            "IdCountry": "BRA",
+            "PictureUrl": null,
+            "Name": [
+              {
+                "Locale": "en-gb",
+                "Description": "João Paulo de Araújo Cavalcanti"
+              }
+            ],
+            "Alias": [
+              {
+                "Locale": "en-gb",
+                "Description": "João Paulo Cavalcanti"
+              }
+            ],
+            "Role": 1,
+            "SpecialStatus": null
+          },
+          {
+            "IdCoach": "7wf6e9vqj3vtam918ymnpedt6",
+            "IdCountry": "BRA",
+            "PictureUrl": null,
+            "Name": [
+              {
+                "Locale": "en-gb",
+                "Description": "Rodrigo Rojas"
+              }
+            ],
+            "Alias": [
+              {
+                "Locale": "en-gb",
+                "Description": "Rodrigo Rojas"
+              }
+            ],
+            "Role": 1,
+            "SpecialStatus": null
+          }
+        ],
+        "Players": [],
+        "Bookings": [],
+        "Goals": [],
+        "Substitutions": [],
+        "Staffs": [],
+        "FootballType": 0,
+        "Gender": 1,
+        "IdAssociation": "BRA",
+        "ShortClubName": "Athletic"
+      },
+      "BallPossession": null,
+      "TerritorialPossesion": null,
+      "TerritorialThirdPossesion": null,
+      "Officials": [
+        {
+          "IdCountry": "BRA",
+          "OfficialId": "424922",
+          "NameShort": [
+            {
+              "Locale": "en-gb",
+              "Description": "Flávio Rodrigues de Souza"
+            }
+          ],
+          "Name": [
+            {
+              "Locale": "en-GB",
+              "Description": "Flavio Rodrigues De Souza"
+            }
+          ],
+          "OfficialType": 1,
+          "TypeLocalized": [
+            {
+              "Locale": "en-GB",
+              "Description": "Referee"
+            }
+          ]
+        },
+        {
+          "IdCountry": "BRA",
+          "OfficialId": "7m63mr0e08k1moxbsqgw7pz2t",
+          "NameShort": [
+            {
+              "Locale": "en-gb",
+              "Description": "Miguel Cataneo Ribeiro Da Costa"
+            }
+          ],
+          "Name": [
+            {
+              "Locale": "en-gb",
+              "Description": "Miguel Cataneo Ribeiro Da Costa"
+            }
+          ],
+          "OfficialType": 2,
+          "TypeLocalized": [
+            {
+              "Locale": "en-GB",
+              "Description": "Assistant Referee 1"
+            }
+          ]
+        },
+        {
+          "IdCountry": "BRA",
+          "OfficialId": "5iza328rurlutp9v3euv30x04",
+          "NameShort": [
+            {
+              "Locale": "en-gb",
+              "Description": "Deborah Beatriz Ferreira da Silva"
+            }
+          ],
+          "Name": [
+            {
+              "Locale": "en-gb",
+              "Description": "Deborah Beatriz Ferreira da Silva"
+            }
+          ],
+          "OfficialType": 3,
+          "TypeLocalized": [
+            {
+              "Locale": "en-GB",
+              "Description": "Assistant Referee 2"
+            }
+          ]
+        }
+      ],
+      "MatchStatus": 1,
+      "GroupName": [],
+      "StageName": [
+        {
+          "Locale": "en-gb",
+          "Description": "Regular Season"
+        }
+      ],
+      "OfficialityStatus": 0,
+      "TimeDefined": true,
+      "Properties": {
+        "IdStatsPerform": "bcx8ol0xzm31w5em65rixyhhw"
+      },
+      "IsUpdateable": null
+    },
+    {
+      "IdMatch": "baj8zj1r8hwweas7kz5yfdc7o",
+      "IdStage": "7qcaa39x1bmdu2m7apl0hak9g",
+      "IdGroup": null,
+      "IdSeason": "7pt8trpd4rbju1v568nuskdn8",
+      "CoverageLevel": 13,
+      "IdCompetition": "5zr0b05eyx25km7z1k03ca9jx",
+      "CompetitionName": [
+        {
+          "Locale": "en-gb",
+          "Description": "Serie B"
+        }
+      ],
+      "SeasonName": [
+        {
+          "Locale": "en-gb",
+          "Description": "Serie B 2026"
+        }
+      ],
+      "SeasonShortName": [],
+      "Stadium": {
+        "IdStadium": null,
+        "Name": [
+          {
+            "Locale": "en-gb",
+            "Description": "Estádio Adelmar da Costa Carvalho"
+          }
+        ],
+        "Capacity": 32983,
+        "WebAddress": null,
+        "Built": "1937-01-01T00:00:00Z",
+        "Roof": false,
+        "Turf": null,
+        "IdCity": "400221552",
+        "CityName": [
+          {
+            "Locale": "en-GB",
+            "Description": "RECIFE"
+          }
+        ],
+        "IdCountry": "BRA",
+        "PostalCode": null,
+        "Street": "Avenida Sport Clube do Recife 56a, Bairro Ilha do Retiro",
+        "Email": null,
+        "Fax": null,
+        "Phone": null,
+        "AffiliationCountry": null,
+        "AffiliationRegion": null,
+        "Latitude": -8.062995419,
+        "Longitude": -34.903022647,
+        "Length": null,
+        "Width": null,
+        "Properties": {},
+        "IsUpdateable": null
+      },
+      "ResultType": 1,
+      "MatchDay": "32",
+      "MatchNumber": null,
+      "HomeTeamPenaltyScore": null,
+      "AwayTeamPenaltyScore": null,
+      "AggregateHomeTeamScore": null,
+      "AggregateAwayTeamScore": null,
+      "Weather": null,
+      "Attendance": null,
+      "Date": "2026-10-06T22:30:00Z",
+      "LocalDate": "2026-10-06T19:30:00Z",
+      "MatchTime": "0'",
+      "SecondHalfTime": null,
+      "FirstHalfTime": null,
+      "FirstHalfExtraTime": null,
+      "SecondHalfExtraTime": null,
+      "Winner": null,
+      "Period": 2,
+      "HomeTeam": {
+        "Score": null,
+        "Side": null,
+        "IdTeam": "2147482124",
+        "PictureUrl": "https://api.fifa.com/api/v3/picture/teams-{format}-{size}/2147482124",
+        "IdCountry": "BRA",
+        "TeamType": 0,
+        "AgeType": 7,
+        "Tactics": null,
+        "TeamName": [
+          {
+            "Locale": "en-GB",
+            "Description": "Sport"
+          }
+        ],
+        "Abbreviation": "SCR",
+        "Coaches": [
+          {
+            "IdCoach": "5qx8ldvgtvfc87so3ehhzu3md",
+            "IdCountry": "BRA",
+            "PictureUrl": null,
+            "Name": [
+              {
+                "Locale": "en-gb",
+                "Description": "Alexandre Oliveira"
+              }
+            ],
+            "Alias": [
+              {
+                "Locale": "en-gb",
+                "Description": "Alexandre Oliveira"
+              }
+            ],
+            "Role": 1,
+            "SpecialStatus": null
+          },
+          {
+            "IdCoach": "euxn51ce057acv3q3ia8c197t",
+            "IdCountry": "ARG",
+            "PictureUrl": null,
+            "Name": [
+              {
+                "Locale": "en-gb",
+                "Description": "Mariano Soso"
+              }
+            ],
+            "Alias": [
+              {
+                "Locale": "en-gb",
+                "Description": "M. Soso"
+              }
+            ],
+            "Role": 0,
+            "SpecialStatus": null
+          }
+        ],
+        "Players": [],
+        "Bookings": [],
+        "Goals": [],
+        "Substitutions": [],
+        "Staffs": [],
+        "FootballType": 0,
+        "Gender": 1,
+        "IdAssociation": "BRA",
+        "ShortClubName": "Sport"
+      },
+      "AwayTeam": {
+        "Score": null,
+        "Side": null,
+        "IdTeam": "82ng59yij7r96hwr24uzxibq4",
+        "PictureUrl": null,
+        "IdCountry": "BRA",
+        "TeamType": 0,
+        "AgeType": 7,
+        "Tactics": null,
+        "TeamName": [
+          {
+            "Locale": "en-gb",
+            "Description": "São Bernardo"
+          }
+        ],
+        "Abbreviation": "SBR",
+        "Coaches": [
+          {
+            "IdCoach": "1us3wlxs3r0u46eq4n7r9c06h",
+            "IdCountry": "BRA",
+            "PictureUrl": null,
+            "Name": [
+              {
+                "Locale": "en-gb",
+                "Description": "Ricardo Catalá"
+              }
+            ],
+            "Alias": [
+              {
+                "Locale": "en-gb",
+                "Description": "Ricardo Catalá"
+              }
+            ],
+            "Role": 0,
+            "SpecialStatus": null
+          },
+          {
+            "IdCoach": "8xxiz0rnkkfiihxuxehs8edxw",
+            "IdCountry": "BRA",
+            "PictureUrl": null,
+            "Name": [
+              {
+                "Locale": "en-gb",
+                "Description": "Thiago"
+              }
+            ],
+            "Alias": [
+              {
+                "Locale": "en-gb",
+                "Description": "Thiago"
+              }
+            ],
+            "Role": 1,
+            "SpecialStatus": null
+          },
+          {
+            "IdCoach": "g05cdrbjt2b6xrk1aaogvd91",
+            "IdCountry": "BRA",
+            "PictureUrl": null,
+            "Name": [
+              {
+                "Locale": "en-gb",
+                "Description": "Vinícius Bergantin"
+              }
+            ],
+            "Alias": [
+              {
+                "Locale": "en-gb",
+                "Description": "Vinícius Bergantin"
+              }
+            ],
+            "Role": 0,
+            "SpecialStatus": null
+          }
+        ],
+        "Players": [],
+        "Bookings": [],
+        "Goals": [],
+        "Substitutions": [],
+        "Staffs": [],
+        "FootballType": 0,
+        "Gender": 1,
+        "IdAssociation": "BRA",
+        "ShortClubName": "São Bernardo"
+      },
+      "BallPossession": null,
+      "TerritorialPossesion": null,
+      "TerritorialThirdPossesion": null,
+      "Officials": [
+        {
+          "IdCountry": "BRA",
+          "OfficialId": "aqny948f4qlekgrpe5p1v6ns9",
+          "NameShort": [
+            {
+              "Locale": "en-gb",
+              "Description": "Raimundo Rodrigues de Oliveira Junior"
+            }
+          ],
+          "Name": [
+            {
+              "Locale": "en-gb",
+              "Description": "Raimundo Rodrigues de Oliveira Junior"
+            }
+          ],
+          "OfficialType": 1,
+          "TypeLocalized": [
+            {
+              "Locale": "en-GB",
+              "Description": "Referee"
+            }
+          ]
+        },
+        {
+          "IdCountry": "BRA",
+          "OfficialId": "4s4ejpgm27pdaut746jvlru5m",
+          "NameShort": [
+            {
+              "Locale": "en-gb",
+              "Description": "Schumacher Marques Gomes"
+            }
+          ],
+          "Name": [
+            {
+              "Locale": "en-gb",
+              "Description": "Schumacher Marques Gomes"
+            }
+          ],
+          "OfficialType": 2,
+          "TypeLocalized": [
+            {
+              "Locale": "en-GB",
+              "Description": "Assistant Referee 1"
+            }
+          ]
+        },
+        {
+          "IdCountry": "BRA",
+          "OfficialId": "bku9j33xavg938uo70cgibrah",
+          "NameShort": [
+            {
+              "Locale": "en-gb",
+              "Description": "Elson Araujo da Silva"
+            }
+          ],
+          "Name": [
+            {
+              "Locale": "en-gb",
+              "Description": "Elson Araujo da Silva"
+            }
+          ],
+          "OfficialType": 3,
+          "TypeLocalized": [
+            {
+              "Locale": "en-GB",
+              "Description": "Assistant Referee 2"
+            }
+          ]
+        }
+      ],
+      "MatchStatus": 1,
+      "GroupName": [],
+      "StageName": [
+        {
+          "Locale": "en-gb",
+          "Description": "Regular Season"
+        }
+      ],
+      "OfficialityStatus": 0,
+      "TimeDefined": true,
+      "Properties": {
+        "IdStatsPerform": "baj8zj1r8hwweas7kz5yfdc7o"
+      },
+      "IsUpdateable": null
+    }
+  ]
+}

@@ -1,0 +1,84 @@
+{
+  "ContinuationToken": "3",
+  "ContinuationHash": "3",
+  "Results": [
+    {
+      "IdCompetition": "2000000000",
+      "Name": [
+        {
+          "Locale": "en-gb",
+          "Description": "Premier League"
+        }
+      ],
+      "IdConfederation": [
+        "UEFA"
+      ],
+      "IdMemberAssociation": [
+        "ENG"
+      ],
+      "IdOwner": "UEFA",
+      "Gender": 1,
+      "FootballType": 0,
+      "TeamType": 0,
+      "CompetitionType": 2,
+      "AgeType": 7,
+      "DisplayOrder": 10,
+      "Properties": {
+        "IdStatsPerform": "2kwbbcootiqqgmrzs6o5inle5"
+      },
+      "IsUpdateable": null
+    },
+    {
+      "IdCompetition": "2000000030",
+      "Name": [
+        {
+          "Locale": "en-gb",
+          "Description": "Ekstraklasa"
+        }
+      ],
+      "IdConfederation": [
+        "UEFA"
+      ],
+      "IdMemberAssociation": [
+        "POL"
+      ],
+      "IdOwner": "UEFA",
+      "Gender": 1,
+      "FootballType": 0,
+      "TeamType": 0,
+      "CompetitionType": 2,
+      "AgeType": 7,
+      "DisplayOrder": 10,
+      "Properties": {
+        "IdStatsPerform": "7hl0svs2hg225i2zud0g3xzp2"
+      },
+      "IsUpdateable": null
+    },
+    {
+      "IdCompetition": "2000000078",
+      "Name": [
+        {
+          "Locale": "en-gb",
+          "Description": "Serie A"
+        }
+      ],
+      "IdConfederation": [
+        "CONMEBOL"
+      ],
+      "IdMemberAssociation": [
+        "BRA"
+      ],
+      "IdOwner": "CONMEBOL",
+      "Gender": 1,
+      "FootballType": 0,
+      "TeamType": 0,
+      "CompetitionType": 2,
+      "AgeType": 7,
+      "DisplayOrder": 10,
+      "Properties": {
+        "IdStatsPerform": "scf9p4y91yjvqvg5jndxzhxj"
+      },
+      "IsUpdateable": null
+    }
+  ]
+}

@@ -1,0 +1,50 @@
+{
+  "ContinuationToken": "3",
+  "ContinuationHash": "3",
+  "Results": [
+    {
+      "IdSeason": "285023",
+      "Name": [
+        {
+          "Locale": "en-GB",
+          "Description": "FIFA World Cup 2026™"
+        }
+      ],
+      "ShortName": [],
+      "Abbreviation": "FWC 2026",
+      "IdMemberAssociation": [
+        "USA",
+        "CAN",
+        "MEX"
+      ],
+      "IdConfederation": [
+        "CONCACAF",
+        "AFC",
+        "OFC"
+      ],
+      "IdCompetition": "17",
+      "StartDate": "2026-06-11T19:00:00Z",
+      "EndDate": "2026-07-19T00:00:00Z",
+      "PictureUrl": "https://api.fifa.com/api/v3/picture/tournaments-{format}-{size}/285023",
+      "MascotPictureUrl": "https://api.fifa.com/api/v3/picture/tournaments-mascot-{format}-{size}/285023",
+      "MatchBallPictureUrl": "https://api.fifa.com/api/v3/picture/tournaments-matchball-{format}-{size}/285023",
+      "HostTeams": [
+        {
+          "IdTeam": "43921"
+        },
+        {
+          "IdTeam": "43899"
+        },
+        {
+          "IdTeam": "43911"
+        }
+      ],
+      "SportType": 0,
+      "Properties": {
+        "IdIFES": "285023",
+        "Providers": "IHF"
+      },
+      "IsUpdateable": null
+    }
+  ]
+}
