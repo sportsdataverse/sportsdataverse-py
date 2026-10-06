@@ -1,0 +1,140 @@
+columns:
+- description: Person type code (J = player, E = coach, ...).
+  name: type
+  type: character
+- description: Person type name.
+  name: type_name
+  type: character
+- description: Whether the record is currently active.
+  name: active
+  type: logical
+- description: Start date (ISO 8601).
+  name: start_date
+  type: character
+- description: End date (ISO 8601).
+  name: end_date
+  type: character
+- description: Display order within the roster.
+  name: order
+  type: integer
+- description: Jersey number as displayed.
+  name: dorsal
+  type: character
+- description: Jersey number as stored by the engine.
+  name: dorsal_raw
+  type: character
+- description: Position code of the player (engine integer).
+  name: position
+  type: integer
+- description: Position name of the player.
+  name: position_name
+  type: character
+- description: Previous club of the person.
+  name: last_team
+  type: character
+- description: External (statistics-provider) identifier of the person (Utf8 join
+    key).
+  name: external_id
+  type: character
+- description: 'Person: euroLeague code of the entity (competition, season, club,
+    person or venue; Utf8 join key).'
+  name: person_code
+  type: character
+- description: 'Person: display name.'
+  name: person_name
+  type: character
+- description: 'Person: short display alias.'
+  name: person_alias
+  type: character
+- description: 'Person: short alias as stored by the engine.'
+  name: person_alias_raw
+  type: character
+- description: 'Person: given name as on the passport.'
+  name: person_passport_name
+  type: character
+- description: 'Person: surname as on the passport.'
+  name: person_passport_surname
+  type: character
+- description: 'Person: name printed on the jersey.'
+  name: person_jersey_name
+  type: character
+- description: 'Person: abbreviated display name.'
+  name: person_abbreviated_name
+  type: character
+- description: 'Person: ISO country code.'
+  name: person_country_code
+  type: character
+- description: 'Person: country name.'
+  name: person_country_name
+  type: character
+- description: 'Person: height in centimetres.'
+  name: person_height
+  type: integer
+- description: 'Person: weight in kilograms.'
+  name: person_weight
+  type: integer
+- description: 'Person: date of birth (ISO 8601).'
+  name: person_birth_date
+  type: character
+- description: 'Person: birth country: euroLeague code of the entity (competition,
+    season, club, person or venue; Utf8 join key).'
+  name: person_birth_country_code
+  type: character
+- description: 'Person: birth country: display name.'
+  name: person_birth_country_name
+  type: character
+- description: 'Person: twitter / X handle.'
+  name: person_twitter_account
+  type: character
+- description: 'Person: instagram handle.'
+  name: person_instagram_account
+  type: character
+- description: 'Person: facebook handle.'
+  name: person_facebook_account
+  type: character
+- description: 'Person: whether the person is a referee.'
+  name: person_is_referee
+  type: logical
+- description: 'Club: euroLeague code of the entity (competition, season, club, person
+    or venue; Utf8 join key).'
+  name: club_code
+  type: character
+- description: 'Club: display name.'
+  name: club_name
+  type: character
+- description: 'Club: abbreviated display name.'
+  name: club_abbreviated_name
+  type: character
+- description: 'Club: editorial (long-form) display name.'
+  name: club_editorial_name
+  type: character
+- description: 'Club: three-letter broadcast abbreviation of the club.'
+  name: club_tv_code
+  type: character
+- description: 'Club: whether the club is a placeholder rather than a real club.'
+  name: club_is_virtual
+  type: logical
+- description: 'Club: URL of the club crest image.'
+  name: club_images_crest
+  type: character
+- description: 'Season: display name.'
+  name: season_name
+  type: character
+- description: 'Season code: competition code + start year, e.g. E2025 for 2025-26
+    (Utf8 join key).'
+  name: season_code
+  type: character
+- description: 'Season: short display alias.'
+  name: season_alias
+  type: character
+- description: 'Season: competition code (E = EuroLeague, U = EuroCup; Utf8 join key).'
+  name: season_competition_code
+  type: character
+- description: 'Season: start year of the season.'
+  name: season_year
+  type: integer
+- description: 'Season: start date (ISO 8601).'
+  name: season_start_date
+  type: character
+kind: dataframe
+schema: people

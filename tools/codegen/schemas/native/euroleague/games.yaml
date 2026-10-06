@@ -1,0 +1,298 @@
+columns:
+- description: Provider identifier for the entity (Utf8 join key).
+  name: id
+  type: character
+- description: Season-qualified game identifier, e.g. E2025_1.
+  name: identifier
+  type: character
+- description: Game number within the season (1-based; Utf8 join key).
+  name: game_code
+  type: character
+- description: Round number within the season.
+  name: round
+  type: integer
+- description: Short alias of the round.
+  name: round_alias
+  type: character
+- description: Display name of the round.
+  name: round_name
+  type: character
+- description: Whether the game has been played.
+  name: played
+  type: logical
+- description: Scheduled tip-off (ISO 8601, venue local time).
+  name: date
+  type: character
+- description: Whether the game date is confirmed.
+  name: confirmed_date
+  type: logical
+- description: Whether the tip-off time is confirmed.
+  name: confirmed_hour
+  type: logical
+- description: UTC offset of the venue, in hours.
+  name: local_time_zone
+  type: integer
+- description: Scheduled tip-off in venue local time (ISO 8601).
+  name: local_date
+  type: character
+- description: Scheduled tip-off in UTC (ISO 8601).
+  name: utc_date
+  type: character
+- description: Attendance.
+  name: audience
+  type: integer
+- description: Whether the attendance figure is confirmed.
+  name: audience_confirmed
+  type: logical
+- description: Social-media hashtag or feed tag for the game.
+  name: social_feed
+  type: character
+- description: Engine operations code of the game.
+  name: operations_code
+  type: character
+- description: Fourth referee (null unless a fourth official is assigned).
+  name: referee4
+  type: character
+- description: Whether the game is played at a neutral venue.
+  name: is_neutral_venue
+  type: logical
+- description: Game status (scheduled, live, result).
+  name: game_status
+  type: character
+- description: 'Season: display name.'
+  name: season_name
+  type: character
+- description: 'Season code: competition code + start year, e.g. E2025 for 2025-26
+    (Utf8 join key).'
+  name: season_code
+  type: character
+- description: 'Season: short display alias.'
+  name: season_alias
+  type: character
+- description: 'Season: competition code (E = EuroLeague, U = EuroCup; Utf8 join key).'
+  name: season_competition_code
+  type: character
+- description: 'Season: start year of the season.'
+  name: season_year
+  type: integer
+- description: 'Season: start date (ISO 8601).'
+  name: season_start_date
+  type: character
+- description: 'Group: provider identifier for the entity (Utf8 join key).'
+  name: group_id
+  type: character
+- description: 'Group: display order within the roster.'
+  name: group_order
+  type: integer
+- description: 'Group: display name.'
+  name: group_name
+  type: character
+- description: 'Group: group name as stored by the engine.'
+  name: group_raw_name
+  type: character
+- description: Phase type code (RS = regular season, PO = playoffs, ...).
+  name: phase_type_code
+  type: character
+- description: 'Phase type: short display alias.'
+  name: phase_type_alias
+  type: character
+- description: 'Phase type: display name.'
+  name: phase_type_name
+  type: character
+- description: 'Phase type: whether the phase is played in groups.'
+  name: phase_type_is_group_phase
+  type: logical
+- description: 'Home side: club: euroLeague code of the entity (competition, season,
+    club, person or venue; Utf8 join key).'
+  name: local_club_code
+  type: character
+- description: 'Home side: club: display name.'
+  name: local_club_name
+  type: character
+- description: 'Home side: club: abbreviated display name.'
+  name: local_club_abbreviated_name
+  type: character
+- description: 'Home side: club: editorial (long-form) display name.'
+  name: local_club_editorial_name
+  type: character
+- description: 'Home side: club: three-letter broadcast abbreviation of the club.'
+  name: local_club_tv_code
+  type: character
+- description: 'Home side: club: whether the club is a placeholder rather than a real
+    club.'
+  name: local_club_is_virtual
+  type: logical
+- description: 'Home side: club: URL of the club crest image.'
+  name: local_club_images_crest
+  type: character
+- description: 'Home side: final score of the side.'
+  name: local_score
+  type: integer
+- description: 'Home side: score of the side as counted for the standings.'
+  name: local_standings_score
+  type: integer
+- description: 'Home side: quarter scores: points scored in the 1st quarter.'
+  name: local_partials_partials1
+  type: integer
+- description: 'Home side: quarter scores: points scored in the 2nd quarter.'
+  name: local_partials_partials2
+  type: integer
+- description: 'Home side: quarter scores: points scored in the 3rd quarter.'
+  name: local_partials_partials3
+  type: integer
+- description: 'Home side: quarter scores: points scored in the 4th quarter.'
+  name: local_partials_partials4
+  type: integer
+- description: 'Away side: club: euroLeague code of the entity (competition, season,
+    club, person or venue; Utf8 join key).'
+  name: road_club_code
+  type: character
+- description: 'Away side: club: display name.'
+  name: road_club_name
+  type: character
+- description: 'Away side: club: abbreviated display name.'
+  name: road_club_abbreviated_name
+  type: character
+- description: 'Away side: club: editorial (long-form) display name.'
+  name: road_club_editorial_name
+  type: character
+- description: 'Away side: club: three-letter broadcast abbreviation of the club.'
+  name: road_club_tv_code
+  type: character
+- description: 'Away side: club: whether the club is a placeholder rather than a real
+    club.'
+  name: road_club_is_virtual
+  type: logical
+- description: 'Away side: club: URL of the club crest image.'
+  name: road_club_images_crest
+  type: character
+- description: 'Away side: final score of the side.'
+  name: road_score
+  type: integer
+- description: 'Away side: score of the side as counted for the standings.'
+  name: road_standings_score
+  type: integer
+- description: 'Away side: quarter scores: points scored in the 1st quarter.'
+  name: road_partials_partials1
+  type: integer
+- description: 'Away side: quarter scores: points scored in the 2nd quarter.'
+  name: road_partials_partials2
+  type: integer
+- description: 'Away side: quarter scores: points scored in the 3rd quarter.'
+  name: road_partials_partials3
+  type: integer
+- description: 'Away side: quarter scores: points scored in the 4th quarter.'
+  name: road_partials_partials4
+  type: integer
+- description: 'First referee: euroLeague code of the entity (competition, season,
+    club, person or venue; Utf8 join key).'
+  name: referee1_code
+  type: character
+- description: 'First referee: display name.'
+  name: referee1_name
+  type: character
+- description: 'First referee: short display alias.'
+  name: referee1_alias
+  type: character
+- description: 'First referee: ISO country code.'
+  name: referee1_country_code
+  type: character
+- description: 'First referee: country name.'
+  name: referee1_country_name
+  type: character
+- description: 'First referee: URL of the small portrait image.'
+  name: referee1_images_vertical_small
+  type: character
+- description: 'First referee: whether the record is currently active.'
+  name: referee1_active
+  type: logical
+- description: 'Second referee: euroLeague code of the entity (competition, season,
+    club, person or venue; Utf8 join key).'
+  name: referee2_code
+  type: character
+- description: 'Second referee: display name.'
+  name: referee2_name
+  type: character
+- description: 'Second referee: short display alias.'
+  name: referee2_alias
+  type: character
+- description: 'Second referee: ISO country code.'
+  name: referee2_country_code
+  type: character
+- description: 'Second referee: country name.'
+  name: referee2_country_name
+  type: character
+- description: 'Second referee: URL of the small portrait image.'
+  name: referee2_images_vertical_small
+  type: character
+- description: 'Second referee: whether the record is currently active.'
+  name: referee2_active
+  type: logical
+- description: 'Third referee: euroLeague code of the entity (competition, season,
+    club, person or venue; Utf8 join key).'
+  name: referee3_code
+  type: character
+- description: 'Third referee: display name.'
+  name: referee3_name
+  type: character
+- description: 'Third referee: short display alias.'
+  name: referee3_alias
+  type: character
+- description: 'Third referee: ISO country code.'
+  name: referee3_country_code
+  type: character
+- description: 'Third referee: country name.'
+  name: referee3_country_name
+  type: character
+- description: 'Third referee: URL of the small portrait image.'
+  name: referee3_images_vertical_small
+  type: character
+- description: 'Third referee: whether the record is currently active.'
+  name: referee3_active
+  type: logical
+- description: 'Venue: display name.'
+  name: venue_name
+  type: character
+- description: Code of the venue the club or game plays at (Utf8 join key).
+  name: venue_code
+  type: character
+- description: 'Venue: seating capacity of the venue.'
+  name: venue_capacity
+  type: integer
+- description: 'Venue: street address.'
+  name: venue_address
+  type: character
+- description: 'Venue: URL of the medium-size venue image.'
+  name: venue_images_medium
+  type: character
+- description: 'Venue: whether the record is currently active.'
+  name: venue_active
+  type: logical
+- description: 'Venue: venue notes.'
+  name: venue_notes
+  type: character
+- description: 'Winning club: euroLeague code of the entity (competition, season,
+    club, person or venue; Utf8 join key).'
+  name: winner_code
+  type: character
+- description: 'Winning club: display name.'
+  name: winner_name
+  type: character
+- description: 'Winning club: abbreviated display name.'
+  name: winner_abbreviated_name
+  type: character
+- description: 'Winning club: editorial (long-form) display name.'
+  name: winner_editorial_name
+  type: character
+- description: 'Winning club: three-letter broadcast abbreviation of the club.'
+  name: winner_tv_code
+  type: character
+- description: 'Winning club: whether the club is a placeholder rather than a real
+    club.'
+  name: winner_is_virtual
+  type: logical
+- description: 'Winning club: URL of the club crest image.'
+  name: winner_images_crest
+  type: character
+kind: dataframe
+schema: games

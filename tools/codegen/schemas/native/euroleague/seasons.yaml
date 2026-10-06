@@ -1,0 +1,54 @@
+columns:
+- description: Display name.
+  name: name
+  type: character
+- description: EuroLeague code of the entity (competition, season, club, person or
+    venue; Utf8 join key).
+  name: code
+  type: character
+- description: Short display alias.
+  name: alias
+  type: character
+- description: Competition code (E = EuroLeague, U = EuroCup; Utf8 join key).
+  name: competition_code
+  type: character
+- description: Start year of the season.
+  name: year
+  type: integer
+- description: Start date (ISO 8601).
+  name: start_date
+  type: character
+- description: Date the season was activated in the engine (ISO 8601).
+  name: activation_date
+  type: character
+- description: End date (ISO 8601).
+  name: end_date
+  type: character
+- description: Winning club of the season (null while in progress).
+  name: winner
+  type: numeric
+- description: 'Winning club: euroLeague code of the entity (competition, season,
+    club, person or venue; Utf8 join key).'
+  name: winner_code
+  type: character
+- description: 'Winning club: display name.'
+  name: winner_name
+  type: character
+- description: 'Winning club: abbreviated display name.'
+  name: winner_abbreviated_name
+  type: character
+- description: 'Winning club: editorial (long-form) display name.'
+  name: winner_editorial_name
+  type: character
+- description: 'Winning club: three-letter broadcast abbreviation of the club.'
+  name: winner_tv_code
+  type: character
+- description: 'Winning club: whether the club is a placeholder rather than a real
+    club.'
+  name: winner_is_virtual
+  type: character
+- description: 'Winning club: URL of the club crest image.'
+  name: winner_images_crest
+  type: character
+kind: dataframe
+schema: seasons
