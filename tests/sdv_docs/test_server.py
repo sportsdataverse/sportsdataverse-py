@@ -5,7 +5,7 @@ import sys
 import pytest
 
 from sdv_docs import server
-from tests.sdv_docs.conftest import make_tiny_db
+from tests.sdv_docs.conftest import DOCS, make_tiny_db
 
 
 @pytest.fixture(autouse=True)
@@ -123,8 +123,63 @@ def test_find_columns_caps_at_limit(tmp_path, monkeypatch):
     con.close()
     monkeypatch.setenv("SDV_DOCS_DB", str(db))
     out = server.find_columns("game_id")
-    assert "(first 50; narrow with league= or function=)" in out
+    assert out.startswith(
+        "`game_id` is returned by 62 function(s); showing the first 50 of 62 definitions"
+        " (narrow with league= or function=):\n"
+    )
     assert out.count("\n- ") == 50
+
+
+def test_find_columns_counts_functions_not_rows(tmp_path, monkeypatch):
+    db = make_tiny_db(tmp_path / "frames.sqlite")
+    con = sqlite3.connect(db)
+    con.executemany(  # one function returning the column in two result sets
+        "INSERT INTO columns VALUES (?,?,?,?,?)",
+        [("nba_stats_x", s, "game_id", "String", "Game id.") for s in ("Home", "Away")],
+    )
+    con.commit()
+    con.close()
+    monkeypatch.setenv("SDV_DOCS_DB", str(db))
+    out = server.find_columns("game_id")
+    assert out.startswith("`game_id` is returned by 3 function(s):\n") and out.count("\n- ") == 4
+
+
+@pytest.mark.parametrize("limit", [-1, 0])
+def test_limit_is_clamped(limit):
+    assert server.search("nhl", limit=limit).count("\n- ") == 1
+    assert server.find_endpoints("espn", limit=limit).count("### ") == 1
+    assert server.list_datasets(limit=limit).count("\n| load_") == 1
+
+
+def test_limit_is_capped_at_100(monkeypatch):
+    seen = []
+    monkeypatch.setattr(server.Index, "search", lambda self, q, **kw: seen.append(kw["limit"]) or [])
+    server.search("nhl", limit=10_000)
+    assert seen == [100]
+
+
+def test_list_datasets_states_truncation():
+    out = server.list_datasets(limit=2)
+    assert out.startswith("Showing 2 of 3 datasets; narrow with league= or query=.\n")
+    assert "Showing" not in server.list_datasets()
+
+
+def test_get_function_caps_a_wide_returns_table(tmp_path, monkeypatch):
+    db = make_tiny_db(tmp_path / "wide.sqlite")
+    con = sqlite3.connect(db)
+    con.executemany(
+        "INSERT INTO columns VALUES (?,?,?,?,?)",
+        [("load_nhl_shifts", None, f"col_{i:04d}", "Float64", "x" * 200) for i in range(1549)],
+    )
+    con.commit()
+    con.close()
+    monkeypatch.setenv("SDV_DOCS_DB", str(db))
+    out = server.get_function("load_nhl_shifts")
+    table = [line for line in out.splitlines() if line.startswith("| `")]
+    assert 0 < len(table) < 1550 and sum(len(line) + 1 for line in table) <= server.TABLE_BUDGET
+    assert f"_first {len(table)} of 1550 columns; full table: {DOCS}nhl/reference/loaders/other#load_nhl_shifts" in out
+    assert "(or use find_columns)_" in out
+    assert "_first" not in server.get_function("load_nhl_pbp")  # a narrow table is shown whole
 
 
 def test_find_endpoints():

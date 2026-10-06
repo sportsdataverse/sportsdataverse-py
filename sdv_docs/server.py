@@ -16,6 +16,8 @@ INSTALL = "sdv-docs needs Python >= 3.10 and the mcp extra: pip install 'sportsd
 COLUMN_CAP = 50
 WRAPPER_CAP = 6
 FOUND_CAP = 10
+LIMIT_MAX = 100
+TABLE_BUDGET = 40_000  # characters of get_function's returns table; MCP clients cap tool output (~25k tokens)
 
 
 def _with_index(run: Callable[[Index], str]) -> str:
@@ -25,6 +27,10 @@ def _with_index(run: Callable[[Index], str]) -> str:
         return f"index unavailable: {e}; set SDV_DOCS_DB or check network"
     with Index(path) as ix:
         return run(ix)
+
+
+def _clamp(limit: int) -> int:
+    return max(1, min(int(limit), LIMIT_MAX))
 
 
 def _elsewhere(filters: dict[str, Optional[str]], found: list[str]) -> str:
@@ -61,11 +67,11 @@ def search(
         kind: Optional filter: function, column, endpoint or dataset.
         league: Optional league prefix, e.g. nba, wnba, mbb, wbb, cfb, nfl, mlb, nhl.
         lang: Optional filter: python or r.
-        limit: Maximum hits (default 10).
+        limit: Maximum hits (default 10, at most 100).
     """
 
     def run(ix: Index) -> str:
-        hits = ix.search(query, kind=kind, league=league, lang=lang, limit=limit)
+        hits = ix.search(query, kind=kind, league=league, lang=lang, limit=_clamp(limit))
         if not hits:
             filters = {"kind": kind, "league": league, "lang": lang}
             anywhere = ix.search(query, limit=100) if any(filters.values()) else []
@@ -143,10 +149,17 @@ def _function_block(ix: Index, f: Any, columns: bool) -> str:
             lines.append(f"_{len(cols)} returned columns omitted; pass columns=True or use find_columns._")
         elif cols:
             lines += [f"**Returns** ({len(cols)} columns)", "| column | type | description |", "|---|---|---|"]
-            for c in cols:
+            used = 0
+            for i, c in enumerate(cols):
                 col = f"{c['section']}.{c['name']}" if c["section"] else c["name"]
                 desc = (c["description"] or "").replace("|", "\\|")
-                lines.append(f"| `{col}` | {c['type'] or ''} | {desc} |")
+                row = f"| `{col}` | {c['type'] or ''} | {desc} |"
+                used += len(row) + 1
+                if used > TABLE_BUDGET:  # 1,549-column functions reach 210 KB, over the MCP output limit
+                    rest = f"full table: {f['doc_url']} (or use find_columns)" if f["doc_url"] else "use find_columns"
+                    lines.append(f"_first {i} of {len(cols)} columns; {rest}_")
+                    break
+                lines.append(row)
     else:
         eq = [e for e in ix.equivalents(f["name"]) if e["r_function"] == f["name"] and e["r_package"] == f["package"]]
         if eq:
@@ -166,7 +179,7 @@ def find_columns(column: str, league: Optional[str] = None, function: Optional[s
     """
 
     def run(ix: Index) -> str:
-        rows = ix.columns_named(column, league=league, function=function, limit=COLUMN_CAP + 1)
+        rows = ix.columns_named(column, league=league, function=function, limit=-1)  # -1: no LIMIT, to count
         if not rows:
             anywhere = ix.columns_named(column, limit=-1) if (league or function) else []  # -1: no LIMIT
             if anywhere:
@@ -175,10 +188,14 @@ def find_columns(column: str, league: Optional[str] = None, function: Optional[s
                 )
                 return f"`{column.strip()}` exists, but " + _elsewhere({"league": league, "function": function}, found)
             return _not_found(ix, "column", column.strip(), "columns")
-        shown = rows[:COLUMN_CAP]
-        more = f" (first {COLUMN_CAP}; narrow with league= or function=)" if len(rows) > COLUMN_CAP else ""
-        lines = [f"`{column.strip()}` is returned by {len(shown)} function(s){more}:"]
-        for r in shown:
+        n_fn = len({r["function"] for r in rows})  # a function can return the column in several result sets
+        more = (
+            f"; showing the first {COLUMN_CAP} of {len(rows)} definitions (narrow with league= or function=)"
+            if len(rows) > COLUMN_CAP
+            else ""
+        )
+        lines = [f"`{column.strip()}` is returned by {n_fn} function(s){more}:"]
+        for r in rows[:COLUMN_CAP]:
             sec = f" [{r['section']}]" if r["section"] else ""
             url = f" {r['doc_url']}" if r["doc_url"] else ""
             lines.append(
@@ -195,11 +212,11 @@ def find_endpoints(query: str, api: Optional[str] = None, limit: int = 10) -> st
     Args:
         query: Free text, e.g. "athlete injuries", "event odds", "shotchartdetail".
         api: Optional exact API name, e.g. espn_core_v2, espn_site_v2, espn_cdn, nba_stats, nhl_api_web.
-        limit: Maximum endpoints (default 10).
+        limit: Maximum endpoints (default 10, at most 100).
     """
 
     def run(ix: Index) -> str:
-        rows = ix.endpoints(query, api=api, limit=limit)
+        rows = ix.endpoints(query, api=api, limit=_clamp(limit))
         if not rows:
             anywhere = ix.endpoints(query, limit=100) if api else []
             if anywhere:
@@ -236,11 +253,12 @@ def list_datasets(league: Optional[str] = None, query: Optional[str] = None, lim
     Args:
         league: Optional league prefix, e.g. nhl, nfl, cfb, nba.
         query: Optional free text, e.g. "shifts", "ratings", "pbp".
-        limit: Maximum rows (default 50).
+        limit: Maximum rows (default 50, at most 100).
     """
 
     def run(ix: Index) -> str:
-        rows = ix.datasets(league=league, query=query, limit=limit)
+        limit_ = _clamp(limit)
+        rows = ix.datasets(league=league, query=query, limit=-1)  # -1: no LIMIT, to count what is cut
         if not rows:
             anywhere = ix.datasets(query=query, limit=-1) if league else []  # -1: no LIMIT
             if anywhere:
@@ -253,9 +271,12 @@ def list_datasets(league: Optional[str] = None, query: Optional[str] = None, lim
                 + "."
             )
         lines = [_partial(query or "")] if rows.op == "OR" else []
+        if len(rows) > limit_:
+            lines.append(f"Showing {limit_} of {len(rows)} datasets; narrow with league= or query=.")
         lines += ["| loader | league | release tag | from season | release |", "|---|---|---|---|---|"]
         lines += [
-            f"| {d['loader']} | {d['league']} | {d['tag']} | {d['min_season']} | {d['release_url']} |" for d in rows
+            f"| {d['loader']} | {d['league']} | {d['tag']} | {d['min_season']} | {d['release_url']} |"
+            for d in rows[:limit_]
         ]
         return "\n".join(lines)
 
