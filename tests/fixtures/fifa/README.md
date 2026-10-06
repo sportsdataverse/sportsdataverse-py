@@ -1,3 +1,11 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [FIFA fixtures](#fifa-fixtures)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # FIFA fixtures
 
 Real, truncated first-page responses from the keyless FIFA public API v3
