@@ -17,8 +17,8 @@ Box score of one game: per-player and team totals per side, by-quarter scores, r
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
-| `gamecode` | `game_code` |  |  | `Y` | Required. Game number within the season (1-based). |
-| `seasoncode` | `season_code` |  |  | `Y` | Required. Competition code + start year: E2025 (EuroLeague 2025-26), U2025 (EuroCup). |
+| `gamecode` | `game_code` |  | `Y` |  | Required. Game number within the season (1-based). |
+| `seasoncode` | `season_code` |  | `Y` |  | Required. Competition code + start year: E2025 (EuroLeague 2025-26), U2025 (EuroCup). |
 
 ### Returns {#euroleague_game_boxscore-returns}
 
@@ -29,9 +29,19 @@ Box score of one game: per-player and team totals per side, by-quarter scores, r
 | `row_type` | character | Row kind: player, team (team-only rebounds) or total (side totals). |
 | `team_name` | character | Club display name. |
 | `coach` | character | Head coach name. |
+| `attendance` | character | Attendance, as reported by the box score (repeated on every row). |
+| `referees` | character | Referees of the game, comma-separated SURNAME, GIVEN NAME (repeated on every row). |
+| `by_quarter_q1` | integer | Points the row's team scored in quarter 1 (from the box score's ByQuarter block). |
+| `by_quarter_q2` | integer | Points the row's team scored in quarter 2 (from the box score's ByQuarter block). |
+| `by_quarter_q3` | integer | Points the row's team scored in quarter 3 (from the box score's ByQuarter block). |
+| `by_quarter_q4` | integer | Points the row's team scored in quarter 4 (from the box score's ByQuarter block). |
+| `end_of_quarter_q1` | integer | Score of the row's team at the end of quarter 1 (cumulative; from the box score's EndOfQuarter block). |
+| `end_of_quarter_q2` | integer | Score of the row's team at the end of quarter 2 (cumulative; from the box score's EndOfQuarter block). |
+| `end_of_quarter_q3` | integer | Score of the row's team at the end of quarter 3 (cumulative; from the box score's EndOfQuarter block). |
+| `end_of_quarter_q4` | integer | Score of the row's team at the end of quarter 4 (cumulative; from the box score's EndOfQuarter block). |
 | `player_id` | character | EuroLeague player code (Utf8 join key; space padding stripped; blank on team rows). |
-| `is_starter` | numeric | Whether the player started (1 / 0). |
-| `is_playing` | numeric | Whether the player appeared in the game (1 / 0). |
+| `is_starter` | integer | Whether the player started (1 / 0). |
+| `is_playing` | integer | Whether the player appeared in the game (1 / 0). |
 | `team` | character | EuroLeague club code of the team (Utf8 join key; space padding stripped). |
 | `dorsal` | character | Jersey number as displayed. |
 | `player` | character | Player display name (SURNAME, GIVEN NAME). |
@@ -76,8 +86,8 @@ Game header: teams, codes, coaches, score by quarter, venue, referees.
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
-| `gamecode` | `game_code` |  |  | `Y` | Required. Game number within the season (1-based). |
-| `seasoncode` | `season_code` |  |  | `Y` | Required. Competition code + start year: E2025 (EuroLeague 2025-26), U2025 (EuroCup). |
+| `gamecode` | `game_code` |  | `Y` |  | Required. Game number within the season (1-based). |
+| `seasoncode` | `season_code` |  | `Y` |  | Required. Competition code + start year: E2025 (EuroLeague 2025-26), U2025 (EuroCup). |
 
 ### Returns {#euroleague_game_header-returns}
 
@@ -90,17 +100,17 @@ Game header: teams, codes, coaches, score by quarter, venue, referees.
 | `date` | character | Game date (venue local, dd/mm/yyyy). |
 | `hour` | character | Scheduled tip-off time (venue local, HH:MM). |
 | `stadium` | character | Venue name. |
-| `capacity` | character | Seating capacity of the venue. |
-| `team_a` | character | Display name of team A (the home side). |
-| `team_b` | character | Display name of team B (the away side). |
-| `code_team_a` | character | EuroLeague club code of team A (the home side; Utf8 join key). |
+| `capacity` | character | Capacity as reported by the API (equals the box score's attendance on the captured game; semantics unverified). |
+| `team_a` | character | Display name of team A (= the home side, measured on one game). |
+| `team_b` | character | Display name of team B (= the away side, measured on one game). |
+| `code_team_a` | character | EuroLeague club code of team A (= the home side, measured on one game); Utf8 join key. |
 | `tv_code_a` | character | Three-letter broadcast abbreviation of team A. |
-| `code_team_b` | character | EuroLeague club code of team B (the away side; Utf8 join key). |
+| `code_team_b` | character | EuroLeague club code of team B (= the away side, measured on one game); Utf8 join key. |
 | `tv_code_b` | character | Three-letter broadcast abbreviation of team B. |
 | `im_a` | character | Crest image file name of team A. |
 | `im_b` | character | Crest image file name of team B. |
-| `score_a` | character | Score of team A (the home side). |
-| `score_b` | character | Score of team B (the away side). |
+| `score_a` | character | Score of team A (= the home side, measured on one game). |
+| `score_b` | character | Score of team B (= the away side, measured on one game). |
 | `coach_a` | character | Head coach of team A. |
 | `coach_b` | character | Head coach of team B. |
 | `game_time` | character | Elapsed game time (mm:ss). |
@@ -111,16 +121,16 @@ Game header: teams, codes, coaches, score by quarter, venue, referees.
 | `foults_b` | character | Team fouls of team B in the current period (sic: the API spells it this way). |
 | `timeouts_a` | character | Timeouts used by team A. |
 | `timeouts_b` | character | Timeouts used by team B. |
-| `score_quarter1_a` | integer | Points scored by team A (the home side) in quarter 1. |
-| `score_quarter2_a` | integer | Points scored by team A (the home side) in quarter 2. |
-| `score_quarter3_a` | integer | Points scored by team A (the home side) in quarter 3. |
-| `score_quarter4_a` | integer | Points scored by team A (the home side) in quarter 4. |
-| `score_extra_time_a` | integer | Points scored by team A in overtime. |
-| `score_quarter1_b` | integer | Points scored by team B (the away side) in quarter 1. |
-| `score_quarter2_b` | integer | Points scored by team B (the away side) in quarter 2. |
-| `score_quarter3_b` | integer | Points scored by team B (the away side) in quarter 3. |
-| `score_quarter4_b` | integer | Points scored by team B (the away side) in quarter 4. |
-| `score_extra_time_b` | integer | Points scored by team B in overtime. |
+| `score_quarter1_a` | integer | Score of team A at the end of quarter 1 (cumulative). |
+| `score_quarter2_a` | integer | Score of team A at the end of quarter 2 (cumulative). |
+| `score_quarter3_a` | integer | Score of team A at the end of quarter 3 (cumulative). |
+| `score_quarter4_a` | integer | Score of team A at the end of quarter 4 (cumulative). |
+| `score_extra_time_a` | integer | Points scored by team A in overtime (0 when none). |
+| `score_quarter1_b` | integer | Score of team B at the end of quarter 1 (cumulative). |
+| `score_quarter2_b` | integer | Score of team B at the end of quarter 2 (cumulative). |
+| `score_quarter3_b` | integer | Score of team B at the end of quarter 3 (cumulative). |
+| `score_quarter4_b` | integer | Score of team B at the end of quarter 4 (cumulative). |
+| `score_extra_time_b` | integer | Points scored by team B in overtime (0 when none). |
 | `phase` | character | Phase name (Regular Season, Playoffs, ...). |
 | `phase_reduced_name` | character | Short phase name. |
 | `competition` | character | Competition name. |
@@ -150,8 +160,8 @@ Play-by-play of one game, one array per quarter (FirstQuarter ... ForthQuarter, 
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
-| `gamecode` | `game_code` |  |  | `Y` | Required. Game number within the season (1-based). |
-| `seasoncode` | `season_code` |  |  | `Y` | Required. Competition code + start year: E2025 (EuroLeague 2025-26), U2025 (EuroCup). |
+| `gamecode` | `game_code` |  | `Y` |  | Required. Game number within the season (1-based). |
+| `seasoncode` | `season_code` |  | `Y` |  | Required. Competition code + start year: E2025 (EuroLeague 2025-26), U2025 (EuroCup). |
 
 ### Returns {#euroleague_game_pbp-returns}
 
@@ -160,10 +170,10 @@ Play-by-play of one game, one array per quarter (FirstQuarter ... ForthQuarter, 
 | col_name | type | description |
 |---|---|---|
 | `quarter` | integer | Period of the play: 1-4, or 5 for every overtime period. |
-| `team_a` | character | Display name of team A (the home side). |
-| `team_b` | character | Display name of team B (the away side). |
-| `code_team_a` | character | EuroLeague club code of team A (the home side; Utf8 join key). |
-| `code_team_b` | character | EuroLeague club code of team B (the away side; Utf8 join key). |
+| `team_a` | character | Display name of team A (= the home side, measured on one game). |
+| `team_b` | character | Display name of team B (= the away side, measured on one game). |
+| `code_team_a` | character | EuroLeague club code of team A (= the home side, measured on one game); Utf8 join key. |
+| `code_team_b` | character | EuroLeague club code of team B (= the away side, measured on one game); Utf8 join key. |
 | `type` | integer | Play type (engine integer). |
 | `numberofplay` | integer | Sequence number of the play within the game. |
 | `codeteam` | character | EuroLeague club code of the team on the play (Utf8 join key; blank on administrative plays). |
@@ -174,8 +184,8 @@ Play-by-play of one game, one array per quarter (FirstQuarter ... ForthQuarter, 
 | `dorsal` | character | Jersey number as displayed. |
 | `minute` | integer | Game minute of the event (1-based; 41+ in overtime). |
 | `markertime` | character | Game clock at the play (mm:ss remaining in the period). |
-| `points_a` | integer | Running score of team A (the home side) after the event. |
-| `points_b` | integer | Running score of team B (the away side) after the event. |
+| `points_a` | integer | Running score of team A (= the home side, measured on one game) after the event. |
+| `points_b` | integer | Running score of team B (= the away side, measured on one game) after the event. |
 | `comment` | character | Free-text annotation of the play. |
 | `playinfo` | character | Play description. |
 
@@ -199,8 +209,8 @@ Shot chart of one game: one row per made/missed FG and made FT, with COORD_X/COO
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
-| `gamecode` | `game_code` |  |  | `Y` | Required. Game number within the season (1-based). |
-| `seasoncode` | `season_code` |  |  | `Y` | Required. Competition code + start year: E2025 (EuroLeague 2025-26), U2025 (EuroCup). |
+| `gamecode` | `game_code` |  | `Y` |  | Required. Game number within the season (1-based). |
+| `seasoncode` | `season_code` |  | `Y` |  | Required. Competition code + start year: E2025 (EuroLeague 2025-26), U2025 (EuroCup). |
 
 ### Returns {#euroleague_game_points-returns}
 
@@ -223,8 +233,8 @@ Shot chart of one game: one row per made/missed FG and made FT, with COORD_X/COO
 | `points_off_turnover` | character | Whether the shot came off a turnover (0 / 1 as a string). |
 | `minute` | integer | Game minute of the event (1-based; 41+ in overtime). |
 | `console` | character | Game clock at the event (mm:ss remaining in the period). |
-| `points_a` | integer | Running score of team A (the home side) after the event. |
-| `points_b` | integer | Running score of team B (the away side) after the event. |
+| `points_a` | integer | Running score of team A (= the home side, measured on one game) after the event. |
+| `points_b` | integer | Running score of team B (= the away side, measured on one game) after the event. |
 | `utc` | character | UTC timestamp of the event (yyyymmddHHMMSS). |
 
 **`return_parsed=False`** — the raw JSON `Dict` (`{}` when the live API answers its empty-body "no such game" sentinel, which the parser turns into a zero-row frame).

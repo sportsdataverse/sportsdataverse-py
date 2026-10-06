@@ -8,16 +8,55 @@ columns:
 - description: Head coach name.
   name: coach
   type: character
+- description: Attendance, as reported by the box score (repeated on every row).
+  name: attendance
+  type: character
+- description: Referees of the game, comma-separated SURNAME, GIVEN NAME (repeated
+    on every row).
+  name: referees
+  type: character
+- description: Points the row's team scored in quarter 1 (from the box score's ByQuarter
+    block).
+  name: by_quarter_q1
+  type: integer
+- description: Points the row's team scored in quarter 2 (from the box score's ByQuarter
+    block).
+  name: by_quarter_q2
+  type: integer
+- description: Points the row's team scored in quarter 3 (from the box score's ByQuarter
+    block).
+  name: by_quarter_q3
+  type: integer
+- description: Points the row's team scored in quarter 4 (from the box score's ByQuarter
+    block).
+  name: by_quarter_q4
+  type: integer
+- description: Score of the row's team at the end of quarter 1 (cumulative; from the
+    box score's EndOfQuarter block).
+  name: end_of_quarter_q1
+  type: integer
+- description: Score of the row's team at the end of quarter 2 (cumulative; from the
+    box score's EndOfQuarter block).
+  name: end_of_quarter_q2
+  type: integer
+- description: Score of the row's team at the end of quarter 3 (cumulative; from the
+    box score's EndOfQuarter block).
+  name: end_of_quarter_q3
+  type: integer
+- description: Score of the row's team at the end of quarter 4 (cumulative; from the
+    box score's EndOfQuarter block).
+  name: end_of_quarter_q4
+  type: integer
 - description: EuroLeague player code (Utf8 join key; space padding stripped; blank
     on team rows).
   name: player_id
   type: character
 - description: Whether the player started (1 / 0).
   name: is_starter
-  type: numeric
+  type: integer
 - description: Whether the player appeared in the game (1 / 0).
   name: is_playing
-  type: numeric
+  type: integer
 - description: EuroLeague club code of the team (Utf8 join key; space padding stripped).
   name: team
   type: character

@@ -371,16 +371,22 @@ the body contract by host.
   sentinel, and which sideline is +x **unverified** (the column descriptions carry the measured
   frame); `euroleague_game_pbp()` — the per-quarter arrays unrolled to one row per play with a
   `quarter` column (5 = overtime); `euroleague_game_boxscore()` — one row per player plus each
-  side's team-only and totals rows (`row_type`); `euroleague_game_header()` — one row. Live-API
-  codes are space-padded on the wire and are stripped; `id_player` / `player_id` / `codeteam` /
-  `team` and the team codes are pinned to `Utf8`. The live API answers an unknown game with an
-  **empty 200 body**: the runtime returns `{}` for that one case (every other host's empty 200
-  still raises `AssetFetchError`) and the parsers make it a zero-row frame.
+  side's team-only and totals rows (`row_type`), with the game's `attendance` / `referees` and the
+  side's per-quarter (`by_quarter_q1`..) and cumulative end-of-quarter (`end_of_quarter_q1`..)
+  scores repeated on every row; `euroleague_game_header()` — one row (its `score_quarterN_*` are
+  cumulative). `game_code` / `season_code` are positional-required on the four (an omitted code
+  answers a silent empty body). Live-API codes are space-padded on the wire and are stripped;
+  `id_player` / `player_id` / `codeteam` / `team` and the team codes are pinned to `Utf8`. The
+  live API answers an unknown game with an **empty 200 body**: the runtime returns `{}` for that
+  one case (every other host's empty 200 still raises `AssetFetchError`) and each live parser
+  makes it a zero-row frame **with its documented columns** (`_euroleague_schemas.py`, generated
+  from the captures).
 - **api-live v3** (`Accept: application/json`, like v2): `euroleague_standings(competition_code,
   season_code, round, kind=)` — one wrapper over `basicstandings` (default), `calendarstandings`,
   `streaks` and `aheadbehind`, one row per team as of the round, with one documented column
-  table per `kind`; `euroleague_player_stats()` / `euroleague_team_stats()` with
-  `mode="traditional"` (default) or `"advanced"` and `season_mode="Single"` /
+  table per `kind` (any other value raises `ValueError` before a request is made — codegen gains
+  a `choices:` param field for closed value sets); `euroleague_player_stats()` /
+  `euroleague_team_stats()` with `mode="traditional"` (default) or `"advanced"` (same check) and `season_mode="Single"` /
   `statistic_mode="PerGame"` (the capture-verified defaults; other values are unverified);
   `euroleague_game_report()` — one row per game with both clubs, scores and last-5 form.
 - Fixtures: byte copies of the 13 new E2025 captures plus the two EuroCup (U2025) live

@@ -1,3 +1,9 @@
+"""EuroLeague / EuroCup wrappers (``euroleague_*``) over the three keyless EuroLeague APIs.
+
+Unofficial, keyless API; not supported by Euroleague Basketball. Wrap-only: payloads are
+not redistributed as release assets.
+"""
+
 from __future__ import annotations
 
 # ``euroleague`` is a non-league home (like ``odds``): the generated flat module and its

@@ -9,6 +9,7 @@ the bottom (``SDV_PY_LIVE_TESTS=1``; one request per host).
 
 from __future__ import annotations
 
+import inspect
 import json
 import re
 from pathlib import Path
@@ -19,11 +20,13 @@ import pytest
 import yaml
 
 from sportsdataverse.euroleague import euroleague, euroleague_runtime
+from sportsdataverse.euroleague._euroleague_schemas import SCHEMAS
 from sportsdataverse.euroleague.euroleague_parsers import (
     parse_euroleague,
     parse_euroleague_boxscore,
-    parse_euroleague_live,
+    parse_euroleague_header,
     parse_euroleague_pbp,
+    parse_euroleague_points,
 )
 from tests.conftest import skip_if_no_live
 
@@ -45,8 +48,8 @@ _GAME_REPORT = "v3__competitions__E__seasons__E2025__games__1__report"
 
 # The live parser per fixture stem (``U2025__`` copies share the E2025 route's parser).
 _LIVE_PARSER = {
-    "Points": parse_euroleague_live,
-    "Header": parse_euroleague_live,
+    "Points": parse_euroleague_points,
+    "Header": parse_euroleague_header,
     "PlayByPlay": parse_euroleague_pbp,
     "Boxscore": parse_euroleague_boxscore,
 }
@@ -211,17 +214,38 @@ def test_season_stats_flatten_player_and_team() -> None:
 
 @pytest.mark.parametrize("raw", [None, [], {}, "x", 17, {"total": 0, "data": []}, [None]])
 def test_empty_payload_is_zero_row_frame(raw: Any) -> None:
-    for parser in (parse_euroleague, parse_euroleague_live, parse_euroleague_pbp, parse_euroleague_boxscore):
-        df = parser(raw)
-        assert isinstance(df, pl.DataFrame)
-        assert df.height == 0
+    df = parse_euroleague(raw)
+    assert isinstance(df, pl.DataFrame)
+    assert df.height == 0
+
+
+@pytest.mark.parametrize("raw", [None, [], {}, "x", 17, {"Rows": []}, {"FirstQuarter": []}, {"Stats": []}, [None]])
+@pytest.mark.parametrize(
+    "short,parser",
+    [
+        ("game_points", parse_euroleague_points),
+        ("game_header", parse_euroleague_header),
+        ("game_pbp", parse_euroleague_pbp),
+        ("game_boxscore", parse_euroleague_boxscore),
+    ],
+)
+def test_live_empty_payload_is_zero_row_frame_with_the_documented_schema(raw: Any, short: str, parser: Any) -> None:
+    """The parser contract: an empty live body keeps the returns table's columns (and dtypes)."""
+    df = parser(raw)
+    assert isinstance(df, pl.DataFrame)
+    assert df.height == 0
+    assert df.columns == [c["name"] for c in _schema(short)["columns"]]
+    assert df.columns == list(SCHEMAS[short])
+    assert {c: str(t) for c, t in df.schema.items()} == SCHEMAS[short]
+    pdf = parser(raw, return_as_pandas=True)
+    assert list(pdf.columns) == df.columns and len(pdf) == 0
 
 
 def test_return_as_pandas() -> None:
     pdf = parse_euroleague(_load("competitions"), return_as_pandas=True)
     assert type(pdf).__module__.startswith("pandas")
     assert len(pdf) == 3
-    pdf = parse_euroleague_live(_load("api__Points"), return_as_pandas=True)
+    pdf = parse_euroleague_points(_load("api__Points"), return_as_pandas=True)
     assert type(pdf).__module__.startswith("pandas")
     assert len(pdf) == 3
 
@@ -250,7 +274,7 @@ def test_points_is_the_shot_chart_in_cm_from_the_hoop(stem: str) -> None:
     raw = _load(stem)
     assert set(raw) == {"Rows"}
     assert raw["Rows"][0]["TEAM"].endswith(" "), "capture no longer carries the space padding"
-    df = parse_euroleague_live(raw)
+    df = parse_euroleague_points(raw)
     assert df.height == len(raw["Rows"])
     assert {"team", "id_player", "id_action", "coord_x", "coord_y", "zone", "points_a", "points_b"} <= set(df.columns)
     assert df.schema["coord_x"] == pl.Int64 and df.schema["coord_y"] == pl.Int64
@@ -265,7 +289,7 @@ def test_points_free_throws_carry_the_minus_one_sentinel() -> None:
     fts = [r for r in rows if r["ID_ACTION"] == "FTM"]
     if not fts:  # the 3-row trims may hold no free throw; the rule is still asserted on the frame
         pytest.skip("no FTM row in the trimmed captures")
-    df = parse_euroleague_live({"Rows": fts})
+    df = parse_euroleague_points({"Rows": fts})
     assert (df["coord_x"] == -1).all() and (df["coord_y"] == -1).all()
     assert (df["zone"] == "").all()
 
@@ -291,6 +315,19 @@ def test_boxscore_rows_are_players_then_team_and_totals_per_side() -> None:
     assert df.height == sum(len(s["PlayersStats"]) + 2 for s in raw["Stats"]) == 10
     assert df["row_type"].to_list() == ["player"] * 3 + ["team", "total"] + ["player"] * 3 + ["team", "total"]
     assert {"team_name", "coach", "player_id", "team", "points", "valuation"} <= set(df.columns)
+    assert df.schema["is_starter"] == pl.Int64 and df.schema["is_playing"] == pl.Int64
+    # the game-level and side-level header fields repeat on every row
+    assert df["attendance"].unique().to_list() == [raw["Attendance"]]
+    assert df["referees"].unique().to_list() == [raw["Referees"]]
+    for i, side in enumerate(raw["Stats"]):
+        rows = df.filter(pl.col("team_name") == side["Team"])
+        assert rows.height == len(side["PlayersStats"]) + 2
+        for q in (1, 2, 3, 4):
+            assert rows[f"by_quarter_q{q}"].unique().to_list() == [raw["ByQuarter"][i][f"Quarter{q}"]]
+            assert rows[f"end_of_quarter_q{q}"].unique().to_list() == [raw["EndOfQuarter"][i][f"Quarter{q}"]]
+    # EndOfQuarter is cumulative (21/40/60/85), ByQuarter is per period (21/19/20/25)
+    first = df.row(0, named=True)
+    assert first["end_of_quarter_q4"] == sum(first[f"by_quarter_q{q}"] for q in (1, 2, 3, 4))
     assert (
         df.schema["player_id"] == pl.String
         and df["player_id"][0] == raw["Stats"][0]["PlayersStats"][0]["Player_ID"].strip()
@@ -301,8 +338,11 @@ def test_boxscore_rows_are_players_then_team_and_totals_per_side() -> None:
 
 def test_header_is_one_row() -> None:
     raw = _load("api__Header")
-    df = parse_euroleague_live(raw)
+    df = parse_euroleague_header(raw)
     assert df.height == 1
+    # the header's quarter scores are cumulative, not per period
+    assert df["score_quarter4_a"][0] == int(raw["ScoreA"]) - raw["ScoreExtraTimeA"]
+    assert "cumulative" in {c["name"]: c["description"] for c in _schema("game_header")["columns"]}["score_quarter1_a"]
     assert {"code_team_a", "code_team_b", "score_a", "score_b", "score_quarter1_a", "referee1"} <= set(df.columns)
     assert df["code_team_a"][0] == raw["CodeTeamA"].strip()
 
@@ -335,6 +375,11 @@ def test_yaml_lists_every_wrapper_with_its_host() -> None:
         assert "no such game" in by_short[short]["docstring"]["raw_doc"]
         assert [p["query_key"] for p in by_short[short]["extra_params"]] == ["gamecode", "seasoncode"]
         assert [p["name"] for p in by_short[short]["extra_params"]] == ["game_code", "season_code"]
+        # an omitted code answers a silent empty 200, so both are positional-required
+        assert all(p["required"] for p in by_short[short]["extra_params"])
+        sig = inspect.signature(getattr(euroleague, f"euroleague_{short}"))
+        assert sig.parameters["game_code"].default is inspect.Parameter.empty
+        assert sig.parameters["season_code"].default is inspect.Parameter.empty
 
 
 def test_merged_wrappers_take_the_segment_as_a_defaulted_argument() -> None:
@@ -342,10 +387,12 @@ def test_merged_wrappers_take_the_segment_as_a_defaulted_argument() -> None:
     kind = by_short["standings"]["path_params"][-1]
     assert by_short["standings"]["path"].endswith("/rounds/{round}/{kind}")
     assert (kind["name"], kind["default"], kind["required"]) == ("kind", "basicstandings", False)
+    assert kind["choices"] == ["basicstandings", "calendarstandings", "streaks", "aheadbehind"]
     for short in ("player_stats", "team_stats"):
         mode = by_short[short]["path_params"][-1]
         assert by_short[short]["path"].endswith("/{mode}")
         assert (mode["name"], mode["default"]) == ("mode", "traditional")
+        assert mode["choices"] == ["traditional", "advanced"]
         defaults = {p["name"]: p.get("default") for p in by_short[short]["extra_params"]}
         assert defaults["season_mode"] == "Single" and defaults["statistic_mode"] == "PerGame"
         assert defaults["season_code"] is None
@@ -391,8 +438,8 @@ def test_points_schema_documents_the_shot_frame() -> None:
 def test_schemas_match_the_parsers_on_the_captures() -> None:
     """Column names and order on every returns table are what the parser emits on its capture."""
     checks = {
-        "game_points": parse_euroleague_live(_load("api__Points")),
-        "game_header": parse_euroleague_live(_load("api__Header")),
+        "game_points": parse_euroleague_points(_load("api__Points")),
+        "game_header": parse_euroleague_header(_load("api__Header")),
         "game_pbp": parse_euroleague_pbp(_load("api__PlayByPlay")),
         "game_boxscore": parse_euroleague_boxscore(_load("api__Boxscore")),
         "game_report": parse_euroleague(_load(_GAME_REPORT)),
@@ -428,6 +475,21 @@ def test_v3_wrappers_use_the_v3_host(recorder: _Recorder) -> None:
     assert recorder.url == f"{V3}/competitions/E/seasons/E2025/rounds/1/aheadbehind"
     euroleague.euroleague_game_report(competition_code="E", season_code="E2025", game_code=1)
     assert recorder.url == f"{V3}/competitions/E/seasons/E2025/games/1/report"
+
+
+@pytest.mark.parametrize(
+    "call",
+    [
+        lambda: euroleague.euroleague_standings(competition_code="E", season_code="E2025", round=1, kind="basic"),
+        lambda: euroleague.euroleague_player_stats(competition_code="E", season_code="E2025", mode="Traditional"),
+        lambda: euroleague.euroleague_team_stats(competition_code="E", season_code="E2025", mode="adv"),
+    ],
+)
+def test_invalid_kind_or_mode_raises_before_any_request(recorder: _Recorder, call: Any) -> None:
+    """A typo would otherwise reach the host as a path segment and surface as a misleading NoDataError."""
+    with pytest.raises(ValueError, match="must be one of"):
+        call()
+    assert recorder.url == "", "no transport call may happen"
 
 
 def test_stats_wrappers_default_the_captured_modes(recorder: _Recorder) -> None:

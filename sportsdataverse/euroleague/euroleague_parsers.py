@@ -1,5 +1,8 @@
 """Parsers for the generated ``euroleague`` wrappers (EuroLeague APIs, three hosts).
 
+Unofficial, keyless API; not supported by Euroleague Basketball. Wrap-only: payloads are
+not redistributed as release assets.
+
 ``api-live.euroleague.net`` (v2 + v3) is keyless (``Accept: application/json`` is sent
 by :mod:`sportsdataverse.euroleague.euroleague_runtime`; without it the API answers
 XML) and serves these body shapes, all handled by :func:`parse_euroleague`:
@@ -23,22 +26,25 @@ here -- the box score's ``{"local", "road"}`` object would otherwise split into
 two rows.
 
 ``live.euroleague.net/api`` (the legacy live API, per game by
-``?gamecode=&seasoncode=``) has its own parsers because its keys are UPPER-CASE
-fixed-width strings (``TEAM = "IST       "``):
+``?gamecode=&seasoncode=``) has one parser per route because its keys are UPPER-CASE
+fixed-width strings (``TEAM = "IST       "``) and each route has its own shape:
 
-* :func:`parse_euroleague_live` -- ``Points`` (``{"Rows": [...]}``, the shot chart)
-  and ``Header`` (a flat object -> one row).
+* :func:`parse_euroleague_points` -- ``Points`` (``{"Rows": [...]}``, the shot chart).
+* :func:`parse_euroleague_header` -- ``Header`` (a flat object -> one row).
 * :func:`parse_euroleague_pbp` -- ``PlayByPlay``: one array per quarter
   (``FirstQuarter`` ... ``ForthQuarter``, ``ExtraTime``) unrolled to one row per play
   with a leading ``quarter`` column.
 * :func:`parse_euroleague_boxscore` -- ``Boxscore``: one row per player per side
   plus each side's team-only (``tmr``) and totals (``totr``) rows, tagged by
-  ``row_type``.
+  ``row_type``, with the game's attendance / referees and the side's by-quarter
+  scores repeated on every row.
 
 Every live-API string cell is whitespace-stripped (the codes are space-padded),
-and an all-null column is pinned to ``Utf8`` so a truncated or empty game keeps a
-stable schema. The live API's "no such game" answer is an empty 200 body, which
-the runtime hands over as ``{}`` -> a zero-row frame, never an exception.
+and an all-null column is pinned to ``Utf8`` so a truncated game keeps a stable
+schema. The live API's "no such game" answer is an empty 200 body, which the
+runtime hands over as ``{}``: each live parser then returns a **zero-row frame with
+its documented columns** (:mod:`sportsdataverse.euroleague._euroleague_schemas`,
+generated from the captures), never an exception.
 
 Ids and codes (``id``, ``code``, ``*_id``, ``*_code``, ``id_*``, ``codeteam``,
 ``code_team_a``, ``team``, ...) are opaque join keys and are pinned to ``Utf8``;
@@ -58,13 +64,15 @@ from typing import Any, Dict, List, Union
 import pandas as pd
 import polars as pl
 
+from sportsdataverse.euroleague._euroleague_schemas import SCHEMAS
 from sportsdataverse.soccer._frames import as_output, rows_to_frame, to_utf8_ids
 
 __all__ = [
     "parse_euroleague",
     "parse_euroleague_boxscore",
-    "parse_euroleague_live",
+    "parse_euroleague_header",
     "parse_euroleague_pbp",
+    "parse_euroleague_points",
 ]
 
 # ``id`` / ``*_id`` / ``code`` / ``*_code`` -- every api-live join key.
@@ -146,19 +154,27 @@ def parse_euroleague(
     return as_output(df, return_as_pandas=return_as_pandas)
 
 
-def _live_frame(rows: List[Any]) -> pl.DataFrame:
+def _empty(short: str) -> pl.DataFrame:
+    """A zero-row frame carrying the route's documented schema (the parser contract)."""
+    return pl.DataFrame(schema={col: getattr(pl, dtype) for col, dtype in SCHEMAS.get(short, {}).items()})
+
+
+def _live_frame(short: str, rows: List[Any]) -> pl.DataFrame:
     """Finish a live-API row list: snake_case, strip the space padding, pin ids + all-null columns."""
+    rows = [r for r in rows if isinstance(r, dict)]
+    if not rows:
+        return _empty(short)
     df = rows_to_frame(rows)
     df = df.with_columns(pl.col(pl.String).str.strip_chars())
     return to_utf8_ids(df, [c for c, t in df.schema.items() if _LIVE_ID.match(c) or t == pl.Null])
 
 
-def parse_euroleague_live(
+def parse_euroleague_points(
     raw: Union[Dict[str, Any], List[Any], None],
     *,
     return_as_pandas: bool = False,
 ) -> Union[pl.DataFrame, pd.DataFrame]:
-    """Parse a ``live.euroleague.net/api`` ``Points`` (shot chart) or ``Header`` body.
+    """Parse a ``live.euroleague.net/api`` ``Points`` body: the shot chart, one row per shot.
 
     ``Points`` is the shot-chart source: one row per field-goal attempt (``id_action``
     ``2FGM`` / ``2FGA`` / ``3FGM`` / ``3FGA``) and per made free throw (``FTM``), with
@@ -182,18 +198,17 @@ def parse_euroleague_live(
       before plotting.
     * ``zone`` letters A-I: A rim, B/C close left/right, D/E mid, F/G long two, H/I three.
 
-    ``Header`` is a flat object (teams, codes, coaches, score by quarter, venue,
-    referees) and becomes one row.
+    Team A is the home side as measured on one game.
 
     Args:
-        raw: the live API JSON body -- ``{"Rows": [...]}`` for ``Points``, a flat
-            object for ``Header``, or ``{}`` (the runtime's "no such game" answer).
+        raw: the ``Points`` JSON body ``{"Rows": [...]}``, or ``{}`` (the runtime's
+            "no such game" answer).
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
-        One row per shot (``Points``) or one row (``Header``), snake_cased, every
-        string cell stripped of its space padding, the id / code columns pinned to
-        ``Utf8``. A zero-row frame for ``{}``, ``None`` or a malformed payload.
+        One row per shot, snake_cased, every string cell stripped of its space
+        padding, the id / code columns pinned to ``Utf8``. A zero-row frame with the
+        documented columns for ``{}``, ``None`` or a malformed payload.
 
     Raises:
         None: malformed payloads yield a zero-row frame rather than an exception.
@@ -217,7 +232,51 @@ def parse_euroleague_live(
 
     .. _EuroLeague Basketball: https://www.euroleaguebasketball.net/
     """
-    return as_output(_live_frame(_as_rows(raw)), return_as_pandas=return_as_pandas)
+    return as_output(_live_frame("game_points", _as_rows(raw)), return_as_pandas=return_as_pandas)
+
+
+def parse_euroleague_header(
+    raw: Union[Dict[str, Any], List[Any], None],
+    *,
+    return_as_pandas: bool = False,
+) -> Union[pl.DataFrame, pd.DataFrame]:
+    """Parse a ``live.euroleague.net/api`` ``Header`` body into one row.
+
+    The header is a flat object: teams, codes, coaches, the score and the
+    **cumulative** score at the end of each quarter (``score_quarter1_a`` ...), venue,
+    capacity (as reported; its semantics are unverified) and referees. Team A is the
+    home side as measured on one game.
+
+    Args:
+        raw: the ``Header`` JSON body, or ``{}`` (the runtime's "no such game" answer).
+        return_as_pandas: return a pandas DataFrame instead of polars.
+
+    Returns:
+        One row, snake_cased, string cells stripped of their space padding, the team
+        codes pinned to ``Utf8``. A zero-row frame with the documented columns for
+        ``{}``, ``None`` or a malformed payload.
+
+    Raises:
+        None: malformed payloads yield a zero-row frame rather than an exception.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.euroleague.euroleague import euroleague_game_header
+
+            header = euroleague_game_header(game_code=1, season_code="E2025")
+            print(header.shape)
+
+        Pipeline next step (one line)::
+
+            header.select("code_team_a", "code_team_b", "score_a", "score_b", "referee1")
+
+    See Also:
+        * `EuroLeague Basketball`_ -- the site the live API serves.
+
+    .. _EuroLeague Basketball: https://www.euroleaguebasketball.net/
+    """
+    return as_output(_live_frame("game_header", _as_rows(raw)), return_as_pandas=return_as_pandas)
 
 
 def parse_euroleague_pbp(
@@ -232,7 +291,8 @@ def parse_euroleague_pbp(
     names and codes. The arrays are unrolled in game order with a leading
     ``quarter`` column (1-4; 5 for every overtime period, which the body does not
     split further) and the ``team_a`` / ``team_b`` / ``code_team_a`` / ``code_team_b``
-    header fields repeated on every row.
+    header fields repeated on every row. Team A is the home side as measured on one
+    game.
 
     Args:
         raw: the ``PlayByPlay`` JSON body, or ``{}`` (the runtime's "no such game" answer).
@@ -241,7 +301,7 @@ def parse_euroleague_pbp(
     Returns:
         One row per play, snake_cased, string cells stripped of their space padding,
         ``codeteam`` / ``player_id`` / the team codes pinned to ``Utf8``. A zero-row
-        frame for ``{}``, ``None`` or a malformed payload.
+        frame with the documented columns for ``{}``, ``None`` or a malformed payload.
 
     Raises:
         None: malformed payloads yield a zero-row frame rather than an exception.
@@ -273,11 +333,30 @@ def parse_euroleague_pbp(
             for play in plays if isinstance(plays, list) else []:
                 if isinstance(play, dict):
                     rows.append({"Quarter": quarter, **head, **play})
-    df = _live_frame(rows)
+    df = _live_frame("game_pbp", rows)
     # The running score is an integer on the wire but null on the admin plays that
     # open a period; a truncated or partial body must not drift it to Utf8.
     df = df.with_columns(pl.col(c).cast(pl.Int64, strict=False) for c in ("points_a", "points_b") if c in df.columns)
     return as_output(df, return_as_pandas=return_as_pandas)
+
+
+def _quarter_scores(block: Any, side: int, team: Any, prefix: str) -> Dict[str, Any]:
+    """The side's ``{prefix}_q1..`` cells from a ``ByQuarter`` / ``EndOfQuarter`` block.
+
+    The block is one object per side, keyed by the team name in UPPER CASE where
+    ``Stats`` carries it in title case, so the match folds case and falls back to
+    the side's position.
+    """
+    if not isinstance(block, list):
+        return {}
+    name = str(team or "").strip().casefold()
+    rows = [r for r in block if isinstance(r, dict)]
+    match = next((r for r in rows if str(r.get("Team") or "").strip().casefold() == name), None)
+    if match is None and side < len(rows):
+        match = rows[side]
+    if match is None:
+        return {}
+    return {f"{prefix}_{str(k).replace('Quarter', 'Q')}": v for k, v in match.items() if k != "Team"}
 
 
 def parse_euroleague_boxscore(
@@ -290,9 +369,11 @@ def parse_euroleague_boxscore(
     ``Stats`` holds one object per side (``Team``, ``Coach``, ``PlayersStats``,
     ``tmr`` = team-only rebounds, ``totr`` = totals). Each side's players become
     rows tagged ``row_type = "player"``, followed by the side's ``"team"`` and
-    ``"total"`` rows, all carrying ``team_name`` and ``coach``. The by-quarter scores,
-    referees and attendance are left in the raw payload (``return_parsed=False``);
-    the quarter scores and referees are also on ``Header``.
+    ``"total"`` rows. Every row also carries the game's ``attendance`` and
+    ``referees`` and, for the row's side, ``team_name``, ``coach``, the points scored
+    per quarter (``by_quarter_q1`` ...) and the cumulative score at the end of each
+    quarter (``end_of_quarter_q1`` ...). These repeat per row rather than forming a
+    second table because the family's returns tables document one frame per route.
 
     Args:
         raw: the ``Boxscore`` JSON body, or ``{}`` (the runtime's "no such game" answer).
@@ -300,8 +381,9 @@ def parse_euroleague_boxscore(
 
     Returns:
         One row per player plus two per side, snake_cased, string cells stripped of
-        their space padding, ``player_id`` / ``team`` pinned to ``Utf8``. A zero-row
-        frame for ``{}``, ``None`` or a malformed payload.
+        their space padding, ``player_id`` / ``team`` pinned to ``Utf8``,
+        ``is_starter`` / ``is_playing`` ``Int64``. A zero-row frame with the documented
+        columns for ``{}``, ``None`` or a malformed payload.
 
     Raises:
         None: malformed payloads yield a zero-row frame rather than an exception.
@@ -327,10 +409,17 @@ def parse_euroleague_boxscore(
     """
     rows: List[Dict[str, Any]] = []
     sides = raw.get("Stats") if isinstance(raw, dict) else None
-    for side in sides if isinstance(sides, list) else []:
-        if not isinstance(side, dict):
+    game = {"Attendance": raw.get("Attendance"), "Referees": raw.get("Referees")} if isinstance(raw, dict) else {}
+    for i, side in enumerate(sides if isinstance(sides, list) else []):
+        if not isinstance(side, dict) or not isinstance(raw, dict):
             continue
-        head = {"TeamName": side.get("Team"), "Coach": side.get("Coach")}
+        head = {
+            "TeamName": side.get("Team"),
+            "Coach": side.get("Coach"),
+            **game,
+            **_quarter_scores(raw.get("ByQuarter"), i, side.get("Team"), "ByQuarter"),
+            **_quarter_scores(raw.get("EndOfQuarter"), i, side.get("Team"), "EndOfQuarter"),
+        }
         players = side.get("PlayersStats")
         for player in players if isinstance(players, list) else []:
             if isinstance(player, dict):
@@ -338,4 +427,9 @@ def parse_euroleague_boxscore(
         for key, kind in (("tmr", "team"), ("totr", "total")):
             if isinstance(side.get(key), dict):
                 rows.append({"RowType": kind, **head, **side[key]})
-    return as_output(_live_frame(rows), return_as_pandas=return_as_pandas)
+    df = _live_frame("game_boxscore", rows)
+    # 1 / 0 flags on the player rows, absent on the totals row: pin them, never Float64.
+    df = df.with_columns(
+        pl.col(c).cast(pl.Int64, strict=False) for c in ("is_starter", "is_playing") if c in df.columns
+    )
+    return as_output(df, return_as_pandas=return_as_pandas)

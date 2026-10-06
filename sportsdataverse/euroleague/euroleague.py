@@ -10,8 +10,9 @@ from sportsdataverse.euroleague.euroleague_runtime import _get
 from sportsdataverse.euroleague.euroleague_parsers import (
     parse_euroleague,
     parse_euroleague_boxscore,
-    parse_euroleague_live,
+    parse_euroleague_header,
     parse_euroleague_pbp,
+    parse_euroleague_points,
 )
 
 if TYPE_CHECKING:  # pragma: no cover -- annotation-only imports (PEP 563 defers eval)
@@ -142,8 +143,8 @@ def euroleague_competitions(
 
 
 def euroleague_game_boxscore(
-    game_code: Optional[str] = None,
-    season_code: Optional[str] = None,
+    game_code: str,
+    season_code: str,
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
@@ -199,8 +200,8 @@ def euroleague_game_boxscore(
 
 
 def euroleague_game_header(
-    game_code: Optional[str] = None,
-    season_code: Optional[str] = None,
+    game_code: str,
+    season_code: str,
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
@@ -214,7 +215,7 @@ def euroleague_game_header(
     Args:
         game_code: Required. Game number within the season (1-based).
         season_code: Required. Competition code + start year: E2025 (EuroLeague 2025-26), U2025 (EuroCup).
-        return_parsed: parse the payload through parse_euroleague_live -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON ``Dict`` (``{}`` when the live API answers its empty-body "no such game" sentinel, which the parser turns into a zero-row frame).
+        return_parsed: parse the payload through parse_euroleague_header -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON ``Dict`` (``{}`` when the live API answers its empty-body "no such game" sentinel, which the parser turns into a zero-row frame).
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
 
@@ -251,13 +252,13 @@ def euroleague_game_header(
         **kwargs,
     )
     if return_parsed:
-        return parse_euroleague_live(raw, return_as_pandas=return_as_pandas)
+        return parse_euroleague_header(raw, return_as_pandas=return_as_pandas)
     return raw
 
 
 def euroleague_game_pbp(
-    game_code: Optional[str] = None,
-    season_code: Optional[str] = None,
+    game_code: str,
+    season_code: str,
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
@@ -313,8 +314,8 @@ def euroleague_game_pbp(
 
 
 def euroleague_game_points(
-    game_code: Optional[str] = None,
-    season_code: Optional[str] = None,
+    game_code: str,
+    season_code: str,
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
@@ -328,7 +329,7 @@ def euroleague_game_points(
     Args:
         game_code: Required. Game number within the season (1-based).
         season_code: Required. Competition code + start year: E2025 (EuroLeague 2025-26), U2025 (EuroCup).
-        return_parsed: parse the payload through parse_euroleague_live -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON ``Dict`` (``{}`` when the live API answers its empty-body "no such game" sentinel, which the parser turns into a zero-row frame).
+        return_parsed: parse the payload through parse_euroleague_points -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON ``Dict`` (``{}`` when the live API answers its empty-body "no such game" sentinel, which the parser turns into a zero-row frame).
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
 
@@ -365,7 +366,7 @@ def euroleague_game_points(
         **kwargs,
     )
     if return_parsed:
-        return parse_euroleague_live(raw, return_as_pandas=return_as_pandas)
+        return parse_euroleague_points(raw, return_as_pandas=return_as_pandas)
     return raw
 
 
@@ -654,6 +655,8 @@ def euroleague_player_stats(
         .. _EuroLeague Basketball: https://www.euroleaguebasketball.net/
         .. _euroleague-api: https://github.com/giasemidis/euroleague_api
     """
+    if mode not in ("traditional", "advanced"):
+        raise ValueError(f"mode must be one of ('traditional', 'advanced'); got {mode!r}")
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
         "SeasonMode": season_mode,
@@ -824,6 +827,10 @@ def euroleague_standings(
         .. _EuroLeague Basketball: https://www.euroleaguebasketball.net/
         .. _euroleague-api: https://github.com/giasemidis/euroleague_api
     """
+    if kind not in ("basicstandings", "calendarstandings", "streaks", "aheadbehind"):
+        raise ValueError(
+            f"kind must be one of ('basicstandings', 'calendarstandings', 'streaks', 'aheadbehind'); got {kind!r}"
+        )
     _caller_params = kwargs.pop("params", None) or {}
     _params = {}
     _params.update(_caller_params)
@@ -888,6 +895,8 @@ def euroleague_team_stats(
         .. _EuroLeague Basketball: https://www.euroleaguebasketball.net/
         .. _euroleague-api: https://github.com/giasemidis/euroleague_api
     """
+    if mode not in ("traditional", "advanced"):
+        raise ValueError(f"mode must be one of ('traditional', 'advanced'); got {mode!r}")
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
         "SeasonMode": season_mode,

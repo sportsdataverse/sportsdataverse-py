@@ -58,11 +58,13 @@ endpoints:
   - description: Required. Game number within the season (1-based).
     name: game_code
     query_key: gamecode
+    required: true
     type: str
   - description: 'Required. Competition code + start year: E2025 (EuroLeague 2025-26),
       U2025 (EuroCup).'
     name: season_code
     query_key: seasoncode
+    required: true
     type: str
   host: https://live.euroleague.net/api
   parser: parse_euroleague_boxscore
@@ -93,14 +95,16 @@ endpoints:
   - description: Required. Game number within the season (1-based).
     name: game_code
     query_key: gamecode
+    required: true
     type: str
   - description: 'Required. Competition code + start year: E2025 (EuroLeague 2025-26),
       U2025 (EuroCup).'
     name: season_code
     query_key: seasoncode
+    required: true
     type: str
   host: https://live.euroleague.net/api
-  parser: parse_euroleague_live
+  parser: parse_euroleague_header
   path: /Header
   returns_schema: native/euroleague/game_header
   short: game_header
@@ -127,11 +131,13 @@ endpoints:
   - description: Required. Game number within the season (1-based).
     name: game_code
     query_key: gamecode
+    required: true
     type: str
   - description: 'Required. Competition code + start year: E2025 (EuroLeague 2025-26),
       U2025 (EuroCup).'
     name: season_code
     query_key: seasoncode
+    required: true
     type: str
   host: https://live.euroleague.net/api
   parser: parse_euroleague_pbp
@@ -162,14 +168,16 @@ endpoints:
   - description: Required. Game number within the season (1-based).
     name: game_code
     query_key: gamecode
+    required: true
     type: str
   - description: 'Required. Competition code + start year: E2025 (EuroLeague 2025-26),
       U2025 (EuroCup).'
     name: season_code
     query_key: seasoncode
+    required: true
     type: str
   host: https://live.euroleague.net/api
-  parser: parse_euroleague_live
+  parser: parse_euroleague_points
   path: /Points
   returns_schema: native/euroleague/game_points
   short: game_points
@@ -334,7 +342,10 @@ endpoints:
     name: competition_code
     required: true
     type: str
-  - default: traditional
+  - choices:
+    - traditional
+    - advanced
+    default: traditional
     description: traditional (default) or advanced; the columns depend on it (see
       Returns).
     name: mode
@@ -407,7 +418,12 @@ endpoints:
     name: round
     required: true
     type: str
-  - default: basicstandings
+  - choices:
+    - basicstandings
+    - calendarstandings
+    - streaks
+    - aheadbehind
+    default: basicstandings
     description: 'Standings table: basicstandings (default), calendarstandings, streaks
       or aheadbehind; the columns depend on it (see Returns).'
     name: kind
@@ -467,7 +483,10 @@ endpoints:
     name: competition_code
     required: true
     type: str
-  - default: traditional
+  - choices:
+    - traditional
+    - advanced
+    default: traditional
     description: traditional (default) or advanced; the columns depend on it (see
       Returns).
     name: mode

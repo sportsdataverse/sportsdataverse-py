@@ -53,10 +53,12 @@ columns:
 - description: Game clock at the event (mm:ss remaining in the period).
   name: console
   type: character
-- description: Running score of team A (the home side) after the event.
+- description: Running score of team A (= the home side, measured on one game) after
+    the event.
   name: points_a
   type: integer
-- description: Running score of team B (the away side) after the event.
+- description: Running score of team B (= the away side, measured on one game) after
+    the event.
   name: points_b
   type: integer
 - description: UTC timestamp of the event (yyyymmddHHMMSS).

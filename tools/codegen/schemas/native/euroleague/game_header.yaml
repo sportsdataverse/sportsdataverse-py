@@ -14,22 +14,25 @@ columns:
 - description: Venue name.
   name: stadium
   type: character
-- description: Seating capacity of the venue.
+- description: Capacity as reported by the API (equals the box score's attendance
+    on the captured game; semantics unverified).
   name: capacity
   type: character
-- description: Display name of team A (the home side).
+- description: Display name of team A (= the home side, measured on one game).
   name: team_a
   type: character
-- description: Display name of team B (the away side).
+- description: Display name of team B (= the away side, measured on one game).
   name: team_b
   type: character
-- description: EuroLeague club code of team A (the home side; Utf8 join key).
+- description: EuroLeague club code of team A (= the home side, measured on one game);
+    Utf8 join key.
   name: code_team_a
   type: character
 - description: Three-letter broadcast abbreviation of team A.
   name: tv_code_a
   type: character
-- description: EuroLeague club code of team B (the away side; Utf8 join key).
+- description: EuroLeague club code of team B (= the away side, measured on one game);
+    Utf8 join key.
   name: code_team_b
   type: character
 - description: Three-letter broadcast abbreviation of team B.
@@ -41,10 +44,10 @@ columns:
 - description: Crest image file name of team B.
   name: im_b
   type: character
-- description: Score of team A (the home side).
+- description: Score of team A (= the home side, measured on one game).
   name: score_a
   type: character
-- description: Score of team B (the away side).
+- description: Score of team B (= the away side, measured on one game).
   name: score_b
   type: character
 - description: Head coach of team A.
@@ -79,34 +82,34 @@ columns:
 - description: Timeouts used by team B.
   name: timeouts_b
   type: character
-- description: Points scored by team A (the home side) in quarter 1.
+- description: Score of team A at the end of quarter 1 (cumulative).
   name: score_quarter1_a
   type: integer
-- description: Points scored by team A (the home side) in quarter 2.
+- description: Score of team A at the end of quarter 2 (cumulative).
   name: score_quarter2_a
   type: integer
-- description: Points scored by team A (the home side) in quarter 3.
+- description: Score of team A at the end of quarter 3 (cumulative).
   name: score_quarter3_a
   type: integer
-- description: Points scored by team A (the home side) in quarter 4.
+- description: Score of team A at the end of quarter 4 (cumulative).
   name: score_quarter4_a
   type: integer
-- description: Points scored by team A in overtime.
+- description: Points scored by team A in overtime (0 when none).
   name: score_extra_time_a
   type: integer
-- description: Points scored by team B (the away side) in quarter 1.
+- description: Score of team B at the end of quarter 1 (cumulative).
   name: score_quarter1_b
   type: integer
-- description: Points scored by team B (the away side) in quarter 2.
+- description: Score of team B at the end of quarter 2 (cumulative).
   name: score_quarter2_b
   type: integer
-- description: Points scored by team B (the away side) in quarter 3.
+- description: Score of team B at the end of quarter 3 (cumulative).
   name: score_quarter3_b
   type: integer
-- description: Points scored by team B (the away side) in quarter 4.
+- description: Score of team B at the end of quarter 4 (cumulative).
   name: score_quarter4_b
   type: integer
-- description: Points scored by team B in overtime.
+- description: Points scored by team B in overtime (0 when none).
   name: score_extra_time_b
   type: integer
 - description: Phase name (Regular Season, Playoffs, ...).

@@ -73,12 +73,15 @@ _OP_PREFIXES = ("competitions_competitionCode_seasons_seasonCode_", "competition
 
 # The live API's operationIds are its bare route names.
 _LIVE_SHORTS = {"Points": "game_points", "PlayByPlay": "game_pbp", "Boxscore": "game_boxscore", "Header": "game_header"}
+# One parser per live route, each carrying its documented schema for the empty-body case
+# (``_euroleague_schemas.py``, generated below from the captures).
 _LIVE_PARSERS = {
-    "game_points": "parse_euroleague_live",
-    "game_header": "parse_euroleague_live",
+    "game_points": "parse_euroleague_points",
+    "game_header": "parse_euroleague_header",
     "game_pbp": "parse_euroleague_pbp",
     "game_boxscore": "parse_euroleague_boxscore",
 }
+_SCHEMAS_MODULE = ROOT / "sportsdataverse" / "euroleague" / "_euroleague_schemas.py"
 
 # One wrapper over sibling routes: ``members`` are the (unmerged) shorts in the order
 # the values are documented, the first being the default of the ``token`` argument.
@@ -310,14 +313,14 @@ _LEAF: Dict[str, str] = {
     "points_off_turnover": "Whether the shot came off a turnover (0 / 1 as a string).",
     "minute": "Game minute of the event (1-based; 41+ in overtime).",
     "console": "Game clock at the event (mm:ss remaining in the period).",
-    "points_a": "Running score of team A (the home side) after the event.",
-    "points_b": "Running score of team B (the away side) after the event.",
+    "points_a": "Running score of team A (= the home side, measured on one game) after the event.",
+    "points_b": "Running score of team B (= the away side, measured on one game) after the event.",
     "utc": "UTC timestamp of the event (yyyymmddHHMMSS).",
     "quarter": "Period of the play: 1-4, or 5 for every overtime period.",
-    "team_a": "Display name of team A (the home side).",
-    "team_b": "Display name of team B (the away side).",
-    "code_team_a": "EuroLeague club code of team A (the home side; Utf8 join key).",
-    "code_team_b": "EuroLeague club code of team B (the away side; Utf8 join key).",
+    "team_a": "Display name of team A (= the home side, measured on one game).",
+    "team_b": "Display name of team B (= the away side, measured on one game).",
+    "code_team_a": "EuroLeague club code of team A (= the home side, measured on one game); Utf8 join key.",
+    "code_team_b": "EuroLeague club code of team B (= the away side, measured on one game); Utf8 join key.",
     "tv_code_a": "Three-letter broadcast abbreviation of team A.",
     "tv_code_b": "Three-letter broadcast abbreviation of team B.",
     "numberofplay": "Sequence number of the play within the game.",
@@ -328,6 +331,8 @@ _LEAF: Dict[str, str] = {
     "playinfo": "Play description.",
     "row_type": "Row kind: player, team (team-only rebounds) or total (side totals).",
     "coach": "Head coach name.",
+    "attendance": "Attendance, as reported by the box score (repeated on every row).",
+    "referees": "Referees of the game, comma-separated SURNAME, GIVEN NAME (repeated on every row).",
     "is_starter": "Whether the player started (1 / 0).",
     "is_playing": "Whether the player appeared in the game (1 / 0).",
     "minutes": "Minutes played (mm:ss).",
@@ -336,8 +341,8 @@ _LEAF: Dict[str, str] = {
     "stadium": "Venue name.",
     "im_a": "Crest image file name of team A.",
     "im_b": "Crest image file name of team B.",
-    "score_a": "Score of team A (the home side).",
-    "score_b": "Score of team B (the away side).",
+    "score_a": "Score of team A (= the home side, measured on one game).",
+    "score_b": "Score of team B (= the away side, measured on one game).",
     "coach_a": "Head coach of team A.",
     "coach_b": "Head coach of team B.",
     "game_time": "Elapsed game time (mm:ss).",
@@ -347,8 +352,8 @@ _LEAF: Dict[str, str] = {
     "foults_b": "Team fouls of team B in the current period (sic: the API spells it this way).",
     "timeouts_a": "Timeouts used by team A.",
     "timeouts_b": "Timeouts used by team B.",
-    "score_extra_time_a": "Points scored by team A in overtime.",
-    "score_extra_time_b": "Points scored by team B in overtime.",
+    "score_extra_time_a": "Points scored by team A in overtime (0 when none).",
+    "score_extra_time_b": "Points scored by team B in overtime (0 when none).",
     "phase": "Phase name (Regular Season, Playoffs, ...).",
     "phase_reduced_name": "Short phase name.",
     "competition": "Competition name.",
@@ -359,8 +364,12 @@ _LEAF: Dict[str, str] = {
     "referee3": "Third referee.",
 }
 for _q in (1, 2, 3, 4):
-    for _side, _label in (("a", "team A (the home side)"), ("b", "team B (the away side)")):
-        _LEAF[f"score_quarter{_q}_{_side}"] = f"Points scored by {_label} in quarter {_q}."
+    for _side, _label in (("a", "team A"), ("b", "team B")):
+        _LEAF[f"score_quarter{_q}_{_side}"] = f"Score of {_label} at the end of quarter {_q} (cumulative)."
+    _LEAF[f"by_quarter_q{_q}"] = f"Points the row's team scored in quarter {_q} (from the box score's ByQuarter block)."
+    _LEAF[f"end_of_quarter_q{_q}"] = (
+        f"Score of the row's team at the end of quarter {_q} (cumulative; from the box score's EndOfQuarter block)."
+    )
 for _when, _label in (
     ("quater1", "after the 1st quarter"),
     ("half1", "at the half"),
@@ -413,6 +422,7 @@ _PER_SHORT: Dict[str, Dict[str, str]] = {
     "game_points": {"points": "Points the shot is worth (1, 2 or 3)."},
     "game_header": {
         "round": "Round label (e.g. Round 1).",
+        "capacity": "Capacity as reported by the API (equals the box score's attendance on the captured game; semantics unverified).",
         "quarter": "Current period of the game.",
         "date": "Game date (venue local, dd/mm/yyyy).",
     },
@@ -514,7 +524,7 @@ def _path_params(op: dict) -> List[Dict[str, Any]]:
     ]
 
 
-def _query_params(op: dict) -> List[Dict[str, Any]]:
+def _query_params(op: dict, host: Optional[str]) -> List[Dict[str, Any]]:
     out: List[Dict[str, Any]] = []
     for prm in op.get("parameters", []):
         if prm.get("in") != "query":
@@ -529,6 +539,9 @@ def _query_params(op: dict) -> List[Dict[str, Any]]:
             "type": "str",
             "description": desc,
         }
+        if host == LIVE_HOST and prm.get("required"):
+            # positional, not Optional: an omitted code answers a silent empty 200
+            entry["required"] = True
         if wire in _QUERY_DEFAULTS:
             entry["default"] = _QUERY_DEFAULTS[wire]
             entry["description"] = f"{desc} Default {_QUERY_DEFAULTS[wire]}."
@@ -569,7 +582,7 @@ def _endpoint_entry(spec: dict, path: str, op: dict) -> Dict[str, Any]:
     short = _short(op)
     host = _host(spec, path)
     pps = _path_params(op)
-    qps = _query_params(op)
+    qps = _query_params(op, host)
     names = {p["name"] for p in pps}
     assert not {"league", "sport"} & names, path
     assert {underscore(t) for t in _TOKEN.findall(path)} == names, path
@@ -609,7 +622,14 @@ def _merge(
     entry["returns_schema"] = f"native/{STEM}/{short}"
     entry["path_params"] = [
         *entry.get("path_params", []),
-        {"name": token, "type": "str", "required": False, "default": values[0], "description": grp["token_doc"]},
+        {
+            "name": token,
+            "type": "str",
+            "required": False,
+            "default": values[0],
+            "choices": values,
+            "description": grp["token_doc"],
+        },
     ]
     return entry, [(value, by_member[m][1]) for m, value in zip(grp["members"], values)]
 
@@ -660,6 +680,7 @@ def main() -> None:
     shared = [spec_descriptions(spec), markdown_descriptions(refs / f"{STEM}-returns.md"), _descriptions()]
     schema_dir = ROOT / f"tools/codegen/schemas/native/{STEM}"
     rewrite_schema_dir(schema_dir)
+    live_schemas: Dict[str, Dict[str, str]] = {}
     for entry in entries:
         short = entry["short"]
         parser = getattr(euroleague_parsers, entry["parser"])
@@ -668,7 +689,10 @@ def main() -> None:
         missing = []
         for value, capture in captures[short]:
             if capture.exists():
-                tables.append((value, columns_from_frame(parse_capture(capture, parser), descriptions)))
+                frame = parse_capture(capture, parser)
+                tables.append((value, columns_from_frame(frame, descriptions)))
+                if short in _LIVE_PARSERS:
+                    live_schemas[short] = {c: str(t) for c, t in frame.schema.items()}
             else:
                 missing.append(capture.name)
         schema: Dict[str, Any] = {"schema": short}
@@ -684,7 +708,30 @@ def main() -> None:
                 f"no committed capture in sdv-internal-refs/{STEM}/captures/{SEASON} ({', '.join(missing)})"
             )
         write_yaml(schema_dir / f"{short}.yaml", schema)
+    _write_schemas_module(live_schemas)
     print(f"{STEM}: {len(entries)} endpoints ({len(ops)} routes)")
+
+
+def _write_schemas_module(schemas: Dict[str, Dict[str, str]]) -> None:
+    """The live parsers' documented schemas, so an empty body yields a zero-row frame WITH columns."""
+    lines = [
+        "# GENERATED by tools/codegen/gen_euroleague.py -- DO NOT EDIT.",
+        '"""Documented polars schema per live-API route (the columns its parser emits on the',
+        'committed capture), so the empty-body "no such game" answer parses to a zero-row frame',
+        'that still carries the returns table."""',
+        "",
+        "from __future__ import annotations",
+        "",
+        "from typing import Dict",
+        "",
+        "SCHEMAS: Dict[str, Dict[str, str]] = {",
+    ]
+    for short in sorted(schemas):
+        lines.append(f'    "{short}": {{')
+        lines += [f'        "{col}": "{dtype}",' for col, dtype in schemas[short].items()]
+        lines.append("    },")
+    lines.append("}")
+    _SCHEMAS_MODULE.write_text("\n".join(lines) + "\n", encoding="utf-8", newline="\n")
 
 
 if __name__ == "__main__":
