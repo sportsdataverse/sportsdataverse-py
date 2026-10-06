@@ -1,0 +1,284 @@
+frames:
+- columns:
+  - description: Position code of the player (engine integer).
+    name: position
+    type: integer
+  - description: Movement since the previous round (Up, Down, Equal).
+    name: position_change
+    type: character
+  - description: Games played.
+    name: games_played
+    type: integer
+  - description: Games won.
+    name: games_won
+    type: integer
+  - description: Games lost.
+    name: games_lost
+    type: integer
+  - description: Whether the team has clinched qualification for the next phase.
+    name: qualified
+    type: logical
+  - description: Win percentage, formatted (e.g. 100%).
+    name: win_percentage
+    type: character
+  - description: Points for minus points against, signed and formatted (e.g. +19).
+    name: points_difference
+    type: character
+  - description: Points scored.
+    name: points_for
+    type: integer
+  - description: Points conceded.
+    name: points_against
+    type: integer
+  - description: Home win-loss record (W-L).
+    name: home_record
+    type: character
+  - description: Away win-loss record (W-L).
+    name: away_record
+    type: character
+  - description: Neutral-venue win-loss record (W-L).
+    name: neutral_record
+    type: character
+  - description: Overtime win-loss record (W-L).
+    name: overtime_record
+    type: character
+  - description: Win-loss record over the last ten games (W-L).
+    name: last_ten_record
+    type: character
+  - description: 'Group: display name.'
+    name: group_name
+    type: character
+  - description: Results of the last five games, oldest first (W / L), JSON-encoded.
+    name: last5_form
+    type: character
+  - description: 'Club: euroLeague code of the entity (competition, season, club,
+      person or venue; Utf8 join key).'
+    name: club_code
+    type: character
+  - description: 'Club: display name.'
+    name: club_name
+    type: character
+  - description: 'Club: abbreviated display name.'
+    name: club_abbreviated_name
+    type: character
+  - description: 'Club: editorial (long-form) display name.'
+    name: club_editorial_name
+    type: character
+  - description: 'Club: three-letter broadcast abbreviation of the club.'
+    name: club_tv_code
+    type: character
+  - description: 'Club: whether the club is a placeholder rather than a real club.'
+    name: club_is_virtual
+    type: logical
+  - description: 'Club: URL of the club crest image.'
+    name: club_images_crest
+    type: character
+  section: basicstandings
+- columns:
+  - description: Position code of the player (engine integer).
+    name: position
+    type: integer
+  - description: Movement since the previous round (Up, Down, Equal).
+    name: position_change
+    type: character
+  - description: Games played.
+    name: games_played
+    type: integer
+  - description: Games won.
+    name: games_won
+    type: integer
+  - description: Games lost.
+    name: games_lost
+    type: integer
+  - description: Whether the team has clinched qualification for the next phase.
+    name: qualified
+    type: logical
+  - description: 'Group: display name.'
+    name: group_name
+    type: character
+  - description: 'Per-round result streaks: start date, end date and W-L record of
+      each run, JSON-encoded.'
+    name: streaks
+    type: character
+  - description: 'Club: euroLeague code of the entity (competition, season, club,
+      person or venue; Utf8 join key).'
+    name: club_code
+    type: character
+  - description: 'Club: display name.'
+    name: club_name
+    type: character
+  - description: 'Club: abbreviated display name.'
+    name: club_abbreviated_name
+    type: character
+  - description: 'Club: editorial (long-form) display name.'
+    name: club_editorial_name
+    type: character
+  - description: 'Club: three-letter broadcast abbreviation of the club.'
+    name: club_tv_code
+    type: character
+  - description: 'Club: whether the club is a placeholder rather than a real club.'
+    name: club_is_virtual
+    type: logical
+  - description: 'Club: URL of the club crest image.'
+    name: club_images_crest
+    type: character
+  section: calendarstandings
+- columns:
+  - description: Position code of the player (engine integer).
+    name: position
+    type: integer
+  - description: Movement since the previous round (Up, Down, Equal).
+    name: position_change
+    type: character
+  - description: Games played.
+    name: games_played
+    type: integer
+  - description: Games won.
+    name: games_won
+    type: integer
+  - description: Games lost.
+    name: games_lost
+    type: integer
+  - description: Whether the team has clinched qualification for the next phase.
+    name: qualified
+    type: logical
+  - description: Home win-loss record (W-L).
+    name: home_record
+    type: character
+  - description: Away win-loss record (W-L).
+    name: away_record
+    type: character
+  - description: Win-loss record over the last ten games (W-L).
+    name: last10
+    type: character
+  - description: Win-loss record over the last five home games (W-L).
+    name: home_last5
+    type: character
+  - description: Win-loss record over the last five away games (W-L).
+    name: away_last5
+    type: character
+  - description: Longest winning streak this season.
+    name: longest_wins_streak_current_season
+    type: integer
+  - description: Longest losing streak this season.
+    name: longest_loses_streak_current_season
+    type: integer
+  - description: Longest winning streak in any season.
+    name: longest_wins_streak_any_season
+    type: integer
+  - description: Longest losing streak in any season.
+    name: longest_loses_streak_any_season
+    type: integer
+  - description: 'Group: display name.'
+    name: group_name
+    type: character
+  - description: 'Club: euroLeague code of the entity (competition, season, club,
+      person or venue; Utf8 join key).'
+    name: club_code
+    type: character
+  - description: 'Club: display name.'
+    name: club_name
+    type: character
+  - description: 'Club: abbreviated display name.'
+    name: club_abbreviated_name
+    type: character
+  - description: 'Club: editorial (long-form) display name.'
+    name: club_editorial_name
+    type: character
+  - description: 'Club: three-letter broadcast abbreviation of the club.'
+    name: club_tv_code
+    type: character
+  - description: 'Club: whether the club is a placeholder rather than a real club.'
+    name: club_is_virtual
+    type: logical
+  - description: 'Club: URL of the club crest image.'
+    name: club_images_crest
+    type: character
+  section: streaks
+- columns:
+  - description: Position code of the player (engine integer).
+    name: position
+    type: integer
+  - description: Movement since the previous round (Up, Down, Equal).
+    name: position_change
+    type: character
+  - description: Games played.
+    name: games_played
+    type: integer
+  - description: Games won.
+    name: games_won
+    type: integer
+  - description: Games lost.
+    name: games_lost
+    type: integer
+  - description: Whether the team has clinched qualification for the next phase.
+    name: qualified
+    type: logical
+  - description: Win percentage, formatted (e.g. 100%).
+    name: wins_percentage
+    type: character
+  - description: 'Win-loss record when ahead after the 1st quarter (W-L; sic: the
+      API spells quarter this way).'
+    name: quater1_ahead
+    type: character
+  - description: 'Win-loss record when behind after the 1st quarter (W-L; sic: the
+      API spells quarter this way).'
+    name: quater1_behind
+    type: character
+  - description: 'Win-loss record when tied after the 1st quarter (W-L; sic: the API
+      spells quarter this way).'
+    name: quater1_tied
+    type: character
+  - description: 'Win-loss record when ahead at the half (W-L; sic: the API spells
+      quarter this way).'
+    name: half1_ahead
+    type: character
+  - description: 'Win-loss record when behind at the half (W-L; sic: the API spells
+      quarter this way).'
+    name: half1_behind
+    type: character
+  - description: 'Win-loss record when tied at the half (W-L; sic: the API spells
+      quarter this way).'
+    name: half1_tied
+    type: character
+  - description: 'Win-loss record when ahead after the 3rd quarter (W-L; sic: the
+      API spells quarter this way).'
+    name: quater3_ahead
+    type: character
+  - description: 'Win-loss record when behind after the 3rd quarter (W-L; sic: the
+      API spells quarter this way).'
+    name: quater3_behind
+    type: character
+  - description: 'Win-loss record when tied after the 3rd quarter (W-L; sic: the API
+      spells quarter this way).'
+    name: quater3_tied
+    type: character
+  - description: 'Group: display name.'
+    name: group_name
+    type: character
+  - description: 'Club: euroLeague code of the entity (competition, season, club,
+      person or venue; Utf8 join key).'
+    name: club_code
+    type: character
+  - description: 'Club: display name.'
+    name: club_name
+    type: character
+  - description: 'Club: abbreviated display name.'
+    name: club_abbreviated_name
+    type: character
+  - description: 'Club: editorial (long-form) display name.'
+    name: club_editorial_name
+    type: character
+  - description: 'Club: three-letter broadcast abbreviation of the club.'
+    name: club_tv_code
+    type: character
+  - description: 'Club: whether the club is a placeholder rather than a real club.'
+    name: club_is_virtual
+    type: logical
+  - description: 'Club: URL of the club crest image.'
+    name: club_images_crest
+    type: character
+  section: aheadbehind
+frames_by: kind
+kind: frames
+schema: standings

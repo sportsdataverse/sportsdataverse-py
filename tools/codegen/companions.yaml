@@ -42,3 +42,16 @@ f1:
   - name: Jolpica F1 API
     url: https://github.com/jolpica/jolpica-f1
     note: the API itself (docs, CC BY-NC-SA 4.0 terms, 500 requests/hour limit)
+euroleague:
+  - name: hoopR
+    url: https://hoopR.sportsdataverse.org
+    note: the R home of SportsDataverse basketball, where the EuroLeague wrappers land next
+  - name: sdvplot
+    url: https://github.com/sportsdataverse/sdvplot
+    note: draws the FIBA court the shot chart's hoop-origin centimeter coordinates land on
+  - name: sdvplotR
+    url: https://github.com/sportsdataverse/sdvplotR
+    note: the R twin, same FIBA court
+  - name: euroleague-api
+    url: https://github.com/giasemidis/euroleague_api
+    note: community Python client for the same EuroLeague and EuroCup APIs

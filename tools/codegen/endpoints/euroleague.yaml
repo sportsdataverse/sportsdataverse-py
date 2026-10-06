@@ -3,14 +3,14 @@ docstring:
   example_import: true
   raises:
   - 'sportsdataverse.errors.NoDataError: the EuroLeague API returned 404 (unknown
-    competition, season or game code).'
+    competition, season, round or game code).'
   see_also:
   - name: EuroLeague Basketball
-    note: the site the Competition Engine API serves (competitions, seasons, clubs,
-      games)
+    note: the site the Competition Engine and live APIs serve (competitions, seasons,
+      clubs, games)
     url: https://www.euroleaguebasketball.net/
   - name: euroleague-api
-    note: community Python client over the same v2 API
+    note: community Python client over the same v2 / v3 / live APIs
     url: https://github.com/giasemidis/euroleague_api
 endpoints:
 - example_args:
@@ -36,6 +36,189 @@ endpoints:
   returns_schema: native/euroleague/competitions
   short: competitions
   summary: Competitions (EuroLeague E, EuroCup U, ...).
+- docstring:
+    example_import: true
+    raises:
+    - 'sportsdataverse.errors.NoDataError: the EuroLeague API returned 404 (unknown
+      competition, season, round or game code).'
+    raw_doc: the raw JSON ``Dict`` (``{}`` when the live API answers its empty-body
+      "no such game" sentinel, which the parser turns into a zero-row frame)
+    see_also:
+    - name: EuroLeague Basketball
+      note: the site the Competition Engine and live APIs serve (competitions, seasons,
+        clubs, games)
+      url: https://www.euroleaguebasketball.net/
+    - name: euroleague-api
+      note: community Python client over the same v2 / v3 / live APIs
+      url: https://github.com/giasemidis/euroleague_api
+  example_args:
+    game_code: 1
+    season_code: E2025
+  extra_params:
+  - description: Required. Game number within the season (1-based).
+    name: game_code
+    query_key: gamecode
+    required: true
+    type: str
+  - description: 'Required. Competition code + start year: E2025 (EuroLeague 2025-26),
+      U2025 (EuroCup).'
+    name: season_code
+    query_key: seasoncode
+    required: true
+    type: str
+  host: https://live.euroleague.net/api
+  parser: parse_euroleague_boxscore
+  path: /Boxscore
+  returns_schema: native/euroleague/game_boxscore
+  short: game_boxscore
+  summary: 'Box score of one game: per-player and team totals per side, by-quarter
+    scores, referees, attendance.'
+- docstring:
+    example_import: true
+    raises:
+    - 'sportsdataverse.errors.NoDataError: the EuroLeague API returned 404 (unknown
+      competition, season, round or game code).'
+    raw_doc: the raw JSON ``Dict`` (``{}`` when the live API answers its empty-body
+      "no such game" sentinel, which the parser turns into a zero-row frame)
+    see_also:
+    - name: EuroLeague Basketball
+      note: the site the Competition Engine and live APIs serve (competitions, seasons,
+        clubs, games)
+      url: https://www.euroleaguebasketball.net/
+    - name: euroleague-api
+      note: community Python client over the same v2 / v3 / live APIs
+      url: https://github.com/giasemidis/euroleague_api
+  example_args:
+    game_code: 1
+    season_code: E2025
+  extra_params:
+  - description: Required. Game number within the season (1-based).
+    name: game_code
+    query_key: gamecode
+    required: true
+    type: str
+  - description: 'Required. Competition code + start year: E2025 (EuroLeague 2025-26),
+      U2025 (EuroCup).'
+    name: season_code
+    query_key: seasoncode
+    required: true
+    type: str
+  host: https://live.euroleague.net/api
+  parser: parse_euroleague_header
+  path: /Header
+  returns_schema: native/euroleague/game_header
+  short: game_header
+  summary: 'Game header: teams, codes, coaches, score by quarter, venue, referees.'
+- docstring:
+    example_import: true
+    raises:
+    - 'sportsdataverse.errors.NoDataError: the EuroLeague API returned 404 (unknown
+      competition, season, round or game code).'
+    raw_doc: the raw JSON ``Dict`` (``{}`` when the live API answers its empty-body
+      "no such game" sentinel, which the parser turns into a zero-row frame)
+    see_also:
+    - name: EuroLeague Basketball
+      note: the site the Competition Engine and live APIs serve (competitions, seasons,
+        clubs, games)
+      url: https://www.euroleaguebasketball.net/
+    - name: euroleague-api
+      note: community Python client over the same v2 / v3 / live APIs
+      url: https://github.com/giasemidis/euroleague_api
+  example_args:
+    game_code: 1
+    season_code: E2025
+  extra_params:
+  - description: Required. Game number within the season (1-based).
+    name: game_code
+    query_key: gamecode
+    required: true
+    type: str
+  - description: 'Required. Competition code + start year: E2025 (EuroLeague 2025-26),
+      U2025 (EuroCup).'
+    name: season_code
+    query_key: seasoncode
+    required: true
+    type: str
+  host: https://live.euroleague.net/api
+  parser: parse_euroleague_pbp
+  path: /PlayByPlay
+  returns_schema: native/euroleague/game_pbp
+  short: game_pbp
+  summary: Play-by-play of one game, one array per quarter (FirstQuarter ... ForthQuarter,
+    ExtraTime).
+- docstring:
+    example_import: true
+    raises:
+    - 'sportsdataverse.errors.NoDataError: the EuroLeague API returned 404 (unknown
+      competition, season, round or game code).'
+    raw_doc: the raw JSON ``Dict`` (``{}`` when the live API answers its empty-body
+      "no such game" sentinel, which the parser turns into a zero-row frame)
+    see_also:
+    - name: EuroLeague Basketball
+      note: the site the Competition Engine and live APIs serve (competitions, seasons,
+        clubs, games)
+      url: https://www.euroleaguebasketball.net/
+    - name: euroleague-api
+      note: community Python client over the same v2 / v3 / live APIs
+      url: https://github.com/giasemidis/euroleague_api
+  example_args:
+    game_code: 1
+    season_code: E2025
+  extra_params:
+  - description: Required. Game number within the season (1-based).
+    name: game_code
+    query_key: gamecode
+    required: true
+    type: str
+  - description: 'Required. Competition code + start year: E2025 (EuroLeague 2025-26),
+      U2025 (EuroCup).'
+    name: season_code
+    query_key: seasoncode
+    required: true
+    type: str
+  host: https://live.euroleague.net/api
+  parser: parse_euroleague_points
+  path: /Points
+  returns_schema: native/euroleague/game_points
+  short: game_points
+  summary: 'Shot chart of one game: one row per made/missed FG and made FT, with COORD_X/COORD_Y
+    in cm from the hoop (the shot-chart source).'
+- docstring:
+    example_import: true
+    raises:
+    - 'sportsdataverse.errors.NoDataError: the EuroLeague API returned 404 (unknown
+      competition, season, round or game code).'
+    see_also:
+    - name: EuroLeague Basketball
+      note: the site the Competition Engine and live APIs serve (competitions, seasons,
+        clubs, games)
+      url: https://www.euroleaguebasketball.net/
+    - name: euroleague-api
+      note: community Python client over the same v2 / v3 / live APIs
+      url: https://github.com/giasemidis/euroleague_api
+  example_args:
+    competition_code: E
+    game_code: 1
+    season_code: E2025
+  host: https://api-live.euroleague.net/v3
+  parser: parse_euroleague
+  path: /competitions/{competition_code}/seasons/{season_code}/games/{game_code}/report
+  path_params:
+  - description: E = EuroLeague, U = EuroCup (see /competitions).
+    name: competition_code
+    required: true
+    type: str
+  - description: Competition code + start year, e.g. E2025 for 2025-26.
+    name: season_code
+    required: true
+    type: str
+  - description: Game number within the season (1-based).
+    name: game_code
+    required: true
+    type: str
+  returns_schema: native/euroleague/game_report
+  short: game_report
+  summary: 'Game report: date, round, phase, both clubs with score and last-5 form.'
 - example_args:
     competition_code: E
     game_code: 1
@@ -110,6 +293,68 @@ endpoints:
   returns_schema: native/euroleague/people
   short: people
   summary: People (players, coaches) in a season.
+- docstring:
+    example_import: true
+    raises:
+    - 'sportsdataverse.errors.NoDataError: the EuroLeague API returned 404 (unknown
+      competition, season, round or game code).'
+    see_also:
+    - name: EuroLeague Basketball
+      note: the site the Competition Engine and live APIs serve (competitions, seasons,
+        clubs, games)
+      url: https://www.euroleaguebasketball.net/
+    - name: euroleague-api
+      note: community Python client over the same v2 / v3 / live APIs
+      url: https://github.com/giasemidis/euroleague_api
+  example_args:
+    competition_code: E
+    season_code: E2025
+  extra_params:
+  - default: Single
+    description: Required. `Single` as captured (other values unverified). Default
+      Single.
+    name: season_mode
+    query_key: SeasonMode
+    type: str
+  - description: Required. Competition code + start year, e.g. E2025 for 2025-26.
+    name: season_code
+    query_key: SeasonCode
+    type: str
+  - default: PerGame
+    description: Required. `PerGame` as captured (other values unverified). Default
+      PerGame.
+    name: statistic_mode
+    query_key: statisticMode
+    type: str
+  - description: Page size (the capture used 3).
+    name: limit
+    query_key: limit
+    type: str
+  - description: Row offset into the full list.
+    name: offset
+    query_key: offset
+    type: str
+  host: https://api-live.euroleague.net/v3
+  parser: parse_euroleague
+  path: /competitions/{competition_code}/statistics/players/{mode}
+  path_params:
+  - description: E = EuroLeague, U = EuroCup (see /competitions).
+    name: competition_code
+    required: true
+    type: str
+  - choices:
+    - traditional
+    - advanced
+    default: traditional
+    description: traditional (default) or advanced; the columns depend on it (see
+      Returns).
+    name: mode
+    required: false
+    type: str
+  returns_schema: native/euroleague/player_stats
+  short: player_stats
+  summary: Season player stats, traditional (box-score totals or per-game averages)
+    or advanced (eFG%, TS%, rebound / assist / turnover rates), one row per player.
 - example_args:
     competition_code: E
     season_code: E2025
@@ -139,6 +384,118 @@ endpoints:
   returns_schema: native/euroleague/seasons
   short: seasons
   summary: Seasons of a competition.
+- docstring:
+    example_import: true
+    raises:
+    - 'sportsdataverse.errors.NoDataError: the EuroLeague API returned 404 (unknown
+      competition, season, round or game code).'
+    see_also:
+    - name: EuroLeague Basketball
+      note: the site the Competition Engine and live APIs serve (competitions, seasons,
+        clubs, games)
+      url: https://www.euroleaguebasketball.net/
+    - name: euroleague-api
+      note: community Python client over the same v2 / v3 / live APIs
+      url: https://github.com/giasemidis/euroleague_api
+  example_args:
+    competition_code: E
+    round: 1
+    season_code: E2025
+  host: https://api-live.euroleague.net/v3
+  parser: parse_euroleague
+  path: /competitions/{competition_code}/seasons/{season_code}/rounds/{round}/{kind}
+  path_params:
+  - description: E = EuroLeague, U = EuroCup (see /competitions).
+    name: competition_code
+    required: true
+    type: str
+  - description: Competition code + start year, e.g. E2025 for 2025-26.
+    name: season_code
+    required: true
+    type: str
+  - description: Round number within the season (the `round` field of /rounds); the
+      standings are as of this round.
+    name: round
+    required: true
+    type: str
+  - choices:
+    - basicstandings
+    - calendarstandings
+    - streaks
+    - aheadbehind
+    default: basicstandings
+    description: 'Standings table: basicstandings (default), calendarstandings, streaks
+      or aheadbehind; the columns depend on it (see Returns).'
+    name: kind
+    required: false
+    type: str
+  returns_schema: native/euroleague/standings
+  short: standings
+  summary: 'Standings as of a round: basic (W-L, points, home/away/last-10 records),
+    calendar (per-round result streaks), streaks (longest win/loss runs) or aheadbehind
+    (records when ahead/behind/tied after Q1, the half and Q3).'
+- docstring:
+    example_import: true
+    raises:
+    - 'sportsdataverse.errors.NoDataError: the EuroLeague API returned 404 (unknown
+      competition, season, round or game code).'
+    see_also:
+    - name: EuroLeague Basketball
+      note: the site the Competition Engine and live APIs serve (competitions, seasons,
+        clubs, games)
+      url: https://www.euroleaguebasketball.net/
+    - name: euroleague-api
+      note: community Python client over the same v2 / v3 / live APIs
+      url: https://github.com/giasemidis/euroleague_api
+  example_args:
+    competition_code: E
+    season_code: E2025
+  extra_params:
+  - default: Single
+    description: Required. `Single` as captured (other values unverified). Default
+      Single.
+    name: season_mode
+    query_key: SeasonMode
+    type: str
+  - description: Required. Competition code + start year, e.g. E2025 for 2025-26.
+    name: season_code
+    query_key: SeasonCode
+    type: str
+  - default: PerGame
+    description: Required. `PerGame` as captured (other values unverified). Default
+      PerGame.
+    name: statistic_mode
+    query_key: statisticMode
+    type: str
+  - description: Page size (the capture used 3).
+    name: limit
+    query_key: limit
+    type: str
+  - description: Row offset into the full list.
+    name: offset
+    query_key: offset
+    type: str
+  host: https://api-live.euroleague.net/v3
+  parser: parse_euroleague
+  path: /competitions/{competition_code}/statistics/teams/{mode}
+  path_params:
+  - description: E = EuroLeague, U = EuroCup (see /competitions).
+    name: competition_code
+    required: true
+    type: str
+  - choices:
+    - traditional
+    - advanced
+    default: traditional
+    description: traditional (default) or advanced; the columns depend on it (see
+      Returns).
+    name: mode
+    required: false
+    type: str
+  returns_schema: native/euroleague/team_stats
+  short: team_stats
+  summary: Season team stats, traditional (box-score totals or per-game averages)
+    or advanced (eFG%, TS%, four-factor style rates), one row per team.
 getter_module: sportsdataverse.euroleague.euroleague_runtime
 host: https://api-live.euroleague.net/v2
 module: euroleague

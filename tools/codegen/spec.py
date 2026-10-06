@@ -27,6 +27,7 @@ class Param:
     default_from: Optional[str] = None  # use another arg's value when None
     transform: Optional[str] = None  # named runtime transform (e.g. format_nhl_season, _csv)
     description: str = ""  # authored human-readable description for docs
+    choices: List[str] = field(default_factory=list)  # closed value set; the wrapper raises ValueError otherwise
     # Render after ``*`` so a param added to an existing wrapper never shifts the
     # positional slot of ``headers`` (or any later arg) for existing callers.
     kw_only: bool = False
@@ -264,6 +265,7 @@ def _parse_endpoint(e: dict, registry: Dict[str, Param], path: Path) -> Endpoint
                 default=extra.get("default"),
                 transform=extra.get("transform"),
                 description=extra.get("description", "") or inherited_desc,
+                choices=[str(c) for c in extra.get("choices") or []],
                 kw_only=bool(extra.get("kw_only", False)),
             ),
         )
@@ -281,6 +283,7 @@ def _parse_endpoint(e: dict, registry: Dict[str, Param], path: Path) -> Endpoint
                 default_from=pp.get("default_from"),
                 transform=pp.get("transform"),
                 description=pp.get("description", ""),
+                choices=[str(c) for c in pp.get("choices") or []],
             ),
         )
     ep = Endpoint(

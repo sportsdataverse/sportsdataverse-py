@@ -68,6 +68,9 @@ def {{ ep.fn_name }}(
 ) -> {{ ep.raw_annotation }}:
 {% endif %}
 {{ ep.docstring }}
+{% for check in ep.choice_checks %}
+    {{ check }}
+{% endfor %}
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
 {% for k, v in ep.fixed_params.items() %}

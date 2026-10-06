@@ -1,0 +1,130 @@
+columns:
+- description: 'Row kind: player, team (team-only rebounds) or total (side totals).'
+  name: row_type
+  type: character
+- description: Club display name.
+  name: team_name
+  type: character
+- description: Head coach name.
+  name: coach
+  type: character
+- description: Attendance, as reported by the box score (repeated on every row).
+  name: attendance
+  type: character
+- description: Referees of the game, comma-separated SURNAME, GIVEN NAME (repeated
+    on every row).
+  name: referees
+  type: character
+- description: Points the row's team scored in quarter 1 (from the box score's ByQuarter
+    block).
+  name: by_quarter_q1
+  type: integer
+- description: Points the row's team scored in quarter 2 (from the box score's ByQuarter
+    block).
+  name: by_quarter_q2
+  type: integer
+- description: Points the row's team scored in quarter 3 (from the box score's ByQuarter
+    block).
+  name: by_quarter_q3
+  type: integer
+- description: Points the row's team scored in quarter 4 (from the box score's ByQuarter
+    block).
+  name: by_quarter_q4
+  type: integer
+- description: Score of the row's team at the end of quarter 1 (cumulative; from the
+    box score's EndOfQuarter block).
+  name: end_of_quarter_q1
+  type: integer
+- description: Score of the row's team at the end of quarter 2 (cumulative; from the
+    box score's EndOfQuarter block).
+  name: end_of_quarter_q2
+  type: integer
+- description: Score of the row's team at the end of quarter 3 (cumulative; from the
+    box score's EndOfQuarter block).
+  name: end_of_quarter_q3
+  type: integer
+- description: Score of the row's team at the end of quarter 4 (cumulative; from the
+    box score's EndOfQuarter block).
+  name: end_of_quarter_q4
+  type: integer
+- description: EuroLeague player code (Utf8 join key; space padding stripped; blank
+    on team rows).
+  name: player_id
+  type: character
+- description: Whether the player started (1 / 0).
+  name: is_starter
+  type: integer
+- description: Whether the player appeared in the game (1 / 0).
+  name: is_playing
+  type: integer
+- description: EuroLeague club code of the team (Utf8 join key; space padding stripped).
+  name: team
+  type: character
+- description: Jersey number as displayed.
+  name: dorsal
+  type: character
+- description: Player display name (SURNAME, GIVEN NAME).
+  name: player
+  type: character
+- description: Minutes played (mm:ss).
+  name: minutes
+  type: character
+- description: Points.
+  name: points
+  type: integer
+- description: Two-point field goals made.
+  name: field_goals_made2
+  type: integer
+- description: Two-point field goals attempted.
+  name: field_goals_attempted2
+  type: integer
+- description: Three-point field goals made.
+  name: field_goals_made3
+  type: integer
+- description: Three-point field goals attempted.
+  name: field_goals_attempted3
+  type: integer
+- description: Free throws made.
+  name: free_throws_made
+  type: integer
+- description: Free throws attempted.
+  name: free_throws_attempted
+  type: integer
+- description: Offensive rebounds.
+  name: offensive_rebounds
+  type: integer
+- description: Defensive rebounds.
+  name: defensive_rebounds
+  type: integer
+- description: Total rebounds.
+  name: total_rebounds
+  type: integer
+- description: Assists.
+  name: assistances
+  type: integer
+- description: Steals.
+  name: steals
+  type: integer
+- description: Turnovers.
+  name: turnovers
+  type: integer
+- description: Blocks made.
+  name: blocks_favour
+  type: integer
+- description: Shots blocked by the opponent.
+  name: blocks_against
+  type: integer
+- description: Personal fouls committed.
+  name: fouls_commited
+  type: integer
+- description: Fouls drawn.
+  name: fouls_received
+  type: integer
+- description: Performance index rating (PIR).
+  name: valuation
+  type: integer
+- description: Plus/minus.
+  name: plusminus
+  type: numeric
+kind: dataframe
+schema: game_boxscore

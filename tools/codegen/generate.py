@@ -817,6 +817,15 @@ class _EndpointView:
         # never displace ``headers`` / later positional args of an existing wrapper.
         self.signature_params = [p for p in ordered if not p.kw_only]
         self.kw_only_params = [p for p in ordered if p.kw_only]
+        # A closed value set (``choices:``) is checked BEFORE the request: a path-token
+        # typo would otherwise reach the host and surface as a misleading NoDataError.
+        self.choice_checks = [
+            f"if {p.python_name} not in {tuple(p.choices)!r}:"
+            + "\n        raise ValueError("
+            + f'f"{p.python_name} must be one of {tuple(p.choices)!r}; got {{{p.python_name}!r}}")'
+            for p in ordered
+            if p.choices
+        ]
 
         self.league_param = league.league_param
         # In param mode, keep {league} as a runtime f-string token (sport still baked).
@@ -2592,7 +2601,7 @@ _FLAT_API_DOC = {
     "cbs_napi": "CBS Sports NAPI (api.cbssports.com/napi)",
     "yahoo_shangrila": "Yahoo Sports Shangrila (graphite-secure.sports.yahoo.com)",
     "fox_api": "Fox Sports API (api.foxsports.com)",
-    "euroleague": "EuroLeague Competition Engine API (api-live.euroleague.net v2)",
+    "euroleague": "EuroLeague APIs (api-live.euroleague.net v2 + v3, live.euroleague.net/api)",
     "fotmob": "FotMob data API (fotmob.com, unofficial)",
     "uefa": "UEFA front-end APIs (comp/match/standings/matchstats.uefa.com)",
     "fifa": "FIFA public API v3 (api.fifa.com)",

@@ -1,0 +1,68 @@
+columns:
+- description: Sequence number of the scoring annotation within the game.
+  name: num_anot
+  type: integer
+- description: EuroLeague club code of the team (Utf8 join key; space padding stripped).
+  name: team
+  type: character
+- description: EuroLeague player code (Utf8 join key; space padding stripped).
+  name: id_player
+  type: character
+- description: Player display name (SURNAME, GIVEN NAME).
+  name: player
+  type: character
+- description: 'Shot type code: 2FGM / 2FGA / 3FGM / 3FGA (made / attempted field
+    goal) or FTM (made free throw).'
+  name: id_action
+  type: character
+- description: Shot type label (Two Pointer, Three Pointer, Free Throw In, ...).
+  name: action
+  type: character
+- description: Points the shot is worth (1, 2 or 3).
+  name: points
+  type: integer
+- description: 'Shot x in integer centimeters from the hoop, signed left/right of
+    it (-683 to 696 cm measured): both teams are mapped onto one basket; 3-point zone
+    H is x < 0 and I is x > 0; which sideline is positive (from the shooter''s view
+    or from the scorer''s table) is UNVERIFIED from the data alone. Made free throws
+    (FTM) carry the -1 sentinel.'
+  name: coord_x
+  type: integer
+- description: 'Shot y in integer centimeters from the hoop, growing away from the
+    baseline toward the court (-6 to 865 cm measured; 3FG rows at 414-865): both teams
+    are mapped onto one basket, negative y is behind the hoop. Made free throws (FTM)
+    carry the -1 sentinel.'
+  name: coord_y
+  type: integer
+- description: 'Court zone letter: A rim, B/C close left/right, D/E mid, F/G long
+    two, H/I three; blank on free throws.'
+  name: zone
+  type: character
+- description: Whether the shot came on a fast break (0 / 1 as a string).
+  name: fastbreak
+  type: character
+- description: Whether the shot was a second-chance attempt (0 / 1 as a string).
+  name: second_chance
+  type: character
+- description: Whether the shot came off a turnover (0 / 1 as a string).
+  name: points_off_turnover
+  type: character
+- description: Game minute of the event (1-based; 41+ in overtime).
+  name: minute
+  type: integer
+- description: Game clock at the event (mm:ss remaining in the period).
+  name: console
+  type: character
+- description: Running score of team A (= the home side, measured on one game) after
+    the event.
+  name: points_a
+  type: integer
+- description: Running score of team B (= the away side, measured on one game) after
+    the event.
+  name: points_b
+  type: integer
+- description: UTC timestamp of the event (yyyymmddHHMMSS).
+  name: utc
+  type: character
+kind: dataframe
+schema: game_points

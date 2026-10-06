@@ -1,0 +1,178 @@
+frames:
+- columns:
+  - description: Rank of the player on the requested statistic mode.
+    name: player_ranking
+    type: integer
+  - description: Games played.
+    name: games_played
+    type: numeric
+  - description: Games started.
+    name: games_started
+    type: numeric
+  - description: Minutes played.
+    name: minutes_played
+    type: numeric
+  - description: Points scored.
+    name: points_scored
+    type: numeric
+  - description: Two-point field goals made.
+    name: two_pointers_made
+    type: numeric
+  - description: Two-point field goals attempted.
+    name: two_pointers_attempted
+    type: numeric
+  - description: Two-point field-goal percentage, formatted.
+    name: two_pointers_percentage
+    type: character
+  - description: Three-point field goals made.
+    name: three_pointers_made
+    type: numeric
+  - description: Three-point field goals attempted.
+    name: three_pointers_attempted
+    type: numeric
+  - description: Three-point field-goal percentage, formatted.
+    name: three_pointers_percentage
+    type: character
+  - description: Free throws made.
+    name: free_throws_made
+    type: numeric
+  - description: Free throws attempted.
+    name: free_throws_attempted
+    type: numeric
+  - description: Free-throw percentage, formatted.
+    name: free_throws_percentage
+    type: character
+  - description: Offensive rebounds.
+    name: offensive_rebounds
+    type: numeric
+  - description: Defensive rebounds.
+    name: defensive_rebounds
+    type: numeric
+  - description: Total rebounds.
+    name: total_rebounds
+    type: numeric
+  - description: Assists.
+    name: assists
+    type: numeric
+  - description: Steals.
+    name: steals
+    type: numeric
+  - description: Turnovers.
+    name: turnovers
+    type: numeric
+  - description: Blocks made.
+    name: blocks
+    type: numeric
+  - description: Shots blocked by the opponent.
+    name: blocks_against
+    type: numeric
+  - description: Personal fouls committed.
+    name: fouls_commited
+    type: numeric
+  - description: Fouls drawn.
+    name: fouls_drawn
+    type: numeric
+  - description: Performance index rating (PIR).
+    name: pir
+    type: numeric
+  - description: 'Player: euroLeague code of the entity (competition, season, club,
+      person or venue; Utf8 join key).'
+    name: player_code
+    type: character
+  - description: 'Player: display name.'
+    name: player_name
+    type: character
+  - description: Age of the player in years.
+    name: player_age
+    type: integer
+  - description: 'Player: URL of the image.'
+    name: player_image_url
+    type: character
+  - description: 'Player: euroLeague club code (Utf8 join key).'
+    name: player_team_code
+    type: character
+  - description: 'Player: three-letter broadcast abbreviation(s) of the club.'
+    name: player_team_tv_codes
+    type: character
+  - description: 'Player: club display name.'
+    name: player_team_name
+    type: character
+  - description: 'Player: URL of the club crest image.'
+    name: player_team_image_url
+    type: character
+  section: traditional
+- columns:
+  - description: Rank of the player on the requested statistic mode.
+    name: player_ranking
+    type: integer
+  - description: Games played.
+    name: games_played
+    type: numeric
+  - description: Minutes played.
+    name: minutes_played
+    type: numeric
+  - description: Effective field-goal percentage, formatted.
+    name: effective_field_goal_percentage
+    type: character
+  - description: True shooting percentage, formatted.
+    name: true_shooting_percentage
+    type: character
+  - description: Offensive rebound percentage, formatted.
+    name: offensive_rebounds_percentage
+    type: character
+  - description: Defensive rebound percentage, formatted.
+    name: defensive_rebounds_percentage
+    type: character
+  - description: Total rebound percentage, formatted.
+    name: rebounds_percentage
+    type: character
+  - description: Assist-to-turnover ratio.
+    name: assists_to_turnovers_ratio
+    type: numeric
+  - description: Assist ratio (assists per 100 possessions used), formatted.
+    name: assists_ratio
+    type: character
+  - description: Turnover ratio (turnovers per 100 possessions used), formatted.
+    name: turnovers_ratio
+    type: character
+  - description: Share of field-goal attempts that are two-pointers, formatted.
+    name: two_point_attempts_ratio
+    type: character
+  - description: Share of field-goal attempts that are three-pointers, formatted.
+    name: three_point_attempts_ratio
+    type: character
+  - description: Free-throw rate (free-throw attempts per field-goal attempt), formatted.
+    name: free_throws_rate
+    type: character
+  - description: 'Possessions (sic: the API spells it this way).'
+    name: possesions
+    type: numeric
+  - description: 'Player: euroLeague code of the entity (competition, season, club,
+      person or venue; Utf8 join key).'
+    name: player_code
+    type: character
+  - description: 'Player: display name.'
+    name: player_name
+    type: character
+  - description: Age of the player in years.
+    name: player_age
+    type: integer
+  - description: 'Player: URL of the image.'
+    name: player_image_url
+    type: character
+  - description: 'Player: euroLeague club code (Utf8 join key).'
+    name: player_team_code
+    type: character
+  - description: 'Player: three-letter broadcast abbreviation(s) of the club.'
+    name: player_team_tv_codes
+    type: character
+  - description: 'Player: club display name.'
+    name: player_team_name
+    type: character
+  - description: 'Player: URL of the club crest image.'
+    name: player_team_image_url
+    type: character
+  section: advanced
+frames_by: mode
+kind: frames
+schema: player_stats
