@@ -1,0 +1,177 @@
+api: openligadb
+docstring:
+  example_import: true
+  raises:
+  - 'sportsdataverse.errors.NoDataError: OpenLigaDB answered 404 (unknown league,
+    season, matchday or match id -- /getnextmatchbyleagueteam 404s once the season
+    is over).'
+  see_also:
+  - name: OpenLigaDB
+    note: keyless community API for German football; no query parameters, everything
+      is a path segment
+    url: https://api.openligadb.de/index.html
+endpoints:
+- example_args:
+    league_slug: bl1
+  parser: parse_openligadb
+  path: /getcurrentgroup/{league_slug}
+  path_params:
+  - name: league_slug
+    required: true
+    type: str
+  returns_schema: native/openligadb/current_group
+  short: current_group
+  summary: Current matchday.
+- example_args:
+    league_slug: bl1
+    season: '2025'
+  parser: parse_openligadb
+  path: /getgoalgetters/{league_slug}/{season}
+  path_params:
+  - name: league_slug
+    required: true
+    type: str
+  - name: season
+    required: true
+    type: str
+  returns_schema: native/openligadb/goalgetters
+  short: goalgetters
+  summary: Top scorers.
+- example_args:
+    group: '1'
+    league_slug: bl1
+    season: '2025'
+  parser: parse_openligadb
+  path: /getmatchdata/{league_slug}/{season}/{group}
+  path_params:
+  - name: league_slug
+    required: true
+    type: str
+  - name: season
+    required: true
+    type: str
+  - name: group
+    required: true
+    type: str
+  returns_schema: native/openligadb/group_matches
+  short: group_matches
+  summary: Matches of one matchday.
+- example_args:
+    league_slug: bl1
+    season: '2025'
+  parser: parse_openligadb
+  path: /getavailablegroups/{league_slug}/{season}
+  path_params:
+  - name: league_slug
+    required: true
+    type: str
+  - name: season
+    required: true
+    type: str
+  returns_schema: native/openligadb/groups
+  short: groups
+  summary: Matchdays of a league-season.
+- example_args:
+    group: '1'
+    league_slug: bl1
+    season: '2025'
+  parser: parse_openligadb
+  path: /getlastchangedate/{league_slug}/{season}/{group}
+  path_params:
+  - name: league_slug
+    required: true
+    type: str
+  - name: season
+    required: true
+    type: str
+  - name: group
+    required: true
+    type: str
+  returns_schema: native/openligadb/last_change_date
+  short: last_change_date
+  summary: Last change timestamp (bare ISO string).
+- example_args: {}
+  parser: parse_openligadb
+  path: /getavailableleagues
+  returns_schema: native/openligadb/leagues
+  short: leagues
+  summary: All leagues (shortcut, season, sport).
+- example_args:
+    match_id: '77264'
+  parser: parse_openligadb
+  path: /getmatchdata/{match_id}
+  path_params:
+  - name: match_id
+    required: true
+    type: str
+  returns_schema: native/openligadb/match
+  short: match
+  summary: One match.
+- example_args:
+    league_id: '4937'
+    team_id: '40'
+  parser: parse_openligadb
+  path: /getnextmatchbyleagueteam/{league_id}/{team_id}
+  path_params:
+  - name: league_id
+    required: true
+    type: str
+  - name: team_id
+    required: true
+    type: str
+  returns_schema: native/openligadb/next_match
+  short: next_match
+  summary: Next match of a team (404 text once the season is over).
+- example_args:
+    league_slug: bl1
+    season: '2025'
+  parser: parse_openligadb
+  path: /getmatchdata/{league_slug}/{season}
+  path_params:
+  - name: league_slug
+    required: true
+    type: str
+  - name: season
+    required: true
+    type: str
+  returns_schema: native/openligadb/season_matches
+  short: season_matches
+  summary: All matches of a season.
+- example_args:
+    league_slug: bl1
+    season: '2025'
+  parser: parse_openligadb
+  path: /getbltable/{league_slug}/{season}
+  path_params:
+  - name: league_slug
+    required: true
+    type: str
+  - name: season
+    required: true
+    type: str
+  returns_schema: native/openligadb/table
+  short: table
+  summary: League table.
+- example_args:
+    league_slug: bl1
+    season: '2025'
+  parser: parse_openligadb
+  path: /getavailableteams/{league_slug}/{season}
+  path_params:
+  - name: league_slug
+    required: true
+    type: str
+  - name: season
+    required: true
+    type: str
+  returns_schema: native/openligadb/teams
+  short: teams
+  summary: Teams of a league-season.
+host: https://api.openligadb.de
+module: openligadb
+name_pattern: openligadb_{short}
+parser_module: soccer.openligadb_parsers
+passthrough_query: false
+qualifier: ''
+runtime_imports:
+- _get

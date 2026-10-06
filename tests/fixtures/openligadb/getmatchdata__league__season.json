@@ -1,0 +1,290 @@
+[
+  {
+    "matchID": 77256,
+    "matchDateTime": "2025-08-22T20:30:00",
+    "timeZoneID": "W. Europe Standard Time",
+    "leagueId": 4821,
+    "leagueName": "1. Fußball-Bundesliga 2025/2026",
+    "leagueSeason": 2025,
+    "leagueShortcut": "bl1",
+    "matchDateTimeUTC": "2025-08-22T18:30:00Z",
+    "group": {
+      "groupName": "1. Spieltag",
+      "groupOrderID": 1,
+      "groupID": 47611
+    },
+    "team1": {
+      "teamId": 40,
+      "teamName": "FC Bayern München",
+      "shortName": "Bayern",
+      "teamIconUrl": "https://upload.wikimedia.org/wikipedia/commons/1/1f/Logo_FC_Bayern_M%C3%BCnchen_%282002%E2%80%932017%29.svg",
+      "teamGroupName": null
+    },
+    "team2": {
+      "teamId": 1635,
+      "teamName": "RB Leipzig",
+      "shortName": "Leipzig",
+      "teamIconUrl": "https://i.imgur.com/Rpwsjz1.png",
+      "teamGroupName": null
+    },
+    "lastUpdateDateTime": "2025-08-23T01:00:54.147",
+    "matchIsFinished": true,
+    "matchResults": [
+      {
+        "resultID": 118490,
+        "resultName": "Halbzeit",
+        "pointsTeam1": 3,
+        "pointsTeam2": 0,
+        "resultOrderID": 1,
+        "resultTypeID": 1,
+        "resultTypeKind": "HalfTime",
+        "resultDescription": "Ergebnis nach Ende der ersten Halbzeit"
+      },
+      {
+        "resultID": 118491,
+        "resultName": "Endergebnis",
+        "pointsTeam1": 6,
+        "pointsTeam2": 0,
+        "resultOrderID": 2,
+        "resultTypeID": 2,
+        "resultTypeKind": "After90Minutes",
+        "resultDescription": "Ergebnis nach Ende der offiziellen Spielzeit"
+      }
+    ],
+    "goals": [
+      {
+        "goalID": 130535,
+        "scoreTeam1": 1,
+        "scoreTeam2": 0,
+        "matchMinute": 27,
+        "goalGetterID": 23135,
+        "goalGetterName": "M. Olise",
+        "scoringTeamId": 40,
+        "isPenalty": false,
+        "isOwnGoal": false,
+        "isOvertime": false,
+        "comment": null
+      },
+      {
+        "goalID": 130536,
+        "scoreTeam1": 2,
+        "scoreTeam2": 0,
+        "matchMinute": 32,
+        "goalGetterID": 18880,
+        "goalGetterName": "Luis Díaz",
+        "scoringTeamId": 40,
+        "isPenalty": false,
+        "isOwnGoal": false,
+        "isOvertime": false,
+        "comment": null
+      },
+      {
+        "goalID": 130537,
+        "scoreTeam1": 3,
+        "scoreTeam2": 0,
+        "matchMinute": 42,
+        "goalGetterID": 23135,
+        "goalGetterName": "M. Olise",
+        "scoringTeamId": 40,
+        "isPenalty": false,
+        "isOwnGoal": false,
+        "isOvertime": false,
+        "comment": null
+      }
+    ],
+    "location": null,
+    "numberOfViewers": null
+  },
+  {
+    "matchID": 77257,
+    "matchDateTime": "2025-08-23T15:30:00",
+    "timeZoneID": "W. Europe Standard Time",
+    "leagueId": 4821,
+    "leagueName": "1. Fußball-Bundesliga 2025/2026",
+    "leagueSeason": 2025,
+    "leagueShortcut": "bl1",
+    "matchDateTimeUTC": "2025-08-23T13:30:00Z",
+    "group": {
+      "groupName": "1. Spieltag",
+      "groupOrderID": 1,
+      "groupID": 47611
+    },
+    "team1": {
+      "teamId": 6,
+      "teamName": "Bayer 04 Leverkusen",
+      "shortName": "Leverkusen",
+      "teamIconUrl": "https://www.bundesliga-reisefuehrer.de/sites/default/files/B04_Standard_Logo_RGB.png",
+      "teamGroupName": null
+    },
+    "team2": {
+      "teamId": 175,
+      "teamName": "TSG Hoffenheim",
+      "shortName": "Hoffenheim",
+      "teamIconUrl": "https://i.imgur.com/gF0PfEl.png",
+      "teamGroupName": null
+    },
+    "lastUpdateDateTime": "2025-08-23T17:26:05.92",
+    "matchIsFinished": true,
+    "matchResults": [
+      {
+        "resultID": 118504,
+        "resultName": "Halbzeit",
+        "pointsTeam1": 1,
+        "pointsTeam2": 1,
+        "resultOrderID": 1,
+        "resultTypeID": 1,
+        "resultTypeKind": "HalfTime",
+        "resultDescription": "Ergebnis nach Ende der ersten Halbzeit"
+      },
+      {
+        "resultID": 118505,
+        "resultName": "Endergebnis",
+        "pointsTeam1": 1,
+        "pointsTeam2": 2,
+        "resultOrderID": 2,
+        "resultTypeID": 2,
+        "resultTypeKind": "After90Minutes",
+        "resultDescription": "Ergebnis nach Ende der offiziellen Spielzeit"
+      }
+    ],
+    "goals": [
+      {
+        "goalID": 130567,
+        "scoreTeam1": 1,
+        "scoreTeam2": 0,
+        "matchMinute": 6,
+        "goalGetterID": 23648,
+        "goalGetterName": "J. Quansah",
+        "scoringTeamId": 6,
+        "isPenalty": false,
+        "isOwnGoal": false,
+        "isOvertime": false,
+        "comment": null
+      },
+      {
+        "goalID": 130572,
+        "scoreTeam1": 1,
+        "scoreTeam2": 1,
+        "matchMinute": 25,
+        "goalGetterID": 20687,
+        "goalGetterName": "F. Asllani",
+        "scoringTeamId": 175,
+        "isPenalty": false,
+        "isOwnGoal": false,
+        "isOvertime": false,
+        "comment": null
+      },
+      {
+        "goalID": 130578,
+        "scoreTeam1": 1,
+        "scoreTeam2": 2,
+        "matchMinute": 52,
+        "goalGetterID": 19004,
+        "goalGetterName": "T. Lemperle",
+        "scoringTeamId": 175,
+        "isPenalty": false,
+        "isOwnGoal": false,
+        "isOvertime": false,
+        "comment": null
+      }
+    ],
+    "location": null,
+    "numberOfViewers": null
+  },
+  {
+    "matchID": 77258,
+    "matchDateTime": "2025-08-23T15:30:00",
+    "timeZoneID": "W. Europe Standard Time",
+    "leagueId": 4821,
+    "leagueName": "1. Fußball-Bundesliga 2025/2026",
+    "leagueSeason": 2025,
+    "leagueShortcut": "bl1",
+    "matchDateTimeUTC": "2025-08-23T13:30:00Z",
+    "group": {
+      "groupName": "1. Spieltag",
+      "groupOrderID": 1,
+      "groupID": 47611
+    },
+    "team1": {
+      "teamId": 91,
+      "teamName": "Eintracht Frankfurt",
+      "shortName": "Frankfurt",
+      "teamIconUrl": "https://i.imgur.com/X8NFkOb.png",
+      "teamGroupName": null
+    },
+    "team2": {
+      "teamId": 134,
+      "teamName": "SV Werder Bremen",
+      "shortName": "Bremen",
+      "teamIconUrl": "https://upload.wikimedia.org/wikipedia/commons/b/be/SV-Werder-Bremen-Logo.svg",
+      "teamGroupName": null
+    },
+    "lastUpdateDateTime": "2025-08-23T17:26:24.783",
+    "matchIsFinished": true,
+    "matchResults": [
+      {
+        "resultID": 118506,
+        "resultName": "Halbzeit",
+        "pointsTeam1": 2,
+        "pointsTeam2": 0,
+        "resultOrderID": 1,
+        "resultTypeID": 1,
+        "resultTypeKind": "HalfTime",
+        "resultDescription": "Ergebnis nach Ende der ersten Halbzeit"
+      },
+      {
+        "resultID": 118507,
+        "resultName": "Endergebnis",
+        "pointsTeam1": 4,
+        "pointsTeam2": 1,
+        "resultOrderID": 2,
+        "resultTypeID": 2,
+        "resultTypeKind": "After90Minutes",
+        "resultDescription": "Ergebnis nach Ende der offiziellen Spielzeit"
+      }
+    ],
+    "goals": [
+      {
+        "goalID": 130569,
+        "scoreTeam1": 1,
+        "scoreTeam2": 0,
+        "matchMinute": 22,
+        "goalGetterID": 20128,
+        "goalGetterName": "C. Uzun",
+        "scoringTeamId": 91,
+        "isPenalty": false,
+        "isOwnGoal": false,
+        "isOvertime": false,
+        "comment": null
+      },
+      {
+        "goalID": 130571,
+        "scoreTeam1": 2,
+        "scoreTeam2": 0,
+        "matchMinute": 25,
+        "goalGetterID": 23303,
+        "goalGetterName": "J. Bahoya",
+        "scoringTeamId": 91,
+        "isPenalty": false,
+        "isOwnGoal": false,
+        "isOvertime": false,
+        "comment": null
+      },
+      {
+        "goalID": 130579,
+        "scoreTeam1": 3,
+        "scoreTeam2": 0,
+        "matchMinute": 47,
+        "goalGetterID": 23303,
+        "goalGetterName": "J. Bahoya",
+        "scoringTeamId": 91,
+        "isPenalty": false,
+        "isOwnGoal": false,
+        "isOvertime": false,
+        "comment": null
+      }
+    ],
+    "location": null,
+    "numberOfViewers": null
+  }
+]

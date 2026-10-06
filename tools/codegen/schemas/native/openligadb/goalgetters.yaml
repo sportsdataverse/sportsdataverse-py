@@ -1,0 +1,12 @@
+columns:
+- description: ''
+  name: goal_getter_id
+  type: character
+- description: ''
+  name: goal_getter_name
+  type: character
+- description: ''
+  name: goal_count
+  type: integer
+kind: dataframe
+schema: goalgetters

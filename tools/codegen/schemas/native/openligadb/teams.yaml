@@ -1,0 +1,18 @@
+columns:
+- description: ''
+  name: team_id
+  type: character
+- description: ''
+  name: team_name
+  type: character
+- description: ''
+  name: short_name
+  type: character
+- description: ''
+  name: team_icon_url
+  type: character
+- description: ''
+  name: team_group_name
+  type: character
+kind: dataframe
+schema: teams

@@ -1,0 +1,39 @@
+columns:
+- description: ''
+  name: team_info_id
+  type: character
+- description: ''
+  name: team_name
+  type: character
+- description: ''
+  name: short_name
+  type: character
+- description: ''
+  name: team_icon_url
+  type: character
+- description: ''
+  name: points
+  type: integer
+- description: ''
+  name: opponent_goals
+  type: integer
+- description: ''
+  name: goals
+  type: integer
+- description: ''
+  name: matches
+  type: integer
+- description: ''
+  name: won
+  type: integer
+- description: ''
+  name: lost
+  type: integer
+- description: ''
+  name: draw
+  type: integer
+- description: ''
+  name: goal_diff
+  type: integer
+kind: dataframe
+schema: table
