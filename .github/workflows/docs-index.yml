@@ -1,0 +1,74 @@
+# Builds the sdv-docs MCP index (tools/codegen/build_docs_index.py) and publishes it to the
+# rolling `docs-index` release, which `sdv-docs` clients download once a day at most.
+# `build` runs repo + third-party code with a read-only token; `publish` holds
+# contents:write and runs no repo code. A retrieval-set failure blocks publishing.
+name: docs-index
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "tools/codegen/**"
+      - "docs/docs/**"
+      - "sportsdataverse/**"
+      - "sdv_docs/**"
+      - "tests/sdv_docs/**"
+      - ".github/workflows/docs-index.yml"
+  schedule:
+    - cron: "17 6 * * 1" # weekly: sdv-swagger and the R pkgdown sites change without an sdv-py push
+  workflow_dispatch:
+
+concurrency:
+  group: docs-index
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - uses: astral-sh/setup-uv@v8.1.0
+        with:
+          version: "latest"
+          enable-cache: true
+          cache-dependency-glob: "uv.lock"
+      - run: uv python install 3.13.2
+      - run: uv sync --all-extras --all-groups --frozen --python 3.13.2
+      - name: Build the index
+        run: uv run --frozen python tools/codegen/build_docs_index.py --out build/docs-index
+      - name: sdv_docs tests + retrieval set
+        env:
+          SDV_DOCS_RETRIEVAL_DB: build/docs-index/sdv_docs_v1.sqlite
+        run: uv run --frozen pytest tests/sdv_docs -q
+      - uses: actions/upload-artifact@v7
+        with:
+          name: docs-index
+          path: build/docs-index/
+          retention-days: 7
+
+  publish:
+    needs: build
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v8
+        with:
+          name: docs-index
+          path: docs-index
+      - name: Upload to the rolling docs-index release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        # Created with GITHUB_TOKEN, so the release does not trigger other workflows
+        # (python-publish.yml is also guarded against this tag).
+        run: |
+          gh release view docs-index >/dev/null 2>&1 || gh release create docs-index \
+            --title "sdv-docs index" --latest=false \
+            --notes "Rolling build of the sdv-docs MCP index (tools/codegen/build_docs_index.py). Assets are replaced on every build; not a package release."
+          gh release upload docs-index docs-index/sdv_docs_v1.sqlite docs-index/manifest_v1.json --clobber
