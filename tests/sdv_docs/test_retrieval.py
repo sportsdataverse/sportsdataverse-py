@@ -1,6 +1,7 @@
 """Retrieval set: real questions against a full (online) index build.
 
-Runs only when SDV_DOCS_RETRIEVAL_DB points at one. The docs-index workflow sets it,
+Runs only when SDV_DOCS_RETRIEVAL_DB is set (unset = skip; set but empty or pointing
+at a missing file = FAIL, so a misconfigured CI step cannot pass silently). The docs-index workflow sets it,
 and a failure there blocks publishing. Never lower an expectation to make it pass:
 fix the builder or the ranking.
 """
@@ -13,10 +14,14 @@ import yaml
 
 from sdv_docs import server
 
-DB = os.environ.get("SDV_DOCS_RETRIEVAL_DB", "")
+DB = os.environ.get("SDV_DOCS_RETRIEVAL_DB")
 CASES = yaml.safe_load((Path(__file__).parent / "retrieval.yaml").read_text(encoding="utf-8"))
 
-pytestmark = pytest.mark.skipif(not DB, reason="set SDV_DOCS_RETRIEVAL_DB to a full sdv-docs index build")
+pytestmark = pytest.mark.skipif(DB is None, reason="set SDV_DOCS_RETRIEVAL_DB to a full sdv-docs index build")
+
+
+def test_retrieval_db_exists():
+    assert DB and Path(DB).is_file(), f"retrieval DB missing: {DB!r}"
 
 
 def test_every_lookup_has_at_least_six_cases():
