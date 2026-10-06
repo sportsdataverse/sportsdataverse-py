@@ -1,0 +1,33 @@
+columns:
+- description: ''
+  name: count_fp
+  type: character
+- description: ''
+  name: created_time
+  type: character
+- description: ''
+  name: is_block_trade
+  type: logical
+- description: ''
+  name: no_price_dollars
+  type: character
+- description: ''
+  name: taker_book_side
+  type: character
+- description: ''
+  name: taker_outcome_side
+  type: character
+- description: ''
+  name: taker_side
+  type: character
+- description: ''
+  name: ticker
+  type: character
+- description: ''
+  name: trade_id
+  type: character
+- description: ''
+  name: yes_price_dollars
+  type: character
+kind: dataframe
+schema: trades

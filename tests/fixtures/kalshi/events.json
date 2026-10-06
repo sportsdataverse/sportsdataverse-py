@@ -1,0 +1,72 @@
+{
+  "cursor": "CgYI8Kmw1gYSF0tYTkZMR0FNRS0yNk9DVDExQ0lOTUlB",
+  "events": [
+    {
+      "category": "Sports",
+      "collateral_return_type": "MECNET",
+      "event_ticker": "KXNFLGAME-26OCT08TBDAL",
+      "exchange_index": 0,
+      "last_updated_ts": "2026-09-29T04:02:34.475096Z",
+      "mutually_exclusive": true,
+      "product_metadata": {
+        "competition": "Pro Football",
+        "competition_scope": "Game"
+      },
+      "series_ticker": "KXNFLGAME",
+      "settlement_sources": [
+        {
+          "name": "the Governing League",
+          "url": "https://www.nfl.com/"
+        }
+      ],
+      "strike_period": "",
+      "sub_title": "TB vs DAL (Oct 8)",
+      "title": "TB Buccaneers vs DAL Cowboys"
+    },
+    {
+      "category": "Sports",
+      "collateral_return_type": "MECNET",
+      "event_ticker": "KXNFLGAME-26OCT11PHIJAC",
+      "exchange_index": 0,
+      "last_updated_ts": "2026-09-29T04:02:34.508267Z",
+      "mutually_exclusive": true,
+      "product_metadata": {
+        "competition": "Pro Football",
+        "competition_scope": "Game"
+      },
+      "series_ticker": "KXNFLGAME",
+      "settlement_sources": [
+        {
+          "name": "the Governing League",
+          "url": "https://www.nfl.com/"
+        }
+      ],
+      "strike_period": "",
+      "sub_title": "PHI vs JAC (Oct 11)",
+      "title": "PHI Eagles vs JAC Jaguars"
+    },
+    {
+      "category": "Sports",
+      "collateral_return_type": "MECNET",
+      "event_ticker": "KXNFLGAME-26OCT11CINMIA",
+      "exchange_index": 0,
+      "last_updated_ts": "2026-09-29T04:02:34.484949Z",
+      "mutually_exclusive": true,
+      "product_metadata": {
+        "competition": "Pro Football",
+        "competition_scope": "Game"
+      },
+      "series_ticker": "KXNFLGAME",
+      "settlement_sources": [
+        {
+          "name": "the Governing League",
+          "url": "https://www.nfl.com/"
+        }
+      ],
+      "strike_period": "",
+      "sub_title": "CIN vs MIA (Oct 11)",
+      "title": "CIN Bengals vs MIA Dolphins"
+    }
+  ],
+  "milestones": []
+}

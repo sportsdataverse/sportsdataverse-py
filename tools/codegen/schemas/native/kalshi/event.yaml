@@ -1,0 +1,45 @@
+columns:
+- description: ''
+  name: category
+  type: character
+- description: ''
+  name: collateral_return_type
+  type: character
+- description: ''
+  name: event_ticker
+  type: character
+- description: ''
+  name: exchange_index
+  type: integer
+- description: ''
+  name: last_updated_ts
+  type: character
+- description: ''
+  name: markets
+  type: character
+- description: ''
+  name: mutually_exclusive
+  type: logical
+- description: ''
+  name: series_ticker
+  type: character
+- description: ''
+  name: settlement_sources
+  type: character
+- description: ''
+  name: strike_period
+  type: character
+- description: ''
+  name: sub_title
+  type: character
+- description: ''
+  name: title
+  type: character
+- description: ''
+  name: product_metadata_competition
+  type: character
+- description: ''
+  name: product_metadata_competition_scope
+  type: character
+kind: dataframe
+schema: event
