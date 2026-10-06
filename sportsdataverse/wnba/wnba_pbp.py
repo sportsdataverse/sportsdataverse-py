@@ -11,6 +11,7 @@ import polars as pl
 
 from sportsdataverse._espn_basketball_pbp import pickcenter_odds as _pickcenter_odds
 from sportsdataverse._espn_basketball_pbp import team_timeout_called as _team_timeout_called
+from sportsdataverse._codegen_runtime import _download_json
 from sportsdataverse.dl_utils import download, flatten_json_iterative
 
 
@@ -58,8 +59,7 @@ def espn_wnba_pbp(game_id: int, raw=False, **kwargs) -> Dict:
     pbp_txt = {"timeouts": {}}
     # summary endpoint for pickcenter array
     summary_url = f"http://site.api.espn.com/apis/site/v2/sports/basketball/wnba/summary?event={game_id}"
-    summary_resp = download(summary_url, **kwargs)
-    summary = summary_resp.json()
+    summary = _download_json(download, summary_url, **kwargs)
 
     incoming_keys_expected = [
         "boxscore",

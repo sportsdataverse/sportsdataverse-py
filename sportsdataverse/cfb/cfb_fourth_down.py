@@ -181,10 +181,13 @@ def _load_fd_model() -> Booster:
     if cached.exists():
         return _load_booster(cached)
     try:
+        from sportsdataverse._codegen_runtime import _check_response
         from sportsdataverse.dl_utils import download
 
         cached.parent.mkdir(parents=True, exist_ok=True)
-        content = download(_FD_MODEL_URL, num_retries=5).content
+        resp = download(_FD_MODEL_URL, num_retries=5)
+        _check_response(resp, _FD_MODEL_URL)  # a 403/5xx body cached as the model poisons every later load
+        content = resp.content
         tmp = cached.with_suffix(cached.suffix + ".tmp")
         with open(tmp, "wb") as fh:
             fh.write(content)

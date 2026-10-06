@@ -16,6 +16,7 @@ from typing import Any, Literal, overload
 import pandas as pd
 import polars as pl
 
+from sportsdataverse._codegen_runtime import _download_json
 from sportsdataverse.dl_utils import download, underscore
 
 _LEAGUE_SLUG: str = "womens-college-basketball"
@@ -175,8 +176,7 @@ def _espn_basketball_team_roster(
     returns polars (or pandas).
     """
     url = f"https://site.api.espn.com/apis/site/v2/sports/basketball/{league}/teams/{team_id}/roster"
-    resp = download(url, **kwargs)
-    summary: dict[str, Any] = resp.json()
+    summary: dict[str, Any] = _download_json(download, url, **kwargs)
 
     if raw:
         return summary

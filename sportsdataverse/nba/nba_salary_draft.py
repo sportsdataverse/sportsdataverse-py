@@ -60,6 +60,7 @@ from typing import Any, Dict, List, Optional, Union
 import pandas as pd
 import polars as pl
 
+from sportsdataverse._codegen_runtime import _check_response
 from sportsdataverse._html_tables import html_tables
 from sportsdataverse.dl_utils import download
 
@@ -193,11 +194,14 @@ def _empty(schema: Dict[str, Any], return_as_pandas: bool) -> Union[pl.DataFrame
 def _fetch(url: str, *, params: Optional[Dict[str, Any]] = None, proxy: Any = None) -> Optional[Any]:
     """GET ``url`` through the shared gateway, warning instead of raising.
 
-    Mirrors the R wrappers' ``tryCatch`` posture: a dead host or a 404 yields an
-    empty frame, not a traceback.
+    Mirrors the R wrappers' ``tryCatch`` posture: a dead host, a 404 or any other
+    non-2xx answer yields an empty frame plus this warning, never the error page
+    parsed as data.
     """
     try:
-        return download(url=url, params=params, headers={"User-Agent": _USER_AGENT}, proxy=proxy)
+        resp = download(url=url, params=params, headers={"User-Agent": _USER_AGENT}, proxy=proxy)
+        _check_response(resp, url)
+        return resp
     except Exception as exc:  # noqa: BLE001 - transport errors vary by backend
         warnings.warn(f"{url} could not be fetched ({type(exc).__name__}: {exc}).", UserWarning, stacklevel=3)
         return None

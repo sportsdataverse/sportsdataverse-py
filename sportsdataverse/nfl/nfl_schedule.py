@@ -5,6 +5,7 @@ import datetime
 import pandas as pd
 import polars as pl
 
+from sportsdataverse._codegen_runtime import _download_json
 from sportsdataverse.dl_utils import download
 
 
@@ -47,10 +48,8 @@ def espn_nfl_schedule(
     params = {"week": week, "dates": dates, "seasonType": season_type, "limit": limit}
 
     url = "http://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard"
-    resp = download(url=url, params=params, **kwargs)
-
     ev = pd.DataFrame()
-    events_txt = resp.json()
+    events_txt = _download_json(download, url, params=params, **kwargs)
     events = events_txt.get("events")
     if events is None:
         return pd.DataFrame() if return_as_pandas else pl.DataFrame()
@@ -217,8 +216,7 @@ def espn_nfl_calendar(season=None, ondays=None, return_as_pandas=False, **kwargs
     else:
         url = "http://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard"
         params = {"dates": season}
-        resp = download(url=url, params=params, **kwargs)
-        txt = resp.json()
+        txt = _download_json(download, url, params=params, **kwargs)
         txt = txt.get("leagues")[0].get("calendar")
         full_schedule = pl.DataFrame()
         for i in range(len(txt)):
@@ -246,14 +244,12 @@ def espn_nfl_calendar(season=None, ondays=None, return_as_pandas=False, **kwargs
 
 def __ondays_nfl_calendar(season, **kwargs):
     url = f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/{season}/types/2/calendar/ondays"
-    resp = download(url=url, **kwargs)
-    if resp is not None:
-        txt = resp.json().get("eventDate").get("dates")
-        result = pl.DataFrame(txt, schema=["dates"])
-        result = result.with_columns(dateURL=pl.col("dates").str.slice(0, 10))
-        result = result.with_columns(
-            url="http://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard?dates=" + pl.col("dateURL"),
-        )
+    txt = _download_json(download, url, **kwargs).get("eventDate").get("dates")
+    result = pl.DataFrame(txt, schema=["dates"])
+    result = result.with_columns(dateURL=pl.col("dates").str.slice(0, 10))
+    result = result.with_columns(
+        url="http://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard?dates=" + pl.col("dateURL"),
+    )
 
     return result
 

@@ -5,6 +5,7 @@ import datetime
 import pandas as pd
 import polars as pl
 
+from sportsdataverse._codegen_runtime import _download_json
 from sportsdataverse.dl_utils import download
 
 
@@ -46,10 +47,7 @@ def espn_mlb_schedule(dates=None, season_type=None, limit=500, return_as_pandas=
     if season_type is not None:
         params["seasontype"] = season_type
 
-    resp = download(url=url, params=params, **kwargs)
-    if resp is None:
-        return None
-    payload = resp.json()
+    payload = _download_json(download, url, params=params, **kwargs)
     events = payload.get("events", [])
     if not events:
         return None
@@ -137,10 +135,7 @@ def espn_mlb_calendar(season=None, ondays=None, return_as_pandas=False, **kwargs
     if season is None:
         season = datetime.date.today().year
     url = f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/seasons/{season}/types/2/calendar/ondays"
-    resp = download(url=url, **kwargs)
-    if resp is None:
-        return None
-    payload = resp.json()
+    payload = _download_json(download, url, **kwargs)
     eventdates = payload.get("eventDate", {}).get("dates", []) or []
     rows = []
     for d in eventdates:

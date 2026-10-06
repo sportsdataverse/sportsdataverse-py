@@ -19,6 +19,7 @@ from typing import Any, Literal, overload
 import pandas as pd
 import polars as pl
 
+from sportsdataverse._codegen_runtime import _download_json
 from sportsdataverse.dl_utils import download
 
 _LEAGUE_SLUG: str = "womens-college-basketball"
@@ -216,8 +217,7 @@ def _espn_basketball_standings(
     """
     base = f"https://site.api.espn.com/apis/v2/sports/basketball/{league}/standings?season={season}"
     url = f"{base}&group={group}" if group is not None else base
-    resp = download(url, **kwargs)
-    payload: dict[str, Any] = resp.json()
+    payload: dict[str, Any] = _download_json(download, url, **kwargs)
 
     if raw:
         return payload

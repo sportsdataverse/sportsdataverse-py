@@ -354,6 +354,7 @@ def _load_model(name: str, models_dir: Optional[Union[str, Path]] = None) -> "Bo
 
     # 4. Download-on-demand.
     if name in _MODEL_URLS:
+        from sportsdataverse._codegen_runtime import _check_response
         from sportsdataverse.dl_utils import download
         from sportsdataverse.nfl.config import get_config
 
@@ -366,7 +367,9 @@ def _load_model(name: str, models_dir: Optional[Union[str, Path]] = None) -> "Bo
                 print(
                     f"Downloading {name} (~34 MB) from the nfl_model_artifacts release… (caching under {dest.parent})"
                 )
-            content = download(url, timeout=cfg.timeout, num_retries=5).content
+            resp = download(url, timeout=cfg.timeout, num_retries=5)
+            _check_response(resp, url)  # a 403/5xx body cached as the model poisons every later load
+            content = resp.content
             tmp = dest.with_suffix(dest.suffix + ".tmp")
             with open(tmp, "wb") as fh:
                 fh.write(content)

@@ -319,6 +319,7 @@ from sportsdataverse.cfb.model_vars import (
     wp_start_columns,
     wp_start_touchback_columns,
 )
+from sportsdataverse._codegen_runtime import _download_json
 from sportsdataverse.dl_utils import download
 
 ep_model_file = _cfb_resource_filename("sportsdataverse", "cfb/models/ep_model.ubj")
@@ -2233,8 +2234,7 @@ class CFBPlayProcess(object):
             cache_buster = int(time.time() * 1000)
             # summary endpoint for pickcenter array
             summary_url = f"http://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event={self.gameId}&{cache_buster}"
-            summary_resp = download(url=summary_url, **kwargs)
-            summary = summary_resp.json()
+            summary = _download_json(download, summary_url, **kwargs)
         incoming_keys_expected = [
             "boxscore",
             "format",
@@ -3564,8 +3564,7 @@ class CFBPlayProcess(object):
             f"odds?limit=100&{cache_buster}"
         )
         try:
-            odds_resp = download(odds_url)
-            odds = odds_resp.json()
+            odds = _download_json(download, odds_url)
         except Exception as e:
             logger.warning(
                 "%s: odds fetch failed (%r); falling back to defaults",

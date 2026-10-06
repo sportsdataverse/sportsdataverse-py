@@ -8,6 +8,51 @@ Merged to `main` since 0.1.4 and not yet released. Released versions are on the 
 
 ## Unreleased
 
+### Fixed — a failed fetch in the hand-written ESPN scrapers raises instead of being parsed (BREAKING)
+
+88 hand-written fetches read `download()`'s response without checking it. Once the
+retries ran out, a 403 / 429 / 5xx came back as the last response and its body was parsed
+as data: ESPN's JSON error bodies (`{"code": 503, ...}`) became an empty schedule, a
+zero-row teams frame or a summary with no plays, and an HTML error page surfaced as a
+`JSONDecodeError`. They now decode through the same helpers as the generated wrappers
+(`_codegen_runtime._download_json`: `_transport_errors` + `_json_body`):
+
+| Answer | Before | Now |
+|---|---|---|
+| 2xx with a JSON body | the body | the body (unchanged) |
+| 404, or ESPN's 200 with `code: 404` | `NoDataError` | `NoDataError` (unchanged) |
+| 400 / 422 | the error body as data | `ValueError` |
+| 401 / 403 / 429 / 5xx after the retries | the error body as data, or `JSONDecodeError` | `AssetFetchError` |
+| 2xx with an empty or non-JSON body | `JSONDecodeError` | `AssetFetchError` |
+| connection failure after the retries | the raw `requests` exception | `AssetFetchError`, chained to it |
+
+Covered: `espn_{cfb,mbb,mlb,nba,nfl,nhl,wbb,wnba}_schedule` / `_calendar` / `_teams` /
+`_game_rosters`, `espn_{mbb,mlb,nba,nhl,wbb,wnba}_pbp`, the live summary and odds fetches
+of `CFBPlayProcess` / `NFLPlayProcess`, `espn_{cfb,nfl}_play_participants`, every
+`espn_*_player_stats`, the `espn_{wbb,wnba}` team roster, team stats, standings, game
+officials and draft wrappers, `build_nfl_players`, the MBB/WBB recruiting projection, and
+the Basketball-Reference `bref_*` scrapers (a 429 page is no longer read as an empty
+table).
+
+Loops: `build_nfl_players` raises on a failed athletes index page (it used to return a
+partial or zero-row frame) and tallies its per-athlete fetches: isolated failures are
+skipped and logged, and every athlete failing raises `CrosswalkSourceError`. The
+recruiting projection tallies its per-recruit fetches the same way. Best-effort fetches
+keep their fallbacks: the play-participants sidecar and `$ref` name backfill, the
+player-stats athlete/team metadata, the pbp odds (default line) and participants join.
+Game rosters still skip a team whose roster 404s. `build_nfl_season` still warns and skips
+a game that fails. The offline paths (`summary=`, `path_to_json`) never reach the network
+and are unchanged.
+
+The `nfl` / `cfb` download-on-demand models no longer cache an error page as the model
+file (which made every later load fail); a failed download still raises
+`FileNotFoundError`. The Spotrac / HoopsHype / NBADraft.net / RotoWire scrapers keep their
+warn-and-return-an-empty-frame posture, now also for a non-2xx answer.
+
+Migration: catch `AssetFetchError` where a loop over these functions must keep going;
+`except NoDataError` keeps skipping absent resources. A request ESPN rejects (400 / 422)
+now raises `ValueError`.
+
 ### Fixed — a failed stats.nba.com / stats.wnba.com fetch raises instead of returning `{}` (BREAKING)
 
 The `nba_stats_*` / `wnba_stats_*` getter (`nba_stats_runtime._get`, and the WNBA shim

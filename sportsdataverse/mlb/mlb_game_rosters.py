@@ -3,6 +3,7 @@ from __future__ import annotations
 import pandas as pd
 import polars as pl
 
+from sportsdataverse._codegen_runtime import _download_json
 from sportsdataverse.dl_utils import download, underscore
 
 
@@ -38,10 +39,7 @@ def espn_mlb_game_rosters(game_id: int, raw: bool = False, return_as_pandas: boo
         "https://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/"
         f"events/{game_id}/competitions/{game_id}/competitors"
     )
-    comp_resp = download(url=competitors_url, **kwargs)
-    if comp_resp is None:
-        return None
-    comp_payload = comp_resp.json()
+    comp_payload = _download_json(download, competitors_url, **kwargs)
     items = comp_payload.get("items") or []
     if not items:
         return None
@@ -53,10 +51,7 @@ def espn_mlb_game_rosters(game_id: int, raw: bool = False, return_as_pandas: boo
         roster_ref = (c.get("roster") or {}).get("$ref")
         if not roster_ref:
             continue
-        roster_resp = download(url=roster_ref, **kwargs)
-        if roster_resp is None:
-            continue
-        roster_payload = roster_resp.json()
+        roster_payload = _download_json(download, roster_ref, **kwargs)
         entries = roster_payload.get("entries") or []
         for e in entries:
             athlete = e.get("athlete") or {}

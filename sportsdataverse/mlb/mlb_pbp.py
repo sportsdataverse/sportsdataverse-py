@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from typing import Dict
 
+from sportsdataverse._codegen_runtime import _download_json
 from sportsdataverse.dl_utils import download
 
 
@@ -53,10 +54,7 @@ def espn_mlb_pbp(game_id: int, raw: bool = False, **kwargs) -> Dict:
         payload — use :func:`mlb_api_pbp` (statsapi.mlb.com) for that.
     """
     url = f"http://site.api.espn.com/apis/site/v2/sports/baseball/mlb/summary?event={game_id}"
-    resp = download(url=url, **kwargs)
-    if resp is None:
-        return {}
-    payload = resp.json()
+    payload = _download_json(download, url, **kwargs)
     if raw:
         return payload
     # TODO: tidy-parse into plays / boxscore frames; for now we return the

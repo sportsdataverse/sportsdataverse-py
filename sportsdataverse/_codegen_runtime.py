@@ -8,7 +8,7 @@ from __future__ import annotations
 
 import json
 from contextlib import contextmanager
-from typing import Any, Iterator, List, Optional
+from typing import Any, Callable, Iterator, List, Optional
 from urllib.parse import urlsplit
 
 import polars as pl
@@ -177,6 +177,18 @@ def _json_body(resp: Any, url: str) -> Any:
     return _json_text(url, getattr(resp, "status_code", 200), getattr(resp, "text", "") or "")
 
 
+def _download_json(transport: Callable[..., Any], url: str, **kwargs: Any) -> Any:
+    """``transport(url=url, **kwargs)`` decoded under the error vocabulary (see :func:`_get`).
+
+    The hand-written scrapers pass their own module-level ``download`` as
+    ``transport``, so a test that monkeypatches ``<module>.download`` still
+    intercepts the request.
+    """
+    with _transport_errors(url):
+        resp = transport(url=url, **kwargs)
+    return _json_body(resp, url)
+
+
 def _get(url: str, params: Optional[dict] = None, **kwargs) -> Any:
     """GET ``url`` as JSON. Strips ``None`` params.
 
@@ -187,9 +199,7 @@ def _get(url: str, params: Optional[dict] = None, **kwargs) -> Any:
             retries, or a 2xx whose body is empty (not 204/205) or not JSON.
     """
     clean = {k: v for k, v in (params or {}).items() if v is not None}
-    with _transport_errors(url):
-        resp = download(url=url, params=clean, **kwargs)
-    return _json_body(resp, url)
+    return _download_json(download, url, params=clean, **kwargs)
 
 
 def _csv(values: Any) -> Optional[str]:

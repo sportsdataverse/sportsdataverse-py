@@ -61,6 +61,7 @@ from typing import TYPE_CHECKING, Any, Dict, List, Optional
 
 import polars as pl
 
+from sportsdataverse._codegen_runtime import _text_body, _transport_errors
 from sportsdataverse.dl_utils import download
 from sportsdataverse.errors import NoDataError
 
@@ -167,13 +168,19 @@ def _bref_get(path: str, *, proxy: Any = None, **kwargs: Any) -> str:
         The page HTML, or ``""`` when the page does not exist (a 404 is a
         definitive "no such season/player" here, and the callers turn an empty
         body into a zero-row frame).
+
+    Raises:
+        AssetFetchError: Any other failed fetch -- a 429 / 403 / 5xx after the
+            retries, an empty 200, or a connection failure. Never parsed as a page.
     """
     _throttle()
+    url = f"{_BASE_URL}{path}"
     try:
-        resp = download(url=f"{_BASE_URL}{path}", headers=_HEADERS, proxy=proxy, **kwargs)
+        with _transport_errors(url):
+            resp = download(url=url, headers=_HEADERS, proxy=proxy, **kwargs)
     except NoDataError:
         return ""
-    return getattr(resp, "text", "") or ""
+    return _text_body(resp, url)
 
 
 # ---------------------------------------------------------------------------

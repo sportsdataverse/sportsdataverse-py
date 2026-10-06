@@ -28,6 +28,7 @@ from typing import Any
 import pandas as pd
 import polars as pl
 
+from sportsdataverse._codegen_runtime import _download_json
 from sportsdataverse.dl_utils import download, underscore
 
 logger = logging.getLogger("sdv.football.play_participants")
@@ -248,8 +249,7 @@ def _download_plays(game_id: int, league: str = "college-football", **kwargs: An
     params: dict[str, Any] = {"limit": 1000, "page": 1}
     out: list[dict[str, Any]] = []
     while True:
-        resp = download(base, params=params, **kwargs)
-        body = resp.json()
+        body = _download_json(download, base, params=params, **kwargs)
         items = body.get("items") or []
         if isinstance(items, list):
             out.extend(item for item in items if isinstance(item, dict))
@@ -270,8 +270,7 @@ def _download_athlete_lookup(game_id: int, league: str = "college-football", **k
     """
     url = f"https://cdn.espn.com/core/{league}/playbyplay?xhr=1&gameId={game_id}"
     try:
-        resp = download(url, **kwargs)
-        sidecar = resp.json()
+        sidecar = _download_json(download, url, **kwargs)
     except Exception:  # noqa: BLE001
         # Sidecar is best-effort; participants table is still useful with
         # only ids if the sidecar is unavailable for some reason.
@@ -412,8 +411,7 @@ def _resolve_missing_athletes(
         ath_id = row["athlete_id"]
         ref_url = row["athlete_ref"]
         try:
-            resp = download(ref_url, **kwargs)
-            payload = resp.json()
+            payload = _download_json(download, ref_url, **kwargs)
         except Exception as e:  # noqa: BLE001 — best-effort; log and continue
             logger.warning(
                 "football.play_participants: failed to resolve athlete %s via %s: %s",
