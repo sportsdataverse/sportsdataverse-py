@@ -15,6 +15,7 @@ from sdv_docs.index import Index, IndexUnavailable, locate
 INSTALL = "sdv-docs needs Python >= 3.10 and the mcp extra: pip install 'sportsdataverse[mcp]'"
 COLUMN_CAP = 50
 WRAPPER_CAP = 6
+FOUND_CAP = 10
 
 
 def _with_index(run: Callable[[Index], str]) -> str:
@@ -24,6 +25,13 @@ def _with_index(run: Callable[[Index], str]) -> str:
         return f"index unavailable: {e}; set SDV_DOCS_DB or check network"
     with Index(path) as ix:
         return run(ix)
+
+
+def _elsewhere(filters: dict[str, Optional[str]], found: list[str]) -> str:
+    """The tail of a message for a filtered lookup that missed but matches without its filters."""
+    shown = " and ".join(f"{k} {v!r}" for k, v in filters.items() if v)
+    more = ", …" if len(found) > FOUND_CAP else ""
+    return f"not for {shown} (found in: {', '.join(found[:FOUND_CAP])}{more})."
 
 
 def _not_found(ix: Index, what: str, name: str, table: str) -> str:
@@ -54,6 +62,12 @@ def search(
     def run(ix: Index) -> str:
         hits = ix.search(query, kind=kind, league=league, lang=lang, limit=limit)
         if not hits:
+            filters = {"kind": kind, "league": league, "lang": lang}
+            anywhere = ix.search(query, limit=100) if any(filters.values()) else []
+            if anywhere:
+                keys = [k for k, v in filters.items() if v]
+                found = sorted({" · ".join(str(h[k] or "none") for k in keys) for h in anywhere})
+                return f"Results for {query!r} exist, but " + _elsewhere(filters, found)
             return f"No results for {query!r}."
         lines = [f"{len(hits)} result(s) for {query!r}:"]
         for h in hits:
@@ -78,7 +92,15 @@ def get_function(name: str, lang: Optional[str] = None, columns: bool = True) ->
     def run(ix: Index) -> str:
         rows = ix.functions(name, lang)
         if not rows:
-            bare = name.strip().rpartition("::")[2].strip().removesuffix("()")
+            pkg, _, bare = name.strip().rpartition("::")
+            bare = bare.strip().removesuffix("()")
+            anywhere = ix.functions(bare) if (pkg or lang) else []
+            if anywhere:
+                found = [
+                    f"`{r['name']}` (python)" if r["lang"] == "python" else f"`{r['package']}::{r['name']}` (r)"
+                    for r in anywhere
+                ]
+                return f"`{bare}` exists, but " + _elsewhere({"package": pkg.strip(), "lang": lang}, found)
             return _not_found(ix, "function", bare, "functions")
         return "\n\n---\n\n".join(_function_block(ix, f, columns) for f in rows)
 
@@ -141,6 +163,12 @@ def find_columns(column: str, league: Optional[str] = None, function: Optional[s
     def run(ix: Index) -> str:
         rows = ix.columns_named(column, league=league, function=function, limit=COLUMN_CAP + 1)
         if not rows:
+            anywhere = ix.columns_named(column, limit=-1) if (league or function) else []  # -1: no LIMIT
+            if anywhere:
+                found = sorted(
+                    {r["function"] for r in anywhere} if function else {r["league"] or "none" for r in anywhere}
+                )
+                return f"`{column.strip()}` exists, but " + _elsewhere({"league": league, "function": function}, found)
             return _not_found(ix, "column", column.strip(), "columns")
         shown = rows[:COLUMN_CAP]
         more = f" (first {COLUMN_CAP}; narrow with league= or function=)" if len(rows) > COLUMN_CAP else ""
@@ -168,6 +196,10 @@ def find_endpoints(query: str, api: Optional[str] = None, limit: int = 10) -> st
     def run(ix: Index) -> str:
         rows = ix.endpoints(query, api=api, limit=limit)
         if not rows:
+            anywhere = ix.endpoints(query, limit=100) if api else []
+            if anywhere:
+                found = sorted({e["api"] for e in anywhere})
+                return f"Endpoints matching {query!r} exist, but " + _elsewhere({"api": api}, found)
             return f"No endpoints match {query!r}" + (f" in api {api!r}" if api else "") + "."
         blocks = []
         for e in rows:
@@ -205,6 +237,10 @@ def list_datasets(league: Optional[str] = None, query: Optional[str] = None, lim
     def run(ix: Index) -> str:
         rows = ix.datasets(league=league, query=query, limit=limit)
         if not rows:
+            anywhere = ix.datasets(query=query, limit=-1) if league else []  # -1: no LIMIT
+            if anywhere:
+                what = f"Datasets matching {query!r} exist" if query else "Datasets exist"
+                return f"{what}, but " + _elsewhere({"league": league}, sorted({d["league"] for d in anywhere}))
             return (
                 "No datasets match"
                 + (f" league {league!r}" if league else "")

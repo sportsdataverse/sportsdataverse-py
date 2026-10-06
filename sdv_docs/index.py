@@ -67,7 +67,7 @@ class Index:
         for col, val in (("kind", kind), ("league", league), ("lang", lang)):
             if val:
                 where += f" AND search.{col} = ?"
-                args.append(val.lower() if col == "lang" else val)
+                args.append(val.lower())  # stored kind / league / lang are lower-case
         for op in ("AND", "OR"):
             q = fts_query(query, op)
             if not q:
@@ -127,7 +127,7 @@ class Index:
         args: list[object] = [column.strip()]
         if league:
             sql += " AND f.league = ?"
-            args.append(league)
+            args.append(league.lower())
         if function:
             sql += " AND c.function = ?"
             args.append(function.strip().removesuffix("()"))
@@ -139,11 +139,11 @@ class Index:
         ).fetchall()
 
     def endpoints(self, query: str, api: Optional[str] = None, limit: int = 10) -> list[sqlite3.Row]:
-        where, args = (" AND t.api = ?", (api,)) if api else ("", ())
+        where, args = (" AND lower(t.api) = lower(?)", (api,)) if api else ("", ())  # OpenAPI titles are mixed-case
         return self._ranked("endpoints", "endpoint", query, where, args, limit)
 
     def datasets(self, league: Optional[str] = None, query: Optional[str] = None, limit: int = 50) -> list[sqlite3.Row]:
-        args: tuple = (league,) if league else ()
+        args: tuple = (league.lower(),) if league else ()
         if query is not None:  # an empty or punctuation-only query matches nothing, not everything
             return self._ranked("datasets", "dataset", query, " AND t.league = ?" if league else "", args, limit)
         sql = "SELECT * FROM datasets" + (" WHERE league = ?" if league else "") + " ORDER BY loader LIMIT ?"

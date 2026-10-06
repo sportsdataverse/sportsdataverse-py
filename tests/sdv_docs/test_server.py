@@ -73,6 +73,34 @@ def test_find_columns_and_league_filter():
     assert "not in index" in server.find_columns("no_such_column_xyz")
 
 
+def test_filters_are_case_insensitive():
+    assert "nhl_shifts" in server.list_datasets(league="NHL")
+    assert "**load_nba_pbp**" in server.find_columns("game_id", league="NBA")
+    assert "**espn_nba_team_roster**" in server.search("team roster", kind="Function", league="NBA", lang="Python")
+    assert "/injuries" in server.find_endpoints("athlete injuries", api="ESPN_CORE_V2")
+    assert "source: openapi" in server.find_endpoints("odds", api="espn core api")
+
+
+def test_a_filtered_miss_says_where_the_match_is():
+    out = server.find_columns("game_id", league="mlb")
+    assert out == "`game_id` exists, but not for league 'mlb' (found in: nba, nhl)."
+    out = server.find_columns("event_type", function="load_nba_pbp")
+    assert out == "`event_type` exists, but not for function 'load_nba_pbp' (found in: load_nhl_pbp)."
+    out = server.get_function("load_nhl_pbp", lang="r")
+    assert out == "`load_nhl_pbp` exists, but not for lang 'r' (found in: `load_nhl_pbp` (python))."
+    out = server.get_function("wehoop::load_nba_pbp")
+    assert out.startswith("`load_nba_pbp` exists, but not for package 'wehoop' (found in: `load_nba_pbp` (python), ")
+    assert "`hoopR::load_nba_pbp` (r)" in out
+    out = server.list_datasets(league="nba", query="shifts")
+    assert out == "Datasets matching 'shifts' exist, but not for league 'nba' (found in: nhl)."
+    assert server.list_datasets(league="mlb") == "Datasets exist, but not for league 'mlb' (found in: nba, nhl)."
+    out = server.search("shifts", league="nba")
+    assert out == "Results for 'shifts' exist, but not for league 'nba' (found in: nhl)."
+    out = server.find_endpoints("athlete injuries", api="espn_cdn")
+    assert out == "Endpoints matching 'athlete injuries' exist, but not for api 'espn_cdn' (found in: espn_core_v2)."
+    assert "not in index" in server.find_columns("no_such_column_xyz", league="nba")  # a true miss stays a miss
+
+
 def test_find_columns_caps_at_limit(tmp_path, monkeypatch):
     db = make_tiny_db(tmp_path / "big.sqlite")
     con = sqlite3.connect(db)
