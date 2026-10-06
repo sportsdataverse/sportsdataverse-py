@@ -337,8 +337,10 @@
 `sdv-docs` is a stdio MCP server that answers exact questions about the SportsDataverse surface
 from a local SQLite index, so an agent stops guessing column names and endpoint paths. Six
 read-only tools: `search`, `get_function`, `find_columns`, `find_endpoints`, `list_datasets` and
-`index_info`. Install with `pip install 'sportsdataverse[mcp]'` (Python 3.10+) or, for Claude
-Code, `claude mcp add sdv-docs -- uvx --from 'sportsdataverse[mcp]' sdv-docs`. The `sdv_docs/`
+`index_info`. From the next release (0.1.5+), install with `pip install 'sportsdataverse[mcp]'`
+(Python 3.10+) or, for Claude Code,
+`claude mcp add sdv-docs -- uvx --from 'sportsdataverse[mcp]' sdv-docs`. Until then, install
+from GitHub main: `uvx --from 'sportsdataverse[mcp] @ git+https://github.com/sportsdataverse/sportsdataverse-py' sdv-docs`. The `sdv_docs/`
 package ships in the same wheel but never imports `sportsdataverse`, so a bare server starts in
 about 1.5 s and ~70 MB rather than the 4-12 s and ~320 MB of loading every league.
 

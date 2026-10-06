@@ -812,8 +812,10 @@ publish/download helpers plus a pure-Python **byte-parity RDS writer**
   [--out DIR]` is the online build (codegen model + sdv-swagger specs + R pkgdown `llms.txt`);
   `--offline` skips the network inputs. Output: `sdv_docs_v1.sqlite` + `manifest_v1.json`.
 - **Schema version:** bump `SCHEMA_VERSION` in `sdv_docs/schema.py` on any breaking table or column
-  change. It is part of the asset name (`sdv_docs_v{N}.sqlite`), so old clients keep reading their
-  own `v{N-1}` asset instead of crashing on the new one.
+  change. It is part of the asset name (`sdv_docs_v{N}.sqlite`). Also update the hard-coded
+  `sdv_docs_v1.sqlite` / `manifest_v1.json` names in `docs-index.yml` (publish step and the
+  `SDV_DOCS_RETRIEVAL_DB` path). `--clobber` never deletes old assets, so the v{N-1} pair stays on
+  the release, frozen: old clients keep working on a stale index.
 - **Retrieval gate:** `tests/sdv_docs/retrieval.yaml` (28 cases) runs only when
   `SDV_DOCS_RETRIEVAL_DB` points at a full build: `SDV_DOCS_RETRIEVAL_DB=build/docs-index/sdv_docs_v1.sqlite
   uv run pytest tests/sdv_docs/test_retrieval.py`. Unset = skipped. CI sets it in `docs-index.yml`.
