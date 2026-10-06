@@ -144,3 +144,77 @@ def test_parse_soccer_teams_empty_zero_rows():
     from sportsdataverse.soccer.soccer_espn_parsers import parse_soccer_teams
 
     assert parse_soccer_teams({}).height == 0
+
+
+# --- W1: event coordinates + play details ----------------------------------
+
+_COORD_COLS = [
+    "field_position_x",
+    "field_position_y",
+    "field_position2_x",
+    "field_position2_y",
+    "goal_position_x",
+    "goal_position_y",
+]
+
+
+def _summary(league: str) -> dict:
+    return json.loads((FIX / league / "site-v2" / "summary.json").read_text(encoding="utf-8"))
+
+
+def test_key_events_keep_coordinates_float64():
+    from sportsdataverse.soccer.soccer_espn_parsers import parse_soccer_summary
+
+    ke = parse_soccer_summary(_summary("eng.1"), section="key_events")
+    for c in _COORD_COLS + ["source_id", "source_description"]:
+        assert c in ke.columns
+    for c in _COORD_COLS:
+        assert ke.schema[c] == pl.Float64
+    # end location sits on the goal line (x = 0) with y > 0
+    assert ke.filter(pl.col("field_position2_y") > 0).height >= 1
+
+
+def test_key_events_penalty_spot_coordinates():
+    from sportsdataverse.soccer.soccer_espn_parsers import parse_soccer_summary
+
+    found = 0
+    for lg in ("eng.1", "uefa.champions"):
+        ke = parse_soccer_summary(_summary(lg), section="key_events")
+        pen = ke.filter(pl.col("type").str.starts_with("Penalty"))
+        for r in pen.iter_rows(named=True):
+            # ESPN's (0, 0) placeholder is kept faithfully; located ones sit on the spot.
+            if r["field_position_x"] > 0:
+                assert r["field_position_x"] == 0.23
+                assert r["field_position_y"] == 0.5
+                found += 1
+    assert found >= 1
+
+
+def test_commentary_play_block_columns():
+    from sportsdataverse.soccer.soccer_espn_parsers import parse_soccer_summary
+
+    raw = _summary("eng.1")
+    cm = parse_soccer_summary(raw, section="commentary")
+    for c in ["play_id", "play_type", "team_name", "field_position_x", "athlete_id", "athlete_name"]:
+        assert c in cm.columns
+    assert cm.columns[:4] == ["sequence", "time_display", "time_value", "text"]
+    with_play = [i for i in raw["commentary"] if i.get("play")]
+    assert len(with_play) >= 70
+    assert cm.filter(pl.col("play_id").is_not_null()).height == len(with_play)
+    assert cm.filter(pl.col("play_id").is_null()).height == len(raw["commentary"]) - len(with_play)
+    expected = sum(
+        1 for i in with_play if (i["play"].get("fieldPositionX") or 0) > 0 or (i["play"].get("fieldPositionY") or 0) > 0
+    )
+    got = cm.filter((pl.col("field_position_x") > 0) | (pl.col("field_position_y") > 0)).height
+    assert got == expected > 0
+
+
+def test_key_events_and_commentary_coordinates_agree():
+    from sportsdataverse.soccer.soccer_espn_parsers import parse_soccer_summary
+
+    raw = _summary("eng.1")
+    ke = parse_soccer_summary(raw, section="key_events")
+    cm = parse_soccer_summary(raw, section="commentary")
+    j = ke.join(cm.drop_nulls("play_id"), left_on="id", right_on="play_id", suffix="_cm")
+    for c in ("field_position_x", "field_position_y"):
+        assert (j[c] == j[c + "_cm"]).all()

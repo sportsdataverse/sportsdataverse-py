@@ -181,6 +181,26 @@ def _build_lineups(payload: dict) -> pl.DataFrame:
         return pl.DataFrame()
 
 
+_COORD_KEYS = {
+    "field_position_x": "fieldPositionX",
+    "field_position_y": "fieldPositionY",
+    "field_position2_x": "fieldPosition2X",
+    "field_position2_y": "fieldPosition2Y",
+    "goal_position_x": "goalPositionX",
+    "goal_position_y": "goalPositionY",
+}
+
+
+def _coords(block: dict) -> dict:
+    """Six ESPN pitch-coordinate fields from an event/play block (None stays None)."""
+    return {col: block.get(key) for col, key in _COORD_KEYS.items()}
+
+
+def _float_coords(df: pl.DataFrame) -> pl.DataFrame:
+    # All-null columns would otherwise infer the Null dtype.
+    return df.with_columns(pl.col(list(_COORD_KEYS)).cast(pl.Float64))
+
+
 def _build_key_events(payload: dict) -> pl.DataFrame:
     try:
         events = payload.get("keyEvents") or []
@@ -210,6 +230,9 @@ def _build_key_events(payload: dict) -> pl.DataFrame:
                     "team_id": team_block.get("id"),
                     "team_name": team_block.get("displayName"),
                     "scoring_play": ev.get("scoringPlay"),
+                    **_coords(ev),
+                    "source_id": (ev.get("source") or {}).get("id"),
+                    "source_description": (ev.get("source") or {}).get("description"),
                     "athlete_id": primary_athlete_id,
                     "athlete_name": primary_athlete_name,
                     "wallclock": ev.get("wallclock"),
@@ -217,7 +240,7 @@ def _build_key_events(payload: dict) -> pl.DataFrame:
             )
         if not rows:
             return pl.DataFrame()
-        return pl.DataFrame(_stringify_lists(rows))
+        return _float_coords(pl.DataFrame(_stringify_lists(rows)))
     except Exception:
         return pl.DataFrame()
 
@@ -255,17 +278,37 @@ def _build_commentary(payload: dict) -> pl.DataFrame:
         rows = []
         for item in items:
             time_block = item.get("time") or {}
+            play = item.get("play") or {}
+            type_block = play.get("type") or {}
+            clock_block = play.get("clock") or {}
+            participants = play.get("participants") or []
+            athlete = ((participants[0] or {}).get("athlete") or {}) if participants else {}
             rows.append(
                 {
                     "sequence": item.get("sequence"),
                     "time_display": time_block.get("displayValue"),
                     "time_value": time_block.get("value"),
                     "text": item.get("text"),
+                    "play_id": play.get("id"),
+                    "play_type": type_block.get("text"),
+                    "play_type_id": type_block.get("id"),
+                    "play_type_slug": type_block.get("type"),
+                    "play_text": play.get("text"),
+                    "play_short_text": play.get("shortText"),
+                    "period": (play.get("period") or {}).get("number"),
+                    "clock": clock_block.get("displayValue"),
+                    "clock_value": clock_block.get("value"),
+                    "scoring_play": play.get("scoringPlay"),
+                    "team_name": (play.get("team") or {}).get("displayName"),
+                    "athlete_id": athlete.get("id"),
+                    "athlete_name": athlete.get("displayName"),
+                    **_coords(play),
+                    "wallclock": play.get("wallclock"),
                 }
             )
         if not rows:
             return pl.DataFrame()
-        return pl.DataFrame(_stringify_lists(rows))
+        return _float_coords(pl.DataFrame(_stringify_lists(rows)))
     except Exception:
         return pl.DataFrame()
 

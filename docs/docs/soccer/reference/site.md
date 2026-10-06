@@ -121,6 +121,14 @@ ESPN endpoint.
 | `team_id` | character | Unique team identifier. |
 | `team_name` | character | Full display name of the team. |
 | `scoring_play` | logical | TRUE if the play resulted in points scored. |
+| `field_position_x` | double | Distance of the event from the goal line the event's team attacks, as a fraction of half the pitch (penalty spot = 0.23); 0 together with a 0 y means ESPN recorded no location. |
+| `field_position_y` | double | Position of the event across the pitch from 0 to 1, where values below 0.5 are the attacking team's left; 0 together with a 0 x means ESPN recorded no location. |
+| `field_position2_x` | double | Distance of the event's end location from the goal line the team attacks, as a fraction of half the pitch, in the same frame as field_position_x; 0 when not recorded. |
+| `field_position2_y` | double | Position of the event's end location across the pitch from 0 to 1, in the same frame as field_position_y; 0 when not recorded. |
+| `goal_position_x` | double | Horizontal position at which a shot crossed the goal frame; 0 when not recorded. |
+| `goal_position_y` | double | Vertical position at which a shot crossed the goal frame; 0 when not recorded. |
+| `source_id` | character | ESPN data-source id for the probability row. |
+| `source_description` | character | ESPN data-source description (e.g. `Basic/Manual`). |
 | `athlete_id` | character | Unique athlete identifier (ESPN). |
 | `athlete_name` | character | Athlete display name (ESPN). |
 | `wallclock` | character | Wallclock. |
@@ -170,6 +178,26 @@ ESPN endpoint.
 | `time_display` | character | Human-readable game clock time at which a match event occurred. |
 | `time_value` | double | Numeric game clock value at which a match event occurred. |
 | `text` | character | Text description of the play / record. |
+| `play_id` | character | Numeric play id that when used with game_id and drive provides the unique identifier for a single play. |
+| `play_type` | character | String indicating the type of play: pass (includes sacks), run (includes scrambles), punt, field_goal, kickoff, extra_point, qb_kneel, qb_spike, no_play (timeouts and penalties), and missing for rows indicating end of play. |
+| `play_type_id` | character | CFBD play type identifier (matches `play_type` IDs in [cfbd_plays()]). |
+| `play_type_slug` | character | ESPN's lowercase slug for the play type of the linked play, e.g. foul or goal. |
+| `play_text` | character | Free-form text description of the play from the CFBD feed. |
+| `play_short_text` | character | ESPN's short label for the play linked to this commentary item, e.g. a player name followed by the event type. |
+| `period` | integer | Period of the game (1-4 quarters; 5+ for OT). |
+| `clock` | character | Game clock value. |
+| `clock_value` | double | Clock value in seconds. |
+| `scoring_play` | character | TRUE if the play resulted in points scored. |
+| `team_name` | character | Full display name of the team. |
+| `athlete_id` | character | Unique athlete identifier (ESPN). |
+| `athlete_name` | character | Athlete display name (ESPN). |
+| `field_position_x` | double | Distance of the event from the goal line the event's team attacks, as a fraction of half the pitch (penalty spot = 0.23); 0 together with a 0 y means ESPN recorded no location. |
+| `field_position_y` | double | Position of the event across the pitch from 0 to 1, where values below 0.5 are the attacking team's left; 0 together with a 0 x means ESPN recorded no location. |
+| `field_position2_x` | double | Distance of the event's end location from the goal line the team attacks, as a fraction of half the pitch, in the same frame as field_position_x; 0 when not recorded. |
+| `field_position2_y` | double | Position of the event's end location across the pitch from 0 to 1, in the same frame as field_position_y; 0 when not recorded. |
+| `goal_position_x` | double | Horizontal position at which a shot crossed the goal frame; 0 when not recorded. |
+| `goal_position_y` | double | Vertical position at which a shot crossed the goal frame; 0 when not recorded. |
+| `wallclock` | character | Wallclock. |
 
 **leaders**
 

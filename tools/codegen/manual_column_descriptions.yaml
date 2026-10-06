@@ -37372,6 +37372,10 @@ summary:
   extras: Additional runs awarded to the batting side from wides, no-balls, byes, or leg byes in this innings.
   field_goals_made/field_goal_attempts: Field goal conversion ratio for the player, expressed as field goals made divided
     by attempts.
+  field_position2_x: Distance of the event's end location from the goal line the team attacks, as a fraction of half the pitch, in the same frame as field_position_x; 0 when not recorded.
+  field_position2_y: Position of the event's end location across the pitch from 0 to 1, in the same frame as field_position_y; 0 when not recorded.
+  field_position_x: Distance of the event from the goal line the event's team attacks, as a fraction of half the pitch (penalty spot = 0.23); 0 together with a 0 y means ESPN recorded no location.
+  field_position_y: Position of the event across the pitch from 0 to 1, where values below 0.5 are the attacking team's left; 0 together with a 0 x means ESPN recorded no location.
   for: Total runs or score accumulated by the team across all matches in the group or stage.
   formation_place: Starting formation position or role assigned to the player within the team lineup for the match.
   fouls_committed: Total number of fouls committed by the team during the match.
@@ -37381,6 +37385,8 @@ summary:
     box score.
   fumbles: Number of fumbles committed by the player in the box score.
   game_note: Optional editorial note or context annotation attached to the game in the header.
+  goal_position_x: Horizontal position at which a shot crossed the goal frame; 0 when not recorded.
+  goal_position_y: Vertical position at which a shot crossed the goal frame; 0 when not recorded.
   gross_avg_punt_yards: Average gross punt distance before accounting for returns, recorded for the player in the game.
   hits_at_bats: Hitting performance ratio expressed as hits divided by at-bats for the player in the box score.
   home_aggregate_score: Aggregate score for the home team across both legs of the two-legged tie.
@@ -37429,6 +37435,8 @@ summary:
   perspective_team_id: ESPN identifier for the team whose perspective is used to orient the series or match result display.
   pitches: Total number of pitches thrown or faced by the player in the box score.
   pitches_strikes: Combined count of pitches thrown and strikes recorded for the pitcher in the box score.
+  play_short_text: ESPN's short label for the play linked to this commentary item, e.g. a player name followed by the event type.
+  play_type_slug: ESPN's lowercase slug for the play type of the linked play, e.g. foul or goal.
   player1_name: Name of the first batter in the batting partnership for this fall-of-wicket entry.
   player1_runs: Runs contributed by the first player in the batting partnership.
   player2_name: Name of the second batter in the batting partnership for this fall-of-wicket entry.
