@@ -44,6 +44,12 @@ especially for American football.
 pip install sportsdataverse
 ```
 
+:::caution Deprecated
+`sportsdataverse.parsed.*` is deprecated. The league wrappers already default to
+`return_parsed=True`, so call `sportsdataverse.nba` (etc.) directly; the `parsed`
+namespace is a thin alias kept for back-compat.
+:::
+
 ```python
 # Today's NBA scoreboard as a polars DataFrame — no kwargs needed via parsed.*
 from sportsdataverse.parsed.nba import espn_nba_scoreboard
@@ -134,6 +140,28 @@ matching `parse_*` function for NHL / MLB sibling APIs. See
 | [Fox Sports](fox/) | `sportsdataverse.fox` | Fox Sports API (33) |
 | [EuroLeague](euroleague/) | `sportsdataverse.euroleague` | EuroLeague Competition Engine (7) |
 <!-- END generated: leagues-and-sources -->
+
+## Errors (0.1.5)
+
+- `NoDataError` — the fetch SUCCEEDED and there is nothing there (a 404, or ESPN's
+  200-with-`code:404` body).
+- `AssetFetchError` — the fetch FAILED and the answer is unknown (403, rate limit,
+  exhausted retries). Never record this as an empty season.
+- `ValueError` — a 400 / 422: the request itself is wrong, so retrying cannot help.
+
+As of 0.1.5 the hand-written ESPN scrapers and every generated flat-API getter
+raise rather than returning an error body or an empty dict.
+
+## Asking the package about itself
+
+`sdv-docs` is an MCP server over a prebuilt index of this surface — exact columns,
+function signatures, provider endpoints and released datasets:
+
+```bash
+claude mcp add sdv-docs -- uvx --from 'sportsdataverse[mcp]' sdv-docs
+```
+
+Needs 0.1.5 or newer and Python >= 3.10.
 
 ## Polars / pandas parser layer
 

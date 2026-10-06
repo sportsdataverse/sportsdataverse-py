@@ -298,3 +298,59 @@ def test_contributing_drops_the_stale_claim(stale):
 @pytest.mark.parametrize("current", _CONTRIBUTING_CURRENT)
 def test_contributing_states_the_current_fact(current):
     assert current in flat("contributing")
+
+
+# --- the docs-site conceptual pages ---------------------------------------
+
+_SITE_STALE = {
+    "intro": ["PWHL + 20", "import mlb_api_person_stats"],
+    "qol": ["~4,400 callables"],
+    "espn": ["800+", "| NBA | 113 |"],
+    "parsers": ["All 121 wrapper short names", "make_league_module", "18 parsers"],
+    "ecosystem": ["ten executed"],
+}
+
+_SITE_CURRENT = {
+    "intro": ["## Errors (0.1.5)", "AssetFetchError", "sdv-docs", "is deprecated"],
+    "qol": ["~6,170 callables", "**deprecated**"],
+    "espn": ["126 short names across 30 leagues", "| CFB | 125 |", "default to `return_parsed=True`"],
+    "parsers": ["All 131 entries", "33 parser modules", "21-section", "Errors (0.1.5)"],
+    "ecosystem": ["fifteen executed"],
+}
+
+
+@pytest.mark.parametrize(
+    ("key", "stale"),
+    [(k, v) for k, vals in _SITE_STALE.items() for v in vals],
+)
+def test_site_page_drops_the_stale_claim(key, stale):
+    assert stale.strip() not in flat(key), f"{key} still claims {stale!r}"
+
+
+@pytest.mark.parametrize(
+    ("key", "current"),
+    [(k, v) for k, vals in _SITE_CURRENT.items() for v in vals],
+)
+def test_site_page_states_the_current_fact(key, current):
+    assert current in flat(key)
+
+
+def test_espn_page_per_league_counts_match_the_code():
+    """The per-league table is a snapshot, but a wrong snapshot is what this program is fixing."""
+    from tools.codegen import generate, spec
+
+    params = spec.load_parameters(generate.ENDPOINTS / "parameters.yaml")
+    cfg = spec.load_leagues(generate.ENDPOINTS / "leagues.yaml")
+    apis = [spec.load_espn_api(generate.ENDPOINTS / f"{a}.yaml", params) for a in generate.ESPN_APIS]
+    body = flat("espn")
+    for prefix, label in (("cfb", "CFB"), ("mbb", "MBB"), ("nfl", "NFL"), ("nba", "NBA"), ("nhl", "NHL")):
+        league = next(x for x in cfg.leagues if x.prefix == prefix)
+        n = len(generate._espn_league_views(league, apis, cfg.hosts))
+        assert f"| {label} | {n} |" in body, f"{label} should read {n}"
+
+
+def test_docusaurus_config_comment_is_current():
+    cfg = (ROOT / "docs" / "docusaurus.config.ts").read_text(encoding="utf-8")
+    assert "main (latest)" in cfg
+    assert "docs-deploy.yml" in cfg
+    assert "/docs/0.0.50/ tree) are NOT served" in cfg

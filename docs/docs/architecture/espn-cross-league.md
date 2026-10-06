@@ -6,7 +6,7 @@ sidebar_position: 1
 
 # ESPN cross-league architecture
 
-`sportsdataverse-py` wraps **800+ ESPN endpoints** across eight leagues
+`sportsdataverse-py` wraps **126 short names across 30 leagues** of ESPN endpoints
 (NBA, MBB, WNBA, WBB, CFB, NFL, MLB, NHL — *NHL also has its own modern
 api-web.nhle.com path; see the [NHL section](../nhl/index.md)*) from a
 single set of endpoint specs parameterized by the `{sport}`/`{league}`
@@ -61,10 +61,13 @@ parser, and example — using the `{sport}`/`{league}` template:
 module per league — `sportsdataverse/<league>/<league>_espn_ext.py` —
 substituting the slugs and applying the naming conventions (below):
 
+Wrappers default to `return_parsed=True` and hand back a tidy polars DataFrame;
+pass `return_parsed=False` for the raw `Dict`, or `return_as_pandas=True` for pandas.
+
 ```python
 # sportsdataverse/nba/nba_espn_ext.py   — GENERATED, do not edit
-def espn_nba_scoreboard(dates=None, ..., *, return_parsed=False,
-                        return_as_pandas=False, **kwargs) -> Dict:
+def espn_nba_scoreboard(dates=None, ..., *, return_parsed=True,
+                        return_as_pandas=False, **kwargs):
     raw = _get("https://site.api.espn.com/.../basketball/nba/scoreboard",
                params={...}, **kwargs)
     if return_parsed:
@@ -157,27 +160,23 @@ vocabulary, applied to **every** league:
 
 ## Per-league function counts
 
-| League | Generated `espn_*` wrappers | Hand-written originals | Total |
-|---|---:|---:|---:|
-| NBA  | 113 |  5 | **118** |
-| MBB  | 116 |  5 | **121** |
-| WNBA | 113 | 11 | **124** |
-| WBB  | 116 | 10 | **126** |
-| CFB  | 118 |  5 | **123** |
-| NFL  | 115 |  4 | **119** |
-| MLB  | 113 |  5 | **118** |
-| NHL  | (separate api-web.nhle.com surface — see [NHL section](../nhl/index.md)) |
+126 ESPN short names, expanded across the 30 documented leagues. The eight
+largest, as `generate._espn_league_views` resolves them today:
 
-(Exact per-API counts are in each league's **Reference** section, which is
-generated from the same specs.)
+| League | `espn_*` wrappers |
+|---|---:|
+| CFB  | 125 |
+| MBB  | 122 |
+| WBB  | 121 |
+| NFL  | 118 |
+| MLB  | 117 |
+| NBA  | 116 |
+| WNBA | 115 |
+| NHL  | 113 |
 
-Beyond the vocabulary alignment above, the surface diverges from the R
-packages (hoopR/wehoop/cfbfastR) in one deliberate way: where R collapses
-multiple `/teams` paths into a single function with branching internals,
-sdv-py exposes them as distinct functions (`espn_<league>_teams_site`,
-`..._season_teams`, `..._season_team`) so the caller picks the surface
-they want. See [Ecosystem & philosophy](../ecosystem.md) for the full
-Python ↔ R mapping.
+Counts move whenever an endpoint YAML gains or loses a league, so treat the table
+as a snapshot and the per-league **Data sources** table on each league page as the
+live figure.
 
 ## See also
 
