@@ -191,3 +191,71 @@ def test_parse_pkgdown_llms_reads_inline_colon_titles():
         ("sportsdataverse_update", "All functions", "Update sportsdataverse packages"),
         ("sportsdataverse_logo", "All functions", "The sportsdataverse logo, using **ASCII** or Unicode characters"),
     ]
+
+
+def _meta_rows():
+    return B.Rows(meta={"schema_version": "1", "built_at": "2026-01-01T00:00:00Z", "sdv_py_commit": "abc"})
+
+
+def test_write_failure_leaves_no_manifest_or_tmp(tmp_path):
+    (tmp_path / MANIFEST).write_text("{}")  # a previous release's manifest
+    rows = _meta_rows()
+    rows.functions.append(("too", "few"))  # wrong tuple width -> the insert raises
+    with pytest.raises(sqlite3.Error):
+        B.write(rows, tmp_path)
+    assert not (tmp_path / MANIFEST).exists() and not list(tmp_path.glob("*.tmp"))
+
+
+def test_write_over_previous_release_refreshes_manifest(tmp_path):
+    B.write(_meta_rows(), tmp_path)
+    rows = _meta_rows()
+    rows.meta["extra"] = "x" * 50_000  # make the second DB differ in size and content
+    db = B.write(rows, tmp_path)
+    manifest = json.loads((tmp_path / MANIFEST).read_text())
+    assert manifest["sha256"] == hashlib.sha256(db.read_bytes()).hexdigest() and manifest["size"] == db.stat().st_size
+    assert not list(tmp_path.glob("*.tmp"))
+
+
+def _stub_offline_parts(monkeypatch):
+    for name in ("codegen_wrappers", "python_functions"):
+        monkeypatch.setattr(B, name, lambda *a, **k: {})
+    monkeypatch.setattr(B, "doc_anchors", lambda: {})
+    monkeypatch.setattr(B, "python_columns", lambda *a, **k: None)
+
+
+def test_online_build_adds_swagger_and_pkgdown_rows(tmp_path, monkeypatch):
+    _stub_offline_parts(monkeypatch)
+    monkeypatch.setattr(B, "swagger_sha", lambda: "deadbeef")
+    monkeypatch.setattr(B, "fetch_swagger", lambda sha: {})
+    monkeypatch.setattr(B, "R_LLMS", {"hoopR": "https://example.test/llms.txt"})
+    llms = "# hoopR\n\n# Package index\n\n## Loaders\n\n- [`load_x()`](https://example.test/reference/load_x.md)\n  : Load x\n"
+    monkeypatch.setattr(B, "http_get", lambda url, *a, **k: llms.encode())
+    db = B.build(tmp_path, offline=False)
+    con = sqlite3.connect(db)
+    meta = dict(con.execute("SELECT key, value FROM meta"))
+    assert meta["sdv_swagger_sha"] == "deadbeef" and "pkgdown_fetched" in meta and "skipped" not in meta
+    assert con.execute("SELECT summary FROM functions WHERE lang='r' AND name='load_x'").fetchone() == ("Load x",)
+
+
+def test_online_build_raises_when_llms_parses_to_nothing(tmp_path, monkeypatch):
+    _stub_offline_parts(monkeypatch)
+    monkeypatch.setattr(B, "swagger_sha", lambda: "deadbeef")
+    monkeypatch.setattr(B, "fetch_swagger", lambda sha: {})
+    monkeypatch.setattr(B, "R_LLMS", {"hoopR": "https://example.test/llms.txt"})
+    monkeypatch.setattr(B, "http_get", lambda url, *a, **k: b"# nothing here\n")
+    with pytest.raises(RuntimeError, match="https://example.test/llms.txt"):
+        B.build(tmp_path, offline=False)
+    assert not (tmp_path / MANIFEST).exists()
+
+
+def test_main_writes_index_and_prints_summary(tmp_path, monkeypatch, capsys):
+    seen = {}
+
+    def fake_build(out, offline=False):
+        seen["offline"] = offline
+        return B.write(_meta_rows(), out)
+
+    monkeypatch.setattr(B, "build", fake_build)
+    assert B.main(["--out", str(tmp_path), "--offline"]) == 0
+    assert seen["offline"] is True and (tmp_path / MANIFEST).exists()
+    assert capsys.readouterr().out.startswith(f"wrote {tmp_path / ASSET}")

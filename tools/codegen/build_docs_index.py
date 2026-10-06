@@ -18,6 +18,7 @@ import importlib
 import inspect
 import io
 import json
+import os
 import re
 import sqlite3
 import subprocess
@@ -478,32 +479,41 @@ def build(out_dir: Path, offline: bool = False) -> Path:
 
 
 def write(rows: Rows, out_dir: Path) -> Path:
+    """Write ASSET then MANIFEST atomically: a failed write leaves neither, never a stale manifest."""
     out_dir.mkdir(parents=True, exist_ok=True)
-    db = out_dir / ASSET
-    db.unlink(missing_ok=True)
-    con = sqlite3.connect(db)
+    db, man = out_dir / ASSET, out_dir / MANIFEST
+    db_tmp, man_tmp = db.with_name(db.name + ".tmp"), man.with_name(man.name + ".tmp")
+    man.unlink(missing_ok=True)
     try:
-        con.executescript(SCHEMA_SQL)
-        con.executemany("INSERT INTO meta VALUES (?, ?)", sorted(rows.meta.items()))
-        con.executemany("INSERT INTO functions VALUES (?,?,?,?,?,?,?,?,?,?)", rows.functions)
-        con.executemany("INSERT INTO params VALUES (?,?,?,?,?,?)", rows.params)
-        con.executemany("INSERT INTO columns VALUES (?,?,?,?,?)", rows.columns)
-        con.executemany("INSERT INTO endpoints VALUES (?,?,?,?,?,?,?,?,?)", rows.endpoints)
-        con.executemany("INSERT OR IGNORE INTO datasets VALUES (?,?,?,?,?,?)", rows.datasets)
-        con.executemany("INSERT INTO equivalents VALUES (?,?,?,?)", rows.equivalents)
-        con.executescript(SEARCH_SQL)
-        con.commit()
-        con.execute("VACUUM")
+        db_tmp.unlink(missing_ok=True)
+        con = sqlite3.connect(db_tmp)
+        try:
+            con.executescript(SCHEMA_SQL)
+            con.executemany("INSERT INTO meta VALUES (?, ?)", sorted(rows.meta.items()))
+            con.executemany("INSERT INTO functions VALUES (?,?,?,?,?,?,?,?,?,?)", rows.functions)
+            con.executemany("INSERT INTO params VALUES (?,?,?,?,?,?)", rows.params)
+            con.executemany("INSERT INTO columns VALUES (?,?,?,?,?)", rows.columns)
+            con.executemany("INSERT INTO endpoints VALUES (?,?,?,?,?,?,?,?,?)", rows.endpoints)
+            con.executemany("INSERT OR IGNORE INTO datasets VALUES (?,?,?,?,?,?)", rows.datasets)
+            con.executemany("INSERT INTO equivalents VALUES (?,?,?,?)", rows.equivalents)
+            con.executescript(SEARCH_SQL)
+            con.commit()
+            con.execute("VACUUM")
+        finally:
+            con.close()
+        os.replace(db_tmp, db)
+        manifest = {
+            "schema_version": SCHEMA_VERSION,
+            "sha256": hashlib.sha256(db.read_bytes()).hexdigest(),
+            "size": db.stat().st_size,
+            "built_at": rows.meta["built_at"],
+            "sdv_py_commit": rows.meta["sdv_py_commit"],
+        }
+        man_tmp.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
+        os.replace(man_tmp, man)
     finally:
-        con.close()
-    manifest = {
-        "schema_version": SCHEMA_VERSION,
-        "sha256": hashlib.sha256(db.read_bytes()).hexdigest(),
-        "size": db.stat().st_size,
-        "built_at": rows.meta["built_at"],
-        "sdv_py_commit": rows.meta["sdv_py_commit"],
-    }
-    (out_dir / MANIFEST).write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
+        db_tmp.unlink(missing_ok=True)
+        man_tmp.unlink(missing_ok=True)
     return db
 
 
