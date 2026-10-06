@@ -153,7 +153,9 @@ def main() -> None:
             schema["unverified"] = f"no committed capture in sdv-internal-refs/{STEM}/captures (see ENDPOINTS.md)"
             schema["columns"] = []
         else:
-            schema["columns"] = columns_from_frame(parse_capture(capture, parse_sleeper), descriptions, leaf_fallback=False)
+            schema["columns"] = columns_from_frame(
+                parse_capture(capture, parse_sleeper), descriptions, leaf_fallback=False
+            )
         write_yaml(schema_dir / f"{short}.yaml", schema)
     print(f"{STEM}: {len(ops)} endpoints, {unverified} unverified")
 
