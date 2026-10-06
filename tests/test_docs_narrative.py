@@ -231,3 +231,70 @@ def test_copilot_carries_the_two_pitfalls_it_lacked():
 
 def test_copilot_states_the_parsed_deprecation():
     assert "`sportsdataverse.parsed.*` is **deprecated**" in flat("copilot")
+
+
+# --- README.md and CONTRIBUTING.md -----------------------------------------
+
+_README_STALE = [
+    "6,180 exported names",
+    "112 NBA",
+    "95 WNBA wrappers",
+    "once we add a PEP 735",
+    "from the next release (0.1.5+)",
+    "git+https://github.com/sportsdataverse/sportsdataverse-py' sdv-docs`",
+]
+
+_README_CURRENT = [
+    "6,456 exported names",
+    "128 NBA",
+    "111 WNBA wrappers",
+    "sportsdataverse[nflpro]",
+    "sportsdataverse[pff]",
+    "sportsdataverse[mcp]",
+    "EXCEPT mcp",
+    "fox_api",
+    "107 multi-sport `yahoo_*`",
+    "cbs_napi",
+    "### Errors (0.1.5)",
+    "AssetFetchError",
+]
+
+_CONTRIBUTING_STALE = [
+    "uv run mypy sportsdataverse/\n",
+    "without `from __future__ import annotations`",
+    "CI runs against the floor (3.9)",
+    "there is no in-repo deploy workflow",
+    "labelled `main`)",
+]
+
+_CONTRIBUTING_CURRENT = [
+    "DO add `from __future__ import annotations`",
+    "CI runs **3.13.2 only**",
+    "docs-deploy.yml",
+    "main (latest)",
+    "VERSIONS_TO_KEEP=3",
+    "had not been done since 0.0.75",
+    "`removed_in` is a commitment",
+    "architecture/codegen.md",
+    "sdv_docs/",
+]
+
+
+@pytest.mark.parametrize("stale", _README_STALE)
+def test_readme_drops_the_stale_claim(stale):
+    assert stale not in flat("readme"), f"README.md still claims {stale!r}"
+
+
+@pytest.mark.parametrize("current", _README_CURRENT)
+def test_readme_states_the_current_fact(current):
+    assert current in flat("readme")
+
+
+@pytest.mark.parametrize("stale", _CONTRIBUTING_STALE)
+def test_contributing_drops_the_stale_claim(stale):
+    assert stale.strip() not in flat("contributing"), f"CONTRIBUTING.md still claims {stale!r}"
+
+
+@pytest.mark.parametrize("current", _CONTRIBUTING_CURRENT)
+def test_contributing_states_the_current_fact(current):
+    assert current in flat("contributing")
