@@ -1,0 +1,66 @@
+columns:
+- description: Provider identifier for the entity (Utf8 join key).
+  name: id
+  type: character
+- description: ''
+  name: start_time
+  type: character
+- description: ''
+  name: end_time
+  type: character
+- description: ''
+  name: qualifiers
+  type: character
+- description: ''
+  name: station_id
+  type: character
+- description: ''
+  name: match_id
+  type: character
+- description: ''
+  name: league_id
+  type: character
+- description: ''
+  name: parent_league_id
+  type: character
+- description: ''
+  name: bet365_match_id
+  type: character
+- description: ''
+  name: external_id
+  type: character
+- description: ''
+  name: affiliates
+  type: character
+- description: Content tags, JSON-encoded.
+  name: tags
+  type: character
+- description: ''
+  name: station_call_sign
+  type: character
+- description: ''
+  name: station_station_id
+  type: character
+- description: ''
+  name: station_affiliate_id
+  type: character
+- description: ''
+  name: station_affiliate_call_sign
+  type: character
+- description: ''
+  name: station_name
+  type: character
+- description: ''
+  name: station_type
+  type: character
+- description: ''
+  name: station_blocked_country_codes
+  type: character
+- description: ''
+  name: program_root_id
+  type: character
+- description: ''
+  name: program_teams
+  type: character
+kind: dataframe
+schema: tvlistings

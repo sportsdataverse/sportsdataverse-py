@@ -1,0 +1,150 @@
+api: euroleague
+docstring:
+  example_import: true
+  raises:
+  - 'sportsdataverse.errors.NoDataError: the EuroLeague API returned 404 (unknown
+    competition, season or game code).'
+  see_also:
+  - name: EuroLeague Basketball
+    note: the site the Competition Engine API serves (competitions, seasons, clubs,
+      games)
+    url: https://www.euroleaguebasketball.net/
+  - name: euroleague-api
+    note: community Python client over the same v2 API
+    url: https://github.com/giasemidis/euroleague_api
+endpoints:
+- example_args:
+    competition_code: E
+    season_code: E2025
+  parser: parse_euroleague
+  path: /competitions/{competition_code}/seasons/{season_code}/clubs
+  path_params:
+  - description: E = EuroLeague, U = EuroCup (see /competitions).
+    name: competition_code
+    required: true
+    type: str
+  - description: Competition code + start year, e.g. E2025 for 2025-26.
+    name: season_code
+    required: true
+    type: str
+  returns_schema: native/euroleague/clubs
+  short: clubs
+  summary: Clubs in a season.
+- example_args: {}
+  parser: parse_euroleague
+  path: /competitions
+  returns_schema: native/euroleague/competitions
+  short: competitions
+  summary: Competitions (EuroLeague E, EuroCup U, ...).
+- example_args:
+    competition_code: E
+    game_code: 1
+    season_code: E2025
+  parser: parse_euroleague
+  path: /competitions/{competition_code}/seasons/{season_code}/games/{game_code}/stats
+  path_params:
+  - description: E = EuroLeague, U = EuroCup (see /competitions).
+    name: competition_code
+    required: true
+    type: str
+  - description: Competition code + start year, e.g. E2025 for 2025-26.
+    name: season_code
+    required: true
+    type: str
+  - description: Game number within the season (1-based).
+    name: game_code
+    required: true
+    type: str
+  returns_schema: native/euroleague/game_stats
+  short: game_stats
+  summary: Box score of one game.
+- example_args:
+    competition_code: E
+    season_code: E2025
+  extra_params:
+  - description: Page size (number of rows to return).
+    name: limit
+    query_key: limit
+    type: str
+  - description: Row offset into the full list.
+    name: offset
+    query_key: offset
+    type: str
+  parser: parse_euroleague
+  path: /competitions/{competition_code}/seasons/{season_code}/games
+  path_params:
+  - description: E = EuroLeague, U = EuroCup (see /competitions).
+    name: competition_code
+    required: true
+    type: str
+  - description: Competition code + start year, e.g. E2025 for 2025-26.
+    name: season_code
+    required: true
+    type: str
+  returns_schema: native/euroleague/games
+  short: games
+  summary: Games of a season.
+- example_args:
+    competition_code: E
+    season_code: E2025
+  extra_params:
+  - description: Page size (number of rows to return).
+    name: limit
+    query_key: limit
+    type: str
+  - description: Row offset into the full list.
+    name: offset
+    query_key: offset
+    type: str
+  parser: parse_euroleague
+  path: /competitions/{competition_code}/seasons/{season_code}/people
+  path_params:
+  - description: E = EuroLeague, U = EuroCup (see /competitions).
+    name: competition_code
+    required: true
+    type: str
+  - description: Competition code + start year, e.g. E2025 for 2025-26.
+    name: season_code
+    required: true
+    type: str
+  returns_schema: native/euroleague/people
+  short: people
+  summary: People (players, coaches) in a season.
+- example_args:
+    competition_code: E
+    season_code: E2025
+  parser: parse_euroleague
+  path: /competitions/{competition_code}/seasons/{season_code}/rounds
+  path_params:
+  - description: E = EuroLeague, U = EuroCup (see /competitions).
+    name: competition_code
+    required: true
+    type: str
+  - description: Competition code + start year, e.g. E2025 for 2025-26.
+    name: season_code
+    required: true
+    type: str
+  returns_schema: native/euroleague/rounds
+  short: rounds
+  summary: Rounds of a season.
+- example_args:
+    competition_code: E
+  parser: parse_euroleague
+  path: /competitions/{competition_code}/seasons
+  path_params:
+  - description: E = EuroLeague, U = EuroCup (see /competitions).
+    name: competition_code
+    required: true
+    type: str
+  returns_schema: native/euroleague/seasons
+  short: seasons
+  summary: Seasons of a competition.
+getter_module: sportsdataverse.euroleague.euroleague_runtime
+host: https://api-live.euroleague.net/v2
+module: euroleague
+name_pattern: euroleague_{short}
+parser_module: euroleague.euroleague_parsers
+passthrough_query: false
+qualifier: ''
+runtime_imports:
+- _get

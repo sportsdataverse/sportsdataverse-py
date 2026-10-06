@@ -1,0 +1,127 @@
+{
+  "popular": [
+    {
+      "id": 47,
+      "name": "Premier League",
+      "localizedName": "Premier League",
+      "pageUrl": "/leagues/47/overview/premier-league",
+      "ccode": "ENG"
+    },
+    {
+      "id": 42,
+      "name": "Champions League",
+      "localizedName": "Champions League",
+      "pageUrl": "/leagues/42/overview/champions-league",
+      "ccode": "INT"
+    },
+    {
+      "id": 87,
+      "name": "LaLiga",
+      "localizedName": "LaLiga",
+      "pageUrl": "/leagues/87/overview/laliga",
+      "ccode": "ESP"
+    }
+  ],
+  "international": [
+    {
+      "ccode": "INT",
+      "name": "International",
+      "leagues": [
+        {
+          "id": 42,
+          "name": "Champions League",
+          "localizedName": "Champions League",
+          "pageUrl": "/leagues/42/overview/champions-league",
+          "ccode": "INT"
+        },
+        {
+          "id": 73,
+          "name": "Europa League",
+          "localizedName": "Europa League",
+          "pageUrl": "/leagues/73/overview/europa-league",
+          "ccode": "INT"
+        },
+        {
+          "id": 9470,
+          "name": "AFC Challenge League",
+          "localizedName": "AFC Challenge League",
+          "pageUrl": "/leagues/9470/overview/afc-challenge-league",
+          "ccode": "INT"
+        }
+      ],
+      "localizedName": "International"
+    }
+  ],
+  "countries": [
+    {
+      "ccode": "ALB",
+      "name": "Albania",
+      "leagues": [
+        {
+          "id": 260,
+          "name": "Kategoria Superiore",
+          "localizedName": "Kategoria Superiore",
+          "pageUrl": "/leagues/260/overview/kategoria-superiore",
+          "ccode": "ALB"
+        },
+        {
+          "id": 9173,
+          "name": "Superiore Qualification",
+          "localizedName": "Superiore Qualification",
+          "pageUrl": "/leagues/9173/overview/superiore-qualification",
+          "ccode": "ALB"
+        },
+        {
+          "id": 10175,
+          "name": "Superkupa e Shqipërisë",
+          "localizedName": "Superkupa e Shqipërisë",
+          "pageUrl": "/leagues/10175/overview/superkupa-e-shqiperise",
+          "ccode": "ALB"
+        }
+      ],
+      "localizedName": "Albania"
+    },
+    {
+      "ccode": "ALG",
+      "name": "Algeria",
+      "leagues": [
+        {
+          "id": 516,
+          "name": "Ligue 1",
+          "localizedName": "Ligue 1",
+          "pageUrl": "/leagues/516/overview/ligue-1",
+          "ccode": "ALG"
+        }
+      ],
+      "localizedName": "Algeria"
+    },
+    {
+      "ccode": "ARG",
+      "name": "Argentina",
+      "leagues": [
+        {
+          "id": 112,
+          "name": "Liga Profesional",
+          "localizedName": "Liga Profesional",
+          "pageUrl": "/leagues/112/overview/liga-profesional",
+          "ccode": "ARG"
+        },
+        {
+          "id": 8965,
+          "name": "Primera B Nacional",
+          "localizedName": "Primera B Nacional",
+          "pageUrl": "/leagues/8965/overview/primera-b-nacional",
+          "ccode": "ARG"
+        },
+        {
+          "id": 9213,
+          "name": "Primera B Metropolitana & Torneo Federal A",
+          "localizedName": "Primera B Metropolitana & Torneo Federal A",
+          "pageUrl": "/leagues/9213/overview/primera-b-metropolitana-torneo-federal",
+          "ccode": "ARG"
+        }
+      ],
+      "localizedName": "Argentina"
+    }
+  ]
+}

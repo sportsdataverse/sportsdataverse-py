@@ -1,0 +1,134 @@
+{
+  "ContinuationToken": null,
+  "ContinuationHash": null,
+  "Results": [
+    {
+      "IdTeam": "1884881",
+      "IdConfederation": "CONMEBOL",
+      "ActiveStatus": 0,
+      "Type": 1,
+      "AgeType": 7,
+      "FootballType": 0,
+      "Gender": 2,
+      "Name": [
+        {
+          "Locale": "en-GB",
+          "Description": "Argentina"
+        }
+      ],
+      "IdAssociation": "ARG",
+      "IdCity": null,
+      "Headquarters": null,
+      "TrainingCentre": null,
+      "OfficialSite": null,
+      "City": "",
+      "IdCountry": "ARG",
+      "PostalCode": "",
+      "RegionName": null,
+      "ShortClubName": "Argentina",
+      "Abbreviation": "ARG",
+      "Street": "",
+      "FoundationYear": 1893,
+      "Stadium": null,
+      "PictureUrl": "https://api.fifa.com/api/v3/picture/flags-{format}-{size}/ARG",
+      "ThumbnailUrl": null,
+      "DisplayName": [
+        {
+          "Locale": "en-GB",
+          "Description": "ARG"
+        }
+      ],
+      "Content": [],
+      "Properties": {
+        "IdIFES": "1884881",
+        "StatsPerformIfesId": "1884881",
+        "IdStatsPerform": "3btsze7bdibe9vm0to62hecrv"
+      },
+      "IsUpdateable": null
+    },
+    {
+      "IdTeam": "dzyfvuebkdkd7tczoubnr09o7",
+      "IdConfederation": "CONMEBOL",
+      "ActiveStatus": null,
+      "Type": 1,
+      "AgeType": 0,
+      "FootballType": 0,
+      "Gender": 9999,
+      "Name": [
+        {
+          "Locale": "en-gb",
+          "Description": "Argentina U21"
+        }
+      ],
+      "IdAssociation": "ARG",
+      "IdCity": null,
+      "Headquarters": null,
+      "TrainingCentre": null,
+      "OfficialSite": null,
+      "City": "Buenos Aires, Ciudad de Buenos Aires",
+      "IdCountry": "ARG",
+      "PostalCode": "1053",
+      "RegionName": null,
+      "ShortClubName": null,
+      "Abbreviation": "ARG",
+      "Street": null,
+      "FoundationYear": 1893,
+      "Stadium": null,
+      "PictureUrl": "https://api.fifa.com/api/v3/picture/flags-{format}-{size}/ARG",
+      "ThumbnailUrl": null,
+      "DisplayName": [
+        {
+          "Locale": "en-gb",
+          "Description": "ARG"
+        }
+      ],
+      "Content": [],
+      "Properties": {
+        "IdStatsPerform": "dzyfvuebkdkd7tczoubnr09o7"
+      },
+      "IsUpdateable": null
+    },
+    {
+      "IdTeam": "djvocgh2uf3lmt61szb7i25g4",
+      "IdConfederation": "CONMEBOL",
+      "ActiveStatus": null,
+      "Type": 1,
+      "AgeType": 11,
+      "FootballType": 0,
+      "Gender": 1,
+      "Name": [
+        {
+          "Locale": "en-gb",
+          "Description": "Argentina U16"
+        }
+      ],
+      "IdAssociation": "ARG",
+      "IdCity": null,
+      "Headquarters": null,
+      "TrainingCentre": null,
+      "OfficialSite": null,
+      "City": "Buenos Aires, Ciudad de Buenos Aires",
+      "IdCountry": "ARG",
+      "PostalCode": null,
+      "RegionName": null,
+      "ShortClubName": "Argentina",
+      "Abbreviation": "ARG",
+      "Street": null,
+      "FoundationYear": null,
+      "Stadium": null,
+      "PictureUrl": "https://api.fifa.com/api/v3/picture/flags-{format}-{size}/ARG",
+      "ThumbnailUrl": null,
+      "DisplayName": [
+        {
+          "Locale": "en-gb",
+          "Description": "ARG"
+        }
+      ],
+      "Content": [],
+      "Properties": {
+        "IdStatsPerform": "djvocgh2uf3lmt61szb7i25g4"
+      },
+      "IsUpdateable": null
+    }
+  ]
+}

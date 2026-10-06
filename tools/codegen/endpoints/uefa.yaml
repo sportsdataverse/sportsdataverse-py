@@ -1,0 +1,163 @@
+api: uefa
+docstring:
+  example_import: true
+  raises:
+  - 'NoDataError: The UEFA host answered 404 (unknown id or route).'
+  - 'ValueError: The UEFA host answered 400 / 422 -- the request is wrong; retrying
+    cannot help.'
+  - 'AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after
+    retries, e.g. a 403 from the edge, 429 or 5xx, or an empty or unreadable 200 body)
+    -- the answer is unknown, not empty.'
+  see_also:
+  - name: UEFA.com
+    note: the public site these keyless front-end hosts render
+    url: https://www.uefa.com/
+  - name: uefa-api
+    note: community TypeScript wrapper over the same hosts
+    url: https://github.com/ErikMichelson/uefa-api
+endpoints:
+- example_args:
+    competition_ids: 1,3,2019
+  extra_params:
+  - description: Required. Comma-separated competition ids.
+    name: competition_ids
+    query_key: competitionIds
+    type: str
+  parser: parse_uefa
+  path: /v2/competitions
+  returns_schema: native/uefa/competitions
+  short: competitions
+  summary: UEFA competitions by id (Champions League 1, Europa League 3, Conference
+    League 2019).
+- host: https://match.uefa.com
+  parser: parse_uefa
+  path: /v5/livescore
+  returns_schema: native/uefa/livescore
+  short: livescore
+  summary: Matches live right now across UEFA competitions.
+- example_args:
+    competition_id: '1'
+    limit: '3'
+    offset: '0'
+    season_year: '2026'
+  extra_params:
+  - description: Required. 1 = Champions League, 3 = Europa League, 2019 = Conference
+      League (see /v2/competitions).
+    name: competition_id
+    query_key: competitionId
+    type: str
+  - description: The season's end year (2026 = 2025-26).
+    name: season_year
+    query_key: seasonYear
+    type: str
+  - description: Page size.
+    name: limit
+    query_key: limit
+    type: str
+  - description: Page offset.
+    name: offset
+    query_key: offset
+    type: str
+  host: https://match.uefa.com
+  parser: parse_uefa
+  path: /v5/matches
+  returns_schema: native/uefa/matches
+  short: matches
+  summary: Matches of a UEFA competition season.
+- example_args:
+    competition_id: '1'
+    limit: '3'
+    offset: '0'
+    season_year: '2026'
+  extra_params:
+  - description: Required. 1 = Champions League, 3 = Europa League, 2019 = Conference
+      League (see /v2/competitions).
+    name: competition_id
+    query_key: competitionId
+    type: str
+  - description: The season's end year (2026 = 2025-26).
+    name: season_year
+    query_key: seasonYear
+    type: str
+  - description: Page size.
+    name: limit
+    query_key: limit
+    type: str
+  - description: Page offset.
+    name: offset
+    query_key: offset
+    type: str
+  parser: parse_uefa
+  path: /v2/players
+  returns_schema: native/uefa/players
+  short: players
+  summary: Players registered in a UEFA competition season.
+- example_args:
+    competition_id: '1'
+    season_year: '2026'
+  extra_params:
+  - description: Required. 1 = Champions League, 3 = Europa League, 2019 = Conference
+      League (see /v2/competitions).
+    name: competition_id
+    query_key: competitionId
+    type: str
+  - description: The season's end year (2026 = 2025-26).
+    name: season_year
+    query_key: seasonYear
+    type: str
+  host: https://standings.uefa.com
+  parser: parse_uefa
+  path: /v1/standings
+  returns_schema: native/uefa/standings
+  short: standings
+  summary: Group / league-phase standings of a UEFA competition season.
+- example_args:
+    match_id: '2047742'
+  host: https://matchstats.uefa.com
+  parser: parse_uefa
+  path: /v1/team-statistics/{match_id}
+  path_params:
+  - description: Match id (from /v5/matches).
+    name: match_id
+    required: true
+    type: str
+  returns_schema: native/uefa/team_statistics
+  short: team_statistics
+  summary: Per-team match statistics of one UEFA match (one row per team).
+- example_args:
+    competition_id: '1'
+    limit: '3'
+    offset: '0'
+    season_year: '2026'
+  extra_params:
+  - description: Required. 1 = Champions League, 3 = Europa League, 2019 = Conference
+      League (see /v2/competitions).
+    name: competition_id
+    query_key: competitionId
+    type: str
+  - description: The season's end year (2026 = 2025-26).
+    name: season_year
+    query_key: seasonYear
+    type: str
+  - description: Page size.
+    name: limit
+    query_key: limit
+    type: str
+  - description: Page offset.
+    name: offset
+    query_key: offset
+    type: str
+  parser: parse_uefa
+  path: /v2/teams
+  returns_schema: native/uefa/teams
+  short: teams
+  summary: Teams entered in a UEFA competition season.
+getter_module: sportsdataverse.soccer.uefa_runtime
+host: https://comp.uefa.com
+module: uefa
+name_pattern: uefa_{short}
+parser_module: soccer.uefa_parsers
+passthrough_query: false
+qualifier: ''
+runtime_imports:
+- _get

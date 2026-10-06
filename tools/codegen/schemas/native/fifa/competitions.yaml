@@ -1,0 +1,43 @@
+columns:
+- description: FIFA competition id (17 = FIFA World Cup; Utf8 join key).
+  name: id_competition
+  type: character
+- description: Localised name, JSON list of `{Locale, Description}` objects.
+  name: name
+  type: character
+- description: Confederation code (e.g. UEFA, CONMEBOL); a JSON list on competitions
+    and seasons.
+  name: id_confederation
+  type: character
+- description: Member-association codes (e.g. ENG), JSON list.
+  name: id_member_association
+  type: character
+- description: Code of the body that owns the competition (FIFA or a confederation).
+  name: id_owner
+  type: character
+- description: 'Gender code (FIFA integer enum: 1 = men, 2 = women).'
+  name: gender
+  type: integer
+- description: Football discipline code (FIFA integer enum; 0 = eleven-a-side football).
+  name: football_type
+  type: integer
+- description: 'Team-type code (FIFA integer enum: 0 = club, 1 = national team).'
+  name: team_type
+  type: integer
+- description: Competition-type code (FIFA integer enum).
+  name: competition_type
+  type: integer
+- description: Age-category code (FIFA integer enum; 7 = senior).
+  name: age_type
+  type: integer
+- description: Sort order for display.
+  name: display_order
+  type: integer
+- description: IsUpdateable flag from the API (null in the captures).
+  name: is_updateable
+  type: character
+- description: Stats Perform (Opta) id of the record (Utf8 cross-reference).
+  name: properties_id_stats_perform
+  type: character
+kind: dataframe
+schema: competitions

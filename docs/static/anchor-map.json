@@ -2865,7 +2865,6 @@
   "load_pfr_advstats": "dataset-loaders-3",
   "load_player_stats": "dataset-loaders-3",
   "load_players": "dataset-loaders-4",
-  "load_rosters": "dataset-loaders-4",
   "load_rosters_weekly": "dataset-loaders-4",
   "load_schedules": "dataset-loaders-4",
   "load_snap_counts": "dataset-loaders-4",

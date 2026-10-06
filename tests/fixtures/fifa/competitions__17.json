@@ -1,0 +1,22 @@
+{
+  "IdCompetition": "17",
+  "Name": [
+    {
+      "Locale": "en-GB",
+      "Description": "FIFA World Cup™"
+    }
+  ],
+  "IdConfederation": [],
+  "IdMemberAssociation": [],
+  "IdOwner": "FIFA",
+  "Gender": 1,
+  "FootballType": 0,
+  "TeamType": 1,
+  "CompetitionType": 3,
+  "AgeType": 7,
+  "DisplayOrder": null,
+  "Properties": {
+    "IdIFES": "FWC"
+  },
+  "IsUpdateable": null
+}

@@ -39,6 +39,8 @@ from sportsdataverse.nfl.nfl_espn_ext import *
 from sportsdataverse.nfl.nfl_game_rosters import *
 from sportsdataverse.nfl.nfl_games import *
 from sportsdataverse.nfl.nfl_ngs import *
+from sportsdataverse.nfl.sleeper import *  # noqa: F401,F403
+from sportsdataverse.nfl.sleeper_parsers import *  # noqa: F401,F403
 
 # ---------------------------------------------------------------------------
 # nflreadpy parity aliases

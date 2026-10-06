@@ -1,0 +1,10 @@
+columns:
+- description: Display name.
+  name: name
+  type: character
+- description: EuroLeague code of the entity (competition, season, club, person or
+    venue; Utf8 join key).
+  name: code
+  type: character
+kind: dataframe
+schema: competitions

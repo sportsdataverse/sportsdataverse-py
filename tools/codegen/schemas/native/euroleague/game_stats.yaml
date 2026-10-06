@@ -1,0 +1,327 @@
+columns:
+- description: 'Home side: head coach code (Utf8 join key).'
+  name: local_coach_code
+  type: character
+- description: 'Home side: head coach name.'
+  name: local_coach_name
+  type: character
+- description: 'Home side: per-player box-score rows for the side, JSON-encoded.'
+  name: local_players
+  type: character
+- description: 'Home side: team-only (not attributed to a player): seconds played.'
+  name: local_team_time_played
+  type: numeric
+- description: 'Home side: team-only (not attributed to a player): performance index
+    rating (PIR).'
+  name: local_team_valuation
+  type: numeric
+- description: 'Home side: team-only (not attributed to a player): points.'
+  name: local_team_points
+  type: numeric
+- description: 'Home side: team-only (not attributed to a player): two-point field
+    goals made.'
+  name: local_team_field_goals_made2
+  type: numeric
+- description: 'Home side: team-only (not attributed to a player): two-point field
+    goals attempted.'
+  name: local_team_field_goals_attempted2
+  type: numeric
+- description: 'Home side: team-only (not attributed to a player): three-point field
+    goals made.'
+  name: local_team_field_goals_made3
+  type: numeric
+- description: 'Home side: team-only (not attributed to a player): three-point field
+    goals attempted.'
+  name: local_team_field_goals_attempted3
+  type: numeric
+- description: 'Home side: team-only (not attributed to a player): free throws made.'
+  name: local_team_free_throws_made
+  type: numeric
+- description: 'Home side: team-only (not attributed to a player): free throws attempted.'
+  name: local_team_free_throws_attempted
+  type: numeric
+- description: 'Home side: team-only (not attributed to a player): field goals made.'
+  name: local_team_field_goals_made_total
+  type: numeric
+- description: 'Home side: team-only (not attributed to a player): field goals attempted.'
+  name: local_team_field_goals_attempted_total
+  type: numeric
+- description: 'Home side: team-only (not attributed to a player): shots made (accuracy
+    numerator).'
+  name: local_team_accuracy_made
+  type: numeric
+- description: 'Home side: team-only (not attributed to a player): shots attempted
+    (accuracy denominator).'
+  name: local_team_accuracy_attempted
+  type: numeric
+- description: 'Home side: team-only (not attributed to a player): total rebounds.'
+  name: local_team_total_rebounds
+  type: numeric
+- description: 'Home side: team-only (not attributed to a player): defensive rebounds.'
+  name: local_team_defensive_rebounds
+  type: numeric
+- description: 'Home side: team-only (not attributed to a player): offensive rebounds.'
+  name: local_team_offensive_rebounds
+  type: numeric
+- description: 'Home side: team-only (not attributed to a player): assists.'
+  name: local_team_assistances
+  type: numeric
+- description: 'Home side: team-only (not attributed to a player): steals.'
+  name: local_team_steals
+  type: numeric
+- description: 'Home side: team-only (not attributed to a player): turnovers.'
+  name: local_team_turnovers
+  type: numeric
+- description: 'Home side: team-only (not attributed to a player): blocks made.'
+  name: local_team_blocks_favour
+  type: numeric
+- description: 'Home side: team-only (not attributed to a player): shots blocked by
+    the opponent.'
+  name: local_team_blocks_against
+  type: numeric
+- description: 'Home side: team-only (not attributed to a player): personal fouls
+    committed.'
+  name: local_team_fouls_commited
+  type: numeric
+- description: 'Home side: team-only (not attributed to a player): fouls drawn.'
+  name: local_team_fouls_received
+  type: numeric
+- description: 'Home side: team-only (not attributed to a player): plus/minus.'
+  name: local_team_plus_minus
+  type: numeric
+- description: 'Home side: totals: seconds played.'
+  name: local_total_time_played
+  type: numeric
+- description: 'Home side: totals: performance index rating (PIR).'
+  name: local_total_valuation
+  type: numeric
+- description: 'Home side: totals: points.'
+  name: local_total_points
+  type: numeric
+- description: 'Home side: totals: two-point field goals made.'
+  name: local_total_field_goals_made2
+  type: numeric
+- description: 'Home side: totals: two-point field goals attempted.'
+  name: local_total_field_goals_attempted2
+  type: numeric
+- description: 'Home side: totals: three-point field goals made.'
+  name: local_total_field_goals_made3
+  type: numeric
+- description: 'Home side: totals: three-point field goals attempted.'
+  name: local_total_field_goals_attempted3
+  type: numeric
+- description: 'Home side: totals: free throws made.'
+  name: local_total_free_throws_made
+  type: numeric
+- description: 'Home side: totals: free throws attempted.'
+  name: local_total_free_throws_attempted
+  type: numeric
+- description: 'Home side: totals: field goals made.'
+  name: local_total_field_goals_made_total
+  type: numeric
+- description: 'Home side: totals: field goals attempted.'
+  name: local_total_field_goals_attempted_total
+  type: numeric
+- description: 'Home side: totals: shots made (accuracy numerator).'
+  name: local_total_accuracy_made
+  type: numeric
+- description: 'Home side: totals: shots attempted (accuracy denominator).'
+  name: local_total_accuracy_attempted
+  type: numeric
+- description: 'Home side: totals: total rebounds.'
+  name: local_total_total_rebounds
+  type: numeric
+- description: 'Home side: totals: defensive rebounds.'
+  name: local_total_defensive_rebounds
+  type: numeric
+- description: 'Home side: totals: offensive rebounds.'
+  name: local_total_offensive_rebounds
+  type: numeric
+- description: 'Home side: totals: assists.'
+  name: local_total_assistances
+  type: numeric
+- description: 'Home side: totals: steals.'
+  name: local_total_steals
+  type: numeric
+- description: 'Home side: totals: turnovers.'
+  name: local_total_turnovers
+  type: numeric
+- description: 'Home side: totals: blocks made.'
+  name: local_total_blocks_favour
+  type: numeric
+- description: 'Home side: totals: shots blocked by the opponent.'
+  name: local_total_blocks_against
+  type: numeric
+- description: 'Home side: totals: personal fouls committed.'
+  name: local_total_fouls_commited
+  type: numeric
+- description: 'Home side: totals: fouls drawn.'
+  name: local_total_fouls_received
+  type: numeric
+- description: 'Home side: totals: plus/minus.'
+  name: local_total_plus_minus
+  type: numeric
+- description: 'Away side: head coach code (Utf8 join key).'
+  name: road_coach_code
+  type: character
+- description: 'Away side: head coach name.'
+  name: road_coach_name
+  type: character
+- description: 'Away side: per-player box-score rows for the side, JSON-encoded.'
+  name: road_players
+  type: character
+- description: 'Away side: team-only (not attributed to a player): seconds played.'
+  name: road_team_time_played
+  type: numeric
+- description: 'Away side: team-only (not attributed to a player): performance index
+    rating (PIR).'
+  name: road_team_valuation
+  type: numeric
+- description: 'Away side: team-only (not attributed to a player): points.'
+  name: road_team_points
+  type: numeric
+- description: 'Away side: team-only (not attributed to a player): two-point field
+    goals made.'
+  name: road_team_field_goals_made2
+  type: numeric
+- description: 'Away side: team-only (not attributed to a player): two-point field
+    goals attempted.'
+  name: road_team_field_goals_attempted2
+  type: numeric
+- description: 'Away side: team-only (not attributed to a player): three-point field
+    goals made.'
+  name: road_team_field_goals_made3
+  type: numeric
+- description: 'Away side: team-only (not attributed to a player): three-point field
+    goals attempted.'
+  name: road_team_field_goals_attempted3
+  type: numeric
+- description: 'Away side: team-only (not attributed to a player): free throws made.'
+  name: road_team_free_throws_made
+  type: numeric
+- description: 'Away side: team-only (not attributed to a player): free throws attempted.'
+  name: road_team_free_throws_attempted
+  type: numeric
+- description: 'Away side: team-only (not attributed to a player): field goals made.'
+  name: road_team_field_goals_made_total
+  type: numeric
+- description: 'Away side: team-only (not attributed to a player): field goals attempted.'
+  name: road_team_field_goals_attempted_total
+  type: numeric
+- description: 'Away side: team-only (not attributed to a player): shots made (accuracy
+    numerator).'
+  name: road_team_accuracy_made
+  type: numeric
+- description: 'Away side: team-only (not attributed to a player): shots attempted
+    (accuracy denominator).'
+  name: road_team_accuracy_attempted
+  type: numeric
+- description: 'Away side: team-only (not attributed to a player): total rebounds.'
+  name: road_team_total_rebounds
+  type: numeric
+- description: 'Away side: team-only (not attributed to a player): defensive rebounds.'
+  name: road_team_defensive_rebounds
+  type: numeric
+- description: 'Away side: team-only (not attributed to a player): offensive rebounds.'
+  name: road_team_offensive_rebounds
+  type: numeric
+- description: 'Away side: team-only (not attributed to a player): assists.'
+  name: road_team_assistances
+  type: numeric
+- description: 'Away side: team-only (not attributed to a player): steals.'
+  name: road_team_steals
+  type: numeric
+- description: 'Away side: team-only (not attributed to a player): turnovers.'
+  name: road_team_turnovers
+  type: numeric
+- description: 'Away side: team-only (not attributed to a player): blocks made.'
+  name: road_team_blocks_favour
+  type: numeric
+- description: 'Away side: team-only (not attributed to a player): shots blocked by
+    the opponent.'
+  name: road_team_blocks_against
+  type: numeric
+- description: 'Away side: team-only (not attributed to a player): personal fouls
+    committed.'
+  name: road_team_fouls_commited
+  type: numeric
+- description: 'Away side: team-only (not attributed to a player): fouls drawn.'
+  name: road_team_fouls_received
+  type: numeric
+- description: 'Away side: team-only (not attributed to a player): plus/minus.'
+  name: road_team_plus_minus
+  type: numeric
+- description: 'Away side: totals: seconds played.'
+  name: road_total_time_played
+  type: numeric
+- description: 'Away side: totals: performance index rating (PIR).'
+  name: road_total_valuation
+  type: numeric
+- description: 'Away side: totals: points.'
+  name: road_total_points
+  type: numeric
+- description: 'Away side: totals: two-point field goals made.'
+  name: road_total_field_goals_made2
+  type: numeric
+- description: 'Away side: totals: two-point field goals attempted.'
+  name: road_total_field_goals_attempted2
+  type: numeric
+- description: 'Away side: totals: three-point field goals made.'
+  name: road_total_field_goals_made3
+  type: numeric
+- description: 'Away side: totals: three-point field goals attempted.'
+  name: road_total_field_goals_attempted3
+  type: numeric
+- description: 'Away side: totals: free throws made.'
+  name: road_total_free_throws_made
+  type: numeric
+- description: 'Away side: totals: free throws attempted.'
+  name: road_total_free_throws_attempted
+  type: numeric
+- description: 'Away side: totals: field goals made.'
+  name: road_total_field_goals_made_total
+  type: numeric
+- description: 'Away side: totals: field goals attempted.'
+  name: road_total_field_goals_attempted_total
+  type: numeric
+- description: 'Away side: totals: shots made (accuracy numerator).'
+  name: road_total_accuracy_made
+  type: numeric
+- description: 'Away side: totals: shots attempted (accuracy denominator).'
+  name: road_total_accuracy_attempted
+  type: numeric
+- description: 'Away side: totals: total rebounds.'
+  name: road_total_total_rebounds
+  type: numeric
+- description: 'Away side: totals: defensive rebounds.'
+  name: road_total_defensive_rebounds
+  type: numeric
+- description: 'Away side: totals: offensive rebounds.'
+  name: road_total_offensive_rebounds
+  type: numeric
+- description: 'Away side: totals: assists.'
+  name: road_total_assistances
+  type: numeric
+- description: 'Away side: totals: steals.'
+  name: road_total_steals
+  type: numeric
+- description: 'Away side: totals: turnovers.'
+  name: road_total_turnovers
+  type: numeric
+- description: 'Away side: totals: blocks made.'
+  name: road_total_blocks_favour
+  type: numeric
+- description: 'Away side: totals: shots blocked by the opponent.'
+  name: road_total_blocks_against
+  type: numeric
+- description: 'Away side: totals: personal fouls committed.'
+  name: road_total_fouls_commited
+  type: numeric
+- description: 'Away side: totals: fouls drawn.'
+  name: road_total_fouls_received
+  type: numeric
+- description: 'Away side: totals: plus/minus.'
+  name: road_total_plus_minus
+  type: numeric
+kind: dataframe
+schema: game_stats

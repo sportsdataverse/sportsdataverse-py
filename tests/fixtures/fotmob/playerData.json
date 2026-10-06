@@ -1,0 +1,1438 @@
+{
+  "id": 1077894,
+  "name": "Jude Bellingham",
+  "birthDate": {
+    "utcTime": "2003-06-29T00:00:00.000Z",
+    "timezone": "UTC"
+  },
+  "contractEnd": {
+    "utcTime": "2029-06-30T00:00:00.000Z",
+    "timezone": "UTC"
+  },
+  "isCoach": false,
+  "isCaptain": false,
+  "gender": "male",
+  "primaryTeam": {
+    "teamId": 8633,
+    "teamName": "Real Madrid",
+    "onLoan": false,
+    "teamColors": {
+      "color": "#085098",
+      "colorAlternate": "#FFFFFF",
+      "colorAway": "#d99f00",
+      "colorAwayAlternate": "#FEBE10"
+    }
+  },
+  "positionDescription": {
+    "positions": [
+      {
+        "strPos": {
+          "label": "Defensive Midfielder",
+          "key": "centerdefensivemidfielder"
+        },
+        "strPosShort": {
+          "label": "DM",
+          "key": "centerdefensivemidfielder_short"
+        },
+        "occurences": 1,
+        "position": "66",
+        "isMainPosition": false,
+        "pitchPositionData": null
+      },
+      {
+        "strPos": {
+          "label": "Central Midfielder",
+          "key": "centermidfielder"
+        },
+        "strPosShort": {
+          "label": "CM",
+          "key": "centermidfielder_short"
+        },
+        "occurences": 12,
+        "position": "73",
+        "isMainPosition": false,
+        "pitchPositionData": {
+          "right": 0.5,
+          "top": 0.42,
+          "ratio": 0.4553191489361702
+        }
+      },
+      {
+        "strPos": {
+          "label": "Left Midfielder",
+          "key": "leftmidfielder"
+        },
+        "strPosShort": {
+          "label": "LM",
+          "key": "leftmidfielder_short"
+        },
+        "occurences": 5,
+        "position": "78",
+        "isMainPosition": false,
+        "pitchPositionData": {
+          "right": 0.17,
+          "top": 0.42,
+          "ratio": 0.30638297872340425
+        }
+      }
+    ],
+    "primaryPosition": {
+      "label": "Attacking Midfielder",
+      "key": "centerattackingmidfielder"
+    },
+    "nonPrimaryPositions": [
+      {
+        "label": "Central Midfielder",
+        "key": "centermidfielder"
+      },
+      {
+        "label": "Left Midfielder",
+        "key": "leftmidfielder"
+      }
+    ]
+  },
+  "injuryInformation": null,
+  "internationalDuty": null,
+  "playerInformation": [
+    {
+      "value": {
+        "numberValue": 186,
+        "key": null,
+        "fallback": "186 cm"
+      },
+      "title": "Height",
+      "translationKey": "height_sentencecase"
+    },
+    {
+      "value": {
+        "numberValue": 5,
+        "options": {},
+        "key": null,
+        "fallback": 5
+      },
+      "title": "Shirt",
+      "translationKey": "shirt"
+    },
+    {
+      "value": {
+        "numberValue": 23,
+        "options": {
+          "style": "unit",
+          "unit": "year",
+          "unitDisplay": "long"
+        },
+        "key": null,
+        "fallback": "23"
+      },
+      "title": "Age",
+      "translationKey": "age_sentencecase"
+    }
+  ],
+  "mainLeague": {
+    "leagueId": 87,
+    "leagueName": "LaLiga",
+    "season": "2026/2027",
+    "stats": [
+      {
+        "title": "Goals",
+        "localizedTitleId": "goals",
+        "value": 3
+      },
+      {
+        "title": "Assists",
+        "localizedTitleId": "assists",
+        "value": 2
+      },
+      {
+        "title": "Started",
+        "localizedTitleId": "started",
+        "value": 6
+      }
+    ]
+  },
+  "trophies": {
+    "playerTrophies": [
+      {
+        "ccode": "ESP",
+        "teamId": 8633,
+        "teamName": "Real Madrid",
+        "tournaments": [
+          {
+            "ccode": "ESP",
+            "leagueId": 87,
+            "leagueName": "LaLiga",
+            "seasonsWon": [
+              "2023/2024"
+            ],
+            "seasonsRunnerUp": [
+              "2025/2026",
+              "2024/2025"
+            ]
+          },
+          {
+            "ccode": "INT",
+            "leagueId": 42,
+            "leagueName": "Champions League",
+            "seasonsWon": [
+              "2023/2024"
+            ],
+            "seasonsRunnerUp": []
+          },
+          {
+            "ccode": "INT",
+            "leagueId": 74,
+            "leagueName": "UEFA Super Cup",
+            "seasonsWon": [
+              "2024/2025"
+            ],
+            "seasonsRunnerUp": []
+          }
+        ]
+      },
+      {
+        "ccode": "GER",
+        "teamId": 9789,
+        "teamName": "Borussia Dortmund",
+        "tournaments": [
+          {
+            "ccode": "GER",
+            "leagueId": 209,
+            "leagueName": "DFB Pokal",
+            "seasonsWon": [
+              "2020/2021"
+            ],
+            "seasonsRunnerUp": []
+          }
+        ]
+      }
+    ],
+    "coachTrophies": []
+  },
+  "recentMatches": [
+    {
+      "teamId": 8491,
+      "teamName": "England",
+      "opponentTeamId": 10155,
+      "opponentTeamName": "Croatia",
+      "isHomeTeam": false,
+      "id": 5181853,
+      "matchDate": {
+        "utcTime": "2026-10-03T16:00:00.000Z"
+      },
+      "matchPageUrl": "/matches/england-vs-croatia/2viayw#5181853",
+      "leagueId": 9806,
+      "leagueName": "UEFA Nations League A",
+      "stage": null,
+      "homeScore": 0,
+      "awayScore": 7,
+      "minutesPlayed": 90,
+      "goals": 1,
+      "assists": 3,
+      "yellowCards": 0,
+      "redCards": 0,
+      "ratingProps": {
+        "rating": "9.8",
+        "isTopRating": true
+      },
+      "playerOfTheMatch": true,
+      "onBench": false,
+      "lineupPositionId": 85,
+      "playedInMatch": true
+    },
+    {
+      "teamId": 8491,
+      "teamName": "England",
+      "opponentTeamId": 8496,
+      "opponentTeamName": "Czechia",
+      "isHomeTeam": false,
+      "id": 5181851,
+      "matchDate": {
+        "utcTime": "2026-09-29T18:45:00.000Z"
+      },
+      "matchPageUrl": "/matches/england-vs-czechia/2dwrka#5181851",
+      "leagueId": 9806,
+      "leagueName": "UEFA Nations League A",
+      "stage": null,
+      "homeScore": 0,
+      "awayScore": 2,
+      "minutesPlayed": 19,
+      "goals": 0,
+      "assists": 0,
+      "yellowCards": 0,
+      "redCards": 0,
+      "ratingProps": {
+        "rating": "6.2",
+        "isTopRating": false
+      },
+      "playerOfTheMatch": false,
+      "onBench": false,
+      "playedInMatch": true
+    },
+    {
+      "teamId": 8491,
+      "teamName": "England",
+      "opponentTeamId": 6720,
+      "opponentTeamName": "Spain",
+      "isHomeTeam": true,
+      "id": 5181850,
+      "matchDate": {
+        "utcTime": "2026-09-26T18:45:00.000Z"
+      },
+      "matchPageUrl": "/matches/spain-vs-england/1wvxa5#5181850",
+      "leagueId": 9806,
+      "leagueName": "UEFA Nations League A",
+      "stage": null,
+      "homeScore": 2,
+      "awayScore": 3,
+      "minutesPlayed": 90,
+      "goals": 0,
+      "assists": 1,
+      "yellowCards": 1,
+      "redCards": 0,
+      "ratingProps": {
+        "rating": "8.3",
+        "isTopRating": false
+      },
+      "playerOfTheMatch": false,
+      "onBench": false,
+      "lineupPositionId": 85,
+      "playedInMatch": true
+    }
+  ],
+  "matchesUrl": "https://pub.fotmob.com/prod/db/api/player/1077894/matches?leagueId={leagueId}&teamId={teamId}",
+  "matchFilters": {
+    "teams": [
+      {
+        "teamId": 8633,
+        "name": "Real Madrid",
+        "leagueIds": [
+          87,
+          42,
+          489
+        ]
+      },
+      {
+        "teamId": 8491,
+        "name": "England",
+        "leagueIds": [
+          77,
+          9806,
+          114
+        ]
+      }
+    ],
+    "leagues": [
+      {
+        "leagueId": 87,
+        "name": "LaLiga",
+        "teamIds": [
+          8633
+        ]
+      },
+      {
+        "leagueId": 42,
+        "name": "Champions League",
+        "teamIds": [
+          8633
+        ]
+      },
+      {
+        "leagueId": 77,
+        "name": "World Cup",
+        "teamIds": [
+          8491
+        ]
+      }
+    ]
+  },
+  "careerHistory": {
+    "showFootnote": false,
+    "careerItems": {
+      "senior": {
+        "teamEntries": [
+          {
+            "participantId": 1077894,
+            "teamId": 8633,
+            "team": "Real Madrid",
+            "teamGender": "male",
+            "showTeamGender": false,
+            "transferType": null,
+            "startDate": "2023-07-01T00:00:00",
+            "endDate": null,
+            "active": true,
+            "role": null,
+            "appearances": "148",
+            "goals": "49",
+            "assists": "34",
+            "hasUncertainData": false
+          },
+          {
+            "participantId": 1077894,
+            "teamId": 9789,
+            "team": "Borussia Dortmund",
+            "teamGender": "male",
+            "showTeamGender": false,
+            "transferType": null,
+            "startDate": "2020-07-23T00:00:00",
+            "endDate": "2023-07-01T00:00:00",
+            "active": false,
+            "role": null,
+            "appearances": "132",
+            "goals": "24",
+            "assists": "23",
+            "hasUncertainData": false
+          },
+          {
+            "participantId": 1077894,
+            "teamId": 8658,
+            "team": "Birmingham City",
+            "teamGender": "male",
+            "showTeamGender": false,
+            "transferType": null,
+            "startDate": "2019-07-01T00:00:00",
+            "endDate": "2020-07-23T00:00:00",
+            "active": false,
+            "role": null,
+            "appearances": "44",
+            "goals": "4",
+            "assists": "2",
+            "hasUncertainData": false
+          }
+        ],
+        "seasonEntries": [
+          {
+            "seasonName": "2026/2027",
+            "appearances": "8",
+            "goals": "3",
+            "assists": "2",
+            "rating": {
+              "rating": "8.00"
+            },
+            "tournamentStats": [
+              {
+                "isFriendly": false,
+                "leagueId": 87,
+                "leagueName": "LaLiga",
+                "seasonName": "2026/2027",
+                "tournamentId": 38843,
+                "goals": "3",
+                "assists": "2",
+                "appearances": "7",
+                "rating": {
+                  "rating": "8.06"
+                }
+              },
+              {
+                "isFriendly": false,
+                "leagueId": 42,
+                "leagueName": "Champions League",
+                "seasonName": "2026/2027",
+                "tournamentId": 47760,
+                "goals": "0",
+                "assists": "0",
+                "appearances": "1",
+                "rating": {
+                  "rating": "7.62"
+                }
+              }
+            ],
+            "teamId": 8633,
+            "team": "Real Madrid",
+            "teamGender": "male",
+            "showTeamGender": false,
+            "transferType": null
+          },
+          {
+            "seasonName": "2025/2026",
+            "appearances": "46",
+            "goals": "9",
+            "assists": "6",
+            "rating": {
+              "rating": "7.45"
+            },
+            "tournamentStats": [
+              {
+                "isFriendly": false,
+                "leagueId": 87,
+                "leagueName": "LaLiga",
+                "seasonName": "2025/2026",
+                "tournamentId": 27233,
+                "goals": "6",
+                "assists": "4",
+                "appearances": "28",
+                "rating": {
+                  "rating": "7.53"
+                }
+              },
+              {
+                "isFriendly": false,
+                "leagueId": 138,
+                "leagueName": "Copa del Rey",
+                "seasonName": "2025/2026",
+                "tournamentId": 28392,
+                "goals": "0",
+                "assists": "0",
+                "appearances": "1",
+                "rating": {
+                  "rating": "6.30"
+                }
+              },
+              {
+                "isFriendly": false,
+                "leagueId": 139,
+                "leagueName": "Super Cup",
+                "seasonName": "2025/2026",
+                "tournamentId": 47879,
+                "goals": "0",
+                "assists": "0",
+                "appearances": "2",
+                "rating": {
+                  "rating": null
+                }
+              }
+            ],
+            "teamId": 8633,
+            "team": "Real Madrid",
+            "teamGender": "male",
+            "showTeamGender": false,
+            "transferType": null
+          },
+          {
+            "seasonName": "2024/2025",
+            "appearances": "52",
+            "goals": "14",
+            "assists": "13",
+            "rating": {
+              "rating": "7.58"
+            },
+            "tournamentStats": [
+              {
+                "isFriendly": false,
+                "leagueId": 87,
+                "leagueName": "LaLiga",
+                "seasonName": "2024/2025",
+                "tournamentId": 23686,
+                "goals": "9",
+                "assists": "8",
+                "appearances": "31",
+                "rating": {
+                  "rating": "7.60"
+                }
+              },
+              {
+                "isFriendly": false,
+                "leagueId": 138,
+                "leagueName": "Copa del Rey",
+                "seasonName": "2024/2025",
+                "tournamentId": 24269,
+                "goals": "1",
+                "assists": "1",
+                "appearances": "4",
+                "rating": {
+                  "rating": "7.84"
+                }
+              },
+              {
+                "isFriendly": false,
+                "leagueId": 139,
+                "leagueName": "Super Cup",
+                "seasonName": "2024/2025",
+                "tournamentId": 27485,
+                "goals": "1",
+                "assists": "0",
+                "appearances": "2",
+                "rating": {
+                  "rating": "6.90"
+                }
+              }
+            ],
+            "teamId": 8633,
+            "team": "Real Madrid",
+            "teamGender": "male",
+            "showTeamGender": false,
+            "transferType": null
+          }
+        ]
+      },
+      "youth": {
+        "teamEntries": [
+          {
+            "participantId": 1077894,
+            "teamId": 1281663,
+            "team": "Birmingham City U18",
+            "teamGender": "male",
+            "showTeamGender": false,
+            "transferType": null,
+            "startDate": "2018-07-01T00:00:00",
+            "endDate": "2020-07-23T00:00:00",
+            "active": false,
+            "role": null,
+            "appearances": "1",
+            "goals": "0",
+            "assists": "0",
+            "hasUncertainData": false
+          }
+        ],
+        "seasonEntries": [
+          {
+            "seasonName": "2018/2019",
+            "appearances": "1",
+            "goals": "0",
+            "assists": "0",
+            "rating": {
+              "rating": null
+            },
+            "tournamentStats": [
+              {
+                "isFriendly": false,
+                "leagueName": "FA Youth Cup",
+                "seasonName": "2018/2019",
+                "tournamentId": -1,
+                "goals": "0",
+                "assists": "undefined",
+                "appearances": "1",
+                "rating": {
+                  "rating": null
+                }
+              }
+            ],
+            "teamId": 1281663,
+            "team": "Birmingham City U18",
+            "teamGender": "male",
+            "showTeamGender": false,
+            "transferType": null
+          }
+        ]
+      },
+      "national team": {
+        "teamEntries": [
+          {
+            "participantId": 1077894,
+            "teamId": 8491,
+            "team": "England",
+            "teamGender": "male",
+            "showTeamGender": false,
+            "transferType": null,
+            "startDate": "2020-11-10T00:00:00",
+            "endDate": null,
+            "active": true,
+            "role": null,
+            "appearances": "59",
+            "goals": "14",
+            "assists": "12",
+            "hasUncertainData": false
+          },
+          {
+            "participantId": 1077894,
+            "teamId": -1,
+            "team": "England Under 16",
+            "teamGender": "male",
+            "showTeamGender": false,
+            "transferType": null,
+            "startDate": "2019-02-01T00:00:00",
+            "endDate": "2021-03-31T00:00:00",
+            "active": false,
+            "role": null,
+            "appearances": "5",
+            "goals": "2",
+            "assists": "3",
+            "hasUncertainData": false
+          },
+          {
+            "participantId": 1077894,
+            "teamId": 5935,
+            "team": "England U17",
+            "teamGender": "male",
+            "showTeamGender": false,
+            "transferType": null,
+            "startDate": "2019-09-01T00:00:00",
+            "endDate": "2020-12-31T00:00:00",
+            "active": false,
+            "role": null,
+            "appearances": "3",
+            "goals": "2",
+            "assists": "0",
+            "hasUncertainData": false
+          }
+        ],
+        "seasonEntries": [
+          {
+            "seasonName": "2026/2027",
+            "appearances": "3",
+            "goals": "1",
+            "assists": "4",
+            "rating": {
+              "rating": "8.08"
+            },
+            "tournamentStats": [
+              {
+                "isFriendly": false,
+                "leagueId": 9806,
+                "leagueName": "UEFA Nations League A",
+                "seasonName": "2026/2027",
+                "tournamentId": 31436,
+                "goals": "1",
+                "assists": "4",
+                "appearances": "3",
+                "rating": {
+                  "rating": "8.08"
+                }
+              }
+            ],
+            "teamId": 8491,
+            "team": "England",
+            "teamGender": "male",
+            "showTeamGender": false,
+            "transferType": null
+          },
+          {
+            "seasonName": "2026",
+            "appearances": "10",
+            "goals": "7",
+            "assists": "1",
+            "rating": {
+              "rating": "7.75"
+            },
+            "tournamentStats": [
+              {
+                "isFriendly": false,
+                "leagueId": 77,
+                "leagueName": "World Cup",
+                "seasonName": "2026",
+                "tournamentId": 24254,
+                "goals": "7",
+                "assists": "1",
+                "appearances": "8",
+                "rating": {
+                  "rating": "7.84"
+                }
+              },
+              {
+                "isFriendly": true,
+                "leagueId": 114,
+                "leagueName": "Friendlies",
+                "seasonName": "2026",
+                "tournamentId": 29822,
+                "goals": "0",
+                "assists": "0",
+                "appearances": "2",
+                "rating": {
+                  "rating": "7.40"
+                }
+              }
+            ],
+            "teamId": 8491,
+            "team": "England",
+            "teamGender": "male",
+            "showTeamGender": false,
+            "transferType": null
+          },
+          {
+            "seasonName": "2025/2026",
+            "appearances": "5",
+            "goals": "0",
+            "assists": "1",
+            "rating": {
+              "rating": "7.57"
+            },
+            "tournamentStats": [
+              {
+                "isFriendly": false,
+                "leagueId": 10195,
+                "leagueName": "World Cup Qualification UEFA",
+                "seasonName": "2025/2026",
+                "tournamentId": 24488,
+                "goals": "0",
+                "assists": "1",
+                "appearances": "5",
+                "rating": {
+                  "rating": "7.57"
+                }
+              }
+            ],
+            "teamId": 8491,
+            "team": "England",
+            "teamGender": "male",
+            "showTeamGender": false,
+            "transferType": null
+          }
+        ]
+      }
+    },
+    "fullCareer": true
+  },
+  "traits": {
+    "key": "stats_comparison_att_mid_wingers",
+    "title": "Stats compared to other attacking midfielders/wingers",
+    "items": [
+      {
+        "key": "chances_created",
+        "title": "Chances created",
+        "value": 0.69
+      },
+      {
+        "key": "aerials_won",
+        "title": "Aerial duels",
+        "value": 0.87
+      },
+      {
+        "key": "defensive_actions",
+        "title": "Defensive actions",
+        "value": 0.92
+      }
+    ]
+  },
+  "meta": {
+    "seopath": "jude-bellingham",
+    "pageurl": "/players/1077894/jude-bellingham",
+    "faqJSONLD": {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "How old is Jude Bellingham?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Jude Bellingham is 23 years old. Born on Sun Jun 29 2003."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How tall is Jude Bellingham?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Jude Bellingham is 186 cm tall. Or 6 ft 1 in."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "When was Jude Bellingham born?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Jude Bellingham was born Sun Jun 29 2003 and is now 23 years old."
+          }
+        }
+      ]
+    },
+    "personJSONLD": {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "name": "Jude Bellingham",
+      "birthDate": "2003-06-29T00:00:00.000Z",
+      "url": "https://www.fotmob.com/players/1077894/jude-bellingham",
+      "nationality": {
+        "@type": "Country",
+        "name": "England"
+      },
+      "affiliation": {
+        "@type": "SportsTeam",
+        "name": "Real Madrid"
+      },
+      "gender": "https://schema.org/Male",
+      "height": {
+        "@type": "QuantitativeValue",
+        "unitText": "cm",
+        "value": "186"
+      },
+      "weight": {
+        "@type": "QuantitativeValue",
+        "unitText": "kg",
+        "value": "75"
+      }
+    },
+    "breadcrumbJSONLD": {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://www.fotmob.com"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "LaLiga 2026/2027",
+          "item": "https://www.fotmob.com/leagues/87/overview/laliga-20262027"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Real Madrid",
+          "item": "https://www.fotmob.com/teams/8633/overview/real-madrid"
+        }
+      ]
+    }
+  },
+  "coachStats": null,
+  "statSeasons": [
+    {
+      "seasonName": "2026/2027",
+      "tournaments": [
+        {
+          "name": "LaLiga",
+          "tournamentId": 87,
+          "entryId": "0-0",
+          "hasDeepStats": true
+        },
+        {
+          "name": "Champions League",
+          "tournamentId": 42,
+          "entryId": "0-1",
+          "hasDeepStats": true
+        },
+        {
+          "name": "World Cup",
+          "tournamentId": 77,
+          "entryId": "0-2",
+          "hasDeepStats": true
+        }
+      ]
+    },
+    {
+      "seasonName": "2025/2026",
+      "tournaments": [
+        {
+          "name": "LaLiga",
+          "tournamentId": 87,
+          "entryId": "1-0",
+          "hasDeepStats": true
+        },
+        {
+          "name": "Copa del Rey",
+          "tournamentId": 138,
+          "entryId": "1-1",
+          "hasDeepStats": true
+        },
+        {
+          "name": "Champions League",
+          "tournamentId": 42,
+          "entryId": "1-2",
+          "hasDeepStats": true
+        }
+      ]
+    },
+    {
+      "seasonName": "2024/2025",
+      "tournaments": [
+        {
+          "name": "LaLiga",
+          "tournamentId": 87,
+          "entryId": "2-0",
+          "hasDeepStats": true
+        },
+        {
+          "name": "Copa del Rey",
+          "tournamentId": 138,
+          "entryId": "2-1",
+          "hasDeepStats": true
+        },
+        {
+          "name": "Super Cup",
+          "tournamentId": 139,
+          "entryId": "2-2",
+          "hasDeepStats": true
+        }
+      ]
+    }
+  ],
+  "firstSeasonStats": {
+    "sectionOrder": [
+      "top-stat-card",
+      "shotmap",
+      "stats-section"
+    ],
+    "shotmap": [
+      {
+        "id": 2958277893,
+        "playerName": "Jude Bellingham",
+        "eventType": "Goal",
+        "shotType": "Header",
+        "situation": "SetPiece",
+        "teamId": 8633,
+        "playerId": 1077894,
+        "x": 95.4473684198,
+        "y": 34.61,
+        "min": 9,
+        "period": "FirstHalf",
+        "isOwnGoal": false,
+        "isBlocked": false,
+        "isOnTarget": true,
+        "isSavedOffLine": false,
+        "isFromInsideBox": true,
+        "goalCrossedY": 35.75375,
+        "goalCrossedZ": 0.6934736808,
+        "expectedGoals": 0.0546035431325436,
+        "expectedGoalsOnTarget": 0.230360627174377,
+        "onGoalShot": {
+          "x": 0.536044973544974,
+          "y": 0.183458645714286,
+          "zoomRatio": 1
+        },
+        "box": "InsideBox",
+        "homeTeamId": 8558,
+        "awayTeamId": 8633,
+        "homeTeamName": "Espanyol",
+        "awayTeamName": "Real Madrid",
+        "homeScore": 1,
+        "awayScore": 2,
+        "matchId": 5868025,
+        "matchDate": "2026-08-22T19:30:00Z",
+        "teamColor": "#085098",
+        "teamColorDark": "#FFFFFF"
+      },
+      {
+        "id": 2958348895,
+        "playerName": "Jude Bellingham",
+        "eventType": "AttemptSaved",
+        "shotType": "Header",
+        "situation": "FromCorner",
+        "teamId": 8633,
+        "playerId": 1077894,
+        "x": 97.7631578942,
+        "y": 37.2025,
+        "min": 53,
+        "period": "SecondHalf",
+        "isOwnGoal": false,
+        "isBlocked": false,
+        "isOnTarget": true,
+        "isSavedOffLine": false,
+        "isFromInsideBox": true,
+        "blockedX": 103.8620689656,
+        "blockedY": 34.1525,
+        "goalCrossedY": 32.39875,
+        "goalCrossedZ": 2.1125263054,
+        "expectedGoals": 0.0714364051818848,
+        "expectedGoalsOnTarget": 0.376051336526871,
+        "onGoalShot": {
+          "x": 1.42361111111111,
+          "y": 0.558869392962963,
+          "zoomRatio": 1
+        },
+        "box": "InsideBox",
+        "homeTeamId": 8558,
+        "awayTeamId": 8633,
+        "homeTeamName": "Espanyol",
+        "awayTeamName": "Real Madrid",
+        "homeScore": 1,
+        "awayScore": 2,
+        "matchId": 5868025,
+        "matchDate": "2026-08-22T19:30:00Z",
+        "teamColor": "#085098",
+        "teamColorDark": "#FFFFFF"
+      },
+      {
+        "id": 2960098905,
+        "playerName": "Jude Bellingham",
+        "eventType": "AttemptSaved",
+        "shotType": "LeftFoot",
+        "situation": "RegularPlay",
+        "teamId": 8633,
+        "playerId": 1077894,
+        "x": 92.3,
+        "y": 37.05,
+        "min": 67,
+        "period": "SecondHalf",
+        "isOwnGoal": false,
+        "isBlocked": true,
+        "isOnTarget": true,
+        "isSavedOffLine": false,
+        "isFromInsideBox": true,
+        "blockedX": 95.3508771917,
+        "blockedY": 36.51625,
+        "goalCrossedY": 34.61,
+        "goalCrossedZ": 1.219999994,
+        "expectedGoals": 0.148579895496368,
+        "expectedGoalsOnTarget": 0,
+        "onGoalShot": {
+          "x": 0.838624338624339,
+          "y": 0.322751321164021,
+          "zoomRatio": 1
+        },
+        "box": "InsideBox",
+        "homeTeamId": 8633,
+        "awayTeamId": 8560,
+        "homeTeamName": "Real Madrid",
+        "awayTeamName": "Real Sociedad",
+        "homeScore": 4,
+        "awayScore": 1,
+        "matchId": 5868018,
+        "matchDate": "2026-08-26T19:00:00Z",
+        "teamColor": "#085098",
+        "teamColorDark": "#FFFFFF"
+      }
+    ],
+    "statsSection": {
+      "id": "stats-section",
+      "items": [
+        {
+          "display": "stats-group",
+          "items": [
+            {
+              "localizedTitleId": "goals",
+              "per90": 0.5103969754253308,
+              "percentileRank": 92.1875,
+              "percentileRankPer90": 81.25,
+              "statFormat": "number",
+              "statValue": "3",
+              "title": "Goals"
+            },
+            {
+              "localizedTitleId": "expected_goals",
+              "per90": 0.21482608043403842,
+              "percentileRank": 78.125,
+              "percentileRankPer90": 57.8125,
+              "statFormat": "fraction",
+              "statValue": "1.26",
+              "title": "xG"
+            },
+            {
+              "localizedTitleId": "expected_goals_on_target",
+              "per90": 0.3577372392319101,
+              "percentileRank": 87.5,
+              "percentileRankPer90": 73.4375,
+              "statFormat": "fraction",
+              "statValue": "2.10",
+              "title": "xGOT"
+            }
+          ],
+          "localizedTitleId": "shooting",
+          "title": "Shooting",
+          "type": "stat-values"
+        },
+        {
+          "display": "stats-group",
+          "items": [
+            {
+              "localizedTitleId": "assists",
+              "per90": 0.3402646502835539,
+              "percentileRank": 78.125,
+              "percentileRankPer90": 73.4375,
+              "statFormat": "number",
+              "statValue": "2",
+              "title": "Assists"
+            },
+            {
+              "localizedTitleId": "expected_assists",
+              "per90": 0.24688086122105388,
+              "percentileRank": 90.625,
+              "percentileRankPer90": 76.5625,
+              "statFormat": "fraction",
+              "statValue": "1.45",
+              "title": "xA"
+            },
+            {
+              "localizedTitleId": "successful_passes",
+              "per90": 37.42911153119093,
+              "percentileRank": 92.1875,
+              "percentileRankPer90": 78.125,
+              "statFormat": "number",
+              "statValue": "220",
+              "title": "Accurate passes"
+            }
+          ],
+          "localizedTitleId": "passing",
+          "title": "Passing",
+          "type": "stat-values"
+        },
+        {
+          "display": "stats-group",
+          "items": [
+            {
+              "localizedTitleId": "dribbles_succeeded",
+              "per90": 3.402646502835539,
+              "percentileRank": 96.875,
+              "percentileRankPer90": 90.625,
+              "statFormat": "number",
+              "statValue": "20",
+              "title": "Dribbles"
+            },
+            {
+              "localizedTitleId": "won_contest_subtitle",
+              "per90": 68.96551724137932,
+              "percentileRank": 75,
+              "percentileRankPer90": 75,
+              "statFormat": "percent",
+              "statValue": "69.0",
+              "title": "Dribbles success rate"
+            },
+            {
+              "localizedTitleId": "duel_won",
+              "per90": 8.8468809073724,
+              "percentileRank": 100,
+              "percentileRankPer90": 93.75,
+              "statFormat": "number",
+              "statValue": "52",
+              "title": "Duels won"
+            }
+          ],
+          "localizedTitleId": "possession",
+          "title": "Possession",
+          "type": "stat-values"
+        }
+      ],
+      "localizedTitleId": "season_performance",
+      "title": "Season performance",
+      "type": "grouped-stat-values"
+    },
+    "topStatCard": {
+      "display": "stats-group",
+      "id": "top-stat-card",
+      "items": [
+        {
+          "localizedTitleId": "goals",
+          "per90": 0.5103969754253308,
+          "percentileRank": 92.1875,
+          "percentileRankPer90": 81.25,
+          "statFormat": "number",
+          "statValue": "3",
+          "title": "Goals"
+        },
+        {
+          "localizedTitleId": "assists",
+          "per90": 0.3402646502835539,
+          "percentileRank": 78.125,
+          "percentileRankPer90": 73.4375,
+          "statFormat": "number",
+          "statValue": "2",
+          "title": "Assists"
+        },
+        {
+          "localizedTitleId": "rating",
+          "per90": 8.055714285714286,
+          "percentileRank": 96.875,
+          "percentileRankPer90": 96.875,
+          "statFormat": "fraction",
+          "statValue": "8.06",
+          "title": "Rating"
+        }
+      ],
+      "type": "stat-values"
+    },
+    "heatmap": {
+      "coordinates": [
+        {
+          "x": 48.43,
+          "y": 16.15
+        },
+        {
+          "x": 33.21,
+          "y": 2.36
+        },
+        {
+          "x": 32.09,
+          "y": 5.38
+        }
+      ]
+    },
+    "keeperShotmap": null,
+    "shotmapTeamColors": {
+      "color": "#085098",
+      "colorAlternate": "#FFFFFF",
+      "colorAway": "#d99f00",
+      "colorAwayAlternate": "#FEBE10"
+    }
+  },
+  "status": "active",
+  "marketValues": {
+    "values": [
+      {
+        "date": "2019-12-31T00:00:00+00:00",
+        "value": 9220000,
+        "currency": "EUR",
+        "lowerBound": 6920000,
+        "upperBound": 11530000,
+        "source": "scisports",
+        "teamId": 8658,
+        "teamName": "Birmingham City",
+        "isPeriodStart": true,
+        "teamColor": {
+          "lightMode": "#0032A0",
+          "darkMode": "#0053bb"
+        }
+      },
+      {
+        "date": "2020-06-30T00:00:00+00:00",
+        "value": 20060000,
+        "currency": "EUR",
+        "lowerBound": 15050000,
+        "upperBound": 25080000,
+        "source": "scisports",
+        "teamId": 9789,
+        "teamName": "Borussia Dortmund",
+        "isPeriodStart": true,
+        "teamColor": {
+          "lightMode": "#d8a000",
+          "darkMode": "#FFD900"
+        }
+      },
+      {
+        "date": "2020-12-31T00:00:00+00:00",
+        "value": 30900000,
+        "currency": "EUR",
+        "lowerBound": 23180000,
+        "upperBound": 38630000,
+        "source": "scisports",
+        "teamId": 9789,
+        "teamName": "Borussia Dortmund",
+        "teamColor": {
+          "lightMode": "#d8a000",
+          "darkMode": "#FFD900"
+        }
+      }
+    ]
+  },
+  "relatedLinksData": {
+    "teammates": [
+      {
+        "id": 170323,
+        "name": "Thibaut Courtois"
+      },
+      {
+        "id": 1580528,
+        "name": "Raúl Asencio"
+      },
+      {
+        "id": 844415,
+        "name": "Éder Militao"
+      }
+    ],
+    "mensNationalTeam": [
+      {
+        "id": 1300526,
+        "name": "Nico O'Reilly"
+      },
+      {
+        "id": 1288450,
+        "name": "Rico Lewis"
+      },
+      {
+        "id": 303919,
+        "name": "Jordan Pickford"
+      }
+    ],
+    "womensNationalTeam": []
+  },
+  "nextMatch": {
+    "matchId": 5868089,
+    "homeId": 8633,
+    "awayId": 10205,
+    "homeName": "Real Madrid",
+    "awayName": "Villarreal",
+    "matchDate": "2026-10-10T19:00:00Z",
+    "statusId": 1,
+    "leagueId": 87,
+    "parentLeagueId": -1,
+    "leagueName": "LaLiga",
+    "status": {
+      "utcTime": "2026-10-10T19:00:00.000Z",
+      "started": false,
+      "cancelled": false,
+      "finished": false
+    },
+    "stadium": {
+      "venue": "Estadio Bernabéu",
+      "city": "Madrid",
+      "lat": 40.453068279,
+      "long": -3.688353896
+    },
+    "matchUrl": "/matches/real-madrid-vs-villarreal/2xnfqu#5868089"
+  },
+  "dataProvider": "enet",
+  "initialMatchesPage": {
+    "matches": [
+      {
+        "teamId": 8491,
+        "teamName": "England",
+        "opponentTeamId": 10155,
+        "opponentTeamName": "Croatia",
+        "isHomeTeam": false,
+        "id": 5181853,
+        "matchDate": {
+          "utcTime": "2026-10-03T16:00:00.000Z"
+        },
+        "matchPageUrl": "/matches/england-vs-croatia/2viayw#5181853",
+        "leagueId": 9806,
+        "leagueName": "UEFA Nations League A",
+        "stage": null,
+        "homeScore": 0,
+        "awayScore": 7,
+        "minutesPlayed": 90,
+        "goals": 1,
+        "assists": 3,
+        "yellowCards": 0,
+        "redCards": 0,
+        "ratingProps": {
+          "rating": "9.8",
+          "isTopRating": true
+        },
+        "playerOfTheMatch": true,
+        "onBench": false,
+        "lineupPositionId": 85,
+        "playedInMatch": true
+      },
+      {
+        "teamId": 8491,
+        "teamName": "England",
+        "opponentTeamId": 8496,
+        "opponentTeamName": "Czechia",
+        "isHomeTeam": false,
+        "id": 5181851,
+        "matchDate": {
+          "utcTime": "2026-09-29T18:45:00.000Z"
+        },
+        "matchPageUrl": "/matches/england-vs-czechia/2dwrka#5181851",
+        "leagueId": 9806,
+        "leagueName": "UEFA Nations League A",
+        "stage": null,
+        "homeScore": 0,
+        "awayScore": 2,
+        "minutesPlayed": 19,
+        "goals": 0,
+        "assists": 0,
+        "yellowCards": 0,
+        "redCards": 0,
+        "ratingProps": {
+          "rating": "6.2",
+          "isTopRating": false
+        },
+        "playerOfTheMatch": false,
+        "onBench": false,
+        "playedInMatch": true
+      },
+      {
+        "teamId": 8491,
+        "teamName": "England",
+        "opponentTeamId": 6720,
+        "opponentTeamName": "Spain",
+        "isHomeTeam": true,
+        "id": 5181850,
+        "matchDate": {
+          "utcTime": "2026-09-26T18:45:00.000Z"
+        },
+        "matchPageUrl": "/matches/spain-vs-england/1wvxa5#5181850",
+        "leagueId": 9806,
+        "leagueName": "UEFA Nations League A",
+        "stage": null,
+        "homeScore": 2,
+        "awayScore": 3,
+        "minutesPlayed": 90,
+        "goals": 0,
+        "assists": 1,
+        "yellowCards": 1,
+        "redCards": 0,
+        "ratingProps": {
+          "rating": "8.3",
+          "isTopRating": false
+        },
+        "playerOfTheMatch": false,
+        "onBench": false,
+        "lineupPositionId": 85,
+        "playedInMatch": true
+      }
+    ],
+    "previous": "https://pub.fotmob.com/prod/db/api/player/1077894/matches?before=1781726400&leagueId=&teamId="
+  }
+}

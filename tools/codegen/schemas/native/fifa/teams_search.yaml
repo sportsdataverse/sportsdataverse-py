@@ -1,0 +1,95 @@
+columns:
+- description: FIFA team id (Utf8 join key).
+  name: id_team
+  type: character
+- description: Confederation code (e.g. UEFA, CONMEBOL); a JSON list on competitions
+    and seasons.
+  name: id_confederation
+  type: character
+- description: Activity-status code (FIFA integer enum).
+  name: active_status
+  type: numeric
+- description: 'Team-type code (FIFA integer enum: 0 = club, 1 = national team).'
+  name: type
+  type: integer
+- description: Age-category code (FIFA integer enum; 7 = senior).
+  name: age_type
+  type: integer
+- description: Football discipline code (FIFA integer enum; 0 = eleven-a-side football).
+  name: football_type
+  type: integer
+- description: 'Gender code (FIFA integer enum: 1 = men, 2 = women).'
+  name: gender
+  type: integer
+- description: Localised name, JSON list of `{Locale, Description}` objects.
+  name: name
+  type: character
+- description: Three-letter code of the member association, e.g. ARG.
+  name: id_association
+  type: character
+- description: City id (Utf8 join key).
+  name: id_city
+  type: character
+- description: Headquarters (null in the captures).
+  name: headquarters
+  type: character
+- description: Training centre (null in the captures).
+  name: training_centre
+  type: character
+- description: Official website (null in the captures).
+  name: official_site
+  type: character
+- description: City of the team's headquarters.
+  name: city
+  type: character
+- description: Three-letter FIFA country code, e.g. ARG.
+  name: id_country
+  type: character
+- description: Postal code.
+  name: postal_code
+  type: character
+- description: Region name (null in the captures).
+  name: region_name
+  type: character
+- description: Short English team name.
+  name: short_club_name
+  type: character
+- description: Abbreviation (e.g. ARG, FWC 2026).
+  name: abbreviation
+  type: character
+- description: Street address.
+  name: street
+  type: character
+- description: Year the team or association was founded.
+  name: foundation_year
+  type: numeric
+- description: Home stadium block (null in the captures).
+  name: stadium
+  type: character
+- description: Image URL template with `{format}` and `{size}` placeholders.
+  name: picture_url
+  type: character
+- description: Thumbnail image URL (null in the captures).
+  name: thumbnail_url
+  type: character
+- description: Localised display name (e.g. ARG), JSON list of `{Locale, Description}`
+    objects.
+  name: display_name
+  type: character
+- description: Editorial content entries, JSON list (empty in the captures).
+  name: content
+  type: character
+- description: IsUpdateable flag from the API (null in the captures).
+  name: is_updateable
+  type: character
+- description: IFES cross-reference id (Utf8).
+  name: properties_id_ifes
+  type: character
+- description: IFES id as carried by the Stats Perform feed (Utf8).
+  name: properties_stats_perform_ifes_id
+  type: character
+- description: Stats Perform (Opta) id of the record (Utf8 cross-reference).
+  name: properties_id_stats_perform
+  type: character
+kind: dataframe
+schema: teams_search

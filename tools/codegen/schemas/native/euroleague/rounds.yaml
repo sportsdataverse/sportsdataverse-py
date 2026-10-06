@@ -1,0 +1,29 @@
+columns:
+- description: 'Season code: competition code + start year, e.g. E2025 for 2025-26
+    (Utf8 join key).'
+  name: season_code
+  type: character
+- description: Phase type code (RS = regular season, PO = playoffs, ...).
+  name: phase_type_code
+  type: character
+- description: Round number within the season.
+  name: round
+  type: integer
+- description: Ordinal position of the round within the season.
+  name: index
+  type: integer
+- description: Display name.
+  name: name
+  type: character
+- description: Earliest game start in the round (ISO 8601).
+  name: min_game_start_date
+  type: character
+- description: Latest game start in the round (ISO 8601).
+  name: max_game_start_date
+  type: character
+- description: 'Human-readable date range of the round (sic: the API spells it this
+    way).'
+  name: dates_formmated
+  type: character
+kind: dataframe
+schema: rounds

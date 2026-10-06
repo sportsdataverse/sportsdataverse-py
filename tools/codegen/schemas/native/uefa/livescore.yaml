@@ -1,0 +1,15 @@
+columns:
+- description: ''
+  name: hash
+  type: character
+- description: Provider identifier for the entity (Utf8 join key).
+  name: id
+  type: character
+- description: ''
+  name: lineup_status
+  type: character
+- description: ''
+  name: status
+  type: character
+kind: dataframe
+schema: livescore

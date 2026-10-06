@@ -1,0 +1,117 @@
+{
+  "ContinuationToken": "W3sidG9rZW4iOiIrUklEOn5XYWs3QU9JTzNnUUVBQUFBQUFBQUFBPT0jUlQ6MSNUUkM6MyNJU1Y6MiNJRU86NjU1NjcjUUNGOjgiLCJyYW5nZSI6eyJtaW4iOiIiLCJtYXgiOiJGRiJ9fV0=",
+  "ContinuationHash": "206508948",
+  "Results": [
+    {
+      "IdStadium": "400242492",
+      "Name": [
+        {
+          "Locale": "en-GB",
+          "Description": "ANZ National Stadium"
+        }
+      ],
+      "Capacity": null,
+      "WebAddress": null,
+      "Built": null,
+      "Roof": false,
+      "Turf": null,
+      "IdCity": "400242493",
+      "CityName": [
+        {
+          "Locale": "en-GB",
+          "Description": "Suva"
+        }
+      ],
+      "IdCountry": "FIJ",
+      "PostalCode": null,
+      "Street": null,
+      "Email": null,
+      "Fax": null,
+      "Phone": null,
+      "AffiliationCountry": null,
+      "AffiliationRegion": null,
+      "Latitude": null,
+      "Longitude": null,
+      "Length": null,
+      "Width": null,
+      "Properties": {
+        "IdIFES": "5000272"
+      },
+      "IsUpdateable": null
+    },
+    {
+      "IdStadium": "400243160",
+      "Name": [
+        {
+          "Locale": "en-GB",
+          "Description": "Sugathadasa Stadium"
+        }
+      ],
+      "Capacity": null,
+      "WebAddress": null,
+      "Built": null,
+      "Roof": false,
+      "Turf": null,
+      "IdCity": "400243225",
+      "CityName": [
+        {
+          "Locale": "en-GB",
+          "Description": "Colombo"
+        }
+      ],
+      "IdCountry": "SRI",
+      "PostalCode": null,
+      "Street": null,
+      "Email": null,
+      "Fax": null,
+      "Phone": null,
+      "AffiliationCountry": null,
+      "AffiliationRegion": null,
+      "Latitude": null,
+      "Longitude": null,
+      "Length": null,
+      "Width": null,
+      "Properties": {
+        "IdIFES": "34854"
+      },
+      "IsUpdateable": null
+    },
+    {
+      "IdStadium": "400243164",
+      "Name": [
+        {
+          "Locale": "en-GB",
+          "Description": "Pana-ad Stadium"
+        }
+      ],
+      "Capacity": null,
+      "WebAddress": null,
+      "Built": null,
+      "Roof": false,
+      "Turf": null,
+      "IdCity": "400243229",
+      "CityName": [
+        {
+          "Locale": "en-GB",
+          "Description": "Bacolod"
+        }
+      ],
+      "IdCountry": "PHI",
+      "PostalCode": null,
+      "Street": null,
+      "Email": null,
+      "Fax": null,
+      "Phone": null,
+      "AffiliationCountry": null,
+      "AffiliationRegion": null,
+      "Latitude": null,
+      "Longitude": null,
+      "Length": null,
+      "Width": null,
+      "Properties": {
+        "IdIFES": "5014843"
+      },
+      "IsUpdateable": null
+    }
+  ]
+}

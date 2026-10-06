@@ -1,0 +1,66 @@
+[
+  {
+    "avatar": "cc12ec49965eb7856f84d71cf85306af",
+    "display_name": "2KSports",
+    "is_bot": null,
+    "is_owner": true,
+    "league_id": "289646328504385536",
+    "metadata": {
+      "allow_pn": "on",
+      "mascot_item_type_id_leg_16": "dawg-pound",
+      "mascot_item_type_id_leg_17": "dawg-pound",
+      "mention_pn": "on",
+      "player_nickname_update": "on",
+      "team_name": "Giant Dolphins",
+      "team_name_update": "on",
+      "transaction_commissioner": "on",
+      "transaction_free_agent": "on",
+      "transaction_trade": "on",
+      "transaction_waiver": "on",
+      "user_message_pn": "on"
+    },
+    "settings": null,
+    "user_id": "457511950237696"
+  },
+  {
+    "avatar": "nfl_sf",
+    "display_name": "sunny",
+    "is_bot": null,
+    "is_owner": false,
+    "league_id": "289646328504385536",
+    "metadata": {
+      "allow_pn": "off",
+      "mention_pn": "on",
+      "player_nickname_update": "off",
+      "team_name_update": "off",
+      "transaction_commissioner": "off",
+      "transaction_free_agent": "off",
+      "transaction_trade": "off",
+      "transaction_waiver": "off",
+      "user_message_pn": "off"
+    },
+    "settings": null,
+    "user_id": "476735150112768"
+  },
+  {
+    "avatar": "eefceb945b9159798eac0eb764d3fbc4",
+    "display_name": "TKO",
+    "is_bot": null,
+    "is_owner": false,
+    "league_id": "289646328504385536",
+    "metadata": {
+      "allow_pn": "on",
+      "mention_pn": "on",
+      "player_nickname_update": "on",
+      "team_name": "Not saved by the Bell",
+      "team_name_update": "on",
+      "transaction_commissioner": "on",
+      "transaction_free_agent": "on",
+      "transaction_trade": "on",
+      "transaction_waiver": "on",
+      "user_message_pn": "off"
+    },
+    "settings": null,
+    "user_id": "521611313037312"
+  }
+]

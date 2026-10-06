@@ -1,0 +1,9 @@
+columns:
+- description: ''
+  name: count
+  type: integer
+- description: ''
+  name: player_id
+  type: character
+kind: dataframe
+schema: trending_adds

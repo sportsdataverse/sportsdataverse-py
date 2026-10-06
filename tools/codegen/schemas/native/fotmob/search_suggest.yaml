@@ -1,0 +1,12 @@
+columns:
+- description: ''
+  name: suggestions
+  type: character
+- description: ''
+  name: title_key
+  type: character
+- description: ''
+  name: title_value
+  type: character
+kind: dataframe
+schema: search_suggest

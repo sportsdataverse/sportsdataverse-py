@@ -1,0 +1,24 @@
+columns:
+- description: ''
+  name: m
+  type: integer
+- description: ''
+  name: r
+  type: integer
+- description: ''
+  name: l
+  type: integer
+- description: ''
+  name: w
+  type: integer
+- description: ''
+  name: t1
+  type: integer
+- description: ''
+  name: t2
+  type: integer
+- description: ''
+  name: t2_from_w
+  type: numeric
+kind: dataframe
+schema: winners_bracket

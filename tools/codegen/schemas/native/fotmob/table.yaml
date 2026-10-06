@@ -1,0 +1,39 @@
+columns:
+- description: ''
+  name: ccode
+  type: character
+- description: ''
+  name: league_id
+  type: character
+- description: ''
+  name: page_url
+  type: character
+- description: ''
+  name: league_name
+  type: character
+- description: ''
+  name: legend
+  type: character
+- description: ''
+  name: ongoing
+  type: character
+- description: ''
+  name: table_filter_types
+  type: character
+- description: ''
+  name: composite
+  type: logical
+- description: ''
+  name: table_all
+  type: character
+- description: ''
+  name: table_home
+  type: character
+- description: ''
+  name: table_away
+  type: character
+- description: ''
+  name: table_xg
+  type: character
+kind: dataframe
+schema: table

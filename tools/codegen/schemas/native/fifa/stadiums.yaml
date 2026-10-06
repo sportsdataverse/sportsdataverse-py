@@ -1,0 +1,72 @@
+columns:
+- description: FIFA stadium id (Utf8 join key).
+  name: id_stadium
+  type: character
+- description: Localised name, JSON list of `{Locale, Description}` objects.
+  name: name
+  type: character
+- description: Seating capacity.
+  name: capacity
+  type: character
+- description: Website URL.
+  name: web_address
+  type: character
+- description: Year built, as an ISO 8601 date.
+  name: built
+  type: character
+- description: Whether the stadium is roofed.
+  name: roof
+  type: logical
+- description: Pitch surface (null in the captures).
+  name: turf
+  type: character
+- description: City id (Utf8 join key).
+  name: id_city
+  type: character
+- description: Localised city name, JSON list of `{Locale, Description}` objects.
+  name: city_name
+  type: character
+- description: Three-letter FIFA country code, e.g. ARG.
+  name: id_country
+  type: character
+- description: Postal code.
+  name: postal_code
+  type: character
+- description: Street address.
+  name: street
+  type: character
+- description: Contact e-mail.
+  name: email
+  type: character
+- description: Contact fax number.
+  name: fax
+  type: character
+- description: Contact phone number.
+  name: phone
+  type: character
+- description: Affiliation country (null in the captures).
+  name: affiliation_country
+  type: character
+- description: Affiliation region (null in the captures).
+  name: affiliation_region
+  type: character
+- description: Latitude in decimal degrees.
+  name: latitude
+  type: character
+- description: Longitude in decimal degrees.
+  name: longitude
+  type: character
+- description: Pitch length (null in the captures).
+  name: length
+  type: character
+- description: Pitch width (null in the captures).
+  name: width
+  type: character
+- description: IsUpdateable flag from the API (null in the captures).
+  name: is_updateable
+  type: character
+- description: IFES cross-reference id (Utf8).
+  name: properties_id_ifes
+  type: character
+kind: dataframe
+schema: stadiums

@@ -1,0 +1,64 @@
+columns:
+- description: EuroLeague code of the entity (competition, season, club, person or
+    venue; Utf8 join key).
+  name: code
+  type: character
+- description: Display name.
+  name: name
+  type: character
+- description: Abbreviated display name.
+  name: abbreviated_name
+  type: character
+- description: Editorial (long-form) display name.
+  name: editorial_name
+  type: character
+- description: Three-letter broadcast abbreviation of the club.
+  name: tv_code
+  type: character
+- description: Whether the club is a placeholder rather than a real club.
+  name: is_virtual
+  type: logical
+- description: Club sponsor.
+  name: sponsor
+  type: character
+- description: Permanent club name independent of sponsor naming.
+  name: club_permanent_name
+  type: character
+- description: Permanent club alias independent of sponsor naming.
+  name: club_permanent_alias
+  type: character
+- description: Street address.
+  name: address
+  type: character
+- description: Official website URL.
+  name: website
+  type: character
+- description: Ticketing URL.
+  name: tickets_url
+  type: character
+- description: Twitter / X handle.
+  name: twitter_account
+  type: character
+- description: Code of the venue the club or game plays at (Utf8 join key).
+  name: venue_code
+  type: character
+- description: City the club is based in.
+  name: city
+  type: character
+- description: Club president.
+  name: president
+  type: character
+- description: Contact phone number.
+  name: phone
+  type: character
+- description: URL of the club crest image.
+  name: images_crest
+  type: character
+- description: ISO country code.
+  name: country_code
+  type: character
+- description: Country name.
+  name: country_name
+  type: character
+kind: dataframe
+schema: clubs

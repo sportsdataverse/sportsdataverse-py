@@ -1,0 +1,188 @@
+[
+  {
+    "age": "ADULT",
+    "code": "UCL",
+    "id": "1",
+    "images": {
+      "FULL_LOGO": "https://img.uefa.com/imgml/uefacom/elements/logos/competitions/color/full/1.svg"
+    },
+    "metaData": {
+      "name": "UEFA Champions League"
+    },
+    "region": "CONTINENTAL",
+    "sex": "MALE",
+    "sportsType": "FOOTBALL",
+    "teamCategory": "CLUB",
+    "translations": {
+      "name": {
+        "EN": "UEFA Champions League",
+        "FR": "UEFA Champions League",
+        "DE": "UEFA Champions League",
+        "ES": "UEFA Champions League",
+        "PT": "UEFA Champions League",
+        "IT": "UEFA Champions League",
+        "RU": "Лига чемпионов УЕФА",
+        "ZH": "欧洲冠军联赛",
+        "AR": "دوري أبطال أوروبا"
+      },
+      "prequalifyingName": {
+        "EN": "UEFA Champions League",
+        "FR": "UEFA Champions League",
+        "DE": "UEFA Champions League",
+        "ES": "UEFA Champions League",
+        "PT": "UEFA Champions League",
+        "IT": "UEFA Champions League",
+        "RU": "Лига чемпионов УЕФА",
+        "ZH": "欧洲冠军联赛",
+        "AR": "دوري أبطال أوروبا"
+      },
+      "qualifyingName": {
+        "EN": "UEFA Champions League",
+        "FR": "UEFA Champions League",
+        "DE": "UEFA Champions League",
+        "ES": "UEFA Champions League",
+        "PT": "UEFA Champions League",
+        "IT": "UEFA Champions League",
+        "RU": "Лига чемпионов УЕФА",
+        "ZH": "欧洲冠军联赛",
+        "AR": "دوري أبطال أوروبا"
+      },
+      "tournamentName": {
+        "EN": "UEFA Champions League",
+        "FR": "UEFA Champions League",
+        "DE": "UEFA Champions League",
+        "ES": "UEFA Champions League",
+        "PT": "UEFA Champions League",
+        "IT": "UEFA Champions League",
+        "RU": "Лига чемпионов УЕФА",
+        "ZH": "欧洲冠军联赛",
+        "AR": "دوري أبطال أوروبا"
+      }
+    },
+    "type": "CUP"
+  },
+  {
+    "age": "ADULT",
+    "code": "EURO",
+    "id": "3",
+    "images": {
+      "FULL_LOGO": "https://img.uefa.com/imgml/uefacom/elements/logos/competitions/color/full/3.svg"
+    },
+    "metaData": {
+      "name": "European Championship"
+    },
+    "region": "CONTINENTAL",
+    "sex": "MALE",
+    "sportsType": "FOOTBALL",
+    "teamCategory": "NATIONAL",
+    "translations": {
+      "name": {
+        "EN": "UEFA EURO",
+        "FR": "UEFA EURO",
+        "DE": "UEFA EURO",
+        "ES": "UEFA EURO",
+        "PT": "UEFA EURO",
+        "IT": "UEFA EURO",
+        "RU": "ЕВРО",
+        "ZH": "UEFA EURO",
+        "AR": "UEFA يورو"
+      },
+      "prequalifyingName": {
+        "EN": "UEFA EURO",
+        "FR": "UEFA EURO",
+        "DE": "UEFA EURO",
+        "ES": "UEFA EURO",
+        "PT": "UEFA EURO",
+        "IT": "UEFA EURO",
+        "RU": "ЕВРО",
+        "ZH": "UEFA EURO",
+        "AR": "UEFA يورو"
+      },
+      "qualifyingName": {
+        "EN": "European Qualifiers",
+        "FR": "Éliminatoires européens",
+        "DE": "European Qualifiers",
+        "ES": "Clasificatorios Europeos",
+        "PT": "Qualificação Europeia",
+        "IT": "Qualificazioni Europee",
+        "RU": "Европейская квалификация",
+        "ZH": "EURO Qualifiers",
+        "AR": "التصفيات الأوروبية"
+      },
+      "tournamentName": {
+        "EN": "UEFA EURO",
+        "FR": "UEFA EURO",
+        "DE": "UEFA EURO",
+        "ES": "UEFA EURO",
+        "PT": "UEFA EURO",
+        "IT": "UEFA EURO",
+        "RU": "ЕВРО",
+        "ZH": "UEFA EURO",
+        "AR": "UEFA يورو"
+      }
+    },
+    "type": "CUP"
+  },
+  {
+    "age": "ADULT",
+    "code": "UECL",
+    "id": "2019",
+    "images": {
+      "FULL_LOGO": "https://img.uefa.com/imgml/uefacom/elements/logos/competitions/color/full/2019.svg"
+    },
+    "metaData": {
+      "name": "UEFA Conference League"
+    },
+    "region": "CONTINENTAL",
+    "sex": "MALE",
+    "sportsType": "FOOTBALL",
+    "teamCategory": "CLUB",
+    "translations": {
+      "name": {
+        "EN": "UEFA Conference League",
+        "FR": "UEFA Conference League",
+        "DE": "UEFA Conference League",
+        "ES": "UEFA Conference League",
+        "PT": "UEFA Conference League",
+        "IT": "UEFA Conference League",
+        "RU": "Лига конференций УЕФА",
+        "ZH": "UEFA Conference League",
+        "AR": "دوري المؤتمر الأوروبي UEFA"
+      },
+      "prequalifyingName": {
+        "EN": "UEFA Conference League",
+        "FR": "UEFA Conference League",
+        "DE": "UEFA Conference League",
+        "ES": "UEFA Conference League",
+        "PT": "UEFA Conference League",
+        "IT": "UEFA Conference League",
+        "RU": "Лига конференций УЕФА",
+        "ZH": "UEFA Conference League",
+        "AR": "دوري المؤتمر الأوروبي UEFA"
+      },
+      "qualifyingName": {
+        "EN": "UEFA Conference League",
+        "FR": "UEFA Conference League",
+        "DE": "UEFA Conference League",
+        "ES": "UEFA Conference League",
+        "PT": "UEFA Conference League",
+        "IT": "UEFA Conference League",
+        "RU": "Лига конференций УЕФА",
+        "ZH": "UEFA Conference League",
+        "AR": "دوري المؤتمر الأوروبي UEFA"
+      },
+      "tournamentName": {
+        "EN": "UEFA Conference League",
+        "FR": "UEFA Conference League",
+        "DE": "UEFA Conference League",
+        "ES": "UEFA Conference League",
+        "PT": "UEFA Conference League",
+        "IT": "UEFA Conference League",
+        "RU": "Лига конференций УЕФА",
+        "ZH": "UEFA Conference League",
+        "AR": "دوري المؤتمر الأوروبي UEFA"
+      }
+    },
+    "type": "CUP"
+  }
+]

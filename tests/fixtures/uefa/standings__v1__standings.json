@@ -1,0 +1,492 @@
+[
+  {
+    "group": {
+      "competitionId": "1",
+      "id": "2013082",
+      "metaData": {
+        "groupName": "League",
+        "groupShortName": "League"
+      },
+      "order": 1,
+      "phase": "TOURNAMENT",
+      "roundId": "2002110",
+      "seasonYear": "2026",
+      "teams": [
+        "52709",
+        "70691",
+        "60609"
+      ],
+      "teamsQualifiedNumber": 24,
+      "translations": {
+        "name": {
+          "EN": "League",
+          "FR": "League",
+          "DE": "League",
+          "ES": "League",
+          "PT": "League",
+          "IT": "League",
+          "RU": "League",
+          "ZH": "League",
+          "AR": "League"
+        },
+        "shortName": {
+          "EN": "League",
+          "FR": "League",
+          "DE": "League",
+          "ES": "League",
+          "PT": "League",
+          "IT": "League",
+          "RU": "League",
+          "ZH": "League",
+          "AR": "League"
+        }
+      },
+      "type": "STANDARD"
+    },
+    "items": [
+      {
+        "drawn": 0,
+        "goalDifference": 19,
+        "goalsAgainst": 4,
+        "goalsFor": 23,
+        "goalsForAway": 11,
+        "goalsForHome": 12,
+        "groupFairPlayCoefficient": 19.0,
+        "isBanned": false,
+        "isLive": false,
+        "isOverridden": false,
+        "isQualifying": true,
+        "isTied": false,
+        "lost": 0,
+        "lostAway": 0,
+        "lostHome": 0,
+        "opponentsGoalDifference": -16,
+        "opponentsGoalScored": 100,
+        "opponentsPoints": 82.0,
+        "played": 8,
+        "points": 24,
+        "previousRank": 1,
+        "qualified": true,
+        "rank": 1,
+        "rankTrend": "EQUAL",
+        "rankingCoefficient": 98.0,
+        "team": {
+          "associationId": "200039",
+          "associationLogoUrl": "https://img.uefa.com/imgml/uefacom/elements/logos/ma/ENG.svg",
+          "bigLogoUrl": "https://img.uefa.com/imgml/TP/teams/logos/700x700/52280.png",
+          "confederationType": "UEFA",
+          "countryCode": "ENG",
+          "id": "52280",
+          "idProvider": "FAME",
+          "internationalName": "Arsenal",
+          "isPlaceHolder": false,
+          "logoUrl": "https://img.uefa.com/imgml/TP/teams/logos/70x70/52280.png",
+          "mediumLogoUrl": "https://img.uefa.com/imgml/TP/teams/logos/240x240/52280.png",
+          "organizationId": "252280",
+          "teamCode": "ARS",
+          "teamTypeDetail": "DOMESTIC_MEN_TEAM_A",
+          "translations": {
+            "countryName": {
+              "EN": "England",
+              "FR": "Angleterre",
+              "DE": "England",
+              "ES": "Inglaterra",
+              "PT": "Inglaterra",
+              "IT": "Inghilterra",
+              "RU": "Англия",
+              "ZH": "英格兰",
+              "AR": "إنجلترا"
+            },
+            "displayName": {
+              "EN": "Arsenal",
+              "FR": "Arsenal",
+              "DE": "Arsenal",
+              "ES": "Arsenal",
+              "PT": "Arsenal",
+              "IT": "Arsenal",
+              "RU": "Арсенал",
+              "ZH": "阿森纳",
+              "AR": "آرسنال"
+            },
+            "displayOfficialName": {
+              "EN": "Arsenal FC",
+              "FR": "Arsenal FC",
+              "DE": "Arsenal FC",
+              "ES": "Arsenal FC",
+              "PT": "Arsenal FC",
+              "IT": "Arsenal FC",
+              "RU": "Арсенал",
+              "ZH": "阿森纳",
+              "AR": "آرسنال"
+            },
+            "displayTeamCode": {
+              "EN": "ARS",
+              "FR": "ARS",
+              "DE": "ARS",
+              "ES": "ARS",
+              "PT": "ARS",
+              "IT": "ARS",
+              "RU": "ARS",
+              "ZH": "ARS",
+              "AR": "ARS"
+            },
+            "shortName": {
+              "EN": "Arsenal",
+              "FR": "Arsenal",
+              "DE": "Arsenal",
+              "ES": "Arsenal",
+              "PT": "Arsenal",
+              "IT": "Arsenal",
+              "RU": "Арсенал",
+              "ZH": "Arsenal",
+              "AR": "آرسنال"
+            }
+          },
+          "typeIsNational": false,
+          "typeTeam": "DOMESTIC"
+        },
+        "teamId": "52280",
+        "tieBreakerRuleId": "1",
+        "totalPoints": 24.0,
+        "won": 8,
+        "wonAway": 4,
+        "wonHome": 4
+      },
+      {
+        "drawn": 0,
+        "goalDifference": 14,
+        "goalsAgainst": 8,
+        "goalsFor": 22,
+        "goalsForAway": 10,
+        "goalsForHome": 12,
+        "groupFairPlayCoefficient": 22.0,
+        "isBanned": false,
+        "isLive": false,
+        "isOverridden": false,
+        "isQualifying": true,
+        "isTied": false,
+        "lost": 1,
+        "lostAway": 1,
+        "lostHome": 0,
+        "opponentsGoalDifference": 28,
+        "opponentsGoalScored": 125,
+        "opponentsPoints": 106.0,
+        "played": 8,
+        "points": 21,
+        "previousRank": 2,
+        "qualified": true,
+        "rank": 2,
+        "rankTrend": "EQUAL",
+        "rankingCoefficient": 135.25,
+        "team": {
+          "associationId": "200047",
+          "associationLogoUrl": "https://img.uefa.com/imgml/uefacom/elements/logos/ma/GER.svg",
+          "bigLogoUrl": "https://img.uefa.com/imgml/TP/teams/logos/700x700/50037.png",
+          "confederationType": "UEFA",
+          "countryCode": "GER",
+          "id": "50037",
+          "idProvider": "FAME",
+          "internationalName": "Bayern München",
+          "isPlaceHolder": false,
+          "logoUrl": "https://img.uefa.com/imgml/TP/teams/logos/70x70/50037.png",
+          "mediumLogoUrl": "https://img.uefa.com/imgml/TP/teams/logos/240x240/50037.png",
+          "organizationId": "250037",
+          "teamCode": "BAY",
+          "teamTypeDetail": "DOMESTIC_MEN_TEAM_A",
+          "translations": {
+            "countryName": {
+              "EN": "Germany",
+              "FR": "Allemagne",
+              "DE": "Deutschland",
+              "ES": "Alemania",
+              "PT": "Alemanha",
+              "IT": "Germania",
+              "RU": "Германия",
+              "ZH": "德国",
+              "AR": "ألمانيا"
+            },
+            "displayName": {
+              "EN": "Bayern München",
+              "FR": "Bayern München",
+              "DE": "Bayern München",
+              "ES": "Bayern München",
+              "PT": "Bayern München",
+              "IT": "Bayern München",
+              "RU": "Бавария",
+              "ZH": "拜仁慕尼黑",
+              "AR": "بايرن ميونخ"
+            },
+            "displayOfficialName": {
+              "EN": "FC Bayern München",
+              "FR": "FC Bayern München",
+              "DE": "FC Bayern München",
+              "ES": "FC Bayern München",
+              "PT": "FC Bayern München",
+              "IT": "FC Bayern München",
+              "RU": "Бавария",
+              "ZH": "拜仁慕尼黑",
+              "AR": "بايرن ميونخ"
+            },
+            "displayTeamCode": {
+              "EN": "BAY",
+              "FR": "BAY",
+              "DE": "BAY",
+              "ES": "BAY",
+              "PT": "BAY",
+              "IT": "BAY",
+              "RU": "BAY",
+              "ZH": "BAY",
+              "AR": "BAY"
+            },
+            "shortName": {
+              "EN": "Bayern",
+              "FR": "Bayern",
+              "DE": "Bayern",
+              "ES": "Bayern",
+              "PT": "Bayern",
+              "IT": "Bayern",
+              "RU": "Бавария",
+              "ZH": "Bayern",
+              "AR": "بايرن"
+            }
+          },
+          "typeIsNational": false,
+          "typeTeam": "DOMESTIC"
+        },
+        "teamId": "50037",
+        "tieBreakerRuleId": "1",
+        "totalPoints": 21.0,
+        "won": 7,
+        "wonAway": 3,
+        "wonHome": 4
+      },
+      {
+        "drawn": 0,
+        "goalDifference": 12,
+        "goalsAgainst": 8,
+        "goalsFor": 20,
+        "goalsForAway": 9,
+        "goalsForHome": 11,
+        "groupFairPlayCoefficient": 8.0,
+        "isBanned": false,
+        "isLive": false,
+        "isOverridden": false,
+        "isQualifying": true,
+        "isTied": false,
+        "lost": 2,
+        "lostAway": 1,
+        "lostHome": 1,
+        "opponentsGoalDifference": -5,
+        "opponentsGoalScored": 112,
+        "opponentsPoints": 84.0,
+        "played": 8,
+        "points": 18,
+        "previousRank": 4,
+        "qualified": true,
+        "rank": 3,
+        "rankTrend": "UP",
+        "rankingCoefficient": 125.5,
+        "team": {
+          "associationId": "200039",
+          "associationLogoUrl": "https://img.uefa.com/imgml/uefacom/elements/logos/ma/ENG.svg",
+          "bigLogoUrl": "https://img.uefa.com/imgml/TP/teams/logos/700x700/7889.png",
+          "confederationType": "UEFA",
+          "countryCode": "ENG",
+          "id": "7889",
+          "idProvider": "FAME",
+          "internationalName": "Liverpool",
+          "isPlaceHolder": false,
+          "logoUrl": "https://img.uefa.com/imgml/TP/teams/logos/70x70/7889.png",
+          "mediumLogoUrl": "https://img.uefa.com/imgml/TP/teams/logos/240x240/7889.png",
+          "organizationId": "207889",
+          "teamCode": "LIV",
+          "teamTypeDetail": "DOMESTIC_MEN_TEAM_A",
+          "translations": {
+            "countryName": {
+              "EN": "England",
+              "FR": "Angleterre",
+              "DE": "England",
+              "ES": "Inglaterra",
+              "PT": "Inglaterra",
+              "IT": "Inghilterra",
+              "RU": "Англия",
+              "ZH": "英格兰",
+              "AR": "إنجلترا"
+            },
+            "displayName": {
+              "EN": "Liverpool",
+              "FR": "Liverpool",
+              "DE": "Liverpool",
+              "ES": "Liverpool",
+              "PT": "Liverpool",
+              "IT": "Liverpool",
+              "RU": "Ливерпуль",
+              "ZH": "利物浦",
+              "AR": "ليفربول"
+            },
+            "displayOfficialName": {
+              "EN": "Liverpool FC",
+              "FR": "Liverpool FC",
+              "DE": "Liverpool FC",
+              "ES": "Liverpool FC",
+              "PT": "Liverpool FC",
+              "IT": "Liverpool FC",
+              "RU": "Ливерпуль",
+              "ZH": "利物浦",
+              "AR": "ليفربول"
+            },
+            "displayTeamCode": {
+              "EN": "LIV",
+              "FR": "LIV",
+              "DE": "LIV",
+              "ES": "LIV",
+              "PT": "LIV",
+              "IT": "LIV",
+              "RU": "LIV",
+              "ZH": "LIV",
+              "AR": "LIV"
+            },
+            "shortName": {
+              "EN": "Liverpool",
+              "FR": "Liverpool",
+              "DE": "Liverpool",
+              "ES": "Liverpool",
+              "PT": "Liverpool",
+              "IT": "Liverpool",
+              "RU": "Ливерпуль",
+              "ZH": "Liverpool",
+              "AR": "ليفربول"
+            }
+          },
+          "typeIsNational": false,
+          "typeTeam": "DOMESTIC"
+        },
+        "teamId": "7889",
+        "tieBreakerRuleId": "1",
+        "totalPoints": 18.0,
+        "won": 6,
+        "wonAway": 3,
+        "wonHome": 3
+      }
+    ],
+    "qualificationLabels": [
+      {
+        "labelId": "1",
+        "translations": {
+          "labelName": {
+            "EN": "R16 place confirmed",
+            "FR": "Place en huitièmes assurée",
+            "DE": "Sicher im Achtelfinale",
+            "ES": "Plaza confirmada en octavos",
+            "PT": "Lugar nos oitavos confirmado",
+            "IT": "Confermata agli ottavi",
+            "RU": "Точно в 1/8 финала",
+            "ZH": "R16 place confirmed",
+            "AR": "تأكد صعوده لدور الـ16"
+          }
+        }
+      },
+      {
+        "labelId": "2",
+        "translations": {
+          "labelName": {
+            "EN": "R16 or Knockout play-off place confirmed",
+            "FR": "Place en huitièmes ou en barrages assurée",
+            "DE": "Steht im Achtelfinale oder in den Play-offs der K.-o.-Runde",
+            "ES": "Plaza confirmada en octavos o play-offs eliminatorios",
+            "PT": "Lugar nos oitavos ou no play-off confirmado",
+            "IT": "Posto agli ottavi o agli spareggi eliminazione diretta confermato",
+            "RU": "Точно в 1/8 финала или стыковых матчах",
+            "ZH": "STANDING_QUALIFICATION_LABEL_2",
+            "AR": "ضمن مقعدا في دور الـ 16 أو الملحق المؤهل"
+          }
+        }
+      },
+      {
+        "labelId": "3",
+        "translations": {
+          "labelName": {
+            "EN": "Knockout play-off place confirmed",
+            "FR": "Place en barrages assurée",
+            "DE": "Sicher in den Play-offs der K.-o.-Phase",
+            "ES": "Plaza confirmada en los play-offs eliminatorios",
+            "PT": "Lugar no play-off a eliminar confirmado",
+            "IT": "Posto spareggi eliminazione diretta confermato",
+            "RU": "Точно в стыковых матчах",
+            "ZH": "Knockout play-off place confirmed",
+            "AR": "تأكّد التأهل إلى الملحق المؤهل للأدوار الإقصائية"
+          }
+        }
+      }
+    ],
+    "round": {
+      "active": false,
+      "benchGKCount": 12,
+      "benchPlayersCount": 12,
+      "benchStaffCount": 15,
+      "coefficientWinnerBonus": 0.0,
+      "competitionId": "1",
+      "dateFrom": "2025-09-15T22:00:00+0000",
+      "dateTo": "2026-01-28T22:59:59+0000",
+      "fieldPlayersCount": 11,
+      "groupCount": 1,
+      "id": "2002110",
+      "metaData": {
+        "name": "League Phase",
+        "type": "GROUP_STANDINGS"
+      },
+      "mode": "GROUP",
+      "modeDetail": "GROUP",
+      "orderInCompetition": 5,
+      "phase": "TOURNAMENT",
+      "seasonYear": "2026",
+      "secondaryType": "GROUP_PHASE",
+      "stadiumNameType": "OFFICIAL_NAME",
+      "standingsRankingFormulaId": "590",
+      "status": "FINISHED",
+      "substitutionCount": 5,
+      "teamCount": 36,
+      "teams": [
+        "52709",
+        "70691",
+        "60609"
+      ],
+      "translations": {
+        "abbreviation": {
+          "EN": "LP",
+          "FR": "Ph. lig.",
+          "DE": "GP",
+          "ES": "FL",
+          "PT": "FL",
+          "IT": "FC",
+          "RU": "ОЭ",
+          "ZH": "LP",
+          "AR": "LP"
+        },
+        "name": {
+          "EN": "League phase",
+          "FR": "Phase de ligue",
+          "DE": "Ligaphase",
+          "ES": "Fase liga",
+          "PT": "Fase da Liga",
+          "IT": "Fase campionato",
+          "RU": "Общий этап",
+          "ZH": "League phase",
+          "AR": "مرحلة الدوري"
+        },
+        "shortName": {
+          "EN": "League phase",
+          "FR": "Phase de ligue",
+          "DE": "Ligaphase",
+          "ES": "Fase liga",
+          "PT": "Fase da Liga",
+          "IT": "Fase campionato",
+          "RU": "Общий этап",
+          "ZH": "League phase",
+          "AR": "مرحلة الدوري"
+        }
+      }
+    },
+    "status": "OFFICIAL"
+  }
+]

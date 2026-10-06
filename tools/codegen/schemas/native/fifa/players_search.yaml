@@ -1,0 +1,72 @@
+columns:
+- description: FIFA player id (Utf8 join key).
+  name: id_player
+  type: character
+- description: Localised name, JSON list of `{Locale, Description}` objects.
+  name: name
+  type: character
+- description: Localised alias, JSON list of `{Locale, Description}` objects.
+  name: alias
+  type: character
+- description: Date of birth (ISO 8601).
+  name: birth_date
+  type: character
+- description: Weight in kilograms.
+  name: weight
+  type: numeric
+- description: Height in centimetres.
+  name: height
+  type: numeric
+- description: Place of birth (a city name or a country code).
+  name: birth_place
+  type: character
+- description: Three-letter FIFA country code, e.g. ARG.
+  name: id_country
+  type: character
+- description: International appearances (caps).
+  name: international_caps
+  type: integer
+- description: Date of the international debut (ISO 8601).
+  name: international_debut
+  type: character
+- description: Debut date in a top competition (null in the captures).
+  name: top_competition_debut
+  type: character
+- description: Image URL template with `{format}` and `{size}` placeholders.
+  name: picture_url
+  type: character
+- description: Thumbnail image URL (null in the captures).
+  name: thumbnail_url
+  type: character
+- description: Twitter / X handle (null in the captures).
+  name: twitter_account
+  type: character
+- description: Preferred-foot code (FIFA integer enum; 9999 when unset).
+  name: preferred_foot
+  type: numeric
+- description: Media content entries, JSON list (empty in the captures).
+  name: media_content
+  type: character
+- description: Localised Twitter / X handles (null in the captures).
+  name: localized_twitter_accounts
+  type: character
+- description: Goals credited to the player.
+  name: goals
+  type: integer
+- description: Player picture block (null in the captures).
+  name: player_picture
+  type: character
+- description: IsUpdateable flag from the API (null in the captures).
+  name: is_updateable
+  type: character
+- description: IFES cross-reference id (Utf8).
+  name: properties_id_ifes
+  type: character
+- description: Stats Perform (Opta) id of the record (Utf8 cross-reference).
+  name: properties_id_stats_perform
+  type: character
+- description: IFES id as carried by the Stats Perform feed (Utf8).
+  name: properties_stats_perform_ifes_id
+  type: character
+kind: dataframe
+schema: players_search

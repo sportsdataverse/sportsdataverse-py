@@ -1,0 +1,15 @@
+columns:
+- description: ''
+  name: localized_key
+  type: character
+- description: Composite id of the round.
+  name: round_id
+  type: character
+- description: ''
+  name: link
+  type: character
+- description: ''
+  name: is_completed
+  type: logical
+kind: dataframe
+schema: totw_rounds

@@ -1,0 +1,193 @@
+api: fifa
+docstring:
+  example_import: true
+  raises:
+  - 'sportsdataverse.errors.NoDataError: the FIFA API returned 404 (unknown competition
+    or team id).'
+  raw_doc: the raw JSON ``Dict`` (paginated routes return the first page; the API's
+    paging request parameter is undocumented, see the spec's x-pagination)
+  see_also:
+  - name: FIFA
+    note: data origin (keyless front-end API behind fifa.com; not official or supported)
+    url: https://www.fifa.com/
+  - name: fifa-public-api-mcp
+    note: community MCP server over the same API
+    url: https://github.com/chrispickford/fifa-public-api-mcp
+endpoints:
+- example_args:
+    count: '3'
+    id_competition: '17'
+    id_season: '285023'
+    language: en
+  extra_params:
+  - description: Required. Competition id; 17 = FIFA World Cup (see /competitions).
+    name: id_competition
+    query_key: idCompetition
+    type: str
+  - description: Required. Season id; 285023 = FIFA World Cup 2026 (see /seasons?idCompetition=17).
+    name: id_season
+    query_key: idSeason
+    type: str
+  - description: Content language, e.g. en, es, fr.
+    name: language
+    query_key: language
+    type: str
+  - description: Page size. List routes return ContinuationToken / ContinuationHash
+      in the body; the request parameter that takes the token back is unverified.
+    name: count
+    query_key: count
+    type: str
+  parser: parse_fifa
+  path: /calendar/matches
+  returns_schema: native/fifa/calendar_matches
+  short: calendar_matches
+  summary: Match calendar of a competition season (first page; results and fixtures).
+- example_args:
+    id_competition: '17'
+    language: en
+  extra_params:
+  - description: Content language, e.g. en, es, fr.
+    name: language
+    query_key: language
+    type: str
+  parser: parse_fifa
+  path: /competitions/{id_competition}
+  path_params:
+  - description: Competition id; 17 = FIFA World Cup (see /competitions).
+    name: id_competition
+    required: true
+    type: str
+  returns_schema: native/fifa/competition
+  short: competition
+  summary: One competition by id.
+- example_args:
+    count: '3'
+    language: en
+  extra_params:
+  - description: Content language, e.g. en, es, fr.
+    name: language
+    query_key: language
+    type: str
+  - description: Page size. List routes return ContinuationToken / ContinuationHash
+      in the body; the request parameter that takes the token back is unverified.
+    name: count
+    query_key: count
+    type: str
+  parser: parse_fifa
+  path: /competitions
+  returns_schema: native/fifa/competitions
+  short: competitions
+  summary: All FIFA competitions (first page).
+- example_args:
+    language: en
+  extra_params:
+  - description: Content language, e.g. en, es, fr.
+    name: language
+    query_key: language
+    type: str
+  parser: parse_fifa
+  path: /live/football
+  returns_schema: native/fifa/live_football
+  short: live_football
+  summary: Matches live right now across FIFA competitions.
+- example_args:
+    language: en
+    name: Messi
+  extra_params:
+  - description: Required. Search text.
+    name: name
+    query_key: name
+    type: str
+  - description: Content language, e.g. en, es, fr.
+    name: language
+    query_key: language
+    type: str
+  parser: parse_fifa
+  path: /players/search
+  returns_schema: native/fifa/players_search
+  short: players_search
+  summary: Players matching a name (first page).
+- example_args:
+    count: '3'
+    id_competition: '17'
+    language: en
+  extra_params:
+  - description: Required. Competition id; 17 = FIFA World Cup (see /competitions).
+    name: id_competition
+    query_key: idCompetition
+    type: str
+  - description: Content language, e.g. en, es, fr.
+    name: language
+    query_key: language
+    type: str
+  - description: Page size. List routes return ContinuationToken / ContinuationHash
+      in the body; the request parameter that takes the token back is unverified.
+    name: count
+    query_key: count
+    type: str
+  parser: parse_fifa
+  path: /seasons
+  returns_schema: native/fifa/seasons
+  short: seasons
+  summary: Seasons of a competition (first page).
+- example_args:
+    count: '3'
+    language: en
+  extra_params:
+  - description: Content language, e.g. en, es, fr.
+    name: language
+    query_key: language
+    type: str
+  - description: Page size. List routes return ContinuationToken / ContinuationHash
+      in the body; the request parameter that takes the token back is unverified.
+    name: count
+    query_key: count
+    type: str
+  parser: parse_fifa
+  path: /stadiums
+  returns_schema: native/fifa/stadiums
+  short: stadiums
+  summary: Stadiums (first page).
+- example_args:
+    id_team: '43922'
+    language: en
+  extra_params:
+  - description: Content language, e.g. en, es, fr.
+    name: language
+    query_key: language
+    type: str
+  parser: parse_fifa
+  path: /teams/{id_team}
+  path_params:
+  - description: Team id (see /teams/search).
+    name: id_team
+    required: true
+    type: str
+  returns_schema: native/fifa/team
+  short: team
+  summary: One team by id.
+- example_args:
+    language: en
+    name: Argentina
+  extra_params:
+  - description: Required. Search text.
+    name: name
+    query_key: name
+    type: str
+  - description: Content language, e.g. en, es, fr.
+    name: language
+    query_key: language
+    type: str
+  parser: parse_fifa
+  path: /teams/search
+  returns_schema: native/fifa/teams_search
+  short: teams_search
+  summary: Teams matching a name (first page).
+host: https://api.fifa.com/api/v3
+module: fifa
+name_pattern: fifa_{short}
+parser_module: soccer.fifa_parsers
+passthrough_query: false
+qualifier: ''
+runtime_imports:
+- _get
