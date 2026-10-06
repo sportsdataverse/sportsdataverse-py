@@ -1,0 +1,47 @@
+{
+  "MRData": {
+    "xmlns": "",
+    "series": "f1",
+    "url": "https://api.jolpi.ca/ergast/f1/circuits.json",
+    "limit": "30",
+    "offset": "0",
+    "total": "78",
+    "CircuitTable": {
+      "Circuits": [
+        {
+          "circuitId": "adelaide",
+          "url": "https://en.wikipedia.org/wiki/Adelaide_Street_Circuit",
+          "circuitName": "Adelaide Street Circuit",
+          "Location": {
+            "lat": "-34.9272",
+            "long": "138.617",
+            "locality": "Adelaide",
+            "country": "Australia"
+          }
+        },
+        {
+          "circuitId": "ain-diab",
+          "url": "https://en.wikipedia.org/wiki/Ain-Diab_Circuit",
+          "circuitName": "Ain Diab",
+          "Location": {
+            "lat": "33.5786",
+            "long": "-7.6875",
+            "locality": "Casablanca",
+            "country": "Morocco"
+          }
+        },
+        {
+          "circuitId": "aintree",
+          "url": "https://en.wikipedia.org/wiki/Aintree_Motor_Racing_Circuit",
+          "circuitName": "Aintree",
+          "Location": {
+            "lat": "53.4769",
+            "long": "-2.94056",
+            "locality": "Liverpool",
+            "country": "UK"
+          }
+        }
+      ]
+    }
+  }
+}

@@ -8,6 +8,24 @@ Merged to `main` since 0.1.4 and not yet released. Released versions are on the 
 
 ## Unreleased
 
+### Added — Formula 1: Jolpica (Ergast-compatible) wrappers in `sportsdataverse.f1`
+
+`sportsdataverse.f1` wraps the keyless [Jolpica F1 API](https://github.com/jolpica/jolpica-f1)
+(`api.jolpi.ca/ergast/f1`, the Ergast successor) with f1dataR-named wrappers: `f1_schedule`,
+`f1_race`, `f1_results`, `f1_qualifying`, `f1_sprint`, `f1_pitstops`, `f1_driver_standings`,
+`f1_constructor_standings`, `f1_drivers`, `f1_driver`, `f1_constructors`, `f1_circuits`,
+`f1_seasons`, `f1_status` (generated from the recon's OpenAPI spec and 3-row captures) plus
+`f1_laps(season, round)`, a hand-written pager that walks `offset` in 100-timing pages until
+`MRData.total` is read (one race ~12 requests), and the single-page `f1_laps_page`. One parser,
+`parse_f1_mrdata`, flattens the shared `MRData` envelope per the recon's rule (ancestor scalars
+carried onto each row, `Driver.driverId` -> `driver_id`, `FastestLap.lap` -> `fastest_lap`,
+list cells JSON-encoded), casts the integer / number columns Ergast serializes as strings and
+keeps ids `Utf8`. Terms in every docstring's Notes: data is CC BY-NC-SA 4.0 (wrap-only, never a
+release asset) and the host allows 4 requests/second burst, 500 requests/hour sustained per IP.
+Fixtures are byte copies of the recon captures (`tests/fixtures/f1/`); the offline suite is
+`tests/f1/test_f1.py`. Generated wrappers now accept a `notes:` list in the endpoint YAML's
+`docstring:` block, rendered as a trailing `Notes:` section.
+
 ### Added — `asa_players_xpass()` and the `nasl` + `usls` ASA leagues
 
 `asa_players_xpass(league_slug, season_name=...)` wraps the American Soccer Analysis

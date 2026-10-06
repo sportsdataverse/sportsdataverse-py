@@ -1,0 +1,94 @@
+columns:
+- description: Round number within the season (integer); on standings routes the round
+    the standings are computed after.
+  name: round
+  type: integer
+- description: Season year (integer).
+  name: season
+  type: integer
+- description: Circuit country.
+  name: race_circuit_location_country
+  type: character
+- description: Circuit latitude (decimal degrees).
+  name: race_circuit_location_lat
+  type: numeric
+- description: Circuit city / locality.
+  name: race_circuit_location_locality
+  type: character
+- description: Circuit longitude (decimal degrees).
+  name: race_circuit_location_long
+  type: numeric
+- description: Ergast circuit id (join key to `/circuits`).
+  name: race_circuit_id
+  type: character
+- description: Circuit name.
+  name: race_circuit_name
+  type: character
+- description: Wikipedia URL of the circuit.
+  name: race_circuit_url
+  type: character
+- description: Race date (YYYY-MM-DD).
+  name: race_date
+  type: character
+- description: Grand Prix name.
+  name: race_name
+  type: character
+- description: Race start time (HH:MM:SSZ, UTC); absent for older seasons.
+  name: race_time
+  type: character
+- description: Wikipedia URL of the race.
+  name: race_url
+  type: character
+- description: Ergast constructor id (join key to `/constructors`).
+  name: constructor_id
+  type: character
+- description: Constructor name.
+  name: constructor_name
+  type: character
+- description: Constructor nationality (demonym).
+  name: constructor_nationality
+  type: character
+- description: Wikipedia URL of the constructor.
+  name: constructor_url
+  type: character
+- description: Three-letter driver code (e.g. `VER`).
+  name: driver_code
+  type: character
+- description: Driver date of birth (YYYY-MM-DD).
+  name: driver_date_of_birth
+  type: character
+- description: Ergast driver id (join key to `/drivers`).
+  name: driver_id
+  type: character
+- description: Driver surname.
+  name: driver_family_name
+  type: character
+- description: Driver first name.
+  name: driver_given_name
+  type: character
+- description: Driver nationality (demonym).
+  name: driver_nationality
+  type: character
+- description: Driver's permanent car number (integer; 2014+).
+  name: driver_permanent_number
+  type: integer
+- description: Wikipedia URL of the driver.
+  name: driver_url
+  type: character
+- description: Q1 lap time (`M:SS.mmm`).
+  name: q1
+  type: character
+- description: Q2 lap time; absent when eliminated in Q1.
+  name: q2
+  type: character
+- description: Q3 lap time; absent when eliminated in Q2.
+  name: q3
+  type: character
+- description: Car number (integer).
+  name: number
+  type: integer
+- description: Classified position (integer).
+  name: position
+  type: integer
+kind: dataframe
+schema: qualifying

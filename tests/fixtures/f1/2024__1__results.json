@@ -1,0 +1,157 @@
+{
+  "MRData": {
+    "xmlns": "",
+    "series": "f1",
+    "url": "https://api.jolpi.ca/ergast/f1/2024/1/results.json",
+    "limit": "30",
+    "offset": "0",
+    "total": "20",
+    "RaceTable": {
+      "season": "2024",
+      "round": "1",
+      "Races": [
+        {
+          "season": "2024",
+          "round": "1",
+          "url": "https://en.wikipedia.org/wiki/2024_Bahrain_Grand_Prix",
+          "raceName": "Bahrain Grand Prix",
+          "Circuit": {
+            "circuitId": "bahrain",
+            "url": "https://en.wikipedia.org/wiki/Bahrain_International_Circuit",
+            "circuitName": "Bahrain International Circuit",
+            "Location": {
+              "lat": "26.0325",
+              "long": "50.5106",
+              "locality": "Sakhir",
+              "country": "Bahrain"
+            }
+          },
+          "date": "2024-03-02",
+          "time": "15:00:00Z",
+          "Results": [
+            {
+              "number": "1",
+              "position": "1",
+              "positionText": "1",
+              "points": "26",
+              "Driver": {
+                "driverId": "max_verstappen",
+                "permanentNumber": "3",
+                "code": "VER",
+                "url": "http://en.wikipedia.org/wiki/Max_Verstappen",
+                "givenName": "Max",
+                "familyName": "Verstappen",
+                "dateOfBirth": "1997-09-30",
+                "nationality": "Dutch"
+              },
+              "Constructor": {
+                "constructorId": "red_bull",
+                "url": "https://en.wikipedia.org/wiki/Red_Bull_Racing",
+                "name": "Red Bull",
+                "nationality": "Austrian"
+              },
+              "grid": "1",
+              "laps": "57",
+              "status": "Finished",
+              "Time": {
+                "millis": "5504742",
+                "time": "1:31:44.742"
+              },
+              "FastestLap": {
+                "rank": "1",
+                "lap": "39",
+                "Time": {
+                  "time": "1:32.608"
+                },
+                "AverageSpeed": {
+                  "units": "kph",
+                  "speed": "210.383"
+                }
+              }
+            },
+            {
+              "number": "11",
+              "position": "2",
+              "positionText": "2",
+              "points": "18",
+              "Driver": {
+                "driverId": "perez",
+                "permanentNumber": "11",
+                "code": "PER",
+                "url": "http://en.wikipedia.org/wiki/Sergio_P%C3%A9rez",
+                "givenName": "Sergio",
+                "familyName": "Pérez",
+                "dateOfBirth": "1990-01-26",
+                "nationality": "Mexican"
+              },
+              "Constructor": {
+                "constructorId": "red_bull",
+                "url": "https://en.wikipedia.org/wiki/Red_Bull_Racing",
+                "name": "Red Bull",
+                "nationality": "Austrian"
+              },
+              "grid": "5",
+              "laps": "57",
+              "status": "Finished",
+              "Time": {
+                "millis": "5527199",
+                "time": "+22.457"
+              },
+              "FastestLap": {
+                "rank": "4",
+                "lap": "40",
+                "Time": {
+                  "time": "1:34.364"
+                },
+                "AverageSpeed": {
+                  "units": "kph",
+                  "speed": "206.468"
+                }
+              }
+            },
+            {
+              "number": "55",
+              "position": "3",
+              "positionText": "3",
+              "points": "15",
+              "Driver": {
+                "driverId": "sainz",
+                "permanentNumber": "55",
+                "code": "SAI",
+                "url": "http://en.wikipedia.org/wiki/Carlos_Sainz_Jr.",
+                "givenName": "Carlos",
+                "familyName": "Sainz",
+                "dateOfBirth": "1994-09-01",
+                "nationality": "Spanish"
+              },
+              "Constructor": {
+                "constructorId": "ferrari",
+                "url": "https://en.wikipedia.org/wiki/Scuderia_Ferrari",
+                "name": "Ferrari",
+                "nationality": "Italian"
+              },
+              "grid": "4",
+              "laps": "57",
+              "status": "Finished",
+              "Time": {
+                "millis": "5529852",
+                "time": "+25.110"
+              },
+              "FastestLap": {
+                "rank": "6",
+                "lap": "44",
+                "Time": {
+                  "time": "1:34.507"
+                },
+                "AverageSpeed": {
+                  "units": "kph",
+                  "speed": "206.156"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

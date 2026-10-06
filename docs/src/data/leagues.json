@@ -253,6 +253,10 @@
         {
           "prefix": "euroleague",
           "label": "EuroLeague"
+        },
+        {
+          "prefix": "f1",
+          "label": "Formula 1"
         }
       ]
     }

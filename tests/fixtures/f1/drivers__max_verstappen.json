@@ -1,0 +1,25 @@
+{
+  "MRData": {
+    "xmlns": "",
+    "series": "f1",
+    "url": "https://api.jolpi.ca/ergast/f1/drivers/max_verstappen.json",
+    "limit": "30",
+    "offset": "0",
+    "total": "1",
+    "DriverTable": {
+      "driverId": "max_verstappen",
+      "Drivers": [
+        {
+          "driverId": "max_verstappen",
+          "permanentNumber": "3",
+          "code": "VER",
+          "url": "http://en.wikipedia.org/wiki/Max_Verstappen",
+          "givenName": "Max",
+          "familyName": "Verstappen",
+          "dateOfBirth": "1997-09-30",
+          "nationality": "Dutch"
+        }
+      ]
+    }
+  }
+}

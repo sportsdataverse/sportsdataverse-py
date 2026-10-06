@@ -1,0 +1,393 @@
+api: f1
+docstring:
+  example_import: true
+  notes:
+  - 'Data license CC BY-NC-SA 4.0 (non-commercial, attribution, share-alike): sdv-py
+    wraps the API on the caller''s behalf and never republishes Jolpica payloads as
+    release assets.'
+  - 'Rate limit 4 requests/second burst, 500 requests/hour sustained, unauthenticated,
+    per IP and shared by every process on the machine. Paging: ``limit`` is capped
+    at 100 (a larger value is clamped and echoed in ``MRData.limit``); ``offset``
+    pages the innermost rows counted by ``MRData.total``.'
+  - '``season`` accepts ``current``; ``round`` accepts ``last`` / ``next``. Paths
+    are case-insensitive.'
+  raises:
+  - 'sportsdataverse.errors.NoDataError: the Jolpica API returned 404 (unknown season,
+    round or driver id).'
+  see_also:
+  - name: Jolpica F1 API
+    note: the Ergast-compatible API this family wraps (docs, terms, rate limit)
+    url: https://github.com/jolpica/jolpica-f1
+  - name: f1dataR
+    note: the R twin over the same API; wrapper names and columns follow it
+    url: https://scottyd22.github.io/f1dataR/
+  - name: FastF1
+    note: timing, telemetry and session data that sdv-py does not wrap
+    url: https://docs.fastf1.dev/
+endpoints:
+- example_args: {}
+  extra_params:
+  - description: Page size. Default 30, maximum 100 (a larger value is clamped to
+      100 and echoed in `MRData.limit`).
+    name: limit
+    query_key: limit
+    type: str
+  - description: Rows to skip (paging on the innermost rows counted by `MRData.total`).
+      Default 0.
+    name: offset
+    query_key: offset
+    type: str
+  parser: parse_f1_mrdata
+  path: /circuits.json
+  returns_schema: native/f1/circuits
+  short: circuits
+  summary: All circuits.
+- example_args:
+    season: 2024
+  extra_params:
+  - description: Page size. Default 30, maximum 100 (a larger value is clamped to
+      100 and echoed in `MRData.limit`).
+    name: limit
+    query_key: limit
+    type: str
+  - description: Rows to skip (paging on the innermost rows counted by `MRData.total`).
+      Default 0.
+    name: offset
+    query_key: offset
+    type: str
+  parser: parse_f1_mrdata
+  path: /{season}/constructorStandings.json
+  path_params:
+  - description: Four-digit season year, or `current`.
+    name: season
+    required: true
+    type: str
+  returns_schema: native/f1/constructor_standings
+  short: constructor_standings
+  summary: Constructors' championship standings after the season's last round.
+- example_args:
+    season: 2024
+  extra_params:
+  - description: Page size. Default 30, maximum 100 (a larger value is clamped to
+      100 and echoed in `MRData.limit`).
+    name: limit
+    query_key: limit
+    type: str
+  - description: Rows to skip (paging on the innermost rows counted by `MRData.total`).
+      Default 0.
+    name: offset
+    query_key: offset
+    type: str
+  parser: parse_f1_mrdata
+  path: /{season}/constructors.json
+  path_params:
+  - description: Four-digit season year, or `current`.
+    name: season
+    required: true
+    type: str
+  returns_schema: native/f1/constructors
+  short: constructors
+  summary: Constructors who took part in a season.
+- example_args:
+    driver_id: max_verstappen
+  extra_params:
+  - description: Page size. Default 30, maximum 100 (a larger value is clamped to
+      100 and echoed in `MRData.limit`).
+    name: limit
+    query_key: limit
+    type: str
+  - description: Rows to skip (paging on the innermost rows counted by `MRData.total`).
+      Default 0.
+    name: offset
+    query_key: offset
+    type: str
+  parser: parse_f1_mrdata
+  path: /drivers/{driver_id}.json
+  path_params:
+  - description: Ergast driver id, e.g. `max_verstappen`.
+    name: driver_id
+    required: true
+    type: str
+  returns_schema: native/f1/driver
+  short: driver
+  summary: One driver by id.
+- example_args:
+    season: 2024
+  extra_params:
+  - description: Page size. Default 30, maximum 100 (a larger value is clamped to
+      100 and echoed in `MRData.limit`).
+    name: limit
+    query_key: limit
+    type: str
+  - description: Rows to skip (paging on the innermost rows counted by `MRData.total`).
+      Default 0.
+    name: offset
+    query_key: offset
+    type: str
+  parser: parse_f1_mrdata
+  path: /{season}/driverStandings.json
+  path_params:
+  - description: Four-digit season year, or `current`.
+    name: season
+    required: true
+    type: str
+  returns_schema: native/f1/driver_standings
+  short: driver_standings
+  summary: Drivers' championship standings after the season's last round.
+- example_args:
+    season: 2024
+  extra_params:
+  - description: Page size. Default 30, maximum 100 (a larger value is clamped to
+      100 and echoed in `MRData.limit`).
+    name: limit
+    query_key: limit
+    type: str
+  - description: Rows to skip (paging on the innermost rows counted by `MRData.total`).
+      Default 0.
+    name: offset
+    query_key: offset
+    type: str
+  parser: parse_f1_mrdata
+  path: /{season}/drivers.json
+  path_params:
+  - description: Four-digit season year, or `current`.
+    name: season
+    required: true
+    type: str
+  returns_schema: native/f1/drivers
+  short: drivers
+  summary: Drivers who took part in a season.
+- example_args:
+    round: 1
+    season: 2024
+  extra_params:
+  - description: Page size. Default 30, maximum 100 (a larger value is clamped to
+      100 and echoed in `MRData.limit`).
+    name: limit
+    query_key: limit
+    type: str
+  - description: Rows to skip (paging on the innermost rows counted by `MRData.total`).
+      Default 0.
+    name: offset
+    query_key: offset
+    type: str
+  parser: parse_f1_mrdata
+  path: /{season}/{round}/laps.json
+  path_params:
+  - description: Four-digit season year, or `current`.
+    name: season
+    required: true
+    type: str
+  - description: Round number within the season, or `last` / `next`.
+    name: round
+    required: true
+    type: str
+  returns_schema: native/f1/laps_page
+  short: laps_page
+  summary: Lap times, one timing row per driver per lap (1996+; offset-paged, max
+    100 timings per call).
+- example_args:
+    round: 1
+    season: 2024
+  extra_params:
+  - description: Page size. Default 30, maximum 100 (a larger value is clamped to
+      100 and echoed in `MRData.limit`).
+    name: limit
+    query_key: limit
+    type: str
+  - description: Rows to skip (paging on the innermost rows counted by `MRData.total`).
+      Default 0.
+    name: offset
+    query_key: offset
+    type: str
+  parser: parse_f1_mrdata
+  path: /{season}/{round}/pitstops.json
+  path_params:
+  - description: Four-digit season year, or `current`.
+    name: season
+    required: true
+    type: str
+  - description: Round number within the season, or `last` / `next`.
+    name: round
+    required: true
+    type: str
+  returns_schema: native/f1/pitstops
+  short: pitstops
+  summary: Pit stops of a race (2012+).
+- example_args:
+    round: 1
+    season: 2024
+  extra_params:
+  - description: Page size. Default 30, maximum 100 (a larger value is clamped to
+      100 and echoed in `MRData.limit`).
+    name: limit
+    query_key: limit
+    type: str
+  - description: Rows to skip (paging on the innermost rows counted by `MRData.total`).
+      Default 0.
+    name: offset
+    query_key: offset
+    type: str
+  parser: parse_f1_mrdata
+  path: /{season}/{round}/qualifying.json
+  path_params:
+  - description: Four-digit season year, or `current`.
+    name: season
+    required: true
+    type: str
+  - description: Round number within the season, or `last` / `next`.
+    name: round
+    required: true
+    type: str
+  returns_schema: native/f1/qualifying
+  short: qualifying
+  summary: Qualifying classification (Q1/Q2/Q3).
+- example_args:
+    round: 1
+    season: 2024
+  extra_params:
+  - description: Page size. Default 30, maximum 100 (a larger value is clamped to
+      100 and echoed in `MRData.limit`).
+    name: limit
+    query_key: limit
+    type: str
+  - description: Rows to skip (paging on the innermost rows counted by `MRData.total`).
+      Default 0.
+    name: offset
+    query_key: offset
+    type: str
+  parser: parse_f1_mrdata
+  path: /{season}/{round}.json
+  path_params:
+  - description: Four-digit season year, or `current`.
+    name: season
+    required: true
+    type: str
+  - description: Round number within the season, or `last` / `next`.
+    name: round
+    required: true
+    type: str
+  returns_schema: native/f1/race
+  short: race
+  summary: One race of the schedule.
+- example_args:
+    round: 1
+    season: 2024
+  extra_params:
+  - description: Page size. Default 30, maximum 100 (a larger value is clamped to
+      100 and echoed in `MRData.limit`).
+    name: limit
+    query_key: limit
+    type: str
+  - description: Rows to skip (paging on the innermost rows counted by `MRData.total`).
+      Default 0.
+    name: offset
+    query_key: offset
+    type: str
+  parser: parse_f1_mrdata
+  path: /{season}/{round}/results.json
+  path_params:
+  - description: Four-digit season year, or `current`.
+    name: season
+    required: true
+    type: str
+  - description: Round number within the season, or `last` / `next`.
+    name: round
+    required: true
+    type: str
+  returns_schema: native/f1/results
+  short: results
+  summary: Race classification.
+- example_args:
+    season: 2024
+  extra_params:
+  - description: Page size. Default 30, maximum 100 (a larger value is clamped to
+      100 and echoed in `MRData.limit`).
+    name: limit
+    query_key: limit
+    type: str
+  - description: Rows to skip (paging on the innermost rows counted by `MRData.total`).
+      Default 0.
+    name: offset
+    query_key: offset
+    type: str
+  parser: parse_f1_mrdata
+  path: /{season}.json
+  path_params:
+  - description: Four-digit season year, or `current`.
+    name: season
+    required: true
+    type: str
+  returns_schema: native/f1/schedule
+  short: schedule
+  summary: Race schedule of a season (one row per race).
+- example_args: {}
+  extra_params:
+  - description: Page size. Default 30, maximum 100 (a larger value is clamped to
+      100 and echoed in `MRData.limit`).
+    name: limit
+    query_key: limit
+    type: str
+  - description: Rows to skip (paging on the innermost rows counted by `MRData.total`).
+      Default 0.
+    name: offset
+    query_key: offset
+    type: str
+  parser: parse_f1_mrdata
+  path: /seasons.json
+  returns_schema: native/f1/seasons
+  short: seasons
+  summary: All championship seasons.
+- example_args:
+    round: 5
+    season: 2024
+  extra_params:
+  - description: Page size. Default 30, maximum 100 (a larger value is clamped to
+      100 and echoed in `MRData.limit`).
+    name: limit
+    query_key: limit
+    type: str
+  - description: Rows to skip (paging on the innermost rows counted by `MRData.total`).
+      Default 0.
+    name: offset
+    query_key: offset
+    type: str
+  parser: parse_f1_mrdata
+  path: /{season}/{round}/sprint.json
+  path_params:
+  - description: Four-digit season year, or `current`.
+    name: season
+    required: true
+    type: str
+  - description: Round number within the season, or `last` / `next`.
+    name: round
+    required: true
+    type: str
+  returns_schema: native/f1/sprint
+  short: sprint
+  summary: Sprint race classification (empty Races[] on a non-sprint weekend).
+- example_args: {}
+  extra_params:
+  - description: Page size. Default 30, maximum 100 (a larger value is clamped to
+      100 and echoed in `MRData.limit`).
+    name: limit
+    query_key: limit
+    type: str
+  - description: Rows to skip (paging on the innermost rows counted by `MRData.total`).
+      Default 0.
+    name: offset
+    query_key: offset
+    type: str
+  parser: parse_f1_mrdata
+  path: /status.json
+  returns_schema: native/f1/status
+  short: status
+  summary: Finishing-status vocabulary with all-time counts.
+host: https://api.jolpi.ca/ergast/f1
+module: f1
+name_pattern: f1_{short}
+parser_module: f1.f1_parsers
+passthrough_query: false
+qualifier: ''
+runtime_imports:
+- _get

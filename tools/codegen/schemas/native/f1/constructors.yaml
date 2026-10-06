@@ -1,0 +1,18 @@
+columns:
+- description: Season year (integer).
+  name: season
+  type: integer
+- description: Ergast constructor id (join key to `/constructors`).
+  name: constructor_id
+  type: character
+- description: Constructor name.
+  name: name
+  type: character
+- description: Nationality (demonym).
+  name: nationality
+  type: character
+- description: Wikipedia URL.
+  name: url
+  type: character
+kind: dataframe
+schema: constructors

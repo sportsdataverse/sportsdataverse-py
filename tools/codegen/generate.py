@@ -199,7 +199,7 @@ def _build_docstring(
     (NFL.com), keeping the public ``Args`` block complete.
 
     ``doc_extras`` carries the optional per-family ``docstring:`` block from the
-    endpoint YAML (``raw_doc`` / ``raises`` / ``see_also`` / ``example_import``).
+    endpoint YAML (``raw_doc`` / ``raises`` / ``see_also`` / ``notes`` / ``example_import``).
     It is opt-in so families that don't declare it render byte-identically to
     before; new families declare it to meet the repo's Google-style contract
     (``Args`` / ``Returns`` / ``Raises`` + a runnable ``Example`` + ``See Also``).
@@ -305,6 +305,13 @@ def _build_docstring(
         lines += [f"        * `{s['name']}`_ - {s['note']}" for s in see_also]
         lines.append("")
         lines += [f"    .. _{s['name']}: {s['url']}" for s in see_also]
+    # Trailing on purpose: docstring_parser has no Notes section, and the reference
+    # renderer's _clean_example stops at the "Notes:" sentinel, so the example stays clean.
+    notes = list(extras.get("notes") or [])
+    if notes:
+        lines.append("")
+        lines.append("Notes:")
+        lines += [f"    * {n}" for n in notes]
     lines.append('"""')
     return "\n".join(("    " + ln) if ln else "" for ln in lines)
 
@@ -1962,6 +1969,7 @@ FLAT_APIS = [
     ("uefa", "soccer"),
     ("fifa", "soccer"),
     ("sleeper", "nfl"),
+    ("f1", "f1"),  # Jolpica F1 (Ergast-compatible), sdv-internal-refs: f1/
 ]
 
 
@@ -2337,6 +2345,7 @@ _COVERAGE_LEAGUES = [
     *_HOCKEYTECH_MODULE_LEAGUES,  # ahl/ohl/whl/qmjhl + the promoted junior/minor leagues
     "odds",
     "euroleague",
+    "f1",
 ]
 
 # Mapping from doc/coverage prefix to actual Python module path for leagues
@@ -2584,6 +2593,7 @@ _FLAT_API_DOC = {
     "uefa": "UEFA front-end APIs (comp/match/standings/matchstats.uefa.com)",
     "fifa": "FIFA public API v3 (api.fifa.com)",
     "sleeper": "Sleeper fantasy API v1 (api.sleeper.app)",
+    "f1": "Jolpica F1 API (api.jolpi.ca, Ergast-compatible; CC BY-NC-SA 4.0, 500 requests/hour)",
 }
 
 # Friendly label per releases.yaml base key, for the "Dataset loaders" row of a
@@ -3872,7 +3882,7 @@ def _doc_leagues() -> list[str]:
     _HOCKEYTECH_EXTRA = _HOCKEYTECH_MODULE_LEAGUES
     # Cross-sport hand-written modules that get their own docs scope but have no
     # ESPN/loader entries (e.g. the The Odds API wrappers in sportsdataverse.odds).
-    _NONLEAGUE_EXTRA = ["odds", "cbs", "yahoo", "fox", "euroleague"]
+    _NONLEAGUE_EXTRA = ["odds", "cbs", "yahoo", "fox", "euroleague", "f1"]
     known = set(prefixes) | set(extra)
     hockeytech = [lg for lg in _HOCKEYTECH_EXTRA if lg not in known]
     nonleague = [m for m in _NONLEAGUE_EXTRA if m not in known]
@@ -4258,6 +4268,7 @@ _LEAGUE_LABELS = {
     "nbagl": "NBA G League",
     "odds": "Betting odds",
     "euroleague": "EuroLeague",
+    "f1": "Formula 1",
     "seriea": "Serie A",
     "soccer": "Soccer (all)",
     "yahoo": "Yahoo Sports",
