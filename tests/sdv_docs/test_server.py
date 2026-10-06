@@ -1,3 +1,4 @@
+import importlib.metadata
 import sqlite3
 import subprocess
 import sys
@@ -254,7 +255,7 @@ def test_importing_sdv_docs_never_imports_sportsdataverse():
 
 def test_main_exits_2_on_python_39(monkeypatch, capsys):
     monkeypatch.setattr(sys, "version_info", (3, 9, 18))
-    assert server.main() == 2
+    assert server.main([]) == 2
     assert "pip install 'sportsdataverse[mcp]'" in capsys.readouterr().err
 
 
@@ -263,8 +264,23 @@ def test_main_exits_2_without_mcp(monkeypatch, capsys):
         raise ImportError("No module named 'mcp'")
 
     monkeypatch.setattr(server, "build_server", no_mcp)
-    assert server.main() == 2
+    assert server.main([]) == 2
     assert "sdv-docs needs Python >= 3.10" in capsys.readouterr().err
+
+
+def test_main_help_and_version_exit_without_serving(monkeypatch, capsys):
+    monkeypatch.setattr(server, "build_server", lambda: pytest.fail("must not start the server"))
+    assert server.main(["--help"]) == 0 and capsys.readouterr().out.startswith("usage: sdv-docs")
+    assert server.main(["--version"]) == 0
+    assert capsys.readouterr().out.strip() == f"sdv-docs {importlib.metadata.version('sportsdataverse')}"
+    assert server.main(["--serve"]) == 2 and capsys.readouterr().err.startswith("usage: sdv-docs")
+
+
+def test_console_help_does_not_block_on_stdin():
+    out = subprocess.run(
+        [sys.executable, "-m", "sdv_docs.server", "--help"], capture_output=True, text=True, timeout=30, check=True
+    )
+    assert out.stdout.startswith("usage: sdv-docs")
 
 
 @needs_mcp

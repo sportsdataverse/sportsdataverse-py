@@ -13,6 +13,10 @@ from typing import Any, Callable, Optional
 from sdv_docs.index import Index, IndexUnavailable, locate
 
 INSTALL = "sdv-docs needs Python >= 3.10 and the mcp extra: pip install 'sportsdataverse[mcp]'"
+USAGE = (
+    "usage: sdv-docs [--help | --version]\n\n"
+    "With no arguments, serve the sdv-docs MCP tools over stdio (Python >= 3.10, sportsdataverse[mcp])."
+)
 COLUMN_CAP = 50
 WRAPPER_CAP = 6
 FOUND_CAP = 10
@@ -314,8 +318,27 @@ def build_server() -> Any:
     return server
 
 
+def _version() -> str:
+    from importlib.metadata import PackageNotFoundError, version  # never import sportsdataverse itself
+
+    try:
+        return version("sportsdataverse")
+    except PackageNotFoundError:
+        return "unknown"
+
+
 def main(argv: Optional[list[str]] = None) -> int:
     """Console entry point ``sdv-docs``: serve the tools over stdio until the client disconnects."""
+    args = sys.argv[1:] if argv is None else argv
+    if args in (["-h"], ["--help"]):
+        print(USAGE)
+        return 0
+    if args == ["--version"]:
+        print(f"sdv-docs {_version()}")
+        return 0
+    if args:
+        print(USAGE, file=sys.stderr)
+        return 2
     if sys.version_info < (3, 10):
         print(INSTALL, file=sys.stderr)
         return 2
