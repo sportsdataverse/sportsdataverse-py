@@ -9,7 +9,7 @@ sidebar_position: 50
 Hand-written wrappers, loaders, and helpers in `sportsdataverse.ufl`
 not covered by the generated API-endpoint reference above.
 
-## Other
+## ESPN
 
 ### ufl_pbp {#ufl_pbp}
 

@@ -3107,52 +3107,35 @@ def _is_shared_leak(module: str) -> bool:
     return module == "sportsdataverse.dl_utils" or module == "sportsdataverse.errors" or module.endswith("_parsers")
 
 
-# Deterministic family order for the autodoc page (families not listed sort last,
-# alphabetically). Functions within a family are always sorted alphabetically.
-_AUTODOC_FAMILY_ORDER = [
-    "Highlights",
-    "Statcast",
-    "MLB Stats API",
-    "Play-by-play, schedule & rosters",
-    "NHL native",
-    "Dataset loaders",
-    "Utilities & helpers",
-    "Other",
-]
+@functools.lru_cache(maxsize=1)
+def _family_rank() -> dict[str, int]:
+    """``{family label: order}`` -- the sources.yaml registry order, Highlights first.
 
-_ESPN_PBP_FAMILY_TOKENS = (
-    "_pbp",
-    "_schedule",
-    "_game_rosters",
-    "_player_stats",
-    "_play_participants",
-    "_team_stats",
-    "_game_officials",
-)
+    Replaces the hand-maintained ``_AUTODOC_FAMILY_ORDER``: a family IS a registry
+    label now, so the registry's own order is the page order and the two can never
+    drift."""
+    from tools.codegen import sources
+
+    return {"Highlights": -1, **{e.label: e.order for e in sources.load()}}
 
 
-def _autodoc_family(name: str, highlighted: frozenset[str] = frozenset()) -> str:
-    """Group key for an autodoc function name (see the family rules in Task D2).
+# Read once at import: the registry is a committed file and every autodoc page needs this order.
+_FAMILY_RANK = _family_rank()
 
-    ``highlighted`` (the per-league curated set from :func:`_highlighted_names`)
-    is checked FIRST, so a hand-picked "start here" function is pulled out of
-    whichever family it would otherwise land in (Utilities & helpers, Other,
-    Play-by-play, ...) into its own top-billed Highlights section instead."""
+
+def _autodoc_family(name: str, highlighted: frozenset[str] = frozenset(), *, module: str = "") -> str:
+    """Group heading for an autodoc function: its ``sources.yaml`` entry's label.
+
+    ``highlighted`` (the per-league curated set from :func:`_highlighted_names`) is
+    checked FIRST, so a hand-picked "start here" function is pulled out of its
+    provider/category section into the top-billed Highlights one. Everything else
+    resolves through the registry -- name-prefix guessing is gone, which is what
+    produced the "Build" / "Calc" / "Nfl" / "Fox" / "Get" headings."""
+    from tools.codegen import sources
+
     if name in highlighted:
         return "Highlights"
-    if name.startswith("statcast") or name == "mlb_statcast":
-        return "Statcast"
-    if name.startswith("load_"):
-        return "Dataset loaders"
-    if name.startswith("mlb_api"):
-        return "MLB Stats API"
-    if name.startswith("espn_") and any(tok in name for tok in _ESPN_PBP_FAMILY_TOKENS):
-        return "Play-by-play, schedule & rosters"
-    if name.startswith("nhl_"):
-        return "NHL native"
-    if name.endswith("PlayProcess") or name.startswith(("most_recent_", "get_current_")) or name == "year_to_season":
-        return "Utilities & helpers"
-    return "Other"
+    return sources.resolve(name, module, **_resolve_origin(name)).label
 
 
 def _autodoc_signature(obj) -> str:
@@ -3771,7 +3754,7 @@ def _autodoc_names(league: str | None, corpus: str) -> list[str]:
 def _autodoc_groups(league: str | None, names: list[str]) -> list[dict]:
     """``[{family, functions:[{name, signature, short, long, params, returns, example}]}]``.
 
-    Families ordered by :data:`_AUTODOC_FAMILY_ORDER` (unknown families last,
+    Families ordered by :func:`_family_rank` (unknown families last,
     alphabetically); functions sorted alphabetically within each family. Each
     function carries the parsed-docstring view from :func:`_doc_view` so the
     template can render Parameters/Returns/Example sections."""
@@ -3805,12 +3788,14 @@ def _autodoc_groups(league: str | None, names: list[str]) -> list[dict]:
             c["description"] = _table_cell_desc(str(c.get("description", "")), league, raw_name, n)
             c["name"] = raw_name.replace("|", "\\|")
             c["type"] = str(c.get("type", "")).replace("|", "\\|")
-        by_family.setdefault(_autodoc_family(n, highlighted), []).append(
+        by_family.setdefault(_autodoc_family(n, highlighted, module=getattr(obj, "__module__", "")), []).append(
             {"name": n, "signature": _autodoc_signature(obj), "return_columns": return_columns, **view},
         )
 
+    rank = _family_rank()
+
     def fam_key(fam: str) -> tuple[int, str]:
-        return (_AUTODOC_FAMILY_ORDER.index(fam) if fam in _AUTODOC_FAMILY_ORDER else len(_AUTODOC_FAMILY_ORDER), fam)
+        return (rank.get(fam, len(rank)), fam)
 
     groups = []
     for fam in sorted(by_family, key=fam_key):
@@ -4163,13 +4148,18 @@ def _loader_families(names: list[str], prefix: str | None) -> list[str]:
     return [n[len(own) :].split("_")[0] if n.startswith(own) else n.split("_")[1] for n in names]
 
 
-def _pack_families(items: list[tuple[str, str, int]]) -> list[tuple[str, str, int, list[str]]]:
+def _pack_families(
+    items: list[tuple[str, str, int]], *, rank: dict[str, int] | None = None
+) -> list[tuple[str, str, int, list[str]]]:
     """``[(name, family key, markdown bytes)]`` in page order -> ``[(slug, label, part, [names])]``.
 
     A plural key folds into its singular (``teams`` -> ``team``); a family with one function or under
     :data:`_FAMILY_MIN_BYTES` joins ``other``; a family over :data:`_PAGE_MD_BUDGET` continues on
-    ``<slug>-2``, ``<slug>-3`` ... (a single function over the budget gets a page to itself). Families
-    are ordered by label, ``other`` last."""
+    ``<slug>-2``, ``<slug>-3`` ... (a single function over the budget gets a page to itself).
+
+    ``rank`` (``{label: order}``, from :func:`_family_rank`) puts the families in registry order --
+    an autodoc page's sections then match the league index's source table. Without it families are
+    ordered by label, as the endpoint and loader pages still are. ``other`` is always last."""
     keys = {k for _, k, _ in items}
     fold = {k: k[:-1] if k.endswith("s") and k[:-1] in keys else k for k in keys}
     items = [(n, fold[k], s) for n, k, s in items]
@@ -4184,9 +4174,13 @@ def _pack_families(items: list[tuple[str, str, int]]) -> list[tuple[str, str, in
     families: dict[str, list[tuple[str, int]]] = {}
     for n, k, s in items:
         families.setdefault(k, []).append((n, s))
-    label = {k: _FAMILY_LABELS.get(k, k[:1].upper() + k[1:]) for k in families}
+    # An autodoc key IS already a registry label ("nflverse data releases"), so it is used verbatim --
+    # title-casing it would rewrite brand names ("Nflverse"). Endpoint/loader keys are bare words
+    # ("boxscore") and still get their label or a capitalised fallback.
+    label = {k: k if k in _FAMILY_RANK else _FAMILY_LABELS.get(k, k[:1].upper() + k[1:]) for k in families}
+    order = {k: (rank.get(label[k], len(rank)) if rank is not None else 0) for k in families}
     pages = []
-    for k in sorted(families, key=lambda k: (k == "other", label[k].lower())):
+    for k in sorted(families, key=lambda k: (k == "other", order[k], label[k].lower())):
         part: list[str] = []
         used, n_part = 0, 1
         for n, s in families[k]:
@@ -4313,7 +4307,10 @@ def _family_pages(rel: str, content: str, prefix: str | None) -> tuple[str, dict
                 spans[name] = (sec.start() + h.start(), sec.start() + end)
                 section_of.setdefault(sec.start(), name)
                 family = sec.group(1).strip()
-                keys.append(family if family != "Other" else name.split("_")[0])
+                # The family heading IS the registry label now, so it is kept as-is. It used to be
+                # re-keyed to name.split("_")[0] for an "Other" section, which is where the
+                # "Build" / "Calc" / "Nfl" / "Get" headings came from.
+                keys.append(family)
     else:
         heads = list(_FN_H2_LINE.finditer(body))
         preamble = body[: heads[0].start()] if heads else body
@@ -4325,7 +4322,10 @@ def _family_pages(rel: str, content: str, prefix: str | None) -> tuple[str, dict
         keys = _loader_families(names, prefix) if page == "loaders" else _name_families(names)
     if len(blocks) < 2:  # nothing to split: one function over the budget stays as it is
         return None
-    pages = _pack_families([(n, k, len(blocks[n].encode())) for n, k in zip(blocks, keys)])
+    pages = _pack_families(
+        [(n, k, len(blocks[n].encode())) for n, k in zip(blocks, keys)],
+        rank=_FAMILY_RANK if autodoc else None,
+    )
     title = meta.get("title", page).strip('"')
     toc = "toc_max_heading_level: 2\n" if "toc_max_heading_level" in meta else ""
     family_pages: dict[str, str] = {}

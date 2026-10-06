@@ -9,7 +9,7 @@ sidebar_position: 50
 Hand-written wrappers, loaders, and helpers in `sportsdataverse.college_baseball`
 not covered by the generated API-endpoint reference above.
 
-## Other
+## stats.ncaa.org
 
 ### college_baseball_re24 {#college_baseball_re24}
 
@@ -85,6 +85,8 @@ see the core function's Returns table.
 from sportsdataverse.baseball.college_baseball.college_baseball_re import college_baseball_wpa
 wpa = college_baseball_wpa(state=state, results=results)
 ```
+
+## Play-by-play processing
 
 ### decompose_college_baseball_plays {#decompose_college_baseball_plays}
 

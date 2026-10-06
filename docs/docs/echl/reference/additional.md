@@ -9,35 +9,7 @@ sidebar_position: 50
 Hand-written wrappers, loaders, and helpers in `sportsdataverse.echl`
 not covered by the generated API-endpoint reference above.
 
-## Utilities & helpers
-
-### most_recent_echl_season {#most_recent_echl_season}
-
-`most_recent_echl_season() -> 'int'`
-
-Newest ECHL regular season as an end-year integer: the highest `season_yr` of a regular season that is not a one-off event, so a preseason listed first is not a default. Raises `NoDataError` when the seasons feed lists none, `AssetFetchError` when it fails.
-
-## Other
-
-### build_family {#build_family}
-
-`build_family(league: 'str') -> 'dict[str, Any]'`
-
-Return a dict of public callables for *league*.
-
-All callables are fully independent closures over the single `league`
-string; none share mutable state.  The dict is ready to be spread into
-a module namespace via `globals().update(...)`.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `league` | `str` |  | HockeyTech league code: `"ahl"`, `"ohl"`, `"whl"`, or `"qmjhl"`. |
-
-**Returns**
-
-Keys are the public function names (e.g. `"ahl_schedule"`).
+## HockeyTech / LeagueStat
 
 ### echl_game_corsi {#echl_game_corsi}
 
@@ -162,33 +134,6 @@ ECHL schedule — one row per game.
 | `season_id` | character | Unique season identifier. |
 | `game_type` | character | The most recent game type of that season that a player appeared on the roster. |
 
-### echl_season_id {#echl_season_id}
-
-`echl_season_id(return_as_pandas: 'bool' = False) -> 'Any'`
-
-All ECHL seasons with end-year + game-type labels.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `return_as_pandas` | `bool` | `False` |  |
-
-**Returns**
-
-
-| col_name | type | description |
-|---|---|---|
-| `season_id` | integer | Unique season identifier. |
-| `season_name` | character | Full season name (e.g., "2024-25 Regular Season"). |
-| `season_short` | character | Short season name. |
-| `career` | character | Whether this is a career-stats season. |
-| `playoff` | character | Whether the row is playoff statistics. |
-| `start_date` | character | Start date (YYYY-MM-DD). |
-| `end_date` | character | End date (YYYY-MM-DD). |
-| `season_yr` | integer | End year of the season the row belongs to, read from its name: "2025-26", "2025/26" and "2025-2026" are 2026, "26-27" is 2027, a compact "2425" is 2025. A preseason or exhibition named with the one year it starts in belongs to the next season ("2026 Pre-season" is 2027). Null when the name holds no year. |
-| `game_type_label` | character | Game type read from the season name, first match wins: "preseason" (pre-season, preseason), "playoffs" (playoff, post), "exhibition", else "regular". One-off events such as all-star games are labelled "regular" too; season resolution skips them. |
-
 ### echl_standings {#echl_standings}
 
 `echl_standings(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'`
@@ -265,3 +210,60 @@ ECHL teams for a given season.
 | `team_label` | character | Short city label. |
 | `division` | character | Team division. |
 | `team_logo` | character | Team logo image URL. |
+
+## Play-by-play processing
+
+### build_family {#build_family}
+
+`build_family(league: 'str') -> 'dict[str, Any]'`
+
+Return a dict of public callables for *league*.
+
+All callables are fully independent closures over the single `league`
+string; none share mutable state.  The dict is ready to be spread into
+a module namespace via `globals().update(...)`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `league` | `str` |  | HockeyTech league code: `"ahl"`, `"ohl"`, `"whl"`, or `"qmjhl"`. |
+
+**Returns**
+
+Keys are the public function names (e.g. `"ahl_schedule"`).
+
+## Dates and seasons
+
+### echl_season_id {#echl_season_id}
+
+`echl_season_id(return_as_pandas: 'bool' = False) -> 'Any'`
+
+All ECHL seasons with end-year + game-type labels.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `return_as_pandas` | `bool` | `False` |  |
+
+**Returns**
+
+
+| col_name | type | description |
+|---|---|---|
+| `season_id` | integer | Unique season identifier. |
+| `season_name` | character | Full season name (e.g., "2024-25 Regular Season"). |
+| `season_short` | character | Short season name. |
+| `career` | character | Whether this is a career-stats season. |
+| `playoff` | character | Whether the row is playoff statistics. |
+| `start_date` | character | Start date (YYYY-MM-DD). |
+| `end_date` | character | End date (YYYY-MM-DD). |
+| `season_yr` | integer | End year of the season the row belongs to, read from its name: "2025-26", "2025/26" and "2025-2026" are 2026, "26-27" is 2027, a compact "2425" is 2025. A preseason or exhibition named with the one year it starts in belongs to the next season ("2026 Pre-season" is 2027). Null when the name holds no year. |
+| `game_type_label` | character | Game type read from the season name, first match wins: "preseason" (pre-season, preseason), "playoffs" (playoff, post), "exhibition", else "regular". One-off events such as all-star games are labelled "regular" too; season resolution skips them. |
+
+### most_recent_echl_season {#most_recent_echl_season}
+
+`most_recent_echl_season() -> 'int'`
+
+Newest ECHL regular season as an end-year integer: the highest `season_yr` of a regular season that is not a one-off event, so a preseason listed first is not a default. Raises `NoDataError` when the seasons feed lists none, `AssetFetchError` when it fails.

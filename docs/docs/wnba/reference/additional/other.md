@@ -1,7 +1,7 @@
 ---
 title: "WNBA — additional Python functions — Other"
 sidebar_label: "Other"
-sidebar_position: 5
+sidebar_position: 6
 description: "WNBA — additional Python functions — Other — function reference in sdv-py, the SportsDataverse Python package."
 ---
 # WNBA — additional Python functions — Other
@@ -168,6 +168,209 @@ df = load_wnba_stats_team_season_stats(seasons=2026)
 print(df.shape)
 ```
 
+### wnba_aging_curve {#wnba_aging_curve}
+
+`wnba_aging_curve(*, return_as_pandas: 'bool' = False) -> "'pl.DataFrame | pd.DataFrame'"`
+
+WNBA aging curve -- the NBA core bound to `league="wnba"`.
+
+See `sportsdataverse.nba.nba_aging_curve.nba_aging_curve` for the
+full contract; this is a by-reference re-export, same algorithm, women's
+bundled artifact.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `return_as_pandas` | `bool` | `False` |  |
+
+**Returns**
+
+Frame `age:Int64, rel_value:Float64, peak_age:Float64`.
+
+| col_name | type | description |
+|---|---|---|
+| `age` | integer | Player age (in years). |
+| `rel_value` | double | Value multiplier for this age relative to the peak age: a delta-method curve chaining minutes-weighted within-player consecutive-age changes in per-100-possession box-score value, quadratic-smoothed and min-max scaled to [0.4, 1.0], so the peak age is exactly 1.0 and the lowest-valued age 0.4. |
+| `peak_age` | double | Age at which rel_value reaches its maximum of 1.0, repeated on every row for filtering and joining (29.0 in the bundled curve). |
+
+**Example**
+
+```python
+from sportsdataverse.wnba import wnba_aging_curve
+curve = wnba_aging_curve()
+```
+
+### wnba_career_trajectory {#wnba_career_trajectory}
+
+`wnba_career_trajectory(player_values: 'pl.DataFrame', *, return_as_pandas: 'bool' = False) -> "'pl.DataFrame | pd.DataFrame'"`
+
+WNBA career trajectory -- the NBA core bound to `league="wnba"`.
+
+See `sportsdataverse.nba.nba_aging_curve.nba_career_trajectory` for
+the full contract.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `player_values` | `DataFrame` |  | Frame `player_id, age:Int64, value:Float64`. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+`player_values` plus `age_adjusted_value` and `proj_next_value`.
+
+**Example**
+
+```python
+import polars as pl
+from sportsdataverse.wnba import wnba_career_trajectory
+player_values = pl.DataFrame({"player_id": ["1"], "age": [26], "value": [10.0]})
+wnba_career_trajectory(player_values)
+```
+
+### wnba_draft_model {#wnba_draft_model}
+
+`wnba_draft_model(draft_year: "'int | list[int]'", *, return_as_pandas: 'bool' = False) -> "'pl.DataFrame | pd.DataFrame'"`
+
+Project WNBA prospect career value + draft probability from draft slot.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `draft_year` | `int \| list[int]` |  | A draft year (e.g. `2023`) or list of years. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+Frame `player_id:Utf8, draft_year:Int64, proj_career_value:Float64, draft_prob:Float64, projected_pick:Int64, pro_tier:Utf8`. Empty input returns the zero-row schema, never raises.
+
+**Example**
+
+```python
+from sportsdataverse.wnba import wnba_draft_model
+board = wnba_draft_model(2023)
+```
+
+### wnba_in_game_win_prob {#wnba_in_game_win_prob}
+
+`wnba_in_game_win_prob(pbp: 'pl.DataFrame', pregame_home_prob: 'float', *, league_id: 'str' = '00', return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
+
+WNBA in-game win probability (league_id='10'). See sportsdataverse.nba.nba_game_predict.nba_in_game_win_prob.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `pbp` | `DataFrame` |  |  |
+| `pregame_home_prob` | `float` |  |  |
+| `league_id` | `str` | `'00'` |  |
+| `return_as_pandas` | `bool` | `False` |  |
+
+### wnba_predict_games {#wnba_predict_games}
+
+`wnba_predict_games(games: 'pl.DataFrame', ratings: 'pl.DataFrame', *, league_id: 'str' = '00', return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
+
+WNBA vectorized pregame predictions (league_id='10'). See sportsdataverse.nba.nba_game_predict.nba_predict_games.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `games` | `DataFrame` |  |  |
+| `ratings` | `DataFrame` |  |  |
+| `league_id` | `str` | `'00'` |  |
+| `return_as_pandas` | `bool` | `False` |  |
+
+### wnba_predict_margin {#wnba_predict_margin}
+
+`wnba_predict_margin(home_net: 'float', away_net: 'float', *, home_pace: 'float', away_pace: 'float', neutral: 'bool' = False, league_id: 'str' = '00') -> 'float'`
+
+WNBA expected margin (league_id='10'). See sportsdataverse.nba.nba_game_predict.predict_margin.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `home_net` | `float` |  |  |
+| `away_net` | `float` |  |  |
+| `home_pace` | `float` |  |  |
+| `away_pace` | `float` |  |  |
+| `neutral` | `bool` | `False` |  |
+| `league_id` | `str` | `'00'` |  |
+
+### wnba_predict_total {#wnba_predict_total}
+
+`wnba_predict_total(home_off: 'float', home_def: 'float', away_off: 'float', away_def: 'float', home_pace: 'float', away_pace: 'float', *, league_id: 'str' = '00') -> 'float'`
+
+WNBA expected total (league_id='10'). See sportsdataverse.nba.nba_game_predict.predict_total.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `home_off` | `float` |  |  |
+| `home_def` | `float` |  |  |
+| `away_off` | `float` |  |  |
+| `away_def` | `float` |  |  |
+| `home_pace` | `float` |  |  |
+| `away_pace` | `float` |  |  |
+| `league_id` | `str` | `'00'` |  |
+
+### wnba_rookie_projection {#wnba_rookie_projection}
+
+`wnba_rookie_projection(draft_year: "'int | list[int]'", *, return_as_pandas: 'bool' = False) -> "'pl.DataFrame | pd.DataFrame'"`
+
+WNBA rookie/sophomore projection -- composes the WNBA draft/aging/availability pieces.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `draft_year` | `int \| list[int]` |  | A draft year or list of years. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+Frame `player_id:Utf8, draft_year:Int64, proj_rookie_value:Float64, proj_soph_value:Float64, proj_rookie_min:Float64, proj_avail_pct:Float64, pro_tier:Utf8`. Empty input -> zero-row schema.
+
+**Example**
+
+```python
+from sportsdataverse.wnba import wnba_rookie_projection
+board = wnba_rookie_projection(2023)
+```
+
+### wnba_team_ratings {#wnba_team_ratings}
+
+`wnba_team_ratings(seasons: 'Union[int, list[int]]', *, league_id: 'str' = '00', as_of_date: 'Union[dt.date, None]' = None, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"`
+
+WNBA team ratings (league_id='10'). See sportsdataverse.nba.nba_team_ratings.nba_team_ratings.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `Union[int, list[int]]` |  |  |
+| `league_id` | `str` | `'00'` |  |
+| `as_of_date` | `Union[date, None]` | `None` |  |
+| `return_as_pandas` | `bool` | `False` |  |
+
+### wnba_win_prob_from_margin {#wnba_win_prob_from_margin}
+
+`wnba_win_prob_from_margin(exp_margin: 'float', *, league_id: 'str' = '00') -> 'float'`
+
+WNBA home win probability (league_id='10'). See sportsdataverse.nba.nba_game_predict.win_prob_from_margin.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `exp_margin` | `float` |  |  |
+| `league_id` | `str` | `'00'` |  |
+
 ### most_recent_wnba_season {#most_recent_wnba_season}
 
 `most_recent_wnba_season()`
@@ -190,319 +393,117 @@ cal = espn_wnba_calendar(season=season)
 print(season, cal.height)
 ```
 
-### build_athlete_identity_lookup {#build_athlete_identity_lookup}
+### wnba_player_crosswalk {#wnba_player_crosswalk}
 
-`build_athlete_identity_lookup(rosters: 'dict[int | str, dict]') -> 'dict[str, dict[str, Any]]'`
+`wnba_player_crosswalk(season: 'Optional[int]' = None, min_confidence: 'float' = 0.92, *, return_as_pandas: 'bool' = False, strict: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame']"`
 
-R `build_athlete_identity_lookup`: athlete_id -> identity from team rosters.
+Build the WNBA cross-source player crosswalk (ESPN / WNBA Stats / Fox).
 
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `rosters` | `dict[int \| str, dict]` |  | Mapping of team_id -> that team's raw roster payload (`wbb/team_rosters/json/{season}/{team_id}.json`). NOTE: R walks `raw$athletes` directly here (no position-bucket unwrap, unlike the rosters dataset itself). |
-
-**Returns**
-
-athlete_id (str) -> identity fields for `helper_wbb_player_season_stats`.
-
-### build_wnba_season_wp {#build_wnba_season_wp}
-
-`build_wnba_season_wp(season: 'int', *, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"`
-
-A WNBA season's play-by-play with win-probability columns joined in.
-
-Loads the season's play-by-play, schedule, and team boxscores, builds a
-leakage-free weekly as-of pregame anchor per game from the WNBA ratings
-engine (`league_id="10"`), scores every play through the bundled
-in-game win-probability artifact, and returns the full `load_wnba_pbp`
-frame with `pregame_home_prob` + `home_win_prob` appended -- the
-enrich-in-place shape that overwrites the season's
-`play_by_play_<season>.parquet` release asset.
+One row per ESPN athlete per team. `match_method` / `match_confidence`
+describe the **Stats API** match (normalized exact name, then
+Jaro-Winkler with jersey and DOB tiebreaks); Fox contributes
+`fox_athlete_id` only.
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `season` | `int` |  | Season year (e.g. `2024`); bounded by `load_wnba_pbp` release availability. |
-| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+| `season` | `Optional[int]` | `None` | Season year (e.g. `2026`). Defaults to the most recent WNBA season. |
+| `min_confidence` | `float` | `0.92` | Jaro-Winkler floor for fuzzy matches (R default 0.92). |
+| `return_as_pandas` | `bool` | `False` | Return pandas instead of polars. |
+| `strict` | `bool` | `False` | Raise on the first failed per-team ESPN or Fox roster fetch (a 404 is still skipped) instead of skipping isolated failures. Default `False` matches the R producers; a provider whose every item failed raises either way. An item the host *answered* -- including a 404 -- counts as answered. |
 
 **Returns**
 
-The season's `load_wnba_pbp` frame (every column preserved) with the two WP columns `pregame_home_prob` + `home_win_prob` appended (both `Float64`), sorted by `game_id` then `game_play_number`.
+`pl.DataFrame` (or pandas), one row per ESPN athlete, 21 columns.
 
 **Example**
 
 ```python
-from sportsdataverse.wnba import build_wnba_season_wp
-wp = build_wnba_season_wp(2024)
-wp.select("game_id", "game_play_number", "home_win_prob").head()
+from sportsdataverse.wnba import wnba_player_crosswalk
+df = wnba_player_crosswalk(season=2026)
+print(df["match_method"].value_counts())
 
-# Pandas output
+# Tighten the fuzzy floor
 
-wp_pd = build_wnba_season_wp(2024, return_as_pandas=True)
-```
-
-### espn_wnba_teams {#espn_wnba_teams}
-
-`espn_wnba_teams(return_as_pandas=False, **kwargs) -> 'pl.DataFrame'`
-
-espn_wnba_teams - look up WNBA teams
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `return_as_pandas` | `bool` | `False` | If True, returns a pandas dataframe. If False, returns a polars dataframe. |
-
-**Returns**
-
-Polars dataframe containing teams for the requested league. This function caches by default, so if you want to refresh the data, use the command sportsdataverse.wnba.espn_wnba_teams.clear_cache().
-
-| col_name | type | description |
-|---|---|---|
-| `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
-| `team_alternate_color` | character | Team alternate color (hex without leading '#'). |
-| `team_color` | character | Team primary color (hex without leading '#'). |
-| `team_display_name` | character | Full team display name. |
-| `team_id` | character | Unique team identifier. |
-| `team_is_active` | logical | TRUE if the team is currently active. |
-| `team_is_all_star` | logical | TRUE if the row represents an All-Star team. |
-| `team_location` | character | Team city or location string. |
-| `team_logos` | integer | Team logo metadata. |
-| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
-| `team_nickname` | character | Team nickname. |
-| `team_short_display_name` | character | Short team display name (e.g. 'Aces'). |
-| `team_slug` | character | URL-safe team identifier (e.g. 'lasvegas-aces' / 'aces'). |
-| `team_uid` | character | ESPN universal team identifier (UID format 's:40~l:...~t:...'). |
-
-**Example**
-
-```python
-from sportsdataverse.wnba import espn_wnba_teams
-teams = espn_wnba_teams()
-print(teams.shape)
-teams.select(["team_id", "team_abbreviation", "team_display_name"]).head()
-
-# Find Las Vegas Aces (team_id 17)
-
-teams.filter(__import__("polars").col("team_id") == "17").to_dicts()
-
-# Refresh the cache (the call is ``lru_cache``'d)
-
-espn_wnba_teams.cache_clear()  # cached at function-level
-teams_pd = espn_wnba_teams(return_as_pandas=True)
-```
-
-### make_prob_by_context {#make_prob_by_context}
-
-`make_prob_by_context(ptshots: 'pl.DataFrame', *, return_as_pandas: 'bool' = False) -> "'dict[str, Union[pl.DataFrame, pd.DataFrame]]'"`
-
-Marginal FG% tables by defender distance and by shot clock.
-
-The public API exposes defender-distance and shot-clock only as aggregate
-bucket tables (`playerdashptshots`), not per-shot fields, so this
-aggregates `Σfgm/Σfga` across players within each bucket.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `ptshots` | `DataFrame` |  | The stacked `playerdashptshots` fixture — one frame with a `result_set` tag (`ClosestDefenderShooting` / `ShotClockShooting`) plus `bucket, fga, fgm`. |
-| `return_as_pandas` | `bool` | `False` | Return pandas DataFrames instead of polars. |
-
-**Returns**
-
-`{"defender": frame, "shot_clock": frame}` each with rows per `bucket` (`bucket, fga, fgm, fg_pct`). Missing result sets return the zero-row schema.
-
-**Example**
-
-```python
-from sportsdataverse.nba.nba_shot_value import make_prob_by_context
-tables = make_prob_by_context(ptshots)
-tables["defender"].sort("fg_pct")
-```
-
-### make_prob_joint {#make_prob_joint}
-
-`make_prob_joint(defender: 'pl.DataFrame', shot_clock: 'pl.DataFrame', overall_fg_pct: 'float', *, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"`
-
-Independence-combined defender x shot-clock make probability.
-
-Combines the two marginal FG% tables under a conditional-independence
-assumption via odds multipliers: `odds(p) = p/(1-p)`;
-`odds_joint = odds_overall * (odds_def/odds_overall) *
-(odds_clock/odds_overall)`; `joint = odds_joint/(1+odds_joint)`. This
-assumes defender distance and shot-clock effects are independent given the
-league baseline — a simplification (a late clock correlates with tighter
-defense), documented here so callers weigh it.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `defender` | `DataFrame` |  | The `"defender"` marginal table from `make_prob_by_context` (`bucket, fg_pct`). |
-| `shot_clock` | `DataFrame` |  | The `"shot_clock"` marginal table (`bucket, fg_pct`). |
-| `overall_fg_pct` | `float` |  | The league overall FG% baseline. |
-| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
-
-**Returns**
-
-One row per `(close_def_dist_range, shot_clock_range)`: `close_def_dist_range:Utf8, shot_clock_range:Utf8, joint_fg_pct:Float64`. Empty inputs return the zero-row schema.
-
-**Example**
-
-```python
-from sportsdataverse.nba.nba_shot_value import make_prob_by_context, make_prob_joint
-t = make_prob_by_context(ptshots)
-joint = make_prob_joint(t["defender"], t["shot_clock"], 0.47)
-```
-
-### score_shot_xpoints {#score_shot_xpoints}
-
-`score_shot_xpoints(shots: 'pl.DataFrame', league_avgs: 'pl.DataFrame', *, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"`
-
-Score each shot with expected points from the league-average baseline.
-
-Joins the per-shot frame to the zone baseline (falling back to the
-within-`shot_zone_range` mean when a zone triple is unmatched) and adds
-`shot_value` (3 for a `3PT` shot else 2), `xpoints = base_fg_pct *
-shot_value`, and `actual_points = shot_made_flag * shot_value`.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `shots` | `DataFrame` |  | Per-shot `Shot_Chart_Detail` frame (needs `shot_type` + the three zone keys + `shot_made_flag`). |
-| `league_avgs` | `DataFrame` |  | The `LeagueAverages` frame (see `xpoints_baseline`). |
-| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
-
-**Returns**
-
-The input `shots` plus `shot_value:Int64, base_fg_pct:Float64, xpoints:Float64, actual_points:Float64`. Empty input returns the augmented schema with zero rows.
-
-**Example**
-
-```python
-from sportsdataverse.nba.nba_shot_value import score_shot_xpoints
-scored = score_shot_xpoints(shots, league_avgs)
+strict = wnba_player_crosswalk(season=2026, min_confidence=0.97)
 
 # Pipeline next step (one line)
 
-scored.group_by("player_id").agg(pl.col("xpoints").sum())
+df.filter(pl.col("match_method") == "fuzzy_jw").head()
 ```
 
-### scoreboard_event_parsing {#scoreboard_event_parsing}
+### wnba_schedule_crosswalk {#wnba_schedule_crosswalk}
 
-`scoreboard_event_parsing(event)`
+`wnba_schedule_crosswalk(season: 'Optional[int]' = None, *, stats_games: 'Optional[pl.DataFrame]' = None, return_as_pandas: 'bool' = False, strict: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame']"`
 
-_No description available._
+Build the WNBA cross-source schedule crosswalk (ESPN / WNBA Stats).
 
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `event` |  |  |  |
-
-### shooter_talent {#shooter_talent}
-
-`shooter_talent(scored_shots: 'pl.DataFrame', *, league_id: 'str' = '00', min_attempts: 'int' = 50, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"`
-
-Regressed shooter true-talent: make%-above-expected, shrunk to the mean.
-
-Aggregates `score_shot_xpoints` output per shooter and regresses the
-raw over-expected rate toward zero by `n/(n+k)` (`k =
-get_shrinkage_k(league_id)`, fitted split-half). **As-of leakage
-boundary:** to score a shooter's talent for shots after date *D*, pass
-only that shooter's shots before *D* -- this function does not enforce the
-cut itself.
+One row per game, joined on `(game_date, home_espn_team_id,
+away_espn_team_id)` after both sides reduce to the Eastern-Time date. The
+Stats CDN serves the current season only, so the live builder is
+effectively current-season.
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `scored_shots` | `DataFrame` |  | `score_shot_xpoints` output (needs `player_id`, `shot_made_flag`, `base_fg_pct`, `xpoints`, `actual_points`). |
-| `league_id` | `str` | `'00'` | `"00"` NBA, `"10"` WNBA, `"20"` G-League. |
-| `min_attempts` | `int` | `50` | Drop shooters with fewer attempts (unstable estimate). |
-| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+| `season` | `Optional[int]` | `None` | Season year (e.g. `2026`). Defaults to the most recent WNBA season. |
+| `stats_games` | `Optional[DataFrame]` | `None` | Pre-fetched Stats schedule frame; `None` fetches live. |
+| `return_as_pandas` | `bool` | `False` | Return pandas instead of polars. |
+| `strict` | `bool` | `False` | Raise on the first failed per-date ESPN scoreboard fetch (a 404 is still skipped) instead of skipping isolated failures. Default `False` matches the R producers; a provider whose every item failed raises either way. An item the host *answered* -- including a 404 -- counts as answered. |
 
 **Returns**
 
-One row per `player_id`: `player_id:Int64, n_att:Int64, actual_makes:Int64, exp_makes:Float64, points_above_expected:Float64, raw_above_pct:Float64, talent_pct:Float64`. Empty input returns the zero-row schema.
+`pl.DataFrame` (or pandas) with `SCHEDULE_COLUMNS`.
 
 **Example**
 
 ```python
-from sportsdataverse.nba.nba_shot_value import score_shot_xpoints, shooter_talent
-talent = shooter_talent(score_shot_xpoints(shots, league_avgs))
+from sportsdataverse.wnba import wnba_schedule_crosswalk
+df = wnba_schedule_crosswalk(season=2026)
+print(df["match_method"].value_counts())
 
 # Pipeline next step (one line)
 
-talent.sort("talent_pct", descending=True).head(15)
+df.filter(pl.col("match_method") == "both").select("espn_game_id", "wnba_game_id").head()
 ```
 
-### shot_selection_quality {#shot_selection_quality}
+### wnba_team_crosswalk {#wnba_team_crosswalk}
 
-`shot_selection_quality(scored_shots: 'pl.DataFrame', *, min_attempts: 'int' = 50, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"`
+`wnba_team_crosswalk(season: 'Optional[int]' = None, *, stats: 'Optional[pl.DataFrame]' = None, fox: 'Optional[pl.DataFrame]' = None, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame']"`
 
-Player shot-selection quality: mean expected value vs the league mean.
+Build the WNBA cross-source team crosswalk (ESPN / WNBA Stats / Fox).
 
-`xev_per_shot` is a player's mean `xpoints` (the value of the LOOKS
-they take, independent of makes); `selection_quality` is that minus the
-league-wide mean `xpoints` over the same frame -- a rim-and-three diet
-scores positive, a mid-range diet negative.
+One row per ESPN team, keyed on `espn_team_id`. The Stats side is
+derived from the season schedule's home/away team fields (as in wehoop)
+and joined on the normalized `city + name`.
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `scored_shots` | `DataFrame` |  | `score_shot_xpoints` output (needs `player_id`, `xpoints`). |
-| `min_attempts` | `int` | `50` | Drop players with fewer attempts. |
-| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+| `season` | `Optional[int]` | `None` | Season year (e.g. `2026`). Defaults to the most recent WNBA season. |
+| `stats` | `Optional[DataFrame]` | `None` | Pre-fetched Stats team directory. `None` derives it from the Stats schedule. |
+| `fox` | `Optional[DataFrame]` | `None` | Pre-fetched `fox_wnba_teams()` frame. `None` fetches live. |
+| `return_as_pandas` | `bool` | `False` | Return pandas instead of polars. |
 
 **Returns**
 
-One row per `player_id`: `player_id:Int64, n_att:Int64, xev_per_shot:Float64, league_xev_per_shot:Float64, selection_quality:Float64`. Empty input returns the zero-row schema.
+`pl.DataFrame` (or pandas), one row per ESPN team, with `TEAM_COLUMNS`.
 
 **Example**
 
 ```python
-from sportsdataverse.nba.nba_shot_value import score_shot_xpoints, shot_selection_quality
-sel = shot_selection_quality(score_shot_xpoints(shots, league_avgs))
+from sportsdataverse.wnba import wnba_team_crosswalk
+df = wnba_team_crosswalk(season=2026)
+print(df.shape)
+
+# Offline with pre-fetched provider frames
+
+df = wnba_team_crosswalk(season=2026, stats=my_stats, fox=my_fox)
 
 # Pipeline next step (one line)
 
-sel.sort("selection_quality", descending=True).head(15)
-```
-
-### zone_value_map {#zone_value_map}
-
-`zone_value_map(scored_shots: 'pl.DataFrame', *, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"`
-
-Per-player per-zone value map: points and expected points per shot.
-
-Collapses `shot_zone_basic` to a canonical zone via `ZONE_COLLAPSE`
-(the two corner-3 zones merge) and aggregates realized vs expected points
-per shot in each zone.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `scored_shots` | `DataFrame` |  | `score_shot_xpoints` output (needs `player_id`, `shot_zone_basic`, `shot_made_flag`, `actual_points`, `xpoints`). |
-| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
-
-**Returns**
-
-One row per `(player_id, zone)`: `player_id:Int64, zone:Utf8, att:Int64, makes:Int64, pts:Float64, pps:Float64, xpps:Float64, pps_above_expected:Float64` (`pps` = points per shot, `xpps` = expected). Empty input returns the zero-row schema.
-
-**Example**
-
-```python
-from sportsdataverse.nba.nba_shot_value import score_shot_xpoints, zone_value_map
-zmap = zone_value_map(score_shot_xpoints(shots, league_avgs))
-
-# Pipeline next step (one line)
-
-zmap.filter(pl.col("zone") == "corner_3").sort("pps_above_expected", descending=True)
+df.select("espn_team_id", "wnba_team_id", "match_method").head()
 ```

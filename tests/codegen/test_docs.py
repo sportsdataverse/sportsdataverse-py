@@ -82,11 +82,12 @@ def test_highlighted_names_is_always_empty_for_the_global_scope():
     assert generate._highlighted_names(None, ["espn_mbb_schedule"]) == set()
 
 
-def test_autodoc_family_checks_highlighted_before_the_keyword_rules():
-    # espn_mbb_schedule would otherwise classify as "Play-by-play, schedule & rosters"
-    # (it matches the _ESPN_PBP_FAMILY_TOKENS "_schedule" token) -- Highlights wins.
-    assert generate._autodoc_family("espn_mbb_schedule") == "Play-by-play, schedule & rosters"
-    assert generate._autodoc_family("espn_mbb_schedule", frozenset({"espn_mbb_schedule"})) == "Highlights"
+def test_autodoc_family_checks_highlighted_before_the_registry():
+    # espn_mbb_schedule resolves to the ESPN provider through sources.yaml (0.1.5 replaced the
+    # name-token families); a curated "start here" pick is still pulled out into Highlights.
+    mod = "sportsdataverse.mbb.mbb_schedule"
+    assert generate._autodoc_family("espn_mbb_schedule", module=mod) == "ESPN"
+    assert generate._autodoc_family("espn_mbb_schedule", frozenset({"espn_mbb_schedule"}), module=mod) == "Highlights"
 
 
 def test_render_league_index_highlights_row_and_additional_count_do_not_overlap():

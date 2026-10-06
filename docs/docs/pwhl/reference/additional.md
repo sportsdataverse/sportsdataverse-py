@@ -9,7 +9,7 @@ sidebar_position: 50
 Hand-written wrappers, loaders, and helpers in `sportsdataverse.pwhl`
 not covered by the generated API-endpoint reference above.
 
-## Dataset loaders
+## sportsdataverse-data releases
 
 ### load_pwhl_games {#load_pwhl_games}
 
@@ -136,172 +136,7 @@ Alias of load_pwhl_team_boxscores() for naming parity with fastRhockey (R).
 | `seasons` |  |  |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
-## Utilities & helpers
-
-### most_recent_pwhl_season {#most_recent_pwhl_season}
-
-`most_recent_pwhl_season() -> 'int'`
-
-Newest PWHL regular season as an end-year integer.
-
-The highest `season_yr` of a regular season that is not a one-off event, so a
-preseason the feed lists before its regular season is not a default.
-
-Raises `NoDataError` when the seasons feed lists none, `AssetFetchError` when it fails.
-
-## Other
-
-### LeagueConstants {#LeagueConstants}
-
-`LeagueConstants(hfa: 'float', margin_sd: 'float', avg_xgf: 'float', avg_total_goals: 'float', total_scale: 'float', shrink_k: 'float', prop_kappa: 'dict', pos_priors: 'dict', prop_team_volume_slope: 'float', in_game_wp_artifact: 'str', min_season: 'int') -> None`
-
-Fitted, league-specific constants for the NHL/PWHL prediction spine.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `hfa` | `float` |  | home-ice edge, expected-goals units. |
-| `margin_sd` | `float` |  | standard deviation of the final goal margin (deliberately WIDE for hockey). |
-| `avg_xgf` | `float` |  | league mean even-strength xG-for, per game. |
-| `avg_total_goals` | `float` |  | league mean total goals per game. |
-| `total_scale` | `float` |  | multiplier converting rating differential to total-goals deviation. |
-| `shrink_k` | `float` |  | games-played prior strength for rating shrinkage. |
-| `prop_kappa` | `dict` |  | empirical-Bayes shrinkage strength per player-prop stat family. |
-| `pos_priors` | `dict` |  | per-position (F/D) per-stat-family prior rates. |
-| `prop_team_volume_slope` | `float` |  | game-script tilt on a player-prop projection (favored team -> fewer late shots-for). SEEDED PLACEHOLDER (~0.04), not yet fitted -- a future prop-fit task should estimate it from the realized shots-vs-exp_margin slope, mirroring how fit_props.py fits prop_kappa/pos_priors. |
-| `in_game_wp_artifact` | `str` |  | filename of the bundled in-game win-probability model under `sportsdataverse/nhl/models/`. |
-| `min_season` | `int` |  | earliest season this league's prediction spine supports. |
-
-### as_of_ratings_split {#as_of_ratings_split}
-
-`as_of_ratings_split(df: 'pl.DataFrame', cutoff_date: '_dt.date', *, date_col: 'str' = 'date') -> 'pl.DataFrame'`
-
-Filter a frame to rows strictly before `cutoff_date` (the leakage boundary).
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `df` | `DataFrame` |  | a polars DataFrame with a date column. |
-| `cutoff_date` | `date` |  | the game date being predicted; only strictly-earlier rows are kept. |
-| `date_col` | `str` | `'date'` | name of the date column (default `"date"`). |
-
-**Returns**
-
-The subset of `df` with `df[date_col] < cutoff_date`.
-
-**Example**
-
-```python
-import datetime as dt
-import polars as pl
-from sportsdataverse.nhl.nhl_prediction_constants import as_of_ratings_split
-df = pl.DataFrame({"date": [dt.date(2023, 1, 1), dt.date(2023, 1, 2)]})
-as_of_ratings_split(df, dt.date(2023, 1, 2))
-```
-
-### brier_score {#brier_score}
-
-`brier_score(y_true: 'np.ndarray', p_pred: 'np.ndarray') -> 'float'`
-
-Mean squared error between predicted probabilities and binary outcomes.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `y_true` | `ndarray` |  | Array of binary outcomes (0/1). |
-| `p_pred` | `ndarray` |  | Array of predicted probabilities in [0, 1]. |
-
-**Returns**
-
-The Brier score (0.0 is a perfect forecast).
-
-**Example**
-
-```python
-import numpy as np
-from sportsdataverse._common.metrics import brier_score
-brier_score(np.array([1, 0]), np.array([0.9, 0.1]))
-```
-
-### calibration_table {#calibration_table}
-
-`calibration_table(y_true: 'np.ndarray', p_pred: 'np.ndarray', n_bins: 'int' = 10) -> 'pl.DataFrame'`
-
-Bucket predicted probabilities into bins and compare to actual outcome rates.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `y_true` | `ndarray` |  | Array of binary outcomes (0/1). |
-| `p_pred` | `ndarray` |  | Array of predicted probabilities in [0, 1]. |
-| `n_bins` | `int` | `10` | Number of equal-width probability bins. |
-
-**Returns**
-
-A `polars.DataFrame` with columns `bin_mid`, `mean_pred`, `mean_actual`, `n` (one row per non-empty bin).
-
-**Example**
-
-```python
-import numpy as np
-from sportsdataverse._common.metrics import calibration_table
-calibration_table(np.array([1, 0, 1, 0]), np.array([0.9, 0.1, 0.8, 0.2]))
-```
-
-### log_loss_score {#log_loss_score}
-
-`log_loss_score(y_true: 'np.ndarray', p_pred: 'np.ndarray', eps: 'float' = 1e-15) -> 'float'`
-
-Binary cross-entropy loss between predicted probabilities and outcomes.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `y_true` | `ndarray` |  | Array of binary outcomes (0/1). |
-| `p_pred` | `ndarray` |  | Array of predicted probabilities in [0, 1]. |
-| `eps` | `float` | `1e-15` | Clipping bound to avoid `log(0)`. |
-
-**Returns**
-
-The mean log loss.
-
-**Example**
-
-```python
-import numpy as np
-from sportsdataverse._common.metrics import log_loss_score
-log_loss_score(np.array([1, 0]), np.array([0.9, 0.1]))
-```
-
-### mae {#mae}
-
-`mae(a: 'np.ndarray', b: 'np.ndarray') -> 'float'`
-
-Mean absolute error between two arrays.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `a` | `ndarray` |  | First array of values. |
-| `b` | `ndarray` |  | Second array of values (same length as `a`). |
-
-**Returns**
-
-The mean absolute error.
-
-**Example**
-
-```python
-import numpy as np
-from sportsdataverse._common.metrics import mae
-mae(np.array([1.0, 2.0]), np.array([1.5, 2.5]))
-```
+## HockeyTech / LeagueStat
 
 ### pwhl_game_corsi {#pwhl_game_corsi}
 
@@ -405,65 +240,6 @@ PWHL game summary — dict of frames (game/goals/penalties/shots_by_period/three
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `game_id` | `int` |  |  |
-
-### pwhl_game_total {#pwhl_game_total}
-
-`pwhl_game_total(games: 'Any', ratings: 'Any', *, league: 'str' = 'pwhl', **kwargs: 'Any') -> 'Any'`
-
-PWHL per-game expected total goals (re-export of the expected-goals helper).
-
-Delegates to `sportsdataverse.nhl.nhl_player_props.nhl_game_total`
-with `league="pwhl"` defaulted.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `games` | `Any` |  | a schedule-shaped frame. |
-| `ratings` | `Any` |  | a `pwhl_team_ratings`-shaped frame. |
-| `league` | `str` | `'pwhl'` | league key (defaults to `"pwhl"`). |
-
-**Returns**
-
-The NHL core's `game_id`/`exp_total` frame, computed with PWHL constants.
-
-**Example**
-
-```python
-from sportsdataverse.pwhl.pwhl_player_props import pwhl_game_total
-totals = pwhl_game_total(games, ratings)
-```
-
-### pwhl_in_game_win_prob {#pwhl_in_game_win_prob}
-
-`pwhl_in_game_win_prob(pbp: 'Any', pregame_home_prob: 'float', *, league: 'str' = 'pwhl', **kwargs: 'Any') -> 'Any'`
-
-PWHL per-play live home win probability from the bundled in-game model.
-
-Delegates to `sportsdataverse.nhl.nhl_market.nhl_in_game_win_prob`
-with `league="pwhl"` defaulted. NOTE: requires a committed
-`pwhl_in_game_wp` artifact, deferred until PWHL data lands (see module
-docstring); calling it before then raises a clear `FileNotFoundError`
-from the artifact loader, not a silent bad result.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `pbp` | `Any` |  | a play-by-play frame shaped like `load_nhl_pbp_full`. |
-| `pregame_home_prob` | `float` |  | the pregame home win probability anchor. |
-| `league` | `str` | `'pwhl'` | league key (defaults to `"pwhl"`). |
-
-**Returns**
-
-The NHL core's per-play `home_win_prob` frame.
-
-**Example**
-
-```python
-from sportsdataverse.pwhl.pwhl_market import pwhl_in_game_win_prob
-wp = pwhl_in_game_win_prob(pbp, pregame_home_prob=0.5)
-```
 
 ### pwhl_leaders {#pwhl_leaders}
 
@@ -584,33 +360,6 @@ NOTE: returns an empty frame pending a captured fixture + correct endpoint wirin
 |---|---|---|---|
 | `player_id` | `int` |  |  |
 | `return_as_pandas` | `bool` | `False` |  |
-
-### pwhl_player_props {#pwhl_player_props}
-
-`pwhl_player_props(seasons: 'Any', *, league: 'str' = 'pwhl', **kwargs: 'Any') -> 'Any'`
-
-PWHL empirical-Bayes shots/points player-prop projections.
-
-Delegates to `sportsdataverse.nhl.nhl_player_props.nhl_player_props`
-with `league="pwhl"` defaulted.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `seasons` | `Any` |  | an int or iterable of seasons. |
-| `league` | `str` | `'pwhl'` | league key (defaults to `"pwhl"`). |
-
-**Returns**
-
-The NHL core's per-(player, game, stat) projection frame.
-
-**Example**
-
-```python
-from sportsdataverse.pwhl.pwhl_player_props import pwhl_player_props
-props = pwhl_player_props(2024)
-```
 
 ### pwhl_player_search {#pwhl_player_search}
 
@@ -775,34 +524,6 @@ Raises `NoDataError` when the seasons feed lists no playoff season.
 | `season_id` | `Optional[int]` | `None` |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
-### pwhl_predict_games {#pwhl_predict_games}
-
-`pwhl_predict_games(games: 'Any', ratings: 'Any', *, league: 'str' = 'pwhl', **kwargs: 'Any') -> 'Any'`
-
-PWHL vectorized pregame margin/win-prob/total (+ market edge).
-
-Delegates to `sportsdataverse.nhl.nhl_market.nhl_predict_games` with
-`league="pwhl"` defaulted.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `games` | `Any` |  | a schedule-shaped frame (`game_id`, `home_team`, `away_team`, `neutral_site`). |
-| `ratings` | `Any` |  | a `pwhl_team_ratings`-shaped frame. |
-| `league` | `str` | `'pwhl'` | league key (defaults to `"pwhl"`). |
-
-**Returns**
-
-The NHL core's per-game prediction frame, computed with PWHL constants.
-
-**Example**
-
-```python
-from sportsdataverse.pwhl.pwhl_market import pwhl_predict_games
-preds = pwhl_predict_games(games, ratings)
-```
-
 ### pwhl_schedule {#pwhl_schedule}
 
 `pwhl_schedule(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'`
@@ -917,33 +638,6 @@ PWHL live scorebar (today ± 3 days).
 | `visitor_logo` | character | URL of the logo image for the visiting team. |
 | `flo_hockey_url` | character | URL to the FloHockey streaming page for this PWHL game. |
 | `combined_client_code` | character | Combined league-and-client identifier string used by the HockeyTech feed to distinguish multi-tenant deployments. |
-
-### pwhl_season_id {#pwhl_season_id}
-
-`pwhl_season_id(return_as_pandas: 'bool' = False) -> 'Any'`
-
-All PWHL seasons with end-year + game-type labels (HockeyTech `seasons`).
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `return_as_pandas` | `bool` | `False` |  |
-
-**Returns**
-
-
-| col_name | type | description |
-|---|---|---|
-| `season_id` | integer | Season identifier. |
-| `season_name` | character | Full season name (e.g., "2024-25 Regular Season"). |
-| `season_short` | character | Short season name. |
-| `career` | character | Whether this is a career-stats season. |
-| `playoff` | character | Whether the row is playoff statistics. |
-| `start_date` | character | Season start date. |
-| `end_date` | character | Season end date. |
-| `season_yr` | integer | End year of the season the row belongs to, read from its name: "2025-26", "2025/26" and "2025-2026" are 2026, "26-27" is 2027, a compact "2425" is 2025. A preseason or exhibition named with the one year it starts in belongs to the next season ("2026 Pre-season" is 2027). Null when the name holds no year. |
-| `game_type_label` | character | Game type read from the season name, first match wins: "preseason" (pre-season, preseason), "playoffs" (playoff, post), "exhibition", else "regular". One-off events such as all-star games are labelled "regular" too; season resolution skips them. |
 
 ### pwhl_skater_rapm {#pwhl_skater_rapm}
 
@@ -1189,34 +883,6 @@ Current PWHL player/team streaks — **non-functional: no such upstream view**.
 
 An empty frame (the upstream view does not exist).
 
-### pwhl_team_ratings {#pwhl_team_ratings}
-
-`pwhl_team_ratings(seasons: 'Any', *, league: 'str' = 'pwhl', **kwargs: 'Any') -> 'Any'`
-
-PWHL opponent-adjusted, shrunk even-strength xG team ratings.
-
-Delegates to `sportsdataverse.nhl.nhl_team_ratings.nhl_team_ratings`
-with `league="pwhl"` defaulted. Oracle gate deferred (no xG-bearing
-PWHL pbp yet -- see module docstring).
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `seasons` | `Any` |  | an int or iterable of seasons. |
-| `league` | `str` | `'pwhl'` | league key (defaults to `"pwhl"`). |
-
-**Returns**
-
-The NHL core's ratings frame, computed with PWHL constants.
-
-**Example**
-
-```python
-from sportsdataverse.pwhl.pwhl_team_ratings import pwhl_team_ratings
-ratings = pwhl_team_ratings(2024)
-```
-
 ### pwhl_team_roster {#pwhl_team_roster}
 
 `pwhl_team_roster(team_id: 'int', season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'`
@@ -1349,6 +1015,188 @@ from sportsdataverse.pwhl.pwhl_player_impact import pwhl_unit_ratings
 units = pwhl_unit_ratings(pbp, shifts)
 ```
 
+## Models and calculators
+
+### LeagueConstants {#LeagueConstants}
+
+`LeagueConstants(hfa: 'float', margin_sd: 'float', avg_xgf: 'float', avg_total_goals: 'float', total_scale: 'float', shrink_k: 'float', prop_kappa: 'dict', pos_priors: 'dict', prop_team_volume_slope: 'float', in_game_wp_artifact: 'str', min_season: 'int') -> None`
+
+Fitted, league-specific constants for the NHL/PWHL prediction spine.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `hfa` | `float` |  | home-ice edge, expected-goals units. |
+| `margin_sd` | `float` |  | standard deviation of the final goal margin (deliberately WIDE for hockey). |
+| `avg_xgf` | `float` |  | league mean even-strength xG-for, per game. |
+| `avg_total_goals` | `float` |  | league mean total goals per game. |
+| `total_scale` | `float` |  | multiplier converting rating differential to total-goals deviation. |
+| `shrink_k` | `float` |  | games-played prior strength for rating shrinkage. |
+| `prop_kappa` | `dict` |  | empirical-Bayes shrinkage strength per player-prop stat family. |
+| `pos_priors` | `dict` |  | per-position (F/D) per-stat-family prior rates. |
+| `prop_team_volume_slope` | `float` |  | game-script tilt on a player-prop projection (favored team -> fewer late shots-for). SEEDED PLACEHOLDER (~0.04), not yet fitted -- a future prop-fit task should estimate it from the realized shots-vs-exp_margin slope, mirroring how fit_props.py fits prop_kappa/pos_priors. |
+| `in_game_wp_artifact` | `str` |  | filename of the bundled in-game win-probability model under `sportsdataverse/nhl/models/`. |
+| `min_season` | `int` |  | earliest season this league's prediction spine supports. |
+
+### as_of_ratings_split {#as_of_ratings_split}
+
+`as_of_ratings_split(df: 'pl.DataFrame', cutoff_date: '_dt.date', *, date_col: 'str' = 'date') -> 'pl.DataFrame'`
+
+Filter a frame to rows strictly before `cutoff_date` (the leakage boundary).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `df` | `DataFrame` |  | a polars DataFrame with a date column. |
+| `cutoff_date` | `date` |  | the game date being predicted; only strictly-earlier rows are kept. |
+| `date_col` | `str` | `'date'` | name of the date column (default `"date"`). |
+
+**Returns**
+
+The subset of `df` with `df[date_col] < cutoff_date`.
+
+**Example**
+
+```python
+import datetime as dt
+import polars as pl
+from sportsdataverse.nhl.nhl_prediction_constants import as_of_ratings_split
+df = pl.DataFrame({"date": [dt.date(2023, 1, 1), dt.date(2023, 1, 2)]})
+as_of_ratings_split(df, dt.date(2023, 1, 2))
+```
+
+### brier_score {#brier_score}
+
+`brier_score(y_true: 'np.ndarray', p_pred: 'np.ndarray') -> 'float'`
+
+Mean squared error between predicted probabilities and binary outcomes.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `y_true` | `ndarray` |  | Array of binary outcomes (0/1). |
+| `p_pred` | `ndarray` |  | Array of predicted probabilities in [0, 1]. |
+
+**Returns**
+
+The Brier score (0.0 is a perfect forecast).
+
+**Example**
+
+```python
+import numpy as np
+from sportsdataverse._common.metrics import brier_score
+brier_score(np.array([1, 0]), np.array([0.9, 0.1]))
+```
+
+### calibration_table {#calibration_table}
+
+`calibration_table(y_true: 'np.ndarray', p_pred: 'np.ndarray', n_bins: 'int' = 10) -> 'pl.DataFrame'`
+
+Bucket predicted probabilities into bins and compare to actual outcome rates.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `y_true` | `ndarray` |  | Array of binary outcomes (0/1). |
+| `p_pred` | `ndarray` |  | Array of predicted probabilities in [0, 1]. |
+| `n_bins` | `int` | `10` | Number of equal-width probability bins. |
+
+**Returns**
+
+A `polars.DataFrame` with columns `bin_mid`, `mean_pred`, `mean_actual`, `n` (one row per non-empty bin).
+
+**Example**
+
+```python
+import numpy as np
+from sportsdataverse._common.metrics import calibration_table
+calibration_table(np.array([1, 0, 1, 0]), np.array([0.9, 0.1, 0.8, 0.2]))
+```
+
+### log_loss_score {#log_loss_score}
+
+`log_loss_score(y_true: 'np.ndarray', p_pred: 'np.ndarray', eps: 'float' = 1e-15) -> 'float'`
+
+Binary cross-entropy loss between predicted probabilities and outcomes.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `y_true` | `ndarray` |  | Array of binary outcomes (0/1). |
+| `p_pred` | `ndarray` |  | Array of predicted probabilities in [0, 1]. |
+| `eps` | `float` | `1e-15` | Clipping bound to avoid `log(0)`. |
+
+**Returns**
+
+The mean log loss.
+
+**Example**
+
+```python
+import numpy as np
+from sportsdataverse._common.metrics import log_loss_score
+log_loss_score(np.array([1, 0]), np.array([0.9, 0.1]))
+```
+
+### mae {#mae}
+
+`mae(a: 'np.ndarray', b: 'np.ndarray') -> 'float'`
+
+Mean absolute error between two arrays.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `a` | `ndarray` |  | First array of values. |
+| `b` | `ndarray` |  | Second array of values (same length as `a`). |
+
+**Returns**
+
+The mean absolute error.
+
+**Example**
+
+```python
+import numpy as np
+from sportsdataverse._common.metrics import mae
+mae(np.array([1.0, 2.0]), np.array([1.5, 2.5]))
+```
+
+### pwhl_team_ratings {#pwhl_team_ratings}
+
+`pwhl_team_ratings(seasons: 'Any', *, league: 'str' = 'pwhl', **kwargs: 'Any') -> 'Any'`
+
+PWHL opponent-adjusted, shrunk even-strength xG team ratings.
+
+Delegates to `sportsdataverse.nhl.nhl_team_ratings.nhl_team_ratings`
+with `league="pwhl"` defaulted. Oracle gate deferred (no xG-bearing
+PWHL pbp yet -- see module docstring).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `Any` |  | an int or iterable of seasons. |
+| `league` | `str` | `'pwhl'` | league key (defaults to `"pwhl"`). |
+
+**Returns**
+
+The NHL core's ratings frame, computed with PWHL constants.
+
+**Example**
+
+```python
+from sportsdataverse.pwhl.pwhl_team_ratings import pwhl_team_ratings
+ratings = pwhl_team_ratings(2024)
+```
+
 ### spearman_corr {#spearman_corr}
 
 `spearman_corr(a: 'np.ndarray', b: 'np.ndarray') -> 'float'`
@@ -1373,3 +1221,159 @@ import numpy as np
 from sportsdataverse._common.metrics import spearman_corr
 spearman_corr(np.array([1, 2, 3]), np.array([3, 1, 2]))
 ```
+
+## Analytics
+
+### pwhl_game_total {#pwhl_game_total}
+
+`pwhl_game_total(games: 'Any', ratings: 'Any', *, league: 'str' = 'pwhl', **kwargs: 'Any') -> 'Any'`
+
+PWHL per-game expected total goals (re-export of the expected-goals helper).
+
+Delegates to `sportsdataverse.nhl.nhl_player_props.nhl_game_total`
+with `league="pwhl"` defaulted.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `games` | `Any` |  | a schedule-shaped frame. |
+| `ratings` | `Any` |  | a `pwhl_team_ratings`-shaped frame. |
+| `league` | `str` | `'pwhl'` | league key (defaults to `"pwhl"`). |
+
+**Returns**
+
+The NHL core's `game_id`/`exp_total` frame, computed with PWHL constants.
+
+**Example**
+
+```python
+from sportsdataverse.pwhl.pwhl_player_props import pwhl_game_total
+totals = pwhl_game_total(games, ratings)
+```
+
+### pwhl_in_game_win_prob {#pwhl_in_game_win_prob}
+
+`pwhl_in_game_win_prob(pbp: 'Any', pregame_home_prob: 'float', *, league: 'str' = 'pwhl', **kwargs: 'Any') -> 'Any'`
+
+PWHL per-play live home win probability from the bundled in-game model.
+
+Delegates to `sportsdataverse.nhl.nhl_market.nhl_in_game_win_prob`
+with `league="pwhl"` defaulted. NOTE: requires a committed
+`pwhl_in_game_wp` artifact, deferred until PWHL data lands (see module
+docstring); calling it before then raises a clear `FileNotFoundError`
+from the artifact loader, not a silent bad result.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `pbp` | `Any` |  | a play-by-play frame shaped like `load_nhl_pbp_full`. |
+| `pregame_home_prob` | `float` |  | the pregame home win probability anchor. |
+| `league` | `str` | `'pwhl'` | league key (defaults to `"pwhl"`). |
+
+**Returns**
+
+The NHL core's per-play `home_win_prob` frame.
+
+**Example**
+
+```python
+from sportsdataverse.pwhl.pwhl_market import pwhl_in_game_win_prob
+wp = pwhl_in_game_win_prob(pbp, pregame_home_prob=0.5)
+```
+
+### pwhl_player_props {#pwhl_player_props}
+
+`pwhl_player_props(seasons: 'Any', *, league: 'str' = 'pwhl', **kwargs: 'Any') -> 'Any'`
+
+PWHL empirical-Bayes shots/points player-prop projections.
+
+Delegates to `sportsdataverse.nhl.nhl_player_props.nhl_player_props`
+with `league="pwhl"` defaulted.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `Any` |  | an int or iterable of seasons. |
+| `league` | `str` | `'pwhl'` | league key (defaults to `"pwhl"`). |
+
+**Returns**
+
+The NHL core's per-(player, game, stat) projection frame.
+
+**Example**
+
+```python
+from sportsdataverse.pwhl.pwhl_player_props import pwhl_player_props
+props = pwhl_player_props(2024)
+```
+
+### pwhl_predict_games {#pwhl_predict_games}
+
+`pwhl_predict_games(games: 'Any', ratings: 'Any', *, league: 'str' = 'pwhl', **kwargs: 'Any') -> 'Any'`
+
+PWHL vectorized pregame margin/win-prob/total (+ market edge).
+
+Delegates to `sportsdataverse.nhl.nhl_market.nhl_predict_games` with
+`league="pwhl"` defaulted.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `games` | `Any` |  | a schedule-shaped frame (`game_id`, `home_team`, `away_team`, `neutral_site`). |
+| `ratings` | `Any` |  | a `pwhl_team_ratings`-shaped frame. |
+| `league` | `str` | `'pwhl'` | league key (defaults to `"pwhl"`). |
+
+**Returns**
+
+The NHL core's per-game prediction frame, computed with PWHL constants.
+
+**Example**
+
+```python
+from sportsdataverse.pwhl.pwhl_market import pwhl_predict_games
+preds = pwhl_predict_games(games, ratings)
+```
+
+## Dates and seasons
+
+### most_recent_pwhl_season {#most_recent_pwhl_season}
+
+`most_recent_pwhl_season() -> 'int'`
+
+Newest PWHL regular season as an end-year integer.
+
+The highest `season_yr` of a regular season that is not a one-off event, so a
+preseason the feed lists before its regular season is not a default.
+
+Raises `NoDataError` when the seasons feed lists none, `AssetFetchError` when it fails.
+
+### pwhl_season_id {#pwhl_season_id}
+
+`pwhl_season_id(return_as_pandas: 'bool' = False) -> 'Any'`
+
+All PWHL seasons with end-year + game-type labels (HockeyTech `seasons`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `return_as_pandas` | `bool` | `False` |  |
+
+**Returns**
+
+
+| col_name | type | description |
+|---|---|---|
+| `season_id` | integer | Season identifier. |
+| `season_name` | character | Full season name (e.g., "2024-25 Regular Season"). |
+| `season_short` | character | Short season name. |
+| `career` | character | Whether this is a career-stats season. |
+| `playoff` | character | Whether the row is playoff statistics. |
+| `start_date` | character | Season start date. |
+| `end_date` | character | Season end date. |
+| `season_yr` | integer | End year of the season the row belongs to, read from its name: "2025-26", "2025/26" and "2025-2026" are 2026, "26-27" is 2027, a compact "2425" is 2025. A preseason or exhibition named with the one year it starts in belongs to the next season ("2026 Pre-season" is 2027). Null when the name holds no year. |
+| `game_type_label` | character | Game type read from the season name, first match wins: "preseason" (pre-season, preseason), "playoffs" (playoff, post), "exhibition", else "regular". One-off events such as all-star games are labelled "regular" too; season resolution skips them. |

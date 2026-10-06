@@ -166,16 +166,16 @@ Each `sportsdataverse` function and its equivalent in the sister R package, [`cf
 
 | `sportsdataverse.cfb` (Python) | `cfbfastR` (R) |
 |---|---|
-| [`calculate_completion_probability`](reference/additional/calculate#calculate_completion_probability) | [`calculate_completion_probability`](https://cfbfastR.sportsdataverse.org/reference/calculate_completion_probability.html) |
-| [`calculate_epa`](reference/additional/calculate#calculate_epa) | [`calculate_epa`](https://cfbfastR.sportsdataverse.org/reference/calculate_epa.html) |
-| [`calculate_expected_points`](reference/additional/calculate#calculate_expected_points) | [`calculate_expected_points`](https://cfbfastR.sportsdataverse.org/reference/calculate_expected_points.html) |
-| [`calculate_field_goal_probability`](reference/additional/calculate#calculate_field_goal_probability) | [`calculate_field_goal_probability`](https://cfbfastR.sportsdataverse.org/reference/calculate_field_goal_probability.html) |
-| [`calculate_fourth_down`](reference/additional/calculate#calculate_fourth_down) | [`calculate_fourth_down`](https://cfbfastR.sportsdataverse.org/reference/calculate_fourth_down.html) |
-| [`calculate_qbr`](reference/additional/calculate#calculate_qbr) | [`calculate_qbr`](https://cfbfastR.sportsdataverse.org/reference/calculate_qbr.html) |
-| [`calculate_two_point_probability`](reference/additional/calculate#calculate_two_point_probability) | [`calculate_two_point_probability`](https://cfbfastR.sportsdataverse.org/reference/calculate_two_point_probability.html) |
-| [`calculate_win_probability`](reference/additional/calculate#calculate_win_probability) | [`calculate_win_probability`](https://cfbfastR.sportsdataverse.org/reference/calculate_win_probability.html) |
-| [`calculate_wpa`](reference/additional/calculate#calculate_wpa) | [`calculate_wpa`](https://cfbfastR.sportsdataverse.org/reference/calculate_wpa.html) |
-| [`calculate_xpass`](reference/additional/calculate#calculate_xpass) | [`calculate_xpass`](https://cfbfastR.sportsdataverse.org/reference/calculate_xpass.html) |
+| [`calculate_completion_probability`](reference/additional/models-and-calculators#calculate_completion_probability) | [`calculate_completion_probability`](https://cfbfastR.sportsdataverse.org/reference/calculate_completion_probability.html) |
+| [`calculate_epa`](reference/additional/models-and-calculators#calculate_epa) | [`calculate_epa`](https://cfbfastR.sportsdataverse.org/reference/calculate_epa.html) |
+| [`calculate_expected_points`](reference/additional/models-and-calculators#calculate_expected_points) | [`calculate_expected_points`](https://cfbfastR.sportsdataverse.org/reference/calculate_expected_points.html) |
+| [`calculate_field_goal_probability`](reference/additional/models-and-calculators#calculate_field_goal_probability) | [`calculate_field_goal_probability`](https://cfbfastR.sportsdataverse.org/reference/calculate_field_goal_probability.html) |
+| [`calculate_fourth_down`](reference/additional/models-and-calculators#calculate_fourth_down) | [`calculate_fourth_down`](https://cfbfastR.sportsdataverse.org/reference/calculate_fourth_down.html) |
+| [`calculate_qbr`](reference/additional/models-and-calculators#calculate_qbr) | [`calculate_qbr`](https://cfbfastR.sportsdataverse.org/reference/calculate_qbr.html) |
+| [`calculate_two_point_probability`](reference/additional/models-and-calculators#calculate_two_point_probability) | [`calculate_two_point_probability`](https://cfbfastR.sportsdataverse.org/reference/calculate_two_point_probability.html) |
+| [`calculate_win_probability`](reference/additional/models-and-calculators#calculate_win_probability) | [`calculate_win_probability`](https://cfbfastR.sportsdataverse.org/reference/calculate_win_probability.html) |
+| [`calculate_wpa`](reference/additional/models-and-calculators#calculate_wpa) | [`calculate_wpa`](https://cfbfastR.sportsdataverse.org/reference/calculate_wpa.html) |
+| [`calculate_xpass`](reference/additional/models-and-calculators#calculate_xpass) | [`calculate_xpass`](https://cfbfastR.sportsdataverse.org/reference/calculate_xpass.html) |
 | [`espn_cfb_award`](reference/core/other#espn_cfb_award) | [`espn_cfb_award`](https://cfbfastR.sportsdataverse.org/reference/espn_cfb_award.html) |
 | [`espn_cfb_awards`](reference/core/other#espn_cfb_awards) | [`espn_cfb_awards`](https://cfbfastR.sportsdataverse.org/reference/espn_cfb_awards.html) |
 | [`espn_cfb_calendar`](reference/site#espn_cfb_calendar) | [`espn_cfb_calendar`](https://cfbfastR.sportsdataverse.org/reference/espn_cfb_calendar.html) |
@@ -228,14 +228,14 @@ Each `sportsdataverse` function and its equivalent in the sister R package, [`cf
 | [`espn_cfb_venue`](reference/core/other#espn_cfb_venue) | [`espn_cfb_venue`](https://cfbfastR.sportsdataverse.org/reference/espn_cfb_venue.html) |
 | [`espn_cfb_venues`](reference/core/other#espn_cfb_venues) | [`espn_cfb_venues`](https://cfbfastR.sportsdataverse.org/reference/espn_cfb_venues.html) |
 | [`espn_cfb_week_rankings`](reference/core/other#espn_cfb_week_rankings) | [`espn_cfb_week_rankings`](https://cfbfastR.sportsdataverse.org/reference/espn_cfb_week_rankings.html) |
-| [`fox_cfb_boxscore`](reference/additional/fox#fox_cfb_boxscore) | [`fox_cfb_boxscore`](https://cfbfastR.sportsdataverse.org/reference/fox_cfb_boxscore.html) |
-| [`fox_cfb_league_leaders`](reference/additional/fox#fox_cfb_league_leaders) | [`fox_cfb_league_leaders`](https://cfbfastR.sportsdataverse.org/reference/fox_cfb_league_leaders.html) |
-| [`fox_cfb_odds`](reference/additional/fox#fox_cfb_odds) | [`fox_cfb_odds`](https://cfbfastR.sportsdataverse.org/reference/fox_cfb_odds.html) |
-| [`fox_cfb_pbp`](reference/additional/fox#fox_cfb_pbp) | [`fox_cfb_pbp`](https://cfbfastR.sportsdataverse.org/reference/fox_cfb_pbp.html) |
-| [`fox_cfb_standings`](reference/additional/fox#fox_cfb_standings) | [`fox_cfb_standings`](https://cfbfastR.sportsdataverse.org/reference/fox_cfb_standings.html) |
-| [`fox_cfb_team_gamelog`](reference/additional/fox#fox_cfb_team_gamelog) | [`fox_cfb_team_gamelog`](https://cfbfastR.sportsdataverse.org/reference/fox_cfb_team_gamelog.html) |
-| [`fox_cfb_team_roster`](reference/additional/fox#fox_cfb_team_roster) | [`fox_cfb_team_roster`](https://cfbfastR.sportsdataverse.org/reference/fox_cfb_team_roster.html) |
-| [`fox_cfb_team_stats`](reference/additional/fox#fox_cfb_team_stats) | [`fox_cfb_team_stats`](https://cfbfastR.sportsdataverse.org/reference/fox_cfb_team_stats.html) |
+| [`fox_cfb_boxscore`](reference/additional/fox-sports-api#fox_cfb_boxscore) | [`fox_cfb_boxscore`](https://cfbfastR.sportsdataverse.org/reference/fox_cfb_boxscore.html) |
+| [`fox_cfb_league_leaders`](reference/additional/fox-sports-api#fox_cfb_league_leaders) | [`fox_cfb_league_leaders`](https://cfbfastR.sportsdataverse.org/reference/fox_cfb_league_leaders.html) |
+| [`fox_cfb_odds`](reference/additional/fox-sports-api#fox_cfb_odds) | [`fox_cfb_odds`](https://cfbfastR.sportsdataverse.org/reference/fox_cfb_odds.html) |
+| [`fox_cfb_pbp`](reference/additional/fox-sports-api#fox_cfb_pbp) | [`fox_cfb_pbp`](https://cfbfastR.sportsdataverse.org/reference/fox_cfb_pbp.html) |
+| [`fox_cfb_standings`](reference/additional/fox-sports-api#fox_cfb_standings) | [`fox_cfb_standings`](https://cfbfastR.sportsdataverse.org/reference/fox_cfb_standings.html) |
+| [`fox_cfb_team_gamelog`](reference/additional/fox-sports-api#fox_cfb_team_gamelog) | [`fox_cfb_team_gamelog`](https://cfbfastR.sportsdataverse.org/reference/fox_cfb_team_gamelog.html) |
+| [`fox_cfb_team_roster`](reference/additional/fox-sports-api#fox_cfb_team_roster) | [`fox_cfb_team_roster`](https://cfbfastR.sportsdataverse.org/reference/fox_cfb_team_roster.html) |
+| [`fox_cfb_team_stats`](reference/additional/fox-sports-api#fox_cfb_team_stats) | [`fox_cfb_team_stats`](https://cfbfastR.sportsdataverse.org/reference/fox_cfb_team_stats.html) |
 | [`load_cfb_fpi_weekly`](reference/loaders/other#load_cfb_fpi_weekly) | [`load_cfb_fpi_weekly`](https://cfbfastR.sportsdataverse.org/reference/load_cfb_fpi_weekly.html) |
 | [`load_cfb_group_aliases`](reference/loaders/other-2#load_cfb_group_aliases) | [`load_cfb_group_aliases`](https://cfbfastR.sportsdataverse.org/reference/load_cfb_group_aliases.html) |
 | [`load_cfb_group_seasons`](reference/loaders/other-2#load_cfb_group_seasons) | [`load_cfb_group_seasons`](https://cfbfastR.sportsdataverse.org/reference/load_cfb_group_seasons.html) |
@@ -264,9 +264,9 @@ Each `sportsdataverse` function and its equivalent in the sister R package, [`cf
 | [`load_ncaa_mfb_schedule`](reference/loaders/ncaa#load_ncaa_mfb_schedule) | [`load_ncaa_mfb_schedule`](https://cfbfastR.sportsdataverse.org/reference/load_ncaa_mfb_schedule.html) |
 | [`load_ncaa_mfb_team_stats`](reference/loaders/ncaa#load_ncaa_mfb_team_stats) | [`load_ncaa_mfb_team_stats`](https://cfbfastR.sportsdataverse.org/reference/load_ncaa_mfb_team_stats.html) |
 | [`load_ncaa_mfb_teams`](reference/loaders/ncaa#load_ncaa_mfb_teams) | [`load_ncaa_mfb_teams`](https://cfbfastR.sportsdataverse.org/reference/load_ncaa_mfb_teams.html) |
-| [`yahoo_cfb_boxscore`](reference/additional/yahoo#yahoo_cfb_boxscore) | [`yahoo_cfb_boxscore`](https://cfbfastR.sportsdataverse.org/reference/yahoo_cfb_boxscore.html) |
-| [`yahoo_cfb_player_season_stats`](reference/additional/yahoo#yahoo_cfb_player_season_stats) | [`yahoo_cfb_player_season_stats`](https://cfbfastR.sportsdataverse.org/reference/yahoo_cfb_player_season_stats.html) |
-| [`yahoo_cfb_player_season_stats_legacy`](reference/additional/yahoo#yahoo_cfb_player_season_stats_legacy) | [`yahoo_cfb_player_season_stats_legacy`](https://cfbfastR.sportsdataverse.org/reference/yahoo_cfb_player_season_stats_legacy.html) |
-| [`yahoo_cfb_scoreboard`](reference/additional/yahoo#yahoo_cfb_scoreboard) | [`yahoo_cfb_scoreboard`](https://cfbfastR.sportsdataverse.org/reference/yahoo_cfb_scoreboard.html) |
-| [`yahoo_cfb_team_season_stats`](reference/additional/yahoo#yahoo_cfb_team_season_stats) | [`yahoo_cfb_team_season_stats`](https://cfbfastR.sportsdataverse.org/reference/yahoo_cfb_team_season_stats.html) |
-| [`yahoo_cfb_team_season_stats_legacy`](reference/additional/yahoo#yahoo_cfb_team_season_stats_legacy) | [`yahoo_cfb_team_season_stats_legacy`](https://cfbfastR.sportsdataverse.org/reference/yahoo_cfb_team_season_stats_legacy.html) |
+| [`yahoo_cfb_boxscore`](reference/additional/yahoo-sports-shangrila#yahoo_cfb_boxscore) | [`yahoo_cfb_boxscore`](https://cfbfastR.sportsdataverse.org/reference/yahoo_cfb_boxscore.html) |
+| [`yahoo_cfb_player_season_stats`](reference/additional/yahoo-sports-shangrila#yahoo_cfb_player_season_stats) | [`yahoo_cfb_player_season_stats`](https://cfbfastR.sportsdataverse.org/reference/yahoo_cfb_player_season_stats.html) |
+| [`yahoo_cfb_player_season_stats_legacy`](reference/additional/yahoo-sports-shangrila#yahoo_cfb_player_season_stats_legacy) | [`yahoo_cfb_player_season_stats_legacy`](https://cfbfastR.sportsdataverse.org/reference/yahoo_cfb_player_season_stats_legacy.html) |
+| [`yahoo_cfb_scoreboard`](reference/additional/yahoo-sports-shangrila#yahoo_cfb_scoreboard) | [`yahoo_cfb_scoreboard`](https://cfbfastR.sportsdataverse.org/reference/yahoo_cfb_scoreboard.html) |
+| [`yahoo_cfb_team_season_stats`](reference/additional/yahoo-sports-shangrila#yahoo_cfb_team_season_stats) | [`yahoo_cfb_team_season_stats`](https://cfbfastR.sportsdataverse.org/reference/yahoo_cfb_team_season_stats.html) |
+| [`yahoo_cfb_team_season_stats_legacy`](reference/additional/yahoo-sports-shangrila#yahoo_cfb_team_season_stats_legacy) | [`yahoo_cfb_team_season_stats_legacy`](https://cfbfastR.sportsdataverse.org/reference/yahoo_cfb_team_season_stats_legacy.html) |

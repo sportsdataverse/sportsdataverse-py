@@ -9,7 +9,7 @@ sidebar_position: 50
 Hand-written wrappers, loaders, and helpers in `sportsdataverse.mch`
 not covered by the generated API-endpoint reference above.
 
-## Other
+## Models and calculators
 
 ### mch_ratings {#mch_ratings}
 
