@@ -1186,7 +1186,7 @@ event, columns snake-cased (kloppy's own names -- `event_id`, `event_type`,
 
 **Returns**
 
-A polars DataFrame (pandas with `return_as_pandas=True`), one row per event. Coordinates are in the dataset's coordinate system -- kloppy's default is a 0-1 normalised pitch; pass `coordinates="statsbomb"` (etc.) to kloppy's loader to keep the provider's units.
+A polars DataFrame (pandas with `return_as_pandas=True`), one row per event. Coordinates are in the dataset's coordinate system -- kloppy's default is a 0-1 normalized pitch; pass `coordinates="statsbomb"` (etc.) to kloppy's loader to keep the provider's units.
 
 **Example**
 
@@ -1214,7 +1214,7 @@ Load one match of a provider's free open event data as a tidy frame.
 
 `provider="statsbomb"` reads StatsBomb open data (https://github.com/statsbomb/open-data)
 through `kloppy.statsbomb.load_open_data(match_id=...)`. That data is free for research and
-non-commercial use only, under StatsBomb's open-data licence -- read it before publishing
+non-commercial use only, under StatsBomb's open-data license -- read it before publishing
 anything built on it. Other kloppy open samples (Metrica, SkillCorner) follow the same
 shape and are added on request.
 

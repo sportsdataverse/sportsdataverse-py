@@ -6,7 +6,7 @@ coordinates against the raw JSON). Lineups are kept whole (18 KB). Re-run to re-
 
     uv run python tests/fixtures/kloppy/trim_statsbomb_8658.py [<dir with 8658 events/lineups json>]
 
-Source: https://github.com/statsbomb/open-data (CC BY-NC 4.0 style non-commercial licence; see README.md).
+Source: https://github.com/statsbomb/open-data (StatsBomb's non-commercial public-data license; see README.md).
 """
 
 from __future__ import annotations

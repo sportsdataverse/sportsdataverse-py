@@ -21,7 +21,7 @@ Match 8658 is France v Croatia, the 2018 FIFA World Cup final. Captured 2026-10-
 head-trim ("Failed to determine start and end time of periods"), which is why both boundary
 events of each half are kept.
 
-**Licence.** StatsBomb open data is published at <https://github.com/statsbomb/open-data> under
-StatsBomb's non-commercial public data licence (`LICENSE.pdf` in that repo): free for research
+**License.** StatsBomb open data is published at <https://github.com/statsbomb/open-data> under
+StatsBomb's non-commercial public data license (`LICENSE.pdf` in that repo): free for research
 and non-commercial use with attribution to StatsBomb; no commercial use. These files are a
 test fixture only.

@@ -14,7 +14,8 @@ from typing import Any
 import pandas as pd
 import polars as pl
 import pytest
-from kloppy import statsbomb
+
+statsbomb = pytest.importorskip("kloppy.statsbomb")
 
 import sportsdataverse
 from sportsdataverse import soccer
@@ -124,12 +125,11 @@ def test_open_events_dispatches_to_kloppy_and_forwards_kwargs(monkeypatch: pytes
         return _dataset(coordinates=kwargs["coordinates"])
 
     monkeypatch.setattr(statsbomb, "load_open_data", fake_load_open_data)
-    df = soccer_open_events("StatsBomb", 8658, coordinates="statsbomb")
+    df = soccer_open_events("StatsBomb", 8658)  # coordinates default to the provider's units
     assert seen == {"match_id": 8658, "coordinates": "statsbomb"}
     assert isinstance(df, pl.DataFrame)
-    assert (
-        df.height == RAW_EVENT_COUNT + 2
-    )  # kloppy adds a BALL_OUT after the pass that went out, and one more generic row
+    # kloppy synthesizes rows (a BALL_OUT after the pass that went out, ...); count what it loaded
+    assert df.height == len(_dataset(coordinates="statsbomb").events)
     assert df["coordinates_x"].max() > 1.0  # provider units survived the kwarg
 
 

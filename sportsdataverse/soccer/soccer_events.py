@@ -54,11 +54,11 @@ def soccer_events_to_frame(dataset: Any, *, return_as_pandas: bool = False) -> U
     Returns:
         A polars DataFrame (pandas with ``return_as_pandas=True``), one row per event.
         Coordinates are in the dataset's coordinate system -- kloppy's default is a 0-1
-        normalised pitch; pass ``coordinates="statsbomb"`` (etc.) to kloppy's loader to keep
+        normalized pitch; pass ``coordinates="statsbomb"`` (etc.) to kloppy's loader to keep
         the provider's units.
 
     Raises:
-        ImportError: kloppy's polars engine is missing (``kloppy[polars]``).
+        AttributeError: ``dataset`` has no ``to_df`` (it is not a kloppy dataset).
 
     Example:
         Quick start (a local StatsBomb match)::
@@ -104,7 +104,7 @@ def soccer_open_events(
 
     ``provider="statsbomb"`` reads StatsBomb open data (https://github.com/statsbomb/open-data)
     through ``kloppy.statsbomb.load_open_data(match_id=...)``. That data is free for research and
-    non-commercial use only, under StatsBomb's open-data licence -- read it before publishing
+    non-commercial use only, under StatsBomb's open-data license -- read it before publishing
     anything built on it. Other kloppy open samples (Metrica, SkillCorner) follow the same
     shape and are added on request.
 
@@ -113,8 +113,9 @@ def soccer_open_events(
         match_id: The provider's match id (StatsBomb: e.g. ``8658`` -- France v Croatia, 2018
             World Cup final).
         return_as_pandas: Return a pandas DataFrame instead of polars.
-        **kwargs: Forwarded to the kloppy loader, e.g. ``coordinates="statsbomb"`` to keep
-            StatsBomb's 120 x 80 units instead of kloppy's 0-1 pitch, or
+        **kwargs: Forwarded to the kloppy loader. ``coordinates`` defaults to the provider's own
+            units (StatsBomb: 120 x 80 yards, what sdvplot's ``pitch_coords`` expects); pass
+            ``coordinates="kloppy"`` for kloppy's 0-1 normalized pitch. Others pass through, e.g.
             ``event_types=["shot", "pass"]``.
 
     Returns:
@@ -153,5 +154,6 @@ def soccer_open_events(
     if key not in _OPEN_DATA_PROVIDERS:
         raise ValueError(f"unknown open-data provider {provider!r}; supported: {sorted(_OPEN_DATA_PROVIDERS)}")
     kloppy = _kloppy()
+    kwargs.setdefault("coordinates", key)  # provider units (StatsBomb 120 x 80), what pitch_coords() expects
     dataset = getattr(kloppy, _OPEN_DATA_PROVIDERS[key]).load_open_data(match_id=match_id, **kwargs)
     return soccer_events_to_frame(dataset, return_as_pandas=return_as_pandas)

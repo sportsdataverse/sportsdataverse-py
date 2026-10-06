@@ -343,13 +343,15 @@ pass distance, share of team touches), regenerated from the 2026-10-06 recon. Th
 League). USL Super League seasons use split-year labels, so pass `season_name="2024-25"`, not
 `2024`, which returns an empty frame. Every ASA route answers on all seven slugs except
 `players/salaries`, which stays MLS-only.
+
 ### Added — kloppy as the optional `soccer` extra; `soccer_open_events()` loads open event data
 
 `pip install "sportsdataverse[soccer]"` installs [kloppy](https://kloppy.pysport.org) (`kloppy[polars]>=3.19`),
 which reads ~15 soccer event / tracking providers (StatsBomb, Opta, Wyscout, Sportec, SkillCorner, ...).
 Two functions in `sportsdataverse.soccer` sit on top of it: `soccer_open_events("statsbomb", 8658)`
-loads one match of StatsBomb's free open data (research / non-commercial licence) as a polars frame
-(pandas with `return_as_pandas=True`; kloppy kwargs such as `coordinates="statsbomb"` pass through), and
+loads one match of StatsBomb's free open data (research / non-commercial license) as a polars frame
+(pandas with `return_as_pandas=True`; coordinates default to the provider's own units, StatsBomb's 120 x 80,
+and other kloppy kwargs pass through), and
 `soccer_events_to_frame(dataset)` turns any dataset a user loaded with kloppy into the same frame
 (`event_id`, `event_type`, `period_id`, `timestamp`, `team_id`, `player_id`, `coordinates_x`,
 `coordinates_y`, ...). Without kloppy the package still imports; calling `soccer_open_events` raises an
