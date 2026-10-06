@@ -1,0 +1,19 @@
+{
+  "player": [
+    {
+      "idPlayer": "34145395",
+      "idTeam": "133610",
+      "strPlayer": "Danny Welbeck",
+      "strTeam": "Chelsea",
+      "strSport": "Soccer",
+      "strThumb": "https://r2.thesportsdb.com/images/media/player/thumb/f5sgpu1772017716.jpg",
+      "strCutout": "https://r2.thesportsdb.com/images/media/player/cutout/mjo6g31787690678.png",
+      "strNationality": "England",
+      "dateBorn": "1990-11-26",
+      "strStatus": "Active",
+      "strGender": "Male",
+      "strPosition": "Centre-Forward",
+      "relevance": "30.17046356201172"
+    }
+  ]
+}
