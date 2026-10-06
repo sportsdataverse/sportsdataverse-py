@@ -617,6 +617,7 @@ def _table_cell_desc(
 _R_EXPORTS_FILE = ROOT / "tools" / "codegen" / "r_exports.yaml"
 _R_PARITY_ALIASES_FILE = ROOT / "tools" / "codegen" / "r_parity_aliases.yaml"
 _HIGHLIGHTS_FILE = ROOT / "tools" / "codegen" / "highlights.yaml"
+_COMPANIONS_FILE = ROOT / "tools" / "codegen" / "companions.yaml"
 
 # League prefix -> R package for parity (pwhl is also fastRhockey; otherwise the
 # same mapping used for column descriptions).
@@ -663,6 +664,25 @@ def _highlights_map() -> dict:
     import yaml
 
     return yaml.safe_load(_HIGHLIGHTS_FILE.read_text(encoding="utf-8")) or {}
+
+
+@functools.lru_cache(maxsize=1)
+def _companions_map() -> dict:
+    """``{league_prefix: [{name, url, note}]}`` from the committed ``companions.yaml``.
+
+    Hand-maintained companion packages rendered as the ``## See also`` block of a
+    league's index page -- see the file's own header comment. Empty dict if absent,
+    so a league with no entry renders exactly as before."""
+    if not _COMPANIONS_FILE.exists():
+        return {}
+    import yaml
+
+    return yaml.safe_load(_COMPANIONS_FILE.read_text(encoding="utf-8")) or {}
+
+
+def _companions_for(prefix: str) -> list[dict]:
+    """The ``companions.yaml`` entries for *prefix* (``[]`` when it has none)."""
+    return list(_companions_map().get(prefix) or [])
 
 
 def _highlighted_names(league: str | None, names: list[str]) -> set[str]:
@@ -2145,6 +2165,15 @@ def _flat_modules_for_prefix(prefix: str) -> list[str]:
     return sorted(out)
 
 
+# Hand-written modules (no endpoint YAML, so FLAT_APIS cannot drive them) that a
+# sport-group container re-exports beside its flat families. The container
+# ``__init__.py`` is generated, so a module listed here is the ONLY way its public
+# names reach ``sportsdataverse.<group>`` and the top-level package.
+_CONTAINER_HANDWRITTEN: dict[str, list[str]] = {
+    "soccer": ["soccer_events"],  # kloppy event data, the optional ``soccer`` extra
+}
+
+
 def _container_init_body(group: str, members: list[str], has_ext: bool) -> str:
     """Return the deterministic body for a sport-group container ``__init__.py``.
 
@@ -2174,6 +2203,12 @@ def _container_init_body(group: str, members: list[str], has_ext: bool) -> str:
             parsers = LIVE / group / f"{module}_parsers.py"
             if parsers.exists():
                 lines.append(f"from sportsdataverse.{group}.{module}_parsers import *  # noqa: F401,F403")
+        lines.append("")
+    handwritten = _CONTAINER_HANDWRITTEN.get(group, [])
+    if handwritten:
+        lines.append(f"# Hand-written modules homed directly at ``sportsdataverse.{group}``.")
+        for module in handwritten:
+            lines.append(f"from sportsdataverse.{group}.{module} import *  # noqa: F401,F403")
         lines.append("")
     lines.append(f"# Sub-league packages — imported so ``sportsdataverse.{group}.<leaf>`` is reachable")
     lines.append("# as an attribute on this container module (0.0.65+).")
@@ -2850,6 +2885,7 @@ def render_league_index(
         has_highlights=has_highlights,
         highlights_count=highlights_count,
         notebooks=_notebooks_for(prefix),
+        companions=_companions_for(prefix),
         r_parity=r_parity or [],
         r_pkg=r_pkg,
     )

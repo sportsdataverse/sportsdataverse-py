@@ -37,6 +37,29 @@ League). USL Super League seasons use split-year labels, so pass `season_name="2
 `2024`, which returns an empty frame. Every ASA route answers on all seven slugs except
 `players/salaries`, which stays MLS-only.
 
+### Added — kloppy as the optional `soccer` extra; `soccer_open_events()` loads open event data
+
+`pip install "sportsdataverse[soccer]"` installs [kloppy](https://kloppy.pysport.org) (`kloppy[polars]>=3.19`),
+which reads ~15 soccer event / tracking providers (StatsBomb, Opta, Wyscout, Sportec, SkillCorner, ...).
+Two functions in `sportsdataverse.soccer` sit on top of it: `soccer_open_events("statsbomb", 8658)`
+loads one match of StatsBomb's free open data (research / non-commercial license) as a polars frame
+(pandas with `return_as_pandas=True`; coordinates default to the provider's own units, StatsBomb's 120 x 80,
+and other kloppy kwargs pass through), and
+`soccer_events_to_frame(dataset)` turns any dataset a user loaded with kloppy into the same frame
+(`event_id`, `event_type`, `period_id`, `timestamp`, `team_id`, `player_id`, `coordinates_x`,
+`coordinates_y`, ...). Without kloppy the package still imports; calling `soccer_open_events` raises an
+`ImportError` naming the extra. kloppy fetches its own files and is the documented exception to the
+`dl_utils.download()` rule. The frame drops straight into sdvplot's `pitch_coords(provider="statsbomb")` /
+sdvplotR's `sdv_pitch_coords()`. Tests load a trimmed real StatsBomb match (`tests/fixtures/kloppy/`);
+kloppy is also in the `tests` and `all` extras so CI has it.
+
+### Changed — league index pages gain a "See also" block of companion packages (soccer first)
+
+Each league's reference index (`docs/docs/<league>/index.md`) can now list the packages a reader is likely
+to reach for next, from the hand-maintained `tools/codegen/companions.yaml` (same shape as `highlights.yaml`).
+The SOCCER page links kloppy, sdvplot, sdvplotR, itscalledsoccer, soccerdata and mplsoccer; leagues without an
+entry render unchanged.
+
 ### Added — sdv-docs MCP server and a published docs index
 
 `sdv-docs` is a stdio MCP server that answers exact questions about the SportsDataverse surface
