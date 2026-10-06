@@ -1,0 +1,254 @@
+{
+  "4785817": [
+    {
+      "startTime": "/Date(1791304200000)/",
+      "endTime": "/Date(-62135596800000)/",
+      "qualifiers": [
+        "Live"
+      ],
+      "station": {
+        "callSign": "BBC iPlayer",
+        "stationId": "rn_1728",
+        "affiliateId": null,
+        "affiliateCallSign": null,
+        "name": "BBC iPlayer",
+        "type": "Stream",
+        "blockedCountryCodes": null
+      },
+      "stationId": "rn_1728",
+      "matchId": 4785817,
+      "leagueId": 897724,
+      "parentLeagueId": 10437,
+      "program": {
+        "rootId": "4785817",
+        "teams": [
+          {
+            "name": "Wales U21",
+            "isHome": true,
+            "teamBrandId": "5852"
+          },
+          {
+            "name": "Austria U21",
+            "isHome": false,
+            "teamBrandId": "5834"
+          }
+        ]
+      },
+      "bet365MatchId": 0,
+      "externalId": "1809268",
+      "affiliates": [],
+      "tags": [
+        "live"
+      ]
+    },
+    {
+      "startTime": "/Date(1791304200000)/",
+      "endTime": "/Date(-62135596800000)/",
+      "qualifiers": [
+        "Live"
+      ],
+      "station": {
+        "callSign": "S4C Clic",
+        "stationId": "rn_2251",
+        "affiliateId": null,
+        "affiliateCallSign": null,
+        "name": "S4C Clic",
+        "type": "Stream",
+        "blockedCountryCodes": null
+      },
+      "stationId": "rn_2251",
+      "matchId": 4785817,
+      "leagueId": 897724,
+      "parentLeagueId": 10437,
+      "program": {
+        "rootId": "4785817",
+        "teams": [
+          {
+            "name": "Wales U21",
+            "isHome": true,
+            "teamBrandId": "5852"
+          },
+          {
+            "name": "Austria U21",
+            "isHome": false,
+            "teamBrandId": "5834"
+          }
+        ]
+      },
+      "bet365MatchId": 0,
+      "externalId": "1809268",
+      "affiliates": [],
+      "tags": [
+        "live"
+      ]
+    },
+    {
+      "startTime": "/Date(1791304200000)/",
+      "endTime": "/Date(-62135596800000)/",
+      "qualifiers": [
+        "Live"
+      ],
+      "station": {
+        "callSign": "BBC Sport online",
+        "stationId": "fotmob_bbconline",
+        "affiliateId": null,
+        "affiliateCallSign": null,
+        "name": "BBC Sport online",
+        "type": "",
+        "blockedCountryCodes": null
+      },
+      "stationId": "fotmob_bbconline",
+      "matchId": 4785817,
+      "leagueId": 897724,
+      "parentLeagueId": 10437,
+      "program": {
+        "rootId": "4785817",
+        "teams": [
+          {
+            "name": "Wales U21",
+            "isHome": true,
+            "teamBrandId": "5852"
+          },
+          {
+            "name": "Austria U21",
+            "isHome": false,
+            "teamBrandId": "5834"
+          }
+        ]
+      },
+      "bet365MatchId": 0,
+      "externalId": "station-auto-add",
+      "affiliates": [],
+      "tags": [
+        "live"
+      ]
+    }
+  ],
+  "4785881": [
+    {
+      "startTime": "/Date(1791304200000)/",
+      "endTime": "/Date(-62135596800000)/",
+      "qualifiers": [
+        "Live"
+      ],
+      "station": {
+        "callSign": "Youtube UK",
+        "stationId": "rn_1727",
+        "affiliateId": null,
+        "affiliateCallSign": null,
+        "name": "Youtube UK",
+        "type": "Stream",
+        "blockedCountryCodes": null
+      },
+      "stationId": "rn_1727",
+      "matchId": 4785881,
+      "leagueId": 897728,
+      "parentLeagueId": 10437,
+      "program": {
+        "rootId": "4785881",
+        "teams": [
+          {
+            "name": "Bulgaria U21",
+            "isHome": true,
+            "teamBrandId": "5849"
+          },
+          {
+            "name": "Scotland U21",
+            "isHome": false,
+            "teamBrandId": "8508"
+          }
+        ]
+      },
+      "bet365MatchId": 0,
+      "externalId": "1809250",
+      "affiliates": [],
+      "tags": [
+        "live"
+      ]
+    }
+  ],
+  "4785941": [
+    {
+      "startTime": "/Date(1791306000000)/",
+      "endTime": "/Date(-62135596800000)/",
+      "qualifiers": [
+        "Live"
+      ],
+      "station": {
+        "callSign": "England App",
+        "stationId": "fotmob_englandapp",
+        "affiliateId": null,
+        "affiliateCallSign": null,
+        "name": "England App",
+        "type": "",
+        "blockedCountryCodes": null
+      },
+      "stationId": "fotmob_englandapp",
+      "matchId": 4785941,
+      "leagueId": 10437,
+      "parentLeagueId": -1,
+      "program": {
+        "rootId": "4785941",
+        "teams": [
+          {
+            "name": "Ireland U21",
+            "isHome": true,
+            "teamBrandId": "5856"
+          },
+          {
+            "name": "England U21",
+            "isHome": false,
+            "teamBrandId": "5846"
+          }
+        ]
+      },
+      "bet365MatchId": 0,
+      "externalId": null,
+      "affiliates": [],
+      "tags": [
+        "live"
+      ]
+    },
+    {
+      "startTime": "/Date(1791306000000)/",
+      "endTime": "/Date(-62135596800000)/",
+      "qualifiers": [
+        "Live"
+      ],
+      "station": {
+        "callSign": "LOITV (Int)",
+        "stationId": "fotmob_loi_int",
+        "affiliateId": null,
+        "affiliateCallSign": null,
+        "name": "LOITV (Int)",
+        "type": "",
+        "blockedCountryCodes": null
+      },
+      "stationId": "fotmob_loi_int",
+      "matchId": 4785941,
+      "leagueId": 10437,
+      "parentLeagueId": -1,
+      "program": {
+        "rootId": "4785941",
+        "teams": [
+          {
+            "name": "Ireland U21",
+            "isHome": true,
+            "teamBrandId": "5856"
+          },
+          {
+            "name": "England U21",
+            "isHome": false,
+            "teamBrandId": "5846"
+          }
+        ]
+      },
+      "bet365MatchId": 0,
+      "externalId": null,
+      "affiliates": [],
+      "tags": [
+        "live"
+      ]
+    }
+  ]
+}

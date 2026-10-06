@@ -1,0 +1,134 @@
+{
+  "transfers": [
+    {
+      "name": "Wout Faes",
+      "playerId": 693678,
+      "position": {
+        "label": "CB",
+        "key": "centerback_short"
+      },
+      "transferDate": "2026-09-29T09:13:21Z",
+      "transferText": [
+        null,
+        null,
+        null
+      ],
+      "fromClub": "Leicester",
+      "fromClubFullName": "Leicester City",
+      "fromClubId": 8197,
+      "fromClubColors": {
+        "lightMode": "#0d47a1",
+        "darkMode": "#0f55bd"
+      },
+      "toClub": "Shabab Al-Ahli Dubai FC",
+      "toClubFullName": "Shabab Al-Ahli Dubai FC",
+      "toClubId": 102119,
+      "toClubColors": {
+        "lightMode": "#C02020",
+        "darkMode": "#C02020"
+      },
+      "fee": {
+        "feeText": "undisclosed",
+        "localizedFeeText": "undisclosed"
+      },
+      "amountEuroEstimated": 13000000,
+      "transferType": {
+        "text": "contract",
+        "localizationKey": "contract"
+      },
+      "contractExtension": false,
+      "onLoan": false,
+      "fromDate": "2026-09-28T00:00:00Z",
+      "toDate": null,
+      "marketValue": 5483011
+    },
+    {
+      "name": "Enzo Fernández",
+      "playerId": 1137705,
+      "position": {
+        "label": "AM",
+        "key": "centerattackingmidfielder_short"
+      },
+      "transferDate": "2026-09-01T22:41:23Z",
+      "transferText": [
+        null,
+        null,
+        null
+      ],
+      "fromClub": "Chelsea",
+      "fromClubFullName": "Chelsea",
+      "fromClubId": 8455,
+      "fromClubColors": {
+        "lightMode": "#051495",
+        "darkMode": "#033cc1"
+      },
+      "toClub": "Man City",
+      "toClubFullName": "Manchester City",
+      "toClubId": 8456,
+      "toClubColors": {
+        "lightMode": "#69A8D8",
+        "darkMode": "#76b4e5"
+      },
+      "fee": {
+        "feeText": "fee",
+        "localizedFeeText": "transfer_fee",
+        "value": 145000000
+      },
+      "amountEuroEstimated": null,
+      "transferType": {
+        "text": "contract",
+        "localizationKey": "contract"
+      },
+      "contractExtension": false,
+      "onLoan": false,
+      "fromDate": "2026-08-31T22:00:00Z",
+      "toDate": "2032-06-29T22:00:00Z",
+      "marketValue": 83325379
+    },
+    {
+      "name": "Iliman Ndiaye",
+      "playerId": 965764,
+      "position": {
+        "label": "RW",
+        "key": "rightwinger_short"
+      },
+      "transferDate": "2026-09-01T20:19:32Z",
+      "transferText": [
+        null,
+        null,
+        null
+      ],
+      "fromClub": "Everton",
+      "fromClubFullName": "Everton",
+      "fromClubId": 8668,
+      "fromClubColors": {
+        "lightMode": "#00359C",
+        "darkMode": "#0051d6"
+      },
+      "toClub": "Man City",
+      "toClubFullName": "Manchester City",
+      "toClubId": 8456,
+      "toClubColors": {
+        "lightMode": "#69A8D8",
+        "darkMode": "#76b4e5"
+      },
+      "fee": {
+        "feeText": "fee",
+        "localizedFeeText": "transfer_fee",
+        "value": 76000000
+      },
+      "amountEuroEstimated": null,
+      "transferType": {
+        "text": "contract",
+        "localizationKey": "contract"
+      },
+      "contractExtension": false,
+      "onLoan": false,
+      "fromDate": "2026-08-31T22:00:00Z",
+      "toDate": "2031-06-29T22:00:00Z",
+      "marketValue": 54003030
+    }
+  ],
+  "hits": 3,
+  "maxFee": 145000000
+}

@@ -1,0 +1,27 @@
+columns:
+- description: ''
+  name: ccode
+  type: character
+- description: Provider identifier for the entity (Utf8 join key).
+  name: id
+  type: character
+- description: ''
+  name: primary_id
+  type: character
+- description: Display name.
+  name: name
+  type: character
+- description: ''
+  name: matches
+  type: character
+- description: ''
+  name: internal_rank
+  type: integer
+- description: ''
+  name: simple_league
+  type: logical
+- description: ''
+  name: local_rank
+  type: integer
+kind: dataframe
+schema: matches

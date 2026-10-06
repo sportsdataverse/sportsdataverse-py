@@ -1,0 +1,4001 @@
+{
+  "general": {
+    "matchId": "4813647",
+    "matchName": "Brighton & Hove Albion-vs-Nottingham Forest_Sun, Mar 1, 2026, 14:00 UTC",
+    "matchRound": "28",
+    "teamColors": {
+      "darkMode": {
+        "home": "#095bb6",
+        "away": "#C8102E"
+      },
+      "lightMode": {
+        "home": "#0850A0",
+        "away": "#C8102E"
+      },
+      "fontDarkMode": {
+        "home": "rgba(255, 255, 255, 1.0)",
+        "away": "rgba(255, 255, 255, 1.0)"
+      },
+      "fontLightMode": {
+        "home": "rgba(255, 255, 255, 1.0)",
+        "away": "rgba(255, 255, 255, 1.0)"
+      }
+    },
+    "leagueId": 47,
+    "leagueName": "Premier League",
+    "leagueRoundName": "28",
+    "parentLeagueId": 47,
+    "countryCode": "ENG",
+    "homeTeam": {
+      "name": "Brighton & Hove Albion",
+      "id": 10204
+    },
+    "awayTeam": {
+      "name": "Nottingham Forest",
+      "id": 10203
+    },
+    "coverageLevel": "xG",
+    "matchTimeUTC": "Sun, Mar 1, 2026, 14:00 UTC",
+    "matchTimeUTCDate": "2026-03-01T14:00:00.000Z",
+    "started": true,
+    "finished": true,
+    "gender": "male"
+  },
+  "header": {
+    "teams": [
+      {
+        "name": "Brighton & Hove Albion",
+        "id": 10204,
+        "score": 2,
+        "imageUrl": "https://images.fotmob.com/image_resources/logo/teamlogo/10204_small.png",
+        "pageUrl": "/teams/10204/overview/brighton-hove-albion"
+      },
+      {
+        "name": "Nottingham Forest",
+        "id": 10203,
+        "score": 1,
+        "imageUrl": "https://images.fotmob.com/image_resources/logo/teamlogo/10203_small.png",
+        "pageUrl": "/teams/10203/overview/nottingham-forest"
+      }
+    ],
+    "status": {
+      "utcTime": "2026-03-01T14:00:00.000Z",
+      "numberOfHomeRedCards": 0,
+      "numberOfAwayRedCards": 0,
+      "halfs": {
+        "firstHalfStarted": "01.03.2026 15:01:18",
+        "firstHalfEnded": "01.03.2026 15:49:30",
+        "secondHalfStarted": "01.03.2026 16:05:29",
+        "secondHalfEnded": "01.03.2026 16:56:59",
+        "firstExtraHalfStarted": "",
+        "secondExtraHalfStarted": "",
+        "gameEnded": "01.03.2026 16:56:59"
+      },
+      "finished": true,
+      "started": true,
+      "cancelled": false,
+      "awarded": false,
+      "scoreStr": "2 - 1",
+      "reason": {
+        "short": "FT",
+        "shortKey": "fulltime_short",
+        "long": "Full-Time",
+        "longKey": "finished"
+      },
+      "whoLostOnPenalties": null,
+      "whoLostOnAggregated": ""
+    },
+    "events": {
+      "homeTeamGoals": {
+        "Gómez": [
+          {
+            "reactKey": "137957686Goal1354561undefinedtrue",
+            "timeStr": 6,
+            "type": "Goal",
+            "time": 6,
+            "overloadTime": null,
+            "eventId": 13795768,
+            "player": {
+              "id": 1354561,
+              "name": "Diego Gómez",
+              "profileUrl": "/players/1354561/diego-gomez"
+            },
+            "homeScore": 0,
+            "awayScore": 0,
+            "profileUrl": "/players/1354561/diego-gomez",
+            "overloadTimeStr": false,
+            "isHome": true,
+            "ownGoal": null,
+            "goalDescription": null,
+            "goalDescriptionKey": null,
+            "suffix": null,
+            "suffixKey": null,
+            "isPenaltyShootoutEvent": false,
+            "nameStr": "Diego Gómez",
+            "firstName": "Diego",
+            "lastName": "Gómez",
+            "fullName": "Diego Gómez",
+            "playerId": 1354561,
+            "newScore": [
+              1,
+              0
+            ],
+            "penShootoutScore": null,
+            "shotmapEvent": {
+              "id": 2906058715,
+              "eventType": "Goal",
+              "teamId": 10204,
+              "playerId": 1354561,
+              "playerName": "Diego Gomez",
+              "x": 92.8,
+              "y": 15.661656051799998,
+              "min": 6,
+              "minAdded": null,
+              "isBlocked": false,
+              "isOnTarget": true,
+              "blockedX": null,
+              "blockedY": null,
+              "goalCrossedY": 36.97375,
+              "goalCrossedZ": 1.2585263096000001,
+              "expectedGoals": 0.02647620253264904,
+              "expectedGoalsOnTarget": 0.09728556871414185,
+              "shotType": "RightFoot",
+              "situation": "RegularPlay",
+              "period": "FirstHalf",
+              "isOwnGoal": false,
+              "onGoalShot": {
+                "x": 0.21329365079365015,
+                "y": 0.3329434681481482,
+                "zoomRatio": 1
+              },
+              "isSavedOffLine": false,
+              "isFromInsideBox": true,
+              "keeperId": 181069,
+              "firstName": "Diego",
+              "lastName": "Gomez",
+              "fullName": "Diego Gomez",
+              "teamColor": "#0850A0"
+            },
+            "assistStr": "assist by Pascal Groß",
+            "assistProfileUrl": "/players/167008/pascal-gross",
+            "assistPlayerId": 167008,
+            "assistKey": "assist_by",
+            "assistInput": "Pascal Groß"
+          }
+        ],
+        "Welbeck": [
+          {
+            "reactKey": "1379588215Goal113836undefinedtrue",
+            "timeStr": 15,
+            "type": "Goal",
+            "time": 15,
+            "overloadTime": null,
+            "eventId": 13795882,
+            "player": {
+              "id": 113836,
+              "name": "Danny Welbeck",
+              "profileUrl": "/players/113836/danny-welbeck"
+            },
+            "homeScore": 1,
+            "awayScore": 1,
+            "profileUrl": "/players/113836/danny-welbeck",
+            "overloadTimeStr": false,
+            "isHome": true,
+            "ownGoal": null,
+            "goalDescription": null,
+            "goalDescriptionKey": null,
+            "suffix": null,
+            "suffixKey": null,
+            "isPenaltyShootoutEvent": false,
+            "nameStr": "Danny Welbeck",
+            "firstName": "Danny",
+            "lastName": "Welbeck",
+            "fullName": "Danny Welbeck",
+            "playerId": 113836,
+            "newScore": [
+              2,
+              1
+            ],
+            "penShootoutScore": null,
+            "shotmapEvent": {
+              "id": 2906067457,
+              "eventType": "Goal",
+              "teamId": 10204,
+              "playerId": 113836,
+              "playerName": "Danny Welbeck",
+              "x": 97.0877192975,
+              "y": 29.127380951,
+              "min": 15,
+              "minAdded": null,
+              "isBlocked": false,
+              "isOnTarget": true,
+              "blockedX": null,
+              "blockedY": null,
+              "goalCrossedY": 35.9825,
+              "goalCrossedZ": 1.0145263108,
+              "expectedGoals": 0.2343314290046692,
+              "expectedGoalsOnTarget": 0.6451980471611023,
+              "shotType": "RightFoot",
+              "situation": "RegularPlay",
+              "period": "FirstHalf",
+              "isOwnGoal": false,
+              "onGoalShot": {
+                "x": 0.47552910052910013,
+                "y": 0.2683932039153439,
+                "zoomRatio": 1
+              },
+              "isSavedOffLine": false,
+              "isFromInsideBox": true,
+              "keeperId": 181069,
+              "firstName": "Danny",
+              "lastName": "Welbeck",
+              "fullName": "Danny Welbeck",
+              "teamColor": "#0850A0"
+            },
+            "assistStr": "assist by Jack Hinshelwood",
+            "assistProfileUrl": "/players/1251334/jack-hinshelwood",
+            "assistPlayerId": 1251334,
+            "assistKey": "assist_by",
+            "assistInput": "Jack Hinshelwood"
+          }
+        ]
+      },
+      "awayTeamGoals": {
+        "Gibbs-White": [
+          {
+            "reactKey": "1379584413Goal789502undefinedfalse",
+            "timeStr": 13,
+            "type": "Goal",
+            "time": 13,
+            "overloadTime": null,
+            "eventId": 13795844,
+            "player": {
+              "id": 789502,
+              "name": "Morgan Gibbs-White",
+              "profileUrl": "/players/789502/morgan-gibbs-white"
+            },
+            "homeScore": 1,
+            "awayScore": 0,
+            "profileUrl": "/players/789502/morgan-gibbs-white",
+            "overloadTimeStr": false,
+            "isHome": false,
+            "ownGoal": null,
+            "goalDescription": null,
+            "goalDescriptionKey": null,
+            "suffix": null,
+            "suffixKey": null,
+            "isPenaltyShootoutEvent": false,
+            "nameStr": "Morgan Gibbs-White",
+            "firstName": "Morgan",
+            "lastName": "Gibbs-White",
+            "fullName": "Morgan Gibbs-White",
+            "playerId": 789502,
+            "newScore": [
+              1,
+              1
+            ],
+            "penShootoutScore": null,
+            "shotmapEvent": {
+              "id": 2906065643,
+              "eventType": "Goal",
+              "teamId": 10203,
+              "playerId": 789502,
+              "playerName": "Morgan Gibbs-White",
+              "x": 81.35873786479999,
+              "y": 35.75375,
+              "min": 13,
+              "minAdded": null,
+              "isBlocked": false,
+              "isOnTarget": true,
+              "blockedX": null,
+              "blockedY": null,
+              "goalCrossedY": 32.09375,
+              "goalCrossedZ": 1.5025263084,
+              "expectedGoals": 0.03626056760549545,
+              "expectedGoalsOnTarget": 0.23053918778896332,
+              "shotType": "RightFoot",
+              "situation": "RegularPlay",
+              "period": "FirstHalf",
+              "isOwnGoal": false,
+              "onGoalShot": {
+                "x": 1.5042989417989419,
+                "y": 0.39749373238095237,
+                "zoomRatio": 1
+              },
+              "isSavedOffLine": false,
+              "isFromInsideBox": false,
+              "keeperId": 1131987,
+              "firstName": "Morgan",
+              "lastName": "Gibbs-White",
+              "fullName": "Morgan Gibbs-White",
+              "teamColor": "#C8102E"
+            },
+            "assistStr": "assist by Igor Jesus",
+            "assistProfileUrl": "/players/1082102/igor-jesus",
+            "assistPlayerId": 1082102,
+            "assistKey": "assist_by",
+            "assistInput": "Igor Jesus"
+          }
+        ]
+      },
+      "homeTeamRedCards": {},
+      "awayTeamRedCards": {}
+    }
+  },
+  "nav": [
+    "matchfacts",
+    "liveticker",
+    "lineup"
+  ],
+  "ongoing": false,
+  "hasPendingVAR": false,
+  "content": {
+    "matchFacts": {
+      "matchId": 4813647,
+      "highlights": {
+        "image": "https://i.ytimg.com/vi/Ei3_rA8Dcw8/maxresdefault.jpg",
+        "url": "https://www.youtube.com/watch?v=Ei3_rA8Dcw8",
+        "source": "www.youtube.com"
+      },
+      "playerOfTheMatch": {
+        "id": 167008,
+        "name": {
+          "firstName": "Pascal",
+          "lastName": "Groß",
+          "fullName": "Pascal Groß"
+        },
+        "teamName": "Brighton & Hove Albion",
+        "teamId": 10204,
+        "rating": {
+          "num": "8.4",
+          "isTop": {
+            "isTopRating": true,
+            "isMatchFinished": true
+          }
+        },
+        "minutesPlayed": 90,
+        "shotmap": [
+          {
+            "id": 2906111927,
+            "eventType": "AttemptSaved",
+            "teamId": 10204,
+            "playerId": 167008,
+            "playerName": "Pascal Gross",
+            "x": 84.85,
+            "y": 50.7969426736,
+            "min": 53,
+            "minAdded": null,
+            "isBlocked": false,
+            "isOnTarget": true,
+            "blockedX": 102.9137931036,
+            "blockedY": 35.0675,
+            "goalCrossedY": 36.5925,
+            "goalCrossedZ": 0.0385263156,
+            "expectedGoals": 0.01651211641728878,
+            "expectedGoalsOnTarget": 0.11004888266324997,
+            "shotType": "RightFoot",
+            "situation": "SetPiece",
+            "period": "SecondHalf",
+            "isOwnGoal": false,
+            "onGoalShot": {
+              "x": 0.31415343915343885,
+              "y": 0.010192146984126984,
+              "zoomRatio": 1
+            },
+            "isSavedOffLine": false,
+            "isFromInsideBox": false,
+            "keeperId": 181069,
+            "teamColor": "#0850A0"
+          }
+        ],
+        "pageUrl": "/players/167008/pascal-gross",
+        "isHomeTeam": true,
+        "stats": [
+          {
+            "title": "Top stats",
+            "key": "top_stats",
+            "stats": {
+              "FotMob rating": {
+                "key": "rating_title",
+                "stat": {
+                  "value": 8.43,
+                  "type": "double"
+                }
+              },
+              "Minutes played": {
+                "key": "minutes_played",
+                "stat": {
+                  "value": 90,
+                  "type": "integer"
+                }
+              },
+              "Goals": {
+                "key": "goals",
+                "stat": {
+                  "value": 0,
+                  "type": "integer"
+                }
+              },
+              "Assists": {
+                "key": "assists",
+                "stat": {
+                  "value": 1,
+                  "type": "integer"
+                }
+              },
+              "Expected goals (xG)": {
+                "key": "expected_goals",
+                "stat": {
+                  "value": 0.02,
+                  "type": "double"
+                }
+              },
+              "Expected goals on target (xGOT)": {
+                "key": "expected_goals_on_target_variant",
+                "stat": {
+                  "value": 0.09,
+                  "type": "double"
+                }
+              },
+              "Expected assists (xA)": {
+                "key": "expected_assists",
+                "stat": {
+                  "value": 0.56,
+                  "type": "double"
+                }
+              },
+              "xG + xA": {
+                "key": "xg_and_xa",
+                "stat": {
+                  "value": 0.5800000000000001,
+                  "type": "double"
+                }
+              },
+              "Total shots": {
+                "key": "total_shots",
+                "stat": {
+                  "value": 1,
+                  "type": "integer"
+                },
+                "hideInPopupCard": true
+              },
+              "Top speed": {
+                "key": "physical_metrics_topspeed",
+                "stat": {
+                  "value": 27.5,
+                  "type": "speed"
+                }
+              },
+              "Distance covered": {
+                "key": "physical_metrics_distance_covered",
+                "stat": {
+                  "value": 12754,
+                  "type": "distance"
+                }
+              },
+              "Accurate passes": {
+                "key": "accurate_passes",
+                "stat": {
+                  "value": 51,
+                  "total": 60,
+                  "type": "fractionWithPercentage"
+                }
+              },
+              "Chances created": {
+                "key": "chances_created",
+                "stat": {
+                  "value": 3,
+                  "type": "integer"
+                }
+              },
+              "Shots on target": {
+                "key": "ShotsOnTarget",
+                "stat": {
+                  "value": 1,
+                  "type": "integer"
+                }
+              },
+              "Shots off target": {
+                "key": "ShotsOffTarget",
+                "stat": {
+                  "value": 0,
+                  "type": "integer"
+                }
+              },
+              "Shot accuracy": {
+                "key": "shot_accuracy",
+                "stat": {
+                  "value": 1,
+                  "total": 1,
+                  "type": "fractionWithPercentage"
+                }
+              },
+              "Shotmap": {
+                "key": null,
+                "stat": {
+                  "value": 1,
+                  "type": "boolean"
+                }
+              },
+              "Fantasy points": {
+                "key": "fantasy_points",
+                "stat": {
+                  "value": 5,
+                  "type": "fantasyPoints"
+                }
+              },
+              "Defensive actions": {
+                "key": "defensive_actions",
+                "stat": {
+                  "value": 10,
+                  "type": "integer"
+                }
+              }
+            }
+          },
+          {
+            "title": "Attack",
+            "key": "attack",
+            "stats": {
+              "Touches": {
+                "key": "touches",
+                "stat": {
+                  "value": 77,
+                  "type": "integer"
+                }
+              },
+              "Touches in opposition box": {
+                "key": "touches_opp_box",
+                "stat": {
+                  "value": 5,
+                  "type": "integer"
+                }
+              },
+              "Successful dribbles": {
+                "key": "dribbles_succeeded",
+                "stat": {
+                  "value": 1,
+                  "total": 1,
+                  "type": "fractionWithPercentage"
+                }
+              },
+              "Passes into final third": {
+                "key": "passes_into_final_third",
+                "stat": {
+                  "value": 3,
+                  "type": "integer"
+                }
+              },
+              "Line breaking passes": {
+                "key": "line_breaking_passes",
+                "stat": {
+                  "value": 2,
+                  "type": "integer"
+                }
+              },
+              "Accurate crosses": {
+                "key": "accurate_crosses",
+                "stat": {
+                  "value": 3,
+                  "total": 6,
+                  "type": "fractionWithPercentage"
+                }
+              },
+              "Corners": {
+                "key": "corners",
+                "stat": {
+                  "value": 4,
+                  "type": "integer"
+                }
+              },
+              "Dispossessed": {
+                "key": "dispossessed",
+                "stat": {
+                  "value": 0,
+                  "type": "integer"
+                }
+              },
+              "xG Non-penalty": {
+                "key": "expected_goals_non_penalty",
+                "stat": {
+                  "value": 0.02,
+                  "type": "double"
+                }
+              }
+            }
+          },
+          {
+            "title": "Defense",
+            "key": "defense",
+            "stats": {
+              "Defensive actions": {
+                "key": "defensive_actions",
+                "stat": {
+                  "value": 10,
+                  "type": "integer"
+                }
+              },
+              "Tackles": {
+                "key": "matchstats.headers.tackles",
+                "stat": {
+                  "value": 2,
+                  "type": "integer"
+                }
+              },
+              "Blocks": {
+                "key": "shot_blocks",
+                "stat": {
+                  "value": 0,
+                  "type": "integer"
+                }
+              },
+              "Clearances": {
+                "key": "clearances",
+                "stat": {
+                  "value": 2,
+                  "type": "integer"
+                }
+              },
+              "Headed clearance": {
+                "key": "headed_clearance",
+                "stat": {
+                  "value": 1,
+                  "type": "integer"
+                }
+              },
+              "Interceptions": {
+                "key": "interceptions",
+                "stat": {
+                  "value": 1,
+                  "type": "integer"
+                }
+              },
+              "Recoveries": {
+                "key": "recoveries",
+                "stat": {
+                  "value": 5,
+                  "type": "integer"
+                }
+              },
+              "Dribbled past": {
+                "key": "dribbled_past",
+                "stat": {
+                  "value": 1,
+                  "type": "integer"
+                }
+              }
+            }
+          }
+        ],
+        "role": "Midfielder",
+        "teamData": {
+          "home": {
+            "id": 10204,
+            "color": "#0850A0"
+          },
+          "away": {
+            "id": 10203,
+            "color": "#C8102E"
+          }
+        }
+      },
+      "events": {
+        "ongoing": false,
+        "events": [
+          {
+            "reactKey": "137957686Goal1354561undefinedtrue",
+            "timeStr": 6,
+            "type": "Goal",
+            "time": 6,
+            "overloadTime": null,
+            "eventId": 13795768,
+            "player": {
+              "id": 1354561,
+              "name": "Diego Gómez",
+              "profileUrl": "/players/1354561/diego-gomez"
+            },
+            "homeScore": 0,
+            "awayScore": 0,
+            "profileUrl": "/players/1354561/diego-gomez",
+            "overloadTimeStr": false,
+            "isHome": true,
+            "ownGoal": null,
+            "goalDescription": null,
+            "goalDescriptionKey": null,
+            "suffix": null,
+            "suffixKey": null,
+            "isPenaltyShootoutEvent": false,
+            "nameStr": "Diego Gómez",
+            "firstName": "Diego",
+            "lastName": "Gómez",
+            "fullName": "Diego Gómez",
+            "playerId": 1354561,
+            "newScore": [
+              1,
+              0
+            ],
+            "penShootoutScore": null,
+            "shotmapEvent": {
+              "id": 2906058715,
+              "eventType": "Goal",
+              "teamId": 10204,
+              "playerId": 1354561,
+              "playerName": "Diego Gomez",
+              "x": 92.8,
+              "y": 15.661656051799998,
+              "min": 6,
+              "minAdded": null,
+              "isBlocked": false,
+              "isOnTarget": true,
+              "blockedX": null,
+              "blockedY": null,
+              "goalCrossedY": 36.97375,
+              "goalCrossedZ": 1.2585263096000001,
+              "expectedGoals": 0.02647620253264904,
+              "expectedGoalsOnTarget": 0.09728556871414185,
+              "shotType": "RightFoot",
+              "situation": "RegularPlay",
+              "period": "FirstHalf",
+              "isOwnGoal": false,
+              "onGoalShot": {
+                "x": 0.21329365079365015,
+                "y": 0.3329434681481482,
+                "zoomRatio": 1
+              },
+              "isSavedOffLine": false,
+              "isFromInsideBox": true,
+              "keeperId": 181069,
+              "firstName": "Diego",
+              "lastName": "Gomez",
+              "fullName": "Diego Gomez",
+              "teamColor": "#0850A0"
+            },
+            "assistStr": "assist by Pascal Groß",
+            "assistProfileUrl": "/players/167008/pascal-gross",
+            "assistPlayerId": 167008,
+            "assistKey": "assist_by",
+            "assistInput": "Pascal Groß"
+          },
+          {
+            "reactKey": "1379584413Goal789502undefinedfalse",
+            "timeStr": 13,
+            "type": "Goal",
+            "time": 13,
+            "overloadTime": null,
+            "eventId": 13795844,
+            "player": {
+              "id": 789502,
+              "name": "Morgan Gibbs-White",
+              "profileUrl": "/players/789502/morgan-gibbs-white"
+            },
+            "homeScore": 1,
+            "awayScore": 0,
+            "profileUrl": "/players/789502/morgan-gibbs-white",
+            "overloadTimeStr": false,
+            "isHome": false,
+            "ownGoal": null,
+            "goalDescription": null,
+            "goalDescriptionKey": null,
+            "suffix": null,
+            "suffixKey": null,
+            "isPenaltyShootoutEvent": false,
+            "nameStr": "Morgan Gibbs-White",
+            "firstName": "Morgan",
+            "lastName": "Gibbs-White",
+            "fullName": "Morgan Gibbs-White",
+            "playerId": 789502,
+            "newScore": [
+              1,
+              1
+            ],
+            "penShootoutScore": null,
+            "shotmapEvent": {
+              "id": 2906065643,
+              "eventType": "Goal",
+              "teamId": 10203,
+              "playerId": 789502,
+              "playerName": "Morgan Gibbs-White",
+              "x": 81.35873786479999,
+              "y": 35.75375,
+              "min": 13,
+              "minAdded": null,
+              "isBlocked": false,
+              "isOnTarget": true,
+              "blockedX": null,
+              "blockedY": null,
+              "goalCrossedY": 32.09375,
+              "goalCrossedZ": 1.5025263084,
+              "expectedGoals": 0.03626056760549545,
+              "expectedGoalsOnTarget": 0.23053918778896332,
+              "shotType": "RightFoot",
+              "situation": "RegularPlay",
+              "period": "FirstHalf",
+              "isOwnGoal": false,
+              "onGoalShot": {
+                "x": 1.5042989417989419,
+                "y": 0.39749373238095237,
+                "zoomRatio": 1
+              },
+              "isSavedOffLine": false,
+              "isFromInsideBox": false,
+              "keeperId": 1131987,
+              "firstName": "Morgan",
+              "lastName": "Gibbs-White",
+              "fullName": "Morgan Gibbs-White",
+              "teamColor": "#C8102E"
+            },
+            "assistStr": "assist by Igor Jesus",
+            "assistProfileUrl": "/players/1082102/igor-jesus",
+            "assistPlayerId": 1082102,
+            "assistKey": "assist_by",
+            "assistInput": "Igor Jesus"
+          },
+          {
+            "reactKey": "1379588215Goal113836undefinedtrue",
+            "timeStr": 15,
+            "type": "Goal",
+            "time": 15,
+            "overloadTime": null,
+            "eventId": 13795882,
+            "player": {
+              "id": 113836,
+              "name": "Danny Welbeck",
+              "profileUrl": "/players/113836/danny-welbeck"
+            },
+            "homeScore": 1,
+            "awayScore": 1,
+            "profileUrl": "/players/113836/danny-welbeck",
+            "overloadTimeStr": false,
+            "isHome": true,
+            "ownGoal": null,
+            "goalDescription": null,
+            "goalDescriptionKey": null,
+            "suffix": null,
+            "suffixKey": null,
+            "isPenaltyShootoutEvent": false,
+            "nameStr": "Danny Welbeck",
+            "firstName": "Danny",
+            "lastName": "Welbeck",
+            "fullName": "Danny Welbeck",
+            "playerId": 113836,
+            "newScore": [
+              2,
+              1
+            ],
+            "penShootoutScore": null,
+            "shotmapEvent": {
+              "id": 2906067457,
+              "eventType": "Goal",
+              "teamId": 10204,
+              "playerId": 113836,
+              "playerName": "Danny Welbeck",
+              "x": 97.0877192975,
+              "y": 29.127380951,
+              "min": 15,
+              "minAdded": null,
+              "isBlocked": false,
+              "isOnTarget": true,
+              "blockedX": null,
+              "blockedY": null,
+              "goalCrossedY": 35.9825,
+              "goalCrossedZ": 1.0145263108,
+              "expectedGoals": 0.2343314290046692,
+              "expectedGoalsOnTarget": 0.6451980471611023,
+              "shotType": "RightFoot",
+              "situation": "RegularPlay",
+              "period": "FirstHalf",
+              "isOwnGoal": false,
+              "onGoalShot": {
+                "x": 0.47552910052910013,
+                "y": 0.2683932039153439,
+                "zoomRatio": 1
+              },
+              "isSavedOffLine": false,
+              "isFromInsideBox": true,
+              "keeperId": 181069,
+              "firstName": "Danny",
+              "lastName": "Welbeck",
+              "fullName": "Danny Welbeck",
+              "teamColor": "#0850A0"
+            },
+            "assistStr": "assist by Jack Hinshelwood",
+            "assistProfileUrl": "/players/1251334/jack-hinshelwood",
+            "assistPlayerId": 1251334,
+            "assistKey": "assist_by",
+            "assistInput": "Jack Hinshelwood"
+          }
+        ],
+        "eventTypes": [
+          "Goal",
+          "Assist",
+          "Card"
+        ],
+        "penaltyShootoutEvents": null
+      },
+      "infoBox": {
+        "legInfo": null,
+        "Match Date": {
+          "utcTime": "2026-03-01T14:00:00.000Z",
+          "isDateCorrect": true
+        },
+        "Tournament": {
+          "id": 47,
+          "parentLeagueId": 47,
+          "link": "/leagues/47/overview/premier-league",
+          "leagueName": "Premier League",
+          "roundName": "28",
+          "round": "28"
+        },
+        "Stadium": {
+          "name": "American Express Stadium",
+          "city": "Falmer, East Sussex",
+          "country": "England",
+          "lat": 50.861579551,
+          "long": -0.083642006,
+          "capacity": 31872,
+          "surface": "grass"
+        },
+        "Referee": {
+          "imgUrl": "https://images.fotmob.com/image_resources/logo/teamlogo/eng.png",
+          "text": "Andy Madley",
+          "countryCode": "ENG",
+          "country": "England"
+        },
+        "Attendance": 31427
+      },
+      "teamForm": [
+        [
+          {
+            "result": 0,
+            "resultString": "D",
+            "imageUrl": "https://images.fotmob.com/image_resources/logo/teamlogo/8668.png",
+            "linkToMatch": "/matches/everton-vs-brighton-hove-albion/2y16fs#4813606",
+            "date": {
+              "utcTime": "2026-01-31T15:00:00.000Z"
+            },
+            "teamPageUrl": "/teams/8668/overview/everton",
+            "tooltipText": {
+              "utcTime": "2026-01-31T15:00:00.000Z",
+              "homeTeam": "Brighton & Hove Albion",
+              "homeTeamId": 10204,
+              "homeScore": "1",
+              "awayTeam": "Everton",
+              "awayTeamId": 8668,
+              "awayScore": "1"
+            },
+            "score": "1 - 1",
+            "home": {
+              "id": "10204",
+              "name": "Brighton & Hove Albion",
+              "isOurTeam": true
+            },
+            "away": {
+              "id": "8668",
+              "name": "Everton",
+              "isOurTeam": false
+            }
+          },
+          {
+            "result": -1,
+            "resultString": "L",
+            "imageUrl": "https://images.fotmob.com/image_resources/logo/teamlogo/9826.png",
+            "linkToMatch": "/matches/crystal-palace-vs-brighton-hove-albion/3bfzlv#4813617",
+            "date": {
+              "utcTime": "2026-02-08T14:00:00.000Z"
+            },
+            "teamPageUrl": "/teams/9826/overview/crystal-palace",
+            "tooltipText": {
+              "utcTime": "2026-02-08T14:00:00.000Z",
+              "homeTeam": "Brighton & Hove Albion",
+              "homeTeamId": 10204,
+              "homeScore": "0",
+              "awayTeam": "Crystal Palace",
+              "awayTeamId": 9826,
+              "awayScore": "1"
+            },
+            "score": "0 - 1",
+            "home": {
+              "id": "10204",
+              "name": "Brighton & Hove Albion",
+              "isOurTeam": true
+            },
+            "away": {
+              "id": "9826",
+              "name": "Crystal Palace",
+              "isOurTeam": false
+            }
+          },
+          {
+            "result": -1,
+            "resultString": "L",
+            "imageUrl": "https://images.fotmob.com/image_resources/logo/teamlogo/10252.png",
+            "linkToMatch": "/matches/brighton-hove-albion-vs-aston-villa/3gku1s#4813625",
+            "date": {
+              "utcTime": "2026-02-11T19:30:00.000Z"
+            },
+            "teamPageUrl": "/teams/10252/overview/aston-villa",
+            "tooltipText": {
+              "utcTime": "2026-02-11T19:30:00.000Z",
+              "homeTeam": "Aston Villa",
+              "homeTeamId": 10252,
+              "homeScore": "1",
+              "awayTeam": "Brighton & Hove Albion",
+              "awayTeamId": 10204,
+              "awayScore": "0"
+            },
+            "score": "1 - 0",
+            "home": {
+              "id": "10252",
+              "name": "Aston Villa",
+              "isOurTeam": false
+            },
+            "away": {
+              "id": "10204",
+              "name": "Brighton & Hove Albion",
+              "isOurTeam": true
+            }
+          }
+        ],
+        [
+          {
+            "result": -1,
+            "resultString": "L",
+            "imageUrl": "https://images.fotmob.com/image_resources/logo/teamlogo/8463.png",
+            "linkToMatch": "/matches/leeds-united-vs-nottingham-forest/2vqauu#4813620",
+            "date": {
+              "utcTime": "2026-02-06T20:00:00.000Z"
+            },
+            "teamPageUrl": "/teams/8463/overview/leeds-united",
+            "tooltipText": {
+              "utcTime": "2026-02-06T20:00:00.000Z",
+              "homeTeam": "Leeds United",
+              "homeTeamId": 8463,
+              "homeScore": "3",
+              "awayTeam": "Nottingham Forest",
+              "awayTeamId": 10203,
+              "awayScore": "1"
+            },
+            "score": "3 - 1",
+            "home": {
+              "id": "8463",
+              "name": "Leeds United",
+              "isOurTeam": false
+            },
+            "away": {
+              "id": "10203",
+              "name": "Nottingham Forest",
+              "isOurTeam": true
+            }
+          },
+          {
+            "result": 0,
+            "resultString": "D",
+            "imageUrl": "https://images.fotmob.com/image_resources/logo/teamlogo/8602.png",
+            "linkToMatch": "/matches/wolverhampton-wanderers-vs-nottingham-forest/2xa4gh#4813631",
+            "date": {
+              "utcTime": "2026-02-11T19:30:00.000Z"
+            },
+            "teamPageUrl": "/teams/8602/overview/wolverhampton-wanderers",
+            "tooltipText": {
+              "utcTime": "2026-02-11T19:30:00.000Z",
+              "homeTeam": "Nottingham Forest",
+              "homeTeamId": 10203,
+              "homeScore": "0",
+              "awayTeam": "Wolverhampton Wanderers",
+              "awayTeamId": 8602,
+              "awayScore": "0"
+            },
+            "score": "0 - 0",
+            "home": {
+              "id": "10203",
+              "name": "Nottingham Forest",
+              "isOurTeam": true
+            },
+            "away": {
+              "id": "8602",
+              "name": "Wolverhampton Wanderers",
+              "isOurTeam": false
+            }
+          },
+          {
+            "result": 1,
+            "resultString": "W",
+            "imageUrl": "https://images.fotmob.com/image_resources/logo/teamlogo/8695.png",
+            "linkToMatch": "/matches/fenerbahce-vs-nottingham-forest/2ybpc2#5161886",
+            "date": {
+              "utcTime": "2026-02-19T17:45:00.000Z"
+            },
+            "teamPageUrl": "/teams/8695/overview/fenerbahce",
+            "tooltipText": {
+              "utcTime": "2026-02-19T17:45:00.000Z",
+              "homeTeam": "Fenerbahçe",
+              "homeTeamId": 8695,
+              "homeScore": "0",
+              "awayTeam": "Nottingham Forest",
+              "awayTeamId": 10203,
+              "awayScore": "3"
+            },
+            "score": "0 - 3",
+            "home": {
+              "id": "8695",
+              "name": "Fenerbahçe",
+              "isOurTeam": false
+            },
+            "away": {
+              "id": "10203",
+              "name": "Nottingham Forest",
+              "isOurTeam": true
+            }
+          }
+        ]
+      ],
+      "poll": {
+        "oddspoll": {
+          "PollName": "oddspoll-match-4813647",
+          "MatchId": 4813647,
+          "HomeTeamId": 10204,
+          "AwayTeamId": 10203,
+          "HomeTeam": "Brighton",
+          "AwayTeam": "Nottm Forest",
+          "Facts": [
+            {
+              "OddsType": "1x2",
+              "DefaultLabel": "Who will win?",
+              "TextLabelId": "who_will_win",
+              "DefaultTemplate": "{0} have {1}W, {2}D, {3}L in five matches while {4} have {5}W, {6}D, {7}L.",
+              "TextTemplateId": "team_form_both",
+              "StatValues": [
+                "home_team",
+                "1",
+                "1"
+              ],
+              "DefaultLabels": [
+                "1",
+                "x",
+                "2"
+              ],
+              "LabelTemplates": [
+                "label_1",
+                "label_x",
+                "label_2"
+              ],
+              "Icon": "poll_teams",
+              "defaultText": "Brighton & Hove Albion have 1W, 1D, 3L in five matches while Nottingham Forest have 1W, 1D, 3L."
+            },
+            {
+              "OddsType": "bts",
+              "DefaultLabel": "Will both teams score?",
+              "TextLabelId": "both_score",
+              "DefaultTemplate": "{0} have scored in their last {1} away matches.",
+              "TextTemplateId": "goalstreak_team_away",
+              "StatValues": [
+                "away_team",
+                "3"
+              ],
+              "DefaultLabels": [
+                "yes",
+                "no"
+              ],
+              "LabelTemplates": [
+                "label_yes",
+                "label_no"
+              ],
+              "Icon": "poll_goal",
+              "defaultText": "Nottingham Forest have scored in their last 3 away matches."
+            },
+            {
+              "OddsType": "ou",
+              "DefaultLabel": "Will there be more than 2.5 goals?",
+              "TextLabelId": "over_under",
+              "DefaultTemplate": "{0} have an average of {2} goals in their last three matches and {1} have an average of {3}.",
+              "TextTemplateId": "average_goals_last3_both",
+              "StatValues": [
+                "home_team",
+                "away_team",
+                "0.67"
+              ],
+              "DefaultLabels": [
+                "yes",
+                "no"
+              ],
+              "LabelTemplates": [
+                "label_yes",
+                "label_no"
+              ],
+              "Icon": "poll_goal",
+              "defaultText": "Brighton & Hove Albion have an average of 0.67 goals in their last three matches and Nottingham Forest have an average of 1.33."
+            }
+          ]
+        },
+        "renderToTop": false
+      },
+      "topPlayers": {
+        "homeTopPlayers": [
+          {
+            "playerId": 167008,
+            "name": {
+              "firstName": "Pascal",
+              "lastName": "Groß",
+              "fullName": "Pascal Groß"
+            },
+            "playerRatingRounded": "8.4",
+            "playerRating": 8.43,
+            "color": "rgba(51, 199, 113, 1.0)",
+            "manOfTheMatch": true,
+            "teamId": "10204",
+            "positionLabel": {
+              "label": "DM",
+              "key": "centerdefensivemidfielder_short"
+            }
+          },
+          {
+            "playerId": 1354561,
+            "name": {
+              "firstName": "Diego",
+              "lastName": "Gómez",
+              "fullName": "Diego Gómez"
+            },
+            "playerRatingRounded": "8.3",
+            "playerRating": 8.27,
+            "color": "rgba(51, 199, 113, 1.0)",
+            "manOfTheMatch": false,
+            "teamId": "10204",
+            "positionLabel": {
+              "label": "RW",
+              "key": "rightwinger_short"
+            }
+          },
+          {
+            "playerId": 113836,
+            "name": {
+              "firstName": "Danny",
+              "lastName": "Welbeck",
+              "fullName": "Danny Welbeck"
+            },
+            "playerRatingRounded": "8.0",
+            "playerRating": 8.01,
+            "color": "rgba(51, 199, 113, 1.0)",
+            "manOfTheMatch": false,
+            "teamId": "10204",
+            "positionLabel": {
+              "label": "ST",
+              "key": "striker_short"
+            }
+          }
+        ],
+        "awayTopPlayers": [
+          {
+            "playerId": 789502,
+            "name": {
+              "firstName": "Morgan",
+              "lastName": "Gibbs-White",
+              "fullName": "Morgan Gibbs-White"
+            },
+            "playerRatingRounded": "8.1",
+            "playerRating": 8.08,
+            "color": "rgba(51, 199, 113, 1.0)",
+            "manOfTheMatch": false,
+            "teamId": "10203",
+            "positionLabel": {
+              "label": "AM",
+              "key": "centerattackingmidfielder_short"
+            }
+          },
+          {
+            "playerId": 1082102,
+            "name": {
+              "firstName": "Igor",
+              "lastName": "Jesus",
+              "fullName": "Igor Jesus"
+            },
+            "shortName": "Igor Jesus",
+            "playerRatingRounded": "7.3",
+            "playerRating": 7.29,
+            "color": "rgba(51, 199, 113, 1.0)",
+            "manOfTheMatch": false,
+            "teamId": "10203",
+            "positionLabel": {
+              "label": "ST",
+              "key": "striker_short"
+            }
+          },
+          {
+            "playerId": 846383,
+            "name": {
+              "firstName": "Callum",
+              "lastName": "Hudson-Odoi",
+              "fullName": "Callum Hudson-Odoi"
+            },
+            "playerRatingRounded": "6.7",
+            "playerRating": 6.72,
+            "color": "rgba(240, 128, 34, 1.0)",
+            "manOfTheMatch": false,
+            "teamId": "10203",
+            "positionLabel": {
+              "label": "LW",
+              "key": "leftwinger_short"
+            }
+          }
+        ]
+      },
+      "insights": [
+        {
+          "type": "team",
+          "playerId": null,
+          "teamId": 10204,
+          "priority": 1338,
+          "defaultText": "Have scored {0} goals in their last {1} matches",
+          "localizedTextId": "insights_goals_team",
+          "statValues": [
+            {
+              "value": 3,
+              "name": null,
+              "type": "integer"
+            },
+            {
+              "value": 5,
+              "name": null,
+              "type": "integer"
+            }
+          ],
+          "text": "Have scored 3 goals in their last 5 matches",
+          "color": "#0850A0"
+        },
+        {
+          "type": "team",
+          "playerId": null,
+          "teamId": 10204,
+          "priority": 6,
+          "defaultText": "{0} and {1} have not drawn any of their last {2} matches against each other.",
+          "localizedTextId": "h2h_no_draws_v2",
+          "statValues": [
+            {
+              "value": 10204,
+              "name": "Brighton & Hove Albion",
+              "type": "team"
+            },
+            {
+              "value": 10203,
+              "name": "Nottingham Forest",
+              "type": "team"
+            },
+            {
+              "value": 3,
+              "name": null,
+              "type": "integer"
+            }
+          ],
+          "text": "Brighton & Hove Albion and Nottingham Forest have not drawn any of their last 3 matches against each other.",
+          "color": "#0850A0"
+        },
+        {
+          "type": "player",
+          "playerId": 1561249,
+          "teamId": 10204,
+          "priority": 1,
+          "defaultText": "{0} has the most shots on target per match for {1} ({2})",
+          "localizedTextId": "insights_player_most_shots_on_target_for_team",
+          "statValues": [
+            {
+              "value": 1561249,
+              "name": "Charalampos Kostoulas",
+              "type": "player"
+            },
+            {
+              "value": 10204,
+              "name": "Brighton & Hove Albion",
+              "type": "team"
+            },
+            {
+              "value": 1.8,
+              "name": null,
+              "type": "double"
+            }
+          ],
+          "text": "Charalampos Kostoulas has the most shots on target per match for Brighton & Hove Albion (1.8)",
+          "color": "#0850A0"
+        }
+      ],
+      "topScorers": {
+        "section": "Top scorers",
+        "sectionId": 6,
+        "homePlayer": {
+          "playerId": 113836,
+          "position": 3,
+          "matchesWithRating": 25,
+          "lastName": "Welbeck",
+          "fullName": "Danny Welbeck",
+          "stats": {
+            "goals": 9,
+            "goalAssist": 0,
+            "ontargetScoringAtt": 1.23,
+            "motm": 2,
+            "gamesPlayed": 26,
+            "minsPlayed": 1543,
+            "minsPlayedGoal": 171,
+            "expectedGoals": 8.794599533081055,
+            "playerRating": 6.7
+          }
+        },
+        "awayPlayer": {
+          "playerId": 789502,
+          "position": 2,
+          "matchesWithRating": 27,
+          "lastName": "Gibbs-White",
+          "fullName": "Morgan Gibbs-White",
+          "stats": {
+            "goals": 6,
+            "goalAssist": 2,
+            "ontargetScoringAtt": 1.21,
+            "motm": 2,
+            "gamesPlayed": 27,
+            "minsPlayed": 2304,
+            "minsPlayedGoal": 384,
+            "expectedGoals": 6.857399940490723,
+            "playerRating": 6.93
+          }
+        },
+        "statsOrder": [
+          "playerRating",
+          "goals",
+          "expectedGoals"
+        ]
+      },
+      "momentum": {
+        "main": {
+          "data": [
+            {
+              "minute": 1,
+              "value": -22
+            },
+            {
+              "minute": 2,
+              "value": -27
+            },
+            {
+              "minute": 3,
+              "value": -22
+            }
+          ],
+          "debugTitle": "Using xT SA-version"
+        },
+        "alternateModels": []
+      },
+      "countryCode": "ENG",
+      "postReview": [
+        {
+          "id": "1xylpg68snaws1fzt07nl1y34y",
+          "title": "Brighton 2-1 Nottingham Forest: Gomez and Welbeck sink struggling visitors",
+          "image": "https://images.performgroup.com/di/library/omnisport/fe/e5/brighton_1m0p9dh8vpqon1dn1ns21t8i30.png?t=-1384881604",
+          "description": "Brighton made it back-to-back Premier League victories as Nottingham Forest were put to the sword at the Amex Stadium on Sunday.",
+          "lang": "en",
+          "contentUrl": "https://apigw.fotmob.com/searchapi/search?entity=id&term=1xylpg68snaws1fzt07nl1y34y",
+          "dateUpdated": "2026-03-01T16:30:25Z",
+          "source": "Opta",
+          "shareUrl": "https://www.fotmob.com/news/1xylpg68snaws1fzt07nl1y34y-brighton-2-1-nottingham-forest-gomez-welbeck-sink-struggling-visitors?utm_source=fotmob"
+        },
+        {
+          "id": "1xylpg68snaws1fzt07nl1y34y_es",
+          "title": "Brighton 2-1 Nottingham Forest: Gómez y Welbeck hunden a unos visitantes en apuros",
+          "image": "https://images.performgroup.com/di/library/omnisport/fe/e5/brighton_1m0p9dh8vpqon1dn1ns21t8i30.png?t=-1384881604",
+          "description": "El Brighton encadenó dos victorias seguidas en la Premier League al imponerse al Nottingham Forest el domingo en el Amex Stadium.",
+          "lang": "es",
+          "contentUrl": "https://apigw.fotmob.com/searchapi/search?entity=id&term=1xylpg68snaws1fzt07nl1y34y_es",
+          "dateUpdated": "2026-03-01T16:30:25Z",
+          "source": "Opta",
+          "shareUrl": "https://www.fotmob.com/news/1xylpg68snaws1fzt07nl1y34y_es-brighton-2-1-nottingham-forest-gomez-y-welbeck-hunden-unos-visitantes-en-apuros?utm_source=fotmob"
+        },
+        {
+          "id": "1xylpg68snaws1fzt07nl1y34y_pt-BR",
+          "title": "Brighton 2-1 Nottingham Forest: Gomez e Welbeck afundam visitantes em má fase",
+          "image": "https://images.performgroup.com/di/library/omnisport/fe/e5/brighton_1m0p9dh8vpqon1dn1ns21t8i30.png?t=-1384881604",
+          "description": "Brighton emplacou a segunda vitória seguida na Premier League, e o Nottingham Forest foi derrotado no Amex Stadium neste domingo.",
+          "lang": "pt-BR",
+          "contentUrl": "https://apigw.fotmob.com/searchapi/search?entity=id&term=1xylpg68snaws1fzt07nl1y34y_pt-BR",
+          "dateUpdated": "2026-03-01T16:30:25Z",
+          "source": "Opta",
+          "shareUrl": "https://www.fotmob.com/news/1xylpg68snaws1fzt07nl1y34y_pt-BR-brighton-2-1-nottingham-forest-gomez-e-welbeck-afundam-visitantes-em-ma-fase?utm_source=fotmob"
+        }
+      ],
+      "preReview": [
+        {
+          "id": "1abeynfd1pciu1cuzkhdefcnca",
+          "title": "Dunk wants to see Brighton fight, but not targeting European places",
+          "image": "https://images.performgroup.com/di/library/omnisport/b2/91/dunk_kz9hxihatoxx1odx7vtndezii.jpg?t=-1536379124",
+          "description": "Brighton are looking to make it back-to-back victories, welcoming struggling Nottingham Forest to the Amex Stadium on Sunday.",
+          "lang": "en",
+          "contentUrl": "https://apigw.fotmob.com/searchapi/search?entity=id&term=1abeynfd1pciu1cuzkhdefcnca",
+          "dateUpdated": "2026-02-28T10:22:42Z",
+          "source": "Opta",
+          "shareUrl": "https://www.fotmob.com/news/1abeynfd1pciu1cuzkhdefcnca-dunk-wants-see-brighton-fight-but-not-targeting-european-places?utm_source=fotmob"
+        },
+        {
+          "id": "1abeynfd1pciu1cuzkhdefcnca_es",
+          "title": "Dunk quiere ver al Brighton competir, pero no se marca como objetivo Europa",
+          "image": "https://images.performgroup.com/di/library/omnisport/b2/91/dunk_kz9hxihatoxx1odx7vtndezii.jpg?t=-1536379124",
+          "description": "El Brighton busca enlazar dos victorias y recibe el domingo en el Amex Stadium a un Nottingham Forest en apuros.",
+          "lang": "es",
+          "contentUrl": "https://apigw.fotmob.com/searchapi/search?entity=id&term=1abeynfd1pciu1cuzkhdefcnca_es",
+          "dateUpdated": "2026-02-28T10:22:42Z",
+          "source": "Opta",
+          "shareUrl": "https://www.fotmob.com/news/1abeynfd1pciu1cuzkhdefcnca_es-dunk-quiere-ver-al-brighton-competir-pero-no-se-marca-como-objetivo-europa?utm_source=fotmob"
+        },
+        {
+          "id": "1abeynfd1pciu1cuzkhdefcnca_it",
+          "title": "Dunk vuole vedere un Brighton combattivo, ma non punta all'Europa",
+          "image": "https://images.performgroup.com/di/library/omnisport/b2/91/dunk_kz9hxihatoxx1odx7vtndezii.jpg?t=-1536379124",
+          "description": "Il Brighton cerca la seconda vittoria di fila: domenica all'Amex Stadium arriva un Nottingham Forest in difficoltà.",
+          "lang": "it",
+          "contentUrl": "https://apigw.fotmob.com/searchapi/search?entity=id&term=1abeynfd1pciu1cuzkhdefcnca_it",
+          "dateUpdated": "2026-02-28T10:22:42Z",
+          "source": "Opta",
+          "shareUrl": "https://www.fotmob.com/news/1abeynfd1pciu1cuzkhdefcnca_it-dunk-vuole-vedere-un-brighton-combattivo-ma-non-punta-alleuropa?utm_source=fotmob"
+        }
+      ],
+      "QAData": [
+        {
+          "question": "Who won between Brighton & Hove Albion and Nottingham Forest on Sun, 01 Mar 2026 14:00:00 GMT?",
+          "answer": "Brighton & Hove Albion won 2–1 over Nottingham Forest on Sun, 01 Mar 2026 14:00:00 GMT."
+        }
+      ],
+      "matchInsightsConfig": {
+        "hasBettingInsight": false,
+        "urlTemplate": "https://data.fotmob.com/generated-match-insights/47/4813647/matchinsights_{lang}.json",
+        "languages": [
+          "en",
+          "nb",
+          "de"
+        ]
+      }
+    },
+    "liveticker": {
+      "langs": "ar_gen,de_gen,en,es_gen,fr_gen,it_gen,pt-BR_gen,pt_gen",
+      "teams": [
+        "Brighton & Hove Albion",
+        "Nottingham Forest"
+      ]
+    },
+    "superlive": {
+      "superLiveUrl": "https://pub.fotmob.com/prod/news/api/law?matchid=41r0h2drg86j5w2car2sd2iac&competition=2kwbbcootiqqgmrzs6o5inle5&season=51r6ph2woavlbbpk8f29nynf8&version=v4w",
+      "showSuperLive": false
+    },
+    "buzz": null,
+    "stats": {
+      "Periods": {
+        "All": {
+          "stats": [
+            {
+              "title": "Top stats",
+              "key": "top_stats",
+              "stats": [
+                {
+                  "title": "Ball possession",
+                  "key": "BallPossesion",
+                  "stats": [
+                    54,
+                    46
+                  ],
+                  "rawStats": [
+                    {
+                      "value": 54
+                    },
+                    {
+                      "value": 46
+                    }
+                  ],
+                  "format": "integer",
+                  "type": "graph",
+                  "highlighted": "home"
+                },
+                {
+                  "title": "Expected goals (xG)",
+                  "key": "expected_goals",
+                  "stats": [
+                    "1.32",
+                    "0.79"
+                  ],
+                  "rawStats": [
+                    {
+                      "value": 1.32
+                    },
+                    {
+                      "value": 0.79
+                    }
+                  ],
+                  "format": "double",
+                  "type": "text",
+                  "highlighted": "home"
+                },
+                {
+                  "title": "Total shots",
+                  "key": "total_shots",
+                  "stats": [
+                    14,
+                    13
+                  ],
+                  "rawStats": [
+                    {
+                      "value": 14
+                    },
+                    {
+                      "value": 13
+                    }
+                  ],
+                  "format": "integer",
+                  "type": "text",
+                  "highlighted": "home"
+                }
+              ]
+            },
+            {
+              "title": "Shots",
+              "key": "shots",
+              "stats": [
+                {
+                  "title": "Shots",
+                  "key": "shots",
+                  "stats": [
+                    null,
+                    null
+                  ],
+                  "rawStats": [
+                    null,
+                    null
+                  ],
+                  "type": "title",
+                  "highlighted": "equal"
+                },
+                {
+                  "title": "Total shots",
+                  "key": "total_shots",
+                  "stats": [
+                    14,
+                    13
+                  ],
+                  "rawStats": [
+                    {
+                      "value": 14
+                    },
+                    {
+                      "value": 13
+                    }
+                  ],
+                  "format": "integer",
+                  "type": "text",
+                  "highlighted": "home"
+                },
+                {
+                  "title": "Shots off target",
+                  "key": "ShotsOffTarget",
+                  "stats": [
+                    5,
+                    3
+                  ],
+                  "rawStats": [
+                    {
+                      "value": 5
+                    },
+                    {
+                      "value": 3
+                    }
+                  ],
+                  "format": "integer",
+                  "type": "text",
+                  "highlighted": "home"
+                }
+              ]
+            },
+            {
+              "title": "Expected goals (xG)",
+              "key": "expected_goals",
+              "stats": [
+                {
+                  "title": "Expected goals (xG)",
+                  "key": "expected_goals",
+                  "stats": [
+                    null,
+                    null
+                  ],
+                  "rawStats": [
+                    null,
+                    null
+                  ],
+                  "type": "title",
+                  "highlighted": "equal"
+                },
+                {
+                  "title": "Expected goals (xG)",
+                  "key": "expected_goals",
+                  "stats": [
+                    "1.32",
+                    "0.79"
+                  ],
+                  "rawStats": [
+                    {
+                      "value": 1.32
+                    },
+                    {
+                      "value": 0.79
+                    }
+                  ],
+                  "format": "double",
+                  "type": "text",
+                  "highlighted": "home"
+                },
+                {
+                  "title": "xG open play",
+                  "key": "expected_goals_open_play",
+                  "stats": [
+                    "1.28",
+                    "0.72"
+                  ],
+                  "rawStats": [
+                    {
+                      "value": 1.28
+                    },
+                    {
+                      "value": 0.72
+                    }
+                  ],
+                  "format": "double",
+                  "type": "text",
+                  "highlighted": "home"
+                }
+              ]
+            }
+          ],
+          "teamColors": {
+            "darkMode": {
+              "home": "#095bb6",
+              "away": "#C8102E"
+            },
+            "lightMode": {
+              "home": "#0850A0",
+              "away": "#C8102E"
+            },
+            "fontDarkMode": {
+              "home": "rgba(255, 255, 255, 1.0)",
+              "away": "rgba(255, 255, 255, 1.0)"
+            },
+            "fontLightMode": {
+              "home": "rgba(255, 255, 255, 1.0)",
+              "away": "rgba(255, 255, 255, 1.0)"
+            }
+          }
+        },
+        "FirstHalf": {
+          "stats": [
+            {
+              "title": "Top stats",
+              "key": "top_stats",
+              "stats": [
+                {
+                  "title": "Ball possession",
+                  "key": "BallPossesion",
+                  "stats": [
+                    50,
+                    50
+                  ],
+                  "rawStats": [
+                    {
+                      "value": 50
+                    },
+                    {
+                      "value": 50
+                    }
+                  ],
+                  "format": "integer",
+                  "type": "graph",
+                  "highlighted": "equal"
+                },
+                {
+                  "title": "Expected goals (xG)",
+                  "key": "expected_goals",
+                  "stats": [
+                    "1.11",
+                    "0.16"
+                  ],
+                  "rawStats": [
+                    {
+                      "value": 1.11
+                    },
+                    {
+                      "value": 0.16
+                    }
+                  ],
+                  "format": "double",
+                  "type": "text",
+                  "highlighted": "home"
+                },
+                {
+                  "title": "Total shots",
+                  "key": "total_shots",
+                  "stats": [
+                    8,
+                    4
+                  ],
+                  "rawStats": [
+                    {
+                      "value": 8
+                    },
+                    {
+                      "value": 4
+                    }
+                  ],
+                  "format": "integer",
+                  "type": "text",
+                  "highlighted": "home"
+                }
+              ]
+            },
+            {
+              "title": "Shots",
+              "key": "shots",
+              "stats": [
+                {
+                  "title": "Shots",
+                  "key": "shots",
+                  "stats": [
+                    null,
+                    null
+                  ],
+                  "rawStats": [
+                    null,
+                    null
+                  ],
+                  "type": "title",
+                  "highlighted": "equal"
+                },
+                {
+                  "title": "Total shots",
+                  "key": "total_shots",
+                  "stats": [
+                    8,
+                    4
+                  ],
+                  "rawStats": [
+                    {
+                      "value": 8
+                    },
+                    {
+                      "value": 4
+                    }
+                  ],
+                  "format": "integer",
+                  "type": "text",
+                  "highlighted": "home"
+                },
+                {
+                  "title": "Shots off target",
+                  "key": "ShotsOffTarget",
+                  "stats": [
+                    2,
+                    0
+                  ],
+                  "rawStats": [
+                    {
+                      "value": 2
+                    },
+                    {
+                      "value": 0
+                    }
+                  ],
+                  "format": "integer",
+                  "type": "text",
+                  "highlighted": "home"
+                }
+              ]
+            },
+            {
+              "title": "Expected goals (xG)",
+              "key": "expected_goals",
+              "stats": [
+                {
+                  "title": "Expected goals (xG)",
+                  "key": "expected_goals",
+                  "stats": [
+                    null,
+                    null
+                  ],
+                  "rawStats": [
+                    null,
+                    null
+                  ],
+                  "type": "title",
+                  "highlighted": "equal"
+                },
+                {
+                  "title": "Expected goals (xG)",
+                  "key": "expected_goals",
+                  "stats": [
+                    "1.11",
+                    "0.16"
+                  ],
+                  "rawStats": [
+                    {
+                      "value": 1.11
+                    },
+                    {
+                      "value": 0.16
+                    }
+                  ],
+                  "format": "double",
+                  "type": "text",
+                  "highlighted": "home"
+                },
+                {
+                  "title": "xG open play",
+                  "key": "expected_goals_open_play",
+                  "stats": [
+                    "1.11",
+                    "0.14"
+                  ],
+                  "rawStats": [
+                    {
+                      "value": 1.11
+                    },
+                    {
+                      "value": 0.14
+                    }
+                  ],
+                  "format": "double",
+                  "type": "text",
+                  "highlighted": "home"
+                }
+              ]
+            }
+          ],
+          "teamColors": {
+            "darkMode": {
+              "home": "#095bb6",
+              "away": "#C8102E"
+            },
+            "lightMode": {
+              "home": "#0850A0",
+              "away": "#C8102E"
+            },
+            "fontDarkMode": {
+              "home": "rgba(255, 255, 255, 1.0)",
+              "away": "rgba(255, 255, 255, 1.0)"
+            },
+            "fontLightMode": {
+              "home": "rgba(255, 255, 255, 1.0)",
+              "away": "rgba(255, 255, 255, 1.0)"
+            }
+          }
+        },
+        "SecondHalf": {
+          "stats": [
+            {
+              "title": "Top stats",
+              "key": "top_stats",
+              "stats": [
+                {
+                  "title": "Ball possession",
+                  "key": "BallPossesion",
+                  "stats": [
+                    57,
+                    43
+                  ],
+                  "rawStats": [
+                    {
+                      "value": 57
+                    },
+                    {
+                      "value": 43
+                    }
+                  ],
+                  "format": "integer",
+                  "type": "graph",
+                  "highlighted": "home"
+                },
+                {
+                  "title": "Expected goals (xG)",
+                  "key": "expected_goals",
+                  "stats": [
+                    "0.21",
+                    "0.64"
+                  ],
+                  "rawStats": [
+                    {
+                      "value": 0.21
+                    },
+                    {
+                      "value": 0.64
+                    }
+                  ],
+                  "format": "double",
+                  "type": "text",
+                  "highlighted": "away"
+                },
+                {
+                  "title": "Total shots",
+                  "key": "total_shots",
+                  "stats": [
+                    6,
+                    9
+                  ],
+                  "rawStats": [
+                    {
+                      "value": 6
+                    },
+                    {
+                      "value": 9
+                    }
+                  ],
+                  "format": "integer",
+                  "type": "text",
+                  "highlighted": "away"
+                }
+              ]
+            },
+            {
+              "title": "Shots",
+              "key": "shots",
+              "stats": [
+                {
+                  "title": "Shots",
+                  "key": "shots",
+                  "stats": [
+                    null,
+                    null
+                  ],
+                  "rawStats": [
+                    null,
+                    null
+                  ],
+                  "type": "title",
+                  "highlighted": "equal"
+                },
+                {
+                  "title": "Total shots",
+                  "key": "total_shots",
+                  "stats": [
+                    6,
+                    9
+                  ],
+                  "rawStats": [
+                    {
+                      "value": 6
+                    },
+                    {
+                      "value": 9
+                    }
+                  ],
+                  "format": "integer",
+                  "type": "text",
+                  "highlighted": "away"
+                },
+                {
+                  "title": "Shots off target",
+                  "key": "ShotsOffTarget",
+                  "stats": [
+                    3,
+                    3
+                  ],
+                  "rawStats": [
+                    {
+                      "value": 3
+                    },
+                    {
+                      "value": 3
+                    }
+                  ],
+                  "format": "integer",
+                  "type": "text",
+                  "highlighted": "equal"
+                }
+              ]
+            },
+            {
+              "title": "Expected goals (xG)",
+              "key": "expected_goals",
+              "stats": [
+                {
+                  "title": "Expected goals (xG)",
+                  "key": "expected_goals",
+                  "stats": [
+                    null,
+                    null
+                  ],
+                  "rawStats": [
+                    null,
+                    null
+                  ],
+                  "type": "title",
+                  "highlighted": "equal"
+                },
+                {
+                  "title": "Expected goals (xG)",
+                  "key": "expected_goals",
+                  "stats": [
+                    "0.21",
+                    "0.64"
+                  ],
+                  "rawStats": [
+                    {
+                      "value": 0.21
+                    },
+                    {
+                      "value": 0.64
+                    }
+                  ],
+                  "format": "double",
+                  "type": "text",
+                  "highlighted": "away"
+                },
+                {
+                  "title": "xG open play",
+                  "key": "expected_goals_open_play",
+                  "stats": [
+                    "0.17",
+                    "0.58"
+                  ],
+                  "rawStats": [
+                    {
+                      "value": 0.17
+                    },
+                    {
+                      "value": 0.58
+                    }
+                  ],
+                  "format": "double",
+                  "type": "text",
+                  "highlighted": "away"
+                }
+              ]
+            }
+          ],
+          "teamColors": {
+            "darkMode": {
+              "home": "#095bb6",
+              "away": "#C8102E"
+            },
+            "lightMode": {
+              "home": "#0850A0",
+              "away": "#C8102E"
+            },
+            "fontDarkMode": {
+              "home": "rgba(255, 255, 255, 1.0)",
+              "away": "rgba(255, 255, 255, 1.0)"
+            },
+            "fontLightMode": {
+              "home": "rgba(255, 255, 255, 1.0)",
+              "away": "rgba(255, 255, 255, 1.0)"
+            }
+          }
+        }
+      }
+    },
+    "playerStats": {
+      "38807": {
+        "name": "James Milner",
+        "id": 38807,
+        "optaId": "15157",
+        "teamId": 10204,
+        "teamName": "Brighton and Hove Albion",
+        "isGoalkeeper": false,
+        "stats": [
+          {
+            "title": "Top stats",
+            "key": "top_stats",
+            "stats": {
+              "FotMob rating": {
+                "key": "rating_title",
+                "stat": {
+                  "value": 6.92,
+                  "type": "double"
+                }
+              },
+              "Minutes played": {
+                "key": "minutes_played",
+                "stat": {
+                  "value": 86,
+                  "type": "integer"
+                }
+              },
+              "Goals": {
+                "key": "goals",
+                "stat": {
+                  "value": 0,
+                  "type": "integer"
+                }
+              },
+              "Assists": {
+                "key": "assists",
+                "stat": {
+                  "value": 0,
+                  "type": "integer"
+                }
+              },
+              "Expected assists (xA)": {
+                "key": "expected_assists",
+                "stat": {
+                  "value": 0.03,
+                  "type": "double"
+                }
+              },
+              "xG + xA": {
+                "key": "xg_and_xa",
+                "stat": {
+                  "value": 0.03,
+                  "type": "double"
+                }
+              },
+              "Top speed": {
+                "key": "physical_metrics_topspeed",
+                "stat": {
+                  "value": 31.399999618530273,
+                  "type": "speed"
+                }
+              },
+              "Distance covered": {
+                "key": "physical_metrics_distance_covered",
+                "stat": {
+                  "value": 11656,
+                  "type": "distance"
+                }
+              },
+              "Accurate passes": {
+                "key": "accurate_passes",
+                "stat": {
+                  "value": 50,
+                  "total": 56,
+                  "type": "fractionWithPercentage"
+                }
+              },
+              "Chances created": {
+                "key": "chances_created",
+                "stat": {
+                  "value": 1,
+                  "type": "integer"
+                }
+              },
+              "Shotmap": {
+                "key": null,
+                "stat": {
+                  "value": 0,
+                  "type": "boolean"
+                }
+              },
+              "Fantasy points": {
+                "key": "fantasy_points",
+                "stat": {
+                  "value": 2,
+                  "type": "fantasyPoints"
+                }
+              },
+              "Defensive actions": {
+                "key": "defensive_actions",
+                "stat": {
+                  "value": 7,
+                  "type": "integer"
+                }
+              }
+            }
+          },
+          {
+            "title": "Attack",
+            "key": "attack",
+            "stats": {
+              "Touches": {
+                "key": "touches",
+                "stat": {
+                  "value": 64,
+                  "type": "integer"
+                }
+              },
+              "Touches in opposition box": {
+                "key": "touches_opp_box",
+                "stat": {
+                  "value": 0,
+                  "type": "integer"
+                }
+              },
+              "Passes into final third": {
+                "key": "passes_into_final_third",
+                "stat": {
+                  "value": 7,
+                  "type": "integer"
+                }
+              },
+              "Line breaking passes": {
+                "key": "line_breaking_passes",
+                "stat": {
+                  "value": 5,
+                  "type": "integer"
+                }
+              },
+              "Accurate crosses": {
+                "key": "accurate_crosses",
+                "stat": {
+                  "value": 0,
+                  "total": 2,
+                  "type": "fractionWithPercentage"
+                }
+              },
+              "Accurate long balls": {
+                "key": "long_balls_accurate",
+                "stat": {
+                  "value": 2,
+                  "total": 4,
+                  "type": "fractionWithPercentage"
+                }
+              },
+              "Dispossessed": {
+                "key": "dispossessed",
+                "stat": {
+                  "value": 0,
+                  "type": "integer"
+                }
+              }
+            }
+          },
+          {
+            "title": "Defense",
+            "key": "defense",
+            "stats": {
+              "Defensive actions": {
+                "key": "defensive_actions",
+                "stat": {
+                  "value": 7,
+                  "type": "integer"
+                }
+              },
+              "Tackles": {
+                "key": "matchstats.headers.tackles",
+                "stat": {
+                  "value": 1,
+                  "type": "integer"
+                }
+              },
+              "Blocks": {
+                "key": "shot_blocks",
+                "stat": {
+                  "value": 0,
+                  "type": "integer"
+                }
+              },
+              "Clearances": {
+                "key": "clearances",
+                "stat": {
+                  "value": 1,
+                  "type": "integer"
+                }
+              },
+              "Interceptions": {
+                "key": "interceptions",
+                "stat": {
+                  "value": 0,
+                  "type": "integer"
+                }
+              },
+              "Recoveries": {
+                "key": "recoveries",
+                "stat": {
+                  "value": 5,
+                  "type": "integer"
+                }
+              },
+              "Dribbled past": {
+                "key": "dribbled_past",
+                "stat": {
+                  "value": 2,
+                  "type": "integer"
+                }
+              }
+            }
+          }
+        ],
+        "shotmap": [],
+        "shirtNumber": "20",
+        "positionId": 64,
+        "usualPosition": 2
+      },
+      "107917": {
+        "name": "Jason Steele",
+        "id": 107917,
+        "optaId": "49262",
+        "teamId": 10204,
+        "teamName": "Brighton and Hove Albion",
+        "isGoalkeeper": true,
+        "stats": [],
+        "shotmap": [],
+        "shirtNumber": "23",
+        "usualPosition": 0
+      },
+      "113836": {
+        "name": "Danny Welbeck",
+        "id": 113836,
+        "optaId": "50175",
+        "teamId": 10204,
+        "teamName": "Brighton and Hove Albion",
+        "isGoalkeeper": false,
+        "stats": [
+          {
+            "title": "Top stats",
+            "key": "top_stats",
+            "stats": {
+              "FotMob rating": {
+                "key": "rating_title",
+                "stat": {
+                  "value": 8.01,
+                  "type": "double"
+                }
+              },
+              "Minutes played": {
+                "key": "minutes_played",
+                "stat": {
+                  "value": 90,
+                  "type": "integer"
+                }
+              },
+              "Goals": {
+                "key": "goals",
+                "stat": {
+                  "value": 1,
+                  "type": "integer"
+                }
+              }
+            }
+          },
+          {
+            "title": "Attack",
+            "key": "attack",
+            "stats": {
+              "Touches": {
+                "key": "touches",
+                "stat": {
+                  "value": 45,
+                  "type": "integer"
+                }
+              },
+              "Touches in opposition box": {
+                "key": "touches_opp_box",
+                "stat": {
+                  "value": 5,
+                  "type": "integer"
+                }
+              },
+              "Successful dribbles": {
+                "key": "dribbles_succeeded",
+                "stat": {
+                  "value": 0,
+                  "total": 2,
+                  "type": "fractionWithPercentage"
+                }
+              },
+              "Accurate long balls": {
+                "key": "long_balls_accurate",
+                "stat": {
+                  "value": 1,
+                  "total": 1,
+                  "type": "fractionWithPercentage"
+                }
+              },
+              "Dispossessed": {
+                "key": "dispossessed",
+                "stat": {
+                  "value": 0,
+                  "type": "integer"
+                }
+              },
+              "xG Non-penalty": {
+                "key": "expected_goals_non_penalty",
+                "stat": {
+                  "value": 0.38,
+                  "type": "double"
+                }
+              }
+            }
+          },
+          {
+            "title": "Defense",
+            "key": "defense",
+            "stats": {
+              "Defensive actions": {
+                "key": "defensive_actions",
+                "stat": {
+                  "value": 7,
+                  "type": "integer"
+                }
+              },
+              "Tackles": {
+                "key": "matchstats.headers.tackles",
+                "stat": {
+                  "value": 2,
+                  "type": "integer"
+                }
+              },
+              "Blocks": {
+                "key": "shot_blocks",
+                "stat": {
+                  "value": 0,
+                  "type": "integer"
+                }
+              },
+              "Clearances": {
+                "key": "clearances",
+                "stat": {
+                  "value": 0,
+                  "type": "integer"
+                }
+              },
+              "Interceptions": {
+                "key": "interceptions",
+                "stat": {
+                  "value": 2,
+                  "type": "integer"
+                }
+              },
+              "Recoveries": {
+                "key": "recoveries",
+                "stat": {
+                  "value": 3,
+                  "type": "integer"
+                }
+              },
+              "Dribbled past": {
+                "key": "dribbled_past",
+                "stat": {
+                  "value": 2,
+                  "type": "integer"
+                }
+              }
+            }
+          }
+        ],
+        "shotmap": [
+          {
+            "id": 2906067457,
+            "eventType": "Goal",
+            "teamId": 10204,
+            "playerId": 113836,
+            "playerName": "Danny Welbeck",
+            "x": 97.0877192975,
+            "y": 29.127380951,
+            "min": 15,
+            "minAdded": null,
+            "isBlocked": false,
+            "isOnTarget": true,
+            "blockedX": null,
+            "blockedY": null,
+            "goalCrossedY": 35.9825,
+            "goalCrossedZ": 1.0145263108,
+            "expectedGoals": 0.2343314290046692,
+            "expectedGoalsOnTarget": 0.6451980471611023,
+            "shotType": "RightFoot",
+            "situation": "RegularPlay",
+            "period": "FirstHalf",
+            "isOwnGoal": false,
+            "onGoalShot": {
+              "x": 0.47552910052910013,
+              "y": 0.2683932039153439,
+              "zoomRatio": 1
+            },
+            "isSavedOffLine": false,
+            "isFromInsideBox": true,
+            "keeperId": 181069,
+            "teamColor": "#0850A0"
+          },
+          {
+            "id": 2906077579,
+            "eventType": "Miss",
+            "teamId": 10204,
+            "playerId": 113836,
+            "playerName": "Danny Welbeck",
+            "x": 77.8674757296,
+            "y": 33.77125,
+            "min": 26,
+            "minAdded": null,
+            "isBlocked": false,
+            "isOnTarget": false,
+            "blockedX": null,
+            "blockedY": null,
+            "goalCrossedY": 39.040714287,
+            "goalCrossedZ": 0.0898947364,
+            "expectedGoals": 0.03357362002134323,
+            "expectedGoalsOnTarget": 0,
+            "shotType": "RightFoot",
+            "situation": "RegularPlay",
+            "period": "FirstHalf",
+            "isOwnGoal": false,
+            "onGoalShot": {
+              "x": 0,
+              "y": 0.017833729761640823,
+              "zoomRatio": 0.7498937223537185
+            },
+            "isSavedOffLine": false,
+            "isFromInsideBox": false,
+            "keeperId": null,
+            "teamColor": "#0850A0"
+          },
+          {
+            "id": 2906108089,
+            "eventType": "AttemptSaved",
+            "teamId": 10204,
+            "playerId": 113836,
+            "playerName": "Danny Welbeck",
+            "x": 91.3,
+            "y": 32.70374999999999,
+            "min": 48,
+            "minAdded": null,
+            "isBlocked": true,
+            "isOnTarget": true,
+            "blockedX": 94.9649122793,
+            "blockedY": 33.00875,
+            "goalCrossedY": 34,
+            "goalCrossedZ": 1.2199999940000001,
+            "expectedGoals": 0.11507628113031387,
+            "expectedGoalsOnTarget": 0,
+            "shotType": "LeftFoot",
+            "situation": "RegularPlay",
+            "period": "SecondHalf",
+            "isOwnGoal": false,
+            "onGoalShot": {
+              "x": 1,
+              "y": 0.32275132116402117,
+              "zoomRatio": 1
+            },
+            "isSavedOffLine": false,
+            "isFromInsideBox": true,
+            "keeperId": null,
+            "teamColor": "#0850A0"
+          }
+        ],
+        "shirtNumber": "18",
+        "positionId": 115,
+        "usualPosition": 3,
+        "funFacts": [
+          {
+            "translationKey": "fun_fact_joint_most_shots",
+            "fallbackText": "Took the joint-most shots (%1$s)",
+            "value": 3,
+            "valueFormat": "integer",
+            "isPositive": true,
+            "hasLiveVariant": true,
+            "statKey": "total_shots"
+          }
+        ]
+      }
+    },
+    "shotmap": {
+      "shots": [
+        {
+          "id": 2906054275,
+          "eventType": "AttemptSaved",
+          "teamId": 10203,
+          "playerId": 1215652,
+          "playerName": "Omari Hutchinson",
+          "x": 92.5,
+          "y": 16.011974523299997,
+          "min": 2,
+          "minAdded": null,
+          "isBlocked": false,
+          "isOnTarget": true,
+          "blockedX": 104.051724138,
+          "blockedY": 31.559999999999995,
+          "goalCrossedY": 34.22875,
+          "goalCrossedZ": 0.20547368320000003,
+          "expectedGoals": 0.019383255392313004,
+          "expectedGoalsOnTarget": 0.017292864620685577,
+          "shotType": "LeftFoot",
+          "situation": "FromCorner",
+          "period": "FirstHalf",
+          "isOwnGoal": false,
+          "onGoalShot": {
+            "x": 0.9394841269841275,
+            "y": 0.05435811724867726,
+            "zoomRatio": 1
+          },
+          "isSavedOffLine": false,
+          "isFromInsideBox": true,
+          "keeperId": 1131987,
+          "firstName": "Omari",
+          "lastName": "Hutchinson",
+          "fullName": "Omari Hutchinson",
+          "teamColor": "#C8102E"
+        },
+        {
+          "id": 2906056057,
+          "eventType": "AttemptSaved",
+          "teamId": 10204,
+          "playerId": 862608,
+          "playerName": "Kaoru Mitoma",
+          "x": 87.6411764704,
+          "y": 45.542165601099995,
+          "min": 3,
+          "minAdded": null,
+          "isBlocked": false,
+          "isOnTarget": true,
+          "blockedX": 102.8189655174,
+          "blockedY": 36.21125,
+          "goalCrossedY": 34.38125,
+          "goalCrossedZ": 0.1219999994,
+          "expectedGoals": 0.03214987739920616,
+          "expectedGoalsOnTarget": 0.01619695872068405,
+          "shotType": "RightFoot",
+          "situation": "RegularPlay",
+          "period": "FirstHalf",
+          "isOwnGoal": false,
+          "onGoalShot": {
+            "x": 0.8991402116402113,
+            "y": 0.032275132116402115,
+            "zoomRatio": 1
+          },
+          "isSavedOffLine": false,
+          "isFromInsideBox": false,
+          "keeperId": 181069,
+          "firstName": "Kaoru",
+          "lastName": "Mitoma",
+          "fullName": "Kaoru Mitoma",
+          "teamColor": "#0850A0"
+        },
+        {
+          "id": 2906058715,
+          "eventType": "Goal",
+          "teamId": 10204,
+          "playerId": 1354561,
+          "playerName": "Diego Gomez",
+          "x": 92.8,
+          "y": 15.661656051799998,
+          "min": 6,
+          "minAdded": null,
+          "isBlocked": false,
+          "isOnTarget": true,
+          "blockedX": null,
+          "blockedY": null,
+          "goalCrossedY": 36.97375,
+          "goalCrossedZ": 1.2585263096000001,
+          "expectedGoals": 0.02647620253264904,
+          "expectedGoalsOnTarget": 0.09728556871414185,
+          "shotType": "RightFoot",
+          "situation": "RegularPlay",
+          "period": "FirstHalf",
+          "isOwnGoal": false,
+          "onGoalShot": {
+            "x": 0.21329365079365015,
+            "y": 0.3329434681481482,
+            "zoomRatio": 1
+          },
+          "isSavedOffLine": false,
+          "isFromInsideBox": true,
+          "keeperId": 181069,
+          "firstName": "Diego",
+          "lastName": "Gomez",
+          "fullName": "Diego Gomez",
+          "teamColor": "#0850A0"
+        }
+      ],
+      "Periods": {
+        "All": [
+          {
+            "id": 2906054275,
+            "eventType": "AttemptSaved",
+            "teamId": 10203,
+            "playerId": 1215652,
+            "playerName": "Omari Hutchinson",
+            "x": 92.5,
+            "y": 16.011974523299997,
+            "min": 2,
+            "minAdded": null,
+            "isBlocked": false,
+            "isOnTarget": true,
+            "blockedX": 104.051724138,
+            "blockedY": 31.559999999999995,
+            "goalCrossedY": 34.22875,
+            "goalCrossedZ": 0.20547368320000003,
+            "expectedGoals": 0.019383255392313004,
+            "expectedGoalsOnTarget": 0.017292864620685577,
+            "shotType": "LeftFoot",
+            "situation": "FromCorner",
+            "period": "FirstHalf",
+            "isOwnGoal": false,
+            "onGoalShot": {
+              "x": 0.9394841269841275,
+              "y": 0.05435811724867726,
+              "zoomRatio": 1
+            },
+            "isSavedOffLine": false,
+            "isFromInsideBox": true,
+            "keeperId": 1131987,
+            "firstName": "Omari",
+            "lastName": "Hutchinson",
+            "fullName": "Omari Hutchinson",
+            "teamColor": "#C8102E"
+          },
+          {
+            "id": 2906056057,
+            "eventType": "AttemptSaved",
+            "teamId": 10204,
+            "playerId": 862608,
+            "playerName": "Kaoru Mitoma",
+            "x": 87.6411764704,
+            "y": 45.542165601099995,
+            "min": 3,
+            "minAdded": null,
+            "isBlocked": false,
+            "isOnTarget": true,
+            "blockedX": 102.8189655174,
+            "blockedY": 36.21125,
+            "goalCrossedY": 34.38125,
+            "goalCrossedZ": 0.1219999994,
+            "expectedGoals": 0.03214987739920616,
+            "expectedGoalsOnTarget": 0.01619695872068405,
+            "shotType": "RightFoot",
+            "situation": "RegularPlay",
+            "period": "FirstHalf",
+            "isOwnGoal": false,
+            "onGoalShot": {
+              "x": 0.8991402116402113,
+              "y": 0.032275132116402115,
+              "zoomRatio": 1
+            },
+            "isSavedOffLine": false,
+            "isFromInsideBox": false,
+            "keeperId": 181069,
+            "firstName": "Kaoru",
+            "lastName": "Mitoma",
+            "fullName": "Kaoru Mitoma",
+            "teamColor": "#0850A0"
+          },
+          {
+            "id": 2906058715,
+            "eventType": "Goal",
+            "teamId": 10204,
+            "playerId": 1354561,
+            "playerName": "Diego Gomez",
+            "x": 92.8,
+            "y": 15.661656051799998,
+            "min": 6,
+            "minAdded": null,
+            "isBlocked": false,
+            "isOnTarget": true,
+            "blockedX": null,
+            "blockedY": null,
+            "goalCrossedY": 36.97375,
+            "goalCrossedZ": 1.2585263096000001,
+            "expectedGoals": 0.02647620253264904,
+            "expectedGoalsOnTarget": 0.09728556871414185,
+            "shotType": "RightFoot",
+            "situation": "RegularPlay",
+            "period": "FirstHalf",
+            "isOwnGoal": false,
+            "onGoalShot": {
+              "x": 0.21329365079365015,
+              "y": 0.3329434681481482,
+              "zoomRatio": 1
+            },
+            "isSavedOffLine": false,
+            "isFromInsideBox": true,
+            "keeperId": 181069,
+            "firstName": "Diego",
+            "lastName": "Gomez",
+            "fullName": "Diego Gomez",
+            "teamColor": "#0850A0"
+          }
+        ],
+        "FirstHalf": [
+          {
+            "id": 2906054275,
+            "eventType": "AttemptSaved",
+            "teamId": 10203,
+            "playerId": 1215652,
+            "playerName": "Omari Hutchinson",
+            "x": 92.5,
+            "y": 16.011974523299997,
+            "min": 2,
+            "minAdded": null,
+            "isBlocked": false,
+            "isOnTarget": true,
+            "blockedX": 104.051724138,
+            "blockedY": 31.559999999999995,
+            "goalCrossedY": 34.22875,
+            "goalCrossedZ": 0.20547368320000003,
+            "expectedGoals": 0.019383255392313004,
+            "expectedGoalsOnTarget": 0.017292864620685577,
+            "shotType": "LeftFoot",
+            "situation": "FromCorner",
+            "period": "FirstHalf",
+            "isOwnGoal": false,
+            "onGoalShot": {
+              "x": 0.9394841269841275,
+              "y": 0.05435811724867726,
+              "zoomRatio": 1
+            },
+            "isSavedOffLine": false,
+            "isFromInsideBox": true,
+            "keeperId": 1131987,
+            "firstName": "Omari",
+            "lastName": "Hutchinson",
+            "fullName": "Omari Hutchinson",
+            "teamColor": "#C8102E"
+          },
+          {
+            "id": 2906056057,
+            "eventType": "AttemptSaved",
+            "teamId": 10204,
+            "playerId": 862608,
+            "playerName": "Kaoru Mitoma",
+            "x": 87.6411764704,
+            "y": 45.542165601099995,
+            "min": 3,
+            "minAdded": null,
+            "isBlocked": false,
+            "isOnTarget": true,
+            "blockedX": 102.8189655174,
+            "blockedY": 36.21125,
+            "goalCrossedY": 34.38125,
+            "goalCrossedZ": 0.1219999994,
+            "expectedGoals": 0.03214987739920616,
+            "expectedGoalsOnTarget": 0.01619695872068405,
+            "shotType": "RightFoot",
+            "situation": "RegularPlay",
+            "period": "FirstHalf",
+            "isOwnGoal": false,
+            "onGoalShot": {
+              "x": 0.8991402116402113,
+              "y": 0.032275132116402115,
+              "zoomRatio": 1
+            },
+            "isSavedOffLine": false,
+            "isFromInsideBox": false,
+            "keeperId": 181069,
+            "firstName": "Kaoru",
+            "lastName": "Mitoma",
+            "fullName": "Kaoru Mitoma",
+            "teamColor": "#0850A0"
+          },
+          {
+            "id": 2906058715,
+            "eventType": "Goal",
+            "teamId": 10204,
+            "playerId": 1354561,
+            "playerName": "Diego Gomez",
+            "x": 92.8,
+            "y": 15.661656051799998,
+            "min": 6,
+            "minAdded": null,
+            "isBlocked": false,
+            "isOnTarget": true,
+            "blockedX": null,
+            "blockedY": null,
+            "goalCrossedY": 36.97375,
+            "goalCrossedZ": 1.2585263096000001,
+            "expectedGoals": 0.02647620253264904,
+            "expectedGoalsOnTarget": 0.09728556871414185,
+            "shotType": "RightFoot",
+            "situation": "RegularPlay",
+            "period": "FirstHalf",
+            "isOwnGoal": false,
+            "onGoalShot": {
+              "x": 0.21329365079365015,
+              "y": 0.3329434681481482,
+              "zoomRatio": 1
+            },
+            "isSavedOffLine": false,
+            "isFromInsideBox": true,
+            "keeperId": 181069,
+            "firstName": "Diego",
+            "lastName": "Gomez",
+            "fullName": "Diego Gomez",
+            "teamColor": "#0850A0"
+          }
+        ],
+        "SecondHalf": [
+          {
+            "id": 2906108089,
+            "eventType": "AttemptSaved",
+            "teamId": 10204,
+            "playerId": 113836,
+            "playerName": "Danny Welbeck",
+            "x": 91.3,
+            "y": 32.70374999999999,
+            "min": 48,
+            "minAdded": null,
+            "isBlocked": true,
+            "isOnTarget": true,
+            "blockedX": 94.9649122793,
+            "blockedY": 33.00875,
+            "goalCrossedY": 34,
+            "goalCrossedZ": 1.2199999940000001,
+            "expectedGoals": 0.11507628113031387,
+            "expectedGoalsOnTarget": 0,
+            "shotType": "LeftFoot",
+            "situation": "RegularPlay",
+            "period": "SecondHalf",
+            "isOwnGoal": false,
+            "onGoalShot": {
+              "x": 1,
+              "y": 0.32275132116402117,
+              "zoomRatio": 1
+            },
+            "isSavedOffLine": false,
+            "isFromInsideBox": true,
+            "keeperId": null,
+            "firstName": "Danny",
+            "lastName": "Welbeck",
+            "fullName": "Danny Welbeck",
+            "teamColor": "#0850A0"
+          },
+          {
+            "id": 2906108693,
+            "eventType": "Miss",
+            "teamId": 10204,
+            "playerId": 862608,
+            "playerName": "Kaoru Mitoma",
+            "x": 91,
+            "y": 46.7332484042,
+            "min": 49,
+            "minAdded": null,
+            "isBlocked": false,
+            "isOnTarget": false,
+            "blockedX": null,
+            "blockedY": null,
+            "goalCrossedY": 39.460952381999995,
+            "goalCrossedZ": 0.2696842092,
+            "expectedGoals": 0.013471735641360283,
+            "expectedGoalsOnTarget": 0,
+            "shotType": "RightFoot",
+            "situation": "FromCorner",
+            "period": "SecondHalf",
+            "isOwnGoal": false,
+            "onGoalShot": {
+              "x": 0,
+              "y": 0.0493840982918866,
+              "zoomRatio": 0.6921869548724447
+            },
+            "isSavedOffLine": false,
+            "isFromInsideBox": true,
+            "keeperId": null,
+            "firstName": "Kaoru",
+            "lastName": "Mitoma",
+            "fullName": "Kaoru Mitoma",
+            "teamColor": "#0850A0"
+          },
+          {
+            "id": 2906111927,
+            "eventType": "AttemptSaved",
+            "teamId": 10204,
+            "playerId": 167008,
+            "playerName": "Pascal Gross",
+            "x": 84.85,
+            "y": 50.7969426736,
+            "min": 53,
+            "minAdded": null,
+            "isBlocked": false,
+            "isOnTarget": true,
+            "blockedX": 102.9137931036,
+            "blockedY": 35.0675,
+            "goalCrossedY": 36.5925,
+            "goalCrossedZ": 0.0385263156,
+            "expectedGoals": 0.01651211641728878,
+            "expectedGoalsOnTarget": 0.11004888266324997,
+            "shotType": "RightFoot",
+            "situation": "SetPiece",
+            "period": "SecondHalf",
+            "isOwnGoal": false,
+            "onGoalShot": {
+              "x": 0.31415343915343885,
+              "y": 0.010192146984126984,
+              "zoomRatio": 1
+            },
+            "isSavedOffLine": false,
+            "isFromInsideBox": false,
+            "keeperId": 181069,
+            "firstName": "Pascal",
+            "lastName": "Gross",
+            "fullName": "Pascal Gross",
+            "teamColor": "#0850A0"
+          }
+        ]
+      }
+    },
+    "weather": {
+      "temperature": 9,
+      "windSpeed": 7,
+      "windDirectionCardinal": "SSW",
+      "iconCode": 28,
+      "relativeHumidity": 96,
+      "precipitation": 0,
+      "snow": 0,
+      "cloudCover": 87,
+      "description": "Mostly Cloudy",
+      "apiUsed": "current",
+      "lastUpdated": "2026-03-01T15:04:31Z",
+      "localizedKey": "weather_condition_cloudy",
+      "defaultTitle": "Cloudy"
+    },
+    "lineup": {
+      "matchId": 4813647,
+      "lineupType": "standard",
+      "source": "enetpulse",
+      "availableFilters": [
+        "distance",
+        "speed",
+        "marketValue"
+      ],
+      "homeTeam": {
+        "id": 10204,
+        "name": "Brighton & Hove Albion",
+        "rating": 7.3,
+        "formation": "4-2-3-1",
+        "starters": [
+          {
+            "id": 1131987,
+            "age": 23,
+            "name": "Bart Verbruggen",
+            "positionId": 11,
+            "usualPlayingPositionId": 0,
+            "shirtNumber": "1",
+            "countryName": "Netherlands",
+            "countryCode": "NED",
+            "horizontalLayout": {
+              "x": 0.1,
+              "y": 0.5,
+              "height": 0.25,
+              "width": 0.192
+            },
+            "verticalLayout": {
+              "x": 0.5,
+              "y": 0.1,
+              "height": 0.192,
+              "width": 1
+            },
+            "marketValue": 42031185,
+            "performance": {
+              "rating": 6.5,
+              "fantasyScore": "3",
+              "totalDistanceCovered": 5714,
+              "topSpeed": 22.399999618530273
+            },
+            "firstName": "Bart",
+            "lastName": "Verbruggen",
+            "nationalTeamId": 6708,
+            "rankings": {
+              "totalDistanceCovered": {
+                "rank": 21,
+                "totalPlayers": 31
+              },
+              "topSpeed": {
+                "rank": 31,
+                "totalPlayers": 31
+              }
+            }
+          },
+          {
+            "id": 970243,
+            "age": 26,
+            "name": "Mats Wieffer",
+            "positionId": 32,
+            "usualPlayingPositionId": 1,
+            "shirtNumber": "27",
+            "countryName": "Netherlands",
+            "countryCode": "NED",
+            "horizontalLayout": {
+              "x": 0.292,
+              "y": 0.875,
+              "height": 0.25,
+              "width": 0.385
+            },
+            "verticalLayout": {
+              "x": 0.125,
+              "y": 0.292,
+              "height": 0.192,
+              "width": 0.25
+            },
+            "marketValue": 16037133,
+            "performance": {
+              "rating": 6.9,
+              "events": [
+                {
+                  "type": "yellowCard"
+                }
+              ],
+              "substitutionEvents": [
+                {
+                  "time": 71,
+                  "type": "subOut",
+                  "reason": "injury"
+                }
+              ],
+              "fantasyScore": "1",
+              "totalDistanceCovered": 8299,
+              "topSpeed": 31.299999237060547
+            },
+            "firstName": "Mats",
+            "lastName": "Wieffer",
+            "nationalTeamId": 6708,
+            "rankings": {
+              "totalDistanceCovered": {
+                "rank": 17,
+                "totalPlayers": 31
+              },
+              "topSpeed": {
+                "rank": 7,
+                "totalPlayers": 31
+              }
+            }
+          },
+          {
+            "id": 974618,
+            "age": 25,
+            "name": "Jan Paul van Hecke",
+            "positionId": 34,
+            "usualPlayingPositionId": 1,
+            "shirtNumber": "6",
+            "countryName": "Netherlands",
+            "countryCode": "NED",
+            "horizontalLayout": {
+              "x": 0.292,
+              "y": 0.625,
+              "height": 0.25,
+              "width": 0.192
+            },
+            "verticalLayout": {
+              "x": 0.375,
+              "y": 0.292,
+              "height": 0.192,
+              "width": 0.25
+            },
+            "marketValue": 38184171,
+            "performance": {
+              "rating": 7.3,
+              "fantasyScore": "4",
+              "totalDistanceCovered": 10688,
+              "topSpeed": 32.900001525878906
+            },
+            "firstName": "Jan Paul",
+            "lastName": "van Hecke",
+            "nationalTeamId": 6708,
+            "rankings": {
+              "totalDistanceCovered": {
+                "rank": 8,
+                "totalPlayers": 31
+              },
+              "topSpeed": {
+                "rank": 3,
+                "totalPlayers": 31
+              }
+            }
+          }
+        ],
+        "coach": {
+          "id": 208516,
+          "age": 33,
+          "name": "Fabian Hürzeler",
+          "countryName": "Germany",
+          "countryCode": "GER",
+          "firstName": "Fabian",
+          "lastName": "Hürzeler",
+          "nationalTeamId": 8570,
+          "primaryTeamId": 10204,
+          "primaryTeamName": "Brighton & Hove Albion",
+          "usualPlayingPositionId": null,
+          "isCoach": true
+        },
+        "subs": [
+          {
+            "id": 304455,
+            "age": 34,
+            "name": "Joël Veltman",
+            "usualPlayingPositionId": 1,
+            "shirtNumber": "34",
+            "countryName": "Netherlands",
+            "countryCode": "NED",
+            "marketValue": 1883790,
+            "performance": {
+              "rating": 6.4,
+              "substitutionEvents": [
+                {
+                  "time": 71,
+                  "type": "subIn",
+                  "reason": "injury"
+                }
+              ],
+              "fantasyScore": "1",
+              "totalDistanceCovered": 2706,
+              "topSpeed": 26.600000381469727
+            },
+            "firstName": "Joël",
+            "lastName": "Veltman",
+            "nationalTeamId": 6708,
+            "rankings": {
+              "totalDistanceCovered": {
+                "rank": 25,
+                "totalPlayers": 31
+              },
+              "topSpeed": {
+                "rank": 26,
+                "totalPlayers": 31
+              }
+            }
+          },
+          {
+            "id": 1352713,
+            "age": 22,
+            "name": "Carlos Baleba",
+            "usualPlayingPositionId": 2,
+            "shirtNumber": "17",
+            "countryName": "Cameroon",
+            "countryCode": "CMR",
+            "marketValue": 69581990,
+            "performance": {
+              "substitutionEvents": [
+                {
+                  "time": 86,
+                  "type": "subIn",
+                  "reason": "tactical"
+                }
+              ],
+              "fantasyScore": "1",
+              "totalDistanceCovered": 1127,
+              "topSpeed": 28.600000381469727
+            },
+            "firstName": "Carlos",
+            "lastName": "Baleba",
+            "nationalTeamId": 6629,
+            "rankings": {
+              "totalDistanceCovered": {
+                "rank": 30,
+                "totalPlayers": 31
+              },
+              "topSpeed": {
+                "rank": 19,
+                "totalPlayers": 31
+              }
+            }
+          },
+          {
+            "id": 416850,
+            "age": 31,
+            "name": "Solly March",
+            "usualPlayingPositionId": 3,
+            "shirtNumber": "7",
+            "countryName": "England",
+            "countryCode": "ENG",
+            "marketValue": 2018409,
+            "performance": {
+              "substitutionEvents": [
+                {
+                  "time": 86,
+                  "type": "subIn",
+                  "reason": "tactical"
+                }
+              ],
+              "fantasyScore": "1",
+              "totalDistanceCovered": 1212,
+              "topSpeed": 24.299999237060547
+            },
+            "firstName": "Solly",
+            "lastName": "March",
+            "nationalTeamId": 8491,
+            "rankings": {
+              "totalDistanceCovered": {
+                "rank": 29,
+                "totalPlayers": 31
+              },
+              "topSpeed": {
+                "rank": 30,
+                "totalPlayers": 31
+              }
+            }
+          }
+        ],
+        "unavailable": [],
+        "averageStarterAge": 29,
+        "totalStarterMarketValue": 168181502
+      },
+      "awayTeam": {
+        "id": 10203,
+        "name": "Nottingham Forest",
+        "rating": 6.3,
+        "formation": "4-2-3-1",
+        "starters": [
+          {
+            "id": 181069,
+            "age": 34,
+            "name": "Matz Sels",
+            "positionId": 11,
+            "usualPlayingPositionId": 0,
+            "shirtNumber": "26",
+            "countryName": "Belgium",
+            "countryCode": "BEL",
+            "horizontalLayout": {
+              "x": 0.1,
+              "y": 0.5,
+              "height": 0.25,
+              "width": 0.192
+            },
+            "verticalLayout": {
+              "x": 0.5,
+              "y": 0.1,
+              "height": 0.192,
+              "width": 1
+            },
+            "marketValue": 6109600,
+            "performance": {
+              "rating": 5.8,
+              "fantasyScore": "2",
+              "totalDistanceCovered": 5190,
+              "topSpeed": 25.799999237060547
+            },
+            "firstName": "Matz",
+            "lastName": "Sels",
+            "nationalTeamId": 8263,
+            "rankings": {
+              "totalDistanceCovered": {
+                "rank": 22,
+                "totalPlayers": 31
+              },
+              "topSpeed": {
+                "rank": 28,
+                "totalPlayers": 31
+              }
+            }
+          },
+          {
+            "id": 682548,
+            "age": 29,
+            "name": "Ola Aina",
+            "positionId": 32,
+            "usualPlayingPositionId": 1,
+            "shirtNumber": "34",
+            "countryName": "Nigeria",
+            "countryCode": "NGA",
+            "horizontalLayout": {
+              "x": 0.292,
+              "y": 0.875,
+              "height": 0.25,
+              "width": 0.192
+            },
+            "verticalLayout": {
+              "x": 0.125,
+              "y": 0.292,
+              "height": 0.192,
+              "width": 0.25
+            },
+            "marketValue": 23411303,
+            "performance": {
+              "rating": 6.1,
+              "substitutionEvents": [
+                {
+                  "time": 82,
+                  "type": "subOut",
+                  "reason": "tactical"
+                }
+              ],
+              "fantasyScore": "1",
+              "totalDistanceCovered": 8789,
+              "topSpeed": 34.29999923706055
+            },
+            "firstName": "Ola",
+            "lastName": "Aina",
+            "nationalTeamId": 6346,
+            "rankings": {
+              "totalDistanceCovered": {
+                "rank": 16,
+                "totalPlayers": 31
+              },
+              "topSpeed": {
+                "rank": 1,
+                "totalPlayers": 31
+              }
+            }
+          },
+          {
+            "id": 766611,
+            "age": 28,
+            "name": "Nikola Milenkovic",
+            "positionId": 34,
+            "usualPlayingPositionId": 1,
+            "shirtNumber": "31",
+            "countryName": "Serbia",
+            "countryCode": "SRB",
+            "horizontalLayout": {
+              "x": 0.292,
+              "y": 0.625,
+              "height": 0.25,
+              "width": 0.192
+            },
+            "verticalLayout": {
+              "x": 0.375,
+              "y": 0.292,
+              "height": 0.192,
+              "width": 0.25
+            },
+            "marketValue": 33489603,
+            "performance": {
+              "rating": 6.2,
+              "fantasyScore": "1",
+              "totalDistanceCovered": 10271,
+              "topSpeed": 26.299999237060547
+            },
+            "firstName": "Nikola",
+            "lastName": "Milenkovic",
+            "nationalTeamId": 8205,
+            "rankings": {
+              "totalDistanceCovered": {
+                "rank": 10,
+                "totalPlayers": 31
+              },
+              "topSpeed": {
+                "rank": 27,
+                "totalPlayers": 31
+              }
+            }
+          }
+        ],
+        "coach": {
+          "id": 282115,
+          "age": 57,
+          "name": "Vítor Pereira",
+          "countryName": "Portugal",
+          "countryCode": "POR",
+          "firstName": "Vítor",
+          "lastName": "Pereira",
+          "nationalTeamId": 8361,
+          "primaryTeamId": 10203,
+          "primaryTeamName": "Nottingham Forest",
+          "usualPlayingPositionId": null,
+          "isCoach": true
+        },
+        "subs": [
+          {
+            "id": 1391209,
+            "age": 20,
+            "name": "Jair Cunha",
+            "usualPlayingPositionId": 1,
+            "shirtNumber": "23",
+            "countryName": "Brazil",
+            "countryCode": "BRA",
+            "marketValue": 18259062,
+            "performance": {
+              "rating": 6.3,
+              "substitutionEvents": [
+                {
+                  "time": 56,
+                  "type": "subIn",
+                  "reason": "tactical"
+                }
+              ],
+              "fantasyScore": "1",
+              "totalDistanceCovered": 4404,
+              "topSpeed": 28.5
+            },
+            "firstName": "Jair",
+            "lastName": "Cunha",
+            "nationalTeamId": 8256,
+            "rankings": {
+              "totalDistanceCovered": {
+                "rank": 24,
+                "totalPlayers": 31
+              },
+              "topSpeed": {
+                "rank": 20,
+                "totalPlayers": 31
+              }
+            }
+          },
+          {
+            "id": 1155130,
+            "age": 22,
+            "name": "Luca Netz",
+            "usualPlayingPositionId": 2,
+            "shirtNumber": "25",
+            "countryName": "Germany",
+            "countryCode": "GER",
+            "marketValue": 5750614,
+            "performance": {
+              "rating": 6.1,
+              "substitutionEvents": [
+                {
+                  "time": 56,
+                  "type": "subIn",
+                  "reason": "tactical"
+                }
+              ],
+              "fantasyScore": "1",
+              "totalDistanceCovered": 4570,
+              "topSpeed": 29.5
+            },
+            "firstName": "Luca",
+            "lastName": "Netz",
+            "nationalTeamId": 8570,
+            "rankings": {
+              "totalDistanceCovered": {
+                "rank": 23,
+                "totalPlayers": 31
+              },
+              "topSpeed": {
+                "rank": 13,
+                "totalPlayers": 31
+              }
+            }
+          },
+          {
+            "id": 1079539,
+            "age": 23,
+            "name": "Dilane Bakwa",
+            "usualPlayingPositionId": 3,
+            "shirtNumber": "29",
+            "countryName": "France",
+            "countryCode": "FRA",
+            "marketValue": 43212127,
+            "performance": {
+              "rating": 5.8,
+              "substitutionEvents": [
+                {
+                  "time": 74,
+                  "type": "subIn",
+                  "reason": "tactical"
+                }
+              ],
+              "fantasyScore": "1",
+              "totalDistanceCovered": 2470,
+              "topSpeed": 28.600000381469727
+            },
+            "firstName": "Dilane",
+            "lastName": "Bakwa",
+            "nationalTeamId": 6723,
+            "rankings": {
+              "totalDistanceCovered": {
+                "rank": 26,
+                "totalPlayers": 31
+              },
+              "topSpeed": {
+                "rank": 18,
+                "totalPlayers": 31
+              }
+            }
+          }
+        ],
+        "unavailable": [
+          {
+            "id": 276729,
+            "age": 33,
+            "name": "Stefan Ortega",
+            "countryName": "Germany",
+            "countryCode": "GER",
+            "marketValue": 5232509,
+            "unavailability": {
+              "injuryId": 101,
+              "type": "injury",
+              "expectedReturn": "Late March 2026"
+            },
+            "firstName": "Stefan",
+            "lastName": "Ortega",
+            "nationalTeamId": 8570
+          }
+        ],
+        "averageStarterAge": 26.4,
+        "totalStarterMarketValue": 374518643
+      }
+    },
+    "hasPlayoff": false,
+    "table": {
+      "leagueId": "47",
+      "url": "https://data.fotmob.com/tables.ext.47.fot.gz",
+      "teams": [
+        10204,
+        10203
+      ],
+      "tournamentNameForUrl": "Premier League",
+      "parentLeagueId": 47,
+      "countryCode": "ENG"
+    },
+    "h2h": {
+      "summary": [
+        8,
+        7,
+        5
+      ],
+      "matches": [
+        {
+          "time": {
+            "utcTime": "2027-05-01T14:00:00.000Z"
+          },
+          "matchUrl": "/matches/nottingham-forest-vs-brighton-hove-albion/3fzdi8#5795746",
+          "league": {
+            "name": "Premier League",
+            "id": "47",
+            "pageUrl": "/leagues/47/overview/premier-league"
+          },
+          "home": {
+            "name": "Brighton & Hove Albion",
+            "id": "10204"
+          },
+          "status": {
+            "utcTime": "2027-05-01T14:00:00.000Z",
+            "started": false,
+            "cancelled": false,
+            "finished": false
+          },
+          "finished": false,
+          "away": {
+            "name": "Nottingham Forest",
+            "id": "10203"
+          }
+        },
+        {
+          "time": {
+            "utcTime": "2026-12-05T15:00:00.000Z"
+          },
+          "matchUrl": "/matches/nottingham-forest-vs-brighton-hove-albion/3fzdi8#5795553",
+          "league": {
+            "name": "Premier League",
+            "id": "47",
+            "pageUrl": "/leagues/47/overview/premier-league"
+          },
+          "home": {
+            "name": "Nottingham Forest",
+            "id": "10203"
+          },
+          "status": {
+            "utcTime": "2026-12-05T15:00:00.000Z",
+            "started": false,
+            "cancelled": false,
+            "finished": false
+          },
+          "finished": false,
+          "away": {
+            "name": "Brighton & Hove Albion",
+            "id": "10204"
+          }
+        },
+        {
+          "time": {
+            "utcTime": "2025-11-30T14:05:00.000Z"
+          },
+          "matchUrl": "/matches/nottingham-forest-vs-brighton-hove-albion/3fzdi8#4813501",
+          "league": {
+            "name": "Premier League",
+            "id": "47",
+            "pageUrl": "/leagues/47/overview/premier-league"
+          },
+          "home": {
+            "name": "Nottingham Forest",
+            "id": "10203"
+          },
+          "status": {
+            "utcTime": "2025-11-30T14:05:00.000Z",
+            "finished": true,
+            "started": true,
+            "cancelled": false,
+            "awarded": false,
+            "scoreStr": "0 - 2",
+            "reason": {
+              "short": "FT",
+              "shortKey": "fulltime_short",
+              "long": "Full-Time",
+              "longKey": "finished"
+            }
+          },
+          "finished": false,
+          "away": {
+            "name": "Brighton & Hove Albion",
+            "id": "10204"
+          }
+        }
+      ]
+    },
+    "momentum": {
+      "main": {
+        "data": [
+          {
+            "minute": 0,
+            "value": 0
+          },
+          {
+            "minute": 1,
+            "value": -22
+          },
+          {
+            "minute": 2,
+            "value": -27
+          }
+        ],
+        "debugTitle": "Using xT SA-version"
+      },
+      "alternateModels": []
+    },
+    "highlightStories": {
+      "stories": [
+        {
+          "provider": "WSC",
+          "content": [
+            {
+              "id": "699da2df3459fc9c779cce6c",
+              "pregame": true,
+              "title": "BHA - NFO",
+              "lastUpdated": "2026-02-24T13:08:57Z",
+              "restriction": {
+                "allowed": [
+                  "ca"
+                ],
+                "blocked": []
+              }
+            },
+            {
+              "id": "69a44783204506a7c02dc8e7",
+              "pregame": false,
+              "title": "BHA - NFO",
+              "lastUpdated": "2026-03-02T04:03:12Z",
+              "restriction": {
+                "allowed": [
+                  "ca"
+                ],
+                "blocked": []
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "heatmapUrl": "/api/data/heatmap/match/4813647/heatmaps?heatmapUrl=https%3A%2F%2Fpub.fotmob.com%2Fprod%2Fdb%2Fapi%2Fheatmap%2Fmatch%2F4813647"
+  },
+  "seo": {
+    "path": "brighton-hove-albion-vs-nottingham-forest",
+    "eventJSONLD": {
+      "@context": "https://schema.org",
+      "@type": "SportsEvent",
+      "@id": "https://www.fotmob.com/match/4813647",
+      "sport": "Football/Soccer",
+      "homeTeam": {
+        "@context": "https://schema.org",
+        "@type": "SportsTeam",
+        "name": "Brighton & Hove Albion",
+        "sport": "Football/Soccer",
+        "logo": "https://images.fotmob.com/image_resources/logo/teamlogo/10204.png",
+        "url": "https://www.fotmob.com/teams/10204/overview/brighton-hove-albion",
+        "location": null,
+        "memberOf": null
+      },
+      "awayTeam": {
+        "@context": "https://schema.org",
+        "@type": "SportsTeam",
+        "name": "Nottingham Forest",
+        "sport": "Football/Soccer",
+        "logo": "https://images.fotmob.com/image_resources/logo/teamlogo/10203.png",
+        "url": "https://www.fotmob.com/teams/10203/overview/nottingham-forest",
+        "location": null,
+        "memberOf": null
+      },
+      "name": "Brighton & Hove Albion vs Nottingham Forest",
+      "description": "Follow Brighton & Hove Albion vs Nottingham Forest live on fotmob.com",
+      "startDate": "2026-03-01T14:00:00.000Z",
+      "endDate": "2026-03-01T16:00:00.000Z",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+      "location": {
+        "@type": "Place",
+        "name": "American Express Stadium",
+        "latitude": 50.861579551,
+        "longitude": -0.083642006,
+        "address": {
+          "@type": "PostalAddress",
+          "addressCountry": "England",
+          "addressLocality": "Falmer, East Sussex"
+        }
+      },
+      "image": [
+        "https://images.fotmob.com/image_resources/logo/teamlogo/10204.png",
+        "https://images.fotmob.com/image_resources/logo/teamlogo/10203.png"
+      ],
+      "organizer": {
+        "@type": "Organization",
+        "name": "FotMob",
+        "url": "https://www.fotmob.com",
+        "logo": "https://www.fotmob.com/img/fotmob_icon_2017.png"
+      },
+      "offers": {
+        "@type": "Offer",
+        "url": "https://www.fotmob.com/match/4813647",
+        "availability": "https://schema.org/InStock",
+        "price": "0",
+        "priceCurrency": "USD",
+        "validFrom": "2026-03-01T14:00:00.000Z"
+      },
+      "performer": [
+        {
+          "@type": "SportsTeam",
+          "name": "Brighton & Hove Albion",
+          "url": "https://www.fotmob.com/teams/10204/overview/brighton-hove-albion"
+        },
+        {
+          "@type": "SportsTeam",
+          "name": "Nottingham Forest",
+          "url": "https://www.fotmob.com/teams/10203/overview/nottingham-forest"
+        }
+      ]
+    },
+    "breadcrumbJSONLD": [
+      {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://www.fotmob.com"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Premier League",
+            "item": "https://www.fotmob.com/leagues/47/overview/premier-league"
+          },
+          {
+            "@type": "ListItem",
+            "position": 3,
+            "name": "Brighton & Hove Albion - Nottingham Forest",
+            "item": "https://www.fotmob.com/match/4813647"
+          }
+        ]
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://www.fotmob.com"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Premier League",
+            "item": "https://www.fotmob.com/leagues/47/overview/premier-league"
+          },
+          {
+            "@type": "ListItem",
+            "position": 3,
+            "name": "Nottingham Forest",
+            "item": "https://www.fotmob.com/teams/10203/overview/nottingham-forest"
+          }
+        ]
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://www.fotmob.com"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Premier League",
+            "item": "https://www.fotmob.com/leagues/47/overview/premier-league"
+          },
+          {
+            "@type": "ListItem",
+            "position": 3,
+            "name": "Brighton & Hove Albion",
+            "item": "https://www.fotmob.com/teams/10204/overview/brighton-hove-albion"
+          }
+        ]
+      }
+    ],
+    "faqJSONLD": {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Who won between Brighton & Hove Albion and Nottingham Forest on Sun, 01 Mar 2026 14:00:00 GMT?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Brighton & Hove Albion won 2–1 over Nottingham Forest on Sun, 01 Mar 2026 14:00:00 GMT."
+          }
+        }
+      ]
+    }
+  }
+}

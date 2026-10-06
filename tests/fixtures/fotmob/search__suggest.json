@@ -1,0 +1,72 @@
+[
+  {
+    "title": {
+      "key": "all",
+      "value": "All"
+    },
+    "suggestions": [
+      {
+        "type": "player",
+        "id": "737066",
+        "score": 301295,
+        "name": "Erling Haaland",
+        "isCoach": false,
+        "teamId": 8456,
+        "teamName": "Manchester City"
+      },
+      {
+        "type": "player",
+        "id": "1276931",
+        "score": 300006,
+        "name": "Markus Haaland",
+        "isCoach": false,
+        "teamId": 8428,
+        "teamName": "Häcken"
+      },
+      {
+        "type": "player",
+        "id": "1647372",
+        "score": 300000,
+        "name": "Sindre Haaland",
+        "isCoach": false,
+        "teamId": 119139,
+        "teamName": "Brodd"
+      }
+    ]
+  },
+  {
+    "title": {
+      "key": "players",
+      "value": "Players"
+    },
+    "suggestions": [
+      {
+        "type": "player",
+        "id": "737066",
+        "score": 301295,
+        "name": "Erling Haaland",
+        "isCoach": false,
+        "teamId": 8456,
+        "teamName": "Manchester City"
+      },
+      {
+        "type": "player",
+        "id": "1276931",
+        "score": 300006,
+        "name": "Markus Haaland",
+        "isCoach": false,
+        "teamId": 8428,
+        "teamName": "Häcken"
+      },
+      {
+        "type": "player",
+        "id": "1647372",
+        "score": 300000,
+        "name": "Sindre Haaland",
+        "isCoach": false,
+        "teamId": 119139,
+        "teamName": "Brodd"
+      }
+    ]
+  }
+]
