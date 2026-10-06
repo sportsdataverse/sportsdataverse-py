@@ -19,7 +19,7 @@ One event, optionally with its markets nested.
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
-| `event_ticker` | `event_ticker` |  | `Y` |  | event_ticker path parameter. |
+| `event_ticker` | `event_ticker` |  | `Y` |  | Event ticker, e.g. KXNFLGAME-26OCT08TBDAL (from /events). |
 | `with_nested_markets` | `with_nested_markets` |  |  | `Y` | true nests the event's markets under event.markets. |
 
 ### Returns {#kalshi_event-returns}
@@ -28,7 +28,7 @@ One event, optionally with its markets nested.
 
 | col_name | type | description |
 |---|---|---|
-| `category` | character | Category label. |
+| `category` | character |  |
 | `collateral_return_type` | character |  |
 | `event_ticker` | character |  |
 | `exchange_index` | integer |  |
@@ -39,7 +39,7 @@ One event, optionally with its markets nested.
 | `settlement_sources` | character |  |
 | `strike_period` | character |  |
 | `sub_title` | character |  |
-| `title` | character | Specific role title for the assignment. |
+| `title` | character |  |
 | `product_metadata_competition` | character |  |
 | `product_metadata_competition_scope` | character |  |
 
@@ -74,7 +74,7 @@ Events, filterable by series and status; cursor-paged.
 
 | col_name | type | description |
 |---|---|---|
-| `category` | character | Category label. |
+| `category` | character |  |
 | `collateral_return_type` | character |  |
 | `event_ticker` | character |  |
 | `exchange_index` | integer |  |
@@ -84,7 +84,7 @@ Events, filterable by series and status; cursor-paged.
 | `settlement_sources` | character |  |
 | `strike_period` | character |  |
 | `sub_title` | character |  |
-| `title` | character | Specific role title for the assignment. |
+| `title` | character |  |
 | `product_metadata_competition` | character |  |
 | `product_metadata_competition_scope` | character |  |
 
@@ -140,7 +140,7 @@ One market.
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
-| `ticker` | `ticker` |  | `Y` |  | ticker path parameter. |
+| `ticker` | `ticker` |  | `Y` |  | Market ticker, e.g. KXNFLGAME-26OCT08TBDAL-DAL (from /markets). |
 
 ### Returns {#kalshi_market-returns}
 
@@ -159,7 +159,7 @@ One market.
 | `expiration_value` | character |  |
 | `last_price_dollars` | character |  |
 | `latest_expiration_time` | character |  |
-| `market_type` | character | Market type code (`winLeague`, `winConference`, `winDivision`, ...). |
+| `market_type` | character |  |
 | `no_ask_dollars` | character |  |
 | `no_bid_dollars` | character |  |
 | `no_sub_title` | character |  |
@@ -172,15 +172,15 @@ One market.
 | `previous_yes_bid_dollars` | character |  |
 | `price_level_structure` | character |  |
 | `price_ranges` | character |  |
-| `result` | character | Result. |
+| `result` | character |  |
 | `rules_primary` | character |  |
 | `rules_secondary` | character |  |
 | `settlement_bounds_type` | character |  |
 | `settlement_timer_seconds` | integer |  |
-| `status` | character | Status label. |
+| `status` | character |  |
 | `strike_type` | character |  |
 | `ticker` | character |  |
-| `title` | character | Specific role title for the assignment. |
+| `title` | character |  |
 | `updated_time` | character |  |
 | `volume_24h_fp` | character |  |
 | `volume_fp` | character |  |
@@ -232,7 +232,7 @@ Markets, filterable by event/series/status; cursor-paged.
 | `expiration_value` | character |  |
 | `last_price_dollars` | character |  |
 | `latest_expiration_time` | character |  |
-| `market_type` | character | Market type code (`winLeague`, `winConference`, `winDivision`, ...). |
+| `market_type` | character |  |
 | `no_ask_dollars` | character |  |
 | `no_bid_dollars` | character |  |
 | `no_sub_title` | character |  |
@@ -245,15 +245,15 @@ Markets, filterable by event/series/status; cursor-paged.
 | `previous_yes_bid_dollars` | character |  |
 | `price_level_structure` | character |  |
 | `price_ranges` | character |  |
-| `result` | character | Result. |
+| `result` | character |  |
 | `rules_primary` | character |  |
 | `rules_secondary` | character |  |
 | `settlement_bounds_type` | character |  |
 | `settlement_timer_seconds` | integer |  |
-| `status` | character | Status label. |
+| `status` | character |  |
 | `strike_type` | character |  |
 | `ticker` | character |  |
-| `title` | character | Specific role title for the assignment. |
+| `title` | character |  |
 | `updated_time` | character |  |
 | `volume_24h_fp` | character |  |
 | `volume_fp` | character |  |
@@ -284,7 +284,7 @@ Order book of a market (fixed-point dollar levels).
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
-| `ticker` | `ticker` |  | `Y` |  | ticker path parameter. |
+| `ticker` | `ticker` |  | `Y` |  | Market ticker, e.g. KXNFLGAME-26OCT08TBDAL-DAL (from /markets). |
 | `depth` | `depth` |  |  | `Y` | Price levels per side (omit for the full book). |
 
 ### Returns {#kalshi_orderbook-returns}
@@ -293,7 +293,7 @@ Order book of a market (fixed-point dollar levels).
 
 | col_name | type | description |
 |---|---|---|
-| `side` | character | Side label (e.g. 'home', 'away', or 'overUnder'). |
+| `side` | character |  |
 | `price` | character |  |
 | `size` | character |  |
 
@@ -317,7 +317,7 @@ One series.
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
-| `series_ticker` | `series_ticker` |  | `Y` |  | series_ticker path parameter. |
+| `series_ticker` | `series_ticker` |  | `Y` |  | Series ticker, e.g. KXNFLGAME (from /series). |
 
 ### Returns {#kalshi_series-returns}
 
@@ -327,7 +327,7 @@ One series.
 |---|---|---|
 | `additional_prohibitions` | character |  |
 | `categories` | character |  |
-| `category` | character | Category label. |
+| `category` | character |  |
 | `contract_terms_url` | character |  |
 | `contract_url` | character |  |
 | `exchange_index` | integer |  |
@@ -338,7 +338,7 @@ One series.
 | `settlement_sources` | character |  |
 | `tags` | character |  |
 | `ticker` | character |  |
-| `title` | character | Specific role title for the assignment. |
+| `title` | character |  |
 | `product_metadata_scope` | character |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
@@ -371,7 +371,7 @@ Series (market families) in a category; the whole category in one body.
 |---|---|---|
 | `additional_prohibitions` | character |  |
 | `categories` | character |  |
-| `category` | character | Category label. |
+| `category` | character |  |
 | `contract_terms_url` | character |  |
 | `contract_url` | character |  |
 | `exchange_index` | integer |  |
@@ -382,7 +382,7 @@ Series (market families) in a category; the whole category in one body.
 | `settlement_sources` | character |  |
 | `tags` | character |  |
 | `ticker` | character |  |
-| `title` | character | Specific role title for the assignment. |
+| `title` | character |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -422,7 +422,7 @@ Public trades, filterable by market; cursor-paged.
 | `taker_outcome_side` | character |  |
 | `taker_side` | character |  |
 | `ticker` | character |  |
-| `trade_id` | character | ID of Trade |
+| `trade_id` | character |  |
 | `yes_price_dollars` | character |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.

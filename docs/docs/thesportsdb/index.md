@@ -7,7 +7,7 @@ description: "sdv-py THESPORTSDB: endpoint references, dataset loaders and parse
 
 | Reference | Functions | Base URL |
 |---|---:|---|
-| [TheSportsDB API v1 (thesportsdb.com, free test key)](reference/thesportsdb) | 12 | `https://www.thesportsdb.com/api/v1/json/{key}` |
+| [TheSportsDB API v1 (thesportsdb.com; free test key by default, $THESPORTSDB_API_KEY to use your own)](reference/thesportsdb) | 12 | `https://www.thesportsdb.com/api/v1/json/3` |
 
 ## Examples
 

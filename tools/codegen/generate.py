@@ -417,6 +417,11 @@ _LEAGUE_R_PACKAGE = {
     "pwhl": "fastRhockey",
 }
 
+# Package homes that are not leagues: they carry flat-API families but no ESPN league, no
+# loaders and no R counterpart. Ordered, because _doc_leagues() appends them in this order.
+_NONLEAGUE_HOMES = ("odds", "cbs", "yahoo", "fox", "euroleague", "espn_content", "thesportsdb")
+
+
 # Flat-API families with NO R counterpart. Their columns never passed through an R package,
 # so ``r_column_descriptions.yaml`` has nothing true to say about them -- and asked anyway,
 # the cross-sport ``_merged`` union back-fills confident nonsense. Measured on the wave-2
@@ -430,6 +435,23 @@ _LEAGUE_R_PACKAGE = {
 _NO_R_DICT_FAMILIES = frozenset(
     {"espn_content", "thesportsdb", "football_data", "openligadb", "polymarket", "kalshi"},
 )
+
+
+def _doc_display_name(prefix: str) -> str:
+    """The name a league/home shows in the sidebar, its page title and its description.
+
+    Historically this was just ``prefix.upper()``, which reads fine for NFL, SOCCER and
+    EUROLEAGUE. ``espn_content`` is the first multi-word NON-LEAGUE home, and ``ESPN_CONTENT``
+    puts the underscore on the page, so such a home shows its curated label instead.
+
+    Deliberately scoped to non-league homes: ``college_baseball`` and ``college_softball`` have
+    the same underscore, and widening the rule to every prefix renames 22 of their existing
+    pages. That is probably an improvement, but it does not belong in a PR about six new
+    providers -- it is a one-line follow-up (drop the ``_NONLEAGUE_EXTRA`` condition).
+    """
+    if "_" in prefix and prefix in _NONLEAGUE_HOMES:
+        return _LEAGUE_LABELS.get(prefix, prefix.upper())
+    return prefix.upper()
 
 
 def _r_dict_applies(key: str | None) -> bool:
@@ -2807,7 +2829,7 @@ def render_reference_page(prefix: str, api: str, position: int = 1) -> str:
     template = render.ENV.get_template("reference_page.md.jinja")
     return template.render(
         prefix=prefix,
-        title=f"{prefix.upper()} — {label}",
+        title=f"{_doc_display_name(prefix)} — {label}",
         label=label,
         sidebar_position=position,
         count=len(endpoints),
@@ -2876,6 +2898,7 @@ def render_league_index(
     template = render.ENV.get_template("league_index.md.jinja")
     return template.render(
         prefix=prefix,
+        display_name=_doc_display_name(prefix),
         api_rows=_apis_for(prefix),
         has_loaders=bool(loaders),
         loader_count=len(loaders),
@@ -3717,7 +3740,7 @@ def render_autodoc_page(prefix: str | None, corpus: str) -> str | None:
         title = "Package — additional Python functions"
         module = "sportsdataverse"
     else:
-        title = f"{prefix.upper()} — additional Python functions"
+        title = f"{_doc_display_name(prefix)} — additional Python functions"
         module = f"sportsdataverse.{prefix}"
     template = render.ENV.get_template("autodoc_page.md.jinja")
     return template.render(title=title, module=module, sidebar_position=50, groups=groups)
@@ -3935,7 +3958,7 @@ def _doc_leagues() -> list[str]:
     _HOCKEYTECH_EXTRA = _HOCKEYTECH_MODULE_LEAGUES
     # Cross-sport hand-written modules that get their own docs scope but have no
     # ESPN/loader entries (e.g. the The Odds API wrappers in sportsdataverse.odds).
-    _NONLEAGUE_EXTRA = ["odds", "cbs", "yahoo", "fox", "euroleague", "espn_content", "thesportsdb"]
+    _NONLEAGUE_EXTRA = list(_NONLEAGUE_HOMES)
     known = set(prefixes) | set(extra)
     hockeytech = [lg for lg in _HOCKEYTECH_EXTRA if lg not in known]
     nonleague = [m for m in _NONLEAGUE_EXTRA if m not in known]
@@ -4356,7 +4379,7 @@ def _render_docs_all() -> dict[str, str]:
     for i, prefix in enumerate(_doc_leagues()):
         apis = _apis_for(prefix)
         loaders = _loader_doc_views(prefix)
-        out[f"{prefix}/_category_.json"] = render_category(prefix.upper(), 10 + i, True)
+        out[f"{prefix}/_category_.json"] = render_category(_doc_display_name(prefix), 10 + i, True)
         # Sidebar order within a league's Reference category: Loaders first (1),
         # then native/flat APIs (NHL/MLB API; 10+), then ESPN APIs (site/web/core;
         # 20+). _apis_for returns ESPN first then flat, so assign position by kind

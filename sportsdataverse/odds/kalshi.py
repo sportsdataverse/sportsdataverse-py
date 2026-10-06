@@ -40,7 +40,7 @@ def kalshi_event(
     Example URL: https://api.elections.kalshi.com/trade-api/v2/events/KXNFLGAME-26OCT08TBDAL?with_nested_markets=true
 
     Args:
-        event_ticker: event_ticker path parameter.
+        event_ticker: Event ticker, e.g. KXNFLGAME-26OCT08TBDAL (from /events).
         with_nested_markets: true nests the event's markets under event.markets.
         return_parsed: parse the payload through parse_kalshi -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
@@ -202,7 +202,7 @@ def kalshi_market(
     Example URL: https://api.elections.kalshi.com/trade-api/v2/markets/KXNFLGAME-26OCT08TBDAL-DAL
 
     Args:
-        ticker: ticker path parameter.
+        ticker: Market ticker, e.g. KXNFLGAME-26OCT08TBDAL-DAL (from /markets).
         return_parsed: parse the payload through parse_kalshi -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -311,7 +311,7 @@ def kalshi_orderbook(
     Example URL: https://api.elections.kalshi.com/trade-api/v2/markets/KXNFLGAME-26OCT08TBDAL-DAL/orderbook?depth=3
 
     Args:
-        ticker: ticker path parameter.
+        ticker: Market ticker, e.g. KXNFLGAME-26OCT08TBDAL-DAL (from /markets).
         depth: Price levels per side (omit for the full book).
         return_parsed: parse the payload through parse_kalshi -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
@@ -364,7 +364,7 @@ def kalshi_series(
     Example URL: https://api.elections.kalshi.com/trade-api/v2/series/KXNFLGAME
 
     Args:
-        series_ticker: series_ticker path parameter.
+        series_ticker: Series ticker, e.g. KXNFLGAME (from /series).
         return_parsed: parse the payload through parse_kalshi -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.

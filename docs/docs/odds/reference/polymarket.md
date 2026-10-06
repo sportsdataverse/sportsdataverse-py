@@ -30,18 +30,18 @@ Events -- groups of related markets -- on the Gamma metadata host.
 
 | col_name | type | description |
 |---|---|---|
-| `id` | character | ID of the player in the 'name' column. |
+| `id` | character |  |
 | `ticker` | character |  |
-| `slug` | character | URL-safe identifier. |
-| `title` | character | Specific role title for the assignment. |
-| `description` | character | Long-form description text. |
+| `slug` | character |  |
+| `title` | character |  |
+| `description` | character |  |
 | `resolution_source` | character |  |
-| `start_date` | character | Start date (YYYY-MM-DD). |
+| `start_date` | character |  |
 | `creation_date` | character |  |
-| `end_date` | character | End date (YYYY-MM-DD). |
+| `end_date` | character |  |
 | `image` | character |  |
 | `icon` | character |  |
-| `active` | logical | TRUE if the row represents an active record (player / team / season). |
+| `active` | logical |  |
 | `closed` | logical |  |
 | `archived` | logical |  |
 | `new` | logical |  |
@@ -101,7 +101,7 @@ One market by its Gamma id.
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
-| `id` | `id` |  | `Y` |  | id path parameter. |
+| `id` | `id` |  | `Y` |  | Gamma market id (from /markets). |
 
 ### Returns {#polymarket_gamma_market-returns}
 
@@ -109,21 +109,21 @@ One market by its Gamma id.
 
 | col_name | type | description |
 |---|---|---|
-| `id` | character | ID of the player in the 'name' column. |
+| `id` | character |  |
 | `question` | character |  |
 | `condition_id` | character |  |
-| `slug` | character | URL-safe identifier. |
+| `slug` | character |  |
 | `resolution_source` | character |  |
-| `end_date` | character | End date (YYYY-MM-DD). |
+| `end_date` | character |  |
 | `liquidity` | character |  |
-| `start_date` | character | Start date (YYYY-MM-DD). |
+| `start_date` | character |  |
 | `image` | character |  |
 | `icon` | character |  |
-| `description` | character | Long-form description text. |
+| `description` | character |  |
 | `outcomes` | character |  |
 | `outcome_prices` | character |  |
 | `volume` | character |  |
-| `active` | logical | TRUE if the row represents an active record (player / team / season). |
+| `active` | logical |  |
 | `closed` | logical |  |
 | `market_maker_address` | character |  |
 | `created_at` | character |  |
@@ -174,7 +174,7 @@ One market by its Gamma id.
 | `approved` | logical |  |
 | `rewards_min_size` | integer |  |
 | `rewards_max_spread` | numeric |  |
-| `spread` | numeric | Spread. |
+| `spread` | numeric |  |
 | `one_day_price_change` | numeric |  |
 | `one_hour_price_change` | numeric |  |
 | `one_week_price_change` | numeric |  |
@@ -235,21 +235,21 @@ Markets on the Gamma metadata host, orderable by volume or liquidity.
 
 | col_name | type | description |
 |---|---|---|
-| `id` | character | ID of the player in the 'name' column. |
+| `id` | character |  |
 | `question` | character |  |
 | `condition_id` | character |  |
-| `slug` | character | URL-safe identifier. |
+| `slug` | character |  |
 | `resolution_source` | character |  |
-| `end_date` | character | End date (YYYY-MM-DD). |
+| `end_date` | character |  |
 | `liquidity` | character |  |
-| `start_date` | character | Start date (YYYY-MM-DD). |
+| `start_date` | character |  |
 | `image` | character |  |
 | `icon` | character |  |
-| `description` | character | Long-form description text. |
+| `description` | character |  |
 | `outcomes` | character |  |
 | `outcome_prices` | character |  |
 | `volume` | character |  |
-| `active` | logical | TRUE if the row represents an active record (player / team / season). |
+| `active` | logical |  |
 | `closed` | logical |  |
 | `market_maker_address` | character |  |
 | `created_at` | character |  |
@@ -289,7 +289,7 @@ Markets on the Gamma metadata host, orderable by volume or liquidity.
 | `custom_liveness` | integer |  |
 | `accepting_orders` | logical |  |
 | `neg_risk` | logical |  |
-| `events` | character | Nested list of non-game events. |
+| `events` | character |  |
 | `ready` | logical |  |
 | `funded` | logical |  |
 | `accepting_orders_timestamp` | character |  |
@@ -298,7 +298,7 @@ Markets on the Gamma metadata host, orderable by volume or liquidity.
 | `approved` | logical |  |
 | `rewards_min_size` | integer |  |
 | `rewards_max_spread` | numeric |  |
-| `spread` | numeric | Spread. |
+| `spread` | numeric |  |
 | `one_day_price_change` | numeric |  |
 | `last_trade_price` | numeric |  |
 | `best_bid` | numeric |  |
@@ -363,9 +363,9 @@ Tags used to categorise Gamma events and markets.
 
 | col_name | type | description |
 |---|---|---|
-| `id` | character | ID of the player in the 'name' column. |
-| `label` | character | Label. |
-| `slug` | character | URL-safe identifier. |
+| `id` | character |  |
+| `label` | character |  |
+| `slug` | character |  |
 | `created_at` | character |  |
 | `updated_at` | character |  |
 | `published_at` | character |  |
@@ -390,7 +390,7 @@ Full order book, bids and asks, for one outcome token.
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
-| `token_id` | `token_id` |  |  | `Y` | Required. CLOB token id (uint256 as a decimal string) = one entry of a Gamma market's clobTokenIds. |
+| `token_id` | `token_id` |  | `Y` |  | Required. CLOB token id (uint256 as a decimal string) = one entry of a Gamma market's clobTokenIds. |
 
 ### Returns {#polymarket_clob_book-returns}
 
@@ -398,15 +398,15 @@ Full order book, bids and asks, for one outcome token.
 
 | col_name | type | description |
 |---|---|---|
-| `market` | character | Broadcast market (e.g. home/away). |
+| `market` | character |  |
 | `asset_id` | character |  |
-| `timestamp` | character | Response timestamp (ISO 8601). |
+| `timestamp` | character |  |
 | `hash` | character |  |
 | `min_order_size` | character |  |
 | `tick_size` | character |  |
 | `neg_risk` | logical |  |
 | `last_trade_price` | character |  |
-| `side` | character | Side label (e.g. 'home', 'away', or 'overUnder'). |
+| `side` | character |  |
 | `price` | character |  |
 | `size` | character |  |
 
@@ -439,7 +439,7 @@ Markets on the CLOB host, cursor-paged.
 | col_name | type | description |
 |---|---|---|
 | `enable_order_book` | logical |  |
-| `active` | logical | TRUE if the row represents an active record (player / team / season). |
+| `active` | logical |  |
 | `closed` | logical |  |
 | `archived` | logical |  |
 | `accepting_orders` | logical |  |
@@ -449,7 +449,7 @@ Markets on the CLOB host, cursor-paged.
 | `condition_id` | character |  |
 | `question_id` | character |  |
 | `question` | character |  |
-| `description` | character | Long-form description text. |
+| `description` | character |  |
 | `market_slug` | character |  |
 | `end_date_iso` | character |  |
 | `game_start_time` | character |  |
@@ -491,7 +491,7 @@ Midpoint between the best bid and the best ask for one outcome token.
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
-| `token_id` | `token_id` |  |  | `Y` | Required. CLOB token id (uint256 as a decimal string) = one entry of a Gamma market's clobTokenIds. |
+| `token_id` | `token_id` |  | `Y` |  | Required. CLOB token id (uint256 as a decimal string) = one entry of a Gamma market's clobTokenIds. |
 
 ### Returns {#polymarket_clob_midpoint-returns}
 
@@ -521,8 +521,8 @@ Best price on one side of the book for one outcome token.
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
-| `token_id` | `token_id` |  |  | `Y` | Required. CLOB token id (uint256 as a decimal string) = one entry of a Gamma market's clobTokenIds. |
-| `side` | `side` |  |  | `Y` | Required. buy or sell. |
+| `token_id` | `token_id` |  | `Y` |  | Required. CLOB token id (uint256 as a decimal string) = one entry of a Gamma market's clobTokenIds. |
+| `side` | `side` |  | `Y` |  | Required. buy or sell. |
 
 ### Returns {#polymarket_clob_price-returns}
 

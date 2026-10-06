@@ -41,7 +41,7 @@ def openligadb_current_group(
     Example URL: https://api.openligadb.de/getcurrentgroup/bl1
 
     Args:
-        league_slug: league_slug path parameter.
+        league_slug: League shortcut from /getavailableleagues, e.g. bl1 (Bundesliga).
         return_parsed: parse the payload through parse_openligadb -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -92,8 +92,8 @@ def openligadb_goalgetters(
     Example URL: https://api.openligadb.de/getgoalgetters/bl1/2025
 
     Args:
-        league_slug: league_slug path parameter.
-        season: season path parameter.
+        league_slug: League shortcut from /getavailableleagues, e.g. bl1 (Bundesliga).
+        season: Season start year, e.g. 2025 for 2025/26.
         return_parsed: parse the payload through parse_openligadb -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -145,9 +145,9 @@ def openligadb_group_matches(
     Example URL: https://api.openligadb.de/getmatchdata/bl1/2025/1
 
     Args:
-        league_slug: league_slug path parameter.
-        season: season path parameter.
-        group: group path parameter.
+        league_slug: League shortcut from /getavailableleagues, e.g. bl1 (Bundesliga).
+        season: Season start year, e.g. 2025 for 2025/26.
+        group: Matchday number (groupOrderID from /getavailablegroups), e.g. 1.
         return_parsed: parse the payload through parse_openligadb -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -198,8 +198,8 @@ def openligadb_groups(
     Example URL: https://api.openligadb.de/getavailablegroups/bl1/2025
 
     Args:
-        league_slug: league_slug path parameter.
-        season: season path parameter.
+        league_slug: League shortcut from /getavailableleagues, e.g. bl1 (Bundesliga).
+        season: Season start year, e.g. 2025 for 2025/26.
         return_parsed: parse the payload through parse_openligadb -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -251,9 +251,9 @@ def openligadb_last_change_date(
     Example URL: https://api.openligadb.de/getlastchangedate/bl1/2025/1
 
     Args:
-        league_slug: league_slug path parameter.
-        season: season path parameter.
-        group: group path parameter.
+        league_slug: League shortcut from /getavailableleagues, e.g. bl1 (Bundesliga).
+        season: Season start year, e.g. 2025 for 2025/26.
+        group: Matchday number (groupOrderID from /getavailablegroups), e.g. 1.
         return_parsed: parse the payload through parse_openligadb -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -351,7 +351,7 @@ def openligadb_match(
     Example URL: https://api.openligadb.de/getmatchdata/77264
 
     Args:
-        match_id: match_id path parameter.
+        match_id: Match id (matchID from any getmatchdata list), e.g. 77264.
         return_parsed: parse the payload through parse_openligadb -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -402,8 +402,8 @@ def openligadb_next_match(
     Example URL: https://api.openligadb.de/getnextmatchbyleagueteam/4937/40
 
     Args:
-        league_id: league_id path parameter.
-        team_id: team_id path parameter.
+        league_id: Numeric leagueId from /getavailableleagues of a season still in progress, e.g. 4937 (bl1 2026); a finished season answers 404 text.
+        team_id: Team id (teamId from /getavailableteams), e.g. 40 (FC Bayern München).
         return_parsed: parse the payload through parse_openligadb -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -454,8 +454,8 @@ def openligadb_season_matches(
     Example URL: https://api.openligadb.de/getmatchdata/bl1/2025
 
     Args:
-        league_slug: league_slug path parameter.
-        season: season path parameter.
+        league_slug: League shortcut from /getavailableleagues, e.g. bl1 (Bundesliga).
+        season: Season start year, e.g. 2025 for 2025/26.
         return_parsed: parse the payload through parse_openligadb -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -506,8 +506,8 @@ def openligadb_table(
     Example URL: https://api.openligadb.de/getbltable/bl1/2025
 
     Args:
-        league_slug: league_slug path parameter.
-        season: season path parameter.
+        league_slug: League shortcut from /getavailableleagues, e.g. bl1 (Bundesliga).
+        season: Season start year, e.g. 2025 for 2025/26.
         return_parsed: parse the payload through parse_openligadb -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -558,8 +558,8 @@ def openligadb_teams(
     Example URL: https://api.openligadb.de/getavailableteams/bl1/2025
 
     Args:
-        league_slug: league_slug path parameter.
-        season: season path parameter.
+        league_slug: League shortcut from /getavailableleagues, e.g. bl1 (Bundesliga).
+        season: Season start year, e.g. 2025 for 2025/26.
         return_parsed: parse the payload through parse_openligadb -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.

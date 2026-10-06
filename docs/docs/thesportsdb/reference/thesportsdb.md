@@ -1,11 +1,11 @@
 ---
-title: THESPORTSDB — TheSportsDB API v1 (thesportsdb.com, free test key)
-sidebar_label: TheSportsDB API v1 (thesportsdb.com, free test key)
-description: "THESPORTSDB — TheSportsDB API v1 (thesportsdb.com, free test key) — endpoint reference in sdv-py, the SportsDataverse Python package."
+title: THESPORTSDB — TheSportsDB API v1 (thesportsdb.com; free test key by default, $THESPORTSDB_API_KEY to use your own)
+sidebar_label: TheSportsDB API v1 (thesportsdb.com; free test key by default, $THESPORTSDB_API_KEY to use your own)
+description: "THESPORTSDB — TheSportsDB API v1 (thesportsdb.com; free test key by default, $THESPORTSDB_API_KEY to use your own) — endpoint reference in sdv-py, the SportsDataverse Python package."
 sidebar_position: 10
 toc_max_heading_level: 2
 ---
-# THESPORTSDB — TheSportsDB API v1 (thesportsdb.com, free test key)
+# THESPORTSDB — TheSportsDB API v1 (thesportsdb.com; free test key by default, $THESPORTSDB_API_KEY to use your own)
 
 `sportsdataverse.thesportsdb` — 12 endpoints.
 
@@ -13,13 +13,13 @@ toc_max_heading_level: 2
 
 One event.
 
-**Endpoint URL:** `GET https://www.thesportsdb.com/api/v1/json/{key}/lookupevent.php`
+**Endpoint URL:** `GET https://www.thesportsdb.com/api/v1/json/3/lookupevent.php`
 
-**Valid URL:** [https://www.thesportsdb.com/api/v1/json/{key}/lookupevent.php?id=2267073](https://www.thesportsdb.com/api/v1/json/{key}/lookupevent.php?id=2267073)
+**Valid URL:** [https://www.thesportsdb.com/api/v1/json/3/lookupevent.php?id=2267073](https://www.thesportsdb.com/api/v1/json/3/lookupevent.php?id=2267073)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
-| `id` | `id` |  |  | `Y` | Required. Event id (idEvent from /eventsseason.php). |
+| `id` | `id` |  | `Y` |  | Required. Event id (idEvent from /eventsseason.php). |
 
 ### Returns {#thesportsdb_event-returns}
 
@@ -91,13 +91,13 @@ _Last validated n/a._
 
 One league.
 
-**Endpoint URL:** `GET https://www.thesportsdb.com/api/v1/json/{key}/lookupleague.php`
+**Endpoint URL:** `GET https://www.thesportsdb.com/api/v1/json/3/lookupleague.php`
 
-**Valid URL:** [https://www.thesportsdb.com/api/v1/json/{key}/lookupleague.php?id=4328](https://www.thesportsdb.com/api/v1/json/{key}/lookupleague.php?id=4328)
+**Valid URL:** [https://www.thesportsdb.com/api/v1/json/3/lookupleague.php?id=4328](https://www.thesportsdb.com/api/v1/json/3/lookupleague.php?id=4328)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
-| `id` | `id` |  |  | `Y` | Required. League id (idLeague from /all_leagues.php). |
+| `id` | `id` |  | `Y` |  | Required. League id (idLeague from /all_leagues.php). |
 
 ### Returns {#thesportsdb_league-returns}
 
@@ -167,13 +167,13 @@ _Last validated n/a._
 
 Next 15 events of a league.
 
-**Endpoint URL:** `GET https://www.thesportsdb.com/api/v1/json/{key}/eventsnextleague.php`
+**Endpoint URL:** `GET https://www.thesportsdb.com/api/v1/json/3/eventsnextleague.php`
 
-**Valid URL:** [https://www.thesportsdb.com/api/v1/json/{key}/eventsnextleague.php?id=4328](https://www.thesportsdb.com/api/v1/json/{key}/eventsnextleague.php?id=4328)
+**Valid URL:** [https://www.thesportsdb.com/api/v1/json/3/eventsnextleague.php?id=4328](https://www.thesportsdb.com/api/v1/json/3/eventsnextleague.php?id=4328)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
-| `id` | `id` |  |  | `Y` | Required. League id (idLeague from /all_leagues.php). |
+| `id` | `id` |  | `Y` |  | Required. League id (idLeague from /all_leagues.php). |
 
 ### Returns {#thesportsdb_league_next_events-returns}
 
@@ -245,13 +245,13 @@ _Last validated n/a._
 
 Teams in a league (by league name).
 
-**Endpoint URL:** `GET https://www.thesportsdb.com/api/v1/json/{key}/search_all_teams.php`
+**Endpoint URL:** `GET https://www.thesportsdb.com/api/v1/json/3/search_all_teams.php`
 
-**Valid URL:** [https://www.thesportsdb.com/api/v1/json/{key}/search_all_teams.php?l=English+Premier+League](https://www.thesportsdb.com/api/v1/json/{key}/search_all_teams.php?l=English+Premier+League)
+**Valid URL:** [https://www.thesportsdb.com/api/v1/json/3/search_all_teams.php?l=English+Premier+League](https://www.thesportsdb.com/api/v1/json/3/search_all_teams.php?l=English+Premier+League)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
-| `l` | `league_name` |  |  | `Y` | Required. League name as spelled in strLeague. |
+| `l` | `league_name` |  | `Y` |  | Required. League name as spelled in strLeague. |
 
 ### Returns {#thesportsdb_league_teams-returns}
 
@@ -337,9 +337,9 @@ _Last validated n/a._
 
 All leagues.
 
-**Endpoint URL:** `GET https://www.thesportsdb.com/api/v1/json/{key}/all_leagues.php`
+**Endpoint URL:** `GET https://www.thesportsdb.com/api/v1/json/3/all_leagues.php`
 
-**Valid URL:** [https://www.thesportsdb.com/api/v1/json/{key}/all_leagues.php](https://www.thesportsdb.com/api/v1/json/{key}/all_leagues.php)
+**Valid URL:** [https://www.thesportsdb.com/api/v1/json/3/all_leagues.php](https://www.thesportsdb.com/api/v1/json/3/all_leagues.php)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -368,13 +368,13 @@ _Last validated n/a._
 
 One player.
 
-**Endpoint URL:** `GET https://www.thesportsdb.com/api/v1/json/{key}/lookupplayer.php`
+**Endpoint URL:** `GET https://www.thesportsdb.com/api/v1/json/3/lookupplayer.php`
 
-**Valid URL:** [https://www.thesportsdb.com/api/v1/json/{key}/lookupplayer.php?id=34145937](https://www.thesportsdb.com/api/v1/json/{key}/lookupplayer.php?id=34145937)
+**Valid URL:** [https://www.thesportsdb.com/api/v1/json/3/lookupplayer.php?id=34145937](https://www.thesportsdb.com/api/v1/json/3/lookupplayer.php?id=34145937)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
-| `id` | `id` |  |  | `Y` | Required. Player id (idPlayer from /lookup_all_players.php). |
+| `id` | `id` |  | `Y` |  | Required. Player id (idPlayer from /lookup_all_players.php). |
 
 ### Returns {#thesportsdb_player-returns}
 
@@ -402,7 +402,7 @@ One player.
 | `date_born` | character |  |
 | `date_died` | character |  |
 | `str_number` | character |  |
-| `date_signed` | character | Date the player signed a new contract (YYYY-MM-DD). |
+| `date_signed` | character |  |
 | `str_signing` | character |  |
 | `str_wage` | character |  |
 | `str_outfitter` | character |  |
@@ -468,13 +468,13 @@ _Last validated n/a._
 
 Search players by name.
 
-**Endpoint URL:** `GET https://www.thesportsdb.com/api/v1/json/{key}/searchplayers.php`
+**Endpoint URL:** `GET https://www.thesportsdb.com/api/v1/json/3/searchplayers.php`
 
-**Valid URL:** [https://www.thesportsdb.com/api/v1/json/{key}/searchplayers.php?p=Danny+Welbeck](https://www.thesportsdb.com/api/v1/json/{key}/searchplayers.php?p=Danny+Welbeck)
+**Valid URL:** [https://www.thesportsdb.com/api/v1/json/3/searchplayers.php?p=Danny+Welbeck](https://www.thesportsdb.com/api/v1/json/3/searchplayers.php?p=Danny+Welbeck)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
-| `p` | `player_name` |  |  | `Y` | Required. Player name (substring search). |
+| `p` | `player_name` |  | `Y` |  | Required. Player name (substring search). |
 
 ### Returns {#thesportsdb_player_search-returns}
 
@@ -510,13 +510,13 @@ _Last validated n/a._
 
 Events of a league-season.
 
-**Endpoint URL:** `GET https://www.thesportsdb.com/api/v1/json/{key}/eventsseason.php`
+**Endpoint URL:** `GET https://www.thesportsdb.com/api/v1/json/3/eventsseason.php`
 
-**Valid URL:** [https://www.thesportsdb.com/api/v1/json/{key}/eventsseason.php?id=4328&s=2025-2026](https://www.thesportsdb.com/api/v1/json/{key}/eventsseason.php?id=4328&s=2025-2026)
+**Valid URL:** [https://www.thesportsdb.com/api/v1/json/3/eventsseason.php?id=4328&s=2025-2026](https://www.thesportsdb.com/api/v1/json/3/eventsseason.php?id=4328&s=2025-2026)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
-| `id` | `id` |  |  | `Y` | Required. League id (idLeague from /all_leagues.php). |
+| `id` | `id` |  | `Y` |  | Required. League id (idLeague from /all_leagues.php). |
 | `s` | `season` |  |  | `Y` | Season label, e.g. 2025-2026; omitted, the API answers the current season. |
 
 ### Returns {#thesportsdb_season_events-returns}
@@ -570,9 +570,9 @@ _Last validated n/a._
 
 All sports.
 
-**Endpoint URL:** `GET https://www.thesportsdb.com/api/v1/json/{key}/all_sports.php`
+**Endpoint URL:** `GET https://www.thesportsdb.com/api/v1/json/3/all_sports.php`
 
-**Valid URL:** [https://www.thesportsdb.com/api/v1/json/{key}/all_sports.php](https://www.thesportsdb.com/api/v1/json/{key}/all_sports.php)
+**Valid URL:** [https://www.thesportsdb.com/api/v1/json/3/all_sports.php](https://www.thesportsdb.com/api/v1/json/3/all_sports.php)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -605,13 +605,13 @@ _Last validated n/a._
 
 League table.
 
-**Endpoint URL:** `GET https://www.thesportsdb.com/api/v1/json/{key}/lookuptable.php`
+**Endpoint URL:** `GET https://www.thesportsdb.com/api/v1/json/3/lookuptable.php`
 
-**Valid URL:** [https://www.thesportsdb.com/api/v1/json/{key}/lookuptable.php?l=4328&s=2025-2026](https://www.thesportsdb.com/api/v1/json/{key}/lookuptable.php?l=4328&s=2025-2026)
+**Valid URL:** [https://www.thesportsdb.com/api/v1/json/3/lookuptable.php?l=4328&s=2025-2026](https://www.thesportsdb.com/api/v1/json/3/lookuptable.php?l=4328&s=2025-2026)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
-| `l` | `league_id` |  |  | `Y` | Required. League id (idLeague from /all_leagues.php). |
+| `l` | `league_id` |  | `Y` |  | Required. League id (idLeague from /all_leagues.php). |
 | `s` | `season` |  |  | `Y` | Season label, e.g. 2025-2026; omitted, the API answers the current season. |
 
 ### Returns {#thesportsdb_table-returns}
@@ -655,13 +655,13 @@ _Last validated n/a._
 
 One team.
 
-**Endpoint URL:** `GET https://www.thesportsdb.com/api/v1/json/{key}/lookupteam.php`
+**Endpoint URL:** `GET https://www.thesportsdb.com/api/v1/json/3/lookupteam.php`
 
-**Valid URL:** [https://www.thesportsdb.com/api/v1/json/{key}/lookupteam.php?id=133604](https://www.thesportsdb.com/api/v1/json/{key}/lookupteam.php?id=133604)
+**Valid URL:** [https://www.thesportsdb.com/api/v1/json/3/lookupteam.php?id=133604](https://www.thesportsdb.com/api/v1/json/3/lookupteam.php?id=133604)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
-| `id` | `id` |  |  | `Y` | Required. Team id (idTeam from /search_all_teams.php). |
+| `id` | `id` |  | `Y` |  | Required. Team id (idTeam from /search_all_teams.php). |
 
 ### Returns {#thesportsdb_team-returns}
 
@@ -747,13 +747,13 @@ _Last validated n/a._
 
 Players of a team.
 
-**Endpoint URL:** `GET https://www.thesportsdb.com/api/v1/json/{key}/lookup_all_players.php`
+**Endpoint URL:** `GET https://www.thesportsdb.com/api/v1/json/3/lookup_all_players.php`
 
-**Valid URL:** [https://www.thesportsdb.com/api/v1/json/{key}/lookup_all_players.php?id=133604](https://www.thesportsdb.com/api/v1/json/{key}/lookup_all_players.php?id=133604)
+**Valid URL:** [https://www.thesportsdb.com/api/v1/json/3/lookup_all_players.php?id=133604](https://www.thesportsdb.com/api/v1/json/3/lookup_all_players.php?id=133604)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
-| `id` | `id` |  |  | `Y` | Required. Team id (idTeam from /search_all_teams.php). |
+| `id` | `id` |  | `Y` |  | Required. Team id (idTeam from /search_all_teams.php). |
 
 ### Returns {#thesportsdb_team_players-returns}
 
@@ -781,7 +781,7 @@ Players of a team.
 | `date_born` | character |  |
 | `date_died` | character |  |
 | `str_number` | character |  |
-| `date_signed` | character | Date the player signed a new contract (YYYY-MM-DD). |
+| `date_signed` | character |  |
 | `str_signing` | character |  |
 | `str_wage` | character |  |
 | `str_outfitter` | character |  |

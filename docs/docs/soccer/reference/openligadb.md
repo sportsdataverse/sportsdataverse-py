@@ -19,7 +19,7 @@ Current matchday.
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
-| `league_slug` | `league_slug` |  | `Y` |  | league_slug path parameter. |
+| `league_slug` | `league_slug` |  | `Y` |  | League shortcut from /getavailableleagues, e.g. bl1 (Bundesliga). |
 
 ### Returns {#openligadb_current_group-returns}
 
@@ -27,9 +27,9 @@ Current matchday.
 
 | col_name | type | description |
 |---|---|---|
-| `group_name` | character | Group name (conference / division). |
+| `group_name` | character |  |
 | `group_order_id` | character |  |
-| `group_id` | character | ESPN group id. |
+| `group_id` | character |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -51,8 +51,8 @@ Top scorers.
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
-| `league_slug` | `league_slug` |  | `Y` |  | league_slug path parameter. |
-| `season` | `season` |  | `Y` |  | season path parameter. |
+| `league_slug` | `league_slug` |  | `Y` |  | League shortcut from /getavailableleagues, e.g. bl1 (Bundesliga). |
+| `season` | `season` |  | `Y` |  | Season start year, e.g. 2025 for 2025/26. |
 
 ### Returns {#openligadb_goalgetters-returns}
 
@@ -62,7 +62,7 @@ Top scorers.
 |---|---|---|
 | `goal_getter_id` | character |  |
 | `goal_getter_name` | character |  |
-| `goal_count` | integer | Total goals recorded. |
+| `goal_count` | integer |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -84,9 +84,9 @@ Matches of one matchday.
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
-| `league_slug` | `league_slug` |  | `Y` |  | league_slug path parameter. |
-| `season` | `season` |  | `Y` |  | season path parameter. |
-| `group` | `group` |  | `Y` |  | group path parameter. |
+| `league_slug` | `league_slug` |  | `Y` |  | League shortcut from /getavailableleagues, e.g. bl1 (Bundesliga). |
+| `season` | `season` |  | `Y` |  | Season start year, e.g. 2025 for 2025/26. |
+| `group` | `group` |  | `Y` |  | Matchday number (groupOrderID from /getavailablegroups), e.g. 1. |
 
 ### Returns {#openligadb_group_matches-returns}
 
@@ -97,16 +97,16 @@ Matches of one matchday.
 | `match_id` | character |  |
 | `match_date_time` | character |  |
 | `time_zone_id` | character |  |
-| `league_id` | character | League identifier ('10' = WNBA). |
-| `league_name` | character | League name. |
-| `league_season` | integer | Season year for the league record. |
+| `league_id` | character |  |
+| `league_name` | character |  |
+| `league_season` | integer |  |
 | `league_shortcut` | character |  |
 | `match_date_time_utc` | character |  |
 | `last_update_date_time` | character |  |
 | `match_is_finished` | logical |  |
 | `match_results` | character |  |
-| `goals` | character | Goals scored. |
-| `location` | character | Either Home if the home team is playing in their home stadium, or Neutral if the game is being played at a neutral location. This still shows as Home for games between the Giants and Jets even though they share the same home stadium. |
+| `goals` | character |  |
+| `location` | character |  |
 | `number_of_viewers` | character |  |
 | `group_group_name` | character |  |
 | `group_group_order_id` | character |  |
@@ -142,8 +142,8 @@ Matchdays of a league-season.
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
-| `league_slug` | `league_slug` |  | `Y` |  | league_slug path parameter. |
-| `season` | `season` |  | `Y` |  | season path parameter. |
+| `league_slug` | `league_slug` |  | `Y` |  | League shortcut from /getavailableleagues, e.g. bl1 (Bundesliga). |
+| `season` | `season` |  | `Y` |  | Season start year, e.g. 2025 for 2025/26. |
 
 ### Returns {#openligadb_groups-returns}
 
@@ -151,9 +151,9 @@ Matchdays of a league-season.
 
 | col_name | type | description |
 |---|---|---|
-| `group_name` | character | Group name (conference / division). |
+| `group_name` | character |  |
 | `group_order_id` | character |  |
-| `group_id` | character | ESPN group id. |
+| `group_id` | character |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -175,9 +175,9 @@ Last change timestamp (bare ISO string).
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
-| `league_slug` | `league_slug` |  | `Y` |  | league_slug path parameter. |
-| `season` | `season` |  | `Y` |  | season path parameter. |
-| `group` | `group` |  | `Y` |  | group path parameter. |
+| `league_slug` | `league_slug` |  | `Y` |  | League shortcut from /getavailableleagues, e.g. bl1 (Bundesliga). |
+| `season` | `season` |  | `Y` |  | Season start year, e.g. 2025 for 2025/26. |
+| `group` | `group` |  | `Y` |  | Matchday number (groupOrderID from /getavailablegroups), e.g. 1. |
 
 ### Returns {#openligadb_last_change_date-returns}
 
@@ -185,7 +185,7 @@ Last change timestamp (bare ISO string).
 
 | col_name | type | description |
 |---|---|---|
-| `value` | character | Numeric or string value field. |
+| `value` | character |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -214,10 +214,10 @@ All leagues (shortcut, season, sport).
 
 | col_name | type | description |
 |---|---|---|
-| `league_id` | character | League identifier ('10' = WNBA). |
-| `league_name` | character | League name. |
+| `league_id` | character |  |
+| `league_name` | character |  |
 | `league_shortcut` | character |  |
-| `league_season` | character | Season year for the league record. |
+| `league_season` | character |  |
 | `sport_sport_id` | character | Yahoo identifier of the sport the league belongs to. |
 | `sport_sport_name` | character |  |
 
@@ -241,7 +241,7 @@ One match.
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
-| `match_id` | `match_id` |  | `Y` |  | match_id path parameter. |
+| `match_id` | `match_id` |  | `Y` |  | Match id (matchID from any getmatchdata list), e.g. 77264. |
 
 ### Returns {#openligadb_match-returns}
 
@@ -252,16 +252,16 @@ One match.
 | `match_id` | character |  |
 | `match_date_time` | character |  |
 | `time_zone_id` | character |  |
-| `league_id` | character | League identifier ('10' = WNBA). |
-| `league_name` | character | League name. |
-| `league_season` | integer | Season year for the league record. |
+| `league_id` | character |  |
+| `league_name` | character |  |
+| `league_season` | integer |  |
 | `league_shortcut` | character |  |
 | `match_date_time_utc` | character |  |
 | `last_update_date_time` | character |  |
 | `match_is_finished` | logical |  |
 | `match_results` | character |  |
-| `goals` | character | Goals scored. |
-| `location` | character | Either Home if the home team is playing in their home stadium, or Neutral if the game is being played at a neutral location. This still shows as Home for games between the Giants and Jets even though they share the same home stadium. |
+| `goals` | character |  |
+| `location` | character |  |
 | `number_of_viewers` | character |  |
 | `group_group_name` | character |  |
 | `group_group_order_id` | character |  |
@@ -297,8 +297,8 @@ Next match of a team (404 text once the season is over).
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
-| `league_id` | `league_id` |  | `Y` |  | league_id path parameter. |
-| `team_id` | `team_id` |  | `Y` |  | team_id path parameter. |
+| `league_id` | `league_id` |  | `Y` |  | Numeric leagueId from /getavailableleagues of a season still in progress, e.g. 4937 (bl1 2026); a finished season answers 404 text. |
+| `team_id` | `team_id` |  | `Y` |  | Team id (teamId from /getavailableteams), e.g. 40 (FC Bayern München). |
 
 ### Returns {#openligadb_next_match-returns}
 
@@ -309,16 +309,16 @@ Next match of a team (404 text once the season is over).
 | `match_id` | character |  |
 | `match_date_time` | character |  |
 | `time_zone_id` | character |  |
-| `league_id` | character | League identifier ('10' = WNBA). |
-| `league_name` | character | League name. |
-| `league_season` | integer | Season year for the league record. |
+| `league_id` | character |  |
+| `league_name` | character |  |
+| `league_season` | integer |  |
 | `league_shortcut` | character |  |
 | `match_date_time_utc` | character |  |
 | `last_update_date_time` | character |  |
 | `match_is_finished` | logical |  |
 | `match_results` | character |  |
-| `goals` | character | Goals scored. |
-| `location` | character | Either Home if the home team is playing in their home stadium, or Neutral if the game is being played at a neutral location. This still shows as Home for games between the Giants and Jets even though they share the same home stadium. |
+| `goals` | character |  |
+| `location` | character |  |
 | `number_of_viewers` | character |  |
 | `group_group_name` | character |  |
 | `group_group_order_id` | character |  |
@@ -354,8 +354,8 @@ All matches of a season.
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
-| `league_slug` | `league_slug` |  | `Y` |  | league_slug path parameter. |
-| `season` | `season` |  | `Y` |  | season path parameter. |
+| `league_slug` | `league_slug` |  | `Y` |  | League shortcut from /getavailableleagues, e.g. bl1 (Bundesliga). |
+| `season` | `season` |  | `Y` |  | Season start year, e.g. 2025 for 2025/26. |
 
 ### Returns {#openligadb_season_matches-returns}
 
@@ -366,16 +366,16 @@ All matches of a season.
 | `match_id` | character |  |
 | `match_date_time` | character |  |
 | `time_zone_id` | character |  |
-| `league_id` | character | League identifier ('10' = WNBA). |
-| `league_name` | character | League name. |
-| `league_season` | integer | Season year for the league record. |
+| `league_id` | character |  |
+| `league_name` | character |  |
+| `league_season` | integer |  |
 | `league_shortcut` | character |  |
 | `match_date_time_utc` | character |  |
 | `last_update_date_time` | character |  |
 | `match_is_finished` | logical |  |
 | `match_results` | character |  |
-| `goals` | character | Goals scored. |
-| `location` | character | Either Home if the home team is playing in their home stadium, or Neutral if the game is being played at a neutral location. This still shows as Home for games between the Giants and Jets even though they share the same home stadium. |
+| `goals` | character |  |
+| `location` | character |  |
 | `number_of_viewers` | character |  |
 | `group_group_name` | character |  |
 | `group_group_order_id` | character |  |
@@ -411,8 +411,8 @@ League table.
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
-| `league_slug` | `league_slug` |  | `Y` |  | league_slug path parameter. |
-| `season` | `season` |  | `Y` |  | season path parameter. |
+| `league_slug` | `league_slug` |  | `Y` |  | League shortcut from /getavailableleagues, e.g. bl1 (Bundesliga). |
+| `season` | `season` |  | `Y` |  | Season start year, e.g. 2025 for 2025/26. |
 
 ### Returns {#openligadb_table-returns}
 
@@ -421,12 +421,12 @@ League table.
 | col_name | type | description |
 |---|---|---|
 | `team_info_id` | character |  |
-| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
-| `short_name` | character | Short display name. |
+| `team_name` | character |  |
+| `short_name` | character |  |
 | `team_icon_url` | character |  |
-| `points` | integer | Points scored. |
+| `points` | integer |  |
 | `opponent_goals` | integer |  |
-| `goals` | integer | Goals scored. |
+| `goals` | integer |  |
 | `matches` | integer |  |
 | `won` | integer |  |
 | `lost` | integer |  |
@@ -453,8 +453,8 @@ Teams of a league-season.
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
-| `league_slug` | `league_slug` |  | `Y` |  | league_slug path parameter. |
-| `season` | `season` |  | `Y` |  | season path parameter. |
+| `league_slug` | `league_slug` |  | `Y` |  | League shortcut from /getavailableleagues, e.g. bl1 (Bundesliga). |
+| `season` | `season` |  | `Y` |  | Season start year, e.g. 2025 for 2025/26. |
 
 ### Returns {#openligadb_teams-returns}
 
@@ -463,8 +463,8 @@ Teams of a league-season.
 | col_name | type | description |
 |---|---|---|
 | `team_id` | character | ESPN numeric identifier for the team. |
-| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
-| `short_name` | character | Short display name. |
+| `team_name` | character |  |
+| `short_name` | character |  |
 | `team_icon_url` | character |  |
 | `team_group_name` | character |  |
 

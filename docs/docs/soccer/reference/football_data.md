@@ -19,7 +19,7 @@ All seasons of one 'extra' league (BRA, ARG, USA, ...).
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
-| `country` | `country` |  | `Y` |  | country path parameter. |
+| `country` | `country` |  | `Y` |  | Three-letter country code of an 'extra' league, e.g. BRA (Brazil); ARG, AUT, CHN, DNK, FIN, IRL, JPN, MEX, NOR, POL, ROU, RUS, SWE, SWZ, USA per new_leagues.php. |
 
 ### Returns {#football_data_extra_league-returns}
 
@@ -27,13 +27,13 @@ All seasons of one 'extra' league (BRA, ARG, USA, ...).
 
 | col_name | type | description |
 |---|---|---|
-| `country` | character | Venue country. |
-| `league` | character | League slug. |
-| `season` | integer | Season year. |
+| `country` | character |  |
+| `league` | character |  |
+| `season` | integer |  |
 | `date` | character | Match Date (dd/mm/yy) |
 | `time` | character | Time of match kick off |
-| `home` | character | Home. |
-| `away` | character | Away team shots in the period. |
+| `home` | character |  |
+| `away` | character |  |
 | `hg` | integer | Full Time Home Team Goals |
 | `ag` | integer | Full Time Away Team Goals |
 | `res` | character | Full Time Result (H=Home Win, D=Draw, A=Away Win) |
@@ -195,8 +195,8 @@ One league-season of results + closing odds (main leagues).
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
-| `season` | `season` |  | `Y` |  | season path parameter. |
-| `div` | `div` |  | `Y` |  | div path parameter. |
+| `season` | `season` |  | `Y` |  | Two-digit start and end years of the season, e.g. 2526 for 2025/26 (files go back to 9394). |
+| `div` | `div` |  | `Y` |  | Division code, e.g. E0 (Premier League); E1-E3, EC, SC0-SC3, D1, D2, I1, I2, SP1, SP2, F1, F2, N1, B1, P1, T1, G1 per matches.php. |
 
 ### Returns {#football_data_league_season-returns}
 

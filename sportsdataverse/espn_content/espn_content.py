@@ -36,8 +36,8 @@ def espn_content_league_news(
     Example URL: https://content.core.api.espn.com/v1/sports/football/nfl/news
 
     Args:
-        sport_slug: sport_slug path parameter.
-        league_slug: league_slug path parameter.
+        sport_slug: ESPN sport slug (football, basketball, soccer, ...).
+        league_slug: ESPN league slug (nfl, college-football, nba, mens-college-basketball, eng.1, ...).
         limit: Page size (default 10; the body echoes resultsLimit).
         offset: Page offset (body echoes resultsOffset).
         return_parsed: parse the payload through parse_espn_content -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
@@ -147,7 +147,7 @@ def espn_content_story(
     Example URL: https://content.core.api.espn.com/v1/sports/news/49778940
 
     Args:
-        id: id path parameter.
+        id: Story id (headlines[].id; links.api.self.href points here).
         return_parsed: parse the payload through parse_espn_content -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.

@@ -33,7 +33,7 @@ def football_data_extra_league(
     Example URL: https://www.football-data.co.uk/new/BRA.csv
 
     Args:
-        country: country path parameter.
+        country: Three-letter country code of an 'extra' league, e.g. BRA (Brazil); ARG, AUT, CHN, DNK, FIN, IRL, JPN, MEX, NOR, POL, ROU, RUS, SWE, SWZ, USA per new_leagues.php.
         return_parsed: parse the payload through parse_football_data -> polars DataFrame (default True). Pass return_parsed=False for the raw CSV response body (``str``).
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -132,8 +132,8 @@ def football_data_league_season(
     Example URL: https://www.football-data.co.uk/mmz4281/2526/E0.csv
 
     Args:
-        season: season path parameter.
-        div: div path parameter.
+        season: Two-digit start and end years of the season, e.g. 2526 for 2025/26 (files go back to 9394).
+        div: Division code, e.g. E0 (Premier League); E1-E3, EC, SC0-SC3, D1, D2, I1, I2, SP1, SP2, F1, F2, N1, B1, P1, T1, G1 per matches.php.
         return_parsed: parse the payload through parse_football_data -> polars DataFrame (default True). Pass return_parsed=False for the raw CSV response body (``str``).
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.

@@ -1,11 +1,11 @@
 ---
-title: ESPN_CONTENT — ESPN content API (content.core.api.espn.com/v1, news)
+title: ESPN content (news) — ESPN content API (content.core.api.espn.com/v1, news)
 sidebar_label: ESPN content API (content.core.api.espn.com/v1, news)
-description: "ESPN_CONTENT — ESPN content API (content.core.api.espn.com/v1, news) — endpoint reference in sdv-py, the SportsDataverse Python package."
+description: "ESPN content (news) — ESPN content API (content.core.api.espn.com/v1, news) — endpoint reference in sdv-py, the SportsDataverse Python package."
 sidebar_position: 10
 toc_max_heading_level: 2
 ---
-# ESPN_CONTENT — ESPN content API (content.core.api.espn.com/v1, news)
+# ESPN content (news) — ESPN content API (content.core.api.espn.com/v1, news)
 
 `sportsdataverse.espn_content` — 3 endpoints.
 
@@ -19,8 +19,8 @@ Headlines for one league (limit, offset).
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
-| `sport_slug` | `sport_slug` |  | `Y` |  | sport_slug path parameter. |
-| `league_slug` | `league_slug` |  | `Y` |  | league_slug path parameter. |
+| `sport_slug` | `sport_slug` |  | `Y` |  | ESPN sport slug (football, basketball, soccer, ...). |
+| `league_slug` | `league_slug` |  | `Y` |  | ESPN league slug (nfl, college-football, nba, mens-college-basketball, eng.1, ...). |
 | `limit` | `limit` |  |  | `Y` | Page size (default 10; the body echoes resultsLimit). |
 | `offset` | `offset` |  |  | `Y` | Page offset (body echoes resultsOffset). |
 
@@ -30,21 +30,21 @@ Headlines for one league (limit, offset).
 
 | col_name | type | description |
 |---|---|---|
-| `id` | character | ID of the player in the 'name' column. |
-| `now_id` | character | ESPN Now identifier. |
-| `content_key` | character | Content management key. |
+| `id` | character |  |
+| `now_id` | character |  |
+| `content_key` | character |  |
 | `data_source_identifier` | character |  |
 | `publishedkey` | character |  |
-| `type` | character | Record type / category. |
+| `type` | character |  |
 | `feed_display_type` | character |  |
-| `headline` | character | News headline. |
-| `description` | character | Long-form description text. |
-| `title` | character | Specific role title for the assignment. |
+| `headline` | character |  |
+| `description` | character |  |
+| `title` | character |  |
 | `link_text` | character |  |
 | `categorized` | character |  |
 | `originally_posted` | character |  |
-| `last_modified` | character | ISO timestamp the probability row was last modified. |
-| `published` | character | Publication timestamp (ISO 8601). |
+| `last_modified` | character |  |
+| `published` | character |  |
 | `root` | character |  |
 | `section` | character |  |
 | `images` | character |  |
@@ -58,14 +58,14 @@ Headlines for one league (limit, offset).
 | `allow_commerce` | logical |  |
 | `allow_content_reactions` | logical |  |
 | `allow_search` | logical |  |
-| `byline` | character | News article byline / author. |
+| `byline` | character |  |
 | `is_live_blog` | logical |  |
-| `premium` | logical | Whether the article is premium content. |
+| `premium` | logical |  |
 | `links_api_self_href` | character |  |
 | `links_app_sportscenter_href` | character |  |
 | `links_mobile_href` | character |  |
 | `links_web_href` | character |  |
-| `video` | character | Associated video content. |
+| `video` | character |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -105,7 +105,7 @@ Cross-sport headlines (limit, offset).
 | `feed_display_type` | character |  |
 | `headline` | character | Article headline. |
 | `description` | character | Article summary/description. |
-| `title` | character | Specific role title for the assignment. |
+| `title` | character |  |
 | `link_text` | character |  |
 | `categorized` | character |  |
 | `originally_posted` | character |  |
@@ -130,7 +130,7 @@ Cross-sport headlines (limit, offset).
 | `links_app_sportscenter_href` | character | SportsCenter app deep link. |
 | `links_mobile_href` | character | Mobile article URL. |
 | `links_web_href` | character | Web article URL. |
-| `video` | character | Associated video content. |
+| `video` | character |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -152,7 +152,7 @@ One story (same envelope, one headline).
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
-| `id` | `id` |  | `Y` |  | id path parameter. |
+| `id` | `id` |  | `Y` |  | Story id (headlines[].id; links.api.self.href points here). |
 
 ### Returns {#espn_content_story-returns}
 
@@ -160,21 +160,21 @@ One story (same envelope, one headline).
 
 | col_name | type | description |
 |---|---|---|
-| `id` | character | ID of the player in the 'name' column. |
-| `now_id` | character | ESPN Now identifier. |
-| `content_key` | character | Content management key. |
+| `id` | character |  |
+| `now_id` | character |  |
+| `content_key` | character |  |
 | `data_source_identifier` | character |  |
 | `publishedkey` | character |  |
-| `type` | character | Record type / category. |
+| `type` | character |  |
 | `feed_display_type` | character |  |
-| `headline` | character | News headline. |
-| `description` | character | Long-form description text. |
-| `title` | character | Specific role title for the assignment. |
+| `headline` | character |  |
+| `description` | character |  |
+| `title` | character |  |
 | `link_text` | character |  |
 | `categorized` | character |  |
 | `originally_posted` | character |  |
-| `last_modified` | character | ISO timestamp the probability row was last modified. |
-| `published` | character | Publication timestamp (ISO 8601). |
+| `last_modified` | character |  |
+| `published` | character |  |
 | `root` | character |  |
 | `section` | character |  |
 | `images` | character |  |
@@ -187,9 +187,9 @@ One story (same envelope, one headline).
 | `allow_commerce` | logical |  |
 | `allow_content_reactions` | logical |  |
 | `allow_search` | logical |  |
-| `byline` | character | News article byline / author. |
+| `byline` | character |  |
 | `is_live_blog` | logical |  |
-| `premium` | logical | Whether the article is premium content. |
+| `premium` | logical |  |
 | `links_api_self_href` | character |  |
 | `links_app_sportscenter_href` | character |  |
 | `links_mobile_href` | character |  |

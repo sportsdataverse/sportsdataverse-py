@@ -3,6 +3,7 @@
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
 - [Unreleased](#unreleased)
+  - [Added — wrappers for six more intake providers (ESPN content, TheSportsDB, Football-Data.co.uk, OpenLigaDB, Polymarket, Kalshi)](#added--wrappers-for-six-more-intake-providers-espn-content-thesportsdb-football-datacouk-openligadb-polymarket-kalshi)
   - [Added — `asa_players_xpass()` and the `nasl` + `usls` ASA leagues](#added--asa_players_xpass-and-the-nasl--usls-asa-leagues)
   - [Added — kloppy as the optional `soccer` extra; `soccer_open_events()` loads open event data](#added--kloppy-as-the-optional-soccer-extra-soccer_open_events-loads-open-event-data)
   - [Changed — league index pages gain a "See also" block of companion packages (soccer first)](#changed--league-index-pages-gain-a-see-also-block-of-companion-packages-soccer-first)

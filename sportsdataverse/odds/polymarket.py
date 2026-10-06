@@ -99,7 +99,7 @@ def polymarket_gamma_market(
     Example URL: https://gamma-api.polymarket.com/markets/608565
 
     Args:
-        id: id path parameter.
+        id: Gamma market id (from /markets).
         return_parsed: parse the payload through parse_polymarket -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -256,7 +256,7 @@ def polymarket_gamma_tags(
 
 
 def polymarket_clob_book(
-    token_id: Optional[str] = None,
+    token_id: str,
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
@@ -360,7 +360,7 @@ def polymarket_clob_markets(
 
 
 def polymarket_clob_midpoint(
-    token_id: Optional[str] = None,
+    token_id: str,
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
@@ -412,8 +412,8 @@ def polymarket_clob_midpoint(
 
 
 def polymarket_clob_price(
-    token_id: Optional[str] = None,
-    side: Optional[str] = None,
+    token_id: str,
+    side: str,
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,

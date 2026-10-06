@@ -1,9 +1,9 @@
 ---
-title: ESPN_CONTENT
-sidebar_label: ESPN_CONTENT
-description: "sdv-py ESPN_CONTENT: endpoint references, dataset loaders and parsers for ESPN_CONTENT in the SportsDataverse Python package."
+title: ESPN content (news)
+sidebar_label: ESPN content (news)
+description: "sdv-py ESPN content (news): endpoint references, dataset loaders and parsers for ESPN content (news) in the SportsDataverse Python package."
 ---
-# ESPN_CONTENT (`sportsdataverse.espn_content`)
+# ESPN content (news) (`sportsdataverse.espn_content`)
 
 | Reference | Functions | Base URL |
 |---|---:|---|
