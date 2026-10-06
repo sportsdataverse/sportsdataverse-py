@@ -8,6 +8,16 @@ Merged to `main` since 0.1.4 and not yet released. Released versions are on the 
 
 ## Unreleased
 
+### Added — `asa_players_xpass()` and the `nasl` + `usls` ASA leagues
+
+`asa_players_xpass(league_slug, season_name=...)` wraps the American Soccer Analysis
+`/{league}/players/xpass` route (13 columns: pass completion over expected, average and vertical
+pass distance, share of team touches), regenerated from the 2026-10-06 recon. The documented
+`league_slug` values gain `nasl` (North American Soccer League, 2011-2017) and `usls` (USL Super
+League). USL Super League seasons use split-year labels, so pass `season_name="2024-25"`, not
+`2024`, which returns an empty frame. Every ASA route answers on all seven slugs except
+`players/salaries`, which stays MLS-only.
+
 ### Added — sdv-docs MCP server and a published docs index
 
 `sdv-docs` is a stdio MCP server that answers exact questions about the SportsDataverse surface
