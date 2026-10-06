@@ -140,6 +140,8 @@ def _returns_dict(schema_doc: dict) -> bool:
 _VOCAB_GETTERS = frozenset(
     {
         "sportsdataverse._codegen_runtime",
+        "sportsdataverse.euroleague.euroleague_runtime",
+        "sportsdataverse.soccer.uefa_runtime",
         "sportsdataverse.cfb.on3_runtime",
         "sportsdataverse.cfb.sports247_runtime",
         "sportsdataverse.cfb.sports247_site_pages_runtime",
