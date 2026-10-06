@@ -1,0 +1,44 @@
+{
+  "IdTeam": "43922",
+  "IdConfederation": "CONMEBOL",
+  "ActiveStatus": 0,
+  "Type": 1,
+  "AgeType": 7,
+  "FootballType": 0,
+  "Gender": 1,
+  "Name": [
+    {
+      "Locale": "en-GB",
+      "Description": "Argentina"
+    }
+  ],
+  "IdAssociation": "ARG",
+  "IdCity": null,
+  "Headquarters": null,
+  "TrainingCentre": null,
+  "OfficialSite": null,
+  "City": "BUENOS AIRES",
+  "IdCountry": "ARG",
+  "PostalCode": "1053",
+  "RegionName": null,
+  "ShortClubName": "Argentina",
+  "Abbreviation": "ARG",
+  "Street": "Asociación del Fútbol Argentino, Viamonte 1366/76",
+  "FoundationYear": 1893,
+  "Stadium": null,
+  "PictureUrl": "https://api.fifa.com/api/v3/picture/flags-{format}-{size}/ARG",
+  "ThumbnailUrl": null,
+  "DisplayName": [
+    {
+      "Locale": "en-GB",
+      "Description": "ARG"
+    }
+  ],
+  "Content": [],
+  "Properties": {
+    "IdIFES": "43922",
+    "StatsPerformIfesId": "43922",
+    "IdStatsPerform": "ak48fkypnql8y4n69cvcq5ghc"
+  },
+  "IsUpdateable": null
+}

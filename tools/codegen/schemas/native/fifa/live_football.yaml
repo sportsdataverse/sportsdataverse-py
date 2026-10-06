@@ -1,0 +1,339 @@
+columns:
+- description: FIFA match id (Utf8 join key).
+  name: id_match
+  type: character
+- description: Stage id within the season (Utf8 join key).
+  name: id_stage
+  type: character
+- description: Group id within the stage (Utf8 join key).
+  name: id_group
+  type: character
+- description: FIFA season id (285023 = FIFA World Cup 2026; Utf8 join key).
+  name: id_season
+  type: character
+- description: Data-coverage level of the match (integer).
+  name: coverage_level
+  type: integer
+- description: FIFA competition id (17 = FIFA World Cup; Utf8 join key).
+  name: id_competition
+  type: character
+- description: Localised competition name, JSON list of `{Locale, Description}` objects.
+  name: competition_name
+  type: character
+- description: Localised season name, JSON list of `{Locale, Description}` objects.
+  name: season_name
+  type: character
+- description: Localised short season name, JSON list of `{Locale, Description}` objects
+    (often empty).
+  name: season_short_name
+  type: character
+- description: Result-type code (FIFA integer enum).
+  name: result_type
+  type: integer
+- description: Match day (round) within the stage.
+  name: match_day
+  type: character
+- description: Match number within the season.
+  name: match_number
+  type: character
+- description: 'Home team: penalty shoot-out score (null when there was no shoot-out).'
+  name: home_team_penalty_score
+  type: character
+- description: 'Away team: penalty shoot-out score (null when there was no shoot-out).'
+  name: away_team_penalty_score
+  type: character
+- description: Home team aggregate score over two legs (null for a single-leg tie).
+  name: aggregate_home_team_score
+  type: character
+- description: Away team aggregate score over two legs (null for a single-leg tie).
+  name: aggregate_away_team_score
+  type: character
+- description: Weather block (null when not reported).
+  name: weather
+  type: character
+- description: Attendance.
+  name: attendance
+  type: character
+- description: Kick-off in UTC (ISO 8601).
+  name: date
+  type: character
+- description: Kick-off in venue local time (ISO 8601; the trailing Z is not a UTC
+    marker).
+  name: local_date
+  type: character
+- description: Match clock as displayed, e.g. 98'.
+  name: match_time
+  type: character
+- description: Second-half timing field (null in the captures).
+  name: second_half_time
+  type: character
+- description: First-half timing field (null in the captures).
+  name: first_half_time
+  type: character
+- description: Stoppage time added to the first half, in minutes.
+  name: first_half_extra_time
+  type: numeric
+- description: Stoppage time added to the second half, in minutes.
+  name: second_half_extra_time
+  type: numeric
+- description: Team id of the winner (Utf8; null for a draw or an unplayed match).
+  name: winner
+  type: character
+- description: Match period code (FIFA integer enum).
+  name: period
+  type: integer
+- description: 'Territorial possession block (sic: the API''s spelling; null in the
+    captures).'
+  name: territorial_possesion
+  type: character
+- description: 'Territorial possession by third (sic: the API''s spelling; null in
+    the captures).'
+  name: territorial_third_possesion
+  type: character
+- description: Match officials, JSON list (OfficialId, OfficialType, IdCountry, localised
+    Name / NameShort).
+  name: officials
+  type: character
+- description: 'Match status code (FIFA integer enum: 0 = played, 1 = to be played).'
+  name: match_status
+  type: integer
+- description: Localised group name (e.g. Group A), JSON list of `{Locale, Description}`
+    objects.
+  name: group_name
+  type: character
+- description: Localised stage name (e.g. First Stage), JSON list of `{Locale, Description}`
+    objects.
+  name: stage_name
+  type: character
+- description: Officiality code of the result (FIFA integer enum).
+  name: officiality_status
+  type: integer
+- description: Whether the kick-off time is confirmed.
+  name: time_defined
+  type: logical
+- description: IsUpdateable flag from the API (null in the captures).
+  name: is_updateable
+  type: character
+- description: 'Stadium: FIFA stadium id (Utf8 join key).'
+  name: stadium_id_stadium
+  type: character
+- description: 'Stadium: localised name, JSON list of `{Locale, Description}` objects.'
+  name: stadium_name
+  type: character
+- description: 'Stadium: seating capacity.'
+  name: stadium_capacity
+  type: integer
+- description: 'Stadium: website URL.'
+  name: stadium_web_address
+  type: character
+- description: 'Stadium: year built, as an ISO 8601 date.'
+  name: stadium_built
+  type: character
+- description: 'Stadium: whether the stadium is roofed.'
+  name: stadium_roof
+  type: logical
+- description: 'Stadium: pitch surface (null in the captures).'
+  name: stadium_turf
+  type: character
+- description: 'Stadium: city id (Utf8 join key).'
+  name: stadium_id_city
+  type: character
+- description: 'Stadium: localised city name, JSON list of `{Locale, Description}`
+    objects.'
+  name: stadium_city_name
+  type: character
+- description: 'Stadium: three-letter FIFA country code, e.g. ARG.'
+  name: stadium_id_country
+  type: character
+- description: 'Stadium: postal code.'
+  name: stadium_postal_code
+  type: character
+- description: 'Stadium: street address.'
+  name: stadium_street
+  type: character
+- description: 'Stadium: contact e-mail.'
+  name: stadium_email
+  type: character
+- description: 'Stadium: contact fax number.'
+  name: stadium_fax
+  type: character
+- description: 'Stadium: contact phone number.'
+  name: stadium_phone
+  type: character
+- description: 'Stadium: affiliation country (null in the captures).'
+  name: stadium_affiliation_country
+  type: character
+- description: 'Stadium: affiliation region (null in the captures).'
+  name: stadium_affiliation_region
+  type: character
+- description: 'Stadium: latitude in decimal degrees.'
+  name: stadium_latitude
+  type: numeric
+- description: 'Stadium: longitude in decimal degrees.'
+  name: stadium_longitude
+  type: numeric
+- description: 'Stadium: pitch length (null in the captures).'
+  name: stadium_length
+  type: character
+- description: 'Stadium: pitch width (null in the captures).'
+  name: stadium_width
+  type: character
+- description: 'Stadium: isUpdateable flag from the API (null in the captures).'
+  name: stadium_is_updateable
+  type: character
+- description: 'Home team: goals scored.'
+  name: home_team_score
+  type: numeric
+- description: 'Home team: side marker (null in the captures).'
+  name: home_team_side
+  type: character
+- description: 'Home team: FIFA team id (Utf8 join key).'
+  name: home_team_id_team
+  type: character
+- description: 'Home team: image URL template with `{format}` and `{size}` placeholders.'
+  name: home_team_picture_url
+  type: character
+- description: 'Home team: three-letter FIFA country code, e.g. ARG.'
+  name: home_team_id_country
+  type: character
+- description: 'Home team: team-type code (FIFA integer enum: 0 = club, 1 = national
+    team).'
+  name: home_team_team_type
+  type: integer
+- description: 'Home team: age-category code (FIFA integer enum; 7 = senior).'
+  name: home_team_age_type
+  type: integer
+- description: 'Home team: formation, e.g. 4-2-3-1.'
+  name: home_team_tactics
+  type: character
+- description: 'Home team: localised team name, JSON list of `{Locale, Description}`
+    objects.'
+  name: home_team_team_name
+  type: character
+- description: 'Home team: abbreviation (e.g. ARG, FWC 2026).'
+  name: home_team_abbreviation
+  type: character
+- description: 'Home team: coaches, JSON list (IdCoach, IdCountry, Role, localised
+    Name / Alias, ...).'
+  name: home_team_coaches
+  type: character
+- description: 'Home team: line-up, JSON list (IdPlayer, ShirtNumber, Status, Captain,
+    Position, localised PlayerName, ...).'
+  name: home_team_players
+  type: character
+- description: 'Home team: cards, JSON list (Card, Period, Minute, IdPlayer, IdTeam,
+    ...).'
+  name: home_team_bookings
+  type: character
+- description: 'Home team: goals, JSON list (Type, Period, Minute, IdPlayer, IdAssistPlayer,
+    IdTeam, ...).'
+  name: home_team_goals
+  type: character
+- description: 'Home team: substitutions, JSON list (Period, Minute, IdPlayerOff,
+    IdPlayerOn, Reason, ...).'
+  name: home_team_substitutions
+  type: character
+- description: 'Home team: team staff, JSON list (empty in the captures).'
+  name: home_team_staffs
+  type: character
+- description: 'Home team: football discipline code (FIFA integer enum; 0 = eleven-a-side
+    football).'
+  name: home_team_football_type
+  type: integer
+- description: 'Home team: gender code (FIFA integer enum: 1 = men, 2 = women).'
+  name: home_team_gender
+  type: integer
+- description: 'Home team: three-letter code of the member association, e.g. ARG.'
+  name: home_team_id_association
+  type: character
+- description: 'Home team: short English team name.'
+  name: home_team_short_club_name
+  type: character
+- description: 'Away team: goals scored.'
+  name: away_team_score
+  type: numeric
+- description: 'Away team: side marker (null in the captures).'
+  name: away_team_side
+  type: character
+- description: 'Away team: FIFA team id (Utf8 join key).'
+  name: away_team_id_team
+  type: character
+- description: 'Away team: image URL template with `{format}` and `{size}` placeholders.'
+  name: away_team_picture_url
+  type: character
+- description: 'Away team: three-letter FIFA country code, e.g. ARG.'
+  name: away_team_id_country
+  type: character
+- description: 'Away team: team-type code (FIFA integer enum: 0 = club, 1 = national
+    team).'
+  name: away_team_team_type
+  type: integer
+- description: 'Away team: age-category code (FIFA integer enum; 7 = senior).'
+  name: away_team_age_type
+  type: integer
+- description: 'Away team: formation, e.g. 4-2-3-1.'
+  name: away_team_tactics
+  type: character
+- description: 'Away team: localised team name, JSON list of `{Locale, Description}`
+    objects.'
+  name: away_team_team_name
+  type: character
+- description: 'Away team: abbreviation (e.g. ARG, FWC 2026).'
+  name: away_team_abbreviation
+  type: character
+- description: 'Away team: coaches, JSON list (IdCoach, IdCountry, Role, localised
+    Name / Alias, ...).'
+  name: away_team_coaches
+  type: character
+- description: 'Away team: line-up, JSON list (IdPlayer, ShirtNumber, Status, Captain,
+    Position, localised PlayerName, ...).'
+  name: away_team_players
+  type: character
+- description: 'Away team: cards, JSON list (Card, Period, Minute, IdPlayer, IdTeam,
+    ...).'
+  name: away_team_bookings
+  type: character
+- description: 'Away team: goals, JSON list (Type, Period, Minute, IdPlayer, IdAssistPlayer,
+    IdTeam, ...).'
+  name: away_team_goals
+  type: character
+- description: 'Away team: substitutions, JSON list (Period, Minute, IdPlayerOff,
+    IdPlayerOn, Reason, ...).'
+  name: away_team_substitutions
+  type: character
+- description: 'Away team: team staff, JSON list (empty in the captures).'
+  name: away_team_staffs
+  type: character
+- description: 'Away team: football discipline code (FIFA integer enum; 0 = eleven-a-side
+    football).'
+  name: away_team_football_type
+  type: integer
+- description: 'Away team: gender code (FIFA integer enum: 1 = men, 2 = women).'
+  name: away_team_gender
+  type: integer
+- description: 'Away team: three-letter code of the member association, e.g. ARG.'
+  name: away_team_id_association
+  type: character
+- description: 'Away team: short English team name.'
+  name: away_team_short_club_name
+  type: character
+- description: 'Ball possession: possession per interval, JSON list.'
+  name: ball_possession_intervals
+  type: character
+- description: 'Ball possession: possession over the most recent stretch, JSON list.'
+  name: ball_possession_last_x
+  type: character
+- description: 'Ball possession: home team share of possession, percent.'
+  name: ball_possession_overall_home
+  type: numeric
+- description: 'Ball possession: away team share of possession, percent.'
+  name: ball_possession_overall_away
+  type: numeric
+- description: Stats Perform (Opta) id of the record (Utf8 cross-reference).
+  name: properties_id_stats_perform
+  type: character
+- description: Ball-possession block (null when not tracked).
+  name: ball_possession
+  type: numeric
+kind: dataframe
+schema: live_football

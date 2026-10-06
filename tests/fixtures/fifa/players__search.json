@@ -1,0 +1,113 @@
+{
+  "ContinuationToken": "50",
+  "ContinuationHash": "50",
+  "Results": [
+    {
+      "IdPlayer": "505714",
+      "Name": [
+        {
+          "Locale": "en-GB",
+          "Description": "Rayane MESSI"
+        }
+      ],
+      "Alias": [
+        {
+          "Locale": "en-GB",
+          "Description": "Rayane MESSI"
+        }
+      ],
+      "BirthDate": "2007-05-23T00:00:00Z",
+      "Weight": 61.0,
+      "Height": 175.0,
+      "BirthPlace": null,
+      "IdCountry": "FRA",
+      "InternationalCaps": 0,
+      "InternationalDebut": null,
+      "TopCompetitionDebut": null,
+      "PictureUrl": null,
+      "ThumbnailUrl": null,
+      "TwitterAccount": null,
+      "PreferredFoot": null,
+      "MediaContent": [],
+      "LocalizedTwitterAccounts": null,
+      "Goals": 0,
+      "PlayerPicture": null,
+      "Properties": {
+        "IdIFES": "505714"
+      },
+      "IsUpdateable": null
+    },
+    {
+      "IdPlayer": "6t2zkeebj44ied09xr5862jo4",
+      "Name": [
+        {
+          "Locale": "en-gb",
+          "Description": "Joaquín Messi"
+        }
+      ],
+      "Alias": [
+        {
+          "Locale": "en-gb",
+          "Description": "J. Messi"
+        }
+      ],
+      "BirthDate": "2002-04-16T00:00:00",
+      "Weight": 72.0,
+      "Height": 174.0,
+      "BirthPlace": "ARG",
+      "IdCountry": "ARG",
+      "InternationalCaps": 0,
+      "InternationalDebut": null,
+      "TopCompetitionDebut": null,
+      "PictureUrl": null,
+      "ThumbnailUrl": null,
+      "TwitterAccount": null,
+      "PreferredFoot": 9999,
+      "MediaContent": [],
+      "LocalizedTwitterAccounts": null,
+      "Goals": 0,
+      "PlayerPicture": null,
+      "Properties": {
+        "IdStatsPerform": "6t2zkeebj44ied09xr5862jo4"
+      },
+      "IsUpdateable": null
+    },
+    {
+      "IdPlayer": "229397",
+      "Name": [
+        {
+          "Locale": "en-GB",
+          "Description": "Lionel MESSI"
+        }
+      ],
+      "Alias": [
+        {
+          "Locale": "en-GB",
+          "Description": "Lionel MESSI"
+        }
+      ],
+      "BirthDate": "1987-06-24T00:00:00Z",
+      "Weight": 68.0,
+      "Height": 170.0,
+      "BirthPlace": "Rosario",
+      "IdCountry": "ARG",
+      "InternationalCaps": 207,
+      "InternationalDebut": "2005-08-17T00:00:00Z",
+      "TopCompetitionDebut": null,
+      "PictureUrl": null,
+      "ThumbnailUrl": null,
+      "TwitterAccount": null,
+      "PreferredFoot": 0,
+      "MediaContent": [],
+      "LocalizedTwitterAccounts": null,
+      "Goals": 125,
+      "PlayerPicture": null,
+      "Properties": {
+        "StatsPerformIfesId": "229397",
+        "IdStatsPerform": "c5ryhn04g9goikd0blmh83aol",
+        "IdIFES": "229397"
+      },
+      "IsUpdateable": null
+    }
+  ]
+}

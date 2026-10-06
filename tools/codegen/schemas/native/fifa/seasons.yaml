@@ -1,0 +1,56 @@
+columns:
+- description: FIFA season id (285023 = FIFA World Cup 2026; Utf8 join key).
+  name: id_season
+  type: character
+- description: Localised name, JSON list of `{Locale, Description}` objects.
+  name: name
+  type: character
+- description: Localised short name, JSON list of `{Locale, Description}` objects
+    (often empty).
+  name: short_name
+  type: character
+- description: Abbreviation (e.g. ARG, FWC 2026).
+  name: abbreviation
+  type: character
+- description: Member-association codes (e.g. ENG), JSON list.
+  name: id_member_association
+  type: character
+- description: Confederation code (e.g. UEFA, CONMEBOL); a JSON list on competitions
+    and seasons.
+  name: id_confederation
+  type: character
+- description: FIFA competition id (17 = FIFA World Cup; Utf8 join key).
+  name: id_competition
+  type: character
+- description: Start date (ISO 8601).
+  name: start_date
+  type: character
+- description: End date (ISO 8601).
+  name: end_date
+  type: character
+- description: Image URL template with `{format}` and `{size}` placeholders.
+  name: picture_url
+  type: character
+- description: Mascot image URL template with `{format}` and `{size}` placeholders.
+  name: mascot_picture_url
+  type: character
+- description: Match-ball image URL template with `{format}` and `{size}` placeholders.
+  name: match_ball_picture_url
+  type: character
+- description: Host teams, JSON list of `{IdTeam}` objects.
+  name: host_teams
+  type: character
+- description: Sport code (FIFA integer enum; 0 = football).
+  name: sport_type
+  type: integer
+- description: IsUpdateable flag from the API (null in the captures).
+  name: is_updateable
+  type: character
+- description: IFES cross-reference id (Utf8).
+  name: properties_id_ifes
+  type: character
+- description: Data-provider tag of the record.
+  name: properties_providers
+  type: character
+kind: dataframe
+schema: seasons
