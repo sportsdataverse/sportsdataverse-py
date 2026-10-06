@@ -19,8 +19,9 @@ Merged to `main` since 0.1.4 and not yet released. Released versions are on the 
 `MRData.total` is read (one race ~12 requests), and the single-page `f1_laps_page`. One parser,
 `parse_f1_mrdata`, flattens the shared `MRData` envelope per the recon's rule (ancestor scalars
 carried onto each row, `Driver.driverId` -> `driver_id`, `FastestLap.lap` -> `fastest_lap`,
-list cells JSON-encoded), casts the integer / number columns Ergast serializes as strings and
-keeps ids `Utf8`. Terms in every docstring's Notes: data is CC BY-NC-SA 4.0 (wrap-only, never a
+list cells JSON-encoded), casts the integer / number columns Ergast serializes as strings (`season`, `round`, `position`,
+`points`, `laps`, ... are `Int64` / `Float64`, where f1dataR keeps them character) and keeps ids `Utf8`;
+an empty payload (a non-sprint weekend's `f1_sprint`) is a zero-row frame with the documented columns. Terms in every docstring's Notes: data is CC BY-NC-SA 4.0 (wrap-only, never a
 release asset) and the host allows 4 requests/second burst, 500 requests/hour sustained per IP.
 Fixtures are byte copies of the recon captures (`tests/fixtures/f1/`); the offline suite is
 `tests/f1/test_f1.py`. Generated wrappers now accept a `notes:` list in the endpoint YAML's

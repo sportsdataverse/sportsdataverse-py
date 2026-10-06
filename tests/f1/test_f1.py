@@ -19,6 +19,8 @@ import polars as pl
 import pytest
 import yaml
 
+import sportsdataverse
+from sportsdataverse.errors import AssetFetchError
 from sportsdataverse.f1 import f1 as f1_mod
 from sportsdataverse.f1 import f1_extra as laps_mod
 from sportsdataverse.f1.f1_parsers import parse_f1_mrdata
@@ -29,6 +31,8 @@ YAML_PATH = Path(__file__).parents[2] / "tools" / "codegen" / "endpoints" / "f1.
 SCHEMA_DIR = Path(__file__).parents[2] / "tools" / "codegen" / "schemas" / "native" / "f1"
 
 _STEMS = sorted(p.stem for p in FIXTURES.glob("*.json"))
+_EMPTY_SPRINT = "2024__3__sprint"  # a real non-sprint weekend: Races: [], total 0
+_ROWS_STEMS = [s for s in _STEMS if s != _EMPTY_SPRINT]
 
 # fixture stem -> endpoint short (the schema whose documented columns it must parse to)
 _SHORT_OF = {
@@ -39,6 +43,7 @@ _SHORT_OF = {
     "2024__1__results": "results",
     "2024__1__qualifying": "qualifying",
     "2024__5__sprint": "sprint",
+    "2024__3__sprint": "sprint",
     "2024__1__laps": "laps_page",
     "2024__1__pitstops": "pitstops",
     "2024__driverStandings": "driver_standings",
@@ -95,7 +100,7 @@ def test_every_fixture_is_mapped_to_a_schema() -> None:
     assert set(_STEMS) == set(_SHORT_OF)
 
 
-@pytest.mark.parametrize("stem", _STEMS)
+@pytest.mark.parametrize("stem", _ROWS_STEMS)
 def test_every_fixture_parses_to_the_documented_columns(stem: str) -> None:
     raw = _load(stem)
     assert set(raw) == {"MRData"}, "capture no longer carries the envelope"
@@ -180,6 +185,27 @@ def test_empty_payload_is_zero_row_frame(raw: Any) -> None:
     df = parse_f1_mrdata(raw)
     assert isinstance(df, pl.DataFrame)
     assert df.height == 0
+    documented = _schema_columns("sprint")
+    typed = parse_f1_mrdata(raw, columns=documented)
+    assert typed.height == 0 and typed.columns == documented
+    assert typed.schema["season"] == pl.Int64 and typed.schema["points"] == pl.Float64
+    assert typed.schema["driver_id"] == pl.String
+
+
+def test_non_sprint_weekend_is_an_empty_frame_with_the_documented_schema(monkeypatch: pytest.MonkeyPatch) -> None:
+    """``/2024/3/sprint.json`` (Australia, no sprint) answers ``Races: []`` with ``total: 0``, not a 404."""
+    raw = _load(_EMPTY_SPRINT)
+    assert raw["MRData"]["total"] == "0" and raw["MRData"]["RaceTable"]["Races"] == []
+    monkeypatch.setattr(f1_mod, "_get", _Recorder(raw))
+    df = f1_mod.f1_sprint(2024, 3)
+    assert df.height == 0
+    assert df.columns == _schema_columns("sprint")
+    assert df.columns == f1_mod._PARSER_COLUMNS["sprint"]
+    assert df.schema["position"] == pl.Int64
+    # chainable without a null-check
+    assert df.filter(pl.col("position") == 1).select("driver_id", "points").height == 0
+    pdf = f1_mod.f1_sprint(2024, 3, return_as_pandas=True)
+    assert list(pdf.columns) == _schema_columns("sprint") and len(pdf) == 0
 
 
 def test_return_as_pandas() -> None:
@@ -191,6 +217,68 @@ def test_return_as_pandas() -> None:
 # ---------------------------------------------------------------------------
 # generated endpoint YAML + schemas (gen_f1.py output)
 # ---------------------------------------------------------------------------
+
+_RETURNS_MD = FIXTURES / "f1-returns.md"
+_ROUTE_SHORT = {
+    "/seasons.json": "seasons",
+    "/{season}.json": "schedule",
+    "/{season}/{round}.json": "race",
+    "/{season}/{round}/results.json": "results",
+    "/{season}/{round}/qualifying.json": "qualifying",
+    "/{season}/{round}/sprint.json": "sprint",
+    "/{season}/{round}/laps.json": "laps_page",
+    "/{season}/{round}/pitstops.json": "pitstops",
+    "/{season}/driverStandings.json": "driver_standings",
+    "/{season}/constructorStandings.json": "constructor_standings",
+    "/{season}/drivers.json": "drivers",
+    "/{season}/constructors.json": "constructors",
+    "/circuits.json": "circuits",
+    "/status.json": "status",
+    "/drivers/{driverId}.json": "driver",
+}
+
+
+def _recon_columns() -> Dict[str, List[str]]:
+    """``{route: [col, ...]}`` from the committed copy of the recon's ``f1-returns.md`` tables."""
+    out: Dict[str, List[str]] = {}
+    route = ""
+    for line in _RETURNS_MD.read_text(encoding="utf-8").splitlines():
+        head = re.match(r"^## `([^`]+)`", line)
+        if head:
+            route = head.group(1)
+            out[route] = []
+            continue
+        cell = re.match(r"^\| `([^`]+)` \|", line)
+        if cell and route:
+            out[route].append(cell.group(1))
+    return out
+
+
+def test_recon_returns_tables_anchor_every_schema() -> None:
+    """Names AND order per route equal the recon's flattened tables (independent of the parser)."""
+    recon = _recon_columns()
+    assert set(recon) == set(_ROUTE_SHORT)
+    for route, short in _ROUTE_SHORT.items():
+        assert _schema_columns(short) == recon[route], short
+    assert recon["/{season}.json"].index("sprint_date") == recon["/{season}.json"].index("second_practice_time") + 1
+
+
+@pytest.mark.parametrize("stem", _ROWS_STEMS)
+def test_every_fixture_parses_to_the_recon_columns(stem: str) -> None:
+    """The parser's columns (names, order) are the recon's; the schedule sample lacks only the sprint columns."""
+    route = next(r for r, s in _ROUTE_SHORT.items() if s == _SHORT_OF[stem])
+    expected = _recon_columns()[route]
+    got = parse_f1_mrdata(_load(stem)).columns
+    if stem == "2024":
+        assert set(expected) - set(got) == {
+            "sprint_date",
+            "sprint_time",
+            "sprint_qualifying_date",
+            "sprint_qualifying_time",
+        }
+        assert [c for c in expected if c in got] == got
+    else:
+        assert got == expected
 
 
 def test_yaml_lists_every_spec_route() -> None:
@@ -220,6 +308,19 @@ def test_every_endpoint_schema_has_described_columns() -> None:
 # ---------------------------------------------------------------------------
 # generated wrappers + the hand-written pager (fake transport)
 # ---------------------------------------------------------------------------
+
+
+def test_package_keeps_its_name_and_exports_only_the_public_surface() -> None:
+    """The top-level star import must not copy the ``f1`` submodule over the ``sportsdataverse.f1`` package."""
+    import sportsdataverse.f1 as pkg
+
+    assert pkg.__name__ == "sportsdataverse.f1"
+    assert sportsdataverse.f1 is pkg and sportsdataverse.f1 is not f1_mod
+    assert pkg.f1_laps is sportsdataverse.f1_laps is laps_mod.f1_laps
+    assert pkg.f1_results is sportsdataverse.f1_results is f1_mod.f1_results
+    assert pkg.parse_f1_mrdata is sportsdataverse.parse_f1_mrdata
+    assert set(pkg.__all__) == set(f1_mod.__all__) | {"f1_laps", "parse_f1_mrdata"}
+    assert not {"f1", "f1_extra", "f1_parsers", "annotations"} & set(pkg.__all__)
 
 
 def test_wrapper_builds_the_url_and_passes_paging(recorder: _Recorder) -> None:
@@ -255,13 +356,23 @@ def test_f1_laps_pages_over_offset_until_total(monkeypatch: pytest.MonkeyPatch) 
     assert df.columns == _schema_columns("laps_page")
 
 
-def test_f1_laps_stops_on_an_empty_page(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_f1_laps_empty_race_is_a_zero_row_frame_with_the_schema(monkeypatch: pytest.MonkeyPatch) -> None:
     rec = _Recorder()  # Races: [] with total 0 (a round not yet run)
     monkeypatch.setattr(f1_mod, "_get", rec)
     monkeypatch.setattr(laps_mod, "_PAGE_PAUSE_S", 0)
     df = laps_mod.f1_laps(2024, "next")
     assert len(rec.calls) == 1
     assert df.height == 0
+    assert df.columns == _schema_columns("laps_page")
+
+
+def test_f1_laps_raises_on_an_empty_page_before_total(monkeypatch: pytest.MonkeyPatch) -> None:
+    """A 200 with an empty table while ``offset < total`` is a failed fetch, never an empty race."""
+    rec = _Recorder({"MRData": {"total": "1129", "limit": "100", "RaceTable": {"Races": []}}})
+    monkeypatch.setattr(f1_mod, "_get", rec)
+    monkeypatch.setattr(laps_mod, "_PAGE_PAUSE_S", 0)
+    with pytest.raises(AssetFetchError, match="offset 0 of 1129"):
+        laps_mod.f1_laps(2024, 1)
 
 
 # ---------------------------------------------------------------------------

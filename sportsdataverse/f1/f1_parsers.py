@@ -22,12 +22,19 @@ flattens that per the reference repo's rule (``sdv-internal-refs/f1/f1-returns.m
   ``fastest_lap``);
 * a list inside a row (a driver standing's ``Constructors``) stays one
   JSON-encoded cell;
-* keys are visited in sorted order, so the column order is deterministic.
+* keys are visited in sorted order over the UNION of the rows' shapes (a sprint
+  weekend's ``Sprint`` sits between ``SecondPractice`` and ``ThirdPractice`` even when
+  no single row has all three), so the column order is deterministic and matches
+  the recon's tables.
 
 Ergast serializes **every** value as a string. Columns documented as integers or
 numbers (``season``, ``round``, ``position``, ``points``, ``laps``, ``grid``,
-``time_millis``, circuit latitude/longitude, ...) are cast; ids (``driver_id``,
-``constructor_id``, ``circuit_id``, ``status_id``) stay ``Utf8`` join keys.
+``time_millis``, circuit latitude/longitude, ...) are cast to ``Int64`` / ``Float64``
+-- a deliberate divergence from f1dataR, which keeps every column character; ids
+(``driver_id``, ``constructor_id``, ``circuit_id``, ``status_id``) stay ``Utf8`` join keys.
+An empty payload (``Races: []`` on a non-sprint weekend) parses to a zero-row frame
+with the documented columns when the caller passes ``columns=`` (the generated
+wrappers do, from their returns-schema), so callers can chain without a null-check.
 
 Follows the package-wide parser contract: polars by default, pandas via
 ``return_as_pandas=True``, a zero-row frame (never an exception) on an empty or
@@ -38,11 +45,12 @@ from __future__ import annotations
 
 import json
 import re
-from typing import Any, Dict, List, Optional, Union
+from typing import Any, Dict, List, Optional, Sequence, Union
 
 import pandas as pd
 import polars as pl
 
+from sportsdataverse.dl_utils import underscore
 from sportsdataverse.soccer._frames import as_output, to_utf8_ids
 
 __all__ = ["parse_f1_mrdata"]
@@ -100,11 +108,6 @@ _FLOAT = frozenset(
 
 # ``id`` / ``*_id`` -- every Ergast join key (``driver_id``, ``circuit_id``, ``status_id``).
 _ID = re.compile(r"(^|_)id$")
-_CAMEL = re.compile(r"(?<!^)(?=[A-Z])")
-
-
-def _snake(key: str) -> str:
-    return _CAMEL.sub("_", key).lower()
 
 
 def _join(prefix: str, key: str) -> str:
@@ -125,15 +128,37 @@ def _flatten(obj: Dict[str, Any], prefix: str, out: Dict[str, Any], skip: Option
         if key == skip:
             continue
         value = obj[key]
-        col = _join(prefix, _snake(key))
+        col = _join(prefix, underscore(key))
         if isinstance(value, dict):
             _flatten(value, col, out)
         elif col not in out:
             out[col] = json.dumps(value) if isinstance(value, list) else value
 
 
+def _shape(values: List[Any], shape: Dict[str, Any]) -> Dict[str, Any]:
+    """Merge the key structure of every dict in ``values`` into ``shape`` (nested dicts)."""
+    for value in values:
+        if isinstance(value, dict):
+            for key, inner in value.items():
+                sub = shape.setdefault(key, {})
+                if isinstance(inner, dict):
+                    _shape([inner], sub)
+    return shape
+
+
+def _flatten_by(obj: Dict[str, Any], shape: Dict[str, Any], prefix: str, out: Dict[str, Any]) -> None:
+    """Flatten ``obj`` along the merged ``shape`` (sorted keys; absent leaves are ``None``)."""
+    for key in sorted(shape):
+        value = obj.get(key)
+        col = _join(prefix, underscore(key))
+        if shape[key] and not isinstance(value, list):
+            _flatten_by(value if isinstance(value, dict) else {}, shape[key], col, out)
+        elif col not in out:
+            out[col] = json.dumps(value) if isinstance(value, list) else value
+
+
 def _singular(list_key: str) -> str:
-    return _snake(list_key[:-1] if list_key.endswith("s") else list_key)
+    return underscore(list_key[:-1] if list_key.endswith("s") else list_key)
 
 
 def _row_list(node: Dict[str, Any], table: Optional[str]) -> Optional[str]:
@@ -162,13 +187,13 @@ def _explode(
             leaves = leaves | {leaf}
             carried = {**carried, col: value}
     child_prefix = _singular(list_key)
-    for element in node.get(list_key) or []:
-        if not isinstance(element, dict):
-            continue
+    elements = [e for e in node.get(list_key) or [] if isinstance(e, dict)]
+    shape = _shape(elements, {})  # union of the rows' shapes -> one sorted column order
+    for element in elements:
         next_key = None if list_key == table else _row_list(element, table)
         if next_key is None:
             row = dict(carried)
-            _flatten(element, "", row)
+            _flatten_by(element, shape, "", row)
             rows.append(row)
         else:
             _explode(element, next_key, child_prefix, carried, leaves, table, rows)
@@ -195,6 +220,7 @@ def parse_f1_mrdata(
     table: Optional[str] = None,
     *,
     return_as_pandas: bool = False,
+    columns: Optional[Sequence[str]] = None,
 ) -> Union[pl.DataFrame, pd.DataFrame]:
     """Flatten a Jolpica / Ergast ``MRData`` envelope into a tidy frame.
 
@@ -210,15 +236,16 @@ def parse_f1_mrdata(
             ``"Races"`` on a results payload gives the race header rows instead of
             the classification. Default ``None`` descends to the innermost list.
         return_as_pandas: return a pandas DataFrame instead of polars.
+        columns: the route's documented column names (the generated wrappers pass
+            their returns-schema); an empty payload then yields a zero-row frame with
+            exactly these columns and their documented dtypes.
 
     Returns:
         One row per innermost record, snake_cased per ``f1-returns.md``, integer /
         number columns cast, ids pinned to ``Utf8``, list cells JSON-encoded. A
         zero-row frame when the payload is ``None``, empty (``Races: []`` on a
-        non-sprint weekend) or malformed -- callers can chain without a null-check.
-
-    Raises:
-        None: malformed payloads yield a zero-row frame rather than an exception.
+        non-sprint weekend) or malformed -- with the ``columns`` schema when given, so
+        callers can chain without a null-check. Never raises on a bad payload.
 
     Example:
         Quick start::
@@ -240,21 +267,21 @@ def parse_f1_mrdata(
     """
     rows = _rows(raw, table)
     if not rows:
-        return as_output(pl.DataFrame(), return_as_pandas=return_as_pandas)
-    # Column order: a column first seen on a later row (a sprint weekend's
-    # ``sprint_date`` on the schedule) slots in after its predecessor in that row.
+        empty = pl.DataFrame({c: pl.Series(c, [], dtype=pl.String) for c in columns or []})
+        return as_output(_typed(empty), return_as_pandas=return_as_pandas)
     cols: List[str] = []
     for row in rows:
-        prev = ""
-        for col in row:
-            if col not in cols:
-                cols.insert(cols.index(prev) + 1 if prev in cols else len(cols), col)
-            prev = col
+        cols.extend(c for c in row if c not in cols)
     df = pl.DataFrame(
         {c: pl.Series(c, [row.get(c) for row in rows], dtype=pl.String) for c in cols},
     )
+    return as_output(_typed(df), return_as_pandas=return_as_pandas)
+
+
+def _typed(df: pl.DataFrame) -> pl.DataFrame:
+    """Cast the documented integer / number columns of an all-``Utf8`` frame; pin ids to ``Utf8``."""
+    cols = df.columns
     casts = [pl.col(c).cast(pl.Int64, strict=False) for c in cols if c in _INT and not _ID.search(c)]
     casts += [pl.col(c).cast(pl.Float64, strict=False) for c in cols if c in _FLOAT]
     df = df.with_columns(casts) if casts else df
-    df = to_utf8_ids(df, [c for c in cols if _ID.search(c)])
-    return as_output(df, return_as_pandas=return_as_pandas)
+    return to_utf8_ids(df, [c for c in cols if _ID.search(c)])

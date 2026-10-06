@@ -19,6 +19,16 @@ __all__ = [
     "{{ ep.fn_name }}",
 {% endfor %}
 ]
+{% if parser_columns %}
+
+# Documented columns per endpoint (its returns-schema): an empty payload parses to a
+# zero-row frame with this schema, so callers can chain without a null-check.
+_PARSER_COLUMNS = {
+{% for ep in endpoints %}
+    "{{ ep.short }}": [{% for c in ep.parser_columns %}"{{ c }}", {% endfor %}],
+{% endfor %}
+}
+{% endif %}
 {% for ep in endpoints %}
 
 
@@ -93,7 +103,11 @@ def {{ ep.fn_name }}(
     )
 {% if ep.parser %}
     if return_parsed:
+{% if parser_columns %}
+        return {{ ep.parser }}(raw, return_as_pandas=return_as_pandas, columns=_PARSER_COLUMNS["{{ ep.short }}"])
+{% else %}
         return {{ ep.parser }}(raw, return_as_pandas=return_as_pandas)
+{% endif %}
 {% endif %}
     return raw
 {% endfor %}

@@ -13,7 +13,7 @@ not covered by the generated API-endpoint reference above.
 
 ### f1_laps {#f1_laps}
 
-`f1_laps(season: 'Union[int, str]', round: 'Union[int, str]', *, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'Union[pl.DataFrame, pd.DataFrame]'`
+`f1_laps(season: 'str', round: 'str', *, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'Union[pl.DataFrame, pd.DataFrame]'`
 
 Lap times of one race: one row per driver per lap (1996+), all pages.
 
@@ -25,13 +25,13 @@ requested with `limit=100` and `offset` advanced page by page until
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `season` | `Union[int, str]` |  | Four-digit season year, or `current`. |
-| `round` | `Union[int, str]` |  | Round number within the season, or `last` / `next`. |
+| `season` | `str` |  | Four-digit season year, or `current`. |
+| `round` | `str` |  | Round number within the season, or `last` / `next`. |
 | `return_as_pandas` | `bool` | `False` | return a pandas DataFrame instead of polars. |
 
 **Returns**
 
-A polars/pandas DataFrame with the `laps_page` columns (`season`, `round`, `race_*`, `lap_number`, `driver_id`, `position`, `time`), concatenated across pages; zero rows when the race has no lap data (before 1996, or a round not yet run).
+A polars/pandas DataFrame with the `laps_page` columns (`season`, `round`, `race_*`, `lap_number`, `driver_id`, `position`, `time`), concatenated across pages; zero rows (same columns) when the race has no lap data (before 1996, or a round not yet run).
 
 **Example**
 

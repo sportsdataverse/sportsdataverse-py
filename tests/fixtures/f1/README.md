@@ -28,6 +28,7 @@ offline parser tests; sdv-py never republishes Jolpica payloads as release asset
 | `2024__1__results.json` | `/2024/1/results.json` |
 | `2024__1__qualifying.json` | `/2024/1/qualifying.json` |
 | `2024__5__sprint.json` | `/2024/5/sprint.json` |
+| `2024__3__sprint.json` | `/2024/3/sprint.json` -- a NON-sprint weekend: `Races: []`, `total: 0` (full body, captured 2026-10-06 for the empty-schema test) |
 | `2024__1__laps.json` | `/2024/1/laps.json?limit=100` |
 | `2024__1__pitstops.json` | `/2024/1/pitstops.json` |
 | `2024__driverStandings.json` | `/2024/driverStandings.json` |
@@ -37,6 +38,9 @@ offline parser tests; sdv-py never republishes Jolpica payloads as release asset
 | `circuits.json` | `/circuits.json` |
 | `status.json` | `/status.json` |
 | `drivers__max_verstappen.json` | `/drivers/max_verstappen.json` |
+
+`f1-returns.md` is a byte copy of the recon's generated returns tables (the per-route flattened
+column lists); `tests/f1/test_f1.py` anchors the generated schemas to it, names and order.
 
 Every body is `{"MRData": {..., "<Table>": {...}}}`; every value is a string on the
 wire. Regenerate by re-copying from the reference repo; do not hand-edit.

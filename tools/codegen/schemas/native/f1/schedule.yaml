@@ -35,6 +35,12 @@ columns:
 - description: Qualifying start time (UTC).
   name: qualifying_time
   type: character
+- description: FP2 date.
+  name: second_practice_date
+  type: character
+- description: FP2 start time (UTC).
+  name: second_practice_time
+  type: character
 - description: Sprint date (sprint weekends only).
   name: sprint_date
   type: character
@@ -46,12 +52,6 @@ columns:
   type: character
 - description: Sprint qualifying start time (UTC).
   name: sprint_qualifying_time
-  type: character
-- description: FP2 date.
-  name: second_practice_date
-  type: character
-- description: FP2 start time (UTC).
-  name: second_practice_time
   type: character
 - description: FP3 date (absent on sprint weekends).
   name: third_practice_date

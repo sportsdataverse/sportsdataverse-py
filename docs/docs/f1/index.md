@@ -12,8 +12,8 @@ description: "sdv-py F1: endpoint references, dataset loaders and parsers for F1
 
 ## See also
 
-- [f1dataR](https://scottyd22.github.io/f1dataR/) — the R twin over the same Jolpica (Ergast-compatible) API; names and columns match
-- [FastF1](https://docs.fastf1.dev/) — session timing, telemetry and tyre data that sdv-py does not wrap
+- [f1dataR](https://scottyd22.github.io/f1dataR/) — the R twin over the same Jolpica (Ergast-compatible) API; wrapper and column names follow it
+- [FastF1](https://docs.fastf1.dev/) — session timing, telemetry and tire data that sdv-py does not wrap
 - [Jolpica F1 API](https://github.com/jolpica/jolpica-f1) — the API itself (docs, CC BY-NC-SA 4.0 terms, 500 requests/hour limit)
 
 ## Examples

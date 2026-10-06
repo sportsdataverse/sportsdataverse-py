@@ -20,7 +20,7 @@ The laps route is generated as ``laps_page`` (one page, max 100 timings): the
 paging loop that fetches a whole race is the hand-written
 ``sportsdataverse.f1.f1_extra.f1_laps``.
 
-Wrapper names mirror f1dataR (``load_results`` -> ``f1_results``, ``load_quali`` ->
+Wrapper and column names follow f1dataR (sdv-py types the integer / number columns; f1dataR keeps them character) (``load_results`` -> ``f1_results``, ``load_quali`` ->
 ``f1_qualifying``, ``load_standings(type=)`` -> ``f1_driver_standings`` /
 ``f1_constructor_standings``); the two extra spec routes are ``f1_race`` (one race of
 the schedule) and ``f1_driver`` (one driver by id).
@@ -207,6 +207,7 @@ def main() -> None:
         "parser_module": "f1.f1_parsers",
         "qualifier": "",
         "passthrough_query": False,
+        "parser_columns": True,
         "docstring": {
             "example_import": True,
             "raises": [
@@ -227,7 +228,7 @@ def main() -> None:
                 {
                     "name": "f1dataR",
                     "url": "https://scottyd22.github.io/f1dataR/",
-                    "note": "the R twin over the same API; wrapper names and columns follow it",
+                    "note": "the R twin over the same API; wrapper and column names follow it (integer columns are typed here)",
                 },
                 {
                     "name": "FastF1",

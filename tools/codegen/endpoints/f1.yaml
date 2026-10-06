@@ -19,7 +19,8 @@ docstring:
     note: the Ergast-compatible API this family wraps (docs, terms, rate limit)
     url: https://github.com/jolpica/jolpica-f1
   - name: f1dataR
-    note: the R twin over the same API; wrapper names and columns follow it
+    note: the R twin over the same API; wrapper and column names follow it (integer
+      columns are typed here)
     url: https://scottyd22.github.io/f1dataR/
   - name: FastF1
     note: timing, telemetry and session data that sdv-py does not wrap
@@ -386,6 +387,7 @@ endpoints:
 host: https://api.jolpi.ca/ergast/f1
 module: f1
 name_pattern: f1_{short}
+parser_columns: true
 parser_module: f1.f1_parsers
 passthrough_query: false
 qualifier: ''

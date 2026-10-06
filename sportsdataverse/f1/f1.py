@@ -31,6 +31,287 @@ __all__ = [
     "f1_status",
 ]
 
+# Documented columns per endpoint (its returns-schema): an empty payload parses to a
+# zero-row frame with this schema, so callers can chain without a null-check.
+_PARSER_COLUMNS = {
+    "circuits": [
+        "location_country",
+        "location_lat",
+        "location_locality",
+        "location_long",
+        "circuit_id",
+        "circuit_name",
+        "url",
+    ],
+    "constructor_standings": [
+        "round",
+        "season",
+        "constructor_id",
+        "constructor_name",
+        "constructor_nationality",
+        "constructor_url",
+        "points",
+        "position",
+        "position_text",
+        "wins",
+    ],
+    "constructors": [
+        "season",
+        "constructor_id",
+        "name",
+        "nationality",
+        "url",
+    ],
+    "driver": [
+        "driver_id",
+        "code",
+        "date_of_birth",
+        "family_name",
+        "given_name",
+        "nationality",
+        "permanent_number",
+        "url",
+    ],
+    "driver_standings": [
+        "round",
+        "season",
+        "constructors",
+        "driver_code",
+        "driver_date_of_birth",
+        "driver_id",
+        "driver_family_name",
+        "driver_given_name",
+        "driver_nationality",
+        "driver_permanent_number",
+        "driver_url",
+        "points",
+        "position",
+        "position_text",
+        "wins",
+    ],
+    "drivers": [
+        "season",
+        "code",
+        "date_of_birth",
+        "driver_id",
+        "family_name",
+        "given_name",
+        "nationality",
+        "permanent_number",
+        "url",
+    ],
+    "laps_page": [
+        "round",
+        "season",
+        "race_circuit_location_country",
+        "race_circuit_location_lat",
+        "race_circuit_location_locality",
+        "race_circuit_location_long",
+        "race_circuit_id",
+        "race_circuit_name",
+        "race_circuit_url",
+        "race_date",
+        "race_name",
+        "race_time",
+        "race_url",
+        "lap_number",
+        "driver_id",
+        "position",
+        "time",
+    ],
+    "pitstops": [
+        "round",
+        "season",
+        "race_circuit_location_country",
+        "race_circuit_location_lat",
+        "race_circuit_location_locality",
+        "race_circuit_location_long",
+        "race_circuit_id",
+        "race_circuit_name",
+        "race_circuit_url",
+        "race_date",
+        "race_name",
+        "race_time",
+        "race_url",
+        "driver_id",
+        "duration",
+        "lap",
+        "stop",
+        "time",
+    ],
+    "qualifying": [
+        "round",
+        "season",
+        "race_circuit_location_country",
+        "race_circuit_location_lat",
+        "race_circuit_location_locality",
+        "race_circuit_location_long",
+        "race_circuit_id",
+        "race_circuit_name",
+        "race_circuit_url",
+        "race_date",
+        "race_name",
+        "race_time",
+        "race_url",
+        "constructor_id",
+        "constructor_name",
+        "constructor_nationality",
+        "constructor_url",
+        "driver_code",
+        "driver_date_of_birth",
+        "driver_id",
+        "driver_family_name",
+        "driver_given_name",
+        "driver_nationality",
+        "driver_permanent_number",
+        "driver_url",
+        "q1",
+        "q2",
+        "q3",
+        "number",
+        "position",
+    ],
+    "race": [
+        "round",
+        "season",
+        "circuit_location_country",
+        "circuit_location_lat",
+        "circuit_location_locality",
+        "circuit_location_long",
+        "circuit_id",
+        "circuit_name",
+        "circuit_url",
+        "first_practice_date",
+        "first_practice_time",
+        "qualifying_date",
+        "qualifying_time",
+        "second_practice_date",
+        "second_practice_time",
+        "third_practice_date",
+        "third_practice_time",
+        "date",
+        "race_name",
+        "time",
+        "url",
+    ],
+    "results": [
+        "round",
+        "season",
+        "race_circuit_location_country",
+        "race_circuit_location_lat",
+        "race_circuit_location_locality",
+        "race_circuit_location_long",
+        "race_circuit_id",
+        "race_circuit_name",
+        "race_circuit_url",
+        "race_date",
+        "race_name",
+        "race_time",
+        "race_url",
+        "constructor_id",
+        "constructor_name",
+        "constructor_nationality",
+        "constructor_url",
+        "driver_code",
+        "driver_date_of_birth",
+        "driver_id",
+        "driver_family_name",
+        "driver_given_name",
+        "driver_nationality",
+        "driver_permanent_number",
+        "driver_url",
+        "fastest_lap_average_speed",
+        "fastest_lap_average_speed_units",
+        "fastest_lap_time",
+        "fastest_lap",
+        "fastest_lap_rank",
+        "time_millis",
+        "time",
+        "grid",
+        "laps",
+        "number",
+        "points",
+        "position",
+        "position_text",
+        "status",
+    ],
+    "schedule": [
+        "season",
+        "circuit_location_country",
+        "circuit_location_lat",
+        "circuit_location_locality",
+        "circuit_location_long",
+        "circuit_id",
+        "circuit_name",
+        "circuit_url",
+        "first_practice_date",
+        "first_practice_time",
+        "qualifying_date",
+        "qualifying_time",
+        "second_practice_date",
+        "second_practice_time",
+        "sprint_date",
+        "sprint_time",
+        "sprint_qualifying_date",
+        "sprint_qualifying_time",
+        "third_practice_date",
+        "third_practice_time",
+        "date",
+        "race_name",
+        "round",
+        "time",
+        "url",
+    ],
+    "seasons": [
+        "season",
+        "url",
+    ],
+    "sprint": [
+        "round",
+        "season",
+        "race_circuit_location_country",
+        "race_circuit_location_lat",
+        "race_circuit_location_locality",
+        "race_circuit_location_long",
+        "race_circuit_id",
+        "race_circuit_name",
+        "race_circuit_url",
+        "race_date",
+        "race_name",
+        "race_time",
+        "race_url",
+        "constructor_id",
+        "constructor_name",
+        "constructor_nationality",
+        "constructor_url",
+        "driver_code",
+        "driver_date_of_birth",
+        "driver_id",
+        "driver_family_name",
+        "driver_given_name",
+        "driver_nationality",
+        "driver_permanent_number",
+        "driver_url",
+        "fastest_lap_time",
+        "fastest_lap",
+        "fastest_lap_rank",
+        "time_millis",
+        "time",
+        "grid",
+        "laps",
+        "number",
+        "points",
+        "position",
+        "position_text",
+        "status",
+    ],
+    "status": [
+        "count",
+        "status",
+        "status_id",
+    ],
+}
+
 
 def f1_circuits(
     limit: Optional[str] = None,
@@ -68,7 +349,7 @@ def f1_circuits(
 
         See Also:
             * `Jolpica F1 API`_ - the Ergast-compatible API this family wraps (docs, terms, rate limit)
-            * `f1dataR`_ - the R twin over the same API; wrapper names and columns follow it
+            * `f1dataR`_ - the R twin over the same API; wrapper and column names follow it (integer columns are typed here)
             * `FastF1`_ - timing, telemetry and session data that sdv-py does not wrap
 
         .. _Jolpica F1 API: https://github.com/jolpica/jolpica-f1
@@ -92,7 +373,7 @@ def f1_circuits(
         **kwargs,
     )
     if return_parsed:
-        return parse_f1_mrdata(raw, return_as_pandas=return_as_pandas)
+        return parse_f1_mrdata(raw, return_as_pandas=return_as_pandas, columns=_PARSER_COLUMNS["circuits"])
     return raw
 
 
@@ -134,7 +415,7 @@ def f1_constructor_standings(
 
         See Also:
             * `Jolpica F1 API`_ - the Ergast-compatible API this family wraps (docs, terms, rate limit)
-            * `f1dataR`_ - the R twin over the same API; wrapper names and columns follow it
+            * `f1dataR`_ - the R twin over the same API; wrapper and column names follow it (integer columns are typed here)
             * `FastF1`_ - timing, telemetry and session data that sdv-py does not wrap
 
         .. _Jolpica F1 API: https://github.com/jolpica/jolpica-f1
@@ -158,7 +439,7 @@ def f1_constructor_standings(
         **kwargs,
     )
     if return_parsed:
-        return parse_f1_mrdata(raw, return_as_pandas=return_as_pandas)
+        return parse_f1_mrdata(raw, return_as_pandas=return_as_pandas, columns=_PARSER_COLUMNS["constructor_standings"])
     return raw
 
 
@@ -200,7 +481,7 @@ def f1_constructors(
 
         See Also:
             * `Jolpica F1 API`_ - the Ergast-compatible API this family wraps (docs, terms, rate limit)
-            * `f1dataR`_ - the R twin over the same API; wrapper names and columns follow it
+            * `f1dataR`_ - the R twin over the same API; wrapper and column names follow it (integer columns are typed here)
             * `FastF1`_ - timing, telemetry and session data that sdv-py does not wrap
 
         .. _Jolpica F1 API: https://github.com/jolpica/jolpica-f1
@@ -224,7 +505,7 @@ def f1_constructors(
         **kwargs,
     )
     if return_parsed:
-        return parse_f1_mrdata(raw, return_as_pandas=return_as_pandas)
+        return parse_f1_mrdata(raw, return_as_pandas=return_as_pandas, columns=_PARSER_COLUMNS["constructors"])
     return raw
 
 
@@ -266,7 +547,7 @@ def f1_driver(
 
         See Also:
             * `Jolpica F1 API`_ - the Ergast-compatible API this family wraps (docs, terms, rate limit)
-            * `f1dataR`_ - the R twin over the same API; wrapper names and columns follow it
+            * `f1dataR`_ - the R twin over the same API; wrapper and column names follow it (integer columns are typed here)
             * `FastF1`_ - timing, telemetry and session data that sdv-py does not wrap
 
         .. _Jolpica F1 API: https://github.com/jolpica/jolpica-f1
@@ -290,7 +571,7 @@ def f1_driver(
         **kwargs,
     )
     if return_parsed:
-        return parse_f1_mrdata(raw, return_as_pandas=return_as_pandas)
+        return parse_f1_mrdata(raw, return_as_pandas=return_as_pandas, columns=_PARSER_COLUMNS["driver"])
     return raw
 
 
@@ -332,7 +613,7 @@ def f1_driver_standings(
 
         See Also:
             * `Jolpica F1 API`_ - the Ergast-compatible API this family wraps (docs, terms, rate limit)
-            * `f1dataR`_ - the R twin over the same API; wrapper names and columns follow it
+            * `f1dataR`_ - the R twin over the same API; wrapper and column names follow it (integer columns are typed here)
             * `FastF1`_ - timing, telemetry and session data that sdv-py does not wrap
 
         .. _Jolpica F1 API: https://github.com/jolpica/jolpica-f1
@@ -356,7 +637,7 @@ def f1_driver_standings(
         **kwargs,
     )
     if return_parsed:
-        return parse_f1_mrdata(raw, return_as_pandas=return_as_pandas)
+        return parse_f1_mrdata(raw, return_as_pandas=return_as_pandas, columns=_PARSER_COLUMNS["driver_standings"])
     return raw
 
 
@@ -398,7 +679,7 @@ def f1_drivers(
 
         See Also:
             * `Jolpica F1 API`_ - the Ergast-compatible API this family wraps (docs, terms, rate limit)
-            * `f1dataR`_ - the R twin over the same API; wrapper names and columns follow it
+            * `f1dataR`_ - the R twin over the same API; wrapper and column names follow it (integer columns are typed here)
             * `FastF1`_ - timing, telemetry and session data that sdv-py does not wrap
 
         .. _Jolpica F1 API: https://github.com/jolpica/jolpica-f1
@@ -422,7 +703,7 @@ def f1_drivers(
         **kwargs,
     )
     if return_parsed:
-        return parse_f1_mrdata(raw, return_as_pandas=return_as_pandas)
+        return parse_f1_mrdata(raw, return_as_pandas=return_as_pandas, columns=_PARSER_COLUMNS["drivers"])
     return raw
 
 
@@ -466,7 +747,7 @@ def f1_laps_page(
 
         See Also:
             * `Jolpica F1 API`_ - the Ergast-compatible API this family wraps (docs, terms, rate limit)
-            * `f1dataR`_ - the R twin over the same API; wrapper names and columns follow it
+            * `f1dataR`_ - the R twin over the same API; wrapper and column names follow it (integer columns are typed here)
             * `FastF1`_ - timing, telemetry and session data that sdv-py does not wrap
 
         .. _Jolpica F1 API: https://github.com/jolpica/jolpica-f1
@@ -490,7 +771,7 @@ def f1_laps_page(
         **kwargs,
     )
     if return_parsed:
-        return parse_f1_mrdata(raw, return_as_pandas=return_as_pandas)
+        return parse_f1_mrdata(raw, return_as_pandas=return_as_pandas, columns=_PARSER_COLUMNS["laps_page"])
     return raw
 
 
@@ -534,7 +815,7 @@ def f1_pitstops(
 
         See Also:
             * `Jolpica F1 API`_ - the Ergast-compatible API this family wraps (docs, terms, rate limit)
-            * `f1dataR`_ - the R twin over the same API; wrapper names and columns follow it
+            * `f1dataR`_ - the R twin over the same API; wrapper and column names follow it (integer columns are typed here)
             * `FastF1`_ - timing, telemetry and session data that sdv-py does not wrap
 
         .. _Jolpica F1 API: https://github.com/jolpica/jolpica-f1
@@ -558,7 +839,7 @@ def f1_pitstops(
         **kwargs,
     )
     if return_parsed:
-        return parse_f1_mrdata(raw, return_as_pandas=return_as_pandas)
+        return parse_f1_mrdata(raw, return_as_pandas=return_as_pandas, columns=_PARSER_COLUMNS["pitstops"])
     return raw
 
 
@@ -602,7 +883,7 @@ def f1_qualifying(
 
         See Also:
             * `Jolpica F1 API`_ - the Ergast-compatible API this family wraps (docs, terms, rate limit)
-            * `f1dataR`_ - the R twin over the same API; wrapper names and columns follow it
+            * `f1dataR`_ - the R twin over the same API; wrapper and column names follow it (integer columns are typed here)
             * `FastF1`_ - timing, telemetry and session data that sdv-py does not wrap
 
         .. _Jolpica F1 API: https://github.com/jolpica/jolpica-f1
@@ -626,7 +907,7 @@ def f1_qualifying(
         **kwargs,
     )
     if return_parsed:
-        return parse_f1_mrdata(raw, return_as_pandas=return_as_pandas)
+        return parse_f1_mrdata(raw, return_as_pandas=return_as_pandas, columns=_PARSER_COLUMNS["qualifying"])
     return raw
 
 
@@ -670,7 +951,7 @@ def f1_race(
 
         See Also:
             * `Jolpica F1 API`_ - the Ergast-compatible API this family wraps (docs, terms, rate limit)
-            * `f1dataR`_ - the R twin over the same API; wrapper names and columns follow it
+            * `f1dataR`_ - the R twin over the same API; wrapper and column names follow it (integer columns are typed here)
             * `FastF1`_ - timing, telemetry and session data that sdv-py does not wrap
 
         .. _Jolpica F1 API: https://github.com/jolpica/jolpica-f1
@@ -694,7 +975,7 @@ def f1_race(
         **kwargs,
     )
     if return_parsed:
-        return parse_f1_mrdata(raw, return_as_pandas=return_as_pandas)
+        return parse_f1_mrdata(raw, return_as_pandas=return_as_pandas, columns=_PARSER_COLUMNS["race"])
     return raw
 
 
@@ -738,7 +1019,7 @@ def f1_results(
 
         See Also:
             * `Jolpica F1 API`_ - the Ergast-compatible API this family wraps (docs, terms, rate limit)
-            * `f1dataR`_ - the R twin over the same API; wrapper names and columns follow it
+            * `f1dataR`_ - the R twin over the same API; wrapper and column names follow it (integer columns are typed here)
             * `FastF1`_ - timing, telemetry and session data that sdv-py does not wrap
 
         .. _Jolpica F1 API: https://github.com/jolpica/jolpica-f1
@@ -762,7 +1043,7 @@ def f1_results(
         **kwargs,
     )
     if return_parsed:
-        return parse_f1_mrdata(raw, return_as_pandas=return_as_pandas)
+        return parse_f1_mrdata(raw, return_as_pandas=return_as_pandas, columns=_PARSER_COLUMNS["results"])
     return raw
 
 
@@ -804,7 +1085,7 @@ def f1_schedule(
 
         See Also:
             * `Jolpica F1 API`_ - the Ergast-compatible API this family wraps (docs, terms, rate limit)
-            * `f1dataR`_ - the R twin over the same API; wrapper names and columns follow it
+            * `f1dataR`_ - the R twin over the same API; wrapper and column names follow it (integer columns are typed here)
             * `FastF1`_ - timing, telemetry and session data that sdv-py does not wrap
 
         .. _Jolpica F1 API: https://github.com/jolpica/jolpica-f1
@@ -828,7 +1109,7 @@ def f1_schedule(
         **kwargs,
     )
     if return_parsed:
-        return parse_f1_mrdata(raw, return_as_pandas=return_as_pandas)
+        return parse_f1_mrdata(raw, return_as_pandas=return_as_pandas, columns=_PARSER_COLUMNS["schedule"])
     return raw
 
 
@@ -868,7 +1149,7 @@ def f1_seasons(
 
         See Also:
             * `Jolpica F1 API`_ - the Ergast-compatible API this family wraps (docs, terms, rate limit)
-            * `f1dataR`_ - the R twin over the same API; wrapper names and columns follow it
+            * `f1dataR`_ - the R twin over the same API; wrapper and column names follow it (integer columns are typed here)
             * `FastF1`_ - timing, telemetry and session data that sdv-py does not wrap
 
         .. _Jolpica F1 API: https://github.com/jolpica/jolpica-f1
@@ -892,7 +1173,7 @@ def f1_seasons(
         **kwargs,
     )
     if return_parsed:
-        return parse_f1_mrdata(raw, return_as_pandas=return_as_pandas)
+        return parse_f1_mrdata(raw, return_as_pandas=return_as_pandas, columns=_PARSER_COLUMNS["seasons"])
     return raw
 
 
@@ -936,7 +1217,7 @@ def f1_sprint(
 
         See Also:
             * `Jolpica F1 API`_ - the Ergast-compatible API this family wraps (docs, terms, rate limit)
-            * `f1dataR`_ - the R twin over the same API; wrapper names and columns follow it
+            * `f1dataR`_ - the R twin over the same API; wrapper and column names follow it (integer columns are typed here)
             * `FastF1`_ - timing, telemetry and session data that sdv-py does not wrap
 
         .. _Jolpica F1 API: https://github.com/jolpica/jolpica-f1
@@ -960,7 +1241,7 @@ def f1_sprint(
         **kwargs,
     )
     if return_parsed:
-        return parse_f1_mrdata(raw, return_as_pandas=return_as_pandas)
+        return parse_f1_mrdata(raw, return_as_pandas=return_as_pandas, columns=_PARSER_COLUMNS["sprint"])
     return raw
 
 
@@ -1000,7 +1281,7 @@ def f1_status(
 
         See Also:
             * `Jolpica F1 API`_ - the Ergast-compatible API this family wraps (docs, terms, rate limit)
-            * `f1dataR`_ - the R twin over the same API; wrapper names and columns follow it
+            * `f1dataR`_ - the R twin over the same API; wrapper and column names follow it (integer columns are typed here)
             * `FastF1`_ - timing, telemetry and session data that sdv-py does not wrap
 
         .. _Jolpica F1 API: https://github.com/jolpica/jolpica-f1
@@ -1024,5 +1305,5 @@ def f1_status(
         **kwargs,
     )
     if return_parsed:
-        return parse_f1_mrdata(raw, return_as_pandas=return_as_pandas)
+        return parse_f1_mrdata(raw, return_as_pandas=return_as_pandas, columns=_PARSER_COLUMNS["status"])
     return raw

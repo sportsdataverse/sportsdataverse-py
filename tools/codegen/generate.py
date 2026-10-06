@@ -800,6 +800,8 @@ class _EndpointView:
         self.fixed_params = ep.fixed_params
         self.path_params = ep.path_params
         self.parser = ep.parser
+        # Filled by _flat_views for a ``parser_columns`` family: the documented column names.
+        self.parser_columns: list[str] | None = None
         self.path = ep.path
         self.host_url = ep_host
         self.example_args = ep.example_args
@@ -1208,21 +1210,22 @@ def _flat_views(api: spec.FlatApi, league_prefix: str = "") -> list[_EndpointVie
             fn_name = api.name_pattern.format(short=ep.short)
         used.add(fn_name)
         ep_host = ep.host or api.host
-        views.append(
-            _EndpointView(
-                ep,
-                fn_name,
-                ep_host,
-                stub_league,
-                flat=True,
-                auth=api.auth,
-                raw_types=api.raw_types,
-                getter_module=api.getter_module,
-                # Per-endpoint extras win over the family block, so a large family
-                # can document one wrapper without rewriting all of its siblings.
-                doc_extras=ep.docstring or api.docstring,
-            )
+        view = _EndpointView(
+            ep,
+            fn_name,
+            ep_host,
+            stub_league,
+            flat=True,
+            auth=api.auth,
+            raw_types=api.raw_types,
+            getter_module=api.getter_module,
+            # Per-endpoint extras win over the family block, so a large family
+            # can document one wrapper without rewriting all of its siblings.
+            doc_extras=ep.docstring or api.docstring,
         )
+        if api.parser_columns:
+            view.parser_columns = [str(c["name"]) for c in _schema_doc(ep.returns_schema).get("columns") or []]
+        views.append(view)
     return views
 
 
@@ -1256,6 +1259,7 @@ def render_flat_module(api: spec.FlatApi, league_prefix: str = "") -> str:
         passthrough_query=api.passthrough_query,
         getter_module=api.getter_module,
         auth=api.auth,
+        parser_columns=api.parser_columns,
     )
 
 
