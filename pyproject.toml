@@ -330,6 +330,8 @@ warn_unused_ignores = true
 warn_redundant_casts = true
 files = [
     "sportsdataverse/_deprecation.py",
+    "sportsdataverse/euroleague/euroleague_parsers.py",
+    "sportsdataverse/euroleague/euroleague_runtime.py",
     "sportsdataverse/validation/box_reconcile.py",
     "sportsdataverse/validation/findings.py",
     "sportsdataverse/validation/pbp_invariants.py",

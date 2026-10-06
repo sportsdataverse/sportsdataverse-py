@@ -2592,7 +2592,7 @@ _FLAT_API_DOC = {
     "cbs_napi": "CBS Sports NAPI (api.cbssports.com/napi)",
     "yahoo_shangrila": "Yahoo Sports Shangrila (graphite-secure.sports.yahoo.com)",
     "fox_api": "Fox Sports API (api.foxsports.com)",
-    "euroleague": "EuroLeague Competition Engine API (api-live.euroleague.net v2)",
+    "euroleague": "EuroLeague APIs (api-live.euroleague.net v2 + v3, live.euroleague.net/api)",
     "fotmob": "FotMob data API (fotmob.com, unofficial)",
     "uefa": "UEFA front-end APIs (comp/match/standings/matchstats.uefa.com)",
     "fifa": "FIFA public API v3 (api.fifa.com)",

@@ -27,6 +27,38 @@ Fixtures are byte copies of the recon captures (`tests/fixtures/f1/`); the offli
 `tests/f1/test_f1.py`. Generated wrappers now accept a `notes:` list in the endpoint YAML's
 `docstring:` block, rendered as a trailing `Notes:` section.
 
+### Added — EuroLeague shots, play-by-play, box score, standings and season stats (`euroleague_*`)
+
+The `euroleague` family grows from 7 to 15 wrappers, regenerated from the sdv-internal-refs
+recon of 2026-10-06, which added two hosts beside the Competition Engine v2 API (keyless, all
+three). The generator (`tools/codegen/gen_euroleague.py`) now reads the spec's per-path
+`servers`: a route on another host gets an endpoint-level `host`, and the family runtime picks
+the body contract by host.
+
+- **Live API** (`https://live.euroleague.net/api`, per game by `game_code` + `season_code`):
+  `euroleague_game_points()` — the shot chart, one row per field-goal attempt and made free
+  throw with `coord_x` / `coord_y` in **integer centimeters from the hoop**, both teams on one
+  basket, `coord_y` growing from the baseline toward the court, free throws at the `-1, -1`
+  sentinel, and which sideline is +x **unverified** (the column descriptions carry the measured
+  frame); `euroleague_game_pbp()` — the per-quarter arrays unrolled to one row per play with a
+  `quarter` column (5 = overtime); `euroleague_game_boxscore()` — one row per player plus each
+  side's team-only and totals rows (`row_type`); `euroleague_game_header()` — one row. Live-API
+  codes are space-padded on the wire and are stripped; `id_player` / `player_id` / `codeteam` /
+  `team` and the team codes are pinned to `Utf8`. The live API answers an unknown game with an
+  **empty 200 body**: the runtime returns `{}` for that one case (every other host's empty 200
+  still raises `AssetFetchError`) and the parsers make it a zero-row frame.
+- **api-live v3** (`Accept: application/json`, like v2): `euroleague_standings(competition_code,
+  season_code, round, kind=)` — one wrapper over `basicstandings` (default), `calendarstandings`,
+  `streaks` and `aheadbehind`, one row per team as of the round, with one documented column
+  table per `kind`; `euroleague_player_stats()` / `euroleague_team_stats()` with
+  `mode="traditional"` (default) or `"advanced"` and `season_mode="Single"` /
+  `statistic_mode="PerGame"` (the capture-verified defaults; other values are unverified);
+  `euroleague_game_report()` — one row per game with both clubs, scores and last-5 form.
+- Fixtures: byte copies of the 13 new E2025 captures plus the two EuroCup (U2025) live
+  captures; offline tests for every fixture, the empty-200 path through a fake transport, and
+  one gated live smoke per host. `companions.yaml` gains `euroleague` (hoopR, sdvplot /
+  sdvplotR FIBA court, euroleague-api).
+
 ### Added — `asa_players_xpass()` and the `nasl` + `usls` ASA leagues
 
 `asa_players_xpass(league_slug, season_name=...)` wraps the American Soccer Analysis

@@ -1,0 +1,137 @@
+columns:
+- description: Whether the game is in progress.
+  name: live
+  type: logical
+- description: Round label (e.g. Round 1).
+  name: round
+  type: character
+- description: Game date (venue local, dd/mm/yyyy).
+  name: date
+  type: character
+- description: Scheduled tip-off time (venue local, HH:MM).
+  name: hour
+  type: character
+- description: Venue name.
+  name: stadium
+  type: character
+- description: Seating capacity of the venue.
+  name: capacity
+  type: character
+- description: Display name of team A (the home side).
+  name: team_a
+  type: character
+- description: Display name of team B (the away side).
+  name: team_b
+  type: character
+- description: EuroLeague club code of team A (the home side; Utf8 join key).
+  name: code_team_a
+  type: character
+- description: Three-letter broadcast abbreviation of team A.
+  name: tv_code_a
+  type: character
+- description: EuroLeague club code of team B (the away side; Utf8 join key).
+  name: code_team_b
+  type: character
+- description: Three-letter broadcast abbreviation of team B.
+  name: tv_code_b
+  type: character
+- description: Crest image file name of team A.
+  name: im_a
+  type: character
+- description: Crest image file name of team B.
+  name: im_b
+  type: character
+- description: Score of team A (the home side).
+  name: score_a
+  type: character
+- description: Score of team B (the away side).
+  name: score_b
+  type: character
+- description: Head coach of team A.
+  name: coach_a
+  type: character
+- description: Head coach of team B.
+  name: coach_b
+  type: character
+- description: Elapsed game time (mm:ss).
+  name: game_time
+  type: character
+- description: Time remaining in the current period (mm:ss).
+  name: remaining_partial_time
+  type: character
+- description: Live-feed widget identifier of the game.
+  name: wid
+  type: character
+- description: Current period of the game.
+  name: quarter
+  type: character
+- description: 'Team fouls of team A in the current period (sic: the API spells it
+    this way).'
+  name: foults_a
+  type: character
+- description: 'Team fouls of team B in the current period (sic: the API spells it
+    this way).'
+  name: foults_b
+  type: character
+- description: Timeouts used by team A.
+  name: timeouts_a
+  type: character
+- description: Timeouts used by team B.
+  name: timeouts_b
+  type: character
+- description: Points scored by team A (the home side) in quarter 1.
+  name: score_quarter1_a
+  type: integer
+- description: Points scored by team A (the home side) in quarter 2.
+  name: score_quarter2_a
+  type: integer
+- description: Points scored by team A (the home side) in quarter 3.
+  name: score_quarter3_a
+  type: integer
+- description: Points scored by team A (the home side) in quarter 4.
+  name: score_quarter4_a
+  type: integer
+- description: Points scored by team A in overtime.
+  name: score_extra_time_a
+  type: integer
+- description: Points scored by team B (the away side) in quarter 1.
+  name: score_quarter1_b
+  type: integer
+- description: Points scored by team B (the away side) in quarter 2.
+  name: score_quarter2_b
+  type: integer
+- description: Points scored by team B (the away side) in quarter 3.
+  name: score_quarter3_b
+  type: integer
+- description: Points scored by team B (the away side) in quarter 4.
+  name: score_quarter4_b
+  type: integer
+- description: Points scored by team B in overtime.
+  name: score_extra_time_b
+  type: integer
+- description: Phase name (Regular Season, Playoffs, ...).
+  name: phase
+  type: character
+- description: Short phase name.
+  name: phase_reduced_name
+  type: character
+- description: Competition name.
+  name: competition
+  type: character
+- description: Short competition name.
+  name: competition_reduced_name
+  type: character
+- description: Competition code of the live feed (E = EuroLeague, U = EuroCup).
+  name: pcom
+  type: character
+- description: First referee.
+  name: referee1
+  type: character
+- description: Second referee.
+  name: referee2
+  type: character
+- description: Third referee.
+  name: referee3
+  type: character
+kind: dataframe
+schema: game_header

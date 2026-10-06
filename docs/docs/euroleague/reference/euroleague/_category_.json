@@ -1,0 +1,6 @@
+{
+  "label": "EuroLeague APIs (api-live.euroleague.net v2 + v3, live.euroleague.net/api)",
+  "position": 10,
+  "collapsed": true,
+  "link": {"type": "doc", "id": "euroleague/reference/euroleague"}
+}
