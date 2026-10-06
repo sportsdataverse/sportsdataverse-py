@@ -1,0 +1,116 @@
+[
+  {
+    "idProvider": "FAME",
+    "statistics": [
+      {
+        "name": "shot_in_goal_gate_inner_upper_left",
+        "translations": {
+          "name": {
+            "EN": "shot in goal gate inner upper left",
+            "FR": "shot in goal gate inner upper left",
+            "DE": "shot in goal gate inner upper left",
+            "ES": "shot in goal gate inner upper left",
+            "PT": "remate superior à esquerda da baliza dentro da área",
+            "IT": "shot in goal gate inner upper left",
+            "RU": "shot in goal gate inner upper left",
+            "ZH": "shot in goal gate inner upper left",
+            "AR": "تسديدة في أعلى يسار المرمى"
+          }
+        },
+        "value": "1"
+      },
+      {
+        "name": "shot_in_goal_gate_inner_upper_center",
+        "translations": {
+          "name": {
+            "EN": "shot in goal gate inner upper center",
+            "FR": "shot in goal gate inner upper center",
+            "DE": "shot in goal gate inner upper center",
+            "ES": "tiro a puerta a la parte superior central",
+            "PT": "remate superior ao centro da baliza dentro da área",
+            "IT": "shot in goal gate inner upper center",
+            "RU": "shot in goal gate inner upper center",
+            "ZH": "shot in goal gate inner upper center",
+            "AR": "تسديدة في أعلى منتصف المرمى"
+          }
+        },
+        "value": "0"
+      },
+      {
+        "name": "shot_in_goal_gate_inner_upper_right",
+        "translations": {
+          "name": {
+            "EN": "shot in goal gate inner upper right",
+            "FR": "shot in goal gate inner upper right",
+            "DE": "shot in goal gate inner upper right",
+            "ES": "tiro a puerta a la parte superior derecha",
+            "PT": "remate superior à direita da baliza dentro da área",
+            "IT": "shot in goal gate inner upper right",
+            "RU": "shot in goal gate inner upper right",
+            "ZH": "shot in goal gate inner upper right",
+            "AR": "تسديدة في أعلى يمين المرمى"
+          }
+        },
+        "value": "0"
+      }
+    ],
+    "teamId": "52280"
+  },
+  {
+    "idProvider": "FAME",
+    "statistics": [
+      {
+        "name": "shot_in_goal_gate_inner_upper_left",
+        "translations": {
+          "name": {
+            "EN": "shot in goal gate inner upper left",
+            "FR": "shot in goal gate inner upper left",
+            "DE": "shot in goal gate inner upper left",
+            "ES": "shot in goal gate inner upper left",
+            "PT": "remate superior à esquerda da baliza dentro da área",
+            "IT": "shot in goal gate inner upper left",
+            "RU": "shot in goal gate inner upper left",
+            "ZH": "shot in goal gate inner upper left",
+            "AR": "تسديدة في أعلى يسار المرمى"
+          }
+        },
+        "value": "1"
+      },
+      {
+        "name": "shot_in_goal_gate_inner_upper_center",
+        "translations": {
+          "name": {
+            "EN": "shot in goal gate inner upper center",
+            "FR": "shot in goal gate inner upper center",
+            "DE": "shot in goal gate inner upper center",
+            "ES": "tiro a puerta a la parte superior central",
+            "PT": "remate superior ao centro da baliza dentro da área",
+            "IT": "shot in goal gate inner upper center",
+            "RU": "shot in goal gate inner upper center",
+            "ZH": "shot in goal gate inner upper center",
+            "AR": "تسديدة في أعلى منتصف المرمى"
+          }
+        },
+        "value": "0"
+      },
+      {
+        "name": "shot_in_goal_gate_inner_upper_right",
+        "translations": {
+          "name": {
+            "EN": "shot in goal gate inner upper right",
+            "FR": "shot in goal gate inner upper right",
+            "DE": "shot in goal gate inner upper right",
+            "ES": "tiro a puerta a la parte superior derecha",
+            "PT": "remate superior à direita da baliza dentro da área",
+            "IT": "shot in goal gate inner upper right",
+            "RU": "shot in goal gate inner upper right",
+            "ZH": "shot in goal gate inner upper right",
+            "AR": "تسديدة في أعلى يمين المرمى"
+          }
+        },
+        "value": "0"
+      }
+    ],
+    "teamId": "52747"
+  }
+]

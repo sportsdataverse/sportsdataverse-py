@@ -1,0 +1,4361 @@
+[
+  {
+    "awayTeam": {
+      "associationId": "200039",
+      "associationLogoUrl": "https://img.uefa.com/imgml/uefacom/elements/logos/ma/ENG.svg",
+      "bigLogoUrl": "https://img.uefa.com/imgml/TP/teams/logos/700x700/52280.png",
+      "confederationType": "UEFA",
+      "countryCode": "ENG",
+      "id": "52280",
+      "idProvider": "FAME",
+      "internationalName": "Arsenal",
+      "isPlaceHolder": false,
+      "logoUrl": "https://img.uefa.com/imgml/TP/teams/logos/70x70/52280.png",
+      "mediumLogoUrl": "https://img.uefa.com/imgml/TP/teams/logos/240x240/52280.png",
+      "organizationId": "252280",
+      "teamCode": "ARS",
+      "teamTypeDetail": "DOMESTIC_MEN_TEAM_A",
+      "translations": {
+        "countryName": {
+          "EN": "England",
+          "FR": "Angleterre",
+          "DE": "England",
+          "ES": "Inglaterra",
+          "PT": "Inglaterra",
+          "IT": "Inghilterra",
+          "RU": "Англия",
+          "ZH": "英格兰",
+          "AR": "إنجلترا"
+        },
+        "displayName": {
+          "EN": "Arsenal",
+          "FR": "Arsenal",
+          "DE": "Arsenal",
+          "ES": "Arsenal",
+          "PT": "Arsenal",
+          "IT": "Arsenal",
+          "RU": "Арсенал",
+          "ZH": "阿森纳",
+          "AR": "آرسنال"
+        },
+        "displayOfficialName": {
+          "EN": "Arsenal FC",
+          "FR": "Arsenal FC",
+          "DE": "Arsenal FC",
+          "ES": "Arsenal FC",
+          "PT": "Arsenal FC",
+          "IT": "Arsenal FC",
+          "RU": "Арсенал",
+          "ZH": "阿森纳",
+          "AR": "آرسنال"
+        },
+        "displayTeamCode": {
+          "EN": "ARS",
+          "FR": "ARS",
+          "DE": "ARS",
+          "ES": "ARS",
+          "PT": "ARS",
+          "IT": "ARS",
+          "RU": "ARS",
+          "ZH": "ARS",
+          "AR": "ARS"
+        },
+        "shortName": {
+          "EN": "Arsenal",
+          "FR": "Arsenal",
+          "DE": "Arsenal",
+          "ES": "Arsenal",
+          "PT": "Arsenal",
+          "IT": "Arsenal",
+          "RU": "Арсенал",
+          "ZH": "Arsenal",
+          "AR": "آرسنال"
+        }
+      },
+      "typeIsNational": false,
+      "typeTeam": "DOMESTIC"
+    },
+    "behindClosedDoors": false,
+    "competition": {
+      "age": "ADULT",
+      "code": "UCL",
+      "id": "1",
+      "images": {
+        "FULL_LOGO": "https://img.uefa.com/imgml/uefacom/elements/logos/competitions/color/full/1.svg"
+      },
+      "metaData": {
+        "name": "UEFA Champions League"
+      },
+      "region": "CONTINENTAL",
+      "sex": "MALE",
+      "sportsType": "FOOTBALL",
+      "teamCategory": "CLUB",
+      "translations": {
+        "name": {
+          "EN": "UEFA Champions League",
+          "FR": "UEFA Champions League",
+          "DE": "UEFA Champions League",
+          "ES": "UEFA Champions League",
+          "PT": "UEFA Champions League",
+          "IT": "UEFA Champions League",
+          "RU": "Лига чемпионов УЕФА",
+          "ZH": "欧洲冠军联赛",
+          "AR": "دوري أبطال أوروبا"
+        },
+        "prequalifyingName": {
+          "EN": "UEFA Champions League",
+          "FR": "UEFA Champions League",
+          "DE": "UEFA Champions League",
+          "ES": "UEFA Champions League",
+          "PT": "UEFA Champions League",
+          "IT": "UEFA Champions League",
+          "RU": "Лига чемпионов УЕФА",
+          "ZH": "欧洲冠军联赛",
+          "AR": "دوري أبطال أوروبا"
+        },
+        "qualifyingName": {
+          "EN": "UEFA Champions League",
+          "FR": "UEFA Champions League",
+          "DE": "UEFA Champions League",
+          "ES": "UEFA Champions League",
+          "PT": "UEFA Champions League",
+          "IT": "UEFA Champions League",
+          "RU": "Лига чемпионов УЕФА",
+          "ZH": "欧洲冠军联赛",
+          "AR": "دوري أبطال أوروبا"
+        },
+        "tournamentName": {
+          "EN": "UEFA Champions League",
+          "FR": "UEFA Champions League",
+          "DE": "UEFA Champions League",
+          "ES": "UEFA Champions League",
+          "PT": "UEFA Champions League",
+          "IT": "UEFA Champions League",
+          "RU": "Лига чемпионов УЕФА",
+          "ZH": "欧洲冠军联赛",
+          "AR": "دوري أبطال أوروبا"
+        }
+      },
+      "type": "CUP"
+    },
+    "competitionPhase": "TOURNAMENT",
+    "fullTimeAt": "2026-05-30T19:00:24.003Z",
+    "homeTeam": {
+      "associationId": "200043",
+      "associationLogoUrl": "https://img.uefa.com/imgml/uefacom/elements/logos/ma/FRA.svg",
+      "bigLogoUrl": "https://img.uefa.com/imgml/TP/teams/logos/700x700/52747.png",
+      "confederationType": "UEFA",
+      "countryCode": "FRA",
+      "id": "52747",
+      "idProvider": "FAME",
+      "internationalName": "Paris",
+      "isPlaceHolder": false,
+      "logoUrl": "https://img.uefa.com/imgml/TP/teams/logos/70x70/52747.png",
+      "mediumLogoUrl": "https://img.uefa.com/imgml/TP/teams/logos/240x240/52747.png",
+      "organizationId": "252747",
+      "teamCode": "PSG",
+      "teamTypeDetail": "DOMESTIC_MEN_TEAM_A",
+      "translations": {
+        "countryName": {
+          "EN": "France",
+          "FR": "France",
+          "DE": "Frankreich",
+          "ES": "Francia",
+          "PT": "França",
+          "IT": "Francia",
+          "RU": "Франция",
+          "ZH": "法国",
+          "AR": "فرنسا"
+        },
+        "displayName": {
+          "EN": "Paris",
+          "FR": "Paris",
+          "DE": "Paris",
+          "ES": "Paris",
+          "PT": "Paris",
+          "IT": "Paris",
+          "RU": "ПСЖ",
+          "ZH": "巴黎圣日耳曼",
+          "AR": "باريس"
+        },
+        "displayOfficialName": {
+          "EN": "Paris Saint-Germain",
+          "FR": "Paris Saint-Germain",
+          "DE": "Paris Saint-Germain",
+          "ES": "Paris Saint-Germain",
+          "PT": "Paris Saint-Germain",
+          "IT": "Paris Saint-Germain",
+          "RU": "Пари Сен-Жермен",
+          "ZH": "巴黎圣日耳曼",
+          "AR": "باريس سان جيرمان"
+        },
+        "displayTeamCode": {
+          "EN": "PSG",
+          "FR": "PSG",
+          "DE": "PSG",
+          "ES": "PSG",
+          "PT": "PSG",
+          "IT": "PSG",
+          "RU": "PSG",
+          "ZH": "PSG",
+          "AR": "PSG"
+        },
+        "shortName": {
+          "EN": "Paris",
+          "FR": "Paris",
+          "DE": "Paris",
+          "ES": "Paris",
+          "PT": "Paris",
+          "IT": "Paris",
+          "RU": "ПСЖ",
+          "ZH": "Paris",
+          "AR": "باريس"
+        }
+      },
+      "typeIsNational": false,
+      "typeTeam": "DOMESTIC"
+    },
+    "id": "2047742",
+    "kickOffTime": {
+      "date": "2026-05-30",
+      "dateTime": "2026-05-30T16:00:00Z",
+      "utcOffsetInHours": 2
+    },
+    "lineupStatus": "TACTICAL_AVAILABLE",
+    "matchAttendance": 61035,
+    "matchday": {
+      "competitionId": "1",
+      "dateFrom": "2026-05-30T06:00:00+0000",
+      "dateTo": "2026-05-30T21:59:59+0000",
+      "format": "EXTRA_TIME_WITH_PENALTIES",
+      "id": "36271",
+      "longName": "Matchday 17",
+      "name": "MD17",
+      "phase": "TOURNAMENT",
+      "roundId": "2002115",
+      "seasonYear": "2026",
+      "sequenceNumber": "1",
+      "translations": {
+        "longName": {
+          "EN": "Matchday 17",
+          "FR": "Journée 17",
+          "DE": "Spieltag 17",
+          "ES": "Jornada 17",
+          "PT": "Jornada 17",
+          "IT": "Giornata 17",
+          "RU": "Тур 17",
+          "ZH": "比赛日 17",
+          "AR": "الجولة 17"
+        },
+        "name": {
+          "EN": "MD 17",
+          "FR": "J 17",
+          "DE": "ST 17",
+          "ES": "JOR 17",
+          "PT": "J 17",
+          "IT": "G 17",
+          "RU": "Тур 17",
+          "ZH": "比赛日 17",
+          "AR": "MD 17"
+        }
+      },
+      "type": "FINAL"
+    },
+    "playerEvents": {
+      "penaltyScorers": [
+        {
+          "id": "c73c8a23-1f1b-4eec-ba47-130559c7b99a",
+          "penaltyType": "SCORED",
+          "phase": "PENALTY",
+          "player": {
+            "age": "25",
+            "birthDate": "2001-06-20",
+            "clubId": "50058",
+            "clubJerseyNumber": "9",
+            "clubShirtName": "G.RAMOS",
+            "countryCode": "POR",
+            "countryOfBirthCode": "POR",
+            "detailedFieldPosition": "STRIKER",
+            "fieldPosition": "FORWARD",
+            "gender": "MALE",
+            "id": "250116654",
+            "imageUrl": "https://img.uefa.com/imgml/TP/players/1/2026/324x324/250116654.jpg",
+            "internationalName": "Gonçalo Ramos",
+            "nationalFieldPosition": "FORWARD",
+            "nationalJerseyNumber": "9",
+            "nationalShirtName": "G. RAMOS",
+            "nationalTeamId": "110",
+            "translations": {
+              "countryName": {
+                "EN": "Portugal",
+                "FR": "Portugal",
+                "DE": "Portugal",
+                "ES": "Portugal",
+                "PT": "Portugal",
+                "IT": "Portogallo",
+                "RU": "Португалия",
+                "ZH": "葡萄牙",
+                "AR": "البرتغال"
+              },
+              "countryOfBirthName": {
+                "EN": "Portugal",
+                "FR": "Portugal",
+                "DE": "Portugal",
+                "ES": "Portugal",
+                "PT": "Portugal",
+                "IT": "Portogallo",
+                "RU": "Португалия",
+                "ZH": "葡萄牙",
+                "AR": "البرتغال"
+              },
+              "fieldPosition": {
+                "EN": "Forward",
+                "FR": "Attaquant",
+                "DE": "Stürmer",
+                "ES": "Delantero",
+                "PT": "Avançado",
+                "IT": "Attaccante",
+                "RU": "Нападающий",
+                "ZH": "前锋",
+                "AR": "مهاجم"
+              },
+              "firstName": {
+                "ZH": "贡萨洛"
+              },
+              "lastName": {
+                "EN": "Gonçalo Ramos",
+                "FR": "Gonçalo Ramos",
+                "DE": "Gonçalo Ramos",
+                "ES": "Gonçalo Ramos",
+                "PT": "Gonçalo Ramos",
+                "IT": "Gonçalo Ramos",
+                "RU": "Гонсалу Рамуш",
+                "ZH": "贡萨洛·拉莫斯",
+                "AR": "جونزالو راموس"
+              },
+              "name": {
+                "EN": "Gonçalo Ramos",
+                "FR": "Gonçalo Ramos",
+                "DE": "Gonçalo Ramos",
+                "ES": "Gonçalo Ramos",
+                "PT": "Gonçalo Ramos",
+                "IT": "Gonçalo Ramos",
+                "RU": "Гонсалу Рамуш",
+                "ZH": "贡萨洛·拉莫斯",
+                "AR": "جونزالو راموس"
+              },
+              "nationalFieldPosition": {
+                "EN": "Forward",
+                "FR": "Attaquant",
+                "DE": "Stürmer",
+                "ES": "Delantero",
+                "PT": "Avançado",
+                "IT": "Attaccante",
+                "RU": "Нападающий",
+                "ZH": "前锋",
+                "AR": "مهاجم"
+              },
+              "shortName": {
+                "EN": "Gonçalo Ramos",
+                "FR": "Gonçalo Ramos",
+                "DE": "Gonçalo Ramos",
+                "ES": "Gonçalo Ramos",
+                "PT": "Gonçalo Ramos",
+                "IT": "Gonçalo Ramos",
+                "RU": "Гонсалу Рамуш",
+                "ZH": "贡萨洛·拉莫斯",
+                "AR": "جونزالو راموس"
+              }
+            }
+          },
+          "teamId": "52747",
+          "teamIdProvider": "FAME"
+        },
+        {
+          "id": "61f102a9-cd3b-4df8-8d14-bc63a1da1ee8",
+          "penaltyType": "SCORED",
+          "phase": "PENALTY",
+          "player": {
+            "age": "28",
+            "birthDate": "1998-06-04",
+            "clubId": "52280",
+            "clubJerseyNumber": "14",
+            "clubShirtName": "Gyökeres",
+            "countryCode": "SWE",
+            "detailedFieldPosition": "UNKNOWN",
+            "fieldPosition": "FORWARD",
+            "gender": "MALE",
+            "id": "250105927",
+            "imageUrl": "https://img.uefa.com/imgml/TP/players/1/2026/324x324/250105927.jpg",
+            "internationalName": "Viktor Gyökeres",
+            "nationalFieldPosition": "FORWARD",
+            "nationalJerseyNumber": "17",
+            "nationalShirtName": "Gyökeres",
+            "nationalTeamId": "127",
+            "translations": {
+              "countryName": {
+                "EN": "Sweden",
+                "FR": "Suède",
+                "DE": "Schweden",
+                "ES": "Suecia",
+                "PT": "Suécia",
+                "IT": "Svezia",
+                "RU": "Швеция",
+                "ZH": "瑞典",
+                "AR": "السويد"
+              },
+              "fieldPosition": {
+                "EN": "Forward",
+                "FR": "Attaquant",
+                "DE": "Stürmer",
+                "ES": "Delantero",
+                "PT": "Avançado",
+                "IT": "Attaccante",
+                "RU": "Нападающий",
+                "ZH": "前锋",
+                "AR": "مهاجم"
+              },
+              "firstName": {
+                "EN": "Viktor",
+                "FR": "Viktor",
+                "DE": "Viktor",
+                "ES": "Viktor",
+                "PT": "Viktor",
+                "IT": "Viktor",
+                "RU": "Виктор",
+                "ZH": "维克托",
+                "AR": "فيكتور "
+              },
+              "lastName": {
+                "EN": "Gyökeres",
+                "FR": "Gyökeres",
+                "DE": "Gyökeres",
+                "ES": "Gyökeres",
+                "PT": "Gyökeres",
+                "IT": "Gyökeres",
+                "RU": "Дьекереш",
+                "ZH": "哲凯赖什",
+                "AR": "جيوكيريس"
+              },
+              "name": {
+                "EN": "Viktor Gyökeres",
+                "FR": "Viktor Gyökeres",
+                "DE": "Viktor Gyökeres",
+                "ES": "Viktor Gyökeres",
+                "PT": "Viktor Gyökeres",
+                "IT": "Viktor Gyökeres",
+                "RU": "Виктор Дьекереш",
+                "ZH": "维克托·哲凯赖什",
+                "AR": "فيكتور جيوكيريس"
+              },
+              "nationalFieldPosition": {
+                "EN": "Forward",
+                "FR": "Attaquant",
+                "DE": "Stürmer",
+                "ES": "Delantero",
+                "PT": "Avançado",
+                "IT": "Attaccante",
+                "RU": "Нападающий",
+                "ZH": "前锋",
+                "AR": "مهاجم"
+              },
+              "shortName": {
+                "EN": "Gyökeres",
+                "FR": "Gyökeres",
+                "DE": "Gyökeres",
+                "ES": "Gyökeres",
+                "PT": "Gyökeres",
+                "IT": "Gyökeres",
+                "RU": "Дьекереш",
+                "ZH": "哲凯赖什",
+                "AR": "جيوكيريس"
+              }
+            }
+          },
+          "teamId": "52280",
+          "teamIdProvider": "FAME"
+        },
+        {
+          "id": "39b12aac-0cf4-4b5c-86c3-b9b0f3ea3c14",
+          "penaltyType": "SCORED",
+          "phase": "PENALTY",
+          "player": {
+            "age": "21",
+            "birthDate": "2005-06-03",
+            "clubId": "52747",
+            "clubJerseyNumber": "14",
+            "clubShirtName": "D.DOUÉ",
+            "countryCode": "FRA",
+            "detailedFieldPosition": "UNKNOWN",
+            "fieldPosition": "FORWARD",
+            "gender": "MALE",
+            "id": "250162177",
+            "imageUrl": "https://img.uefa.com/imgml/TP/players/1/2026/324x324/250162177.jpg",
+            "internationalName": "Désiré Doué",
+            "nationalFieldPosition": "FORWARD",
+            "nationalJerseyNumber": "20",
+            "nationalShirtName": "Doue",
+            "nationalTeamId": "43",
+            "translations": {
+              "countryName": {
+                "EN": "France",
+                "FR": "France",
+                "DE": "Frankreich",
+                "ES": "Francia",
+                "PT": "França",
+                "IT": "Francia",
+                "RU": "Франция",
+                "ZH": "法国",
+                "AR": "فرنسا"
+              },
+              "fieldPosition": {
+                "EN": "Forward",
+                "FR": "Attaquant",
+                "DE": "Stürmer",
+                "ES": "Delantero",
+                "PT": "Avançado",
+                "IT": "Attaccante",
+                "RU": "Нападающий",
+                "ZH": "前锋",
+                "AR": "مهاجم"
+              },
+              "firstName": {
+                "EN": "Désiré",
+                "FR": "Désiré",
+                "DE": "Désiré",
+                "ES": "Désiré",
+                "PT": "Désiré",
+                "IT": "Désiré",
+                "RU": "Дезире",
+                "ZH": "德西雷",
+                "AR": "ديزريه "
+              },
+              "lastName": {
+                "EN": "Doué",
+                "FR": "Doué",
+                "DE": "Doué",
+                "ES": "Doué",
+                "PT": "Doué",
+                "IT": "Doué",
+                "RU": "Дуэ",
+                "ZH": "杜埃",
+                "AR": "دوي"
+              },
+              "name": {
+                "EN": "Désiré Doué",
+                "FR": "Désiré Doué",
+                "DE": "Désiré Doué",
+                "ES": "Désiré Doué",
+                "PT": "Désiré Doué",
+                "IT": "Désiré Doué",
+                "RU": "Дезире Дуэ",
+                "ZH": "德西雷·杜埃",
+                "AR": "ديزريه دوي"
+              },
+              "nationalFieldPosition": {
+                "EN": "Forward",
+                "FR": "Attaquant",
+                "DE": "Stürmer",
+                "ES": "Delantero",
+                "PT": "Avançado",
+                "IT": "Attaccante",
+                "RU": "Нападающий",
+                "ZH": "前锋",
+                "AR": "مهاجم"
+              },
+              "shortName": {
+                "EN": "Doué",
+                "FR": "Doué",
+                "DE": "Doué",
+                "ES": "Doué",
+                "PT": "Doué",
+                "IT": "Doué",
+                "RU": "Д. Дуэ",
+                "ZH": "杜埃",
+                "AR": "دوي"
+              }
+            }
+          },
+          "teamId": "52747",
+          "teamIdProvider": "FAME"
+        }
+      ],
+      "scorers": [
+        {
+          "goalType": "SCORED",
+          "id": "39e1403e-6c06-4e58-ac5a-11bf6e49a483",
+          "phase": "FIRST_HALF",
+          "player": {
+            "age": "27",
+            "birthDate": "1999-06-11",
+            "clubId": "52280",
+            "clubJerseyNumber": "29",
+            "clubShirtName": "Havertz",
+            "countryCode": "GER",
+            "detailedFieldPosition": "STRIKER",
+            "fieldPosition": "FORWARD",
+            "gender": "MALE",
+            "id": "250087938",
+            "imageUrl": "https://img.uefa.com/imgml/TP/players/1/2026/324x324/250087938.jpg",
+            "internationalName": "Kai Havertz",
+            "nationalFieldPosition": "FORWARD",
+            "nationalJerseyNumber": "7",
+            "nationalShirtName": "Havertz",
+            "nationalTeamId": "47",
+            "translations": {
+              "countryName": {
+                "EN": "Germany",
+                "FR": "Allemagne",
+                "DE": "Deutschland",
+                "ES": "Alemania",
+                "PT": "Alemanha",
+                "IT": "Germania",
+                "RU": "Германия",
+                "ZH": "德国",
+                "AR": "ألمانيا"
+              },
+              "fieldPosition": {
+                "EN": "Forward",
+                "FR": "Attaquant",
+                "DE": "Stürmer",
+                "ES": "Delantero",
+                "PT": "Avançado",
+                "IT": "Attaccante",
+                "RU": "Нападающий",
+                "ZH": "前锋",
+                "AR": "مهاجم"
+              },
+              "firstName": {
+                "EN": "Kai",
+                "FR": "Kai",
+                "DE": "Kai",
+                "ES": "Kai",
+                "PT": "Kai",
+                "IT": "Kai",
+                "RU": "Кай",
+                "ZH": "凯",
+                "AR": "كاي"
+              },
+              "lastName": {
+                "EN": "Havertz",
+                "FR": "Havertz",
+                "DE": "Havertz",
+                "ES": "Havertz",
+                "PT": "Havertz",
+                "IT": "Havertz",
+                "RU": "Хаверц",
+                "ZH": "哈弗茨",
+                "AR": "هافيرتز"
+              },
+              "name": {
+                "EN": "Kai Havertz",
+                "FR": "Kai Havertz",
+                "DE": "Kai Havertz",
+                "ES": "Kai Havertz",
+                "PT": "Kai Havertz",
+                "IT": "Kai Havertz",
+                "RU": "Кай Хаверц",
+                "ZH": "凯·哈弗茨",
+                "AR": "كاي هافيرتز"
+              },
+              "nationalFieldPosition": {
+                "EN": "Forward",
+                "FR": "Attaquant",
+                "DE": "Stürmer",
+                "ES": "Delantero",
+                "PT": "Avançado",
+                "IT": "Attaccante",
+                "RU": "Нападающий",
+                "ZH": "前锋",
+                "AR": "مهاجم"
+              },
+              "shortName": {
+                "EN": "Havertz",
+                "FR": "Havertz",
+                "DE": "Havertz",
+                "ES": "Havertz",
+                "PT": "Havertz",
+                "IT": "Havertz",
+                "RU": "Хаверц",
+                "ZH": "哈弗茨",
+                "AR": "هافيرتز"
+              }
+            }
+          },
+          "teamId": "52280",
+          "teamIdProvider": "FAME",
+          "time": {
+            "minute": 6,
+            "second": 4
+          }
+        },
+        {
+          "goalType": "PENALTY",
+          "id": "64c71970-9a61-41d9-83a3-53ce7014e1df",
+          "phase": "SECOND_HALF",
+          "player": {
+            "age": "29",
+            "birthDate": "1997-05-15",
+            "clubId": "52747",
+            "clubJerseyNumber": "10",
+            "clubShirtName": "O.DEMBÉLÉ",
+            "countryCode": "FRA",
+            "detailedFieldPosition": "UNKNOWN",
+            "fieldPosition": "FORWARD",
+            "gender": "MALE",
+            "height": 178,
+            "id": "250066886",
+            "imageUrl": "https://img.uefa.com/imgml/TP/players/1/2026/324x324/250066886.jpg",
+            "internationalName": "Ousmane Dembélé",
+            "nationalFieldPosition": "FORWARD",
+            "nationalJerseyNumber": "7",
+            "nationalShirtName": "Dembele",
+            "nationalTeamId": "43",
+            "translations": {
+              "countryName": {
+                "EN": "France",
+                "FR": "France",
+                "DE": "Frankreich",
+                "ES": "Francia",
+                "PT": "França",
+                "IT": "Francia",
+                "RU": "Франция",
+                "ZH": "法国",
+                "AR": "فرنسا"
+              },
+              "fieldPosition": {
+                "EN": "Forward",
+                "FR": "Attaquant",
+                "DE": "Stürmer",
+                "ES": "Delantero",
+                "PT": "Avançado",
+                "IT": "Attaccante",
+                "RU": "Нападающий",
+                "ZH": "前锋",
+                "AR": "مهاجم"
+              },
+              "firstName": {
+                "EN": "Ousmane",
+                "FR": "Ousmane",
+                "DE": "Ousmane",
+                "ES": "Ousmane",
+                "PT": "Ousmane",
+                "IT": "Ousmane",
+                "RU": "Усман",
+                "ZH": "奥斯曼",
+                "AR": "عثمان"
+              },
+              "lastName": {
+                "EN": "Dembélé",
+                "FR": "Dembélé",
+                "DE": "Dembélé",
+                "ES": "Dembélé",
+                "PT": "Dembélé",
+                "IT": "Dembélé",
+                "RU": "Дембеле",
+                "ZH": "登贝莱",
+                "AR": "ديمبيلي"
+              },
+              "name": {
+                "EN": "Ousmane Dembélé",
+                "FR": "Ousmane Dembélé",
+                "DE": "Ousmane Dembélé",
+                "ES": "Ousmane Dembélé",
+                "PT": "Ousmane Dembélé",
+                "IT": "Ousmane Dembélé",
+                "RU": "Усман Дембеле",
+                "ZH": "奥斯曼·登贝莱",
+                "AR": "عثمان ديمبيلي"
+              },
+              "nationalFieldPosition": {
+                "EN": "Forward",
+                "FR": "Attaquant",
+                "DE": "Stürmer",
+                "ES": "Delantero",
+                "PT": "Avançado",
+                "IT": "Attaccante",
+                "RU": "Нападающий",
+                "ZH": "前锋",
+                "AR": "مهاجم"
+              },
+              "shortName": {
+                "EN": "Dembélé",
+                "FR": "Dembélé",
+                "DE": "Dembélé",
+                "ES": "Dembélé",
+                "PT": "Dembélé",
+                "IT": "Dembélé",
+                "RU": "Дембеле",
+                "ZH": "奥斯曼·登贝莱",
+                "AR": "ديمبيلي"
+              }
+            },
+            "weight": 67
+          },
+          "teamId": "52747",
+          "teamIdProvider": "FAME",
+          "time": {
+            "minute": 65,
+            "second": 20
+          }
+        }
+      ]
+    },
+    "playerOfTheMatch": {
+      "player": {
+        "age": "26",
+        "birthDate": "2000-02-13",
+        "clubId": "52747",
+        "clubJerseyNumber": "17",
+        "clubShirtName": "VITINHA",
+        "countryCode": "POR",
+        "detailedFieldPosition": "UNKNOWN",
+        "fieldPosition": "MIDFIELDER",
+        "gender": "MALE",
+        "id": "250101444",
+        "imageUrl": "https://img.uefa.com/imgml/TP/players/1/2026/324x324/250101444.jpg",
+        "internationalName": "Vitinha",
+        "nationalFieldPosition": "MIDFIELDER",
+        "nationalJerseyNumber": "23",
+        "nationalShirtName": "VITINHA",
+        "nationalTeamId": "110",
+        "translations": {
+          "countryName": {
+            "EN": "Portugal",
+            "FR": "Portugal",
+            "DE": "Portugal",
+            "ES": "Portugal",
+            "PT": "Portugal",
+            "IT": "Portogallo",
+            "RU": "Португалия",
+            "ZH": "葡萄牙",
+            "AR": "البرتغال"
+          },
+          "fieldPosition": {
+            "EN": "Midfielder",
+            "FR": "Milieu",
+            "DE": "Mittelfeldspieler",
+            "ES": "Centrocampista",
+            "PT": "Médio",
+            "IT": "Centrocampista",
+            "RU": "Полузащитник",
+            "ZH": "中场球员",
+            "AR": "لاعب وسط"
+          },
+          "lastName": {
+            "EN": "Vitinha",
+            "FR": "Vitinha",
+            "DE": "Vitinha",
+            "ES": "Vitinha",
+            "PT": "Vitinha",
+            "IT": "Vitinha",
+            "RU": "Витинья",
+            "ZH": "维蒂尼亚",
+            "AR": "فيتينيا"
+          },
+          "name": {
+            "EN": "Vitinha",
+            "FR": "Vitinha",
+            "DE": "Vitinha",
+            "ES": "Vitinha",
+            "PT": "Vitinha",
+            "IT": "Vitinha",
+            "RU": "Витинья",
+            "ZH": "维蒂尼亚",
+            "AR": "فيتينيا"
+          },
+          "nationalFieldPosition": {
+            "EN": "Midfielder",
+            "FR": "Milieu",
+            "DE": "Mittelfeldspieler",
+            "ES": "Centrocampista",
+            "PT": "Médio",
+            "IT": "Centrocampista",
+            "RU": "Полузащитник",
+            "ZH": "中场球员",
+            "AR": "لاعب وسط"
+          },
+          "shortName": {
+            "EN": "Vitinha",
+            "FR": "Vitinha",
+            "DE": "Vitinha",
+            "ES": "Vitinha",
+            "PT": "Vitinha",
+            "IT": "Vitinha",
+            "RU": "Витинья",
+            "ZH": "维蒂尼亚",
+            "AR": "فيتينيا"
+          }
+        }
+      },
+      "teamId": "52747"
+    },
+    "referees": [
+      {
+        "images": {
+          "SMALL_SQUARE": "https://img.uefa.com/imgml/referees/75x75/259894.jpg"
+        },
+        "person": {
+          "countryCode": "SVN",
+          "gender": "MALE",
+          "id": "259894",
+          "translations": {
+            "countryName": {
+              "EN": "Slovenia",
+              "FR": "Slovénie",
+              "DE": "Slowenien",
+              "ES": "Eslovenia",
+              "PT": "Eslovénia",
+              "IT": "Slovenia",
+              "RU": "Словения",
+              "ZH": "斯洛文尼亚",
+              "AR": "سلوفينيا"
+            },
+            "firstName": {
+              "EN": "Vladimir",
+              "FR": "Vladimir",
+              "DE": "Vladimir",
+              "ES": "Vladimir",
+              "PT": "Vladimir",
+              "IT": "Vladimir",
+              "RU": "Vladimir",
+              "ZH": "Vladimir",
+              "AR": "فلاديمير "
+            },
+            "lastName": {
+              "EN": "Šajn",
+              "FR": "Šajn",
+              "DE": "Šajn",
+              "ES": "Šajn",
+              "PT": "Šajn",
+              "IT": "Šajn",
+              "RU": "SAJN",
+              "ZH": "Sajn",
+              "AR": "شاين"
+            },
+            "name": {
+              "EN": "Vladimir Šajn",
+              "FR": "Vladimir Šajn",
+              "DE": "Vladimir Šajn",
+              "ES": "Vladimir Šajn",
+              "PT": "Vladimir Šajn",
+              "IT": "Vladimir Šajn",
+              "RU": "Владо Шайн",
+              "ZH": "维拉迪米尔·萨恩",
+              "AR": "فلاديمير شاين"
+            },
+            "shortName": {
+              "EN": "Šajn",
+              "FR": "Šajn",
+              "DE": "Šajn",
+              "ES": "Šajn",
+              "PT": "Šajn",
+              "IT": "Šajn",
+              "RU": "Шайн",
+              "ZH": "萨恩",
+              "AR": "شاين"
+            }
+          }
+        },
+        "role": "REFEREE_OBSERVER",
+        "translations": {
+          "roleName": {
+            "EN": "Referee observer",
+            "FR": "Observateur d'arbitres",
+            "DE": "Referee observer",
+            "ES": "Observador arbitral",
+            "PT": "Observador de árbitro",
+            "IT": "Referee observer",
+            "RU": "Судейский наблюдатель",
+            "ZH": "Referee observer",
+            "AR": "مراقب الحكام"
+          }
+        }
+      },
+      {
+        "images": {
+          "SMALL_SQUARE": "https://img.uefa.com/imgml/referees/75x75/250061999.jpg"
+        },
+        "person": {
+          "countryCode": "ESP",
+          "gender": "FEMALE",
+          "id": "250061999",
+          "translations": {
+            "countryName": {
+              "EN": "Spain",
+              "FR": "Espagne",
+              "DE": "Spanien",
+              "ES": "España",
+              "PT": "Espanha",
+              "IT": "Spagna",
+              "RU": "Испания",
+              "ZH": "西班牙",
+              "AR": "إسبانيا"
+            },
+            "firstName": {
+              "EN": "Guadalupe",
+              "FR": "Guadalupe",
+              "DE": "Guadalupe",
+              "ES": "Guadalupe",
+              "PT": "Guadalupe",
+              "IT": "Guadalupe",
+              "RU": "Guadalupe",
+              "ZH": "Guadalupe",
+              "AR": "جوادالوبي "
+            },
+            "lastName": {
+              "EN": "Porras Ayuso",
+              "FR": "Porras Ayuso",
+              "DE": "Porras Ayuso",
+              "ES": "Porras Ayuso",
+              "PT": "Porras Ayuso",
+              "IT": "Porras Ayuso",
+              "RU": "Porras Ayuso",
+              "ZH": "Porras Ayuso",
+              "AR": "بوراس أيوسو"
+            },
+            "name": {
+              "EN": "Guadalupe Porras Ayuso",
+              "FR": "Guadalupe Porras Ayuso",
+              "DE": "Guadalupe Porras Ayuso",
+              "ES": "Guadalupe Porras Ayuso",
+              "PT": "Guadalupe Porras Ayuso",
+              "IT": "Guadalupe Porras Ayuso",
+              "RU": "Гуадалупе Поррас",
+              "ZH": "Guadalupe Porras Ayuso",
+              "AR": "جوادالوبي بوراس أيوسو"
+            },
+            "shortName": {
+              "EN": "Porras Ayuso",
+              "FR": "Porras Ayuso",
+              "DE": "Porras Ayuso",
+              "ES": "Porras Ayuso",
+              "PT": "Porras Ayuso",
+              "IT": "Porras Ayuso",
+              "RU": "Поррас",
+              "ZH": "Porras Ayuso",
+              "AR": "بوراس أيوسو"
+            }
+          }
+        },
+        "role": "RESERVE_REFEREE",
+        "translations": {
+          "roleName": {
+            "EN": "Reserve Official",
+            "FR": "Arbitre de réserve",
+            "DE": "Reserve Official",
+            "ES": "Oficial reserva",
+            "PT": "Árbitro Reserva",
+            "IT": "Ufficiale di riserva",
+            "RU": "Reserve Official",
+            "ZH": "Reserve Official",
+            "AR": "الحكم الاحتياطي"
+          }
+        }
+      },
+      {
+        "images": {
+          "SMALL_SQUARE": "https://img.uefa.com/imgml/referees/75x75/250038192.jpg"
+        },
+        "person": {
+          "countryCode": "ESP",
+          "gender": "MALE",
+          "id": "250038192",
+          "translations": {
+            "countryName": {
+              "EN": "Spain",
+              "FR": "Espagne",
+              "DE": "Spanien",
+              "ES": "España",
+              "PT": "Espanha",
+              "IT": "Spagna",
+              "RU": "Испания",
+              "ZH": "西班牙",
+              "AR": "إسبانيا"
+            },
+            "firstName": {
+              "EN": "Carlos",
+              "FR": "Carlos",
+              "DE": "Carlos",
+              "ES": "Carlos",
+              "PT": "Carlos",
+              "IT": "Carlos",
+              "RU": "Carlos",
+              "ZH": "Carlos",
+              "AR": "كارلوس "
+            },
+            "lastName": {
+              "EN": "Del Cerro Grande",
+              "FR": "Del Cerro Grande",
+              "DE": "Del Cerro Grande",
+              "ES": "Del Cerro Grande",
+              "PT": "Del Cerro Grande",
+              "IT": "Del Cerro Grande",
+              "RU": "Del Cerro Grande",
+              "ZH": "Del Cerro Grande",
+              "AR": "ديل سيرو جراندي"
+            },
+            "name": {
+              "EN": "Carlos del Cerro Grande",
+              "FR": "Carlos del Cerro Grande",
+              "DE": "Carlos del Cerro Grande",
+              "ES": "Carlos del Cerro Grande",
+              "PT": "Carlos del Cerro Grande",
+              "IT": "Carlos del Cerro Grande",
+              "RU": "Карлос дель Серро",
+              "ZH": "卡洛斯·德尔·塞罗",
+              "AR": "كارلوس ديل سيرو جراندي"
+            },
+            "shortName": {
+              "EN": "del Cerro Grande",
+              "FR": "del Cerro Grande",
+              "DE": "del Cerro Grande",
+              "ES": "del Cerro Grande",
+              "PT": "del Cerro Grande",
+              "IT": "del Cerro Grande",
+              "RU": "дель Серро",
+              "ZH": "塞罗",
+              "AR": "ديل سيرو جراندي"
+            }
+          }
+        },
+        "role": "ASSISTANT_VIDEO_ASSISTANT_REFEREE_TWO",
+        "translations": {
+          "roleName": {
+            "EN": "Video Assistant Referee Support",
+            "FR": "Arbitre de soutien à l'assistance vidéo",
+            "DE": "Unterstützung des Video-Schiedsrichterassistenten",
+            "ES": "Apoyo al árbitro asistente de vídeo",
+            "PT": "Apoio ao árbitro assistente de vídeo",
+            "IT": "Supporto Video Assistant Referee",
+            "RU": "Помощник видеопомощника рефери",
+            "ZH": "Video Assistant Referee Support",
+            "AR": "دعم حكم الفيديو المساعد"
+          }
+        }
+      }
+    ],
+    "round": {
+      "active": false,
+      "benchGKCount": 12,
+      "benchPlayersCount": 12,
+      "benchStaffCount": 15,
+      "coefficientWinnerBonus": 0.0,
+      "competitionId": "1",
+      "dateFrom": "2026-05-30T06:00:00+0000",
+      "dateTo": "2026-05-30T21:59:59+0000",
+      "fieldPlayersCount": 11,
+      "groupCount": 1,
+      "id": "2002115",
+      "metaData": {
+        "name": "Final",
+        "type": "FINAL"
+      },
+      "mode": "FINAL",
+      "modeDetail": "KNOCK_OUT_ONE_LEG",
+      "orderInCompetition": 10,
+      "phase": "TOURNAMENT",
+      "seasonYear": "2026",
+      "secondaryType": "FINALS",
+      "stadiumNameType": "SPECIAL_EVENTS_NAME",
+      "status": "FINISHED",
+      "substitutionCount": 5,
+      "teamCount": 2,
+      "teams": [
+        "2614324",
+        "52280",
+        "52747"
+      ],
+      "translations": {
+        "abbreviation": {
+          "EN": "Final",
+          "FR": "F",
+          "DE": "Finale",
+          "ES": "F.",
+          "PT": "F.",
+          "IT": "F.",
+          "RU": "Финал",
+          "ZH": "Final",
+          "AR": "Final"
+        },
+        "name": {
+          "EN": "Final",
+          "FR": "Finale",
+          "DE": "Finale",
+          "ES": "Final",
+          "PT": "Final",
+          "IT": "Finale",
+          "RU": "Финал",
+          "ZH": "Final",
+          "AR": "النهائي"
+        },
+        "shortName": {
+          "EN": "Final",
+          "FR": "F",
+          "DE": "Finale",
+          "ES": "Final",
+          "PT": "F.",
+          "IT": "F.",
+          "RU": "Финал",
+          "ZH": "Final",
+          "AR": "النهائي"
+        }
+      }
+    },
+    "score": {
+      "penalty": {
+        "away": 3,
+        "home": 4
+      },
+      "regular": {
+        "away": 1,
+        "home": 1
+      },
+      "total": {
+        "away": 1,
+        "home": 1
+      }
+    },
+    "seasonYear": "2026",
+    "sessionNumber": 1,
+    "stadium": {
+      "address": "Istvánmezei u. 3-5",
+      "capacity": 65014,
+      "city": {
+        "countryCode": "HUN",
+        "id": "1327",
+        "translations": {
+          "name": {
+            "EN": "Budapest",
+            "FR": "Budapest",
+            "DE": "Budapest",
+            "ES": "Budapest",
+            "PT": "Budapeste",
+            "IT": "Budapest",
+            "RU": "Будапешт",
+            "ZH": "布达佩斯",
+            "AR": "بودابست"
+          }
+        }
+      },
+      "countryCode": "HUN",
+      "geolocation": {
+        "latitude": 47.503111,
+        "longitude": 19.098024
+      },
+      "id": "250004078",
+      "images": {
+        "MEDIUM_WIDE": "https://img.uefa.com/imgml/stadium/matchinfo/w1/250004078.jpg",
+        "LARGE_ULTRA_WIDE": "https://img.uefa.com/imgml/stadium/matchinfo/uw/250004078.jpg"
+      },
+      "openingDate": "2019-01-01",
+      "pitch": {
+        "length": 105,
+        "width": 68
+      },
+      "translations": {
+        "mediaName": {
+          "EN": "Puskás Aréna",
+          "FR": "Puskás Aréna",
+          "DE": "Puskás Aréna",
+          "ES": "Puskás Aréna",
+          "PT": "Puskás Aréna",
+          "IT": "Puskás Aréna",
+          "RU": "Пушкаш Арена",
+          "ZH": "普斯卡什竞技场",
+          "AR": "بوشكاش أرينا"
+        },
+        "name": {
+          "EN": "Puskás Aréna",
+          "FR": "Puskás Aréna",
+          "DE": "Puskás Aréna",
+          "ES": "Puskás Aréna",
+          "PT": "Puskás Aréna",
+          "IT": "Puskás Aréna",
+          "RU": "Пушкаш Арена",
+          "ZH": "普斯卡什竞技场",
+          "AR": "بوشكاش أرينا"
+        },
+        "officialName": {
+          "EN": "Puskás Aréna",
+          "FR": "Puskás Aréna",
+          "DE": "Puskás Aréna",
+          "ES": "Puskás Aréna",
+          "PT": "Puskás Aréna",
+          "IT": "Puskás Aréna",
+          "RU": "Пушкаш Арена",
+          "ZH": "普斯卡什竞技场",
+          "AR": "بوشكاش أرينا"
+        },
+        "specialEventsName": {
+          "EN": "Puskás Aréna",
+          "FR": "Puskás Aréna",
+          "DE": "Puskás Aréna",
+          "ES": "Puskás Aréna",
+          "PT": "Puskás Aréna",
+          "IT": "Puskás Aréna",
+          "RU": "Пушкаш Арена",
+          "ZH": "普斯卡什竞技场",
+          "AR": "بوشكاش أرينا"
+        },
+        "sponsorName": {
+          "EN": "Puskás Aréna",
+          "FR": "Puskás Aréna",
+          "DE": "Puskás Aréna",
+          "ES": "Puskás Aréna",
+          "PT": "Puskás Aréna",
+          "IT": "Puskás Aréna",
+          "RU": "Пушкаш Арена",
+          "ZH": "普斯卡什竞技场",
+          "AR": "بوشكاش أرينا"
+        }
+      }
+    },
+    "status": "FINISHED",
+    "type": "SINGLE",
+    "winner": {
+      "match": {
+        "reason": "WIN_ON_PENALTIES",
+        "team": {
+          "associationId": "200043",
+          "associationLogoUrl": "https://img.uefa.com/imgml/uefacom/elements/logos/ma/FRA.svg",
+          "bigLogoUrl": "https://img.uefa.com/imgml/TP/teams/logos/700x700/52747.png",
+          "confederationType": "UEFA",
+          "countryCode": "FRA",
+          "id": "52747",
+          "idProvider": "FAME",
+          "internationalName": "Paris",
+          "isPlaceHolder": false,
+          "logoUrl": "https://img.uefa.com/imgml/TP/teams/logos/70x70/52747.png",
+          "mediumLogoUrl": "https://img.uefa.com/imgml/TP/teams/logos/240x240/52747.png",
+          "organizationId": "252747",
+          "teamCode": "PSG",
+          "teamTypeDetail": "DOMESTIC_MEN_TEAM_A",
+          "translations": {
+            "countryName": {
+              "EN": "France",
+              "FR": "France",
+              "DE": "Frankreich",
+              "ES": "Francia",
+              "PT": "França",
+              "IT": "Francia",
+              "RU": "Франция",
+              "ZH": "法国",
+              "AR": "فرنسا"
+            },
+            "displayName": {
+              "EN": "Paris",
+              "FR": "Paris",
+              "DE": "Paris",
+              "ES": "Paris",
+              "PT": "Paris",
+              "IT": "Paris",
+              "RU": "ПСЖ",
+              "ZH": "巴黎圣日耳曼",
+              "AR": "باريس"
+            },
+            "displayOfficialName": {
+              "EN": "Paris Saint-Germain",
+              "FR": "Paris Saint-Germain",
+              "DE": "Paris Saint-Germain",
+              "ES": "Paris Saint-Germain",
+              "PT": "Paris Saint-Germain",
+              "IT": "Paris Saint-Germain",
+              "RU": "Пари Сен-Жермен",
+              "ZH": "巴黎圣日耳曼",
+              "AR": "باريس سان جيرمان"
+            },
+            "displayTeamCode": {
+              "EN": "PSG",
+              "FR": "PSG",
+              "DE": "PSG",
+              "ES": "PSG",
+              "PT": "PSG",
+              "IT": "PSG",
+              "RU": "PSG",
+              "ZH": "PSG",
+              "AR": "PSG"
+            },
+            "shortName": {
+              "EN": "Paris",
+              "FR": "Paris",
+              "DE": "Paris",
+              "ES": "Paris",
+              "PT": "Paris",
+              "IT": "Paris",
+              "RU": "ПСЖ",
+              "ZH": "Paris",
+              "AR": "باريس"
+            }
+          },
+          "typeIsNational": false,
+          "typeTeam": "DOMESTIC"
+        },
+        "translations": {
+          "reasonText": {
+            "RU": "ПСЖ побеждает по пенальти",
+            "DE": "Paris gewinnt im Elfmeterschießen",
+            "PT": "Paris vence nos penalties",
+            "ES": "Paris gana en los penaltis",
+            "IT": "Paris vince ai rigori",
+            "EN": "Paris win on penalties",
+            "ZH": "巴黎圣日耳曼 点球大战取胜",
+            "AR": " فاز باريس بركلات الترجيح",
+            "FR": "Paris: victoire aux tirs au but"
+          },
+          "reasonTextAbbr": {
+            "RU": "ПСЖ побеждает по пенальти",
+            "DE": "Paris i.E.",
+            "PT": "Paris ap",
+            "ES": "Paris gana en penaltis",
+            "IT": "Paris dcr",
+            "EN": "Paris ap",
+            "ZH": "巴黎圣日耳曼 ap",
+            "AR": "تأهل باريس",
+            "FR": "Paris: victoire aux t.a.b.\n"
+          }
+        }
+      }
+    }
+  },
+  {
+    "awayTeam": {
+      "associationId": "200043",
+      "associationLogoUrl": "https://img.uefa.com/imgml/uefacom/elements/logos/ma/FRA.svg",
+      "bigLogoUrl": "https://img.uefa.com/imgml/TP/teams/logos/700x700/52747.png",
+      "confederationType": "UEFA",
+      "countryCode": "FRA",
+      "id": "52747",
+      "idProvider": "FAME",
+      "internationalName": "Paris",
+      "isPlaceHolder": false,
+      "logoUrl": "https://img.uefa.com/imgml/TP/teams/logos/70x70/52747.png",
+      "mediumLogoUrl": "https://img.uefa.com/imgml/TP/teams/logos/240x240/52747.png",
+      "organizationId": "252747",
+      "teamCode": "PSG",
+      "teamTypeDetail": "DOMESTIC_MEN_TEAM_A",
+      "translations": {
+        "countryName": {
+          "EN": "France",
+          "FR": "France",
+          "DE": "Frankreich",
+          "ES": "Francia",
+          "PT": "França",
+          "IT": "Francia",
+          "RU": "Франция",
+          "ZH": "法国",
+          "AR": "فرنسا"
+        },
+        "displayName": {
+          "EN": "Paris",
+          "FR": "Paris",
+          "DE": "Paris",
+          "ES": "Paris",
+          "PT": "Paris",
+          "IT": "Paris",
+          "RU": "ПСЖ",
+          "ZH": "巴黎圣日耳曼",
+          "AR": "باريس"
+        },
+        "displayOfficialName": {
+          "EN": "Paris Saint-Germain",
+          "FR": "Paris Saint-Germain",
+          "DE": "Paris Saint-Germain",
+          "ES": "Paris Saint-Germain",
+          "PT": "Paris Saint-Germain",
+          "IT": "Paris Saint-Germain",
+          "RU": "Пари Сен-Жермен",
+          "ZH": "巴黎圣日耳曼",
+          "AR": "باريس سان جيرمان"
+        },
+        "displayTeamCode": {
+          "EN": "PSG",
+          "FR": "PSG",
+          "DE": "PSG",
+          "ES": "PSG",
+          "PT": "PSG",
+          "IT": "PSG",
+          "RU": "PSG",
+          "ZH": "PSG",
+          "AR": "PSG"
+        },
+        "shortName": {
+          "EN": "Paris",
+          "FR": "Paris",
+          "DE": "Paris",
+          "ES": "Paris",
+          "PT": "Paris",
+          "IT": "Paris",
+          "RU": "ПСЖ",
+          "ZH": "Paris",
+          "AR": "باريس"
+        }
+      },
+      "typeIsNational": false,
+      "typeTeam": "DOMESTIC"
+    },
+    "behindClosedDoors": false,
+    "competition": {
+      "age": "ADULT",
+      "code": "UCL",
+      "id": "1",
+      "images": {
+        "FULL_LOGO": "https://img.uefa.com/imgml/uefacom/elements/logos/competitions/color/full/1.svg"
+      },
+      "metaData": {
+        "name": "UEFA Champions League"
+      },
+      "region": "CONTINENTAL",
+      "sex": "MALE",
+      "sportsType": "FOOTBALL",
+      "teamCategory": "CLUB",
+      "translations": {
+        "name": {
+          "EN": "UEFA Champions League",
+          "FR": "UEFA Champions League",
+          "DE": "UEFA Champions League",
+          "ES": "UEFA Champions League",
+          "PT": "UEFA Champions League",
+          "IT": "UEFA Champions League",
+          "RU": "Лига чемпионов УЕФА",
+          "ZH": "欧洲冠军联赛",
+          "AR": "دوري أبطال أوروبا"
+        },
+        "prequalifyingName": {
+          "EN": "UEFA Champions League",
+          "FR": "UEFA Champions League",
+          "DE": "UEFA Champions League",
+          "ES": "UEFA Champions League",
+          "PT": "UEFA Champions League",
+          "IT": "UEFA Champions League",
+          "RU": "Лига чемпионов УЕФА",
+          "ZH": "欧洲冠军联赛",
+          "AR": "دوري أبطال أوروبا"
+        },
+        "qualifyingName": {
+          "EN": "UEFA Champions League",
+          "FR": "UEFA Champions League",
+          "DE": "UEFA Champions League",
+          "ES": "UEFA Champions League",
+          "PT": "UEFA Champions League",
+          "IT": "UEFA Champions League",
+          "RU": "Лига чемпионов УЕФА",
+          "ZH": "欧洲冠军联赛",
+          "AR": "دوري أبطال أوروبا"
+        },
+        "tournamentName": {
+          "EN": "UEFA Champions League",
+          "FR": "UEFA Champions League",
+          "DE": "UEFA Champions League",
+          "ES": "UEFA Champions League",
+          "PT": "UEFA Champions League",
+          "IT": "UEFA Champions League",
+          "RU": "Лига чемпионов УЕФА",
+          "ZH": "欧洲冠军联赛",
+          "AR": "دوري أبطال أوروبا"
+        }
+      },
+      "type": "CUP"
+    },
+    "competitionPhase": "TOURNAMENT",
+    "condition": {
+      "humidity": 86,
+      "pitchCondition": "EXCELLENT",
+      "temperature": 11,
+      "translations": {
+        "pitchConditionName": {
+          "EN": "excellent",
+          "FR": "impeccable",
+          "DE": "exzellent",
+          "ES": "excelente",
+          "PT": "excelente",
+          "IT": "eccellente",
+          "RU": "превосходное",
+          "ZH": "非常好",
+          "AR": "ممتاز"
+        },
+        "weatherConditionName": {
+          "EN": "Partly cloudy night",
+          "FR": "soirée partiellement nuageuse",
+          "DE": "teilweise bewölkter Abend",
+          "ES": "Noche parcialmente nublada",
+          "PT": "Noite parcialmente nublada",
+          "IT": "Serata parzialmente nuvolosa",
+          "RU": "Частично облачный вечер",
+          "ZH": "部分多云夜晚",
+          "AR": "ليلة غائمة جزئياً"
+        }
+      },
+      "weatherCondition": "PARTLY_CLOUDY_NIGHT",
+      "windSpeed": 14
+    },
+    "fullTimeAt": "2026-05-06T20:59:13.518Z",
+    "homeTeam": {
+      "associationId": "200047",
+      "associationLogoUrl": "https://img.uefa.com/imgml/uefacom/elements/logos/ma/GER.svg",
+      "bigLogoUrl": "https://img.uefa.com/imgml/TP/teams/logos/700x700/50037.png",
+      "confederationType": "UEFA",
+      "countryCode": "GER",
+      "id": "50037",
+      "idProvider": "FAME",
+      "internationalName": "Bayern München",
+      "isPlaceHolder": false,
+      "logoUrl": "https://img.uefa.com/imgml/TP/teams/logos/70x70/50037.png",
+      "mediumLogoUrl": "https://img.uefa.com/imgml/TP/teams/logos/240x240/50037.png",
+      "organizationId": "250037",
+      "teamCode": "BAY",
+      "teamTypeDetail": "DOMESTIC_MEN_TEAM_A",
+      "translations": {
+        "countryName": {
+          "EN": "Germany",
+          "FR": "Allemagne",
+          "DE": "Deutschland",
+          "ES": "Alemania",
+          "PT": "Alemanha",
+          "IT": "Germania",
+          "RU": "Германия",
+          "ZH": "德国",
+          "AR": "ألمانيا"
+        },
+        "displayName": {
+          "EN": "Bayern München",
+          "FR": "Bayern München",
+          "DE": "Bayern München",
+          "ES": "Bayern München",
+          "PT": "Bayern München",
+          "IT": "Bayern München",
+          "RU": "Бавария",
+          "ZH": "拜仁慕尼黑",
+          "AR": "بايرن ميونخ"
+        },
+        "displayOfficialName": {
+          "EN": "FC Bayern München",
+          "FR": "FC Bayern München",
+          "DE": "FC Bayern München",
+          "ES": "FC Bayern München",
+          "PT": "FC Bayern München",
+          "IT": "FC Bayern München",
+          "RU": "Бавария",
+          "ZH": "拜仁慕尼黑",
+          "AR": "بايرن ميونخ"
+        },
+        "displayTeamCode": {
+          "EN": "BAY",
+          "FR": "BAY",
+          "DE": "BAY",
+          "ES": "BAY",
+          "PT": "BAY",
+          "IT": "BAY",
+          "RU": "BAY",
+          "ZH": "BAY",
+          "AR": "BAY"
+        },
+        "shortName": {
+          "EN": "Bayern",
+          "FR": "Bayern",
+          "DE": "Bayern",
+          "ES": "Bayern",
+          "PT": "Bayern",
+          "IT": "Bayern",
+          "RU": "Бавария",
+          "ZH": "Bayern",
+          "AR": "بايرن"
+        }
+      },
+      "typeIsNational": false,
+      "typeTeam": "DOMESTIC"
+    },
+    "id": "2048073",
+    "kickOffTime": {
+      "date": "2026-05-06",
+      "dateTime": "2026-05-06T19:00:00Z",
+      "utcOffsetInHours": 2
+    },
+    "leg": {
+      "dateTimeFrom": "2026-05-05T06:00:00Z",
+      "dateTimeTo": "2026-05-06T21:59:59Z",
+      "number": 2,
+      "translations": {
+        "name": {
+          "EN": "2nd leg",
+          "FR": "retour",
+          "DE": "Rückspiel",
+          "ES": "Partido de vuelta",
+          "PT": "2ª mão",
+          "IT": "ritorno",
+          "RU": "2-й матч",
+          "ZH": "次回合",
+          "AR": "الإياب"
+        }
+      }
+    },
+    "lineupStatus": "TACTICAL_AVAILABLE",
+    "matchAttendance": 75000,
+    "matchday": {
+      "competitionId": "1",
+      "dateFrom": "2026-05-05T06:00:00+0000",
+      "dateTo": "2026-05-06T21:59:59+0000",
+      "format": "EXTRA_TIME_WITH_PENALTIES",
+      "id": "36270",
+      "longName": "Matchday 16",
+      "name": "MD16",
+      "phase": "TOURNAMENT",
+      "roundId": "2002114",
+      "seasonYear": "2026",
+      "sequenceNumber": "2",
+      "translations": {
+        "longName": {
+          "EN": "Matchday 16",
+          "FR": "Journée 16",
+          "DE": "Spieltag 16",
+          "ES": "Jornada 16",
+          "PT": "Jornada 16",
+          "IT": "Giornata 16",
+          "RU": "Тур 16",
+          "ZH": "比赛日 16",
+          "AR": "الجولة 16"
+        },
+        "name": {
+          "EN": "MD 16",
+          "FR": "J 16",
+          "DE": "ST 16",
+          "ES": "JOR 16",
+          "PT": "J 16",
+          "IT": "G 16",
+          "RU": "Тур 16",
+          "ZH": "比赛日 16",
+          "AR": "MD 16"
+        }
+      },
+      "type": "SECOND_LEG"
+    },
+    "playerEvents": {
+      "scorers": [
+        {
+          "goalType": "SCORED",
+          "id": "4e26cb13-e6ec-4509-8578-7c9943af3735",
+          "phase": "FIRST_HALF",
+          "player": {
+            "age": "29",
+            "birthDate": "1997-05-15",
+            "clubId": "52747",
+            "clubJerseyNumber": "10",
+            "clubShirtName": "O.DEMBÉLÉ",
+            "countryCode": "FRA",
+            "detailedFieldPosition": "UNKNOWN",
+            "fieldPosition": "FORWARD",
+            "gender": "MALE",
+            "height": 178,
+            "id": "250066886",
+            "imageUrl": "https://img.uefa.com/imgml/TP/players/1/2026/324x324/250066886.jpg",
+            "internationalName": "Ousmane Dembélé",
+            "nationalFieldPosition": "FORWARD",
+            "nationalJerseyNumber": "7",
+            "nationalShirtName": "Dembele",
+            "nationalTeamId": "43",
+            "translations": {
+              "countryName": {
+                "EN": "France",
+                "FR": "France",
+                "DE": "Frankreich",
+                "ES": "Francia",
+                "PT": "França",
+                "IT": "Francia",
+                "RU": "Франция",
+                "ZH": "法国",
+                "AR": "فرنسا"
+              },
+              "fieldPosition": {
+                "EN": "Forward",
+                "FR": "Attaquant",
+                "DE": "Stürmer",
+                "ES": "Delantero",
+                "PT": "Avançado",
+                "IT": "Attaccante",
+                "RU": "Нападающий",
+                "ZH": "前锋",
+                "AR": "مهاجم"
+              },
+              "firstName": {
+                "EN": "Ousmane",
+                "FR": "Ousmane",
+                "DE": "Ousmane",
+                "ES": "Ousmane",
+                "PT": "Ousmane",
+                "IT": "Ousmane",
+                "RU": "Усман",
+                "ZH": "奥斯曼",
+                "AR": "عثمان"
+              },
+              "lastName": {
+                "EN": "Dembélé",
+                "FR": "Dembélé",
+                "DE": "Dembélé",
+                "ES": "Dembélé",
+                "PT": "Dembélé",
+                "IT": "Dembélé",
+                "RU": "Дембеле",
+                "ZH": "登贝莱",
+                "AR": "ديمبيلي"
+              },
+              "name": {
+                "EN": "Ousmane Dembélé",
+                "FR": "Ousmane Dembélé",
+                "DE": "Ousmane Dembélé",
+                "ES": "Ousmane Dembélé",
+                "PT": "Ousmane Dembélé",
+                "IT": "Ousmane Dembélé",
+                "RU": "Усман Дембеле",
+                "ZH": "奥斯曼·登贝莱",
+                "AR": "عثمان ديمبيلي"
+              },
+              "nationalFieldPosition": {
+                "EN": "Forward",
+                "FR": "Attaquant",
+                "DE": "Stürmer",
+                "ES": "Delantero",
+                "PT": "Avançado",
+                "IT": "Attaccante",
+                "RU": "Нападающий",
+                "ZH": "前锋",
+                "AR": "مهاجم"
+              },
+              "shortName": {
+                "EN": "Dembélé",
+                "FR": "Dembélé",
+                "DE": "Dembélé",
+                "ES": "Dembélé",
+                "PT": "Dembélé",
+                "IT": "Dembélé",
+                "RU": "Дембеле",
+                "ZH": "奥斯曼·登贝莱",
+                "AR": "ديمبيلي"
+              }
+            },
+            "weight": 67
+          },
+          "teamId": "52747",
+          "teamIdProvider": "FAME",
+          "time": {
+            "minute": 3,
+            "second": 19
+          }
+        },
+        {
+          "goalType": "SCORED",
+          "id": "29112c57-80da-4cfb-99ef-a9322c4b42bd",
+          "phase": "SECOND_HALF",
+          "player": {
+            "age": "33",
+            "birthDate": "1993-07-28",
+            "clubId": "50037",
+            "clubJerseyNumber": "9",
+            "clubShirtName": "Kane",
+            "countryCode": "ENG",
+            "detailedFieldPosition": "STRIKER",
+            "fieldPosition": "FORWARD",
+            "gender": "MALE",
+            "height": 188,
+            "id": "250016833",
+            "imageUrl": "https://img.uefa.com/imgml/TP/players/1/2026/324x324/250016833.jpg",
+            "internationalName": "Harry Kane",
+            "nationalFieldPosition": "FORWARD",
+            "nationalJerseyNumber": "9",
+            "nationalShirtName": "Kane",
+            "nationalTeamId": "39",
+            "translations": {
+              "countryName": {
+                "EN": "England",
+                "FR": "Angleterre",
+                "DE": "England",
+                "ES": "Inglaterra",
+                "PT": "Inglaterra",
+                "IT": "Inghilterra",
+                "RU": "Англия",
+                "ZH": "英格兰",
+                "AR": "إنجلترا"
+              },
+              "fieldPosition": {
+                "EN": "Forward",
+                "FR": "Attaquant",
+                "DE": "Stürmer",
+                "ES": "Delantero",
+                "PT": "Avançado",
+                "IT": "Attaccante",
+                "RU": "Нападающий",
+                "ZH": "前锋",
+                "AR": "مهاجم"
+              },
+              "firstName": {
+                "EN": "Harry",
+                "FR": "Harry",
+                "DE": "Harry",
+                "ES": "Harry",
+                "PT": "Harry",
+                "IT": "Harry",
+                "RU": "Гарри",
+                "ZH": "哈里",
+                "AR": "هاري"
+              },
+              "lastName": {
+                "EN": "Kane",
+                "FR": "Kane",
+                "DE": "Kane",
+                "ES": "Kane",
+                "PT": "Kane",
+                "IT": "Kane",
+                "RU": "Кейн",
+                "ZH": "凯恩",
+                "AR": "كين"
+              },
+              "name": {
+                "EN": "Harry Kane",
+                "FR": "Harry Kane",
+                "DE": "Harry Kane",
+                "ES": "Harry Kane",
+                "PT": "Harry Kane",
+                "IT": "Harry Kane",
+                "RU": "Гарри Кейн",
+                "ZH": "哈里·凯恩",
+                "AR": "هاري كين"
+              },
+              "nationalFieldPosition": {
+                "EN": "Forward",
+                "FR": "Attaquant",
+                "DE": "Stürmer",
+                "ES": "Delantero",
+                "PT": "Avançado",
+                "IT": "Attaccante",
+                "RU": "Нападающий",
+                "ZH": "前锋",
+                "AR": "مهاجم"
+              },
+              "shortName": {
+                "EN": "Kane",
+                "FR": "Kane",
+                "DE": "Kane",
+                "ES": "Kane",
+                "PT": "Kane",
+                "IT": "Kane",
+                "RU": "Кейн",
+                "ZH": "凯恩",
+                "AR": "كين"
+              }
+            },
+            "weight": 65
+          },
+          "teamId": "50037",
+          "teamIdProvider": "FAME",
+          "time": {
+            "injuryMinute": 4,
+            "minute": 90,
+            "second": 50
+          }
+        }
+      ]
+    },
+    "playerOfTheMatch": {
+      "player": {
+        "age": "24",
+        "birthDate": "2001-10-16",
+        "clubId": "52747",
+        "clubJerseyNumber": "51",
+        "clubShirtName": "PACHO",
+        "countryCode": "ECU",
+        "detailedFieldPosition": "UNKNOWN",
+        "fieldPosition": "DEFENDER",
+        "gender": "MALE",
+        "id": "250174126",
+        "imageUrl": "https://img.uefa.com/imgml/TP/players/1/2026/324x324/250174126.jpg",
+        "internationalName": "Willian Pacho",
+        "nationalFieldPosition": "DEFENDER",
+        "nationalJerseyNumber": "6",
+        "nationalShirtName": "Pacho",
+        "nationalTeamId": "37",
+        "translations": {
+          "countryName": {
+            "EN": "Ecuador",
+            "FR": "Équateur",
+            "DE": "Ecuador",
+            "ES": "Ecuador",
+            "PT": "Equador",
+            "IT": "Ecuador",
+            "RU": "Эквадор",
+            "ZH": "厄瓜多尔",
+            "AR": "الإكوادور"
+          },
+          "fieldPosition": {
+            "EN": "Defender",
+            "FR": "Défenseur",
+            "DE": "Verteidiger",
+            "ES": "Defensa",
+            "PT": "Defesa",
+            "IT": "Difensore",
+            "RU": "Защитник",
+            "ZH": "后卫",
+            "AR": "مدافع"
+          },
+          "firstName": {
+            "EN": "Willian",
+            "FR": "Willian",
+            "DE": "Willian",
+            "ES": "Willian",
+            "PT": "Willian",
+            "IT": "Willian",
+            "RU": "Виллиан",
+            "ZH": "威廉",
+            "AR": "ويليام "
+          },
+          "lastName": {
+            "EN": "Pacho",
+            "FR": "Pacho",
+            "DE": "Pacho",
+            "ES": "Pacho",
+            "PT": "Pacho",
+            "IT": "Pacho",
+            "RU": "Пачо",
+            "ZH": "帕乔",
+            "AR": "باشو"
+          },
+          "name": {
+            "EN": "Willian Pacho",
+            "FR": "Willian Pacho",
+            "DE": "Willian Pacho",
+            "ES": "Willian Pacho",
+            "PT": "Willian Pacho",
+            "IT": "Willian Pacho",
+            "RU": "Виллиан Пачо",
+            "ZH": "威廉·帕乔",
+            "AR": "ويليام باشو"
+          },
+          "nationalFieldPosition": {
+            "EN": "Defender",
+            "FR": "Défenseur",
+            "DE": "Verteidiger",
+            "ES": "Defensa",
+            "PT": "Defesa",
+            "IT": "Difensore",
+            "RU": "Защитник",
+            "ZH": "后卫",
+            "AR": "مدافع"
+          },
+          "shortName": {
+            "EN": "Pacho",
+            "FR": "Pacho",
+            "DE": "Pacho",
+            "ES": "Pacho",
+            "PT": "Pacho",
+            "IT": "Pacho",
+            "RU": "Пачо",
+            "ZH": "威廉·帕乔",
+            "AR": "باشو"
+          }
+        }
+      },
+      "teamId": "52747"
+    },
+    "referees": [
+      {
+        "images": {
+          "SMALL_SQUARE": "https://img.uefa.com/imgml/referees/75x75/250058829.jpg"
+        },
+        "person": {
+          "countryCode": "NOR",
+          "gender": "MALE",
+          "id": "250058829",
+          "translations": {
+            "countryName": {
+              "EN": "Norway",
+              "FR": "Norvège",
+              "DE": "Norwegen",
+              "ES": "Noruega",
+              "PT": "Noruega",
+              "IT": "Norvegia",
+              "RU": "Норвегия",
+              "ZH": "挪威",
+              "AR": "النرويج"
+            },
+            "firstName": {
+              "EN": "Espen",
+              "FR": "Espen",
+              "DE": "Espen",
+              "ES": "Espen",
+              "PT": "Espen",
+              "IT": "Espen",
+              "RU": "Эспен",
+              "ZH": "Espen",
+              "AR": "إسبن "
+            },
+            "lastName": {
+              "EN": "Eskås",
+              "FR": "Eskås",
+              "DE": "Eskås",
+              "ES": "Eskås",
+              "PT": "Eskås",
+              "IT": "Eskås",
+              "RU": "Эскос",
+              "ZH": "Eskås",
+              "AR": "إسكاس"
+            },
+            "name": {
+              "EN": "Espen Eskås",
+              "FR": "Espen Eskås",
+              "DE": "Espen Eskås",
+              "ES": "Espen Eskås",
+              "PT": "Espen Eskås",
+              "IT": "Espen Eskås",
+              "RU": "Эспен Эскос",
+              "ZH": "Espen Eskås",
+              "AR": "إسبن إسكاس"
+            },
+            "shortName": {
+              "EN": "Eskås",
+              "FR": "Eskås",
+              "DE": "Eskås",
+              "ES": "Eskås",
+              "PT": "Eskås",
+              "IT": "Eskås",
+              "RU": "Эскос",
+              "ZH": "Eskås",
+              "AR": "إسكاس"
+            }
+          }
+        },
+        "role": "FOURTH_OFFICIAL",
+        "translations": {
+          "roleName": {
+            "EN": "Fourth official",
+            "FR": "Quatrième arbitre",
+            "DE": "Vierter Offizieller",
+            "ES": "Cuarto árbitro",
+            "PT": "Quarto árbitro",
+            "IT": "Quarto uomo",
+            "RU": "Четвертый рефери",
+            "ZH": "Quarto árbitro",
+            "AR": "الحكم الرابع"
+          }
+        }
+      },
+      {
+        "images": {
+          "SMALL_SQUARE": "https://img.uefa.com/imgml/referees/75x75/250080703.jpg"
+        },
+        "person": {
+          "countryCode": "POR",
+          "gender": "MALE",
+          "id": "250080703",
+          "translations": {
+            "countryName": {
+              "EN": "Portugal",
+              "FR": "Portugal",
+              "DE": "Portugal",
+              "ES": "Portugal",
+              "PT": "Portugal",
+              "IT": "Portogallo",
+              "RU": "Португалия",
+              "ZH": "葡萄牙",
+              "AR": "البرتغال"
+            },
+            "firstName": {
+              "EN": "Tiago",
+              "FR": "Tiago",
+              "DE": "Tiago",
+              "ES": "Tiago",
+              "PT": "Tiago",
+              "IT": "Tiago",
+              "RU": "Tiago Bruno",
+              "ZH": "Tiago Bruno",
+              "AR": "تياجو "
+            },
+            "lastName": {
+              "EN": "Martins",
+              "FR": "Martins",
+              "DE": "Martins",
+              "ES": "Martins",
+              "PT": "Martins",
+              "IT": "Martins",
+              "RU": "Lopes Martins",
+              "ZH": "Lopes Martins",
+              "AR": "مارتينز"
+            },
+            "name": {
+              "EN": "Tiago Martins",
+              "FR": "Tiago Martins",
+              "DE": "Tiago Martins",
+              "ES": "Tiago Martins",
+              "PT": "Tiago Martins",
+              "IT": "Tiago Martins",
+              "RU": "Тьягу Мартинш",
+              "ZH": "蒂亚戈·马丁斯",
+              "AR": "تياجو مارتينز"
+            },
+            "shortName": {
+              "EN": "Martins",
+              "FR": "Martins",
+              "DE": "Martins",
+              "ES": "Martins",
+              "PT": "Martins",
+              "IT": "Martins",
+              "RU": "Мартинш",
+              "ZH": "马丁斯",
+              "AR": "مارتينز"
+            }
+          }
+        },
+        "role": "ASSISTANT_VIDEO_ASSISTANT_REFEREE",
+        "translations": {
+          "roleName": {
+            "EN": "Assistant Video Assistant Referee",
+            "FR": "Assistant de l'Arbitre Assistant Vidéo",
+            "DE": "Erster Assistent des Videoassistenten",
+            "ES": "Asistente del Árbitro Asistente de Vídeo",
+            "PT": "Assistente de Vídeo Árbitro Assistente",
+            "IT": "Assistente Video Assistant Referee",
+            "RU": "Ассистент видеопомощника рефери",
+            "ZH": "Assistente de Vídeo Árbitro Assistente",
+            "AR": "مساعد حكم الفيديو المساعد"
+          }
+        }
+      },
+      {
+        "images": {
+          "SMALL_SQUARE": "https://img.uefa.com/imgml/referees/75x75/88983.jpg"
+        },
+        "person": {
+          "countryCode": "NOR",
+          "gender": "MALE",
+          "id": "88983",
+          "translations": {
+            "countryName": {
+              "EN": "Norway",
+              "FR": "Norvège",
+              "DE": "Norwegen",
+              "ES": "Noruega",
+              "PT": "Noruega",
+              "IT": "Norvegia",
+              "RU": "Норвегия",
+              "ZH": "挪威",
+              "AR": "النرويج"
+            },
+            "firstName": {
+              "EN": "Rune",
+              "FR": "Rune",
+              "DE": "Rune",
+              "ES": "Rune",
+              "PT": "Rune",
+              "IT": "Rune",
+              "RU": "Руне",
+              "ZH": "Rune",
+              "AR": "رون "
+            },
+            "lastName": {
+              "EN": "Pedersen",
+              "FR": "Pedersen",
+              "DE": "Pedersen",
+              "ES": "Pedersen",
+              "PT": "Pedersen",
+              "IT": "Pedersen",
+              "RU": "Педерсен",
+              "ZH": "PEDERSEN",
+              "AR": "بيدرسن"
+            },
+            "name": {
+              "EN": "Rune Pedersen",
+              "FR": "Rune Pedersen",
+              "DE": "Rune Pedersen",
+              "ES": "Rune Pedersen",
+              "PT": "Rune Pedersen",
+              "IT": "Rune Pedersen",
+              "RU": "Руне Педерсен",
+              "ZH": "鲁恩·佩德森",
+              "AR": "رون بيدرسن"
+            },
+            "shortName": {
+              "EN": "Pedersen",
+              "FR": "Pedersen",
+              "DE": "Pedersen",
+              "ES": "Pedersen",
+              "PT": "Pedersen",
+              "IT": "Pedersen",
+              "RU": "Педерсен",
+              "ZH": "佩德森",
+              "AR": "بيدرسن"
+            }
+          }
+        },
+        "role": "REFEREE_OBSERVER",
+        "translations": {
+          "roleName": {
+            "EN": "Referee observer",
+            "FR": "Observateur d'arbitres",
+            "DE": "Referee observer",
+            "ES": "Observador arbitral",
+            "PT": "Observador de árbitro",
+            "IT": "Referee observer",
+            "RU": "Судейский наблюдатель",
+            "ZH": "Referee observer",
+            "AR": "مراقب الحكام"
+          }
+        }
+      }
+    ],
+    "relatedMatches": [
+      {
+        "awayTeam": {
+          "associationId": "200047",
+          "associationLogoUrl": "https://img.uefa.com/imgml/uefacom/elements/logos/ma/GER.svg",
+          "bigLogoUrl": "https://img.uefa.com/imgml/TP/teams/logos/700x700/50037.png",
+          "confederationType": "UEFA",
+          "countryCode": "GER",
+          "id": "50037",
+          "idProvider": "FAME",
+          "internationalName": "Bayern München",
+          "isPlaceHolder": false,
+          "logoUrl": "https://img.uefa.com/imgml/TP/teams/logos/70x70/50037.png",
+          "mediumLogoUrl": "https://img.uefa.com/imgml/TP/teams/logos/240x240/50037.png",
+          "organizationId": "250037",
+          "teamCode": "BAY",
+          "teamTypeDetail": "DOMESTIC_MEN_TEAM_A",
+          "translations": {
+            "countryName": {
+              "EN": "Germany",
+              "FR": "Allemagne",
+              "DE": "Deutschland",
+              "ES": "Alemania",
+              "PT": "Alemanha",
+              "IT": "Germania",
+              "RU": "Германия",
+              "ZH": "德国",
+              "AR": "ألمانيا"
+            },
+            "displayName": {
+              "EN": "Bayern München",
+              "FR": "Bayern München",
+              "DE": "Bayern München",
+              "ES": "Bayern München",
+              "PT": "Bayern München",
+              "IT": "Bayern München",
+              "RU": "Бавария",
+              "ZH": "拜仁慕尼黑",
+              "AR": "بايرن ميونخ"
+            },
+            "displayOfficialName": {
+              "EN": "FC Bayern München",
+              "FR": "FC Bayern München",
+              "DE": "FC Bayern München",
+              "ES": "FC Bayern München",
+              "PT": "FC Bayern München",
+              "IT": "FC Bayern München",
+              "RU": "Бавария",
+              "ZH": "拜仁慕尼黑",
+              "AR": "بايرن ميونخ"
+            },
+            "displayTeamCode": {
+              "EN": "BAY",
+              "FR": "BAY",
+              "DE": "BAY",
+              "ES": "BAY",
+              "PT": "BAY",
+              "IT": "BAY",
+              "RU": "BAY",
+              "ZH": "BAY",
+              "AR": "BAY"
+            },
+            "shortName": {
+              "EN": "Bayern",
+              "FR": "Bayern",
+              "DE": "Bayern",
+              "ES": "Bayern",
+              "PT": "Bayern",
+              "IT": "Bayern",
+              "RU": "Бавария",
+              "ZH": "Bayern",
+              "AR": "بايرن"
+            }
+          },
+          "typeIsNational": false,
+          "typeTeam": "DOMESTIC"
+        },
+        "homeTeam": {
+          "associationId": "200043",
+          "associationLogoUrl": "https://img.uefa.com/imgml/uefacom/elements/logos/ma/FRA.svg",
+          "bigLogoUrl": "https://img.uefa.com/imgml/TP/teams/logos/700x700/52747.png",
+          "confederationType": "UEFA",
+          "countryCode": "FRA",
+          "id": "52747",
+          "idProvider": "FAME",
+          "internationalName": "Paris",
+          "isPlaceHolder": false,
+          "logoUrl": "https://img.uefa.com/imgml/TP/teams/logos/70x70/52747.png",
+          "mediumLogoUrl": "https://img.uefa.com/imgml/TP/teams/logos/240x240/52747.png",
+          "organizationId": "252747",
+          "teamCode": "PSG",
+          "teamTypeDetail": "DOMESTIC_MEN_TEAM_A",
+          "translations": {
+            "countryName": {
+              "EN": "France",
+              "FR": "France",
+              "DE": "Frankreich",
+              "ES": "Francia",
+              "PT": "França",
+              "IT": "Francia",
+              "RU": "Франция",
+              "ZH": "法国",
+              "AR": "فرنسا"
+            },
+            "displayName": {
+              "EN": "Paris",
+              "FR": "Paris",
+              "DE": "Paris",
+              "ES": "Paris",
+              "PT": "Paris",
+              "IT": "Paris",
+              "RU": "ПСЖ",
+              "ZH": "巴黎圣日耳曼",
+              "AR": "باريس"
+            },
+            "displayOfficialName": {
+              "EN": "Paris Saint-Germain",
+              "FR": "Paris Saint-Germain",
+              "DE": "Paris Saint-Germain",
+              "ES": "Paris Saint-Germain",
+              "PT": "Paris Saint-Germain",
+              "IT": "Paris Saint-Germain",
+              "RU": "Пари Сен-Жермен",
+              "ZH": "巴黎圣日耳曼",
+              "AR": "باريس سان جيرمان"
+            },
+            "displayTeamCode": {
+              "EN": "PSG",
+              "FR": "PSG",
+              "DE": "PSG",
+              "ES": "PSG",
+              "PT": "PSG",
+              "IT": "PSG",
+              "RU": "PSG",
+              "ZH": "PSG",
+              "AR": "PSG"
+            },
+            "shortName": {
+              "EN": "Paris",
+              "FR": "Paris",
+              "DE": "Paris",
+              "ES": "Paris",
+              "PT": "Paris",
+              "IT": "Paris",
+              "RU": "ПСЖ",
+              "ZH": "Paris",
+              "AR": "باريس"
+            }
+          },
+          "typeIsNational": false,
+          "typeTeam": "DOMESTIC"
+        },
+        "id": "2048072",
+        "kickOffTime": {
+          "date": "2026-04-28",
+          "dateTime": "2026-04-28T19:00:00Z",
+          "utcOffsetInHours": 2
+        },
+        "score": {
+          "aggregate": {
+            "away": 5,
+            "home": 6
+          },
+          "regular": {
+            "away": 4,
+            "home": 5
+          },
+          "total": {
+            "away": 4,
+            "home": 5
+          }
+        },
+        "status": "FINISHED",
+        "type": "FIRST_LEG",
+        "winner": {
+          "aggregate": {
+            "reason": "WIN_ON_AGGREGATE",
+            "team": {
+              "associationId": "200043",
+              "associationLogoUrl": "https://img.uefa.com/imgml/uefacom/elements/logos/ma/FRA.svg",
+              "bigLogoUrl": "https://img.uefa.com/imgml/TP/teams/logos/700x700/52747.png",
+              "confederationType": "UEFA",
+              "countryCode": "FRA",
+              "id": "52747",
+              "idProvider": "FAME",
+              "internationalName": "Paris",
+              "isPlaceHolder": false,
+              "logoUrl": "https://img.uefa.com/imgml/TP/teams/logos/70x70/52747.png",
+              "mediumLogoUrl": "https://img.uefa.com/imgml/TP/teams/logos/240x240/52747.png",
+              "organizationId": "252747",
+              "teamCode": "PSG",
+              "teamTypeDetail": "DOMESTIC_MEN_TEAM_A",
+              "translations": {
+                "countryName": {
+                  "EN": "France",
+                  "FR": "France",
+                  "DE": "Frankreich",
+                  "ES": "Francia",
+                  "PT": "França",
+                  "IT": "Francia",
+                  "RU": "Франция",
+                  "ZH": "法国",
+                  "AR": "فرنسا"
+                },
+                "displayName": {
+                  "EN": "Paris",
+                  "FR": "Paris",
+                  "DE": "Paris",
+                  "ES": "Paris",
+                  "PT": "Paris",
+                  "IT": "Paris",
+                  "RU": "ПСЖ",
+                  "ZH": "巴黎圣日耳曼",
+                  "AR": "باريس"
+                },
+                "displayOfficialName": {
+                  "EN": "Paris Saint-Germain",
+                  "FR": "Paris Saint-Germain",
+                  "DE": "Paris Saint-Germain",
+                  "ES": "Paris Saint-Germain",
+                  "PT": "Paris Saint-Germain",
+                  "IT": "Paris Saint-Germain",
+                  "RU": "Пари Сен-Жермен",
+                  "ZH": "巴黎圣日耳曼",
+                  "AR": "باريس سان جيرمان"
+                },
+                "displayTeamCode": {
+                  "EN": "PSG",
+                  "FR": "PSG",
+                  "DE": "PSG",
+                  "ES": "PSG",
+                  "PT": "PSG",
+                  "IT": "PSG",
+                  "RU": "PSG",
+                  "ZH": "PSG",
+                  "AR": "PSG"
+                },
+                "shortName": {
+                  "EN": "Paris",
+                  "FR": "Paris",
+                  "DE": "Paris",
+                  "ES": "Paris",
+                  "PT": "Paris",
+                  "IT": "Paris",
+                  "RU": "ПСЖ",
+                  "ZH": "Paris",
+                  "AR": "باريس"
+                }
+              },
+              "typeIsNational": false,
+              "typeTeam": "DOMESTIC"
+            },
+            "translations": {
+              "reasonTextAbbr": {
+                "RU": "ПСЖ побеждает",
+                "DE": "Paris gewinnt",
+                "PT": "Paris vence",
+                "ES": "Gana Paris",
+                "IT": "Paris vince",
+                "EN": "Paris win",
+                "ZH": "巴黎圣日耳曼 总比分取胜",
+                "AR": " فاز باريس بمجموع المباراتين  ",
+                "FR": "Paris: vainqueur"
+              }
+            }
+          },
+          "match": {
+            "reason": "WIN_REGULAR",
+            "team": {
+              "associationId": "200043",
+              "associationLogoUrl": "https://img.uefa.com/imgml/uefacom/elements/logos/ma/FRA.svg",
+              "bigLogoUrl": "https://img.uefa.com/imgml/TP/teams/logos/700x700/52747.png",
+              "confederationType": "UEFA",
+              "countryCode": "FRA",
+              "id": "52747",
+              "idProvider": "FAME",
+              "internationalName": "Paris",
+              "isPlaceHolder": false,
+              "logoUrl": "https://img.uefa.com/imgml/TP/teams/logos/70x70/52747.png",
+              "mediumLogoUrl": "https://img.uefa.com/imgml/TP/teams/logos/240x240/52747.png",
+              "organizationId": "252747",
+              "teamCode": "PSG",
+              "teamTypeDetail": "DOMESTIC_MEN_TEAM_A",
+              "translations": {
+                "countryName": {
+                  "EN": "France",
+                  "FR": "France",
+                  "DE": "Frankreich",
+                  "ES": "Francia",
+                  "PT": "França",
+                  "IT": "Francia",
+                  "RU": "Франция",
+                  "ZH": "法国",
+                  "AR": "فرنسا"
+                },
+                "displayName": {
+                  "EN": "Paris",
+                  "FR": "Paris",
+                  "DE": "Paris",
+                  "ES": "Paris",
+                  "PT": "Paris",
+                  "IT": "Paris",
+                  "RU": "ПСЖ",
+                  "ZH": "巴黎圣日耳曼",
+                  "AR": "باريس"
+                },
+                "displayOfficialName": {
+                  "EN": "Paris Saint-Germain",
+                  "FR": "Paris Saint-Germain",
+                  "DE": "Paris Saint-Germain",
+                  "ES": "Paris Saint-Germain",
+                  "PT": "Paris Saint-Germain",
+                  "IT": "Paris Saint-Germain",
+                  "RU": "Пари Сен-Жермен",
+                  "ZH": "巴黎圣日耳曼",
+                  "AR": "باريس سان جيرمان"
+                },
+                "displayTeamCode": {
+                  "EN": "PSG",
+                  "FR": "PSG",
+                  "DE": "PSG",
+                  "ES": "PSG",
+                  "PT": "PSG",
+                  "IT": "PSG",
+                  "RU": "PSG",
+                  "ZH": "PSG",
+                  "AR": "PSG"
+                },
+                "shortName": {
+                  "EN": "Paris",
+                  "FR": "Paris",
+                  "DE": "Paris",
+                  "ES": "Paris",
+                  "PT": "Paris",
+                  "IT": "Paris",
+                  "RU": "ПСЖ",
+                  "ZH": "Paris",
+                  "AR": "باريس"
+                }
+              },
+              "typeIsNational": false,
+              "typeTeam": "DOMESTIC"
+            },
+            "translations": {
+              "reasonText": {
+                "RU": "ПСЖ выигрывает первый матч",
+                "DE": "Paris gewann das Hinspiel",
+                "PT": "Paris venceu a primeira mão",
+                "ES": "Paris ganó en la ida",
+                "IT": "Paris ha vinto l'andata",
+                "EN": "Paris won the first leg",
+                "ZH": "巴黎圣日耳曼 凭借首回合比赛结果晋级",
+                "AR": "باريس فاز في مباراة الذهاب",
+                "FR": "Paris a gagné l'aller"
+              },
+              "reasonTextAbbr": {
+                "RU": "ПСЖ побеждает",
+                "DE": "Paris gewinnt",
+                "PT": "Paris venceu",
+                "ES": "Ganó Paris",
+                "IT": "Paris ha vinto",
+                "EN": "Paris won",
+                "ZH": "巴黎圣日耳曼 获胜",
+                "AR": "باريس فاز",
+                "FR": "Paris: vainqueur"
+              }
+            }
+          }
+        }
+      }
+    ],
+    "round": {
+      "active": false,
+      "benchGKCount": 12,
+      "benchPlayersCount": 12,
+      "benchStaffCount": 15,
+      "coefficientWinnerBonus": 0.0,
+      "competitionId": "1",
+      "dateFrom": "2026-04-28T06:00:00+0000",
+      "dateTo": "2026-05-06T21:59:59+0000",
+      "fieldPlayersCount": 11,
+      "groupCount": 2,
+      "id": "2002114",
+      "metaData": {
+        "name": "Semi-finals",
+        "type": "SEMIFINAL"
+      },
+      "mode": "KNOCK_OUT",
+      "modeDetail": "KNOCK_OUT_TWO_LEGS",
+      "orderInCompetition": 9,
+      "phase": "TOURNAMENT",
+      "seasonYear": "2026",
+      "secondaryType": "KNOCKOUT_PHASE",
+      "stadiumNameType": "OFFICIAL_NAME",
+      "status": "FINISHED",
+      "substitutionCount": 5,
+      "teamCount": 4,
+      "teams": [
+        "50037",
+        "50124",
+        "52280"
+      ],
+      "translations": {
+        "abbreviation": {
+          "EN": "SF",
+          "FR": "DF",
+          "DE": "HF",
+          "ES": "SF",
+          "PT": "MF",
+          "IT": "SF",
+          "RU": "1/2",
+          "ZH": "SF",
+          "AR": "SF"
+        },
+        "name": {
+          "EN": "Semi-finals",
+          "FR": "Demi-finales",
+          "DE": "Halbfinale",
+          "ES": "Semifinales",
+          "PT": "Meias-finais",
+          "IT": "Semifinali",
+          "RU": "Полуфиналы",
+          "ZH": "Semi-finals",
+          "AR": "نصف النهائي"
+        },
+        "shortName": {
+          "EN": "Semi-finals",
+          "FR": "Demi-finales",
+          "DE": "Halbfinale",
+          "ES": "Semifinales",
+          "PT": "Meias-finais",
+          "IT": "Semifinali",
+          "RU": "1/2 финала",
+          "ZH": "半决赛",
+          "AR": "نصف النهائي"
+        }
+      }
+    },
+    "score": {
+      "aggregate": {
+        "away": 6,
+        "home": 5
+      },
+      "regular": {
+        "away": 1,
+        "home": 1
+      },
+      "total": {
+        "away": 1,
+        "home": 1
+      }
+    },
+    "seasonYear": "2026",
+    "sessionNumber": 2,
+    "stadium": {
+      "address": "Werner-Heisenberg-Allee 25",
+      "capacity": 61682,
+      "city": {
+        "countryCode": "GER",
+        "id": "2298",
+        "translations": {
+          "name": {
+            "EN": "Munich",
+            "FR": "Munich",
+            "DE": "München",
+            "ES": "Múnich",
+            "PT": "Munique",
+            "IT": "Monaco di Baviera",
+            "RU": "Мюнхен",
+            "ZH": "慕尼黑",
+            "AR": "ميونخ"
+          }
+        }
+      },
+      "countryCode": "GER",
+      "geolocation": {
+        "latitude": 48.2187944,
+        "longitude": 11.6247306
+      },
+      "id": "85441",
+      "images": {
+        "MEDIUM_WIDE": "https://img.uefa.com/imgml/stadium/matchinfo/w1/85441.jpg",
+        "LARGE_ULTRA_WIDE": "https://img.uefa.com/imgml/stadium/matchinfo/uw/85441.jpg"
+      },
+      "openingDate": "2005-01-01",
+      "pitch": {
+        "length": 105,
+        "width": 68
+      },
+      "translations": {
+        "mediaName": {
+          "EN": "Fußball Arena München",
+          "FR": "Fußball Arena München",
+          "DE": "Fußball Arena München",
+          "ES": "Fußball Arena München",
+          "PT": "Fußball Arena München",
+          "IT": "Fußball Arena München",
+          "RU": "Арена Мюнхен",
+          "ZH": "慕尼黑足球竞技场",
+          "AR": "ملعب ميونخ لكرة القدم"
+        },
+        "name": {
+          "EN": "Fußball Arena München",
+          "FR": "Fußball Arena München",
+          "DE": "Fußball Arena München",
+          "ES": "Fußball Arena München",
+          "PT": "Fußball Arena München",
+          "IT": "Fußball Arena München",
+          "RU": "Арена Мюнхен",
+          "ZH": "慕尼黑足球竞技场",
+          "AR": "ملعب ميونخ لكرة القدم"
+        },
+        "officialName": {
+          "EN": "Fußball Arena München",
+          "FR": "Fußball Arena München",
+          "DE": "Fußball Arena München",
+          "ES": "Fußball Arena München",
+          "PT": "Fußball Arena München",
+          "IT": "Fußball Arena München",
+          "RU": "Арена Мюнхен",
+          "ZH": "慕尼黑足球竞技场",
+          "AR": "ملعب ميونخ لكرة القدم"
+        },
+        "specialEventsName": {
+          "EN": "Munich Football Arena",
+          "FR": "Munich Football Arena",
+          "DE": "Munich Football Arena",
+          "ES": "Munich Football Arena",
+          "PT": "Munich Football Arena",
+          "IT": "Munich Football Arena",
+          "RU": "Арена Мюнхен",
+          "ZH": "慕尼黑足球竞技场",
+          "AR": "ملعب ميونخ لكرة القدم"
+        },
+        "sponsorName": {
+          "EN": "Allianz Arena",
+          "FR": "Allianz Arena",
+          "DE": "Allianz Arena",
+          "ES": "Allianz Arena",
+          "PT": "Allianz Arena",
+          "IT": "Allianz Arena",
+          "RU": "Allianz Арена",
+          "ZH": "慕尼黑足球竞技场",
+          "AR": "أليانز أرينا"
+        }
+      }
+    },
+    "status": "FINISHED",
+    "type": "SECOND_LEG",
+    "winner": {
+      "aggregate": {
+        "reason": "WIN_ON_AGGREGATE",
+        "team": {
+          "associationId": "200043",
+          "associationLogoUrl": "https://img.uefa.com/imgml/uefacom/elements/logos/ma/FRA.svg",
+          "bigLogoUrl": "https://img.uefa.com/imgml/TP/teams/logos/700x700/52747.png",
+          "confederationType": "UEFA",
+          "countryCode": "FRA",
+          "id": "52747",
+          "idProvider": "FAME",
+          "internationalName": "Paris",
+          "isPlaceHolder": false,
+          "logoUrl": "https://img.uefa.com/imgml/TP/teams/logos/70x70/52747.png",
+          "mediumLogoUrl": "https://img.uefa.com/imgml/TP/teams/logos/240x240/52747.png",
+          "organizationId": "252747",
+          "teamCode": "PSG",
+          "teamTypeDetail": "DOMESTIC_MEN_TEAM_A",
+          "translations": {
+            "countryName": {
+              "EN": "France",
+              "FR": "France",
+              "DE": "Frankreich",
+              "ES": "Francia",
+              "PT": "França",
+              "IT": "Francia",
+              "RU": "Франция",
+              "ZH": "法国",
+              "AR": "فرنسا"
+            },
+            "displayName": {
+              "EN": "Paris",
+              "FR": "Paris",
+              "DE": "Paris",
+              "ES": "Paris",
+              "PT": "Paris",
+              "IT": "Paris",
+              "RU": "ПСЖ",
+              "ZH": "巴黎圣日耳曼",
+              "AR": "باريس"
+            },
+            "displayOfficialName": {
+              "EN": "Paris Saint-Germain",
+              "FR": "Paris Saint-Germain",
+              "DE": "Paris Saint-Germain",
+              "ES": "Paris Saint-Germain",
+              "PT": "Paris Saint-Germain",
+              "IT": "Paris Saint-Germain",
+              "RU": "Пари Сен-Жермен",
+              "ZH": "巴黎圣日耳曼",
+              "AR": "باريس سان جيرمان"
+            },
+            "displayTeamCode": {
+              "EN": "PSG",
+              "FR": "PSG",
+              "DE": "PSG",
+              "ES": "PSG",
+              "PT": "PSG",
+              "IT": "PSG",
+              "RU": "PSG",
+              "ZH": "PSG",
+              "AR": "PSG"
+            },
+            "shortName": {
+              "EN": "Paris",
+              "FR": "Paris",
+              "DE": "Paris",
+              "ES": "Paris",
+              "PT": "Paris",
+              "IT": "Paris",
+              "RU": "ПСЖ",
+              "ZH": "Paris",
+              "AR": "باريس"
+            }
+          },
+          "typeIsNational": false,
+          "typeTeam": "DOMESTIC"
+        },
+        "translations": {
+          "reasonTextAbbr": {
+            "RU": "ПСЖ побеждает",
+            "DE": "Paris gewinnt",
+            "PT": "Paris vence",
+            "ES": "Gana Paris",
+            "IT": "Paris vince",
+            "EN": "Paris win",
+            "ZH": "巴黎圣日耳曼 总比分取胜",
+            "AR": " فاز باريس بمجموع المباراتين  ",
+            "FR": "Paris: vainqueur"
+          }
+        }
+      },
+      "match": {
+        "reason": "DRAW"
+      }
+    }
+  },
+  {
+    "awayTeam": {
+      "associationId": "200122",
+      "associationLogoUrl": "https://img.uefa.com/imgml/uefacom/elements/logos/ma/ESP.svg",
+      "bigLogoUrl": "https://img.uefa.com/imgml/TP/teams/logos/700x700/50124.png",
+      "confederationType": "UEFA",
+      "countryCode": "ESP",
+      "id": "50124",
+      "idProvider": "FAME",
+      "internationalName": "Atleti",
+      "isPlaceHolder": false,
+      "logoUrl": "https://img.uefa.com/imgml/TP/teams/logos/70x70/50124.png",
+      "mediumLogoUrl": "https://img.uefa.com/imgml/TP/teams/logos/240x240/50124.png",
+      "organizationId": "250124",
+      "teamCode": "ATM",
+      "teamTypeDetail": "DOMESTIC_MEN_TEAM_A",
+      "translations": {
+        "countryName": {
+          "EN": "Spain",
+          "FR": "Espagne",
+          "DE": "Spanien",
+          "ES": "España",
+          "PT": "Espanha",
+          "IT": "Spagna",
+          "RU": "Испания",
+          "ZH": "西班牙",
+          "AR": "إسبانيا"
+        },
+        "displayName": {
+          "EN": "Atleti",
+          "FR": "Atleti",
+          "DE": "Atleti",
+          "ES": "Atleti",
+          "PT": "Atleti",
+          "IT": "Atleti",
+          "RU": "Атлетико",
+          "ZH": "马德里竞技",
+          "AR": "أتلتيكو"
+        },
+        "displayOfficialName": {
+          "EN": "Atlético de Madrid",
+          "FR": "Atlético de Madrid",
+          "DE": "Atlético de Madrid",
+          "ES": "Atlético de Madrid",
+          "PT": "Atlético de Madrid",
+          "IT": "Atlético de Madrid",
+          "RU": "Атлетико",
+          "ZH": "马德里竞技",
+          "AR": "أتلتيكو مدريد"
+        },
+        "displayTeamCode": {
+          "EN": "ATM",
+          "FR": "ATM",
+          "DE": "ATM",
+          "ES": "ATM",
+          "PT": "ATM",
+          "IT": "ATM",
+          "RU": "ATM",
+          "ZH": "ATM",
+          "AR": "ATM"
+        },
+        "shortName": {
+          "EN": "Atlético",
+          "FR": "Atlético",
+          "DE": "Atlético",
+          "ES": "Atlético",
+          "PT": "Atlético",
+          "IT": "Atlético",
+          "RU": "Атлетико",
+          "ZH": "Atlético",
+          "AR": "أتلتيكو"
+        }
+      },
+      "typeIsNational": false,
+      "typeTeam": "DOMESTIC"
+    },
+    "behindClosedDoors": false,
+    "competition": {
+      "age": "ADULT",
+      "code": "UCL",
+      "id": "1",
+      "images": {
+        "FULL_LOGO": "https://img.uefa.com/imgml/uefacom/elements/logos/competitions/color/full/1.svg"
+      },
+      "metaData": {
+        "name": "UEFA Champions League"
+      },
+      "region": "CONTINENTAL",
+      "sex": "MALE",
+      "sportsType": "FOOTBALL",
+      "teamCategory": "CLUB",
+      "translations": {
+        "name": {
+          "EN": "UEFA Champions League",
+          "FR": "UEFA Champions League",
+          "DE": "UEFA Champions League",
+          "ES": "UEFA Champions League",
+          "PT": "UEFA Champions League",
+          "IT": "UEFA Champions League",
+          "RU": "Лига чемпионов УЕФА",
+          "ZH": "欧洲冠军联赛",
+          "AR": "دوري أبطال أوروبا"
+        },
+        "prequalifyingName": {
+          "EN": "UEFA Champions League",
+          "FR": "UEFA Champions League",
+          "DE": "UEFA Champions League",
+          "ES": "UEFA Champions League",
+          "PT": "UEFA Champions League",
+          "IT": "UEFA Champions League",
+          "RU": "Лига чемпионов УЕФА",
+          "ZH": "欧洲冠军联赛",
+          "AR": "دوري أبطال أوروبا"
+        },
+        "qualifyingName": {
+          "EN": "UEFA Champions League",
+          "FR": "UEFA Champions League",
+          "DE": "UEFA Champions League",
+          "ES": "UEFA Champions League",
+          "PT": "UEFA Champions League",
+          "IT": "UEFA Champions League",
+          "RU": "Лига чемпионов УЕФА",
+          "ZH": "欧洲冠军联赛",
+          "AR": "دوري أبطال أوروبا"
+        },
+        "tournamentName": {
+          "EN": "UEFA Champions League",
+          "FR": "UEFA Champions League",
+          "DE": "UEFA Champions League",
+          "ES": "UEFA Champions League",
+          "PT": "UEFA Champions League",
+          "IT": "UEFA Champions League",
+          "RU": "Лига чемпионов УЕФА",
+          "ZH": "欧洲冠军联赛",
+          "AR": "دوري أبطال أوروبا"
+        }
+      },
+      "type": "CUP"
+    },
+    "competitionPhase": "TOURNAMENT",
+    "condition": {
+      "humidity": 60,
+      "pitchCondition": "EXCELLENT",
+      "temperature": 13,
+      "translations": {
+        "pitchConditionName": {
+          "EN": "excellent",
+          "FR": "impeccable",
+          "DE": "exzellent",
+          "ES": "excelente",
+          "PT": "excelente",
+          "IT": "eccellente",
+          "RU": "превосходное",
+          "ZH": "非常好",
+          "AR": "ممتاز"
+        },
+        "weatherConditionName": {
+          "EN": "Cloudy night",
+          "FR": "ciel nuageux",
+          "DE": "bewölkter Abend",
+          "ES": "Noche nublada",
+          "PT": "Noite nublada",
+          "IT": "Serata nuvolosa",
+          "RU": "Облачный вечер",
+          "ZH": "多云夜晚",
+          "AR": "ليلة غائمة"
+        }
+      },
+      "weatherCondition": "CLOUDY_NIGHT",
+      "windSpeed": 10
+    },
+    "fullTimeAt": "2026-05-05T20:53:37.451Z",
+    "homeTeam": {
+      "associationId": "200039",
+      "associationLogoUrl": "https://img.uefa.com/imgml/uefacom/elements/logos/ma/ENG.svg",
+      "bigLogoUrl": "https://img.uefa.com/imgml/TP/teams/logos/700x700/52280.png",
+      "confederationType": "UEFA",
+      "countryCode": "ENG",
+      "id": "52280",
+      "idProvider": "FAME",
+      "internationalName": "Arsenal",
+      "isPlaceHolder": false,
+      "logoUrl": "https://img.uefa.com/imgml/TP/teams/logos/70x70/52280.png",
+      "mediumLogoUrl": "https://img.uefa.com/imgml/TP/teams/logos/240x240/52280.png",
+      "organizationId": "252280",
+      "teamCode": "ARS",
+      "teamTypeDetail": "DOMESTIC_MEN_TEAM_A",
+      "translations": {
+        "countryName": {
+          "EN": "England",
+          "FR": "Angleterre",
+          "DE": "England",
+          "ES": "Inglaterra",
+          "PT": "Inglaterra",
+          "IT": "Inghilterra",
+          "RU": "Англия",
+          "ZH": "英格兰",
+          "AR": "إنجلترا"
+        },
+        "displayName": {
+          "EN": "Arsenal",
+          "FR": "Arsenal",
+          "DE": "Arsenal",
+          "ES": "Arsenal",
+          "PT": "Arsenal",
+          "IT": "Arsenal",
+          "RU": "Арсенал",
+          "ZH": "阿森纳",
+          "AR": "آرسنال"
+        },
+        "displayOfficialName": {
+          "EN": "Arsenal FC",
+          "FR": "Arsenal FC",
+          "DE": "Arsenal FC",
+          "ES": "Arsenal FC",
+          "PT": "Arsenal FC",
+          "IT": "Arsenal FC",
+          "RU": "Арсенал",
+          "ZH": "阿森纳",
+          "AR": "آرسنال"
+        },
+        "displayTeamCode": {
+          "EN": "ARS",
+          "FR": "ARS",
+          "DE": "ARS",
+          "ES": "ARS",
+          "PT": "ARS",
+          "IT": "ARS",
+          "RU": "ARS",
+          "ZH": "ARS",
+          "AR": "ARS"
+        },
+        "shortName": {
+          "EN": "Arsenal",
+          "FR": "Arsenal",
+          "DE": "Arsenal",
+          "ES": "Arsenal",
+          "PT": "Arsenal",
+          "IT": "Arsenal",
+          "RU": "Арсенал",
+          "ZH": "Arsenal",
+          "AR": "آرسنال"
+        }
+      },
+      "typeIsNational": false,
+      "typeTeam": "DOMESTIC"
+    },
+    "id": "2048074",
+    "kickOffTime": {
+      "date": "2026-05-05",
+      "dateTime": "2026-05-05T19:00:00Z",
+      "utcOffsetInHours": 1
+    },
+    "leg": {
+      "dateTimeFrom": "2026-05-05T06:00:00Z",
+      "dateTimeTo": "2026-05-06T21:59:59Z",
+      "number": 2,
+      "translations": {
+        "name": {
+          "EN": "2nd leg",
+          "FR": "retour",
+          "DE": "Rückspiel",
+          "ES": "Partido de vuelta",
+          "PT": "2ª mão",
+          "IT": "ritorno",
+          "RU": "2-й матч",
+          "ZH": "次回合",
+          "AR": "الإياب"
+        }
+      }
+    },
+    "lineupStatus": "TACTICAL_AVAILABLE",
+    "matchAttendance": 58874,
+    "matchday": {
+      "competitionId": "1",
+      "dateFrom": "2026-05-05T06:00:00+0000",
+      "dateTo": "2026-05-06T21:59:59+0000",
+      "format": "EXTRA_TIME_WITH_PENALTIES",
+      "id": "36270",
+      "longName": "Matchday 16",
+      "name": "MD16",
+      "phase": "TOURNAMENT",
+      "roundId": "2002114",
+      "seasonYear": "2026",
+      "sequenceNumber": "2",
+      "translations": {
+        "longName": {
+          "EN": "Matchday 16",
+          "FR": "Journée 16",
+          "DE": "Spieltag 16",
+          "ES": "Jornada 16",
+          "PT": "Jornada 16",
+          "IT": "Giornata 16",
+          "RU": "Тур 16",
+          "ZH": "比赛日 16",
+          "AR": "الجولة 16"
+        },
+        "name": {
+          "EN": "MD 16",
+          "FR": "J 16",
+          "DE": "ST 16",
+          "ES": "JOR 16",
+          "PT": "J 16",
+          "IT": "G 16",
+          "RU": "Тур 16",
+          "ZH": "比赛日 16",
+          "AR": "MD 16"
+        }
+      },
+      "type": "SECOND_LEG"
+    },
+    "playerEvents": {
+      "scorers": [
+        {
+          "goalType": "SCORED",
+          "id": "de55ea4d-78b1-4a98-b940-3ce1c04ee749",
+          "phase": "FIRST_HALF",
+          "player": {
+            "age": "25",
+            "birthDate": "2001-09-05",
+            "clubId": "52280",
+            "clubJerseyNumber": "7",
+            "clubShirtName": "Saka",
+            "countryCode": "ENG",
+            "detailedFieldPosition": "WINGER",
+            "fieldPosition": "FORWARD",
+            "gender": "MALE",
+            "id": "250106939",
+            "imageUrl": "https://img.uefa.com/imgml/TP/players/1/2026/324x324/250106939.jpg",
+            "internationalName": "Bukayo Saka",
+            "nationalFieldPosition": "FORWARD",
+            "nationalJerseyNumber": "7",
+            "nationalShirtName": "Saka",
+            "nationalTeamId": "39",
+            "translations": {
+              "countryName": {
+                "EN": "England",
+                "FR": "Angleterre",
+                "DE": "England",
+                "ES": "Inglaterra",
+                "PT": "Inglaterra",
+                "IT": "Inghilterra",
+                "RU": "Англия",
+                "ZH": "英格兰",
+                "AR": "إنجلترا"
+              },
+              "fieldPosition": {
+                "EN": "Forward",
+                "FR": "Attaquant",
+                "DE": "Stürmer",
+                "ES": "Delantero",
+                "PT": "Avançado",
+                "IT": "Attaccante",
+                "RU": "Нападающий",
+                "ZH": "前锋",
+                "AR": "مهاجم"
+              },
+              "firstName": {
+                "EN": "Bukayo",
+                "FR": "Bukayo",
+                "DE": "Bukayo",
+                "ES": "Bukayo",
+                "PT": "Bukayo",
+                "IT": "Bukayo",
+                "RU": "Букайо",
+                "ZH": "布卡约",
+                "AR": "بوكايو "
+              },
+              "lastName": {
+                "EN": "Saka",
+                "FR": "Saka",
+                "DE": "Saka",
+                "ES": "Saka",
+                "PT": "Saka",
+                "IT": "Saka",
+                "RU": "Сака",
+                "ZH": "萨卡",
+                "AR": "ساكا"
+              },
+              "name": {
+                "EN": "Bukayo Saka",
+                "FR": "Bukayo Saka",
+                "DE": "Bukayo Saka",
+                "ES": "Bukayo Saka",
+                "PT": "Bukayo Saka",
+                "IT": "Bukayo Saka",
+                "RU": "Букайо Сака",
+                "ZH": "布卡约·萨卡",
+                "AR": "بوكايو ساكا"
+              },
+              "nationalFieldPosition": {
+                "EN": "Forward",
+                "FR": "Attaquant",
+                "DE": "Stürmer",
+                "ES": "Delantero",
+                "PT": "Avançado",
+                "IT": "Attaccante",
+                "RU": "Нападающий",
+                "ZH": "前锋",
+                "AR": "مهاجم"
+              },
+              "shortName": {
+                "EN": "Saka",
+                "FR": "Saka",
+                "DE": "Saka",
+                "ES": "Saka",
+                "PT": "Saka",
+                "IT": "Saka",
+                "RU": "Сака",
+                "ZH": "萨卡",
+                "AR": "ساكا"
+              }
+            }
+          },
+          "teamId": "52280",
+          "teamIdProvider": "FAME",
+          "time": {
+            "minute": 45,
+            "second": 5
+          }
+        }
+      ]
+    },
+    "playerOfTheMatch": {
+      "player": {
+        "age": "27",
+        "birthDate": "1999-01-14",
+        "clubId": "52280",
+        "clubJerseyNumber": "41",
+        "clubShirtName": "Rice",
+        "countryCode": "ENG",
+        "fieldPosition": "MIDFIELDER",
+        "gender": "MALE",
+        "id": "250083732",
+        "imageUrl": "https://img.uefa.com/imgml/TP/players/1/2026/324x324/250083732.jpg",
+        "internationalName": "Declan Rice",
+        "nationalFieldPosition": "MIDFIELDER",
+        "nationalJerseyNumber": "4",
+        "nationalShirtName": "Rice",
+        "nationalTeamId": "39",
+        "translations": {
+          "countryName": {
+            "EN": "England",
+            "FR": "Angleterre",
+            "DE": "England",
+            "ES": "Inglaterra",
+            "PT": "Inglaterra",
+            "IT": "Inghilterra",
+            "RU": "Англия",
+            "ZH": "英格兰",
+            "AR": "إنجلترا"
+          },
+          "fieldPosition": {
+            "EN": "Midfielder",
+            "FR": "Milieu",
+            "DE": "Mittelfeldspieler",
+            "ES": "Centrocampista",
+            "PT": "Médio",
+            "IT": "Centrocampista",
+            "RU": "Полузащитник",
+            "ZH": "中场球员",
+            "AR": "لاعب وسط"
+          },
+          "firstName": {
+            "EN": "Declan",
+            "FR": "Declan",
+            "DE": "Declan",
+            "ES": "Declan",
+            "PT": "Declan",
+            "IT": "Declan",
+            "RU": "Деклан",
+            "ZH": "德克兰",
+            "AR": "ديكلان"
+          },
+          "lastName": {
+            "EN": "Rice",
+            "FR": "Rice",
+            "DE": "Rice",
+            "ES": "Rice",
+            "PT": "Rice",
+            "IT": "Rice",
+            "RU": "Райс",
+            "ZH": "赖斯",
+            "AR": "رايس"
+          },
+          "name": {
+            "EN": "Declan Rice",
+            "FR": "Declan Rice",
+            "DE": "Declan Rice",
+            "ES": "Declan Rice",
+            "PT": "Declan Rice",
+            "IT": "Declan Rice",
+            "RU": "Деклан Райс",
+            "ZH": "德克兰·赖斯",
+            "AR": "ديكلان رايس"
+          },
+          "nationalFieldPosition": {
+            "EN": "Midfielder",
+            "FR": "Milieu",
+            "DE": "Mittelfeldspieler",
+            "ES": "Centrocampista",
+            "PT": "Médio",
+            "IT": "Centrocampista",
+            "RU": "Полузащитник",
+            "ZH": "中场球员",
+            "AR": "لاعب وسط"
+          },
+          "shortName": {
+            "EN": "Rice",
+            "FR": "Rice",
+            "DE": "Rice",
+            "ES": "Rice",
+            "PT": "Rice",
+            "IT": "Rice",
+            "RU": "Райс",
+            "ZH": "赖斯",
+            "AR": "رايس"
+          }
+        }
+      },
+      "teamId": "52280"
+    },
+    "referees": [
+      {
+        "images": {
+          "SMALL_SQUARE": "https://img.uefa.com/imgml/referees/75x75/256295.jpg"
+        },
+        "person": {
+          "countryCode": "NOR",
+          "gender": "MALE",
+          "id": "256295",
+          "translations": {
+            "countryName": {
+              "EN": "Norway",
+              "FR": "Norvège",
+              "DE": "Norwegen",
+              "ES": "Noruega",
+              "PT": "Noruega",
+              "IT": "Norvegia",
+              "RU": "Норвегия",
+              "ZH": "挪威",
+              "AR": "النرويج"
+            },
+            "firstName": {
+              "EN": "Terje",
+              "FR": "Terje",
+              "DE": "Terje",
+              "ES": "Terje",
+              "PT": "Terje",
+              "IT": "Terje",
+              "RU": "Терье",
+              "ZH": "Terje",
+              "AR": "تيرجي "
+            },
+            "lastName": {
+              "EN": "Hauge",
+              "FR": "Hauge",
+              "DE": "Hauge",
+              "ES": "Hauge",
+              "PT": "Hauge",
+              "IT": "Hauge",
+              "RU": "Хоге",
+              "ZH": "Hauge",
+              "AR": "هاوج"
+            },
+            "name": {
+              "EN": "Terje Hauge",
+              "FR": "Terje Hauge",
+              "DE": "Terje Hauge",
+              "ES": "Terje Hauge",
+              "PT": "Terje Hauge",
+              "IT": "Terje Hauge",
+              "RU": "Терье Хауге",
+              "ZH": "特里·豪格",
+              "AR": "تيرجي هاوج"
+            },
+            "shortName": {
+              "EN": "Hauge",
+              "FR": "Hauge",
+              "DE": "Hauge",
+              "ES": "Hauge",
+              "PT": "Hauge",
+              "IT": "Hauge",
+              "RU": "Хауге",
+              "ZH": "豪格",
+              "AR": "هاوج"
+            }
+          }
+        },
+        "role": "REFEREE_OBSERVER",
+        "translations": {
+          "roleName": {
+            "EN": "Referee observer",
+            "FR": "Observateur d'arbitres",
+            "DE": "Referee observer",
+            "ES": "Observador arbitral",
+            "PT": "Observador de árbitro",
+            "IT": "Referee observer",
+            "RU": "Судейский наблюдатель",
+            "ZH": "Referee observer",
+            "AR": "مراقب الحكام"
+          }
+        }
+      },
+      {
+        "images": {
+          "SMALL_SQUARE": "https://img.uefa.com/imgml/referees/75x75/250058005.jpg"
+        },
+        "person": {
+          "countryCode": "GER",
+          "gender": "MALE",
+          "id": "250058005",
+          "translations": {
+            "countryName": {
+              "EN": "Germany",
+              "FR": "Allemagne",
+              "DE": "Deutschland",
+              "ES": "Alemania",
+              "PT": "Alemanha",
+              "IT": "Germania",
+              "RU": "Германия",
+              "ZH": "德国",
+              "AR": "ألمانيا"
+            },
+            "firstName": {
+              "EN": "Rafael",
+              "FR": "Rafael",
+              "DE": "Rafael",
+              "ES": "Rafael",
+              "PT": "Rafael",
+              "IT": "Rafael",
+              "RU": "Rafael",
+              "ZH": "Rafael",
+              "AR": "رافائيل "
+            },
+            "lastName": {
+              "EN": "Foltyn",
+              "FR": "Foltyn",
+              "DE": "Foltyn",
+              "ES": "Foltyn",
+              "PT": "Foltyn",
+              "IT": "Foltyn",
+              "RU": "Foltyn",
+              "ZH": "Foltyn",
+              "AR": "فولتين"
+            },
+            "name": {
+              "EN": "Rafael Foltyn",
+              "FR": "Rafael Foltyn",
+              "DE": "Rafael Foltyn",
+              "ES": "Rafael Foltyn",
+              "PT": "Rafael Foltyn",
+              "IT": "Rafael Foltyn",
+              "RU": "Рафаэль Фольтин",
+              "ZH": "拉斐尔·福尔蒂",
+              "AR": "رافائيل فولتين"
+            },
+            "shortName": {
+              "EN": "Foltyn",
+              "FR": "Foltyn",
+              "DE": "Foltyn",
+              "ES": "Foltyn",
+              "PT": "Foltyn",
+              "IT": "Foltyn",
+              "RU": "Фольтин",
+              "ZH": "福尔蒂",
+              "AR": "فولتين"
+            }
+          }
+        },
+        "role": "ASSISTANT_REFEREE_TWO",
+        "translations": {
+          "roleName": {
+            "EN": "Assistant referee two",
+            "FR": "Arbitre assistant n°2",
+            "DE": "Schiedsrichterassistent zwei",
+            "ES": "Segundo árbitro asistente",
+            "PT": "Árbitro assistente 2",
+            "IT": "Guardalinee due",
+            "RU": "Ассистент рефери 2",
+            "ZH": "Árbitro-assistente 2",
+            "AR": "مساعد الحكم الثاني"
+          }
+        }
+      },
+      {
+        "images": {
+          "SMALL_SQUARE": "https://img.uefa.com/imgml/referees/75x75/1907630.jpg"
+        },
+        "person": {
+          "countryCode": "GER",
+          "gender": "MALE",
+          "id": "1907630",
+          "translations": {
+            "countryName": {
+              "EN": "Germany",
+              "FR": "Allemagne",
+              "DE": "Deutschland",
+              "ES": "Alemania",
+              "PT": "Alemanha",
+              "IT": "Germania",
+              "RU": "Германия",
+              "ZH": "德国",
+              "AR": "ألمانيا"
+            },
+            "firstName": {
+              "EN": "Tobias",
+              "FR": "Tobias",
+              "DE": "Tobias",
+              "ES": "Tobias",
+              "PT": "Tobias",
+              "IT": "Tobias",
+              "RU": "Tobias",
+              "ZH": "Tobias",
+              "AR": "توبياس "
+            },
+            "lastName": {
+              "EN": "Stieler",
+              "FR": "Stieler",
+              "DE": "Stieler",
+              "ES": "Stieler",
+              "PT": "Stieler",
+              "IT": "Stieler",
+              "RU": "Stieler",
+              "ZH": "Stieler",
+              "AR": "ستيلر"
+            },
+            "name": {
+              "EN": "Tobias Stieler",
+              "FR": "Tobias Stieler",
+              "DE": "Tobias Stieler",
+              "ES": "Tobias Stieler",
+              "PT": "Tobias Stieler",
+              "IT": "Tobias Stieler",
+              "RU": "Тобиас Штилер",
+              "ZH": "Tobias Stieler",
+              "AR": "توبياس ستيلر"
+            },
+            "shortName": {
+              "EN": "Stieler",
+              "FR": "Stieler",
+              "DE": "Stieler",
+              "ES": "Stieler",
+              "PT": "Stieler",
+              "IT": "Stieler",
+              "RU": "Штилер",
+              "ZH": "Stieler",
+              "AR": "ستيلر"
+            }
+          }
+        },
+        "role": "FOURTH_OFFICIAL",
+        "translations": {
+          "roleName": {
+            "EN": "Fourth official",
+            "FR": "Quatrième arbitre",
+            "DE": "Vierter Offizieller",
+            "ES": "Cuarto árbitro",
+            "PT": "Quarto árbitro",
+            "IT": "Quarto uomo",
+            "RU": "Четвертый рефери",
+            "ZH": "Quarto árbitro",
+            "AR": "الحكم الرابع"
+          }
+        }
+      }
+    ],
+    "relatedMatches": [
+      {
+        "awayTeam": {
+          "associationId": "200039",
+          "associationLogoUrl": "https://img.uefa.com/imgml/uefacom/elements/logos/ma/ENG.svg",
+          "bigLogoUrl": "https://img.uefa.com/imgml/TP/teams/logos/700x700/52280.png",
+          "confederationType": "UEFA",
+          "countryCode": "ENG",
+          "id": "52280",
+          "idProvider": "FAME",
+          "internationalName": "Arsenal",
+          "isPlaceHolder": false,
+          "logoUrl": "https://img.uefa.com/imgml/TP/teams/logos/70x70/52280.png",
+          "mediumLogoUrl": "https://img.uefa.com/imgml/TP/teams/logos/240x240/52280.png",
+          "organizationId": "252280",
+          "teamCode": "ARS",
+          "teamTypeDetail": "DOMESTIC_MEN_TEAM_A",
+          "translations": {
+            "countryName": {
+              "EN": "England",
+              "FR": "Angleterre",
+              "DE": "England",
+              "ES": "Inglaterra",
+              "PT": "Inglaterra",
+              "IT": "Inghilterra",
+              "RU": "Англия",
+              "ZH": "英格兰",
+              "AR": "إنجلترا"
+            },
+            "displayName": {
+              "EN": "Arsenal",
+              "FR": "Arsenal",
+              "DE": "Arsenal",
+              "ES": "Arsenal",
+              "PT": "Arsenal",
+              "IT": "Arsenal",
+              "RU": "Арсенал",
+              "ZH": "阿森纳",
+              "AR": "آرسنال"
+            },
+            "displayOfficialName": {
+              "EN": "Arsenal FC",
+              "FR": "Arsenal FC",
+              "DE": "Arsenal FC",
+              "ES": "Arsenal FC",
+              "PT": "Arsenal FC",
+              "IT": "Arsenal FC",
+              "RU": "Арсенал",
+              "ZH": "阿森纳",
+              "AR": "آرسنال"
+            },
+            "displayTeamCode": {
+              "EN": "ARS",
+              "FR": "ARS",
+              "DE": "ARS",
+              "ES": "ARS",
+              "PT": "ARS",
+              "IT": "ARS",
+              "RU": "ARS",
+              "ZH": "ARS",
+              "AR": "ARS"
+            },
+            "shortName": {
+              "EN": "Arsenal",
+              "FR": "Arsenal",
+              "DE": "Arsenal",
+              "ES": "Arsenal",
+              "PT": "Arsenal",
+              "IT": "Arsenal",
+              "RU": "Арсенал",
+              "ZH": "Arsenal",
+              "AR": "آرسنال"
+            }
+          },
+          "typeIsNational": false,
+          "typeTeam": "DOMESTIC"
+        },
+        "homeTeam": {
+          "associationId": "200122",
+          "associationLogoUrl": "https://img.uefa.com/imgml/uefacom/elements/logos/ma/ESP.svg",
+          "bigLogoUrl": "https://img.uefa.com/imgml/TP/teams/logos/700x700/50124.png",
+          "confederationType": "UEFA",
+          "countryCode": "ESP",
+          "id": "50124",
+          "idProvider": "FAME",
+          "internationalName": "Atleti",
+          "isPlaceHolder": false,
+          "logoUrl": "https://img.uefa.com/imgml/TP/teams/logos/70x70/50124.png",
+          "mediumLogoUrl": "https://img.uefa.com/imgml/TP/teams/logos/240x240/50124.png",
+          "organizationId": "250124",
+          "teamCode": "ATM",
+          "teamTypeDetail": "DOMESTIC_MEN_TEAM_A",
+          "translations": {
+            "countryName": {
+              "EN": "Spain",
+              "FR": "Espagne",
+              "DE": "Spanien",
+              "ES": "España",
+              "PT": "Espanha",
+              "IT": "Spagna",
+              "RU": "Испания",
+              "ZH": "西班牙",
+              "AR": "إسبانيا"
+            },
+            "displayName": {
+              "EN": "Atleti",
+              "FR": "Atleti",
+              "DE": "Atleti",
+              "ES": "Atleti",
+              "PT": "Atleti",
+              "IT": "Atleti",
+              "RU": "Атлетико",
+              "ZH": "马德里竞技",
+              "AR": "أتلتيكو"
+            },
+            "displayOfficialName": {
+              "EN": "Atlético de Madrid",
+              "FR": "Atlético de Madrid",
+              "DE": "Atlético de Madrid",
+              "ES": "Atlético de Madrid",
+              "PT": "Atlético de Madrid",
+              "IT": "Atlético de Madrid",
+              "RU": "Атлетико",
+              "ZH": "马德里竞技",
+              "AR": "أتلتيكو مدريد"
+            },
+            "displayTeamCode": {
+              "EN": "ATM",
+              "FR": "ATM",
+              "DE": "ATM",
+              "ES": "ATM",
+              "PT": "ATM",
+              "IT": "ATM",
+              "RU": "ATM",
+              "ZH": "ATM",
+              "AR": "ATM"
+            },
+            "shortName": {
+              "EN": "Atlético",
+              "FR": "Atlético",
+              "DE": "Atlético",
+              "ES": "Atlético",
+              "PT": "Atlético",
+              "IT": "Atlético",
+              "RU": "Атлетико",
+              "ZH": "Atlético",
+              "AR": "أتلتيكو"
+            }
+          },
+          "typeIsNational": false,
+          "typeTeam": "DOMESTIC"
+        },
+        "id": "2048071",
+        "kickOffTime": {
+          "date": "2026-04-29",
+          "dateTime": "2026-04-29T19:00:00Z",
+          "utcOffsetInHours": 2
+        },
+        "score": {
+          "aggregate": {
+            "away": 2,
+            "home": 1
+          },
+          "regular": {
+            "away": 1,
+            "home": 1
+          },
+          "total": {
+            "away": 1,
+            "home": 1
+          }
+        },
+        "status": "FINISHED",
+        "type": "FIRST_LEG",
+        "winner": {
+          "aggregate": {
+            "reason": "WIN_ON_AGGREGATE",
+            "team": {
+              "associationId": "200039",
+              "associationLogoUrl": "https://img.uefa.com/imgml/uefacom/elements/logos/ma/ENG.svg",
+              "bigLogoUrl": "https://img.uefa.com/imgml/TP/teams/logos/700x700/52280.png",
+              "confederationType": "UEFA",
+              "countryCode": "ENG",
+              "id": "52280",
+              "idProvider": "FAME",
+              "internationalName": "Arsenal",
+              "isPlaceHolder": false,
+              "logoUrl": "https://img.uefa.com/imgml/TP/teams/logos/70x70/52280.png",
+              "mediumLogoUrl": "https://img.uefa.com/imgml/TP/teams/logos/240x240/52280.png",
+              "organizationId": "252280",
+              "teamCode": "ARS",
+              "teamTypeDetail": "DOMESTIC_MEN_TEAM_A",
+              "translations": {
+                "countryName": {
+                  "EN": "England",
+                  "FR": "Angleterre",
+                  "DE": "England",
+                  "ES": "Inglaterra",
+                  "PT": "Inglaterra",
+                  "IT": "Inghilterra",
+                  "RU": "Англия",
+                  "ZH": "英格兰",
+                  "AR": "إنجلترا"
+                },
+                "displayName": {
+                  "EN": "Arsenal",
+                  "FR": "Arsenal",
+                  "DE": "Arsenal",
+                  "ES": "Arsenal",
+                  "PT": "Arsenal",
+                  "IT": "Arsenal",
+                  "RU": "Арсенал",
+                  "ZH": "阿森纳",
+                  "AR": "آرسنال"
+                },
+                "displayOfficialName": {
+                  "EN": "Arsenal FC",
+                  "FR": "Arsenal FC",
+                  "DE": "Arsenal FC",
+                  "ES": "Arsenal FC",
+                  "PT": "Arsenal FC",
+                  "IT": "Arsenal FC",
+                  "RU": "Арсенал",
+                  "ZH": "阿森纳",
+                  "AR": "آرسنال"
+                },
+                "displayTeamCode": {
+                  "EN": "ARS",
+                  "FR": "ARS",
+                  "DE": "ARS",
+                  "ES": "ARS",
+                  "PT": "ARS",
+                  "IT": "ARS",
+                  "RU": "ARS",
+                  "ZH": "ARS",
+                  "AR": "ARS"
+                },
+                "shortName": {
+                  "EN": "Arsenal",
+                  "FR": "Arsenal",
+                  "DE": "Arsenal",
+                  "ES": "Arsenal",
+                  "PT": "Arsenal",
+                  "IT": "Arsenal",
+                  "RU": "Арсенал",
+                  "ZH": "Arsenal",
+                  "AR": "آرسنال"
+                }
+              },
+              "typeIsNational": false,
+              "typeTeam": "DOMESTIC"
+            },
+            "translations": {
+              "reasonTextAbbr": {
+                "RU": "Арсенал побеждает",
+                "DE": "Arsenal gewinnt",
+                "PT": "Arsenal vence",
+                "ES": "Gana Arsenal",
+                "IT": "Arsenal vince",
+                "EN": "Arsenal win",
+                "ZH": "阿森纳 总比分取胜",
+                "AR": " فاز آرسنال بمجموع المباراتين  ",
+                "FR": "Arsenal: vainqueur"
+              }
+            }
+          },
+          "match": {
+            "reason": "DRAW",
+            "translations": {
+              "reasonText": {
+                "RU": "Первый матч закончился вничью",
+                "DE": "Das Hinspiel endete unentschieden",
+                "PT": "A primeira mão terminou com um empate",
+                "ES": "El partido de ida finalizó en empate",
+                "IT": "Andata finita in pareggio",
+                "EN": "First leg ended in a draw",
+                "ZH": "首回合比赛打平",
+                "AR": "تعادل في مباراة الذهاب",
+                "FR": "L'aller s'est terminé sur un nul"
+              },
+              "reasonTextAbbr": {
+                "RU": "Ничья",
+                "DE": "Unentschieden",
+                "PT": "Empate",
+                "ES": "Empate",
+                "IT": "Pareggio",
+                "EN": "Draw",
+                "ZH": "平局",
+                "AR": "تعادل",
+                "FR": "Nul"
+              }
+            }
+          }
+        }
+      }
+    ],
+    "round": {
+      "active": false,
+      "benchGKCount": 12,
+      "benchPlayersCount": 12,
+      "benchStaffCount": 15,
+      "coefficientWinnerBonus": 0.0,
+      "competitionId": "1",
+      "dateFrom": "2026-04-28T06:00:00+0000",
+      "dateTo": "2026-05-06T21:59:59+0000",
+      "fieldPlayersCount": 11,
+      "groupCount": 2,
+      "id": "2002114",
+      "metaData": {
+        "name": "Semi-finals",
+        "type": "SEMIFINAL"
+      },
+      "mode": "KNOCK_OUT",
+      "modeDetail": "KNOCK_OUT_TWO_LEGS",
+      "orderInCompetition": 9,
+      "phase": "TOURNAMENT",
+      "seasonYear": "2026",
+      "secondaryType": "KNOCKOUT_PHASE",
+      "stadiumNameType": "OFFICIAL_NAME",
+      "status": "FINISHED",
+      "substitutionCount": 5,
+      "teamCount": 4,
+      "teams": [
+        "50037",
+        "50124",
+        "52280"
+      ],
+      "translations": {
+        "abbreviation": {
+          "EN": "SF",
+          "FR": "DF",
+          "DE": "HF",
+          "ES": "SF",
+          "PT": "MF",
+          "IT": "SF",
+          "RU": "1/2",
+          "ZH": "SF",
+          "AR": "SF"
+        },
+        "name": {
+          "EN": "Semi-finals",
+          "FR": "Demi-finales",
+          "DE": "Halbfinale",
+          "ES": "Semifinales",
+          "PT": "Meias-finais",
+          "IT": "Semifinali",
+          "RU": "Полуфиналы",
+          "ZH": "Semi-finals",
+          "AR": "نصف النهائي"
+        },
+        "shortName": {
+          "EN": "Semi-finals",
+          "FR": "Demi-finales",
+          "DE": "Halbfinale",
+          "ES": "Semifinales",
+          "PT": "Meias-finais",
+          "IT": "Semifinali",
+          "RU": "1/2 финала",
+          "ZH": "半决赛",
+          "AR": "نصف النهائي"
+        }
+      }
+    },
+    "score": {
+      "aggregate": {
+        "away": 1,
+        "home": 2
+      },
+      "regular": {
+        "away": 0,
+        "home": 1
+      },
+      "total": {
+        "away": 0,
+        "home": 1
+      }
+    },
+    "seasonYear": "2026",
+    "sessionNumber": 1,
+    "stadium": {
+      "address": "Queensland road",
+      "capacity": 60704,
+      "city": {
+        "countryCode": "ENG",
+        "id": "2116",
+        "translations": {
+          "name": {
+            "EN": "London",
+            "FR": "Londres",
+            "DE": "London",
+            "ES": "Londres",
+            "PT": "Londres",
+            "IT": "Londra",
+            "RU": "Лондон",
+            "ZH": "伦敦",
+            "AR": "لندن"
+          }
+        }
+      },
+      "countryCode": "ENG",
+      "geolocation": {
+        "latitude": 51.555141,
+        "longitude": -0.108479
+      },
+      "id": "93415",
+      "images": {
+        "MEDIUM_WIDE": "https://img.uefa.com/imgml/stadium/matchinfo/w1/93415.jpg",
+        "LARGE_ULTRA_WIDE": "https://img.uefa.com/imgml/stadium/matchinfo/uw/93415.jpg"
+      },
+      "openingDate": "2006-01-01",
+      "pitch": {
+        "length": 105,
+        "width": 68
+      },
+      "translations": {
+        "mediaName": {
+          "EN": "Arsenal Stadium",
+          "FR": "Arsenal Stadium",
+          "DE": "Arsenal Stadium",
+          "ES": "Arsenal Stadium",
+          "PT": "Arsenal Stadium",
+          "IT": "Arsenal Stadium",
+          "RU": "Арсенал",
+          "ZH": "Arsenal Stadium",
+          "AR": "استاد أرسنال"
+        },
+        "name": {
+          "EN": "Arsenal Stadium",
+          "FR": "Arsenal Stadium",
+          "DE": "Arsenal Stadium",
+          "ES": "Arsenal Stadium",
+          "PT": "Arsenal Stadium",
+          "IT": "Arsenal Stadium",
+          "RU": "Арсенал",
+          "ZH": "Arsenal Stadium",
+          "AR": "استاد أرسنال"
+        },
+        "officialName": {
+          "EN": "Arsenal Stadium",
+          "FR": "Arsenal Stadium",
+          "DE": "Arsenal Stadium",
+          "ES": "Arsenal Stadium",
+          "PT": "Arsenal Stadium",
+          "IT": "Arsenal Stadium",
+          "RU": "Арсенал",
+          "ZH": "Arsenal Stadium",
+          "AR": "استاد أرسنال"
+        },
+        "specialEventsName": {
+          "EN": "Arsenal Stadium",
+          "FR": "Arsenal Stadium",
+          "DE": "Arsenal Stadium",
+          "ES": "Arsenal Stadium",
+          "PT": "Arsenal Stadium",
+          "IT": "Arsenal Stadium",
+          "RU": "Арсенал",
+          "ZH": "Arsenal Stadium",
+          "AR": "استاد أرسنال"
+        },
+        "sponsorName": {
+          "EN": "Arsenal Stadium",
+          "FR": "Arsenal Stadium",
+          "DE": "Arsenal Stadium",
+          "ES": "Arsenal Stadium",
+          "PT": "Arsenal Stadium",
+          "IT": "Arsenal Stadium",
+          "RU": "Арсенал",
+          "ZH": "Emirates Stadium",
+          "AR": "استاد أرسنال"
+        }
+      }
+    },
+    "status": "FINISHED",
+    "type": "SECOND_LEG",
+    "winner": {
+      "aggregate": {
+        "reason": "WIN_ON_AGGREGATE",
+        "team": {
+          "associationId": "200039",
+          "associationLogoUrl": "https://img.uefa.com/imgml/uefacom/elements/logos/ma/ENG.svg",
+          "bigLogoUrl": "https://img.uefa.com/imgml/TP/teams/logos/700x700/52280.png",
+          "confederationType": "UEFA",
+          "countryCode": "ENG",
+          "id": "52280",
+          "idProvider": "FAME",
+          "internationalName": "Arsenal",
+          "isPlaceHolder": false,
+          "logoUrl": "https://img.uefa.com/imgml/TP/teams/logos/70x70/52280.png",
+          "mediumLogoUrl": "https://img.uefa.com/imgml/TP/teams/logos/240x240/52280.png",
+          "organizationId": "252280",
+          "teamCode": "ARS",
+          "teamTypeDetail": "DOMESTIC_MEN_TEAM_A",
+          "translations": {
+            "countryName": {
+              "EN": "England",
+              "FR": "Angleterre",
+              "DE": "England",
+              "ES": "Inglaterra",
+              "PT": "Inglaterra",
+              "IT": "Inghilterra",
+              "RU": "Англия",
+              "ZH": "英格兰",
+              "AR": "إنجلترا"
+            },
+            "displayName": {
+              "EN": "Arsenal",
+              "FR": "Arsenal",
+              "DE": "Arsenal",
+              "ES": "Arsenal",
+              "PT": "Arsenal",
+              "IT": "Arsenal",
+              "RU": "Арсенал",
+              "ZH": "阿森纳",
+              "AR": "آرسنال"
+            },
+            "displayOfficialName": {
+              "EN": "Arsenal FC",
+              "FR": "Arsenal FC",
+              "DE": "Arsenal FC",
+              "ES": "Arsenal FC",
+              "PT": "Arsenal FC",
+              "IT": "Arsenal FC",
+              "RU": "Арсенал",
+              "ZH": "阿森纳",
+              "AR": "آرسنال"
+            },
+            "displayTeamCode": {
+              "EN": "ARS",
+              "FR": "ARS",
+              "DE": "ARS",
+              "ES": "ARS",
+              "PT": "ARS",
+              "IT": "ARS",
+              "RU": "ARS",
+              "ZH": "ARS",
+              "AR": "ARS"
+            },
+            "shortName": {
+              "EN": "Arsenal",
+              "FR": "Arsenal",
+              "DE": "Arsenal",
+              "ES": "Arsenal",
+              "PT": "Arsenal",
+              "IT": "Arsenal",
+              "RU": "Арсенал",
+              "ZH": "Arsenal",
+              "AR": "آرسنال"
+            }
+          },
+          "typeIsNational": false,
+          "typeTeam": "DOMESTIC"
+        },
+        "translations": {
+          "reasonTextAbbr": {
+            "RU": "Арсенал побеждает",
+            "DE": "Arsenal gewinnt",
+            "PT": "Arsenal vence",
+            "ES": "Gana Arsenal",
+            "IT": "Arsenal vince",
+            "EN": "Arsenal win",
+            "ZH": "阿森纳 总比分取胜",
+            "AR": " فاز آرسنال بمجموع المباراتين  ",
+            "FR": "Arsenal: vainqueur"
+          }
+        }
+      },
+      "match": {
+        "reason": "WIN_REGULAR",
+        "team": {
+          "associationId": "200039",
+          "associationLogoUrl": "https://img.uefa.com/imgml/uefacom/elements/logos/ma/ENG.svg",
+          "bigLogoUrl": "https://img.uefa.com/imgml/TP/teams/logos/700x700/52280.png",
+          "confederationType": "UEFA",
+          "countryCode": "ENG",
+          "id": "52280",
+          "idProvider": "FAME",
+          "internationalName": "Arsenal",
+          "isPlaceHolder": false,
+          "logoUrl": "https://img.uefa.com/imgml/TP/teams/logos/70x70/52280.png",
+          "mediumLogoUrl": "https://img.uefa.com/imgml/TP/teams/logos/240x240/52280.png",
+          "organizationId": "252280",
+          "teamCode": "ARS",
+          "teamTypeDetail": "DOMESTIC_MEN_TEAM_A",
+          "translations": {
+            "countryName": {
+              "EN": "England",
+              "FR": "Angleterre",
+              "DE": "England",
+              "ES": "Inglaterra",
+              "PT": "Inglaterra",
+              "IT": "Inghilterra",
+              "RU": "Англия",
+              "ZH": "英格兰",
+              "AR": "إنجلترا"
+            },
+            "displayName": {
+              "EN": "Arsenal",
+              "FR": "Arsenal",
+              "DE": "Arsenal",
+              "ES": "Arsenal",
+              "PT": "Arsenal",
+              "IT": "Arsenal",
+              "RU": "Арсенал",
+              "ZH": "阿森纳",
+              "AR": "آرسنال"
+            },
+            "displayOfficialName": {
+              "EN": "Arsenal FC",
+              "FR": "Arsenal FC",
+              "DE": "Arsenal FC",
+              "ES": "Arsenal FC",
+              "PT": "Arsenal FC",
+              "IT": "Arsenal FC",
+              "RU": "Арсенал",
+              "ZH": "阿森纳",
+              "AR": "آرسنال"
+            },
+            "displayTeamCode": {
+              "EN": "ARS",
+              "FR": "ARS",
+              "DE": "ARS",
+              "ES": "ARS",
+              "PT": "ARS",
+              "IT": "ARS",
+              "RU": "ARS",
+              "ZH": "ARS",
+              "AR": "ARS"
+            },
+            "shortName": {
+              "EN": "Arsenal",
+              "FR": "Arsenal",
+              "DE": "Arsenal",
+              "ES": "Arsenal",
+              "PT": "Arsenal",
+              "IT": "Arsenal",
+              "RU": "Арсенал",
+              "ZH": "Arsenal",
+              "AR": "آرسنال"
+            }
+          },
+          "typeIsNational": false,
+          "typeTeam": "DOMESTIC"
+        }
+      }
+    }
+  }
+]

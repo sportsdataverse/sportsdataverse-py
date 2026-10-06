@@ -1,0 +1,269 @@
+[
+  {
+    "age": "44",
+    "birthDate": "1982-06-15",
+    "clubJerseyNumber": "4",
+    "clubShirtName": "",
+    "countryCode": "FRO",
+    "detailedFieldPosition": "UNKNOWN",
+    "gender": "MALE",
+    "height": 194,
+    "id": "46209",
+    "imageUrl": "https://img.uefa.com/imgml/TP/players/1/2026/324x324/46209.jpg",
+    "internationalName": "Atli Gregersen",
+    "nationalJerseyNumber": "4",
+    "nationalShirtName": "",
+    "nationalTeamId": "51218",
+    "translations": {
+      "countryName": {
+        "EN": "Faroe Islands",
+        "FR": "Îles Féroé",
+        "DE": "Färöer-Inseln",
+        "ES": "Islas Feroe",
+        "PT": "Ilhas Faroé",
+        "IT": "Isole Faroe",
+        "RU": "Фарерские острова",
+        "ZH": "法罗群岛",
+        "AR": "جزر فارو"
+      },
+      "firstName": {
+        "EN": "Atli",
+        "FR": "Atli",
+        "DE": "Atli",
+        "ES": "Atli",
+        "PT": "Atli",
+        "IT": "Atli",
+        "RU": "Атли",
+        "ZH": "阿特利",
+        "AR": "Atli"
+      },
+      "lastName": {
+        "EN": "Gregersen",
+        "FR": "Gregersen",
+        "DE": "Gregersen",
+        "ES": "Gregersen",
+        "PT": "Gregersen",
+        "IT": "Gregersen",
+        "RU": "Грегерсен",
+        "ZH": "格雷格森",
+        "AR": "Gregersen"
+      },
+      "name": {
+        "EN": "Atli Gregersen",
+        "FR": "Atli Gregersen",
+        "DE": "Atli Gregersen",
+        "ES": "Atli Gregersen",
+        "PT": "Atli Gregersen",
+        "IT": "Atli Gregersen",
+        "RU": "Атли Грегерсен",
+        "ZH": "阿特利·格雷格森",
+        "AR": "Atli Gregersen"
+      },
+      "shortName": {
+        "EN": "A. Gregersen",
+        "FR": "A. Gregersen",
+        "DE": "A. Gregersen",
+        "ES": "A. Gregersen",
+        "PT": "A. Gregersen",
+        "IT": "A. Gregersen",
+        "RU": "А. Грегерсен",
+        "ZH": "格雷格森",
+        "AR": "A. Gregersen"
+      }
+    },
+    "weight": 85
+  },
+  {
+    "age": "39",
+    "birthDate": "1987-01-09",
+    "clubId": "64516",
+    "clubJerseyNumber": "5",
+    "clubShirtName": "Rinaldi",
+    "countryCode": "ITA",
+    "fieldPosition": "DEFENDER",
+    "gender": "MALE",
+    "id": "69982",
+    "imageUrl": "https://img.uefa.com/imgml/TP/players/1/2026/324x324/69982.jpg",
+    "internationalName": "Michele Rinaldi",
+    "nationalFieldPosition": "DEFENDER",
+    "nationalShirtName": "Rinaldi",
+    "translations": {
+      "countryName": {
+        "EN": "Italy",
+        "FR": "Italie",
+        "DE": "Italien",
+        "ES": "Italia",
+        "PT": "Itália",
+        "IT": "Italia",
+        "RU": "Италия",
+        "ZH": "意大利",
+        "AR": "إيطاليا"
+      },
+      "fieldPosition": {
+        "EN": "Defender",
+        "FR": "Défenseur",
+        "DE": "Verteidiger",
+        "ES": "Defensa",
+        "PT": "Defesa",
+        "IT": "Difensore",
+        "RU": "Защитник",
+        "ZH": "后卫",
+        "AR": "مدافع"
+      },
+      "firstName": {
+        "EN": "Michele",
+        "FR": "Michele",
+        "DE": "Michele",
+        "ES": "Michele",
+        "PT": "Michele",
+        "IT": "Michele",
+        "RU": "Микеле",
+        "ZH": "Michele",
+        "AR": "Michele"
+      },
+      "lastName": {
+        "EN": "Rinaldi",
+        "FR": "Rinaldi",
+        "DE": "Rinaldi",
+        "ES": "Rinaldi",
+        "PT": "Rinaldi",
+        "IT": "Rinaldi",
+        "RU": "Ринальди",
+        "ZH": "Rinaldi",
+        "AR": "Rinaldi"
+      },
+      "name": {
+        "EN": "Michele Rinaldi",
+        "FR": "Michele Rinaldi",
+        "DE": "Michele Rinaldi",
+        "ES": "Michele Rinaldi",
+        "PT": "Michele Rinaldi",
+        "IT": "Michele Rinaldi",
+        "RU": "Микеле Ринальди",
+        "ZH": "Michele Rinaldi",
+        "AR": "Michele Rinaldi"
+      },
+      "nationalFieldPosition": {
+        "EN": "Defender",
+        "FR": "Défenseur",
+        "DE": "Verteidiger",
+        "ES": "Defensa",
+        "PT": "Defesa",
+        "IT": "Difensore",
+        "RU": "Защитник",
+        "ZH": "后卫",
+        "AR": "مدافع"
+      },
+      "shortName": {
+        "EN": "Rinaldi",
+        "FR": "Rinaldi",
+        "DE": "Rinaldi",
+        "ES": "Rinaldi",
+        "PT": "Rinaldi",
+        "IT": "Rinaldi",
+        "RU": "Ринальди",
+        "ZH": "Rinaldi",
+        "AR": "Rinaldi"
+      }
+    }
+  },
+  {
+    "age": "39",
+    "birthDate": "1987-08-26",
+    "clubId": "79970",
+    "clubJerseyNumber": "14",
+    "clubShirtName": "Martynovich",
+    "countryCode": "BLR",
+    "detailedFieldPosition": "CENTRE_BACK",
+    "fieldPosition": "DEFENDER",
+    "gender": "MALE",
+    "height": 192,
+    "id": "74771",
+    "imageUrl": "https://img.uefa.com/imgml/TP/players/1/2026/324x324/74771.jpg",
+    "internationalName": "Aleksandr Martynovich",
+    "nationalFieldPosition": "DEFENDER",
+    "nationalJerseyNumber": "4",
+    "nationalShirtName": "Martynovich",
+    "nationalTeamId": "57155",
+    "translations": {
+      "countryName": {
+        "EN": "Belarus",
+        "FR": "Bélarus",
+        "DE": "Belarus",
+        "ES": "Bielorrusia",
+        "PT": "Bielorrússia",
+        "IT": "Bielorussia",
+        "RU": "Беларусь",
+        "ZH": "白俄罗斯",
+        "AR": "بيلاروسيا"
+      },
+      "fieldPosition": {
+        "EN": "Defender",
+        "FR": "Défenseur",
+        "DE": "Verteidiger",
+        "ES": "Defensa",
+        "PT": "Defesa",
+        "IT": "Difensore",
+        "RU": "Защитник",
+        "ZH": "后卫",
+        "AR": "مدافع"
+      },
+      "firstName": {
+        "EN": "Aleksandr",
+        "FR": "Aleksandr",
+        "DE": "Aleksandr",
+        "ES": "Aleksandr",
+        "PT": "Aleksandr",
+        "IT": "Aleksandr",
+        "RU": "Александр",
+        "ZH": "亚历山大",
+        "AR": "ألكسندر "
+      },
+      "lastName": {
+        "EN": "Martynovich",
+        "FR": "Martynovich",
+        "DE": "Martynovich",
+        "ES": "Martynovich",
+        "PT": "Martynovich",
+        "IT": "Martynovich",
+        "RU": "Мартынович",
+        "ZH": "马蒂诺维奇",
+        "AR": "مارتينوفيتش"
+      },
+      "name": {
+        "EN": "Aleksandr Martynovich",
+        "FR": "Aleksandr Martynovich",
+        "DE": "Aleksandr Martynovich",
+        "ES": "Aleksandr Martynovich",
+        "PT": "Aleksandr Martynovich",
+        "IT": "Aleksandr Martynovich",
+        "RU": "Александр Мартынович",
+        "ZH": "亚历山大·马蒂诺维奇",
+        "AR": "ألكسندر مارتينوفيتش"
+      },
+      "nationalFieldPosition": {
+        "EN": "Defender",
+        "FR": "Défenseur",
+        "DE": "Verteidiger",
+        "ES": "Defensa",
+        "PT": "Defesa",
+        "IT": "Difensore",
+        "RU": "Защитник",
+        "ZH": "后卫",
+        "AR": "مدافع"
+      },
+      "shortName": {
+        "EN": "Martynovich",
+        "FR": "Martynovich",
+        "DE": "Martynovich",
+        "ES": "Martynovich",
+        "PT": "Martynovich",
+        "IT": "Martynovich",
+        "RU": "Мартынович",
+        "ZH": "马蒂诺维奇",
+        "AR": "مارتينوفيتش"
+      }
+    },
+    "weight": 83
+  }
+]

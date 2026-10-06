@@ -1,0 +1,227 @@
+[
+  {
+    "associationId": "200043",
+    "associationLogoUrl": "https://img.uefa.com/imgml/uefacom/elements/logos/ma/FRA.svg",
+    "bigLogoUrl": "https://img.uefa.com/imgml/TP/teams/logos/700x700/52747.png",
+    "confederationType": "UEFA",
+    "countryCode": "FRA",
+    "id": "52747",
+    "idProvider": "FAME",
+    "internationalName": "Paris",
+    "isPlaceHolder": false,
+    "logoUrl": "https://img.uefa.com/imgml/TP/teams/logos/70x70/52747.png",
+    "mediumLogoUrl": "https://img.uefa.com/imgml/TP/teams/logos/240x240/52747.png",
+    "organizationId": "252747",
+    "teamCode": "PSG",
+    "teamTypeDetail": "DOMESTIC_MEN_TEAM_A",
+    "translations": {
+      "countryName": {
+        "EN": "France",
+        "FR": "France",
+        "DE": "Frankreich",
+        "ES": "Francia",
+        "PT": "França",
+        "IT": "Francia",
+        "RU": "Франция",
+        "ZH": "法国",
+        "AR": "فرنسا"
+      },
+      "displayName": {
+        "EN": "Paris",
+        "FR": "Paris",
+        "DE": "Paris",
+        "ES": "Paris",
+        "PT": "Paris",
+        "IT": "Paris",
+        "RU": "ПСЖ",
+        "ZH": "巴黎圣日耳曼",
+        "AR": "باريس"
+      },
+      "displayOfficialName": {
+        "EN": "Paris Saint-Germain",
+        "FR": "Paris Saint-Germain",
+        "DE": "Paris Saint-Germain",
+        "ES": "Paris Saint-Germain",
+        "PT": "Paris Saint-Germain",
+        "IT": "Paris Saint-Germain",
+        "RU": "Пари Сен-Жермен",
+        "ZH": "巴黎圣日耳曼",
+        "AR": "باريس سان جيرمان"
+      },
+      "displayTeamCode": {
+        "EN": "PSG",
+        "FR": "PSG",
+        "DE": "PSG",
+        "ES": "PSG",
+        "PT": "PSG",
+        "IT": "PSG",
+        "RU": "PSG",
+        "ZH": "PSG",
+        "AR": "PSG"
+      },
+      "shortName": {
+        "EN": "Paris",
+        "FR": "Paris",
+        "DE": "Paris",
+        "ES": "Paris",
+        "PT": "Paris",
+        "IT": "Paris",
+        "RU": "ПСЖ",
+        "ZH": "Paris",
+        "AR": "باريس"
+      }
+    },
+    "typeIsNational": false,
+    "typeTeam": "DOMESTIC"
+  },
+  {
+    "associationId": "200039",
+    "associationLogoUrl": "https://img.uefa.com/imgml/uefacom/elements/logos/ma/ENG.svg",
+    "bigLogoUrl": "https://img.uefa.com/imgml/TP/teams/logos/700x700/52280.png",
+    "confederationType": "UEFA",
+    "countryCode": "ENG",
+    "id": "52280",
+    "idProvider": "FAME",
+    "internationalName": "Arsenal",
+    "isPlaceHolder": false,
+    "logoUrl": "https://img.uefa.com/imgml/TP/teams/logos/70x70/52280.png",
+    "mediumLogoUrl": "https://img.uefa.com/imgml/TP/teams/logos/240x240/52280.png",
+    "organizationId": "252280",
+    "teamCode": "ARS",
+    "teamTypeDetail": "DOMESTIC_MEN_TEAM_A",
+    "translations": {
+      "countryName": {
+        "EN": "England",
+        "FR": "Angleterre",
+        "DE": "England",
+        "ES": "Inglaterra",
+        "PT": "Inglaterra",
+        "IT": "Inghilterra",
+        "RU": "Англия",
+        "ZH": "英格兰",
+        "AR": "إنجلترا"
+      },
+      "displayName": {
+        "EN": "Arsenal",
+        "FR": "Arsenal",
+        "DE": "Arsenal",
+        "ES": "Arsenal",
+        "PT": "Arsenal",
+        "IT": "Arsenal",
+        "RU": "Арсенал",
+        "ZH": "阿森纳",
+        "AR": "آرسنال"
+      },
+      "displayOfficialName": {
+        "EN": "Arsenal FC",
+        "FR": "Arsenal FC",
+        "DE": "Arsenal FC",
+        "ES": "Arsenal FC",
+        "PT": "Arsenal FC",
+        "IT": "Arsenal FC",
+        "RU": "Арсенал",
+        "ZH": "阿森纳",
+        "AR": "آرسنال"
+      },
+      "displayTeamCode": {
+        "EN": "ARS",
+        "FR": "ARS",
+        "DE": "ARS",
+        "ES": "ARS",
+        "PT": "ARS",
+        "IT": "ARS",
+        "RU": "ARS",
+        "ZH": "ARS",
+        "AR": "ARS"
+      },
+      "shortName": {
+        "EN": "Arsenal",
+        "FR": "Arsenal",
+        "DE": "Arsenal",
+        "ES": "Arsenal",
+        "PT": "Arsenal",
+        "IT": "Arsenal",
+        "RU": "Арсенал",
+        "ZH": "Arsenal",
+        "AR": "آرسنال"
+      }
+    },
+    "typeIsNational": false,
+    "typeTeam": "DOMESTIC"
+  },
+  {
+    "associationId": "200047",
+    "associationLogoUrl": "https://img.uefa.com/imgml/uefacom/elements/logos/ma/GER.svg",
+    "bigLogoUrl": "https://img.uefa.com/imgml/TP/teams/logos/700x700/50037.png",
+    "confederationType": "UEFA",
+    "countryCode": "GER",
+    "id": "50037",
+    "idProvider": "FAME",
+    "internationalName": "Bayern München",
+    "isPlaceHolder": false,
+    "logoUrl": "https://img.uefa.com/imgml/TP/teams/logos/70x70/50037.png",
+    "mediumLogoUrl": "https://img.uefa.com/imgml/TP/teams/logos/240x240/50037.png",
+    "organizationId": "250037",
+    "teamCode": "BAY",
+    "teamTypeDetail": "DOMESTIC_MEN_TEAM_A",
+    "translations": {
+      "countryName": {
+        "EN": "Germany",
+        "FR": "Allemagne",
+        "DE": "Deutschland",
+        "ES": "Alemania",
+        "PT": "Alemanha",
+        "IT": "Germania",
+        "RU": "Германия",
+        "ZH": "德国",
+        "AR": "ألمانيا"
+      },
+      "displayName": {
+        "EN": "Bayern München",
+        "FR": "Bayern München",
+        "DE": "Bayern München",
+        "ES": "Bayern München",
+        "PT": "Bayern München",
+        "IT": "Bayern München",
+        "RU": "Бавария",
+        "ZH": "拜仁慕尼黑",
+        "AR": "بايرن ميونخ"
+      },
+      "displayOfficialName": {
+        "EN": "FC Bayern München",
+        "FR": "FC Bayern München",
+        "DE": "FC Bayern München",
+        "ES": "FC Bayern München",
+        "PT": "FC Bayern München",
+        "IT": "FC Bayern München",
+        "RU": "Бавария",
+        "ZH": "拜仁慕尼黑",
+        "AR": "بايرن ميونخ"
+      },
+      "displayTeamCode": {
+        "EN": "BAY",
+        "FR": "BAY",
+        "DE": "BAY",
+        "ES": "BAY",
+        "PT": "BAY",
+        "IT": "BAY",
+        "RU": "BAY",
+        "ZH": "BAY",
+        "AR": "BAY"
+      },
+      "shortName": {
+        "EN": "Bayern",
+        "FR": "Bayern",
+        "DE": "Bayern",
+        "ES": "Bayern",
+        "PT": "Bayern",
+        "IT": "Bayern",
+        "RU": "Бавария",
+        "ZH": "Bayern",
+        "AR": "بايرن"
+      }
+    },
+    "typeIsNational": false,
+    "typeTeam": "DOMESTIC"
+  }
+]

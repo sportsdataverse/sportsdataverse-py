@@ -1,0 +1,12 @@
+columns:
+- description: ''
+  name: id_provider
+  type: character
+- description: ''
+  name: statistics
+  type: character
+- description: 'Club: provider identifier for the entity (Utf8 join key).'
+  name: team_id
+  type: character
+kind: dataframe
+schema: team_statistics
