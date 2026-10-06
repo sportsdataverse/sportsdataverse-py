@@ -1934,6 +1934,12 @@ FLAT_APIS = [
     ("cbs_napi", "cbs"),
     ("yahoo_shangrila", "yahoo"),
     ("fox_api", "fox"),
+    # wave-1 intake families (sdv-internal-refs: euroleague/, fotmob/, uefa/, fifa/, sleeper/)
+    ("euroleague", "euroleague"),
+    ("fotmob", "soccer"),
+    ("uefa", "soccer"),
+    ("fifa", "soccer"),
+    ("sleeper", "nfl"),
 ]
 
 
@@ -2293,6 +2299,7 @@ _COVERAGE_LEAGUES = [
     "pwhl",
     *_HOCKEYTECH_MODULE_LEAGUES,  # ahl/ohl/whl/qmjhl + the promoted junior/minor leagues
     "odds",
+    "euroleague",
 ]
 
 # Mapping from doc/coverage prefix to actual Python module path for leagues
@@ -2535,6 +2542,11 @@ _FLAT_API_DOC = {
     "cbs_napi": "CBS Sports NAPI (api.cbssports.com/napi)",
     "yahoo_shangrila": "Yahoo Sports Shangrila (graphite-secure.sports.yahoo.com)",
     "fox_api": "Fox Sports API (api.foxsports.com)",
+    "euroleague": "EuroLeague Competition Engine API (api-live.euroleague.net v2)",
+    "fotmob": "FotMob data API (fotmob.com, unofficial)",
+    "uefa": "UEFA front-end APIs (comp/match/standings/matchstats.uefa.com)",
+    "fifa": "FIFA public API v3 (api.fifa.com)",
+    "sleeper": "Sleeper fantasy API v1 (api.sleeper.app)",
 }
 
 # Friendly label per releases.yaml base key, for the "Dataset loaders" row of a
@@ -3822,7 +3834,7 @@ def _doc_leagues() -> list[str]:
     _HOCKEYTECH_EXTRA = _HOCKEYTECH_MODULE_LEAGUES
     # Cross-sport hand-written modules that get their own docs scope but have no
     # ESPN/loader entries (e.g. the The Odds API wrappers in sportsdataverse.odds).
-    _NONLEAGUE_EXTRA = ["odds", "cbs", "yahoo", "fox"]
+    _NONLEAGUE_EXTRA = ["odds", "cbs", "yahoo", "fox", "euroleague"]
     known = set(prefixes) | set(extra)
     hockeytech = [lg for lg in _HOCKEYTECH_EXTRA if lg not in known]
     nonleague = [m for m in _NONLEAGUE_EXTRA if m not in known]
@@ -4207,6 +4219,7 @@ _LEAGUE_LABELS = {
     "ligue1": "Ligue 1",
     "nbagl": "NBA G League",
     "odds": "Betting odds",
+    "euroleague": "EuroLeague",
     "seriea": "Serie A",
     "soccer": "Soccer (all)",
     "yahoo": "Yahoo Sports",
