@@ -24,6 +24,7 @@ import subprocess
 import sys
 import tarfile
 import urllib.request
+import warnings
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Optional
@@ -130,7 +131,15 @@ def codegen_wrappers(commit: str, rows: Rows) -> dict[str, Wrapper]:
     out: dict[str, Wrapper] = {}
     found: dict[tuple[str, str], tuple[str, list[str]]] = {}  # (stem, short) -> (host_url, wrapper names)
     for lg in cfg.leagues:
-        for v in G._espn_league_views(lg, list(apis.values()), cfg.hosts):
+        with warnings.catch_warnings():
+            # generate.py imports ``sportsdataverse.<prefix>`` for grouped leagues (mls, mch, cfl, ...) through
+            # the deprecated top-level alias. It resolves to the same module, so nothing is indexed twice;
+            # generate.py is drift-gated, hence the narrow filter here instead of an edit there.
+            warnings.filterwarnings(
+                "ignore", message=r"import sportsdataverse\.\w+ is deprecated", category=DeprecationWarning
+            )
+            views = G._espn_league_views(lg, list(apis.values()), cfg.hosts)
+        for v in views:
             ep = next(e for e in apis[v.api_name].endpoints if e.short == v.short)
             out.setdefault(
                 v.fn_name,
