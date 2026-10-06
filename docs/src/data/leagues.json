@@ -249,6 +249,10 @@
         {
           "prefix": "fox",
           "label": "Fox Sports"
+        },
+        {
+          "prefix": "euroleague",
+          "label": "EuroLeague"
         }
       ]
     }

@@ -83,7 +83,6 @@ not covered by the generated API-endpoint reference above.
 | [load_pfr_advstats](additional/dataset-loaders-3.md#load_pfr_advstats) | Load Pro-Football Reference advanced statistics going back to 2018. |
 | [load_player_stats](additional/dataset-loaders-3.md#load_player_stats) | Load NFL player stats data |
 | [load_players](additional/dataset-loaders-4.md#load_players) | Load the nflverse NFL player-identity master. |
-| [load_rosters](additional/dataset-loaders-4.md#load_rosters) | Load NFL season roster data for the requested seasons. |
 | [load_rosters_weekly](additional/dataset-loaders-4.md#load_rosters_weekly) | Load NFL weekly roster data for the requested seasons. |
 | [load_schedules](additional/dataset-loaders-4.md#load_schedules) | Load NFL schedule data |
 | [load_snap_counts](additional/dataset-loaders-4.md#load_snap_counts) | Load NFL snap counts data for selected seasons |

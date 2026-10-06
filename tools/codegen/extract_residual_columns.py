@@ -107,12 +107,11 @@ _DEFERRED_BUCKETS: dict[str, int | None] = {
     "native/nba_stats": 312,
     "native/wnba_stats": 269,
     "native/on3": 1841,
-    # wave-1 intake families: capture-derived specs carry no property docs; pinned to measured counts at integration
-    "native/euroleague": None,
-    "native/fotmob": None,
-    "native/uefa": None,
-    "native/fifa": None,
-    "native/sleeper": None,
+    # wave-1 intake families whose capture-derived specs carry no property docs (euroleague and fifa
+    # describe every column in their gen scripts, so they are not deferred); measured 2026-10-06
+    "native/fotmob": 283,
+    "native/uefa": 842,
+    "native/sleeper": 458,
 }
 
 
