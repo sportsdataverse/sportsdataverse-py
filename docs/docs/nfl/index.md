@@ -5,20 +5,174 @@ description: "sdv-py NFL: endpoint references, dataset loaders and parsers for N
 ---
 # NFL (`sportsdataverse.nfl`)
 
-| Reference | Functions | Base URL |
-|---|---:|---|
-| [ESPN site API (v2)](reference/site) | 24 | `https://site.api.espn.com/apis/site/v2/sports` |
-| [ESPN web API (v3)](reference/web) | 5 | `https://site.web.api.espn.com/apis/common/v3/sports` |
-| [ESPN core API (v2)](reference/core) | 84 | `https://sports.core.api.espn.com/v2/sports` |
-| [ESPN FPI API (fitt v3)](reference/fitt) | 1 | `https://site.web.api.espn.com/apis/fitt/v3/sports` |
-| [ESPN CDN API (cdn.espn.com)](reference/cdn) | 4 | `https://cdn.espn.com/core` |
-| [NFL.com API](reference/nfl_api) | 15 | `https://api.nfl.com` |
-| [nflpro](reference/nflpro) | 16 | `https://pro.nfl.com` |
-| [PFF Premium Stats -- LEGACY (premium.pff.com, cookie auth; use the PFF Developer API)](reference/pff_core) | 46 | `https://premium.pff.com` |
-| [PFF Developer API (api.pff.com, API key)](reference/pff_api) | 68 | `https://api.pff.com` |
-| [Sleeper fantasy API v1 (api.sleeper.app)](reference/sleeper) | 15 | `https://api.sleeper.app/v1` |
-| [Dataset loaders](reference/loaders) | 29 | nflverse data releases / sportsdataverse-data releases |
-| [Additional functions](reference/additional) | 177 | hand-written wrappers, loaders & helpers |
+## Data sources
+
+| Source | APIs / hosts | Functions | Auth |
+|---|---|---:|---|
+| [ESPN](#espn) | `cdn.espn.com`, `site.api.espn.com`, `site.web.api.espn.com` +1 more | 126 | none |
+| [NFL.com Shield API](#nfl-com-shield-api) | `api.nfl.com` | 22 | WEB_DESKTOP bearer token |
+| [NFL Pro](#nfl-pro) | `pro.nfl.com` | 32 | none |
+| [Sleeper fantasy API](#sleeper-fantasy-api) | `api.sleeper.app` | 15 | none |
+| [PFF Developer API](#pff-developer-api) | `api.pff.com` | 68 | API key (SDV_PY_PFF_API_KEY) |
+| [PFF Premium Stats (LEGACY)](#pff-premium-stats-legacy) | `premium.pff.com` | 46 | cookie (legacy) |
+| [nflverse data releases](#nflverse-data-releases) | `github.com` | 57 | none |
+| [sportsdataverse-data releases](#sportsdataverse-data-releases) | `github.com` | 21 | none |
+| [Fox Sports API](#fox-sports-api) | `api.foxsports.com` | 25 | none |
+| [Additional functions](reference/additional) | hand-written wrappers & helpers | 177 | — |
+
+## ESPN {#espn}
+
+| Reference | Functions |
+|---|---:|
+| [ESPN site API (v2)](reference/site) | 24 |
+| [ESPN web API (v3)](reference/web) | 5 |
+| [ESPN core API (v2)](reference/core) | 84 |
+| [ESPN FPI API (fitt v3)](reference/fitt) | 1 |
+| [ESPN CDN API (cdn.espn.com)](reference/cdn) | 4 |
+| [Hand-written wrappers](reference/additional) | 8 |
+
+## NFL.com Shield API {#nfl-com-shield-api}
+
+| Reference | Functions |
+|---|---:|
+| [NFL.com API](reference/nfl_api) | 15 |
+| [Hand-written wrappers](reference/additional) | 7 |
+
+## NFL Pro {#nfl-pro}
+
+| Reference | Functions |
+|---|---:|
+| [nflpro](reference/nflpro) | 16 |
+| [Hand-written wrappers](reference/additional) | 16 |
+
+## Sleeper fantasy API {#sleeper-fantasy-api}
+
+| Reference | Functions |
+|---|---:|
+| [Sleeper fantasy API v1 (api.sleeper.app)](reference/sleeper) | 15 |
+
+## PFF Developer API {#pff-developer-api}
+
+| Reference | Functions |
+|---|---:|
+| [PFF Developer API (api.pff.com, API key)](reference/pff_api) | 68 |
+
+## PFF Premium Stats (LEGACY) {#pff-premium-stats-legacy}
+
+| Reference | Functions |
+|---|---:|
+| [PFF Premium Stats -- LEGACY (premium.pff.com, cookie auth; use the PFF Developer API)](reference/pff_core) | 46 |
+
+## nflverse data releases {#nflverse-data-releases}
+
+| Reference | Functions |
+|---|---:|
+| [nflverse data releases](reference/loaders) | 8 |
+| [Hand-written wrappers](reference/additional) | 49 |
+
+## sportsdataverse-data releases {#sportsdataverse-data-releases}
+
+| Reference | Functions |
+|---|---:|
+| [sportsdataverse-data releases](reference/loaders) | 21 |
+
+## Fox Sports API {#fox-sports-api}
+
+| Reference | Functions |
+|---|---:|
+| [Hand-written wrappers](reference/additional) | 25 |
+## Tools and helpers
+
+### Play-by-play processing {#play-by-play-processing}
+
+- [`NFLPlayProcess`](reference/additional#NFLPlayProcess)
+- [`build_nfl_player_stats`](reference/additional#build_nfl_player_stats)
+- [`build_nfl_player_stats_def`](reference/additional#build_nfl_player_stats_def)
+- [`build_nfl_player_stats_kicking`](reference/additional#build_nfl_player_stats_kicking)
+- [`build_nfl_players`](reference/additional#build_nfl_players)
+- [`build_nfl_rosters`](reference/additional#build_nfl_rosters)
+- [`build_nfl_season`](reference/additional#build_nfl_season)
+- [`build_nfl_team_stats`](reference/additional#build_nfl_team_stats)
+- [`clean_nfl_pbp`](reference/additional#clean_nfl_pbp)
+- [`shield_nfl_pbp`](reference/additional#shield_nfl_pbp)
+- [`shield_to_espn_summary`](reference/additional#shield_to_espn_summary)
+- [`team_name_fn`](reference/additional#team_name_fn)
+
+### Models and calculators {#models-and-calculators}
+
+- [`adjust_pressure_pairs`](reference/additional#adjust_pressure_pairs)
+- [`calculate_completion_probability`](reference/additional#calculate_completion_probability)
+- [`calculate_epa`](reference/additional#calculate_epa)
+- [`calculate_expected_points`](reference/additional#calculate_expected_points)
+- [`calculate_nfl_series_conversion_rates`](reference/additional#calculate_nfl_series_conversion_rates)
+- [`calculate_nfl_standings`](reference/additional#calculate_nfl_standings)
+- [`calculate_win_probability`](reference/additional#calculate_win_probability)
+- [`calculate_wpa`](reference/additional#calculate_wpa)
+- [`calculate_xpass`](reference/additional#calculate_xpass)
+- [`calculate_xyac`](reference/additional#calculate_xyac)
+- [`efficiency_ratings`](reference/additional#efficiency_ratings)
+- [`env_adjusted_make_prob`](reference/additional#env_adjusted_make_prob)
+- [`fg_make_probability`](reference/additional#fg_make_probability)
+- [`fit_nfl_field_position_ep`](reference/additional#fit_nfl_field_position_ep)
+- [`get_2pt_probs`](reference/additional#get_2pt_probs)
+- [`get_2pt_wp`](reference/additional#get_2pt_wp)
+- [`get_4th_down_probs`](reference/additional#get_4th_down_probs)
+- [`get_fg_wp`](reference/additional#get_fg_wp)
+- [`get_go_wp`](reference/additional#get_go_wp)
+- [`get_punt_wp`](reference/additional#get_punt_wp)
+- [`load_nfl_fp_curve`](reference/additional#load_nfl_fp_curve)
+- [`nfl_compute_results`](reference/additional#nfl_compute_results)
+- [`nfl_draft_projection`](reference/additional#nfl_draft_projection)
+- [`nfl_fantasy_projection`](reference/additional#nfl_fantasy_projection)
+- [`nfl_kicker_rating`](reference/additional#nfl_kicker_rating)
+- [`nfl_line_grades`](reference/additional#nfl_line_grades)
+- [`nfl_player_projection`](reference/additional#nfl_player_projection)
+- [`nfl_ratings`](reference/additional#nfl_ratings)
+- [`nfl_simulations`](reference/additional#nfl_simulations)
+- [`nfl_usage_projection`](reference/additional#nfl_usage_projection)
+- [`opponent_adjusted_ridge`](reference/additional#opponent_adjusted_ridge)
+- [`pressure_pairs`](reference/additional#pressure_pairs)
+- [`special_teams_ratings`](reference/additional#special_teams_ratings)
+- [`team_pressure_rates`](reference/additional#team_pressure_rates)
+
+### Analytics {#analytics}
+
+- [`compose_counting_projection`](reference/additional#compose_counting_projection)
+- [`nfl_availability_projection`](reference/additional#nfl_availability_projection)
+- [`nfl_game_script`](reference/additional#nfl_game_script)
+- [`nfl_play_call_probabilities`](reference/additional#nfl_play_call_probabilities)
+- [`nfl_play_call_tendencies`](reference/additional#nfl_play_call_tendencies)
+- [`nfl_player_props`](reference/additional#nfl_player_props)
+- [`nfl_predict_games`](reference/additional#nfl_predict_games)
+- [`nfl_season_standings`](reference/additional#nfl_season_standings)
+- [`playcall_features`](reference/additional#playcall_features)
+- [`player_usage_efficiency`](reference/additional#player_usage_efficiency)
+- [`predict_margin`](reference/additional#predict_margin)
+- [`predict_total`](reference/additional#predict_total)
+- [`team_game_pace`](reference/additional#team_game_pace)
+- [`win_prob_from_margin`](reference/additional#win_prob_from_margin)
+
+### Cache and configuration {#cache-and-configuration}
+
+- [`NflConfig`](reference/additional#NflConfig)
+- [`cached_loader`](reference/additional#cached_loader)
+- [`clear_cache`](reference/additional#clear_cache)
+- [`get_config`](reference/additional#get_config)
+- [`reset_config`](reference/additional#reset_config)
+- [`update_config`](reference/additional#update_config)
+
+### Dates and seasons {#dates-and-seasons}
+
+- [`get_current_nfl_season`](reference/additional#get_current_nfl_season)
+- [`get_current_nfl_week`](reference/additional#get_current_nfl_week)
+- [`get_current_season`](reference/additional#get_current_season)
+- [`get_current_week`](reference/additional#get_current_week)
+- [`most_recent_nfl_season`](reference/additional#most_recent_nfl_season)
+
+### IDs and crosswalks {#ids-and-crosswalks}
+
+- [`nfl_players_crosswalk`](reference/additional#nfl_players_crosswalk)
+
 
 ## Examples
 

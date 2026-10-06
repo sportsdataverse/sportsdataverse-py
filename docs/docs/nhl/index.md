@@ -5,19 +5,126 @@ description: "sdv-py NHL: endpoint references, dataset loaders and parsers for N
 ---
 # NHL (`sportsdataverse.nhl`)
 
-| Reference | Functions | Base URL |
-|---|---:|---|
-| [ESPN site API (v2)](reference/site) | 24 | `https://site.api.espn.com/apis/site/v2/sports` |
-| [ESPN web API (v3)](reference/web) | 5 | `https://site.web.api.espn.com/apis/common/v3/sports` |
-| [ESPN core API (v2)](reference/core) | 82 | `https://sports.core.api.espn.com/v2/sports` |
-| [ESPN FPI API (fitt v3)](reference/fitt) | 1 | `https://site.web.api.espn.com/apis/fitt/v3/sports` |
-| [ESPN CDN API (cdn.espn.com)](reference/cdn) | 1 | `https://cdn.espn.com/core` |
-| [NHL Web API](reference/nhl_api_web) | 27 | `https://api-web.nhle.com` |
-| [NHL EDGE API](reference/nhl_edge) | 35 | `https://api-web.nhle.com` |
-| [NHL Stats REST API](reference/nhl_stats_rest) | 21 | `https://api.nhle.com/stats/rest` |
-| [NHL Records API](reference/nhl_records) | 44 | `https://records.nhl.com/site/api` |
-| [Dataset loaders](reference/loaders) | 27 | sportsdataverse-data releases |
-| [Additional functions](reference/additional) | 87 | hand-written wrappers, loaders & helpers |
+## Data sources
+
+| Source | APIs / hosts | Functions | Auth |
+|---|---|---:|---|
+| [ESPN](#espn) | `cdn.espn.com`, `site.api.espn.com`, `site.web.api.espn.com` +1 more | 119 | none |
+| [sportsdataverse-data releases](#sportsdataverse-data-releases) | `github.com` | 32 | none |
+| [NHL Web API](#nhl-web-api) | `api-web.nhle.com` | 28 | none |
+| [NHL EDGE](#nhl-edge) | `api-web.nhle.com` | 35 | none |
+| [NHL Stats REST](#nhl-stats-rest) | `api.nhle.com` | 21 | none |
+| [NHL Records](#nhl-records) | `records.nhl.com` | 50 | none |
+| [Fox Sports API](#fox-sports-api) | `api.foxsports.com` | 25 | none |
+| [Additional functions](reference/additional) | hand-written wrappers & helpers | 87 | — |
+
+## ESPN {#espn}
+
+| Reference | Functions |
+|---|---:|
+| [ESPN site API (v2)](reference/site) | 24 |
+| [ESPN web API (v3)](reference/web) | 5 |
+| [ESPN core API (v2)](reference/core) | 82 |
+| [ESPN FPI API (fitt v3)](reference/fitt) | 1 |
+| [ESPN CDN API (cdn.espn.com)](reference/cdn) | 1 |
+| [Hand-written wrappers](reference/additional) | 6 |
+
+## sportsdataverse-data releases {#sportsdataverse-data-releases}
+
+| Reference | Functions |
+|---|---:|
+| [sportsdataverse-data releases](reference/loaders) | 27 |
+| [Hand-written wrappers](reference/additional) | 5 |
+
+## NHL Web API {#nhl-web-api}
+
+| Reference | Functions |
+|---|---:|
+| [NHL Web API](reference/nhl_api_web) | 27 |
+| [Hand-written wrappers](reference/additional) | 1 |
+
+## NHL EDGE {#nhl-edge}
+
+| Reference | Functions |
+|---|---:|
+| [NHL EDGE API](reference/nhl_edge) | 35 |
+
+## NHL Stats REST {#nhl-stats-rest}
+
+| Reference | Functions |
+|---|---:|
+| [NHL Stats REST API](reference/nhl_stats_rest) | 21 |
+
+## NHL Records {#nhl-records}
+
+| Reference | Functions |
+|---|---:|
+| [NHL Records API](reference/nhl_records) | 44 |
+| [Hand-written wrappers](reference/additional) | 6 |
+
+## Fox Sports API {#fox-sports-api}
+
+| Reference | Functions |
+|---|---:|
+| [Hand-written wrappers](reference/additional) | 25 |
+## Tools and helpers
+
+### Play-by-play processing {#play-by-play-processing}
+
+- [`build_design`](reference/additional#build_design)
+- [`build_stints`](reference/additional#build_stints)
+- [`espn_nhl_pbp`](reference/additional#espn_nhl_pbp)
+- [`nhl_pbp_disk`](reference/additional#nhl_pbp_disk)
+
+### Models and calculators {#models-and-calculators}
+
+- [`ImpactConfig`](reference/additional#ImpactConfig)
+- [`LeagueConstants`](reference/additional#LeagueConstants)
+- [`add_shot_geometry`](reference/additional#add_shot_geometry)
+- [`adjust_rate_opponent`](reference/additional#adjust_rate_opponent)
+- [`as_of_ratings_split`](reference/additional#as_of_ratings_split)
+- [`booster_cache_dir`](reference/additional#booster_cache_dir)
+- [`brier_score`](reference/additional#brier_score)
+- [`calibration_table`](reference/additional#calibration_table)
+- [`ensure_xg_models`](reference/additional#ensure_xg_models)
+- [`get_constants`](reference/additional#get_constants)
+- [`load_xg_models`](reference/additional#load_xg_models)
+- [`log_loss_score`](reference/additional#log_loss_score)
+- [`mae`](reference/additional#mae)
+- [`nhl_expected_assists`](reference/additional#nhl_expected_assists)
+- [`nhl_goalie_gsax`](reference/additional#nhl_goalie_gsax)
+- [`nhl_skater_rapm`](reference/additional#nhl_skater_rapm)
+- [`nhl_skater_war`](reference/additional#nhl_skater_war)
+- [`nhl_team_ratings`](reference/additional#nhl_team_ratings)
+- [`nhl_unit_ratings`](reference/additional#nhl_unit_ratings)
+- [`nhl_xg`](reference/additional#nhl_xg)
+- [`prepare_xg_features`](reference/additional#prepare_xg_features)
+- [`spearman_corr`](reference/additional#spearman_corr)
+- [`team_fullname_to_abbr`](reference/additional#team_fullname_to_abbr)
+- [`team_game_xg_rates`](reference/additional#team_game_xg_rates)
+- [`weighted_ridge`](reference/additional#weighted_ridge)
+
+### Analytics {#analytics}
+
+- [`expected_goals`](reference/additional#expected_goals)
+- [`in_game_features`](reference/additional#in_game_features)
+- [`nhl_edge_skating_value`](reference/additional#nhl_edge_skating_value)
+- [`nhl_faceoff_value`](reference/additional#nhl_faceoff_value)
+- [`nhl_game_total`](reference/additional#nhl_game_total)
+- [`nhl_in_game_win_prob`](reference/additional#nhl_in_game_win_prob)
+- [`nhl_penalty_value`](reference/additional#nhl_penalty_value)
+- [`nhl_player_props`](reference/additional#nhl_player_props)
+- [`nhl_predict_games`](reference/additional#nhl_predict_games)
+- [`nhl_zone_transitions`](reference/additional#nhl_zone_transitions)
+- [`predict_margin`](reference/additional#predict_margin)
+- [`predict_total`](reference/additional#predict_total)
+- [`win_prob_from_margin`](reference/additional#win_prob_from_margin)
+
+### Dates and seasons {#dates-and-seasons}
+
+- [`most_recent_nhl_season`](reference/additional#most_recent_nhl_season)
+- [`year_to_season`](reference/additional#year_to_season)
+
 
 ## Examples
 

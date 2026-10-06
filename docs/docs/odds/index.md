@@ -5,9 +5,18 @@ description: "sdv-py ODDS: endpoint references, dataset loaders and parsers for 
 ---
 # ODDS (`sportsdataverse.odds`)
 
-| Reference | Functions | Base URL |
-|---|---:|---|
-| [Additional functions](reference/additional) | 11 | hand-written wrappers, loaders & helpers |
+## Data sources
+
+| Source | APIs / hosts | Functions | Auth |
+|---|---|---:|---|
+| [The Odds API](#the-odds-api) | `the-odds-api.com` | 11 | API key (SDV_PY_ODDS_API_KEY) |
+| [Additional functions](reference/additional) | hand-written wrappers & helpers | 11 | — |
+
+## The Odds API {#the-odds-api}
+
+| Reference | Functions |
+|---|---:|
+| [Hand-written wrappers](reference/additional) | 11 |
 
 ## Examples
 

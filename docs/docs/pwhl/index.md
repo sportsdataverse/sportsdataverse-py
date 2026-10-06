@@ -5,10 +5,51 @@ description: "sdv-py PWHL: endpoint references, dataset loaders and parsers for 
 ---
 # PWHL (`sportsdataverse.pwhl`)
 
-| Reference | Functions | Base URL |
-|---|---:|---|
-| [Dataset loaders](reference/loaders) | 21 | sportsdataverse-data releases |
-| [Additional functions](reference/additional) | 45 | hand-written wrappers, loaders & helpers |
+## Data sources
+
+| Source | APIs / hosts | Functions | Auth |
+|---|---|---:|---|
+| [sportsdataverse-data releases](#sportsdataverse-data-releases) | `github.com` | 27 | none |
+| [HockeyTech / LeagueStat](#hockeytech-leaguestat) | `lscluster.hockeytech.com` | 25 | per-league public key (SDV_<LEAGUE>_API_KEY) |
+| [Additional functions](reference/additional) | hand-written wrappers & helpers | 45 | — |
+
+## sportsdataverse-data releases {#sportsdataverse-data-releases}
+
+| Reference | Functions |
+|---|---:|
+| [sportsdataverse-data releases](reference/loaders) | 21 |
+| [Hand-written wrappers](reference/additional) | 6 |
+
+## HockeyTech / LeagueStat {#hockeytech-leaguestat}
+
+| Reference | Functions |
+|---|---:|
+| [Hand-written wrappers](reference/additional) | 25 |
+## Tools and helpers
+
+### Models and calculators {#models-and-calculators}
+
+- [`LeagueConstants`](reference/additional#LeagueConstants)
+- [`as_of_ratings_split`](reference/additional#as_of_ratings_split)
+- [`brier_score`](reference/additional#brier_score)
+- [`calibration_table`](reference/additional#calibration_table)
+- [`log_loss_score`](reference/additional#log_loss_score)
+- [`mae`](reference/additional#mae)
+- [`pwhl_team_ratings`](reference/additional#pwhl_team_ratings)
+- [`spearman_corr`](reference/additional#spearman_corr)
+
+### Analytics {#analytics}
+
+- [`pwhl_game_total`](reference/additional#pwhl_game_total)
+- [`pwhl_in_game_win_prob`](reference/additional#pwhl_in_game_win_prob)
+- [`pwhl_player_props`](reference/additional#pwhl_player_props)
+- [`pwhl_predict_games`](reference/additional#pwhl_predict_games)
+
+### Dates and seasons {#dates-and-seasons}
+
+- [`most_recent_pwhl_season`](reference/additional#most_recent_pwhl_season)
+- [`pwhl_season_id`](reference/additional#pwhl_season_id)
+
 
 ## Examples
 

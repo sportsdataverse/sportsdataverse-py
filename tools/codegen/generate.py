@@ -1422,7 +1422,7 @@ _GENERATED_LOADER_LEAGUES = {"cfb", "mbb", "mlb", "nba", "nhl", "pwhl", "wbb", "
 
 def _render_loaders_all() -> dict[str, str]:
     """{league: src} for each generated-loader league with manifest entries."""
-    rel = spec.load_releases(ENDPOINTS / "releases.yaml")
+    rel = _releases_cfg()
     out: dict[str, str] = {}
     for lg in sorted(_GENERATED_LOADER_LEAGUES):
         loaders = [ld for ld in rel.loaders if ld.league == lg]
@@ -1756,7 +1756,7 @@ def refresh_loader_schemas() -> int:
     import polars as pl
     import yaml
 
-    rel = spec.load_releases(ENDPOINTS / "releases.yaml")
+    rel = _releases_cfg()
     out: dict = {}
     failed = []
     for ld in rel.loaders:
@@ -1805,7 +1805,7 @@ def audit_releases() -> int:
     release list (network, via ``gh``). Reports release tags with no loader
     (gaps) and manifest tags no longer published (orphans). Informational drift
     gate -- meant for a CI job, not the offline ``--check``."""
-    rel = spec.load_releases(ENDPOINTS / "releases.yaml")
+    rel = _releases_cfg()
     # Only loaders that pull from the sportsdataverse-data *releases* host are
     # comparable to the live release list. ``raw_data``-based loaders (e.g. cfb/nhl
     # read raw.githubusercontent.com/sportsdataverse/<repo>) carry the source repo
@@ -2491,9 +2491,19 @@ def _generated_origins() -> dict[str, tuple[str, str]]:
             continue
         for v in _flat_views(spec.load_flat_api(y, params), league_prefix=prefix):
             out[v.fn_name] = (stem, "")
-    for ld in spec.load_releases(ENDPOINTS / "releases.yaml").loaders:
+    for ld in _releases_cfg().loaders:
         out[ld.fn] = ("", ld.base)
     return out
+
+
+def _resolve_origin(name: str) -> dict[str, str]:
+    """``{"api": ..., "base": ...}`` kwargs for :func:`sources.resolve`, empty for a hand-written name.
+
+    Lets every caller resolve a name without caring whether it is generated: a generated
+    wrapper/loader carries its API stem or release base, a hand-written one carries nothing
+    and resolves by module glob."""
+    api, base = _generated_origins().get(name, ("", ""))
+    return {"api": api, "base": base}
 
 
 def _source_gaps() -> list[tuple[str, str, str]]:
@@ -2505,12 +2515,10 @@ def _source_gaps() -> list[tuple[str, str, str]]:
     source arbitrarily. Both fail ``--check``; there is no allowlist."""
     from tools.codegen import sources
 
-    origins = _generated_origins()
     gaps: list[tuple[str, str, str]] = []
     for (label, name), module in sorted(_source_scope_objects().items()):
-        api, base = origins.get(name, ("", ""))
         try:
-            sources.resolve(name, module, api=api, base=base)
+            sources.resolve(name, module, **_resolve_origin(name))
         except (sources.UnknownSource, sources.AmbiguousSource) as e:
             gaps.append((label, name, str(e)))
     return gaps
@@ -2639,7 +2647,7 @@ _LOADER_BASE_LABEL = {
 
 def _loader_base_label(prefix: str) -> str:
     """Human label for a league's dataset-loader source(s) (distinct bases joined)."""
-    rel = spec.load_releases(ENDPOINTS / "releases.yaml")
+    rel = _releases_cfg()
     bases = sorted({ld.base for ld in rel.loaders if ld.league == prefix})
     return " / ".join(_LOADER_BASE_LABEL.get(b, b) for b in bases) or "sportsdataverse-data releases"
 
@@ -2686,7 +2694,7 @@ def _loader_doc_views(prefix: str) -> list[dict]:
 
     ``automation`` is normalized to always carry ``repo``/``workflow`` keys so the
     StrictUndefined template can test ``ld.automation.repo`` safely."""
-    rel = spec.load_releases(ENDPOINTS / "releases.yaml")
+    rel = _releases_cfg()
     out: list[dict] = []
     for ld in rel.loaders:
         if ld.league != prefix:
@@ -2716,6 +2724,19 @@ def _loader_doc_views(prefix: str) -> list[dict]:
     return out
 
 
+@functools.lru_cache(maxsize=1)
+def _releases_cfg():
+    """``releases.yaml``, parsed once per process.
+
+    Read by every league's loader views AND its sources table, so without the cache a
+    full docs render re-parsed it over a hundred times."""
+    return spec.load_releases(ENDPOINTS / "releases.yaml")
+
+
+# Pure in ``prefix`` and now called twice per league (reference pages + the sources
+# table). Callers only ever READ the returned dicts, so one cached list per league is
+# safe and cuts a whole-tree render by minutes.
+@functools.lru_cache(maxsize=None)
 def _apis_for(prefix: str) -> list[dict]:
     """API descriptors (``name``/``slug``/``label``/``base``/``count``/``kind``) that
     have a reference page for ``prefix`` -- the in-scope ESPN APIs plus any flat API
@@ -2830,6 +2851,121 @@ def _notebooks_for(prefix: str) -> list[dict]:
     return [{"label": label, "url": f"../tutorials/{stem}.md"} for stem, label in entries]
 
 
+def _host_names(bases: list[str], home: str = "") -> list[str]:
+    """Distinct hostnames from a provider's base URLs, falling back to its registry ``home``."""
+    from urllib.parse import urlsplit
+
+    seen = {urlsplit(b).netloc for b in bases if b}
+    if not seen and home:
+        seen = {urlsplit(home).netloc or home}
+    return sorted(h for h in seen if h)
+
+
+def _league_source_rows(prefix: str, *, autodoc_names: list[str] | None = None) -> list[dict]:
+    """One row per provider PRESENT in ``prefix``, in ``sources.yaml`` registry order.
+
+    A provider is present when the league has at least one reference page for one of
+    its APIs, at least one dataset loader on one of its release bases, or at least
+    one autodoc name whose module resolves to it. ``entries`` is what the row's
+    section lists: one line per API / host / release base, with the function count
+    and the page it links. A provider with nothing in this league is omitted
+    entirely -- never a zero row and never an empty section."""
+    import importlib
+
+    from tools.codegen import sources
+
+    autodoc_names = autodoc_names or []
+    rel = _releases_cfg()
+    buckets: dict[str, list[dict]] = {}
+    hosts: dict[str, list[str]] = {}
+    for a in _apis_for(prefix):
+        e = sources.by_api(a["name"])
+        if e is None:
+            continue
+        buckets.setdefault(e.key, []).append(
+            {"label": a["label"], "count": a["count"], "url": f"reference/{a['slug']}"},
+        )
+        hosts.setdefault(e.key, []).append(a["base"])
+    loaders = _loader_doc_views(prefix)
+    if loaders:
+        by_base: dict[str, int] = {}
+        for ld in rel.loaders:
+            if ld.league == prefix:
+                by_base[ld.base] = by_base.get(ld.base, 0) + 1
+        for base, n in by_base.items():
+            e = sources.by_base(base)
+            if e is None:
+                continue
+            buckets.setdefault(e.key, []).append(
+                {"label": _LOADER_BASE_LABEL.get(base, base), "count": n, "url": "reference/loaders"},
+            )
+            hosts.setdefault(e.key, []).append(rel.bases.get(base, ""))
+    if autodoc_names:
+        mod = importlib.import_module(f"sportsdataverse.{_LEAGUE_MODULE.get(prefix, prefix)}")
+        hand: dict[str, int] = {}
+        for n in autodoc_names:
+            obj = getattr(mod, n, None)
+            if obj is None:
+                continue
+            e = sources.resolve(n, getattr(obj, "__module__", ""), **_resolve_origin(n))
+            if e.kind == "provider":
+                hand[e.key] = hand.get(e.key, 0) + 1
+        for key, n in hand.items():
+            buckets.setdefault(key, []).append(
+                {"label": "Hand-written wrappers", "count": n, "url": f"reference/{_AUTODOC_PAGE[:-3]}"},
+            )
+    out: list[dict] = []
+    for e in sources.providers():
+        entries = buckets.get(e.key)
+        if not entries:
+            continue
+        out.append(
+            {
+                "key": e.key,
+                "label": e.label,
+                "anchor": _slugify(e.label),
+                "auth": e.auth or "none",
+                # Hostnames, not full base URLs: ESPN alone spans five bases, and the row only
+                # has to say WHOSE host this is -- the section below links each API by name. A
+                # provider reached only through hand-written wrappers has no base, so its
+                # registry `home` stands in rather than leaving the cell blank.
+                "hosts": _host_names(hosts.get(e.key, []), e.home),
+                "count": sum(x["count"] for x in entries),
+                "entries": entries,
+            },
+        )
+    return out
+
+
+def _league_category_rows(prefix: str, autodoc_names: list[str]) -> list[dict]:
+    """``[{key, label, anchor, functions}]`` for each helper category present in ``prefix``.
+
+    Only the league's autodoc names can land in a category (every generated wrapper
+    and loader belongs to a provider), so a league with no hand-written helpers gets
+    an empty list and the template drops the whole "Tools and helpers" block."""
+    import importlib
+
+    from tools.codegen import sources
+
+    if not autodoc_names:
+        return []
+    mod = importlib.import_module(f"sportsdataverse.{_LEAGUE_MODULE.get(prefix, prefix)}")
+    page = _AUTODOC_PAGE[:-3]
+    by_key: dict[str, list[dict]] = {}
+    for n in sorted(autodoc_names):
+        obj = getattr(mod, n, None)
+        if obj is None:
+            continue
+        e = sources.resolve(n, getattr(obj, "__module__", ""), **_resolve_origin(n))
+        if e.kind == "category":
+            by_key.setdefault(e.key, []).append({"name": n, "url": f"reference/{page}#{n}"})
+    return [
+        {"key": e.key, "label": e.label, "anchor": _slugify(e.label), "functions": by_key[e.key]}
+        for e in sources.categories()
+        if e.key in by_key
+    ]
+
+
 def render_league_index(
     prefix: str,
     *,
@@ -2839,6 +2975,8 @@ def render_league_index(
     highlights_count: int = 0,
     r_parity: list[dict] | None = None,
     r_pkg: str | None = None,
+    source_rows: list[dict] | None = None,
+    category_rows: list[dict] | None = None,
 ) -> str:
     """Render a league's ``index.md`` (reference table + optional loaders link).
 
@@ -2865,6 +3003,8 @@ def render_league_index(
         notebooks=_notebooks_for(prefix),
         r_parity=r_parity or [],
         r_pkg=r_pkg,
+        source_rows=source_rows or [],
+        category_rows=category_rows or [],
     )
 
 
@@ -3733,6 +3873,8 @@ def _autodoc_names_by_scope() -> dict[str | None, list[str]]:
             prefix,
             has_additional=bool(names),
             additional_count=len(names),
+            source_rows=_league_source_rows(prefix, autodoc_names=names),
+            category_rows=_league_category_rows(prefix, names),
         )
         result[prefix] = names
     out["reference/parameters.md"] = render_parameters_page()
@@ -3905,7 +4047,7 @@ def render_packages_page() -> str | None:
 def _doc_leagues() -> list[str]:
     """League prefixes to document: every ESPN league + loader-only leagues (pwhl) + HockeyTech junior leagues."""
     cfg = spec.load_leagues(ENDPOINTS / "leagues.yaml")
-    rel = spec.load_releases(ENDPOINTS / "releases.yaml")
+    rel = _releases_cfg()
     prefixes = [lg.prefix for lg in cfg.leagues]
     extra = sorted({ld.league for ld in rel.loaders} - set(prefixes))
     # HockeyTech junior leagues have hand-written modules but no ESPN/loader entries.
@@ -4391,6 +4533,8 @@ def _render_docs_all() -> dict[str, str]:
             highlights_count=highlights_count,
             r_parity=_r_parity_rows(prefix, ref_pages, autodoc_names_list, moved),
             r_pkg=_R_PARITY_PACKAGE.get(prefix),
+            source_rows=_league_source_rows(prefix, autodoc_names=autodoc_names_list),
+            category_rows=_league_category_rows(prefix, autodoc_names_list),
         )
         if apis or loaders or autodoc is not None:
             out[f"{prefix}/reference/_category_.json"] = render_category("Reference", 1, True)

@@ -5,17 +5,205 @@ description: "sdv-py NBA: endpoint references, dataset loaders and parsers for N
 ---
 # NBA (`sportsdataverse.nba`)
 
-| Reference | Functions | Base URL |
-|---|---:|---|
-| [Highlights](reference/additional#highlights) | 8 | curated "start here" functions |
-| [ESPN site API (v2)](reference/site) | 24 | `https://site.api.espn.com/apis/site/v2/sports` |
-| [ESPN web API (v3)](reference/web) | 5 | `https://site.web.api.espn.com/apis/common/v3/sports` |
-| [ESPN core API (v2)](reference/core) | 82 | `https://sports.core.api.espn.com/v2/sports` |
-| [ESPN FPI API (fitt v3)](reference/fitt) | 1 | `https://site.web.api.espn.com/apis/fitt/v3/sports` |
-| [ESPN CDN API (cdn.espn.com)](reference/cdn) | 4 | `https://cdn.espn.com/core` |
-| [NBA Stats API (stats.nba.com)](reference/nba_stats) | 128 | `https://stats.nba.com` |
-| [Dataset loaders](reference/loaders) | 41 | sportsdataverse-data releases |
-| [Additional functions](reference/additional) | 180 | hand-written wrappers, loaders & helpers |
+## Data sources
+
+| Source | APIs / hosts | Functions | Auth |
+|---|---|---:|---|
+| [Highlights](reference/additional#highlights) | curated "start here" functions | 8 | — |
+| [ESPN](#espn) | `cdn.espn.com`, `site.api.espn.com`, `site.web.api.espn.com` +1 more | 121 | none |
+| [sportsdataverse-data releases](#sportsdataverse-data-releases) | `github.com` | 42 | none |
+| [NBA Stats API](#nba-stats-api) | `stats.nba.com` | 130 | none (curl_cffi chrome TLS impersonation) |
+| [Fox Sports API](#fox-sports-api) | `api.foxsports.com` | 26 | none |
+| [Basketball-Reference](#basketball-reference) | `www.basketball-reference.com` | 9 | none (slow, owner agreement) |
+| [RealGM](#realgm) | `basketball.realgm.com` | 18 | none |
+| [Public model datasets](#public-model-datasets) | `dunksandthrees.com` | 7 | none |
+| [Additional functions](reference/additional) | hand-written wrappers & helpers | 180 | — |
+
+## ESPN {#espn}
+
+| Reference | Functions |
+|---|---:|
+| [ESPN site API (v2)](reference/site) | 24 |
+| [ESPN web API (v3)](reference/web) | 5 |
+| [ESPN core API (v2)](reference/core) | 82 |
+| [ESPN FPI API (fitt v3)](reference/fitt) | 1 |
+| [ESPN CDN API (cdn.espn.com)](reference/cdn) | 4 |
+| [Hand-written wrappers](reference/additional) | 5 |
+
+## sportsdataverse-data releases {#sportsdataverse-data-releases}
+
+| Reference | Functions |
+|---|---:|
+| [sportsdataverse-data releases](reference/loaders) | 41 |
+| [Hand-written wrappers](reference/additional) | 1 |
+
+## NBA Stats API {#nba-stats-api}
+
+| Reference | Functions |
+|---|---:|
+| [NBA Stats API (stats.nba.com)](reference/nba_stats) | 128 |
+| [Hand-written wrappers](reference/additional) | 2 |
+
+## Fox Sports API {#fox-sports-api}
+
+| Reference | Functions |
+|---|---:|
+| [Hand-written wrappers](reference/additional) | 26 |
+
+## Basketball-Reference {#basketball-reference}
+
+| Reference | Functions |
+|---|---:|
+| [Hand-written wrappers](reference/additional) | 9 |
+
+## RealGM {#realgm}
+
+| Reference | Functions |
+|---|---:|
+| [Hand-written wrappers](reference/additional) | 18 |
+
+## Public model datasets {#public-model-datasets}
+
+| Reference | Functions |
+|---|---:|
+| [Hand-written wrappers](reference/additional) | 7 |
+## Tools and helpers
+
+### Play-by-play processing {#play-by-play-processing}
+
+- [`build_athlete_identity_lookup`](reference/additional#build_athlete_identity_lookup)
+- [`build_nba_player_identity_lookup`](reference/additional#build_nba_player_identity_lookup)
+- [`build_play_context_shots`](reference/additional#build_play_context_shots)
+- [`build_possession_shooting`](reference/additional#build_possession_shooting)
+- [`compile_nba_season`](reference/additional#compile_nba_season)
+- [`espn_nba_pbp`](reference/additional#espn_nba_pbp)
+- [`nba_pbp_disk`](reference/additional#nba_pbp_disk)
+- [`nba_v3_to_v2_pbp`](reference/additional#nba_v3_to_v2_pbp)
+
+### Models and calculators {#models-and-calculators}
+
+- [`AdjRapmModel`](reference/additional#AdjRapmModel)
+- [`AgingCurve`](reference/additional#AgingCurve)
+- [`ExternalValidityResult`](reference/additional#ExternalValidityResult)
+- [`ForecastResult`](reference/additional#ForecastResult)
+- [`LeagueConstants`](reference/additional#LeagueConstants)
+- [`MeasureSpec`](reference/additional#MeasureSpec)
+- [`NbaBpmModel`](reference/additional#NbaBpmModel)
+- [`NbaSpmModel`](reference/additional#NbaSpmModel)
+- [`RidgeRapmModel`](reference/additional#RidgeRapmModel)
+- [`SpmCoefficients`](reference/additional#SpmCoefficients)
+- [`ValidationReport`](reference/additional#ValidationReport)
+- [`WalkForwardResult`](reference/additional#WalkForwardResult)
+- [`adjust_efficiency`](reference/additional#adjust_efficiency)
+- [`adjust_pace`](reference/additional#adjust_pace)
+- [`as_of_ratings_split`](reference/additional#as_of_ratings_split)
+- [`calibrate_pts_per_win`](reference/additional#calibrate_pts_per_win)
+- [`calibrate_replacement_level`](reference/additional#calibrate_replacement_level)
+- [`darko_forecast_accuracy`](reference/additional#darko_forecast_accuracy)
+- [`decay_weights`](reference/additional#decay_weights)
+- [`expected_possessions`](reference/additional#expected_possessions)
+- [`external_validity`](reference/additional#external_validity)
+- [`fit_aging_curve`](reference/additional#fit_aging_curve)
+- [`get_constants`](reference/additional#get_constants)
+- [`get_shrinkage_k`](reference/additional#get_shrinkage_k)
+- [`in_game_features`](reference/additional#in_game_features)
+- [`luck_adjusted_response`](reference/additional#luck_adjusted_response)
+- [`nba_adj_rapm`](reference/additional#nba_adj_rapm)
+- [`nba_aging_curve`](reference/additional#nba_aging_curve)
+- [`nba_bpm`](reference/additional#nba_bpm)
+- [`nba_career_trajectory`](reference/additional#nba_career_trajectory)
+- [`nba_darko`](reference/additional#nba_darko)
+- [`nba_decay_rapm`](reference/additional#nba_decay_rapm)
+- [`nba_draft_model`](reference/additional#nba_draft_model)
+- [`nba_expected_turnovers`](reference/additional#nba_expected_turnovers)
+- [`nba_four_factor_rapm`](reference/additional#nba_four_factor_rapm)
+- [`nba_in_game_win_prob`](reference/additional#nba_in_game_win_prob)
+- [`nba_la_rapm`](reference/additional#nba_la_rapm)
+- [`nba_matchup_drapm`](reference/additional#nba_matchup_drapm)
+- [`nba_predict_games`](reference/additional#nba_predict_games)
+- [`nba_rookie_projection`](reference/additional#nba_rookie_projection)
+- [`nba_spm`](reference/additional#nba_spm)
+- [`nba_team_ratings`](reference/additional#nba_team_ratings)
+- [`nba_war`](reference/additional#nba_war)
+- [`predict_margin`](reference/additional#predict_margin)
+- [`predict_total`](reference/additional#predict_total)
+- [`raw_game_efficiency`](reference/additional#raw_game_efficiency)
+- [`render_report`](reference/additional#render_report)
+- [`train_spm`](reference/additional#train_spm)
+- [`validate_model`](reference/additional#validate_model)
+- [`walk_forward`](reference/additional#walk_forward)
+- [`win_prob_from_margin`](reference/additional#win_prob_from_margin)
+
+### Analytics {#analytics}
+
+- [`add_ctg_shot_zones`](reference/additional#add_ctg_shot_zones)
+- [`add_play_context`](reference/additional#add_play_context)
+- [`add_start_type_detail`](reference/additional#add_start_type_detail)
+- [`add_transition`](reference/additional#add_transition)
+- [`box_features`](reference/additional#box_features)
+- [`clutch_delta`](reference/additional#clutch_delta)
+- [`flag_garbage_time`](reference/additional#flag_garbage_time)
+- [`flag_heave_possessions`](reference/additional#flag_heave_possessions)
+- [`hoopshype_salaries`](reference/additional#hoopshype_salaries)
+- [`lineup_play_context`](reference/additional#lineup_play_context)
+- [`make_prob_by_context`](reference/additional#make_prob_by_context)
+- [`make_prob_joint`](reference/additional#make_prob_joint)
+- [`nba_availability`](reference/additional#nba_availability)
+- [`nba_box_logs`](reference/additional#nba_box_logs)
+- [`nba_foul_drawing`](reference/additional#nba_foul_drawing)
+- [`nba_l2m`](reference/additional#nba_l2m)
+- [`nba_l2m_games`](reference/additional#nba_l2m_games)
+- [`nba_play_context`](reference/additional#nba_play_context)
+- [`nba_player_ages`](reference/additional#nba_player_ages)
+- [`nba_player_identity`](reference/additional#nba_player_identity)
+- [`nba_player_positions`](reference/additional#nba_player_positions)
+- [`nba_player_props`](reference/additional#nba_player_props)
+- [`nba_playtype_ratings`](reference/additional#nba_playtype_ratings)
+- [`nba_ratings_panel`](reference/additional#nba_ratings_panel)
+- [`nba_raw_store_season_frame`](reference/additional#nba_raw_store_season_frame)
+- [`nba_referee_assignments`](reference/additional#nba_referee_assignments)
+- [`nba_shot_value`](reference/additional#nba_shot_value)
+- [`nba_shot_value_lineups`](reference/additional#nba_shot_value_lineups)
+- [`nba_team_clutch`](reference/additional#nba_team_clutch)
+- [`nba_tracking_drive_value`](reference/additional#nba_tracking_drive_value)
+- [`nba_tracking_pass_value`](reference/additional#nba_tracking_pass_value)
+- [`nba_tracking_reb_oe`](reference/additional#nba_tracking_reb_oe)
+- [`nba_tracking_rim_protect_value`](reference/additional#nba_tracking_rim_protect_value)
+- [`nba_tracking_shot_diet_value`](reference/additional#nba_tracking_shot_diet_value)
+- [`nba_tracking_touch_value`](reference/additional#nba_tracking_touch_value)
+- [`nbadraft_mock_draft`](reference/additional#nbadraft_mock_draft)
+- [`player_play_context`](reference/additional#player_play_context)
+- [`player_rates`](reference/additional#player_rates)
+- [`players_on_court_from_pbp`](reference/additional#players_on_court_from_pbp)
+- [`players_on_court_from_quarter_boxscores`](reference/additional#players_on_court_from_quarter_boxscores)
+- [`players_on_court_from_rotation`](reference/additional#players_on_court_from_rotation)
+- [`prob_over`](reference/additional#prob_over)
+- [`project_player_line`](reference/additional#project_player_line)
+- [`prop_distribution`](reference/additional#prop_distribution)
+- [`ratings_as_of`](reference/additional#ratings_as_of)
+- [`rotowire_injuries`](reference/additional#rotowire_injuries)
+- [`score_shot_xpoints`](reference/additional#score_shot_xpoints)
+- [`shooter_talent`](reference/additional#shooter_talent)
+- [`shot_selection_quality`](reference/additional#shot_selection_quality)
+- [`shrink_clutch`](reference/additional#shrink_clutch)
+- [`spotrac_team_cap`](reference/additional#spotrac_team_cap)
+- [`starters_on_court_counts`](reference/additional#starters_on_court_counts)
+- [`team_pace_projection`](reference/additional#team_pace_projection)
+- [`team_play_context`](reference/additional#team_play_context)
+- [`xpoints_baseline`](reference/additional#xpoints_baseline)
+- [`zone_value_map`](reference/additional#zone_value_map)
+
+### Dates and seasons {#dates-and-seasons}
+
+- [`most_recent_nba_season`](reference/additional#most_recent_nba_season)
+- [`year_to_season`](reference/additional#year_to_season)
+
+### IDs and crosswalks {#ids-and-crosswalks}
+
+- [`nba_player_crosswalk`](reference/additional#nba_player_crosswalk)
+- [`nba_schedule_crosswalk`](reference/additional#nba_schedule_crosswalk)
+- [`nba_team_crosswalk`](reference/additional#nba_team_crosswalk)
+
 
 ## Examples
 

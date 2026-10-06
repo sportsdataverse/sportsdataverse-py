@@ -5,9 +5,17 @@ description: "sdv-py EUROLEAGUE: endpoint references, dataset loaders and parser
 ---
 # EUROLEAGUE (`sportsdataverse.euroleague`)
 
-| Reference | Functions | Base URL |
-|---|---:|---|
-| [EuroLeague Competition Engine API (api-live.euroleague.net v2)](reference/euroleague) | 7 | `https://api-live.euroleague.net/v2` |
+## Data sources
+
+| Source | APIs / hosts | Functions | Auth |
+|---|---|---:|---|
+| [EuroLeague Competition Engine](#euroleague-competition-engine) | `api-live.euroleague.net` | 7 | none |
+
+## EuroLeague Competition Engine {#euroleague-competition-engine}
+
+| Reference | Functions |
+|---|---:|
+| [EuroLeague Competition Engine API (api-live.euroleague.net v2)](reference/euroleague) | 7 |
 
 ## Examples
 

@@ -56,10 +56,16 @@ def test_reference_page_documents_resolved_wrapper_names():
 
 
 def test_league_index_lists_api_rows_and_loaders():
-    md = generate.render_league_index("nba")
+    """Each API and the loaders page are reached from their provider's own section (0.1.5 layout)."""
+    md = generate.render_league_index(
+        "nba",
+        source_rows=generate._league_source_rows("nba", autodoc_names=[]),
+        category_rows=[],
+    )
     assert "# NBA (`sportsdataverse.nba`)" in md
+    assert "## Data sources" in md
     assert "[ESPN site API (v2)](reference/site)" in md
-    assert "[Dataset loaders](reference/loaders)" in md
+    assert "[sportsdataverse-data releases](reference/loaders)" in md
 
 
 # --- Highlights: curated functions pulled out of the Additional bucket ------
@@ -85,10 +91,16 @@ def test_autodoc_family_checks_highlighted_before_the_keyword_rules():
 
 def test_render_league_index_highlights_row_and_additional_count_do_not_overlap():
     md = generate.render_league_index(
-        "mbb", has_additional=True, additional_count=317, has_highlights=True, highlights_count=9
+        "mbb",
+        has_additional=True,
+        additional_count=317,
+        has_highlights=True,
+        highlights_count=9,
+        source_rows=generate._league_source_rows("mbb", autodoc_names=[]),
+        category_rows=[],
     )
-    assert "| [Highlights](reference/additional#highlights) | 9 |" in md
-    assert "| [Additional functions](reference/additional) | 317 |" in md
+    assert '| [Highlights](reference/additional#highlights) | curated "start here" functions | 9 |' in md
+    assert "| [Additional functions](reference/additional) | hand-written wrappers & helpers | 317 |" in md
 
 
 def test_render_league_index_omits_highlights_row_by_default():

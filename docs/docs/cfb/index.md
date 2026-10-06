@@ -5,19 +5,153 @@ description: "sdv-py CFB: endpoint references, dataset loaders and parsers for C
 ---
 # CFB (`sportsdataverse.cfb`)
 
-| Reference | Functions | Base URL |
-|---|---:|---|
-| [Highlights](reference/additional#highlights) | 8 | curated "start here" functions |
-| [ESPN site API (v2)](reference/site) | 25 | `https://site.api.espn.com/apis/site/v2/sports` |
-| [ESPN web API (v3)](reference/web) | 5 | `https://site.web.api.espn.com/apis/common/v3/sports` |
-| [ESPN core API (v2)](reference/core) | 89 | `https://sports.core.api.espn.com/v2/sports` |
-| [ESPN FPI API (fitt v3)](reference/fitt) | 1 | `https://site.web.api.espn.com/apis/fitt/v3/sports` |
-| [ESPN CDN API (cdn.espn.com)](reference/cdn) | 5 | `https://cdn.espn.com/core` |
-| [On3 Recruit Database (api.on3.com)](reference/on3) | 78 | `https://api.on3.com/public/rdb/v1` |
-| [247Sports Recruit Database (ipa.247sports.com)](reference/sports247) | 12 | `https://ipa.247sports.com` |
-| [247Sports Site Pages (247sports.com)](reference/sports247_site_pages) | 35 | `https://247sports.com` |
-| [Dataset loaders](reference/loaders) | 71 | sportsdataverse raw data / sportsdataverse-data releases |
-| [Additional functions](reference/additional) | 105 | hand-written wrappers, loaders & helpers |
+## Data sources
+
+| Source | APIs / hosts | Functions | Auth |
+|---|---|---:|---|
+| [Highlights](reference/additional#highlights) | curated "start here" functions | 8 | — |
+| [ESPN](#espn) | `cdn.espn.com`, `site.api.espn.com`, `site.web.api.espn.com` +1 more | 131 | none |
+| [sportsdataverse-data releases](#sportsdataverse-data-releases) | `github.com`, `raw.githubusercontent.com` | 74 | none |
+| [stats.ncaa.org](#stats-ncaa-org) | `stats.ncaa.org` | 1 | none (Terms gate + rate rotation) |
+| [On3 Recruit Database](#on3-recruit-database) | `api.on3.com` | 82 | API key (ON3_API_KEY) |
+| [247Sports Recruit Database](#247sports-recruit-database) | `247sports.com`, `ipa.247sports.com` | 47 | none |
+| [Yahoo Sports Shangrila](#yahoo-sports-shangrila) | `graphite-secure.sports.yahoo.com` | 7 | none |
+| [Fox Sports API](#fox-sports-api) | `api.foxsports.com` | 29 | none |
+| [Additional functions](reference/additional) | hand-written wrappers & helpers | 105 | — |
+
+## ESPN {#espn}
+
+| Reference | Functions |
+|---|---:|
+| [ESPN site API (v2)](reference/site) | 25 |
+| [ESPN web API (v3)](reference/web) | 5 |
+| [ESPN core API (v2)](reference/core) | 89 |
+| [ESPN FPI API (fitt v3)](reference/fitt) | 1 |
+| [ESPN CDN API (cdn.espn.com)](reference/cdn) | 5 |
+| [Hand-written wrappers](reference/additional) | 6 |
+
+## sportsdataverse-data releases {#sportsdataverse-data-releases}
+
+| Reference | Functions |
+|---|---:|
+| [sportsdataverse-data releases](reference/loaders) | 70 |
+| [sportsdataverse raw data](reference/loaders) | 1 |
+| [Hand-written wrappers](reference/additional) | 3 |
+
+## stats.ncaa.org {#stats-ncaa-org}
+
+| Reference | Functions |
+|---|---:|
+| [Hand-written wrappers](reference/additional) | 1 |
+
+## On3 Recruit Database {#on3-recruit-database}
+
+| Reference | Functions |
+|---|---:|
+| [On3 Recruit Database (api.on3.com)](reference/on3) | 78 |
+| [Hand-written wrappers](reference/additional) | 4 |
+
+## 247Sports Recruit Database {#247sports-recruit-database}
+
+| Reference | Functions |
+|---|---:|
+| [247Sports Recruit Database (ipa.247sports.com)](reference/sports247) | 12 |
+| [247Sports Site Pages (247sports.com)](reference/sports247_site_pages) | 35 |
+
+## Yahoo Sports Shangrila {#yahoo-sports-shangrila}
+
+| Reference | Functions |
+|---|---:|
+| [Hand-written wrappers](reference/additional) | 7 |
+
+## Fox Sports API {#fox-sports-api}
+
+| Reference | Functions |
+|---|---:|
+| [Hand-written wrappers](reference/additional) | 29 |
+## Tools and helpers
+
+### Play-by-play processing {#play-by-play-processing}
+
+- [`CFBPlayProcess`](reference/additional#CFBPlayProcess)
+
+### Models and calculators {#models-and-calculators}
+
+- [`add_era_columns`](reference/additional#add_era_columns)
+- [`assert_rating_scale`](reference/additional#assert_rating_scale)
+- [`calculate_completion_probability`](reference/additional#calculate_completion_probability)
+- [`calculate_epa`](reference/additional#calculate_epa)
+- [`calculate_expected_points`](reference/additional#calculate_expected_points)
+- [`calculate_field_goal_probability`](reference/additional#calculate_field_goal_probability)
+- [`calculate_fourth_down`](reference/additional#calculate_fourth_down)
+- [`calculate_qbr`](reference/additional#calculate_qbr)
+- [`calculate_two_point_probability`](reference/additional#calculate_two_point_probability)
+- [`calculate_win_probability`](reference/additional#calculate_win_probability)
+- [`calculate_wpa`](reference/additional#calculate_wpa)
+- [`calculate_xpass`](reference/additional#calculate_xpass)
+- [`cfb_adjusted_epa`](reference/additional#cfb_adjusted_epa)
+- [`cfb_adjusted_epa_by_game`](reference/additional#cfb_adjusted_epa_by_game)
+- [`cfb_compute_results`](reference/additional#cfb_compute_results)
+- [`cfb_draft_projection`](reference/additional#cfb_draft_projection)
+- [`cfb_field_position`](reference/additional#cfb_field_position)
+- [`cfb_predict_games`](reference/additional#cfb_predict_games)
+- [`cfb_ratings`](reference/additional#cfb_ratings)
+- [`cfb_recruiting_projection`](reference/additional#cfb_recruiting_projection)
+- [`cfb_roster_talent`](reference/additional#cfb_roster_talent)
+- [`cfb_simulations`](reference/additional#cfb_simulations)
+- [`efficiency_ratings`](reference/additional#efficiency_ratings)
+- [`fei_ratings`](reference/additional#fei_ratings)
+- [`fit_field_position_ep`](reference/additional#fit_field_position_ep)
+- [`get_2pt_probs`](reference/additional#get_2pt_probs)
+- [`get_4th_down_probs`](reference/additional#get_4th_down_probs)
+- [`get_fg_wp`](reference/additional#get_fg_wp)
+- [`get_go_wp`](reference/additional#get_go_wp)
+- [`get_punt_wp`](reference/additional#get_punt_wp)
+- [`load_draft_outcomes`](reference/additional#load_draft_outcomes)
+- [`load_fp_curve`](reference/additional#load_fp_curve)
+- [`load_recruit_classes`](reference/additional#load_recruit_classes)
+- [`normalize_pbp_columns`](reference/additional#normalize_pbp_columns)
+- [`predict_from_card`](reference/additional#predict_from_card)
+- [`predict_margin`](reference/additional#predict_margin)
+- [`predict_total`](reference/additional#predict_total)
+- [`slope_for_games`](reference/additional#slope_for_games)
+- [`special_teams_ratings`](reference/additional#special_teams_ratings)
+- [`win_prob_from_margin`](reference/additional#win_prob_from_margin)
+
+### Analytics {#analytics}
+
+- [`add_play_type_canonical`](reference/additional#add_play_type_canonical)
+- [`canonical_play_type_expr`](reference/additional#canonical_play_type_expr)
+- [`cfb_adjusted_tempo`](reference/additional#cfb_adjusted_tempo)
+- [`cfb_advanced_stats`](reference/additional#cfb_advanced_stats)
+- [`cfb_games_from_schedule`](reference/additional#cfb_games_from_schedule)
+- [`cfb_playoff_seeds`](reference/additional#cfb_playoff_seeds)
+- [`cfb_resume`](reference/additional#cfb_resume)
+- [`cfb_returning_production`](reference/additional#cfb_returning_production)
+- [`cfb_season_odds`](reference/additional#cfb_season_odds)
+- [`cfb_standings`](reference/additional#cfb_standings)
+- [`cfb_transfer_impact`](reference/additional#cfb_transfer_impact)
+- [`cfb_transfer_moves`](reference/additional#cfb_transfer_moves)
+- [`create_drive_summary`](reference/additional#create_drive_summary)
+- [`create_situational_stats`](reference/additional#create_situational_stats)
+- [`make_ratings_compute_results`](reference/additional#make_ratings_compute_results)
+- [`play_type_family_expr`](reference/additional#play_type_family_expr)
+
+### Dates and seasons {#dates-and-seasons}
+
+- [`most_recent_cfb_season`](reference/additional#most_recent_cfb_season)
+
+### IDs and crosswalks {#ids-and-crosswalks}
+
+- [`cfb_odds_events_crosswalk`](reference/additional#cfb_odds_events_crosswalk)
+- [`cfb_rosters_crosswalk`](reference/additional#cfb_rosters_crosswalk)
+- [`cfb_schedule_crosswalk`](reference/additional#cfb_schedule_crosswalk)
+- [`cfb_teams_crosswalk`](reference/additional#cfb_teams_crosswalk)
+
+### Validation {#validation}
+
+- [`check_box_invariants`](reference/additional#check_box_invariants)
+
 
 ## Examples
 
