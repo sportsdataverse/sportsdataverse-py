@@ -1,0 +1,71 @@
+[
+  {
+    "draft_id": "257270643320426496",
+    "draft_slot": 1,
+    "is_keeper": null,
+    "metadata": {
+      "first_name": "David",
+      "injury_status": "Out",
+      "last_name": "Johnson",
+      "news_updated": "1513007102037",
+      "number": "31",
+      "player_id": "2391",
+      "position": "RB",
+      "sport": "nfl",
+      "status": "Injured Reserve",
+      "team": "ARI"
+    },
+    "pick_no": 1,
+    "picked_by": "200837482281963520",
+    "player_id": "2391",
+    "reactions": null,
+    "roster_id": 1,
+    "round": 1
+  },
+  {
+    "draft_id": "257270643320426496",
+    "draft_slot": 2,
+    "is_keeper": null,
+    "metadata": {
+      "first_name": "Le'Veon",
+      "injury_status": "",
+      "last_name": "Bell",
+      "news_updated": "1515698101257",
+      "number": "26",
+      "player_id": "1408",
+      "position": "RB",
+      "sport": "nfl",
+      "status": "Active",
+      "team": "PIT"
+    },
+    "pick_no": 2,
+    "picked_by": "199042945356140544",
+    "player_id": "1408",
+    "reactions": null,
+    "roster_id": 2,
+    "round": 1
+  },
+  {
+    "draft_id": "257270643320426496",
+    "draft_slot": 3,
+    "is_keeper": null,
+    "metadata": {
+      "first_name": "Antonio",
+      "injury_status": "Probable",
+      "last_name": "Brown",
+      "news_updated": "1515673801292",
+      "number": "84",
+      "player_id": "536",
+      "position": "WR",
+      "sport": "nfl",
+      "status": "Active",
+      "team": "PIT"
+    },
+    "pick_no": 3,
+    "picked_by": "667279356739584",
+    "player_id": "536",
+    "reactions": null,
+    "roster_id": 3,
+    "round": 1
+  }
+]

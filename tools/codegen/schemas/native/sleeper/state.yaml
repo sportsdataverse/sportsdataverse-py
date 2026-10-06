@@ -1,0 +1,33 @@
+columns:
+- description: ''
+  name: week
+  type: integer
+- description: ''
+  name: leg
+  type: integer
+- description: ''
+  name: season
+  type: character
+- description: 'Season: type discriminator for the record.'
+  name: season_type
+  type: character
+- description: ''
+  name: league_season
+  type: character
+- description: ''
+  name: previous_season
+  type: character
+- description: ''
+  name: season_start_date
+  type: character
+- description: ''
+  name: display_week
+  type: integer
+- description: ''
+  name: league_create_season
+  type: character
+- description: ''
+  name: season_has_scores
+  type: logical
+kind: dataframe
+schema: state

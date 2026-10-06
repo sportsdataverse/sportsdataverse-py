@@ -1,0 +1,18 @@
+columns:
+- description: ''
+  name: round
+  type: integer
+- description: ''
+  name: season
+  type: character
+- description: ''
+  name: roster_id
+  type: character
+- description: ''
+  name: owner_id
+  type: character
+- description: ''
+  name: previous_owner_id
+  type: character
+kind: dataframe
+schema: traded_picks
