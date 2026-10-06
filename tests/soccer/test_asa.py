@@ -196,4 +196,4 @@ def test_live_players_xpass_nasl_2017() -> None:
 def test_live_players_xpass_usls_split_year_season() -> None:
     """USL Super League labels its seasons split-year (``2024-25``); ``season_name="2024"`` returns ``[]``."""
     df = asa.asa_players_xpass(league_slug="usls", season_name="2024-25")
-    assert df.height > 0
+    assert df.height >= 100  # 231 rows measured 2026-10-06; a partial reply would fall below
