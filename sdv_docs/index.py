@@ -5,19 +5,22 @@ Stdlib only. Never import ``sportsdataverse`` here (see sdv_docs/__init__.py).
 
 from __future__ import annotations
 
+import gzip
 import hashlib
 import json
 import os
 import re
+import shutil
 import sqlite3
 import tempfile
 import threading
 import time
 import urllib.request
+import zlib
 from pathlib import Path
 from typing import Callable, Optional
 
-from sdv_docs.schema import ASSET, MANIFEST, RELEASE_BASE, SCHEMA_VERSION
+from sdv_docs.schema import ASSET, MANIFEST, RELEASE_ASSET, RELEASE_BASE, SCHEMA_VERSION
 
 _WORD = re.compile(r"\w+")
 # bm25 weights per search column: kind, name, title, body, url, league, lang, ref
@@ -182,12 +185,17 @@ def sha256(path: Path) -> str:
     return h.hexdigest()
 
 
+def _check(path: Path, size: Optional[int], digest: Optional[str], what: str) -> None:
+    if size is not None and path.stat().st_size != size:
+        raise IndexUnavailable(f"downloaded {what} has the wrong size")
+    if digest is not None and sha256(path) != digest:
+        raise IndexUnavailable(f"downloaded {what} failed its sha256 check")
+
+
 def verify(path: Path, manifest: dict) -> None:
-    """Raise IndexUnavailable unless ``path`` matches the manifest and is a sound index of our schema."""
-    if path.stat().st_size != manifest["size"]:
-        raise IndexUnavailable("downloaded index has the wrong size")
-    if sha256(path) != manifest["sha256"]:
-        raise IndexUnavailable("downloaded index failed its sha256 check")
+    """Raise IndexUnavailable unless the decompressed ``path`` matches the manifest's db_size / db_sha256
+    (when present) and is a sound index of our schema."""
+    _check(path, manifest.get("db_size"), manifest.get("db_sha256"), "index")
     try:
         con = sqlite3.connect(f"file:{path}?mode=ro", uri=True)
         try:
@@ -212,18 +220,29 @@ def refresh(db: Path, fetch: Fetch = http_fetch, timeout: float = 30.0) -> bool:
         manifest = json.loads(fetch(RELEASE_BASE + MANIFEST, timeout))
         db.parent.mkdir(parents=True, exist_ok=True)
         stamp = db.with_name("last_check")
-        if db.is_file() and sha256(db) == manifest["sha256"]:
+        if db.is_file() and sha256(db) == manifest.get("db_sha256"):
             stamp.touch()
             return False
-        fd, name = tempfile.mkstemp(dir=db.parent, suffix=".tmp")  # per-download, so processes never share one
-        tmp = Path(name)
+        # Per-download temp files, so processes never share one: the gz as served, then the index.
+        fd, name = tempfile.mkstemp(dir=db.parent, suffix=".gz.tmp")
+        gz, tmp = Path(name), None
         try:
             with os.fdopen(fd, "wb") as f:
-                f.write(fetch(RELEASE_BASE + ASSET, timeout))
+                f.write(fetch(RELEASE_BASE + RELEASE_ASSET, timeout))
+            _check(gz, manifest["size"], manifest["sha256"], "asset")
+            fd, name = tempfile.mkstemp(dir=db.parent, suffix=".tmp")
+            tmp = Path(name)
+            try:
+                with os.fdopen(fd, "wb") as dst, gzip.open(gz, "rb") as src:
+                    shutil.copyfileobj(src, dst, 1 << 20)
+            except (gzip.BadGzipFile, EOFError, zlib.error) as e:
+                raise IndexUnavailable(f"downloaded asset is not a valid gzip file ({e})") from e
             verify(tmp, manifest)
             os.replace(tmp, db)
         finally:
-            tmp.unlink(missing_ok=True)
+            gz.unlink(missing_ok=True)
+            if tmp is not None:
+                tmp.unlink(missing_ok=True)
         stamp.touch()
         return True
 

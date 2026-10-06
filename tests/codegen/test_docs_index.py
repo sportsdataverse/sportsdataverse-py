@@ -1,3 +1,4 @@
+import gzip
 import hashlib
 import io
 import json
@@ -9,7 +10,7 @@ from types import SimpleNamespace
 import pytest
 import yaml
 
-from sdv_docs.schema import ASSET, MANIFEST
+from sdv_docs.schema import ASSET, MANIFEST, RELEASE_ASSET
 from tools.codegen import build_docs_index as B
 from tools.codegen import spec
 
@@ -144,8 +145,7 @@ def test_parse_pkgdown_llms_reads_the_package_index_only():
 def test_offline_build_end_to_end(tmp_path):
     db = B.build(tmp_path, offline=True)
     assert db == tmp_path / ASSET
-    manifest = json.loads((tmp_path / MANIFEST).read_text())
-    assert manifest["sha256"] == hashlib.sha256(db.read_bytes()).hexdigest() and manifest["size"] == db.stat().st_size
+    _assert_manifest_describes_the_gz(tmp_path, db)
     con = sqlite3.connect(db)
 
     def one(sql, *args):
@@ -233,6 +233,18 @@ def test_parse_pkgdown_llms_fails_when_aliases_go_unparsed():
         B.parse_pkgdown_llms("p", text, B.Rows())
 
 
+def _assert_manifest_describes_the_gz(out, db):
+    # The manifest describes what clients download (the gz); db_* describe the file they install.
+    gz = (out / RELEASE_ASSET).read_bytes()
+    manifest = json.loads((out / MANIFEST).read_text())
+    assert (manifest["sha256"], manifest["size"]) == (hashlib.sha256(gz).hexdigest(), len(gz))
+    assert (manifest["db_sha256"], manifest["db_size"]) == (
+        hashlib.sha256(db.read_bytes()).hexdigest(),
+        db.stat().st_size,
+    )
+    assert gzip.decompress(gz) == db.read_bytes()
+
+
 def _meta_rows():
     return B.Rows(meta={"schema_version": "1", "built_at": "2026-01-01T00:00:00Z", "sdv_py_commit": "abc"})
 
@@ -251,8 +263,7 @@ def test_write_over_previous_release_refreshes_manifest(tmp_path):
     rows = _meta_rows()
     rows.meta["extra"] = "x" * 50_000  # make the second DB differ in size and content
     db = B.write(rows, tmp_path)
-    manifest = json.loads((tmp_path / MANIFEST).read_text())
-    assert manifest["sha256"] == hashlib.sha256(db.read_bytes()).hexdigest() and manifest["size"] == db.stat().st_size
+    _assert_manifest_describes_the_gz(tmp_path, db)
     assert not list(tmp_path.glob("*.tmp"))
 
 

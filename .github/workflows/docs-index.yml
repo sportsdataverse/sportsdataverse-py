@@ -48,7 +48,12 @@ jobs:
       - uses: actions/upload-artifact@v7
         with:
           name: docs-index
-          path: build/docs-index/
+          # Only what the release serves: the gzipped index and its manifest. The plain
+          # .sqlite above is for the retrieval gate and local use.
+          path: |
+            build/docs-index/sdv_docs_v1.sqlite.gz
+            build/docs-index/manifest_v1.json
+          if-no-files-found: error
           retention-days: 7
 
   publish:
@@ -73,4 +78,4 @@ jobs:
           gh release view docs-index >/dev/null 2>&1 || gh release create docs-index \
             --title "sdv-docs index" --latest=false \
             --notes "Rolling build of the sdv-docs MCP index (tools/codegen/build_docs_index.py). Assets are replaced on every build; not a package release."
-          gh release upload docs-index docs-index/sdv_docs_v1.sqlite docs-index/manifest_v1.json --clobber
+          gh release upload docs-index docs-index/sdv_docs_v1.sqlite.gz docs-index/manifest_v1.json --clobber

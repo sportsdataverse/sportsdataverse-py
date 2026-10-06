@@ -3,7 +3,8 @@
 from __future__ import annotations
 
 SCHEMA_VERSION = 1
-ASSET = f"sdv_docs_v{SCHEMA_VERSION}.sqlite"
+ASSET = f"sdv_docs_v{SCHEMA_VERSION}.sqlite"  # the cached / local index (SDV_DOCS_DB)
+RELEASE_ASSET = ASSET + ".gz"  # what the release serves; clients decompress it to ASSET
 MANIFEST = f"manifest_v{SCHEMA_VERSION}.json"
 RELEASE_TAG = "docs-index"
 RELEASE_BASE = f"https://github.com/sportsdataverse/sportsdataverse-py/releases/download/{RELEASE_TAG}/"

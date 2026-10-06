@@ -1,3 +1,4 @@
+import gzip
 import hashlib
 import json
 import os
@@ -9,7 +10,7 @@ import pytest
 
 from sdv_docs import index as idx
 from sdv_docs.index import Index, fts_query
-from sdv_docs.schema import ASSET, MANIFEST, RELEASE_BASE
+from sdv_docs.schema import ASSET, MANIFEST, RELEASE_ASSET, RELEASE_BASE
 from tests.sdv_docs.conftest import make_tiny_db
 
 
@@ -87,9 +88,23 @@ def test_meta_counts_names(tiny_db: Path):
         assert "load_nhl_pbp" in ix.names("functions")
 
 
+def _gz(data: bytes) -> bytes:
+    return gzip.compress(data, mtime=0)  # byte-stable, so a manifest and a later _serve agree
+
+
+def _manifest(gz: bytes, db: bytes) -> dict:
+    return {
+        "schema_version": 1,
+        "sha256": hashlib.sha256(gz).hexdigest(),
+        "size": len(gz),
+        "db_sha256": hashlib.sha256(db).hexdigest(),
+        "db_size": len(db),
+    }
+
+
 def _published(tmp_path: Path, **meta: str) -> tuple[Path, dict]:
     db = make_tiny_db(tmp_path / "published.sqlite", **meta)
-    return db, {"schema_version": 1, "sha256": idx.sha256(db), "size": db.stat().st_size}
+    return db, _manifest(_gz(db.read_bytes()), db.read_bytes())
 
 
 def _fetcher(files: dict, calls: list):
@@ -103,7 +118,10 @@ def _fetcher(files: dict, calls: list):
 
 
 def _serve(pub: Path, man: dict, asset_bytes: bytes = b"") -> dict:
-    return {RELEASE_BASE + MANIFEST: json.dumps(man).encode(), RELEASE_BASE + ASSET: asset_bytes or pub.read_bytes()}
+    return {
+        RELEASE_BASE + MANIFEST: json.dumps(man).encode(),
+        RELEASE_BASE + RELEASE_ASSET: asset_bytes or _gz(pub.read_bytes()),
+    }
 
 
 @pytest.fixture
@@ -130,8 +148,9 @@ def test_first_use_downloads_verifies_and_installs(tmp_path, cache):
     pub, man = _published(tmp_path)
     path = idx.locate(_fetcher(_serve(pub, man), []), background=False)
     assert path == cache / ASSET
-    assert idx.sha256(path) == man["sha256"]
+    assert idx.sha256(path) == man["db_sha256"]  # installed decompressed
     assert (cache / "last_check").exists()
+    assert sorted(p.name for p in cache.iterdir()) == ["last_check", ASSET]  # no temp files left
 
 
 def test_first_use_without_network_is_a_clear_error(cache):
@@ -142,8 +161,11 @@ def test_first_use_without_network_is_a_clear_error(cache):
 @pytest.mark.parametrize(
     ("tamper", "match"),
     [
-        ("truncate", "size"),
-        ("sha", "sha256"),
+        ("truncate", "asset has the wrong size"),
+        ("sha", "asset failed its sha256 check"),
+        ("not_gzip", "not a valid gzip file"),
+        ("db_size", "index has the wrong size"),
+        ("db_sha", "index failed its sha256 check"),
         ("schema", "schema"),
         ("garbage", "not a SQLite file"),
     ],
@@ -155,20 +177,30 @@ def test_bad_downloads_are_rejected_and_old_index_kept(tmp_path, cache, tamper, 
     pub, man = _published(
         tmp_path, built_at="2026-10-06T00:00:00Z", **({"schema_version": "999"} if tamper == "schema" else {})
     )
-    if tamper == "schema":
-        man = {**man, "sha256": idx.sha256(pub), "size": pub.stat().st_size}
-    blob = pub.read_bytes()
+    blob = _gz(pub.read_bytes())
     if tamper == "truncate":
         blob = blob[:1000]
     if tamper == "sha":
         man = {**man, "sha256": "0" * 64}
-    if tamper == "garbage":
-        blob = b"x" * 4096
-        man = {**man, "sha256": hashlib.sha256(blob).hexdigest(), "size": len(blob)}
+    if tamper == "db_size":
+        man = {**man, "db_size": man["db_size"] + 1}
+    if tamper == "db_sha":
+        man = {**man, "db_sha256": "0" * 64}
+    if tamper in ("not_gzip", "garbage"):  # a manifest that matches the bytes served, so only the content fails
+        raw = b"x" * 4096
+        blob = raw if tamper == "not_gzip" else _gz(raw)
+        man = _manifest(blob, raw)
     with pytest.raises(idx.IndexUnavailable, match=match):
         idx.refresh(cache / ASSET, _fetcher(_serve(pub, man, blob), []))
     assert idx.sha256(cache / ASSET) == old_sha
-    assert not list(cache.glob("*.tmp"))
+    assert sorted(p.name for p in cache.iterdir()) == [ASSET]  # both temp files cleaned up
+
+
+def test_manifest_without_db_fields_still_installs(tmp_path, cache):
+    pub, man = _published(tmp_path)
+    man = {k: v for k, v in man.items() if not k.startswith("db_")}
+    assert idx.refresh(cache / ASSET, _fetcher(_serve(pub, man), [])) is True
+    assert idx.sha256(cache / ASSET) == idx.sha256(pub)
 
 
 def test_unchanged_manifest_only_touches_the_stamp(tmp_path, cache):
@@ -196,7 +228,7 @@ def test_stale_stamp_installs_a_newer_index(tmp_path, cache):
     os.utime(cache / "last_check", (time.time() - 2 * 86400,) * 2)
     pub, man = _published(tmp_path, built_at="2026-10-06T00:00:00Z")
     idx.locate(_fetcher(_serve(pub, man), []), background=False)
-    assert idx.sha256(cache / ASSET) == man["sha256"]
+    assert idx.sha256(cache / ASSET) == man["db_sha256"]
 
 
 def test_failed_replace_keeps_the_old_index(tmp_path, cache, monkeypatch):

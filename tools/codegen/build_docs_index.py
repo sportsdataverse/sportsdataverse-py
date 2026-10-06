@@ -6,13 +6,15 @@ released datasets and Python/R equivalents in one SQLite file.
 Reads the same in-memory model codegen renders the reference docs from (spec.py +
 generate.py), the committed generated docs tree (for doc URLs), and two public network
 inputs that --offline skips: the sdv-swagger OpenAPI specs and the R packages' pkgdown
-llms.txt function indexes. Writes sdv_docs.schema.ASSET and MANIFEST into --out.
+llms.txt function indexes. Writes sdv_docs.schema.ASSET, its gzip RELEASE_ASSET (the file
+the release serves) and MANIFEST into --out.
 """
 
 from __future__ import annotations
 
 import argparse
 import datetime as dt
+import gzip
 import hashlib
 import importlib
 import inspect
@@ -20,6 +22,7 @@ import io
 import json
 import os
 import re
+import shutil
 import sqlite3
 import subprocess
 import sys
@@ -33,7 +36,7 @@ from typing import Any, Optional
 import yaml
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
-from sdv_docs.schema import ASSET, MANIFEST, SCHEMA_SQL, SCHEMA_VERSION, SEARCH_SQL  # noqa: E402
+from sdv_docs.schema import ASSET, MANIFEST, RELEASE_ASSET, SCHEMA_SQL, SCHEMA_VERSION, SEARCH_SQL  # noqa: E402
 from tools.codegen import generate as G  # noqa: E402
 from tools.codegen import spec  # noqa: E402
 
@@ -505,10 +508,11 @@ def build(out_dir: Path, offline: bool = False) -> Path:
 
 
 def write(rows: Rows, out_dir: Path) -> Path:
-    """Write ASSET then MANIFEST atomically: a failed write leaves neither, never a stale manifest."""
+    """Write ASSET, RELEASE_ASSET (its gzip) then MANIFEST, each atomically: a failed write never
+    leaves a manifest that describes stale files."""
     out_dir.mkdir(parents=True, exist_ok=True)
-    db, man = out_dir / ASSET, out_dir / MANIFEST
-    db_tmp, man_tmp = db.with_name(db.name + ".tmp"), man.with_name(man.name + ".tmp")
+    db, gz, man = out_dir / ASSET, out_dir / RELEASE_ASSET, out_dir / MANIFEST
+    db_tmp, gz_tmp, man_tmp = (p.with_name(p.name + ".tmp") for p in (db, gz, man))
     man.unlink(missing_ok=True)
     try:
         db_tmp.unlink(missing_ok=True)
@@ -528,18 +532,23 @@ def write(rows: Rows, out_dir: Path) -> Path:
         finally:
             con.close()
         os.replace(db_tmp, db)
-        manifest = {
+        with db.open("rb") as src, gz_tmp.open("wb") as f, gzip.GzipFile(ASSET, "wb", fileobj=f, mtime=0) as dst:
+            shutil.copyfileobj(src, dst, 1 << 20)
+        os.replace(gz_tmp, gz)
+        manifest = {  # describes the download (the gz); db_* describe the decompressed index
             "schema_version": SCHEMA_VERSION,
-            "sha256": hashlib.sha256(db.read_bytes()).hexdigest(),
-            "size": db.stat().st_size,
+            "sha256": hashlib.sha256(gz.read_bytes()).hexdigest(),
+            "size": gz.stat().st_size,
+            "db_sha256": hashlib.sha256(db.read_bytes()).hexdigest(),
+            "db_size": db.stat().st_size,
             "built_at": rows.meta["built_at"],
             "sdv_py_commit": rows.meta["sdv_py_commit"],
         }
         man_tmp.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
         os.replace(man_tmp, man)
     finally:
-        db_tmp.unlink(missing_ok=True)
-        man_tmp.unlink(missing_ok=True)
+        for tmp in (db_tmp, gz_tmp, man_tmp):
+            tmp.unlink(missing_ok=True)
     return db
 
 
@@ -553,7 +562,11 @@ def main(argv: Optional[list[str]] = None) -> int:
     tables = ("functions", "params", "columns", "endpoints", "datasets", "equivalents", "search")
     counts = {t: con.execute(f"SELECT count(*) FROM {t}").fetchone()[0] for t in tables}  # noqa: S608 -- fixed names
     con.close()
-    print(f"wrote {db} ({db.stat().st_size / 1e6:.1f} MB): " + ", ".join(f"{k} {v:,}" for k, v in counts.items()))
+    gz_mb = (db.with_name(RELEASE_ASSET).stat().st_size) / 1e6
+    print(
+        f"wrote {db} ({db.stat().st_size / 1e6:.1f} MB; {RELEASE_ASSET} {gz_mb:.1f} MB): "
+        + ", ".join(f"{k} {v:,}" for k, v in counts.items())
+    )
     return 0
 
 
