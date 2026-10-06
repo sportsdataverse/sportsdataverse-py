@@ -11,11 +11,15 @@ llms.txt function indexes. Writes sdv_docs.schema.ASSET and MANIFEST into --out.
 
 from __future__ import annotations
 
+import argparse
+import datetime as dt
+import hashlib
 import importlib
 import inspect
 import io
 import json
 import re
+import sqlite3
 import subprocess
 import sys
 import tarfile
@@ -27,6 +31,7 @@ from typing import Any, Optional
 import yaml
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+from sdv_docs.schema import ASSET, MANIFEST, SCHEMA_SQL, SCHEMA_VERSION, SEARCH_SQL  # noqa: E402
 from tools.codegen import generate as G  # noqa: E402
 from tools.codegen import spec  # noqa: E402
 
@@ -408,11 +413,13 @@ def openapi_rows(specs: dict[str, dict], sha: str, rows: Rows) -> None:
 
 
 _R_ALIAS = re.compile(r"\[`([^`]+?)`\]\((\S+?)\)")
-_R_TITLE = re.compile(r"^\s*\*\*(.+?)\*\*\s*$")
+# pkgdown writes a help page's title in two layouts: inline after the colon ("  : Title"),
+# or a bare "  :" line followed by a bold "  **Title**" line (hoopR, 2026-10-05).
+_R_TITLE = re.compile(r"^\s*(?::\s+(\S.*?)|\*\*(.+?)\*\*)\s*$")
 
 
 def parse_pkgdown_llms(package: str, text: str, rows: Rows) -> int:
-    """R functions from the ``# Package index`` of a pkgdown llms.txt. One help page = aliases + a bold title."""
+    """R functions from the ``# Package index`` of a pkgdown llms.txt. One help page = aliases + its title."""
     _, _, index = text.partition("\n# Package index")
     category: Optional[str] = None
     pending: list[tuple[str, str]] = []
@@ -428,8 +435,82 @@ def parse_pkgdown_llms(package: str, text: str, rows: Rows) -> int:
         pending += [(n.removesuffix("()"), u) for n, u in _R_ALIAS.findall(line)]
         m = _R_TITLE.match(line)
         if m and pending:
+            title = (m.group(1) or m.group(2)).strip()
             for n, u in pending:
-                rows.functions.append((n, "r", package, None, None, "function", category, m.group(1).strip(), None, u))
+                rows.functions.append((n, "r", package, None, None, "function", category, title, None, u))
                 added += 1
             pending = []
     return added
+
+
+def build(out_dir: Path, offline: bool = False) -> Path:
+    commit = subprocess.run(
+        ["git", "rev-parse", "HEAD"], cwd=G.ROOT, check=True, capture_output=True, text=True
+    ).stdout.strip()
+    now = dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+    rows = Rows(meta={"schema_version": str(SCHEMA_VERSION), "built_at": now, "sdv_py_commit": commit})
+    rel = spec.load_releases(G.ENDPOINTS / "releases.yaml")
+    loaders = {ld.fn: ld for ld in rel.loaders}
+    wrappers = codegen_wrappers(commit, rows)
+    funcs = python_functions(wrappers, loaders, doc_anchors(), rows)
+    python_columns(funcs, wrappers, loaders, rows)
+    dataset_rows(rel, rows)
+    equivalent_rows(funcs, rows)
+    if offline:
+        rows.meta["skipped"] = "sdv-swagger OpenAPI specs, R pkgdown llms.txt (--offline)"
+    else:
+        sha = swagger_sha()
+        openapi_rows(fetch_swagger(sha), sha, rows)
+        for package, url in R_LLMS.items():
+            if parse_pkgdown_llms(package, http_get(url).decode("utf-8"), rows) == 0:
+                raise RuntimeError(f"{url}: no functions parsed; the pkgdown llms.txt layout changed")
+        rows.meta.update(sdv_swagger_sha=sha, pkgdown_fetched=now)
+    return write(rows, out_dir)
+
+
+def write(rows: Rows, out_dir: Path) -> Path:
+    out_dir.mkdir(parents=True, exist_ok=True)
+    db = out_dir / ASSET
+    db.unlink(missing_ok=True)
+    con = sqlite3.connect(db)
+    try:
+        con.executescript(SCHEMA_SQL)
+        con.executemany("INSERT INTO meta VALUES (?, ?)", sorted(rows.meta.items()))
+        con.executemany("INSERT INTO functions VALUES (?,?,?,?,?,?,?,?,?,?)", rows.functions)
+        con.executemany("INSERT INTO params VALUES (?,?,?,?,?,?)", rows.params)
+        con.executemany("INSERT INTO columns VALUES (?,?,?,?,?)", rows.columns)
+        con.executemany("INSERT INTO endpoints VALUES (?,?,?,?,?,?,?,?,?)", rows.endpoints)
+        con.executemany("INSERT OR IGNORE INTO datasets VALUES (?,?,?,?,?,?)", rows.datasets)
+        con.executemany("INSERT INTO equivalents VALUES (?,?,?,?)", rows.equivalents)
+        con.executescript(SEARCH_SQL)
+        con.commit()
+        con.execute("VACUUM")
+    finally:
+        con.close()
+    manifest = {
+        "schema_version": SCHEMA_VERSION,
+        "sha256": hashlib.sha256(db.read_bytes()).hexdigest(),
+        "size": db.stat().st_size,
+        "built_at": rows.meta["built_at"],
+        "sdv_py_commit": rows.meta["sdv_py_commit"],
+    }
+    (out_dir / MANIFEST).write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
+    return db
+
+
+def main(argv: Optional[list[str]] = None) -> int:
+    ap = argparse.ArgumentParser(prog="build_docs_index.py", description="Build the sdv-docs MCP index.")
+    ap.add_argument("--out", type=Path, default=G.ROOT / "build" / "docs-index")
+    ap.add_argument("--offline", action="store_true", help="skip sdv-swagger and the R pkgdown llms.txt files")
+    args = ap.parse_args(argv)
+    db = build(args.out, offline=args.offline)
+    con = sqlite3.connect(db)
+    tables = ("functions", "params", "columns", "endpoints", "datasets", "equivalents", "search")
+    counts = {t: con.execute(f"SELECT count(*) FROM {t}").fetchone()[0] for t in tables}  # noqa: S608 -- fixed names
+    con.close()
+    print(f"wrote {db} ({db.stat().st_size / 1e6:.1f} MB): " + ", ".join(f"{k} {v:,}" for k, v in counts.items()))
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

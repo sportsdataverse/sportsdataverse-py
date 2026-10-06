@@ -1,5 +1,7 @@
+import hashlib
 import io
 import json
+import sqlite3
 import tarfile
 from pathlib import Path
 from types import SimpleNamespace
@@ -7,6 +9,7 @@ from types import SimpleNamespace
 import pytest
 import yaml
 
+from sdv_docs.schema import ASSET, MANIFEST
 from tools.codegen import build_docs_index as B
 from tools.codegen import spec
 
@@ -135,3 +138,56 @@ def test_parse_pkgdown_llms_reads_the_package_index_only():
     )
     assert rows.functions[1][0] == "load_nba_team_box" and rows.functions[1][7] == "Load hoopR NBA play-by-play"
     assert rows.functions[2][7] == "Update or create a hoopR NBA play-by-play database"
+
+
+@pytest.mark.xdist_group("docs_index_build")
+def test_offline_build_end_to_end(tmp_path):
+    db = B.build(tmp_path, offline=True)
+    assert db == tmp_path / ASSET
+    manifest = json.loads((tmp_path / MANIFEST).read_text())
+    assert manifest["sha256"] == hashlib.sha256(db.read_bytes()).hexdigest() and manifest["size"] == db.stat().st_size
+    con = sqlite3.connect(db)
+
+    def one(sql, *args):
+        return con.execute(sql, args).fetchone()
+
+    assert one("SELECT kind, league, doc_url FROM functions WHERE name='load_nhl_pbp' AND lang='python'") == (
+        "loader",
+        "nhl",
+        "https://py.sportsdataverse.org/docs/nhl/reference/loaders/pbp#load_nhl_pbp",
+    )
+    assert one("SELECT type FROM columns WHERE function='load_nhl_pbp' AND name='event_type'") == ("String",)
+    assert one("SELECT count(*) FROM columns WHERE function='load_cfb_drives' AND name='drive_id'") == (1,)
+    assert one("SELECT tag, min_season FROM datasets WHERE loader='load_nhl_shifts'") == ("nhl_shifts", 2025)
+    assert one(
+        "SELECT r_function, match FROM equivalents WHERE py_function='load_nfl_pbp' AND r_package='nflreadr'"
+    ) == ("load_pbp", "alias")
+    assert one("SELECT match FROM equivalents WHERE py_function='load_nba_pbp' AND r_package='hoopR'") == ("identity",)
+    assert one("SELECT kind, league FROM functions WHERE name='espn_nba_team_roster'") == ("espn", "nba")
+    assert one("SELECT kind, league FROM functions WHERE name='wnba_stats_shotchartdetail'") == ("flat", "wnba")
+    assert one("SELECT count(*) FROM params WHERE function='load_nhl_pbp' AND name='seasons'") == (1,)
+    assert "--offline" in one("SELECT value FROM meta WHERE key='skipped'")[0]
+    counts = {
+        t: one(f"SELECT count(*) FROM {t}")[0]
+        for t in ("functions", "columns", "endpoints", "datasets", "equivalents", "search")
+    }
+    assert counts["functions"] > 3000 and counts["columns"] > 10000 and counts["endpoints"] > 300
+    assert counts["datasets"] >= 300 and counts["equivalents"] > 100 and counts["search"] > counts["columns"]
+    assert one("SELECT count(*) FROM functions WHERE lang='r'") == (0,)
+
+
+def test_parse_pkgdown_llms_reads_inline_colon_titles():
+    # pkgdown's other layout (r.sportsdataverse.org, 2026-10-05): the title follows the colon on the same line.
+    text = (
+        "# sportsdataverse\n\n# Package index\n\n## All functions\n\n"
+        "- [`sportsdataverse_update()`](https://r.sportsdataverse.org/reference/sportsdataverse_update.md)\n"
+        "  : Update sportsdataverse packages\n"
+        "- [`sportsdataverse_logo()`](https://r.sportsdataverse.org/reference/sportsdataverse_logo.md)\n"
+        "  : The sportsdataverse logo, using **ASCII** or Unicode characters\n"
+    )
+    rows = B.Rows()
+    assert B.parse_pkgdown_llms("sportsdataverse", text, rows) == 2
+    assert [(f[0], f[6], f[7]) for f in rows.functions] == [
+        ("sportsdataverse_update", "All functions", "Update sportsdataverse packages"),
+        ("sportsdataverse_logo", "All functions", "The sportsdataverse logo, using **ASCII** or Unicode characters"),
+    ]
