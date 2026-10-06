@@ -34,6 +34,11 @@ def _elsewhere(filters: dict[str, Optional[str]], found: list[str]) -> str:
     return f"not for {shown} (found in: {', '.join(found[:FOUND_CAP])}{more})."
 
 
+def _partial(query: str) -> str:
+    """Heading for OR-fallback hits: spec §5 says a miss is explicit, never dressed up as an answer."""
+    return f"Nothing matches every word of {query!r}; partial matches:"
+
+
 def _not_found(ix: Index, what: str, name: str, table: str) -> str:
     close = difflib.get_close_matches(name, ix.names(table), n=5, cutoff=0.6)
     hint = f" Close names: {', '.join(f'`{c}`' for c in close)}." if close else ""
@@ -69,7 +74,7 @@ def search(
                 found = sorted({" · ".join(str(h[k] or "none") for k in keys) for h in anywhere})
                 return f"Results for {query!r} exist, but " + _elsewhere(filters, found)
             return f"No results for {query!r}."
-        lines = [f"{len(hits)} result(s) for {query!r}:"]
+        lines = [_partial(query) if hits.op == "OR" else f"{len(hits)} result(s) for {query!r}:"]
         for h in hits:
             tags = " · ".join(t for t in (h["kind"], h["lang"], h["league"]) if t)
             title = f" — {h['title']}" if h["title"] else ""
@@ -220,7 +225,7 @@ def find_endpoints(query: str, api: Optional[str] = None, limit: int = 10) -> st
             if e["spec_url"]:
                 lines.append(f"spec: {e['spec_url']}")
             blocks.append("\n".join(lines))
-        return "\n\n".join(blocks)
+        return (_partial(query) + "\n" if rows.op == "OR" else "") + "\n\n".join(blocks)
 
     return _with_index(run)
 
@@ -247,7 +252,8 @@ def list_datasets(league: Optional[str] = None, query: Optional[str] = None, lim
                 + (f" query {query!r}" if query else "")
                 + "."
             )
-        lines = ["| loader | league | release tag | from season | release |", "|---|---|---|---|---|"]
+        lines = [_partial(query or "")] if rows.op == "OR" else []
+        lines += ["| loader | league | release tag | from season | release |", "|---|---|---|---|---|"]
         lines += [
             f"| {d['loader']} | {d['league']} | {d['tag']} | {d['min_season']} | {d['release_url']} |" for d in rows
         ]

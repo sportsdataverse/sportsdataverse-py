@@ -18,7 +18,7 @@ import time
 import urllib.request
 import zlib
 from pathlib import Path
-from typing import Callable, Optional
+from typing import Callable, Iterable, Optional
 
 from sdv_docs.schema import ASSET, MANIFEST, RELEASE_ASSET, RELEASE_BASE, SCHEMA_VERSION
 
@@ -30,6 +30,14 @@ _WEIGHTS = "0, 10.0, 5.0, 1.0, 0, 0, 0, 0"
 def fts_query(text: str, op: str = "AND") -> str:
     """Quote every word so user text can never be parsed as FTS5 syntax."""
     return f" {op} ".join(f'"{w}"' for w in _WORD.findall(text))
+
+
+class Hits(list[sqlite3.Row]):
+    """Ranked rows plus the pass that found them: "AND" (every word matched) or "OR" (a partial match)."""
+
+    def __init__(self, rows: Iterable[sqlite3.Row] = (), op: str = "AND") -> None:
+        super().__init__(rows)
+        self.op = op
 
 
 class Index:
@@ -62,7 +70,7 @@ class Index:
         league: Optional[str] = None,
         lang: Optional[str] = None,
         limit: int = 10,
-    ) -> list[sqlite3.Row]:
+    ) -> Hits:
         where, args = "", []
         for col, val in (("kind", kind), ("league", league), ("lang", lang)):
             if val:
@@ -71,7 +79,7 @@ class Index:
         for op in ("AND", "OR"):
             q = fts_query(query, op)
             if not q:
-                return []
+                return Hits()
             rows = self.con.execute(
                 "SELECT kind, name, title, url, league, lang, ref FROM search "  # noqa: S608 -- fixed SQL
                 # Column rows go last: they carry their function's name as title and would bury it.
@@ -79,22 +87,22 @@ class Index:
                 (q, *args, limit),
             ).fetchall()
             if rows:
-                return rows
-        return []
+                return Hits(rows, op)
+        return Hits()
 
-    def _ranked(self, table: str, kind: str, query: str, where: str, args: tuple, limit: int) -> list[sqlite3.Row]:
+    def _ranked(self, table: str, kind: str, query: str, where: str, args: tuple, limit: int) -> Hits:
         for op in ("AND", "OR"):
             q = fts_query(query, op)
             if not q:
-                return []
+                return Hits()
             rows = self.con.execute(
                 f"SELECT t.* FROM search JOIN {table} t ON t.rowid = search.ref "  # noqa: S608 -- fixed table names
                 f"WHERE search MATCH ? AND search.kind = ?{where} ORDER BY bm25(search, {_WEIGHTS}) LIMIT ?",
                 (q, kind, *args, limit),
             ).fetchall()
             if rows:
-                return rows
-        return []
+                return Hits(rows, op)
+        return Hits()
 
     def functions(self, name: str, lang: Optional[str] = None) -> list[sqlite3.Row]:
         pkg, _, fn = name.strip().rpartition("::")
@@ -138,16 +146,16 @@ class Index:
             "SELECT * FROM equivalents WHERE py_function = ? OR r_function = ? ORDER BY r_package", (name, name)
         ).fetchall()
 
-    def endpoints(self, query: str, api: Optional[str] = None, limit: int = 10) -> list[sqlite3.Row]:
+    def endpoints(self, query: str, api: Optional[str] = None, limit: int = 10) -> Hits:
         where, args = (" AND lower(t.api) = lower(?)", (api,)) if api else ("", ())  # OpenAPI titles are mixed-case
         return self._ranked("endpoints", "endpoint", query, where, args, limit)
 
-    def datasets(self, league: Optional[str] = None, query: Optional[str] = None, limit: int = 50) -> list[sqlite3.Row]:
+    def datasets(self, league: Optional[str] = None, query: Optional[str] = None, limit: int = 50) -> Hits:
         args: tuple = (league.lower(),) if league else ()
         if query is not None:  # an empty or punctuation-only query matches nothing, not everything
             return self._ranked("datasets", "dataset", query, " AND t.league = ?" if league else "", args, limit)
         sql = "SELECT * FROM datasets" + (" WHERE league = ?" if league else "") + " ORDER BY loader LIMIT ?"
-        return self.con.execute(sql, (*args, limit)).fetchall()
+        return Hits(self.con.execute(sql, (*args, limit)).fetchall())
 
     def dataset_for(self, loader: str) -> Optional[sqlite3.Row]:
         row: Optional[sqlite3.Row] = self.con.execute("SELECT * FROM datasets WHERE loader = ?", (loader,)).fetchone()

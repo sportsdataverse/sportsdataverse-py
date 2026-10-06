@@ -28,6 +28,17 @@ def test_search_survives_hostile_input(text):
     assert server.list_datasets(query=text).startswith("No datasets")
 
 
+def test_partial_matches_are_labelled():
+    partial = "Nothing matches every word of 'shift zamboni'; partial matches:\n"
+    assert server.search("shift zamboni").startswith(partial)
+    assert server.list_datasets(query="shift zamboni").startswith(partial)
+    assert server.find_endpoints("athlete zamboni").startswith(
+        "Nothing matches every word of 'athlete zamboni'; partial matches:\n"
+    )
+    for out in (server.search("nhl shifts"), server.list_datasets(query="shifts"), server.find_endpoints("athlete")):
+        assert "partial matches" not in out
+
+
 def test_get_function_full_block():
     out = server.get_function("load_nhl_pbp")
     for s in (

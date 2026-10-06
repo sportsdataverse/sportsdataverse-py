@@ -48,7 +48,11 @@ def test_search_ranks_column_rows_last(tiny_db: Path):
 
 def test_search_falls_back_to_or(tiny_db: Path):
     with Index(tiny_db) as ix:
-        assert any(h["name"] == "load_nhl_shifts" for h in ix.search("shift zamboni"))
+        hits = ix.search("shift zamboni")
+        assert any(h["name"] == "load_nhl_shifts" for h in hits)
+        assert hits.op == "OR" and ix.search("nhl shifts").op == "AND"
+        assert ix.endpoints("athlete zamboni").op == "OR" and ix.endpoints("athlete injuries").op == "AND"
+        assert ix.datasets(query="shifts zamboni").op == "OR" and ix.datasets(league="nhl").op == "AND"
 
 
 def test_functions_accepts_name_variants(tiny_db: Path):
