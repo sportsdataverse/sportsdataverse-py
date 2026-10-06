@@ -5,7 +5,7 @@ Each family routes its ``download()`` through ``_codegen_runtime._download_json`
 loop, ESPN ``code: 404`` probe) with only ``requests.Session.get`` replaced, serving the
 real ESPN bodies under ``tests/fixtures/espn/`` and ``tests/fixtures/runtime_errors/``.
 Short synthetic bodies stand in where no capture exists (a 403/429/5xx error body, the
-core-v2 competitors / plays / athletes pages).
+core-v2 roster / plays / athletes pages).
 """
 
 from __future__ import annotations
