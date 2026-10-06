@@ -2,6 +2,7 @@
 # rolling `docs-index` release, which `sdv-docs` clients download once a day at most.
 # `build` runs repo + third-party code with a read-only token; `publish` holds
 # contents:write and runs no repo code. A retrieval-set failure blocks publishing.
+# Pull requests run `build` only, so a ranking or parser regression fails the PR.
 name: docs-index
 
 on:
@@ -14,13 +15,23 @@ on:
       - "sdv_docs/**"
       - "tests/sdv_docs/**"
       - ".github/workflows/docs-index.yml"
+  pull_request:
+    paths:
+      - "tools/codegen/**"
+      - "docs/docs/**"
+      - "sportsdataverse/**"
+      - "sdv_docs/**"
+      - "tests/sdv_docs/**"
+      - ".github/workflows/docs-index.yml"
   schedule:
     - cron: "17 6 * * 1" # weekly: sdv-swagger and the R pkgdown sites change without an sdv-py push
   workflow_dispatch:
 
 concurrency:
-  group: docs-index
-  cancel-in-progress: false # never cancel mid-publish: a cancelled run could leave a mismatched sqlite/manifest pair
+  # PR runs get their own group, so a PR can never displace a queued publishing run on main.
+  group: ${{ github.event_name == 'pull_request' && format('docs-index-pr-{0}', github.ref) || 'docs-index' }}
+  # never cancel mid-publish: a cancelled run could leave a mismatched gz/manifest pair
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   build:
@@ -58,7 +69,7 @@ jobs:
 
   publish:
     needs: build
-    if: github.ref == 'refs/heads/main'
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions:
