@@ -3,6 +3,7 @@
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
 - [Unreleased](#unreleased)
+  - [Added — sdv-docs MCP server and a published docs index](#added--sdv-docs-mcp-server-and-a-published-docs-index)
   - [Fixed — a failed fetch in the hand-written ESPN scrapers raises instead of being parsed (BREAKING)](#fixed--a-failed-fetch-in-the-hand-written-espn-scrapers-raises-instead-of-being-parsed-breaking)
   - [Fixed — a failed stats.nba.com / stats.wnba.com fetch raises instead of returning `{}` (BREAKING)](#fixed--a-failed-statsnbacom--statswnbacom-fetch-raises-instead-of-returning--breaking)
   - [Fixed — a failed flat-API fetch raises instead of returning the error body (BREAKING)](#fixed--a-failed-flat-api-fetch-raises-instead-of-returning-the-error-body-breaking)
@@ -330,6 +331,28 @@
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## Unreleased
+
+### Added — sdv-docs MCP server and a published docs index
+
+`sdv-docs` is a stdio MCP server that answers exact questions about the SportsDataverse surface
+from a local SQLite index, so an agent stops guessing column names and endpoint paths. Six
+read-only tools: `search`, `get_function`, `find_columns`, `find_endpoints`, `list_datasets` and
+`index_info`. Install with `pip install 'sportsdataverse[mcp]'` (Python 3.10+) or, for Claude
+Code, `claude mcp add sdv-docs -- uvx --from 'sportsdataverse[mcp]' sdv-docs`. The `sdv_docs/`
+package ships in the same wheel but never imports `sportsdataverse`, so a bare server starts in
+about 1.5 s and ~70 MB rather than the 4-12 s and ~320 MB of loading every league.
+
+The index (`sdv_docs_v1.sqlite` plus `manifest_v1.json`) is built by
+`uv run python tools/codegen/build_docs_index.py [--out DIR] [--offline]` from the codegen model,
+the sdv-swagger OpenAPI specs and the R packages' pkgdown `llms.txt`. A full build holds 8,935
+functions (Python plus 13 R packages), 92,339 columns, 3,472 endpoints, 323 datasets and 1,080
+Python-R equivalents, in 72.7 MB. `.github/workflows/docs-index.yml` runs the tests and a 28-case
+retrieval gate in a read-only job, then publishes to the rolling `docs-index` release from a
+separate write-permission job; `python-publish.yml` skips that release. The client caches the
+index under `$SDV_PY_CACHE_DIR/docs-index/` (else `~/.cache/sportsdataverse/docs-index/`), checks
+the manifest at most once a day, and verifies sha256, `integrity_check` and the schema version
+before swapping a new file in. No queries leave the machine. `SDV_DOCS_DB=<file>` points the
+server at a local build and never downloads.
 
 ### Fixed — a failed fetch in the hand-written ESPN scrapers raises instead of being parsed (BREAKING)
 
