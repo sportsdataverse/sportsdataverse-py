@@ -2302,6 +2302,15 @@ _COVERAGE_LEAGUES = [
     *_HOCKEYTECH_MODULE_LEAGUES,  # ahl/ohl/whl/qmjhl + the promoted junior/minor leagues
     "odds",
     "euroleague",
+    # Joined in 0.1.5: each has hand-written modules, so until now the gates never
+    # saw their functions and they had no Additional page.
+    "soccer",
+    "mch",
+    "ufl",
+    "college_baseball",
+    "cbs",
+    "yahoo",
+    "fox",
 ]
 
 # Mapping from doc/coverage prefix to actual Python module path for leagues
@@ -2437,6 +2446,73 @@ def _coverage_gaps() -> list[tuple[str, list[str]]]:
         missing = sorted(names - {n for n in names if _is_documented(n, corpus)} - allowed)
         if missing:
             gaps.append((label, missing))
+    return gaps
+
+
+def _source_scope_objects() -> dict[tuple[str, str], str]:
+    """``{(league_label, name): obj.__module__}`` for every in-scope public function.
+
+    One import pass shared by the sources gate and its report, keyed the same way
+    :func:`_coverage_gaps` groups: a league prefix, or ``"global"`` for the
+    package-level names."""
+    import importlib
+
+    per_league, global_names = _coverage_scope_names()
+    out: dict[tuple[str, str], str] = {}
+    for lg in _COVERAGE_LEAGUES:
+        mod = importlib.import_module(f"sportsdataverse.{_LEAGUE_MODULE.get(lg, lg)}")
+        for n in per_league[lg]:
+            out[(lg, n)] = getattr(getattr(mod, n), "__module__", "")
+    top = importlib.import_module("sportsdataverse")
+    for n in global_names:
+        out[("global", n)] = getattr(getattr(top, n), "__module__", "")
+    return out
+
+
+@functools.lru_cache(maxsize=1)
+def _generated_origins() -> dict[str, tuple[str, str]]:
+    """``{function name: (api name or flat stem, releases.yaml base)}`` for every GENERATED name.
+
+    A generated wrapper or loader carries no hand-written module, so the registry
+    deliberately has no ``modules:`` glob for it (one would shadow the provider that
+    owns the family). Its source is the API it was generated from, which only the
+    codegen model knows -- this is that lookup, and it is what lets
+    :func:`sources.resolve` answer in its third tier."""
+    params = spec.load_parameters(ENDPOINTS / "parameters.yaml")
+    cfg = spec.load_leagues(ENDPOINTS / "leagues.yaml")
+    out: dict[str, tuple[str, str]] = {}
+    espn_apis = [spec.load_espn_api(ENDPOINTS / f"{a}.yaml", params) for a in ESPN_APIS]
+    for league in cfg.leagues:
+        for v in _espn_league_views(league, espn_apis, cfg.hosts):
+            out[v.fn_name] = (v.api_name, "")
+    for stem, prefix in FLAT_APIS:
+        y = ENDPOINTS / f"{stem}.yaml"
+        if not y.exists():
+            continue
+        for v in _flat_views(spec.load_flat_api(y, params), league_prefix=prefix):
+            out[v.fn_name] = (stem, "")
+    for ld in spec.load_releases(ENDPOINTS / "releases.yaml").loaders:
+        out[ld.fn] = ("", ld.base)
+    return out
+
+
+def _source_gaps() -> list[tuple[str, str, str]]:
+    """``[(league_label, name, reason)]`` for every public function that does NOT
+    resolve to exactly one ``sources.yaml`` entry.
+
+    Zero matches means the docs cannot say where the function's data comes from;
+    two or more means the registry is self-contradictory and the page would pick a
+    source arbitrarily. Both fail ``--check``; there is no allowlist."""
+    from tools.codegen import sources
+
+    origins = _generated_origins()
+    gaps: list[tuple[str, str, str]] = []
+    for (label, name), module in sorted(_source_scope_objects().items()):
+        api, base = origins.get(name, ("", ""))
+        try:
+            sources.resolve(name, module, api=api, base=base)
+        except (sources.UnknownSource, sources.AmbiguousSource) as e:
+            gaps.append((label, name, str(e)))
     return gaps
 
 
@@ -4473,6 +4549,14 @@ def main(argv=None) -> int:
             print(
                 "codegen --check: undocumented user-facing functions:",
                 ", ".join(missing_names),
+                file=sys.stderr,
+            )
+            rc = 1
+        src_gaps = _source_gaps()
+        if src_gaps:
+            print(
+                "codegen --check: public functions with no single source:",
+                "; ".join(f"{label}.{name}: {why}" for label, name, why in src_gaps),
                 file=sys.stderr,
             )
             rc = 1

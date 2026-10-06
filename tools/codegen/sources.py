@@ -104,6 +104,36 @@ def by_base(base: str) -> Entry | None:
     return next((e for e in load() if base in e.release_bases), None)
 
 
+def _specificity(glob: str) -> tuple[int, int]:
+    """Sort key for "most specific glob wins": most literal characters, then fewest wildcards.
+
+    Specificity is how much of the name a glob actually pins down, so
+    ``sportsdataverse.*.nba_fox_ext`` (28 literal chars) beats ``sportsdataverse.nba.*``
+    (20), and ``sportsdataverse.wbb.wbb_ncaa_*`` beats ``sportsdataverse.*.*_schedule`` --
+    an NCAA schedule resolves to stats.ncaa.org, not to ESPN. A true tie (two rules pinning
+    down equally much) stays ambiguous on purpose: that is a registry bug to fix, not a
+    coin to flip.
+    """
+    wild = glob.count("*") + glob.count("?")
+    return (len(glob) - wild, -wild)
+
+
+def _match(entries: tuple[Entry, ...], value: str, field: str) -> list[Entry]:
+    """Entries whose ``field`` globs match ``value``, keeping only the most specific tie group."""
+    hits: list[tuple[tuple[int, int], Entry]] = []
+    for e in entries:
+        best = max(
+            (_specificity(g) for g in getattr(e, field) if fnmatch.fnmatchcase(value, g)),
+            default=None,
+        )
+        if best is not None:
+            hits.append((best, e))
+    if not hits:
+        return []
+    top = max(k for k, _ in hits)
+    return [e for k, e in hits if k == top]
+
+
 def _one(hits: list[Entry], name: str, module: str) -> Entry:
     if len(hits) > 1:
         raise AmbiguousSource(
@@ -128,11 +158,14 @@ def resolve(name: str, module: str, *, api: str = "", base: str = "") -> Entry:
         AmbiguousSource: Two or more rules match in the winning tier.
         UnknownSource: No rule matches in any tier.
     """
-    hits = [e for e in load() if any(fnmatch.fnmatchcase(name, g) for g in e.functions)]
-    if hits:
+    if hits := _match(load(), name, "functions"):
         return _one(hits, name, module)
-    hits = [e for e in load() if any(fnmatch.fnmatchcase(module, g) for g in e.modules)]
-    if hits:
+    # Categories before providers: a function that both lives in a provider's namespace and is a
+    # model/analytic/helper (mbb_ncaa_models, nhl_edge_value, pwhl_market) belongs under Tools and
+    # helpers, not in the provider's data-wrapper section.
+    if hits := _match(categories(), module, "modules"):
+        return _one(hits, name, module)
+    if hits := _match(providers(), module, "modules"):
         return _one(hits, name, module)
     if api and (e := by_api(api)) is not None:
         return e

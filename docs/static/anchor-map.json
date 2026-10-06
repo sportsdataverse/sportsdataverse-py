@@ -3610,9 +3610,6 @@
  },
  "/docs/reference/python-helpers": {
   "cache_stats": "other",
-  "college_baseball_re24": "other",
-  "college_baseball_state": "other",
-  "college_baseball_wpa": "other",
   "college_softball_re24": "other",
   "college_softball_state": "other",
   "college_softball_wpa": "other",
@@ -3620,13 +3617,11 @@
   "cricket_match_state": "other",
   "cricket_win_probability": "other",
   "cricket_wpa": "other",
-  "decompose_college_baseball_plays": "other",
   "defense_vs_position": "other",
   "deserved_wins": "other",
   "football_attempts": "other",
   "football_events": "other",
   "get_cache_mode": "other",
-  "mch_ratings": "other",
   "metric_curves": "other",
   "nbagl_enhanced_pbp": "other",
   "nbagl_on_court": "other",
@@ -3824,10 +3819,8 @@
   "set_default_ttl": "other",
   "shot_attempts": "other",
   "shot_events": "other",
-  "ufl_pbp": "other",
   "validate_game": "other",
-  "wch_ratings": "other",
-  "xfl_pbp": "other"
+  "wch_ratings": "other"
  },
  "/docs/seriea/reference/core": {
   "espn_seriea_award": "other",

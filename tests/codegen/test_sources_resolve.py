@@ -59,6 +59,32 @@ def test_resolve_prefers_a_functions_glob_over_a_modules_glob(tmp_path, monkeypa
 
 
 def test_resolve_raises_on_two_matching_rules(tmp_path, monkeypatch):
+    """Two rules that pin down equally much is a registry bug, not a coin to flip."""
+    monkeypatch.setattr(
+        sources,
+        "SOURCES_FILE",
+        _registry(
+            tmp_path,
+            """
+            providers:
+              espn:
+                label: ESPN
+                modules: ["sportsdataverse.nba.*"]
+              fox:
+                label: Fox Sports
+                modules: ["sportsdataverse.nba.*"]
+            categories: {}
+            """,
+        ),
+    )
+    with pytest.raises(sources.AmbiguousSource) as e:
+        sources.resolve("fox_nba_scores", "sportsdataverse.nba.nba_fox_ext")
+    assert "espn" in str(e.value) and "fox" in str(e.value)
+    assert "fox_nba_scores" in str(e.value)
+
+
+def test_the_more_specific_glob_wins(tmp_path, monkeypatch):
+    """A rule naming the exact module beats a rule that only names its package."""
     monkeypatch.setattr(
         sources,
         "SOURCES_FILE",
@@ -76,10 +102,31 @@ def test_resolve_raises_on_two_matching_rules(tmp_path, monkeypatch):
             """,
         ),
     )
-    with pytest.raises(sources.AmbiguousSource) as e:
-        sources.resolve("fox_nba_scores", "sportsdataverse.nba.nba_fox_ext")
-    assert "espn" in str(e.value) and "fox" in str(e.value)
-    assert "fox_nba_scores" in str(e.value)
+    assert sources.resolve("fox_nba_scores", "sportsdataverse.nba.nba_fox_ext").key == "fox"
+    assert sources.resolve("espn_nba_pbp", "sportsdataverse.nba.nba_pbp").key == "espn"
+
+
+def test_a_category_beats_a_provider_on_the_same_module(tmp_path, monkeypatch):
+    """A model built on a provider's data is a model, not one of that provider's data wrappers."""
+    monkeypatch.setattr(
+        sources,
+        "SOURCES_FILE",
+        _registry(
+            tmp_path,
+            """
+            providers:
+              ncaa_stats:
+                label: stats.ncaa.org
+                modules: ["sportsdataverse.mbb.mbb_ncaa_*"]
+            categories:
+              models:
+                label: Models and calculators
+                modules: ["sportsdataverse.*.*_models"]
+            """,
+        ),
+    )
+    assert sources.resolve("mbb_ncaa_fit", "sportsdataverse.mbb.mbb_ncaa_models").key == "models"
+    assert sources.resolve("mbb_ncaa_box", "sportsdataverse.mbb.mbb_ncaa_box_stats").key == "ncaa_stats"
 
 
 def test_resolve_raises_on_no_matching_rule(tmp_path, monkeypatch):

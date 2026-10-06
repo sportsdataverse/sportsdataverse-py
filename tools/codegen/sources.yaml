@@ -43,6 +43,7 @@ providers:
       - sportsdataverse.football.xfl.*
       - sportsdataverse.football.cfl.*
       - sportsdataverse.cricket.cricket_espn_ext
+      - sportsdataverse.*.*_team_stats
 
   nfl_com:
     label: NFL.com Shield API
@@ -51,6 +52,7 @@ providers:
     flat_apis: [nfl_api]
     modules:
       - sportsdataverse.nfl.nfl_api_runtime
+      - sportsdataverse.nfl.nfl_games
 
   nfl_pro:
     label: NFL Pro
@@ -84,6 +86,9 @@ providers:
       - sportsdataverse.pff
       - sportsdataverse.nfl.pff_runtime
       - sportsdataverse.nfl.pff_league
+      # gen_pff mints per-league alias modules (pff_aaf_facet_*) at import time off
+      # pff_core, so those names are not in the endpoint YAML and cannot resolve by stem.
+      - sportsdataverse.nfl.pff_core
 
   nflverse:
     label: nflverse data releases
@@ -140,6 +145,7 @@ providers:
     flat_apis: [mlb_api]
     modules:
       - sportsdataverse.mlb.mlb_api_extra
+      - sportsdataverse.mlb.mlb_api_parsers
 
   statcast:
     label: Baseball Savant (Statcast)
@@ -157,6 +163,7 @@ providers:
     flat_apis: [nhl_api_web]
     modules:
       - sportsdataverse.nhl.nhl_api_web_extra
+      - sportsdataverse.nhl.nhl_api_web_parsers
 
   nhl_edge:
     label: NHL EDGE
@@ -165,12 +172,15 @@ providers:
     flat_apis: [nhl_edge]
     modules:
       - sportsdataverse.nhl.nhl_edge_value
+      - sportsdataverse.nhl.nhl_edge_parsers
 
   nhl_stats_rest:
     label: NHL Stats REST
     home: https://api.nhle.com/stats/rest
     auth: none
     flat_apis: [nhl_stats_rest]
+    modules:
+      - sportsdataverse.nhl.nhl_stats_rest_parsers
 
   nhl_records:
     label: NHL Records
@@ -179,6 +189,7 @@ providers:
     flat_apis: [nhl_records]
     modules:
       - sportsdataverse.nhl.nhl_records_extra
+      - sportsdataverse.nhl.nhl_records_parsers
 
   nba_stats:
     label: NBA Stats API
@@ -234,6 +245,8 @@ providers:
     home: https://www.on3.com
     auth: API key (ON3_API_KEY)
     flat_apis: [on3]
+    modules:
+      - sportsdataverse.cfb.on3_rankings
 
   sports247:
     label: 247Sports Recruit Database
@@ -298,6 +311,7 @@ providers:
     flat_apis: [yahoo_shangrila]
     modules:
       - sportsdataverse.football.yahoo_common
+      - sportsdataverse.*.*_yahoo_ext
 
   fox:
     label: Fox Sports API
@@ -308,6 +322,7 @@ providers:
       - sportsdataverse._fox_layout
       - sportsdataverse.football.fox_common
       - sportsdataverse.*.*_fox_ext
+      - sportsdataverse.cfb.cfb_pbp_fox
 
   her_hoop_stats:
     label: Her Hoop Stats
@@ -330,6 +345,13 @@ providers:
     modules:
       - sportsdataverse.nba.realgm
 
+  public_models:
+    label: Public model datasets
+    home: https://dunksandthrees.com
+    auth: none
+    modules:
+      - sportsdataverse.nba.nba_oracle_data
+
 categories:
   processing:
     label: Play-by-play processing
@@ -345,6 +367,15 @@ categories:
       - sportsdataverse.football.box
       - sportsdataverse.football.positions
       - sportsdataverse.football.attribution
+      - sportsdataverse.nfl.shield_pbp.*
+      - sportsdataverse.nfl.nfl_stats
+      - sportsdataverse.nfl.nfl_roster_builder
+      - sportsdataverse.*.*_adapter
+      - sportsdataverse.*.*_season_compile
+      - sportsdataverse.*.*_season_producers
+      - sportsdataverse.*.*_engine
+    functions:
+      - build_*
 
   models:
     label: Models and calculators
@@ -356,6 +387,7 @@ categories:
       - sportsdataverse.cricket.cricket_wpa
       - sportsdataverse.nfl.ep_wp
       - sportsdataverse.nfl.nfl_fourth_down
+      - sportsdataverse.cfb.cfb_fourth_down
       - sportsdataverse.football.spring_football_ep_wp
       - sportsdataverse.*.*_model
       - sportsdataverse.*.*_models
@@ -365,6 +397,40 @@ categories:
       - sportsdataverse.*.*_rapm
       - sportsdataverse.*.*_xg
       - sportsdataverse.*.*_war
+      - sportsdataverse._common.metrics
+      - sportsdataverse._common.ratings
+      - sportsdataverse.cfb.model_calculators
+      - sportsdataverse.*.*_constants
+      - sportsdataverse.*.*_win_prob
+      - sportsdataverse.*.*_win_expectancy
+      - sportsdataverse.*.*_simulations
+      - sportsdataverse.*.*_season_sim
+      - sportsdataverse.*.*_bpm
+      - sportsdataverse.*.*_spm
+      - sportsdataverse.*.*_darko
+      - sportsdataverse.*.*_drapm
+      - sportsdataverse.*.*_rapm_variants
+      - sportsdataverse.*.*_aging_curve
+      - sportsdataverse.*.*_expected_home_runs
+      - sportsdataverse.*.*_expected_stats
+      - sportsdataverse.*.*_expected_assists
+      - sportsdataverse.*.*_expected_turnovers
+      - sportsdataverse.*.*_stuff_plus
+      - sportsdataverse.*.*_command_plus
+      - sportsdataverse.*.*_pitch_classify
+      - sportsdataverse.*.*_swing_decision
+      - sportsdataverse.*.*_run_expectancy
+      - sportsdataverse.*.*_run_values
+      - sportsdataverse.*.*_kicker_rating
+      - sportsdataverse.*.*_line_grades
+      - sportsdataverse.*.*_gsax
+      - sportsdataverse.*.*_shot_quality
+      - sportsdataverse.*.*_shooter_talent
+      - sportsdataverse.*.*_roster_talent
+      - sportsdataverse.*.*_model_validation
+      - sportsdataverse.*.*_two_point
+      - sportsdataverse.*.*_adjusted_epa
+      - sportsdataverse.*.*_field_position
     functions:
       - calculate_*
       - fg_make_probability
@@ -392,6 +458,43 @@ categories:
       - sportsdataverse.*.*_availability
       - sportsdataverse.*.*_officiating
       - sportsdataverse.*.*_bracketology
+      - sportsdataverse.*.*_baserunning
+      - sportsdataverse.*.*_catcher_defense
+      - sportsdataverse.*.*_catcher_framing
+      - sportsdataverse.*.*_fielding_oaa
+      - sportsdataverse.*.*_umpire_zone
+      - sportsdataverse.*.*_pitch_era
+      - sportsdataverse.*.*_pitch_fatigue
+      - sportsdataverse.*.*_pitch_features
+      - sportsdataverse.*.*_pitch_sequencing
+      - sportsdataverse.*.*_pitch_injury
+      - sportsdataverse.*.*_stolen_base
+      - sportsdataverse.*.*_clutch
+      - sportsdataverse.*.*_foul_drawing
+      - sportsdataverse.*.*_player_ages
+      - sportsdataverse.*.*_playtype
+      - sportsdataverse.*.*_playtype_impact
+      - sportsdataverse.*.*_positions
+      - sportsdataverse.*.*_box_logs
+      - sportsdataverse.*.*_ratings_panel
+      - sportsdataverse.*.*_salary_draft
+      - sportsdataverse.*.*_play_context
+      - sportsdataverse.*.*_zone_transitions
+      - sportsdataverse.*.*_tempo
+      - sportsdataverse.*.*_resume
+      - sportsdataverse.*.*_standings
+      - sportsdataverse.*.*_season_odds
+      - sportsdataverse.*.*_season_standings
+      - sportsdataverse.*.*_drive_summary
+      - sportsdataverse.*.*_play_types
+      - sportsdataverse.*.*_advanced_stats
+      - sportsdataverse.*.*_situational_stats
+      - sportsdataverse.*.*_returning_production
+      - sportsdataverse.*.*_transfer_impact
+      - sportsdataverse.*.*_shot_selection
+      - sportsdataverse.*.*_playcall
+      - sportsdataverse.*.*_gamescript
+      - sportsdataverse.*.*_players
 
   cache_config:
     label: Cache and configuration
@@ -420,6 +523,7 @@ categories:
       - sportsdataverse.*.*_crosswalk
       - sportsdataverse.*.*_team_ids
       - sportsdataverse.*.*_names
+      - sportsdataverse.nfl.nfl_players
     functions:
       - "*_team_ids"
       - find_*
@@ -431,6 +535,7 @@ categories:
     modules:
       - sportsdataverse.validation
       - sportsdataverse.validation.*
+      - sportsdataverse.*.*_box_invariants
 
   release:
     label: Release utilities

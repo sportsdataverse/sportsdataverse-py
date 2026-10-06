@@ -203,9 +203,6 @@ not covered by the generated API-endpoint reference above.
 | Function | Summary |
 |---|---|
 | [cache_stats](python-helpers/other.md#cache_stats) | Return a snapshot of the cache for debugging / inspection. |
-| [college_baseball_re24](python-helpers/other.md#college_baseball_re24) | see the core function's Returns table. |
-| [college_baseball_state](python-helpers/other.md#college_baseball_state) | see the core function's Returns table. |
-| [college_baseball_wpa](python-helpers/other.md#college_baseball_wpa) | see the core function's Returns table. |
 | [college_softball_re24](python-helpers/other.md#college_softball_re24) | see the core function's Returns table. |
 | [college_softball_state](python-helpers/other.md#college_softball_state) | see the core function's Returns table. |
 | [college_softball_wpa](python-helpers/other.md#college_softball_wpa) | see the core function's Returns table. |
@@ -213,13 +210,11 @@ not covered by the generated API-endpoint reference above.
 | [cricket_match_state](python-helpers/other.md#cricket_match_state) | Extract over-level match state from an ESPN cricket summary/scoreboard payload. |
 | [cricket_win_probability](python-helpers/other.md#cricket_win_probability) | In-play win probability for the batting/chasing team from match state. |
 | [cricket_wpa](python-helpers/other.md#cricket_wpa) | Batting/bowling win-probability added per over/wicket transition. |
-| [decompose_college_baseball_plays](python-helpers/other.md#decompose_college_baseball_plays) | Decompose pre-extracted play rows into the full `PBP_SCHEMA` frame. |
 | [defense_vs_position](python-helpers/other.md#defense_vs_position) | EPA/play, success and explosive rate each defense allowed to QBs, RBs, WRs and TEs. |
 | [deserved_wins](python-helpers/other.md#deserved_wins) | Season deserved wins and luck per team from `paper_index_games` rows. |
 | [football_attempts](python-helpers/other.md#football_attempts) | Field-goal, air-yards, fourth-down and down-x-distance attempts from released `espn_{cfb,nfl}_pbp`. |
 | [football_events](python-helpers/other.md#football_events) | Dropback / target / carry / team-play events from released `espn_{cfb,nfl}_pbp` plays. |
 | [get_cache_mode](python-helpers/other.md#get_cache_mode) | Return the current cache mode. |
-| [mch_ratings](python-helpers/other.md#mch_ratings) | MCH opponent-adjusted goal-margin ratings over a set of scoreboard dates. |
 | [metric_curves](python-helpers/other.md#metric_curves) | League, team and player rate curves from an `ATTEMPT_SCHEMA` frame. |
 | [nbagl_enhanced_pbp](python-helpers/other.md#nbagl_enhanced_pbp) | Return a normalised enhanced play-by-play frame for a G-League game. |
 | [nbagl_on_court](python-helpers/other.md#nbagl_on_court) | Return the rotation-keyed on-court player frame for a G-League game. |
@@ -233,7 +228,5 @@ not covered by the generated API-endpoint reference above.
 | [set_default_ttl](python-helpers/other.md#set_default_ttl) | Override the default TTL for endpoints not matched by the tier rules. |
 | [shot_attempts](python-helpers/other.md#shot_attempts) | Regular-season (`season_type_id` `"2"`) and playoff (`"4"`) shots; success = |
 | [shot_events](python-helpers/other.md#shot_events) | Field-goal-attempt events from released `{nba,wnba}_stats_shots`. |
-| [ufl_pbp](python-helpers/other.md#ufl_pbp) | Enriched UFL play-by-play (EP/EPA/WP/WPA/CP/CPOE). |
 | [validate_game](python-helpers/other.md#validate_game) | Validate one processed game against the packaged invariant rules. |
 | [wch_ratings](python-helpers/other.md#wch_ratings) | WCH opponent-adjusted goal-margin ratings over a set of scoreboard dates. |
-| [xfl_pbp](python-helpers/other.md#xfl_pbp) | Enriched XFL play-by-play (EP/EPA/WP/WPA/CP/CPOE). |
