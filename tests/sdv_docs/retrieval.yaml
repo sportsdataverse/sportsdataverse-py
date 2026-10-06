@@ -1,3 +1,4 @@
+# top: K checks `expect` against the first K result lines only, so a ranking regression fails.
 # Columns
 - {id: col-event-type, tool: find_columns, args: {column: event_type, function: load_nhl_pbp}, expect: ["**load_nhl_pbp**", "(String)"]}
 - {id: col-drive-id-cfb, tool: find_columns, args: {column: drive_id, league: cfb}, expect: ["**load_cfb_drives**"], reject: ["espn_nfl_"]}
@@ -10,7 +11,9 @@
 - {id: fn-nhl-pbp, tool: get_function, args: {name: load_nhl_pbp, columns: false}, expect: ["`seasons`", "**Dataset**: release `nhl_pbp_full`, seasons from 2010"]}
 - {id: fn-hoopr-r-to-py, tool: get_function, args: {name: "hoopR::load_nba_pbp"}, expect: ["## hoopR::load_nba_pbp", "**Python equivalent**: `load_nba_pbp`"]}
 - {id: fn-nfl-alias, tool: get_function, args: {name: load_nfl_pbp, columns: false}, expect: ["`nflreadr::load_pbp`"]}
-- {id: fn-wnba-shotchart, tool: search, args: {query: wnba shotchartdetail, lang: python}, expect: ["wnba_stats_shotchartdetail", "https://py.sportsdataverse.org/docs/wnba/reference/wnba_stats/shotchart#wnba_stats_shotchartdetail"], reject: ["docs/nba/"]}
+- {id: fn-wnba-shotchart, tool: search, args: {query: wnba shotchartdetail, lang: python}, top: 3, expect: ["**wnba_stats_shotchartdetail** (function · python · wnba)", "https://py.sportsdataverse.org/docs/wnba/reference/wnba_stats/shotchart#wnba_stats_shotchartdetail"], reject: ["docs/nba/"]}
+- {id: fn-wnba-shot-chart-words, tool: search, args: {query: wnba shot chart, lang: python}, top: 3, expect: ["**wnba_stats_shotchartdetail** (function · python · wnba)"]}
+- {id: fn-exact-name-search, tool: search, args: {query: load_nfl_pbp}, top: 5, expect: ["**load_nfl_pbp** (function"]}
 - {id: fn-team-roster, tool: get_function, args: {name: espn_nba_team_roster, columns: false}, expect: ["`team_id`", "python · espn · nba"]}
 - {id: fn-roster-search, tool: search, args: {query: team roster, league: nba, kind: function}, expect: ["**espn_nba_team_roster** (function · python · nba)"], reject: ["espn_wnba_team_roster", "(function · python · wnba)"]}
 - {id: fn-typo, tool: get_function, args: {name: load_nhl_pbpp}, expect: ["not in index", "`load_nhl_pbp`"]}

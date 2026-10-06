@@ -34,7 +34,11 @@ def test_every_lookup_has_at_least_six_cases():
 def test_retrieval(case, monkeypatch):
     monkeypatch.setenv("SDV_DOCS_DB", DB)
     out = getattr(server, case["tool"])(**case["args"])
+    top = (
+        "\n".join([line for line in out.splitlines() if line.startswith("- ")][: case["top"]]) if "top" in case else out
+    )
     for s in case["expect"]:
-        assert s in out, f"{case['id']}: {s!r} not in:\n{out[:2000]}"
+        where = f"the first {case['top']} results" if "top" in case else "the output"
+        assert s in top, f"{case['id']}: {s!r} not in {where}:\n{out[:2000]}"
     for s in case.get("reject", []):
         assert s not in out, f"{case['id']}: {s!r} unexpectedly in output"

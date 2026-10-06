@@ -30,3 +30,13 @@ def test_function_search_body_includes_param_descriptions():
 def test_asset_names_carry_the_schema_version():
     assert ASSET == f"sdv_docs_v{SCHEMA_VERSION}.sqlite"
     assert MANIFEST == f"manifest_v{SCHEMA_VERSION}.json"
+
+
+def test_function_search_body_includes_return_sections():
+    # ~480 flat wrappers summarize as "GET /path"; their result-set names are the words agents search.
+    con = _db()
+    con.execute("DELETE FROM search")
+    con.execute("INSERT INTO columns VALUES ('load_nhl_pbp','Shot_Chart_Detail','game_id','Int64',NULL)")
+    con.executescript(SEARCH_SQL)
+    hits = con.execute('SELECT kind FROM search WHERE search MATCH \'"shot" AND "chart"\'').fetchall()
+    assert ("function",) in hits

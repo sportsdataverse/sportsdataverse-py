@@ -40,13 +40,17 @@ CREATE VIRTUAL TABLE search USING fts5(
 
 # One search row per item. unicode61 treats "_" as a separator, so load_nhl_pbp
 # indexes as load / nhl / pbp and a quoted "load_nhl_pbp" still matches as a phrase.
+# A Python function's body also carries its return-section names (Shot_Chart_Detail):
+# ~480 flat wrappers have only "GET /path" as a summary.
 SEARCH_SQL = """
 INSERT INTO search (kind, name, title, body, url, league, lang, ref)
 SELECT 'function', f.name, f.summary,
        trim(coalesce(f.package, '') || ' ' || coalesce(f.kind, '') || ' ' || coalesce(f.category, '') || ' '
             || coalesce(f.signature, '') || ' '
             || coalesce((SELECT group_concat(p.name || ' ' || coalesce(p.description, ''), ' ')
-                         FROM params p WHERE p.function = f.name AND f.lang = 'python'), '')),
+                         FROM params p WHERE p.function = f.name AND f.lang = 'python'), '') || ' '
+            || coalesce((SELECT group_concat(DISTINCT c.section)
+                         FROM columns c WHERE c.function = f.name AND f.lang = 'python'), '')),
        f.doc_url, f.league, f.lang, f.rowid
 FROM functions f;
 INSERT INTO search (kind, name, title, body, url, league, lang, ref)

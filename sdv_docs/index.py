@@ -74,7 +74,8 @@ class Index:
                 return []
             rows = self.con.execute(
                 "SELECT kind, name, title, url, league, lang, ref FROM search "  # noqa: S608 -- fixed SQL
-                f"WHERE search MATCH ?{where} ORDER BY bm25(search, {_WEIGHTS}) LIMIT ?",
+                # Column rows go last: they carry their function's name as title and would bury it.
+                f"WHERE search MATCH ?{where} ORDER BY search.kind = 'column', bm25(search, {_WEIGHTS}) LIMIT ?",
                 (q, *args, limit),
             ).fetchall()
             if rows:

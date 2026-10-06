@@ -39,6 +39,13 @@ def test_search_ranks_and_filters(tiny_db: Path):
         assert all(h["lang"] == "r" for h in ix.search("play by play", lang="r"))
 
 
+def test_search_ranks_column_rows_last(tiny_db: Path):
+    # Column rows carry their function's name as title, so bm25 alone ranks them above the function.
+    with Index(tiny_db) as ix:
+        kinds = [h["kind"] for h in ix.search("load_nhl_pbp")]
+    assert "function" in kinds and kinds == sorted(kinds, key=lambda k: k == "column")
+
+
 def test_search_falls_back_to_or(tiny_db: Path):
     with Index(tiny_db) as ix:
         assert any(h["name"] == "load_nhl_shifts" for h in ix.search("shift zamboni"))
