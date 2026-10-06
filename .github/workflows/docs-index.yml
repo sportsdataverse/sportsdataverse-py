@@ -20,11 +20,12 @@ on:
 
 concurrency:
   group: docs-index
-  cancel-in-progress: true
+  cancel-in-progress: false # never cancel mid-publish: a cancelled run could leave a mismatched sqlite/manifest pair
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     permissions:
       contents: read
     steps:
@@ -54,6 +55,7 @@ jobs:
     needs: build
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     permissions:
       contents: write
     steps:
