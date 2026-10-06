@@ -1,8 +1,8 @@
 # Columns
 - {id: col-event-type, tool: find_columns, args: {column: event_type, function: load_nhl_pbp}, expect: ["**load_nhl_pbp**", "(String)"]}
-- {id: col-drive-id-cfb, tool: find_columns, args: {column: drive_id, league: cfb}, expect: ["**load_cfb_drives**"], reject: ["load_nfl_drives"]}
+- {id: col-drive-id-cfb, tool: find_columns, args: {column: drive_id, league: cfb}, expect: ["**load_cfb_drives**"], reject: ["espn_nfl_"]}
 - {id: col-epa-nfl, tool: find_columns, args: {column: epa, function: load_nfl_pbp}, expect: ["**load_nfl_pbp** (Float64): Expected points added (EPA)"], reject: ["load_cfb_pbp"]}
-- {id: col-shooting-play, tool: find_columns, args: {column: shooting_play, league: nba}, expect: ["**load_nba_pbp** (Boolean): TRUE if the play was a shooting attempt"], reject: ["load_wnba_pbp", "load_nfl_pbp"]}
+- {id: col-shooting-play, tool: find_columns, args: {column: shooting_play, league: nba}, expect: ["**load_nba_pbp** (Boolean): TRUE if the play was a shooting attempt"], reject: ["load_wnba_pbp", "docs/mbb/"]}
 - {id: col-EPA-cfb-case, tool: find_columns, args: {column: EPA, function: load_cfb_pbp}, expect: ["**load_cfb_pbp** (Float64): Expected Points Added on the play"], reject: ["load_nfl_pbp"]}
 - {id: col-shifts-players-on, tool: get_function, args: {name: load_nhl_shifts}, expect: ["`players_on`"]}
 - {id: col-miss, tool: find_columns, args: {column: no_such_column_xyz}, expect: ["not in index"]}
