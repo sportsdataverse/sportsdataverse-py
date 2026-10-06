@@ -17,18 +17,23 @@ endpoints:
   - description: Page size (default 10; the body echoes resultsLimit).
     name: limit
     query_key: limit
+    required: false
     type: str
   - description: Page offset (body echoes resultsOffset).
     name: offset
     query_key: offset
+    required: false
     type: str
   parser: parse_espn_content
   path: /sports/{sport_slug}/{league_slug}/news
   path_params:
-  - name: sport_slug
+  - description: ESPN sport slug (football, basketball, soccer, ...).
+    name: sport_slug
     required: true
     type: str
-  - name: league_slug
+  - description: ESPN league slug (nfl, college-football, nba, mens-college-basketball,
+      eng.1, ...).
+    name: league_slug
     required: true
     type: str
   returns_schema: native/espn_content/league_news
@@ -39,10 +44,12 @@ endpoints:
   - description: Page size (default 10; the body echoes resultsLimit).
     name: limit
     query_key: limit
+    required: false
     type: str
   - description: Page offset (body echoes resultsOffset).
     name: offset
     query_key: offset
+    required: false
     type: str
   parser: parse_espn_content
   path: /sports/news
@@ -54,7 +61,8 @@ endpoints:
   parser: parse_espn_content
   path: /sports/news/{id}
   path_params:
-  - name: id
+  - description: Story id (headlines[].id; links.api.self.href points here).
+    name: id
     required: true
     type: str
   returns_schema: native/espn_content/story

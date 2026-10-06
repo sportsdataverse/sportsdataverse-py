@@ -75,6 +75,21 @@ _SURFACES = [
 ]
 
 
+# Curated prose summaries. The reverse-engineered specs carry only "<host><path>" as
+# their summary, and these lines are shown verbatim on the reference index and in IDE
+# hover -- the FIFA lesson from the wave-1 review (tests/codegen/test_intake_family_summaries.py).
+_SUMMARIES = {
+    "gamma_markets": "Markets on the Gamma metadata host, orderable by volume or liquidity.",
+    "gamma_market": "One market by its Gamma id.",
+    "gamma_events": "Events -- groups of related markets -- on the Gamma metadata host.",
+    "gamma_tags": "Tags used to categorise Gamma events and markets.",
+    "clob_markets": "Markets on the CLOB host, cursor-paged.",
+    "clob_book": "Full order book, bids and asks, for one outcome token.",
+    "clob_midpoint": "Midpoint between the best bid and the best ask for one outcome token.",
+    "clob_price": "Best price on one side of the book for one outcome token.",
+}
+
+
 def _capture_for(refs: Path, prefix: str, path: str) -> Path | None:
     """``clob`` + ``/markets`` -> ``captures/clob__markets.json``."""
     slug = path.strip("/").replace("/", "__").replace("{", "").replace("}", "")
@@ -90,11 +105,25 @@ def _endpoint_entry(path: str, op: dict, short: str, host: str) -> Dict[str, Any
         name = prm["name"]
         desc = str(prm.get("description") or "").strip()
         if prm.get("in") == "path":
-            path_params.append({"name": name, "type": "str", "required": True})
+            # Every one of these specs documents its path params; dropping the text makes the
+            # reference page print "<name> path parameter." filler instead.
+            path_params.append({"name": name, "type": "str", "required": True, "description": desc})
         elif prm.get("in") == "query":
             if prm.get("required"):
                 desc = f"Required. {desc}".strip()
-            extra_params.append({"name": underscore(name), "query_key": name, "type": "str", "description": desc})
+            extra_params.append(
+                {
+                    "name": underscore(name),
+                    "query_key": name,
+                    "type": "str",
+                    # The flag drives the page's Required column AND whether the generated
+                    # signature makes the param positional. Prose alone leaves a required param
+                    # defaulting to None, so the call goes out without it and fetches an error
+                    # body where it should have been a TypeError.
+                    "required": bool(prm.get("required")),
+                    "description": desc,
+                }
+            )
         if prm.get("example") is not None:
             # A 77-digit token_id must never travel as an int.
             example_args[underscore(name)] = str(prm["example"])
@@ -102,7 +131,7 @@ def _endpoint_entry(path: str, op: dict, short: str, host: str) -> Dict[str, Any
     assert not {"league", "sport"} & {p["name"] for p in path_params}, path
     entry: Dict[str, Any] = {
         "short": short,
-        "summary": (op.get("summary") or f"Fetch {path}").rstrip(".") + ".",
+        "summary": _SUMMARIES[short],
         "path": path,
         "parser": "parse_polymarket",
         "returns_schema": f"native/{STEM}/{short}",

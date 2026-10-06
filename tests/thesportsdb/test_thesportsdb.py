@@ -74,10 +74,14 @@ def test_id_columns_are_utf8():
             assert dtype == pl.String, name
 
 
-def test_yaml_host_keeps_the_key_placeholder():
-    """The API key is a path segment; thesportsdb_runtime substitutes it at call time."""
+def test_yaml_host_pins_the_free_key_so_the_docs_links_resolve():
+    """The API key is a path segment, and the host is what the reference page prints as its
+    base URL and bakes into every Valid URL example. A ``{key}`` placeholder there rendered
+    24 dead links, so the host carries the documented free test key and the runtime swaps
+    that segment for the caller's key."""
     doc = yaml.safe_load(YAML_PATH.read_text(encoding="utf-8"))
-    assert doc["host"] == "https://www.thesportsdb.com/api/v1/json/{key}"
+    assert doc["host"] == "https://www.thesportsdb.com/api/v1/json/3"
+    assert "{" not in doc["host"]
     assert doc["getter_module"] == "sportsdataverse.thesportsdb.thesportsdb_runtime"
 
 

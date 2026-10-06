@@ -112,14 +112,17 @@ _DEFERRED_BUCKETS: dict[str, int | None] = {
     "native/fotmob": 283,
     "native/uefa": 841,
     "native/sleeper": 459,
-    # wave-2 intake families; capture-derived specs carry no property docs. Counts are
-    # placeholders until Task 7 measures them with `python tools/codegen/extract_residual_columns.py`.
-    "native/espn_content": None,
-    "native/thesportsdb": None,
-    "native/football_data": None,
-    "native/openligadb": None,
-    "native/polymarket": None,
-    "native/kalshi": None,
+    # wave-2 intake families, same situation: the specs are capture-derived and these providers
+    # publish no property docs, so the generators have nothing to describe from. espn-content
+    # additionally keys its returns-doc rows by dotted JSON path, which never matches a
+    # snake_cased parser column. football-data is the exception: its glossary describes 224 of
+    # 251 columns, and only the exchange-odds codes are blank upstream too. Measured 2026-10-06.
+    "native/espn_content": 63,
+    "native/thesportsdb": 484,
+    "native/football_data": 22,
+    "native/openligadb": 104,
+    "native/polymarket": 262,
+    "native/kalshi": 139,
 }
 
 

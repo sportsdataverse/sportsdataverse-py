@@ -16,7 +16,8 @@ endpoints:
   parser: parse_openligadb
   path: /getcurrentgroup/{league_slug}
   path_params:
-  - name: league_slug
+  - description: League shortcut from /getavailableleagues, e.g. bl1 (Bundesliga).
+    name: league_slug
     required: true
     type: str
   returns_schema: native/openligadb/current_group
@@ -28,10 +29,12 @@ endpoints:
   parser: parse_openligadb
   path: /getgoalgetters/{league_slug}/{season}
   path_params:
-  - name: league_slug
+  - description: League shortcut from /getavailableleagues, e.g. bl1 (Bundesliga).
+    name: league_slug
     required: true
     type: str
-  - name: season
+  - description: Season start year, e.g. 2025 for 2025/26.
+    name: season
     required: true
     type: str
   returns_schema: native/openligadb/goalgetters
@@ -44,13 +47,16 @@ endpoints:
   parser: parse_openligadb
   path: /getmatchdata/{league_slug}/{season}/{group}
   path_params:
-  - name: league_slug
+  - description: League shortcut from /getavailableleagues, e.g. bl1 (Bundesliga).
+    name: league_slug
     required: true
     type: str
-  - name: season
+  - description: Season start year, e.g. 2025 for 2025/26.
+    name: season
     required: true
     type: str
-  - name: group
+  - description: Matchday number (groupOrderID from /getavailablegroups), e.g. 1.
+    name: group
     required: true
     type: str
   returns_schema: native/openligadb/group_matches
@@ -62,10 +68,12 @@ endpoints:
   parser: parse_openligadb
   path: /getavailablegroups/{league_slug}/{season}
   path_params:
-  - name: league_slug
+  - description: League shortcut from /getavailableleagues, e.g. bl1 (Bundesliga).
+    name: league_slug
     required: true
     type: str
-  - name: season
+  - description: Season start year, e.g. 2025 for 2025/26.
+    name: season
     required: true
     type: str
   returns_schema: native/openligadb/groups
@@ -78,13 +86,16 @@ endpoints:
   parser: parse_openligadb
   path: /getlastchangedate/{league_slug}/{season}/{group}
   path_params:
-  - name: league_slug
+  - description: League shortcut from /getavailableleagues, e.g. bl1 (Bundesliga).
+    name: league_slug
     required: true
     type: str
-  - name: season
+  - description: Season start year, e.g. 2025 for 2025/26.
+    name: season
     required: true
     type: str
-  - name: group
+  - description: Matchday number (groupOrderID from /getavailablegroups), e.g. 1.
+    name: group
     required: true
     type: str
   returns_schema: native/openligadb/last_change_date
@@ -101,7 +112,8 @@ endpoints:
   parser: parse_openligadb
   path: /getmatchdata/{match_id}
   path_params:
-  - name: match_id
+  - description: Match id (matchID from any getmatchdata list), e.g. 77264.
+    name: match_id
     required: true
     type: str
   returns_schema: native/openligadb/match
@@ -113,10 +125,13 @@ endpoints:
   parser: parse_openligadb
   path: /getnextmatchbyleagueteam/{league_id}/{team_id}
   path_params:
-  - name: league_id
+  - description: Numeric leagueId from /getavailableleagues of a season still in progress,
+      e.g. 4937 (bl1 2026); a finished season answers 404 text.
+    name: league_id
     required: true
     type: str
-  - name: team_id
+  - description: Team id (teamId from /getavailableteams), e.g. 40 (FC Bayern München).
+    name: team_id
     required: true
     type: str
   returns_schema: native/openligadb/next_match
@@ -128,10 +143,12 @@ endpoints:
   parser: parse_openligadb
   path: /getmatchdata/{league_slug}/{season}
   path_params:
-  - name: league_slug
+  - description: League shortcut from /getavailableleagues, e.g. bl1 (Bundesliga).
+    name: league_slug
     required: true
     type: str
-  - name: season
+  - description: Season start year, e.g. 2025 for 2025/26.
+    name: season
     required: true
     type: str
   returns_schema: native/openligadb/season_matches
@@ -143,10 +160,12 @@ endpoints:
   parser: parse_openligadb
   path: /getbltable/{league_slug}/{season}
   path_params:
-  - name: league_slug
+  - description: League shortcut from /getavailableleagues, e.g. bl1 (Bundesliga).
+    name: league_slug
     required: true
     type: str
-  - name: season
+  - description: Season start year, e.g. 2025 for 2025/26.
+    name: season
     required: true
     type: str
   returns_schema: native/openligadb/table
@@ -158,10 +177,12 @@ endpoints:
   parser: parse_openligadb
   path: /getavailableteams/{league_slug}/{season}
   path_params:
-  - name: league_slug
+  - description: League shortcut from /getavailableleagues, e.g. bl1 (Bundesliga).
+    name: league_slug
     required: true
     type: str
-  - name: season
+  - description: Season start year, e.g. 2025 for 2025/26.
+    name: season
     required: true
     type: str
   returns_schema: native/openligadb/teams

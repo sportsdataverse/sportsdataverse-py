@@ -61,7 +61,9 @@ def parse_football_data(
     Returns:
         One row per match (or per upcoming fixture), snake_cased, with the
         source's unnamed trailing columns dropped. A zero-row frame when the
-        payload is ``None``, blank, header-only or not CSV text at all.
+        payload is ``None``, blank or header-only. Text that is not CSV cannot be
+        recognised as such -- a one-line HTML body is a valid one-column CSV -- so
+        the runtime rejects an HTML response before it reaches here.
 
     Raises:
         None: malformed payloads yield a zero-row frame rather than an exception.
@@ -94,9 +96,12 @@ def parse_football_data(
             truncate_ragged_lines=True,
             null_values=["", "NA"],
         )
+        keep = [c for c in df.columns if not _is_blank_name(c)]
+        # Inside the try: two source headers can snake_case to one name (a future season adding
+        # a ``fthg`` beside ``FTHG``), and ``rename`` raises DuplicateError on that.
+        df = df.select(keep).rename({c: underscore(c) for c in keep})
     except Exception:
-        # Not CSV at all (an error page, a glossary): a zero-row frame, never a raise.
+        # Not CSV at all (an error page, a glossary), or headers that collapse onto each other:
+        # a zero-row frame, never a raise.
         return pl.DataFrame().to_pandas() if return_as_pandas else pl.DataFrame()
-    keep = [c for c in df.columns if not _is_blank_name(c)]
-    df = df.select(keep).rename({c: underscore(c) for c in keep})
     return df.to_pandas() if return_as_pandas else df

@@ -17,11 +17,13 @@ endpoints:
   - description: true nests the event's markets under event.markets.
     name: with_nested_markets
     query_key: with_nested_markets
+    required: false
     type: str
   parser: parse_kalshi
   path: /events/{event_ticker}
   path_params:
-  - name: event_ticker
+  - description: Event ticker, e.g. KXNFLGAME-26OCT08TBDAL (from /events).
+    name: event_ticker
     required: true
     type: str
   returns_schema: native/kalshi/event
@@ -35,19 +37,23 @@ endpoints:
   - description: Rows per page (max 1000 on /markets, 200 on /events; default 100).
     name: limit
     query_key: limit
+    required: false
     type: str
   - description: 'Lifecycle filter: open, closed, settled (events also accept unopened).'
     name: status
     query_key: status
+    required: false
     type: str
   - description: Series ticker, e.g. KXNFLGAME (from /series).
     name: series_ticker
     query_key: series_ticker
+    required: false
     type: str
   - description: Opaque page cursor returned in the previous page's `cursor` field
       (verified 2026-10-06).
     name: cursor
     query_key: cursor
+    required: false
     type: str
   parser: parse_kalshi
   path: /events
@@ -65,7 +71,8 @@ endpoints:
   parser: parse_kalshi
   path: /markets/{ticker}
   path_params:
-  - name: ticker
+  - description: Market ticker, e.g. KXNFLGAME-26OCT08TBDAL-DAL (from /markets).
+    name: ticker
     required: true
     type: str
   returns_schema: native/kalshi/market
@@ -78,15 +85,18 @@ endpoints:
   - description: Rows per page (max 1000 on /markets, 200 on /events; default 100).
     name: limit
     query_key: limit
+    required: false
     type: str
   - description: Event ticker, e.g. KXNFLGAME-26OCT08TBDAL (from /events).
     name: event_ticker
     query_key: event_ticker
+    required: false
     type: str
   - description: Opaque page cursor returned in the previous page's `cursor` field
       (verified 2026-10-06).
     name: cursor
     query_key: cursor
+    required: false
     type: str
   parser: parse_kalshi
   path: /markets
@@ -100,11 +110,13 @@ endpoints:
   - description: Price levels per side (omit for the full book).
     name: depth
     query_key: depth
+    required: false
     type: str
   parser: parse_kalshi
   path: /markets/{ticker}/orderbook
   path_params:
-  - name: ticker
+  - description: Market ticker, e.g. KXNFLGAME-26OCT08TBDAL-DAL (from /markets).
+    name: ticker
     required: true
     type: str
   returns_schema: native/kalshi/orderbook
@@ -115,7 +127,8 @@ endpoints:
   parser: parse_kalshi
   path: /series/{series_ticker}
   path_params:
-  - name: series_ticker
+  - description: Series ticker, e.g. KXNFLGAME (from /series).
+    name: series_ticker
     required: true
     type: str
   returns_schema: native/kalshi/series
@@ -127,6 +140,7 @@ endpoints:
   - description: Series category, e.g. Sports.
     name: category
     query_key: category
+    required: false
     type: str
   parser: parse_kalshi
   path: /series
@@ -140,15 +154,18 @@ endpoints:
   - description: Rows per page (max 1000 on /markets, 200 on /events; default 100).
     name: limit
     query_key: limit
+    required: false
     type: str
   - description: Market ticker, e.g. KXNFLGAME-26OCT08TBDAL-DAL (from /markets).
     name: ticker
     query_key: ticker
+    required: false
     type: str
   - description: Opaque page cursor returned in the previous page's `cursor` field
       (verified 2026-10-06).
     name: cursor
     query_key: cursor
+    required: false
     type: str
   parser: parse_kalshi
   path: /markets/trades

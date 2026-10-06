@@ -9,6 +9,11 @@ them would make the column set depend on which headlines came back. The
 fixed-key ``links`` object flattens to ``links_api_self_href``-style columns, the
 same treatment the Sleeper parser gives a page object's fixed-key children.
 
+The envelope's other list, ``breakingNews``, is **not** read. It is empty on every captured
+route and fills only while a story is breaking, so a body carrying
+``{"headlines": [], "breakingNews": [...]}`` parses to zero rows; read it with
+``return_parsed=False`` if you need it.
+
 Follows the package-wide parser contract: polars by default, pandas via
 ``return_as_pandas=True``, a zero-row frame (never an exception) on an empty or
 malformed payload, snake_cased columns, ids pinned to ``Utf8``.
@@ -50,9 +55,21 @@ def _to_frame(rows: List[Dict[str, Any]]) -> pl.DataFrame:
         return pl.DataFrame()
     pdf = pd.json_normalize(rows, sep="_")
     pdf.columns = [underscore(str(c)) for c in pdf.columns]
+    # Two source shapes make ``pl.from_pandas`` raise, and this parser promises a frame:
+    # two keys that snake_case to one name (``pdf[name]`` would be a DataFrame), and one key
+    # the source typed inconsistently across records. A missing key is NOT a second type --
+    # json_normalize fills it with NaN, and counting that would restringify every boolean
+    # column absent from one record.
+    if pdf.columns.duplicated().any():
+        pdf = pdf.loc[:, ~pdf.columns.duplicated()]
     for name in pdf.columns:
-        if pdf[name].dtype == object:
-            pdf[name] = pdf[name].map(_encode)
+        col = pdf[name]
+        if col.dtype == object:
+            col = col.map(_encode)
+            present = col[col.notna()]
+            if present.map(type).nunique() > 1:
+                col = col.map(lambda v: v if v is None or (isinstance(v, float) and v != v) else str(v))
+            pdf[name] = col
     df = pl.from_pandas(pdf)
     ids = []
     for name, dtype in df.schema.items():
@@ -89,11 +106,9 @@ def parse_espn_content(
     Example:
         Quick start::
 
-            import polars as pl
-
             from sportsdataverse.espn_content import espn_content_league_news
 
-            df = espn_content_league_news(sport_slug="football", league_slug="nfl", limit=5)
+            df = espn_content_league_news(sport_slug="football", league_slug="nfl", limit="5")
             print(df.shape)
 
         Pipeline next step (one line)::

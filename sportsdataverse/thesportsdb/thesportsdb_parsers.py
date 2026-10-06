@@ -25,7 +25,12 @@ from sportsdataverse.dl_utils import underscore
 
 __all__ = ["parse_thesportsdb"]
 
-_ID = re.compile(r"(^|_)(id|code)$")
+# TheSportsDB prefixes its identifiers rather than suffixing them -- ``idTeam`` / ``idLeague``
+# / ``idEvent`` snake_case to ``id_team`` / ``id_league`` / ``id_event``, which a trailing-only
+# pattern misses. Measured across every committed fixture of all six wave-2 families: this
+# form pins ~30 TheSportsDB columns and matches nothing in any sibling family. They arrive
+# quoted today, so the pin is a no-op until the day the API drops the quotes.
+_ID = re.compile(r"(^|_)(id|code)(_|$)")
 
 
 def _as_rows(raw: Any) -> List[Dict[str, Any]]:
@@ -34,9 +39,13 @@ def _as_rows(raw: Any) -> List[Dict[str, Any]]:
         return [r for r in raw if isinstance(r, dict)]
     if not isinstance(raw, dict) or not raw:
         return []
+    # Lists win over dicts regardless of key order, so an envelope that ever grows a scalar
+    # sibling object cannot shadow the resource list behind it -- the same failure the Kalshi
+    # family's ordered key list exists to prevent.
     for value in raw.values():
         if isinstance(value, list):
             return [r for r in value if isinstance(r, dict)]
+    for value in raw.values():
         if isinstance(value, dict):
             return [value]
     # Every value was a scalar or null (``{"teams": null}``): nothing to tabulate.
@@ -52,9 +61,21 @@ def _to_frame(rows: List[Dict[str, Any]]) -> pl.DataFrame:
         return pl.DataFrame()
     pdf = pd.json_normalize(rows, sep="_")
     pdf.columns = [underscore(str(c)) for c in pdf.columns]
+    # Two source shapes make ``pl.from_pandas`` raise, and this parser promises a frame:
+    # two keys that snake_case to one name (``pdf[name]`` would be a DataFrame), and one key
+    # the source typed inconsistently across records. A missing key is NOT a second type --
+    # json_normalize fills it with NaN, and counting that would restringify every boolean
+    # column absent from one record.
+    if pdf.columns.duplicated().any():
+        pdf = pdf.loc[:, ~pdf.columns.duplicated()]
     for name in pdf.columns:
-        if pdf[name].dtype == object:
-            pdf[name] = pdf[name].map(_encode)
+        col = pdf[name]
+        if col.dtype == object:
+            col = col.map(_encode)
+            present = col[col.notna()]
+            if present.map(type).nunique() > 1:
+                col = col.map(lambda v: v if v is None or (isinstance(v, float) and v != v) else str(v))
+            pdf[name] = col
     df = pl.from_pandas(pdf)
     ids = []
     for name, dtype in df.schema.items():
@@ -91,11 +112,9 @@ def parse_thesportsdb(
     Example:
         Quick start::
 
-            import polars as pl
-
             from sportsdataverse.thesportsdb import thesportsdb_league_teams
 
-            df = thesportsdb_league_teams(l="English Premier League")
+            df = thesportsdb_league_teams(league_name="English Premier League")
             print(df.shape)
 
         Pipeline next step (one line)::

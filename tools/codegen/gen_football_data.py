@@ -93,11 +93,25 @@ def _endpoint_entry(path: str, op: dict) -> Dict[str, Any]:
         name = prm["name"]
         desc = str(prm.get("description") or "").strip()
         if prm.get("in") == "path":
-            path_params.append({"name": name, "type": "str", "required": True})
+            # Every one of these specs documents its path params; dropping the text makes the
+            # reference page print "<name> path parameter." filler instead.
+            path_params.append({"name": name, "type": "str", "required": True, "description": desc})
         elif prm.get("in") == "query":
             if prm.get("required"):
                 desc = f"Required. {desc}".strip()
-            extra_params.append({"name": underscore(name), "query_key": name, "type": "str", "description": desc})
+            extra_params.append(
+                {
+                    "name": underscore(name),
+                    "query_key": name,
+                    "type": "str",
+                    # The flag drives the page's Required column AND whether the generated
+                    # signature makes the param positional. Prose alone leaves a required param
+                    # defaulting to None, so the call goes out without it and fetches an error
+                    # body where it should have been a TypeError.
+                    "required": bool(prm.get("required")),
+                    "description": desc,
+                }
+            )
         if prm.get("example") is not None:
             # Every param is a string on the wire; a season like 2526 must not travel as an int.
             example_args[underscore(name)] = str(prm["example"])

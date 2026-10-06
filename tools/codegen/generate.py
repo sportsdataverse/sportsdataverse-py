@@ -417,6 +417,37 @@ _LEAGUE_R_PACKAGE = {
     "pwhl": "fastRhockey",
 }
 
+# Flat-API families with NO R counterpart. Their columns never passed through an R package,
+# so ``r_column_descriptions.yaml`` has nothing true to say about them -- and asked anyway,
+# the cross-sport ``_merged`` union back-fills confident nonsense. Measured on the wave-2
+# intake pages before this opt-out existed: "Full team display name (e.g. 'Las Vegas Aces')"
+# on a Bundesliga ``team_name``, "League identifier ('10' = WNBA)" on an OpenLigaDB
+# ``league_id``, and ESPN's "home / away / overUnder" on a Polymarket CLOB ``side``, which is
+# buy/sell. 134 cells across six pages. The junior-hockey leagues dodge the same trap by
+# being mapped to fastRhockey above; these have no package to map to, so they opt out here.
+# A blank cell is honest. A wrong one is worse than blank AND invisible to the description
+# ratchet, which counts it as covered.
+_NO_R_DICT_FAMILIES = frozenset(
+    {"espn_content", "thesportsdb", "football_data", "openligadb", "polymarket", "kalshi"},
+)
+
+
+def _r_dict_applies(key: str | None) -> bool:
+    """False when ``key`` names a family whose columns have no R-package counterpart.
+
+    Args:
+        key: either a returns-schema id (``native/kalshi/markets``) or a wrapper name
+            (``kalshi_markets``) -- the two shapes the return-table renderers hold.
+
+    Returns:
+        True unless the key belongs to a family in :data:`_NO_R_DICT_FAMILIES`.
+    """
+    s = key or ""
+    if s.startswith("native/"):
+        parts = s.split("/")
+        return len(parts) < 2 or parts[1] not in _NO_R_DICT_FAMILIES
+    return not any(s.startswith(f"{fam}_") for fam in _NO_R_DICT_FAMILIES)
+
 
 @functools.lru_cache(maxsize=1)
 def _r_col_descs() -> dict:
@@ -542,9 +573,18 @@ def _manual_col_desc(schema: str | None, col: str) -> str:
     return (d.get("_global") or {}).get(col, "") or ""
 
 
-def _table_cell_desc(stored: str, league: str | None, col: str, schema: str | None = None) -> str:
+def _table_cell_desc(
+    stored: str,
+    league: str | None,
+    col: str,
+    schema: str | None = None,
+    *,
+    r_dict_key: str | None = None,
+) -> str:
     """A return-table description cell: stored value if non-empty, else the
-    hand-curated manual dict (schema-keyed), else the R-dict fill.
+    hand-curated manual dict (schema-keyed), else the R-dict fill -- and the R-dict
+    fill is skipped entirely for a family with no R counterpart (see
+    :func:`_r_dict_applies`).
 
     Never overwrites a non-empty (captured) stored description. The result is
     pipe/newline-escaped so it is safe inside a single markdown table cell.
@@ -553,7 +593,12 @@ def _table_cell_desc(stored: str, league: str | None, col: str, schema: str | No
     if (stored or "").strip():
         raw = stored
     else:
-        raw = _manual_col_desc(schema, col) or _r_col_desc(league, col)
+        raw = _manual_col_desc(schema, col)
+        # ``r_dict_key`` defaults to ``schema`` because the autodoc and loader callers pass a
+        # wrapper / loader name there; the reference-table caller passes the bare short, so it
+        # hands the full ``native/<family>/<short>`` id in explicitly.
+        if not raw and _r_dict_applies(r_dict_key if r_dict_key is not None else schema):
+            raw = _r_col_desc(league, col)
     normalized = _normalize_rst((raw or "").replace("\n", " ").strip())
     return normalized.replace("|", "\\|")
 
@@ -722,7 +767,7 @@ def _return_table(schema_name: str | None, league: str | None = None) -> str:
         head = "| col_name | type | description |\n|---|---|---|\n"
         return head + "".join(
             f"| `{c['name']}` | {c.get('type', '')} | "
-            f"{_table_cell_desc(c.get('description', ''), league, c.get('name', ''), d.get('schema'))} |\n"
+            f"{_table_cell_desc(c.get('description', ''), league, c.get('name', ''), d.get('schema'), r_dict_key=schema_name)} |\n"
             for c in cols
         )
 
@@ -2562,7 +2607,7 @@ _FLAT_API_DOC = {
     "fifa": "FIFA public API v3 (api.fifa.com)",
     "sleeper": "Sleeper fantasy API v1 (api.sleeper.app)",
     "espn_content": "ESPN content API (content.core.api.espn.com/v1, news)",
-    "thesportsdb": "TheSportsDB API v1 (thesportsdb.com, free test key)",
+    "thesportsdb": "TheSportsDB API v1 (thesportsdb.com; free test key by default, $THESPORTSDB_API_KEY to use your own)",
     "football_data": "Football-Data.co.uk CSV archive (football-data.co.uk)",
     "openligadb": "OpenLigaDB (api.openligadb.de, community German football)",
     "polymarket": "Polymarket read APIs (gamma-api + clob.polymarket.com)",

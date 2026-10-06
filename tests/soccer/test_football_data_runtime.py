@@ -2,6 +2,8 @@
 
 import json
 
+import pytest
+
 from sportsdataverse.soccer import football_data_runtime as rt
 
 
@@ -50,3 +52,18 @@ def test_none_params_are_dropped(monkeypatch):
     monkeypatch.setattr(rt, "download", fake)
     rt._get("https://www.football-data.co.uk/fixtures.csv", {"a": 1, "b": None})
     assert seen["params"] == {"a": 1}
+
+
+def test_an_html_body_is_a_failed_fetch_not_data(monkeypatch):
+    """A 200 error page must not reach the CSV parser.
+
+    football-data.co.uk is a static archive on shared hosting, so the realistic failure is a
+    200 interstitial rather than a 404. Passed through as text it parses to a 2x1 frame whose
+    one column is ``<!doctype html>`` -- non-empty, no exception, no warning.
+    """
+    from sportsdataverse.errors import AssetFetchError
+
+    html = "<!DOCTYPE html>\n<html><head><title>404 Not Found</title></head><body>nope</body></html>"
+    monkeypatch.setattr(rt, "download", lambda **kw: _resp("text/html; charset=UTF-8", html))
+    with pytest.raises(AssetFetchError):
+        rt._get("https://www.football-data.co.uk/mmz4281/9999/ZZ.csv")

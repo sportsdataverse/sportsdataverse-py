@@ -41,7 +41,13 @@ from gen_soccer_common import (
 from sportsdataverse.dl_utils import underscore
 from sportsdataverse.thesportsdb.thesportsdb_parsers import parse_thesportsdb
 
-HOST = "https://www.thesportsdb.com/api/v1/json/{key}"
+# The free test key goes in the host rather than a ``{key}`` placeholder: the host is what the
+# reference page prints as its base URL and bakes into every "Valid URL" example, and a
+# placeholder there renders 24 dead links. ``thesportsdb_runtime`` swaps this segment for
+# $THESPORTSDB_API_KEY when one is set, so the default is a URL a reader can open and a
+# paid key still works.
+FREE_TEST_KEY = "3"
+HOST = f"https://www.thesportsdb.com/api/v1/json/{FREE_TEST_KEY}"
 SPEC = "thesportsdb.openapi.yaml"
 STEM = "thesportsdb"
 
@@ -63,6 +69,21 @@ _SHORTS: Dict[str, str] = {
 }
 
 
+# TheSportsDB names its query parameters with single letters. ``l`` is E741 ("ambiguous
+# variable name") so the rendered module does not even pass ruff, and ``l`` / ``s`` / ``p``
+# make a poor public kwarg either way. The wire name is preserved in ``query_key``; only the
+# Python parameter is renamed. Keyed by (short, name) because ``l`` is NOT one thing: it is a
+# league NAME on /search_all_teams.php and a league ID on /lookuptable.php -- the same
+# per-(route, param) lesson as the wave-1 FotMob ``required`` ruling.
+_PARAM_RENAMES = {
+    ("league_teams", "l"): "league_name",
+    ("player_search", "p"): "player_name",
+    ("season_events", "s"): "season",
+    ("table", "l"): "league_id",
+    ("table", "s"): "season",
+}
+
+
 def _capture_for(refs: Path, path: str) -> Path | None:
     """``/lookupteam.php`` -> ``captures/lookupteam.json``."""
     candidate = refs / "captures" / f"{path.strip('/').removesuffix('.php')}.json"
@@ -76,18 +97,35 @@ def _endpoint_entry(path: str, op: dict) -> Dict[str, Any]:
     example_args: Dict[str, Any] = {}
     for prm in op.get("parameters", []):
         name = prm["name"]
+        py_name = _PARAM_RENAMES.get((short, name), underscore(name))
         desc = str(prm.get("description") or "").strip()
         if prm.get("in") == "path":
-            path_params.append({"name": name, "type": "str", "required": True})
+            # Every one of these specs documents its path params; dropping the text makes the
+            # reference page print "<name> path parameter." filler instead.
+            path_params.append({"name": name, "type": "str", "required": True, "description": desc})
         elif prm.get("in") == "query":
             if prm.get("required"):
                 desc = f"Required. {desc}".strip()
-            extra_params.append({"name": underscore(name), "query_key": name, "type": "str", "description": desc})
+            extra_params.append(
+                {
+                    "name": py_name,
+                    "query_key": name,
+                    "type": "str",
+                    # The flag drives the page's Required column AND whether the generated
+                    # signature makes the param positional; prose alone leaves a required
+                    # param defaulting to None, so the call fetches an error body.
+                    "required": bool(prm.get("required")),
+                    "description": desc,
+                }
+            )
         if prm.get("example") is not None:
             # Every param is a string on the wire; long ids must never travel as ints.
-            example_args[underscore(name)] = str(prm["example"])
+            example_args[py_name] = str(prm["example"])
     # Review Focus 1: the module renderer substitutes {league}/{sport} as ESPN slugs.
     assert not {"league", "sport"} & {p["name"] for p in path_params}, path
+    # A one-letter kwarg is either ambiguous (ruff E741 on ``l``) or simply unusable; a new
+    # upstream param must be named here rather than shipped as a letter.
+    assert not [p for p in extra_params if len(p["name"]) < 2], (path, extra_params)
     entry: Dict[str, Any] = {
         "short": short,
         "summary": (op.get("summary") or f"Fetch {path}").rstrip(".") + ".",

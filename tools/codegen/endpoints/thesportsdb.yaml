@@ -15,6 +15,7 @@ endpoints:
   - description: Required. Event id (idEvent from /eventsseason.php).
     name: id
     query_key: id
+    required: true
     type: str
   parser: parse_thesportsdb
   path: /lookupevent.php
@@ -27,6 +28,7 @@ endpoints:
   - description: Required. League id (idLeague from /all_leagues.php).
     name: id
     query_key: id
+    required: true
     type: str
   parser: parse_thesportsdb
   path: /lookupleague.php
@@ -39,6 +41,7 @@ endpoints:
   - description: Required. League id (idLeague from /all_leagues.php).
     name: id
     query_key: id
+    required: true
     type: str
   parser: parse_thesportsdb
   path: /eventsnextleague.php
@@ -46,11 +49,12 @@ endpoints:
   short: league_next_events
   summary: Next 15 events of a league.
 - example_args:
-    l: English Premier League
+    league_name: English Premier League
   extra_params:
   - description: Required. League name as spelled in strLeague.
-    name: l
+    name: league_name
     query_key: l
+    required: true
     type: str
   parser: parse_thesportsdb
   path: /search_all_teams.php
@@ -69,6 +73,7 @@ endpoints:
   - description: Required. Player id (idPlayer from /lookup_all_players.php).
     name: id
     query_key: id
+    required: true
     type: str
   parser: parse_thesportsdb
   path: /lookupplayer.php
@@ -76,11 +81,12 @@ endpoints:
   short: player
   summary: One player.
 - example_args:
-    p: Danny Welbeck
+    player_name: Danny Welbeck
   extra_params:
   - description: Required. Player name (substring search).
-    name: p
+    name: player_name
     query_key: p
+    required: true
     type: str
   parser: parse_thesportsdb
   path: /searchplayers.php
@@ -89,16 +95,18 @@ endpoints:
   summary: Search players by name.
 - example_args:
     id: '4328'
-    s: 2025-2026
+    season: 2025-2026
   extra_params:
   - description: Required. League id (idLeague from /all_leagues.php).
     name: id
     query_key: id
+    required: true
     type: str
   - description: Season label, e.g. 2025-2026; omitted, the API answers the current
       season.
-    name: s
+    name: season
     query_key: s
+    required: false
     type: str
   parser: parse_thesportsdb
   path: /eventsseason.php
@@ -112,17 +120,19 @@ endpoints:
   short: sports
   summary: All sports.
 - example_args:
-    l: '4328'
-    s: 2025-2026
+    league_id: '4328'
+    season: 2025-2026
   extra_params:
   - description: Required. League id (idLeague from /all_leagues.php).
-    name: l
+    name: league_id
     query_key: l
+    required: true
     type: str
   - description: Season label, e.g. 2025-2026; omitted, the API answers the current
       season.
-    name: s
+    name: season
     query_key: s
+    required: false
     type: str
   parser: parse_thesportsdb
   path: /lookuptable.php
@@ -135,6 +145,7 @@ endpoints:
   - description: Required. Team id (idTeam from /search_all_teams.php).
     name: id
     query_key: id
+    required: true
     type: str
   parser: parse_thesportsdb
   path: /lookupteam.php
@@ -147,6 +158,7 @@ endpoints:
   - description: Required. Team id (idTeam from /search_all_teams.php).
     name: id
     query_key: id
+    required: true
     type: str
   parser: parse_thesportsdb
   path: /lookup_all_players.php
@@ -154,7 +166,7 @@ endpoints:
   short: team_players
   summary: Players of a team.
 getter_module: sportsdataverse.thesportsdb.thesportsdb_runtime
-host: https://www.thesportsdb.com/api/v1/json/{key}
+host: https://www.thesportsdb.com/api/v1/json/3
 module: thesportsdb
 name_pattern: thesportsdb_{short}
 parser_module: thesportsdb.thesportsdb_parsers
