@@ -159,3 +159,75 @@ def test_claude_md_flat_api_count_matches_the_code():
     from tools.codegen import generate
 
     assert f"`FLAT_APIS` has {len(generate.FLAT_APIS)} families" in text("claude")
+
+
+# --- .github/copilot-instructions.md ---------------------------------------
+
+_COPILOT_STALE = [
+    "23 canonical",
+    "112 wrappers",
+    "95 wrappers",
+    "[[tool.mypy.overrides]] module",
+    "uv run mypy sportsdataverse/<your_module>.py",
+    "Use `from __future__ import annotations` only when targeting py3.8",
+    "runs only to inject",
+    "CI does NOT set this var by default",
+    "mlbam_games",
+    "`yahoo_cfb_*` wraps Yahoo Sports",
+    "Error vocabulary (0.1.0)",
+    "Reference-docs build toolchain (codegen)",
+]
+
+_COPILOT_CURRENT = [
+    "45 canonical",
+    "128 wrappers",
+    "111 wrappers",
+    "[tool.mypy] files",
+    "DO use `from __future__ import annotations`",
+    "Python 3.13.2 only",
+    "fox_api",
+    "107 multi-sport `yahoo_*`",
+    "AssetFetchError",
+    "400 / 422",
+    "architecture/codegen.md",
+    "returns the last response",
+]
+
+# Copilot uses Title Case headings; these match the file's own convention.
+_COPILOT_SECTIONS_FROM_CLAUDE = [
+    "## Project Structure",
+    "## ESPN Cross-League Architecture",
+    "## Parser Layer",
+    "## PFF",
+    "## sdv-docs MCP Server",
+    "## Release Utilities",
+    "## Rule-Era Models",
+    "## ID Column Types",
+    "## Error Vocabulary (0.1.5)",
+    "## Codegen",
+]
+
+
+@pytest.mark.parametrize("stale", _COPILOT_STALE)
+def test_copilot_drops_the_stale_claim(stale):
+    assert stale not in flat("copilot"), f"copilot-instructions.md still claims {stale!r}"
+
+
+@pytest.mark.parametrize("current", _COPILOT_CURRENT)
+def test_copilot_states_the_current_fact(current):
+    assert current in flat("copilot")
+
+
+@pytest.mark.parametrize("heading", _COPILOT_SECTIONS_FROM_CLAUDE)
+def test_copilot_gained_the_claude_only_section(heading):
+    assert heading in text("copilot")
+
+
+def test_copilot_carries_the_two_pitfalls_it_lacked():
+    body = flat("copilot")
+    assert "ESPN injuries come from the LEAGUE endpoint" in body
+    assert "Regenerate generated files before pushing" in body
+
+
+def test_copilot_states_the_parsed_deprecation():
+    assert "`sportsdataverse.parsed.*` is **deprecated**" in flat("copilot")
