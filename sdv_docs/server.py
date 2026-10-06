@@ -111,8 +111,10 @@ def _function_block(ix: Index, f: Any, columns: bool) -> str:
         eq = [e for e in ix.equivalents(f["name"]) if e["py_function"] == f["name"]]
         if eq:
             lines.append("**R equivalent**: " + ", ".join(f"`{e['r_package']}::{e['r_function']}`" for e in eq))
-        cols = ix.columns(f["name"]) if columns else []
-        if cols:
+        cols = ix.columns(f["name"])
+        if cols and not columns:
+            lines.append(f"_{len(cols)} returned columns omitted; pass columns=True or use find_columns._")
+        elif cols:
             lines += [f"**Returns** ({len(cols)} columns)", "| column | type | description |", "|---|---|---|"]
             for c in cols:
                 col = f"{c['section']}.{c['name']}" if c["section"] else c["name"]

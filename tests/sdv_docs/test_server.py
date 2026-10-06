@@ -45,6 +45,7 @@ def test_get_function_full_block():
 def test_get_function_without_columns():
     out = server.get_function("load_nhl_pbp", columns=False)
     assert "event_type" not in out and "**Returns**" not in out
+    assert "returned columns omitted; pass columns=True or use find_columns" in out
 
 
 def test_get_function_shows_python_then_r_with_equivalents():

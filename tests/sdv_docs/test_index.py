@@ -1,6 +1,7 @@
 import hashlib
 import json
 import os
+import threading
 import time
 from pathlib import Path
 
@@ -167,7 +168,7 @@ def test_bad_downloads_are_rejected_and_old_index_kept(tmp_path, cache, tamper, 
     with pytest.raises(idx.IndexUnavailable, match=match):
         idx.refresh(cache / ASSET, _fetcher(_serve(pub, man, blob), []))
     assert idx.sha256(cache / ASSET) == old_sha
-    assert not (cache / (ASSET + ".tmp")).exists()
+    assert not list(cache.glob("*.tmp"))
 
 
 def test_unchanged_manifest_only_touches_the_stamp(tmp_path, cache):
@@ -209,4 +210,44 @@ def test_failed_replace_keeps_the_old_index(tmp_path, cache, monkeypatch):
     monkeypatch.setattr(idx.os, "replace", locked)
     assert idx.locate(_fetcher(_serve(pub, man), []), background=False) == cache / ASSET
     assert idx.sha256(cache / ASSET) == old_sha
-    assert not (cache / (ASSET + ".tmp")).exists()
+    assert not list(cache.glob("*.tmp"))
+
+
+def test_parallel_first_use_locate_all_succeed(tmp_path, cache):
+    pub, man = _published(tmp_path)
+    serve = _serve(pub, man)
+
+    def slow(url, timeout):
+        time.sleep(0.05)  # widen the window in which callers overlap
+        return serve[url]
+
+    results: list = []
+
+    def go():
+        try:
+            results.append(idx.locate(slow, background=False))
+        except Exception as e:  # noqa: BLE001
+            results.append(e)
+
+    threads = [threading.Thread(target=go) for _ in range(4)]
+    for t in threads:
+        t.start()
+    for t in threads:
+        t.join()
+    assert results == [cache / ASSET] * 4
+    assert not list(cache.glob("*.tmp"))
+
+
+def test_cache_dir_expands_tilde(monkeypatch, tmp_path):
+    monkeypatch.setenv("HOME", str(tmp_path))
+    monkeypatch.setenv("USERPROFILE", str(tmp_path))
+    monkeypatch.setenv("SDV_PY_CACHE_DIR", "~/x")
+    assert idx.cache_dir() == tmp_path / "x" / "docs-index"
+
+
+def test_sdv_docs_db_expands_tilde(monkeypatch, tmp_path):
+    make_tiny_db(tmp_path / "d.sqlite")
+    monkeypatch.setenv("HOME", str(tmp_path))
+    monkeypatch.setenv("USERPROFILE", str(tmp_path))
+    monkeypatch.setenv("SDV_DOCS_DB", "~/d.sqlite")
+    assert idx.locate() == tmp_path / "d.sqlite"

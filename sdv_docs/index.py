@@ -10,6 +10,7 @@ import json
 import os
 import re
 import sqlite3
+import tempfile
 import threading
 import time
 import urllib.request
@@ -163,7 +164,7 @@ class IndexUnavailable(RuntimeError):
 def cache_dir() -> Path:
     # ponytail: duplicates sportsdataverse.cache._cache_dir(); importing it would load every league.
     root = os.environ.get("SDV_PY_CACHE_DIR")
-    return (Path(root) if root else Path.home() / ".cache" / "sportsdataverse") / "docs-index"
+    return (Path(root).expanduser() if root else Path.home() / ".cache" / "sportsdataverse") / "docs-index"
 
 
 def http_fetch(url: str, timeout: float) -> bytes:
@@ -202,23 +203,29 @@ def verify(path: Path, manifest: dict) -> None:
         raise IndexUnavailable(f"downloaded index has schema {row[0] if row else None}, expected {SCHEMA_VERSION}")
 
 
+_REFRESH_LOCK = threading.RLock()  # mcp runs sync tools on worker threads; serialize installs
+
+
 def refresh(db: Path, fetch: Fetch = http_fetch, timeout: float = 30.0) -> bool:
     """Install the published index at ``db`` if it differs from the local one. True when replaced."""
-    manifest = json.loads(fetch(RELEASE_BASE + MANIFEST, timeout))
-    db.parent.mkdir(parents=True, exist_ok=True)
-    stamp = db.with_name("last_check")
-    if db.is_file() and sha256(db) == manifest["sha256"]:
+    with _REFRESH_LOCK:
+        manifest = json.loads(fetch(RELEASE_BASE + MANIFEST, timeout))
+        db.parent.mkdir(parents=True, exist_ok=True)
+        stamp = db.with_name("last_check")
+        if db.is_file() and sha256(db) == manifest["sha256"]:
+            stamp.touch()
+            return False
+        fd, name = tempfile.mkstemp(dir=db.parent, suffix=".tmp")  # per-download, so processes never share one
+        tmp = Path(name)
+        try:
+            with os.fdopen(fd, "wb") as f:
+                f.write(fetch(RELEASE_BASE + ASSET, timeout))
+            verify(tmp, manifest)
+            os.replace(tmp, db)
+        finally:
+            tmp.unlink(missing_ok=True)
         stamp.touch()
-        return False
-    tmp = db.with_name(db.name + ".tmp")
-    try:
-        tmp.write_bytes(fetch(RELEASE_BASE + ASSET, timeout))
-        verify(tmp, manifest)
-        os.replace(tmp, db)
-    finally:
-        tmp.unlink(missing_ok=True)
-    stamp.touch()
-    return True
+        return True
 
 
 def _refresh_quietly(db: Path, fetch: Fetch) -> None:
@@ -232,7 +239,7 @@ def locate(fetch: Fetch = http_fetch, background: bool = True) -> Path:
     """The index to use: SDV_DOCS_DB, else the cache (re-checked at most daily), else a fresh download."""
     env = os.environ.get("SDV_DOCS_DB")
     if env:
-        path = Path(env)
+        path = Path(env).expanduser()
         if not path.is_file():
             raise IndexUnavailable(f"SDV_DOCS_DB={env} is not a file")
         return path
@@ -247,7 +254,9 @@ def locate(fetch: Fetch = http_fetch, background: bool = True) -> Path:
                 _refresh_quietly(db, fetch)
         return db
     try:
-        refresh(db, fetch, timeout=10.0)
+        with _REFRESH_LOCK:
+            if not db.is_file():
+                refresh(db, fetch, timeout=10.0)
     except IndexUnavailable:
         raise
     except Exception as e:  # noqa: BLE001 -- network and JSON errors both mean "no index yet"
