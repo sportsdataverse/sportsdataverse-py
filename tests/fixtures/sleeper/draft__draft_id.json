@@ -1,0 +1,51 @@
+{
+  "created": 1515700610526,
+  "creators": [
+    "457511950237696"
+  ],
+  "draft_id": "257270643320426496",
+  "draft_order": {
+    "199042945356140544": 2,
+    "200837482281963520": 1,
+    "246105752211554304": 6,
+    "457511950237696": 5,
+    "667279356739584": 3,
+    "720638189125632": 4
+  },
+  "last_message_id": "257272036450111488",
+  "last_message_time": 1515700942674,
+  "last_picked": 1515700871182,
+  "league_id": "257270637750382592",
+  "metadata": {
+    "description": "",
+    "name": "My Dynasty",
+    "scoring_type": "ppr"
+  },
+  "season": "2017",
+  "season_type": "regular",
+  "settings": {
+    "pick_timer": 120,
+    "rounds": 15,
+    "slots_bn": 5,
+    "slots_def": 1,
+    "slots_flex": 2,
+    "slots_k": 1,
+    "slots_qb": 1,
+    "slots_rb": 2,
+    "slots_te": 1,
+    "slots_wr": 2,
+    "teams": 6
+  },
+  "slot_to_roster_id": {
+    "1": 1,
+    "2": 2,
+    "3": 3,
+    "4": 4,
+    "5": 5,
+    "6": 6
+  },
+  "sport": "nfl",
+  "start_time": 1515700800000,
+  "status": "complete",
+  "type": "snake"
+}

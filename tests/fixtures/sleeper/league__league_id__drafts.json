@@ -1,0 +1,54 @@
+[
+  {
+    "created": 1523419575386,
+    "creators": [
+      "457511950237696",
+      "667279356739584",
+      "720638189125632"
+    ],
+    "draft_id": "289646328508579840",
+    "draft_order": {
+      "189140835533586432": 6,
+      "228297280283734016": 12,
+      "31161755661385728": 7,
+      "313952381563858944": 11,
+      "314278749690396672": 2,
+      "3975968863961088": 4,
+      "457511950237696": 8,
+      "521611313037312": 3,
+      "61960473868124160": 10,
+      "667279356739584": 5,
+      "720638189125632": 9,
+      "76888557872365568": 1
+    },
+    "last_message_id": "337106166544891904",
+    "last_message_time": 1534734882536,
+    "last_picked": 1534734655611,
+    "league_id": "289646328504385536",
+    "metadata": {
+      "description": "",
+      "name": "Sleeper Friends League",
+      "scoring_type": "ppr"
+    },
+    "season": "2018",
+    "season_type": "regular",
+    "settings": {
+      "cpu_autopick": 0,
+      "pick_timer": 120,
+      "player_type": 0,
+      "rounds": 15,
+      "slots_bn": 6,
+      "slots_def": 1,
+      "slots_flex": 2,
+      "slots_qb": 1,
+      "slots_rb": 2,
+      "slots_te": 1,
+      "slots_wr": 2,
+      "teams": 12
+    },
+    "sport": "nfl",
+    "start_time": 1534727100000,
+    "status": "complete",
+    "type": "snake"
+  }
+]

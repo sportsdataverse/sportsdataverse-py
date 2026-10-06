@@ -1,0 +1,27 @@
+columns:
+- description: ''
+  name: points
+  type: numeric
+- description: ''
+  name: players
+  type: character
+- description: ''
+  name: roster_id
+  type: character
+- description: ''
+  name: custom_points
+  type: character
+- description: ''
+  name: matchup_id
+  type: character
+- description: ''
+  name: starters
+  type: character
+- description: ''
+  name: starters_points
+  type: character
+- description: ''
+  name: players_points
+  type: character
+kind: dataframe
+schema: matchups
