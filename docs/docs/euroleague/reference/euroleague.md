@@ -11,7 +11,7 @@ toc_max_heading_level: 2
 
 ## euroleague_clubs
 
-Clubs in a season
+Clubs in a season.
 
 **Endpoint URL:** `GET https://api-live.euroleague.net/v2/competitions/{competition_code}/seasons/{season_code}/clubs`
 
@@ -61,7 +61,7 @@ _Last validated n/a._
 
 ## euroleague_competitions
 
-Competitions (EuroLeague E, EuroCup U, ...)
+Competitions (EuroLeague E, EuroCup U, ...).
 
 **Endpoint URL:** `GET https://api-live.euroleague.net/v2/competitions`
 
@@ -91,7 +91,7 @@ _Last validated n/a._
 
 ## euroleague_game_stats
 
-Box score of one game
+Box score of one game.
 
 **Endpoint URL:** `GET https://api-live.euroleague.net/v2/competitions/{competition_code}/seasons/{season_code}/games/{game_code}/stats`
 
@@ -224,7 +224,7 @@ _Last validated n/a._
 
 ## euroleague_games
 
-Games of a season
+Games of a season.
 
 **Endpoint URL:** `GET https://api-live.euroleague.net/v2/competitions/{competition_code}/seasons/{season_code}/games`
 
@@ -351,7 +351,7 @@ _Last validated n/a._
 
 ## euroleague_people
 
-People (players, coaches) in a season
+People (players, coaches) in a season.
 
 **Endpoint URL:** `GET https://api-live.euroleague.net/v2/competitions/{competition_code}/seasons/{season_code}/people`
 
@@ -427,7 +427,7 @@ _Last validated n/a._
 
 ## euroleague_rounds
 
-Rounds of a season
+Rounds of a season.
 
 **Endpoint URL:** `GET https://api-live.euroleague.net/v2/competitions/{competition_code}/seasons/{season_code}/rounds`
 
@@ -465,7 +465,7 @@ _Last validated n/a._
 
 ## euroleague_seasons
 
-Seasons of a competition
+Seasons of a competition.
 
 **Endpoint URL:** `GET https://api-live.euroleague.net/v2/competitions/{competition_code}/seasons`
 

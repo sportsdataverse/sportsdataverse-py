@@ -163,6 +163,21 @@ from sportsdataverse.nfl import nfl_teams_history as _raw_nfl_teams_history
 from sportsdataverse.nfl import nfl_weekly_game_details as _raw_nfl_weekly_game_details
 from sportsdataverse.nfl import nfl_weeks as _raw_nfl_weeks
 from sportsdataverse.nfl import nfl_weeks_by_date as _raw_nfl_weeks_by_date
+from sportsdataverse.nfl import sleeper_draft as _raw_sleeper_draft
+from sportsdataverse.nfl import sleeper_draft_picks as _raw_sleeper_draft_picks
+from sportsdataverse.nfl import sleeper_drafts as _raw_sleeper_drafts
+from sportsdataverse.nfl import sleeper_league as _raw_sleeper_league
+from sportsdataverse.nfl import sleeper_matchups as _raw_sleeper_matchups
+from sportsdataverse.nfl import sleeper_players as _raw_sleeper_players
+from sportsdataverse.nfl import sleeper_rosters as _raw_sleeper_rosters
+from sportsdataverse.nfl import sleeper_state as _raw_sleeper_state
+from sportsdataverse.nfl import sleeper_traded_picks as _raw_sleeper_traded_picks
+from sportsdataverse.nfl import sleeper_transactions as _raw_sleeper_transactions
+from sportsdataverse.nfl import sleeper_trending_adds as _raw_sleeper_trending_adds
+from sportsdataverse.nfl import sleeper_user as _raw_sleeper_user
+from sportsdataverse.nfl import sleeper_user_leagues as _raw_sleeper_user_leagues
+from sportsdataverse.nfl import sleeper_users as _raw_sleeper_users
+from sportsdataverse.nfl import sleeper_winners_bracket as _raw_sleeper_winners_bracket
 from sportsdataverse.nfl import NFLPlayProcess as NFLPlayProcess  # noqa: F401
 from sportsdataverse.nfl import NflConfig as NflConfig  # noqa: F401
 from sportsdataverse.nfl import adjust_pressure_pairs as adjust_pressure_pairs  # noqa: F401
@@ -353,6 +368,7 @@ from sportsdataverse.nfl import nfl_usage_projection as nfl_usage_projection  # 
 from sportsdataverse.nfl import nfl_week_games as nfl_week_games  # noqa: F401
 from sportsdataverse.nfl import normalize_team_roster_columns as normalize_team_roster_columns  # noqa: F401
 from sportsdataverse.nfl import opponent_adjusted_ridge as opponent_adjusted_ridge  # noqa: F401
+from sportsdataverse.nfl import parse_sleeper as parse_sleeper  # noqa: F401
 from sportsdataverse.nfl import playcall_features as playcall_features  # noqa: F401
 from sportsdataverse.nfl import player_usage_efficiency as player_usage_efficiency  # noqa: F401
 from sportsdataverse.nfl import predict_margin as predict_margin  # noqa: F401
@@ -704,6 +720,7 @@ __all__ = [
     "nfl_weeks_by_date",
     "normalize_team_roster_columns",
     "opponent_adjusted_ridge",
+    "parse_sleeper",
     "playcall_features",
     "player_usage_efficiency",
     "predict_margin",
@@ -716,6 +733,21 @@ __all__ = [
     "season_not_found_error",
     "shield_nfl_pbp",
     "shield_to_espn_summary",
+    "sleeper_draft",
+    "sleeper_draft_picks",
+    "sleeper_drafts",
+    "sleeper_league",
+    "sleeper_matchups",
+    "sleeper_players",
+    "sleeper_rosters",
+    "sleeper_state",
+    "sleeper_traded_picks",
+    "sleeper_transactions",
+    "sleeper_trending_adds",
+    "sleeper_user",
+    "sleeper_user_leagues",
+    "sleeper_users",
+    "sleeper_winners_bracket",
     "special_teams_ratings",
     "team_game_pace",
     "team_name_fn",
@@ -2684,3 +2716,213 @@ def nfl_weeks_by_date(*args, **kwargs):
     """
     kwargs.setdefault("return_parsed", True)
     return _raw_nfl_weeks_by_date(*args, **kwargs)
+
+
+def sleeper_draft(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nfl.sleeper_draft``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.nfl.sleeper_draft` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nfl.sleeper_draft` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_sleeper_draft(*args, **kwargs)
+
+
+def sleeper_draft_picks(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nfl.sleeper_draft_picks``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.nfl.sleeper_draft_picks` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nfl.sleeper_draft_picks` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_sleeper_draft_picks(*args, **kwargs)
+
+
+def sleeper_drafts(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nfl.sleeper_drafts``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.nfl.sleeper_drafts` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nfl.sleeper_drafts` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_sleeper_drafts(*args, **kwargs)
+
+
+def sleeper_league(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nfl.sleeper_league``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.nfl.sleeper_league` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nfl.sleeper_league` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_sleeper_league(*args, **kwargs)
+
+
+def sleeper_matchups(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nfl.sleeper_matchups``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.nfl.sleeper_matchups` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nfl.sleeper_matchups` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_sleeper_matchups(*args, **kwargs)
+
+
+def sleeper_players(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nfl.sleeper_players``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.nfl.sleeper_players` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nfl.sleeper_players` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_sleeper_players(*args, **kwargs)
+
+
+def sleeper_rosters(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nfl.sleeper_rosters``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.nfl.sleeper_rosters` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nfl.sleeper_rosters` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_sleeper_rosters(*args, **kwargs)
+
+
+def sleeper_state(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nfl.sleeper_state``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.nfl.sleeper_state` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nfl.sleeper_state` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_sleeper_state(*args, **kwargs)
+
+
+def sleeper_traded_picks(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nfl.sleeper_traded_picks``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.nfl.sleeper_traded_picks` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nfl.sleeper_traded_picks` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_sleeper_traded_picks(*args, **kwargs)
+
+
+def sleeper_transactions(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nfl.sleeper_transactions``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.nfl.sleeper_transactions` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nfl.sleeper_transactions` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_sleeper_transactions(*args, **kwargs)
+
+
+def sleeper_trending_adds(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nfl.sleeper_trending_adds``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.nfl.sleeper_trending_adds` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nfl.sleeper_trending_adds` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_sleeper_trending_adds(*args, **kwargs)
+
+
+def sleeper_user(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nfl.sleeper_user``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.nfl.sleeper_user` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nfl.sleeper_user` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_sleeper_user(*args, **kwargs)
+
+
+def sleeper_user_leagues(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nfl.sleeper_user_leagues``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.nfl.sleeper_user_leagues` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nfl.sleeper_user_leagues` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_sleeper_user_leagues(*args, **kwargs)
+
+
+def sleeper_users(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nfl.sleeper_users``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.nfl.sleeper_users` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nfl.sleeper_users` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_sleeper_users(*args, **kwargs)
+
+
+def sleeper_winners_bracket(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``nfl.sleeper_winners_bracket``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.nfl.sleeper_winners_bracket` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.nfl.sleeper_winners_bracket` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_sleeper_winners_bracket(*args, **kwargs)

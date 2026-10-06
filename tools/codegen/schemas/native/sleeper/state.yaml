@@ -8,7 +8,7 @@ columns:
 - description: ''
   name: season
   type: character
-- description: 'Season: type discriminator for the record.'
+- description: ''
   name: season_type
   type: character
 - description: ''

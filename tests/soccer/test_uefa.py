@@ -279,3 +279,19 @@ def test_wrapper_parses_by_default(recorder: Tuple[Any, _Recorder]) -> None:
     df = uefa.uefa_teams(competition_id="1")
     assert isinstance(df, pl.DataFrame)
     assert df.height == 3
+
+
+def test_curated_uefa_columns_are_described():
+    import yaml
+
+    root = Path(__file__).resolve().parents[2] / "tools" / "codegen" / "schemas" / "native" / "uefa"
+    stats = {
+        c["name"]: c["description"]
+        for c in yaml.safe_load((root / "team_statistics.yaml").read_text(encoding="utf-8"))["columns"]
+    }
+    assert "JSON" in stats["statistics"], stats["statistics"]  # the whole per-team stat list lives in this one cell
+    matches = {
+        c["name"]: c["description"]
+        for c in yaml.safe_load((root / "matches.yaml").read_text(encoding="utf-8"))["columns"]
+    }
+    assert "TOURNAMENT" in matches["competition_phase"], matches["competition_phase"]

@@ -2,7 +2,7 @@ columns:
 - description: ''
   name: status
   type: character
-- description: Type discriminator for the record.
+- description: ''
   name: type
   type: character
 - description: ''

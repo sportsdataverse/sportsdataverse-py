@@ -39,7 +39,7 @@ def sleeper_draft(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """A draft
+    """A draft.
 
     Endpoint: ``GET https://api.sleeper.app/v1/draft/{draft_id}``
     Example URL: https://api.sleeper.app/v1/draft/257270643320426496
@@ -89,7 +89,7 @@ def sleeper_draft_picks(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """Picks of a draft
+    """Picks of a draft.
 
     Endpoint: ``GET https://api.sleeper.app/v1/draft/{draft_id}/picks``
     Example URL: https://api.sleeper.app/v1/draft/257270643320426496/picks
@@ -139,7 +139,7 @@ def sleeper_drafts(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """Drafts of a league
+    """Drafts of a league.
 
     Endpoint: ``GET https://api.sleeper.app/v1/league/{league_id}/drafts``
     Example URL: https://api.sleeper.app/v1/league/289646328504385536/drafts
@@ -189,7 +189,7 @@ def sleeper_league(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """A league
+    """A league.
 
     Endpoint: ``GET https://api.sleeper.app/v1/league/{league_id}``
     Example URL: https://api.sleeper.app/v1/league/289646328504385536
@@ -240,7 +240,7 @@ def sleeper_matchups(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """Matchups for a week
+    """Matchups for a week.
 
     Endpoint: ``GET https://api.sleeper.app/v1/league/{league_id}/matchups/{week}``
     Example URL: https://api.sleeper.app/v1/league/289646328504385536/matchups/1
@@ -290,7 +290,7 @@ def sleeper_players(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """All NFL players (large; fetch at most once per day)
+    """All NFL players (large; fetch at most once per day).
 
     Endpoint: ``GET https://api.sleeper.app/v1/players/nfl``
     Example URL: https://api.sleeper.app/v1/players/nfl
@@ -339,7 +339,7 @@ def sleeper_rosters(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """Rosters in a league
+    """Rosters in a league.
 
     Endpoint: ``GET https://api.sleeper.app/v1/league/{league_id}/rosters``
     Example URL: https://api.sleeper.app/v1/league/289646328504385536/rosters
@@ -388,7 +388,7 @@ def sleeper_state(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """Current NFL week and season state
+    """Current NFL week and season state.
 
     Endpoint: ``GET https://api.sleeper.app/v1/state/nfl``
     Example URL: https://api.sleeper.app/v1/state/nfl
@@ -437,7 +437,7 @@ def sleeper_traded_picks(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """Traded draft picks
+    """Traded draft picks.
 
     Endpoint: ``GET https://api.sleeper.app/v1/league/{league_id}/traded_picks``
     Example URL: https://api.sleeper.app/v1/league/289646328504385536/traded_picks
@@ -488,7 +488,7 @@ def sleeper_transactions(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """Transactions for a week
+    """Transactions for a week.
 
     Endpoint: ``GET https://api.sleeper.app/v1/league/{league_id}/transactions/{week}``
     Example URL: https://api.sleeper.app/v1/league/289646328504385536/transactions/1
@@ -540,7 +540,7 @@ def sleeper_trending_adds(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """Trending adds (lookback_hours, limit)
+    """Trending adds (lookback_hours, limit).
 
     Endpoint: ``GET https://api.sleeper.app/v1/players/nfl/trending/add``
     Example URL: https://api.sleeper.app/v1/players/nfl/trending/add
@@ -594,7 +594,7 @@ def sleeper_user(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """Look up a user by username or id
+    """Look up a user by username or id.
 
     Endpoint: ``GET https://api.sleeper.app/v1/user/{username}``
     Example URL: https://api.sleeper.app/v1/user/457511950237696
@@ -645,7 +645,7 @@ def sleeper_user_leagues(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """Leagues a user is in for a season
+    """Leagues a user is in for a season.
 
     Endpoint: ``GET https://api.sleeper.app/v1/user/{user_id}/leagues/nfl/{season}``
     Example URL: https://api.sleeper.app/v1/user/457511950237696/leagues/nfl/2018
@@ -696,7 +696,7 @@ def sleeper_users(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """Users in a league
+    """Users in a league.
 
     Endpoint: ``GET https://api.sleeper.app/v1/league/{league_id}/users``
     Example URL: https://api.sleeper.app/v1/league/289646328504385536/users
@@ -746,7 +746,7 @@ def sleeper_winners_bracket(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """Playoff bracket
+    """Playoff bracket.
 
     Endpoint: ``GET https://api.sleeper.app/v1/league/{league_id}/winners_bracket``
     Example URL: https://api.sleeper.app/v1/league/289646328504385536/winners_bracket

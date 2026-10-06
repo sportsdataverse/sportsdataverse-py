@@ -92,7 +92,7 @@ def _endpoint_entry(path: str, op: dict) -> Dict[str, Any]:
     assert not {"league", "sport"} & {p["name"] for p in path_params}, path
     entry: Dict[str, Any] = {
         "short": short,
-        "summary": op.get("summary") or f"GET {path}",
+        "summary": (op.get("summary") or f"Fetch {path}").rstrip(".") + ".",
         "path": path,
         "parser": "parse_sleeper",
         "returns_schema": f"native/{STEM}/{short}",
@@ -153,7 +153,7 @@ def main() -> None:
             schema["unverified"] = f"no committed capture in sdv-internal-refs/{STEM}/captures (see ENDPOINTS.md)"
             schema["columns"] = []
         else:
-            schema["columns"] = columns_from_frame(parse_capture(capture, parse_sleeper), descriptions)
+            schema["columns"] = columns_from_frame(parse_capture(capture, parse_sleeper), descriptions, leaf_fallback=False)
         write_yaml(schema_dir / f"{short}.yaml", schema)
     print(f"{STEM}: {len(ops)} endpoints, {unverified} unverified")
 

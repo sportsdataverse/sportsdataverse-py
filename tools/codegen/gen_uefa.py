@@ -62,6 +62,12 @@ PARSER = "parse_uefa"
 GETTER = "sportsdataverse.soccer.uefa_runtime"
 
 # The spec's summaries are bare ``host/path`` strings; the docstring headline wants prose.
+# Column prose the spec and the returns doc lack; consulted before them.
+_COLUMN_NOTES: Dict[str, str] = {
+    "statistics": "The team's full statistic list for the match, JSON-encoded (one {name, value} object per statistic).",
+    "competition_phase": "Competition phase: TOURNAMENT (main draw) or QUALIFYING.",
+}
+
 _SUMMARIES: Dict[str, str] = {
     "competitions": "UEFA competitions by id (Champions League 1, Europa League 3, Conference League 2019)",
     "teams": "Teams entered in a UEFA competition season",
@@ -161,7 +167,7 @@ def _endpoint_entry(spec: dict, path: str, op: dict) -> Dict[str, Any]:
     assert not {"league", "sport"} & names, path
     entry: Dict[str, Any] = {
         "short": short,
-        "summary": _SUMMARIES[short],
+        "summary": _SUMMARIES[short].rstrip(".") + ".",
         "path": _snake_path(path),
         "parser": PARSER,
         "returns_schema": f"native/{STEM}/{short}",
@@ -227,7 +233,7 @@ def main() -> None:
     }
     write_yaml(ROOT / f"tools/codegen/endpoints/{STEM}.yaml", doc)
 
-    descriptions = [spec_descriptions(spec), markdown_descriptions(refs / f"{STEM}-returns.md")]
+    descriptions = [_COLUMN_NOTES, spec_descriptions(spec), markdown_descriptions(refs / f"{STEM}-returns.md")]
     schema_dir = ROOT / f"tools/codegen/schemas/native/{STEM}"
     rewrite_schema_dir(schema_dir)
     unverified = 0

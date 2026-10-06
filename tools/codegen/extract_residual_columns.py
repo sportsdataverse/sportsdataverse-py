@@ -110,8 +110,8 @@ _DEFERRED_BUCKETS: dict[str, int | None] = {
     # wave-1 intake families whose capture-derived specs carry no property docs (euroleague and fifa
     # describe every column in their gen scripts, so they are not deferred); measured 2026-10-06
     "native/fotmob": 283,
-    "native/uefa": 842,
-    "native/sleeper": 458,
+    "native/uefa": 841,
+    "native/sleeper": 459,
 }
 
 

@@ -169,3 +169,25 @@ def test_wrapper_builds_the_league_url(monkeypatch: pytest.MonkeyPatch) -> None:
     df = sleeper.sleeper_league(league_id="289646328504385536")
     assert seen["url"] == "https://api.sleeper.app/v1/league/289646328504385536"
     assert df.height == 1
+
+
+def test_package_reexports_sleeper_wrappers_and_parser():
+    # the generated docstrings say ``from sportsdataverse.nfl import sleeper_draft``; pff is the precedent
+    from sportsdataverse import nfl
+
+    assert callable(nfl.sleeper_draft) and callable(nfl.parse_sleeper)
+
+
+def test_descriptions_do_not_borrow_soccer_prose():
+    # the shared describe() falls back to a soccer leaf dictionary; a player's full_name is not a club
+    import yaml
+
+    root = Path(__file__).resolve().parents[2] / "tools" / "codegen" / "schemas" / "native" / "sleeper"
+    for path in sorted(root.glob("*.yaml")):
+        for col in yaml.safe_load(path.read_text(encoding="utf-8")).get("columns") or []:
+            d = col["description"]
+            assert "club" not in d.lower() and not d.startswith("Season: ") and "Opta" not in d, (
+                path.name,
+                col["name"],
+                d,
+            )

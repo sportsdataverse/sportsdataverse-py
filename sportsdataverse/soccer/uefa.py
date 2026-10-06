@@ -31,7 +31,7 @@ def uefa_competitions(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """UEFA competitions by id (Champions League 1, Europa League 3, Conference League 2019)
+    """UEFA competitions by id (Champions League 1, Europa League 3, Conference League 2019).
 
     Endpoint: ``GET https://comp.uefa.com/v2/competitions``
     Example URL: https://comp.uefa.com/v2/competitions?competitionIds=1%2C3%2C2019
@@ -84,7 +84,7 @@ def uefa_livescore(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """Matches live right now across UEFA competitions
+    """Matches live right now across UEFA competitions.
 
     Endpoint: ``GET https://match.uefa.com/v5/livescore``
     Example URL: https://match.uefa.com/v5/livescore
@@ -138,7 +138,7 @@ def uefa_matches(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """Matches of a UEFA competition season
+    """Matches of a UEFA competition season.
 
     Endpoint: ``GET https://match.uefa.com/v5/matches``
     Example URL: https://match.uefa.com/v5/matches?competitionId=1&seasonYear=2026&limit=3&offset=0
@@ -201,7 +201,7 @@ def uefa_players(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """Players registered in a UEFA competition season
+    """Players registered in a UEFA competition season.
 
     Endpoint: ``GET https://comp.uefa.com/v2/players``
     Example URL: https://comp.uefa.com/v2/players?competitionId=1&seasonYear=2026&limit=3&offset=0
@@ -262,7 +262,7 @@ def uefa_standings(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """Group / league-phase standings of a UEFA competition season
+    """Group / league-phase standings of a UEFA competition season.
 
     Endpoint: ``GET https://standings.uefa.com/v1/standings``
     Example URL: https://standings.uefa.com/v1/standings?competitionId=1&seasonYear=2026
@@ -318,7 +318,7 @@ def uefa_team_statistics(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """Per-team match statistics of one UEFA match (one row per team)
+    """Per-team match statistics of one UEFA match (one row per team).
 
     Endpoint: ``GET https://matchstats.uefa.com/v1/team-statistics/{match_id}``
     Example URL: https://matchstats.uefa.com/v1/team-statistics/2047742
@@ -373,7 +373,7 @@ def uefa_teams(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """Teams entered in a UEFA competition season
+    """Teams entered in a UEFA competition season.
 
     Endpoint: ``GET https://comp.uefa.com/v2/teams``
     Example URL: https://comp.uefa.com/v2/teams?competitionId=1&seasonYear=2026&limit=3&offset=0

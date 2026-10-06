@@ -36,7 +36,7 @@ def fifa_calendar_matches(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """/calendar/matches
+    """Match calendar of a competition season (first page; results and fixtures).
 
     Endpoint: ``GET https://api.fifa.com/api/v3/calendar/matches``
     Example URL: https://api.fifa.com/api/v3/calendar/matches?idCompetition=17&idSeason=285023&language=en&count=3
@@ -97,7 +97,7 @@ def fifa_competition(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """/competitions/{idCompetition}
+    """One competition by id.
 
     Endpoint: ``GET https://api.fifa.com/api/v3/competitions/{id_competition}``
     Example URL: https://api.fifa.com/api/v3/competitions/17?language=en
@@ -153,7 +153,7 @@ def fifa_competitions(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """/competitions
+    """All FIFA competitions (first page).
 
     Endpoint: ``GET https://api.fifa.com/api/v3/competitions``
     Example URL: https://api.fifa.com/api/v3/competitions?language=en&count=3
@@ -209,7 +209,7 @@ def fifa_live_football(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """/live/football
+    """Matches live right now across FIFA competitions.
 
     Endpoint: ``GET https://api.fifa.com/api/v3/live/football``
     Example URL: https://api.fifa.com/api/v3/live/football?language=en
@@ -264,7 +264,7 @@ def fifa_players_search(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """/players/search
+    """Players matching a name (first page).
 
     Endpoint: ``GET https://api.fifa.com/api/v3/players/search``
     Example URL: https://api.fifa.com/api/v3/players/search?name=Messi&language=en
@@ -322,7 +322,7 @@ def fifa_seasons(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """/seasons
+    """Seasons of a competition (first page).
 
     Endpoint: ``GET https://api.fifa.com/api/v3/seasons``
     Example URL: https://api.fifa.com/api/v3/seasons?idCompetition=17&language=en&count=3
@@ -381,7 +381,7 @@ def fifa_stadiums(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """/stadiums
+    """Stadiums (first page).
 
     Endpoint: ``GET https://api.fifa.com/api/v3/stadiums``
     Example URL: https://api.fifa.com/api/v3/stadiums?language=en&count=3
@@ -438,7 +438,7 @@ def fifa_team(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """/teams/{idTeam}
+    """One team by id.
 
     Endpoint: ``GET https://api.fifa.com/api/v3/teams/{id_team}``
     Example URL: https://api.fifa.com/api/v3/teams/43922?language=en
@@ -494,7 +494,7 @@ def fifa_teams_search(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """/teams/search
+    """Teams matching a name (first page).
 
     Endpoint: ``GET https://api.fifa.com/api/v3/teams/search``
     Example URL: https://api.fifa.com/api/v3/teams/search?name=Argentina&language=en

@@ -11,7 +11,7 @@ toc_max_heading_level: 2
 
 ## sleeper_draft
 
-A draft
+A draft.
 
 **Endpoint URL:** `GET https://api.sleeper.app/v1/draft/{draft_id}`
 
@@ -19,7 +19,7 @@ A draft
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
-| `draft_id` | `draft_id` |  | `Y` |  |  |
+| `draft_id` | `draft_id` |  | `Y` |  | draft_id path parameter. |
 
 ### Returns {#sleeper_draft-returns}
 
@@ -36,12 +36,12 @@ A draft
 | `last_picked` | integer |  |
 | `league_id` | character | League identifier ('10' = WNBA). |
 | `season` | character | 4 digit number indicating to which season(s) the specified timeframe belongs to. |
-| `season_type` | character | Season: type discriminator for the record. |
+| `season_type` | character | REG or POST indicating if the timeframe belongs to regular or post season. |
 | `slot_to_roster_id` | character |  |
 | `sport` | character |  |
 | `start_time` | integer | Kickoff time in eastern time zone. |
 | `status` | character | Game status (e.g. "scheduled", "in_progress", "completed"). |
-| `type` | character | Type discriminator for the record. |
+| `type` | character | Record-type category (e.g. `total`, `home`, `road`). |
 | `metadata_description` | character |  |
 | `metadata_name` | character |  |
 | `metadata_scoring_type` | character |  |
@@ -69,7 +69,7 @@ _Last validated n/a._
 
 ## sleeper_draft_picks
 
-Picks of a draft
+Picks of a draft.
 
 **Endpoint URL:** `GET https://api.sleeper.app/v1/draft/{draft_id}/picks`
 
@@ -77,7 +77,7 @@ Picks of a draft
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
-| `draft_id` | `draft_id` |  | `Y` |  |  |
+| `draft_id` | `draft_id` |  | `Y` |  | draft_id path parameter. |
 
 ### Returns {#sleeper_draft_picks-returns}
 
@@ -117,7 +117,7 @@ _Last validated n/a._
 
 ## sleeper_drafts
 
-Drafts of a league
+Drafts of a league.
 
 **Endpoint URL:** `GET https://api.sleeper.app/v1/league/{league_id}/drafts`
 
@@ -125,7 +125,7 @@ Drafts of a league
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
-| `league_id` | `league_id` |  | `Y` |  |  |
+| `league_id` | `league_id` |  | `Y` |  | league_id path parameter. |
 
 ### Returns {#sleeper_drafts-returns}
 
@@ -142,11 +142,11 @@ Drafts of a league
 | `last_picked` | integer |  |
 | `league_id` | character | League identifier ('10' = WNBA). |
 | `season` | character | 4 digit number indicating to which season(s) the specified timeframe belongs to. |
-| `season_type` | character | Season: type discriminator for the record. |
+| `season_type` | character | REG or POST indicating if the timeframe belongs to regular or post season. |
 | `sport` | character |  |
 | `start_time` | integer | Kickoff time in eastern time zone. |
 | `status` | character | Game status (e.g. "scheduled", "in_progress", "completed"). |
-| `type` | character | Type discriminator for the record. |
+| `type` | character | Record-type category (e.g. `total`, `home`, `road`). |
 | `metadata_description` | character |  |
 | `metadata_name` | character |  |
 | `metadata_scoring_type` | character |  |
@@ -175,7 +175,7 @@ _Last validated n/a._
 
 ## sleeper_league
 
-A league
+A league.
 
 **Endpoint URL:** `GET https://api.sleeper.app/v1/league/{league_id}`
 
@@ -183,7 +183,7 @@ A league
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
-| `league_id` | `league_id` |  | `Y` |  |  |
+| `league_id` | `league_id` |  | `Y` |  | league_id path parameter. |
 
 ### Returns {#sleeper_league-returns}
 
@@ -191,13 +191,13 @@ A league
 
 | col_name | type | description |
 |---|---|---|
-| `name` | character | Display name. |
+| `name` | character | Name, as reported by MFL but reordered into FirstName LastName instead of Last, First |
 | `status` | character | Game status (e.g. "scheduled", "in_progress", "completed"). |
 | `avatar` | character |  |
 | `company_id` | character |  |
 | `shard` | integer |  |
 | `season` | character | 4 digit number indicating to which season(s) the specified timeframe belongs to. |
-| `season_type` | character | Season: type discriminator for the record. |
+| `season_type` | character | REG or POST indicating if the timeframe belongs to regular or post season. |
 | `sport` | character |  |
 | `last_message_id` | character |  |
 | `last_author_avatar` | character |  |
@@ -351,7 +351,7 @@ _Last validated n/a._
 
 ## sleeper_matchups
 
-Matchups for a week
+Matchups for a week.
 
 **Endpoint URL:** `GET https://api.sleeper.app/v1/league/{league_id}/matchups/{week}`
 
@@ -359,8 +359,8 @@ Matchups for a week
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
-| `league_id` | `league_id` |  | `Y` |  |  |
-| `week` | `week` |  | `Y` |  |  |
+| `league_id` | `league_id` |  | `Y` |  | league_id path parameter. |
+| `week` | `week` |  | `Y` |  | week path parameter. |
 
 ### Returns {#sleeper_matchups-returns}
 
@@ -389,7 +389,7 @@ _Last validated n/a._
 
 ## sleeper_players
 
-All NFL players (large; fetch at most once per day)
+All NFL players (large; fetch at most once per day).
 
 **Endpoint URL:** `GET https://api.sleeper.app/v1/players/nfl`
 
@@ -444,7 +444,7 @@ All NFL players (large; fetch at most once per day)
 | `stats_id` | character | Stats ID - usual format is five digit integer |
 | `practice_description` | character |  |
 | `oddsjam_id` | character |  |
-| `full_name` | character | Full club name. |
+| `full_name` | character | Full name as per NFL.com |
 | `fantasy_positions` | character |  |
 | `age` | integer | Age as of last pipeline build, rounded to one decimal. Pipeline is built on a weekly basis. |
 | `first_name` | character | First name of player |
@@ -456,7 +456,7 @@ All NFL players (large; fetch at most once per day)
 | `depth_chart_order` | character |  |
 | `birth_date` | character | Player birth date (sourced from NFL. Other sources may differ) |
 | `kalshi_id` | character |  |
-| `opta_id` | character | Parallel Opta integer id for the entity. |
+| `opta_id` | character |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -470,7 +470,7 @@ _Last validated n/a._
 
 ## sleeper_rosters
 
-Rosters in a league
+Rosters in a league.
 
 **Endpoint URL:** `GET https://api.sleeper.app/v1/league/{league_id}/rosters`
 
@@ -478,7 +478,7 @@ Rosters in a league
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
-| `league_id` | `league_id` |  | `Y` |  |  |
+| `league_id` | `league_id` |  | `Y` |  | league_id path parameter. |
 
 ### Returns {#sleeper_rosters-returns}
 
@@ -522,7 +522,7 @@ _Last validated n/a._
 
 ## sleeper_state
 
-Current NFL week and season state
+Current NFL week and season state.
 
 **Endpoint URL:** `GET https://api.sleeper.app/v1/state/nfl`
 
@@ -540,7 +540,7 @@ Current NFL week and season state
 | `week` | integer | Season week. |
 | `leg` | integer |  |
 | `season` | character | 4 digit number indicating to which season(s) the specified timeframe belongs to. |
-| `season_type` | character | Season: type discriminator for the record. |
+| `season_type` | character | REG or POST indicating if the timeframe belongs to regular or post season. |
 | `league_season` | character | Season year for the league record. |
 | `previous_season` | character |  |
 | `season_start_date` | character | Date in YYYY-MM-DD format. |
@@ -560,7 +560,7 @@ _Last validated n/a._
 
 ## sleeper_traded_picks
 
-Traded draft picks
+Traded draft picks.
 
 **Endpoint URL:** `GET https://api.sleeper.app/v1/league/{league_id}/traded_picks`
 
@@ -568,7 +568,7 @@ Traded draft picks
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
-| `league_id` | `league_id` |  | `Y` |  |  |
+| `league_id` | `league_id` |  | `Y` |  | league_id path parameter. |
 
 ### Returns {#sleeper_traded_picks-returns}
 
@@ -594,7 +594,7 @@ _Last validated n/a._
 
 ## sleeper_transactions
 
-Transactions for a week
+Transactions for a week.
 
 **Endpoint URL:** `GET https://api.sleeper.app/v1/league/{league_id}/transactions/{week}`
 
@@ -602,8 +602,8 @@ Transactions for a week
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
-| `league_id` | `league_id` |  | `Y` |  |  |
-| `week` | `week` |  | `Y` |  |  |
+| `league_id` | `league_id` |  | `Y` |  | league_id path parameter. |
+| `week` | `week` |  | `Y` |  | week path parameter. |
 
 ### Returns {#sleeper_transactions-returns}
 
@@ -612,7 +612,7 @@ Transactions for a week
 | col_name | type | description |
 |---|---|---|
 | `status` | character | Game status (e.g. "scheduled", "in_progress", "completed"). |
-| `type` | character | Type discriminator for the record. |
+| `type` | character | Record-type category (e.g. `total`, `home`, `road`). |
 | `created` | integer |  |
 | `leg` | integer |  |
 | `draft_picks` | character |  |
@@ -640,7 +640,7 @@ _Last validated n/a._
 
 ## sleeper_trending_adds
 
-Trending adds (lookback_hours, limit)
+Trending adds (lookback_hours, limit).
 
 **Endpoint URL:** `GET https://api.sleeper.app/v1/players/nfl/trending/add`
 
@@ -672,7 +672,7 @@ _Last validated n/a._
 
 ## sleeper_user
 
-Look up a user by username or id
+Look up a user by username or id.
 
 **Endpoint URL:** `GET https://api.sleeper.app/v1/user/{username}`
 
@@ -680,7 +680,7 @@ Look up a user by username or id
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
-| `username` | `username` |  | `Y` |  |  |
+| `username` | `username` |  | `Y` |  | username path parameter. |
 
 ### Returns {#sleeper_user-returns}
 
@@ -722,7 +722,7 @@ _Last validated n/a._
 
 ## sleeper_user_leagues
 
-Leagues a user is in for a season
+Leagues a user is in for a season.
 
 **Endpoint URL:** `GET https://api.sleeper.app/v1/user/{user_id}/leagues/nfl/{season}`
 
@@ -730,8 +730,8 @@ Leagues a user is in for a season
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
-| `user_id` | `user_id` |  | `Y` |  |  |
-| `season` | `season` |  | `Y` |  |  |
+| `user_id` | `user_id` |  | `Y` |  | user_id path parameter. |
+| `season` | `season` |  | `Y` |  | season path parameter. |
 
 ### Returns {#sleeper_user_leagues-returns}
 
@@ -757,7 +757,7 @@ Leagues a user is in for a season
 | `display_order` | integer | Position of the bracket slot within its round, controlling top-to-bottom rendering. |
 | `league_id` | character | League identifier ('10' = WNBA). |
 | `last_author_is_bot` | character |  |
-| `name` | character | Display name. |
+| `name` | character | Name, as reported by MFL but reordered into FirstName LastName instead of Last, First |
 | `company_id` | character |  |
 | `last_author_id` | character |  |
 | `roster_positions` | character |  |
@@ -768,7 +768,7 @@ Leagues a user is in for a season
 | `last_transaction_id` | character |  |
 | `shard` | integer |  |
 | `avatar` | character |  |
-| `season_type` | character | Season: type discriminator for the record. |
+| `season_type` | character | REG or POST indicating if the timeframe belongs to regular or post season. |
 | `metadata_trophy_winner` | character |  |
 | `metadata_trophy_winner_background` | character |  |
 | `metadata_trophy_winner_banner_text` | character |  |
@@ -910,7 +910,7 @@ _Last validated n/a._
 
 ## sleeper_users
 
-Users in a league
+Users in a league.
 
 **Endpoint URL:** `GET https://api.sleeper.app/v1/league/{league_id}/users`
 
@@ -918,7 +918,7 @@ Users in a league
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
-| `league_id` | `league_id` |  | `Y` |  |  |
+| `league_id` | `league_id` |  | `Y` |  | league_id path parameter. |
 
 ### Returns {#sleeper_users-returns}
 
@@ -958,7 +958,7 @@ _Last validated n/a._
 
 ## sleeper_winners_bracket
 
-Playoff bracket
+Playoff bracket.
 
 **Endpoint URL:** `GET https://api.sleeper.app/v1/league/{league_id}/winners_bracket`
 
@@ -966,7 +966,7 @@ Playoff bracket
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
-| `league_id` | `league_id` |  | `Y` |  |  |
+| `league_id` | `league_id` |  | `Y` |  | league_id path parameter. |
 
 ### Returns {#sleeper_winners_bracket-returns}
 

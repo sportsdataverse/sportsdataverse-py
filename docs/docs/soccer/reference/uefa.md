@@ -11,7 +11,7 @@ toc_max_heading_level: 2
 
 ## uefa_competitions
 
-UEFA competitions by id (Champions League 1, Europa League 3, Conference League 2019)
+UEFA competitions by id (Champions League 1, Europa League 3, Conference League 2019).
 
 **Endpoint URL:** `GET https://comp.uefa.com/v2/competitions`
 
@@ -86,7 +86,7 @@ _Last validated n/a._
 
 ## uefa_livescore
 
-Matches live right now across UEFA competitions
+Matches live right now across UEFA competitions.
 
 **Endpoint URL:** `GET https://match.uefa.com/v5/livescore`
 
@@ -118,7 +118,7 @@ _Last validated n/a._
 
 ## uefa_matches
 
-Matches of a UEFA competition season
+Matches of a UEFA competition season.
 
 **Endpoint URL:** `GET https://match.uefa.com/v5/matches`
 
@@ -138,7 +138,7 @@ Matches of a UEFA competition season
 | col_name | type | description |
 |---|---|---|
 | `behind_closed_doors` | logical |  |
-| `competition_phase` | character | Competition: competition phase of the match (regular season, playoffs, ...). |
+| `competition_phase` | character | Competition phase: TOURNAMENT (main draw) or QUALIFYING. |
 | `full_time_at` | character |  |
 | `id` | character | Provider identifier for the entity (Utf8 join key). |
 | `lineup_status` | character |  |
@@ -757,7 +757,7 @@ _Last validated n/a._
 
 ## uefa_players
 
-Players registered in a UEFA competition season
+Players registered in a UEFA competition season.
 
 **Endpoint URL:** `GET https://comp.uefa.com/v2/players`
 
@@ -870,7 +870,7 @@ _Last validated n/a._
 
 ## uefa_standings
 
-Group / league-phase standings of a UEFA competition season
+Group / league-phase standings of a UEFA competition season.
 
 **Endpoint URL:** `GET https://standings.uefa.com/v1/standings`
 
@@ -984,7 +984,7 @@ _Last validated n/a._
 
 ## uefa_team_statistics
 
-Per-team match statistics of one UEFA match (one row per team)
+Per-team match statistics of one UEFA match (one row per team).
 
 **Endpoint URL:** `GET https://matchstats.uefa.com/v1/team-statistics/{match_id}`
 
@@ -1001,7 +1001,7 @@ Per-team match statistics of one UEFA match (one row per team)
 | col_name | type | description |
 |---|---|---|
 | `id_provider` | character |  |
-| `statistics` | character |  |
+| `statistics` | character | The team's full statistic list for the match, JSON-encoded (one {name, value} object per statistic). |
 | `team_id` | character | Club: provider identifier for the entity (Utf8 join key). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
@@ -1016,7 +1016,7 @@ _Last validated n/a._
 
 ## uefa_teams
 
-Teams entered in a UEFA competition season
+Teams entered in a UEFA competition season.
 
 **Endpoint URL:** `GET https://comp.uefa.com/v2/teams`
 

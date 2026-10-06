@@ -59,6 +59,19 @@ STEM = "fifa"
 # operationId -> short, where the spec's ``<collection>_<idParam>`` form reads badly.
 _SHORT_OVERRIDES = {"competitions_idCompetition": "competition", "teams_idTeam": "team"}
 
+# The spec's ``summary`` is the route path; the reference index and IDE hover show this line.
+_SUMMARIES = {
+    "calendar_matches": "Match calendar of a competition season (first page; results and fixtures).",
+    "competitions": "All FIFA competitions (first page).",
+    "competition": "One competition by id.",
+    "seasons": "Seasons of a competition (first page).",
+    "live_football": "Matches live right now across FIFA competitions.",
+    "players_search": "Players matching a name (first page).",
+    "stadiums": "Stadiums (first page).",
+    "teams_search": "Teams matching a name (first page).",
+    "team": "One team by id.",
+}
+
 # Path-id examples the captures were taken with (``tools/capture.py`` ROUTES):
 # 17 = FIFA World Cup, 43922 = Argentina. The spec carries no ``example`` on path params.
 _PATH_EXAMPLES = {"idCompetition": "17", "idTeam": "43922"}
@@ -289,7 +302,7 @@ def _endpoint_entry(path: str, op: dict) -> Dict[str, Any]:
     assert {underscore(t) for t in _TOKEN.findall(path)} == names, path
     entry: Dict[str, Any] = {
         "short": short,
-        "summary": op.get("summary") or f"GET {path}",
+        "summary": _SUMMARIES[short],
         "path": _TOKEN.sub(lambda m: "{" + underscore(m.group(1)) + "}", path),
         "parser": "parse_fifa",
         "returns_schema": f"native/{STEM}/{short}",

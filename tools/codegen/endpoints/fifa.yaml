@@ -41,7 +41,7 @@ endpoints:
   path: /calendar/matches
   returns_schema: native/fifa/calendar_matches
   short: calendar_matches
-  summary: /calendar/matches
+  summary: Match calendar of a competition season (first page; results and fixtures).
 - example_args:
     id_competition: '17'
     language: en
@@ -59,7 +59,7 @@ endpoints:
     type: str
   returns_schema: native/fifa/competition
   short: competition
-  summary: /competitions/{idCompetition}
+  summary: One competition by id.
 - example_args:
     count: '3'
     language: en
@@ -77,7 +77,7 @@ endpoints:
   path: /competitions
   returns_schema: native/fifa/competitions
   short: competitions
-  summary: /competitions
+  summary: All FIFA competitions (first page).
 - example_args:
     language: en
   extra_params:
@@ -89,7 +89,7 @@ endpoints:
   path: /live/football
   returns_schema: native/fifa/live_football
   short: live_football
-  summary: /live/football
+  summary: Matches live right now across FIFA competitions.
 - example_args:
     language: en
     name: Messi
@@ -106,7 +106,7 @@ endpoints:
   path: /players/search
   returns_schema: native/fifa/players_search
   short: players_search
-  summary: /players/search
+  summary: Players matching a name (first page).
 - example_args:
     count: '3'
     id_competition: '17'
@@ -129,7 +129,7 @@ endpoints:
   path: /seasons
   returns_schema: native/fifa/seasons
   short: seasons
-  summary: /seasons
+  summary: Seasons of a competition (first page).
 - example_args:
     count: '3'
     language: en
@@ -147,7 +147,7 @@ endpoints:
   path: /stadiums
   returns_schema: native/fifa/stadiums
   short: stadiums
-  summary: /stadiums
+  summary: Stadiums (first page).
 - example_args:
     id_team: '43922'
     language: en
@@ -165,7 +165,7 @@ endpoints:
     type: str
   returns_schema: native/fifa/team
   short: team
-  summary: /teams/{idTeam}
+  summary: One team by id.
 - example_args:
     language: en
     name: Argentina
@@ -182,7 +182,7 @@ endpoints:
   path: /teams/search
   returns_schema: native/fifa/teams_search
   short: teams_search
-  summary: /teams/search
+  summary: Teams matching a name (first page).
 host: https://api.fifa.com/api/v3
 module: fifa
 name_pattern: fifa_{short}

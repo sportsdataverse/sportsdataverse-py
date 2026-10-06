@@ -105,6 +105,8 @@ def parse_fifa(
 
         Pipeline next step (one line)::
 
+            import polars as pl
+
             df.filter(pl.col("id_competition") == "17")
 
     See Also:

@@ -381,7 +381,7 @@ def _decapitalize(text: str) -> str:
     return text[:1].lower() + text[1:]
 
 
-def describe(name: str, sources: Sequence[Dict[str, str]]) -> str:
+def describe(name: str, sources: Sequence[Dict[str, str]], *, leaf_fallback: bool = True) -> str:
     """Resolve a description for one snake_cased column name.
 
     Three tiers, in order:
@@ -400,6 +400,9 @@ def describe(name: str, sources: Sequence[Dict[str, str]]) -> str:
     Args:
         name: snake_cased column name.
         sources: description maps consulted in order.
+        leaf_fallback: consult tiers 2 and 3 (the soccer leaf dictionary and its container
+            prefixes). A non-soccer family (Sleeper) passes ``False``: a player's
+            ``full_name`` is not a club, and a blank beats a wrong description.
 
     Returns:
         The description, or ``""`` when nothing resolves.
@@ -407,6 +410,8 @@ def describe(name: str, sources: Sequence[Dict[str, str]]) -> str:
     for source in sources:
         if source.get(name):
             return source[name]
+    if not leaf_fallback:
+        return ""
     if name in _LEAF_DESCRIPTIONS:
         return _LEAF_DESCRIPTIONS[name]
     for prefix, label in _PREFIX_LABELS:
@@ -417,19 +422,28 @@ def describe(name: str, sources: Sequence[Dict[str, str]]) -> str:
     return ""
 
 
-def columns_from_frame(df: pl.DataFrame, descriptions: Sequence[Dict[str, str]]) -> List[Dict[str, str]]:
+def columns_from_frame(
+    df: pl.DataFrame, descriptions: Sequence[Dict[str, str]], *, leaf_fallback: bool = True
+) -> List[Dict[str, str]]:
     """``[{name, type, description}, ...]`` for a parsed frame.
 
     Args:
         df: the frame the endpoint's parser produced from its capture.
         descriptions: description maps consulted in order; the first hit wins.
+        leaf_fallback: see :func:`describe`.
 
     Returns:
         One entry per column, in frame order.
     """
     cols: List[Dict[str, str]] = []
     for name, dtype in df.schema.items():
-        cols.append({"name": name, "type": _column_type(dtype), "description": describe(name, descriptions)})
+        cols.append(
+            {
+                "name": name,
+                "type": _column_type(dtype),
+                "description": describe(name, descriptions, leaf_fallback=leaf_fallback),
+            }
+        )
     return cols
 
 

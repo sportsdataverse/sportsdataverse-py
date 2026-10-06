@@ -20,7 +20,7 @@ endpoints:
     type: str
   returns_schema: native/sleeper/draft
   short: draft
-  summary: A draft
+  summary: A draft.
 - example_args:
     draft_id: '257270643320426496'
   parser: parse_sleeper
@@ -31,7 +31,7 @@ endpoints:
     type: str
   returns_schema: native/sleeper/draft_picks
   short: draft_picks
-  summary: Picks of a draft
+  summary: Picks of a draft.
 - example_args:
     league_id: '289646328504385536'
   parser: parse_sleeper
@@ -42,7 +42,7 @@ endpoints:
     type: str
   returns_schema: native/sleeper/drafts
   short: drafts
-  summary: Drafts of a league
+  summary: Drafts of a league.
 - example_args:
     league_id: '289646328504385536'
   parser: parse_sleeper
@@ -53,7 +53,7 @@ endpoints:
     type: str
   returns_schema: native/sleeper/league
   short: league
-  summary: A league
+  summary: A league.
 - example_args:
     league_id: '289646328504385536'
     week: '1'
@@ -68,13 +68,13 @@ endpoints:
     type: str
   returns_schema: native/sleeper/matchups
   short: matchups
-  summary: Matchups for a week
+  summary: Matchups for a week.
 - example_args: {}
   parser: parse_sleeper
   path: /players/nfl
   returns_schema: native/sleeper/players
   short: players
-  summary: All NFL players (large; fetch at most once per day)
+  summary: All NFL players (large; fetch at most once per day).
 - example_args:
     league_id: '289646328504385536'
   parser: parse_sleeper
@@ -85,13 +85,13 @@ endpoints:
     type: str
   returns_schema: native/sleeper/rosters
   short: rosters
-  summary: Rosters in a league
+  summary: Rosters in a league.
 - example_args: {}
   parser: parse_sleeper
   path: /state/nfl
   returns_schema: native/sleeper/state
   short: state
-  summary: Current NFL week and season state
+  summary: Current NFL week and season state.
 - example_args:
     league_id: '289646328504385536'
   parser: parse_sleeper
@@ -102,7 +102,7 @@ endpoints:
     type: str
   returns_schema: native/sleeper/traded_picks
   short: traded_picks
-  summary: Traded draft picks
+  summary: Traded draft picks.
 - example_args:
     league_id: '289646328504385536'
     week: '1'
@@ -117,7 +117,7 @@ endpoints:
     type: str
   returns_schema: native/sleeper/transactions
   short: transactions
-  summary: Transactions for a week
+  summary: Transactions for a week.
 - example_args: {}
   extra_params:
   - description: Hours to look back (default 24).
@@ -132,7 +132,7 @@ endpoints:
   path: /players/nfl/trending/add
   returns_schema: native/sleeper/trending_adds
   short: trending_adds
-  summary: Trending adds (lookback_hours, limit)
+  summary: Trending adds (lookback_hours, limit).
 - example_args:
     username: '457511950237696'
   parser: parse_sleeper
@@ -143,7 +143,7 @@ endpoints:
     type: str
   returns_schema: native/sleeper/user
   short: user
-  summary: Look up a user by username or id
+  summary: Look up a user by username or id.
 - example_args:
     season: '2018'
     user_id: '457511950237696'
@@ -158,7 +158,7 @@ endpoints:
     type: str
   returns_schema: native/sleeper/user_leagues
   short: user_leagues
-  summary: Leagues a user is in for a season
+  summary: Leagues a user is in for a season.
 - example_args:
     league_id: '289646328504385536'
   parser: parse_sleeper
@@ -169,7 +169,7 @@ endpoints:
     type: str
   returns_schema: native/sleeper/users
   short: users
-  summary: Users in a league
+  summary: Users in a league.
 - example_args:
     league_id: '289646328504385536'
   parser: parse_sleeper
@@ -180,7 +180,7 @@ endpoints:
     type: str
   returns_schema: native/sleeper/winners_bracket
   short: winners_bracket
-  summary: Playoff bracket
+  summary: Playoff bracket.
 host: https://api.sleeper.app/v1
 module: sleeper
 name_pattern: sleeper_{short}

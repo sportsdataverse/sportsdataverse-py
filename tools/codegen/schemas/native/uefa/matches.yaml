@@ -2,8 +2,7 @@ columns:
 - description: ''
   name: behind_closed_doors
   type: logical
-- description: 'Competition: competition phase of the match (regular season, playoffs,
-    ...).'
+- description: 'Competition phase: TOURNAMENT (main draw) or QUALIFYING.'
   name: competition_phase
   type: character
 - description: ''

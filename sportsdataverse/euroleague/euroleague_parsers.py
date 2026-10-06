@@ -92,6 +92,8 @@ def parse_euroleague(
 
         Pipeline next step (one line)::
 
+            import polars as pl
+
             df.filter(pl.col("played") == True).select("game_code", "local_club_code", "road_club_code")
 
     See Also:

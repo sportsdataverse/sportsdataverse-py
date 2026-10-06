@@ -32,7 +32,7 @@ def euroleague_clubs(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """Clubs in a season
+    """Clubs in a season.
 
     Endpoint: ``GET https://api-live.euroleague.net/v2/competitions/{competition_code}/seasons/{season_code}/clubs``
     Example URL: https://api-live.euroleague.net/v2/competitions/E/seasons/E2025/clubs
@@ -84,7 +84,7 @@ def euroleague_competitions(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """Competitions (EuroLeague E, EuroCup U, ...)
+    """Competitions (EuroLeague E, EuroCup U, ...).
 
     Endpoint: ``GET https://api-live.euroleague.net/v2/competitions``
     Example URL: https://api-live.euroleague.net/v2/competitions
@@ -137,7 +137,7 @@ def euroleague_game_stats(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """Box score of one game
+    """Box score of one game.
 
     Endpoint: ``GET https://api-live.euroleague.net/v2/competitions/{competition_code}/seasons/{season_code}/games/{game_code}/stats``
     Example URL: https://api-live.euroleague.net/v2/competitions/E/seasons/E2025/games/1/stats
@@ -194,7 +194,7 @@ def euroleague_games(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """Games of a season
+    """Games of a season.
 
     Endpoint: ``GET https://api-live.euroleague.net/v2/competitions/{competition_code}/seasons/{season_code}/games``
     Example URL: https://api-live.euroleague.net/v2/competitions/E/seasons/E2025/games
@@ -255,7 +255,7 @@ def euroleague_people(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """People (players, coaches) in a season
+    """People (players, coaches) in a season.
 
     Endpoint: ``GET https://api-live.euroleague.net/v2/competitions/{competition_code}/seasons/{season_code}/people``
     Example URL: https://api-live.euroleague.net/v2/competitions/E/seasons/E2025/people
@@ -314,7 +314,7 @@ def euroleague_rounds(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """Rounds of a season
+    """Rounds of a season.
 
     Endpoint: ``GET https://api-live.euroleague.net/v2/competitions/{competition_code}/seasons/{season_code}/rounds``
     Example URL: https://api-live.euroleague.net/v2/competitions/E/seasons/E2025/rounds
@@ -367,7 +367,7 @@ def euroleague_seasons(
     return_as_pandas: bool = False,
     **kwargs,
 ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-    """Seasons of a competition
+    """Seasons of a competition.
 
     Endpoint: ``GET https://api-live.euroleague.net/v2/competitions/{competition_code}/seasons``
     Example URL: https://api-live.euroleague.net/v2/competitions/E/seasons

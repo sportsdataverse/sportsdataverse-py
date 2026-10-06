@@ -11,7 +11,7 @@ toc_max_heading_level: 2
 
 ## fifa_calendar_matches
 
-/calendar/matches
+Match calendar of a competition season (first page; results and fixtures).
 
 **Endpoint URL:** `GET https://api.fifa.com/api/v3/calendar/matches`
 
@@ -142,7 +142,7 @@ _Last validated n/a._
 
 ## fifa_competition
 
-/competitions/{idCompetition}
+One competition by id.
 
 **Endpoint URL:** `GET https://api.fifa.com/api/v3/competitions/{id_competition}`
 
@@ -185,7 +185,7 @@ _Last validated n/a._
 
 ## fifa_competitions
 
-/competitions
+All FIFA competitions (first page).
 
 **Endpoint URL:** `GET https://api.fifa.com/api/v3/competitions`
 
@@ -228,7 +228,7 @@ _Last validated n/a._
 
 ## fifa_live_football
 
-/live/football
+Matches live right now across FIFA competitions.
 
 **Endpoint URL:** `GET https://api.fifa.com/api/v3/live/football`
 
@@ -361,7 +361,7 @@ _Last validated n/a._
 
 ## fifa_players_search
 
-/players/search
+Players matching a name (first page).
 
 **Endpoint URL:** `GET https://api.fifa.com/api/v3/players/search`
 
@@ -414,7 +414,7 @@ _Last validated n/a._
 
 ## fifa_seasons
 
-/seasons
+Seasons of a competition (first page).
 
 **Endpoint URL:** `GET https://api.fifa.com/api/v3/seasons`
 
@@ -462,7 +462,7 @@ _Last validated n/a._
 
 ## fifa_stadiums
 
-/stadiums
+Stadiums (first page).
 
 **Endpoint URL:** `GET https://api.fifa.com/api/v3/stadiums`
 
@@ -515,7 +515,7 @@ _Last validated n/a._
 
 ## fifa_team
 
-/teams/{idTeam}
+One team by id.
 
 **Endpoint URL:** `GET https://api.fifa.com/api/v3/teams/{id_team}`
 
@@ -575,7 +575,7 @@ _Last validated n/a._
 
 ## fifa_teams_search
 
-/teams/search
+Teams matching a name (first page).
 
 **Endpoint URL:** `GET https://api.fifa.com/api/v3/teams/search`
 

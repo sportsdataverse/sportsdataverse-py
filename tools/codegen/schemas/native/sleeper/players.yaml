@@ -119,7 +119,7 @@ columns:
 - description: ''
   name: oddsjam_id
   type: character
-- description: Full club name.
+- description: ''
   name: full_name
   type: character
 - description: ''
@@ -155,7 +155,7 @@ columns:
 - description: ''
   name: kalshi_id
   type: character
-- description: Parallel Opta integer id for the entity.
+- description: ''
   name: opta_id
   type: character
 kind: dataframe

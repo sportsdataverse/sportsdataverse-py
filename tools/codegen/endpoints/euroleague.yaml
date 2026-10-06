@@ -29,13 +29,13 @@ endpoints:
     type: str
   returns_schema: native/euroleague/clubs
   short: clubs
-  summary: Clubs in a season
+  summary: Clubs in a season.
 - example_args: {}
   parser: parse_euroleague
   path: /competitions
   returns_schema: native/euroleague/competitions
   short: competitions
-  summary: Competitions (EuroLeague E, EuroCup U, ...)
+  summary: Competitions (EuroLeague E, EuroCup U, ...).
 - example_args:
     competition_code: E
     game_code: 1
@@ -57,7 +57,7 @@ endpoints:
     type: str
   returns_schema: native/euroleague/game_stats
   short: game_stats
-  summary: Box score of one game
+  summary: Box score of one game.
 - example_args:
     competition_code: E
     season_code: E2025
@@ -83,7 +83,7 @@ endpoints:
     type: str
   returns_schema: native/euroleague/games
   short: games
-  summary: Games of a season
+  summary: Games of a season.
 - example_args:
     competition_code: E
     season_code: E2025
@@ -109,7 +109,7 @@ endpoints:
     type: str
   returns_schema: native/euroleague/people
   short: people
-  summary: People (players, coaches) in a season
+  summary: People (players, coaches) in a season.
 - example_args:
     competition_code: E
     season_code: E2025
@@ -126,7 +126,7 @@ endpoints:
     type: str
   returns_schema: native/euroleague/rounds
   short: rounds
-  summary: Rounds of a season
+  summary: Rounds of a season.
 - example_args:
     competition_code: E
   parser: parse_euroleague
@@ -138,7 +138,7 @@ endpoints:
     type: str
   returns_schema: native/euroleague/seasons
   short: seasons
-  summary: Seasons of a competition
+  summary: Seasons of a competition.
 getter_module: sportsdataverse.euroleague.euroleague_runtime
 host: https://api-live.euroleague.net/v2
 module: euroleague

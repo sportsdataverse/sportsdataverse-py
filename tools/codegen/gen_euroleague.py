@@ -297,7 +297,7 @@ def _endpoint_entry(path: str, op: dict) -> Dict[str, Any]:
     assert {underscore(t) for t in _TOKEN.findall(path)} == names, path
     entry: Dict[str, Any] = {
         "short": short,
-        "summary": op.get("summary") or f"GET {path}",
+        "summary": (op.get("summary") or f"Fetch {path}").rstrip(".") + ".",
         "path": _snake_path(path),
         "parser": "parse_euroleague",
         "returns_schema": f"native/{STEM}/{short}",

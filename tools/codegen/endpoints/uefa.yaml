@@ -28,13 +28,13 @@ endpoints:
   returns_schema: native/uefa/competitions
   short: competitions
   summary: UEFA competitions by id (Champions League 1, Europa League 3, Conference
-    League 2019)
+    League 2019).
 - host: https://match.uefa.com
   parser: parse_uefa
   path: /v5/livescore
   returns_schema: native/uefa/livescore
   short: livescore
-  summary: Matches live right now across UEFA competitions
+  summary: Matches live right now across UEFA competitions.
 - example_args:
     competition_id: '1'
     limit: '3'
@@ -63,7 +63,7 @@ endpoints:
   path: /v5/matches
   returns_schema: native/uefa/matches
   short: matches
-  summary: Matches of a UEFA competition season
+  summary: Matches of a UEFA competition season.
 - example_args:
     competition_id: '1'
     limit: '3'
@@ -91,7 +91,7 @@ endpoints:
   path: /v2/players
   returns_schema: native/uefa/players
   short: players
-  summary: Players registered in a UEFA competition season
+  summary: Players registered in a UEFA competition season.
 - example_args:
     competition_id: '1'
     season_year: '2026'
@@ -110,7 +110,7 @@ endpoints:
   path: /v1/standings
   returns_schema: native/uefa/standings
   short: standings
-  summary: Group / league-phase standings of a UEFA competition season
+  summary: Group / league-phase standings of a UEFA competition season.
 - example_args:
     match_id: '2047742'
   host: https://matchstats.uefa.com
@@ -123,7 +123,7 @@ endpoints:
     type: str
   returns_schema: native/uefa/team_statistics
   short: team_statistics
-  summary: Per-team match statistics of one UEFA match (one row per team)
+  summary: Per-team match statistics of one UEFA match (one row per team).
 - example_args:
     competition_id: '1'
     limit: '3'
@@ -151,7 +151,7 @@ endpoints:
   path: /v2/teams
   returns_schema: native/uefa/teams
   short: teams
-  summary: Teams entered in a UEFA competition season
+  summary: Teams entered in a UEFA competition season.
 getter_module: sportsdataverse.soccer.uefa_runtime
 host: https://comp.uefa.com
 module: uefa
