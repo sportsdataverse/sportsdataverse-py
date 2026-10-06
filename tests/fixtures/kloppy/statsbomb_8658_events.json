@@ -1,0 +1,3131 @@
+[
+ {
+  "id": "4a44199a-3111-4e28-b567-9c1393e68dff",
+  "index": 1,
+  "period": 1,
+  "timestamp": "00:00:00.000",
+  "minute": 0,
+  "second": 0,
+  "type": {
+   "id": 35,
+   "name": "Starting XI"
+  },
+  "possession": 1,
+  "possession_team": {
+   "id": 771,
+   "name": "France"
+  },
+  "play_pattern": {
+   "id": 1,
+   "name": "Regular Play"
+  },
+  "team": {
+   "id": 771,
+   "name": "France"
+  },
+  "duration": 0.0,
+  "tactics": {
+   "formation": 442,
+   "lineup": [
+    {
+     "player": {
+      "id": 3099,
+      "name": "Hugo Lloris"
+     },
+     "position": {
+      "id": 1,
+      "name": "Goalkeeper"
+     },
+     "jersey_number": 1
+    },
+    {
+     "player": {
+      "id": 5476,
+      "name": "Benjamin Pavard"
+     },
+     "position": {
+      "id": 2,
+      "name": "Right Back"
+     },
+     "jersey_number": 2
+    },
+    {
+     "player": {
+      "id": 5485,
+      "name": "Rapha\u00ebl Varane"
+     },
+     "position": {
+      "id": 3,
+      "name": "Right Center Back"
+     },
+     "jersey_number": 4
+    },
+    {
+     "player": {
+      "id": 5492,
+      "name": "Samuel Yves Umtiti"
+     },
+     "position": {
+      "id": 5,
+      "name": "Left Center Back"
+     },
+     "jersey_number": 5
+    },
+    {
+     "player": {
+      "id": 5484,
+      "name": "Lucas Hern\u00e1ndez Pi"
+     },
+     "position": {
+      "id": 6,
+      "name": "Left Back"
+     },
+     "jersey_number": 21
+    },
+    {
+     "player": {
+      "id": 20004,
+      "name": "Paul Pogba"
+     },
+     "position": {
+      "id": 9,
+      "name": "Right Defensive Midfield"
+     },
+     "jersey_number": 6
+    },
+    {
+     "player": {
+      "id": 3961,
+      "name": "N''Golo Kant\u00e9"
+     },
+     "position": {
+      "id": 11,
+      "name": "Left Defensive Midfield"
+     },
+     "jersey_number": 13
+    },
+    {
+     "player": {
+      "id": 3009,
+      "name": "Kylian Mbapp\u00e9 Lottin"
+     },
+     "position": {
+      "id": 12,
+      "name": "Right Midfield"
+     },
+     "jersey_number": 10
+    },
+    {
+     "player": {
+      "id": 4375,
+      "name": "Blaise Matuidi"
+     },
+     "position": {
+      "id": 16,
+      "name": "Left Midfield"
+     },
+     "jersey_number": 14
+    },
+    {
+     "player": {
+      "id": 5487,
+      "name": "Antoine Griezmann"
+     },
+     "position": {
+      "id": 22,
+      "name": "Right Center Forward"
+     },
+     "jersey_number": 7
+    },
+    {
+     "player": {
+      "id": 3604,
+      "name": "Olivier Giroud"
+     },
+     "position": {
+      "id": 24,
+      "name": "Left Center Forward"
+     },
+     "jersey_number": 9
+    }
+   ]
+  }
+ },
+ {
+  "id": "2137ed27-042c-4d73-877c-75d04406617c",
+  "index": 2,
+  "period": 1,
+  "timestamp": "00:00:00.000",
+  "minute": 0,
+  "second": 0,
+  "type": {
+   "id": 35,
+   "name": "Starting XI"
+  },
+  "possession": 1,
+  "possession_team": {
+   "id": 771,
+   "name": "France"
+  },
+  "play_pattern": {
+   "id": 1,
+   "name": "Regular Play"
+  },
+  "team": {
+   "id": 785,
+   "name": "Croatia"
+  },
+  "duration": 1.412,
+  "tactics": {
+   "formation": 433,
+   "lineup": [
+    {
+     "player": {
+      "id": 3444,
+      "name": "Danijel Suba\u0161i\u0107"
+     },
+     "position": {
+      "id": 1,
+      "name": "Goalkeeper"
+     },
+     "jersey_number": 23
+    },
+    {
+     "player": {
+      "id": 5461,
+      "name": "\u0160ime Vrsaljko"
+     },
+     "position": {
+      "id": 2,
+      "name": "Right Back"
+     },
+     "jersey_number": 2
+    },
+    {
+     "player": {
+      "id": 3471,
+      "name": "Dejan Lovren"
+     },
+     "position": {
+      "id": 3,
+      "name": "Right Center Back"
+     },
+     "jersey_number": 6
+    },
+    {
+     "player": {
+      "id": 5468,
+      "name": "Domagoj Vida"
+     },
+     "position": {
+      "id": 5,
+      "name": "Left Center Back"
+     },
+     "jersey_number": 21
+    },
+    {
+     "player": {
+      "id": 5457,
+      "name": "Ivan Strini\u0107"
+     },
+     "position": {
+      "id": 6,
+      "name": "Left Back"
+     },
+     "jersey_number": 3
+    },
+    {
+     "player": {
+      "id": 5469,
+      "name": "Marcelo Brozovi\u0107"
+     },
+     "position": {
+      "id": 10,
+      "name": "Center Defensive Midfield"
+     },
+     "jersey_number": 11
+    },
+    {
+     "player": {
+      "id": 5463,
+      "name": "Luka Modri\u0107"
+     },
+     "position": {
+      "id": 13,
+      "name": "Right Center Midfield"
+     },
+     "jersey_number": 10
+    },
+    {
+     "player": {
+      "id": 5470,
+      "name": "Ivan Rakiti\u0107"
+     },
+     "position": {
+      "id": 15,
+      "name": "Left Center Midfield"
+     },
+     "jersey_number": 7
+    },
+    {
+     "player": {
+      "id": 5465,
+      "name": "Ante Rebi\u0107"
+     },
+     "position": {
+      "id": 17,
+      "name": "Right Wing"
+     },
+     "jersey_number": 18
+    },
+    {
+     "player": {
+      "id": 5474,
+      "name": "Ivan Peri\u0161i\u0107"
+     },
+     "position": {
+      "id": 21,
+      "name": "Left Wing"
+     },
+     "jersey_number": 4
+    },
+    {
+     "player": {
+      "id": 5472,
+      "name": "Mario Mand\u017euki\u0107"
+     },
+     "position": {
+      "id": 23,
+      "name": "Center Forward"
+     },
+     "jersey_number": 17
+    }
+   ]
+  }
+ },
+ {
+  "id": "531c8cbd-7a3e-4e46-91c1-549a98c27bcb",
+  "index": 3,
+  "period": 1,
+  "timestamp": "00:00:00.000",
+  "minute": 0,
+  "second": 0,
+  "type": {
+   "id": 18,
+   "name": "Half Start"
+  },
+  "possession": 1,
+  "possession_team": {
+   "id": 771,
+   "name": "France"
+  },
+  "play_pattern": {
+   "id": 1,
+   "name": "Regular Play"
+  },
+  "team": {
+   "id": 771,
+   "name": "France"
+  },
+  "duration": 0.0,
+  "related_events": [
+   "9b9060d4-13a5-4a44-aafa-2221ed10a8bc"
+  ]
+ },
+ {
+  "id": "9b9060d4-13a5-4a44-aafa-2221ed10a8bc",
+  "index": 4,
+  "period": 1,
+  "timestamp": "00:00:00.000",
+  "minute": 0,
+  "second": 0,
+  "type": {
+   "id": 18,
+   "name": "Half Start"
+  },
+  "possession": 1,
+  "possession_team": {
+   "id": 771,
+   "name": "France"
+  },
+  "play_pattern": {
+   "id": 1,
+   "name": "Regular Play"
+  },
+  "team": {
+   "id": 785,
+   "name": "Croatia"
+  },
+  "duration": 0.0,
+  "related_events": [
+   "531c8cbd-7a3e-4e46-91c1-549a98c27bcb"
+  ]
+ },
+ {
+  "id": "6d7450f7-2590-4b04-a2ae-9ed11602e342",
+  "index": 5,
+  "period": 1,
+  "timestamp": "00:00:00.400",
+  "minute": 0,
+  "second": 0,
+  "type": {
+   "id": 30,
+   "name": "Pass"
+  },
+  "possession": 2,
+  "possession_team": {
+   "id": 785,
+   "name": "Croatia"
+  },
+  "play_pattern": {
+   "id": 9,
+   "name": "From Kick Off"
+  },
+  "team": {
+   "id": 785,
+   "name": "Croatia"
+  },
+  "player": {
+   "id": 5472,
+   "name": "Mario Mand\u017euki\u0107"
+  },
+  "position": {
+   "id": 23,
+   "name": "Center Forward"
+  },
+  "location": [
+   61.0,
+   41.0
+  ],
+  "duration": 1.159,
+  "related_events": [
+   "3e17cab8-367e-47bb-b942-1d7a0b6f8ae5"
+  ],
+  "pass": {
+   "recipient": {
+    "id": 5469,
+    "name": "Marcelo Brozovi\u0107"
+   },
+   "length": 11.045361,
+   "angle": 3.050933,
+   "height": {
+    "id": 1,
+    "name": "Ground Pass"
+   },
+   "end_location": [
+    50.0,
+    42.0
+   ],
+   "type": {
+    "id": 65,
+    "name": "Kick Off"
+   },
+   "body_part": {
+    "id": 40,
+    "name": "Right Foot"
+   }
+  }
+ },
+ {
+  "id": "3e17cab8-367e-47bb-b942-1d7a0b6f8ae5",
+  "index": 6,
+  "period": 1,
+  "timestamp": "00:00:01.559",
+  "minute": 0,
+  "second": 1,
+  "type": {
+   "id": 42,
+   "name": "Ball Receipt*"
+  },
+  "possession": 2,
+  "possession_team": {
+   "id": 785,
+   "name": "Croatia"
+  },
+  "play_pattern": {
+   "id": 9,
+   "name": "From Kick Off"
+  },
+  "team": {
+   "id": 785,
+   "name": "Croatia"
+  },
+  "player": {
+   "id": 5469,
+   "name": "Marcelo Brozovi\u0107"
+  },
+  "position": {
+   "id": 10,
+   "name": "Center Defensive Midfield"
+  },
+  "location": [
+   50.0,
+   42.0
+  ],
+  "related_events": [
+   "6d7450f7-2590-4b04-a2ae-9ed11602e342"
+  ]
+ },
+ {
+  "id": "1eb01089-03b0-46ac-9c5a-6deecaf6499f",
+  "index": 7,
+  "period": 1,
+  "timestamp": "00:00:01.559",
+  "minute": 0,
+  "second": 1,
+  "type": {
+   "id": 43,
+   "name": "Carry"
+  },
+  "possession": 2,
+  "possession_team": {
+   "id": 785,
+   "name": "Croatia"
+  },
+  "play_pattern": {
+   "id": 9,
+   "name": "From Kick Off"
+  },
+  "team": {
+   "id": 785,
+   "name": "Croatia"
+  },
+  "player": {
+   "id": 5469,
+   "name": "Marcelo Brozovi\u0107"
+  },
+  "position": {
+   "id": 10,
+   "name": "Center Defensive Midfield"
+  },
+  "location": [
+   50.0,
+   42.0
+  ],
+  "duration": 0.788,
+  "related_events": [
+   "3e17cab8-367e-47bb-b942-1d7a0b6f8ae5",
+   "d304b712-3d28-4117-aeaf-11c15a36587c"
+  ],
+  "carry": {
+   "end_location": [
+    49.0,
+    41.0
+   ]
+  }
+ },
+ {
+  "id": "d304b712-3d28-4117-aeaf-11c15a36587c",
+  "index": 8,
+  "period": 1,
+  "timestamp": "00:00:02.347",
+  "minute": 0,
+  "second": 2,
+  "type": {
+   "id": 30,
+   "name": "Pass"
+  },
+  "possession": 2,
+  "possession_team": {
+   "id": 785,
+   "name": "Croatia"
+  },
+  "play_pattern": {
+   "id": 9,
+   "name": "From Kick Off"
+  },
+  "team": {
+   "id": 785,
+   "name": "Croatia"
+  },
+  "player": {
+   "id": 5469,
+   "name": "Marcelo Brozovi\u0107"
+  },
+  "position": {
+   "id": 10,
+   "name": "Center Defensive Midfield"
+  },
+  "location": [
+   49.0,
+   41.0
+  ],
+  "duration": 0.773,
+  "related_events": [
+   "be4fa841-3347-442b-aa56-c9cb52b9da6b"
+  ],
+  "pass": {
+   "recipient": {
+    "id": 5463,
+    "name": "Luka Modri\u0107"
+   },
+   "length": 11.18034,
+   "angle": 2.0344439,
+   "height": {
+    "id": 1,
+    "name": "Ground Pass"
+   },
+   "end_location": [
+    44.0,
+    51.0
+   ],
+   "body_part": {
+    "id": 40,
+    "name": "Right Foot"
+   }
+  }
+ },
+ {
+  "id": "c6cb8b15-75bf-4fbc-b6ab-bc21b7836f92",
+  "index": 9,
+  "period": 1,
+  "timestamp": "00:00:02.919",
+  "minute": 0,
+  "second": 2,
+  "type": {
+   "id": 17,
+   "name": "Pressure"
+  },
+  "possession": 2,
+  "possession_team": {
+   "id": 785,
+   "name": "Croatia"
+  },
+  "play_pattern": {
+   "id": 9,
+   "name": "From Kick Off"
+  },
+  "team": {
+   "id": 771,
+   "name": "France"
+  },
+  "player": {
+   "id": 3604,
+   "name": "Olivier Giroud"
+  },
+  "position": {
+   "id": 24,
+   "name": "Left Center Forward"
+  },
+  "location": [
+   70.0,
+   32.0
+  ],
+  "duration": 1.0,
+  "related_events": [
+   "99ef3a69-f406-45e7-b32a-2f2f00a082c4",
+   "be4fa841-3347-442b-aa56-c9cb52b9da6b"
+  ]
+ },
+ {
+  "id": "be4fa841-3347-442b-aa56-c9cb52b9da6b",
+  "index": 10,
+  "period": 1,
+  "timestamp": "00:00:03.120",
+  "minute": 0,
+  "second": 3,
+  "type": {
+   "id": 42,
+   "name": "Ball Receipt*"
+  },
+  "possession": 2,
+  "possession_team": {
+   "id": 785,
+   "name": "Croatia"
+  },
+  "play_pattern": {
+   "id": 9,
+   "name": "From Kick Off"
+  },
+  "team": {
+   "id": 785,
+   "name": "Croatia"
+  },
+  "player": {
+   "id": 5463,
+   "name": "Luka Modri\u0107"
+  },
+  "position": {
+   "id": 13,
+   "name": "Right Center Midfield"
+  },
+  "location": [
+   44.0,
+   51.0
+  ],
+  "under_pressure": true,
+  "related_events": [
+   "c6cb8b15-75bf-4fbc-b6ab-bc21b7836f92",
+   "d304b712-3d28-4117-aeaf-11c15a36587c"
+  ]
+ },
+ {
+  "id": "99ef3a69-f406-45e7-b32a-2f2f00a082c4",
+  "index": 11,
+  "period": 1,
+  "timestamp": "00:00:03.120",
+  "minute": 0,
+  "second": 3,
+  "type": {
+   "id": 43,
+   "name": "Carry"
+  },
+  "possession": 2,
+  "possession_team": {
+   "id": 785,
+   "name": "Croatia"
+  },
+  "play_pattern": {
+   "id": 9,
+   "name": "From Kick Off"
+  },
+  "team": {
+   "id": 785,
+   "name": "Croatia"
+  },
+  "player": {
+   "id": 5463,
+   "name": "Luka Modri\u0107"
+  },
+  "position": {
+   "id": 13,
+   "name": "Right Center Midfield"
+  },
+  "location": [
+   44.0,
+   51.0
+  ],
+  "duration": 0.827,
+  "under_pressure": true,
+  "related_events": [
+   "a29c5a6c-6b85-409e-a43b-03f2d6bd3bf2",
+   "be4fa841-3347-442b-aa56-c9cb52b9da6b",
+   "c6cb8b15-75bf-4fbc-b6ab-bc21b7836f92"
+  ],
+  "carry": {
+   "end_location": [
+    43.0,
+    56.0
+   ]
+  }
+ },
+ {
+  "id": "a29c5a6c-6b85-409e-a43b-03f2d6bd3bf2",
+  "index": 12,
+  "period": 1,
+  "timestamp": "00:00:03.947",
+  "minute": 0,
+  "second": 3,
+  "type": {
+   "id": 30,
+   "name": "Pass"
+  },
+  "possession": 2,
+  "possession_team": {
+   "id": 785,
+   "name": "Croatia"
+  },
+  "play_pattern": {
+   "id": 9,
+   "name": "From Kick Off"
+  },
+  "team": {
+   "id": 785,
+   "name": "Croatia"
+  },
+  "player": {
+   "id": 5463,
+   "name": "Luka Modri\u0107"
+  },
+  "position": {
+   "id": 13,
+   "name": "Right Center Midfield"
+  },
+  "location": [
+   43.0,
+   56.0
+  ],
+  "duration": 1.253,
+  "related_events": [
+   "c1a01f09-fa7b-4f88-9f94-4fb3753f68c0"
+  ],
+  "pass": {
+   "recipient": {
+    "id": 5461,
+    "name": "\u0160ime Vrsaljko"
+   },
+   "length": 23.021729,
+   "angle": 1.6142472,
+   "height": {
+    "id": 1,
+    "name": "Ground Pass"
+   },
+   "end_location": [
+    42.0,
+    79.0
+   ],
+   "body_part": {
+    "id": 40,
+    "name": "Right Foot"
+   }
+  }
+ },
+ {
+  "id": "c1a01f09-fa7b-4f88-9f94-4fb3753f68c0",
+  "index": 13,
+  "period": 1,
+  "timestamp": "00:00:05.200",
+  "minute": 0,
+  "second": 5,
+  "type": {
+   "id": 42,
+   "name": "Ball Receipt*"
+  },
+  "possession": 2,
+  "possession_team": {
+   "id": 785,
+   "name": "Croatia"
+  },
+  "play_pattern": {
+   "id": 9,
+   "name": "From Kick Off"
+  },
+  "team": {
+   "id": 785,
+   "name": "Croatia"
+  },
+  "player": {
+   "id": 5461,
+   "name": "\u0160ime Vrsaljko"
+  },
+  "position": {
+   "id": 2,
+   "name": "Right Back"
+  },
+  "location": [
+   42.0,
+   79.0
+  ],
+  "related_events": [
+   "a29c5a6c-6b85-409e-a43b-03f2d6bd3bf2"
+  ]
+ },
+ {
+  "id": "8dc09109-c1d4-45f2-8dd1-46ec88bbe263",
+  "index": 14,
+  "period": 1,
+  "timestamp": "00:00:05.200",
+  "minute": 0,
+  "second": 5,
+  "type": {
+   "id": 43,
+   "name": "Carry"
+  },
+  "possession": 2,
+  "possession_team": {
+   "id": 785,
+   "name": "Croatia"
+  },
+  "play_pattern": {
+   "id": 9,
+   "name": "From Kick Off"
+  },
+  "team": {
+   "id": 785,
+   "name": "Croatia"
+  },
+  "player": {
+   "id": 5461,
+   "name": "\u0160ime Vrsaljko"
+  },
+  "position": {
+   "id": 2,
+   "name": "Right Back"
+  },
+  "location": [
+   42.0,
+   79.0
+  ],
+  "duration": 1.04,
+  "under_pressure": true,
+  "related_events": [
+   "33f3ffd6-a353-437c-b21d-7cd2bcdf2adf",
+   "c1a01f09-fa7b-4f88-9f94-4fb3753f68c0",
+   "f763b318-a8a2-407f-a6c5-6b5fa9de3989"
+  ],
+  "carry": {
+   "end_location": [
+    38.0,
+    78.0
+   ]
+  }
+ },
+ {
+  "id": "33f3ffd6-a353-437c-b21d-7cd2bcdf2adf",
+  "index": 15,
+  "period": 1,
+  "timestamp": "00:00:05.347",
+  "minute": 0,
+  "second": 5,
+  "type": {
+   "id": 17,
+   "name": "Pressure"
+  },
+  "possession": 2,
+  "possession_team": {
+   "id": 785,
+   "name": "Croatia"
+  },
+  "play_pattern": {
+   "id": 9,
+   "name": "From Kick Off"
+  },
+  "team": {
+   "id": 771,
+   "name": "France"
+  },
+  "player": {
+   "id": 4375,
+   "name": "Blaise Matuidi"
+  },
+  "position": {
+   "id": 16,
+   "name": "Left Midfield"
+  },
+  "location": [
+   74.0,
+   4.0
+  ],
+  "duration": 0.973,
+  "related_events": [
+   "8dc09109-c1d4-45f2-8dd1-46ec88bbe263",
+   "f763b318-a8a2-407f-a6c5-6b5fa9de3989"
+  ]
+ },
+ {
+  "id": "f763b318-a8a2-407f-a6c5-6b5fa9de3989",
+  "index": 16,
+  "period": 1,
+  "timestamp": "00:00:06.240",
+  "minute": 0,
+  "second": 6,
+  "type": {
+   "id": 30,
+   "name": "Pass"
+  },
+  "possession": 2,
+  "possession_team": {
+   "id": 785,
+   "name": "Croatia"
+  },
+  "play_pattern": {
+   "id": 9,
+   "name": "From Kick Off"
+  },
+  "team": {
+   "id": 785,
+   "name": "Croatia"
+  },
+  "player": {
+   "id": 5461,
+   "name": "\u0160ime Vrsaljko"
+  },
+  "position": {
+   "id": 2,
+   "name": "Right Back"
+  },
+  "location": [
+   38.0,
+   78.0
+  ],
+  "duration": 2.667,
+  "under_pressure": true,
+  "related_events": [
+   "33f3ffd6-a353-437c-b21d-7cd2bcdf2adf",
+   "ec4dd78b-8aa7-4c7e-8254-41655ab65aae"
+  ],
+  "pass": {
+   "recipient": {
+    "id": 3444,
+    "name": "Danijel Suba\u0161i\u0107"
+   },
+   "length": 40.311287,
+   "angle": -2.3386524,
+   "height": {
+    "id": 1,
+    "name": "Ground Pass"
+   },
+   "end_location": [
+    10.0,
+    49.0
+   ],
+   "body_part": {
+    "id": 40,
+    "name": "Right Foot"
+   }
+  }
+ },
+ {
+  "id": "09a7f0f6-b31c-4978-8e73-d022ce2b1c7d",
+  "index": 17,
+  "period": 1,
+  "timestamp": "00:00:07.320",
+  "minute": 0,
+  "second": 7,
+  "type": {
+   "id": 17,
+   "name": "Pressure"
+  },
+  "possession": 2,
+  "possession_team": {
+   "id": 785,
+   "name": "Croatia"
+  },
+  "play_pattern": {
+   "id": 9,
+   "name": "From Kick Off"
+  },
+  "team": {
+   "id": 771,
+   "name": "France"
+  },
+  "player": {
+   "id": 3604,
+   "name": "Olivier Giroud"
+  },
+  "position": {
+   "id": 24,
+   "name": "Left Center Forward"
+  },
+  "location": [
+   92.0,
+   18.0
+  ],
+  "duration": 1.16
+ },
+ {
+  "id": "ec4dd78b-8aa7-4c7e-8254-41655ab65aae",
+  "index": 18,
+  "period": 1,
+  "timestamp": "00:00:08.907",
+  "minute": 0,
+  "second": 8,
+  "type": {
+   "id": 42,
+   "name": "Ball Receipt*"
+  },
+  "possession": 2,
+  "possession_team": {
+   "id": 785,
+   "name": "Croatia"
+  },
+  "play_pattern": {
+   "id": 9,
+   "name": "From Kick Off"
+  },
+  "team": {
+   "id": 785,
+   "name": "Croatia"
+  },
+  "player": {
+   "id": 3444,
+   "name": "Danijel Suba\u0161i\u0107"
+  },
+  "position": {
+   "id": 1,
+   "name": "Goalkeeper"
+  },
+  "location": [
+   10.0,
+   49.0
+  ],
+  "related_events": [
+   "f763b318-a8a2-407f-a6c5-6b5fa9de3989"
+  ]
+ },
+ {
+  "id": "57cda114-5704-4ef3-99b5-776245afbd68",
+  "index": 19,
+  "period": 1,
+  "timestamp": "00:00:08.907",
+  "minute": 0,
+  "second": 8,
+  "type": {
+   "id": 43,
+   "name": "Carry"
+  },
+  "possession": 2,
+  "possession_team": {
+   "id": 785,
+   "name": "Croatia"
+  },
+  "play_pattern": {
+   "id": 9,
+   "name": "From Kick Off"
+  },
+  "team": {
+   "id": 785,
+   "name": "Croatia"
+  },
+  "player": {
+   "id": 3444,
+   "name": "Danijel Suba\u0161i\u0107"
+  },
+  "position": {
+   "id": 1,
+   "name": "Goalkeeper"
+  },
+  "location": [
+   10.0,
+   49.0
+  ],
+  "duration": 0.493,
+  "under_pressure": true,
+  "related_events": [
+   "a9394a34-2ebd-450a-ac1e-519e2f666f5a",
+   "e4db1861-af61-4f2b-a8d3-cc117b30845c",
+   "ec4dd78b-8aa7-4c7e-8254-41655ab65aae"
+  ],
+  "carry": {
+   "end_location": [
+    9.0,
+    49.0
+   ]
+  }
+ },
+ {
+  "id": "a9394a34-2ebd-450a-ac1e-519e2f666f5a",
+  "index": 20,
+  "period": 1,
+  "timestamp": "00:00:08.907",
+  "minute": 0,
+  "second": 8,
+  "type": {
+   "id": 17,
+   "name": "Pressure"
+  },
+  "possession": 2,
+  "possession_team": {
+   "id": 785,
+   "name": "Croatia"
+  },
+  "play_pattern": {
+   "id": 9,
+   "name": "From Kick Off"
+  },
+  "team": {
+   "id": 771,
+   "name": "France"
+  },
+  "player": {
+   "id": 3604,
+   "name": "Olivier Giroud"
+  },
+  "position": {
+   "id": 24,
+   "name": "Left Center Forward"
+  },
+  "location": [
+   102.0,
+   30.0
+  ],
+  "duration": 0.493,
+  "related_events": [
+   "57cda114-5704-4ef3-99b5-776245afbd68",
+   "e4db1861-af61-4f2b-a8d3-cc117b30845c"
+  ]
+ },
+ {
+  "id": "e4db1861-af61-4f2b-a8d3-cc117b30845c",
+  "index": 21,
+  "period": 1,
+  "timestamp": "00:00:09.400",
+  "minute": 0,
+  "second": 9,
+  "type": {
+   "id": 30,
+   "name": "Pass"
+  },
+  "possession": 2,
+  "possession_team": {
+   "id": 785,
+   "name": "Croatia"
+  },
+  "play_pattern": {
+   "id": 9,
+   "name": "From Kick Off"
+  },
+  "team": {
+   "id": 785,
+   "name": "Croatia"
+  },
+  "player": {
+   "id": 3444,
+   "name": "Danijel Suba\u0161i\u0107"
+  },
+  "position": {
+   "id": 1,
+   "name": "Goalkeeper"
+  },
+  "location": [
+   9.0,
+   49.0
+  ],
+  "duration": 4.227,
+  "under_pressure": true,
+  "related_events": [
+   "015b8778-b534-47a1-bb7c-860894363dea",
+   "83a11f79-5aa5-4bcc-a932-e7e6f7233e52",
+   "a9394a34-2ebd-450a-ac1e-519e2f666f5a"
+  ],
+  "pass": {
+   "recipient": {
+    "id": 5472,
+    "name": "Mario Mand\u017euki\u0107"
+   },
+   "length": 64.12488,
+   "angle": -0.06241881,
+   "height": {
+    "id": 3,
+    "name": "High Pass"
+   },
+   "end_location": [
+    73.0,
+    45.0
+   ],
+   "outcome": {
+    "id": 9,
+    "name": "Incomplete"
+   },
+   "body_part": {
+    "id": 40,
+    "name": "Right Foot"
+   }
+  }
+ },
+ {
+  "id": "83a11f79-5aa5-4bcc-a932-e7e6f7233e52",
+  "index": 22,
+  "period": 1,
+  "timestamp": "00:00:13.627",
+  "minute": 0,
+  "second": 13,
+  "type": {
+   "id": 42,
+   "name": "Ball Receipt*"
+  },
+  "possession": 2,
+  "possession_team": {
+   "id": 785,
+   "name": "Croatia"
+  },
+  "play_pattern": {
+   "id": 9,
+   "name": "From Kick Off"
+  },
+  "team": {
+   "id": 785,
+   "name": "Croatia"
+  },
+  "player": {
+   "id": 5472,
+   "name": "Mario Mand\u017euki\u0107"
+  },
+  "position": {
+   "id": 23,
+   "name": "Center Forward"
+  },
+  "location": [
+   72.0,
+   41.0
+  ],
+  "related_events": [
+   "e4db1861-af61-4f2b-a8d3-cc117b30845c"
+  ],
+  "ball_receipt": {
+   "outcome": {
+    "id": 9,
+    "name": "Incomplete"
+   }
+  }
+ },
+ {
+  "id": "3b5fcdd1-837e-47da-9c78-814172ceaf11",
+  "index": 23,
+  "period": 1,
+  "timestamp": "00:00:13.627",
+  "minute": 0,
+  "second": 13,
+  "type": {
+   "id": 4,
+   "name": "Duel"
+  },
+  "possession": 2,
+  "possession_team": {
+   "id": 785,
+   "name": "Croatia"
+  },
+  "play_pattern": {
+   "id": 9,
+   "name": "From Kick Off"
+  },
+  "team": {
+   "id": 785,
+   "name": "Croatia"
+  },
+  "player": {
+   "id": 5472,
+   "name": "Mario Mand\u017euki\u0107"
+  },
+  "position": {
+   "id": 23,
+   "name": "Center Forward"
+  },
+  "location": [
+   73.0,
+   31.0
+  ],
+  "duration": 0.0,
+  "under_pressure": true,
+  "related_events": [
+   "015b8778-b534-47a1-bb7c-860894363dea"
+  ],
+  "duel": {
+   "type": {
+    "id": 10,
+    "name": "Aerial Lost"
+   }
+  }
+ },
+ {
+  "id": "015b8778-b534-47a1-bb7c-860894363dea",
+  "index": 24,
+  "period": 1,
+  "timestamp": "00:00:13.627",
+  "minute": 0,
+  "second": 13,
+  "type": {
+   "id": 30,
+   "name": "Pass"
+  },
+  "possession": 2,
+  "possession_team": {
+   "id": 785,
+   "name": "Croatia"
+  },
+  "play_pattern": {
+   "id": 9,
+   "name": "From Kick Off"
+  },
+  "team": {
+   "id": 771,
+   "name": "France"
+  },
+  "player": {
+   "id": 5485,
+   "name": "Rapha\u00ebl Varane"
+  },
+  "position": {
+   "id": 3,
+   "name": "Right Center Back"
+  },
+  "location": [
+   48.0,
+   50.0
+  ],
+  "duration": 3.053,
+  "under_pressure": true,
+  "related_events": [
+   "3b5fcdd1-837e-47da-9c78-814172ceaf11",
+   "678cea4b-de19-490c-a0d6-41f3eeb04ae1",
+   "e4db1861-af61-4f2b-a8d3-cc117b30845c"
+  ],
+  "pass": {
+   "length": 10.0,
+   "angle": 1.5707964,
+   "height": {
+    "id": 3,
+    "name": "High Pass"
+   },
+   "end_location": [
+    48.0,
+    60.0
+   ],
+   "type": {
+    "id": 66,
+    "name": "Recovery"
+   },
+   "outcome": {
+    "id": 9,
+    "name": "Incomplete"
+   },
+   "aerial_won": true
+  }
+ },
+ {
+  "id": "678cea4b-de19-490c-a0d6-41f3eeb04ae1",
+  "index": 25,
+  "period": 1,
+  "timestamp": "00:00:16.680",
+  "minute": 0,
+  "second": 16,
+  "type": {
+   "id": 30,
+   "name": "Pass"
+  },
+  "possession": 2,
+  "possession_team": {
+   "id": 785,
+   "name": "Croatia"
+  },
+  "play_pattern": {
+   "id": 9,
+   "name": "From Kick Off"
+  },
+  "team": {
+   "id": 785,
+   "name": "Croatia"
+  },
+  "player": {
+   "id": 5474,
+   "name": "Ivan Peri\u0161i\u0107"
+  },
+  "position": {
+   "id": 21,
+   "name": "Left Wing"
+  },
+  "location": [
+   73.0,
+   21.0
+  ],
+  "duration": 1.026,
+  "related_events": [
+   "015b8778-b534-47a1-bb7c-860894363dea",
+   "d798833f-53fc-4bc3-95cb-fa39df942afc"
+  ],
+  "pass": {
+   "recipient": {
+    "id": 5470,
+    "name": "Ivan Rakiti\u0107"
+   },
+   "length": 12.649111,
+   "angle": 2.819842,
+   "height": {
+    "id": 1,
+    "name": "Ground Pass"
+   },
+   "end_location": [
+    61.0,
+    25.0
+   ],
+   "type": {
+    "id": 66,
+    "name": "Recovery"
+   },
+   "body_part": {
+    "id": 40,
+    "name": "Right Foot"
+   }
+  }
+ },
+ {
+  "id": "d798833f-53fc-4bc3-95cb-fa39df942afc",
+  "index": 26,
+  "period": 1,
+  "timestamp": "00:00:17.706",
+  "minute": 0,
+  "second": 17,
+  "type": {
+   "id": 42,
+   "name": "Ball Receipt*"
+  },
+  "possession": 2,
+  "possession_team": {
+   "id": 785,
+   "name": "Croatia"
+  },
+  "play_pattern": {
+   "id": 9,
+   "name": "From Kick Off"
+  },
+  "team": {
+   "id": 785,
+   "name": "Croatia"
+  },
+  "player": {
+   "id": 5470,
+   "name": "Ivan Rakiti\u0107"
+  },
+  "position": {
+   "id": 15,
+   "name": "Left Center Midfield"
+  },
+  "location": [
+   61.0,
+   25.0
+  ],
+  "related_events": [
+   "678cea4b-de19-490c-a0d6-41f3eeb04ae1"
+  ]
+ },
+ {
+  "id": "d0a15842-3f60-46c0-8022-c58fd96066fc",
+  "index": 27,
+  "period": 1,
+  "timestamp": "00:00:17.706",
+  "minute": 0,
+  "second": 17,
+  "type": {
+   "id": 43,
+   "name": "Carry"
+  },
+  "possession": 2,
+  "possession_team": {
+   "id": 785,
+   "name": "Croatia"
+  },
+  "play_pattern": {
+   "id": 9,
+   "name": "From Kick Off"
+  },
+  "team": {
+   "id": 785,
+   "name": "Croatia"
+  },
+  "player": {
+   "id": 5470,
+   "name": "Ivan Rakiti\u0107"
+  },
+  "position": {
+   "id": 15,
+   "name": "Left Center Midfield"
+  },
+  "location": [
+   61.0,
+   25.0
+  ],
+  "duration": 1.654,
+  "under_pressure": true,
+  "related_events": [
+   "1387efe1-1d4f-4b03-a2f2-b9f6cabf7ee3",
+   "21f16dd7-e983-49fc-b9a6-c2bfc5386103",
+   "d798833f-53fc-4bc3-95cb-fa39df942afc"
+  ],
+  "carry": {
+   "end_location": [
+    60.0,
+    18.0
+   ]
+  }
+ },
+ {
+  "id": "1387efe1-1d4f-4b03-a2f2-b9f6cabf7ee3",
+  "index": 28,
+  "period": 1,
+  "timestamp": "00:00:18.000",
+  "minute": 0,
+  "second": 18,
+  "type": {
+   "id": 17,
+   "name": "Pressure"
+  },
+  "possession": 2,
+  "possession_team": {
+   "id": 785,
+   "name": "Croatia"
+  },
+  "play_pattern": {
+   "id": 9,
+   "name": "From Kick Off"
+  },
+  "team": {
+   "id": 771,
+   "name": "France"
+  },
+  "player": {
+   "id": 3604,
+   "name": "Olivier Giroud"
+  },
+  "position": {
+   "id": 24,
+   "name": "Left Center Forward"
+  },
+  "location": [
+   54.0,
+   56.0
+  ],
+  "duration": 1.386,
+  "related_events": [
+   "21f16dd7-e983-49fc-b9a6-c2bfc5386103",
+   "d0a15842-3f60-46c0-8022-c58fd96066fc"
+  ]
+ },
+ {
+  "id": "21f16dd7-e983-49fc-b9a6-c2bfc5386103",
+  "index": 29,
+  "period": 1,
+  "timestamp": "00:00:19.360",
+  "minute": 0,
+  "second": 19,
+  "type": {
+   "id": 30,
+   "name": "Pass"
+  },
+  "possession": 2,
+  "possession_team": {
+   "id": 785,
+   "name": "Croatia"
+  },
+  "play_pattern": {
+   "id": 9,
+   "name": "From Kick Off"
+  },
+  "team": {
+   "id": 785,
+   "name": "Croatia"
+  },
+  "player": {
+   "id": 5470,
+   "name": "Ivan Rakiti\u0107"
+  },
+  "position": {
+   "id": 15,
+   "name": "Left Center Midfield"
+  },
+  "location": [
+   60.0,
+   18.0
+  ],
+  "duration": 0.759,
+  "under_pressure": true,
+  "related_events": [
+   "1387efe1-1d4f-4b03-a2f2-b9f6cabf7ee3",
+   "21ac7c18-9d08-4b59-8611-fb31b9656a64"
+  ],
+  "pass": {
+   "recipient": {
+    "id": 5457,
+    "name": "Ivan Strini\u0107"
+   },
+   "length": 17.888544,
+   "angle": -1.1071488,
+   "height": {
+    "id": 1,
+    "name": "Ground Pass"
+   },
+   "end_location": [
+    68.0,
+    2.0
+   ],
+   "body_part": {
+    "id": 38,
+    "name": "Left Foot"
+   }
+  }
+ },
+ {
+  "id": "21ac7c18-9d08-4b59-8611-fb31b9656a64",
+  "index": 30,
+  "period": 1,
+  "timestamp": "00:00:20.119",
+  "minute": 0,
+  "second": 20,
+  "type": {
+   "id": 42,
+   "name": "Ball Receipt*"
+  },
+  "possession": 2,
+  "possession_team": {
+   "id": 785,
+   "name": "Croatia"
+  },
+  "play_pattern": {
+   "id": 9,
+   "name": "From Kick Off"
+  },
+  "team": {
+   "id": 785,
+   "name": "Croatia"
+  },
+  "player": {
+   "id": 5457,
+   "name": "Ivan Strini\u0107"
+  },
+  "position": {
+   "id": 6,
+   "name": "Left Back"
+  },
+  "location": [
+   68.0,
+   2.0
+  ],
+  "related_events": [
+   "21f16dd7-e983-49fc-b9a6-c2bfc5386103"
+  ]
+ },
+ {
+  "id": "6048ca8a-7ca6-4f2d-be0b-d08043580dce",
+  "index": 31,
+  "period": 1,
+  "timestamp": "00:00:20.119",
+  "minute": 0,
+  "second": 20,
+  "type": {
+   "id": 43,
+   "name": "Carry"
+  },
+  "possession": 2,
+  "possession_team": {
+   "id": 785,
+   "name": "Croatia"
+  },
+  "play_pattern": {
+   "id": 9,
+   "name": "From Kick Off"
+  },
+  "team": {
+   "id": 785,
+   "name": "Croatia"
+  },
+  "player": {
+   "id": 5457,
+   "name": "Ivan Strini\u0107"
+  },
+  "position": {
+   "id": 6,
+   "name": "Left Back"
+  },
+  "location": [
+   68.0,
+   2.0
+  ],
+  "duration": 0.001,
+  "related_events": [
+   "17c4c303-d690-4620-b791-dbc204a51377",
+   "21ac7c18-9d08-4b59-8611-fb31b9656a64"
+  ],
+  "carry": {
+   "end_location": [
+    69.0,
+    2.0
+   ]
+  }
+ },
+ {
+  "id": "17c4c303-d690-4620-b791-dbc204a51377",
+  "index": 32,
+  "period": 1,
+  "timestamp": "00:00:20.120",
+  "minute": 0,
+  "second": 20,
+  "type": {
+   "id": 30,
+   "name": "Pass"
+  },
+  "possession": 2,
+  "possession_team": {
+   "id": 785,
+   "name": "Croatia"
+  },
+  "play_pattern": {
+   "id": 9,
+   "name": "From Kick Off"
+  },
+  "team": {
+   "id": 785,
+   "name": "Croatia"
+  },
+  "player": {
+   "id": 5457,
+   "name": "Ivan Strini\u0107"
+  },
+  "position": {
+   "id": 6,
+   "name": "Left Back"
+  },
+  "location": [
+   69.0,
+   2.0
+  ],
+  "duration": 1.96,
+  "related_events": [
+   "cd95dd70-f43b-4d9c-a8e6-6e6781491822"
+  ],
+  "pass": {
+   "recipient": {
+    "id": 5469,
+    "name": "Marcelo Brozovi\u0107"
+   },
+   "length": 25.317978,
+   "angle": 1.7294515,
+   "height": {
+    "id": 1,
+    "name": "Ground Pass"
+   },
+   "end_location": [
+    65.0,
+    27.0
+   ],
+   "body_part": {
+    "id": 40,
+    "name": "Right Foot"
+   }
+  }
+ },
+ {
+  "id": "cd95dd70-f43b-4d9c-a8e6-6e6781491822",
+  "index": 33,
+  "period": 1,
+  "timestamp": "00:00:22.080",
+  "minute": 0,
+  "second": 22,
+  "type": {
+   "id": 42,
+   "name": "Ball Receipt*"
+  },
+  "possession": 2,
+  "possession_team": {
+   "id": 785,
+   "name": "Croatia"
+  },
+  "play_pattern": {
+   "id": 9,
+   "name": "From Kick Off"
+  },
+  "team": {
+   "id": 785,
+   "name": "Croatia"
+  },
+  "player": {
+   "id": 5469,
+   "name": "Marcelo Brozovi\u0107"
+  },
+  "position": {
+   "id": 10,
+   "name": "Center Defensive Midfield"
+  },
+  "location": [
+   65.0,
+   27.0
+  ],
+  "related_events": [
+   "17c4c303-d690-4620-b791-dbc204a51377"
+  ]
+ },
+ {
+  "id": "c42518d8-b1f3-43f5-8866-74090dce0c0f",
+  "index": 34,
+  "period": 1,
+  "timestamp": "00:00:22.080",
+  "minute": 0,
+  "second": 22,
+  "type": {
+   "id": 43,
+   "name": "Carry"
+  },
+  "possession": 2,
+  "possession_team": {
+   "id": 785,
+   "name": "Croatia"
+  },
+  "play_pattern": {
+   "id": 9,
+   "name": "From Kick Off"
+  },
+  "team": {
+   "id": 785,
+   "name": "Croatia"
+  },
+  "player": {
+   "id": 5469,
+   "name": "Marcelo Brozovi\u0107"
+  },
+  "position": {
+   "id": 10,
+   "name": "Center Defensive Midfield"
+  },
+  "location": [
+   65.0,
+   27.0
+  ],
+  "duration": 1.467,
+  "under_pressure": true,
+  "related_events": [
+   "32f44222-b47e-47d0-902e-93a9c3419326",
+   "cd95dd70-f43b-4d9c-a8e6-6e6781491822",
+   "dbe9627a-6772-4de3-b5ee-1eac21458fe5"
+  ],
+  "carry": {
+   "end_location": [
+    69.0,
+    24.0
+   ]
+  }
+ },
+ {
+  "id": "dbe9627a-6772-4de3-b5ee-1eac21458fe5",
+  "index": 35,
+  "period": 1,
+  "timestamp": "00:00:22.840",
+  "minute": 0,
+  "second": 22,
+  "type": {
+   "id": 17,
+   "name": "Pressure"
+  },
+  "possession": 2,
+  "possession_team": {
+   "id": 785,
+   "name": "Croatia"
+  },
+  "play_pattern": {
+   "id": 9,
+   "name": "From Kick Off"
+  },
+  "team": {
+   "id": 771,
+   "name": "France"
+  },
+  "player": {
+   "id": 20004,
+   "name": "Paul Pogba"
+  },
+  "position": {
+   "id": 9,
+   "name": "Right Defensive Midfield"
+  },
+  "location": [
+   55.0,
+   70.0
+  ],
+  "duration": 0.8,
+  "related_events": [
+   "32f44222-b47e-47d0-902e-93a9c3419326",
+   "c42518d8-b1f3-43f5-8866-74090dce0c0f"
+  ]
+ },
+ {
+  "id": "32f44222-b47e-47d0-902e-93a9c3419326",
+  "index": 36,
+  "period": 1,
+  "timestamp": "00:00:23.547",
+  "minute": 0,
+  "second": 23,
+  "type": {
+   "id": 30,
+   "name": "Pass"
+  },
+  "possession": 2,
+  "possession_team": {
+   "id": 785,
+   "name": "Croatia"
+  },
+  "play_pattern": {
+   "id": 9,
+   "name": "From Kick Off"
+  },
+  "team": {
+   "id": 785,
+   "name": "Croatia"
+  },
+  "player": {
+   "id": 5469,
+   "name": "Marcelo Brozovi\u0107"
+  },
+  "position": {
+   "id": 10,
+   "name": "Center Defensive Midfield"
+  },
+  "location": [
+   69.0,
+   24.0
+  ],
+  "duration": 0.613,
+  "under_pressure": true,
+  "related_events": [
+   "184b8e0e-d80d-49ad-b1a1-c441f70442a0",
+   "dbe9627a-6772-4de3-b5ee-1eac21458fe5"
+  ],
+  "pass": {
+   "recipient": {
+    "id": 5474,
+    "name": "Ivan Peri\u0161i\u0107"
+   },
+   "length": 3.6055512,
+   "angle": -2.55359,
+   "height": {
+    "id": 1,
+    "name": "Ground Pass"
+   },
+   "end_location": [
+    66.0,
+    22.0
+   ],
+   "body_part": {
+    "id": 40,
+    "name": "Right Foot"
+   }
+  }
+ },
+ {
+  "id": "184b8e0e-d80d-49ad-b1a1-c441f70442a0",
+  "index": 37,
+  "period": 1,
+  "timestamp": "00:00:24.160",
+  "minute": 0,
+  "second": 24,
+  "type": {
+   "id": 42,
+   "name": "Ball Receipt*"
+  },
+  "possession": 2,
+  "possession_team": {
+   "id": 785,
+   "name": "Croatia"
+  },
+  "play_pattern": {
+   "id": 9,
+   "name": "From Kick Off"
+  },
+  "team": {
+   "id": 785,
+   "name": "Croatia"
+  },
+  "player": {
+   "id": 5474,
+   "name": "Ivan Peri\u0161i\u0107"
+  },
+  "position": {
+   "id": 21,
+   "name": "Left Wing"
+  },
+  "location": [
+   66.0,
+   22.0
+  ],
+  "related_events": [
+   "32f44222-b47e-47d0-902e-93a9c3419326"
+  ]
+ },
+ {
+  "id": "08845785-75f6-4608-bcd3-8ffc909f378c",
+  "index": 38,
+  "period": 1,
+  "timestamp": "00:00:24.160",
+  "minute": 0,
+  "second": 24,
+  "type": {
+   "id": 43,
+   "name": "Carry"
+  },
+  "possession": 2,
+  "possession_team": {
+   "id": 785,
+   "name": "Croatia"
+  },
+  "play_pattern": {
+   "id": 9,
+   "name": "From Kick Off"
+  },
+  "team": {
+   "id": 785,
+   "name": "Croatia"
+  },
+  "player": {
+   "id": 5474,
+   "name": "Ivan Peri\u0161i\u0107"
+  },
+  "position": {
+   "id": 21,
+   "name": "Left Wing"
+  },
+  "location": [
+   66.0,
+   22.0
+  ],
+  "duration": 0.947,
+  "related_events": [
+   "184b8e0e-d80d-49ad-b1a1-c441f70442a0",
+   "7694da9f-8308-41a3-b205-0a7beff633c0"
+  ],
+  "carry": {
+   "end_location": [
+    63.0,
+    21.0
+   ]
+  }
+ },
+ {
+  "id": "7694da9f-8308-41a3-b205-0a7beff633c0",
+  "index": 39,
+  "period": 1,
+  "timestamp": "00:00:25.107",
+  "minute": 0,
+  "second": 25,
+  "type": {
+   "id": 30,
+   "name": "Pass"
+  },
+  "possession": 2,
+  "possession_team": {
+   "id": 785,
+   "name": "Croatia"
+  },
+  "play_pattern": {
+   "id": 9,
+   "name": "From Kick Off"
+  },
+  "team": {
+   "id": 785,
+   "name": "Croatia"
+  },
+  "player": {
+   "id": 5474,
+   "name": "Ivan Peri\u0161i\u0107"
+  },
+  "position": {
+   "id": 21,
+   "name": "Left Wing"
+  },
+  "location": [
+   63.0,
+   21.0
+  ],
+  "duration": 1.133,
+  "related_events": [
+   "cb5e79d0-9508-4106-b02f-37d817591dc8"
+  ],
+  "pass": {
+   "recipient": {
+    "id": 5468,
+    "name": "Domagoj Vida"
+   },
+   "length": 12.369317,
+   "angle": 2.896614,
+   "height": {
+    "id": 1,
+    "name": "Ground Pass"
+   },
+   "end_location": [
+    51.0,
+    24.0
+   ],
+   "body_part": {
+    "id": 38,
+    "name": "Left Foot"
+   }
+  }
+ },
+ {
+  "id": "cb5e79d0-9508-4106-b02f-37d817591dc8",
+  "index": 40,
+  "period": 1,
+  "timestamp": "00:00:26.240",
+  "minute": 0,
+  "second": 26,
+  "type": {
+   "id": 42,
+   "name": "Ball Receipt*"
+  },
+  "possession": 2,
+  "possession_team": {
+   "id": 785,
+   "name": "Croatia"
+  },
+  "play_pattern": {
+   "id": 9,
+   "name": "From Kick Off"
+  },
+  "team": {
+   "id": 785,
+   "name": "Croatia"
+  },
+  "player": {
+   "id": 5468,
+   "name": "Domagoj Vida"
+  },
+  "position": {
+   "id": 5,
+   "name": "Left Center Back"
+  },
+  "location": [
+   51.0,
+   24.0
+  ],
+  "related_events": [
+   "7694da9f-8308-41a3-b205-0a7beff633c0"
+  ]
+ },
+ {
+  "id": "b311d6e2-8b30-418e-8fac-eed521886397",
+  "index": 41,
+  "period": 1,
+  "timestamp": "00:00:26.240",
+  "minute": 0,
+  "second": 26,
+  "type": {
+   "id": 43,
+   "name": "Carry"
+  },
+  "possession": 2,
+  "possession_team": {
+   "id": 785,
+   "name": "Croatia"
+  },
+  "play_pattern": {
+   "id": 9,
+   "name": "From Kick Off"
+  },
+  "team": {
+   "id": 785,
+   "name": "Croatia"
+  },
+  "player": {
+   "id": 5468,
+   "name": "Domagoj Vida"
+  },
+  "position": {
+   "id": 5,
+   "name": "Left Center Back"
+  },
+  "location": [
+   51.0,
+   24.0
+  ],
+  "duration": 1.027,
+  "related_events": [
+   "3b456c62-4879-43da-b6f4-a6795ee0e4e4",
+   "cb5e79d0-9508-4106-b02f-37d817591dc8"
+  ],
+  "carry": {
+   "end_location": [
+    49.0,
+    30.0
+   ]
+  }
+ },
+ {
+  "id": "3b456c62-4879-43da-b6f4-a6795ee0e4e4",
+  "index": 42,
+  "period": 1,
+  "timestamp": "00:00:27.267",
+  "minute": 0,
+  "second": 27,
+  "type": {
+   "id": 30,
+   "name": "Pass"
+  },
+  "possession": 2,
+  "possession_team": {
+   "id": 785,
+   "name": "Croatia"
+  },
+  "play_pattern": {
+   "id": 9,
+   "name": "From Kick Off"
+  },
+  "team": {
+   "id": 785,
+   "name": "Croatia"
+  },
+  "player": {
+   "id": 5468,
+   "name": "Domagoj Vida"
+  },
+  "position": {
+   "id": 5,
+   "name": "Left Center Back"
+  },
+  "location": [
+   49.0,
+   30.0
+  ],
+  "duration": 0.653,
+  "related_events": [
+   "565a53ab-be8b-43dd-8904-a57d197f6199"
+  ],
+  "pass": {
+   "recipient": {
+    "id": 5463,
+    "name": "Luka Modri\u0107"
+   },
+   "length": 7.615773,
+   "angle": 0.4048918,
+   "height": {
+    "id": 1,
+    "name": "Ground Pass"
+   },
+   "end_location": [
+    56.0,
+    33.0
+   ],
+   "body_part": {
+    "id": 40,
+    "name": "Right Foot"
+   }
+  }
+ },
+ {
+  "id": "565a53ab-be8b-43dd-8904-a57d197f6199",
+  "index": 43,
+  "period": 1,
+  "timestamp": "00:00:27.920",
+  "minute": 0,
+  "second": 27,
+  "type": {
+   "id": 42,
+   "name": "Ball Receipt*"
+  },
+  "possession": 2,
+  "possession_team": {
+   "id": 785,
+   "name": "Croatia"
+  },
+  "play_pattern": {
+   "id": 9,
+   "name": "From Kick Off"
+  },
+  "team": {
+   "id": 785,
+   "name": "Croatia"
+  },
+  "player": {
+   "id": 5463,
+   "name": "Luka Modri\u0107"
+  },
+  "position": {
+   "id": 13,
+   "name": "Right Center Midfield"
+  },
+  "location": [
+   56.0,
+   33.0
+  ],
+  "related_events": [
+   "3b456c62-4879-43da-b6f4-a6795ee0e4e4"
+  ]
+ },
+ {
+  "id": "eda0ab64-82e6-4725-bc60-1f5c78aff4a0",
+  "index": 44,
+  "period": 1,
+  "timestamp": "00:00:27.920",
+  "minute": 0,
+  "second": 27,
+  "type": {
+   "id": 30,
+   "name": "Pass"
+  },
+  "possession": 2,
+  "possession_team": {
+   "id": 785,
+   "name": "Croatia"
+  },
+  "play_pattern": {
+   "id": 9,
+   "name": "From Kick Off"
+  },
+  "team": {
+   "id": 785,
+   "name": "Croatia"
+  },
+  "player": {
+   "id": 5463,
+   "name": "Luka Modri\u0107"
+  },
+  "position": {
+   "id": 13,
+   "name": "Right Center Midfield"
+  },
+  "location": [
+   56.0,
+   33.0
+  ],
+  "duration": 1.08,
+  "related_events": [
+   "b3ac890d-45ee-4449-9821-0c6e3ef300be"
+  ],
+  "pass": {
+   "recipient": {
+    "id": 5468,
+    "name": "Domagoj Vida"
+   },
+   "length": 10.440307,
+   "angle": -2.8501358,
+   "height": {
+    "id": 1,
+    "name": "Ground Pass"
+   },
+   "end_location": [
+    46.0,
+    30.0
+   ],
+   "body_part": {
+    "id": 40,
+    "name": "Right Foot"
+   }
+  }
+ },
+ {
+  "id": "b3ac890d-45ee-4449-9821-0c6e3ef300be",
+  "index": 45,
+  "period": 1,
+  "timestamp": "00:00:29.000",
+  "minute": 0,
+  "second": 29,
+  "type": {
+   "id": 42,
+   "name": "Ball Receipt*"
+  },
+  "possession": 2,
+  "possession_team": {
+   "id": 785,
+   "name": "Croatia"
+  },
+  "play_pattern": {
+   "id": 9,
+   "name": "From Kick Off"
+  },
+  "team": {
+   "id": 785,
+   "name": "Croatia"
+  },
+  "player": {
+   "id": 5468,
+   "name": "Domagoj Vida"
+  },
+  "position": {
+   "id": 5,
+   "name": "Left Center Back"
+  },
+  "location": [
+   46.0,
+   30.0
+  ],
+  "related_events": [
+   "eda0ab64-82e6-4725-bc60-1f5c78aff4a0"
+  ]
+ },
+ {
+  "id": "1829b4ef-98e4-470e-a932-4919140482b8",
+  "index": 46,
+  "period": 1,
+  "timestamp": "00:00:29.000",
+  "minute": 0,
+  "second": 29,
+  "type": {
+   "id": 43,
+   "name": "Carry"
+  },
+  "possession": 2,
+  "possession_team": {
+   "id": 785,
+   "name": "Croatia"
+  },
+  "play_pattern": {
+   "id": 9,
+   "name": "From Kick Off"
+  },
+  "team": {
+   "id": 785,
+   "name": "Croatia"
+  },
+  "player": {
+   "id": 5468,
+   "name": "Domagoj Vida"
+  },
+  "position": {
+   "id": 5,
+   "name": "Left Center Back"
+  },
+  "location": [
+   46.0,
+   30.0
+  ],
+  "duration": 0.427,
+  "related_events": [
+   "98b058ec-9cbd-40da-9e9e-0abef82c0d81",
+   "b3ac890d-45ee-4449-9821-0c6e3ef300be"
+  ],
+  "carry": {
+   "end_location": [
+    48.0,
+    27.0
+   ]
+  }
+ },
+ {
+  "id": "98b058ec-9cbd-40da-9e9e-0abef82c0d81",
+  "index": 47,
+  "period": 1,
+  "timestamp": "00:00:29.427",
+  "minute": 0,
+  "second": 29,
+  "type": {
+   "id": 30,
+   "name": "Pass"
+  },
+  "possession": 2,
+  "possession_team": {
+   "id": 785,
+   "name": "Croatia"
+  },
+  "play_pattern": {
+   "id": 9,
+   "name": "From Kick Off"
+  },
+  "team": {
+   "id": 785,
+   "name": "Croatia"
+  },
+  "player": {
+   "id": 5468,
+   "name": "Domagoj Vida"
+  },
+  "position": {
+   "id": 5,
+   "name": "Left Center Back"
+  },
+  "location": [
+   48.0,
+   27.0
+  ],
+  "duration": 1.213,
+  "related_events": [
+   "12dab7fb-a657-4810-9963-7772972a7ed9"
+  ],
+  "pass": {
+   "recipient": {
+    "id": 5470,
+    "name": "Ivan Rakiti\u0107"
+   },
+   "length": 11.18034,
+   "angle": -1.1071488,
+   "height": {
+    "id": 1,
+    "name": "Ground Pass"
+   },
+   "end_location": [
+    53.0,
+    17.0
+   ],
+   "body_part": {
+    "id": 40,
+    "name": "Right Foot"
+   }
+  }
+ },
+ {
+  "id": "12dab7fb-a657-4810-9963-7772972a7ed9",
+  "index": 48,
+  "period": 1,
+  "timestamp": "00:00:30.640",
+  "minute": 0,
+  "second": 30,
+  "type": {
+   "id": 42,
+   "name": "Ball Receipt*"
+  },
+  "possession": 2,
+  "possession_team": {
+   "id": 785,
+   "name": "Croatia"
+  },
+  "play_pattern": {
+   "id": 9,
+   "name": "From Kick Off"
+  },
+  "team": {
+   "id": 785,
+   "name": "Croatia"
+  },
+  "player": {
+   "id": 5470,
+   "name": "Ivan Rakiti\u0107"
+  },
+  "position": {
+   "id": 15,
+   "name": "Left Center Midfield"
+  },
+  "location": [
+   53.0,
+   17.0
+  ],
+  "related_events": [
+   "98b058ec-9cbd-40da-9e9e-0abef82c0d81"
+  ]
+ },
+ {
+  "id": "710d634a-d808-4fed-a406-558bc30ea736",
+  "index": 49,
+  "period": 1,
+  "timestamp": "00:00:30.640",
+  "minute": 0,
+  "second": 30,
+  "type": {
+   "id": 43,
+   "name": "Carry"
+  },
+  "possession": 2,
+  "possession_team": {
+   "id": 785,
+   "name": "Croatia"
+  },
+  "play_pattern": {
+   "id": 9,
+   "name": "From Kick Off"
+  },
+  "team": {
+   "id": 785,
+   "name": "Croatia"
+  },
+  "player": {
+   "id": 5470,
+   "name": "Ivan Rakiti\u0107"
+  },
+  "position": {
+   "id": 15,
+   "name": "Left Center Midfield"
+  },
+  "location": [
+   53.0,
+   17.0
+  ],
+  "duration": 1.107,
+  "under_pressure": true,
+  "related_events": [
+   "12dab7fb-a657-4810-9963-7772972a7ed9",
+   "7d223a8f-5672-4bc4-b54a-50816c3389a2",
+   "b96a2472-2f9f-4f6e-85c7-4dd4a405331e"
+  ],
+  "carry": {
+   "end_location": [
+    47.0,
+    17.0
+   ]
+  }
+ },
+ {
+  "id": "7d223a8f-5672-4bc4-b54a-50816c3389a2",
+  "index": 50,
+  "period": 1,
+  "timestamp": "00:00:30.960",
+  "minute": 0,
+  "second": 30,
+  "type": {
+   "id": 17,
+   "name": "Pressure"
+  },
+  "possession": 2,
+  "possession_team": {
+   "id": 785,
+   "name": "Croatia"
+  },
+  "play_pattern": {
+   "id": 9,
+   "name": "From Kick Off"
+  },
+  "team": {
+   "id": 771,
+   "name": "France"
+  },
+  "player": {
+   "id": 20004,
+   "name": "Paul Pogba"
+  },
+  "position": {
+   "id": 9,
+   "name": "Right Defensive Midfield"
+  },
+  "location": [
+   65.0,
+   58.0
+  ],
+  "duration": 0.719,
+  "related_events": [
+   "710d634a-d808-4fed-a406-558bc30ea736"
+  ]
+ },
+ {
+  "id": "0ef27014-a826-45ef-81e3-71857c9bbc12",
+  "index": 724,
+  "period": 1,
+  "timestamp": "00:20:51.227",
+  "minute": 20,
+  "second": 51,
+  "type": {
+   "id": 16,
+   "name": "Shot"
+  },
+  "possession": 43,
+  "possession_team": {
+   "id": 785,
+   "name": "Croatia"
+  },
+  "play_pattern": {
+   "id": 3,
+   "name": "From Free Kick"
+  },
+  "team": {
+   "id": 785,
+   "name": "Croatia"
+  },
+  "player": {
+   "id": 5468,
+   "name": "Domagoj Vida"
+  },
+  "position": {
+   "id": 5,
+   "name": "Left Center Back"
+  },
+  "location": [
+   112.0,
+   49.0
+  ],
+  "duration": 1.013,
+  "related_events": [
+   "8d6a6202-0ec8-4618-aa49-fe7d28c6d065"
+  ],
+  "shot": {
+   "statsbomb_xg": 0.12795697,
+   "end_location": [
+    119.0,
+    36.6,
+    5.0
+   ],
+   "key_pass_id": "c6ff0d60-6068-4815-a43f-378ced83acfb",
+   "technique": {
+    "id": 93,
+    "name": "Normal"
+   },
+   "type": {
+    "id": 87,
+    "name": "Open Play"
+   },
+   "outcome": {
+    "id": 98,
+    "name": "Off T"
+   },
+   "body_part": {
+    "id": 37,
+    "name": "Head"
+   },
+   "freeze_frame": [
+    {
+     "location": [
+      114.0,
+      36.0
+     ],
+     "player": {
+      "id": 20004,
+      "name": "Paul Pogba"
+     },
+     "position": {
+      "id": 9,
+      "name": "Right Defensive Midfield"
+     },
+     "teammate": false
+    },
+    {
+     "location": [
+      114.0,
+      42.0
+     ],
+     "player": {
+      "id": 5485,
+      "name": "Rapha\u00ebl Varane"
+     },
+     "position": {
+      "id": 3,
+      "name": "Right Center Back"
+     },
+     "teammate": false
+    },
+    {
+     "location": [
+      108.0,
+      66.0
+     ],
+     "player": {
+      "id": 4375,
+      "name": "Blaise Matuidi"
+     },
+     "position": {
+      "id": 16,
+      "name": "Left Midfield"
+     },
+     "teammate": false
+    },
+    {
+     "location": [
+      108.0,
+      53.0
+     ],
+     "player": {
+      "id": 3961,
+      "name": "N''Golo Kant\u00e9"
+     },
+     "position": {
+      "id": 11,
+      "name": "Left Defensive Midfield"
+     },
+     "teammate": false
+    },
+    {
+     "location": [
+      102.0,
+      37.0
+     ],
+     "player": {
+      "id": 3009,
+      "name": "Kylian Mbapp\u00e9 Lottin"
+     },
+     "position": {
+      "id": 12,
+      "name": "Right Midfield"
+     },
+     "teammate": false
+    },
+    {
+     "location": [
+      113.0,
+      46.0
+     ],
+     "player": {
+      "id": 3604,
+      "name": "Olivier Giroud"
+     },
+     "position": {
+      "id": 24,
+      "name": "Left Center Forward"
+     },
+     "teammate": false
+    },
+    {
+     "location": [
+      110.0,
+      47.0
+     ],
+     "player": {
+      "id": 5492,
+      "name": "Samuel Yves Umtiti"
+     },
+     "position": {
+      "id": 5,
+      "name": "Left Center Back"
+     },
+     "teammate": false
+    },
+    {
+     "location": [
+      113.0,
+      52.0
+     ],
+     "player": {
+      "id": 5487,
+      "name": "Antoine Griezmann"
+     },
+     "position": {
+      "id": 22,
+      "name": "Right Center Forward"
+     },
+     "teammate": false
+    },
+    {
+     "location": [
+      113.0,
+      39.0
+     ],
+     "player": {
+      "id": 5476,
+      "name": "Benjamin Pavard"
+     },
+     "position": {
+      "id": 2,
+      "name": "Right Back"
+     },
+     "teammate": false
+    },
+    {
+     "location": [
+      113.0,
+      33.0
+     ],
+     "player": {
+      "id": 5484,
+      "name": "Lucas Hern\u00e1ndez Pi"
+     },
+     "position": {
+      "id": 6,
+      "name": "Left Back"
+     },
+     "teammate": false
+    },
+    {
+     "location": [
+      113.0,
+      43.0
+     ],
+     "player": {
+      "id": 5472,
+      "name": "Mario Mand\u017euki\u0107"
+     },
+     "position": {
+      "id": 23,
+      "name": "Center Forward"
+     },
+     "teammate": true
+    },
+    {
+     "location": [
+      113.0,
+      41.0
+     ],
+     "player": {
+      "id": 3471,
+      "name": "Dejan Lovren"
+     },
+     "position": {
+      "id": 3,
+      "name": "Right Center Back"
+     },
+     "teammate": true
+    },
+    {
+     "location": [
+      111.0,
+      38.0
+     ],
+     "player": {
+      "id": 5474,
+      "name": "Ivan Peri\u0161i\u0107"
+     },
+     "position": {
+      "id": 21,
+      "name": "Left Wing"
+     },
+     "teammate": true
+    },
+    {
+     "location": [
+      112.0,
+      33.0
+     ],
+     "player": {
+      "id": 5465,
+      "name": "Ante Rebi\u0107"
+     },
+     "position": {
+      "id": 17,
+      "name": "Right Wing"
+     },
+     "teammate": true
+    },
+    {
+     "location": [
+      99.0,
+      33.0
+     ],
+     "player": {
+      "id": 5470,
+      "name": "Ivan Rakiti\u0107"
+     },
+     "position": {
+      "id": 15,
+      "name": "Left Center Midfield"
+     },
+     "teammate": true
+    },
+    {
+     "location": [
+      120.0,
+      42.0
+     ],
+     "player": {
+      "id": 3099,
+      "name": "Hugo Lloris"
+     },
+     "position": {
+      "id": 1,
+      "name": "Goalkeeper"
+     },
+     "teammate": false
+    }
+   ]
+  }
+ },
+ {
+  "id": "44f4607c-bf7b-42d1-9ed4-5fa6cc9bf251",
+  "index": 1331,
+  "period": 1,
+  "timestamp": "00:48:26.080",
+  "minute": 48,
+  "second": 26,
+  "type": {
+   "id": 34,
+   "name": "Half End"
+  },
+  "possession": 91,
+  "possession_team": {
+   "id": 771,
+   "name": "France"
+  },
+  "play_pattern": {
+   "id": 3,
+   "name": "From Free Kick"
+  },
+  "team": {
+   "id": 771,
+   "name": "France"
+  },
+  "duration": 0.0,
+  "related_events": [
+   "8425526a-08fb-45a3-90e6-a76f108be8c0"
+  ]
+ },
+ {
+  "id": "8425526a-08fb-45a3-90e6-a76f108be8c0",
+  "index": 1332,
+  "period": 1,
+  "timestamp": "00:48:26.080",
+  "minute": 48,
+  "second": 26,
+  "type": {
+   "id": 34,
+   "name": "Half End"
+  },
+  "possession": 91,
+  "possession_team": {
+   "id": 771,
+   "name": "France"
+  },
+  "play_pattern": {
+   "id": 3,
+   "name": "From Free Kick"
+  },
+  "team": {
+   "id": 785,
+   "name": "Croatia"
+  },
+  "duration": 0.0,
+  "related_events": [
+   "44f4607c-bf7b-42d1-9ed4-5fa6cc9bf251"
+  ]
+ },
+ {
+  "id": "222f623b-cc3b-4a58-932e-7ca094be47cc",
+  "index": 1333,
+  "period": 2,
+  "timestamp": "00:00:00.000",
+  "minute": 45,
+  "second": 0,
+  "type": {
+   "id": 18,
+   "name": "Half Start"
+  },
+  "possession": 91,
+  "possession_team": {
+   "id": 771,
+   "name": "France"
+  },
+  "play_pattern": {
+   "id": 3,
+   "name": "From Free Kick"
+  },
+  "team": {
+   "id": 785,
+   "name": "Croatia"
+  },
+  "duration": 0.0,
+  "related_events": [
+   "b024cda0-5ab7-479c-a70e-1b8c6f7a9d6d"
+  ]
+ },
+ {
+  "id": "b024cda0-5ab7-479c-a70e-1b8c6f7a9d6d",
+  "index": 1334,
+  "period": 2,
+  "timestamp": "00:00:00.000",
+  "minute": 45,
+  "second": 0,
+  "type": {
+   "id": 18,
+   "name": "Half Start"
+  },
+  "possession": 91,
+  "possession_team": {
+   "id": 771,
+   "name": "France"
+  },
+  "play_pattern": {
+   "id": 3,
+   "name": "From Free Kick"
+  },
+  "team": {
+   "id": 771,
+   "name": "France"
+  },
+  "duration": 0.0,
+  "related_events": [
+   "222f623b-cc3b-4a58-932e-7ca094be47cc"
+  ]
+ },
+ {
+  "id": "c2384d92-1244-47f0-9156-9098274b70c2",
+  "index": 2977,
+  "period": 2,
+  "timestamp": "00:50:03.760",
+  "minute": 95,
+  "second": 3,
+  "type": {
+   "id": 34,
+   "name": "Half End"
+  },
+  "possession": 182,
+  "possession_team": {
+   "id": 771,
+   "name": "France"
+  },
+  "play_pattern": {
+   "id": 8,
+   "name": "From Keeper"
+  },
+  "team": {
+   "id": 771,
+   "name": "France"
+  },
+  "duration": 0.0,
+  "related_events": [
+   "883aa370-a1b5-4e33-877a-7a4c83abd26e"
+  ]
+ },
+ {
+  "id": "883aa370-a1b5-4e33-877a-7a4c83abd26e",
+  "index": 2978,
+  "period": 2,
+  "timestamp": "00:50:03.760",
+  "minute": 95,
+  "second": 3,
+  "type": {
+   "id": 34,
+   "name": "Half End"
+  },
+  "possession": 182,
+  "possession_team": {
+   "id": 771,
+   "name": "France"
+  },
+  "play_pattern": {
+   "id": 8,
+   "name": "From Keeper"
+  },
+  "team": {
+   "id": 785,
+   "name": "Croatia"
+  },
+  "duration": 0.0,
+  "related_events": [
+   "c2384d92-1244-47f0-9156-9098274b70c2"
+  ]
+ }
+]

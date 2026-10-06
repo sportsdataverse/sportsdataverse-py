@@ -2090,6 +2090,15 @@ def _flat_modules_for_prefix(prefix: str) -> list[str]:
     return sorted(out)
 
 
+# Hand-written modules (no endpoint YAML, so FLAT_APIS cannot drive them) that a
+# sport-group container re-exports beside its flat families. The container
+# ``__init__.py`` is generated, so a module listed here is the ONLY way its public
+# names reach ``sportsdataverse.<group>`` and the top-level package.
+_CONTAINER_HANDWRITTEN: dict[str, list[str]] = {
+    "soccer": ["soccer_events"],  # kloppy event data, the optional ``soccer`` extra
+}
+
+
 def _container_init_body(group: str, members: list[str], has_ext: bool) -> str:
     """Return the deterministic body for a sport-group container ``__init__.py``.
 
@@ -2119,6 +2128,12 @@ def _container_init_body(group: str, members: list[str], has_ext: bool) -> str:
             parsers = LIVE / group / f"{module}_parsers.py"
             if parsers.exists():
                 lines.append(f"from sportsdataverse.{group}.{module}_parsers import *  # noqa: F401,F403")
+        lines.append("")
+    handwritten = _CONTAINER_HANDWRITTEN.get(group, [])
+    if handwritten:
+        lines.append(f"# Hand-written modules homed directly at ``sportsdataverse.{group}``.")
+        for module in handwritten:
+            lines.append(f"from sportsdataverse.{group}.{module} import *  # noqa: F401,F403")
         lines.append("")
     lines.append(f"# Sub-league packages — imported so ``sportsdataverse.{group}.<leaf>`` is reachable")
     lines.append("# as an attribute on this container module (0.0.65+).")
