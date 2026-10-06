@@ -165,3 +165,30 @@ def test_generated_docs_tree_is_current(first_render):
     # Compare against the session render rather than a fourth identical one.
     stale = generate._docs_stale(rendered=first_render(generate._render_docs_all))
     assert stale == [], f"stale generated docs (run `python tools/codegen/generate.py --docs`): {stale}"
+
+
+def test_render_league_index_see_also_comes_from_companions_yaml():
+    """soccer has companion entries; a league without any renders no ``## See also``."""
+    soccer = generate.render_league_index("soccer")
+    assert "## See also" in soccer
+    assert "[kloppy](https://kloppy.pysport.org)" in soccer
+    # The block sits between the reference table and the Examples section.
+    assert soccer.index("## See also") < soccer.index("## Examples")
+    assert "## See also" not in generate.render_league_index("nba")
+
+
+def test_companions_yaml_entries_are_well_formed():
+    for prefix, entries in generate._companions_map().items():
+        assert entries, prefix
+        for entry in entries:
+            assert set(entry) == {"name", "url", "note"}, (prefix, entry)
+            assert entry["url"].startswith("https://"), (prefix, entry["url"])
+
+
+def test_companion_notes_do_not_shadow_autodoc_names():
+    """A bare function name in a companion note reads as "already documented" to the
+    autodoc corpus scan and silently drops that function from its helpers page."""
+    notes = " ".join(e["note"] for entries in generate._companions_map().values() for e in entries)
+    for scope_names in generate._autodoc_names_by_scope().values():
+        for name in scope_names:
+            assert name not in notes, name

@@ -16,6 +16,15 @@ description: "sdv-py SOCCER: endpoint references, dataset loaders and parsers fo
 | [UEFA front-end APIs (comp/match/standings/matchstats.uefa.com)](reference/uefa) | 7 | `https://comp.uefa.com` |
 | [FIFA public API v3 (api.fifa.com)](reference/fifa) | 9 | `https://api.fifa.com/api/v3` |
 
+## See also
+
+- [kloppy](https://kloppy.pysport.org) — reads ~15 event and tracking providers; the `soccer` extra's open-data loader sits on it
+- [sdvplot](https://github.com/sportsdataverse/sdvplot) — `pitch_coords()` puts any provider's events on the 105 x 68 pitch
+- [sdvplotR](https://github.com/sportsdataverse/sdvplotR) — the R twin (`sdv_pitch_coords()`)
+- [itscalledsoccer](https://github.com/American-Soccer-Analysis/itscalledsoccer) — American Soccer Analysis's own client for the API behind `asa_*`
+- [soccerdata](https://github.com/probberechts/soccerdata) — FBref, Understat, WhoScored and Sofascore scrapers that sdv-py does not wrap
+- [mplsoccer](https://mplsoccer.readthedocs.io) — matplotlib pitches and StatsBomb helpers; sdvplot's pitch frame interoperates with it
+
 ## Examples
 
 Worked examples — executed notebooks rendered as pages (refreshed weekly against the live APIs):

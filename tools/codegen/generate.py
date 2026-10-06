@@ -570,6 +570,7 @@ def _table_cell_desc(stored: str, league: str | None, col: str, schema: str | No
 _R_EXPORTS_FILE = ROOT / "tools" / "codegen" / "r_exports.yaml"
 _R_PARITY_ALIASES_FILE = ROOT / "tools" / "codegen" / "r_parity_aliases.yaml"
 _HIGHLIGHTS_FILE = ROOT / "tools" / "codegen" / "highlights.yaml"
+_COMPANIONS_FILE = ROOT / "tools" / "codegen" / "companions.yaml"
 
 # League prefix -> R package for parity (pwhl is also fastRhockey; otherwise the
 # same mapping used for column descriptions).
@@ -616,6 +617,25 @@ def _highlights_map() -> dict:
     import yaml
 
     return yaml.safe_load(_HIGHLIGHTS_FILE.read_text(encoding="utf-8")) or {}
+
+
+@functools.lru_cache(maxsize=1)
+def _companions_map() -> dict:
+    """``{league_prefix: [{name, url, note}]}`` from the committed ``companions.yaml``.
+
+    Hand-maintained companion packages rendered as the ``## See also`` block of a
+    league's index page -- see the file's own header comment. Empty dict if absent,
+    so a league with no entry renders exactly as before."""
+    if not _COMPANIONS_FILE.exists():
+        return {}
+    import yaml
+
+    return yaml.safe_load(_COMPANIONS_FILE.read_text(encoding="utf-8")) or {}
+
+
+def _companions_for(prefix: str) -> list[dict]:
+    """The ``companions.yaml`` entries for *prefix* (``[]`` when it has none)."""
+    return list(_companions_map().get(prefix) or [])
 
 
 def _highlighted_names(league: str | None, names: list[str]) -> set[str]:
@@ -2802,6 +2822,7 @@ def render_league_index(
         has_highlights=has_highlights,
         highlights_count=highlights_count,
         notebooks=_notebooks_for(prefix),
+        companions=_companions_for(prefix),
         r_parity=r_parity or [],
         r_pkg=r_pkg,
     )

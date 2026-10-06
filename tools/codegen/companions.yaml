@@ -1,0 +1,34 @@
+# Hand-maintained, per-league companion packages for the "See also" block on a
+# league's index page (docs/docs/<prefix>/index.md), rendered by
+# generate.py's `render_league_index` through `_companions_for`.
+#
+# A league key lists packages a reader of that page is likely to reach for next:
+# the SportsDataverse plotting twins, an upstream client for the same API, or a
+# well-known library sdv-py interoperates with but does not wrap. Keep each note
+# to one clause (American English). A league with no key renders unchanged.
+#
+# Shape: {prefix: [{name, url, note}]}. URLs must be https.
+#
+# Never name an sdv-py function in a note: the autodoc "already documented"
+# heuristic matches bare names across the rendered docs corpus, so a mention here
+# would silently drop that function from its python-helpers / additional page
+# (tests/codegen/test_docs.py guards this).
+soccer:
+  - name: kloppy
+    url: https://kloppy.pysport.org
+    note: reads ~15 event and tracking providers; the `soccer` extra's open-data loader sits on it
+  - name: sdvplot
+    url: https://github.com/sportsdataverse/sdvplot
+    note: "`pitch_coords()` puts any provider's events on the 105 x 68 pitch"
+  - name: sdvplotR
+    url: https://github.com/sportsdataverse/sdvplotR
+    note: the R twin (`sdv_pitch_coords()`)
+  - name: itscalledsoccer
+    url: https://github.com/American-Soccer-Analysis/itscalledsoccer
+    note: American Soccer Analysis's own client for the API behind `asa_*`
+  - name: soccerdata
+    url: https://github.com/probberechts/soccerdata
+    note: FBref, Understat, WhoScored and Sofascore scrapers that sdv-py does not wrap
+  - name: mplsoccer
+    url: https://mplsoccer.readthedocs.io
+    note: matplotlib pitches and StatsBomb helpers; sdvplot's pitch frame interoperates with it

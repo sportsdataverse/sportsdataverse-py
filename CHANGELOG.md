@@ -5,6 +5,7 @@
 - [Unreleased](#unreleased)
   - [Added — `asa_players_xpass()` and the `nasl` + `usls` ASA leagues](#added--asa_players_xpass-and-the-nasl--usls-asa-leagues)
   - [Added — kloppy as the optional `soccer` extra; `soccer_open_events()` loads open event data](#added--kloppy-as-the-optional-soccer-extra-soccer_open_events-loads-open-event-data)
+  - [Changed — league index pages gain a "See also" block of companion packages (soccer first)](#changed--league-index-pages-gain-a-see-also-block-of-companion-packages-soccer-first)
   - [Added — sdv-docs MCP server and a published docs index](#added--sdv-docs-mcp-server-and-a-published-docs-index)
   - [Fixed — a failed fetch in the hand-written ESPN scrapers raises instead of being parsed (BREAKING)](#fixed--a-failed-fetch-in-the-hand-written-espn-scrapers-raises-instead-of-being-parsed-breaking)
   - [Fixed — a failed stats.nba.com / stats.wnba.com fetch raises instead of returning `{}` (BREAKING)](#fixed--a-failed-statsnbacom--statswnbacom-fetch-raises-instead-of-returning--breaking)
@@ -359,6 +360,13 @@ and other kloppy kwargs pass through), and
 `dl_utils.download()` rule. The frame drops straight into sdvplot's `pitch_coords(provider="statsbomb")` /
 sdvplotR's `sdv_pitch_coords()`. Tests load a trimmed real StatsBomb match (`tests/fixtures/kloppy/`);
 kloppy is also in the `tests` and `all` extras so CI has it.
+
+### Changed — league index pages gain a "See also" block of companion packages (soccer first)
+
+Each league's reference index (`docs/docs/<league>/index.md`) can now list the packages a reader is likely
+to reach for next, from the hand-maintained `tools/codegen/companions.yaml` (same shape as `highlights.yaml`).
+The SOCCER page links kloppy, sdvplot, sdvplotR, itscalledsoccer, soccerdata and mplsoccer; leagues without an
+entry render unchanged.
 
 ### Added — sdv-docs MCP server and a published docs index
 
