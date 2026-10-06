@@ -218,9 +218,7 @@ not covered by the generated API-endpoint reference above.
 | [defense_vs_position](python-helpers/analytics.md#defense_vs_position) | EPA/play, success and explosive rate each defense allowed to QBs, RBs, WRs and TEs. |
 | [football_attempts](python-helpers/analytics.md#football_attempts) | Field-goal, air-yards, fourth-down and down-x-distance attempts from released `espn_{cfb,nfl}_pbp`. |
 | [football_events](python-helpers/analytics.md#football_events) | Dropback / target / carry / team-play events from released `espn_{cfb,nfl}_pbp` plays. |
-| [metric_curves](python-helpers/analytics.md#metric_curves) | League, team and player rate curves from an `ATTEMPT_SCHEMA` frame. |
 | [nflfastr_attempts](python-helpers/analytics.md#nflfastr_attempts) | The same attempts from `nfl_model_pbp` (the nflfastR shape), which carries air yards. |
-| [rolling_windows](python-helpers/analytics.md#rolling_windows) | Rolling-window form for every entity with an event in `season`. |
 | [shot_attempts](python-helpers/analytics.md#shot_attempts) | Regular-season (`season_type_id` `"2"`) and playoff (`"4"`) shots; success = |
 | [shot_events](python-helpers/analytics.md#shot_events) | Field-goal-attempt events from released `{nba,wnba}_stats_shots`. |
 

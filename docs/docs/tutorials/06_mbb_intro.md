@@ -85,6 +85,8 @@ The `load_*` parquet loaders are stable year-round, so we call those directly.
 
 
 ```python
+from sportsdataverse.errors import AssetFetchError, NoDataError
+
 def safe(label, thunk):
     """Run a live call defensively; return its result or None with a note."""
     try:
@@ -92,8 +94,8 @@ def safe(label, thunk):
         ok = out is not None and (not hasattr(out, "height") or out.height)
         print(f"{'✅' if ok else 'ℹ️ '} {label}{'' if ok else ' — no rows right now'}")
         return out
-    except Exception as e:  # noqa: BLE001 -- demo resilience
-        print(f"⏭️  {label}: unavailable right now ({type(e).__name__})")
+    except (NoDataError, AssetFetchError) as e:
+        print(f"\u23ed\ufe0f  {label}: {type(e).__name__}: {e}")
         return None
 ```
 
@@ -491,7 +493,7 @@ print("season schedule rows:", schedule_2024.shape)
 
 ## 🏛️ stats.ncaa.org — the `ncaa_mbb_*` family (bigballR parity)
 
-New in 0.0.72: a 16-function port of bigballR wired to **stats.ncaa.org** —
+a 16-function port of bigballR wired to **stats.ncaa.org** —
 schedules, rosters, box scores, play-by-play, lineups, possessions, on/off
 splits, and shot locations (`ncaa_mbb_team_schedule`, `ncaa_mbb_game_pbp`,
 `ncaa_mbb_lineups`, `ncaa_mbb_possessions`, `ncaa_mbb_on_off`, ...). The
@@ -535,3 +537,26 @@ lineups = ncaa_mbb_lineups(game_id)       # five-player stints
   [wehoop](https://wehoop.sportsdataverse.org).
 
 Now go bracket something! 🏀🔥
+
+## 📊 Torvik and KenPom
+
+`torvik_*` (barttorvik.com, free) and `kenpom_*` (kenpom.com, **subscription** —
+the cell is a no-op without credentials).
+
+
+
+```python
+import os
+
+from sportsdataverse.mbb import torvik_ratings
+
+safe("torvik ratings", lambda: torvik_ratings(year=2025))
+
+if os.environ.get("KENPOM_EMAIL") and os.environ.get("KENPOM_PASSWORD"):
+    from sportsdataverse.mbb import kenpom_ratings
+
+    safe("kenpom ratings", lambda: kenpom_ratings(season=2025))
+else:
+    print("no KenPom credentials - skipping kenpom_* (set KENPOM_EMAIL / KENPOM_PASSWORD)")
+
+```

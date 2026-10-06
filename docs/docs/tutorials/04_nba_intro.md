@@ -76,14 +76,16 @@ instead of a scary traceback. 🛟
 
 
 ```python
+from sportsdataverse.errors import AssetFetchError, NoDataError
+
 def safe(label, thunk):
     try:
         out = thunk()
         n = out.height if isinstance(out, pl.DataFrame) else (len(out) if hasattr(out, '__len__') else '?')
         print(f'✅ {label} — {n} rows')
         return out
-    except Exception as e:  # noqa: BLE001 -- demo resilience
-        print(f'⏭️  {label}: unavailable right now ({type(e).__name__})')
+    except (NoDataError, AssetFetchError) as e:
+        print(f"\u23ed\ufe0f  {label}: {type(e).__name__}: {e}")
         return None
 ```
 
@@ -562,3 +564,19 @@ logs, play-by-play, and bulk box scores. A few parting tips:
 
 Now go break down some film — and may your jumper always find the bottom of
 the net! 🏀🔥
+
+## 🦓 Officiating
+
+Last Two Minute reports and referee assignments, from `official.nba.com` and the
+NBA's own feeds.
+
+
+
+```python
+from sportsdataverse.nba import nba_officiating
+
+print("nba_officiating:", [n for n in dir(nba_officiating) if not n.startswith("_")][:8])
+safe("referee assignments", lambda: nba_officiating.nba_referee_assignments(game_date="2024-04-01"))
+safe("L2M games", lambda: nba_officiating.nba_l2m_games())
+
+```

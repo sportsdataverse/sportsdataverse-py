@@ -70,13 +70,15 @@ The 🛰️ **live** HockeyTech feed is seasonal and occasionally rate-limited, 
 
 
 ```python
+from sportsdataverse.errors import AssetFetchError, NoDataError
+
 def safe(label, thunk):
     try:
         out = thunk()
         print(f"✅ {label}")
         return out
-    except Exception as e:  # noqa: BLE001 -- demo resilience
-        print(f"⏭️  {label}: unavailable right now ({type(e).__name__})")
+    except (NoDataError, AssetFetchError) as e:
+        print(f"\u23ed\ufe0f  {label}: {type(e).__name__}: {e}")
         return None
 ```
 
@@ -549,7 +551,7 @@ print('type:', type(skater_pd).__name__, '| shape:', skater_pd.shape)
 
 ## ⏱️ Shifts, strength state, and shot-level xG
 
-New in 0.0.72: two published PWHL dataset releases. `load_pwhl_shifts` is the
+two published PWHL dataset releases. `load_pwhl_shifts` is the
 shift-chart table backing the real on-ice `strength_state` (EV/PP/SH), and
 `load_pwhl_xg_pbp` is the play-by-play enriched with shot-level,
 coordinate-based expected goals:

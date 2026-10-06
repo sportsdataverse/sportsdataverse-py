@@ -29,7 +29,7 @@ Let's kick it off! ⚽
 
 Everything returns a tidy **polars** `DataFrame` by default — pass
 `return_as_pandas=True` for pandas. The wrappers return the raw ESPN JSON by
-default; pass `return_parsed=True` to run the built-in parser. ⭐ marks the
+default; pass `` to run the built-in parser. ⭐ marks the
 most commonly used entry points.
 
 ### Core wrappers (pass `league=` slug)
@@ -109,13 +109,15 @@ and a friendly one-liner when it isn't (never a scary traceback). 🛟
 
 
 ```python
+from sportsdataverse.errors import AssetFetchError, NoDataError
+
 def safe(label, thunk):
     try:
         out = thunk()
         print(f'✅ {label}')
         return out
-    except Exception as e:  # noqa: BLE001 -- demo resilience
-        print(f'⏭️  {label}: unavailable right now ({type(e).__name__})')
+    except (NoDataError, AssetFetchError) as e:
+        print(f"\u23ed\ufe0f  {label}: {type(e).__name__}: {e}")
         return None
 ```
 
@@ -124,7 +126,7 @@ def safe(label, thunk):
 [`espn_soccer_scoreboard`](../soccer/reference/site.md#espn_soccer_scoreboard)
 returns every match for a league on a given date. Pass `dates=YYYYMMDD`; omit
 it to get today's slate. The raw payload is a nested ESPN JSON dict — pass
-`return_parsed=True` to flatten it into a tidy polars frame, or call
+`` to flatten it into a tidy polars frame, or call
 `parse_soccer_scoreboard` explicitly on the raw dict.
 
 We'll start with a **Premier League** match-day.

@@ -65,6 +65,8 @@ ESPN's live endpoints are **seasonal** — polls, injuries, and live scoreboards
 
 
 ```python
+from sportsdataverse.errors import AssetFetchError, NoDataError
+
 def safe(label, thunk):
     """Run a live call defensively; return None (with a note) if it can't."""
     try:
@@ -72,8 +74,8 @@ def safe(label, thunk):
         ok = out is not None and (not hasattr(out, 'height') or out.height > 0)
         print(f"{'✅' if ok else '🟡'} {label}" + ('' if ok else ' (no rows right now)'))
         return out
-    except Exception as e:  # noqa: BLE001 -- demo resilience
-        print(f"⏭️  {label}: unavailable right now ({type(e).__name__})")
+    except (NoDataError, AssetFetchError) as e:
+        print(f"\u23ed\ufe0f  {label}: {type(e).__name__}: {e}")
         return None
 
 
@@ -526,7 +528,7 @@ play_mix
 
 ## 🏛️ stats.ncaa.org — the `ncaa_wbb_*` family (bigballR parity)
 
-New in 0.0.72: a 16-function port of bigballR/wbigballR wired to
+a 16-function port of bigballR/wbigballR wired to
 **stats.ncaa.org** — schedules, rosters, box scores, play-by-play, lineups,
 possessions, on/off splits, and shot locations (`ncaa_wbb_team_schedule`,
 `ncaa_wbb_game_pbp`, `ncaa_wbb_lineups`, `ncaa_wbb_possessions`,
@@ -563,3 +565,16 @@ lineups = ncaa_wbb_lineups(game_id)       # five-player stints
 - R user? The same surface lives in [wehoop](https://wehoop.sportsdataverse.org).
 
 Now go find the next national champion! 🏀🏆
+
+## 📊 Bart Torvik (women's T-Rank)
+
+`bart_wbb_*` wraps barttorvik.com/ncaaw — team ratings and game results with no key.
+
+
+
+```python
+from sportsdataverse.wbb import bart_wbb_ratings
+
+safe("bart_wbb ratings", lambda: bart_wbb_ratings(year=2025))
+
+```

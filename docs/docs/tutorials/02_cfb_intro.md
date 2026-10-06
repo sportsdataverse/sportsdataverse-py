@@ -81,13 +81,15 @@ traceback). The release loaders are reliable, so we call those directly. 🛟
 
 
 ```python
+from sportsdataverse.errors import AssetFetchError, NoDataError
+
 def safe(label, thunk):
     try:
         out = thunk()
         print(f'✅ {label}')
         return out
-    except Exception as e:  # noqa: BLE001 -- demo resilience
-        print(f'⏭️  {label}: unavailable right now ({type(e).__name__})')
+    except (NoDataError, AssetFetchError) as e:
+        print(f"\u23ed\ufe0f  {label}: {type(e).__name__}: {e}")
         return None
 ```
 
@@ -609,7 +611,7 @@ out
 
 ## 🏛️ stats.ncaa.org football — `parse_cfb_ncaa_pbp` + box parsers
 
-New in 0.0.72: parsers for the **stats.ncaa.org** football surface.
+parsers for the **stats.ncaa.org** football surface.
 `parse_cfb_ncaa_pbp` takes the raw HTML of a `/contests/{id}/play_by_play`
 page and emits one tidy row per play, cfbfastR-style — drive context,
 down/distance/yard line, a classified `play_type`, extracted

@@ -43,7 +43,7 @@ Top-level shortcuts (e.g. `sportsdataverse.ufl`) exist for back-compat but emit 
 ## 🧰 The toolbox
 
 Every wrapper returns a raw `dict` by default (`return_parsed=False`). Pass
-`return_parsed=True` to get a tidy **polars** `DataFrame` where a parser is
+`` to get a tidy **polars** `DataFrame` where a parser is
 registered, or `return_as_pandas=True` for a **pandas** `DataFrame`. The
 function surface is identical across all seven leagues below.
 
@@ -100,13 +100,15 @@ consistently whether you run this in-season or in the off-season.
 
 
 ```python
+from sportsdataverse.errors import AssetFetchError, NoDataError
+
 def safe(label, thunk):
     try:
         out = thunk()
         print(f'✅ {label}')
         return out
-    except Exception as e:  # noqa: BLE001 -- demo resilience
-        print(f'⏭️  {label}: unavailable right now ({type(e).__name__})')
+    except (NoDataError, AssetFetchError) as e:
+        print(f"\u23ed\ufe0f  {label}: {type(e).__name__}: {e}")
         return None
 
 
@@ -145,10 +147,10 @@ power-index, and drive-level detail out of the box.
 
 ### 📋 UFL: the scoreboard
 
-[`espn_ufl_scoreboard(dates=YYYYMMDD)`](../football/reference/ufl.md#espn_ufl_scoreboard)
+[`espn_ufl_scoreboard(dates=YYYYMMDD)`](../ufl/reference/site.md#espn_ufl_scoreboard)
 returns the game slate for a specific date. The raw payload is a dict whose
 `events` key holds one entry per game with nested team and status objects.
-Pass `return_parsed=True` to get a flat polars frame.
+Pass `` to get a flat polars frame.
 
 
 ```python
@@ -162,7 +164,7 @@ _keys(board_raw)
 # Parsed frame — one row per game
 board = safe(
     'UFL scoreboard (parsed)',
-    lambda: ufl.espn_ufl_scoreboard(dates=UFL_DATE, return_parsed=True),
+    lambda: ufl.espn_ufl_scoreboard(dates=UFL_DATE),
 )
 if board is not None and getattr(board, 'height', 0):
     keep = [c for c in board.columns
@@ -176,14 +178,14 @@ else:
 
 ### 🏫 UFL: teams
 
-[`espn_ufl_teams_site()`](../football/reference/ufl.md#espn_ufl_teams_site)
+[`espn_ufl_teams_site()`](../ufl/reference/site.md#espn_ufl_teams_site)
 lists every team with its `team_id` — the key you feed into every
 team-scoped call (`espn_ufl_team_schedule`, `espn_ufl_team_roster`, etc.).
 There are no required arguments.
 
 
 ```python
-teams_ufl = safe('UFL teams', lambda: ufl.espn_ufl_teams_site(return_parsed=True))
+teams_ufl = safe('UFL teams', lambda: ufl.espn_ufl_teams_site())
 if teams_ufl is not None and teams_ufl.height:
     keep = [c for c in teams_ufl.columns
             if c in ('id', 'abbreviation', 'display_name', 'location',
@@ -195,13 +197,13 @@ else:
 
 ### 📊 UFL: standings
 
-[`espn_ufl_standings()`](../football/reference/ufl.md#espn_ufl_standings)
+[`espn_ufl_standings()`](../ufl/reference/site.md#espn_ufl_standings)
 returns the conference / division standings table. Pair with the
 team `id` from the teams frame to build a standings dashboard.
 
 
 ```python
-standings_ufl = safe('UFL standings', lambda: ufl.espn_ufl_standings(return_parsed=True))
+standings_ufl = safe('UFL standings', lambda: ufl.espn_ufl_standings())
 if standings_ufl is not None and standings_ufl.height:
     keep = [c for c in standings_ufl.columns
             if c in ('team_id', 'team_name', 'team_abbreviation',
@@ -213,7 +215,7 @@ else:
 
 ### 📅 UFL: team schedule
 
-[`espn_ufl_team_schedule(team_id=, season=)`](../football/reference/ufl.md#espn_ufl_team_schedule)
+[`espn_ufl_team_schedule(team_id=, season=)`](../ufl/reference/site.md#espn_ufl_team_schedule)
 returns one row per game for a single team's season — useful for building
 a results table or joining standings context onto a game-log.
 
@@ -223,7 +225,7 @@ a results table or joining standings context onto a game-log.
 schedule_ufl = safe(
     'UFL team schedule',
     lambda: ufl.espn_ufl_team_schedule(team_id=10000, season=SAMPLE_SEASON,
-                                       return_parsed=True),
+                                       ),
 )
 if schedule_ufl is not None and schedule_ufl.height:
     keep = [c for c in schedule_ufl.columns
@@ -237,7 +239,7 @@ else:
 
 ### 🏟️ UFL: game summary & play-by-play
 
-[`espn_ufl_summary(event_id=)`](../football/reference/ufl.md#espn_ufl_summary)
+[`espn_ufl_summary(event_id=)`](../ufl/reference/site.md#espn_ufl_summary)
 returns the full ~700 KB Site v2 summary payload — box score, plays, drives,
 scoring plays, leaders, odds, and more. You can extract any sub-frame directly
 from the raw dict, or use the `parse_summary` parser (see the architecture
@@ -280,7 +282,7 @@ merger into the UFL.
 
 ```python
 # XFL teams — good cross-check since some franchises carried over to UFL
-teams_xfl = safe('XFL teams', lambda: xfl.espn_xfl_teams_site(return_parsed=True))
+teams_xfl = safe('XFL teams', lambda: xfl.espn_xfl_teams_site())
 if teams_xfl is not None and teams_xfl.height:
     keep = [c for c in teams_xfl.columns
             if c in ('id', 'abbreviation', 'display_name', 'location')]
@@ -294,7 +296,7 @@ else:
 # XFL championship scoreboard — May 2023
 board_xfl = safe(
     'XFL scoreboard (parsed)',
-    lambda: xfl.espn_xfl_scoreboard(dates=XFL_DATE, return_parsed=True),
+    lambda: xfl.espn_xfl_scoreboard(dates=XFL_DATE),
 )
 if board_xfl is not None and getattr(board_xfl, 'height', 0):
     keep = [c for c in board_xfl.columns
@@ -309,7 +311,7 @@ else:
 
 ```python
 # XFL standings (2023)
-standings_xfl = safe('XFL standings', lambda: xfl.espn_xfl_standings(return_parsed=True))
+standings_xfl = safe('XFL standings', lambda: xfl.espn_xfl_standings())
 if standings_xfl is not None and standings_xfl.height:
     keep = [c for c in standings_xfl.columns
             if c in ('team_id', 'team_name', 'team_abbreviation',
@@ -333,7 +335,7 @@ power-index endpoints.
 # CFL Grey Cup 2023 scoreboard
 board_cfl = safe(
     'CFL scoreboard (parsed)',
-    lambda: cfl.espn_cfl_scoreboard(dates=CFL_DATE, return_parsed=True),
+    lambda: cfl.espn_cfl_scoreboard(dates=CFL_DATE),
 )
 if board_cfl is not None and getattr(board_cfl, 'height', 0):
     keep = [c for c in board_cfl.columns
@@ -348,7 +350,7 @@ else:
 
 ```python
 # CFL teams
-teams_cfl = safe('CFL teams', lambda: cfl.espn_cfl_teams_site(return_parsed=True))
+teams_cfl = safe('CFL teams', lambda: cfl.espn_cfl_teams_site())
 if teams_cfl is not None and teams_cfl.height:
     keep = [c for c in teams_cfl.columns
             if c in ('id', 'abbreviation', 'display_name', 'location', 'color')]
@@ -360,7 +362,7 @@ else:
 
 ```python
 # CFL standings (2023)
-standings_cfl = safe('CFL standings', lambda: cfl.espn_cfl_standings(return_parsed=True))
+standings_cfl = safe('CFL standings', lambda: cfl.espn_cfl_standings())
 if standings_cfl is not None and standings_cfl.height:
     keep = [c for c in standings_cfl.columns
             if c in ('team_id', 'team_name', 'team_abbreviation',
@@ -375,7 +377,7 @@ else:
 # CFL team schedule — Winnipeg Blue Bombers (team_id=100) 2023 season
 schedule_cfl = safe(
     'CFL team schedule',
-    lambda: cfl.espn_cfl_team_schedule(team_id=100, season=2023, return_parsed=True),
+    lambda: cfl.espn_cfl_team_schedule(team_id=100, season=2023),
 )
 if schedule_cfl is not None and schedule_cfl.height:
     keep = [c for c in schedule_cfl.columns
@@ -399,7 +401,7 @@ alongside the standard scoreboard/schedule/teams/standings family.
 
 ### ⚾ College baseball: scoreboard & teams
 
-[`espn_college_baseball_scoreboard(dates=YYYYMMDD)`](../baseball/reference/college_baseball.md#espn_college_baseball_scoreboard)
+[`espn_college_baseball_scoreboard(dates=YYYYMMDD)`](../college_baseball/reference/site.md#espn_college_baseball_scoreboard)
 returns the game slate for a date. The College World Series in June is peak
 traffic, so games should be available; the off-season window (November – January)
 returns an empty slate.
@@ -409,7 +411,7 @@ returns an empty slate.
 # College World Series finals day, 2024
 board_cbb = safe(
     'college baseball scoreboard (parsed)',
-    lambda: cbb.espn_college_baseball_scoreboard(dates=CBB_DATE, return_parsed=True),
+    lambda: cbb.espn_college_baseball_scoreboard(dates=CBB_DATE),
 )
 if board_cbb is not None and getattr(board_cbb, 'height', 0):
     keep = [c for c in board_cbb.columns
@@ -426,7 +428,7 @@ else:
 # All NCAA baseball teams with their team_id
 teams_cbb = safe(
     'college baseball teams',
-    lambda: cbb.espn_college_baseball_teams_site(return_parsed=True),
+    lambda: cbb.espn_college_baseball_teams_site(),
 )
 if teams_cbb is not None and teams_cbb.height:
     keep = [c for c in teams_cbb.columns
@@ -439,8 +441,8 @@ else:
 
 ### 📊 College baseball: standings & rankings
 
-[`espn_college_baseball_standings()`](../baseball/reference/college_baseball.md#espn_college_baseball_standings)
-returns conference standings. [`espn_college_baseball_rankings()`](../baseball/reference/college_baseball.md#espn_college_baseball_rankings)
+[`espn_college_baseball_standings()`](../college_baseball/reference/site.md#espn_college_baseball_standings)
+returns conference standings. [`espn_college_baseball_rankings()`](../college_baseball/reference/site.md#espn_college_baseball_rankings)
 returns the current AP / USA Today poll — one of the NCAA extras added by the
 `_NCAA_WRAPPERS` family.
 
@@ -449,7 +451,7 @@ returns the current AP / USA Today poll — one of the NCAA extras added by the
 # Conference standings
 standings_cbb = safe(
     'college baseball standings',
-    lambda: cbb.espn_college_baseball_standings(return_parsed=True),
+    lambda: cbb.espn_college_baseball_standings(),
 )
 if standings_cbb is not None and standings_cbb.height:
     keep = [c for c in standings_cbb.columns
@@ -465,7 +467,7 @@ else:
 # National polls — AP / USA Today baseball rankings
 rankings_cbb = safe(
     'college baseball rankings',
-    lambda: cbb.espn_college_baseball_rankings(return_parsed=True),
+    lambda: cbb.espn_college_baseball_rankings(),
 )
 if rankings_cbb is not None and rankings_cbb.height:
     keep = [c for c in rankings_cbb.columns
@@ -487,7 +489,7 @@ Texas (team_id=251) is a perennial CWS contender — a good reference point.
 schedule_cbb = safe(
     'college baseball team schedule',
     lambda: cbb.espn_college_baseball_team_schedule(
-        team_id=251, season=SAMPLE_SEASON, return_parsed=True
+        team_id=251, season=SAMPLE_SEASON
     ),
 )
 if schedule_cbb is not None and schedule_cbb.height:
@@ -511,7 +513,7 @@ wraps up in early June.
 # WCWS finals day, June 2024
 board_cbs = safe(
     'college softball scoreboard (parsed)',
-    lambda: cbs.espn_college_softball_scoreboard(dates=CBS_DATE, return_parsed=True),
+    lambda: cbs.espn_college_softball_scoreboard(dates=CBS_DATE),
 )
 if board_cbs is not None and getattr(board_cbs, 'height', 0):
     keep = [c for c in board_cbs.columns
@@ -528,7 +530,7 @@ else:
 # College softball teams
 teams_cbs = safe(
     'college softball teams',
-    lambda: cbs.espn_college_softball_teams_site(return_parsed=True),
+    lambda: cbs.espn_college_softball_teams_site(),
 )
 if teams_cbs is not None and teams_cbs.height:
     keep = [c for c in teams_cbs.columns
@@ -544,7 +546,7 @@ else:
 # College softball rankings
 rankings_cbs = safe(
     'college softball rankings',
-    lambda: cbs.espn_college_softball_rankings(return_parsed=True),
+    lambda: cbs.espn_college_softball_rankings(),
 )
 if rankings_cbs is not None and rankings_cbs.height:
     keep = [c for c in rankings_cbs.columns
@@ -584,8 +586,8 @@ signature events are the **Frozen Four** in April (men's) and March (women's).
 
 ### 🏒 Men's college hockey: scoreboard & teams
 
-[`espn_mch_scoreboard(dates=YYYYMMDD)`](../hockey/reference/mch.md#espn_mch_scoreboard)
-returns the game slate. [`espn_mch_teams_site()`](../hockey/reference/mch.md#espn_mch_teams_site)
+[`espn_mch_scoreboard(dates=YYYYMMDD)`](../mch/reference/site.md#espn_mch_scoreboard)
+returns the game slate. [`espn_mch_teams_site()`](../mch/reference/site.md#espn_mch_teams_site)
 lists all Division I programs — currently 60 teams.
 
 
@@ -593,7 +595,7 @@ lists all Division I programs — currently 60 teams.
 # Frozen Four semi-final day, April 2024
 board_mch = safe(
     'men\'s college hockey scoreboard (parsed)',
-    lambda: mch.espn_mch_scoreboard(dates=MCH_DATE, return_parsed=True),
+    lambda: mch.espn_mch_scoreboard(dates=MCH_DATE),
 )
 if board_mch is not None and getattr(board_mch, 'height', 0):
     keep = [c for c in board_mch.columns
@@ -610,7 +612,7 @@ else:
 # Men's college hockey teams
 teams_mch = safe(
     'men\'s college hockey teams',
-    lambda: mch.espn_mch_teams_site(return_parsed=True),
+    lambda: mch.espn_mch_teams_site(),
 )
 if teams_mch is not None and teams_mch.height:
     keep = [c for c in teams_mch.columns
@@ -632,7 +634,7 @@ The rankings endpoint returns the USCHO / USA Today poll.
 # Conference standings
 standings_mch = safe(
     "men's college hockey standings",
-    lambda: mch.espn_mch_standings(return_parsed=True),
+    lambda: mch.espn_mch_standings(),
 )
 if standings_mch is not None and standings_mch.height:
     keep = [c for c in standings_mch.columns
@@ -648,7 +650,7 @@ else:
 # National rankings
 rankings_mch = safe(
     "men's college hockey rankings",
-    lambda: mch.espn_mch_rankings(return_parsed=True),
+    lambda: mch.espn_mch_rankings(),
 )
 if rankings_mch is not None and rankings_mch.height:
     keep = [c for c in rankings_mch.columns
@@ -662,9 +664,9 @@ else:
 ### 📅 Men's college hockey: team schedule & roster
 
 Pull a program's full schedule with
-[`espn_mch_team_schedule(team_id=, season=)`](../hockey/reference/mch.md#espn_mch_team_schedule)
+[`espn_mch_team_schedule(team_id=, season=)`](../mch/reference/site.md#espn_mch_team_schedule)
 and their roster with
-[`espn_mch_team_roster(team_id=, season=)`](../hockey/reference/mch.md#espn_mch_team_roster).
+[`espn_mch_team_roster(team_id=, season=)`](../mch/reference/site.md#espn_mch_team_roster).
 Boston University (team_id=103) won the 2024 national title — a good
 reference point.
 
@@ -674,7 +676,7 @@ reference point.
 schedule_mch = safe(
     "men's college hockey team schedule",
     lambda: mch.espn_mch_team_schedule(team_id=103, season=SAMPLE_SEASON,
-                                       return_parsed=True),
+                                       ),
 )
 if schedule_mch is not None and schedule_mch.height:
     keep = [c for c in schedule_mch.columns
@@ -692,7 +694,7 @@ else:
 roster_mch = safe(
     "men's college hockey roster",
     lambda: mch.espn_mch_team_roster(team_id=103, season=SAMPLE_SEASON,
-                                     return_parsed=True),
+                                     ),
 )
 if roster_mch is not None and roster_mch.height:
     keep = [c for c in roster_mch.columns
@@ -715,7 +717,7 @@ in late March. Wisconsin is the perennial power — 12 national championships.
 # NCAA Women's Frozen Four 2024
 board_wch = safe(
     "women's college hockey scoreboard (parsed)",
-    lambda: wch.espn_wch_scoreboard(dates=WCH_DATE, return_parsed=True),
+    lambda: wch.espn_wch_scoreboard(dates=WCH_DATE),
 )
 if board_wch is not None and getattr(board_wch, 'height', 0):
     keep = [c for c in board_wch.columns
@@ -732,7 +734,7 @@ else:
 # Women's college hockey teams
 teams_wch = safe(
     "women's college hockey teams",
-    lambda: wch.espn_wch_teams_site(return_parsed=True),
+    lambda: wch.espn_wch_teams_site(),
 )
 if teams_wch is not None and teams_wch.height:
     keep = [c for c in teams_wch.columns
@@ -749,7 +751,7 @@ else:
 schedule_wch = safe(
     "women's college hockey team schedule",
     lambda: wch.espn_wch_team_schedule(team_id=275, season=SAMPLE_SEASON,
-                                       return_parsed=True),
+                                       ),
 )
 if schedule_wch is not None and schedule_wch.height:
     keep = [c for c in schedule_wch.columns
@@ -766,7 +768,7 @@ else:
 # Women's college hockey rankings
 rankings_wch = safe(
     "women's college hockey rankings",
-    lambda: wch.espn_wch_rankings(return_parsed=True),
+    lambda: wch.espn_wch_rankings(),
 )
 if rankings_wch is not None and rankings_wch.height:
     keep = [c for c in rankings_wch.columns
@@ -805,7 +807,7 @@ LEAGUE_MODULES = [
 frames = []
 for league_name, mod, fn_name in LEAGUE_MODULES:
     fn = getattr(mod, fn_name)
-    df = safe(f'{league_name} teams', lambda fn=fn: fn(return_parsed=True))
+    df = safe(f'{league_name} teams', lambda fn=fn: fn())
     if df is not None and df.height:
         # parsed teams frames use team_id / team_display_name column names
         id_col = 'team_id' if 'team_id' in df.columns else 'id' if 'id' in df.columns else df.columns[0]
@@ -839,7 +841,7 @@ today_str = int(date.today().strftime('%Y%m%d'))
 # Swap in any module + scoreboard function to check a different league
 todays_cfl = safe(
     f"today's CFL slate ({today_str})",
-    lambda: cfl.espn_cfl_scoreboard(dates=today_str, return_parsed=True),
+    lambda: cfl.espn_cfl_scoreboard(dates=today_str),
 )
 if todays_cfl is not None and getattr(todays_cfl, 'height', 0):
     print(f"{todays_cfl.height} game(s) today")
@@ -876,8 +878,8 @@ else:
 
 ### Recipe 4 — News & injuries for any league 📰
 
-[`espn_{prefix}_news()`](../football/reference/ufl.md#espn_ufl_news) and
-[`espn_{prefix}_injuries()`](../football/reference/ufl.md#espn_ufl_injuries)
+[`espn_{prefix}_news()`](../ufl/reference/site.md#espn_ufl_news) and
+[`espn_{prefix}_injuries()`](../ufl/reference/site.md#espn_ufl_injuries)
 need no arguments — just call them for the latest feed. Both return raw
 dicts; parsed versions are available where a parser is registered.
 
@@ -923,7 +925,7 @@ This means:
 - Any bug fix in `_common_espn` applies to all 7 leagues at once.
 - Every league has an identical `dir()` surface — the only difference
   is the prefix string (`ufl`, `xfl`, `cfl`, `college_baseball`, …).
-- The `return_parsed=True` path routes through `ENDPOINT_PARSERS` — a
+- The `` path routes through `ENDPOINT_PARSERS` — a
   registry mapping each short name to a dedicated parser function (or
   a generic fall-through like `parse_items`, `parse_single_entity`, or
   `parse_summary`). You can always get the raw dict by omitting the kwarg.
@@ -956,14 +958,14 @@ for name, mod in [('ufl', ufl), ('xfl', xfl), ('cfl', cfl),
 ## 🔗 See Also
 
 - **Spring / pro football reference docs:**
-  [UFL](../football/reference/ufl.md) ·
+  [UFL](../ufl/reference/site.md) ·
   [XFL](../football/reference/xfl.md) ·
   [CFL](../football/reference/cfl.md)
 - **College baseball / softball reference docs:**
-  [College Baseball](../baseball/reference/college_baseball.md) ·
+  [College Baseball](../college_baseball/reference/site.md) ·
   [College Softball](../baseball/reference/college_softball.md)
 - **NCAA hockey reference docs:**
-  [Men's College Hockey](../hockey/reference/mch.md) ·
+  [Men's College Hockey](../mch/reference/site.md) ·
   [Women's College Hockey](../hockey/reference/wch.md)
 - **Cross-league architecture deep-dive:** `docs/docs/architecture/espn-cross-league.md`
 - **Parser layer:** `docs/docs/parsers/`

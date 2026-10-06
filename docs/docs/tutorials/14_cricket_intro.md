@@ -84,13 +84,15 @@ helper runs every network call defensively. Any exception is caught, printed, an
 
 
 ```python
+from sportsdataverse.errors import AssetFetchError, NoDataError
+
 def safe(label, thunk):
     try:
         out = thunk()
         print(f"✅ {label}")
         return out
-    except Exception as exc:
-        print(f"⚠️  {label} — {exc}")
+    except (NoDataError, AssetFetchError) as e:
+        print(f"\u23ed\ufe0f  {label}: {type(e).__name__}: {e}")
         return None
 ```
 
@@ -98,7 +100,7 @@ def safe(label, thunk):
 
 [`espn_cricket_scoreboard`](../cricket/reference/site.md#espn_cricket_scoreboard)
 hits the Site v2 scoreboard endpoint for the given `league=` slug.
-By default (`return_parsed=True`) it routes the payload through
+By default (``) it routes the payload through
 `parse_cricket_scoreboard` and returns a tidy polars frame.
 Pass `return_parsed=False` to get the raw ESPN JSON dict instead.
 
@@ -367,7 +369,7 @@ else:
 
 When you only need one frame, pass `section=` to `parse_cricket_summary` to
 avoid deserializing all 8 sections. The wrapper also accepts the section via
-`return_parsed=True` + `section=` if you want to skip the intermediate raw dict.
+`` + `section=` if you want to skip the intermediate raw dict.
 
 
 ```python

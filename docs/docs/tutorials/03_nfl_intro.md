@@ -86,14 +86,16 @@ directly.
 
 
 ```python
+from sportsdataverse.errors import AssetFetchError, NoDataError
+
 def safe(label, thunk):
     """Run a live call; return its result, or print a one-liner and return None."""
     try:
         out = thunk()
         print(f"✅ {label}")
         return out
-    except Exception as e:  # noqa: BLE001 -- demo resilience over network blips
-        print(f"⏭️  {label}: unavailable right now ({type(e).__name__})")
+    except (NoDataError, AssetFetchError) as e:
+        print(f"\u23ed\ufe0f  {label}: {type(e).__name__}: {e}")
         return None
 
 
@@ -644,7 +646,7 @@ calendar; `most_recent_nfl_season()` gives the latest season with data.
 
 ## 🏆 Season standings + playoff seeding — `nfl_season_standings`
 
-New in 0.0.72: a faithful port of the nflseedR v2 standings engine. It
+a faithful port of the nflseedR v2 standings engine. It
 computes division ranks, conference seeds, and the full tiebreaker cascade
 straight from a games frame — the schedule loader output works as-is:
 
@@ -673,3 +675,36 @@ standings.select(["team", "division", "games", "wins", "losses", "true_wins"]).h
   [nflreadpy](https://github.com/nflverse/nflreadpy).
 
 Now go build something great — may your EPA be ever positive! 📈🏈
+
+## 🏟️ NFL Pro, PFF and the Shield adapter
+
+Three NFL-only sources beyond ESPN and nflverse: **NFL Pro** (`pro.nfl.com` Next
+Gen Stats, no key), the **PFF Developer API** (`api.pff.com`, needs
+`SDV_PY_PFF_API_KEY`), and the **Shield** play-by-play parser that feeds
+`NFLPlayProcess` with `source="shield"`.
+
+
+
+```python
+import os
+
+from sportsdataverse.nfl.nflpro import nfl_pro_players_offense_passing_season
+
+ngs = safe("nfl_pro passing (season)", lambda: nfl_pro_players_offense_passing_season(season=2024))
+if ngs is not None:
+    print(ngs.columns[:8])
+
+# PFF needs a key; the cell is a no-op without one rather than a traceback.
+if os.environ.get("SDV_PY_PFF_API_KEY") or os.environ.get("PFF_API_KEY"):
+    from sportsdataverse.nfl.pff_api import pff_api_facet_defense_coverage
+
+    safe("pff_api defense coverage", lambda: pff_api_facet_defense_coverage(season=2024))
+else:
+    print("no PFF key set - skipping pff_api_* (set SDV_PY_PFF_API_KEY)")
+
+# The Shield parser is what source="shield" routes through.
+from sportsdataverse.nfl import shield_pbp
+
+print("shield_pbp:", [n for n in dir(shield_pbp) if not n.startswith("_")][:6])
+
+```

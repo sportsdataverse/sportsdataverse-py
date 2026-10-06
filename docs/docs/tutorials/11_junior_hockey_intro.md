@@ -68,13 +68,15 @@ is up, and a friendly one-liner when it isn't (never a scary traceback). 🛟
 
 
 ```python
+from sportsdataverse.errors import AssetFetchError, NoDataError
+
 def safe(label, thunk):
     try:
         out = thunk()
         print(f"✅ {label}")
         return out
-    except Exception as e:  # noqa: BLE001 -- demo resilience
-        print(f"⏭️  {label}: unavailable right now ({type(e).__name__})")
+    except (NoDataError, AssetFetchError) as e:
+        print(f"\u23ed\ufe0f  {label}: {type(e).__name__}: {e}")
         return None
 ```
 
@@ -384,3 +386,52 @@ the recipes above guard on `height` before using them. 🛟
 - Override a league's public key only if it rotates: `SDV_<LEAGUE>_API_KEY`.
 
 Now go find the next first-overall pick! 🏒
+
+## 🌍 All 19 minor & junior families
+
+`ahl`, `ohl`, `whl` and `qmjhl` above are four of the **19** HockeyTech families
+(PWHL has its own notebook). The other fifteen: `echl`, `sphl`, `chl`, `ushl`,
+`bchl`, `ajhl`, `sjhl`, `ojhl`, `cchl`, `gojhl`, `mhl`, `nojhl`, `vijhl`, `kijhl`
+and `mjhl`. Every family is minted by the same
+`hockeytech.build_family(league)`, so each one exposes the identical 13 callables —
+`<lg>_schedule`, `<lg>_pbp`, `<lg>_standings`, `<lg>_teams`, `<lg>_team_roster`,
+`<lg>_player_stats`, `<lg>_leaders`, `<lg>_game_summary`, `<lg>_game_shifts`,
+`<lg>_player_toi`, `<lg>_game_corsi`, `<lg>_season_id` and
+`most_recent_<lg>_season`.
+
+**Two pbp caveats.** `ushl` and `mjhl` gamecenter feeds carry goals, penalties and
+goalie changes only — no coordinates. `mjhl` additionally denies `gc/gamesummary`,
+so `mjhl_game_summary` returns empty event frames and `mjhl_pbp` returns plays
+without game metadata.
+
+
+
+```python
+import sportsdataverse as sdv
+from sportsdataverse.hockeytech._leagues import LEAGUES
+
+families = sorted(lg for lg in LEAGUES if lg != "pwhl")
+print(f"{len(families)} families:", ", ".join(families))
+
+# One standings call per family: the registry is the whole surface.
+for lg in families:
+    fn = getattr(sdv, f"{lg}_standings", None)
+    if fn is None:
+        print(f"  {lg}: not exported at the top level")
+        continue
+    safe(f"{lg}_standings", lambda fn=fn: fn())
+
+```
+
+
+```python
+# The two small-canvas / partial-feed families, called explicitly so the caveat is visible.
+for lg in ("ushl", "mjhl"):
+    pbp = safe(f"{lg}_pbp", lambda lg=lg: getattr(sdv, f"{lg}_pbp")(
+        game_id=getattr(sdv, f"{lg}_schedule")().row(0, named=True)["game_id"]
+    ))
+    if pbp is not None:
+        has_xy = {"x_location", "y_location"} & set(pbp.columns)
+        print(f"  {lg}: {pbp.height} plays, coordinates present: {bool(has_xy)}")
+
+```

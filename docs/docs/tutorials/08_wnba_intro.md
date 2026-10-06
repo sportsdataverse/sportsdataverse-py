@@ -65,14 +65,16 @@ ESPN's live endpoints are seasonal and occasionally rate-limited, so a tiny `saf
 
 
 ```python
+from sportsdataverse.errors import AssetFetchError, NoDataError
+
 def safe(label, thunk):
     """Run a live call; print a one-liner instead of raising on failure."""
     try:
         out = thunk()
         print(f'✅ {label}')
         return out
-    except Exception as e:  # noqa: BLE001 -- demo resilience
-        print(f'⏭️  {label}: unavailable right now ({type(e).__name__})')
+    except (NoDataError, AssetFetchError) as e:
+        print(f"\u23ed\ufe0f  {label}: {type(e).__name__}: {e}")
         return None
 ```
 
@@ -494,3 +496,16 @@ box_2024.select(['game_id', 'game_date', 'athlete_display_name',
 - Want a deeper stats API? [nba_api](https://github.com/swar/nba_api) also covers the WNBA.
 
 Now go chart some buckets! 🏀
+
+## 🦓 Game officials
+
+Who worked a given game, from the ESPN summary feed.
+
+
+
+```python
+from sportsdataverse.wnba import wnba_game_officials
+
+safe("wnba game officials", lambda: wnba_game_officials(game_id=1022400100))
+
+```

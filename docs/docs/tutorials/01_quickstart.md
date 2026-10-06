@@ -112,14 +112,23 @@ That keeps this whole page runnable offline or in the off-season. 🛟
 
 
 ```python
+from sportsdataverse.errors import AssetFetchError, NoDataError
+
 def safe(label, thunk):
-    '''Run a live call; return its result, or print a one-liner and return None.'''
+    '''Run a live call; return its result, or name the failure and return None.
+
+    NoDataError means the fetch SUCCEEDED and there is nothing there (an
+    out-of-season endpoint, a 404). AssetFetchError means the fetch FAILED and the
+    answer is unknown (a 403, a rate limit, an exhausted retry budget). Collapsing
+    the two into None is the silent-data-loss bug the error vocabulary exists to
+    prevent, so the class is printed.
+    '''
     try:
         out = thunk()
         print(f"✅ {label}")
         return out
-    except Exception as e:  # noqa: BLE001 -- demo resilience
-        print(f"⏭️  {label}: unavailable right now ({type(e).__name__})")
+    except (NoDataError, AssetFetchError) as e:
+        print(f"\u23ed\ufe0f  {label}: {type(e).__name__}: {e}")
         return None
 
 
@@ -572,3 +581,21 @@ sport has a dedicated tutorial that leads with its premium endpoints:
 Part of the **[SportsDataverse](https://www.sportsdataverse.org)** — the names
 here mirror the R sisters (hoopR, wehoop, cfbfastR, baseballr, fastRhockey,
 oddsapiR). Now go build something great! 🏆
+
+## 📈 Derived surfaces
+
+Three package-level helpers that work on any frame you have already loaded —
+rolling form windows, rate curves along a continuous axis, and the metric registry
+that names and resolves every published metric (`sportsdataverse.registry`).
+
+
+
+```python
+from sportsdataverse import metric_curves, rolling_windows
+import sportsdataverse.registry as registry
+
+print("rolling_windows:", [n for n in dir(rolling_windows) if not n.startswith("_")][:6])
+print("metric_curves:  ", [n for n in dir(metric_curves) if not n.startswith("_")][:6])
+print("registry:       ", [n for n in dir(registry) if not n.startswith("_")][:6])
+
+```
