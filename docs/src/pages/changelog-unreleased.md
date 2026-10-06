@@ -34,6 +34,13 @@ and other kloppy kwargs pass through), and
 sdvplotR's `sdv_pitch_coords()`. Tests load a trimmed real StatsBomb match (`tests/fixtures/kloppy/`);
 kloppy is also in the `tests` and `all` extras so CI has it.
 
+### Changed — league index pages gain a "See also" block of companion packages (soccer first)
+
+Each league's reference index (`docs/docs/<league>/index.md`) can now list the packages a reader is likely
+to reach for next, from the hand-maintained `tools/codegen/companions.yaml` (same shape as `highlights.yaml`).
+The SOCCER page links kloppy, sdvplot, sdvplotR, itscalledsoccer, soccerdata and mplsoccer; leagues without an
+entry render unchanged.
+
 ### Added — sdv-docs MCP server and a published docs index
 
 `sdv-docs` is a stdio MCP server that answers exact questions about the SportsDataverse surface
