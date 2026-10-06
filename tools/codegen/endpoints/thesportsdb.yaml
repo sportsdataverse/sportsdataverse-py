@@ -1,0 +1,164 @@
+api: thesportsdb
+docstring:
+  example_import: true
+  raises:
+  - 'sportsdataverse.errors.NoDataError: TheSportsDB answered 404 (unknown id or route).'
+  see_also:
+  - name: TheSportsDB API docs
+    note: free test key 3 is the default (30 req/min); set $THESPORTSDB_API_KEY to
+      use your own
+    url: https://www.thesportsdb.com/free_sports_api
+endpoints:
+- example_args:
+    id: '2267073'
+  extra_params:
+  - description: Required. Event id (idEvent from /eventsseason.php).
+    name: id
+    query_key: id
+    type: str
+  parser: parse_thesportsdb
+  path: /lookupevent.php
+  returns_schema: native/thesportsdb/event
+  short: event
+  summary: One event.
+- example_args:
+    id: '4328'
+  extra_params:
+  - description: Required. League id (idLeague from /all_leagues.php).
+    name: id
+    query_key: id
+    type: str
+  parser: parse_thesportsdb
+  path: /lookupleague.php
+  returns_schema: native/thesportsdb/league
+  short: league
+  summary: One league.
+- example_args:
+    id: '4328'
+  extra_params:
+  - description: Required. League id (idLeague from /all_leagues.php).
+    name: id
+    query_key: id
+    type: str
+  parser: parse_thesportsdb
+  path: /eventsnextleague.php
+  returns_schema: native/thesportsdb/league_next_events
+  short: league_next_events
+  summary: Next 15 events of a league.
+- example_args:
+    l: English Premier League
+  extra_params:
+  - description: Required. League name as spelled in strLeague.
+    name: l
+    query_key: l
+    type: str
+  parser: parse_thesportsdb
+  path: /search_all_teams.php
+  returns_schema: native/thesportsdb/league_teams
+  short: league_teams
+  summary: Teams in a league (by league name).
+- example_args: {}
+  parser: parse_thesportsdb
+  path: /all_leagues.php
+  returns_schema: native/thesportsdb/leagues
+  short: leagues
+  summary: All leagues.
+- example_args:
+    id: '34145937'
+  extra_params:
+  - description: Required. Player id (idPlayer from /lookup_all_players.php).
+    name: id
+    query_key: id
+    type: str
+  parser: parse_thesportsdb
+  path: /lookupplayer.php
+  returns_schema: native/thesportsdb/player
+  short: player
+  summary: One player.
+- example_args:
+    p: Danny Welbeck
+  extra_params:
+  - description: Required. Player name (substring search).
+    name: p
+    query_key: p
+    type: str
+  parser: parse_thesportsdb
+  path: /searchplayers.php
+  returns_schema: native/thesportsdb/player_search
+  short: player_search
+  summary: Search players by name.
+- example_args:
+    id: '4328'
+    s: 2025-2026
+  extra_params:
+  - description: Required. League id (idLeague from /all_leagues.php).
+    name: id
+    query_key: id
+    type: str
+  - description: Season label, e.g. 2025-2026; omitted, the API answers the current
+      season.
+    name: s
+    query_key: s
+    type: str
+  parser: parse_thesportsdb
+  path: /eventsseason.php
+  returns_schema: native/thesportsdb/season_events
+  short: season_events
+  summary: Events of a league-season.
+- example_args: {}
+  parser: parse_thesportsdb
+  path: /all_sports.php
+  returns_schema: native/thesportsdb/sports
+  short: sports
+  summary: All sports.
+- example_args:
+    l: '4328'
+    s: 2025-2026
+  extra_params:
+  - description: Required. League id (idLeague from /all_leagues.php).
+    name: l
+    query_key: l
+    type: str
+  - description: Season label, e.g. 2025-2026; omitted, the API answers the current
+      season.
+    name: s
+    query_key: s
+    type: str
+  parser: parse_thesportsdb
+  path: /lookuptable.php
+  returns_schema: native/thesportsdb/table
+  short: table
+  summary: League table.
+- example_args:
+    id: '133604'
+  extra_params:
+  - description: Required. Team id (idTeam from /search_all_teams.php).
+    name: id
+    query_key: id
+    type: str
+  parser: parse_thesportsdb
+  path: /lookupteam.php
+  returns_schema: native/thesportsdb/team
+  short: team
+  summary: One team.
+- example_args:
+    id: '133604'
+  extra_params:
+  - description: Required. Team id (idTeam from /search_all_teams.php).
+    name: id
+    query_key: id
+    type: str
+  parser: parse_thesportsdb
+  path: /lookup_all_players.php
+  returns_schema: native/thesportsdb/team_players
+  short: team_players
+  summary: Players of a team.
+getter_module: sportsdataverse.thesportsdb.thesportsdb_runtime
+host: https://www.thesportsdb.com/api/v1/json/{key}
+module: thesportsdb
+name_pattern: thesportsdb_{short}
+parser_module: thesportsdb.thesportsdb_parsers
+passthrough_query: false
+qualifier: ''
+runtime_imports:
+- _get
