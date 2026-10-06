@@ -1,0 +1,6004 @@
+{
+  "tabs": [
+    "overview",
+    "table",
+    "fixtures"
+  ],
+  "allAvailableSeasons": [
+    "2026/2027",
+    "2025/2026",
+    "2024/2025"
+  ],
+  "details": {
+    "id": 47,
+    "type": "league",
+    "name": "Premier League",
+    "selectedSeason": "2026/2027",
+    "latestSeason": "2026/2027",
+    "shortName": "Premier League",
+    "country": "ENG",
+    "gender": "male",
+    "nationalTeamId": 8491,
+    "faqJSONLD": null,
+    "breadcrumbJSONLD": {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://www.fotmob.com"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Premier League",
+          "item": "https://www.fotmob.com/leagues/47/overview/premier-league"
+        }
+      ]
+    },
+    "canSyncCalendar": true,
+    "hasFixtureDifficulty": true,
+    "leagueColor": "#3F1152",
+    "dataProvider": "enet",
+    "seopath": "premier-league"
+  },
+  "seostr": "premier-league",
+  "QAData": [],
+  "table": [
+    {
+      "data": {
+        "ccode": "ENG",
+        "leagueId": 47,
+        "pageUrl": "/leagues/47/overview/premier-league",
+        "leagueName": "Premier League",
+        "legend": [
+          {
+            "title": "Champions League",
+            "tKey": "championsleague",
+            "color": "#2AD572",
+            "indices": [
+              0,
+              1,
+              2
+            ]
+          },
+          {
+            "title": "Europa League",
+            "tKey": "europaleague",
+            "color": "#0046A7",
+            "indices": [
+              4
+            ]
+          },
+          {
+            "title": "Relegation",
+            "tKey": "relegation",
+            "color": "#FF4646",
+            "indices": [
+              17,
+              18,
+              19
+            ]
+          }
+        ],
+        "ongoing": [],
+        "table": {
+          "all": [
+            {
+              "name": "Manchester City",
+              "shortName": "Man City",
+              "id": 8456,
+              "pageUrl": "/teams/8456/overview/manchester-city",
+              "deduction": null,
+              "ongoing": null,
+              "played": 5,
+              "wins": 5,
+              "draws": 0,
+              "losses": 0,
+              "scoresStr": "13-5",
+              "goalConDiff": 8,
+              "pts": 15,
+              "idx": 1,
+              "qualColor": "#2AD572"
+            },
+            {
+              "name": "Arsenal",
+              "shortName": "Arsenal",
+              "id": 9825,
+              "pageUrl": "/teams/9825/overview/arsenal",
+              "deduction": null,
+              "ongoing": null,
+              "played": 5,
+              "wins": 4,
+              "draws": 0,
+              "losses": 1,
+              "scoresStr": "8-4",
+              "goalConDiff": 4,
+              "pts": 12,
+              "idx": 2,
+              "qualColor": "#2AD572"
+            },
+            {
+              "name": "Brighton & Hove Albion",
+              "shortName": "Brighton",
+              "id": 10204,
+              "pageUrl": "/teams/10204/overview/brighton-hove-albion",
+              "deduction": null,
+              "ongoing": null,
+              "played": 5,
+              "wins": 3,
+              "draws": 1,
+              "losses": 1,
+              "scoresStr": "16-5",
+              "goalConDiff": 11,
+              "pts": 10,
+              "idx": 3,
+              "qualColor": "#2AD572"
+            }
+          ],
+          "home": [
+            {
+              "name": "Manchester City",
+              "shortName": "Man City",
+              "id": 8456,
+              "pageUrl": "/teams/8456/overview/manchester-city",
+              "deduction": null,
+              "ongoing": null,
+              "played": 3,
+              "wins": 3,
+              "draws": 0,
+              "losses": 0,
+              "scoresStr": "8-4",
+              "goalConDiff": 4,
+              "goalsScored": 8,
+              "pts": 9,
+              "idx": 1,
+              "qualColor": "#2AD572"
+            },
+            {
+              "name": "Brighton & Hove Albion",
+              "shortName": "Brighton",
+              "id": 10204,
+              "pageUrl": "/teams/10204/overview/brighton-hove-albion",
+              "deduction": null,
+              "ongoing": null,
+              "played": 3,
+              "wins": 2,
+              "draws": 1,
+              "losses": 0,
+              "scoresStr": "8-1",
+              "goalConDiff": 7,
+              "goalsScored": 8,
+              "pts": 7,
+              "idx": 2,
+              "qualColor": "#2AD572"
+            },
+            {
+              "name": "Brentford",
+              "shortName": "Brentford",
+              "id": 9937,
+              "pageUrl": "/teams/9937/overview/brentford",
+              "deduction": null,
+              "ongoing": null,
+              "played": 3,
+              "wins": 2,
+              "draws": 1,
+              "losses": 0,
+              "scoresStr": "7-1",
+              "goalConDiff": 6,
+              "goalsScored": 7,
+              "pts": 7,
+              "idx": 3,
+              "qualColor": "#2AD572"
+            }
+          ],
+          "away": [
+            {
+              "name": "Liverpool",
+              "shortName": "Liverpool",
+              "id": 8650,
+              "pageUrl": "/teams/8650/overview/liverpool",
+              "deduction": null,
+              "ongoing": null,
+              "played": 3,
+              "wins": 2,
+              "draws": 1,
+              "losses": 0,
+              "scoresStr": "5-2",
+              "goalConDiff": 3,
+              "goalsScored": 5,
+              "pts": 7,
+              "idx": 1,
+              "qualColor": "#2AD572"
+            },
+            {
+              "name": "Manchester City",
+              "shortName": "Man City",
+              "id": 8456,
+              "pageUrl": "/teams/8456/overview/manchester-city",
+              "deduction": null,
+              "ongoing": null,
+              "played": 2,
+              "wins": 2,
+              "draws": 0,
+              "losses": 0,
+              "scoresStr": "5-1",
+              "goalConDiff": 4,
+              "goalsScored": 5,
+              "pts": 6,
+              "idx": 2,
+              "qualColor": "#2AD572"
+            },
+            {
+              "name": "Arsenal",
+              "shortName": "Arsenal",
+              "id": 9825,
+              "pageUrl": "/teams/9825/overview/arsenal",
+              "deduction": null,
+              "ongoing": null,
+              "played": 3,
+              "wins": 2,
+              "draws": 0,
+              "losses": 1,
+              "scoresStr": "3-3",
+              "goalConDiff": 0,
+              "goalsScored": 3,
+              "pts": 6,
+              "idx": 3,
+              "qualColor": "#2AD572"
+            }
+          ],
+          "form": [
+            {
+              "name": "Manchester City",
+              "shortName": "Man City",
+              "featuredInMatch": false,
+              "id": 8456,
+              "pageUrl": "/teams/8456/overview/manchester-city",
+              "played": 5,
+              "wins": 5,
+              "draws": 0,
+              "losses": 0,
+              "scoresStr": "13-5",
+              "goalConDiff": 8,
+              "goalsScored": 13,
+              "pts": 15,
+              "ongoing": null,
+              "idx": 1,
+              "qualColor": "#2AD572"
+            },
+            {
+              "name": "Arsenal",
+              "shortName": "Arsenal",
+              "featuredInMatch": false,
+              "id": 9825,
+              "pageUrl": "/teams/9825/overview/arsenal",
+              "played": 5,
+              "wins": 4,
+              "draws": 0,
+              "losses": 1,
+              "scoresStr": "8-4",
+              "goalConDiff": 4,
+              "goalsScored": 8,
+              "pts": 12,
+              "ongoing": null,
+              "idx": 2,
+              "qualColor": "#2AD572"
+            },
+            {
+              "name": "Brighton & Hove Albion",
+              "shortName": "Brighton",
+              "featuredInMatch": false,
+              "id": 10204,
+              "pageUrl": "/teams/10204/overview/brighton-hove-albion",
+              "played": 5,
+              "wins": 3,
+              "draws": 1,
+              "losses": 1,
+              "scoresStr": "16-5",
+              "goalConDiff": 11,
+              "goalsScored": 16,
+              "pts": 10,
+              "ongoing": null,
+              "idx": 3,
+              "qualColor": "#2AD572"
+            }
+          ],
+          "xg": [
+            {
+              "name": "Arsenal",
+              "shortName": "Arsenal",
+              "id": 9825,
+              "pageUrl": "/teams/9825/overview/arsenal",
+              "ongoing": null,
+              "played": 5,
+              "wins": 4,
+              "draws": 0,
+              "losses": 1,
+              "scoresStr": "8-4",
+              "goalConDiff": 4,
+              "pts": 12,
+              "teamId": 9825,
+              "teamName": "Arsenal",
+              "xg": 8.476900100708008,
+              "xgConceded": 4.0386000126600266,
+              "xPoints": 10.28462860665999,
+              "position": 1,
+              "xgDiff": -0.4769001007080078,
+              "xgConcededDiff": -0.03860001266002655,
+              "xPointsDiff": 1.7153713933400105,
+              "xPosition": 1,
+              "idx": 1,
+              "xPositionDiff": 1,
+              "qualColor": "#2AD572"
+            },
+            {
+              "name": "Manchester City",
+              "shortName": "Man City",
+              "id": 8456,
+              "pageUrl": "/teams/8456/overview/manchester-city",
+              "ongoing": null,
+              "played": 5,
+              "wins": 5,
+              "draws": 0,
+              "losses": 0,
+              "scoresStr": "13-5",
+              "goalConDiff": 8,
+              "pts": 15,
+              "teamId": 8456,
+              "teamName": "Manchester City",
+              "xg": 10.498800039291382,
+              "xgConceded": 7.247300088405609,
+              "xPoints": 9.248291792719282,
+              "position": 2,
+              "xgDiff": 2.501199960708618,
+              "xgConcededDiff": -2.247300088405609,
+              "xPointsDiff": 5.751708207280718,
+              "xPosition": 2,
+              "idx": 2,
+              "xPositionDiff": -1,
+              "qualColor": "#2AD572"
+            },
+            {
+              "name": "Nottingham Forest",
+              "shortName": "Nottm Forest",
+              "id": 10203,
+              "pageUrl": "/teams/10203/overview/nottingham-forest",
+              "ongoing": null,
+              "played": 5,
+              "wins": 1,
+              "draws": 2,
+              "losses": 2,
+              "scoresStr": "4-5",
+              "goalConDiff": -1,
+              "pts": 5,
+              "teamId": 10203,
+              "teamName": "Nottingham Forest",
+              "xg": 7.25790011882782,
+              "xgConceded": 4.773800015449524,
+              "xPoints": 8.603078232046109,
+              "position": 3,
+              "xgDiff": -3.25790011882782,
+              "xgConcededDiff": 0.22619998455047607,
+              "xPointsDiff": -3.6030782320461086,
+              "xPosition": 3,
+              "idx": 3,
+              "xPositionDiff": 10,
+              "qualColor": "#2AD572"
+            }
+          ]
+        },
+        "tableFilterTypes": [
+          "all",
+          "home",
+          "away"
+        ],
+        "composite": false,
+        "selectedSeason": "2026/2027",
+        "isCurrentSeason": true
+      },
+      "tableFilterTypes": [
+        "all",
+        "home",
+        "away"
+      ],
+      "teamForm": {
+        "8455": [
+          {
+            "result": 1,
+            "resultString": "W",
+            "imageUrl": "https://images.fotmob.com/image_resources/logo/teamlogo/9879.png",
+            "linkToMatch": "/matches/chelsea-vs-fulham/2s2omg#5795372",
+            "date": null,
+            "teamPageUrl": "/teams/9879/overview/fulham",
+            "tooltipText": {
+              "utcTime": "2026-08-24T19:00:00Z",
+              "homeTeam": "Fulham",
+              "homeTeamId": 9879,
+              "homeScore": 2,
+              "awayTeam": "Chelsea",
+              "awayTeamId": 8455,
+              "awayScore": 3
+            },
+            "score": "2 - 3",
+            "home": {
+              "id": "9879",
+              "name": "Fulham",
+              "shortName": "Fulham",
+              "isOurTeam": false
+            },
+            "away": {
+              "id": "8455",
+              "name": "Chelsea",
+              "shortName": "Chelsea",
+              "isOurTeam": true
+            }
+          },
+          {
+            "result": 1,
+            "resultString": "W",
+            "imageUrl": "https://images.fotmob.com/image_resources/logo/teamlogo/10204.png",
+            "linkToMatch": "/matches/chelsea-vs-brighton-hove-albion/2vni1p#5795427",
+            "date": null,
+            "teamPageUrl": "/teams/10204/overview/brighton-hove-albion",
+            "tooltipText": {
+              "utcTime": "2026-08-30T13:00:00Z",
+              "homeTeam": "Chelsea",
+              "homeTeamId": 8455,
+              "homeScore": 4,
+              "awayTeam": "Brighton & Hove Albion",
+              "awayTeamId": 10204,
+              "awayScore": 3
+            },
+            "score": "4 - 3",
+            "home": {
+              "id": "8455",
+              "name": "Chelsea",
+              "shortName": "Chelsea",
+              "isOurTeam": true
+            },
+            "away": {
+              "id": "10204",
+              "name": "Brighton & Hove Albion",
+              "shortName": "Brighton & Hove Albion",
+              "isOurTeam": false
+            }
+          },
+          {
+            "result": -1,
+            "resultString": "L",
+            "imageUrl": "https://images.fotmob.com/image_resources/logo/teamlogo/9825.png",
+            "linkToMatch": "/matches/chelsea-vs-arsenal/2rhhrp#5795435",
+            "date": null,
+            "teamPageUrl": "/teams/9825/overview/arsenal",
+            "tooltipText": {
+              "utcTime": "2026-09-06T15:30:00Z",
+              "homeTeam": "Arsenal",
+              "homeTeamId": 9825,
+              "homeScore": 2,
+              "awayTeam": "Chelsea",
+              "awayTeamId": 8455,
+              "awayScore": 1
+            },
+            "score": "2 - 1",
+            "home": {
+              "id": "9825",
+              "name": "Arsenal",
+              "shortName": "Arsenal",
+              "isOurTeam": false
+            },
+            "away": {
+              "id": "8455",
+              "name": "Chelsea",
+              "shortName": "Chelsea",
+              "isOurTeam": true
+            }
+          }
+        ],
+        "8456": [
+          {
+            "result": 1,
+            "resultString": "W",
+            "imageUrl": "https://images.fotmob.com/image_resources/logo/teamlogo/8678.png",
+            "linkToMatch": "/matches/manchester-city-vs-afc-bournemouth/2feiv3#5795370",
+            "date": null,
+            "teamPageUrl": "/teams/8678/overview/afc-bournemouth",
+            "tooltipText": {
+              "utcTime": "2026-08-23T13:00:00Z",
+              "homeTeam": "Manchester City",
+              "homeTeamId": 8456,
+              "homeScore": 2,
+              "awayTeam": "AFC Bournemouth",
+              "awayTeamId": 8678,
+              "awayScore": 1
+            },
+            "score": "2 - 1",
+            "home": {
+              "id": "8456",
+              "name": "Manchester City",
+              "shortName": "Manchester City",
+              "isOurTeam": true
+            },
+            "away": {
+              "id": "8678",
+              "name": "AFC Bournemouth",
+              "shortName": "AFC Bournemouth",
+              "isOurTeam": false
+            }
+          },
+          {
+            "result": 1,
+            "resultString": "W",
+            "imageUrl": "https://images.fotmob.com/image_resources/logo/teamlogo/9826.png",
+            "linkToMatch": "/matches/manchester-city-vs-crystal-palace/2ri9zd#5795429",
+            "date": null,
+            "teamPageUrl": "/teams/9826/overview/crystal-palace",
+            "tooltipText": {
+              "utcTime": "2026-08-28T19:00:00Z",
+              "homeTeam": "Crystal Palace",
+              "homeTeamId": 9826,
+              "homeScore": 1,
+              "awayTeam": "Manchester City",
+              "awayTeamId": 8456,
+              "awayScore": 4
+            },
+            "score": "1 - 4",
+            "home": {
+              "id": "9826",
+              "name": "Crystal Palace",
+              "shortName": "Crystal Palace",
+              "isOurTeam": false
+            },
+            "away": {
+              "id": "8456",
+              "name": "Manchester City",
+              "shortName": "Manchester City",
+              "isOurTeam": true
+            }
+          },
+          {
+            "result": 1,
+            "resultString": "W",
+            "imageUrl": "https://images.fotmob.com/image_resources/logo/teamlogo/8669.png",
+            "linkToMatch": "/matches/manchester-city-vs-coventry-city/2fb7wc#5795442",
+            "date": null,
+            "teamPageUrl": "/teams/8669/overview/coventry-city",
+            "tooltipText": {
+              "utcTime": "2026-09-05T14:00:00Z",
+              "homeTeam": "Manchester City",
+              "homeTeamId": 8456,
+              "homeScore": 1,
+              "awayTeam": "Coventry City",
+              "awayTeamId": 8669,
+              "awayScore": 0
+            },
+            "score": "1 - 0",
+            "home": {
+              "id": "8456",
+              "name": "Manchester City",
+              "shortName": "Manchester City",
+              "isOurTeam": true
+            },
+            "away": {
+              "id": "8669",
+              "name": "Coventry City",
+              "shortName": "Coventry City",
+              "isOurTeam": false
+            }
+          }
+        ],
+        "8463": [
+          {
+            "result": 1,
+            "resultString": "W",
+            "imageUrl": "https://images.fotmob.com/image_resources/logo/teamlogo/10203.png",
+            "linkToMatch": "/matches/leeds-united-vs-nottingham-forest/2vqauu#5795367",
+            "date": null,
+            "teamPageUrl": "/teams/10203/overview/nottingham-forest",
+            "tooltipText": {
+              "utcTime": "2026-08-22T14:00:00Z",
+              "homeTeam": "Nottingham Forest",
+              "homeTeamId": 10203,
+              "homeScore": 0,
+              "awayTeam": "Leeds United",
+              "awayTeamId": 8463,
+              "awayScore": 1
+            },
+            "score": "0 - 1",
+            "home": {
+              "id": "10203",
+              "name": "Nottingham Forest",
+              "shortName": "Nottingham Forest",
+              "isOurTeam": false
+            },
+            "away": {
+              "id": "8463",
+              "name": "Leeds United",
+              "shortName": "Leeds United",
+              "isOurTeam": true
+            }
+          },
+          {
+            "result": 0,
+            "resultString": "D",
+            "imageUrl": "https://images.fotmob.com/image_resources/logo/teamlogo/9937.png",
+            "linkToMatch": "/matches/leeds-united-vs-brentford/2sso1t#5795430",
+            "date": null,
+            "teamPageUrl": "/teams/9937/overview/brentford",
+            "tooltipText": {
+              "utcTime": "2026-08-30T13:00:00Z",
+              "homeTeam": "Leeds United",
+              "homeTeamId": 8463,
+              "homeScore": 1,
+              "awayTeam": "Brentford",
+              "awayTeamId": 9937,
+              "awayScore": 1
+            },
+            "score": "1 - 1",
+            "home": {
+              "id": "8463",
+              "name": "Leeds United",
+              "shortName": "Leeds United",
+              "isOurTeam": true
+            },
+            "away": {
+              "id": "9937",
+              "name": "Brentford",
+              "shortName": "Brentford",
+              "isOurTeam": false
+            }
+          },
+          {
+            "result": 0,
+            "resultString": "D",
+            "imageUrl": "https://images.fotmob.com/image_resources/logo/teamlogo/10204.png",
+            "linkToMatch": "/matches/leeds-united-vs-brighton-hove-albion/2vqp9d#5795437",
+            "date": null,
+            "teamPageUrl": "/teams/10204/overview/brighton-hove-albion",
+            "tooltipText": {
+              "utcTime": "2026-09-05T14:00:00Z",
+              "homeTeam": "Brighton & Hove Albion",
+              "homeTeamId": 10204,
+              "homeScore": 1,
+              "awayTeam": "Leeds United",
+              "awayTeamId": 8463,
+              "awayScore": 1
+            },
+            "score": "1 - 1",
+            "home": {
+              "id": "10204",
+              "name": "Brighton & Hove Albion",
+              "shortName": "Brighton & Hove Albion",
+              "isOurTeam": false
+            },
+            "away": {
+              "id": "8463",
+              "name": "Leeds United",
+              "shortName": "Leeds United",
+              "isOurTeam": true
+            }
+          }
+        ],
+        "8472": [
+          {
+            "result": -1,
+            "resultString": "L",
+            "imageUrl": "https://images.fotmob.com/image_resources/logo/teamlogo/9902.png",
+            "linkToMatch": "/matches/sunderland-vs-ipswich-town/2sif4z#5795366",
+            "date": null,
+            "teamPageUrl": "/teams/9902/overview/ipswich-town",
+            "tooltipText": {
+              "utcTime": "2026-08-22T14:00:00Z",
+              "homeTeam": "Ipswich Town",
+              "homeTeamId": 9902,
+              "homeScore": 2,
+              "awayTeam": "Sunderland",
+              "awayTeamId": 8472,
+              "awayScore": 1
+            },
+            "score": "2 - 1",
+            "home": {
+              "id": "9902",
+              "name": "Ipswich Town",
+              "shortName": "Ipswich Town",
+              "isOurTeam": false
+            },
+            "away": {
+              "id": "8472",
+              "name": "Sunderland",
+              "shortName": "Sunderland",
+              "isOurTeam": true
+            }
+          },
+          {
+            "result": 1,
+            "resultString": "W",
+            "imageUrl": "https://images.fotmob.com/image_resources/logo/teamlogo/9879.png",
+            "linkToMatch": "/matches/sunderland-vs-fulham/2s9d8f#5795433",
+            "date": null,
+            "teamPageUrl": "/teams/9879/overview/fulham",
+            "tooltipText": {
+              "utcTime": "2026-08-30T13:00:00Z",
+              "homeTeam": "Sunderland",
+              "homeTeamId": 8472,
+              "homeScore": 1,
+              "awayTeam": "Fulham",
+              "awayTeamId": 9879,
+              "awayScore": 0
+            },
+            "score": "1 - 0",
+            "home": {
+              "id": "8472",
+              "name": "Sunderland",
+              "shortName": "Sunderland",
+              "isOurTeam": true
+            },
+            "away": {
+              "id": "9879",
+              "name": "Fulham",
+              "shortName": "Fulham",
+              "isOurTeam": false
+            }
+          },
+          {
+            "result": 0,
+            "resultString": "D",
+            "imageUrl": "https://images.fotmob.com/image_resources/logo/teamlogo/9937.png",
+            "linkToMatch": "/matches/sunderland-vs-brentford/2sw7v2#5795436",
+            "date": null,
+            "teamPageUrl": "/teams/9937/overview/brentford",
+            "tooltipText": {
+              "utcTime": "2026-09-05T14:00:00Z",
+              "homeTeam": "Brentford",
+              "homeTeamId": 9937,
+              "homeScore": 1,
+              "awayTeam": "Sunderland",
+              "awayTeamId": 8472,
+              "awayScore": 1
+            },
+            "score": "1 - 1",
+            "home": {
+              "id": "9937",
+              "name": "Brentford",
+              "shortName": "Brentford",
+              "isOurTeam": false
+            },
+            "away": {
+              "id": "8472",
+              "name": "Sunderland",
+              "shortName": "Sunderland",
+              "isOurTeam": true
+            }
+          }
+        ],
+        "8586": [
+          {
+            "result": -1,
+            "resultString": "L",
+            "imageUrl": "https://images.fotmob.com/image_resources/logo/teamlogo/9937.png",
+            "linkToMatch": "/matches/tottenham-hotspur-vs-brentford/2u5c8b#5795368",
+            "date": null,
+            "teamPageUrl": "/teams/9937/overview/brentford",
+            "tooltipText": {
+              "utcTime": "2026-08-22T16:30:00Z",
+              "homeTeam": "Brentford",
+              "homeTeamId": 9937,
+              "homeScore": 3,
+              "awayTeam": "Tottenham Hotspur",
+              "awayTeamId": 8586,
+              "awayScore": 0
+            },
+            "score": "3 - 0",
+            "home": {
+              "id": "9937",
+              "name": "Brentford",
+              "shortName": "Brentford",
+              "isOurTeam": false
+            },
+            "away": {
+              "id": "8586",
+              "name": "Tottenham Hotspur",
+              "shortName": "Tottenham Hotspur",
+              "isOurTeam": true
+            }
+          },
+          {
+            "result": -1,
+            "resultString": "L",
+            "imageUrl": "https://images.fotmob.com/image_resources/logo/teamlogo/10261.png",
+            "linkToMatch": "/matches/tottenham-hotspur-vs-newcastle-united/2xr2ka#5795434",
+            "date": null,
+            "teamPageUrl": "/teams/10261/overview/newcastle-united",
+            "tooltipText": {
+              "utcTime": "2026-08-29T16:30:00Z",
+              "homeTeam": "Tottenham Hotspur",
+              "homeTeamId": 8586,
+              "homeScore": 0,
+              "awayTeam": "Newcastle United",
+              "awayTeamId": 10261,
+              "awayScore": 2
+            },
+            "score": "0 - 2",
+            "home": {
+              "id": "8586",
+              "name": "Tottenham Hotspur",
+              "shortName": "Tottenham Hotspur",
+              "isOurTeam": true
+            },
+            "away": {
+              "id": "10261",
+              "name": "Newcastle United",
+              "shortName": "Newcastle United",
+              "isOurTeam": false
+            }
+          },
+          {
+            "result": 0,
+            "resultString": "D",
+            "imageUrl": "https://images.fotmob.com/image_resources/logo/teamlogo/10203.png",
+            "linkToMatch": "/matches/tottenham-hotspur-vs-nottingham-forest/2x3odl#5795444",
+            "date": null,
+            "teamPageUrl": "/teams/10203/overview/nottingham-forest",
+            "tooltipText": {
+              "utcTime": "2026-09-05T14:00:00Z",
+              "homeTeam": "Nottingham Forest",
+              "homeTeamId": 10203,
+              "homeScore": 0,
+              "awayTeam": "Tottenham Hotspur",
+              "awayTeamId": 8586,
+              "awayScore": 0
+            },
+            "score": "0 - 0",
+            "home": {
+              "id": "10203",
+              "name": "Nottingham Forest",
+              "shortName": "Nottingham Forest",
+              "isOurTeam": false
+            },
+            "away": {
+              "id": "8586",
+              "name": "Tottenham Hotspur",
+              "shortName": "Tottenham Hotspur",
+              "isOurTeam": true
+            }
+          }
+        ],
+        "8650": [
+          {
+            "result": 0,
+            "resultString": "D",
+            "imageUrl": "https://images.fotmob.com/image_resources/logo/teamlogo/10261.png",
+            "linkToMatch": "/matches/liverpool-vs-newcastle-united/2ygyxm#5795371",
+            "date": null,
+            "teamPageUrl": "/teams/10261/overview/newcastle-united",
+            "tooltipText": {
+              "utcTime": "2026-08-23T15:30:00Z",
+              "homeTeam": "Newcastle United",
+              "homeTeamId": 10261,
+              "homeScore": 2,
+              "awayTeam": "Liverpool",
+              "awayTeamId": 8650,
+              "awayScore": 2
+            },
+            "score": "2 - 2",
+            "home": {
+              "id": "10261",
+              "name": "Newcastle United",
+              "shortName": "Newcastle United",
+              "isOurTeam": false
+            },
+            "away": {
+              "id": "8650",
+              "name": "Liverpool",
+              "shortName": "Liverpool",
+              "isOurTeam": true
+            }
+          },
+          {
+            "result": 0,
+            "resultString": "D",
+            "imageUrl": "https://images.fotmob.com/image_resources/logo/teamlogo/10203.png",
+            "linkToMatch": "/matches/liverpool-vs-nottingham-forest/2xthvt#5795431",
+            "date": null,
+            "teamPageUrl": "/teams/10203/overview/nottingham-forest",
+            "tooltipText": {
+              "utcTime": "2026-08-29T11:30:00Z",
+              "homeTeam": "Liverpool",
+              "homeTeamId": 8650,
+              "homeScore": 2,
+              "awayTeam": "Nottingham Forest",
+              "awayTeamId": 10203,
+              "awayScore": 2
+            },
+            "score": "2 - 2",
+            "home": {
+              "id": "8650",
+              "name": "Liverpool",
+              "shortName": "Liverpool",
+              "isOurTeam": true
+            },
+            "away": {
+              "id": "10203",
+              "name": "Nottingham Forest",
+              "shortName": "Nottingham Forest",
+              "isOurTeam": false
+            }
+          },
+          {
+            "result": 1,
+            "resultString": "W",
+            "imageUrl": "https://images.fotmob.com/image_resources/logo/teamlogo/9902.png",
+            "linkToMatch": "/matches/liverpool-vs-ipswich-town/2ugv0q#5795441",
+            "date": null,
+            "teamPageUrl": "/teams/9902/overview/ipswich-town",
+            "tooltipText": {
+              "utcTime": "2026-09-04T19:00:00Z",
+              "homeTeam": "Ipswich Town",
+              "homeTeamId": 9902,
+              "homeScore": 0,
+              "awayTeam": "Liverpool",
+              "awayTeamId": 8650,
+              "awayScore": 2
+            },
+            "score": "0 - 2",
+            "home": {
+              "id": "9902",
+              "name": "Ipswich Town",
+              "shortName": "Ipswich Town",
+              "isOurTeam": false
+            },
+            "away": {
+              "id": "8650",
+              "name": "Liverpool",
+              "shortName": "Liverpool",
+              "isOurTeam": true
+            }
+          }
+        ],
+        "8667": [
+          {
+            "result": 1,
+            "resultString": "W",
+            "imageUrl": "https://images.fotmob.com/image_resources/logo/teamlogo/10260.png",
+            "linkToMatch": "/matches/hull-city-vs-manchester-united/2yngir#5795364",
+            "date": null,
+            "teamPageUrl": "/teams/10260/overview/manchester-united",
+            "tooltipText": {
+              "utcTime": "2026-08-22T11:30:00Z",
+              "homeTeam": "Hull City",
+              "homeTeamId": 8667,
+              "homeScore": 2,
+              "awayTeam": "Manchester United",
+              "awayTeamId": 10260,
+              "awayScore": 0
+            },
+            "score": "2 - 0",
+            "home": {
+              "id": "8667",
+              "name": "Hull City",
+              "shortName": "Hull City",
+              "isOurTeam": true
+            },
+            "away": {
+              "id": "10260",
+              "name": "Manchester United",
+              "shortName": "Manchester United",
+              "isOurTeam": false
+            }
+          },
+          {
+            "result": 1,
+            "resultString": "W",
+            "imageUrl": "https://images.fotmob.com/image_resources/logo/teamlogo/8669.png",
+            "linkToMatch": "/matches/hull-city-vs-coventry-city/2hh595#5795428",
+            "date": null,
+            "teamPageUrl": "/teams/8669/overview/coventry-city",
+            "tooltipText": {
+              "utcTime": "2026-08-29T14:00:00Z",
+              "homeTeam": "Coventry City",
+              "homeTeamId": 8669,
+              "homeScore": 0,
+              "awayTeam": "Hull City",
+              "awayTeamId": 8667,
+              "awayScore": 1
+            },
+            "score": "0 - 1",
+            "home": {
+              "id": "8669",
+              "name": "Coventry City",
+              "shortName": "Coventry City",
+              "isOurTeam": false
+            },
+            "away": {
+              "id": "8667",
+              "name": "Hull City",
+              "shortName": "Hull City",
+              "isOurTeam": true
+            }
+          },
+          {
+            "result": 0,
+            "resultString": "D",
+            "imageUrl": "https://images.fotmob.com/image_resources/logo/teamlogo/10252.png",
+            "linkToMatch": "/matches/hull-city-vs-aston-villa/2yk7pj#5795440",
+            "date": null,
+            "teamPageUrl": "/teams/10252/overview/aston-villa",
+            "tooltipText": {
+              "utcTime": "2026-09-05T16:30:00Z",
+              "homeTeam": "Hull City",
+              "homeTeamId": 8667,
+              "homeScore": 0,
+              "awayTeam": "Aston Villa",
+              "awayTeamId": 10252,
+              "awayScore": 0
+            },
+            "score": "0 - 0",
+            "home": {
+              "id": "8667",
+              "name": "Hull City",
+              "shortName": "Hull City",
+              "isOurTeam": true
+            },
+            "away": {
+              "id": "10252",
+              "name": "Aston Villa",
+              "shortName": "Aston Villa",
+              "isOurTeam": false
+            }
+          }
+        ],
+        "8668": [
+          {
+            "result": 1,
+            "resultString": "W",
+            "imageUrl": "https://images.fotmob.com/image_resources/logo/teamlogo/9826.png",
+            "linkToMatch": "/matches/everton-vs-crystal-palace/2tttz7#5795365",
+            "date": null,
+            "teamPageUrl": "/teams/9826/overview/crystal-palace",
+            "tooltipText": {
+              "utcTime": "2026-08-22T14:00:00Z",
+              "homeTeam": "Everton",
+              "homeTeamId": 8668,
+              "homeScore": 2,
+              "awayTeam": "Crystal Palace",
+              "awayTeamId": 9826,
+              "awayScore": 0
+            },
+            "score": "2 - 0",
+            "home": {
+              "id": "8668",
+              "name": "Everton",
+              "shortName": "Everton",
+              "isOurTeam": true
+            },
+            "away": {
+              "id": "9826",
+              "name": "Crystal Palace",
+              "shortName": "Crystal Palace",
+              "isOurTeam": false
+            }
+          },
+          {
+            "result": 0,
+            "resultString": "D",
+            "imageUrl": "https://images.fotmob.com/image_resources/logo/teamlogo/8678.png",
+            "linkToMatch": "/matches/everton-vs-afc-bournemouth/2hkv2h#5795425",
+            "date": null,
+            "teamPageUrl": "/teams/8678/overview/afc-bournemouth",
+            "tooltipText": {
+              "utcTime": "2026-08-29T14:00:00Z",
+              "homeTeam": "AFC Bournemouth",
+              "homeTeamId": 8678,
+              "homeScore": 1,
+              "awayTeam": "Everton",
+              "awayTeamId": 8668,
+              "awayScore": 1
+            },
+            "score": "1 - 1",
+            "home": {
+              "id": "8678",
+              "name": "AFC Bournemouth",
+              "shortName": "AFC Bournemouth",
+              "isOurTeam": false
+            },
+            "away": {
+              "id": "8668",
+              "name": "Everton",
+              "shortName": "Everton",
+              "isOurTeam": true
+            }
+          },
+          {
+            "result": 0,
+            "resultString": "D",
+            "imageUrl": "https://images.fotmob.com/image_resources/logo/teamlogo/10260.png",
+            "linkToMatch": "/matches/everton-vs-manchester-united/2ynv4k#5795438",
+            "date": null,
+            "teamPageUrl": "/teams/10260/overview/manchester-united",
+            "tooltipText": {
+              "utcTime": "2026-09-06T13:00:00Z",
+              "homeTeam": "Everton",
+              "homeTeamId": 8668,
+              "homeScore": 2,
+              "awayTeam": "Manchester United",
+              "awayTeamId": 10260,
+              "awayScore": 2
+            },
+            "score": "2 - 2",
+            "home": {
+              "id": "8668",
+              "name": "Everton",
+              "shortName": "Everton",
+              "isOurTeam": true
+            },
+            "away": {
+              "id": "10260",
+              "name": "Manchester United",
+              "shortName": "Manchester United",
+              "isOurTeam": false
+            }
+          }
+        ],
+        "8669": [
+          {
+            "result": -1,
+            "resultString": "L",
+            "imageUrl": "https://images.fotmob.com/image_resources/logo/teamlogo/9825.png",
+            "linkToMatch": "/matches/coventry-city-vs-arsenal/2tttz6#5795363",
+            "date": null,
+            "teamPageUrl": "/teams/9825/overview/arsenal",
+            "tooltipText": {
+              "utcTime": "2026-08-21T19:00:00Z",
+              "homeTeam": "Arsenal",
+              "homeTeamId": 9825,
+              "homeScore": 3,
+              "awayTeam": "Coventry City",
+              "awayTeamId": 8669,
+              "awayScore": 0
+            },
+            "score": "3 - 0",
+            "home": {
+              "id": "9825",
+              "name": "Arsenal",
+              "shortName": "Arsenal",
+              "isOurTeam": false
+            },
+            "away": {
+              "id": "8669",
+              "name": "Coventry City",
+              "shortName": "Coventry City",
+              "isOurTeam": true
+            }
+          },
+          {
+            "result": -1,
+            "resultString": "L",
+            "imageUrl": "https://images.fotmob.com/image_resources/logo/teamlogo/8667.png",
+            "linkToMatch": "/matches/hull-city-vs-coventry-city/2hh595#5795428",
+            "date": null,
+            "teamPageUrl": "/teams/8667/overview/hull-city",
+            "tooltipText": {
+              "utcTime": "2026-08-29T14:00:00Z",
+              "homeTeam": "Coventry City",
+              "homeTeamId": 8669,
+              "homeScore": 0,
+              "awayTeam": "Hull City",
+              "awayTeamId": 8667,
+              "awayScore": 1
+            },
+            "score": "0 - 1",
+            "home": {
+              "id": "8669",
+              "name": "Coventry City",
+              "shortName": "Coventry City",
+              "isOurTeam": true
+            },
+            "away": {
+              "id": "8667",
+              "name": "Hull City",
+              "shortName": "Hull City",
+              "isOurTeam": false
+            }
+          },
+          {
+            "result": -1,
+            "resultString": "L",
+            "imageUrl": "https://images.fotmob.com/image_resources/logo/teamlogo/8456.png",
+            "linkToMatch": "/matches/manchester-city-vs-coventry-city/2fb7wc#5795442",
+            "date": null,
+            "teamPageUrl": "/teams/8456/overview/manchester-city",
+            "tooltipText": {
+              "utcTime": "2026-09-05T14:00:00Z",
+              "homeTeam": "Manchester City",
+              "homeTeamId": 8456,
+              "homeScore": 1,
+              "awayTeam": "Coventry City",
+              "awayTeamId": 8669,
+              "awayScore": 0
+            },
+            "score": "1 - 0",
+            "home": {
+              "id": "8456",
+              "name": "Manchester City",
+              "shortName": "Manchester City",
+              "isOurTeam": false
+            },
+            "away": {
+              "id": "8669",
+              "name": "Coventry City",
+              "shortName": "Coventry City",
+              "isOurTeam": true
+            }
+          }
+        ],
+        "8678": [
+          {
+            "result": -1,
+            "resultString": "L",
+            "imageUrl": "https://images.fotmob.com/image_resources/logo/teamlogo/8456.png",
+            "linkToMatch": "/matches/manchester-city-vs-afc-bournemouth/2feiv3#5795370",
+            "date": null,
+            "teamPageUrl": "/teams/8456/overview/manchester-city",
+            "tooltipText": {
+              "utcTime": "2026-08-23T13:00:00Z",
+              "homeTeam": "Manchester City",
+              "homeTeamId": 8456,
+              "homeScore": 2,
+              "awayTeam": "AFC Bournemouth",
+              "awayTeamId": 8678,
+              "awayScore": 1
+            },
+            "score": "2 - 1",
+            "home": {
+              "id": "8456",
+              "name": "Manchester City",
+              "shortName": "Manchester City",
+              "isOurTeam": false
+            },
+            "away": {
+              "id": "8678",
+              "name": "AFC Bournemouth",
+              "shortName": "AFC Bournemouth",
+              "isOurTeam": true
+            }
+          },
+          {
+            "result": 0,
+            "resultString": "D",
+            "imageUrl": "https://images.fotmob.com/image_resources/logo/teamlogo/8668.png",
+            "linkToMatch": "/matches/everton-vs-afc-bournemouth/2hkv2h#5795425",
+            "date": null,
+            "teamPageUrl": "/teams/8668/overview/everton",
+            "tooltipText": {
+              "utcTime": "2026-08-29T14:00:00Z",
+              "homeTeam": "AFC Bournemouth",
+              "homeTeamId": 8678,
+              "homeScore": 1,
+              "awayTeam": "Everton",
+              "awayTeamId": 8668,
+              "awayScore": 1
+            },
+            "score": "1 - 1",
+            "home": {
+              "id": "8678",
+              "name": "AFC Bournemouth",
+              "shortName": "AFC Bournemouth",
+              "isOurTeam": true
+            },
+            "away": {
+              "id": "8668",
+              "name": "Everton",
+              "shortName": "Everton",
+              "isOurTeam": false
+            }
+          },
+          {
+            "result": 0,
+            "resultString": "D",
+            "imageUrl": "https://images.fotmob.com/image_resources/logo/teamlogo/10261.png",
+            "linkToMatch": "/matches/afc-bournemouth-vs-newcastle-united/2ysbu8#5795443",
+            "date": null,
+            "teamPageUrl": "/teams/10261/overview/newcastle-united",
+            "tooltipText": {
+              "utcTime": "2026-09-05T11:30:00Z",
+              "homeTeam": "Newcastle United",
+              "homeTeamId": 10261,
+              "homeScore": 2,
+              "awayTeam": "AFC Bournemouth",
+              "awayTeamId": 8678,
+              "awayScore": 2
+            },
+            "score": "2 - 2",
+            "home": {
+              "id": "10261",
+              "name": "Newcastle United",
+              "shortName": "Newcastle United",
+              "isOurTeam": false
+            },
+            "away": {
+              "id": "8678",
+              "name": "AFC Bournemouth",
+              "shortName": "AFC Bournemouth",
+              "isOurTeam": true
+            }
+          }
+        ],
+        "9825": [
+          {
+            "result": 1,
+            "resultString": "W",
+            "imageUrl": "https://images.fotmob.com/image_resources/logo/teamlogo/8669.png",
+            "linkToMatch": "/matches/coventry-city-vs-arsenal/2tttz6#5795363",
+            "date": null,
+            "teamPageUrl": "/teams/8669/overview/coventry-city",
+            "tooltipText": {
+              "utcTime": "2026-08-21T19:00:00Z",
+              "homeTeam": "Arsenal",
+              "homeTeamId": 9825,
+              "homeScore": 3,
+              "awayTeam": "Coventry City",
+              "awayTeamId": 8669,
+              "awayScore": 0
+            },
+            "score": "3 - 0",
+            "home": {
+              "id": "9825",
+              "name": "Arsenal",
+              "shortName": "Arsenal",
+              "isOurTeam": true
+            },
+            "away": {
+              "id": "8669",
+              "name": "Coventry City",
+              "shortName": "Coventry City",
+              "isOurTeam": false
+            }
+          },
+          {
+            "result": 1,
+            "resultString": "W",
+            "imageUrl": "https://images.fotmob.com/image_resources/logo/teamlogo/10252.png",
+            "linkToMatch": "/matches/arsenal-vs-aston-villa/3c06vg#5795426",
+            "date": null,
+            "teamPageUrl": "/teams/10252/overview/aston-villa",
+            "tooltipText": {
+              "utcTime": "2026-08-31T19:00:00Z",
+              "homeTeam": "Aston Villa",
+              "homeTeamId": 10252,
+              "homeScore": 0,
+              "awayTeam": "Arsenal",
+              "awayTeamId": 9825,
+              "awayScore": 1
+            },
+            "score": "0 - 1",
+            "home": {
+              "id": "10252",
+              "name": "Aston Villa",
+              "shortName": "Aston Villa",
+              "isOurTeam": false
+            },
+            "away": {
+              "id": "9825",
+              "name": "Arsenal",
+              "shortName": "Arsenal",
+              "isOurTeam": true
+            }
+          },
+          {
+            "result": 1,
+            "resultString": "W",
+            "imageUrl": "https://images.fotmob.com/image_resources/logo/teamlogo/8455.png",
+            "linkToMatch": "/matches/chelsea-vs-arsenal/2rhhrp#5795435",
+            "date": null,
+            "teamPageUrl": "/teams/8455/overview/chelsea",
+            "tooltipText": {
+              "utcTime": "2026-09-06T15:30:00Z",
+              "homeTeam": "Arsenal",
+              "homeTeamId": 9825,
+              "homeScore": 2,
+              "awayTeam": "Chelsea",
+              "awayTeamId": 8455,
+              "awayScore": 1
+            },
+            "score": "2 - 1",
+            "home": {
+              "id": "9825",
+              "name": "Arsenal",
+              "shortName": "Arsenal",
+              "isOurTeam": true
+            },
+            "away": {
+              "id": "8455",
+              "name": "Chelsea",
+              "shortName": "Chelsea",
+              "isOurTeam": false
+            }
+          }
+        ],
+        "9826": [
+          {
+            "result": -1,
+            "resultString": "L",
+            "imageUrl": "https://images.fotmob.com/image_resources/logo/teamlogo/8668.png",
+            "linkToMatch": "/matches/everton-vs-crystal-palace/2tttz7#5795365",
+            "date": null,
+            "teamPageUrl": "/teams/8668/overview/everton",
+            "tooltipText": {
+              "utcTime": "2026-08-22T14:00:00Z",
+              "homeTeam": "Everton",
+              "homeTeamId": 8668,
+              "homeScore": 2,
+              "awayTeam": "Crystal Palace",
+              "awayTeamId": 9826,
+              "awayScore": 0
+            },
+            "score": "2 - 0",
+            "home": {
+              "id": "8668",
+              "name": "Everton",
+              "shortName": "Everton",
+              "isOurTeam": false
+            },
+            "away": {
+              "id": "9826",
+              "name": "Crystal Palace",
+              "shortName": "Crystal Palace",
+              "isOurTeam": true
+            }
+          },
+          {
+            "result": -1,
+            "resultString": "L",
+            "imageUrl": "https://images.fotmob.com/image_resources/logo/teamlogo/8456.png",
+            "linkToMatch": "/matches/manchester-city-vs-crystal-palace/2ri9zd#5795429",
+            "date": null,
+            "teamPageUrl": "/teams/8456/overview/manchester-city",
+            "tooltipText": {
+              "utcTime": "2026-08-28T19:00:00Z",
+              "homeTeam": "Crystal Palace",
+              "homeTeamId": 9826,
+              "homeScore": 1,
+              "awayTeam": "Manchester City",
+              "awayTeamId": 8456,
+              "awayScore": 4
+            },
+            "score": "1 - 4",
+            "home": {
+              "id": "9826",
+              "name": "Crystal Palace",
+              "shortName": "Crystal Palace",
+              "isOurTeam": true
+            },
+            "away": {
+              "id": "8456",
+              "name": "Manchester City",
+              "shortName": "Manchester City",
+              "isOurTeam": false
+            }
+          },
+          {
+            "result": 1,
+            "resultString": "W",
+            "imageUrl": "https://images.fotmob.com/image_resources/logo/teamlogo/9879.png",
+            "linkToMatch": "/matches/crystal-palace-vs-fulham/37llbg#5795439",
+            "date": null,
+            "teamPageUrl": "/teams/9879/overview/fulham",
+            "tooltipText": {
+              "utcTime": "2026-09-05T14:00:00Z",
+              "homeTeam": "Fulham",
+              "homeTeamId": 9879,
+              "homeScore": 2,
+              "awayTeam": "Crystal Palace",
+              "awayTeamId": 9826,
+              "awayScore": 3
+            },
+            "score": "2 - 3",
+            "home": {
+              "id": "9879",
+              "name": "Fulham",
+              "shortName": "Fulham",
+              "isOurTeam": false
+            },
+            "away": {
+              "id": "9826",
+              "name": "Crystal Palace",
+              "shortName": "Crystal Palace",
+              "isOurTeam": true
+            }
+          }
+        ],
+        "9879": [
+          {
+            "result": -1,
+            "resultString": "L",
+            "imageUrl": "https://images.fotmob.com/image_resources/logo/teamlogo/8455.png",
+            "linkToMatch": "/matches/chelsea-vs-fulham/2s2omg#5795372",
+            "date": null,
+            "teamPageUrl": "/teams/8455/overview/chelsea",
+            "tooltipText": {
+              "utcTime": "2026-08-24T19:00:00Z",
+              "homeTeam": "Fulham",
+              "homeTeamId": 9879,
+              "homeScore": 2,
+              "awayTeam": "Chelsea",
+              "awayTeamId": 8455,
+              "awayScore": 3
+            },
+            "score": "2 - 3",
+            "home": {
+              "id": "9879",
+              "name": "Fulham",
+              "shortName": "Fulham",
+              "isOurTeam": true
+            },
+            "away": {
+              "id": "8455",
+              "name": "Chelsea",
+              "shortName": "Chelsea",
+              "isOurTeam": false
+            }
+          },
+          {
+            "result": -1,
+            "resultString": "L",
+            "imageUrl": "https://images.fotmob.com/image_resources/logo/teamlogo/8472.png",
+            "linkToMatch": "/matches/sunderland-vs-fulham/2s9d8f#5795433",
+            "date": null,
+            "teamPageUrl": "/teams/8472/overview/sunderland",
+            "tooltipText": {
+              "utcTime": "2026-08-30T13:00:00Z",
+              "homeTeam": "Sunderland",
+              "homeTeamId": 8472,
+              "homeScore": 1,
+              "awayTeam": "Fulham",
+              "awayTeamId": 9879,
+              "awayScore": 0
+            },
+            "score": "1 - 0",
+            "home": {
+              "id": "8472",
+              "name": "Sunderland",
+              "shortName": "Sunderland",
+              "isOurTeam": false
+            },
+            "away": {
+              "id": "9879",
+              "name": "Fulham",
+              "shortName": "Fulham",
+              "isOurTeam": true
+            }
+          },
+          {
+            "result": -1,
+            "resultString": "L",
+            "imageUrl": "https://images.fotmob.com/image_resources/logo/teamlogo/9826.png",
+            "linkToMatch": "/matches/crystal-palace-vs-fulham/37llbg#5795439",
+            "date": null,
+            "teamPageUrl": "/teams/9826/overview/crystal-palace",
+            "tooltipText": {
+              "utcTime": "2026-09-05T14:00:00Z",
+              "homeTeam": "Fulham",
+              "homeTeamId": 9879,
+              "homeScore": 2,
+              "awayTeam": "Crystal Palace",
+              "awayTeamId": 9826,
+              "awayScore": 3
+            },
+            "score": "2 - 3",
+            "home": {
+              "id": "9879",
+              "name": "Fulham",
+              "shortName": "Fulham",
+              "isOurTeam": true
+            },
+            "away": {
+              "id": "9826",
+              "name": "Crystal Palace",
+              "shortName": "Crystal Palace",
+              "isOurTeam": false
+            }
+          }
+        ],
+        "9902": [
+          {
+            "result": 1,
+            "resultString": "W",
+            "imageUrl": "https://images.fotmob.com/image_resources/logo/teamlogo/8472.png",
+            "linkToMatch": "/matches/sunderland-vs-ipswich-town/2sif4z#5795366",
+            "date": null,
+            "teamPageUrl": "/teams/8472/overview/sunderland",
+            "tooltipText": {
+              "utcTime": "2026-08-22T14:00:00Z",
+              "homeTeam": "Ipswich Town",
+              "homeTeamId": 9902,
+              "homeScore": 2,
+              "awayTeam": "Sunderland",
+              "awayTeamId": 8472,
+              "awayScore": 1
+            },
+            "score": "2 - 1",
+            "home": {
+              "id": "9902",
+              "name": "Ipswich Town",
+              "shortName": "Ipswich Town",
+              "isOurTeam": true
+            },
+            "away": {
+              "id": "8472",
+              "name": "Sunderland",
+              "shortName": "Sunderland",
+              "isOurTeam": false
+            }
+          },
+          {
+            "result": -1,
+            "resultString": "L",
+            "imageUrl": "https://images.fotmob.com/image_resources/logo/teamlogo/10260.png",
+            "linkToMatch": "/matches/ipswich-town-vs-manchester-united/3d0uj5#5795432",
+            "date": null,
+            "teamPageUrl": "/teams/10260/overview/manchester-united",
+            "tooltipText": {
+              "utcTime": "2026-08-30T15:30:00Z",
+              "homeTeam": "Manchester United",
+              "homeTeamId": 10260,
+              "homeScore": 5,
+              "awayTeam": "Ipswich Town",
+              "awayTeamId": 9902,
+              "awayScore": 2
+            },
+            "score": "5 - 2",
+            "home": {
+              "id": "10260",
+              "name": "Manchester United",
+              "shortName": "Manchester United",
+              "isOurTeam": false
+            },
+            "away": {
+              "id": "9902",
+              "name": "Ipswich Town",
+              "shortName": "Ipswich Town",
+              "isOurTeam": true
+            }
+          },
+          {
+            "result": -1,
+            "resultString": "L",
+            "imageUrl": "https://images.fotmob.com/image_resources/logo/teamlogo/8650.png",
+            "linkToMatch": "/matches/liverpool-vs-ipswich-town/2ugv0q#5795441",
+            "date": null,
+            "teamPageUrl": "/teams/8650/overview/liverpool",
+            "tooltipText": {
+              "utcTime": "2026-09-04T19:00:00Z",
+              "homeTeam": "Ipswich Town",
+              "homeTeamId": 9902,
+              "homeScore": 0,
+              "awayTeam": "Liverpool",
+              "awayTeamId": 8650,
+              "awayScore": 2
+            },
+            "score": "0 - 2",
+            "home": {
+              "id": "9902",
+              "name": "Ipswich Town",
+              "shortName": "Ipswich Town",
+              "isOurTeam": true
+            },
+            "away": {
+              "id": "8650",
+              "name": "Liverpool",
+              "shortName": "Liverpool",
+              "isOurTeam": false
+            }
+          }
+        ],
+        "9937": [
+          {
+            "result": 1,
+            "resultString": "W",
+            "imageUrl": "https://images.fotmob.com/image_resources/logo/teamlogo/8586.png",
+            "linkToMatch": "/matches/tottenham-hotspur-vs-brentford/2u5c8b#5795368",
+            "date": null,
+            "teamPageUrl": "/teams/8586/overview/tottenham-hotspur",
+            "tooltipText": {
+              "utcTime": "2026-08-22T16:30:00Z",
+              "homeTeam": "Brentford",
+              "homeTeamId": 9937,
+              "homeScore": 3,
+              "awayTeam": "Tottenham Hotspur",
+              "awayTeamId": 8586,
+              "awayScore": 0
+            },
+            "score": "3 - 0",
+            "home": {
+              "id": "9937",
+              "name": "Brentford",
+              "shortName": "Brentford",
+              "isOurTeam": true
+            },
+            "away": {
+              "id": "8586",
+              "name": "Tottenham Hotspur",
+              "shortName": "Tottenham Hotspur",
+              "isOurTeam": false
+            }
+          },
+          {
+            "result": 0,
+            "resultString": "D",
+            "imageUrl": "https://images.fotmob.com/image_resources/logo/teamlogo/8463.png",
+            "linkToMatch": "/matches/leeds-united-vs-brentford/2sso1t#5795430",
+            "date": null,
+            "teamPageUrl": "/teams/8463/overview/leeds-united",
+            "tooltipText": {
+              "utcTime": "2026-08-30T13:00:00Z",
+              "homeTeam": "Leeds United",
+              "homeTeamId": 8463,
+              "homeScore": 1,
+              "awayTeam": "Brentford",
+              "awayTeamId": 9937,
+              "awayScore": 1
+            },
+            "score": "1 - 1",
+            "home": {
+              "id": "8463",
+              "name": "Leeds United",
+              "shortName": "Leeds United",
+              "isOurTeam": false
+            },
+            "away": {
+              "id": "9937",
+              "name": "Brentford",
+              "shortName": "Brentford",
+              "isOurTeam": true
+            }
+          },
+          {
+            "result": 0,
+            "resultString": "D",
+            "imageUrl": "https://images.fotmob.com/image_resources/logo/teamlogo/8472.png",
+            "linkToMatch": "/matches/sunderland-vs-brentford/2sw7v2#5795436",
+            "date": null,
+            "teamPageUrl": "/teams/8472/overview/sunderland",
+            "tooltipText": {
+              "utcTime": "2026-09-05T14:00:00Z",
+              "homeTeam": "Brentford",
+              "homeTeamId": 9937,
+              "homeScore": 1,
+              "awayTeam": "Sunderland",
+              "awayTeamId": 8472,
+              "awayScore": 1
+            },
+            "score": "1 - 1",
+            "home": {
+              "id": "9937",
+              "name": "Brentford",
+              "shortName": "Brentford",
+              "isOurTeam": true
+            },
+            "away": {
+              "id": "8472",
+              "name": "Sunderland",
+              "shortName": "Sunderland",
+              "isOurTeam": false
+            }
+          }
+        ],
+        "10203": [
+          {
+            "result": -1,
+            "resultString": "L",
+            "imageUrl": "https://images.fotmob.com/image_resources/logo/teamlogo/8463.png",
+            "linkToMatch": "/matches/leeds-united-vs-nottingham-forest/2vqauu#5795367",
+            "date": null,
+            "teamPageUrl": "/teams/8463/overview/leeds-united",
+            "tooltipText": {
+              "utcTime": "2026-08-22T14:00:00Z",
+              "homeTeam": "Nottingham Forest",
+              "homeTeamId": 10203,
+              "homeScore": 0,
+              "awayTeam": "Leeds United",
+              "awayTeamId": 8463,
+              "awayScore": 1
+            },
+            "score": "0 - 1",
+            "home": {
+              "id": "10203",
+              "name": "Nottingham Forest",
+              "shortName": "Nottingham Forest",
+              "isOurTeam": true
+            },
+            "away": {
+              "id": "8463",
+              "name": "Leeds United",
+              "shortName": "Leeds United",
+              "isOurTeam": false
+            }
+          },
+          {
+            "result": 0,
+            "resultString": "D",
+            "imageUrl": "https://images.fotmob.com/image_resources/logo/teamlogo/8650.png",
+            "linkToMatch": "/matches/liverpool-vs-nottingham-forest/2xthvt#5795431",
+            "date": null,
+            "teamPageUrl": "/teams/8650/overview/liverpool",
+            "tooltipText": {
+              "utcTime": "2026-08-29T11:30:00Z",
+              "homeTeam": "Liverpool",
+              "homeTeamId": 8650,
+              "homeScore": 2,
+              "awayTeam": "Nottingham Forest",
+              "awayTeamId": 10203,
+              "awayScore": 2
+            },
+            "score": "2 - 2",
+            "home": {
+              "id": "8650",
+              "name": "Liverpool",
+              "shortName": "Liverpool",
+              "isOurTeam": false
+            },
+            "away": {
+              "id": "10203",
+              "name": "Nottingham Forest",
+              "shortName": "Nottingham Forest",
+              "isOurTeam": true
+            }
+          },
+          {
+            "result": 0,
+            "resultString": "D",
+            "imageUrl": "https://images.fotmob.com/image_resources/logo/teamlogo/8586.png",
+            "linkToMatch": "/matches/tottenham-hotspur-vs-nottingham-forest/2x3odl#5795444",
+            "date": null,
+            "teamPageUrl": "/teams/8586/overview/tottenham-hotspur",
+            "tooltipText": {
+              "utcTime": "2026-09-05T14:00:00Z",
+              "homeTeam": "Nottingham Forest",
+              "homeTeamId": 10203,
+              "homeScore": 0,
+              "awayTeam": "Tottenham Hotspur",
+              "awayTeamId": 8586,
+              "awayScore": 0
+            },
+            "score": "0 - 0",
+            "home": {
+              "id": "10203",
+              "name": "Nottingham Forest",
+              "shortName": "Nottingham Forest",
+              "isOurTeam": true
+            },
+            "away": {
+              "id": "8586",
+              "name": "Tottenham Hotspur",
+              "shortName": "Tottenham Hotspur",
+              "isOurTeam": false
+            }
+          }
+        ],
+        "10204": [
+          {
+            "result": 1,
+            "resultString": "W",
+            "imageUrl": "https://images.fotmob.com/image_resources/logo/teamlogo/10252.png",
+            "linkToMatch": "/matches/brighton-hove-albion-vs-aston-villa/3gku1s#5795369",
+            "date": null,
+            "teamPageUrl": "/teams/10252/overview/aston-villa",
+            "tooltipText": {
+              "utcTime": "2026-08-23T13:00:00Z",
+              "homeTeam": "Brighton & Hove Albion",
+              "homeTeamId": 10204,
+              "homeScore": 4,
+              "awayTeam": "Aston Villa",
+              "awayTeamId": 10252,
+              "awayScore": 0
+            },
+            "score": "4 - 0",
+            "home": {
+              "id": "10204",
+              "name": "Brighton & Hove Albion",
+              "shortName": "Brighton & Hove Albion",
+              "isOurTeam": true
+            },
+            "away": {
+              "id": "10252",
+              "name": "Aston Villa",
+              "shortName": "Aston Villa",
+              "isOurTeam": false
+            }
+          },
+          {
+            "result": -1,
+            "resultString": "L",
+            "imageUrl": "https://images.fotmob.com/image_resources/logo/teamlogo/8455.png",
+            "linkToMatch": "/matches/chelsea-vs-brighton-hove-albion/2vni1p#5795427",
+            "date": null,
+            "teamPageUrl": "/teams/8455/overview/chelsea",
+            "tooltipText": {
+              "utcTime": "2026-08-30T13:00:00Z",
+              "homeTeam": "Chelsea",
+              "homeTeamId": 8455,
+              "homeScore": 4,
+              "awayTeam": "Brighton & Hove Albion",
+              "awayTeamId": 10204,
+              "awayScore": 3
+            },
+            "score": "4 - 3",
+            "home": {
+              "id": "8455",
+              "name": "Chelsea",
+              "shortName": "Chelsea",
+              "isOurTeam": false
+            },
+            "away": {
+              "id": "10204",
+              "name": "Brighton & Hove Albion",
+              "shortName": "Brighton & Hove Albion",
+              "isOurTeam": true
+            }
+          },
+          {
+            "result": 0,
+            "resultString": "D",
+            "imageUrl": "https://images.fotmob.com/image_resources/logo/teamlogo/8463.png",
+            "linkToMatch": "/matches/leeds-united-vs-brighton-hove-albion/2vqp9d#5795437",
+            "date": null,
+            "teamPageUrl": "/teams/8463/overview/leeds-united",
+            "tooltipText": {
+              "utcTime": "2026-09-05T14:00:00Z",
+              "homeTeam": "Brighton & Hove Albion",
+              "homeTeamId": 10204,
+              "homeScore": 1,
+              "awayTeam": "Leeds United",
+              "awayTeamId": 8463,
+              "awayScore": 1
+            },
+            "score": "1 - 1",
+            "home": {
+              "id": "10204",
+              "name": "Brighton & Hove Albion",
+              "shortName": "Brighton & Hove Albion",
+              "isOurTeam": true
+            },
+            "away": {
+              "id": "8463",
+              "name": "Leeds United",
+              "shortName": "Leeds United",
+              "isOurTeam": false
+            }
+          }
+        ],
+        "10252": [
+          {
+            "result": -1,
+            "resultString": "L",
+            "imageUrl": "https://images.fotmob.com/image_resources/logo/teamlogo/10204.png",
+            "linkToMatch": "/matches/brighton-hove-albion-vs-aston-villa/3gku1s#5795369",
+            "date": null,
+            "teamPageUrl": "/teams/10204/overview/brighton-hove-albion",
+            "tooltipText": {
+              "utcTime": "2026-08-23T13:00:00Z",
+              "homeTeam": "Brighton & Hove Albion",
+              "homeTeamId": 10204,
+              "homeScore": 4,
+              "awayTeam": "Aston Villa",
+              "awayTeamId": 10252,
+              "awayScore": 0
+            },
+            "score": "4 - 0",
+            "home": {
+              "id": "10204",
+              "name": "Brighton & Hove Albion",
+              "shortName": "Brighton & Hove Albion",
+              "isOurTeam": false
+            },
+            "away": {
+              "id": "10252",
+              "name": "Aston Villa",
+              "shortName": "Aston Villa",
+              "isOurTeam": true
+            }
+          },
+          {
+            "result": -1,
+            "resultString": "L",
+            "imageUrl": "https://images.fotmob.com/image_resources/logo/teamlogo/9825.png",
+            "linkToMatch": "/matches/arsenal-vs-aston-villa/3c06vg#5795426",
+            "date": null,
+            "teamPageUrl": "/teams/9825/overview/arsenal",
+            "tooltipText": {
+              "utcTime": "2026-08-31T19:00:00Z",
+              "homeTeam": "Aston Villa",
+              "homeTeamId": 10252,
+              "homeScore": 0,
+              "awayTeam": "Arsenal",
+              "awayTeamId": 9825,
+              "awayScore": 1
+            },
+            "score": "0 - 1",
+            "home": {
+              "id": "10252",
+              "name": "Aston Villa",
+              "shortName": "Aston Villa",
+              "isOurTeam": true
+            },
+            "away": {
+              "id": "9825",
+              "name": "Arsenal",
+              "shortName": "Arsenal",
+              "isOurTeam": false
+            }
+          },
+          {
+            "result": 0,
+            "resultString": "D",
+            "imageUrl": "https://images.fotmob.com/image_resources/logo/teamlogo/8667.png",
+            "linkToMatch": "/matches/hull-city-vs-aston-villa/2yk7pj#5795440",
+            "date": null,
+            "teamPageUrl": "/teams/8667/overview/hull-city",
+            "tooltipText": {
+              "utcTime": "2026-09-05T16:30:00Z",
+              "homeTeam": "Hull City",
+              "homeTeamId": 8667,
+              "homeScore": 0,
+              "awayTeam": "Aston Villa",
+              "awayTeamId": 10252,
+              "awayScore": 0
+            },
+            "score": "0 - 0",
+            "home": {
+              "id": "8667",
+              "name": "Hull City",
+              "shortName": "Hull City",
+              "isOurTeam": false
+            },
+            "away": {
+              "id": "10252",
+              "name": "Aston Villa",
+              "shortName": "Aston Villa",
+              "isOurTeam": true
+            }
+          }
+        ],
+        "10260": [
+          {
+            "result": -1,
+            "resultString": "L",
+            "imageUrl": "https://images.fotmob.com/image_resources/logo/teamlogo/8667.png",
+            "linkToMatch": "/matches/hull-city-vs-manchester-united/2yngir#5795364",
+            "date": null,
+            "teamPageUrl": "/teams/8667/overview/hull-city",
+            "tooltipText": {
+              "utcTime": "2026-08-22T11:30:00Z",
+              "homeTeam": "Hull City",
+              "homeTeamId": 8667,
+              "homeScore": 2,
+              "awayTeam": "Manchester United",
+              "awayTeamId": 10260,
+              "awayScore": 0
+            },
+            "score": "2 - 0",
+            "home": {
+              "id": "8667",
+              "name": "Hull City",
+              "shortName": "Hull City",
+              "isOurTeam": false
+            },
+            "away": {
+              "id": "10260",
+              "name": "Manchester United",
+              "shortName": "Manchester United",
+              "isOurTeam": true
+            }
+          },
+          {
+            "result": 1,
+            "resultString": "W",
+            "imageUrl": "https://images.fotmob.com/image_resources/logo/teamlogo/9902.png",
+            "linkToMatch": "/matches/ipswich-town-vs-manchester-united/3d0uj5#5795432",
+            "date": null,
+            "teamPageUrl": "/teams/9902/overview/ipswich-town",
+            "tooltipText": {
+              "utcTime": "2026-08-30T15:30:00Z",
+              "homeTeam": "Manchester United",
+              "homeTeamId": 10260,
+              "homeScore": 5,
+              "awayTeam": "Ipswich Town",
+              "awayTeamId": 9902,
+              "awayScore": 2
+            },
+            "score": "5 - 2",
+            "home": {
+              "id": "10260",
+              "name": "Manchester United",
+              "shortName": "Manchester United",
+              "isOurTeam": true
+            },
+            "away": {
+              "id": "9902",
+              "name": "Ipswich Town",
+              "shortName": "Ipswich Town",
+              "isOurTeam": false
+            }
+          },
+          {
+            "result": 0,
+            "resultString": "D",
+            "imageUrl": "https://images.fotmob.com/image_resources/logo/teamlogo/8668.png",
+            "linkToMatch": "/matches/everton-vs-manchester-united/2ynv4k#5795438",
+            "date": null,
+            "teamPageUrl": "/teams/8668/overview/everton",
+            "tooltipText": {
+              "utcTime": "2026-09-06T13:00:00Z",
+              "homeTeam": "Everton",
+              "homeTeamId": 8668,
+              "homeScore": 2,
+              "awayTeam": "Manchester United",
+              "awayTeamId": 10260,
+              "awayScore": 2
+            },
+            "score": "2 - 2",
+            "home": {
+              "id": "8668",
+              "name": "Everton",
+              "shortName": "Everton",
+              "isOurTeam": false
+            },
+            "away": {
+              "id": "10260",
+              "name": "Manchester United",
+              "shortName": "Manchester United",
+              "isOurTeam": true
+            }
+          }
+        ],
+        "10261": [
+          {
+            "result": 0,
+            "resultString": "D",
+            "imageUrl": "https://images.fotmob.com/image_resources/logo/teamlogo/8650.png",
+            "linkToMatch": "/matches/liverpool-vs-newcastle-united/2ygyxm#5795371",
+            "date": null,
+            "teamPageUrl": "/teams/8650/overview/liverpool",
+            "tooltipText": {
+              "utcTime": "2026-08-23T15:30:00Z",
+              "homeTeam": "Newcastle United",
+              "homeTeamId": 10261,
+              "homeScore": 2,
+              "awayTeam": "Liverpool",
+              "awayTeamId": 8650,
+              "awayScore": 2
+            },
+            "score": "2 - 2",
+            "home": {
+              "id": "10261",
+              "name": "Newcastle United",
+              "shortName": "Newcastle United",
+              "isOurTeam": true
+            },
+            "away": {
+              "id": "8650",
+              "name": "Liverpool",
+              "shortName": "Liverpool",
+              "isOurTeam": false
+            }
+          },
+          {
+            "result": 1,
+            "resultString": "W",
+            "imageUrl": "https://images.fotmob.com/image_resources/logo/teamlogo/8586.png",
+            "linkToMatch": "/matches/tottenham-hotspur-vs-newcastle-united/2xr2ka#5795434",
+            "date": null,
+            "teamPageUrl": "/teams/8586/overview/tottenham-hotspur",
+            "tooltipText": {
+              "utcTime": "2026-08-29T16:30:00Z",
+              "homeTeam": "Tottenham Hotspur",
+              "homeTeamId": 8586,
+              "homeScore": 0,
+              "awayTeam": "Newcastle United",
+              "awayTeamId": 10261,
+              "awayScore": 2
+            },
+            "score": "0 - 2",
+            "home": {
+              "id": "8586",
+              "name": "Tottenham Hotspur",
+              "shortName": "Tottenham Hotspur",
+              "isOurTeam": false
+            },
+            "away": {
+              "id": "10261",
+              "name": "Newcastle United",
+              "shortName": "Newcastle United",
+              "isOurTeam": true
+            }
+          },
+          {
+            "result": 0,
+            "resultString": "D",
+            "imageUrl": "https://images.fotmob.com/image_resources/logo/teamlogo/8678.png",
+            "linkToMatch": "/matches/afc-bournemouth-vs-newcastle-united/2ysbu8#5795443",
+            "date": null,
+            "teamPageUrl": "/teams/8678/overview/afc-bournemouth",
+            "tooltipText": {
+              "utcTime": "2026-09-05T11:30:00Z",
+              "homeTeam": "Newcastle United",
+              "homeTeamId": 10261,
+              "homeScore": 2,
+              "awayTeam": "AFC Bournemouth",
+              "awayTeamId": 8678,
+              "awayScore": 2
+            },
+            "score": "2 - 2",
+            "home": {
+              "id": "10261",
+              "name": "Newcastle United",
+              "shortName": "Newcastle United",
+              "isOurTeam": true
+            },
+            "away": {
+              "id": "8678",
+              "name": "AFC Bournemouth",
+              "shortName": "AFC Bournemouth",
+              "isOurTeam": false
+            }
+          }
+        ]
+      },
+      "nextOpponent": {
+        "8455": [
+          "8678",
+          "AFC Bournemouth",
+          "5795467"
+        ],
+        "8456": [
+          "8650",
+          "Liverpool",
+          "5795472"
+        ],
+        "8463": [
+          "9825",
+          "Arsenal",
+          "5795465"
+        ],
+        "8472": [
+          "10204",
+          "Brighton & Hove Albion",
+          "5795474"
+        ],
+        "8586": [
+          "10260",
+          "Manchester United",
+          "5795473"
+        ],
+        "8650": [
+          "8456",
+          "Manchester City",
+          "5795472"
+        ],
+        "8667": [
+          "8668",
+          "Everton",
+          "5795470"
+        ],
+        "8668": [
+          "8667",
+          "Hull City",
+          "5795470"
+        ],
+        "8669": [
+          "10261",
+          "Newcastle United",
+          "5795468"
+        ],
+        "8678": [
+          "8455",
+          "Chelsea",
+          "5795467"
+        ],
+        "9825": [
+          "8463",
+          "Leeds United",
+          "5795465"
+        ],
+        "9826": [
+          "10203",
+          "Nottingham Forest",
+          "5795469"
+        ],
+        "9879": [
+          "9902",
+          "Ipswich Town",
+          "5795471"
+        ],
+        "9902": [
+          "9879",
+          "Fulham",
+          "5795471"
+        ],
+        "9937": [
+          "10252",
+          "Aston Villa",
+          "5795466"
+        ],
+        "10203": [
+          "9826",
+          "Crystal Palace",
+          "5795469"
+        ],
+        "10204": [
+          "8472",
+          "Sunderland",
+          "5795474"
+        ],
+        "10252": [
+          "9937",
+          "Brentford",
+          "5795466"
+        ],
+        "10260": [
+          "8586",
+          "Tottenham Hotspur",
+          "5795473"
+        ],
+        "10261": [
+          "8669",
+          "Coventry City",
+          "5795468"
+        ]
+      },
+      "tableHeader": {
+        "staticTableHeaders": [
+          "#",
+          "Team",
+          "PL"
+        ],
+        "dynamicTableHeaders": [
+          "Form",
+          "Next"
+        ]
+      }
+    }
+  ],
+  "transfers": {
+    "type": "league",
+    "data": [
+      {
+        "name": "David Akintola",
+        "playerId": 656495,
+        "position": {
+          "label": "RW",
+          "key": "rightwinger_short"
+        },
+        "transferDate": "2026-09-10T10:43:54Z",
+        "transferText": [
+          null,
+          null,
+          null
+        ],
+        "fromClub": "Hull",
+        "fromClubFullName": "Hull City",
+        "fromClubId": 8667,
+        "fromClubColors": {
+          "lightMode": "#ED8B00",
+          "darkMode": "#fd9416"
+        },
+        "toClub": "Omonia Nicosia",
+        "toClubFullName": "Omonia Nicosia",
+        "toClubId": 8044,
+        "toClubColors": {
+          "lightMode": "#0B582C",
+          "darkMode": "#155f32"
+        },
+        "fee": null,
+        "amountEuroEstimated": null,
+        "transferType": {
+          "text": "contract",
+          "localizationKey": "contract"
+        },
+        "contractExtension": false,
+        "onLoan": false,
+        "fromDate": "2026-09-09T22:00:00Z",
+        "toDate": "2028-06-29T22:00:00Z",
+        "marketValue": 1126673
+      },
+      {
+        "name": "Taha Majni",
+        "playerId": 1816803,
+        "position": {
+          "label": "RB",
+          "key": "rightback_short"
+        },
+        "transferDate": "2026-09-09T19:41:31Z",
+        "transferText": [
+          null,
+          null,
+          null
+        ],
+        "fromClub": "Union Touarga Sport",
+        "fromClubFullName": "Union Touarga Sport",
+        "fromClubId": 320835,
+        "fromClubColors": {
+          "lightMode": "#f9f9f9",
+          "darkMode": "#6D7782"
+        },
+        "toClub": "Crystal Palace",
+        "toClubFullName": "Crystal Palace",
+        "toClubId": 9826,
+        "toClubColors": {
+          "lightMode": "#0055A5",
+          "darkMode": "#0055A5"
+        },
+        "fee": {
+          "feeText": "fee",
+          "localizedFeeText": "transfer_fee",
+          "value": 689000
+        },
+        "amountEuroEstimated": null,
+        "transferType": {
+          "text": "contract",
+          "localizationKey": "contract"
+        },
+        "contractExtension": false,
+        "onLoan": false,
+        "fromDate": "2026-09-06T22:00:00Z",
+        "toDate": null,
+        "marketValue": null
+      },
+      {
+        "name": "James Overy",
+        "playerId": 1648069,
+        "position": {
+          "label": "RB",
+          "key": "rightback_short"
+        },
+        "transferDate": "2026-09-09T09:49:10Z",
+        "transferText": [
+          null,
+          null,
+          null
+        ],
+        "fromClub": "Man United",
+        "fromClubFullName": "Manchester United",
+        "fromClubId": 10260,
+        "fromClubColors": {
+          "lightMode": "#C70101",
+          "darkMode": "#C70101"
+        },
+        "toClub": "Sydney FC",
+        "toClubFullName": "Sydney FC",
+        "toClubId": 10164,
+        "toClubColors": {
+          "lightMode": "#184878",
+          "darkMode": "#62a8da"
+        },
+        "fee": null,
+        "amountEuroEstimated": null,
+        "transferType": {
+          "text": "contract",
+          "localizationKey": "contract"
+        },
+        "contractExtension": false,
+        "onLoan": false,
+        "fromDate": "2026-09-06T22:00:00Z",
+        "toDate": "2029-06-29T22:00:00Z",
+        "marketValue": null
+      }
+    ]
+  },
+  "overview": {
+    "season": "2026/2027",
+    "selectedSeason": "2026/2027",
+    "table": [
+      {
+        "data": {
+          "ccode": "ENG",
+          "leagueId": 47,
+          "pageUrl": "/leagues/47/overview/premier-league",
+          "leagueName": "Premier League",
+          "legend": [
+            {
+              "title": "Champions League",
+              "tKey": "championsleague",
+              "color": "#2AD572",
+              "indices": [
+                0,
+                1,
+                2
+              ]
+            },
+            {
+              "title": "Europa League",
+              "tKey": "europaleague",
+              "color": "#0046A7",
+              "indices": [
+                4
+              ]
+            },
+            {
+              "title": "Relegation",
+              "tKey": "relegation",
+              "color": "#FF4646",
+              "indices": [
+                17,
+                18,
+                19
+              ]
+            }
+          ],
+          "ongoing": [],
+          "table": {
+            "all": [
+              {
+                "name": "Manchester City",
+                "shortName": "Man City",
+                "id": 8456,
+                "pageUrl": "/teams/8456/overview/manchester-city",
+                "deduction": null,
+                "ongoing": null,
+                "played": 5,
+                "wins": 5,
+                "draws": 0,
+                "losses": 0,
+                "scoresStr": "13-5",
+                "goalConDiff": 8,
+                "pts": 15,
+                "idx": 1,
+                "qualColor": "#2AD572"
+              },
+              {
+                "name": "Arsenal",
+                "shortName": "Arsenal",
+                "id": 9825,
+                "pageUrl": "/teams/9825/overview/arsenal",
+                "deduction": null,
+                "ongoing": null,
+                "played": 5,
+                "wins": 4,
+                "draws": 0,
+                "losses": 1,
+                "scoresStr": "8-4",
+                "goalConDiff": 4,
+                "pts": 12,
+                "idx": 2,
+                "qualColor": "#2AD572"
+              },
+              {
+                "name": "Brighton & Hove Albion",
+                "shortName": "Brighton",
+                "id": 10204,
+                "pageUrl": "/teams/10204/overview/brighton-hove-albion",
+                "deduction": null,
+                "ongoing": null,
+                "played": 5,
+                "wins": 3,
+                "draws": 1,
+                "losses": 1,
+                "scoresStr": "16-5",
+                "goalConDiff": 11,
+                "pts": 10,
+                "idx": 3,
+                "qualColor": "#2AD572"
+              }
+            ],
+            "home": [
+              {
+                "name": "Manchester City",
+                "shortName": "Man City",
+                "id": 8456,
+                "pageUrl": "/teams/8456/overview/manchester-city",
+                "deduction": null,
+                "ongoing": null,
+                "played": 3,
+                "wins": 3,
+                "draws": 0,
+                "losses": 0,
+                "scoresStr": "8-4",
+                "goalConDiff": 4,
+                "goalsScored": 8,
+                "pts": 9,
+                "idx": 1,
+                "qualColor": "#2AD572"
+              },
+              {
+                "name": "Brighton & Hove Albion",
+                "shortName": "Brighton",
+                "id": 10204,
+                "pageUrl": "/teams/10204/overview/brighton-hove-albion",
+                "deduction": null,
+                "ongoing": null,
+                "played": 3,
+                "wins": 2,
+                "draws": 1,
+                "losses": 0,
+                "scoresStr": "8-1",
+                "goalConDiff": 7,
+                "goalsScored": 8,
+                "pts": 7,
+                "idx": 2,
+                "qualColor": "#2AD572"
+              },
+              {
+                "name": "Brentford",
+                "shortName": "Brentford",
+                "id": 9937,
+                "pageUrl": "/teams/9937/overview/brentford",
+                "deduction": null,
+                "ongoing": null,
+                "played": 3,
+                "wins": 2,
+                "draws": 1,
+                "losses": 0,
+                "scoresStr": "7-1",
+                "goalConDiff": 6,
+                "goalsScored": 7,
+                "pts": 7,
+                "idx": 3,
+                "qualColor": "#2AD572"
+              }
+            ],
+            "away": [
+              {
+                "name": "Liverpool",
+                "shortName": "Liverpool",
+                "id": 8650,
+                "pageUrl": "/teams/8650/overview/liverpool",
+                "deduction": null,
+                "ongoing": null,
+                "played": 3,
+                "wins": 2,
+                "draws": 1,
+                "losses": 0,
+                "scoresStr": "5-2",
+                "goalConDiff": 3,
+                "goalsScored": 5,
+                "pts": 7,
+                "idx": 1,
+                "qualColor": "#2AD572"
+              },
+              {
+                "name": "Manchester City",
+                "shortName": "Man City",
+                "id": 8456,
+                "pageUrl": "/teams/8456/overview/manchester-city",
+                "deduction": null,
+                "ongoing": null,
+                "played": 2,
+                "wins": 2,
+                "draws": 0,
+                "losses": 0,
+                "scoresStr": "5-1",
+                "goalConDiff": 4,
+                "goalsScored": 5,
+                "pts": 6,
+                "idx": 2,
+                "qualColor": "#2AD572"
+              },
+              {
+                "name": "Arsenal",
+                "shortName": "Arsenal",
+                "id": 9825,
+                "pageUrl": "/teams/9825/overview/arsenal",
+                "deduction": null,
+                "ongoing": null,
+                "played": 3,
+                "wins": 2,
+                "draws": 0,
+                "losses": 1,
+                "scoresStr": "3-3",
+                "goalConDiff": 0,
+                "goalsScored": 3,
+                "pts": 6,
+                "idx": 3,
+                "qualColor": "#2AD572"
+              }
+            ],
+            "form": [
+              {
+                "name": "Manchester City",
+                "shortName": "Man City",
+                "featuredInMatch": false,
+                "id": 8456,
+                "pageUrl": "/teams/8456/overview/manchester-city",
+                "played": 5,
+                "wins": 5,
+                "draws": 0,
+                "losses": 0,
+                "scoresStr": "13-5",
+                "goalConDiff": 8,
+                "goalsScored": 13,
+                "pts": 15,
+                "ongoing": null,
+                "idx": 1,
+                "qualColor": "#2AD572"
+              },
+              {
+                "name": "Arsenal",
+                "shortName": "Arsenal",
+                "featuredInMatch": false,
+                "id": 9825,
+                "pageUrl": "/teams/9825/overview/arsenal",
+                "played": 5,
+                "wins": 4,
+                "draws": 0,
+                "losses": 1,
+                "scoresStr": "8-4",
+                "goalConDiff": 4,
+                "goalsScored": 8,
+                "pts": 12,
+                "ongoing": null,
+                "idx": 2,
+                "qualColor": "#2AD572"
+              },
+              {
+                "name": "Brighton & Hove Albion",
+                "shortName": "Brighton",
+                "featuredInMatch": false,
+                "id": 10204,
+                "pageUrl": "/teams/10204/overview/brighton-hove-albion",
+                "played": 5,
+                "wins": 3,
+                "draws": 1,
+                "losses": 1,
+                "scoresStr": "16-5",
+                "goalConDiff": 11,
+                "goalsScored": 16,
+                "pts": 10,
+                "ongoing": null,
+                "idx": 3,
+                "qualColor": "#2AD572"
+              }
+            ],
+            "xg": [
+              {
+                "name": "Arsenal",
+                "shortName": "Arsenal",
+                "id": 9825,
+                "pageUrl": "/teams/9825/overview/arsenal",
+                "ongoing": null,
+                "played": 5,
+                "wins": 4,
+                "draws": 0,
+                "losses": 1,
+                "scoresStr": "8-4",
+                "goalConDiff": 4,
+                "pts": 12,
+                "teamId": 9825,
+                "teamName": "Arsenal",
+                "xg": 8.476900100708008,
+                "xgConceded": 4.0386000126600266,
+                "xPoints": 10.28462860665999,
+                "position": 1,
+                "xgDiff": -0.4769001007080078,
+                "xgConcededDiff": -0.03860001266002655,
+                "xPointsDiff": 1.7153713933400105,
+                "xPosition": 1,
+                "idx": 1,
+                "xPositionDiff": 1,
+                "qualColor": "#2AD572"
+              },
+              {
+                "name": "Manchester City",
+                "shortName": "Man City",
+                "id": 8456,
+                "pageUrl": "/teams/8456/overview/manchester-city",
+                "ongoing": null,
+                "played": 5,
+                "wins": 5,
+                "draws": 0,
+                "losses": 0,
+                "scoresStr": "13-5",
+                "goalConDiff": 8,
+                "pts": 15,
+                "teamId": 8456,
+                "teamName": "Manchester City",
+                "xg": 10.498800039291382,
+                "xgConceded": 7.247300088405609,
+                "xPoints": 9.248291792719282,
+                "position": 2,
+                "xgDiff": 2.501199960708618,
+                "xgConcededDiff": -2.247300088405609,
+                "xPointsDiff": 5.751708207280718,
+                "xPosition": 2,
+                "idx": 2,
+                "xPositionDiff": -1,
+                "qualColor": "#2AD572"
+              },
+              {
+                "name": "Nottingham Forest",
+                "shortName": "Nottm Forest",
+                "id": 10203,
+                "pageUrl": "/teams/10203/overview/nottingham-forest",
+                "ongoing": null,
+                "played": 5,
+                "wins": 1,
+                "draws": 2,
+                "losses": 2,
+                "scoresStr": "4-5",
+                "goalConDiff": -1,
+                "pts": 5,
+                "teamId": 10203,
+                "teamName": "Nottingham Forest",
+                "xg": 7.25790011882782,
+                "xgConceded": 4.773800015449524,
+                "xPoints": 8.603078232046109,
+                "position": 3,
+                "xgDiff": -3.25790011882782,
+                "xgConcededDiff": 0.22619998455047607,
+                "xPointsDiff": -3.6030782320461086,
+                "xPosition": 3,
+                "idx": 3,
+                "xPositionDiff": 10,
+                "qualColor": "#2AD572"
+              }
+            ]
+          },
+          "tableFilterTypes": [
+            "all",
+            "home",
+            "away"
+          ],
+          "composite": false,
+          "selectedSeason": "2026/2027",
+          "isCurrentSeason": true
+        },
+        "tableFilterTypes": [
+          "all",
+          "home",
+          "away"
+        ],
+        "teamForm": {
+          "8455": [
+            {
+              "result": 1,
+              "resultString": "W",
+              "imageUrl": "https://images.fotmob.com/image_resources/logo/teamlogo/9879.png",
+              "linkToMatch": "/matches/chelsea-vs-fulham/2s2omg#5795372",
+              "date": null,
+              "teamPageUrl": "/teams/9879/overview/fulham",
+              "tooltipText": {
+                "utcTime": "2026-08-24T19:00:00Z",
+                "homeTeam": "Fulham",
+                "homeTeamId": 9879,
+                "homeScore": 2,
+                "awayTeam": "Chelsea",
+                "awayTeamId": 8455,
+                "awayScore": 3
+              },
+              "score": "2 - 3",
+              "home": {
+                "id": "9879",
+                "name": "Fulham",
+                "shortName": "Fulham",
+                "isOurTeam": false
+              },
+              "away": {
+                "id": "8455",
+                "name": "Chelsea",
+                "shortName": "Chelsea",
+                "isOurTeam": true
+              }
+            },
+            {
+              "result": 1,
+              "resultString": "W",
+              "imageUrl": "https://images.fotmob.com/image_resources/logo/teamlogo/10204.png",
+              "linkToMatch": "/matches/chelsea-vs-brighton-hove-albion/2vni1p#5795427",
+              "date": null,
+              "teamPageUrl": "/teams/10204/overview/brighton-hove-albion",
+              "tooltipText": {
+                "utcTime": "2026-08-30T13:00:00Z",
+                "homeTeam": "Chelsea",
+                "homeTeamId": 8455,
+                "homeScore": 4,
+                "awayTeam": "Brighton & Hove Albion",
+                "awayTeamId": 10204,
+                "awayScore": 3
+              },
+              "score": "4 - 3",
+              "home": {
+                "id": "8455",
+                "name": "Chelsea",
+                "shortName": "Chelsea",
+                "isOurTeam": true
+              },
+              "away": {
+                "id": "10204",
+                "name": "Brighton & Hove Albion",
+                "shortName": "Brighton & Hove Albion",
+                "isOurTeam": false
+              }
+            },
+            {
+              "result": -1,
+              "resultString": "L",
+              "imageUrl": "https://images.fotmob.com/image_resources/logo/teamlogo/9825.png",
+              "linkToMatch": "/matches/chelsea-vs-arsenal/2rhhrp#5795435",
+              "date": null,
+              "teamPageUrl": "/teams/9825/overview/arsenal",
+              "tooltipText": {
+                "utcTime": "2026-09-06T15:30:00Z",
+                "homeTeam": "Arsenal",
+                "homeTeamId": 9825,
+                "homeScore": 2,
+                "awayTeam": "Chelsea",
+                "awayTeamId": 8455,
+                "awayScore": 1
+              },
+              "score": "2 - 1",
+              "home": {
+                "id": "9825",
+                "name": "Arsenal",
+                "shortName": "Arsenal",
+                "isOurTeam": false
+              },
+              "away": {
+                "id": "8455",
+                "name": "Chelsea",
+                "shortName": "Chelsea",
+                "isOurTeam": true
+              }
+            }
+          ],
+          "8456": [
+            {
+              "result": 1,
+              "resultString": "W",
+              "imageUrl": "https://images.fotmob.com/image_resources/logo/teamlogo/8678.png",
+              "linkToMatch": "/matches/manchester-city-vs-afc-bournemouth/2feiv3#5795370",
+              "date": null,
+              "teamPageUrl": "/teams/8678/overview/afc-bournemouth",
+              "tooltipText": {
+                "utcTime": "2026-08-23T13:00:00Z",
+                "homeTeam": "Manchester City",
+                "homeTeamId": 8456,
+                "homeScore": 2,
+                "awayTeam": "AFC Bournemouth",
+                "awayTeamId": 8678,
+                "awayScore": 1
+              },
+              "score": "2 - 1",
+              "home": {
+                "id": "8456",
+                "name": "Manchester City",
+                "shortName": "Manchester City",
+                "isOurTeam": true
+              },
+              "away": {
+                "id": "8678",
+                "name": "AFC Bournemouth",
+                "shortName": "AFC Bournemouth",
+                "isOurTeam": false
+              }
+            },
+            {
+              "result": 1,
+              "resultString": "W",
+              "imageUrl": "https://images.fotmob.com/image_resources/logo/teamlogo/9826.png",
+              "linkToMatch": "/matches/manchester-city-vs-crystal-palace/2ri9zd#5795429",
+              "date": null,
+              "teamPageUrl": "/teams/9826/overview/crystal-palace",
+              "tooltipText": {
+                "utcTime": "2026-08-28T19:00:00Z",
+                "homeTeam": "Crystal Palace",
+                "homeTeamId": 9826,
+                "homeScore": 1,
+                "awayTeam": "Manchester City",
+                "awayTeamId": 8456,
+                "awayScore": 4
+              },
+              "score": "1 - 4",
+              "home": {
+                "id": "9826",
+                "name": "Crystal Palace",
+                "shortName": "Crystal Palace",
+                "isOurTeam": false
+              },
+              "away": {
+                "id": "8456",
+                "name": "Manchester City",
+                "shortName": "Manchester City",
+                "isOurTeam": true
+              }
+            },
+            {
+              "result": 1,
+              "resultString": "W",
+              "imageUrl": "https://images.fotmob.com/image_resources/logo/teamlogo/8669.png",
+              "linkToMatch": "/matches/manchester-city-vs-coventry-city/2fb7wc#5795442",
+              "date": null,
+              "teamPageUrl": "/teams/8669/overview/coventry-city",
+              "tooltipText": {
+                "utcTime": "2026-09-05T14:00:00Z",
+                "homeTeam": "Manchester City",
+                "homeTeamId": 8456,
+                "homeScore": 1,
+                "awayTeam": "Coventry City",
+                "awayTeamId": 8669,
+                "awayScore": 0
+              },
+              "score": "1 - 0",
+              "home": {
+                "id": "8456",
+                "name": "Manchester City",
+                "shortName": "Manchester City",
+                "isOurTeam": true
+              },
+              "away": {
+                "id": "8669",
+                "name": "Coventry City",
+                "shortName": "Coventry City",
+                "isOurTeam": false
+              }
+            }
+          ],
+          "8463": [
+            {
+              "result": 1,
+              "resultString": "W",
+              "imageUrl": "https://images.fotmob.com/image_resources/logo/teamlogo/10203.png",
+              "linkToMatch": "/matches/leeds-united-vs-nottingham-forest/2vqauu#5795367",
+              "date": null,
+              "teamPageUrl": "/teams/10203/overview/nottingham-forest",
+              "tooltipText": {
+                "utcTime": "2026-08-22T14:00:00Z",
+                "homeTeam": "Nottingham Forest",
+                "homeTeamId": 10203,
+                "homeScore": 0,
+                "awayTeam": "Leeds United",
+                "awayTeamId": 8463,
+                "awayScore": 1
+              },
+              "score": "0 - 1",
+              "home": {
+                "id": "10203",
+                "name": "Nottingham Forest",
+                "shortName": "Nottingham Forest",
+                "isOurTeam": false
+              },
+              "away": {
+                "id": "8463",
+                "name": "Leeds United",
+                "shortName": "Leeds United",
+                "isOurTeam": true
+              }
+            },
+            {
+              "result": 0,
+              "resultString": "D",
+              "imageUrl": "https://images.fotmob.com/image_resources/logo/teamlogo/9937.png",
+              "linkToMatch": "/matches/leeds-united-vs-brentford/2sso1t#5795430",
+              "date": null,
+              "teamPageUrl": "/teams/9937/overview/brentford",
+              "tooltipText": {
+                "utcTime": "2026-08-30T13:00:00Z",
+                "homeTeam": "Leeds United",
+                "homeTeamId": 8463,
+                "homeScore": 1,
+                "awayTeam": "Brentford",
+                "awayTeamId": 9937,
+                "awayScore": 1
+              },
+              "score": "1 - 1",
+              "home": {
+                "id": "8463",
+                "name": "Leeds United",
+                "shortName": "Leeds United",
+                "isOurTeam": true
+              },
+              "away": {
+                "id": "9937",
+                "name": "Brentford",
+                "shortName": "Brentford",
+                "isOurTeam": false
+              }
+            },
+            {
+              "result": 0,
+              "resultString": "D",
+              "imageUrl": "https://images.fotmob.com/image_resources/logo/teamlogo/10204.png",
+              "linkToMatch": "/matches/leeds-united-vs-brighton-hove-albion/2vqp9d#5795437",
+              "date": null,
+              "teamPageUrl": "/teams/10204/overview/brighton-hove-albion",
+              "tooltipText": {
+                "utcTime": "2026-09-05T14:00:00Z",
+                "homeTeam": "Brighton & Hove Albion",
+                "homeTeamId": 10204,
+                "homeScore": 1,
+                "awayTeam": "Leeds United",
+                "awayTeamId": 8463,
+                "awayScore": 1
+              },
+              "score": "1 - 1",
+              "home": {
+                "id": "10204",
+                "name": "Brighton & Hove Albion",
+                "shortName": "Brighton & Hove Albion",
+                "isOurTeam": false
+              },
+              "away": {
+                "id": "8463",
+                "name": "Leeds United",
+                "shortName": "Leeds United",
+                "isOurTeam": true
+              }
+            }
+          ],
+          "8472": [
+            {
+              "result": -1,
+              "resultString": "L",
+              "imageUrl": "https://images.fotmob.com/image_resources/logo/teamlogo/9902.png",
+              "linkToMatch": "/matches/sunderland-vs-ipswich-town/2sif4z#5795366",
+              "date": null,
+              "teamPageUrl": "/teams/9902/overview/ipswich-town",
+              "tooltipText": {
+                "utcTime": "2026-08-22T14:00:00Z",
+                "homeTeam": "Ipswich Town",
+                "homeTeamId": 9902,
+                "homeScore": 2,
+                "awayTeam": "Sunderland",
+                "awayTeamId": 8472,
+                "awayScore": 1
+              },
+              "score": "2 - 1",
+              "home": {
+                "id": "9902",
+                "name": "Ipswich Town",
+                "shortName": "Ipswich Town",
+                "isOurTeam": false
+              },
+              "away": {
+                "id": "8472",
+                "name": "Sunderland",
+                "shortName": "Sunderland",
+                "isOurTeam": true
+              }
+            },
+            {
+              "result": 1,
+              "resultString": "W",
+              "imageUrl": "https://images.fotmob.com/image_resources/logo/teamlogo/9879.png",
+              "linkToMatch": "/matches/sunderland-vs-fulham/2s9d8f#5795433",
+              "date": null,
+              "teamPageUrl": "/teams/9879/overview/fulham",
+              "tooltipText": {
+                "utcTime": "2026-08-30T13:00:00Z",
+                "homeTeam": "Sunderland",
+                "homeTeamId": 8472,
+                "homeScore": 1,
+                "awayTeam": "Fulham",
+                "awayTeamId": 9879,
+                "awayScore": 0
+              },
+              "score": "1 - 0",
+              "home": {
+                "id": "8472",
+                "name": "Sunderland",
+                "shortName": "Sunderland",
+                "isOurTeam": true
+              },
+              "away": {
+                "id": "9879",
+                "name": "Fulham",
+                "shortName": "Fulham",
+                "isOurTeam": false
+              }
+            },
+            {
+              "result": 0,
+              "resultString": "D",
+              "imageUrl": "https://images.fotmob.com/image_resources/logo/teamlogo/9937.png",
+              "linkToMatch": "/matches/sunderland-vs-brentford/2sw7v2#5795436",
+              "date": null,
+              "teamPageUrl": "/teams/9937/overview/brentford",
+              "tooltipText": {
+                "utcTime": "2026-09-05T14:00:00Z",
+                "homeTeam": "Brentford",
+                "homeTeamId": 9937,
+                "homeScore": 1,
+                "awayTeam": "Sunderland",
+                "awayTeamId": 8472,
+                "awayScore": 1
+              },
+              "score": "1 - 1",
+              "home": {
+                "id": "9937",
+                "name": "Brentford",
+                "shortName": "Brentford",
+                "isOurTeam": false
+              },
+              "away": {
+                "id": "8472",
+                "name": "Sunderland",
+                "shortName": "Sunderland",
+                "isOurTeam": true
+              }
+            }
+          ],
+          "8586": [
+            {
+              "result": -1,
+              "resultString": "L",
+              "imageUrl": "https://images.fotmob.com/image_resources/logo/teamlogo/9937.png",
+              "linkToMatch": "/matches/tottenham-hotspur-vs-brentford/2u5c8b#5795368",
+              "date": null,
+              "teamPageUrl": "/teams/9937/overview/brentford",
+              "tooltipText": {
+                "utcTime": "2026-08-22T16:30:00Z",
+                "homeTeam": "Brentford",
+                "homeTeamId": 9937,
+                "homeScore": 3,
+                "awayTeam": "Tottenham Hotspur",
+                "awayTeamId": 8586,
+                "awayScore": 0
+              },
+              "score": "3 - 0",
+              "home": {
+                "id": "9937",
+                "name": "Brentford",
+                "shortName": "Brentford",
+                "isOurTeam": false
+              },
+              "away": {
+                "id": "8586",
+                "name": "Tottenham Hotspur",
+                "shortName": "Tottenham Hotspur",
+                "isOurTeam": true
+              }
+            },
+            {
+              "result": -1,
+              "resultString": "L",
+              "imageUrl": "https://images.fotmob.com/image_resources/logo/teamlogo/10261.png",
+              "linkToMatch": "/matches/tottenham-hotspur-vs-newcastle-united/2xr2ka#5795434",
+              "date": null,
+              "teamPageUrl": "/teams/10261/overview/newcastle-united",
+              "tooltipText": {
+                "utcTime": "2026-08-29T16:30:00Z",
+                "homeTeam": "Tottenham Hotspur",
+                "homeTeamId": 8586,
+                "homeScore": 0,
+                "awayTeam": "Newcastle United",
+                "awayTeamId": 10261,
+                "awayScore": 2
+              },
+              "score": "0 - 2",
+              "home": {
+                "id": "8586",
+                "name": "Tottenham Hotspur",
+                "shortName": "Tottenham Hotspur",
+                "isOurTeam": true
+              },
+              "away": {
+                "id": "10261",
+                "name": "Newcastle United",
+                "shortName": "Newcastle United",
+                "isOurTeam": false
+              }
+            },
+            {
+              "result": 0,
+              "resultString": "D",
+              "imageUrl": "https://images.fotmob.com/image_resources/logo/teamlogo/10203.png",
+              "linkToMatch": "/matches/tottenham-hotspur-vs-nottingham-forest/2x3odl#5795444",
+              "date": null,
+              "teamPageUrl": "/teams/10203/overview/nottingham-forest",
+              "tooltipText": {
+                "utcTime": "2026-09-05T14:00:00Z",
+                "homeTeam": "Nottingham Forest",
+                "homeTeamId": 10203,
+                "homeScore": 0,
+                "awayTeam": "Tottenham Hotspur",
+                "awayTeamId": 8586,
+                "awayScore": 0
+              },
+              "score": "0 - 0",
+              "home": {
+                "id": "10203",
+                "name": "Nottingham Forest",
+                "shortName": "Nottingham Forest",
+                "isOurTeam": false
+              },
+              "away": {
+                "id": "8586",
+                "name": "Tottenham Hotspur",
+                "shortName": "Tottenham Hotspur",
+                "isOurTeam": true
+              }
+            }
+          ],
+          "8650": [
+            {
+              "result": 0,
+              "resultString": "D",
+              "imageUrl": "https://images.fotmob.com/image_resources/logo/teamlogo/10261.png",
+              "linkToMatch": "/matches/liverpool-vs-newcastle-united/2ygyxm#5795371",
+              "date": null,
+              "teamPageUrl": "/teams/10261/overview/newcastle-united",
+              "tooltipText": {
+                "utcTime": "2026-08-23T15:30:00Z",
+                "homeTeam": "Newcastle United",
+                "homeTeamId": 10261,
+                "homeScore": 2,
+                "awayTeam": "Liverpool",
+                "awayTeamId": 8650,
+                "awayScore": 2
+              },
+              "score": "2 - 2",
+              "home": {
+                "id": "10261",
+                "name": "Newcastle United",
+                "shortName": "Newcastle United",
+                "isOurTeam": false
+              },
+              "away": {
+                "id": "8650",
+                "name": "Liverpool",
+                "shortName": "Liverpool",
+                "isOurTeam": true
+              }
+            },
+            {
+              "result": 0,
+              "resultString": "D",
+              "imageUrl": "https://images.fotmob.com/image_resources/logo/teamlogo/10203.png",
+              "linkToMatch": "/matches/liverpool-vs-nottingham-forest/2xthvt#5795431",
+              "date": null,
+              "teamPageUrl": "/teams/10203/overview/nottingham-forest",
+              "tooltipText": {
+                "utcTime": "2026-08-29T11:30:00Z",
+                "homeTeam": "Liverpool",
+                "homeTeamId": 8650,
+                "homeScore": 2,
+                "awayTeam": "Nottingham Forest",
+                "awayTeamId": 10203,
+                "awayScore": 2
+              },
+              "score": "2 - 2",
+              "home": {
+                "id": "8650",
+                "name": "Liverpool",
+                "shortName": "Liverpool",
+                "isOurTeam": true
+              },
+              "away": {
+                "id": "10203",
+                "name": "Nottingham Forest",
+                "shortName": "Nottingham Forest",
+                "isOurTeam": false
+              }
+            },
+            {
+              "result": 1,
+              "resultString": "W",
+              "imageUrl": "https://images.fotmob.com/image_resources/logo/teamlogo/9902.png",
+              "linkToMatch": "/matches/liverpool-vs-ipswich-town/2ugv0q#5795441",
+              "date": null,
+              "teamPageUrl": "/teams/9902/overview/ipswich-town",
+              "tooltipText": {
+                "utcTime": "2026-09-04T19:00:00Z",
+                "homeTeam": "Ipswich Town",
+                "homeTeamId": 9902,
+                "homeScore": 0,
+                "awayTeam": "Liverpool",
+                "awayTeamId": 8650,
+                "awayScore": 2
+              },
+              "score": "0 - 2",
+              "home": {
+                "id": "9902",
+                "name": "Ipswich Town",
+                "shortName": "Ipswich Town",
+                "isOurTeam": false
+              },
+              "away": {
+                "id": "8650",
+                "name": "Liverpool",
+                "shortName": "Liverpool",
+                "isOurTeam": true
+              }
+            }
+          ],
+          "8667": [
+            {
+              "result": 1,
+              "resultString": "W",
+              "imageUrl": "https://images.fotmob.com/image_resources/logo/teamlogo/10260.png",
+              "linkToMatch": "/matches/hull-city-vs-manchester-united/2yngir#5795364",
+              "date": null,
+              "teamPageUrl": "/teams/10260/overview/manchester-united",
+              "tooltipText": {
+                "utcTime": "2026-08-22T11:30:00Z",
+                "homeTeam": "Hull City",
+                "homeTeamId": 8667,
+                "homeScore": 2,
+                "awayTeam": "Manchester United",
+                "awayTeamId": 10260,
+                "awayScore": 0
+              },
+              "score": "2 - 0",
+              "home": {
+                "id": "8667",
+                "name": "Hull City",
+                "shortName": "Hull City",
+                "isOurTeam": true
+              },
+              "away": {
+                "id": "10260",
+                "name": "Manchester United",
+                "shortName": "Manchester United",
+                "isOurTeam": false
+              }
+            },
+            {
+              "result": 1,
+              "resultString": "W",
+              "imageUrl": "https://images.fotmob.com/image_resources/logo/teamlogo/8669.png",
+              "linkToMatch": "/matches/hull-city-vs-coventry-city/2hh595#5795428",
+              "date": null,
+              "teamPageUrl": "/teams/8669/overview/coventry-city",
+              "tooltipText": {
+                "utcTime": "2026-08-29T14:00:00Z",
+                "homeTeam": "Coventry City",
+                "homeTeamId": 8669,
+                "homeScore": 0,
+                "awayTeam": "Hull City",
+                "awayTeamId": 8667,
+                "awayScore": 1
+              },
+              "score": "0 - 1",
+              "home": {
+                "id": "8669",
+                "name": "Coventry City",
+                "shortName": "Coventry City",
+                "isOurTeam": false
+              },
+              "away": {
+                "id": "8667",
+                "name": "Hull City",
+                "shortName": "Hull City",
+                "isOurTeam": true
+              }
+            },
+            {
+              "result": 0,
+              "resultString": "D",
+              "imageUrl": "https://images.fotmob.com/image_resources/logo/teamlogo/10252.png",
+              "linkToMatch": "/matches/hull-city-vs-aston-villa/2yk7pj#5795440",
+              "date": null,
+              "teamPageUrl": "/teams/10252/overview/aston-villa",
+              "tooltipText": {
+                "utcTime": "2026-09-05T16:30:00Z",
+                "homeTeam": "Hull City",
+                "homeTeamId": 8667,
+                "homeScore": 0,
+                "awayTeam": "Aston Villa",
+                "awayTeamId": 10252,
+                "awayScore": 0
+              },
+              "score": "0 - 0",
+              "home": {
+                "id": "8667",
+                "name": "Hull City",
+                "shortName": "Hull City",
+                "isOurTeam": true
+              },
+              "away": {
+                "id": "10252",
+                "name": "Aston Villa",
+                "shortName": "Aston Villa",
+                "isOurTeam": false
+              }
+            }
+          ],
+          "8668": [
+            {
+              "result": 1,
+              "resultString": "W",
+              "imageUrl": "https://images.fotmob.com/image_resources/logo/teamlogo/9826.png",
+              "linkToMatch": "/matches/everton-vs-crystal-palace/2tttz7#5795365",
+              "date": null,
+              "teamPageUrl": "/teams/9826/overview/crystal-palace",
+              "tooltipText": {
+                "utcTime": "2026-08-22T14:00:00Z",
+                "homeTeam": "Everton",
+                "homeTeamId": 8668,
+                "homeScore": 2,
+                "awayTeam": "Crystal Palace",
+                "awayTeamId": 9826,
+                "awayScore": 0
+              },
+              "score": "2 - 0",
+              "home": {
+                "id": "8668",
+                "name": "Everton",
+                "shortName": "Everton",
+                "isOurTeam": true
+              },
+              "away": {
+                "id": "9826",
+                "name": "Crystal Palace",
+                "shortName": "Crystal Palace",
+                "isOurTeam": false
+              }
+            },
+            {
+              "result": 0,
+              "resultString": "D",
+              "imageUrl": "https://images.fotmob.com/image_resources/logo/teamlogo/8678.png",
+              "linkToMatch": "/matches/everton-vs-afc-bournemouth/2hkv2h#5795425",
+              "date": null,
+              "teamPageUrl": "/teams/8678/overview/afc-bournemouth",
+              "tooltipText": {
+                "utcTime": "2026-08-29T14:00:00Z",
+                "homeTeam": "AFC Bournemouth",
+                "homeTeamId": 8678,
+                "homeScore": 1,
+                "awayTeam": "Everton",
+                "awayTeamId": 8668,
+                "awayScore": 1
+              },
+              "score": "1 - 1",
+              "home": {
+                "id": "8678",
+                "name": "AFC Bournemouth",
+                "shortName": "AFC Bournemouth",
+                "isOurTeam": false
+              },
+              "away": {
+                "id": "8668",
+                "name": "Everton",
+                "shortName": "Everton",
+                "isOurTeam": true
+              }
+            },
+            {
+              "result": 0,
+              "resultString": "D",
+              "imageUrl": "https://images.fotmob.com/image_resources/logo/teamlogo/10260.png",
+              "linkToMatch": "/matches/everton-vs-manchester-united/2ynv4k#5795438",
+              "date": null,
+              "teamPageUrl": "/teams/10260/overview/manchester-united",
+              "tooltipText": {
+                "utcTime": "2026-09-06T13:00:00Z",
+                "homeTeam": "Everton",
+                "homeTeamId": 8668,
+                "homeScore": 2,
+                "awayTeam": "Manchester United",
+                "awayTeamId": 10260,
+                "awayScore": 2
+              },
+              "score": "2 - 2",
+              "home": {
+                "id": "8668",
+                "name": "Everton",
+                "shortName": "Everton",
+                "isOurTeam": true
+              },
+              "away": {
+                "id": "10260",
+                "name": "Manchester United",
+                "shortName": "Manchester United",
+                "isOurTeam": false
+              }
+            }
+          ],
+          "8669": [
+            {
+              "result": -1,
+              "resultString": "L",
+              "imageUrl": "https://images.fotmob.com/image_resources/logo/teamlogo/9825.png",
+              "linkToMatch": "/matches/coventry-city-vs-arsenal/2tttz6#5795363",
+              "date": null,
+              "teamPageUrl": "/teams/9825/overview/arsenal",
+              "tooltipText": {
+                "utcTime": "2026-08-21T19:00:00Z",
+                "homeTeam": "Arsenal",
+                "homeTeamId": 9825,
+                "homeScore": 3,
+                "awayTeam": "Coventry City",
+                "awayTeamId": 8669,
+                "awayScore": 0
+              },
+              "score": "3 - 0",
+              "home": {
+                "id": "9825",
+                "name": "Arsenal",
+                "shortName": "Arsenal",
+                "isOurTeam": false
+              },
+              "away": {
+                "id": "8669",
+                "name": "Coventry City",
+                "shortName": "Coventry City",
+                "isOurTeam": true
+              }
+            },
+            {
+              "result": -1,
+              "resultString": "L",
+              "imageUrl": "https://images.fotmob.com/image_resources/logo/teamlogo/8667.png",
+              "linkToMatch": "/matches/hull-city-vs-coventry-city/2hh595#5795428",
+              "date": null,
+              "teamPageUrl": "/teams/8667/overview/hull-city",
+              "tooltipText": {
+                "utcTime": "2026-08-29T14:00:00Z",
+                "homeTeam": "Coventry City",
+                "homeTeamId": 8669,
+                "homeScore": 0,
+                "awayTeam": "Hull City",
+                "awayTeamId": 8667,
+                "awayScore": 1
+              },
+              "score": "0 - 1",
+              "home": {
+                "id": "8669",
+                "name": "Coventry City",
+                "shortName": "Coventry City",
+                "isOurTeam": true
+              },
+              "away": {
+                "id": "8667",
+                "name": "Hull City",
+                "shortName": "Hull City",
+                "isOurTeam": false
+              }
+            },
+            {
+              "result": -1,
+              "resultString": "L",
+              "imageUrl": "https://images.fotmob.com/image_resources/logo/teamlogo/8456.png",
+              "linkToMatch": "/matches/manchester-city-vs-coventry-city/2fb7wc#5795442",
+              "date": null,
+              "teamPageUrl": "/teams/8456/overview/manchester-city",
+              "tooltipText": {
+                "utcTime": "2026-09-05T14:00:00Z",
+                "homeTeam": "Manchester City",
+                "homeTeamId": 8456,
+                "homeScore": 1,
+                "awayTeam": "Coventry City",
+                "awayTeamId": 8669,
+                "awayScore": 0
+              },
+              "score": "1 - 0",
+              "home": {
+                "id": "8456",
+                "name": "Manchester City",
+                "shortName": "Manchester City",
+                "isOurTeam": false
+              },
+              "away": {
+                "id": "8669",
+                "name": "Coventry City",
+                "shortName": "Coventry City",
+                "isOurTeam": true
+              }
+            }
+          ],
+          "8678": [
+            {
+              "result": -1,
+              "resultString": "L",
+              "imageUrl": "https://images.fotmob.com/image_resources/logo/teamlogo/8456.png",
+              "linkToMatch": "/matches/manchester-city-vs-afc-bournemouth/2feiv3#5795370",
+              "date": null,
+              "teamPageUrl": "/teams/8456/overview/manchester-city",
+              "tooltipText": {
+                "utcTime": "2026-08-23T13:00:00Z",
+                "homeTeam": "Manchester City",
+                "homeTeamId": 8456,
+                "homeScore": 2,
+                "awayTeam": "AFC Bournemouth",
+                "awayTeamId": 8678,
+                "awayScore": 1
+              },
+              "score": "2 - 1",
+              "home": {
+                "id": "8456",
+                "name": "Manchester City",
+                "shortName": "Manchester City",
+                "isOurTeam": false
+              },
+              "away": {
+                "id": "8678",
+                "name": "AFC Bournemouth",
+                "shortName": "AFC Bournemouth",
+                "isOurTeam": true
+              }
+            },
+            {
+              "result": 0,
+              "resultString": "D",
+              "imageUrl": "https://images.fotmob.com/image_resources/logo/teamlogo/8668.png",
+              "linkToMatch": "/matches/everton-vs-afc-bournemouth/2hkv2h#5795425",
+              "date": null,
+              "teamPageUrl": "/teams/8668/overview/everton",
+              "tooltipText": {
+                "utcTime": "2026-08-29T14:00:00Z",
+                "homeTeam": "AFC Bournemouth",
+                "homeTeamId": 8678,
+                "homeScore": 1,
+                "awayTeam": "Everton",
+                "awayTeamId": 8668,
+                "awayScore": 1
+              },
+              "score": "1 - 1",
+              "home": {
+                "id": "8678",
+                "name": "AFC Bournemouth",
+                "shortName": "AFC Bournemouth",
+                "isOurTeam": true
+              },
+              "away": {
+                "id": "8668",
+                "name": "Everton",
+                "shortName": "Everton",
+                "isOurTeam": false
+              }
+            },
+            {
+              "result": 0,
+              "resultString": "D",
+              "imageUrl": "https://images.fotmob.com/image_resources/logo/teamlogo/10261.png",
+              "linkToMatch": "/matches/afc-bournemouth-vs-newcastle-united/2ysbu8#5795443",
+              "date": null,
+              "teamPageUrl": "/teams/10261/overview/newcastle-united",
+              "tooltipText": {
+                "utcTime": "2026-09-05T11:30:00Z",
+                "homeTeam": "Newcastle United",
+                "homeTeamId": 10261,
+                "homeScore": 2,
+                "awayTeam": "AFC Bournemouth",
+                "awayTeamId": 8678,
+                "awayScore": 2
+              },
+              "score": "2 - 2",
+              "home": {
+                "id": "10261",
+                "name": "Newcastle United",
+                "shortName": "Newcastle United",
+                "isOurTeam": false
+              },
+              "away": {
+                "id": "8678",
+                "name": "AFC Bournemouth",
+                "shortName": "AFC Bournemouth",
+                "isOurTeam": true
+              }
+            }
+          ],
+          "9825": [
+            {
+              "result": 1,
+              "resultString": "W",
+              "imageUrl": "https://images.fotmob.com/image_resources/logo/teamlogo/8669.png",
+              "linkToMatch": "/matches/coventry-city-vs-arsenal/2tttz6#5795363",
+              "date": null,
+              "teamPageUrl": "/teams/8669/overview/coventry-city",
+              "tooltipText": {
+                "utcTime": "2026-08-21T19:00:00Z",
+                "homeTeam": "Arsenal",
+                "homeTeamId": 9825,
+                "homeScore": 3,
+                "awayTeam": "Coventry City",
+                "awayTeamId": 8669,
+                "awayScore": 0
+              },
+              "score": "3 - 0",
+              "home": {
+                "id": "9825",
+                "name": "Arsenal",
+                "shortName": "Arsenal",
+                "isOurTeam": true
+              },
+              "away": {
+                "id": "8669",
+                "name": "Coventry City",
+                "shortName": "Coventry City",
+                "isOurTeam": false
+              }
+            },
+            {
+              "result": 1,
+              "resultString": "W",
+              "imageUrl": "https://images.fotmob.com/image_resources/logo/teamlogo/10252.png",
+              "linkToMatch": "/matches/arsenal-vs-aston-villa/3c06vg#5795426",
+              "date": null,
+              "teamPageUrl": "/teams/10252/overview/aston-villa",
+              "tooltipText": {
+                "utcTime": "2026-08-31T19:00:00Z",
+                "homeTeam": "Aston Villa",
+                "homeTeamId": 10252,
+                "homeScore": 0,
+                "awayTeam": "Arsenal",
+                "awayTeamId": 9825,
+                "awayScore": 1
+              },
+              "score": "0 - 1",
+              "home": {
+                "id": "10252",
+                "name": "Aston Villa",
+                "shortName": "Aston Villa",
+                "isOurTeam": false
+              },
+              "away": {
+                "id": "9825",
+                "name": "Arsenal",
+                "shortName": "Arsenal",
+                "isOurTeam": true
+              }
+            },
+            {
+              "result": 1,
+              "resultString": "W",
+              "imageUrl": "https://images.fotmob.com/image_resources/logo/teamlogo/8455.png",
+              "linkToMatch": "/matches/chelsea-vs-arsenal/2rhhrp#5795435",
+              "date": null,
+              "teamPageUrl": "/teams/8455/overview/chelsea",
+              "tooltipText": {
+                "utcTime": "2026-09-06T15:30:00Z",
+                "homeTeam": "Arsenal",
+                "homeTeamId": 9825,
+                "homeScore": 2,
+                "awayTeam": "Chelsea",
+                "awayTeamId": 8455,
+                "awayScore": 1
+              },
+              "score": "2 - 1",
+              "home": {
+                "id": "9825",
+                "name": "Arsenal",
+                "shortName": "Arsenal",
+                "isOurTeam": true
+              },
+              "away": {
+                "id": "8455",
+                "name": "Chelsea",
+                "shortName": "Chelsea",
+                "isOurTeam": false
+              }
+            }
+          ],
+          "9826": [
+            {
+              "result": -1,
+              "resultString": "L",
+              "imageUrl": "https://images.fotmob.com/image_resources/logo/teamlogo/8668.png",
+              "linkToMatch": "/matches/everton-vs-crystal-palace/2tttz7#5795365",
+              "date": null,
+              "teamPageUrl": "/teams/8668/overview/everton",
+              "tooltipText": {
+                "utcTime": "2026-08-22T14:00:00Z",
+                "homeTeam": "Everton",
+                "homeTeamId": 8668,
+                "homeScore": 2,
+                "awayTeam": "Crystal Palace",
+                "awayTeamId": 9826,
+                "awayScore": 0
+              },
+              "score": "2 - 0",
+              "home": {
+                "id": "8668",
+                "name": "Everton",
+                "shortName": "Everton",
+                "isOurTeam": false
+              },
+              "away": {
+                "id": "9826",
+                "name": "Crystal Palace",
+                "shortName": "Crystal Palace",
+                "isOurTeam": true
+              }
+            },
+            {
+              "result": -1,
+              "resultString": "L",
+              "imageUrl": "https://images.fotmob.com/image_resources/logo/teamlogo/8456.png",
+              "linkToMatch": "/matches/manchester-city-vs-crystal-palace/2ri9zd#5795429",
+              "date": null,
+              "teamPageUrl": "/teams/8456/overview/manchester-city",
+              "tooltipText": {
+                "utcTime": "2026-08-28T19:00:00Z",
+                "homeTeam": "Crystal Palace",
+                "homeTeamId": 9826,
+                "homeScore": 1,
+                "awayTeam": "Manchester City",
+                "awayTeamId": 8456,
+                "awayScore": 4
+              },
+              "score": "1 - 4",
+              "home": {
+                "id": "9826",
+                "name": "Crystal Palace",
+                "shortName": "Crystal Palace",
+                "isOurTeam": true
+              },
+              "away": {
+                "id": "8456",
+                "name": "Manchester City",
+                "shortName": "Manchester City",
+                "isOurTeam": false
+              }
+            },
+            {
+              "result": 1,
+              "resultString": "W",
+              "imageUrl": "https://images.fotmob.com/image_resources/logo/teamlogo/9879.png",
+              "linkToMatch": "/matches/crystal-palace-vs-fulham/37llbg#5795439",
+              "date": null,
+              "teamPageUrl": "/teams/9879/overview/fulham",
+              "tooltipText": {
+                "utcTime": "2026-09-05T14:00:00Z",
+                "homeTeam": "Fulham",
+                "homeTeamId": 9879,
+                "homeScore": 2,
+                "awayTeam": "Crystal Palace",
+                "awayTeamId": 9826,
+                "awayScore": 3
+              },
+              "score": "2 - 3",
+              "home": {
+                "id": "9879",
+                "name": "Fulham",
+                "shortName": "Fulham",
+                "isOurTeam": false
+              },
+              "away": {
+                "id": "9826",
+                "name": "Crystal Palace",
+                "shortName": "Crystal Palace",
+                "isOurTeam": true
+              }
+            }
+          ],
+          "9879": [
+            {
+              "result": -1,
+              "resultString": "L",
+              "imageUrl": "https://images.fotmob.com/image_resources/logo/teamlogo/8455.png",
+              "linkToMatch": "/matches/chelsea-vs-fulham/2s2omg#5795372",
+              "date": null,
+              "teamPageUrl": "/teams/8455/overview/chelsea",
+              "tooltipText": {
+                "utcTime": "2026-08-24T19:00:00Z",
+                "homeTeam": "Fulham",
+                "homeTeamId": 9879,
+                "homeScore": 2,
+                "awayTeam": "Chelsea",
+                "awayTeamId": 8455,
+                "awayScore": 3
+              },
+              "score": "2 - 3",
+              "home": {
+                "id": "9879",
+                "name": "Fulham",
+                "shortName": "Fulham",
+                "isOurTeam": true
+              },
+              "away": {
+                "id": "8455",
+                "name": "Chelsea",
+                "shortName": "Chelsea",
+                "isOurTeam": false
+              }
+            },
+            {
+              "result": -1,
+              "resultString": "L",
+              "imageUrl": "https://images.fotmob.com/image_resources/logo/teamlogo/8472.png",
+              "linkToMatch": "/matches/sunderland-vs-fulham/2s9d8f#5795433",
+              "date": null,
+              "teamPageUrl": "/teams/8472/overview/sunderland",
+              "tooltipText": {
+                "utcTime": "2026-08-30T13:00:00Z",
+                "homeTeam": "Sunderland",
+                "homeTeamId": 8472,
+                "homeScore": 1,
+                "awayTeam": "Fulham",
+                "awayTeamId": 9879,
+                "awayScore": 0
+              },
+              "score": "1 - 0",
+              "home": {
+                "id": "8472",
+                "name": "Sunderland",
+                "shortName": "Sunderland",
+                "isOurTeam": false
+              },
+              "away": {
+                "id": "9879",
+                "name": "Fulham",
+                "shortName": "Fulham",
+                "isOurTeam": true
+              }
+            },
+            {
+              "result": -1,
+              "resultString": "L",
+              "imageUrl": "https://images.fotmob.com/image_resources/logo/teamlogo/9826.png",
+              "linkToMatch": "/matches/crystal-palace-vs-fulham/37llbg#5795439",
+              "date": null,
+              "teamPageUrl": "/teams/9826/overview/crystal-palace",
+              "tooltipText": {
+                "utcTime": "2026-09-05T14:00:00Z",
+                "homeTeam": "Fulham",
+                "homeTeamId": 9879,
+                "homeScore": 2,
+                "awayTeam": "Crystal Palace",
+                "awayTeamId": 9826,
+                "awayScore": 3
+              },
+              "score": "2 - 3",
+              "home": {
+                "id": "9879",
+                "name": "Fulham",
+                "shortName": "Fulham",
+                "isOurTeam": true
+              },
+              "away": {
+                "id": "9826",
+                "name": "Crystal Palace",
+                "shortName": "Crystal Palace",
+                "isOurTeam": false
+              }
+            }
+          ],
+          "9902": [
+            {
+              "result": 1,
+              "resultString": "W",
+              "imageUrl": "https://images.fotmob.com/image_resources/logo/teamlogo/8472.png",
+              "linkToMatch": "/matches/sunderland-vs-ipswich-town/2sif4z#5795366",
+              "date": null,
+              "teamPageUrl": "/teams/8472/overview/sunderland",
+              "tooltipText": {
+                "utcTime": "2026-08-22T14:00:00Z",
+                "homeTeam": "Ipswich Town",
+                "homeTeamId": 9902,
+                "homeScore": 2,
+                "awayTeam": "Sunderland",
+                "awayTeamId": 8472,
+                "awayScore": 1
+              },
+              "score": "2 - 1",
+              "home": {
+                "id": "9902",
+                "name": "Ipswich Town",
+                "shortName": "Ipswich Town",
+                "isOurTeam": true
+              },
+              "away": {
+                "id": "8472",
+                "name": "Sunderland",
+                "shortName": "Sunderland",
+                "isOurTeam": false
+              }
+            },
+            {
+              "result": -1,
+              "resultString": "L",
+              "imageUrl": "https://images.fotmob.com/image_resources/logo/teamlogo/10260.png",
+              "linkToMatch": "/matches/ipswich-town-vs-manchester-united/3d0uj5#5795432",
+              "date": null,
+              "teamPageUrl": "/teams/10260/overview/manchester-united",
+              "tooltipText": {
+                "utcTime": "2026-08-30T15:30:00Z",
+                "homeTeam": "Manchester United",
+                "homeTeamId": 10260,
+                "homeScore": 5,
+                "awayTeam": "Ipswich Town",
+                "awayTeamId": 9902,
+                "awayScore": 2
+              },
+              "score": "5 - 2",
+              "home": {
+                "id": "10260",
+                "name": "Manchester United",
+                "shortName": "Manchester United",
+                "isOurTeam": false
+              },
+              "away": {
+                "id": "9902",
+                "name": "Ipswich Town",
+                "shortName": "Ipswich Town",
+                "isOurTeam": true
+              }
+            },
+            {
+              "result": -1,
+              "resultString": "L",
+              "imageUrl": "https://images.fotmob.com/image_resources/logo/teamlogo/8650.png",
+              "linkToMatch": "/matches/liverpool-vs-ipswich-town/2ugv0q#5795441",
+              "date": null,
+              "teamPageUrl": "/teams/8650/overview/liverpool",
+              "tooltipText": {
+                "utcTime": "2026-09-04T19:00:00Z",
+                "homeTeam": "Ipswich Town",
+                "homeTeamId": 9902,
+                "homeScore": 0,
+                "awayTeam": "Liverpool",
+                "awayTeamId": 8650,
+                "awayScore": 2
+              },
+              "score": "0 - 2",
+              "home": {
+                "id": "9902",
+                "name": "Ipswich Town",
+                "shortName": "Ipswich Town",
+                "isOurTeam": true
+              },
+              "away": {
+                "id": "8650",
+                "name": "Liverpool",
+                "shortName": "Liverpool",
+                "isOurTeam": false
+              }
+            }
+          ],
+          "9937": [
+            {
+              "result": 1,
+              "resultString": "W",
+              "imageUrl": "https://images.fotmob.com/image_resources/logo/teamlogo/8586.png",
+              "linkToMatch": "/matches/tottenham-hotspur-vs-brentford/2u5c8b#5795368",
+              "date": null,
+              "teamPageUrl": "/teams/8586/overview/tottenham-hotspur",
+              "tooltipText": {
+                "utcTime": "2026-08-22T16:30:00Z",
+                "homeTeam": "Brentford",
+                "homeTeamId": 9937,
+                "homeScore": 3,
+                "awayTeam": "Tottenham Hotspur",
+                "awayTeamId": 8586,
+                "awayScore": 0
+              },
+              "score": "3 - 0",
+              "home": {
+                "id": "9937",
+                "name": "Brentford",
+                "shortName": "Brentford",
+                "isOurTeam": true
+              },
+              "away": {
+                "id": "8586",
+                "name": "Tottenham Hotspur",
+                "shortName": "Tottenham Hotspur",
+                "isOurTeam": false
+              }
+            },
+            {
+              "result": 0,
+              "resultString": "D",
+              "imageUrl": "https://images.fotmob.com/image_resources/logo/teamlogo/8463.png",
+              "linkToMatch": "/matches/leeds-united-vs-brentford/2sso1t#5795430",
+              "date": null,
+              "teamPageUrl": "/teams/8463/overview/leeds-united",
+              "tooltipText": {
+                "utcTime": "2026-08-30T13:00:00Z",
+                "homeTeam": "Leeds United",
+                "homeTeamId": 8463,
+                "homeScore": 1,
+                "awayTeam": "Brentford",
+                "awayTeamId": 9937,
+                "awayScore": 1
+              },
+              "score": "1 - 1",
+              "home": {
+                "id": "8463",
+                "name": "Leeds United",
+                "shortName": "Leeds United",
+                "isOurTeam": false
+              },
+              "away": {
+                "id": "9937",
+                "name": "Brentford",
+                "shortName": "Brentford",
+                "isOurTeam": true
+              }
+            },
+            {
+              "result": 0,
+              "resultString": "D",
+              "imageUrl": "https://images.fotmob.com/image_resources/logo/teamlogo/8472.png",
+              "linkToMatch": "/matches/sunderland-vs-brentford/2sw7v2#5795436",
+              "date": null,
+              "teamPageUrl": "/teams/8472/overview/sunderland",
+              "tooltipText": {
+                "utcTime": "2026-09-05T14:00:00Z",
+                "homeTeam": "Brentford",
+                "homeTeamId": 9937,
+                "homeScore": 1,
+                "awayTeam": "Sunderland",
+                "awayTeamId": 8472,
+                "awayScore": 1
+              },
+              "score": "1 - 1",
+              "home": {
+                "id": "9937",
+                "name": "Brentford",
+                "shortName": "Brentford",
+                "isOurTeam": true
+              },
+              "away": {
+                "id": "8472",
+                "name": "Sunderland",
+                "shortName": "Sunderland",
+                "isOurTeam": false
+              }
+            }
+          ],
+          "10203": [
+            {
+              "result": -1,
+              "resultString": "L",
+              "imageUrl": "https://images.fotmob.com/image_resources/logo/teamlogo/8463.png",
+              "linkToMatch": "/matches/leeds-united-vs-nottingham-forest/2vqauu#5795367",
+              "date": null,
+              "teamPageUrl": "/teams/8463/overview/leeds-united",
+              "tooltipText": {
+                "utcTime": "2026-08-22T14:00:00Z",
+                "homeTeam": "Nottingham Forest",
+                "homeTeamId": 10203,
+                "homeScore": 0,
+                "awayTeam": "Leeds United",
+                "awayTeamId": 8463,
+                "awayScore": 1
+              },
+              "score": "0 - 1",
+              "home": {
+                "id": "10203",
+                "name": "Nottingham Forest",
+                "shortName": "Nottingham Forest",
+                "isOurTeam": true
+              },
+              "away": {
+                "id": "8463",
+                "name": "Leeds United",
+                "shortName": "Leeds United",
+                "isOurTeam": false
+              }
+            },
+            {
+              "result": 0,
+              "resultString": "D",
+              "imageUrl": "https://images.fotmob.com/image_resources/logo/teamlogo/8650.png",
+              "linkToMatch": "/matches/liverpool-vs-nottingham-forest/2xthvt#5795431",
+              "date": null,
+              "teamPageUrl": "/teams/8650/overview/liverpool",
+              "tooltipText": {
+                "utcTime": "2026-08-29T11:30:00Z",
+                "homeTeam": "Liverpool",
+                "homeTeamId": 8650,
+                "homeScore": 2,
+                "awayTeam": "Nottingham Forest",
+                "awayTeamId": 10203,
+                "awayScore": 2
+              },
+              "score": "2 - 2",
+              "home": {
+                "id": "8650",
+                "name": "Liverpool",
+                "shortName": "Liverpool",
+                "isOurTeam": false
+              },
+              "away": {
+                "id": "10203",
+                "name": "Nottingham Forest",
+                "shortName": "Nottingham Forest",
+                "isOurTeam": true
+              }
+            },
+            {
+              "result": 0,
+              "resultString": "D",
+              "imageUrl": "https://images.fotmob.com/image_resources/logo/teamlogo/8586.png",
+              "linkToMatch": "/matches/tottenham-hotspur-vs-nottingham-forest/2x3odl#5795444",
+              "date": null,
+              "teamPageUrl": "/teams/8586/overview/tottenham-hotspur",
+              "tooltipText": {
+                "utcTime": "2026-09-05T14:00:00Z",
+                "homeTeam": "Nottingham Forest",
+                "homeTeamId": 10203,
+                "homeScore": 0,
+                "awayTeam": "Tottenham Hotspur",
+                "awayTeamId": 8586,
+                "awayScore": 0
+              },
+              "score": "0 - 0",
+              "home": {
+                "id": "10203",
+                "name": "Nottingham Forest",
+                "shortName": "Nottingham Forest",
+                "isOurTeam": true
+              },
+              "away": {
+                "id": "8586",
+                "name": "Tottenham Hotspur",
+                "shortName": "Tottenham Hotspur",
+                "isOurTeam": false
+              }
+            }
+          ],
+          "10204": [
+            {
+              "result": 1,
+              "resultString": "W",
+              "imageUrl": "https://images.fotmob.com/image_resources/logo/teamlogo/10252.png",
+              "linkToMatch": "/matches/brighton-hove-albion-vs-aston-villa/3gku1s#5795369",
+              "date": null,
+              "teamPageUrl": "/teams/10252/overview/aston-villa",
+              "tooltipText": {
+                "utcTime": "2026-08-23T13:00:00Z",
+                "homeTeam": "Brighton & Hove Albion",
+                "homeTeamId": 10204,
+                "homeScore": 4,
+                "awayTeam": "Aston Villa",
+                "awayTeamId": 10252,
+                "awayScore": 0
+              },
+              "score": "4 - 0",
+              "home": {
+                "id": "10204",
+                "name": "Brighton & Hove Albion",
+                "shortName": "Brighton & Hove Albion",
+                "isOurTeam": true
+              },
+              "away": {
+                "id": "10252",
+                "name": "Aston Villa",
+                "shortName": "Aston Villa",
+                "isOurTeam": false
+              }
+            },
+            {
+              "result": -1,
+              "resultString": "L",
+              "imageUrl": "https://images.fotmob.com/image_resources/logo/teamlogo/8455.png",
+              "linkToMatch": "/matches/chelsea-vs-brighton-hove-albion/2vni1p#5795427",
+              "date": null,
+              "teamPageUrl": "/teams/8455/overview/chelsea",
+              "tooltipText": {
+                "utcTime": "2026-08-30T13:00:00Z",
+                "homeTeam": "Chelsea",
+                "homeTeamId": 8455,
+                "homeScore": 4,
+                "awayTeam": "Brighton & Hove Albion",
+                "awayTeamId": 10204,
+                "awayScore": 3
+              },
+              "score": "4 - 3",
+              "home": {
+                "id": "8455",
+                "name": "Chelsea",
+                "shortName": "Chelsea",
+                "isOurTeam": false
+              },
+              "away": {
+                "id": "10204",
+                "name": "Brighton & Hove Albion",
+                "shortName": "Brighton & Hove Albion",
+                "isOurTeam": true
+              }
+            },
+            {
+              "result": 0,
+              "resultString": "D",
+              "imageUrl": "https://images.fotmob.com/image_resources/logo/teamlogo/8463.png",
+              "linkToMatch": "/matches/leeds-united-vs-brighton-hove-albion/2vqp9d#5795437",
+              "date": null,
+              "teamPageUrl": "/teams/8463/overview/leeds-united",
+              "tooltipText": {
+                "utcTime": "2026-09-05T14:00:00Z",
+                "homeTeam": "Brighton & Hove Albion",
+                "homeTeamId": 10204,
+                "homeScore": 1,
+                "awayTeam": "Leeds United",
+                "awayTeamId": 8463,
+                "awayScore": 1
+              },
+              "score": "1 - 1",
+              "home": {
+                "id": "10204",
+                "name": "Brighton & Hove Albion",
+                "shortName": "Brighton & Hove Albion",
+                "isOurTeam": true
+              },
+              "away": {
+                "id": "8463",
+                "name": "Leeds United",
+                "shortName": "Leeds United",
+                "isOurTeam": false
+              }
+            }
+          ],
+          "10252": [
+            {
+              "result": -1,
+              "resultString": "L",
+              "imageUrl": "https://images.fotmob.com/image_resources/logo/teamlogo/10204.png",
+              "linkToMatch": "/matches/brighton-hove-albion-vs-aston-villa/3gku1s#5795369",
+              "date": null,
+              "teamPageUrl": "/teams/10204/overview/brighton-hove-albion",
+              "tooltipText": {
+                "utcTime": "2026-08-23T13:00:00Z",
+                "homeTeam": "Brighton & Hove Albion",
+                "homeTeamId": 10204,
+                "homeScore": 4,
+                "awayTeam": "Aston Villa",
+                "awayTeamId": 10252,
+                "awayScore": 0
+              },
+              "score": "4 - 0",
+              "home": {
+                "id": "10204",
+                "name": "Brighton & Hove Albion",
+                "shortName": "Brighton & Hove Albion",
+                "isOurTeam": false
+              },
+              "away": {
+                "id": "10252",
+                "name": "Aston Villa",
+                "shortName": "Aston Villa",
+                "isOurTeam": true
+              }
+            },
+            {
+              "result": -1,
+              "resultString": "L",
+              "imageUrl": "https://images.fotmob.com/image_resources/logo/teamlogo/9825.png",
+              "linkToMatch": "/matches/arsenal-vs-aston-villa/3c06vg#5795426",
+              "date": null,
+              "teamPageUrl": "/teams/9825/overview/arsenal",
+              "tooltipText": {
+                "utcTime": "2026-08-31T19:00:00Z",
+                "homeTeam": "Aston Villa",
+                "homeTeamId": 10252,
+                "homeScore": 0,
+                "awayTeam": "Arsenal",
+                "awayTeamId": 9825,
+                "awayScore": 1
+              },
+              "score": "0 - 1",
+              "home": {
+                "id": "10252",
+                "name": "Aston Villa",
+                "shortName": "Aston Villa",
+                "isOurTeam": true
+              },
+              "away": {
+                "id": "9825",
+                "name": "Arsenal",
+                "shortName": "Arsenal",
+                "isOurTeam": false
+              }
+            },
+            {
+              "result": 0,
+              "resultString": "D",
+              "imageUrl": "https://images.fotmob.com/image_resources/logo/teamlogo/8667.png",
+              "linkToMatch": "/matches/hull-city-vs-aston-villa/2yk7pj#5795440",
+              "date": null,
+              "teamPageUrl": "/teams/8667/overview/hull-city",
+              "tooltipText": {
+                "utcTime": "2026-09-05T16:30:00Z",
+                "homeTeam": "Hull City",
+                "homeTeamId": 8667,
+                "homeScore": 0,
+                "awayTeam": "Aston Villa",
+                "awayTeamId": 10252,
+                "awayScore": 0
+              },
+              "score": "0 - 0",
+              "home": {
+                "id": "8667",
+                "name": "Hull City",
+                "shortName": "Hull City",
+                "isOurTeam": false
+              },
+              "away": {
+                "id": "10252",
+                "name": "Aston Villa",
+                "shortName": "Aston Villa",
+                "isOurTeam": true
+              }
+            }
+          ],
+          "10260": [
+            {
+              "result": -1,
+              "resultString": "L",
+              "imageUrl": "https://images.fotmob.com/image_resources/logo/teamlogo/8667.png",
+              "linkToMatch": "/matches/hull-city-vs-manchester-united/2yngir#5795364",
+              "date": null,
+              "teamPageUrl": "/teams/8667/overview/hull-city",
+              "tooltipText": {
+                "utcTime": "2026-08-22T11:30:00Z",
+                "homeTeam": "Hull City",
+                "homeTeamId": 8667,
+                "homeScore": 2,
+                "awayTeam": "Manchester United",
+                "awayTeamId": 10260,
+                "awayScore": 0
+              },
+              "score": "2 - 0",
+              "home": {
+                "id": "8667",
+                "name": "Hull City",
+                "shortName": "Hull City",
+                "isOurTeam": false
+              },
+              "away": {
+                "id": "10260",
+                "name": "Manchester United",
+                "shortName": "Manchester United",
+                "isOurTeam": true
+              }
+            },
+            {
+              "result": 1,
+              "resultString": "W",
+              "imageUrl": "https://images.fotmob.com/image_resources/logo/teamlogo/9902.png",
+              "linkToMatch": "/matches/ipswich-town-vs-manchester-united/3d0uj5#5795432",
+              "date": null,
+              "teamPageUrl": "/teams/9902/overview/ipswich-town",
+              "tooltipText": {
+                "utcTime": "2026-08-30T15:30:00Z",
+                "homeTeam": "Manchester United",
+                "homeTeamId": 10260,
+                "homeScore": 5,
+                "awayTeam": "Ipswich Town",
+                "awayTeamId": 9902,
+                "awayScore": 2
+              },
+              "score": "5 - 2",
+              "home": {
+                "id": "10260",
+                "name": "Manchester United",
+                "shortName": "Manchester United",
+                "isOurTeam": true
+              },
+              "away": {
+                "id": "9902",
+                "name": "Ipswich Town",
+                "shortName": "Ipswich Town",
+                "isOurTeam": false
+              }
+            },
+            {
+              "result": 0,
+              "resultString": "D",
+              "imageUrl": "https://images.fotmob.com/image_resources/logo/teamlogo/8668.png",
+              "linkToMatch": "/matches/everton-vs-manchester-united/2ynv4k#5795438",
+              "date": null,
+              "teamPageUrl": "/teams/8668/overview/everton",
+              "tooltipText": {
+                "utcTime": "2026-09-06T13:00:00Z",
+                "homeTeam": "Everton",
+                "homeTeamId": 8668,
+                "homeScore": 2,
+                "awayTeam": "Manchester United",
+                "awayTeamId": 10260,
+                "awayScore": 2
+              },
+              "score": "2 - 2",
+              "home": {
+                "id": "8668",
+                "name": "Everton",
+                "shortName": "Everton",
+                "isOurTeam": false
+              },
+              "away": {
+                "id": "10260",
+                "name": "Manchester United",
+                "shortName": "Manchester United",
+                "isOurTeam": true
+              }
+            }
+          ],
+          "10261": [
+            {
+              "result": 0,
+              "resultString": "D",
+              "imageUrl": "https://images.fotmob.com/image_resources/logo/teamlogo/8650.png",
+              "linkToMatch": "/matches/liverpool-vs-newcastle-united/2ygyxm#5795371",
+              "date": null,
+              "teamPageUrl": "/teams/8650/overview/liverpool",
+              "tooltipText": {
+                "utcTime": "2026-08-23T15:30:00Z",
+                "homeTeam": "Newcastle United",
+                "homeTeamId": 10261,
+                "homeScore": 2,
+                "awayTeam": "Liverpool",
+                "awayTeamId": 8650,
+                "awayScore": 2
+              },
+              "score": "2 - 2",
+              "home": {
+                "id": "10261",
+                "name": "Newcastle United",
+                "shortName": "Newcastle United",
+                "isOurTeam": true
+              },
+              "away": {
+                "id": "8650",
+                "name": "Liverpool",
+                "shortName": "Liverpool",
+                "isOurTeam": false
+              }
+            },
+            {
+              "result": 1,
+              "resultString": "W",
+              "imageUrl": "https://images.fotmob.com/image_resources/logo/teamlogo/8586.png",
+              "linkToMatch": "/matches/tottenham-hotspur-vs-newcastle-united/2xr2ka#5795434",
+              "date": null,
+              "teamPageUrl": "/teams/8586/overview/tottenham-hotspur",
+              "tooltipText": {
+                "utcTime": "2026-08-29T16:30:00Z",
+                "homeTeam": "Tottenham Hotspur",
+                "homeTeamId": 8586,
+                "homeScore": 0,
+                "awayTeam": "Newcastle United",
+                "awayTeamId": 10261,
+                "awayScore": 2
+              },
+              "score": "0 - 2",
+              "home": {
+                "id": "8586",
+                "name": "Tottenham Hotspur",
+                "shortName": "Tottenham Hotspur",
+                "isOurTeam": false
+              },
+              "away": {
+                "id": "10261",
+                "name": "Newcastle United",
+                "shortName": "Newcastle United",
+                "isOurTeam": true
+              }
+            },
+            {
+              "result": 0,
+              "resultString": "D",
+              "imageUrl": "https://images.fotmob.com/image_resources/logo/teamlogo/8678.png",
+              "linkToMatch": "/matches/afc-bournemouth-vs-newcastle-united/2ysbu8#5795443",
+              "date": null,
+              "teamPageUrl": "/teams/8678/overview/afc-bournemouth",
+              "tooltipText": {
+                "utcTime": "2026-09-05T11:30:00Z",
+                "homeTeam": "Newcastle United",
+                "homeTeamId": 10261,
+                "homeScore": 2,
+                "awayTeam": "AFC Bournemouth",
+                "awayTeamId": 8678,
+                "awayScore": 2
+              },
+              "score": "2 - 2",
+              "home": {
+                "id": "10261",
+                "name": "Newcastle United",
+                "shortName": "Newcastle United",
+                "isOurTeam": true
+              },
+              "away": {
+                "id": "8678",
+                "name": "AFC Bournemouth",
+                "shortName": "AFC Bournemouth",
+                "isOurTeam": false
+              }
+            }
+          ]
+        },
+        "nextOpponent": {
+          "8455": [
+            "8678",
+            "AFC Bournemouth",
+            "5795467"
+          ],
+          "8456": [
+            "8650",
+            "Liverpool",
+            "5795472"
+          ],
+          "8463": [
+            "9825",
+            "Arsenal",
+            "5795465"
+          ],
+          "8472": [
+            "10204",
+            "Brighton & Hove Albion",
+            "5795474"
+          ],
+          "8586": [
+            "10260",
+            "Manchester United",
+            "5795473"
+          ],
+          "8650": [
+            "8456",
+            "Manchester City",
+            "5795472"
+          ],
+          "8667": [
+            "8668",
+            "Everton",
+            "5795470"
+          ],
+          "8668": [
+            "8667",
+            "Hull City",
+            "5795470"
+          ],
+          "8669": [
+            "10261",
+            "Newcastle United",
+            "5795468"
+          ],
+          "8678": [
+            "8455",
+            "Chelsea",
+            "5795467"
+          ],
+          "9825": [
+            "8463",
+            "Leeds United",
+            "5795465"
+          ],
+          "9826": [
+            "10203",
+            "Nottingham Forest",
+            "5795469"
+          ],
+          "9879": [
+            "9902",
+            "Ipswich Town",
+            "5795471"
+          ],
+          "9902": [
+            "9879",
+            "Fulham",
+            "5795471"
+          ],
+          "9937": [
+            "10252",
+            "Aston Villa",
+            "5795466"
+          ],
+          "10203": [
+            "9826",
+            "Crystal Palace",
+            "5795469"
+          ],
+          "10204": [
+            "8472",
+            "Sunderland",
+            "5795474"
+          ],
+          "10252": [
+            "9937",
+            "Brentford",
+            "5795466"
+          ],
+          "10260": [
+            "8586",
+            "Tottenham Hotspur",
+            "5795473"
+          ],
+          "10261": [
+            "8669",
+            "Coventry City",
+            "5795468"
+          ]
+        },
+        "tableHeader": {
+          "staticTableHeaders": [
+            "#",
+            "Team",
+            "PL"
+          ],
+          "dynamicTableHeaders": [
+            "Form",
+            "Next"
+          ]
+        }
+      }
+    ],
+    "topPlayers": {
+      "byRating": {
+        "players": [
+          {
+            "id": 167008,
+            "name": "Pascal Groß",
+            "teamId": 10204,
+            "teamName": "Brighton and Hove Albion",
+            "rating": 8,
+            "value": 8,
+            "stat": {
+              "name": "rating",
+              "value": 8,
+              "format": "fraction",
+              "fractions": 2
+            },
+            "teamColors": {
+              "darkMode": "#095bb6",
+              "lightMode": "#0850A0",
+              "fontDarkMode": "rgba(255, 255, 255, 1.0)",
+              "fontLightMode": "rgba(255, 255, 255, 1.0)"
+            }
+          },
+          {
+            "id": 737066,
+            "name": "Erling Haaland",
+            "teamId": 8456,
+            "teamName": "Manchester City",
+            "rating": 7.99,
+            "value": 7.99,
+            "stat": {
+              "name": "rating",
+              "value": 7.99,
+              "format": "fraction",
+              "fractions": 2
+            },
+            "teamColors": {
+              "darkMode": "#76b4e5",
+              "lightMode": "#69A8D8",
+              "fontDarkMode": "rgba(29, 29, 29, 1.0)",
+              "fontLightMode": "rgba(255, 255, 255, 1.0)"
+            }
+          },
+          {
+            "id": 961995,
+            "name": "Bukayo Saka",
+            "teamId": 9825,
+            "teamName": "Arsenal",
+            "rating": 7.94,
+            "value": 7.94,
+            "stat": {
+              "name": "rating",
+              "value": 7.94,
+              "format": "fraction",
+              "fractions": 2
+            },
+            "teamColors": {
+              "darkMode": "#bd0510",
+              "lightMode": "#bd0510",
+              "fontDarkMode": "rgba(255, 255, 255, 1.0)",
+              "fontLightMode": "rgba(255, 255, 255, 1.0)"
+            }
+          }
+        ],
+        "seeAllLink": "/leagues/47/stats/season/36781/players/rating/premier-league"
+      },
+      "byGoals": {
+        "players": [
+          {
+            "id": 737066,
+            "name": "Erling Haaland",
+            "teamId": 8456,
+            "teamName": "Manchester City",
+            "goals": 5,
+            "value": 5,
+            "stat": {
+              "name": "goals",
+              "value": 5,
+              "format": "number",
+              "fractions": 0
+            },
+            "teamColors": {
+              "darkMode": "#76b4e5",
+              "lightMode": "#69A8D8",
+              "fontDarkMode": "rgba(29, 29, 29, 1.0)",
+              "fontLightMode": "rgba(255, 255, 255, 1.0)"
+            }
+          },
+          {
+            "id": 690107,
+            "name": "Alexander Isak",
+            "teamId": 8650,
+            "teamName": "Liverpool",
+            "goals": 4,
+            "value": 4,
+            "stat": {
+              "name": "goals",
+              "value": 4,
+              "format": "number",
+              "fractions": 0
+            },
+            "teamColors": {
+              "darkMode": "#911712",
+              "lightMode": "#911712",
+              "fontDarkMode": "rgba(255, 255, 255, 1.0)",
+              "fontLightMode": "rgba(255, 255, 255, 1.0)"
+            }
+          },
+          {
+            "id": 940446,
+            "name": "Brian Brobbey",
+            "teamId": 8472,
+            "teamName": "Sunderland",
+            "goals": 3,
+            "value": 3,
+            "stat": {
+              "name": "goals",
+              "value": 3,
+              "format": "number",
+              "fractions": 0
+            },
+            "teamColors": {
+              "darkMode": "#DC0814",
+              "lightMode": "#DC0814",
+              "fontDarkMode": "rgba(255, 255, 255, 1.0)",
+              "fontLightMode": "rgba(255, 255, 255, 1.0)"
+            }
+          }
+        ],
+        "seeAllLink": "/leagues/47/stats/season/36781/players/goals/premier-league"
+      },
+      "byAssists": {
+        "players": [
+          {
+            "id": 806552,
+            "name": "Cody Gakpo",
+            "teamId": 8650,
+            "teamName": "Liverpool",
+            "assists": 3,
+            "value": 3,
+            "stat": {
+              "name": "assists",
+              "value": 3,
+              "format": "number",
+              "fractions": 0
+            },
+            "teamColors": {
+              "darkMode": "#911712",
+              "lightMode": "#911712",
+              "fontDarkMode": "rgba(255, 255, 255, 1.0)",
+              "fontLightMode": "rgba(255, 255, 255, 1.0)"
+            }
+          },
+          {
+            "id": 933576,
+            "name": "Antoine Semenyo",
+            "teamId": 8456,
+            "teamName": "Manchester City",
+            "assists": 3,
+            "value": 3,
+            "stat": {
+              "name": "assists",
+              "value": 3,
+              "format": "number",
+              "fractions": 0
+            },
+            "teamColors": {
+              "darkMode": "#76b4e5",
+              "lightMode": "#69A8D8",
+              "fontDarkMode": "rgba(29, 29, 29, 1.0)",
+              "fontLightMode": "rgba(255, 255, 255, 1.0)"
+            }
+          },
+          {
+            "id": 167008,
+            "name": "Pascal Groß",
+            "teamId": 10204,
+            "teamName": "Brighton and Hove Albion",
+            "assists": 3,
+            "value": 3,
+            "stat": {
+              "name": "assists",
+              "value": 3,
+              "format": "number",
+              "fractions": 0
+            },
+            "teamColors": {
+              "darkMode": "#095bb6",
+              "lightMode": "#0850A0",
+              "fontDarkMode": "rgba(255, 255, 255, 1.0)",
+              "fontLightMode": "rgba(255, 255, 255, 1.0)"
+            }
+          }
+        ],
+        "seeAllLink": "/leagues/47/stats/season/36781/players/goal_assist/premier-league"
+      },
+      "seeAllUrl": "stats"
+    },
+    "hasTotw": true,
+    "leagueOverviewMatches": [
+      {
+        "id": "5795363",
+        "pageUrl": "/matches/coventry-city-vs-arsenal/2tttz6#5795363",
+        "opponent": {
+          "id": "9825",
+          "name": "Arsenal",
+          "score": 3
+        },
+        "home": {
+          "id": "9825",
+          "name": "Arsenal",
+          "score": 3
+        },
+        "away": {
+          "id": "8669",
+          "name": "Coventry",
+          "score": 0
+        },
+        "displayTournament": true,
+        "notStarted": false,
+        "tournament": {
+          "stage": ""
+        },
+        "status": {
+          "utcTime": "2026-08-21T19:00:00Z",
+          "finished": true,
+          "started": true,
+          "cancelled": false,
+          "awarded": false,
+          "scoreStr": "3 - 0",
+          "reason": {
+            "short": "FT",
+            "shortKey": "fulltime_short",
+            "long": "Full-Time",
+            "longKey": "finished"
+          }
+        }
+      },
+      {
+        "id": "5795364",
+        "pageUrl": "/matches/hull-city-vs-manchester-united/2yngir#5795364",
+        "opponent": {
+          "id": "8667",
+          "name": "Hull",
+          "score": 2
+        },
+        "home": {
+          "id": "8667",
+          "name": "Hull",
+          "score": 2
+        },
+        "away": {
+          "id": "10260",
+          "name": "Man United",
+          "score": 0
+        },
+        "displayTournament": true,
+        "notStarted": false,
+        "tournament": {
+          "stage": ""
+        },
+        "status": {
+          "utcTime": "2026-08-22T11:30:00Z",
+          "finished": true,
+          "started": true,
+          "cancelled": false,
+          "awarded": false,
+          "scoreStr": "2 - 0",
+          "reason": {
+            "short": "FT",
+            "shortKey": "fulltime_short",
+            "long": "Full-Time",
+            "longKey": "finished"
+          }
+        }
+      },
+      {
+        "id": "5795365",
+        "pageUrl": "/matches/everton-vs-crystal-palace/2tttz7#5795365",
+        "opponent": {
+          "id": "8668",
+          "name": "Everton",
+          "score": 2
+        },
+        "home": {
+          "id": "8668",
+          "name": "Everton",
+          "score": 2
+        },
+        "away": {
+          "id": "9826",
+          "name": "Crystal Palace",
+          "score": 0
+        },
+        "displayTournament": true,
+        "notStarted": false,
+        "tournament": {
+          "stage": ""
+        },
+        "status": {
+          "utcTime": "2026-08-22T14:00:00Z",
+          "finished": true,
+          "started": true,
+          "cancelled": false,
+          "awarded": false,
+          "scoreStr": "2 - 0",
+          "reason": {
+            "short": "FT",
+            "shortKey": "fulltime_short",
+            "long": "Full-Time",
+            "longKey": "finished"
+          }
+        }
+      }
+    ],
+    "hasOngoingMatch": false,
+    "shotMap": null,
+    "matches": {
+      "firstUnplayedMatch": {
+        "firstUnplayedMatchIndex": 51,
+        "firstUnplayedMatchId": "5795465"
+      },
+      "allMatches": [
+        {
+          "round": "1",
+          "roundName": 1,
+          "pageUrl": "/matches/coventry-city-vs-arsenal/2tttz6#5795363",
+          "id": "5795363",
+          "home": {
+            "name": "Arsenal",
+            "shortName": "Arsenal",
+            "id": "9825"
+          },
+          "away": {
+            "name": "Coventry City",
+            "shortName": "Coventry",
+            "id": "8669"
+          },
+          "status": {
+            "utcTime": "2026-08-21T19:00:00Z",
+            "timezone": "",
+            "finished": true,
+            "started": true,
+            "cancelled": false,
+            "awarded": false,
+            "scoreStr": "3 - 0",
+            "reason": {
+              "short": "FT",
+              "shortKey": "fulltime_short",
+              "long": "Full-Time",
+              "longKey": "finished"
+            }
+          }
+        },
+        {
+          "round": "1",
+          "roundName": 1,
+          "pageUrl": "/matches/hull-city-vs-manchester-united/2yngir#5795364",
+          "id": "5795364",
+          "home": {
+            "name": "Hull City",
+            "shortName": "Hull",
+            "id": "8667"
+          },
+          "away": {
+            "name": "Manchester United",
+            "shortName": "Man United",
+            "id": "10260"
+          },
+          "status": {
+            "utcTime": "2026-08-22T11:30:00Z",
+            "timezone": "",
+            "finished": true,
+            "started": true,
+            "cancelled": false,
+            "awarded": false,
+            "scoreStr": "2 - 0",
+            "reason": {
+              "short": "FT",
+              "shortKey": "fulltime_short",
+              "long": "Full-Time",
+              "longKey": "finished"
+            }
+          }
+        },
+        {
+          "round": "1",
+          "roundName": 1,
+          "pageUrl": "/matches/everton-vs-crystal-palace/2tttz7#5795365",
+          "id": "5795365",
+          "home": {
+            "name": "Everton",
+            "shortName": "Everton",
+            "id": "8668"
+          },
+          "away": {
+            "name": "Crystal Palace",
+            "shortName": "Crystal Palace",
+            "id": "9826"
+          },
+          "status": {
+            "utcTime": "2026-08-22T14:00:00Z",
+            "timezone": "",
+            "finished": true,
+            "started": true,
+            "cancelled": false,
+            "awarded": false,
+            "scoreStr": "2 - 0",
+            "reason": {
+              "short": "FT",
+              "shortKey": "fulltime_short",
+              "long": "Full-Time",
+              "longKey": "finished"
+            }
+          }
+        }
+      ],
+      "hasOngoingMatch": false,
+      "fixtureInfo": {
+        "activeRound": {
+          "roundId": "6",
+          "localizedKey": "round_fmt"
+        },
+        "rounds": [
+          {
+            "roundId": "1",
+            "localizedKey": "round_fmt"
+          },
+          {
+            "roundId": "2",
+            "localizedKey": "round_fmt"
+          },
+          {
+            "roundId": "3",
+            "localizedKey": "round_fmt"
+          }
+        ],
+        "teams": [
+          {
+            "id": 8678,
+            "name": "AFC Bournemouth"
+          },
+          {
+            "id": 9825,
+            "name": "Arsenal"
+          },
+          {
+            "id": 10252,
+            "name": "Aston Villa"
+          }
+        ],
+        "groups": []
+      }
+    }
+  },
+  "stats": {
+    "players": [
+      {
+        "header": "Top scorer",
+        "participant": {
+          "id": 737066,
+          "name": "Erling Haaland",
+          "rank": 1,
+          "ccode": "NOR",
+          "teamId": 8456,
+          "teamName": "Manchester City",
+          "value": 5,
+          "stat": {
+            "name": "goals",
+            "value": 5,
+            "format": "number",
+            "fractions": 0
+          }
+        },
+        "fetchAllUrl": "https://data.fotmob.com/stats/47/season/36781/goals.json",
+        "topThree": [
+          {
+            "id": 737066,
+            "name": "Erling Haaland",
+            "rank": 1,
+            "ccode": "NOR",
+            "teamId": 8456,
+            "teamName": "Manchester City",
+            "value": 5,
+            "stat": {
+              "name": "goals",
+              "value": 5,
+              "format": "number",
+              "fractions": 0
+            },
+            "teamColors": {
+              "darkMode": "#76b4e5",
+              "lightMode": "#69A8D8",
+              "fontDarkMode": "rgba(29, 29, 29, 1.0)",
+              "fontLightMode": "rgba(255, 255, 255, 1.0)"
+            }
+          },
+          {
+            "id": 690107,
+            "name": "Alexander Isak",
+            "rank": 2,
+            "ccode": "SWE",
+            "teamId": 8650,
+            "teamName": "Liverpool",
+            "value": 4,
+            "stat": {
+              "name": "goals",
+              "value": 4,
+              "format": "number",
+              "fractions": 0
+            },
+            "teamColors": {
+              "darkMode": "#911712",
+              "lightMode": "#911712",
+              "fontDarkMode": "rgba(255, 255, 255, 1.0)",
+              "fontLightMode": "rgba(255, 255, 255, 1.0)"
+            }
+          },
+          {
+            "id": 940446,
+            "name": "Brian Brobbey",
+            "rank": 3,
+            "ccode": "NED",
+            "teamId": 8472,
+            "teamName": "Sunderland",
+            "value": 3,
+            "stat": {
+              "name": "goals",
+              "value": 3,
+              "format": "number",
+              "fractions": 0
+            },
+            "teamColors": {
+              "darkMode": "#DC0814",
+              "lightMode": "#DC0814",
+              "fontDarkMode": "rgba(255, 255, 255, 1.0)",
+              "fontLightMode": "rgba(255, 255, 255, 1.0)"
+            }
+          }
+        ],
+        "order": 1,
+        "name": "goals",
+        "localizedTitleId": "goals_title",
+        "category": "Top Stat"
+      },
+      {
+        "header": "Assists",
+        "participant": {
+          "id": 806552,
+          "name": "Cody Gakpo",
+          "rank": 1,
+          "ccode": "NED",
+          "teamId": 8650,
+          "teamName": "Liverpool",
+          "value": 3,
+          "stat": {
+            "name": "goal_assist",
+            "value": 3,
+            "format": "number",
+            "fractions": 0
+          }
+        },
+        "fetchAllUrl": "https://data.fotmob.com/stats/47/season/36781/goal_assist.json",
+        "topThree": [
+          {
+            "id": 806552,
+            "name": "Cody Gakpo",
+            "rank": 1,
+            "ccode": "NED",
+            "teamId": 8650,
+            "teamName": "Liverpool",
+            "value": 3,
+            "stat": {
+              "name": "goal_assist",
+              "value": 3,
+              "format": "number",
+              "fractions": 0
+            },
+            "teamColors": {
+              "darkMode": "#911712",
+              "lightMode": "#911712",
+              "fontDarkMode": "rgba(255, 255, 255, 1.0)",
+              "fontLightMode": "rgba(255, 255, 255, 1.0)"
+            }
+          },
+          {
+            "id": 933576,
+            "name": "Antoine Semenyo",
+            "rank": 2,
+            "ccode": "GHA",
+            "teamId": 8456,
+            "teamName": "Manchester City",
+            "value": 3,
+            "stat": {
+              "name": "goal_assist",
+              "value": 3,
+              "format": "number",
+              "fractions": 0
+            },
+            "teamColors": {
+              "darkMode": "#76b4e5",
+              "lightMode": "#69A8D8",
+              "fontDarkMode": "rgba(29, 29, 29, 1.0)",
+              "fontLightMode": "rgba(255, 255, 255, 1.0)"
+            }
+          },
+          {
+            "id": 167008,
+            "name": "Pascal Groß",
+            "rank": 3,
+            "ccode": "GER",
+            "teamId": 10204,
+            "teamName": "Brighton and Hove Albion",
+            "value": 3,
+            "stat": {
+              "name": "goal_assist",
+              "value": 3,
+              "format": "number",
+              "fractions": 0
+            },
+            "teamColors": {
+              "darkMode": "#095bb6",
+              "lightMode": "#0850A0",
+              "fontDarkMode": "rgba(255, 255, 255, 1.0)",
+              "fontLightMode": "rgba(255, 255, 255, 1.0)"
+            }
+          }
+        ],
+        "order": 2,
+        "name": "goal_assist",
+        "localizedTitleId": "goal_assist_title",
+        "category": "Top Stat"
+      },
+      {
+        "header": "Goals + Assists",
+        "participant": {
+          "id": 167008,
+          "name": "Pascal Groß",
+          "rank": 1,
+          "ccode": "GER",
+          "teamId": 10204,
+          "teamName": "Brighton and Hove Albion",
+          "value": 6,
+          "stat": {
+            "name": "_goals_and_goal_assist",
+            "value": 6,
+            "format": "number",
+            "fractions": 0
+          }
+        },
+        "fetchAllUrl": "https://data.fotmob.com/stats/47/season/36781/_goals_and_goal_assist.json",
+        "topThree": [
+          {
+            "id": 167008,
+            "name": "Pascal Groß",
+            "rank": 1,
+            "ccode": "GER",
+            "teamId": 10204,
+            "teamName": "Brighton and Hove Albion",
+            "value": 6,
+            "stat": {
+              "name": "_goals_and_goal_assist",
+              "value": 6,
+              "format": "number",
+              "fractions": 0
+            },
+            "teamColors": {
+              "darkMode": "#095bb6",
+              "lightMode": "#0850A0",
+              "fontDarkMode": "rgba(255, 255, 255, 1.0)",
+              "fontLightMode": "rgba(255, 255, 255, 1.0)"
+            }
+          },
+          {
+            "id": 1021382,
+            "name": "João Pedro",
+            "rank": 2,
+            "ccode": "BRA",
+            "teamId": 8455,
+            "teamName": "Chelsea",
+            "value": 6,
+            "stat": {
+              "name": "_goals_and_goal_assist",
+              "value": 6,
+              "format": "number",
+              "fractions": 0
+            },
+            "teamColors": {
+              "darkMode": "#033cc1",
+              "lightMode": "#051495",
+              "fontDarkMode": "rgba(255, 255, 255, 1.0)",
+              "fontLightMode": "rgba(255, 255, 255, 1.0)"
+            }
+          },
+          {
+            "id": 737066,
+            "name": "Erling Haaland",
+            "rank": 3,
+            "ccode": "NOR",
+            "teamId": 8456,
+            "teamName": "Manchester City",
+            "value": 5,
+            "stat": {
+              "name": "_goals_and_goal_assist",
+              "value": 5,
+              "format": "number",
+              "fractions": 0
+            },
+            "teamColors": {
+              "darkMode": "#76b4e5",
+              "lightMode": "#69A8D8",
+              "fontDarkMode": "rgba(29, 29, 29, 1.0)",
+              "fontLightMode": "rgba(255, 255, 255, 1.0)"
+            }
+          }
+        ],
+        "order": 3,
+        "name": "_goals_and_goal_assist",
+        "localizedTitleId": "goals_and_assists",
+        "category": "Top Stat"
+      }
+    ],
+    "teams": [
+      {
+        "header": "FotMob rating",
+        "participant": {
+          "id": 0,
+          "name": "Manchester City",
+          "rank": 1,
+          "ccode": "ENG",
+          "teamId": 8456,
+          "value": 7.41,
+          "stat": {
+            "name": "rating_team",
+            "value": 7.41,
+            "format": "fraction",
+            "fractions": 2
+          }
+        },
+        "fetchAllUrl": "https://data.fotmob.com/stats/47/season/36781/rating_team.json",
+        "topThree": [
+          {
+            "id": 0,
+            "name": "Manchester City",
+            "rank": 1,
+            "ccode": "ENG",
+            "teamId": 8456,
+            "value": 7.41,
+            "stat": {
+              "name": "rating_team",
+              "value": 7.41,
+              "format": "fraction",
+              "fractions": 2
+            },
+            "teamColors": {
+              "darkMode": "#76b4e5",
+              "lightMode": "#69A8D8",
+              "fontDarkMode": "rgba(29, 29, 29, 1.0)",
+              "fontLightMode": "rgba(255, 255, 255, 1.0)"
+            }
+          },
+          {
+            "id": 0,
+            "name": "Brighton & Hove Albion",
+            "rank": 2,
+            "ccode": "ENG",
+            "teamId": 10204,
+            "value": 7.16,
+            "stat": {
+              "name": "rating_team",
+              "value": 7.16,
+              "format": "fraction",
+              "fractions": 2
+            },
+            "teamColors": {
+              "darkMode": "#095bb6",
+              "lightMode": "#0850A0",
+              "fontDarkMode": "rgba(255, 255, 255, 1.0)",
+              "fontLightMode": "rgba(255, 255, 255, 1.0)"
+            }
+          },
+          {
+            "id": 0,
+            "name": "Everton",
+            "rank": 3,
+            "ccode": "ENG",
+            "teamId": 8668,
+            "value": 7.14,
+            "stat": {
+              "name": "rating_team",
+              "value": 7.14,
+              "format": "fraction",
+              "fractions": 2
+            },
+            "teamColors": {
+              "darkMode": "#0051d6",
+              "lightMode": "#00359C",
+              "fontDarkMode": "rgba(255, 255, 255, 1.0)",
+              "fontLightMode": "rgba(255, 255, 255, 1.0)"
+            }
+          }
+        ],
+        "order": 44,
+        "name": "rating_team",
+        "localizedTitleId": "rating_team_title",
+        "category": "Top Stat"
+      },
+      {
+        "header": "Goals per match",
+        "participant": {
+          "id": 0,
+          "name": "Brighton & Hove Albion",
+          "rank": 1,
+          "ccode": "ENG",
+          "teamId": 10204,
+          "value": 3.2,
+          "stat": {
+            "name": "goals_team_match",
+            "value": 3.2,
+            "format": "fraction",
+            "fractions": 1
+          }
+        },
+        "fetchAllUrl": "https://data.fotmob.com/stats/47/season/36781/goals_team_match.json",
+        "topThree": [
+          {
+            "id": 0,
+            "name": "Brighton & Hove Albion",
+            "rank": 1,
+            "ccode": "ENG",
+            "teamId": 10204,
+            "value": 3.2,
+            "stat": {
+              "name": "goals_team_match",
+              "value": 3.2,
+              "format": "fraction",
+              "fractions": 1
+            },
+            "teamColors": {
+              "darkMode": "#095bb6",
+              "lightMode": "#0850A0",
+              "fontDarkMode": "rgba(255, 255, 255, 1.0)",
+              "fontLightMode": "rgba(255, 255, 255, 1.0)"
+            }
+          },
+          {
+            "id": 0,
+            "name": "Manchester City",
+            "rank": 2,
+            "ccode": "ENG",
+            "teamId": 8456,
+            "value": 2.6,
+            "stat": {
+              "name": "goals_team_match",
+              "value": 2.6,
+              "format": "fraction",
+              "fractions": 1
+            },
+            "teamColors": {
+              "darkMode": "#76b4e5",
+              "lightMode": "#69A8D8",
+              "fontDarkMode": "rgba(29, 29, 29, 1.0)",
+              "fontLightMode": "rgba(255, 255, 255, 1.0)"
+            }
+          },
+          {
+            "id": 0,
+            "name": "Brentford",
+            "rank": 3,
+            "ccode": "ENG",
+            "teamId": 9937,
+            "value": 2,
+            "stat": {
+              "name": "goals_team_match",
+              "value": 2,
+              "format": "fraction",
+              "fractions": 1
+            },
+            "teamColors": {
+              "darkMode": "#C00808",
+              "lightMode": "#C00808",
+              "fontDarkMode": "rgba(255, 255, 255, 1.0)",
+              "fontLightMode": "rgba(255, 255, 255, 1.0)"
+            }
+          }
+        ],
+        "order": 45,
+        "name": "goals_team_match",
+        "localizedTitleId": "goals_team_match_title",
+        "category": "Top Stat"
+      },
+      {
+        "header": "Goals conceded per match",
+        "participant": {
+          "id": 0,
+          "name": "Leeds United",
+          "rank": 1,
+          "ccode": "ENG",
+          "teamId": 8463,
+          "value": 0.6,
+          "stat": {
+            "name": "goals_conceded_team_match",
+            "value": 0.6,
+            "format": "fraction",
+            "fractions": 1
+          }
+        },
+        "fetchAllUrl": "https://data.fotmob.com/stats/47/season/36781/goals_conceded_team_match.json",
+        "topThree": [
+          {
+            "id": 0,
+            "name": "Leeds United",
+            "rank": 1,
+            "ccode": "ENG",
+            "teamId": 8463,
+            "value": 0.6,
+            "stat": {
+              "name": "goals_conceded_team_match",
+              "value": 0.6,
+              "format": "fraction",
+              "fractions": 1
+            },
+            "teamColors": {
+              "darkMode": "#ffffff",
+              "lightMode": "#0060AA",
+              "fontDarkMode": "rgba(29, 29, 29, 1.0)",
+              "fontLightMode": "rgba(255, 255, 255, 1.0)"
+            }
+          },
+          {
+            "id": 0,
+            "name": "Everton",
+            "rank": 1,
+            "ccode": "ENG",
+            "teamId": 8668,
+            "value": 0.6,
+            "stat": {
+              "name": "goals_conceded_team_match",
+              "value": 0.6,
+              "format": "fraction",
+              "fractions": 1
+            },
+            "teamColors": {
+              "darkMode": "#0051d6",
+              "lightMode": "#00359C",
+              "fontDarkMode": "rgba(255, 255, 255, 1.0)",
+              "fontLightMode": "rgba(255, 255, 255, 1.0)"
+            }
+          },
+          {
+            "id": 0,
+            "name": "Liverpool",
+            "rank": 3,
+            "ccode": "ENG",
+            "teamId": 8650,
+            "value": 0.8,
+            "stat": {
+              "name": "goals_conceded_team_match",
+              "value": 0.8,
+              "format": "fraction",
+              "fractions": 1
+            },
+            "teamColors": {
+              "darkMode": "#911712",
+              "lightMode": "#911712",
+              "fontDarkMode": "rgba(255, 255, 255, 1.0)",
+              "fontLightMode": "rgba(255, 255, 255, 1.0)"
+            }
+          }
+        ],
+        "order": 46,
+        "name": "goals_conceded_team_match",
+        "localizedTitleId": "goals_conceded_team_match_title",
+        "category": "Top Stat"
+      }
+    ],
+    "seasonStatLinks": [
+      {
+        "Name": "2026/2027",
+        "CountryCode": "ENG",
+        "RelativePath": "stats/47/season/36781/topstats.json",
+        "League": "Premier League",
+        "StageId": 0,
+        "TemplateId": 47,
+        "TournamentId": 36781
+      },
+      {
+        "Name": "2025/2026",
+        "CountryCode": "ENG",
+        "RelativePath": "stats/47/season/27110/topstats.json",
+        "League": "Premier League",
+        "StageId": 0,
+        "TemplateId": 47,
+        "TournamentId": 27110
+      },
+      {
+        "Name": "2024/2025",
+        "CountryCode": "ENG",
+        "RelativePath": "stats/47/season/23685/topstats.json",
+        "League": "Premier League",
+        "StageId": 0,
+        "TemplateId": 47,
+        "TournamentId": 23685
+      }
+    ],
+    "seasonsWithLinks": [
+      "2026/2027",
+      "2025/2026",
+      "2024/2025"
+    ]
+  },
+  "fixtures": {
+    "firstUnplayedMatch": {
+      "firstUnplayedMatchIndex": 51,
+      "firstUnplayedMatchId": "5795465"
+    },
+    "allMatches": [
+      {
+        "round": "1",
+        "roundName": 1,
+        "pageUrl": "/matches/coventry-city-vs-arsenal/2tttz6#5795363",
+        "id": "5795363",
+        "home": {
+          "name": "Arsenal",
+          "shortName": "Arsenal",
+          "id": "9825"
+        },
+        "away": {
+          "name": "Coventry City",
+          "shortName": "Coventry",
+          "id": "8669"
+        },
+        "status": {
+          "utcTime": "2026-08-21T19:00:00Z",
+          "timezone": "",
+          "finished": true,
+          "started": true,
+          "cancelled": false,
+          "awarded": false,
+          "scoreStr": "3 - 0",
+          "reason": {
+            "short": "FT",
+            "shortKey": "fulltime_short",
+            "long": "Full-Time",
+            "longKey": "finished"
+          }
+        }
+      },
+      {
+        "round": "1",
+        "roundName": 1,
+        "pageUrl": "/matches/hull-city-vs-manchester-united/2yngir#5795364",
+        "id": "5795364",
+        "home": {
+          "name": "Hull City",
+          "shortName": "Hull",
+          "id": "8667"
+        },
+        "away": {
+          "name": "Manchester United",
+          "shortName": "Man United",
+          "id": "10260"
+        },
+        "status": {
+          "utcTime": "2026-08-22T11:30:00Z",
+          "timezone": "",
+          "finished": true,
+          "started": true,
+          "cancelled": false,
+          "awarded": false,
+          "scoreStr": "2 - 0",
+          "reason": {
+            "short": "FT",
+            "shortKey": "fulltime_short",
+            "long": "Full-Time",
+            "longKey": "finished"
+          }
+        }
+      },
+      {
+        "round": "1",
+        "roundName": 1,
+        "pageUrl": "/matches/everton-vs-crystal-palace/2tttz7#5795365",
+        "id": "5795365",
+        "home": {
+          "name": "Everton",
+          "shortName": "Everton",
+          "id": "8668"
+        },
+        "away": {
+          "name": "Crystal Palace",
+          "shortName": "Crystal Palace",
+          "id": "9826"
+        },
+        "status": {
+          "utcTime": "2026-08-22T14:00:00Z",
+          "timezone": "",
+          "finished": true,
+          "started": true,
+          "cancelled": false,
+          "awarded": false,
+          "scoreStr": "2 - 0",
+          "reason": {
+            "short": "FT",
+            "shortKey": "fulltime_short",
+            "long": "Full-Time",
+            "longKey": "finished"
+          }
+        }
+      }
+    ],
+    "hasOngoingMatch": false,
+    "fixtureInfo": {
+      "activeRound": {
+        "roundId": "6",
+        "localizedKey": "round_fmt"
+      },
+      "rounds": [
+        {
+          "roundId": "1",
+          "localizedKey": "round_fmt"
+        },
+        {
+          "roundId": "2",
+          "localizedKey": "round_fmt"
+        },
+        {
+          "roundId": "3",
+          "localizedKey": "round_fmt"
+        }
+      ],
+      "teams": [
+        {
+          "id": 8678,
+          "name": "AFC Bournemouth"
+        },
+        {
+          "id": 9825,
+          "name": "Arsenal"
+        },
+        {
+          "id": 10252,
+          "name": "Aston Villa"
+        }
+      ],
+      "groups": []
+    }
+  },
+  "playoff": null,
+  "seasons": [
+    {
+      "seasonName": "2025/2026",
+      "winner": {
+        "id": 9825,
+        "seasonName": "2025/2026",
+        "name": "Arsenal",
+        "winner": true
+      },
+      "loser": {
+        "id": 8456,
+        "seasonName": "2025/2026",
+        "name": "Manchester City",
+        "winner": false
+      }
+    },
+    {
+      "seasonName": "2024/2025",
+      "winner": {
+        "id": 8650,
+        "seasonName": "2024/2025",
+        "name": "Liverpool",
+        "winner": true
+      },
+      "loser": {
+        "id": 9825,
+        "seasonName": "2024/2025",
+        "name": "Arsenal",
+        "winner": false
+      }
+    },
+    {
+      "seasonName": "2023/2024",
+      "winner": {
+        "id": 8456,
+        "seasonName": "2023/2024",
+        "name": "Manchester City",
+        "winner": true
+      },
+      "loser": {
+        "id": 9825,
+        "seasonName": "2023/2024",
+        "name": "Arsenal",
+        "winner": false
+      }
+    }
+  ]
+}

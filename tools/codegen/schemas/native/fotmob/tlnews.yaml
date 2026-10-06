@@ -1,0 +1,27 @@
+columns:
+- description: Provider identifier for the entity (Utf8 join key).
+  name: id
+  type: character
+- description: ''
+  name: image_url
+  type: character
+- description: Display title.
+  name: title
+  type: character
+- description: ''
+  name: gmt_time
+  type: character
+- description: ''
+  name: source_str
+  type: character
+- description: ''
+  name: source_icon_url
+  type: character
+- description: ''
+  name: language
+  type: character
+- description: ''
+  name: page_url
+  type: character
+kind: dataframe
+schema: tlnews

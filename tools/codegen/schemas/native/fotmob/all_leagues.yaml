@@ -1,0 +1,12 @@
+columns:
+- description: ''
+  name: popular
+  type: character
+- description: ''
+  name: international
+  type: character
+- description: ''
+  name: countries
+  type: character
+kind: dataframe
+schema: all_leagues

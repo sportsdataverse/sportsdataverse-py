@@ -1,0 +1,411 @@
+{
+  "leagues": [
+    {
+      "ccode": "ENG",
+      "id": 47,
+      "primaryId": 47,
+      "name": "Premier League",
+      "matches": [
+        {
+          "id": 4813647,
+          "leagueId": 47,
+          "time": "01.03.2026 15:00",
+          "home": {
+            "id": 10204,
+            "score": 2,
+            "name": "Brighton & Hove Albion",
+            "shortName": "Brighton",
+            "longName": "Brighton & Hove Albion"
+          },
+          "away": {
+            "id": 10203,
+            "score": 1,
+            "name": "Nottingham Forest",
+            "shortName": "Nottm Forest",
+            "longName": "Nottingham Forest"
+          },
+          "eliminatedTeamId": null,
+          "statusId": 6,
+          "tournamentStage": "28",
+          "status": {
+            "utcTime": "2026-03-01T14:00:00.000Z",
+            "halfs": {
+              "firstHalfStarted": "01.03.2026 15:01:18",
+              "secondHalfStarted": "01.03.2026 16:05:29"
+            },
+            "periodLength": 45,
+            "finished": true,
+            "started": true,
+            "cancelled": false,
+            "awarded": false,
+            "scoreStr": "2 - 1",
+            "reason": {
+              "short": "FT",
+              "shortKey": "fulltime_short",
+              "long": "Full-Time",
+              "longKey": "finished"
+            }
+          },
+          "timeTS": 1772373600000
+        },
+        {
+          "id": 4813649,
+          "leagueId": 47,
+          "time": "01.03.2026 15:00",
+          "home": {
+            "id": 9879,
+            "score": 2,
+            "name": "Fulham",
+            "shortName": "Fulham",
+            "longName": "Fulham"
+          },
+          "away": {
+            "id": 8586,
+            "score": 1,
+            "name": "Tottenham Hotspur",
+            "shortName": "Tottenham",
+            "longName": "Tottenham Hotspur"
+          },
+          "eliminatedTeamId": null,
+          "statusId": 6,
+          "tournamentStage": "28",
+          "status": {
+            "utcTime": "2026-03-01T14:00:00.000Z",
+            "halfs": {
+              "firstHalfStarted": "01.03.2026 15:00:43",
+              "secondHalfStarted": "01.03.2026 16:05:11"
+            },
+            "periodLength": 45,
+            "finished": true,
+            "started": true,
+            "cancelled": false,
+            "awarded": false,
+            "scoreStr": "2 - 1",
+            "reason": {
+              "short": "FT",
+              "shortKey": "fulltime_short",
+              "long": "Full-Time",
+              "longKey": "finished"
+            }
+          },
+          "timeTS": 1772373600000
+        },
+        {
+          "id": 4813652,
+          "leagueId": 47,
+          "time": "01.03.2026 15:00",
+          "home": {
+            "id": 10260,
+            "score": 2,
+            "name": "Manchester United",
+            "shortName": "Man United",
+            "longName": "Manchester United"
+          },
+          "away": {
+            "id": 9826,
+            "score": 1,
+            "name": "Crystal Palace",
+            "redCards": 1,
+            "longName": "Crystal Palace"
+          },
+          "eliminatedTeamId": null,
+          "statusId": 6,
+          "tournamentStage": "28",
+          "status": {
+            "utcTime": "2026-03-01T14:00:00.000Z",
+            "numberOfAwayRedCards": 1,
+            "halfs": {
+              "firstHalfStarted": "01.03.2026 15:00:42",
+              "secondHalfStarted": "01.03.2026 16:04:39"
+            },
+            "periodLength": 45,
+            "finished": true,
+            "started": true,
+            "cancelled": false,
+            "awarded": false,
+            "scoreStr": "2 - 1",
+            "reason": {
+              "short": "FT",
+              "shortKey": "fulltime_short",
+              "long": "Full-Time",
+              "longKey": "finished"
+            }
+          },
+          "timeTS": 1772373600000
+        }
+      ],
+      "internalRank": 30,
+      "simpleLeague": false,
+      "localRank": 17
+    },
+    {
+      "ccode": "GER",
+      "id": 54,
+      "primaryId": 54,
+      "name": "Bundesliga",
+      "matches": [
+        {
+          "id": 4829529,
+          "leagueId": 54,
+          "time": "01.03.2026 15:30",
+          "home": {
+            "id": 10269,
+            "score": 4,
+            "name": "VfB Stuttgart",
+            "longName": "VfB Stuttgart"
+          },
+          "away": {
+            "id": 8721,
+            "score": 0,
+            "name": "Wolfsburg",
+            "shortName": "Wolfsburg",
+            "longName": "Wolfsburg"
+          },
+          "eliminatedTeamId": null,
+          "statusId": 6,
+          "tournamentStage": "24",
+          "status": {
+            "utcTime": "2026-03-01T14:30:00.000Z",
+            "halfs": {
+              "firstHalfStarted": "01.03.2026 15:30:28",
+              "secondHalfStarted": "01.03.2026 16:33:21"
+            },
+            "periodLength": 45,
+            "finished": true,
+            "started": true,
+            "cancelled": false,
+            "awarded": false,
+            "scoreStr": "4 - 0",
+            "reason": {
+              "short": "FT",
+              "shortKey": "fulltime_short",
+              "long": "Full-Time",
+              "longKey": "finished"
+            }
+          },
+          "timeTS": 1772375400000
+        },
+        {
+          "id": 4829526,
+          "leagueId": 54,
+          "time": "01.03.2026 17:30",
+          "home": {
+            "id": 9810,
+            "score": 2,
+            "name": "Eintracht Frankfurt",
+            "shortName": "Frankfurt",
+            "longName": "Eintracht Frankfurt"
+          },
+          "away": {
+            "id": 8358,
+            "score": 0,
+            "name": "Freiburg",
+            "shortName": "Freiburg",
+            "longName": "Freiburg"
+          },
+          "eliminatedTeamId": null,
+          "statusId": 6,
+          "tournamentStage": "24",
+          "status": {
+            "utcTime": "2026-03-01T16:30:00.000Z",
+            "halfs": {
+              "firstHalfStarted": "01.03.2026 17:30:12",
+              "secondHalfStarted": "01.03.2026 18:36:06"
+            },
+            "periodLength": 45,
+            "finished": true,
+            "started": true,
+            "cancelled": false,
+            "awarded": false,
+            "scoreStr": "2 - 0",
+            "reason": {
+              "short": "FT",
+              "shortKey": "fulltime_short",
+              "long": "Full-Time",
+              "longKey": "finished"
+            }
+          },
+          "timeTS": 1772382600000
+        },
+        {
+          "id": 4829527,
+          "leagueId": 54,
+          "time": "01.03.2026 19:30",
+          "home": {
+            "id": 9790,
+            "score": 1,
+            "name": "Hamburger SV",
+            "longName": "Hamburger SV"
+          },
+          "away": {
+            "id": 178475,
+            "score": 2,
+            "name": "RB Leipzig",
+            "shortName": "RB Leipzig",
+            "longName": "RB Leipzig"
+          },
+          "eliminatedTeamId": null,
+          "statusId": 6,
+          "tournamentStage": "24",
+          "status": {
+            "utcTime": "2026-03-01T18:30:00.000Z",
+            "halfs": {
+              "firstHalfStarted": "01.03.2026 19:30:35",
+              "secondHalfStarted": "01.03.2026 20:36:06"
+            },
+            "periodLength": 45,
+            "finished": true,
+            "started": true,
+            "cancelled": false,
+            "awarded": false,
+            "scoreStr": "1 - 2",
+            "reason": {
+              "short": "FT",
+              "shortKey": "fulltime_short",
+              "long": "Full-Time",
+              "longKey": "finished"
+            }
+          },
+          "timeTS": 1772389800000
+        }
+      ],
+      "internalRank": 20,
+      "simpleLeague": false,
+      "localRank": 21
+    },
+    {
+      "ccode": "ESP",
+      "id": 87,
+      "primaryId": 87,
+      "name": "LaLiga",
+      "matches": [
+        {
+          "id": 4837362,
+          "leagueId": 87,
+          "time": "01.03.2026 14:00",
+          "home": {
+            "id": 10268,
+            "score": 2,
+            "name": "Elche",
+            "longName": "Elche"
+          },
+          "away": {
+            "id": 8558,
+            "score": 2,
+            "name": "Espanyol",
+            "redCards": 1,
+            "longName": "Espanyol"
+          },
+          "eliminatedTeamId": null,
+          "statusId": 6,
+          "tournamentStage": "26",
+          "status": {
+            "utcTime": "2026-03-01T13:00:00.000Z",
+            "numberOfAwayRedCards": 1,
+            "halfs": {
+              "firstHalfStarted": "01.03.2026 14:02:08",
+              "secondHalfStarted": "01.03.2026 15:06:02"
+            },
+            "periodLength": 45,
+            "finished": true,
+            "started": true,
+            "cancelled": false,
+            "awarded": false,
+            "scoreStr": "2 - 2",
+            "reason": {
+              "short": "FT",
+              "shortKey": "fulltime_short",
+              "long": "Full-Time",
+              "longKey": "finished"
+            }
+          },
+          "timeTS": 1772370000000
+        },
+        {
+          "id": 4837369,
+          "leagueId": 87,
+          "time": "01.03.2026 16:15",
+          "home": {
+            "id": 10267,
+            "score": 1,
+            "name": "Valencia",
+            "longName": "Valencia"
+          },
+          "away": {
+            "id": 8371,
+            "score": 0,
+            "name": "Osasuna",
+            "longName": "Osasuna"
+          },
+          "eliminatedTeamId": null,
+          "statusId": 6,
+          "tournamentStage": "26",
+          "status": {
+            "utcTime": "2026-03-01T15:15:00.000Z",
+            "halfs": {
+              "firstHalfStarted": "01.03.2026 16:19:39",
+              "secondHalfStarted": "01.03.2026 17:22:54"
+            },
+            "periodLength": 45,
+            "finished": true,
+            "started": true,
+            "cancelled": false,
+            "awarded": false,
+            "scoreStr": "1 - 0",
+            "reason": {
+              "short": "FT",
+              "shortKey": "fulltime_short",
+              "long": "Full-Time",
+              "longKey": "finished"
+            }
+          },
+          "timeTS": 1772378100000
+        },
+        {
+          "id": 4837361,
+          "leagueId": 87,
+          "time": "01.03.2026 18:30",
+          "home": {
+            "id": 8603,
+            "score": 2,
+            "name": "Real Betis",
+            "longName": "Real Betis"
+          },
+          "away": {
+            "id": 8302,
+            "score": 2,
+            "name": "Sevilla",
+            "longName": "Sevilla"
+          },
+          "eliminatedTeamId": null,
+          "statusId": 6,
+          "tournamentStage": "26",
+          "status": {
+            "utcTime": "2026-03-01T17:30:00.000Z",
+            "halfs": {
+              "firstHalfStarted": "01.03.2026 18:33:03",
+              "secondHalfStarted": "01.03.2026 19:38:31"
+            },
+            "periodLength": 45,
+            "finished": true,
+            "started": true,
+            "cancelled": false,
+            "awarded": false,
+            "scoreStr": "2 - 2",
+            "reason": {
+              "short": "FT",
+              "shortKey": "fulltime_short",
+              "long": "Full-Time",
+              "longKey": "finished"
+            }
+          },
+          "timeTS": 1772386200000
+        }
+      ],
+      "internalRank": 10,
+      "simpleLeague": false,
+      "localRank": 20
+    }
+  ],
+  "date": "20260301"
+}

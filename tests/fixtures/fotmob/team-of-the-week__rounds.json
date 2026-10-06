@@ -1,0 +1,28 @@
+{
+  "last": {
+    "localizedKey": "tots",
+    "roundId": "TOTS",
+    "link": "https://pub.fotmob.com/prod/db/api/v4/team-of-the-week/team?tournamentid=27110&roundid=tots",
+    "isCompleted": true
+  },
+  "rounds": [
+    {
+      "localizedKey": "tots",
+      "roundId": "TOTS",
+      "link": "https://pub.fotmob.com/prod/db/api/v4/team-of-the-week/team?tournamentid=27110&roundid=tots",
+      "isCompleted": true
+    },
+    {
+      "localizedKey": "round_fmt",
+      "roundId": "38",
+      "link": "https://pub.fotmob.com/prod/db/api/v4/team-of-the-week/team?tournamentid=27110&roundid=38",
+      "isCompleted": true
+    },
+    {
+      "localizedKey": "round_fmt",
+      "roundId": "37",
+      "link": "https://pub.fotmob.com/prod/db/api/v4/team-of-the-week/team?tournamentid=27110&roundid=37",
+      "isCompleted": true
+    }
+  ]
+}

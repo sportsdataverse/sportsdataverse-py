@@ -1,0 +1,231 @@
+api: fotmob
+docstring:
+  example_import: true
+  raises:
+  - 'sportsdataverse.errors.NoDataError: FotMob answered HTTP 404 (route withdrawn).'
+  raw_doc: the decoded JSON body (a page object, a one-list envelope, an id-keyed
+    map or a list; ``{}`` or ``null`` for an unknown id)
+  see_also:
+  - name: FotMob
+    note: the site these routes render; unofficial JSON, keyless as of 2026-10-05
+    url: https://www.fotmob.com/
+  - name: iamglitch404/fotmob
+    note: community route catalogue the capture set was seeded from
+    url: https://github.com/iamglitch404/fotmob
+endpoints:
+- parser: parse_fotmob
+  path: /allLeagues
+  returns_schema: native/fotmob/all_leagues
+  short: all_leagues
+  summary: Every league FotMob covers, grouped as popular / international / by country.
+- parser: parse_fotmob
+  path: /audio-matches
+  returns_schema: native/fotmob/audio_matches
+  short: audio_matches
+  summary: Matches with audio commentary available, with their languages.
+- example_args:
+    id: '47'
+    tab: overview
+    time_zone: UTC
+    type: league
+  extra_params:
+  - description: Required. League, team or player id (numeric string).
+    name: id
+    query_key: id
+    type: str
+  - description: Page tab, e.g. overview, table, fixtures, stats.
+    name: tab
+    query_key: tab
+    type: str
+  - description: league or team.
+    name: type
+    query_key: type
+    type: str
+  - description: IANA zone for kickoff times.
+    name: time_zone
+    query_key: timeZone
+    type: str
+  parser: parse_fotmob
+  path: /leagues
+  returns_schema: native/fotmob/leagues
+  short: leagues
+  summary: 'League page: details, tabs, current table, fixtures, stats, transfers
+    (one wide row).'
+- example_args:
+    match_id: '4813647'
+  extra_params:
+  - description: Required. Match id (from /matches).
+    name: match_id
+    query_key: matchId
+    type: str
+  parser: parse_fotmob
+  path: /matchDetails
+  returns_schema: native/fotmob/match_details
+  short: match_details
+  summary: 'Match page: general info, header, lineups, events, stats (one wide row).'
+- example_args:
+    date: '20260301'
+    timezone: UTC
+  extra_params:
+  - description: YYYYMMDD.
+    name: date
+    query_key: date
+    type: str
+  - description: IANA zone.
+    name: timezone
+    query_key: timezone
+    type: str
+  parser: parse_fotmob
+  path: /matches
+  returns_schema: native/fotmob/matches
+  short: matches
+  summary: All matches on a date, one row per league with that league's matches nested.
+- example_args:
+    id: '1077894'
+  extra_params:
+  - description: Required. League, team or player id (numeric string).
+    name: id
+    query_key: id
+    type: str
+  parser: parse_fotmob
+  path: /playerData
+  returns_schema: native/fotmob/player_data
+  short: player_data
+  summary: 'Player page: bio, primary team, career history, recent matches, stats
+    (one wide row).'
+- example_args:
+    lang: en
+    term: haaland
+  extra_params:
+  - description: Required. Search text.
+    name: term
+    query_key: term
+    type: str
+  - description: Language code.
+    name: lang
+    query_key: lang
+    type: str
+  parser: parse_fotmob
+  path: /search/suggest
+  returns_schema: native/fotmob/search_suggest
+  short: search_suggest
+  summary: Search suggestions for a term, one row per result group (players, teams,
+    leagues).
+- example_args:
+    url: http://data.fotmob.com/tables.ext.47.fot.gz
+  extra_params:
+  - description: Required. The data.fotmob.com table file to return, e.g. http://data.fotmob.com/tables.ext.47.fot.gz.
+    name: url
+    query_key: url
+    type: str
+  parser: parse_fotmob
+  path: /table
+  returns_schema: native/fotmob/table
+  short: table
+  summary: 'A data.fotmob.com league table file: legend, filters and the all/home/away/xg
+    tables.'
+- example_args:
+    id: '8650'
+    tab: overview
+    time_zone: UTC
+    type: team
+  extra_params:
+  - description: Required. League, team or player id (numeric string).
+    name: id
+    query_key: id
+    type: str
+  - description: Page tab, e.g. overview, table, fixtures, stats.
+    name: tab
+    query_key: tab
+    type: str
+  - description: league or team.
+    name: type
+    query_key: type
+    type: str
+  - description: IANA zone for kickoff times.
+    name: time_zone
+    query_key: timeZone
+    type: str
+  parser: parse_fotmob
+  path: /teams
+  returns_schema: native/fotmob/teams
+  short: teams
+  summary: 'Team page: details, squad, table, fixtures, stats, transfers, history
+    (one wide row).'
+- example_args:
+    id: '47'
+    start_index: '0'
+    type: league
+  extra_params:
+  - description: Required. League, team or player id (numeric string).
+    name: id
+    query_key: id
+    type: str
+  - description: Required. league or team.
+    name: type
+    query_key: type
+    type: str
+  - description: Required. Paging offset for the news timeline.
+    name: start_index
+    query_key: startIndex
+    type: str
+  parser: parse_fotmob
+  path: /tlnews
+  returns_schema: native/fotmob/tlnews
+  short: tlnews
+  summary: News timeline for a league or team, one row per story.
+- parser: parse_fotmob
+  path: /top-transfers
+  returns_schema: native/fotmob/top_transfers
+  short: top_transfers
+  summary: Top transfers across FotMob, one row per transfer.
+- example_args:
+    league_id: '47'
+    season: 2025/2026
+  extra_params:
+  - description: Required. League id.
+    name: league_id
+    query_key: leagueId
+    type: str
+  - description: e.g. 2025/2026.
+    name: season
+    query_key: season
+    type: str
+  parser: parse_fotmob
+  path: /team-of-the-week/rounds
+  returns_schema: native/fotmob/totw_rounds
+  short: totw_rounds
+  summary: Team-of-the-week rounds for a league season, one row per round.
+- example_args:
+    lang: en
+  extra_params:
+  - description: Language code.
+    name: lang
+    query_key: lang
+    type: str
+  host: https://www.fotmob.com
+  parser: parse_fotmob
+  path: /api/trendingnews
+  returns_schema: native/fotmob/trending_news
+  short: trending_news
+  summary: Trending news stories (host-root route), one row per story.
+- example_args:
+    country_code: GB
+  extra_params:
+  - description: Required. ISO country for TV listings.
+    name: country_code
+    query_key: countryCode
+    type: str
+  parser: parse_fotmob
+  path: /tvlistings
+  returns_schema: native/fotmob/tvlistings
+  short: tvlistings
+  summary: TV listings for a country, one row per broadcast with the match id in ``id``.
+host: https://www.fotmob.com/api/data
+module: fotmob
+name_pattern: fotmob_{short}
+parser_module: soccer.fotmob_parsers
+passthrough_query: false
+qualifier: ''
+runtime_imports:
+- _get
