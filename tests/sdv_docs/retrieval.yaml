@@ -1,0 +1,33 @@
+# Columns
+- {id: col-event-type, tool: find_columns, args: {column: event_type, function: load_nhl_pbp}, expect: ["**load_nhl_pbp**", "(String)"]}
+- {id: col-drive-id-cfb, tool: find_columns, args: {column: drive_id, league: cfb}, expect: ["**load_cfb_drives**"]}
+- {id: col-epa-nfl, tool: find_columns, args: {column: epa, function: load_nfl_pbp}, expect: ["**load_nfl_pbp**"]}
+- {id: col-shooting-play, tool: find_columns, args: {column: shooting_play, league: nba}, expect: ["**load_nba_pbp**"]}
+- {id: col-EPA-cfb-case, tool: find_columns, args: {column: EPA, function: load_cfb_pbp}, expect: ["**load_cfb_pbp**"]}
+- {id: col-shifts-players-on, tool: get_function, args: {name: load_nhl_shifts}, expect: ["`players_on`"]}
+- {id: col-miss, tool: find_columns, args: {column: no_such_column_xyz}, expect: ["not in index"]}
+# Functions, Python and R
+- {id: fn-nhl-pbp, tool: get_function, args: {name: load_nhl_pbp, columns: false}, expect: ["`seasons`", "**Dataset**: release `nhl_pbp_full`, seasons from 2010"]}
+- {id: fn-hoopr-r-to-py, tool: get_function, args: {name: "hoopR::load_nba_pbp"}, expect: ["## hoopR::load_nba_pbp", "**Python equivalent**: `load_nba_pbp`"]}
+- {id: fn-nfl-alias, tool: get_function, args: {name: load_nfl_pbp, columns: false}, expect: ["`nflreadr::load_pbp`"]}
+- {id: fn-wnba-shotchart, tool: search, args: {query: wnba shotchartdetail, lang: python}, expect: ["wnba_stats_shotchartdetail"]}
+- {id: fn-team-roster, tool: get_function, args: {name: espn_nba_team_roster, columns: false}, expect: ["`team_id`", "python · espn · nba"]}
+- {id: fn-roster-search, tool: search, args: {query: team roster, league: nba, kind: function}, expect: ["espn_nba_team_roster"]}
+- {id: fn-typo, tool: get_function, args: {name: load_nhl_pbpp}, expect: ["not in index", "`load_nhl_pbp`"]}
+# Provider endpoints
+- {id: ep-athlete-injuries, tool: find_endpoints, args: {query: athlete injuries, api: espn_core_v2}, expect: ["/athletes/{athlete_id}/injuries"]}
+- {id: ep-event-odds, tool: find_endpoints, args: {query: event odds, api: espn_core_v2}, expect: ["/odds"]}
+- {id: ep-cdn-pbp, tool: find_endpoints, args: {query: cdn playbyplay, api: espn_cdn}, expect: ["https://cdn.espn.com/core", "playbyplay"]}
+- {id: ep-wnba-shotchart, tool: find_endpoints, args: {query: shotchartdetail, api: wnba_stats}, expect: ["`wnba_stats_shotchartdetail`", "https://stats.wnba.com"]}
+- {id: ep-site-scoreboard, tool: find_endpoints, args: {query: scoreboard, api: espn_site_v2}, expect: ["scoreboard", "https://site.api.espn.com/"]}
+- {id: ep-openapi-odds, tool: find_endpoints, args: {query: historical odds}, expect: ["source: openapi", "historical"]}
+- {id: ep-miss, tool: find_endpoints, args: {query: zzqx}, expect: ["No endpoints match"]}
+# Datasets and releases
+- {id: ds-nhl-shifts, tool: list_datasets, args: {league: nhl, query: shifts}, expect: ["| load_nhl_shifts | nhl | nhl_shifts | 2025 |"]}
+- {id: ds-nfl-pbp, tool: list_datasets, args: {league: nfl, query: pbp}, expect: ["| load_nfl_pbp | nfl | pbp | 1999 |"]}
+- {id: ds-cfb-ratings, tool: list_datasets, args: {league: cfb, query: ratings}, expect: ["| load_cfb_ratings | cfb | cfb_ratings | 2004 |"]}
+- {id: ds-wnba-pbp-by-tag, tool: list_datasets, args: {query: espn_wnba_pbp}, expect: ["load_wnba_pbp"]}
+- {id: ds-pwhl-shifts, tool: list_datasets, args: {league: pwhl, query: shifts}, expect: ["| pwhl_shifts | 2024 |"]}
+- {id: ds-search, tool: search, args: {query: nhl shifts, kind: dataset}, expect: ["load_nhl_shifts"]}
+# Index metadata
+- {id: info, tool: index_info, args: {}, expect: ["- sdv_swagger_sha:", "- pkgdown_fetched:", "rows: functions"], reject: ["- skipped:"]}
