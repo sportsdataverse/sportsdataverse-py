@@ -4463,12 +4463,54 @@ def render_leagues_json() -> str:
     return json.dumps({"sports": sports}, indent=2)
 
 
+# intro.md is a hand-authored conceptual page EXCEPT for one table. The generator
+# owns the span between these markers and rewrites it in place, so the "Supported
+# leagues and data sources" table is drift-gated like every other generated page
+# while the surrounding prose stays hand-written.
+_INTRO_MARKERS = (
+    "<!-- BEGIN generated: leagues-and-sources -->",
+    "<!-- END generated: leagues-and-sources -->",
+)
+# League prefix -> the import path shown in intro.md, where it is not sportsdataverse.<prefix>.
+_INTRO_MODULE = {lg: f"sportsdataverse.hockey.{lg}" for lg in _HOCKEYTECH_MODULE_LEAGUES}
+
+
+def _patch_between_markers(text: str, begin: str, end: str, body: str) -> str:
+    """``text`` with everything between ``begin`` and ``end`` replaced by ``body``.
+
+    Raises ``SystemExit`` naming the marker when it is absent, rather than silently
+    appending -- a lost marker must fail the build, not drop the generated table."""
+    i, j = text.find(begin), text.find(end)
+    if i < 0 or j < 0 or j < i:
+        missing = begin if i < 0 else end
+        raise SystemExit(f"codegen: docs/docs/intro.md is missing the marker {missing}")
+    return text[: i + len(begin)] + "\n" + body.rstrip() + "\n" + text[j:]
+
+
+def render_intro_sources_table(autodoc_by_scope: dict[str | None, list[str]]) -> str:
+    """``| League | Module | Data sources |`` for every documented league.
+
+    The Data-sources cell lists each provider present in that league with its
+    function count, in ``sources.yaml`` registry order -- the same rows the league
+    index's own table shows, so the two can never disagree."""
+    lines = ["| League | Module | Data sources |", "|---|---|---|"]
+    for prefix in _doc_leagues():
+        rows = _league_source_rows(prefix, autodoc_names=autodoc_by_scope.get(prefix) or [])
+        if not rows:
+            continue
+        cell = ", ".join(f"{r['label']} ({r['count']})" for r in rows)
+        module = _INTRO_MODULE.get(prefix, f"sportsdataverse.{prefix}")
+        lines.append(f"| [{_LEAGUE_LABELS.get(prefix, prefix.upper())}]({prefix}/) | `{module}` | {cell} |")
+    return "\n".join(lines)
+
+
 def _render_docs_all() -> dict[str, str]:
     """{relpath: content} for the full generated docs staging tree.
 
     Keys are relative to ``docs/docs``; :data:`_ANCHOR_MAP_REL` points outside it, at ``docs/static``."""
     out: dict[str, str] = {}
     anchor_map: dict[str, dict[str, str]] = {}
+    autodoc_by_scope: dict[str | None, list[str]] = {}
     preserved = _preserved_docs_corpus()
     for i, prefix in enumerate(_doc_leagues()):
         apis = _apis_for(prefix)
@@ -4503,6 +4545,9 @@ def _render_docs_all() -> dict[str, str]:
         # corpus does not change which names are "already documented".
         ref_corpus = "\n".join(c for rel, c in out.items() if rel.startswith(f"{prefix}/") and rel.endswith(".md"))
         autodoc_names_list = _autodoc_names(prefix, ref_corpus)
+        # Kept for intro.md's table below: it must count the SAME hand-written names this
+        # league's own index counts, or the two pages report different totals.
+        autodoc_by_scope[prefix] = autodoc_names_list
         # {slug: content} for this league's reference pages (already in `out`), used
         # to anchor each Python function in the parity table to its doc page.
         ref_prefix = f"{prefix}/reference/"
@@ -4557,6 +4602,13 @@ def _render_docs_all() -> dict[str, str]:
     pkgs = render_packages_page()
     if pkgs is not None:
         out["packages.mdx"] = pkgs
+    intro = DOCS / "intro.md"
+    if intro.exists():
+        out["intro.md"] = _patch_between_markers(
+            intro.read_text(encoding="utf-8"),
+            *_INTRO_MARKERS,
+            render_intro_sources_table(autodoc_by_scope),
+        )
     # Normalize every file to exactly one trailing newline so the generic
     # end-of-file-fixer / trailing-whitespace pre-commit hooks are a no-op and
     # never fight this drift gate (template whitespace control leaves some pages
