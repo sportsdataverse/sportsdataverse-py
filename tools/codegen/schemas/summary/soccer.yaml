@@ -118,6 +118,30 @@ frames:
   - name: scoring_play
     type: logical
     description: ''
+  - name: field_position_x
+    type: double
+    description: ''
+  - name: field_position_y
+    type: double
+    description: ''
+  - name: field_position2_x
+    type: double
+    description: ''
+  - name: field_position2_y
+    type: double
+    description: ''
+  - name: goal_position_x
+    type: double
+    description: ''
+  - name: goal_position_y
+    type: double
+    description: ''
+  - name: source_id
+    type: character
+    description: ''
+  - name: source_description
+    type: character
+    description: ''
   - name: athlete_id
     type: character
     description: ''
@@ -237,6 +261,66 @@ frames:
     type: double
     description: ''
   - name: text
+    type: character
+    description: ''
+  - name: play_id
+    type: character
+    description: ''
+  - name: play_type
+    type: character
+    description: ''
+  - name: play_type_id
+    type: character
+    description: ''
+  - name: play_type_slug
+    type: character
+    description: ''
+  - name: play_text
+    type: character
+    description: ''
+  - name: play_short_text
+    type: character
+    description: ''
+  - name: period
+    type: integer
+    description: ''
+  - name: clock
+    type: character
+    description: ''
+  - name: clock_value
+    type: double
+    description: ''
+  - name: scoring_play
+    type: logical
+    description: ''
+  - name: team_name
+    type: character
+    description: ''
+  - name: athlete_id
+    type: character
+    description: ''
+  - name: athlete_name
+    type: character
+    description: ''
+  - name: field_position_x
+    type: double
+    description: ''
+  - name: field_position_y
+    type: double
+    description: ''
+  - name: field_position2_x
+    type: double
+    description: ''
+  - name: field_position2_y
+    type: double
+    description: ''
+  - name: goal_position_x
+    type: double
+    description: ''
+  - name: goal_position_y
+    type: double
+    description: ''
+  - name: wallclock
     type: character
     description: ''
 - section: leaders
