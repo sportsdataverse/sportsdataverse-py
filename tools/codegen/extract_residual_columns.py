@@ -112,6 +112,14 @@ _DEFERRED_BUCKETS: dict[str, int | None] = {
     "native/fotmob": 283,
     "native/uefa": 841,
     "native/sleeper": 459,
+    # wave-2 intake families; capture-derived specs carry no property docs. Counts are
+    # placeholders until Task 7 measures them with `python tools/codegen/extract_residual_columns.py`.
+    "native/espn_content": None,
+    "native/thesportsdb": None,
+    "native/football_data": None,
+    "native/openligadb": None,
+    "native/polymarket": None,
+    "native/kalshi": None,
 }
 
 

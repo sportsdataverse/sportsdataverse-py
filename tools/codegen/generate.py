@@ -141,6 +141,8 @@ _VOCAB_GETTERS = frozenset(
     {
         "sportsdataverse._codegen_runtime",
         "sportsdataverse.euroleague.euroleague_runtime",
+        "sportsdataverse.thesportsdb.thesportsdb_runtime",
+        "sportsdataverse.soccer.football_data_runtime",
         "sportsdataverse.soccer.uefa_runtime",
         "sportsdataverse.cfb.on3_runtime",
         "sportsdataverse.cfb.sports247_runtime",
@@ -1942,6 +1944,14 @@ FLAT_APIS = [
     ("uefa", "soccer"),
     ("fifa", "soccer"),
     ("sleeper", "nfl"),
+    # wave-2 intake families (sdv-internal-refs: espn-content/, thesportsdb/,
+    # football-data-co-uk/, openligadb/, polymarket/, kalshi/)
+    ("espn_content", "espn_content"),
+    ("thesportsdb", "thesportsdb"),
+    ("football_data", "soccer"),
+    ("openligadb", "soccer"),
+    ("polymarket", "odds"),
+    ("kalshi", "odds"),
 ]
 
 
@@ -2302,6 +2312,8 @@ _COVERAGE_LEAGUES = [
     *_HOCKEYTECH_MODULE_LEAGUES,  # ahl/ohl/whl/qmjhl + the promoted junior/minor leagues
     "odds",
     "euroleague",
+    "espn_content",
+    "thesportsdb",
 ]
 
 # Mapping from doc/coverage prefix to actual Python module path for leagues
@@ -2549,6 +2561,12 @@ _FLAT_API_DOC = {
     "uefa": "UEFA front-end APIs (comp/match/standings/matchstats.uefa.com)",
     "fifa": "FIFA public API v3 (api.fifa.com)",
     "sleeper": "Sleeper fantasy API v1 (api.sleeper.app)",
+    "espn_content": "ESPN content API (content.core.api.espn.com/v1, news)",
+    "thesportsdb": "TheSportsDB API v1 (thesportsdb.com, free test key)",
+    "football_data": "Football-Data.co.uk CSV archive (football-data.co.uk)",
+    "openligadb": "OpenLigaDB (api.openligadb.de, community German football)",
+    "polymarket": "Polymarket read APIs (gamma-api + clob.polymarket.com)",
+    "kalshi": "Kalshi Trade API v2 market data (api.elections.kalshi.com)",
 }
 
 # Friendly label per releases.yaml base key, for the "Dataset loaders" row of a
@@ -3836,7 +3854,7 @@ def _doc_leagues() -> list[str]:
     _HOCKEYTECH_EXTRA = _HOCKEYTECH_MODULE_LEAGUES
     # Cross-sport hand-written modules that get their own docs scope but have no
     # ESPN/loader entries (e.g. the The Odds API wrappers in sportsdataverse.odds).
-    _NONLEAGUE_EXTRA = ["odds", "cbs", "yahoo", "fox", "euroleague"]
+    _NONLEAGUE_EXTRA = ["odds", "cbs", "yahoo", "fox", "euroleague", "espn_content", "thesportsdb"]
     known = set(prefixes) | set(extra)
     hockeytech = [lg for lg in _HOCKEYTECH_EXTRA if lg not in known]
     nonleague = [m for m in _NONLEAGUE_EXTRA if m not in known]
@@ -4222,6 +4240,8 @@ _LEAGUE_LABELS = {
     "nbagl": "NBA G League",
     "odds": "Betting odds",
     "euroleague": "EuroLeague",
+    "espn_content": "ESPN content (news)",
+    "thesportsdb": "TheSportsDB",
     "seriea": "Serie A",
     "soccer": "Soccer (all)",
     "yahoo": "Yahoo Sports",

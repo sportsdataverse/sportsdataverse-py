@@ -253,6 +253,14 @@
         {
           "prefix": "euroleague",
           "label": "EuroLeague"
+        },
+        {
+          "prefix": "espn_content",
+          "label": "ESPN content (news)"
+        },
+        {
+          "prefix": "thesportsdb",
+          "label": "TheSportsDB"
         }
       ]
     }
