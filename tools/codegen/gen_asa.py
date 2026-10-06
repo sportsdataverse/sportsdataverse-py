@@ -7,7 +7,7 @@ Idempotent: same spec + same captures -> byte-identical output. Modeled on
 The generator reads the frozen spec from the ``sdv-internal-refs`` checkout
 (``$SDV_INTERNAL_REFS_REPO``, else the sibling checkout) and emits:
 
-* ``tools/codegen/endpoints/asa.yaml`` -- one endpoint per GET route (15), host
+* ``tools/codegen/endpoints/asa.yaml`` -- one endpoint per GET route (16), host
   ``https://app.americansocceranalysis.com/api/v1``.
 * ``tools/codegen/schemas/native/asa/<short>.yaml`` -- returns-schema per
   endpoint, columns taken from running the endpoint's parser over the committed
@@ -49,8 +49,14 @@ HOST = "https://app.americansocceranalysis.com/api/v1"
 LEAGUE_PARAM = "league_slug"
 
 # Capture directories, most-complete league first: the union of routes lives under
-# mls, with nwsl covering the women's-only differences.
-_CAPTURE_LEAGUES = ("mls", "nwsl", "uslc", "usl1", "mlsnp")
+# mls, with nwsl covering the women's-only differences. Every route answers on all
+# seven slugs except ``players/salaries`` (mls-only); ``usls`` seasons are split-year.
+_CAPTURE_LEAGUES = ("mls", "nwsl", "uslc", "usl1", "mlsnp", "nasl", "usls")
+
+LEAGUE_DESCRIPTION = (
+    "ASA league slug: `mls`, `nwsl`, `uslc`, `usl1`, `mlsnp`, `nasl` (2011-2017) or `usls`. "
+    'USL Super League seasons use split-year labels (`season_name="2024-25"`).'
+)
 
 # Routes whose rows nest a per-action-type ``data[]`` breakdown.
 _GOALS_ADDED_SUFFIX = "_goals_added"
@@ -106,7 +112,9 @@ def _endpoint_entry(path: str, op: dict) -> Dict[str, Any]:
         "short": short,
         "summary": op.get("summary") or f"GET {path}",
         "path": path.replace("{league}", "{" + LEAGUE_PARAM + "}"),
-        "path_params": [{"name": LEAGUE_PARAM, "type": "str", "required": True}],
+        "path_params": [
+            {"name": LEAGUE_PARAM, "type": "str", "required": True, "description": LEAGUE_DESCRIPTION},
+        ],
         "parser": _parser_for(short),
         "returns_schema": f"native/asa/{short}",
         "example_args": dict(_EXAMPLE),

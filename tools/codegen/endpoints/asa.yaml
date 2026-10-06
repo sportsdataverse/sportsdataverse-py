@@ -17,7 +17,9 @@ endpoints:
   parser: parse_asa
   path: /{league_slug}/games
   path_params:
-  - name: league_slug
+  - description: 'ASA league slug: `mls`, `nwsl`, `uslc`, `usl1`, `mlsnp`, `nasl`
+      (2011-2017) or `usls`. USL Super League seasons use split-year labels (`season_name="2024-25"`).'
+    name: league_slug
     required: true
     type: str
   returns_schema: native/asa/games
@@ -67,7 +69,9 @@ endpoints:
   parser: parse_asa
   path: /{league_slug}/games/xgoals
   path_params:
-  - name: league_slug
+  - description: 'ASA league slug: `mls`, `nwsl`, `uslc`, `usl1`, `mlsnp`, `nasl`
+      (2011-2017) or `usls`. USL Super League seasons use split-year labels (`season_name="2024-25"`).'
+    name: league_slug
     required: true
     type: str
   returns_schema: native/asa/games_xgoals
@@ -117,7 +121,9 @@ endpoints:
   parser: parse_asa_goals_added
   path: /{league_slug}/goalkeepers/goals-added
   path_params:
-  - name: league_slug
+  - description: 'ASA league slug: `mls`, `nwsl`, `uslc`, `usl1`, `mlsnp`, `nasl`
+      (2011-2017) or `usls`. USL Super League seasons use split-year labels (`season_name="2024-25"`).'
+    name: league_slug
     required: true
     type: str
   returns_schema: native/asa/goalkeepers_goals_added
@@ -167,7 +173,9 @@ endpoints:
   parser: parse_asa
   path: /{league_slug}/goalkeepers/xgoals
   path_params:
-  - name: league_slug
+  - description: 'ASA league slug: `mls`, `nwsl`, `uslc`, `usl1`, `mlsnp`, `nasl`
+      (2011-2017) or `usls`. USL Super League seasons use split-year labels (`season_name="2024-25"`).'
+    name: league_slug
     required: true
     type: str
   returns_schema: native/asa/goalkeepers_xgoals
@@ -178,7 +186,9 @@ endpoints:
   parser: parse_asa
   path: /{league_slug}/managers
   path_params:
-  - name: league_slug
+  - description: 'ASA league slug: `mls`, `nwsl`, `uslc`, `usl1`, `mlsnp`, `nasl`
+      (2011-2017) or `usls`. USL Super League seasons use split-year labels (`season_name="2024-25"`).'
+    name: league_slug
     required: true
     type: str
   returns_schema: native/asa/managers
@@ -189,7 +199,9 @@ endpoints:
   parser: parse_asa
   path: /{league_slug}/players
   path_params:
-  - name: league_slug
+  - description: 'ASA league slug: `mls`, `nwsl`, `uslc`, `usl1`, `mlsnp`, `nasl`
+      (2011-2017) or `usls`. USL Super League seasons use split-year labels (`season_name="2024-25"`).'
+    name: league_slug
     required: true
     type: str
   returns_schema: native/asa/players
@@ -239,7 +251,9 @@ endpoints:
   parser: parse_asa_goals_added
   path: /{league_slug}/players/goals-added
   path_params:
-  - name: league_slug
+  - description: 'ASA league slug: `mls`, `nwsl`, `uslc`, `usl1`, `mlsnp`, `nasl`
+      (2011-2017) or `usls`. USL Super League seasons use split-year labels (`season_name="2024-25"`).'
+    name: league_slug
     required: true
     type: str
   returns_schema: native/asa/players_goals_added
@@ -289,7 +303,9 @@ endpoints:
   parser: parse_asa
   path: /{league_slug}/players/salaries
   path_params:
-  - name: league_slug
+  - description: 'ASA league slug: `mls`, `nwsl`, `uslc`, `usl1`, `mlsnp`, `nasl`
+      (2011-2017) or `usls`. USL Super League seasons use split-year labels (`season_name="2024-25"`).'
+    name: league_slug
     required: true
     type: str
   returns_schema: native/asa/players_salaries
@@ -339,7 +355,9 @@ endpoints:
   parser: parse_asa
   path: /{league_slug}/players/xgoals
   path_params:
-  - name: league_slug
+  - description: 'ASA league slug: `mls`, `nwsl`, `uslc`, `usl1`, `mlsnp`, `nasl`
+      (2011-2017) or `usls`. USL Super League seasons use split-year labels (`season_name="2024-25"`).'
+    name: league_slug
     required: true
     type: str
   returns_schema: native/asa/players_xgoals
@@ -347,10 +365,65 @@ endpoints:
   summary: Per-player expected-goals + attacking production.
 - example_args:
     league_slug: mls
+  extra_params:
+  - description: Filter to one or more seasons. Comma-list accepted (`2022,2023`).
+    name: season_name
+    query_key: season_name
+    type: str
+  - description: Filter to a competition stage, e.g. `Regular Season`. **URL-encode
+      spaces.**
+    name: stage_name
+    query_key: stage_name
+    type: str
+  - description: Drop players/teams below this minutes-played threshold.
+    name: minimum_minutes
+    query_key: minimum_minutes
+    type: str
+  - description: 'Filter by general position code: GK, CB, FB, DM, CM, AM, W, ST (player/GK
+      routes).'
+    name: general_position
+    query_key: general_position
+    type: str
+  - description: '`true` => one row per entity per team (splits traded players).'
+    name: split_by_teams
+    query_key: split_by_teams
+    type: str
+  - description: '`true` => one row per entity per season.'
+    name: split_by_seasons
+    query_key: split_by_seasons
+    type: str
+  - description: '`true` => one row per entity per game.'
+    name: split_by_games
+    query_key: split_by_games
+    type: str
+  - description: Lower date bound (`YYYY-MM-DD`), where the route supports date windows.
+    name: start_date
+    query_key: start_date
+    type: str
+  - description: Upper date bound (`YYYY-MM-DD`), where the route supports date windows.
+    name: end_date
+    query_key: end_date
+    type: str
+  parser: parse_asa
+  path: /{league_slug}/players/xpass
+  path_params:
+  - description: 'ASA league slug: `mls`, `nwsl`, `uslc`, `usl1`, `mlsnp`, `nasl`
+      (2011-2017) or `usls`. USL Super League seasons use split-year labels (`season_name="2024-25"`).'
+    name: league_slug
+    required: true
+    type: str
+  returns_schema: native/asa/players_xpass
+  short: players_xpass
+  summary: Per-player expected-passing (completion over expected, distance, share
+    of team touches).
+- example_args:
+    league_slug: mls
   parser: parse_asa
   path: /{league_slug}/referees
   path_params:
-  - name: league_slug
+  - description: 'ASA league slug: `mls`, `nwsl`, `uslc`, `usl1`, `mlsnp`, `nasl`
+      (2011-2017) or `usls`. USL Super League seasons use split-year labels (`season_name="2024-25"`).'
+    name: league_slug
     required: true
     type: str
   returns_schema: native/asa/referees
@@ -361,7 +434,9 @@ endpoints:
   parser: parse_asa
   path: /{league_slug}/stadia
   path_params:
-  - name: league_slug
+  - description: 'ASA league slug: `mls`, `nwsl`, `uslc`, `usl1`, `mlsnp`, `nasl`
+      (2011-2017) or `usls`. USL Super League seasons use split-year labels (`season_name="2024-25"`).'
+    name: league_slug
     required: true
     type: str
   returns_schema: native/asa/stadia
@@ -372,7 +447,9 @@ endpoints:
   parser: parse_asa
   path: /{league_slug}/teams
   path_params:
-  - name: league_slug
+  - description: 'ASA league slug: `mls`, `nwsl`, `uslc`, `usl1`, `mlsnp`, `nasl`
+      (2011-2017) or `usls`. USL Super League seasons use split-year labels (`season_name="2024-25"`).'
+    name: league_slug
     required: true
     type: str
   returns_schema: native/asa/teams
@@ -422,7 +499,9 @@ endpoints:
   parser: parse_asa_goals_added
   path: /{league_slug}/teams/goals-added
   path_params:
-  - name: league_slug
+  - description: 'ASA league slug: `mls`, `nwsl`, `uslc`, `usl1`, `mlsnp`, `nasl`
+      (2011-2017) or `usls`. USL Super League seasons use split-year labels (`season_name="2024-25"`).'
+    name: league_slug
     required: true
     type: str
   returns_schema: native/asa/teams_goals_added
@@ -472,7 +551,9 @@ endpoints:
   parser: parse_asa
   path: /{league_slug}/teams/xgoals
   path_params:
-  - name: league_slug
+  - description: 'ASA league slug: `mls`, `nwsl`, `uslc`, `usl1`, `mlsnp`, `nasl`
+      (2011-2017) or `usls`. USL Super League seasons use split-year labels (`season_name="2024-25"`).'
+    name: league_slug
     required: true
     type: str
   returns_schema: native/asa/teams_xgoals
@@ -522,7 +603,9 @@ endpoints:
   parser: parse_asa
   path: /{league_slug}/teams/xpass
   path_params:
-  - name: league_slug
+  - description: 'ASA league slug: `mls`, `nwsl`, `uslc`, `usl1`, `mlsnp`, `nasl`
+      (2011-2017) or `usls`. USL Super League seasons use split-year labels (`season_name="2024-25"`).'
+    name: league_slug
     required: true
     type: str
   returns_schema: native/asa/teams_xpass

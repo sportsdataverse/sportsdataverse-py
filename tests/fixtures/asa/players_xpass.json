@@ -1,0 +1,47 @@
+[
+  {
+    "player_id": "0Oq624oPq6",
+    "team_id": "jYQJ19EqGR",
+    "general_position": "FB",
+    "minutes_played": 19,
+    "attempted_passes": 6,
+    "pass_completion_percentage": 0.5,
+    "xpass_completion_percentage": 0.6475,
+    "passes_completed_over_expected": -0.8849,
+    "passes_completed_over_expected_p100": -14.7483,
+    "avg_distance_yds": 10.9487,
+    "avg_vertical_distance_yds": 9.4044,
+    "share_team_touches": 0.0141,
+    "count_games": 1
+  },
+  {
+    "player_id": "0Oq630dXQ6",
+    "team_id": "pzeQZ6xQKw",
+    "general_position": "W",
+    "minutes_played": 1580,
+    "attempted_passes": 368,
+    "pass_completion_percentage": 0.75,
+    "xpass_completion_percentage": 0.7708,
+    "passes_completed_over_expected": -7.6484,
+    "passes_completed_over_expected_p100": -2.0784,
+    "avg_distance_yds": 15.0896,
+    "avg_vertical_distance_yds": -0.4525,
+    "share_team_touches": 0.0401,
+    "count_games": 25
+  },
+  {
+    "player_id": "0Oq632k7Q6",
+    "team_id": "jYQJ19EqGR",
+    "general_position": "DM",
+    "minutes_played": 352,
+    "attempted_passes": 237,
+    "pass_completion_percentage": 0.7764,
+    "xpass_completion_percentage": 0.7824,
+    "passes_completed_over_expected": -1.4295,
+    "passes_completed_over_expected_p100": -0.6031,
+    "avg_distance_yds": 20.0232,
+    "avg_vertical_distance_yds": 4.2539,
+    "share_team_touches": 0.0328,
+    "count_games": 14
+  }
+]
