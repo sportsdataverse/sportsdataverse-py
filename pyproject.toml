@@ -119,6 +119,11 @@ pff = [
     # short-lived Clerk session cookies. Also needs `playwright install chromium`.
     "playwright>=1.40",
 ]
+mcp = [
+    # sdv-docs MCP server (sdv_docs/). mcp 2.x needs Python >= 3.10; on 3.9 the extra
+    # installs nothing and `sdv-docs` exits 2 with an install hint.
+    "mcp>=2.3,<3; python_version >= '3.10'",
+]
 all = [
     # Mirrors `tests + models`. Kept explicit (rather than referencing the other
     # groups) because PEP 621 does not have a "union of groups" mechanism that
@@ -165,6 +170,7 @@ Changelog = "https://github.com/sportsdataverse/sportsdataverse-py/blob/main/CHA
 # `sportsdataverse/cli.py` for the argparse-driven dispatch.
 [project.scripts]
 sdv = "sportsdataverse.cli:main"
+sdv-docs = "sdv_docs.server:main"
 
 
 # PEP 735 dependency groups — dev-only deps that shouldn't ship as
@@ -230,7 +236,7 @@ where = ["."]
 # runtime, and the tests that import `tools` run against the source tree rather
 # than the wheel. An allowlist also means a new top-level directory cannot leak
 # into the distribution by being forgotten here.
-include = ["sportsdataverse*"]
+include = ["sportsdataverse*", "sdv_docs*"]
 
 [tool.setuptools.package-data]
 # ``py.typed`` is the PEP 561 marker that tells downstream type checkers this
@@ -752,4 +758,8 @@ files = [
     "sportsdataverse/defense_vs_position.py",
     "sportsdataverse/registry/__init__.py",
     "sportsdataverse/registry/__main__.py",
+    "sdv_docs/__init__.py",
+    "sdv_docs/schema.py",
+    "sdv_docs/index.py",
+    "sdv_docs/server.py",
 ]

@@ -12,6 +12,7 @@
     - [Development install](#development-install)
     - [Notes](#notes)
   - [Examples and tutorials](#examples-and-tutorials)
+  - [Using with AI agents](#using-with-ai-agents)
   - [Companion packages](#companion-packages)
 - [**Our Authors**](#our-authors)
   - [**Cheat sheet**](#cheat-sheet)
@@ -230,6 +231,21 @@ under [`examples/notebooks/`](examples/notebooks):
 | `13_soccer_intro.ipynb` | ESPN soccer — league-parameterized wrappers |
 | `14_cricket_intro.ipynb` | ESPN cricket + win-probability models |
 | `15_other_espn_leagues_intro.ipynb` | UFL/XFL/CFL, college hockey, college baseball/softball ESPN families |
+
+## Using with AI agents
+
+- **[Context7](https://context7.com)** indexes these docs (`context7.json` scopes it to `docs/docs/`) and the SDV R packages (from their pkgdown `llms.txt`).
+- **llms.txt:** <https://py.sportsdataverse.org/llms.txt> links a Markdown copy of every docs page.
+- **sdv-docs MCP server:** exact answers about returned columns, Python and R functions, provider API endpoints (ESPN, stats.nba.com, NHL, MLB, …) and released datasets.
+
+  ```bash
+  claude mcp add sdv-docs -- uvx --from 'sportsdataverse[mcp]' sdv-docs
+  ```
+
+  That works from the next release (0.1.5+); until then install from GitHub main:
+  `claude mcp add sdv-docs -- uvx --from 'sportsdataverse[mcp] @ git+https://github.com/sportsdataverse/sportsdataverse-py' sdv-docs`.
+
+  Needs Python 3.10+. The server downloads its index (`sdv_docs_v1.sqlite.gz`, about 10 MB) from the [`docs-index` release](https://github.com/sportsdataverse/sportsdataverse-py/releases/tag/docs-index), checking at most once a day, and sends no queries anywhere. Set `SDV_DOCS_DB=/path/to/sdv_docs_v1.sqlite` to use a local build (`uv run python tools/codegen/build_docs_index.py`). `sdv-docs --version` prints the installed version.
 
 ## Companion packages
 

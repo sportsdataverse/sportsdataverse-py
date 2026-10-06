@@ -16,6 +16,8 @@ permissions:
 jobs:
   build:
     name: Build sdist + wheel
+    # Never publish to PyPI for the rolling docs-index asset release.
+    if: github.event_name != 'release' || github.event.release.tag_name != 'docs-index'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5

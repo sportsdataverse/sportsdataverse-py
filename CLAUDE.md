@@ -28,6 +28,7 @@
     - [MBB / WBB / CFB / college baseball — stats.ncaa.org families (0.0.72+)](#mbb--wbb--cfb--college-baseball--statsncaaorg-families-0072)
     - [NBA / WNBA — read-through raw JSON store (0.0.72+)](#nba--wnba--read-through-raw-json-store-0072)
     - [Release utilities — `sportsdataverse.release` (0.0.72+)](#release-utilities--sportsdataverserelease-0072)
+    - [sdv-docs MCP server (`sdv_docs/`)](#sdv-docs-mcp-server-sdv_docs)
     - [PFF — Developer API (`api.pff.com`, current) vs Premium (`premium.pff.com`, LEGACY)](#pff--developer-api-apipffcom-current-vs-premium-premiumpffcom-legacy)
     - [HTTP / retry layer](#http--retry-layer)
     - [Error vocabulary (0.1.0)](#error-vocabulary-010)
@@ -801,6 +802,34 @@ Port of the `sportsdataversedata` R package: GitHub-release asset
 publish/download helpers plus a pure-Python **byte-parity RDS writer**
 (`_rds.py`). csv.gz outputs are opt-in only. Use these instead of ad-hoc
 `gh release upload` scripting in Python producers.
+
+### sdv-docs MCP server (`sdv_docs/`)
+
+- **Never import `sportsdataverse` from `sdv_docs/`.** That import loads every league (4-12 s,
+  ~320 MB); a bare server is ~1.5 s / ~70 MB. A test guards it. Console script: `sdv-docs`
+  (`sdv_docs/server.py`); install extra: `sportsdataverse[mcp]` (Python ≥ 3.10).
+- **Builder:** `tools/codegen/build_docs_index.py`. `uv run python tools/codegen/build_docs_index.py
+  [--out DIR]` is the online build (codegen model + sdv-swagger specs + R pkgdown `llms.txt`);
+  `--offline` skips the network inputs. Output: `sdv_docs_v1.sqlite` (local use, retrieval gate),
+  `sdv_docs_v1.sqlite.gz` (the release asset) and `manifest_v1.json` (sha256 + size of the gz,
+  `db_sha256` + `db_size` of the plain file). The build fails when more than 2% of an R package's
+  pkgdown index aliases go unparsed: a pkgdown layout change, not a reason to raise the threshold.
+- **Schema version:** bump `SCHEMA_VERSION` in `sdv_docs/schema.py` on any breaking table or column
+  change. It is part of the asset names (`sdv_docs_v{N}.sqlite`, released as `sdv_docs_v{N}.sqlite.gz`).
+  Also update the hard-coded names in `docs-index.yml`: `sdv_docs_v1.sqlite.gz` / `manifest_v1.json`
+  (artifact path and publish step) and `sdv_docs_v1.sqlite` (the `SDV_DOCS_RETRIEVAL_DB` path).
+  `--clobber` never deletes old assets, so the v{N-1} pair stays on the release, frozen: old clients
+  keep working on a stale index.
+- **Retrieval gate:** `tests/sdv_docs/retrieval.yaml` (30 cases; `top: K` checks a case against the
+  first K results only, for ranking) runs only when
+  `SDV_DOCS_RETRIEVAL_DB` points at a full build: `SDV_DOCS_RETRIEVAL_DB=build/docs-index/sdv_docs_v1.sqlite
+  uv run pytest tests/sdv_docs/test_retrieval.py`. Unset = skipped. CI sets it in `docs-index.yml`,
+  which also runs on pull requests (build and gate only; publishing is main-only).
+- **Not drift-gated.** The index is a build artefact published to the rolling `docs-index` release
+  by `docs-index.yml` (read-only build job, separate write-permission publish job); it is never
+  committed. Its inputs (codegen model, schemas, docstrings) already are drift-gated.
+- `SDV_DOCS_DB=<file>` overrides the cache and never downloads. Adding or changing the `mcp` extra
+  re-locks `uv.lock`; commit the bump deliberately.
 
 ### PFF — Developer API (`api.pff.com`, current) vs Premium (`premium.pff.com`, LEGACY)
 
