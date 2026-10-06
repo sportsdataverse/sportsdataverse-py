@@ -1,0 +1,78 @@
+columns:
+- description: ''
+  name: country
+  type: character
+- description: ''
+  name: league
+  type: character
+- description: ''
+  name: season
+  type: integer
+- description: Match Date (dd/mm/yy)
+  name: date
+  type: character
+- description: Time of match kick off
+  name: time
+  type: character
+- description: ''
+  name: home
+  type: character
+- description: ''
+  name: away
+  type: character
+- description: Full Time Home Team Goals
+  name: hg
+  type: integer
+- description: Full Time Away Team Goals
+  name: ag
+  type: integer
+- description: Full Time Result (H=Home Win, D=Draw, A=Away Win)
+  name: res
+  type: character
+- description: Closing Pinnacle home win odds
+  name: psch
+  type: numeric
+- description: Closing Pinnacle draw odds
+  name: pscd
+  type: numeric
+- description: Closing Pinnacle away win odds
+  name: psca
+  type: numeric
+- description: Closing Market maximum home win odds
+  name: max_ch
+  type: numeric
+- description: Closing Market maximum draw win odds
+  name: max_cd
+  type: numeric
+- description: Closing Market maximum away win odds
+  name: max_ca
+  type: numeric
+- description: Closing Market average home win odds
+  name: avg_ch
+  type: numeric
+- description: Closing Market average draw win odds
+  name: avg_cd
+  type: numeric
+- description: Closing Market average away win odds
+  name: avg_ca
+  type: numeric
+- description: Closing Betfair Exchange home win odds
+  name: bfech
+  type: character
+- description: Closing Betfair Exchange draw odds
+  name: bfecd
+  type: character
+- description: Closing Betfair Exchange away win odds
+  name: bfeca
+  type: character
+- description: Closing Bet365 home win odds
+  name: b365_ch
+  type: character
+- description: Closing Bet365 draw odds
+  name: b365_cd
+  type: character
+- description: Closing Bet365 away win odds
+  name: b365_ca
+  type: character
+kind: dataframe
+schema: extra_league

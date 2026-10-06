@@ -1,0 +1,57 @@
+api: football_data
+docstring:
+  example_import: true
+  raises:
+  - 'sportsdataverse.errors.NoDataError: football-data.co.uk answered 404 (no file
+    for that season or division).'
+  raw_doc: the raw CSV response body (``str``)
+  see_also:
+  - name: Football-Data.co.uk
+    note: static CSV archive with a /notes.txt column glossary; keep live use to about
+      one request per second
+    url: https://www.football-data.co.uk/data.php
+endpoints:
+- example_args:
+    country: BRA
+  parser: parse_football_data
+  path: /new/{country}.csv
+  path_params:
+  - name: country
+    required: true
+    type: str
+  returns_schema: native/football_data/extra_league
+  short: extra_league
+  summary: All seasons of one 'extra' league (BRA, ARG, USA, ...).
+- example_args: {}
+  parser: parse_football_data
+  path: /fixtures.csv
+  returns_schema: native/football_data/fixtures
+  short: fixtures
+  summary: Upcoming fixtures with odds.
+- example_args:
+    div: E0
+    season: '2526'
+  parser: parse_football_data
+  path: /mmz4281/{season}/{div}.csv
+  path_params:
+  - name: season
+    required: true
+    type: str
+  - name: div
+    required: true
+    type: str
+  returns_schema: native/football_data/league_season
+  short: league_season
+  summary: One league-season of results + closing odds (main leagues).
+getter_module: sportsdataverse.soccer.football_data_runtime
+host: https://www.football-data.co.uk
+module: football_data
+name_pattern: football_data_{short}
+parser_module: soccer.football_data_parsers
+passthrough_query: false
+qualifier: ''
+raw_types:
+- Dict
+- str
+runtime_imports:
+- _get

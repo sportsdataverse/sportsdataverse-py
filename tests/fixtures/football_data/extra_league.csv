@@ -1,0 +1,4 @@
+Country,League,Season,Date,Time,Home,Away,HG,AG,Res,PSCH,PSCD,PSCA,MaxCH,MaxCD,MaxCA,AvgCH,AvgCD,AvgCA,BFECH,BFECD,BFECA,B365CH,B365CD,B365CA
+Brazil,Serie A,2012,19/05/2012,22:30,Palmeiras,Portuguesa,1,1,D,1.75,3.86,5.25,1.76,3.87,5.31,1.69,3.5,4.9,,,,,,
+Brazil,Serie A,2012,19/05/2012,22:30,Sport Recife,Flamengo RJ,1,1,D,2.83,3.39,2.68,2.83,3.42,2.7,2.59,3.23,2.58,,,,,,
+Brazil,Serie A,2012,20/05/2012,01:00,Figueirense,Nautico,2,1,H,1.6,4.04,6.72,1.67,4.05,7.22,1.59,3.67,5.64,,,,,,
