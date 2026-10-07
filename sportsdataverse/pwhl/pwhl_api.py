@@ -390,7 +390,8 @@ def pwhl_playoff_bracket(
         polars.DataFrame: One row per playoff series: ``round`` / ``round_name`` /
             ``round_type_name``, ``series_letter`` / ``series_name``, ``team1`` / ``team2``
             (team ids), ``team1_wins`` / ``team2_wins`` (Int64), ``winner`` (the winning team
-            id, empty while the series is live), ``feeder_series1`` / ``feeder_series2``, and
+            id, but the feed often leaves it empty even after a series ends, so read the
+            result from the win counts), ``feeder_series1`` / ``feeder_series2``, and
             ``games`` (a list of structs, one per game: ids, both teams, goal counts, status,
             date). A pandas DataFrame when ``return_as_pandas`` is True.
 
