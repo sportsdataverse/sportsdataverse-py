@@ -40,11 +40,11 @@ Pull EDGE detail stats for a single team.
 | `team_slug` | character | Team URL slug. |
 | `team_conference` | character | Name of the NHL conference (e.g., Eastern, Western) to which this team belongs, as returned by the NHL api-web team detail endpoint. |
 | `team_division` | character | Name of the NHL division (e.g., Atlantic, Metro, Central, Pacific) to which this team belongs, as returned by the NHL api-web team detail endpoint. |
-| `team_wins` | integer | Team wins. |
-| `team_losses` | integer | Team losses. |
+| `team_wins` | integer |  |
+| `team_losses` | integer |  |
 | `team_ot_losses` | integer | Total number of games this team has lost in overtime or a shootout (earning one standings point each) in the current season. |
 | `team_games_played` | integer | Total number of regular-season or playoff games this team has played in the current season, from the NHL api-web team detail endpoint. |
-| `team_points` | integer | Total points scored by the player's team in this game. |
+| `team_points` | integer |  |
 | `shot_speed_shot_attempts_over90_value` | integer | Total count of shot attempts recorded at a speed exceeding 90 mph by this team's players during the season, from NHL EDGE tracking data. |
 | `shot_speed_shot_attempts_over90_rank` | integer | Team's league rank by number of shot attempts exceeding 90 mph in shot speed, with rank 1 indicating the highest count, from NHL EDGE tracking data. |
 | `shot_speed_top_shot_speed_imperial` | double | Fastest recorded shot speed by any player on this team during the season, expressed in miles per hour, from NHL EDGE tracking data. |

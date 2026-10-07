@@ -471,7 +471,7 @@ Batch club detail by Sportec ids (sportapi).
 | `full_name` | character | Full name |
 | `slug` | character | URL slug. |
 | `short_name` | character | Short name |
-| `abbreviation` | character | Short abbreviation. |
+| `abbreviation` | character |  |
 | `background_color` | character | Brand background colour (hex). |
 | `logo_bw_slug` | character | Asset slug for the black-and-white logo. |
 | `logo_color_slug` | character | Asset slug for the full-colour logo. |
@@ -526,7 +526,7 @@ Single match detail (sportapi / .NET).
 | `competition_phase` | character | Competition: competition phase of the match (regular season, playoffs, ...). |
 | `home_club_rank` | character | Home club: club's standings rank at the time of the request. |
 | `away_club_rank` | character | Away club: club's standings rank at the time of the request. |
-| `round_number` | integer | Draft round number. |
+| `round_number` | integer |  |
 | `round_group` | character | Group label within the round (tournaments). |
 | `match_day` | character | Matchday / round number |
 | `calendar_url` | character | Calendar (.ics) subscription URL for the match. |
@@ -538,7 +538,7 @@ Single match detail (sportapi / .NET).
 | `home_full_name` | character | Home club: full name |
 | `home_slug` | character | Home club: URL slug. |
 | `home_short_name` | character | Home club: short name |
-| `home_abbreviation` | character | Home team's abbreviation. |
+| `home_abbreviation` | character |  |
 | `home_background_color` | character | Home club: brand background colour (hex). |
 | `home_logo_bw_slug` | character | Home club: asset slug for the black-and-white logo. |
 | `home_logo_color_slug` | character | Home club: asset slug for the full-colour logo. |
@@ -550,7 +550,7 @@ Single match detail (sportapi / .NET).
 | `away_full_name` | character | Away club: full name |
 | `away_slug` | character | Away club: URL slug. |
 | `away_short_name` | character | Away club: short name |
-| `away_abbreviation` | character | Away team's abbreviation. |
+| `away_abbreviation` | character |  |
 | `away_background_color` | character | Away club: brand background colour (hex). |
 | `away_logo_bw_slug` | character | Away club: asset slug for the black-and-white logo. |
 | `away_logo_color_slug` | character | Away club: asset slug for the full-colour logo. |
@@ -633,7 +633,7 @@ Batch match detail by Sportec ids (sportapi).
 | `competition_phase` | character | Competition: competition phase of the match (regular season, playoffs, ...). |
 | `home_club_rank` | character | Home club: club's standings rank at the time of the request. |
 | `away_club_rank` | character | Away club: club's standings rank at the time of the request. |
-| `round_number` | integer | Draft round number. |
+| `round_number` | integer |  |
 | `round_group` | character | Group label within the round (tournaments). |
 | `match_day` | character | Matchday / round number |
 | `calendar_url` | character | Calendar (.ics) subscription URL for the match. |
@@ -645,7 +645,7 @@ Batch match detail by Sportec ids (sportapi).
 | `home_full_name` | character | Home club: full name |
 | `home_slug` | character | Home club: URL slug. |
 | `home_short_name` | character | Home club: short name |
-| `home_abbreviation` | character | Home team's abbreviation. |
+| `home_abbreviation` | character |  |
 | `home_background_color` | character | Home club: brand background colour (hex). |
 | `home_logo_bw_slug` | character | Home club: asset slug for the black-and-white logo. |
 | `home_logo_color_slug` | character | Home club: asset slug for the full-colour logo. |
@@ -656,7 +656,7 @@ Batch match detail by Sportec ids (sportapi).
 | `away_full_name` | character | Away club: full name |
 | `away_slug` | character | Away club: URL slug. |
 | `away_short_name` | character | Away club: short name |
-| `away_abbreviation` | character | Away team's abbreviation. |
+| `away_abbreviation` | character |  |
 | `away_background_color` | character | Away club: brand background colour (hex). |
 | `away_logo_bw_slug` | character | Away club: asset slug for the black-and-white logo. |
 | `away_logo_color_slug` | character | Away club: asset slug for the full-colour logo. |
@@ -726,7 +726,7 @@ Standings table for a competition season (stats-api).
 | `competition_id` | character | Sportec competition id |
 | `season_id` | character | Sportec season id |
 | `group` | character | Group name (tournaments) |
-| `category` | character | Category label. |
+| `category` | character |  |
 | `type` | character | Type discriminator for the record. |
 | `position` | integer | Table position/rank |
 | `club` | character | Club full name |

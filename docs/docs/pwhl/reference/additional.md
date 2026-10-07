@@ -342,8 +342,12 @@ PWHL player game-by-game log.
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `player_id` | `int` |  |  |
-| `return_as_pandas` | `bool` | `False` |  |
+| `player_id` | `int` |  | The HockeyTech player id. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+One row per game played: `id` (the game id), `date_played`, `home_team_code` / `visiting_team_code` and names, `player_team`, `goals`, `assists`, `points`, `plus_minus`, `shots`, `hits`, `penalty_minutes`, `ice_time_minutes_seconds`, faceoff, power-play, short-handed and shootout counts. Counts arrive as strings except `points` and the percentages (Int64). A pandas DataFrame when `return_as_pandas` is True; a zero-row frame for a player with no games.
 
 ### pwhl_player_info {#pwhl_player_info}
 
@@ -514,15 +518,18 @@ PWHL playoff bracket for a given season.
 
 With neither `season` nor `season_id`, the newest season that has playoffs:
 the newest season overall is usually still before its playoffs, with no bracket.
-Raises `NoDataError` when the seasons feed lists no playoff season.
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `season` | `Optional[int]` | `None` |  |
-| `season_id` | `Optional[int]` | `None` |  |
-| `return_as_pandas` | `bool` | `False` |  |
+| `season` | `Optional[int]` | `None` | Season as an END year (2026 = the 2025-26 season). |
+| `season_id` | `Optional[int]` | `None` | The HockeyTech playoff season id, when it is already known. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+One row per playoff series: `round` / `round_name` / `round_type_name`, `series_letter` / `series_name`, `team1` / `team2` (team ids), `team1_wins` / `team2_wins` (Int64), `winner` (the winning team id, but the feed often leaves it empty even after a series ends, so read the result from the win counts), `feeder_series1` / `feeder_series2`, and `games` (a list of structs, one per game: ids, both teams, goal counts, status, date). A pandas DataFrame when `return_as_pandas` is True.
 
 ### pwhl_schedule {#pwhl_schedule}
 
@@ -612,7 +619,7 @@ PWHL live scorebar (today ± 3 days).
 | `period` | character | Period number. |
 | `period_name_short` | character | Abbreviated name of the current or final game period (e.g., "3rd", "OT"). |
 | `period_name_long` | character | Verbose name of the current or final game period (e.g., "Third Period", "Overtime"). |
-| `game_clock` | character | Game clock. |
+| `game_clock` | character |  |
 | `game_summary_url` | character | Game-summary link target, not a full URL: the bare game id in some leagues (e.g. PWHL '74') and a site-relative path in others (e.g. '/game-center/?game_id=4896'). |
 | `home_wins` | character | Home team's wins in its record for this game's season (season_id) as the feed reports it when fetched: the same value on every row of that team-season, not the record as of the game date. |
 | `home_regulation_losses` | character | Home team's regulation losses in its record for this game's season (season_id) as the feed reports it when fetched: the same value on every row of that team-season, not the record as of the game date. |
@@ -752,7 +759,7 @@ PWHL standings — one row per team.
 | `non_reg_losses` | character | Non-regulation losses. |
 | `games_remaining` | character | Games remaining in the season. |
 | `percentage` | character | Points percentage earned by the PWHL team (points divided by maximum possible points), expressed as a decimal between 0 and 1. |
-| `overall_rank` | character | Overall recruit ranking (top recruits only; may be `NA`). |
+| `overall_rank` | character |  |
 | `games_played` | character | Games played. |
 | `team_rank` | integer | Team rank in the standings. |
 | `team` | character | Team name. |
@@ -942,8 +949,8 @@ PWHL team roster for a given team + season.
 | `nhlteam` | character | Name or identifier of the NHL organization that holds the player's NHL rights, if applicable. |
 | `player_id_1` | character | Alternate or secondary HockeyTech player identifier, distinct from the primary person_id and player_id fields. |
 | `is_rookie` | character | Whether the player is a rookie. |
-| `h` | character | Hits. |
-| `w` | character | Wins. |
+| `h` | character |  |
+| `w` | character |  |
 | `draft_status` | character | Text description of the player's draft history or eligibility status (e.g., undrafted, drafted year and round). |
 | `name` | character | Player full name, first then last (e.g. 'Megan Keller'). |
 | `player_image` | character | URL of the player's official roster photograph from the PWHL HockeyTech feed. |
@@ -986,7 +993,11 @@ PWHL roster transactions.
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `return_as_pandas` | `bool` | `False` |  |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+One row per transaction on the feed's current page (the newest 20): `transaction_date` / `transaction_time`, `transaction_type` / `ttype_text`, `title`, `detail`, `player_id` / `player_name` / `position`, and `team_id` / `team_name` / `team_code` / `team_city` (String). A pandas DataFrame when `return_as_pandas` is True.
 
 ### pwhl_unit_ratings {#pwhl_unit_ratings}
 

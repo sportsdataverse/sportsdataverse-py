@@ -26,7 +26,7 @@ Pull NHL draft picks for a year (and optionally one round).
 
 | col_name | type | description |
 |---|---|---|
-| `round` | integer | Shootout round number. |
+| `round` | integer | Draft round the pick was made in (1 = first round). |
 | `pick_in_round` | integer | Pick number within the round. |
 | `overall_pick` | integer | Overall pick number in the draft. |
 | `team_id` | integer | Unique team identifier. |

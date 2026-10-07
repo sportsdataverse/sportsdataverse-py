@@ -32,7 +32,7 @@ Current expert 'crystal ball' predictions for a season.
 | `updated_on` | character | Date the prediction was last updated. |
 | `prediction_status` | character | Crystal-ball prediction status code. |
 | `days_correct` | numeric | Number of days the prediction has stood as correct. |
-| `premium` | character | Whether the article is premium content. |
+| `premium` | character |  |
 | `score` | numeric | Expert accuracy score at time of prediction. |
 | `confidence` | integer | Expert confidence 1-10. |
 | `parent` | character | Parent prediction record this entry updates (247Sports field). |
@@ -187,18 +187,18 @@ Recruit class rankings for a season (rich per-recruit rows with inlined Player).
 | `recruit_interest_count` | integer | Number of tracked school interests. |
 | `recruit_interests_url` | character | Site URL to the recruit's interest timeline. |
 | `player_key` | integer | Primary key of this entity (the id used in its `.json` route). |
-| `player_first_name` | character | Player's first name |
-| `player_last_name` | character | Player's last name |
-| `player_full_name` | character | Player full name. |
-| `player_height` | character | Participant height (e.g. "6' 5\""). |
-| `player_weight` | numeric | Participant weight in pounds. |
+| `player_first_name` | character |  |
+| `player_last_name` | character |  |
+| `player_full_name` | character |  |
+| `player_height` | character |  |
+| `player_weight` | numeric |  |
 | `player_bio` | character | Player biography text authored on 247Sports. |
 | `player_scout_evaluation` | character | 247Sports scouting evaluation text for the player. |
 | `player_birthdate` | character | Player's date of birth, per 247Sports. |
 | `player_modified_user` | character | 247Sports user who last modified the player record. |
 | `player_modified_date` | character | Date the player record was last modified. |
 | `player_cbs_key` | integer | Cross-reference key into the CBS Sports id space. |
-| `player_url` | character | Full stats.ncaa.org url for the player page. |
+| `player_url` | character |  |
 | `player_last_recruitment_player_institution` | integer | Nested player-institution record from the player's most recent recruitment (stringified). |
 | `player_current_player_institution` | integer | FK -> PlayerInstitution (current school). |
 | `player_twitter_contact` | numeric | Nested 247Sports contact record for the player's Twitter/X account (stringified). |

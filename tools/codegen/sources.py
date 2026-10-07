@@ -5,7 +5,8 @@ from". Resolution per function, first tier that matches wins:
 
 1. the ESPN API name / flat-API stem / release base the codegen already knows --
    authoritative, because a generated wrapper or loader comes from exactly that API
-   and no glob can know better
+   and no glob can know better. An API or base no provider owns is a gap (raise),
+   never a reason to guess from the module
 2. ``functions:`` glob on the function name
 3. ``modules:`` glob on ``obj.__module__`` -- providers and categories ranked
    together, most specific glob first
@@ -163,11 +164,14 @@ def resolve(name: str, module: str, *, api: str = "", base: str = "") -> Entry:
 
     Raises:
         AmbiguousSource: Two or more rules match in the winning tier.
-        UnknownSource: No rule matches in any tier.
+        UnknownSource: No rule matches in any tier, or ``api`` / ``base`` is owned by no provider.
     """
-    if api and (e := by_api(api)) is not None:
-        return e
-    if base and (e := by_base(base)) is not None:
+    if api or base:
+        if (e := by_api(api) if api else by_base(base)) is None:
+            raise UnknownSource(
+                f"{name} ({module}) was generated from {api or base!r}, which no sources.yaml provider owns"
+                " -- add it to a provider's espn_apis / flat_apis / release_bases",
+            )
         return e
     if hits := _match(load(), name, "functions"):
         return _one(hits, name, module)

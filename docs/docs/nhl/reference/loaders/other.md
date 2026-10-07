@@ -78,7 +78,7 @@ Release: [nhl_schedules](https://github.com/sportsdataverse/sportsdataverse-data
 | `venue` | String | Venue where the game was played. |
 | `series_letter` | String | Playoff series identifier letter, populated only for postseason games (88 of 1,400 rows in 2024) and null for the regular season. |
 | `playoff_round` | Int32 | Playoff round identifier. |
-| `series_game_number` | Int32 | Series game number. |
+| `series_game_number` | Int32 |  |
 | `season` | Int32 | Season year (echoed from arg). |
 | `game_json` | Boolean | Whether processed game JSON is available. |
 | `game_json_url` | String | URL to the processed game JSON. |
@@ -409,7 +409,7 @@ Release: [nhl_schedules](https://github.com/sportsdataverse/sportsdataverse-data
 | `venue` | String | Venue where the game was played. |
 | `series_letter` | String | NHL API letter code identifying the playoff series the game belongs to (null for regular-season games). |
 | `playoff_round` | Int32 | Playoff round identifier. |
-| `series_game_number` | Int32 | Series game number. |
+| `series_game_number` | Int32 |  |
 | `season` | Int32 | Season year (echoed from arg). |
 | `game_json` | Boolean | Whether processed game JSON is available. |
 | `game_json_url` | String | URL to the processed game JSON. |
@@ -420,7 +420,7 @@ Release: [nhl_schedules](https://github.com/sportsdataverse/sportsdataverse-data
 | `goalie_box` | Boolean | Whether goalie box data is available. |
 | `game_info` | Boolean | Whether game info data is available. |
 | `game_rosters` | Boolean | Whether game rosters data is available. |
-| `scoring` | Boolean | TRUE when the play results in a score (TD, FG, safety, two-point conversion). |
+| `scoring` | Boolean |  |
 | `penalties` | Boolean | Penalty count. |
 | `scratches` | Boolean | Flag indicating a scratches payload was captured for this game in the NHL raw store. |
 | `linescore` | Boolean | Flag indicating a period-by-period linescore payload was captured for this game in the NHL raw store. |

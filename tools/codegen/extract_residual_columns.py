@@ -9,7 +9,7 @@ import glob
 import json
 import os
 
-from tools.codegen.generate import ENDPOINTS, FLAT_APIS, _manual_col_desc, _r_col_desc
+from tools.codegen.generate import ENDPOINTS, FLAT_APIS, _manual_col_desc, _r_col_desc, _r_dict_applies
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 SCHEMA_DIR = os.path.join(ROOT, "tools", "codegen", "schemas")
@@ -45,8 +45,7 @@ def _league_of(path: str) -> str | None:
       (the stem is the league slug, matching how ``_return_table`` passes ``league.prefix``).
     * ``schemas/native/<stem>/<name>.yaml`` → the ``FLAT_APIS`` league of the endpoints that
       return it (``native/pff/*`` → ``nfl``). The path names an API family, not a league, and
-      reading ``None`` here gave the check the cross-sport ``_merged`` text where the page shows
-      the league's own (e.g. nflreadr's "as reported by NFL.com" on PFF tables).
+      reading ``None`` here gave the check no R text where the page shows the league's own.
 
     Top-level files (e.g. ``schemas/scoreboard.yaml``, depth==1) and native schemas no endpoint
     returns remain ``None``.
@@ -83,14 +82,15 @@ def _bucket_of(path: str) -> str:
 # quietly reappearing as "deferred." If a bucket like this grows a large new
 # backlog again, re-add it here deliberately rather than letting the gate go red.
 #
-# native/nflpro remains deferred for a different, durable reason (not "not yet
-# authored" but "not authorable"): the Next Gen Stats field names (avgTTT, croeNd,
-# bhPct, ...) have no reachable authoritative label source, and guessing would
-# manufacture authority the capture does not carry. See
-# sdv-internal-refs/nfl/nflpro/catalogs/nfl_pro_secured_returns.md for the full
-# provenance note and the identified (partial) load_nfl_nextgen_stats cross-walk.
+# native/nflpro is deferred for a different, durable reason (not "not yet authored"
+# but "not authorable"): the Next Gen Stats field names have no reachable authoritative
+# label source. gen_nflpro_descriptions.py (2026-10-07) authored the 1,006 columns that
+# a nflverse value crosswalk, an arithmetic identity on the capture or the envelope
+# confirms; the 30 it cannot confirm (avgTTP, bhPct, twfPct, ...) stay blank and capped.
+# See sdv-internal-refs/nfl/nflpro/catalogs/nfl_pro_secured_returns.md.
 #
-# native/nba_stats, native/wnba_stats and native/on3 are deferred AGAIN (2026-10-05)
+# native/nba_stats and native/wnba_stats are deferred AGAIN (2026-10-05; native/on3 was
+# fully authored 2026-10-07 by gen_on3_descriptions.py and promoted out)
 # because their tables were regenerated from what the parsers emit on real captures
 # instead of from the canonical catalog / OpenAPI spec. That renamed columns
 # (fg3m -> fg3_m, leagueid -> league_id; descriptions re-keyed where the rename was
@@ -103,26 +103,69 @@ def _bucket_of(path: str) -> str:
 #
 # {bucket: max uncovered cells, or None for no cap}
 _DEFERRED_BUCKETS: dict[str, int | None] = {
-    "native/nflpro": None,
+    "native/nflpro": 30,  # the un-authorable NGS fields only (2026-10-07); was None
     "native/nba_stats": 312,
     "native/wnba_stats": 269,
-    "native/on3": 1841,
-    # wave-1 intake families whose capture-derived specs carry no property docs (euroleague and fifa
-    # describe every column in their gen scripts, so they are not deferred); measured 2026-10-06
     "native/fotmob": 283,
     "native/uefa": 841,
     "native/sleeper": 459,
+    # Buckets whose blank cells held CROSS-SPORT R text until the fallback was scoped to the
+    # league's own sport (2026-10-07): the earlier zero residual counted baseballr's "Inning
+    # number." on a jersey number and cfbfastR's SP+ on an NFL rating as coverage, so these are
+    # re-based at the measured count, not loosened. Lower a cap as columns are authored.
+    "autodoc/ahl": 2,
+    "autodoc/ajhl": 1,
+    "autodoc/cchl": 1,
+    "autodoc/cfb": 92,
+    "autodoc/chl": 2,
+    "autodoc/global": 3,
+    "autodoc/gojhl": 1,
+    "autodoc/mbb": 6,
+    "autodoc/mlb": 31,
+    "autodoc/nba": 4,
+    "autodoc/nfl": 248,
+    "autodoc/nhl": 51,
+    "autodoc/nojhl": 1,
+    "autodoc/odds": 22,
+    "autodoc/ohl": 2,
+    "autodoc/pwhl": 4,
+    "autodoc/qmjhl": 4,
+    "autodoc/sjhl": 1,
+    "autodoc/ushl": 2,
+    "autodoc/wbb": 6,
+    "autodoc/whl": 1,
+    "autodoc/wnba": 5,
+    "cdn_scoreboard.yaml": 38,
+    "loader_schemas": 371,
+    "native/cbs_napi": 42,
+    "native/mlb_api": 10,
+    "native/mls_api": 8,
+    "native/nhl_api_web": 6,
+    "native/nhl_edge": 12,
+    "native/nhl_records": 19,
+    "native/nhl_stats_rest": 2,
+    "native/nwsl_api": 9,
+    "native/sports247_site_pages": 22,
+    "native/yahoo_shangrila": 729,
+    "scoreboard": 105,
+    "scoreboard.yaml": 38,
+    "standings": 8,
+    "summary": 211,
+    "team_roster": 24,
+    "team_schedule": 4,
     # wave-2 intake families, same situation: the specs are capture-derived and these providers
     # publish no property docs, so the generators have nothing to describe from. espn-content
     # additionally keys its returns-doc rows by dotted JSON path, which never matches a
     # snake_cased parser column. football-data is the exception: its glossary describes 224 of
-    # 251 columns, and only the exchange-odds codes are blank upstream too. Measured 2026-10-06.
-    "native/espn_content": 63,
-    "native/thesportsdb": 484,
-    "native/football_data": 22,
-    "native/openligadb": 104,
-    "native/polymarket": 262,
-    "native/kalshi": 139,
+    # 251 columns, and only the exchange-odds codes are blank upstream too. Measured 2026-10-06;
+    # re-measured 2026-10-07 once this check applied the same no-R-dict gate the renderer does
+    # (the first measurement counted cross-sport R text the page never showed as coverage).
+    "native/espn_content": 88,
+    "native/thesportsdb": 486,
+    "native/football_data": 27,
+    "native/openligadb": 139,
+    "native/polymarket": 292,
+    "native/kalshi": 157,
 }
 
 
@@ -227,7 +270,11 @@ def iter_schema_columns() -> list[dict]:
 
 def _uncovered(r: dict) -> bool:
     """A blank column with no manual-dict and no R-dict description."""
-    return r["blank"] and not _manual_col_desc(r["schema"], r["col"]) and not _r_col_desc(r["league"], r["col"])
+    if not r["blank"] or _manual_col_desc(r["schema"], r["col"]):
+        return False
+    # Same gate as render: a family with no R counterpart (``_NO_R_DICT_FAMILIES``) gets no fill.
+    key = f"{r['bucket']}/{r['schema']}" if r["bucket"].startswith("native/") else r["schema"]
+    return not (_r_dict_applies(key) and _r_col_desc(r["league"], r["col"], r["schema"]))
 
 
 def residual_columns() -> list[dict]:

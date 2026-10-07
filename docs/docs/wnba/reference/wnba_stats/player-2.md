@@ -164,8 +164,8 @@ GET /stats/playerindex
 | col_name | type | description |
 |---|---|---|
 | `person_id` | integer | Unique player identifier (V3 endpoints). |
-| `player_last_name` | character | Participant last name. |
-| `player_first_name` | character | Participant first name. |
+| `player_last_name` | character | Player's last name. |
+| `player_first_name` | character | Player's first name. |
 | `player_slug` | character | URL-safe player identifier. |
 | `team_id` | integer | Unique team identifier. |
 | `team_slug` | character | URL-safe team identifier (e.g. 'lasvegas-aces' / 'aces'). |
@@ -180,8 +180,8 @@ GET /stats/playerindex
 | `country` | character | Country (full name or code). |
 | `draft_year` | integer | Draft year (4-digit). |
 | `draft_round` | integer | Round of the draft selection. |
-| `draft_number` | integer | The number pick that was used to select a given player. |
-| `roster_status` | numeric | Payroll table the row came from: Active, IL, or Retained Salary. |
+| `draft_number` | integer | Overall pick the player was selected with, as a string; 'Undrafted' when never drafted. |
+| `roster_status` | numeric | Roster status flag: 1 when the player is on a current roster, 0 otherwise. |
 | `from_year` | character | First season. |
 | `to_year` | character | Most recent season. |
 | `pts` | numeric | Points scored. |
@@ -227,9 +227,9 @@ GET /stats/playernextngames
 | `visitor_team_id` | integer | Unique identifier for visitor team. |
 | `home_team_name` | character | Home team name. |
 | `visitor_team_name` | character | Full name of the visiting team in the upcoming game. |
-| `home_team_abbreviation` | character | Home team abbreviation. |
+| `home_team_abbreviation` | character | Home team's three-letter tricode (e.g. 'LAL'). |
 | `visitor_team_abbreviation` | character | Abbreviation of the visiting team in the upcoming game. |
-| `home_team_nickname` | character | Home team nickname label. |
+| `home_team_nickname` | character | Home team's nickname (e.g. 'Lakers'). |
 | `visitor_team_nickname` | character | Nickname of the visiting team in the upcoming game. |
 | `game_time` | character | Game start time. |
 | `home_wl` | character | Home team's win-loss record entering the upcoming game. |
@@ -454,7 +454,7 @@ GET /stats/playerprofilev2
 | `season_id` | character | Unique season identifier. |
 | `league_id` | character | League identifier ('10' = WNBA). |
 | `organization_id` | character |  |
-| `school_name` | character | School name. |
+| `school_name` | character | College or school of the season row (SeasonTotalsCollegeSeason set). |
 | `player_age` | character | NBA or WNBA Stats value for player age in the playerprofilev2 result set. |
 | `gp` | character | Games played. |
 | `gs` | character | Games started. |
@@ -672,7 +672,7 @@ GET /stats/playerprofilev2
 | `game_date` | character | Game date (YYYY-MM-DD). |
 | `game_time` | character | Game start time. |
 | `location` | character | Filter results by game location. |
-| `player_team_id` | integer | Unique team identifier of the primary player. |
+| `player_team_id` | integer | Team id of the player's current team in the NextGame set. |
 | `player_team_city` | character |  |
 | `player_team_nickname` | character |  |
 | `player_team_abbreviation` | character |  |
@@ -896,7 +896,7 @@ GET /stats/playervsplayer
 | `display_first_last` | character |  |
 | `display_last_comma_first` | character |  |
 | `display_fi_last` | character |  |
-| `birthdate` | character | Date of birth. |
+| `birthdate` | character | Date of birth as an ISO timestamp string (e.g. '1984-12-30T00:00:00'). |
 | `school` | character | Player's school / college (when distinct from 'college'). |
 | `country` | character | Country (full name or code). |
 | `last_affiliation` | character |  |
@@ -911,7 +911,7 @@ GET /stats/playervsplayer
 | `display_first_last` | character |  |
 | `display_last_comma_first` | character |  |
 | `display_fi_last` | character |  |
-| `birthdate` | character | Date of birth. |
+| `birthdate` | character | Date of birth as an ISO timestamp string (e.g. '1984-12-30T00:00:00'). |
 | `school` | character | Player's school / college (when distinct from 'college'). |
 | `country` | character | Country (full name or code). |
 | `last_affiliation` | character |  |

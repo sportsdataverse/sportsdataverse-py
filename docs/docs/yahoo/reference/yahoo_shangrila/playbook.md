@@ -1,11 +1,11 @@
 ---
-title: "YAHOO — Yahoo Sports Shangrila (graphite-secure.sports.yahoo.com) — Playbook: boxscore–team"
-sidebar_label: "Playbook: boxscore–team"
+title: "YAHOO — Yahoo Sports Shangrila (graphite-secure.sports.yahoo.com) — Playbook"
+sidebar_label: "Playbook"
 sidebar_position: 5
-description: "YAHOO — Yahoo Sports Shangrila (graphite-secure.sports.yahoo.com) — Playbook: boxscore–team — function reference in sdv-py, the SportsDataverse Python package."
+description: "YAHOO — Yahoo Sports Shangrila (graphite-secure.sports.yahoo.com) — Playbook — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---
-# YAHOO — Yahoo Sports Shangrila (graphite-secure.sports.yahoo.com) — Playbook: boxscore–team
+# YAHOO — Yahoo Sports Shangrila (graphite-secure.sports.yahoo.com) — Playbook
 
 ## yahoo_playbook_boxscore
 
@@ -37,38 +37,38 @@ Yahoo shangrila persisted query `playbookBoxscore` -> tables: football_positions
 
 | col_name | type | description |
 |---|---|---|
-| `position_id` | character | Unique position identifier. |
-| `name` | character | Display name. |
-| `abbreviation` | character | Short abbreviation. |
+| `position_id` | character |  |
+| `name` | character |  |
+| `abbreviation` | character |  |
 
 **football_stat_types**
 
 | col_name | type | description |
 |---|---|---|
 | `stat_id` | character | Yahoo stat-type key the leader board is built on (e.g., "PASSING_YARDS", "GAMES_RUSHING"). |
-| `abbreviation` | character | Short abbreviation. |
-| `display_name` | character | Display name. |
-| `short_name` | character | Short display name. |
+| `abbreviation` | character |  |
+| `display_name` | character |  |
+| `short_name` | character |  |
 | `context_agnostic_abbreviation` | character | Abbreviation for the statistic that still reads correctly outside its category (e.g., "PassYds" where the in-category abbreviation is only "Yds"). |
-| `sort_order` | character | Display sort order for the sport. |
+| `sort_order` | character |  |
 
 **games**
 
 | col_name | type | description |
 |---|---|---|
-| `game_id` | character | Unique game identifier. |
-| `display_name` | character | Display name. |
-| `display_result` | character | Drive-result label (e.g. `Punt`, `Touchdown`). |
-| `sport_name` | character | Sport name (e.g., Major League Baseball). |
-| `league_name` | character | League name. |
+| `game_id` | character |  |
+| `display_name` | character |  |
+| `display_result` | character |  |
+| `sport_name` | character |  |
+| `league_name` | character |  |
 | `league_full_name` | character | Full league name (e.g., "NCAA Football"). |
 | `league_display_short` | character | Short league label used in navigation and compact UI (e.g., "NCAA FB"). |
-| `league_short_name` | character | League short name. |
+| `league_short_name` | character |  |
 | `league_sport` | character | Sport the league belongs to (e.g., "football"). |
 | `league_alias` | character | JSON-encoded Yahoo alias object for the league, carrying its site URL and path. |
 | `alias_url` | character | Absolute sports.yahoo.com URL of the entity's page (e.g., "https://sports.yahoo.com/ncaaf/players/464024/"). |
 | `special_event_type` | character | Marker identifying a special framing for the game, such as a bowl game or neutral-site showcase. |
-| `away_team_id` | character | Unique identifier for the away team. |
+| `away_team_id` | character |  |
 | `basic_away_team_abbreviation` | character | Short abbreviation for the away team used in compact displays, as carried on the boxscore's lightweight team node. |
 | `basic_away_team_display_name` | character | Display name of the away team as shown on the scoreboard, as carried on the boxscore's lightweight team node. |
 | `basic_away_team_team_id` | character | Yahoo composite team id of the away team (e.g., "ncaaf.t.29"), as carried on the boxscore's lightweight team node. |
@@ -78,15 +78,15 @@ Yahoo shangrila persisted query `playbookBoxscore` -> tables: football_positions
 | `basic_away_team_nickname` | character | Nickname or mascot of the away team, as carried on the boxscore's lightweight team node. |
 | `basic_away_team_primary_color` | character | Primary brand color of the away team, as a hex RGB string without the leading hash, as carried on the boxscore's lightweight team node. |
 | `basic_away_team_secondary_color` | character | Secondary brand color of the away team, as a hex RGB string without the leading hash, as carried on the boxscore's lightweight team node. |
-| `away_team_full_name` | character | Full away team name (e.g. 'Las Vegas Aces'). |
+| `away_team_full_name` | character |  |
 | `away_team_team_id` | character | Yahoo composite team id of the away team (e.g., "ncaaf.t.29"). |
 | `away_team_primary_color` | character | Primary brand color of the away team, as a hex RGB string without the leading hash. |
 | `away_team_secondary_color` | character | Secondary brand color of the away team, as a hex RGB string without the leading hash. |
-| `away_team_display_name` | character | Away team full display name. |
-| `away_team_abbreviation` | character | Away team abbreviation. |
-| `away_team_location` | character | Away team's team location. |
+| `away_team_display_name` | character |  |
+| `away_team_abbreviation` | character |  |
+| `away_team_location` | character |  |
 | `away_team_alias` | character | JSON-encoded Yahoo alias object for the away team, carrying its site URL and path. |
-| `away_team_nickname` | character | Away team nickname label. |
+| `away_team_nickname` | character |  |
 | `away_team_last_games` | character | JSON-encoded list of the away team's most recently completed games. |
 | `away_team_team_logo_white` | character | JSON-encoded image node for the away team's white knockout logo, used on dark backgrounds. |
 | `away_team_team_logo` | character | JSON-encoded image node for the away team's standard logo. |
@@ -97,8 +97,8 @@ Yahoo shangrila persisted query `playbookBoxscore` -> tables: football_positions
 | `away_team_injured_players` | character | JSON-encoded list of away-team players currently carrying an injury designation. |
 | `away_team_rank_polls` | character | JSON-encoded list of the poll rankings the away team currently holds. |
 | `away_team_playoff_seeds` | character | JSON-encoded list of the away team's playoff-seed entries for the season. |
-| `away_team_record` | character | Away team's win-loss record. |
-| `home_team_id` | character | Unique identifier for the home team. |
+| `away_team_record` | character |  |
+| `home_team_id` | character |  |
 | `basic_home_team_abbreviation` | character | Short abbreviation for the home team used in compact displays, as carried on the boxscore's lightweight team node. |
 | `basic_home_team_display_name` | character | Display name of the home team as shown on the scoreboard, as carried on the boxscore's lightweight team node. |
 | `basic_home_team_team_id` | character | Yahoo composite team id of the home team (e.g., "ncaaf.t.29"), as carried on the boxscore's lightweight team node. |
@@ -108,15 +108,15 @@ Yahoo shangrila persisted query `playbookBoxscore` -> tables: football_positions
 | `basic_home_team_nickname` | character | Nickname or mascot of the home team, as carried on the boxscore's lightweight team node. |
 | `basic_home_team_primary_color` | character | Primary brand color of the home team, as a hex RGB string without the leading hash, as carried on the boxscore's lightweight team node. |
 | `basic_home_team_secondary_color` | character | Secondary brand color of the home team, as a hex RGB string without the leading hash, as carried on the boxscore's lightweight team node. |
-| `home_team_full_name` | character | Full home team name (e.g. 'Las Vegas Aces'). |
+| `home_team_full_name` | character |  |
 | `home_team_team_id` | character | Yahoo composite team id of the home team (e.g., "ncaaf.t.29"). |
 | `home_team_primary_color` | character | Primary brand color of the home team, as a hex RGB string without the leading hash. |
 | `home_team_secondary_color` | character | Secondary brand color of the home team, as a hex RGB string without the leading hash. |
-| `home_team_display_name` | character | Home team full display name. |
-| `home_team_abbreviation` | character | Home team abbreviation. |
-| `home_team_location` | character | Home team's team location. |
+| `home_team_display_name` | character |  |
+| `home_team_abbreviation` | character |  |
+| `home_team_location` | character |  |
 | `home_team_alias` | character | JSON-encoded Yahoo alias object for the home team, carrying its site URL and path. |
-| `home_team_nickname` | character | Home team nickname label. |
+| `home_team_nickname` | character |  |
 | `home_team_last_games` | character | JSON-encoded list of the home team's most recently completed games. |
 | `home_team_team_logo_white` | character | JSON-encoded image node for the home team's white knockout logo, used on dark backgrounds. |
 | `home_team_team_logo` | character | JSON-encoded image node for the home team's standard logo. |
@@ -127,21 +127,21 @@ Yahoo shangrila persisted query `playbookBoxscore` -> tables: football_positions
 | `home_team_injured_players` | character | JSON-encoded list of home-team players currently carrying an injury designation. |
 | `home_team_rank_polls` | character | JSON-encoded list of the poll rankings the home team currently holds. |
 | `home_team_playoff_seeds` | character | JSON-encoded list of the home team's playoff-seed entries for the season. |
-| `home_team_record` | character | Home team's win-loss record. |
-| `away_score` | integer | Away team score at the time of the play. |
-| `home_score` | integer | Home team score at the time of the play. |
-| `start_time` | character | Kickoff time in eastern time zone. |
-| `start_date` | character | Start date (YYYY-MM-DD). |
-| `if_necessary` | character | If necessary. |
-| `status` | character | Status label. |
+| `home_team_record` | character |  |
+| `away_score` | integer |  |
+| `home_score` | integer |  |
+| `start_time` | character |  |
+| `start_date` | character |  |
+| `if_necessary` | character |  |
+| `status` | character |  |
 | `status_display_name` | character | Short game or event status as shown on the scoreboard (e.g., "Final", "12:00 pm ET"). |
 | `full_status_display_name` | character | Long-form game status label including overtime and date context (e.g., "Final/OT"). |
-| `season` | integer | Season year. |
+| `season` | integer |  |
 | `season_phase` | character | Phase of the season the game falls in (e.g., "season.phase.season"). |
-| `time_left` | character | Time left. |
+| `time_left` | character |  |
 | `is_halftime` | logical | Flag indicating that the game is currently stopped at halftime. |
-| `tournament_id` | character | ESPN tournament identifier. |
-| `week` | integer | Week number. |
+| `tournament_id` | character |  |
+| `week` | integer |  |
 | `playoff_series` | character | JSON-encoded playoff-series node the game belongs to. |
 | `winning_team_id` | character | Composite Yahoo team id of the side that won the game (e.g., "ncaaf.t.29"). |
 | `broadcast_channels` | character | JSON-encoded list of the channels broadcasting the event. |
@@ -158,13 +158,13 @@ Yahoo shangrila persisted query `playbookBoxscore` -> tables: football_positions
 | `bets` | character | JSON-encoded list of the betting markets offered on the event (spread, moneyline and total). |
 | `partial_game_bets` | character | JSON-encoded list of in-game betting markets covering only part of the game, such as halves or quarters. |
 | `venue_display_name` | character | Name of the venue hosting the event. |
-| `venue_city` | character | Venue city. |
+| `venue_city` | character |  |
 | `venue_cover_type` | character | Whether the venue is open-air, domed or fitted with a retractable roof. |
-| `venue_state` | character | Venue state / region. |
+| `venue_state` | character |  |
 | `venue_venue_id` | character | Yahoo identifier of the venue hosting the event. |
 | `venue_country` | character | Country the venue is located in. |
 | `tv_coverage` | character | Network carrying the game, as a short broadcast abbreviation (e.g., "CBS", "ESPN"). |
-| `weather` | character | String describing the weather including temperature, humidity and wind (direction and speed). Doesn't change during the game! |
+| `weather` | character |  |
 | `regular_season_series_series_score` | character | Formatted head-to-head record for the regular-season series between the two teams (e.g., "1-1"). |
 | `regular_season_series_games` | character | JSON-encoded list of the games making up the regular-season series between the two teams. |
 | `regular_season_series_first_home_team_id` | character | Yahoo team id of the side that hosted the first meeting of the regular-season series. |
@@ -177,24 +177,24 @@ Yahoo shangrila persisted query `playbookBoxscore` -> tables: football_positions
 | `current_period_period` | character | Ordinal number of the period currently in progress within the game. |
 | `current_period_display_name` | character | Full label for the period in progress (e.g., "4th Quarter"). |
 | `current_period_overtime` | character | Flag indicating that the period in progress is an overtime period. |
-| `regulation_periods` | character | Regulation periods. |
+| `regulation_periods` | character |  |
 | `away_team_lineup` | character | JSON-encoded starting lineup fielded by the away team. |
 | `home_team_lineup` | character | JSON-encoded starting lineup fielded by the home team. |
 | `game_ticket_price` | character | Lowest available ticket price for the game from the Gametime affiliate feed, in US dollars. |
 | `gametime_ticket_url` | character | Gametime affiliate ticket-purchase URL for the event or team. |
 | `game_coverage` | character | JSON-encoded node describing which live feeds Yahoo carries for the game. |
-| `down` | character | The down for the given play. |
-| `distance` | character | Distance value (in feet for shot data; otherwise context-dependent). |
+| `down` | character |  |
+| `distance` | character |  |
 | `field_position` | character | Ball spot expressed on Yahoo's 0-100 field scale, measured toward the offense's target goal line. |
 | `field_position_display_name` | character | Ball spot rendered the way a scoreboard shows it (e.g., "MICH 35"). |
-| `home_timeouts_remaining` | integer | Numeric timeouts remaining in the half for the home team. |
-| `away_timeouts_remaining` | integer | Numeric timeouts remaining in the half for the away team. |
+| `home_timeouts_remaining` | integer |  |
+| `away_timeouts_remaining` | integer |  |
 | `timeouts_granted` | integer | Number of timeouts granted so far in the current period. |
 | `team_possessing_ball` | character | Yahoo team id of the side currently possessing the ball. |
 | `away_line_score` | character | JSON-encoded per-period scoring line for the away team. |
 | `home_line_score` | character | JSON-encoded per-period scoring line for the home team. |
 | `first_play` | character | JSON-encoded first play of the game or of the current period. |
-| `last_play` | character | Free-text description of the most recent play. |
+| `last_play` | character |  |
 | `recap_videos` | character | JSON-encoded list of recap videos published for the game. |
 | `play_by_play` | character | JSON-encoded data-island pointer to the game's play-by-play collection in the same editorial payload. |
 | `drives` | character | JSON-encoded data-island pointer to the game's drive collection; football only. |
@@ -237,33 +237,33 @@ Yahoo shangrila persisted query `playbookBoxscorePoll` -> tables: football_posit
 
 | col_name | type | description |
 |---|---|---|
-| `position_id` | character | Unique position identifier. |
-| `name` | character | Display name. |
-| `abbreviation` | character | Short abbreviation. |
+| `position_id` | character |  |
+| `name` | character |  |
+| `abbreviation` | character |  |
 
 **football_stat_types**
 
 | col_name | type | description |
 |---|---|---|
 | `stat_id` | character | Yahoo stat-type key the leader board is built on (e.g., "PASSING_YARDS", "GAMES_RUSHING"). |
-| `abbreviation` | character | Short abbreviation. |
-| `display_name` | character | Display name. |
-| `short_name` | character | Short display name. |
+| `abbreviation` | character |  |
+| `display_name` | character |  |
+| `short_name` | character |  |
 | `context_agnostic_abbreviation` | character | Abbreviation for the statistic that still reads correctly outside its category (e.g., "PassYds" where the in-category abbreviation is only "Yds"). |
-| `sort_order` | character | Display sort order for the sport. |
+| `sort_order` | character |  |
 
 **games**
 
 | col_name | type | description |
 |---|---|---|
-| `game_id` | character | Unique game identifier. |
-| `display_name` | character | Display name. |
-| `season` | integer | Season year. |
-| `league_name` | character | League name. |
+| `game_id` | character |  |
+| `display_name` | character |  |
+| `season` | integer |  |
+| `league_name` | character |  |
 | `league_full_name` | character | Full league name (e.g., "NCAA Football"). |
-| `sport_name` | character | Sport name (e.g., Major League Baseball). |
+| `sport_name` | character |  |
 | `alias_url` | character | Absolute sports.yahoo.com URL of the entity's page (e.g., "https://sports.yahoo.com/ncaaf/players/464024/"). |
-| `away_score` | integer | Away team score at the time of the play. |
+| `away_score` | integer |  |
 | `basic_away_team_abbreviation` | character | Short abbreviation for the away team used in compact displays, as carried on the boxscore's lightweight team node. |
 | `basic_away_team_display_name` | character | Display name of the away team as shown on the scoreboard, as carried on the boxscore's lightweight team node. |
 | `basic_away_team_team_id` | character | Yahoo composite team id of the away team (e.g., "ncaaf.t.29"), as carried on the boxscore's lightweight team node. |
@@ -273,15 +273,15 @@ Yahoo shangrila persisted query `playbookBoxscorePoll` -> tables: football_posit
 | `basic_away_team_nickname` | character | Nickname or mascot of the away team, as carried on the boxscore's lightweight team node. |
 | `basic_away_team_primary_color` | character | Primary brand color of the away team, as a hex RGB string without the leading hash, as carried on the boxscore's lightweight team node. |
 | `basic_away_team_secondary_color` | character | Secondary brand color of the away team, as a hex RGB string without the leading hash, as carried on the boxscore's lightweight team node. |
-| `away_team_full_name` | character | Full away team name (e.g. 'Las Vegas Aces'). |
+| `away_team_full_name` | character |  |
 | `away_team_team_id` | character | Yahoo composite team id of the away team (e.g., "ncaaf.t.29"). |
 | `away_team_primary_color` | character | Primary brand color of the away team, as a hex RGB string without the leading hash. |
 | `away_team_secondary_color` | character | Secondary brand color of the away team, as a hex RGB string without the leading hash. |
-| `away_team_display_name` | character | Away team full display name. |
-| `away_team_abbreviation` | character | Away team abbreviation. |
-| `away_team_location` | character | Away team's team location. |
+| `away_team_display_name` | character |  |
+| `away_team_abbreviation` | character |  |
+| `away_team_location` | character |  |
 | `away_team_alias` | character | JSON-encoded Yahoo alias object for the away team, carrying its site URL and path. |
-| `away_team_nickname` | character | Away team nickname label. |
+| `away_team_nickname` | character |  |
 | `away_team_team_logo_white` | character | JSON-encoded image node for the away team's white knockout logo, used on dark backgrounds. |
 | `away_team_team_logo` | character | JSON-encoded image node for the away team's standard logo. |
 | `away_team_team_logo_white_large` | character | JSON-encoded image node for the large-format white knockout away-team logo. |
@@ -289,22 +289,22 @@ Yahoo shangrila persisted query `playbookBoxscorePoll` -> tables: football_posit
 | `away_team_team_standings` | character | JSON-encoded standings node for the away team, carrying its record, position and streak. |
 | `away_team_rank_polls` | character | JSON-encoded list of the poll rankings the away team currently holds. |
 | `away_team_playoff_seeds` | character | JSON-encoded list of the away team's playoff-seed entries for the season. |
-| `away_team_record` | character | Away team's win-loss record. |
-| `away_team_id` | character | Unique identifier for the away team. |
+| `away_team_record` | character |  |
+| `away_team_id` | character |  |
 | `bets` | character | JSON-encoded list of the betting markets offered on the event (spread, moneyline and total). |
 | `partial_game_bets` | character | JSON-encoded list of in-game betting markets covering only part of the game, such as halves or quarters. |
 | `brief` | character | Short editorial blurb summarizing the game's state or result. |
 | `broadcast_channels` | character | JSON-encoded list of the channels broadcasting the event. |
-| `home_score` | integer | Home team score at the time of the play. |
-| `home_team_full_name` | character | Full home team name (e.g. 'Las Vegas Aces'). |
+| `home_score` | integer |  |
+| `home_team_full_name` | character |  |
 | `home_team_team_id` | character | Yahoo composite team id of the home team (e.g., "ncaaf.t.29"). |
 | `home_team_primary_color` | character | Primary brand color of the home team, as a hex RGB string without the leading hash. |
 | `home_team_secondary_color` | character | Secondary brand color of the home team, as a hex RGB string without the leading hash. |
-| `home_team_display_name` | character | Home team full display name. |
-| `home_team_abbreviation` | character | Home team abbreviation. |
-| `home_team_location` | character | Home team's team location. |
+| `home_team_display_name` | character |  |
+| `home_team_abbreviation` | character |  |
+| `home_team_location` | character |  |
 | `home_team_alias` | character | JSON-encoded Yahoo alias object for the home team, carrying its site URL and path. |
-| `home_team_nickname` | character | Home team nickname label. |
+| `home_team_nickname` | character |  |
 | `home_team_team_logo_white` | character | JSON-encoded image node for the home team's white knockout logo, used on dark backgrounds. |
 | `home_team_team_logo` | character | JSON-encoded image node for the home team's standard logo. |
 | `home_team_team_logo_white_large` | character | JSON-encoded image node for the large-format white knockout home-team logo. |
@@ -312,8 +312,8 @@ Yahoo shangrila persisted query `playbookBoxscorePoll` -> tables: football_posit
 | `home_team_team_standings` | character | JSON-encoded standings node for the home team, carrying its record, position and streak. |
 | `home_team_rank_polls` | character | JSON-encoded list of the poll rankings the home team currently holds. |
 | `home_team_playoff_seeds` | character | JSON-encoded list of the home team's playoff-seed entries for the season. |
-| `home_team_record` | character | Home team's win-loss record. |
-| `home_team_id` | character | Unique identifier for the home team. |
+| `home_team_record` | character |  |
+| `home_team_id` | character |  |
 | `basic_home_team_abbreviation` | character | Short abbreviation for the home team used in compact displays, as carried on the boxscore's lightweight team node. |
 | `basic_home_team_display_name` | character | Display name of the home team as shown on the scoreboard, as carried on the boxscore's lightweight team node. |
 | `basic_home_team_team_id` | character | Yahoo composite team id of the home team (e.g., "ncaaf.t.29"), as carried on the boxscore's lightweight team node. |
@@ -323,24 +323,24 @@ Yahoo shangrila persisted query `playbookBoxscorePoll` -> tables: football_posit
 | `basic_home_team_nickname` | character | Nickname or mascot of the home team, as carried on the boxscore's lightweight team node. |
 | `basic_home_team_primary_color` | character | Primary brand color of the home team, as a hex RGB string without the leading hash, as carried on the boxscore's lightweight team node. |
 | `basic_home_team_secondary_color` | character | Secondary brand color of the home team, as a hex RGB string without the leading hash, as carried on the boxscore's lightweight team node. |
-| `start_date` | character | Start date (YYYY-MM-DD). |
-| `start_time` | character | Kickoff time in eastern time zone. |
-| `status` | character | Status label. |
+| `start_date` | character |  |
+| `start_time` | character |  |
+| `status` | character |  |
 | `status_display_name` | character | Short game or event status as shown on the scoreboard (e.g., "Final", "12:00 pm ET"). |
 | `full_status_display_name` | character | Long-form game status label including overtime and date context (e.g., "Final/OT"). |
-| `time_left` | character | Time left. |
+| `time_left` | character |  |
 | `venue_display_name` | character | Name of the venue hosting the event. |
-| `venue_city` | character | Venue city. |
+| `venue_city` | character |  |
 | `venue_cover_type` | character | Whether the venue is open-air, domed or fitted with a retractable roof. |
-| `venue_state` | character | Venue state / region. |
+| `venue_state` | character |  |
 | `venue_venue_id` | character | Yahoo identifier of the venue hosting the event. |
 | `venue_country` | character | Country the venue is located in. |
-| `weather` | character | String describing the weather including temperature, humidity and wind (direction and speed). Doesn't change during the game! |
+| `weather` | character |  |
 | `game_win_probability_time_line_win_probability_timeline` | character | JSON-encoded series of win-probability observations across the course of the game. |
 | `playoff_series` | character | JSON-encoded playoff-series node the game belongs to. |
 | `regular_season_series_games` | character | JSON-encoded list of the games making up the regular-season series between the two teams. |
 | `is_halftime` | logical | Flag indicating that the game is currently stopped at halftime. |
-| `regulation_periods` | character | Regulation periods. |
+| `regulation_periods` | character |  |
 | `current_period_short_display_name` | character | Abbreviated label for the period in progress (e.g., "4th"). |
 | `current_period_period` | character | Ordinal number of the period currently in progress within the game. |
 | `current_period_display_name` | character | Full label for the period in progress (e.g., "4th Quarter"). |
@@ -350,13 +350,13 @@ Yahoo shangrila persisted query `playbookBoxscorePoll` -> tables: football_posit
 | `winning_team_id` | character | Composite Yahoo team id of the side that won the game (e.g., "ncaaf.t.29"). |
 | `game_coverage` | character | JSON-encoded node describing which live feeds Yahoo carries for the game. |
 | `away_line_score` | character | JSON-encoded per-period scoring line for the away team. |
-| `away_timeouts_remaining` | integer | Numeric timeouts remaining in the half for the away team. |
-| `down` | character | The down for the given play. |
-| `distance` | character | Distance value (in feet for shot data; otherwise context-dependent). |
+| `away_timeouts_remaining` | integer |  |
+| `down` | character |  |
+| `distance` | character |  |
 | `field_position_display_name` | character | Ball spot rendered the way a scoreboard shows it (e.g., "MICH 35"). |
 | `field_position` | character | Ball spot expressed on Yahoo's 0-100 field scale, measured toward the offense's target goal line. |
 | `home_line_score` | character | JSON-encoded per-period scoring line for the home team. |
-| `home_timeouts_remaining` | integer | Numeric timeouts remaining in the half for the home team. |
+| `home_timeouts_remaining` | integer |  |
 | `team_possessing_ball` | character | Yahoo team id of the side currently possessing the ball. |
 | `drives` | character | JSON-encoded data-island pointer to the game's drive collection; football only. |
 | `first_play` | character | JSON-encoded first play of the game or of the current period. |
@@ -391,20 +391,20 @@ Yahoo shangrila persisted query `playbookBoxscoreSocialShare` -> one row per `ga
 
 | col_name | type | description |
 |---|---|---|
-| `game_id` | character | Unique game identifier. |
-| `away_team_active` | character | Whether the away team is active. |
+| `game_id` | character |  |
+| `away_team_active` | character |  |
 | `away_team_primary_color` | character | Primary brand color of the away team, as a hex RGB string without the leading hash. |
 | `away_team_secondary_color` | character | Secondary brand color of the away team, as a hex RGB string without the leading hash. |
 | `away_team_team_logo_white` | character | JSON-encoded image node for the away team's white knockout logo, used on dark backgrounds. |
 | `away_team_team_logo` | character | JSON-encoded image node for the away team's standard logo. |
-| `home_team_active` | character | Whether the home team is active. |
+| `home_team_active` | character |  |
 | `home_team_primary_color` | character | Primary brand color of the home team, as a hex RGB string without the leading hash. |
 | `home_team_secondary_color` | character | Secondary brand color of the home team, as a hex RGB string without the leading hash. |
 | `home_team_team_logo_white` | character | JSON-encoded image node for the home team's white knockout logo, used on dark backgrounds. |
 | `home_team_team_logo` | character | JSON-encoded image node for the home team's standard logo. |
 | `league_league_logo` | character | JSON-encoded image node for the league's logo. |
-| `start_time` | character | Kickoff time in eastern time zone. |
-| `start_date` | character | Start date (YYYY-MM-DD). |
+| `start_time` | character |  |
+| `start_date` | character |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -465,25 +465,25 @@ Yahoo shangrila persisted query `playbookGame` -> one row per `games` entry
 
 | col_name | type | description |
 |---|---|---|
-| `game_id` | character | Unique game identifier. |
-| `display_name` | character | Display name. |
-| `league_name` | character | League name. |
+| `game_id` | character |  |
+| `display_name` | character |  |
+| `league_name` | character |  |
 | `league_full_name` | character | Full league name (e.g., "NCAA Football"). |
 | `league_display_short` | character | Short league label used in navigation and compact UI (e.g., "NCAA FB"). |
-| `league_short_name` | character | League short name. |
+| `league_short_name` | character |  |
 | `league_sport` | character | Sport the league belongs to (e.g., "football"). |
 | `league_alias` | character | JSON-encoded Yahoo alias object for the league, carrying its site URL and path. |
 | `alias_url` | character | Absolute sports.yahoo.com URL of the entity's page (e.g., "https://sports.yahoo.com/ncaaf/players/464024/"). |
-| `away_team_id` | character | Unique identifier for the away team. |
-| `away_team_full_name` | character | Full away team name (e.g. 'Las Vegas Aces'). |
+| `away_team_id` | character |  |
+| `away_team_full_name` | character |  |
 | `away_team_team_id` | character | Yahoo composite team id of the away team (e.g., "ncaaf.t.29"). |
 | `away_team_primary_color` | character | Primary brand color of the away team, as a hex RGB string without the leading hash. |
 | `away_team_secondary_color` | character | Secondary brand color of the away team, as a hex RGB string without the leading hash. |
-| `away_team_display_name` | character | Away team full display name. |
-| `away_team_abbreviation` | character | Away team abbreviation. |
-| `away_team_location` | character | Away team's team location. |
+| `away_team_display_name` | character |  |
+| `away_team_abbreviation` | character |  |
+| `away_team_location` | character |  |
 | `away_team_alias` | character | JSON-encoded Yahoo alias object for the away team, carrying its site URL and path. |
-| `away_team_nickname` | character | Away team nickname label. |
+| `away_team_nickname` | character |  |
 | `away_team_last_games` | character | JSON-encoded list of the away team's most recently completed games. |
 | `away_team_team_logo_white` | character | JSON-encoded image node for the away team's white knockout logo, used on dark backgrounds. |
 | `away_team_team_logo` | character | JSON-encoded image node for the away team's standard logo. |
@@ -491,16 +491,16 @@ Yahoo shangrila persisted query `playbookGame` -> one row per `games` entry
 | `away_team_players` | character | JSON-encoded roster of away-team players attached to the game. |
 | `away_team_rank_polls` | character | JSON-encoded list of the poll rankings the away team currently holds. |
 | `away_team_playoff_seeds` | character | JSON-encoded list of the away team's playoff-seed entries for the season. |
-| `home_team_id` | character | Unique identifier for the home team. |
-| `home_team_full_name` | character | Full home team name (e.g. 'Las Vegas Aces'). |
+| `home_team_id` | character |  |
+| `home_team_full_name` | character |  |
 | `home_team_team_id` | character | Yahoo composite team id of the home team (e.g., "ncaaf.t.29"). |
 | `home_team_primary_color` | character | Primary brand color of the home team, as a hex RGB string without the leading hash. |
 | `home_team_secondary_color` | character | Secondary brand color of the home team, as a hex RGB string without the leading hash. |
-| `home_team_display_name` | character | Home team full display name. |
-| `home_team_abbreviation` | character | Home team abbreviation. |
-| `home_team_location` | character | Home team's team location. |
+| `home_team_display_name` | character |  |
+| `home_team_abbreviation` | character |  |
+| `home_team_location` | character |  |
 | `home_team_alias` | character | JSON-encoded Yahoo alias object for the home team, carrying its site URL and path. |
-| `home_team_nickname` | character | Home team nickname label. |
+| `home_team_nickname` | character |  |
 | `home_team_last_games` | character | JSON-encoded list of the home team's most recently completed games. |
 | `home_team_team_logo_white` | character | JSON-encoded image node for the home team's white knockout logo, used on dark backgrounds. |
 | `home_team_team_logo` | character | JSON-encoded image node for the home team's standard logo. |
@@ -508,17 +508,17 @@ Yahoo shangrila persisted query `playbookGame` -> one row per `games` entry
 | `home_team_players` | character | JSON-encoded roster of home-team players attached to the game. |
 | `home_team_rank_polls` | character | JSON-encoded list of the poll rankings the home team currently holds. |
 | `home_team_playoff_seeds` | character | JSON-encoded list of the home team's playoff-seed entries for the season. |
-| `away_score` | integer | Away team score at the time of the play. |
-| `home_score` | integer | Home team score at the time of the play. |
-| `start_time` | character | Kickoff time in eastern time zone. |
-| `start_date` | character | Start date (YYYY-MM-DD). |
-| `if_necessary` | character | If necessary. |
-| `status` | character | Status label. |
+| `away_score` | integer |  |
+| `home_score` | integer |  |
+| `start_time` | character |  |
+| `start_date` | character |  |
+| `if_necessary` | character |  |
+| `status` | character |  |
 | `status_display_name` | character | Short game or event status as shown on the scoreboard (e.g., "Final", "12:00 pm ET"). |
-| `season` | integer | Season year. |
+| `season` | integer |  |
 | `season_phase` | character | Phase of the season the game falls in (e.g., "season.phase.season"). |
-| `time_left` | character | Time left. |
-| `tournament_id` | character | ESPN tournament identifier. |
+| `time_left` | character |  |
+| `tournament_id` | character |  |
 | `playoff_series` | character | JSON-encoded playoff-series node the game belongs to. |
 | `winning_team_id` | character | Composite Yahoo team id of the side that won the game (e.g., "ncaaf.t.29"). |
 | `broadcast_channels` | character | JSON-encoded list of the channels broadcasting the event. |
@@ -529,25 +529,25 @@ Yahoo shangrila persisted query `playbookGame` -> one row per `games` entry
 | `brief` | character | Short editorial blurb summarizing the game's state or result. |
 | `bets` | character | JSON-encoded list of the betting markets offered on the event (spread, moneyline and total). |
 | `venue_display_name` | character | Name of the venue hosting the event. |
-| `venue_city` | character | Venue city. |
+| `venue_city` | character |  |
 | `venue_cover_type` | character | Whether the venue is open-air, domed or fitted with a retractable roof. |
-| `venue_state` | character | Venue state / region. |
+| `venue_state` | character |  |
 | `venue_venue_id` | character | Yahoo identifier of the venue hosting the event. |
 | `venue_country` | character | Country the venue is located in. |
 | `tv_coverage` | character | Network carrying the game, as a short broadcast abbreviation (e.g., "CBS", "ESPN"). |
-| `weather` | character | String describing the weather including temperature, humidity and wind (direction and speed). Doesn't change during the game! |
+| `weather` | character |  |
 | `away_line_score` | character | JSON-encoded per-period scoring line for the away team. |
 | `current_period_period` | character | Ordinal number of the period currently in progress within the game. |
 | `field_position` | character | Ball spot expressed on Yahoo's 0-100 field scale, measured toward the offense's target goal line. |
 | `field_position_display_name` | character | Ball spot rendered the way a scoreboard shows it (e.g., "MICH 35"). |
 | `home_line_score` | character | JSON-encoded per-period scoring line for the home team. |
-| `home_timeouts_remaining` | integer | Numeric timeouts remaining in the half for the home team. |
-| `away_timeouts_remaining` | integer | Numeric timeouts remaining in the half for the away team. |
-| `last_play` | character | Free-text description of the most recent play. |
+| `home_timeouts_remaining` | integer |  |
+| `away_timeouts_remaining` | integer |  |
+| `last_play` | character |  |
 | `game_stat_leaders` | character | JSON-encoded pointer to the per-category statistical leaders for the game. |
 | `team_possessing_ball` | character | Yahoo team id of the side currently possessing the ball. |
 | `recap_videos` | character | JSON-encoded list of recap videos published for the game. |
-| `week` | integer | Week number. |
+| `week` | integer |  |
 | `play_by_play` | character | JSON-encoded data-island pointer to the game's play-by-play collection in the same editorial payload. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
@@ -579,7 +579,7 @@ Yahoo shangrila persisted query `playbookGameOddsPoll` -> one row per `games` en
 
 | col_name | type | description |
 |---|---|---|
-| `game_id` | character | Unique game identifier. |
+| `game_id` | character |  |
 | `bets` | character | JSON-encoded list of the betting markets offered on the event (spread, moneyline and total). |
 | `partial_game_bets` | character | JSON-encoded list of in-game betting markets covering only part of the game, such as halves or quarters. |
 
@@ -677,30 +677,30 @@ Yahoo shangrila persisted query `playbookPlayer` -> one row per `players` entry
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | character | Unique player identifier. |
+| `player_id` | character |  |
 | `alias_url` | character | Absolute sports.yahoo.com URL of the entity's page (e.g., "https://sports.yahoo.com/ncaaf/players/464024/"). |
 | `alias_subpages` | character | JSON-encoded list of subpage aliases (roster, schedule, stats) available beneath the entity's Yahoo page. |
-| `sport_name` | character | Sport name (e.g., Major League Baseball). |
-| `first_name` | character | Player's first name. |
-| `last_name` | character | Player's last name. |
-| `display_name` | character | Display name. |
-| `college` | character | Official college (usually the last one attended) |
-| `birth_state` | character | Birth state / region. |
-| `birth_city` | character | Birth city. |
-| `birth_country` | character | Player birth country. |
-| `birth_date` | character | Date of birth (YYYY-MM-DD). |
-| `height` | integer | Player height (string e.g. '6-2' or inches). |
-| `display_height` | character | Player height in display format (e.g. '6-2'). |
-| `weight` | integer | Player weight in pounds. |
-| `status` | character | Status label. |
-| `active` | logical | TRUE if the row represents an active record (player / team / season). |
+| `sport_name` | character |  |
+| `first_name` | character |  |
+| `last_name` | character |  |
+| `display_name` | character |  |
+| `college` | character |  |
+| `birth_state` | character |  |
+| `birth_city` | character |  |
+| `birth_country` | character |  |
+| `birth_date` | character |  |
+| `height` | integer |  |
+| `display_height` | character |  |
+| `weight` | integer |  |
+| `status` | character |  |
+| `active` | logical |  |
 | `suggested_headshot` | character | JSON-encoded image node for the headshot Yahoo recommends for this player. |
 | `uniform_number` | character | Jersey number the player wears for the team. |
-| `positions` | character | Positions. |
-| `team_id` | character | Unique team identifier. |
-| `team_team_id` | character | Unique identifier for team team. |
-| `team_display_name` | character | Full team display name. |
-| `team_full_name` | character | Full team name. |
+| `positions` | character |  |
+| `team_id` | character |  |
+| `team_team_id` | character |  |
+| `team_display_name` | character |  |
+| `team_full_name` | character |  |
 | `team_alias` | character | JSON-encoded alias object for the entity's team, carrying its Yahoo page URL and path. |
 | `team_team_logo` | character | JSON-encoded image node for the team's standard logo. |
 | `team_team_logo_white` | character | JSON-encoded image node for the team's white knockout logo. |
@@ -723,7 +723,7 @@ Yahoo shangrila persisted query `playbookPlayer` -> one row per `players` entry
 | `earnings` | character | Prize money the player has earned over the covered period, in US dollars. |
 | `first_year` | character | First season in which the player appeared in this league. |
 | `last_year` | integer | Most recent season in which the player appeared in this league. |
-| `injury` | character | Injury (body part / description). |
+| `injury` | character |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -753,8 +753,8 @@ Yahoo shangrila persisted query `playbookPlayerSocialShare` -> one row per `play
 
 | col_name | type | description |
 |---|---|---|
-| `sport_name` | character | Sport name (e.g., Major League Baseball). |
-| `short_display_name` | character | Short display name. |
+| `sport_name` | character |  |
+| `short_display_name` | character |  |
 | `suggested_headshot` | character | JSON-encoded image node for the headshot Yahoo recommends for this player. |
 | `team_primary_color` | character | Primary brand color of the entity's team, as a hex RGB string without the leading hash. |
 | `team_secondary_color` | character | Secondary brand color of the entity's team, as a hex RGB string without the leading hash. |
@@ -823,18 +823,18 @@ Yahoo shangrila persisted query `playbookTeam` -> tables: teams, leagues
 | col_name | type | description |
 |---|---|---|
 | `sport_sport_id` | character | Yahoo identifier of the sport the league belongs to. |
-| `sport_name` | character | Sport name (e.g., Major League Baseball). |
-| `league_name` | character | League name. |
-| `league_short_name` | character | League short name. |
+| `sport_name` | character |  |
+| `league_name` | character |  |
+| `league_short_name` | character |  |
 | `league_current_season_phase` | character | Phase the league's season is currently in (e.g., "season.phase.season"). |
-| `team_id` | character | Unique team identifier. |
-| `conference_id` | integer | Conference identifier. |
-| `full_name` | character | Player's full name. |
-| `display_name` | character | Display name. |
-| `location` | character | Either Home if the home team is playing in their home stadium, or Neutral if the game is being played at a neutral location. This still shows as Home for games between the Giants and Jets even though they share the same home stadium. |
-| `nickname` | character | Team or athlete nickname. |
-| `primary_color` | character | Primary team color (hex). |
-| `secondary_color` | character | Secondary team color (hex). |
+| `team_id` | character |  |
+| `conference_id` | integer |  |
+| `full_name` | character |  |
+| `display_name` | character |  |
+| `location` | character |  |
+| `nickname` | character |  |
+| `primary_color` | character |  |
+| `secondary_color` | character |  |
 | `team_logo_white_url` | character | Absolute URL of the team's white knockout logo, the variant used on dark backgrounds. |
 | `team_logo_url` | character | Absolute URL of the team's standard logo image on Yahoo's image CDN. |
 | `alias_navigation_links` | character | JSON-encoded map of navigation links (scores, standings, teams) hanging off the entity's Yahoo alias. |
@@ -842,13 +842,13 @@ Yahoo shangrila persisted query `playbookTeam` -> tables: teams, leagues
 | `alias_path` | character | Site-relative path portion of the entity's Yahoo alias (e.g., "/ncaaf/teams/tcu/"). |
 | `last_games` | character | JSON-encoded list of the team's most recently completed games, used for form and streak displays. |
 | `next_games` | character | JSON-encoded list of the team's next scheduled games. |
-| `division_name` | character | Division name. |
+| `division_name` | character |  |
 | `division_teams` | character | JSON-encoded list of the teams that make up the division. |
-| `conference_short_name` | character | Conference short name (e.g. 'ACC'). |
-| `conference_name` | character | Full conference name. |
+| `conference_short_name` | character |  |
+| `conference_name` | character |  |
 | `conference_conference_id` | character | Yahoo numeric identifier of the conference carried on the team's conference node. |
 | `conference_team_standings` | character | JSON-encoded standings rows for every team in the conference. |
-| `conference_abbreviation` | character | Conference abbreviation. |
+| `conference_abbreviation` | character |  |
 | `team_standings_team` | character | JSON-encoded team node the standings row describes. |
 | `team_standings_conference_id` | character | Yahoo numeric conference id for the team's standings row. |
 | `team_standings_conference` | character | JSON-encoded conference node the standings row sits under. |
@@ -900,18 +900,18 @@ Yahoo shangrila persisted query `playbookTeamBasic` -> one row per `teams` entry
 | col_name | type | description |
 |---|---|---|
 | `sport_sport_id` | character | Yahoo identifier of the sport the league belongs to. |
-| `sport_name` | character | Sport name (e.g., Major League Baseball). |
-| `league_name` | character | League name. |
-| `league_short_name` | character | League short name. |
+| `sport_name` | character |  |
+| `league_name` | character |  |
+| `league_short_name` | character |  |
 | `league_current_season_phase` | character | Phase the league's season is currently in (e.g., "season.phase.season"). |
-| `team_id` | character | Unique team identifier. |
-| `conference_id` | integer | Conference identifier. |
-| `full_name` | character | Player's full name. |
-| `display_name` | character | Display name. |
-| `location` | character | Either Home if the home team is playing in their home stadium, or Neutral if the game is being played at a neutral location. This still shows as Home for games between the Giants and Jets even though they share the same home stadium. |
-| `nickname` | character | Team or athlete nickname. |
-| `primary_color` | character | Primary team color (hex). |
-| `secondary_color` | character | Secondary team color (hex). |
+| `team_id` | character |  |
+| `conference_id` | integer |  |
+| `full_name` | character |  |
+| `display_name` | character |  |
+| `location` | character |  |
+| `nickname` | character |  |
+| `primary_color` | character |  |
+| `secondary_color` | character |  |
 | `team_logo_white_url` | character | Absolute URL of the team's white knockout logo, the variant used on dark backgrounds. |
 | `team_logo_url` | character | Absolute URL of the team's standard logo image on Yahoo's image CDN. |
 | `alias_navigation_links` | character | JSON-encoded map of navigation links (scores, standings, teams) hanging off the entity's Yahoo alias. |
@@ -919,11 +919,11 @@ Yahoo shangrila persisted query `playbookTeamBasic` -> one row per `teams` entry
 | `alias_path` | character | Site-relative path portion of the entity's Yahoo alias (e.g., "/ncaaf/teams/tcu/"). |
 | `last_games` | character | JSON-encoded list of the team's most recently completed games, used for form and streak displays. |
 | `next_games` | character | JSON-encoded list of the team's next scheduled games. |
-| `division_name` | character | Division name. |
-| `conference_short_name` | character | Conference short name (e.g. 'ACC'). |
-| `conference_name` | character | Full conference name. |
+| `division_name` | character |  |
+| `conference_short_name` | character |  |
+| `conference_name` | character |  |
 | `conference_conference_id` | character | Yahoo numeric identifier of the conference carried on the team's conference node. |
-| `conference_abbreviation` | character | Conference abbreviation. |
+| `conference_abbreviation` | character |  |
 | `team_standings_team` | character | JSON-encoded team node the standings row describes. |
 | `team_standings_conference_id` | character | Yahoo numeric conference id for the team's standings row. |
 | `team_standings_conference` | character | JSON-encoded conference node the standings row sits under. |
@@ -968,9 +968,9 @@ Yahoo shangrila persisted query `playbookTeamSocialShare` -> one row per `teams`
 | col_name | type | description |
 |---|---|---|
 | `sport_sport_id` | character | Yahoo identifier of the sport the league belongs to. |
-| `sport_name` | character | Sport name (e.g., Major League Baseball). |
-| `team_id` | character | Unique team identifier. |
-| `primary_color` | character | Primary team color (hex). |
+| `sport_name` | character |  |
+| `team_id` | character |  |
+| `primary_color` | character |  |
 | `team_logo_url` | character | Absolute URL of the team's standard logo image on Yahoo's image CDN. |
 | `team_logo_white_url` | character | Absolute URL of the team's white knockout logo, the variant used on dark backgrounds. |
 
@@ -980,6 +980,31 @@ Yahoo shangrila persisted query `playbookTeamSocialShare` -> one row per `teams`
 
 ```python
 yahoo_playbook_team_social_share()
+```
+
+_Last validated n/a._
+
+## yahoo_playbook_tennis_match
+
+Yahoo shangrila persisted query `playbookTennisMatch` -> one row per `events` entry
+
+**Endpoint URL:** `GET https://graphite-secure.sports.yahoo.com/v1/query/shangrila/playbookTennisMatch`
+
+**Valid URL:** [https://graphite-secure.sports.yahoo.com/v1/query/shangrila/playbookTennisMatch](https://graphite-secure.sports.yahoo.com/v1/query/shangrila/playbookTennisMatch)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `gameId` | `game_id` |  |  | `Y` | gameId query parameter. |
+
+### Returns {#yahoo_playbook_tennis_match-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_yahoo_shangrila`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example {#yahoo_playbook_tennis_match-example}
+
+```python
+yahoo_playbook_tennis_match()
 ```
 
 _Last validated n/a._

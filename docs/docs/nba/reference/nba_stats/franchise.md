@@ -31,8 +31,8 @@ GET /stats/franchisehistory
 | `team_id` | integer | Unique team identifier. |
 | `team_city` | character | Team city or region (e.g. 'Las Vegas'). |
 | `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
-| `start_year` | character | Span starting year. |
-| `end_year` | character | Span ending year. |
+| `start_year` | character | First season (start year) of the franchise span, as a string (e.g. '1949'). |
+| `end_year` | character | Last season (start year) of the franchise span, as a string; the current season for an active franchise. |
 | `years` | integer | Years. |
 | `games` | integer | Games played. |
 | `wins` | integer | Total wins. |
@@ -51,8 +51,8 @@ GET /stats/franchisehistory
 | `team_id` | integer | Unique team identifier. |
 | `team_city` | character | Team city or region (e.g. 'Las Vegas'). |
 | `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
-| `start_year` | character | Span starting year. |
-| `end_year` | character | Span ending year. |
+| `start_year` | character | First season (start year) of the franchise span, as a string (e.g. '1949'). |
+| `end_year` | character | Last season (start year) of the franchise span, as a string; the current season for an active franchise. |
 | `years` | integer | Years. |
 | `games` | integer | Games played. |
 | `wins` | integer | Total wins. |

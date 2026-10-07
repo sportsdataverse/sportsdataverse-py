@@ -27,8 +27,8 @@ Coach identity detail.
 | `first_name` | character | Athlete first name. |
 | `last_name` | character | Athlete last name. |
 | `full_name` | character | Venue full name (e.g. `Tenney Stadium`). |
-| `birthdate` | character | Birthdate |
-| `hometown` | integer | Prospect hometown. |
+| `birthdate` | character |  |
+| `hometown` | integer |  |
 | `alma_mater` | integer | School the coach graduated from, per 247Sports. |
 | `cbs_key` | integer | CBS Sports identifier for the coach (247Sports is a CBS Sports property). |
 | `twitter_contact` | character | Coach's Twitter/X handle on the 247Sports profile. |
@@ -69,9 +69,9 @@ Recruiting event detail (camp/combine/regional).
 | `name` | character | Position name (e.g. `Quarterback`). |
 | `event_group` | integer | Grouping or series the event belongs to (e.g. a camp circuit) on 247Sports. |
 | `event_type` | integer | Numeric code for the kind of 247Sports recruiting event on this row. |
-| `event_date` | character | Event date-time in ISO 8601 (e.g. '2017-07-11T00:00:00Z'). |
+| `event_date` | character |  |
 | `default_asset` | integer | Nested 247Sports image asset for the event (stringified). |
-| `primary_color` | integer | Primary team color (hex). |
+| `primary_color` | integer |  |
 | `year` | integer | Four-digit season year (e.g. 2019). |
 | `default_name` | character | Server-rendered display label for the entity. |
 
@@ -112,8 +112,8 @@ Institution (school/team) detail.
 | `rankable` | character | Whether the institution participates in class rankings. |
 | `mascot` | character | Team mascot. |
 | `abbreviation` | character | Metric abbreviation. |
-| `primary_color` | character | Primary team color (hex). |
-| `secondary_color` | character | Secondary team color (hex). |
+| `primary_color` | character |  |
+| `secondary_color` | character |  |
 | `is_foreign` | character | Whether the institution is located outside the United States. |
 | `site` | integer | FK -> team Site (network site key). |
 | `default_asset` | numeric | Nested 247Sports image asset for the institution's primary logo (stringified). |
@@ -163,8 +163,8 @@ Institution directory (paginated list).
 | `rankable` | character | Whether the institution participates in class rankings. |
 | `mascot` | character | Team mascot. |
 | `abbreviation` | character | Metric abbreviation. |
-| `primary_color` | character | Primary team color (hex). |
-| `secondary_color` | character | Secondary team color (hex). |
+| `primary_color` | character |  |
+| `secondary_color` | character |  |
 | `is_foreign` | character | Whether the institution is located outside the United States. |
 | `site` | integer | FK -> team Site (network site key). |
 | `default_asset` | numeric | Nested 247Sports image asset for the institution's primary logo (stringified). |
@@ -204,7 +204,7 @@ Institution location (city/state/coords/tax).
 | col_name | type | description |
 |---|---|---|
 | `key` | integer | Primary key of this entity (the id used in its `.json` route). |
-| `postal_code` | integer | Postal code of the venue. |
+| `postal_code` | integer |  |
 | `city` | character | Venue city. |
 | `state` | integer | U.S. state of the location record, per 247Sports. |
 | `latitude` | numeric | Venue latitude in decimal degrees. |
@@ -288,14 +288,14 @@ Pro-draft picks embed for a league/year/round.
 | `pick` | integer | Pick number within the round. |
 | `overall_pick` | integer | Overall selection number in the draft. |
 | `player` | integer | Player name. |
-| `player_first_name` | character | Player's first name |
-| `player_last_name` | character | Player's last name |
+| `player_first_name` | character |  |
+| `player_last_name` | character |  |
 | `college_team` | integer | College team name. |
 | `college_team_name` | character | Name of the college the player was drafted out of. |
 | `position_abbreviation` | character | Player's position at draft. |
 | `traded_from_team` | character | Team the pick was traded from, when it changed hands. |
 | `pick_type` | character | Type of the selection (e.g. regular, compensatory, supplemental). |
-| `league` | integer | League slug. |
+| `league` | integer |  |
 | `mock` | character | Whether this is a mock-draft projection vs an actual pick. |
 | `default_name` | integer | Server-rendered display label for the entity. |
 
@@ -339,8 +339,8 @@ Institutions belonging to a league.
 | `rankable` | character | Whether the institution participates in class rankings. |
 | `mascot` | character | Team mascot. |
 | `abbreviation` | character | Metric abbreviation. |
-| `primary_color` | character | Primary team color (hex). |
-| `secondary_color` | character | Secondary team color (hex). |
+| `primary_color` | character |  |
+| `secondary_color` | character |  |
 | `is_foreign` | character | Whether the institution is located outside the United States. |
 | `site` | integer | FK -> team Site (network site key). |
 | `default_asset` | numeric | Nested 247Sports image asset for the institution's primary logo (stringified). |
@@ -417,7 +417,7 @@ PlayerInstitution linked to a PlayerSport.
 | `player` | integer | Player name. |
 | `institution` | integer | Nested 247Sports institution for the stint (stringified). |
 | `state` | integer | Nested 247Sports state record for the institution's location (stringified). |
-| `agent` | character | Listed player agent. |
+| `agent` | character |  |
 | `end_year` | integer | Span ending year. |
 | `end_date` | character | Season end timestamp (ISO 8601, UTC). |
 | `early_enrollee` | character | Whether the player enrolled early at the institution. |
@@ -490,7 +490,7 @@ Ranking history for a PlayerSport (one row per Ranking snapshot).
 | `composite_rating` | numeric | Player's 247Sports Composite rating, blending the major services' ratings. |
 | `overall_rank` | integer | Overall national rank in the snapshot. |
 | `composite_overall_rank` | integer | Player's national rank by 247Sports Composite rating. |
-| `group_rank` | integer | League/season rank for group. |
+| `group_rank` | integer |  |
 | `composite_group_rank` | integer | Player's rank within their position group by Composite rating. |
 | `position_rank` | integer | Rank within position. |
 | `previous_player_sport_ranking` | numeric | Nested prior-cycle ranking row for the player (stringified). |
@@ -547,7 +547,7 @@ Player-sport rankings for a position.
 | `composite_rating` | numeric | Player's 247Sports Composite rating, blending the major services' ratings. |
 | `overall_rank` | integer | Overall national rank in the snapshot. |
 | `composite_overall_rank` | integer | Player's national rank by 247Sports Composite rating. |
-| `group_rank` | integer | League/season rank for group. |
+| `group_rank` | integer |  |
 | `composite_group_rank` | integer | Player's rank within their position group by Composite rating. |
 | `position_rank` | integer | Rank within position. |
 | `previous_player_sport_ranking` | numeric | Nested prior-cycle ranking row for the player (stringified). |

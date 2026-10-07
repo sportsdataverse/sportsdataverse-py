@@ -26,7 +26,7 @@ Release: [cfb_team_info](https://github.com/sportsdataverse/sportsdataverse-data
 | `classification` | String | Conference classification (fbs, fcs, ii, iii). |
 | `color` | String | Primary team color (hex, no `#`). |
 | `alt_color` | String | Team color (alternate). |
-| `logo` | String | Team or league logo URL. |
+| `logo` | String |  |
 | `logo_2` | String | URL of the team's alternate dark-background 500-pixel logo on ESPN's CDN, null for programs with no dark variant. |
 | `logos_3` | String | URL of the team's logo variant in slot 3 of ESPN's team-info logo list; null when the team publishes fewer variants. |
 | `logos_4` | String | URL of the team's logo variant in slot 4 of ESPN's team-info logo list; null when the team publishes fewer variants. |
@@ -183,7 +183,7 @@ Release: [cfb_crosswalk](https://github.com/sportsdataverse/sportsdataverse-data
 | `norm_key` | String | Shared join key across providers: the team name lowercased, ASCII-folded, stripped of punctuation, whitespace-collapsed, and alias-mapped. |
 | `espn_team_id` | Int64 | ESPN team id for the crosswalk row. |
 | `espn_team` | String | ESPN's full team display name, school plus mascot, null when the row was anchored on a non-ESPN provider. |
-| `espn_abbreviation` | String | ESPN abbreviation. |
+| `espn_abbreviation` | String |  |
 | `fox_team_id` | String | Fox Sports team id for the same team. |
 | `fox_team` | String | Fox Sports' team name, which that feed ships in all capitals. |
 | `fox_abbreviation` | String | Fox Sports' short team code, which frequently differs from the ESPN abbreviation for the same school. |

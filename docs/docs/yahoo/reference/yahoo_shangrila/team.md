@@ -1,7 +1,7 @@
 ---
 title: "YAHOO — Yahoo Sports Shangrila (graphite-secure.sports.yahoo.com) — Team"
 sidebar_label: "Team"
-sidebar_position: 9
+sidebar_position: 8
 description: "YAHOO — Yahoo Sports Shangrila (graphite-secure.sports.yahoo.com) — Team — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---
@@ -25,18 +25,18 @@ Yahoo shangrila persisted query `teamInjuries` -> one row per `teams` entry
 
 | col_name | type | description |
 |---|---|---|
-| `team_id` | character | Unique team identifier. |
-| `nickname` | character | Team or athlete nickname. |
-| `full_name` | character | Player's full name. |
-| `location` | character | Either Home if the home team is playing in their home stadium, or Neutral if the game is being played at a neutral location. This still shows as Home for games between the Giants and Jets even though they share the same home stadium. |
-| `display_name` | character | Display name. |
-| `primary_color` | character | Primary team color (hex). |
-| `abbreviation` | character | Short abbreviation. |
+| `team_id` | character |  |
+| `nickname` | character |  |
+| `full_name` | character |  |
+| `location` | character |  |
+| `display_name` | character |  |
+| `primary_color` | character |  |
+| `abbreviation` | character |  |
 | `alias_path` | character | Site-relative path portion of the entity's Yahoo alias (e.g., "/ncaaf/teams/tcu/"). |
 | `alias_url` | character | Absolute sports.yahoo.com URL of the entity's page (e.g., "https://sports.yahoo.com/ncaaf/players/464024/"). |
 | `team_logo_white_url` | character | Absolute URL of the team's white knockout logo, the variant used on dark backgrounds. |
 | `team_logo_url` | character | Absolute URL of the team's standard logo image on Yahoo's image CDN. |
-| `players` | character | Nested list of per-player box scores. |
+| `players` | character |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -126,17 +126,17 @@ Yahoo shangrila persisted query `teamScheduleBySeason` -> one row per `teams` en
 
 | col_name | type | description |
 |---|---|---|
-| `team_id` | character | Unique team identifier. |
-| `display_name` | character | Display name. |
-| `primary_color` | character | Primary team color (hex). |
-| `secondary_color` | character | Secondary team color (hex). |
+| `team_id` | character |  |
+| `display_name` | character |  |
+| `primary_color` | character |  |
+| `secondary_color` | character |  |
 | `gametime_ticket_url` | character | Gametime affiliate ticket-purchase URL for the event or team. |
 | `bye_weeks` | character | JSON-encoded list of the week numbers in which the team has no scheduled game. |
-| `games` | character | Games played. |
+| `games` | character |  |
 | `leagues` | character | JSON-encoded list of the league nodes the team's schedule spans. |
-| `full_name` | character | Player's full name. |
-| `abbreviation` | character | Short abbreviation. |
-| `nickname` | character | Team or athlete nickname. |
+| `full_name` | character |  |
+| `abbreviation` | character |  |
+| `nickname` | character |  |
 | `team_logo_white_url` | character | Absolute URL of the team's white knockout logo, the variant used on dark backgrounds. |
 | `team_logo_url` | character | Absolute URL of the team's standard logo image on Yahoo's image CDN. |
 | `team_standings_team_record` | character | Formatted overall record for the team (e.g., "8-2"). |
@@ -172,17 +172,17 @@ Yahoo shangrila persisted query `teamSearch` -> one row per `teams` entry
 
 | col_name | type | description |
 |---|---|---|
-| `team_id` | character | Unique team identifier. |
-| `display_name` | character | Display name. |
-| `full_name` | character | Player's full name. |
+| `team_id` | character |  |
+| `display_name` | character |  |
+| `full_name` | character |  |
 | `alias_url` | character | Absolute sports.yahoo.com URL of the entity's page (e.g., "https://sports.yahoo.com/ncaaf/players/464024/"). |
 | `alias_path` | character | Site-relative path portion of the entity's Yahoo alias (e.g., "/ncaaf/teams/tcu/"). |
-| `primary_color` | character | Primary team color (hex). |
-| `secondary_color` | character | Secondary team color (hex). |
-| `abbreviation` | character | Short abbreviation. |
-| `league_short_name` | character | League short name. |
+| `primary_color` | character |  |
+| `secondary_color` | character |  |
+| `abbreviation` | character |  |
+| `league_short_name` | character |  |
 | `league_display_short` | character | Short league label used in navigation and compact UI (e.g., "NCAA FB"). |
-| `league_name` | character | League name. |
+| `league_name` | character |  |
 | `team_logo_url` | character | Absolute URL of the team's standard logo image on Yahoo's image CDN. |
 | `team_logo_white_url` | character | Absolute URL of the team's white knockout logo, the variant used on dark backgrounds. |
 
@@ -224,9 +224,9 @@ Yahoo shangrila persisted query `teamStatsLeadersV2` -> tables: leagues, teams
 
 | col_name | type | description |
 |---|---|---|
-| `display_name` | character | Display name. |
-| `full_name` | character | Player's full name. |
-| `nickname` | character | Team or athlete nickname. |
+| `display_name` | character |  |
+| `full_name` | character |  |
+| `nickname` | character |  |
 | `team_football` | character | JSON-encoded team-level football leader board for the team. |
 | `individual_football` | character | JSON-encoded player-level football leader board for the team. |
 
@@ -258,13 +258,13 @@ Yahoo shangrila persisted query `teamTransactions` -> one row per `teams` entry
 
 | col_name | type | description |
 |---|---|---|
-| `team_id` | character | Unique team identifier. |
-| `nickname` | character | Team or athlete nickname. |
-| `full_name` | character | Player's full name. |
-| `location` | character | Either Home if the home team is playing in their home stadium, or Neutral if the game is being played at a neutral location. This still shows as Home for games between the Giants and Jets even though they share the same home stadium. |
-| `display_name` | character | Display name. |
-| `primary_color` | character | Primary team color (hex). |
-| `abbreviation` | character | Short abbreviation. |
+| `team_id` | character |  |
+| `nickname` | character |  |
+| `full_name` | character |  |
+| `location` | character |  |
+| `display_name` | character |  |
+| `primary_color` | character |  |
+| `abbreviation` | character |  |
 | `alias_path` | character | Site-relative path portion of the entity's Yahoo alias (e.g., "/ncaaf/teams/tcu/"). |
 | `alias_url` | character | Absolute sports.yahoo.com URL of the entity's page (e.g., "https://sports.yahoo.com/ncaaf/players/464024/"). |
 | `alias_domain` | character | Host the entity's Yahoo alias resolves against (e.g., "sports.yahoo.com"). |
@@ -302,20 +302,20 @@ Yahoo shangrila persisted query `teamsBasic` -> one row per `teams` entry
 
 | col_name | type | description |
 |---|---|---|
-| `team_id` | character | Unique team identifier. |
+| `team_id` | character |  |
 | `team_logo_url` | character | Absolute URL of the team's standard logo image on Yahoo's image CDN. |
 | `team_logo_white_url` | character | Absolute URL of the team's white knockout logo, the variant used on dark backgrounds. |
-| `display_name` | character | Display name. |
-| `full_name` | character | Player's full name. |
-| `nickname` | character | Team or athlete nickname. |
+| `display_name` | character |  |
+| `full_name` | character |  |
+| `nickname` | character |  |
 | `alias_url` | character | Absolute sports.yahoo.com URL of the entity's page (e.g., "https://sports.yahoo.com/ncaaf/players/464024/"). |
 | `alias_path` | character | Site-relative path portion of the entity's Yahoo alias (e.g., "/ncaaf/teams/tcu/"). |
-| `primary_color` | character | Primary team color (hex). |
-| `secondary_color` | character | Secondary team color (hex). |
-| `abbreviation` | character | Short abbreviation. |
+| `primary_color` | character |  |
+| `secondary_color` | character |  |
+| `abbreviation` | character |  |
 | `league_display_short` | character | Short league label used in navigation and compact UI (e.g., "NCAA FB"). |
-| `league_name` | character | League name. |
-| `league_short_name` | character | League short name. |
+| `league_name` | character |  |
+| `league_short_name` | character |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 

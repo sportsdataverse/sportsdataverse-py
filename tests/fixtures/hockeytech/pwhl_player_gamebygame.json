@@ -1,0 +1,64 @@
+{
+  "SiteKit": {
+    "Parameters": {
+      "feed": "modulekit",
+      "key": "REDACTED",
+      "client_code": "pwhl",
+      "site_id": "0",
+      "lang": "en",
+      "view": "player",
+      "player_id": "12",
+      "category": "gamebygame",
+      "lang_id": 1,
+      "league_id": "1",
+      "season_id": "10"
+    },
+    "Player": {
+      "seasons_played": [
+        {
+          "season_id": 10,
+          "season_name": "2026-27 Pre-Season"
+        },
+        {
+          "season_id": 9,
+          "season_name": "2026 Playoffs"
+        },
+        {
+          "season_id": 8,
+          "season_name": "2025-26 Regular Season"
+        },
+        {
+          "season_id": 7,
+          "season_name": "2025-26 Preseason"
+        },
+        {
+          "season_id": 5,
+          "season_name": "2024-25 Regular Season"
+        },
+        {
+          "season_id": 4,
+          "season_name": "2024-25 Preseason"
+        },
+        {
+          "season_id": 3,
+          "season_name": "2024 Playoffs"
+        },
+        {
+          "season_id": 1,
+          "season_name": "2024 Regular Season"
+        },
+        {
+          "season_id": 2,
+          "season_name": "2024 Preseason"
+        }
+      ],
+      "games": []
+    },
+    "Copyright": {
+      "required_copyright": "Official statistics provided by Professional Women's Hockey League",
+      "required_link": "http://leaguestat.com",
+      "powered_by": "Powered by HockeyTech.com",
+      "powered_by_url": "http://hockeytech.com"
+    }
+  }
+}

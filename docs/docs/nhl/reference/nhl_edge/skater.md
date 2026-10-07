@@ -33,7 +33,7 @@ Pull EDGE detail stats for a single skater.
 | `player_id` | integer | Unique player identifier. |
 | `player_first_name_default` | character | Player first name (default language). |
 | `player_last_name_default` | character | Player last name (default language). |
-| `player_birth_date` | character | Participant birth date (YYYY-MM-DD). |
+| `player_birth_date` | character |  |
 | `player_shoots_catches` | character | Handedness indicator for the skater showing the side they shoot from ('L' for left, 'R' for right). |
 | `player_sweater_number` | integer | Player jersey number. |
 | `player_position` | character | Primary player position. |
@@ -41,7 +41,7 @@ Pull EDGE detail stats for a single skater.
 | `player_headshot` | character | URL to the player headshot image. |
 | `player_goals` | integer | Total regular-season goals scored by the skater in the current NHL season, as returned in the EDGE skater detail. |
 | `player_assists` | integer | Total regular-season assists recorded by the skater in the current NHL season, as returned in the EDGE skater detail. |
-| `player_points` | integer | Player points. |
+| `player_points` | integer |  |
 | `player_games_played` | integer | Total number of regular-season games played by the skater in the current NHL season, as returned in the EDGE skater detail. |
 | `player_team_common_name_default` | character | Player team common name (default locale). |
 | `player_team_place_name_with_preposition_default` | character | Player team place name with preposition (default locale). |
@@ -161,7 +161,7 @@ Pull EDGE comparison data for a single skater.
 | `player_id` | integer | Unique player identifier. |
 | `player_first_name_default` | character | Player first name (default language). |
 | `player_last_name_default` | character | Player last name (default language). |
-| `player_birth_date` | character | Participant birth date (YYYY-MM-DD). |
+| `player_birth_date` | character |  |
 | `player_shoots_catches` | character | Handedness of the skater's shot or, for goalies, their catching hand (L or R). |
 | `player_sweater_number` | integer | Player jersey number. |
 | `player_position` | character | Primary player position. |
@@ -169,7 +169,7 @@ Pull EDGE comparison data for a single skater.
 | `player_headshot` | character | URL to the player headshot image. |
 | `player_goals` | integer | Total regular-season goals scored by the skater in the current season. |
 | `player_assists` | integer | Total regular-season assists recorded by the skater in the current season. |
-| `player_points` | integer | Player points. |
+| `player_points` | integer |  |
 | `player_games_played` | integer | Number of regular-season games the skater appeared in during the current season. |
 | `player_team_common_name_default` | character | Player team common name (default locale). |
 | `player_team_place_name_with_preposition_default` | character | Player team place name with preposition (default locale). |

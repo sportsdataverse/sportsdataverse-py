@@ -144,10 +144,10 @@ A `polars`/`pandas` `DataFrame` (one row per sport) by default; the raw JSON `li
 | col_name | type | description |
 |---|---|---|
 | `key` | character | The Odds API sport key, a lowercase slug such as 'americanfootball_ncaaf' or 'aussierules_afl', with futures keys ending in a suffix like '_championship_winner'; pass it as sport= to the other toa_* functions. |
-| `group` | character | Stat group (e.g. "hitting", "pitching", "fielding"). |
-| `title` | character | Specific role title for the assignment. |
-| `description` | character | Long-form description text. |
-| `active` | logical | TRUE if the row represents an active record (player / team / season). |
+| `group` | character |  |
+| `title` | character |  |
+| `description` | character |  |
+| `active` | logical |  |
 | `has_outrights` | logical | True for futures keys such as 'americanfootball_ncaaf_championship_winner' or 'americanfootball_nfl_super_bowl_winner', False for game leagues such as 'americanfootball_ncaaf'. |
 
 **Example**
@@ -183,12 +183,12 @@ A `polars`/`pandas` `DataFrame` (one row per event) by default; raw JSON `list` 
 
 | col_name | type | description |
 |---|---|---|
-| `id` | character | ID of the player in the 'name' column. |
+| `id` | character |  |
 | `sport_key` | character | The Odds API sport key the event belongs to, the same slug toa_sports returns as key (sampled 'americanfootball_nfl', the function's default sport). |
 | `sport_title` | character | Display title of the sport key, e.g. 'NFL' for americanfootball_nfl. |
 | `commence_time` | character | Scheduled start of the event from The Odds API, an ISO-8601 UTC string with a trailing Z, kept as text. |
-| `home_team` | character | Home team name. |
-| `away_team` | character | Away team name. |
+| `home_team` | character |  |
+| `away_team` | character |  |
 
 **Example**
 
@@ -229,12 +229,12 @@ A `polars`/`pandas` `DataFrame` (one row per event, stamped with the snapshot ti
 | `snapshot_timestamp` | character | Time of the historical snapshot the API returned, an ISO-8601 UTC string with a trailing Z; the same on every row of a call (sampled '2023-11-29T22:40:39Z' for the default date '2023-11-29T22:45:00Z'). |
 | `previous_timestamp` | character | Time of the snapshot immediately before the returned one, an ISO-8601 UTC string with a trailing Z; the same on every row of a call (sampled '2023-11-29T22:35:39Z'). |
 | `next_timestamp` | character | Time of the snapshot immediately after the returned one, an ISO-8601 UTC string with a trailing Z; the same on every row of a call (sampled '2023-11-29T22:45:40Z'). |
-| `id` | character | ID of the player in the 'name' column. |
+| `id` | character |  |
 | `sport_key` | character | The Odds API sport key the event belongs to, the same slug toa_sports returns as key (sampled 'americanfootball_nfl', the function's default sport). |
 | `sport_title` | character | Display title of the sport key, e.g. 'NFL' for americanfootball_nfl. |
 | `commence_time` | character | Scheduled start of the event from The Odds API, an ISO-8601 UTC string with a trailing Z, kept as text. |
-| `home_team` | character | Home team name. |
-| `away_team` | character | Away team name. |
+| `home_team` | character |  |
+| `away_team` | character |  |
 
 **Example**
 
@@ -276,12 +276,12 @@ A long-form `polars`/`pandas` `DataFrame` (one row per event x bookmaker x marke
 
 | col_name | type | description |
 |---|---|---|
-| `event_id` | character | Unique event / game identifier (ESPN). |
+| `event_id` | character |  |
 | `sport_key` | character | The Odds API sport key the event belongs to, the same slug toa_sports returns as key (sampled 'americanfootball_nfl', the function's default sport). |
 | `sport_title` | character | Display title of the sport key, e.g. 'NFL' for americanfootball_nfl. |
 | `commence_time` | character | Scheduled start of the event from The Odds API, an ISO-8601 UTC string with a trailing Z, kept as text. |
-| `home_team` | character | Home team name. |
-| `away_team` | character | Away team name. |
+| `home_team` | character |  |
+| `away_team` | character |  |
 | `bookmaker_key` | character | The Odds API bookmaker key, a lowercase slug such as 'draftkings', 'fanduel' or 'williamhill_us'. |
 | `bookmaker_title` | character | Bookmaker display name, e.g. 'DraftKings', 'BetOnline.ag', or 'Caesars' for williamhill_us. |
 | `bookmaker_last_update` | character | When this bookmaker last updated its odds for the event, an ISO-8601 UTC string with a trailing Z. |
@@ -334,12 +334,12 @@ A long-form `polars`/`pandas` `DataFrame` (one row per outcome, stamped with the
 | `snapshot_timestamp` | character | Time of the historical snapshot the API returned, an ISO-8601 UTC string with a trailing Z; the same on every row of a call (sampled '2023-11-29T22:40:39Z' for the default date '2023-11-29T22:45:00Z'). |
 | `previous_timestamp` | character | Time of the snapshot immediately before the returned one, an ISO-8601 UTC string with a trailing Z; the same on every row of a call (sampled '2023-11-29T22:35:39Z'). |
 | `next_timestamp` | character | Time of the snapshot immediately after the returned one, an ISO-8601 UTC string with a trailing Z; the same on every row of a call (sampled '2023-11-29T22:45:40Z'). |
-| `event_id` | character | Unique event / game identifier (ESPN). |
+| `event_id` | character |  |
 | `sport_key` | character | The Odds API sport key the event belongs to, the same slug toa_sports returns as key (sampled 'americanfootball_nfl', the function's default sport). |
 | `sport_title` | character | Display title of the sport key, e.g. 'NFL' for americanfootball_nfl. |
 | `commence_time` | character | Scheduled start of the event from The Odds API, an ISO-8601 UTC string with a trailing Z, kept as text. |
-| `home_team` | character | Home team name. |
-| `away_team` | character | Away team name. |
+| `home_team` | character |  |
+| `away_team` | character |  |
 | `bookmaker_key` | character | The Odds API bookmaker key, a lowercase slug such as 'draftkings', 'fanduel' or 'williamhill_us'. |
 | `bookmaker_title` | character | Bookmaker display name, e.g. 'DraftKings', 'BetOnline.ag', or 'Caesars' for williamhill_us. |
 | `bookmaker_last_update` | character | When this bookmaker last updated its odds for the event, an ISO-8601 UTC string with a trailing Z. |
@@ -380,8 +380,8 @@ A `polars`/`pandas` `DataFrame` (one row per participant) by default; raw JSON `
 
 | col_name | type | description |
 |---|---|---|
-| `full_name` | character | Player's full name. |
-| `id` | character | ID of the player in the 'name' column. |
+| `full_name` | character |  |
+| `id` | character |  |
 
 **Example**
 
@@ -414,13 +414,13 @@ A `polars`/`pandas` `DataFrame` (one row per event) by default; raw JSON `list` 
 
 | col_name | type | description |
 |---|---|---|
-| `id` | character | ID of the player in the 'name' column. |
+| `id` | character |  |
 | `sport_key` | character | The Odds API sport key the event belongs to, the same slug toa_sports returns as key (sampled 'americanfootball_nfl', the function's default sport). |
 | `sport_title` | character | Display title of the sport key, e.g. 'NFL' for americanfootball_nfl. |
 | `commence_time` | character | Scheduled start of the event from The Odds API, an ISO-8601 UTC string with a trailing Z, kept as text. |
-| `completed` | logical | `TRUE` if the game is complete. |
-| `home_team` | character | Home team name. |
-| `away_team` | character | Away team name. |
+| `completed` | logical |  |
+| `home_team` | character |  |
+| `away_team` | character |  |
 | `scores` | character | Event scores as the parser's str() rendering of the API's list value (Python repr, not JSON); null on all 32 sampled events, none of which had started. |
 | `last_update` | character | Time of the event's last score update; null on all 32 sampled events, none of which had started when the data was pulled. |
 

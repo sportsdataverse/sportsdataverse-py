@@ -116,38 +116,38 @@ Full game box score + play-by-play (normalized stat dictionaries)
 | col_name | type | description |
 |---|---|---|
 | `entity_id` | character | Composite Yahoo id this editorial row was keyed under, surfaced from the collection map key (e.g., "ncaaf.g.202509200023" for a game, "ncaaf.t.29" for a team); always carried as Utf8. |
-| `stats` | character | Stats. |
+| `stats` | character |  |
 
 **stat_categories**
 
 | col_name | type | description |
 |---|---|---|
 | `entity_id` | character | Composite Yahoo id this editorial row was keyed under, surfaced from the collection map key (e.g., "ncaaf.g.202509200023" for a game, "ncaaf.t.29" for a team); always carried as Utf8. |
-| `name` | character | Display name. |
+| `name` | character |  |
 | `sort` | character | Yahoo composite stat-type id the category sorts on by default (e.g., "ncaaf.stat_type.105"). |
-| `stats` | character | Stats. |
+| `stats` | character |  |
 
 **stat_variations**
 
 | col_name | type | description |
 |---|---|---|
 | `entity_id` | character | Composite Yahoo id this editorial row was keyed under, surfaced from the collection map key (e.g., "ncaaf.g.202509200023" for a game, "ncaaf.t.29" for a team); always carried as Utf8. |
-| `name` | character | Display name. |
+| `name` | character |  |
 
 **stat_types**
 
 | col_name | type | description |
 |---|---|---|
 | `entity_id` | character | Composite Yahoo id this editorial row was keyed under, surfaced from the collection map key (e.g., "ncaaf.g.202509200023" for a game, "ncaaf.t.29" for a team); always carried as Utf8. |
-| `name` | character | Display name. |
-| `short_name` | character | Short display name. |
+| `name` | character |  |
+| `short_name` | character |  |
 
 **stat_cut_types**
 
 | col_name | type | description |
 |---|---|---|
 | `entity_id` | character | Composite Yahoo id this editorial row was keyed under, surfaced from the collection map key (e.g., "ncaaf.g.202509200023" for a game, "ncaaf.t.29" for a team); always carried as Utf8. |
-| `name` | character | Display name. |
+| `name` | character |  |
 
 **games**
 
@@ -156,21 +156,21 @@ Full game box score + play-by-play (normalized stat dictionaries)
 | `entity_id` | character | Composite Yahoo id this editorial row was keyed under, surfaced from the collection map key (e.g., "ncaaf.g.202509200023" for a game, "ncaaf.t.29" for a team); always carried as Utf8. |
 | `gameid` | character | Date-encoded Yahoo composite game id for this row (e.g., "ncaaf.g.202509200023"). |
 | `global_gameid` | character | Yahoo cross-provider game id, distinct from the date-encoded gameid (e.g., "ncaaf.g.13556882"). |
-| `start_time` | character | Kickoff time in eastern time zone. |
+| `start_time` | character |  |
 | `is_time_tba` | logical | Flag indicating that the scheduled start time has not yet been announced. |
 | `season_phase_id` | character | Identifier of the season phase the game falls in (e.g., "season.phase.season"). |
-| `game_type` | character | The most recent game type of that season that a player appeared on the roster. |
+| `game_type` | character |  |
 | `winning_team_id` | character | Composite Yahoo team id of the side that won the game (e.g., "ncaaf.t.29"). |
 | `is_rank_upset` | character | Flag indicating that the lower-ranked side won, judged against the teams' poll rankings. |
 | `is_spread_upset` | logical | Flag indicating that the winning side was the betting underdog against the closing spread. |
 | `outcome_type` | character | Outcome classification for a completed game (e.g., "outcome.type.won", "outcome.type.tied"). |
-| `home_team_id` | character | Unique identifier for the home team. |
-| `away_team_id` | character | Unique identifier for the away team. |
-| `week_number` | character | Week number. |
+| `home_team_id` | character |  |
+| `away_team_id` | character |  |
+| `week_number` | character |  |
 | `sportacular_url` | character | Deep link into the Yahoo Sportacular mobile app for this game (a "ysportacular://" URL). |
 | `status_display_name` | character | Short game or event status as shown on the scoreboard (e.g., "Final", "12:00 pm ET"). |
-| `status_description` | character | Roster status description (e.g. 'Active'). |
-| `status_type` | character | Status type. |
+| `status_description` | character |  |
+| `status_type` | character |  |
 | `total_away_points` | character | Points scored by the away team in the game. |
 | `current_period_id` | character | Ordinal number of the period currently in progress, counting from 1. |
 | `total_home_points` | character | Points scored by the home team in the game. |
@@ -182,59 +182,59 @@ Full game box score + play-by-play (normalized stat dictionaries)
 | `game_period_strikes` | character | Strikes in the count for the at-bat in progress; baseball only. |
 | `game_period_outs` | character | Outs recorded so far in the current half-inning; baseball only. |
 | `yards_to_endzone` | character | Distance from the current ball spot to the opponent's goal line, in yards. |
-| `start_yardline` | character | Yard line at the drive start. |
-| `distance` | character | Distance value (in feet for shot data; otherwise context-dependent). |
-| `down` | character | The down for the given play. |
+| `start_yardline` | character |  |
+| `distance` | character |  |
+| `down` | character |  |
 | `team_in_possession` | character | Yahoo team id of the side currently in possession of the ball. |
 | `power_play_strength_home` | character | Number of skaters the home team has on the ice during special-teams play; hockey only. |
 | `power_play_strength_away` | character | Number of skaters the away team has on the ice during special-teams play; hockey only. |
 | `game_time_elapsed` | character | Playing time elapsed in the game, in seconds. |
 | `game_time_elapsed_display` | character | Playing time elapsed formatted for display (e.g., "67:12"), used by sports whose clock counts up. |
 | `inning_status` | character | Half-inning indicator for a game in progress (e.g., "Top", "Bottom"); baseball only. |
-| `away_timeouts` | character | Away-team timeouts remaining. |
-| `home_timeouts` | character | Home-team timeouts remaining. |
+| `away_timeouts` | character |  |
+| `home_timeouts` | character |  |
 | `is_halftime` | character | Flag indicating that the game is currently stopped at halftime. |
 | `minimum_periods` | integer | Number of periods a game of this sport runs before overtime is required (4 for football, 9 for baseball). |
 | `game_periods` | character | JSON-encoded list of the game's period nodes, each carrying a period number and its display names. |
 | `baserunners` | character | JSON-encoded baserunner occupancy for the game in progress; baseball only. |
-| `season` | character | Season year. |
+| `season` | character |  |
 | `subleague` | character | Sub-league the game belongs to, for leagues split into constituent circuits. |
 | `subleague_display_name` | character | Display name of the sub-league the game belongs to. |
 | `agg_score` | character | Aggregate score across the legs of a two-leg tie, populated only for competitions decided on aggregate. |
 | `leg_number` | character | Ordinal of this leg within a multi-leg tie, counting from 1. |
 | `tv_coverage` | character | Network carrying the game, as a short broadcast abbreviation (e.g., "CBS", "ESPN"). |
 | `seatgeek_id` | character | SeatGeek performer or event identifier used to build the ticket-purchase link. |
-| `last_updated` | character | Last-updated timestamp. |
-| `teams` | character | Nested list of member-team membership spans. |
+| `last_updated` | character |  |
+| `teams` | character |  |
 | `play_by_play` | character | JSON-encoded data-island pointer to the game's play-by-play collection in the same editorial payload. |
 | `pitches` | character | JSON-encoded data-island pointer to the game's pitch-level feed; baseball only. |
 | `at_bat` | character | JSON-encoded data-island pointer to the game's current at-bat feed; baseball only. |
-| `penalty_summary` | character | Whether penalty summary data is available. |
-| `scoring_summary` | character | Whether scoring summary data is available. |
+| `penalty_summary` | character |  |
+| `scoring_summary` | character |  |
 | `stat_categories` | character | JSON-encoded pointer to the stat-category dictionary that groups this feed's statistics. |
-| `stadium` | character | Name of the stadium |
-| `stadium_id` | character | ID of the stadium the game was played in. (Source: Pro-Football-Reference) |
+| `stadium` | character |  |
+| `stadium_id` | character |  |
 | `stadium_image` | character | JSON-encoded data-island pointer to the venue photograph used on the game page. |
-| `attendance` | character | Reported attendance. |
+| `attendance` | character |  |
 | `lineups` | character | JSON-encoded data-island pointer to the game's lineup collection. |
 | `top_performer` | character | JSON-encoded data-island pointer to the game's top-performing players. |
-| `players` | character | Nested list of per-player box scores. |
-| `byline` | character | News article byline / author. |
+| `players` | character |  |
+| `byline` | character |  |
 | `highlight` | character | JSON-encoded data-island pointer to the game's highlight video. |
-| `highlights` | character | Game highlight urls. |
+| `highlights` | character |  |
 | `live_video` | character | JSON-encoded data-island pointer to the live video stream for the game. |
 | `odds` | character | JSON-encoded data-island pointer to the game's odds collection. |
 | `current_players` | character | JSON-encoded data-island pointer to the players currently on the field, ice or court. |
-| `last_play` | character | Free-text description of the most recent play. |
+| `last_play` | character |  |
 | `series_type` | character | JSON-encoded data-island pointer to the kind of series the game belongs to. |
 | `series_status` | character | JSON-encoded data-island pointer to the current state of the series the game belongs to. |
-| `games` | character | Games played. |
+| `games` | character |  |
 | `series_games` | character | JSON-encoded data-island pointer to the games making up the series. |
 | `game_details` | character | JSON-encoded data-island pointer to supplementary detail notes for the game. |
 | `section_notes` | character | JSON-encoded data-island pointer to editorial section notes attached to the game page. |
 | `articles` | character | JSON-encoded data-island pointer to the editorial articles attached to the game. |
 | `tweets` | character | JSON-encoded data-island pointer to the social posts attached to the game page. |
-| `playoff_round` | character | Playoff round identifier. |
+| `playoff_round` | character |  |
 | `media_stream` | character | JSON-encoded data-island pointer to the game's media-stream collection. |
 | `playoff_series_status` | character | JSON-encoded data-island pointer to the current state of the playoff series the game belongs to. |
 | `playoff_series_details` | character | JSON-encoded data-island pointer to detail about the playoff series the game belongs to. |
@@ -245,8 +245,8 @@ Full game box score + play-by-play (normalized stat dictionaries)
 | `starting_pitchers` | character | JSON-encoded data-island pointer to the game's announced starting pitchers; baseball only. |
 | `unrestricted_streams` | character | JSON-encoded data-island pointer to the streams viewable without a subscription. |
 | `tv_details` | character | JSON-encoded list of broadcast entries for the game, each carrying a network abbreviation and full channel name (e.g., [{"abbr": "NBC", "name": "NBC/Peacock"}]). |
-| `away_seed` | character | Away team's seed. |
-| `home_seed` | character | Home team's seed. |
+| `away_seed` | character |  |
+| `home_seed` | character |  |
 | `navigation_links_tickets_url` | character | Affiliate ticket-purchase URL for the game, pointing at the SeatGeek marketplace. |
 | `navigation_links_boxscore_url` | character | Site-relative URL of the game's boxscore page on sports.yahoo.com. |
 | `navigation_links_match_page_url` | character | Site-relative URL of the game's match page on sports.yahoo.com. |
@@ -264,28 +264,28 @@ Full game box score + play-by-play (normalized stat dictionaries)
 | col_name | type | description |
 |---|---|---|
 | `entity_id` | character | Composite Yahoo id this editorial row was keyed under, surfaced from the collection map key (e.g., "ncaaf.g.202509200023" for a game, "ncaaf.t.29" for a team); always carried as Utf8. |
-| `value` | character | Numeric or string value field. |
+| `value` | character |  |
 
 **gameplayoff_series_status**
 
 | col_name | type | description |
 |---|---|---|
 | `entity_id` | character | Composite Yahoo id this editorial row was keyed under, surfaced from the collection map key (e.g., "ncaaf.g.202509200023" for a game, "ncaaf.t.29" for a team); always carried as Utf8. |
-| `value` | character | Numeric or string value field. |
+| `value` | character |  |
 
 **gameplayoff_series_details**
 
 | col_name | type | description |
 |---|---|---|
 | `entity_id` | character | Composite Yahoo id this editorial row was keyed under, surfaced from the collection map key (e.g., "ncaaf.g.202509200023" for a game, "ncaaf.t.29" for a team); always carried as Utf8. |
-| `value` | character | Numeric or string value field. |
+| `value` | character |  |
 
 **gamescore**
 
 | col_name | type | description |
 |---|---|---|
 | `entity_id` | character | Composite Yahoo id this editorial row was keyed under, surfaced from the collection map key (e.g., "ncaaf.g.202509200023" for a game, "ncaaf.t.29" for a team); always carried as Utf8. |
-| `value` | character | Numeric or string value field. |
+| `value` | character |  |
 
 **gamecurrent_players**
 
@@ -302,12 +302,12 @@ Full game box score + play-by-play (normalized stat dictionaries)
 | col_name | type | description |
 |---|---|---|
 | `entity_id` | character | Composite Yahoo id this editorial row was keyed under, surfaced from the collection map key (e.g., "ncaaf.g.202509200023" for a game, "ncaaf.t.29" for a team); always carried as Utf8. |
-| `play_id` | character | Numeric play id that when used with game_id and drive provides the unique identifier for a single play. |
-| `play_type` | character | String indicating the type of play: pass (includes sacks), run (includes scrambles), punt, field_goal, kickoff, extra_point, qb_kneel, qb_spike, no_play (timeouts and penalties), and missing for rows indicating end of play. |
-| `play_text` | character | Free-form text description of the play from the CFBD feed. |
-| `period` | character | Period of the game (1-4 quarters; 5+ for OT). |
-| `clock` | character | Game clock value. |
-| `team` | character | Team-side label or team identifier. |
+| `play_id` | character |  |
+| `play_type` | character |  |
+| `play_text` | character |  |
+| `period` | character |  |
+| `clock` | character |  |
+| `team` | character |  |
 | `is_scoring_play` | integer | Flag indicating that the play put points on the board (1 = scoring play, 0 = not). |
 
 **gamepenalty_box**
@@ -315,7 +315,7 @@ Full game box score + play-by-play (normalized stat dictionaries)
 | col_name | type | description |
 |---|---|---|
 | `entity_id` | character | Composite Yahoo id this editorial row was keyed under, surfaced from the collection map key (e.g., "ncaaf.g.202509200023" for a game, "ncaaf.t.29" for a team); always carried as Utf8. |
-| `value` | character | Numeric or string value field. |
+| `value` | character |  |
 
 **gameplay_by_play**
 
@@ -323,17 +323,17 @@ Full game box score + play-by-play (normalized stat dictionaries)
 |---|---|---|
 | `entity_id` | character | Composite Yahoo id this editorial row was keyed under, surfaced from the collection map key (e.g., "ncaaf.g.202509200023" for a game, "ncaaf.t.29" for a team); always carried as Utf8. |
 | `sub_id` | character | Second-level key of an id-keyed editorial collection, present when one entity holds many sub-records — a play id, a scoring-play id, or a stat variation such as "ncaaf.stat_variation.2". |
-| `play_id` | character | Numeric play id that when used with game_id and drive provides the unique identifier for a single play. |
-| `period` | character | Period of the game (1-4 quarters; 5+ for OT). |
-| `clock` | character | Game clock value. |
-| `down` | character | The down for the given play. |
-| `distance` | character | Distance value (in feet for shot data; otherwise context-dependent). |
-| `team` | character | Team-side label or team identifier. |
+| `play_id` | character |  |
+| `period` | character |  |
+| `clock` | character |  |
+| `down` | character |  |
+| `distance` | character |  |
+| `team` | character |  |
 | `yardline` | character | Ball spot at the snap as rendered on the scoreboard (e.g., "MICH 35"). |
 | `yards_to_endzone` | character | Distance from the current ball spot to the opponent's goal line, in yards. |
-| `type` | character | Record type / category. |
-| `yards` | character | Total yards gained on the drive. |
-| `text` | character | Text description of the play / record. |
+| `type` | character |  |
+| `yards` | character |  |
+| `text` | character |  |
 | `play_time` | character | Wall-clock instant the play was recorded, as a Unix epoch timestamp in seconds. |
 
 **gameat_bat**
@@ -341,7 +341,7 @@ Full game box score + play-by-play (normalized stat dictionaries)
 | col_name | type | description |
 |---|---|---|
 | `entity_id` | character | Composite Yahoo id this editorial row was keyed under, surfaced from the collection map key (e.g., "ncaaf.g.202509200023" for a game, "ncaaf.t.29" for a team); always carried as Utf8. |
-| `value` | character | Numeric or string value field. |
+| `value` | character |  |
 
 **gamescoring_summary**
 
@@ -349,16 +349,16 @@ Full game box score + play-by-play (normalized stat dictionaries)
 |---|---|---|
 | `entity_id` | character | Composite Yahoo id this editorial row was keyed under, surfaced from the collection map key (e.g., "ncaaf.g.202509200023" for a game, "ncaaf.t.29" for a team); always carried as Utf8. |
 | `sub_id` | character | Second-level key of an id-keyed editorial collection, present when one entity holds many sub-records — a play id, a scoring-play id, or a stat variation such as "ncaaf.stat_variation.2". |
-| `play_id` | character | Numeric play id that when used with game_id and drive provides the unique identifier for a single play. |
-| `period` | character | Period of the game (1-4 quarters; 5+ for OT). |
-| `clock` | character | Game clock value. |
-| `away_score` | character | Away team score at the time of the play. |
-| `home_score` | character | Home team score at the time of the play. |
-| `team` | character | Team-side label or team identifier. |
+| `play_id` | character |  |
+| `period` | character |  |
+| `clock` | character |  |
+| `away_score` | character |  |
+| `home_score` | character |  |
+| `team` | character |  |
 | `score_type` | character | Kind of score produced by the scoring play (e.g., "TD" touchdown, "FG" field goal, "SF" safety). |
 | `xp_type` | character | Conversion attempted after the touchdown ("EP" for an extra point, "2PT" for a two-point try, "0" when none was attempted). |
-| `players` | character | Nested list of per-player box scores. |
-| `text` | character | Text description of the play / record. |
+| `players` | character |  |
+| `text` | character |  |
 
 **gamemedia_stream**
 
@@ -369,7 +369,7 @@ Full game box score + play-by-play (normalized stat dictionaries)
 | `media_source` | character | Feed the media item was produced from (e.g., "play_by_play"). |
 | `sequence_id` | integer | Monotonic sequence number that orders items within the game's media stream. |
 | `external_id` | character | Provider-side identifier for the media item, matching the play id it accompanies. |
-| `timestamp` | character | Response timestamp (ISO 8601). |
+| `timestamp` | character |  |
 | `official` | logical | Flag indicating that the media item comes from the official league feed rather than an editorial source. |
 
 **gamedrives**
@@ -377,15 +377,15 @@ Full game box score + play-by-play (normalized stat dictionaries)
 | col_name | type | description |
 |---|---|---|
 | `entity_id` | character | Composite Yahoo id this editorial row was keyed under, surfaced from the collection map key (e.g., "ncaaf.g.202509200023" for a game, "ncaaf.t.29" for a team); always carried as Utf8. |
-| `id` | character | ID of the player in the 'name' column. |
-| `team` | character | Team-side label or team identifier. |
-| `time` | character | Time at start of play provided in string format as minutes:seconds remaining in the quarter. |
+| `id` | character |  |
+| `team` | character |  |
+| `time` | character |  |
 | `num_plays` | character | Number of plays the offense ran on the drive. |
 | `yards_covered` | character | Net yards the offense gained over the course of the drive. |
-| `start_yardline` | character | Yard line at the drive start. |
+| `start_yardline` | character |  |
 | `yardline_text` | character | Ball spot where the drive started, rendered as it appears on the scoreboard (e.g., "NEB 25"). |
-| `plays` | character | Total qualifying passing plays included in the WEPA calculation. |
-| `result` | character | Result. |
+| `plays` | character |  |
+| `result` | character |  |
 | `start_time_clock` | character | Game clock reading when the drive began, as MM:SS remaining in its period. |
 | `start_time_period` | character | Period number in which the drive began. |
 | `end_time_clock` | character | Game clock reading when the drive ended, as MM:SS remaining in its period. |

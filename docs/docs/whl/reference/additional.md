@@ -239,7 +239,7 @@ WHL standings — one row per team.
 | `shootout_wins` | character | Shootout wins. |
 | `shootout_losses` | character | Shootout losses. |
 | `regulation_wins` | character | Wins in regulation. |
-| `row` | character | Row index within the game grouping (sequencing helper). |
+| `row` | character |  |
 | `points` | integer | Total points (goals + assists). |
 | `penalty_minutes` | character | Penalty minutes. |
 | `streak` | character | Current streak value. |

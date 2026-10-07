@@ -45,7 +45,7 @@ A polars (or pandas) DataFrame of all games in the data repository.
 | `venue` | character | Venue where the game was played. |
 | `series_letter` | character | Single-letter identifier for the playoff series to which this game belongs, used to group games within the same bracket matchup in the NHL games dataset. |
 | `playoff_round` | integer | Playoff round identifier. |
-| `series_game_number` | integer | Series game number. |
+| `series_game_number` | integer |  |
 | `season` | integer | Season year (echoed from arg). |
 | `game_json` | logical | Whether processed game JSON is available. |
 | `game_json_url` | character | URL to the processed game JSON. |
@@ -56,7 +56,7 @@ A polars (or pandas) DataFrame of all games in the data repository.
 | `goalie_box` | logical | Whether goalie box data is available. |
 | `game_info` | logical | Whether game info data is available. |
 | `game_rosters` | logical | Whether game rosters data is available. |
-| `scoring` | logical | TRUE when the play results in a score (TD, FG, safety, two-point conversion). |
+| `scoring` | logical |  |
 | `penalties` | logical | Penalty count. |
 | `scratches` | logical | Logical flag indicating whether a scratches list (players healthy-scratched and not dressing) is available for this game in the NHL games loader output. |
 | `linescore` | logical | Logical flag indicating whether linescore data (period-by-period scoring breakdown) is available for this game in the NHL games loader output. |

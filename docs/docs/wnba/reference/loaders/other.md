@@ -100,11 +100,11 @@ Release: [espn_wnba_schedules](https://github.com/sportsdataverse/sportsdatavers
 | `time_valid` | Boolean | Time valid. |
 | `neutral_site` | Boolean | Neutral site. |
 | `conference_competition` | Boolean | Conference competition. |
-| `play_by_play_available` | Boolean | Whether play-by-play data is available. |
+| `play_by_play_available` | Boolean |  |
 | `recent` | Boolean | Recent. |
 | `start_date` | String | Start date (YYYY-MM-DD). |
 | `broadcast` | String | Broadcast information string. |
-| `highlights` | String | Game highlight urls. |
+| `highlights` | String |  |
 | `notes_type` | String | Notes type. |
 | `notes_headline` | String | Notes headline. |
 | `broadcast_market` | String | Broadcast market label (e.g. 'national', 'home'). |
@@ -163,11 +163,11 @@ Release: [espn_wnba_schedules](https://github.com/sportsdataverse/sportsdatavers
 | `season` | Int32 | Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted. |
 | `season_type` | Int32 | Season type (1=pre-season, 2=regular season, 3=postseason, 4=off-season for ESPN; or string label for WNBA Stats). |
 | `status_type_alt_detail` | String | Status type alt detail. |
-| `game_json` | Boolean | Whether processed game JSON is available. |
-| `game_json_url` | String | URL to the processed game JSON. |
+| `game_json` | Boolean |  |
+| `game_json_url` | String |  |
 | `game_date_time` | Datetime(time_unit='us', time_zone='America/New_York') | Game start date/time (ISO 8601). |
 | `game_date` | Date | Game date (YYYY-MM-DD). |
-| `PBP` | Boolean | Whether play-by-play data is available. |
+| `PBP` | Boolean |  |
 | `team_box` | Boolean | Team box. |
 | `player_box` | Boolean | Player box. |
 
@@ -263,19 +263,19 @@ Release: [espn_wnba_draft](https://github.com/sportsdataverse/sportsdataverse-da
 | `athlete_id` | Int32 | Unique athlete identifier (ESPN). |
 | `athlete_uid` | String | ESPN athlete UID (universal identifier). |
 | `athlete_guid` | String | ESPN athlete GUID. |
-| `athlete_first_name` | String | Player first name. |
-| `athlete_last_name` | String | Athlete last name. |
-| `athlete_full_name` | String | Drafted player full name. |
+| `athlete_first_name` | String |  |
+| `athlete_last_name` | String |  |
+| `athlete_full_name` | String |  |
 | `athlete_display_name` | String | Athlete display name (full). |
 | `athlete_short_name` | String | Athlete short display name. |
-| `athlete_height` | String | Athlete height. |
-| `athlete_weight` | String | Athlete weight. |
+| `athlete_height` | String |  |
+| `athlete_weight` | String |  |
 | `athlete_position_abbreviation` | String | Athlete position abbreviation (G / F / C). |
 | `athlete_position_name` | String | Athlete position ('Guard', 'Forward', 'Center'). |
 | `athlete_headshot_href` | String | Athlete headshot image URL. |
 | `college_id` | Int32 | Unique identifier for college. |
 | `college_name` | String | College name. |
-| `college_short_name` | String | College short name. |
+| `college_short_name` | String |  |
 | `college_abbreviation` | String | Short code for the drafted player's school, read from the athlete's ESPN college block; null throughout the published data because ESPN ships no college block on these picks. |
 | `team_id` | Int32 | Unique team identifier. |
 | `team_uid` | String | ESPN universal team identifier (UID format 's:40~l:...~t:...'). |
@@ -312,8 +312,8 @@ Release: [espn_wnba_game_rosters](https://github.com/sportsdataverse/sportsdatav
 | `athlete_guid` | String | ESPN athlete GUID. |
 | `athlete_display_name` | String | Athlete display name (full). |
 | `athlete_short_name` | String | Athlete short display name. |
-| `athlete_first_name` | String | Player first name. |
-| `athlete_last_name` | String | Athlete last name. |
+| `athlete_first_name` | String |  |
+| `athlete_last_name` | String |  |
 | `athlete_jersey` | String | Athlete jersey number. |
 | `athlete_position` | String | Athlete position. |
 | `athlete_headshot` | String | Direct link to the player's ESPN headshot image, always of the form https://a.espncdn.com/i/headshots/wnba/players/full/{athlete_id}.png, and null for the few players ESPN has no photo for. |
@@ -439,8 +439,8 @@ Release: [espn_wnba_standings](https://github.com/sportsdataverse/sportsdatavers
 |---|---|---|
 | `season` | Int32 | Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted. |
 | `group_id` | String | ESPN group id. |
-| `group_name` | String | Group name (conference / division). |
-| `group_abbreviation` | String | Group abbreviation. |
+| `group_name` | String |  |
+| `group_abbreviation` | String |  |
 | `group_short_name` | String | Short label of the standings group node the team sits under, read from ESPN shortName; the WNBA conference nodes ship only name and abbreviation, so it is null on every published row. |
 | `team_id` | Int32 | Unique team identifier. |
 | `team_uid` | String | ESPN universal team identifier (UID format 's:40~l:...~t:...'). |
@@ -455,7 +455,7 @@ Release: [espn_wnba_standings](https://github.com/sportsdataverse/sportsdatavers
 | `team_logo` | String | Team logo image URL. |
 | `stat_name` | String | Internal stat key. |
 | `stat_display_name` | String | Stat display name. |
-| `stat_short_display_name` | String | Short human-readable stat name. |
+| `stat_short_display_name` | String |  |
 | `stat_description` | String | ESPN's long-form explanation of the standings stat, such as Clinched Best League Record for clincher or Record last 10 games for lasttengames. |
 | `stat_abbreviation` | String | ESPN's abbreviation for the standings stat, which can differ from stat_short_display_name (playoffSeed is SEED here but POS there) and is null on the record-split rows such as Home and vs. Conf. |
 | `stat_type` | String | Stat type code (e.g. "win", "loss"). |
@@ -483,7 +483,7 @@ Release: [espn_wnba_team_season_stats](https://github.com/sportsdataverse/sports
 | `team_alternate_color` | String | Team alternate color (hex without leading '#'). |
 | `team_logo` | String | Team logo image URL. |
 | `category` | String | Category label. |
-| `stat_label` | String | Human-readable label of the statistic (e.g. 'At bats'). |
+| `stat_label` | String |  |
 | `stat_name` | String | Internal stat key. |
 | `stat_display_name` | String | Stat display name. |
 | `stat_description` | String | Human-readable description of the statistic the row reports. |

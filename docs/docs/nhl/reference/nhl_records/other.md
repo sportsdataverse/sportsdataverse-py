@@ -160,7 +160,7 @@ List NHL head coaches.
 | `featured_image` | character | URL of the coach's featured promotional or profile image on the NHL platform. |
 | `first_name` | character | Player first name. |
 | `full_name` | character | Player full name. |
-| `history` | character | ESPN's long-form history text for the award. |
+| `history` | character |  |
 | `hockey_hof_link` | character | URL to the coach's Hockey Hall of Fame profile page, if they are an inductee. |
 | `in_hockey_hof` | logical | Whether the player is in the Hockey Hall of Fame. |
 | `in_iihf_hockey_hof` | logical | Boolean flag indicating whether the coach is inducted into the IIHF Hockey Hall of Fame. |
@@ -216,7 +216,7 @@ Retrieve one coach by their numeric ID.
 | `featured_image` | character | URL of the featured promotional image associated with the coach's NHL profile. |
 | `first_name` | character | Player first name. |
 | `full_name` | character | Player full name. |
-| `history` | character | ESPN's long-form history text for the award. |
+| `history` | character |  |
 | `hockey_hof_link` | character | URL to the coach's page on the Hockey Hall of Fame website, if inducted. |
 | `in_hockey_hof` | logical | Whether the player is in the Hockey Hall of Fame. |
 | `in_iihf_hockey_hof` | logical | Boolean flag indicating whether the coach is inducted into the IIHF Hockey Hall of Fame. |
@@ -269,7 +269,7 @@ All-time head-to-head records between every franchise pairing.
 | `home_last_meeting_season_id` | integer | NHL season identifier for the most recent home game played against this opponent franchise. |
 | `home_losses` | integer | Losses at home. |
 | `home_ot_losses` | integer | Home overtime losses. |
-| `home_points` | integer | Home team total points scored in the game so far. |
+| `home_points` | integer |  |
 | `home_ties` | integer | Ties at home. |
 | `home_wins` | integer | Wins at home. |
 | `opponent_franchise_id` | integer | NHL records identifier for the opposing franchise in this all-time head-to-head record. |
@@ -293,8 +293,8 @@ All-time head-to-head records between every franchise pairing.
 | `total_losses` | integer | Total losses to date (goalie). |
 | `total_ot_losses` | integer | Total number of overtime losses accumulated by the franchise all-time against this opponent. |
 | `total_points` | integer | Total standings points earned by the franchise across all all-time games against this opponent. |
-| `total_ties` | integer | Total ties. |
-| `total_wins` | integer | Total wins. |
+| `total_ties` | integer |  |
+| `total_wins` | integer |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -770,7 +770,7 @@ General Manager career records.
 | `game_type_id` | integer | Game type identifier (regular/playoffs). |
 | `games` | integer | Games played. |
 | `gm_of_the_year` | integer | Number of times the general manager won the NHL GM of the Year Award during their career. |
-| `home_games` | integer | Total home games. |
+| `home_games` | integer |  |
 | `home_losses` | integer | Losses at home. |
 | `home_ot_losses` | double | Home overtime losses. |
 | `home_ties` | double | Ties at home. |
@@ -840,7 +840,7 @@ General Manager records scoped to franchise stints.
 | `game_type_id` | integer | Game type identifier (regular/playoffs). |
 | `games` | integer | Games played. |
 | `gm_of_the_year` | integer | Number of NHL General Manager of the Year awards won during this franchise tenure. |
-| `home_games` | integer | Total home games. |
+| `home_games` | integer |  |
 | `home_losses` | integer | Losses at home. |
 | `home_ot_losses` | double | Home overtime losses. |
 | `home_ties` | double | Ties at home. |
