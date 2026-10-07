@@ -1,0 +1,23 @@
+[
+  {
+    "teamId": 199,
+    "teamName": "1. FC Heidenheim 1846",
+    "shortName": "Heidenheim",
+    "teamIconUrl": "https://upload.wikimedia.org/wikipedia/commons/9/9d/1._FC_Heidenheim_1846.svg",
+    "teamGroupName": null
+  },
+  {
+    "teamId": 65,
+    "teamName": "1. FC Köln",
+    "shortName": "Köln",
+    "teamIconUrl": "https://upload.wikimedia.org/wikipedia/commons/0/01/1._FC_Koeln_Logo_2014%E2%80%93.svg",
+    "teamGroupName": null
+  },
+  {
+    "teamId": 80,
+    "teamName": "1. FC Union Berlin",
+    "shortName": "Union Berlin",
+    "teamIconUrl": "https://assets.dfb.de/uploads/000/018/232/small_union-Berlin.jpg",
+    "teamGroupName": null
+  }
+]

@@ -1,0 +1,1541 @@
+{
+  "resultsCount": 3,
+  "resultsLimit": 10,
+  "resultsOffset": 0,
+  "headlines": [
+    {
+      "id": 50115183,
+      "nowId": "1-50115183",
+      "contentKey": "50115183-1-5-1",
+      "dataSourceIdentifier": "c96c3917bcaa5",
+      "publishedkey": "50115183",
+      "type": "HeadlineNews",
+      "feedDisplayType": "Default",
+      "headline": "Boos rain down from Superdome stands in Saints' blowout loss",
+      "description": "New Orleans quarterback Tyler Shough understood the fans' frustration after the 1-3 Saints dropped a 45-24 decision to the Atlanta Falcons on Monday night, telling reporters after the loss that \"we had some opportunities that we didn't take advantage of.\"",
+      "title": "Boos rain down from Superdome stands in Saints' blowout loss",
+      "linkText": "'I'd boo, too': Shough feels fans' frustration in Saints' MNF loss",
+      "categorized": "2026-10-06T06:26:42Z",
+      "originallyPosted": "2026-10-06T06:18:34Z",
+      "lastModified": "2026-10-06T06:24:52Z",
+      "published": "2026-10-06T06:24:52Z",
+      "root": "nfl",
+      "section": "NFL",
+      "images": [
+        {
+          "dataSourceIdentifier": "02e28570a6637",
+          "id": 50115159,
+          "type": "header",
+          "name": "Tyler Shough [600x600]",
+          "credit": "Imagn Images",
+          "height": 600,
+          "width": 600,
+          "url": "https://a.espncdn.com/photo/2026/1006/r1726723_600x600_1-1.jpg"
+        }
+      ],
+      "related": [
+        {
+          "id": 50114987,
+          "dataSourceIdentifier": "ed5fee40d714f",
+          "publishedkey": "50114987",
+          "type": "HeadlineNews",
+          "headline": "Resurgent Falcons score 80 points in two-game winning streak",
+          "title": "Resurgent Falcons score 80 points in two-game winning streak",
+          "linkText": "'Phenomenal' Penix continues winning ways with resurgent Falcons",
+          "images": [
+            {
+              "dataSourceIdentifier": "0ee6b8a787eb5",
+              "id": 50114957,
+              "type": "header",
+              "name": "Michael Penix Jr. [600x600]",
+              "credit": "Getty Images",
+              "height": 600,
+              "width": 600,
+              "url": "https://a.espncdn.com/photo/2026/1006/r1726713_600x600_1-1.jpg"
+            }
+          ],
+          "byline": "Marc Raimondi",
+          "isLiveBlog": false,
+          "links": {
+            "api": {
+              "self": {
+                "href": "https://content.core.api.espn.com/v1/sports/news/50114987"
+              }
+            },
+            "app": {
+              "sportscenter": {
+                "href": "sportscenter://x-callback-url/showStory?uid=50114987"
+              }
+            },
+            "mobile": {
+              "href": "http://m.espn.go.com/nfl/story?storyId=50114987"
+            },
+            "web": {
+              "href": "https://www.espn.com/nfl/story/_/id/50114987/resurgent-falcons-score-80-points-two-game-winning-streak"
+            }
+          },
+          "premium": false
+        },
+        {
+          "id": 50114045,
+          "dataSourceIdentifier": "0f3f80c2695d7",
+          "publishedkey": "50114045",
+          "type": "Story",
+          "headline": "Bijan Robinson sparks Falcons' rout of division rival Saints",
+          "title": "Bijan Robinson sparks Falcons' rout of division rival Saints",
+          "linkText": "Bijan Robinson, Falcons make NFC South statement in rout of Saints",
+          "images": [
+            {
+              "dataSourceIdentifier": "015ff4c85028a",
+              "id": 50114189,
+              "type": "header",
+              "name": "Bijan Robinson [1296x729]",
+              "caption": "Bijan Robinson continued his mastery on primetime Monday night.",
+              "credit": "Stephen Lew-Imagn Images",
+              "height": 729,
+              "width": 1296,
+              "url": "https://a.espncdn.com/photo/2026/1006/r1726681_1296x729_16-9.jpg"
+            }
+          ],
+          "byline": "Marc Raimondi and Katherine Terrell",
+          "isLiveBlog": false,
+          "links": {
+            "api": {
+              "self": {
+                "href": "https://content.core.api.espn.com/v1/sports/news/50114045"
+              }
+            },
+            "app": {
+              "sportscenter": {
+                "href": "sportscenter://x-callback-url/showStory?uid=50114045"
+              }
+            },
+            "mobile": {
+              "href": "http://m.espn.go.com/nfl/story?storyId=50114045"
+            },
+            "web": {
+              "href": "https://www.espn.com/nfl/story/_/id/50114045/mnf-falcons-saints-bijan-robinson"
+            }
+          },
+          "premium": false
+        },
+        {
+          "id": 50103536,
+          "dataSourceIdentifier": "8821ea4510487",
+          "publishedkey": "50103536",
+          "type": "Story",
+          "headline": "The punt block that unified New Orleans and a Falcons-Saints rivalry",
+          "title": "Falcons-Saints MNF: How a punt block unified New Orleans",
+          "linkText": "20 years later: How Steve Gleason's punt block unified New Orleans, stoked flames of Falcons-Saints rivalry",
+          "source": "ESPN",
+          "images": [
+            {
+              "dataSourceIdentifier": "671e8332380b9",
+              "id": 50085866,
+              "type": "header",
+              "name": "Domecoming [1296x729]",
+              "caption": "The night of Sept. 25, 2006 was a memorable game for the city of New Orleans' rebirth after the devastation of Hurricane Katrina. Former Saints coach Sean Payton and current Saints QB Tyler Shough share how that game affected them and the city.",
+              "alt": "Domecoming",
+              "credit": "ESPN",
+              "height": 729,
+              "width": 1296,
+              "url": "https://a.espncdn.com/photo/2026/1002/nfl_superdome_16x9.jpg"
+            }
+          ],
+          "byline": "Katherine Terrell",
+          "isLiveBlog": false,
+          "links": {
+            "api": {
+              "self": {
+                "href": "https://content.core.api.espn.com/v1/sports/news/50103536"
+              }
+            },
+            "app": {
+              "sportscenter": {
+                "href": "sportscenter://x-callback-url/showStory?uid=50103536"
+              }
+            },
+            "mobile": {
+              "href": "http://m.espn.go.com/nfl/story?storyId=50103536"
+            },
+            "web": {
+              "href": "https://www.espn.com/nfl/story/_/id/50103536/new-orleans-saints-falcons-gleason-20-years-mnf-rivalry"
+            }
+          },
+          "premium": false
+        }
+      ],
+      "categories": [
+        {
+          "id": 409224,
+          "type": "topic",
+          "guid": "52313677-19f8-b106-ec91-d8d17e6087fe",
+          "description": "news",
+          "sportId": 0,
+          "topicId": 781
+        },
+        {
+          "id": 9572,
+          "type": "league",
+          "uid": "s:20~l:28",
+          "guid": "ad4c3bd2-ddb6-3f8c-8abf-744855a08fa4",
+          "description": "NFL",
+          "sportId": 28,
+          "leagueId": 28,
+          "league": {
+            "id": 28,
+            "description": "NFL",
+            "abbreviation": "NFL",
+            "links": {
+              "mobile": {
+                "leagues": {
+                  "href": "https://www.espn.com/nfl/"
+                }
+              },
+              "web": {
+                "leagues": {
+                  "href": "https://www.espn.com/nfl/"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 2035,
+          "type": "team",
+          "uid": "s:20~l:28~t:18",
+          "guid": "97d2f6c9-2f22-459c-306a-046941ccab2a",
+          "description": "New Orleans Saints",
+          "sportId": 28,
+          "teamId": 18,
+          "team": {
+            "id": 18,
+            "description": "New Orleans Saints",
+            "abbreviation": "NO",
+            "shortDisplayName": "Saints",
+            "links": {
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/nfl/team/_/name/no/new-orleans-saints"
+                }
+              },
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/nfl/team/_/name/no/new-orleans-saints"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "keywords": [
+        "news",
+        "NFL",
+        "New Orleans Saints"
+      ],
+      "story": "<p>NEW ORLEANS -- Quarterback <a data-player-guid=\"0eb2837a-e6ed-bbd7-d7d5-cbeb2cd7ab11\" href=\"https://www.espn.com/nfl/player/_/id/4360689/tyler-shough\">Tyler Shough</a> understood the fans' frustration after the <a data-clubhouse-guid=\"97d2f6c9-2f22-459c-306a-046941ccab2a\" href=\"https://www.espn.com/nfl/team/_/name/no/new-orleans-saints\">New Orleans Saints</a>' <a href=\"https://www.espn.com/nfl/game/_/gameId/401872979/falcons-saints\">45-24 loss</a> to the <a data-clubhouse-guid=\"49fd392a-86fe-4df3-1b77-9bbfa18b2ad5\" href=\"https://www.espn.com/nfl/team/_/name/atl/atlanta-falcons\">Atlanta Falcons</a>.</p>\n<p>The Saints were booed several times throughout the blowout loss, including going into halftime and at the end of the game. Saints fans left in droves before the end of the fourth quarter, leaving only Falcons fans in red jerseys in the stands.</p>\n<p>\"Fans understandably are upset,\" Shough said. \"We had some opportunities that we didn't take advantage of and you're playing the Falcons and you lose like that. I mean, I'd boo, too. That sucks.\"</p>\n<p>The Saints (1-3) went into the primetime game with a lot of emotion. The franchise was celebrating the 20th anniversary of the return to the Superdome after Hurricane Katrina forced them to play on the road the entire 2005 season.</p>\n<p>Former Saints safety Steve Gleason, who famously blocked a punt to help beat the Falcons in that game in 2006, was honored during the game and in attendance with several other key figures, including Drew Brees and Roger Goodell.</p>\n<p><alsosee></p>\n<p>But that emotion was quickly snuffed out after the Saints fell into a 24-7 deficit to their rival by halftime, turning cheers from the home crow to boos.</p>\n<p>\"I'm disappointed. More than anything, you lose the Falcons like that and especially on a Monday night game, it sucks,\" Shough said. \"There's nothing you can say., like, 'Ah man, it doesn't suck.' It definitely does. But I do know as a team that we're extremely close and we're going to keep going and keep our eyes forward. We have really good leadership and our leadership on the team admits that we got to get better. We have to get better and watch the film and evaluate that. There's no hiding that. But at the same time, it is a long season and there's a lot of games yet to be played to where we can do that.\"</p>\n<p>Saints defensive end <a data-player-guid=\"cfd6d317-0d17-cb31-2766-cd6062d001e4\" href=\"https://www.espn.com/nfl/player/_/id/13971/cameron-jordan\">Cameron Jordan</a> said the team got \"punched in the mouth early\" and that the Falcons \"had their way today.\" The Falcons rushed for 205 yards and five touchdowns between <a data-player-guid=\"6667bcb0-dad1-3345-8e5a-a67ed4b010b0\" href=\"https://www.espn.com/nfl/player/_/id/4430807/bijan-robinson\">Bijan Robinson</a> and <a data-player-guid=\"db9245d5-8563-a0ac-7fa0-73b7da5f9de0\" href=\"https://www.espn.com/nfl/player/_/id/4241474/brian-robinson-jr\">Brian Robinson Jr</a>.</p>\n<p>\"Everybody gets punched in the mouth in this game. Any given Sunday. But it's how you respond,\" Jordan said. \"So we lost this game. Trash ass birds, they beat us, it is what it is. We have to be able to respond. That'll show you what type of team we are. We could go on for days ... about what we could do better. Break down the film, head to next week, we have to be a better team. Or this is what we'll get each and every week.\"</p>\n\n\n\n",
+      "allowAMP": true,
+      "allowAds": true,
+      "allowComments": true,
+      "allowCommerce": true,
+      "allowContentReactions": true,
+      "allowSearch": true,
+      "byline": "Katherine Terrell",
+      "isLiveBlog": false,
+      "links": {
+        "api": {
+          "self": {
+            "href": "https://content.core.api.espn.com/v1/sports/news/50115183"
+          }
+        },
+        "app": {
+          "sportscenter": {
+            "href": "sportscenter://x-callback-url/showStory?uid=50115183"
+          }
+        },
+        "mobile": {
+          "href": "http://m.espn.go.com/nfl/story?storyId=50115183"
+        },
+        "web": {
+          "href": "https://www.espn.com/nfl/story/_/id/50115183/boos-rain-superdome-stands-saints-blowout-loss"
+        }
+      },
+      "premium": false
+    },
+    {
+      "id": 50114987,
+      "nowId": "1-50114987",
+      "contentKey": "50114987-1-5-1",
+      "dataSourceIdentifier": "ed5fee40d714f",
+      "publishedkey": "50114987",
+      "type": "HeadlineNews",
+      "feedDisplayType": "Default",
+      "headline": "Resurgent Falcons score 80 points in two-game winning streak",
+      "description": "The 2-2 Falcons had a combined 16 points, the lowest total in the NFL, through two weeks, but after a 45-24 victory over the rival New Orleans Saints on \"Monday Night Football,\" Atlanta now has a league-high 80 combined points in a two-game winning surge.",
+      "title": "Resurgent Falcons score 80 points in two-game winning streak",
+      "linkText": "'Phenomenal' Penix continues winning ways with resurgent Falcons",
+      "categorized": "2026-10-06T06:26:42Z",
+      "originallyPosted": "2026-10-06T05:10:52Z",
+      "lastModified": "2026-10-06T06:26:40Z",
+      "published": "2026-10-06T06:26:40Z",
+      "root": "nfl",
+      "section": "NFL",
+      "images": [
+        {
+          "dataSourceIdentifier": "0ee6b8a787eb5",
+          "id": 50114957,
+          "type": "header",
+          "name": "Michael Penix Jr. [600x600]",
+          "credit": "Getty Images",
+          "height": 600,
+          "width": 600,
+          "url": "https://a.espncdn.com/photo/2026/1006/r1726713_600x600_1-1.jpg"
+        },
+        {
+          "type": "Media",
+          "name": "Falcons clobber Saints on the road",
+          "caption": "Falcons clobber Saints on the road",
+          "height": 324,
+          "width": 576,
+          "url": "https://espnmedia-cdn.akamaized.net/espn/media/common/wsc/2026/1006/ba6151e6-4d1d-470e-a9c0-cc4bb9ed6ff3/ba6151e6-4d1d-470e-a9c0-cc4bb9ed6ff3.jpg"
+        }
+      ],
+      "video": [
+        {
+          "id": 50114637,
+          "dataSourceIdentifier": "5e0aa0cc8e4d7",
+          "cerebroId": "6ac46ccd5c97450b2d9f4195",
+          "pccId": "0d1afbc4-a0c9-45e4-95d9-2030f9ff9b76",
+          "source": "espn",
+          "headline": "Falcons clobber Saints on the road",
+          "shortHeadline": "Falcons clobber Saints on the road",
+          "caption": "Falcons clobber Saints on the road",
+          "title": "Falcons clobber Saints on the road",
+          "description": "Falcons clobber Saints on the road",
+          "shortDescription": "Falcons clobber Saints on the road",
+          "lastModified": "2026-10-06T03:39:06Z",
+          "originalPublishDate": "2026-10-06T03:36:46Z",
+          "premium": false,
+          "syndicatable": true,
+          "duration": 78,
+          "videoRatio": "16:9,9:16",
+          "timeRestrictions": {
+            "embargoDate": "2026-10-06T03:36:44Z",
+            "expirationDate": "2026-10-08T03:36:44Z"
+          },
+          "deviceRestrictions": {
+            "devices": [
+              "settop",
+              "tablet",
+              "handset"
+            ],
+            "type": "whitelist"
+          },
+          "plays": [
+            {
+              "id": 401872979110
+            }
+          ],
+          "thumbnail": "https://espnmedia-cdn.akamaized.net/espn/media/common/wsc/2026/1006/ba6151e6-4d1d-470e-a9c0-cc4bb9ed6ff3/ba6151e6-4d1d-470e-a9c0-cc4bb9ed6ff3.jpg",
+          "images": [
+            {
+              "name": "Poster Image",
+              "caption": "",
+              "alt": "",
+              "credit": "",
+              "height": 324,
+              "width": 576,
+              "url": "https://espnmedia-cdn.akamaized.net/espn/media/common/wsc/2026/1006/ba6151e6-4d1d-470e-a9c0-cc4bb9ed6ff3/ba6151e6-4d1d-470e-a9c0-cc4bb9ed6ff3.jpg"
+            }
+          ],
+          "posterImages": {
+            "default": {
+              "href": "https://espnmedia-cdn.akamaized.net/espn/media/common/wsc/2026/1006/ba6151e6-4d1d-470e-a9c0-cc4bb9ed6ff3/ba6151e6-4d1d-470e-a9c0-cc4bb9ed6ff3_default.jpg",
+              "width": 576,
+              "height": 324
+            },
+            "firstFrame": {
+              "href": "https://cmp-espn.media.dssott.com/opp/img/espn/wsc/2026/1006/ba6151e6-4d1d-470e-a9c0-cc4bb9ed6ff3/ba6151e6-4d1d-470e-a9c0-cc4bb9ed6ff3/thumb-1-w720-h406-f4.jpg"
+            },
+            "full": {
+              "href": "https://espnmedia-cdn.akamaized.net/espn/media/common/wsc/2026/1006/ba6151e6-4d1d-470e-a9c0-cc4bb9ed6ff3/ba6151e6-4d1d-470e-a9c0-cc4bb9ed6ff3.jpg"
+            },
+            "square": {
+              "href": "https://espnmedia-cdn.akamaized.net/espn/media/common/wsc/2026/1006/ba6151e6-4d1d-470e-a9c0-cc4bb9ed6ff3/ba6151e6-4d1d-470e-a9c0-cc4bb9ed6ff3_1x1.jpg"
+            },
+            "vertical": {
+              "href": "https://espnmedia-cdn.akamaized.net/espn/media/common/wsc/2026/1006/ba6151e6-4d1d-470e-a9c0-cc4bb9ed6ff3/ba6151e6-4d1d-470e-a9c0-cc4bb9ed6ff3_9x16.jpg"
+            },
+            "verticalFirstFrame": {
+              "href": "https://cmp-espn.media.dssott.com/opp/img/espn/9x16/wsc/2026/1006/ba6151e6-4d1d-470e-a9c0-cc4bb9ed6ff3/ba6151e6-4d1d-470e-a9c0-cc4bb9ed6ff3/thumb-1-w406-h720-f4.jpg"
+            },
+            "wide": {
+              "href": "https://espnmedia-cdn.akamaized.net/espn/media/common/wsc/2026/1006/ba6151e6-4d1d-470e-a9c0-cc4bb9ed6ff3/ba6151e6-4d1d-470e-a9c0-cc4bb9ed6ff3_5x2.jpg"
+            }
+          },
+          "links": {
+            "api": {
+              "artwork": {
+                "href": "https://artwork.api.espn.com/artwork/collections/media/0d1afbc4-a0c9-45e4-95d9-2030f9ff9b76"
+              },
+              "self": {
+                "href": "https://content.core.api.espn.com/v1/video/clips/50114637"
+              }
+            },
+            "mobile": {
+              "href": "https://watch.auth.api.espn.com/video/auth/brightcove/0d1afbc4-a0c9-45e4-95d9-2030f9ff9b76/asset?UMADPARAMreferer=https://www.espn.com/video/clip/_/id/50114637/falcons-clobber-saints-road",
+              "alert": {
+                "href": "https://m.espn.com/general/video/videoAlert?vid=50114637"
+              },
+              "progressiveDownload": {
+                "href": "https://watch.auth.api.espn.com/video/auth/brightcove/0d1afbc4-a0c9-45e4-95d9-2030f9ff9b76/asset?UMADPARAMreferer=https://www.espn.com/video/clip/_/id/50114637/falcons-clobber-saints-road"
+              },
+              "source": {
+                "href": "https://espnmedia-cdn.akamaized.net/espn/media/16x9/wsc/2026/1006/ba6151e6-4d1d-470e-a9c0-cc4bb9ed6ff3/ba6151e6-4d1d-470e-a9c0-cc4bb9ed6ff3.mp4"
+              },
+              "streaming": {
+                "href": "https://watch.auth.api.espn.com/video/auth/brightcove/0d1afbc4-a0c9-45e4-95d9-2030f9ff9b76/asset?UMADPARAMreferer=https://www.espn.com/video/clip/_/id/50114637/falcons-clobber-saints-road"
+              }
+            },
+            "source": {
+              "href": "https://espnmedia-cdn.akamaized.net/espn/media/16x9/wsc/2026/1006/ba6151e6-4d1d-470e-a9c0-cc4bb9ed6ff3/ba6151e6-4d1d-470e-a9c0-cc4bb9ed6ff3.mp4",
+              "HD": {
+                "href": "https://espnmedia-cdn.akamaized.net/espn/media/16x9/wsc/2026/1006/ba6151e6-4d1d-470e-a9c0-cc4bb9ed6ff3/ba6151e6-4d1d-470e-a9c0-cc4bb9ed6ff3.mp4"
+              },
+              "HLS": {
+                "href": "https://cmp-espn.media.dssott.com/opp/hls/espn/wsc/2026/1006/ba6151e6-4d1d-470e-a9c0-cc4bb9ed6ff3/ba6151e6-4d1d-470e-a9c0-cc4bb9ed6ff3/playlist.m3u8",
+                "9x16": {
+                  "href": "https://cmp-espn.media.dssott.com/opp/hls/espn/9x16/wsc/2026/1006/ba6151e6-4d1d-470e-a9c0-cc4bb9ed6ff3/ba6151e6-4d1d-470e-a9c0-cc4bb9ed6ff3/playlist.m3u8"
+                },
+                "HD": {
+                  "href": "https://cmp-espn.media.dssott.com/opp/hls/espn/wsc/2026/1006/ba6151e6-4d1d-470e-a9c0-cc4bb9ed6ff3/ba6151e6-4d1d-470e-a9c0-cc4bb9ed6ff3/playlist.m3u8"
+                },
+                "cmaf": {
+                  "href": "https://cmp-espn.media.dssott.com/opp/cmaf/espn/wsc/2026/1006/ba6151e6-4d1d-470e-a9c0-cc4bb9ed6ff3/ba6151e6-4d1d-470e-a9c0-cc4bb9ed6ff3/playlist.m3u8",
+                  "9x16": {
+                    "href": "https://cmp-espn.media.dssott.com/opp/cmaf/espn/9x16/wsc/2026/1006/ba6151e6-4d1d-470e-a9c0-cc4bb9ed6ff3/ba6151e6-4d1d-470e-a9c0-cc4bb9ed6ff3/playlist.m3u8"
+                  },
+                  "cmb": {
+                    "href": "https://cmp-espn.media.dssott.com/opp/cmaf/espn/cmb/wsc/2026/1006/ba6151e6-4d1d-470e-a9c0-cc4bb9ed6ff3/ba6151e6-4d1d-470e-a9c0-cc4bb9ed6ff3/playlist.m3u8"
+                  }
+                },
+                "cmb": {
+                  "href": "https://cmp-espn.media.dssott.com/opp/hls/espn/cmb/wsc/2026/1006/ba6151e6-4d1d-470e-a9c0-cc4bb9ed6ff3/ba6151e6-4d1d-470e-a9c0-cc4bb9ed6ff3/playlist.m3u8"
+                },
+                "shield": {
+                  "href": "https://watch.auth.api.espn.com/video/auth/media/0d1afbc4-a0c9-45e4-95d9-2030f9ff9b76/asset"
+                }
+              },
+              "flash": {
+                "href": "https://espnmedia-cdn.akamaized.net/espn/media/16x9/wsc/2026/1006/ba6151e6-4d1d-470e-a9c0-cc4bb9ed6ff3/ba6151e6-4d1d-470e-a9c0-cc4bb9ed6ff3.mp4"
+              },
+              "full": {
+                "href": "https://espnmedia-cdn.akamaized.net/espn/media/16x9/wsc/2026/1006/ba6151e6-4d1d-470e-a9c0-cc4bb9ed6ff3/ba6151e6-4d1d-470e-a9c0-cc4bb9ed6ff3.mp4"
+              },
+              "mezzanine": {
+                "href": "https://espnmedia-cdn.akamaized.net/espn/media/16x9/wsc/2026/1006/ba6151e6-4d1d-470e-a9c0-cc4bb9ed6ff3/ba6151e6-4d1d-470e-a9c0-cc4bb9ed6ff3.mp4"
+              }
+            },
+            "sportscenter": {
+              "href": "sportscenter://x-callback-url/showVideo?videoID=50114637&videoDSI=5e0aa0cc8e4d7"
+            },
+            "web": {
+              "href": "https://www.espn.com/video/clip/_/id/50114637/falcons-clobber-saints-road",
+              "self": {
+                "href": "https://www.espn.com/video/clip/_/id/50114637/falcons-clobber-saints-road",
+                "dsi": {
+                  "href": "https://www.espn.com/video/clip?id=5e0aa0cc8e4d7"
+                }
+              }
+            }
+          },
+          "categories": [
+            {
+              "id": 529368,
+              "type": "athlete",
+              "uid": "s:20~l:28~a:4361409",
+              "guid": "26171769-a750-2898-5ffd-aa95c1ed7621",
+              "description": "Jahan Dotson",
+              "sportId": 28,
+              "athleteId": 4361409,
+              "athlete": {
+                "id": 4361409,
+                "description": "Jahan Dotson",
+                "links": {
+                  "mobile": {
+                    "athletes": {
+                      "href": "https://www.espn.com/nfl/player/_/id/4361409/jahan-dotson"
+                    }
+                  },
+                  "web": {
+                    "athletes": {
+                      "href": "https://www.espn.com/nfl/player/_/id/4361409/jahan-dotson"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "id": 2035,
+              "type": "team",
+              "uid": "s:20~l:28~t:18",
+              "guid": "97d2f6c9-2f22-459c-306a-046941ccab2a",
+              "description": "New Orleans Saints",
+              "sportId": 28,
+              "teamId": 18,
+              "team": {
+                "id": 18,
+                "description": "New Orleans Saints",
+                "abbreviation": "NO",
+                "shortDisplayName": "Saints",
+                "links": {
+                  "mobile": {
+                    "teams": {
+                      "href": "https://www.espn.com/nfl/team/_/name/no/new-orleans-saints"
+                    }
+                  },
+                  "web": {
+                    "teams": {
+                      "href": "https://www.espn.com/nfl/team/_/name/no/new-orleans-saints"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "id": 166929,
+              "type": "athlete",
+              "uid": "s:20~l:28~a:3054850",
+              "guid": "488f79c1-5040-ac01-30bb-aa9c200d3c92",
+              "description": "Alvin Kamara",
+              "sportId": 28,
+              "athleteId": 3054850,
+              "athlete": {
+                "id": 3054850,
+                "description": "Alvin Kamara",
+                "links": {
+                  "mobile": {
+                    "athletes": {
+                      "href": "https://www.espn.com/nfl/player/_/id/3054850/alvin-kamara"
+                    }
+                  },
+                  "web": {
+                    "athletes": {
+                      "href": "https://www.espn.com/nfl/player/_/id/3054850/alvin-kamara"
+                    }
+                  }
+                }
+              }
+            }
+          ],
+          "ad": {
+            "bundle": "nfl_one_plays",
+            "sport": "nfl"
+          },
+          "contributingPartner": "wsc",
+          "contributingSystem": "wsc",
+          "tracking": {
+            "coverageType": "Final Game Highlight",
+            "leagueName": "NFL",
+            "program": "espnnfl",
+            "sportName": "football",
+            "trackingId": "dm_20261006_NFL_falcons_clobber_saints_on_the_road",
+            "trackingName": "COM_NFL Highlight (Falcons clobber Saints on the road) 2026/10/06 ESHEET"
+          }
+        }
+      ],
+      "related": [
+        {
+          "id": 50115183,
+          "dataSourceIdentifier": "c96c3917bcaa5",
+          "publishedkey": "50115183",
+          "type": "HeadlineNews",
+          "headline": "Boos rain down from Superdome stands in Saints' blowout loss",
+          "title": "Boos rain down from Superdome stands in Saints' blowout loss",
+          "linkText": "'I'd boo, too': Shough feels fans' frustration in Saints' MNF loss",
+          "images": [
+            {
+              "dataSourceIdentifier": "02e28570a6637",
+              "id": 50115159,
+              "type": "header",
+              "name": "Tyler Shough [600x600]",
+              "credit": "Imagn Images",
+              "height": 600,
+              "width": 600,
+              "url": "https://a.espncdn.com/photo/2026/1006/r1726723_600x600_1-1.jpg"
+            }
+          ],
+          "byline": "Katherine Terrell",
+          "isLiveBlog": false,
+          "links": {
+            "api": {
+              "self": {
+                "href": "https://content.core.api.espn.com/v1/sports/news/50115183"
+              }
+            },
+            "app": {
+              "sportscenter": {
+                "href": "sportscenter://x-callback-url/showStory?uid=50115183"
+              }
+            },
+            "mobile": {
+              "href": "http://m.espn.go.com/nfl/story?storyId=50115183"
+            },
+            "web": {
+              "href": "https://www.espn.com/nfl/story/_/id/50115183/boos-rain-superdome-stands-saints-blowout-loss"
+            }
+          },
+          "premium": false
+        },
+        {
+          "id": 50114045,
+          "dataSourceIdentifier": "0f3f80c2695d7",
+          "publishedkey": "50114045",
+          "type": "Story",
+          "headline": "Bijan Robinson sparks Falcons' rout of division rival Saints",
+          "title": "Bijan Robinson sparks Falcons' rout of division rival Saints",
+          "linkText": "Bijan Robinson, Falcons make NFC South statement in rout of Saints",
+          "images": [
+            {
+              "dataSourceIdentifier": "015ff4c85028a",
+              "id": 50114189,
+              "type": "header",
+              "name": "Bijan Robinson [1296x729]",
+              "caption": "Bijan Robinson continued his mastery on primetime Monday night.",
+              "credit": "Stephen Lew-Imagn Images",
+              "height": 729,
+              "width": 1296,
+              "url": "https://a.espncdn.com/photo/2026/1006/r1726681_1296x729_16-9.jpg"
+            }
+          ],
+          "byline": "Marc Raimondi and Katherine Terrell",
+          "isLiveBlog": false,
+          "links": {
+            "api": {
+              "self": {
+                "href": "https://content.core.api.espn.com/v1/sports/news/50114045"
+              }
+            },
+            "app": {
+              "sportscenter": {
+                "href": "sportscenter://x-callback-url/showStory?uid=50114045"
+              }
+            },
+            "mobile": {
+              "href": "http://m.espn.go.com/nfl/story?storyId=50114045"
+            },
+            "web": {
+              "href": "https://www.espn.com/nfl/story/_/id/50114045/mnf-falcons-saints-bijan-robinson"
+            }
+          },
+          "premium": false
+        },
+        {
+          "id": 50101403,
+          "dataSourceIdentifier": "89b560c02f816",
+          "publishedkey": "50101403",
+          "type": "Story",
+          "headline": "Is Bijan Robinson the NFL's top RB? He is when he's in primetime",
+          "title": "Is Bijan Robinson the NFL's top RB? He is in primetime",
+          "linkText": "Is the Falcons' Bijan Robinson the NFL's best running back? He is when he's in primetime",
+          "images": [
+            {
+              "dataSourceIdentifier": "9f4033f6c4eb5",
+              "id": 50108742,
+              "type": "header",
+              "name": "Bijan Robinson [1296x729]",
+              "caption": "Bijan Robinson is in lofty company when it comes to yards per scrimmage per primetime game. He's first, Barry Sanders is second and O.J. Simpson is third.",
+              "credit": "Kevin Sabitus/Getty Images",
+              "height": 729,
+              "width": 1296,
+              "url": "https://a.espncdn.com/photo/2026/1005/r1726261_1296x729_16-9.jpg"
+            }
+          ],
+          "byline": "Marc Raimondi",
+          "isLiveBlog": false,
+          "links": {
+            "api": {
+              "self": {
+                "href": "https://content.core.api.espn.com/v1/sports/news/50101403"
+              }
+            },
+            "app": {
+              "sportscenter": {
+                "href": "sportscenter://x-callback-url/showStory?uid=50101403"
+              }
+            },
+            "mobile": {
+              "href": "http://m.espn.go.com/nfl/story?storyId=50101403"
+            },
+            "web": {
+              "href": "https://www.espn.com/nfl/story/_/id/50101403/falcons-bijan-robinson-prime-mnf"
+            }
+          },
+          "premium": false
+        }
+      ],
+      "categories": [
+        {
+          "id": 409224,
+          "type": "topic",
+          "guid": "52313677-19f8-b106-ec91-d8d17e6087fe",
+          "description": "news",
+          "sportId": 0,
+          "topicId": 781
+        },
+        {
+          "id": 9572,
+          "type": "league",
+          "uid": "s:20~l:28",
+          "guid": "ad4c3bd2-ddb6-3f8c-8abf-744855a08fa4",
+          "description": "NFL",
+          "sportId": 28,
+          "leagueId": 28,
+          "league": {
+            "id": 28,
+            "description": "NFL",
+            "abbreviation": "NFL",
+            "links": {
+              "mobile": {
+                "leagues": {
+                  "href": "https://www.espn.com/nfl/"
+                }
+              },
+              "web": {
+                "leagues": {
+                  "href": "https://www.espn.com/nfl/"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 1979,
+          "type": "team",
+          "uid": "s:20~l:28~t:1",
+          "guid": "49fd392a-86fe-4df3-1b77-9bbfa18b2ad5",
+          "description": "Atlanta Falcons",
+          "sportId": 28,
+          "teamId": 1,
+          "team": {
+            "id": 1,
+            "description": "Atlanta Falcons",
+            "abbreviation": "ATL",
+            "shortDisplayName": "Falcons",
+            "links": {
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/nfl/team/_/name/atl/atlanta-falcons"
+                }
+              },
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/nfl/team/_/name/atl/atlanta-falcons"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "keywords": [
+        "news",
+        "NFL",
+        "Atlanta Falcons"
+      ],
+      "story": "<p>NEW ORLEANS -- The <a data-clubhouse-guid=\"49fd392a-86fe-4df3-1b77-9bbfa18b2ad5\" href=\"https://www.espn.com/nfl/team/_/name/atl/atlanta-falcons\">Atlanta Falcons</a>' offense has completed an improbable turnaround in the span of just two weeks.</p>\n<p>Over the first two games of the season, the Falcons had a combined 16 points, the fewest in the NFL. After a <a href=\"https://www.espn.com/nfl/game/_/gameId/401872979/falcons-saints\">45-24 win</a> over the rival <a data-clubhouse-guid=\"97d2f6c9-2f22-459c-306a-046941ccab2a\" href=\"https://www.espn.com/nfl/team/_/name/no/new-orleans-saints\">New Orleans Saints</a> on \"Monday Night Football,\" Atlanta had a league-high 80 combined points in Weeks 3 and 4.</p>\n<p>The Falcons defeated the <a data-clubhouse-guid=\"06cd3bcf-7a86-53d4-28e7-aa049dd36261\" href=\"https://www.espn.com/nfl/team/_/name/gb/green-bay-packers\">Green Bay Packers</a> 35-14 at Lambeau Field last week on \"Thursday Night Football.\" Atlanta is the first team in NFL history to win back-to-back primetime games on the road by 20 or more points, according to ESPN Research.</p>\n<p>The biggest reason? <a data-player-guid=\"28022fa1-9050-eee1-5160-c77a6a379ec2\" href=\"https://www.espn.com/nfl/player/_/id/4360423/michael-penix-jr\">Michael Penix Jr</a>.'s return from ACL surgery.</p>\n<p>The Falcons started third-string quarterback <a data-player-guid=\"f1706f6e-2a98-a598-6308-e1f7b278edf7\" href=\"https://www.espn.com/nfl/player/_/id/2972515/cooper-rush\">Cooper Rush</a> the first two weeks of the season. Penix came back in Week 3 and led the Falcons to a dominant performance against the Packers. On Monday, Penix completed 15 of 20 passes for 223 yards and a touchdown with no interceptions.</p>\n<p>\"He's been phenomenal, man,\" Falcons running back <a data-player-guid=\"db9245d5-8563-a0ac-7fa0-73b7da5f9de0\" href=\"https://www.espn.com/nfl/player/_/id/4241474/brian-robinson-jr\">Brian Robinson Jr</a>. said of Penix. \"It ain't really much other words I can say about the way he's been playing. I appreciate his attitude, how he come in and just take the field and he's focused and he's ready. He's not letting nothing that he's been through in his past get in the way of his goals and what he wants in the future.\"</p>\n<p><alsosee></p>\n<p>Penix, who tore his left ACL last November, is the first Falcons quarterback with a completion percentage of least 70% and 10 yards per attempt in consecutive games since Matt Ryan in 2018.</p>\n<p>Penix's presence has opened up things for the Falcons' running game in a huge way. Atlanta has gone over 200 yards on the ground in each of the past two weeks. On Monday, the Falcons had five rushing touchdowns. <a data-player-guid=\"6667bcb0-dad1-3345-8e5a-a67ed4b010b0\" href=\"https://www.espn.com/nfl/player/_/id/4430807/bijan-robinson\">Bijan Robinson</a> had 19 carries for 145 yards and two touchdowns, and Brian Robinson Jr. had 62 yards on 14 carries with three touchdowns.</p>\n<p>\"I feel like it could be the best in the league this year,\" right tackle <a data-player-guid=\"cb7dd5b6-fa73-3b71-3d45-822f9da01570\" href=\"https://www.espn.com/nfl/player/_/id/4034961/jawaan-taylor\">Jawaan Taylor</a> said of the team's ground attack.</p>\n<p>The Falcons started 0-2 with a feeble offense and then faced three straight primetime games, two of them on the road, including Monday when the Saints were celebrating the 20-year anniversary of their first game back at the Superdome after Hurricane Katrina.</p>\n<p>Atlanta has now won two straight heading into a date with the <a data-clubhouse-guid=\"38248455-3da4-84e4-8090-98b5cc38ffdc\" href=\"https://www.espn.com/nfl/team/_/name/bal/baltimore-ravens\">Baltimore Ravens</a> on \"Sunday Night Football.\"</p>\n<p>\"We just want to show the world who we can be,\" Falcons safety <a data-player-guid=\"dadb4f44-91c3-441e-a543-88e002a9e1c5\" href=\"https://www.espn.com/nfl/player/_/id/3919512/jessie-bates\">Jessie Bates III</a> said. \"The first two weeks were not up to our standards. Obviously, when you got [Penix] back there dealing, it's a whole different team. So, we're just excited to continue to go with this.\"</p>\n\n\n\n\n",
+      "allowAMP": true,
+      "allowAds": true,
+      "allowComments": true,
+      "allowCommerce": true,
+      "allowContentReactions": true,
+      "allowSearch": true,
+      "byline": "Marc Raimondi",
+      "isLiveBlog": false,
+      "links": {
+        "api": {
+          "self": {
+            "href": "https://content.core.api.espn.com/v1/sports/news/50114987"
+          }
+        },
+        "app": {
+          "sportscenter": {
+            "href": "sportscenter://x-callback-url/showStory?uid=50114987"
+          }
+        },
+        "mobile": {
+          "href": "http://m.espn.go.com/nfl/story?storyId=50114987"
+        },
+        "web": {
+          "href": "https://www.espn.com/nfl/story/_/id/50114987/resurgent-falcons-score-80-points-two-game-winning-streak"
+        }
+      },
+      "premium": false
+    },
+    {
+      "id": 50105587,
+      "nowId": "1-50105587",
+      "contentKey": "50105587-1-6-1",
+      "dataSourceIdentifier": "d81e0f49a689f",
+      "publishedkey": "50105587",
+      "type": "Story",
+      "feedDisplayType": "Default",
+      "headline": "Atlanta's jabs at New Orleans after MNF top Week 4 trolls",
+      "description": "The calendar shifted to October, and the trolls are becoming a little more impactful, led by the Atlanta Falcons.",
+      "title": "Atlanta's jabs at New Orleans after MNF tops Week 4 trolls",
+      "linkText": "'Marched in': Falcons poke fun at Saints, lead NFL Week 4 trolls",
+      "categorized": "2026-10-06T04:16:29Z",
+      "originallyPosted": "2026-10-06T03:46:00Z",
+      "lastModified": "2026-10-06T04:16:25Z",
+      "published": "2026-10-06T04:16:25Z",
+      "root": "nfl",
+      "section": "NFL",
+      "images": [
+        {
+          "dataSourceIdentifier": "e3ddb825e88da",
+          "id": 50114556,
+          "type": "header",
+          "name": "falcons for troll [608x342]",
+          "credit": "(Photo by Morgan Simmons/Getty Images)",
+          "height": 342,
+          "width": 608,
+          "url": "https://a.espncdn.com/photo/2026/1006/r1726702_608x342_16-9.jpg"
+        },
+        {
+          "dataSourceIdentifier": "c98439870bda1",
+          "id": 50105281,
+          "type": "header",
+          "name": "cowboys for trolls [608x342]",
+          "credit": "(Photo by David Buono/Icon Sportswire via Getty Images)",
+          "height": 342,
+          "width": 608,
+          "url": "https://a.espncdn.com/photo/2026/1004/r1726097_2_608x342_16-9.jpg"
+        },
+        {
+          "type": "Media",
+          "name": "Brian Robinson Jr.'s hat trick gives Falcons a commanding lead",
+          "caption": "Brian Robinson Jr.'s hat trick gives Falcons a commanding lead ",
+          "height": 324,
+          "width": 576,
+          "url": "https://espnmedia-cdn.akamaized.net/espn/media/common/2026/1005/1190cf2dce934dcba76ce8730ee0a2e41437/1190cf2dce934dcba76ce8730ee0a2e41437.jpg"
+        }
+      ],
+      "video": [
+        {
+          "id": 50114507,
+          "dataSourceIdentifier": "ec731273ca5da",
+          "cerebroId": "6ac468c25c97450b2d9f4101",
+          "pccId": "41987290-c396-4401-8af7-7242f2f45a93",
+          "source": "espn",
+          "headline": "Brian Robinson Jr.'s hat trick gives Falcons a commanding lead",
+          "shortHeadline": "Brian Robinson Jr.'s hat trick gives Falcons a commanding lead ",
+          "caption": "Brian Robinson Jr.'s hat trick gives Falcons a commanding lead",
+          "title": "Brian Robinson Jr.'s hat trick gives Falcons a commanding lead",
+          "description": "Brian Robinson Jr.'s hat trick gives Falcons a commanding lead ",
+          "shortDescription": "Brian Robinson Jr.'s hat trick gives Falcons a commanding lead ",
+          "lastModified": "2026-10-06T03:58:11Z",
+          "originalPublishDate": "2026-10-06T03:19:30Z",
+          "premium": false,
+          "syndicatable": true,
+          "duration": 31,
+          "videoRatio": "16:9,9:16",
+          "timeRestrictions": {
+            "embargoDate": "2026-10-06T03:19:29Z",
+            "expirationDate": "2026-10-08T03:19:00Z"
+          },
+          "deviceRestrictions": {
+            "devices": [
+              "settop",
+              "tablet",
+              "handset"
+            ],
+            "type": "whitelist"
+          },
+          "plays": [
+            {
+              "id": 4018729793901
+            }
+          ],
+          "thumbnail": "https://espnmedia-cdn.akamaized.net/espn/media/common/2026/1005/1190cf2dce934dcba76ce8730ee0a2e41437/1190cf2dce934dcba76ce8730ee0a2e41437.jpg",
+          "images": [
+            {
+              "name": "Poster Image",
+              "caption": "",
+              "alt": "",
+              "credit": "",
+              "height": 324,
+              "width": 576,
+              "url": "https://espnmedia-cdn.akamaized.net/espn/media/common/2026/1005/1190cf2dce934dcba76ce8730ee0a2e41437/1190cf2dce934dcba76ce8730ee0a2e41437.jpg"
+            }
+          ],
+          "posterImages": {
+            "default": {
+              "href": "https://espnmedia-cdn.akamaized.net/espn/media/common/2026/1005/1190cf2dce934dcba76ce8730ee0a2e41437/1190cf2dce934dcba76ce8730ee0a2e41437_default.jpg",
+              "width": 576,
+              "height": 324
+            },
+            "firstFrame": {
+              "href": "https://cmp-espn.media.dssott.com/opp/img/espn/wsc/2026/1006/1190cf2d-ce93-4dcb-a76c-e8730ee0a2e4/1190cf2d-ce93-4dcb-a76c-e8730ee0a2e4/thumb-1-w720-h406-f4.jpg"
+            },
+            "full": {
+              "href": "https://espnmedia-cdn.akamaized.net/espn/media/common/2026/1005/1190cf2dce934dcba76ce8730ee0a2e41437/1190cf2dce934dcba76ce8730ee0a2e41437.jpg"
+            },
+            "square": {
+              "href": "https://espnmedia-cdn.akamaized.net/espn/media/common/2026/1005/1190cf2dce934dcba76ce8730ee0a2e41437/1190cf2dce934dcba76ce8730ee0a2e41437_1x1.jpg"
+            },
+            "vertical": {
+              "href": "https://espnmedia-cdn.akamaized.net/espn/media/common/2026/1005/1190cf2dce934dcba76ce8730ee0a2e41437/1190cf2dce934dcba76ce8730ee0a2e41437_9x16.jpg"
+            },
+            "verticalFirstFrame": {
+              "href": "https://cmp-espn.media.dssott.com/opp/img/espn/9x16/wsc/2026/1006/1190cf2d-ce93-4dcb-a76c-e8730ee0a2e4/1190cf2d-ce93-4dcb-a76c-e8730ee0a2e4/thumb-1-w406-h720-f4.jpg"
+            },
+            "wide": {
+              "href": "https://espnmedia-cdn.akamaized.net/espn/media/common/2026/1005/1190cf2dce934dcba76ce8730ee0a2e41437/1190cf2dce934dcba76ce8730ee0a2e41437_5x2.jpg"
+            }
+          },
+          "links": {
+            "api": {
+              "artwork": {
+                "href": "https://artwork.api.espn.com/artwork/collections/media/41987290-c396-4401-8af7-7242f2f45a93"
+              },
+              "self": {
+                "href": "https://content.core.api.espn.com/v1/video/clips/50114507"
+              }
+            },
+            "mobile": {
+              "href": "https://watch.auth.api.espn.com/video/auth/brightcove/41987290-c396-4401-8af7-7242f2f45a93/asset?UMADPARAMreferer=https://www.espn.com/video/clip/_/id/50114507/brian-robinson-jr-hat-trick-gives-falcons-commanding-lead",
+              "alert": {
+                "href": "https://m.espn.com/general/video/videoAlert?vid=50114507"
+              },
+              "progressiveDownload": {
+                "href": "https://watch.auth.api.espn.com/video/auth/brightcove/41987290-c396-4401-8af7-7242f2f45a93/asset?UMADPARAMreferer=https://www.espn.com/video/clip/_/id/50114507/brian-robinson-jr-hat-trick-gives-falcons-commanding-lead"
+              },
+              "source": {
+                "href": "https://espnmedia-cdn.akamaized.net/espn/media/16x9/wsc/2026/1006/1190cf2d-ce93-4dcb-a76c-e8730ee0a2e4/1190cf2d-ce93-4dcb-a76c-e8730ee0a2e4.mp4"
+              },
+              "streaming": {
+                "href": "https://watch.auth.api.espn.com/video/auth/brightcove/41987290-c396-4401-8af7-7242f2f45a93/asset?UMADPARAMreferer=https://www.espn.com/video/clip/_/id/50114507/brian-robinson-jr-hat-trick-gives-falcons-commanding-lead"
+              }
+            },
+            "source": {
+              "href": "https://espnmedia-cdn.akamaized.net/espn/media/16x9/wsc/2026/1006/1190cf2d-ce93-4dcb-a76c-e8730ee0a2e4/1190cf2d-ce93-4dcb-a76c-e8730ee0a2e4.mp4",
+              "HD": {
+                "href": "https://espnmedia-cdn.akamaized.net/espn/media/16x9/wsc/2026/1006/1190cf2d-ce93-4dcb-a76c-e8730ee0a2e4/1190cf2d-ce93-4dcb-a76c-e8730ee0a2e4.mp4"
+              },
+              "HLS": {
+                "href": "https://cmp-espn.media.dssott.com/opp/hls/espn/wsc/2026/1006/1190cf2d-ce93-4dcb-a76c-e8730ee0a2e4/1190cf2d-ce93-4dcb-a76c-e8730ee0a2e4/playlist.m3u8",
+                "9x16": {
+                  "href": "https://cmp-espn.media.dssott.com/opp/hls/espn/9x16/wsc/2026/1006/1190cf2d-ce93-4dcb-a76c-e8730ee0a2e4/1190cf2d-ce93-4dcb-a76c-e8730ee0a2e4/playlist.m3u8"
+                },
+                "HD": {
+                  "href": "https://cmp-espn.media.dssott.com/opp/hls/espn/wsc/2026/1006/1190cf2d-ce93-4dcb-a76c-e8730ee0a2e4/1190cf2d-ce93-4dcb-a76c-e8730ee0a2e4/playlist.m3u8"
+                },
+                "cmaf": {
+                  "href": "https://cmp-espn.media.dssott.com/opp/cmaf/espn/wsc/2026/1006/1190cf2d-ce93-4dcb-a76c-e8730ee0a2e4/1190cf2d-ce93-4dcb-a76c-e8730ee0a2e4/playlist.m3u8",
+                  "9x16": {
+                    "href": "https://cmp-espn.media.dssott.com/opp/cmaf/espn/9x16/wsc/2026/1006/1190cf2d-ce93-4dcb-a76c-e8730ee0a2e4/1190cf2d-ce93-4dcb-a76c-e8730ee0a2e4/playlist.m3u8"
+                  },
+                  "cmb": {
+                    "href": "https://cmp-espn.media.dssott.com/opp/cmaf/espn/cmb/wsc/2026/1006/1190cf2d-ce93-4dcb-a76c-e8730ee0a2e4/1190cf2d-ce93-4dcb-a76c-e8730ee0a2e4/playlist.m3u8"
+                  }
+                },
+                "cmb": {
+                  "href": "https://cmp-espn.media.dssott.com/opp/hls/espn/cmb/wsc/2026/1006/1190cf2d-ce93-4dcb-a76c-e8730ee0a2e4/1190cf2d-ce93-4dcb-a76c-e8730ee0a2e4/playlist.m3u8"
+                },
+                "shield": {
+                  "href": "https://watch.auth.api.espn.com/video/auth/media/41987290-c396-4401-8af7-7242f2f45a93/asset"
+                }
+              },
+              "flash": {
+                "href": "https://espnmedia-cdn.akamaized.net/espn/media/16x9/wsc/2026/1006/1190cf2d-ce93-4dcb-a76c-e8730ee0a2e4/1190cf2d-ce93-4dcb-a76c-e8730ee0a2e4.mp4"
+              },
+              "full": {
+                "href": "https://espnmedia-cdn.akamaized.net/espn/media/16x9/wsc/2026/1006/1190cf2d-ce93-4dcb-a76c-e8730ee0a2e4/1190cf2d-ce93-4dcb-a76c-e8730ee0a2e4.mp4"
+              },
+              "mezzanine": {
+                "href": "https://espnmedia-cdn.akamaized.net/espn/media/16x9/wsc/2026/1006/1190cf2d-ce93-4dcb-a76c-e8730ee0a2e4/1190cf2d-ce93-4dcb-a76c-e8730ee0a2e4.mp4"
+              }
+            },
+            "sportscenter": {
+              "href": "sportscenter://x-callback-url/showVideo?videoID=50114507&videoDSI=ec731273ca5da"
+            },
+            "web": {
+              "href": "https://www.espn.com/video/clip/_/id/50114507/brian-robinson-jr-hat-trick-gives-falcons-commanding-lead",
+              "self": {
+                "href": "https://www.espn.com/video/clip/_/id/50114507/brian-robinson-jr-hat-trick-gives-falcons-commanding-lead",
+                "dsi": {
+                  "href": "https://www.espn.com/video/clip?id=ec731273ca5da"
+                }
+              }
+            }
+          },
+          "categories": [
+            {
+              "id": 2035,
+              "type": "team",
+              "uid": "s:20~l:28~t:18",
+              "guid": "97d2f6c9-2f22-459c-306a-046941ccab2a",
+              "description": "New Orleans Saints",
+              "sportId": 28,
+              "teamId": 18,
+              "team": {
+                "id": 18,
+                "description": "New Orleans Saints",
+                "abbreviation": "NO",
+                "shortDisplayName": "Saints",
+                "links": {
+                  "mobile": {
+                    "teams": {
+                      "href": "https://www.espn.com/nfl/team/_/name/no/new-orleans-saints"
+                    }
+                  },
+                  "web": {
+                    "teams": {
+                      "href": "https://www.espn.com/nfl/team/_/name/no/new-orleans-saints"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "id": 9572,
+              "type": "league",
+              "uid": "s:20~l:28",
+              "guid": "ad4c3bd2-ddb6-3f8c-8abf-744855a08fa4",
+              "description": "NFL",
+              "sportId": 28,
+              "leagueId": 28,
+              "league": {
+                "id": 28,
+                "description": "NFL",
+                "abbreviation": "NFL",
+                "links": {
+                  "mobile": {
+                    "leagues": {
+                      "href": "https://www.espn.com/nfl/"
+                    }
+                  },
+                  "web": {
+                    "leagues": {
+                      "href": "https://www.espn.com/nfl/"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "id": 711827,
+              "type": "editorialindicator",
+              "guid": "26380a67-7938-32a0-9c82-33abab9f7ad4",
+              "description": "3 Star Rating"
+            }
+          ],
+          "ad": {
+            "bundle": "nfl_inprogress_highlights",
+            "sport": "nfl"
+          },
+          "contributingPartner": "wsc",
+          "contributingSystem": "wsc",
+          "tracking": {
+            "coverageType": "OnePlay",
+            "leagueName": "NFL",
+            "program": "espnnfl",
+            "sportName": "football",
+            "trackingId": "dm_20261006_NFL_brian_robinson_jrs_hat_trick_gives_falcons_a_commanding_lead_",
+            "trackingName": "NFL_One-Play (Brian Robinson Jr.'s hat trick gives Falcons a commanding lead ) 2026/10/06 ESHEET"
+          }
+        },
+        {
+          "id": 50103615,
+          "dataSourceIdentifier": "8b7e638e4544a",
+          "cerebroId": "6ac2bd9ef18aef7bd1a7eab6",
+          "pccId": "9d6134e1-b12e-4f3b-9843-1edd4c67ae38",
+          "source": "espn",
+          "headline": "Dallas Cowboys vs. Houston Texans: Game Highlights",
+          "shortHeadline": "Dallas Cowboys vs. Houston Texans: Game Highlights",
+          "caption": "Dallas Cowboys vs. Houston Texans: Game Highlights",
+          "title": "Dallas Cowboys vs. Houston Texans: Game Highlights",
+          "description": "Dallas Cowboys vs. Houston Texans: Game Highlights",
+          "shortDescription": "Dallas Cowboys vs. Houston Texans: Game Highlights",
+          "lastModified": "2026-10-04T21:02:19Z",
+          "originalPublishDate": "2026-10-04T20:57:02Z",
+          "premium": false,
+          "syndicatable": true,
+          "duration": 60,
+          "videoRatio": "16:9,9:16",
+          "timeRestrictions": {
+            "embargoDate": "2026-10-04T20:57:01Z",
+            "expirationDate": "2026-10-06T20:57:00Z"
+          },
+          "deviceRestrictions": {
+            "devices": [
+              "settop",
+              "tablet",
+              "handset"
+            ],
+            "type": "whitelist"
+          },
+          "plays": [
+            {
+              "id": 401872967250
+            }
+          ],
+          "thumbnail": "https://espnmedia-cdn.akamaized.net/espn/media/common/wsc/2026/1004/5350583c-499d-4660-aa9f-3f1316e1dada/5350583c-499d-4660-aa9f-3f1316e1dada.jpg",
+          "images": [
+            {
+              "name": "Poster Image",
+              "caption": "",
+              "alt": "",
+              "credit": "",
+              "height": 324,
+              "width": 576,
+              "url": "https://espnmedia-cdn.akamaized.net/espn/media/common/wsc/2026/1004/5350583c-499d-4660-aa9f-3f1316e1dada/5350583c-499d-4660-aa9f-3f1316e1dada.jpg"
+            }
+          ],
+          "posterImages": {
+            "default": {
+              "href": "https://espnmedia-cdn.akamaized.net/espn/media/common/wsc/2026/1004/5350583c-499d-4660-aa9f-3f1316e1dada/5350583c-499d-4660-aa9f-3f1316e1dada_default.jpg",
+              "width": 576,
+              "height": 324
+            },
+            "firstFrame": {
+              "href": "https://cmp-espn.media.dssott.com/opp/img/espn/wsc/2026/1004/5350583c-499d-4660-aa9f-3f1316e1dada/5350583c-499d-4660-aa9f-3f1316e1dada/thumb-1-w720-h406-f4.jpg"
+            },
+            "full": {
+              "href": "https://espnmedia-cdn.akamaized.net/espn/media/common/wsc/2026/1004/5350583c-499d-4660-aa9f-3f1316e1dada/5350583c-499d-4660-aa9f-3f1316e1dada.jpg"
+            },
+            "square": {
+              "href": "https://espnmedia-cdn.akamaized.net/espn/media/common/wsc/2026/1004/5350583c-499d-4660-aa9f-3f1316e1dada/5350583c-499d-4660-aa9f-3f1316e1dada_1x1.jpg"
+            },
+            "vertical": {
+              "href": "https://espnmedia-cdn.akamaized.net/espn/media/common/wsc/2026/1004/5350583c-499d-4660-aa9f-3f1316e1dada/5350583c-499d-4660-aa9f-3f1316e1dada_9x16.jpg"
+            },
+            "verticalFirstFrame": {
+              "href": "https://cmp-espn.media.dssott.com/opp/img/espn/9x16/wsc/2026/1004/5350583c-499d-4660-aa9f-3f1316e1dada/5350583c-499d-4660-aa9f-3f1316e1dada/thumb-1-w406-h720-f4.jpg"
+            },
+            "wide": {
+              "href": "https://espnmedia-cdn.akamaized.net/espn/media/common/wsc/2026/1004/5350583c-499d-4660-aa9f-3f1316e1dada/5350583c-499d-4660-aa9f-3f1316e1dada_5x2.jpg"
+            }
+          },
+          "links": {
+            "api": {
+              "artwork": {
+                "href": "https://artwork.api.espn.com/artwork/collections/media/9d6134e1-b12e-4f3b-9843-1edd4c67ae38"
+              },
+              "self": {
+                "href": "https://content.core.api.espn.com/v1/video/clips/50103615"
+              }
+            },
+            "mobile": {
+              "href": "https://watch.auth.api.espn.com/video/auth/brightcove/9d6134e1-b12e-4f3b-9843-1edd4c67ae38/asset?UMADPARAMreferer=https://www.espn.com/video/clip/_/id/50103615/game-highlights",
+              "alert": {
+                "href": "https://m.espn.com/general/video/videoAlert?vid=50103615"
+              },
+              "progressiveDownload": {
+                "href": "https://watch.auth.api.espn.com/video/auth/brightcove/9d6134e1-b12e-4f3b-9843-1edd4c67ae38/asset?UMADPARAMreferer=https://www.espn.com/video/clip/_/id/50103615/game-highlights"
+              },
+              "source": {
+                "href": "https://espnmedia-cdn.akamaized.net/espn/media/16x9/wsc/2026/1004/5350583c-499d-4660-aa9f-3f1316e1dada/5350583c-499d-4660-aa9f-3f1316e1dada.mp4"
+              },
+              "streaming": {
+                "href": "https://watch.auth.api.espn.com/video/auth/brightcove/9d6134e1-b12e-4f3b-9843-1edd4c67ae38/asset?UMADPARAMreferer=https://www.espn.com/video/clip/_/id/50103615/game-highlights"
+              }
+            },
+            "source": {
+              "href": "https://espnmedia-cdn.akamaized.net/espn/media/16x9/wsc/2026/1004/5350583c-499d-4660-aa9f-3f1316e1dada/5350583c-499d-4660-aa9f-3f1316e1dada.mp4",
+              "HD": {
+                "href": "https://espnmedia-cdn.akamaized.net/espn/media/16x9/wsc/2026/1004/5350583c-499d-4660-aa9f-3f1316e1dada/5350583c-499d-4660-aa9f-3f1316e1dada.mp4"
+              },
+              "HLS": {
+                "href": "https://cmp-espn.media.dssott.com/opp/hls/espn/wsc/2026/1004/5350583c-499d-4660-aa9f-3f1316e1dada/5350583c-499d-4660-aa9f-3f1316e1dada/playlist.m3u8",
+                "9x16": {
+                  "href": "https://cmp-espn.media.dssott.com/opp/hls/espn/9x16/wsc/2026/1004/5350583c-499d-4660-aa9f-3f1316e1dada/5350583c-499d-4660-aa9f-3f1316e1dada/playlist.m3u8"
+                },
+                "HD": {
+                  "href": "https://cmp-espn.media.dssott.com/opp/hls/espn/wsc/2026/1004/5350583c-499d-4660-aa9f-3f1316e1dada/5350583c-499d-4660-aa9f-3f1316e1dada/playlist.m3u8"
+                },
+                "cmaf": {
+                  "href": "https://cmp-espn.media.dssott.com/opp/cmaf/espn/wsc/2026/1004/5350583c-499d-4660-aa9f-3f1316e1dada/5350583c-499d-4660-aa9f-3f1316e1dada/playlist.m3u8",
+                  "9x16": {
+                    "href": "https://cmp-espn.media.dssott.com/opp/cmaf/espn/9x16/wsc/2026/1004/5350583c-499d-4660-aa9f-3f1316e1dada/5350583c-499d-4660-aa9f-3f1316e1dada/playlist.m3u8"
+                  },
+                  "cmb": {
+                    "href": "https://cmp-espn.media.dssott.com/opp/cmaf/espn/cmb/wsc/2026/1004/5350583c-499d-4660-aa9f-3f1316e1dada/5350583c-499d-4660-aa9f-3f1316e1dada/playlist.m3u8"
+                  }
+                },
+                "cmb": {
+                  "href": "https://cmp-espn.media.dssott.com/opp/hls/espn/cmb/wsc/2026/1004/5350583c-499d-4660-aa9f-3f1316e1dada/5350583c-499d-4660-aa9f-3f1316e1dada/playlist.m3u8"
+                },
+                "shield": {
+                  "href": "https://watch.auth.api.espn.com/video/auth/media/9d6134e1-b12e-4f3b-9843-1edd4c67ae38/asset"
+                }
+              },
+              "flash": {
+                "href": "https://espnmedia-cdn.akamaized.net/espn/media/16x9/wsc/2026/1004/5350583c-499d-4660-aa9f-3f1316e1dada/5350583c-499d-4660-aa9f-3f1316e1dada.mp4"
+              },
+              "full": {
+                "href": "https://espnmedia-cdn.akamaized.net/espn/media/16x9/wsc/2026/1004/5350583c-499d-4660-aa9f-3f1316e1dada/5350583c-499d-4660-aa9f-3f1316e1dada.mp4"
+              },
+              "mezzanine": {
+                "href": "https://espnmedia-cdn.akamaized.net/espn/media/16x9/wsc/2026/1004/5350583c-499d-4660-aa9f-3f1316e1dada/5350583c-499d-4660-aa9f-3f1316e1dada.mp4"
+              }
+            },
+            "sportscenter": {
+              "href": "sportscenter://x-callback-url/showVideo?videoID=50103615&videoDSI=8b7e638e4544a"
+            },
+            "web": {
+              "href": "https://www.espn.com/video/clip/_/id/50103615/game-highlights",
+              "self": {
+                "href": "https://www.espn.com/video/clip/_/id/50103615/game-highlights",
+                "dsi": {
+                  "href": "https://www.espn.com/video/clip?id=8b7e638e4544a"
+                }
+              }
+            }
+          },
+          "categories": [
+            {
+              "id": 442886,
+              "type": "athlete",
+              "uid": "s:20~l:28~a:4429059",
+              "guid": "bd8cfa24-9145-3c9e-b8e7-60669972052c",
+              "description": "Woody Marks",
+              "sportId": 28,
+              "athleteId": 4429059,
+              "athlete": {
+                "id": 4429059,
+                "description": "Woody Marks",
+                "links": {
+                  "mobile": {
+                    "athletes": {
+                      "href": "https://www.espn.com/nfl/player/_/id/4429059/woody-marks"
+                    }
+                  },
+                  "web": {
+                    "athletes": {
+                      "href": "https://www.espn.com/nfl/player/_/id/4429059/woody-marks"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "id": 1298,
+              "type": "team",
+              "uid": "s:20~l:28~t:6",
+              "guid": "b0fc8fb7-9dbe-e574-9008-6f0ee7c6b234",
+              "description": "Dallas Cowboys",
+              "sportId": 28,
+              "teamId": 6,
+              "team": {
+                "id": 6,
+                "description": "Dallas Cowboys",
+                "abbreviation": "DAL",
+                "shortDisplayName": "Cowboys",
+                "links": {
+                  "mobile": {
+                    "teams": {
+                      "href": "https://www.espn.com/nfl/team/_/name/dal/dallas-cowboys"
+                    }
+                  },
+                  "web": {
+                    "teams": {
+                      "href": "https://www.espn.com/nfl/team/_/name/dal/dallas-cowboys"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "id": 9572,
+              "type": "league",
+              "uid": "s:20~l:28",
+              "guid": "ad4c3bd2-ddb6-3f8c-8abf-744855a08fa4",
+              "description": "NFL",
+              "sportId": 28,
+              "leagueId": 28,
+              "league": {
+                "id": 28,
+                "description": "NFL",
+                "abbreviation": "NFL",
+                "links": {
+                  "mobile": {
+                    "leagues": {
+                      "href": "https://www.espn.com/nfl/"
+                    }
+                  },
+                  "web": {
+                    "leagues": {
+                      "href": "https://www.espn.com/nfl/"
+                    }
+                  }
+                }
+              }
+            }
+          ],
+          "ad": {
+            "bundle": "sportscenter",
+            "sport": "nfl"
+          },
+          "contributingPartner": "wsc",
+          "contributingSystem": "wsc",
+          "tracking": {
+            "coverageType": "Final Game Highlight",
+            "leagueName": "NFL",
+            "program": "espnnfl",
+            "sportName": "football",
+            "trackingId": "dm_20261004_NFL_dallas_cowboys_vs_houston_texans_game_highlights",
+            "trackingName": "NFL_One-Play (Dallas Cowboys vs. Houston Texans: Game Highlights) 2026/10/04 ESHEET"
+          }
+        }
+      ],
+      "related": [
+        {
+          "id": 50079780,
+          "dataSourceIdentifier": "cef218993789a",
+          "publishedkey": "50079780",
+          "type": "Story",
+          "headline": "NFL Week 4's best arrivals, led by Saints DE Cam Jordan",
+          "title": "NFL Week 4's best arrivals, led by Saints DE Cam Jordan",
+          "linkText": "Saints DE Cam Jordan leads NFL Week 4's most fashionable arrivals",
+          "images": [
+            {
+              "dataSourceIdentifier": "2cddfc28d2f7f",
+              "id": 50112674,
+              "type": "header",
+              "name": "cam jordan MNF [590x332]",
+              "caption": "New Orleans Saints defensive end Cam Jordan arrives for \"Monday Night Football.\"",
+              "credit": "Saints / Instagram",
+              "height": 332,
+              "width": 590,
+              "url": "https://a.espncdn.com/photo/2026/1005/r1726588_590x332_16-9.png"
+            }
+          ],
+          "byline": "ESPN Staff",
+          "isLiveBlog": false,
+          "links": {
+            "api": {
+              "self": {
+                "href": "https://content.core.api.espn.com/v1/sports/news/50079780"
+              }
+            },
+            "app": {
+              "sportscenter": {
+                "href": "sportscenter://x-callback-url/showStory?uid=50079780"
+              }
+            },
+            "mobile": {
+              "href": "http://m.espn.go.com/nfl/story?storyId=50079780"
+            },
+            "web": {
+              "href": "https://www.espn.com/nfl/story/_/id/50079780/nfl-week-4-fashionable-arrivals"
+            }
+          },
+          "premium": false
+        },
+        {
+          "id": 50077236,
+          "dataSourceIdentifier": "13dc1d4147c8c",
+          "publishedkey": "50077236",
+          "type": "Story",
+          "headline": "NFL Week 4: Big takeaways, questions and fantasy spin from Sunday's games",
+          "title": "NFL Week 4 takeaways, questions, fantasy spin on Sunday's games",
+          "linkText": "Making sense of Week 4, including comebacks, three unbeatens and Tetairoa McMillan's banner night",
+          "images": [
+            {
+              "dataSourceIdentifier": "3c024428bce85",
+              "id": 50106842,
+              "type": "header",
+              "name": "Tetairoa McMillan [608x342]",
+              "credit": "Bob Donnan/Imagn Images",
+              "height": 342,
+              "width": 608,
+              "url": "https://a.espncdn.com/photo/2026/1005/r1726176_608x342_16-9.jpg"
+            }
+          ],
+          "byline": "NFL Nation",
+          "isLiveBlog": false,
+          "links": {
+            "api": {
+              "self": {
+                "href": "https://content.core.api.espn.com/v1/sports/news/50077236"
+              }
+            },
+            "app": {
+              "sportscenter": {
+                "href": "sportscenter://x-callback-url/showStory?uid=50077236"
+              }
+            },
+            "mobile": {
+              "href": "http://m.espn.go.com/nfl/story?storyId=50077236"
+            },
+            "web": {
+              "href": "https://www.espn.com/nfl/story/_/id/50077236/week-4-sunday-games-takeaways-questions-2026"
+            }
+          },
+          "premium": false
+        },
+        {
+          "id": 50085799,
+          "dataSourceIdentifier": "d487a5e31771b",
+          "publishedkey": "50085799",
+          "type": "Story",
+          "headline": "Week 4 NFL highlights: Best plays, moments, touchdowns, more",
+          "title": "Week 4 NFL highlights: Best plays, moments, touchdowns, more",
+          "linkText": "Best plays of NFL Week 4: Bryce Young, Panthers go off in victory",
+          "source": "ESPN",
+          "images": [
+            {
+              "dataSourceIdentifier": "1e30bbb47e5e5",
+              "id": 50106395,
+              "type": "header",
+              "name": "Bryce Young [608x342]",
+              "credit": "David Jensen/Getty Images",
+              "height": 342,
+              "width": 608,
+              "url": "https://a.espncdn.com/photo/2026/1005/r1726150_608x342_16-9.jpg"
+            }
+          ],
+          "byline": "NFL Nation",
+          "isLiveBlog": false,
+          "links": {
+            "api": {
+              "self": {
+                "href": "https://content.core.api.espn.com/v1/sports/news/50085799"
+              }
+            },
+            "app": {
+              "sportscenter": {
+                "href": "sportscenter://x-callback-url/showStory?uid=50085799"
+              }
+            },
+            "mobile": {
+              "href": "http://m.espn.go.com/nfl/story?storyId=50085799"
+            },
+            "web": {
+              "href": "https://www.espn.com/nfl/story/_/id/50085799/week-4-highlights-best-plays-touchdowns-2026"
+            }
+          },
+          "premium": false
+        }
+      ],
+      "categories": [
+        {
+          "id": 9572,
+          "type": "league",
+          "uid": "s:20~l:28",
+          "guid": "ad4c3bd2-ddb6-3f8c-8abf-744855a08fa4",
+          "description": "NFL",
+          "sportId": 28,
+          "leagueId": 28,
+          "league": {
+            "id": 28,
+            "description": "NFL",
+            "abbreviation": "NFL",
+            "links": {
+              "mobile": {
+                "leagues": {
+                  "href": "https://www.espn.com/nfl/"
+                }
+              },
+              "web": {
+                "leagues": {
+                  "href": "https://www.espn.com/nfl/"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 1298,
+          "type": "team",
+          "uid": "s:20~l:28~t:6",
+          "guid": "b0fc8fb7-9dbe-e574-9008-6f0ee7c6b234",
+          "description": "Dallas Cowboys",
+          "sportId": 28,
+          "teamId": 6,
+          "team": {
+            "id": 6,
+            "description": "Dallas Cowboys",
+            "abbreviation": "DAL",
+            "shortDisplayName": "Cowboys",
+            "links": {
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/nfl/team/_/name/dal/dallas-cowboys"
+                }
+              },
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/nfl/team/_/name/dal/dallas-cowboys"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 3053,
+          "type": "team",
+          "uid": "s:20~l:28~t:34",
+          "guid": "595690b3-2161-4913-a7a7-814af2fd2621",
+          "description": "Houston Texans",
+          "sportId": 28,
+          "teamId": 34,
+          "team": {
+            "id": 34,
+            "description": "Houston Texans",
+            "abbreviation": "HOU",
+            "shortDisplayName": "Texans",
+            "links": {
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/nfl/team/_/name/hou/houston-texans"
+                }
+              },
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/nfl/team/_/name/hou/houston-texans"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "keywords": [
+        "NFL",
+        "Dallas Cowboys",
+        "Houston Texans"
+      ],
+      "story": "<p><video1></p>\n<p>Welcome to the first weekend of October, when the games get a little more meaningful and the trolls follow suit. Week 4 of the NFL season was further proof of that.</p>\n<p><alsosee></p>\n<p>The <a data-clubhouse-guid=\"49fd392a-86fe-4df3-1b77-9bbfa18b2ad5\" href=\"https://www.espn.com/nfl/team/_/name/atl/atlanta-falcons\">Atlanta Falcons</a> dominated the <a data-clubhouse-guid=\"97d2f6c9-2f22-459c-306a-046941ccab2a\" href=\"https://www.espn.com/nfl/team/_/name/no/new-orleans-saints\">New Orleans Saints</a> 45-24 on \"Monday Night Football,\" thanks to a standout performance from their backfield.</p>\n<p>Atlanta put up a whopping 420 yards, led by 145 rushing yards by <a data-player-guid=\"6667bcb0-dad1-3345-8e5a-a67ed4b010b0\" href=\"https://www.espn.com/nfl/player/_/id/4430807/bijan-robinson\">Bijan Robinson</a>, who also added two scores. His fellow running back <a data-player-guid=\"db9245d5-8563-a0ac-7fa0-73b7da5f9de0\" href=\"https://www.espn.com/nfl/player/_/id/4241474/brian-robinson-jr\">Brian Robinson Jr</a>. put up three touchdowns. The Falcons' five rushing touchdowns tied a franchise record. They are the sixth pair of teammates who each had multiple rushing touchdowns in a \"Monday Night Football\" game. The Falcons' lone passing touchdown occurred when quarterback <a data-player-guid=\"28022fa1-9050-eee1-5160-c77a6a379ec2\" href=\"https://www.espn.com/nfl/player/_/id/4360423/michael-penix-jr\">Michael Penix Jr</a>. connected with wide receiver <a data-player-guid=\"26171769-a750-2898-5ffd-aa95c1ed7621\" href=\"https://www.espn.com/nfl/player/_/id/4361409/jahan-dotson\">Jahan Dotson</a> for a 31-yard score. </p>\n<p>With the Falcons-Saints rivalry being one of the fiercest in the league, it only made sense that Atlanta poked fun after the victory -- multiple times. The Falcons captioned their post: \"Marched in,\" a nod to the Saints' anthem, \"When the Saints Go Marching In.\"</p>\n<p>The Falcons then resurfaced a video in which a Saints fan motioned a choking sign at Falcons players as they entered halftime with a lead, indicating that Atlanta would eventually lose. The original video had the caption: \"This Saints fan potentially could have an all-time clip for the second half,\" to which the Falcons quipped postgame with: \"He did not.\" </p>\n<p><inline8> </p>\n<p>Here are the other top trolls from Week 4.</p>\n<p><img src=\"http://a.espncdn.com/i/infographics/20170710_nfl_fpr/charts/_end_rule.png\" width=\"100%\"></p>\n\n\n<h2><a href=\"https://www.espn.com/nfl/game/_/gameId/401872967/cowboys-texans\">Dallas Cowboys 34, Houston Texans 30</a></h2>\n<p>The <a data-clubhouse-guid=\"b0fc8fb7-9dbe-e574-9008-6f0ee7c6b234\" href=\"https://www.espn.com/nfl/team/_/name/dal/dallas-cowboys\">Dallas Cowboys</a> defeated the <a data-clubhouse-guid=\"595690b3-2161-4913-a7a7-814af2fd2621\" href=\"https://www.espn.com/nfl/team/_/name/hou/houston-texans\">Houston Texans</a> on the road. Facing a four-point deficit with 2:23 left, Dallas went on an 11-play, 74-yard drive that concluded with a 12-yard touchdown catch by wide receiver <a data-player-guid=\"2994891b-8927-33cb-6999-e809560d0545\" href=\"https://www.espn.com/nfl/player/_/id/4241389/ceedee-lamb\">CeeDee Lamb</a>.</p>\n<p>It put the Cowboys up for good and capped a stellar performance from Lamb. He had a whopping 17 catches -- second most in franchise history -- for 189 yards. It's the most receptions by any player since <a data-player-guid=\"c22ef201-95ad-1740-dd33-3ae06d7e7e68\" href=\"https://www.espn.com/nfl/player/_/id/15818/keenan-allen\">Keenan Allen</a> had 18 in Week 3 of the 2023 season, according to ESPN Research.</p>\n<p>Dallas had clever jabs lined up for the in-state matchup. The Cowboys referenced country star Ella Langley's hit track, \"Choosin' Texas,\" in a social media post, adding \"Dallas\" ahead of \"Texas.\"</p>\n<p>Then, Dallas put a spin on the opening sequence from the sitcom \"King of the Hill,\" which is set in Texas. The illustration featured Lamb, <a data-player-guid=\"5f09781b-6b0b-7325-049b-a91e60d794e6\" href=\"https://www.espn.com/nfl/player/_/id/2577417/dak-prescott\">Dak Prescott</a>, wide receiver <a data-player-guid=\"ab0fe70b-0fb4-fc8e-55e1-8f5204851a9d\" href=\"https://www.espn.com/nfl/player/_/id/4426354/george-pickens\">George Pickens</a> and safety <a data-player-guid=\"12c8597c-e9ff-36ba-a51a-61c91d87abf7\" href=\"https://www.espn.com/nfl/player/_/id/4870706/caleb-downs\">Caleb Downs</a> hanging out together with \"Kings of the State\" written above them.</p>\n<p><inline1></p>\n\n\n<hr>\n<h2><a href=\"https://www.espn.com/nfl/game/_/gameId/401872978\">Carolina Panthers 32, Detroit Lions 26 </a></h2>\n<p>It required one final stop, but the Panthers survived for a \"Sunday Night Football\" win against the Lions.</p>\n<p>Carolina held a six-point lead when Detroit regained possession with 2:06 left. Four plays later, the Lions turned it over on downs, clinching the Panthers' victory. Panthers quarterback <a data-player-guid=\"975cc6da-01e5-3dcc-8a1a-1c9ecdb27d58\" href=\"https://www.espn.com/nfl/player/_/id/4685720/bryce-young\">Bryce Young</a> threw for 329 yards and two touchdowns -- both to wide receiver <a data-player-guid=\"5b060a16-d491-3595-b199-6ba05b4d9391\" href=\"https://www.espn.com/nfl/player/_/id/4685472/tetairoa-mcmillan\">Tetairoa McMillan</a>, who had 14 catches for 192 yards. Their teammate, running back <a data-player-guid=\"7c6b0551-49b5-aa13-9e26-7db2f9dad46f\" href=\"https://www.espn.com/nfl/player/_/id/4241416/chuba-hubbard\">Chuba Hubbard</a>, had 122 yards on the ground and two scores.</p>\n<p>Carolina understood the assignment postgame when poking fun at Detroit. It shared an image of a Panther standing on a ledge and growling over a lion, writing in the caption: \"The Lion's king.\"</p>\n<p><inline7></p>\n<hr>\n\n\n<h2><a href=\"https://www.espn.com/nfl/game/_/gameId/401872977/chargers-seahawks\">Seattle Seahawks 30, Los Angeles Chargers 23</a></h2>\n<p>Seattle held on to beat Los Angeles in a bounce-back victory.</p>\n<p>The Chargers had a chance to tie the score with 1:42 remaining, but the Seahawks sacked quarterback <a data-player-guid=\"ec880cbc-1490-cdae-548f-f844104974ae\" href=\"https://www.espn.com/nfl/player/_/id/4038941/justin-herbert\">Justin Herbert</a> to force a fumble, which they recovered to secure the win. Seattle forced four turnovers -- three came from Herbert and two led to touchdowns.</p>\n<p>The Seahawks had multiple lightning- and charging-related trolls after the win.</p>\n<p>Their first post was simple with the caption: \"Lights Out,\" a reference to the nickname of Chargers legend Shawne Merriman. Seattle's victory comic included a robot out of charge. Seahawks defensive end <a data-player-guid=\"4ea23eac-ad50-dfe7-6864-0cf74b7cf6b1\" href=\"https://www.espn.com/nfl/player/_/id/2971622/leonard-williams\">Leonard Williams</a> was labeled \"The Lightning Thief,\" the title of a popular Rick Riordan novel. Then there was an image of a charging cord with tattered wires, captioned \"0% battery,\" and another of a charging error with safety <a href=\"https://www.espn.com/nfl/player/_/id/4869523/nick-emmanwori\">Nick Emmanwori</a> sacking Herbert in the background. </p>\n<p><inline2></p>\n\n\n<hr>\n\n\n<h2><a href=\"https://www.espn.com/nfl/game/_/gameId/401872970/rams-eagles\">Los Angeles Rams 24, Philadelphia Eagles 20</a></h2>\n<p>Los Angeles stormed back late to beat Philadelphia on the road.</p>\n<p>The Rams outscored the Eagles 14-0 in the second half. The winning touchdown came on a 7-yard run by <a data-player-guid=\"f22d9167-1359-d2cc-4c4d-b31ab83ad48d\" href=\"https://www.espn.com/nfl/player/_/id/4430737/kyren-williams\">Kyren Williams</a> with 1:10 left. The Eagles then had a turnover on downs, giving the Rams the ball and the win.</p>\n<p>Even though the result was still up in the air, Los Angeles soft launched its troll with a post earlier in the day. The Rams <a href=\"https://x.com/RamsNFL/status/2106739005706600818?s=20\">shared an image of their players</a> with \"Rams in Philadelphia\" written above them in a font evoking the hit comedy \"Abbott Elementary,\" which is set in Philadelphia.</p>\n<p>Just over five hours later, Los Angeles posted a test paper with scantron bubbles filled in to spell out \"W.\"</p>\n<p><inline3></p>\n\n\n<hr>\n<h2><a href=\"https://www.espn.com/nfl/game/_/gameId/401872975/broncos-49ers\">San Francisco 49ers 24, Denver Broncos 14</a></h2>\n<p>The 49ers remain undefeated following a win against the Broncos.</p>\n<p>San Francisco's defense shined, allowing just one touchdown and 296 total yards to Denver. The 49ers' offense played its part, too, specifically the offensive line -- the team has yet to give up a sack this season. The Niners are the first team to allow zero sacks through four games since the 2005 <a data-clubhouse-guid=\"582d14eb-da61-e505-cc40-d972a1b60ed1\" href=\"https://www.espn.com/nfl/team/_/name/ind/indianapolis-colts\">Indianapolis Colts</a>, according to ESPN Research.</p>\n<p>The Broncos' home stadium is Empower Field at Mile High, and even though the 49ers won at home, they highlighted the \"mile high\" component with a jab.</p>\n<p><inline4></p>\n\n\n<hr>\n<h2><a href=\"https://www.espn.com/nfl/game/_/gameId/401872969/jaguars-bengals\">Jacksonville Jaguars 22, Cincinnati Bengals 17</a></h2>\n<p>Jacksonville's wire-to-wire win over Cincinnati prompted a simple, yet effective, troll.</p>\n<p>Jaguars quarterback <a data-player-guid=\"76111495-d1d9-2333-170d-4206eebe673f\" href=\"https://www.espn.com/nfl/player/_/id/4360310/trevor-lawrence\">Trevor Lawrence</a> had 223 passing yards and one score, and Bengals quarterback <a data-player-guid=\"e6957db5-5b2e-a82d-c788-d889115d9772\" href=\"https://www.espn.com/nfl/player/_/id/3915511/joe-burrow\">Joe Burrow</a> threw for 428 yards, one touchdown plus two interceptions. Cincinnati put up a whopping 437 yards of offense but had only two touchdowns to show for it.</p>\n<p>In a battle between Jaguars and Bengals, Jacksonville highlighted its win by writing \"Jungle Cats\" in its postgame caption.</p>\n<p><inline5></p>\n\n\n<hr>\n<h2><a href=\"https://www.espn.com/nfl/game/_/gameId/401872964/steelers-browns\">Cleveland Browns 27, Pittsburgh Steelers 24</a></h2>\n<p>The Browns have won three straight games for the first time since 2023 after defeating the Steelers on \"Thursday Night Football.\"</p>\n<p>Pittsburgh tied the score with 1:42 remaining, but Cleveland responded by kicking a winning field goal with 10 ticks left. As a result, <a data-player-guid=\"b6ec8e9e-3d85-a1de-9d0a-5a51621a9c20\" href=\"https://www.espn.com/nfl/player/_/id/3122840/deshaun-watson\">Deshaun Watson</a> became the second Browns quarterback since 1970 to lead three straight winning drives in the fourth quarter or overtime, according to ESPN Research.</p>\n<p>At first glance, Cleveland's Minecraft-themed post after the win seemed something ordinary. But it was a reference to former Pittsburgh head coach <a href=\"https://www.espn.com/nfl/story/_/id/50073098/former-steelers-coach-mike-tomlin-minecraft-city-12-year-reveal\">Mike Tomlin revealing his Minecraft world</a> Wednesday. The Browns capitalized on the moment by building out an \"L\" in Minecraft blocks and writing: \"Pittsburgh was defeated by the Dawg Pound.\"</p>\n<p><inline6></p>\n\n\n\n\n",
+      "allowAMP": true,
+      "allowAds": true,
+      "allowComments": true,
+      "allowCommerce": true,
+      "allowContentReactions": true,
+      "allowSearch": true,
+      "byline": "Anthony Gharib",
+      "isLiveBlog": false,
+      "links": {
+        "api": {
+          "self": {
+            "href": "https://content.core.api.espn.com/v1/sports/news/50105587"
+          }
+        },
+        "app": {
+          "sportscenter": {
+            "href": "sportscenter://x-callback-url/showStory?uid=50105587"
+          }
+        },
+        "mobile": {
+          "href": "http://m.espn.go.com/nfl/story?storyId=50105587"
+        },
+        "web": {
+          "href": "https://www.espn.com/nfl/story/_/id/50105587/nfl-week-4-2026-trolls"
+        }
+      },
+      "premium": false
+    }
+  ],
+  "breakingNews": [],
+  "timestamp": "2026-10-06T06:33:16Z",
+  "status": "success"
+}

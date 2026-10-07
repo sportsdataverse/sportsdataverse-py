@@ -259,3 +259,34 @@ def test_redact_secrets_is_linear(shape):
     start = time.perf_counter()
     _redact_secrets(text)
     assert time.perf_counter() - start < 0.05
+
+
+def test_a_key_in_a_path_segment_is_redacted():
+    """TheSportsDB puts its API key in the path, not a query parameter.
+
+    ``_SECRET_PAIR`` only knows the ``name=value`` shape, so without a path rule the key
+    survives into every error message, every ``download`` retry log line and every chained
+    traceback.
+    """
+    from sportsdataverse.errors import _redact_secrets
+
+    url = "www.thesportsdb.com/api/v1/json/9a8b7c6d5e4f3g2h/lookupevent.php"
+    out = _redact_secrets(f"{url} answered HTTP 404")
+    assert "9a8b7c6d5e4f3g2h" not in out
+    assert out == "www.thesportsdb.com/api/v1/json/REDACTED/lookupevent.php answered HTTP 404"
+
+
+def test_path_key_redaction_keeps_the_rest_of_the_path():
+    from sportsdataverse.errors import _redact_secrets
+
+    out = _redact_secrets("https://www.thesportsdb.com/api/v1/json/abc123/eventsseason.php?id=4328&s=2025-2026")
+    assert "abc123" not in out
+    assert "eventsseason.php" in out
+    assert "id=4328" in out
+
+
+def test_path_key_redaction_leaves_a_keyless_path_alone():
+    from sportsdataverse.errors import _redact_secrets
+
+    text = "api.openligadb.de/getmatchdata/bl1/2025 answered HTTP 404"
+    assert _redact_secrets(text) == text

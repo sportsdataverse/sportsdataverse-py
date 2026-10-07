@@ -1,0 +1,35 @@
+{
+  "matchID": 83196,
+  "matchDateTime": "2026-10-10T15:30:00",
+  "timeZoneID": "W. Europe Standard Time",
+  "leagueId": 4937,
+  "leagueName": "1. Fußball-Bundesliga 2026/2027",
+  "leagueSeason": 2026,
+  "leagueShortcut": "bl1",
+  "matchDateTimeUTC": "2026-10-10T13:30:00Z",
+  "group": {
+    "groupName": "5. Spieltag",
+    "groupOrderID": 5,
+    "groupID": 50637
+  },
+  "team1": {
+    "teamId": 95,
+    "teamName": "FC Augsburg",
+    "shortName": "Augsburg",
+    "teamIconUrl": "https://i.imgur.com/sdE62e2.png",
+    "teamGroupName": null
+  },
+  "team2": {
+    "teamId": 40,
+    "teamName": "FC Bayern München",
+    "shortName": "Bayern",
+    "teamIconUrl": "https://upload.wikimedia.org/wikipedia/commons/1/1f/Logo_FC_Bayern_M%C3%BCnchen_%282002%E2%80%932017%29.svg",
+    "teamGroupName": null
+  },
+  "lastUpdateDateTime": "2026-07-03T08:03:29.417",
+  "matchIsFinished": false,
+  "matchResults": [],
+  "goals": [],
+  "location": null,
+  "numberOfViewers": null
+}

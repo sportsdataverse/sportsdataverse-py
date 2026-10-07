@@ -1,0 +1,32 @@
+[
+  {
+    "leagueId": 3,
+    "leagueName": "1. Fußball-Bundesliga 2007/2008",
+    "leagueShortcut": "bl1",
+    "leagueSeason": "2007",
+    "sport": {
+      "sportId": 1,
+      "sportName": "Fußball"
+    }
+  },
+  {
+    "leagueId": 4,
+    "leagueName": "2. Fussball-Bundesliga 2007/2008",
+    "leagueShortcut": "bl2",
+    "leagueSeason": "2007",
+    "sport": {
+      "sportId": 1,
+      "sportName": "Fußball"
+    }
+  },
+  {
+    "leagueId": 5,
+    "leagueName": "Uefa EM 2008 ",
+    "leagueShortcut": "fem08",
+    "leagueSeason": "2008",
+    "sport": {
+      "sportId": 1,
+      "sportName": "Fußball"
+    }
+  }
+]

@@ -13,3 +13,9 @@ from sportsdataverse.odds.the_odds_api_parsers import (
     parse_toa_scores,
     parse_toa_sports,
 )
+
+# Flat-API families homed at ``sportsdataverse.odds`` (prediction markets).
+from sportsdataverse.odds.kalshi import *  # noqa: F401,F403,E402
+from sportsdataverse.odds.kalshi_parsers import *  # noqa: F401,F403,E402
+from sportsdataverse.odds.polymarket import *  # noqa: F401,F403,E402
+from sportsdataverse.odds.polymarket_parsers import *  # noqa: F401,F403,E402

@@ -1,0 +1,15 @@
+columns:
+- description: ''
+  name: exchange_active
+  type: logical
+- description: ''
+  name: exchange_index_statuses
+  type: character
+- description: ''
+  name: intra_exchange_transfers_active
+  type: logical
+- description: ''
+  name: trading_active
+  type: logical
+kind: dataframe
+schema: exchange_status
