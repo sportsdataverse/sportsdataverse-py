@@ -1009,10 +1009,10 @@ columns:
   type: character
 - description: ''
   name: score_penalty_away
-  type: numeric
+  type: integer
 - description: ''
   name: score_penalty_home
-  type: numeric
+  type: integer
 - description: ''
   name: score_regular_away
   type: integer
@@ -1255,7 +1255,7 @@ columns:
   type: character
 - description: ''
   name: winner_match_team_is_place_holder
-  type: character
+  type: logical
 - description: ''
   name: winner_match_team_logo_url
   type: character
@@ -1408,7 +1408,7 @@ columns:
   type: character
 - description: ''
   name: winner_match_team_type_is_national
-  type: character
+  type: logical
 - description: ''
   name: winner_match_team_type_team
   type: character
@@ -1471,13 +1471,13 @@ columns:
   type: character
 - description: ''
   name: condition_humidity
-  type: numeric
+  type: integer
 - description: ''
   name: condition_pitch_condition
   type: character
 - description: ''
   name: condition_temperature
-  type: numeric
+  type: integer
 - description: ''
   name: condition_translations_pitch_condition_name_en
   type: character
@@ -1537,7 +1537,7 @@ columns:
   type: character
 - description: ''
   name: condition_wind_speed
-  type: numeric
+  type: integer
 - description: ''
   name: leg_date_time_from
   type: character
@@ -1546,7 +1546,7 @@ columns:
   type: character
 - description: ''
   name: leg_number
-  type: numeric
+  type: integer
 - description: ''
   name: leg_translations_name_en
   type: character
@@ -1603,10 +1603,10 @@ columns:
   type: character
 - description: ''
   name: score_aggregate_away
-  type: numeric
+  type: integer
 - description: ''
   name: score_aggregate_home
-  type: numeric
+  type: integer
 - description: ''
   name: winner_aggregate_reason
   type: character
@@ -1636,7 +1636,7 @@ columns:
   type: character
 - description: ''
   name: winner_aggregate_team_is_place_holder
-  type: character
+  type: logical
 - description: ''
   name: winner_aggregate_team_logo_url
   type: character
@@ -1789,7 +1789,7 @@ columns:
   type: character
 - description: ''
   name: winner_aggregate_team_type_is_national
-  type: character
+  type: logical
 - description: ''
   name: winner_aggregate_team_type_team
   type: character

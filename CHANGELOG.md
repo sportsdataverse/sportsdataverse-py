@@ -9,6 +9,7 @@
   - [Added — kloppy as the optional `soccer` extra; `soccer_open_events()` loads open event data](#added--kloppy-as-the-optional-soccer-extra-soccer_open_events-loads-open-event-data)
   - [Changed — league index pages gain a "See also" block of companion packages (soccer first)](#changed--league-index-pages-gain-a-see-also-block-of-companion-packages-soccer-first)
   - [Added — sdv-docs MCP server and a published docs index](#added--sdv-docs-mcp-server-and-a-published-docs-index)
+  - [Fixed — nullable boolean and integer columns keep their types; no `"nan"` strings (soccer / EuroLeague frames)](#fixed--nullable-boolean-and-integer-columns-keep-their-types-no-nan-strings-soccer--euroleague-frames)
   - [Fixed — a failed fetch in the hand-written ESPN scrapers raises instead of being parsed (BREAKING)](#fixed--a-failed-fetch-in-the-hand-written-espn-scrapers-raises-instead-of-being-parsed-breaking)
   - [Fixed — a failed stats.nba.com / stats.wnba.com fetch raises instead of returning `{}` (BREAKING)](#fixed--a-failed-statsnbacom--statswnbacom-fetch-raises-instead-of-returning--breaking)
   - [Fixed — a failed flat-API fetch raises instead of returning the error body (BREAKING)](#fixed--a-failed-flat-api-fetch-raises-instead-of-returning-the-error-body-breaking)
@@ -460,6 +461,19 @@ because of a filter says where the name does exist, and results that match only 
 query's words are labelled as partial matches. `limit` is capped at 100, and a returns table is
 cut at about 40,000 characters with a link to the full table. `sdv-docs --help` and
 `sdv-docs --version` exit without starting the server.
+
+### Fixed — nullable boolean and integer columns keep their types; no `"nan"` strings (soccer / EuroLeague frames)
+
+The shared frame builder behind the ASA, FIFA, FotMob, UEFA, MLS, NWSL and EuroLeague
+parsers (`sportsdataverse/soccer/_frames.py`) went through pandas, so one missing value
+changed a column's type: a nullable boolean became a string column carrying the literal
+`"nan"` (`euroleague_seasons().winner_is_virtual`), and a nullable integer was promoted
+to `Float64` (`uefa_matches().score_penalty_away`). The frame is now built by polars
+directly: a nullable boolean is `Boolean` with a null, a nullable integer is `Int64`
+with a null, a column that is null on every row is `Utf8`, and no column carries a
+`"nan"` / `"None"` string. Column names, order and values are unchanged; the
+returns tables of the affected endpoints now document the corrected types
+(`numeric` -> `integer`, `character` -> `logical`).
 
 ### Fixed — a failed fetch in the hand-written ESPN scrapers raises instead of being parsed (BREAKING)
 

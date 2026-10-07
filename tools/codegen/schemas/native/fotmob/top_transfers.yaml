@@ -31,7 +31,7 @@ columns:
   type: character
 - description: ''
   name: amount_euro_estimated
-  type: numeric
+  type: integer
 - description: ''
   name: contract_extension
   type: logical
@@ -79,6 +79,6 @@ columns:
   type: character
 - description: ''
   name: fee_value
-  type: numeric
+  type: integer
 kind: dataframe
 schema: top_transfers

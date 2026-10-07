@@ -24,7 +24,7 @@ are correctness issues rather than formatting:
 from __future__ import annotations
 
 import json
-from typing import Any, Dict, Iterable, List, Optional, Sequence, Union
+from typing import Any, Dict, Iterable, List, Optional, Sequence, Tuple, Union
 
 import pandas as pd
 import polars as pl
@@ -93,28 +93,64 @@ def to_utf8_ids(df: pl.DataFrame, cols: Optional[Iterable[str]] = None) -> pl.Da
     return df.with_columns(exprs) if exprs else df
 
 
+def _flatten(record: Dict[str, Any], prefix: str = "") -> Dict[str, Any]:
+    """Flatten nested objects to ``parent_child`` keys (``json_normalize(sep="_")`` semantics).
+
+    Lists are kept as values; an empty nested object contributes no key; a
+    ``None`` nested object stays a ``None`` cell. Column order is
+    ``json_normalize``'s: top-level scalars first, then each nested object's
+    keys in document order.
+    """
+    flat: Dict[str, Any] = {}
+    nested: List[Tuple[str, Dict[str, Any]]] = []
+    for key, value in record.items():
+        name = f"{prefix}{key}"
+        if isinstance(value, dict) and not prefix:
+            nested.append((name, value))
+        elif isinstance(value, dict):
+            flat.update(_flatten(value, f"{name}_"))
+        else:
+            flat[name] = value
+    for name, value in nested:
+        flat.update(_flatten(value, f"{name}_"))
+    return flat
+
+
 def _encode(name: str, value: Any) -> Any:
-    """JSON/str-encode one object-dtype cell (id lists become comma-joined)."""
+    """JSON-encode one list cell (id lists become comma-joined); scalars pass through."""
     if isinstance(value, list) and is_id_name(name):
         return ",".join(str(v) for v in value)
-    if isinstance(value, (list, dict)):
+    if isinstance(value, list):
         return json.dumps(value)
-    if value is None or isinstance(value, str):
-        return value
-    return str(value)
+    return value
+
+
+def _kind(value: Any) -> str:
+    """Scalar type class: bool / number / str -- mixing classes in one column forces Utf8."""
+    if isinstance(value, bool):
+        return "bool"
+    if isinstance(value, (int, float)):
+        return "number"
+    return "str"
 
 
 def rows_to_frame(rows: Sequence[Any]) -> pl.DataFrame:
     """Flatten a list of JSON records into a tidy polars frame.
+
+    Missing values stay nulls: a nullable boolean column is ``Boolean`` (never
+    the string ``"nan"``), a nullable integer column is ``Int64`` (never
+    promoted to ``Float64``), and a column that is null on every row is
+    ``Utf8``. A column mixing scalar classes (bool / number / str) is
+    stringified so the frame is always buildable.
 
     Args:
         rows: records from a provider payload. Non-dict entries (a bare scalar
             array) are wrapped as a single ``value`` column.
 
     Returns:
-        One row per record with ``json_normalize``-flattened, snake_cased
-        columns; nested cells stringified and id columns pinned to ``Utf8``.
-        A zero-row, zero-column frame when ``rows`` is empty.
+        One row per record with nested objects flattened to ``parent_child``
+        snake_cased columns; list cells stringified and id columns pinned to
+        ``Utf8``. A zero-row, zero-column frame when ``rows`` is empty.
 
     Example:
         Basic use::
@@ -131,23 +167,38 @@ def rows_to_frame(rows: Sequence[Any]) -> pl.DataFrame:
         return pl.DataFrame()
     if not any(isinstance(r, dict) for r in kept):
         return pl.DataFrame({"value": [str(r) for r in kept]})
-    records: List[Dict[str, Any]] = [r if isinstance(r, dict) else {"value": r} for r in kept]
-    pdf = pd.json_normalize(records, sep="_")
+    flat = [_flatten(r if isinstance(r, dict) else {"value": r}) for r in kept]
+    # Column names: union of raw keys in first-seen order, snake_cased, suffixed
+    # when two raw keys collapse to one snake name.
     seen: Dict[str, int] = {}
-    names: List[str] = []
-    for raw_name in pdf.columns:
-        name = underscore(str(raw_name))
-        if name in seen:
-            seen[name] += 1
-            name = f"{name}_{seen[name]}"
-        else:
-            seen[name] = 1
-        names.append(name)
-    pdf.columns = names
-    for name in pdf.columns:
-        if pdf[name].dtype == object:
-            pdf[name] = pdf[name].map(lambda v, _n=name: _encode(_n, v))
-    return to_utf8_ids(pl.from_pandas(pdf))
+    names: Dict[str, str] = {}
+    for record in flat:
+        for raw_name in record:
+            if raw_name in names:
+                continue
+            name = underscore(raw_name)
+            if name in seen:
+                seen[name] += 1
+                name = f"{name}_{seen[name]}"
+            else:
+                seen[name] = 1
+            names[raw_name] = name
+    columns: Dict[str, List[Any]] = {name: [None] * len(flat) for name in names.values()}
+    for i, record in enumerate(flat):
+        for raw_name, value in record.items():
+            name = names[raw_name]
+            columns[name][i] = _encode(name, value)
+    for name, values in columns.items():
+        kinds = {_kind(v) for v in values if v is not None}
+        if len(kinds) > 1:
+            columns[name] = [None if v is None else str(v) for v in values]
+        elif kinds == {"number"} and any(isinstance(v, float) for v in values):
+            columns[name] = [None if v is None else float(v) for v in values]
+    df = pl.DataFrame(columns, infer_schema_length=None)
+    all_null = [c for c, t in df.schema.items() if t == pl.Null]
+    if all_null:
+        df = df.with_columns(pl.col(all_null).cast(pl.String))
+    return to_utf8_ids(df)
 
 
 def as_output(

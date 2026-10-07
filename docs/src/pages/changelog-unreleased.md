@@ -132,6 +132,19 @@ query's words are labelled as partial matches. `limit` is capped at 100, and a r
 cut at about 40,000 characters with a link to the full table. `sdv-docs --help` and
 `sdv-docs --version` exit without starting the server.
 
+### Fixed — nullable boolean and integer columns keep their types; no `"nan"` strings (soccer / EuroLeague frames)
+
+The shared frame builder behind the ASA, FIFA, FotMob, UEFA, MLS, NWSL and EuroLeague
+parsers (`sportsdataverse/soccer/_frames.py`) went through pandas, so one missing value
+changed a column's type: a nullable boolean became a string column carrying the literal
+`"nan"` (`euroleague_seasons().winner_is_virtual`), and a nullable integer was promoted
+to `Float64` (`uefa_matches().score_penalty_away`). The frame is now built by polars
+directly: a nullable boolean is `Boolean` with a null, a nullable integer is `Int64`
+with a null, a column that is null on every row is `Utf8`, and no column carries a
+`"nan"` / `"None"` string. Column names, order and values are unchanged; the
+returns tables of the affected endpoints now document the corrected types
+(`numeric` -> `integer`, `character` -> `logical`).
+
 ### Fixed — a failed fetch in the hand-written ESPN scrapers raises instead of being parsed (BREAKING)
 
 88 hand-written fetches read `download()`'s response without checking it. Once the

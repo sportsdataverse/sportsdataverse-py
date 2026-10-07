@@ -22,7 +22,7 @@ columns:
   type: character
 - description: ''
   name: height
-  type: numeric
+  type: integer
 - description: Provider identifier for the entity (Utf8 join key).
   name: id
   type: character
@@ -43,7 +43,7 @@ columns:
   type: character
 - description: ''
   name: weight
-  type: numeric
+  type: integer
 - description: ''
   name: translations_country_name_en
   type: character
