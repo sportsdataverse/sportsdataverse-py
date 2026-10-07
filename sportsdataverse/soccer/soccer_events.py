@@ -11,6 +11,7 @@ Install with ``pip install "sportsdataverse[soccer]"``.
 
 from __future__ import annotations
 
+import dataclasses
 from typing import TYPE_CHECKING, Any, Dict, Union
 
 from sportsdataverse.dl_utils import underscore
@@ -29,8 +30,15 @@ def _kloppy() -> Any:
     try:
         import kloppy
     except ImportError as exc:
-        raise ImportError(f"soccer_open_events() needs kloppy: {_INSTALL_HINT}") from exc
+        raise ImportError(f"kloppy is required: {_INSTALL_HINT}") from exc
     return kloppy
+
+
+def _stamp_game_id(dataset: Any, game_id: Union[int, str]) -> Any:
+    """Record ``game_id`` on a dataset whose loader left it unset (kloppy's StatsBomb one does)."""
+    if dataset.metadata.game_id is None:
+        dataset.metadata = dataclasses.replace(dataset.metadata, game_id=str(game_id))
+    return dataset
 
 
 # provider -> the kloppy module attribute whose ``load_open_data(match_id=...)`` serves it.
@@ -122,7 +130,7 @@ def soccer_open_dataset(provider: str, match_id: Union[int, str], **kwargs: Any)
 
             from sportsdataverse.soccer import soccer_open_dataset, soccer_spadl
             dataset = soccer_open_dataset("statsbomb", 8658)
-            actions = soccer_spadl(dataset, game_id=8658)
+            actions = soccer_spadl(dataset)
 
         Pipeline next step (one line)::
 
@@ -138,7 +146,8 @@ def soccer_open_dataset(provider: str, match_id: Union[int, str], **kwargs: Any)
         raise ValueError(f"unknown open-data provider {provider!r}; supported: {sorted(_OPEN_DATA_PROVIDERS)}")
     kloppy = _kloppy()
     kwargs.setdefault("coordinates", key)  # provider units (StatsBomb 120 x 80), what pitch_coords() expects
-    return getattr(kloppy, _OPEN_DATA_PROVIDERS[key]).load_open_data(match_id=match_id, **kwargs)
+    dataset = getattr(kloppy, _OPEN_DATA_PROVIDERS[key]).load_open_data(match_id=match_id, **kwargs)
+    return _stamp_game_id(dataset, match_id)
 
 
 def soccer_open_events(

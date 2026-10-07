@@ -1234,7 +1234,7 @@ A kloppy `EventDataset`.
 ```python
 from sportsdataverse.soccer import soccer_open_dataset, soccer_spadl
 dataset = soccer_open_dataset("statsbomb", 8658)
-actions = soccer_spadl(dataset, game_id=8658)
+actions = soccer_spadl(dataset)
 
 # Pipeline next step (one line)
 
@@ -1306,7 +1306,7 @@ One row per on-ball action with the SPADL columns (`type_name`, `result_name`, `
 
 ```python
 from sportsdataverse.soccer import soccer_open_dataset, soccer_spadl
-actions = soccer_spadl(soccer_open_dataset("statsbomb", 8658), game_id=8658)
+actions = soccer_spadl(soccer_open_dataset("statsbomb", 8658))
 print(actions.shape)
 
 # Pipeline next step (one line)

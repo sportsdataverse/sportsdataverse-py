@@ -390,13 +390,14 @@ def soccer_spadl(
 
     Raises:
         ImportError: kloppy is missing (``pip install "sportsdataverse[soccer]"``).
-        ValueError: neither the dataset nor ``game_id`` names the game.
+        ValueError: neither the dataset nor ``game_id`` names the game; or the dataset's provider has no
+            usable coordinate system (unknown / ``OTHER``) or its pitch dimensions are not fixed.
 
     Example:
         Quick start::
 
             from sportsdataverse.soccer import soccer_open_dataset, soccer_spadl
-            actions = soccer_spadl(soccer_open_dataset("statsbomb", 8658), game_id=8658)
+            actions = soccer_spadl(soccer_open_dataset("statsbomb", 8658))
             print(actions.shape)
 
         Pipeline next step (one line)::
