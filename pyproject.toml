@@ -330,6 +330,8 @@ warn_unused_ignores = true
 warn_redundant_casts = true
 files = [
     "sportsdataverse/_deprecation.py",
+    "sportsdataverse/euroleague/euroleague_parsers.py",
+    "sportsdataverse/euroleague/euroleague_runtime.py",
     "sportsdataverse/validation/box_reconcile.py",
     "sportsdataverse/validation/findings.py",
     "sportsdataverse/validation/pbp_invariants.py",
@@ -768,6 +770,8 @@ files = [
     "sportsdataverse/registry/__init__.py",
     "sportsdataverse/registry/__main__.py",
     "sportsdataverse/soccer/soccer_events.py",
+    "sportsdataverse/f1/f1_parsers.py",
+    "sportsdataverse/f1/f1_extra.py",
     "sdv_docs/__init__.py",
     "sdv_docs/schema.py",
     "sdv_docs/index.py",

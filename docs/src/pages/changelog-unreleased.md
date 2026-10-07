@@ -26,6 +26,62 @@ strings, and order-book price levels as the fixed-point strings the hosts send, 
 rounded or overflowed. Paging stays the caller's: a wrapper sends the cursor or offset you pass and
 never follows a continuation token on its own. Only read-only surfaces are wrapped -- Polymarket
 trading and Kalshi's `/portfolio` routes need credentials and are out of scope.
+### Added — Formula 1: Jolpica (Ergast-compatible) wrappers in `sportsdataverse.f1`
+
+`sportsdataverse.f1` wraps the keyless [Jolpica F1 API](https://github.com/jolpica/jolpica-f1)
+(`api.jolpi.ca/ergast/f1`, the Ergast successor) with f1dataR-named wrappers: `f1_schedule`,
+`f1_race`, `f1_results`, `f1_qualifying`, `f1_sprint`, `f1_pitstops`, `f1_driver_standings`,
+`f1_constructor_standings`, `f1_drivers`, `f1_driver`, `f1_constructors`, `f1_circuits`,
+`f1_seasons`, `f1_status` (generated from the recon's OpenAPI spec and 3-row captures) plus
+`f1_laps(season, round)`, a hand-written pager that walks `offset` in 100-timing pages until
+`MRData.total` is read (one race ~12 requests), and the single-page `f1_laps_page`. One parser,
+`parse_f1_mrdata`, flattens the shared `MRData` envelope per the recon's rule (ancestor scalars
+carried onto each row, `Driver.driverId` -> `driver_id`, `FastestLap.lap` -> `fastest_lap`,
+list cells JSON-encoded), casts the integer / number columns Ergast serializes as strings (`season`, `round`, `position`,
+`points`, `laps`, ... are `Int64` / `Float64`, where f1dataR keeps them character) and keeps ids `Utf8`;
+an empty payload (a non-sprint weekend's `f1_sprint`) is a zero-row frame with the documented columns. Terms in every docstring's Notes: data is CC BY-NC-SA 4.0 (wrap-only, never a
+release asset) and the host allows 4 requests/second burst, 500 requests/hour sustained per IP.
+Fixtures are byte copies of the recon captures (`tests/fixtures/f1/`); the offline suite is
+`tests/f1/test_f1.py`. Generated wrappers now accept a `notes:` list in the endpoint YAML's
+`docstring:` block, rendered as a trailing `Notes:` section.
+
+### Added — EuroLeague shots, play-by-play, box score, standings and season stats (`euroleague_*`)
+
+The `euroleague` family grows from 7 to 15 wrappers, regenerated from the sdv-internal-refs
+recon of 2026-10-06, which added two hosts beside the Competition Engine v2 API (keyless, all
+three). The generator (`tools/codegen/gen_euroleague.py`) now reads the spec's per-path
+`servers`: a route on another host gets an endpoint-level `host`, and the family runtime picks
+the body contract by host.
+
+- **Live API** (`https://live.euroleague.net/api`, per game by `game_code` + `season_code`):
+  `euroleague_game_points()` — the shot chart, one row per field-goal attempt and made free
+  throw with `coord_x` / `coord_y` in **integer centimeters from the hoop**, both teams on one
+  basket, `coord_y` growing from the baseline toward the court, free throws at the `-1, -1`
+  sentinel, and which sideline is +x **unverified** (the column descriptions carry the measured
+  frame); `euroleague_game_pbp()` — the per-quarter arrays unrolled to one row per play with a
+  `quarter` column (5 = overtime); `euroleague_game_boxscore()` — one row per player plus each
+  side's team-only and totals rows (`row_type`), with the game's `attendance` / `referees` and the
+  side's per-quarter (`by_quarter_q1`..) and cumulative end-of-quarter (`end_of_quarter_q1`..)
+  scores repeated on every row; `euroleague_game_header()` — one row (its `score_quarterN_*` are
+  cumulative). `game_code` / `season_code` are positional-required on the four (an omitted code
+  answers a silent empty body). Live-API codes are space-padded on the wire and are stripped;
+  `id_player` / `player_id` / `codeteam` / `team` and the team codes are pinned to `Utf8`. The
+  live API answers an unknown game with an **empty 200 body**: the runtime returns `{}` for that
+  one case (every other host's empty 200 still raises `AssetFetchError`) and each live parser
+  makes it a zero-row frame **with its documented columns** (`_euroleague_schemas.py`, generated
+  from the captures).
+- **api-live v3** (`Accept: application/json`, like v2): `euroleague_standings(competition_code,
+  season_code, round, kind=)` — one wrapper over `basicstandings` (default), `calendarstandings`,
+  `streaks` and `aheadbehind`, one row per team as of the round, with one documented column
+  table per `kind` (any other value raises `ValueError` before a request is made — codegen gains
+  a `choices:` param field for closed value sets); `euroleague_player_stats()` /
+  `euroleague_team_stats()` with `mode="traditional"` (default) or `"advanced"` (same check) and `season_mode="Single"` /
+  `statistic_mode="PerGame"` (the capture-verified defaults; other values are unverified);
+  `euroleague_game_report()` — one row per game with both clubs, scores and last-5 form.
+- Fixtures: byte copies of the 13 new E2025 captures plus the two EuroCup (U2025) live
+  captures; offline tests for every fixture, the empty-200 path through a fake transport, and
+  one gated live smoke per host. `companions.yaml` gains `euroleague` (hoopR, sdvplot /
+  sdvplotR FIBA court, euroleague-api).
 
 ### Added — `asa_players_xpass()` and the `nasl` + `usls` ASA leagues
 

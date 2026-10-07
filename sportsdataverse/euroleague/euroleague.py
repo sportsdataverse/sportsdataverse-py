@@ -7,7 +7,13 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Dict, List, Optional, Union  # noqa: F401
 
 from sportsdataverse.euroleague.euroleague_runtime import _get
-from sportsdataverse.euroleague.euroleague_parsers import parse_euroleague
+from sportsdataverse.euroleague.euroleague_parsers import (
+    parse_euroleague,
+    parse_euroleague_boxscore,
+    parse_euroleague_header,
+    parse_euroleague_pbp,
+    parse_euroleague_points,
+)
 
 if TYPE_CHECKING:  # pragma: no cover -- annotation-only imports (PEP 563 defers eval)
     import pandas as pd
@@ -16,11 +22,19 @@ if TYPE_CHECKING:  # pragma: no cover -- annotation-only imports (PEP 563 defers
 __all__ = [
     "euroleague_clubs",
     "euroleague_competitions",
+    "euroleague_game_boxscore",
+    "euroleague_game_header",
+    "euroleague_game_pbp",
+    "euroleague_game_points",
+    "euroleague_game_report",
     "euroleague_game_stats",
     "euroleague_games",
     "euroleague_people",
+    "euroleague_player_stats",
     "euroleague_rounds",
     "euroleague_seasons",
+    "euroleague_standings",
+    "euroleague_team_stats",
 ]
 
 
@@ -48,7 +62,7 @@ def euroleague_clubs(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the EuroLeague API returned 404 (unknown competition, season or game code).
+        sportsdataverse.errors.NoDataError: the EuroLeague API returned 404 (unknown competition, season, round or game code).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
@@ -59,8 +73,8 @@ def euroleague_clubs(
             euroleague_clubs(competition_code='E', season_code='E2025')
 
         See Also:
-            * `EuroLeague Basketball`_ - the site the Competition Engine API serves (competitions, seasons, clubs, games)
-            * `euroleague-api`_ - community Python client over the same v2 API
+            * `EuroLeague Basketball`_ - the site the Competition Engine and live APIs serve (competitions, seasons, clubs, games)
+            * `euroleague-api`_ - community Python client over the same v2 / v3 / live APIs
 
         .. _EuroLeague Basketball: https://www.euroleaguebasketball.net/
         .. _euroleague-api: https://github.com/giasemidis/euroleague_api
@@ -98,7 +112,7 @@ def euroleague_competitions(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the EuroLeague API returned 404 (unknown competition, season or game code).
+        sportsdataverse.errors.NoDataError: the EuroLeague API returned 404 (unknown competition, season, round or game code).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
@@ -109,8 +123,8 @@ def euroleague_competitions(
             euroleague_competitions()
 
         See Also:
-            * `EuroLeague Basketball`_ - the site the Competition Engine API serves (competitions, seasons, clubs, games)
-            * `euroleague-api`_ - community Python client over the same v2 API
+            * `EuroLeague Basketball`_ - the site the Competition Engine and live APIs serve (competitions, seasons, clubs, games)
+            * `euroleague-api`_ - community Python client over the same v2 / v3 / live APIs
 
         .. _EuroLeague Basketball: https://www.euroleaguebasketball.net/
         .. _euroleague-api: https://github.com/giasemidis/euroleague_api
@@ -120,6 +134,290 @@ def euroleague_competitions(
     _params.update(_caller_params)
     raw = _get(
         "https://api-live.euroleague.net/v2/competitions",
+        params=_params,
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_euroleague(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def euroleague_game_boxscore(
+    game_code: str,
+    season_code: str,
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """Box score of one game: per-player and team totals per side, by-quarter scores, referees, attendance.
+
+    Endpoint: ``GET https://live.euroleague.net/api/Boxscore``
+    Example URL: https://live.euroleague.net/api/Boxscore?gamecode=1&seasoncode=E2025
+
+    Args:
+        game_code: Required. Game number within the season (1-based).
+        season_code: Required. Competition code + start year: E2025 (EuroLeague 2025-26), U2025 (EuroCup).
+        return_parsed: parse the payload through parse_euroleague_boxscore -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON ``Dict`` (``{}`` when the live API answers its empty-body "no such game" sentinel, which the parser turns into a zero-row frame).
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` (``{}`` when the live API answers its empty-body "no such game" sentinel, which the parser turns into a zero-row frame) when ``return_parsed=False``.
+
+    Raises:
+        sportsdataverse.errors.NoDataError: the EuroLeague API returned 404 (unknown competition, season, round or game code).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.euroleague import euroleague_game_boxscore
+            euroleague_game_boxscore(game_code=1, season_code='E2025')
+
+        See Also:
+            * `EuroLeague Basketball`_ - the site the Competition Engine and live APIs serve (competitions, seasons, clubs, games)
+            * `euroleague-api`_ - community Python client over the same v2 / v3 / live APIs
+
+        .. _EuroLeague Basketball: https://www.euroleaguebasketball.net/
+        .. _euroleague-api: https://github.com/giasemidis/euroleague_api
+    """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "gamecode": game_code,
+        "seasoncode": season_code,
+    }
+    _params.update(_caller_params)
+    raw = _get(
+        "https://live.euroleague.net/api/Boxscore",
+        params=_params,
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_euroleague_boxscore(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def euroleague_game_header(
+    game_code: str,
+    season_code: str,
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """Game header: teams, codes, coaches, score by quarter, venue, referees.
+
+    Endpoint: ``GET https://live.euroleague.net/api/Header``
+    Example URL: https://live.euroleague.net/api/Header?gamecode=1&seasoncode=E2025
+
+    Args:
+        game_code: Required. Game number within the season (1-based).
+        season_code: Required. Competition code + start year: E2025 (EuroLeague 2025-26), U2025 (EuroCup).
+        return_parsed: parse the payload through parse_euroleague_header -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON ``Dict`` (``{}`` when the live API answers its empty-body "no such game" sentinel, which the parser turns into a zero-row frame).
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` (``{}`` when the live API answers its empty-body "no such game" sentinel, which the parser turns into a zero-row frame) when ``return_parsed=False``.
+
+    Raises:
+        sportsdataverse.errors.NoDataError: the EuroLeague API returned 404 (unknown competition, season, round or game code).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.euroleague import euroleague_game_header
+            euroleague_game_header(game_code=1, season_code='E2025')
+
+        See Also:
+            * `EuroLeague Basketball`_ - the site the Competition Engine and live APIs serve (competitions, seasons, clubs, games)
+            * `euroleague-api`_ - community Python client over the same v2 / v3 / live APIs
+
+        .. _EuroLeague Basketball: https://www.euroleaguebasketball.net/
+        .. _euroleague-api: https://github.com/giasemidis/euroleague_api
+    """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "gamecode": game_code,
+        "seasoncode": season_code,
+    }
+    _params.update(_caller_params)
+    raw = _get(
+        "https://live.euroleague.net/api/Header",
+        params=_params,
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_euroleague_header(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def euroleague_game_pbp(
+    game_code: str,
+    season_code: str,
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """Play-by-play of one game, one array per quarter (FirstQuarter ... ForthQuarter, ExtraTime).
+
+    Endpoint: ``GET https://live.euroleague.net/api/PlayByPlay``
+    Example URL: https://live.euroleague.net/api/PlayByPlay?gamecode=1&seasoncode=E2025
+
+    Args:
+        game_code: Required. Game number within the season (1-based).
+        season_code: Required. Competition code + start year: E2025 (EuroLeague 2025-26), U2025 (EuroCup).
+        return_parsed: parse the payload through parse_euroleague_pbp -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON ``Dict`` (``{}`` when the live API answers its empty-body "no such game" sentinel, which the parser turns into a zero-row frame).
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` (``{}`` when the live API answers its empty-body "no such game" sentinel, which the parser turns into a zero-row frame) when ``return_parsed=False``.
+
+    Raises:
+        sportsdataverse.errors.NoDataError: the EuroLeague API returned 404 (unknown competition, season, round or game code).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.euroleague import euroleague_game_pbp
+            euroleague_game_pbp(game_code=1, season_code='E2025')
+
+        See Also:
+            * `EuroLeague Basketball`_ - the site the Competition Engine and live APIs serve (competitions, seasons, clubs, games)
+            * `euroleague-api`_ - community Python client over the same v2 / v3 / live APIs
+
+        .. _EuroLeague Basketball: https://www.euroleaguebasketball.net/
+        .. _euroleague-api: https://github.com/giasemidis/euroleague_api
+    """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "gamecode": game_code,
+        "seasoncode": season_code,
+    }
+    _params.update(_caller_params)
+    raw = _get(
+        "https://live.euroleague.net/api/PlayByPlay",
+        params=_params,
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_euroleague_pbp(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def euroleague_game_points(
+    game_code: str,
+    season_code: str,
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """Shot chart of one game: one row per made/missed FG and made FT, with COORD_X/COORD_Y in cm from the hoop (the shot-chart source).
+
+    Endpoint: ``GET https://live.euroleague.net/api/Points``
+    Example URL: https://live.euroleague.net/api/Points?gamecode=1&seasoncode=E2025
+
+    Args:
+        game_code: Required. Game number within the season (1-based).
+        season_code: Required. Competition code + start year: E2025 (EuroLeague 2025-26), U2025 (EuroCup).
+        return_parsed: parse the payload through parse_euroleague_points -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON ``Dict`` (``{}`` when the live API answers its empty-body "no such game" sentinel, which the parser turns into a zero-row frame).
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` (``{}`` when the live API answers its empty-body "no such game" sentinel, which the parser turns into a zero-row frame) when ``return_parsed=False``.
+
+    Raises:
+        sportsdataverse.errors.NoDataError: the EuroLeague API returned 404 (unknown competition, season, round or game code).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.euroleague import euroleague_game_points
+            euroleague_game_points(game_code=1, season_code='E2025')
+
+        See Also:
+            * `EuroLeague Basketball`_ - the site the Competition Engine and live APIs serve (competitions, seasons, clubs, games)
+            * `euroleague-api`_ - community Python client over the same v2 / v3 / live APIs
+
+        .. _EuroLeague Basketball: https://www.euroleaguebasketball.net/
+        .. _euroleague-api: https://github.com/giasemidis/euroleague_api
+    """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "gamecode": game_code,
+        "seasoncode": season_code,
+    }
+    _params.update(_caller_params)
+    raw = _get(
+        "https://live.euroleague.net/api/Points",
+        params=_params,
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_euroleague_points(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def euroleague_game_report(
+    competition_code: str,
+    season_code: str,
+    game_code: str,
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """Game report: date, round, phase, both clubs with score and last-5 form.
+
+    Endpoint: ``GET https://api-live.euroleague.net/v3/competitions/{competition_code}/seasons/{season_code}/games/{game_code}/report``
+    Example URL: https://api-live.euroleague.net/v3/competitions/E/seasons/E2025/games/1/report
+
+    Args:
+        competition_code: E = EuroLeague, U = EuroCup (see /competitions).
+        season_code: Competition code + start year, e.g. E2025 for 2025-26.
+        game_code: Game number within the season (1-based).
+        return_parsed: parse the payload through parse_euroleague -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Raises:
+        sportsdataverse.errors.NoDataError: the EuroLeague API returned 404 (unknown competition, season, round or game code).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.euroleague import euroleague_game_report
+            euroleague_game_report(competition_code='E', game_code=1, season_code='E2025')
+
+        See Also:
+            * `EuroLeague Basketball`_ - the site the Competition Engine and live APIs serve (competitions, seasons, clubs, games)
+            * `euroleague-api`_ - community Python client over the same v2 / v3 / live APIs
+
+        .. _EuroLeague Basketball: https://www.euroleaguebasketball.net/
+        .. _euroleague-api: https://github.com/giasemidis/euroleague_api
+    """
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
+    raw = _get(
+        f"https://api-live.euroleague.net/v3/competitions/{competition_code}/seasons/{season_code}/games/{game_code}/report",
         params=_params,
         **kwargs,
     )
@@ -154,7 +452,7 @@ def euroleague_game_stats(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the EuroLeague API returned 404 (unknown competition, season or game code).
+        sportsdataverse.errors.NoDataError: the EuroLeague API returned 404 (unknown competition, season, round or game code).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
@@ -165,8 +463,8 @@ def euroleague_game_stats(
             euroleague_game_stats(competition_code='E', game_code=1, season_code='E2025')
 
         See Also:
-            * `EuroLeague Basketball`_ - the site the Competition Engine API serves (competitions, seasons, clubs, games)
-            * `euroleague-api`_ - community Python client over the same v2 API
+            * `EuroLeague Basketball`_ - the site the Competition Engine and live APIs serve (competitions, seasons, clubs, games)
+            * `euroleague-api`_ - community Python client over the same v2 / v3 / live APIs
 
         .. _EuroLeague Basketball: https://www.euroleaguebasketball.net/
         .. _euroleague-api: https://github.com/giasemidis/euroleague_api
@@ -212,7 +510,7 @@ def euroleague_games(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the EuroLeague API returned 404 (unknown competition, season or game code).
+        sportsdataverse.errors.NoDataError: the EuroLeague API returned 404 (unknown competition, season, round or game code).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
@@ -223,8 +521,8 @@ def euroleague_games(
             euroleague_games(competition_code='E', season_code='E2025')
 
         See Also:
-            * `EuroLeague Basketball`_ - the site the Competition Engine API serves (competitions, seasons, clubs, games)
-            * `euroleague-api`_ - community Python client over the same v2 API
+            * `EuroLeague Basketball`_ - the site the Competition Engine and live APIs serve (competitions, seasons, clubs, games)
+            * `euroleague-api`_ - community Python client over the same v2 / v3 / live APIs
 
         .. _EuroLeague Basketball: https://www.euroleaguebasketball.net/
         .. _euroleague-api: https://github.com/giasemidis/euroleague_api
@@ -273,7 +571,7 @@ def euroleague_people(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the EuroLeague API returned 404 (unknown competition, season or game code).
+        sportsdataverse.errors.NoDataError: the EuroLeague API returned 404 (unknown competition, season, round or game code).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
@@ -284,8 +582,8 @@ def euroleague_people(
             euroleague_people(competition_code='E', season_code='E2025')
 
         See Also:
-            * `EuroLeague Basketball`_ - the site the Competition Engine API serves (competitions, seasons, clubs, games)
-            * `euroleague-api`_ - community Python client over the same v2 API
+            * `EuroLeague Basketball`_ - the site the Competition Engine and live APIs serve (competitions, seasons, clubs, games)
+            * `euroleague-api`_ - community Python client over the same v2 / v3 / live APIs
 
         .. _EuroLeague Basketball: https://www.euroleaguebasketball.net/
         .. _euroleague-api: https://github.com/giasemidis/euroleague_api
@@ -298,6 +596,78 @@ def euroleague_people(
     _params.update(_caller_params)
     raw = _get(
         f"https://api-live.euroleague.net/v2/competitions/{competition_code}/seasons/{season_code}/people",
+        params=_params,
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_euroleague(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def euroleague_player_stats(
+    competition_code: str,
+    mode: str = "traditional",
+    season_mode: Optional[str] = "Single",
+    season_code: Optional[str] = None,
+    statistic_mode: Optional[str] = "PerGame",
+    limit: Optional[str] = None,
+    offset: Optional[str] = None,
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """Season player stats, traditional (box-score totals or per-game averages) or advanced (eFG%, TS%, rebound / assist / turnover rates), one row per player.
+
+    Endpoint: ``GET https://api-live.euroleague.net/v3/competitions/{competition_code}/statistics/players/{mode}``
+    Example URL: https://api-live.euroleague.net/v3/competitions/E/statistics/players/traditional?SeasonMode=Single&SeasonCode=E2025&statisticMode=PerGame
+
+    Args:
+        competition_code: E = EuroLeague, U = EuroCup (see /competitions).
+        mode: traditional (default) or advanced; the columns depend on it (see Returns).
+        season_mode: Required. `Single` as captured (other values unverified). Default Single.
+        season_code: Required. Competition code + start year, e.g. E2025 for 2025-26.
+        statistic_mode: Required. `PerGame` as captured (other values unverified). Default PerGame.
+        limit: Page size (the capture used 3).
+        offset: Row offset into the full list.
+        return_parsed: parse the payload through parse_euroleague -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Raises:
+        sportsdataverse.errors.NoDataError: the EuroLeague API returned 404 (unknown competition, season, round or game code).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.euroleague import euroleague_player_stats
+            euroleague_player_stats(competition_code='E', season_code='E2025')
+
+        See Also:
+            * `EuroLeague Basketball`_ - the site the Competition Engine and live APIs serve (competitions, seasons, clubs, games)
+            * `euroleague-api`_ - community Python client over the same v2 / v3 / live APIs
+
+        .. _EuroLeague Basketball: https://www.euroleaguebasketball.net/
+        .. _euroleague-api: https://github.com/giasemidis/euroleague_api
+    """
+    if mode not in ("traditional", "advanced"):
+        raise ValueError(f"mode must be one of ('traditional', 'advanced'); got {mode!r}")
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "SeasonMode": season_mode,
+        "SeasonCode": season_code,
+        "statisticMode": statistic_mode,
+        "limit": limit,
+        "offset": offset,
+    }
+    _params.update(_caller_params)
+    raw = _get(
+        f"https://api-live.euroleague.net/v3/competitions/{competition_code}/statistics/players/{mode}",
         params=_params,
         **kwargs,
     )
@@ -330,7 +700,7 @@ def euroleague_rounds(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the EuroLeague API returned 404 (unknown competition, season or game code).
+        sportsdataverse.errors.NoDataError: the EuroLeague API returned 404 (unknown competition, season, round or game code).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
@@ -341,8 +711,8 @@ def euroleague_rounds(
             euroleague_rounds(competition_code='E', season_code='E2025')
 
         See Also:
-            * `EuroLeague Basketball`_ - the site the Competition Engine API serves (competitions, seasons, clubs, games)
-            * `euroleague-api`_ - community Python client over the same v2 API
+            * `EuroLeague Basketball`_ - the site the Competition Engine and live APIs serve (competitions, seasons, clubs, games)
+            * `euroleague-api`_ - community Python client over the same v2 / v3 / live APIs
 
         .. _EuroLeague Basketball: https://www.euroleaguebasketball.net/
         .. _euroleague-api: https://github.com/giasemidis/euroleague_api
@@ -382,7 +752,7 @@ def euroleague_seasons(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the EuroLeague API returned 404 (unknown competition, season or game code).
+        sportsdataverse.errors.NoDataError: the EuroLeague API returned 404 (unknown competition, season, round or game code).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
@@ -393,8 +763,8 @@ def euroleague_seasons(
             euroleague_seasons(competition_code='E')
 
         See Also:
-            * `EuroLeague Basketball`_ - the site the Competition Engine API serves (competitions, seasons, clubs, games)
-            * `euroleague-api`_ - community Python client over the same v2 API
+            * `EuroLeague Basketball`_ - the site the Competition Engine and live APIs serve (competitions, seasons, clubs, games)
+            * `euroleague-api`_ - community Python client over the same v2 / v3 / live APIs
 
         .. _EuroLeague Basketball: https://www.euroleaguebasketball.net/
         .. _euroleague-api: https://github.com/giasemidis/euroleague_api
@@ -404,6 +774,140 @@ def euroleague_seasons(
     _params.update(_caller_params)
     raw = _get(
         f"https://api-live.euroleague.net/v2/competitions/{competition_code}/seasons",
+        params=_params,
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_euroleague(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def euroleague_standings(
+    competition_code: str,
+    season_code: str,
+    round: str,
+    kind: str = "basicstandings",
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """Standings as of a round: basic (W-L, points, home/away/last-10 records), calendar (per-round result streaks), streaks (longest win/loss runs) or aheadbehind (records when ahead/behind/tied after Q1, the half and Q3).
+
+    Endpoint: ``GET https://api-live.euroleague.net/v3/competitions/{competition_code}/seasons/{season_code}/rounds/{round}/{kind}``
+    Example URL: https://api-live.euroleague.net/v3/competitions/E/seasons/E2025/rounds/1/basicstandings
+
+    Args:
+        competition_code: E = EuroLeague, U = EuroCup (see /competitions).
+        season_code: Competition code + start year, e.g. E2025 for 2025-26.
+        round: Round number within the season (the `round` field of /rounds); the standings are as of this round.
+        kind: Standings table: basicstandings (default), calendarstandings, streaks or aheadbehind; the columns depend on it (see Returns).
+        return_parsed: parse the payload through parse_euroleague -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Raises:
+        sportsdataverse.errors.NoDataError: the EuroLeague API returned 404 (unknown competition, season, round or game code).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.euroleague import euroleague_standings
+            euroleague_standings(competition_code='E', round=1, season_code='E2025')
+
+        See Also:
+            * `EuroLeague Basketball`_ - the site the Competition Engine and live APIs serve (competitions, seasons, clubs, games)
+            * `euroleague-api`_ - community Python client over the same v2 / v3 / live APIs
+
+        .. _EuroLeague Basketball: https://www.euroleaguebasketball.net/
+        .. _euroleague-api: https://github.com/giasemidis/euroleague_api
+    """
+    if kind not in ("basicstandings", "calendarstandings", "streaks", "aheadbehind"):
+        raise ValueError(
+            f"kind must be one of ('basicstandings', 'calendarstandings', 'streaks', 'aheadbehind'); got {kind!r}"
+        )
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
+    raw = _get(
+        f"https://api-live.euroleague.net/v3/competitions/{competition_code}/seasons/{season_code}/rounds/{round}/{kind}",
+        params=_params,
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_euroleague(raw, return_as_pandas=return_as_pandas)
+    return raw
+
+
+def euroleague_team_stats(
+    competition_code: str,
+    mode: str = "traditional",
+    season_mode: Optional[str] = "Single",
+    season_code: Optional[str] = None,
+    statistic_mode: Optional[str] = "PerGame",
+    limit: Optional[str] = None,
+    offset: Optional[str] = None,
+    *,
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """Season team stats, traditional (box-score totals or per-game averages) or advanced (eFG%, TS%, four-factor style rates), one row per team.
+
+    Endpoint: ``GET https://api-live.euroleague.net/v3/competitions/{competition_code}/statistics/teams/{mode}``
+    Example URL: https://api-live.euroleague.net/v3/competitions/E/statistics/teams/traditional?SeasonMode=Single&SeasonCode=E2025&statisticMode=PerGame
+
+    Args:
+        competition_code: E = EuroLeague, U = EuroCup (see /competitions).
+        mode: traditional (default) or advanced; the columns depend on it (see Returns).
+        season_mode: Required. `Single` as captured (other values unverified). Default Single.
+        season_code: Required. Competition code + start year, e.g. E2025 for 2025-26.
+        statistic_mode: Required. `PerGame` as captured (other values unverified). Default PerGame.
+        limit: Page size (the capture used 3).
+        offset: Row offset into the full list.
+        return_parsed: parse the payload through parse_euroleague -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Raises:
+        sportsdataverse.errors.NoDataError: the EuroLeague API returned 404 (unknown competition, season, round or game code).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.euroleague import euroleague_team_stats
+            euroleague_team_stats(competition_code='E', season_code='E2025')
+
+        See Also:
+            * `EuroLeague Basketball`_ - the site the Competition Engine and live APIs serve (competitions, seasons, clubs, games)
+            * `euroleague-api`_ - community Python client over the same v2 / v3 / live APIs
+
+        .. _EuroLeague Basketball: https://www.euroleaguebasketball.net/
+        .. _euroleague-api: https://github.com/giasemidis/euroleague_api
+    """
+    if mode not in ("traditional", "advanced"):
+        raise ValueError(f"mode must be one of ('traditional', 'advanced'); got {mode!r}")
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "SeasonMode": season_mode,
+        "SeasonCode": season_code,
+        "statisticMode": statistic_mode,
+        "limit": limit,
+        "offset": offset,
+    }
+    _params.update(_caller_params)
+    raw = _get(
+        f"https://api-live.euroleague.net/v3/competitions/{competition_code}/statistics/teams/{mode}",
         params=_params,
         **kwargs,
     )

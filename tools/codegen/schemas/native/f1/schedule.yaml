@@ -1,0 +1,80 @@
+columns:
+- description: Season year (integer).
+  name: season
+  type: integer
+- description: Circuit country.
+  name: circuit_location_country
+  type: character
+- description: Circuit latitude (decimal degrees).
+  name: circuit_location_lat
+  type: numeric
+- description: Circuit city / locality.
+  name: circuit_location_locality
+  type: character
+- description: Circuit longitude (decimal degrees).
+  name: circuit_location_long
+  type: numeric
+- description: Ergast circuit id.
+  name: circuit_id
+  type: character
+- description: Circuit name.
+  name: circuit_name
+  type: character
+- description: Wikipedia URL of the circuit.
+  name: circuit_url
+  type: character
+- description: FP1 date.
+  name: first_practice_date
+  type: character
+- description: FP1 start time (UTC).
+  name: first_practice_time
+  type: character
+- description: Qualifying date.
+  name: qualifying_date
+  type: character
+- description: Qualifying start time (UTC).
+  name: qualifying_time
+  type: character
+- description: FP2 date.
+  name: second_practice_date
+  type: character
+- description: FP2 start time (UTC).
+  name: second_practice_time
+  type: character
+- description: Sprint date (sprint weekends only).
+  name: sprint_date
+  type: character
+- description: Sprint start time (UTC).
+  name: sprint_time
+  type: character
+- description: Sprint qualifying date (sprint weekends only).
+  name: sprint_qualifying_date
+  type: character
+- description: Sprint qualifying start time (UTC).
+  name: sprint_qualifying_time
+  type: character
+- description: FP3 date (absent on sprint weekends).
+  name: third_practice_date
+  type: character
+- description: FP3 start time (UTC).
+  name: third_practice_time
+  type: character
+- description: Race date (YYYY-MM-DD).
+  name: date
+  type: character
+- description: Grand Prix name.
+  name: race_name
+  type: character
+- description: Round number within the season (integer); on standings routes the round
+    the standings are computed after.
+  name: round
+  type: integer
+- description: Lap time (`M:SS.mmm`) on laps; race-finish time on results (winner
+    elapsed, others as a gap); local wall-clock on pit stops.
+  name: time
+  type: character
+- description: Wikipedia URL.
+  name: url
+  type: character
+kind: dataframe
+schema: schedule

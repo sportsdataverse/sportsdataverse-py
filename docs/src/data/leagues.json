@@ -255,6 +255,10 @@
           "label": "EuroLeague"
         },
         {
+          "prefix": "f1",
+          "label": "Formula 1"
+        },
+        {
           "prefix": "espn_content",
           "label": "ESPN content (news)"
         },

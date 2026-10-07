@@ -1,0 +1,26 @@
+{
+  "MRData": {
+    "xmlns": "",
+    "series": "f1",
+    "url": "https://api.jolpi.ca/ergast/f1/seasons.json",
+    "limit": "30",
+    "offset": "0",
+    "total": "77",
+    "SeasonTable": {
+      "Seasons": [
+        {
+          "season": "1950",
+          "url": "https://en.wikipedia.org/wiki/1950_Formula_One_season"
+        },
+        {
+          "season": "1951",
+          "url": "https://en.wikipedia.org/wiki/1951_Formula_One_season"
+        },
+        {
+          "season": "1952",
+          "url": "https://en.wikipedia.org/wiki/1952_Formula_One_season"
+        }
+      ]
+    }
+  }
+}

@@ -18,6 +18,7 @@ FAMILIES = (
     "uefa",
     "fifa",
     "sleeper",
+    "f1",
     # wave 2
     "espn_content",
     "thesportsdb",

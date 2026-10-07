@@ -1,0 +1,30 @@
+columns:
+- description: Season year (integer).
+  name: season
+  type: integer
+- description: Three-letter driver code.
+  name: code
+  type: character
+- description: Date of birth (YYYY-MM-DD).
+  name: date_of_birth
+  type: character
+- description: Ergast driver id (join key to `/drivers`).
+  name: driver_id
+  type: character
+- description: Surname.
+  name: family_name
+  type: character
+- description: First name.
+  name: given_name
+  type: character
+- description: Nationality (demonym).
+  name: nationality
+  type: character
+- description: Permanent car number (integer; 2014+).
+  name: permanent_number
+  type: integer
+- description: Wikipedia URL.
+  name: url
+  type: character
+kind: dataframe
+schema: drivers
