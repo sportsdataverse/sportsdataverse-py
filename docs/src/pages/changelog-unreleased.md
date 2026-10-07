@@ -8,6 +8,20 @@ Merged to `main` since 0.1.4 and not yet released. Released versions are on the 
 
 ## Unreleased
 
+### Added — SPADL actions from any kloppy event dataset: soccer_spadl() and soccer_open_dataset()
+
+`soccer_spadl(dataset)` converts any kloppy event dataset (StatsBomb, Opta, Wyscout, Sportec, ...)
+into SPADL actions, a port of [socceraction](https://github.com/ML-KULeuven/socceraction) (MIT).
+Every action attacks left to right (kloppy `ACTION_EXECUTING_TEAM` orientation), and coordinates
+are scaled linearly onto a 105 x 68 pitch, matching socceraction. `soccer_open_dataset()` is the
+dataset-returning twin of `soccer_open_events()`, which returns a frame.
+
+The port is checked against an oracle: the socceraction 1.5.3 direct StatsBomb converter on open
+match 8658. Ours yields 1,709 rows against the oracle's 1,707 (the two extra are StatsBomb
+"Injury Clearance" passes that kloppy keeps); both sides produce 653 synthetic dribbles. Over the
+1,054 joined rows, types, results, body parts and coordinates agree 99.81 % of the time, with a
+2-id agreement allowlist.
+
 ### Added — Formula 1: Jolpica (Ergast-compatible) wrappers in `sportsdataverse.f1`
 
 `sportsdataverse.f1` wraps the keyless [Jolpica F1 API](https://github.com/jolpica/jolpica-f1)

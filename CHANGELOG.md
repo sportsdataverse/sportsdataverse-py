@@ -3,6 +3,7 @@
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
 - [Unreleased](#unreleased)
+  - [Added — SPADL actions from any kloppy event dataset: soccer_spadl() and soccer_open_dataset()](#added--spadl-actions-from-any-kloppy-event-dataset-soccer_spadl-and-soccer_open_dataset)
   - [Added — Formula 1: Jolpica (Ergast-compatible) wrappers in `sportsdataverse.f1`](#added--formula-1-jolpica-ergast-compatible-wrappers-in-sportsdataversef1)
   - [Added — EuroLeague shots, play-by-play, box score, standings and season stats (`euroleague_*`)](#added--euroleague-shots-play-by-play-box-score-standings-and-season-stats-euroleague_)
   - [Added — `asa_players_xpass()` and the `nasl` + `usls` ASA leagues](#added--asa_players_xpass-and-the-nasl--usls-asa-leagues)
@@ -337,6 +338,20 @@
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## Unreleased
+
+### Added — SPADL actions from any kloppy event dataset: soccer_spadl() and soccer_open_dataset()
+
+`soccer_spadl(dataset)` converts any kloppy event dataset (StatsBomb, Opta, Wyscout, Sportec, ...)
+into SPADL actions, a port of [socceraction](https://github.com/ML-KULeuven/socceraction) (MIT).
+Every action attacks left to right (kloppy `ACTION_EXECUTING_TEAM` orientation), and coordinates
+are scaled linearly onto a 105 x 68 pitch, matching socceraction. `soccer_open_dataset()` is the
+dataset-returning twin of `soccer_open_events()`, which returns a frame.
+
+The port is checked against an oracle: the socceraction 1.5.3 direct StatsBomb converter on open
+match 8658. Ours yields 1,709 rows against the oracle's 1,707 (the two extra are StatsBomb
+"Injury Clearance" passes that kloppy keeps); both sides produce 653 synthetic dribbles. Over the
+1,054 joined rows, types, results, body parts and coordinates agree 99.81 % of the time, with a
+2-id agreement allowlist.
 
 ### Added — Formula 1: Jolpica (Ergast-compatible) wrappers in `sportsdataverse.f1`
 
