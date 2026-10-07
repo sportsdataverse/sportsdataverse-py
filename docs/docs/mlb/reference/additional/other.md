@@ -302,9 +302,9 @@ Polars dataframe containing teams for MLB. This function caches by default, so i
 | `team_is_active` | logical | Team is active. |
 | `team_is_all_star` | logical | Team is all star. |
 | `team_location` | character | Team city / location. |
-| `team_logos` | integer | Team logo metadata. |
+| `team_logos` | integer |  |
 | `team_name` | character | Team name. |
-| `team_nickname` | character | Team nickname. |
+| `team_nickname` | character |  |
 | `team_short_display_name` | character | Short team display name. |
 | `team_slug` | character | URL-safe team identifier. |
 | `team_uid` | character | ESPN universal team identifier (UID). |

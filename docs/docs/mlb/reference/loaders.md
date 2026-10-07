@@ -71,7 +71,7 @@ Release: [mlb_game_state](https://github.com/sportsdataverse/sportsdataverse-dat
 | col_name | type | description |
 |---|---|---|
 | `inning_capped` | Int64 | Inning number with the ninth and every extra inning collapsed into 9, so extras share the ninth-inning win-expectancy cells. |
-| `half` | String | Half of the game (1 or 2). |
+| `half` | String |  |
 | `base_state` | String | Three-character pre-play base occupancy where each slot carries its base number when occupied and an underscore when empty, so ___ is bases empty and 123 is bases loaded. |
 | `outs_start` | Int64 | Outs already recorded when the plate appearance began, normally 0 through 2, though a handful of published rows carry a stale 3 that the RE24 matrix filters out but this table does not. |
 | `score_diff_bucket` | Int64 | Home score minus away score before the play, clipped to the range -6 through +6 so blowouts collapse into the end buckets. |
@@ -93,7 +93,7 @@ Release: [mlb_game_state](https://github.com/sportsdataverse/sportsdataverse-dat
 |---|---|---|
 | `game_id` | String | Unique ESPN game/event identifier. |
 | `at_bat_index` | Int64 | Zero-based index of the at-bat within the game. |
-| `wpa` | Float64 | Win probability added (WPA) for the posteam. |
+| `wpa` | Float64 |  |
 | `season` | Int64 | Season year. |
 
 ```python
@@ -346,9 +346,9 @@ Release: [ncaa_baseball_pbp](https://github.com/sportsdataverse/sportsdataverse-
 | `inning_top_bot` | String | Half-inning ("top" or "bot"). |
 | `batting` | String | Whether the situation applies to batting stats. |
 | `fielding` | String | Whether the situation applies to fielding stats. |
-| `play_number` | Int64 | Sequential play number within the game (1-indexed). |
-| `score_away` | Int64 | Score away. |
-| `score_home` | Int64 | Score home. |
+| `play_number` | Int64 |  |
+| `score_away` | Int64 |  |
+| `score_home` | Int64 |  |
 | `batter` | String | MLBAM player id of the batter. |
 | `play_type` | String | Play category the NCAA baseball parser classified from the play text: single, double, triple, home_run, strikeout, walk, hit_by_pitch, groundout, flyout, lineout, out, double_play, fielders_choice, reached_on_error, stolen_base, wild_pitch, passed_ball, runner_advance, substitution, other, or unknown when the clause could not be classified. |
 | `hit_trajectory` | String | Batted-ball trajectory: one of ground, line, fly, pop, foul. |
@@ -372,7 +372,7 @@ Release: [ncaa_baseball_pbp](https://github.com/sportsdataverse/sportsdataverse-
 | `is_scoring_play` | Boolean | Flag indicating that the play put points on the board (1 = scoring play, 0 = not). |
 | `description` | String | Long-form description text. |
 | `source` | String | Source. |
-| `espn_game_id` | String | ESPN game id (NA for bart-only rows). |
+| `espn_game_id` | String |  |
 | `game_key` | String | NCAA contest identifier for the game the row belongs to; the join key to the other ncaa_baseball_* tables. |
 | `game_date` | String | Game date (YYYY-MM-DD). |
 | `location` | String | Team city/region (e.g. "Los Angeles"). |
@@ -395,7 +395,7 @@ Release: [ncaa_baseball_schedules](https://github.com/sportsdataverse/sportsdata
 | `date` | String | Date in YYYY-MM-DD format. |
 | `game_number` | Int64 | Game number within a doubleheader. |
 | `opponent_id` | String | Unique identifier for opponent. |
-| `opponent` | String | Opposing team of player |
+| `opponent` | String |  |
 | `result` | String | Win/loss/tie result for `team_id`. |
 | `outcome` | String | Result for the team the row is keyed to: 'W', 'L' or 'T'. |
 | `team_score` | Int64 | Team's score / final score. |
@@ -442,8 +442,8 @@ Release: [ncaa_baseball_rosters](https://github.com/sportsdataverse/sportsdatave
 | `position` | String | Position the NCAA baseball feed reports for the player. |
 | `height` | String | Height (feet and inches). |
 | `weight` | Int64 | Weight in pounds. |
-| `hometown` | String | Prospect hometown. |
-| `high_school` | String | High school |
+| `hometown` | String |  |
+| `high_school` | String |  |
 | `games_played` | Int64 | Games played. |
 | `games_started` | Int64 | Games started. |
 | `season` | Int64 | Season year. |
@@ -468,10 +468,10 @@ Release: [ncaa_baseball_linescore](https://github.com/sportsdataverse/sportsdata
 | `hits` | Int64 | Hits. |
 | `errors` | Int64 | Fielding errors. |
 | `game_date` | String | Game date (YYYY-MM-DD). |
-| `venue` | String | Venue name. |
+| `venue` | String |  |
 | `attendance` | Int64 | Reported attendance (NA on the redesigned page). |
 | `source` | String | Source. |
-| `espn_game_id` | String | ESPN game id (NA for bart-only rows). |
+| `espn_game_id` | String |  |
 | `game_key` | String | NCAA contest identifier for the game the row belongs to; the join key to the other ncaa_baseball_* tables. |
 | `location` | String | Team city/region (e.g. "Los Angeles"). |
 | `season` | Int64 | Season year. |
@@ -489,14 +489,14 @@ Release: [ncaa_baseball_team_stats](https://github.com/sportsdataverse/sportsdat
 |---|---|---|
 | `contest_id` | String | stats.ncaa.org contest (game) identifier. |
 | `category` | String | Category label. |
-| `stat` | String | Stat. |
+| `stat` | String |  |
 | `period` | String | Inning number. |
 | `away_team` | String | Away team name. |
 | `away_value` | String | Away team's value for the stat named by the row, as a string (the table is long/tidy, one stat per row). |
 | `home_team` | String | Home team name. |
 | `home_value` | String | Home team's value for the stat named by the row, as a string (the table is long/tidy, one stat per row). |
 | `source` | String | Source. |
-| `espn_game_id` | String | ESPN game id (NA for bart-only rows). |
+| `espn_game_id` | String |  |
 | `game_key` | String | NCAA contest identifier for the game the row belongs to; the join key to the other ncaa_baseball_* tables. |
 | `game_date` | String | Game date (YYYY-MM-DD). |
 | `location` | String | Team city/region (e.g. "Los Angeles"). |
@@ -540,7 +540,7 @@ Release: [ncaa_baseball_player_stats](https://github.com/sportsdataverse/sportsd
 | `kl` | String | Strikeouts looking -- called third strikes, as opposed to swinging strikeouts. |
 | `category` | String | Category label. |
 | `source` | String | Source. |
-| `espn_game_id` | String | ESPN game id (NA for bart-only rows). |
+| `espn_game_id` | String |  |
 | `game_key` | String | NCAA contest identifier for the game the row belongs to; the join key to the other ncaa_baseball_* tables. |
 | `game_date` | String | Game date (YYYY-MM-DD). |
 | `location` | String | Team city/region (e.g. "Los Angeles"). |
@@ -587,7 +587,7 @@ Release: [ncaa_baseball_situational_stats](https://github.com/sportsdataverse/sp
 |---|---|---|
 | `contest_id` | String | stats.ncaa.org contest (game) identifier. |
 | `team_seq` | Int64 | Side indicator for the row: 0 and 1 distinguish the two teams in the contest. |
-| `player` | String | Player name. |
+| `player` | String |  |
 | `position` | String | Position the NCAA baseball feed reports for the player. |
 | `with_runrs` | String | Situational split as a 'successes-opportunities' pair string (e.g. '5-13'), not a numeric rate -- plate appearances with runners on base. |
 | `hits_scorepos` | String | Situational split as a 'successes-opportunities' pair string (e.g. '5-13'), not a numeric rate -- at-bats with runners in scoring position. |
@@ -604,7 +604,7 @@ Release: [ncaa_baseball_situational_stats](https://github.com/sportsdataverse/sp
 | `bases_loaded` | String | Situational split as a 'successes-opportunities' pair string (e.g. '5-13'), not a numeric rate -- plate appearances with the bases loaded. |
 | `category` | String | Category label. |
 | `source` | String | Source. |
-| `espn_game_id` | String | ESPN game id (NA for bart-only rows). |
+| `espn_game_id` | String |  |
 | `game_key` | String | NCAA contest identifier for the game the row belongs to; the join key to the other ncaa_baseball_* tables. |
 | `game_date` | String | Game date (YYYY-MM-DD). |
 | `location` | String | Team city/region (e.g. "Los Angeles"). |
@@ -635,7 +635,7 @@ Release: [ncaa_baseball_games](https://github.com/sportsdataverse/sportsdatavers
 | `game_pbp_id` | Int64 | stats.ncaa.org play-by-play (contest) identifier. |
 | `season` | Int64 | Season year. |
 | `source` | String | Source. |
-| `espn_game_id` | String | ESPN game id (NA for bart-only rows). |
+| `espn_game_id` | String |  |
 | `away_team` | String | Away team name. |
 | `away_final` | Int64 | Final runs scored by the away team. |
 | `home_team` | String | Home team name. |

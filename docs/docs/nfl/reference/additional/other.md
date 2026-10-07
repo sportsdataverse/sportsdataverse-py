@@ -338,20 +338,20 @@ Polars dataframe containing teams for the requested league. This function caches
 
 | col_name | type | description |
 |---|---|---|
-| `team_abbreviation` | character | Team abbreviation. |
-| `team_alternate_color` | character | Alternate team color. |
-| `team_color` | character | Primary team color. |
-| `team_display_name` | character | Full team display name. |
-| `team_id` | character | ESPN team id. |
-| `team_is_active` | logical | TRUE if the team is currently active. |
-| `team_is_all_star` | logical | TRUE if the row represents an All-Star team. |
-| `team_location` | character | Team location / school name. |
-| `team_logos` | integer | Team logo metadata. |
-| `team_name` | character | Team nickname. |
-| `team_nickname` | character | Team nickname label. |
-| `team_short_display_name` | character | Short team display name. |
-| `team_slug` | character | Team slug for the stat row. |
-| `team_uid` | character | ESPN universal team identifier (UID format 's:40~l:...~t:...'). |
+| `team_abbreviation` | character |  |
+| `team_alternate_color` | character |  |
+| `team_color` | character |  |
+| `team_display_name` | character |  |
+| `team_id` | character |  |
+| `team_is_active` | logical |  |
+| `team_is_all_star` | logical |  |
+| `team_location` | character |  |
+| `team_logos` | integer |  |
+| `team_name` | character |  |
+| `team_nickname` | character |  |
+| `team_short_display_name` | character |  |
+| `team_slug` | character |  |
+| `team_uid` | character |  |
 
 **Example**
 

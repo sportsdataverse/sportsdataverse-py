@@ -118,7 +118,7 @@ Release: [espn_cfb_adv_passing](https://github.com/sportsdataverse/sportsdataver
 | `YPA` | Float64 | Yards per pass attempt. |
 | `EPA` | Float64 | Expected Points Added on the play (cfbfastR EPA model output). |
 | `EPA_per_Play` | Float64 | EPA per play on the passer's plays. |
-| `WPA` | Float64 | Win Probability Added. |
+| `WPA` | Float64 |  |
 | `SR` | Float64 | Success rate on the passer's plays. |
 | `Sck` | Int64 | Times the passer was sacked. |
 | `CompPct` | Float64 | Completion percentage from the advanced box score. |
@@ -164,7 +164,7 @@ Release: [espn_cfb_adv_rushing](https://github.com/sportsdataverse/sportsdataver
 | `YPC` | Float64 | Yards per carry, the mean rushing yardage across the player's attempts in the game. |
 | `EPA` | Float64 | Expected Points Added on the play (cfbfastR EPA model output). |
 | `EPA_per_Play` | Float64 | EPA per play on the passer's plays. |
-| `WPA` | Float64 | Win Probability Added. |
+| `WPA` | Float64 |  |
 | `SR` | Float64 | Success rate on the passer's plays. |
 | `Fum` | Int64 | Count of the carrier's rush attempts whose play text mentions a fumble; it is a play-level flag, not a fumble charged to this player. |
 | `Fum_Lost` | Int64 | Count of the carrier's rush attempts on which a fumble was lost to the opponent. |
@@ -193,7 +193,7 @@ Release: [espn_cfb_adv_receiving](https://github.com/sportsdataverse/sportsdatav
 | `YPT` | Float64 | Receiving yards per target, the mean of receiving yardage over every target rather than over receptions only. |
 | `EPA` | Float64 | Expected Points Added on the play (cfbfastR EPA model output). |
 | `EPA_per_Play` | Float64 | EPA per play on the passer's plays. |
-| `WPA` | Float64 | Win Probability Added. |
+| `WPA` | Float64 |  |
 | `SR` | Float64 | Success rate on the passer's plays. |
 | `Fum` | Int64 | Count of the receiver's targeted pass plays whose text mentions a fumble; it is a play-level flag, not a fumble charged to this player. |
 | `Fum_Lost` | Int64 | Count of the receiver's targeted plays on which a fumble was lost to the opponent. |
@@ -389,7 +389,7 @@ Release: [espn_cfb_adv_specialists](https://github.com/sportsdataverse/sportsdat
 |---|---|---|
 | `pos_team_id` | Int64 | ESPN team id of the team on offense. Present for every season 2004+. |
 | `pos_team` | String | Team name in possession at the start of the play (offense, kickoff-aware). |
-| `player_name` | String | Full name of player |
+| `player_name` | String |  |
 | `field_goals` | Int64 | Number of field-goal attempts. |
 | `field_goals_yards` | Int64 | Sum of the field-goal attempt distances parsed out of the play text; it stays at zero when no distance could be parsed from the narrative. |
 | `punts` | Int64 | Punts attempted. |
@@ -431,7 +431,7 @@ Release: [espn_cfb_adv_turnover](https://github.com/sportsdataverse/sportsdatave
 | `expected_turnover_margin` | Float64 | The opponent's expected_turnovers minus this team's, so positive means the team was expected to win the turnover battle. |
 | `turnover_margin` | Int64 | The opponent's turnovers minus this team's turnovers, positive when the team gained more possessions than it gave away. |
 | `turnover_luck` | Float64 | Points of scoring luck attributed to turnovers, five points per turnover times the gap between turnover_margin and expected_turnover_margin. |
-| `takeaways` | Int64 | Takeaways. |
+| `takeaways` | Int64 |  |
 | `st_turnovers_gained` | Int64 | Special-teams turnovers this team recovered, taken as the opponent's st_turnovers_lost. |
 | `fumble_recoveries_gained` | Int64 | Opponent fumbles this team recovered, taken as the opponent's fumbles_lost. |
 | `game_id` | Int64 | ESPN game identifier. |
@@ -458,12 +458,12 @@ Release: [espn_cfb_adv_team_gamelog](https://github.com/sportsdataverse/sportsda
 | `team` | String | Team name. |
 | `opponent_id` | Int64 | ESPN team id of the opponent. |
 | `opponent` | String | Opponent team name. |
-| `is_home` | Boolean | Whether the subject team was the home team. |
+| `is_home` | Boolean |  |
 | `neutral_site` | Boolean | TRUE/FALSE flag for if the game took place at a neutral site. |
-| `points_for` | Int64 | Goals/points scored. |
-| `points_against` | Int64 | Points allowed. |
+| `points_for` | Int64 |  |
+| `points_against` | Int64 |  |
 | `margin` | Int64 | Final scoring margin from this team's perspective, exactly points_for minus points_against. |
-| `win` | Boolean | Whether the game was a win (goalie). |
+| `win` | Boolean |  |
 | `rushing_highlight_yards_per_opp` | Float64 | Highlight yards per rushing opportunity. |
 | `total_pen_yards` | Int64 | Total penalty yards assessed. |
 | `EPA_penalty` | Float64 | Total EPA attributed to penalties. |

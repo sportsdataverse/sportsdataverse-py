@@ -65,9 +65,9 @@ Team lineups (starting XI + bench + staff) for a match.
 | col_name | type | description |
 |---|---|---|
 | `match_id` | character | Composite Match id (Utf8 join key). |
-| `side` | character | Side label (e.g. 'home', 'away', or 'overUnder'). |
+| `side` | character |  |
 | `team_id` | character | Composite Team id (Utf8 join key). |
-| `selection` | character | Selection. |
+| `selection` | character |  |
 | `provider_id` | character | Underlying StatsPerform/Opta provider id (e.g. `opta:...`). |
 | `player_id` | character | Composite Player id (Utf8 join key). |
 | `bib_number` | character | Shirt/bib number. |
@@ -77,7 +77,7 @@ Team lineups (starting XI + bench + staff) for a match.
 | `media_last_name` | character | Media-style last name. |
 | `shirt_name` | character | Name printed on the shirt. |
 | `short_name` | character | Short team name. |
-| `display_name` | character | Display name. |
+| `display_name` | character |  |
 | `nationality` | character | Nationality name. |
 | `nationality_iso_code` | character | ISO country code. |
 | `is_captain` | logical | Whether the player wears the captain's armband. |
@@ -176,7 +176,7 @@ Player-stats leaderboard for a season (paginated).
 | `media_last_name` | character | Media-style last name. |
 | `shirt_name` | character | Name printed on the shirt. |
 | `short_name` | character | Short team name. |
-| `display_name` | character | Display name. |
+| `display_name` | character |  |
 | `nationality` | character | Nationality name. |
 | `nationality_iso_code` | character | ISO country code. |
 | `api_call_request_time` | character | Server timestamp the payload was assembled (ISO-8601). |
@@ -266,16 +266,16 @@ Matches across one or more seasons within a US-format date window.
 | `stadium_id` | character | Composite Stadium id for the venue. |
 | `stadium_name` | character | Stadium: stage display name. |
 | `city_name` | character | City the stadium is in. |
-| `group` | character | Stat group (e.g. "hitting", "pitching", "fielding"). |
-| `group_name` | character | Group name (conference / division). |
+| `group` | character |  |
+| `group_name` | character |  |
 | `round_id` | character | Composite id of the round. |
 | `round_name` | character | Name of the round or series this match belongs to. |
 | `schedule_status` | character | Scheduling status. |
 | `provider_home_score` | integer | Provider-reported: home side's score. |
 | `provider_away_score` | integer | Provider-reported: away side's score. |
-| `group_id` | character | ESPN group id. |
+| `group_id` | character |  |
 | `sub_league` | character | Sub-league label. |
-| `time` | character | Time at start of play provided in string format as minutes:seconds remaining in the quarter. |
+| `time` | character |  |
 | `additional_time` | character | Stoppage time added, in minutes. |
 | `previous_leg_id` | character | Composite Match id of the previous leg (two-legged ties). |
 | `editorial_broadcasters_broadcaster_national1` | character | Broadcast listing: first national broadcaster carrying the match. |
@@ -421,7 +421,7 @@ Overall standings table for a season (table/home/away splits).
 
 | col_name | type | description |
 |---|---|---|
-| `split_type` | character | Split type code. |
+| `split_type` | character |  |
 | `achievement_statuses` | character | Achievement flags (champion, clinched, etc.). |
 | `note` | character | Free-text standings note (null when none). |
 | `team_id` | character | Composite Team id (Utf8 join key). |

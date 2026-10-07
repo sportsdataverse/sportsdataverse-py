@@ -1,7 +1,7 @@
 ---
 title: "CFB — On3 Recruit Database (api.on3.com) — Commits"
 sidebar_label: "Commits"
-sidebar_position: 1
+sidebar_position: 2
 description: "CFB — On3 Recruit Database (api.on3.com) — Commits — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---
@@ -46,117 +46,117 @@ GET /rdb/v1/commits/latest
 | `predictions` | character | List of recruiting-prediction entries (RPM picks) for the recruit. |
 | `nil_status` | character | Nested NIL (name/image/likeness) status object for the recruit. |
 | `nil_value` | integer | On3 NIL valuation for the recruit (US dollars). |
-| `high_school_key` | integer |  |
-| `high_school_full_name` | character |  |
-| `high_school_name_2` | character |  |
-| `high_school_known_as` | character |  |
-| `high_school_mascot` | character |  |
-| `high_school_abbreviation` | character |  |
-| `high_school_asset_url` | character |  |
-| `high_school_default_asset_key` | numeric |  |
-| `high_school_default_asset_domain_override` | character |  |
-| `high_school_default_asset_domain` | character |  |
-| `high_school_default_asset_source_override` | character |  |
-| `high_school_default_asset_source` | character |  |
-| `high_school_default_asset_title` | character |  |
-| `high_school_default_asset_description` | character |  |
-| `high_school_default_asset_caption` | character |  |
-| `high_school_default_asset_category` | character |  |
-| `high_school_default_asset_alt_text` | character |  |
-| `high_school_default_asset_height` | numeric |  |
-| `high_school_default_asset_width` | numeric |  |
-| `high_school_default_asset_asset_type` | character |  |
-| `high_school_default_asset_file_system` | character |  |
-| `high_school_default_asset_path` | character |  |
-| `high_school_default_asset_type` | character |  |
-| `high_school_default_asset_thumbnail` | character |  |
-| `high_school_default_asset_duration` | numeric |  |
-| `high_school_default_asset_mime_type` | character |  |
-| `high_school_slug` | character |  |
-| `high_school_primary_color` | character |  |
-| `high_school_org_type` | character |  |
-| `high_school_org_type_enum` | character |  |
-| `high_school_division` | character |  |
-| `high_school_site_keys` | character |  |
-| `high_school_url_slug` | character |  |
-| `default_asset_key` | integer |  |
-| `default_asset_domain_override` | character |  |
-| `default_asset_domain` | character |  |
-| `default_asset_source_override` | character |  |
-| `default_asset_source` | character |  |
-| `default_asset_title` | character |  |
-| `default_asset_description` | character |  |
-| `default_asset_caption` | character |  |
-| `default_asset_category` | character |  |
-| `default_asset_alt_text` | character |  |
-| `default_asset_height` | integer |  |
-| `default_asset_width` | integer |  |
-| `default_asset_asset_type` | character |  |
-| `default_asset_file_system` | character |  |
-| `default_asset_path` | character |  |
-| `default_asset_type` | character |  |
-| `default_asset_thumbnail` | character |  |
-| `default_asset_duration` | integer |  |
-| `default_asset_mime_type` | character |  |
-| `rating_key` | numeric |  |
-| `rating_rating` | numeric |  |
-| `rating_stars` | numeric |  |
-| `rating_national_rank` | numeric |  |
-| `rating_position_rank` | numeric |  |
-| `rating_state_rank` | numeric |  |
-| `rating_position_abbr` | character |  |
-| `rating_state_abbr` | character |  |
-| `rating_five_star_plus` | character |  |
-| `commit_status_type` | character |  |
-| `commit_status_short_term_signee` | logical |  |
-| `commit_status_date` | character |  |
-| `commit_status_committed_asset_key` | integer |  |
-| `commit_status_committed_asset_url` | character |  |
-| `commit_status_committed_asset_slug` | character |  |
-| `commit_status_committed_asset_full_name` | character |  |
-| `commit_status_committed_asset_res_key` | integer |  |
-| `commit_status_committed_asset_res_domain_override` | character |  |
-| `commit_status_committed_asset_res_domain` | character |  |
-| `commit_status_committed_asset_res_source_override` | character |  |
-| `commit_status_committed_asset_res_source` | character |  |
-| `commit_status_committed_asset_res_title` | character |  |
-| `commit_status_committed_asset_res_description` | character |  |
-| `commit_status_committed_asset_res_caption` | character |  |
-| `commit_status_committed_asset_res_category` | character |  |
-| `commit_status_committed_asset_res_alt_text` | character |  |
-| `commit_status_committed_asset_res_height` | integer |  |
-| `commit_status_committed_asset_res_width` | integer |  |
-| `commit_status_committed_asset_res_asset_type` | character |  |
-| `commit_status_committed_asset_res_file_system` | character |  |
-| `commit_status_committed_asset_res_path` | character |  |
-| `commit_status_committed_asset_res_type` | character |  |
-| `commit_status_committed_asset_res_thumbnail` | character |  |
-| `commit_status_committed_asset_res_duration` | integer |  |
-| `commit_status_committed_asset_res_mime_type` | character |  |
-| `commit_status_transferred_asset` | character |  |
-| `commit_status_transferred_asset_res` | character |  |
-| `commit_status_committed_organization_key` | integer |  |
-| `commit_status_committed_organization_full_name` | character |  |
-| `commit_status_committed_organization_name` | character |  |
-| `commit_status_committed_organization_mascot` | character |  |
-| `commit_status_committed_organization_abbreviation` | character |  |
-| `commit_status_committed_organization_asset_url` | character |  |
-| `commit_status_committed_organization_asset` | character |  |
-| `commit_status_committed_organization_slug` | character |  |
-| `commit_status_committed_organization_primary_color` | character |  |
-| `commit_status_class_rank` | character |  |
-| `commit_status_transfer_entered` | character |  |
-| `commit_status_recruitment_year` | integer |  |
-| `commit_status_decommitted_asset` | character |  |
-| `commit_status_transfer` | logical |  |
-| `commit_status_expected_to_transfer` | logical |  |
-| `commit_status_recruitment_key` | integer |  |
-| `commit_status_withdrawn_transfer` | logical |  |
-| `commit_status_withdrawn_transfer_date` | character |  |
-| `sport_key` | integer |  |
-| `sport_name` | character | Sport name (e.g., Major League Baseball). |
+| `high_school_key` | integer | On3 numeric key of the high school. |
+| `high_school_full_name` | character | Full name of the high school (with mascot). |
+| `high_school_name_2` | character | Name field of the nested high-school object (json_normalize de-duplication of high_school_name). |
+| `high_school_known_as` | character | Common short name of the high school, when On3 lists one. |
+| `high_school_mascot` | character | High-school mascot. |
+| `high_school_abbreviation` | character | High-school abbreviation. |
+| `high_school_asset_url` | character | Convenience CDN URL of the high-school logo. |
+| `high_school_default_asset_key` | numeric | On3 asset key of the high school's logo asset. |
+| `high_school_default_asset_domain_override` | character | CDN domain override for the high school's logo asset (usually null). |
+| `high_school_default_asset_domain` | character | CDN domain serving the high school's logo asset. |
+| `high_school_default_asset_source_override` | character | Source-path override for the high school's logo asset (usually null). |
+| `high_school_default_asset_source` | character | CDN-relative source path of the high school's logo asset. |
+| `high_school_default_asset_title` | character | Editorial title attached to the high school's logo asset. |
+| `high_school_default_asset_description` | character | Editorial description attached to the high school's logo asset (usually null). |
+| `high_school_default_asset_caption` | character | Editorial caption attached to the high school's logo asset (usually null). |
+| `high_school_default_asset_category` | character | Editorial category label of the high school's logo asset (usually null). |
+| `high_school_default_asset_alt_text` | character | Accessibility alt text of the high school's logo asset (usually null). |
+| `high_school_default_asset_height` | numeric | Pixel height of the high school's logo asset. |
+| `high_school_default_asset_width` | numeric | Pixel width of the high school's logo asset. |
+| `high_school_default_asset_asset_type` | character | On3 asset-type discriminator of the high school's logo asset (e.g. Image). |
+| `high_school_default_asset_file_system` | character | Storage file-system flag of the high school's logo asset. |
+| `high_school_default_asset_path` | character | Storage path of the high school's logo asset. |
+| `high_school_default_asset_type` | character | Media type field of the high school's logo asset (file extension, e.g. png). |
+| `high_school_default_asset_thumbnail` | character | Thumbnail variant of the high school's logo asset (video assets; usually null). |
+| `high_school_default_asset_duration` | numeric | Duration of the high school's logo asset when it is a video (usually null or 0). |
+| `high_school_default_asset_mime_type` | character | MIME type of the high school's logo asset. |
+| `high_school_slug` | character | URL slug of the high school on On3. |
+| `high_school_primary_color` | character | Primary hex color of the high school. |
+| `high_school_org_type` | character | Organization type label of the school (e.g. HighSchool). |
+| `high_school_org_type_enum` | character | Organization type enum of the school. |
+| `high_school_division` | character | Division or classification of the high school, when listed. |
+| `high_school_site_keys` | character | JSON-encoded On3 site keys covering the school (usually null). |
+| `high_school_url_slug` | character | URL slug variant of the high-school page, with the key appended. |
+| `default_asset_key` | integer | On3 asset key of the default asset. |
+| `default_asset_domain_override` | character | CDN domain override for the record's default asset (usually null). |
+| `default_asset_domain` | character | CDN domain serving the default asset. |
+| `default_asset_source_override` | character | Source-path override for the default asset (usually null). |
+| `default_asset_source` | character | CDN-relative source path of the default asset. |
+| `default_asset_title` | character | Editorial title attached to the default asset. |
+| `default_asset_description` | character | Editorial description attached to the default asset (usually null). |
+| `default_asset_caption` | character | Editorial caption attached to the default asset (usually null). |
+| `default_asset_category` | character | Editorial category label of the default asset (usually null). |
+| `default_asset_alt_text` | character | Accessibility alt text of the default asset (usually null). |
+| `default_asset_height` | integer | Pixel height of the default asset. |
+| `default_asset_width` | integer | Pixel width of the default asset. |
+| `default_asset_asset_type` | character | On3 asset-type discriminator of the default asset (e.g. Image). |
+| `default_asset_file_system` | character | Storage file-system flag of the default asset. |
+| `default_asset_path` | character | Storage path of the default asset. |
+| `default_asset_type` | character | Media type field of the default asset (file extension, e.g. png). |
+| `default_asset_thumbnail` | character | Thumbnail variant of the default asset (video assets; usually null). |
+| `default_asset_duration` | integer | Duration of the default asset when it is a video (usually null or 0). |
+| `default_asset_mime_type` | character | MIME type of the default asset. |
+| `rating_key` | numeric | On3 key of the On3 rating record. |
+| `rating_rating` | numeric | Numeric value of the On3 rating (0-100 scale). |
+| `rating_stars` | numeric | Star rating of the On3 rating (2-5). |
+| `rating_national_rank` | numeric | National rank of the On3 rating. |
+| `rating_position_rank` | numeric | Position rank of the On3 rating. |
+| `rating_state_rank` | numeric | State rank of the On3 rating. |
+| `rating_position_abbr` | character | Position abbreviation the On3 rating was assigned at. |
+| `rating_state_abbr` | character | State abbreviation the On3 rating was assigned in. |
+| `rating_five_star_plus` | character | Five-star-plus flag on the On3 rating. |
+| `commit_status_type` | character | Type of the commitment status (e.g. Committed, Signed, Enrolled, None). |
+| `commit_status_short_term_signee` | logical | Short-term-signee flag of the commitment status (null when not applicable). |
+| `commit_status_date` | character | Date the commitment status took effect (ISO timestamp string). |
+| `commit_status_committed_asset_key` | integer | On3 numeric key of the commitment status's committed-to program. |
+| `commit_status_committed_asset_url` | character | CDN URL of the commitment status's committed-to program's logo. |
+| `commit_status_committed_asset_slug` | character | URL slug of the commitment status's committed-to program on On3. |
+| `commit_status_committed_asset_full_name` | character | Full name of the commitment status's committed-to program (e.g. 'Alabama Crimson Tide'). |
+| `commit_status_committed_asset_res_key` | integer | On3 asset key of the commitment status's committed-to program's logo asset. |
+| `commit_status_committed_asset_res_domain_override` | character | CDN domain override for the commitment status's committed-to program's logo asset (usually null). |
+| `commit_status_committed_asset_res_domain` | character | CDN domain serving the commitment status's committed-to program's logo asset. |
+| `commit_status_committed_asset_res_source_override` | character | Source-path override for the commitment status's committed-to program's logo asset (usually null). |
+| `commit_status_committed_asset_res_source` | character | CDN-relative source path of the commitment status's committed-to program's logo asset. |
+| `commit_status_committed_asset_res_title` | character | Editorial title attached to the commitment status's committed-to program's logo asset. |
+| `commit_status_committed_asset_res_description` | character | Editorial description attached to the commitment status's committed-to program's logo asset (usually null). |
+| `commit_status_committed_asset_res_caption` | character | Editorial caption attached to the commitment status's committed-to program's logo asset (usually null). |
+| `commit_status_committed_asset_res_category` | character | Editorial category label of the commitment status's committed-to program's logo asset (usually null). |
+| `commit_status_committed_asset_res_alt_text` | character | Accessibility alt text of the commitment status's committed-to program's logo asset (usually null). |
+| `commit_status_committed_asset_res_height` | integer | Pixel height of the commitment status's committed-to program's logo asset. |
+| `commit_status_committed_asset_res_width` | integer | Pixel width of the commitment status's committed-to program's logo asset. |
+| `commit_status_committed_asset_res_asset_type` | character | On3 asset-type discriminator of the commitment status's committed-to program's logo asset (e.g. Image). |
+| `commit_status_committed_asset_res_file_system` | character | Storage file-system flag of the commitment status's committed-to program's logo asset. |
+| `commit_status_committed_asset_res_path` | character | Storage path of the commitment status's committed-to program's logo asset. |
+| `commit_status_committed_asset_res_type` | character | Media type field of the commitment status's committed-to program's logo asset (file extension, e.g. png). |
+| `commit_status_committed_asset_res_thumbnail` | character | Thumbnail variant of the commitment status's committed-to program's logo asset (video assets; usually null). |
+| `commit_status_committed_asset_res_duration` | integer | Duration of the commitment status's committed-to program's logo asset when it is a video (usually null or 0). |
+| `commit_status_committed_asset_res_mime_type` | character | MIME type of the commitment status's committed-to program's logo asset. |
+| `commit_status_transferred_asset` | character | Nested asset of the program transferred to (the commitment status; usually null). |
+| `commit_status_transferred_asset_res` | character | Nested logo asset of the program transferred to (the commitment status; usually null). |
+| `commit_status_committed_organization_key` | integer | On3 key of the committed-to program (the commitment status). |
+| `commit_status_committed_organization_full_name` | character | Full name of the commitment status's committed-to program (e.g. 'Alabama Crimson Tide'). |
+| `commit_status_committed_organization_name` | character | Short name of the commitment status's committed-to program. |
+| `commit_status_committed_organization_mascot` | character | Mascot of the commitment status's committed-to program. |
+| `commit_status_committed_organization_abbreviation` | character | Abbreviation of the commitment status's committed-to program. |
+| `commit_status_committed_organization_asset_url` | character | CDN URL of the committed-to program's logo (the commitment status). |
+| `commit_status_committed_organization_asset` | character | Nested logo asset of the committed-to program (the commitment status; stringified or null). |
+| `commit_status_committed_organization_slug` | character | URL slug of the committed-to program (the commitment status). |
+| `commit_status_committed_organization_primary_color` | character | Primary hex color of the commitment status's committed-to program. |
+| `commit_status_class_rank` | character | Academic class standing recorded on the commitment status (e.g. Senior). |
+| `commit_status_transfer_entered` | character | Date the player entered the transfer portal (the commitment status; null when never entered). |
+| `commit_status_recruitment_year` | integer | Recruiting-cycle year the commitment status belongs to. |
+| `commit_status_decommitted_asset` | character | Nested asset of the program decommitted from (the commitment status; usually null). |
+| `commit_status_transfer` | logical | Transfer flag of the commitment status (null when not applicable). |
+| `commit_status_expected_to_transfer` | logical | Expected-to-transfer flag of the commitment status (null when not applicable). |
+| `commit_status_recruitment_key` | integer | On3 key of the recruitment record the commitment status belongs to. |
+| `commit_status_withdrawn_transfer` | logical | Whether the player withdrew from the transfer portal (the commitment status). |
+| `commit_status_withdrawn_transfer_date` | character | Date the player withdrew from the transfer portal (the commitment status; null when never withdrawn). |
+| `sport_key` | integer | On3 numeric key of the sport. |
+| `sport_name` | character | Name of the sport (e.g. Football). |
 | `rating` | character | On3 rating for the recruit. |
-| `high_school_default_asset` | character |  |
+| `high_school_default_asset` | character | Nested default-asset object of the high school (null when On3 ships none). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 

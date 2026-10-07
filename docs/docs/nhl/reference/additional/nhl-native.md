@@ -554,8 +554,8 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 | `series_status_bottom_seed_team_abbrev` | character | Three-letter abbreviation for the lower-seeded team in the playoff series context embedded in the scoreboard game entry. |
 | `series_status_bottom_seed_wins` | integer | Number of wins accumulated by the lower-seeded team in the current playoff series as of this scoreboard snapshot. |
 | `period_descriptor_ot_periods` | double | Number of overtime periods played when the game extended beyond regulation, as reported in the scoreboard period descriptor. |
-| `away_team_record` | character | Away team's win-loss record. |
-| `home_team_record` | character | Home team's win-loss record. |
+| `away_team_record` | character |  |
+| `home_team_record` | character |  |
 | `away_team_common_name_fr` | character | Away team common name (French). |
 | `home_team_common_name_fr` | character | Home team common name (French). |
 

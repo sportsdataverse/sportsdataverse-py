@@ -96,8 +96,8 @@ League page: details, tabs, current table, fixtures, stats, transfers (one wide 
 | `seostr` | character |  |
 | `qa_data` | character |  |
 | `table` | character |  |
-| `playoff` | character | Whether the row is playoff statistics. |
-| `seasons` | character | NBA seasons played. |
+| `playoff` | character | Whether the league entry is a playoff competition; null when Fotmob ships no flag. |
+| `seasons` | character | Nested list (stringified) of the seasons the source publishes for the league. |
 | `details_id` | character |  |
 | `details_type` | character |  |
 | `details_name` | character |  |
@@ -163,7 +163,7 @@ Match page: general info, header, lineups, events, stats (one wide row).
 | col_name | type | description |
 |---|---|---|
 | `nav` | character |  |
-| `ongoing` | logical | Whether the streak is ongoing. |
+| `ongoing` | logical | Whether the match was in progress when the payload was fetched. |
 | `has_pending_var` | logical |  |
 | `general_match_id` | character |  |
 | `general_match_name` | character |  |
@@ -275,7 +275,7 @@ Player page: bio, primary team, career history, recent matches, stats (one wide 
 | `name` | character | Display name. |
 | `is_coach` | logical |  |
 | `is_captain` | logical |  |
-| `gender` | character | League gender designation. |
+| `gender` | character | Player's gender as Fotmob ships it (e.g. 'male'). |
 | `injury_information` | character |  |
 | `international_duty` | character |  |
 | `player_information` | character |  |
@@ -283,7 +283,7 @@ Player page: bio, primary team, career history, recent matches, stats (one wide 
 | `matches_url` | character |  |
 | `coach_stats` | character |  |
 | `stat_seasons` | character |  |
-| `status` | character | Status label. |
+| `status` | character | Player's status as Fotmob ships it (e.g. 'active'). |
 | `data_provider` | character |  |
 | `birth_date_utc_time` | character |  |
 | `birth_date_timezone` | character |  |
@@ -404,11 +404,11 @@ A data.fotmob.com league table file: legend, filters and the all/home/away/xg ta
 | col_name | type | description |
 |---|---|---|
 | `ccode` | character |  |
-| `league_id` | character | League identifier ('10' = WNBA). |
+| `league_id` | character | Fotmob league id of the table, as a string. |
 | `page_url` | character |  |
-| `league_name` | character | League name. |
+| `league_name` | character | Fotmob league name of the table (e.g. 'Premier League'). |
 | `legend` | character |  |
-| `ongoing` | character | Whether the streak is ongoing. |
+| `ongoing` | character | Stringified list of the team's ongoing matches at capture; empty when none. |
 | `table_filter_types` | character |  |
 | `composite` | logical |  |
 | `table_all` | character |  |
@@ -545,12 +545,12 @@ News timeline for a league or team, one row per story.
 | col_name | type | description |
 |---|---|---|
 | `id` | character | Provider identifier for the entity (Utf8 join key). |
-| `image_url` | character | Player headshot URL. |
+| `image_url` | character | URL of the article's lead image. |
 | `title` | character | Display title. |
 | `gmt_time` | character |  |
 | `source_str` | character |  |
 | `source_icon_url` | character |  |
-| `language` | character | Broadcast language. |
+| `language` | character | Language code of the article (e.g. 'en'). |
 | `page_url` | character |  |
 
 **`return_parsed=False`** — the decoded JSON body (a page object, a one-list envelope, an id-keyed map or a list; `{}` or `null` for an unknown id).
@@ -581,8 +581,8 @@ Top transfers across FotMob, one row per transfer.
 | col_name | type | description |
 |---|---|---|
 | `name` | character | Display name. |
-| `player_id` | character | Unique player identifier. |
-| `transfer_date` | character | Date the transfer was reported (parsed downstream to POSIXct). |
+| `player_id` | character | Fotmob player id of the transferred player, as a string. |
+| `transfer_date` | character | Timestamp the transfer was recorded (ISO-8601 UTC). |
 | `transfer_text` | character |  |
 | `from_club` | character |  |
 | `from_club_full_name` | character |  |
@@ -639,7 +639,7 @@ Team-of-the-week rounds for a league season, one row per round.
 |---|---|---|
 | `localized_key` | character |  |
 | `round_id` | character | Composite id of the round. |
-| `link` | character | API link to the game feed. |
+| `link` | character | Fotmob API URL of the round's team-of-the-week payload. |
 | `is_completed` | logical |  |
 
 **`return_parsed=False`** — the decoded JSON body (a page object, a one-list envelope, an id-keyed map or a list; `{}` or `null` for an unknown id).
@@ -671,7 +671,7 @@ Trending news stories (host-root route), one row per story.
 | col_name | type | description |
 |---|---|---|
 | `id` | character | Provider identifier for the entity (Utf8 join key). |
-| `image_url` | character | Player headshot URL. |
+| `image_url` | character | URL of the article's lead image. |
 | `title` | character | Display title. |
 | `gmt_time` | character |  |
 | `source_str` | character |  |
@@ -707,12 +707,12 @@ TV listings for a country, one row per broadcast with the match id in `id`.
 | col_name | type | description |
 |---|---|---|
 | `id` | character | Provider identifier for the entity (Utf8 join key). |
-| `start_time` | character | Kickoff time in eastern time zone. |
-| `end_time` | character | Shift end time (MM:SS countdown clock). |
-| `qualifiers` | character | Qualifiers. |
+| `start_time` | character | Broadcast start as an ASP.NET-style '/Date(<ms>)/' string (milliseconds since the Unix epoch). |
+| `end_time` | character | Broadcast end as an ASP.NET-style '/Date(<ms>)/' string; a large negative value is Fotmob's 'unset' sentinel. |
+| `qualifiers` | character | Stringified list of listing qualifiers (e.g. ['Live']). |
 | `station_id` | character |  |
 | `match_id` | character |  |
-| `league_id` | character | League identifier ('10' = WNBA). |
+| `league_id` | character | Fotmob league id of the listing's competition, as a string. |
 | `parent_league_id` | character |  |
 | `bet365_match_id` | character |  |
 | `external_id` | character | Provider-side identifier for the media item, matching the play id it accompanies. |

@@ -157,11 +157,11 @@ Get the resource endpoint registry
 | col_name | type | description |
 |---|---|---|
 | `key` | character | Registry key for the endpoint, which is CBS's internal resource class name such as BoxscoreResource or PlayerResource; the parser lifts it out of the payload's top-level key into a column. |
-| `location` | character | Either Home if the home team is playing in their home stadium, or Neutral if the game is being played at a neutral location. This still shows as Home for games between the Giants and Jets even though they share the same home stadium. |
-| `route` | character | A string indicating the route the primary receiver on a play took. Has the following possible values: "CORNER", "DEEP OUT", "GO", "HITCH/CURL", "IN/DIG", "POST", "QUICK OUT", "SCREEN", "SHALLOW CROSS/DRAG", "SLANT", "SWING", "TEXAS/ANGLE", "WHEEL". |
+| `location` | character |  |
+| `route` | character |  |
 | `path` | character | OpenAPI-style request path for the endpoint with brace placeholders, e.g. /resource/game/boxscore/{gameId}. |
-| `summary` | character | Record summary string (e.g. "25-15-10"). |
-| `notes` | character | Free-form notes attached to the record. |
+| `summary` | character |  |
+| `notes` | character |  |
 | `methods` | character | JSON-encoded list of HTTP verbs the endpoint accepts; every entry in the captured registry allows GET only. |
 | `formats` | character | JSON-encoded list of response serialisations the endpoint can emit, json throughout the captured registry. |
 | `parameters` | character | JSON-encoded list of parameter descriptors, each carrying name, required, dataType, paramType (path or query), an optional allowedValues enumeration and CBS's own prose description. |
@@ -176,7 +176,7 @@ Get the resource endpoint registry
 | `routes` | character | JSON-encoded list of colon-style route patterns for the endpoints reachable at more than one route; only the conference, division and team resources carry it, each adding a /resource/vendor/{vendorId}/... variant. |
 | `paths` | character | JSON-encoded list of brace-style request paths matching routes, present only on the endpoints that expose several routes. |
 | `expiration_message` | character | Cache-expiration descriptor as CBS returns it for the four entries where the block is null rather than an object; the object form is flattened into expiration_message_object_key_name instead. |
-| `is_active` | character | Whether the team was active in this season. |
+| `is_active` | character |  |
 | `resource_cache_no_cache` | character | Marker carried only by the endpoints CBS never caches (the bulk controller and the registry itself), whose resourceCache block holds noCache in place of a namespace. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
@@ -426,12 +426,12 @@ Get a league resource
 
 | col_name | type | description |
 |---|---|---|
-| `league_id` | integer | League identifier ('10' = WNBA). |
+| `league_id` | integer | Sleeper league id, as a string. |
 | `league_abbr` | character | Short CBS code for the league, e.g. NFL, NHL, NCAAB, EPL. |
-| `league_name` | character | League name. |
-| `sport_id` | integer | Sport MLBAM ID. |
+| `league_name` | character |  |
+| `sport_id` | integer |  |
 | `league_type` | character | Single-character CBS classification code for the league; all seventeen captured leagues carry M and CBS does not publish the rest of the code set. |
-| `teams` | character | Nested list of member-team membership spans. |
+| `teams` | character |  |
 | `color_primary` | character | Primary brand colour of the league as six hex digits, inconsistently prefixed with a hash (#003369 for the NFL, 002D72 for MLB); null for the leagues CBS carries no palette for. |
 | `color_secondary` | character | Secondary brand colour of the league as six hex digits, with the same inconsistent hash prefix as color_primary; null where CBS carries no palette. |
 
@@ -565,27 +565,27 @@ Get team resources associated to a season
 
 | col_name | type | description |
 |---|---|---|
-| `team_id` | integer | Unique team identifier. |
+| `team_id` | integer |  |
 | `stub_hub_team_id` | integer | StubHub performer id for the team, which is the key behind ticket_url; entirely null for the ten soccer leagues and populated only for MLB, MLS, NBA, NCAAB, NCAAF, NFL and NHL, so the port pins it back to Int64 after pandas widens the nullable column to float. |
-| `location` | character | Either Home if the home team is playing in their home stadium, or Neutral if the game is being played at a neutral location. This still shows as Home for games between the Giants and Jets even though they share the same home stadium. |
-| `nick_name` | character | Player nickname. |
+| `location` | character |  |
+| `nick_name` | character |  |
 | `medium_name` | character | Medium-length display name for the team, sitting between short_name and the full location plus nickname (Arizona for the Cardinals, Duke University, Werder Bremen). |
-| `short_name` | character | Short display name. |
-| `abbrev` | character | Team abbreviation. |
-| `status` | character | Status label. |
-| `home_venue_id` | integer | Unique identifier for home venue. |
-| `conference_id` | integer | Conference identifier. |
-| `league_id` | integer | League identifier ('10' = WNBA). |
-| `division_id` | integer | Division MLBAM ID. |
+| `short_name` | character |  |
+| `abbrev` | character |  |
+| `status` | character |  |
+| `home_venue_id` | integer |  |
+| `conference_id` | integer |  |
+| `league_id` | integer |  |
+| `division_id` | integer |  |
 | `ticket_url` | character | StubHub ticket-purchase URL for the team, either a bare /performer/{id} link or a slugged team-tickets link; an empty string for the leagues where CBS carries no StubHub performer. |
 | `color_hex_dex` | character | Six-digit team colour drawn from CBS's own colour index, with no leading hash and an empty string where unset; it can differ slightly from color_primary_hex (96223E against 97233f for the Arizona Cardinals). |
 | `color_primary_hex` | character | Team's primary colour as six hex digits with no leading hash, e.g. 97233f. |
 | `color_secondary_hex` | character | Team's secondary colour as six hex digits with no leading hash, e.g. 000000. |
-| `players` | character | Nested list of per-player box scores. |
-| `league` | character | League slug. |
+| `players` | character |  |
+| `league` | character |  |
 | `standings` | character | Nested standings sub-resource for the team, JSON-encoded when present; null unless the request asked for it through the endpoint's resources parameter, which defaults to none. |
-| `conference` | character | Conference name. |
-| `division` | character | Team division. |
+| `conference` | character |  |
+| `division` | character |  |
 | `team_seasons` | character | Nested list of the team's season records, JSON-encoded when present; null unless requested through the resources parameter. |
 | `polls` | character | Nested poll-ranking sub-resource for the team, JSON-encoded when present; null unless requested through the resources parameter. |
 | `home_venue` | character | Nested venue record for the team's home site, JSON-encoded when present; null unless requested through the resources parameter, with home_venue_id always carrying the id. |

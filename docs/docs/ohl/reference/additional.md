@@ -410,7 +410,7 @@ OHL standings — one row per team.
 | `shootout_wins` | character | Shootout wins. |
 | `shootout_losses` | character | Shootout losses. |
 | `regulation_wins` | character | Wins in regulation. |
-| `row` | character | Row index within the game grouping (sequencing helper). |
+| `row` | character |  |
 | `points` | integer | Total points (goals + assists). |
 | `penalty_minutes` | character | Penalty minutes. |
 | `streak` | character | Current streak value. |
@@ -418,7 +418,7 @@ OHL standings — one row per team.
 | `goals_against` | character | Goals against. |
 | `goals_diff` | character | Net goal differential for the team (goals for minus goals against) displayed as a signed string. |
 | `percentage` | character | Team points percentage expressed as a string, calculated as points earned divided by maximum possible points. |
-| `overall_rank` | character | Overall recruit ranking (top recruits only; may be `NA`). |
+| `overall_rank` | character |  |
 | `games_played` | character | Games played. |
 | `team_rank` | integer | Team rank in the standings. |
 | `past_10` | character | Record over the team's most recent 10 games (feed header 'Past 10 Games') as a hyphenated string: W-L-OTL-SOL when four parts are shipped (e.g. '2-0-0-1'), W-L-OTL when three are (e.g. '0-2-1'). |

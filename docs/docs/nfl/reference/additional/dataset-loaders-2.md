@@ -623,10 +623,10 @@ Polars dataframe containing officials available.
 |---|---|---|
 | `game_id` | character | Ten digit identifier for NFL game. |
 | `game_key` | character | Unique nflverse game identifier linking the officiating record to a specific NFL game. |
-| `official_name` | character | Official name. |
+| `official_name` | character |  |
 | `position` | character | Primary position as reported by NFL.com |
 | `jersey_number` | integer | Jersey number. Often useful for joins by name/team/jersey. |
-| `official_id` | character | Unique official / referee identifier. |
+| `official_id` | character |  |
 | `season` | integer | 4 digit number indicating to which season(s) the specified timeframe belongs to. |
 | `season_type` | character | REG or POST indicating if the timeframe belongs to regular or post season. |
 | `week` | integer | Season week. |
@@ -753,9 +753,9 @@ Will be removed in a future release. Migrate callers to the unified
 | `tm` | character | Team ID as used on MyFantasyLeague.com |
 | `age` | double | Age as of last pipeline build, rounded to one decimal. Pipeline is built on a weekly basis. |
 | `pos` | character | Position as tracked by FP |
-| `g` | double | Goals (skaters). |
+| `g` | double |  |
 | `gs` | double | Number of games the player started during the season or period covered by this row. |
-| `int` | double | Binary flag for an interception. |
+| `int` | double |  |
 | `tgt` | double | Total number of times the player was the nearest defender on a pass attempt (targets in coverage) per Pro Football Reference. |
 | `cmp` | double | Number of passes completed by the opposing quarterback when targeting the player in coverage. |
 | `cmp_percent` | double | Completion percentage allowed by the player in coverage (completions divided by targets). |
@@ -880,7 +880,7 @@ Will be removed in a future release. Migrate callers to the unified
 | `tm` | character | Team ID as used on MyFantasyLeague.com |
 | `age` | double | Age as of last pipeline build, rounded to one decimal. Pipeline is built on a weekly basis. |
 | `pos` | character | Position as tracked by FP |
-| `g` | double | Goals (skaters). |
+| `g` | double |  |
 | `gs` | double | Number of games the player started at a receiver position during the period covered. |
 | `tgt` | double | Total number of times the player was the intended receiver on a pass attempt. |
 | `rec` | double | Total receptions made by the player during the period covered. |
@@ -896,7 +896,7 @@ Will be removed in a future release. Migrate callers to the unified
 | `rec_br` | double | Receptions per broken tackle — number of receptions for each broken tackle the player forced after the catch, per Pro Football Reference. |
 | `drop` | double | Number of catchable passes the player dropped (failed to secure after the ball reached the receiver's hands). |
 | `drop_percent` | double | Percentage of catchable targets that the player dropped. |
-| `int` | double | Binary flag for an interception. |
+| `int` | double |  |
 | `rat` | double | Passer rating generated on passes thrown to the player — the NFL passer rating when the receiver is targeted. |
 | `loaded` | character | Indicator or metadata field from the Pro Football Reference data load, flagging the row's data source state or completeness. |
 
@@ -935,7 +935,7 @@ Will be removed in a future release. Migrate callers to the unified
 | `tm` | character | Team ID as used on MyFantasyLeague.com |
 | `age` | double | Age as of last pipeline build, rounded to one decimal. Pipeline is built on a weekly basis. |
 | `pos` | character | Position as tracked by FP |
-| `g` | double | Goals (skaters). |
+| `g` | double |  |
 | `gs` | double | Number of games started by the player during the period covered. |
 | `att` | double | Total rushing attempts by the player during the period covered. |
 | `yds` | double | Total rushing yards gained during the period covered. |

@@ -27,12 +27,12 @@ Pull the play-by-play feed for one NHL game.
 |---|---|---|
 | `event_id` | integer | ESPN event id (echoed from arg). |
 | `time_in_period` | character | Time elapsed in the period when the shot occurred. |
-| `time_remaining` | character | Time remaining. |
-| `situation_code` | character | Code identifying the game situation. |
+| `time_remaining` | character |  |
+| `situation_code` | character |  |
 | `home_team_defending_side` | character | Ice end ('left' or 'right') that the home team is defending in the current period, used to orient x/y coordinates in the NHL api-web play-by-play feed. |
 | `type_code` | integer | Numeric event-type code identifying the category of play (e.g., goal, shot, hit, penalty, faceoff) in the NHL api-web play-by-play feed. |
 | `type_desc_key` | character | String key describing the event type category (e.g., 'goal', 'shot-on-goal', 'hit', 'faceoff') in the NHL api-web play-by-play feed. |
-| `sort_order` | integer | Display sort order for the sport. |
+| `sort_order` | integer |  |
 | `period_descriptor_number` | integer | Period number. |
 | `period_descriptor_period_type` | character | Period type (e.g., REG, OT). |
 | `period_descriptor_max_regulation_periods` | integer | Maximum number of regulation periods. |

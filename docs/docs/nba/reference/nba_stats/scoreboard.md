@@ -221,7 +221,7 @@ GET /stats/scoreboardv3
 | `awayteam_wins` | integer | Away team's win total entering the game. |
 | `gameclock` | character | Current game clock display for a live game. |
 | `gamecode` | character | Gamecode. |
-| `gamedate` | character | Game date as parsed from the source feed. |
+| `gamedate` | character | Game date the scoreboard was requested for (YYYY-MM-DD). |
 | `gameet` | character | Scheduled game start time in US Eastern time. |
 | `gameid` | character | Unique 10-character game identifier from the league's stats API. |
 | `gamelabel` | character | Display label for the game (e.g. a playoff series or event name). |

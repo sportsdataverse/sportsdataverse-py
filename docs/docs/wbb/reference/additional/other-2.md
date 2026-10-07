@@ -1478,7 +1478,7 @@ Polars dataframe containing teams for the requested league. This function caches
 | `team_is_active` | logical | TRUE if the team is currently active. |
 | `team_is_all_star` | logical | TRUE if the row represents an All-Star team. |
 | `team_location` | character | Team city or location string. |
-| `team_logos` | integer | Team logo metadata. |
+| `team_logos` | integer |  |
 | `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
 | `team_nickname` | character | Team nickname. |
 | `team_short_display_name` | character | Short team display name (e.g. 'Aces'). |

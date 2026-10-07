@@ -281,7 +281,7 @@ A polars (or pandas) `DataFrame`, one row per play (empty frame if the game has 
 | `playDeleted` | logical | Indicates whether this play record has been marked as deleted or voided. |
 | `playDescription` | character | Official text description of the play as provided by the NFL. |
 | `playDescriptionWithJerseyNumbers` | character | Play description text augmented with player jersey numbers for participant identification. |
-| `playId` | integer | Unique play event identifier (UUID). |
+| `playId` | integer |  |
 | `playStats` | integer | Internal NFL stat identifier linking this play to associated statistical records. |
 | `playType` | character | Categorical classification of the play type (e.g., PASS, RUSH, PUNT, KICKOFF). |
 | `prePlayByPlay` | character | Narrative text describing the game situation or setup immediately before this play. |
@@ -702,11 +702,11 @@ A polars (or pandas) `DataFrame`, one row per scheduled game.
 | col_name | type | description |
 |---|---|---|
 | `gameKey` | integer | Legacy NFL game key used as an alternative identifier in the NGS scheduling system. |
-| `gameDate` | character | Game date-time (ISO 8601, UTC). |
+| `gameDate` | character |  |
 | `gameId` | integer | NFL Next Gen Stats integer identifier for the game. |
 | `gameTime` | character | Scheduled kickoff time for the game in local or UTC format. |
 | `gameTimeEastern` | character | Scheduled kickoff time for the game expressed in Eastern Time. |
-| `gameType` | character | Game type identifier (3 for playoffs). |
+| `gameType` | character |  |
 | `homeDisplayName` | character | Full display name of the home team (e.g., 'Kansas City Chiefs'). |
 | `homeNickname` | character | Nickname (mascot name) of the home team (e.g., 'Chiefs'). |
 | `homeTeamAbbr` | character | Abbreviated team name for the home team at the schedule row level. |
@@ -800,11 +800,11 @@ A polars (or pandas) `DataFrame`, one row per game in the current week.
 | col_name | type | description |
 |---|---|---|
 | `gameKey` | integer | Alternate numeric key for the NFL game used in official NFL NGS record-keeping. |
-| `gameDate` | character | Game date-time (ISO 8601, UTC). |
+| `gameDate` | character |  |
 | `gameId` | integer | Unique identifier for the NFL game in the NGS/Shield data system. |
 | `gameTime` | character | Scheduled kickoff time for the game in local or ET representation. |
 | `gameTimeEastern` | character | Scheduled kickoff time for the game in Eastern Time (ET), as published by the NFL. |
-| `gameType` | character | Game type identifier (3 for playoffs). |
+| `gameType` | character |  |
 | `homeDisplayName` | character | Full display name of the home team (e.g., 'Kansas City Chiefs') for the scheduled game. |
 | `homeNickname` | character | Nickname of the home team (e.g., 'Chiefs') for the scheduled game. |
 | `homeTeamAbbr` | character | Two- or three-letter abbreviation identifying the home team at the top-level game record. |
@@ -900,8 +900,8 @@ A polars (or pandas) `DataFrame`, one row per team.
 | `abbr` | character | Official team abbreviation used by the NFL Next Gen Stats system (e.g., 'KC', 'NE'). |
 | `cityState` | character | City and state where the team is based (e.g., 'Kansas City, MO'). |
 | `conferenceAbbr` | character | Abbreviation of the conference the team belongs to (e.g., 'AFC', 'NFC'). |
-| `fullName` | character | Full name of the probable starting pitcher. |
-| `logo` | character | Team or league logo URL. |
+| `fullName` | character |  |
+| `logo` | character |  |
 | `nick` | character | Team nickname or mascot name (e.g., 'Chiefs', 'Patriots'). |
 | `season` | integer | 4 digit number indicating to which season(s) the specified timeframe belongs to. |
 | `smartId` | character | NFL Next Gen Stats smart (UUID-style) identifier for the team. |
@@ -912,11 +912,11 @@ A polars (or pandas) `DataFrame`, one row per team.
 | `teamType` | character | Classification of the team type within the NFL system (e.g., 'NFL' for active franchises). |
 | `ticketPhoneNumber` | character | Phone number for ticket sales inquiries for this team. |
 | `yearFound` | integer | Year the franchise was founded. |
-| `conference_id` | character | Referencing conference id. |
-| `conference_abbr` | character | Conference abbreviation. |
+| `conference_id` | character |  |
+| `conference_abbr` | character |  |
 | `conference_fullName` | character | Full name of the conference the team belongs to (e.g., 'American Football Conference'). |
-| `division_id` | character | Division MLBAM ID. |
-| `division_abbr` | character | Division abbreviation. |
+| `division_id` | character |  |
+| `division_abbr` | character |  |
 | `division_fullName` | character | Full name of the division the team belongs to (e.g., 'AFC West'). |
 | `divisionAbbr` | character | Abbreviation of the division the team belongs to (e.g., 'AFC West'). |
 
@@ -1011,10 +1011,10 @@ A polars (or pandas) `DataFrame`, one row per chart in the page.
 |---|---|---|
 | `imageName` | character | Filename or label for the player image asset used on the NGS microsite chart. |
 | `esbId` | character | Elias Sports Bureau identifier for the player featured on the NGS microsite chart. |
-| `firstName` | character | Scorer first name (localized list). |
+| `firstName` | character |  |
 | `gameId` | integer | Unique identifier for the NFL game associated with the NGS microsite chart entry. |
 | `headshot` | character | NFL headshot url for player |
-| `lastName` | character | Scorer last name (localized list). |
+| `lastName` | character |  |
 | `playerName` | character | Full display name of the player featured on the NGS microsite chart. |
 | `position` | character | Primary position as reported by NFL.com |
 | `receivingYards` | integer | Total receiving yards for the player (receiver) featured on the NGS microsite chart. |
@@ -1022,9 +1022,9 @@ A polars (or pandas) `DataFrame`, one row per chart in the page.
 | `season` | integer | 4 digit number indicating to which season(s) the specified timeframe belongs to. |
 | `seasonType` | character | Season type classification for the chart entry (e.g., 'REG' for regular season, 'POST' for playoffs). |
 | `teamId` | character | Unique numeric identifier for the player's team in the NFL NGS/Shield data system. |
-| `timestamp` | integer | Response timestamp (ISO 8601). |
+| `timestamp` | integer |  |
 | `touchdowns` | integer | Total number of touchdowns scored or thrown by the player featured on the NGS microsite chart. |
-| `type` | character | Record-type category (e.g. `total`, `home`, `road`). |
+| `type` | character |  |
 | `week` | integer | Season week. |
 | `extraLargeImg` | character | URL to the extra-large player image asset used on the NFL NGS microsite chart display. |
 | `playerNameSlug` | character | URL-safe slug version of the player's name used in NGS microsite routing (e.g., 'patrick-mahomes'). |
@@ -1073,8 +1073,8 @@ A polars (or pandas) `DataFrame`, one row per player.
 | col_name | type | description |
 |---|---|---|
 | `esbId` | character | Elias Sports Bureau identifier for the player used in NFL Next Gen Stats microsite chart data. |
-| `firstName` | character | Scorer first name (localized list). |
-| `lastName` | character | Scorer last name (localized list). |
+| `firstName` | character |  |
+| `lastName` | character |  |
 | `playerName` | character | Full display name of the player as shown in NFL Next Gen Stats microsite charts. |
 
 **Example**

@@ -90,8 +90,8 @@ All-Star Game career statistics for goaltenders.
 | `save_percentage` | double | Save percentage (goalies). |
 | `season_id` | integer | Season identifier. |
 | `shots_against` | integer | Shots faced. |
-| `team_losses` | integer | Team losses. |
-| `team_wins` | integer | Team wins. |
+| `team_losses` | integer |  |
+| `team_wins` | integer |  |
 | `ties` | integer | Total ties. |
 | `time_on_ice` | integer | Time on ice in seconds. |
 | `wins` | integer | Wins. |
@@ -167,22 +167,22 @@ All-Star Game single-game scoring records for skaters.
 | `id` | integer | Unique player identifier. |
 | `all_star_team_id` | integer | Identifier for the All-Star team roster to which the skater was assigned for this game. |
 | `all_star_team_score` | integer | Goals scored by the skater's All-Star team in this specific All-Star game. |
-| `arena_name` | character | Arena name. |
+| `arena_name` | character |  |
 | `assists` | integer | Assists. |
 | `city` | character | City where the venue is located. |
 | `first_name` | character | Player first name. |
 | `full_name` | character | Player full name. |
 | `game_date` | character | Game date. |
 | `game_id` | integer | Unique game identifier. |
-| `game_name` | character | Full event name. |
+| `game_name` | character |  |
 | `goals` | integer | Goals scored. |
 | `home_road` | character | Designation indicating whether the skater's All-Star team was the home or road side for this game. |
 | `is_active` | logical | Whether the team is active. |
 | `is_rookie` | logical | Whether the player is a rookie. |
 | `last_name` | character | Player last name. |
-| `mvp` | character | Mvp. |
+| `mvp` | character |  |
 | `nhl_team_id` | integer | NHL identifier for the skater's regular-season team at the time this All-Star game was played. |
-| `opponent_score` | integer | Opponent score. |
+| `opponent_score` | integer |  |
 | `opponent_team_id` | integer | Opponent team identifier. |
 | `penalties` | double | Penalty count. |
 | `penalty_minutes` | double | Penalty minutes. |
@@ -224,21 +224,21 @@ All-Star Game single-game stats for goaltenders.
 | `id` | integer | Unique player identifier. |
 | `all_star_team_id` | integer | NHL identifier for the All-Star team the goalie was assigned to in the game. |
 | `all_star_team_score` | integer | Goals scored by the goalie's All-Star team in that game. |
-| `arena_name` | character | Arena name. |
+| `arena_name` | character |  |
 | `city` | character | City where the venue is located. |
 | `first_name` | character | Player first name. |
 | `full_name` | character | Player full name. |
 | `game_date` | character | Game date. |
 | `game_id` | integer | Unique game identifier. |
-| `game_name` | character | Full event name. |
+| `game_name` | character |  |
 | `goals_against` | integer | Goals against. |
 | `home_road` | character | Indicates whether the goalie's All-Star team was the designated home or road squad for the game. |
 | `is_active` | logical | Whether the team is active. |
 | `is_rookie` | logical | Whether the player is a rookie. |
 | `last_name` | character | Player last name. |
-| `mvp` | character | Mvp. |
+| `mvp` | character |  |
 | `nhl_team_id` | integer | NHL identifier for the goalie's regular-season franchise at the time of the All-Star game. |
-| `opponent_score` | integer | Opponent score. |
+| `opponent_score` | integer |  |
 | `opponent_team_id` | integer | Opponent team identifier. |
 | `player_id` | integer | Unique player identifier. |
 | `save_percentage` | double | Save percentage (goalies). |

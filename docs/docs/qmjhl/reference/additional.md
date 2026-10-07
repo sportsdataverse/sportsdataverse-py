@@ -274,7 +274,7 @@ QMJHL standings — one row per team.
 | `ot_wins` | character | Overtime wins. |
 | `shootout_wins` | character | Shootout wins. |
 | `shootout_losses` | character | Shootout losses. |
-| `row` | character | Row index within the game grouping (sequencing helper). |
+| `row` | character |  |
 | `points` | integer | Total points (goals + assists). |
 | `penalty_minutes` | character | Penalty minutes. |
 | `streak` | character | Current streak value. |
@@ -282,7 +282,7 @@ QMJHL standings — one row per team.
 | `goals_against` | character | Goals against. |
 | `goals_diff` | character | Goals-for minus goals-against differential for the team through the current point in the QMJHL season. |
 | `percentage` | character | Points percentage representing the fraction of available points earned by the team in the QMJHL standings. |
-| `overall_rank` | character | Overall recruit ranking (top recruits only; may be `NA`). |
+| `overall_rank` | character |  |
 | `games_played` | character | Games played. |
 | `team_rank` | integer | Team rank in the standings. |
 | `past_10` | character | Win-loss-overtime record string for the team over its most recent ten games (e.g., "7-2-1"). |
@@ -347,8 +347,8 @@ QMJHL team roster for a given team + season.
 | `nhlteam` | character | Name or abbreviation of the NHL team that holds the player's NHL rights, if applicable. |
 | `player_id_1` | character | Primary alternate player identifier used by the HockeyTech system to cross-reference player records. |
 | `is_rookie` | character | Whether the player is a rookie. |
-| `h` | character | Hits. |
-| `w` | character | Wins. |
+| `h` | character |  |
+| `w` | character |  |
 | `draft_status` | character | Description of the player's NHL or league draft eligibility or draft history (e.g., "Drafted", "Eligible"). |
 | `name` | character | Team mascot name. |
 | `player_image` | character | URL of the player's headshot or profile image as stored in the HockeyTech roster feed. |

@@ -127,7 +127,7 @@ A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, o
 | `content_uri` | character | Fox content URI of the league entity (e.g., 'hockey/nhl/league/1'); entity_id is its trailing number. |
 | `content_type` | character | Fox entity type of the header payload; always 'league' for the league header. |
 | `color` | character | Primary color hex. |
-| `logo_url` | character | NBA CDN primary logo URL. |
+| `logo_url` | character |  |
 | `image_alt_text` | character | Image alt text Fox ships with the header, the full league name (e.g., 'National Hockey League'). |
 | `rank` | character | Rank of the streak. |
 | `details` | character | Odds detail string (e.g. "DET -185"). |
@@ -161,13 +161,13 @@ A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, o
 
 | col_name | type | description |
 |---|---|---|
-| `players` | character | Nested list of per-player box scores. |
+| `players` | character |  |
 | `v1` | character | Abbreviated player name (e.g., 'A. Ovechkin'), from the leader table's unlabeled second column. |
-| `gp` | character | Games played. |
+| `gp` | character |  |
 | `entity_id` | character | Fox id of the row's linked player or team as a string: the trailing number of the row's entityLink contentUri. |
 | `g` | character | Goals (skaters). |
 | `a` | character | Assists (skaters). |
-| `p` | character | P. |
+| `p` | character |  |
 
 **Example**
 
@@ -325,9 +325,9 @@ A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, o
 | `eastern_conference` | character | First-column cell of Fox's EASTERN CONFERENCE tables (CONFERENCE and PRESEASON sections), whose header text names this column; all null in the sampled preseason data, where Fox left that cell blank. |
 | `v1` | character | Team nickname (e.g., 'Bruins'), from the standings table's unlabeled second column. |
 | `w_l_otl` | character | Record as a 'W-L-OTL' string (wins-losses-overtime losses); '0-0-0' for every team in the sampled preseason data. |
-| `pts` | character | Points scored. |
-| `gp` | character | Games played. |
-| `row` | character | Row index within the game grouping (sequencing helper). |
+| `pts` | character |  |
+| `gp` | character |  |
+| `row` | character |  |
 | `sow` | character | Shootout wins (SOW column), as a string; '0' for every team in the sampled preseason data. |
 | `sol` | character | Shootout losses (SOL column), as a string; '0' for every team in the sampled preseason data. |
 | `gf` | character | Goals for (GF column), as a string; '0' for every team in the sampled preseason data. |
@@ -335,8 +335,8 @@ A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, o
 | `gd` | character | Goal differential (GD column), as a string; '0' for every team in the sampled preseason data. |
 | `home` | character | Whether the player's team was home. |
 | `away` | character | Away team shots in the period. |
-| `l10` | character | Last-ten record. |
-| `strk` | character | Current streak. |
+| `l10` | character |  |
+| `strk` | character |  |
 | `entity_id` | character | Fox id of the row's linked team as a string: the trailing number of the row's entityLink contentUri. |
 | `western_conference` | character | First-column cell of Fox's WESTERN CONFERENCE tables (CONFERENCE and PRESEASON sections), whose header text names this column; all null in the sampled preseason data, where Fox left that cell blank. |
 | `east_atlantic` | character | First-column cell of Fox's 'EAST, ATLANTIC' division tables (DIVISION and WILD CARD sections), whose header text names this column; all null in the sampled preseason data, where Fox left that cell blank. |
@@ -367,7 +367,7 @@ A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, o
 | col_name | type | description |
 |---|---|---|
 | `category` | character | Stat leader category. |
-| `stat` | character | Stat. |
+| `stat` | character |  |
 | `stat_abbreviation` | character | Fox's short label for the leader's stat (e.g., 'G', 'GAA', 'TOI/G'). |
 | `player` | character | Penalized player name. |
 | `value` | character | Leader stat numeric value. |
@@ -630,7 +630,7 @@ A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, o
 
 | col_name | type | description |
 |---|---|---|
-| `group` | character | Stat group (e.g. "hitting", "pitching", "fielding"). |
+| `group` | character |  |
 | `fox_id` | character | Fox Sports team id as a string (e.g., '14'), the trailing number of content_uri. |
 | `abbreviation` | character | Team abbreviation. |
 | `name` | character | Team mascot name. |
@@ -638,7 +638,7 @@ A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, o
 | `content_type` | character | Fox entity type of the nav item; always 'team' in sampled data. |
 | `web_url` | character | Site-relative foxsports.com path of the team page (e.g., '/nhl/detroit-red-wings-team'). |
 | `color` | character | Primary color hex. |
-| `logo_url` | character | NBA CDN primary logo URL. |
+| `logo_url` | character |  |
 
 **Example**
 

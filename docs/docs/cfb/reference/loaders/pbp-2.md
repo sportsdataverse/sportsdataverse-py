@@ -137,12 +137,12 @@ Release: [cfbfastR_cfb_pbp](https://github.com/sportsdataverse/sportsdataverse-d
 | `completed` | Boolean | `TRUE` if the game is complete. |
 | `home_team_id` | Int32 | ESPN home team id (parsed from `home_team_ref`). |
 | `home_team` | String | Home team name. |
-| `home_team_division` | String | Home team NCAA division (1, 2, 3). |
+| `home_team_division` | String |  |
 | `home_team_conference` | String | Conference name of the home team. |
 | `home_team_pregame_elo` | Int32 | Home team's pregame Elo rating, carried on the cfbfastR-shaped schema. |
 | `away_team_id` | Int32 | ESPN away team id (parsed from `away_team_ref`). |
 | `away_team` | String | Away team name. |
-| `away_team_division` | String | Away team NCAA division (1, 2, 3). |
+| `away_team_division` | String |  |
 | `away_team_conference` | String | Conference name of the away team. |
 | `away_team_pregame_elo` | Int32 | Away team's pregame Elo rating, carried on the cfbfastR-shaped schema. |
 | `season` | Int32 | Season (4-digit year). |

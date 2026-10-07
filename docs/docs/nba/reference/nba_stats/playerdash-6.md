@@ -240,7 +240,7 @@ GET /stats/playerdashptpass
 | `pass_to` | character |  |
 | `pass_teammate_player_id` | integer | Stats API identifier for pass teammate player identifier associated with this NBA or WNBA Stats row. |
 | `frequency` | numeric | NBA or WNBA Stats value for frequency in the playerdashptpass result set. |
-| `pass` | numeric | Binary indicator if the play was a pass play (sacks and scrambles included). |
+| `pass` | numeric | Passes per game to the paired teammate (PassesMade set) or received from the paired teammate (PassesReceived set). |
 | `ast` | numeric | Assists. |
 | `fgm` | numeric | Field goals made. |
 | `fga` | numeric | Field goal attempts. |
@@ -266,7 +266,7 @@ GET /stats/playerdashptpass
 | `pass_from` | character | Passing or assist metric for pass from in the requested NBA or WNBA Stats split. |
 | `pass_teammate_player_id` | integer | Stats API identifier for pass teammate player identifier associated with this NBA or WNBA Stats row. |
 | `frequency` | numeric | NBA or WNBA Stats value for frequency in the playerdashptpass result set. |
-| `pass` | numeric | Binary indicator if the play was a pass play (sacks and scrambles included). |
+| `pass` | numeric | Passes per game to the paired teammate (PassesMade set) or received from the paired teammate (PassesReceived set). |
 | `ast` | numeric | Assists. |
 | `fgm` | numeric | Field goals made. |
 | `fga` | numeric | Field goal attempts. |
@@ -348,7 +348,7 @@ GET /stats/playerdashptreb
 |---|---|---|
 | `player_id` | integer | Unique player identifier. |
 | `player_name_last_first` | character | Player display name formatted as Last, First for sorting in NBA or WNBA Stats tables. |
-| `sort_order` | integer | Display sort order for the sport. |
+| `sort_order` | integer | Display order of the split rows within the result set (1 = first), as a string. |
 | `g` | integer | Games played. |
 | `shot_type_range` | character | Shooting metric for shot type range in the requested NBA or WNBA Stats split. |
 | `reb_frequency` | numeric | Rebounding metric for rebounds frequency in the requested NBA or WNBA Stats split. |
@@ -370,7 +370,7 @@ GET /stats/playerdashptreb
 |---|---|---|
 | `player_id` | integer | Unique player identifier. |
 | `player_name_last_first` | character | Player display name formatted as Last, First for sorting in NBA or WNBA Stats tables. |
-| `sort_order` | integer | Display sort order for the sport. |
+| `sort_order` | integer | Display order of the split rows within the result set (1 = first), as a string. |
 | `g` | integer | Games played. |
 | `reb_num_contesting_range` | character |  |
 | `reb_frequency` | numeric | Rebounding metric for rebounds frequency in the requested NBA or WNBA Stats split. |
@@ -392,7 +392,7 @@ GET /stats/playerdashptreb
 |---|---|---|
 | `player_id` | integer | Unique player identifier. |
 | `player_name_last_first` | character | Player display name formatted as Last, First for sorting in NBA or WNBA Stats tables. |
-| `sort_order` | integer | Display sort order for the sport. |
+| `sort_order` | integer | Display order of the split rows within the result set (1 = first), as a string. |
 | `g` | integer | Games played. |
 | `shot_dist_range` | character |  |
 | `reb_frequency` | numeric | Rebounding metric for rebounds frequency in the requested NBA or WNBA Stats split. |
@@ -414,7 +414,7 @@ GET /stats/playerdashptreb
 |---|---|---|
 | `player_id` | integer | Unique player identifier. |
 | `player_name_last_first` | character | Player display name formatted as Last, First for sorting in NBA or WNBA Stats tables. |
-| `sort_order` | integer | Display sort order for the sport. |
+| `sort_order` | integer | Display order of the split rows within the result set (1 = first), as a string. |
 | `g` | integer | Games played. |
 | `reb_dist_range` | character |  |
 | `reb_frequency` | numeric | Rebounding metric for rebounds frequency in the requested NBA or WNBA Stats split. |
@@ -535,7 +535,7 @@ GET /stats/playerdashptshots
 |---|---|---|
 | `player_id` | integer | Unique player identifier. |
 | `player_name_last_first` | character | Player display name formatted as Last, First for sorting in NBA or WNBA Stats tables. |
-| `sort_order` | integer | Display sort order for the sport. |
+| `sort_order` | integer | Display order of the split rows within the result set (1 = first), as a string. |
 | `gp` | integer | Games played. |
 | `g` | integer | Games played. |
 | `shot_type` | character | Shot type label (e.g. 'Jump Shot', 'Layup'). |
@@ -559,7 +559,7 @@ GET /stats/playerdashptshots
 |---|---|---|
 | `player_id` | integer | Unique player identifier. |
 | `player_name_last_first` | character | Player display name formatted as Last, First for sorting in NBA or WNBA Stats tables. |
-| `sort_order` | integer | Display sort order for the sport. |
+| `sort_order` | integer | Display order of the split rows within the result set (1 = first), as a string. |
 | `gp` | integer | Games played. |
 | `g` | integer | Games played. |
 | `shot_type` | character | Shot type label (e.g. 'Jump Shot', 'Layup'). |
@@ -583,7 +583,7 @@ GET /stats/playerdashptshots
 |---|---|---|
 | `player_id` | integer | Unique player identifier. |
 | `player_name_last_first` | character | Player display name formatted as Last, First for sorting in NBA or WNBA Stats tables. |
-| `sort_order` | integer | Display sort order for the sport. |
+| `sort_order` | integer | Display order of the split rows within the result set (1 = first), as a string. |
 | `gp` | integer | Games played. |
 | `g` | integer | Games played. |
 | `shot_clock_range` | character |  |
@@ -607,7 +607,7 @@ GET /stats/playerdashptshots
 |---|---|---|
 | `player_id` | integer | Unique player identifier. |
 | `player_name_last_first` | character | Player display name formatted as Last, First for sorting in NBA or WNBA Stats tables. |
-| `sort_order` | integer | Display sort order for the sport. |
+| `sort_order` | integer | Display order of the split rows within the result set (1 = first), as a string. |
 | `gp` | integer | Games played. |
 | `g` | integer | Games played. |
 | `dribble_range` | character |  |
@@ -631,7 +631,7 @@ GET /stats/playerdashptshots
 |---|---|---|
 | `player_id` | integer | Unique player identifier. |
 | `player_name_last_first` | character | Player display name formatted as Last, First for sorting in NBA or WNBA Stats tables. |
-| `sort_order` | integer | Display sort order for the sport. |
+| `sort_order` | integer | Display order of the split rows within the result set (1 = first), as a string. |
 | `gp` | integer | Games played. |
 | `g` | integer | Games played. |
 | `close_def_dist_range` | character |  |
@@ -655,7 +655,7 @@ GET /stats/playerdashptshots
 |---|---|---|
 | `player_id` | integer | Unique player identifier. |
 | `player_name_last_first` | character | Player display name formatted as Last, First for sorting in NBA or WNBA Stats tables. |
-| `sort_order` | integer | Display sort order for the sport. |
+| `sort_order` | integer | Display order of the split rows within the result set (1 = first), as a string. |
 | `gp` | integer | Games played. |
 | `g` | integer | Games played. |
 | `close_def_dist_range` | character |  |
@@ -679,7 +679,7 @@ GET /stats/playerdashptshots
 |---|---|---|
 | `player_id` | integer | Unique player identifier. |
 | `player_name_last_first` | character | Player display name formatted as Last, First for sorting in NBA or WNBA Stats tables. |
-| `sort_order` | integer | Display sort order for the sport. |
+| `sort_order` | integer | Display order of the split rows within the result set (1 = first), as a string. |
 | `gp` | integer | Games played. |
 | `g` | integer | Games played. |
 | `touch_time_range` | character | Time value for touch time range in the NBA or WNBA Stats result set. |

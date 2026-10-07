@@ -33,7 +33,7 @@ Pull categorized (cat) EDGE detail stats for a single skater.
 | `player_id` | integer | Unique player identifier. |
 | `player_first_name_default` | character | Player first name (default language). |
 | `player_last_name_default` | character | Player last name (default language). |
-| `player_birth_date` | character | Participant birth date (YYYY-MM-DD). |
+| `player_birth_date` | character |  |
 | `player_shoots_catches` | character | Side on which the skater shoots — L (left) or R (right). |
 | `player_sweater_number` | integer | Player jersey number. |
 | `player_position` | character | Primary player position. |
@@ -41,7 +41,7 @@ Pull categorized (cat) EDGE detail stats for a single skater.
 | `player_headshot` | character | URL to the player headshot image. |
 | `player_goals` | integer | Number of goals scored by the skater during the relevant tracking period. |
 | `player_assists` | integer | Number of assists credited to the skater during the relevant tracking period. |
-| `player_points` | integer | Player points. |
+| `player_points` | integer |  |
 | `player_games_played` | integer | Number of games in which the skater appeared during the relevant tracking period. |
 | `player_team_common_name_default` | character | Player team common name (default locale). |
 | `player_team_place_name_with_preposition_default` | character | Player team place name with preposition (default locale). |
@@ -116,7 +116,7 @@ Pull categorized (cat) EDGE detail stats for a single goalie.
 | `player_id` | integer | Unique player identifier. |
 | `player_first_name_default` | character | Player first name (default language). |
 | `player_last_name_default` | character | Player last name (default language). |
-| `player_birth_date` | character | Participant birth date (YYYY-MM-DD). |
+| `player_birth_date` | character |  |
 | `player_shoots_catches` | character | Side on which the goalie catches — L (left) or R (right). |
 | `player_sweater_number` | integer | Player jersey number. |
 | `player_slug` | character | URL slug for the player. |

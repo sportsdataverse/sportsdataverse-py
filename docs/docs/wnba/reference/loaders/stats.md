@@ -134,7 +134,7 @@ Release: [wnba_stats_pbp](https://github.com/sportsdataverse/sportsdataverse-dat
 | `is_missed_shot` | Boolean | True when the event is a missed field goal. |
 | `is_free_throw` | Boolean | True when the event is a free throw attempt. |
 | `is_rebound` | Boolean | True when the event is a rebound (player or team). |
-| `is_turnover` | Boolean | `TRUE` if the play was a turnover. |
+| `is_turnover` | Boolean |  |
 | `is_foul` | Boolean | True when the event is a foul. |
 | `is_substitution` | Boolean | True when the event is a substitution. |
 | `is_jump_ball` | Boolean | True when the event is a jump ball. |
@@ -354,12 +354,12 @@ Release: [wnba_stats_schedules](https://github.com/sportsdataverse/sportsdataver
 | `game_date` | String | Game date (YYYY-MM-DD). |
 | `matchup` | String | Matchup. |
 | `home_team_id` | Int64 | Unique identifier for the home team. |
-| `home_team_abbreviation` | String | Home team abbreviation. |
+| `home_team_abbreviation` | String |  |
 | `home_team_name` | String | Home team name. |
 | `home_pts` | Int64 | Final points scored by the home team. |
 | `home_wl` | String | Result for the home team ('W' or 'L'); null before the game is final. |
 | `away_team_id` | Int64 | Unique identifier for the away team. |
-| `away_team_abbreviation` | String | Away team abbreviation. |
+| `away_team_abbreviation` | String |  |
 | `away_team_name` | String | Away team name. |
 | `away_pts` | Int64 | Final points scored by the away team. |
 | `away_wl` | String | Result for the away team ('W' or 'L'); null before the game is final. |

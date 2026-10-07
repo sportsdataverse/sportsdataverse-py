@@ -32,7 +32,7 @@ Coach career-records (regular season).
 | `first_name` | character | Player first name. |
 | `game_type_id` | integer | Game type identifier (regular/playoffs). |
 | `games` | integer | Games played. |
-| `home_games` | integer | Total home games. |
+| `home_games` | integer |  |
 | `home_losses` | integer | Losses at home. |
 | `home_ot_losses` | double | Home overtime losses. |
 | `home_ties` | double | Ties at home. |
@@ -144,7 +144,7 @@ Coach records scoped to individual franchise stints.
 | `franchise_name` | character | Franchise name. |
 | `game_type_id` | integer | Game type identifier (regular/playoffs). |
 | `games` | integer | Games played. |
-| `home_games` | integer | Total home games. |
+| `home_games` | integer |  |
 | `home_losses` | integer | Losses at home. |
 | `home_ot_losses` | double | Home overtime losses. |
 | `home_ties` | double | Ties at home. |

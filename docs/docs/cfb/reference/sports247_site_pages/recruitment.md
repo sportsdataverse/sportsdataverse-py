@@ -102,8 +102,8 @@ Committed institution for a recruitment.
 | `rankable` | character | Whether the institution participates in class rankings. |
 | `mascot` | character | Team mascot. |
 | `abbreviation` | character | Metric abbreviation. |
-| `primary_color` | character | Primary team color (hex). |
-| `secondary_color` | character | Secondary team color (hex). |
+| `primary_color` | character |  |
+| `secondary_color` | character |  |
 | `is_foreign` | character | Whether the institution is located outside the United States. |
 | `site` | integer | FK -> team Site (network site key). |
 | `default_asset` | numeric | Nested 247Sports image asset for the institution's primary logo (stringified). |
@@ -153,8 +153,8 @@ All institutions the recruit has interest links with.
 | `rankable` | character | Whether the institution participates in class rankings. |
 | `mascot` | character | Team mascot. |
 | `abbreviation` | character | Metric abbreviation. |
-| `primary_color` | character | Primary team color (hex). |
-| `secondary_color` | character | Secondary team color (hex). |
+| `primary_color` | character |  |
+| `secondary_color` | character |  |
 | `is_foreign` | character | Whether the institution is located outside the United States. |
 | `site` | integer | FK -> team Site (network site key). |
 | `default_asset` | numeric | Nested 247Sports image asset for the institution's primary logo (stringified). |
@@ -204,8 +204,8 @@ Institutions that have offered the recruit.
 | `rankable` | character | Whether the institution participates in class rankings. |
 | `mascot` | character | Team mascot. |
 | `abbreviation` | character | Metric abbreviation. |
-| `primary_color` | character | Primary team color (hex). |
-| `secondary_color` | character | Secondary team color (hex). |
+| `primary_color` | character |  |
+| `secondary_color` | character |  |
 | `is_foreign` | character | Whether the institution is located outside the United States. |
 | `site` | integer | FK -> team Site (network site key). |
 | `default_asset` | numeric | Nested 247Sports image asset for the institution's primary logo (stringified). |

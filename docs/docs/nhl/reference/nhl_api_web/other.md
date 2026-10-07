@@ -306,7 +306,7 @@ Pull a single playoff series payload.
 | `season` | integer | Season year (echoed from arg). |
 | `game_type` | integer | Game type the row belongs to. |
 | `game_number` | integer | Game number within the schedule. |
-| `if_necessary` | logical | If necessary. |
+| `if_necessary` | logical |  |
 | `neutral_site` | logical | Whether the game is at a neutral site. |
 | `start_time_utc` | character | Scheduled start time in UTC. |
 | `eastern_utc_offset` | character | Eastern time UTC offset. |
@@ -369,7 +369,7 @@ Pull the NHL standings.
 
 | col_name | type | description |
 |---|---|---|
-| `clinch_indicator` | character | Playoff clinch indicator (e.g. 'x' clinched playoff, 'e' eliminated). |
+| `clinch_indicator` | character |  |
 | `conference_abbrev` | character | Conference abbreviation. |
 | `conference_home_sequence` | integer | Team's rank within its conference based solely on home-game results in the NHL api-web standings. |
 | `conference_l10_sequence` | integer | Team's rank within its conference based on performance in the last 10 games played, as reported by the NHL api-web standings endpoint. |
@@ -396,7 +396,7 @@ Pull the NHL standings.
 | `home_goals_for` | integer | Total number of goals scored by the team in home games during the current season. |
 | `home_losses` | integer | Losses at home. |
 | `home_ot_losses` | integer | Home overtime losses. |
-| `home_points` | integer | Home team total points scored in the game so far. |
+| `home_points` | integer |  |
 | `home_regulation_plus_ot_wins` | integer | Number of home wins achieved in regulation or overtime (excluding shootout decisions) in the current season. |
 | `home_regulation_wins` | integer | Number of home wins achieved in regulation time (within 60 minutes) in the current season. |
 | `home_ties` | integer | Ties at home. |

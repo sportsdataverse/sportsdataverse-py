@@ -129,7 +129,7 @@ A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, o
 | `color` | character | Primary color (hex without leading '#'). |
 | `logo_url` | character | NBA CDN primary logo URL. |
 | `image_alt_text` | character | Alt text Fox attaches to the header image, which reads as the league's full name. |
-| `rank` | character | Whether to include statistical ranks in the returned table. |
+| `rank` | character | Rank. |
 | `details` | character | Details. |
 
 **Example**
@@ -226,7 +226,7 @@ A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, o
 | `impact_title` | character | Heading label Fox shows above the impact note; always 'Impact' in sampled data. |
 | `impact` | character | Fox's free-text impact note for the item, describing the player's availability or outlook (e.g. games missed with an injury and the next chance to play). |
 | `date` | character | Date in YYYY-MM-DD format. |
-| `source` | character | News source. |
+| `source` | character |  |
 | `athlete_id` | character | Unique athlete identifier (ESPN). |
 | `content_uri` | character | Fox Bifrost content URI of the athlete the item is about, shaped 'basketball/wnba/athletes/<athlete_id>'. |
 | `web_url` | character | Site-relative foxsports.com path of the player's page (e.g. '/wnba/kahleah-copper-player'). |

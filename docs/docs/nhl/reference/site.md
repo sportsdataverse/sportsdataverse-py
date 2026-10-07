@@ -182,7 +182,7 @@ ESPN endpoint.
 | `home_score` | integer | Home score. |
 | `scoring_play` | logical | Scoring play. |
 | `score_value` | integer | Score value. |
-| `modified` | character | ISO timestamp the play record was last modified. |
+| `modified` | character |  |
 | `wallclock` | character | Wallclock. |
 | `shooting_play` | logical | Shooting play. |
 | `type_id` | character | Type id. |

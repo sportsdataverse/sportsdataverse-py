@@ -27,10 +27,10 @@ UEFA competitions by id (Champions League 1, Europa League 3, Conference League 
 
 | col_name | type | description |
 |---|---|---|
-| `age` | character | Player age (in years). |
-| `code` | character | Fielder detail type code. |
+| `age` | character | Age category of the competition (e.g. 'ADULT', 'U21'). |
+| `code` | character | UEFA competition code (e.g. 'UCL', 'EURO', 'UECL'). |
 | `id` | character | Provider identifier for the entity (Utf8 join key). |
-| `region` | character | Region label. |
+| `region` | character | UEFA region of the competition (e.g. 'CONTINENTAL'). |
 | `sex` | character |  |
 | `sports_type` | character |  |
 | `team_category` | character |  |
@@ -104,7 +104,7 @@ Matches live right now across UEFA competitions.
 | `hash` | character |  |
 | `id` | character | Provider identifier for the entity (Utf8 join key). |
 | `lineup_status` | character |  |
-| `status` | character | Status label. |
+| `status` | character | UEFA match status (e.g. 'UPCOMING', 'LIVE', 'FINISHED'). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -144,9 +144,9 @@ Matches of a UEFA competition season.
 | `lineup_status` | character |  |
 | `match_attendance` | integer |  |
 | `referees` | character |  |
-| `season_year` | character | Season year string ('YYYY-YY' format). |
+| `season_year` | character | Season year of the match as a string (e.g. '2026'). |
 | `session_number` | integer |  |
-| `status` | character | Status label. |
+| `status` | character | UEFA match status (e.g. 'UPCOMING', 'LIVE', 'FINISHED'). |
 | `type` | character | Type discriminator for the record. |
 | `away_team_association_id` | character |  |
 | `away_team_association_logo_url` | character |  |
@@ -160,7 +160,7 @@ Matches of a UEFA competition season.
 | `away_team_logo_url` | character |  |
 | `away_team_medium_logo_url` | character |  |
 | `away_team_organization_id` | character |  |
-| `away_team_team_code` | character | Away team code. |
+| `away_team_team_code` | character | Away team's three-letter UEFA code (e.g. 'PSG'); null when the team is not yet known. |
 | `away_team_team_type_detail` | character |  |
 | `away_team_translations_country_name_en` | character |  |
 | `away_team_translations_country_name_fr` | character |  |
@@ -267,7 +267,7 @@ Matches of a UEFA competition season.
 | `home_team_logo_url` | character |  |
 | `home_team_medium_logo_url` | character |  |
 | `home_team_organization_id` | character |  |
-| `home_team_team_code` | character | Home team code. |
+| `home_team_team_code` | character | Home team's three-letter UEFA code (e.g. 'ARS'); null when the team is not yet known. |
 | `home_team_team_type_detail` | character |  |
 | `home_team_translations_country_name_en` | character |  |
 | `home_team_translations_country_name_fr` | character |  |
@@ -776,21 +776,21 @@ Players registered in a UEFA competition season.
 
 | col_name | type | description |
 |---|---|---|
-| `age` | character | Player age (in years). |
-| `birth_date` | character | Date of birth (YYYY-MM-DD). |
+| `age` | character | Player's age in years at capture (string), where the source lists it. |
+| `birth_date` | character | Player's date of birth (YYYY-MM-DD), where the source lists it. |
 | `club_jersey_number` | character |  |
 | `club_shirt_name` | character |  |
 | `country_code` | character | ISO country code. |
 | `detailed_field_position` | character |  |
-| `gender` | character | League gender designation. |
-| `height` | integer | Player height (string e.g. '6-2' or inches). |
+| `gender` | character | Player's gender as the source lists it (e.g. 'MALE'). |
+| `height` | integer | Player's height as the source encodes it (PFF uses feet and inches without a separator, 602 = 6'02"; others use inches or centimetres). |
 | `id` | character | Provider identifier for the entity (Utf8 join key). |
-| `image_url` | character | Player headshot URL. |
+| `image_url` | character | URL of the player's headshot on the source CDN. |
 | `international_name` | character |  |
 | `national_jersey_number` | character |  |
 | `national_shirt_name` | character |  |
 | `national_team_id` | character |  |
-| `weight` | integer | Player weight in pounds. |
+| `weight` | integer | Player's weight as the source lists it (pounds for US sources). |
 | `translations_country_name_en` | character |  |
 | `translations_country_name_fr` | character |  |
 | `translations_country_name_de` | character |  |
@@ -889,9 +889,9 @@ Group / league-phase standings of a UEFA competition season.
 |---|---|---|
 | `items` | character |  |
 | `qualification_labels` | character |  |
-| `status` | character | Status label. |
+| `status` | character | UEFA standings status (e.g. 'FINISHED', 'OFFICIAL'). |
 | `group_competition_id` | character |  |
-| `group_id` | character | ESPN group id. |
+| `group_id` | character | UEFA group id the standings row belongs to; null for a league-phase table. |
 | `group_meta_data_group_name` | character |  |
 | `group_meta_data_group_short_name` | character |  |
 | `group_order` | integer |  |
@@ -1044,10 +1044,10 @@ Teams entered in a UEFA competition season.
 | `id_provider` | character |  |
 | `international_name` | character |  |
 | `is_place_holder` | logical |  |
-| `logo_url` | character | NBA CDN primary logo URL. |
+| `logo_url` | character | URL of the team's logo on the source CDN. |
 | `medium_logo_url` | character |  |
 | `organization_id` | character |  |
-| `team_code` | character | Internal team code. |
+| `team_code` | character | Team's three-letter UEFA code (e.g. 'PSG'). |
 | `team_type_detail` | character |  |
 | `type_is_national` | logical |  |
 | `type_team` | character |  |

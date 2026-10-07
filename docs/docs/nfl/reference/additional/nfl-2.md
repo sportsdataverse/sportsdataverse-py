@@ -34,7 +34,7 @@ A one-row polars (or pandas) `DataFrame` with `gameId`, `playId`, `isHighlight` 
 | col_name | type | description |
 |---|---|---|
 | `gameId` | integer | NFL Shield API game identifier for the game this highlight record belongs to. |
-| `playId` | integer | Unique play event identifier (UUID). |
+| `playId` | integer |  |
 | `isHighlight` | logical | Boolean flag indicating whether this play record has been designated as a highlight by the NFL Shield API. |
 | `highlight_gameId` | integer | NFL Shield API game identifier associated with the specific highlight clip. |
 | `highlight_playId` | integer | NFL Shield API play identifier for the specific play associated with the highlight clip. |
@@ -267,7 +267,7 @@ A polars (or pandas) `DataFrame`, one row per qualifying player.
 | `player_footballName` | character | Football name used by the player, which may differ from the legal first name. |
 | `player_gsisId` | character | NFL GSIS (Game Statistics and Information System) identifier, the primary nflverse player key. |
 | `player_gsisItId` | integer | NFL GSIS internal tracking integer identifier for the player. |
-| `player_headshot` | character | URL to the player headshot image. |
+| `player_headshot` | character |  |
 | `player_jerseyNumber` | integer | Jersey number worn by the player. |
 | `player_lastName` | character | Last name of the player. |
 | `player_position` | character | Position of the player accordinng to NGS |
@@ -411,7 +411,7 @@ A polars (or pandas) `DataFrame` stacking every leader list, with a `category` c
 | `player_shortName` | character | Abbreviated player name used in display contexts (e.g., 'P.Mahomes'). |
 | `player_status` | character | Player's current roster status (e.g., 'ACT' for active, 'IR' for injured reserve). |
 | `player_uniformNumber` | character | Player's uniform number as a string, matching what appears on the jersey. |
-| `player_headshot` | character | URL to the player headshot image. |
+| `player_headshot` | character |  |
 | `player_smartId` | character | NFL Smart ID — a system-agnostic unique identifier for the player used across NFL Shield systems. |
 | `player_ngsPosition` | character | Player's position as classified by NFL Next Gen Stats (may differ from official NFL position; e.g., NGS uses 'ILB' vs 'LB'). |
 | `player_ngsPositionGroup` | character | Broad position group assigned by NFL Next Gen Stats (e.g., 'QB', 'WR', 'DB', 'DL'). |

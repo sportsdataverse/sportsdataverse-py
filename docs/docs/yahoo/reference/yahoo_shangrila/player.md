@@ -1,7 +1,7 @@
 ---
 title: "YAHOO — Yahoo Sports Shangrila (graphite-secure.sports.yahoo.com) — Player"
 sidebar_label: "Player"
-sidebar_position: 7
+sidebar_position: 6
 description: "YAHOO — Yahoo Sports Shangrila (graphite-secure.sports.yahoo.com) — Player — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---
@@ -32,15 +32,15 @@ Yahoo shangrila persisted query `playerBasic` -> tables: players, leagues
 | `alias_lang` | character | Language/locale tag attached to the entity's Yahoo alias (e.g., "en-US"). |
 | `alias_url` | character | Absolute sports.yahoo.com URL of the entity's page (e.g., "https://sports.yahoo.com/ncaaf/players/464024/"). |
 | `alias_domain` | character | Host the entity's Yahoo alias resolves against (e.g., "sports.yahoo.com"). |
-| `display_name` | character | Display name. |
-| `first_name` | character | Player's first name. |
-| `last_name` | character | Player's last name. |
-| `player_id` | character | Unique player identifier. |
-| `positions` | character | Positions. |
-| `team_display_name` | character | Full team display name. |
-| `team_team_id` | character | Unique identifier for team team. |
+| `display_name` | character |  |
+| `first_name` | character |  |
+| `last_name` | character |  |
+| `player_id` | character |  |
+| `positions` | character |  |
+| `team_display_name` | character |  |
+| `team_team_id` | character |  |
 | `uniform_number` | character | Jersey number the player wears for the team. |
-| `injury` | character | Injury (body part / description). |
+| `injury` | character |  |
 
 **leagues**
 
@@ -82,7 +82,7 @@ Yahoo shangrila persisted query `playerCareerStats` -> one row per `players` ent
 
 | col_name | type | description |
 |---|---|---|
-| `positions` | character | Positions. |
+| `positions` | character |  |
 | `stats_by_season` | character | JSON-encoded per-season statistical lines for the player. |
 | `total_stats` | character | JSON-encoded career-total statistical line summing the player's seasons. |
 | `career_stats` | character | JSON-encoded career statistical totals for the player across every season. |
@@ -123,10 +123,10 @@ Yahoo shangrila persisted query `playerGameLog` -> one row per `players` entry
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | character | Unique player identifier. |
-| `active` | logical | TRUE if the row represents an active record (player / team / season). |
-| `positions` | character | Positions. |
-| `team_id` | character | Unique team identifier. |
+| `player_id` | character |  |
+| `active` | logical |  |
+| `positions` | character |  |
+| `team_id` | character |  |
 | `player_game_stats` | character | JSON-encoded per-game statistical lines for the player across the requested game log. |
 | `player_season_stats` | character | JSON-encoded season statistical totals for the player. |
 
@@ -158,9 +158,9 @@ Yahoo shangrila persisted query `playerProps` -> one row per `players` entry
 
 | col_name | type | description |
 |---|---|---|
-| `games` | character | Games played. |
-| `player_id` | character | Unique player identifier. |
-| `display_name` | character | Display name. |
+| `games` | character |  |
+| `player_id` | character |  |
+| `display_name` | character |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -196,14 +196,14 @@ Yahoo shangrila persisted query `playerSearch` -> one row per `leagues.players` 
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | character | Unique player identifier. |
-| `active` | character | TRUE if the row represents an active record (player / team / season). |
+| `player_id` | character |  |
+| `active` | character |  |
 | `alias` | character | JSON-encoded Yahoo alias object for the entity, carrying the site URL, path and subpage routing used to build links to its page. |
-| `first_name` | character | Player's first name. |
-| `last_name` | character | Player's last name. |
-| `display_name` | character | Display name. |
+| `first_name` | character |  |
+| `last_name` | character |  |
+| `display_name` | character |  |
 | `suggested_headshot` | character | JSON-encoded image node for the headshot Yahoo recommends for this player. |
-| `team` | character | Team-side label or team identifier. |
+| `team` | character |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -245,10 +245,10 @@ Yahoo shangrila persisted query `playerSeasonStats` -> one row per `players` ent
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | character | Unique player identifier. |
-| `active` | logical | TRUE if the row represents an active record (player / team / season). |
-| `positions` | character | Positions. |
-| `team_id` | character | Unique team identifier. |
+| `player_id` | character |  |
+| `active` | logical |  |
+| `positions` | character |  |
+| `team_id` | character |  |
 | `player_season_stats` | character | JSON-encoded season statistical totals for the player. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.

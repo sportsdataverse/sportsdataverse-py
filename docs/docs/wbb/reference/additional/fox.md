@@ -141,7 +141,7 @@ A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, o
 | `color` | character | Primary color (hex without leading '#'). |
 | `logo_url` | character | NBA CDN primary logo URL. |
 | `image_alt_text` | character | Alt text Fox attaches to the header image, which reads as the league's display name ('Women's College Basketball' in sampled data). |
-| `rank` | character | Whether to include statistical ranks in the returned table. |
+| `rank` | character | Rank. |
 | `details` | character | Details. |
 
 **Example**

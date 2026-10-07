@@ -213,7 +213,7 @@ View schedule info for postseason based on series.
 | `total_items` | integer | Total schedule items on the date. |
 | `total_games` | integer | Total games on the date. |
 | `total_games_in_progress` | integer | Games currently in progress on the date. |
-| `games` | character | Games played. |
+| `games` | character |  |
 | `sort_order` | integer | Display sort order for the sport. |
 | `series_id` | character | Series identifier (e.g. 'W_1'). |
 | `series_sort_number` | integer | Sort number for the series. |

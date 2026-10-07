@@ -115,7 +115,7 @@ GET /stats/teamdashlineups
 |---|---|---|
 | `group_set` | character | Name of the grouping family used for this dashboard or split row. |
 | `group_id` | character | ESPN group id. |
-| `group_name` | character | Group name (conference / division). |
+| `group_name` | character | The lineup's players as a ' - ' separated string of abbreviated names (two to five players, by group_quantity). |
 | `gp` | integer | Games played. |
 | `w` | integer | Wins. |
 | `l` | integer | Losses. |

@@ -148,8 +148,8 @@ Each `sportsdataverse` function and its equivalent in the sister R package, [`ho
 | [`load_nba_stats_standings`](reference/loaders/stats-2#load_nba_stats_standings) | [`load_nba_stats_standings`](https://hoopR.sportsdataverse.org/reference/load_nba_stats_standings.html) |
 | [`load_nba_stats_team_boxscores`](reference/loaders/stats-2#load_nba_stats_team_boxscores) | [`load_nba_stats_team_boxscores`](https://hoopR.sportsdataverse.org/reference/load_nba_stats_team_boxscores.html) |
 | [`load_nba_stats_team_season_stats`](reference/loaders/stats-2#load_nba_stats_team_season_stats) | [`load_nba_stats_team_season_stats`](https://hoopR.sportsdataverse.org/reference/load_nba_stats_team_season_stats.html) |
-| [`load_nba_team_crosswalk`](reference/loaders/team#load_nba_team_crosswalk) | [`load_nba_team_crosswalk`](https://hoopR.sportsdataverse.org/reference/load_nba_team_crosswalk.html) |
-| [`load_nba_team_group_seasons`](reference/loaders/team#load_nba_team_group_seasons) | [`load_nba_team_group_seasons`](https://hoopR.sportsdataverse.org/reference/load_nba_team_group_seasons.html) |
+| [`load_nba_team_crosswalk`](reference/loaders/other#load_nba_team_crosswalk) | [`load_nba_team_crosswalk`](https://hoopR.sportsdataverse.org/reference/load_nba_team_crosswalk.html) |
+| [`load_nba_team_group_seasons`](reference/loaders/other#load_nba_team_group_seasons) | [`load_nba_team_group_seasons`](https://hoopR.sportsdataverse.org/reference/load_nba_team_group_seasons.html) |
 | [`most_recent_nba_season`](reference/additional/highlights#most_recent_nba_season) | [`most_recent_nba_season`](https://hoopR.sportsdataverse.org/reference/most_recent_nba_season.html) |
 | [`nba_l2m`](reference/additional/nba#nba_l2m) | [`nba_l2m`](https://hoopR.sportsdataverse.org/reference/nba_l2m.html) |
 | [`nba_l2m_games`](reference/additional/nba#nba_l2m_games) | [`nba_l2m_games`](https://hoopR.sportsdataverse.org/reference/nba_l2m_games.html) |

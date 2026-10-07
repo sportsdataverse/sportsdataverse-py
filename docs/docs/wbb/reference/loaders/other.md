@@ -1,7 +1,7 @@
 ---
 title: "WBB dataset loaders — Other"
 sidebar_label: "Other"
-sidebar_position: 4
+sidebar_position: 3
 description: "WBB dataset loaders — Other — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---
@@ -83,7 +83,7 @@ Release: [espn_womens_college_basketball_pbp](https://github.com/sportsdataverse
 | `athlete_name_2` | String | Display name of the second athlete in the ESPN play participants (e.g., the assisting player), when present. |
 | `athlete_name_3` | String | Display name of the third athlete in the ESPN play participants, when present. |
 | `pregame_home_prob` | Float64 | Model's pre-game win probability for the home team (0-1), constant within a game. |
-| `home_win_prob` | Float64 | Home win probability - pre-game prediction (0-1). |
+| `home_win_prob` | Float64 |  |
 
 ```python
 load_wbb_pbp(seasons=2024)
@@ -103,11 +103,11 @@ Release: [espn_womens_college_basketball_schedules](https://github.com/sportsdat
 | `time_valid` | Boolean | Time valid. |
 | `neutral_site` | Boolean | Neutral site. |
 | `conference_competition` | Boolean | Conference competition. |
-| `play_by_play_available` | Boolean | Whether play-by-play data is available. |
+| `play_by_play_available` | Boolean |  |
 | `recent` | Boolean | Recent. |
 | `start_date` | String | Start date (YYYY-MM-DD). |
 | `broadcast` | String | Broadcast information string. |
-| `highlights` | String | Game highlight urls. |
+| `highlights` | String |  |
 | `notes_type` | String | Notes type. |
 | `notes_headline` | String | Notes headline. |
 | `broadcast_market` | String | Broadcast market label (e.g. 'national', 'home'). |
@@ -175,8 +175,8 @@ Release: [espn_womens_college_basketball_schedules](https://github.com/sportsdat
 | `groups_name` | String | Groups name. |
 | `groups_short_name` | String | Groups short name. |
 | `groups_is_conference` | Boolean | Groups is conference. |
-| `game_json` | Boolean | Whether processed game JSON is available. |
-| `game_json_url` | String | URL to the processed game JSON. |
+| `game_json` | Boolean |  |
+| `game_json_url` | String |  |
 | `has_game_json` | Boolean | Whether the raw game JSON payload exists in the raw store for this game. |
 | `game_json_raw_url` | String | raw.githubusercontent.com URL of the game's raw JSON payload in wehoop-wbb-raw. |
 | `game_rosters_json_url` | String | raw.githubusercontent.com URL of the game's rosters JSON payload in wehoop-wbb-raw. |
@@ -185,7 +185,7 @@ Release: [espn_womens_college_basketball_schedules](https://github.com/sportsdat
 | `has_officials_json` | Boolean | Whether the officials JSON payload exists in the raw store for this game. |
 | `game_date_time` | Datetime(time_unit='us', time_zone='America/New_York') | Game start date/time (ISO 8601). |
 | `game_date` | Date | Game date (YYYY-MM-DD). |
-| `PBP` | Boolean | Whether play-by-play data is available. |
+| `PBP` | Boolean |  |
 | `team_box` | Boolean | Team box. |
 | `player_box` | Boolean | Player box. |
 | `in_shots` | Boolean | Whether the game is represented in the built shots dataset. |
@@ -194,6 +194,76 @@ Release: [espn_womens_college_basketball_schedules](https://github.com/sportsdat
 
 ```python
 load_wbb_schedule(seasons=2024)
+```
+
+## load_wbb_team_boxscore
+
+Release: [espn_womens_college_basketball_team_boxscores](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_womens_college_basketball_team_boxscores) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_womens_college_basketball_team_boxscores/team_box_{season}.parquet`
+### Returns {#load_wbb_team_boxscore-returns}
+
+| col_name | type | description |
+|---|---|---|
+| `game_id` | Int32 | Unique game identifier. |
+| `season` | Int32 | Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted. |
+| `season_type` | Int32 | Season type (1=pre-season, 2=regular season, 3=postseason, 4=off-season for ESPN; or string label for WNBA Stats). |
+| `game_date` | Date | Game date (YYYY-MM-DD). |
+| `game_date_time` | Datetime(time_unit='us', time_zone='America/New_York') | Game start date/time (ISO 8601). |
+| `team_id` | Int32 | Unique team identifier. |
+| `team_uid` | String | ESPN universal team identifier (UID format 's:40~l:...~t:...'). |
+| `team_slug` | String | URL-safe team identifier (e.g. 'lasvegas-aces' / 'aces'). |
+| `team_location` | String | Team city or location string. |
+| `team_name` | String | Full team display name (e.g. 'Las Vegas Aces'). |
+| `team_abbreviation` | String | Short team abbreviation (e.g. 'LAS'). |
+| `team_display_name` | String | Full team display name. |
+| `team_short_display_name` | String | Short team display name (e.g. 'Aces'). |
+| `team_color` | String | Team primary color (hex without leading '#'). |
+| `team_alternate_color` | String | Team alternate color (hex without leading '#'). |
+| `team_logo` | String | Team logo image URL. |
+| `team_home_away` | String | Team home away. |
+| `team_score` | Int32 | Team's score / final score. |
+| `team_winner` | Boolean | TRUE if the team won this game. |
+| `assists` | Int32 | Total assists. |
+| `blocks` | Int32 | Total blocks. |
+| `defensive_rebounds` | Int32 | Defensive rebounds. |
+| `fast_break_points` | String | Fast-break points scored. |
+| `field_goal_pct` | Float64 | Field goal percentage (0-1). |
+| `field_goals_made` | Int32 | Field goals made (2-pt + 3-pt). |
+| `field_goals_attempted` | Int32 | Field goal attempts (2-pt + 3-pt). |
+| `fouls` | Int32 | Personal fouls. |
+| `free_throw_pct` | Float64 | Free throw percentage (0-1). |
+| `free_throws_made` | Int32 | Free throws made. |
+| `free_throws_attempted` | Int32 | Free throw attempts. |
+| `largest_lead` | String | Largest lead during the game. |
+| `offensive_rebounds` | Int32 | Offensive rebounds. |
+| `points_in_paint` | String | Points scored in the paint. |
+| `steals` | Int32 | Total steals. |
+| `team_turnovers` | Int32 | Team turnovers (turnovers credited to the team rather than a player). |
+| `technical_fouls` | Int32 | Total technical fouls. |
+| `three_point_field_goal_pct` | Float64 | Three-point field goal percentage (0-1). |
+| `three_point_field_goals_made` | Int32 | Three-point field goals made. |
+| `three_point_field_goals_attempted` | Int32 | Three-point field goal attempts. |
+| `total_rebounds` | Int32 | Total rebounds. |
+| `total_technical_fouls` | Int32 | Total technical fouls (player + team). |
+| `total_turnovers` | Int32 | Total turnovers (player + team). |
+| `turnover_points` | String | Turnover points. |
+| `turnovers` | Int32 | Total turnovers. |
+| `opponent_team_id` | Int32 | Unique identifier for the opponent team. |
+| `opponent_team_uid` | String | Opponent team uid. |
+| `opponent_team_slug` | String | Opponent team slug. |
+| `opponent_team_location` | String | Opponent team city / location. |
+| `opponent_team_name` | String | Opponent team display name. |
+| `opponent_team_abbreviation` | String | Opponent team abbreviation. |
+| `opponent_team_display_name` | String | Opponent team full display name. |
+| `opponent_team_short_display_name` | String | Opponent team short display name. |
+| `opponent_team_color` | String | Opponent team primary color (hex). |
+| `opponent_team_alternate_color` | String | Opponent team alternate color (hex). |
+| `opponent_team_logo` | String | Opponent team logo URL. |
+| `opponent_team_score` | Int32 | Opponent team's score. |
+| `lead_changes` | String | Lead changes. |
+| `lead_percentage` | String | Share of game time the team held the lead, as reported in ESPN's team boxscore. |
+
+```python
+load_wbb_team_boxscore(seasons=2024)
 ```
 
 ## load_wbb_ratings
@@ -212,7 +282,7 @@ Release: [wbb_ratings](https://github.com/sportsdataverse/sportsdataverse-data/r
 | `raw_o` | Float64 | Raw o. |
 | `raw_d` | Float64 | Raw d. |
 | `games` | Int64 | Games played. |
-| `rank` | Int64 | Whether to include statistical ranks in the returned table. |
+| `rank` | Int64 | Rank. |
 | `adj_em_z` | Float64 | Within-season z-score of adj_em, computed as adj_em minus the season mean divided by the season standard deviation over every team in the frame, so it is mean 0 and standard deviation 1 per season. |
 
 ```python
@@ -238,8 +308,8 @@ Release: [espn_womens_college_basketball_game_rosters](https://github.com/sports
 | `athlete_guid` | String | ESPN athlete GUID. |
 | `athlete_display_name` | String | Athlete display name (full). |
 | `athlete_short_name` | String | Athlete short display name. |
-| `athlete_first_name` | String | Player first name. |
-| `athlete_last_name` | String | Athlete last name. |
+| `athlete_first_name` | String |  |
+| `athlete_last_name` | String |  |
 | `athlete_jersey` | String | Athlete jersey number. |
 | `athlete_position` | String | Athlete position. |
 | `athlete_headshot` | String | URL of the player's ESPN headshot image on a.espncdn.com, whose filename is the athlete_id; null when ESPN publishes no headshot for that player. |
@@ -365,8 +435,8 @@ Release: [espn_womens_college_basketball_standings](https://github.com/sportsdat
 |---|---|---|
 | `season` | Int32 | Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted. |
 | `group_id` | Int32 | ESPN group id. |
-| `group_name` | String | Group name (conference / division). |
-| `group_abbreviation` | String | Group abbreviation. |
+| `group_name` | String |  |
+| `group_abbreviation` | String |  |
 | `group_short_name` | String | Short display name of the conference or division grouping the row belongs to. |
 | `team_id` | Int32 | Unique team identifier. |
 | `team_uid` | String | ESPN universal team identifier (UID format 's:40~l:...~t:...'). |
@@ -381,7 +451,7 @@ Release: [espn_womens_college_basketball_standings](https://github.com/sportsdat
 | `team_logo` | String | Team logo image URL. |
 | `stat_name` | String | Internal stat key. |
 | `stat_display_name` | String | Stat display name. |
-| `stat_short_display_name` | String | Short human-readable stat name. |
+| `stat_short_display_name` | String |  |
 | `stat_description` | String | ESPN's longer wording for the standings stat, for example Overall Record for the Team Season Record entry and Current Streak for Streak; null for stats ESPN ships without one, such as vs AP Top 25. |
 | `stat_abbreviation` | String | ESPN's abbreviation for the standings stat, such as GB, OPP PPG or VS CONF; always populated and matching stat_short_display_name for about 90 percent of rows. |
 | `stat_type` | String | Stat type code (e.g. "win", "loss"). |
@@ -390,6 +460,34 @@ Release: [espn_womens_college_basketball_standings](https://github.com/sportsdat
 
 ```python
 load_wbb_standings(seasons=2026)
+```
+
+## load_wbb_team_season_stats
+
+Release: [espn_womens_college_basketball_team_season_stats](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_womens_college_basketball_team_season_stats) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_womens_college_basketball_team_season_stats/team_season_stats_{season}.parquet`
+### Returns {#load_wbb_team_season_stats-returns}
+
+| col_name | type | description |
+|---|---|---|
+| `season` | Int32 | Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted. |
+| `team_id` | Int32 | Unique team identifier. |
+| `team_slug` | String | URL-safe team identifier (e.g. 'lasvegas-aces' / 'aces'). |
+| `team_abbreviation` | String | Short team abbreviation (e.g. 'LAS'). |
+| `team_display_name` | String | Full team display name. |
+| `team_short_display_name` | String | Short team display name (e.g. 'Aces'). |
+| `team_color` | String | Team primary color (hex without leading '#'). |
+| `team_alternate_color` | String | Team alternate color (hex without leading '#'). |
+| `team_logo` | String | Team logo image URL. |
+| `category` | String | Category label. |
+| `stat_label` | String |  |
+| `stat_name` | String | Internal stat key. |
+| `stat_display_name` | String | Stat display name. |
+| `stat_description` | String | ESPN's prose definition of the team statistic named in stat_name, for example The average blocks per game for avgBlocks or the full sentence defining a blocked shot for blocks. |
+| `display_value` | String | Display-formatted value. |
+| `value` | Float64 | Numeric or string value field. |
+
+```python
+load_wbb_team_season_stats(seasons=2026)
 ```
 
 ## load_wbb_schedule_crosswalk
@@ -415,6 +513,36 @@ Release: [wbb_crosswalk](https://github.com/sportsdataverse/sportsdataverse-data
 
 ```python
 load_wbb_schedule_crosswalk(seasons=2026)
+```
+
+## load_wbb_team_crosswalk
+
+Release: [wbb_crosswalk](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/wbb_crosswalk) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/wbb_crosswalk/wbb_team_crosswalk_{season}.parquet`
+### Returns {#load_wbb_team_crosswalk-returns}
+
+| col_name | type | description |
+|---|---|---|
+| `season` | Int32 | Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted. |
+| `espn_team_id` | Int32 | ESPN team id (canonical key). |
+| `espn_abbreviation` | String | ESPN abbreviation. |
+| `espn_display_name` | String | ESPN display name (school + mascot). |
+| `espn_short_name` | String | ESPN short name. |
+| `espn_location` | String | ESPN school/location only. |
+| `espn_mascot` | String | ESPN team mascot/nickname. |
+| `espn_conference` | String | ESPN conference name. |
+| `fox_team_id` | String | Fox Bifrost team id (NA if unmatched). |
+| `fox_team_name` | String | Fox team name (NA if unmatched). |
+| `fox_section` | String | Fox conference/section label (NA if unmatched). |
+| `bart_team` | String | Torvik team name (NA if unmatched). |
+| `bart_conf` | String | Torvik conference abbreviation (NA if unmatched). |
+| `yahoo_team_id` | String | Yahoo team id (NA placeholder). |
+| `yahoo_team_name` | String | Yahoo team name (NA placeholder). |
+| `fox_match_confidence` | Float64 | 1 for matched, NA for unmatched. |
+| `bart_match_confidence` | Float64 | 1 for matched, NA for unmatched. |
+| `match_method` | String | Combination of matched sources, e.g. "fox+bart" / "fox_only" / "bart_only" / "espn_only". |
+
+```python
+load_wbb_team_crosswalk(seasons=2026)
 ```
 
 ## load_wbb_groups
@@ -489,4 +617,32 @@ One season-less file: every name, abbreviation, slug and source id that a source
 
 ```python
 load_wbb_group_aliases()
+```
+
+## load_wbb_team_group_seasons
+
+Release: [wbb_groups](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/wbb_groups) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/wbb_groups/wbb_team_group_seasons_{season}.parquet`
+
+:::caution[Coverage]
+One row per team per season: the SDV subdivision, conference and division group ids the team belonged to that season (null where a level does not apply), the team name as of that season, where the membership came from, and whether a second source agreed (null when only one source covers the season). team_id is a string: the ESPN team id; team_id_source names the id space. season is the ENDING year (2025 = the 2024-25 season); seasons 2002-2027.
+:::
+
+### Returns {#load_wbb_team_group_seasons-returns}
+
+| col_name | type | description |
+|---|---|---|
+| `league` | String | League code of the table ("wbb"); the prefix of every group_id in it. |
+| `season` | Int32 | Season of the membership (ENDING year: 2025 = the 2024-25 season). |
+| `team_id` | String | Team id as a string: the ESPN team id where ESPN covers the team, otherwise the league's own id; team_id_source says which. |
+| `team_id_source` | String | Id space of team_id (in this table: espn). |
+| `team_name` | String | Team name as of that season, not today's. |
+| `subdivision_id` | String | SDV group_id of the team's subdivision that season (e.g. FBS / FCS, Division I); null where the league has no subdivision level. |
+| `conference_id` | String | SDV group_id of the team's conference that season; null where the team had no conference (an independent, or a season played without conferences). |
+| `division_id` | String | SDV group_id of the team's division that season; null where the level does not apply. |
+| `source` | String | Source the membership was taken from -- the most reliable per-season source for that era. |
+| `sources_agree` | Boolean | Whether a second source agreed on the membership; null when only one source covers the season. |
+| `notes` | String | Builder notes on the team-season, such as a source disagreement or which of several listed memberships was kept. |
+
+```python
+load_wbb_team_group_seasons(seasons=2024)
 ```

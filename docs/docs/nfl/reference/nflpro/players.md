@@ -31,63 +31,63 @@ GET /api/secured/stats/players-offense/passing/season — one row per passer for
 
 | col_name | type | description |
 |---|---|---|
-| `nfl_id` | character | NFL ID of player (this is used in Big Data Bowl Data) |
-| `display_name` | character | Full name of player |
-| `short_name` | character | Player short name (i.e. "F.Last") |
-| `headshot` | character | NFL headshot url for player |
-| `team_id` | character | ESPN team id. |
-| `jersey_number` | integer | Jersey number. Often useful for joins by name/team/jersey. |
-| `position` | character | Primary position as reported by NFL.com |
-| `position_group` | character | Postion group of player as listed by NFL |
-| `ngs_position` | character | Primary position as reported by the NextGen stats API. |
-| `ngs_position_group` | character | Position group of player as listed by Next Gen Stats |
-| `gp` | integer | Games played. |
-| `gs` | integer | Games started. |
-| `tg` | integer |  |
-| `total_tg` | integer |  |
-| `cmp` | integer |  |
-| `att` | integer |  |
-| `yds` | integer |  |
-| `td` | integer |  |
-| `int` | integer | Binary flag for an interception. |
-| `rating` | double | Overall SP+ rating (Bill Connelly methodology, in points per game). |
-| `ypa` | double |  |
-| `cmp_pct` | double |  |
-| `sack` | integer | Binary indicator for if the play ended in a sack. |
-| `x_cmp` | double |  |
-| `cpoe` | double | For a single pass play this is 1 - cp when the pass was completed or 0 - cp when the pass was incomplete. Analyzed for a whole game or season an indicator for the passer how much over or under expectation his completion percentage was. |
-| `db` | integer |  |
-| `epa` | double | Expected points added (EPA) by the posteam for the given play. |
-| `epa_db` | double |  |
-| `avg_ttt` | double |  |
+| `nfl_id` | character | NFL player id (`nflId`) as a string; the key the wrappers accept as `nfl_id`. |
+| `display_name` | character | Player's full display name (e.g. 'Aaron Rodgers'). |
+| `short_name` | character | Player's abbreviated name, first initial and surname (e.g. 'A.Rodgers'). |
+| `headshot` | character | NFL headshot image URL template; the `{formatInstructions}` token must be replaced with a Cloudinary transform (e.g. `t_headshot_desktop`) before use. |
+| `team_id` | character | NFL team id as a zero-padded string (e.g. '0200', '3430'); casting it to a number drops the leading zero. |
+| `jersey_number` | integer | Jersey number the player wore in the season. |
+| `position` | character | Roster position abbreviation (e.g. QB, WR, CB). |
+| `position_group` | character | Position group the roster position rolls up to (e.g. QB, RB, WR, TE, DB). |
+| `ngs_position` | character | Position Next Gen Stats assigns from tracking data; null for players NGS has not classified. |
+| `ngs_position_group` | character | Position group of ngs_position; null when ngs_position is null. |
+| `gp` | integer | Games played in the season (and season type) -- the denominator of every `*_pg` per-game column. |
+| `gs` | integer | Games started in the season. |
+| `tg` | integer | Games the player's team played while he was on the roster; equals gp in sampled data. |
+| `total_tg` | integer | Total games the player's team played in the season type (17 for a full regular season). |
+| `cmp` | integer | Pass completions, season total. |
+| `att` | integer | Pass attempts, season total. |
+| `yds` | integer | Passing yards, season total. |
+| `td` | integer | Passing touchdowns, season total. |
+| `int` | integer | Interceptions thrown, season total (a count, not a per-play flag). |
+| `rating` | double | NFL passer rating for the season (the standard 0-158.3 formula; equals nflverse `passer_rating`). |
+| `ypa` | double | Yards per pass attempt (yds / att). |
+| `cmp_pct` | double | Completion percentage as a fraction (cmp / att, e.g. 0.63). |
+| `sack` | integer | Times sacked, season total (a count, not a per-play flag). |
+| `x_cmp` | double | Expected completion percentage as a fraction, per Next Gen Stats (nflverse `expected_completion_percentage` / 100). |
+| `cpoe` | double | Completion percentage over expected as a fraction: cmp_pct - x_cmp (nflverse `completion_percentage_above_expectation` / 100). |
+| `db` | integer | Dropbacks, season total (attempts plus sacks and scrambles); the denominator of qbp_r and epa_db. |
+| `epa` | double | Total expected points added on the passer's dropbacks. |
+| `epa_db` | double | Expected points added per dropback (epa / db). |
+| `avg_ttt` | double | Average time to throw in seconds, snap to release, per Next Gen Stats (nflverse `avg_time_to_throw`). |
 | `avg_ttp` | double |  |
 | `avg_tts` | double |  |
-| `qbp` | integer |  |
-| `qbp_r` | double |  |
-| `blitz_r` | double |  |
-| `drop` | integer |  |
-| `drop_r` | double |  |
-| `ay` | double | Acceleration of the pitch in the y-direction at y=50 ft (ft/s^2). |
-| `yac` | double |  |
-| `x_yac` | double |  |
-| `yac_pct` | double |  |
-| `ay_att` | double |  |
-| `avg_sep` | double |  |
-| `deep_att_pct` | double |  |
-| `tw_att_pct` | double |  |
-| `pa_db_pct` | double |  |
-| `qp` | logical |  |
-| `cmp_pg` | double |  |
-| `att_pg` | double |  |
-| `yds_pg` | double |  |
-| `td_pg` | double |  |
-| `int_pg` | double |  |
-| `sack_pg` | double |  |
-| `db_pg` | double |  |
-| `epa_pg` | double |  |
-| `qbp_pg` | double |  |
-| `drop_pg` | double |  |
-| `tw_att_pg` | double |  |
+| `qbp` | integer | Dropbacks on which the passer was pressured, season total. |
+| `qbp_r` | double | Pressure rate: share of dropbacks on which the passer was pressured (qbp / db). |
+| `blitz_r` | double | Blitz rate: share of the passer's dropbacks on which the defense blitzed, per Next Gen Stats. |
+| `drop` | integer | Passes dropped by the passer's receivers, season total. |
+| `drop_r` | double | Drop rate: drops per pass attempt (drop / att). |
+| `ay` | double | Total intended air yards on pass attempts; ay_att is this per attempt. |
+| `yac` | double | Total yards after the catch gained on the passer's completions. |
+| `x_yac` | double | Total expected yards after the catch on the passer's completions, per Next Gen Stats. |
+| `yac_pct` | double | Share of passing yards gained after the catch (yac / yds). |
+| `ay_att` | double | Average intended air yards per pass attempt (nflverse `avg_intended_air_yards`). |
+| `avg_sep` | double | Average separation in yards between the targeted receiver and the nearest defender at pass arrival on the passer's targets, per Next Gen Stats. |
+| `deep_att_pct` | double | Share of pass attempts NGS classifies as deep throws. |
+| `tw_att_pct` | double | Aggressiveness: share of pass attempts into a tight window (defender within a yard of the receiver), per Next Gen Stats (nflverse `aggressiveness` / 100). |
+| `pa_db_pct` | double | Share of dropbacks that used play action. |
+| `qp` | logical | Whether the passer meets the league qualifying-attempts threshold (the `qualified` filter). |
+| `cmp_pg` | double | Completions per game (cmp / gp). |
+| `att_pg` | double | Pass attempts per game (att / gp). |
+| `yds_pg` | double | Passing yards per game (yds / gp). |
+| `td_pg` | double | Passing touchdowns per game (td / gp). |
+| `int_pg` | double | Interceptions thrown per game (int / gp). |
+| `sack_pg` | double | Sacks taken per game (sack / gp). |
+| `db_pg` | double | Dropbacks per game (db / gp). |
+| `epa_pg` | double | Expected points added per game (epa / gp). |
+| `qbp_pg` | double | Pressured dropbacks per game (qbp / gp). |
+| `drop_pg` | double | Receiver drops per game (drop / gp). |
+| `tw_att_pg` | double | Tight-window pass attempts per game; tw_att_pct = tw_att_pg / att_pg. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -124,70 +124,70 @@ GET /api/secured/stats/players-offense/passing/week — one row per passer per w
 
 | col_name | type | description |
 |---|---|---|
-| `nfl_id` | character | NFL ID of player (this is used in Big Data Bowl Data) |
-| `display_name` | character | Full name of player |
-| `short_name` | character | Player short name (i.e. "F.Last") |
-| `headshot` | character | NFL headshot url for player |
-| `team_id` | character | ESPN team id. |
-| `jersey_number` | integer | Jersey number. Often useful for joins by name/team/jersey. |
-| `position` | character | Primary position as reported by NFL.com |
-| `position_group` | character | Postion group of player as listed by NFL |
-| `ngs_position` | character | Primary position as reported by the NextGen stats API. |
-| `ngs_position_group` | character | Position group of player as listed by Next Gen Stats |
-| `gp` | integer | Games played. |
-| `gs` | integer | Games started. |
-| `tg` | integer |  |
-| `total_tg` | integer |  |
-| `week_slug` | character |  |
-| `game_id` | integer | Ten digit identifier for NFL game. |
-| `fapi_game_id` | character |  |
-| `opponent_team_id` | character | Unique identifier for the opponent team. |
-| `is_home` | logical | Whether the subject team was the home team. |
-| `final_score` | character |  |
-| `game_result` | character | Game result for the player's team (`W`/`L`). |
-| `cmp` | integer |  |
-| `att` | integer |  |
-| `yds` | integer |  |
-| `td` | integer |  |
-| `int` | integer | Binary flag for an interception. |
-| `rating` | double | Overall SP+ rating (Bill Connelly methodology, in points per game). |
-| `ypa` | double |  |
-| `cmp_pct` | double |  |
-| `sack` | integer | Binary indicator for if the play ended in a sack. |
-| `x_cmp` | double |  |
-| `cpoe` | double | For a single pass play this is 1 - cp when the pass was completed or 0 - cp when the pass was incomplete. Analyzed for a whole game or season an indicator for the passer how much over or under expectation his completion percentage was. |
-| `db` | integer |  |
-| `epa` | double | Expected points added (EPA) by the posteam for the given play. |
-| `epa_db` | double |  |
-| `avg_ttt` | double |  |
+| `nfl_id` | character | NFL player id (`nflId`) as a string; the key the wrappers accept as `nfl_id`. |
+| `display_name` | character | Player's full display name (e.g. 'Aaron Rodgers'). |
+| `short_name` | character | Player's abbreviated name, first initial and surname (e.g. 'A.Rodgers'). |
+| `headshot` | character | NFL headshot image URL template; the `{formatInstructions}` token must be replaced with a Cloudinary transform (e.g. `t_headshot_desktop`) before use. |
+| `team_id` | character | NFL team id as a zero-padded string (e.g. '0200', '3430'); casting it to a number drops the leading zero. |
+| `jersey_number` | integer | Jersey number the player wore in the season. |
+| `position` | character | Roster position abbreviation (e.g. QB, WR, CB). |
+| `position_group` | character | Position group the roster position rolls up to (e.g. QB, RB, WR, TE, DB). |
+| `ngs_position` | character | Position Next Gen Stats assigns from tracking data; null for players NGS has not classified. |
+| `ngs_position_group` | character | Position group of ngs_position; null when ngs_position is null. |
+| `gp` | integer | Games played in the season (and season type) -- the denominator of every `*_pg` per-game column. |
+| `gs` | integer | Games started in the season. |
+| `tg` | integer | Games the player's team played while he was on the roster; equals gp in sampled data. |
+| `total_tg` | integer | Total games the player's team played in the season type (17 for a full regular season). |
+| `week_slug` | character | Week slug of the game (e.g. 'WEEK_1', 'WEEK_18'); the week scope of the row. |
+| `game_id` | integer | NFL game id as an integer (e.g. 2024090900, the date followed by a two-digit sequence). |
+| `fapi_game_id` | character | NFL Football API (FAPI) UUID of the game, the id api.nfl.com uses for the same game. |
+| `opponent_team_id` | character | Opponent's NFL team id as a zero-padded string. |
+| `is_home` | logical | Whether the player's team was the home team in the game. |
+| `final_score` | character | Final score as 'own-opponent' (e.g. '19-32' for a 32-19 loss). |
+| `game_result` | character | Result from the player's team's side: 'W', 'L' or 'T'. |
+| `cmp` | integer | Pass completions in the game. |
+| `att` | integer | Pass attempts in the game. |
+| `yds` | integer | Passing yards in the game. |
+| `td` | integer | Passing touchdowns in the game. |
+| `int` | integer | Interceptions thrown in the game (a count, not a per-play flag). |
+| `rating` | double | NFL passer rating for the season (the standard 0-158.3 formula; equals nflverse `passer_rating`). |
+| `ypa` | double | Yards per pass attempt (yds / att). |
+| `cmp_pct` | double | Completion percentage as a fraction (cmp / att, e.g. 0.63). |
+| `sack` | integer | Times sacked in the game (a count, not a per-play flag). |
+| `x_cmp` | double | Expected completion percentage as a fraction, per Next Gen Stats (nflverse `expected_completion_percentage` / 100). |
+| `cpoe` | double | Completion percentage over expected as a fraction: cmp_pct - x_cmp (nflverse `completion_percentage_above_expectation` / 100). |
+| `db` | integer | Dropbacks in the game (attempts plus sacks and scrambles); the denominator of qbp_r and epa_db. |
+| `epa` | double | Total expected points added on the passer's dropbacks. |
+| `epa_db` | double | Expected points added per dropback (epa / db). |
+| `avg_ttt` | double | Average time to throw in seconds, snap to release, per Next Gen Stats (nflverse `avg_time_to_throw`). |
 | `avg_ttp` | double |  |
 | `avg_tts` | double |  |
-| `qbp` | integer |  |
-| `qbp_r` | double |  |
-| `blitz_r` | double |  |
-| `drop` | integer |  |
-| `drop_r` | double |  |
-| `ay` | double | Acceleration of the pitch in the y-direction at y=50 ft (ft/s^2). |
-| `yac` | double |  |
-| `x_yac` | double |  |
-| `yac_pct` | double |  |
-| `ay_att` | double |  |
-| `avg_sep` | double |  |
-| `deep_att_pct` | double |  |
-| `tw_att_pct` | double |  |
-| `pa_db_pct` | double |  |
-| `qp` | logical |  |
-| `cmp_pg` | integer |  |
-| `att_pg` | integer |  |
-| `yds_pg` | integer |  |
-| `td_pg` | integer |  |
-| `int_pg` | integer |  |
-| `sack_pg` | integer |  |
-| `db_pg` | integer |  |
-| `epa_pg` | double |  |
-| `qbp_pg` | integer |  |
-| `drop_pg` | integer |  |
-| `tw_att_pg` | integer |  |
+| `qbp` | integer | Dropbacks on which the passer was pressured in the game. |
+| `qbp_r` | double | Pressure rate: share of dropbacks on which the passer was pressured (qbp / db). |
+| `blitz_r` | double | Blitz rate: share of the passer's dropbacks on which the defense blitzed, per Next Gen Stats. |
+| `drop` | integer | Passes dropped by the passer's receivers in the game. |
+| `drop_r` | double | Drop rate: drops per pass attempt (drop / att). |
+| `ay` | double | Total intended air yards on pass attempts; ay_att is this per attempt. |
+| `yac` | double | Total yards after the catch gained on the passer's completions. |
+| `x_yac` | double | Total expected yards after the catch on the passer's completions, per Next Gen Stats. |
+| `yac_pct` | double | Share of passing yards gained after the catch (yac / yds). |
+| `ay_att` | double | Average intended air yards per pass attempt (nflverse `avg_intended_air_yards`). |
+| `avg_sep` | double | Average separation in yards between the targeted receiver and the nearest defender at pass arrival on the passer's targets, per Next Gen Stats. |
+| `deep_att_pct` | double | Share of pass attempts NGS classifies as deep throws. |
+| `tw_att_pct` | double | Aggressiveness: share of pass attempts into a tight window (defender within a yard of the receiver), per Next Gen Stats (nflverse `aggressiveness` / 100). |
+| `pa_db_pct` | double | Share of dropbacks that used play action. |
+| `qp` | logical | Whether the passer meets the league qualifying-attempts threshold (the `qualified` filter). |
+| `cmp_pg` | integer | Completions per game (cmp / gp). |
+| `att_pg` | integer | Pass attempts per game (att / gp). |
+| `yds_pg` | integer | Passing yards per game (yds / gp). |
+| `td_pg` | integer | Passing touchdowns per game (td / gp). |
+| `int_pg` | integer | Interceptions thrown per game (int / gp). |
+| `sack_pg` | integer | Sacks taken per game (sack / gp). |
+| `db_pg` | integer | Dropbacks per game (db / gp). |
+| `epa_pg` | double | Expected points added per game (epa / gp). |
+| `qbp_pg` | integer | Pressured dropbacks per game (qbp / gp). |
+| `drop_pg` | integer | Receiver drops per game (drop / gp). |
+| `tw_att_pg` | integer | Tight-window pass attempts per game; tw_att_pct = tw_att_pg / att_pg. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -223,58 +223,58 @@ GET /api/secured/stats/players-offense/rushing/season — one row per rusher for
 
 | col_name | type | description |
 |---|---|---|
-| `nfl_id` | character | NFL ID of player (this is used in Big Data Bowl Data) |
-| `display_name` | character | Full name of player |
-| `short_name` | character | Player short name (i.e. "F.Last") |
-| `headshot` | character | NFL headshot url for player |
-| `team_id` | character | ESPN team id. |
-| `jersey_number` | integer | Jersey number. Often useful for joins by name/team/jersey. |
-| `position` | character | Primary position as reported by NFL.com |
-| `position_group` | character | Postion group of player as listed by NFL |
-| `ngs_position` | character | Primary position as reported by the NextGen stats API. |
-| `ngs_position_group` | character | Position group of player as listed by Next Gen Stats |
-| `gp` | integer | Games played. |
-| `gs` | integer | Games started. |
-| `tg` | integer |  |
-| `total_tg` | integer |  |
-| `att` | integer |  |
-| `yds` | integer |  |
-| `td` | integer |  |
-| `ypc` | double |  |
-| `epa` | double | Expected points added (EPA) by the posteam for the given play. |
-| `epa_att` | double |  |
-| `x_ry` | double |  |
-| `x_ypc` | double |  |
-| `ryoe` | double |  |
-| `ryoe_att` | double |  |
-| `yaco` | double |  |
-| `yaco_att` | double |  |
-| `ybco` | double |  |
-| `ybco_att` | double |  |
-| `success` | double | Binary indicator whether epa > 0 in the given play. |
-| `fum` | integer |  |
-| `lost` | integer |  |
-| `rush10_p_yds` | integer |  |
-| `rush15_p_mph` | integer |  |
-| `rush20_p_mph` | integer |  |
-| `eff` | double | Eff. |
+| `nfl_id` | character | NFL player id (`nflId`) as a string; the key the wrappers accept as `nfl_id`. |
+| `display_name` | character | Player's full display name (e.g. 'Aaron Rodgers'). |
+| `short_name` | character | Player's abbreviated name, first initial and surname (e.g. 'A.Rodgers'). |
+| `headshot` | character | NFL headshot image URL template; the `{formatInstructions}` token must be replaced with a Cloudinary transform (e.g. `t_headshot_desktop`) before use. |
+| `team_id` | character | NFL team id as a zero-padded string (e.g. '0200', '3430'); casting it to a number drops the leading zero. |
+| `jersey_number` | integer | Jersey number the player wore in the season. |
+| `position` | character | Roster position abbreviation (e.g. QB, WR, CB). |
+| `position_group` | character | Position group the roster position rolls up to (e.g. QB, RB, WR, TE, DB). |
+| `ngs_position` | character | Position Next Gen Stats assigns from tracking data; null for players NGS has not classified. |
+| `ngs_position_group` | character | Position group of ngs_position; null when ngs_position is null. |
+| `gp` | integer | Games played in the season (and season type) -- the denominator of every `*_pg` per-game column. |
+| `gs` | integer | Games started in the season. |
+| `tg` | integer | Games the player's team played while he was on the roster; equals gp in sampled data. |
+| `total_tg` | integer | Total games the player's team played in the season type (17 for a full regular season). |
+| `att` | integer | Rush attempts, season total. |
+| `yds` | integer | Rushing yards, season total. |
+| `td` | integer | Rushing touchdowns, season total. |
+| `ypc` | double | Yards per carry (yds / att). |
+| `epa` | double | Total expected points added on the player's rush attempts. |
+| `epa_att` | double | Expected points added per rush attempt (epa / att). |
+| `x_ry` | double | Expected rushing yards, season total, per Next Gen Stats (nflverse `expected_rush_yards`); yds = x_ry + ryoe. |
+| `x_ypc` | double | Expected yards per carry (x_ry / att). |
+| `ryoe` | double | Rushing yards over expected, season total (yds - x_ry; nflverse `rush_yards_over_expected`). |
+| `ryoe_att` | double | Rushing yards over expected per attempt (ryoe / att). |
+| `yaco` | double | Yards after contact, season total. |
+| `yaco_att` | double | Yards after contact per attempt (yaco / att). |
+| `ybco` | double | Yards before contact, season total. |
+| `ybco_att` | double | Yards before contact per attempt (ybco / att). |
+| `success` | double | Success rate: share of rush attempts graded successful, as a fraction. |
+| `fum` | integer | Fumbles on rush attempts, season total. |
+| `lost` | integer | Fumbles lost on rush attempts, season total. |
+| `rush10_p_yds` | integer | Rush attempts that gained 10 or more yards, season total. |
+| `rush15_p_mph` | integer | Rush attempts on which the ball carrier reached 15+ mph, per Next Gen Stats. |
+| `rush20_p_mph` | integer | Rush attempts on which the ball carrier reached 20+ mph, per Next Gen Stats. |
+| `eff` | double | Rushing efficiency: distance travelled per rushing yard gained (lower is more direct), per Next Gen Stats (nflverse `efficiency`). |
 | `in_t_pct` | double |  |
-| `st_box_pct` | double |  |
+| `st_box_pct` | double | Share of rush attempts against a stacked box (8 or more defenders), per Next Gen Stats. |
 | `under_pct` | double |  |
-| `qr` | logical |  |
-| `att_pg` | double |  |
-| `yds_pg` | double |  |
-| `td_pg` | double |  |
-| `epa_pg` | double |  |
-| `x_ry_pg` | double |  |
-| `ryoe_pg` | double |  |
-| `yaco_pg` | double |  |
-| `ybco_pg` | double |  |
-| `fum_pg` | double |  |
-| `lost_pg` | double |  |
-| `rush10_p_yds_pg` | double |  |
-| `rush15_p_mph_pg` | double |  |
-| `rush20_p_mph_pg` | double |  |
+| `qr` | logical | Whether the player meets the league qualifying threshold for the table (the `qualified` filter). |
+| `att_pg` | double | Rush attempts per game (att / gp). |
+| `yds_pg` | double | Rushing yards per game (yds / gp). |
+| `td_pg` | double | Rushing touchdowns per game (td / gp). |
+| `epa_pg` | double | Expected points added per game (epa / gp). |
+| `x_ry_pg` | double | Expected rushing yards per game (x_ry / gp). |
+| `ryoe_pg` | double | Rushing yards over expected per game (ryoe / gp). |
+| `yaco_pg` | double | Yards after contact per game (yaco / gp). |
+| `ybco_pg` | double | Yards before contact per game (ybco / gp). |
+| `fum_pg` | double | Fumbles per game (fum / gp). |
+| `lost_pg` | double | Fumbles lost per game (lost / gp). |
+| `rush10_p_yds_pg` | double | Rushes of 10+ yards per game (rush10_p_yds / gp). |
+| `rush15_p_mph_pg` | double | Rushes reaching 15+ mph per game (rush15_p_mph / gp). |
+| `rush20_p_mph_pg` | double | Rushes reaching 20+ mph per game (rush20_p_mph / gp). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -311,65 +311,65 @@ GET /api/secured/stats/players-offense/rushing/week — one row per rusher per w
 
 | col_name | type | description |
 |---|---|---|
-| `nfl_id` | character | NFL ID of player (this is used in Big Data Bowl Data) |
-| `display_name` | character | Full name of player |
-| `short_name` | character | Player short name (i.e. "F.Last") |
-| `headshot` | character | NFL headshot url for player |
-| `team_id` | character | ESPN team id. |
-| `jersey_number` | integer | Jersey number. Often useful for joins by name/team/jersey. |
-| `position` | character | Primary position as reported by NFL.com |
-| `position_group` | character | Postion group of player as listed by NFL |
-| `ngs_position` | character | Primary position as reported by the NextGen stats API. |
-| `ngs_position_group` | character | Position group of player as listed by Next Gen Stats |
-| `gp` | integer | Games played. |
-| `gs` | integer | Games started. |
-| `tg` | integer |  |
-| `total_tg` | integer |  |
-| `week_slug` | character |  |
-| `game_id` | integer | Ten digit identifier for NFL game. |
-| `fapi_game_id` | character |  |
-| `opponent_team_id` | character | Unique identifier for the opponent team. |
-| `is_home` | logical | Whether the subject team was the home team. |
-| `final_score` | character |  |
-| `game_result` | character | Game result for the player's team (`W`/`L`). |
-| `att` | integer |  |
-| `yds` | integer |  |
-| `td` | integer |  |
-| `ypc` | double |  |
-| `epa` | double | Expected points added (EPA) by the posteam for the given play. |
-| `epa_att` | double |  |
-| `x_ry` | double |  |
-| `x_ypc` | double |  |
-| `ryoe` | double |  |
-| `ryoe_att` | double |  |
-| `yaco` | double |  |
-| `yaco_att` | double |  |
-| `ybco` | double |  |
-| `ybco_att` | double |  |
-| `success` | double | Binary indicator whether epa > 0 in the given play. |
-| `fum` | integer |  |
-| `lost` | integer |  |
-| `rush10_p_yds` | integer |  |
-| `rush15_p_mph` | integer |  |
-| `rush20_p_mph` | integer |  |
-| `eff` | double | Eff. |
+| `nfl_id` | character | NFL player id (`nflId`) as a string; the key the wrappers accept as `nfl_id`. |
+| `display_name` | character | Player's full display name (e.g. 'Aaron Rodgers'). |
+| `short_name` | character | Player's abbreviated name, first initial and surname (e.g. 'A.Rodgers'). |
+| `headshot` | character | NFL headshot image URL template; the `{formatInstructions}` token must be replaced with a Cloudinary transform (e.g. `t_headshot_desktop`) before use. |
+| `team_id` | character | NFL team id as a zero-padded string (e.g. '0200', '3430'); casting it to a number drops the leading zero. |
+| `jersey_number` | integer | Jersey number the player wore in the season. |
+| `position` | character | Roster position abbreviation (e.g. QB, WR, CB). |
+| `position_group` | character | Position group the roster position rolls up to (e.g. QB, RB, WR, TE, DB). |
+| `ngs_position` | character | Position Next Gen Stats assigns from tracking data; null for players NGS has not classified. |
+| `ngs_position_group` | character | Position group of ngs_position; null when ngs_position is null. |
+| `gp` | integer | Games played in the season (and season type) -- the denominator of every `*_pg` per-game column. |
+| `gs` | integer | Games started in the season. |
+| `tg` | integer | Games the player's team played while he was on the roster; equals gp in sampled data. |
+| `total_tg` | integer | Total games the player's team played in the season type (17 for a full regular season). |
+| `week_slug` | character | Week slug of the game (e.g. 'WEEK_1', 'WEEK_18'); the week scope of the row. |
+| `game_id` | integer | NFL game id as an integer (e.g. 2024090900, the date followed by a two-digit sequence). |
+| `fapi_game_id` | character | NFL Football API (FAPI) UUID of the game, the id api.nfl.com uses for the same game. |
+| `opponent_team_id` | character | Opponent's NFL team id as a zero-padded string. |
+| `is_home` | logical | Whether the player's team was the home team in the game. |
+| `final_score` | character | Final score as 'own-opponent' (e.g. '19-32' for a 32-19 loss). |
+| `game_result` | character | Result from the player's team's side: 'W', 'L' or 'T'. |
+| `att` | integer | Rush attempts in the game. |
+| `yds` | integer | Rushing yards in the game. |
+| `td` | integer | Rushing touchdowns in the game. |
+| `ypc` | double | Yards per carry (yds / att). |
+| `epa` | double | Total expected points added on the player's rush attempts. |
+| `epa_att` | double | Expected points added per rush attempt (epa / att). |
+| `x_ry` | double | Expected rushing yards in the game, per Next Gen Stats (nflverse `expected_rush_yards`); yds = x_ry + ryoe. |
+| `x_ypc` | double | Expected yards per carry (x_ry / att). |
+| `ryoe` | double | Rushing yards over expected in the game (yds - x_ry; nflverse `rush_yards_over_expected`). |
+| `ryoe_att` | double | Rushing yards over expected per attempt (ryoe / att). |
+| `yaco` | double | Yards after contact in the game. |
+| `yaco_att` | double | Yards after contact per attempt (yaco / att). |
+| `ybco` | double | Yards before contact in the game. |
+| `ybco_att` | double | Yards before contact per attempt (ybco / att). |
+| `success` | double | Success rate: share of rush attempts graded successful, as a fraction. |
+| `fum` | integer | Fumbles on rush attempts in the game. |
+| `lost` | integer | Fumbles lost on rush attempts in the game. |
+| `rush10_p_yds` | integer | Rush attempts that gained 10 or more yards in the game. |
+| `rush15_p_mph` | integer | Rush attempts on which the ball carrier reached 15+ mph, per Next Gen Stats. |
+| `rush20_p_mph` | integer | Rush attempts on which the ball carrier reached 20+ mph, per Next Gen Stats. |
+| `eff` | double | Rushing efficiency: distance travelled per rushing yard gained (lower is more direct), per Next Gen Stats (nflverse `efficiency`). |
 | `in_t_pct` | double |  |
-| `st_box_pct` | integer |  |
+| `st_box_pct` | integer | Share of rush attempts against a stacked box (8 or more defenders), per Next Gen Stats. |
 | `under_pct` | double |  |
-| `qr` | logical |  |
-| `att_pg` | integer |  |
-| `yds_pg` | integer |  |
-| `td_pg` | integer |  |
-| `epa_pg` | double |  |
-| `x_ry_pg` | double |  |
-| `ryoe_pg` | double |  |
-| `yaco_pg` | double |  |
-| `ybco_pg` | double |  |
-| `fum_pg` | integer |  |
-| `lost_pg` | integer |  |
-| `rush10_p_yds_pg` | integer |  |
-| `rush15_p_mph_pg` | integer |  |
-| `rush20_p_mph_pg` | integer |  |
+| `qr` | logical | Whether the player meets the league qualifying threshold for the table (the `qualified` filter). |
+| `att_pg` | integer | Rush attempts per game (att / gp). |
+| `yds_pg` | integer | Rushing yards per game (yds / gp). |
+| `td_pg` | integer | Rushing touchdowns per game (td / gp). |
+| `epa_pg` | double | Expected points added per game (epa / gp). |
+| `x_ry_pg` | double | Expected rushing yards per game (x_ry / gp). |
+| `ryoe_pg` | double | Rushing yards over expected per game (ryoe / gp). |
+| `yaco_pg` | double | Yards after contact per game (yaco / gp). |
+| `ybco_pg` | double | Yards before contact per game (ybco / gp). |
+| `fum_pg` | integer | Fumbles per game (fum / gp). |
+| `lost_pg` | integer | Fumbles lost per game (lost / gp). |
+| `rush10_p_yds_pg` | integer | Rushes of 10+ yards per game (rush10_p_yds / gp). |
+| `rush15_p_mph_pg` | integer | Rushes reaching 15+ mph per game (rush15_p_mph / gp). |
+| `rush20_p_mph_pg` | integer | Rushes reaching 20+ mph per game (rush20_p_mph / gp). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -405,65 +405,65 @@ GET /api/secured/stats/players-offense/receiving/season — one row per receiver
 
 | col_name | type | description |
 |---|---|---|
-| `nfl_id` | character | NFL ID of player (this is used in Big Data Bowl Data) |
-| `display_name` | character | Full name of player |
-| `short_name` | character | Player short name (i.e. "F.Last") |
-| `headshot` | character | NFL headshot url for player |
-| `team_id` | character | ESPN team id. |
-| `jersey_number` | integer | Jersey number. Often useful for joins by name/team/jersey. |
-| `position` | character | Primary position as reported by NFL.com |
-| `position_group` | character | Postion group of player as listed by NFL |
-| `ngs_position` | character | Primary position as reported by the NextGen stats API. |
-| `ngs_position_group` | character | Position group of player as listed by Next Gen Stats |
-| `gp` | integer | Games played. |
-| `gs` | integer | Games started. |
-| `tg` | integer |  |
-| `total_tg` | integer |  |
-| `rt` | integer |  |
-| `tgt` | integer |  |
-| `rec` | integer |  |
-| `yds` | integer |  |
-| `td` | integer |  |
-| `int` | integer | Binary flag for an interception. |
-| `rating` | double | Overall SP+ rating (Bill Connelly methodology, in points per game). |
-| `catch` | double |  |
-| `x_catch` | double |  |
-| `croe` | double |  |
-| `yds_rec` | double |  |
-| `yds_rt` | double |  |
-| `epa` | double | Expected points added (EPA) by the posteam for the given play. |
-| `epa_tgt` | double |  |
-| `epa_rt` | double |  |
-| `drop` | integer |  |
-| `drop_tgt` | double |  |
-| `yac` | integer |  |
-| `x_yac` | integer |  |
-| `yacoe` | integer |  |
-| `yac_rec` | double |  |
-| `avg_sep` | double |  |
-| `ay` | double | Acceleration of the pitch in the y-direction at y=50 ft (ft/s^2). |
-| `ay_tgt` | double |  |
-| `tgt_rt` | double |  |
-| `avg_rt_dep` | double |  |
-| `ez_tgt` | integer |  |
-| `ez_rec` | integer |  |
-| `deep_tgt_pct` | double |  |
-| `tw_pct` | double |  |
-| `qr` | logical |  |
-| `rt_pg` | double |  |
-| `tgt_pg` | double |  |
-| `rec_pg` | double |  |
-| `yds_pg` | double |  |
-| `td_pg` | double |  |
-| `int_pg` | double |  |
-| `epa_pg` | double |  |
-| `drop_pg` | double |  |
-| `yac_pg` | double |  |
-| `x_yac_pg` | double |  |
-| `yacoe_pg` | double |  |
-| `ay_pg` | double |  |
-| `ez_tgt_pg` | double |  |
-| `ez_rec_pg` | double |  |
+| `nfl_id` | character | NFL player id (`nflId`) as a string; the key the wrappers accept as `nfl_id`. |
+| `display_name` | character | Player's full display name (e.g. 'Aaron Rodgers'). |
+| `short_name` | character | Player's abbreviated name, first initial and surname (e.g. 'A.Rodgers'). |
+| `headshot` | character | NFL headshot image URL template; the `{formatInstructions}` token must be replaced with a Cloudinary transform (e.g. `t_headshot_desktop`) before use. |
+| `team_id` | character | NFL team id as a zero-padded string (e.g. '0200', '3430'); casting it to a number drops the leading zero. |
+| `jersey_number` | integer | Jersey number the player wore in the season. |
+| `position` | character | Roster position abbreviation (e.g. QB, WR, CB). |
+| `position_group` | character | Position group the roster position rolls up to (e.g. QB, RB, WR, TE, DB). |
+| `ngs_position` | character | Position Next Gen Stats assigns from tracking data; null for players NGS has not classified. |
+| `ngs_position_group` | character | Position group of ngs_position; null when ngs_position is null. |
+| `gp` | integer | Games played in the season (and season type) -- the denominator of every `*_pg` per-game column. |
+| `gs` | integer | Games started in the season. |
+| `tg` | integer | Games the player's team played while he was on the roster; equals gp in sampled data. |
+| `total_tg` | integer | Total games the player's team played in the season type (17 for a full regular season). |
+| `rt` | integer | Routes run, season total. |
+| `tgt` | integer | Targets, season total. |
+| `rec` | integer | Receptions, season total. |
+| `yds` | integer | Receiving yards, season total. |
+| `td` | integer | Receiving touchdowns, season total. |
+| `int` | integer | Interceptions thrown on passes targeting the player, season total. |
+| `rating` | double | Passer rating on throws targeting the player (the standard formula applied to his targets). |
+| `catch` | double | Catch rate as a fraction (rec / tgt; nflverse `catch_percentage` / 100). |
+| `x_catch` | double | Expected catch rate as a fraction, per Next Gen Stats; catch = x_catch + croe. |
+| `croe` | double | Catch rate over expected as a fraction (catch - x_catch). |
+| `yds_rec` | double | Yards per reception (yds / rec). |
+| `yds_rt` | double | Yards per route run (yds / rt). |
+| `epa` | double | Total expected points added on the player's targets. |
+| `epa_tgt` | double | Expected points added per target (epa / tgt). |
+| `epa_rt` | double | Expected points added per route run (epa / rt). |
+| `drop` | integer | Drops, season total. |
+| `drop_tgt` | double | Drop rate: drops per target (drop / tgt). |
+| `yac` | integer | Yards after the catch, season total. |
+| `x_yac` | integer | Expected yards after the catch, season total, per Next Gen Stats; yac = x_yac + yacoe. |
+| `yacoe` | integer | Yards after the catch over expected, season total (yac - x_yac). |
+| `yac_rec` | double | Yards after the catch per reception (yac / rec; nflverse `avg_yac`). |
+| `avg_sep` | double | Average separation in yards from the nearest defender at pass arrival, per Next Gen Stats (nflverse `avg_separation`). |
+| `ay` | double | Total intended air yards on the player's targets. |
+| `ay_tgt` | double | Average intended air yards per target (ay / tgt; nflverse `avg_intended_air_yards`). |
+| `tgt_rt` | double | Target rate: targets per route run (tgt / rt). |
+| `avg_rt_dep` | double | Average route depth in yards, per Next Gen Stats. |
+| `ez_tgt` | integer | End-zone targets, season total. |
+| `ez_rec` | integer | End-zone receptions, season total. |
+| `deep_tgt_pct` | double | Share of targets NGS classifies as deep. |
+| `tw_pct` | double | Share of targets thrown into a tight window (defender within a yard), per Next Gen Stats. |
+| `qr` | logical | Whether the player meets the league qualifying threshold for the table (the `qualified` filter). |
+| `rt_pg` | double | Routes run per game (rt / gp). |
+| `tgt_pg` | double | Targets per game (tgt / gp). |
+| `rec_pg` | double | Receptions per game (rec / gp). |
+| `yds_pg` | double | Receiving yards per game (yds / gp). |
+| `td_pg` | double | Receiving touchdowns per game (td / gp). |
+| `int_pg` | double | Interceptions on the player's targets per game (int / gp). |
+| `epa_pg` | double | Expected points added per game (epa / gp). |
+| `drop_pg` | double | Drops per game (drop / gp). |
+| `yac_pg` | double | Yards after the catch per game (yac / gp). |
+| `x_yac_pg` | double | Expected yards after the catch per game (x_yac / gp). |
+| `yacoe_pg` | double | Yards after the catch over expected per game (yacoe / gp). |
+| `ay_pg` | double | Intended air yards per game (ay / gp). |
+| `ez_tgt_pg` | double | End-zone targets per game (ez_tgt / gp). |
+| `ez_rec_pg` | double | End-zone receptions per game (ez_rec / gp). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -500,72 +500,72 @@ GET /api/secured/stats/players-offense/receiving/week — one row per receiver p
 
 | col_name | type | description |
 |---|---|---|
-| `nfl_id` | character | NFL ID of player (this is used in Big Data Bowl Data) |
-| `display_name` | character | Full name of player |
-| `short_name` | character | Player short name (i.e. "F.Last") |
-| `headshot` | character | NFL headshot url for player |
-| `team_id` | character | ESPN team id. |
-| `jersey_number` | integer | Jersey number. Often useful for joins by name/team/jersey. |
-| `position` | character | Primary position as reported by NFL.com |
-| `position_group` | character | Postion group of player as listed by NFL |
-| `ngs_position` | character | Primary position as reported by the NextGen stats API. |
-| `ngs_position_group` | character | Position group of player as listed by Next Gen Stats |
-| `gp` | integer | Games played. |
-| `gs` | integer | Games started. |
-| `tg` | integer |  |
-| `total_tg` | integer |  |
-| `week_slug` | character |  |
-| `game_id` | integer | Ten digit identifier for NFL game. |
-| `fapi_game_id` | character |  |
-| `opponent_team_id` | character | Unique identifier for the opponent team. |
-| `is_home` | logical | Whether the subject team was the home team. |
-| `final_score` | character |  |
-| `game_result` | character | Game result for the player's team (`W`/`L`). |
-| `rt` | integer |  |
-| `tgt` | integer |  |
-| `rec` | integer |  |
-| `yds` | integer |  |
-| `td` | integer |  |
-| `int` | integer | Binary flag for an interception. |
-| `rating` | integer | Overall SP+ rating (Bill Connelly methodology, in points per game). |
-| `catch` | integer |  |
-| `x_catch` | integer |  |
-| `croe` | integer |  |
-| `yds_rec` | integer |  |
-| `yds_rt` | integer |  |
-| `epa` | integer | Expected points added (EPA) by the posteam for the given play. |
-| `epa_tgt` | integer |  |
-| `epa_rt` | integer |  |
-| `drop` | integer |  |
-| `drop_tgt` | integer |  |
-| `yac` | integer |  |
-| `x_yac` | integer |  |
-| `yacoe` | integer |  |
-| `yac_rec` | integer |  |
-| `avg_sep` | integer |  |
-| `ay` | integer | Acceleration of the pitch in the y-direction at y=50 ft (ft/s^2). |
-| `ay_tgt` | integer |  |
-| `tgt_rt` | integer |  |
-| `avg_rt_dep` | integer |  |
-| `ez_tgt` | integer |  |
-| `ez_rec` | integer |  |
-| `deep_tgt_pct` | integer |  |
-| `tw_pct` | integer |  |
-| `qr` | logical |  |
-| `rt_pg` | integer |  |
-| `tgt_pg` | integer |  |
-| `rec_pg` | integer |  |
-| `yds_pg` | integer |  |
-| `td_pg` | integer |  |
-| `int_pg` | integer |  |
-| `epa_pg` | integer |  |
-| `drop_pg` | integer |  |
-| `yac_pg` | integer |  |
-| `x_yac_pg` | integer |  |
-| `yacoe_pg` | integer |  |
-| `ay_pg` | integer |  |
-| `ez_tgt_pg` | integer |  |
-| `ez_rec_pg` | integer |  |
+| `nfl_id` | character | NFL player id (`nflId`) as a string; the key the wrappers accept as `nfl_id`. |
+| `display_name` | character | Player's full display name (e.g. 'Aaron Rodgers'). |
+| `short_name` | character | Player's abbreviated name, first initial and surname (e.g. 'A.Rodgers'). |
+| `headshot` | character | NFL headshot image URL template; the `{formatInstructions}` token must be replaced with a Cloudinary transform (e.g. `t_headshot_desktop`) before use. |
+| `team_id` | character | NFL team id as a zero-padded string (e.g. '0200', '3430'); casting it to a number drops the leading zero. |
+| `jersey_number` | integer | Jersey number the player wore in the season. |
+| `position` | character | Roster position abbreviation (e.g. QB, WR, CB). |
+| `position_group` | character | Position group the roster position rolls up to (e.g. QB, RB, WR, TE, DB). |
+| `ngs_position` | character | Position Next Gen Stats assigns from tracking data; null for players NGS has not classified. |
+| `ngs_position_group` | character | Position group of ngs_position; null when ngs_position is null. |
+| `gp` | integer | Games played in the season (and season type) -- the denominator of every `*_pg` per-game column. |
+| `gs` | integer | Games started in the season. |
+| `tg` | integer | Games the player's team played while he was on the roster; equals gp in sampled data. |
+| `total_tg` | integer | Total games the player's team played in the season type (17 for a full regular season). |
+| `week_slug` | character | Week slug of the game (e.g. 'WEEK_1', 'WEEK_18'); the week scope of the row. |
+| `game_id` | integer | NFL game id as an integer (e.g. 2024090900, the date followed by a two-digit sequence). |
+| `fapi_game_id` | character | NFL Football API (FAPI) UUID of the game, the id api.nfl.com uses for the same game. |
+| `opponent_team_id` | character | Opponent's NFL team id as a zero-padded string. |
+| `is_home` | logical | Whether the player's team was the home team in the game. |
+| `final_score` | character | Final score as 'own-opponent' (e.g. '19-32' for a 32-19 loss). |
+| `game_result` | character | Result from the player's team's side: 'W', 'L' or 'T'. |
+| `rt` | integer | Routes run in the game. |
+| `tgt` | integer | Targets in the game. |
+| `rec` | integer | Receptions in the game. |
+| `yds` | integer | Receiving yards in the game. |
+| `td` | integer | Receiving touchdowns in the game. |
+| `int` | integer | Interceptions thrown on passes targeting the player in the game. |
+| `rating` | integer | Passer rating on throws targeting the player (the standard formula applied to his targets). |
+| `catch` | integer | Catch rate as a fraction (rec / tgt; nflverse `catch_percentage` / 100). |
+| `x_catch` | integer | Expected catch rate as a fraction, per Next Gen Stats; catch = x_catch + croe. |
+| `croe` | integer | Catch rate over expected as a fraction (catch - x_catch). |
+| `yds_rec` | integer | Yards per reception (yds / rec). |
+| `yds_rt` | integer | Yards per route run (yds / rt). |
+| `epa` | integer | Total expected points added on the player's targets. |
+| `epa_tgt` | integer | Expected points added per target (epa / tgt). |
+| `epa_rt` | integer | Expected points added per route run (epa / rt). |
+| `drop` | integer | Drops in the game. |
+| `drop_tgt` | integer | Drop rate: drops per target (drop / tgt). |
+| `yac` | integer | Yards after the catch in the game. |
+| `x_yac` | integer | Expected yards after the catch in the game, per Next Gen Stats; yac = x_yac + yacoe. |
+| `yacoe` | integer | Yards after the catch over expected in the game (yac - x_yac). |
+| `yac_rec` | integer | Yards after the catch per reception (yac / rec; nflverse `avg_yac`). |
+| `avg_sep` | integer | Average separation in yards from the nearest defender at pass arrival, per Next Gen Stats (nflverse `avg_separation`). |
+| `ay` | integer | Total intended air yards on the player's targets. |
+| `ay_tgt` | integer | Average intended air yards per target (ay / tgt; nflverse `avg_intended_air_yards`). |
+| `tgt_rt` | integer | Target rate: targets per route run (tgt / rt). |
+| `avg_rt_dep` | integer | Average route depth in yards, per Next Gen Stats. |
+| `ez_tgt` | integer | End-zone targets in the game. |
+| `ez_rec` | integer | End-zone receptions in the game. |
+| `deep_tgt_pct` | integer | Share of targets NGS classifies as deep. |
+| `tw_pct` | integer | Share of targets thrown into a tight window (defender within a yard), per Next Gen Stats. |
+| `qr` | logical | Whether the player meets the league qualifying threshold for the table (the `qualified` filter). |
+| `rt_pg` | integer | Routes run per game (rt / gp). |
+| `tgt_pg` | integer | Targets per game (tgt / gp). |
+| `rec_pg` | integer | Receptions per game (rec / gp). |
+| `yds_pg` | integer | Receiving yards per game (yds / gp). |
+| `td_pg` | integer | Receiving touchdowns per game (td / gp). |
+| `int_pg` | integer | Interceptions on the player's targets per game (int / gp). |
+| `epa_pg` | integer | Expected points added per game (epa / gp). |
+| `drop_pg` | integer | Drops per game (drop / gp). |
+| `yac_pg` | integer | Yards after the catch per game (yac / gp). |
+| `x_yac_pg` | integer | Expected yards after the catch per game (x_yac / gp). |
+| `yacoe_pg` | integer | Yards after the catch over expected per game (yacoe / gp). |
+| `ay_pg` | integer | Intended air yards per game (ay / gp). |
+| `ez_tgt_pg` | integer | End-zone targets per game (ez_tgt / gp). |
+| `ez_rec_pg` | integer | End-zone receptions per game (ez_rec / gp). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 

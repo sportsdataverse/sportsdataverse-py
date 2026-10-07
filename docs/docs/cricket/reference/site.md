@@ -76,20 +76,20 @@ ESPN endpoint.
 
 | col_name | type | description |
 |---|---|---|
-| `id` | character | ID of the player in the 'name' column. |
-| `uid` | character | ESPN UID string. |
-| `time_valid` | logical | Whether the start time is confirmed. |
-| `season_year` | integer | Season year string ('YYYY-YY' format). |
+| `id` | character |  |
+| `uid` | character |  |
+| `time_valid` | logical |  |
+| `season_year` | integer |  |
 | `season_type` | integer | ESPN season-phase numeric code (1=pre-season, 2=regular season, 3=postseason, 4=off-season). |
-| `season_slug` | character | Season slug. |
+| `season_slug` | character |  |
 | `league_id` | character | ESPN numeric identifier for the league or competition. |
-| `league_name` | character | League name. |
+| `league_name` | character |  |
 | `league_abbreviation` | character | Abbreviation for the league or competition the game belongs to. |
 | `competition_id` | character | ESPN numeric identifier for the primary competition (game) in the header. |
 | `competition_date` | character | Date and time of the competition as recorded in the game header. |
-| `neutral_site` | logical | Neutral site. |
-| `status_name` | character | Status label. |
-| `status_description` | character | Roster status description (e.g. 'Active'). |
+| `neutral_site` | logical |  |
+| `status_name` | character |  |
+| `status_description` | character |  |
 | `is_final` | character | Boolean flag indicating whether the game has reached a final or completed status. |
 
 **matchcards_batting**
@@ -98,13 +98,13 @@ ESPN endpoint.
 |---|---|---|
 | `innings_number` | character | Innings number within the match to which this batting or bowling entry belongs. |
 | `team_name` | character | Full display name of the team. |
-| `total` | character | Total. |
+| `total` | character |  |
 | `runs_total` | character | Total runs scored by the team or batting side in this innings. |
 | `extras` | character | Additional runs awarded to the batting side from wides, no-balls, byes, or leg byes in this innings. |
-| `player_id` | character | Unique player identifier. |
-| `player_name` | character | Player name. |
+| `player_id` | character |  |
+| `player_name` | character |  |
 | `dismissal` | character | Method by which the batter was dismissed in this innings (e.g., caught, bowled, run out). |
-| `runs` | character | Runs scored. |
+| `runs` | character |  |
 | `balls_faced` | character | Total number of balls faced by the batter during their innings. |
 | `fours` | character | Number of boundaries hit for four runs by the batter in this innings. |
 | `sixes` | character | Number of boundaries hit for six runs by the batter in this innings. |
@@ -115,8 +115,8 @@ ESPN endpoint.
 |---|---|---|
 | `innings_number` | character | Innings number within the match to which this batting or bowling entry belongs. |
 | `team_name` | character | Full display name of the team. |
-| `player_id` | character | Unique player identifier. |
-| `player_name` | character | Player name. |
+| `player_id` | character |  |
+| `player_name` | character |  |
 | `overs` | character | Number of overs bowled by the bowler in this innings. |
 | `maidens` | character | Number of maiden overs bowled by the bowler in this innings, in which no runs were conceded. |
 | `conceded` | character | Total runs conceded by the bowler during their spell in this innings. |
@@ -143,36 +143,36 @@ ESPN endpoint.
 
 | col_name | type | description |
 |---|---|---|
-| `team_id` | character | Unique team identifier. |
-| `home_away` | character | Game venue label ('home' or 'away'). |
-| `winner` | logical | Winner. |
-| `athlete_id` | character | Unique athlete identifier (ESPN). |
+| `team_id` | character |  |
+| `home_away` | character |  |
+| `winner` | logical |  |
+| `athlete_id` | character |  |
 | `athlete` | character | Reference or identifier string for the athlete associated with this row in the box score. |
-| `jersey` | character | Jersey number worn by the player. |
-| `starter` | logical | TRUE if the player was in the starting lineup; FALSE otherwise. |
-| `position` | character | Listed roster position (G, F, C, etc.). |
+| `jersey` | character |  |
+| `starter` | logical |  |
+| `position` | character |  |
 | `captain` | logical | Indicates whether the player was designated as a team captain for this game. |
 
 **game_info**
 
 | col_name | type | description |
 |---|---|---|
-| `venue_id` | character | Unique venue identifier. |
-| `venue_full_name` | character | Venue full name. |
+| `venue_id` | character |  |
+| `venue_full_name` | character |  |
 | `venue_short_name` | character | Abbreviated or shortened display name for the venue where the game was played. |
-| `venue_city` | character | Venue city. |
+| `venue_city` | character |  |
 | `venue_country` | character | Country name for the venue where the game was played. |
-| `attendance` | integer | Reported attendance. |
-| `officials` | character | Whether officials data is available. |
+| `attendance` | integer |  |
+| `officials` | character |  |
 
 **standings**
 
 | col_name | type | description |
 |---|---|---|
-| `group` | character | Stat group (e.g. "hitting", "pitching", "fielding"). |
-| `team` | character | Team-side label or team identifier. |
-| `team_id` | character | Unique team identifier. |
-| `rank` | integer | Position of the school within the poll for the given week (1 = top-ranked). |
+| `group` | character |  |
+| `team` | character |  |
+| `team_id` | character |  |
+| `rank` | integer |  |
 | `matches_played` | integer | Total number of matches played by the team in the current stage or competition group. |
 | `matches_won` | integer | Total number of matches won by the team in the current stage or competition group. |
 | `matches_lost` | integer | Total number of matches lost by the team in the current stage or competition group. |
@@ -182,7 +182,7 @@ ESPN endpoint.
 | `netrr` | double | Net Run Rate for the team, a tiebreaker metric used in cricket group standings. |
 | `for` | double | Total runs or score accumulated by the team across all matches in the group or stage. |
 | `against` | double | Total runs or score conceded by the team across all matches in the group or stage. |
-| `total` | character | Total. |
+| `total` | character |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 

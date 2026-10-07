@@ -77,20 +77,20 @@ Get player resources on a team.
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | integer | Unique player identifier. |
-| `first_name` | character | Player's first name. |
+| `player_id` | integer |  |
+| `first_name` | character |  |
 | `full_first_name` | character | Player's full given name including any middle names CBS records (Kieran James Ricardo); null throughout the US leagues and populated mainly in the soccer leagues. |
-| `last_name` | character | Player's last name. |
+| `last_name` | character |  |
 | `full_last_name` | character | Player's full family name as CBS records it, which can be longer than the display last_name; null throughout the US leagues and populated mainly in soccer. |
-| `nick_name` | character | Player nickname. |
-| `height` | character | Player height (string e.g. '6-2' or inches). |
-| `weight` | integer | Player weight in pounds. |
-| `experience` | integer | Years of professional experience. |
-| `school` | character | Team name. |
-| `home_town` | character | Home town of the player. |
+| `nick_name` | character |  |
+| `height` | character |  |
+| `weight` | integer |  |
+| `experience` | integer |  |
+| `school` | character |  |
+| `home_town` | character |  |
 | `debut` | character | Date of the player's debut for the team as CBS records it; null for every player in the captured leagues, so the shipped format is unverified. |
-| `birth_date` | character | Date of birth (YYYY-MM-DD). |
-| `birth_country` | character | Player birth country. |
+| `birth_date` | character |  |
+| `birth_country` | character |  |
 | `birth_country_code` | character | Lowercase three-letter code for the player's country of birth, e.g. eng, wal, fra; populated in the soccer leagues and null in the US ones. |
 | `nationality_country` | character | Country the player represents internationally, spelled out (England, Wales, France); can differ from birth_country for dual-eligible players. |
 | `nationality_country_code` | character | Lowercase three-letter code matching nationality_country, e.g. eng. |
@@ -105,7 +105,7 @@ Get player resources on a team.
 | `rankings` | character | Nested ranking entries for the player, JSON-encoded when present; null unless requested through the resources parameter. |
 | `player_outlook` | character | Nested fantasy-outlook copy for the player, JSON-encoded when present; null unless requested through the resources parameter. |
 | `meta_data` | character | Nested metadata block for the player, JSON-encoded when present; null unless requested through the resources parameter. |
-| `draft_info` | character | Draft information. |
+| `draft_info` | character |  |
 | `game_stats` | character | Nested per-game statistical lines for the player, JSON-encoded when present; null unless requested through the resources parameter. |
 | `combine_data` | character | Nested scouting-combine measurements for the player, JSON-encoded when present; null unless requested through the resources parameter. |
 
@@ -250,11 +250,11 @@ Get standings for a particular team.
 
 | col_name | type | description |
 |---|---|---|
-| `season_year` | integer | Season year string ('YYYY-YY' format). |
-| `season_type` | character | Season type (1=pre-season, 2=regular season, 3=postseason, 4=off-season for ESPN; or string label for WNBA Stats). |
-| `streak` | character | Current streak (e.g. 'W3' for three-game win streak). |
+| `season_year` | integer |  |
+| `season_type` | character |  |
+| `streak` | character |  |
 | `win_loss_record` | character | JSON-encoded array of the team's split records, one object per split carrying wins, losses, ties (plus shootout and overtime splits in the NHL) with a name and a type such as home, away, division, conference or last5. |
-| `season_id` | integer | Unique season identifier. |
+| `season_id` | integer |  |
 | `wins_number` | integer | Wins the team recorded over the season and season type of this row. |
 | `goals_for_goals` | integer | Goals the team scored, on the soccer and hockey standings shapes. |
 | `last_results_r2` | character | Second of the five form-guide slots CBS publishes for a soccer team, reported as Win, Loss or Draw. |
@@ -326,8 +326,8 @@ Get standings for a particular team.
 | `place_conference_rank` | integer | Rank the team holds within its conference, carried on the place block of the MLS standings shape. |
 | `place_division_rank` | character | Rank the team holds within its division, carried on the place block of the MLS standings shape; an empty string for leagues or seasons without divisions. |
 | `conference_conference_id` | integer | CBS conference identifier for the team's conference, paired with the conference name and abbreviation on the same block. |
-| `conference_name` | character | Full conference name. |
-| `conference_abbreviation` | character | Conference abbreviation. |
+| `conference_name` | character |  |
+| `conference_abbreviation` | character |  |
 | `basketball_nba_playoffs_indicator` | character | JSON-encoded array of the NBA clinching markers CBS attaches to the team, each an object with a type such as clinched-playoffs, division-first or conference-first. |
 | `points_for_per_game_points` | numeric | Points the team scored per game, on the NBA standings shape, e.g. 120.5. |
 | `magic_number_number` | character | Magic number CBS publishes for the team's clinching scenario; 0 or negative once the scenario no longer applies to a clinched team, and an empty string on rows where CBS computes none (preseason blocks). |
@@ -335,8 +335,8 @@ Get standings for a particular team.
 | `points_against_per_game_points` | numeric | Points the team conceded per game, on the NBA standings shape, e.g. 107.6. |
 | `conference_seed_seed` | character | Team's current seeding within its conference bracket. |
 | `conference_eos_seed_seed` | integer | Team's end-of-season conference seed, CBS's settled bracket position once the regular season is complete. |
-| `points_for` | character | Goals/points scored. |
-| `points_against` | character | Points allowed. |
+| `points_for` | character |  |
+| `points_against` | character |  |
 | `won_conference_tournament_won` | logical | Whether the team won its conference tournament, on the NCAA standings shape. |
 | `rpi_rank` | integer | Team's national rank by the rpi_rpi rating, 1 being best. |
 | `rpi_rpi` | character | Ratings Percentage Index for the team on the NCAA standings shape, a leading-dot four-decimal string such as .4021. |

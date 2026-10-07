@@ -304,7 +304,7 @@ A single-row wide DataFrame (polars by default). When `raw=True` returns the raw
 | `team_color` | character | Team primary color (hex without leading '#'). |
 | `team_alternate_color` | character | Team alternate color (hex without leading '#'). |
 | `team_is_active` | logical | TRUE if the team is currently active. |
-| `team_logo_href` | character | Default team logo URL. |
+| `team_logo_href` | character |  |
 
 **Example**
 
@@ -342,11 +342,11 @@ Polars dataframe containing schedule dates for the requested season. Returns Non
 | `time_valid` | logical | Time valid. |
 | `neutral_site` | logical | Neutral site. |
 | `conference_competition` | logical | Conference competition. |
-| `play_by_play_available` | logical | Whether play-by-play data is available. |
+| `play_by_play_available` | logical |  |
 | `recent` | logical | Recent. |
 | `start_date` | character | Start date (YYYY-MM-DD). |
 | `broadcast` | character | Broadcast information string. |
-| `highlights` | integer | Game highlight urls. |
+| `highlights` | integer |  |
 | `notes_type` | character | Notes type. |
 | `notes_headline` | character | Notes headline. |
 | `broadcast_market` | character | Broadcast market label (e.g. 'national', 'home'). |

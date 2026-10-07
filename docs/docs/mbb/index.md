@@ -121,8 +121,8 @@ Each `sportsdataverse` function and its equivalent in the sister R package, [`ho
 | [`load_mbb_schedule_crosswalk`](reference/loaders/other#load_mbb_schedule_crosswalk) | [`load_mbb_schedule_crosswalk`](https://hoopR.sportsdataverse.org/reference/load_mbb_schedule_crosswalk.html) |
 | [`load_mbb_shots`](reference/loaders/other#load_mbb_shots) | [`load_mbb_shots`](https://hoopR.sportsdataverse.org/reference/load_mbb_shots.html) |
 | [`load_mbb_standings`](reference/loaders/other#load_mbb_standings) | [`load_mbb_standings`](https://hoopR.sportsdataverse.org/reference/load_mbb_standings.html) |
-| [`load_mbb_team_crosswalk`](reference/loaders/team#load_mbb_team_crosswalk) | [`load_mbb_team_crosswalk`](https://hoopR.sportsdataverse.org/reference/load_mbb_team_crosswalk.html) |
-| [`load_mbb_team_group_seasons`](reference/loaders/team#load_mbb_team_group_seasons) | [`load_mbb_team_group_seasons`](https://hoopR.sportsdataverse.org/reference/load_mbb_team_group_seasons.html) |
+| [`load_mbb_team_crosswalk`](reference/loaders/other#load_mbb_team_crosswalk) | [`load_mbb_team_crosswalk`](https://hoopR.sportsdataverse.org/reference/load_mbb_team_crosswalk.html) |
+| [`load_mbb_team_group_seasons`](reference/loaders/other#load_mbb_team_group_seasons) | [`load_mbb_team_group_seasons`](https://hoopR.sportsdataverse.org/reference/load_mbb_team_group_seasons.html) |
 | [`load_ncaa_mbb_lineups`](reference/loaders/ncaa#load_ncaa_mbb_lineups) | [`load_ncaa_mbb_lineups`](https://hoopR.sportsdataverse.org/reference/load_ncaa_mbb_lineups.html) |
 | [`load_ncaa_mbb_matchup_stints`](reference/loaders/ncaa#load_ncaa_mbb_matchup_stints) | [`load_ncaa_mbb_matchup_stints`](https://hoopR.sportsdataverse.org/reference/load_ncaa_mbb_matchup_stints.html) |
 | [`load_ncaa_mbb_pbp`](reference/loaders/ncaa#load_ncaa_mbb_pbp) | [`load_ncaa_mbb_pbp`](https://hoopR.sportsdataverse.org/reference/load_ncaa_mbb_pbp.html) |
