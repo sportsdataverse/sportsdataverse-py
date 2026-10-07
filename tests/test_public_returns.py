@@ -92,3 +92,15 @@ def test_a_class_is_not_asked_for_a_returns_section(monkeypatch):
     monkeypatch.setattr(generate, "_source_scope_objects", lambda: {("mbb", "Event"): "tests.test_public_returns"})
     monkeypatch.setattr(generate, "_scope_callable", lambda label, name: Event)
     assert generate._returns_gaps() == []
+
+
+def _gap_names(label: str) -> list[str]:
+    return [n for lg, n in generate._returns_gaps() if lg == label]
+
+
+def test_pwhl_has_no_returns_gap():
+    assert not _gap_names("pwhl")
+
+
+def test_global_scope_has_no_returns_gap():
+    assert not _gap_names("global")

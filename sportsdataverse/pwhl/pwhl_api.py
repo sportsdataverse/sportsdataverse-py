@@ -46,7 +46,21 @@ _LG = "pwhl"
 
 
 def pwhl_season_id(return_as_pandas: bool = False) -> Any:
-    """All PWHL seasons with end-year + game-type labels (HockeyTech ``seasons``)."""
+    """All PWHL seasons with end-year + game-type labels (HockeyTech ``seasons``).
+
+    Args:
+        return_as_pandas: Return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars.DataFrame: One row per season: ``season_id`` (Int64), ``season_name``, ``season_short``,
+            ``career``, ``playoff``, ``start_date``, ``end_date``, ``season_yr`` (Int64, the END year)
+            and ``game_type_label``. A pandas DataFrame when ``return_as_pandas`` is True.
+
+    Raises:
+        NoDataError: The feed answered 404.
+        AssetFetchError: The fetch failed: a non-2xx status, an empty or unparseable body, or an
+            ``Undefined Tab`` / ``InvalidView`` sentinel.
+    """
     return P.parse_seasons(hockeytech_api(_LG, "modulekit", "seasons", {}), return_as_pandas)
 
 
@@ -56,7 +70,12 @@ def most_recent_pwhl_season() -> int:
     The highest ``season_yr`` of a regular season that is not a one-off event, so a
     preseason the feed lists before its regular season is not a default.
 
-    Raises ``NoDataError`` when the seasons feed lists none, ``AssetFetchError`` when it fails.
+    Returns:
+        int: The newest regular season's END year (2026 = the 2025-26 season).
+
+    Raises:
+        NoDataError: The seasons feed lists no regular season.
+        AssetFetchError: The seasons feed failed.
     """
     return most_recent_season_yr(pwhl_season_id(), _LG)
 
@@ -71,7 +90,25 @@ def pwhl_schedule(
     season_id: Optional[int] = None,
     return_as_pandas: bool = False,
 ) -> Any:
-    """PWHL schedule — one row per game (matches fastRhockey ``pwhl_schedule``)."""
+    """PWHL schedule — one row per game (matches fastRhockey ``pwhl_schedule``).
+
+    Args:
+        season: Season as an END year (2026 = the 2025-26 season). Defaults to the newest regular
+            season when neither ``season`` nor ``season_id`` is given.
+        season_id: The HockeyTech season id, when it is already known.
+        return_as_pandas: Return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars.DataFrame: One row per game: ``game_id``, ``game_date``, ``game_status``, ``home_team`` /
+            ``home_team_id`` / ``home_score``, ``away_team`` / ``away_team_id`` / ``away_score``,
+            ``venue``, ``season_id`` and ``game_type`` (all String). With no season given, the feed's
+            whole recent window. A pandas DataFrame when ``return_as_pandas`` is True.
+
+    Raises:
+        NoDataError: The feed answered 404.
+        AssetFetchError: The fetch failed: a non-2xx status, an empty or unparseable body, or an
+            ``Undefined Tab`` / ``InvalidView`` sentinel.
+    """
     params: dict = {
         "numberofdaysback": 10000,
         "numberofdaysahead": 10000,
@@ -108,6 +145,24 @@ def pwhl_pbp(game_id: int, return_as_pandas: bool = False) -> Any:
     all go through the module-level ``hockeytech_api`` reference so tests can
     monkeypatch ``sportsdataverse.pwhl.pwhl_api.hockeytech_api`` to intercept
     all calls without touching the shared core.
+
+    Args:
+        game_id: The HockeyTech game id.
+        return_as_pandas: Return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars.DataFrame: One row per event (shot, goal, penalty, faceoff, hit, goalie
+            change ...): ``game_id``, ``event``, ``team_id``, ``period_of_game``,
+            ``time_of_period``, rink ``x_coord`` / ``y_coord`` (Float64, hockeytech_a canvas)
+            and the transforms above, the primary / second / third player and goalie ids
+            (Float64) and names, the plus / minus skaters on a goal, ``is_goal_twin``, and the
+            clock, geometry, game-meta and on-ice columns listed above. A pandas DataFrame
+            when ``return_as_pandas`` is True.
+
+    Raises:
+        NoDataError: The feed answered 404.
+        AssetFetchError: The fetch failed: a non-2xx status, an empty or unparseable body,
+            or an ``Undefined Tab`` / ``InvalidView`` sentinel.
     """
     payload = hockeytech_api(_LG, "statviewfeed", "gameCenterPlayByPlay", {"game_id": game_id, "league_id": ""})
     df = P.parse_pbp(payload, pbp_style="hockeytech_a", game_id=game_id)
@@ -130,7 +185,25 @@ def pwhl_standings(
     season_id: Optional[int] = None,
     return_as_pandas: bool = False,
 ) -> Any:
-    """PWHL standings — one row per team."""
+    """PWHL standings — one row per team.
+
+    Args:
+        season: Season as an END year (2026 = the 2025-26 season). Defaults to the newest regular
+            season when neither ``season`` nor ``season_id`` is given.
+        season_id: The HockeyTech season id, when it is already known.
+        return_as_pandas: Return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars.DataFrame: One row per team: ``team``, ``team_code``, ``team_rank`` and ``wins`` (Int64),
+            and ``games_played``, ``losses``, ``regulation_wins``, ``non_reg_wins``, ``non_reg_losses``,
+            ``points``, ``goals_for``, ``goals_against``, ``games_remaining``, ``percentage`` and
+            ``overall_rank`` (String, as the feed ships them). A pandas DataFrame when ``return_as_pandas`` is True.
+
+    Raises:
+        NoDataError: The feed answered 404.
+        AssetFetchError: The fetch failed: a non-2xx status, an empty or unparseable body, or an
+            ``Undefined Tab`` / ``InvalidView`` sentinel.
+    """
     sid = resolve_season_id(_LG, season=_season_or_latest(season, season_id), season_id=season_id)
     payload = hockeytech_api(
         _LG,
@@ -153,7 +226,23 @@ def pwhl_teams(
     season_id: Optional[int] = None,
     return_as_pandas: bool = False,
 ) -> Any:
-    """PWHL teams for a given season."""
+    """PWHL teams for a given season.
+
+    Args:
+        season: Season as an END year (2026 = the 2025-26 season). Defaults to the newest regular
+            season when neither ``season`` nor ``season_id`` is given.
+        season_id: The HockeyTech season id, when it is already known.
+        return_as_pandas: Return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars.DataFrame: One row per team: ``team_id``, ``team_name``, ``team_code``,
+            ``team_nickname``, ``team_label``, ``division`` and ``team_logo`` (String). A pandas DataFrame when ``return_as_pandas`` is True.
+
+    Raises:
+        NoDataError: The feed answered 404.
+        AssetFetchError: The fetch failed: a non-2xx status, an empty or unparseable body, or an
+            ``Undefined Tab`` / ``InvalidView`` sentinel.
+    """
     sid = resolve_season_id(_LG, season=_season_or_latest(season, season_id), season_id=season_id)
     return P.parse_teams(hockeytech_api(_LG, "modulekit", "teamsbyseason", {"season": sid}), return_as_pandas)
 
@@ -164,7 +253,27 @@ def pwhl_team_roster(
     season_id: Optional[int] = None,
     return_as_pandas: bool = False,
 ) -> Any:
-    """PWHL team roster for a given team + season."""
+    """PWHL team roster for a given team + season.
+
+    Args:
+        team_id: The HockeyTech team id.
+        season: Season as an END year (2026 = the 2025-26 season). Defaults to the newest regular
+            season when neither ``season`` nor ``season_id`` is given.
+        season_id: The HockeyTech season id, when it is already known.
+        return_as_pandas: Return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars.DataFrame: One row per rostered player: ``player_id``, ``person_id``, names
+            (``first_name``, ``last_name``, ``display_name``), ``position``, ``tp_jersey_number``,
+            ``shoots`` / ``catches``, ``height`` / ``weight``, ``birthdate``, home and birth places,
+            ``rookie``, ``veteran_status``, ``draft_status`` and ``player_image`` (String, as the feed
+            ships them). A pandas DataFrame when ``return_as_pandas`` is True.
+
+    Raises:
+        NoDataError: The feed answered 404.
+        AssetFetchError: The fetch failed: a non-2xx status, an empty or unparseable body, or an
+            ``Undefined Tab`` / ``InvalidView`` sentinel.
+    """
     sid = resolve_season_id(_LG, season=_season_or_latest(season, season_id), season_id=season_id)
     return P.parse_roster(
         hockeytech_api(_LG, "modulekit", "roster", {"team_id": team_id, "season_id": sid}),
@@ -173,7 +282,24 @@ def pwhl_team_roster(
 
 
 def pwhl_player_stats(player_id: int, return_as_pandas: bool = False) -> Any:
-    """PWHL player season stats across all seasons."""
+    """PWHL player season stats across all seasons.
+
+    Args:
+        player_id: The HockeyTech player id.
+        return_as_pandas: Return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars.DataFrame: One row per season (and team) the player played: ``season_id``,
+            ``season_name``, ``playoff``, ``team_id`` / ``team_name`` / ``team_code``,
+            ``games_played``, ``goals``, ``assists``, ``points``, ``plus_minus``, ``penalty_minutes``,
+            power-play / short-handed / shootout splits, ``shots``, ``faceoff_wins`` /
+            ``faceoff_attempts``, ``ice_time`` and ``stat_type`` (String, as the feed ships them). A pandas DataFrame when ``return_as_pandas`` is True.
+
+    Raises:
+        NoDataError: The feed answered 404.
+        AssetFetchError: The fetch failed: a non-2xx status, an empty or unparseable body, or an
+            ``Undefined Tab`` / ``InvalidView`` sentinel.
+    """
     return P.parse_player_stats(
         hockeytech_api(_LG, "modulekit", "player", {"player_id": player_id, "category": "seasonstats"}),
         return_as_pandas,
@@ -190,6 +316,23 @@ def pwhl_leaders(
     NOTE: the ``leadersExtended`` endpoint uses ``season_id`` (integer) to filter
     by season, not ``season`` (name string). The resolved integer is passed as the
     ``season_id`` param so historical-season requests return results.
+
+    Args:
+        season: Season as an END year (2026 = the 2025-26 season). Defaults to the newest regular
+            season when neither ``season`` nor ``season_id`` is given.
+        season_id: The HockeyTech season id, when it is already known.
+        return_as_pandas: Return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars.DataFrame: One row per ranked skater (points and goals leaders): ``rank`` (Int64),
+            ``player_id``, ``name``, ``jersey_number``, ``position``, ``team_id`` / ``team_name`` /
+            ``team_code``, ``stat_formatted`` and ``type_formatted`` (String), plus photo and logo
+            URLs. A pandas DataFrame when ``return_as_pandas`` is True.
+
+    Raises:
+        NoDataError: The feed answered 404.
+        AssetFetchError: The fetch failed: a non-2xx status, an empty or unparseable body, or an
+            ``Undefined Tab`` / ``InvalidView`` sentinel.
     """
     sid = resolve_season_id(_LG, season=_season_or_latest(season, season_id), season_id=season_id)
     payload = hockeytech_api(
@@ -208,12 +351,43 @@ def pwhl_leaders(
 
 
 def pwhl_game_summary(game_id: int) -> dict:
-    """PWHL game summary — dict of frames (game/goals/penalties/shots_by_period/three_stars)."""
+    """PWHL game summary — dict of frames (game/goals/penalties/shots_by_period/three_stars).
+
+    Args:
+        game_id: The HockeyTech game id.
+
+    Returns:
+        dict[str, polars.DataFrame]: ``game`` (one row: ``game_id``, ``date``, ``status``, ``venue``,
+            ``attendance``, both teams and scores), ``goals`` (one row per goal with the scorer, both
+            assists and the plus / minus skaters), ``penalties`` (one row per penalty),
+            ``shots_by_period`` (``side``, ``period``, ``shots``) and ``three_stars``.
+
+    Raises:
+        NoDataError: The feed answered 404.
+        AssetFetchError: The fetch failed: a non-2xx status, an empty or unparseable body, or an
+            ``Undefined Tab`` / ``InvalidView`` sentinel.
+    """
     return P.parse_game_summary(hockeytech_api(_LG, "gc", "gamesummary", {"game_id": game_id}), game_id=game_id)
 
 
 def pwhl_scorebar(return_as_pandas: bool = False) -> Any:
-    """PWHL live scorebar (today ± 3 days)."""
+    """PWHL live scorebar (today ± 3 days).
+
+    Args:
+        return_as_pandas: Return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars.DataFrame: One row per game in the window, as the feed ships it (String): ``id``,
+            ``season_id``, ``game_date`` / ``game_date_iso8601``, ``scheduled_time``, ``home_id`` /
+            ``home_code`` / ``home_long_name`` / ``home_goals``, the same ``visitor_*`` columns,
+            ``period``, ``game_clock``, ``game_status`` / ``game_status_string``, ``venue_name``, both
+            teams' records, and broadcast URLs. A pandas DataFrame when ``return_as_pandas`` is True.
+
+    Raises:
+        NoDataError: The feed answered 404.
+        AssetFetchError: The fetch failed: a non-2xx status, an empty or unparseable body, or an
+            ``Undefined Tab`` / ``InvalidView`` sentinel.
+    """
     return P.parse_scorebar(
         hockeytech_api(
             _LG,
@@ -230,6 +404,19 @@ def pwhl_game_info(game_id: int, return_as_pandas: bool = False) -> Any:
 
     NOTE: returns an empty frame pending a captured fixture + correct endpoint wiring
     (A1.8 follow-up); not yet functional.
+
+    Args:
+        game_id: The HockeyTech game id.
+        return_as_pandas: Return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars.DataFrame: A zero-row frame today -- the ``statviewfeed`` reply is not a ``SiteKit``
+            envelope, so there is nothing to parse (see the note above). A pandas DataFrame when ``return_as_pandas`` is True.
+
+    Raises:
+        NoDataError: The feed answered 404.
+        AssetFetchError: The fetch failed: a non-2xx status, an empty or unparseable body, or an
+            ``Undefined Tab`` / ``InvalidView`` sentinel.
     """
     return P.parse_game_info(
         hockeytech_api(_LG, "statviewfeed", "gameSummary", {"game_id": game_id}),
@@ -242,6 +429,19 @@ def pwhl_player_box(game_id: int, return_as_pandas: bool = False) -> Any:
 
     NOTE: returns an empty frame pending a captured fixture + correct endpoint wiring
     (A1.8 follow-up); not yet functional.
+
+    Args:
+        game_id: The HockeyTech game id.
+        return_as_pandas: Return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars.DataFrame: A zero-row frame today -- the ``statviewfeed`` reply is not a ``SiteKit``
+            envelope, so there is nothing to parse (see the note above). A pandas DataFrame when ``return_as_pandas`` is True.
+
+    Raises:
+        NoDataError: The feed answered 404.
+        AssetFetchError: The fetch failed: a non-2xx status, an empty or unparseable body, or an
+            ``Undefined Tab`` / ``InvalidView`` sentinel.
     """
     return P.parse_player_box(
         hockeytech_api(_LG, "statviewfeed", "gameSummary", {"game_id": game_id}),
@@ -254,6 +454,19 @@ def pwhl_player_info(player_id: int, return_as_pandas: bool = False) -> Any:
 
     NOTE: returns an empty frame pending a captured fixture + correct endpoint wiring
     (A1.8 follow-up); not yet functional.
+
+    Args:
+        player_id: The HockeyTech player id.
+        return_as_pandas: Return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars.DataFrame: A zero-row frame today -- the ``statviewfeed`` reply is not a ``SiteKit``
+            envelope, so there is nothing to parse (see the note above). A pandas DataFrame when ``return_as_pandas`` is True.
+
+    Raises:
+        NoDataError: The feed answered 404.
+        AssetFetchError: The fetch failed: a non-2xx status, an empty or unparseable body, or an
+            ``Undefined Tab`` / ``InvalidView`` sentinel.
     """
     return P.parse_player_info(
         hockeytech_api(_LG, "statviewfeed", "player", {"player_id": player_id}),
@@ -270,7 +483,23 @@ def pwhl_player_game_log(player_id: int, return_as_pandas: bool = False) -> Any:
 
 
 def pwhl_player_search(name: str, return_as_pandas: bool = False) -> Any:
-    """Search for PWHL players by name."""
+    """Search for PWHL players by name.
+
+    Args:
+        name: The search text, matched against player names.
+        return_as_pandas: Return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars.DataFrame: One row per matching player (String): ``person_id``, ``player_id``,
+            ``first_name`` / ``last_name``, ``position``, ``shoots`` / ``catches``, ``height`` /
+            ``weight``, ``birthdate`` and birthplace, ``last_team_name`` / ``last_team_code``,
+            ``role_name``, ``active``, ``last_active_date`` and the match ``score``. A pandas DataFrame when ``return_as_pandas`` is True.
+
+    Raises:
+        NoDataError: The feed answered 404.
+        AssetFetchError: The fetch failed: a non-2xx status, an empty or unparseable body, or an
+            ``Undefined Tab`` / ``InvalidView`` sentinel.
+    """
     return P.parse_player_search(
         hockeytech_api(_LG, "modulekit", "searchplayers", {"search_term": name}),
         return_as_pandas,
@@ -283,7 +512,27 @@ def pwhl_stats(
     position: str = "skaters",
     return_as_pandas: bool = False,
 ) -> Any:
-    """PWHL aggregate stats by season and position."""
+    """PWHL aggregate stats by season and position.
+
+    Args:
+        season: Season as an END year (2026 = the 2025-26 season). Defaults to the newest regular
+            season when neither ``season`` nor ``season_id`` is given.
+        season_id: The HockeyTech season id, when it is already known.
+        position: ``"skaters"`` (default) or ``"goalies"``.
+        return_as_pandas: Return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars.DataFrame: One row per player for that season and position, as the feed ships it
+            (String, ~90 columns): ``player_id``, ``name``, ``team_id`` / ``team_name`` /
+            ``team_code``, ``position``, ``games_played``, and the counting, per-game and ice-time
+            stats of that position (skaters: ``goals``, ``assists``, ``points``, ``plus_minus``,
+            ``shots``, ``hits``, ``penalty_minutes`` ...). A pandas DataFrame when ``return_as_pandas`` is True.
+
+    Raises:
+        NoDataError: The feed answered 404.
+        AssetFetchError: The fetch failed: a non-2xx status, an empty or unparseable body, or an
+            ``Undefined Tab`` / ``InvalidView`` sentinel.
+    """
     sid = resolve_season_id(_LG, season=_season_or_latest(season, season_id), season_id=season_id)
     return P.parse_stats(
         hockeytech_api(_LG, "modulekit", "statviewtype", {"type": position, "season_id": sid}),

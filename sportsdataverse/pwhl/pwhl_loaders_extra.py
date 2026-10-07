@@ -39,27 +39,82 @@ __all__ = [
 
 
 def load_pwhl_team_box(seasons, return_as_pandas: bool = False):
-    """Alias of load_pwhl_team_boxscores() for naming parity with fastRhockey (R)."""
+    """Alias of load_pwhl_team_boxscores() for naming parity with fastRhockey (R).
+
+    Args:
+        seasons: A season or list of seasons, as END years (2026 = the 2025-26 season).
+        return_as_pandas: Return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars.DataFrame: Exactly what :func:`load_pwhl_team_boxscores` returns -- one row per team per game, the
+            requested seasons stacked; see its Returns table for the columns. A season with no
+            published asset is skipped with a warning. A pandas DataFrame when
+            ``return_as_pandas`` is True.
+    """
     return load_pwhl_team_boxscores(seasons, return_as_pandas=return_as_pandas)
 
 
 def load_pwhl_player_box(seasons, return_as_pandas: bool = False):
-    """Alias of load_pwhl_player_boxscores() for naming parity with fastRhockey (R)."""
+    """Alias of load_pwhl_player_boxscores() for naming parity with fastRhockey (R).
+
+    Args:
+        seasons: A season or list of seasons, as END years (2026 = the 2025-26 season).
+        return_as_pandas: Return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars.DataFrame: Exactly what :func:`load_pwhl_player_boxscores` returns -- one row per player per game, the
+            requested seasons stacked; see its Returns table for the columns. A season with no
+            published asset is skipped with a warning. A pandas DataFrame when
+            ``return_as_pandas`` is True.
+    """
     return load_pwhl_player_boxscores(seasons, return_as_pandas=return_as_pandas)
 
 
 def load_pwhl_skater_box(seasons, return_as_pandas: bool = False):
-    """Alias of load_pwhl_skater_boxscores() for naming parity with fastRhockey (R)."""
+    """Alias of load_pwhl_skater_boxscores() for naming parity with fastRhockey (R).
+
+    Args:
+        seasons: A season or list of seasons, as END years (2026 = the 2025-26 season).
+        return_as_pandas: Return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars.DataFrame: Exactly what :func:`load_pwhl_skater_boxscores` returns -- one row per skater per game, the
+            requested seasons stacked; see its Returns table for the columns. A season with no
+            published asset is skipped with a warning. A pandas DataFrame when
+            ``return_as_pandas`` is True.
+    """
     return load_pwhl_skater_boxscores(seasons, return_as_pandas=return_as_pandas)
 
 
 def load_pwhl_goalie_box(seasons, return_as_pandas: bool = False):
-    """Alias of load_pwhl_goalie_boxscores() for naming parity with fastRhockey (R)."""
+    """Alias of load_pwhl_goalie_boxscores() for naming parity with fastRhockey (R).
+
+    Args:
+        seasons: A season or list of seasons, as END years (2026 = the 2025-26 season).
+        return_as_pandas: Return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars.DataFrame: Exactly what :func:`load_pwhl_goalie_boxscores` returns -- one row per goalie per game, the
+            requested seasons stacked; see its Returns table for the columns. A season with no
+            published asset is skipped with a warning. A pandas DataFrame when
+            ``return_as_pandas`` is True.
+    """
     return load_pwhl_goalie_boxscores(seasons, return_as_pandas=return_as_pandas)
 
 
 def load_pwhl_schedule(seasons, return_as_pandas: bool = False):
-    """Alias of load_pwhl_schedules() for naming parity with fastRhockey (R)."""
+    """Alias of load_pwhl_schedules() for naming parity with fastRhockey (R).
+
+    Args:
+        seasons: A season or list of seasons, as END years (2026 = the 2025-26 season).
+        return_as_pandas: Return a pandas DataFrame instead of polars.
+
+    Returns:
+        polars.DataFrame: Exactly what :func:`load_pwhl_schedules` returns -- one row per game, the
+            requested seasons stacked; see its Returns table for the columns. A season with no
+            published asset is skipped with a warning. A pandas DataFrame when
+            ``return_as_pandas`` is True.
+    """
     return load_pwhl_schedules(seasons, return_as_pandas=return_as_pandas)
 
 

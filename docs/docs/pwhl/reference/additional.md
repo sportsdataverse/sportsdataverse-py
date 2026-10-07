@@ -81,8 +81,12 @@ Alias of load_pwhl_goalie_boxscores() for naming parity with fastRhockey (R).
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `seasons` |  |  |  |
-| `return_as_pandas` | `bool` | `False` |  |
+| `seasons` |  |  | A season or list of seasons, as END years (2026 = the 2025-26 season). |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+Exactly what `load_pwhl_goalie_boxscores` returns -- one row per goalie per game, the requested seasons stacked; see its Returns table for the columns. A season with no published asset is skipped with a warning. A pandas DataFrame when `return_as_pandas` is True.
 
 ### load_pwhl_player_box {#load_pwhl_player_box}
 
@@ -94,8 +98,12 @@ Alias of load_pwhl_player_boxscores() for naming parity with fastRhockey (R).
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `seasons` |  |  |  |
-| `return_as_pandas` | `bool` | `False` |  |
+| `seasons` |  |  | A season or list of seasons, as END years (2026 = the 2025-26 season). |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+Exactly what `load_pwhl_player_boxscores` returns -- one row per player per game, the requested seasons stacked; see its Returns table for the columns. A season with no published asset is skipped with a warning. A pandas DataFrame when `return_as_pandas` is True.
 
 ### load_pwhl_schedule {#load_pwhl_schedule}
 
@@ -107,8 +115,12 @@ Alias of load_pwhl_schedules() for naming parity with fastRhockey (R).
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `seasons` |  |  |  |
-| `return_as_pandas` | `bool` | `False` |  |
+| `seasons` |  |  | A season or list of seasons, as END years (2026 = the 2025-26 season). |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+Exactly what `load_pwhl_schedules` returns -- one row per game, the requested seasons stacked; see its Returns table for the columns. A season with no published asset is skipped with a warning. A pandas DataFrame when `return_as_pandas` is True.
 
 ### load_pwhl_skater_box {#load_pwhl_skater_box}
 
@@ -120,8 +132,12 @@ Alias of load_pwhl_skater_boxscores() for naming parity with fastRhockey (R).
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `seasons` |  |  |  |
-| `return_as_pandas` | `bool` | `False` |  |
+| `seasons` |  |  | A season or list of seasons, as END years (2026 = the 2025-26 season). |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+Exactly what `load_pwhl_skater_boxscores` returns -- one row per skater per game, the requested seasons stacked; see its Returns table for the columns. A season with no published asset is skipped with a warning. A pandas DataFrame when `return_as_pandas` is True.
 
 ### load_pwhl_team_box {#load_pwhl_team_box}
 
@@ -133,8 +149,12 @@ Alias of load_pwhl_team_boxscores() for naming parity with fastRhockey (R).
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `seasons` |  |  |  |
-| `return_as_pandas` | `bool` | `False` |  |
+| `seasons` |  |  | A season or list of seasons, as END years (2026 = the 2025-26 season). |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+Exactly what `load_pwhl_team_boxscores` returns -- one row per team per game, the requested seasons stacked; see its Returns table for the columns. A season with no published asset is skipped with a warning. A pandas DataFrame when `return_as_pandas` is True.
 
 ## HockeyTech / LeagueStat
 
@@ -189,8 +209,12 @@ NOTE: returns an empty frame pending a captured fixture + correct endpoint wirin
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `game_id` | `int` |  |  |
-| `return_as_pandas` | `bool` | `False` |  |
+| `game_id` | `int` |  | The HockeyTech game id. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+A zero-row frame today -- the `statviewfeed` reply is not a `SiteKit` envelope, so there is nothing to parse (see the note above). A pandas DataFrame when `return_as_pandas` is True.
 
 ### pwhl_game_shifts {#pwhl_game_shifts}
 
@@ -239,7 +263,11 @@ PWHL game summary — dict of frames (game/goals/penalties/shots_by_period/three
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `game_id` | `int` |  |  |
+| `game_id` | `int` |  | The HockeyTech game id. |
+
+**Returns**
+
+`game` (one row: `game_id`, `date`, `status`, `venue`, `attendance`, both teams and scores), `goals` (one row per goal with the scorer, both assists and the plus / minus skaters), `penalties` (one row per penalty), `shots_by_period` (`side`, `period`, `shots`) and `three_stars`.
 
 ### pwhl_leaders {#pwhl_leaders}
 
@@ -255,12 +283,13 @@ by season, not `season` (name string). The resolved integer is passed as the
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `season` | `Optional[int]` | `None` |  |
-| `season_id` | `Optional[int]` | `None` |  |
-| `return_as_pandas` | `bool` | `False` |  |
+| `season` | `Optional[int]` | `None` | Season as an END year (2026 = the 2025-26 season). Defaults to the newest regular season when neither `season` nor `season_id` is given. |
+| `season_id` | `Optional[int]` | `None` | The HockeyTech season id, when it is already known. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
 
 **Returns**
 
+One row per ranked skater (points and goals leaders): `rank` (Int64), `player_id`, `name`, `jersey_number`, `position`, `team_id` / `team_name` / `team_code`, `stat_formatted` and `type_formatted` (String), plus photo and logo URLs. A pandas DataFrame when `return_as_pandas` is True.
 
 | col_name | type | description |
 |---|---|---|
@@ -313,8 +342,12 @@ all calls without touching the shared core.
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `game_id` | `int` |  |  |
-| `return_as_pandas` | `bool` | `False` |  |
+| `game_id` | `int` |  | The HockeyTech game id. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+One row per event (shot, goal, penalty, faceoff, hit, goalie change ...): `game_id`, `event`, `team_id`, `period_of_game`, `time_of_period`, rink `x_coord` / `y_coord` (Float64, hockeytech_a canvas) and the transforms above, the primary / second / third player and goalie ids (Float64) and names, the plus / minus skaters on a goal, `is_goal_twin`, and the clock, geometry, game-meta and on-ice columns listed above. A pandas DataFrame when `return_as_pandas` is True.
 
 ### pwhl_player_box {#pwhl_player_box}
 
@@ -329,8 +362,12 @@ NOTE: returns an empty frame pending a captured fixture + correct endpoint wirin
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `game_id` | `int` |  |  |
-| `return_as_pandas` | `bool` | `False` |  |
+| `game_id` | `int` |  | The HockeyTech game id. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+A zero-row frame today -- the `statviewfeed` reply is not a `SiteKit` envelope, so there is nothing to parse (see the note above). A pandas DataFrame when `return_as_pandas` is True.
 
 ### pwhl_player_game_log {#pwhl_player_game_log}
 
@@ -358,8 +395,12 @@ NOTE: returns an empty frame pending a captured fixture + correct endpoint wirin
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `player_id` | `int` |  |  |
-| `return_as_pandas` | `bool` | `False` |  |
+| `player_id` | `int` |  | The HockeyTech player id. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+A zero-row frame today -- the `statviewfeed` reply is not a `SiteKit` envelope, so there is nothing to parse (see the note above). A pandas DataFrame when `return_as_pandas` is True.
 
 ### pwhl_player_search {#pwhl_player_search}
 
@@ -371,11 +412,12 @@ Search for PWHL players by name.
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `name` | `str` |  |  |
-| `return_as_pandas` | `bool` | `False` |  |
+| `name` | `str` |  | The search text, matched against player names. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
 
 **Returns**
 
+One row per matching player (String): `person_id`, `player_id`, `first_name` / `last_name`, `position`, `shoots` / `catches`, `height` / `weight`, `birthdate` and birthplace, `last_team_name` / `last_team_code`, `role_name`, `active`, `last_active_date` and the match `score`. A pandas DataFrame when `return_as_pandas` is True.
 
 | col_name | type | description |
 |---|---|---|
@@ -418,11 +460,12 @@ PWHL player season stats across all seasons.
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `player_id` | `int` |  |  |
-| `return_as_pandas` | `bool` | `False` |  |
+| `player_id` | `int` |  | The HockeyTech player id. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
 
 **Returns**
 
+One row per season (and team) the player played: `season_id`, `season_name`, `playoff`, `team_id` / `team_name` / `team_code`, `games_played`, `goals`, `assists`, `points`, `plus_minus`, `penalty_minutes`, power-play / short-handed / shootout splits, `shots`, `faceoff_wins` / `faceoff_attempts`, `ice_time` and `stat_type` (String, as the feed ships them). A pandas DataFrame when `return_as_pandas` is True.
 
 | col_name | type | description |
 |---|---|---|
@@ -534,12 +577,13 @@ PWHL schedule — one row per game (matches fastRhockey `pwhl_schedule`).
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `season` | `Optional[int]` | `None` |  |
-| `season_id` | `Optional[int]` | `None` |  |
-| `return_as_pandas` | `bool` | `False` |  |
+| `season` | `Optional[int]` | `None` | Season as an END year (2026 = the 2025-26 season). Defaults to the newest regular season when neither `season` nor `season_id` is given. |
+| `season_id` | `Optional[int]` | `None` | The HockeyTech season id, when it is already known. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
 
 **Returns**
 
+One row per game: `game_id`, `game_date`, `game_status`, `home_team` / `home_team_id` / `home_score`, `away_team` / `away_team_id` / `away_score`, `venue`, `season_id` and `game_type` (all String). With no season given, the feed's whole recent window. A pandas DataFrame when `return_as_pandas` is True.
 
 | col_name | type | description |
 |---|---|---|
@@ -566,10 +610,11 @@ PWHL live scorebar (today ± 3 days).
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `return_as_pandas` | `bool` | `False` |  |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
 
 **Returns**
 
+One row per game in the window, as the feed ships it (String): `id`, `season_id`, `game_date` / `game_date_iso8601`, `scheduled_time`, `home_id` / `home_code` / `home_long_name` / `home_goals`, the same `visitor_*` columns, `period`, `game_clock`, `game_status` / `game_status_string`, `venue_name`, both teams' records, and broadcast URLs. A pandas DataFrame when `return_as_pandas` is True.
 
 | col_name | type | description |
 |---|---|---|
@@ -732,12 +777,13 @@ PWHL standings — one row per team.
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `season` | `Optional[int]` | `None` |  |
-| `season_id` | `Optional[int]` | `None` |  |
-| `return_as_pandas` | `bool` | `False` |  |
+| `season` | `Optional[int]` | `None` | Season as an END year (2026 = the 2025-26 season). Defaults to the newest regular season when neither `season` nor `season_id` is given. |
+| `season_id` | `Optional[int]` | `None` | The HockeyTech season id, when it is already known. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
 
 **Returns**
 
+One row per team: `team`, `team_code`, `team_rank` and `wins` (Int64), and `games_played`, `losses`, `regulation_wins`, `non_reg_wins`, `non_reg_losses`, `points`, `goals_for`, `goals_against`, `games_remaining`, `percentage` and `overall_rank` (String, as the feed ships them). A pandas DataFrame when `return_as_pandas` is True.
 
 | col_name | type | description |
 |---|---|---|
@@ -768,13 +814,14 @@ PWHL aggregate stats by season and position.
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `season` | `Optional[int]` | `None` |  |
-| `season_id` | `Optional[int]` | `None` |  |
-| `position` | `str` | `'skaters'` |  |
-| `return_as_pandas` | `bool` | `False` |  |
+| `season` | `Optional[int]` | `None` | Season as an END year (2026 = the 2025-26 season). Defaults to the newest regular season when neither `season` nor `season_id` is given. |
+| `season_id` | `Optional[int]` | `None` | The HockeyTech season id, when it is already known. |
+| `position` | `str` | `'skaters'` | `"skaters"` (default) or `"goalies"`. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
 
 **Returns**
 
+One row per player for that season and position, as the feed ships it (String, ~90 columns): `player_id`, `name`, `team_id` / `team_name` / `team_code`, `position`, `games_played`, and the counting, per-game and ice-time stats of that position (skaters: `goals`, `assists`, `points`, `plus_minus`, `shots`, `hits`, `penalty_minutes` ...). A pandas DataFrame when `return_as_pandas` is True.
 
 | col_name | type | description |
 |---|---|---|
@@ -893,13 +940,14 @@ PWHL team roster for a given team + season.
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `team_id` | `int` |  |  |
-| `season` | `Optional[int]` | `None` |  |
-| `season_id` | `Optional[int]` | `None` |  |
-| `return_as_pandas` | `bool` | `False` |  |
+| `team_id` | `int` |  | The HockeyTech team id. |
+| `season` | `Optional[int]` | `None` | Season as an END year (2026 = the 2025-26 season). Defaults to the newest regular season when neither `season` nor `season_id` is given. |
+| `season_id` | `Optional[int]` | `None` | The HockeyTech season id, when it is already known. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
 
 **Returns**
 
+One row per rostered player: `player_id`, `person_id`, names (`first_name`, `last_name`, `display_name`), `position`, `tp_jersey_number`, `shoots` / `catches`, `height` / `weight`, `birthdate`, home and birth places, `rookie`, `veteran_status`, `draft_status` and `player_image` (String, as the feed ships them). A pandas DataFrame when `return_as_pandas` is True.
 
 | col_name | type | description |
 |---|---|---|
@@ -959,12 +1007,13 @@ PWHL teams for a given season.
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `season` | `Optional[int]` | `None` |  |
-| `season_id` | `Optional[int]` | `None` |  |
-| `return_as_pandas` | `bool` | `False` |  |
+| `season` | `Optional[int]` | `None` | Season as an END year (2026 = the 2025-26 season). Defaults to the newest regular season when neither `season` nor `season_id` is given. |
+| `season_id` | `Optional[int]` | `None` | The HockeyTech season id, when it is already known. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
 
 **Returns**
 
+One row per team: `team_id`, `team_name`, `team_code`, `team_nickname`, `team_label`, `division` and `team_logo` (String). A pandas DataFrame when `return_as_pandas` is True.
 
 | col_name | type | description |
 |---|---|---|
@@ -1349,7 +1398,9 @@ Newest PWHL regular season as an end-year integer.
 The highest `season_yr` of a regular season that is not a one-off event, so a
 preseason the feed lists before its regular season is not a default.
 
-Raises `NoDataError` when the seasons feed lists none, `AssetFetchError` when it fails.
+**Returns**
+
+The newest regular season's END year (2026 = the 2025-26 season).
 
 ### pwhl_season_id {#pwhl_season_id}
 
@@ -1361,10 +1412,11 @@ All PWHL seasons with end-year + game-type labels (HockeyTech `seasons`).
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `return_as_pandas` | `bool` | `False` |  |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
 
 **Returns**
 
+One row per season: `season_id` (Int64), `season_name`, `season_short`, `career`, `playoff`, `start_date`, `end_date`, `season_yr` (Int64, the END year) and `game_type_label`. A pandas DataFrame when `return_as_pandas` is True.
 
 | col_name | type | description |
 |---|---|---|

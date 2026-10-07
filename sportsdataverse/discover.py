@@ -187,6 +187,13 @@ def function_count(league: Optional[str] = None) -> Union[Dict[str, int], int]:
 
         function_count(league="mlb")
         178
+
+    Args:
+        league: A league prefix (``"mlb"``); ``None`` counts every league.
+
+    Returns:
+        dict[str, int] | int: ``{league: count}`` for every league, or the one league's count
+            when ``league`` is given.
     """
     if league is not None:
         names = list_functions(league=league)

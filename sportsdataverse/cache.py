@@ -189,7 +189,11 @@ def set_cache_mode(mode: str) -> None:
 
 
 def get_cache_mode() -> str:
-    """Return the current cache mode."""
+    """Return the current cache mode.
+
+    Returns:
+        str: ``"off"``, ``"memory"`` or ``"filesystem"``.
+    """
     return _MODE
 
 
@@ -444,9 +448,12 @@ def _drop_matching(glob: str) -> int:
 def cache_stats() -> Dict[str, Any]:
     """Return a snapshot of the cache for debugging / inspection.
 
-    Returns a dict with ``mode``, ``entries``, and ``disk_bytes`` (only
-    populated when mode=filesystem). Cheap — doesn't read the cached
-    bodies, just counts + sizes.
+    Cheap — doesn't read the cached bodies, just counts + sizes.
+
+    Returns:
+        dict[str, Any]: ``mode`` (the current cache mode), ``entries`` (cached responses: memory
+            entries, or cache files in filesystem mode) and ``disk_bytes`` (total size of those files;
+            0 unless the mode is ``"filesystem"``).
     """
     out: Dict[str, Any] = {"mode": _MODE, "entries": 0, "disk_bytes": 0}
     if _MODE == "memory":
