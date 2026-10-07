@@ -3,8 +3,10 @@
 Run ONCE in a throwaway virtual environment (never sdv-py's):
 
     uv venv --python 3.12 /tmp/sa-oracle
-    uv pip install --python /tmp/sa-oracle/Scripts/python.exe "socceraction==1.5.3" "numpy<2" "statsbombpy>=1.13" "multimethod<2"
-    /tmp/sa-oracle/Scripts/python.exe tools/models/freeze_socceraction_oracle.py --game-id 8658 --out tests/fixtures/socceraction
+    uv pip install --python /tmp/sa-oracle/bin/python "socceraction==1.5.3" "numpy<2" "statsbombpy>=1.13" "multimethod<2"
+    /tmp/sa-oracle/bin/python tools/models/freeze_socceraction_oracle.py --game-id 8658 --out tests/fixtures/socceraction
+
+On Windows the interpreter is ``<venv>/Scripts/python.exe``.
 
 Writes ``<game_id>_spadl.csv`` (socceraction's DIRECT StatsBomb converter, with names, after
 ``play_left_to_right`` so every action attacks left to right), ``<game_id>_xt_fit.json``

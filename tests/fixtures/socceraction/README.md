@@ -15,7 +15,7 @@
 | `8658_xt_fit_log.txt` | versions and the iteration count socceraction printed. | same run |
 
 The script runs only in a throwaway venv, installed with
-`uv pip install --python <venv>/Scripts/python.exe "socceraction==1.5.3" "numpy<2" "statsbombpy>=1.13" "multimethod<2"`
+`uv pip install --python <venv>/bin/python "socceraction==1.5.3" "numpy<2" "statsbombpy>=1.13" "multimethod<2"` (on Windows the interpreter is `<venv>/Scripts/python.exe`)
 (`multimethod<2` is required: pandera 0.17.2 fails to import against multimethod 2.x). Resolved versions: socceraction 1.5.3,
 numpy 1.26.4, multimethod 1.12, pandera 0.17.2, python 3.12.6. socceraction's pins are incompatible with sdv-py's lock. The oracle is the direct converter, not socceraction's kloppy converter, because
 the latter requests `Orientation.HOME_AWAY`, which flips the home side each period in kloppy 3.19.

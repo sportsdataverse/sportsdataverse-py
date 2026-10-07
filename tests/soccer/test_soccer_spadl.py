@@ -369,12 +369,12 @@ def test_parity_with_the_socceraction_oracle() -> None:
         & (pl.col("result_name") == pl.col("result_name_o"))
         & (pl.col("bodypart_name") == pl.col("bodypart_name_o"))
     )
-    coords = (
-        ((pl.col("start_x") - pl.col("start_x_o")).abs() < 1e-6)
-        & ((pl.col("start_y") - pl.col("start_y_o")).abs() < 1e-6)
-        & ((pl.col("end_x") - pl.col("end_x_o")).abs() < 1e-6)
-        & ((pl.col("end_y") - pl.col("end_y_o")).abs() < 1e-6)
-    ).fill_null(True)
+
+    def same(c: str) -> pl.Expr:
+        a, b = pl.col(c), pl.col(c + "_o")
+        return (a.is_null() & b.is_null()) | ((a - b).abs() < 1e-6)
+
+    coords = same("start_x") & same("start_y") & same("end_x") & same("end_y")
     disagree = real.filter(~(agree & coords))
     allowed = set(_PARITY_ALLOWLIST)
     unexpected = sorted(set(disagree["original_event_id"].to_list()) - allowed)
