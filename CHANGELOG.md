@@ -473,7 +473,7 @@ directly: a nullable boolean is `Boolean` with a null, a nullable integer is `In
 with a null, a column that is null on every row is `Utf8`, and no column carries a
 `"nan"` / `"None"` string. Column names, order and values are unchanged; the
 returns tables of the affected endpoints now document the corrected types
-(`numeric` -> `integer`, `character` -> `logical`).
+(`numeric` -> `integer`, `character` -> `logical`, and `numeric` -> `character` for columns that are null on every captured row).
 
 ### Fixed — a failed fetch in the hand-written ESPN scrapers raises instead of being parsed (BREAKING)
 

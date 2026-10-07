@@ -13,9 +13,10 @@ are correctness issues rather than formatting:
   ``"nwsl::Football_Team::<32-hex>"``). Any column named ``id`` / ``*_id`` /
   ``*_ids`` is pinned to ``Utf8``, and a float-typed one is routed through
   ``Int64`` first so a nullable integer id can never stringify to ``"123.0"``.
-* **Nested cells are stringified.** ``pandas.json_normalize`` flattens nested
-  objects to dotted columns, but list-valued cells stay Python lists, which
-  polars rejects when the element types are mixed. Those are JSON-encoded --
+* **Nested cells are stringified.** Nested objects flatten to ``_``-joined
+  columns in ``pandas.json_normalize`` order (without pandas), but list-valued
+  cells would be Python lists, which polars rejects when the element types are
+  mixed. Those are JSON-encoded --
   except list-valued *id* cells (ASA serializes ``team_id`` as a list for a
   player who featured for several clubs), which are comma-joined so the column
   stays a readable Utf8 join key.
@@ -140,7 +141,8 @@ def rows_to_frame(rows: Sequence[Any]) -> pl.DataFrame:
     Missing values stay nulls: a nullable boolean column is ``Boolean`` (never
     the string ``"nan"``), a nullable integer column is ``Int64`` (never
     promoted to ``Float64``), and a column that is null on every row is
-    ``Utf8``. A column mixing scalar classes (bool / number / str) is
+    ``Utf8`` (no non-null value means no evidence of a type, and Utf8 is the
+    lossless choice for a later concat). A column mixing scalar classes (bool / number / str) is
     stringified so the frame is always buildable.
 
     Args:
@@ -194,7 +196,7 @@ def rows_to_frame(rows: Sequence[Any]) -> pl.DataFrame:
             columns[name] = [None if v is None else str(v) for v in values]
         elif kinds == {"number"} and any(isinstance(v, float) for v in values):
             columns[name] = [None if v is None else float(v) for v in values]
-    df = pl.DataFrame(columns, infer_schema_length=None)
+    df = pl.DataFrame(columns)  # the per-column kind pass above decides the dtypes
     all_null = [c for c, t in df.schema.items() if t == pl.Null]
     if all_null:
         df = df.with_columns(pl.col(all_null).cast(pl.String))
