@@ -4118,14 +4118,17 @@ def _preserved_docs_corpus() -> str:
     across a generation run (never clobbered/rewritten), so reading them here is
     idempotent. The autodoc gap judgment unions this with the freshly-rendered
     generated pages so a name already covered by a conceptual page is not
-    redundantly re-documented on an autodoc page."""
+    redundantly re-documented on an autodoc page.
+
+    ``tutorials/`` is excluded: a rendered notebook shows a call, not a signature or a
+    Returns table, so a helper a tutorial uses still needs its reference block."""
     if not DOCS.exists():
         return ""
     roots = _generated_docs_roots()
     parts = []
     for f in sorted(DOCS.rglob("*.md")):
         top = f.relative_to(DOCS).parts[0]
-        if top in roots:
+        if top in roots or top == "tutorials":
             continue
         parts.append(f.read_text(encoding="utf-8"))
     return "\n".join(parts)

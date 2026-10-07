@@ -50,3 +50,16 @@ def test_the_committed_intro_table_is_current():
     text = (generate.DOCS / "intro.md").read_text(encoding="utf-8")
     body = generate.render_intro_sources_table(generate._autodoc_names_by_scope())
     assert generate._patch_between_markers(text, BEGIN, END, body) == text
+
+
+def test_a_tutorial_mention_does_not_count_as_reference_documentation(tmp_path, monkeypatch):
+    """A tutorial shows a call, not a signature or a Returns table. Counting it as coverage made the
+    package page DROP the API block of every helper a notebook happened to use (metric_curves,
+    rolling_windows) the moment the tutorials were re-rendered."""
+    (tmp_path / "tutorials").mkdir()
+    (tmp_path / "tutorials" / "01_quickstart.md").write_text("metric_curves(df)\n", encoding="utf-8")
+    (tmp_path / "quality-of-life.md").write_text("see `concept_helper`\n", encoding="utf-8")
+    monkeypatch.setattr(generate, "DOCS", tmp_path)
+    corpus = generate._preserved_docs_corpus()
+    assert "concept_helper" in corpus
+    assert "metric_curves" not in corpus

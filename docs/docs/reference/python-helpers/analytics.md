@@ -196,6 +196,56 @@ ev.filter(pl.col("window_unit") == "dropback").head()
 ev.group_by("entity_id", "season").agg(pl.col("value").mean())
 ```
 
+### metric_curves {#metric_curves}
+
+`metric_curves(attempts: 'pl.DataFrame', league: 'str') -> 'pl.DataFrame'`
+
+League, team and player rate curves from an `ATTEMPT_SCHEMA` frame.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `attempts` | `DataFrame` |  | one row per attempt x metric (from an adapter), any number of seasons. |
+| `league` | `str` |  | `"cfb"`, `"nfl"`, `"nba"` or `"wnba"`. The curves are league-agnostic; `league` only supplies the default `id_source` (`ID_SOURCE`) when the attempts frame carries no `id_source` column. An adapter's column wins, so the ESPN adapter on NFL pbp keeps `espn` whatever `league` says. |
+
+**Returns**
+
+one row per (season, entity, metric, down, bucket), `OUTPUT_SCHEMA`: * `entity_type` `league` (`entity_id` null), `team` and `player` (only attempts credited to a player; `team_id` is the team of most of them). * `x_lo` / `x_hi`: the attempt's bucket, inclusive / exclusive. * `attempts`, `successes`, `rate = successes / attempts` (exact), `epa_per_att` (mean EPA of the attempts that have one, else null). * `down`: only set for `success_by_down_distance`. A bucket with no attempt has no row.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | integer | Season the curve covers, keyed as the source asset keys it (CFB/NFL starting year, nba_stats ENDING year, WNBA calendar year). |
+| `entity_type` | character | Aggregation level of the row: "league" (every attempt), "team" or "player". |
+| `entity_id` | character | Text id of the entity the row describes, per entity_type: team rows carry the source's team id (ESPN pos_team_id, nflfastR posteam, stats.nba team_id) and player rows the source's player id (ESPN athlete id, nflfastR gsis id until the NFL producer re-keys it to ESPN, stats.nba person_id); null on league rows. |
+| `entity_name` | character | Display name of the player or team as the source pbp/shots carry it; null on league rows. |
+| `team_id` | character | On player rows, the team of most of the player's attempts that season (text id); null on league and team rows. |
+| `id_source` | character | Id system of the row's ids, stamped by the adapter that built the attempts (espn, gsis, nba_stats or wnba_stats); the league argument only supplies the default when the attempts frame carries no id_source column. |
+| `metric` | character | Curve name: fg_pct_by_distance, cmp_pct_by_air_yards, epa_by_air_yards, fourth_conv_by_ytg, success_by_down_distance or fg_pct_by_shot_distance. |
+| `down` | integer | Down (1-4), the second axis of success_by_down_distance; null for every other metric. |
+| `x_lo` | double | Inclusive lower edge of the bucket on the metric's axis, in yards (kick distance, air yards, yards to go) or feet (shot distance); the edges are fixed per metric in metric_curves.BUCKET_EDGES. |
+| `x_hi` | double | Exclusive upper edge of the bucket on the same axis as x_lo; an attempt at exactly x_hi belongs to the next bucket up. |
+| `attempts` | integer | Attempts in the bucket (field goals, pass attempts, fourth-down plays, scrimmage plays or shots); always positive, since an empty bucket has no row. |
+| `successes` | integer | Successful attempts in the bucket: makes, completions, EPA successes (EPA > 0), fourth-down conversions or made shots. |
+| `rate` | double | successes divided by attempts, computed exactly (no smoothing). |
+| `epa_per_att` | double | Mean EPA of the bucket's attempts that carry an EPA; null for shots and for kicks without EPA. |
+
+**Example**
+
+```python
+import polars as pl
+from sportsdataverse.cfb import load_cfb_pbp
+from sportsdataverse.metric_curves import FOOTBALL_ATTEMPT_COLUMNS, football_attempts, metric_curves
+
+pbp = load_cfb_pbp(2024).select(FOOTBALL_ATTEMPT_COLUMNS)
+curves = metric_curves(football_attempts(pbp), "cfb")
+curves.filter((pl.col("metric") == "fg_pct_by_distance") & (pl.col("entity_type") == "league"))
+
+# Pipeline next step (one line)
+
+curves.filter((pl.col("entity_type") == "player") & (pl.col("attempts") >= 10)).sort("rate", descending=True)
+```
+
 ### nflfastr_attempts {#nflfastr_attempts}
 
 `nflfastr_attempts(pbp: 'pl.DataFrame') -> 'pl.DataFrame'`
@@ -253,6 +303,51 @@ from sportsdataverse.metric_curves import NFLFASTR_ATTEMPT_COLUMNS, metric_curve
 pbp = load_nfl_model_pbp([2024]).select(NFLFASTR_ATTEMPT_COLUMNS)
 curves = metric_curves(nflfastr_attempts(pbp), "nfl")
 curves.filter((pl.col("metric") == "cmp_pct_by_air_yards") & (pl.col("entity_type") == "league"))
+```
+
+### rolling_windows {#rolling_windows}
+
+`rolling_windows(events: 'pl.DataFrame', season: 'int', windows: 'dict[str, tuple[int, ...]] | None' = None) -> 'pl.DataFrame'`
+
+Rolling-window form for every entity with an event in `season`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `events` | `DataFrame` |  | an `EVENT_SCHEMA` frame covering every season up to `season` (the career history the baselines read). |
+| `season` | `int` |  | the season the rows describe; later seasons in `events` are ignored. |
+| `windows` | `dict[str, tuple[int, ...]] \| None` | `None` | `{window_unit: (sizes...)}`; defaults to `WINDOWS`. |
+
+**Returns**
+
+one row per (entity, unit, metric, window size), `OUTPUT_SCHEMA`. Null / NaN event values are dropped before any window is computed. Columns: * `cur`: the mean of the entity's last `window_n` events through `season`. * `prev`: the mean of the `window_n` events immediately before `cur`'s window; null unless a full window of earlier history exists. * `season_start`: the mean of the `window_n` events immediately before season `season` started -- i.e. the entity's form entering the season, not counting any event actually played in `season`. * `career_baseline`: the mean of every event before `cur`'s window, including earlier events within `season` itself; null unless at least one full window of history precedes it. * `qualified`: `True` iff `n == window_n` -- the window is fully populated (not padded by a short career). Consumers building a "hottest" list should filter on this first. * `team_id` / `entity_name`: taken from the entity's single latest event through `season`, so a player who changed teams mid-season is labelled with their current team. * `delta_prev_rank`: 1 = biggest riser, ties share the lowest rank; null unless `qualified` and `prev` exists.
+
+**Example**
+
+```python
+import polars as pl
+from sportsdataverse.cfb import load_cfb_pbp, load_cfb_schedule
+from sportsdataverse.rolling_windows import FOOTBALL_PBP_COLUMNS, football_events, rolling_windows
+
+pbp = load_cfb_pbp(2024).select(FOOTBALL_PBP_COLUMNS)
+sched = load_cfb_schedule(2024)
+game_dates = sched.select(
+    pl.col("game_id").cast(pl.Int64),
+    game_date=pl.col("start_date")
+    .str.to_datetime(time_zone="UTC")
+    .dt.convert_time_zone("America/New_York")
+    .dt.date(),
+)
+ev = football_events(pbp, game_dates)
+rw = rolling_windows(ev, 2024)
+rw.filter(pl.col("window_unit") == "dropback").head()
+
+# Pipeline next step (one line)
+
+rw.filter(pl.col("qualified") & (pl.col("delta_prev_rank") == 1)).select(
+    "entity_name", "window_unit", "window_n"
+)
 ```
 
 ### shot_attempts {#shot_attempts}
