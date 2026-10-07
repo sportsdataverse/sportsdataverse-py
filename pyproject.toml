@@ -770,6 +770,7 @@ files = [
     "sportsdataverse/registry/__init__.py",
     "sportsdataverse/registry/__main__.py",
     "sportsdataverse/soccer/soccer_events.py",
+    "sportsdataverse/soccer/spadl.py",
     "sportsdataverse/f1/f1_parsers.py",
     "sportsdataverse/f1/f1_extra.py",
     "sdv_docs/__init__.py",
