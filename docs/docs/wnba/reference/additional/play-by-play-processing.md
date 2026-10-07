@@ -1,7 +1,7 @@
 ---
 title: "WNBA — additional Python functions — Play-by-play processing"
 sidebar_label: "Play-by-play processing"
-sidebar_position: 4
+sidebar_position: 5
 description: "WNBA — additional Python functions — Play-by-play processing — function reference in sdv-py, the SportsDataverse Python package."
 ---
 # WNBA — additional Python functions — Play-by-play processing
@@ -21,80 +21,6 @@ R `build_athlete_identity_lookup`: athlete_id -> identity from team rosters.
 **Returns**
 
 athlete_id (str) -> identity fields for `helper_wbb_player_season_stats`.
-
-### build_wnba_season_wp {#build_wnba_season_wp}
-
-`build_wnba_season_wp(season: 'int', *, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"`
-
-A WNBA season's play-by-play with win-probability columns joined in.
-
-Loads the season's play-by-play, schedule, and team boxscores, builds a
-leakage-free weekly as-of pregame anchor per game from the WNBA ratings
-engine (`league_id="10"`), scores every play through the bundled
-in-game win-probability artifact, and returns the full `load_wnba_pbp`
-frame with `pregame_home_prob` + `home_win_prob` appended -- the
-enrich-in-place shape that overwrites the season's
-`play_by_play_<season>.parquet` release asset.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `season` | `int` |  | Season year (e.g. `2024`); bounded by `load_wnba_pbp` release availability. |
-| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
-
-**Returns**
-
-The season's `load_wnba_pbp` frame (every column preserved) with the two WP columns `pregame_home_prob` + `home_win_prob` appended (both `Float64`), sorted by `game_id` then `game_play_number`.
-
-**Example**
-
-```python
-from sportsdataverse.wnba import build_wnba_season_wp
-wp = build_wnba_season_wp(2024)
-wp.select("game_id", "game_play_number", "home_win_prob").head()
-
-# Pandas output
-
-wp_pd = build_wnba_season_wp(2024, return_as_pandas=True)
-```
-
-### espn_wnba_pbp {#espn_wnba_pbp}
-
-`espn_wnba_pbp(game_id: 'int', raw=False, **kwargs) -> 'Dict'`
-
-espn_wnba_pbp() - Pull the game by id. Data from API endpoints - `wnba/playbyplay`, `wnba/summary`
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `game_id` | `int` |  | Unique game_id, can be obtained from wnba_schedule(). |
-| `raw` |  | `False` |  |
-
-**Returns**
-
-Dictionary of game data with keys - "gameId", "plays", "winprobability", "boxscore", "header", "broadcasts", "videos", "playByPlaySource", "standings", "leaders", "seasonseries", "timeouts", "pickcenter", "againstTheSpread", "odds", "predictor", "espnWP", "gameInfo", "season"
-
-**Example**
-
-```python
-from sportsdataverse.wnba import espn_wnba_pbp
-game = espn_wnba_pbp(game_id=401620238)  # 2024 WNBA Finals Game 1
-list(game.keys())  # ['gameId', 'plays', 'winprobability', ...]
-
-# Inspect the parsed plays and a header summary
-
-import polars as pl
-plays = pl.DataFrame(game["plays"])
-print(plays.shape)
-print(plays.select(["period", "time", "type.text", "text"]).head(5))
-
-# Fetch the unparsed payload for custom downstream parsing
-
-raw = espn_wnba_pbp(game_id=401620238, raw=True)
-sorted(raw.keys())[:5]  # raw ESPN summary keys, no flattening
-```
 
 ### wnba_enhanced_pbp {#wnba_enhanced_pbp}
 

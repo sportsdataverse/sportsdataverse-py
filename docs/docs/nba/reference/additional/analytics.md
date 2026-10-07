@@ -1,7 +1,7 @@
 ---
 title: "NBA — additional Python functions — Analytics: add_ctg–nba_tracking"
 sidebar_label: "Analytics: add_ctg–nba_tracking"
-sidebar_position: 8
+sidebar_position: 12
 description: "NBA — additional Python functions — Analytics: add_ctg–nba_tracking — function reference in sdv-py, the SportsDataverse Python package."
 ---
 # NBA — additional Python functions — Analytics: add_ctg–nba_tracking
@@ -188,6 +188,91 @@ game's own team pace), then summed — the result is fully deterministic.
 **Returns**
 
 One row per player: `player_id`, the STATS` per-100 rates, `min` (total), `gp` (games). Empty frame with that schema on empty input.
+
+### build_play_context_shots {#build_play_context_shots}
+
+`build_play_context_shots(possessions: 'pl.DataFrame', enhanced_pbp: 'pl.DataFrame', *, putback_seconds: 'float' = 2.0) -> 'pl.DataFrame'`
+
+Build the per-shot frame carrying CTG's play context.
+
+CTG assigns context **per play**, not per possession: one possession can
+contain a transition miss, a halfcourt reset and a putback. This frame is the
+play-level view — one row per field-goal attempt.
+
+* `is_putback` — pbpstats `field_goal.py:112-144`: an **unassisted 2-point**
+  attempt whose preceding event is a **real offensive rebound by the same
+  player**, within `putback_seconds`. A three is never a putback.
+* `is_second_chance_shot` — the shot follows an offensive rebound earlier in
+  the same possession.
+* `shot_context` — `transition` / `putback` / `halfcourt`. **Transition
+  wins over putback**, reproducing CTG exactly: "if a team comes down in
+  transition and misses a shot but gets a putback, that putback is classified
+  as part of the overall transition event."
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `possessions` | `DataFrame` |  | Frame from `add_transition` (needs `is_transition`). |
+| `enhanced_pbp` | `DataFrame` |  | The enhanced PBP frame the possessions were built from. |
+| `putback_seconds` | `float` | `2.0` | Rebound-to-shot window. Default 2.0 (pbpstats). |
+
+**Returns**
+
+Polars DataFrame with schema `PLAY_CONTEXT_SHOTS_SCHEMA` — one row per field-goal attempt. Empty input returns the zero-row schema.
+
+**Example**
+
+```python
+shots = build_play_context_shots(poss, pbp)
+print(shots.group_by("shot_context").len())
+print(shots.filter(pl.col("is_putback") == True).height)
+```
+
+### build_possession_shooting {#build_possession_shooting}
+
+`build_possession_shooting(enhanced_pbp: 'pl.DataFrame') -> 'pl.DataFrame'`
+
+Build the per-shooter companion frame from an enhanced play-by-play DataFrame.
+
+Companion to `build_possessions`: instead of one team-level row per
+possession, emits one row per distinct shooter (`player_id`) per
+possession, with their own `fg2a/fg2m/fg3a/fg3m/fta/ftm` counts. Shares
+the same possession-group traversal as `build_possessions` via
+assemble` — the two frames are always built from a single
+consistent pass over the play-by-play. Consumed by WP2's luck-adjusted
+shooting response.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `enhanced_pbp` | `DataFrame` |  | Polars DataFrame with schema `ENHANCED_PBP_SCHEMA` (from `~sportsdataverse.nba.nba_enhanced_pbp.enhanced_pbp_from_payload`). An empty or malformed frame returns a zero-row frame with `POSSESSION_SHOOTING_SCHEMA` — never raises. |
+
+**Returns**
+
+Polars DataFrame with schema `POSSESSION_SHOOTING_SCHEMA`. One row per `(possession_number, player_id)` pair. Events with `person_id == 0` are skipped (unattributable to a shooter — they still count toward `build_possessions`' team-level totals). Per-possession sums of the six shooting columns match the corresponding `build_possessions` columns exactly.
+
+**Example**
+
+```python
+import json, pathlib
+from sportsdataverse.nba.nba_enhanced_pbp import enhanced_pbp_from_payload
+from sportsdataverse.nba.nba_possessions import build_possession_shooting
+
+payload = json.loads(pathlib.Path("playbyplayv3.json").read_text())
+pbp = enhanced_pbp_from_payload(payload)
+sh = build_possession_shooting(pbp)
+print(sh.shape, sh.schema["player_id"])
+
+# Per-player shooting totals
+
+import polars as pl
+totals = sh.group_by("player_id").agg(
+    pl.col("fg3m").sum(), pl.col("ftm").sum()
+)
+print(totals.head())
+```
 
 ### clutch_delta {#clutch_delta}
 
@@ -1342,77 +1427,4 @@ One row per player-season: `season:Int64, player_id:Utf8, player_name:Utf8, team
 from sportsdataverse.nba import nba_tracking_rim_protect_value
 df = nba_tracking_rim_protect_value(2024)
 print(df.sort("rim_protect_pts_saved", descending=True).head())
-```
-
-### nba_tracking_shot_diet_value {#nba_tracking_shot_diet_value}
-
-`nba_tracking_shot_diet_value(seasons: "'int | str | list'", *, league_id: 'str' = '00', per_mode: 'str' = 'Totals', by_position: 'bool' = True, positions: 'Optional[pl.DataFrame]' = None, return_as_pandas: 'bool' = False, _get_fn: 'Optional[Callable[..., dict]]' = None) -> "'Union[pl.DataFrame, pd.DataFrame]'"`
-
-Catch-&-shoot vs pull-up points-over-expected, per player-season.
-
-Fetches `CatchShoot` and `PullUpShot` (two calls), scores each with the
-shared engine, joins on `player_id` (dtype-asserted `Utf8` both sides
-first), and computes `shot_diet_delta = (cs_pts_oe / cs_fga) -
-(pu_pts_oe / pu_fga)` (null-safe on zero attempts) -- positive means the
-player's efficiency edge comes from catch-&-shoot, negative from
-off-the-dribble.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `seasons` | `int \| str \| list` |  | A single season or list of seasons. |
-| `league_id` | `str` | `'00'` | `"00"` NBA (default), `"10"` WNBA, `"20"` G-League. |
-| `per_mode` | `str` | `'Totals'` | `per_mode_simple` passed to each fetch (default `"Totals"`). |
-| `by_position` | `bool` | `True` | Compute each measure's baseline within role buckets (default); `False` forces one league-wide bucket. |
-| `positions` | `Optional[DataFrame]` | `None` | Optional pre-fetched positions frame. |
-| `return_as_pandas` | `bool` | `False` | Return a `pandas.DataFrame` instead of polars. |
-| `_get_fn` | `Optional[Callable[..., dict]]` | `None` | Injectable replacement for `nba_stats_leaguedashptstats`, dispatched by the `pt_measure_type` kwarg for each of the two calls. |
-
-**Returns**
-
-One row per player-season: `season:Int64, player_id:Utf8, player_name:Utf8, team_id:Utf8, position_bucket:Utf8, cs_fga:Float64, cs_pts:Float64, cs_pts_oe:Float64, pu_fga:Float64, pu_pts:Float64, pu_pts_oe:Float64, shot_diet_delta:Float64, league_id:Utf8`. Empty/malformed input returns a zero-row frame with this schema.
-
-**Example**
-
-```python
-from sportsdataverse.nba import nba_tracking_shot_diet_value
-df = nba_tracking_shot_diet_value(2024)
-print(df.sort("cs_pts_oe", descending=True).head())
-```
-
-### nba_tracking_touch_value {#nba_tracking_touch_value}
-
-`nba_tracking_touch_value(seasons: "'int | str | list'", *, league_id: 'str' = '00', per_mode: 'str' = 'Totals', by_position: 'bool' = True, positions: 'Optional[pl.DataFrame]' = None, return_as_pandas: 'bool' = False, _get_fn: 'Optional[Callable[..., dict]]' = None) -> "'Union[pl.DataFrame, pd.DataFrame]'"`
-
-Touch / possession-time value over expected, per player-season.
-
-Fetches the `Possessions` `leaguedashptstats` measure and computes
-`pts_per_touch_oe = pts - touches * bucket_pts_per_touch`.
-`time_of_poss_eff` is the z-score of `pts / time_of_poss` within the
-player's role bucket -- scoring economy per second of possession,
-independent of touch volume.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `seasons` | `int \| str \| list` |  | A single season or list of seasons. |
-| `league_id` | `str` | `'00'` | `"00"` NBA (default), `"10"` WNBA, `"20"` G-League. |
-| `per_mode` | `str` | `'Totals'` | `per_mode_simple` passed to the fetch (default `"Totals"`). |
-| `by_position` | `bool` | `True` | Compute the baseline within role buckets (default); `False` forces one league-wide bucket. |
-| `positions` | `Optional[DataFrame]` | `None` | Optional pre-fetched positions frame. |
-| `return_as_pandas` | `bool` | `False` | Return a `pandas.DataFrame` instead of polars. |
-| `_get_fn` | `Optional[Callable[..., dict]]` | `None` | Injectable replacement for `nba_stats_leaguedashptstats`. |
-
-**Returns**
-
-One row per player-season: `season:Int64, player_id:Utf8, player_name:Utf8, team_id:Utf8, position_bucket:Utf8, gp:Int64, min:Float64, touches:Float64, pts:Float64, touch_baseline_rate:Float64, touch_expected:Float64, pts_per_touch_oe:Float64, time_of_poss:Float64, time_of_poss_eff:Float64, league_id:Utf8`. Empty/malformed input returns a zero-row frame with this schema.
-
-**Example**
-
-```python
-from sportsdataverse.nba import nba_tracking_touch_value
-df = nba_tracking_touch_value(2024)
-print(df.sort("pts_per_touch_oe", descending=True).head())
 ```

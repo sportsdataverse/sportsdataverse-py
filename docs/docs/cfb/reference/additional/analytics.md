@@ -1,7 +1,7 @@
 ---
 title: "CFB — additional Python functions — Analytics"
 sidebar_label: "Analytics"
-sidebar_position: 6
+sidebar_position: 9
 description: "CFB — additional Python functions — Analytics — function reference in sdv-py, the SportsDataverse Python package."
 ---
 # CFB — additional Python functions — Analytics

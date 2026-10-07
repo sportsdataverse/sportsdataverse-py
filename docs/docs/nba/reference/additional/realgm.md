@@ -1,7 +1,7 @@
 ---
 title: "NBA — additional Python functions — RealGM"
 sidebar_label: "RealGM"
-sidebar_position: 5
+sidebar_position: 7
 description: "NBA — additional Python functions — RealGM — function reference in sdv-py, the SportsDataverse Python package."
 ---
 # NBA — additional Python functions — RealGM

@@ -173,6 +173,52 @@ roster_pd = espn_wbb_game_rosters(game_id=401587902, return_as_pandas=True)
 roster_pd.head()
 ```
 
+### espn_wbb_pbp {#espn_wbb_pbp}
+
+`espn_wbb_pbp(game_id: 'int', raw=False, **kwargs) -> 'Dict'`
+
+espn_wbb_pbp() - Pull the game by id. Data from API endpoints - `womens-college-basketball/playbyplay`,
+
+`womens-college-basketball/summary`
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `game_id` | `int` |  | Unique game_id, can be obtained from wbb_schedule(). |
+| `raw` | `bool` | `False` | If True, returns the raw json from the API endpoint. If False, returns a cleaned dictionary of datasets. |
+
+**Returns**
+
+Dictionary of game data with keys - "gameId", "plays", "winprobability", "boxscore", "header", "broadcasts", "videos", "playByPlaySource", "standings", "leaders", "timeouts", "pickcenter", "againstTheSpread", "odds", "predictor","espnWP", "gameInfo", "season"
+
+**Example**
+
+```python
+from sportsdataverse.wbb import espn_wbb_pbp
+game = espn_wbb_pbp(game_id=401587902)
+print(game["gameId"])
+print(len(game["plays"]))
+
+# Convert plays to a DataFrame and filter shooting plays
+
+import polars as pl
+plays = pl.DataFrame(game["plays"])
+shots = plays.filter(pl.col("scoring_play") | pl.col("shooting_play"))
+shots.select(["period_number", "clock_display_value", "team_id", "coordinate_x", "coordinate_y", "score_value", "text"]).head()
+
+# Convert to pandas for downstream analysis
+
+import pandas as pd
+shots_pd = pd.DataFrame(game["plays"])
+shots_pd[shots_pd["shooting_play"] == True].head()
+
+# Raw payload (skip the cleaning pipeline) for debugging
+
+raw = espn_wbb_pbp(game_id=401587902, raw=True)
+sorted(raw.keys())
+```
+
 ### espn_wbb_player_stats {#espn_wbb_player_stats}
 
 `espn_wbb_player_stats(athlete_id: 'int', season: 'int', *, season_type: 'str' = 'regular', total: 'bool' = False, raw: 'bool' = False, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'pl.DataFrame | pd.DataFrame | dict[str, Any]'`
@@ -564,54 +610,3 @@ _No description available._
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `event` |  |  |  |
-
-### strength_of_schedule {#strength_of_schedule}
-
-`strength_of_schedule(results: 'pl.DataFrame', ratings: 'pl.DataFrame', *, league: 'str' = 'mens') -> 'pl.DataFrame'`
-
-Per-team SoS + Quad 1-4 record + WAB from completed games and ratings.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `results` | `DataFrame` |  | Completed games with `game_id, season, home_team_id, away_team_id, home_score, away_score, neutral_site`. |
-| `ratings` | `DataFrame` |  | One row per team with `season, team_id, adj_em, rank` (the `mbb_team_ratings` output). Team-id dtype must match `results`. |
-| `league` | `str` | `'mens'` | `"mens"` or `"womens"` (quad thresholds, HFA, bubble EM). |
-
-**Returns**
-
-One row per (season, team_id): `season, team_id, sos, sos_rank, wab, quad1_w .. quad4_l, quality_wins`. `sos` is the mean opponent `adj_em` (rank 1 = hardest schedule); quads follow the NET venue-adjusted opponent-rank thresholds; `quality_wins` is Quad-1 + Quad-2 wins; `wab` is actual wins minus a bubble-quality team's expected wins against the same schedule. Empty input returns the schema with zero rows.
-
-**Example**
-
-```python
-from sportsdataverse.mbb.mbb_strength_of_schedule import strength_of_schedule
-resume = strength_of_schedule(results, ratings)
-```
-
-### wbb_strength_of_schedule {#wbb_strength_of_schedule}
-
-`wbb_strength_of_schedule(seasons: 'list[int]', *, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
-
-Women's season-level SoS / Quad / WAB résumé.
-
-Delegates to `sportsdataverse.mbb.mbb_strength_of_schedule.mbb_strength_of_schedule` with `league="womens"` (WBB loaders + women's constants).
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `seasons` | `list[int]` |  | Seasons to compute (e.g. `[2024]`). |
-| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
-
-**Returns**
-
-One row per (season, team_id): `season, team_id, sos, sos_rank, wab, quad1_w .. quad4_l, quality_wins` -- see the mbb core for the full contract.
-
-**Example**
-
-```python
-from sportsdataverse.wbb import wbb_strength_of_schedule
-wbb_strength_of_schedule([2024]).sort("wab", descending=True).head(20)
-```

@@ -1,7 +1,7 @@
 ---
 title: "NBA — additional Python functions — Models and calculators: predict_total–win_prob"
 sidebar_label: "Models and calculators: predict_total–win_prob"
-sidebar_position: 7
+sidebar_position: 11
 description: "NBA — additional Python functions — Models and calculators: predict_total–win_prob — function reference in sdv-py, the SportsDataverse Python package."
 ---
 # NBA — additional Python functions — Models and calculators: predict_total–win_prob

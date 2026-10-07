@@ -1,7 +1,7 @@
 ---
 title: "WBB — additional Python functions — Analytics"
 sidebar_label: "Analytics"
-sidebar_position: 8
+sidebar_position: 10
 description: "WBB — additional Python functions — Analytics — function reference in sdv-py, the SportsDataverse Python package."
 ---
 # WBB — additional Python functions — Analytics
@@ -110,6 +110,252 @@ candidates if there's more than one) and finally `lineup_fixer`
 **Returns**
 
 The lineup(s) ending in this clump, enriched with possession counts. Empty if `clump.lineups` is empty (see the module docstring's landmine-index note -- unreachable via `calculate_possessions_by_event`).
+
+### build_3p_shot_info {#build_3p_shot_info}
+
+`build_3p_shot_info(p: 'LineupStatSet') -> 'OffLuckShotInfo3P'`
+
+3P-only shot-decomposition wrapper.
+
+Public port of `build3PShotInfo` (`LuckUtils.ts:741-759`) --
+remaps build_shot_info`'s generic keys to the 3pm`/
+3pa`/3p` suffixes used throughout the luck-adjustment engine.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `p` | `LineupStatSet` |  | The player's `LineupStatSet`/`IndivStatSet`-shaped dict. |
+
+**Returns**
+
+`{"shot_info_ast_3pm", "shot_info_early_3pa", "shot_info_scramble_3pa", "shot_info_unast_3pm", "shot_info_unknown_3pM", "shot_info_total_3p"}`.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_luck import build_3p_shot_info
+
+info = build_3p_shot_info(player)
+print(info["shot_info_total_3p"])
+```
+
+### build_adjusted_3p {#build_adjusted_3p}
+
+`build_adjusted_3p(p: 'LineupStatSet', info: 'OffLuckShotInfo3P') -> 'OffLuckAdj3P'`
+
+3P-only approx-unassisted/assisted-FG% wrapper.
+
+Public port of `buildAdjusted3P` (`LuckUtils.ts:812-835`, "retained
+for bwc [backwards compat]" per the upstream comment) -- a thin remap of
+build_adjusted_fg` called with `shot_type="3p"`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `p` | `LineupStatSet` |  | The (typically base-period) player dict driving `off_3p`/ `off_3p_ast`. |
+| `info` | `OffLuckShotInfo3P` |  | An `build_3p_shot_info`-shaped dict (the "biggest sample available" per the upstream comment -- normally the base period, not the sample being luck-adjusted). |
+
+**Returns**
+
+`{"base3P", "unassisted3P", "assisted3P", "baseAssistPct"}`.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_luck import build_3p_shot_info, build_adjusted_3p
+
+base_info = build_3p_shot_info(base_player)
+adj = build_adjusted_3p(base_player, base_info)
+print(adj["assisted3P"], adj["unassisted3P"])
+```
+
+### build_efficiency_margins {#build_efficiency_margins}
+
+`build_efficiency_margins(mutable_stat_set: 'LineupStatSet', key_override: 'str | None' = None) -> 'None'`
+
+Derive `off_net` / `off_raw_net` on a stat set, in place.
+
+Faithful port of `LineupUtils.buildEfficiencyMargins` (`LineupUtils.ts:145`).
+`off_net` is `off_adj_ppp - def_adj_ppp` (adjusted efficiency margin);
+`off_raw_net` is `off_ppp - def_ppp` (raw/unadjusted margin). Both are
+only written when their two source fields are both present on
+`mutable_stat_set`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `mutable_stat_set` | `LineupStatSet` |  | The `LineupStatSet` (or team-report equivalent) to mutate in place. |
+| `key_override` | `str \| None` | `None` | `"value"` or `"old_value"` -- which sub-key to read from the source fields and write into `off_net` / `off_raw_net`. When `None` (the default), the upstream `nonLuckKey` fallback applies: use `"old_value"` if `mutable_stat_set["off_ppp"]["old_value"]` is present, otherwise `"value"`. When given explicitly, the written field is merged onto any existing `off_net` / `off_raw_net` dict (so a second call with the other key preserves the first call's key) rather than replacing it outright. |
+
+**Returns**
+
+None. `mutable_stat_set` is mutated in place.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_lineup_stats import build_efficiency_margins
+
+build_efficiency_margins(team_info, "value")
+off_ppp = team_info.get("off_ppp")
+if isinstance(off_ppp, dict) and off_ppp.get("old_value") is not None:
+    build_efficiency_margins(team_info, "old_value")
+print(team_info["off_net"]["value"])
+```
+
+### build_exp_3p {#build_exp_3p}
+
+`build_exp_3p(info: 'OffLuckShotTypeAndAdj3P') -> 'float'`
+
+Expected made-3P count given a player's shot-type mix + shooting %s.
+
+Public port of `buildExp3P` (`LuckUtils.ts:838-847`): `(assisted
+3PM * assisted3P%) + (unassisted 3PM * unassisted3P%) +
+(early/scramble/unknown 3PA * base3P%)`. Pure weighted sum -- no
+division, so this introduces no landmine.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `info` | `OffLuckShotTypeAndAdj3P` |  | A dict carrying both `build_3p_shot_info`'s `shot_info_*` keys and `build_adjusted_3p`'s `*3P` keys (i.e. an `OffLuckShotTypeAndAdj3P`). |
+
+**Returns**
+
+The expected number of made 3-pointers (`3P% * total 3P`).
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_luck import (
+    build_3p_shot_info, build_adjusted_3p, build_exp_3p,
+)
+
+base_info = build_3p_shot_info(base_player)
+info = {**build_3p_shot_info(player), **build_adjusted_3p(base_player, base_info)}
+expected_makes = build_exp_3p(info)
+```
+
+### build_position {#build_position}
+
+`build_position(confs: 'dict[str, float]', confs_no_height: 'dict[str, float] | None', player: 'dict[str, Any]', team_season: 'str') -> 'tuple[str, str]'`
+
+Classify a player into a position label + diagnostic trace string.
+
+Faithful port of `PositionUtils.buildPosition` (`PositionUtils.ts:401-580`)
+-- the PG / s-PG / CG / WG / WF / S-PF / PF/C / C decision tree. A
+`ABSOLUTE_POSITION_FIXES` manual override short-circuits the whole
+tree (recursing once, with `team_season=""`, purely to compute the
+diagnostic "what would this have been" string); otherwise the function
+walks the confidence-threshold / assist-rate / 3PT-rate branch cascade,
+applies the "too few effective possessions" (< 25) fallback, and
+reconciles the result against roster metadata via `using_roster_pos`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `confs` | `dict[str, float]` |  | The 5-way positional confidence dict (`TRAD_POS_LIST` keys), typically the height-adjusted output of `build_position_confidences`. |
+| `confs_no_height` | `dict[str, float] \| None` |  | The pre-height-adjustment confidences, or `None` when the caller has no height data. When present, a PG <-> s-PG flip caused solely by the height adjustment is reverted (the `maybeIgnoreHeight` closure, `ts:433-457`). The check is `is not None` (JS object-truthiness: an empty dict is still a truthy JS object), NOT a Python-falsy `if confs_no_height`. |
+| `player` | `dict[str, Any]` |  | The player stat dict. Reads `key` (override lookup), `off_assist` / `off_3pr` / `off_usage` / `off_team_poss` (each `{"value": N}`-wrapped), and `roster` (a plain `{"pos": ..., "role": ...}` dict of un-wrapped strings). |
+| `team_season` | `str` |  | `"{sport}_{team}_{season}"` key into `ABSOLUTE_POSITION_FIXES`. Pass `""` to disable override lookup for a given call (the recursive diagnostic call inside the override branch does exactly this). |
+
+**Returns**
+
+A `(position, diagnostic)` tuple. `position` is one of `ID_TO_POSITION`'s keys; `diagnostic` is a human-readable trace of which rule fired, byte-identical to the TS's template strings (including `.toFixed(1)`-style percentage formatting).
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_positions import build_position, TRAD_POS_LIST
+confs = dict(zip(TRAD_POS_LIST, [0.9, 0.1, 0, 0, 0]))
+player = {"off_assist": {"value": 0.10}, "off_3pr": {"value": 0.20},
+          "off_team_poss": {"value": 1000}, "off_usage": {"value": 0.20}}
+build_position(confs, None, player, "Men_Boston College_2019/20")
+
+# A manual-override short-circuit
+
+build_position(confs, None, {"key": "Popovic, Nik",
+    "off_usage": {"value": 1}, "off_team_poss": {"value": 200},
+    "off_assist": {"value": 0.10}}, "Men_Boston College_2019/20")
+```
+
+### build_position_confidences {#build_position_confidences}
+
+`build_position_confidences(player: 'dict[str, Any]', height_in: 'float | None' = None) -> 'tuple[dict[str, float], dict[str, Any]]'`
+
+Build the 5-way positional confidence vector for a player.
+
+Faithful port of `PositionUtils.buildPositionConfidences`
+(`PositionUtils.ts:263-338`). Derives the six `calc_*` ratios from the
+player's box-score fields, dot-products the resulting 17-feature vector
+against `POSITION_FEATURE_WEIGHTS` (each field regressed via
+`regress_shot_quality` and multiplied by its per-feature `scale`)
+plus the `POSITION_FEATURE_INIT` intercepts, applies a softmax over
+the five raw scores, and -- when `height_in` is supplied -- reweights the
+confidences via `incorporate_height`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `player` | `dict[str, Any]` |  | The player stat dict (ES-aggregation bucket shape); each stat field is `{"value": N}`. Reads `total_off_assist`, `total_off_to`, `off_3p`, `off_efg`, `off_2pmid`, `off_2prim`, `total_off_fga`, `total_off_fta`, `total_off_ftm` (for the `calc_*` ratios) plus every non-`calc_` field in `POSITION_FEATURE_WEIGHTS`. |
+| `height_in` | `float \| None` | `None` | Optional player height in inches. When truthy, the returned confidences are height-adjusted; when `None` / `0`, the raw softmax confidences are returned. (JS `height_in ? ... : ...` falsy check, ts:324 -- a `0` height is treated as "no height".) |
+
+**Returns**
+
+A `(confidences, diagnostics)` tuple. `confidences` maps each `TRAD_POS_LIST` key (in order) to its final confidence. `diagnostics` carries `"scores"` (raw scores x `0.1`, keyed by position), `"confsNoHeight"` (the pre-height confidences, present only when `height_in` is truthy, else `None`), and `"calculated"` (the six derived `calc_*` ratios). The upstream diag object has exactly these three fields -- no UI-only fields are dropped.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_positions import build_position_confidences
+confs, diags = build_position_confidences(player_bucket)
+print(confs["pos_pg"], diags["calculated"]["calc_ast_tov"])
+
+# Height-adjusted confidences
+
+confs_h, diags_h = build_position_confidences(player_bucket, 78.0)
+```
+
+### build_positional_aware_filter {#build_positional_aware_filter}
+
+`build_positional_aware_filter(filter_str: 'str') -> 'tuple[list[dict[str, Any]], list[dict[str, Any]], bool]'`
+
+Decompose a search-filter string into positionally-aware +ve/-ve fragments.
+
+Faithful port of `PositionUtils.buildPositionalAwareFilter`
+(`PositionUtils.ts:764-828`). Picks a fragment separator by scanning
+`[";", "/", ","]` in priority order for the first one present anywhere
+in `filter_str` (a fragment separator of `"!!!"` -- never itself
+present -- is the "no separator found" fallback, which leaves the whole
+string as a single fragment). Splits on that separator, trims whitespace,
+drops empty fragments and `[`-prefixed ones (reserved for aggregation-key
+filters elsewhere in the app), then routes each fragment to the positive
+or negative bucket by a leading `-`, and parses each fragment's optional
+`=<tokens>` position spec via decomp_positional_filter_fragment`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `filter_str` | `str` |  | A raw filter string, e.g. `"test1=pg / -test2=Pf+C / test3"`. |
+
+**Returns**
+
+A `(positive_fragments, negative_fragments, has_position)` triple. Each fragment is `{"filter": <lowercased name>, "pos": [indices]}`. `has_position` is `True` iff any fragment (either side) carried at least one recognized position token.
+
+**Example**
+
+```python
+::
+
+from sportsdataverse.mbb.mbb_positions import build_positional_aware_filter
+build_positional_aware_filter("test1=pg / -test2=Pf+C / test3")
+```
 
 ### calc_def_player_luck_adj {#calc_def_player_luck_adj}
 
@@ -255,6 +501,127 @@ diags = calc_off_team_luck_adj(
     ],
 )
 ```
+
+### calculate_aggregated_lineup_stats {#calculate_aggregated_lineup_stats}
+
+`calculate_aggregated_lineup_stats(lineups: 'list[LineupStatSet] | None') -> 'LineupStatSet'`
+
+Combine all lineups into a single team stat set.
+
+Faithful port of `LineupUtils.calculateAggregatedLineupStats`
+(`LineupUtils.ts:106`). Seeds an accumulator from
+`StatModels.emptyLineup()` (`{"key": "empty", "doc_count": 0}`) plus
+an `all_lineups` sub-accumulator of the same shape, then merges every
+lineup via `weighted_avg`: lineups without a truthy `rapmRemove`
+key merge into the main accumulator, while `rapmRemove` lineups merge
+into `all_lineups` instead (their contribution is folded back in
+afterward). Calls `complete_weighted_avg` to turn the main
+accumulator's weighted sums into weighted averages, then -- because
+`StatModels.emptyLineup()` always carries `key`/`doc_count` and so
+is never considered "empty" by the upstream `lodash.isEmpty` check --
+unconditionally re-merges the (now-averaged) team totals into
+`all_lineups` and finishes that sub-accumulator too. Finally rebuilds
+`off_net` / `off_raw_net` via `build_efficiency_margins`
+(value-key always; old-value-key too when the team is in luck-adjusted
+mode, i.e. `off_ppp.old_value` is present) -- but only on the top-level
+result, matching upstream's "don't bother for all_lineups" comment.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `lineups` | `list[LineupStatSet] \| None` |  | The per-lineup `LineupStatSet` docs to fold together (e.g. the ES aggregation buckets under `responses[0].aggregations.lineups.buckets`). `None` or an empty list yields an all-zero/empty team stat set (mirrors the upstream `lineups \|\| []` guard). |
+
+**Returns**
+
+The aggregated team-total `LineupStatSet`, including a nested `all_lineups` key holding the `rapmRemove`-lineups-plus-team-total composite sub-aggregate.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_lineup_stats import calculate_aggregated_lineup_stats
+
+buckets = raw_response["responses"][0]["aggregations"]["lineups"]["buckets"]
+team_info = calculate_aggregated_lineup_stats(buckets)
+print(team_info["off_ppp"]["value"], team_info["off_poss"]["value"])
+
+# RAPM-exclusion flag
+
+buckets[1]["rapmRemove"] = True  # divert into all_lineups instead
+team_info = calculate_aggregated_lineup_stats(buckets)
+```
+
+### calculate_possessions {#calculate_possessions}
+
+`calculate_possessions(lineup_events: 'Iterable[LineupEvent]') -> 'list[LineupEvent]'`
+
+Top-level entry point: calculate team/opponent possessions for a
+
+sequence of lineup events (`PossessionUtils.calculate_possessions`,
+`PossessionUtils.scala:371-379`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `lineup_events` | `Iterable[LineupEvent]` |  | The lineups to enrich, in chronological order. |
+
+**Returns**
+
+The lineups, each enriched with possession counts.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_possessions import calculate_possessions
+
+enriched = calculate_possessions(lineups)
+enriched[0].team_stats.num_possessions
+```
+
+### calculate_possessions_by_event {#calculate_possessions_by_event}
+
+`calculate_possessions_by_event(raw_events_as_clumps: 'Iterable[ConcurrentClump]') -> 'list[LineupEvent]'`
+
+Drive the batch loop + per-clump scoring over an already-flattened
+
+clump stream (`PossessionUtils.calculate_possessions_by_event`,
+`PossessionUtils.scala:521-573`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `raw_events_as_clumps` | `Iterable[ConcurrentClump]` |  | The unbatched clump stream, e.g. from flat-mapping `lineup_as_raw_clumps` over several lineups. |
+
+**Returns**
+
+The lineups, each enriched with possession counts, in original order.
+
+### calculate_stats {#calculate_stats}
+
+`calculate_stats(clump: 'ConcurrentClump', prev: 'ConcurrentClump', dir: 'Direction') -> 'PossCalcFragment'`
+
+Calculate one direction's possession-fragment for one merged clump
+
+(`PossessionUtils.calculate_stats`, `PossessionUtils.scala:170-369`).
+
+See the upstream source's inline worked examples (and-one detection,
+technical/flagrant offsetting, the deadball-rebound heuristic) for the
+hand-annotated NCAA play-by-play snippets that motivate each step; this
+port reproduces every step in the same order.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `clump` | `ConcurrentClump` |  | The merged clump to score. |
+| `prev` | `ConcurrentClump` |  | The previously-processed merged clump (feeds the and-one and deadball-rebound heuristics -- see below). |
+| `dir` | `Direction` |  | Which side (`Direction.TEAM`/`Direction.OPPONENT`) is "attacking" for this calculation. Named to match the Scala (shadows the `dir` builtin -- consistent with this port's existing precedent of naming params after their Scala originals, e.g. `RawGameEvent.for_team`'s `min`). |
+
+**Returns**
+
+A `~sportsdataverse.mbb.mbb_ncaa_models.PossCalcFragment` for this clump/direction.
 
 ### complete_weighted_avg {#complete_weighted_avg}
 
@@ -860,6 +1227,31 @@ regress_shot_quality(100, 3, "calc_rim_relative",
      "total_off_2prim_attempts": {"value": 8}})
 ```
 
+### strength_of_schedule {#strength_of_schedule}
+
+`strength_of_schedule(results: 'pl.DataFrame', ratings: 'pl.DataFrame', *, league: 'str' = 'mens') -> 'pl.DataFrame'`
+
+Per-team SoS + Quad 1-4 record + WAB from completed games and ratings.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `results` | `DataFrame` |  | Completed games with `game_id, season, home_team_id, away_team_id, home_score, away_score, neutral_site`. |
+| `ratings` | `DataFrame` |  | One row per team with `season, team_id, adj_em, rank` (the `mbb_team_ratings` output). Team-id dtype must match `results`. |
+| `league` | `str` | `'mens'` | `"mens"` or `"womens"` (quad thresholds, HFA, bubble EM). |
+
+**Returns**
+
+One row per (season, team_id): `season, team_id, sos, sos_rank, wab, quad1_w .. quad4_l, quality_wins`. `sos` is the mean opponent `adj_em` (rank 1 = hardest schedule); quads follow the NET venue-adjusted opponent-rank thresholds; `quality_wins` is Quad-1 + Quad-2 wins; `wab` is actual wins minus a bubble-quality team's expected wins against the same schedule. Empty input returns the schema with zero rows.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_strength_of_schedule import strength_of_schedule
+resume = strength_of_schedule(results, ratings)
+```
+
 ### test_positional_aware_filter {#test_positional_aware_filter}
 
 `test_positional_aware_filter(sorted_to_test: 'list[dict[str, str]]', pve_frags: 'list[dict[str, Any]]', nve_frags: 'list[dict[str, Any]]') -> 'bool'`
@@ -953,6 +1345,32 @@ One row per team: `season, team_id, resume_score, projected_seed, at_large_prob,
 ```python
 from sportsdataverse.wbb import wbb_bracketology
 field = wbb_bracketology(2024)
+```
+
+### wbb_strength_of_schedule {#wbb_strength_of_schedule}
+
+`wbb_strength_of_schedule(seasons: 'list[int]', *, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
+
+Women's season-level SoS / Quad / WAB résumé.
+
+Delegates to `sportsdataverse.mbb.mbb_strength_of_schedule.mbb_strength_of_schedule` with `league="womens"` (WBB loaders + women's constants).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `list[int]` |  | Seasons to compute (e.g. `[2024]`). |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+One row per (season, team_id): `season, team_id, sos, sos_rank, wab, quad1_w .. quad4_l, quality_wins` -- see the mbb core for the full contract.
+
+**Example**
+
+```python
+from sportsdataverse.wbb import wbb_strength_of_schedule
+wbb_strength_of_schedule([2024]).sort("wab", descending=True).head(20)
 ```
 
 ### weighted_avg {#weighted_avg}

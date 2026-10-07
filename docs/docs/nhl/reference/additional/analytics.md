@@ -1,7 +1,7 @@
 ---
 title: "NHL — additional Python functions — Analytics"
 sidebar_label: "Analytics"
-sidebar_position: 4
+sidebar_position: 8
 description: "NHL — additional Python functions — Analytics — function reference in sdv-py, the SportsDataverse Python package."
 ---
 # NHL — additional Python functions — Analytics
@@ -308,6 +308,38 @@ A polars (or pandas) DataFrame, one row per game. |col_name |type | |:----------
 from sportsdataverse.nhl.nhl_market import nhl_predict_games
 preds = nhl_predict_games(games, ratings)
 print(preds.sort("home_win_prob", descending=True).head())
+```
+
+### nhl_special_teams_value {#nhl_special_teams_value}
+
+`nhl_special_teams_value(pbp: 'pl.DataFrame', shifts: 'pl.DataFrame', *, model_dir: "'str | None'" = None, league: 'str' = 'nhl', return_as_pandas: 'bool' = False, _stints: 'pl.DataFrame | None' = None) -> "'pl.DataFrame | pd.DataFrame'"`
+
+Per-skater power-play/penalty-kill value (goals) above/below league baseline.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `pbp` | `DataFrame` |  | a `load_nhl_pbp_full`-shaped frame. |
+| `shifts` | `DataFrame` |  | a `load_nhl_shifts`-shaped frame. |
+| `model_dir` | `str \| None` | `None` | passed through to `nhl_xg`. |
+| `league` | `str` | `'nhl'` | `"nhl"` or `"pwhl"` -- selects `league_xg_rate_pp`/pk` via `LEAGUE_CONSTANTS`. |
+| `return_as_pandas` | `bool` | `False` | return a pandas DataFrame instead of polars. |
+| `_stints` | `DataFrame \| None` | `None` | internal test hook -- inject a pre-built stints frame. |
+
+**Returns**
+
+`player_id:Int64, pp_toi_minutes:Float64, pk_toi_minutes:Float64, pp_value:Float64, pk_value:Float64`. Empty input returns a zero-row frame with this schema.
+
+**Example**
+
+```python
+import polars as pl
+from sportsdataverse.nhl.nhl_special_teams import nhl_special_teams_value
+pbp = pl.read_parquet("tests/fixtures/nhl_player_impact/pbp_sample.parquet")
+shifts = pl.read_parquet("tests/fixtures/nhl_player_impact/shifts_sample.parquet")
+st = nhl_special_teams_value(pbp, shifts, model_dir="tests/fixtures/nhl_player_impact/xg_models")
+print(st.sort("pp_value", descending=True).head(10))
 ```
 
 ### nhl_zone_transitions {#nhl_zone_transitions}

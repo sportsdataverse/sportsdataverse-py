@@ -9,7 +9,7 @@ description: "sdv-py MLB: endpoint references, dataset loaders and parsers for M
 
 | Source | APIs / hosts | Functions | Auth |
 |---|---|---:|---|
-| [ESPN](#espn) | `cdn.espn.com`, `site.api.espn.com`, `site.web.api.espn.com` +1 more | 121 | none |
+| [ESPN](#espn) | `cdn.espn.com`, `site.api.espn.com`, `site.web.api.espn.com` +1 more | 122 | none |
 | [sportsdataverse-data releases](#sportsdataverse-data-releases) | `github.com` | 32 | none |
 | [MLB Stats API](#mlb-stats-api) | `statsapi.mlb.com` | 79 | none |
 | [Baseball Savant (Statcast)](#baseball-savant-statcast) | `baseballsavant.mlb.com` | 43 | none |
@@ -25,7 +25,7 @@ description: "sdv-py MLB: endpoint references, dataset loaders and parsers for M
 | [ESPN core API (v2)](reference/core) | 83 |
 | [ESPN FPI API (fitt v3)](reference/fitt) | 1 |
 | [ESPN CDN API (cdn.espn.com)](reference/cdn) | 4 |
-| [Hand-written wrappers](reference/additional) | 4 |
+| [Hand-written wrappers](reference/additional/espn) | 5 |
 
 ## sportsdataverse-data releases {#sportsdataverse-data-releases}
 
@@ -38,87 +38,83 @@ description: "sdv-py MLB: endpoint references, dataset loaders and parsers for M
 | Reference | Functions |
 |---|---:|
 | [MLB Stats API](reference/mlb_api) | 64 |
-| [Hand-written wrappers](reference/additional) | 15 |
+| [Hand-written wrappers](reference/additional/mlb-stats-api) | 15 |
 
 ## Baseball Savant (Statcast) {#baseball-savant-statcast}
 
 | Reference | Functions |
 |---|---:|
 | [MLB Statcast (Baseball Savant)](reference/mlb_statcast) | 39 |
-| [Hand-written wrappers](reference/additional) | 4 |
+| [Hand-written wrappers](reference/additional/baseball-savant-statcast) | 4 |
 
 ## Fox Sports API {#fox-sports-api}
 
 | Reference | Functions |
 |---|---:|
-| [Hand-written wrappers](reference/additional) | 23 |
+| [Hand-written wrappers](reference/additional/fox-sports-api) | 23 |
 ## Tools and helpers
-
-### Play-by-play processing {#play-by-play-processing}
-
-- [`build_we_table`](reference/additional#build_we_table)
-- [`espn_mlb_pbp`](reference/additional#espn_mlb_pbp)
 
 ### Models and calculators {#models-and-calculators}
 
-- [`as_of_split`](reference/additional#as_of_split)
-- [`count_strike_run_value`](reference/additional#count_strike_run_value)
-- [`event_run_value`](reference/additional#event_run_value)
-- [`mae`](reference/additional#mae)
-- [`mlb_batter_projection`](reference/additional#mlb_batter_projection)
-- [`mlb_command_plus`](reference/additional#mlb_command_plus)
-- [`mlb_expected_home_runs`](reference/additional#mlb_expected_home_runs)
-- [`mlb_expected_stats`](reference/additional#mlb_expected_stats)
-- [`mlb_pitch_classify`](reference/additional#mlb_pitch_classify)
-- [`mlb_prop_strikeouts`](reference/additional#mlb_prop_strikeouts)
-- [`mlb_prop_team_runs`](reference/additional#mlb_prop_team_runs)
-- [`mlb_props`](reference/additional#mlb_props)
-- [`mlb_pythagenpat`](reference/additional#mlb_pythagenpat)
-- [`mlb_pythagenpat_table`](reference/additional#mlb_pythagenpat_table)
-- [`mlb_run_expectancy_matrix`](reference/additional#mlb_run_expectancy_matrix)
-- [`mlb_stuff_plus`](reference/additional#mlb_stuff_plus)
-- [`mlb_swing_decision`](reference/additional#mlb_swing_decision)
-- [`mlb_team_elo`](reference/additional#mlb_team_elo)
-- [`mlb_team_projection`](reference/additional#mlb_team_projection)
-- [`mlb_win_expectancy`](reference/additional#mlb_win_expectancy)
-- [`mlb_win_probability_added`](reference/additional#mlb_win_probability_added)
-- [`pbp_base_out_states`](reference/additional#pbp_base_out_states)
-- [`pearson_corr`](reference/additional#pearson_corr)
-- [`prop_over_prob`](reference/additional#prop_over_prob)
-- [`spearman_corr`](reference/additional#spearman_corr)
+- [`as_of_split`](reference/additional/models-and-calculators#as_of_split)
+- [`build_we_table`](reference/additional/models-and-calculators#build_we_table)
+- [`count_strike_run_value`](reference/additional/models-and-calculators#count_strike_run_value)
+- [`event_run_value`](reference/additional/models-and-calculators#event_run_value)
+- [`mae`](reference/additional/models-and-calculators#mae)
+- [`mlb_batter_projection`](reference/additional/models-and-calculators#mlb_batter_projection)
+- [`mlb_command_plus`](reference/additional/models-and-calculators#mlb_command_plus)
+- [`mlb_expected_home_runs`](reference/additional/models-and-calculators#mlb_expected_home_runs)
+- [`mlb_expected_stats`](reference/additional/models-and-calculators#mlb_expected_stats)
+- [`mlb_pitch_classify`](reference/additional/models-and-calculators#mlb_pitch_classify)
+- [`mlb_prop_strikeouts`](reference/additional/models-and-calculators#mlb_prop_strikeouts)
+- [`mlb_prop_team_runs`](reference/additional/models-and-calculators#mlb_prop_team_runs)
+- [`mlb_props`](reference/additional/models-and-calculators#mlb_props)
+- [`mlb_pythagenpat`](reference/additional/models-and-calculators#mlb_pythagenpat)
+- [`mlb_pythagenpat_table`](reference/additional/models-and-calculators#mlb_pythagenpat_table)
+- [`mlb_run_expectancy_matrix`](reference/additional/models-and-calculators#mlb_run_expectancy_matrix)
+- [`mlb_stuff_plus`](reference/additional/models-and-calculators#mlb_stuff_plus)
+- [`mlb_swing_decision`](reference/additional/models-and-calculators#mlb_swing_decision)
+- [`mlb_team_elo`](reference/additional/models-and-calculators#mlb_team_elo)
+- [`mlb_team_projection`](reference/additional/models-and-calculators#mlb_team_projection)
+- [`mlb_win_expectancy`](reference/additional/models-and-calculators#mlb_win_expectancy)
+- [`mlb_win_probability_added`](reference/additional/models-and-calculators#mlb_win_probability_added)
+- [`pbp_base_out_states`](reference/additional/models-and-calculators#pbp_base_out_states)
+- [`pearson_corr`](reference/additional/models-and-calculators#pearson_corr)
+- [`prop_over_prob`](reference/additional/models-and-calculators#prop_over_prob)
+- [`spearman_corr`](reference/additional/models-and-calculators#spearman_corr)
 
 ### Analytics {#analytics}
 
-- [`add_sequence_features`](reference/additional#add_sequence_features)
-- [`advancement_opportunities`](reference/additional#advancement_opportunities)
-- [`bip_trajectory_features`](reference/additional#bip_trajectory_features)
-- [`called_strike_prob_grid`](reference/additional#called_strike_prob_grid)
-- [`catch_prob_surface`](reference/additional#catch_prob_surface)
-- [`fit_zone_model`](reference/additional#fit_zone_model)
-- [`mlb_baserunning_value`](reference/additional#mlb_baserunning_value)
-- [`mlb_catcher_blocking`](reference/additional#mlb_catcher_blocking)
-- [`mlb_catcher_framing`](reference/additional#mlb_catcher_framing)
-- [`mlb_catcher_throwing`](reference/additional#mlb_catcher_throwing)
-- [`mlb_fielding_oaa`](reference/additional#mlb_fielding_oaa)
-- [`mlb_injury_risk`](reference/additional#mlb_injury_risk)
-- [`mlb_pitch_era`](reference/additional#mlb_pitch_era)
-- [`mlb_pitch_tunneling`](reference/additional#mlb_pitch_tunneling)
-- [`mlb_sequence_run_value`](reference/additional#mlb_sequence_run_value)
-- [`mlb_stolen_base_value`](reference/additional#mlb_stolen_base_value)
-- [`mlb_times_through_order`](reference/additional#mlb_times_through_order)
-- [`mlb_umpire_bias`](reference/additional#mlb_umpire_bias)
-- [`mlb_umpire_called_strike_prob`](reference/additional#mlb_umpire_called_strike_prob)
-- [`pitch_features`](reference/additional#pitch_features)
-- [`pitcher_appearance_trends`](reference/additional#pitcher_appearance_trends)
-- [`predict_sb_success`](reference/additional#predict_sb_success)
-- [`sb_attempts_from_pitches`](reference/additional#sb_attempts_from_pitches)
-- [`sb_success_surface`](reference/additional#sb_success_surface)
-- [`siera_like`](reference/additional#siera_like)
-- [`tto_penalty_table`](reference/additional#tto_penalty_table)
+- [`add_sequence_features`](reference/additional/analytics#add_sequence_features)
+- [`advancement_opportunities`](reference/additional/analytics#advancement_opportunities)
+- [`bip_trajectory_features`](reference/additional/analytics#bip_trajectory_features)
+- [`called_strike_prob_grid`](reference/additional/analytics#called_strike_prob_grid)
+- [`catch_prob_surface`](reference/additional/analytics#catch_prob_surface)
+- [`fit_zone_model`](reference/additional/analytics#fit_zone_model)
+- [`mlb_baserunning_value`](reference/additional/analytics#mlb_baserunning_value)
+- [`mlb_catcher_blocking`](reference/additional/analytics#mlb_catcher_blocking)
+- [`mlb_catcher_framing`](reference/additional/analytics#mlb_catcher_framing)
+- [`mlb_catcher_throwing`](reference/additional/analytics#mlb_catcher_throwing)
+- [`mlb_fielding_oaa`](reference/additional/analytics#mlb_fielding_oaa)
+- [`mlb_injury_risk`](reference/additional/analytics#mlb_injury_risk)
+- [`mlb_pitch_era`](reference/additional/analytics#mlb_pitch_era)
+- [`mlb_pitch_tunneling`](reference/additional/analytics#mlb_pitch_tunneling)
+- [`mlb_sequence_run_value`](reference/additional/analytics#mlb_sequence_run_value)
+- [`mlb_stolen_base_value`](reference/additional/analytics#mlb_stolen_base_value)
+- [`mlb_times_through_order`](reference/additional/analytics#mlb_times_through_order)
+- [`mlb_umpire_bias`](reference/additional/analytics#mlb_umpire_bias)
+- [`mlb_umpire_called_strike_prob`](reference/additional/analytics#mlb_umpire_called_strike_prob)
+- [`pitch_features`](reference/additional/analytics#pitch_features)
+- [`pitcher_appearance_trends`](reference/additional/analytics#pitcher_appearance_trends)
+- [`predict_sb_success`](reference/additional/analytics#predict_sb_success)
+- [`sb_attempts_from_pitches`](reference/additional/analytics#sb_attempts_from_pitches)
+- [`sb_success_surface`](reference/additional/analytics#sb_success_surface)
+- [`siera_like`](reference/additional/analytics#siera_like)
+- [`tto_penalty_table`](reference/additional/analytics#tto_penalty_table)
 
 ### Dates and seasons {#dates-and-seasons}
 
-- [`most_recent_mlb_season`](reference/additional#most_recent_mlb_season)
+- [`most_recent_mlb_season`](reference/additional/dates-and-seasons#most_recent_mlb_season)
 
 
 ## Examples
@@ -162,7 +158,7 @@ Each `sportsdataverse` function and its equivalent in the sister R package, [`ba
 | [`espn_mlb_injuries`](reference/site#espn_mlb_injuries) | [`espn_mlb_injuries`](https://billpetti.github.io/baseballr/reference/espn_mlb_injuries.html) |
 | [`espn_mlb_leaders`](reference/web#espn_mlb_leaders) | [`espn_mlb_leaders`](https://billpetti.github.io/baseballr/reference/espn_mlb_leaders.html) |
 | [`espn_mlb_news`](reference/site#espn_mlb_news) | [`espn_mlb_news`](https://billpetti.github.io/baseballr/reference/espn_mlb_news.html) |
-| [`espn_mlb_pbp`](reference/additional/other#espn_mlb_pbp) | [`espn_mlb_pbp`](https://billpetti.github.io/baseballr/reference/espn_mlb_pbp.html) |
+| [`espn_mlb_pbp`](reference/additional/espn#espn_mlb_pbp) | [`espn_mlb_pbp`](https://billpetti.github.io/baseballr/reference/espn_mlb_pbp.html) |
 | [`espn_mlb_player_awards`](reference/core/player#espn_mlb_player_awards) | [`espn_mlb_player_awards`](https://billpetti.github.io/baseballr/reference/espn_mlb_player_awards.html) |
 | [`espn_mlb_player_career_stats`](reference/core/player#espn_mlb_player_career_stats) | [`espn_mlb_player_career_stats`](https://billpetti.github.io/baseballr/reference/espn_mlb_player_career_stats.html) |
 | [`espn_mlb_player_contracts`](reference/core/player#espn_mlb_player_contracts) | [`espn_mlb_player_contracts`](https://billpetti.github.io/baseballr/reference/espn_mlb_player_contracts.html) |
@@ -267,4 +263,4 @@ Each `sportsdataverse` function and its equivalent in the sister R package, [`ba
 | [`mlb_teams_stats`](reference/mlb_api/team#mlb_teams_stats) | [`mlb_teams_stats`](https://billpetti.github.io/baseballr/reference/mlb_teams_stats.html) |
 | [`mlb_teams_stats_leaders`](reference/mlb_api/team#mlb_teams_stats_leaders) | [`mlb_teams_stats_leaders`](https://billpetti.github.io/baseballr/reference/mlb_teams_stats_leaders.html) |
 | [`mlb_venues`](reference/mlb_api/other#mlb_venues) | [`mlb_venues`](https://billpetti.github.io/baseballr/reference/mlb_venues.html) |
-| [`most_recent_mlb_season`](reference/additional/other#most_recent_mlb_season) | [`most_recent_mlb_season`](https://billpetti.github.io/baseballr/reference/most_recent_mlb_season.html) |
+| [`most_recent_mlb_season`](reference/additional/dates-and-seasons#most_recent_mlb_season) | [`most_recent_mlb_season`](https://billpetti.github.io/baseballr/reference/most_recent_mlb_season.html) |

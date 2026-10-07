@@ -1,7 +1,7 @@
 ---
 title: "CFB — additional Python functions — Models and calculators: add_era–special_teams"
 sidebar_label: "Models and calculators: add_era–special_teams"
-sidebar_position: 4
+sidebar_position: 7
 description: "CFB — additional Python functions — Models and calculators: add_era–special_teams — function reference in sdv-py, the SportsDataverse Python package."
 ---
 # CFB — additional Python functions — Models and calculators: add_era–special_teams

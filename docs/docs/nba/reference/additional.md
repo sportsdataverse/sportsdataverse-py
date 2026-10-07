@@ -22,6 +22,20 @@ not covered by the generated API-endpoint reference above.
 | [espn_nba_teams](additional/highlights.md#espn_nba_teams) | espn_nba_teams - look up NBA teams |
 | [most_recent_nba_season](additional/highlights.md#most_recent_nba_season) | Return the most recent NBA season year based on today's date. |
 
+## ESPN
+
+| Function | Summary |
+|---|---|
+| [espn_nba_game_rosters](additional/espn.md#espn_nba_game_rosters) | espn_nba_game_rosters() - Pull the game by id. |
+| [espn_nba_pbp](additional/espn.md#espn_nba_pbp) | espn_nba_pbp() - Pull the game by id - Data from API endpoints - `nba/playbyplay`, `nba/summary` |
+| [scoreboard_event_parsing](additional/espn.md#scoreboard_event_parsing) | Internal helper that flattens an ESPN NBA scoreboard event dict into a |
+
+## sportsdataverse-data releases
+
+| Function | Summary |
+|---|---|
+| [load_nba_stats_leaguedash](additional/sportsdataverse-data-releases.md#load_nba_stats_leaguedash) | Load one asset family of the `nba_stats_leaguedash` release. |
+
 ## NBA Stats API
 
 | Function | Summary |
@@ -94,6 +108,27 @@ not covered by the generated API-endpoint reference above.
 | [realgm_teams](additional/realgm.md#realgm_teams) | The NBA team index with division and conference. |
 | [realgm_transactions](additional/realgm.md#realgm_transactions) | The NBA league transactions log. |
 
+## Public model datasets
+
+| Function | Summary |
+|---|---|
+| [load_darko_dpm](additional/public-model-datasets.md#load_darko_dpm) | Parse a DARKO DPM leaderboard CSV (e.g. `2026-darko-dpm-leaderboard.csv`). |
+| [load_dunks_threes_stats](additional/public-model-datasets.md#load_dunks_threes_stats) | Parse a Dunks & Threes counting-stats CSV (e.g. `2025_Dunks_&_Threes_Stats.csv`). |
+| [load_epm](additional/public-model-datasets.md#load_epm) | Parse a Dunks & Threes EPM CSV (`{season}_EPM_data.csv`). |
+| [load_lebron_daily](additional/public-model-datasets.md#load_lebron_daily) | Parse a LEBRON daily-snapshot CSV (e.g. `lebron_daily_2026-07-02.csv`). |
+| [load_lebron_season](additional/public-model-datasets.md#load_lebron_season) | Parse a LEBRON season-file CSV (e.g. `lebron-data-2026.csv`). |
+| [load_rapm_ryan_davis](additional/public-model-datasets.md#load_rapm_ryan_davis) | Parse a Ryan Davis published RAPM CSV (single-season or multi-year window). |
+| [normalize_player_name](additional/public-model-datasets.md#normalize_player_name) | Fold a player display name to a join-safe key. |
+
+## Play-by-play processing
+
+| Function | Summary |
+|---|---|
+| [build_athlete_identity_lookup](additional/play-by-play-processing.md#build_athlete_identity_lookup) | R `build_athlete_identity_lookup`: athlete_id -> identity from team rosters. |
+| [build_nba_player_identity_lookup](additional/play-by-play-processing.md#build_nba_player_identity_lookup) | R `build_identity_lookup(season)`: athlete_id -> identity from the |
+| [nba_pbp_disk](additional/play-by-play-processing.md#nba_pbp_disk) | Load a previously cached ESPN NBA summary JSON for a game from disk. |
+| [nba_v3_to_v2_pbp](additional/play-by-play-processing.md#nba_v3_to_v2_pbp) | Convert a v3 `playbyplayv3` payload into the full v2-schema pbp frame. |
+
 ## Models and calculators
 
 | Function | Summary |
@@ -159,6 +194,8 @@ not covered by the generated API-endpoint reference above.
 | [add_start_type_detail](additional/analytics.md#add_start_type_detail) | Append the full pbpstats start-type taxonomy to a possession frame. |
 | [add_transition](additional/analytics.md#add_transition) | Flag possessions that started in transition, and time their initial play. |
 | [box_features](additional/analytics.md#box_features) | Aggregate per-player per-100-possession box features over a set of games. |
+| [build_play_context_shots](additional/analytics.md#build_play_context_shots) | Build the per-shot frame carrying CTG's play context. |
+| [build_possession_shooting](additional/analytics.md#build_possession_shooting) | Build the per-shooter companion frame from an enhanced play-by-play DataFrame. |
 | [clutch_delta](additional/analytics.md#clutch_delta) | Clutch net-rating delta vs a full-game baseline, per (season, team_id). |
 | [flag_garbage_time](additional/analytics.md#flag_garbage_time) | Flag CTG garbage time (excluded from CTG stats by default). |
 | [flag_heave_possessions](additional/analytics.md#flag_heave_possessions) | Flag CTG's "projected heave possessions" (excluded from CTG stats by default). |
@@ -187,8 +224,8 @@ not covered by the generated API-endpoint reference above.
 | [nba_tracking_pass_value](additional/analytics.md#nba_tracking_pass_value) | Expected-assists / passer value: `ast_oe` per player-season. |
 | [nba_tracking_reb_oe](additional/analytics.md#nba_tracking_reb_oe) | Rebounding-over-expected: `reb_oe` plus OREB/DREB splits, per player-season. |
 | [nba_tracking_rim_protect_value](additional/analytics.md#nba_tracking_rim_protect_value) | Rim-protection / shot-defend points-saved over expected, per player-season. |
-| [nba_tracking_shot_diet_value](additional/analytics.md#nba_tracking_shot_diet_value) | Catch-&-shoot vs pull-up points-over-expected, per player-season. |
-| [nba_tracking_touch_value](additional/analytics.md#nba_tracking_touch_value) | Touch / possession-time value over expected, per player-season. |
+| [nba_tracking_shot_diet_value](additional/analytics-2.md#nba_tracking_shot_diet_value) | Catch-&-shoot vs pull-up points-over-expected, per player-season. |
+| [nba_tracking_touch_value](additional/analytics-2.md#nba_tracking_touch_value) | Touch / possession-time value over expected, per player-season. |
 | [nbadraft_mock_draft](additional/analytics-2.md#nbadraft_mock_draft) | The current consensus mock draft from NBADraft.net. |
 | [player_play_context](additional/analytics-2.md#player_play_context) | Per-player offensive On/Off Play-Context table (CTG's On/Off page, offense half). |
 | [player_rates](additional/analytics-2.md#player_rates) | Per-player per-minute rate stats from box logs. |
@@ -211,28 +248,16 @@ not covered by the generated API-endpoint reference above.
 | [xpoints_baseline](additional/analytics-2.md#xpoints_baseline) | League-average FG% baseline table keyed by the three shot-zone columns. |
 | [zone_value_map](additional/analytics-2.md#zone_value_map) | Per-player per-zone value map: points and expected points per shot. |
 
-## Other
+## Dates and seasons
 
 | Function | Summary |
 |---|---|
-| [espn_nba_game_rosters](additional/other.md#espn_nba_game_rosters) | espn_nba_game_rosters() - Pull the game by id. |
-| [scoreboard_event_parsing](additional/other.md#scoreboard_event_parsing) | Internal helper that flattens an ESPN NBA scoreboard event dict into a |
-| [load_nba_stats_leaguedash](additional/other.md#load_nba_stats_leaguedash) | Load one asset family of the `nba_stats_leaguedash` release. |
-| [load_darko_dpm](additional/other.md#load_darko_dpm) | Parse a DARKO DPM leaderboard CSV (e.g. `2026-darko-dpm-leaderboard.csv`). |
-| [load_dunks_threes_stats](additional/other.md#load_dunks_threes_stats) | Parse a Dunks & Threes counting-stats CSV (e.g. `2025_Dunks_&_Threes_Stats.csv`). |
-| [load_epm](additional/other.md#load_epm) | Parse a Dunks & Threes EPM CSV (`{season}_EPM_data.csv`). |
-| [load_lebron_daily](additional/other.md#load_lebron_daily) | Parse a LEBRON daily-snapshot CSV (e.g. `lebron_daily_2026-07-02.csv`). |
-| [load_lebron_season](additional/other.md#load_lebron_season) | Parse a LEBRON season-file CSV (e.g. `lebron-data-2026.csv`). |
-| [load_rapm_ryan_davis](additional/other.md#load_rapm_ryan_davis) | Parse a Ryan Davis published RAPM CSV (single-season or multi-year window). |
-| [normalize_player_name](additional/other.md#normalize_player_name) | Fold a player display name to a join-safe key. |
-| [build_athlete_identity_lookup](additional/other.md#build_athlete_identity_lookup) | R `build_athlete_identity_lookup`: athlete_id -> identity from team rosters. |
-| [build_nba_player_identity_lookup](additional/other.md#build_nba_player_identity_lookup) | R `build_identity_lookup(season)`: athlete_id -> identity from the |
-| [build_play_context_shots](additional/other.md#build_play_context_shots) | Build the per-shot frame carrying CTG's play context. |
-| [build_possession_shooting](additional/other.md#build_possession_shooting) | Build the per-shooter companion frame from an enhanced play-by-play DataFrame. |
-| [espn_nba_pbp](additional/other.md#espn_nba_pbp) | espn_nba_pbp() - Pull the game by id - Data from API endpoints - `nba/playbyplay`, `nba/summary` |
-| [nba_pbp_disk](additional/other.md#nba_pbp_disk) | Load a previously cached ESPN NBA summary JSON for a game from disk. |
-| [nba_v3_to_v2_pbp](additional/other.md#nba_v3_to_v2_pbp) | Convert a v3 `playbyplayv3` payload into the full v2-schema pbp frame. |
-| [year_to_season](additional/other.md#year_to_season) | Convert a season START year (e.g. 2023) to the NBA's hyphenated label |
-| [nba_player_crosswalk](additional/other.md#nba_player_crosswalk) | Build the NBA cross-source player crosswalk (ESPN / NBA Stats / Fox). |
-| [nba_schedule_crosswalk](additional/other.md#nba_schedule_crosswalk) | Build the NBA cross-source schedule crosswalk (ESPN / NBA Stats). |
-| [nba_team_crosswalk](additional/other.md#nba_team_crosswalk) | Build the NBA cross-source team crosswalk (ESPN / NBA Stats / Fox). |
+| [year_to_season](additional/dates-and-seasons.md#year_to_season) | Convert a season START year (e.g. 2023) to the NBA's hyphenated label |
+
+## IDs and crosswalks
+
+| Function | Summary |
+|---|---|
+| [nba_player_crosswalk](additional/ids-and-crosswalks.md#nba_player_crosswalk) | Build the NBA cross-source player crosswalk (ESPN / NBA Stats / Fox). |
+| [nba_schedule_crosswalk](additional/ids-and-crosswalks.md#nba_schedule_crosswalk) | Build the NBA cross-source schedule crosswalk (ESPN / NBA Stats). |
+| [nba_team_crosswalk](additional/ids-and-crosswalks.md#nba_team_crosswalk) | Build the NBA cross-source team crosswalk (ESPN / NBA Stats / Fox). |

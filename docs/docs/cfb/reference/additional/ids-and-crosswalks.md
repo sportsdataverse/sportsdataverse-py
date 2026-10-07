@@ -1,7 +1,7 @@
 ---
 title: "CFB — additional Python functions — IDs and crosswalks"
 sidebar_label: "IDs and crosswalks"
-sidebar_position: 7
+sidebar_position: 10
 description: "CFB — additional Python functions — IDs and crosswalks — function reference in sdv-py, the SportsDataverse Python package."
 ---
 # CFB — additional Python functions — IDs and crosswalks

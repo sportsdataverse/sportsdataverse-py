@@ -1,7 +1,7 @@
 ---
 title: "WNBA — additional Python functions — WNBA Stats API"
 sidebar_label: "WNBA Stats API"
-sidebar_position: 2
+sidebar_position: 3
 description: "WNBA — additional Python functions — WNBA Stats API — function reference in sdv-py, the SportsDataverse Python package."
 ---
 # WNBA — additional Python functions — WNBA Stats API

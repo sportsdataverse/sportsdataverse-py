@@ -198,6 +198,23 @@ not covered by the generated API-endpoint reference above.
 | [pff_ufl_teams](python-helpers/pff-premium-stats-legacy-6.md#pff_ufl_teams) | LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Teams / franchise groups + games for a league-season |
 | [pff_ufl_teams_overview](python-helpers/pff-premium-stats-legacy-6.md#pff_ufl_teams_overview) | LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers). Team overview table (By Team landing) |
 
+## stats.ncaa.org
+
+| Function | Summary |
+|---|---|
+| [college_softball_re24](python-helpers/stats-ncaa-org.md#college_softball_re24) | see the core function's Returns table. |
+| [college_softball_state](python-helpers/stats-ncaa-org.md#college_softball_state) | see the core function's Returns table. |
+| [college_softball_wpa](python-helpers/stats-ncaa-org.md#college_softball_wpa) | see the core function's Returns table. |
+
+## Play-by-play processing
+
+| Function | Summary |
+|---|---|
+| [nbagl_enhanced_pbp](python-helpers/play-by-play-processing.md#nbagl_enhanced_pbp) | Return a normalised enhanced play-by-play frame for a G-League game. |
+| [nbagl_on_court](python-helpers/play-by-play-processing.md#nbagl_on_court) | Return the rotation-keyed on-court player frame for a G-League game. |
+| [nbagl_possessions](python-helpers/play-by-play-processing.md#nbagl_possessions) | Return the possession-level lineup stint matrix for a G-League game. |
+| [nbagl_rapm_from_games](python-helpers/play-by-play-processing.md#nbagl_rapm_from_games) | Compute per-player RAPM estimates over a sequence of G-League games. |
+
 ## Models and calculators
 
 | Function | Summary |
@@ -222,19 +239,17 @@ not covered by the generated API-endpoint reference above.
 | [shot_attempts](python-helpers/analytics.md#shot_attempts) | Regular-season (`season_type_id` `"2"`) and playoff (`"4"`) shots; success = |
 | [shot_events](python-helpers/analytics.md#shot_events) | Field-goal-attempt events from released `{nba,wnba}_stats_shots`. |
 
-## Other
+## Cache and configuration
 
 | Function | Summary |
 |---|---|
-| [college_softball_re24](python-helpers/other.md#college_softball_re24) | see the core function's Returns table. |
-| [college_softball_state](python-helpers/other.md#college_softball_state) | see the core function's Returns table. |
-| [college_softball_wpa](python-helpers/other.md#college_softball_wpa) | see the core function's Returns table. |
-| [nbagl_enhanced_pbp](python-helpers/other.md#nbagl_enhanced_pbp) | Return a normalised enhanced play-by-play frame for a G-League game. |
-| [nbagl_on_court](python-helpers/other.md#nbagl_on_court) | Return the rotation-keyed on-court player frame for a G-League game. |
-| [nbagl_possessions](python-helpers/other.md#nbagl_possessions) | Return the possession-level lineup stint matrix for a G-League game. |
-| [nbagl_rapm_from_games](python-helpers/other.md#nbagl_rapm_from_games) | Compute per-player RAPM estimates over a sequence of G-League games. |
-| [cache_stats](python-helpers/other.md#cache_stats) | Return a snapshot of the cache for debugging / inspection. |
-| [get_cache_mode](python-helpers/other.md#get_cache_mode) | Return the current cache mode. |
-| [set_cache_mode](python-helpers/other.md#set_cache_mode) | Switch the global cache mode. |
-| [set_default_ttl](python-helpers/other.md#set_default_ttl) | Override the default TTL for endpoints not matched by the tier rules. |
-| [validate_game](python-helpers/other.md#validate_game) | Validate one processed game against the packaged invariant rules. |
+| [cache_stats](python-helpers/cache-and-configuration.md#cache_stats) | Return a snapshot of the cache for debugging / inspection. |
+| [get_cache_mode](python-helpers/cache-and-configuration.md#get_cache_mode) | Return the current cache mode. |
+| [set_cache_mode](python-helpers/cache-and-configuration.md#set_cache_mode) | Switch the global cache mode. |
+| [set_default_ttl](python-helpers/cache-and-configuration.md#set_default_ttl) | Override the default TTL for endpoints not matched by the tier rules. |
+
+## Validation
+
+| Function | Summary |
+|---|---|
+| [validate_game](python-helpers/validation.md#validate_game) | Validate one processed game against the packaged invariant rules. |

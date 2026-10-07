@@ -116,6 +116,44 @@ rosters_pd = espn_nhl_game_rosters(game_id=401559395, return_as_pandas=True)
 rosters_pd[["athlete_display_name", "team_abbreviation", "did_not_play"]].head()
 ```
 
+### espn_nhl_pbp {#espn_nhl_pbp}
+
+`espn_nhl_pbp(game_id: 'int', raw=False, **kwargs) -> 'Dict'`
+
+espn_nhl_pbp() - Pull the game by id. Data from API endpoints - `nhl/playbyplay`, `nhl/summary`
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `game_id` | `int` |  | Unique ESPN event id (NOT the NHL native game id), can be obtained from nhl_schedule(). |
+| `raw` |  | `False` |  |
+
+**Returns**
+
+Dictionary of game data with keys - "gameId", "plays", "boxscore", "header", "broadcasts", "videos", "playByPlaySource", "standings", "leaders", "seasonseries", "pickcenter", "againstTheSpread", "odds", "onIce", "gameInfo", "season"
+
+**Example**
+
+```python
+from sportsdataverse.nhl import espn_nhl_pbp
+game = espn_nhl_pbp(game_id=401559395)
+list(game.keys())  # 'gameId', 'plays', 'boxscore', ...
+
+# Inspect parsed plays and a quick filter on goal events
+
+import polars as pl
+plays = pl.DataFrame(game["plays"])
+print(plays.shape)
+goals = plays.filter(pl.col("type.text") == "Goal")
+goals.select(["period", "time", "text"]).head()
+
+# Pull the unparsed payload for custom downstream parsing
+
+raw = espn_nhl_pbp(game_id=401559395, raw=True)
+sorted(raw.keys())[:5]
+```
+
 ### espn_nhl_player_stats {#espn_nhl_player_stats}
 
 `espn_nhl_player_stats(athlete_id: 'int', season: 'int', *, season_type: 'str' = 'regular', total: 'bool' = False, raw: 'bool' = False, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'pl.DataFrame | pd.DataFrame | dict[str, Any]'`
@@ -438,38 +476,6 @@ teams.filter(pl.col("team_id") == "14").to_dicts()
 espn_nhl_teams.cache_clear()
 teams_pd = espn_nhl_teams(return_as_pandas=True)
 teams_pd[["team_id", "team_abbreviation", "team_display_name"]].head()
-```
-
-### nhl_special_teams_value {#nhl_special_teams_value}
-
-`nhl_special_teams_value(pbp: 'pl.DataFrame', shifts: 'pl.DataFrame', *, model_dir: "'str | None'" = None, league: 'str' = 'nhl', return_as_pandas: 'bool' = False, _stints: 'pl.DataFrame | None' = None) -> "'pl.DataFrame | pd.DataFrame'"`
-
-Per-skater power-play/penalty-kill value (goals) above/below league baseline.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `pbp` | `DataFrame` |  | a `load_nhl_pbp_full`-shaped frame. |
-| `shifts` | `DataFrame` |  | a `load_nhl_shifts`-shaped frame. |
-| `model_dir` | `str \| None` | `None` | passed through to `nhl_xg`. |
-| `league` | `str` | `'nhl'` | `"nhl"` or `"pwhl"` -- selects `league_xg_rate_pp`/pk` via `LEAGUE_CONSTANTS`. |
-| `return_as_pandas` | `bool` | `False` | return a pandas DataFrame instead of polars. |
-| `_stints` | `DataFrame \| None` | `None` | internal test hook -- inject a pre-built stints frame. |
-
-**Returns**
-
-`player_id:Int64, pp_toi_minutes:Float64, pk_toi_minutes:Float64, pp_value:Float64, pk_value:Float64`. Empty input returns a zero-row frame with this schema.
-
-**Example**
-
-```python
-import polars as pl
-from sportsdataverse.nhl.nhl_special_teams import nhl_special_teams_value
-pbp = pl.read_parquet("tests/fixtures/nhl_player_impact/pbp_sample.parquet")
-shifts = pl.read_parquet("tests/fixtures/nhl_player_impact/shifts_sample.parquet")
-st = nhl_special_teams_value(pbp, shifts, model_dir="tests/fixtures/nhl_player_impact/xg_models")
-print(st.sort("pp_value", descending=True).head(10))
 ```
 
 ### scoreboard_event_parsing {#scoreboard_event_parsing}

@@ -82,3 +82,36 @@ def test_every_row_reports_a_nonzero_function_count():
         for row in generate._league_source_rows(prefix, autodoc_names=[]):
             assert row["count"] > 0, f"{prefix}: {row['label']} has a zero-count row"
             assert row["entries"], f"{prefix}: {row['label']} has no API/host entries"
+
+
+def _index_links(idx):
+    return re.findall(r"\]\((reference/[^)#\s]+)(?:#([^)\s]+))?\)", idx.read_text(encoding="utf-8"))
+
+
+def test_index_anchor_links_land_on_the_page_that_holds_the_anchor():
+    """A function the family split moved is linked on its family page. Linking the old page and
+    relying on anchorForward.ts to bounce the reader works only with JavaScript, and only in the
+    browser -- the sdv-docs index and any markdown reader see a dead anchor."""
+    bad = []
+    for idx in sorted(generate.DOCS.glob("*/index.md")):
+        for target, anchor in _index_links(idx):
+            page = idx.parent / f"{target}.md"
+            if not anchor:
+                continue
+            ids = {i for _off, i in generate._heading_ids(page.read_text(encoding="utf-8"))} if page.exists() else set()
+            if anchor not in ids:
+                bad.append(f"{idx.parent.name}: {target}#{anchor}")
+    assert not bad, f"{len(bad)} index links to a missing anchor:\n" + "\n".join(bad[:20])
+
+
+def test_hand_written_wrapper_rows_link_their_provider_family_page():
+    """When the Additional page is split, a provider's hand-written wrappers live on that
+    provider's family page; the hub only lists families."""
+    bad = []
+    for idx in sorted(generate.DOCS.glob("*/index.md")):
+        if not (idx.parent / "reference" / "additional").is_dir():
+            continue
+        for line in idx.read_text(encoding="utf-8").splitlines():
+            if line.startswith("| [Hand-written wrappers](reference/additional)"):
+                bad.append(idx.parent.name)
+    assert not bad, "Hand-written rows still link the hub: " + ", ".join(bad)

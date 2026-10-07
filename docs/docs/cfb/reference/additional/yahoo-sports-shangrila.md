@@ -1,7 +1,7 @@
 ---
 title: "CFB — additional Python functions — Yahoo Sports Shangrila"
 sidebar_label: "Yahoo Sports Shangrila"
-sidebar_position: 2
+sidebar_position: 5
 description: "CFB — additional Python functions — Yahoo Sports Shangrila — function reference in sdv-py, the SportsDataverse Python package."
 ---
 # CFB — additional Python functions — Yahoo Sports Shangrila

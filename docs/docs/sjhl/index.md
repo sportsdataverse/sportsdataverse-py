@@ -9,19 +9,15 @@ description: "sdv-py SJHL: endpoint references, dataset loaders and parsers for 
 
 | Source | APIs / hosts | Functions | Auth |
 |---|---|---:|---|
-| [HockeyTech / LeagueStat](#hockeytech-leaguestat) | `lscluster.hockeytech.com` | 11 | per-league public key (SDV_<LEAGUE>_API_KEY) |
+| [HockeyTech / LeagueStat](#hockeytech-leaguestat) | `lscluster.hockeytech.com` | 12 | per-league public key (SDV_<LEAGUE>_API_KEY) |
 | [Additional functions](reference/additional) | hand-written wrappers & helpers | 14 | — |
 
 ## HockeyTech / LeagueStat {#hockeytech-leaguestat}
 
 | Reference | Functions |
 |---|---:|
-| [Hand-written wrappers](reference/additional) | 11 |
+| [Hand-written wrappers](reference/additional) | 12 |
 ## Tools and helpers
-
-### Play-by-play processing {#play-by-play-processing}
-
-- [`build_family`](reference/additional#build_family)
 
 ### Dates and seasons {#dates-and-seasons}
 

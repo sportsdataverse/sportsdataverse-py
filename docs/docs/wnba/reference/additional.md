@@ -15,11 +15,22 @@ not covered by the generated API-endpoint reference above.
 |---|---|
 | [espn_wnba_game_officials](additional/espn.md#espn_wnba_game_officials) | Pull the officials assigned to a WNBA game. |
 | [espn_wnba_game_rosters](additional/espn.md#espn_wnba_game_rosters) | espn_wnba_game_rosters() - Pull the game by id. |
+| [espn_wnba_pbp](additional/espn.md#espn_wnba_pbp) | espn_wnba_pbp() - Pull the game by id. Data from API endpoints - `wnba/playbyplay`, `wnba/summary` |
 | [espn_wnba_player_stats](additional/espn.md#espn_wnba_player_stats) | Pull a WNBA athlete's ESPN **season** stat line. |
 | [espn_wnba_schedule](additional/espn.md#espn_wnba_schedule) | espn_wnba_schedule - look up the WNBA schedule for a given season |
 | [espn_wnba_team_stats](additional/espn.md#espn_wnba_team_stats) | Pull ESPN team season stats for a WNBA team. |
 | [espn_wnba_teams](additional/espn.md#espn_wnba_teams) | espn_wnba_teams - look up WNBA teams |
 | [scoreboard_event_parsing](additional/espn.md#scoreboard_event_parsing) | _No description available._ |
+
+## sportsdataverse-data releases
+
+| Function | Summary |
+|---|---|
+| [load_wnba_stats_leaguedash](additional/sportsdataverse-data-releases.md#load_wnba_stats_leaguedash) | Load one asset family of the `wnba_stats_leaguedash` release. |
+| [load_wnba_stats_lineups](additional/sportsdataverse-data-releases.md#load_wnba_stats_lineups) | Load season-level WNBA 5-man lineup statistics (deprecated). |
+| [load_wnba_stats_player_season_stats](additional/sportsdataverse-data-releases.md#load_wnba_stats_player_season_stats) | Load season-level WNBA player statistics (deprecated). |
+| [load_wnba_stats_standings](additional/sportsdataverse-data-releases.md#load_wnba_stats_standings) | Load season-level WNBA standings (deprecated). |
+| [load_wnba_stats_team_season_stats](additional/sportsdataverse-data-releases.md#load_wnba_stats_team_season_stats) | Load season-level WNBA team statistics (deprecated). |
 
 ## WNBA Stats API
 
@@ -64,14 +75,28 @@ not covered by the generated API-endpoint reference above.
 | Function | Summary |
 |---|---|
 | [build_athlete_identity_lookup](additional/play-by-play-processing.md#build_athlete_identity_lookup) | R `build_athlete_identity_lookup`: athlete_id -> identity from team rosters. |
-| [build_wnba_season_wp](additional/play-by-play-processing.md#build_wnba_season_wp) | A WNBA season's play-by-play with win-probability columns joined in. |
-| [espn_wnba_pbp](additional/play-by-play-processing.md#espn_wnba_pbp) | espn_wnba_pbp() - Pull the game by id. Data from API endpoints - `wnba/playbyplay`, `wnba/summary` |
 | [wnba_enhanced_pbp](additional/play-by-play-processing.md#wnba_enhanced_pbp) | Return a normalised enhanced play-by-play frame for a WNBA game. |
 | [wnba_on_court](additional/play-by-play-processing.md#wnba_on_court) | Return the rotation-keyed on-court player frame for a WNBA game. |
 | [wnba_pbp_disk](additional/play-by-play-processing.md#wnba_pbp_disk) | _No description available._ |
 | [wnba_play_context](additional/play-by-play-processing.md#wnba_play_context) | Return a WNBA game's possessions with the full CTG play-context surface. |
 | [wnba_possessions](additional/play-by-play-processing.md#wnba_possessions) | Return the possession-level lineup stint matrix for a WNBA game. |
 | [wnba_rapm_from_games](additional/play-by-play-processing.md#wnba_rapm_from_games) | Compute per-player RAPM estimates over a sequence of WNBA games. |
+
+## Models and calculators
+
+| Function | Summary |
+|---|---|
+| [build_wnba_season_wp](additional/models-and-calculators.md#build_wnba_season_wp) | A WNBA season's play-by-play with win-probability columns joined in. |
+| [wnba_aging_curve](additional/models-and-calculators.md#wnba_aging_curve) | WNBA aging curve -- the NBA core bound to `league="wnba"`. |
+| [wnba_career_trajectory](additional/models-and-calculators.md#wnba_career_trajectory) | WNBA career trajectory -- the NBA core bound to `league="wnba"`. |
+| [wnba_draft_model](additional/models-and-calculators.md#wnba_draft_model) | Project WNBA prospect career value + draft probability from draft slot. |
+| [wnba_in_game_win_prob](additional/models-and-calculators.md#wnba_in_game_win_prob) | WNBA in-game win probability (league_id='10'). See sportsdataverse.nba.nba_game_predict.nba_in_game_win_prob. |
+| [wnba_predict_games](additional/models-and-calculators.md#wnba_predict_games) | WNBA vectorized pregame predictions (league_id='10'). See sportsdataverse.nba.nba_game_predict.nba_predict_games. |
+| [wnba_predict_margin](additional/models-and-calculators.md#wnba_predict_margin) | WNBA expected margin (league_id='10'). See sportsdataverse.nba.nba_game_predict.predict_margin. |
+| [wnba_predict_total](additional/models-and-calculators.md#wnba_predict_total) | WNBA expected total (league_id='10'). See sportsdataverse.nba.nba_game_predict.predict_total. |
+| [wnba_rookie_projection](additional/models-and-calculators.md#wnba_rookie_projection) | WNBA rookie/sophomore projection -- composes the WNBA draft/aging/availability pieces. |
+| [wnba_team_ratings](additional/models-and-calculators.md#wnba_team_ratings) | WNBA team ratings (league_id='10'). See sportsdataverse.nba.nba_team_ratings.nba_team_ratings. |
+| [wnba_win_prob_from_margin](additional/models-and-calculators.md#wnba_win_prob_from_margin) | WNBA home win probability (league_id='10'). See sportsdataverse.nba.nba_game_predict.win_prob_from_margin. |
 
 ## Analytics
 
@@ -99,26 +124,16 @@ not covered by the generated API-endpoint reference above.
 | [wnba_tracking_touch_value](additional/analytics.md#wnba_tracking_touch_value) | WNBA touch / possession-time value (`league_id="10"` by-reference shim). |
 | [zone_value_map](additional/analytics.md#zone_value_map) | Per-player per-zone value map: points and expected points per shot. |
 
-## Other
+## Dates and seasons
 
 | Function | Summary |
 |---|---|
-| [load_wnba_stats_leaguedash](additional/other.md#load_wnba_stats_leaguedash) | Load one asset family of the `wnba_stats_leaguedash` release. |
-| [load_wnba_stats_lineups](additional/other.md#load_wnba_stats_lineups) | Load season-level WNBA 5-man lineup statistics (deprecated). |
-| [load_wnba_stats_player_season_stats](additional/other.md#load_wnba_stats_player_season_stats) | Load season-level WNBA player statistics (deprecated). |
-| [load_wnba_stats_standings](additional/other.md#load_wnba_stats_standings) | Load season-level WNBA standings (deprecated). |
-| [load_wnba_stats_team_season_stats](additional/other.md#load_wnba_stats_team_season_stats) | Load season-level WNBA team statistics (deprecated). |
-| [wnba_aging_curve](additional/other.md#wnba_aging_curve) | WNBA aging curve -- the NBA core bound to `league="wnba"`. |
-| [wnba_career_trajectory](additional/other.md#wnba_career_trajectory) | WNBA career trajectory -- the NBA core bound to `league="wnba"`. |
-| [wnba_draft_model](additional/other.md#wnba_draft_model) | Project WNBA prospect career value + draft probability from draft slot. |
-| [wnba_in_game_win_prob](additional/other.md#wnba_in_game_win_prob) | WNBA in-game win probability (league_id='10'). See sportsdataverse.nba.nba_game_predict.nba_in_game_win_prob. |
-| [wnba_predict_games](additional/other.md#wnba_predict_games) | WNBA vectorized pregame predictions (league_id='10'). See sportsdataverse.nba.nba_game_predict.nba_predict_games. |
-| [wnba_predict_margin](additional/other.md#wnba_predict_margin) | WNBA expected margin (league_id='10'). See sportsdataverse.nba.nba_game_predict.predict_margin. |
-| [wnba_predict_total](additional/other.md#wnba_predict_total) | WNBA expected total (league_id='10'). See sportsdataverse.nba.nba_game_predict.predict_total. |
-| [wnba_rookie_projection](additional/other.md#wnba_rookie_projection) | WNBA rookie/sophomore projection -- composes the WNBA draft/aging/availability pieces. |
-| [wnba_team_ratings](additional/other.md#wnba_team_ratings) | WNBA team ratings (league_id='10'). See sportsdataverse.nba.nba_team_ratings.nba_team_ratings. |
-| [wnba_win_prob_from_margin](additional/other.md#wnba_win_prob_from_margin) | WNBA home win probability (league_id='10'). See sportsdataverse.nba.nba_game_predict.win_prob_from_margin. |
-| [most_recent_wnba_season](additional/other.md#most_recent_wnba_season) | most_recent_wnba_season - return the most recent (likely-completed) WNBA season year. |
-| [wnba_player_crosswalk](additional/other.md#wnba_player_crosswalk) | Build the WNBA cross-source player crosswalk (ESPN / WNBA Stats / Fox). |
-| [wnba_schedule_crosswalk](additional/other.md#wnba_schedule_crosswalk) | Build the WNBA cross-source schedule crosswalk (ESPN / WNBA Stats). |
-| [wnba_team_crosswalk](additional/other.md#wnba_team_crosswalk) | Build the WNBA cross-source team crosswalk (ESPN / WNBA Stats / Fox). |
+| [most_recent_wnba_season](additional/dates-and-seasons.md#most_recent_wnba_season) | most_recent_wnba_season - return the most recent (likely-completed) WNBA season year. |
+
+## IDs and crosswalks
+
+| Function | Summary |
+|---|---|
+| [wnba_player_crosswalk](additional/ids-and-crosswalks.md#wnba_player_crosswalk) | Build the WNBA cross-source player crosswalk (ESPN / WNBA Stats / Fox). |
+| [wnba_schedule_crosswalk](additional/ids-and-crosswalks.md#wnba_schedule_crosswalk) | Build the WNBA cross-source schedule crosswalk (ESPN / WNBA Stats). |
+| [wnba_team_crosswalk](additional/ids-and-crosswalks.md#wnba_team_crosswalk) | Build the WNBA cross-source team crosswalk (ESPN / WNBA Stats / Fox). |

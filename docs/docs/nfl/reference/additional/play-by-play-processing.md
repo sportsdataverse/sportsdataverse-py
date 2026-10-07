@@ -402,56 +402,6 @@ season = build_nfl_player_stats_kicking(pbp, weekly=False)
 wk.filter(pl.col("fg_att") >= 1).sort("fg_pct", descending=True).head()
 ```
 
-### build_nfl_players {#build_nfl_players}
-
-`build_nfl_players(*, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"`
-
-Build an SDV-native NFL players frame from ESPN's public athletes endpoint.
-
-Walks ESPN's public NFL athletes index
-(`sports.core.api.espn.com/v2/sports/football/leagues/nfl/athletes`),
-resolves each athlete's detail resource, flattens it onto the SDV-native
-players schema, **dedups to the highest numeric `espn_id` per
-`(full_name, birth_date)`** (the ESPN ~2007 4-digit -> 7-digit id
-migration left some players with two ids), and enriches `gsis_id` +
-other cross-IDs by a best-effort join against
-`sportsdataverse.nfl.load_nfl_players`.
-
-This is the **public ESPN-athletes tier only** — a partial mirror of
-nflverse's full seven-source `players.parquet` (three of those sources,
-PFR / OTC / PFF, require private credentials). ESPN-native rows with no
-nflverse match keep only their ESPN fields (cross-IDs left null). For the
-full identity master prefer `sportsdataverse.nfl.load_nfl_players`;
-use `build_nfl_players` when you need an SDV-native frame that depends
-only on the live public ESPN API.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `return_as_pandas` | `bool` | `False` | If `True`, return a `pandas.DataFrame`; otherwise a `polars.DataFrame` (default). |
-
-**Returns**
-
-A one-row-per-player `DataFrame` with the documented schema (`espn_id`, `full_name`, `first_name`, `last_name`, `position`, `team`, `jersey`, `height`, `weight`, `birth_date`, `status`, `headshot_url`, `gsis_id`, `esb_id`, `pfr_id`, `pff_id`, `smart_id`, `college`). An empty fetch yields a zero-row frame carrying the same column set.
-
-**Example**
-
-```python
-from sportsdataverse.nfl import build_nfl_players
-players = build_nfl_players()
-print(players.shape)
-
-# Pandas output
-
-df = build_nfl_players(return_as_pandas=True)
-
-# Pipeline next step (one line)
-
-import polars as pl
-build_nfl_players().filter(pl.col("position") == "QB").head()
-```
-
 ### build_nfl_rosters {#build_nfl_rosters}
 
 `build_nfl_rosters(seasons: 'List[int]', *, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"`
@@ -615,6 +565,45 @@ df_pd = build_nfl_team_stats([2023], summary_level="season",
 # Pipeline next step (one line)
 
 wk.sort("def_sacks", descending=True).head()
+```
+
+### calculate_nfl_series_conversion_rates {#calculate_nfl_series_conversion_rates}
+
+`calculate_nfl_series_conversion_rates(pbp: 'pl.DataFrame', *, weekly: 'bool' = False, return_as_pandas: 'bool' = False) -> "pl.DataFrame | 'pd.DataFrame'"`
+
+Compute per-team offense + defense series conversion rates.
+
+A faithful polars port of nflfastR's `calculate_series_conversion_rates`.
+Series where `down` is null (kickoffs, PAT/2pt attempts, non-plays, no
+`posteam`) and series ending in a `"QB kneel"` are excluded from the
+series count before rates are computed, matching the R source.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `pbp` | `DataFrame` |  | Play-by-play frame carrying `season`, `week`, `posteam`, `defteam`, `down`, `series`, `series_success`, and `series_result` (added by the `add_series_data` port). Rows must already be in play order within each series so the internal `first()`/`last()` series collapse is correct. |
+| `weekly` | `bool` | `False` | If `True`, group on `(season, team, week)`; if `False` (default), group on `(season, team)` -- collapsing every week into one season-level rate. |
+| `return_as_pandas` | `bool` | `False` | If `True` return a pandas DataFrame; else polars. |
+
+**Returns**
+
+A polars (or pandas) DataFrame with one row per team (per week when `weekly=True`), `off_n`/`def_n` (series count) plus the `off_*`/`def_*` rate columns documented in reference Sec 11. A team with offensive series but zero defensive series in a group (or vice versa -- effectively never happens in real data) carries nulls in the missing side rather than being dropped (full outer join).
+
+**Example**
+
+```python
+from sportsdataverse.nfl import calculate_nfl_series_conversion_rates
+rates = calculate_nfl_series_conversion_rates(pbp)
+rates.filter(pl.col("team") == "KC").select("off_scr", "def_scr")
+
+# Weekly grain
+
+weekly = calculate_nfl_series_conversion_rates(pbp, weekly=True)
+
+# Pipeline next step (one line)
+
+rates.sort("off_scr", descending=True).head()
 ```
 
 ### clean_nfl_pbp {#clean_nfl_pbp}

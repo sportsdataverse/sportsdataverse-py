@@ -2533,8 +2533,8 @@ def _generated_origins() -> dict[str, tuple[str, str]]:
     A generated wrapper or loader carries no hand-written module, so the registry
     deliberately has no ``modules:`` glob for it (one would shadow the provider that
     owns the family). Its source is the API it was generated from, which only the
-    codegen model knows -- this is that lookup, and it is what lets
-    :func:`sources.resolve` answer in its third tier."""
+    codegen model knows -- this is that lookup, and :func:`sources.resolve` treats it as
+    authoritative (its first tier), ahead of every glob."""
     params = spec.load_parameters(ENDPOINTS / "parameters.yaml")
     cfg = spec.load_leagues(ENDPOINTS / "leagues.yaml")
     out: dict[str, tuple[str, str]] = {}
@@ -2919,7 +2919,9 @@ def _host_names(bases: list[str], home: str = "") -> list[str]:
     return sorted(h for h in seen if h)
 
 
-def _league_source_rows(prefix: str, *, autodoc_names: list[str] | None = None) -> list[dict]:
+def _league_source_rows(
+    prefix: str, *, autodoc_names: list[str] | None = None, moved: dict[str, str] | None = None
+) -> list[dict]:
     """One row per provider PRESENT in ``prefix``, in ``sources.yaml`` registry order.
 
     A provider is present when the league has at least one reference page for one of
@@ -2927,7 +2929,10 @@ def _league_source_rows(prefix: str, *, autodoc_names: list[str] | None = None) 
     one autodoc name whose module resolves to it. ``entries`` is what the row's
     section lists: one line per API / host / release base, with the function count
     and the page it links. A provider with nothing in this league is omitted
-    entirely -- never a zero row and never an empty section."""
+    entirely -- never a zero row and never an empty section.
+
+    ``moved`` is :func:`_split_family_pages`' ``{function: "<page>/<family>"}``: when the
+    Additional page is split, a provider's hand-written row links its family page, not the hub."""
     import importlib
 
     from tools.codegen import sources
@@ -2961,6 +2966,7 @@ def _league_source_rows(prefix: str, *, autodoc_names: list[str] | None = None) 
     if autodoc_names:
         mod = importlib.import_module(f"sportsdataverse.{_LEAGUE_MODULE.get(prefix, prefix)}")
         hand: dict[str, int] = {}
+        first: dict[str, str] = {}
         for n in autodoc_names:
             obj = getattr(mod, n, None)
             if obj is None:
@@ -2968,9 +2974,11 @@ def _league_source_rows(prefix: str, *, autodoc_names: list[str] | None = None) 
             e = sources.resolve(n, getattr(obj, "__module__", ""), **_resolve_origin(n))
             if e.kind == "provider":
                 hand[e.key] = hand.get(e.key, 0) + 1
+                first.setdefault(e.key, n)
         for key, n in hand.items():
+            page = (moved or {}).get(first[key], _AUTODOC_PAGE[:-3])
             buckets.setdefault(key, []).append(
-                {"label": "Hand-written wrappers", "count": n, "url": f"reference/{_AUTODOC_PAGE[:-3]}"},
+                {"label": "Hand-written wrappers", "count": n, "url": f"reference/{page}"}
             )
     out: list[dict] = []
     for e in sources.providers():
@@ -2995,12 +3003,13 @@ def _league_source_rows(prefix: str, *, autodoc_names: list[str] | None = None) 
     return out
 
 
-def _league_category_rows(prefix: str, autodoc_names: list[str]) -> list[dict]:
+def _league_category_rows(prefix: str, autodoc_names: list[str], moved: dict[str, str] | None = None) -> list[dict]:
     """``[{key, label, anchor, functions}]`` for each helper category present in ``prefix``.
 
     Only the league's autodoc names can land in a category (every generated wrapper
     and loader belongs to a provider), so a league with no hand-written helpers gets
-    an empty list and the template drops the whole "Tools and helpers" block."""
+    an empty list and the template drops the whole "Tools and helpers" block. ``moved`` sends
+    each link to the family page the split moved the function to (see :func:`_league_source_rows`)."""
     import importlib
 
     from tools.codegen import sources
@@ -3016,7 +3025,7 @@ def _league_category_rows(prefix: str, autodoc_names: list[str]) -> list[dict]:
             continue
         e = sources.resolve(n, getattr(obj, "__module__", ""), **_resolve_origin(n))
         if e.kind == "category":
-            by_key.setdefault(e.key, []).append({"name": n, "url": f"reference/{page}#{n}"})
+            by_key.setdefault(e.key, []).append({"name": n, "url": f"reference/{(moved or {}).get(n, page)}#{n}"})
     return [
         {"key": e.key, "label": e.label, "anchor": _slugify(e.label), "functions": by_key[e.key]}
         for e in sources.categories()
@@ -3176,10 +3185,6 @@ def _family_rank() -> dict[str, int]:
     from tools.codegen import sources
 
     return {"Highlights": -1, **{e.label: e.order for e in sources.load()}}
-
-
-# Read once at import: the registry is a committed file and every autodoc page needs this order.
-_FAMILY_RANK = _family_rank()
 
 
 def _autodoc_family(name: str, highlighted: frozenset[str] = frozenset(), *, module: str = "") -> str:
@@ -4212,31 +4217,35 @@ def _pack_families(
 ) -> list[tuple[str, str, int, list[str]]]:
     """``[(name, family key, markdown bytes)]`` in page order -> ``[(slug, label, part, [names])]``.
 
-    A plural key folds into its singular (``teams`` -> ``team``); a family with one function or under
-    :data:`_FAMILY_MIN_BYTES` joins ``other``; a family over :data:`_PAGE_MD_BUDGET` continues on
-    ``<slug>-2``, ``<slug>-3`` ... (a single function over the budget gets a page to itself).
+    Without ``rank`` (endpoint and loader pages, whose keys are bare words) a plural key folds into
+    its singular (``teams`` -> ``team``), a family with one function or under
+    :data:`_FAMILY_MIN_BYTES` joins ``other``, and families are ordered by label. A family over
+    :data:`_PAGE_MD_BUDGET` continues on ``<slug>-2``, ``<slug>-3`` ... (a single function over the
+    budget gets a page to itself).
 
-    ``rank`` (``{label: order}``, from :func:`_family_rank`) puts the families in registry order --
-    an autodoc page's sections then match the league index's source table. Without it families are
-    ordered by label, as the endpoint and loader pages still are. ``other`` is always last."""
-    keys = {k for _, k, _ in items}
-    fold = {k: k[:-1] if k.endswith("s") and k[:-1] in keys else k for k in keys}
-    items = [(n, fold[k], s) for n, k, s in items]
-    count: dict[str, int] = {}
-    size: dict[str, int] = {}
-    for _, k, s in items:
-        count[k] = count.get(k, 0) + 1
-        size[k] = size.get(k, 0) + s
-    small = {k for k in count if count[k] < 2 or size[k] < _FAMILY_MIN_BYTES}
-    if len(small) < len(count):
-        items = [(n, "other" if k in small else k, s) for n, k, s in items]
+    ``rank`` (``{label: order}``, from :func:`_family_rank`) is for autodoc pages, whose keys are
+    ``sources.yaml`` labels: families keep their label verbatim, are never folded into ``other`` (a
+    small source is still a source), and follow registry order, so the page's sections match the
+    league index's source table. ``other`` is always last."""
+    if rank is None:
+        keys = {k for _, k, _ in items}
+        fold = {k: k[:-1] if k.endswith("s") and k[:-1] in keys else k for k in keys}
+        items = [(n, fold[k], s) for n, k, s in items]
+        count: dict[str, int] = {}
+        size: dict[str, int] = {}
+        for _, k, s in items:
+            count[k] = count.get(k, 0) + 1
+            size[k] = size.get(k, 0) + s
+        small = {k for k in count if count[k] < 2 or size[k] < _FAMILY_MIN_BYTES}
+        if len(small) < len(count):
+            items = [(n, "other" if k in small else k, s) for n, k, s in items]
     families: dict[str, list[tuple[str, int]]] = {}
     for n, k, s in items:
         families.setdefault(k, []).append((n, s))
     # An autodoc key IS already a registry label ("nflverse data releases"), so it is used verbatim --
     # title-casing it would rewrite brand names ("Nflverse"). Endpoint/loader keys are bare words
     # ("boxscore") and still get their label or a capitalised fallback.
-    label = {k: k if k in _FAMILY_RANK else _FAMILY_LABELS.get(k, k[:1].upper() + k[1:]) for k in families}
+    label = {k: k if rank is not None else _FAMILY_LABELS.get(k, k[:1].upper() + k[1:]) for k in families}
     order = {k: (rank.get(label[k], len(rank)) if rank is not None else 0) for k in families}
     pages = []
     for k in sorted(families, key=lambda k: (k == "other", order[k], label[k].lower())):
@@ -4383,7 +4392,7 @@ def _family_pages(rel: str, content: str, prefix: str | None) -> tuple[str, dict
         return None
     pages = _pack_families(
         [(n, k, len(blocks[n].encode())) for n, k in zip(blocks, keys)],
-        rank=_FAMILY_RANK if autodoc else None,
+        rank=_family_rank() if autodoc else None,
     )
     title = meta.get("title", page).strip('"')
     toc = "toc_max_heading_level: 2\n" if "toc_max_heading_level" in meta else ""
@@ -4638,8 +4647,8 @@ def _render_docs_all() -> dict[str, str]:
             highlights_count=highlights_count,
             r_parity=_r_parity_rows(prefix, ref_pages, autodoc_names_list, moved),
             r_pkg=_R_PARITY_PACKAGE.get(prefix),
-            source_rows=_league_source_rows(prefix, autodoc_names=autodoc_names_list),
-            category_rows=_league_category_rows(prefix, autodoc_names_list),
+            source_rows=_league_source_rows(prefix, autodoc_names=autodoc_names_list, moved=moved),
+            category_rows=_league_category_rows(prefix, autodoc_names_list, moved),
         )
         if apis or loaders or autodoc is not None:
             out[f"{prefix}/reference/_category_.json"] = render_category("Reference", 1, True)

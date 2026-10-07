@@ -1,7 +1,7 @@
 ---
 title: "WNBA — additional Python functions — Fox Sports API"
 sidebar_label: "Fox Sports API"
-sidebar_position: 3
+sidebar_position: 4
 description: "WNBA — additional Python functions — Fox Sports API — function reference in sdv-py, the SportsDataverse Python package."
 ---
 # WNBA — additional Python functions — Fox Sports API

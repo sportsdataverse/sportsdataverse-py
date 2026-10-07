@@ -1,10 +1,287 @@
 ---
-title: "MBB — additional Python functions — Models and calculators: inject_rapm–win_prob"
-sidebar_label: "Models and calculators: inject_rapm–win_prob"
-sidebar_position: 7
-description: "MBB — additional Python functions — Models and calculators: inject_rapm–win_prob — function reference in sdv-py, the SportsDataverse Python package."
+title: "MBB — additional Python functions — Models and calculators: calculate_predicted–win_prob"
+sidebar_label: "Models and calculators: calculate_predicted–win_prob"
+sidebar_position: 10
+description: "MBB — additional Python functions — Models and calculators: calculate_predicted–win_prob — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# MBB — additional Python functions — Models and calculators: inject_rapm–win_prob
+# MBB — additional Python functions — Models and calculators: calculate_predicted–win_prob
+
+### calculate_predicted_out {#calculate_predicted_out}
+
+`calculate_predicted_out(player_weight_matrix: 'NDArray[np.float64]', regressed_players: 'list[float]', ctx: 'RapmPlayerContext') -> 'NDArray[np.float64]'`
+
+Predict per-lineup outputs from fitted per-player RAPM values.
+
+Faithful port of `RapmUtils.calculatePredictedOut` (`RapmUtils.ts:1559-1567`).
+`ctx` is accepted for signature parity with the TS source but unused in
+the body (ported verbatim -- upstream's own `ctx` param is likewise
+dead in this function).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `player_weight_matrix` | `NDArray[float64]` |  | The off/def design matrix, shape `(num_lineups, num_players)`. |
+| `regressed_players` | `list[float]` |  | The fitted per-player values (e.g. the final, strong-prior-blended RAPM from Task 3.5's `pickRidgeRegression`, or a raw `calculate_rapm` output), length `num_players`. |
+| `ctx` | `RapmPlayerContext` |  | A `RapmPlayerContext` (unused). |
+
+**Returns**
+
+The predicted per-lineup value, length `num_lineups` -- feed into `calculate_residual_error` alongside the actual lineup outputs.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_rapm import calculate_predicted_out
+
+predicted = calculate_predicted_out(x, [0.875, 1.375], ctx)
+```
+
+### calculate_rapm {#calculate_rapm}
+
+`calculate_rapm(regression_matrix: 'NDArray[np.float64]', player_outputs: 'list[float]') -> 'NDArray[np.float64]'`
+
+Apply a regression solver matrix to a target-outputs vector.
+
+Faithful port of `RapmUtils.calculateRapm` (`RapmUtils.ts:772-775`).
+Note the TS signature carries no `ctx` parameter (unlike its solve-layer
+siblings) -- ported verbatim, param-for-param.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `regression_matrix` | `NDArray[float64]` |  | The `(num_players, num_lineups)` solver from `slow_regression`. |
+| `player_outputs` | `list[float]` |  | The per-lineup target vector, length `num_lineups` (e.g. `calc_lineup_outputs`'s `off_outputs`/`def_outputs`). |
+
+**Returns**
+
+The per-player RAPM estimate, length `num_players`.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_rapm import calculate_rapm
+
+rapm = calculate_rapm(solver, [1.0, 2.0, 3.0])
+print(rapm.shape)  # (num_players,)
+```
+
+### calculate_residual_error {#calculate_residual_error}
+
+`calculate_residual_error(player_outs: 'list[float]', regressed_outs: 'list[float]', ctx: 'RapmPlayerContext') -> 'float'`
+
+Sum of squared residuals between actual and predicted lineup outputs.
+
+Faithful port of `RapmUtils.calculateResidualError` (`RapmUtils.ts:1569-1579`).
+`ctx` is accepted for signature parity but unused in the body (dead
+upstream too).
+
+**NaN/shape regime (landmine 7):** TS zips the two arrays via lodash
+.zip` (pads the shorter side with `undefined`, so a length
+mismatch silently contributes `NaN` to the running sum via
+`undefined - number`) then reduces with plain `+`. This port instead
+subtracts the two as `numpy` arrays: a length mismatch **raises**
+`ValueError` (numpy broadcast rules), rather than the TS silent-NaN
+behavior -- not reachable via either language's own call sites (both
+arguments are always index-aligned to the same lineup count in
+production), so this is a divergence in dead territory, not a fixed bug.
+A `NaN` *value already present* inside either input (as opposed to a
+length mismatch) propagates through the `numpy` subtraction/sum
+exactly as it would through the JS arithmetic (both regimes:
+numpy-propagate).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `player_outs` | `list[float]` |  | The actual per-lineup target values (e.g. `calc_lineup_outputs`'s output). |
+| `regressed_outs` | `list[float]` |  | The predicted per-lineup values (e.g. `calculate_predicted_out`'s output). |
+| `ctx` | `RapmPlayerContext` |  | A `RapmPlayerContext` (unused). |
+
+**Returns**
+
+`sum((player_outs[i] - regressed_outs[i]) ** 2)` -- the `errSq` term consumed by `calculate_sd_rapm`.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_rapm import calculate_residual_error
+
+err_sq = calculate_residual_error([1.0, 2.0, 3.0], [0.875, 1.375, 2.25], ctx)
+```
+
+### calculate_sd_rapm {#calculate_sd_rapm}
+
+`calculate_sd_rapm(param_errs: 'NDArray[np.float64]', err_sq: 'float', num_lineups: 'int', num_players: 'int') -> 'NDArray[np.float64]'`
+
+Per-player RAPM standard errors.
+
+Faithful port of the inline `sdRapm` computation in
+`RapmUtils.pickRidgeRegression` (`RapmUtils.ts:1373-1390`, not itself
+a named TS function -- promoted to a standalone, independently testable
+helper here since Task 3.4's brief calls out the formula explicitly).
+Cites [arXiv:1509.09169](https://arxiv.org/pdf/1509.09169.pdf).
+
+**Two NaN/error regimes (landmines 8-9):**
+
+8. `dof_inv = 1.0 / (num_lineups - num_players)` -- if
+   `num_lineups == num_players` exactly, JS silently produces
+   `Infinity` (float division by zero); this port instead **raises**
+   `ZeroDivisionError` (Python float division by zero), matching this
+   module's already-established landmine-2 convention (unguarded
+   division, Python-raises vs JS-Infinity/NaN). Not reachable via the
+   oracle fixtures (`num_off_lineups`/`num_def_lineups` always
+   comfortably exceed `num_players` there).
+9. `sqrt(sqrt(param_errs) * err_sq * dof_inv)` -- a negative
+   `param_errs` entry (only possible if `XᵀX + λI` isn't actually
+   positive-definite, e.g. `ridge_lambda < 0`) silently
+   **numpy-propagates** to `NaN` (matching JS `Math.sqrt(negative)
+   -> NaN`, with a `RuntimeWarning` rather than a raise) -- both
+   language regimes agree here, unlike landmine 8.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `param_errs` | `NDArray[float64]` |  | Per-player variance terms from `calc_slow_pseudo_inverse`, length `num_players`. |
+| `err_sq` | `float` |  | The residual sum of squares from `calculate_residual_error`. |
+| `num_lineups` | `int` |  | `ctx["num_off_lineups"]` or `ctx["num_def_lineups"]` (whichever side `param_errs`/`err_sq` were computed for). |
+| `num_players` | `int` |  | `ctx["num_players"]`. |
+
+**Returns**
+
+A length-`num_players` array of per-player RAPM standard errors.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_rapm import calculate_sd_rapm
+
+sd_rapm = calculate_sd_rapm(param_errs, err_sq, num_lineups=3, num_players=2)
+```
+
+### calibration_table {#calibration_table}
+
+`calibration_table(y_true: 'np.ndarray', p_pred: 'np.ndarray', n_bins: 'int' = 10) -> 'pl.DataFrame'`
+
+Bucket predicted probabilities into bins and compare to actual outcome rates.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `y_true` | `ndarray` |  | Array of binary outcomes (0/1). |
+| `p_pred` | `ndarray` |  | Array of predicted probabilities in [0, 1]. |
+| `n_bins` | `int` | `10` | Number of equal-width probability bins. |
+
+**Returns**
+
+A `polars.DataFrame` with columns `bin_mid`, `mean_pred`, `mean_actual`, `n` (one row per non-empty bin).
+
+**Example**
+
+```python
+import numpy as np
+from sportsdataverse._common.metrics import calibration_table
+calibration_table(np.array([1, 0, 1, 0]), np.array([0.9, 0.1, 0.8, 0.2]))
+```
+
+### fit_shrinkage_k {#fit_shrinkage_k}
+
+`fit_shrinkage_k(scored: 'pl.DataFrame', *, seed: 'int' = 0) -> 'float'`
+
+Fit the talent shrinkage `k` split-half (see module docstring).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `scored` | `DataFrame` |  | `mbb_shot_quality` output. |
+| `seed` | `int` | `0` | Split seed (deterministic fit). |
+
+**Returns**
+
+The `k` in `[1, 5000]` minimizing `talent_split_mse`.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_shooter_talent import fit_shrinkage_k
+k = fit_shrinkage_k(scored)
+```
+
+### get_constants {#get_constants}
+
+`get_constants(league: 'str') -> 'LeagueConstants'`
+
+Return the `LeagueConstants` for a league.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `league` | `str` |  | Either `"mens"` or `"womens"`. |
+
+**Returns**
+
+The league's `LeagueConstants`.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_prediction_constants import get_constants
+get_constants("mens").hfa
+```
+
+### get_player_value_constants {#get_player_value_constants}
+
+`get_player_value_constants(league: 'str') -> 'PlayerValueConstants'`
+
+Return the `PlayerValueConstants` for a league.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `league` | `str` |  | `"mens"` or `"womens"`. |
+
+**Returns**
+
+The league's `PlayerValueConstants`.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_player_value_constants import get_player_value_constants
+get_player_value_constants("mens").bundle_prefix
+```
+
+### in_game_features {#in_game_features}
+
+`in_game_features(pbp: 'pl.DataFrame', pregame_home_prob: 'float') -> 'pl.DataFrame'`
+
+Per-play in-game win-probability features from a `load_mbb_pbp` frame.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `pbp` | `DataFrame` |  | Play-by-play frame with `start_game_seconds_remaining`, `home_score`, `away_score`, `team_id` (event team) and `home_team_id` (the `load_mbb_pbp` schema). |
+| `pregame_home_prob` | `float` |  | The pregame home win probability (e.g. from `win_prob_from_margin`), encoded as a constant logit column. Clipped to `[1e-6, 1 - 1e-6]` so a saturated CDF (exact 0/1) cannot crash the logit. |
+
+**Returns**
+
+One row per input play: `score_diff` (home - away), `sec_left` (clipped at 0 -- overtime plays count as 0 seconds left), `sqrt_sec_left`, `pregame_logit`, `home_has_ball` (`Int8`; dead-ball / unknown-team plays are 0).
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_game_predict import in_game_features
+from sportsdataverse.mbb.mbb_loaders import load_mbb_pbp
+pbp = load_mbb_pbp([2024]).filter(pl.col("game_id") == 401638643)
+feats = in_game_features(pbp, 0.62)
+```
 
 ### inject_rapm_into_players {#inject_rapm_into_players}
 

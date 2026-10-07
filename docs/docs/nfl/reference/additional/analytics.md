@@ -6,6 +6,50 @@ description: "NFL — additional Python functions — Analytics — function ref
 ---
 # NFL — additional Python functions — Analytics
 
+### calculate_nfl_standings {#calculate_nfl_standings}
+
+`calculate_nfl_standings(games: 'pl.DataFrame', *, teams: 'pl.DataFrame | None' = None, tiebreaker_depth: 'int' = 3, playoff_seeds: 'int | None' = None, return_as_pandas: 'bool' = False) -> "pl.DataFrame | 'pd.DataFrame'"`
+
+Compute NFL division standings + conference playoff seeds.
+
+A reduced port of the tiebreaker ladder nflfastR delegates to the external
+`nflseedR` package (see the module docstring for the exact scope). Games
+are doubled into one row per team per game, regular-season win/loss/tie
+records are computed per team, and ties are broken win_pct -> head-to-head
+-> division record -> conference record, to the depth configured by
+`tiebreaker_depth`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `games` | `DataFrame` |  | A `load_nfl_schedule`-shaped frame: `game_id`, `season`, `game_type`, `week`, `home_team`, `away_team`, `home_score`, `away_score`. Only `game_type == "REG"` rows with both scores present are used. |
+| `teams` | `DataFrame \| None` | `None` | A `load_nfl_teams`-shaped frame (`team_abbr`, `team_conf`, `team_division`). When `None` (default), calls `sportsdataverse.nfl.load_nfl_teams`. Must cover every team abbreviation appearing in `games` -- a team absent from `teams` gets null `conf`/`division` and is silently pooled into the `(season, None)` division/conference group rather than raising. |
+| `tiebreaker_depth` | `int` | `3` | `1` (win_pct only), `2` (adds head-to-head + division record), or `3` (default; adds conference record too). |
+| `playoff_seeds` | `int \| None` | `None` | Number of teams per conference that receive a non-null `seed`. When `None` (default), uses the 2020 playoff -format cutover: `6` for seasons <= 2019, `7` for 2020+. |
+| `return_as_pandas` | `bool` | `False` | If `True` return a pandas DataFrame; else polars. |
+
+**Returns**
+
+A polars (or pandas) DataFrame with one row per (season, team): `conf`, `division`, `div_rank`, `seed` (null past `playoff_seeds`), `team`, `games`, `wins`, `losses`, `ties`, `win_pct` (ties count as 0.5 win), `div_pct`, `conf_pct`. Sorted by `(season, division, div_rank, seed)`.
+
+**Example**
+
+```python
+from sportsdataverse.nfl import calculate_nfl_standings, load_nfl_schedule
+games = load_nfl_schedule(seasons=[2023])
+standings = calculate_nfl_standings(games)
+standings.filter(standings["div_rank"] == 1)
+
+# Injected teams frame (offline)
+
+standings = calculate_nfl_standings(games, teams=my_teams_df)
+
+# Pipeline next step (one line)
+
+standings.sort(["conf", "seed"]).select("team", "seed", "win_pct")
+```
+
 ### compose_counting_projection {#compose_counting_projection}
 
 `compose_counting_projection(rate_proj: 'pl.DataFrame', avail_proj: 'pl.DataFrame', *, rate_col: 'str' = 'proj_rate', volume_col: 'str' = 'proj_volume') -> 'pl.DataFrame'`
@@ -332,6 +376,46 @@ preds.sort("home_win_prob", descending=True).head()
 preds = nfl_predict_games(games, ratings, odds=odds)
 ```
 
+### nfl_punter_value {#nfl_punter_value}
+
+`nfl_punter_value(seasons: 'Union[int, List[int]]', *, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"`
+
+Punter net-field-position value over expected.
+
+Expected net comes from the shipped punt landing distribution
+(`nfl_fourth_down._load_punt_data`) evaluated at each punt's line of
+scrimmage; realized net is `kick_distance - return_yards - 20*touchback`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `Union[int, List[int]]` |  | Season or list of seasons. |
+| `return_as_pandas` | `bool` | `False` | When `True`, return a `pandas.DataFrame`. |
+
+**Returns**
+
+Per `(season, punter_player_id)`: `punts`, `gross_avg`, `net_avg`, `exp_net_avg`, `net_over_expected`, `epa`. Empty seasons yield a zero-row frame with this schema.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | integer | Season of the aggregate. |
+| `punter_player_id` | character | nflverse punter GSIS id (Utf8 join key). |
+| `punts` | integer | Punts with a recorded kick distance. |
+| `gross_avg` | double | Mean gross punt distance (yards). |
+| `net_avg` | double | Mean net distance, kick_distance - return_yards - 20 * touchback. |
+| `exp_net_avg` | double | Mean expected net from the shipped punt landing distribution at each punt's line of scrimmage. |
+| `net_over_expected` | double | net_avg minus exp_net_avg (yards of field position per punt over expectation). |
+| `epa` | double | Total EPA on the punter's punt plays (kicking-team perspective). |
+
+**Example**
+
+```python
+from sportsdataverse.nfl.nfl_special_teams import nfl_punter_value
+pv = nfl_punter_value([2023])
+print(pv.head())
+```
+
 ### nfl_season_standings {#nfl_season_standings}
 
 `nfl_season_standings(games: 'pl.DataFrame', *, ranks: 'str' = 'CONF', tiebreaker_depth: 'str' = 'SOS', playoff_seeds: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"`
@@ -402,6 +486,46 @@ df = nfl.nfl_season_standings(
 # Pipeline next step (one line)
 
 standings.filter(pl.col("conf_rank") <= 7).sort("conf", "conf_rank")
+```
+
+### nfl_special_teams_epa {#nfl_special_teams_epa}
+
+`nfl_special_teams_epa(seasons: 'Union[int, List[int]]', *, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"`
+
+Special-teams EPA by team-unit.
+
+Units: `punt` / `punt_return` / `kickoff` / `kickoff_return` /
+`field_goal` / `extra_point`.  On each punt/kickoff the kicking
+team's unit carries the play EPA signed to the kicking team and the
+return team's unit its negation, so a team's units sum to its total
+ST-play EPA.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `Union[int, List[int]]` |  | Season or list of seasons. |
+| `return_as_pandas` | `bool` | `False` | When `True`, return a `pandas.DataFrame`. |
+
+**Returns**
+
+Per `(season, team, unit)`: `plays`, `epa`, `epa_per_play`. Empty seasons yield a zero-row frame with this schema.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | integer | Season of the aggregate. |
+| `team` | character | Team abbreviation. |
+| `unit` | character | Special-teams unit (punt, punt_return, kickoff, kickoff_return, field_goal, extra_point). |
+| `plays` | integer | Plays credited to the unit. |
+| `epa` | double | Total EPA credited to the unit (kicking team carries the play EPA signed to it; the return team carries its negation). |
+| `epa_per_play` | double | EPA per play for the unit. |
+
+**Example**
+
+```python
+from sportsdataverse.nfl.nfl_special_teams import nfl_special_teams_epa
+st = nfl_special_teams_epa([2023])
+print(st.filter(pl.col("unit") == "punt").sort("epa", descending=True).head())
 ```
 
 ### playcall_features {#playcall_features}

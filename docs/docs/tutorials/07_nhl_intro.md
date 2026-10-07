@@ -55,11 +55,11 @@ are the **premium native NHL feed** — start there.
 | [`nhl_records_franchises`](../nhl/reference/nhl_records/franchise.md#nhl_records_franchises) | Every franchise in NHL history (Records API) | ⭐ NHL records |
 | [`nhl_records_franchise_team_totals`](../nhl/reference/nhl_records/franchise.md#nhl_records_franchise_team_totals) | All-time W/L/points per franchise | ⭐ NHL records |
 | [`load_nhl_schedule`](../nhl/reference/loaders/other.md#load_nhl_schedule) | Pre-built schedule parquet (offline-friendly) | 📦 loader |
-| [`load_nhl_team_box`](../nhl/reference/additional/other.md#load_nhl_team_box) | Pre-built team box parquet | 📦 loader |
-| [`load_nhl_player_box`](../nhl/reference/additional/other.md#load_nhl_player_box) | Pre-built player box parquet | 📦 loader |
+| [`load_nhl_team_box`](../nhl/reference/additional/sportsdataverse-data-releases.md#load_nhl_team_box) | Pre-built team box parquet | 📦 loader |
+| [`load_nhl_player_box`](../nhl/reference/additional/sportsdataverse-data-releases.md#load_nhl_player_box) | Pre-built player box parquet | 📦 loader |
 | [`espn_nhl_teams`](../nhl/reference/additional/espn.md#espn_nhl_teams) | ESPN team directory | ESPN |
 | [`espn_nhl_schedule`](../nhl/reference/additional/espn.md#espn_nhl_schedule) | ESPN schedule for a date | ESPN |
-| [`espn_nhl_pbp`](../nhl/reference/additional/other.md#espn_nhl_pbp) | ESPN play-by-play (a dict) | ESPN |
+| [`espn_nhl_pbp`](../nhl/reference/additional/espn.md#espn_nhl_pbp) | ESPN play-by-play (a dict) | ESPN |
 | [`espn_nhl_standings`](../nhl/reference/site.md#espn_nhl_standings) | ESPN standings | ESPN |
 
 
@@ -491,7 +491,7 @@ out
 ### Recipe 10 — Season-to-date team aggregates (loader + pandas) 📦🐼
 
 For **multi-game** rollups, the offline-friendly
-[`load_nhl_team_box`](../nhl/reference/additional/other.md#load_nhl_team_box) parquet
+[`load_nhl_team_box`](../nhl/reference/additional/sportsdataverse-data-releases.md#load_nhl_team_box) parquet
 release is your friend: one row per team per game. Group it in polars, then
 `.to_pandas()` to hand the result to the rest of the PyData stack.
 
@@ -582,7 +582,7 @@ out
 Prefer the native feed above, but ESPN is a handy fallback and matches the
 conventions used across every other league in the package. Team names are
 `home_display_name` / `away_display_name`, scores come back as **strings** (cast
-before arithmetic), and [`espn_nhl_pbp`](../nhl/reference/additional/other.md#espn_nhl_pbp)
+before arithmetic), and [`espn_nhl_pbp`](../nhl/reference/additional/espn.md#espn_nhl_pbp)
 returns a **dict** whose `plays` use raw ESPN dot-notation. ESPN game ids look
 like `401675111`.
 
@@ -590,7 +590,7 @@ like `401675111`.
 |---|---|
 | [`espn_nhl_teams`](../nhl/reference/additional/espn.md#espn_nhl_teams) | ESPN team directory |
 | [`espn_nhl_schedule`](../nhl/reference/additional/espn.md#espn_nhl_schedule) | schedule for a date |
-| [`espn_nhl_pbp`](../nhl/reference/additional/other.md#espn_nhl_pbp) | play-by-play (a dict) |
+| [`espn_nhl_pbp`](../nhl/reference/additional/espn.md#espn_nhl_pbp) | play-by-play (a dict) |
 | [`espn_nhl_standings`](../nhl/reference/site.md#espn_nhl_standings) | standings |
 
 
@@ -628,8 +628,8 @@ polars frames. Pass `seasons=[...]`; add `return_as_pandas=True` for pandas.
 | Function | Release |
 |---|---|
 | [`load_nhl_schedule`](../nhl/reference/loaders/other.md#load_nhl_schedule) | schedules |
-| [`load_nhl_team_box`](../nhl/reference/additional/other.md#load_nhl_team_box) | team box |
-| [`load_nhl_player_box`](../nhl/reference/additional/other.md#load_nhl_player_box) | player box |
+| [`load_nhl_team_box`](../nhl/reference/additional/sportsdataverse-data-releases.md#load_nhl_team_box) | team box |
+| [`load_nhl_player_box`](../nhl/reference/additional/sportsdataverse-data-releases.md#load_nhl_player_box) | player box |
 | [`load_nhl_pbp`](../nhl/reference/loaders/pbp.md#load_nhl_pbp) | play-by-play |
 
 

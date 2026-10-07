@@ -1,7 +1,7 @@
 ---
 title: "WBB — additional Python functions — IDs and crosswalks"
 sidebar_label: "IDs and crosswalks"
-sidebar_position: 9
+sidebar_position: 12
 description: "WBB — additional Python functions — IDs and crosswalks — function reference in sdv-py, the SportsDataverse Python package."
 ---
 # WBB — additional Python functions — IDs and crosswalks
@@ -114,6 +114,37 @@ A `StrongSurnameMatch` / `WeakSurnameMatch` / `NoSurnameMatch`, per the surname-
 from sportsdataverse.mbb.mbb_ncaa_names import box_aware_compare
 box_aware_compare("Tuitele, Peanut", "Tuitele, Peanut")
 # StrongSurnameMatch(box_name='Tuitele, Peanut', score=100)
+```
+
+### build_tidy_player_context {#build_tidy_player_context}
+
+`build_tidy_player_context(box_lineup: 'LineupEvent') -> 'TidyPlayerContext'`
+
+Build the alternative player-code lookup maps for a box-score lineup
+
+(`LineupErrorAnalysisUtils.build_tidy_player_context`, `:59-73`).
+
+Sometimes the play-by-play uses `SURNAME,INITIAL` instead of
+`SURNAME,NAME`, or `SURNAME,NAME1` instead of `SURNAME,NAME1
+NAME2` -- both collapse to the same *truncated* code, so grouping by
+truncated code (and only keeping groups with exactly one distinct name)
+lets `tidy_player` recover the box-score name unambiguously.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `box_lineup` | `LineupEvent` |  | The box-score lineup event to index. |
+
+**Returns**
+
+A fresh `TidyPlayerContext` (empty `resolution_cache`).
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_names import build_tidy_player_context
+ctx = build_tidy_player_context(box_lineup)
 ```
 
 ### code_from_box {#code_from_box}
@@ -248,160 +279,6 @@ from sportsdataverse.mbb.mbb_ncaa_names import display_name_to_roster_key
 display_name_to_roster_key("Clark, Garry")            # "GARRY.CLARK"
 display_name_to_roster_key("Wrightsell Jr., Latrell") # "LATRELL.WRIGHTSELL"
 display_name_to_roster_key('"TJ" Madlock, Antonio')   # "ANTONIO.MADLOCK"
-```
-
-### find_lineup {#find_lineup}
-
-`find_lineup(shot: 'ShotEvent', curr_pbp: 'Optional[MiscGameEvent]', curr_lineups: 'list[LineupEvent]', lineup_it: "'PeekableIterator[LineupEvent]'") -> 'tuple[Optional[LineupEvent], list[LineupEvent]]'`
-
-Find the lineup (stint) event on the floor for `shot`
-
-(`ShotEnrichmentUtils.find_lineup`, `PlayByPlayUtils.scala:352-517`).
-
-A recursive state machine over three lists: `curr_lineup` (the current
-candidate), `fallback_lineups` (time-matching lineups whose raw events
-did not contain `curr_pbp` -- kept as fallbacks), and `stashed_lineups`
-(lineups pulled from the iterator but not yet stepped into, available for
-future shots). The branch cases (labelled 2.1-2.4 in the Scala):
-
-* **2.1** -- no time-matching lineup left: return the fallbacks.
-* **2.2** -- the next lineup starts *after* the shot: no match, stash it.
-* **2.3** -- strictly inside a lineup with no prior fallbacks: take it.
-* **2.4** -- shot is exactly at a lineup boundary (or we are already
-  choosing among multiple fallbacks): take this lineup iff its raw game
-  events contain `curr_pbp`'s event string (`curr_pbp is None` takes
-  it unconditionally); otherwise keep it as a fallback and recurse.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `shot` | `ShotEvent` |  | The shot to place (only `min` / `is_off` are read). |
-| `curr_pbp` | `Optional[MiscGameEvent]` |  | The already-matched play-by-play event for this shot, used to disambiguate boundary lineups; `None` disables that check. |
-| `curr_lineups` | `list[LineupEvent]` |  | Lineups pulled from the iterator on a previous call and still available (the current one first). |
-| `lineup_it` | `PeekableIterator[LineupEvent]` |  | The shared lineup iterator (consumed in place). |
-
-**Returns**
-
-`(matched_lineup_or_None, lineups_to_retry_next_time)` -- the second element always includes the matched lineup (so out-of-order shots sharing it still resolve) plus any leftover stash.
-
-**Example**
-
-```python
-from sportsdataverse.mbb.mbb_ncaa_pbp_glue import (
-    PeekableIterator,
-    find_lineup,
-)
-matched, retry = find_lineup(shot, None, [lineup], PeekableIterator([]))
-```
-
-### find_missing_subs {#find_missing_subs}
-
-`find_missing_subs(clump: 'BadLineupClump', box_lineup: 'LineupEvent', valid_player_codes: 'set[str]') -> 'tuple[list[LineupEvent], BadLineupClump]'`
-
-Trims a clump whose lineups carry TOO MANY players by identifying the
-
-"ghost" player(s) a missing sub-out left behind
-(`LineupErrorAnalysisUtils.find_missing_subs`, `:406-514`).
-
-Fires only when the clump's first event has `>= 6` on-floor players
-(`:415-416`: `candidates.size < 6` is a no-op). `expected_size_diff`
-(`:419`) is `first_event_player_count - 5` -- the number of ghosts the
-trim should end up removing.
-
-**Phase 1 -- shrink the candidate pool** (`:437-478`). Starting from the
-first event's players, walk the clump chronologically. At each event a
-candidate is *confirmed present* (and dropped from the pool) if it subs
-out (`ev.players_out`, **skipped for the first event** -- `:445`,
-literal port of `clump.evs.headOption.contains(ev)` as value equality
-`ev == clump.evs[0]`; for a well-formed clump of distinct events this is
-exactly `index == 0`) or is named in one of the event's team-side raw
-plays (`parse_any_play` -> `~sportsdataverse.mbb.mbb_ncaa_names
-.tidy_player` -> `~sportsdataverse.mbb.mbb_ncaa_stints
-.build_player_code`, `:448-456`; unlike `validate_lineup` this
-does NOT skip the literal `"team"` token -- ported verbatim).
-`matching_index` is the **FIRST** event index at which the pool size
-first equals `expected_size_diff` (`:475`); once set it freezes -- all
-later events are skipped in phase 1 (`:439-441`).
-
-**Accept gate** (`:479-480`): the final pool must be non-empty and no
-larger than `expected_size_diff`. If `matching_index` never fired
-(the pool jumped past `expected_size_diff` in a single step, or never
-shrank to it), the gate still accepts iff the residual pool is a non-empty
-subset of size `<= expected_size_diff` -- in which case phase 3 routes
-**every** event through the "before match" branch (`index > None` is
-always false). On failure the **original** clump is returned unchanged.
-
-**Phase 3 -- rebuild the events** (`:482-503`, a `scanLeft` ported as
-a manual accumulate loop that drops the seed). For events at/before
-`matching_index` the ghost pool is simply removed from `players`
-(`filterNot`). For events strictly **after** `matching_index`
-(`index > matching_index` -- the matched event itself is "before")
-`players` is rebuilt from the previous *tidied* event via
-`~sportsdataverse.mbb.mbb_ncaa_stints.build_new_player_list` (the
-`scanLeft` threads the previously-emitted event; its seed is `None`,
-but the first event can never be an "after match" event, so the
-`getOrElse(ev)` fallback is only ever a formality -- ported faithfully
-all the same). The rebuilt events are partitioned by
-`validate_lineup`.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `clump` | `BadLineupClump` |  | The bad-lineup clump to attempt to repair. |
-| `box_lineup` | `LineupEvent` |  | The team's box-score lineup event (roster + name context). |
-| `valid_player_codes` | `set[str]` |  | Every player code on the box score / roster. |
-
-**Returns**
-
-`(fixed_lineups, still_to_fix)` -- the now-valid rebuilt events and a clump of the still-invalid ones (carrying the input's `next_good`); or `([], clump)` on a no-op / rejected fix.
-
-**Example**
-
-```python
-from sportsdataverse.mbb.mbb_ncaa_stint_validation import (
-    find_missing_subs,
-)
-fixed, still = find_missing_subs(clump, box_lineup, valid_codes)
-```
-
-### find_pbp_clump {#find_pbp_clump}
-
-`find_pbp_clump(shot_time: 'float', pbp_it: "'PeekableIterator[PlayByPlayEvent]'", curr_pbp_clump: 'list[MiscGameEvent]', maybe_next_pbp_event: 'Optional[MiscGameEvent]') -> 'tuple[list[MiscGameEvent], Optional[MiscGameEvent]]'`
-
-Gather every play-by-play shot/assist event sharing `shot_time`
-
-(`ShotEnrichmentUtils.find_pbp_clump`, `PlayByPlayUtils.scala:556-608`).
-
-If `curr_pbp_clump` (carried over from the previous shot) already holds
-events at `shot_time` they are returned as-is; otherwise the iterator is
-walked forward, discarding earlier events, accumulating the equal-time
-ones, and stopping (returning it as `maybe_next_pbp_event`) at the first
-later event.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `shot_time` | `float` |  | The shot's game-clock minute to gather events for. |
-| `pbp_it` | `PeekableIterator[PlayByPlayEvent]` |  | The shared play-by-play iterator (consumed in place). |
-| `curr_pbp_clump` | `list[MiscGameEvent]` |  | Events left over from the previous shot's clump. |
-| `maybe_next_pbp_event` | `Optional[MiscGameEvent]` |  | The look-ahead event stashed by the previous call, if any. |
-
-**Returns**
-
-`(clump, maybe_next)` -- the equal-time events, plus the first strictly-later event (or `None` at end of stream).
-
-**Example**
-
-```python
-from sportsdataverse.mbb.mbb_ncaa_pbp_glue import (
-    PeekableIterator,
-    find_pbp_clump,
-)
-clump, nxt = find_pbp_clump(5.0, PeekableIterator([]), [], None)
-# ([], None)
 ```
 
 ### fuzzy_box_match {#fuzzy_box_match}

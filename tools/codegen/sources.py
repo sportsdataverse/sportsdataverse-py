@@ -3,10 +3,17 @@
 ``sources.yaml`` is the single source of truth for "where does this data come
 from". Resolution per function, first tier that matches wins:
 
-1. ``functions:`` glob on the function name
-2. ``modules:`` glob on ``obj.__module__``
-3. the ESPN API name / flat-API stem / release base the codegen already knows
-   (generated wrappers and loaders never need a ``modules:`` glob)
+1. the ESPN API name / flat-API stem / release base the codegen already knows --
+   authoritative, because a generated wrapper or loader comes from exactly that API
+   and no glob can know better
+2. ``functions:`` glob on the function name
+3. ``modules:`` glob on ``obj.__module__`` -- providers and categories ranked
+   together, most specific glob first
+
+Module rules are literal module paths wherever they can be: a cross-package
+suffix glob (``sportsdataverse.*.*_schedule``) silently claimed every future
+module with that suffix (``mbb_strength_of_schedule`` once resolved to ESPN), so
+the registry fails closed and a new module needs its own line.
 
 Exactly one entry must match within the winning tier: zero raises
 :class:`UnknownSource`, two or more raises :class:`AmbiguousSource`. Both are
@@ -109,10 +116,10 @@ def _specificity(glob: str) -> tuple[int, int]:
 
     Specificity is how much of the name a glob actually pins down, so
     ``sportsdataverse.*.nba_fox_ext`` (28 literal chars) beats ``sportsdataverse.nba.*``
-    (20), and ``sportsdataverse.wbb.wbb_ncaa_*`` beats ``sportsdataverse.*.*_schedule`` --
-    an NCAA schedule resolves to stats.ncaa.org, not to ESPN. A true tie (two rules pinning
-    down equally much) stays ambiguous on purpose: that is a registry bug to fix, not a
-    coin to flip.
+    (20), and a category's literal ``sportsdataverse.mbb.mbb_ncaa_models`` beats a
+    provider's ``sportsdataverse.mbb.mbb_ncaa_*``. A true tie (two rules pinning down
+    equally much, such as one module listed under two entries) stays ambiguous on
+    purpose: that is a registry bug to fix, not a coin to flip.
     """
     wild = glob.count("*") + glob.count("?")
     return (len(glob) - wild, -wild)
@@ -158,17 +165,12 @@ def resolve(name: str, module: str, *, api: str = "", base: str = "") -> Entry:
         AmbiguousSource: Two or more rules match in the winning tier.
         UnknownSource: No rule matches in any tier.
     """
-    if hits := _match(load(), name, "functions"):
-        return _one(hits, name, module)
-    # Categories before providers: a function that both lives in a provider's namespace and is a
-    # model/analytic/helper (mbb_ncaa_models, nhl_edge_value, pwhl_market) belongs under Tools and
-    # helpers, not in the provider's data-wrapper section.
-    if hits := _match(categories(), module, "modules"):
-        return _one(hits, name, module)
-    if hits := _match(providers(), module, "modules"):
-        return _one(hits, name, module)
     if api and (e := by_api(api)) is not None:
         return e
     if base and (e := by_base(base)) is not None:
         return e
+    if hits := _match(load(), name, "functions"):
+        return _one(hits, name, module)
+    if hits := _match(load(), module, "modules"):
+        return _one(hits, name, module)
     raise UnknownSource(f"{name} ({module}) matches no sources.yaml rule -- add one to tools/codegen/sources.yaml")

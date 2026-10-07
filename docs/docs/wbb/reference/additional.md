@@ -15,13 +15,12 @@ not covered by the generated API-endpoint reference above.
 |---|---|
 | [espn_wbb_game_officials](additional/espn.md#espn_wbb_game_officials) | Pull the officials assigned to a women's-college-basketball game. |
 | [espn_wbb_game_rosters](additional/espn.md#espn_wbb_game_rosters) | espn_wbb_game_rosters() - Pull the game by id. |
+| [espn_wbb_pbp](additional/espn.md#espn_wbb_pbp) | espn_wbb_pbp() - Pull the game by id. Data from API endpoints - `womens-college-basketball/playbyplay`, |
 | [espn_wbb_player_stats](additional/espn.md#espn_wbb_player_stats) | Pull a women's-college-basketball athlete's ESPN **season** stat line. |
 | [espn_wbb_schedule](additional/espn.md#espn_wbb_schedule) | espn_wbb_schedule - look up the women's college basketball schedule for a given season |
 | [espn_wbb_team_stats](additional/espn.md#espn_wbb_team_stats) | Pull ESPN team season stats for a women's-college-basketball team. |
 | [espn_wbb_teams](additional/espn.md#espn_wbb_teams) | espn_wbb_teams - look up the women's college basketball teams |
 | [scoreboard_event_parsing](additional/espn.md#scoreboard_event_parsing) | _No description available._ |
-| [strength_of_schedule](additional/espn.md#strength_of_schedule) | Per-team SoS + Quad 1-4 record + WAB from completed games and ratings. |
-| [wbb_strength_of_schedule](additional/espn.md#wbb_strength_of_schedule) | Women's season-level SoS / Quad / WAB résumé. |
 
 ## stats.ncaa.org
 
@@ -54,6 +53,15 @@ not covered by the generated API-endpoint reference above.
 | [alias_combos](additional/stats-ncaa-org.md#alias_combos) | Pair each of `combos`' three name variants with a shared alias |
 | [analyze_and_fix_clumps](additional/stats-ncaa-org.md#analyze_and_fix_clumps) | Runs the full self-healing fixer pipeline over one bad-lineup clump |
 | [attr_regex_filter](additional/stats-ncaa-org.md#attr_regex_filter) | JSoup `[attr~=regex]`: candidates whose `attr` value matches |
+| [build_available_team_list](additional/stats-ncaa-org.md#build_available_team_list) | Builds a per-conference team-index JSON fragment for |
+| [build_base_event](additional/stats-ncaa-org.md#build_base_event) | Fills in the fields a shot event can borrow straight from the |
+| [build_lineup_cli_array](additional/stats-ncaa-org.md#build_lineup_cli_array) | Builds the per-conference team array for `lineups-cli.sh` files |
+| [build_lineup_id](additional/stats-ncaa-org.md#build_lineup_id) | Builds a lineup id from a list of players (`ExtractorUtils.scala:602-606`): |
+| [build_new_player_list](additional/stats-ncaa-org.md#build_new_player_list) | Builds a player list from the previous (or current, if pre-initialized) |
+| [build_partial_lineup_list](additional/stats-ncaa-org.md#build_partial_lineup_list) | Converts a stream of partially parsed events into a list of lineup |
+| [build_player_code](additional/stats-ncaa-org.md#build_player_code) | Build a short player code from a name, in any of the NCAA formats |
+| [build_strength_adjusted_stats](additional/stats-ncaa-org.md#build_strength_adjusted_stats) | Run the full strength-adjustment compute over a team list. |
+| [build_sub_error](additional/stats-ncaa-org.md#build_sub_error) | Build a location-less `ParseError` from id fragments |
 | [cached_path](additional/stats-ncaa-org.md#cached_path) | Return the on-disk cache file path for *path*, without touching it. |
 | [categorize_bad_lineups](additional/stats-ncaa-org.md#categorize_bad_lineups) | Aggregates bad lineup events for display, by clump-leader player count |
 | [clump_bad_lineups](additional/stats-ncaa-org.md#clump_bad_lineups) | Groups consecutive bad lineup events into `BadLineupClump`\ s |
@@ -69,19 +77,22 @@ not covered by the generated API-endpoint reference above.
 | [enrich_lineup](additional/stats-ncaa-org.md#enrich_lineup) | Populate `pts`/`plus_minus` from the score delta, then run the |
 | [enrich_shot_events_with_pbp](additional/stats-ncaa-org.md#enrich_shot_events_with_pbp) | Enrich each shot with its play-by-play event + on-floor lineup |
 | [enrich_stats](additional/stats-ncaa-org.md#enrich_stats) | Fold a lineup's raw events into a counting-stat tree (``protected def |
-| [ensure_ev_uniqueness](additional/stats-ncaa-org.md#ensure_ev_uniqueness) | Nudge each event's `min` by a tiny per-index delta so truly |
-| [extract_player_from_ev](additional/stats-ncaa-org.md#extract_player_from_ev) | Resolve the player named in `pbp_event` to a |
-| [field_keys](additional/stats-ncaa-org.md#field_keys) | Off/def stat-key names for a field (`fieldKeys`, `ts:77-79`). |
-| [filter_matching_own](additional/stats-ncaa-org.md#filter_matching_own) | JSoup `:matchesOwn(regex)` applied to an already-computed candidate |
-| [fix_combos](additional/stats-ncaa-org.md#fix_combos) | Pair each of `combos`' three name variants with a shared |
-| [fix_possible_score_swap_bug](additional/stats-ncaa-org.md#fix_possible_score_swap_bug) | Undo a rare NCAA data bug where the scores get transposed |
-| [get_ascending_time](additional/stats-ncaa-org.md#get_ascending_time) | Converts the descending in-period clock time to an ascending |
-| [get_box_lineup](additional/stats-ncaa-org.md#get_box_lineup) | Gets the boxscore lineup from the HTML page (``BoxscoreParser |
-| [get_config](additional/stats-ncaa-org.md#get_config) | Return the live `NcaaFetchConfig` singleton. |
-| [get_game_weight](additional/stats-ncaa-org.md#get_game_weight) | Weight for one game/field/side (`getGameWeight`, `ts:119-140`). |
-| [get_neutral_games](additional/stats-ncaa-org.md#get_neutral_games) | Extracts the set of neutral/away-marked game dates from a saved NCAA |
-| [get_per_game_raw](additional/stats-ncaa-org.md#get_per_game_raw) | Per-game raw shooting rate from one opponent row (`getPerGameRaw`, `ts:82-116`). |
-| [get_sorted_pbp_events](additional/stats-ncaa-org.md#get_sorted_pbp_events) | Handy util to return the play-by-play events in chronological order, |
+| [ensure_ev_uniqueness](additional/stats-ncaa-org-2.md#ensure_ev_uniqueness) | Nudge each event's `min` by a tiny per-index delta so truly |
+| [extract_player_from_ev](additional/stats-ncaa-org-2.md#extract_player_from_ev) | Resolve the player named in `pbp_event` to a |
+| [field_keys](additional/stats-ncaa-org-2.md#field_keys) | Off/def stat-key names for a field (`fieldKeys`, `ts:77-79`). |
+| [filter_matching_own](additional/stats-ncaa-org-2.md#filter_matching_own) | JSoup `:matchesOwn(regex)` applied to an already-computed candidate |
+| [find_lineup](additional/stats-ncaa-org-2.md#find_lineup) | Find the lineup (stint) event on the floor for `shot` |
+| [find_missing_subs](additional/stats-ncaa-org-2.md#find_missing_subs) | Trims a clump whose lineups carry TOO MANY players by identifying the |
+| [find_pbp_clump](additional/stats-ncaa-org-2.md#find_pbp_clump) | Gather every play-by-play shot/assist event sharing `shot_time` |
+| [fix_combos](additional/stats-ncaa-org-2.md#fix_combos) | Pair each of `combos`' three name variants with a shared |
+| [fix_possible_score_swap_bug](additional/stats-ncaa-org-2.md#fix_possible_score_swap_bug) | Undo a rare NCAA data bug where the scores get transposed |
+| [get_ascending_time](additional/stats-ncaa-org-2.md#get_ascending_time) | Converts the descending in-period clock time to an ascending |
+| [get_box_lineup](additional/stats-ncaa-org-2.md#get_box_lineup) | Gets the boxscore lineup from the HTML page (``BoxscoreParser |
+| [get_config](additional/stats-ncaa-org-2.md#get_config) | Return the live `NcaaFetchConfig` singleton. |
+| [get_game_weight](additional/stats-ncaa-org-2.md#get_game_weight) | Weight for one game/field/side (`getGameWeight`, `ts:119-140`). |
+| [get_neutral_games](additional/stats-ncaa-org-2.md#get_neutral_games) | Extracts the set of neutral/away-marked game dates from a saved NCAA |
+| [get_per_game_raw](additional/stats-ncaa-org-2.md#get_per_game_raw) | Per-game raw shooting rate from one opponent row (`getPerGameRaw`, `ts:82-116`). |
+| [get_sorted_pbp_events](additional/stats-ncaa-org-2.md#get_sorted_pbp_events) | Handy util to return the play-by-play events in chronological order, |
 | [get_team_raw_from_per_game](additional/stats-ncaa-org-2.md#get_team_raw_from_per_game) | A team's field rate as the weighted mean of its per-game raws (`getTeamRawFromPerGame`, `ts:224-250`). |
 | [get_team_triples](additional/stats-ncaa-org-2.md#get_team_triples) | Extracts `(team, NCAA id, conference)` triples from a saved NCAA |
 | [get_unified_ncaa_id](additional/stats-ncaa-org-2.md#get_unified_ncaa_id) | Gets a player's lowest cross-season NCAA id from a saved player page |
@@ -120,12 +131,12 @@ not covered by the generated API-endpoint reference above.
 | [shot_js_to_html](additional/stats-ncaa-org-2.md#shot_js_to_html) | Converts client-side `addShot(...)` JS calls into parseable |
 | [start_time_from_period](additional/stats-ncaa-org-2.md#start_time_from_period) | The game-clock time (minutes elapsed) a period starts at |
 | [sum_event_stats](additional/stats-ncaa-org-2.md#sum_event_stats) | Field-wise add two :class:`~sportsdataverse.mbb.mbb_ncaa_models |
-| [sum_shot_infos](additional/stats-ncaa-org-2.md#sum_shot_infos) | Field-wise sum a list of :class:`~sportsdataverse.mbb.mbb_ncaa_models |
-| [td_at](additional/stats-ncaa-org-2.md#td_at) | JSoup `row >?> element("td:eq(n)")`: the `n`-th `<td>` child. |
-| [transform_shot_location](additional/stats-ncaa-org-2.md#transform_shot_location) | Transforms a raw SVG pixel location into feet from the basket, always |
-| [update_config](additional/stats-ncaa-org-2.md#update_config) | Update the active config in place. |
-| [validate_box_score](additional/stats-ncaa-org-2.md#validate_box_score) | Checks there are no duplicates in the lineup (``BoxscoreParser |
-| [validate_lineup](additional/stats-ncaa-org-2.md#validate_lineup) | Flags a lineup stint as internally inconsistent, via 3 independent |
+| [sum_shot_infos](additional/stats-ncaa-org-3.md#sum_shot_infos) | Field-wise sum a list of :class:`~sportsdataverse.mbb.mbb_ncaa_models |
+| [td_at](additional/stats-ncaa-org-3.md#td_at) | JSoup `row >?> element("td:eq(n)")`: the `n`-th `<td>` child. |
+| [transform_shot_location](additional/stats-ncaa-org-3.md#transform_shot_location) | Transforms a raw SVG pixel location into feet from the basket, always |
+| [update_config](additional/stats-ncaa-org-3.md#update_config) | Update the active config in place. |
+| [validate_box_score](additional/stats-ncaa-org-3.md#validate_box_score) | Checks there are no duplicates in the lineup (``BoxscoreParser |
+| [validate_lineup](additional/stats-ncaa-org-3.md#validate_lineup) | Flags a lineup stint as internally inconsistent, via 3 independent |
 
 ## Fox Sports API
 
@@ -159,41 +170,25 @@ not covered by the generated API-endpoint reference above.
 | [fox_wbb_teams](additional/fox-sports-api.md#fox_wbb_teams) | WBB team directory (`fox_team_id` / `fox_team_name` / `fox_section`). |
 | [fox_wbb_teams_all](additional/fox-sports-api.md#fox_wbb_teams_all) | Full WBB team directory by walking seed ids across conferences. |
 
+## Her Hoop Stats
+
+| Function | Summary |
+|---|---|
+| [has_herhoopstats_login](additional/her-hoop-stats.md#has_herhoopstats_login) | Whether Her Hoop Stats credentials are set in the environment. |
+| [herhoopstats_login](additional/her-hoop-stats.md#herhoopstats_login) | Log into herhoopstats.com and return the authenticated session. |
+| [herhoopstats_team_roster](additional/her-hoop-stats.md#herhoopstats_team_roster) | The player roster table from one Her Hoop Stats team page. |
+| [herhoopstats_team_stats](additional/her-hoop-stats.md#herhoopstats_team_stats) | Every table on one Her Hoop Stats team page. |
+| [herhoopstats_teams](additional/her-hoop-stats.md#herhoopstats_teams) | NCAA women's team single-season summary table. |
+
 ## Play-by-play processing
 
 | Function | Summary |
 |---|---|
-| [build_3p_shot_info](additional/play-by-play-processing.md#build_3p_shot_info) | 3P-only shot-decomposition wrapper. |
-| [build_adjusted_3p](additional/play-by-play-processing.md#build_adjusted_3p) | 3P-only approx-unassisted/assisted-FG% wrapper. |
 | [build_athlete_identity_lookup](additional/play-by-play-processing.md#build_athlete_identity_lookup) | R `build_athlete_identity_lookup`: athlete_id -> identity from team rosters. |
-| [build_available_team_list](additional/play-by-play-processing.md#build_available_team_list) | Builds a per-conference team-index JSON fragment for |
-| [build_base_event](additional/play-by-play-processing.md#build_base_event) | Fills in the fields a shot event can borrow straight from the |
-| [build_d_rtg](additional/play-by-play-processing.md#build_d_rtg) | Individual defensive rating (Dean-Oliver DRtg) + diagnostics. |
-| [build_efficiency_margins](additional/play-by-play-processing.md#build_efficiency_margins) | Derive `off_net` / `off_raw_net` on a stat set, in place. |
-| [build_exp_3p](additional/play-by-play-processing.md#build_exp_3p) | Expected made-3P count given a player's shot-type mix + shooting %s. |
-| [build_lineup_cli_array](additional/play-by-play-processing.md#build_lineup_cli_array) | Builds the per-conference team array for `lineups-cli.sh` files |
-| [build_lineup_id](additional/play-by-play-processing.md#build_lineup_id) | Builds a lineup id from a list of players (`ExtractorUtils.scala:602-606`): |
-| [build_net_points](additional/play-by-play-processing.md#build_net_points) | Decompose ORtg/DRtg + RAPM into a Net-Points-like breakdown. |
-| [build_new_player_list](additional/play-by-play-processing.md#build_new_player_list) | Builds a player list from the previous (or current, if pre-initialized) |
-| [build_o_rtg](additional/play-by-play-processing.md#build_o_rtg) | Individual offensive rating (Dean-Oliver ORtg) + diagnostics. |
-| [build_partial_lineup_list](additional/play-by-play-processing.md#build_partial_lineup_list) | Converts a stream of partially parsed events into a list of lineup |
-| [build_player_code](additional/play-by-play-processing.md#build_player_code) | Build a short player code from a name, in any of the NCAA formats |
-| [build_player_context](additional/play-by-play-processing.md#build_player_context) | Build the context object the RAPM matrix-solve layer consumes. |
-| [build_position](additional/play-by-play-processing.md#build_position) | Classify a player into a position label + diagnostic trace string. |
-| [build_position_confidences](additional/play-by-play-processing.md#build_position_confidences) | Build the 5-way positional confidence vector for a player. |
-| [build_positional_aware_filter](additional/play-by-play-processing.md#build_positional_aware_filter) | Decompose a search-filter string into positionally-aware +ve/-ve fragments. |
-| [build_priors](additional/play-by-play-processing.md#build_priors) | Build strong/weak per-player RAPM priors for every column. |
-| [build_productivity](additional/play-by-play-processing.md#build_productivity) | Public port of `RatingUtils.buildProductivity` (`RatingUtils.ts:963-990`). |
-| [build_strength_adjusted_stats](additional/play-by-play-processing.md#build_strength_adjusted_stats) | Run the full strength-adjustment compute over a team list. |
-| [build_sub_error](additional/play-by-play-processing.md#build_sub_error) | Build a location-less `ParseError` from id fragments |
-| [build_tidy_player_context](additional/play-by-play-processing.md#build_tidy_player_context) | Build the alternative player-code lookup maps for a box-score lineup |
-| [build_wbb_season_wp](additional/play-by-play-processing.md#build_wbb_season_wp) | A WBB season's play-by-play with win-probability columns joined in. |
-| [build_weak_prior_from_rapm](additional/play-by-play-processing.md#build_weak_prior_from_rapm) | Wrap a flat RAPM-estimate vector into `playersWeak`-shaped dicts. |
 | [classify_point_value](additional/play-by-play-processing.md#classify_point_value) | 2 or 3 from basket-relative geometry (arc radius + corner band). |
 | [classify_zone_geometry](additional/play-by-play-processing.md#classify_zone_geometry) | Shot zone from geometry: `rim \| paint \| mid \| corner3 \| abovebreak3`. |
 | [classify_zone_type](additional/play-by-play-processing.md#classify_zone_type) | Collapse a source shot-type label to `rim \| arc3 \| jump`. |
 | [espn_shots_to_canonical](additional/play-by-play-processing.md#espn_shots_to_canonical) | ESPN `load_mbb_shots` frame -> the canonical shot frame. |
-| [espn_wbb_pbp](additional/play-by-play-processing.md#espn_wbb_pbp) | espn_wbb_pbp() - Pull the game by id. Data from API endpoints - `womens-college-basketball/playbyplay`, |
 | [fit_espn_court_scale](additional/play-by-play-processing.md#fit_espn_court_scale) | Fit the ESPN raw-coordinate court scale: `(origin_x, origin_y, feet_per_unit)`. |
 | [ncaa_wbb_game_pbp](additional/play-by-play-processing.md#ncaa_wbb_game_pbp) | Scrape one WBB game's play-by-play (wbigballR `scrape_game`, quarters fixed). |
 | [ncaa_wbb_play_by_play](additional/play-by-play-processing.md#ncaa_wbb_play_by_play) | Scrape many WBB games' play-by-play (wbigballR `get_play_by_play`, quarters fixed). |
@@ -247,23 +242,27 @@ not covered by the generated API-endpoint reference above.
 | [as_of_season_split](additional/models-and-calculators.md#as_of_season_split) | Rows strictly before `target_season` -- the leakage boundary. |
 | [bootstrap_ari](additional/models-and-calculators.md#bootstrap_ari) | Cluster stability: mean ARI between the full fit and bootstrap refits. |
 | [brier_score](additional/models-and-calculators.md#brier_score) | Mean squared error between predicted probabilities and binary outcomes. |
+| [build_d_rtg](additional/models-and-calculators.md#build_d_rtg) | Individual defensive rating (Dean-Oliver DRtg) + diagnostics. |
+| [build_net_points](additional/models-and-calculators.md#build_net_points) | Decompose ORtg/DRtg + RAPM into a Net-Points-like breakdown. |
+| [build_o_rtg](additional/models-and-calculators.md#build_o_rtg) | Individual offensive rating (Dean-Oliver ORtg) + diagnostics. |
+| [build_player_context](additional/models-and-calculators.md#build_player_context) | Build the context object the RAPM matrix-solve layer consumes. |
+| [build_priors](additional/models-and-calculators.md#build_priors) | Build strong/weak per-player RAPM priors for every column. |
+| [build_productivity](additional/models-and-calculators.md#build_productivity) | Public port of `RatingUtils.buildProductivity` (`RatingUtils.ts:963-990`). |
+| [build_wbb_season_wp](additional/models-and-calculators.md#build_wbb_season_wp) | A WBB season's play-by-play with win-probability columns joined in. |
+| [build_weak_prior_from_rapm](additional/models-and-calculators.md#build_weak_prior_from_rapm) | Wrap a flat RAPM-estimate vector into `playersWeak`-shaped dicts. |
 | [calc_collinearity_diag](additional/models-and-calculators.md#calc_collinearity_diag) | Multi-collinearity diagnostic between the players in an off/def design matrix. |
 | [calc_lineup_outputs](additional/models-and-calculators.md#calc_lineup_outputs) | Build the off/def target vectors the RAPM design matrices are fit against. |
 | [calc_player_weights](additional/models-and-calculators.md#calc_player_weights) | Build the off/def player-weight (design) matrices for the RAPM solve. |
-| [calc_slow_pseudo_inverse](additional/models-and-calculators.md#calc_slow_pseudo_inverse) | Per-parameter variance terms for the ridge-regression standard errors. |
-| [calculate_aggregated_lineup_stats](additional/models-and-calculators.md#calculate_aggregated_lineup_stats) | Combine all lineups into a single team stat set. |
-| [calculate_possessions](additional/models-and-calculators.md#calculate_possessions) | Top-level entry point: calculate team/opponent possessions for a |
-| [calculate_possessions_by_event](additional/models-and-calculators.md#calculate_possessions_by_event) | Drive the batch loop + per-clump scoring over an already-flattened |
-| [calculate_predicted_out](additional/models-and-calculators.md#calculate_predicted_out) | Predict per-lineup outputs from fitted per-player RAPM values. |
-| [calculate_rapm](additional/models-and-calculators.md#calculate_rapm) | Apply a regression solver matrix to a target-outputs vector. |
-| [calculate_residual_error](additional/models-and-calculators.md#calculate_residual_error) | Sum of squared residuals between actual and predicted lineup outputs. |
-| [calculate_sd_rapm](additional/models-and-calculators.md#calculate_sd_rapm) | Per-player RAPM standard errors. |
-| [calculate_stats](additional/models-and-calculators.md#calculate_stats) | Calculate one direction's possession-fragment for one merged clump |
-| [calibration_table](additional/models-and-calculators.md#calibration_table) | Bucket predicted probabilities into bins and compare to actual outcome rates. |
-| [fit_shrinkage_k](additional/models-and-calculators.md#fit_shrinkage_k) | Fit the talent shrinkage `k` split-half (see module docstring). |
-| [get_constants](additional/models-and-calculators.md#get_constants) | League constants bundle for the shot-quality spine. |
-| [get_player_value_constants](additional/models-and-calculators.md#get_player_value_constants) | Return the `PlayerValueConstants` for a league. |
-| [in_game_features](additional/models-and-calculators.md#in_game_features) | Per-play in-game win-probability features from a `load_mbb_pbp` frame. |
+| [calc_slow_pseudo_inverse](additional/models-and-calculators-2.md#calc_slow_pseudo_inverse) | Per-parameter variance terms for the ridge-regression standard errors. |
+| [calculate_predicted_out](additional/models-and-calculators-2.md#calculate_predicted_out) | Predict per-lineup outputs from fitted per-player RAPM values. |
+| [calculate_rapm](additional/models-and-calculators-2.md#calculate_rapm) | Apply a regression solver matrix to a target-outputs vector. |
+| [calculate_residual_error](additional/models-and-calculators-2.md#calculate_residual_error) | Sum of squared residuals between actual and predicted lineup outputs. |
+| [calculate_sd_rapm](additional/models-and-calculators-2.md#calculate_sd_rapm) | Per-player RAPM standard errors. |
+| [calibration_table](additional/models-and-calculators-2.md#calibration_table) | Bucket predicted probabilities into bins and compare to actual outcome rates. |
+| [fit_shrinkage_k](additional/models-and-calculators-2.md#fit_shrinkage_k) | Fit the talent shrinkage `k` split-half (see module docstring). |
+| [get_constants](additional/models-and-calculators-2.md#get_constants) | League constants bundle for the shot-quality spine. |
+| [get_player_value_constants](additional/models-and-calculators-2.md#get_player_value_constants) | Return the `PlayerValueConstants` for a league. |
+| [in_game_features](additional/models-and-calculators-2.md#in_game_features) | Per-play in-game win-probability features from a `load_mbb_pbp` frame. |
 | [inject_rapm_into_players](additional/models-and-calculators-2.md#inject_rapm_into_players) | Write `pick_ridge_regression`'s RAPM predictions back onto each player. |
 | [kmeans_fit](additional/models-and-calculators-2.md#kmeans_fit) | Seeded Lloyd's KMeans, best-of-`n_init` by inertia. |
 | [load_artifact](additional/models-and-calculators-2.md#load_artifact) | Read a bundled player-value artifact (`mbb/models/<name>.json`). |
@@ -302,10 +301,21 @@ not covered by the generated API-endpoint reference above.
 | [PossState](additional/analytics.md#PossState) | Running state threaded through `calculate_possessions_by_event` |
 | [apply_relative_positional_overrides](additional/analytics.md#apply_relative_positional_overrides) | Recursively re-shuffle an ordered lineup per `RELATIVE_POSITION_FIXES`. |
 | [assign_to_right_lineup](additional/analytics.md#assign_to_right_lineup) | Assign a clump's possessions to the lineup(s) ending in it |
+| [build_3p_shot_info](additional/analytics.md#build_3p_shot_info) | 3P-only shot-decomposition wrapper. |
+| [build_adjusted_3p](additional/analytics.md#build_adjusted_3p) | 3P-only approx-unassisted/assisted-FG% wrapper. |
+| [build_efficiency_margins](additional/analytics.md#build_efficiency_margins) | Derive `off_net` / `off_raw_net` on a stat set, in place. |
+| [build_exp_3p](additional/analytics.md#build_exp_3p) | Expected made-3P count given a player's shot-type mix + shooting %s. |
+| [build_position](additional/analytics.md#build_position) | Classify a player into a position label + diagnostic trace string. |
+| [build_position_confidences](additional/analytics.md#build_position_confidences) | Build the 5-way positional confidence vector for a player. |
+| [build_positional_aware_filter](additional/analytics.md#build_positional_aware_filter) | Decompose a search-filter string into positionally-aware +ve/-ve fragments. |
 | [calc_def_player_luck_adj](additional/analytics.md#calc_def_player_luck_adj) | Defensive 3P-luck adjustment for a single player. |
 | [calc_def_team_luck_adj](additional/analytics.md#calc_def_team_luck_adj) | Defensive 3P-luck adjustment for a team (or lineup). |
 | [calc_off_player_luck_adj](additional/analytics.md#calc_off_player_luck_adj) | Offensive 3P-luck adjustment for a single player. |
 | [calc_off_team_luck_adj](additional/analytics.md#calc_off_team_luck_adj) | Offensive 3P-luck adjustment for a team (or lineup). |
+| [calculate_aggregated_lineup_stats](additional/analytics.md#calculate_aggregated_lineup_stats) | Combine all lineups into a single team stat set. |
+| [calculate_possessions](additional/analytics.md#calculate_possessions) | Top-level entry point: calculate team/opponent possessions for a |
+| [calculate_possessions_by_event](additional/analytics.md#calculate_possessions_by_event) | Drive the batch loop + per-clump scoring over an already-flattened |
+| [calculate_stats](additional/analytics.md#calculate_stats) | Calculate one direction's possession-fragment for one merged clump |
 | [complete_weighted_avg](additional/analytics.md#complete_weighted_avg) | Finish a `weighted_avg` accumulator into true weighted averages. |
 | [concurrent_event_handler](additional/analytics.md#concurrent_event_handler) | Batch a stream of singleton/boundary clumps into merged |
 | [count_matching](additional/analytics.md#count_matching) | Count events on one side matching any of the given parsers. |
@@ -324,10 +334,18 @@ not covered by the generated API-endpoint reference above.
 | [pos_class_to_score](additional/analytics.md#pos_class_to_score) | Ordinal "positional weight" for a position class, PG=1000..C=8000. |
 | [project_bracket](additional/analytics.md#project_bracket) | Select and seed a tournament field from a per-team résumé frame. |
 | [regress_shot_quality](additional/analytics.md#regress_shot_quality) | Shrink a small-sample shot-quality stat toward its positional average. |
+| [strength_of_schedule](additional/analytics.md#strength_of_schedule) | Per-team SoS + Quad 1-4 record + WAB from completed games and ratings. |
 | [test_positional_aware_filter](additional/analytics.md#test_positional_aware_filter) | Check a positional-aware filter (from `build_positional_aware_filter`) |
 | [using_roster_pos](additional/analytics.md#using_roster_pos) | Reconcile a stats-derived position class against roster metadata. |
 | [wbb_bracketology](additional/analytics.md#wbb_bracketology) | Women's projected tournament field for a season. |
+| [wbb_strength_of_schedule](additional/analytics.md#wbb_strength_of_schedule) | Women's season-level SoS / Quad / WAB résumé. |
 | [weighted_avg](additional/analytics.md#weighted_avg) | Merge `obj` into `mutable_acc` with possession weighting. |
+
+## Dates and seasons
+
+| Function | Summary |
+|---|---|
+| [most_recent_wbb_season](additional/dates-and-seasons.md#most_recent_wbb_season) | Return the most recent women's college basketball season year. |
 
 ## IDs and crosswalks
 
@@ -339,13 +357,11 @@ not covered by the generated API-endpoint reference above.
 | [TidyPlayerContext](additional/ids-and-crosswalks.md#TidyPlayerContext) | Precomputed box-score lookup tables + resolution cache for |
 | [WeakSurnameMatch](additional/ids-and-crosswalks.md#WeakSurnameMatch) | A surname fragment matched, but the whole-name score fell short of |
 | [box_aware_compare](additional/ids-and-crosswalks.md#box_aware_compare) | Score how well a single play-by-play candidate name fits a single |
+| [build_tidy_player_context](additional/ids-and-crosswalks.md#build_tidy_player_context) | Build the alternative player-code lookup maps for a box-score lineup |
 | [code_from_box](additional/ids-and-crosswalks.md#code_from_box) | Resolve a tidied player NAME to the box roster's own `PlayerCodeId`. |
 | [convert_from_digits](additional/ids-and-crosswalks.md#convert_from_digits) | Resolve a jersey-number-only name to its box-score player |
 | [convert_from_initials](additional/ids-and-crosswalks.md#convert_from_initials) | Resolve a 2-initial name (`"A B"` / `"B, A"`) to the single |
 | [display_name_to_roster_key](additional/ids-and-crosswalks.md#display_name_to_roster_key) | Box-score and shot-chart pages render a player as `"Surname, First"`, |
-| [find_lineup](additional/ids-and-crosswalks.md#find_lineup) | Find the lineup (stint) event on the floor for `shot` |
-| [find_missing_subs](additional/ids-and-crosswalks.md#find_missing_subs) | Trims a clump whose lineups carry TOO MANY players by identifying the |
-| [find_pbp_clump](additional/ids-and-crosswalks.md#find_pbp_clump) | Gather every play-by-play shot/assist event sharing `shot_time` |
 | [fuzzy_box_match](additional/ids-and-crosswalks.md#fuzzy_box_match) | Pick the single unassigned box-score name a mis-spelled play-by-play |
 | [ncaa_espn_team_crosswalk](additional/ids-and-crosswalks.md#ncaa_espn_team_crosswalk) | Season-keyed stats.ncaa.org -> ESPN team-id crosswalk. |
 | [ncaa_wbb_team_ids](additional/ids-and-crosswalks.md#ncaa_wbb_team_ids) | Women's-basketball `(team, season) -> stats.ncaa.org id` crosswalk. |
@@ -354,14 +370,3 @@ not covered by the generated API-endpoint reference above.
 | [wbb_player_crosswalk](additional/ids-and-crosswalks.md#wbb_player_crosswalk) | Build the WBB cross-source player crosswalk (ESPN / Fox). |
 | [wbb_schedule_crosswalk](additional/ids-and-crosswalks.md#wbb_schedule_crosswalk) | Build the WBB cross-source schedule crosswalk (ESPN / Torvik). |
 | [wbb_team_crosswalk](additional/ids-and-crosswalks.md#wbb_team_crosswalk) | Build the WBB cross-source team crosswalk (ESPN / Fox / Torvik). |
-
-## Other
-
-| Function | Summary |
-|---|---|
-| [has_herhoopstats_login](additional/other.md#has_herhoopstats_login) | Whether Her Hoop Stats credentials are set in the environment. |
-| [herhoopstats_login](additional/other.md#herhoopstats_login) | Log into herhoopstats.com and return the authenticated session. |
-| [herhoopstats_team_roster](additional/other.md#herhoopstats_team_roster) | The player roster table from one Her Hoop Stats team page. |
-| [herhoopstats_team_stats](additional/other.md#herhoopstats_team_stats) | Every table on one Her Hoop Stats team page. |
-| [herhoopstats_teams](additional/other.md#herhoopstats_teams) | NCAA women's team single-season summary table. |
-| [most_recent_wbb_season](additional/other.md#most_recent_wbb_season) | Return the most recent women's college basketball season year. |

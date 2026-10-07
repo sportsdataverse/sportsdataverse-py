@@ -1,7 +1,7 @@
 ---
 title: "NBA — additional Python functions — Basketball-Reference"
 sidebar_label: "Basketball-Reference"
-sidebar_position: 4
+sidebar_position: 6
 description: "NBA — additional Python functions — Basketball-Reference — function reference in sdv-py, the SportsDataverse Python package."
 ---
 # NBA — additional Python functions — Basketball-Reference

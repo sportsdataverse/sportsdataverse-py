@@ -820,6 +820,61 @@ else:
 out
 ```
 
+## 📦 Event data from any provider with kloppy
+
+ESPN gives you the match log; for per-event coordinates (every pass, carry, shot) the open
+standard is [kloppy](https://kloppy.pysport.org), which reads ~15 providers (StatsBomb, Opta,
+Wyscout, Sportec, SkillCorner, …) into one event model. It is an **optional extra**:
+
+```bash
+pip install "sportsdataverse[soccer]"
+```
+
+`soccer_open_events('statsbomb', match_id)` loads one match of
+[StatsBomb open data](https://github.com/statsbomb/open-data) (free for research and
+non-commercial use) as a polars frame — one row per event, snake_case columns, coordinates on
+kloppy's 0–1 pitch by default (`coordinates='statsbomb'` keeps the 120 × 80 units).
+Match 8658 is the 2018 World Cup final, France v Croatia.
+
+
+```python
+from sportsdataverse.soccer import soccer_open_events
+
+events = safe(
+    'StatsBomb open data — 2018 World Cup final (match 8658)',
+    lambda: soccer_open_events('statsbomb', 8658),
+)
+if events is not None:
+    print('events:', events.shape)
+    out = (
+        events.filter(pl.col('event_type') == 'SHOT')
+        .select('period_id', 'timestamp', 'team_id', 'player_id',
+                'coordinates_x', 'coordinates_y', 'result')
+        .head(10)
+    )
+else:
+    out = 'kloppy not installed (pip install "sportsdataverse[soccer]") or StatsBomb open data unavailable'
+out
+```
+
+Any other provider or file goes through kloppy itself, then
+`soccer_events_to_frame(dataset)` applies the same frame convention:
+
+```python
+from kloppy import statsbomb
+from sportsdataverse.soccer import soccer_events_to_frame
+ds = statsbomb.load(event_data='8658.json', lineup_data='lineups_8658.json')
+df = soccer_events_to_frame(ds)
+```
+
+To draw it, [sdvplot](https://github.com/sportsdataverse/sdvplot) puts the frame on a 105 × 68 m
+pitch in one line (sdvplot is not a dependency, so this is not executed here):
+
+```python
+from sdvplot import pitch_coords
+xy = pitch_coords(events, provider='statsbomb')   # R: sdvplotR::sdv_pitch_coords(events, 'statsbomb')
+```
+
 ## 🎉 Where to next
 
 - 📡 **Full function list** — every `espn_soccer_*` wrapper is

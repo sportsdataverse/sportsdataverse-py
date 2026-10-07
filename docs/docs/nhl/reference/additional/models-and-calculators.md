@@ -1,7 +1,7 @@
 ---
 title: "NHL — additional Python functions — Models and calculators"
 sidebar_label: "Models and calculators"
-sidebar_position: 3
+sidebar_position: 7
 description: "NHL — additional Python functions — Models and calculators — function reference in sdv-py, the SportsDataverse Python package."
 ---
 # NHL — additional Python functions — Models and calculators
@@ -199,6 +199,71 @@ The Brier score (0.0 is a perfect forecast).
 import numpy as np
 from sportsdataverse._common.metrics import brier_score
 brier_score(np.array([1, 0]), np.array([0.9, 0.1]))
+```
+
+### build_design {#build_design}
+
+`build_design(stints: 'pl.DataFrame') -> "tuple['sp.csr_matrix', np.ndarray, np.ndarray, list[int]]"`
+
+Build the sparse RAPM design matrix -- two rows per stint (one per attacking team).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `stints` | `DataFrame` |  | a `build_stints`-shaped frame. |
+
+**Returns**
+
+`(X, y, w, player_index)` where `X` is a `scipy.sparse.csr_matrix` with columns `off_<player>` (all on-ice attackers), `def_<player>` (all on-ice defenders), then a trailing home-ice indicator and intercept column; `y` is the attacking team's xGF per 60; `w` is stint duration (seconds); `player_index` maps each `off_`/`def_` column pair's position to a `player_id` (so column `j` is `off_<player_index[j]>` and column `j + n_players` is `def_<player_index[j]>`).
+
+**Example**
+
+```python
+from sportsdataverse.nhl.nhl_rapm import build_design
+X, y, w, player_index = build_design(stints)
+```
+
+### build_stints {#build_stints}
+
+`build_stints(shifts: 'pl.DataFrame', scored: 'pl.DataFrame', *, as_of: 'int | None' = None) -> 'pl.DataFrame'`
+
+Fold `load_nhl_shifts` CHANGE events into contiguous constant-personnel intervals.
+
+Per game: resolves each shift row's full team name (`event_team`) to home/away via
+`team_fullname_to_abbr` + the game's `home_abbr`/`away_abbr` (from `scored`),
+then folds `ids_on`/`ids_off` deltas chronologically into a running on-ice set per
+side. A new interval begins at every distinct `game_seconds` boundary; the final
+interval is closed at the last `scored` event's `game_seconds` + 1 for that game
+(there is no explicit "end of game" CHANGE row in the shift-chart feed).
+
+Known simplification: shift-chart id lists do not distinguish position, so
+`home_ids`/`away_ids` may include the on-ice goalie's id alongside skaters;
+`home_goalie`/`away_goalie` are instead sourced from the overlapping `scored`
+events' `home_goalie_id`/`away_goalie_id` (the modal value in the interval).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `shifts` | `DataFrame` |  | a `load_nhl_shifts`-shaped frame. |
+| `scored` | `DataFrame` |  | an `nhl_xg`-scored frame (for the game's `home_abbr`/`away_abbr` and each interval's on-ice xG-for and goalie). |
+| `as_of` | `int \| None` | `None` | an optional per-game `game_seconds` cutoff -- intervals starting at or after `as_of` are dropped. This is the leakage boundary for any forward-looking use: features for a game/date must use only stints strictly before that game's cutoff. |
+
+**Returns**
+
+one row per interval -- `game_id:Int64, period:Int64, start_s:Int64, end_s:Int64, duration:Int64, home_ids:List(Int64), away_ids:List(Int64), home_goalie:Int64, away_goalie:Int64, strength_state:Utf8, xgf_home:Float64, xgf_away:Float64`. Empty/malformed `shifts` returns a zero-row frame with this schema.
+
+**Example**
+
+```python
+import polars as pl
+from sportsdataverse.nhl.nhl_xg import nhl_xg
+from sportsdataverse.nhl.nhl_rapm import build_stints
+pbp = pl.read_parquet("tests/fixtures/nhl_player_impact/pbp_sample.parquet")
+shifts = pl.read_parquet("tests/fixtures/nhl_player_impact/shifts_sample.parquet")
+scored = nhl_xg(pbp, model_dir="tests/fixtures/nhl_player_impact/xg_models")
+stints = build_stints(shifts, scored)
 ```
 
 ### calibration_table {#calibration_table}

@@ -238,8 +238,6 @@ AJHL teams for a given season.
 | `division` | character | Team division. |
 | `team_logo` | character | Team logo image URL. |
 
-## Play-by-play processing
-
 ### build_family {#build_family}
 
 `build_family(league: 'str') -> 'dict[str, Any]'`

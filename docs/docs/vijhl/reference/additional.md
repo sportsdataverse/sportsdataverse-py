@@ -11,6 +11,26 @@ not covered by the generated API-endpoint reference above.
 
 ## HockeyTech / LeagueStat
 
+### build_family {#build_family}
+
+`build_family(league: 'str') -> 'dict[str, Any]'`
+
+Return a dict of public callables for *league*.
+
+All callables are fully independent closures over the single `league`
+string; none share mutable state.  The dict is ready to be spread into
+a module namespace via `globals().update(...)`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `league` | `str` |  | HockeyTech league code: `"ahl"`, `"ohl"`, `"whl"`, or `"qmjhl"`. |
+
+**Returns**
+
+Keys are the public function names (e.g. `"ahl_schedule"`).
+
 ### vijhl_game_corsi {#vijhl_game_corsi}
 
 `vijhl_game_corsi(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'`
@@ -231,28 +251,6 @@ VIJHL teams for a given season.
 | `team_label` | character | Short city label. |
 | `division` | character | Team division. |
 | `team_logo` | character | Team logo image URL. |
-
-## Play-by-play processing
-
-### build_family {#build_family}
-
-`build_family(league: 'str') -> 'dict[str, Any]'`
-
-Return a dict of public callables for *league*.
-
-All callables are fully independent closures over the single `league`
-string; none share mutable state.  The dict is ready to be spread into
-a module namespace via `globals().update(...)`.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `league` | `str` |  | HockeyTech league code: `"ahl"`, `"ohl"`, `"whl"`, or `"qmjhl"`. |
-
-**Returns**
-
-Keys are the public function names (e.g. `"ahl_schedule"`).
 
 ## Dates and seasons
 

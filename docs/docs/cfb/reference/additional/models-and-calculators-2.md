@@ -1,7 +1,7 @@
 ---
 title: "CFB — additional Python functions — Models and calculators: win_prob"
 sidebar_label: "Models and calculators: win_prob"
-sidebar_position: 5
+sidebar_position: 8
 description: "CFB — additional Python functions — Models and calculators: win_prob — function reference in sdv-py, the SportsDataverse Python package."
 ---
 # CFB — additional Python functions — Models and calculators: win_prob

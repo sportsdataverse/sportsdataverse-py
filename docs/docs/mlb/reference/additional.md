@@ -14,6 +14,7 @@ not covered by the generated API-endpoint reference above.
 | Function | Summary |
 |---|---|
 | [espn_mlb_game_rosters](additional/espn.md#espn_mlb_game_rosters) | espn_mlb_game_rosters - pull the active game rosters for both teams. |
+| [espn_mlb_pbp](additional/espn.md#espn_mlb_pbp) | espn_mlb_pbp - pull the full ESPN game-summary payload for one MLB game. |
 | [espn_mlb_player_stats](additional/espn.md#espn_mlb_player_stats) | Pull an MLB athlete's ESPN **season** stat line as one wide row. |
 | [espn_mlb_schedule](additional/espn.md#espn_mlb_schedule) | espn_mlb_schedule - look up the MLB schedule for a given date or season-year. |
 | [espn_mlb_teams](additional/espn.md#espn_mlb_teams) | espn_mlb_teams - look up MLB teams from ESPN's Site v2 API. |
@@ -80,6 +81,7 @@ not covered by the generated API-endpoint reference above.
 | Function | Summary |
 |---|---|
 | [as_of_split](additional/models-and-calculators.md#as_of_split) | Leakage boundary: rows strictly before `cutoff_date` only. |
+| [build_we_table](additional/models-and-calculators.md#build_we_table) | Empirical, Laplace-smoothed home win-expectancy table. |
 | [count_strike_run_value](additional/models-and-calculators.md#count_strike_run_value) | Ball-to-strike run-expectancy delta per count, from `delta_run_exp`. |
 | [event_run_value](additional/models-and-calculators.md#event_run_value) | Empirical run value of an event set, from mean `delta_run_exp`. |
 | [mae](additional/models-and-calculators.md#mae) | Mean absolute error between two arrays. |
@@ -136,10 +138,8 @@ not covered by the generated API-endpoint reference above.
 | [siera_like](additional/analytics.md#siera_like) | SIERA-like ERA estimator from K%/BB%/GB% (**experimental / provisional**). |
 | [tto_penalty_table](additional/analytics.md#tto_penalty_table) | Observed mean run value by times-through-order, with the penalty vs TTO=1. |
 
-## Other
+## Dates and seasons
 
 | Function | Summary |
 |---|---|
-| [build_we_table](additional/other.md#build_we_table) | Empirical, Laplace-smoothed home win-expectancy table. |
-| [espn_mlb_pbp](additional/other.md#espn_mlb_pbp) | espn_mlb_pbp - pull the full ESPN game-summary payload for one MLB game. |
-| [most_recent_mlb_season](additional/other.md#most_recent_mlb_season) | most_recent_mlb_season - return the most recent / current MLB season year. |
+| [most_recent_mlb_season](additional/dates-and-seasons.md#most_recent_mlb_season) | most_recent_mlb_season - return the most recent / current MLB season year. |

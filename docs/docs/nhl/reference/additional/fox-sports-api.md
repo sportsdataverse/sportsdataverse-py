@@ -1,7 +1,7 @@
 ---
 title: "NHL — additional Python functions — Fox Sports API"
 sidebar_label: "Fox Sports API"
-sidebar_position: 2
+sidebar_position: 5
 description: "NHL — additional Python functions — Fox Sports API — function reference in sdv-py, the SportsDataverse Python package."
 ---
 # NHL — additional Python functions — Fox Sports API

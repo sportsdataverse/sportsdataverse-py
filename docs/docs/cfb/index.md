@@ -28,7 +28,7 @@ description: "sdv-py CFB: endpoint references, dataset loaders and parsers for C
 | [ESPN core API (v2)](reference/core) | 89 |
 | [ESPN FPI API (fitt v3)](reference/fitt) | 1 |
 | [ESPN CDN API (cdn.espn.com)](reference/cdn) | 5 |
-| [Hand-written wrappers](reference/additional) | 6 |
+| [Hand-written wrappers](reference/additional/espn) | 6 |
 
 ## sportsdataverse-data releases {#sportsdataverse-data-releases}
 
@@ -36,20 +36,20 @@ description: "sdv-py CFB: endpoint references, dataset loaders and parsers for C
 |---|---:|
 | [sportsdataverse-data releases](reference/loaders) | 70 |
 | [sportsdataverse raw data](reference/loaders) | 1 |
-| [Hand-written wrappers](reference/additional) | 3 |
+| [Hand-written wrappers](reference/additional/highlights) | 3 |
 
 ## stats.ncaa.org {#stats-ncaa-org}
 
 | Reference | Functions |
 |---|---:|
-| [Hand-written wrappers](reference/additional) | 1 |
+| [Hand-written wrappers](reference/additional/highlights) | 1 |
 
 ## On3 Recruit Database {#on3-recruit-database}
 
 | Reference | Functions |
 |---|---:|
 | [On3 Recruit Database (api.on3.com)](reference/on3) | 78 |
-| [Hand-written wrappers](reference/additional) | 4 |
+| [Hand-written wrappers](reference/additional/on3-recruit-database) | 4 |
 
 ## 247Sports Recruit Database {#247sports-recruit-database}
 
@@ -62,95 +62,95 @@ description: "sdv-py CFB: endpoint references, dataset loaders and parsers for C
 
 | Reference | Functions |
 |---|---:|
-| [Hand-written wrappers](reference/additional) | 7 |
+| [Hand-written wrappers](reference/additional/yahoo-sports-shangrila) | 7 |
 
 ## Fox Sports API {#fox-sports-api}
 
 | Reference | Functions |
 |---|---:|
-| [Hand-written wrappers](reference/additional) | 29 |
+| [Hand-written wrappers](reference/additional/fox-sports-api) | 29 |
 ## Tools and helpers
 
 ### Play-by-play processing {#play-by-play-processing}
 
-- [`CFBPlayProcess`](reference/additional#CFBPlayProcess)
+- [`CFBPlayProcess`](reference/additional/highlights#CFBPlayProcess)
 
 ### Models and calculators {#models-and-calculators}
 
-- [`add_era_columns`](reference/additional#add_era_columns)
-- [`assert_rating_scale`](reference/additional#assert_rating_scale)
-- [`calculate_completion_probability`](reference/additional#calculate_completion_probability)
-- [`calculate_epa`](reference/additional#calculate_epa)
-- [`calculate_expected_points`](reference/additional#calculate_expected_points)
-- [`calculate_field_goal_probability`](reference/additional#calculate_field_goal_probability)
-- [`calculate_fourth_down`](reference/additional#calculate_fourth_down)
-- [`calculate_qbr`](reference/additional#calculate_qbr)
-- [`calculate_two_point_probability`](reference/additional#calculate_two_point_probability)
-- [`calculate_win_probability`](reference/additional#calculate_win_probability)
-- [`calculate_wpa`](reference/additional#calculate_wpa)
-- [`calculate_xpass`](reference/additional#calculate_xpass)
-- [`cfb_adjusted_epa`](reference/additional#cfb_adjusted_epa)
-- [`cfb_adjusted_epa_by_game`](reference/additional#cfb_adjusted_epa_by_game)
-- [`cfb_compute_results`](reference/additional#cfb_compute_results)
-- [`cfb_draft_projection`](reference/additional#cfb_draft_projection)
-- [`cfb_field_position`](reference/additional#cfb_field_position)
-- [`cfb_predict_games`](reference/additional#cfb_predict_games)
-- [`cfb_ratings`](reference/additional#cfb_ratings)
-- [`cfb_recruiting_projection`](reference/additional#cfb_recruiting_projection)
-- [`cfb_roster_talent`](reference/additional#cfb_roster_talent)
-- [`cfb_simulations`](reference/additional#cfb_simulations)
-- [`efficiency_ratings`](reference/additional#efficiency_ratings)
-- [`fei_ratings`](reference/additional#fei_ratings)
-- [`fit_field_position_ep`](reference/additional#fit_field_position_ep)
-- [`get_2pt_probs`](reference/additional#get_2pt_probs)
-- [`get_4th_down_probs`](reference/additional#get_4th_down_probs)
-- [`get_fg_wp`](reference/additional#get_fg_wp)
-- [`get_go_wp`](reference/additional#get_go_wp)
-- [`get_punt_wp`](reference/additional#get_punt_wp)
-- [`load_draft_outcomes`](reference/additional#load_draft_outcomes)
-- [`load_fp_curve`](reference/additional#load_fp_curve)
-- [`load_recruit_classes`](reference/additional#load_recruit_classes)
-- [`normalize_pbp_columns`](reference/additional#normalize_pbp_columns)
-- [`predict_from_card`](reference/additional#predict_from_card)
-- [`predict_margin`](reference/additional#predict_margin)
-- [`predict_total`](reference/additional#predict_total)
-- [`slope_for_games`](reference/additional#slope_for_games)
-- [`special_teams_ratings`](reference/additional#special_teams_ratings)
-- [`win_prob_from_margin`](reference/additional#win_prob_from_margin)
+- [`add_era_columns`](reference/additional/models-and-calculators#add_era_columns)
+- [`assert_rating_scale`](reference/additional/models-and-calculators#assert_rating_scale)
+- [`calculate_completion_probability`](reference/additional/models-and-calculators#calculate_completion_probability)
+- [`calculate_epa`](reference/additional/models-and-calculators#calculate_epa)
+- [`calculate_expected_points`](reference/additional/models-and-calculators#calculate_expected_points)
+- [`calculate_field_goal_probability`](reference/additional/models-and-calculators#calculate_field_goal_probability)
+- [`calculate_fourth_down`](reference/additional/models-and-calculators#calculate_fourth_down)
+- [`calculate_qbr`](reference/additional/models-and-calculators#calculate_qbr)
+- [`calculate_two_point_probability`](reference/additional/models-and-calculators#calculate_two_point_probability)
+- [`calculate_win_probability`](reference/additional/models-and-calculators#calculate_win_probability)
+- [`calculate_wpa`](reference/additional/models-and-calculators#calculate_wpa)
+- [`calculate_xpass`](reference/additional/models-and-calculators#calculate_xpass)
+- [`cfb_adjusted_epa`](reference/additional/models-and-calculators#cfb_adjusted_epa)
+- [`cfb_adjusted_epa_by_game`](reference/additional/models-and-calculators#cfb_adjusted_epa_by_game)
+- [`cfb_compute_results`](reference/additional/models-and-calculators#cfb_compute_results)
+- [`cfb_draft_projection`](reference/additional/models-and-calculators#cfb_draft_projection)
+- [`cfb_field_position`](reference/additional/models-and-calculators#cfb_field_position)
+- [`cfb_predict_games`](reference/additional/models-and-calculators#cfb_predict_games)
+- [`cfb_ratings`](reference/additional/models-and-calculators#cfb_ratings)
+- [`cfb_recruiting_projection`](reference/additional/models-and-calculators#cfb_recruiting_projection)
+- [`cfb_roster_talent`](reference/additional/models-and-calculators#cfb_roster_talent)
+- [`cfb_simulations`](reference/additional/models-and-calculators#cfb_simulations)
+- [`efficiency_ratings`](reference/additional/models-and-calculators#efficiency_ratings)
+- [`fei_ratings`](reference/additional/models-and-calculators#fei_ratings)
+- [`fit_field_position_ep`](reference/additional/models-and-calculators#fit_field_position_ep)
+- [`get_2pt_probs`](reference/additional/models-and-calculators#get_2pt_probs)
+- [`get_4th_down_probs`](reference/additional/models-and-calculators#get_4th_down_probs)
+- [`get_fg_wp`](reference/additional/models-and-calculators#get_fg_wp)
+- [`get_go_wp`](reference/additional/models-and-calculators#get_go_wp)
+- [`get_punt_wp`](reference/additional/models-and-calculators#get_punt_wp)
+- [`load_draft_outcomes`](reference/additional/models-and-calculators#load_draft_outcomes)
+- [`load_fp_curve`](reference/additional/models-and-calculators#load_fp_curve)
+- [`load_recruit_classes`](reference/additional/models-and-calculators#load_recruit_classes)
+- [`normalize_pbp_columns`](reference/additional/models-and-calculators#normalize_pbp_columns)
+- [`predict_from_card`](reference/additional/models-and-calculators#predict_from_card)
+- [`predict_margin`](reference/additional/models-and-calculators#predict_margin)
+- [`predict_total`](reference/additional/models-and-calculators#predict_total)
+- [`slope_for_games`](reference/additional/models-and-calculators#slope_for_games)
+- [`special_teams_ratings`](reference/additional/models-and-calculators#special_teams_ratings)
+- [`win_prob_from_margin`](reference/additional/models-and-calculators-2#win_prob_from_margin)
 
 ### Analytics {#analytics}
 
-- [`add_play_type_canonical`](reference/additional#add_play_type_canonical)
-- [`canonical_play_type_expr`](reference/additional#canonical_play_type_expr)
-- [`cfb_adjusted_tempo`](reference/additional#cfb_adjusted_tempo)
-- [`cfb_advanced_stats`](reference/additional#cfb_advanced_stats)
-- [`cfb_games_from_schedule`](reference/additional#cfb_games_from_schedule)
-- [`cfb_playoff_seeds`](reference/additional#cfb_playoff_seeds)
-- [`cfb_resume`](reference/additional#cfb_resume)
-- [`cfb_returning_production`](reference/additional#cfb_returning_production)
-- [`cfb_season_odds`](reference/additional#cfb_season_odds)
-- [`cfb_standings`](reference/additional#cfb_standings)
-- [`cfb_transfer_impact`](reference/additional#cfb_transfer_impact)
-- [`cfb_transfer_moves`](reference/additional#cfb_transfer_moves)
-- [`create_drive_summary`](reference/additional#create_drive_summary)
-- [`create_situational_stats`](reference/additional#create_situational_stats)
-- [`make_ratings_compute_results`](reference/additional#make_ratings_compute_results)
-- [`play_type_family_expr`](reference/additional#play_type_family_expr)
+- [`add_play_type_canonical`](reference/additional/analytics#add_play_type_canonical)
+- [`canonical_play_type_expr`](reference/additional/analytics#canonical_play_type_expr)
+- [`cfb_adjusted_tempo`](reference/additional/analytics#cfb_adjusted_tempo)
+- [`cfb_advanced_stats`](reference/additional/highlights#cfb_advanced_stats)
+- [`cfb_games_from_schedule`](reference/additional/analytics#cfb_games_from_schedule)
+- [`cfb_playoff_seeds`](reference/additional/analytics#cfb_playoff_seeds)
+- [`cfb_resume`](reference/additional/analytics#cfb_resume)
+- [`cfb_returning_production`](reference/additional/analytics#cfb_returning_production)
+- [`cfb_season_odds`](reference/additional/analytics#cfb_season_odds)
+- [`cfb_standings`](reference/additional/highlights#cfb_standings)
+- [`cfb_transfer_impact`](reference/additional/analytics#cfb_transfer_impact)
+- [`cfb_transfer_moves`](reference/additional/analytics#cfb_transfer_moves)
+- [`create_drive_summary`](reference/additional/analytics#create_drive_summary)
+- [`create_situational_stats`](reference/additional/analytics#create_situational_stats)
+- [`make_ratings_compute_results`](reference/additional/analytics#make_ratings_compute_results)
+- [`play_type_family_expr`](reference/additional/analytics#play_type_family_expr)
 
 ### Dates and seasons {#dates-and-seasons}
 
-- [`most_recent_cfb_season`](reference/additional#most_recent_cfb_season)
+- [`most_recent_cfb_season`](reference/additional/highlights#most_recent_cfb_season)
 
 ### IDs and crosswalks {#ids-and-crosswalks}
 
-- [`cfb_odds_events_crosswalk`](reference/additional#cfb_odds_events_crosswalk)
-- [`cfb_rosters_crosswalk`](reference/additional#cfb_rosters_crosswalk)
-- [`cfb_schedule_crosswalk`](reference/additional#cfb_schedule_crosswalk)
-- [`cfb_teams_crosswalk`](reference/additional#cfb_teams_crosswalk)
+- [`cfb_odds_events_crosswalk`](reference/additional/ids-and-crosswalks#cfb_odds_events_crosswalk)
+- [`cfb_rosters_crosswalk`](reference/additional/ids-and-crosswalks#cfb_rosters_crosswalk)
+- [`cfb_schedule_crosswalk`](reference/additional/ids-and-crosswalks#cfb_schedule_crosswalk)
+- [`cfb_teams_crosswalk`](reference/additional/ids-and-crosswalks#cfb_teams_crosswalk)
 
 ### Validation {#validation}
 
-- [`check_box_invariants`](reference/additional#check_box_invariants)
+- [`check_box_invariants`](reference/additional/validation#check_box_invariants)
 
 
 ## Examples
@@ -224,7 +224,7 @@ Each `sportsdataverse` function and its equivalent in the sister R package, [`cf
 | [`espn_cfb_team_record`](reference/site#espn_cfb_team_record) | [`espn_cfb_team_record`](https://cfbfastR.sportsdataverse.org/reference/espn_cfb_team_record.html) |
 | [`espn_cfb_team_roster`](reference/site#espn_cfb_team_roster) | [`espn_cfb_team_roster`](https://cfbfastR.sportsdataverse.org/reference/espn_cfb_team_roster.html) |
 | [`espn_cfb_team_schedule`](reference/site#espn_cfb_team_schedule) | [`espn_cfb_team_schedule`](https://cfbfastR.sportsdataverse.org/reference/espn_cfb_team_schedule.html) |
-| [`espn_cfb_teams`](reference/additional/other#espn_cfb_teams) | [`espn_cfb_teams`](https://cfbfastR.sportsdataverse.org/reference/espn_cfb_teams.html) |
+| [`espn_cfb_teams`](reference/additional/espn#espn_cfb_teams) | [`espn_cfb_teams`](https://cfbfastR.sportsdataverse.org/reference/espn_cfb_teams.html) |
 | [`espn_cfb_venue`](reference/core/other#espn_cfb_venue) | [`espn_cfb_venue`](https://cfbfastR.sportsdataverse.org/reference/espn_cfb_venue.html) |
 | [`espn_cfb_venues`](reference/core/other#espn_cfb_venues) | [`espn_cfb_venues`](https://cfbfastR.sportsdataverse.org/reference/espn_cfb_venues.html) |
 | [`espn_cfb_week_rankings`](reference/core/other#espn_cfb_week_rankings) | [`espn_cfb_week_rankings`](https://cfbfastR.sportsdataverse.org/reference/espn_cfb_week_rankings.html) |
@@ -247,7 +247,7 @@ Each `sportsdataverse` function and its equivalent in the sister R package, [`cf
 | [`load_cfb_recruits`](reference/loaders/other#load_cfb_recruits) | [`load_cfb_recruits`](https://cfbfastR.sportsdataverse.org/reference/load_cfb_recruits.html) |
 | [`load_cfb_returning_production`](reference/loaders/other#load_cfb_returning_production) | [`load_cfb_returning_production`](https://cfbfastR.sportsdataverse.org/reference/load_cfb_returning_production.html) |
 | [`load_cfb_rosters`](reference/loaders/rosters#load_cfb_rosters) | [`load_cfb_rosters`](https://cfbfastR.sportsdataverse.org/reference/load_cfb_rosters.html) |
-| [`load_cfb_rosters_crosswalk`](reference/additional/other#load_cfb_rosters_crosswalk) | [`load_cfb_rosters_crosswalk`](https://cfbfastR.sportsdataverse.org/reference/load_cfb_rosters_crosswalk.html) |
+| [`load_cfb_rosters_crosswalk`](reference/additional/sportsdataverse-data-releases#load_cfb_rosters_crosswalk) | [`load_cfb_rosters_crosswalk`](https://cfbfastR.sportsdataverse.org/reference/load_cfb_rosters_crosswalk.html) |
 | [`load_cfb_schedule_crosswalk`](reference/loaders/schedule#load_cfb_schedule_crosswalk) | [`load_cfb_schedule_crosswalk`](https://cfbfastR.sportsdataverse.org/reference/load_cfb_schedule_crosswalk.html) |
 | [`load_cfb_team_group_seasons`](reference/loaders/team-5#load_cfb_team_group_seasons) | [`load_cfb_team_group_seasons`](https://cfbfastR.sportsdataverse.org/reference/load_cfb_team_group_seasons.html) |
 | [`load_cfb_team_summaries_weekly`](reference/loaders/team-3#load_cfb_team_summaries_weekly) | [`load_cfb_team_summaries_weekly`](https://cfbfastR.sportsdataverse.org/reference/load_cfb_team_summaries_weekly.html) |

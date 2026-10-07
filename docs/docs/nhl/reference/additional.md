@@ -14,11 +14,38 @@ not covered by the generated API-endpoint reference above.
 | Function | Summary |
 |---|---|
 | [espn_nhl_game_rosters](additional/espn.md#espn_nhl_game_rosters) | espn_nhl_game_rosters() - Pull the game by id. |
+| [espn_nhl_pbp](additional/espn.md#espn_nhl_pbp) | espn_nhl_pbp() - Pull the game by id. Data from API endpoints - `nhl/playbyplay`, `nhl/summary` |
 | [espn_nhl_player_stats](additional/espn.md#espn_nhl_player_stats) | Pull an NHL athlete's ESPN **season** stat line as one wide row. |
 | [espn_nhl_schedule](additional/espn.md#espn_nhl_schedule) | espn_nhl_schedule - look up the NHL schedule for a given date |
 | [espn_nhl_teams](additional/espn.md#espn_nhl_teams) | espn_nhl_teams - look up NHL teams |
-| [nhl_special_teams_value](additional/espn.md#nhl_special_teams_value) | Per-skater power-play/penalty-kill value (goals) above/below league baseline. |
 | [scoreboard_event_parsing](additional/espn.md#scoreboard_event_parsing) | _No description available._ |
+
+## sportsdataverse-data releases
+
+| Function | Summary |
+|---|---|
+| [load_nhl_games](additional/sportsdataverse-data-releases.md#load_nhl_games) | Load the NHL games-in-data-repo manifest (no `seasons` argument). |
+| [load_nhl_goalie_box](additional/sportsdataverse-data-releases.md#load_nhl_goalie_box) | Alias of load_nhl_goalie_boxscores() for naming parity with fastRhockey (R). |
+| [load_nhl_player_box](additional/sportsdataverse-data-releases.md#load_nhl_player_box) | Alias of load_nhl_player_boxscore() for naming parity with fastRhockey (R). |
+| [load_nhl_skater_box](additional/sportsdataverse-data-releases.md#load_nhl_skater_box) | Alias of load_nhl_skater_boxscores() for naming parity with fastRhockey (R). |
+| [load_nhl_team_box](additional/sportsdataverse-data-releases.md#load_nhl_team_box) | Alias of load_nhl_team_boxscore() for naming parity with fastRhockey (R). |
+
+## NHL Web API
+
+| Function | Summary |
+|---|---|
+| [nhl_scoreboard](additional/nhl-web-api.md#nhl_scoreboard) | In-game scoreboard payload (renamed from `nhl_web_scoreboard`). |
+
+## NHL Records
+
+| Function | Summary |
+|---|---|
+| [nhl_records_coach_milestone_wins](additional/nhl-records.md#nhl_records_coach_milestone_wins) | Coaches who reached a wins milestone in fewest games. |
+| [nhl_records_comeback_wins](additional/nhl-records.md#nhl_records_comeback_wins) | Comeback wins from a multi-goal deficit. |
+| [nhl_records_consecutive_goal_seasons](additional/nhl-records.md#nhl_records_consecutive_goal_seasons) | Skaters with the most consecutive N-goal seasons. |
+| [nhl_records_fastest_goals](additional/nhl-records.md#nhl_records_fastest_goals) | Fastest N goals by one team in a single game. |
+| [nhl_records_fastest_goals_both_teams](additional/nhl-records.md#nhl_records_fastest_goals_both_teams) | Fastest N goals combined (both teams) in a single game. |
+| [nhl_records_games_played_streak_skaters](additional/nhl-records.md#nhl_records_games_played_streak_skaters) | Consecutive games-played streaks for skaters. |
 
 ## Fox Sports API
 
@@ -50,6 +77,12 @@ not covered by the generated API-endpoint reference above.
 | [fox_nhl_team_stats](additional/fox-sports-api.md#fox_nhl_team_stats) | NHL team stat leaders by category. |
 | [fox_nhl_teamnav](additional/fox-sports-api.md#fox_nhl_teamnav) | Fox Sports nhl team directory (one row per team). |
 
+## Play-by-play processing
+
+| Function | Summary |
+|---|---|
+| [nhl_pbp_disk](additional/play-by-play-processing.md#nhl_pbp_disk) | _No description available._ |
+
 ## Models and calculators
 
 | Function | Summary |
@@ -61,6 +94,8 @@ not covered by the generated API-endpoint reference above.
 | [as_of_ratings_split](additional/models-and-calculators.md#as_of_ratings_split) | Filter a frame to rows strictly before `cutoff_date` (the leakage boundary). |
 | [booster_cache_dir](additional/models-and-calculators.md#booster_cache_dir) | Resolve the local cache directory for the downloaded `nhl_xg_models` boosters. |
 | [brier_score](additional/models-and-calculators.md#brier_score) | Mean squared error between predicted probabilities and binary outcomes. |
+| [build_design](additional/models-and-calculators.md#build_design) | Build the sparse RAPM design matrix -- two rows per stint (one per attacking team). |
+| [build_stints](additional/models-and-calculators.md#build_stints) | Fold `load_nhl_shifts` CHANGE events into contiguous constant-personnel intervals. |
 | [calibration_table](additional/models-and-calculators.md#calibration_table) | Bucket predicted probabilities into bins and compare to actual outcome rates. |
 | [ensure_xg_models](additional/models-and-calculators.md#ensure_xg_models) | Return a dir holding the 3 published booster files, downloading any missing ones. |
 | [get_constants](additional/models-and-calculators.md#get_constants) | Resolve the fitted-constants row for a league. |
@@ -93,30 +128,15 @@ not covered by the generated API-endpoint reference above.
 | [nhl_penalty_value](additional/analytics.md#nhl_penalty_value) | Per-player net penalty drawn/taken value. |
 | [nhl_player_props](additional/analytics.md#nhl_player_props) | Empirical-Bayes shots/points player-prop projections. |
 | [nhl_predict_games](additional/analytics.md#nhl_predict_games) | Vectorized pregame margin/win-prob/total (+ market edge) over a schedule. |
+| [nhl_special_teams_value](additional/analytics.md#nhl_special_teams_value) | Per-skater power-play/penalty-kill value (goals) above/below league baseline. |
 | [nhl_zone_transitions](additional/analytics.md#nhl_zone_transitions) | Per-player controlled/dump entry & exit rates + xG-weighted values. |
 | [predict_margin](additional/analytics.md#predict_margin) | Expected home-minus-away goal margin. |
 | [predict_total](additional/analytics.md#predict_total) | Expected total goals, variance-corrected by the fitted `total_scale`. |
 | [win_prob_from_margin](additional/analytics.md#win_prob_from_margin) | Convert an expected goal margin to a home win probability via Phi(margin/sigma). |
 
-## Other
+## Dates and seasons
 
 | Function | Summary |
 |---|---|
-| [load_nhl_games](additional/other.md#load_nhl_games) | Load the NHL games-in-data-repo manifest (no `seasons` argument). |
-| [load_nhl_goalie_box](additional/other.md#load_nhl_goalie_box) | Alias of load_nhl_goalie_boxscores() for naming parity with fastRhockey (R). |
-| [load_nhl_player_box](additional/other.md#load_nhl_player_box) | Alias of load_nhl_player_boxscore() for naming parity with fastRhockey (R). |
-| [load_nhl_skater_box](additional/other.md#load_nhl_skater_box) | Alias of load_nhl_skater_boxscores() for naming parity with fastRhockey (R). |
-| [load_nhl_team_box](additional/other.md#load_nhl_team_box) | Alias of load_nhl_team_boxscore() for naming parity with fastRhockey (R). |
-| [nhl_scoreboard](additional/other.md#nhl_scoreboard) | In-game scoreboard payload (renamed from `nhl_web_scoreboard`). |
-| [nhl_records_coach_milestone_wins](additional/other.md#nhl_records_coach_milestone_wins) | Coaches who reached a wins milestone in fewest games. |
-| [nhl_records_comeback_wins](additional/other.md#nhl_records_comeback_wins) | Comeback wins from a multi-goal deficit. |
-| [nhl_records_consecutive_goal_seasons](additional/other.md#nhl_records_consecutive_goal_seasons) | Skaters with the most consecutive N-goal seasons. |
-| [nhl_records_fastest_goals](additional/other.md#nhl_records_fastest_goals) | Fastest N goals by one team in a single game. |
-| [nhl_records_fastest_goals_both_teams](additional/other.md#nhl_records_fastest_goals_both_teams) | Fastest N goals combined (both teams) in a single game. |
-| [nhl_records_games_played_streak_skaters](additional/other.md#nhl_records_games_played_streak_skaters) | Consecutive games-played streaks for skaters. |
-| [build_design](additional/other.md#build_design) | Build the sparse RAPM design matrix -- two rows per stint (one per attacking team). |
-| [build_stints](additional/other.md#build_stints) | Fold `load_nhl_shifts` CHANGE events into contiguous constant-personnel intervals. |
-| [espn_nhl_pbp](additional/other.md#espn_nhl_pbp) | espn_nhl_pbp() - Pull the game by id. Data from API endpoints - `nhl/playbyplay`, `nhl/summary` |
-| [nhl_pbp_disk](additional/other.md#nhl_pbp_disk) | _No description available._ |
-| [most_recent_nhl_season](additional/other.md#most_recent_nhl_season) | most_recent_nhl_season - return the season year for "today". |
-| [year_to_season](additional/other.md#year_to_season) | year_to_season - format a starting year as the canonical `YYYY-YY` season string. |
+| [most_recent_nhl_season](additional/dates-and-seasons.md#most_recent_nhl_season) | most_recent_nhl_season - return the season year for "today". |
+| [year_to_season](additional/dates-and-seasons.md#year_to_season) | year_to_season - format a starting year as the canonical `YYYY-YY` season string. |

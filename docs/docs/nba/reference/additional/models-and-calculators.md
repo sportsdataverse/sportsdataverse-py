@@ -1,7 +1,7 @@
 ---
 title: "NBA — additional Python functions — Models and calculators: AdjRapmModel–predict_margin"
 sidebar_label: "Models and calculators: AdjRapmModel–predict_margin"
-sidebar_position: 6
+sidebar_position: 10
 description: "NBA — additional Python functions — Models and calculators: AdjRapmModel–predict_margin — function reference in sdv-py, the SportsDataverse Python package."
 ---
 # NBA — additional Python functions — Models and calculators: AdjRapmModel–predict_margin

@@ -25,9 +25,9 @@ def test_highlights_still_wins():
 
 
 def test_family_rank_is_registry_order_with_highlights_first():
-    assert generate._FAMILY_RANK["Highlights"] == -1
+    assert generate._family_rank()["Highlights"] == -1
     labels = [e.label for e in sources.load()]
-    ranks = [generate._FAMILY_RANK[lbl] for lbl in labels]
+    ranks = [generate._family_rank()[lbl] for lbl in labels]
     assert ranks == sorted(ranks)
 
 
@@ -51,7 +51,7 @@ def test_a_registry_label_keeps_its_own_capitalisation():
         ("c_fn", "ESPN", 20_000),
         ("d_fn", "ESPN", 20_000),
     ]
-    labels = [lbl for _slug, lbl, _part, _names in generate._pack_families(items, rank=generate._FAMILY_RANK)]
+    labels = [lbl for _slug, lbl, _part, _names in generate._pack_families(items, rank=generate._family_rank())]
     assert "nflverse data releases" in labels
     assert "Nflverse data releases" not in labels
 
@@ -85,3 +85,27 @@ def test_oversize_provider_section_still_splits_and_forwards():
     assert all(f"nba_stats_fn{i}" in fn_slug for i in range(6))
     for slug in fn_slug.values():
         assert slug in family_pages
+
+
+def test_pack_families_never_folds_a_registry_family_into_other():
+    """An autodoc family is a source or a helper category. Folding a small one into "Other" un-names
+    it, so the page says "Other" where the league index says "Cache and configuration"."""
+    items = [("a_fn", "Cache and configuration", 500), ("b_fn", "ESPN", 20_000), ("c_fn", "ESPN", 20_000)]
+    labels = [lbl for _slug, lbl, _part, _names in generate._pack_families(items, rank=generate._family_rank())]
+    assert labels == ["ESPN", "Cache and configuration"]
+
+
+def test_no_committed_autodoc_page_has_an_other_family():
+    """Read the committed tree: `generate.py --check` already proves it matches a fresh render."""
+    autodoc = ("additional", "python-helpers")
+    bad = [str(p.relative_to(generate.DOCS)) for p in generate.DOCS.rglob("other*.md") if p.parent.name in autodoc]
+    for page in generate.DOCS.rglob("*.md"):
+        if page.stem in autodoc and "## Other" in page.read_text(encoding="utf-8").splitlines():
+            bad.append(f"{page.relative_to(generate.DOCS)}: ## Other")
+    assert not sorted(bad)
+
+
+def test_family_rank_is_never_frozen_at_import():
+    """A module-level copy ignores `_family_rank.cache_clear()`, so a split rendered after the
+    registry changed (a test patching it, a long-lived process) would still use the import-time order."""
+    assert not hasattr(generate, "_FAMILY_RANK")

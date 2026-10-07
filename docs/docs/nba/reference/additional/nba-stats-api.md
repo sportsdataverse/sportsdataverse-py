@@ -1,7 +1,7 @@
 ---
 title: "NBA — additional Python functions — NBA Stats API"
 sidebar_label: "NBA Stats API"
-sidebar_position: 2
+sidebar_position: 4
 description: "NBA — additional Python functions — NBA Stats API — function reference in sdv-py, the SportsDataverse Python package."
 ---
 # NBA — additional Python functions — NBA Stats API

@@ -39,17 +39,17 @@ Everything returns a tidy **polars** `DataFrame` by default — pass
 | [`load_cfb_schedule`](../cfb/reference/loaders/schedule.md#load_cfb_schedule) | Season **schedule** + results | ⭐ release |
 | [`load_cfb_team_info`](../cfb/reference/loaders/team.md#load_cfb_team_info) | **Team** metadata: conference, colors, venue | ⭐ release |
 | [`load_cfb_ratings`](../cfb/reference/loaders/other.md#load_cfb_ratings) | Opponent-adjusted **EPA ratings** per team-season | ⭐ release |
-| [`load_cfb_betting_lines`](../cfb/reference/additional/other.md#load_cfb_betting_lines) | Historical **betting market** lines (spread/total/ML) | ⭐ release |
+| [`load_cfb_betting_lines`](../cfb/reference/additional/sportsdataverse-data-releases.md#load_cfb_betting_lines) | Historical **betting market** lines (spread/total/ML) | ⭐ release |
 | [`espn_cfb_scoreboard`](../cfb/reference/site.md#espn_cfb_scoreboard) | Live + recent **scoreboard** for a date/week | ⭐ ESPN |
 | [`espn_cfb_schedule`](../cfb/reference/additional/highlights.md#espn_cfb_schedule) | ESPN **schedule** frame for a date/week | ⭐ ESPN |
-| [`espn_cfb_teams`](../cfb/reference/additional/other.md#espn_cfb_teams) | Every FBS/FCS **team** (grab `team_id`s) | ⭐ ESPN |
+| [`espn_cfb_teams`](../cfb/reference/additional/espn.md#espn_cfb_teams) | Every FBS/FCS **team** (grab `team_id`s) | ⭐ ESPN |
 | [`espn_cfb_team_roster`](../cfb/reference/site.md#espn_cfb_team_roster) | One team's **roster** | ⭐ ESPN |
 | [`espn_cfb_team_schedule`](../cfb/reference/site.md#espn_cfb_team_schedule) | One team's **schedule** | ⭐ ESPN |
 | [`espn_cfb_standings`](../cfb/reference/site.md#espn_cfb_standings) | Conference / division **standings** | ⭐ ESPN |
 | [`espn_cfb_rankings`](../cfb/reference/site.md#espn_cfb_rankings) | AP / Coaches / CFP **polls** | ⭐ ESPN |
 | [`espn_cfb_leaders`](../cfb/reference/web.md#espn_cfb_leaders) | League **stat leaders** by category | ⭐ ESPN |
 | [`espn_cfb_recruits`](../cfb/reference/core/other.md#espn_cfb_recruits) | Season **recruiting** class | ⭐ ESPN |
-| [`espn_cfb_play_participants`](../cfb/reference/additional/other.md#espn_cfb_play_participants) | Per-play **athletes** (passer/rusher/tackler…) | ⭐ ESPN |
+| [`espn_cfb_play_participants`](../cfb/reference/additional/espn.md#espn_cfb_play_participants) | Per-play **athletes** (passer/rusher/tackler…) | ⭐ ESPN |
 | [`CFBPlayProcess`](../cfb/reference/additional/highlights.md#CFBPlayProcess) | Full ESPN **PBP pipeline** (EPA/WPA + box) | ⭐ ESPN |
 | [`most_recent_cfb_season`](../cfb/reference/additional/highlights.md#most_recent_cfb_season) | The current season year helper | helper |
 
@@ -200,7 +200,7 @@ out
 
 ## 🏫 Live from ESPN: teams (and their `team_id`s)
 
-[`espn_cfb_teams`](../cfb/reference/additional/other.md#espn_cfb_teams) lists every
+[`espn_cfb_teams`](../cfb/reference/additional/espn.md#espn_cfb_teams) lists every
 team in a division (`groups=80` FBS, `groups=81` FCS). The `team_id` column
 is the key you feed into every team-scoped ESPN call below.
 
@@ -296,7 +296,7 @@ out
 
 ### Recipe 4 — Who was on the field? Per-play participants 🕵️
 
-[`espn_cfb_play_participants`](../cfb/reference/additional/other.md#espn_cfb_play_participants)
+[`espn_cfb_play_participants`](../cfb/reference/additional/espn.md#espn_cfb_play_participants)
 resolves the athletes involved in each play (passer, rusher, receiver,
 tackler…) straight from ESPN's authoritative `participants[]` array — far
 more reliable than regex-parsing the play text. Set `resolve_missing=False`
@@ -498,7 +498,7 @@ splits
 
 ### Recipe 12 — Biggest betting favorites in history 💸
 
-[`load_cfb_betting_lines`](../cfb/reference/additional/other.md#load_cfb_betting_lines) is a premium release frame of historical sportsbook lines. Average the spread across books per game and sort to surface the most lopsided favorites — the mismatches Vegas saw coming a mile away.
+[`load_cfb_betting_lines`](../cfb/reference/additional/sportsdataverse-data-releases.md#load_cfb_betting_lines) is a premium release frame of historical sportsbook lines. Average the spread across books per game and sort to surface the most lopsided favorites — the mismatches Vegas saw coming a mile away.
 
 
 ```python

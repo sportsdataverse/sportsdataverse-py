@@ -48,7 +48,7 @@ full reference:
 | [`mlb_statcast_gamefeed`](../mlb/reference/mlb_statcast/other.md#mlb_statcast_gamefeed) | Savant single-game feed — one tidy row per pitch | 🔵 **Statcast** |
 | [`mlb_statcast_player`](../mlb/reference/additional/baseball-savant-statcast.md#mlb_statcast_player) | A player's Savant page metrics | 🔵 **Statcast** |
 | [`espn_mlb_teams`](../mlb/reference/additional/espn.md#espn_mlb_teams) · [`espn_mlb_schedule`](../mlb/reference/additional/espn.md#espn_mlb_schedule) | ESPN teams / schedule (wide frames) | ⚪ ESPN |
-| [`most_recent_mlb_season`](../mlb/reference/additional/other.md#most_recent_mlb_season) | Current season helper | ⚪ helper |
+| [`most_recent_mlb_season`](../mlb/reference/additional/dates-and-seasons.md#most_recent_mlb_season) | Current season helper | ⚪ helper |
 
 ## 🔌 Setup
 

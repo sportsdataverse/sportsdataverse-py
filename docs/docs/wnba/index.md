@@ -9,7 +9,7 @@ description: "sdv-py WNBA: endpoint references, dataset loaders and parsers for 
 
 | Source | APIs / hosts | Functions | Auth |
 |---|---|---:|---|
-| [ESPN](#espn) | `cdn.espn.com`, `site.api.espn.com`, `site.web.api.espn.com` +1 more | 122 | none |
+| [ESPN](#espn) | `cdn.espn.com`, `site.api.espn.com`, `site.web.api.espn.com` +1 more | 123 | none |
 | [sportsdataverse-data releases](#sportsdataverse-data-releases) | `github.com` | 39 | none |
 | [WNBA Stats API](#wnba-stats-api) | `stats.wnba.com` | 113 | none (curl_cffi chrome TLS impersonation) |
 | [Fox Sports API](#fox-sports-api) | `api.foxsports.com` | 26 | none |
@@ -24,87 +24,86 @@ description: "sdv-py WNBA: endpoint references, dataset loaders and parsers for 
 | [ESPN core API (v2)](reference/core) | 81 |
 | [ESPN FPI API (fitt v3)](reference/fitt) | 1 |
 | [ESPN CDN API (cdn.espn.com)](reference/cdn) | 4 |
-| [Hand-written wrappers](reference/additional) | 7 |
+| [Hand-written wrappers](reference/additional/espn) | 8 |
 
 ## sportsdataverse-data releases {#sportsdataverse-data-releases}
 
 | Reference | Functions |
 |---|---:|
 | [sportsdataverse-data releases](reference/loaders) | 34 |
-| [Hand-written wrappers](reference/additional) | 5 |
+| [Hand-written wrappers](reference/additional/sportsdataverse-data-releases) | 5 |
 
 ## WNBA Stats API {#wnba-stats-api}
 
 | Reference | Functions |
 |---|---:|
 | [WNBA Stats API (stats.wnba.com)](reference/wnba_stats) | 111 |
-| [Hand-written wrappers](reference/additional) | 2 |
+| [Hand-written wrappers](reference/additional/wnba-stats-api) | 2 |
 
 ## Fox Sports API {#fox-sports-api}
 
 | Reference | Functions |
 |---|---:|
-| [Hand-written wrappers](reference/additional) | 26 |
+| [Hand-written wrappers](reference/additional/fox-sports-api) | 26 |
 ## Tools and helpers
 
 ### Play-by-play processing {#play-by-play-processing}
 
-- [`build_athlete_identity_lookup`](reference/additional#build_athlete_identity_lookup)
-- [`build_wnba_season_wp`](reference/additional#build_wnba_season_wp)
-- [`espn_wnba_pbp`](reference/additional#espn_wnba_pbp)
-- [`wnba_enhanced_pbp`](reference/additional#wnba_enhanced_pbp)
-- [`wnba_on_court`](reference/additional#wnba_on_court)
-- [`wnba_pbp_disk`](reference/additional#wnba_pbp_disk)
-- [`wnba_play_context`](reference/additional#wnba_play_context)
-- [`wnba_possessions`](reference/additional#wnba_possessions)
-- [`wnba_rapm_from_games`](reference/additional#wnba_rapm_from_games)
+- [`build_athlete_identity_lookup`](reference/additional/play-by-play-processing#build_athlete_identity_lookup)
+- [`wnba_enhanced_pbp`](reference/additional/play-by-play-processing#wnba_enhanced_pbp)
+- [`wnba_on_court`](reference/additional/play-by-play-processing#wnba_on_court)
+- [`wnba_pbp_disk`](reference/additional/play-by-play-processing#wnba_pbp_disk)
+- [`wnba_play_context`](reference/additional/play-by-play-processing#wnba_play_context)
+- [`wnba_possessions`](reference/additional/play-by-play-processing#wnba_possessions)
+- [`wnba_rapm_from_games`](reference/additional/play-by-play-processing#wnba_rapm_from_games)
 
 ### Models and calculators {#models-and-calculators}
 
-- [`wnba_aging_curve`](reference/additional#wnba_aging_curve)
-- [`wnba_career_trajectory`](reference/additional#wnba_career_trajectory)
-- [`wnba_draft_model`](reference/additional#wnba_draft_model)
-- [`wnba_in_game_win_prob`](reference/additional#wnba_in_game_win_prob)
-- [`wnba_predict_games`](reference/additional#wnba_predict_games)
-- [`wnba_predict_margin`](reference/additional#wnba_predict_margin)
-- [`wnba_predict_total`](reference/additional#wnba_predict_total)
-- [`wnba_rookie_projection`](reference/additional#wnba_rookie_projection)
-- [`wnba_team_ratings`](reference/additional#wnba_team_ratings)
-- [`wnba_win_prob_from_margin`](reference/additional#wnba_win_prob_from_margin)
+- [`build_wnba_season_wp`](reference/additional/models-and-calculators#build_wnba_season_wp)
+- [`wnba_aging_curve`](reference/additional/models-and-calculators#wnba_aging_curve)
+- [`wnba_career_trajectory`](reference/additional/models-and-calculators#wnba_career_trajectory)
+- [`wnba_draft_model`](reference/additional/models-and-calculators#wnba_draft_model)
+- [`wnba_in_game_win_prob`](reference/additional/models-and-calculators#wnba_in_game_win_prob)
+- [`wnba_predict_games`](reference/additional/models-and-calculators#wnba_predict_games)
+- [`wnba_predict_margin`](reference/additional/models-and-calculators#wnba_predict_margin)
+- [`wnba_predict_total`](reference/additional/models-and-calculators#wnba_predict_total)
+- [`wnba_rookie_projection`](reference/additional/models-and-calculators#wnba_rookie_projection)
+- [`wnba_team_ratings`](reference/additional/models-and-calculators#wnba_team_ratings)
+- [`wnba_win_prob_from_margin`](reference/additional/models-and-calculators#wnba_win_prob_from_margin)
 
 ### Analytics {#analytics}
 
-- [`make_prob_by_context`](reference/additional#make_prob_by_context)
-- [`make_prob_joint`](reference/additional#make_prob_joint)
-- [`score_shot_xpoints`](reference/additional#score_shot_xpoints)
-- [`shooter_talent`](reference/additional#shooter_talent)
-- [`shot_selection_quality`](reference/additional#shot_selection_quality)
-- [`wnba_availability`](reference/additional#wnba_availability)
-- [`wnba_expected_turnovers`](reference/additional#wnba_expected_turnovers)
-- [`wnba_foul_drawing`](reference/additional#wnba_foul_drawing)
-- [`wnba_matchup_drapm`](reference/additional#wnba_matchup_drapm)
-- [`wnba_player_props`](reference/additional#wnba_player_props)
-- [`wnba_playtype_ratings`](reference/additional#wnba_playtype_ratings)
-- [`wnba_referee_assignments`](reference/additional#wnba_referee_assignments)
-- [`wnba_shot_value`](reference/additional#wnba_shot_value)
-- [`wnba_team_clutch`](reference/additional#wnba_team_clutch)
-- [`wnba_tracking_drive_value`](reference/additional#wnba_tracking_drive_value)
-- [`wnba_tracking_pass_value`](reference/additional#wnba_tracking_pass_value)
-- [`wnba_tracking_reb_oe`](reference/additional#wnba_tracking_reb_oe)
-- [`wnba_tracking_rim_protect_value`](reference/additional#wnba_tracking_rim_protect_value)
-- [`wnba_tracking_shot_diet_value`](reference/additional#wnba_tracking_shot_diet_value)
-- [`wnba_tracking_touch_value`](reference/additional#wnba_tracking_touch_value)
-- [`zone_value_map`](reference/additional#zone_value_map)
+- [`make_prob_by_context`](reference/additional/analytics#make_prob_by_context)
+- [`make_prob_joint`](reference/additional/analytics#make_prob_joint)
+- [`score_shot_xpoints`](reference/additional/analytics#score_shot_xpoints)
+- [`shooter_talent`](reference/additional/analytics#shooter_talent)
+- [`shot_selection_quality`](reference/additional/analytics#shot_selection_quality)
+- [`wnba_availability`](reference/additional/analytics#wnba_availability)
+- [`wnba_expected_turnovers`](reference/additional/analytics#wnba_expected_turnovers)
+- [`wnba_foul_drawing`](reference/additional/analytics#wnba_foul_drawing)
+- [`wnba_matchup_drapm`](reference/additional/analytics#wnba_matchup_drapm)
+- [`wnba_player_props`](reference/additional/analytics#wnba_player_props)
+- [`wnba_playtype_ratings`](reference/additional/analytics#wnba_playtype_ratings)
+- [`wnba_referee_assignments`](reference/additional/analytics#wnba_referee_assignments)
+- [`wnba_shot_value`](reference/additional/analytics#wnba_shot_value)
+- [`wnba_team_clutch`](reference/additional/analytics#wnba_team_clutch)
+- [`wnba_tracking_drive_value`](reference/additional/analytics#wnba_tracking_drive_value)
+- [`wnba_tracking_pass_value`](reference/additional/analytics#wnba_tracking_pass_value)
+- [`wnba_tracking_reb_oe`](reference/additional/analytics#wnba_tracking_reb_oe)
+- [`wnba_tracking_rim_protect_value`](reference/additional/analytics#wnba_tracking_rim_protect_value)
+- [`wnba_tracking_shot_diet_value`](reference/additional/analytics#wnba_tracking_shot_diet_value)
+- [`wnba_tracking_touch_value`](reference/additional/analytics#wnba_tracking_touch_value)
+- [`zone_value_map`](reference/additional/analytics#zone_value_map)
 
 ### Dates and seasons {#dates-and-seasons}
 
-- [`most_recent_wnba_season`](reference/additional#most_recent_wnba_season)
+- [`most_recent_wnba_season`](reference/additional/dates-and-seasons#most_recent_wnba_season)
 
 ### IDs and crosswalks {#ids-and-crosswalks}
 
-- [`wnba_player_crosswalk`](reference/additional#wnba_player_crosswalk)
-- [`wnba_schedule_crosswalk`](reference/additional#wnba_schedule_crosswalk)
-- [`wnba_team_crosswalk`](reference/additional#wnba_team_crosswalk)
+- [`wnba_player_crosswalk`](reference/additional/ids-and-crosswalks#wnba_player_crosswalk)
+- [`wnba_schedule_crosswalk`](reference/additional/ids-and-crosswalks#wnba_schedule_crosswalk)
+- [`wnba_team_crosswalk`](reference/additional/ids-and-crosswalks#wnba_team_crosswalk)
 
 
 ## Examples
@@ -146,7 +145,7 @@ Each `sportsdataverse` function and its equivalent in the sister R package, [`we
 | [`espn_wnba_injuries`](reference/site#espn_wnba_injuries) | [`espn_wnba_injuries`](https://wehoop.sportsdataverse.org/reference/espn_wnba_injuries.html) |
 | [`espn_wnba_leaders`](reference/web#espn_wnba_leaders) | [`espn_wnba_leaders`](https://wehoop.sportsdataverse.org/reference/espn_wnba_leaders.html) |
 | [`espn_wnba_news`](reference/site#espn_wnba_news) | [`espn_wnba_news`](https://wehoop.sportsdataverse.org/reference/espn_wnba_news.html) |
-| [`espn_wnba_pbp`](reference/additional/play-by-play-processing#espn_wnba_pbp) | [`espn_wnba_pbp`](https://wehoop.sportsdataverse.org/reference/espn_wnba_pbp.html) |
+| [`espn_wnba_pbp`](reference/additional/espn#espn_wnba_pbp) | [`espn_wnba_pbp`](https://wehoop.sportsdataverse.org/reference/espn_wnba_pbp.html) |
 | [`espn_wnba_player_awards`](reference/core/player#espn_wnba_player_awards) | [`espn_wnba_player_awards`](https://wehoop.sportsdataverse.org/reference/espn_wnba_player_awards.html) |
 | [`espn_wnba_player_career_stats`](reference/core/player#espn_wnba_player_career_stats) | [`espn_wnba_player_career_stats`](https://wehoop.sportsdataverse.org/reference/espn_wnba_player_career_stats.html) |
 | [`espn_wnba_player_eventlog`](reference/core/player#espn_wnba_player_eventlog) | [`espn_wnba_player_eventlog`](https://wehoop.sportsdataverse.org/reference/espn_wnba_player_eventlog.html) |
@@ -212,21 +211,21 @@ Each `sportsdataverse` function and its equivalent in the sister R package, [`we
 | [`load_wnba_stats_coaches`](reference/loaders/stats#load_wnba_stats_coaches) | [`load_wnba_stats_coaches`](https://wehoop.sportsdataverse.org/reference/load_wnba_stats_coaches.html) |
 | [`load_wnba_stats_draft`](reference/loaders/stats#load_wnba_stats_draft) | [`load_wnba_stats_draft`](https://wehoop.sportsdataverse.org/reference/load_wnba_stats_draft.html) |
 | [`load_wnba_stats_game_rosters`](reference/loaders/stats#load_wnba_stats_game_rosters) | [`load_wnba_stats_game_rosters`](https://wehoop.sportsdataverse.org/reference/load_wnba_stats_game_rosters.html) |
-| [`load_wnba_stats_leaguedash`](reference/additional/other#load_wnba_stats_leaguedash) | [`load_wnba_stats_leaguedash`](https://wehoop.sportsdataverse.org/reference/load_wnba_stats_leaguedash.html) |
-| [`load_wnba_stats_lineups`](reference/additional/other#load_wnba_stats_lineups) | [`load_wnba_stats_lineups`](https://wehoop.sportsdataverse.org/reference/load_wnba_stats_lineups.html) |
+| [`load_wnba_stats_leaguedash`](reference/additional/sportsdataverse-data-releases#load_wnba_stats_leaguedash) | [`load_wnba_stats_leaguedash`](https://wehoop.sportsdataverse.org/reference/load_wnba_stats_leaguedash.html) |
+| [`load_wnba_stats_lineups`](reference/additional/sportsdataverse-data-releases#load_wnba_stats_lineups) | [`load_wnba_stats_lineups`](https://wehoop.sportsdataverse.org/reference/load_wnba_stats_lineups.html) |
 | [`load_wnba_stats_officials`](reference/loaders/stats#load_wnba_stats_officials) | [`load_wnba_stats_officials`](https://wehoop.sportsdataverse.org/reference/load_wnba_stats_officials.html) |
 | [`load_wnba_stats_pbp`](reference/loaders/stats#load_wnba_stats_pbp) | [`load_wnba_stats_pbp`](https://wehoop.sportsdataverse.org/reference/load_wnba_stats_pbp.html) |
 | [`load_wnba_stats_player_game_logs`](reference/loaders/stats#load_wnba_stats_player_game_logs) | [`load_wnba_stats_player_game_logs`](https://wehoop.sportsdataverse.org/reference/load_wnba_stats_player_game_logs.html) |
 | [`load_wnba_stats_possessions`](reference/loaders/stats#load_wnba_stats_possessions) | [`load_wnba_stats_possessions`](https://wehoop.sportsdataverse.org/reference/load_wnba_stats_possessions.html) |
 | [`load_wnba_stats_rosters`](reference/loaders/stats#load_wnba_stats_rosters) | [`load_wnba_stats_rosters`](https://wehoop.sportsdataverse.org/reference/load_wnba_stats_rosters.html) |
 | [`load_wnba_stats_shots`](reference/loaders/stats#load_wnba_stats_shots) | [`load_wnba_stats_shots`](https://wehoop.sportsdataverse.org/reference/load_wnba_stats_shots.html) |
-| [`load_wnba_stats_standings`](reference/additional/other#load_wnba_stats_standings) | [`load_wnba_stats_standings`](https://wehoop.sportsdataverse.org/reference/load_wnba_stats_standings.html) |
+| [`load_wnba_stats_standings`](reference/additional/sportsdataverse-data-releases#load_wnba_stats_standings) | [`load_wnba_stats_standings`](https://wehoop.sportsdataverse.org/reference/load_wnba_stats_standings.html) |
 | [`load_wnba_team_crosswalk`](reference/loaders/other#load_wnba_team_crosswalk) | [`load_wnba_team_crosswalk`](https://wehoop.sportsdataverse.org/reference/load_wnba_team_crosswalk.html) |
 | [`load_wnba_team_group_seasons`](reference/loaders/other#load_wnba_team_group_seasons) | [`load_wnba_team_group_seasons`](https://wehoop.sportsdataverse.org/reference/load_wnba_team_group_seasons.html) |
-| [`most_recent_wnba_season`](reference/additional/other#most_recent_wnba_season) | [`most_recent_wnba_season`](https://wehoop.sportsdataverse.org/reference/most_recent_wnba_season.html) |
+| [`most_recent_wnba_season`](reference/additional/dates-and-seasons#most_recent_wnba_season) | [`most_recent_wnba_season`](https://wehoop.sportsdataverse.org/reference/most_recent_wnba_season.html) |
 | [`wnba_live_boxscore`](reference/additional/wnba-stats-api#wnba_live_boxscore) | [`wnba_live_boxscore`](https://wehoop.sportsdataverse.org/reference/wnba_live_boxscore.html) |
 | [`wnba_live_pbp`](reference/additional/wnba-stats-api#wnba_live_pbp) | [`wnba_live_pbp`](https://wehoop.sportsdataverse.org/reference/wnba_live_pbp.html) |
-| [`wnba_player_crosswalk`](reference/additional/other#wnba_player_crosswalk) | [`wnba_player_crosswalk`](https://wehoop.sportsdataverse.org/reference/wnba_player_crosswalk.html) |
+| [`wnba_player_crosswalk`](reference/additional/ids-and-crosswalks#wnba_player_crosswalk) | [`wnba_player_crosswalk`](https://wehoop.sportsdataverse.org/reference/wnba_player_crosswalk.html) |
 | [`wnba_referee_assignments`](reference/additional/analytics#wnba_referee_assignments) | [`wnba_referee_assignments`](https://wehoop.sportsdataverse.org/reference/wnba_referee_assignments.html) |
-| [`wnba_schedule_crosswalk`](reference/additional/other#wnba_schedule_crosswalk) | [`wnba_schedule_crosswalk`](https://wehoop.sportsdataverse.org/reference/wnba_schedule_crosswalk.html) |
-| [`wnba_team_crosswalk`](reference/additional/other#wnba_team_crosswalk) | [`wnba_team_crosswalk`](https://wehoop.sportsdataverse.org/reference/wnba_team_crosswalk.html) |
+| [`wnba_schedule_crosswalk`](reference/additional/ids-and-crosswalks#wnba_schedule_crosswalk) | [`wnba_schedule_crosswalk`](https://wehoop.sportsdataverse.org/reference/wnba_schedule_crosswalk.html) |
+| [`wnba_team_crosswalk`](reference/additional/ids-and-crosswalks#wnba_team_crosswalk) | [`wnba_team_crosswalk`](https://wehoop.sportsdataverse.org/reference/wnba_team_crosswalk.html) |

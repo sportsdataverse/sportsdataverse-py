@@ -36,6 +36,43 @@ from sportsdataverse.mlb.mlb_run_values import as_of_split
 history = as_of_split(events, cutoff_date=dt.date(2024, 6, 15))
 ```
 
+### build_we_table {#build_we_table}
+
+`build_we_table(states: 'pl.DataFrame', results: 'pl.DataFrame', *, laplace: 'float' = 1.0) -> 'pl.DataFrame'`
+
+Empirical, Laplace-smoothed home win-expectancy table.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `states` | `DataFrame` |  | Output of `pbp_base_out_states`. |
+| `results` | `DataFrame` |  | Game-level results with `game_id` (same dtype as `states`), `home_score`, `away_score`. |
+| `laplace` | `float` | `1.0` | Additive smoothing constant (default 1.0). |
+
+**Returns**
+
+one row per observed state bucket. | Column | Type | Description | |---|---|---| | inning_capped | Int64 | Inning, capped at 9 | | half | Utf8 | `"top"` or `"bottom"` | | base_state | Utf8 | 3-char base occupancy | | outs_start | Int64 | Outs before the play (0-2) | | score_diff_bucket | Int64 | home - away score, clipped to [-6, 6] | | home_win_exp | Float64 | Laplace-smoothed P(home wins \| state) | | n | Int64 | Plate appearances observed in this bucket |
+
+| col_name | type | description |
+|---|---|---|
+| `inning_capped` | integer | Inning number, capped at 9 (extra innings pooled with the 9th). |
+| `half` | character | Half-inning ("top" or "bottom"). |
+| `base_state` | character | 3-char base occupancy code. |
+| `outs_start` | integer | Outs before the play (0-2). |
+| `score_diff_bucket` | integer | home minus away score, clipped to [-6, 6]. |
+| `home_win_exp` | double | Laplace-smoothed empirical P(home team wins \| state bucket). |
+| `n` | integer | Plate appearances observed in this state bucket. |
+
+**Example**
+
+```python
+from sportsdataverse.mlb.mlb_run_expectancy import pbp_base_out_states
+from sportsdataverse.mlb.mlb_win_expectancy import build_we_table
+states = pbp_base_out_states(pbp)
+table = build_we_table(states, results)
+```
+
 ### count_strike_run_value {#count_strike_run_value}
 
 `count_strike_run_value(pitches: "'pl.DataFrame'") -> "'pl.DataFrame'"`

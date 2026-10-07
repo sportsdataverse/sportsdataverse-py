@@ -33,6 +33,39 @@ print(ros.shape)
 ros.group_by("home_away").len()
 ```
 
+### espn_mlb_pbp {#espn_mlb_pbp}
+
+`espn_mlb_pbp(game_id: 'int', raw: 'bool' = False, **kwargs) -> 'Dict'`
+
+espn_mlb_pbp - pull the full ESPN game-summary payload for one MLB game.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `game_id` | `int` |  | ESPN game id (the "event id"). Obtainable from `espn_mlb_schedule`. |
+| `raw` | `bool` | `False` | When True, returns the full nested payload unchanged. When False (default), the same payload is returned for now — full parsing into a tidy plays / boxscore dict is **not yet implemented**; see the TODO below. |
+
+**Returns**
+
+The Site v2 summary payload. Top-level keys typically include `header`, `boxscore`, `plays`, `leaders`, `scoringPlays`, `gameInfo`, `winprobability`, `pickcenter`, `news`, `videos`, `standings`, `article`, `seasonseries`, `broadcasts`, `predictor`.
+
+**Example**
+
+```python
+from sportsdataverse.mlb import espn_mlb_pbp
+game = espn_mlb_pbp(game_id=401569461, raw=True)
+sorted(game.keys())
+print(game.get("header", {}).get("competitions", [{}])[0].get("date"))
+
+# Iterate the plays array
+
+plays = game.get("plays") or []
+print(f"{len(plays)} plays")
+for p in plays[:3]:
+    print(p.get("text"))
+```
+
 ### espn_mlb_player_stats {#espn_mlb_player_stats}
 
 `espn_mlb_player_stats(athlete_id: 'int', season: 'int', *, season_type: 'str' = 'regular', total: 'bool' = False, raw: 'bool' = False, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'pl.DataFrame | pd.DataFrame | dict[str, Any]'`

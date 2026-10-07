@@ -18,8 +18,6 @@ not covered by the generated API-endpoint reference above.
 | [espn_nfl_player_stats](additional/espn.md#espn_nfl_player_stats) | Pull an NFL athlete's ESPN **season** stat line as one wide row. |
 | [espn_nfl_schedule](additional/espn.md#espn_nfl_schedule) | espn_nfl_schedule - look up the NFL schedule for a given season |
 | [espn_nfl_teams](additional/espn.md#espn_nfl_teams) | espn_nfl_teams - look up NFL teams |
-| [nfl_punter_value](additional/espn.md#nfl_punter_value) | Punter net-field-position value over expected. |
-| [nfl_special_teams_epa](additional/espn.md#nfl_special_teams_epa) | Special-teams EPA by team-unit. |
 | [scoreboard_event_parsing](additional/espn.md#scoreboard_event_parsing) | Normalize one ESPN scoreboard `event` into a flatter shape. |
 
 ## NFL.com Shield API
@@ -147,10 +145,10 @@ not covered by the generated API-endpoint reference above.
 | [build_nfl_player_stats](additional/play-by-play-processing.md#build_nfl_player_stats) | Build nflverse **player_stats** by aggregating SDV-native play-by-play. |
 | [build_nfl_player_stats_def](additional/play-by-play-processing.md#build_nfl_player_stats_def) | Build player-level defensive stats from play-by-play (nflfastR parity). |
 | [build_nfl_player_stats_kicking](additional/play-by-play-processing.md#build_nfl_player_stats_kicking) | Build player-level kicking stats from play-by-play (nflfastR parity). |
-| [build_nfl_players](additional/play-by-play-processing.md#build_nfl_players) | Build an SDV-native NFL players frame from ESPN's public athletes endpoint. |
 | [build_nfl_rosters](additional/play-by-play-processing.md#build_nfl_rosters) | Build SDV-native NFL season rosters from the public Shield API. |
 | [build_nfl_season](additional/play-by-play-processing.md#build_nfl_season) | Compile play-by-play for multiple NFL games into one tidy frame. |
 | [build_nfl_team_stats](additional/play-by-play-processing.md#build_nfl_team_stats) | Build nflverse **team_stats** by aggregating SDV-native play-by-play. |
+| [calculate_nfl_series_conversion_rates](additional/play-by-play-processing.md#calculate_nfl_series_conversion_rates) | Compute per-team offense + defense series conversion rates. |
 | [clean_nfl_pbp](additional/play-by-play-processing.md#clean_nfl_pbp) | Canonicalize names/ids/teams on a play-by-play frame (nflfastR `clean_pbp` port). |
 | [shield_nfl_pbp](additional/play-by-play-processing.md#shield_nfl_pbp) | Build one NFL game's nflverse-shape play-by-play from Shield, at ANY game phase. |
 | [shield_to_espn_summary](additional/play-by-play-processing.md#shield_to_espn_summary) | Project one Shield game (any phase) onto an ESPN-summary-shaped dict. |
@@ -164,8 +162,6 @@ not covered by the generated API-endpoint reference above.
 | [calculate_completion_probability](additional/models-and-calculators.md#calculate_completion_probability) | Compute completion probability (CP) and CPOE for pass plays. |
 | [calculate_epa](additional/models-and-calculators.md#calculate_epa) | Derive expected points added (EPA) from pre-scored EP point estimates. |
 | [calculate_expected_points](additional/models-and-calculators.md#calculate_expected_points) | Compute expected points for provided plays. |
-| [calculate_nfl_series_conversion_rates](additional/models-and-calculators.md#calculate_nfl_series_conversion_rates) | Compute per-team offense + defense series conversion rates. |
-| [calculate_nfl_standings](additional/models-and-calculators.md#calculate_nfl_standings) | Compute NFL division standings + conference playoff seeds. |
 | [calculate_win_probability](additional/models-and-calculators.md#calculate_win_probability) | Compute win probability for provided plays. |
 | [calculate_wpa](additional/models-and-calculators.md#calculate_wpa) | Derive win probability added (WPA) from pre-scored WP point estimates. |
 | [calculate_xpass](additional/models-and-calculators.md#calculate_xpass) | Compute expected dropback probability (`xpass`) and `pass_oe`. |
@@ -188,8 +184,8 @@ not covered by the generated API-endpoint reference above.
 | [nfl_line_grades](additional/models-and-calculators.md#nfl_line_grades) | Team-season OL pass-block + DL pass-rush grades (opponent-adjusted, EB-shrunk). |
 | [nfl_player_projection](additional/models-and-calculators.md#nfl_player_projection) | Marcel-style next-season player projection with delta-method aging. |
 | [nfl_ratings](additional/models-and-calculators.md#nfl_ratings) | One row per team: the native NFL ratings spine (off/def/ST EPA). |
-| [nfl_simulations](additional/models-and-calculators-2.md#nfl_simulations) | Simulate an NFL season from a schedule with (partially) missing results. |
-| [nfl_usage_projection](additional/models-and-calculators-2.md#nfl_usage_projection) | Project next-season target share, air-yards share, and WOPR. |
+| [nfl_simulations](additional/models-and-calculators.md#nfl_simulations) | Simulate an NFL season from a schedule with (partially) missing results. |
+| [nfl_usage_projection](additional/models-and-calculators.md#nfl_usage_projection) | Project next-season target share, air-yards share, and WOPR. |
 | [opponent_adjusted_ridge](additional/models-and-calculators-2.md#opponent_adjusted_ridge) | Ridge-regress `resp_col` on offense + defense team indicators + HFA. |
 | [pressure_pairs](additional/models-and-calculators-2.md#pressure_pairs) | Per (season, off_team, def_team) dropbacks + pressures (matchup grid). |
 | [special_teams_ratings](additional/models-and-calculators-2.md#special_teams_ratings) | One row per team: opponent-adjusted special-teams EPA per play. |
@@ -199,6 +195,7 @@ not covered by the generated API-endpoint reference above.
 
 | Function | Summary |
 |---|---|
+| [calculate_nfl_standings](additional/analytics.md#calculate_nfl_standings) | Compute NFL division standings + conference playoff seeds. |
 | [compose_counting_projection](additional/analytics.md#compose_counting_projection) | Compose skill and availability into a counting projection. |
 | [nfl_availability_projection](additional/analytics.md#nfl_availability_projection) | Empirical-Bayes availability projection: expected fraction of team games. |
 | [nfl_game_script](additional/analytics.md#nfl_game_script) | Team-season pace / PROE / expected-plays engine. |
@@ -206,7 +203,9 @@ not covered by the generated API-endpoint reference above.
 | [nfl_play_call_tendencies](additional/analytics.md#nfl_play_call_tendencies) | Aggregate scored play-call probabilities to team-season tendencies. |
 | [nfl_player_props](additional/analytics.md#nfl_player_props) | Empirical-Bayes player-prop projections, leakage-safe per week. |
 | [nfl_predict_games](additional/analytics.md#nfl_predict_games) | Vectorized pregame predictions (+ display-only market edge) per game. |
+| [nfl_punter_value](additional/analytics.md#nfl_punter_value) | Punter net-field-position value over expected. |
 | [nfl_season_standings](additional/analytics.md#nfl_season_standings) | Compute NFL standings with the real NFL tiebreaking procedures. |
+| [nfl_special_teams_epa](additional/analytics.md#nfl_special_teams_epa) | Special-teams EPA by team-unit. |
 | [playcall_features](additional/analytics.md#playcall_features) | Build the play-call feature frame (one row per offensive run/pass play). |
 | [player_usage_efficiency](additional/analytics.md#player_usage_efficiency) | Per-player as-of usage + efficiency with empirical-Bayes shrinkage. |
 | [predict_margin](additional/analytics.md#predict_margin) | Expected home scoring margin from two net ratings. |
@@ -214,19 +213,30 @@ not covered by the generated API-endpoint reference above.
 | [team_game_pace](additional/analytics.md#team_game_pace) | Per team-game pace + pass-rate-over-expected. |
 | [win_prob_from_margin](additional/analytics.md#win_prob_from_margin) | Home win probability from an expected margin (Gaussian margin model). |
 
-## Other
+## Cache and configuration
 
 | Function | Summary |
 |---|---|
-| [NflConfig](additional/other.md#NflConfig) | Runtime configuration for sdv-py NFL loaders. |
-| [cached_loader](additional/other.md#cached_loader) | Decorator that adds caching to a `load_nfl_*` function. |
-| [clear_cache](additional/other.md#clear_cache) | Clear both memory and filesystem caches. |
-| [get_config](additional/other.md#get_config) | Return the live `NflConfig` singleton. |
-| [reset_config](additional/other.md#reset_config) | Reset the active config to its env-var-derived defaults. |
-| [update_config](additional/other.md#update_config) | Update the active config in place. |
-| [get_current_nfl_season](additional/other.md#get_current_nfl_season) | Return the current NFL season year. |
-| [get_current_nfl_week](additional/other.md#get_current_nfl_week) | Return the current NFL week (1-22). |
-| [get_current_season](additional/other.md#get_current_season) | Return the current NFL season year. |
-| [get_current_week](additional/other.md#get_current_week) | Return the current NFL week (1-22). |
-| [most_recent_nfl_season](additional/other.md#most_recent_nfl_season) | Alias for `get_current_nfl_season()` mirroring nflreadr's |
-| [nfl_players_crosswalk](additional/other.md#nfl_players_crosswalk) | Pure-consumer ID crosswalk sliced from `load_nfl_players`. |
+| [NflConfig](additional/cache-and-configuration.md#NflConfig) | Runtime configuration for sdv-py NFL loaders. |
+| [cached_loader](additional/cache-and-configuration.md#cached_loader) | Decorator that adds caching to a `load_nfl_*` function. |
+| [clear_cache](additional/cache-and-configuration.md#clear_cache) | Clear both memory and filesystem caches. |
+| [get_config](additional/cache-and-configuration.md#get_config) | Return the live `NflConfig` singleton. |
+| [reset_config](additional/cache-and-configuration.md#reset_config) | Reset the active config to its env-var-derived defaults. |
+| [update_config](additional/cache-and-configuration.md#update_config) | Update the active config in place. |
+
+## Dates and seasons
+
+| Function | Summary |
+|---|---|
+| [get_current_nfl_season](additional/dates-and-seasons.md#get_current_nfl_season) | Return the current NFL season year. |
+| [get_current_nfl_week](additional/dates-and-seasons.md#get_current_nfl_week) | Return the current NFL week (1-22). |
+| [get_current_season](additional/dates-and-seasons.md#get_current_season) | Return the current NFL season year. |
+| [get_current_week](additional/dates-and-seasons.md#get_current_week) | Return the current NFL week (1-22). |
+| [most_recent_nfl_season](additional/dates-and-seasons.md#most_recent_nfl_season) | Alias for `get_current_nfl_season()` mirroring nflreadr's |
+
+## IDs and crosswalks
+
+| Function | Summary |
+|---|---|
+| [build_nfl_players](additional/ids-and-crosswalks.md#build_nfl_players) | Build an SDV-native NFL players frame from ESPN's public athletes endpoint. |
+| [nfl_players_crosswalk](additional/ids-and-crosswalks.md#nfl_players_crosswalk) | Pure-consumer ID crosswalk sliced from `load_nfl_players`. |

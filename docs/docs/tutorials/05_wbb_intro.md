@@ -24,7 +24,7 @@ Every accessor returns a tidy **polars** `DataFrame` by default — pass `return
 | [`espn_wbb_schedule`](../wbb/reference/additional/espn.md#espn_wbb_schedule) | Games for a date / date-range | ESPN |
 | [`espn_wbb_team_schedule`](../wbb/reference/site.md#espn_wbb_team_schedule) | One program's full season slate | ESPN |
 | [`espn_wbb_scoreboard`](../wbb/reference/site.md#espn_wbb_scoreboard) | ⭐ Live + final scoreboard, one row per game | ESPN |
-| [`espn_wbb_pbp`](../wbb/reference/additional/play-by-play-processing.md#espn_wbb_pbp) | Full play-by-play + boxscore for a game | ESPN |
+| [`espn_wbb_pbp`](../wbb/reference/additional/espn.md#espn_wbb_pbp) | Full play-by-play + boxscore for a game | ESPN |
 | [`espn_wbb_player_gamelog`](../wbb/reference/web.md#espn_wbb_player_gamelog) | A player's game-by-game log | ESPN |
 | [`espn_wbb_player_splits`](../wbb/reference/web.md#espn_wbb_player_splits) | A player's situational stat splits | ESPN |
 | [`espn_wbb_team_stats`](../wbb/reference/additional/espn.md#espn_wbb_team_stats) | A team's season stat splits | ESPN |
@@ -135,7 +135,7 @@ keep = ['game_id', 'short_name', 'status_type_completed', 'home_team_short_displ
 
 ## 🎬 Play-by-play
 
-[`espn_wbb_pbp`](../wbb/reference/additional/play-by-play-processing.md#espn_wbb_pbp) returns a **dict** of game components (`plays`, `boxscore`, `header`, `winprobability`, …). The `plays` value is a list of dicts — build a frame with `pl.DataFrame(pbp['plays'], infer_schema_length=None)`. Columns use ESPN dot-notation (`period.number`, `clock.displayValue`, `type.text`, `scoringPlay`).
+[`espn_wbb_pbp`](../wbb/reference/additional/espn.md#espn_wbb_pbp) returns a **dict** of game components (`plays`, `boxscore`, `header`, `winprobability`, …). The `plays` value is a list of dicts — build a frame with `pl.DataFrame(pbp['plays'], infer_schema_length=None)`. Columns use ESPN dot-notation (`period.number`, `clock.displayValue`, `type.text`, `scoringPlay`).
 
 Game `401746075` is the **2025 national championship**: South Carolina vs. UConn.
 

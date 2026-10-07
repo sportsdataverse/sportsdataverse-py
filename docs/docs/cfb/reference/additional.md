@@ -22,6 +22,31 @@ not covered by the generated API-endpoint reference above.
 | [most_recent_cfb_season](additional/highlights.md#most_recent_cfb_season) | Return the most recent college football season year based on today's date. |
 | [to_cfbfastr](additional/highlights.md#to_cfbfastr) | cfbfastR-named play frame from the NCAA structural pbp frame. |
 
+## ESPN
+
+| Function | Summary |
+|---|---|
+| [espn_cfb_game_rosters](additional/espn.md#espn_cfb_game_rosters) | espn_cfb_game_rosters() - Pull the game by id. |
+| [espn_cfb_play_participants](additional/espn.md#espn_cfb_play_participants) | Pull ESPN per-play participants for a college-football game. |
+| [espn_cfb_teams](additional/espn.md#espn_cfb_teams) | espn_cfb_teams - look up the college football teams |
+| [scoreboard_event_parsing](additional/espn.md#scoreboard_event_parsing) | Internal helper that flattens an ESPN scoreboard event dict into a shape |
+
+## sportsdataverse-data releases
+
+| Function | Summary |
+|---|---|
+| [load_cfb_betting_lines](additional/sportsdataverse-data-releases.md#load_cfb_betting_lines) | Load college football betting lines information |
+| [load_cfb_rosters_crosswalk](additional/sportsdataverse-data-releases.md#load_cfb_rosters_crosswalk) | Load the current ESPN x Fox CFB rosters crosswalk (single snapshot). |
+
+## On3 Recruit Database
+
+| Function | Summary |
+|---|---|
+| [on3_industry_player_rankings](additional/on3-recruit-database.md#on3_industry_player_rankings) | On3 Industry Comparison player rankings (**deprecated** next/data` scrape). |
+| [on3_industry_team_rankings](additional/on3-recruit-database.md#on3_industry_team_rankings) | On3 Industry Comparison team rankings (**deprecated** next/data` scrape). |
+| [on3_player_rankings](additional/on3-recruit-database.md#on3_player_rankings) | On3 player rankings for a class year (**deprecated** next/data` scrape). |
+| [on3_team_rankings](additional/on3-recruit-database.md#on3_team_rankings) | On3 team recruiting-class rankings (**deprecated** next/data` scrape). |
+
 ## Yahoo Sports Shangrila
 
 | Function | Summary |
@@ -141,18 +166,8 @@ not covered by the generated API-endpoint reference above.
 | [cfb_schedule_crosswalk](additional/ids-and-crosswalks.md#cfb_schedule_crosswalk) | Build the ESPN x Fox x Yahoo CFB game-id crosswalk. |
 | [cfb_teams_crosswalk](additional/ids-and-crosswalks.md#cfb_teams_crosswalk) | Build the ESPN x Fox x Yahoo CFB team-id crosswalk. |
 
-## Other
+## Validation
 
 | Function | Summary |
 |---|---|
-| [espn_cfb_game_rosters](additional/other.md#espn_cfb_game_rosters) | espn_cfb_game_rosters() - Pull the game by id. |
-| [espn_cfb_play_participants](additional/other.md#espn_cfb_play_participants) | Pull ESPN per-play participants for a college-football game. |
-| [espn_cfb_teams](additional/other.md#espn_cfb_teams) | espn_cfb_teams - look up the college football teams |
-| [scoreboard_event_parsing](additional/other.md#scoreboard_event_parsing) | Internal helper that flattens an ESPN scoreboard event dict into a shape |
-| [load_cfb_betting_lines](additional/other.md#load_cfb_betting_lines) | Load college football betting lines information |
-| [load_cfb_rosters_crosswalk](additional/other.md#load_cfb_rosters_crosswalk) | Load the current ESPN x Fox CFB rosters crosswalk (single snapshot). |
-| [on3_industry_player_rankings](additional/other.md#on3_industry_player_rankings) | On3 Industry Comparison player rankings (**deprecated** next/data` scrape). |
-| [on3_industry_team_rankings](additional/other.md#on3_industry_team_rankings) | On3 Industry Comparison team rankings (**deprecated** next/data` scrape). |
-| [on3_player_rankings](additional/other.md#on3_player_rankings) | On3 player rankings for a class year (**deprecated** next/data` scrape). |
-| [on3_team_rankings](additional/other.md#on3_team_rankings) | On3 team recruiting-class rankings (**deprecated** next/data` scrape). |
-| [check_box_invariants](additional/other.md#check_box_invariants) | Every identity the two aggregates must satisfy; violations as strings. |
+| [check_box_invariants](additional/validation.md#check_box_invariants) | Every identity the two aggregates must satisfy; violations as strings. |

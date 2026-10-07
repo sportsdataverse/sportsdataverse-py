@@ -1,7 +1,7 @@
 ---
 title: "CFB — additional Python functions — Fox Sports API"
 sidebar_label: "Fox Sports API"
-sidebar_position: 3
+sidebar_position: 6
 description: "CFB — additional Python functions — Fox Sports API — function reference in sdv-py, the SportsDataverse Python package."
 ---
 # CFB — additional Python functions — Fox Sports API

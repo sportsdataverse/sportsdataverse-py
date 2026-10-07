@@ -141,7 +141,11 @@ def _fix_links(body: str) -> str:
 # A link to a function on a reference page that generate.py split into family pages
 # (``../cfb/reference/loaders.md#load_cfb_pbp``) goes straight to the family page
 # (``../cfb/reference/loaders/pbp.md#load_cfb_pbp``), from the anchor map the docs build writes.
-_REF_ANCHOR_LINK = re.compile(r"\]\((\.\./([a-z0-9_]+)/reference/([a-z0-9_]+))\.md#([A-Za-z0-9_-]+)\)")
+# A link that already names a family is re-resolved too, so a renamed or removed family
+# (``additional/other.md``) heals on the next render instead of stranding the link.
+_REF_ANCHOR_LINK = re.compile(
+    r"\]\((\.\./([a-z0-9_]+)/reference/([a-z0-9_-]+))(?:/[a-z0-9-]+)?\.md#([A-Za-z0-9_-]+)\)"
+)
 
 
 @functools.lru_cache(maxsize=1)

@@ -113,12 +113,18 @@ def test_rendered_tutorials_have_no_broken_family_links():
     `generate.py --check` does not cover them: renaming an autodoc family silently
     strands every tutorial deep link until the notebooks are re-rendered.
     """
+    from tools.codegen import generate
+
     broken = []
     for page in sorted((DOCS / "tutorials").glob("*.md")):
         body = page.read_text(encoding="utf-8")
-        for lg, ref, slug in re.findall(r"\]\(\.\./([a-z0-9_]+)/reference/([a-z0-9_-]+)/([a-z0-9-]+)\.md#", body):
-            if not (DOCS / lg / "reference" / ref / f"{slug}.md").exists():
-                broken.append(f"{page.name} -> {lg}/reference/{ref}/{slug}.md")
+        for lg, ref, slug, anchor in re.findall(
+            r"\]\(\.\./([a-z0-9_]+)/reference/([a-z0-9_-]+)/([a-z0-9-]+)\.md#([A-Za-z0-9_-]+)\)", body
+        ):
+            target = DOCS / lg / "reference" / ref / f"{slug}.md"
+            ids = {i for _off, i in generate._heading_ids(target.read_text(encoding="utf-8"))} if target.exists() else ()
+            if anchor not in ids:
+                broken.append(f"{page.name} -> {lg}/reference/{ref}/{slug}.md#{anchor}")
     assert not broken, "stale tutorial links (re-run render_notebooks.py):\n" + "\n".join(sorted(set(broken))[:20])
 
 

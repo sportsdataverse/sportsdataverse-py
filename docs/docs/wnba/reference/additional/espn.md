@@ -102,6 +102,43 @@ rosters_pd = espn_wnba_game_rosters(game_id=401620238, return_as_pandas=True)
 rosters_pd[["athlete_display_name", "team_abbreviation", "did_not_play"]].head()
 ```
 
+### espn_wnba_pbp {#espn_wnba_pbp}
+
+`espn_wnba_pbp(game_id: 'int', raw=False, **kwargs) -> 'Dict'`
+
+espn_wnba_pbp() - Pull the game by id. Data from API endpoints - `wnba/playbyplay`, `wnba/summary`
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `game_id` | `int` |  | Unique game_id, can be obtained from wnba_schedule(). |
+| `raw` |  | `False` |  |
+
+**Returns**
+
+Dictionary of game data with keys - "gameId", "plays", "winprobability", "boxscore", "header", "broadcasts", "videos", "playByPlaySource", "standings", "leaders", "seasonseries", "timeouts", "pickcenter", "againstTheSpread", "odds", "predictor", "espnWP", "gameInfo", "season"
+
+**Example**
+
+```python
+from sportsdataverse.wnba import espn_wnba_pbp
+game = espn_wnba_pbp(game_id=401620238)  # 2024 WNBA Finals Game 1
+list(game.keys())  # ['gameId', 'plays', 'winprobability', ...]
+
+# Inspect the parsed plays and a header summary
+
+import polars as pl
+plays = pl.DataFrame(game["plays"])
+print(plays.shape)
+print(plays.select(["period", "time", "type.text", "text"]).head(5))
+
+# Fetch the unparsed payload for custom downstream parsing
+
+raw = espn_wnba_pbp(game_id=401620238, raw=True)
+sorted(raw.keys())[:5]  # raw ESPN summary keys, no flattening
+```
+
 ### espn_wnba_player_stats {#espn_wnba_player_stats}
 
 `espn_wnba_player_stats(athlete_id: 'int', season: 'int', *, season_type: 'str' = 'regular', total: 'bool' = False, raw: 'bool' = False, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'pl.DataFrame | pd.DataFrame | dict[str, Any]'`

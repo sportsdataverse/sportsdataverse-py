@@ -1,7 +1,7 @@
 ---
 title: "WBB — additional Python functions — Fox Sports API"
 sidebar_label: "Fox Sports API"
-sidebar_position: 4
+sidebar_position: 5
 description: "WBB — additional Python functions — Fox Sports API — function reference in sdv-py, the SportsDataverse Python package."
 ---
 # WBB — additional Python functions — Fox Sports API

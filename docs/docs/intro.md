@@ -84,14 +84,14 @@ matching `parse_*` function for NHL / MLB sibling APIs. See
 <!-- BEGIN generated: leagues-and-sources -->
 | League | Module | Data sources |
 |---|---|---|
-| [NBA](nba/) | `sportsdataverse.nba` | ESPN (121), sportsdataverse-data releases (42), NBA Stats API (130), Fox Sports API (26), Basketball-Reference (9), RealGM (18), Public model datasets (7) |
-| [WNBA](wnba/) | `sportsdataverse.wnba` | ESPN (122), sportsdataverse-data releases (39), WNBA Stats API (113), Fox Sports API (26) |
+| [NBA](nba/) | `sportsdataverse.nba` | ESPN (122), sportsdataverse-data releases (42), NBA Stats API (130), Fox Sports API (26), Basketball-Reference (9), RealGM (18), Public model datasets (7) |
+| [WNBA](wnba/) | `sportsdataverse.wnba` | ESPN (123), sportsdataverse-data releases (39), WNBA Stats API (113), Fox Sports API (26) |
 | [NBA G League](nbagl/) | `sportsdataverse.nbagl` | ESPN (112) |
-| [MBB](mbb/) | `sportsdataverse.mbb` | ESPN (129), sportsdataverse-data releases (34), stats.ncaa.org (106), KenPom (32), Bart Torvik T-Rank (5), Fox Sports API (27) |
-| [WBB](wbb/) | `sportsdataverse.wbb` | ESPN (130), sportsdataverse-data releases (34), stats.ncaa.org (99), Bart Torvik Women's T-Rank (1), Fox Sports API (27), Her Hoop Stats (5) |
+| [MBB](mbb/) | `sportsdataverse.mbb` | ESPN (128), sportsdataverse-data releases (34), stats.ncaa.org (118), KenPom (32), Bart Torvik T-Rank (5), Fox Sports API (27) |
+| [WBB](wbb/) | `sportsdataverse.wbb` | ESPN (129), sportsdataverse-data releases (34), stats.ncaa.org (111), Bart Torvik Women's T-Rank (1), Fox Sports API (27), Her Hoop Stats (5) |
 | [CFB](cfb/) | `sportsdataverse.cfb` | ESPN (131), sportsdataverse-data releases (74), stats.ncaa.org (1), On3 Recruit Database (82), 247Sports Recruit Database (47), Yahoo Sports Shangrila (7), Fox Sports API (29) |
-| [NFL](nfl/) | `sportsdataverse.nfl` | ESPN (126), NFL.com Shield API (22), NFL Pro (32), Sleeper fantasy API (15), PFF Developer API (68), PFF Premium Stats (LEGACY) (46), nflverse data releases (57), sportsdataverse-data releases (21), Fox Sports API (25) |
-| [MLB](mlb/) | `sportsdataverse.mlb` | ESPN (121), sportsdataverse-data releases (32), MLB Stats API (79), Baseball Savant (Statcast) (43), Fox Sports API (23) |
+| [NFL](nfl/) | `sportsdataverse.nfl` | ESPN (124), NFL.com Shield API (22), NFL Pro (32), Sleeper fantasy API (15), PFF Developer API (68), PFF Premium Stats (LEGACY) (46), nflverse data releases (57), sportsdataverse-data releases (21), Fox Sports API (25) |
+| [MLB](mlb/) | `sportsdataverse.mlb` | ESPN (122), sportsdataverse-data releases (32), MLB Stats API (79), Baseball Savant (Statcast) (43), Fox Sports API (23) |
 | [NHL](nhl/) | `sportsdataverse.nhl` | ESPN (119), sportsdataverse-data releases (32), NHL Web API (28), NHL EDGE (35), NHL Stats REST (21), NHL Records (50), Fox Sports API (25) |
 | [MCH](mch/) | `sportsdataverse.mch` | ESPN (118) |
 | [WCH](wch/) | `sportsdataverse.wch` | ESPN (118) |
@@ -119,21 +119,21 @@ matching `parse_*` function for NHL / MLB sibling APIs. See
 | [OHL](ohl/) | `sportsdataverse.hockey.ohl` | HockeyTech / LeagueStat (11) |
 | [WHL](whl/) | `sportsdataverse.hockey.whl` | HockeyTech / LeagueStat (11) |
 | [QMJHL](qmjhl/) | `sportsdataverse.hockey.qmjhl` | HockeyTech / LeagueStat (11) |
-| [ECHL](echl/) | `sportsdataverse.hockey.echl` | HockeyTech / LeagueStat (11) |
-| [SPHL](sphl/) | `sportsdataverse.hockey.sphl` | HockeyTech / LeagueStat (11) |
-| [CHL](chl/) | `sportsdataverse.hockey.chl` | HockeyTech / LeagueStat (11) |
-| [USHL](ushl/) | `sportsdataverse.hockey.ushl` | HockeyTech / LeagueStat (11) |
-| [BCHL](bchl/) | `sportsdataverse.hockey.bchl` | HockeyTech / LeagueStat (11) |
-| [AJHL](ajhl/) | `sportsdataverse.hockey.ajhl` | HockeyTech / LeagueStat (11) |
-| [SJHL](sjhl/) | `sportsdataverse.hockey.sjhl` | HockeyTech / LeagueStat (11) |
-| [OJHL](ojhl/) | `sportsdataverse.hockey.ojhl` | HockeyTech / LeagueStat (11) |
-| [CCHL](cchl/) | `sportsdataverse.hockey.cchl` | HockeyTech / LeagueStat (11) |
-| [GOJHL](gojhl/) | `sportsdataverse.hockey.gojhl` | HockeyTech / LeagueStat (11) |
-| [MHL](mhl/) | `sportsdataverse.hockey.mhl` | HockeyTech / LeagueStat (11) |
-| [NOJHL](nojhl/) | `sportsdataverse.hockey.nojhl` | HockeyTech / LeagueStat (11) |
-| [VIJHL](vijhl/) | `sportsdataverse.hockey.vijhl` | HockeyTech / LeagueStat (11) |
-| [KIJHL](kijhl/) | `sportsdataverse.hockey.kijhl` | HockeyTech / LeagueStat (11) |
-| [MJHL](mjhl/) | `sportsdataverse.hockey.mjhl` | HockeyTech / LeagueStat (11) |
+| [ECHL](echl/) | `sportsdataverse.hockey.echl` | HockeyTech / LeagueStat (12) |
+| [SPHL](sphl/) | `sportsdataverse.hockey.sphl` | HockeyTech / LeagueStat (12) |
+| [CHL](chl/) | `sportsdataverse.hockey.chl` | HockeyTech / LeagueStat (12) |
+| [USHL](ushl/) | `sportsdataverse.hockey.ushl` | HockeyTech / LeagueStat (12) |
+| [BCHL](bchl/) | `sportsdataverse.hockey.bchl` | HockeyTech / LeagueStat (12) |
+| [AJHL](ajhl/) | `sportsdataverse.hockey.ajhl` | HockeyTech / LeagueStat (12) |
+| [SJHL](sjhl/) | `sportsdataverse.hockey.sjhl` | HockeyTech / LeagueStat (12) |
+| [OJHL](ojhl/) | `sportsdataverse.hockey.ojhl` | HockeyTech / LeagueStat (12) |
+| [CCHL](cchl/) | `sportsdataverse.hockey.cchl` | HockeyTech / LeagueStat (12) |
+| [GOJHL](gojhl/) | `sportsdataverse.hockey.gojhl` | HockeyTech / LeagueStat (12) |
+| [MHL](mhl/) | `sportsdataverse.hockey.mhl` | HockeyTech / LeagueStat (12) |
+| [NOJHL](nojhl/) | `sportsdataverse.hockey.nojhl` | HockeyTech / LeagueStat (12) |
+| [VIJHL](vijhl/) | `sportsdataverse.hockey.vijhl` | HockeyTech / LeagueStat (12) |
+| [KIJHL](kijhl/) | `sportsdataverse.hockey.kijhl` | HockeyTech / LeagueStat (12) |
+| [MJHL](mjhl/) | `sportsdataverse.hockey.mjhl` | HockeyTech / LeagueStat (12) |
 | [Betting odds](odds/) | `sportsdataverse.odds` | The Odds API (11) |
 | [CBS Sports](cbs/) | `sportsdataverse.cbs` | CBS Sports NAPI (82) |
 | [Yahoo Sports](yahoo/) | `sportsdataverse.yahoo` | Yahoo Sports Shangrila (107) |

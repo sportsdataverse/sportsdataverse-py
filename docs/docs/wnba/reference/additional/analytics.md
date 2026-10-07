@@ -1,7 +1,7 @@
 ---
 title: "WNBA — additional Python functions — Analytics"
 sidebar_label: "Analytics"
-sidebar_position: 5
+sidebar_position: 7
 description: "WNBA — additional Python functions — Analytics — function reference in sdv-py, the SportsDataverse Python package."
 ---
 # WNBA — additional Python functions — Analytics

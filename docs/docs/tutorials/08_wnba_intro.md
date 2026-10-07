@@ -39,7 +39,7 @@ Every accessor returns a tidy **polars** `DataFrame` by default — pass `return
 | [`load_wnba_standings`](../wnba/reference/loaders/other.md#load_wnba_standings) | Whole-season standings (long) | 📦 loader |
 | [`load_wnba_rosters`](../wnba/reference/loaders/other.md#load_wnba_rosters) | Whole-season rosters | 📦 loader |
 | [`load_wnba_draft`](../wnba/reference/loaders/other.md#load_wnba_draft) | Whole-season draft picks | 📦 loader |
-| [`most_recent_wnba_season`](../wnba/reference/additional/other.md#most_recent_wnba_season) | The latest season year | 🛠️ helper |
+| [`most_recent_wnba_season`](../wnba/reference/additional/dates-and-seasons.md#most_recent_wnba_season) | The latest season year | 🛠️ helper |
 
 ⭐ = the **premium ESPN live API** · 📦 = bulk parquet loaders · 🛠️ = helpers.
 

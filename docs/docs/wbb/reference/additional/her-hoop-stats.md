@@ -1,10 +1,10 @@
 ---
-title: "WBB — additional Python functions — Other"
-sidebar_label: "Other"
-sidebar_position: 10
-description: "WBB — additional Python functions — Other — function reference in sdv-py, the SportsDataverse Python package."
+title: "WBB — additional Python functions — Her Hoop Stats"
+sidebar_label: "Her Hoop Stats"
+sidebar_position: 6
+description: "WBB — additional Python functions — Her Hoop Stats — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# WBB — additional Python functions — Other
+# WBB — additional Python functions — Her Hoop Stats
 
 ### has_herhoopstats_login {#has_herhoopstats_login}
 
@@ -155,26 +155,4 @@ teams = herhoopstats_teams(min_season=2024, division=1)
 # Multiple seasons, through a proxy
 
 teams = herhoopstats_teams(2022, 2024, proxy="http://127.0.0.1:8888")
-```
-
-### most_recent_wbb_season {#most_recent_wbb_season}
-
-`most_recent_wbb_season()`
-
-Return the most recent women's college basketball season year.
-
-The women's college basketball season spans late October through early
-April; for any month October-December the "current season" is the
-following calendar year (e.g. October 2025 returns `2026`).
-
-**Returns**
-
-The most recent / current season year.
-
-**Example**
-
-```python
-from sportsdataverse.wbb import most_recent_wbb_season, espn_wbb_schedule
-season = most_recent_wbb_season()
-sched = espn_wbb_schedule(dates=season)
 ```
