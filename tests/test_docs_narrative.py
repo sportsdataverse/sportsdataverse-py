@@ -61,7 +61,6 @@ _CLAUDE_CURRENT = [
     "30 league modules",
     "3,446 wrappers",
     "33 parser modules",
-    "1,459 fixture files across 89 directories",
     "45 canonical load_nfl_*",
     "24 nflreadpy-style aliases",
     "291 generated call sites",
@@ -153,6 +152,14 @@ def test_claude_md_gained_the_copilot_only_sections():
     assert "line-length = 120" in body
     assert "## Module naming" in body or "### Module naming" in body
     assert "conda lockstep" in body
+
+
+def test_claude_md_fixture_count_matches_the_tree():
+    """Measured, not pinned: the pinned "1,459 fixture files" went stale on the first merge."""
+    root = ROOT / "tests" / "fixtures"
+    files = sum(p.is_file() for p in root.rglob("*"))
+    dirs = sum(p.is_dir() for p in root.iterdir())
+    assert f"{files:,} fixture files across {dirs} directories" in flat("claude")
 
 
 def test_claude_md_flat_api_count_matches_the_code():
