@@ -1,3 +1,11 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [OpenLigaDB fixtures](#openligadb-fixtures)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # OpenLigaDB fixtures
 
 Copied verbatim from `sdv-internal-refs/openligadb/captures/` (refs main `22b148b`), server
