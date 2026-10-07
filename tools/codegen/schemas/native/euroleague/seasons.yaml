@@ -26,7 +26,7 @@ columns:
   type: character
 - description: Winning club of the season (null while in progress).
   name: winner
-  type: numeric
+  type: character
 - description: 'Winning club: euroLeague code of the entity (competition, season,
     club, person or venue; Utf8 join key).'
   name: winner_code
@@ -46,7 +46,7 @@ columns:
 - description: 'Winning club: whether the club is a placeholder rather than a real
     club.'
   name: winner_is_virtual
-  type: character
+  type: logical
 - description: 'Winning club: URL of the club crest image.'
   name: winner_images_crest
   type: character

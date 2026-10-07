@@ -72,10 +72,10 @@ columns:
   type: character
 - description: Stoppage time added to the first half, in minutes.
   name: first_half_extra_time
-  type: numeric
+  type: integer
 - description: Stoppage time added to the second half, in minutes.
   name: second_half_extra_time
-  type: numeric
+  type: integer
 - description: Team id of the winner (Utf8; null for a draw or an unplayed match).
   name: winner
   type: character
@@ -183,7 +183,7 @@ columns:
   type: character
 - description: 'Home team: goals scored.'
   name: home_team_score
-  type: numeric
+  type: integer
 - description: 'Home team: side marker (null in the captures).'
   name: home_team_side
   type: character
@@ -251,7 +251,7 @@ columns:
   type: character
 - description: 'Away team: goals scored.'
   name: away_team_score
-  type: numeric
+  type: integer
 - description: 'Away team: side marker (null in the captures).'
   name: away_team_side
   type: character
@@ -334,6 +334,6 @@ columns:
   type: character
 - description: Ball-possession block (null when not tracked).
   name: ball_possession
-  type: numeric
+  type: character
 kind: dataframe
 schema: live_football

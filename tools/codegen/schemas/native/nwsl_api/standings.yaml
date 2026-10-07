@@ -68,7 +68,7 @@ columns:
   type: character
 - description: Qualification band (e.g. playoff/Final Series).
   name: qualification
-  type: numeric
+  type: character
 - description: Matches played in this split.
   name: matches_played
   type: integer

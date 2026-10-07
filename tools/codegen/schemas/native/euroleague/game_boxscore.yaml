@@ -125,6 +125,6 @@ columns:
   type: integer
 - description: Plus/minus.
   name: plusminus
-  type: numeric
+  type: integer
 kind: dataframe
 schema: game_boxscore

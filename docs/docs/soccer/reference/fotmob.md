@@ -590,7 +590,7 @@ Top transfers across FotMob, one row per transfer.
 | `to_club` | character |  |
 | `to_club_full_name` | character |  |
 | `to_club_id` | character |  |
-| `amount_euro_estimated` | numeric |  |
+| `amount_euro_estimated` | integer |  |
 | `contract_extension` | logical |  |
 | `on_loan` | logical |  |
 | `from_date` | character |  |
@@ -606,7 +606,7 @@ Top transfers across FotMob, one row per transfer.
 | `fee_localized_fee_text` | character |  |
 | `transfer_type_text` | character |  |
 | `transfer_type_localization_key` | character |  |
-| `fee_value` | numeric |  |
+| `fee_value` | integer |  |
 
 **`return_parsed=False`** — the decoded JSON body (a page object, a one-list envelope, an id-keyed map or a list; `{}` or `null` for an unknown id).
 

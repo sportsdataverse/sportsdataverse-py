@@ -452,13 +452,13 @@ Seasons of a competition.
 | `start_date` | character | Start date (ISO 8601). |
 | `activation_date` | character | Date the season was activated in the engine (ISO 8601). |
 | `end_date` | character | End date (ISO 8601). |
-| `winner` | numeric | Winning club of the season (null while in progress). |
+| `winner` | character | Winning club of the season (null while in progress). |
 | `winner_code` | character | Winning club: euroLeague code of the entity (competition, season, club, person or venue; Utf8 join key). |
 | `winner_name` | character | Winning club: display name. |
 | `winner_abbreviated_name` | character | Winning club: abbreviated display name. |
 | `winner_editorial_name` | character | Winning club: editorial (long-form) display name. |
 | `winner_tv_code` | character | Winning club: three-letter broadcast abbreviation of the club. |
-| `winner_is_virtual` | character | Winning club: whether the club is a placeholder rather than a real club. |
+| `winner_is_virtual` | logical | Winning club: whether the club is a placeholder rather than a real club. |
 | `winner_images_crest` | character | Winning club: URL of the club crest image. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.

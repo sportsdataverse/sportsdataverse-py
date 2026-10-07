@@ -64,7 +64,7 @@ Box score of one game: per-player and team totals per side, by-quarter scores, r
 | `fouls_commited` | integer | Personal fouls committed. |
 | `fouls_received` | integer | Fouls drawn. |
 | `valuation` | integer | Performance index rating (PIR). |
-| `plusminus` | numeric | Plus/minus. |
+| `plusminus` | integer | Plus/minus. |
 
 **`return_parsed=False`** — the raw JSON `Dict` (`{}` when the live API answers its empty-body "no such game" sentinel, which the parser turns into a zero-row frame).
 

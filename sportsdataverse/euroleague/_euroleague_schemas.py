@@ -47,7 +47,7 @@ SCHEMAS: Dict[str, Dict[str, str]] = {
         "fouls_commited": "Int64",
         "fouls_received": "Int64",
         "valuation": "Int64",
-        "plusminus": "Float64",
+        "plusminus": "Int64",
     },
     "game_header": {
         "live": "Boolean",
