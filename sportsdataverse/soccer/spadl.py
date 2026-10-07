@@ -287,11 +287,10 @@ def _fix_clearances(df: pl.DataFrame) -> pl.DataFrame:
     nxt_x = pl.col("start_x").shift(-1).over("game_id")
     nxt_y = pl.col("start_y").shift(-1).over("game_id")
     is_clear = pl.col("type_id") == _TYPE["clearance"]
-    if "team_id" in df.columns:
-        # coordinates are in each actor's attacking frame: the other team's next action must be mirrored
-        flip = pl.col("team_id") != pl.col("team_id").shift(-1).over("game_id")
-        nxt_x = pl.when(flip).then(FIELD_LENGTH - nxt_x).otherwise(nxt_x)
-        nxt_y = pl.when(flip).then(FIELD_WIDTH - nxt_y).otherwise(nxt_y)
+    # coordinates are in each actor's attacking frame: the other team's next action must be mirrored
+    flip = pl.col("team_id") != pl.col("team_id").shift(-1).over("game_id")
+    nxt_x = pl.when(flip).then(FIELD_LENGTH - nxt_x).otherwise(nxt_x)
+    nxt_y = pl.when(flip).then(FIELD_WIDTH - nxt_y).otherwise(nxt_y)
     return df.with_columns(
         pl.when(is_clear & nxt_x.is_not_null()).then(nxt_x).otherwise(pl.col("end_x")).alias("end_x"),
         pl.when(is_clear & nxt_y.is_not_null()).then(nxt_y).otherwise(pl.col("end_y")).alias("end_y"),
@@ -353,6 +352,10 @@ def _pitch_scaler(meta: Any, kd: Any) -> Any:
     1.5 m near the markings); SPADL's reference converter scales linearly, so we do too.
     """
     dims = meta.pitch_dimensions
+    if any(v is None for v in (dims.x_dim.min, dims.x_dim.max, dims.y_dim.min, dims.y_dim.max)):
+        raise ValueError(
+            f"provider {meta.provider} has no fixed pitch dimensions; SPADL needs a metric or native pitch"
+        )
     x0, x1, y0, y1 = dims.x_dim.min, dims.x_dim.max, dims.y_dim.min, dims.y_dim.max
     top = meta.coordinate_system.vertical_orientation == kd.VerticalOrientation.TOP_TO_BOTTOM
 
@@ -361,7 +364,8 @@ def _pitch_scaler(meta: Any, kd: Any) -> Any:
             return None, None
         x = (pt[0] - x0) / (x1 - x0) * FIELD_LENGTH
         y = (pt[1] - y0) / (y1 - y0) * FIELD_WIDTH
-        return x, (FIELD_WIDTH - y if top else y)
+        y = FIELD_WIDTH - y if top else y
+        return min(max(x, 0.0), FIELD_LENGTH), min(max(y, 0.0), FIELD_WIDTH)  # socceraction statsbomb.py:210-211
 
     return scale
 
@@ -375,7 +379,7 @@ def soccer_spadl(
     frame from any provider kloppy reads is comparable. StatsBomb is the tested path.
 
     Args:
-        dataset: A kloppy ``EventDataset`` (e.g. from :func:`soccer_open_events`).
+        dataset: A kloppy ``EventDataset`` (e.g. from :func:`soccer_open_dataset`).
         game_id: Game identifier when the dataset's metadata carries none.
         return_as_pandas: Return a pandas DataFrame instead of polars.
 
@@ -391,8 +395,8 @@ def soccer_spadl(
     Example:
         Quick start::
 
-            from sportsdataverse.soccer import soccer_open_events, soccer_spadl
-            actions = soccer_spadl(soccer_open_events("statsbomb", 8658))
+            from sportsdataverse.soccer import soccer_open_dataset, soccer_spadl
+            actions = soccer_spadl(soccer_open_dataset("statsbomb", 8658), game_id=8658)
             print(actions.shape)
 
         Pipeline next step (one line)::

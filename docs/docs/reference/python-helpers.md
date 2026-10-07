@@ -234,6 +234,7 @@ not covered by the generated API-endpoint reference above.
 | [shot_attempts](python-helpers/other.md#shot_attempts) | Regular-season (`season_type_id` `"2"`) and playoff (`"4"`) shots; success = |
 | [shot_events](python-helpers/other.md#shot_events) | Field-goal-attempt events from released `{nba,wnba}_stats_shots`. |
 | [soccer_events_to_frame](python-helpers/other.md#soccer_events_to_frame) | Turn a kloppy dataset (any provider, any file) into a tidy frame. |
+| [soccer_open_dataset](python-helpers/other.md#soccer_open_dataset) | Load one match of a provider's free open event data as a kloppy `EventDataset`. |
 | [soccer_open_events](python-helpers/other.md#soccer_open_events) | Load one match of a provider's free open event data as a tidy frame. |
 | [soccer_spadl](python-helpers/other.md#soccer_spadl) | Convert a kloppy event dataset to SPADL actions on the 105 x 68 pitch. |
 | [ufl_pbp](python-helpers/other.md#ufl_pbp) | Enriched UFL play-by-play (EP/EPA/WP/WPA/CP/CPOE). |

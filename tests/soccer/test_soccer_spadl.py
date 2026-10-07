@@ -13,6 +13,8 @@ import pytest
 from sportsdataverse.soccer import soccer_spadl as spadl_fn
 from sportsdataverse.soccer import spadl
 
+from tests.conftest import skip_if_no_live
+
 FIXTURES = Path(__file__).resolve().parents[1] / "fixtures"
 EVENTS = FIXTURES / "kloppy" / "statsbomb_8658_events.json"
 LINEUPS = FIXTURES / "kloppy" / "statsbomb_8658_lineups.json"
@@ -202,6 +204,21 @@ def test_other_provider_warns_and_returns(caplog: pytest.LogCaptureFixture) -> N
     assert df.height > 0 and "opta" in caplog.text.lower()
 
 
+def test_empty_dataset_returns_the_documented_schema() -> None:
+    out = spadl.soccer_spadl(_dataset().filter(lambda e: False))
+    assert out.height == 0 and tuple(out.columns) == spadl.SPADL_COLUMNS
+    assert out.schema["action_id"] == pl.Int64
+
+
+@skip_if_no_live
+def test_live_full_match_height() -> None:
+    from sportsdataverse.soccer import soccer_open_dataset
+
+    oracle = pl.read_csv(ORACLE)
+    out = spadl.soccer_spadl(soccer_open_dataset("statsbomb", 8658), game_id=8658)
+    assert abs(out.height - oracle.height) <= 0.02 * oracle.height
+
+
 def test_public_function_is_reexported_from_the_package() -> None:
     assert spadl_fn is spadl.soccer_spadl
 
@@ -215,6 +232,7 @@ def test_fix_clearances_uses_the_next_start() -> None:
     df = pl.DataFrame(
         {
             "game_id": ["g", "g"],
+            "team_id": ["a", "a"],
             "period_id": [1, 1],
             "time_seconds": [1.0, 2.0],
             "type_id": [spadl._TYPE["clearance"], spadl._TYPE["pass"]],
@@ -322,11 +340,16 @@ def test_parity_with_the_socceraction_oracle() -> None:
         ORACLE,
         schema_overrides={"game_id": pl.Utf8, "original_event_id": pl.Utf8, "team_id": pl.Utf8, "player_id": pl.Utf8},
     )
-    assert abs(ours.height - oracle.height) <= 0.02 * oracle.height
-    real = ours.filter(pl.col("type_name") != "dribble").join(
-        oracle.filter(pl.col("type_name") != "dribble"), on="original_event_id", suffix="_o", how="inner"
-    )
-    assert real.height >= 0.98 * oracle.filter(pl.col("type_name") != "dribble").height
+    ours_nd = ours.filter(pl.col("type_name") != "dribble")
+    oracle_nd = oracle.filter(pl.col("type_name") != "dribble")
+    ours_only = sorted(set(ours_nd["original_event_id"]) - set(oracle_nd["original_event_id"]))
+    oracle_only = sorted(set(oracle_nd["original_event_id"]) - set(ours_nd["original_event_id"]))
+    assert not oracle_only, oracle_only[:20]
+    assert ours_only == sorted(_PARITY_OURS_ONLY), ours_only[:20]
+    # the oracle itself splits the interception-pass into two rows sharing one id, so one ours-only row is not extra
+    assert ours.height == oracle.height + len(_PARITY_OURS_ONLY) - 1
+    real = ours_nd.join(oracle_nd, on="original_event_id", suffix="_o", how="inner")
+    assert real.height >= 0.98 * oracle_nd.height
     agree = (
         (pl.col("type_name") == pl.col("type_name_o"))
         & (pl.col("result_name") == pl.col("result_name_o"))
@@ -354,6 +377,15 @@ _PARITY_ALLOWLIST: tuple[str, ...] = (
     "a1fe186c-ed79-44e4-9d13-5b2ef8326344",
 )
 
+
+# Non-dribble rows kloppy emits that the oracle lacks. Same rule: only genuine kloppy-vs-statsbombpy differences, one reason each.
+_PARITY_OURS_ONLY: dict[str, str] = {
+    # kloppy splits a StatsBomb Pass with pass.type "Interception" into a pass plus a synthetic interception event
+    "interception-a1abd2bb-d135-4622-b467-bebafe3fd845": "kloppy interception-split of a pass",
+    # StatsBomb pass outcome "Injury Clearance": socceraction -> non_action; kloppy maps it to PassResult.OUT -> pass/fail
+    "8de77d94-e304-4d75-8c09-a3befaa8a391": "Injury Clearance pass kept as pass/fail by kloppy",
+    "e14ae27f-6483-4182-9b30-74f22541aec3": "Injury Clearance pass kept as pass/fail by kloppy",
+}
 
 _FULL_URL = "https://raw.githubusercontent.com/statsbomb/open-data/master/data"
 
