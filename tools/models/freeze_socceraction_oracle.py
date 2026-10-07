@@ -90,6 +90,9 @@ def main() -> int:
         f"game_id {args.game_id}, actions {len(actions)}\n{buf.getvalue()}",
         encoding="utf-8",
     )
+    rated = actions[["game_id", "original_event_id", "action_id"]].copy()
+    rated["xt"] = model.rate(actions)
+    rated.to_csv(args.out / f"{args.game_id}_xt_rate.csv", index=False, float_format="%.17g", lineterminator="\n")
     print(f"wrote {len(actions)} actions and the xT grid to {args.out}")
     return 0
 

@@ -145,9 +145,26 @@ def test_live_statsbomb_open_data_match_8658() -> None:
     assert df.filter(pl.col("event_type") == "SHOT").height > 10
 
 
-def test_provider_module_resolves_in_a_fresh_interpreter() -> None:
+def test_open_dataset_resolves_the_provider_in_a_fresh_interpreter() -> None:
     # A bare ``import kloppy`` does not attach ``kloppy.statsbomb``; this suite's importorskip above
-    # does, which is how the getattr-based loader passed here but failed for real users.
-    code = "from sportsdataverse.soccer.soccer_events import _provider_module; print(_provider_module('statsbomb').__name__)"
+    # does, which is how a getattr-based call site passed here but failed for real users. The child
+    # asserts the premise, stubs the provider module, and calls soccer_open_dataset ITSELF.
+    code = "\n".join(
+        [
+            "import dataclasses, sys, types",
+            "import kloppy",
+            "assert not hasattr(kloppy, 'statsbomb'), 'premise gone: kloppy now attaches providers'",
+            "@dataclasses.dataclass",
+            "class Meta:",
+            "    game_id: object = None",
+            "class Dataset:",
+            "    metadata = Meta()",
+            "stub = types.ModuleType('kloppy.statsbomb')",
+            "stub.load_open_data = lambda match_id, **kw: Dataset()",
+            "sys.modules['kloppy.statsbomb'] = stub",
+            "from sportsdataverse.soccer.soccer_events import soccer_open_dataset",
+            "print(soccer_open_dataset('statsbomb', 8658).metadata.game_id)",
+        ]
+    )
     out = subprocess.run([sys.executable, "-c", code], capture_output=True, text=True, check=True)
-    assert out.stdout.strip() == "kloppy.statsbomb"
+    assert out.stdout.strip() == "8658"
