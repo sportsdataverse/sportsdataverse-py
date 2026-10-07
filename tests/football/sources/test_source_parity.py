@@ -9,6 +9,7 @@ are not visible in a happy-path integration run.
 
 from __future__ import annotations
 
+import json
 import math
 
 import polars as pl
@@ -219,6 +220,35 @@ def test_join_rate_and_unavailable_alerts():
     assert [a["rule"] for a in sp.alerts_for(_summary(join_rate=0.5, n_paired_plays=500), cfg)] == ["join_rate"]
     fired = sp.alerts_for(_summary(games_unavailable=6, unavailable_share=0.6, games_ok=4), cfg)
     assert "source_unavailable" in [a["rule"] for a in fired]
+
+
+def test_a_day_on_which_every_game_errored_alerts():
+    """A pairing failure is recorded as an error, not as unavailable, so a day on which every
+    comparison failed must still alert rather than read as healthy (#564)."""
+    cfg = {"floors": {"EPA": 0.97}, "join_rate": 0.9, "unavailable_share": 0.5}
+    all_errored = _summary(
+        games=3, games_ok=0, games_errored=3, join_rate=0.0, n_espn_plays=0, n_paired_plays=0, pooled={}
+    )
+    fired = sp.alerts_for(all_errored, cfg)
+    assert [a["rule"] for a in fired] == ["source_errored"]
+    assert fired[0]["observed"] == 3
+    # a partly errored day is left to the existing rules
+    assert sp.alerts_for(_summary(games_ok=8, games_errored=2), cfg) == []
+
+
+def test_a_cached_date_is_rescored_with_the_current_rules(tmp_path, monkeypatch):
+    """A summary written before ``source_errored`` existed must still alert when the date is
+    rerun without ``--force``: the stored per-source summaries are re-scored, not replayed."""
+    stale = _summary(games=3, games_ok=0, games_errored=3, join_rate=0.0, n_espn_plays=0, n_paired_plays=0, pooled={})
+    stale["alerts"] = []  # what the old code stored for an all-errored day
+    (tmp_path / "parity_2026-09-13.parquet").write_bytes(b"")
+    (tmp_path / "summary_2026-09-13.json").write_text(
+        json.dumps({"date": "2026-09-13", "leagues": ["nfl"], "rows": 3, "sources": [stale], "alerts": []})
+    )
+    monkeypatch.setattr(sp, "load_floors", lambda path=None: {"defaults": {"join_rate": 0.9}})
+    result = sp.run("2026-09-13", ("nfl",), out_dir=tmp_path, post=False)
+    assert [a["rule"] for a in result["alerts"]] == ["source_errored"]
+    assert result["sources"][0]["alerts"] == result["alerts"]
 
 
 def test_a_day_with_no_finals_raises_nothing():
