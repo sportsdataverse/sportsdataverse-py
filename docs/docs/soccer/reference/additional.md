@@ -61,6 +61,37 @@ Fit the grid on SPADL actions by value iteration.
 
 This model, fitted in place.
 
+**Example**
+
+```python
+from sportsdataverse.soccer import XThreat, soccer_open_dataset, soccer_spadl
+model = XThreat().fit(soccer_spadl(soccer_open_dataset("statsbomb", 8658)))
+print(model.iterations)
+```
+
+#### XThreat.from_json
+
+`XThreat.from_json(path: 'Union[str, Path]') -> 'XThreat'`
+
+Read this module's format or socceraction's bare nested list.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `path` | `Union[str, Path]` |  | A JSON file written by `to_json` or socceraction's `save_model`. |
+
+**Returns**
+
+The loaded `XThreat`.
+
+**Example**
+
+```python
+from sportsdataverse.soccer import XThreat
+model = XThreat.from_json("xthreat.json")
+```
+
 #### XThreat.rate
 
 `XThreat.rate(actions: 'pl.DataFrame') -> 'pl.Series'`
@@ -77,6 +108,13 @@ Rate each action: end-cell minus start-cell value for successful passes, dribble
 
 A `Float64` series named `xt_value`; null for actions xT does not value.
 
+**Example**
+
+```python
+from sportsdataverse.soccer import load_xthreat_model
+actions = actions.with_columns(load_xthreat_model().rate(actions))
+```
+
 #### XThreat.to_json
 
 `XThreat.to_json(path: 'Union[str, Path]') -> 'None'`
@@ -87,7 +125,13 @@ Write `{"xT": grid, "w": .., "l": .., "meta": {..}}` (readable by `from_json`).
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `path` | `Union[str, Path]` |  |  |
+| `path` | `Union[str, Path]` |  | Destination file. |
+
+**Example**
+
+```python
+model.to_json("xthreat.json")
+```
 
 ### load_xthreat_model {#load_xthreat_model}
 

@@ -17,8 +17,9 @@ OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 Departures from the original: convergence is tested on the absolute change with a ``max_iter`` cap;
-rows with null coordinates are excluded from every count including the transition matrix; there is no
-interpolated ``rate`` (SciPy's ``interp2d`` no longer exists).
+there is no interpolated ``rate`` (SciPy's ``interp2d`` no longer exists). Null coordinates: an action with a
+null START coordinate is dropped from every count; a move with a null END coordinate still counts toward
+the shot/move split (``p_move``) of its start cell but is dropped from the transition matrix.
 
 Reference: Singh, Karun. "Introducing Expected Threat (xT)", 2019, https://karun.in/blog/expected-threat.html.
 """
@@ -51,21 +52,14 @@ class NotFittedError(RuntimeError):
 def _cell_indexes(x: np.ndarray, y: np.ndarray, l: int, w: int) -> tuple[np.ndarray, np.ndarray]:  # noqa: E741
     """Convert continuous coordinates to cell indexes.
 
-    Parameters
-    ----------
-    x : np.ndarray
-        x-coordinates (0 to FIELD_LENGTH).
-    y : np.ndarray
-        y-coordinates (0 to FIELD_WIDTH).
-    l : int
-        Number of cells along the length (x).
-    w : int
-        Number of cells along the width (y).
+    Args:
+        x: x-coordinates (0 to FIELD_LENGTH).
+        y: y-coordinates (0 to FIELD_WIDTH).
+        l: Number of cells along the length (x).
+        w: Number of cells along the width (y).
 
-    Returns
-    -------
-    tuple[np.ndarray, np.ndarray]
-        (xi, yj) cell indexes, clipped to valid range.
+    Returns:
+        ``(xi, yj)`` cell indexes, clipped to the valid range.
     """
     xi = np.clip((x / FIELD_LENGTH * l).astype(np.int64), 0, l - 1)
     yj = np.clip((y / FIELD_WIDTH * w).astype(np.int64), 0, w - 1)
@@ -78,28 +72,29 @@ def _flat_indexes(x: np.ndarray, y: np.ndarray, l: int, w: int) -> np.ndarray:  
     The grid origin (top-left) is at (0, 0) in the visual representation,
     but flat indexes are numbered with row 0 at the top (y = FIELD_WIDTH).
 
-    Parameters
-    ----------
-    x : np.ndarray
-        x-coordinates (0 to FIELD_LENGTH).
-    y : np.ndarray
-        y-coordinates (0 to FIELD_WIDTH).
-    l : int
-        Number of cells along the length (x).
-    w : int
-        Number of cells along the width (y).
+    Args:
+        x: x-coordinates (0 to FIELD_LENGTH).
+        y: y-coordinates (0 to FIELD_WIDTH).
+        l: Number of cells along the length (x).
+        w: Number of cells along the width (y).
 
-    Returns
-    -------
-    np.ndarray
-        Flat indexes into a (w * l,) shaped array.
+    Returns:
+        Flat indexes into a ``(w * l,)`` shaped array.
     """
     xi, yj = _cell_indexes(x, y, l, w)
     return (w - 1 - yj) * l + xi
 
 
 def _finite(x: np.ndarray, y: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
-    """Filter out NaN coordinates."""
+    """Filter out NaN coordinates.
+
+    Args:
+        x: x-coordinates.
+        y: y-coordinates.
+
+    Returns:
+        ``(x, y)`` with every position where either is NaN removed.
+    """
     keep = ~(np.isnan(x) | np.isnan(y))
     return x[keep], y[keep]
 
@@ -107,21 +102,14 @@ def _finite(x: np.ndarray, y: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
 def _count(x: np.ndarray, y: np.ndarray, l: int, w: int) -> np.ndarray:  # noqa: E741
     """Count occurrences in each grid cell.
 
-    Parameters
-    ----------
-    x : np.ndarray
-        x-coordinates.
-    y : np.ndarray
-        y-coordinates.
-    l : int
-        Number of cells along length.
-    w : int
-        Number of cells along width.
+    Args:
+        x: x-coordinates.
+        y: y-coordinates.
+        l: Number of cells along length.
+        w: Number of cells along width.
 
-    Returns
-    -------
-    np.ndarray
-        Shape (w, l) count matrix, with origin at top-left.
+    Returns:
+        Shape ``(w, l)`` count matrix, with origin at top-left.
     """
     x, y = _finite(x, y)
     counts = np.bincount(_flat_indexes(x, y, l, w), minlength=w * l)
@@ -129,31 +117,41 @@ def _count(x: np.ndarray, y: np.ndarray, l: int, w: int) -> np.ndarray:  # noqa:
 
 
 def _safe_divide(a: np.ndarray, b: np.ndarray) -> np.ndarray:
-    """Divide arrays, returning 0 where denominator is 0."""
+    """Divide arrays, returning 0 where denominator is 0.
+
+    Args:
+        a: Numerator.
+        b: Denominator, broadcastable against ``a``.
+
+    Returns:
+        ``a / b`` as float64, 0 where ``b`` is 0.
+    """
     return np.divide(a, b, out=np.zeros_like(a, dtype=np.float64), where=b != 0)
 
 
 def _xy(df: pl.DataFrame, prefix: str) -> tuple[np.ndarray, np.ndarray]:
-    """Extract x, y columns by prefix as float64 numpy arrays."""
+    """Extract x, y columns by prefix as float64 numpy arrays.
+
+    Args:
+        df: A frame with ``<prefix>_x`` and ``<prefix>_y`` columns.
+        prefix: ``"start"`` or ``"end"``.
+
+    Returns:
+        ``(x, y)`` float64 arrays; nulls become NaN.
+    """
     return df[f"{prefix}_x"].to_numpy().astype(np.float64), df[f"{prefix}_y"].to_numpy().astype(np.float64)
 
 
 def _scoring_prob(actions: pl.DataFrame, l: int, w: int) -> np.ndarray:  # noqa: E741
     """Compute shot success probability per grid cell.
 
-    Parameters
-    ----------
-    actions : pl.DataFrame
-        SPADL actions with type_name, result_name, start_x, start_y columns.
-    l : int
-        Number of cells along length.
-    w : int
-        Number of cells along width.
+    Args:
+        actions: SPADL actions with type_name, result_name, start_x, start_y columns.
+        l: Number of cells along length.
+        w: Number of cells along width.
 
-    Returns
-    -------
-    np.ndarray
-        Shape (w, l) probability matrix (0 to 1).
+    Returns:
+        Shape ``(w, l)`` probability matrix (0 to 1).
     """
     shots = actions.filter(pl.col("type_name") == "shot")
     goals = shots.filter(pl.col("result_name") == "success")
@@ -161,26 +159,30 @@ def _scoring_prob(actions: pl.DataFrame, l: int, w: int) -> np.ndarray:  # noqa:
 
 
 def _moves(actions: pl.DataFrame) -> pl.DataFrame:
-    """Filter to move-type actions (pass, dribble, cross)."""
+    """Filter to move-type actions (pass, dribble, cross).
+
+    Args:
+        actions: SPADL actions with a ``type_name`` column.
+
+    Returns:
+        The rows whose ``type_name`` is in ``MOVE_TYPES``.
+    """
     return actions.filter(pl.col("type_name").is_in(list(MOVE_TYPES)))
 
 
 def _action_prob(actions: pl.DataFrame, l: int, w: int) -> tuple[np.ndarray, np.ndarray]:  # noqa: E741
     """Compute probability of shooting vs moving per grid cell.
 
-    Parameters
-    ----------
-    actions : pl.DataFrame
-        SPADL actions.
-    l : int
-        Number of cells along length.
-    w : int
-        Number of cells along width.
+    A move with a null END coordinate still counts here (only the START cell is read); it is
+    dropped later from the transition matrix.
 
-    Returns
-    -------
-    tuple[np.ndarray, np.ndarray]
-        (shot_prob, move_prob) each shape (w, l).
+    Args:
+        actions: SPADL actions.
+        l: Number of cells along length.
+        w: Number of cells along width.
+
+    Returns:
+        ``(shot_prob, move_prob)``, each of shape ``(w, l)``.
     """
     move = _count(*_xy(_moves(actions), "start"), l, w)
     shot = _count(*_xy(actions.filter(pl.col("type_name") == "shot"), "start"), l, w)
@@ -265,6 +267,13 @@ class XThreat:
 
         Raises:
             RuntimeError: If the grid has not converged within ``max_iter`` iterations.
+
+        Example:
+            Fit on one match::
+
+                from sportsdataverse.soccer import XThreat, soccer_open_dataset, soccer_spadl
+                model = XThreat().fit(soccer_spadl(soccer_open_dataset("statsbomb", 8658)))
+                print(model.iterations)
         """
         p_scoring = _scoring_prob(actions, self.l, self.w)
         p_shot, p_move = _action_prob(actions, self.l, self.w)
@@ -294,6 +303,12 @@ class XThreat:
 
         Raises:
             NotFittedError: If the grid is all zeros.
+
+        Example:
+            Add the column to a SPADL frame::
+
+                from sportsdataverse.soccer import load_xthreat_model
+                actions = actions.with_columns(load_xthreat_model().rate(actions))
         """
         if not np.any(self.xT):
             raise NotFittedError("the xT grid is all zeros; fit() or load_xthreat_model() first")
@@ -315,7 +330,16 @@ class XThreat:
         return pl.Series("xt_value", values, dtype=pl.Float64).fill_nan(None)
 
     def to_json(self, path: Union[str, Path]) -> None:
-        """Write ``{"xT": grid, "w": .., "l": .., "meta": {..}}`` (readable by ``from_json``)."""
+        """Write ``{"xT": grid, "w": .., "l": .., "meta": {..}}`` (readable by ``from_json``).
+
+        Args:
+            path: Destination file.
+
+        Example:
+            Save a fitted grid::
+
+                model.to_json("xthreat.json")
+        """
         Path(path).write_text(
             json.dumps({"xT": self.xT.tolist(), "w": self.w, "l": self.l, "meta": self.meta}, indent=2),
             encoding="utf-8",
@@ -323,7 +347,20 @@ class XThreat:
 
     @classmethod
     def from_json(cls, path: Union[str, Path]) -> XThreat:
-        """Read this module's format or socceraction's bare nested list."""
+        """Read this module's format or socceraction's bare nested list.
+
+        Args:
+            path: A JSON file written by :meth:`to_json` or socceraction's ``save_model``.
+
+        Returns:
+            The loaded :class:`XThreat`.
+
+        Example:
+            Load a saved grid::
+
+                from sportsdataverse.soccer import XThreat
+                model = XThreat.from_json("xthreat.json")
+        """
         data: Any = json.loads(Path(path).read_text(encoding="utf-8"))
         if isinstance(data, list):
             grid: np.ndarray = np.asarray(data, dtype=np.float64)

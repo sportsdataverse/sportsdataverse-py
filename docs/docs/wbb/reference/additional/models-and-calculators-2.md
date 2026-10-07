@@ -1,10 +1,44 @@
 ---
-title: "WBB — additional Python functions — Models and calculators: calc_slow–win_prob"
-sidebar_label: "Models and calculators: calc_slow–win_prob"
+title: "WBB — additional Python functions — Models and calculators: calc_player–win_prob"
+sidebar_label: "Models and calculators: calc_player–win_prob"
 sidebar_position: 9
-description: "WBB — additional Python functions — Models and calculators: calc_slow–win_prob — function reference in sdv-py, the SportsDataverse Python package."
+description: "WBB — additional Python functions — Models and calculators: calc_player–win_prob — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# WBB — additional Python functions — Models and calculators: calc_slow–win_prob
+# WBB — additional Python functions — Models and calculators: calc_player–win_prob
+
+### calc_player_weights {#calc_player_weights}
+
+`calc_player_weights(ctx: 'RapmPlayerContext') -> 'list[NDArray[np.float64]]'`
+
+Build the off/def player-weight (design) matrices for the RAPM solve.
+
+Faithful port of `RapmUtils.calcPlayerWeights` (`RapmUtils.ts:544-595`).
+One row per (filtered) lineup, one column per remaining player; each
+filled cell is `sqrt(lineup_possessions / total_side_possessions)` --
+the possession-weighted design-matrix entry the ridge regression (Task
+3.4) solves against. This is the first function in the module where a
+`dict`-shaped `RapmPlayerContext` gets materialized into a
+`numpy.ndarray` -- see the module docstring's "dict -> `numpy.ndarray`
+boundary" note.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `ctx` | `RapmPlayerContext` |  | A `RapmPlayerContext`, e.g. from `build_player_context`. |
+
+**Returns**
+
+`[off_weights, def_weights]` -- two `numpy.ndarray` matrices of shape `(num_{off,def}_lineups [+1 if ctx["unbias_weight"] > 0], ctx["num_players"])`. The optional extra row (only emitted when `ctx["unbias_weight"] > 0` -- always `0.0` in production per `build_player_context`'s hardcoded local, but settable directly on the returned context dict, as the oracle test does) holds each column's `unbias_weight`-scaled sum-of-squares, an "unbiasing observation" row (`RapmUtils.ts:578-593`).
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_rapm import calc_player_weights
+
+off_weights, def_weights = calc_player_weights(ctx)
+print(off_weights.shape)  # (num_off_lineups, num_players)
+```
 
 ### calc_slow_pseudo_inverse {#calc_slow_pseudo_inverse}
 

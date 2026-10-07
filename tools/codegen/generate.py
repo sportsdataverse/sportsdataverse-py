@@ -3746,7 +3746,7 @@ def _augment_class_view(cls, view: dict) -> None:
                     p["type"] = ip["type_name"]
 
     methods = []
-    for name, member in inspect.getmembers(cls, predicate=inspect.isfunction):
+    for name, member in inspect.getmembers(cls, predicate=lambda m: inspect.isfunction(m) or inspect.ismethod(m)):
         if name.startswith("_"):
             continue
         methods.append({"name": name, "signature": _method_signature(member), **_doc_view(member)})

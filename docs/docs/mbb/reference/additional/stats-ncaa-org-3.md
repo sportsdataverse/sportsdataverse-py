@@ -1,10 +1,58 @@
 ---
-title: "MBB — additional Python functions — stats.ncaa.org: reset_config–validate_lineup"
-sidebar_label: "stats.ncaa.org: reset_config–validate_lineup"
+title: "MBB — additional Python functions — stats.ncaa.org: reorder_and–validate_lineup"
+sidebar_label: "stats.ncaa.org: reorder_and–validate_lineup"
 sidebar_position: 5
-description: "MBB — additional Python functions — stats.ncaa.org: reset_config–validate_lineup — function reference in sdv-py, the SportsDataverse Python package."
+description: "MBB — additional Python functions — stats.ncaa.org: reorder_and–validate_lineup — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# MBB — additional Python functions — stats.ncaa.org: reset_config–validate_lineup
+# MBB — additional Python functions — stats.ncaa.org: reorder_and–validate_lineup
+
+### reorder_and_reverse {#reorder_and_reverse}
+
+`reorder_and_reverse(reversed_partial_events: 'Iterable[PlayByPlayEvent]') -> 'list[PlayByPlayEvent]'`
+
+Orders same-minute play-by-play events so subs never enclose the plays
+
+they logically precede/follow (`ExtractorUtils.scala:435-599`).
+
+Groups consecutive events sharing the same `min` into a block (the
+input arrives in descending/reverse-chronological order, so blocks are
+discovered and internally accumulated in reverse too), then -- for any
+block containing a sub -- reorders it via `inner_sort`: events
+referencing a subbed-OUT player (or scoring no higher than the sub) land
+in a pre-sub group, the subs themselves come next (in ascending-score
+order), and events referencing a subbed-IN player (or scoring higher
+than the sub) land in a trailing post-sub group. Free-throw attempts
+sharing the sub's inferred "direction" (team vs. opponent, inferred from
+the nearest preceding shot/FT/foul) are pulled into the pre-sub group
+unless the shooter is one of the players being subbed in. Blocks with no
+sub are returned unchanged apart from the initial score-based sort.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `reversed_partial_events` | `Iterable[PlayByPlayEvent]` |  | Events for one lineup event, in reverse-chronological (descending-time) order -- the natural order encountered walking play-by-play text bottom-up. |
+
+**Returns**
+
+The same events, forward-chronological (ascending time), with each same-minute block internally reordered so no sub encloses a play it logically shouldn't.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_models import Score
+from sportsdataverse.mbb.mbb_ncaa_stints import (
+    OtherTeamEvent,
+    SubInEvent,
+    reorder_and_reverse,
+)
+events = [
+    SubInEvent(0.4, Score(0, 0), "player1"),
+    OtherTeamEvent(0.4, Score(0, 0), "rebound"),
+]
+reorder_and_reverse(events)
+# [OtherTeamEvent(...), SubInEvent(...)]
+```
 
 ### reset_config {#reset_config}
 

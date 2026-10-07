@@ -1,10 +1,10 @@
 ---
-title: "MBB — additional Python functions — Models and calculators: AssistEvent–calc_slow"
-sidebar_label: "Models and calculators: AssistEvent–calc_slow"
+title: "MBB — additional Python functions — Models and calculators: AssistEvent–calc_player"
+sidebar_label: "Models and calculators: AssistEvent–calc_player"
 sidebar_position: 9
-description: "MBB — additional Python functions — Models and calculators: AssistEvent–calc_slow — function reference in sdv-py, the SportsDataverse Python package."
+description: "MBB — additional Python functions — Models and calculators: AssistEvent–calc_player — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# MBB — additional Python functions — Models and calculators: AssistEvent–calc_slow
+# MBB — additional Python functions — Models and calculators: AssistEvent–calc_player
 
 ### AssistEvent {#AssistEvent}
 
@@ -208,6 +208,14 @@ exercised by Phase 5a -- see the module docstring's scope note.
 | `player_shot_info` | `Optional[PlayerShotInfo]` | `None` | Per-player shot-quality info, if tracked. |
 | `pts` | `int` | `0` | Points scored. |
 | `plus_minus` | `int` | `0` | Point differential while this lineup was on the floor. |
+
+**Methods**
+
+#### LineupEventStats.empty
+
+`LineupEventStats.empty() -> "'LineupEventStats'"`
+
+A fresh all-defaults `LineupEventStats` (`:41`).
 
 ### LineupId {#LineupId}
 
@@ -458,6 +466,41 @@ string is the literal `"date,time,event"` line from the NCAA website.
 | `team` | `Optional[str]` | `None` | The raw event string, if this event belongs to the team under analysis. |
 | `opponent` | `Optional[str]` | `None` | The raw event string, if this event belongs to the opponent. |
 
+**Methods**
+
+#### RawGameEvent.for_opponent
+
+`RawGameEvent.for_opponent(s: 'str', min: 'float') -> "'RawGameEvent'"`
+
+Build an opponent-side event (Scala ``RawGameEvent.opponent(s,
+
+min)`, `LineupEvent.scala:109-110` -- renamed per the "Scala
+idiom decisions" module note to avoid colliding with the
+`opponent`` field).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `s` | `str` |  |  |
+| `min` | `float` |  |  |
+
+#### RawGameEvent.for_team
+
+`RawGameEvent.for_team(s: 'str', min: 'float') -> "'RawGameEvent'"`
+
+Build a team-side event (Scala `RawGameEvent.team(s, min)`,
+
+`LineupEvent.scala:107-108` -- renamed per the "Scala idiom
+decisions" module note to avoid colliding with the `team` field).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `s` | `str` |  |  |
+| `min` | `float` |  |  |
+
 ### RosterEntry {#RosterEntry}
 
 `RosterEntry(player_code_id: 'PlayerCodeId', number: 'str', pos: 'str', height: 'str', height_in: 'Optional[int]', year_class: 'str', gp: 'int', origin: 'Optional[str]', role: 'Optional[str]') -> None`
@@ -507,6 +550,14 @@ Score context at the start/end of a lineup event
 | `end` | `Score` |  | Score at the end of the event. |
 | `start_diff` | `int` |  | Score differential (team - opponent) at the start. |
 | `end_diff` | `int` |  | Score differential (team - opponent) at the end. |
+
+**Methods**
+
+#### ScoreInfo.empty
+
+`ScoreInfo.empty() -> "'ScoreInfo'"`
+
+A fresh zeroed `ScoreInfo` (`ScoreInfo.empty`, `:161-166`).
 
 ### ShotClockStats {#ShotClockStats}
 
@@ -1385,37 +1436,4 @@ from sportsdataverse.mbb.mbb_rapm import calc_player_weights
 
 off_weights, def_weights = calc_player_weights(ctx)
 print(off_weights.shape)  # (num_off_lineups, num_players)
-```
-
-### calc_slow_pseudo_inverse {#calc_slow_pseudo_inverse}
-
-`calc_slow_pseudo_inverse(player_weight_matrix: 'NDArray[np.float64]', ridge_lambda: 'float', ctx: 'RapmPlayerContext') -> 'NDArray[np.float64]'`
-
-Per-parameter variance terms for the ridge-regression standard errors.
-
-Faithful port of the private `RapmUtils.calcSlowPseudoInverse`
-(`RapmUtils.ts:1544-1557`): the same `(XᵀX + ridge_lambda·I)⁻¹` as
-`slow_regression`'s `bottomInv`, but this function returns the
-square root of its diagonal instead of the full solver matrix -- the
-`paramErrs` term consumed by the standard-error formula (see
-`calculate_sd_rapm`).
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `player_weight_matrix` | `NDArray[float64]` |  | The off/def design matrix, same shape as `slow_regression`'s. |
-| `ridge_lambda` | `float` |  | The Tikhonov regularization strength (must match the `ridge_lambda` used to build the corresponding `slow_regression` solver, for the SEs to be meaningful). |
-| `ctx` | `RapmPlayerContext` |  | A `RapmPlayerContext` -- only `ctx["num_players"]` is read. |
-
-**Returns**
-
-A length-`num_players` array, `sqrt(diag((XᵀX + λI)⁻¹))`.
-
-**Example**
-
-```python
-from sportsdataverse.mbb.mbb_rapm import calc_slow_pseudo_inverse
-
-param_errs = calc_slow_pseudo_inverse(x, 1.0, ctx)
 ```
