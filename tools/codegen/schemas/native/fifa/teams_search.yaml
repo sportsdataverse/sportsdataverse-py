@@ -8,7 +8,7 @@ columns:
   type: character
 - description: Activity-status code (FIFA integer enum).
   name: active_status
-  type: numeric
+  type: integer
 - description: 'Team-type code (FIFA integer enum: 0 = club, 1 = national team).'
   name: type
   type: integer
@@ -62,7 +62,7 @@ columns:
   type: character
 - description: Year the team or association was founded.
   name: foundation_year
-  type: numeric
+  type: integer
 - description: Home stadium block (null in the captures).
   name: stadium
   type: character

@@ -50,6 +50,6 @@ columns:
   type: character
 - description: Reported attendance (nullable).
   name: attendance
-  type: numeric
+  type: integer
 kind: dataframe
 schema: games

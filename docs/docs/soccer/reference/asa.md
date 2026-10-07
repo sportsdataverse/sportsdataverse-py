@@ -43,7 +43,7 @@ Games/fixtures with final scores, venue/official/manager FKs.
 | `knockout_game` | logical | True if a knockout/playoff fixture. |
 | `status` | character | Game status (e.g. `final`). |
 | `last_updated_utc` | character | Last-updated timestamp (UTC, ISO 8601). |
-| `attendance` | numeric | Reported attendance (nullable). |
+| `attendance` | integer | Reported attendance (nullable). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 

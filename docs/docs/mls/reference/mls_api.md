@@ -685,8 +685,8 @@ Batch match detail by Sportec ids (sportapi).
 | `competition_player_headshot_thumbnail_field` | character | Competition: content field the site reads player headshots from. |
 | `league_promo_image_asset_url` | character | League promo image: URL of the image asset. |
 | `third_party_tickets_url` | character | Third-party ticketing link: link URL. |
-| `third_party_tickets_open_in_new_tab` | character | Third-party ticketing link: whether the link opens in a new tab. |
-| `third_party_tickets_is_visible` | character | Third-party ticketing link: whether the link is shown. |
+| `third_party_tickets_open_in_new_tab` | logical | Third-party ticketing link: whether the link opens in a new tab. |
+| `third_party_tickets_is_visible` | logical | Third-party ticketing link: whether the link is shown. |
 | `priority_match_date_from` | character | Priority-match window: start of the display window (ISO 8601). |
 | `home_ecal_widget_id` | character | Home club: identifier of the eCal calendar-subscription widget. |
 | `away_ecal_widget_id` | character | Away club: identifier of the eCal calendar-subscription widget. |

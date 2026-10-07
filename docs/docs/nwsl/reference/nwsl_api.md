@@ -443,7 +443,7 @@ Overall standings table for a season (table/home/away splits).
 | `points` | integer | Competition points. |
 | `qualification_qualification_id` | character | Qualification band: identifier of the qualification band. |
 | `qualification_qualification_label` | character | Qualification band: display label of the qualification band. |
-| `qualification` | numeric | Qualification band (e.g. playoff/Final Series). |
+| `qualification` | character | Qualification band (e.g. playoff/Final Series). |
 | `matches_played` | integer | Matches played in this split. |
 | `win` | integer | Matches won. |
 | `draw` | integer | Matches drawn. |

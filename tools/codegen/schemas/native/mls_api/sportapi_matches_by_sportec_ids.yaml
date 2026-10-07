@@ -217,10 +217,10 @@ columns:
   type: character
 - description: 'Third-party ticketing link: whether the link opens in a new tab.'
   name: third_party_tickets_open_in_new_tab
-  type: character
+  type: logical
 - description: 'Third-party ticketing link: whether the link is shown.'
   name: third_party_tickets_is_visible
-  type: character
+  type: logical
 - description: 'Priority-match window: start of the display window (ISO 8601).'
   name: priority_match_date_from
   type: character

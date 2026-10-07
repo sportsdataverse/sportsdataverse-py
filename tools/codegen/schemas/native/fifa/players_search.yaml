@@ -43,7 +43,7 @@ columns:
   type: character
 - description: Preferred-foot code (FIFA integer enum; 9999 when unset).
   name: preferred_foot
-  type: numeric
+  type: integer
 - description: Media content entries, JSON list (empty in the captures).
   name: media_content
   type: character

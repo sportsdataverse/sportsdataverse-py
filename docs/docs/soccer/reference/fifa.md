@@ -267,8 +267,8 @@ Matches live right now across FIFA competitions.
 | `match_time` | character | Match clock as displayed, e.g. 98'. |
 | `second_half_time` | character | Second-half timing field (null in the captures). |
 | `first_half_time` | character | First-half timing field (null in the captures). |
-| `first_half_extra_time` | numeric | Stoppage time added to the first half, in minutes. |
-| `second_half_extra_time` | numeric | Stoppage time added to the second half, in minutes. |
+| `first_half_extra_time` | integer | Stoppage time added to the first half, in minutes. |
+| `second_half_extra_time` | integer | Stoppage time added to the second half, in minutes. |
 | `winner` | character | Team id of the winner (Utf8; null for a draw or an unplayed match). |
 | `period` | integer | Match period code (FIFA integer enum). |
 | `territorial_possesion` | character | Territorial possession block (sic: the API's spelling; null in the captures). |
@@ -302,7 +302,7 @@ Matches live right now across FIFA competitions.
 | `stadium_length` | character | Stadium: pitch length (null in the captures). |
 | `stadium_width` | character | Stadium: pitch width (null in the captures). |
 | `stadium_is_updateable` | character | Stadium: isUpdateable flag from the API (null in the captures). |
-| `home_team_score` | numeric | Home team: goals scored. |
+| `home_team_score` | integer | Home team: goals scored. |
 | `home_team_side` | character | Home team: side marker (null in the captures). |
 | `home_team_id_team` | character | Home team: FIFA team id (Utf8 join key). |
 | `home_team_picture_url` | character | Home team: image URL template with `{format}` and `{size}` placeholders. |
@@ -322,7 +322,7 @@ Matches live right now across FIFA competitions.
 | `home_team_gender` | integer | Home team: gender code (FIFA integer enum: 1 = men, 2 = women). |
 | `home_team_id_association` | character | Home team: three-letter code of the member association, e.g. ARG. |
 | `home_team_short_club_name` | character | Home team: short English team name. |
-| `away_team_score` | numeric | Away team: goals scored. |
+| `away_team_score` | integer | Away team: goals scored. |
 | `away_team_side` | character | Away team: side marker (null in the captures). |
 | `away_team_id_team` | character | Away team: FIFA team id (Utf8 join key). |
 | `away_team_picture_url` | character | Away team: image URL template with `{format}` and `{size}` placeholders. |
@@ -347,7 +347,7 @@ Matches live right now across FIFA competitions.
 | `ball_possession_overall_home` | numeric | Ball possession: home team share of possession, percent. |
 | `ball_possession_overall_away` | numeric | Ball possession: away team share of possession, percent. |
 | `properties_id_stats_perform` | character | Stats Perform (Opta) id of the record (Utf8 cross-reference). |
-| `ball_possession` | numeric | Ball-possession block (null when not tracked). |
+| `ball_possession` | character | Ball-possession block (null when not tracked). |
 
 **`return_parsed=False`** — the raw JSON `Dict` (paginated routes return the first page; the API's paging request parameter is undocumented, see the spec's x-pagination).
 
@@ -392,7 +392,7 @@ Players matching a name (first page).
 | `picture_url` | character | Image URL template with `{format}` and `{size}` placeholders. |
 | `thumbnail_url` | character | Thumbnail image URL (null in the captures). |
 | `twitter_account` | character | Twitter / X handle (null in the captures). |
-| `preferred_foot` | numeric | Preferred-foot code (FIFA integer enum; 9999 when unset). |
+| `preferred_foot` | integer | Preferred-foot code (FIFA integer enum; 9999 when unset). |
 | `media_content` | character | Media content entries, JSON list (empty in the captures). |
 | `localized_twitter_accounts` | character | Localised Twitter / X handles (null in the captures). |
 | `goals` | integer | Goals credited to the player. |
@@ -594,7 +594,7 @@ Teams matching a name (first page).
 |---|---|---|
 | `id_team` | character | FIFA team id (Utf8 join key). |
 | `id_confederation` | character | Confederation code (e.g. UEFA, CONMEBOL); a JSON list on competitions and seasons. |
-| `active_status` | numeric | Activity-status code (FIFA integer enum). |
+| `active_status` | integer | Activity-status code (FIFA integer enum). |
 | `type` | integer | Team-type code (FIFA integer enum: 0 = club, 1 = national team). |
 | `age_type` | integer | Age-category code (FIFA integer enum; 7 = senior). |
 | `football_type` | integer | Football discipline code (FIFA integer enum; 0 = eleven-a-side football). |
@@ -612,7 +612,7 @@ Teams matching a name (first page).
 | `short_club_name` | character | Short English team name. |
 | `abbreviation` | character | Abbreviation (e.g. ARG, FWC 2026). |
 | `street` | character | Street address. |
-| `foundation_year` | numeric | Year the team or association was founded. |
+| `foundation_year` | integer | Year the team or association was founded. |
 | `stadium` | character | Home stadium block (null in the captures). |
 | `picture_url` | character | Image URL template with `{format}` and `{size}` placeholders. |
 | `thumbnail_url` | character | Thumbnail image URL (null in the captures). |

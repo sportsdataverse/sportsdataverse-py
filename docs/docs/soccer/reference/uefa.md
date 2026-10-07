@@ -473,8 +473,8 @@ Matches of a UEFA competition season.
 | `round_translations_short_name_ru` | character |  |
 | `round_translations_short_name_zh` | character |  |
 | `round_translations_short_name_ar` | character |  |
-| `score_penalty_away` | numeric |  |
-| `score_penalty_home` | numeric |  |
+| `score_penalty_away` | integer |  |
+| `score_penalty_home` | integer |  |
 | `score_regular_away` | integer |  |
 | `score_regular_home` | integer |  |
 | `score_total_away` | integer |  |
@@ -555,7 +555,7 @@ Matches of a UEFA competition season.
 | `winner_match_team_id` | character |  |
 | `winner_match_team_id_provider` | character |  |
 | `winner_match_team_international_name` | character |  |
-| `winner_match_team_is_place_holder` | character |  |
+| `winner_match_team_is_place_holder` | logical |  |
 | `winner_match_team_logo_url` | character |  |
 | `winner_match_team_medium_logo_url` | character |  |
 | `winner_match_team_organization_id` | character |  |
@@ -606,7 +606,7 @@ Matches of a UEFA competition season.
 | `winner_match_team_translations_short_name_ru` | character |  |
 | `winner_match_team_translations_short_name_zh` | character |  |
 | `winner_match_team_translations_short_name_ar` | character |  |
-| `winner_match_team_type_is_national` | character |  |
+| `winner_match_team_type_is_national` | logical |  |
 | `winner_match_team_type_team` | character |  |
 | `winner_match_translations_reason_text_ru` | character |  |
 | `winner_match_translations_reason_text_de` | character |  |
@@ -627,9 +627,9 @@ Matches of a UEFA competition season.
 | `winner_match_translations_reason_text_abbr_ar` | character |  |
 | `winner_match_translations_reason_text_abbr_fr` | character |  |
 | `related_matches` | character |  |
-| `condition_humidity` | numeric |  |
+| `condition_humidity` | integer |  |
 | `condition_pitch_condition` | character |  |
-| `condition_temperature` | numeric |  |
+| `condition_temperature` | integer |  |
 | `condition_translations_pitch_condition_name_en` | character |  |
 | `condition_translations_pitch_condition_name_fr` | character |  |
 | `condition_translations_pitch_condition_name_de` | character |  |
@@ -649,10 +649,10 @@ Matches of a UEFA competition season.
 | `condition_translations_weather_condition_name_zh` | character |  |
 | `condition_translations_weather_condition_name_ar` | character |  |
 | `condition_weather_condition` | character |  |
-| `condition_wind_speed` | numeric |  |
+| `condition_wind_speed` | integer |  |
 | `leg_date_time_from` | character |  |
 | `leg_date_time_to` | character |  |
-| `leg_number` | numeric | Ordinal of this leg within a multi-leg tie, counting from 1. |
+| `leg_number` | integer | Ordinal of this leg within a multi-leg tie, counting from 1. |
 | `leg_translations_name_en` | character |  |
 | `leg_translations_name_fr` | character |  |
 | `leg_translations_name_de` | character |  |
@@ -671,8 +671,8 @@ Matches of a UEFA competition season.
 | `player_of_the_match_player_translations_first_name_ru` | character |  |
 | `player_of_the_match_player_translations_first_name_zh` | character |  |
 | `player_of_the_match_player_translations_first_name_ar` | character |  |
-| `score_aggregate_away` | numeric |  |
-| `score_aggregate_home` | numeric |  |
+| `score_aggregate_away` | integer |  |
+| `score_aggregate_home` | integer |  |
 | `winner_aggregate_reason` | character |  |
 | `winner_aggregate_team_association_id` | character |  |
 | `winner_aggregate_team_association_logo_url` | character |  |
@@ -682,7 +682,7 @@ Matches of a UEFA competition season.
 | `winner_aggregate_team_id` | character |  |
 | `winner_aggregate_team_id_provider` | character |  |
 | `winner_aggregate_team_international_name` | character |  |
-| `winner_aggregate_team_is_place_holder` | character |  |
+| `winner_aggregate_team_is_place_holder` | logical |  |
 | `winner_aggregate_team_logo_url` | character |  |
 | `winner_aggregate_team_medium_logo_url` | character |  |
 | `winner_aggregate_team_organization_id` | character |  |
@@ -733,7 +733,7 @@ Matches of a UEFA competition season.
 | `winner_aggregate_team_translations_short_name_ru` | character |  |
 | `winner_aggregate_team_translations_short_name_zh` | character |  |
 | `winner_aggregate_team_translations_short_name_ar` | character |  |
-| `winner_aggregate_team_type_is_national` | character |  |
+| `winner_aggregate_team_type_is_national` | logical |  |
 | `winner_aggregate_team_type_team` | character |  |
 | `winner_aggregate_translations_reason_text_abbr_ru` | character |  |
 | `winner_aggregate_translations_reason_text_abbr_de` | character |  |
@@ -783,14 +783,14 @@ Players registered in a UEFA competition season.
 | `country_code` | character | ISO country code. |
 | `detailed_field_position` | character |  |
 | `gender` | character | League gender designation. |
-| `height` | numeric | Player height (string e.g. '6-2' or inches). |
+| `height` | integer | Player height (string e.g. '6-2' or inches). |
 | `id` | character | Provider identifier for the entity (Utf8 join key). |
 | `image_url` | character | Player headshot URL. |
 | `international_name` | character |  |
 | `national_jersey_number` | character |  |
 | `national_shirt_name` | character |  |
 | `national_team_id` | character |  |
-| `weight` | numeric | Player weight in pounds. |
+| `weight` | integer | Player weight in pounds. |
 | `translations_country_name_en` | character |  |
 | `translations_country_name_fr` | character |  |
 | `translations_country_name_de` | character |  |
