@@ -231,6 +231,31 @@ def test_a_generated_origin_beats_every_glob(tmp_path, monkeypatch):
     )
 
 
+def test_a_generated_family_no_provider_owns_fails_instead_of_falling_through(tmp_path, monkeypatch):
+    """Polymarket and Kalshi wrappers (stems with no provider yet) once resolved to The Odds API
+    through its `sportsdataverse.odds.*` glob. A generated name's API is authoritative, so an
+    unowned API is a registry gap, never a cue to guess from the module."""
+    monkeypatch.setattr(
+        sources,
+        "SOURCES_FILE",
+        _registry(
+            tmp_path,
+            """
+            providers:
+              odds_api:
+                label: The Odds API
+                modules: ["sportsdataverse.odds.*"]
+            categories: {}
+            """,
+        ),
+    )
+    with pytest.raises(sources.UnknownSource) as e:
+        sources.resolve("polymarket_clob_book", "sportsdataverse.odds.polymarket", api="polymarket")
+    assert "polymarket" in str(e.value)
+    with pytest.raises(sources.UnknownSource):
+        sources.resolve("load_new_thing", "sportsdataverse.odds.odds_loaders", base="brand_new_base")
+
+
 def test_by_api_and_by_base_look_up_the_real_registry():
     assert sources.by_api("espn_core_v2").key == "espn"
     assert sources.by_api("nba_stats").key == "nba_stats"
