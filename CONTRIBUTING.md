@@ -7,6 +7,7 @@
   - [Python version support](#python-version-support)
   - [Code standards for new modules](#code-standards-for-new-modules)
   - [Deprecating a public API](#deprecating-a-public-api)
+  - [Codegen and the docs site](#codegen-and-the-docs-site)
   - [Documentation & the docs site](#documentation--the-docs-site)
     - [Updating docs (everyday — including a commit after a release)](#updating-docs-everyday--including-a-commit-after-a-release)
     - [At release time](#at-release-time)
