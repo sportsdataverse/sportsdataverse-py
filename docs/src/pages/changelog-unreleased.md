@@ -23,6 +23,25 @@ carries + 36 synthetic). Over the 1,671 joined rows (every row with an event id)
 body parts and coordinates agree 99.88 % of the time, with a 2-id agreement allowlist; the 36
 synthetic dribbles are checked by position.
 
+### Added — wrappers for six more intake providers (ESPN content, TheSportsDB, Football-Data.co.uk, OpenLigaDB, Polymarket, Kalshi)
+
+46 wrappers across six new flat-API families, each with a parser, committed fixtures and generated
+reference pages. `espn_content_*` (3) reads ESPN's cross-sport news host
+(`content.core.api.espn.com`), paging with `limit` / `offset`. `thesportsdb_*` (12) covers
+TheSportsDB v1 -- sports, leagues, teams, players, events and league tables; that API puts its key in
+the path, so the wrappers default to the documented free test key and use `$THESPORTSDB_API_KEY`
+when you set one. `football_data_*` (3) downloads the Football-Data.co.uk archive -- one
+league-season of results plus closing odds (132 columns), an 'extra' league's full history (25) and
+the upcoming-fixtures file (94) -- and is the first family whose bodies are CSV rather than JSON.
+`openligadb_*` (11) wraps the community OpenLigaDB API for German football: leagues, matchdays,
+teams, matches, tables and top scorers. `polymarket_*` (8) and `kalshi_*` (9) read prediction-market
+data and live under `sportsdataverse.odds` -- Polymarket's Gamma metadata host together with its CLOB
+order books, and Kalshi's keyless market-data routes. Both keep their long ids and tickers as
+strings, and order-book price levels as the fixed-point strings the hosts send, so nothing is
+rounded or overflowed. Paging stays the caller's: a wrapper sends the cursor or offset you pass and
+never follows a continuation token on its own. Only read-only surfaces are wrapped -- Polymarket
+trading and Kalshi's `/portfolio` routes need credentials and are out of scope.
+
 ### Added — Formula 1: Jolpica (Ergast-compatible) wrappers in `sportsdataverse.f1`
 
 `sportsdataverse.f1` wraps the keyless [Jolpica F1 API](https://github.com/jolpica/jolpica-f1)

@@ -7,8 +7,12 @@ from sportsdataverse.soccer.asa import *  # noqa: F401,F403
 from sportsdataverse.soccer.asa_parsers import *  # noqa: F401,F403
 from sportsdataverse.soccer.fifa import *  # noqa: F401,F403
 from sportsdataverse.soccer.fifa_parsers import *  # noqa: F401,F403
+from sportsdataverse.soccer.football_data import *  # noqa: F401,F403
+from sportsdataverse.soccer.football_data_parsers import *  # noqa: F401,F403
 from sportsdataverse.soccer.fotmob import *  # noqa: F401,F403
 from sportsdataverse.soccer.fotmob_parsers import *  # noqa: F401,F403
+from sportsdataverse.soccer.openligadb import *  # noqa: F401,F403
+from sportsdataverse.soccer.openligadb_parsers import *  # noqa: F401,F403
 from sportsdataverse.soccer.uefa import *  # noqa: F401,F403
 from sportsdataverse.soccer.uefa_parsers import *  # noqa: F401,F403
 

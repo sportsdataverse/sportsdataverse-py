@@ -1,0 +1,182 @@
+api: kalshi
+docstring:
+  example_import: true
+  raises:
+  - 'sportsdataverse.errors.NoDataError: Kalshi answered 404 (unknown series, event
+    or market ticker).'
+  see_also:
+  - name: Kalshi API docs
+    note: market data is keyless; /portfolio and order placement need an RSA-signed
+      KALSHI-ACCESS-KEY and are not wrapped
+    url: https://docs.kalshi.com/
+endpoints:
+- example_args:
+    event_ticker: KXNFLGAME-26OCT08TBDAL
+    with_nested_markets: 'true'
+  extra_params:
+  - description: true nests the event's markets under event.markets.
+    name: with_nested_markets
+    query_key: with_nested_markets
+    required: false
+    type: str
+  parser: parse_kalshi
+  path: /events/{event_ticker}
+  path_params:
+  - description: Event ticker, e.g. KXNFLGAME-26OCT08TBDAL (from /events).
+    name: event_ticker
+    required: true
+    type: str
+  returns_schema: native/kalshi/event
+  short: event
+  summary: One event, optionally with its markets nested.
+- example_args:
+    limit: '3'
+    series_ticker: KXNFLGAME
+    status: open
+  extra_params:
+  - description: Rows per page (max 1000 on /markets, 200 on /events; default 100).
+    name: limit
+    query_key: limit
+    required: false
+    type: str
+  - description: 'Lifecycle filter: open, closed, settled (events also accept unopened).'
+    name: status
+    query_key: status
+    required: false
+    type: str
+  - description: Series ticker, e.g. KXNFLGAME (from /series).
+    name: series_ticker
+    query_key: series_ticker
+    required: false
+    type: str
+  - description: Opaque page cursor returned in the previous page's `cursor` field
+      (verified 2026-10-06).
+    name: cursor
+    query_key: cursor
+    required: false
+    type: str
+  parser: parse_kalshi
+  path: /events
+  returns_schema: native/kalshi/events
+  short: events
+  summary: Events, filterable by series and status; cursor-paged.
+- example_args: {}
+  parser: parse_kalshi
+  path: /exchange/status
+  returns_schema: native/kalshi/exchange_status
+  short: exchange_status
+  summary: Exchange and trading status.
+- example_args:
+    ticker: KXNFLGAME-26OCT08TBDAL-DAL
+  parser: parse_kalshi
+  path: /markets/{ticker}
+  path_params:
+  - description: Market ticker, e.g. KXNFLGAME-26OCT08TBDAL-DAL (from /markets).
+    name: ticker
+    required: true
+    type: str
+  returns_schema: native/kalshi/market
+  short: market
+  summary: One market.
+- example_args:
+    event_ticker: KXNFLGAME-26OCT08TBDAL
+    limit: '3'
+  extra_params:
+  - description: Rows per page (max 1000 on /markets, 200 on /events; default 100).
+    name: limit
+    query_key: limit
+    required: false
+    type: str
+  - description: Event ticker, e.g. KXNFLGAME-26OCT08TBDAL (from /events).
+    name: event_ticker
+    query_key: event_ticker
+    required: false
+    type: str
+  - description: Opaque page cursor returned in the previous page's `cursor` field
+      (verified 2026-10-06).
+    name: cursor
+    query_key: cursor
+    required: false
+    type: str
+  parser: parse_kalshi
+  path: /markets
+  returns_schema: native/kalshi/markets
+  short: markets
+  summary: Markets, filterable by event/series/status; cursor-paged.
+- example_args:
+    depth: '3'
+    ticker: KXNFLGAME-26OCT08TBDAL-DAL
+  extra_params:
+  - description: Price levels per side (omit for the full book).
+    name: depth
+    query_key: depth
+    required: false
+    type: str
+  parser: parse_kalshi
+  path: /markets/{ticker}/orderbook
+  path_params:
+  - description: Market ticker, e.g. KXNFLGAME-26OCT08TBDAL-DAL (from /markets).
+    name: ticker
+    required: true
+    type: str
+  returns_schema: native/kalshi/orderbook
+  short: orderbook
+  summary: Order book of a market (fixed-point dollar levels).
+- example_args:
+    series_ticker: KXNFLGAME
+  parser: parse_kalshi
+  path: /series/{series_ticker}
+  path_params:
+  - description: Series ticker, e.g. KXNFLGAME (from /series).
+    name: series_ticker
+    required: true
+    type: str
+  returns_schema: native/kalshi/series
+  short: series
+  summary: One series.
+- example_args:
+    category: Sports
+  extra_params:
+  - description: Series category, e.g. Sports.
+    name: category
+    query_key: category
+    required: false
+    type: str
+  parser: parse_kalshi
+  path: /series
+  returns_schema: native/kalshi/series_list
+  short: series_list
+  summary: Series (market families) in a category; the whole category in one body.
+- example_args:
+    limit: '3'
+    ticker: KXNFLGAME-26OCT08TBDAL-DAL
+  extra_params:
+  - description: Rows per page (max 1000 on /markets, 200 on /events; default 100).
+    name: limit
+    query_key: limit
+    required: false
+    type: str
+  - description: Market ticker, e.g. KXNFLGAME-26OCT08TBDAL-DAL (from /markets).
+    name: ticker
+    query_key: ticker
+    required: false
+    type: str
+  - description: Opaque page cursor returned in the previous page's `cursor` field
+      (verified 2026-10-06).
+    name: cursor
+    query_key: cursor
+    required: false
+    type: str
+  parser: parse_kalshi
+  path: /markets/trades
+  returns_schema: native/kalshi/trades
+  short: trades
+  summary: Public trades, filterable by market; cursor-paged.
+host: https://api.elections.kalshi.com/trade-api/v2
+module: kalshi
+name_pattern: kalshi_{short}
+parser_module: odds.kalshi_parsers
+passthrough_query: false
+qualifier: ''
+runtime_imports:
+- _get
