@@ -1,0 +1,363 @@
+{
+  "SiteKit": {
+    "Parameters": {
+      "feed": "modulekit",
+      "key": "REDACTED",
+      "client_code": "pwhl",
+      "site_id": "0",
+      "lang": "en",
+      "view": "brackets",
+      "season_id": 9,
+      "league_id": 1,
+      "lang_id": 1,
+      "league_code": "pwhl"
+    },
+    "Brackets": {
+      "teams": {
+        "1": {
+          "id": "1",
+          "city": "Boston",
+          "team_code": "BOS",
+          "name": "Boston Fleet",
+          "division_long_name": "PWHL",
+          "division_short_name": "PWHL",
+          "conf_id": "1",
+          "logo": "https://assets.leaguestat.com/pwhl/logos/1.png"
+        },
+        "2": {
+          "id": "2",
+          "city": "Minnesota",
+          "team_code": "MIN",
+          "name": "Minnesota Frost",
+          "division_long_name": "PWHL",
+          "division_short_name": "PWHL",
+          "conf_id": "1",
+          "logo": "https://assets.leaguestat.com/pwhl/logos/2.jpg"
+        },
+        "3": {
+          "id": "3",
+          "city": "Montréal",
+          "team_code": "MTL",
+          "name": "Montréal Victoire",
+          "division_long_name": "PWHL",
+          "division_short_name": "PWHL",
+          "conf_id": "1",
+          "logo": "https://assets.leaguestat.com/pwhl/logos/3.png"
+        },
+        "5": {
+          "id": "5",
+          "city": "Ottawa",
+          "team_code": "OTT",
+          "name": "Ottawa Charge",
+          "division_long_name": "PWHL",
+          "division_short_name": "PWHL",
+          "conf_id": "1",
+          "logo": "https://assets.leaguestat.com/pwhl/logos/5.png"
+        },
+        "7": {
+          "id": "7",
+          "city": "TBD",
+          "team_code": "TBD",
+          "name": "TBD",
+          "division_long_name": "PWHL",
+          "division_short_name": "PWHL",
+          "conf_id": "1",
+          "logo": "https://lscluster.hockeytech.com/download.php?file_path=img/logos/7.jpg&liaf=1&client_code=pwhl&w=40"
+        }
+      },
+      "rounds": [
+        {
+          "round": "1",
+          "round_name": "PWHL Walter Cup Playoffs Semi-Finals Presented by SharkNinja",
+          "season_id": "9",
+          "round_type_id": "1",
+          "round_type_name": "Regular Playoff Series",
+          "matchups": [
+            {
+              "series_letter": "A",
+              "series_name": "PWHL Walter Cup Playoffs Semi-Finals Presented by SharkNinja",
+              "series_logo": "",
+              "round": "1",
+              "active": "1",
+              "feeder_series1": "N/A",
+              "feeder_series2": "N/A",
+              "team1": "1",
+              "team2": "5",
+              "content_en": "",
+              "content_fr": "",
+              "winner": "",
+              "games": [
+                {
+                  "game_id": "338",
+                  "home_team": "1",
+                  "home_goal_count": "2",
+                  "visiting_team": "5",
+                  "visiting_goal_count": "1",
+                  "status": "4",
+                  "game_status": "Final",
+                  "date_time": "2026-04-30 19:00:00",
+                  "GameDateISO8601": "2026-04-30T19:00:00-04:00",
+                  "if_necessary": "0",
+                  "game_notes": "Boston #53 received a major for illegal conduct to the head and a game misconduct at 15:32 of the first period\nOn Boston's second goal, #11 Muller got an assist but went off the ice so didn't get a +\nOttawa takes timeout with 40.9 seconds left in third period",
+                  "flo_hockey_url": "",
+                  "flo_core_event_id": "",
+                  "flo_live_event_id": ""
+                },
+                {
+                  "game_id": "339",
+                  "home_team": "1",
+                  "home_goal_count": "1",
+                  "visiting_team": "5",
+                  "visiting_goal_count": "3",
+                  "status": "4",
+                  "game_status": "Final",
+                  "date_time": "2026-05-02 19:00:00",
+                  "GameDateISO8601": "2026-05-02T19:00:00-04:00",
+                  "if_necessary": "0",
+                  "game_notes": "Boston takes its timeout with 41.6 seconds left in third period.\nOttawa's third goal was into an empty net. Boston had six attackers on the ice",
+                  "flo_hockey_url": "",
+                  "flo_core_event_id": "",
+                  "flo_live_event_id": ""
+                },
+                {
+                  "game_id": "343",
+                  "home_team": "5",
+                  "home_goal_count": "2",
+                  "visiting_team": "1",
+                  "visiting_goal_count": "1",
+                  "status": "4",
+                  "game_status": "Final",
+                  "date_time": "2026-05-08 19:00:00",
+                  "GameDateISO8601": "2026-05-08T19:00:00-04:00",
+                  "if_necessary": "0",
+                  "game_notes": "",
+                  "flo_hockey_url": "",
+                  "flo_core_event_id": "",
+                  "flo_live_event_id": ""
+                },
+                {
+                  "game_id": "344",
+                  "home_team": "5",
+                  "home_goal_count": "4",
+                  "visiting_team": "1",
+                  "visiting_goal_count": "3",
+                  "status": "4",
+                  "game_status": "Final OT2",
+                  "date_time": "2026-05-10 15:00:00",
+                  "GameDateISO8601": "2026-05-10T15:00:00-04:00",
+                  "if_necessary": "0",
+                  "game_notes": "",
+                  "flo_hockey_url": "",
+                  "flo_core_event_id": "",
+                  "flo_live_event_id": ""
+                }
+              ],
+              "team1_wins": 1,
+              "team2_wins": 3,
+              "ties": 0
+            },
+            {
+              "series_letter": "B",
+              "series_name": "PWHL Walter Cup Playoffs Semi-Finals Presented by SharkNinja",
+              "series_logo": "",
+              "round": "1",
+              "active": "1",
+              "feeder_series1": "N/A",
+              "feeder_series2": "N/A",
+              "team1": "3",
+              "team2": "2",
+              "content_en": "",
+              "content_fr": "",
+              "winner": "",
+              "games": [
+                {
+                  "game_id": "340",
+                  "home_team": "3",
+                  "home_goal_count": "4",
+                  "visiting_team": "2",
+                  "visiting_goal_count": "5",
+                  "status": "4",
+                  "game_status": "Final OT1",
+                  "date_time": "2026-05-02 14:00:00",
+                  "GameDateISO8601": "2026-05-02T14:00:00-04:00",
+                  "if_necessary": "0",
+                  "game_notes": "",
+                  "flo_hockey_url": "",
+                  "flo_core_event_id": "",
+                  "flo_live_event_id": ""
+                },
+                {
+                  "game_id": "341",
+                  "home_team": "3",
+                  "home_goal_count": "1",
+                  "visiting_team": "2",
+                  "visiting_goal_count": "0",
+                  "status": "4",
+                  "game_status": "Final OT3",
+                  "date_time": "2026-05-05 19:00:00",
+                  "GameDateISO8601": "2026-05-05T19:00:00-04:00",
+                  "if_necessary": "0",
+                  "game_notes": "",
+                  "flo_hockey_url": "",
+                  "flo_core_event_id": "",
+                  "flo_live_event_id": ""
+                },
+                {
+                  "game_id": "342",
+                  "home_team": "2",
+                  "home_goal_count": "1",
+                  "visiting_team": "3",
+                  "visiting_goal_count": "2",
+                  "status": "4",
+                  "game_status": "Final",
+                  "date_time": "2026-05-07 19:00:00",
+                  "GameDateISO8601": "2026-05-07T19:00:00-04:00",
+                  "if_necessary": "0",
+                  "game_notes": "",
+                  "flo_hockey_url": "",
+                  "flo_core_event_id": "",
+                  "flo_live_event_id": ""
+                },
+                {
+                  "game_id": "345",
+                  "home_team": "2",
+                  "home_goal_count": "3",
+                  "visiting_team": "3",
+                  "visiting_goal_count": "1",
+                  "status": "4",
+                  "game_status": "Final",
+                  "date_time": "2026-05-08 20:30:00",
+                  "GameDateISO8601": "2026-05-08T20:30:00-04:00",
+                  "if_necessary": "0",
+                  "game_notes": "",
+                  "flo_hockey_url": "",
+                  "flo_core_event_id": "",
+                  "flo_live_event_id": ""
+                },
+                {
+                  "game_id": "347",
+                  "home_team": "3",
+                  "home_goal_count": "2",
+                  "visiting_team": "2",
+                  "visiting_goal_count": "1",
+                  "status": "4",
+                  "game_status": "Final",
+                  "date_time": "2026-05-12 19:00:00",
+                  "GameDateISO8601": "2026-05-12T19:00:00-04:00",
+                  "if_necessary": "0",
+                  "game_notes": "",
+                  "flo_hockey_url": "",
+                  "flo_core_event_id": "",
+                  "flo_live_event_id": ""
+                }
+              ],
+              "team1_wins": 3,
+              "team2_wins": 2,
+              "ties": 0
+            }
+          ]
+        },
+        {
+          "round": "2",
+          "round_name": "PWHL Walter Cup Finals Presented by Scotiabank",
+          "season_id": "9",
+          "round_type_id": "1",
+          "round_type_name": "Regular Playoff Series",
+          "matchups": [
+            {
+              "series_letter": "C",
+              "series_name": "PWHL Walter Cup Finals Presented by Scotiabank",
+              "series_logo": "",
+              "round": "2",
+              "active": "1",
+              "feeder_series1": "A",
+              "feeder_series2": "B",
+              "team1": "3",
+              "team2": "5",
+              "content_en": "",
+              "content_fr": "",
+              "winner": "",
+              "games": [
+                {
+                  "game_id": "350",
+                  "home_team": "3",
+                  "home_goal_count": "3",
+                  "visiting_team": "5",
+                  "visiting_goal_count": "2",
+                  "status": "4",
+                  "game_status": "Final OT1",
+                  "date_time": "2026-05-14 19:00:00",
+                  "GameDateISO8601": "2026-05-14T19:00:00-04:00",
+                  "if_necessary": "0",
+                  "game_notes": "",
+                  "flo_hockey_url": "",
+                  "flo_core_event_id": "",
+                  "flo_live_event_id": ""
+                },
+                {
+                  "game_id": "351",
+                  "home_team": "3",
+                  "home_goal_count": "2",
+                  "visiting_team": "5",
+                  "visiting_goal_count": "1",
+                  "status": "4",
+                  "game_status": "Final OT1",
+                  "date_time": "2026-05-16 14:00:00",
+                  "GameDateISO8601": "2026-05-16T14:00:00-04:00",
+                  "if_necessary": "0",
+                  "game_notes": "",
+                  "flo_hockey_url": "",
+                  "flo_core_event_id": "",
+                  "flo_live_event_id": ""
+                },
+                {
+                  "game_id": "348",
+                  "home_team": "5",
+                  "home_goal_count": "2",
+                  "visiting_team": "3",
+                  "visiting_goal_count": "1",
+                  "status": "4",
+                  "game_status": "Final",
+                  "date_time": "2026-05-18 18:00:00",
+                  "GameDateISO8601": "2026-05-18T18:00:00-04:00",
+                  "if_necessary": "0",
+                  "game_notes": "",
+                  "flo_hockey_url": "",
+                  "flo_core_event_id": "",
+                  "flo_live_event_id": ""
+                },
+                {
+                  "game_id": "349",
+                  "home_team": "5",
+                  "home_goal_count": "0",
+                  "visiting_team": "3",
+                  "visiting_goal_count": "4",
+                  "status": "4",
+                  "game_status": "Final",
+                  "date_time": "2026-05-20 19:00:00",
+                  "GameDateISO8601": "2026-05-20T19:00:00-04:00",
+                  "if_necessary": "1",
+                  "game_notes": "",
+                  "flo_hockey_url": "",
+                  "flo_core_event_id": "",
+                  "flo_live_event_id": ""
+                }
+              ],
+              "team1_wins": 3,
+              "team2_wins": 1,
+              "ties": 0
+            }
+          ]
+        }
+      ],
+      "logo": "https://lscluster.hockeytech.com/download.php?file_path=img/playoffs_9.jpg&client_code=pwhl",
+      "show_ties": false
+    },
+    "Copyright": {
+      "required_copyright": "Official statistics provided by Professional Women's Hockey League",
+      "required_link": "http://leaguestat.com",
+      "powered_by": "Powered by HockeyTech.com",
+      "powered_by_url": "http://hockeytech.com"
+    }
+  }
+}
