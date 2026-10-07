@@ -60,3 +60,4 @@ agent/
 
 # Stray local debug output (actively appended by local tooling)
 debug.log
+tests/fixtures/socceraction/_8658_full/

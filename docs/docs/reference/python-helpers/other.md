@@ -1246,6 +1246,39 @@ df_pd = soccer_open_events("statsbomb", 8658, coordinates="statsbomb", return_as
 df.filter(pl.col("event_type") == "SHOT").group_by("team_id").len()
 ```
 
+### soccer_spadl {#soccer_spadl}
+
+`soccer_spadl(dataset: 'Any', *, game_id: 'Optional[Union[int, str]]' = None, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"`
+
+Convert a kloppy event dataset to SPADL actions on the 105 x 68 pitch.
+
+Every action attacks left to right (kloppy `ACTION_EXECUTING_TEAM` orientation), so a
+frame from any provider kloppy reads is comparable. StatsBomb is the tested path.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `dataset` | `Any` |  | A kloppy `EventDataset` (e.g. from `soccer_open_events`). |
+| `game_id` | `Optional[Union[int, str]]` | `None` | Game identifier when the dataset's metadata carries none. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+One row per on-ball action with the SPADL columns (`type_name`, `result_name`, `bodypart_name`, start/end coordinates in meters, `time_seconds` from the period's kick-off). Empty dataset -> zero-row frame with the same schema.
+
+**Example**
+
+```python
+from sportsdataverse.soccer import soccer_open_events, soccer_spadl
+actions = soccer_spadl(soccer_open_events("statsbomb", 8658))
+print(actions.shape)
+
+# Pipeline next step (one line)
+
+actions.filter(pl.col("type_name") == "shot").group_by("team_id").len()
+```
+
 ### ufl_pbp {#ufl_pbp}
 
 `ufl_pbp(game_id: 'Union[str, int]', *, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"`

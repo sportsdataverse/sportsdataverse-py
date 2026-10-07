@@ -25,13 +25,15 @@ flips the home side each period in kloppy 3.19 and yields wrong second-half coor
 from __future__ import annotations
 
 import logging
-from typing import TYPE_CHECKING, Any, Optional
+from typing import TYPE_CHECKING, Any, Optional, Union
 
 import polars as pl
 
+from sportsdataverse.soccer.soccer_events import _kloppy
+
 
 if TYPE_CHECKING:  # pragma: no cover
-    pass
+    import pandas as pd
 
 __all__ = ["ACTIONTYPES", "BODYPARTS", "RESULTS", "SPADL_COLUMNS", "soccer_spadl"]
 
@@ -280,6 +282,179 @@ def _end_location(event: Any, kd: Any) -> tuple[Optional[float], Optional[float]
     return None, None
 
 
-def soccer_spadl() -> None:
-    """Placeholder for SPADL conversion function (Task 3)."""
-    pass
+def _fix_clearances(df: pl.DataFrame) -> pl.DataFrame:
+    """A clearance ends where the next action starts (socceraction spadl/base.py:13-20)."""
+    nxt_x = pl.col("start_x").shift(-1).over("game_id")
+    nxt_y = pl.col("start_y").shift(-1).over("game_id")
+    is_clear = pl.col("type_id") == _TYPE["clearance"]
+    if "team_id" in df.columns:
+        # coordinates are in each actor's attacking frame: the other team's next action must be mirrored
+        flip = pl.col("team_id") != pl.col("team_id").shift(-1).over("game_id")
+        nxt_x = pl.when(flip).then(FIELD_LENGTH - nxt_x).otherwise(nxt_x)
+        nxt_y = pl.when(flip).then(FIELD_WIDTH - nxt_y).otherwise(nxt_y)
+    return df.with_columns(
+        pl.when(is_clear & nxt_x.is_not_null()).then(nxt_x).otherwise(pl.col("end_x")).alias("end_x"),
+        pl.when(is_clear & nxt_y.is_not_null()).then(nxt_y).otherwise(pl.col("end_y")).alias("end_y"),
+    )
+
+
+def _add_dribbles(df: pl.DataFrame) -> pl.DataFrame:
+    """Insert a synthetic dribble between consecutive actions (socceraction spadl/base.py:38-91)."""
+    nxt = {
+        c: pl.col(c).shift(-1).over("game_id")
+        for c in ("team_id", "type_id", "bodypart_id", "start_x", "start_y", "time_seconds", "period_id", "player_id")
+    }
+    dx = pl.col("end_x") - nxt["start_x"]
+    dy = pl.col("end_y") - nxt["start_y"]
+    dist2 = dx * dx + dy * dy
+    cond = (
+        (pl.col("team_id") == nxt["team_id"])
+        & (nxt["type_id"] != _TYPE["foul"])
+        & ~((nxt["type_id"] == _TYPE["shot"]) & (nxt["bodypart_id"] == _BODYPART["head"]))
+        & (dist2 >= MIN_DRIBBLE_LENGTH**2)
+        & (dist2 <= MAX_DRIBBLE_LENGTH**2)
+        & ((nxt["time_seconds"] - pl.col("time_seconds")) < MAX_DRIBBLE_DURATION)
+        & (pl.col("period_id") == nxt["period_id"])
+    ).fill_null(False)
+    prev = df.with_columns(
+        nxt["team_id"].alias("_n_team"),
+        nxt["player_id"].alias("_n_player"),
+        nxt["start_x"].alias("_n_x"),
+        nxt["start_y"].alias("_n_y"),
+        nxt["time_seconds"].alias("_n_t"),
+        cond.alias("_dribble"),
+    ).filter(pl.col("_dribble") == True)
+    dribbles = prev.select(
+        pl.col("game_id"),
+        pl.lit(None, dtype=pl.Utf8).alias("original_event_id"),
+        (pl.col("action_id").cast(pl.Float64) + 0.1).alias("_order"),
+        pl.col("period_id"),
+        ((pl.col("time_seconds") + pl.col("_n_t")) / 2).alias("time_seconds"),
+        pl.col("_n_team").alias("team_id"),
+        pl.col("_n_player").alias("player_id"),
+        pl.col("end_x").alias("start_x"),
+        pl.col("end_y").alias("start_y"),
+        pl.col("_n_x").alias("end_x"),
+        pl.col("_n_y").alias("end_y"),
+        pl.lit(_BODYPART["foot"], dtype=pl.Int64).alias("bodypart_id"),
+        pl.lit(_TYPE["dribble"], dtype=pl.Int64).alias("type_id"),
+        pl.lit(_RESULT["success"], dtype=pl.Int64).alias("result_id"),
+    )
+    base = df.with_columns(pl.col("action_id").cast(pl.Float64).alias("_order")).select(dribbles.columns)
+    out = pl.concat([base, dribbles]).sort(["game_id", "period_id", "_order"], maintain_order=True)
+    return out.drop("_order").with_row_index("action_id").with_columns(pl.col("action_id").cast(pl.Int64))
+
+
+def _pitch_scaler(meta: Any, kd: Any) -> Any:
+    """Linear map from the dataset's native pitch to 105 x 68 meters, bottom-left origin.
+
+    kloppy's own ``standardized`` pitch conversion is piecewise (it moves points by up to
+    1.5 m near the markings); SPADL's reference converter scales linearly, so we do too.
+    """
+    dims = meta.pitch_dimensions
+    x0, x1, y0, y1 = dims.x_dim.min, dims.x_dim.max, dims.y_dim.min, dims.y_dim.max
+    top = meta.coordinate_system.vertical_orientation == kd.VerticalOrientation.TOP_TO_BOTTOM
+
+    def scale(pt: Any) -> tuple[Optional[float], Optional[float]]:
+        if pt is None or pt[0] is None:
+            return None, None
+        x = (pt[0] - x0) / (x1 - x0) * FIELD_LENGTH
+        y = (pt[1] - y0) / (y1 - y0) * FIELD_WIDTH
+        return x, (FIELD_WIDTH - y if top else y)
+
+    return scale
+
+
+def soccer_spadl(
+    dataset: Any, *, game_id: Optional[Union[int, str]] = None, return_as_pandas: bool = False
+) -> Union[pl.DataFrame, "pd.DataFrame"]:
+    """Convert a kloppy event dataset to SPADL actions on the 105 x 68 pitch.
+
+    Every action attacks left to right (kloppy ``ACTION_EXECUTING_TEAM`` orientation), so a
+    frame from any provider kloppy reads is comparable. StatsBomb is the tested path.
+
+    Args:
+        dataset: A kloppy ``EventDataset`` (e.g. from :func:`soccer_open_events`).
+        game_id: Game identifier when the dataset's metadata carries none.
+        return_as_pandas: Return a pandas DataFrame instead of polars.
+
+    Returns:
+        One row per on-ball action with the SPADL columns (``type_name``, ``result_name``,
+        ``bodypart_name``, start/end coordinates in meters, ``time_seconds`` from the period's kick-off).
+        Empty dataset -> zero-row frame with the same schema.
+
+    Raises:
+        ImportError: kloppy is missing (``pip install "sportsdataverse[soccer]"``).
+        ValueError: neither the dataset nor ``game_id`` names the game.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.soccer import soccer_open_events, soccer_spadl
+            actions = soccer_spadl(soccer_open_events("statsbomb", 8658))
+            print(actions.shape)
+
+        Pipeline next step (one line)::
+
+            actions.filter(pl.col("type_name") == "shot").group_by("team_id").len()
+
+    See Also:
+        * `socceraction`_ -- the original SPADL definition and converters (MIT), ported here
+        * `kloppy`_ -- reads the provider files this function consumes
+
+    .. _socceraction: https://github.com/ML-KULeuven/socceraction
+    .. _kloppy: https://kloppy.pysport.org
+    """
+    _kloppy()
+    import kloppy.domain as kd
+
+    meta = dataset.metadata
+    gid: Optional[str] = (
+        str(game_id) if game_id is not None else (str(meta.game_id) if getattr(meta, "game_id", None) else None)
+    )
+    if gid is None:
+        raise ValueError("game_id is not in the dataset metadata; pass game_id=")
+    if meta.provider != kd.Provider.STATSBOMB:
+        _log.warning("soccer_spadl: provider %s is untested; StatsBomb is the verified path", meta.provider)
+    ds = dataset.transform(to_orientation=kd.Orientation.ACTION_EXECUTING_TEAM, to_coordinate_system=meta.provider)
+    scale = _pitch_scaler(ds.metadata, kd)
+    rows = []
+    for ev in ds.events:
+        t, r, b = _parse_event(ev, kd)
+        ex, ey = _end_location(ev, kd)
+        sx, sy = scale((ev.coordinates.x, ev.coordinates.y) if ev.coordinates else None)
+        ex, ey = scale((ex, ey))
+        rows.append(
+            {
+                "game_id": gid,
+                "original_event_id": str(ev.event_id),
+                "period_id": int(ev.period.id),
+                "time_seconds": ev.timestamp.total_seconds(),
+                "team_id": str(ev.team.team_id) if ev.team else None,
+                "player_id": str(ev.player.player_id) if ev.player else None,
+                "start_x": sx,
+                "start_y": sy,
+                "end_x": ex,
+                "end_y": ey,
+                "type_id": t,
+                "result_id": r,
+                "bodypart_id": b,
+            }
+        )
+    if not rows:
+        out = _empty()
+        return out.to_pandas() if return_as_pandas else out
+    df = (
+        pl.DataFrame(rows, schema={k: v for k, v in SPADL_SCHEMA.items() if k in rows[0]})
+        .sort(["game_id", "period_id", "time_seconds"], maintain_order=True)
+        .filter(pl.col("type_id") != _TYPE["non_action"])
+    )
+    df = _fix_clearances(df).with_row_index("action_id").with_columns(pl.col("action_id").cast(pl.Int64))
+    df = _add_dribbles(df)
+    names = {
+        "bodypart_name": pl.col("bodypart_id").replace_strict(dict(enumerate(BODYPARTS)), return_dtype=pl.Utf8),
+        "type_name": pl.col("type_id").replace_strict(dict(enumerate(ACTIONTYPES)), return_dtype=pl.Utf8),
+        "result_name": pl.col("result_id").replace_strict(dict(enumerate(RESULTS)), return_dtype=pl.Utf8),
+    }
+    out = df.with_columns(**names).select(list(SPADL_COLUMNS))
+    return out.to_pandas() if return_as_pandas else out
