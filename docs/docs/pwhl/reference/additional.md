@@ -342,8 +342,12 @@ PWHL player game-by-game log.
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `player_id` | `int` |  |  |
-| `return_as_pandas` | `bool` | `False` |  |
+| `player_id` | `int` |  | The HockeyTech player id. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+One row per game played: `id` (the game id), `date_played`, `home_team_code` / `visiting_team_code` and names, `player_team`, `goals`, `assists`, `points`, `plus_minus`, `shots`, `hits`, `penalty_minutes`, `ice_time_minutes_seconds`, faceoff, power-play, short-handed and shootout counts. Counts arrive as strings except `points` and the percentages (Int64). A pandas DataFrame when `return_as_pandas` is True; a zero-row frame for a player with no games.
 
 ### pwhl_player_info {#pwhl_player_info}
 
@@ -514,15 +518,18 @@ PWHL playoff bracket for a given season.
 
 With neither `season` nor `season_id`, the newest season that has playoffs:
 the newest season overall is usually still before its playoffs, with no bracket.
-Raises `NoDataError` when the seasons feed lists no playoff season.
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `season` | `Optional[int]` | `None` |  |
-| `season_id` | `Optional[int]` | `None` |  |
-| `return_as_pandas` | `bool` | `False` |  |
+| `season` | `Optional[int]` | `None` | Season as an END year (2026 = the 2025-26 season). |
+| `season_id` | `Optional[int]` | `None` | The HockeyTech playoff season id, when it is already known. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+One row per playoff series: `round` / `round_name` / `round_type_name`, `series_letter` / `series_name`, `team1` / `team2` (team ids), `team1_wins` / `team2_wins` (Int64), `winner` (the winning team id, but the feed often leaves it empty even after a series ends, so read the result from the win counts), `feeder_series1` / `feeder_series2`, and `games` (a list of structs, one per game: ids, both teams, goal counts, status, date). A pandas DataFrame when `return_as_pandas` is True.
 
 ### pwhl_schedule {#pwhl_schedule}
 
@@ -986,7 +993,11 @@ PWHL roster transactions.
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `return_as_pandas` | `bool` | `False` |  |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+One row per transaction on the feed's current page (the newest 20): `transaction_date` / `transaction_time`, `transaction_type` / `ttype_text`, `title`, `detail`, `player_id` / `player_name` / `position`, and `team_id` / `team_name` / `team_code` / `team_city` (String). A pandas DataFrame when `return_as_pandas` is True.
 
 ### pwhl_unit_ratings {#pwhl_unit_ratings}
 
