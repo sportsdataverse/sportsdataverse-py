@@ -30,7 +30,8 @@ alert IS a ``platform.error_log`` row, which is what ``GET /v1/admin/errors`` an
 
 * a metric's pooled ``r`` below its floor,
 * the day's join rate below ``join_rate`` (default 0.90),
-* the source raising ``SourceUnavailable`` on more than ``unavailable_share`` of the games.
+* the source raising ``SourceUnavailable`` on more than ``unavailable_share`` of the games,
+* every attempted game erroring (e.g. failing pairing validation), so nothing was compared.
 
 **Politeness.** Every HTTP call the package makes goes through ``requests.Session.request``;
 this module wraps it with a per-host minimum interval (default 2 s, ``SDV_PARITY_MIN_INTERVAL``)
@@ -500,7 +501,7 @@ def summarise(
 
 
 def alerts_for(summary: Mapping[str, Any], cfg: Mapping[str, Any]) -> list[dict[str, Any]]:
-    """The three H1 alert rules. A source with no floors can only trip the availability rules."""
+    """The H1 alert rules. A source with no floors can only trip the availability rules."""
     out: list[dict[str, Any]] = []
     key = f"{summary['league']}.{summary['source']}"
     if summary["games"] and summary["unavailable_share"] > float(cfg.get("unavailable_share", 0.5)):
@@ -511,6 +512,19 @@ def alerts_for(summary: Mapping[str, Any], cfg: Mapping[str, Any]) -> list[dict[
                 "observed": summary["unavailable_share"],
                 "threshold": float(cfg.get("unavailable_share", 0.5)),
                 "detail": f"{summary['games_unavailable']}/{summary['games']} games unavailable",
+            }
+        )
+    # an errored game is not unavailable and has no plays to score, so without this a day on
+    # which every comparison failed would raise nothing and exit 0
+    errored = summary.get("games_errored", 0)
+    if errored and not summary["games_ok"]:
+        out.append(
+            {
+                "rule": "source_errored",
+                "source": key,
+                "observed": errored,
+                "threshold": 0,
+                "detail": f"{errored}/{summary['games']} games errored, none compared",
             }
         )
     if summary["games_ok"] and summary["join_rate"] < float(cfg.get("join_rate", 0.9)):

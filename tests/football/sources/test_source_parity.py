@@ -221,6 +221,20 @@ def test_join_rate_and_unavailable_alerts():
     assert "source_unavailable" in [a["rule"] for a in fired]
 
 
+def test_a_day_on_which_every_game_errored_alerts():
+    """A pairing failure is recorded as an error, not as unavailable, so a day on which every
+    comparison failed must still alert rather than read as healthy (#564)."""
+    cfg = {"floors": {"EPA": 0.97}, "join_rate": 0.9, "unavailable_share": 0.5}
+    all_errored = _summary(
+        games=3, games_ok=0, games_errored=3, join_rate=0.0, n_espn_plays=0, n_paired_plays=0, pooled={}
+    )
+    fired = sp.alerts_for(all_errored, cfg)
+    assert [a["rule"] for a in fired] == ["source_errored"]
+    assert fired[0]["observed"] == 3
+    # a partly errored day is left to the existing rules
+    assert sp.alerts_for(_summary(games_ok=8, games_errored=2), cfg) == []
+
+
 def test_a_day_with_no_finals_raises_nothing():
     cfg = {"floors": {"EPA": 0.99}, "join_rate": 0.9, "unavailable_share": 0.5}
     empty = _summary(games=0, games_ok=0, join_rate=0.0, n_espn_plays=0, n_paired_plays=0, pooled={})
