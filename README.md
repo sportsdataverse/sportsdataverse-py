@@ -60,9 +60,11 @@ The goal of [sportsdataverse-py](https://py.sportsdataverse.org) is to provide t
 
 The big-league modules export roughly 240–680 public functions each (ESPN
 wrappers + that league's native-API wrappers + dataset loaders + parsers) —
-about 6,180 exported names package-wide. **Fox Sports** adds `fox_<league>_*`
+about 6,456 exported names package-wide. **Fox Sports** adds `fox_<league>_*`
 Bifrost wrappers (pbp / boxscore / odds / roster / stats / standings / leaders)
-for nba, mbb, cfb, mlb, nhl; **Yahoo Sports** adds `yahoo_cfb_*` season-stats /
+for 8 leagues plus the generated `fox_api` family (33 endpoints); **Yahoo Sports**
+adds 107 multi-sport `yahoo_*` functions from the generated `yahoo_shangrila`
+family, and **CBS Sports** 82 `cbs_napi_*` wrappers; the legacy `yahoo_cfb_*` season-stats /
 scoreboard wrappers for college football. `sportsdataverse.release` ports the
 `sportsdataversedata` R release utilities (GitHub-release asset publish /
 download helpers, including a pure-Python RDS writer).
@@ -133,9 +135,12 @@ With optional extras (defined in `[project.optional-dependencies]` in
 `pyproject.toml`):
 
 ```bash
-pip install "sportsdataverse[all]"      # everything below
+pip install "sportsdataverse[all]"      # everything below EXCEPT mcp
 pip install "sportsdataverse[models]"   # extra deps for the EPA / WP model code
 pip install "sportsdataverse[tests]"    # adds pytest, mypy, ruff, etc.
+pip install "sportsdataverse[nflpro]"   # NFL Pro (pro.nfl.com) Next Gen Stats
+pip install "sportsdataverse[pff]"      # PFF Developer + Premium clients
+pip install "sportsdataverse[mcp]"      # the sdv-docs MCP server (Python >= 3.10)
 pip install "sportsdataverse[soccer]"   # kloppy: soccer event / tracking data (soccer_open_events)
 ```
 
@@ -169,7 +174,7 @@ uv pip install -e ".[all]"
 pip install -e ".[all]"
 ```
 
-> Note: once we add a PEP 735 `[dependency-groups]` block (currently the
+> Note: dev dependencies live in a PEP 735 `[dependency-groups]` block (the
 > repo only ships PEP 621 `[project.optional-dependencies]`),
 > `uv sync --all-extras --all-groups` will become the one-shot dev incantation.
 > Until then, `uv pip install -e ".[all]"` is the equivalent path.
@@ -194,7 +199,7 @@ For deeper dev-environment detail (lint, mypy, dep-bumping workflow), see
   `SDV_PY_NFL_CACHE=off` to disable. See
   `sportsdataverse.nfl.config.update_config()` for runtime control.
 - **stats.nba.com / stats.wnba.com surface (`nba_stats_*` / `wnba_stats_*`):**
-  112 NBA (+ G-League + Summer League via `league_id`) and 95 WNBA wrappers
+  128 NBA (+ G-League + Summer League via `league_id`) and 111 WNBA wrappers
   are available — the capture-confirmed **live, non-deprecated** endpoints (the
   full active/dying/barren/dead matrix lives in
   `sdv-internal-refs/nba/ENDPOINT_HEALTH.md`). The generic parser also handles the
@@ -202,6 +207,19 @@ For deeper dev-environment detail (lint, mypy, dep-bumping workflow), see
   headers and the `scoreboardv3` game feed. Live calls to `stats.nba.com` require
   the `curl_cffi` package (TLS fingerprint protection); install it via
   `pip install "sportsdataverse[all]"` or `pip install curl_cffi` separately.
+
+### Errors (0.1.5)
+
+Three outcomes, never collapsed into one:
+
+- `NoDataError` — the fetch SUCCEEDED and there is nothing there (a 404, or ESPN's
+  200-with-`code:404` body). Skip the season.
+- `AssetFetchError` — the fetch FAILED and the answer is unknown (403, rate limit,
+  exhausted retries). Surface it; do not record it as an empty season.
+- `ValueError` — a 400 / 422: the request itself is wrong and retrying cannot help.
+
+As of 0.1.5 the hand-written ESPN scrapers and every generated flat-API getter
+**raise** instead of returning an error body or an empty dict.
 
 ## Examples and tutorials
 
@@ -243,8 +261,9 @@ under [`examples/notebooks/`](examples/notebooks):
   claude mcp add sdv-docs -- uvx --from 'sportsdataverse[mcp]' sdv-docs
   ```
 
-  That works from the next release (0.1.5+); until then install from GitHub main:
-  `claude mcp add sdv-docs -- uvx --from 'sportsdataverse[mcp] @ git+https://github.com/sportsdataverse/sportsdataverse-py' sdv-docs`.
+  Needs 0.1.5 or newer (`pip install 'sportsdataverse[mcp]'`, Python >= 3.10). The
+  server ships in the same wheel but never imports `sportsdataverse`, so it starts
+  in about 1.5 s instead of the 4-12 s a full league import costs.
 
   Needs Python 3.10+. The server downloads its index (`sdv_docs_v1.sqlite.gz`, about 10 MB) from the [`docs-index` release](https://github.com/sportsdataverse/sportsdataverse-py/releases/tag/docs-index), checking at most once a day, and sends no queries anywhere. Set `SDV_DOCS_DB=/path/to/sdv_docs_v1.sqlite` to use a local build (`uv run python tools/codegen/build_docs_index.py`). `sdv-docs --version` prints the installed version.
 

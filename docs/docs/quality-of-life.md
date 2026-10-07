@@ -11,6 +11,13 @@ significantly easier to use day-to-day.
 
 ## 1. `sportsdataverse.parsed.*` — DataFrame by default
 
+:::caution Deprecated
+This namespace is **deprecated**. Every league wrapper now defaults to
+`return_parsed=True` and hands back a polars DataFrame, so
+`from sportsdataverse.nba import espn_nba_scoreboard` is the current form.
+`sportsdataverse.parsed.*` survives only as a generated back-compat alias layer.
+:::
+
 The default `sportsdataverse.{league}` modules return a parsed polars
 DataFrame for parser-backed endpoints (0.0.54+); pass `return_parsed=False`
 for the raw `Dict` — so existing callers from 0.0.50 and earlier can opt
@@ -75,7 +82,7 @@ mid-season change (trade, expansion, etc.).
 
 ## 3. `list_functions` / `function_count` — searchable function index
 
-The package exposes ~4,400 callables across 30+ league/module families. `dir()`
+The package exposes ~6,170 callables across 30+ league/module families. `dir()`
 produces a flat list that's hard to scan; `list_functions` is the
 searchable index.
 

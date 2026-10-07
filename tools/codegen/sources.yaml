@@ -1,0 +1,708 @@
+# Source registry: which provider (data source) or helper category every public
+# function belongs to. ORDER IS TABLE ORDER on every rendered docs page.
+#
+# One source = one provider. Resolution per public function (tools/codegen/sources.py):
+#   1. `functions:` glob on the function name
+#   2. `modules:` glob on obj.__module__
+#   3. the ESPN API / flat-API stem / release base the codegen already knows
+#      (generated wrappers and loaders never need a modules: glob)
+# Exactly one entry must match within a tier. Zero across all tiers ->
+# UnknownSource; two within the same tier -> AmbiguousSource. Both fail
+# `generate.py --check` and tests/codegen/test_sources.py. No allowlist.
+#
+# `modules:` globs must stay DISJOINT, and must not catch a GENERATED module
+# (`*_espn_ext`, a flat-API stem module such as `soccer/fifa.py`, `*_loaders`):
+# those resolve by stem in tier 3, and a tier-2 glob over them would file a
+# provider's own wrappers under whichever glob happened to match first.
+
+providers:
+  espn:
+    label: ESPN
+    home: https://www.espn.com
+    auth: none
+    espn_apis: [espn_site_v2, espn_web_v3, espn_core_v2, espn_fitt_v3, espn_cdn]
+    flat_apis: [espn_content]  # content.core.api.espn.com/v1 news (sportsdataverse.espn_content)
+    modules:
+      - sportsdataverse._common_espn
+      - sportsdataverse._common_espn_player_stats
+      - sportsdataverse._espn_basketball_pbp
+      - sportsdataverse.espn_snapshots
+      - sportsdataverse.scrape.espn.*
+      - sportsdataverse.cfb.cfb_schedule
+      - sportsdataverse.mbb.mbb_schedule
+      - sportsdataverse.mlb.mlb_schedule
+      - sportsdataverse.nba.nba_schedule
+      - sportsdataverse.nfl.nfl_schedule
+      - sportsdataverse.nhl.nhl_schedule
+      - sportsdataverse.wbb.wbb_schedule
+      - sportsdataverse.wnba.wnba_schedule
+      - sportsdataverse.cfb.cfb_teams
+      - sportsdataverse.mbb.mbb_teams
+      - sportsdataverse.mlb.mlb_teams
+      - sportsdataverse.nba.nba_teams
+      - sportsdataverse.nfl.nfl_teams
+      - sportsdataverse.nhl.nhl_teams
+      - sportsdataverse.wbb.wbb_teams
+      - sportsdataverse.wnba.wnba_teams
+      - sportsdataverse.cfb.cfb_game_rosters
+      - sportsdataverse.mbb.mbb_game_rosters
+      - sportsdataverse.mlb.mlb_game_rosters
+      - sportsdataverse.nba.nba_game_rosters
+      - sportsdataverse.nfl.nfl_game_rosters
+      - sportsdataverse.nhl.nhl_game_rosters
+      - sportsdataverse.wbb.wbb_game_rosters
+      - sportsdataverse.wnba.wnba_game_rosters
+      - sportsdataverse.cfb.cfb_player_stats
+      - sportsdataverse.mbb.mbb_player_stats
+      - sportsdataverse.mlb.mlb_player_stats
+      - sportsdataverse.nba.nba_player_stats
+      - sportsdataverse.nfl.nfl_player_stats
+      - sportsdataverse.nhl.nhl_player_stats
+      - sportsdataverse.wbb.wbb_player_stats
+      - sportsdataverse.wnba.wnba_player_stats
+      - sportsdataverse.wbb.wbb_game_officials
+      - sportsdataverse.wnba.wnba_game_officials
+      - sportsdataverse.cfb.cfb_play_participants
+      - sportsdataverse.nfl.nfl_play_participants
+      - sportsdataverse.football.espn_box
+      - sportsdataverse.football.espn_text
+      - sportsdataverse.football.aaf.*
+      - sportsdataverse.football.ufl.*
+      - sportsdataverse.football.xfl.*
+      - sportsdataverse.football.cfl.*
+      - sportsdataverse.cricket.cricket_espn_ext
+      - sportsdataverse.wbb.wbb_team_stats
+      - sportsdataverse.wnba.wnba_team_stats
+    functions:
+      - espn_*_pbp
+
+  nfl_com:
+    label: NFL.com Shield API
+    home: https://api.nfl.com
+    auth: WEB_DESKTOP bearer token
+    flat_apis: [nfl_api]
+    modules:
+      - sportsdataverse.nfl.nfl_api_runtime
+      - sportsdataverse.nfl.nfl_games
+
+  nfl_pro:
+    label: NFL Pro
+    home: https://pro.nfl.com
+    auth: none
+    flat_apis: [nflpro]
+    modules:
+      - sportsdataverse.nfl.nfl_ngs
+      - sportsdataverse.nfl.nfl_ngs_tracking
+
+  sleeper:
+    label: Sleeper fantasy API
+    home: https://api.sleeper.app
+    auth: none
+    flat_apis: [sleeper]
+
+  pff_api:
+    label: PFF Developer API
+    home: https://api.pff.com
+    auth: API key (SDV_PY_PFF_API_KEY)
+    flat_apis: [pff_api]
+    modules:
+      - sportsdataverse.nfl.pff_api_runtime
+
+  pff:
+    label: PFF Premium Stats (LEGACY)
+    home: https://premium.pff.com
+    auth: cookie (legacy)
+    flat_apis: [pff]
+    modules:
+      - sportsdataverse.pff
+      - sportsdataverse.nfl.pff_runtime
+      - sportsdataverse.nfl.pff_league
+      # gen_pff mints per-league alias modules (pff_aaf_facet_*) at import time off
+      # pff_core, so those names are not in the endpoint YAML and cannot resolve by stem.
+      - sportsdataverse.nfl.pff_core
+
+  nflverse:
+    label: nflverse data releases
+    home: https://github.com/nflverse
+    auth: none
+    release_bases: [nflverse]
+    modules:
+      - sportsdataverse.nfl.nfl_loaders
+
+  sdv_releases:
+    label: sportsdataverse-data releases
+    home: https://github.com/sportsdataverse/sportsdataverse-data
+    auth: none
+    release_bases: [sdv_releases, raw_data]
+    modules:
+      - sportsdataverse.release
+      - sportsdataverse._rds
+      - sportsdataverse.*.*_loaders_extra
+
+  hockeytech:
+    label: HockeyTech / LeagueStat
+    home: https://lscluster.hockeytech.com
+    auth: per-league public key (SDV_<LEAGUE>_API_KEY)
+    modules:
+      - sportsdataverse.hockeytech.*
+      - sportsdataverse.pwhl.*
+      - sportsdataverse.nhl.pwhl_microstat
+
+  ncaa_stats:
+    label: stats.ncaa.org
+    home: https://stats.ncaa.org
+    auth: none (Terms gate + rate rotation)
+    modules:
+      - sportsdataverse.scrape.ncaa.*
+      - sportsdataverse.mbb.mbb_ncaa_*
+      - sportsdataverse.wbb.wbb_ncaa_*
+      - sportsdataverse.mbb.ncaa_*
+      - sportsdataverse.wbb.ncaa_*
+      - sportsdataverse.cfb.cfb_ncaa_*
+      - sportsdataverse.baseball.college_baseball.*
+      - sportsdataverse.baseball.college_softball.*
+
+  odds_api:
+    label: The Odds API
+    home: https://the-odds-api.com
+    auth: API key (SDV_PY_ODDS_API_KEY)
+    modules:
+      - sportsdataverse.odds.the_odds_api
+
+  polymarket:
+    label: Polymarket
+    home: https://polymarket.com
+    auth: none (read-only Gamma metadata + CLOB order-book routes)
+    flat_apis: [polymarket]
+
+  kalshi:
+    label: Kalshi
+    home: https://kalshi.com
+    auth: none (keyless Trade API v2 market-data routes)
+    flat_apis: [kalshi]
+
+  mlb_stats_api:
+    label: MLB Stats API
+    home: https://statsapi.mlb.com
+    auth: none
+    flat_apis: [mlb_api]
+    modules:
+      - sportsdataverse.mlb.mlb_api_extra
+      - sportsdataverse.mlb.mlb_api_parsers
+
+  statcast:
+    label: Baseball Savant (Statcast)
+    home: https://baseballsavant.mlb.com
+    auth: none
+    flat_apis: [mlb_statcast]
+    modules:
+      - sportsdataverse.mlb.mlb_statcast_extra
+      - sportsdataverse.mlb.mlb_statcast_runtime
+
+  nhl_api_web:
+    label: NHL Web API
+    home: https://api-web.nhle.com
+    auth: none
+    flat_apis: [nhl_api_web]
+    modules:
+      - sportsdataverse.nhl.nhl_api_web_extra
+      - sportsdataverse.nhl.nhl_api_web_parsers
+
+  nhl_edge:
+    label: NHL EDGE
+    home: https://api-web.nhle.com/v1/edge
+    auth: none
+    flat_apis: [nhl_edge]
+    modules:
+      - sportsdataverse.nhl.nhl_edge_parsers
+
+  nhl_stats_rest:
+    label: NHL Stats REST
+    home: https://api.nhle.com/stats/rest
+    auth: none
+    flat_apis: [nhl_stats_rest]
+    modules:
+      - sportsdataverse.nhl.nhl_stats_rest_parsers
+
+  nhl_records:
+    label: NHL Records
+    home: https://records.nhl.com
+    auth: none
+    flat_apis: [nhl_records]
+    modules:
+      - sportsdataverse.nhl.nhl_records_extra
+      - sportsdataverse.nhl.nhl_records_parsers
+
+  nba_stats:
+    label: NBA Stats API
+    home: https://stats.nba.com
+    auth: none (curl_cffi chrome TLS impersonation)
+    flat_apis: [nba_stats]
+    modules:
+      - sportsdataverse.nba.nba_stats_runtime
+      - sportsdataverse.nba.nba_live
+
+  wnba_stats:
+    label: WNBA Stats API
+    home: https://stats.wnba.com
+    auth: none (curl_cffi chrome TLS impersonation)
+    flat_apis: [wnba_stats]
+    modules:
+      - sportsdataverse.wnba.wnba_stats_runtime
+      - sportsdataverse.wnba.wnba_live
+
+  euroleague:
+    label: EuroLeague Competition Engine
+    home: https://api-live.euroleague.net
+    auth: none
+    flat_apis: [euroleague]
+    modules:
+      - sportsdataverse.euroleague.euroleague_runtime
+
+  jolpica:
+    label: Jolpica F1 API (Ergast-compatible)
+    home: https://api.jolpi.ca/ergast/f1
+    auth: none (CC BY-NC-SA 4.0; 4 req/s burst, 500 req/hour)
+    flat_apis: [f1]
+    modules:
+      - sportsdataverse.f1.f1_extra
+
+  kenpom:
+    label: KenPom
+    home: https://kenpom.com
+    auth: subscription (KENPOM_EMAIL / KENPOM_PASSWORD)
+    flat_apis: [kenpom]
+    modules:
+      - sportsdataverse.mbb.kenpom
+      - sportsdataverse.mbb.kenpom_runtime
+
+  torvik:
+    label: Bart Torvik T-Rank
+    home: https://barttorvik.com
+    auth: none
+    flat_apis: [torvik]
+
+  bart_wbb:
+    label: Bart Torvik Women's T-Rank
+    home: https://barttorvik.com/ncaaw
+    auth: none
+    flat_apis: [bart_wbb]
+    modules:
+      - sportsdataverse.wbb.bart_wbb
+
+  on3:
+    label: On3 Recruit Database
+    home: https://www.on3.com
+    auth: API key (ON3_API_KEY)
+    flat_apis: [on3]
+    modules:
+      - sportsdataverse.cfb.on3_rankings
+
+  sports247:
+    label: 247Sports Recruit Database
+    home: https://247sports.com
+    auth: none
+    flat_apis: [sports247, sports247_site_pages]
+
+  asa:
+    label: American Soccer Analysis
+    home: https://app.americansocceranalysis.com
+    auth: none
+    flat_apis: [asa]
+
+  fotmob:
+    label: FotMob
+    home: https://www.fotmob.com
+    auth: none (unofficial)
+    flat_apis: [fotmob]
+
+  uefa:
+    label: UEFA
+    home: https://www.uefa.com
+    auth: none
+    flat_apis: [uefa]
+    modules:
+      - sportsdataverse.soccer.uefa_runtime
+
+  fifa:
+    label: FIFA
+    home: https://api.fifa.com
+    auth: none
+    flat_apis: [fifa]
+
+  football_data:
+    label: Football-Data.co.uk
+    home: https://www.football-data.co.uk
+    auth: none (CSV archive)
+    flat_apis: [football_data]
+    modules:
+      - sportsdataverse.soccer.football_data_runtime
+
+  openligadb:
+    label: OpenLigaDB
+    home: https://www.openligadb.de
+    auth: none
+    flat_apis: [openligadb]
+
+  kloppy:
+    label: kloppy open event data
+    home: https://kloppy.pysport.org
+    auth: none (optional `soccer` extra)
+    modules:
+      - sportsdataverse.soccer.soccer_events
+
+  mls:
+    label: MLS official web API
+    home: https://sportapi.mlssoccer.com
+    auth: none
+    flat_apis: [mls_api]
+    modules:
+      - sportsdataverse.soccer.mls.mls_api_runtime
+
+  nwsl:
+    label: NWSL official web API
+    home: https://api.nwslsoccer.com
+    auth: none
+    flat_apis: [nwsl_api]
+    modules:
+      - sportsdataverse.soccer.nwsl.nwsl_api_runtime
+
+  cbs:
+    label: CBS Sports NAPI
+    home: https://api.cbssports.com/napi
+    auth: none
+    flat_apis: [cbs_napi]
+    modules:
+      - sportsdataverse.football.cbs_common
+
+  yahoo:
+    label: Yahoo Sports Shangrila
+    home: https://graphite-secure.sports.yahoo.com
+    auth: none
+    flat_apis: [yahoo_shangrila]
+    modules:
+      - sportsdataverse.football.yahoo_common
+      - sportsdataverse.*.*_yahoo_ext
+
+  fox:
+    label: Fox Sports API
+    home: https://api.foxsports.com
+    auth: none
+    flat_apis: [fox_api]
+    modules:
+      - sportsdataverse._fox_layout
+      - sportsdataverse.football.fox_common
+      - sportsdataverse.*.*_fox_ext
+      - sportsdataverse.cfb.cfb_pbp_fox
+
+  her_hoop_stats:
+    label: Her Hoop Stats
+    home: https://herhoopstats.com
+    auth: subscription
+    modules:
+      - sportsdataverse.wbb.herhoopstats
+
+  basketball_reference:
+    label: Basketball-Reference
+    home: https://www.basketball-reference.com
+    auth: none (slow, owner agreement)
+    modules:
+      - sportsdataverse.nba.bref
+
+  realgm:
+    label: RealGM
+    home: https://basketball.realgm.com
+    auth: none
+    modules:
+      - sportsdataverse.nba.realgm
+
+  public_models:
+    label: Public model datasets
+    home: https://dunksandthrees.com
+    auth: none
+    modules:
+      - sportsdataverse.nba.nba_oracle_data
+
+  thesportsdb:
+    label: TheSportsDB
+    home: https://www.thesportsdb.com
+    auth: none (free test key by default; THESPORTSDB_API_KEY for your own)
+    flat_apis: [thesportsdb]
+    modules:
+      - sportsdataverse.thesportsdb.thesportsdb_runtime
+
+categories:
+  processing:
+    label: Play-by-play processing
+    modules:
+      - sportsdataverse.baseball.college_baseball.college_baseball_ncaa_pbp
+      - sportsdataverse.cfb.cfb_pbp
+      - sportsdataverse.mbb.mbb_ncaa_game_pbp
+      - sportsdataverse.mbb.mbb_pbp
+      - sportsdataverse.mlb.mlb_pbp
+      - sportsdataverse.nba.nba_pbp
+      - sportsdataverse.nfl.nfl_pbp
+      - sportsdataverse.nhl.nhl_pbp
+      - sportsdataverse.wbb.wbb_ncaa_game_pbp
+      - sportsdataverse.wbb.wbb_pbp
+      - sportsdataverse.wnba.wnba_pbp
+      - sportsdataverse.nfl.nfl_clean
+      - sportsdataverse.nfl.nfl_build
+      - sportsdataverse.football.sources.*
+      - sportsdataverse.football.play_participants
+      - sportsdataverse.football.series
+      - sportsdataverse.football.box
+      - sportsdataverse.football.positions
+      - sportsdataverse.football.attribution
+      - sportsdataverse.nfl.shield_pbp.*
+      - sportsdataverse.nfl.nfl_stats
+      - sportsdataverse.nfl.nfl_roster_builder
+      - sportsdataverse.mbb.mbb_shots_adapter
+      - sportsdataverse.nba.nba_v3_v2_adapter
+      - sportsdataverse.nba.nba_season_compile
+      - sportsdataverse.nba.nba_season_producers
+      - sportsdataverse.wbb.wbb_season_producers
+      - sportsdataverse.nbagl.nbagl_engine
+      - sportsdataverse.wnba.wnba_engine
+      - sportsdataverse.nfl.nfl_series
+
+  models:
+    label: Models and calculators
+    modules:
+      - sportsdataverse._xgb
+      - sportsdataverse.paper_index
+      - sportsdataverse.wexp.*
+      - sportsdataverse.cricket.cricket_win_prob
+      - sportsdataverse.cricket.cricket_wpa
+      - sportsdataverse.nfl.ep_wp
+      - sportsdataverse.nfl.nfl_fourth_down
+      - sportsdataverse.cfb.cfb_fourth_down
+      - sportsdataverse.football.spring_football_ep_wp
+      - sportsdataverse.nba.nba_draft_model
+      - sportsdataverse.nfl.nfl_draft_model
+      - sportsdataverse.wnba.wnba_draft_model
+      - sportsdataverse.mbb.mbb_ncaa_models
+      - sportsdataverse.cfb.cfb_draft_projection
+      - sportsdataverse.cfb.cfb_recruiting_projection
+      - sportsdataverse.mbb.mbb_draft_projection
+      - sportsdataverse.mbb.mbb_recruiting_projection
+      - sportsdataverse.mbb.mbb_transfer_projection
+      - sportsdataverse.mlb.mlb_batter_projection
+      - sportsdataverse.mlb.mlb_prop_projection
+      - sportsdataverse.mlb.mlb_team_projection
+      - sportsdataverse.nba.nba_rookie_projection
+      - sportsdataverse.nfl.nfl_projection
+      - sportsdataverse.nfl.nfl_usage_projection
+      - sportsdataverse.wnba.wnba_rookie_projection
+      - sportsdataverse.cfb.cfb_game_predict
+      - sportsdataverse.mbb.mbb_game_predict
+      - sportsdataverse.nba.nba_game_predict
+      - sportsdataverse.wbb.wbb_game_predict
+      - sportsdataverse.cfb.cfb_ratings
+      - sportsdataverse.hockey.mch.mch_ratings
+      - sportsdataverse.hockey.wch.wch_ratings
+      - sportsdataverse.mbb.mbb_ratings
+      - sportsdataverse.mbb.mbb_team_ratings
+      - sportsdataverse.nba.nba_team_ratings
+      - sportsdataverse.nfl.nfl_ratings
+      - sportsdataverse.nhl.nhl_team_ratings
+      - sportsdataverse.nhl.nhl_unit_ratings
+      - sportsdataverse.pwhl.pwhl_team_ratings
+      - sportsdataverse.wbb.wbb_team_ratings
+      - sportsdataverse.mbb.mbb_rapm
+      - sportsdataverse.nba.nba_adj_rapm
+      - sportsdataverse.nhl.nhl_rapm
+      - sportsdataverse.nhl.nhl_xg
+      - sportsdataverse.nba.nba_war
+      - sportsdataverse.nhl.nhl_war
+      - sportsdataverse._common.metrics
+      - sportsdataverse._common.ratings
+      - sportsdataverse.cfb.model_calculators
+      - sportsdataverse.mbb.mbb_player_value_constants
+      - sportsdataverse.mbb.mbb_prediction_constants
+      - sportsdataverse.mbb.mbb_shot_quality_constants
+      - sportsdataverse.nba.nba_prediction_constants
+      - sportsdataverse.nba.nba_shot_value_constants
+      - sportsdataverse.nba.nba_tracking_value_constants
+      - sportsdataverse.nhl.nhl_player_impact_constants
+      - sportsdataverse.nhl.nhl_prediction_constants
+      - sportsdataverse.mbb.mbb_win_prob
+      - sportsdataverse.wbb.wbb_win_prob
+      - sportsdataverse.wnba.wnba_win_prob
+      - sportsdataverse.mlb.mlb_win_expectancy
+      - sportsdataverse.cfb.cfb_simulations
+      - sportsdataverse.nfl.nfl_simulations
+      - sportsdataverse.mbb.mbb_season_sim
+      - sportsdataverse.wbb.wbb_season_sim
+      - sportsdataverse.mbb.mbb_box_bpm
+      - sportsdataverse.nba.nba_bpm
+      - sportsdataverse.nba.nba_spm
+      - sportsdataverse.nba.nba_darko
+      - sportsdataverse.nba.nba_matchup_drapm
+      - sportsdataverse.nba.nba_rapm_variants
+      - sportsdataverse.nba.nba_aging_curve
+      - sportsdataverse.wnba.wnba_aging_curve
+      - sportsdataverse.mlb.mlb_expected_home_runs
+      - sportsdataverse.mlb.mlb_expected_stats
+      - sportsdataverse.nhl.nhl_expected_assists
+      - sportsdataverse.nba.nba_expected_turnovers
+      - sportsdataverse.mlb.mlb_stuff_plus
+      - sportsdataverse.mlb.mlb_command_plus
+      - sportsdataverse.mlb.mlb_pitch_classify
+      - sportsdataverse.mlb.mlb_swing_decision
+      - sportsdataverse.mlb.mlb_run_expectancy
+      - sportsdataverse.mlb.mlb_run_values
+      - sportsdataverse.nfl.nfl_kicker_rating
+      - sportsdataverse.nfl.nfl_line_grades
+      - sportsdataverse.nhl.nhl_gsax
+      - sportsdataverse.mbb.mbb_shot_quality
+      - sportsdataverse.mbb.mbb_shooter_talent
+      - sportsdataverse.cfb.cfb_roster_talent
+      - sportsdataverse.nba.nba_model_validation
+      - sportsdataverse.cfb.cfb_two_point
+      - sportsdataverse.cfb.cfb_adjusted_epa
+      - sportsdataverse.cfb.cfb_field_position
+      - sportsdataverse.nfl.nfl_field_position
+    functions:
+      - fg_make_probability
+      - "*_fourth_down*"
+      - "*paper_index*"
+
+  analytics:
+    label: Analytics
+    modules:
+      - sportsdataverse.rolling_windows
+      - sportsdataverse.metric_curves
+      - sportsdataverse.defense_vs_position
+      - sportsdataverse.football.tendencies
+      - sportsdataverse.football.usage_box
+      - sportsdataverse.registry
+      - sportsdataverse.registry.*
+      - sportsdataverse.nba.nba_shot_value
+      - sportsdataverse.nba.nba_tracking_value
+      - sportsdataverse.nhl.nhl_edge_value
+      - sportsdataverse.nhl.nhl_faceoff_value
+      - sportsdataverse.nhl.nhl_penalty_value
+      - sportsdataverse.wnba.wnba_shot_value
+      - sportsdataverse.wnba.wnba_tracking_value
+      - sportsdataverse.mbb.mbb_luck
+      - sportsdataverse.mbb.mbb_archetypes
+      - sportsdataverse.mbb.mbb_ncaa_lineups
+      - sportsdataverse.nba.nba_lineups
+      - sportsdataverse.wbb.wbb_ncaa_lineups
+      - sportsdataverse.mbb.mbb_lineup_stats
+      - sportsdataverse.mbb.mbb_ncaa_possessions
+      - sportsdataverse.nba.nba_possessions
+      - sportsdataverse.nfl.nfl_market
+      - sportsdataverse.nhl.nhl_market
+      - sportsdataverse.pwhl.pwhl_market
+      - sportsdataverse.nba.nba_player_props
+      - sportsdataverse.nfl.nfl_player_props
+      - sportsdataverse.nhl.nhl_player_props
+      - sportsdataverse.pwhl.pwhl_player_props
+      - sportsdataverse.nba.nba_availability
+      - sportsdataverse.nfl.nfl_availability
+      - sportsdataverse.wnba.wnba_availability
+      - sportsdataverse.nba.nba_officiating
+      - sportsdataverse.wnba.wnba_officiating
+      - sportsdataverse.mbb.mbb_bracketology
+      - sportsdataverse.wbb.wbb_bracketology
+      - sportsdataverse.mlb.mlb_baserunning
+      - sportsdataverse.mlb.mlb_catcher_defense
+      - sportsdataverse.mlb.mlb_catcher_framing
+      - sportsdataverse.mlb.mlb_fielding_oaa
+      - sportsdataverse.mlb.mlb_umpire_zone
+      - sportsdataverse.mlb.mlb_pitch_era
+      - sportsdataverse.mlb.mlb_pitch_fatigue
+      - sportsdataverse.mlb.mlb_pitch_features
+      - sportsdataverse.mlb.mlb_pitch_sequencing
+      - sportsdataverse.mlb.mlb_pitch_injury
+      - sportsdataverse.mlb.mlb_stolen_base
+      - sportsdataverse.nba.nba_clutch
+      - sportsdataverse.nba.nba_foul_drawing
+      - sportsdataverse.nba.nba_player_ages
+      - sportsdataverse.nba.nba_playtype
+      - sportsdataverse.wnba.wnba_playtype_impact
+      - sportsdataverse.mbb.mbb_positions
+      - sportsdataverse.nba.nba_player_positions
+      - sportsdataverse.nba.nba_box_logs
+      - sportsdataverse.nba.nba_ratings_panel
+      - sportsdataverse.nba.nba_salary_draft
+      - sportsdataverse.nba.nba_play_context
+      - sportsdataverse.nhl.nhl_zone_transitions
+      - sportsdataverse.cfb.cfb_tempo
+      - sportsdataverse.cfb.cfb_resume
+      - sportsdataverse.cfb.cfb_standings
+      - sportsdataverse.nfl.nfl_season_standings
+      - sportsdataverse.cfb.cfb_season_odds
+      - sportsdataverse.cfb.cfb_drive_summary
+      - sportsdataverse.cfb.cfb_play_types
+      - sportsdataverse.cfb.cfb_advanced_stats
+      - sportsdataverse.cfb.cfb_situational_stats
+      - sportsdataverse.cfb.cfb_returning_production
+      - sportsdataverse.cfb.cfb_transfer_impact
+      - sportsdataverse.mbb.mbb_shot_selection
+      - sportsdataverse.nfl.nfl_playcall
+      - sportsdataverse.nfl.nfl_gamescript
+      - sportsdataverse.nfl.nfl_special_teams
+      - sportsdataverse.nhl.nhl_special_teams
+      - sportsdataverse.nfl.nfl_standings_calc
+      - sportsdataverse.mbb.mbb_strength_of_schedule
+      - sportsdataverse.wbb.wbb_strength_of_schedule
+
+  cache_config:
+    label: Cache and configuration
+    modules:
+      - sportsdataverse.nfl.cache
+      - sportsdataverse.nfl.config
+      - sportsdataverse.cache
+      - sportsdataverse.config
+      - sportsdataverse.decorators
+    functions:
+      - clear_team_cache
+
+  dates:
+    label: Dates and seasons
+    modules:
+      - sportsdataverse.*.utils_date
+    functions:
+      - most_recent_*
+      - get_current_*
+      - "*_season_id"
+      - year_to_season
+
+  ids:
+    label: IDs and crosswalks
+    modules:
+      - sportsdataverse._common_crosswalk_basketball
+      - sportsdataverse._crosswalk_basketball_sources
+      - sportsdataverse.cfb.cfb_crosswalk
+      - sportsdataverse.mbb.mbb_crosswalk
+      - sportsdataverse.mbb.mbb_ncaa_espn_crosswalk
+      - sportsdataverse.nba.nba_crosswalk
+      - sportsdataverse.wbb.wbb_crosswalk
+      - sportsdataverse.wnba.wnba_crosswalk
+      - sportsdataverse.mbb.mbb_ncaa_team_ids
+      - sportsdataverse.wbb.wbb_ncaa_team_ids
+      - sportsdataverse.mbb.mbb_ncaa_names
+      - sportsdataverse.nfl.nfl_players
+      - sportsdataverse.find
+      - sportsdataverse.discover
+    functions:
+      - "*_team_ids"
+
+  validation:
+    label: Validation
+    modules:
+      - sportsdataverse.validation
+      - sportsdataverse.validation.*
+      - sportsdataverse.cfb.cfb_box_invariants
+
+  release:
+    label: Release utilities
+    modules:
+      - sportsdataverse.cli
+      - sportsdataverse.dl_utils
+      - sportsdataverse.errors
+      - sportsdataverse.schemas
+      - sportsdataverse.schemas.*

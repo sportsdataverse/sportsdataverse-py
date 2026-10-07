@@ -56,10 +56,16 @@ def test_reference_page_documents_resolved_wrapper_names():
 
 
 def test_league_index_lists_api_rows_and_loaders():
-    md = generate.render_league_index("nba")
+    """Each API and the loaders page are reached from their provider's own section (0.1.5 layout)."""
+    md = generate.render_league_index(
+        "nba",
+        source_rows=generate._league_source_rows("nba", autodoc_names=[]),
+        category_rows=[],
+    )
     assert "# NBA (`sportsdataverse.nba`)" in md
+    assert "## Data sources" in md
     assert "[ESPN site API (v2)](reference/site)" in md
-    assert "[Dataset loaders](reference/loaders)" in md
+    assert "[sportsdataverse-data releases](reference/loaders)" in md
 
 
 # --- Highlights: curated functions pulled out of the Additional bucket ------
@@ -76,19 +82,26 @@ def test_highlighted_names_is_always_empty_for_the_global_scope():
     assert generate._highlighted_names(None, ["espn_mbb_schedule"]) == set()
 
 
-def test_autodoc_family_checks_highlighted_before_the_keyword_rules():
-    # espn_mbb_schedule would otherwise classify as "Play-by-play, schedule & rosters"
-    # (it matches the _ESPN_PBP_FAMILY_TOKENS "_schedule" token) -- Highlights wins.
-    assert generate._autodoc_family("espn_mbb_schedule") == "Play-by-play, schedule & rosters"
-    assert generate._autodoc_family("espn_mbb_schedule", frozenset({"espn_mbb_schedule"})) == "Highlights"
+def test_autodoc_family_checks_highlighted_before_the_registry():
+    # espn_mbb_schedule resolves to the ESPN provider through sources.yaml (0.1.5 replaced the
+    # name-token families); a curated "start here" pick is still pulled out into Highlights.
+    mod = "sportsdataverse.mbb.mbb_schedule"
+    assert generate._autodoc_family("espn_mbb_schedule", module=mod) == "ESPN"
+    assert generate._autodoc_family("espn_mbb_schedule", frozenset({"espn_mbb_schedule"}), module=mod) == "Highlights"
 
 
 def test_render_league_index_highlights_row_and_additional_count_do_not_overlap():
     md = generate.render_league_index(
-        "mbb", has_additional=True, additional_count=317, has_highlights=True, highlights_count=9
+        "mbb",
+        has_additional=True,
+        additional_count=317,
+        has_highlights=True,
+        highlights_count=9,
+        source_rows=generate._league_source_rows("mbb", autodoc_names=[]),
+        category_rows=[],
     )
-    assert "| [Highlights](reference/additional#highlights) | 9 |" in md
-    assert "| [Additional functions](reference/additional) | 317 |" in md
+    assert '| [Highlights](reference/additional#highlights) | curated "start here" functions | 9 |' in md
+    assert "| [Additional functions](reference/additional) | hand-written wrappers & helpers | 317 |" in md
 
 
 def test_render_league_index_omits_highlights_row_by_default():

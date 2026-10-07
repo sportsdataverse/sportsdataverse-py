@@ -5,13 +5,21 @@ description: "sdv-py UCL: endpoint references, dataset loaders and parsers for U
 ---
 # UCL (`sportsdataverse.ucl`)
 
-| Reference | Functions | Base URL |
-|---|---:|---|
-| [ESPN site API (v2)](reference/site) | 24 | `https://site.api.espn.com/apis/site/v2/sports` |
-| [ESPN web API (v3)](reference/web) | 5 | `https://site.web.api.espn.com/apis/common/v3/sports` |
-| [ESPN core API (v2)](reference/core) | 82 | `https://sports.core.api.espn.com/v2/sports` |
-| [ESPN FPI API (fitt v3)](reference/fitt) | 1 | `https://site.web.api.espn.com/apis/fitt/v3/sports` |
-| [ESPN CDN API (cdn.espn.com)](reference/cdn) | 1 | `https://cdn.espn.com/core` |
+## Data sources
+
+| Source | APIs / hosts | Functions | Auth |
+|---|---|---:|---|
+| [ESPN](#espn) | `cdn.espn.com`, `site.api.espn.com`, `site.web.api.espn.com` +1 more | 113 | none |
+
+## ESPN {#espn}
+
+| Reference | Functions |
+|---|---:|
+| [ESPN site API (v2)](reference/site) | 24 |
+| [ESPN web API (v3)](reference/web) | 5 |
+| [ESPN core API (v2)](reference/core) | 82 |
+| [ESPN FPI API (fitt v3)](reference/fitt) | 1 |
+| [ESPN CDN API (cdn.espn.com)](reference/cdn) | 1 |
 
 ## Examples
 

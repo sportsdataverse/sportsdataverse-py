@@ -1554,7 +1554,7 @@ _GENERATED_LOADER_LEAGUES = {"cfb", "mbb", "mlb", "nba", "nhl", "pwhl", "wbb", "
 
 def _render_loaders_all() -> dict[str, str]:
     """{league: src} for each generated-loader league with manifest entries."""
-    rel = spec.load_releases(ENDPOINTS / "releases.yaml")
+    rel = _releases_cfg()
     out: dict[str, str] = {}
     for lg in sorted(_GENERATED_LOADER_LEAGUES):
         loaders = [ld for ld in rel.loaders if ld.league == lg]
@@ -1888,7 +1888,7 @@ def refresh_loader_schemas() -> int:
     import polars as pl
     import yaml
 
-    rel = spec.load_releases(ENDPOINTS / "releases.yaml")
+    rel = _releases_cfg()
     out: dict = {}
     failed = []
     for ld in rel.loaders:
@@ -1937,7 +1937,7 @@ def audit_releases() -> int:
     release list (network, via ``gh``). Reports release tags with no loader
     (gaps) and manifest tags no longer published (orphans). Informational drift
     gate -- meant for a CI job, not the offline ``--check``."""
-    rel = spec.load_releases(ENDPOINTS / "releases.yaml")
+    rel = _releases_cfg()
     # Only loaders that pull from the sportsdataverse-data *releases* host are
     # comparable to the live release list. ``raw_data``-based loaders (e.g. cfb/nhl
     # read raw.githubusercontent.com/sportsdataverse/<repo>) carry the source repo
@@ -2461,6 +2461,15 @@ _COVERAGE_LEAGUES = [
     "f1",
     "espn_content",
     "thesportsdb",
+    # Joined in 0.1.5: each has hand-written modules, so until now the gates never
+    # saw their functions and they had no Additional page.
+    "soccer",
+    "mch",
+    "ufl",
+    "college_baseball",
+    "cbs",
+    "yahoo",
+    "fox",
 ]
 
 # Mapping from doc/coverage prefix to actual Python module path for leagues
@@ -2599,6 +2608,81 @@ def _coverage_gaps() -> list[tuple[str, list[str]]]:
     return gaps
 
 
+def _source_scope_objects() -> dict[tuple[str, str], str]:
+    """``{(league_label, name): obj.__module__}`` for every in-scope public function.
+
+    One import pass shared by the sources gate and its report, keyed the same way
+    :func:`_coverage_gaps` groups: a league prefix, or ``"global"`` for the
+    package-level names."""
+    import importlib
+
+    per_league, global_names = _coverage_scope_names()
+    out: dict[tuple[str, str], str] = {}
+    for lg in _COVERAGE_LEAGUES:
+        mod = importlib.import_module(f"sportsdataverse.{_LEAGUE_MODULE.get(lg, lg)}")
+        for n in per_league[lg]:
+            out[(lg, n)] = getattr(getattr(mod, n), "__module__", "")
+    top = importlib.import_module("sportsdataverse")
+    for n in global_names:
+        out[("global", n)] = getattr(getattr(top, n), "__module__", "")
+    return out
+
+
+@functools.lru_cache(maxsize=1)
+def _generated_origins() -> dict[str, tuple[str, str]]:
+    """``{function name: (api name or flat stem, releases.yaml base)}`` for every GENERATED name.
+
+    A generated wrapper or loader carries no hand-written module, so the registry
+    deliberately has no ``modules:`` glob for it (one would shadow the provider that
+    owns the family). Its source is the API it was generated from, which only the
+    codegen model knows -- this is that lookup, and :func:`sources.resolve` treats it as
+    authoritative (its first tier), ahead of every glob."""
+    params = spec.load_parameters(ENDPOINTS / "parameters.yaml")
+    cfg = spec.load_leagues(ENDPOINTS / "leagues.yaml")
+    out: dict[str, tuple[str, str]] = {}
+    espn_apis = [spec.load_espn_api(ENDPOINTS / f"{a}.yaml", params) for a in ESPN_APIS]
+    for league in cfg.leagues:
+        for v in _espn_league_views(league, espn_apis, cfg.hosts):
+            out[v.fn_name] = (v.api_name, "")
+    for stem, prefix in FLAT_APIS:
+        y = ENDPOINTS / f"{stem}.yaml"
+        if not y.exists():
+            continue
+        for v in _flat_views(spec.load_flat_api(y, params), league_prefix=prefix):
+            out[v.fn_name] = (stem, "")
+    for ld in _releases_cfg().loaders:
+        out[ld.fn] = ("", ld.base)
+    return out
+
+
+def _resolve_origin(name: str) -> dict[str, str]:
+    """``{"api": ..., "base": ...}`` kwargs for :func:`sources.resolve`, empty for a hand-written name.
+
+    Lets every caller resolve a name without caring whether it is generated: a generated
+    wrapper/loader carries its API stem or release base, a hand-written one carries nothing
+    and resolves by module glob."""
+    api, base = _generated_origins().get(name, ("", ""))
+    return {"api": api, "base": base}
+
+
+def _source_gaps() -> list[tuple[str, str, str]]:
+    """``[(league_label, name, reason)]`` for every public function that does NOT
+    resolve to exactly one ``sources.yaml`` entry.
+
+    Zero matches means the docs cannot say where the function's data comes from;
+    two or more means the registry is self-contradictory and the page would pick a
+    source arbitrarily. Both fail ``--check``; there is no allowlist."""
+    from tools.codegen import sources
+
+    gaps: list[tuple[str, str, str]] = []
+    for (label, name), module in sorted(_source_scope_objects().items()):
+        try:
+            sources.resolve(name, module, **_resolve_origin(name))
+        except (sources.UnknownSource, sources.AmbiguousSource) as e:
+            gaps.append((label, name, str(e)))
+    return gaps
+
+
 def coverage_report() -> int:
     """Report user-facing functions that never reach the rendered docs corpus.
 
@@ -2729,7 +2813,7 @@ _LOADER_BASE_LABEL = {
 
 def _loader_base_label(prefix: str) -> str:
     """Human label for a league's dataset-loader source(s) (distinct bases joined)."""
-    rel = spec.load_releases(ENDPOINTS / "releases.yaml")
+    rel = _releases_cfg()
     bases = sorted({ld.base for ld in rel.loaders if ld.league == prefix})
     return " / ".join(_LOADER_BASE_LABEL.get(b, b) for b in bases) or "sportsdataverse-data releases"
 
@@ -2776,7 +2860,7 @@ def _loader_doc_views(prefix: str) -> list[dict]:
 
     ``automation`` is normalized to always carry ``repo``/``workflow`` keys so the
     StrictUndefined template can test ``ld.automation.repo`` safely."""
-    rel = spec.load_releases(ENDPOINTS / "releases.yaml")
+    rel = _releases_cfg()
     out: list[dict] = []
     for ld in rel.loaders:
         if ld.league != prefix:
@@ -2806,6 +2890,19 @@ def _loader_doc_views(prefix: str) -> list[dict]:
     return out
 
 
+@functools.lru_cache(maxsize=1)
+def _releases_cfg():
+    """``releases.yaml``, parsed once per process.
+
+    Read by every league's loader views AND its sources table, so without the cache a
+    full docs render re-parsed it over a hundred times."""
+    return spec.load_releases(ENDPOINTS / "releases.yaml")
+
+
+# Pure in ``prefix`` and now called twice per league (reference pages + the sources
+# table). Callers only ever READ the returned dicts, so one cached list per league is
+# safe and cuts a whole-tree render by minutes.
+@functools.lru_cache(maxsize=None)
 def _apis_for(prefix: str) -> list[dict]:
     """API descriptors (``name``/``slug``/``label``/``base``/``count``/``kind``) that
     have a reference page for ``prefix`` -- the in-scope ESPN APIs plus any flat API
@@ -2920,6 +3017,130 @@ def _notebooks_for(prefix: str) -> list[dict]:
     return [{"label": label, "url": f"../tutorials/{stem}.md"} for stem, label in entries]
 
 
+def _host_names(bases: list[str], home: str = "") -> list[str]:
+    """Distinct hostnames from a provider's base URLs, falling back to its registry ``home``."""
+    from urllib.parse import urlsplit
+
+    seen = {urlsplit(b).netloc for b in bases if b}
+    if not seen and home:
+        seen = {urlsplit(home).netloc or home}
+    return sorted(h for h in seen if h)
+
+
+def _league_source_rows(
+    prefix: str, *, autodoc_names: list[str] | None = None, moved: dict[str, str] | None = None
+) -> list[dict]:
+    """One row per provider PRESENT in ``prefix``, in ``sources.yaml`` registry order.
+
+    A provider is present when the league has at least one reference page for one of
+    its APIs, at least one dataset loader on one of its release bases, or at least
+    one autodoc name whose module resolves to it. ``entries`` is what the row's
+    section lists: one line per API / host / release base, with the function count
+    and the page it links. A provider with nothing in this league is omitted
+    entirely -- never a zero row and never an empty section.
+
+    ``moved`` is :func:`_split_family_pages`' ``{function: "<page>/<family>"}``: when the
+    Additional page is split, a provider's hand-written row links its family page, not the hub."""
+    import importlib
+
+    from tools.codegen import sources
+
+    autodoc_names = autodoc_names or []
+    rel = _releases_cfg()
+    buckets: dict[str, list[dict]] = {}
+    hosts: dict[str, list[str]] = {}
+    for a in _apis_for(prefix):
+        e = sources.by_api(a["name"])
+        if e is None:
+            continue
+        buckets.setdefault(e.key, []).append(
+            {"label": a["label"], "count": a["count"], "url": f"reference/{a['slug']}"},
+        )
+        hosts.setdefault(e.key, []).append(a["base"])
+    loaders = _loader_doc_views(prefix)
+    if loaders:
+        by_base: dict[str, int] = {}
+        for ld in rel.loaders:
+            if ld.league == prefix:
+                by_base[ld.base] = by_base.get(ld.base, 0) + 1
+        for base, n in by_base.items():
+            e = sources.by_base(base)
+            if e is None:
+                continue
+            buckets.setdefault(e.key, []).append(
+                {"label": _LOADER_BASE_LABEL.get(base, base), "count": n, "url": "reference/loaders"},
+            )
+            hosts.setdefault(e.key, []).append(rel.bases.get(base, ""))
+    if autodoc_names:
+        mod = importlib.import_module(f"sportsdataverse.{_LEAGUE_MODULE.get(prefix, prefix)}")
+        hand: dict[str, int] = {}
+        first: dict[str, str] = {}
+        for n in autodoc_names:
+            obj = getattr(mod, n, None)
+            if obj is None:
+                continue
+            e = sources.resolve(n, getattr(obj, "__module__", ""), **_resolve_origin(n))
+            if e.kind == "provider":
+                hand[e.key] = hand.get(e.key, 0) + 1
+                first.setdefault(e.key, n)
+        for key, n in hand.items():
+            page = (moved or {}).get(first[key], _AUTODOC_PAGE[:-3])
+            buckets.setdefault(key, []).append(
+                {"label": "Hand-written wrappers", "count": n, "url": f"reference/{page}"}
+            )
+    out: list[dict] = []
+    for e in sources.providers():
+        entries = buckets.get(e.key)
+        if not entries:
+            continue
+        out.append(
+            {
+                "key": e.key,
+                "label": e.label,
+                "anchor": _slugify(e.label),
+                "auth": e.auth or "none",
+                # Hostnames, not full base URLs: ESPN alone spans five bases, and the row only
+                # has to say WHOSE host this is -- the section below links each API by name. A
+                # provider reached only through hand-written wrappers has no base, so its
+                # registry `home` stands in rather than leaving the cell blank.
+                "hosts": _host_names(hosts.get(e.key, []), e.home),
+                "count": sum(x["count"] for x in entries),
+                "entries": entries,
+            },
+        )
+    return out
+
+
+def _league_category_rows(prefix: str, autodoc_names: list[str], moved: dict[str, str] | None = None) -> list[dict]:
+    """``[{key, label, anchor, functions}]`` for each helper category present in ``prefix``.
+
+    Only the league's autodoc names can land in a category (every generated wrapper
+    and loader belongs to a provider), so a league with no hand-written helpers gets
+    an empty list and the template drops the whole "Tools and helpers" block. ``moved`` sends
+    each link to the family page the split moved the function to (see :func:`_league_source_rows`)."""
+    import importlib
+
+    from tools.codegen import sources
+
+    if not autodoc_names:
+        return []
+    mod = importlib.import_module(f"sportsdataverse.{_LEAGUE_MODULE.get(prefix, prefix)}")
+    page = _AUTODOC_PAGE[:-3]
+    by_key: dict[str, list[dict]] = {}
+    for n in sorted(autodoc_names):
+        obj = getattr(mod, n, None)
+        if obj is None:
+            continue
+        e = sources.resolve(n, getattr(obj, "__module__", ""), **_resolve_origin(n))
+        if e.kind == "category":
+            by_key.setdefault(e.key, []).append({"name": n, "url": f"reference/{(moved or {}).get(n, page)}#{n}"})
+    return [
+        {"key": e.key, "label": e.label, "anchor": _slugify(e.label), "functions": by_key[e.key]}
+        for e in sources.categories()
+        if e.key in by_key
+    ]
+
+
 def render_league_index(
     prefix: str,
     *,
@@ -2929,6 +3150,8 @@ def render_league_index(
     highlights_count: int = 0,
     r_parity: list[dict] | None = None,
     r_pkg: str | None = None,
+    source_rows: list[dict] | None = None,
+    category_rows: list[dict] | None = None,
 ) -> str:
     """Render a league's ``index.md`` (reference table + optional loaders link).
 
@@ -2957,6 +3180,8 @@ def render_league_index(
         companions=_companions_for(prefix),
         r_parity=r_parity or [],
         r_pkg=r_pkg,
+        source_rows=source_rows or [],
+        category_rows=category_rows or [],
     )
 
 
@@ -3059,52 +3284,31 @@ def _is_shared_leak(module: str) -> bool:
     return module == "sportsdataverse.dl_utils" or module == "sportsdataverse.errors" or module.endswith("_parsers")
 
 
-# Deterministic family order for the autodoc page (families not listed sort last,
-# alphabetically). Functions within a family are always sorted alphabetically.
-_AUTODOC_FAMILY_ORDER = [
-    "Highlights",
-    "Statcast",
-    "MLB Stats API",
-    "Play-by-play, schedule & rosters",
-    "NHL native",
-    "Dataset loaders",
-    "Utilities & helpers",
-    "Other",
-]
+@functools.lru_cache(maxsize=1)
+def _family_rank() -> dict[str, int]:
+    """``{family label: order}`` -- the sources.yaml registry order, Highlights first.
 
-_ESPN_PBP_FAMILY_TOKENS = (
-    "_pbp",
-    "_schedule",
-    "_game_rosters",
-    "_player_stats",
-    "_play_participants",
-    "_team_stats",
-    "_game_officials",
-)
+    Replaces the hand-maintained ``_AUTODOC_FAMILY_ORDER``: a family IS a registry
+    label now, so the registry's own order is the page order and the two can never
+    drift."""
+    from tools.codegen import sources
+
+    return {"Highlights": -1, **{e.label: e.order for e in sources.load()}}
 
 
-def _autodoc_family(name: str, highlighted: frozenset[str] = frozenset()) -> str:
-    """Group key for an autodoc function name (see the family rules in Task D2).
+def _autodoc_family(name: str, highlighted: frozenset[str] = frozenset(), *, module: str = "") -> str:
+    """Group heading for an autodoc function: its ``sources.yaml`` entry's label.
 
-    ``highlighted`` (the per-league curated set from :func:`_highlighted_names`)
-    is checked FIRST, so a hand-picked "start here" function is pulled out of
-    whichever family it would otherwise land in (Utilities & helpers, Other,
-    Play-by-play, ...) into its own top-billed Highlights section instead."""
+    ``highlighted`` (the per-league curated set from :func:`_highlighted_names`) is
+    checked FIRST, so a hand-picked "start here" function is pulled out of its
+    provider/category section into the top-billed Highlights one. Everything else
+    resolves through the registry -- name-prefix guessing is gone, which is what
+    produced the "Build" / "Calc" / "Nfl" / "Fox" / "Get" headings."""
+    from tools.codegen import sources
+
     if name in highlighted:
         return "Highlights"
-    if name.startswith("statcast") or name == "mlb_statcast":
-        return "Statcast"
-    if name.startswith("load_"):
-        return "Dataset loaders"
-    if name.startswith("mlb_api"):
-        return "MLB Stats API"
-    if name.startswith("espn_") and any(tok in name for tok in _ESPN_PBP_FAMILY_TOKENS):
-        return "Play-by-play, schedule & rosters"
-    if name.startswith("nhl_"):
-        return "NHL native"
-    if name.endswith("PlayProcess") or name.startswith(("most_recent_", "get_current_")) or name == "year_to_season":
-        return "Utilities & helpers"
-    return "Other"
+    return sources.resolve(name, module, **_resolve_origin(name)).label
 
 
 def _autodoc_signature(obj) -> str:
@@ -3723,7 +3927,7 @@ def _autodoc_names(league: str | None, corpus: str) -> list[str]:
 def _autodoc_groups(league: str | None, names: list[str]) -> list[dict]:
     """``[{family, functions:[{name, signature, short, long, params, returns, example}]}]``.
 
-    Families ordered by :data:`_AUTODOC_FAMILY_ORDER` (unknown families last,
+    Families ordered by :func:`_family_rank` (unknown families last,
     alphabetically); functions sorted alphabetically within each family. Each
     function carries the parsed-docstring view from :func:`_doc_view` so the
     template can render Parameters/Returns/Example sections."""
@@ -3757,12 +3961,14 @@ def _autodoc_groups(league: str | None, names: list[str]) -> list[dict]:
             c["description"] = _table_cell_desc(str(c.get("description", "")), league, raw_name, n)
             c["name"] = raw_name.replace("|", "\\|")
             c["type"] = str(c.get("type", "")).replace("|", "\\|")
-        by_family.setdefault(_autodoc_family(n, highlighted), []).append(
+        by_family.setdefault(_autodoc_family(n, highlighted, module=getattr(obj, "__module__", "")), []).append(
             {"name": n, "signature": _autodoc_signature(obj), "return_columns": return_columns, **view},
         )
 
+    rank = _family_rank()
+
     def fam_key(fam: str) -> tuple[int, str]:
-        return (_AUTODOC_FAMILY_ORDER.index(fam) if fam in _AUTODOC_FAMILY_ORDER else len(_AUTODOC_FAMILY_ORDER), fam)
+        return (rank.get(fam, len(rank)), fam)
 
     groups = []
     for fam in sorted(by_family, key=fam_key):
@@ -3825,6 +4031,8 @@ def _autodoc_names_by_scope() -> dict[str | None, list[str]]:
             prefix,
             has_additional=bool(names),
             additional_count=len(names),
+            source_rows=_league_source_rows(prefix, autodoc_names=names),
+            category_rows=_league_category_rows(prefix, names),
         )
         result[prefix] = names
     out["reference/parameters.md"] = render_parameters_page()
@@ -3997,7 +4205,7 @@ def render_packages_page() -> str | None:
 def _doc_leagues() -> list[str]:
     """League prefixes to document: every ESPN league + loader-only leagues (pwhl) + HockeyTech junior leagues."""
     cfg = spec.load_leagues(ENDPOINTS / "leagues.yaml")
-    rel = spec.load_releases(ENDPOINTS / "releases.yaml")
+    rel = _releases_cfg()
     prefixes = [lg.prefix for lg in cfg.leagues]
     extra = sorted({ld.league for ld in rel.loaders} - set(prefixes))
     # HockeyTech junior leagues have hand-written modules but no ESPN/loader entries.
@@ -4019,14 +4227,17 @@ def _preserved_docs_corpus() -> str:
     across a generation run (never clobbered/rewritten), so reading them here is
     idempotent. The autodoc gap judgment unions this with the freshly-rendered
     generated pages so a name already covered by a conceptual page is not
-    redundantly re-documented on an autodoc page."""
+    redundantly re-documented on an autodoc page.
+
+    ``tutorials/`` is excluded: a rendered notebook shows a call, not a signature or a
+    Returns table, so a helper a tutorial uses still needs its reference block."""
     if not DOCS.exists():
         return ""
     roots = _generated_docs_roots()
     parts = []
     for f in sorted(DOCS.rglob("*.md")):
         top = f.relative_to(DOCS).parts[0]
-        if top in roots:
+        if top in roots or top == "tutorials":
             continue
         parts.append(f.read_text(encoding="utf-8"))
     return "\n".join(parts)
@@ -4113,30 +4324,43 @@ def _loader_families(names: list[str], prefix: str | None) -> list[str]:
     return [n[len(own) :].split("_")[0] if n.startswith(own) else n.split("_")[1] for n in names]
 
 
-def _pack_families(items: list[tuple[str, str, int]]) -> list[tuple[str, str, int, list[str]]]:
+def _pack_families(
+    items: list[tuple[str, str, int]], *, rank: dict[str, int] | None = None
+) -> list[tuple[str, str, int, list[str]]]:
     """``[(name, family key, markdown bytes)]`` in page order -> ``[(slug, label, part, [names])]``.
 
-    A plural key folds into its singular (``teams`` -> ``team``); a family with one function or under
-    :data:`_FAMILY_MIN_BYTES` joins ``other``; a family over :data:`_PAGE_MD_BUDGET` continues on
-    ``<slug>-2``, ``<slug>-3`` ... (a single function over the budget gets a page to itself). Families
-    are ordered by label, ``other`` last."""
-    keys = {k for _, k, _ in items}
-    fold = {k: k[:-1] if k.endswith("s") and k[:-1] in keys else k for k in keys}
-    items = [(n, fold[k], s) for n, k, s in items]
-    count: dict[str, int] = {}
-    size: dict[str, int] = {}
-    for _, k, s in items:
-        count[k] = count.get(k, 0) + 1
-        size[k] = size.get(k, 0) + s
-    small = {k for k in count if count[k] < 2 or size[k] < _FAMILY_MIN_BYTES}
-    if len(small) < len(count):
-        items = [(n, "other" if k in small else k, s) for n, k, s in items]
+    Without ``rank`` (endpoint and loader pages, whose keys are bare words) a plural key folds into
+    its singular (``teams`` -> ``team``), a family with one function or under
+    :data:`_FAMILY_MIN_BYTES` joins ``other``, and families are ordered by label. A family over
+    :data:`_PAGE_MD_BUDGET` continues on ``<slug>-2``, ``<slug>-3`` ... (a single function over the
+    budget gets a page to itself).
+
+    ``rank`` (``{label: order}``, from :func:`_family_rank`) is for autodoc pages, whose keys are
+    ``sources.yaml`` labels: families keep their label verbatim, are never folded into ``other`` (a
+    small source is still a source), and follow registry order, so the page's sections match the
+    league index's source table. ``other`` is always last."""
+    if rank is None:
+        keys = {k for _, k, _ in items}
+        fold = {k: k[:-1] if k.endswith("s") and k[:-1] in keys else k for k in keys}
+        items = [(n, fold[k], s) for n, k, s in items]
+        count: dict[str, int] = {}
+        size: dict[str, int] = {}
+        for _, k, s in items:
+            count[k] = count.get(k, 0) + 1
+            size[k] = size.get(k, 0) + s
+        small = {k for k in count if count[k] < 2 or size[k] < _FAMILY_MIN_BYTES}
+        if len(small) < len(count):
+            items = [(n, "other" if k in small else k, s) for n, k, s in items]
     families: dict[str, list[tuple[str, int]]] = {}
     for n, k, s in items:
         families.setdefault(k, []).append((n, s))
-    label = {k: _FAMILY_LABELS.get(k, k[:1].upper() + k[1:]) for k in families}
+    # An autodoc key IS already a registry label ("nflverse data releases"), so it is used verbatim --
+    # title-casing it would rewrite brand names ("Nflverse"). Endpoint/loader keys are bare words
+    # ("boxscore") and still get their label or a capitalised fallback.
+    label = {k: k if rank is not None else _FAMILY_LABELS.get(k, k[:1].upper() + k[1:]) for k in families}
+    order = {k: (rank.get(label[k], len(rank)) if rank is not None else 0) for k in families}
     pages = []
-    for k in sorted(families, key=lambda k: (k == "other", label[k].lower())):
+    for k in sorted(families, key=lambda k: (k == "other", order[k], label[k].lower())):
         part: list[str] = []
         used, n_part = 0, 1
         for n, s in families[k]:
@@ -4263,7 +4487,10 @@ def _family_pages(rel: str, content: str, prefix: str | None) -> tuple[str, dict
                 spans[name] = (sec.start() + h.start(), sec.start() + end)
                 section_of.setdefault(sec.start(), name)
                 family = sec.group(1).strip()
-                keys.append(family if family != "Other" else name.split("_")[0])
+                # The family heading IS the registry label now, so it is kept as-is. It used to be
+                # re-keyed to name.split("_")[0] for an "Other" section, which is where the
+                # "Build" / "Calc" / "Nfl" / "Get" headings came from.
+                keys.append(family)
     else:
         heads = list(_FN_H2_LINE.finditer(body))
         preamble = body[: heads[0].start()] if heads else body
@@ -4275,7 +4502,10 @@ def _family_pages(rel: str, content: str, prefix: str | None) -> tuple[str, dict
         keys = _loader_families(names, prefix) if page == "loaders" else _name_families(names)
     if len(blocks) < 2:  # nothing to split: one function over the budget stays as it is
         return None
-    pages = _pack_families([(n, k, len(blocks[n].encode())) for n, k in zip(blocks, keys)])
+    pages = _pack_families(
+        [(n, k, len(blocks[n].encode())) for n, k in zip(blocks, keys)],
+        rank=_family_rank() if autodoc else None,
+    )
     title = meta.get("title", page).strip('"')
     toc = "toc_max_heading_level: 2\n" if "toc_max_heading_level" in meta else ""
     family_pages: dict[str, str] = {}
@@ -4416,12 +4646,54 @@ def render_leagues_json() -> str:
     return json.dumps({"sports": sports}, indent=2)
 
 
+# intro.md is a hand-authored conceptual page EXCEPT for one table. The generator
+# owns the span between these markers and rewrites it in place, so the "Supported
+# leagues and data sources" table is drift-gated like every other generated page
+# while the surrounding prose stays hand-written.
+_INTRO_MARKERS = (
+    "<!-- BEGIN generated: leagues-and-sources -->",
+    "<!-- END generated: leagues-and-sources -->",
+)
+# League prefix -> the import path shown in intro.md, where it is not sportsdataverse.<prefix>.
+_INTRO_MODULE = {lg: f"sportsdataverse.hockey.{lg}" for lg in _HOCKEYTECH_MODULE_LEAGUES}
+
+
+def _patch_between_markers(text: str, begin: str, end: str, body: str) -> str:
+    """``text`` with everything between ``begin`` and ``end`` replaced by ``body``.
+
+    Raises ``SystemExit`` naming the marker when it is absent, rather than silently
+    appending -- a lost marker must fail the build, not drop the generated table."""
+    i, j = text.find(begin), text.find(end)
+    if i < 0 or j < 0 or j < i:
+        missing = begin if i < 0 else end
+        raise SystemExit(f"codegen: docs/docs/intro.md is missing the marker {missing}")
+    return text[: i + len(begin)] + "\n" + body.rstrip() + "\n" + text[j:]
+
+
+def render_intro_sources_table(autodoc_by_scope: dict[str | None, list[str]]) -> str:
+    """``| League | Module | Data sources |`` for every documented league.
+
+    The Data-sources cell lists each provider present in that league with its
+    function count, in ``sources.yaml`` registry order -- the same rows the league
+    index's own table shows, so the two can never disagree."""
+    lines = ["| League | Module | Data sources |", "|---|---|---|"]
+    for prefix in _doc_leagues():
+        rows = _league_source_rows(prefix, autodoc_names=autodoc_by_scope.get(prefix) or [])
+        if not rows:
+            continue
+        cell = ", ".join(f"{r['label']} ({r['count']})" for r in rows)
+        module = _INTRO_MODULE.get(prefix, f"sportsdataverse.{prefix}")
+        lines.append(f"| [{_LEAGUE_LABELS.get(prefix, prefix.upper())}]({prefix}/) | `{module}` | {cell} |")
+    return "\n".join(lines)
+
+
 def _render_docs_all() -> dict[str, str]:
     """{relpath: content} for the full generated docs staging tree.
 
     Keys are relative to ``docs/docs``; :data:`_ANCHOR_MAP_REL` points outside it, at ``docs/static``."""
     out: dict[str, str] = {}
     anchor_map: dict[str, dict[str, str]] = {}
+    autodoc_by_scope: dict[str | None, list[str]] = {}
     preserved = _preserved_docs_corpus()
     for i, prefix in enumerate(_doc_leagues()):
         apis = _apis_for(prefix)
@@ -4456,6 +4728,9 @@ def _render_docs_all() -> dict[str, str]:
         # corpus does not change which names are "already documented".
         ref_corpus = "\n".join(c for rel, c in out.items() if rel.startswith(f"{prefix}/") and rel.endswith(".md"))
         autodoc_names_list = _autodoc_names(prefix, ref_corpus)
+        # Kept for intro.md's table below: it must count the SAME hand-written names this
+        # league's own index counts, or the two pages report different totals.
+        autodoc_by_scope[prefix] = autodoc_names_list
         # {slug: content} for this league's reference pages (already in `out`), used
         # to anchor each Python function in the parity table to its doc page.
         ref_prefix = f"{prefix}/reference/"
@@ -4486,6 +4761,8 @@ def _render_docs_all() -> dict[str, str]:
             highlights_count=highlights_count,
             r_parity=_r_parity_rows(prefix, ref_pages, autodoc_names_list, moved),
             r_pkg=_R_PARITY_PACKAGE.get(prefix),
+            source_rows=_league_source_rows(prefix, autodoc_names=autodoc_names_list, moved=moved),
+            category_rows=_league_category_rows(prefix, autodoc_names_list, moved),
         )
         if apis or loaders or autodoc is not None:
             out[f"{prefix}/reference/_category_.json"] = render_category("Reference", 1, True)
@@ -4508,6 +4785,13 @@ def _render_docs_all() -> dict[str, str]:
     pkgs = render_packages_page()
     if pkgs is not None:
         out["packages.mdx"] = pkgs
+    intro = DOCS / "intro.md"
+    if intro.exists():
+        out["intro.md"] = _patch_between_markers(
+            intro.read_text(encoding="utf-8"),
+            *_INTRO_MARKERS,
+            render_intro_sources_table(autodoc_by_scope),
+        )
     # Normalize every file to exactly one trailing newline so the generic
     # end-of-file-fixer / trailing-whitespace pre-commit hooks are a no-op and
     # never fight this drift gate (template whitespace control leaves some pages
@@ -4644,6 +4928,14 @@ def main(argv=None) -> int:
             print(
                 "codegen --check: undocumented user-facing functions:",
                 ", ".join(missing_names),
+                file=sys.stderr,
+            )
+            rc = 1
+        src_gaps = _source_gaps()
+        if src_gaps:
+            print(
+                "codegen --check: public functions with no single source:",
+                "; ".join(f"{label}.{name}: {why}" for label, name, why in src_gaps),
                 file=sys.stderr,
             )
             rc = 1

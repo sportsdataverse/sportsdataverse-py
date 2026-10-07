@@ -98,7 +98,7 @@ jobs:
           # below; it can't block the refresh of the other tutorials.
           ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
         run: |
-          # render_notebooks.py exits 1 if ANY of the 12 live notebooks flakes, but it
+          # render_notebooks.py exits 1 if ANY of the 15 live notebooks flakes, but it
           # still writes the pages that DID render (a failed notebook keeps its prior
           # page). Record the failure for the drift issue instead of failing here, so
           # one weekly flake never skips publishing the pages that did render.

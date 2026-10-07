@@ -9,15 +9,7 @@ sidebar_position: 50
 Hand-written wrappers, loaders, and helpers in `sportsdataverse.bchl`
 not covered by the generated API-endpoint reference above.
 
-## Utilities & helpers
-
-### most_recent_bchl_season {#most_recent_bchl_season}
-
-`most_recent_bchl_season() -> 'int'`
-
-Newest BCHL regular season as an end-year integer: the highest `season_yr` of a regular season that is not a one-off event, so a preseason listed first is not a default. Raises `NoDataError` when the seasons feed lists none, `AssetFetchError` when it fails.
-
-## Other
+## HockeyTech / LeagueStat
 
 ### bchl_game_corsi {#bchl_game_corsi}
 
@@ -142,33 +134,6 @@ BCHL schedule — one row per game.
 | `season_id` | character | Season identifier. |
 | `game_type` | character | Game type the row belongs to. |
 
-### bchl_season_id {#bchl_season_id}
-
-`bchl_season_id(return_as_pandas: 'bool' = False) -> 'Any'`
-
-All BCHL seasons with end-year + game-type labels.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `return_as_pandas` | `bool` | `False` |  |
-
-**Returns**
-
-
-| col_name | type | description |
-|---|---|---|
-| `season_id` | integer | Season identifier. |
-| `season_name` | character | Full season name (e.g., "2024-25 Regular Season"). |
-| `season_short` | character | Short season name. |
-| `career` | character | Whether this is a career-stats season. |
-| `playoff` | character | Whether the row is playoff statistics. |
-| `start_date` | character | Season start date. |
-| `end_date` | character | Season end date. |
-| `season_yr` | integer | End year of the season the row belongs to, read from its name: "2025-26", "2025/26" and "2025-2026" are 2026, "26-27" is 2027, a compact "2425" is 2025. A preseason or exhibition named with the one year it starts in belongs to the next season ("2026 Pre-season" is 2027). Null when the name holds no year. |
-| `game_type_label` | character | Game type read from the season name, first match wins: "preseason" (pre-season, preseason), "playoffs" (playoff, post), "exhibition", else "regular". One-off events such as all-star games are labelled "regular" too; season resolution skips them. |
-
 ### bchl_standings {#bchl_standings}
 
 `bchl_standings(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'`
@@ -266,3 +231,38 @@ a module namespace via `globals().update(...)`.
 **Returns**
 
 Keys are the public function names (e.g. `"ahl_schedule"`).
+
+## Dates and seasons
+
+### bchl_season_id {#bchl_season_id}
+
+`bchl_season_id(return_as_pandas: 'bool' = False) -> 'Any'`
+
+All BCHL seasons with end-year + game-type labels.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `return_as_pandas` | `bool` | `False` |  |
+
+**Returns**
+
+
+| col_name | type | description |
+|---|---|---|
+| `season_id` | integer | Season identifier. |
+| `season_name` | character | Full season name (e.g., "2024-25 Regular Season"). |
+| `season_short` | character | Short season name. |
+| `career` | character | Whether this is a career-stats season. |
+| `playoff` | character | Whether the row is playoff statistics. |
+| `start_date` | character | Season start date. |
+| `end_date` | character | Season end date. |
+| `season_yr` | integer | End year of the season the row belongs to, read from its name: "2025-26", "2025/26" and "2025-2026" are 2026, "26-27" is 2027, a compact "2425" is 2025. A preseason or exhibition named with the one year it starts in belongs to the next season ("2026 Pre-season" is 2027). Null when the name holds no year. |
+| `game_type_label` | character | Game type read from the season name, first match wins: "preseason" (pre-season, preseason), "playoffs" (playoff, post), "exhibition", else "regular". One-off events such as all-star games are labelled "regular" too; season resolution skips them. |
+
+### most_recent_bchl_season {#most_recent_bchl_season}
+
+`most_recent_bchl_season() -> 'int'`
+
+Newest BCHL regular season as an end-year integer: the highest `season_yr` of a regular season that is not a one-off event, so a preseason listed first is not a default. Raises `NoDataError` when the seasons feed lists none, `AssetFetchError` when it fails.

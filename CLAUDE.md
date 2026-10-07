@@ -13,7 +13,7 @@
   - [Parser Layer (0.0.51+)](#parser-layer-0051)
     - [`return_parsed` parameter](#return_parsed-parameter)
     - [Summary dispatcher (21 sub-frames)](#summary-dispatcher-21-sub-frames)
-    - [Test fixtures (89 captures across 6 directories)](#test-fixtures-89-captures-across-6-directories)
+    - [Test fixtures (1,550 fixture files across 97 directories)](#test-fixtures-1550-fixture-files-across-97-directories)
     - [Test infrastructure summary](#test-infrastructure-summary)
   - [Key Coding Conventions](#key-coding-conventions)
     - [Module pattern (NEW modules)](#module-pattern-new-modules)
@@ -31,16 +31,20 @@
     - [sdv-docs MCP server (`sdv_docs/`)](#sdv-docs-mcp-server-sdv_docs)
     - [PFF — Developer API (`api.pff.com`, current) vs Premium (`premium.pff.com`, LEGACY)](#pff--developer-api-apipffcom-current-vs-premium-premiumpffcom-legacy)
     - [HTTP / retry layer](#http--retry-layer)
-    - [Error vocabulary (0.1.0)](#error-vocabulary-010)
+    - [Error vocabulary (0.1.5)](#error-vocabulary-015)
     - [Polars version](#polars-version)
     - [Type hints](#type-hints)
     - [Test gating](#test-gating)
     - [ID column types (join keys / player & team IDs)](#id-column-types-join-keys--player--team-ids)
+    - [Lint and format](#lint-and-format)
+    - [Module naming](#module-naming)
+    - [Test conventions](#test-conventions)
   - [Common Pitfalls](#common-pitfalls)
   - [Documentation Maintenance](#documentation-maintenance)
   - [Docstring conventions for new functions](#docstring-conventions-for-new-functions)
   - [Example notebooks](#example-notebooks)
-  - [Reference-docs build toolchain (codegen)](#reference-docs-build-toolchain-codegen)
+  - [Data sources](#data-sources)
+  - [Codegen](#codegen)
   - [Cheat sheet](#cheat-sheet)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -53,7 +57,7 @@
 (`wehoop`, `hoopR`, `cfbfastR`, `cfbfastR-py`, etc.) and provides tidy access
 to play-by-play, box score, schedule, roster, and other sports data across
 multiple leagues (NBA + G-League, WNBA, NFL, MLB, NHL, MBB, WBB, CFB, PWHL +
-20 HockeyTech minor/junior leagues, college hockey M/W, college baseball +
+19 HockeyTech minor/junior leagues, college hockey M/W, college baseball +
 softball, soccer, cricket, UFL/XFL/CFL, plus odds).
 
 When this guide differs from current repository docs, treat
@@ -113,8 +117,9 @@ python -m build          # produces sdist + wheel into dist/
 
 setuptools is the build backend (`build-system.build-backend =
 "setuptools.build_meta"`). Runtime deps live under `[project.dependencies]`,
-extras under `[project.optional-dependencies]` (`tests`, `docs`, `models`,
-`all`). Package data ships via `[tool.setuptools.package-data]` (currently
+extras under `[project.optional-dependencies]` (`tests`, `nflpro`, `models`, `pff`,
+`soccer`, `mcp`, `all`) -- `soccer` is kloppy for `soccer_open_events`; note `[all]`
+includes every extra EXCEPT `mcp`, which is the sdv-docs server's extra. Package data ships via `[tool.setuptools.package-data]` (currently
 `cfb/models/*`, `nfl/models/*`, and `py.typed`). The `[tool.setuptools.packages.find]`
 block excludes `tests*`, `Sphinx-docs*`, `docs*`, `examples*`, `archive*`,
 `recipe*`, `dev*` from the wheel.
@@ -169,7 +174,7 @@ sportsdataverse/
   mlb/        # MLB (Statcast / Baseball Savant + stats API)
   nba/        # NBA
   nfl/        # NFL — nflreadpy-parity surface
-    nfl_loaders.py    # 24 canonical load_nfl_* + 11 deprecated per-type aliases
+    nfl_loaders.py    # 45 canonical load_nfl_* + 11 deprecated per-type aliases
     nfl_pbp.py, nfl_schedule.py, nfl_teams.py, nfl_games.py, nfl_game_rosters.py
     cache.py          # @cached_loader, memory/filesystem/off, clear_cache()
     config.py         # NflConfig dataclass + get_config / update_config / reset_config
@@ -192,6 +197,21 @@ sportsdataverse/
   cricket/    # ESPN cricket + bundled win-probability models
   football/   # UFL / XFL / CFL ESPN families
   nbagl/      # NBA G-League engine helpers
+  cbs/        # CBS Sports NAPI (cbs_napi_* wrappers + parsers)
+  fox/        # Fox Sports API (fox_api_* wrappers + parsers)
+  yahoo/      # Yahoo Sports Shangrila (yahoo_shangrila_* wrappers + parsers)
+  euroleague/ # EuroLeague Competition Engine (0.1.5)
+  registry/   # metric registry: resolver + TypeScript render
+  validation/ # pbp/box invariant sweeps + per-game gate (validate_game, GameReport)
+  wexp/       # win-expectancy engines, baselines, backtests
+  scrape/     # capture/persist layers: espn/, ncaa/, stats/
+  parsed/     # DEPRECATED per-league alias modules (generated)
+  sdv_docs/   # the sdv-docs MCP server (never imports sportsdataverse)
+  rolling_windows.py      # event-count rolling form windows
+  metric_curves.py        # rate curves along a continuous axis
+  defense_vs_position.py  # what each defense allowed, by position
+  paper_index.py          # Paper Index + season deserved wins
+  cli.py                  # the `sdv` console script
   release.py  # sportsdataversedata R-package port (release assets + RDS writer)
   dl_utils.py # download() retry + janitor + (under|kebab|camel)ize helpers
   errors.py   # NoDataError (alias NoESPNDataError), AssetFetchError, SeasonNotFoundError
@@ -212,47 +232,26 @@ CONTRIBUTING.md             # uv workflow + new-module standards
 
 ## ESPN Cross-League Architecture (0.0.51+)
 
-The cross-league ESPN wrapper surface lives in
-`sportsdataverse/_common_espn.py`. The pattern is **one core +
-N thin extensions**:
+The cross-league ESPN wrapper surface is **codegen output**, not a runtime factory:
 
-- `_common_espn.py` — ~80 core functions parameterized on
-  `(sport, league)` slugs. Every ESPN URL family is wrapped once
-  (Site v2 / Site v2 alt / Web v3 / Core v2 / Core v3 / CDN).
-- `_UNIVERSAL_WRAPPERS` — list of `(short_name, core_fn)` tuples
-  that map to wrapper functions on every league.
-- `_NCAA_WRAPPERS` / `_FOOTBALL_WRAPPERS` / `_MLB_WRAPPERS` —
-  opt-in extras gated by `include_ncaa=` / `include_football=` /
-  `include_mlb=` flags on `make_league_module()`.
-- `_bind(core_fn, sport, league, full_name, parser=None)` — wraps
-  each core function with a `functools.partial` (when no parser
-  registered) or a closure (when a parser is registered) that adds
-  `__name__` / `__qualname__` / `__doc__` for IDE introspection
-  and optionally accepts `return_parsed=True` / `return_as_pandas=True`
-  kwargs.
-- `make_league_module(sport, league, prefix, namespace, ...)` —
-  iterates the wrapper tables and registers each one in `namespace`
-  with the canonical `espn_{prefix}_{short}` name.
+- `sportsdataverse/_common_espn.py` is **40 lines** — the host constants and a
+  `_get` re-export. Nothing is minted at import time.
+- Each `sportsdataverse/<league>/<prefix>_espn_ext.py` is a **generated module of
+  ~5,700 lines**, written by `build_live()` from the five ESPN endpoint YAMLs in
+  `generate.ESPN_APIS`. Every wrapper is spelled out, so `help()`, IDE
+  completion and `inspect.signature` all work without indirection.
+- **Never hand-edit an `*_espn_ext.py`.** Edit the endpoint YAML and run
+  `uv run python tools/codegen/generate.py`; the drift gate fails otherwise. See
+  [`docs/docs/architecture/codegen.md`](docs/docs/architecture/codegen.md).
 
-Per-league extension modules (`sportsdataverse/{league}/{league}_espn_ext.py`)
-are 4-line files: import `make_league_module`, call it with the
-appropriate (sport, league, prefix) tuple + extras flags, assign
-the return value to `__all__`. Examples:
-
-```python
-# sportsdataverse/nba/nba_espn_ext.py
-__all__ = make_league_module("basketball", "nba", "nba", globals())
-
-# sportsdataverse/cfb/cfb_espn_ext.py — both NCAA + football extras
-__all__ = make_league_module(
-    "football", "college-football", "cfb", globals(),
-    include_ncaa=True, include_football=True,
-)
-```
+The old runtime wrapper factory — one core module of partials bound into tiny
+per-league ext modules at import time — was retired when codegen took over. Only
+`tools/codegen/extract.py`, a historical bootstrap that no longer runs, still
+expects it. If you find a description of that pattern anywhere, it predates 0.1.x.
 
 Total cross-league surface: **126 short names** (from the five ESPN
-endpoint YAMLs in `generate.ESPN_APIS`) emitted across 29 league modules
-= **3,334 wrappers**. The `espn_cdn` family (`cdn.espn.com/core`, shorts
+endpoint YAMLs in `generate.ESPN_APIS`) emitted across 30 league modules
+= **3,446 wrappers**. The `espn_cdn` family (`cdn.espn.com/core`, shorts
 `cdn_playbyplay` / `cdn_boxscore` / `cdn_schedule` / `cdn_scoreboard` /
 `cdn_rankings`) is the one family whose per-league reach was live-probed:
 each endpoint carries an `include_prefixes` allowlist (league prefixes, so
@@ -263,8 +262,9 @@ argument. The probe matrix lives at the top of `espn_cdn.yaml`.
 ## Parser Layer (0.0.51+)
 
 Wrappers default to `return_parsed=True` and return tidy polars / pandas
-DataFrames. The parser layer turns raw payloads into those frames. **Six parser
-modules**, one per data surface:
+DataFrames. The parser layer turns raw payloads into those frames. There are
+**33 parser modules** (`find sportsdataverse -name '*_parsers.py'`) — one per
+data surface. The six oldest and largest:
 
 | Module | Surface | Parsers |
 |---|---|---|
@@ -274,6 +274,17 @@ modules**, one per data surface:
 | `nhl/nhl_stats_rest_parsers.py` + `nhl_records_parsers.py` | `api.nhle.com/stats/rest` + `records.nhl.com` | 1 generic each (shared `{data: [...]}` shape) |
 | `mlb/mlb_api_parsers.py` | `statsapi.mlb.com` Stats API | 5 dedicated + 1 generic |
 | `nfl/nfl_api_parsers.py` | `api.nfl.com` "Shield" data API | 11 dedicated (one per `nfl_api` endpoint) |
+
+The other 27 follow the same contract, one per provider family: `fox/fox_api_parsers.py`,
+`cbs/cbs_napi_parsers.py`, `yahoo/yahoo_shangrila_parsers.py`,
+`nba/nba_stats_parsers.py` + `wnba/wnba_stats_parsers.py`, `cfb/on3_parsers.py` +
+`sports247_parsers.py` + `sports247_site_pages_parsers.py`, `nfl/pff_parsers.py` +
+`nflpro_parsers.py` + `sleeper_parsers.py`, `mbb/torvik_parsers.py`,
+`hockeytech/_parsers.py`, `odds/the_odds_api_parsers.py`,
+`mlb/mlb_statcast_parsers.py`, `soccer/` (`soccer_espn`, `asa`, `fotmob`, `uefa`,
+`fifa`, `mls/mls_api`, `nwsl/nwsl_api`), `euroleague/euroleague_parsers.py`,
+`cricket/cricket_espn_parsers.py`, and the NCAA HTML parsers
+`mbb/mbb_ncaa_team_parsers.py` + `wbb/wbb_ncaa_team_parsers.py`.
 
 **Parser contract (universal across all 6 modules):**
 
@@ -351,12 +362,12 @@ Cross-league shape divergences captured by tests:
 - NCAA W basketball `officials` sometimes ships < 3 rows; CFB
   national championship shipped 0 officials.
 
-### Test fixtures (89 captures across 6 directories)
+### Test fixtures (1,550 fixture files across 97 directories)
 
 Captured fixtures live under `tests/fixtures/{espn,mlb_api,nhl_api_web,
 nhl_edge,nhl_stats_rest,nhl_records}/`. Each directory has a
 `README.md` documenting provenance (URL + capture date). See
-`docs/docs/parsers/fixtures.md` for the full inventory.
+each fixture directory's own `README.md` for provenance (URL + capture date).
 
 Adding a new parser → drop a fixture in the right directory + add
 a test in the matching `test_*_parsers.py` file. The parser tests
@@ -369,13 +380,14 @@ and opens a tracking issue labeled `live-tests:drift`.
 
 | Test file | Count | Surface |
 |---|---:|---|
-| `tests/test_espn_universal_parsers.py` | 128 | ESPN cross-league + summary dispatcher |
+| `tests/test_espn_universal_parsers.py` | 134 | ESPN cross-league + summary dispatcher |
 | `tests/test_nhl_api_web_parsers.py` | 37 | NHL api-web modern game-feed |
 | `tests/test_nhl_edge_parsers.py` | 32 | NHL EDGE player-tracking |
 | `tests/test_nhl_aux_parsers.py` | 21 | NHL Stats REST + Records |
 | `tests/test_mlb_api_parsers.py` | 17 | MLB Stats API |
-| **Offline parser tests total** | **235** | |
-| `tests/test_espn_live.py` | 41 | Live API integration (gated by `SDV_PY_LIVE_TESTS=1`) |
+| **Offline parser tests total** | **241** | |
+| `tests/test_espn_live.py` | 80 | Live API integration (gated by `SDV_PY_LIVE_TESTS=1`) |
+| **Whole suite** | **11,446** | `uv run pytest --collect-only -q` |
 
 ## Key Coding Conventions
 
@@ -410,9 +422,10 @@ shared basketball helper.
 The NFL submodule is a near drop-in replacement for [nflreadpy](https://github.com/nflverse/nflreadpy).
 The canonical sdv-py names use the `load_nfl_*` prefix (cross-sport
 disambiguation under the umbrella `sportsdataverse` package); inside
-`sportsdataverse.nfl` itself we additionally export 25 nflreadpy-style
+`sportsdataverse.nfl` itself we additionally export 24 nflreadpy-style
 aliases without the prefix. `load_nfl_espn_qbr` (0.0.68) loads ESPN Total
-QBR (nflreadpy `load_espn_qbr` parity) and brings the canonical count to 24:
+QBR (nflreadpy `load_espn_qbr` parity). There are **45 canonical load_nfl_*** functions,
+plus 2 date aliases (`get_current_season` / `get_current_week`):
 
 ```python
 import sportsdataverse.nfl as nfl
@@ -458,7 +471,7 @@ codebase prefers `kind` internally.
 | `filesystem` | parquet under `cache_dir` | `cache_duration` seconds |
 | `off` | no caching | n/a |
 
-All 24 canonical loaders + 11 deprecated aliases are wrapped with
+All 45 canonical loaders + the 11 deprecated aliases still shipping in 0.1.5 are wrapped with
 `@cached_loader`. The cache key hashes `(qualified_name, args, sorted_kwargs)`
 and **excludes** `return_as_pandas` so a single stored polars frame serves
 both polars and pandas callers (the conversion happens on read).
@@ -877,7 +890,7 @@ buffering it through `download()`. Two variants share that one implementation:
 `_fetch_release_parquet` **raises** `NoDataError` when an asset is absent (used by
 the hand-written `nfl_loaders.py` and `cfb_loaders_extra.py`, where a missing
 season is an error), and `_read_release_parquet` returns **`None`** instead (used
-by the 226 generated call sites, where a season gap is routine). Only "absent"
+by the 291 generated call sites, where a season gap is routine). Only "absent"
 differs — a failed fetch raises `AssetFetchError` from both, so the wrapper can
 never soften a rate limit into an empty frame. This is
 deliberate and measured, not an oversight: Arrow overlaps the fetch with decoding
@@ -892,7 +905,7 @@ season that is EMPTY. Don't "fix" this to route the bytes through `download()`;
 `tests/codegen/test_runtime_release.py::test_success_path_never_calls_the_transport`
 guards it. See issue #397.
 
-### Error vocabulary (0.1.0)
+### Error vocabulary (0.1.5)
 
 `NoDataError` means the fetch **succeeded** and the answer is "nothing here" — a
 404 from any host, or ESPN's 200-with-`code:404` body. `AssetFetchError` means the
@@ -1006,6 +1019,31 @@ across the whole pipeline:
   case rather than require an exact match. For polars/Rust regex use the inline
   case toggle `(?i)...` (lookaround is unsupported — see "Polars version" above).
 
+### Lint and format
+
+ruff is both linter and formatter. `line-length = 120` and `line-ending = "lf"` in
+`pyproject.toml`; invoke it as `uv run ruff check sportsdataverse/` and
+`uv run ruff format`. The isort hook in the pre-commit config is inactive — ruff's
+`I` rules own import order.
+
+### Module naming
+
+| Surface | Module | Public name |
+|---|---|---|
+| ESPN cross-league wrapper (generated) | `<league>/<prefix>_espn_ext.py` | `espn_<prefix>_<short>` |
+| Flat/native API family (generated) | `<league>/<stem>.py` | `<stem>_<slug>` |
+| Dataset loader | `<league>/<lg>_loaders.py` | `load_<lg>_<dataset>` |
+| Parser | `<surface>_parsers.py` | `parse_<surface>_<slug>` |
+| Runtime getter | `<stem>_runtime.py` | `_get` (private) |
+| Hand-written scrape | `<league>/<lg>_<dataset>.py` | `espn_<lg>_<dataset>` |
+
+### Test conventions
+
+One `tests/<pkg>/` subdir per source package; parser tests are payload-agnostic and
+assert against committed fixtures; live tests carry `@skip_if_no_live`
+(`SDV_PY_LIVE_TESTS=1`), and `nba_stats` / `wnba_stats` carry
+`@skip_if_no_nba_stats_live` (`SDV_PY_NBA_STATS_LIVE=1`) instead.
+
 ## Common Pitfalls
 
 - **Statcast parsers must be validated against REAL captures, not synthetic
@@ -1118,6 +1156,11 @@ across the whole pipeline:
   recovered from the player-card link, so do not "simplify" it to a direct
   key read.
 
+- **conda lockstep.** `recipe/meta.yaml` mirrors `[project.dependencies]` by hand.
+  A dependency bump in `pyproject.toml` that is not mirrored there turns
+  `.github/workflows/conda-build.yml` red on the next PR touching either file.
+  Bump both in the same commit.
+
 ## Documentation Maintenance
 
 - The Docusaurus site lives under `docs/`. The per-league reference subtree
@@ -1132,8 +1175,9 @@ across the whole pipeline:
   it becomes contributor-visible reference material.
 - `CONTRIBUTING.md` is the canonical contributor onboarding file (covers
   uv, conda, lint/typecheck, dep-bumping flow).
-- `README.md` has Standard pip / Modern uv / Conda / Development install
-  paths plus the runtime notes (Python 3.9-3.14, polars 1.x, NFL cache).
+- `README.md` has Standard pip / Modern uv / Development install paths plus the
+  runtime notes (Python 3.9-3.14, polars 1.x, NFL cache). There is no Conda
+  section in the README; the recipe lives in `recipe/`.
 - `recipe/meta.yaml` + `recipe/README.md` ship the conda-build recipe and
   document the conda-forge feedstock submission flow. The local-source
   build (`conda build recipe/`) reads metadata from `pyproject.toml`
@@ -1209,57 +1253,60 @@ stats, plus the package-wide cache + config layer where relevant. New
 sport submodules should add a corresponding `0X_<sport>_intro.ipynb` so
 the introductory walkthrough stays parallel across sports.
 
-## Reference-docs build toolchain (codegen)
+## Data sources
 
-The legacy Sphinx pipeline (`Sphinx-docs/` + `create_docs.sh`) is **retired**.
-Reference docs are now generated from the same YAML endpoint metadata that drives
-the wrappers, via the codegen CLI:
+`tools/codegen/sources.yaml` is the registry of record: every public function
+resolves to exactly one provider or helper category, and `--check` fails naming any
+that does not. The rendered view is each league's **Data sources** table plus the
+generated table in `docs/docs/intro.md`.
 
-- **Generate:** `python tools/codegen/generate.py --docs` rewrites the per-league
-  reference subtree under `docs/docs/<sport>/` (full-clobbers each league dir +
-  the shared `docs/docs/reference/` dir; conceptual pages outside them survive).
-  The no-arg `python tools/codegen/generate.py` also regenerates docs alongside
-  the wrappers/loaders/parsed modules.
-- **Templates:** `tools/codegen/templates/_reference_block.jinja` (the 8-section
-  per-function block) + `reference_page`/`league_index`/`loaders_page`/
-  `parameter_reference`/`category_json` templates. `@return` tables come from
-  `tools/codegen/schemas/*.yaml` (ESPN) and `schemas/loader_schemas.yaml` (loaders).
-- **Native (flat) API families:** non-ESPN live APIs are generated from
-  `tools/codegen/endpoints/<stem>.yaml` and registered in `FLAT_APIS` +
-  `_FLAT_API_DOC` (`generate.py`): NHL api-web/edge/stats-rest/records, MLB Stats,
-  and NFL.com (`nfl_api` → `api.nfl.com`). Each emits a
-  `sportsdataverse/<league>/<stem>.py` module (per-endpoint `parser:` → a parser
-  module) **and** its own reference grouping on the league index. **Authenticated**
-  families — NFL.com needs a `WEB_DESKTOP` bearer token — set `auth: true` +
-  `getter_module:` (a module exposing `_get`) in the YAML, so the generated
-  wrappers gain a reusable `headers=` arg and import an auth-aware `_get` (e.g.
-  `nfl/nfl_api_runtime.py`) instead of the shared no-auth `_codegen_runtime._get`.
-  Hand-written cached loaders (NFL is **not** in `_GENERATED_LOADER_LEAGUES`) can
-  still get a "Dataset loaders" docs grouping by listing them in `releases.yaml`
-  (docs-metadata only; the module is left untouched).
-- **Drift gate:** `python tools/codegen/generate.py --check` fails on stale
-  generated docs (orphan-checked only within the generated league/`reference/`
-  dirs). Same gate runs in CI + the `sdv-codegen` pre-commit hook. Offline tests
-  live in `tests/codegen/test_docs.py` + `test_doc_parity.py`.
-- **Docusaurus:** `docs/sidebars.ts` drives each league as a clickable category
-  (link → generated `index`) expanding to an autogenerated reference subtree, so
-  new endpoints surface with no sidebar edit. Verify with
-  `cd docs && yarn build` (broken-link warnings are confined to the frozen
-  `0.0.50` version + CHANGELOG doctoc fragments).
-- **Deploy & versioning:** the site is built on GitHub Actions (`docs-deploy.yml`) and
-  published to the `gh-pages` branch, which Vercel serves at py.sportsdataverse.org.
-  The unversioned `docs/docs/` tree is the live DEFAULT at the root URL
-  (`lastVersion: 'current'`, labelled `main`), so the published docs always track
-  the code. At **each release**, freeze a per-release archive:
-  `cd docs && yarn version:docs <x.y.z>` (snapshots `docs/docs/` →
-  `versioned_docs/version-<x.y.z>/`), then commit. `current`/`main` stays the
-  default — only add a snapshot, never bump `lastVersion` away from `current` — so
-  the live docs never go stale and each release still gets a frozen record. The
-  legacy pre-codegen docs remain archived at `/docs/0.0.50/`.
-- The `--docs` output is markdown the prose linters skip (`docs/docs/**` is
-  excluded from doctoc + markdownlint), so generated tables/fences don't fight the
-  hooks. Docstrings still use Google-style sections (`Args:`/`Returns:`/`Raises:`/
-  `Example:`) — those feed the wrappers' runtime help, not a Sphinx build.
+Providers beyond ESPN and the release loaders: NFL.com Shield (`nfl_api`), NFL Pro
+(`nflpro`), Sleeper (`sleeper`), PFF Developer (`pff_api`) and PFF Premium
+(LEGACY), MLB Stats API (`mlb_api`) and Baseball Savant (`mlb_statcast`), the four
+NHL APIs, `nba_stats` / `wnba_stats`, `kenpom`, `torvik`, `bart_wbb`, Her Hoop
+Stats, Basketball-Reference, RealGM, public model datasets (DARKO / EPM / LEBRON),
+On3 and 247Sports, `asa`, `mls_api`, `nwsl_api`, `fotmob`, `uefa`, `fifa`,
+`euroleague`, `cbs_napi`, `yahoo_shangrila`, `fox_api`, HockeyTech, stats.ncaa.org
+and The Odds API.
+
+Helper categories (non-data functions, grouped on every page's **Tools and
+helpers**): play-by-play processing (including the `football/sources` adapters for
+ESPN / Shield / CBS / Yahoo / Fox / NCAA), models and calculators (`paper_index`,
+the EP/WP and fourth-down surfaces), analytics (`rolling_windows`,
+`metric_curves`, `defense_vs_position`, `tendencies`, `usage_box`,
+`nba_officiating`, `nbagl`), cache and configuration, dates and seasons, IDs and
+crosswalks, `validation`, `wexp`, and the release utilities.
+
+## Codegen
+
+Both the API wrappers and the docs site come out of `tools/codegen/generate.py`.
+The full pipeline — inputs, the six build stages, the docs-site renderers, the
+family split and anchor map, the league registry, the changelog render, the
+coverage and sources gates, and the sdv-docs index downstream — is documented
+once in [`docs/docs/architecture/codegen.md`](docs/docs/architecture/codegen.md).
+Read that page before touching anything under `tools/codegen/`.
+
+The parts worth repeating here:
+
+- **Regenerate after touching any input, always**: endpoint YAML, `schemas/**`,
+  `templates/**`, `tools/codegen/*.py`, a public docstring, an `__all__`, or
+  `CHANGELOG.md`. `uv run python tools/codegen/generate.py` then `--check`. Both
+  the `sdv-codegen` pre-commit hook and `codegen-drift-prepush` now watch
+  `tools/codegen/*.py` and `CHANGELOG.md` as well, which they did not before 0.1.5.
+- **Schema sources are four shapes**: `schemas/<name>.yaml`,
+  `schemas/<name>/<league>.yaml`, `schemas/native/<stem>/` and
+  `schemas/autodoc/<league>/`.
+- **`FLAT_APIS` has 36 families**, not three.
+- **The documented leagues come from `docs/src/data/leagues.json`**, written by
+  `render_leagues_json()`; `docs/sidebars.ts` reads that file and hard-codes nothing.
+- **Returns-table descriptions go in `manual_column_descriptions.yaml`**, never in
+  `schemas/**.yaml` — a re-capture clobbers those.
+- **`sources.yaml` is the provider/category registry.** A new public function in a
+  new module needs a rule there, or `--check` fails naming it.
+- **Versioning**: the live default is the unversioned `docs/docs/` tree, labelled
+  **main (latest)**. `cd docs && yarn version:docs <x.y.z>` snapshots it at a
+  release. `VERSIONS_TO_KEEP=3` means only the three newest snapshots build — the
+  legacy `/docs/0.0.50/` archive is NOT served any more.
 
 ## Cheat sheet
 

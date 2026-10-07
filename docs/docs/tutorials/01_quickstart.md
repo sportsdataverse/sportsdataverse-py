@@ -104,13 +104,6 @@ import sportsdataverse.odds as odds
   "ahl", "ohl", "whl", "qmjhl", "odds")]
 ```
 
-
-
-
-    ['cfb', 'mbb', 'mlb', 'nba', 'nfl', 'nhl', 'odds', 'pwhl', 'wbb', 'wnba']
-
-
-
 Live endpoints are seasonal and occasionally rate-limited, and the
 naming-convention loops below fan out **many** live calls at once — so a tiny
 `safe()` helper runs every network call defensively. You get the frame when the
@@ -119,14 +112,23 @@ That keeps this whole page runnable offline or in the off-season. 🛟
 
 
 ```python
+from sportsdataverse.errors import AssetFetchError, NoDataError
+
 def safe(label, thunk):
-    '''Run a live call; return its result, or print a one-liner and return None.'''
+    '''Run a live call; return its result, or name the failure and return None.
+
+    NoDataError means the fetch SUCCEEDED and there is nothing there (an
+    out-of-season endpoint, a 404). AssetFetchError means the fetch FAILED and the
+    answer is unknown (a 403, a rate limit, an exhausted retry budget). Collapsing
+    the two into None is the silent-data-loss bug the error vocabulary exists to
+    prevent, so the class is printed.
+    '''
     try:
         out = thunk()
         print(f"✅ {label}")
         return out
-    except Exception as e:  # noqa: BLE001 -- demo resilience
-        print(f"⏭️  {label}: unavailable right now ({type(e).__name__})")
+    except (NoDataError, AssetFetchError) as e:
+        print(f"\u23ed\ufe0f  {label}: {type(e).__name__}: {e}")
         return None
 
 
@@ -135,9 +137,6 @@ HAS_KEY = bool(os.environ.get("ODDS_API_KEY"))
 print("ODDS_API_KEY set:", HAS_KEY,
       "— odds cells will" + ("" if HAS_KEY else " NOT") + " run live")
 ```
-
-    ODDS_API_KEY set: True — odds cells will run live
-
 
 ## 🧭 2 · The naming-convention superpower
 
@@ -169,31 +168,6 @@ for lg in ["nba", "wnba", "nhl", "mlb"]:
 pl.DataFrame(rows)  # same columns, same shape — one contract, four leagues
 ```
 
-    ✅ espn_nba_teams
-    ✅ espn_wnba_teams
-    ✅ espn_nhl_teams
-
-
-    ✅ espn_mlb_teams
-
-
-
-
-
-    shape: (4, 4)
-    ┌────────┬───────────────────┬─────────┬────────┐
-    │ league ┆ fn                ┆ n_teams ┆ n_cols │
-    │ ---    ┆ ---               ┆ ---     ┆ ---    │
-    │ str    ┆ str               ┆ i64     ┆ i64    │
-    ╞════════╪═══════════════════╪═════════╪════════╡
-    │ NBA    ┆ espn_nba_teams()  ┆ 30      ┆ 14     │
-    │ WNBA   ┆ espn_wnba_teams() ┆ 15      ┆ 14     │
-    │ NHL    ┆ espn_nhl_teams()  ┆ 32      ┆ 14     │
-    │ MLB    ┆ espn_mlb_teams()  ┆ 30      ┆ 14     │
-    └────────┴───────────────────┴─────────┴────────┘
-
-
-
 Same trick for the **scoreboard** and **standings** families — the call is
 identical, only the slug changes.
 
@@ -208,11 +182,6 @@ stand = safe("espn_nba_standings", lambda: call("standings", "nba"))
 print("NFL scoreboard rows:", None if board is None else board.height,
       "| NBA standings rows:", None if stand is None else getattr(stand, "height", None))
 ```
-
-    ✅ espn_nfl_scoreboard
-    ✅ espn_nba_standings
-    NFL scoreboard rows: 16 | NBA standings rows: 30
-
 
 ### 📦 The loaders follow one pattern too
 
@@ -229,11 +198,6 @@ for sport in ["nba", "wnba", "nhl"]:
     print(f"load_{sport}_pbp(seasons=[{season}])  ->  signature is identical for every sport")
 # (we don't pull all of them here — that's a lot of parquet; Recipe 3 runs one.)
 ```
-
-    load_nba_pbp(seasons=[2024])  ->  signature is identical for every sport
-    load_wnba_pbp(seasons=[2024])  ->  signature is identical for every sport
-    load_nhl_pbp(seasons=[2024])  ->  signature is identical for every sport
-
 
 ### 🏒 The HockeyTech leagues share one surface
 
@@ -261,39 +225,6 @@ for lg, mod in HOCKEYTECH.items():
 pl.DataFrame(rows)
 ```
 
-    ✅ most_recent_ahl_season
-
-
-    ✅ most_recent_ohl_season
-
-
-    ✅ most_recent_whl_season
-
-
-    ✅ most_recent_qmjhl_season
-
-
-    ✅ most_recent_pwhl_season
-
-
-
-
-
-    shape: (5, 4)
-    ┌────────┬──────────────────┬───────────────────┬────────┐
-    │ league ┆ schedule_fn      ┆ standings_fn      ┆ season │
-    │ ---    ┆ ---              ┆ ---               ┆ ---    │
-    │ str    ┆ str              ┆ str               ┆ i64    │
-    ╞════════╪══════════════════╪═══════════════════╪════════╡
-    │ AHL    ┆ ahl_schedule()   ┆ ahl_standings()   ┆ 2027   │
-    │ OHL    ┆ ohl_schedule()   ┆ ohl_standings()   ┆ 2027   │
-    │ WHL    ┆ whl_schedule()   ┆ whl_standings()   ┆ 2026   │
-    │ QMJHL  ┆ qmjhl_schedule() ┆ qmjhl_standings() ┆ 2027   │
-    │ PWHL   ┆ pwhl_schedule()  ┆ pwhl_standings()  ┆ 2027   │
-    └────────┴──────────────────┴───────────────────┴────────┘
-
-
-
 ### 🔎 Discovery helpers — when you don't know the name yet
 
 Four top-level helpers let you *search* the surface instead of guessing:
@@ -311,37 +242,6 @@ for lg, fns in hits.items():
     print(f"{lg:>4}: {', '.join(fns)}")
 ```
 
-     cfb: espn_cfb_scoreboard, fox_cfb_scoreboard, scoreboard_event_parsing, yahoo_cfb_scoreboard
-     mbb: espn_mbb_scoreboard, fox_mbb_scoreboard, parse_ncaa_bb_scoreboard, scoreboard_event_parsing
-     mlb: espn_mlb_scoreboard, fox_mlb_scoreboard
-     nba: espn_nba_scoreboard, fox_nba_scoreboard, scoreboard_event_parsing
-     nfl: espn_nfl_scoreboard, fox_nfl_scoreboard, scoreboard_event_parsing
-     nhl: espn_nhl_scoreboard, fox_nhl_scoreboard, nhl_scoreboard, parse_nhl_web_scoreboard, scoreboard_event_parsing
-     wbb: espn_wbb_scoreboard, fox_wbb_scoreboard, scoreboard_event_parsing
-    wnba: espn_wnba_scoreboard, fox_wnba_scoreboard, scoreboard_event_parsing
-    soccer: espn_soccer_scoreboard
-    cricket: espn_cricket_scoreboard
-     epl: espn_epl_scoreboard
-    laliga: espn_laliga_scoreboard
-    bundesliga: espn_bundesliga_scoreboard
-    seriea: espn_seriea_scoreboard
-    ligue1: espn_ligue1_scoreboard
-     mls: espn_mls_scoreboard
-    ligamx: espn_ligamx_scoreboard
-     ucl: espn_ucl_scoreboard
-     uel: espn_uel_scoreboard
-    nwsl: espn_nwsl_scoreboard
-     wwc: espn_wwc_scoreboard
-      wc: espn_wc_scoreboard
-     mch: espn_mch_scoreboard
-     wch: espn_wch_scoreboard
-     ufl: espn_ufl_scoreboard
-     xfl: espn_xfl_scoreboard
-     cfl: espn_cfl_scoreboard
-    college_baseball: espn_college_baseball_scoreboard
-    college_softball: espn_college_softball_scoreboard
-
-
 
 ```python
 # How big is each league's surface?
@@ -351,30 +251,6 @@ pl.DataFrame({"league": list(counts.keys()), "n_functions": list(counts.values()
 ```
 
 
-
-
-    shape: (34, 2)
-    ┌────────┬─────────────┐
-    │ league ┆ n_functions │
-    │ ---    ┆ ---         │
-    │ str    ┆ i64         │
-    ╞════════╪═════════════╡
-    │ mbb    ┆ 632         │
-    │ wbb    ┆ 570         │
-    │ cfb    ┆ 458         │
-    │ nhl    ┆ 406         │
-    │ mlb    ┆ 370         │
-    │ …      ┆ …           │
-    │ pwhl   ┆ 68          │
-    │ ahl    ┆ 14          │
-    │ ohl    ┆ 14          │
-    │ qmjhl  ┆ 14          │
-    │ whl    ┆ 14          │
-    └────────┴─────────────┘
-
-
-
-
 ```python
 # Fuzzy lookups — no IDs to memorize:
 team = sdv.find_team("Lakers", "nba")
@@ -382,10 +258,6 @@ ath = sdv.find_athlete("LeBron", "nba")
 print("team  ->", None if team is None else f"{team['displayName']} (id={team['id']})")
 print("athlete ->", None if ath is None else f"{ath['displayName']} (id={ath['id']})")
 ```
-
-    team  -> Los Angeles Lakers (id=13)
-    athlete -> LeBron James (id=1966)
-
 
 ## 🍳 3 · Twenty cross-sport recipes
 
@@ -406,27 +278,6 @@ cols = ["team_id", "team_abbreviation", "team_display_name", "team_location"]
  if wbb_teams is not None and wbb_teams.height else "WBB teams unavailable right now")
 ```
 
-    ✅ espn_wbb_teams
-
-
-
-
-
-    shape: (5, 4)
-    ┌─────────┬───────────────────┬────────────────────────────┬───────────────────┐
-    │ team_id ┆ team_abbreviation ┆ team_display_name          ┆ team_location     │
-    │ ---     ┆ ---               ┆ ---                        ┆ ---               │
-    │ str     ┆ str               ┆ str                        ┆ str               │
-    ╞═════════╪═══════════════════╪════════════════════════════╪═══════════════════╡
-    │ 2000    ┆ ACU               ┆ Abilene Christian Wildcats ┆ Abilene Christian │
-    │ 2005    ┆ AF                ┆ Air Force Falcons          ┆ Air Force         │
-    │ 2006    ┆ AKR               ┆ Akron Zips                 ┆ Akron             │
-    │ 2010    ┆ AAMU              ┆ Alabama A&M Bulldogs       ┆ Alabama A&M       │
-    │ 333     ┆ ALA               ┆ Alabama Crimson Tide       ┆ Alabama           │
-    └─────────┴───────────────────┴────────────────────────────┴───────────────────┘
-
-
-
 ### Recipe 2 — Any league's scoreboard 📋
 
 `espn_<lg>_scoreboard()` returns today's slate as a tidy frame. Same call for
@@ -438,40 +289,6 @@ sb = safe("espn_mlb_scoreboard", lambda: sdv.espn_mlb_scoreboard())
 (sb.head() if sb is not None and getattr(sb, "height", 0)
  else "no MLB games on the board right now")
 ```
-
-    ✅ espn_mlb_scoreboard
-
-
-
-
-
-    shape: (4, 50)
-    ┌───────────┬───────────┬───────────┬───────────┬───┬───────────┬───────────┬───────────┬──────────┐
-    │ game_id   ┆ uid       ┆ date      ┆ name      ┆ … ┆ away_logo ┆ away_scor ┆ away_winn ┆ away_ran │
-    │ ---       ┆ ---       ┆ ---       ┆ ---       ┆   ┆ ---       ┆ e         ┆ er        ┆ k        │
-    │ str       ┆ str       ┆ str       ┆ str       ┆   ┆ str       ┆ ---       ┆ ---       ┆ ---      │
-    │           ┆           ┆           ┆           ┆   ┆           ┆ str       ┆ str       ┆ str      │
-    ╞═══════════╪═══════════╪═══════════╪═══════════╪═══╪═══════════╪═══════════╪═══════════╪══════════╡
-    │ 401907965 ┆ s:1~l:10~ ┆ 2026-09-2 ┆ Philadelp ┆ … ┆ https://a ┆ 0         ┆ null      ┆ null     │
-    │           ┆ e:4019079 ┆ 9T18:00Z  ┆ hia       ┆   ┆ .espncdn. ┆           ┆           ┆          │
-    │           ┆ 65        ┆           ┆ Phillies  ┆   ┆ com/i/tea ┆           ┆           ┆          │
-    │           ┆           ┆           ┆ at Atlan… ┆   ┆ mlo…      ┆           ┆           ┆          │
-    │ 401907896 ┆ s:1~l:10~ ┆ 2026-09-2 ┆ Chicago   ┆ … ┆ https://a ┆ 0         ┆ null      ┆ null     │
-    │           ┆ e:4019078 ┆ 9T21:00Z  ┆ White Sox ┆   ┆ .espncdn. ┆           ┆           ┆          │
-    │           ┆ 96        ┆           ┆ at        ┆   ┆ com/i/tea ┆           ┆           ┆          │
-    │           ┆           ┆           ┆ Houston   ┆   ┆ mlo…      ┆           ┆           ┆          │
-    │           ┆           ┆           ┆ A…        ┆   ┆           ┆           ┆           ┆          │
-    │ 401907924 ┆ s:1~l:10~ ┆ 2026-09-3 ┆ Boston    ┆ … ┆ https://a ┆ 0         ┆ null      ┆ null     │
-    │           ┆ e:4019079 ┆ 0T00:00Z  ┆ Red Sox   ┆   ┆ .espncdn. ┆           ┆           ┆          │
-    │           ┆ 24        ┆           ┆ at New    ┆   ┆ com/i/tea ┆           ┆           ┆          │
-    │           ┆           ┆           ┆ York Yan… ┆   ┆ mlo…      ┆           ┆           ┆          │
-    │ 401907974 ┆ s:1~l:10~ ┆ 2026-09-3 ┆ Chicago   ┆ … ┆ https://a ┆ 0         ┆ null      ┆ null     │
-    │           ┆ e:4019079 ┆ 0T02:00Z  ┆ Cubs at   ┆   ┆ .espncdn. ┆           ┆           ┆          │
-    │           ┆ 74        ┆           ┆ San Diego ┆   ┆ com/i/tea ┆           ┆           ┆          │
-    │           ┆           ┆           ┆ Padr…     ┆   ┆ mlo…      ┆           ┆           ┆          │
-    └───────────┴───────────┴───────────┴───────────┴───┴───────────┴───────────┴───────────┴──────────┘
-
-
 
 ### Recipe 3 — Load any sport's season play-by-play 📦
 
@@ -487,28 +304,6 @@ print("WNBA 2024 pbp rows:", None if wnba_pbp is None else wnba_pbp.height)
  if wnba_pbp is not None and wnba_pbp.height else "pbp unavailable right now")
 ```
 
-    ✅ load_wnba_pbp([2024])
-    WNBA 2024 pbp rows: 101501
-
-
-
-
-
-    shape: (5, 4)
-    ┌───────────┬───────────────┬─────────────────────┬─────────────────────────────────┐
-    │ game_id   ┆ period_number ┆ clock_display_value ┆ text                            │
-    │ ---       ┆ ---           ┆ ---                 ┆ ---                             │
-    │ i32       ┆ i32           ┆ str                 ┆ str                             │
-    ╞═══════════╪═══════════════╪═════════════════════╪═════════════════════════════════╡
-    │ 401726992 ┆ 1             ┆ 10:00               ┆ Napheesa Collier vs. Jonquel J… │
-    │ 401726992 ┆ 1             ┆ 9:35                ┆ Napheesa Collier makes 3-foot … │
-    │ 401726992 ┆ 1             ┆ 9:12                ┆ Sabrina Ionescu misses 24-foot… │
-    │ 401726992 ┆ 1             ┆ 9:09                ┆ Bridget Carleton defensive reb… │
-    │ 401726992 ┆ 1             ┆ 8:55                ┆ Betnijah Laney-Hamilton person… │
-    └───────────┴───────────────┴─────────────────────┴─────────────────────────────────┘
-
-
-
 ### Recipe 4 — The same box-score shape for two different sports 🪞
 
 `load_<sport>_team_boxscore` returns the same *kind* of frame for basketball and
@@ -521,14 +316,6 @@ nhl_box = safe("load_nhl_team_boxscore([2024])", lambda: sdv.load_nhl_team_boxsc
 print("NBA team-box shape:", None if nba_box is None else nba_box.shape)
 print("NHL team-box shape:", None if nhl_box is None else nhl_box.shape)
 ```
-
-    ✅ load_nba_team_boxscore([2024])
-
-
-    ✅ load_nhl_team_boxscore([2024])
-    NBA team-box shape: (2640, 57)
-    NHL team-box shape: (2800, 19)
-
 
 ### Recipe 5 — Standings for several leagues at once 🔁
 
@@ -545,29 +332,6 @@ for lg in ["nba", "nhl", "mlb"]:
 pl.DataFrame(rows)
 ```
 
-    ✅ espn_nba_standings
-
-
-    ✅ espn_nhl_standings
-    ✅ espn_mlb_standings
-
-
-
-
-
-    shape: (3, 3)
-    ┌────────┬──────┬──────┐
-    │ league ┆ rows ┆ cols │
-    │ ---    ┆ ---  ┆ ---  │
-    │ str    ┆ i64  ┆ i64  │
-    ╞════════╪══════╪══════╡
-    │ NBA    ┆ 30   ┆ 29   │
-    │ NHL    ┆ 32   ┆ 34   │
-    │ MLB    ┆ 30   ┆ 47   │
-    └────────┴──────┴──────┘
-
-
-
 ### Recipe 6 — Find a team by name 🔎
 
 `find_team` fuzzy-matches across the ESPN leagues and hands back the team dict
@@ -580,18 +344,6 @@ for nm, lg in [("Patriots", "nfl"), ("Yankees", "mlb"), ("Bruins", "nhl"), ("Cri
     print(f"{lg:>3}  {nm:<14} -> {None if t is None else t['displayName']} (id={None if t is None else t['id']})")
 ```
 
-    nfl  Patriots       -> New England Patriots (id=17)
-
-
-    mlb  Yankees        -> New York Yankees (id=10)
-
-
-    nhl  Bruins         -> Boston Bruins (id=1)
-
-
-    cfb  Crimson Tide   -> Alabama Crimson Tide (id=333)
-
-
 ### Recipe 7 — Find an athlete by name 🏃
 
 `find_athlete` does the same for players — great for grabbing an ESPN athlete
@@ -603,15 +355,6 @@ for nm, lg in [("Caitlin Clark", "wnba"), ("Patrick Mahomes", "nfl"), ("Connor M
     a = sdv.find_athlete(nm, lg)
     print(f"{lg:>4}  {nm:<16} -> {None if a is None else a['displayName']} (id={None if a is None else a['id']})")
 ```
-
-    wnba  Caitlin Clark    -> None (id=None)
-
-
-     nfl  Patrick Mahomes  -> Patrick Mahomes (id=3139477)
-
-
-     nhl  Connor McDavid   -> Connor McDavid (id=3895074)
-
 
 ### Recipe 8 — A team and its roster, end to end 👥
 
@@ -629,43 +372,6 @@ if lal is not None:
  else "roster unavailable right now")
 ```
 
-    ✅ espn_nba_team_roster(team_id=13)
-
-
-
-
-
-    shape: (5, 67)
-    ┌─────────┬────────────┬───────────┬───────────┬───┬───────────┬───────────┬───────────┬───────────┐
-    │ id      ┆ uid        ┆ guid      ┆ first_nam ┆ … ┆ citizensh ┆ hand_type ┆ hand_abbr ┆ hand_disp │
-    │ ---     ┆ ---        ┆ ---       ┆ e         ┆   ┆ ip        ┆ ---       ┆ eviation  ┆ lay_value │
-    │ str     ┆ str        ┆ str       ┆ ---       ┆   ┆ ---       ┆ str       ┆ ---       ┆ ---       │
-    │         ┆            ┆           ┆ str       ┆   ┆ str       ┆           ┆ str       ┆ str       │
-    ╞═════════╪════════════╪═══════════╪═══════════╪═══╪═══════════╪═══════════╪═══════════╪═══════════╡
-    │ 5113969 ┆ s:40~l:46~ ┆ a24923a3- ┆ Cameron   ┆ … ┆ null      ┆ null      ┆ null      ┆ null      │
-    │         ┆ a:5113969  ┆ f2e0-334d ┆           ┆   ┆           ┆           ┆           ┆           │
-    │         ┆            ┆ -942f-3d3 ┆           ┆   ┆           ┆           ┆           ┆           │
-    │         ┆            ┆ 689…      ┆           ┆   ┆           ┆           ┆           ┆           │
-    │ 3945274 ┆ s:40~l:46~ ┆ 583794eb- ┆ Luka      ┆ … ┆ null      ┆ null      ┆ null      ┆ null      │
-    │         ┆ a:3945274  ┆ 0f38-9bbd ┆           ┆   ┆           ┆           ┆           ┆           │
-    │         ┆            ┆ -3e25-9dd ┆           ┆   ┆           ┆           ┆           ┆           │
-    │         ┆            ┆ 33b…      ┆           ┆   ┆           ┆           ┆           ┆           │
-    │ 4397014 ┆ s:40~l:46~ ┆ dbe4d07d- ┆ Quentin   ┆ … ┆ null      ┆ null      ┆ null      ┆ null      │
-    │         ┆ a:4397014  ┆ 9166-07d7 ┆           ┆   ┆           ┆           ┆           ┆           │
-    │         ┆            ┆ -19f0-52c ┆           ┆   ┆           ┆           ┆           ┆           │
-    │         ┆            ┆ c77…      ┆           ┆   ┆           ┆           ┆           ┆           │
-    │ 4868423 ┆ s:40~l:46~ ┆ d4c656b3- ┆ Jaden     ┆ … ┆ null      ┆ null      ┆ null      ┆ null      │
-    │         ┆ a:4868423  ┆ e2b5-33c4 ┆           ┆   ┆           ┆           ┆           ┆           │
-    │         ┆            ┆ -b4e7-7ac ┆           ┆   ┆           ┆           ┆           ┆           │
-    │         ┆            ┆ a3e…      ┆           ┆   ┆           ┆           ┆           ┆           │
-    │ 4683774 ┆ s:40~l:46~ ┆ 456f71fd- ┆ Bronny    ┆ … ┆ null      ┆ null      ┆ null      ┆ null      │
-    │         ┆ a:4683774  ┆ 2ce5-3f50 ┆           ┆   ┆           ┆           ┆           ┆           │
-    │         ┆            ┆ -8d0d-f30 ┆           ┆   ┆           ┆           ┆           ┆           │
-    │         ┆            ┆ c01…      ┆           ┆   ┆           ┆           ┆           ┆           │
-    └─────────┴────────────┴───────────┴───────────┴───┴───────────┴───────────┴───────────┴───────────┘
-
-
-
 ### Recipe 9 — polars → pandas in one keyword 🐼
 
 Every wrapper honors `return_as_pandas=True`. Same data, different frame — handy
@@ -678,12 +384,6 @@ teams_pd = safe("espn_wnba_teams (pandas)", lambda: sdv.espn_wnba_teams(return_a
 print("polars:", type(teams_pl).__name__, None if teams_pl is None else teams_pl.shape)
 print("pandas:", type(teams_pd).__name__, None if teams_pd is None else teams_pd.shape)
 ```
-
-    ✅ espn_wnba_teams (polars)
-    ✅ espn_wnba_teams (pandas)
-    polars: DataFrame (15, 14)
-    pandas: DataFrame (15, 14)
-
 
 ### Recipe 10 — The `return_parsed` toggle on a native API 🎛️
 
@@ -698,14 +398,6 @@ print("parsed ->", type(parsed).__name__, None if parsed is None else getattr(pa
 print("raw    ->", type(raw).__name__, "(top-level keys:", None if not isinstance(raw, dict) else list(raw.keys())[:4], ")")
 ```
 
-    ✅ nhl_standings (parsed)
-
-
-    ✅ nhl_standings (raw dict)
-    parsed -> DataFrame (32, 76)
-    raw    -> dict (top-level keys: ['wildCardIndicator', 'standingsDateTimeUtc', 'standings'] )
-
-
 ### Recipe 11 — 🏈 Premium NFL pull (`api.nfl.com`)
 
 `nfl_standings()` hits the league's own API and returns one tidy row per team.
@@ -718,30 +410,6 @@ cols = ["team_abbr", "team_full_name", "overall_wins", "overall_losses",
 (nfl_st.select([c for c in cols if c in nfl_st.columns]).head(8)
  if nfl_st is not None and getattr(nfl_st, "height", 0) else "NFL standings unavailable right now")
 ```
-
-    ✅ nfl_standings (api.nfl.com)
-
-
-
-
-
-    shape: (8, 3)
-    ┌────────────────────┬──────────────┬────────────────┐
-    │ team_full_name     ┆ overall_wins ┆ overall_losses │
-    │ ---                ┆ ---          ┆ ---            │
-    │ str                ┆ i64          ┆ i64            │
-    ╞════════════════════╪══════════════╪════════════════╡
-    │ Arizona Cardinals  ┆ 8            ┆ 9              │
-    │ Atlanta Falcons    ┆ 8            ┆ 9              │
-    │ Baltimore Ravens   ┆ 12           ┆ 5              │
-    │ Buffalo Bills      ┆ 13           ┆ 4              │
-    │ Carolina Panthers  ┆ 5            ┆ 12             │
-    │ Chicago Bears      ┆ 5            ┆ 12             │
-    │ Cincinnati Bengals ┆ 9            ┆ 8              │
-    │ Cleveland Browns   ┆ 3            ┆ 14             │
-    └────────────────────┴──────────────┴────────────────┘
-
-
 
 ### Recipe 12 — ⚾ Premium MLB pull (MLB Stats API + parser)
 
@@ -760,32 +428,6 @@ keep = ["standings_division_name", "team_name", "wins", "losses", "winning_perce
  if mlb_st is not None and getattr(mlb_st, "height", 0) else "MLB standings unavailable right now")
 ```
 
-    ✅ MLB standings (Stats API + parser)
-
-
-
-
-
-    shape: (10, 6)
-    ┌─────────────────────────┬───────────┬──────┬────────┬────────────────────┬────────────┐
-    │ standings_division_name ┆ team_name ┆ wins ┆ losses ┆ winning_percentage ┆ games_back │
-    │ ---                     ┆ ---       ┆ ---  ┆ ---    ┆ ---                ┆ ---        │
-    │ str                     ┆ str       ┆ i64  ┆ i64    ┆ str                ┆ str        │
-    ╞═════════════════════════╪═══════════╪══════╪════════╪════════════════════╪════════════╡
-    │ null                    ┆ Yankees   ┆ 94   ┆ 68     ┆ .580               ┆ -          │
-    │ null                    ┆ Orioles   ┆ 91   ┆ 71     ┆ .562               ┆ 3.0        │
-    │ null                    ┆ Red Sox   ┆ 81   ┆ 81     ┆ .500               ┆ 13.0       │
-    │ null                    ┆ Rays      ┆ 80   ┆ 82     ┆ .494               ┆ 14.0       │
-    │ null                    ┆ Blue Jays ┆ 74   ┆ 88     ┆ .457               ┆ 20.0       │
-    │ null                    ┆ Guardians ┆ 92   ┆ 69     ┆ .571               ┆ -          │
-    │ null                    ┆ Royals    ┆ 86   ┆ 76     ┆ .531               ┆ 6.5        │
-    │ null                    ┆ Tigers    ┆ 86   ┆ 76     ┆ .531               ┆ 6.5        │
-    │ null                    ┆ Twins     ┆ 82   ┆ 80     ┆ .506               ┆ 10.5       │
-    │ null                    ┆ White Sox ┆ 41   ┆ 121    ┆ .253               ┆ 51.5       │
-    └─────────────────────────┴───────────┴──────┴────────┴────────────────────┴────────────┘
-
-
-
 ### Recipe 13 — ⚾ MLB Statcast — the premium tracking firehose
 
 `mlb_statcast_search()` returns one row per pitch — the raw Baseball Savant tracking
@@ -802,37 +444,6 @@ show = [c for c in ["game_date", "player_name", "pitch_type", "release_speed",
  if pitches is not None and getattr(pitches, "height", 0) else "no Statcast rows for that day right now")
 ```
 
-    ✅ mlb_statcast_search (1 day)
-
-
-
-
-
-    shape: (10, 7)
-    ┌────────────┬───────────────┬────────────┬──────────────┬──────────────┬──────────────┬───────────┐
-    │ game_date  ┆ player_name   ┆ pitch_type ┆ release_spee ┆ launch_speed ┆ launch_angle ┆ events    │
-    │ ---        ┆ ---           ┆ ---        ┆ d            ┆ ---          ┆ ---          ┆ ---       │
-    │ str        ┆ str           ┆ str        ┆ ---          ┆ f64          ┆ f64          ┆ str       │
-    │            ┆               ┆            ┆ f64          ┆              ┆              ┆           │
-    ╞════════════╪═══════════════╪════════════╪══════════════╪══════════════╪══════════════╪═══════════╡
-    │ 2024-07-01 ┆ Alonso, Pete  ┆ FF         ┆ 94.8         ┆ 78.0         ┆ 46.0         ┆ field_out │
-    │ 2024-07-01 ┆ Alonso, Pete  ┆ FF         ┆ 96.6         ┆ null         ┆ null         ┆ null      │
-    │ 2024-07-01 ┆ Alonso, Pete  ┆ FF         ┆ 96.3         ┆ 73.3         ┆ 20.0         ┆ null      │
-    │ 2024-07-01 ┆ Alonso, Pete  ┆ FF         ┆ 97.2         ┆ null         ┆ null         ┆ null      │
-    │ 2024-07-01 ┆ Alonso, Pete  ┆ FF         ┆ 95.6         ┆ null         ┆ null         ┆ null      │
-    │ 2024-07-01 ┆ Alonso, Pete  ┆ FF         ┆ 95.8         ┆ null         ┆ null         ┆ null      │
-    │ 2024-07-01 ┆ Varsho,       ┆ FF         ┆ 97.4         ┆ null         ┆ null         ┆ strikeout │
-    │            ┆ Daulton       ┆            ┆              ┆              ┆              ┆           │
-    │ 2024-07-01 ┆ Martinez,     ┆ FF         ┆ 97.5         ┆ null         ┆ null         ┆ strikeout │
-    │            ┆ J.D.          ┆            ┆              ┆              ┆              ┆           │
-    │ 2024-07-01 ┆ Varsho,       ┆ KC         ┆ 84.0         ┆ 94.3         ┆ -12.0        ┆ null      │
-    │            ┆ Daulton       ┆            ┆              ┆              ┆              ┆           │
-    │ 2024-07-01 ┆ Varsho,       ┆ FF         ┆ 96.2         ┆ null         ┆ null         ┆ null      │
-    │            ┆ Daulton       ┆            ┆              ┆              ┆              ┆           │
-    └────────────┴───────────────┴────────────┴──────────────┴──────────────┴──────────────┴───────────┘
-
-
-
 ### Recipe 14 — 🏒 Premium NHL pull (`api-web`)
 
 `nhl_standings()` reads the modern NHL `api-web` feed — one row per team, parsed
@@ -846,30 +457,6 @@ keep = ["team_abbrev", "team_name", "wins", "losses", "ot_losses", "points",
 (nhl_st.select([c for c in keep if c in nhl_st.columns]).head(8)
  if nhl_st is not None and getattr(nhl_st, "height", 0) else "NHL standings unavailable right now")
 ```
-
-    ✅ nhl_standings (api-web)
-
-
-
-
-
-    shape: (8, 6)
-    ┌──────┬────────┬───────────┬────────┬─────────────────┬───────────────┐
-    │ wins ┆ losses ┆ ot_losses ┆ points ┆ conference_name ┆ division_name │
-    │ ---  ┆ ---    ┆ ---       ┆ ---    ┆ ---             ┆ ---           │
-    │ i64  ┆ i64    ┆ i64       ┆ i64    ┆ str             ┆ str           │
-    ╞══════╪════════╪═══════════╪════════╪═════════════════╪═══════════════╡
-    │ 0    ┆ 0      ┆ 0         ┆ 0      ┆ Western         ┆ Pacific       │
-    │ 0    ┆ 0      ┆ 0         ┆ 0      ┆ Eastern         ┆ Atlantic      │
-    │ 0    ┆ 0      ┆ 0         ┆ 0      ┆ Eastern         ┆ Atlantic      │
-    │ 0    ┆ 0      ┆ 0         ┆ 0      ┆ Western         ┆ Pacific       │
-    │ 0    ┆ 0      ┆ 0         ┆ 0      ┆ Eastern         ┆ Metropolitan  │
-    │ 0    ┆ 0      ┆ 0         ┆ 0      ┆ Western         ┆ Central       │
-    │ 0    ┆ 0      ┆ 0         ┆ 0      ┆ Western         ┆ Central       │
-    │ 0    ┆ 0      ┆ 0         ┆ 0      ┆ Eastern         ┆ Metropolitan  │
-    └──────┴────────┴───────────┴────────┴─────────────────┴───────────────┘
-
-
 
 ### Recipe 15 — 🏒 NHL EDGE tracking leaderboard
 
@@ -885,16 +472,6 @@ edge = safe("nhl_edge_skater_speed_top_10",
  else "NHL EDGE leaderboard unavailable right now")
 ```
 
-    ⏭️  nhl_edge_skater_speed_top_10: unavailable right now (NoDataError)
-
-
-
-
-
-    'NHL EDGE leaderboard unavailable right now'
-
-
-
 ### Recipe 16 — 🏒 Premium PWHL pull (HockeyTech)
 
 The women's pro league rides the HockeyTech feed. `pwhl_standings()` returns the
@@ -909,34 +486,6 @@ print("standings rows:", None if pwhl_st is None else getattr(pwhl_st, "height",
 (pwhl_st.head() if pwhl_st is not None and getattr(pwhl_st, "height", 0)
  else "PWHL standings unavailable right now")
 ```
-
-    ✅ pwhl_standings
-    ✅ load_pwhl_schedules([2024])
-    standings rows: 12 | schedule rows: 85
-
-
-
-
-
-    shape: (5, 15)
-    ┌───────────┬────────┬───────────────┬────────┬───┬──────────────┬───────────┬──────────────┬──────┐
-    │ team_code ┆ losses ┆ regulation_wi ┆ points ┆ … ┆ games_played ┆ team_rank ┆ team         ┆ wins │
-    │ ---       ┆ ---    ┆ ns            ┆ ---    ┆   ┆ ---          ┆ ---       ┆ ---          ┆ ---  │
-    │ str       ┆ str    ┆ ---           ┆ i64    ┆   ┆ str          ┆ i64       ┆ str          ┆ i64  │
-    │           ┆        ┆ str           ┆        ┆   ┆              ┆           ┆              ┆      │
-    ╞═══════════╪════════╪═══════════════╪════════╪═══╪══════════════╪═══════════╪══════════════╪══════╡
-    │ BOS       ┆ 0      ┆               ┆ 0      ┆ … ┆ 0            ┆ 1         ┆ Boston Fleet ┆ null │
-    │ MIN       ┆ 0      ┆               ┆ 0      ┆ … ┆ 0            ┆ 2         ┆ Minnesota    ┆ null │
-    │           ┆        ┆               ┆        ┆   ┆              ┆           ┆ Frost        ┆      │
-    │ MTL       ┆ 0      ┆               ┆ 0      ┆ … ┆ 0            ┆ 3         ┆ Montréal     ┆ null │
-    │           ┆        ┆               ┆        ┆   ┆              ┆           ┆ Victoire     ┆      │
-    │ NY        ┆ 0      ┆               ┆ 0      ┆ … ┆ 0            ┆ 4         ┆ New York     ┆ null │
-    │           ┆        ┆               ┆        ┆   ┆              ┆           ┆ Sirens       ┆      │
-    │ OTT       ┆ 0      ┆               ┆ 0      ┆ … ┆ 0            ┆ 5         ┆ Ottawa       ┆ null │
-    │           ┆        ┆               ┆        ┆   ┆              ┆           ┆ Charge       ┆      │
-    └───────────┴────────┴───────────────┴────────┴───┴──────────────┴───────────┴──────────────┴──────┘
-
-
 
 ### Recipe 17 — 🏒 Junior hockey: schedule for all four CHL/AHL loops 🔁
 
@@ -955,47 +504,6 @@ for lg, mod in {"ahl": ahl, "ohl": ohl, "whl": whl, "qmjhl": qmjhl}.items():
 pl.DataFrame(rows)
 ```
 
-    ✅ ahl season
-
-
-    ✅ ahl_schedule
-
-
-    ✅ ohl season
-
-
-    ✅ ohl_schedule
-
-
-    ✅ whl season
-
-
-    ✅ whl_schedule
-
-
-    ✅ qmjhl season
-
-
-    ✅ qmjhl_schedule
-
-
-
-
-
-    shape: (4, 3)
-    ┌────────┬────────┬───────┐
-    │ league ┆ season ┆ games │
-    │ ---    ┆ ---    ┆ ---   │
-    │ str    ┆ i64    ┆ i64   │
-    ╞════════╪════════╪═══════╡
-    │ AHL    ┆ 2027   ┆ 10000 │
-    │ OHL    ┆ 2027   ┆ 10000 │
-    │ WHL    ┆ 2026   ┆ 10000 │
-    │ QMJHL  ┆ 2027   ┆ 10000 │
-    └────────┴────────┴───────┘
-
-
-
 ### Recipe 18 — 🎲 A quick odds peek (key-guarded)
 
 `odds.toa_sports()` lists every in-season sport/league key — it's **free**
@@ -1011,32 +519,6 @@ else:
     out = "set ODDS_API_KEY to run: odds.toa_sports()  (free, doesn't touch quota)"
 out
 ```
-
-    ✅ odds.toa_sports
-
-
-
-
-
-    shape: (10, 3)
-    ┌─────────────────────────────────┬───────────────────┬───────────────────────────┐
-    │ key                             ┆ group             ┆ title                     │
-    │ ---                             ┆ ---               ┆ ---                       │
-    │ str                             ┆ str               ┆ str                       │
-    ╞═════════════════════════════════╪═══════════════════╪═══════════════════════════╡
-    │ americanfootball_cfl            ┆ American Football ┆ CFL                       │
-    │ americanfootball_ncaaf          ┆ American Football ┆ NCAAF                     │
-    │ americanfootball_ncaaf_champio… ┆ American Football ┆ NCAAF Championship Winner │
-    │ americanfootball_nfl            ┆ American Football ┆ NFL                       │
-    │ americanfootball_nfl_super_bow… ┆ American Football ┆ NFL Super Bowl Winner     │
-    │ aussierules_aflw                ┆ Aussie Rules      ┆ AFL Women's               │
-    │ baseball_kbo                    ┆ Baseball          ┆ KBO                       │
-    │ baseball_mlb                    ┆ Baseball          ┆ MLB                       │
-    │ baseball_mlb_world_series_winn… ┆ Baseball          ┆ MLB World Series Winner   │
-    │ baseball_npb                    ┆ Baseball          ┆ NPB                       │
-    └─────────────────────────────────┴───────────────────┴───────────────────────────┘
-
-
 
 ### Recipe 19 — 🎲 Live odds for a league (key-guarded)
 
@@ -1056,42 +538,6 @@ else:
 out
 ```
 
-    ✅ odds.toa_sports_odds (NFL h2h)
-
-
-
-
-
-    shape: (10, 6)
-    ┌───────────────┬──────────────┬────────────────┬────────────┬─────────────────────┬───────────────┐
-    │ home_team     ┆ away_team    ┆ bookmaker_key  ┆ market_key ┆ outcome_name        ┆ outcome_price │
-    │ ---           ┆ ---          ┆ ---            ┆ ---        ┆ ---                 ┆ ---           │
-    │ str           ┆ str          ┆ str            ┆ str        ┆ str                 ┆ i64           │
-    ╞═══════════════╪══════════════╪════════════════╪════════════╪═════════════════════╪═══════════════╡
-    │ Chicago Bears ┆ Philadelphia ┆ draftkings     ┆ h2h        ┆ Chicago Bears       ┆ 164           │
-    │               ┆ Eagles       ┆                ┆            ┆                     ┆               │
-    │ Chicago Bears ┆ Philadelphia ┆ draftkings     ┆ h2h        ┆ Philadelphia Eagles ┆ -198          │
-    │               ┆ Eagles       ┆                ┆            ┆                     ┆               │
-    │ Chicago Bears ┆ Philadelphia ┆ williamhill_us ┆ h2h        ┆ Chicago Bears       ┆ 168           │
-    │               ┆ Eagles       ┆                ┆            ┆                     ┆               │
-    │ Chicago Bears ┆ Philadelphia ┆ williamhill_us ┆ h2h        ┆ Philadelphia Eagles ┆ -197          │
-    │               ┆ Eagles       ┆                ┆            ┆                     ┆               │
-    │ Chicago Bears ┆ Philadelphia ┆ fanduel        ┆ h2h        ┆ Chicago Bears       ┆ 166           │
-    │               ┆ Eagles       ┆                ┆            ┆                     ┆               │
-    │ Chicago Bears ┆ Philadelphia ┆ fanduel        ┆ h2h        ┆ Philadelphia Eagles ┆ -198          │
-    │               ┆ Eagles       ┆                ┆            ┆                     ┆               │
-    │ Chicago Bears ┆ Philadelphia ┆ betrivers      ┆ h2h        ┆ Chicago Bears       ┆ 165           │
-    │               ┆ Eagles       ┆                ┆            ┆                     ┆               │
-    │ Chicago Bears ┆ Philadelphia ┆ betrivers      ┆ h2h        ┆ Philadelphia Eagles ┆ -200          │
-    │               ┆ Eagles       ┆                ┆            ┆                     ┆               │
-    │ Chicago Bears ┆ Philadelphia ┆ betus          ┆ h2h        ┆ Chicago Bears       ┆ 167           │
-    │               ┆ Eagles       ┆                ┆            ┆                     ┆               │
-    │ Chicago Bears ┆ Philadelphia ┆ betus          ┆ h2h        ┆ Philadelphia Eagles ┆ -195          │
-    │               ┆ Eagles       ┆                ┆            ┆                     ┆               │
-    └───────────────┴──────────────┴────────────────┴────────────┴─────────────────────┴───────────────┘
-
-
-
 ### Recipe 20 — Count the whole surface, per league 🔢
 
 `function_count()` returns the exposed-function tally for every league — a quick
@@ -1106,33 +552,6 @@ df = (pl.DataFrame({"league": list(counts.keys()), "n_functions": list(counts.va
 print("Total wrappers across the counted leagues:", sum(counts.values()))
 df
 ```
-
-    Total wrappers across the counted leagues: 5988
-
-
-
-
-
-    shape: (34, 2)
-    ┌────────┬─────────────┐
-    │ league ┆ n_functions │
-    │ ---    ┆ ---         │
-    │ str    ┆ i64         │
-    ╞════════╪═════════════╡
-    │ mbb    ┆ 632         │
-    │ wbb    ┆ 570         │
-    │ cfb    ┆ 458         │
-    │ nhl    ┆ 406         │
-    │ mlb    ┆ 370         │
-    │ …      ┆ …           │
-    │ pwhl   ┆ 68          │
-    │ ahl    ┆ 14          │
-    │ ohl    ┆ 14          │
-    │ qmjhl  ┆ 14          │
-    │ whl    ┆ 14          │
-    └────────┴─────────────┘
-
-
 
 ## 🎉 Where to next
 
@@ -1162,3 +581,21 @@ sport has a dedicated tutorial that leads with its premium endpoints:
 Part of the **[SportsDataverse](https://www.sportsdataverse.org)** — the names
 here mirror the R sisters (hoopR, wehoop, cfbfastR, baseballr, fastRhockey,
 oddsapiR). Now go build something great! 🏆
+
+## 📈 Derived surfaces
+
+Three package-level helpers that work on any frame you have already loaded —
+rolling form windows, rate curves along a continuous axis, and the metric registry
+that names and resolves every published metric (`sportsdataverse.registry`).
+
+
+
+```python
+from sportsdataverse import metric_curves, rolling_windows
+import sportsdataverse.registry as registry
+
+print("rolling_windows:", [n for n in dir(rolling_windows) if not n.startswith("_")][:6])
+print("metric_curves:  ", [n for n in dir(metric_curves) if not n.startswith("_")][:6])
+print("registry:       ", [n for n in dir(registry) if not n.startswith("_")][:6])
+
+```

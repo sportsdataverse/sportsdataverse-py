@@ -5,13 +5,35 @@ description: "sdv-py {{ display_name }}: endpoint references, dataset loaders an
 ---
 # {{ display_name }} (`sportsdataverse.{{ prefix }}`)
 
-| Reference | Functions | Base URL |
-|---|---:|---|
-{% if has_highlights %}| [Highlights](reference/additional#highlights) | {{ highlights_count }} | curated "start here" functions |
-{% endif %}{% for a in api_rows %}| [{{ a.label }}](reference/{{ a.slug }}) | {{ a.count }} | `{{ a.base }}` |
+{% if source_rows %}
+## Data sources
+
+| Source | APIs / hosts | Functions | Auth |
+|---|---|---:|---|
+{% if has_highlights %}| [Highlights](reference/additional#highlights) | curated "start here" functions | {{ highlights_count }} | — |
+{% endif %}{% for s in source_rows %}| [{{ s.label }}](#{{ s.anchor }}) | {% for h in s.hosts[:3] %}`{{ h }}`{% if not loop.last %}, {% endif %}{% endfor %}{% if s.hosts|length > 3 %} +{{ s.hosts|length - 3 }} more{% endif %} | {{ s.count }} | {{ s.auth }} |
+{% endfor %}{% if has_additional %}| [Additional functions](reference/additional) | hand-written wrappers & helpers | {{ additional_count }} | — |
+{% endif %}
+{% for s in source_rows %}
+
+## {{ s.label }} {{ "{#" ~ s.anchor ~ "}" }}
+
+| Reference | Functions |
+|---|---:|
+{% for e in s.entries %}| [{{ e.label }}]({{ e.url }}) | {{ e.count }} |
 {% endfor %}
-{% if has_loaders %}| [Dataset loaders](reference/loaders) | {{ loader_count }} | {{ loader_base }} |
-{% endif %}{% if has_additional %}| [Additional functions](reference/additional) | {{ additional_count }} | hand-written wrappers, loaders & helpers |
+{% endfor %}
+{% endif %}
+{% if category_rows %}
+## Tools and helpers
+
+{% for c in category_rows %}
+### {{ c.label }} {{ "{#" ~ c.anchor ~ "}" }}
+
+{% for f in c.functions %}- [`{{ f.name }}`]({{ f.url }})
+{% endfor %}
+
+{% endfor %}
 {% endif %}
 {% if companions %}
 

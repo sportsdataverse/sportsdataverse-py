@@ -9,7 +9,7 @@ sidebar_position: 50
 Hand-written wrappers, loaders, and helpers in `sportsdataverse.odds`
 not covered by the generated API-endpoint reference above.
 
-## Other
+## The Odds API
 
 ### toa_event_markets {#toa_event_markets}
 

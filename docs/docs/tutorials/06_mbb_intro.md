@@ -47,9 +47,9 @@ no live API). Click any name for the full reference.
 | [`espn_mbb_pbp`](../mbb/reference/additional/highlights.md#espn_mbb_pbp) | Event-level play-by-play for a game | 🟥 ESPN ⭐ |
 | [`espn_mbb_game_rosters`](../mbb/reference/additional/highlights.md#espn_mbb_game_rosters) | Who dressed + started for one game | 🟥 ESPN ⭐ |
 | [`espn_mbb_player_stats`](../mbb/reference/additional/highlights.md#espn_mbb_player_stats) | A player's season stat line | 🟥 ESPN ⭐ |
-| [`fox_mbb_league_leaders`](../mbb/reference/additional/fox.md#fox_mbb_league_leaders) | Stat leaders (scoring, rebounds, …) | 🦊 Fox ⭐ |
-| [`fox_mbb_standings`](../mbb/reference/additional/fox.md#fox_mbb_standings) | Fox conference standings for a team | 🦊 Fox ⭐ |
-| [`fox_mbb_team_roster`](../mbb/reference/additional/fox.md#fox_mbb_team_roster) | Fox roster for a team | 🦊 Fox |
+| [`fox_mbb_league_leaders`](../mbb/reference/additional/fox-sports-api.md#fox_mbb_league_leaders) | Stat leaders (scoring, rebounds, …) | 🦊 Fox ⭐ |
+| [`fox_mbb_standings`](../mbb/reference/additional/fox-sports-api.md#fox_mbb_standings) | Fox conference standings for a team | 🦊 Fox ⭐ |
+| [`fox_mbb_team_roster`](../mbb/reference/additional/fox-sports-api.md#fox_mbb_team_roster) | Fox roster for a team | 🦊 Fox |
 | [`espn_mbb_team_schedule`](../mbb/reference/additional.md#espn_mbb_team_schedule) | One team's full season schedule | 🟥 ESPN ⭐ |
 | [`espn_mbb_conferences`](../mbb/reference/additional.md#espn_mbb_conferences) | Conference / group catalog | 🟥 ESPN ⭐ |
 | [`load_mbb_schedule`](../mbb/reference/loaders/other.md#load_mbb_schedule) | Whole-season schedule parquet | 📦 loader |
@@ -77,9 +77,6 @@ pl.Config.set_tbl_rows(10)
 print("most recent MBB season:", sdv.mbb.most_recent_mbb_season())
 ```
 
-    most recent MBB season: 2026
-
-
 ESPN's *live* endpoints (scoreboard, rankings, standings, a single game's
 play-by-play) are seasonal — in the offseason a poll or scoreboard can come
 back empty. So we use a tiny `safe()` helper: you get the frame when the feed
@@ -88,6 +85,8 @@ The `load_*` parquet loaders are stable year-round, so we call those directly.
 
 
 ```python
+from sportsdataverse.errors import AssetFetchError, NoDataError
+
 def safe(label, thunk):
     """Run a live call defensively; return its result or None with a note."""
     try:
@@ -95,8 +94,8 @@ def safe(label, thunk):
         ok = out is not None and (not hasattr(out, "height") or out.height)
         print(f"{'✅' if ok else 'ℹ️ '} {label}{'' if ok else ' — no rows right now'}")
         return out
-    except Exception as e:  # noqa: BLE001 -- demo resilience
-        print(f"⏭️  {label}: unavailable right now ({type(e).__name__})")
+    except (NoDataError, AssetFetchError) as e:
+        print(f"\u23ed\ufe0f  {label}: {type(e).__name__}: {e}")
         return None
 ```
 
@@ -113,27 +112,6 @@ print("teams:", teams.shape)
 teams.select(["team_id", "team_location", "team_name", "team_abbreviation", "team_is_active"]).head()
 ```
 
-    teams: (362, 14)
-
-
-
-
-
-    shape: (5, 5)
-    ┌─────────┬───────────────────┬──────────────┬───────────────────┬────────────────┐
-    │ team_id ┆ team_location     ┆ team_name    ┆ team_abbreviation ┆ team_is_active │
-    │ ---     ┆ ---               ┆ ---          ┆ ---               ┆ ---            │
-    │ str     ┆ str               ┆ str          ┆ str               ┆ bool           │
-    ╞═════════╪═══════════════════╪══════════════╪═══════════════════╪════════════════╡
-    │ 2000    ┆ Abilene Christian ┆ Wildcats     ┆ ACU               ┆ true           │
-    │ 2005    ┆ Air Force         ┆ Falcons      ┆ AF                ┆ true           │
-    │ 2006    ┆ Akron             ┆ Zips         ┆ AKR               ┆ true           │
-    │ 2010    ┆ Alabama A&M       ┆ Bulldogs     ┆ AAMU              ┆ true           │
-    │ 333     ┆ Alabama           ┆ Crimson Tide ┆ ALA               ┆ true           │
-    └─────────┴───────────────────┴──────────────┴───────────────────┴────────────────┘
-
-
-
 ## 📅 Schedule & scores for a date window
 
 [`espn_mbb_schedule`](../mbb/reference/additional/highlights.md#espn_mbb_schedule) takes a
@@ -149,23 +127,6 @@ sched = safe(
 (sched.select(["id", "home_display_name", "away_display_name", "home_score", "away_score"]).head()
  if sched is not None and sched.height else "schedule unavailable")
 ```
-
-    ✅ schedule 2024-04-08
-
-
-
-
-
-    shape: (1, 5)
-    ┌───────────┬───────────────────┬─────────────────────┬────────────┬────────────┐
-    │ id        ┆ home_display_name ┆ away_display_name   ┆ home_score ┆ away_score │
-    │ ---       ┆ ---               ┆ ---                 ┆ ---        ┆ ---        │
-    │ str       ┆ str               ┆ str                 ┆ str        ┆ str        │
-    ╞═══════════╪═══════════════════╪═════════════════════╪════════════╪════════════╡
-    │ 401638645 ┆ UConn Huskies     ┆ Purdue Boilermakers ┆ 75         ┆ 60         │
-    └───────────┴───────────────────┴─────────────────────┴────────────┴────────────┘
-
-
 
 ## 📊 The rich scoreboard
 
@@ -187,23 +148,6 @@ else:
     out = "scoreboard empty right now (offseason)"
 out
 ```
-
-    ✅ scoreboard 2024-04-08
-
-
-
-
-
-    shape: (1, 3)
-    ┌───────────┬─────────────┬─────────────────────────┐
-    │ game_id   ┆ short_name  ┆ status_type_description │
-    │ ---       ┆ ---         ┆ ---                     │
-    │ str       ┆ str         ┆ str                     │
-    ╞═══════════╪═════════════╪═════════════════════════╡
-    │ 401638645 ┆ PUR VS CONN ┆ Final                   │
-    └───────────┴─────────────┴─────────────────────────┘
-
-
 
 ## 🏆 Conference standings
 
@@ -227,35 +171,6 @@ else:
 out
 ```
 
-    ✅ standings 2024
-
-
-
-
-
-    shape: (10, 6)
-    ┌───────────────────────┬───────────────────────┬──────┬────────┬─────────────┬────────────────────┐
-    │ team_display_name     ┆ group_name            ┆ wins ┆ losses ┆ win_percent ┆ point_differential │
-    │ ---                   ┆ ---                   ┆ ---  ┆ ---    ┆ ---         ┆ ---                │
-    │ str                   ┆ str                   ┆ f64  ┆ f64    ┆ f64         ┆ f64                │
-    ╞═══════════════════════╪═══════════════════════╪══════╪════════╪═════════════╪════════════════════╡
-    │ McNeese Cowboys       ┆ Southland Conference  ┆ 17.0 ┆ 1.0    ┆ 0.9444444   ┆ 308.0              │
-    │ Vermont Catamounts    ┆ America East          ┆ 15.0 ┆ 1.0    ┆ 0.9375      ┆ 179.0              │
-    │                       ┆ Conference            ┆      ┆        ┆             ┆                    │
-    │ Saint Mary's Gaels    ┆ West Coast Conference ┆ 15.0 ┆ 1.0    ┆ 0.9375      ┆ 312.0              │
-    │ UConn Huskies         ┆ Big East Conference   ┆ 18.0 ┆ 2.0    ┆ 0.9         ┆ 277.0              │
-    │ South Florida Bulls   ┆ American Conference   ┆ 16.0 ┆ 2.0    ┆ 0.8888889   ┆ 124.0              │
-    │ Colgate Raiders       ┆ Patriot League        ┆ 16.0 ┆ 2.0    ┆ 0.8888889   ┆ 217.0              │
-    │ App State             ┆ Sun Belt Conference   ┆ 16.0 ┆ 2.0    ┆ 0.8888889   ┆ 198.0              │
-    │ Mountaineers          ┆                       ┆      ┆        ┆             ┆                    │
-    │ Gonzaga Bulldogs      ┆ West Coast Conference ┆ 14.0 ┆ 2.0    ┆ 0.875       ┆ 305.0              │
-    │ Princeton Tigers      ┆ Ivy League            ┆ 12.0 ┆ 2.0    ┆ 0.857143    ┆ 136.0              │
-    │ North Carolina Tar    ┆ Atlantic Coast        ┆ 17.0 ┆ 3.0    ┆ 0.85        ┆ 210.0              │
-    │ Heels                 ┆ Conference            ┆      ┆        ┆             ┆                    │
-    └───────────────────────┴───────────────────────┴──────┴────────┴─────────────┴────────────────────┘
-
-
-
 ## 🍳 Cookbook: common MBB tasks
 
 Now the fun part — real tasks you'll reach for constantly, each built on a
@@ -264,7 +179,7 @@ offseason hiccup prints a note instead of breaking the page.
 
 ### Recipe 1 — National scoring leaders 🥇 (FoxSports)
 
-[`fox_mbb_league_leaders`](../mbb/reference/additional/fox.md#fox_mbb_league_leaders)
+[`fox_mbb_league_leaders`](../mbb/reference/additional/fox-sports-api.md#fox_mbb_league_leaders)
 serves the leaderboard direct from FoxSports — pick a `category` (`scoring`,
 `rebounds`, `assists`, …) and `who` (`player` or `team`). No IDs needed.
 
@@ -281,32 +196,6 @@ else:
     out = "Fox leaders unavailable right now"
 out
 ```
-
-    ✅ fox scoring leaders
-
-
-
-
-
-    shape: (10, 5)
-    ┌─────────┬─────┬──────┬──────┬──────┐
-    │ players ┆ gp  ┆ mpg  ┆ ppg  ┆ pts  │
-    │ ---     ┆ --- ┆ ---  ┆ ---  ┆ ---  │
-    │ str     ┆ str ┆ str  ┆ str  ┆ str  │
-    ╞═════════╪═════╪══════╪══════╪══════╡
-    │ 1       ┆ 37  ┆ null ┆ null ┆ null │
-    │ 2       ┆ 37  ┆ null ┆ null ┆ null │
-    │ 3       ┆ 37  ┆ null ┆ null ┆ null │
-    │ 4       ┆ 36  ┆ null ┆ null ┆ null │
-    │ 5       ┆ 36  ┆ null ┆ null ┆ null │
-    │ 6       ┆ 35  ┆ null ┆ null ┆ null │
-    │ 7       ┆ 35  ┆ null ┆ null ┆ null │
-    │ 8       ┆ 35  ┆ null ┆ null ┆ null │
-    │ 9       ┆ 35  ┆ null ┆ null ┆ null │
-    │ 10      ┆ 35  ┆ null ┆ null ┆ null │
-    └─────────┴─────┴──────┴──────┴──────┘
-
-
 
 ### Recipe 2 — Look up a team's roster 👥 (ESPN)
 
@@ -331,33 +220,6 @@ else:
 out
 ```
 
-    ✅ roster team_id=41
-
-
-
-
-
-    shape: (12, 4)
-    ┌──────────────────┬────────┬────────────────┬────────────────┐
-    │ full_name        ┆ jersey ┆ display_height ┆ display_weight │
-    │ ---              ┆ ---    ┆ ---            ┆ ---            │
-    │ str              ┆ str    ┆ str            ┆ str            │
-    ╞══════════════════╪════════╪════════════════╪════════════════╡
-    │ Solo Ball        ┆ 1      ┆ 6' 4"          ┆ 200 lbs        │
-    │ Silas Demary Jr. ┆ 2      ┆ 6' 4"          ┆ 195 lbs        │
-    │ Rrezon Elezaj    ┆ 10     ┆ 7' 1"          ┆ 225 lbs        │
-    │ Dwayne Koroma    ┆ 4      ┆ 6' 8"          ┆ 212 lbs        │
-    │ Alec Millender   ┆ 9      ┆ 6' 1"          ┆ 190 lbs        │
-    │ …                ┆ …      ┆ …              ┆ …              │
-    │ Eric Reibe       ┆ 12     ┆ 7' 1"          ┆ 260 lbs        │
-    │ Jacob Ross       ┆ 13     ┆ 6' 5"          ┆ 195 lbs        │
-    │ Jayden Ross      ┆ 23     ┆ 6' 7"          ┆ 205 lbs        │
-    │ Malachi Smith    ┆ 0      ┆ 6' 1"          ┆ 180 lbs        │
-    │ Jaylin Stewart   ┆ 3      ┆ 6' 7"          ┆ 225 lbs        │
-    └──────────────────┴────────┴────────────────┴────────────────┘
-
-
-
 ### Recipe 3 — Season scoring leaderboard from parquet 📦
 
 The `load_*` loaders pull whole seasons from the data release — perfect for
@@ -381,32 +243,6 @@ print("player box rows:", pbox.shape)
     .head(10))
 ```
 
-    player box rows: (198586, 55)
-
-
-
-
-
-    shape: (10, 4)
-    ┌──────────────────────┬─────────────────────────┬─────┬──────┐
-    │ athlete_display_name ┆ team_short_display_name ┆ g   ┆ ppg  │
-    │ ---                  ┆ ---                     ┆ --- ┆ ---  │
-    │ str                  ┆ str                     ┆ u32 ┆ f64  │
-    ╞══════════════════════╪═════════════════════════╪═════╪══════╡
-    │ Zach Edey            ┆ Purdue                  ┆ 39  ┆ 25.2 │
-    │ Tommy Bruner         ┆ Denver                  ┆ 34  ┆ 24.0 │
-    │ Terrence Shannon Jr. ┆ Illinois                ┆ 32  ┆ 23.0 │
-    │ Tyler Thomas         ┆ Hofstra                 ┆ 33  ┆ 22.5 │
-    │ Xavier Johnson       ┆ S Illinois              ┆ 32  ┆ 22.2 │
-    │ David Jones          ┆ Memphis                 ┆ 32  ┆ 21.8 │
-    │ Dalton Knecht        ┆ Tennessee               ┆ 36  ┆ 21.7 │
-    │ Tyson Acuff          ┆ E Michigan              ┆ 27  ┆ 21.7 │
-    │ Jordan Sears         ┆ UT Martin               ┆ 32  ┆ 21.6 │
-    │ Tucker DeVries       ┆ Drake                   ┆ 34  ┆ 21.6 │
-    └──────────────────────┴─────────────────────────┴─────┴──────┘
-
-
-
 ### Recipe 4 — Play-by-play slice for one game 🎬 (ESPN)
 
 [`espn_mbb_pbp`](../mbb/reference/additional/highlights.md#espn_mbb_pbp) returns a dict;
@@ -427,42 +263,6 @@ else:
     out = "play-by-play unavailable right now"
 out
 ```
-
-    ✅ pbp 401638636
-
-
-
-
-
-    shape: (10, 6)
-    ┌───────────────┬────────────────────┬───────────────────────┬─────────────┬───────────┬───────────┐
-    │ period.number ┆ clock.displayValue ┆ text                  ┆ scoringPlay ┆ homeScore ┆ awayScore │
-    │ ---           ┆ ---                ┆ ---                   ┆ ---         ┆ ---       ┆ ---       │
-    │ i64           ┆ str                ┆ str                   ┆ bool        ┆ i64       ┆ i64       │
-    ╞═══════════════╪════════════════════╪═══════════════════════╪═════════════╪═══════════╪═══════════╡
-    │ 1             ┆ 19:27              ┆ Ryan Kalkbrenner made ┆ true        ┆ 0         ┆ 2         │
-    │               ┆                    ┆ Layup. A…             ┆             ┆           ┆           │
-    │ 1             ┆ 18:24              ┆ Dalton Knecht made    ┆ true        ┆ 2         ┆ 2         │
-    │               ┆                    ┆ Jumper.               ┆             ┆           ┆           │
-    │ 1             ┆ 17:04              ┆ Mason Miller made     ┆ true        ┆ 2         ┆ 5         │
-    │               ┆                    ┆ Three Point …         ┆             ┆           ┆           │
-    │ 1             ┆ 16:48              ┆ Dalton Knecht made    ┆ true        ┆ 3         ┆ 5         │
-    │               ┆                    ┆ Free Throw.           ┆             ┆           ┆           │
-    │ 1             ┆ 16:34              ┆ Baylor Scheierman     ┆ true        ┆ 3         ┆ 7         │
-    │               ┆                    ┆ made Jumper.          ┆             ┆           ┆           │
-    │ 1             ┆ 15:34              ┆ Josiah-Jordan James   ┆ true        ┆ 6         ┆ 7         │
-    │               ┆                    ┆ made Three…           ┆             ┆           ┆           │
-    │ 1             ┆ 14:45              ┆ Josiah-Jordan James   ┆ true        ┆ 9         ┆ 7         │
-    │               ┆                    ┆ made Three…           ┆             ┆           ┆           │
-    │ 1             ┆ 14:19              ┆ Baylor Scheierman     ┆ true        ┆ 9         ┆ 9         │
-    │               ┆                    ┆ made Jumper.          ┆             ┆           ┆           │
-    │ 1             ┆ 14:07              ┆ Jordan Gainey made    ┆ true        ┆ 11        ┆ 9         │
-    │               ┆                    ┆ Jumper. Ass…          ┆             ┆           ┆           │
-    │ 1             ┆ 13:39              ┆ Baylor Scheierman     ┆ true        ┆ 11        ┆ 12        │
-    │               ┆                    ┆ made Three P…         ┆             ┆           ┆           │
-    └───────────────┴────────────────────┴───────────────────────┴─────────────┴───────────┴───────────┘
-
-
 
 ### Recipe 5 — Best net scoring margin 📊 (parquet)
 
@@ -485,32 +285,6 @@ print("team box rows:", tbox.shape)
     .head(10))
 ```
 
-    team box rows: (12480, 57)
-
-
-
-
-
-    shape: (10, 5)
-    ┌─────────────────────┬─────┬──────┬─────────┬────────────┐
-    │ team_display_name   ┆ g   ┆ ppg  ┆ opp_ppg ┆ net_margin │
-    │ ---                 ┆ --- ┆ ---  ┆ ---     ┆ ---        │
-    │ str                 ┆ u32 ┆ f64  ┆ f64     ┆ f64        │
-    ╞═════════════════════╪═════╪══════╪═════════╪════════════╡
-    │ UConn Huskies       ┆ 40  ┆ 81.4 ┆ 63.4    ┆ 18.0       │
-    │ McNeese Cowboys     ┆ 34  ┆ 80.0 ┆ 62.2    ┆ 17.8       │
-    │ Houston Cougars     ┆ 37  ┆ 73.5 ┆ 57.6    ┆ 15.9       │
-    │ Gonzaga Bulldogs    ┆ 35  ┆ 84.5 ┆ 69.1    ┆ 15.4       │
-    │ Arizona Wildcats    ┆ 36  ┆ 87.1 ┆ 72.1    ┆ 15.0       │
-    │ Auburn Tigers       ┆ 35  ┆ 83.1 ┆ 68.3    ┆ 14.8       │
-    │ Saint Mary's Gaels  ┆ 34  ┆ 74.0 ┆ 59.2    ┆ 14.8       │
-    │ Iowa State Cyclones ┆ 37  ┆ 75.3 ┆ 61.5    ┆ 13.8       │
-    │ James Madison Dukes ┆ 36  ┆ 83.2 ┆ 69.6    ┆ 13.6       │
-    │ Purdue Boilermakers ┆ 39  ┆ 82.3 ┆ 69.0    ┆ 13.3       │
-    └─────────────────────┴─────┴──────┴─────────┴────────────┘
-
-
-
 ### Recipe 6 — Best 3-point shooting teams 🎯 (parquet)
 
 Same team-box parquet, different question: sum makes and attempts across the season, then divide. A `min attempts` filter keeps small-sample flukes off the board so the leaders are real volume shooters.
@@ -531,29 +305,6 @@ Same team-box parquet, different question: sum makes and attempts across the sea
     .select(["team_display_name", "tpm", "tpa", "three_pct"])
     .head(10))
 ```
-
-
-
-
-    shape: (10, 4)
-    ┌─────────────────────────┬───────┬───────┬───────────┐
-    │ team_display_name       ┆ tpm   ┆ tpa   ┆ three_pct │
-    │ ---                     ┆ ---   ┆ ---   ┆ ---       │
-    │ str                     ┆ f64   ┆ f64   ┆ f64       │
-    ╞═════════════════════════╪═══════╪═══════╪═══════════╡
-    │ Kentucky Wildcats       ┆ 327.0 ┆ 800.0 ┆ 40.9      │
-    │ Purdue Boilermakers     ┆ 318.0 ┆ 788.0 ┆ 40.4      │
-    │ Dayton Flyers           ┆ 310.0 ┆ 777.0 ┆ 39.9      │
-    │ UNC Greensboro Spartans ┆ 322.0 ┆ 812.0 ┆ 39.7      │
-    │ Samford Bulldogs        ┆ 351.0 ┆ 889.0 ┆ 39.5      │
-    │ Colorado Buffaloes      ┆ 254.0 ┆ 649.0 ┆ 39.1      │
-    │ Northwestern Wildcats   ┆ 278.0 ┆ 713.0 ┆ 39.0      │
-    │ Baylor Bears            ┆ 301.0 ┆ 773.0 ┆ 38.9      │
-    │ Wright State Raiders    ┆ 218.0 ┆ 569.0 ┆ 38.3      │
-    │ McNeese Cowboys         ┆ 257.0 ┆ 671.0 ┆ 38.3      │
-    └─────────────────────────┴───────┴───────┴───────────┘
-
-
 
 ### Recipe 7 — Most efficient scorers ⚡ (true shooting %)
 
@@ -580,29 +331,6 @@ pbox = sdv.mbb.load_mbb_player_boxscore(seasons=[2024])
     .head(10))
 ```
 
-
-
-
-    shape: (10, 5)
-    ┌──────────────────────┬───────────────────┬─────┬───────┬────────┐
-    │ athlete_display_name ┆ team_abbreviation ┆ g   ┆ pts   ┆ ts_pct │
-    │ ---                  ┆ ---               ┆ --- ┆ ---   ┆ ---    │
-    │ str                  ┆ str               ┆ u32 ┆ f64   ┆ f64    │
-    ╞══════════════════════╪═══════════════════╪═════╪═══════╪════════╡
-    │ Jayson Kent          ┆ INST              ┆ 38  ┆ 514.0 ┆ 73.3   │
-    │ Aubin Gateretse      ┆ STET              ┆ 35  ┆ 407.0 ┆ 71.2   │
-    │ Lynn Kidd            ┆ VT                ┆ 33  ┆ 434.0 ┆ 70.7   │
-    │ Reed Sheppard        ┆ UK                ┆ 33  ┆ 411.0 ┆ 70.5   │
-    │ Vladislav Goldin     ┆ FAU               ┆ 34  ┆ 534.0 ┆ 69.1   │
-    │ Ryan Kalkbrenner     ┆ CREI              ┆ 35  ┆ 604.0 ┆ 68.9   │
-    │ Cedric Coward        ┆ EWU               ┆ 32  ┆ 494.0 ┆ 68.3   │
-    │ Jaylin Williams      ┆ AUB               ┆ 34  ┆ 422.0 ┆ 68.2   │
-    │ Zach Edey            ┆ PUR               ┆ 39  ┆ 983.0 ┆ 67.3   │
-    │ Chaz Lanier          ┆ UNF               ┆ 32  ┆ 629.0 ┆ 67.3   │
-    └──────────────────────┴───────────────────┴─────┴───────┴────────┘
-
-
-
 ### Recipe 8 — One conference's power board 🏟️ (ESPN, join)
 
 [`espn_mbb_conferences`](../mbb/reference/additional.md#espn_mbb_conferences) is the group catalog; [`espn_mbb_standings`](../mbb/reference/site.md#espn_mbb_standings) carries a `group_name` per team. Filter standings to a single league — here the Big 12 — to get a clean intra-conference pecking order.
@@ -628,37 +356,6 @@ else:
 out
 ```
 
-    ✅ conferences
-    some conferences: ['NCAA Division I', 'Non-NCAA Division I']
-
-
-    ✅ standings 2024
-
-
-
-
-
-    shape: (12, 5)
-    ┌────────────────────────┬──────┬────────┬─────────────┬────────────────────┐
-    │ team_display_name      ┆ wins ┆ losses ┆ win_percent ┆ point_differential │
-    │ ---                    ┆ ---  ┆ ---    ┆ ---         ┆ ---                │
-    │ str                    ┆ f64  ┆ f64    ┆ f64         ┆ f64                │
-    ╞════════════════════════╪══════╪════════╪═════════════╪════════════════════╡
-    │ Houston Cougars        ┆ 15.0 ┆ 3.0    ┆ 0.8333333   ┆ 191.0              │
-    │ Iowa State Cyclones    ┆ 13.0 ┆ 5.0    ┆ 0.7222222   ┆ 71.0               │
-    │ Baylor Bears           ┆ 11.0 ┆ 7.0    ┆ 0.6111111   ┆ 52.0               │
-    │ Texas Tech Red Raiders ┆ 11.0 ┆ 7.0    ┆ 0.6111111   ┆ 39.0               │
-    │ BYU Cougars            ┆ 10.0 ┆ 8.0    ┆ 0.5555556   ┆ 19.0               │
-    │ …                      ┆ …    ┆ …      ┆ …           ┆ …                  │
-    │ TCU Horned Frogs       ┆ 9.0  ┆ 9.0    ┆ 0.5         ┆ 21.0               │
-    │ Oklahoma Sooners       ┆ 8.0  ┆ 10.0   ┆ 0.444444    ┆ -33.0              │
-    │ Kansas State Wildcats  ┆ 8.0  ┆ 10.0   ┆ 0.444444    ┆ -23.0              │
-    │ Cincinnati Bearcats    ┆ 7.0  ┆ 11.0   ┆ 0.3888889   ┆ 5.0                │
-    │ UCF Knights            ┆ 7.0  ┆ 11.0   ┆ 0.3888889   ┆ -44.0              │
-    └────────────────────────┴──────┴────────┴─────────────┴────────────────────┘
-
-
-
 ### Recipe 9 — A team's full season schedule 🗓️ (ESPN)
 
 [`espn_mbb_team_schedule`](../mbb/reference/additional.md#espn_mbb_team_schedule) returns every game on one team's slate for a season — matchup name, week and season type — perfect for building an opponent list. We use UConn's 2024 championship run.
@@ -678,36 +375,9 @@ else:
 out
 ```
 
-    ✅ team schedule 41
-
-
-
-
-
-    shape: (12, 4)
-    ┌───────────┬──────────────┬──────────────────┬───────────┐
-    │ id        ┆ short_name   ┆ season_type_name ┆ week_text │
-    │ ---       ┆ ---          ┆ ---              ┆ ---       │
-    │ str       ┆ str          ┆ str              ┆ str       │
-    ╞═══════════╪══════════════╪══════════════════╪═══════════╡
-    │ 401584359 ┆ NAU @ CONN   ┆ Regular Season   ┆ Week 1    │
-    │ 401589296 ┆ STO @ CONN   ┆ Regular Season   ┆ Week 1    │
-    │ 401591369 ┆ MVSU @ CONN  ┆ Regular Season   ┆ Week 2    │
-    │ 401591374 ┆ CONN VS IU   ┆ Regular Season   ┆ Week 2    │
-    │ 401601491 ┆ CONN VS TEX  ┆ Regular Season   ┆ Week 3    │
-    │ …         ┆ …            ┆ …                ┆ …         │
-    │ 401574563 ┆ CONN @ KU    ┆ Regular Season   ┆ Week 4    │
-    │ 401580309 ┆ UNC VS CONN  ┆ Regular Season   ┆ Week 5    │
-    │ 401591372 ┆ UAPB @ CONN  ┆ Regular Season   ┆ Week 5    │
-    │ 401591373 ┆ CONN VS GONZ ┆ Regular Season   ┆ Week 6    │
-    │ 401599441 ┆ CONN @ HALL  ┆ Regular Season   ┆ Week 7    │
-    └───────────┴──────────────┴──────────────────┴───────────┘
-
-
-
 ### Recipe 10 — Top rebounding teams 🧲 (FoxSports)
 
-[`fox_mbb_league_leaders`](../mbb/reference/additional/fox.md#fox_mbb_league_leaders) isn't just a player board — flip `who="team"` and pick `category="rebounds"` to rank programs on the glass straight from FoxSports. No IDs needed.
+[`fox_mbb_league_leaders`](../mbb/reference/additional/fox-sports-api.md#fox_mbb_league_leaders) isn't just a player board — flip `who="team"` and pick `category="rebounds"` to rank programs on the glass straight from FoxSports. No IDs needed.
 
 
 ```python
@@ -722,32 +392,6 @@ else:
     out = "Fox team leaders unavailable right now"
 out
 ```
-
-    ✅ fox team rebounds
-
-
-
-
-
-    shape: (10, 6)
-    ┌───────┬─────┬─────┬─────┬──────┬──────────┐
-    │ teams ┆ gp  ┆ w   ┆ l   ┆ ppg  ┆ ppg_diff │
-    │ ---   ┆ --- ┆ --- ┆ --- ┆ ---  ┆ ---      │
-    │ str   ┆ str ┆ str ┆ str ┆ str  ┆ str      │
-    ╞═══════╪═════╪═════╪═════╪══════╪══════════╡
-    │ 1     ┆ 37  ┆ 21  ┆ 16  ┆ null ┆ null     │
-    │ 2     ┆ 35  ┆ 21  ┆ 15  ┆ null ┆ null     │
-    │ 3     ┆ 35  ┆ 18  ┆ 17  ┆ null ┆ null     │
-    │ 4     ┆ 35  ┆ 23  ┆ 13  ┆ null ┆ null     │
-    │ 5     ┆ 35  ┆ 15  ┆ 20  ┆ null ┆ null     │
-    │ 6     ┆ 35  ┆ 19  ┆ 18  ┆ null ┆ null     │
-    │ 7     ┆ 35  ┆ 30  ┆ 9   ┆ null ┆ null     │
-    │ 8     ┆ 35  ┆ 19  ┆ 16  ┆ null ┆ null     │
-    │ 9     ┆ 34  ┆ 29  ┆ 6   ┆ null ┆ null     │
-    │ 10    ┆ 34  ┆ 36  ┆ 3   ┆ null ┆ null     │
-    └───────┴─────┴─────┴─────┴──────┴──────────┘
-
-
 
 ### Recipe 11 — Crunch-time buckets 🔥 (parquet PBP)
 
@@ -767,43 +411,6 @@ print("season pbp rows:", season_pbp.shape)
              "text", "home_score", "away_score"])
     .head(10))
 ```
-
-    season pbp rows: (2004997, 61)
-
-
-
-
-
-    shape: (10, 6)
-    ┌───────────┬────────────────────┬───────────────────┬───────────────────┬────────────┬────────────┐
-    │ game_id   ┆ period_display_val ┆ clock_display_val ┆ text              ┆ home_score ┆ away_score │
-    │ ---       ┆ ue                 ┆ ue                ┆ ---               ┆ ---        ┆ ---        │
-    │ i32       ┆ ---                ┆ ---               ┆ str               ┆ i32        ┆ i32        │
-    │           ┆ str                ┆ str               ┆                   ┆            ┆            │
-    ╞═══════════╪════════════════════╪═══════════════════╪═══════════════════╪════════════╪════════════╡
-    │ 401573353 ┆ 2nd Half           ┆ 0:19              ┆ Aanen Moody made  ┆ 89         ┆ 79         │
-    │           ┆                    ┆                   ┆ Three Point J…    ┆            ┆            │
-    │ 401573354 ┆ 2nd Half           ┆ 0:20              ┆ Terren Frank made ┆ 48         ┆ 62         │
-    │           ┆                    ┆                   ┆ Jumper.           ┆            ┆            │
-    │ 401573355 ┆ 2nd Half           ┆ 0:04              ┆ Miguel Tomley     ┆ 75         ┆ 76         │
-    │           ┆                    ┆                   ┆ made Free Throw.  ┆            ┆            │
-    │ 401573355 ┆ 2nd Half           ┆ 0:04              ┆ Miguel Tomley     ┆ 76         ┆ 76         │
-    │           ┆                    ┆                   ┆ made Free Throw.  ┆            ┆            │
-    │ 401573355 ┆ OT                 ┆ 1:16              ┆ Carson Basham     ┆ 83         ┆ 79         │
-    │           ┆                    ┆                   ┆ made Free Throw.  ┆            ┆            │
-    │ 401573355 ┆ OT                 ┆ 0:51              ┆ Trent McLaughlin  ┆ 83         ┆ 82         │
-    │           ┆                    ┆                   ┆ made Three Po…    ┆            ┆            │
-    │ 401573355 ┆ OT                 ┆ 0:29              ┆ Maleek Arington   ┆ 84         ┆ 82         │
-    │           ┆                    ┆                   ┆ made Free Thro…   ┆            ┆            │
-    │ 401573355 ┆ OT                 ┆ 0:06              ┆ Liam Lloyd made   ┆ 84         ┆ 83         │
-    │           ┆                    ┆                   ┆ Free Throw.       ┆            ┆            │
-    │ 401573355 ┆ OT                 ┆ 0:06              ┆ Liam Lloyd made   ┆ 84         ┆ 84         │
-    │           ┆                    ┆                   ┆ Free Throw.       ┆            ┆            │
-    │ 401573355 ┆ 2OT                ┆ 0:42              ┆ Jayden Jackson    ┆ 88         ┆ 90         │
-    │           ┆                    ┆                   ┆ made Layup.       ┆            ┆            │
-    └───────────┴────────────────────┴───────────────────┴───────────────────┴────────────┴────────────┘
-
-
 
 ### Recipe 12 — Double-double leaders 🐼 (pandas interop)
 
@@ -826,23 +433,6 @@ pbox_pd["is_dd"] = (pbox_pd[["points", "rebounds", "assists"]] >= 10).sum(axis=1
     .reset_index(drop=True))
 ```
 
-
-
-
-       athlete_display_name team_abbreviation  double_doubles
-    0       Enrique Freeman               AKR              31
-    1             Zach Edey               PUR              30
-    2  Vonterius Woolbright               WCU              27
-    3              DJ Burns               YSU              22
-    4           Oumar Ballo              ARIZ              20
-    5         Armando Bacot               UNC              19
-    6         Fardaws Aimaq               CAL              19
-    7       Yaxel Lendeborg               UAB              19
-    8          Saint Thomas              UNCO              19
-    9           Riley Minix              MORE              19
-
-
-
 ## 🧾 One call, the whole game: `espn_mbb_summary`
 
 [`espn_mbb_summary`](../mbb/reference/site.md#espn_mbb_summary) is the Swiss
@@ -863,41 +453,6 @@ else:
 out
 ```
 
-    ✅ summary 401638636
-    box score sections available: ['boxscore_player', 'boxscore_team', 'plays', 'winprobability', 'leaders', 'game_info', 'officials', 'header']
-
-
-
-
-
-    shape: (5, 9)
-    ┌─────────┬────────────┬───────────┬───────────┬───┬───────────┬───────────┬───────────┬───────────┐
-    │ team_id ┆ team_abbre ┆ team_disp ┆ home_away ┆ … ┆ stat_name ┆ stat_labe ┆ stat_disp ┆ stat_valu │
-    │ ---     ┆ viation    ┆ lay_name  ┆ ---       ┆   ┆ ---       ┆ l         ┆ lay_value ┆ e         │
-    │ str     ┆ ---        ┆ ---       ┆ str       ┆   ┆ str       ┆ ---       ┆ ---       ┆ ---       │
-    │         ┆ str        ┆ str       ┆           ┆   ┆           ┆ str       ┆ str       ┆ str       │
-    ╞═════════╪════════════╪═══════════╪═══════════╪═══╪═══════════╪═══════════╪═══════════╪═══════════╡
-    │ 156     ┆ CREI       ┆ Creighton ┆ away      ┆ … ┆ fieldGoal ┆ FG        ┆ 26-58     ┆ null      │
-    │         ┆            ┆ Bluejays  ┆           ┆   ┆ sMade-fie ┆           ┆           ┆           │
-    │         ┆            ┆           ┆           ┆   ┆ ldGoalsAt ┆           ┆           ┆           │
-    │         ┆            ┆           ┆           ┆   ┆ tem…      ┆           ┆           ┆           │
-    │ 156     ┆ CREI       ┆ Creighton ┆ away      ┆ … ┆ fieldGoal ┆ Field     ┆ 45        ┆ null      │
-    │         ┆            ┆ Bluejays  ┆           ┆   ┆ Pct       ┆ Goal %    ┆           ┆           │
-    │ 156     ┆ CREI       ┆ Creighton ┆ away      ┆ … ┆ threePoin ┆ 3PT       ┆ 11-23     ┆ null      │
-    │         ┆            ┆ Bluejays  ┆           ┆   ┆ tFieldGoa ┆           ┆           ┆           │
-    │         ┆            ┆           ┆           ┆   ┆ lsMade-th ┆           ┆           ┆           │
-    │         ┆            ┆           ┆           ┆   ┆ ree…      ┆           ┆           ┆           │
-    │ 156     ┆ CREI       ┆ Creighton ┆ away      ┆ … ┆ threePoin ┆ Three     ┆ 48        ┆ null      │
-    │         ┆            ┆ Bluejays  ┆           ┆   ┆ tFieldGoa ┆ Point %   ┆           ┆           │
-    │         ┆            ┆           ┆           ┆   ┆ lPct      ┆           ┆           ┆           │
-    │ 156     ┆ CREI       ┆ Creighton ┆ away      ┆ … ┆ freeThrow ┆ FT        ┆ 12-13     ┆ null      │
-    │         ┆            ┆ Bluejays  ┆           ┆   ┆ sMade-fre ┆           ┆           ┆           │
-    │         ┆            ┆           ┆           ┆   ┆ eThrowsAt ┆           ┆           ┆           │
-    │         ┆            ┆           ┆           ┆   ┆ tem…      ┆           ┆           ┆           │
-    └─────────┴────────────┴───────────┴───────────┴───┴───────────┴───────────┴───────────┴───────────┘
-
-
-
 ## 🙌 Who suited up: game rosters
 
 [`espn_mbb_game_rosters`](../mbb/reference/additional/highlights.md#espn_mbb_game_rosters)
@@ -914,32 +469,6 @@ else:
     out = "game rosters unavailable right now"
 out
 ```
-
-    ✅ game rosters 401638636
-
-
-
-
-
-    shape: (10, 3)
-    ┌──────────────────────┬───────────────────┬─────────┐
-    │ athlete_display_name ┆ team_abbreviation ┆ starter │
-    │ ---                  ┆ ---               ┆ ---     │
-    │ str                  ┆ str               ┆ bool    │
-    ╞══════════════════════╪═══════════════════╪═════════╡
-    │ Jonas Aidoo          ┆ TENN              ┆ true    │
-    │ Dalton Knecht        ┆ TENN              ┆ true    │
-    │ Zakai Zeigler        ┆ TENN              ┆ true    │
-    │ Jahmai Mashack       ┆ TENN              ┆ true    │
-    │ Josiah-Jordan James  ┆ TENN              ┆ true    │
-    │ Tobe Awaka           ┆ TENN              ┆ false   │
-    │ J.P. Estrella        ┆ TENN              ┆ false   │
-    │ Freddie Dilione V    ┆ TENN              ┆ false   │
-    │ Cameron Carr         ┆ TENN              ┆ false   │
-    │ Jordan Gainey        ┆ TENN              ┆ false   │
-    └──────────────────────┴───────────────────┴─────────┘
-
-
 
 ## 🔧 A multi-season pipeline: highest-scoring tournament games
 
@@ -962,37 +491,9 @@ print("season schedule rows:", schedule_2024.shape)
     .head(10))
 ```
 
-    season schedule rows: (6249, 84)
-
-
-
-
-
-    shape: (10, 6)
-    ┌────────────┬───────────────────────────┬───────────────────────┬────────────┬────────────┬───────┐
-    │ game_date  ┆ home_display_name         ┆ away_display_name     ┆ home_score ┆ away_score ┆ total │
-    │ ---        ┆ ---                       ┆ ---                   ┆ ---        ┆ ---        ┆ ---   │
-    │ date       ┆ str                       ┆ str                   ┆ i32        ┆ i32        ┆ i64   │
-    ╞════════════╪═══════════════════════════╪═══════════════════════╪════════════╪════════════╪═══════╡
-    │ 2024-01-03 ┆ George Washington         ┆ Fordham Rams          ┆ 113        ┆ 119        ┆ 232   │
-    │            ┆ Revolutionar…             ┆                       ┆            ┆            ┆       │
-    │ 2024-01-13 ┆ Samford Bulldogs          ┆ VMI Keydets           ┆ 134        ┆ 96         ┆ 230   │
-    │ 2023-12-14 ┆ Tulane Green Wave         ┆ Furman Paladins       ┆ 117        ┆ 110        ┆ 227   │
-    │ 2024-01-25 ┆ Denver Pioneers           ┆ South Dakota Coyotes  ┆ 111        ┆ 110        ┆ 221   │
-    │ 2023-11-09 ┆ Kent State Golden Flashes ┆ James Madison Dukes   ┆ 108        ┆ 113        ┆ 221   │
-    │ 2023-11-08 ┆ Bryant Bulldogs           ┆ Fisher College Eagles ┆ 140        ┆ 79         ┆ 219   │
-    │ 2024-02-03 ┆ UAlbany Great Danes       ┆ UMBC Retrievers       ┆ 102        ┆ 114        ┆ 216   │
-    │ 2024-01-21 ┆ UTSA Roadrunners          ┆ Florida Atlantic Owls ┆ 103        ┆ 112        ┆ 215   │
-    │ 2024-03-02 ┆ Kentucky Wildcats         ┆ Arkansas Razorbacks   ┆ 111        ┆ 102        ┆ 213   │
-    │ 2024-02-10 ┆ Appalachian State         ┆ Toledo Rockets        ┆ 109        ┆ 104        ┆ 213   │
-    │            ┆ Mountaineers              ┆                       ┆            ┆            ┆       │
-    └────────────┴───────────────────────────┴───────────────────────┴────────────┴────────────┴───────┘
-
-
-
 ## 🏛️ stats.ncaa.org — the `ncaa_mbb_*` family (bigballR parity)
 
-New in 0.0.72: a 16-function port of bigballR wired to **stats.ncaa.org** —
+a 16-function port of bigballR wired to **stats.ncaa.org** —
 schedules, rosters, box scores, play-by-play, lineups, possessions, on/off
 splits, and shot locations (`ncaa_mbb_team_schedule`, `ncaa_mbb_game_pbp`,
 `ncaa_mbb_lineups`, `ncaa_mbb_possessions`, `ncaa_mbb_on_off`, ...). The
@@ -1007,27 +508,6 @@ ids = ncaa_mbb_team_ids()
 print("team-id crosswalk:", ids.shape)
 ids.filter(pl.col("season") == "2025-26").head()
 ```
-
-    team-id crosswalk: (6006, 4)
-
-
-
-
-
-    shape: (5, 4)
-    ┌────────────────────┬────────────┬────────┬─────────┐
-    │ team               ┆ conference ┆ id     ┆ season  │
-    │ ---                ┆ ---        ┆ ---    ┆ ---     │
-    │ str                ┆ str        ┆ i64    ┆ str     │
-    ╞════════════════════╪════════════╪════════╪═════════╡
-    │ A&M-Corpus Christi ┆ Southland  ┆ 609609 ┆ 2025-26 │
-    │ Abilene Christian  ┆ WAC        ┆ 609614 ┆ 2025-26 │
-    │ Air Force          ┆ MWC        ┆ 609502 ┆ 2025-26 │
-    │ Akron              ┆ MAC        ┆ 609541 ┆ 2025-26 │
-    │ Alabama            ┆ SEC        ┆ 609617 ┆ 2025-26 │
-    └────────────────────┴────────────┴────────┴─────────┘
-
-
 
 Live game fetches go through the shared proxy-bound NCAA fetch layer
 (stats.ncaa.org is IP-ban-happy — configure `SDV_PY_NCAA_*` /
@@ -1057,3 +537,26 @@ lineups = ncaa_mbb_lineups(game_id)       # five-player stints
   [wehoop](https://wehoop.sportsdataverse.org).
 
 Now go bracket something! 🏀🔥
+
+## 📊 Torvik and KenPom
+
+`torvik_*` (barttorvik.com, free) and `kenpom_*` (kenpom.com, **subscription** —
+the cell is a no-op without credentials).
+
+
+
+```python
+import os
+
+from sportsdataverse.mbb import torvik_ratings
+
+safe("torvik ratings", lambda: torvik_ratings(year=2025))
+
+if os.environ.get("KENPOM_EMAIL") and os.environ.get("KENPOM_PASSWORD"):
+    from sportsdataverse.mbb import kenpom_ratings
+
+    safe("kenpom ratings", lambda: kenpom_ratings(season=2025))
+else:
+    print("no KenPom credentials - skipping kenpom_* (set KENPOM_EMAIL / KENPOM_PASSWORD)")
+
+```

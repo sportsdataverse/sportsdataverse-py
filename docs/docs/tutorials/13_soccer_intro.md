@@ -29,7 +29,7 @@ Let's kick it off! ⚽
 
 Everything returns a tidy **polars** `DataFrame` by default — pass
 `return_as_pandas=True` for pandas. The wrappers return the raw ESPN JSON by
-default; pass `return_parsed=True` to run the built-in parser. ⭐ marks the
+default; pass `` to run the built-in parser. ⭐ marks the
 most commonly used entry points.
 
 ### Core wrappers (pass `league=` slug)
@@ -103,22 +103,21 @@ from sportsdataverse.soccer import epl, mls, ucl, laliga, bundesliga
 print('polars version:', pl.__version__)
 ```
 
-    polars version: 1.42.0
-
-
 ESPN's live endpoints are seasonal and occasionally rate-limited, so a tiny
 `safe()` helper runs them defensively — you get the frame when the feed is up,
 and a friendly one-liner when it isn't (never a scary traceback). 🛟
 
 
 ```python
+from sportsdataverse.errors import AssetFetchError, NoDataError
+
 def safe(label, thunk):
     try:
         out = thunk()
         print(f'✅ {label}')
         return out
-    except Exception as e:  # noqa: BLE001 -- demo resilience
-        print(f'⏭️  {label}: unavailable right now ({type(e).__name__})')
+    except (NoDataError, AssetFetchError) as e:
+        print(f"\u23ed\ufe0f  {label}: {type(e).__name__}: {e}")
         return None
 ```
 
@@ -127,7 +126,7 @@ def safe(label, thunk):
 [`espn_soccer_scoreboard`](../soccer/reference/site.md#espn_soccer_scoreboard)
 returns every match for a league on a given date. Pass `dates=YYYYMMDD`; omit
 it to get today's slate. The raw payload is a nested ESPN JSON dict — pass
-`return_parsed=True` to flatten it into a tidy polars frame, or call
+`` to flatten it into a tidy polars frame, or call
 `parse_soccer_scoreboard` explicitly on the raw dict.
 
 We'll start with a **Premier League** match-day.
@@ -141,16 +140,6 @@ raw_board = safe(
 )
 type(raw_board), list(raw_board.keys()) if isinstance(raw_board, dict) else 'unavailable'
 ```
-
-    ✅ EPL scoreboard (raw)
-
-
-
-
-
-    (polars.dataframe.frame.DataFrame, 'unavailable')
-
-
 
 
 ```python
@@ -172,25 +161,11 @@ else:
 out
 ```
 
-    ✅ EPL scoreboard (parsed)
-
-
-
-
-
-    'no scoreboard data for that date'
-
-
-
 
 ```python
 print('board shape:', getattr(board, 'shape', 'N/A'))
 print('columns:', getattr(board, 'columns', []))
 ```
-
-    board shape: (0, 0)
-    columns: []
-
 
 ## 🏆 Standings
 
@@ -225,16 +200,6 @@ else:
 out
 ```
 
-    ✅ EPL standings
-
-
-
-
-
-    'standings unavailable right now'
-
-
-
 
 ```python
 # MLS standings — multiple groups (Eastern/Western Conference)
@@ -253,16 +218,6 @@ else:
     out = 'MLS standings unavailable right now'
 out
 ```
-
-    ✅ MLS standings
-
-
-
-
-
-    'MLS standings unavailable right now'
-
-
 
 ## 🎬 Match summary — the 11-section dispatcher
 
@@ -305,11 +260,6 @@ else:
     frames = {}
 ```
 
-    ✅ EPL summary event 656009
-    sections parsed: ['header', 'lineups', 'key_events', 'team_stats', 'commentary', 'leaders', 'standings', 'head_to_head', 'last_five', 'game_info', 'shootout']
-    rows per section: {'header': 0, 'lineups': 0, 'key_events': 0, 'team_stats': 0, 'commentary': 0, 'leaders': 0, 'standings': 0, 'head_to_head': 0, 'last_five': 0, 'game_info': 0, 'shootout': 0}
-
-
 ### Section: `header` — match overview
 
 
@@ -326,13 +276,6 @@ else:
 out
 ```
 
-
-
-
-    'header section unavailable'
-
-
-
 ### Section: `lineups` — starting XIs and substitutes
 
 
@@ -347,13 +290,6 @@ else:
     out = 'lineups section unavailable'
 out
 ```
-
-
-
-
-    'lineups section unavailable'
-
-
 
 ### Section: `key_events` — goals, cards, substitutions
 
@@ -370,13 +306,6 @@ else:
 out
 ```
 
-
-
-
-    'key_events section unavailable'
-
-
-
 ### Section: `team_stats` — possession, shots, passes …
 
 
@@ -389,13 +318,6 @@ else:
     out = 'team_stats section unavailable'
 out
 ```
-
-
-
-
-    'team_stats section unavailable'
-
-
 
 ### Section: `commentary` — live match log
 
@@ -410,13 +332,6 @@ else:
     out = 'commentary section unavailable'
 out
 ```
-
-
-
-
-    'commentary section unavailable'
-
-
 
 ### Remaining sections at a glance
 
@@ -434,13 +349,6 @@ for section in ('game_info', 'head_to_head', 'last_five', 'leaders', 'shootout')
         print(f'{section:20s}  not in parsed frames')
 ```
 
-    game_info             shape=(0, 0)  cols=[]
-    head_to_head          shape=(0, 0)  cols=[]
-    last_five             shape=(0, 0)  cols=[]
-    leaders               shape=(0, 0)  cols=[]
-    shootout              shape=(0, 0)  cols=[]
-
-
 ### Requesting a single section
 
 Pass `section="<name>"` to `parse_soccer_summary` when you only need one
@@ -456,19 +364,6 @@ else:
     out = 'summary unavailable'
 out
 ```
-
-    DataFrame (0, 0)
-
-
-
-
-
-    shape: (0, 0)
-    ┌┐
-    ╞╡
-    └┘
-
-
 
 ## 🏟️ Teams — the master lookup
 
@@ -493,16 +388,6 @@ else:
     out = 'teams unavailable right now'
 out
 ```
-
-    ✅ EPL teams
-
-
-
-
-
-    'teams unavailable right now'
-
-
 
 ## 👥 Team roster
 
@@ -530,16 +415,6 @@ else:
 out
 ```
 
-    ✅ Arsenal roster (team_id=359)
-
-
-
-
-
-    'roster unavailable right now'
-
-
-
 ## 📆 Team schedule
 
 [`espn_soccer_team_schedule`](../soccer/reference/site.md#espn_soccer_team_schedule)
@@ -563,33 +438,6 @@ elif team_sched is not None:
 else:
     print('schedule unavailable right now')
 ```
-
-    ✅ Arsenal schedule 2023/24
-    shape: (38, 21)
-    shape: (5, 21)
-    ┌────────┬────────────┬────────────┬───────────┬───┬───────────┬───────────┬───────────┬───────────┐
-    │ id     ┆ date       ┆ name       ┆ short_nam ┆ … ┆ league_sh ┆ league_mi ┆ league_sl ┆ league_is │
-    │ ---    ┆ ---        ┆ ---        ┆ e         ┆   ┆ ort_name  ┆ dsize_nam ┆ ug        ┆ _tourname │
-    │ str    ┆ str        ┆ str        ┆ ---       ┆   ┆ ---       ┆ e         ┆ ---       ┆ nt        │
-    │        ┆            ┆            ┆ str       ┆   ┆ str       ┆ ---       ┆ str       ┆ ---       │
-    │        ┆            ┆            ┆           ┆   ┆           ┆ str       ┆           ┆ bool      │
-    ╞════════╪════════════╪════════════╪═══════════╪═══╪═══════════╪═══════════╪═══════════╪═══════════╡
-    │ 704656 ┆ 2025-05-25 ┆ Arsenal at ┆ ARS @ SOU ┆ … ┆ Premier   ┆ ENG.1     ┆ eng.1     ┆ false     │
-    │        ┆ T15:00Z    ┆ Southampto ┆           ┆   ┆ League    ┆           ┆           ┆           │
-    │        ┆            ┆ n          ┆           ┆   ┆           ┆           ┆           ┆           │
-    │ 704639 ┆ 2025-05-18 ┆ Newcastle  ┆ NEW @ ARS ┆ … ┆ Premier   ┆ ENG.1     ┆ eng.1     ┆ false     │
-    │        ┆ T15:30Z    ┆ United at  ┆           ┆   ┆ League    ┆           ┆           ┆           │
-    │        ┆            ┆ Arsenal    ┆           ┆   ┆           ┆           ┆           ┆           │
-    │ 704632 ┆ 2025-05-11 ┆ Arsenal at ┆ ARS @ LIV ┆ … ┆ Premier   ┆ ENG.1     ┆ eng.1     ┆ false     │
-    │        ┆ T15:30Z    ┆ Liverpool  ┆           ┆   ┆ League    ┆           ┆           ┆           │
-    │ 704619 ┆ 2025-05-03 ┆ AFC Bourne ┆ BOU @ ARS ┆ … ┆ Premier   ┆ ENG.1     ┆ eng.1     ┆ false     │
-    │        ┆ T16:30Z    ┆ mouth at   ┆           ┆   ┆ League    ┆           ┆           ┆           │
-    │        ┆            ┆ Arsenal    ┆           ┆   ┆           ┆           ┆           ┆           │
-    │ 704618 ┆ 2025-04-23 ┆ Crystal    ┆ CRY @ ARS ┆ … ┆ Premier   ┆ ENG.1     ┆ eng.1     ┆ false     │
-    │        ┆ T19:00Z    ┆ Palace at  ┆           ┆   ┆ League    ┆           ┆           ┆           │
-    │        ┆            ┆ Arsenal    ┆           ┆   ┆           ┆           ┆           ┆           │
-    └────────┴────────────┴────────────┴───────────┴───┴───────────┴───────────┴───────────┴───────────┘
-
 
 ## 🗞️ News & injuries
 
@@ -615,10 +463,6 @@ else:
     print('news unavailable right now')
 ```
 
-    ✅ EPL news
-    news unavailable right now
-
-
 
 ```python
 injuries = safe(
@@ -632,10 +476,6 @@ elif injuries is not None:
 else:
     print('injuries feed unavailable right now')
 ```
-
-    ✅ EPL injuries
-    shape: (0, 0)
-
 
 ## 📊 Stat leaders
 
@@ -660,24 +500,6 @@ elif goal_leaders is not None:
 else:
     print('leaders unavailable right now')
 ```
-
-    ✅ EPL goal leaders 2023/24
-    shape: (1, 9)
-    shape: (1, 9)
-    ┌───────────┬───────────┬───────────┬───────────┬───┬───────────┬───────────┬───────────┬──────────┐
-    │ current_s ┆ current_s ┆ current_s ┆ current_s ┆ … ┆ current_s ┆ current_s ┆ current_s ┆ current_ │
-    │ eason_yea ┆ eason_dis ┆ eason_sta ┆ eason_end ┆   ┆ eason_typ ┆ eason_typ ┆ eason_typ ┆ season_t │
-    │ r         ┆ play_name ┆ rt_date   ┆ _date     ┆   ┆ e_type    ┆ e_name    ┆ e_start_d ┆ ype_end_ │
-    │ ---       ┆ ---       ┆ ---       ┆ ---       ┆   ┆ ---       ┆ ---       ┆ ate       ┆ date     │
-    │ i64       ┆ str       ┆ str       ┆ str       ┆   ┆ i64       ┆ str       ┆ ---       ┆ ---      │
-    │           ┆           ┆           ┆           ┆   ┆           ┆           ┆ str       ┆ str      │
-    ╞═══════════╪═══════════╪═══════════╪═══════════╪═══╪═══════════╪═══════════╪═══════════╪══════════╡
-    │ 2026      ┆ 2026-27   ┆ 2026-06-0 ┆ 2027-06-0 ┆ … ┆ 14308     ┆ 2026-27   ┆ 2026-06-0 ┆ 2027-06- │
-    │           ┆ English   ┆ 1T04:00:0 ┆ 1T03:59:0 ┆   ┆           ┆ English   ┆ 1T04:00:0 ┆ 01T03:59 │
-    │           ┆ Premier   ┆ 0.000+00: ┆ 0.000+00: ┆   ┆           ┆ Premier   ┆ 0.000+00: ┆ :00.000+ │
-    │           ┆ League    ┆ 00        ┆ 00        ┆   ┆           ┆ League    ┆ 00        ┆ 00:00    │
-    └───────────┴───────────┴───────────┴───────────┴───┴───────────┴───────────┴───────────┴──────────┘
-
 
 ## 🔗 League aliases — drop the `league=` argument
 
@@ -715,16 +537,6 @@ else:
 out
 ```
 
-    ✅ epl.espn_epl_scoreboard
-
-
-
-
-
-    'EPL alias unavailable'
-
-
-
 
 ```python
 # --- MLS alias: standings ---
@@ -742,16 +554,6 @@ else:
     out = 'MLS alias unavailable'
 out
 ```
-
-    ✅ mls.espn_mls_standings
-
-
-
-
-
-    'MLS alias unavailable'
-
-
 
 
 ```python
@@ -771,16 +573,6 @@ else:
     out = 'UCL alias unavailable'
 out
 ```
-
-    ✅ ucl.espn_ucl_standings
-
-
-
-
-
-    'UCL alias unavailable'
-
-
 
 ## 🍳 Cookbook: common soccer tasks
 
@@ -810,13 +602,6 @@ else:
 out
 ```
 
-
-
-
-    'run the standings cell above first'
-
-
-
 ### Recipe 2 — Starter vs. substitute counts from a lineup 🧮
 
 Count the starters and bench players per team from the `lineups`
@@ -838,13 +623,6 @@ else:
 out
 ```
 
-
-
-
-    'run the match-summary cells above first'
-
-
-
 ### Recipe 3 — Goals, cards, and substitutions in the key-events log 🎯
 
 The `key_events` section has a `type_text` column. Group it to get a
@@ -865,13 +643,6 @@ else:
 out
 ```
 
-
-
-
-    'run the match-summary cells above first'
-
-
-
 ### Recipe 4 — Position breakdown of a squad 🏃
 
 Use the parsed roster to count players by position — a quick depth-chart
@@ -891,13 +662,6 @@ else:
     out = 'run the team-roster cell above first'
 out
 ```
-
-
-
-
-    'run the team-roster cell above first'
-
-
 
 ### Recipe 5 — Multi-league standings in one loop 🌍
 
@@ -931,35 +695,6 @@ for slug, name in leagues.items():
 pl.DataFrame(rows)
 ```
 
-    ✅ Premier League standings
-
-
-    ✅ La Liga standings
-
-
-    ✅ Bundesliga standings
-
-
-    ✅ Serie A standings
-
-
-
-
-
-    shape: (4, 4)
-    ┌────────────────┬───────┬───────┬────────┐
-    │ league         ┆ slug  ┆ teams ┆ groups │
-    │ ---            ┆ ---   ┆ ---   ┆ ---    │
-    │ str            ┆ str   ┆ i64   ┆ i64    │
-    ╞════════════════╪═══════╪═══════╪════════╡
-    │ Premier League ┆ eng.1 ┆ 0     ┆ 0      │
-    │ La Liga        ┆ esp.1 ┆ 0     ┆ 0      │
-    │ Bundesliga     ┆ ger.1 ┆ 0     ┆ 0      │
-    │ Serie A        ┆ ita.1 ┆ 0     ┆ 0      │
-    └────────────────┴───────┴───────┴────────┘
-
-
-
 ### Recipe 6 — Pandas interop 🐼
 
 Every parser accepts `return_as_pandas=True`, and any polars frame
@@ -989,16 +724,6 @@ else:
 out
 ```
 
-    ✅ EPL standings (pandas)
-
-
-
-
-
-    'standings unavailable right now'
-
-
-
 ## 🏅 Champions League deep-dive
 
 A quick tour of the same surface on the UCL — demonstrating that
@@ -1022,16 +747,6 @@ else:
 out
 ```
 
-    ✅ UCL scoreboard
-
-
-
-
-
-    'UCL scoreboard unavailable'
-
-
-
 
 ```python
 # UCL group-stage standings — one row per team per group
@@ -1053,13 +768,6 @@ else:
     out = 'run the UCL standings cell above first'
 out
 ```
-
-
-
-
-    'run the UCL standings cell above first'
-
-
 
 ## 🌸 Women's soccer — NWSL & Women's World Cup
 
@@ -1091,16 +799,6 @@ else:
 out
 ```
 
-    ✅ NWSL standings 2023
-
-
-
-
-
-    'NWSL standings unavailable right now'
-
-
-
 
 ```python
 # Women's World Cup 2023 — group-stage standings
@@ -1122,15 +820,60 @@ else:
 out
 ```
 
-    ✅ WWC 2023 standings
+## 📦 Event data from any provider with kloppy
+
+ESPN gives you the match log; for per-event coordinates (every pass, carry, shot) the open
+standard is [kloppy](https://kloppy.pysport.org), which reads ~15 providers (StatsBomb, Opta,
+Wyscout, Sportec, SkillCorner, …) into one event model. It is an **optional extra**:
+
+```bash
+pip install "sportsdataverse[soccer]"
+```
+
+`soccer_open_events('statsbomb', match_id)` loads one match of
+[StatsBomb open data](https://github.com/statsbomb/open-data) (free for research and
+non-commercial use) as a polars frame — one row per event, snake_case columns, coordinates on
+kloppy's 0–1 pitch by default (`coordinates='statsbomb'` keeps the 120 × 80 units).
+Match 8658 is the 2018 World Cup final, France v Croatia.
 
 
+```python
+from sportsdataverse.soccer import soccer_open_events
 
+events = safe(
+    'StatsBomb open data — 2018 World Cup final (match 8658)',
+    lambda: soccer_open_events('statsbomb', 8658),
+)
+if events is not None:
+    print('events:', events.shape)
+    out = (
+        events.filter(pl.col('event_type') == 'SHOT')
+        .select('period_id', 'timestamp', 'team_id', 'player_id',
+                'coordinates_x', 'coordinates_y', 'result')
+        .head(10)
+    )
+else:
+    out = 'kloppy not installed (pip install "sportsdataverse[soccer]") or StatsBomb open data unavailable'
+out
+```
 
+Any other provider or file goes through kloppy itself, then
+`soccer_events_to_frame(dataset)` applies the same frame convention:
 
-    'WWC standings unavailable right now'
+```python
+from kloppy import statsbomb
+from sportsdataverse.soccer import soccer_events_to_frame
+ds = statsbomb.load(event_data='8658.json', lineup_data='lineups_8658.json')
+df = soccer_events_to_frame(ds)
+```
 
+To draw it, [sdvplot](https://github.com/sportsdataverse/sdvplot) puts the frame on a 105 × 68 m
+pitch in one line (sdvplot is not a dependency, so this is not executed here):
 
+```python
+from sdvplot import pitch_coords
+xy = pitch_coords(events, provider='statsbomb')   # R: sdvplotR::sdv_pitch_coords(events, 'statsbomb')
+```
 
 ## 🎉 Where to next
 

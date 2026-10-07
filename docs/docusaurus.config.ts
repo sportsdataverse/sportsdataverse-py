@@ -160,14 +160,18 @@ const config: Config = {
             'https://github.com/sportsdataverse/sportsdataverse-py/edit/main/docs/',
           // Versioning policy: the unversioned tree under docs/docs/ (the codegen-
           // generated reference + hand-authored conceptual pages) is the live
-          // DEFAULT served at the root URL (`lastVersion: 'current'`), so every
-          // push republishes it via Vercel and it can never drift from the code
-          // (the codegen `--check` gate keeps the reference pages == the wrappers).
-          // It is labelled `main` — a rolling, collision-proof label — so that the
-          // per-release snapshots cut at release time (`yarn version:docs x.y.z`,
-          // which freezes a copy under versioned_docs/version-x.y.z) get the exact
-          // release numbers without ever clashing with `current`'s label. The
-          // legacy pre-codegen Sphinx docs stay archived at /docs/0.0.50/.
+          // DEFAULT served at the root URL (`lastVersion: 'current'`), so it can
+          // never drift from the code (the codegen `--check` gate keeps the
+          // reference pages == the wrappers). `.github/workflows/docs-deploy.yml`
+          // builds the site and publishes it to the `gh-pages` branch, which Vercel
+          // serves at py.sportsdataverse.org.
+          // It is labelled `main (latest)` — a rolling, collision-proof label — so
+          // that the per-release snapshots cut at release time
+          // (`yarn version:docs x.y.z`, which freezes a copy under
+          // versioned_docs/version-x.y.z) get the exact release numbers without
+          // ever clashing with `current`'s label. VERSIONS_TO_KEEP = 3 means only
+          // the three newest snapshots are built, so older archives (including the
+          // pre-codegen /docs/0.0.50/ tree) are NOT served any more.
           lastVersion: 'current',
           // `current` + the latest 3 release snapshots (see builtVersions above).
           // Auto-derived from versions.json so new releases never re-break the
