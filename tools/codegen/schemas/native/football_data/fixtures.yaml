@@ -1,0 +1,285 @@
+columns:
+- description: League Division
+  name: div
+  type: character
+- description: Match Date (dd/mm/yy)
+  name: date
+  type: character
+- description: Time of match kick off
+  name: time
+  type: character
+- description: Home Team
+  name: home_team
+  type: character
+- description: Away Team
+  name: away_team
+  type: character
+- description: Match Referee
+  name: referee
+  type: character
+- description: Bet365 home win odds
+  name: b365_h
+  type: numeric
+- description: Bet365 draw odds
+  name: b365_d
+  type: numeric
+- description: Bet365 away win odds
+  name: b365_a
+  type: numeric
+- description: Betfred home win odds
+  name: bfdh
+  type: numeric
+- description: Betfred draw odds
+  name: bfdd
+  type: numeric
+- description: Betfred away win odds
+  name: bfda
+  type: numeric
+- description: Betvictor home win odds
+  name: bvh
+  type: numeric
+- description: Betvictor draw odds
+  name: bvd
+  type: numeric
+- description: Betvictor away win odds
+  name: bva
+  type: numeric
+- description: Bet&Win home win odds
+  name: bwh
+  type: numeric
+- description: Bet&Win draw odds
+  name: bwd
+  type: numeric
+- description: Bet&Win away win odds
+  name: bwa
+  type: numeric
+- description: Paddy Power home win odds
+  name: pph
+  type: numeric
+- description: Paddy Power draw odds
+  name: ppd
+  type: numeric
+- description: Paddy Power away win odds
+  name: ppa
+  type: numeric
+- description: ''
+  name: skbh
+  type: numeric
+- description: ''
+  name: skbd
+  type: numeric
+- description: ''
+  name: skba
+  type: numeric
+- description: Market maximum home win odds
+  name: max_h
+  type: numeric
+- description: Market maximum draw win odds
+  name: max_d
+  type: numeric
+- description: Market maximum away win odds
+  name: max_a
+  type: numeric
+- description: Market average home win odds
+  name: avg_h
+  type: numeric
+- description: Market average draw win odds
+  name: avg_d
+  type: numeric
+- description: Market average away win odds
+  name: avg_a
+  type: numeric
+- description: Betfair Exchange home win odds
+  name: bfeh
+  type: numeric
+- description: Betfair Exchange draw odds
+  name: bfed
+  type: numeric
+- description: Betfair Exchange away win odds
+  name: bfea
+  type: numeric
+- description: Bet365 over 2.5 goals
+  name: b365>2.5
+  type: numeric
+- description: Bet365 under 2.5 goals
+  name: b365<2.5
+  type: numeric
+- description: Market maximum over 2.5 goals
+  name: max>2.5
+  type: numeric
+- description: Market maximum under 2.5 goals
+  name: max<2.5
+  type: numeric
+- description: Market average over 2.5 goals
+  name: avg>2.5
+  type: numeric
+- description: Market average under 2.5 goals
+  name: avg<2.5
+  type: numeric
+- description: ''
+  name: bfe>2.5
+  type: numeric
+- description: ''
+  name: bfe<2.5
+  type: numeric
+- description: Market size of handicap (home team) (since 2019/2020)
+  name: a_hh
+  type: numeric
+- description: Bet365 Asian handicap home team odds
+  name: b365_ahh
+  type: numeric
+- description: Bet365 Asian handicap away team odds
+  name: b365_aha
+  type: numeric
+- description: Market maximum Asian handicap home team odds
+  name: max_ahh
+  type: numeric
+- description: Market maximum Asian handicap away team odds
+  name: max_aha
+  type: numeric
+- description: Market average Asian handicap home team odds
+  name: avg_ahh
+  type: numeric
+- description: Market average Asian handicap away team odds
+  name: avg_aha
+  type: numeric
+- description: ''
+  name: bfeahh
+  type: numeric
+- description: ''
+  name: bfeaha
+  type: numeric
+- description: Closing Bet365 home win odds
+  name: b365_ch
+  type: character
+- description: Closing Bet365 draw odds
+  name: b365_cd
+  type: character
+- description: Closing Bet365 away win odds
+  name: b365_ca
+  type: character
+- description: Closing Betfred home win odds
+  name: bfdch
+  type: character
+- description: Closing Betfred draw odds
+  name: bfdcd
+  type: character
+- description: Closing Betfred away win odds
+  name: bfdca
+  type: character
+- description: Closing Betvictor home win odds
+  name: bvch
+  type: character
+- description: Closing Betvictor draw odds
+  name: bvcd
+  type: character
+- description: Closing Betvictor away win odds
+  name: bvca
+  type: character
+- description: Closing Bet&Win home win odds
+  name: bwch
+  type: character
+- description: Closing Bet&Win draw odds
+  name: bwcd
+  type: character
+- description: Closing Bet&Win away win odds
+  name: bwca
+  type: character
+- description: Closing Paddy Power home win odds
+  name: ppch
+  type: character
+- description: Closing Paddy Power draw odds
+  name: ppcd
+  type: character
+- description: Closing Paddy Power away win odds
+  name: ppca
+  type: character
+- description: ''
+  name: skbch
+  type: character
+- description: ''
+  name: skbcd
+  type: character
+- description: ''
+  name: skbca
+  type: character
+- description: Closing Market maximum home win odds
+  name: max_ch
+  type: character
+- description: Closing Market maximum draw win odds
+  name: max_cd
+  type: character
+- description: Closing Market maximum away win odds
+  name: max_ca
+  type: character
+- description: Closing Market average home win odds
+  name: avg_ch
+  type: character
+- description: Closing Market average draw win odds
+  name: avg_cd
+  type: character
+- description: Closing Market average away win odds
+  name: avg_ca
+  type: character
+- description: Closing Betfair Exchange home win odds
+  name: bfech
+  type: character
+- description: Closing Betfair Exchange draw odds
+  name: bfecd
+  type: character
+- description: Closing Betfair Exchange away win odds
+  name: bfeca
+  type: character
+- description: Closing Bet365 over 2.5 goals
+  name: b365_c>2.5
+  type: character
+- description: Closing Bet365 under 2.5 goals
+  name: b365_c<2.5
+  type: character
+- description: Closing Market maximum over 2.5 goals
+  name: max_c>2.5
+  type: character
+- description: Closing Market maximum under 2.5 goals
+  name: max_c<2.5
+  type: character
+- description: Closing Market average over 2.5 goals
+  name: avg_c>2.5
+  type: character
+- description: Closing Market average under 2.5 goals
+  name: avg_c<2.5
+  type: character
+- description: ''
+  name: bfec>2.5
+  type: character
+- description: ''
+  name: bfec<2.5
+  type: character
+- description: Closing Market size of handicap (home team) (since 2019/2020)
+  name: ah_ch
+  type: character
+- description: Closing Bet365 Asian handicap home team odds
+  name: b365_cahh
+  type: character
+- description: Closing Bet365 Asian handicap away team odds
+  name: b365_caha
+  type: character
+- description: Closing Market maximum Asian handicap home team odds
+  name: max_cahh
+  type: character
+- description: Closing Market maximum Asian handicap away team odds
+  name: max_caha
+  type: character
+- description: Closing Market average Asian handicap home team odds
+  name: avg_cahh
+  type: character
+- description: Closing Market average Asian handicap away team odds
+  name: avg_caha
+  type: character
+- description: ''
+  name: bfecahh
+  type: character
+- description: ''
+  name: bfecaha
+  type: character
+kind: dataframe
+schema: fixtures

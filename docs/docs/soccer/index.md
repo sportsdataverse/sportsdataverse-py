@@ -14,6 +14,8 @@ description: "sdv-py SOCCER: endpoint references, dataset loaders and parsers fo
 | [FotMob](#fotmob) | `www.fotmob.com` | 14 | none (unofficial) |
 | [UEFA](#uefa) | `comp.uefa.com` | 7 | none |
 | [FIFA](#fifa) | `api.fifa.com` | 9 | none |
+| [Football-Data.co.uk](#football-data-co-uk) | `www.football-data.co.uk` | 3 | none (CSV archive) |
+| [OpenLigaDB](#openligadb) | `api.openligadb.de` | 11 | none |
 | [kloppy open event data](#kloppy-open-event-data) | `kloppy.pysport.org` | 2 | none (optional `soccer` extra) |
 | [Additional functions](reference/additional) | hand-written wrappers & helpers | 2 | — |
 
@@ -49,6 +51,18 @@ description: "sdv-py SOCCER: endpoint references, dataset loaders and parsers fo
 | Reference | Functions |
 |---|---:|
 | [FIFA public API v3 (api.fifa.com)](reference/fifa) | 9 |
+
+## Football-Data.co.uk {#football-data-co-uk}
+
+| Reference | Functions |
+|---|---:|
+| [Football-Data.co.uk CSV archive (football-data.co.uk)](reference/football_data) | 3 |
+
+## OpenLigaDB {#openligadb}
+
+| Reference | Functions |
+|---|---:|
+| [OpenLigaDB (api.openligadb.de, community German football)](reference/openligadb) | 11 |
 
 ## kloppy open event data {#kloppy-open-event-data}
 

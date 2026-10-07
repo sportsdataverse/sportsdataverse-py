@@ -1,0 +1,24 @@
+columns:
+- description: ''
+  name: id_sport
+  type: character
+- description: ''
+  name: str_sport
+  type: character
+- description: ''
+  name: str_format
+  type: character
+- description: ''
+  name: str_sport_thumb
+  type: character
+- description: ''
+  name: str_sport_thumb_bw
+  type: character
+- description: ''
+  name: str_sport_icon_green
+  type: character
+- description: ''
+  name: str_sport_description
+  type: character
+kind: dataframe
+schema: sports

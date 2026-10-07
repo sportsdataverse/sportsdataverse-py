@@ -1,0 +1,641 @@
+{
+  "resultsCount": 3,
+  "resultsLimit": 10,
+  "resultsOffset": 0,
+  "headlines": [
+    {
+      "id": 49778940,
+      "nowId": "1-49778940",
+      "contentKey": "49778940-1-6-1",
+      "dataSourceIdentifier": "57a453fcb27bb",
+      "publishedkey": "49778940",
+      "type": "Story",
+      "feedDisplayType": "Default",
+      "headline": "The world's most weird and wonderful soccer kits of 2026-27",
+      "description": "Some soccer kits are just too remarkable to not be seen. Here are some of the season's wildest ones from around the world that demand to be shared.",
+      "title": "The world's most weird and wonderful soccer kits of 2026-27",
+      "linkText": "Jaw-dropping jerseys: The world's most weird and wonderful soccer kits",
+      "categorized": "2026-10-05T09:41:21Z",
+      "originallyPosted": "2026-10-06T08:00:00Z",
+      "lastModified": "2026-10-05T09:41:14Z",
+      "published": "2026-10-05T09:41:14Z",
+      "root": "soccer",
+      "section": "Soccer",
+      "images": [
+        {
+          "dataSourceIdentifier": "aeac93e7d6767",
+          "id": 49791022,
+          "type": "header",
+          "name": "Wild and wonderful 2026-27 kits [1295x729]",
+          "credit": "ESPN",
+          "height": 729,
+          "width": 1295,
+          "url": "https://a.espncdn.com/photo/2026/0901/r1709853_1295x729_16-9.png"
+        },
+        {
+          "dataSourceIdentifier": "7d4ebcd69f2a0",
+          "id": 49794241,
+          "type": "header",
+          "name": "Borussia Dortmund third kit 2026-27 [1296x729]",
+          "credit": "Borussia Dortmund",
+          "height": 729,
+          "width": 1296,
+          "url": "https://a.espncdn.com/photo/2026/0901/r1709986_1296x729_16-9.jpg"
+        },
+        {
+          "dataSourceIdentifier": "8378f9a9cd749",
+          "id": 49794266,
+          "type": "header",
+          "name": "Carlisle United away kit 2026-27 [1080x608]",
+          "credit": "Carlisle United",
+          "height": 608,
+          "width": 1080,
+          "url": "https://a.espncdn.com/photo/2026/0901/r1709988_1080x608_16-9.jpg"
+        }
+      ],
+      "categories": [
+        {
+          "id": 81497,
+          "type": "league",
+          "uid": "s:600",
+          "guid": "119cfa41-71d4-39bf-a790-6273a52b0259",
+          "description": "Soccer",
+          "sportId": 600,
+          "leagueId": 600,
+          "league": {
+            "id": 600,
+            "description": "Soccer",
+            "links": {
+              "mobile": {
+                "leagues": {
+                  "href": "https://www.espn.com/soccer/"
+                }
+              },
+              "web": {
+                "leagues": {
+                  "href": "https://www.espn.com/soccer/"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 597349,
+          "type": "topic",
+          "guid": "e4d76e8f-6d22-9501-0d34-cdeed991b984",
+          "description": "blog - the toe poke",
+          "sportId": 0,
+          "topicId": 65
+        },
+        {
+          "id": 142489,
+          "type": "team",
+          "uid": "s:600~t:124",
+          "guid": "6cdd01c7-3938-6f1d-0c24-c7cf7da68d2b",
+          "description": "Borussia Dortmund",
+          "sportId": 600,
+          "teamId": 124,
+          "team": {
+            "id": 124,
+            "description": "Borussia Dortmund",
+            "abbreviation": "DOR",
+            "shortDisplayName": "Dortmund",
+            "links": {
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/soccer/club/_/id/124/borussia-dortmund"
+                }
+              },
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/soccer/club/_/id/124/borussia-dortmund"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "keywords": [
+        "Soccer",
+        "blog - the toe poke",
+        "Borussia Dortmund"
+      ],
+      "story": "<p><photo1></p>\n<p>In what must surely be the only list in which <a data-clubhouse-guid=\"6cdd01c7-3938-6f1d-0c24-c7cf7da68d2b\" href=\"http://espn.com/soccer/team?id=124\">Borussia Dortmund</a> will ever rub shoulders with <a href=\"https://www.espn.com.au/soccer/team/_/id/322/carlisle-united\" target=\"_blank\">Carlisle United</a>, we have gathered together an array of the wildest football kits released by clubs all around the world for the 2026-27 season.</p>\n<p>The result is a curious collection of weird and/or wonderful home, away and third jerseys in all colors of the rainbow (as well as some colors that might not actually feature on the known spectrum.) The shirts draw inspiration from diverse subject matter -- from vintage aircraft, to European agriculture, to the forests of northern Italy, and even the electrical storms that flash over the deserts of Arizona.</p>\n<p><strong>- <a href=\"https://www.espn.com/soccer/story/_/id/49812807/soccer-best-kits-2025-26-stylish-jerseys-probably-missed\" target=\"_blank\">This season's most stylish jerseys you probably missed</a><br>\n- <a href=\"https://www.espn.co.uk/football/story/_/id/49953407/soccer-wildest-warmup-kits-2026-27-good-bad-ugly\" target=\"_blank\">Soccer's wildest warmup kits: The good, the bad, the ugly</a><br>\n- <a href=\"https://www.espn.com/soccer/story/_/id/50026144/lionel-messi-special-kit-final-argentina-match-unveiled\" target=\"_blank\">A kit fit for the GOAT: Messi's special jersey for Argentina farewell</a></strong></p>\n<p>Given the pure intensity of some of the outrageous kits on offer here, we suggest you should consider wearing some kind of eye protection, just to prevent your retinas from suffering any permanent damage.</p>\n<p>It turns out there are levels of neon pink that we never knew existed ...</p>\n\n\n<hr>\n\n\n<h2><a href=\"http://espn.com/soccer/team?id=124\">Borussia Dortmund</a> third kit (Puma)</h2>\n<p><photo2></p>\n<p>With what we suspect must surely be the purple-est shade of purple ever purpled, Dortmund have created a new third shirt that is likely visible from near-Earth orbit. As if it were in any doubt, the German club then went and applied the trim in ultra-fluorescent yellow just to really make the whole thing pop.</p>\n<h2><a href=\"https://www.espn.com/soccer/team/_/id/322/carlisle-united\">Carlisle United</a> away kit (Macron)</h2>\n<p><photo3></p>\n<p>Relishing the chance to try something a little bit esoteric with their new away kit, Carlisle settled on an utterly putrid pink strip covered in black blotches that unfortunately brings to mind some kind of awful volatile chemical spillage. It makes the purple goalkeeper kit almost palatable. Almost ...</p>\n<h2><a href=\"https://www.espn.com.au/soccer/team/_/id/9739/aldosivi\" target=\"_blank\">Aldosivi</a> third kit (Kappa)</h2>\n<p><photo4></p>\n<p>Presumably inspired by the serene turquoise waters of the Atlantic coast around Buenos Aires, Argentine club Aldosivi released a third kit which treads the finest of lines between footballing haute-couture and something that has been accidentally dropped in an oily puddle on the quayside.</p>\n<h2><a href=\"https://www.espn.com.au/soccer/team/_/id/221/club-atletico-morelia\" target=\"_blank\">Club Atlético Morelia</a> away kit (Keuka)</h2>\n<p><photo5></p>\n<p>Mexican second-tier side Morelia have really gone all-out with their new away kit, which apparently saw them task their designers with producing a shirt that has every square inch covered in what we can only describe as a visual interpretation of a chronic migraine.</p>\n<h2><a href=\"https://www.espn.com.au/soccer/team/_/id/7548/deportivo-municipal\" target=\"_blank\">Deportivo Municipal</a> third kit (EOO Sports)</h2>\n<p><photo6></p>\n<p>Desperately needing to raise funds to keep their club going, Peruvian lower-league side Deportivo Municipal came up with a rather ingenious viral campaign to attract 1,000 new kit sponsors. The result is this rather astounding checkerboard jersey, complete with the logos of all those who donated to the cause.</p>\n<h2><a data-clubhouse-guid=\"e9a9765a-0e0a-5d1e-d086-39eadc4b5c0c\" href=\"http://espn.com/soccer/team?id=122\">FC Cologne</a> third kit (Adidas)</h2>\n<p><photo7></p>\n<p>While we don't truly believe that Cologne's new third kit is directly inspired by a popular flavor of ice cream, we simply can't overlook the fact that the navy shirt appears to have a distinct raspberry ripple effect running across the front of it.</p>\n<h2><a href=\"https://www.espn.com.au/soccer/team/_/id/18673/fc_tucson\" target=\"_blank\">FC Tucson</a> home kit</h2>\n<p><photo8></p>\n<p>Nicknamed \"the Monsoon kit,\" the highly-charged purple shirt is inspired by the electrical storms that periodically form in the skies over Tucson, Arizona, and the Sonoran Desert that surrounds it -- which, as it happens, makes for an incredibly dramatic, almost cinematic football shirt design.</p>\n<h2><a href=\"https://www.espn.com.au/soccer/club/_/id/132819/hanwell-town-fc\" target=\"_blank\">Hanwell Town FC</a> third kit (VX3)</h2>\n<p><photo9></p>\n<p>English lower-league club Hanwell Town successfully scored a high-profile collaboration for their new kits in the unlikely guise of the \"Rocky Horror Show.\" The result is this fittingly bizarre shirt that features a smattering of images and slogans from the musical plastered all over it.</p>\n<h2>Küçükçekmece Sinopspor third kit (Hummel)</h2>\n<p><img src=\"https://a.espncdn.com/photo/2026/0902/r1710390_935x935_1-1.jpg\" width=\"100%\"></p>\n<p>Turkish fourth-tier side Küçükçekmece opted for a very literal approach to making their new third kit stand out by plonking a gigantic lighthouse on the front of it. Having finished in the playoff positions last season, the club will no doubt be hoping that their lucky beacon can help guide them to automatic promotion this time around.</p>\n<h2><a href=\"https://www.espn.com.au/soccer/team/_/id/17857\" target=\"_blank\">NK Lokomotiva Zagreb</a> (Macron)</h2>\n<p><photo10></p>\n<p>Both of Lokomotiva's new home and away kits share a distinctive railway theme, which perhaps shouldn't come as much of a surprise given that the Croatian side were initially formed by Zagreb railway workers back in the early 20th Century. The blue home design has white stripes formed from railway tracks, while the wackier yellow away kit has a track motif stamped over an odd \"cracked mud\" graphic.</p>\n<h2><a data-clubhouse-guid=\"3f4b2640-8af5-9785-93d5-363cbdb5a2f6\" href=\"http://espn.com/soccer/team?id=11420\">RB Leipzig</a> third kit (Puma)</h2>\n<p><photo11></p>\n<p>RB Leipzig unveiled a mind-boggling trippy purple-and-blue number that is slathered in a shimmering cascade of waves, dots and stars aplenty. It's a real humdinger -- with extra emphasis on the \"hum.\"</p>\n<h2><a href=\"https://www.espn.com.au/soccer/team/_/id/2564/shamrock-rovers\" target=\"_blank\">Shamrock Rovers</a> third kit (Macron)</h2>\n<p><photo12></p>\n<p>Released several months back, Shamrock Rovers went with a rather grim and industrial yellow third kit for the 2026 <a href=\"https://www.espn.com.au/soccer/league/_/name/irl.1\" target=\"_blank\">League of Ireland</a> season. It looks like painted concrete upon a factory wall, complete with a barrage of warning stripes that are presumably in place to alert people to stand well clear at all times.</p>\n<h2><a href=\"https://www.espn.com.au/soccer/team/_/id/336/stoke-city\" target=\"_blank\">Stoke City</a> away kit (Macron)</h2>\n<p><photo13></p>\n<p>Conceived as a tribute to the famous Spitfire fighter plane of World War II, Stoke thought it would be a good idea to drum up an era-appropriate military camouflage kit; perfect for stealthily ghosting in at the far post undetected by the opposition. Alas, it does add an extra unnecessary challenge to picking out your own teammates on muddy Championship pitches.</p>\n<h2><a href=\"https://www.espn.com.au/soccer/team/_/id/310/southend-united\" target=\"_blank\">Southend United</a> third kit (Errea)</h2>\n<p><photo14></p>\n<p>Southend have sought to answer the age-old conundrum \"How pink is too pink?\" with an ultra bright, Day-Glo third kit that radiates so intensely we wouldn't be shocked to learn that it possesses a similar radioactive half-life to uranium.</p>\n<h2>Sporting Club Casablanca third kit (Nike)</h2>\n<p><photo15></p>\n<p>Hailing from the Moroccan Women's Championship, Casablanca have abandoned their trusty blue, yellow and white club colors this season in favor of something a little more daring.</p>\n<h2><a href=\"https://www.espn.com.au/soccer/team/_/id/4055/us-avellino\" target=\"_blank\">US Avellino</a> third kit (Magma)</h2>\n<p><photo16></p>\n<p>Covered in a pattern of dense foliage, Avellino's new third kit is an homage to the Irpinia forests of northern Italy and the wolves that live among them. The shirt is covered in an ornate naturalistic graphic that includes grapes, figs, stalks of wheat, and an image of a fearsome wolf itself, shrouded within the autumnal flora.</p>\n<h2><a href=\"https://www.espn.com.au/soccer/team/_/id/11706/viktoria-plzen\" target=\"_blank\">Viktoria Plzen</a> away kit (Macron)</h2>\n<p><photo17></p>\n<p>Oddly, we make this the third kit on the list that seems to be either directly or indirectly inspired by muddy fields. Indeed, the Plzen away jersey was actually introduced as an homage to the hard-working farmers and agricultural heritage of the club's particular region of Czechia. It's infamously tough to make a brown kit work, as is being ably demonstrated here.</p>\n<h2><a href=\"https://www.espn.com.au/soccer/team/_/id/22524/westchester-sc\" target=\"_blank\">Westchester SC</a> third kit (Hummel)</h2>\n<p><photo18></p>\n<p>Should any Westchester SC fans be struggling to make their way home after games, the club have provided the perfect solution. The new \"Commuter\" kit features a useful map of the local area's three MTA Metro-North train lines. Much handier than carrying a paper copy around with you all day.</p>\n\n\n\n\n",
+      "allowAMP": true,
+      "allowAds": true,
+      "allowComments": true,
+      "allowCommerce": true,
+      "allowContentReactions": true,
+      "allowSearch": true,
+      "byline": "Chris Wright",
+      "isLiveBlog": false,
+      "links": {
+        "api": {
+          "self": {
+            "href": "https://content.core.api.espn.com/v1/sports/news/49778940"
+          }
+        },
+        "app": {
+          "sportscenter": {
+            "href": "sportscenter://x-callback-url/showStory?uid=49778940"
+          }
+        },
+        "mobile": {
+          "href": "http://m.espn.go.com/soccer/story?storyId=49778940"
+        },
+        "web": {
+          "href": "https://www.espn.com/soccer/story/_/id/49778940/jaw-dropping-jerseys-soccers-most-wild-wonderful-2026-27-kits"
+        }
+      },
+      "premium": false
+    },
+    {
+      "id": 50108562,
+      "nowId": "1-50108562",
+      "contentKey": "50108562-1-6-1",
+      "dataSourceIdentifier": "d6d13190af7dd",
+      "publishedkey": "50108562",
+      "type": "Story",
+      "feedDisplayType": "Default",
+      "headline": "England vs. Czechia in Nations League 2026: TV channel, how to watch in UK, kick-off time, live stream, referee, line-ups",
+      "description": "Everything you need to know as England take on Czechia in the Nations League behind closed doors.",
+      "title": "England vs. Czechia in Nations League 2026: TV channel, how to watch in UK, kick-off time, live stream, referee, line-ups",
+      "linkText": "England vs. Czechia in Nations League 2026: TV channel, how to watch in UK, kick-off time, live stream, referee, line-ups",
+      "categorized": "2026-10-06T06:32:41Z",
+      "originallyPosted": "2026-10-06T06:32:00Z",
+      "lastModified": "2026-10-06T06:32:39Z",
+      "published": "2026-10-06T06:32:39Z",
+      "root": "soccer",
+      "section": "Soccer",
+      "images": [
+        {
+          "dataSourceIdentifier": "c4661ab3c6dfe",
+          "id": 50090885,
+          "type": "header",
+          "name": " Harry Kane of England  [1296x729]",
+          "credit": "Carl Recine/Getty Images",
+          "height": 729,
+          "width": 1296,
+          "url": "https://a.espncdn.com/photo/2026/1003/r1725327_1296x729_16-9.jpg"
+        },
+        {
+          "type": "Media",
+          "name": "Walcott backs England's Harry Kane to win Ballon d'Or",
+          "caption": "Walcott backs England's Harry Kane to win Ballon d'Or",
+          "height": 324,
+          "width": 576,
+          "url": "https://espnmedia-cdn.akamaized.net/espn/media/common/2026/0929/dm_260929_COM_SOC_Analysis_Walcott_backs_Englands_Harry_Kane_to_win_Ballon_dOr_20260929_GLOBAL/dm_260929_COM_SOC_Analysis_Walcott_backs_Englands_Harry_Kane_to_win_Ballon_dOr_20260929_GLOBAL.jpg"
+        }
+      ],
+      "video": [
+        {
+          "id": 50061850,
+          "dataSourceIdentifier": "b0431fab26103",
+          "cerebroId": "6abc3755f340d6751fad59a7",
+          "pccId": "0896e1f0-a9d6-43ed-ba60-b444f3c82114",
+          "source": "espn",
+          "headline": "Walcott backs England's Harry Kane to win Ballon d'Or",
+          "shortHeadline": "Walcott backs England's Harry Kane to win Ballon d'Or",
+          "caption": "Walcott backs England's Harry Kane to win Ballon d'Or",
+          "title": "Walcott backs England's Harry Kane to win Ballon d'Or",
+          "description": "Walcott backs England's Harry Kane to win Ballon d'Or",
+          "shortDescription": "Walcott backs England's Harry Kane to win Ballon d'Or",
+          "lastModified": "2026-09-29T22:10:50Z",
+          "originalPublishDate": "2026-09-29T22:10:30Z",
+          "premium": false,
+          "syndicatable": true,
+          "duration": 74,
+          "videoRatio": "16:9",
+          "timeRestrictions": {
+            "embargoDate": "2026-09-29T22:09:23Z",
+            "expirationDate": "2027-10-02T22:09:23Z"
+          },
+          "deviceRestrictions": {
+            "devices": [
+              "settop",
+              "tablet",
+              "handset"
+            ],
+            "type": "whitelist"
+          },
+          "thumbnail": "https://espnmedia-cdn.akamaized.net/espn/media/common/2026/0929/dm_260929_COM_SOC_Analysis_Walcott_backs_Englands_Harry_Kane_to_win_Ballon_dOr_20260929_GLOBAL/dm_260929_COM_SOC_Analysis_Walcott_backs_Englands_Harry_Kane_to_win_Ballon_dOr_20260929_GLOBAL.jpg",
+          "images": [
+            {
+              "name": "Poster Image",
+              "caption": "",
+              "alt": "",
+              "credit": "",
+              "height": 324,
+              "width": 576,
+              "url": "https://espnmedia-cdn.akamaized.net/espn/media/common/2026/0929/dm_260929_COM_SOC_Analysis_Walcott_backs_Englands_Harry_Kane_to_win_Ballon_dOr_20260929_GLOBAL/dm_260929_COM_SOC_Analysis_Walcott_backs_Englands_Harry_Kane_to_win_Ballon_dOr_20260929_GLOBAL.jpg"
+            }
+          ],
+          "posterImages": {
+            "default": {
+              "href": "https://espnmedia-cdn.akamaized.net/espn/media/common/2026/0929/dm_260929_COM_SOC_Analysis_Walcott_backs_Englands_Harry_Kane_to_win_Ballon_dOr_20260929_GLOBAL/dm_260929_COM_SOC_Analysis_Walcott_backs_Englands_Harry_Kane_to_win_Ballon_dOr_20260929_GLOBAL_default.jpg",
+              "width": 576,
+              "height": 324
+            },
+            "firstFrame": {
+              "href": "https://cmp-espn.media.dssott.com/opp/img/espn/2026/0929/dm_260929_COM_SOC_Analysis_Walcott_backs_Englands_Harry_Kane_to_win_Ballon_dOr_20260929_GLOBAL/dm_260929_COM_SOC_Analysis_Walcott_backs_Englands_Harry_Kane_to_win_Ballon_dOr_20260929_GLOBAL/thumb-1-w720-h406-f4.jpg"
+            },
+            "full": {
+              "href": "https://espnmedia-cdn.akamaized.net/espn/media/common/2026/0929/dm_260929_COM_SOC_Analysis_Walcott_backs_Englands_Harry_Kane_to_win_Ballon_dOr_20260929_GLOBAL/dm_260929_COM_SOC_Analysis_Walcott_backs_Englands_Harry_Kane_to_win_Ballon_dOr_20260929_GLOBAL.jpg"
+            },
+            "square": {
+              "href": "https://espnmedia-cdn.akamaized.net/espn/media/common/2026/0929/dm_260929_COM_SOC_Analysis_Walcott_backs_Englands_Harry_Kane_to_win_Ballon_dOr_20260929_GLOBAL/dm_260929_COM_SOC_Analysis_Walcott_backs_Englands_Harry_Kane_to_win_Ballon_dOr_20260929_GLOBAL_1x1.jpg"
+            },
+            "wide": {
+              "href": "https://espnmedia-cdn.akamaized.net/espn/media/common/2026/0929/dm_260929_COM_SOC_Analysis_Walcott_backs_Englands_Harry_Kane_to_win_Ballon_dOr_20260929_GLOBAL/dm_260929_COM_SOC_Analysis_Walcott_backs_Englands_Harry_Kane_to_win_Ballon_dOr_20260929_GLOBAL_5x2.jpg"
+            }
+          },
+          "links": {
+            "api": {
+              "artwork": {
+                "href": "https://artwork.api.espn.com/artwork/collections/media/0896e1f0-a9d6-43ed-ba60-b444f3c82114"
+              },
+              "self": {
+                "href": "https://content.core.api.espn.com/v1/video/clips/50061850"
+              }
+            },
+            "mobile": {
+              "href": "https://watch.auth.api.espn.com/video/auth/brightcove/0896e1f0-a9d6-43ed-ba60-b444f3c82114/asset?UMADPARAMreferer=https://www.espn.com/video/clip/_/id/50061850/walcott-backs-england-harry-kane-win-ballon-dor",
+              "alert": {
+                "href": "https://m.espn.com/general/video/videoAlert?vid=50061850"
+              },
+              "progressiveDownload": {
+                "href": "https://watch.auth.api.espn.com/video/auth/brightcove/0896e1f0-a9d6-43ed-ba60-b444f3c82114/asset?UMADPARAMreferer=https://www.espn.com/video/clip/_/id/50061850/walcott-backs-england-harry-kane-win-ballon-dor"
+              },
+              "source": {
+                "href": "https://espnmedia-cdn.akamaized.net/espn/media/16x9/2026/0929/dm_260929_COM_SOC_Analysis_Walcott_backs_Englands_Harry_Kane_to_win_Ballon_dOr_20260929_GLOBAL/dm_260929_COM_SOC_Analysis_Walcott_backs_Englands_Harry_Kane_to_win_Ballon_dOr_20260929_GLOBAL.mp4"
+              },
+              "streaming": {
+                "href": "https://watch.auth.api.espn.com/video/auth/brightcove/0896e1f0-a9d6-43ed-ba60-b444f3c82114/asset?UMADPARAMreferer=https://www.espn.com/video/clip/_/id/50061850/walcott-backs-england-harry-kane-win-ballon-dor"
+              }
+            },
+            "source": {
+              "href": "https://espnmedia-cdn.akamaized.net/espn/media/16x9/2026/0929/dm_260929_COM_SOC_Analysis_Walcott_backs_Englands_Harry_Kane_to_win_Ballon_dOr_20260929_GLOBAL/dm_260929_COM_SOC_Analysis_Walcott_backs_Englands_Harry_Kane_to_win_Ballon_dOr_20260929_GLOBAL.mp4",
+              "HD": {
+                "href": "https://espnmedia-cdn.akamaized.net/espn/media/16x9/2026/0929/dm_260929_COM_SOC_Analysis_Walcott_backs_Englands_Harry_Kane_to_win_Ballon_dOr_20260929_GLOBAL/dm_260929_COM_SOC_Analysis_Walcott_backs_Englands_Harry_Kane_to_win_Ballon_dOr_20260929_GLOBAL.mp4"
+              },
+              "HLS": {
+                "href": "https://cmp-espn.media.dssott.com/opp/hls/espn/2026/0929/dm_260929_COM_SOC_Analysis_Walcott_backs_Englands_Harry_Kane_to_win_Ballon_dOr_20260929_GLOBAL/dm_260929_COM_SOC_Analysis_Walcott_backs_Englands_Harry_Kane_to_win_Ballon_dOr_20260929_GLOBAL/playlist.m3u8",
+                "HD": {
+                  "href": "https://cmp-espn.media.dssott.com/opp/hls/espn/2026/0929/dm_260929_COM_SOC_Analysis_Walcott_backs_Englands_Harry_Kane_to_win_Ballon_dOr_20260929_GLOBAL/dm_260929_COM_SOC_Analysis_Walcott_backs_Englands_Harry_Kane_to_win_Ballon_dOr_20260929_GLOBAL/playlist.m3u8"
+                },
+                "cmaf": {
+                  "href": "https://cmp-espn.media.dssott.com/opp/cmaf/espn/2026/0929/dm_260929_COM_SOC_Analysis_Walcott_backs_Englands_Harry_Kane_to_win_Ballon_dOr_20260929_GLOBAL/dm_260929_COM_SOC_Analysis_Walcott_backs_Englands_Harry_Kane_to_win_Ballon_dOr_20260929_GLOBAL/playlist.m3u8"
+                },
+                "shield": {
+                  "href": "https://watch.auth.api.espn.com/video/auth/media/0896e1f0-a9d6-43ed-ba60-b444f3c82114/asset"
+                }
+              },
+              "flash": {
+                "href": "https://espnmedia-cdn.akamaized.net/espn/media/16x9/2026/0929/dm_260929_COM_SOC_Analysis_Walcott_backs_Englands_Harry_Kane_to_win_Ballon_dOr_20260929_GLOBAL/dm_260929_COM_SOC_Analysis_Walcott_backs_Englands_Harry_Kane_to_win_Ballon_dOr_20260929_GLOBAL.mp4"
+              },
+              "full": {
+                "href": "https://espnmedia-cdn.akamaized.net/espn/media/16x9/2026/0929/dm_260929_COM_SOC_Analysis_Walcott_backs_Englands_Harry_Kane_to_win_Ballon_dOr_20260929_GLOBAL/dm_260929_COM_SOC_Analysis_Walcott_backs_Englands_Harry_Kane_to_win_Ballon_dOr_20260929_GLOBAL.mp4"
+              },
+              "mezzanine": {
+                "href": "https://espnmedia-cdn.akamaized.net/espn/media/16x9/2026/0929/dm_260929_COM_SOC_Analysis_Walcott_backs_Englands_Harry_Kane_to_win_Ballon_dOr_20260929_GLOBAL/dm_260929_COM_SOC_Analysis_Walcott_backs_Englands_Harry_Kane_to_win_Ballon_dOr_20260929_GLOBAL.mp4"
+              }
+            },
+            "sportscenter": {
+              "href": "sportscenter://x-callback-url/showVideo?videoID=50061850&videoDSI=b0431fab26103"
+            },
+            "web": {
+              "href": "https://www.espn.com/video/clip/_/id/50061850/walcott-backs-england-harry-kane-win-ballon-dor",
+              "self": {
+                "href": "https://www.espn.com/video/clip/_/id/50061850/walcott-backs-england-harry-kane-win-ballon-dor",
+                "dsi": {
+                  "href": "https://www.espn.com/video/clip?id=b0431fab26103"
+                }
+              }
+            }
+          },
+          "categories": [
+            {
+              "id": 142446,
+              "type": "team",
+              "uid": "s:600~t:450",
+              "guid": "14608173-473c-c347-d753-e45fe20730f5",
+              "description": "Czechia",
+              "sportId": 600,
+              "teamId": 450,
+              "team": {
+                "id": 450,
+                "description": "Czechia",
+                "abbreviation": "CZE",
+                "shortDisplayName": "Czechia",
+                "links": {
+                  "mobile": {
+                    "teams": {
+                      "href": "https://www.espn.com/soccer/team/_/id/450/czechia"
+                    }
+                  },
+                  "web": {
+                    "teams": {
+                      "href": "https://www.espn.com/soccer/team/_/id/450/czechia"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "id": 72576,
+              "type": "team",
+              "uid": "s:600~t:448",
+              "guid": "217dee4e-6974-a197-49a2-afda6e1788c9",
+              "description": "England",
+              "sportId": 600,
+              "teamId": 448,
+              "team": {
+                "id": 448,
+                "description": "England",
+                "abbreviation": "ENG",
+                "shortDisplayName": "England",
+                "links": {
+                  "mobile": {
+                    "teams": {
+                      "href": "https://www.espn.com/soccer/team/_/id/448/england"
+                    }
+                  },
+                  "web": {
+                    "teams": {
+                      "href": "https://www.espn.com/soccer/team/_/id/448/england"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "id": 250037,
+              "type": "athlete",
+              "uid": "s:600~a:142200",
+              "guid": "66b16016-7a3a-434f-ae82-e767fc5fac88",
+              "description": "Harry Kane",
+              "sportId": 600,
+              "athleteId": 142200,
+              "athlete": {
+                "id": 142200,
+                "description": "Harry Kane",
+                "links": {
+                  "mobile": {
+                    "athletes": {
+                      "href": "https://www.espn.com/soccer/player/_/id/142200/harry-kane"
+                    }
+                  },
+                  "web": {
+                    "athletes": {
+                      "href": "https://www.espn.com/soccer/player/_/id/142200/harry-kane"
+                    }
+                  }
+                }
+              }
+            }
+          ],
+          "ad": {
+            "bundle": "espnfc",
+            "sport": "Soccer"
+          },
+          "tracking": {
+            "coverageType": "Analysis",
+            "leagueName": "UEFA Nations League",
+            "sportName": "soccer",
+            "trackingId": "dm_260929_COM_SOC_Analysis_Walcott_backs_Englands_Harry_Kane_to_win_Ballon_dOr_20260929_GLOBAL",
+            "trackingName": "COM_SOC Analysis (Walcott backs England’s Harry Kane to win Ballon d’Or) 2026/09/29 GLOBAL"
+          }
+        }
+      ],
+      "categories": [
+        {
+          "id": 133852,
+          "type": "topic",
+          "guid": "4a692b96-9c7a-6b07-4a8b-7f0c0e64e7fe",
+          "description": "news - uk football",
+          "sportId": 0,
+          "topicId": 156
+        },
+        {
+          "id": 72576,
+          "type": "team",
+          "uid": "s:600~t:448",
+          "guid": "217dee4e-6974-a197-49a2-afda6e1788c9",
+          "description": "England",
+          "sportId": 600,
+          "teamId": 448,
+          "team": {
+            "id": 448,
+            "description": "England",
+            "abbreviation": "ENG",
+            "shortDisplayName": "England",
+            "links": {
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/soccer/team/_/id/448/england"
+                }
+              },
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/soccer/team/_/id/448/england"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 852299,
+          "type": "topic",
+          "guid": "1c63f589-75fe-37b0-9a0c-0dcb3942b070",
+          "description": "evergreen",
+          "sportId": 0,
+          "topicId": 4425
+        }
+      ],
+      "keywords": [
+        "news - uk football",
+        "England",
+        "evergreen"
+      ],
+      "story": "<p><a data-clubhouse-guid=\"217dee4e-6974-a197-49a2-afda6e1788c9\" href=\"http://espn.com/soccer/team?id=448\">England</a> will round out the international break with a home clash against Czechia. </p>\n<p>Thomas Tuchel's side come into the clash riding high on the confidence of a 7-0 thrashing of <a data-clubhouse-guid=\"9bf5c1f7-c89d-c7c8-3cbb-18e8caa7abb4\" href=\"http://espn.com/soccer/team?id=477\">Croatia</a> on Saturday.</p>\n<p>This will be England's second meeting against <a data-clubhouse-guid=\"14608173-473c-c347-d753-e45fe20730f5\" href=\"http://espn.com/soccer/team?id=450\">Czechia</a> in this window, with goals from <a data-player-guid=\"1c67a47d-7b8f-d560-6aaf-0f9e73b00f51\" href=\"http://espn.com/soccer/player/_/id/268782/anthony-gordon\">Anthony Gordon</a> and <a data-player-guid=\"66b16016-7a3a-434f-ae82-e767fc5fac88\" href=\"http://espn.com/soccer/player/_/id/142200/harry-kane\">Harry Kane</a> securing a 2-0 win in Prague.</p>\n<p>Czechia are bottom of the group and winless in their three games. They suffered a 3-1 defeat to world champions <a data-clubhouse-guid=\"99314f68-1c92-218b-b02b-67c50ff9bc3a\" href=\"http://espn.com/soccer/team?id=164\">Spain</a> over the weekend and had began their campaign with a home loss to Croatia.</p>\n<p>Here's everything you need to know about the match.</p>\n\n\n\n<p><img src=\"http://a.espncdn.com/i/infographics/20160725_mlbrankfuture/greyline.png\" width=\"100%\"></p>\n\n\n<h2>How to watch:</h2>\n\n\n<p>The match will be available to watch on ITV 1 in the UK. It will be shown in Australia on beIN Sports, in India on Sony Sports Network, and on FuboTV and ViX in the U.S. Kickoff is at 7:45 p.m. BST. You can also follow live updates with ESPN.</p>\n<p><img src=\"http://a.espncdn.com/i/infographics/20160725_mlbrankfuture/greyline.png\" width=\"100%\"></p>\n\n\n<h2>Key Details:</h2>\n\n\n<p><strong>Date, kick-off time:</strong><br>\n<strong>UK BST:</strong> Tuesday, Oct. 6, 7:45 p.m.<br>\n<strong>U.S. ET: </strong>Tuesday, Oct. 6, 2:45 p.m.<br>\n<strong>India IST:</strong> Wednesday, Oct. 7, 12.15 p.m.<br>\n<strong>Australia AEST:</strong> Wednesday, Oct. 7, 5:45 a.m.</p>\n\n\n<p><strong>Venue: </strong>Wembley Stadium, London</p>\n\n\n<p><strong> </strong></p>\n\n\n<p><img src=\"http://a.espncdn.com/i/infographics/20160725_mlbrankfuture/greyline.png\" width=\"100%\"></p>\n\n\n<h2><span style=\"font-size: 12px;\">Injury and Team News</span></h2>\n\n\n<p>Alex Scott impressed on his full England debut in the win over Croatia, but has had to pull out of the squad after sustaining a thigh injury. </p>\n<p>Arsenal centre-back Ezri Konsa has also withdrawn from the camp. Manchester City's Rico Lewis has been called up to Tuchel's squad. </p>\n<p><a data-player-guid=\"6db4c779-7f2c-07f7-14ce-64d74f7d7fad\" href=\"http://espn.com/soccer/player/_/id/296395/cole-palmer\">Cole Palmer</a>, <a data-player-guid=\"6d2a6f94-d9e3-a1ed-461e-4c0e61d67be3\" href=\"http://espn.com/soccer/player/_/id/238262/declan-rice\">Declan Rice</a> and <a data-player-guid=\"73bfa01e-2ac7-2124-a245-7af746308a53\" href=\"http://espn.com/soccer/player/_/id/230945/marcus-rashford\">Marcus Rashford</a> remain out having withdrawn from the squad at the start of the international break.</p>\n<p><a data-player-guid=\"13c540b4-8efa-43cd-6d30-4f80eaf6ad79\" href=\"http://espn.com/soccer/player/_/id/216579/martin-erlic\">Martin Erlic</a>, D, injury: <strong>OUT</strong><br>\n<a data-player-guid=\"a0dc8135-576d-b998-bb86-71900056b708\" href=\"http://espn.com/soccer/player/_/id/222567/josip-juranovic\">Josip Juranovic</a>, D, injury: <strong>OUT</strong></p>\n<p><a data-player-guid=\"3e36f914-57dd-30c6-9c8c-449e1aedfa66\" href=\"http://espn.com/soccer/player/_/id/299641/tino-livramento\">Tino Livramento</a>, D, injury: <strong>OUT</strong><br>\n<a data-player-guid=\"05fe1643-f278-30d1-9518-93e6543907ca\" href=\"http://espn.com/soccer/player/_/id/328464/nico-oreilly\">Nico O'Reilly</a>, D, injury: <strong>DOUBT</strong><br>\n<a data-player-guid=\"fc443284-c735-3f94-acc9-1d6708bbd2bb\" href=\"http://espn.com/soccer/player/_/id/328466/kobbie-mainoo\">Kobbie Mainoo</a>, M, injury: <strong>OUT</strong><br>\nCole Palmer, M, injury: <strong>OUT</strong><br>\nDeclan Rice, M, injury: <strong>OUT</strong><br>\nMarcus Rashford, F, injury: <strong>OUT</strong><br>\nEzri Konsa, Injury: <strong>OUT</strong><br>\nAlex Scott, injury:<strong> OUT</strong></p>\n\n\n<p><img src=\"http://a.espncdn.com/i/infographics/20160725_mlbrankfuture/greyline.png\" width=\"100%\"></p>\n\n\n<h2>Expected lineups</h2>\n\n\n<p><strong>England predicted XI (4-2-3-1)</strong></p>\n<p><a data-player-guid=\"2f35ae2e-81ad-5bae-f4f3-11a1b8e6a184\" href=\"http://espn.com/soccer/player/_/id/159443/jordan-pickford\">Jordan Pickford</a></p>\n<p><a data-player-guid=\"1a9f43c4-6ca5-4209-3302-890b1fccaf60\" href=\"http://espn.com/soccer/player/_/id/223532/trent-alexander-arnold\">Trent Alexander-Arnold</a>, <a data-player-guid=\"476ae006-e5b6-49ac-b037-01ebe4436944\" href=\"http://espn.com/soccer/player/_/id/265907/marc-guehi\">Marc Guéhi</a>, <a data-player-guid=\"d12a9319-c6b3-be62-fae8-033b463d47fc\" href=\"http://espn.com/soccer/player/_/id/286965/jarrad-branthwaite\">Jarrad Branthwaite</a>, <a data-player-guid=\"fab2a889-f756-b8fd-cada-092170e6e369\" href=\"http://espn.com/soccer/player/_/id/106139/lewis-hall\">Lewis Hall</a></p>\n<p><a data-player-guid=\"ffa78c92-c4e6-2dbd-1243-5397a39af680\" href=\"http://espn.com/soccer/player/_/id/238472/elliot-anderson\">Elliot Anderson</a>, <a data-player-guid=\"ea100b0f-6aae-349f-af7b-9227ee03248c\" href=\"http://espn.com/soccer/player/_/id/352758/myles-lewis-skelly\">Myles Lewis-Skelly</a></p>\n<p><a data-player-guid=\"8bc110d8-2e41-2af9-c56e-0763870ac2f5\" href=\"http://espn.com/soccer/player/_/id/280555/bukayo-saka\">Bukayo Saka</a>, <a data-player-guid=\"5cb69fa5-1b68-f9a2-6a44-ad2447aa4337\" href=\"http://espn.com/soccer/player/_/id/291281/jude-bellingham\">Jude Bellingham</a>, Anthony Gordon</p>\n<p>Harry Kane</p>\n<p><strong>Czechia predicted XI (4-2-3-1)</strong></p>\n<p><a data-player-guid=\"ff98ab6f-e900-3287-a65b-ba0f9e51d64c\" href=\"http://espn.com/soccer/player/_/id/324393/antonin-kinsky\">Antonín Kinsky</a></p>\n<p>Michal Sáček, Štěpán Chaloupek, Martin Vitik, Jiří Sláma</p>\n<p>Alex Král, <a data-player-guid=\"7348fc8f-35a3-4727-6928-24dc8e954794\" href=\"http://espn.com/soccer/player/_/id/223222/roman-macek\">Roman Macek</a></p>\n<p>Matěj Radosta, Pavel Sulc, Ondřej Lingr</p>\n<p>Adam Hložek</p>\n<p><img src=\"http://a.espncdn.com/i/infographics/20160725_mlbrankfuture/greyline.png\" width=\"100%\"></p>\n\n\n<h2>Talking points</h2>\n<p><photo caption=\"Harry Kane is on the cusp of equalling England's all-time appearance record.\"></p>\n\n\n<h2>Kane set to equal Shilton's record</h2>\n\n\n<p>If Kane steps onto the pitch against Czechia, he will equal Peter Shilton's all-time England appearance record of 125 caps. It's the latest feather in the bow of the England captain, who is already the country's top scorer with 89 goals. Four of those goals have come in this international window. His brace against Croatia made him the first England player to score 10+ goals in three different calendar years per Opta. </p>\n<p>The 33-year-old is among the favourites to win the Ballon d'Or this year along with Lamine Yamal and Kylian Mbappé. The flurry of goals ahead of the ceremony later this month certainly won't hurt his chances. </p>\n\n\n<h2>A chance to move on from the World Cup</h2>\n\n\n<p>England's performances, especially that of their forward line, in this spate of Nations League fixtures has largely washed out the sour taste of their World Cup semifinal exit this summer. A win at Wembley will firmly flip the page for Tuchel's side.</p>\n<p>England's first home match following the World Cup was the 3-2 defeat to world champions Spain and Czechia will undoubtedly be easier opposition. They have lost six of their last eight meetings against England and have lost five of their last six matches in all competitions. </p>\n\n\n\n\n\n",
+      "allowAMP": true,
+      "allowAds": true,
+      "allowComments": true,
+      "allowCommerce": true,
+      "allowContentReactions": true,
+      "allowSearch": true,
+      "byline": "ESPN",
+      "isLiveBlog": false,
+      "links": {
+        "api": {
+          "self": {
+            "href": "https://content.core.api.espn.com/v1/sports/news/50108562"
+          }
+        },
+        "app": {
+          "sportscenter": {
+            "href": "sportscenter://x-callback-url/showStory?uid=50108562"
+          }
+        },
+        "mobile": {
+          "href": "http://m.espn.go.com/soccer/story?storyId=50108562"
+        },
+        "web": {
+          "href": "https://www.espn.com/soccer/story/_/id/50108562/england-vs-czechia-nations-league-2026-tv-channel-how-watch-uk-kick-live-stream-referee-line-ups"
+        }
+      },
+      "premium": false
+    },
+    {
+      "id": 50065733,
+      "nowId": "1-50065733",
+      "contentKey": "50065733-1-6-1",
+      "dataSourceIdentifier": "c6047cd6778bb",
+      "publishedkey": "50065733",
+      "type": "Story",
+      "feedDisplayType": "Default",
+      "headline": "England, Scotland, Wales, Northern Ireland in Nations League: How are Home Nations faring?",
+      "description": "The UEFA Nations League fixtures are in full swing during this international break and all of the Home Nations are involved.",
+      "title": "England, Scotland, Wales, Northern Ireland in Nations League: How are Home Nations faring?",
+      "linkText": "England, Scotland, Wales, Northern Ireland in Nations League: How are Home Nations faring?",
+      "categorized": "2026-10-06T06:31:29Z",
+      "originallyPosted": "2026-10-06T06:31:00Z",
+      "lastModified": "2026-10-06T06:31:27Z",
+      "published": "2026-10-06T06:31:27Z",
+      "root": "soccer",
+      "section": "UEFA Nations League",
+      "images": [
+        {
+          "dataSourceIdentifier": "18f1a0006edb4",
+          "id": 50067418,
+          "type": "header",
+          "name": "Nations League home nations [1296x729]",
+          "credit": "Joe Klamar / AFP via Getty Images, Craig Foy/SNS Group via Getty Images, Ulrik Pedersen/NurPhoto via Getty Images, Charles McQuillan/Getty Images",
+          "height": 729,
+          "width": 1296,
+          "url": "https://a.espncdn.com/photo/2026/0930/r1723893_1296x729_16-9.jpg"
+        },
+        {
+          "dataSourceIdentifier": "2cc6c611aac06",
+          "id": 50066580,
+          "type": "header",
+          "name": "Kane Gordon [1296x729]",
+          "caption": "Harry Kane and Anthony Gordon have been in excellent form for England, scoring two goals each in two matches so far this international break.",
+          "credit": "Gabriel Kuchta - UEFA/UEFA via Getty Images",
+          "height": 729,
+          "width": 1296,
+          "url": "https://a.espncdn.com/photo/2026/0930/r1723857_1296x729_16-9.jpg"
+        },
+        {
+          "dataSourceIdentifier": "36794a4ef4311",
+          "id": 50100020,
+          "type": "header",
+          "name": "Neco Williams Wales [1296x729]",
+          "caption": "Neco Williams scored in Wales' huge 2-1 victory over Norway.",
+          "credit": "Dan Mullan/Getty Images",
+          "height": 729,
+          "width": 1296,
+          "url": "https://a.espncdn.com/photo/2026/1004/r1725775_1296x729_16-9.jpg"
+        }
+      ],
+      "categories": [
+        {
+          "id": 409224,
+          "type": "topic",
+          "guid": "52313677-19f8-b106-ec91-d8d17e6087fe",
+          "description": "news",
+          "sportId": 0,
+          "topicId": 781
+        },
+        {
+          "id": 81497,
+          "type": "league",
+          "uid": "s:600",
+          "guid": "119cfa41-71d4-39bf-a790-6273a52b0259",
+          "description": "Soccer",
+          "sportId": 600,
+          "leagueId": 600,
+          "league": {
+            "id": 600,
+            "description": "Soccer",
+            "links": {
+              "mobile": {
+                "leagues": {
+                  "href": "https://www.espn.com/soccer/"
+                }
+              },
+              "web": {
+                "leagues": {
+                  "href": "https://www.espn.com/soccer/"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": 72576,
+          "type": "team",
+          "uid": "s:600~t:448",
+          "guid": "217dee4e-6974-a197-49a2-afda6e1788c9",
+          "description": "England",
+          "sportId": 600,
+          "teamId": 448,
+          "team": {
+            "id": 448,
+            "description": "England",
+            "abbreviation": "ENG",
+            "shortDisplayName": "England",
+            "links": {
+              "mobile": {
+                "teams": {
+                  "href": "https://www.espn.com/soccer/team/_/id/448/england"
+                }
+              },
+              "web": {
+                "teams": {
+                  "href": "https://www.espn.com/soccer/team/_/id/448/england"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "keywords": [
+        "news",
+        "Soccer",
+        "England"
+      ],
+      "story": "<p>The <a data-league-guid=\"c9dcd0ac-3188-31e2-9cf7-b91bd6b08b3f\" href=\"https://www.espn.com/soccer/league/_/name/UEFA.NATIONS\">UEFA Nations League</a> fixtures are in full swing during this international break and all of the Home Nations are involved.</p>\n<p>How are <a data-clubhouse-guid=\"217dee4e-6974-a197-49a2-afda6e1788c9\" href=\"http://espn.com/soccer/team?id=448\">England</a>, <a href=\"https://www.espn.co.uk/football/team/_/id/578/wales\">Wales</a>, <a data-clubhouse-guid=\"cc39ec4a-4e7a-5018-879a-7128a89b4028\" href=\"http://espn.com/soccer/team?id=580\">Scotland</a> and <a href=\"https://www.espn.co.uk/football/team/_/id/586/northern-ireland\">Northern Ireland</a> faring in their respective games? Who have been performing best and who have been struggling?</p>\n<p>Which country's players are in top form?</p>\n<p>Who are struggling with injuries and squad withdrawals?</p>\n<p>ESPN takes you through how each team is doing.</p>\n<p><photo1></p>\n\n\n<hr>\n\n\n<h2><a href=\"https://www.espn.co.uk/football/team/_/id/448/england\">England</a></h2>\n<p><photo2></p>\n<p>The Three Lions have been dealt a tough set of fixtures this international break. They kicked off their campaign against the reigning world champions <a data-clubhouse-guid=\"99314f68-1c92-218b-b02b-67c50ff9bc3a\" href=\"http://espn.com/soccer/team?id=164\">Spain</a> in a thriller that ended 3-2 to Luis da la Fuente's men. And there is not much shame in losing to a team that have not been beaten in 40 matches.</p>\n<p>Thomas Tuchel's men played well at Wembley, despite a chaotic match, but just didn't have enough to overcome the best international side in the world right now.</p>\n<p>England bounced back against <a data-clubhouse-guid=\"14608173-473c-c347-d753-e45fe20730f5\" href=\"http://espn.com/soccer/team?id=450\">Czechia</a> in Prague on Tuesday in a 2-0 victory over 10 men. The goals against the Czechs were scored by <a data-player-guid=\"1c67a47d-7b8f-d560-6aaf-0f9e73b00f51\" href=\"http://espn.com/soccer/player/_/id/268782/anthony-gordon\">Anthony Gordon</a> and, no surprise, <a data-player-guid=\"66b16016-7a3a-434f-ae82-e767fc5fac88\" href=\"http://espn.com/soccer/player/_/id/142200/harry-kane\">Harry Kane</a>. Gordon and Kane also scored in the defeat to Spain and both are in red hot form this international break.</p>\n<p>Against Croatia, England produced a scintillating performance as they thrashed the Croats 7-0.</p>\n<p>Kane, Gordon, <a href=\"https://www.espn.co.uk/football/player/_/id/291281/jude-bellingham\">Jude Bellingham</a> and <a href=\"https://www.espn.co.uk/football/player/_/id/280555/bukayo-saka\">Bukayo Saka</a> all got on the scoresheet in a remarkable demolition job. Tuchel hailed it as a \"complete performance\" as England shone on a night to remember.</p>\n<p>Remaining Nations League group fixtures for England:</p>\n<ul>\n<li><strong>England vs. Czechia, Wembley Stadium</strong></li>\n</ul>\n\n\n\n<hr>\n\n\n<h2><a href=\"https://www.espn.co.uk/football/team/_/id/578/wales\">Wales</a></h2>\n<p><photo3></p>\n<p>It has been a mixed Nations League campaign so far for Wales. They fell to a 1-0 defeat to <a data-clubhouse-guid=\"12433baf-649d-7f4f-7233-6db63a5f62f4\" href=\"http://espn.com/soccer/team?id=482\">Portugal</a> in their opening fixture -- although it could have been worse had <a data-player-guid=\"19e162c0-6bf5-d817-e9f9-81bf96001ee2\" href=\"http://espn.com/soccer/player/_/id/22774/cristiano-ronaldo\">Cristiano Ronaldo</a> not missed a golden chance, along with having a goal disallowed for offside -- and lost 2-0 against <a data-clubhouse-guid=\"23dd2d21-d64c-2f6e-92e8-bf5e6ea92048\" href=\"http://espn.com/soccer/team?id=479\">Denmark</a> in their second match.</p>\n<p>Wales captain and Spurs defender <a data-player-guid=\"b3623a17-45fd-b501-97ec-6452ca56f394\" href=\"http://espn.com/soccer/player/_/id/6327/ben-davies\">Ben Davies</a> turned a ball from <a data-player-guid=\"52aee2a0-ec21-397a-98c8-0b31c72d0dcd\" href=\"http://espn.com/soccer/player/_/id/308932/mikkel-damsgaard\">Mikkel Damsgaard</a> into his own net early in the second half and <a data-player-guid=\"53dd97df-0975-b09b-eaa2-444060742ed6\" href=\"http://espn.com/soccer/player/_/id/291550/gustav-isaksen\">Gustav Isaksen</a> added to Wales' misery when he scored the Danes' second goal 13 minutes later.</p>\n<p>But The Dragons rebounded to beat 10-man <a data-clubhouse-guid=\"2fceb68b-55e5-2028-6ca3-42869377b23e\" href=\"http://espn.com/soccer/team?id=464\">Norway</a> -- who made it to the World Cup quarterfinals this summer -- 2-1 thanks to goals from Dan James and Neco Williams.</p>\n<p>They lost 1-0 to Denmark and sit third in their Nations League group, ahead of only Norway on goal difference.</p>\n<p>Wales' international break is now over.</p>\n<p>- <a href=\"https://www.espn.co.uk/football/story/_/id/50091270/wales-aiming-boost-euro-2028-seeding-nations-league-performance-craig-bellamy\" target=\"_blank\"><strong>Wales aiming to boost Euro 2028 seeding with Nations League performance - Craig Bellamy</strong></a></p>\n\n\n<hr>\n\n\n<h2><a href=\"https://www.espn.co.uk/football/team/_/id/580/scotland\">Scotland</a></h2>\n<p><photo4></p>\n<p>A new era has begun for Scotland.</p>\n<p>Sébastien Pocognoli is in as head coach after Steve Clarke's reign ended in the summer and, following their dismal display at the World Cup, the Tartan Army have been hoping the Belgian will bring them something to feel happy about.</p>\n<p>The new age got off to a tough start. Scotland began their Nations League campaign with a 0-0 draw against <a data-clubhouse-guid=\"73963d0e-81b2-3d86-2690-9fd996718f15\" href=\"http://espn.com/soccer/team?id=472\">Slovenia</a>, before a nightmare 3-0 defeat to <a data-clubhouse-guid=\"fe8cdad6-2fb3-84d7-e08a-0178e4112534\" href=\"http://espn.com/soccer/team?id=475\">Switzerland</a> in their second match.</p>\n<p>Against the Swiss, Scotland found themselves down to 10 men within 15 minutes as defender <a data-player-guid=\"64f4a673-c226-e84d-4abb-478e158f6930\" href=\"http://espn.com/soccer/player/_/id/207454/jack-hendry\">Jack Hendry</a> was sent off for a shove in <a data-player-guid=\"f4e97457-2066-0df8-5d09-9db6a16ea292\" href=\"http://espn.com/soccer/player/_/id/275842/dan-ndoye\">Dan Ndoye</a>'s back as he sprinted towards Scotland goalkeeper <a data-player-guid=\"b2076288-360d-4cb4-acaa-5cd264b71ca6\" href=\"http://espn.com/soccer/player/_/id/181299/angus-gunn\">Angus Gunn</a>.</p>\n<p>A free-kick was awarded to Switzerland and was scored by <a data-player-guid=\"15b90700-3288-8917-d635-29b4acd4fdd7\" href=\"http://espn.com/soccer/player/_/id/136865/ricardo-rodriguez\">Ricardo Rodríguez</a>.</p>\n<p>Switzerland then scored two more goals in the second half to inflict a heavy defeat on Pocognoli in his first match at Scotland's home of Hampden Park.</p>\n<p>But the Tartan Army beat North Macedonia 2-0 on Saturday for Pocognoli's first win as boss and provided some much-needed respite. Captain <a data-player-guid=\"72de2b32-02aa-faf6-8b3c-cca76d2a698d\" href=\"http://espn.com/soccer/player/_/id/162843/john-mcginn\">John McGinn</a> scored a penalty to double the Scots' lead after <a data-player-guid=\"8c887110-e897-fea1-24d5-5feed7bb25af\" href=\"http://espn.com/soccer/player/_/id/283375/kieron-bowie\">Kieron Bowie</a> put them ahead with his first international goal.</p>\n<p>Pocognoli men then held on for the win despite a red card for <a data-player-guid=\"a911ee2d-2e9a-17e4-0113-c0edc5a4dd1e\" href=\"http://espn.com/soccer/player/_/id/191450/scott-mckenna\">Scott McKenna</a> in the 83rd minute.</p>\n<p>They take on Slovenia at Hampden in their last fixture of the international break. </p>\n<ul>\n<li><strong>Scotland vs. Slovenia, Hampden Park</strong></li>\n</ul>\n<p>- <strong><a href=\"https://www.espn.co.uk/football/story/_/id/50093391/sebastien-pocognoli-first-scotland-victory-shaky-start\" target=\"_blank\">Sébastien Pocognoli claims first Scotland victory after shaky start</a></strong></p>\n\n\n<hr>\n\n\n<h2><a href=\"https://www.espn.co.uk/football/team/_/id/586/northern-ireland\">Northern Ireland</a></h2>\n<p><photo5></p>\n<p>Of all the Home Nations, Northern Ireland are currently putting up the best results. They are unbeaten in their campaign so far, sit at the top of Nations League Group B2, having frustrated <a data-clubhouse-guid=\"a47fbcec-c948-cf4c-9e41-3dfa37588c9c\" href=\"http://espn.com/soccer/team?id=364\">Liverpool</a> stars <a data-player-guid=\"fab1b006-532b-8133-de47-647e95a46877\" href=\"http://espn.com/soccer/player/_/id/257206/dominik-szoboszlai\">Dominik Szoboszlai</a> and <a data-player-guid=\"91151e5b-8274-3eae-8ac4-d7779e62af6a\" href=\"http://espn.com/soccer/player/_/id/323110/milos-kerkez\">Milos Kerkez</a> in a 0-0 draw with <a data-clubhouse-guid=\"d21cfee0-aa72-5e56-3c12-6808522f294e\" href=\"http://espn.com/soccer/team?id=480\">Hungary</a> and thrashed Ukraine 3-0.</p>\n<p>In their opening match against <a data-clubhouse-guid=\"74f060e7-4e4c-b65c-6df4-52b803841667\" href=\"http://espn.com/soccer/team?id=584\">Georgia</a>, Michael O'Neill's side scored the latest of late winners as <a data-clubhouse-guid=\"14acbd22-f709-1525-c5ab-1cb3ec8d1696\" href=\"http://espn.com/soccer/team?id=370\">Fulham</a>'s <a data-player-guid=\"e8053a1a-2d81-3e7f-9fc5-093f185de691\" href=\"http://espn.com/soccer/player/_/id/324164/shea-charles\">Shea Charles</a> bagged a 99th minute goal. Earlier in the match, <a data-player-guid=\"5b14c7b8-65d9-c4b9-70c0-979311821f52\" href=\"http://espn.com/soccer/player/_/id/216134/charles\">Charles</a>' younger brother Pierce -- Northern Ireland's goalkeeper -- saved a penalty from <a data-clubhouse-guid=\"79843c9e-0fe0-63b4-b591-9affc0dbd517\" href=\"http://espn.com/soccer/team?id=160\">Paris Saint-Germain</a> star <a data-player-guid=\"337aee12-62ec-afa4-29c4-f7af9f3e15b1\" href=\"http://espn.com/soccer/player/_/id/274745/khvicha-kvaratskhelia\">Khvicha Kvaratskhelia</a>.</p>\n<p>They followed that up with a credible goalless draw against Hungary but, by far, their most impressive performance of the campaign so far came against Ukraine. </p>\n<p>Ciaron Brown scored a brace and Isaac Price bagged a header to secure an excellent 3-0 win for Northern Ireland.</p>\n<p>In their final fixture of the international break, they drew 0-0 with Georgia, which left Northern Ireland at the top of Nations League group B2 with eight points. </p>\n<p>Northern Ireland finished the international break unbeaten and did not concede a goal in any of their four matches.</p>\n\n<br>\n\n\n\n\n",
+      "allowAMP": true,
+      "allowAds": true,
+      "allowComments": true,
+      "allowCommerce": true,
+      "allowContentReactions": true,
+      "allowSearch": true,
+      "byline": "Hannah Ryan",
+      "isLiveBlog": false,
+      "links": {
+        "api": {
+          "self": {
+            "href": "https://content.core.api.espn.com/v1/sports/news/50065733"
+          }
+        },
+        "app": {
+          "sportscenter": {
+            "href": "sportscenter://x-callback-url/showStory?uid=50065733"
+          }
+        },
+        "mobile": {
+          "href": "http://m.espn.go.com/soccer/story?storyId=50065733"
+        },
+        "web": {
+          "href": "https://www.espn.com/soccer/story/_/id/50065733/england-scotland-wales-northern-ireland-nations-league-home-nations-results"
+        }
+      },
+      "premium": false
+    }
+  ],
+  "breakingNews": [],
+  "timestamp": "2026-10-06T06:35:33Z",
+  "status": "success"
+}

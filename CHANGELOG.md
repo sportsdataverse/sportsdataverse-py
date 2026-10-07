@@ -3,11 +3,35 @@
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
 - [Unreleased](#unreleased)
+  - [Added — wrappers for six more intake providers (ESPN content, TheSportsDB, Football-Data.co.uk, OpenLigaDB, Polymarket, Kalshi)](#added--wrappers-for-six-more-intake-providers-espn-content-thesportsdb-football-datacouk-openligadb-polymarket-kalshi)
   - [Added — Formula 1: Jolpica (Ergast-compatible) wrappers in `sportsdataverse.f1`](#added--formula-1-jolpica-ergast-compatible-wrappers-in-sportsdataversef1)
   - [Added — EuroLeague shots, play-by-play, box score, standings and season stats (`euroleague_*`)](#added--euroleague-shots-play-by-play-box-score-standings-and-season-stats-euroleague_)
   - [Added — `asa_players_xpass()` and the `nasl` + `usls` ASA leagues](#added--asa_players_xpass-and-the-nasl--usls-asa-leagues)
   - [Added — kloppy as the optional `soccer` extra; `soccer_open_events()` loads open event data](#added--kloppy-as-the-optional-soccer-extra-soccer_open_events-loads-open-event-data)
   - [Changed — league index pages gain a "See also" block of companion packages (soccer first)](#changed--league-index-pages-gain-a-see-also-block-of-companion-packages-soccer-first)
+  - [Added — one play-by-play shape from six providers (#540, #541, #542, #543, #544, #545, #548)](#added--one-play-by-play-shape-from-six-providers-540-541-542-543-544-545-548)
+  - [Added — a nightly cross-source parity harness (#547)](#added--a-nightly-cross-source-parity-harness-547)
+  - [Added — team and coach tendencies, and the usage / situational box (#496, #497, #498, #614)](#added--team-and-coach-tendencies-and-the-usage--situational-box-496-497-498-614)
+  - [Added — NFL Pro Next Gen Stats (#454, #481, #489)](#added--nfl-pro-next-gen-stats-454-481-489)
+  - [Added — the Fox Sports API as a generated family (#680)](#added--the-fox-sports-api-as-a-generated-family-680)
+  - [Added — six documented provider APIs (#452)](#added--six-documented-provider-apis-452)
+  - [Added — the remaining basketball sources (#451, #678)](#added--the-remaining-basketball-sources-451-678)
+  - [Added — NBA officiating (#592)](#added--nba-officiating-592)
+  - [Added — the metric registry (#645)](#added--the-metric-registry-645)
+  - [Added — rolling form windows and shot events (#590, #657)](#added--rolling-form-windows-and-shot-events-590-657)
+  - [Added — metric curves (#652)](#added--metric-curves-652)
+  - [Added — defense vs position (#659)](#added--defense-vs-position-659)
+  - [Added — the Paper Index (#661)](#added--the-paper-index-661)
+  - [Added — a per-game validation gate (#553, #554, #555, #556, #558)](#added--a-per-game-validation-gate-553-554-555-556-558)
+  - [Added — the Shield play-by-play parser and its live layer (#528, #536)](#added--the-shield-play-by-play-parser-and-its-live-layer-528-536)
+  - [Added — the ESPN CDN family (#681)](#added--the-espn-cdn-family-681)
+  - [Added — the NBA G League (#684)](#added--the-nba-g-league-684)
+  - [Fixed — a strip-sack is the defence's recovery (#546)](#fixed--a-strip-sack-is-the-defences-recovery-546)
+  - [Fixed — the NCAA mapper's quarter markers, score walk and overturned yardage (#557)](#fixed--the-ncaa-mappers-quarter-markers-score-walk-and-overturned-yardage-557)
+  - [Fixed — the CFB and NFL processor bug sweeps (#503, #533)](#fixed--the-cfb-and-nfl-processor-bug-sweeps-503-533)
+  - [Fixed — stats.ncaa.org Terms gate (#568, #569, #570)](#fixed--statsncaaorg-terms-gate-568-569-570)
+  - [Changed — native thread pools default to one (#563)](#changed--native-thread-pools-default-to-one-563)
+  - [Changed — the docs site is generated from one registry (#664, #671, #672, #673, #674, #676)](#changed--the-docs-site-is-generated-from-one-registry-664-671-672-673-674-676)
   - [Added — sdv-docs MCP server and a published docs index](#added--sdv-docs-mcp-server-and-a-published-docs-index)
   - [Fixed — nullable boolean and integer columns keep their types; no `"nan"` strings (soccer / EuroLeague frames)](#fixed--nullable-boolean-and-integer-columns-keep-their-types-no-nan-strings-soccer--euroleague-frames)
   - [Fixed — a failed fetch in the hand-written ESPN scrapers raises instead of being parsed (BREAKING)](#fixed--a-failed-fetch-in-the-hand-written-espn-scrapers-raises-instead-of-being-parsed-breaking)
@@ -338,6 +362,25 @@
 
 ## Unreleased
 
+### Added — wrappers for six more intake providers (ESPN content, TheSportsDB, Football-Data.co.uk, OpenLigaDB, Polymarket, Kalshi)
+
+46 wrappers across six new flat-API families, each with a parser, committed fixtures and generated
+reference pages. `espn_content_*` (3) reads ESPN's cross-sport news host
+(`content.core.api.espn.com`), paging with `limit` / `offset`. `thesportsdb_*` (12) covers
+TheSportsDB v1 -- sports, leagues, teams, players, events and league tables; that API puts its key in
+the path, so the wrappers default to the documented free test key and use `$THESPORTSDB_API_KEY`
+when you set one. `football_data_*` (3) downloads the Football-Data.co.uk archive -- one
+league-season of results plus closing odds (132 columns), an 'extra' league's full history (25) and
+the upcoming-fixtures file (94) -- and is the first family whose bodies are CSV rather than JSON.
+`openligadb_*` (11) wraps the community OpenLigaDB API for German football: leagues, matchdays,
+teams, matches, tables and top scorers. `polymarket_*` (8) and `kalshi_*` (9) read prediction-market
+data and live under `sportsdataverse.odds` -- Polymarket's Gamma metadata host together with its CLOB
+order books, and Kalshi's keyless market-data routes. Both keep their long ids and tickers as
+strings, and order-book price levels as the fixed-point strings the hosts send, so nothing is
+rounded or overflowed. Paging stays the caller's: a wrapper sends the cursor or offset you pass and
+never follows a continuation token on its own. Only read-only surfaces are wrapped -- Polymarket
+trading and Kalshi's `/portfolio` routes need credentials and are out of scope.
+
 ### Added — Formula 1: Jolpica (Ergast-compatible) wrappers in `sportsdataverse.f1`
 
 `sportsdataverse.f1` wraps the keyless [Jolpica F1 API](https://github.com/jolpica/jolpica-f1)
@@ -445,8 +488,8 @@ silently different number.
 ### Added — team and coach tendencies, and the usage / situational box (#496, #497, #498, #614)
 
 `football.tendencies` derives team and coach play-calling splits from processed plays, and
-`football.usage_box` the usage, situational and special-teams box for both processors (#496,
-#497). `load_{cfb,nfl}_tendencies` and the ESPN usage leaderboards expose them as released
+`football.usage_box` the usage, situational and special-teams box for both processors
+(#496, #497). `load_{cfb,nfl}_tendencies` and the ESPN usage leaderboards expose them as released
 datasets (#498), and every split now carries EPA, success rate and game-context cuts (#614).
 
 ### Added — NFL Pro Next Gen Stats (#454, #481, #489)

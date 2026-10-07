@@ -141,6 +141,8 @@ _VOCAB_GETTERS = frozenset(
     {
         "sportsdataverse._codegen_runtime",
         "sportsdataverse.euroleague.euroleague_runtime",
+        "sportsdataverse.thesportsdb.thesportsdb_runtime",
+        "sportsdataverse.soccer.football_data_runtime",
         "sportsdataverse.soccer.uefa_runtime",
         "sportsdataverse.cfb.on3_runtime",
         "sportsdataverse.cfb.sports247_runtime",
@@ -422,6 +424,59 @@ _LEAGUE_R_PACKAGE = {
     "pwhl": "fastRhockey",
 }
 
+# Package homes that are not leagues: they carry flat-API families but no ESPN league, no
+# loaders and no R counterpart. Ordered, because _doc_leagues() appends them in this order.
+_NONLEAGUE_HOMES = ("odds", "cbs", "yahoo", "fox", "euroleague", "f1", "espn_content", "thesportsdb")
+
+
+# Flat-API families with NO R counterpart. Their columns never passed through an R package,
+# so ``r_column_descriptions.yaml`` has nothing true to say about them -- and asked anyway,
+# the cross-sport ``_merged`` union back-fills confident nonsense. Measured on the wave-2
+# intake pages before this opt-out existed: "Full team display name (e.g. 'Las Vegas Aces')"
+# on a Bundesliga ``team_name``, "League identifier ('10' = WNBA)" on an OpenLigaDB
+# ``league_id``, and ESPN's "home / away / overUnder" on a Polymarket CLOB ``side``, which is
+# buy/sell. 134 cells across six pages. The junior-hockey leagues dodge the same trap by
+# being mapped to fastRhockey above; these have no package to map to, so they opt out here.
+# A blank cell is honest. A wrong one is worse than blank AND invisible to the description
+# ratchet, which counts it as covered.
+_NO_R_DICT_FAMILIES = frozenset(
+    {"espn_content", "thesportsdb", "football_data", "openligadb", "polymarket", "kalshi"},
+)
+
+
+def _doc_display_name(prefix: str) -> str:
+    """The name a league/home shows in the sidebar, its page title and its description.
+
+    Historically this was just ``prefix.upper()``, which reads fine for NFL, SOCCER and
+    EUROLEAGUE. ``espn_content`` is the first multi-word NON-LEAGUE home, and ``ESPN_CONTENT``
+    puts the underscore on the page, so such a home shows its curated label instead.
+
+    Deliberately scoped to non-league homes: ``college_baseball`` and ``college_softball`` have
+    the same underscore, and widening the rule to every prefix renames 22 of their existing
+    pages. That is probably an improvement, but it does not belong in a PR about six new
+    providers -- it is a one-line follow-up (drop the ``_NONLEAGUE_EXTRA`` condition).
+    """
+    if "_" in prefix and prefix in _NONLEAGUE_HOMES:
+        return _LEAGUE_LABELS.get(prefix, prefix.upper())
+    return prefix.upper()
+
+
+def _r_dict_applies(key: str | None) -> bool:
+    """False when ``key`` names a family whose columns have no R-package counterpart.
+
+    Args:
+        key: either a returns-schema id (``native/kalshi/markets``) or a wrapper name
+            (``kalshi_markets``) -- the two shapes the return-table renderers hold.
+
+    Returns:
+        True unless the key belongs to a family in :data:`_NO_R_DICT_FAMILIES`.
+    """
+    s = key or ""
+    if s.startswith("native/"):
+        parts = s.split("/")
+        return len(parts) < 2 or parts[1] not in _NO_R_DICT_FAMILIES
+    return not any(s.startswith(f"{fam}_") for fam in _NO_R_DICT_FAMILIES)
+
 
 @functools.lru_cache(maxsize=1)
 def _r_col_descs() -> dict:
@@ -547,9 +602,18 @@ def _manual_col_desc(schema: str | None, col: str) -> str:
     return (d.get("_global") or {}).get(col, "") or ""
 
 
-def _table_cell_desc(stored: str, league: str | None, col: str, schema: str | None = None) -> str:
+def _table_cell_desc(
+    stored: str,
+    league: str | None,
+    col: str,
+    schema: str | None = None,
+    *,
+    r_dict_key: str | None = None,
+) -> str:
     """A return-table description cell: stored value if non-empty, else the
-    hand-curated manual dict (schema-keyed), else the R-dict fill.
+    hand-curated manual dict (schema-keyed), else the R-dict fill -- and the R-dict
+    fill is skipped entirely for a family with no R counterpart (see
+    :func:`_r_dict_applies`).
 
     Never overwrites a non-empty (captured) stored description. The result is
     pipe/newline-escaped so it is safe inside a single markdown table cell.
@@ -558,7 +622,12 @@ def _table_cell_desc(stored: str, league: str | None, col: str, schema: str | No
     if (stored or "").strip():
         raw = stored
     else:
-        raw = _manual_col_desc(schema, col) or _r_col_desc(league, col)
+        raw = _manual_col_desc(schema, col)
+        # ``r_dict_key`` defaults to ``schema`` because the autodoc and loader callers pass a
+        # wrapper / loader name there; the reference-table caller passes the bare short, so it
+        # hands the full ``native/<family>/<short>`` id in explicitly.
+        if not raw and _r_dict_applies(r_dict_key if r_dict_key is not None else schema):
+            raw = _r_col_desc(league, col)
     normalized = _normalize_rst((raw or "").replace("\n", " ").strip())
     return normalized.replace("|", "\\|")
 
@@ -747,7 +816,7 @@ def _return_table(schema_name: str | None, league: str | None = None) -> str:
         head = "| col_name | type | description |\n|---|---|---|\n"
         return head + "".join(
             f"| `{c['name']}` | {c.get('type', '')} | "
-            f"{_table_cell_desc(c.get('description', ''), league, c.get('name', ''), d.get('schema'))} |\n"
+            f"{_table_cell_desc(c.get('description', ''), league, c.get('name', ''), d.get('schema'), r_dict_key=schema_name)} |\n"
             for c in cols
         )
 
@@ -1983,6 +2052,14 @@ FLAT_APIS = [
     ("fifa", "soccer"),
     ("sleeper", "nfl"),
     ("f1", "f1"),  # Jolpica F1 (Ergast-compatible), sdv-internal-refs: f1/
+    # wave-2 intake families (sdv-internal-refs: espn-content/, thesportsdb/,
+    # football-data-co-uk/, openligadb/, polymarket/, kalshi/)
+    ("espn_content", "espn_content"),
+    ("thesportsdb", "thesportsdb"),
+    ("football_data", "soccer"),
+    ("openligadb", "soccer"),
+    ("polymarket", "odds"),
+    ("kalshi", "odds"),
 ]
 
 
@@ -2359,6 +2436,8 @@ _COVERAGE_LEAGUES = [
     "odds",
     "euroleague",
     "f1",
+    "espn_content",
+    "thesportsdb",
     # Joined in 0.1.5: each has hand-written modules, so until now the gates never
     # saw their functions and they had no Additional page.
     "soccer",
@@ -2691,6 +2770,12 @@ _FLAT_API_DOC = {
     "fifa": "FIFA public API v3 (api.fifa.com)",
     "sleeper": "Sleeper fantasy API v1 (api.sleeper.app)",
     "f1": "Jolpica F1 API (api.jolpi.ca, Ergast-compatible; CC BY-NC-SA 4.0, 500 requests/hour)",
+    "espn_content": "ESPN content API (content.core.api.espn.com/v1, news)",
+    "thesportsdb": "TheSportsDB API v1 (thesportsdb.com; free test key by default, $THESPORTSDB_API_KEY to use your own)",
+    "football_data": "Football-Data.co.uk CSV archive (football-data.co.uk)",
+    "openligadb": "OpenLigaDB (api.openligadb.de, community German football)",
+    "polymarket": "Polymarket read APIs (gamma-api + clob.polymarket.com)",
+    "kalshi": "Kalshi Trade API v2 market data (api.elections.kalshi.com)",
 }
 
 # Friendly label per releases.yaml base key, for the "Dataset loaders" row of a
@@ -2864,7 +2949,7 @@ def render_reference_page(prefix: str, api: str, position: int = 1) -> str:
     template = render.ENV.get_template("reference_page.md.jinja")
     return template.render(
         prefix=prefix,
-        title=f"{prefix.upper()} — {label}",
+        title=f"{_doc_display_name(prefix)} — {label}",
         label=label,
         sidebar_position=position,
         count=len(endpoints),
@@ -3059,6 +3144,7 @@ def render_league_index(
     template = render.ENV.get_template("league_index.md.jinja")
     return template.render(
         prefix=prefix,
+        display_name=_doc_display_name(prefix),
         api_rows=_apis_for(prefix),
         has_loaders=bool(loaders),
         loader_count=len(loaders),
@@ -3883,7 +3969,7 @@ def render_autodoc_page(prefix: str | None, corpus: str) -> str | None:
         title = "Package — additional Python functions"
         module = "sportsdataverse"
     else:
-        title = f"{prefix.upper()} — additional Python functions"
+        title = f"{_doc_display_name(prefix)} — additional Python functions"
         module = f"sportsdataverse.{prefix}"
     template = render.ENV.get_template("autodoc_page.md.jinja")
     return template.render(title=title, module=module, sidebar_position=50, groups=groups)
@@ -4103,7 +4189,7 @@ def _doc_leagues() -> list[str]:
     _HOCKEYTECH_EXTRA = _HOCKEYTECH_MODULE_LEAGUES
     # Cross-sport hand-written modules that get their own docs scope but have no
     # ESPN/loader entries (e.g. the The Odds API wrappers in sportsdataverse.odds).
-    _NONLEAGUE_EXTRA = ["odds", "cbs", "yahoo", "fox", "euroleague", "f1"]
+    _NONLEAGUE_EXTRA = list(_NONLEAGUE_HOMES)
     known = set(prefixes) | set(extra)
     hockeytech = [lg for lg in _HOCKEYTECH_EXTRA if lg not in known]
     nonleague = [m for m in _NONLEAGUE_EXTRA if m not in known]
@@ -4512,6 +4598,8 @@ _LEAGUE_LABELS = {
     "odds": "Betting odds",
     "euroleague": "EuroLeague",
     "f1": "Formula 1",
+    "espn_content": "ESPN content (news)",
+    "thesportsdb": "TheSportsDB",
     "seriea": "Serie A",
     "soccer": "Soccer (all)",
     "yahoo": "Yahoo Sports",
@@ -4587,7 +4675,7 @@ def _render_docs_all() -> dict[str, str]:
     for i, prefix in enumerate(_doc_leagues()):
         apis = _apis_for(prefix)
         loaders = _loader_doc_views(prefix)
-        out[f"{prefix}/_category_.json"] = render_category(prefix.upper(), 10 + i, True)
+        out[f"{prefix}/_category_.json"] = render_category(_doc_display_name(prefix), 10 + i, True)
         # Sidebar order within a league's Reference category: Loaders first (1),
         # then native/flat APIs (NHL/MLB API; 10+), then ESPN APIs (site/web/core;
         # 20+). _apis_for returns ESPN first then flat, so assign position by kind

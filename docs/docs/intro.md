@@ -100,7 +100,7 @@ matching `parse_*` function for NHL / MLB sibling APIs. See
 | [UFL](ufl/) | `sportsdataverse.ufl` | ESPN (114) |
 | [XFL](xfl/) | `sportsdataverse.xfl` | ESPN (112) |
 | [CFL](cfl/) | `sportsdataverse.cfl` | ESPN (112) |
-| [Soccer (all)](soccer/) | `sportsdataverse.soccer` | ESPN (112), American Soccer Analysis (16), FotMob (14), UEFA (7), FIFA (9), kloppy open event data (2) |
+| [Soccer (all)](soccer/) | `sportsdataverse.soccer` | ESPN (112), American Soccer Analysis (16), FotMob (14), UEFA (7), FIFA (9), Football-Data.co.uk (3), OpenLigaDB (11), kloppy open event data (2) |
 | [EPL](epl/) | `sportsdataverse.epl` | ESPN (113) |
 | [LaLiga](laliga/) | `sportsdataverse.laliga` | ESPN (112) |
 | [Bundesliga](bundesliga/) | `sportsdataverse.bundesliga` | ESPN (112) |
@@ -134,12 +134,14 @@ matching `parse_*` function for NHL / MLB sibling APIs. See
 | [VIJHL](vijhl/) | `sportsdataverse.hockey.vijhl` | HockeyTech / LeagueStat (12) |
 | [KIJHL](kijhl/) | `sportsdataverse.hockey.kijhl` | HockeyTech / LeagueStat (12) |
 | [MJHL](mjhl/) | `sportsdataverse.hockey.mjhl` | HockeyTech / LeagueStat (12) |
-| [Betting odds](odds/) | `sportsdataverse.odds` | The Odds API (11) |
+| [Betting odds](odds/) | `sportsdataverse.odds` | The Odds API (11), Polymarket (8), Kalshi (9) |
 | [CBS Sports](cbs/) | `sportsdataverse.cbs` | CBS Sports NAPI (82) |
 | [Yahoo Sports](yahoo/) | `sportsdataverse.yahoo` | Yahoo Sports Shangrila (107) |
 | [Fox Sports](fox/) | `sportsdataverse.fox` | Fox Sports API (33) |
 | [EuroLeague](euroleague/) | `sportsdataverse.euroleague` | EuroLeague Competition Engine (15) |
 | [Formula 1](f1/) | `sportsdataverse.f1` | Jolpica F1 API (Ergast-compatible) (16) |
+| [ESPN content (news)](espn_content/) | `sportsdataverse.espn_content` | ESPN (3) |
+| [TheSportsDB](thesportsdb/) | `sportsdataverse.thesportsdb` | TheSportsDB (12) |
 <!-- END generated: leagues-and-sources -->
 
 ## Errors (0.1.5)

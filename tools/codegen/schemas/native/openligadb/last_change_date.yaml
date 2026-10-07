@@ -1,0 +1,6 @@
+columns:
+- description: ''
+  name: value
+  type: character
+kind: dataframe
+schema: last_change_date

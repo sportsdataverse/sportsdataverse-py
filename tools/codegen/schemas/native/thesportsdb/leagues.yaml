@@ -1,0 +1,12 @@
+columns:
+- description: ''
+  name: id_league
+  type: character
+- description: ''
+  name: str_league
+  type: character
+- description: ''
+  name: str_sport
+  type: character
+kind: dataframe
+schema: leagues

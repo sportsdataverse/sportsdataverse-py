@@ -1,0 +1,45 @@
+columns:
+- description: ''
+  name: additional_prohibitions
+  type: character
+- description: ''
+  name: categories
+  type: character
+- description: ''
+  name: category
+  type: character
+- description: ''
+  name: contract_terms_url
+  type: character
+- description: ''
+  name: contract_url
+  type: character
+- description: ''
+  name: exchange_index
+  type: integer
+- description: ''
+  name: fee_multiplier
+  type: integer
+- description: ''
+  name: fee_type
+  type: character
+- description: ''
+  name: frequency
+  type: character
+- description: ''
+  name: last_updated_ts
+  type: character
+- description: ''
+  name: settlement_sources
+  type: character
+- description: ''
+  name: tags
+  type: character
+- description: ''
+  name: ticker
+  type: character
+- description: ''
+  name: title
+  type: character
+kind: dataframe
+schema: series_list

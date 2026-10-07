@@ -21,6 +21,7 @@ providers:
     home: https://www.espn.com
     auth: none
     espn_apis: [espn_site_v2, espn_web_v3, espn_core_v2, espn_fitt_v3, espn_cdn]
+    flat_apis: [espn_content]  # content.core.api.espn.com/v1 news (sportsdataverse.espn_content)
     modules:
       - sportsdataverse._common_espn
       - sportsdataverse._common_espn_player_stats
@@ -166,7 +167,19 @@ providers:
     home: https://the-odds-api.com
     auth: API key (SDV_PY_ODDS_API_KEY)
     modules:
-      - sportsdataverse.odds.*
+      - sportsdataverse.odds.the_odds_api
+
+  polymarket:
+    label: Polymarket
+    home: https://polymarket.com
+    auth: none (read-only Gamma metadata + CLOB order-book routes)
+    flat_apis: [polymarket]
+
+  kalshi:
+    label: Kalshi
+    home: https://kalshi.com
+    auth: none (keyless Trade API v2 market-data routes)
+    flat_apis: [kalshi]
 
   mlb_stats_api:
     label: MLB Stats API
@@ -317,6 +330,20 @@ providers:
     auth: none
     flat_apis: [fifa]
 
+  football_data:
+    label: Football-Data.co.uk
+    home: https://www.football-data.co.uk
+    auth: none (CSV archive)
+    flat_apis: [football_data]
+    modules:
+      - sportsdataverse.soccer.football_data_runtime
+
+  openligadb:
+    label: OpenLigaDB
+    home: https://www.openligadb.de
+    auth: none
+    flat_apis: [openligadb]
+
   kloppy:
     label: kloppy open event data
     home: https://kloppy.pysport.org
@@ -395,6 +422,14 @@ providers:
     auth: none
     modules:
       - sportsdataverse.nba.nba_oracle_data
+
+  thesportsdb:
+    label: TheSportsDB
+    home: https://www.thesportsdb.com
+    auth: none (free test key by default; THESPORTSDB_API_KEY for your own)
+    flat_apis: [thesportsdb]
+    modules:
+      - sportsdataverse.thesportsdb.thesportsdb_runtime
 
 categories:
   processing:

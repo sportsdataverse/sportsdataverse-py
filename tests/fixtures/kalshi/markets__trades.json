@@ -1,0 +1,41 @@
+{
+  "cursor": "EhIKEAclMNlRaY98c-dmYWN_a3caDAinrpLWBhCIk7mFAg",
+  "trades": [
+    {
+      "count_fp": "1.00",
+      "created_time": "2026-10-06T06:38:16.55614Z",
+      "is_block_trade": false,
+      "no_price_dollars": "0.1900",
+      "taker_book_side": "bid",
+      "taker_outcome_side": "yes",
+      "taker_side": "yes",
+      "ticker": "KXNFLGAME-26OCT08TBDAL-DAL",
+      "trade_id": "072530ae-96b9-bdeb-8290-3cb9a111be45",
+      "yes_price_dollars": "0.8100"
+    },
+    {
+      "count_fp": "14.18",
+      "created_time": "2026-10-06T06:38:11.436559Z",
+      "is_block_trade": false,
+      "no_price_dollars": "0.2000",
+      "taker_book_side": "ask",
+      "taker_outcome_side": "no",
+      "taker_side": "no",
+      "ticker": "KXNFLGAME-26OCT08TBDAL-DAL",
+      "trade_id": "072530dc-e0e9-9eec-eac5-06a89c1dc45f",
+      "yes_price_dollars": "0.8000"
+    },
+    {
+      "count_fp": "24.36",
+      "created_time": "2026-10-06T06:37:27.548293Z",
+      "is_block_trade": false,
+      "no_price_dollars": "0.2000",
+      "taker_book_side": "ask",
+      "taker_outcome_side": "no",
+      "taker_side": "no",
+      "ticker": "KXNFLGAME-26OCT08TBDAL-DAL",
+      "trade_id": "072530d9-5169-8f7c-73e7-6661637f6b77",
+      "yes_price_dollars": "0.8000"
+    }
+  ]
+}

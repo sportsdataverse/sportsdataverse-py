@@ -1,0 +1,19 @@
+{
+  "leagues": [
+    {
+      "idLeague": "4328",
+      "strLeague": "English Premier League",
+      "strSport": "Soccer"
+    },
+    {
+      "idLeague": "4329",
+      "strLeague": "English League Championship",
+      "strSport": "Soccer"
+    },
+    {
+      "idLeague": "4330",
+      "strLeague": "Scottish Premier League",
+      "strSport": "Soccer"
+    }
+  ]
+}

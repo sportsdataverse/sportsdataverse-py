@@ -1,0 +1,6 @@
+columns:
+- description: ''
+  name: price
+  type: character
+kind: dataframe
+schema: clob_price
