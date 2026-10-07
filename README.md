@@ -11,6 +11,7 @@
     - [Modern install (uv — recommended)](#modern-install-uv--recommended)
     - [Development install](#development-install)
     - [Notes](#notes)
+    - [Errors (0.1.5)](#errors-015)
   - [Examples and tutorials](#examples-and-tutorials)
   - [Using with AI agents](#using-with-ai-agents)
   - [Companion packages](#companion-packages)

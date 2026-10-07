@@ -19,6 +19,17 @@
   - [Test Conventions](#test-conventions)
   - [Build & Development Commands](#build--development-commands)
   - [Common Pitfalls](#common-pitfalls)
+  - [Project Structure](#project-structure)
+  - [ESPN Cross-League Architecture](#espn-cross-league-architecture)
+  - [Parser Layer](#parser-layer)
+  - [PFF](#pff)
+  - [sdv-docs MCP Server](#sdv-docs-mcp-server)
+  - [Release Utilities](#release-utilities)
+  - [Rule-Era Models](#rule-era-models)
+  - [ID Column Types](#id-column-types)
+  - [Error Vocabulary (0.1.5)](#error-vocabulary-015)
+  - [Codegen](#codegen)
+  - [Cheat sheet](#cheat-sheet)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
