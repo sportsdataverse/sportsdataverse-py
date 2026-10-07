@@ -5,9 +5,17 @@ description: "sdv-py FOX: endpoint references, dataset loaders and parsers for F
 ---
 # FOX (`sportsdataverse.fox`)
 
-| Reference | Functions | Base URL |
-|---|---:|---|
-| [Fox Sports API (api.foxsports.com)](reference/fox_api) | 33 | `https://api.foxsports.com` |
+## Data sources
+
+| Source | APIs / hosts | Functions | Auth |
+|---|---|---:|---|
+| [Fox Sports API](#fox-sports-api) | `api.foxsports.com` | 33 | none |
+
+## Fox Sports API {#fox-sports-api}
+
+| Reference | Functions |
+|---|---:|
+| [Fox Sports API (api.foxsports.com)](reference/fox_api) | 33 |
 
 ## Examples
 

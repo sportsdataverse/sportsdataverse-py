@@ -5,9 +5,17 @@ description: "sdv-py ESPN content (news): endpoint references, dataset loaders a
 ---
 # ESPN content (news) (`sportsdataverse.espn_content`)
 
-| Reference | Functions | Base URL |
-|---|---:|---|
-| [ESPN content API (content.core.api.espn.com/v1, news)](reference/espn_content) | 3 | `https://content.core.api.espn.com/v1` |
+## Data sources
+
+| Source | APIs / hosts | Functions | Auth |
+|---|---|---:|---|
+| [ESPN](#espn) | `content.core.api.espn.com` | 3 | none |
+
+## ESPN {#espn}
+
+| Reference | Functions |
+|---|---:|
+| [ESPN content API (content.core.api.espn.com/v1, news)](reference/espn_content) | 3 |
 
 ## Examples
 

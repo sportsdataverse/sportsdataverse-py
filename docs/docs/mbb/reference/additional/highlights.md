@@ -1,7 +1,7 @@
 ---
 title: "MBB — additional Python functions — Highlights"
 sidebar_label: "Highlights"
-sidebar_position: 6
+sidebar_position: 1
 description: "MBB — additional Python functions — Highlights — function reference in sdv-py, the SportsDataverse Python package."
 ---
 # MBB — additional Python functions — Highlights

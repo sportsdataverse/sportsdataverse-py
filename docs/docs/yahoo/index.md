@@ -5,9 +5,17 @@ description: "sdv-py YAHOO: endpoint references, dataset loaders and parsers for
 ---
 # YAHOO (`sportsdataverse.yahoo`)
 
-| Reference | Functions | Base URL |
-|---|---:|---|
-| [Yahoo Sports Shangrila (graphite-secure.sports.yahoo.com)](reference/yahoo_shangrila) | 107 | `https://graphite-secure.sports.yahoo.com/v1/query/shangrila` |
+## Data sources
+
+| Source | APIs / hosts | Functions | Auth |
+|---|---|---:|---|
+| [Yahoo Sports Shangrila](#yahoo-sports-shangrila) | `graphite-secure.sports.yahoo.com` | 107 | none |
+
+## Yahoo Sports Shangrila {#yahoo-sports-shangrila}
+
+| Reference | Functions |
+|---|---:|
+| [Yahoo Sports Shangrila (graphite-secure.sports.yahoo.com)](reference/yahoo_shangrila) | 107 |
 
 ## Examples
 

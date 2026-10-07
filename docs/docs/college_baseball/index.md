@@ -5,13 +5,35 @@ description: "sdv-py COLLEGE_BASEBALL: endpoint references, dataset loaders and 
 ---
 # COLLEGE_BASEBALL (`sportsdataverse.college_baseball`)
 
-| Reference | Functions | Base URL |
-|---|---:|---|
-| [ESPN site API (v2)](reference/site) | 25 | `https://site.api.espn.com/apis/site/v2/sports` |
-| [ESPN web API (v3)](reference/web) | 5 | `https://site.web.api.espn.com/apis/common/v3/sports` |
-| [ESPN core API (v2)](reference/core) | 87 | `https://sports.core.api.espn.com/v2/sports` |
-| [ESPN FPI API (fitt v3)](reference/fitt) | 1 | `https://site.web.api.espn.com/apis/fitt/v3/sports` |
-| [ESPN CDN API (cdn.espn.com)](reference/cdn) | 4 | `https://cdn.espn.com/core` |
+## Data sources
+
+| Source | APIs / hosts | Functions | Auth |
+|---|---|---:|---|
+| [ESPN](#espn) | `cdn.espn.com`, `site.api.espn.com`, `site.web.api.espn.com` +1 more | 122 | none |
+| [stats.ncaa.org](#stats-ncaa-org) | `stats.ncaa.org` | 3 | none (Terms gate + rate rotation) |
+| [Additional functions](reference/additional) | hand-written wrappers & helpers | 4 | — |
+
+## ESPN {#espn}
+
+| Reference | Functions |
+|---|---:|
+| [ESPN site API (v2)](reference/site) | 25 |
+| [ESPN web API (v3)](reference/web) | 5 |
+| [ESPN core API (v2)](reference/core) | 87 |
+| [ESPN FPI API (fitt v3)](reference/fitt) | 1 |
+| [ESPN CDN API (cdn.espn.com)](reference/cdn) | 4 |
+
+## stats.ncaa.org {#stats-ncaa-org}
+
+| Reference | Functions |
+|---|---:|
+| [Hand-written wrappers](reference/additional) | 3 |
+## Tools and helpers
+
+### Play-by-play processing {#play-by-play-processing}
+
+- [`decompose_college_baseball_plays`](reference/additional#decompose_college_baseball_plays)
+
 
 ## Examples
 

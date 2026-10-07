@@ -5,10 +5,19 @@ description: "sdv-py F1: endpoint references, dataset loaders and parsers for F1
 ---
 # F1 (`sportsdataverse.f1`)
 
-| Reference | Functions | Base URL |
-|---|---:|---|
-| [Jolpica F1 API (api.jolpi.ca, Ergast-compatible; CC BY-NC-SA 4.0, 500 requests/hour)](reference/f1) | 15 | `https://api.jolpi.ca/ergast/f1` |
-| [Additional functions](reference/additional) | 1 | hand-written wrappers, loaders & helpers |
+## Data sources
+
+| Source | APIs / hosts | Functions | Auth |
+|---|---|---:|---|
+| [Jolpica F1 API (Ergast-compatible)](#jolpica-f1-api-ergast-compatible) | `api.jolpi.ca` | 16 | none (CC BY-NC-SA 4.0; 4 req/s burst, 500 req/hour) |
+| [Additional functions](reference/additional) | hand-written wrappers & helpers | 1 | — |
+
+## Jolpica F1 API (Ergast-compatible) {#jolpica-f1-api-ergast-compatible}
+
+| Reference | Functions |
+|---|---:|
+| [Jolpica F1 API (api.jolpi.ca, Ergast-compatible; CC BY-NC-SA 4.0, 500 requests/hour)](reference/f1) | 15 |
+| [Hand-written wrappers](reference/additional) | 1 |
 
 ## See also
 

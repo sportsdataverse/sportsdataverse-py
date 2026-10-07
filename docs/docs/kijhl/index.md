@@ -5,9 +5,25 @@ description: "sdv-py KIJHL: endpoint references, dataset loaders and parsers for
 ---
 # KIJHL (`sportsdataverse.kijhl`)
 
-| Reference | Functions | Base URL |
-|---|---:|---|
-| [Additional functions](reference/additional) | 14 | hand-written wrappers, loaders & helpers |
+## Data sources
+
+| Source | APIs / hosts | Functions | Auth |
+|---|---|---:|---|
+| [HockeyTech / LeagueStat](#hockeytech-leaguestat) | `lscluster.hockeytech.com` | 12 | per-league public key (SDV_<LEAGUE>_API_KEY) |
+| [Additional functions](reference/additional) | hand-written wrappers & helpers | 14 | — |
+
+## HockeyTech / LeagueStat {#hockeytech-leaguestat}
+
+| Reference | Functions |
+|---|---:|
+| [Hand-written wrappers](reference/additional) | 12 |
+## Tools and helpers
+
+### Dates and seasons {#dates-and-seasons}
+
+- [`kijhl_season_id`](reference/additional#kijhl_season_id)
+- [`most_recent_kijhl_season`](reference/additional#most_recent_kijhl_season)
+
 
 ## Examples
 

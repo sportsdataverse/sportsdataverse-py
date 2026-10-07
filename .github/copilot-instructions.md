@@ -30,7 +30,7 @@
 (`wehoop`, `hoopR`, `cfbfastR`, etc.). It provides tidy access to play-by-play,
 box score, schedule, roster, and other sports data across the NBA (+ G-League),
 WNBA, NFL, MLB, NHL, MBB (men's college basketball), WBB (women's college
-basketball), CFB (college football), PWHL + 20 HockeyTech minor/junior hockey
+basketball), CFB (college football), PWHL + 19 HockeyTech minor/junior hockey
 leagues, college hockey (M/W), college baseball + softball, soccer, cricket,
 UFL/XFL/CFL, and odds endpoints.
 
@@ -71,27 +71,26 @@ is the sole attributable contributor.
 ## Code Style
 
 - Follow PEP 8 with Ruff formatting (line-length 120, configured in
-  `pyproject.toml [tool.ruff]`). Ruff also handles import sorting,
-  pyupgrade, and unused-import removal — black, isort, pycln, and
-  flake8 are NOT used directly. The standalone `isort` hook in
-  `.pre-commit-config.yaml` runs only to inject `from __future__ import
-  annotations` at the top of every Python file via `--add-import`.
+  `pyproject.toml [tool.ruff]`, with `line-ending = "lf"`). Ruff also handles
+  import sorting, pyupgrade, and unused-import removal — black, pycln and
+  flake8 are NOT used directly, and ruff's `I` rules own import order. The
+  standalone import-sorting hook in `.pre-commit-config.yaml` is inactive.
 - Lint, format, and type-check before committing:
 
   ```sh
   uv run ruff check --fix sportsdataverse/<your_module>.py
   uv run ruff format sportsdataverse/<your_module>.py
-  uv run mypy sportsdataverse/<your_module>.py
+  uv run mypy   # the [tool.mypy] files list scopes it; passing a path breaks the ratchet
   ```
 
 - New modules: full type hints required (params + returns); legacy modules
-  remain un-typed for now. Per-module strict mypy overrides live in a
-  single `[[tool.mypy.overrides]] module = [...]` list in `pyproject.toml`
-  — append your module's dotted path to that list rather than creating a
-  new override block.
-- Use `from __future__ import annotations` only when targeting py3.8 (not
-  applicable here; floor is py3.9). Modern type syntax (`dict[str, X]`,
-  `X | None`, `list[int]`) is allowed everywhere.
+  remain un-typed for now. Append the module path to the `[tool.mypy] files`
+  ratchet in `pyproject.toml` (442 entries, `follow_imports = "skip"`). There
+  are no `[[tool.mypy.overrides]]` blocks — do not add one; a whole-package
+  override would make the gate permanently red on the untyped legacy surface.
+- DO use `from __future__ import annotations`: 682 of 729 modules already do,
+  and it keeps `X | None` working on the 3.9 floor. Modern type syntax
+  (`dict[str, X]`, `X | None`, `list[int]`) is allowed everywhere.
 
 ## DataFrame Engine — Polars 1.x
 
@@ -120,16 +119,22 @@ type-hinted, iterative (no recursion), initializes `response = None`
 defensively, and re-raises the most recent exception when the retry budget
 is exhausted (instead of returning an unbound variable).
 
-Wrappers do NOT wrap `download()` calls in try/except — they trust it to
-either return a usable `requests.Response` or raise
-`sportsdataverse.errors.NoDataError` / `requests.exceptions.*`.
+`download()` raises `NoDataError` on a 404 (and ESPN's 200-with-`code:404`) and
+re-raises a connection error, but after the status-retry budget for
+403/408/429/5xx it **returns the last response** — so never call `.json()` on its
+result directly. Read JSON through `_codegen_runtime._download_json(download, url)`
+or `_get`, which apply the error vocabulary below; HTML/text sites use
+`_text_body` / `_check_response`.
 
-**Error vocabulary (0.1.0).** `NoDataError` means the fetch SUCCEEDED and the
+**Error vocabulary (0.1.5).** `NoDataError` means the fetch SUCCEEDED and the
 answer is "nothing here" — a 404 from any host, or ESPN's 200-with-`code:404`
 body. `AssetFetchError` means the fetch FAILED and the answer is UNKNOWN — a 403,
 a rate limit, an exhausted retry budget. Never collapse the two: a failed fetch
 recorded as an empty season is silent data loss. `NoESPNDataError` remains as a
-back-compat alias of `NoDataError`; prefer the new name in new code.
+back-compat alias of `NoDataError`; prefer the new name in new code. Repo-wide a
+**400 / 422** raises `ValueError` (the request itself is wrong; retrying cannot
+help), naming host, path and status. As of 0.1.5 the hand-written ESPN scrapers and
+every flat-API getter raise instead of returning an error body or `{}`.
 
 **Exception — remote columnar reads.** Release parquet is read DIRECTLY by Arrow
 (`_fetch_release_parquet` / `_read_release_parquet` in `_codegen_runtime.py`), not
@@ -149,18 +154,20 @@ Do not "fix" this to route the bytes through the gateway — a test guards it.
 | College football | `cfb_` | `espn_cfb_pbp()`, `espn_cfb_play_participants()` |
 | NFL | `nfl_` | `espn_nfl_pbp()` |
 | NHL | `nhl_` | `espn_nhl_pbp()` |
-| MLB | `mlb_` / `mlbam_` | `mlbam_games()` |
+| MLB | `mlb_` | `mlb_schedule()`, `mlb_person_stats()` |
 | Bulk loaders | `load_<sport>_<dataset>` | `load_wbb_pbp()` |
 | NFL nflreadpy aliases | bare `load_*` inside `sportsdataverse.nfl` only | `nfl.load_pbp([2024])` |
 
 **Source families** (orthogonal to the sport prefix above): `espn_<sport>_*` is
-the default; `fox_<sport>_*` wraps Fox Sports Bifrost (cfb/nba/mbb/nhl/mlb),
-`yahoo_cfb_*` wraps Yahoo Sports, and native-site APIs use their own prefixes
+the default; `fox_<sport>_*` wraps Fox Sports Bifrost (8 leagues) alongside the
+generated `fox_api` family (33 endpoints); 107 multi-sport `yahoo_*` functions come
+from the generated `yahoo_shangrila` family; `cbs_napi_*` wraps CBS Sports NAPI;
+and native-site APIs use their own prefixes
 (`nfl_*` → `api.nfl.com`, `nhl_*` / `mlb_api_*` → the league sites,
 `mlb_statcast_*` → Baseball Savant). Native API families are
 **codegen-generated** from `tools/codegen/endpoints/<stem>.yaml` (authenticated
 ones like NFL.com set `auth: true` + `getter_module:`); see `CLAUDE.md` →
-"Reference-docs build toolchain (codegen)".
+`docs/docs/architecture/codegen.md`.
 
 **MLB Statcast (`mlb_statcast_*`, 0.0.64+):** the full ~43-endpoint Baseball
 Savant surface, named `mlb_statcast_<family>_<name>` (search / leaderboard /
@@ -172,9 +179,9 @@ against real captured payloads (the JSON/CSV/HTML shapes are easy to guess
 wrong); see `CLAUDE.md` → "MLB — Statcast".
 
 **NBA / WNBA stats API (`nba_stats_*` / `wnba_stats_*`, 0.0.72+):** two
-codegen-generated flat-API stems — `nba_stats` (112 wrappers, `stats.nba.com`,
+codegen-generated flat-API stems — `nba_stats` (128 wrappers, `stats.nba.com`,
 `league_id="00"` NBA / `"20"` G-League / `"15"` Summer League) and `wnba_stats`
-(95 wrappers, `stats.wnba.com`). Key gotcha: **`stats.nba.com` TLS/JA3-
+(111 wrappers, `stats.wnba.com`). Key gotcha: **`stats.nba.com` TLS/JA3-
 fingerprint-blocks plain `requests`** — the runtime uses `curl_cffi` with
 `impersonate="chrome"`, which is a **lazy optional import** in the `tests`/`all`
 extras (not a hard dep). One generic parser `parse_nba_stats_result_sets`
@@ -232,7 +239,8 @@ silently completing the build from the live API.
 ### NFL Cache + Config
 
 `sportsdataverse/nfl/cache.py` + `config.py` provide a shared caching
-layer. All 23 canonical loaders + 11 deprecated aliases are wrapped with
+layer. All 45 canonical loaders + the 11 deprecated aliases still shipping in
+0.1.5 are wrapped with
 `@cached_loader`. Cache key hashes `(qualified_name, args, sorted_kwargs)`
 and excludes `return_as_pandas` (one stored polars frame serves both
 engines).
@@ -337,15 +345,20 @@ Mirror their structure for any new ESPN-endpoint module:
    `Totals`, `Misc` for player stats), with an `Other` bucket added only
    when ESPN ships a non-canonical category.
 6. Snake-case columns via `sportsdataverse.dl_utils.underscore`.
-7. Append the new module to the consolidated
-   `[[tool.mypy.overrides]] module = [...]` list in `pyproject.toml`.
+7. Append the new module's path to the `[tool.mypy] files` ratchet in
+   `pyproject.toml` once it types cleanly.
 
 ## Test Conventions
 
 - Test files mirror the source layout: `tests/<sport>/test_<sport>_<module>.py`.
-- Live-API tests use `@skip_if_no_live` from `tests/conftest.py` and run
-  only when `SDV_PY_LIVE_TESTS=1` is set in the environment. CI does NOT
-  set this var by default — live runs are opt-in by contributor.
+- Live-API tests use `@skip_if_no_live` from `tests/conftest.py` and run only
+  when `SDV_PY_LIVE_TESTS=1` is set. `tests.yml` DOES set it on every PR and
+  push (opt out with a `workflow_dispatch` `live_tests=false`), and
+  `live-tests-cron.yml` always sets it — so keep gated tests resilient to
+  upstream flakiness. `nba_stats` / `wnba_stats` live tests use the separate
+  `@skip_if_no_nba_stats_live` gate (`SDV_PY_NBA_STATS_LIVE=1`), which no
+  workflow sets: those hosts hang on datacenter IPs.
+- CI runs **Python 3.13.2 only**; the `[project]` target range is 3.9-3.14.
 - Assertion style: prefer **subset** column checks (`expected_cols.issubset(set(df.columns))`)
   rather than exact equality, so upstream column additions don't fail tests.
 - Smoke tests for live endpoints assert shape (row count > 0, expected
@@ -440,6 +453,99 @@ uv add --dev some-package           # add dev-only dep
 - **`pyjanitor 0.32.18+` silently switched to pandas 3.x.** Keep the
   defensive `pyjanitor<0.32.18` upper bound in `pyproject.toml` until
   pandas 3 is the project floor.
+
+- **ESPN injuries come from the LEAGUE endpoint, never the game summary.** The
+  per-game `summary` payload's `injuries` key is present and always `[]`, so a
+  stage built on it runs green and emits zero rows. Use
+  `espn_{league}_injuries()`, and snapshot it with
+  `sportsdataverse.espn_snapshots.espn_injuries_snapshot()` for history.
+- **Regenerate generated files before pushing.** A stale generated tree is green
+  locally and red in CI: `uv run python tools/codegen/generate.py` then `--check`.
+- **conda lockstep.** `recipe/meta.yaml` mirrors `[project.dependencies]` by hand;
+  bump both in the same commit or `conda-build.yml` goes red.
+
+## Project Structure
+
+One package per league (`cfb/ mbb/ mlb/ nba/ nfl/ nhl/ wbb/ wnba/ pwhl/ nbagl/
+euroleague/ odds/`), the shared hosts (`cbs/ fox/ yahoo/`), the HockeyTech core
+(`hockeytech/`) and its 19 league families under `hockey/`, `baseball/` (college
+baseball + softball), `soccer/` (+ `mls/`, `nwsl/`), `cricket/`, `football/`
+(UFL/XFL/CFL + the `sources/` adapters), `scrape/` (`espn/ ncaa/ stats/`),
+`registry/`, `validation/`, `wexp/`, `parsed/` (DEPRECATED generated aliases) and
+`sdv_docs/` (the MCP server, which must never import `sportsdataverse`). Top-level
+analytics modules: `rolling_windows.py`, `metric_curves.py`,
+`defense_vs_position.py`, `paper_index.py`, plus `release.py`, `dl_utils.py`,
+`errors.py` and `cli.py` (the `sdv` console script).
+
+## ESPN Cross-League Architecture
+
+`_common_espn.py` is 40 lines of host constants. Each
+`<league>/<prefix>_espn_ext.py` is **codegen output** (~5,700 lines) written by
+`build_live()` from the five ESPN endpoint YAMLs — 126 short names across 30
+league modules, 3,446 wrappers. Never hand-edit one; edit the YAML and regenerate.
+
+## Parser Layer
+
+33 `*_parsers.py` modules, one per data surface. Universal contract: return a
+polars DataFrame by default (pandas via `return_as_pandas=True`), snake_case
+columns via `dl_utils.underscore`, and a zero-row frame (never an exception) for an
+empty or malformed payload. `parse_summary` dispatches the 21-section ESPN summary.
+
+## PFF
+
+Current is `pff_api_*` (`api.pff.com`, bearer key from `api_key=` >
+`SDV_PY_PFF_API_KEY` > `PFF_API_KEY`); `/v1` query keys are snake_case and
+api.pff.com SILENTLY IGNORES camelCase. Legacy is `pff_*` / `pff_<league>_*`
+(cookie auth) — keep it working, do not extend it. A `restricted` list means
+columns withheld by entitlement; pipelines must pass `strict=True`.
+
+## sdv-docs MCP Server
+
+`sdv_docs/` is a stdio MCP server over a SQLite index of this package's surface.
+It must NEVER import `sportsdataverse` (a test guards it). Extra:
+`sportsdataverse[mcp]`, Python >= 3.10; console script `sdv-docs`.
+
+## Release Utilities
+
+`sportsdataverse.release` is the port of the `sportsdataversedata` R package:
+GitHub-release asset publish/download plus a byte-parity RDS writer. Use it
+instead of ad-hoc `gh release upload` scripting.
+
+## Rule-Era Models
+
+`cfb/models/` and `nfl/models/` bundle rule-era XGBoost artifacts (EP, WP naive
+and spread, CP, FG, fourth-down, two-point, xpass, QBR). `nfl/ep_wp.py` is the
+single owner of NFL model application and EPA/WPA derivation — construction
+modules emit a frame and `ep_wp` applies the models. Every `shift`/lead is
+`.over("game_id")`.
+
+## ID Column Types
+
+IDs are join keys. Pick one dtype per id and cast at the boundary; never paper
+over a mismatch with a float->Utf8 cast (`"123.0"`); assert
+`left.schema[k] == right.schema[k]` before joining; fold case when matching names
+(polars/Rust regex has no lookaround — use `(?i)prefix(?-i: NAMES)`).
+
+## Error Vocabulary (0.1.5)
+
+`NoDataError` = the fetch SUCCEEDED and there is nothing there (a 404, or ESPN's
+200-with-`code:404`). `AssetFetchError` = the fetch FAILED and the answer is
+unknown (403, rate limit, exhausted retries). Never collapse the two. A **400 /
+422** raises `ValueError` naming host, path and status. As of 0.1.5 the
+hand-written ESPN scrapers and every flat-API getter raise instead of returning an
+error body or `{}`.
+
+## Codegen
+
+Both the wrappers and the docs site come from `tools/codegen/generate.py`; the
+pipeline is documented in
+[`docs/docs/architecture/codegen.md`](../docs/docs/architecture/codegen.md).
+Regenerate after touching endpoint YAML, `schemas/**`, `templates/**`,
+`tools/codegen/*.py`, a public docstring, an `__all__` or `CHANGELOG.md`:
+`uv run python tools/codegen/generate.py` then `--check`. `sources.yaml` is the
+provider/category registry — a new public function in a new module needs a rule
+there or `--check` fails naming it. `sportsdataverse.parsed.*` is **deprecated**:
+wrappers return parsed frames by default, so call the league module directly.
 
 ## Cheat sheet
 

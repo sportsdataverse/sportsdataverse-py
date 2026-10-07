@@ -5,18 +5,70 @@ description: "sdv-py SOCCER: endpoint references, dataset loaders and parsers fo
 ---
 # SOCCER (`sportsdataverse.soccer`)
 
-| Reference | Functions | Base URL |
-|---|---:|---|
-| [ESPN site API (v2)](reference/site) | 24 | `https://site.api.espn.com/apis/site/v2/sports` |
-| [ESPN web API (v3)](reference/web) | 5 | `https://site.web.api.espn.com/apis/common/v3/sports` |
-| [ESPN core API (v2)](reference/core) | 82 | `https://sports.core.api.espn.com/v2/sports` |
-| [ESPN FPI API (fitt v3)](reference/fitt) | 1 | `https://site.web.api.espn.com/apis/fitt/v3/sports` |
-| [American Soccer Analysis (app.americansocceranalysis.com)](reference/asa) | 16 | `https://app.americansocceranalysis.com/api/v1` |
-| [FotMob data API (fotmob.com, unofficial)](reference/fotmob) | 14 | `https://www.fotmob.com/api/data` |
-| [UEFA front-end APIs (comp/match/standings/matchstats.uefa.com)](reference/uefa) | 7 | `https://comp.uefa.com` |
-| [FIFA public API v3 (api.fifa.com)](reference/fifa) | 9 | `https://api.fifa.com/api/v3` |
-| [Football-Data.co.uk CSV archive (football-data.co.uk)](reference/football_data) | 3 | `https://www.football-data.co.uk` |
-| [OpenLigaDB (api.openligadb.de, community German football)](reference/openligadb) | 11 | `https://api.openligadb.de` |
+## Data sources
+
+| Source | APIs / hosts | Functions | Auth |
+|---|---|---:|---|
+| [ESPN](#espn) | `site.api.espn.com`, `site.web.api.espn.com`, `sports.core.api.espn.com` | 112 | none |
+| [American Soccer Analysis](#american-soccer-analysis) | `app.americansocceranalysis.com` | 16 | none |
+| [FotMob](#fotmob) | `www.fotmob.com` | 14 | none (unofficial) |
+| [UEFA](#uefa) | `comp.uefa.com` | 7 | none |
+| [FIFA](#fifa) | `api.fifa.com` | 9 | none |
+| [Football-Data.co.uk](#football-data-co-uk) | `www.football-data.co.uk` | 3 | none (CSV archive) |
+| [OpenLigaDB](#openligadb) | `api.openligadb.de` | 11 | none |
+| [kloppy open event data](#kloppy-open-event-data) | `kloppy.pysport.org` | 4 | none (optional `soccer` extra) |
+| [Additional functions](reference/additional) | hand-written wrappers & helpers | 4 | — |
+
+## ESPN {#espn}
+
+| Reference | Functions |
+|---|---:|
+| [ESPN site API (v2)](reference/site) | 24 |
+| [ESPN web API (v3)](reference/web) | 5 |
+| [ESPN core API (v2)](reference/core) | 82 |
+| [ESPN FPI API (fitt v3)](reference/fitt) | 1 |
+
+## American Soccer Analysis {#american-soccer-analysis}
+
+| Reference | Functions |
+|---|---:|
+| [American Soccer Analysis (app.americansocceranalysis.com)](reference/asa) | 16 |
+
+## FotMob {#fotmob}
+
+| Reference | Functions |
+|---|---:|
+| [FotMob data API (fotmob.com, unofficial)](reference/fotmob) | 14 |
+
+## UEFA {#uefa}
+
+| Reference | Functions |
+|---|---:|
+| [UEFA front-end APIs (comp/match/standings/matchstats.uefa.com)](reference/uefa) | 7 |
+
+## FIFA {#fifa}
+
+| Reference | Functions |
+|---|---:|
+| [FIFA public API v3 (api.fifa.com)](reference/fifa) | 9 |
+
+## Football-Data.co.uk {#football-data-co-uk}
+
+| Reference | Functions |
+|---|---:|
+| [Football-Data.co.uk CSV archive (football-data.co.uk)](reference/football_data) | 3 |
+
+## OpenLigaDB {#openligadb}
+
+| Reference | Functions |
+|---|---:|
+| [OpenLigaDB (api.openligadb.de, community German football)](reference/openligadb) | 11 |
+
+## kloppy open event data {#kloppy-open-event-data}
+
+| Reference | Functions |
+|---|---:|
+| [Hand-written wrappers](reference/additional) | 4 |
 
 ## See also
 

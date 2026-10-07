@@ -5,12 +5,27 @@ description: "sdv-py MCH: endpoint references, dataset loaders and parsers for M
 ---
 # MCH (`sportsdataverse.mch`)
 
-| Reference | Functions | Base URL |
-|---|---:|---|
-| [ESPN site API (v2)](reference/site) | 25 | `https://site.api.espn.com/apis/site/v2/sports` |
-| [ESPN web API (v3)](reference/web) | 5 | `https://site.web.api.espn.com/apis/common/v3/sports` |
-| [ESPN core API (v2)](reference/core) | 87 | `https://sports.core.api.espn.com/v2/sports` |
-| [ESPN FPI API (fitt v3)](reference/fitt) | 1 | `https://site.web.api.espn.com/apis/fitt/v3/sports` |
+## Data sources
+
+| Source | APIs / hosts | Functions | Auth |
+|---|---|---:|---|
+| [ESPN](#espn) | `site.api.espn.com`, `site.web.api.espn.com`, `sports.core.api.espn.com` | 118 | none |
+| [Additional functions](reference/additional) | hand-written wrappers & helpers | 1 | — |
+
+## ESPN {#espn}
+
+| Reference | Functions |
+|---|---:|
+| [ESPN site API (v2)](reference/site) | 25 |
+| [ESPN web API (v3)](reference/web) | 5 |
+| [ESPN core API (v2)](reference/core) | 87 |
+| [ESPN FPI API (fitt v3)](reference/fitt) | 1 |
+## Tools and helpers
+
+### Models and calculators {#models-and-calculators}
+
+- [`mch_ratings`](reference/additional#mch_ratings)
+
 
 ## Examples
 

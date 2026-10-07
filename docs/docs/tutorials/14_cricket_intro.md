@@ -78,22 +78,21 @@ IPL = "8048"
 print("polars", pl.__version__)
 ```
 
-    polars 1.42.0
-
-
 The ESPN cricket feed is live and occasionally rate-limited, so a small `safe()`
 helper runs every network call defensively. Any exception is caught, printed, and
 `None` is returned — downstream cells check for `None` before proceeding.
 
 
 ```python
+from sportsdataverse.errors import AssetFetchError, NoDataError
+
 def safe(label, thunk):
     try:
         out = thunk()
         print(f"✅ {label}")
         return out
-    except Exception as exc:
-        print(f"⚠️  {label} — {exc}")
+    except (NoDataError, AssetFetchError) as e:
+        print(f"\u23ed\ufe0f  {label}: {type(e).__name__}: {e}")
         return None
 ```
 
@@ -101,7 +100,7 @@ def safe(label, thunk):
 
 [`espn_cricket_scoreboard`](../cricket/reference/site.md#espn_cricket_scoreboard)
 hits the Site v2 scoreboard endpoint for the given `league=` slug.
-By default (`return_parsed=True`) it routes the payload through
+By default (``) it routes the payload through
 `parse_cricket_scoreboard` and returns a tidy polars frame.
 Pass `return_parsed=False` to get the raw ESPN JSON dict instead.
 
@@ -117,27 +116,6 @@ board = safe(
 )
 board
 ```
-
-    ✅ IPL scoreboard
-
-
-
-
-
-    shape: (1, 14)
-    ┌──────────┬────────────┬────────────┬────────────┬───┬────────┬───────────┬───────────┬───────────┐
-    │ event_id ┆ date       ┆ name       ┆ short_name ┆ … ┆ status ┆ status_de ┆ venue     ┆ neutral_s │
-    │ ---      ┆ ---        ┆ ---        ┆ ---        ┆   ┆ ---    ┆ tail      ┆ ---       ┆ ite       │
-    │ str      ┆ str        ┆ str        ┆ str        ┆   ┆ null   ┆ ---       ┆ str       ┆ ---       │
-    │          ┆            ┆            ┆            ┆   ┆        ┆ str       ┆           ┆ bool      │
-    ╞══════════╪════════════╪════════════╪════════════╪═══╪════════╪═══════════╪═══════════╪═══════════╡
-    │ 1535465  ┆ 2026-05-31 ┆ Royal Chal ┆ RCB v GT   ┆ … ┆ null   ┆ Final     ┆ Narendra  ┆ true      │
-    │          ┆ T14:00Z    ┆ lengers    ┆            ┆   ┆        ┆           ┆ Modi      ┆           │
-    │          ┆            ┆ Bengaluru  ┆            ┆   ┆        ┆           ┆ Stadium,  ┆           │
-    │          ┆            ┆ v …        ┆            ┆   ┆        ┆           ┆ Motera,…  ┆           │
-    └──────────┴────────────┴────────────┴────────────┴───┴────────┴───────────┴───────────┴───────────┘
-
-
 
 ### What the columns mean
 
@@ -163,17 +141,6 @@ else:
     print("scoreboard unavailable right now — try again outside an off-season window")
 ```
 
-    shape: (1, 5)
-    ┌──────────────────────────────────┬─────────────────────────┬────────────┬────────┬───────────────┐
-    │ name                             ┆ home_score              ┆ away_score ┆ status ┆ status_detail │
-    │ ---                              ┆ ---                     ┆ ---        ┆ ---    ┆ ---           │
-    │ str                              ┆ str                     ┆ str        ┆ null   ┆ str           │
-    ╞══════════════════════════════════╪═════════════════════════╪════════════╪════════╪═══════════════╡
-    │ Royal Challengers Bengaluru v …  ┆ 161/5 (18/20 ov, target ┆ 155/8      ┆ null   ┆ Final         │
-    │                                  ┆ 156)                    ┆            ┆        ┆               │
-    └──────────────────────────────────┴─────────────────────────┴────────────┴────────┴───────────────┘
-
-
 ### Raw payload mode
 
 Pass `return_parsed=False` to skip the parser entirely and work with the raw
@@ -191,11 +158,6 @@ if isinstance(raw_board, dict):
     events = raw_board.get("events") or []
     print(f"Events in payload: {len(events)}")
 ```
-
-    ✅ IPL scoreboard (raw)
-    Top-level keys: ['leagues', 'teams', 'standings', 'events', 'provider']
-    Events in payload: 1
-
 
 ## 🏆 Standings
 
@@ -219,37 +181,6 @@ standings = safe(
 standings
 ```
 
-    ✅ IPL standings
-
-
-
-
-
-    shape: (10, 15)
-    ┌───────┬────────────────────┬─────────┬───────────────────┬───┬────────┬────────┬─────────┬───────┐
-    │ group ┆ team               ┆ team_id ┆ team_abbreviation ┆ … ┆ netrr  ┆ for    ┆ against ┆ total │
-    │ ---   ┆ ---                ┆ ---     ┆ ---               ┆   ┆ ---    ┆ ---    ┆ ---     ┆ ---   │
-    │ str   ┆ str                ┆ str     ┆ str               ┆   ┆ f64    ┆ f64    ┆ f64     ┆ str   │
-    ╞═══════╪════════════════════╪═════════╪═══════════════════╪═══╪════════╪════════╪═════════╪═══════╡
-    │       ┆ Royal Challengers  ┆ 335970  ┆ RCB               ┆ … ┆ 0.783  ┆ 10.393 ┆ 9.615   ┆       │
-    │       ┆ Bengaluru          ┆         ┆                   ┆   ┆        ┆        ┆         ┆       │
-    │       ┆ Gujarat Titans     ┆ 1298769 ┆ GT                ┆ … ┆ 0.695  ┆ 9.46   ┆ 8.755   ┆       │
-    │       ┆ Sunrisers          ┆ 628333  ┆ SRH               ┆ … ┆ 0.524  ┆ 10.337 ┆ 9.82    ┆       │
-    │       ┆ Hyderabad          ┆         ┆                   ┆   ┆        ┆        ┆         ┆       │
-    │       ┆ Rajasthan Royals   ┆ 335977  ┆ RR                ┆ … ┆ 0.189  ┆ 10.096 ┆ 9.907   ┆       │
-    │       ┆ Punjab Kings       ┆ 335973  ┆ PBKS              ┆ … ┆ 0.309  ┆ 10.844 ┆ 10.535  ┆       │
-    │       ┆ Delhi Capitals     ┆ 335975  ┆ DC                ┆ … ┆ -0.651 ┆ 9.394  ┆ 10.039  ┆       │
-    │       ┆ Kolkata Knight     ┆ 335971  ┆ KKR               ┆ … ┆ -0.147 ┆ 9.096  ┆ 9.24    ┆       │
-    │       ┆ Riders             ┆         ┆                   ┆   ┆        ┆        ┆         ┆       │
-    │       ┆ Chennai Super      ┆ 335974  ┆ CSK               ┆ … ┆ -0.345 ┆ 9.2    ┆ 9.548   ┆       │
-    │       ┆ Kings              ┆         ┆                   ┆   ┆        ┆        ┆         ┆       │
-    │       ┆ Mumbai Indians     ┆ 335978  ┆ MI                ┆ … ┆ -0.584 ┆ 9.512  ┆ 10.092  ┆       │
-    │       ┆ Lucknow Super      ┆ 1298768 ┆ LSG               ┆ … ┆ -0.74  ┆ 9.132  ┆ 9.868   ┆       │
-    │       ┆ Giants             ┆         ┆                   ┆   ┆        ┆        ┆         ┆       │
-    └───────┴────────────────────┴─────────┴───────────────────┴───┴────────┴────────┴─────────┴───────┘
-
-
-
 
 ```python
 if standings is not None and standings.height:
@@ -269,11 +200,6 @@ if standings is not None and standings.height:
 else:
     print("standings unavailable right now")
 ```
-
-    Columns: ['group', 'team', 'team_id', 'team_abbreviation', 'rank', 'matches_played', 'matches_won', 'matches_lost', 'noresult', 'match_points', 'qualified', 'netrr', 'for', 'against', 'total']
-
-    Groups present: ['']
-
 
 ### Why the `children` hierarchy matters
 
@@ -327,10 +253,6 @@ if isinstance(summary_raw, dict):
     print("Top-level keys:", list(summary_raw.keys()))
 ```
 
-    ✅ match summary 1535465
-    Top-level keys: ['notes', 'gameInfo', 'debuts', 'rosters', 'matchcards', 'leaders', 'article', 'videos', 'news', 'header', 'wallclockAvailable', 'meta', 'standings']
-
-
 ### Parsing all 8 sections at once
 
 Call `parse_cricket_summary` with `section=None` (the default) to get a
@@ -348,16 +270,6 @@ else:
     frames = {}
     print("summary payload unavailable — frames dict is empty")
 ```
-
-    header                             1 rows ×  15 cols
-    matchcards_batting                11 rows ×  12 cols
-    matchcards_bowling                 6 rows ×  10 cols
-    matchcards_partnerships            6 rows ×  10 cols
-    rosters                           24 rows ×   9 cols
-    game_info                          1 rows ×   7 cols
-    leaders                            0 rows ×   0 cols
-    standings                         10 rows ×  14 cols
-
 
 ### 🏏 Section: `matchcards_batting`
 
@@ -379,26 +291,6 @@ else:
     print("batting scorecard unavailable for this match")
 ```
 
-    Batting columns: ['innings_number', 'team_name', 'total', 'runs_total', 'extras', 'player_id', 'player_name', 'dismissal', 'runs', 'balls_faced', 'fours', 'sixes']
-    shape: (10, 4)
-    ┌────────────────┬──────┬───────┬───────┐
-    │ innings_number ┆ runs ┆ fours ┆ sixes │
-    │ ---            ┆ ---  ┆ ---   ┆ ---   │
-    │ str            ┆ str  ┆ str   ┆ str   │
-    ╞════════════════╪══════╪═══════╪═══════╡
-    │ 2              ┆ 32   ┆ 4     ┆ 2     │
-    │ 2              ┆ 75   ┆ 9     ┆ 3     │
-    │ 2              ┆ 1    ┆ 0     ┆ 0     │
-    │ 2              ┆ 15   ┆ 1     ┆ 1     │
-    │ 2              ┆ 1    ┆ 0     ┆ 0     │
-    │ 2              ┆ 24   ┆ 3     ┆ 1     │
-    │ 2              ┆ 11   ┆ 1     ┆ 0     │
-    │ 2              ┆      ┆       ┆       │
-    │ 2              ┆      ┆       ┆       │
-    │ 2              ┆      ┆       ┆       │
-    └────────────────┴──────┴───────┴───────┘
-
-
 ### 🎯 Section: `matchcards_bowling`
 
 One row per bowler per innings. Key columns: `overs`, `maidens`, `runs_conceded`,
@@ -417,22 +309,6 @@ if bowling.height:
 else:
     print("bowling scorecard unavailable for this match")
 ```
-
-    Bowling columns: ['innings_number', 'team_name', 'player_id', 'player_name', 'overs', 'maidens', 'conceded', 'wickets', 'economy_rate', 'nbw']
-    shape: (6, 4)
-    ┌────────────────┬───────┬─────────┬─────────┐
-    │ innings_number ┆ overs ┆ maidens ┆ wickets │
-    │ ---            ┆ ---   ┆ ---     ┆ ---     │
-    │ str            ┆ str   ┆ str     ┆ str     │
-    ╞════════════════╪═══════╪═════════╪═════════╡
-    │ 2              ┆ 4.0   ┆ 0       ┆ 1       │
-    │ 2              ┆ 3.0   ┆ 0       ┆ 1       │
-    │ 2              ┆ 2.0   ┆ 0       ┆ 0       │
-    │ 2              ┆ 4.0   ┆ 0       ┆ 2       │
-    │ 2              ┆ 4.0   ┆ 0       ┆ 1       │
-    │ 2              ┆ 1.0   ┆ 0       ┆ 0       │
-    └────────────────┴───────┴─────────┴─────────┘
-
 
 ### 🤝 Section: `matchcards_partnerships`
 
@@ -456,22 +332,6 @@ else:
     print("partnerships scorecard unavailable for this match")
 ```
 
-    Partnerships columns: ['innings_number', 'team_name', 'partnership_runs', 'partnership_overs', 'wicket_name', 'fow_type', 'player1_name', 'player1_runs', 'player2_name', 'player2_runs']
-    shape: (6, 1)
-    ┌────────────────┐
-    │ innings_number │
-    │ ---            │
-    │ str            │
-    ╞════════════════╡
-    │ 2              │
-    │ 2              │
-    │ 2              │
-    │ 2              │
-    │ 2              │
-    │ 2              │
-    └────────────────┘
-
-
 ### 🏟️ Section: `header`
 
 Match-level metadata: teams, status, venue, and the competition context. This
@@ -490,12 +350,6 @@ else:
     print("header unavailable for this match")
 ```
 
-    shape: (0, 0)
-    ┌┐
-    ╞╡
-    └┘
-
-
 ### 📋 Section: `game_info`
 
 Match-level metadata that doesn't fit the header: toss winner, match type
@@ -511,24 +365,11 @@ else:
     print("game_info unavailable for this match")
 ```
 
-    shape: (1, 7)
-    ┌──────────┬───────────────┬───────────────┬────────────┬──────────────┬────────────┬──────────────┐
-    │ venue_id ┆ venue_full_na ┆ venue_short_n ┆ venue_city ┆ venue_countr ┆ attendance ┆ officials    │
-    │ ---      ┆ me            ┆ ame           ┆ ---        ┆ y            ┆ ---        ┆ ---          │
-    │ str      ┆ ---           ┆ ---           ┆ str        ┆ ---          ┆ i64        ┆ str          │
-    │          ┆ str           ┆ str           ┆            ┆ str          ┆            ┆              │
-    ╞══════════╪═══════════════╪═══════════════╪════════════╪══════════════╪════════════╪══════════════╡
-    │ 57851    ┆ Narendra Modi ┆ Narendra Modi ┆ Ahmedabad  ┆ India        ┆ 0          ┆ [{'displayNa │
-    │          ┆ Stadium,      ┆ Stadium,      ┆            ┆              ┆            ┆ me': 'KN     │
-    │          ┆ Motera,…      ┆ Motera,…      ┆            ┆              ┆            ┆ Ananthapa…   │
-    └──────────┴───────────────┴───────────────┴────────────┴──────────────┴────────────┴──────────────┘
-
-
 ### 🔎 Requesting a single section
 
 When you only need one frame, pass `section=` to `parse_cricket_summary` to
 avoid deserializing all 8 sections. The wrapper also accepts the section via
-`return_parsed=True` + `section=` if you want to skip the intermediate raw dict.
+`` + `section=` if you want to skip the intermediate raw dict.
 
 
 ```python
@@ -543,10 +384,6 @@ if summary_raw is not None:
 else:
     print("no payload to parse")
 ```
-
-    <class 'polars.dataframe.frame.DataFrame'> (11, 12)
-    <class 'pandas.DataFrame'>
-
 
 ## 📰 News and injuries
 
@@ -569,21 +406,6 @@ else:
     print("news unavailable right now")
 ```
 
-    ✅ IPL news
-    shape: (5, 3)
-    ┌─────────────────────────────────┬──────────────────────┬──────────────┐
-    │ headline                        ┆ published            ┆ type         │
-    │ ---                             ┆ ---                  ┆ ---          │
-    │ str                             ┆ str                  ┆ str          │
-    ╞═════════════════════════════════╪══════════════════════╪══════════════╡
-    │ The spectacle of a sixy Kohli … ┆ 2026-09-28T17:06:18Z ┆ Story        │
-    │ Leicestershire fight on as eig… ┆ 2026-09-28T17:03:34Z ┆ HeadlineNews │
-    │ Ireland appoint Ed Joyce as hi… ┆ 2026-09-28T16:50:40Z ┆ HeadlineNews │
-    │ Tom Westley steps down as Esse… ┆ 2026-09-28T16:28:57Z ┆ HeadlineNews │
-    │ WPL 2027: RCB release Grace Ha… ┆ 2026-09-28T15:00:10Z ┆ HeadlineNews │
-    └─────────────────────────────────┴──────────────────────┴──────────────┘
-
-
 
 ```python
 injuries = safe(
@@ -595,10 +417,6 @@ if injuries is not None and injuries.height:
 else:
     print("injuries feed unavailable or empty right now")
 ```
-
-    ✅ IPL injuries
-    injuries feed unavailable or empty right now
-
 
 ## 📅 Calendar
 
@@ -618,10 +436,6 @@ if cal is not None and cal.height:
 else:
     print("calendar unavailable right now")
 ```
-
-    ⚠️  IPL calendar — NoDataError: No data found for https://site.api.espn.com/apis/site/v2/sports/cricket/8048/calendar
-    calendar unavailable right now
-
 
 ## 🍳 Cookbook: common cricket tasks
 
@@ -668,9 +482,6 @@ else:
     print("bowling frame not available")
 ```
 
-    bowling frame not available
-
-
 ### Recipe 3 — Largest partnerships 🤝
 
 Identify which batting pairs put on the biggest stands in a given innings.
@@ -691,9 +502,6 @@ if partnerships.height and "total_runs" in partnerships.columns:
 else:
     print("partnerships frame not available")
 ```
-
-    partnerships frame not available
-
 
 ### Recipe 4 — Standings: current top-4 playoff picture 🏆
 
@@ -719,9 +527,6 @@ else:
     print("standings not available")
 ```
 
-    expected sort columns not present: ['group', 'team', 'team_id', 'team_abbreviation', 'rank', 'matches_played', 'matches_won', 'matches_lost', 'noresult', 'match_points', 'qualified', 'netrr', 'for', 'against', 'total']
-
-
 ### Recipe 5 — pandas interop: grouping rosters by role 🐼
 
 Every sdv-py endpoint accepts `return_as_pandas=True`, so dropping into the
@@ -746,16 +551,6 @@ if summary_raw is not None:
 else:
     print("no payload")
 ```
-
-    <class 'pandas.DataFrame'>
-    ['team_id', 'home_away', 'winner', 'athlete_id', 'athlete', 'jersey', 'starter', 'position', 'captain']
-    position
-    AR     8
-    BL     8
-    UKN    6
-    WK     2
-    dtype: int64
-
 
 ## ⚠️ Caveats and known limitations
 
@@ -806,18 +601,6 @@ print("Empty summary → dict of zero-row frames:")
 for name, df in empty_frames.items():
     print(f"  {name}: {df.shape}")
 ```
-
-    Empty payload → zero-row frame: (0, 0)
-    Empty summary → dict of zero-row frames:
-      header: (0, 0)
-      matchcards_batting: (0, 0)
-      matchcards_bowling: (0, 0)
-      matchcards_partnerships: (0, 0)
-      rosters: (0, 0)
-      game_info: (0, 0)
-      leaders: (0, 0)
-      standings: (0, 0)
-
 
 ## 🎉 Where to next
 
