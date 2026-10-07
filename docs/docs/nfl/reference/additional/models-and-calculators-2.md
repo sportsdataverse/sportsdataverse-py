@@ -59,10 +59,11 @@ Per (season, off_team, def_team) dropbacks + pressures (matchup grid).
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `pbp` | `DataFrame` |  |  |
+| `pbp` | `DataFrame` |  | nflverse play-by-play with `season`, `posteam`, `defteam` and the dropback / pressure flags. |
 
 **Returns**
 
+One row per (`season`, `off_team`, `def_team`) matchup, with `dropbacks` and `pressures` (Int64), sorted by season and teams. A zero-row frame with that schema when the input has no dropbacks.
 
 | col_name | type | description |
 |---|---|---|

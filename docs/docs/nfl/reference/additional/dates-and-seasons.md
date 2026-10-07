@@ -170,7 +170,11 @@ Alias for `get_current_nfl_season()` mirroring nflreadr's
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `roster` | `bool` | `False` |  |
+| `roster` | `bool` | `False` | Use roster-year logic (the current year from March 15) instead of season logic. |
+
+**Returns**
+
+The current NFL season (or roster) year, from `get_current_nfl_season`.
 
 **Example**
 

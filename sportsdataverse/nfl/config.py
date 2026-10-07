@@ -122,6 +122,10 @@ def get_config() -> NflConfig:
     rather than reassigning fields directly so future hooks (e.g. logging
     on config change) have a single choke point.
 
+    Returns:
+        NflConfig: The live singleton (``cache_mode``, ``cache_dir``, ``cache_duration``,
+            ``verbose``, ``timeout``, ``user_agent``).
+
     Example:
         Inspect the active config::
 
@@ -191,6 +195,9 @@ def reset_config() -> NflConfig:
 
     Convenience for tests / interactive sessions that want to undo a chain
     of ``update_config()`` calls without restarting the interpreter.
+
+    Returns:
+        NflConfig: The live singleton, now holding the env-var-derived defaults again.
 
     Example:
         Restore defaults after a session of tweaks::

@@ -6,7 +6,6 @@ import polars as pl
 from tqdm import tqdm
 
 from sportsdataverse._codegen_runtime import _as_season_list, _fetch_release_parquet
-from sportsdataverse._deprecation import warn_deprecated as _warn_deprecated
 from sportsdataverse.config import (
     NFL_BASE_URL,
     NFL_COMBINE_URL,

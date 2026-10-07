@@ -162,6 +162,14 @@ def cached_loader(func: F) -> F:
     which return shape the caller asked for. The cache always stores the
     polars frame internally and converts to pandas on read when requested.
 
+    Args:
+        func: The ``load_nfl_*`` loader to wrap.
+
+    Returns:
+        Callable: A wrapper with ``func``'s signature that serves a cached polars frame
+            when one is fresh (converted to pandas on read when ``return_as_pandas`` is
+            True) and calls ``func`` otherwise.
+
     Example:
         Decorate a custom loader::
 

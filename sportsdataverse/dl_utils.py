@@ -655,6 +655,10 @@ def key_check(obj, key, replacement=np.array([])):
         key: Key to fetch.
         replacement: Value to return when ``key`` is missing.
 
+    Returns:
+        Any: ``obj[key]`` when ``key`` is present, otherwise ``replacement`` (an empty
+            ``numpy.ndarray`` by default).
+
     Example:
         Default empty-array fallback::
 
@@ -697,6 +701,13 @@ def underscore(word):
 
     Roughly the inverse of :func:`camelize`, though edge cases (e.g.
     consecutive capitals like ``"IOError"``) do not perfectly round-trip.
+
+    Args:
+        word: The CamelCase, PascalCase or dashed string to convert.
+
+    Returns:
+        str: The snake_case form: words split at each case change, dashes turned into
+            underscores, everything lower-cased.
 
     Example:
         Basic input -> output::

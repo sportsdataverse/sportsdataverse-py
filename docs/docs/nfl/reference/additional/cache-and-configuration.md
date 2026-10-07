@@ -64,7 +64,11 @@ polars frame internally and converts to pandas on read when requested.
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `func` | `F` |  |  |
+| `func` | `F` |  | The `load_nfl_*` loader to wrap. |
+
+**Returns**
+
+A wrapper with `func`'s signature that serves a cached polars frame when one is fresh (converted to pandas on read when `return_as_pandas` is True) and calls `func` otherwise.
 
 **Example**
 
@@ -134,6 +138,10 @@ The same object is returned on every call; mutate via `update_config`
 rather than reassigning fields directly so future hooks (e.g. logging
 on config change) have a single choke point.
 
+**Returns**
+
+The live singleton (`cache_mode`, `cache_dir`, `cache_duration`, `verbose`, `timeout`, `user_agent`).
+
 **Example**
 
 ```python
@@ -156,6 +164,10 @@ Reset the active config to its env-var-derived defaults.
 
 Convenience for tests / interactive sessions that want to undo a chain
 of `update_config()` calls without restarting the interpreter.
+
+**Returns**
+
+The live singleton, now holding the env-var-derived defaults again.
 
 **Example**
 
