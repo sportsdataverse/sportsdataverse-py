@@ -3,6 +3,7 @@
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
 - [Unreleased](#unreleased)
+  - [Added — SPADL actions from any kloppy event dataset: soccer_spadl() and soccer_open_dataset()](#added--spadl-actions-from-any-kloppy-event-dataset-soccer_spadl-and-soccer_open_dataset)
   - [Changed — returns-table descriptions: NFL Pro, On3 and Fox authored; R-dictionary fill scoped to the league's own sport](#changed--returns-table-descriptions-nfl-pro-on3-and-fox-authored-r-dictionary-fill-scoped-to-the-leagues-own-sport)
   - [Added — wrappers for six more intake providers (ESPN content, TheSportsDB, Football-Data.co.uk, OpenLigaDB, Polymarket, Kalshi)](#added--wrappers-for-six-more-intake-providers-espn-content-thesportsdb-football-datacouk-openligadb-polymarket-kalshi)
   - [Added — Formula 1: Jolpica (Ergast-compatible) wrappers in `sportsdataverse.f1`](#added--formula-1-jolpica-ergast-compatible-wrappers-in-sportsdataversef1)
@@ -362,6 +363,21 @@
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## Unreleased
+
+### Added — SPADL actions from any kloppy event dataset: soccer_spadl() and soccer_open_dataset()
+
+`soccer_spadl(dataset)` converts any kloppy event dataset (StatsBomb, Opta, Wyscout, Sportec, ...)
+into SPADL actions, a port of [socceraction](https://github.com/ML-KULeuven/socceraction) (MIT).
+Every action attacks left to right (kloppy `ACTION_EXECUTING_TEAM` orientation), and coordinates
+are scaled linearly onto a 105 x 68 pitch, matching socceraction. `soccer_open_dataset()` is the
+dataset-returning twin of `soccer_open_events()`, which returns a frame.
+
+The port is checked against an oracle: the socceraction 1.5.3 direct StatsBomb converter on open
+match 8658. Ours yields 1,709 rows against the oracle's 1,707 (the two extra are StatsBomb
+"Injury Clearance" passes that kloppy keeps); both sides produce 653 dribbles (617 StatsBomb
+carries + 36 synthetic). Over the 1,671 joined rows (every row with an event id), types, results,
+body parts and coordinates agree 99.88 % of the time, with a 2-id agreement allowlist; the 36
+synthetic dribbles are checked by position.
 
 ### Changed — returns-table descriptions: NFL Pro, On3 and Fox authored; R-dictionary fill scoped to the league's own sport
 

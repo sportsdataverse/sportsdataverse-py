@@ -11,6 +11,7 @@ Install with ``pip install "sportsdataverse[soccer]"``.
 
 from __future__ import annotations
 
+import dataclasses
 from typing import TYPE_CHECKING, Any, Dict, Union
 
 from sportsdataverse.dl_utils import underscore
@@ -19,7 +20,7 @@ if TYPE_CHECKING:  # pragma: no cover -- annotation-only imports (PEP 563 defers
     import pandas as pd
     import polars as pl
 
-__all__ = ["soccer_events_to_frame", "soccer_open_events"]
+__all__ = ["soccer_events_to_frame", "soccer_open_dataset", "soccer_open_events"]
 
 _INSTALL_HINT = 'pip install "sportsdataverse[soccer]"'
 
@@ -29,8 +30,15 @@ def _kloppy() -> Any:
     try:
         import kloppy
     except ImportError as exc:
-        raise ImportError(f"soccer_open_events() needs kloppy: {_INSTALL_HINT}") from exc
+        raise ImportError(f"kloppy is required: {_INSTALL_HINT}") from exc
     return kloppy
+
+
+def _stamp_game_id(dataset: Any, game_id: Union[int, str]) -> Any:
+    """Record ``game_id`` on a dataset whose loader left it unset (kloppy's StatsBomb one does)."""
+    if dataset.metadata.game_id is None:
+        dataset.metadata = dataclasses.replace(dataset.metadata, game_id=str(game_id))
+    return dataset
 
 
 # provider -> the kloppy module attribute whose ``load_open_data(match_id=...)`` serves it.
@@ -93,6 +101,55 @@ def soccer_events_to_frame(dataset: Any, *, return_as_pandas: bool = False) -> U
     return df.to_pandas() if return_as_pandas else df
 
 
+def soccer_open_dataset(provider: str, match_id: Union[int, str], **kwargs: Any) -> Any:
+    """Load one match of a provider's free open event data as a kloppy ``EventDataset``.
+
+    ``provider="statsbomb"`` reads StatsBomb open data (https://github.com/statsbomb/open-data)
+    through ``kloppy.statsbomb.load_open_data(match_id=...)``. That data is free for research and
+    non-commercial use only, under StatsBomb's open-data license -- read it before publishing
+    anything built on it. This is the input :func:`soccer_spadl` expects;
+    :func:`soccer_open_events` is the same load flattened to a frame.
+
+    Args:
+        provider: Open-data provider key; currently ``"statsbomb"``.
+        match_id: The provider's match id (StatsBomb: e.g. ``8658`` -- France v Croatia, 2018
+            World Cup final).
+        **kwargs: Forwarded to the kloppy loader. ``coordinates`` defaults to the provider's own
+            units (StatsBomb: 120 x 80 yards); pass ``coordinates="kloppy"`` for kloppy's 0-1
+            normalized pitch. Others pass through, e.g. ``event_types=["shot", "pass"]``.
+
+    Returns:
+        A kloppy ``EventDataset``.
+
+    Raises:
+        ImportError: kloppy is not installed -- ``pip install "sportsdataverse[soccer]"``.
+        ValueError: ``provider`` is not a supported open-data key.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.soccer import soccer_open_dataset, soccer_spadl
+            dataset = soccer_open_dataset("statsbomb", 8658)
+            actions = soccer_spadl(dataset)
+
+        Pipeline next step (one line)::
+
+            frame = dataset.to_df(engine="polars")
+
+    See Also:
+        * `kloppy`_ -- the dataset model and every other provider loader
+
+    .. _kloppy: https://kloppy.pysport.org
+    """
+    key = provider.lower()
+    if key not in _OPEN_DATA_PROVIDERS:
+        raise ValueError(f"unknown open-data provider {provider!r}; supported: {sorted(_OPEN_DATA_PROVIDERS)}")
+    kloppy = _kloppy()
+    kwargs.setdefault("coordinates", key)  # provider units (StatsBomb 120 x 80), what pitch_coords() expects
+    dataset = getattr(kloppy, _OPEN_DATA_PROVIDERS[key]).load_open_data(match_id=match_id, **kwargs)
+    return _stamp_game_id(dataset, match_id)
+
+
 def soccer_open_events(
     provider: str,
     match_id: Union[int, str],
@@ -150,10 +207,5 @@ def soccer_open_events(
     .. _sdvplot pitch_coords: https://github.com/sportsdataverse/sdvplot
     .. _sdvplotR sdv_pitch_coords: https://github.com/sportsdataverse/sdvplotR
     """
-    key = provider.lower()
-    if key not in _OPEN_DATA_PROVIDERS:
-        raise ValueError(f"unknown open-data provider {provider!r}; supported: {sorted(_OPEN_DATA_PROVIDERS)}")
-    kloppy = _kloppy()
-    kwargs.setdefault("coordinates", key)  # provider units (StatsBomb 120 x 80), what pitch_coords() expects
-    dataset = getattr(kloppy, _OPEN_DATA_PROVIDERS[key]).load_open_data(match_id=match_id, **kwargs)
+    dataset = soccer_open_dataset(provider, match_id, **kwargs)
     return soccer_events_to_frame(dataset, return_as_pandas=return_as_pandas)

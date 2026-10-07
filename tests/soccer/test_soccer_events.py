@@ -20,7 +20,7 @@ statsbomb = pytest.importorskip("kloppy.statsbomb")
 import sportsdataverse
 from sportsdataverse import soccer
 from sportsdataverse.dl_utils import underscore
-from sportsdataverse.soccer import soccer_events_to_frame, soccer_open_events
+from sportsdataverse.soccer import soccer_events_to_frame, soccer_open_dataset, soccer_open_events
 from tests.conftest import skip_if_no_live
 
 FIXTURES = Path(__file__).resolve().parents[1] / "fixtures" / "kloppy"
@@ -51,6 +51,8 @@ def raw_events() -> list:
 def test_exported_from_soccer_and_the_top_level_package() -> None:
     assert soccer.soccer_open_events is soccer_open_events
     assert soccer.soccer_events_to_frame is soccer_events_to_frame
+    assert soccer.soccer_open_dataset is soccer_open_dataset
+    assert sportsdataverse.soccer_open_dataset is soccer_open_dataset
     assert sportsdataverse.soccer_open_events is soccer_open_events
     assert sportsdataverse.soccer_events_to_frame is soccer_events_to_frame
 

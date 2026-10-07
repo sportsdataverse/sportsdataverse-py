@@ -350,6 +350,7 @@ providers:
     auth: none (optional `soccer` extra)
     modules:
       - sportsdataverse.soccer.soccer_events
+      - sportsdataverse.soccer.spadl
 
   mls:
     label: MLS official web API
