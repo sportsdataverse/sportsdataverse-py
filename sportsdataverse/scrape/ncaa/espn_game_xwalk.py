@@ -51,6 +51,8 @@ from typing import Dict, List, Union
 
 import polars as pl
 
+from sportsdataverse._temporal import as_date
+
 logger = logging.getLogger(__name__)
 
 
@@ -145,7 +147,7 @@ def espn_schedule_side(league: str, season: int) -> pl.DataFrame:
         _load(seasons=[season])
         .select(
             _utf8_id("game_id").alias("espn_game_id"),
-            pl.col("game_date").cast(pl.Date),
+            as_date(pl.col("game_date")),
             _utf8_id("home_id").alias("home_espn_team_id"),
             _utf8_id("away_id").alias("away_espn_team_id"),
         )

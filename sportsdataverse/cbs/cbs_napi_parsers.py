@@ -501,7 +501,7 @@ def parse_cbs_napi_scoring_plays(
 
         Pipeline next step (one line)::
 
-            plays.select("id", "subplays").explode("subplays").unnest("subplays").select("id", "type", "yards_on_play")
+            plays.select("id", "subplays").explode("subplays", empty_as_null=True).unnest("subplays").select("id", "type", "yards_on_play")
 
     See Also:
         * `nflfastR`_ -- NFL play-by-play in R.

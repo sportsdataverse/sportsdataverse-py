@@ -23,6 +23,8 @@ from typing import Literal, overload
 import pandas as pd
 import polars as pl
 
+from sportsdataverse._temporal import as_date
+
 from sportsdataverse._common.ratings import opponent_adjusted_ridge
 from sportsdataverse.nfl.nfl_loaders import load_nfl_pbp, load_nfl_schedule
 from sportsdataverse.nfl.nfl_prediction_constants import RatingsConfig, as_of_ratings_split
@@ -304,7 +306,7 @@ def nfl_ratings(
     schedule = schedule.with_columns(pl.col("game_id").cast(pl.Utf8))
     assert plays.schema["game_id"] == schedule.schema["game_id"]
 
-    dated = plays.join(schedule.select("game_id", pl.col("gameday").cast(pl.Date)), on="game_id", how="left")
+    dated = plays.join(schedule.select("game_id", as_date(pl.col("gameday"))), on="game_id", how="left")
     if as_of_date is not None:
         dated = as_of_ratings_split(dated, as_of_date)
 
