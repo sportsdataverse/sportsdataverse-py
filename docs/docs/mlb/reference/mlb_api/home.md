@@ -50,7 +50,7 @@ View a home run derby object based on gamePk.
 | `is_verified` | logical | Whether the player profile is verified. |
 | `draft_year` | double | Year the player was drafted. |
 | `pronunciation` | character | Phonetic name pronunciation. |
-| `stats` | character | Stats. |
+| `stats` | character |  |
 | `mlb_debut_date` | character | MLB debut date (YYYY-MM-DD). |
 | `name_first_last` | character | Name in first-last order. |
 | `name_slug` | character | URL-friendly name slug. |
@@ -161,7 +161,7 @@ View a home run derby object based on bracket.
 | `is_verified` | logical | Whether the player profile is verified. |
 | `draft_year` | double | Year the player was drafted. |
 | `pronunciation` | character | Phonetic name pronunciation. |
-| `stats` | character | Stats. |
+| `stats` | character |  |
 | `mlb_debut_date` | character | MLB debut date (YYYY-MM-DD). |
 | `name_first_last` | character | Name in first-last order. |
 | `name_slug` | character | URL-friendly name slug. |
@@ -272,7 +272,7 @@ View a home run derby object based on pool.
 | `is_verified` | logical | Whether the player profile is verified. |
 | `draft_year` | double | Year the player was drafted. |
 | `pronunciation` | character | Phonetic name pronunciation. |
-| `stats` | character | Stats. |
+| `stats` | character |  |
 | `mlb_debut_date` | character | MLB debut date (YYYY-MM-DD). |
 | `name_first_last` | character | Name in first-last order. |
 | `name_slug` | character | URL-friendly name slug. |

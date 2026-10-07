@@ -1,7 +1,7 @@
 ---
 title: "YAHOO — Yahoo Sports Shangrila (graphite-secure.sports.yahoo.com) — Season"
 sidebar_label: "Season"
-sidebar_position: 8
+sidebar_position: 7
 description: "YAHOO — Yahoo Sports Shangrila (graphite-secure.sports.yahoo.com) — Season — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---
@@ -32,21 +32,21 @@ Legacy player season Defense leaders (NCAAF)
 | col_name | type | description |
 |---|---|---|
 | `stat_id` | character | Yahoo stat-type key the leader board is built on (e.g., "PASSING_YARDS", "GAMES_RUSHING"). |
-| `display_name` | character | Display name. |
-| `abbreviation` | character | Short abbreviation. |
-| `sort_order` | character | Display sort order for the sport. |
+| `display_name` | character |  |
+| `abbreviation` | character |  |
+| `sort_order` | character |  |
 
 **leagues**
 
 | col_name | type | description |
 |---|---|---|
-| `player_display_name` | character | Full name of the player |
+| `player_display_name` | character |  |
 | `player_player_id` | character | Yahoo composite player id of the leader-board entry (e.g., "ncaaf.p.464024"); always carried as Utf8. |
-| `player_team` | character | The player's team. |
+| `player_team` | character |  |
 | `player_positions` | character | JSON-encoded list of the positions the leader-board entry plays, each with a name, abbreviation and position id (e.g., [{"name": "Quarterback", "abbreviation": "QB", "positionId": "QUARTERBACK"}]). |
 | `player_alias` | character | JSON-encoded alias object for the leader-board entry, carrying the Yahoo page URL for that player or team. |
 | `player_player_cutout` | character | JSON-encoded image node for the leader-board entry's transparent cut-out portrait. |
-| `stats` | character | Stats. |
+| `stats` | character |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -83,21 +83,21 @@ Legacy player season Kicking leaders (NCAAF)
 | col_name | type | description |
 |---|---|---|
 | `stat_id` | character | Yahoo stat-type key the leader board is built on (e.g., "PASSING_YARDS", "GAMES_RUSHING"). |
-| `display_name` | character | Display name. |
-| `abbreviation` | character | Short abbreviation. |
-| `sort_order` | character | Display sort order for the sport. |
+| `display_name` | character |  |
+| `abbreviation` | character |  |
+| `sort_order` | character |  |
 
 **leagues**
 
 | col_name | type | description |
 |---|---|---|
-| `player_display_name` | character | Full name of the player |
+| `player_display_name` | character |  |
 | `player_player_id` | character | Yahoo composite player id of the leader-board entry (e.g., "ncaaf.p.464024"); always carried as Utf8. |
-| `player_team` | character | The player's team. |
+| `player_team` | character |  |
 | `player_positions` | character | JSON-encoded list of the positions the leader-board entry plays, each with a name, abbreviation and position id (e.g., [{"name": "Quarterback", "abbreviation": "QB", "positionId": "QUARTERBACK"}]). |
 | `player_alias` | character | JSON-encoded alias object for the leader-board entry, carrying the Yahoo page URL for that player or team. |
 | `player_player_cutout` | character | JSON-encoded image node for the leader-board entry's transparent cut-out portrait. |
-| `stats` | character | Stats. |
+| `stats` | character |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -134,21 +134,21 @@ Legacy player season Passing leaders (NCAAF)
 | col_name | type | description |
 |---|---|---|
 | `stat_id` | character | Yahoo stat-type key the leader board is built on (e.g., "PASSING_YARDS", "GAMES_RUSHING"). |
-| `display_name` | character | Display name. |
-| `abbreviation` | character | Short abbreviation. |
-| `sort_order` | character | Display sort order for the sport. |
+| `display_name` | character |  |
+| `abbreviation` | character |  |
+| `sort_order` | character |  |
 
 **leagues**
 
 | col_name | type | description |
 |---|---|---|
-| `player_display_name` | character | Full name of the player |
+| `player_display_name` | character |  |
 | `player_player_id` | character | Yahoo composite player id of the leader-board entry (e.g., "ncaaf.p.464024"); always carried as Utf8. |
-| `player_team` | character | The player's team. |
+| `player_team` | character |  |
 | `player_positions` | character | JSON-encoded list of the positions the leader-board entry plays, each with a name, abbreviation and position id (e.g., [{"name": "Quarterback", "abbreviation": "QB", "positionId": "QUARTERBACK"}]). |
 | `player_alias` | character | JSON-encoded alias object for the leader-board entry, carrying the Yahoo page URL for that player or team. |
 | `player_player_cutout` | character | JSON-encoded image node for the leader-board entry's transparent cut-out portrait. |
-| `stats` | character | Stats. |
+| `stats` | character |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -185,21 +185,21 @@ Legacy player season Punting leaders (NCAAF)
 | col_name | type | description |
 |---|---|---|
 | `stat_id` | character | Yahoo stat-type key the leader board is built on (e.g., "PASSING_YARDS", "GAMES_RUSHING"). |
-| `display_name` | character | Display name. |
-| `abbreviation` | character | Short abbreviation. |
-| `sort_order` | character | Display sort order for the sport. |
+| `display_name` | character |  |
+| `abbreviation` | character |  |
+| `sort_order` | character |  |
 
 **leagues**
 
 | col_name | type | description |
 |---|---|---|
-| `player_display_name` | character | Full name of the player |
+| `player_display_name` | character |  |
 | `player_player_id` | character | Yahoo composite player id of the leader-board entry (e.g., "ncaaf.p.464024"); always carried as Utf8. |
-| `player_team` | character | The player's team. |
+| `player_team` | character |  |
 | `player_positions` | character | JSON-encoded list of the positions the leader-board entry plays, each with a name, abbreviation and position id (e.g., [{"name": "Quarterback", "abbreviation": "QB", "positionId": "QUARTERBACK"}]). |
 | `player_alias` | character | JSON-encoded alias object for the leader-board entry, carrying the Yahoo page URL for that player or team. |
 | `player_player_cutout` | character | JSON-encoded image node for the leader-board entry's transparent cut-out portrait. |
-| `stats` | character | Stats. |
+| `stats` | character |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -236,21 +236,21 @@ Legacy player season Receiving leaders (NCAAF)
 | col_name | type | description |
 |---|---|---|
 | `stat_id` | character | Yahoo stat-type key the leader board is built on (e.g., "PASSING_YARDS", "GAMES_RUSHING"). |
-| `display_name` | character | Display name. |
-| `abbreviation` | character | Short abbreviation. |
-| `sort_order` | character | Display sort order for the sport. |
+| `display_name` | character |  |
+| `abbreviation` | character |  |
+| `sort_order` | character |  |
 
 **leagues**
 
 | col_name | type | description |
 |---|---|---|
-| `player_display_name` | character | Full name of the player |
+| `player_display_name` | character |  |
 | `player_player_id` | character | Yahoo composite player id of the leader-board entry (e.g., "ncaaf.p.464024"); always carried as Utf8. |
-| `player_team` | character | The player's team. |
+| `player_team` | character |  |
 | `player_positions` | character | JSON-encoded list of the positions the leader-board entry plays, each with a name, abbreviation and position id (e.g., [{"name": "Quarterback", "abbreviation": "QB", "positionId": "QUARTERBACK"}]). |
 | `player_alias` | character | JSON-encoded alias object for the leader-board entry, carrying the Yahoo page URL for that player or team. |
 | `player_player_cutout` | character | JSON-encoded image node for the leader-board entry's transparent cut-out portrait. |
-| `stats` | character | Stats. |
+| `stats` | character |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -287,21 +287,21 @@ Legacy player season Returns leaders (NCAAF)
 | col_name | type | description |
 |---|---|---|
 | `stat_id` | character | Yahoo stat-type key the leader board is built on (e.g., "PASSING_YARDS", "GAMES_RUSHING"). |
-| `display_name` | character | Display name. |
-| `abbreviation` | character | Short abbreviation. |
-| `sort_order` | character | Display sort order for the sport. |
+| `display_name` | character |  |
+| `abbreviation` | character |  |
+| `sort_order` | character |  |
 
 **leagues**
 
 | col_name | type | description |
 |---|---|---|
-| `player_display_name` | character | Full name of the player |
+| `player_display_name` | character |  |
 | `player_player_id` | character | Yahoo composite player id of the leader-board entry (e.g., "ncaaf.p.464024"); always carried as Utf8. |
-| `player_team` | character | The player's team. |
+| `player_team` | character |  |
 | `player_positions` | character | JSON-encoded list of the positions the leader-board entry plays, each with a name, abbreviation and position id (e.g., [{"name": "Quarterback", "abbreviation": "QB", "positionId": "QUARTERBACK"}]). |
 | `player_alias` | character | JSON-encoded alias object for the leader-board entry, carrying the Yahoo page URL for that player or team. |
 | `player_player_cutout` | character | JSON-encoded image node for the leader-board entry's transparent cut-out portrait. |
-| `stats` | character | Stats. |
+| `stats` | character |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -338,21 +338,21 @@ Legacy player season Rushing leaders (NCAAF)
 | col_name | type | description |
 |---|---|---|
 | `stat_id` | character | Yahoo stat-type key the leader board is built on (e.g., "PASSING_YARDS", "GAMES_RUSHING"). |
-| `display_name` | character | Display name. |
-| `abbreviation` | character | Short abbreviation. |
-| `sort_order` | character | Display sort order for the sport. |
+| `display_name` | character |  |
+| `abbreviation` | character |  |
+| `sort_order` | character |  |
 
 **leagues**
 
 | col_name | type | description |
 |---|---|---|
-| `player_display_name` | character | Full name of the player |
+| `player_display_name` | character |  |
 | `player_player_id` | character | Yahoo composite player id of the leader-board entry (e.g., "ncaaf.p.464024"); always carried as Utf8. |
-| `player_team` | character | The player's team. |
+| `player_team` | character |  |
 | `player_positions` | character | JSON-encoded list of the positions the leader-board entry plays, each with a name, abbreviation and position id (e.g., [{"name": "Quarterback", "abbreviation": "QB", "positionId": "QUARTERBACK"}]). |
 | `player_alias` | character | JSON-encoded alias object for the leader-board entry, carrying the Yahoo page URL for that player or team. |
 | `player_player_cutout` | character | JSON-encoded image node for the leader-board entry's transparent cut-out portrait. |
-| `stats` | character | Stats. |
+| `stats` | character |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -389,21 +389,21 @@ Legacy team season Defense (NCAAF)
 | col_name | type | description |
 |---|---|---|
 | `stat_id` | character | Yahoo stat-type key the leader board is built on (e.g., "PASSING_YARDS", "GAMES_RUSHING"). |
-| `display_name` | character | Display name. |
-| `abbreviation` | character | Short abbreviation. |
-| `sort_order` | character | Display sort order for the sport. |
+| `display_name` | character |  |
+| `abbreviation` | character |  |
+| `sort_order` | character |  |
 
 **leagues**
 
 | col_name | type | description |
 |---|---|---|
-| `player_display_name` | character | Full name of the player |
+| `player_display_name` | character |  |
 | `player_player_id` | character | Yahoo composite player id of the leader-board entry (e.g., "ncaaf.p.464024"); always carried as Utf8. |
-| `player_team` | character | The player's team. |
+| `player_team` | character |  |
 | `player_positions` | character | JSON-encoded list of the positions the leader-board entry plays, each with a name, abbreviation and position id (e.g., [{"name": "Quarterback", "abbreviation": "QB", "positionId": "QUARTERBACK"}]). |
 | `player_alias` | character | JSON-encoded alias object for the leader-board entry, carrying the Yahoo page URL for that player or team. |
 | `player_player_cutout` | character | JSON-encoded image node for the leader-board entry's transparent cut-out portrait. |
-| `stats` | character | Stats. |
+| `stats` | character |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -440,21 +440,21 @@ Legacy team season Kicking (NCAAF)
 | col_name | type | description |
 |---|---|---|
 | `stat_id` | character | Yahoo stat-type key the leader board is built on (e.g., "PASSING_YARDS", "GAMES_RUSHING"). |
-| `display_name` | character | Display name. |
-| `abbreviation` | character | Short abbreviation. |
-| `sort_order` | character | Display sort order for the sport. |
+| `display_name` | character |  |
+| `abbreviation` | character |  |
+| `sort_order` | character |  |
 
 **leagues**
 
 | col_name | type | description |
 |---|---|---|
-| `player_display_name` | character | Full name of the player |
+| `player_display_name` | character |  |
 | `player_player_id` | character | Yahoo composite player id of the leader-board entry (e.g., "ncaaf.p.464024"); always carried as Utf8. |
-| `player_team` | character | The player's team. |
+| `player_team` | character |  |
 | `player_positions` | character | JSON-encoded list of the positions the leader-board entry plays, each with a name, abbreviation and position id (e.g., [{"name": "Quarterback", "abbreviation": "QB", "positionId": "QUARTERBACK"}]). |
 | `player_alias` | character | JSON-encoded alias object for the leader-board entry, carrying the Yahoo page URL for that player or team. |
 | `player_player_cutout` | character | JSON-encoded image node for the leader-board entry's transparent cut-out portrait. |
-| `stats` | character | Stats. |
+| `stats` | character |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -491,21 +491,21 @@ Legacy team season Kickoffs (NCAAF)
 | col_name | type | description |
 |---|---|---|
 | `stat_id` | character | Yahoo stat-type key the leader board is built on (e.g., "PASSING_YARDS", "GAMES_RUSHING"). |
-| `display_name` | character | Display name. |
-| `abbreviation` | character | Short abbreviation. |
-| `sort_order` | character | Display sort order for the sport. |
+| `display_name` | character |  |
+| `abbreviation` | character |  |
+| `sort_order` | character |  |
 
 **leagues**
 
 | col_name | type | description |
 |---|---|---|
-| `player_display_name` | character | Full name of the player |
+| `player_display_name` | character |  |
 | `player_player_id` | character | Yahoo composite player id of the leader-board entry (e.g., "ncaaf.p.464024"); always carried as Utf8. |
-| `player_team` | character | The player's team. |
+| `player_team` | character |  |
 | `player_positions` | character | JSON-encoded list of the positions the leader-board entry plays, each with a name, abbreviation and position id (e.g., [{"name": "Quarterback", "abbreviation": "QB", "positionId": "QUARTERBACK"}]). |
 | `player_alias` | character | JSON-encoded alias object for the leader-board entry, carrying the Yahoo page URL for that player or team. |
 | `player_player_cutout` | character | JSON-encoded image node for the leader-board entry's transparent cut-out portrait. |
-| `stats` | character | Stats. |
+| `stats` | character |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -542,21 +542,21 @@ Legacy team season Offense (NCAAF)
 | col_name | type | description |
 |---|---|---|
 | `stat_id` | character | Yahoo stat-type key the leader board is built on (e.g., "PASSING_YARDS", "GAMES_RUSHING"). |
-| `display_name` | character | Display name. |
-| `abbreviation` | character | Short abbreviation. |
-| `sort_order` | character | Display sort order for the sport. |
+| `display_name` | character |  |
+| `abbreviation` | character |  |
+| `sort_order` | character |  |
 
 **leagues**
 
 | col_name | type | description |
 |---|---|---|
-| `player_display_name` | character | Full name of the player |
+| `player_display_name` | character |  |
 | `player_player_id` | character | Yahoo composite player id of the leader-board entry (e.g., "ncaaf.p.464024"); always carried as Utf8. |
-| `player_team` | character | The player's team. |
+| `player_team` | character |  |
 | `player_positions` | character | JSON-encoded list of the positions the leader-board entry plays, each with a name, abbreviation and position id (e.g., [{"name": "Quarterback", "abbreviation": "QB", "positionId": "QUARTERBACK"}]). |
 | `player_alias` | character | JSON-encoded alias object for the leader-board entry, carrying the Yahoo page URL for that player or team. |
 | `player_player_cutout` | character | JSON-encoded image node for the leader-board entry's transparent cut-out portrait. |
-| `stats` | character | Stats. |
+| `stats` | character |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -593,21 +593,21 @@ Legacy team season Passing (NCAAF)
 | col_name | type | description |
 |---|---|---|
 | `stat_id` | character | Yahoo stat-type key the leader board is built on (e.g., "PASSING_YARDS", "GAMES_RUSHING"). |
-| `display_name` | character | Display name. |
-| `abbreviation` | character | Short abbreviation. |
-| `sort_order` | character | Display sort order for the sport. |
+| `display_name` | character |  |
+| `abbreviation` | character |  |
+| `sort_order` | character |  |
 
 **leagues**
 
 | col_name | type | description |
 |---|---|---|
-| `player_display_name` | character | Full name of the player |
+| `player_display_name` | character |  |
 | `player_player_id` | character | Yahoo composite player id of the leader-board entry (e.g., "ncaaf.p.464024"); always carried as Utf8. |
-| `player_team` | character | The player's team. |
+| `player_team` | character |  |
 | `player_positions` | character | JSON-encoded list of the positions the leader-board entry plays, each with a name, abbreviation and position id (e.g., [{"name": "Quarterback", "abbreviation": "QB", "positionId": "QUARTERBACK"}]). |
 | `player_alias` | character | JSON-encoded alias object for the leader-board entry, carrying the Yahoo page URL for that player or team. |
 | `player_player_cutout` | character | JSON-encoded image node for the leader-board entry's transparent cut-out portrait. |
-| `stats` | character | Stats. |
+| `stats` | character |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -644,21 +644,21 @@ Legacy team Passing defense allowed (NCAAF)
 | col_name | type | description |
 |---|---|---|
 | `stat_id` | character | Yahoo stat-type key the leader board is built on (e.g., "PASSING_YARDS", "GAMES_RUSHING"). |
-| `display_name` | character | Display name. |
-| `abbreviation` | character | Short abbreviation. |
-| `sort_order` | character | Display sort order for the sport. |
+| `display_name` | character |  |
+| `abbreviation` | character |  |
+| `sort_order` | character |  |
 
 **leagues**
 
 | col_name | type | description |
 |---|---|---|
-| `player_display_name` | character | Full name of the player |
+| `player_display_name` | character |  |
 | `player_player_id` | character | Yahoo composite player id of the leader-board entry (e.g., "ncaaf.p.464024"); always carried as Utf8. |
-| `player_team` | character | The player's team. |
+| `player_team` | character |  |
 | `player_positions` | character | JSON-encoded list of the positions the leader-board entry plays, each with a name, abbreviation and position id (e.g., [{"name": "Quarterback", "abbreviation": "QB", "positionId": "QUARTERBACK"}]). |
 | `player_alias` | character | JSON-encoded alias object for the leader-board entry, carrying the Yahoo page URL for that player or team. |
 | `player_player_cutout` | character | JSON-encoded image node for the leader-board entry's transparent cut-out portrait. |
-| `stats` | character | Stats. |
+| `stats` | character |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -695,21 +695,21 @@ Legacy team season Punting (NCAAF)
 | col_name | type | description |
 |---|---|---|
 | `stat_id` | character | Yahoo stat-type key the leader board is built on (e.g., "PASSING_YARDS", "GAMES_RUSHING"). |
-| `display_name` | character | Display name. |
-| `abbreviation` | character | Short abbreviation. |
-| `sort_order` | character | Display sort order for the sport. |
+| `display_name` | character |  |
+| `abbreviation` | character |  |
+| `sort_order` | character |  |
 
 **leagues**
 
 | col_name | type | description |
 |---|---|---|
-| `player_display_name` | character | Full name of the player |
+| `player_display_name` | character |  |
 | `player_player_id` | character | Yahoo composite player id of the leader-board entry (e.g., "ncaaf.p.464024"); always carried as Utf8. |
-| `player_team` | character | The player's team. |
+| `player_team` | character |  |
 | `player_positions` | character | JSON-encoded list of the positions the leader-board entry plays, each with a name, abbreviation and position id (e.g., [{"name": "Quarterback", "abbreviation": "QB", "positionId": "QUARTERBACK"}]). |
 | `player_alias` | character | JSON-encoded alias object for the leader-board entry, carrying the Yahoo page URL for that player or team. |
 | `player_player_cutout` | character | JSON-encoded image node for the leader-board entry's transparent cut-out portrait. |
-| `stats` | character | Stats. |
+| `stats` | character |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -746,21 +746,21 @@ Legacy team season Receiving (NCAAF)
 | col_name | type | description |
 |---|---|---|
 | `stat_id` | character | Yahoo stat-type key the leader board is built on (e.g., "PASSING_YARDS", "GAMES_RUSHING"). |
-| `display_name` | character | Display name. |
-| `abbreviation` | character | Short abbreviation. |
-| `sort_order` | character | Display sort order for the sport. |
+| `display_name` | character |  |
+| `abbreviation` | character |  |
+| `sort_order` | character |  |
 
 **leagues**
 
 | col_name | type | description |
 |---|---|---|
-| `player_display_name` | character | Full name of the player |
+| `player_display_name` | character |  |
 | `player_player_id` | character | Yahoo composite player id of the leader-board entry (e.g., "ncaaf.p.464024"); always carried as Utf8. |
-| `player_team` | character | The player's team. |
+| `player_team` | character |  |
 | `player_positions` | character | JSON-encoded list of the positions the leader-board entry plays, each with a name, abbreviation and position id (e.g., [{"name": "Quarterback", "abbreviation": "QB", "positionId": "QUARTERBACK"}]). |
 | `player_alias` | character | JSON-encoded alias object for the leader-board entry, carrying the Yahoo page URL for that player or team. |
 | `player_player_cutout` | character | JSON-encoded image node for the leader-board entry's transparent cut-out portrait. |
-| `stats` | character | Stats. |
+| `stats` | character |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -797,21 +797,21 @@ Legacy team Receiving defense allowed (NCAAF)
 | col_name | type | description |
 |---|---|---|
 | `stat_id` | character | Yahoo stat-type key the leader board is built on (e.g., "PASSING_YARDS", "GAMES_RUSHING"). |
-| `display_name` | character | Display name. |
-| `abbreviation` | character | Short abbreviation. |
-| `sort_order` | character | Display sort order for the sport. |
+| `display_name` | character |  |
+| `abbreviation` | character |  |
+| `sort_order` | character |  |
 
 **leagues**
 
 | col_name | type | description |
 |---|---|---|
-| `player_display_name` | character | Full name of the player |
+| `player_display_name` | character |  |
 | `player_player_id` | character | Yahoo composite player id of the leader-board entry (e.g., "ncaaf.p.464024"); always carried as Utf8. |
-| `player_team` | character | The player's team. |
+| `player_team` | character |  |
 | `player_positions` | character | JSON-encoded list of the positions the leader-board entry plays, each with a name, abbreviation and position id (e.g., [{"name": "Quarterback", "abbreviation": "QB", "positionId": "QUARTERBACK"}]). |
 | `player_alias` | character | JSON-encoded alias object for the leader-board entry, carrying the Yahoo page URL for that player or team. |
 | `player_player_cutout` | character | JSON-encoded image node for the leader-board entry's transparent cut-out portrait. |
-| `stats` | character | Stats. |
+| `stats` | character |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -848,21 +848,21 @@ Legacy team season Returns (NCAAF)
 | col_name | type | description |
 |---|---|---|
 | `stat_id` | character | Yahoo stat-type key the leader board is built on (e.g., "PASSING_YARDS", "GAMES_RUSHING"). |
-| `display_name` | character | Display name. |
-| `abbreviation` | character | Short abbreviation. |
-| `sort_order` | character | Display sort order for the sport. |
+| `display_name` | character |  |
+| `abbreviation` | character |  |
+| `sort_order` | character |  |
 
 **leagues**
 
 | col_name | type | description |
 |---|---|---|
-| `player_display_name` | character | Full name of the player |
+| `player_display_name` | character |  |
 | `player_player_id` | character | Yahoo composite player id of the leader-board entry (e.g., "ncaaf.p.464024"); always carried as Utf8. |
-| `player_team` | character | The player's team. |
+| `player_team` | character |  |
 | `player_positions` | character | JSON-encoded list of the positions the leader-board entry plays, each with a name, abbreviation and position id (e.g., [{"name": "Quarterback", "abbreviation": "QB", "positionId": "QUARTERBACK"}]). |
 | `player_alias` | character | JSON-encoded alias object for the leader-board entry, carrying the Yahoo page URL for that player or team. |
 | `player_player_cutout` | character | JSON-encoded image node for the leader-board entry's transparent cut-out portrait. |
-| `stats` | character | Stats. |
+| `stats` | character |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -899,21 +899,21 @@ Legacy team season Rushing (NCAAF)
 | col_name | type | description |
 |---|---|---|
 | `stat_id` | character | Yahoo stat-type key the leader board is built on (e.g., "PASSING_YARDS", "GAMES_RUSHING"). |
-| `display_name` | character | Display name. |
-| `abbreviation` | character | Short abbreviation. |
-| `sort_order` | character | Display sort order for the sport. |
+| `display_name` | character |  |
+| `abbreviation` | character |  |
+| `sort_order` | character |  |
 
 **leagues**
 
 | col_name | type | description |
 |---|---|---|
-| `player_display_name` | character | Full name of the player |
+| `player_display_name` | character |  |
 | `player_player_id` | character | Yahoo composite player id of the leader-board entry (e.g., "ncaaf.p.464024"); always carried as Utf8. |
-| `player_team` | character | The player's team. |
+| `player_team` | character |  |
 | `player_positions` | character | JSON-encoded list of the positions the leader-board entry plays, each with a name, abbreviation and position id (e.g., [{"name": "Quarterback", "abbreviation": "QB", "positionId": "QUARTERBACK"}]). |
 | `player_alias` | character | JSON-encoded alias object for the leader-board entry, carrying the Yahoo page URL for that player or team. |
 | `player_player_cutout` | character | JSON-encoded image node for the leader-board entry's transparent cut-out portrait. |
-| `stats` | character | Stats. |
+| `stats` | character |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -950,21 +950,21 @@ Legacy team Rushing defense allowed (NCAAF)
 | col_name | type | description |
 |---|---|---|
 | `stat_id` | character | Yahoo stat-type key the leader board is built on (e.g., "PASSING_YARDS", "GAMES_RUSHING"). |
-| `display_name` | character | Display name. |
-| `abbreviation` | character | Short abbreviation. |
-| `sort_order` | character | Display sort order for the sport. |
+| `display_name` | character |  |
+| `abbreviation` | character |  |
+| `sort_order` | character |  |
 
 **leagues**
 
 | col_name | type | description |
 |---|---|---|
-| `player_display_name` | character | Full name of the player |
+| `player_display_name` | character |  |
 | `player_player_id` | character | Yahoo composite player id of the leader-board entry (e.g., "ncaaf.p.464024"); always carried as Utf8. |
-| `player_team` | character | The player's team. |
+| `player_team` | character |  |
 | `player_positions` | character | JSON-encoded list of the positions the leader-board entry plays, each with a name, abbreviation and position id (e.g., [{"name": "Quarterback", "abbreviation": "QB", "positionId": "QUARTERBACK"}]). |
 | `player_alias` | character | JSON-encoded alias object for the leader-board entry, carrying the Yahoo page URL for that player or team. |
 | `player_player_cutout` | character | JSON-encoded image node for the leader-board entry's transparent cut-out portrait. |
-| `stats` | character | Stats. |
+| `stats` | character |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 

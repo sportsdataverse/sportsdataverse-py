@@ -374,7 +374,7 @@ GET /stats/teaminfocommon
 | `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
 | `team_conference` | character | Conference the team belongs to. |
 | `team_division` | character | Division the team belongs to. |
-| `team_code` | character | Internal team code. |
+| `team_code` | character | Lowercase slug of the team used in stats.nba.com URLs (e.g. 'lakers'). |
 | `team_slug` | character | URL-safe team identifier (e.g. 'lasvegas-aces' / 'aces'). |
 | `w` | integer | Wins. |
 | `l` | integer | Losses. |

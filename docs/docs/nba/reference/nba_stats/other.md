@@ -248,14 +248,14 @@ GET /stats/assistleaders
 
 | col_name | type | description |
 |---|---|---|
-| `rank` | integer | Rank. |
+| `rank` | integer | Rank of the row within the returned leaderboard (1 = best) for the stat the endpoint sorts by. |
 | `player_id` | integer | Unique player identifier. |
 | `player` | character | Player name. |
 | `team_id` | integer | Unique team identifier. |
 | `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
 | `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
 | `jersey_num` | character | Jersey number worn by the player. |
-| `player_position` | character | Position of the player accordinng to NGS |
+| `player_position` | character | Player's position abbreviation as stats.nba.com lists it (e.g. 'G', 'F-G', 'C'). |
 | `ast` | numeric | Assists. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
@@ -413,7 +413,7 @@ GET /stats/fantasywidget
 |---|---|---|
 | `player_id` | integer | Unique player identifier. |
 | `player_name` | character | Player name. |
-| `player_position` | character | Position of the player accordinng to NGS |
+| `player_position` | character | Player's position abbreviation as stats.nba.com lists it (e.g. 'G', 'F-G', 'C'). |
 | `team_id` | integer | Unique team identifier. |
 | `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
 | `gp` | integer | Games played. |
@@ -529,7 +529,7 @@ GET /stats/homepageleaders
 
 | col_name | type | description |
 |---|---|---|
-| `rank` | integer | Rank. |
+| `rank` | integer | Rank of the row within the returned leaderboard (1 = best) for the stat the endpoint sorts by. |
 | `team_id` | integer | Unique team identifier. |
 | `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
 | `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
@@ -601,112 +601,112 @@ GET /stats/homepagev2
 
 | col_name | type | description |
 |---|---|---|
-| `rank` | integer | Rank. |
+| `rank` | integer | Rank of the row within the returned leaderboard (1 = best) for the stat the endpoint sorts by. |
 | `player_id` | integer | Unique player identifier. |
 | `player` | character | Player name. |
 | `team_id` | integer | Unique team identifier. |
 | `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
 | `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
 | `jersey_num` | character | Jersey number worn by the player. |
-| `player_position` | character | Position of the player accordinng to NGS |
+| `player_position` | character | Player's position abbreviation as stats.nba.com lists it (e.g. 'G', 'F-G', 'C'). |
 | `pts` | numeric | Points scored. |
 
 **HomePageStat2**
 
 | col_name | type | description |
 |---|---|---|
-| `rank` | integer | Rank. |
+| `rank` | integer | Rank of the row within the returned leaderboard (1 = best) for the stat the endpoint sorts by. |
 | `player_id` | integer | Unique player identifier. |
 | `player` | character | Player name. |
 | `team_id` | integer | Unique team identifier. |
 | `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
 | `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
 | `jersey_num` | character | Jersey number worn by the player. |
-| `player_position` | character | Position of the player accordinng to NGS |
+| `player_position` | character | Player's position abbreviation as stats.nba.com lists it (e.g. 'G', 'F-G', 'C'). |
 | `reb` | numeric | Rebounds per game. |
 
 **HomePageStat3**
 
 | col_name | type | description |
 |---|---|---|
-| `rank` | integer | Rank. |
+| `rank` | integer | Rank of the row within the returned leaderboard (1 = best) for the stat the endpoint sorts by. |
 | `player_id` | integer | Unique player identifier. |
 | `player` | character | Player name. |
 | `team_id` | integer | Unique team identifier. |
 | `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
 | `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
 | `jersey_num` | character | Jersey number worn by the player. |
-| `player_position` | character | Position of the player accordinng to NGS |
+| `player_position` | character | Player's position abbreviation as stats.nba.com lists it (e.g. 'G', 'F-G', 'C'). |
 | `ast` | numeric | Assists. |
 
 **HomePageStat4**
 
 | col_name | type | description |
 |---|---|---|
-| `rank` | integer | Rank. |
+| `rank` | integer | Rank of the row within the returned leaderboard (1 = best) for the stat the endpoint sorts by. |
 | `player_id` | integer | Unique player identifier. |
 | `player` | character | Player name. |
 | `team_id` | integer | Unique team identifier. |
 | `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
 | `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
 | `jersey_num` | character | Jersey number worn by the player. |
-| `player_position` | character | Position of the player accordinng to NGS |
+| `player_position` | character | Player's position abbreviation as stats.nba.com lists it (e.g. 'G', 'F-G', 'C'). |
 | `stl` | numeric | Steals. |
 
 **HomePageStat5**
 
 | col_name | type | description |
 |---|---|---|
-| `rank` | integer | Rank. |
+| `rank` | integer | Rank of the row within the returned leaderboard (1 = best) for the stat the endpoint sorts by. |
 | `player_id` | integer | Unique player identifier. |
 | `player` | character | Player name. |
 | `team_id` | integer | Unique team identifier. |
 | `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
 | `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
 | `jersey_num` | character | Jersey number worn by the player. |
-| `player_position` | character | Position of the player accordinng to NGS |
+| `player_position` | character | Player's position abbreviation as stats.nba.com lists it (e.g. 'G', 'F-G', 'C'). |
 | `fg_pct` | numeric | Field goal percentage (0-1). |
 
 **HomePageStat6**
 
 | col_name | type | description |
 |---|---|---|
-| `rank` | integer | Rank. |
+| `rank` | integer | Rank of the row within the returned leaderboard (1 = best) for the stat the endpoint sorts by. |
 | `player_id` | integer | Unique player identifier. |
 | `player` | character | Player name. |
 | `team_id` | integer | Unique team identifier. |
 | `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
 | `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
 | `jersey_num` | character | Jersey number worn by the player. |
-| `player_position` | character | Position of the player accordinng to NGS |
+| `player_position` | character | Player's position abbreviation as stats.nba.com lists it (e.g. 'G', 'F-G', 'C'). |
 | `ft_pct` | numeric | Free throw percentage (0-1). |
 
 **HomePageStat7**
 
 | col_name | type | description |
 |---|---|---|
-| `rank` | integer | Rank. |
+| `rank` | integer | Rank of the row within the returned leaderboard (1 = best) for the stat the endpoint sorts by. |
 | `player_id` | integer | Unique player identifier. |
 | `player` | character | Player name. |
 | `team_id` | integer | Unique team identifier. |
 | `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
 | `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
 | `jersey_num` | character | Jersey number worn by the player. |
-| `player_position` | character | Position of the player accordinng to NGS |
+| `player_position` | character | Player's position abbreviation as stats.nba.com lists it (e.g. 'G', 'F-G', 'C'). |
 | `fg3_pct` | numeric | Three-point field goal percentage (0-1). |
 
 **HomePageStat8**
 
 | col_name | type | description |
 |---|---|---|
-| `rank` | integer | Rank. |
+| `rank` | integer | Rank of the row within the returned leaderboard (1 = best) for the stat the endpoint sorts by. |
 | `player_id` | integer | Unique player identifier. |
 | `player` | character | Player name. |
 | `team_id` | integer | Unique team identifier. |
 | `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
 | `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
 | `jersey_num` | character | Jersey number worn by the player. |
-| `player_position` | character | Position of the player accordinng to NGS |
+| `player_position` | character | Player's position abbreviation as stats.nba.com lists it (e.g. 'G', 'F-G', 'C'). |
 | `blk` | numeric | Blocks. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
@@ -833,7 +833,7 @@ GET /stats/infographicfanduelplayer
 | `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
 | `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
 | `jersey_num` | character | Jersey number worn by the player. |
-| `player_position` | character | Position of the player accordinng to NGS |
+| `player_position` | character | Player's position abbreviation as stats.nba.com lists it (e.g. 'G', 'F-G', 'C'). |
 | `location` | character | Location. |
 | `fan_duel_pts` | numeric | Scoring or score-margin metric for fan duel points in the requested NBA or WNBA Stats split. |
 | `nba_fantasy_pts` | numeric | Nba fantasy points for the requested NBA or WNBA Stats split. |
@@ -897,7 +897,7 @@ GET /stats/leaderstiles
 
 | col_name | type | description |
 |---|---|---|
-| `rank` | integer | Rank. |
+| `rank` | integer | Rank of the row within the returned leaderboard (1 = best) for the stat the endpoint sorts by. |
 | `player_id` | integer | Unique player identifier. |
 | `player` | character | Player name. |
 | `team_id` | integer | Unique team identifier. |
@@ -921,7 +921,7 @@ GET /stats/leaderstiles
 
 | col_name | type | description |
 |---|---|---|
-| `rank` | integer | Rank. |
+| `rank` | integer | Rank of the row within the returned leaderboard (1 = best) for the stat the endpoint sorts by. |
 | `player_id` | integer | Unique player identifier. |
 | `player` | character | Player name. |
 | `team_id` | integer | Unique team identifier. |
@@ -1095,7 +1095,7 @@ GET /stats/playoffpicture
 | col_name | type | description |
 |---|---|---|
 | `conference` | character | Conference name. |
-| `rank` | integer | Rank. |
+| `rank` | integer | Conference standing position of the team (1 = top seed) in the playoff picture. |
 | `team` | character | Team-side label or team identifier. |
 | `team_slug` | character | URL-safe team identifier (e.g. 'lasvegas-aces' / 'aces'). |
 | `team_id` | integer | Unique team identifier. |
@@ -1125,7 +1125,7 @@ GET /stats/playoffpicture
 | col_name | type | description |
 |---|---|---|
 | `conference` | character | Conference name. |
-| `rank` | integer | Rank. |
+| `rank` | integer | Conference standing position of the team (1 = top seed) in the playoff picture. |
 | `team` | character | Team-side label or team identifier. |
 | `team_slug` | character | URL-safe team identifier (e.g. 'lasvegas-aces' / 'aces'). |
 | `team_id` | integer | Unique team identifier. |

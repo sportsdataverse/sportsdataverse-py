@@ -115,7 +115,7 @@ GET /stats/teamdashlineups
 |---|---|---|
 | `group_set` | character | Name of the grouping family used for this dashboard or split row. |
 | `group_id` | character | ESPN group id. |
-| `group_name` | character | Group name (conference / division). |
+| `group_name` | character | The lineup's players as a ' - ' separated string of abbreviated names (two to five players, by group_quantity). |
 | `gp` | integer | Games played. |
 | `w` | integer | Wins. |
 | `l` | integer | Losses. |
@@ -221,7 +221,7 @@ GET /stats/teamdashptpass
 | `pass_from` | character |  |
 | `pass_teammate_player_id` | integer | Stats API identifier for pass teammate player identifier associated with this NBA or WNBA Stats row. |
 | `frequency` | numeric | NBA or WNBA Stats value for frequency in the teamdashptpass result set. |
-| `pass` | numeric | Binary indicator if the play was a pass play (sacks and scrambles included). |
+| `pass` | numeric | Passes per game from the passer to the paired teammate (PassesMade set) or received by the player (PassesReceived set). |
 | `ast` | numeric | Assists. |
 | `fgm` | numeric | Field goals made. |
 | `fga` | numeric | Field goal attempts. |
@@ -244,7 +244,7 @@ GET /stats/teamdashptpass
 | `pass_to` | character | Passing or assist metric for pass to in the requested NBA or WNBA Stats split. |
 | `pass_teammate_player_id` | integer | Stats API identifier for pass teammate player identifier associated with this NBA or WNBA Stats row. |
 | `frequency` | numeric | NBA or WNBA Stats value for frequency in the teamdashptpass result set. |
-| `pass` | numeric | Binary indicator if the play was a pass play (sacks and scrambles included). |
+| `pass` | numeric | Passes per game from the passer to the paired teammate (PassesMade set) or received by the player (PassesReceived set). |
 | `ast` | numeric | Assists. |
 | `fgm` | numeric | Field goals made. |
 | `fga` | numeric | Field goal attempts. |
@@ -325,7 +325,7 @@ GET /stats/teamdashptreb
 |---|---|---|
 | `team_id` | integer | Unique team identifier. |
 | `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
-| `sort_order` | integer | Display sort order for the sport. |
+| `sort_order` | integer | Display order of the split rows within the result set (1 = first), as a string. |
 | `g` | integer | Games played. |
 | `shot_type_range` | character | Shooting metric for shot type range in the requested NBA or WNBA Stats split. |
 | `reb_frequency` | numeric | Rebounding metric for rebounds frequency in the requested NBA or WNBA Stats split. |
@@ -347,7 +347,7 @@ GET /stats/teamdashptreb
 |---|---|---|
 | `team_id` | integer | Unique team identifier. |
 | `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
-| `sort_order` | integer | Display sort order for the sport. |
+| `sort_order` | integer | Display order of the split rows within the result set (1 = first), as a string. |
 | `g` | integer | Games played. |
 | `reb_num_contesting_range` | character |  |
 | `reb_frequency` | numeric | Rebounding metric for rebounds frequency in the requested NBA or WNBA Stats split. |
@@ -369,7 +369,7 @@ GET /stats/teamdashptreb
 |---|---|---|
 | `team_id` | integer | Unique team identifier. |
 | `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
-| `sort_order` | integer | Display sort order for the sport. |
+| `sort_order` | integer | Display order of the split rows within the result set (1 = first), as a string. |
 | `g` | integer | Games played. |
 | `shot_dist_range` | character |  |
 | `reb_frequency` | numeric | Rebounding metric for rebounds frequency in the requested NBA or WNBA Stats split. |
@@ -391,7 +391,7 @@ GET /stats/teamdashptreb
 |---|---|---|
 | `team_id` | integer | Unique team identifier. |
 | `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
-| `sort_order` | integer | Display sort order for the sport. |
+| `sort_order` | integer | Display order of the split rows within the result set (1 = first), as a string. |
 | `g` | integer | Games played. |
 | `reb_dist_range` | character |  |
 | `reb_frequency` | numeric | Rebounding metric for rebounds frequency in the requested NBA or WNBA Stats split. |
@@ -455,7 +455,7 @@ GET /stats/teamdashptshots
 |---|---|---|
 | `team_id` | integer | Unique team identifier. |
 | `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
-| `sort_order` | integer | Display sort order for the sport. |
+| `sort_order` | integer | Display order of the split rows within the result set (1 = first), as a string. |
 | `g` | integer | Games played. |
 | `shot_type` | character | Shot type label (e.g. 'Jump Shot', 'Layup'). |
 | `fga_frequency` | numeric | Shooting metric for fga frequency in the requested NBA or WNBA Stats split. |
@@ -478,7 +478,7 @@ GET /stats/teamdashptshots
 |---|---|---|
 | `team_id` | integer | Unique team identifier. |
 | `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
-| `sort_order` | integer | Display sort order for the sport. |
+| `sort_order` | integer | Display order of the split rows within the result set (1 = first), as a string. |
 | `g` | integer | Games played. |
 | `shot_clock_range` | character |  |
 | `fga_frequency` | numeric | Shooting metric for fga frequency in the requested NBA or WNBA Stats split. |
@@ -501,7 +501,7 @@ GET /stats/teamdashptshots
 |---|---|---|
 | `team_id` | integer | Unique team identifier. |
 | `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
-| `sort_order` | integer | Display sort order for the sport. |
+| `sort_order` | integer | Display order of the split rows within the result set (1 = first), as a string. |
 | `g` | integer | Games played. |
 | `dribble_range` | character |  |
 | `fga_frequency` | numeric | Shooting metric for fga frequency in the requested NBA or WNBA Stats split. |
@@ -524,7 +524,7 @@ GET /stats/teamdashptshots
 |---|---|---|
 | `team_id` | integer | Unique team identifier. |
 | `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
-| `sort_order` | integer | Display sort order for the sport. |
+| `sort_order` | integer | Display order of the split rows within the result set (1 = first), as a string. |
 | `g` | integer | Games played. |
 | `close_def_dist_range` | character |  |
 | `fga_frequency` | numeric | Shooting metric for fga frequency in the requested NBA or WNBA Stats split. |
@@ -547,7 +547,7 @@ GET /stats/teamdashptshots
 |---|---|---|
 | `team_id` | integer | Unique team identifier. |
 | `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
-| `sort_order` | integer | Display sort order for the sport. |
+| `sort_order` | integer | Display order of the split rows within the result set (1 = first), as a string. |
 | `g` | integer | Games played. |
 | `close_def_dist_range` | character |  |
 | `fga_frequency` | numeric | Shooting metric for fga frequency in the requested NBA or WNBA Stats split. |
@@ -570,7 +570,7 @@ GET /stats/teamdashptshots
 |---|---|---|
 | `team_id` | integer | Unique team identifier. |
 | `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
-| `sort_order` | integer | Display sort order for the sport. |
+| `sort_order` | integer | Display order of the split rows within the result set (1 = first), as a string. |
 | `g` | integer | Games played. |
 | `touch_time_range` | character | Time value for touch time range in the NBA or WNBA Stats result set. |
 | `fga_frequency` | numeric | Shooting metric for fga frequency in the requested NBA or WNBA Stats split. |

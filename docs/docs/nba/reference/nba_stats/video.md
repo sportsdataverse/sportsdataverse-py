@@ -263,7 +263,7 @@ GET /stats/videostatus
 | `home_team_id` | integer | Unique identifier for the home team. |
 | `home_team_city` | character | Home team city / location. |
 | `home_team_name` | character | Home team name. |
-| `home_team_abbreviation` | character | Home team abbreviation. |
+| `home_team_abbreviation` | character | Home team's three-letter tricode (e.g. 'PHI'). |
 | `game_status` | integer | Game status label. |
 | `game_status_text` | character | Game status display text (e.g. 'Final', '4:32 - 4th'). |
 | `is_available` | integer | Flag indicating whether game video is available in the league's stats video system. |

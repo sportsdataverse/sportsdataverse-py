@@ -102,7 +102,7 @@ A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, o
 | `content_uri` | character | Fox content URI of the league entity (e.g., 'baseball/mlb/league/1'); entity_id is its trailing number. |
 | `content_type` | character | Fox entity type of the header payload; always 'league' for the league header. |
 | `color` | character | Primary color (hex, no leading '#'). |
-| `logo_url` | character | NBA CDN primary logo URL. |
+| `logo_url` | character |  |
 | `image_alt_text` | character | Image alt text Fox ships with the header, the full league name (e.g., 'Major League Baseball'). |
 | `rank` | character | Rank within the team leaderboard. |
 | `details` | character | Details. |
@@ -136,9 +136,9 @@ A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, o
 
 | col_name | type | description |
 |---|---|---|
-| `players` | character | Nested list of per-player box scores. |
+| `players` | character |  |
 | `v1` | character | Abbreviated player name (e.g., 'M. Olson'), from the leader table's unlabeled second column. |
-| `g` | character | Goals (skaters). |
+| `g` | character |  |
 | `entity_id` | character | Fox id of the row's linked player or team as a string: the trailing number of the row's entityLink contentUri. |
 | `pa` | character | Plate appearances from the PA leader table, as a string (e.g., '687'); null on rows that come from another stat's leader table (G, AB, H). |
 | `ab` | character | At-bats. |
@@ -310,16 +310,16 @@ A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, o
 | `section` | character | Title of the standings section the row's table sits in ('DIVISION', 'WILD CARD' or 'SPRING TRAINING'); each team appears once per section. |
 | `al_east` | character | Position number ('1'-'5') from the first column of Fox's AL EAST division table, whose header text names this column; null on rows from every other table. |
 | `v1` | character | Team nickname (e.g., 'Rays'), from the standings table's unlabeled second column. |
-| `w_l` | character | W l. |
-| `pct` | character | Win percentage. |
+| `w_l` | character |  |
+| `pct` | character |  |
 | `gb` | character | Average exit velocity on ground balls (mph). |
 | `home` | character | Home. |
-| `away` | character | Away team shots in the period. |
+| `away` | character |  |
 | `rs` | character | Runs scored (RS column), as a string (e.g., '688'); null on SPRING TRAINING rows, whose tables carry no RS column. |
 | `ra` | character | Runs allowed (RA column), as a string (e.g., '617'); null on SPRING TRAINING rows, whose tables carry no RA column. |
-| `diff` | character | Scoring margin. |
-| `l10` | character | Last-ten record. |
-| `strk` | character | Current streak. |
+| `diff` | character |  |
+| `l10` | character |  |
+| `strk` | character |  |
 | `entity_id` | character | Fox id of the row's linked team as a string: the trailing number of the row's entityLink contentUri. |
 | `al_central` | character | Position number ('1'-'5') from the first column of Fox's AL CENTRAL division table, whose header text names this column; null on rows from every other table. |
 | `al_west` | character | Position number ('1'-'5') from the first column of Fox's AL WEST division table, whose header text names this column; null on rows from every other table. |
@@ -353,9 +353,9 @@ A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, o
 | col_name | type | description |
 |---|---|---|
 | `category` | character | Category label. |
-| `stat` | character | Stat. |
+| `stat` | character |  |
 | `stat_abbreviation` | character | Fox's short label for the leader's stat (e.g., 'HR', 'ERA', 'ISO'). |
-| `player` | character | Player name. |
+| `player` | character |  |
 | `value` | character | Numeric value. |
 
 **Example**
@@ -599,7 +599,7 @@ A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, o
 | `content_type` | character | Fox entity type of the nav item; always 'team' in sampled data. |
 | `web_url` | character | Site-relative foxsports.com path of the team page (e.g., '/mlb/philadelphia-phillies-team'). |
 | `color` | character | Primary color (hex, no leading '#'). |
-| `logo_url` | character | NBA CDN primary logo URL. |
+| `logo_url` | character |  |
 
 **Example**
 

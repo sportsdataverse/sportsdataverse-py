@@ -37,7 +37,7 @@ A polars DataFrame (pandas when `return_as_pandas=True`), one row per odds event
 |---|---|---|
 | `matchup_key` | character | Order-independent key for the game: the two normalized team names sorted alphabetically and joined with a pipe (e.g. 'akron zips\|minnesota golden gophers'). Built from the Odds API home_team and away_team names. |
 | `odds_event_id` | character | The Odds API event id, a 32-character lowercase hex string (e.g. 'f06e90b4212fb514f3564ded9f190107'); the id column of toa_sports_events. |
-| `espn_game_id` | integer | ESPN game id (NA for bart-only rows). |
+| `espn_game_id` | integer |  |
 | `home_team` | character | Home team name. |
 | `away_team` | character | Away team name. |
 | `commence_time` | character | Scheduled kickoff of the Odds API event, an ISO-8601 UTC string with a trailing Z (e.g. '2026-09-19T16:00:00Z'), kept as text. |
@@ -178,13 +178,13 @@ A polars DataFrame (pandas when `return_as_pandas=True`) with columns `norm_key`
 | col_name | type | description |
 |---|---|---|
 | `norm_key` | character | Shared join key across providers: the team name lowercased, ASCII-folded, stripped of punctuation, whitespace-collapsed and alias-mapped (e.g. 'alabama a m bulldogs'). |
-| `espn_team_id` | integer | ESPN team id (canonical key). |
+| `espn_team_id` | integer |  |
 | `espn_team` | character | ESPN's full team display name, school plus mascot (e.g. 'Akron Zips'); null on rows that matched no ESPN team. |
-| `espn_abbreviation` | character | ESPN abbreviation. |
-| `fox_team_id` | character | Fox Bifrost team id (NA if unmatched). |
+| `espn_abbreviation` | character |  |
+| `fox_team_id` | character |  |
 | `fox_team` | character | Fox Sports' team name, which that feed ships in all capitals (e.g. 'AIR FORCE FALCONS'); null when no Fox team matched. |
 | `fox_abbreviation` | character | Fox Sports' short team code from its teamnav directory (e.g. 'AC', 'AKRON'), which can differ from the Yahoo code for the same school ('AKRON' vs 'AKR'); null when no Fox team matched. |
-| `yahoo_team_id` | character | Yahoo team id (NA placeholder). |
+| `yahoo_team_id` | character |  |
 | `yahoo_team` | character | Yahoo Sports' team display name, school plus mascot (e.g. 'Akron Zips'); null when no Yahoo team matched. |
 | `yahoo_abbreviation` | character | Yahoo Sports' short team code (e.g. 'ACU', 'AKR'); null when no Yahoo team matched. |
 | `matched_sources` | character | Plus-joined provenance tag naming which of espn, fox and yahoo contributed a directory row for this team, e.g. 'espn+fox+yahoo', 'espn', 'fox+yahoo'. |

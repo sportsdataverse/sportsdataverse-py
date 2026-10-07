@@ -612,7 +612,7 @@ PWHL live scorebar (today ± 3 days).
 | `period` | character | Period number. |
 | `period_name_short` | character | Abbreviated name of the current or final game period (e.g., "3rd", "OT"). |
 | `period_name_long` | character | Verbose name of the current or final game period (e.g., "Third Period", "Overtime"). |
-| `game_clock` | character | Game clock. |
+| `game_clock` | character |  |
 | `game_summary_url` | character | Game-summary link target, not a full URL: the bare game id in some leagues (e.g. PWHL '74') and a site-relative path in others (e.g. '/game-center/?game_id=4896'). |
 | `home_wins` | character | Home team's wins in its record for this game's season (season_id) as the feed reports it when fetched: the same value on every row of that team-season, not the record as of the game date. |
 | `home_regulation_losses` | character | Home team's regulation losses in its record for this game's season (season_id) as the feed reports it when fetched: the same value on every row of that team-season, not the record as of the game date. |
@@ -752,7 +752,7 @@ PWHL standings — one row per team.
 | `non_reg_losses` | character | Non-regulation losses. |
 | `games_remaining` | character | Games remaining in the season. |
 | `percentage` | character | Points percentage earned by the PWHL team (points divided by maximum possible points), expressed as a decimal between 0 and 1. |
-| `overall_rank` | character | Overall recruit ranking (top recruits only; may be `NA`). |
+| `overall_rank` | character |  |
 | `games_played` | character | Games played. |
 | `team_rank` | integer | Team rank in the standings. |
 | `team` | character | Team name. |
@@ -942,8 +942,8 @@ PWHL team roster for a given team + season.
 | `nhlteam` | character | Name or identifier of the NHL organization that holds the player's NHL rights, if applicable. |
 | `player_id_1` | character | Alternate or secondary HockeyTech player identifier, distinct from the primary person_id and player_id fields. |
 | `is_rookie` | character | Whether the player is a rookie. |
-| `h` | character | Hits. |
-| `w` | character | Wins. |
+| `h` | character |  |
+| `w` | character |  |
 | `draft_status` | character | Text description of the player's draft history or eligibility status (e.g., undrafted, drafted year and round). |
 | `name` | character | Player full name, first then last (e.g. 'Megan Keller'). |
 | `player_image` | character | URL of the player's official roster photograph from the PWHL HockeyTech feed. |

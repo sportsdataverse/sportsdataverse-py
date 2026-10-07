@@ -27,9 +27,9 @@ Polars dataframe of game roster data with columns: 'athlete_id', 'athlete_uid', 
 | col_name | type | description |
 |---|---|---|
 | `athlete_id` | integer | ESPN athlete identifier (echoed from arg). |
-| `athlete_uid` | character | ESPN athlete UID (universal identifier). |
-| `athlete_guid` | character | ESPN athlete GUID. |
-| `athlete_type` | character | Athlete type / class. |
+| `athlete_uid` | character |  |
+| `athlete_guid` | character |  |
+| `athlete_type` | character |  |
 | `alternate_id` | character | Alternate player identifier. |
 | `first_name` | character | Player first name. |
 | `last_name` | character | Player last name. |
@@ -45,7 +45,7 @@ Polars dataframe of game roster data with columns: 'athlete_id', 'athlete_uid', 
 | `debut_year` | integer | Year of NHL debut. |
 | `slug` | character | URL slug. |
 | `jersey` | character | Jersey number. |
-| `linked` | logical | TRUE if the record is linked to a related entity. |
+| `linked` | logical |  |
 | `active` | logical | Whether athlete is currently active. |
 | `alternate_ids_sdr` | character | Alternate ids sdr. |
 | `birth_place_city` | character | Birth place city. |
@@ -59,10 +59,10 @@ Polars dataframe of game roster data with columns: 'athlete_id', 'athlete_uid', 
 | `hand_display_value` | character | Hand display value. |
 | `contracts_href` | character | ESPN API hypermedia URL pointing to the contract history resource for this player. |
 | `experience_years` | integer | Experience years. |
-| `draft_display_text` | character | Draft display text. |
+| `draft_display_text` | character |  |
 | `draft_round` | integer | Draft round. |
 | `draft_year` | integer | Draft year the lottery applies to. |
-| `draft_selection` | integer | Draft selection. |
+| `draft_selection` | integer |  |
 | `draft_team_href` | character | ESPN API hypermedia URL linking to the team that originally drafted this player. |
 | `status_id` | character | Status identifier. |
 | `status_name` | character | Status name. |
@@ -79,7 +79,7 @@ Polars dataframe of game roster data with columns: 'athlete_id', 'athlete_uid', 
 | `order` | integer | Display order within officials list. |
 | `home_away` | character | Home or away indicator. |
 | `winner` | logical | Whether this competitor won the game. |
-| `team_guid` | character | ESPN team GUID. |
+| `team_guid` | character |  |
 | `team_uid` | character | ESPN team uid. |
 | `team_slug` | character | Team URL slug. |
 | `team_location` | character | Team city/location. |
@@ -93,8 +93,8 @@ Polars dataframe of game roster data with columns: 'athlete_id', 'athlete_uid', 
 | `is_active` | logical | Whether the team is active. |
 | `is_all_star` | logical | Whether the team is an all-star team. |
 | `team_alternate_ids_sdr` | character | Alternate team identifier from the ESPN SDR (Sports Data Repository) system, used to cross-reference team records across ESPN data sources. |
-| `logo_href` | character | Team or league logo URL. |
-| `logo_dark_href` | character | Logo URL for dark backgrounds. |
+| `logo_href` | character |  |
+| `logo_dark_href` | character |  |
 | `game_id` | integer | Unique game identifier. |
 
 **Example**
@@ -186,11 +186,11 @@ A single-row wide DataFrame (polars by default). When `raw=True` returns the raw
 |---|---|---|
 | `season` | integer | Season year (echoed from arg). |
 | `season_type` | character | Season type code (echoed from arg). |
-| `total` | logical | Total. |
+| `total` | logical |  |
 | `athlete_id` | integer | ESPN athlete identifier (echoed from arg). |
-| `athlete_uid` | character | ESPN athlete UID (universal identifier). |
-| `athlete_guid` | character | ESPN athlete GUID. |
-| `athlete_type` | character | Athlete type / class. |
+| `athlete_uid` | character |  |
+| `athlete_guid` | character |  |
+| `athlete_type` | character |  |
 | `first_name` | character | Player first name. |
 | `last_name` | character | Player last name. |
 | `full_name` | character | Player full name. |
@@ -235,7 +235,7 @@ A single-row wide DataFrame (polars by default). When `raw=True` returns the raw
 | `general_wins` | double | Total wins recorded by a goaltender as the decision goalie over the selected season and season type. |
 | `general_losses` | double | Total regulation-time losses recorded by a goaltender as the decision goalie over the selected season and season type. |
 | `general_ties` | character | Number of games that ended in a tie credited to a goaltender, applicable to seasons before the NHL eliminated ties in 2005-06. |
-| `general_plus_minus` | double | A player's estimated on-court impact on team performance measured in point differential per 100 possessions. |
+| `general_plus_minus` | double |  |
 | `general_time_on_ice` | double | Cumulative time on ice for a skater or goaltender across all games in the selected season and season type, in total seconds or minutes as provided by ESPN. |
 | `general_time_on_ice_per_game` | double | Average time on ice per game for a skater or goaltender over the selected season and season type. |
 | `general_shifts` | double | Total number of shifts a skater took during the selected season and season type. |
@@ -298,7 +298,7 @@ A single-row wide DataFrame (polars by default). When `raw=True` returns the raw
 | `rpi_points_against` | character | Total goals or points allowed used in ESPN's RPI-based standings computation for the player's team over the selected season and season type. |
 | `team_id` | integer | Unique team identifier. |
 | `team_uid` | character | ESPN team uid. |
-| `team_guid` | character | ESPN team GUID. |
+| `team_guid` | character |  |
 | `team_slug` | character | Team URL slug. |
 | `team_location` | character | Team city/location. |
 | `team_name` | character | Team name. |
@@ -307,8 +307,8 @@ A single-row wide DataFrame (polars by default). When `raw=True` returns the raw
 | `team_short_display_name` | character | Team short display name. |
 | `team_color` | character | Team primary color hex. |
 | `team_alternate_color` | character | Team alternate color hex. |
-| `team_is_active` | logical | TRUE if the team is currently active. |
-| `team_logo_href` | character | Default team logo URL. |
+| `team_is_active` | logical |  |
+| `team_logo_href` | character |  |
 
 **Example**
 
@@ -349,17 +349,17 @@ Polars dataframe containing schedule dates for the requested season. Returns Non
 | `recent` | logical | Whether the game is recent. |
 | `start_date` | character | Season start date. |
 | `broadcast` | character | Broadcast network(s). |
-| `highlights` | character | Game highlight urls. |
-| `notes_type` | character | Notes type. |
-| `notes_headline` | character | Notes headline. |
-| `broadcast_market` | character | Broadcast market label (e.g. 'national', 'home'). |
-| `broadcast_name` | character | Broadcast name. |
+| `highlights` | character |  |
+| `notes_type` | character |  |
+| `notes_headline` | character |  |
+| `broadcast_market` | character |  |
+| `broadcast_name` | character |  |
 | `type_id` | character | Play type id. |
 | `type_abbreviation` | character | Play type abbreviation. |
 | `venue_id` | character | Venue identifier. |
 | `venue_full_name` | character | Venue full name. |
-| `venue_address_city` | character | Venue address city. |
-| `venue_address_state` | character | Venue address state / region. |
+| `venue_address_city` | character |  |
+| `venue_address_state` | character |  |
 | `venue_address_country` | character | Country name or code for the country in which the game venue is located, as provided by ESPN's schedule endpoint. |
 | `venue_indoor` | logical | Whether the venue is indoors. |
 | `status_clock` | double | Game clock in seconds. |
@@ -372,33 +372,33 @@ Polars dataframe containing schedule dates for the requested season. Returns Non
 | `status_type_description` | character | Status description. |
 | `status_type_detail` | character | Status detail text. |
 | `status_type_short_detail` | character | Short status detail. |
-| `format_regulation_periods` | integer | Format regulation periods. |
+| `format_regulation_periods` | integer |  |
 | `home_id` | character | Home team ESPN identifier. |
-| `home_uid` | character | Home team's uid. |
+| `home_uid` | character |  |
 | `home_location` | character | Home team city. |
 | `home_name` | character | Home team display name. |
 | `home_abbreviation` | character | Home team abbreviation. |
 | `home_display_name` | character | Home team display name. |
-| `home_short_display_name` | character | Home short display name. |
+| `home_short_display_name` | character |  |
 | `home_color` | character | Home team primary color hex. |
 | `home_alternate_color` | character | Home team alternate color hex. |
-| `home_is_active` | logical | Home team's is active. |
-| `home_venue_id` | character | Unique identifier for home venue. |
+| `home_is_active` | logical |  |
+| `home_venue_id` | character |  |
 | `home_logo` | character | Home team logo URL. |
 | `home_score` | character | Home team final score. |
 | `home_linescores` | list | Period-by-period goal totals for the home team, stored as an array of integer scores indexed by period. |
 | `home_records` | character | Serialized win-loss-overtime record string for the home team at the time of the scheduled game. |
 | `away_id` | character | Away team ESPN identifier. |
-| `away_uid` | character | Away team's uid. |
+| `away_uid` | character |  |
 | `away_location` | character | Away team city. |
 | `away_name` | character | Away team display name. |
 | `away_abbreviation` | character | Away team abbreviation. |
 | `away_display_name` | character | Away team display name. |
-| `away_short_display_name` | character | Away short display name. |
+| `away_short_display_name` | character |  |
 | `away_color` | character | Away team primary color hex. |
 | `away_alternate_color` | character | Away team alternate color hex. |
-| `away_is_active` | logical | Away team's is active. |
-| `away_venue_id` | character | Unique identifier for away venue. |
+| `away_is_active` | logical |  |
+| `away_venue_id` | character |  |
 | `away_logo` | character | Away team logo URL. |
 | `away_score` | character | Away team final score. |
 | `away_linescores` | list | Period-by-period goal totals for the away team, stored as an array of integer scores indexed by period. |
@@ -448,8 +448,8 @@ Polars dataframe containing teams for the requested league. This function caches
 | `team_color` | character | Team primary color hex. |
 | `team_display_name` | character | Team display name. |
 | `team_id` | character | Unique team identifier. |
-| `team_is_active` | logical | TRUE if the team is currently active. |
-| `team_is_all_star` | logical | TRUE if the row represents an All-Star team. |
+| `team_is_active` | logical |  |
+| `team_is_all_star` | logical |  |
 | `team_location` | character | Team city/location. |
 | `team_logos` | integer | Team logo metadata. |
 | `team_name` | character | Team name. |

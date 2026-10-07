@@ -460,9 +460,9 @@
  "/docs/cfb/reference/on3": {
   "on3_coaches_history": "other",
   "on3_coaches_profile": "other",
-  "on3_collective_groups": "other",
-  "on3_collective_groups_deals": "other",
-  "on3_collective_groups_key": "other",
+  "on3_collective_groups": "collective",
+  "on3_collective_groups_deals": "collective",
+  "on3_collective_groups_key": "collective",
   "on3_commits_latest": "commits",
   "on3_commits_organizations_latest_commits": "commits",
   "on3_commits_organizations_org_key": "commits",
@@ -528,11 +528,11 @@
   "on3_recruitments_profile": "recruitment",
   "on3_recruitments_rpm_picks": "recruitment",
   "on3_recruitments_rpm_summary": "recruitment",
-  "on3_team_ranking": "other",
-  "on3_team_ranking_bluechips_team_rankings": "other",
-  "on3_team_ranking_consensus_team_rankings": "other",
-  "on3_team_ranking_organizations_summary": "other",
-  "on3_team_ranking_team_rankings": "other",
+  "on3_team_ranking": "team",
+  "on3_team_ranking_bluechips_team_rankings": "team",
+  "on3_team_ranking_consensus_team_rankings": "team",
+  "on3_team_ranking_organizations_summary": "team",
+  "on3_team_ranking_team_rankings": "team",
   "on3_transfers_best_available": "transfers",
   "on3_transfers_latest": "transfers",
   "on3_videos_video_key": "other"
@@ -1741,10 +1741,10 @@
   "load_mbb_schedule_crosswalk": "other",
   "load_mbb_shots": "other",
   "load_mbb_standings": "other",
-  "load_mbb_team_boxscore": "team",
-  "load_mbb_team_crosswalk": "team",
-  "load_mbb_team_group_seasons": "team",
-  "load_mbb_team_season_stats": "team",
+  "load_mbb_team_boxscore": "other",
+  "load_mbb_team_crosswalk": "other",
+  "load_mbb_team_group_seasons": "other",
+  "load_mbb_team_season_stats": "other",
   "load_ncaa_mbb_lineups": "ncaa",
   "load_ncaa_mbb_matchup_stints": "ncaa",
   "load_ncaa_mbb_pbp": "ncaa",
@@ -2543,10 +2543,10 @@
   "load_nba_stats_standings": "stats-2",
   "load_nba_stats_team_boxscores": "stats-2",
   "load_nba_stats_team_season_stats": "stats-2",
-  "load_nba_team_boxscore": "team",
-  "load_nba_team_crosswalk": "team",
-  "load_nba_team_group_seasons": "team",
-  "load_nba_team_season_stats": "team"
+  "load_nba_team_boxscore": "other",
+  "load_nba_team_crosswalk": "other",
+  "load_nba_team_group_seasons": "other",
+  "load_nba_team_season_stats": "other"
  },
  "/docs/nba/reference/nba_stats": {
   "nba_stats_alltimeleadersgrids": "other",
@@ -4718,10 +4718,10 @@
   "load_wbb_schedule_crosswalk": "other",
   "load_wbb_shots": "other",
   "load_wbb_standings": "other",
-  "load_wbb_team_boxscore": "team",
-  "load_wbb_team_crosswalk": "team",
-  "load_wbb_team_group_seasons": "team",
-  "load_wbb_team_season_stats": "team"
+  "load_wbb_team_boxscore": "other",
+  "load_wbb_team_crosswalk": "other",
+  "load_wbb_team_group_seasons": "other",
+  "load_wbb_team_season_stats": "other"
  },
  "/docs/wc/reference/core": {
   "espn_wc_award": "other",
@@ -5445,7 +5445,7 @@
   "yahoo_playbook_team": "playbook",
   "yahoo_playbook_team_basic": "playbook",
   "yahoo_playbook_team_social_share": "playbook",
-  "yahoo_playbook_tennis_match": "playbook-2",
+  "yahoo_playbook_tennis_match": "playbook",
   "yahoo_player_basic": "player",
   "yahoo_player_career_stats": "player",
   "yahoo_player_game_log": "player",
@@ -5488,7 +5488,7 @@
   "yahoo_tennis_tournament": "other",
   "yahoo_tennis_tournaments": "other",
   "yahoo_tennis_tournaments_by_date": "other",
-  "yahoo_trending_event_ids": "other-2",
-  "yahoo_trending_game_ids": "other-2"
+  "yahoo_trending_event_ids": "other",
+  "yahoo_trending_game_ids": "other"
  }
 }

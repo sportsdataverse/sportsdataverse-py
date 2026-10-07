@@ -24,7 +24,7 @@ Release: [nfl_model_pbp](https://github.com/sportsdataverse/sportsdataverse-data
 | `defteam` | String | String abbreviation for the team on defense. |
 | `home_team` | String | The home team. Note that this contains the designated home team for games which no team is playing at home such as Super Bowls or NFL International games. |
 | `away_team` | String | String abbreviation for the away team. |
-| `home` | Int64 | Home team name. |
+| `home` | Int64 |  |
 | `qtr` | Int64 | Quarter of the game (5 is overtime). |
 | `game_half` | String | String indicating which half the play is in, either Half1, Half2, or Overtime. |
 | `down` | Int64 | The down for the given play. |
@@ -330,7 +330,7 @@ Release: [nfl_model_pbp](https://github.com/sportsdataverse/sportsdataverse-data
 | `first_down_prob` | Float32 | Modeled probability of converting the fourth down if the offense goes for it. |
 | `wp_succeed` | Float64 | Mean win probability across the conversion outcomes, i.e. the WP conditional on converting the fourth down. |
 | `wp_fail` | Float64 | Mean win probability across the failure outcomes, i.e. the WP conditional on failing to convert. |
-| `fg_make_prob` | Float64 | Predicted probability of making the field goal (cfbfastR FG model, 0-1). |
+| `fg_make_prob` | Float64 |  |
 | `make_fg_wp` | Float64 | Win probability conditional on the field-goal attempt being good. |
 | `miss_fg_wp` | Float64 | Win probability conditional on the field-goal attempt being missed (opponent takes over at the spot). |
 | `fg_wp` | Float64 | Probability-weighted win probability of attempting the field goal, from the kicking team's perspective. |
@@ -353,7 +353,7 @@ Release: [nfl_ratings_weekly](https://github.com/sportsdataverse/sportsdataverse
 | col_name | type | description |
 |---|---|---|
 | `season` | Int64 | 4 digit number indicating to which season(s) the specified timeframe belongs to. |
-| `team_id` | String | ESPN team id. |
+| `team_id` | String |  |
 | `adj_off_epa` | Float64 | Opponent-adjusted offensive EPA per play for the team as of this week. |
 | `adj_def_epa` | Float64 | Opponent-adjusted defensive EPA per play for the team as of this week (negative is better for the defense). |
 | `adj_st_epa` | Float64 | Opponent-adjusted special-teams EPA per play for the team as of this week. |
@@ -381,10 +381,10 @@ Release: [nfl_ngs_passing](https://github.com/sportsdataverse/sportsdataverse-da
 | `week` | Int64 | Season week. |
 | `scope` | String | Aggregation scope of the row -- "season" for the season-to-date aggregate (always week 0) or "week" for a single week's statboard (week 0 is preseason week 0). |
 | `threshold` | Int64 | Minimum-attempts qualifying threshold NGS applied to the statboard the row came from (differs between weekly and season scopes). |
-| `games_played` | Int64 | Games played. |
+| `games_played` | Int64 |  |
 | `player_name` | String | Full name of player |
 | `position` | String | Primary position as reported by NFL.com |
-| `team_id` | String | ESPN team id. |
+| `team_id` | String |  |
 | `player_gsis_id` | String | Unique identifier of the player |
 | `player_display_name` | String | Full name of the player |
 | `player_short_name` | String | Short version of player's name |
@@ -392,7 +392,7 @@ Release: [nfl_ngs_passing](https://github.com/sportsdataverse/sportsdataverse-da
 | `player_position_group` | String | Roster position group the player is listed under (e.g. "QB", "WR", "RB"). |
 | `player_position` | String | Position of the player accordinng to NGS |
 | `player_jersey_number` | Int64 | Player's jersey number |
-| `player_current_team_id` | String | Player's current team identifier. |
+| `player_current_team_id` | String |  |
 | `player_season` | Int64 | Season the embedded player record was resolved against; mirrors season. |
 | `player_gsis_it_id` | Int64 | Integer NFL GSIS "IT" player id used by the league's internal tracking systems; a second id alongside the string player_gsis_id. |
 | `player_smart_id` | String | NFL "smart id", a UUID-style player identifier shared across NFL data products. |
@@ -403,7 +403,7 @@ Release: [nfl_ngs_passing](https://github.com/sportsdataverse/sportsdataverse-da
 | `player_ngs_position_group` | String | Position group the Next Gen Stats tracking model assigns the player to (e.g. "QB", "WR"). |
 | `player_uniform_number` | String | Jersey number as the zero-padded string NGS lists it (e.g. "07"). |
 | `player_status` | String | Roster status code of the player at capture time (e.g. "ACT" active, "RES" reserve, "CUT", "DEV" practice squad). |
-| `player_headshot` | String | URL to the player headshot image. |
+| `player_headshot` | String |  |
 | `attempts` | Int64 | The number of pass attempts as defined by the NFL. |
 | `completions` | Int64 | The number of completed passes. |
 | `interceptions` | Int64 | The number of interceptions thrown. |

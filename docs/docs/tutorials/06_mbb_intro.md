@@ -54,7 +54,7 @@ no live API). Click any name for the full reference.
 | [`espn_mbb_conferences`](../mbb/reference/additional.md#espn_mbb_conferences) | Conference / group catalog | 🟥 ESPN ⭐ |
 | [`load_mbb_schedule`](../mbb/reference/loaders/other.md#load_mbb_schedule) | Whole-season schedule parquet | 📦 loader |
 | [`load_mbb_player_boxscore`](../mbb/reference/loaders/player.md#load_mbb_player_boxscore) | Season player box scores | 📦 loader |
-| [`load_mbb_team_boxscore`](../mbb/reference/loaders/team.md#load_mbb_team_boxscore) | Season team box scores | 📦 loader |
+| [`load_mbb_team_boxscore`](../mbb/reference/loaders/other.md#load_mbb_team_boxscore) | Season team box scores | 📦 loader |
 | [`load_mbb_pbp`](../mbb/reference/loaders/other.md#load_mbb_pbp) | Season play-by-play parquet | 📦 loader |
 | [`most_recent_mbb_season`](../mbb/reference/additional/highlights.md#most_recent_mbb_season) | Current season-year helper | 🛠️ helper |
 
@@ -266,7 +266,7 @@ out
 
 ### Recipe 5 — Best net scoring margin 📊 (parquet)
 
-[`load_mbb_team_boxscore`](../mbb/reference/loaders/team.md#load_mbb_team_boxscore) gives one row per team-game with the opponent's score attached, so a single group-by ranks every program by points scored minus points allowed — the cleanest one-number power proxy. Pure parquet, no live endpoint.
+[`load_mbb_team_boxscore`](../mbb/reference/loaders/other.md#load_mbb_team_boxscore) gives one row per team-game with the opponent's score attached, so a single group-by ranks every program by points scored minus points allowed — the cleanest one-number power proxy. Pure parquet, no live endpoint.
 
 
 ```python

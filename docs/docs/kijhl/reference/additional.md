@@ -142,17 +142,17 @@ KIJHL schedule — one row per game.
 | col_name | type | description |
 |---|---|---|
 | `game_id` | character | Unique game identifier. |
-| `game_date` | character | Game date (YYYY-MM-DD). |
-| `game_status` | character | Game status label. |
+| `game_date` | character | Game date. |
+| `game_status` | character | Game status text. |
 | `home_team` | character | Home team name. |
-| `home_team_id` | character | Unique identifier for the home team. |
-| `home_score` | character | Home team score at the time of the play. |
+| `home_team_id` | character | Home team identifier. |
+| `home_score` | character | Home team final score. |
 | `away_team` | character | Away team name. |
-| `away_team_id` | character | Unique identifier for the away team. |
-| `away_score` | character | Away team score at the time of the play. |
-| `venue` | character | Venue name. |
-| `season_id` | character | Unique season identifier. |
-| `game_type` | character | The most recent game type of that season that a player appeared on the roster. |
+| `away_team_id` | character | Away team identifier. |
+| `away_score` | character | Away team final score. |
+| `venue` | character | Venue where the game was played. |
+| `season_id` | character | Season identifier. |
+| `game_type` | character | Game type the row belongs to. |
 
 ### kijhl_standings {#kijhl_standings}
 
@@ -216,13 +216,13 @@ All KIJHL seasons with end-year + game-type labels.
 
 | col_name | type | description |
 |---|---|---|
-| `season_id` | integer | Unique season identifier. |
+| `season_id` | integer | Season identifier. |
 | `season_name` | character | Full season name (e.g., "2024-25 Regular Season"). |
 | `season_short` | character | Short season name. |
 | `career` | character | Whether this is a career-stats season. |
 | `playoff` | character | Whether the row is playoff statistics. |
-| `start_date` | character | Start date (YYYY-MM-DD). |
-| `end_date` | character | End date (YYYY-MM-DD). |
+| `start_date` | character | Season start date. |
+| `end_date` | character | Season end date. |
 | `season_yr` | integer | End year of the season the row belongs to, read from its name: "2025-26", "2025/26" and "2025-2026" are 2026, "26-27" is 2027, a compact "2425" is 2025. A preseason or exhibition named with the one year it starts in belongs to the next season ("2026 Pre-season" is 2027). Null when the name holds no year. |
 | `game_type_label` | character | Game type read from the season name, first match wins: "preseason" (pre-season, preseason), "playoffs" (playoff, post), "exhibition", else "regular". One-off events such as all-star games are labelled "regular" too; season resolution skips them. |
 

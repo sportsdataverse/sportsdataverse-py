@@ -402,9 +402,8 @@ def _param_rows(ep: spec.Endpoint, league_prefix: str = "", fn_name: str = "") -
 _R_DICT_FILE = ROOT / "tools" / "codegen" / "r_column_descriptions.yaml"
 
 # League prefix -> R package whose column docs describe its columns. nfl maps to
-# nflreadr (canonical nflverse dictionaries); nflfastR's variable list still
-# contributes via the ``_merged`` fallback. Only pwhl has no package and
-# resolves entirely via ``_merged``.
+# nflreadr (canonical nflverse dictionaries); nflfastR's variable list is its
+# sibling (``_R_SIBLING_PACKAGES``). A league absent here gets no R fallback.
 _LEAGUE_R_PACKAGE = {
     "cfb": "cfbfastR",
     "nba": "hoopR",
@@ -414,14 +413,35 @@ _LEAGUE_R_PACKAGE = {
     "mlb": "baseballr",
     "nhl": "fastRhockey",
     "nfl": "nflreadr",
-    # Hockey junior leagues: use fastRhockey column descriptions (sport-appropriate)
-    # so the _merged fallback (which has basketball-specific phrases like
-    # "Las Vegas Aces" and "while on court") is never used for these leagues.
-    "ahl": "fastRhockey",
-    "ohl": "fastRhockey",
-    "whl": "fastRhockey",
-    "qmjhl": "fastRhockey",
-    "pwhl": "fastRhockey",
+    # NCAA hoops loaders (``load_ncaa_*``, men's and women's): hoopR, then its sibling wehoop.
+    "ncaa": "hoopR",
+    # Hockey: the HockeyTech league families, PWHL/PHF and the NHL all read fastRhockey.
+    **{
+        lg: "fastRhockey"
+        for lg in (
+            "ahl",
+            "ohl",
+            "whl",
+            "qmjhl",
+            "pwhl",
+            "phf",
+            "echl",
+            "sphl",
+            "chl",
+            "ushl",
+            "bchl",
+            "ajhl",
+            "sjhl",
+            "ojhl",
+            "cchl",
+            "gojhl",
+            "mhl",
+            "nojhl",
+            "vijhl",
+            "kijhl",
+            "mjhl",
+        )
+    },
 }
 
 # Package homes that are not leagues: they carry flat-API families but no ESPN league, no
@@ -491,39 +511,48 @@ def _r_col_descs() -> dict:
     return yaml.safe_load(_R_DICT_FILE.read_text(encoding="utf-8")) or {}
 
 
-#: Sport family per R package — lets the fallback prefer SAME-SPORT text over
-#: the cross-sport ``_merged`` union (which put "Inning number" on jersey-number
-#: columns and NFL career text on basketball turnovers).
-_PACKAGE_SPORT = {
-    "hoopR": "basketball",
-    "wehoop": "basketball",
-    "cfbfastR": "football",
-    "nflreadr": "football",
-    "fastRhockey": "hockey",
-    "baseballr": "baseball",
+#: Ordered R packages whose column docs may back a league's blanks -- the packages of
+#: THAT sport only: hoopR then wehoop for a men's basketball league (the reverse for a
+#: women's one), nflreadr then nflfastR for the NFL. cfbfastR and the NFL packages are
+#: both football but are NOT siblings: SP+ text on an NFL Pro rating is wrong. There is
+#: NO cross-sport fallback -- the retired ``_merged`` union put baseballr's "Inning
+#: number." on a basketball jersey number -- so a league with no package (and the shared
+#: ``league=None`` page) resolves through manual_column_descriptions.yaml only.
+_R_SIBLING_PACKAGES = {
+    "hoopR": ("hoopR", "wehoop"),
+    "wehoop": ("wehoop", "hoopR"),
+    "nflreadr": ("nflreadr", "nflfastR"),
 }
 
+#: A mined R entry that describes a function ARGUMENT, not a column (wehoop's ``rank``:
+#: "Whether to include statistical ranks in the returned table."): never used.
+_R_ARGUMENT_TEXT = re.compile(r"^Whether to (?:include|return) .* table\.?$", re.I)
 
-@functools.lru_cache(maxsize=None)
-def _sport_merged(sport: str) -> dict:
-    """Union of the sport's package dicts (first package listed wins a tie)."""
-    out: dict = {}
-    for pkg, sp in _PACKAGE_SPORT.items():
-        if sp == sport:
-            for col, desc in (_r_col_descs().get(pkg) or {}).items():
-                out.setdefault(col, desc)
-    return out
+#: Flat families whose tables are player / team AGGREGATES while their sport's R dicts
+#: describe play-by-play ("Binary indicator for if the play ended in a sack" on a season
+#: total), and On3 recruiting tables that render under ``cfb`` but are not cfbfastR's
+#: (SP+ on a recruit rating): no R fallback at all, manual text only. Matched by the bare
+#: returns-schema name.
+_NO_R_FALLBACK_FAMILIES = ("nflpro", "nfl_api", "pff", "pff_api", "on3")
 
 
-@functools.lru_cache(maxsize=None)
-def _r_pkg_dict(league: str | None) -> dict:
-    """The per-league lookup dict: the league's R package map (cached per league).
+@functools.lru_cache(maxsize=1)
+def _no_r_fallback_schemas() -> frozenset:
+    """Bare ``returns_schema`` names of every endpoint in :data:`_NO_R_FALLBACK_FAMILIES`."""
+    import yaml
 
-    ``None`` (or a league with no R package) yields ``{}`` so the caller falls
-    back to ``_merged`` -- the union, most-frequent description per column name."""
-    d = _r_col_descs()
-    pkg = _LEAGUE_R_PACKAGE.get(league or "")
-    return d.get(pkg, {}) if pkg else {}
+    names: dict = {}  # bare schema name -> families returning it
+    for stem, _prefix in FLAT_APIS:
+        p = ENDPOINTS / f"{stem}.yaml"
+        if not p.exists():
+            continue
+        for ep in (yaml.safe_load(p.read_text(encoding="utf-8")) or {}).get("endpoints") or []:
+            rs = ep.get("returns_schema")
+            if rs:
+                names.setdefault(rs.rsplit("/", 1)[-1], set()).add(stem)
+    # The lookup key is the BARE name (what the renderer has), so a name another family also
+    # returns (sleeper's ``drafts`` vs on3's) stays ambiguous and keeps its R fallback.
+    return frozenset(n for n, fams in names.items() if fams <= set(_NO_R_FALLBACK_FAMILIES))
 
 
 #: Misspellings inherited from upstream R-package roxygen (nflfastR et al.).
@@ -550,28 +579,21 @@ def _fix_desc_typos(text: str) -> str:
 _R_ONLY_ARG = re.compile(r";\s*`[a-z_]+ = (?:TRUE|FALSE)` only(?=\.?$)")
 
 
-def _r_col_desc(league: str | None, col: str) -> str:
-    """Mined description for ``col`` for ``league``'s R package.
+def _r_col_desc(league: str | None, col: str, schema: str | None = None) -> str:
+    """Mined description for ``col`` from the R packages of ``league``'s OWN sport.
 
-    Resolution: league package dict -> ``_merged`` union -> ``""``. ``league=None``
-    (or a league with no package, e.g. pwhl) skips straight to ``_merged``."""
-    if not col:
+    Resolution: the league's package, then its same-sport sibling (:data:`_R_SIBLING_PACKAGES`),
+    then ``""``. ``league=None`` or a league with no package gets nothing, and so does a
+    ``schema`` of an aggregate family (:data:`_NO_R_FALLBACK_FAMILIES`). R argument text
+    (:data:`_R_ARGUMENT_TEXT`) is skipped, never returned."""
+    if not col or (schema and schema in _no_r_fallback_schemas()):
         return ""
-    val = _r_pkg_dict(league).get(col)
-    if val:
-        return _R_ONLY_ARG.sub("", _fix_desc_typos(val))
-    # Prefer SAME-SPORT sibling packages before the cross-sport ``_merged``
-    # union (wehoop text for an nba column beats nflreadr's). ``_merged`` stays
-    # as the last resort — dropping it blanked ~800 described cells and trips
-    # the residual ratchet; remaining wrong-sport fills are overridden in
-    # manual_column_descriptions.yaml as they are found (it wins over this).
     pkg = _LEAGUE_R_PACKAGE.get(league or "")
-    sport = _PACKAGE_SPORT.get(pkg or "")
-    if sport:
-        val = _sport_merged(sport).get(col)
-        if val:
+    for p in _R_SIBLING_PACKAGES.get(pkg or "", (pkg,) if pkg else ()):
+        val = (_r_col_descs().get(p) or {}).get(col) or ""
+        if val and not _R_ARGUMENT_TEXT.match(val):
             return _R_ONLY_ARG.sub("", _fix_desc_typos(val))
-    return _R_ONLY_ARG.sub("", _fix_desc_typos(_r_col_descs().get("_merged", {}).get(col, "") or ""))
+    return ""
 
 
 _MANUAL_DESC_FILE = ROOT / "tools" / "codegen" / "manual_column_descriptions.yaml"
@@ -625,9 +647,10 @@ def _table_cell_desc(
         raw = _manual_col_desc(schema, col)
         # ``r_dict_key`` defaults to ``schema`` because the autodoc and loader callers pass a
         # wrapper / loader name there; the reference-table caller passes the bare short, so it
-        # hands the full ``native/<family>/<short>`` id in explicitly.
+        # hands the full ``native/<family>/<short>`` id in explicitly. ``_r_col_desc`` then
+        # scopes the fill to the league's own sport and skips the aggregate families.
         if not raw and _r_dict_applies(r_dict_key if r_dict_key is not None else schema):
-            raw = _r_col_desc(league, col)
+            raw = _r_col_desc(league, col, schema)
     normalized = _normalize_rst((raw or "").replace("\n", " ").strip())
     return normalized.replace("|", "\\|")
 
@@ -3930,7 +3953,7 @@ def _autodoc_groups(league: str | None, names: list[str]) -> list[dict]:
         # Returns column table from the committed autodoc schema (offline read);
         # empty list -> the template falls back to the docstring Returns prose.
         # Blank description cells are backfilled from the mined SDV R-package dict
-        # (league-aware; ``global`` scope -> ``_merged`` fallback via league=None);
+        # (league-aware; ``global`` scope has no R fallback, league=None);
         # a non-empty captured description is preserved.
         return_columns = [dict(c) for c in _autodoc_return_columns(scope, n)]
         for c in return_columns:

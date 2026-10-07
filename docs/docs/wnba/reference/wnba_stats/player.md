@@ -404,7 +404,7 @@ GET /stats/playercareerstats
 | `season_id` | character | Unique season identifier. |
 | `league_id` | character | League identifier ('10' = WNBA). |
 | `organization_id` | character |  |
-| `school_name` | character | School name. |
+| `school_name` | character | College or school of the season row (SeasonTotalsCollegeSeason set). |
 | `player_age` | character | NBA or WNBA Stats value for player age in the playercareerstats result set. |
 | `gp` | character | Games played. |
 | `gs` | character | Games started. |

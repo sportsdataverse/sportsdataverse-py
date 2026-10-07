@@ -88,21 +88,21 @@ SJHL statistical leaders for a given season.
 
 | col_name | type | description |
 |---|---|---|
-| `rank` | integer | Position of the school within the poll for the given week (1 = top-ranked). |
+| `rank` | integer | Rank of the streak. |
 | `player_id` | character | Unique player identifier. |
 | `jersey_number` | character | Jersey number. |
-| `name` | character | Display name. |
+| `name` | character | Team mascot name. |
 | `team_id` | character | Unique team identifier. |
-| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
-| `team_code` | character | Internal team code. |
-| `team_logo` | character | Team logo image URL. |
+| `team_name` | character | Team name. |
+| `team_code` | character | Team abbreviation. |
+| `team_logo` | character | URL to the team logo image. |
 | `team_logo_small` | character | URL of the logo of the leader's team; the host and path vary by league and team (an lscluster.hockeytech.com download.php link or an assets.leaguestat.com logos path), and it can be the same URL as team_logo. |
 | `stat_formatted` | character | The leader's value in the type_formatted category as a display string; for the Points and Goals leaderboards requested here it is a whole-number count (e.g. '29'), and '0' on every row when the season has no games yet. |
 | `type_formatted` | character | Leaderboard the row belongs to, 'Points' or 'Goals': the function requests those two skater stat types and stacks both leaderboards into one frame. |
 | `photo` | character | URL to the player photo. |
 | `photo_small` | character | URL of the player's 60x60 headshot on assets.leaguestat.com, keyed by league and player_id (e.g. 'https://assets.leaguestat.com/<league>/60x60/<player_id>.jpg'), or the generic placeholder 'https://lscluster.hockeytech.com/img/nophoto.png'. |
-| `position` | character | Listed roster position (G, F, C, etc.). |
-| `division` | character | Team division. |
+| `position` | character | Player position. |
+| `division` | character | Division identifier. |
 
 ### sjhl_pbp {#sjhl_pbp}
 
@@ -163,17 +163,17 @@ SJHL schedule — one row per game.
 | col_name | type | description |
 |---|---|---|
 | `game_id` | character | Unique game identifier. |
-| `game_date` | character | Game date (YYYY-MM-DD). |
-| `game_status` | character | Game status label. |
+| `game_date` | character | Game date. |
+| `game_status` | character | Game status text. |
 | `home_team` | character | Home team name. |
-| `home_team_id` | character | Unique identifier for the home team. |
-| `home_score` | character | Home team score at the time of the play. |
+| `home_team_id` | character | Home team identifier. |
+| `home_score` | character | Home team final score. |
 | `away_team` | character | Away team name. |
-| `away_team_id` | character | Unique identifier for the away team. |
-| `away_score` | character | Away team score at the time of the play. |
-| `venue` | character | Venue name. |
-| `season_id` | character | Unique season identifier. |
-| `game_type` | character | The most recent game type of that season that a player appeared on the roster. |
+| `away_team_id` | character | Away team identifier. |
+| `away_score` | character | Away team final score. |
+| `venue` | character | Venue where the game was played. |
+| `season_id` | character | Season identifier. |
+| `game_type` | character | Game type the row belongs to. |
 
 ### sjhl_standings {#sjhl_standings}
 
@@ -194,26 +194,26 @@ SJHL standings — one row per team.
 
 | col_name | type | description |
 |---|---|---|
-| `team_code` | character | Internal team code. |
-| `wins` | character | Total wins. |
-| `losses` | character | Total losses. |
+| `team_code` | character | Team abbreviation. |
+| `wins` | character | Wins. |
+| `losses` | character | Losses. |
 | `ot_losses` | character | Overtime losses. |
 | `ot_wins` | character | Overtime wins. |
 | `shootout_wins` | character | Shootout wins. |
 | `shootout_losses` | character | Shootout losses. |
 | `regulation_wins` | character | Wins in regulation. |
-| `points` | integer | Points scored. |
+| `points` | integer | Total points (goals + assists). |
 | `penalty_minutes` | character | Penalty minutes. |
-| `streak` | character | Current streak (e.g. 'W3' for three-game win streak). |
+| `streak` | character | Current streak value. |
 | `goals_for` | character | Goals for. |
 | `goals_against` | character | Goals against. |
 | `goals_diff` | character | Goal differential, goals_for minus goals_against (feed header 'Goal Differential'), as a signed integer string such as '14' or '-10'. |
 | `percentage` | character | Points percentage (feed header 'Percentage'): points earned divided by the maximum points available from games played, as a three-decimal string, e.g. '0.833' for 5 of 6 possible points; '0.000' before a team has played. |
-| `overall_rank` | character | Overall recruit ranking (top recruits only; may be `NA`). |
+| `overall_rank` | character |  |
 | `games_played` | character | Games played. |
 | `team_rank` | integer | Team rank in the standings. |
 | `past_10` | character | Record over the team's most recent 10 games (feed header 'Past 10 Games') as a hyphenated string: W-L-OTL-SOL when four parts are shipped (e.g. '2-0-0-1'), W-L-OTL when three are (e.g. '0-2-1'). |
-| `team` | character | Team-side label or team identifier. |
+| `team` | character | Team name. |
 
 ### sjhl_team_roster {#sjhl_team_roster}
 
@@ -249,13 +249,13 @@ SJHL teams for a given season.
 
 | col_name | type | description |
 |---|---|---|
-| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
+| `team_name` | character | Team name. |
 | `team_id` | character | Unique team identifier. |
-| `team_code` | character | Internal team code. |
+| `team_code` | character | Team abbreviation. |
 | `team_nickname` | character | Team nickname. |
 | `team_label` | character | Short city label. |
-| `division` | character | Team division. |
-| `team_logo` | character | Team logo image URL. |
+| `division` | character | Division identifier. |
+| `team_logo` | character | URL to the team logo image. |
 
 ## Dates and seasons
 
@@ -282,12 +282,12 @@ All SJHL seasons with end-year + game-type labels.
 
 | col_name | type | description |
 |---|---|---|
-| `season_id` | integer | Unique season identifier. |
+| `season_id` | integer | Season identifier. |
 | `season_name` | character | Full season name (e.g., "2024-25 Regular Season"). |
 | `season_short` | character | Short season name. |
 | `career` | character | Whether this is a career-stats season. |
 | `playoff` | character | Whether the row is playoff statistics. |
-| `start_date` | character | Start date (YYYY-MM-DD). |
-| `end_date` | character | End date (YYYY-MM-DD). |
+| `start_date` | character | Season start date. |
+| `end_date` | character | Season end date. |
 | `season_yr` | integer | End year of the season the row belongs to, read from its name: "2025-26", "2025/26" and "2025-2026" are 2026, "26-27" is 2027, a compact "2425" is 2025. A preseason or exhibition named with the one year it starts in belongs to the next season ("2026 Pre-season" is 2027). Null when the name holds no year. |
 | `game_type_label` | character | Game type read from the season name, first match wins: "preseason" (pre-season, preseason), "playoffs" (playoff, post), "exhibition", else "regular". One-off events such as all-star games are labelled "regular" too; season resolution skips them. |

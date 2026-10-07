@@ -24,14 +24,14 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 
 | col_name | type | description |
 |---|---|---|
-| `abbreviation` | character | Metric abbreviation. |
+| `abbreviation` | character | League abbreviation as the source lists it (e.g. NFL). |
 | `default_season` | numeric | Season the source API currently treats as the default for this league. |
 | `default_week` | numeric | Week number the source API currently treats as the default for this league. |
 | `default_week_group` | character | Identifier of the week grouping (e.g., regular season or postseason phase) currently set as the league default. |
-| `id` | numeric | ID of the player in the 'name' column. |
-| `name` | character | Name, as reported by MFL but reordered into FirstName LastName instead of Last, First |
-| `seasons` | list | NBA seasons played. |
-| `slug` | character | URL slug for the team. |
+| `id` | numeric | Numeric league id from the source API (PFF: 1 = NFL). |
+| `name` | character | League display name as the source lists it (PFF: 'Pro Football'). |
+| `seasons` | list | Nested list (stringified) of the seasons the source publishes for the league. |
+| `slug` | character | URL slug of the league on premium.pff.com (e.g. nfl). |
 | `week_groups` | list | Nested list of week-group objects (phase label and week span) defined for the league. |
 | `weeks` | list | Nested list of week objects available for the league. |
 
@@ -157,10 +157,10 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 | `home_franchise_id` | numeric | PFF franchise id of the home team. |
 | `home_team` | list | Home team object (JSON-stringified in the tidy frame). |
 | `id` | numeric | PFF game id (integer join key). |
-| `league` | list | League slug. |
+| `league` | list | Nested league object of the game (stringified) with the PFF league id, name and abbreviation (e.g. NFL). |
 | `league_id` | numeric | PFF league id (integer). |
 | `lock_status` | character | Data lock/publish status for the game. |
-| `score` | list | Final score string. |
+| `score` | list | Nested final-score object of the game (stringified) with away_team and home_team points. |
 | `season` | numeric | Season (starting year) of the game. |
 | `stadium_id` | numeric | PFF stadium identifier for the game venue. |
 | `start` | character | Kickoff timestamp (ISO 8601 string). |

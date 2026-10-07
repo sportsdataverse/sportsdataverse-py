@@ -29,14 +29,14 @@ Yahoo shangrila persisted query `gamePropBets` -> one row per `games` entry
 | `alias_lang` | character | Language/locale tag attached to the entity's Yahoo alias (e.g., "en-US"). |
 | `alias_url` | character | Absolute sports.yahoo.com URL of the entity's page (e.g., "https://sports.yahoo.com/ncaaf/players/464024/"). |
 | `alias_domain` | character | Host the entity's Yahoo alias resolves against (e.g., "sports.yahoo.com"). |
-| `game_id` | character | Unique game identifier. |
-| `status` | character | Status label. |
+| `game_id` | character |  |
+| `status` | character |  |
 | `away_team_team_id` | character | Yahoo composite team id of the away team (e.g., "ncaaf.t.29"). |
 | `away_team_primary_color` | character | Primary brand color of the away team, as a hex RGB string without the leading hash. |
-| `away_team_display_name` | character | Away team full display name. |
+| `away_team_display_name` | character |  |
 | `home_team_team_id` | character | Yahoo composite team id of the home team (e.g., "ncaaf.t.29"). |
 | `home_team_primary_color` | character | Primary brand color of the home team, as a hex RGB string without the leading hash. |
-| `home_team_display_name` | character | Home team full display name. |
+| `home_team_display_name` | character |  |
 | `active_prop_bets` | character | JSON-encoded list of the prop-bet markets currently open for the game. |
 | `game_props` | character | JSON-encoded list of player and game prop markets offered on the game. |
 
@@ -226,7 +226,7 @@ Yahoo shangrila persisted query `gameStatsLeaders` -> one row per `games` entry
 
 | col_name | type | description |
 |---|---|---|
-| `status` | character | Status label. |
+| `status` | character |  |
 | `league_full_name` | character | Full league name (e.g., "NCAA Football"). |
 | `league_football_team_season_stats0` | character | JSON-encoded league-wide team season-stat leader board occupying slot 0 of that list in the payload; the slots are positional, so read the block's own stat ids rather than assuming a fixed category order. |
 | `league_football_team_season_stats1` | character | JSON-encoded league-wide team season-stat leader board occupying slot 1 of that list in the payload; the slots are positional, so read the block's own stat ids rather than assuming a fixed category order. |
@@ -250,13 +250,13 @@ Yahoo shangrila persisted query `gameStatsLeaders` -> one row per `games` entry
 | `home_team_game_stats1_stats` | character | JSON-encoded home-team game-stat block occupying slot 1 of that team's game-stats list; the slots are positional, so read the block's own stat ids rather than assuming a fixed category order. |
 | `home_team_lineup` | character | JSON-encoded starting lineup fielded by the home team. |
 | `away_team_lineup` | character | JSON-encoded starting lineup fielded by the away team. |
-| `away_team_id` | character | Unique identifier for the away team. |
-| `away_team_full_name` | character | Full away team name (e.g. 'Las Vegas Aces'). |
+| `away_team_id` | character |  |
+| `away_team_full_name` | character |  |
 | `away_team_team_id` | character | Yahoo composite team id of the away team (e.g., "ncaaf.t.29"). |
 | `away_team_primary_color` | character | Primary brand color of the away team, as a hex RGB string without the leading hash. |
 | `away_team_secondary_color` | character | Secondary brand color of the away team, as a hex RGB string without the leading hash. |
-| `away_team_display_name` | character | Away team full display name. |
-| `away_team_abbreviation` | character | Away team abbreviation. |
+| `away_team_display_name` | character |  |
+| `away_team_abbreviation` | character |  |
 | `away_team_team_logo_white` | character | JSON-encoded image node for the away team's white knockout logo, used on dark backgrounds. |
 | `away_team_team_logo` | character | JSON-encoded image node for the away team's standard logo. |
 | `away_team_league` | character | JSON-encoded league node identifying the league the away team plays in. |
@@ -272,13 +272,13 @@ Yahoo shangrila persisted query `gameStatsLeaders` -> one row per `games` entry
 | `away_team_player_season_stats5` | character | JSON-encoded away-team player season-stat block occupying slot 5 of that list in the payload; the slots are positional, so read the block's own stat ids rather than assuming a fixed category order. |
 | `away_team_player_season_stats6` | character | JSON-encoded away-team player season-stat block occupying slot 6 of that list in the payload; the slots are positional, so read the block's own stat ids rather than assuming a fixed category order. |
 | `away_team_player_season_stats7` | character | JSON-encoded away-team player season-stat block occupying slot 7 of that list in the payload; the slots are positional, so read the block's own stat ids rather than assuming a fixed category order. |
-| `home_team_id` | character | Unique identifier for the home team. |
-| `home_team_full_name` | character | Full home team name (e.g. 'Las Vegas Aces'). |
+| `home_team_id` | character |  |
+| `home_team_full_name` | character |  |
 | `home_team_team_id` | character | Yahoo composite team id of the home team (e.g., "ncaaf.t.29"). |
 | `home_team_primary_color` | character | Primary brand color of the home team, as a hex RGB string without the leading hash. |
 | `home_team_secondary_color` | character | Secondary brand color of the home team, as a hex RGB string without the leading hash. |
-| `home_team_display_name` | character | Home team full display name. |
-| `home_team_abbreviation` | character | Home team abbreviation. |
+| `home_team_display_name` | character |  |
+| `home_team_abbreviation` | character |  |
 | `home_team_team_logo_white` | character | JSON-encoded image node for the home team's white knockout logo, used on dark backgrounds. |
 | `home_team_team_logo` | character | JSON-encoded image node for the home team's standard logo. |
 | `home_team_league` | character | JSON-encoded league node identifying the league the home team plays in. |

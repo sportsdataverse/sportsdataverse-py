@@ -1,7 +1,7 @@
 ---
 title: "CFB — On3 Recruit Database (api.on3.com) — People"
 sidebar_label: "People"
-sidebar_position: 4
+sidebar_position: 5
 description: "CFB — On3 Recruit Database (api.on3.com) — People — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---
@@ -57,16 +57,16 @@ GET /rdb/v1/people/{personKey}/latest-valuation
 | `valuation` | integer | Athlete's latest On3 NIL valuation in dollars. |
 | `valuation_change` | integer | Change in the NIL valuation since the previous update, in dollars. |
 | `followers` | integer | Total social-media followers counted toward the valuation. |
-| `rank` | integer | Position of the school within the poll for the given week (1 = top-ranked). |
-| `last_updated` | integer | Timestamp ESPN last refreshed the power index. |
-| `whisper` | numeric |  |
-| `whisper_change` | numeric |  |
+| `rank` | integer | Overall rank of the player's NIL valuation across On3's NIL 100. |
+| `last_updated` | integer | Unix timestamp (seconds) of the last update to the NIL valuation. |
+| `whisper` | numeric | On3 whisper valuation (reported deal value) behind the NIL valuation, in US dollars. |
+| `whisper_change` | numeric | Change in the whisper valuation since the previous update, in US dollars. |
 | `social_valuations` | character | Per-platform breakdown of the social components of the valuation (stringified list). |
-| `group_rank` | integer | League/season rank for group. |
-| `group_name` | character | Group name (conference / division). |
-| `tags` | character |  |
-| `roster_value` | character |  |
-| `nil_value` | character |  |
+| `group_rank` | integer | Rank of the NIL valuation within its group (sport or position). |
+| `group_name` | character | Name of the group the NIL valuation is ranked within (usually null). |
+| `tags` | character | JSON-encoded list of NIL tags on the valuation (e.g. Influencer). |
+| `roster_value` | character | Nested roster-value object of the NIL valuation (usually null). |
+| `nil_value` | character | On3 NIL valuation in US dollars. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -96,7 +96,7 @@ GET /rdb/v1/people/{personKey}/measurements
 
 | col_name | type | description |
 |---|---|---|
-| `player_measurements` | character |  |
+| `player_measurements` | character | JSON-encoded list of the player's measurement records (type, value, verification). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -197,7 +197,7 @@ GET /rdb/v1/people/{personKey}/social
 
 | col_name | type | description |
 |---|---|---|
-| `type` | character | Record-type category (e.g. `total`, `home`, `road`). |
+| `type` | character | Type label of the row (vocabulary depends on the endpoint). |
 | `handle` | character | Athlete's account handle on the social platform. |
 | `handshake` | logical | On3 RDB handshake field on the social-account record (platform link/verification metadata). |
 
@@ -230,7 +230,7 @@ GET /rdb/v1/people/{personKey}/social-post-summary
 | col_name | type | description |
 |---|---|---|
 | `social_type` | character | Social platform the post summary covers (e.g. Twitter/X, Instagram). |
-| `type` | character | Record-type category (e.g. `total`, `home`, `road`). |
+| `type` | character | Type label of the row (vocabulary depends on the endpoint). |
 | `followers` | integer | Athlete's follower count on the platform. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.

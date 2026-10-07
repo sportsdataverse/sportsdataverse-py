@@ -43,11 +43,11 @@ Release: [ncaa_wbb_pbp](https://github.com/sportsdataverse/sportsdataverse-data/
 | `period` | Int64 | Period of the game (1-4 quarters; 5+ for OT). |
 | `clock` | String | Game clock value. |
 | `game_time` | String | Game start time. |
-| `game_seconds` | Int64 | Elapsed seconds in the game. |
+| `game_seconds` | Int64 |  |
 | `home_score` | Int64 | Home team score at the time of the play. |
 | `away_score` | Int64 | Away team score at the time of the play. |
-| `event_team` | String | Team associated with the shift change. |
-| `event_description` | String | Human-readable event description. |
+| `event_team` | String |  |
+| `event_description` | String |  |
 | `player_1` | String | Name of the primary player credited on the event (shooter, fouler, rebounder, etc.), as scraped from stats.ncaa.org. |
 | `player_2` | String | Name of the secondary player on the event (e.g., the assister or the player subbed for), when present. |
 | `event_type` | String | Event / play type code (V2 PBP). |
@@ -71,7 +71,7 @@ Release: [ncaa_wbb_pbp](https://github.com/sportsdataverse/sportsdataverse-data/
 | `status` | String | Status label. |
 | `is_garbage_time` | Boolean | Flag marking events in garbage time under the score-margin and clock rule of the pbp builder. |
 | `sub_deviate` | Int64 | Per-game count of substitution-tracking deviations found while walking lineups forward; nonzero flags imperfect substitution data. |
-| `contest_id` | String | stats.ncaa.org contest (game) identifier. |
+| `contest_id` | String |  |
 | `home_ncaa_team_id` | String | stats.ncaa.org team identifier for the home team. |
 | `home_espn_team_id` | String | ESPN home team id (NA for bart-only rows). |
 | `away_ncaa_team_id` | String | stats.ncaa.org team identifier for the away team. |
@@ -136,7 +136,7 @@ Release: [ncaa_wbb_schedule](https://github.com/sportsdataverse/sportsdataverse-
 
 | col_name | type | description |
 |---|---|---|
-| `contest_id` | String | stats.ncaa.org contest (game) identifier. |
+| `contest_id` | String |  |
 | `game_date` | String | Game date (YYYY-MM-DD). |
 | `home` | String | Home. |
 | `away` | String | Away record. |
@@ -269,7 +269,7 @@ Release: [ncaa_wbb_player_box](https://github.com/sportsdataverse/sportsdatavers
 | `midm_unast` | Float64 | Mid-range shots made in the unassisted split (makes for which no assist was credited). |
 | `mida_unast` | Float64 | Mid-range shots attempted in the unassisted split (makes for which no assist was credited). |
 | `mid_pct_unast` | Float64 | Mid-range field-goal percentage in the unassisted split (makes for which no assist was credited). |
-| `contest_id` | String | stats.ncaa.org contest (game) identifier. |
+| `contest_id` | String |  |
 | `home_ncaa_team_id` | String | stats.ncaa.org team identifier for the home team. |
 | `home_espn_team_id` | String | ESPN home team id (NA for bart-only rows). |
 | `away_ncaa_team_id` | String | stats.ncaa.org team identifier for the away team. |
@@ -364,7 +364,7 @@ Release: [ncaa_wbb_team_box](https://github.com/sportsdataverse/sportsdataverse-
 | `drb_pct` | Float64 | Defensive rebound percentage. |
 | `time_per_poss` | Float64 | Average seconds per offensive possession. |
 | `d_time_per_poss` | Float64 | Average seconds per defensive possession. |
-| `contest_id` | String | stats.ncaa.org contest (game) identifier. |
+| `contest_id` | String |  |
 | `home_ncaa_team_id` | String | stats.ncaa.org team identifier for the home team. |
 | `home_espn_team_id` | String | ESPN home team id (NA for bart-only rows). |
 | `away_ncaa_team_id` | String | stats.ncaa.org team identifier for the away team. |
@@ -414,7 +414,7 @@ Release: [ncaa_wbb_team_rosters](https://github.com/sportsdataverse/sportsdatave
 | `height` | String | Player height (string e.g. '6-2' or inches). |
 | `ht_inches` | Int64 | Player height converted to total inches from the stats.ncaa.org roster listing. |
 | `hometown` | String | Player hometown. |
-| `high_school` | String | High school |
+| `high_school` | String |  |
 | `gp` | String | Games played. |
 | `gs` | String | Games started. |
 
@@ -472,7 +472,7 @@ Release: [ncaa_wbb_possessions](https://github.com/sportsdataverse/sportsdataver
 | `first_shot_type` | String | Shot class of the possession's first attempt (rim, mid-range, or three). |
 | `last_event_time` | Int64 | Clock time in seconds at the possession's final event. |
 | `last_event_type` | String | Event type that ended the possession (e.g., a made shot, turnover, or defensive rebound). |
-| `contest_id` | String | stats.ncaa.org contest (game) identifier. |
+| `contest_id` | String |  |
 | `home_ncaa_team_id` | String | stats.ncaa.org team identifier for the home team. |
 | `home_espn_team_id` | String | ESPN home team id (NA for bart-only rows). |
 | `away_ncaa_team_id` | String | stats.ncaa.org team identifier for the away team. |
@@ -588,7 +588,7 @@ Release: [ncaa_wbb_lineups](https://github.com/sportsdataverse/sportsdataverse-d
 | `opp_ast` | Int64 | Opponent assists while the lineup was on the floor during the stint. |
 | `opp_foul` | Int64 | Opponent fouls committed while the lineup was on the floor during the stint. |
 | `stint_num` | Int64 | Sequential on-floor stint number for the lineup within the game. |
-| `contest_id` | String | stats.ncaa.org contest (game) identifier. |
+| `contest_id` | String |  |
 | `season` | Int64 | Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted. |
 
 ```python
@@ -602,7 +602,7 @@ Release: [ncaa_wbb_matchup_stints](https://github.com/sportsdataverse/sportsdata
 
 | col_name | type | description |
 |---|---|---|
-| `contest_id` | String | stats.ncaa.org contest (game) identifier. |
+| `contest_id` | String |  |
 | `season` | Int64 | Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted. |
 | `game_date` | String | Game date (YYYY-MM-DD). |
 | `home` | String | Home. |
@@ -659,8 +659,8 @@ Release: [ncaa_wbb_shots](https://github.com/sportsdataverse/sportsdataverse-dat
 | `point_value` | Int64 | Point value of the attempt (2 or 3). |
 | `period` | Null | Period of the game (1-4 quarters; 5+ for OT). |
 | `sec_left` | Null | Seconds remaining in the period when the shot was taken (all-null in current captures). |
-| `source` | String | News source. |
-| `contest_id` | String | stats.ncaa.org contest (game) identifier. |
+| `source` | String |  |
+| `contest_id` | String |  |
 | `ncaa_team_id` | String | stats.ncaa.org team identifier of the shooting team. |
 | `espn_team_id` | String | ESPN team id (canonical key). |
 | `shooter_player_id` | String | stats.ncaa.org player identifier of the shooter. |

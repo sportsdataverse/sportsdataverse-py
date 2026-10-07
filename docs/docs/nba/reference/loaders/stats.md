@@ -20,12 +20,12 @@ Release: [nba_stats_schedules](https://github.com/sportsdataverse/sportsdatavers
 | `game_date` | String | Game date (YYYY-MM-DD). |
 | `matchup` | String | Matchup. |
 | `home_team_id` | Int64 | Unique identifier for the home team. |
-| `home_team_abbreviation` | String | Home team abbreviation. |
+| `home_team_abbreviation` | String |  |
 | `home_team_name` | String | Home team name. |
 | `home_pts` | Int64 | Final points scored by the home team. |
 | `home_wl` | String | Home team's result for the game (W or L). |
 | `away_team_id` | Int64 | Unique identifier for the away team. |
-| `away_team_abbreviation` | String | Away team abbreviation. |
+| `away_team_abbreviation` | String |  |
 | `away_team_name` | String | Away team name. |
 | `away_pts` | Int64 | Final points scored by the away team. |
 | `away_wl` | String | Away team's result for the game (W or L). |
@@ -89,7 +89,7 @@ Release: [nba_stats_lineups](https://github.com/sportsdataverse/sportsdataverse-
 |---|---|---|
 | `group_set` | String | Lineup grouping label from the NBA Stats API (e.g. "Lineups"). |
 | `group_id` | String | ESPN group id. |
-| `group_name` | String | Group name (conference / division). |
+| `group_name` | String |  |
 | `team_id` | Int64 | Unique team identifier. |
 | `team_abbreviation` | String | Short team abbreviation (e.g. 'LAS'). |
 | `gp` | Int64 | Games played. |
@@ -357,7 +357,7 @@ Release: [nba_stats_pbp](https://github.com/sportsdataverse/sportsdataverse-data
 | `is_missed_shot` | Boolean | Whether the event is a missed field goal. |
 | `is_free_throw` | Boolean | Whether the event is a free throw attempt. |
 | `is_rebound` | Boolean | Whether the event is a rebound. |
-| `is_turnover` | Boolean | `TRUE` if the play was a turnover. |
+| `is_turnover` | Boolean |  |
 | `is_foul` | Boolean | Whether the event is a foul. |
 | `is_substitution` | Boolean | Whether the event is a substitution. |
 | `is_jump_ball` | Boolean | Whether the event is a jump ball. |
@@ -553,7 +553,7 @@ Release: [nba_stats_pbp](https://github.com/sportsdataverse/sportsdataverse-data
 | `is_missed_shot` | Boolean | Whether the event is a missed field goal. |
 | `is_free_throw` | Boolean | Whether the event is a free throw attempt. |
 | `is_rebound` | Boolean | Whether the event is a rebound. |
-| `is_turnover` | Boolean | `TRUE` if the play was a turnover. |
+| `is_turnover` | Boolean |  |
 | `is_foul` | Boolean | Whether the event is a foul. |
 | `is_substitution` | Boolean | Whether the event is a substitution. |
 | `is_jump_ball` | Boolean | Whether the event is a jump ball. |

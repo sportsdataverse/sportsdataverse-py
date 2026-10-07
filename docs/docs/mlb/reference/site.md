@@ -39,48 +39,48 @@ ESPN endpoint.
 | `season_year` | integer | Integer season year ESPN assigns the event (e.g. 2025 for the 2025-26 season). |
 | `season_type` | integer | ESPN season-type id of the event's season: 1 preseason, 2 regular season, 3 postseason, 4 offseason for the US leagues; soccer competitions carry their own competition-specific ids (e.g. 13481). |
 | `season_slug` | character | Season slug. |
-| `status_type_id` | character | Unique identifier for status type. |
-| `status_type_name` | character | Status type name. |
-| `status_type_state` | character | Status state (pre/in/post). |
-| `status_type_completed` | logical | Whether the game is complete. |
-| `status_type_description` | character | Status type description. |
-| `status_type_detail` | character | Status type detail. |
-| `status_type_short_detail` | character | Status type short detail. |
+| `status_type_id` | character |  |
+| `status_type_name` | character |  |
+| `status_type_state` | character |  |
+| `status_type_completed` | logical |  |
+| `status_type_description` | character |  |
+| `status_type_detail` | character |  |
+| `status_type_short_detail` | character |  |
 | `status_clock` | double | Game clock in seconds as ESPN reports it: time remaining in the period for clock sports, elapsed seconds for soccer (e.g. 5400.0 at full time); 0.0 once a game has ended. |
-| `status_display_clock` | character | Status display clock. |
+| `status_display_clock` | character |  |
 | `status_period` | integer | Current or final period number (quarter, half, inning or period, depending on the sport). |
 | `neutral_site` | logical | Whether the match is played at a neutral venue. |
 | `conference_competition` | logical | Conference competition. |
 | `attendance` | integer | Reported attendance (NA on the redesigned page). |
 | `venue_id` | character | MLBAM venue ID. |
-| `venue_full_name` | character | Venue full name. |
+| `venue_full_name` | character |  |
 | `venue_city` | character | Venue city. |
 | `venue_state` | character | Venue state / province. |
-| `venue_indoor` | logical | Whether the home venue is indoors. |
+| `venue_indoor` | logical |  |
 | `broadcast` | character | Broadcast information string. |
 | `note` | character | Event note text from the competition (e.g. a series or game label such as 'World Series - Game 1', or a shootout result); an empty string when there is none. |
-| `home_id` | character | Unique identifier for home. |
-| `home_name` | character | Home team display name. |
-| `home_abbreviation` | character | Home team's abbreviation. |
-| `home_display_name` | character | Home team display name. |
-| `home_location` | character | Home team's location. |
-| `home_color` | character | Home team primary color hex. |
-| `home_alternate_color` | character | Color code (hex) for home alternate. |
-| `home_logo` | character | Home team logo URL. |
+| `home_id` | character |  |
+| `home_name` | character |  |
+| `home_abbreviation` | character |  |
+| `home_display_name` | character |  |
+| `home_location` | character |  |
+| `home_color` | character |  |
+| `home_alternate_color` | character |  |
+| `home_logo` | character |  |
 | `home_score` | character | Home team's score. For cricket, the innings string (e.g. '161/5 (18/20 ov, target 156)'). |
-| `home_winner` | logical | Whether the home team won. |
-| `home_rank` | character | Home team rank (if ranked). |
-| `away_id` | character | Unique identifier for away. |
-| `away_name` | character | Away team display name. |
-| `away_abbreviation` | character | Away team's abbreviation. |
-| `away_display_name` | character | Away team display name. |
-| `away_location` | character | Away team's location. |
-| `away_color` | character | Away team primary color hex. |
-| `away_alternate_color` | character | Color code (hex) for away alternate. |
-| `away_logo` | character | Away team logo URL. |
+| `home_winner` | logical |  |
+| `home_rank` | character |  |
+| `away_id` | character |  |
+| `away_name` | character |  |
+| `away_abbreviation` | character |  |
+| `away_display_name` | character |  |
+| `away_location` | character |  |
+| `away_color` | character |  |
+| `away_alternate_color` | character |  |
+| `away_logo` | character |  |
 | `away_score` | character | Away team's score. For cricket, the innings string. |
-| `away_winner` | logical | Whether the away team won. |
-| `away_rank` | character | Away team rank (if ranked). |
+| `away_winner` | logical |  |
+| `away_rank` | character |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -299,20 +299,20 @@ ESPN endpoint.
 
 | col_name | type | description |
 |---|---|---|
-| `station` | character | Station full name (e.g. "FanDuel Sports Network Detroit"). |
+| `station` | character |  |
 | `station_key` | character | Machine-readable key identifying the broadcasting station airing the game. |
-| `lang` | character | Broadcast language (e.g. "en"). |
+| `lang` | character |  |
 | `region` | character | Region label. |
 | `is_national` | logical | Boolean flag indicating whether the broadcast is a nationally distributed feed. |
 | `type_id` | character | Type id. |
-| `type_short_name` | character | Broadcast type short name (e.g. "TV"). |
-| `type_long_name` | character | Broadcast type long name (e.g. "Television"). |
-| `type_slug` | character | Broadcast-type slug (e.g. `streaming`, `tv`). |
+| `type_short_name` | character |  |
+| `type_long_name` | character |  |
+| `type_slug` | character |  |
 | `market_id` | character | ESPN futures-market identifier. |
 | `market_type` | character | Market type code (`winLeague`, `winConference`, `winDivision`, ...). |
-| `media_call_letters` | character | Broadcast call letters for the outlet. |
-| `media_name` | character | ESPN media name for the outlet. |
-| `media_short_name` | character | Short ESPN media name for the outlet. |
+| `media_call_letters` | character |  |
+| `media_name` | character |  |
+| `media_short_name` | character |  |
 
 **format**
 
@@ -693,7 +693,7 @@ ESPN endpoint.
 
 | col_name | type | description |
 |---|---|---|
-| `position_group` | character | Position group of the recruits (e.g. Offensive Line, Defensive Back). |
+| `position_group` | character |  |
 | `id` | character | Id. |
 | `uid` | character | Uid. |
 | `guid` | character | Guid. |
@@ -721,7 +721,7 @@ ESPN endpoint.
 | `birth_place_city` | character | Birth place city. |
 | `birth_place_state` | character | Birth place state. |
 | `birth_place_country` | character | Birth place country. |
-| `birth_place_display_text` | character | Birth place display text. |
+| `birth_place_display_text` | character |  |
 | `college_id` | character | College id. |
 | `college_guid` | character | College guid. |
 | `college_mascot` | character | College mascot. |
@@ -736,11 +736,11 @@ ESPN endpoint.
 | `position_display_name` | character | Position display name. |
 | `position_abbreviation` | character | Position abbreviation. |
 | `position_leaf` | logical | Position leaf. |
-| `position_parent_id` | character | ESPN id of the parent position. |
-| `position_parent_name` | character | Parent position name. |
-| `position_parent_display_name` | character | Parent position display name. |
-| `position_parent_abbreviation` | character | Parent position abbreviation. |
-| `position_parent_leaf` | logical | Whether parent position is leaf. |
+| `position_parent_id` | character |  |
+| `position_parent_name` | character |  |
+| `position_parent_display_name` | character |  |
+| `position_parent_abbreviation` | character |  |
+| `position_parent_leaf` | logical |  |
 | `experience_years` | integer | Experience years. |
 | `status_id` | character | Status id. |
 | `status_name` | character | Status name. |
@@ -795,7 +795,7 @@ ESPN endpoint.
 | `season_type_type` | integer | Season type numeric code. |
 | `season_type_name` | character | Season type name (e.g. Regular Season). |
 | `season_type_abbreviation` | character | Season type abbreviation. |
-| `week_number` | double | Week number. |
+| `week_number` | double |  |
 | `week_text` | character | Human-readable label for the week or scheduling block in which the event falls (e.g., 'Week 3', 'Bowl Week'), as returned by the ESPN schedule API. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
@@ -1142,8 +1142,8 @@ ESPN endpoint.
 | `team_display_name` | character | Team display name. |
 | `team_location` | character | Team location. |
 | `team_logo` | character | Team logo. |
-| `ot_losses` | double | Overtime losses. |
-| `ot_wins` | double | Overtime wins. |
+| `ot_losses` | double |  |
+| `ot_wins` | double |  |
 | `avg_points_against` | double | Avg points against. |
 | `avg_points_for` | double | Avg points for. |
 | `clincher` | double | Clincher. |
@@ -1165,15 +1165,15 @@ ESPN endpoint.
 | `division_games_behind` | double | Number of games the team trails the division leader in the standings, expressed as a decimal (e.g., 0.5 for half a game back). |
 | `division_percent` | double | The team's winning percentage in division games, calculated as division wins divided by total division games played. |
 | `division_tied` | double | Number of games the team has tied against opponents within their own division. |
-| `home_losses` | double | Home team's losses. |
-| `home_ties` | double | Total home ties. |
-| `home_wins` | double | Home team's wins. |
+| `home_losses` | double |  |
+| `home_ties` | double |  |
+| `home_wins` | double |  |
 | `magic_number_division` | double | Combination of wins needed by the team (or losses needed by the division leader) for the team to clinch a division title. |
 | `magic_number_wildcard` | double | Combination of wins needed by the team (or losses needed by the next wildcard team) for the team to clinch a wildcard playoff berth. |
 | `playoff_percent` | double | Estimated or model-derived probability that the team will qualify for the playoffs, expressed as a decimal between 0 and 1. |
-| `road_losses` | double | Road losses. |
-| `road_ties` | double | Ties on the road. |
-| `road_wins` | double | Road wins. |
+| `road_losses` | double |  |
+| `road_ties` | double |  |
+| `road_wins` | double |  |
 | `wild_card_percent` | double | The team's winning percentage in games that count toward wildcard standings positioning. |
 | `overall` | character | Overall. |
 | `home` | character | Home. |

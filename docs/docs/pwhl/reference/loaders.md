@@ -42,7 +42,7 @@ Release: [phf_pbp](https://github.com/sportsdataverse/sportsdataverse-data/relea
 
 | col_name | type | description |
 |---|---|---|
-| `play_type` | String | String indicating the type of play: pass (includes sacks), run (includes scrambles), punt, field_goal, kickoff, extra_point, qb_kneel, qb_spike, no_play (timeouts and penalties), and missing for rows indicating end of play. |
+| `play_type` | String |  |
 | `team` | String | Team name. |
 | `time` | String | Game clock at infraction (MM:SS). |
 | `play_description` | String | Free-text description of the play as published by the league. |
@@ -62,7 +62,7 @@ Release: [phf_pbp](https://github.com/sportsdataverse/sportsdataverse-data/relea
 | `away_goalie` | String | Name of the away goalie on the ice. |
 | `away_goalie_jersey` | String | Jersey number of the away goaltender on the ice. |
 | `goalie_change` | String | True when the play records a goaltender change. |
-| `penalty` | Int32 | Binary indicator for whether or not a penalty occurred. |
+| `penalty` | Int32 |  |
 | `on_ice_situation` | String | Strength situation on the ice for the play (e.g. even strength, power play). |
 | `score` | String | Final score string. |
 | `minute_start` | Int32 | Minute mark of the period when the event started. |
@@ -73,8 +73,8 @@ Release: [phf_pbp](https://github.com/sportsdataverse/sportsdataverse-data/relea
 | `home_goals` | String | Home goals in the period. |
 | `sec_from_start` | Int32 | Seconds elapsed since the start of the game. |
 | `power_play_seconds` | Int32 | Elapsed seconds of the power play at this play. |
-| `time_elapsed` | String | Elapsed game time for the drive (`MM:SS`). |
-| `time_remaining` | String | Time remaining. |
+| `time_elapsed` | String |  |
+| `time_remaining` | String |  |
 | `player_name_1` | String | Name of the player in slot 1 of the play's participant list. |
 | `player_jersey_1` | String | Jersey number of the player in slot 1 of the play's participant list. |
 | `home_skaters` | Int32 | Number of home skaters on the ice. |
@@ -83,9 +83,9 @@ Release: [phf_pbp](https://github.com/sportsdataverse/sportsdataverse-data/relea
 | `home_goalie_jersey` | String | Jersey number of the home goaltender on the ice. |
 | `player_name_2` | String | Name of the player in slot 2 of the play's participant list. |
 | `player_jersey_2` | String | Jersey number of the player in slot 2 of the play's participant list. |
-| `shot_result` | String | Shot result ('Made' / 'Missed'). |
+| `shot_result` | String |  |
 | `goalie_involved` | String | Name of the goaltender involved in the play. |
-| `penalty_type` | String | String indicating the penalty type of the first penalty in the given play. Will be `NA` if `desc` is missing the type. |
+| `penalty_type` | String |  |
 | `penalty_level` | String | Severity classification of the penalty (e.g. minor, major). |
 | `penalty_length` | String | Penalty length in minutes. |
 | `start_power_play` | Int32 | True on the play where a power play begins. |
@@ -142,7 +142,7 @@ Release: [phf_player_boxscores](https://github.com/sportsdataverse/sportsdataver
 | `penalty_minutes` | Int32 | Penalty minutes. |
 | `plus_minus` | Int32 | Plus/minus rating. |
 | `shots_on_goal` | Int32 | Shots on goal. |
-| `blocks` | Int32 | Total blocks. |
+| `blocks` | Int32 |  |
 | `giveaways` | Int32 | Giveaways. |
 | `takeaways` | Int32 | Takeaways. |
 | `faceoffs_won_lost` | String | Faceoffs won and lost, as the league's combined won-lost string. |
@@ -212,7 +212,7 @@ Release: [phf_schedules](https://github.com/sportsdataverse/sportsdataverse-data
 | `home_division_id` | Int32 | League identifier for the home team's division. |
 | `home_division` | String | Home team division. |
 | `away_division_id` | Int32 | League identifier for the away team's division. |
-| `away_division` | String | Away team division. |
+| `away_division` | String |  |
 | `home_score` | Int32 | Home team final score. |
 | `away_score` | Int32 | Away team final score. |
 | `home_shots` | Int32 | Home team shots in the period. |
@@ -229,7 +229,7 @@ Release: [phf_schedules](https://github.com/sportsdataverse/sportsdataverse-data
 | `game_type` | String | Game type the row belongs to. |
 | `notes` | String | Notes flag for the pick. |
 | `status` | String | Status string (e.g. captain markers). |
-| `overtime` | Boolean | Binary indicator of whether or not game went to overtime. |
+| `overtime` | Boolean |  |
 | `shootout` | Boolean | Whether shootout data is available. |
 | `allow_players` | Boolean | League flag for whether player-level detail is published for the game. |
 | `tickets_url` | String | Link to purchase tickets for the game. |

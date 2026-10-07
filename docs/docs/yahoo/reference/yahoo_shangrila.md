@@ -64,7 +64,7 @@ toc_max_heading_level: 2
 | [yahoo_playbook_team](yahoo_shangrila/playbook.md#yahoo_playbook_team) | Yahoo shangrila persisted query `playbookTeam` -> tables: teams, leagues |
 | [yahoo_playbook_team_basic](yahoo_shangrila/playbook.md#yahoo_playbook_team_basic) | Yahoo shangrila persisted query `playbookTeamBasic` -> one row per `teams` entry |
 | [yahoo_playbook_team_social_share](yahoo_shangrila/playbook.md#yahoo_playbook_team_social_share) | Yahoo shangrila persisted query `playbookTeamSocialShare` -> one row per `teams` entry |
-| [yahoo_playbook_tennis_match](yahoo_shangrila/playbook-2.md#yahoo_playbook_tennis_match) | Yahoo shangrila persisted query `playbookTennisMatch` -> one row per `events` entry |
+| [yahoo_playbook_tennis_match](yahoo_shangrila/playbook.md#yahoo_playbook_tennis_match) | Yahoo shangrila persisted query `playbookTennisMatch` -> one row per `events` entry |
 
 ## Player
 
@@ -153,5 +153,5 @@ toc_max_heading_level: 2
 | [yahoo_tennis_tournament](yahoo_shangrila/other.md#yahoo_tennis_tournament) | Yahoo shangrila persisted query `tennisTournament` -> one row per `tennisTournaments` entry |
 | [yahoo_tennis_tournaments](yahoo_shangrila/other.md#yahoo_tennis_tournaments) | Yahoo shangrila persisted query `tennisTournaments` -> one row per `tennisTournaments` entry |
 | [yahoo_tennis_tournaments_by_date](yahoo_shangrila/other.md#yahoo_tennis_tournaments_by_date) | Yahoo shangrila persisted query `tennisTournamentsByDate` -> one row per `tennisTournaments` entry |
-| [yahoo_trending_event_ids](yahoo_shangrila/other-2.md#yahoo_trending_event_ids) | Yahoo shangrila persisted query `trendingEventIds` -> one row per `trendingEvents` entry |
-| [yahoo_trending_game_ids](yahoo_shangrila/other-2.md#yahoo_trending_game_ids) | Yahoo shangrila persisted query `trendingGameIds` -> one row per `trendingGames` entry |
+| [yahoo_trending_event_ids](yahoo_shangrila/other.md#yahoo_trending_event_ids) | Yahoo shangrila persisted query `trendingEventIds` -> one row per `trendingEvents` entry |
+| [yahoo_trending_game_ids](yahoo_shangrila/other.md#yahoo_trending_game_ids) | Yahoo shangrila persisted query `trendingGameIds` -> one row per `trendingGames` entry |

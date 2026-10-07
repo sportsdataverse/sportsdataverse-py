@@ -31,11 +31,11 @@ Player detail (identity + primary-sport rating/ranks).
 | `weight` | numeric | Listed weight (lbs). |
 | `bio` | character | Player biography text authored on 247Sports. |
 | `scout_evaluation` | character | 247Sports scouting evaluation text for the player. |
-| `birthdate` | character | Birthdate |
+| `birthdate` | character |  |
 | `modified_user` | character | 247Sports user who last modified the player record. |
 | `modified_date` | character | Date the player record was last modified. |
 | `cbs_key` | integer | Cross-reference key into the CBS Sports id space. |
-| `url` | character | RotoWire player page URL. |
+| `url` | character |  |
 | `last_recruitment_player_institution` | integer | Nested player-institution record from the player's most recent recruitment (stringified). |
 | `current_player_institution` | integer | FK -> PlayerInstitution (current school). |
 | `twitter_contact` | integer | Nested 247Sports contact record for the player's Twitter/X account (stringified). |
@@ -93,7 +93,7 @@ Player's current PlayerInstitution (committed/enrolled school).
 | `player` | integer | Player name. |
 | `institution` | integer | Nested 247Sports institution for the stint (stringified). |
 | `state` | integer | Nested 247Sports state record for the institution's location (stringified). |
-| `agent` | character | Listed player agent. |
+| `agent` | character |  |
 | `end_year` | integer | Span ending year. |
 | `end_date` | character | Season end timestamp (ISO 8601, UTC). |
 | `early_enrollee` | character | Whether the player enrolled early at the institution. |
@@ -152,7 +152,7 @@ Player's high-school PlayerInstitution row.
 | `player` | integer | Player name. |
 | `institution` | integer | Nested 247Sports institution for the stint (stringified). |
 | `state` | integer | Nested 247Sports state record for the institution's location (stringified). |
-| `agent` | character | Listed player agent. |
+| `agent` | character |  |
 | `end_year` | integer | Span ending year. |
 | `end_date` | character | Season end timestamp (ISO 8601, UTC). |
 | `early_enrollee` | character | Whether the player enrolled early at the institution. |
@@ -209,7 +209,7 @@ Player-at-institution association detail.
 | `player` | integer | Player name. |
 | `institution` | integer | Nested 247Sports institution for the stint (stringified). |
 | `state` | integer | Nested 247Sports state record for the institution's location (stringified). |
-| `agent` | character | Listed player agent. |
+| `agent` | character |  |
 | `end_year` | integer | Span ending year. |
 | `end_date` | character | Season end timestamp (ISO 8601, UTC). |
 | `early_enrollee` | character | Whether the player enrolled early at the institution. |
@@ -376,11 +376,11 @@ Player name search.
 | `weight` | numeric | Listed weight (lbs). |
 | `bio` | character | Player biography text authored on 247Sports. |
 | `scout_evaluation` | character | 247Sports scouting evaluation text for the player. |
-| `birthdate` | character | Birthdate |
+| `birthdate` | character |  |
 | `modified_user` | character | 247Sports user who last modified the player record. |
 | `modified_date` | character | Date the player record was last modified. |
 | `cbs_key` | integer | Cross-reference key into the CBS Sports id space. |
-| `url` | character | RotoWire player page URL. |
+| `url` | character |  |
 | `last_recruitment_player_institution` | integer | Nested player-institution record from the player's most recent recruitment (stringified). |
 | `current_player_institution` | integer | FK -> PlayerInstitution (current school). |
 | `twitter_contact` | integer | Nested 247Sports contact record for the player's Twitter/X account (stringified). |

@@ -121,7 +121,7 @@ A single-row wide DataFrame (polars by default). When `raw=True` returns the raw
 | `position_name` | character | Position name. |
 | `position_display_name` | character | Position display name. |
 | `position_abbreviation` | character | Position abbreviation. |
-| `college_name` | character | College name. |
+| `college_name` | character |  |
 | `status_id` | integer | Status id. |
 | `status_name` | character | Game status (e.g. 'STATUS_FINAL'). |
 | `batting_games_played` | double | Team batting: batting games played. |
@@ -230,7 +230,7 @@ A single-row wide DataFrame (polars by default). When `raw=True` returns the raw
 | `team_color` | character | Team primary color (hex, no leading '#'). |
 | `team_alternate_color` | character | Team alternate color (hex). |
 | `team_is_active` | logical | Team is active. |
-| `team_logo_href` | character | Default team logo URL. |
+| `team_logo_href` | character |  |
 
 **Example**
 
@@ -263,27 +263,27 @@ Polars dataframe containing the schedule. Returns `None` if no games.
 |---|---|---|
 | `game_id` | character | Unique ESPN game/event identifier. |
 | `date` | character | Date in YYYY-MM-DD format. |
-| `season_year` | integer | Season year string ('YYYY-YY' format). |
+| `season_year` | integer |  |
 | `season_type` | integer | Season-type id. |
-| `status_type_state` | character | Status state (pre/in/post). |
-| `status_type_completed` | logical | Whether the game is complete. |
-| `status_type_description` | character | Status type description. |
+| `status_type_state` | character |  |
+| `status_type_completed` | logical |  |
+| `status_type_description` | character |  |
 | `venue_id` | character | MLBAM venue ID. |
-| `venue_full_name` | character | Venue full name. |
+| `venue_full_name` | character |  |
 | `venue_city` | character | Venue city. |
 | `venue_state` | character | Venue state / province. |
-| `home_id` | character | Unique identifier for home. |
-| `home_name` | character | Home team display name. |
-| `home_abbreviation` | character | Home team's abbreviation. |
-| `home_display_name` | character | Home team display name. |
+| `home_id` | character |  |
+| `home_name` | character |  |
+| `home_abbreviation` | character |  |
+| `home_display_name` | character |  |
 | `home_score` | character | Home team run total after the play. |
-| `home_winner` | logical | Whether the home team won. |
-| `away_id` | character | Unique identifier for away. |
-| `away_name` | character | Away team display name. |
-| `away_abbreviation` | character | Away team's abbreviation. |
-| `away_display_name` | character | Away team display name. |
+| `home_winner` | logical |  |
+| `away_id` | character |  |
+| `away_name` | character |  |
+| `away_abbreviation` | character |  |
+| `away_display_name` | character |  |
 | `away_score` | character | Away team run total after the play. |
-| `away_winner` | logical | Whether the away team won. |
+| `away_winner` | logical |  |
 
 **Example**
 
@@ -329,9 +329,9 @@ Polars dataframe containing teams for MLB. This function caches by default, so i
 | `team_is_active` | logical | Team is active. |
 | `team_is_all_star` | logical | Team is all star. |
 | `team_location` | character | Team city / location. |
-| `team_logos` | integer | Team logo metadata. |
+| `team_logos` | integer |  |
 | `team_name` | character | Team name. |
-| `team_nickname` | character | Team nickname. |
+| `team_nickname` | character |  |
 | `team_short_display_name` | character | Short team display name. |
 | `team_slug` | character | URL-safe team identifier. |
 | `team_uid` | character | ESPN universal team identifier (UID). |

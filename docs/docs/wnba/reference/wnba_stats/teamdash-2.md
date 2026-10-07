@@ -514,7 +514,7 @@ GET /stats/teamdashboardbygeneralsplits
 |---|---|---|
 | `group_set` | character | Name of the grouping family used for this dashboard or split row. |
 | `group_value` | character | Specific grouping value for this dashboard or split row. |
-| `game_result` | character | Game result for the player's team (`W`/`L`). |
+| `game_result` | character | Split label of the win/loss rows: 'Wins' or 'Losses'. |
 | `gp` | integer | Games played. |
 | `w` | integer | Wins. |
 | `l` | integer | Losses. |

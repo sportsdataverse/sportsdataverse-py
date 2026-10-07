@@ -56,7 +56,7 @@ GET /api/v1/game/{gamePk}/boxscore — team + player boxscore for one game.
 
 | col_name | type | description |
 |---|---|---|
-| `team_side` | character | Home or away indicator. |
+| `team_side` | character |  |
 | `team_id` | integer | Unique ESPN team identifier. |
 | `team_name` | character | Team name. |
 | `jersey_number` | character | Jersey number worn (often blank for non-uniformed roles). |
@@ -753,11 +753,11 @@ GET /api/v1/leagues — list leagues.
 
 | col_name | type | description |
 |---|---|---|
-| `id` | integer | Id. |
-| `name` | character | Display name. |
+| `id` | integer | Numeric league id from the source API (PFF: 1 = NFL). |
+| `name` | character | League display name as the source lists it (PFF: 'Pro Football'). |
 | `link` | character | API link to the game feed. |
-| `abbreviation` | character | Short abbreviation. |
-| `name_short` | character | Short name of player (First Initial, Last Name) |
+| `abbreviation` | character | League abbreviation as the source lists it (e.g. NFL). |
+| `name_short` | character |  |
 | `season_state` | character | A string describing the current phase of the league's season (e.g., 'inProgress', 'offseason', 'preseason'). |
 | `has_wild_card` | logical | Boolean flag indicating whether this league includes a wild card playoff format for postseason eligibility. |
 | `has_split_season` | logical | Boolean flag indicating whether this league divides its season into two halves with separate standings (as used historically in some minor leagues). |
@@ -767,8 +767,8 @@ GET /api/v1/leagues — list leagues.
 | `num_wildcard_teams` | double | The number of wild card berths available for postseason entry in this league for the given season. |
 | `season` | character | Season year. |
 | `org_code` | character | The organizational code identifying the parent body (e.g., 'MLB') governing this league within the MLB Stats API hierarchy. |
-| `conferences_in_use` | logical | Whether conferences were in use that season. |
-| `divisions_in_use` | logical | Whether divisions were in use that season. |
+| `conferences_in_use` | logical |  |
+| `divisions_in_use` | logical |  |
 | `sort_order` | integer | Display sort order for the sport. |
 | `active` | logical | Whether the player is currently active. |
 | `season_date_info_season_id` | character | Season identifier for the date info block. |

@@ -132,10 +132,10 @@ Release: [espn_cfb_pbp](https://github.com/sportsdataverse/sportsdataverse-data/
 | `lead_wp_before` | Float64 | Value of wp_before on the next play, used for sequence-aware derivations. |
 | `lead_pos_team2` | Int64 | Value of pos_team 2 plays ahead, used for sequence-aware derivations. |
 | `id` | Int64 | 247Sports referencing id for the recruit. |
-| `sequenceNumber` | Int64 | Broadcast sequence order number. |
+| `sequenceNumber` | Int64 |  |
 | `text` | String | Full play description. |
-| `awayScore` | Int64 | Away team score after the goal. |
-| `homeScore` | Int64 | Home team score after the goal. |
+| `awayScore` | Int64 |  |
+| `homeScore` | Int64 |  |
 | `scoringPlay` | Boolean | ESPN flag marking the play as a scoring play. |
 | `priority` | Boolean | `TRUE` if ESPN flags the play as a priority highlight. |
 | `modified` | String | ISO timestamp the play record was last modified. |
@@ -196,7 +196,7 @@ Release: [espn_cfb_pbp](https://github.com/sportsdataverse/sportsdataverse-data/
 | `drive.end.clock.displayValue` | String | ESPN's `end.clock.displayValue` field for the drive containing this play. |
 | `seasonType` | Int64 | ESPN season type for the game (2 = regular season, 3 = postseason). |
 | `week` | Int64 | Game week of the season. |
-| `status_type_completed` | Boolean | Whether the game is complete. |
+| `status_type_completed` | Boolean |  |
 | `homeTeamId` | Int64 | ESPN's home-team Id for the game, stamped on every play. |
 | `awayTeamId` | Int64 | ESPN's away-team Id for the game, stamped on every play. |
 | `homeFinalScore` | Int64 | Final score of the home team from the ESPN game header, repeated on every play of the game; the processing step checks the running score at the last play against it. |
@@ -264,7 +264,7 @@ Release: [espn_cfb_pbp](https://github.com/sportsdataverse/sportsdataverse-data/
 | `down_4_end` | Boolean | True when it is 4th down at the end of the play. |
 | `td_check` | Boolean | Internal flag used while reconciling whether the play produced a touchdown. |
 | `forced_fumble` | Boolean | True when the defense forced a fumble on the play. |
-| `is_home` | Boolean | Whether the subject team was the home team. |
+| `is_home` | Boolean |  |
 | `lag_HA_score_diff` | Int64 | Value of HA_score_diff on the previous play, used for sequence-aware derivations. |
 | `HA_score_diff` | Int64 | Home score minus away score for the play. |
 | `net_HA_score_pts` | Int64 | Net points the play added to the home-minus-away score margin. |
@@ -298,25 +298,25 @@ Release: [espn_cfb_pbp](https://github.com/sportsdataverse/sportsdataverse-data/
 | `fg_attempt` | Boolean | True when the play was a field-goal attempt. |
 | `pos_unit` | String | Possession-team unit label (offense or special teams). |
 | `def_pos_unit` | String | Defensive possession-team unit label (defense or special teams). |
-| `sp` | Boolean | Binary indicator for whether or not a score occurred on the play. |
+| `sp` | Boolean |  |
 | `play` | Boolean | Binary flag indicating the row is a counted play (excludes end markers/timeouts/penalties). |
 | `cleaned_text` | String | Play description with overturned-call prefixes stripped; the text the name and team extractors run against. |
 | `kneel_down` | Boolean | Whether the play is an offensive kneel, from explicit kneel text plus an end-of-half TEAM-rush heuristic. |
 | `scrimmage_play` | Boolean | True when the play is a play from scrimmage rather than a special-teams or administrative row. |
 | `pos_score_diff_end` | Int64 | Score differential from the possessing team's perspective at the end of the play. |
-| `fumble_lost` | Boolean | Binary indicator for if the fumble was lost. |
+| `fumble_lost` | Boolean |  |
 | `fumble_recovered` | Boolean | True when a fumble on the play was recovered. |
-| `field_goal_result` | String | String indicator for result of field goal attempt: made, missed, or blocked. |
-| `extra_point_result` | String | String indicator for the result of the extra point attempt: good, failed, blocked, safety (touchback in defensive endzone is 1 point apparently), or aborted. |
+| `field_goal_result` | String |  |
+| `extra_point_result` | String |  |
 | `two_point_conv_result` | String | String result of the two-point conversion attempt: success, failure, or safety (touchback in the defensive end zone). |
-| `defensive_two_point_attempt` | Boolean | Binary indicator whether or not the defense was able to have an attempt on a two point conversion, this results following a turnover. |
-| `defensive_two_point_conv` | Boolean | Binary indicator whether or not the defense successfully scored on the two point conversion. |
+| `defensive_two_point_attempt` | Boolean |  |
+| `defensive_two_point_conv` | Boolean |  |
 | `yds_punted_source` | String | Provenance of yds_punted: "text" when the value was present before the special-teams derivation step (parsed from the play text, or set by a flag convention such as a blocked punt's 0), "derived" when that step filled it from field position, null when there is no value. |
 | `yds_kickoff_source` | String | Provenance of yds_kickoff: "text" when the value was present before the special-teams derivation step (parsed from the play text, or set by a flag convention such as a blocked punt's 0), "derived" when that step filled it from field position, null when there is no value. |
 | `yds_punt_return_source` | String | Provenance of yds_punt_return: "text" when the value was present before the special-teams derivation step (parsed from the play text, or set by a flag convention such as a blocked punt's 0), "derived" when that step filled it from field position, null when there is no value. |
 | `air_yardsToEndzone` | Int64 | Yards to the endzone at the catch spot, parsed from the 2025+ vendor catch-spot text; null before 2025 or when unresolvable. |
-| `air_yards` | Int64 | Numeric value for distance in yards perpendicular to the line of scrimmage at where the targeted receiver either caught or didn't catch the ball. |
-| `yards_after_catch` | Int64 | Numeric value for distance in yards perpendicular to the yard line where the receiver made the reception to where the play ended. |
+| `air_yards` | Int64 |  |
+| `yards_after_catch` | Int64 |  |
 | `kickoff_return_player_name` | String | Name of the player returning the kickoff, when the play was returned. |
 | `punt_return_player_name` | String | Name of the player returning the punt, when the punt was returned. |
 | `xp_attempt` | Boolean | Whether an extra-point kick was attempted on the play. |
@@ -358,7 +358,7 @@ Release: [espn_cfb_pbp](https://github.com/sportsdataverse/sportsdataverse-data/
 | `new_down` | Int64 | Down after the play, including any penalty enforcement. |
 | `new_distance` | Int64 | Distance to go after the play, including any penalty enforcement. |
 | `under_2` | Boolean | Whether the play began with two minutes or less remaining in the half. |
-| `goal_to_go` | Boolean | Binary indicator for whether or not the posteam is in a goal down situation. |
+| `goal_to_go` | Boolean |  |
 | `stopped_run` | Boolean | True when the rush was stopped at or behind the line of scrimmage. |
 | `opportunity_run` | Boolean | True when a rush reached 4 yards -- the carries on which the blocking did its job. Matches cfbfastR's espn_cfb_15 definition. Assets published before the 2026-08 fix carry the inverted (4 yards or fewer) flag. |
 | `highlight_run` | Boolean | True when the rush gained 8 or more yards. |
@@ -385,7 +385,7 @@ Release: [espn_cfb_pbp](https://github.com/sportsdataverse/sportsdataverse-data/
 | `TFL_rush` | Boolean | True when the play was a tackle for loss on a rush play. |
 | `havoc` | Boolean | True when the defense disrupted the play: a pass breakup, tackle for loss, interception or forced fumble. |
 | `first_down_yards` | Boolean | Whether the play gained enough yardage to earn a first down. |
-| `first_down_penalty` | Boolean | Binary indicator for if a penalty converted the first down. |
+| `first_down_penalty` | Boolean |  |
 | `first_down_earned` | Boolean | Whether the play earned a first down by means other than yardage (e.g. by penalty). |
 | `start.pos_team_spread` | Float64 | ESPN's `pos_team_spread` value for the play state at the start of the play. |
 | `start.elapsed_share` | Float64 | ESPN's `elapsed_share` value for the play state at the start of the play. |
@@ -454,13 +454,13 @@ Release: [espn_cfb_pbp](https://github.com/sportsdataverse/sportsdataverse-data/
 | `home_wp_after_naive` | Float64 | End-of-play naive win probability mapped to the home team. |
 | `away_wp_after_naive` | Float64 | End-of-play naive win probability mapped to the away team. |
 | `wpa_naive` | Float64 | Win probability added on the play under the spread-free (naive) model. |
-| `cp` | Float64 | Numeric value indicating the probability for a complete pass based on comparable game situations. |
+| `cp` | Float64 |  |
 | `cp_game_state` | Float64 | Completion probability from the 8-feature game-state booster, scored on every pass play regardless of which model produced cp. On one scale across seasons, so use it (not cp) for anything summed or averaged; null on non-pass plays. |
 | `cp_model` | String | Which completion-probability booster scored cp on the play: "air_yards" (the 11-feature model, used where ESPN's play text gives a catch/target spot -- essentially 2025 onward) or "game_state" (the 8-feature model used everywhere else). The two are not on one scale, so group any cpoe aggregate by this column; null on non-pass plays. |
-| `cpoe` | Float64 | For a single pass play this is 1 - cp when the pass was completed or 0 - cp when the pass was incomplete. Analyzed for a whole game or season an indicator for the passer how much over or under expectation his completion percentage was. |
-| `era` | Int64 | one of pre2018 (2006-2017) or post2018 (2018+) |
-| `xpass` | Float64 | Probability of dropback scaled from 0 to 1. |
-| `pass_oe` | Float64 | Dropback percent over expected on a given play scaled from 0 to 100. |
+| `cpoe` | Float64 |  |
+| `era` | Int64 |  |
+| `xpass` | Float64 |  |
+| `pass_oe` | Float64 |  |
 | `drive_start` | Float64 | Yard line at which the drive began. |
 | `drive_stopped` | Boolean | True when the play ended the drive. |
 | `drive_play_index` | Int64 | Sequence number of the play within its drive. |
@@ -482,9 +482,9 @@ Release: [espn_cfb_pbp](https://github.com/sportsdataverse/sportsdataverse-data/
 | `pen_weight` | Float64 | Weighting applied to the penalty component of the play. |
 | `action_play` | Boolean | True when the play advanced the game state -- excludes timeouts, end-of-period markers and other non-action rows. |
 | `athlete_name` | String | Player full name. |
-| `rusher_player_id` | Int64 | Unique identifier for the player that attempted the run. |
-| `passer_player_id` | Int64 | Unique identifier for the player that attempted the pass. |
-| `receiver_player_id` | Int64 | Unique identifier for the receiver that was targeted on the pass. |
+| `rusher_player_id` | Int64 |  |
+| `passer_player_id` | Int64 |  |
+| `receiver_player_id` | Int64 |  |
 | `fumble_player_id` | Int64 | CFBD athlete_id of the player who fumbled. |
 | `sack_player_id` | Int64 | Comma-separated CFBD athlete_id(s) of the sacking defender(s). |
 | `sack_player_id2` | Int64 | ESPN athlete id of the second sacker on a split sack (regex fallback for an ESPN sidecar blind spot). |
@@ -493,7 +493,7 @@ Release: [espn_cfb_pbp](https://github.com/sportsdataverse/sportsdataverse-data/
 | `fumble_forced_player_id` | Int64 | CFBD athlete_id of the defender credited with forcing the fumble. |
 | `fumble_recovered_player_id` | Int64 | CFBD athlete_id of the player recovering the fumble. |
 | `fg_kicker_player_id` | Int64 | ESPN athlete id of the field-goal kicker. |
-| `punter_player_id` | Int64 | Unique identifier for the punter. |
+| `punter_player_id` | Int64 |  |
 | `kickoff_player_id` | Int64 | ESPN athlete id of the player kicking off. |
 | `kickoff_return_player_id` | Int64 | ESPN athlete id of the kickoff returner. |
 | `punt_return_player_id` | Int64 | ESPN athlete id of the punt returner. |

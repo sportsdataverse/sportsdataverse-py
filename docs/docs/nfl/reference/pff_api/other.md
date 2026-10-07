@@ -24,14 +24,14 @@ List the leagues you can read, with their seasons and weeks
 
 | col_name | type | description |
 |---|---|---|
-| `abbreviation` | character | Metric abbreviation. |
+| `abbreviation` | character | League abbreviation as the source lists it (e.g. NFL). |
 | `default_season` | numeric | Season the source API currently treats as the default for this league. |
 | `default_week` | numeric | Week number the source API currently treats as the default for this league. |
 | `default_week_group` | character | Identifier of the week grouping (e.g., regular season or postseason phase) currently set as the league default. |
-| `id` | numeric | ID of the player in the 'name' column. |
-| `name` | character | Name, as reported by MFL but reordered into FirstName LastName instead of Last, First |
-| `seasons` | list | NBA seasons played. |
-| `slug` | character | URL slug for the team. |
+| `id` | numeric | Numeric league id from the source API (PFF: 1 = NFL). |
+| `name` | character | League display name as the source lists it (PFF: 'Pro Football'). |
+| `seasons` | list | Nested list (stringified) of the seasons the source publishes for the league. |
+| `slug` | character | URL slug of the league on premium.pff.com (e.g. nfl). |
 | `week_groups` | list | Nested list of week-group objects (phase label and week span) defined for the league. |
 | `weeks` | list | Nested list of week objects available for the league. |
 
@@ -72,10 +72,10 @@ List game results for a league, season and week
 | `home_franchise_id` | numeric | PFF franchise id of the home team. |
 | `home_team` | list | Home team object (JSON-stringified in the tidy frame). |
 | `id` | numeric | PFF game id (integer join key). |
-| `league` | list | League slug. |
+| `league` | list | Nested league object of the game (stringified) with the PFF league id, name and abbreviation (e.g. NFL). |
 | `league_id` | numeric | PFF league id (integer). |
 | `lock_status` | character | Data lock/publish status for the game. |
-| `score` | list | Final score string. |
+| `score` | list | Nested final-score object of the game (stringified) with away_team and home_team points. |
 | `season` | numeric | Season (starting year) of the game. |
 | `stadium_id` | numeric | PFF stadium identifier for the game venue. |
 | `start` | character | Kickoff timestamp (ISO 8601 string). |
@@ -111,20 +111,20 @@ Search the player directory by name or id
 
 | col_name | type | description |
 |---|---|---|
-| `college` | character | Official college (usually the last one attended) |
+| `college` | character | College the player attended, as the source lists it. |
 | `current_class` | character | Player's current college class designation (e.g., Freshman, Senior), per PFF. |
 | `current_eligible_year` | numeric | Year the player is or was first draft-eligible, per PFF. |
-| `dob` | character | Player date of birth. |
+| `dob` | character | Player's date of birth (YYYY-MM-DD). |
 | `draft` | list | Nested draft-selection details for the player (year, round, pick, and franchise) as returned by the source API. |
-| `first_name` | character | First name of player |
-| `height` | numeric | Official height, in inches |
-| `id` | numeric | ID of the player in the 'name' column. |
-| `jersey_number` | character | Jersey number. Often useful for joins by name/team/jersey. |
-| `last_name` | character | Last name of player |
-| `position` | character | Primary position as reported by NFL.com |
-| `speed` | numeric | Speed. |
-| `team` | list | NFL team. Uses official abbreviations as per NFL.com |
-| `weight` | numeric | Official weight, in pounds |
+| `first_name` | character | Player's first name as the source lists it. |
+| `height` | numeric | Player's height as the source encodes it (PFF uses feet and inches without a separator, 602 = 6'02"; others use inches or centimetres). |
+| `id` | numeric | PFF numeric player id, the key of the player-scoped endpoints. |
+| `jersey_number` | character | Jersey number as a string. |
+| `last_name` | character | Player's last name as the source lists it. |
+| `position` | character | Position abbreviation as the source lists it (e.g. QB, WR). |
+| `speed` | numeric | 40-yard-dash time in seconds as recorded by PFF. |
+| `team` | list | Current team of the player as the source ships it (a nested team object, stringified, or a team code). |
+| `weight` | numeric | Player's weight as the source lists it (pounds for US sources). |
 
 **`return_parsed=False`** — The decoded JSON body. /v1 routes return the Premium Stats envelope (`{report_slug: rows}`); /v2 routes return `{..meta.., columns, rows}`..
 

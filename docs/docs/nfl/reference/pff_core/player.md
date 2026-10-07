@@ -230,20 +230,20 @@ LEGACY (premium.pff.com cookie auth; prefer the pff_api_* Developer API wrappers
 
 | col_name | type | description |
 |---|---|---|
-| `college` | character | Official college (usually the last one attended) |
+| `college` | character | College the player attended, as the source lists it. |
 | `current_class` | character | Player's current college class designation (e.g., Freshman, Senior), per PFF. |
 | `current_eligible_year` | numeric | Year the player is or was first draft-eligible, per PFF. |
-| `dob` | character | Player date of birth. |
+| `dob` | character | Player's date of birth (YYYY-MM-DD). |
 | `draft` | list | Nested draft-selection details for the player (year, round, pick, and franchise) as returned by the source API. |
-| `first_name` | character | First name of player |
-| `height` | numeric | Official height, in inches |
-| `id` | numeric | ID of the player in the 'name' column. |
-| `jersey_number` | character | Jersey number. Often useful for joins by name/team/jersey. |
-| `last_name` | character | Last name of player |
-| `position` | character | Primary position as reported by NFL.com |
-| `speed` | numeric | Speed. |
-| `team` | list | NFL team. Uses official abbreviations as per NFL.com |
-| `weight` | numeric | Official weight, in pounds |
+| `first_name` | character | Player's first name as the source lists it. |
+| `height` | numeric | Player's height as the source encodes it (PFF uses feet and inches without a separator, 602 = 6'02"; others use inches or centimetres). |
+| `id` | numeric | PFF numeric player id, the key of the player-scoped endpoints. |
+| `jersey_number` | character | Jersey number as a string. |
+| `last_name` | character | Player's last name as the source lists it. |
+| `position` | character | Position abbreviation as the source lists it (e.g. QB, WR). |
+| `speed` | numeric | 40-yard-dash time in seconds as recorded by PFF. |
+| `team` | list | Current team of the player as the source ships it (a nested team object, stringified, or a team code). |
+| `weight` | numeric | Player's weight as the source lists it (pounds for US sources). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 

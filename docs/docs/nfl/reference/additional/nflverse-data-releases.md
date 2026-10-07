@@ -93,13 +93,13 @@ Polars dataframe containing historical contracts available.
 | `player_page` | character | Player's OverTheCap url |
 | `otc_id` | integer | Over the Cap ID for player |
 | `gsis_id` | character | Game Stats and Info Service ID: the primary ID for play-by-play data. |
-| `date_of_birth` | character | Player date of birth (if published). |
+| `date_of_birth` | character |  |
 | `height` | character | Official height, in inches |
 | `weight` | character | Official weight, in pounds |
 | `college` | character | Official college (usually the last one attended) |
 | `draft_year` | integer | Year that player was drafted |
 | `draft_round` | integer | Round that player was drafted in |
-| `draft_overall` | integer | Overall draft selection number. |
+| `draft_overall` | integer |  |
 | `draft_team` | character | Team that drafted player |
 | `cols` | double | Placeholder column retained in the contracts loader output schema; contains no meaningful data in this context. |
 | `season_history` | double | List of structs, one per league year covered by the contract (year as a string, team, base_salary, prorated_bonus, option_bonus, roster_bonus, guaranteed_salary, cap_number, cap_percent, cash_paid, workout_bonus, per_game_roster_bonus, other_bonus), money in millions of dollars and a final 'Total' row per nflreadr. |
@@ -928,13 +928,13 @@ Polars dataframe containing historical contracts available.
 | `player_page` | character | Player's OverTheCap url |
 | `otc_id` | integer | Over the Cap ID for player |
 | `gsis_id` | character | Game Stats and Info Service ID: the primary ID for play-by-play data. |
-| `date_of_birth` | character | Player date of birth (if published). |
+| `date_of_birth` | character |  |
 | `height` | character | Official height, in inches |
 | `weight` | character | Official weight, in pounds |
 | `college` | character | Official college (usually the last one attended) |
 | `draft_year` | integer | Year that player was drafted |
 | `draft_round` | integer | Round that player was drafted in |
-| `draft_overall` | integer | Overall draft selection number. |
+| `draft_overall` | integer |  |
 | `draft_team` | character | Team that drafted player |
 | `cols` | double | Number of contract columns returned in the contracts dataset (metadata artifact from the loader). |
 | `season_history` | double | List of structs, one per league year covered by the contract (year as a string, team, base_salary, prorated_bonus, option_bonus, roster_bonus, guaranteed_salary, cap_number, cap_percent, cash_paid, workout_bonus, per_game_roster_bonus, other_bonus), money in millions of dollars and a final 'Total' row per nflreadr. |

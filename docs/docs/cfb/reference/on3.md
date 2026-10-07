@@ -9,6 +9,14 @@ toc_max_heading_level: 2
 
 `sportsdataverse.cfb` — 78 endpoints.
 
+## Collective
+
+| Function | Summary |
+|---|---|
+| [on3_collective_groups](on3/collective.md#on3_collective_groups) | GET /rdb/v1/collective-groups |
+| [on3_collective_groups_deals](on3/collective.md#on3_collective_groups_deals) | GET /rdb/v1/collective-groups/{key}/deals |
+| [on3_collective_groups_key](on3/collective.md#on3_collective_groups_key) | GET /rdb/v1/collective-groups/{key} |
+
 ## Commits
 
 | Function | Summary |
@@ -83,6 +91,16 @@ toc_max_heading_level: 2
 | [on3_recruitments_rpm_picks](on3/recruitment.md#on3_recruitments_rpm_picks) | GET /rdb/v1/recruitments/{recKey}/rpm-picks |
 | [on3_recruitments_rpm_summary](on3/recruitment.md#on3_recruitments_rpm_summary) | GET /rdb/v1/recruitments/{recKey}/rpm-summary |
 
+## Team
+
+| Function | Summary |
+|---|---|
+| [on3_team_ranking](on3/team.md#on3_team_ranking) | GET /rdb/v1/team-ranking |
+| [on3_team_ranking_bluechips_team_rankings](on3/team.md#on3_team_ranking_bluechips_team_rankings) | GET /rdb/v1/team-ranking/{sport}-{year}/bluechips-team-rankings |
+| [on3_team_ranking_consensus_team_rankings](on3/team.md#on3_team_ranking_consensus_team_rankings) | GET /rdb/v1/team-ranking/{sport}-{year}/consensus-team-rankings |
+| [on3_team_ranking_organizations_summary](on3/team.md#on3_team_ranking_organizations_summary) | GET /rdb/v1/team-ranking/organizations/{orgKey}/summary |
+| [on3_team_ranking_team_rankings](on3/team.md#on3_team_ranking_team_rankings) | GET /rdb/v1/team-ranking/{sport}-{year}/team-rankings |
+
 ## Transfers
 
 | Function | Summary |
@@ -96,9 +114,6 @@ toc_max_heading_level: 2
 |---|---|
 | [on3_coaches_history](on3/other.md#on3_coaches_history) | GET /rdb/v1/coaches/{personKey}/history |
 | [on3_coaches_profile](on3/other.md#on3_coaches_profile) | GET /rdb/v1/coaches/{personKey}/profile |
-| [on3_collective_groups](on3/other.md#on3_collective_groups) | GET /rdb/v1/collective-groups |
-| [on3_collective_groups_deals](on3/other.md#on3_collective_groups_deals) | GET /rdb/v1/collective-groups/{key}/deals |
-| [on3_collective_groups_key](on3/other.md#on3_collective_groups_key) | GET /rdb/v1/collective-groups/{key} |
 | [on3_draft_organization_rank](on3/other.md#on3_draft_organization_rank) | GET /rdb/v1/draft-organization-rank |
 | [on3_draft_pick_organization_rank](on3/other.md#on3_draft_pick_organization_rank) | GET /rdb/v1/draft-pick-organization-rank |
 | [on3_drafts](on3/other.md#on3_drafts) | GET /rdb/v1/drafts |
@@ -120,9 +135,4 @@ toc_max_heading_level: 2
 | [on3_predictions_user_key](on3/other.md#on3_predictions_user_key) | Expert prediction accuracy + feed (see PredictionAccuracies) |
 | [on3_quotes](on3/other.md#on3_quotes) | GET /rdb/v1/quotes |
 | [on3_quotes_key](on3/other.md#on3_quotes_key) | GET /rdb/v1/quotes/{key} |
-| [on3_team_ranking](on3/other.md#on3_team_ranking) | GET /rdb/v1/team-ranking |
-| [on3_team_ranking_bluechips_team_rankings](on3/other.md#on3_team_ranking_bluechips_team_rankings) | GET /rdb/v1/team-ranking/{sport}-{year}/bluechips-team-rankings |
-| [on3_team_ranking_consensus_team_rankings](on3/other.md#on3_team_ranking_consensus_team_rankings) | GET /rdb/v1/team-ranking/{sport}-{year}/consensus-team-rankings |
-| [on3_team_ranking_organizations_summary](on3/other.md#on3_team_ranking_organizations_summary) | GET /rdb/v1/team-ranking/organizations/{orgKey}/summary |
-| [on3_team_ranking_team_rankings](on3/other.md#on3_team_ranking_team_rankings) | GET /rdb/v1/team-ranking/{sport}-{year}/team-rankings |
 | [on3_videos_video_key](on3/other.md#on3_videos_video_key) | GET /rdb/v1/videos/{videoKey} |
