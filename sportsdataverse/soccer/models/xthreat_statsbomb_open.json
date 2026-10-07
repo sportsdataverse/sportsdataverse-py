@@ -225,25 +225,29 @@
         "competition_id": 43,
         "season_id": 3,
         "name": "FIFA World Cup 2018",
-        "matches": 64
+        "matches": 64,
+        "discovered": 64
       },
       {
         "competition_id": 43,
         "season_id": 106,
         "name": "FIFA World Cup 2022",
-        "matches": 62
+        "matches": 62,
+        "discovered": 64
       },
       {
         "competition_id": 55,
         "season_id": 43,
         "name": "UEFA Euro 2020",
-        "matches": 46
+        "matches": 46,
+        "discovered": 51
       },
       {
         "competition_id": 55,
         "season_id": 282,
         "name": "UEFA Euro 2024",
-        "matches": 50
+        "matches": 50,
+        "discovered": 51
       }
     ],
     "matches": 222,

@@ -73,6 +73,7 @@ description: "sdv-py SOCCER: endpoint references, dataset loaders and parsers fo
 ## See also
 
 - [kloppy](https://kloppy.pysport.org) — reads ~15 event and tracking providers behind the `soccer` extra's open-data loader
+- [socceraction](https://github.com/ML-KULeuven/socceraction) — the SPADL and xT reference implementation these ports follow
 - [sdvplot](https://github.com/sportsdataverse/sdvplot) — `pitch_coords()` puts any provider's events on the 105 x 68 pitch
 - [sdvplotR](https://github.com/sportsdataverse/sdvplotR) — the R twin (`sdv_pitch_coords()`)
 - [itscalledsoccer](https://github.com/American-Soccer-Analysis/itscalledsoccer) — American Soccer Analysis's own client for the API behind `asa_*`

@@ -139,6 +139,10 @@ def test_bundled_model_loads_and_is_sane() -> None:
     assert m.xT.shape == (12, 16) and 0 <= m.xT.min() and m.xT.max() <= 1
     center = m.xT[[5, 6], :].mean(axis=0)
     assert np.all(np.diff(center[:14]) >= -1e-9)  # non-decreasing toward the goal up to the box
+    assert m.xT.max() > 0.1 and center[-1] > center[0]  # rejects an all-zero grid
+    # measured 2026-10-07: 222 of 230 matches fit, 8 skipped on a kloppy deserializer error
+    assert m.meta["matches"] == sum(c["matches"] for c in m.meta["competitions"])
+    assert len(m.meta["skipped"]) == 8
     for key in ("competitions", "matches", "actions", "kloppy_version", "fit_date", "eps", "iterations", "license"):
         assert key in m.meta
 
