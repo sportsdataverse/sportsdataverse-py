@@ -389,6 +389,7 @@ def test_parity_with_the_socceraction_oracle() -> None:
 
     pairs = synthetic(ours).join(synthetic(oracle), on="prev_id", suffix="_o", how="inner")
     assert synthetic(ours).height == synthetic(oracle).height == pairs.height
+    assert pairs.height == 36  # measured 2026-10-07 — a change here means the dribble rule changed
     for c in ("start_x", "start_y", "end_x", "end_y", "time_seconds"):
         assert (pairs[c] - pairs[c + "_o"]).abs().max() < 1e-6, c
     assert pairs["player_id"].to_list() == pairs["player_id_o"].to_list()
