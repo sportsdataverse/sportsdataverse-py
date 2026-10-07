@@ -7,6 +7,7 @@ kloppy itself; the one live test reads StatsBomb open data over the network.
 from __future__ import annotations
 
 import json
+import subprocess
 import sys
 from pathlib import Path
 from typing import Any
@@ -142,3 +143,11 @@ def test_live_statsbomb_open_data_match_8658() -> None:
     assert df.height > 1000
     assert CORE_COLUMNS <= set(df.columns)
     assert df.filter(pl.col("event_type") == "SHOT").height > 10
+
+
+def test_provider_module_resolves_in_a_fresh_interpreter() -> None:
+    # A bare ``import kloppy`` does not attach ``kloppy.statsbomb``; this suite's importorskip above
+    # does, which is how the getattr-based loader passed here but failed for real users.
+    code = "from sportsdataverse.soccer.soccer_events import _provider_module; print(_provider_module('statsbomb').__name__)"
+    out = subprocess.run([sys.executable, "-c", code], capture_output=True, text=True, check=True)
+    assert out.stdout.strip() == "kloppy.statsbomb"

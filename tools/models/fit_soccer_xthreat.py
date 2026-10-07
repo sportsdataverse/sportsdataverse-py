@@ -48,13 +48,13 @@ def main() -> int:
     ap.add_argument("--sleep", type=float, default=0.25)
     args = ap.parse_args()
     import kloppy
-    import kloppy.statsbomb  # noqa: F401 - kloppy does not attach provider submodules on a bare import
 
     frames: list[pl.DataFrame] = []
     used: list[dict[str, Any]] = []
     skipped: list[dict[str, Any]] = []
     for cid, sid, name in DEFAULT:
         ids = match_ids(cid, sid)
+        found = len(ids)
         if args.limit:
             ids = ids[: args.limit]
         n = 0
@@ -66,7 +66,7 @@ def main() -> int:
                 print(f"WARNING: skipping match {mid}: {exc!r}", file=sys.stderr, flush=True)
                 skipped.append({"match_id": mid, "error": repr(exc)})
             time.sleep(args.sleep)
-        used.append({"competition_id": cid, "season_id": sid, "name": name, "matches": n})
+        used.append({"competition_id": cid, "season_id": sid, "name": name, "matches": n, "discovered": found})
         print(f"{name}: {n} matches", flush=True)
     actions = pl.concat(frames, how="diagonal_relaxed")
     model = XThreat().fit(actions)

@@ -12,6 +12,7 @@ Install with ``pip install "sportsdataverse[soccer]"``.
 from __future__ import annotations
 
 import dataclasses
+import importlib
 from typing import TYPE_CHECKING, Any, Dict, Union
 
 from sportsdataverse.dl_utils import underscore
@@ -32,6 +33,12 @@ def _kloppy() -> Any:
     except ImportError as exc:
         raise ImportError(f"kloppy is required: {_INSTALL_HINT}") from exc
     return kloppy
+
+
+def _provider_module(key: str) -> Any:
+    """Import ``kloppy.<provider>`` explicitly: a bare ``import kloppy`` does not attach it."""
+    _kloppy()
+    return importlib.import_module(f"kloppy.{_OPEN_DATA_PROVIDERS[key]}")
 
 
 def _stamp_game_id(dataset: Any, game_id: Union[int, str]) -> Any:
@@ -144,9 +151,9 @@ def soccer_open_dataset(provider: str, match_id: Union[int, str], **kwargs: Any)
     key = provider.lower()
     if key not in _OPEN_DATA_PROVIDERS:
         raise ValueError(f"unknown open-data provider {provider!r}; supported: {sorted(_OPEN_DATA_PROVIDERS)}")
-    kloppy = _kloppy()
+    module = _provider_module(key)
     kwargs.setdefault("coordinates", key)  # provider units (StatsBomb 120 x 80), what pitch_coords() expects
-    dataset = getattr(kloppy, _OPEN_DATA_PROVIDERS[key]).load_open_data(match_id=match_id, **kwargs)
+    dataset = module.load_open_data(match_id=match_id, **kwargs)
     return _stamp_game_id(dataset, match_id)
 
 
