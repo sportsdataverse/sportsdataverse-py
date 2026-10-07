@@ -361,3 +361,20 @@ def test_docusaurus_config_comment_is_current():
     assert "main (latest)" in cfg
     assert "docs-deploy.yml" in cfg
     assert "/docs/0.0.50/ tree) are NOT served" in cfg
+
+
+def test_claude_md_data_sources_names_every_registry_provider():
+    """The provider paragraph is hand-written, and it missed Jolpica and kloppy at one merge and
+    the five wave-2 providers at the next. Every sources.yaml provider must appear by label, key or
+    flat-API stem (ESPN and the two release-loader providers are the paragraph's stated baseline)."""
+    from tools.codegen import sources
+
+    body = text("claude").split("## Data sources", 1)[1].split("\n## ", 1)[0]
+    flat_body = " ".join(body.split()).lower()
+    missing = [
+        e.key
+        for e in sources.providers()
+        if e.key not in ("espn", "nflverse", "sdv_releases")
+        and not any(n.lower() in flat_body for n in (e.label, e.key, *e.flat_apis))
+    ]
+    assert not missing, f"CLAUDE.md's Data sources section omits: {missing}"

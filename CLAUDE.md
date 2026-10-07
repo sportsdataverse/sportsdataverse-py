@@ -201,6 +201,8 @@ sportsdataverse/
   fox/        # Fox Sports API (fox_api_* wrappers + parsers)
   yahoo/      # Yahoo Sports Shangrila (yahoo_shangrila_* wrappers + parsers)
   euroleague/ # EuroLeague Competition Engine (0.1.5)
+  espn_content/ # ESPN content API (articles, news)
+  thesportsdb/  # TheSportsDB (multi-sport reference data)
   registry/   # metric registry: resolver + TypeScript render
   validation/ # pbp/box invariant sweeps + per-game gate (validate_game, GameReport)
   wexp/       # win-expectancy engines, baselines, backtests
@@ -1263,11 +1265,15 @@ generated table in `docs/docs/intro.md`.
 Providers beyond ESPN and the release loaders: NFL.com Shield (`nfl_api`), NFL Pro
 (`nflpro`), Sleeper (`sleeper`), PFF Developer (`pff_api`) and PFF Premium
 (LEGACY), MLB Stats API (`mlb_api`) and Baseball Savant (`mlb_statcast`), the four
-NHL APIs, `nba_stats` / `wnba_stats`, `kenpom`, `torvik`, `bart_wbb`, Her Hoop
-Stats, Basketball-Reference, RealGM, public model datasets (DARKO / EPM / LEBRON),
-On3 and 247Sports, `asa`, `mls_api`, `nwsl_api`, `fotmob`, `uefa`, `fifa`,
-`euroleague`, `cbs_napi`, `yahoo_shangrila`, `fox_api`, HockeyTech, stats.ncaa.org
-and The Odds API.
+NHL APIs (`nhl_api_web`, `nhl_edge`, `nhl_stats_rest`, `nhl_records`), `nba_stats` /
+`wnba_stats`, `kenpom`, `torvik`, `bart_wbb`, Her Hoop Stats, Basketball-Reference,
+RealGM, public model datasets (DARKO / EPM / LEBRON), On3 and 247Sports (`on3`,
+`sports247`), `asa`, `mls_api`, `nwsl_api`, `fotmob`, `uefa`, `fifa`, kloppy open
+event data, Football-Data.co.uk (`football_data`), OpenLigaDB (`openligadb`),
+TheSportsDB (`thesportsdb`), `euroleague`, Jolpica (`f1`), `cbs_napi`,
+`yahoo_shangrila`, `fox_api`, HockeyTech, stats.ncaa.org, The Odds API, and the
+prediction markets Polymarket (`polymarket`) and Kalshi (`kalshi`). ESPN's content API
+(`espn_content`) files under ESPN.
 
 Helper categories (non-data functions, grouped on every page's **Tools and
 helpers**): play-by-play processing (including the `football/sources` adapters for
