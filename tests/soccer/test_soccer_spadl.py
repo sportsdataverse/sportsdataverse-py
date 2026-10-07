@@ -269,6 +269,32 @@ def test_add_dribbles_inserts_a_synthetic_carry() -> None:
     assert out["action_id"].to_list() == [0, 1, 2]
 
 
+def test_add_dribbles_skips_any_shot_and_any_headed_action() -> None:
+    def frame(next_type: str, next_body: str) -> pl.DataFrame:
+        return pl.DataFrame(
+            {
+                "game_id": ["g", "g"],
+                "original_event_id": ["a", "b"],
+                "action_id": [0, 1],
+                "period_id": [1, 1],
+                "time_seconds": [10.0, 14.0],
+                "team_id": ["t", "t"],
+                "player_id": ["p", "p"],
+                "start_x": [10.0, 20.0],
+                "start_y": [10.0, 10.0],
+                "end_x": [12.0, 30.0],
+                "end_y": [10.0, 10.0],
+                "bodypart_id": [0, spadl._BODYPART[next_body]],
+                "type_id": [spadl._TYPE["pass"], spadl._TYPE[next_type]],
+                "result_id": [1, 1],
+            }
+        )
+
+    assert spadl._add_dribbles(frame("shot", "foot")).height == 2  # any shot
+    assert spadl._add_dribbles(frame("pass", "head")).height == 2  # any headed action
+    assert spadl._add_dribbles(frame("pass", "foot")).height == 3
+
+
 def test_add_dribbles_respects_the_thresholds() -> None:
     base = {
         "game_id": ["g", "g"],

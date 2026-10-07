@@ -310,7 +310,8 @@ def _add_dribbles(df: pl.DataFrame) -> pl.DataFrame:
     cond = (
         (pl.col("team_id") == nxt["team_id"])
         & (nxt["type_id"] != _TYPE["foul"])
-        & ~((nxt["type_id"] == _TYPE["shot"]) & (nxt["bodypart_id"] == _BODYPART["head"]))
+        & (nxt["type_id"] != _TYPE["shot"])
+        & (nxt["bodypart_id"] != _BODYPART["head"])
         & (dist2 >= MIN_DRIBBLE_LENGTH**2)
         & (dist2 <= MAX_DRIBBLE_LENGTH**2)
         & ((nxt["time_seconds"] - pl.col("time_seconds")) < MAX_DRIBBLE_DURATION)
