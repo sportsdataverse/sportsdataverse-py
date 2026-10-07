@@ -10,8 +10,9 @@ On Windows the interpreter is ``<venv>/Scripts/python.exe``.
 
 Writes ``<game_id>_spadl.csv`` (socceraction's DIRECT StatsBomb converter, with names, after
 ``play_left_to_right`` so every action attacks left to right), ``<game_id>_xt_fit.json``
-(``ExpectedThreat(l=16, w=12)`` fit on those actions alone, saved with ``save_model``) and
-``<game_id>_xt_fit_log.txt`` (the iteration count socceraction prints).
+(``ExpectedThreat(l=16, w=12)`` fit on those actions alone, saved with ``save_model``),
+``<game_id>_xt_fit_log.txt`` (the iteration count socceraction prints) and ``<game_id>_xt_rate.csv``
+(``ExpectedThreat.rate`` of that fitted model on the same actions, one value per action, NaN where unrated).
 
 socceraction is MIT (c) 2019 KU Leuven Machine Learning Research Group. StatsBomb open data is
 free for research and non-commercial use under StatsBomb's public-data license.

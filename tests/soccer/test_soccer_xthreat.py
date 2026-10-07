@@ -126,6 +126,7 @@ def test_rate_matches_the_socceraction_oracle() -> None:
     assert oracle["action_id"].to_list() == a["action_id"].to_list()
     model = xt.XThreat.from_json(ORACLE_GRID)
     for ours in (model.rate(a), xt.soccer_xthreat_rate(a, model=model)["xt_value"]):
+        assert not ours.is_nan().any()  # unrated actions are null, never NaN
         got, want = ours.to_numpy(), oracle["xt"].to_numpy()  # nulls come back as NaN on both sides
         assert np.array_equal(np.isnan(got), np.isnan(want)) and np.isnan(want).sum() == 453
         assert np.abs(got[~np.isnan(got)] - want[~np.isnan(want)]).max() < 1e-12

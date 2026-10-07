@@ -1,7 +1,7 @@
 """Fit the bundled Expected Threat grid on StatsBomb open data.
 
     uv run python tools/models/fit_soccer_xthreat.py            # all default competitions (230 matches)
-    uv run python tools/models/fit_soccer_xthreat.py --limit 5  # smoke run
+    uv run python tools/models/fit_soccer_xthreat.py --limit 5 --out /tmp/xt_smoke.json  # smoke run (never the bundled path)
 
 Default competitions (ids verified against open-data competitions.json on 2026-10-07): World Cup 2018 (43/3),
 World Cup 2022 (43/106), Euro 2020 (55/43), Euro 2024 (55/282). Match discovery reads
