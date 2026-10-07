@@ -44,6 +44,12 @@ especially for American football.
 pip install sportsdataverse
 ```
 
+:::caution Deprecated
+`sportsdataverse.parsed.*` is deprecated. The league wrappers already default to
+`return_parsed=True`, so call `sportsdataverse.nba` (etc.) directly; the `parsed`
+namespace is a thin alias kept for back-compat.
+:::
+
 ```python
 # Today's NBA scoreboard as a polars DataFrame — no kwargs needed via parsed.*
 from sportsdataverse.parsed.nba import espn_nba_scoreboard
@@ -56,9 +62,9 @@ print(df.select(["event_id", "home_name", "away_name",
                  "home_score", "away_score"]).head())
 
 # Aaron Judge's 2024 season stats from the official MLB API
-from sportsdataverse.mlb import mlb_api_person_stats, parse_mlb_api_person_stats
+from sportsdataverse.mlb import mlb_person_stats, parse_mlb_api_person_stats
 judge = parse_mlb_api_person_stats(
-    mlb_api_person_stats(person_id=592450, stats="season", season=2024)
+    mlb_person_stats(person_id=592450, stats="season", season=2024)
 )
 print(judge.select(["stats_group", "stat_home_runs", "stat_avg"]))
 
@@ -75,24 +81,90 @@ matching `parse_*` function for NHL / MLB sibling APIs. See
 
 ## Supported leagues and data sources
 
-| League | Module | Surfaces covered |
+<!-- BEGIN generated: leagues-and-sources -->
+| League | Module | Data sources |
 |---|---|---|
-| NBA | `sportsdataverse.nba` | ESPN (Site v2 + Web v3 + Core v2) + stats.nba.com (`nba_stats_*`; G-League / Summer League via `league_id`) + Fox Sports |
-| WNBA | `sportsdataverse.wnba` | ESPN + stats.wnba.com (`wnba_stats_*`) |
-| MBB (NCAA M) | `sportsdataverse.mbb` | ESPN + NCAA-only (rankings, recruits) + stats.ncaa.org (`ncaa_mbb_*` + pbp/lineup/stint engine) + Fox Sports |
-| WBB (NCAA W) | `sportsdataverse.wbb` | ESPN + NCAA-only + stats.ncaa.org (`ncaa_wbb_*`) |
-| CFB | `sportsdataverse.cfb` | ESPN + NCAA + stats.ncaa.org (`cfb_ncaa_pbp` + box parsers) + football-only (QBR) + Fox Sports + Yahoo Sports |
-| NFL | `sportsdataverse.nfl` | ESPN + NFL.com API + nflverse loaders (nflreadpy parity) + football-only (QBR) |
-| MLB | `sportsdataverse.mlb` | ESPN + MLB Stats API (`statsapi.mlb.com`) + Baseball Savant / Statcast (`mlb_statcast_*`) + Fox Sports |
-| NHL | `sportsdataverse.nhl` | `api-web.nhle.com/v1/` (game-feed) + NHL EDGE (player tracking) + Stats REST + Records site + Fox Sports |
-| PWHL | `sportsdataverse.pwhl` | HockeyTech/LeagueStat (schedule / pbp / shifts / xG) |
-| Minor & junior hockey | `sportsdataverse.hockey.<lg>` | HockeyTech — 20 league families (`ahl`, `echl`, `ohl`, `whl`, `qmjhl`, `ushl`, …) |
-| College hockey (M/W) | `sportsdataverse.hockey.mch` / `.wch` | ESPN |
-| College baseball & softball | `sportsdataverse.baseball` | ESPN + stats.ncaa.org pbp parsers |
-| Soccer | `sportsdataverse.soccer` | ESPN (league-parameterized — MLS, NWSL, EPL, …) |
-| Cricket | `sportsdataverse.cricket` | ESPN + bundled win-probability models |
-| UFL / XFL / CFL | `sportsdataverse.football` | ESPN |
-| Odds | `sportsdataverse.odds` | Odds & betting lines |
+| [NBA](nba/) | `sportsdataverse.nba` | ESPN (122), sportsdataverse-data releases (42), NBA Stats API (130), Fox Sports API (26), Basketball-Reference (9), RealGM (18), Public model datasets (7) |
+| [WNBA](wnba/) | `sportsdataverse.wnba` | ESPN (123), sportsdataverse-data releases (39), WNBA Stats API (113), Fox Sports API (26) |
+| [NBA G League](nbagl/) | `sportsdataverse.nbagl` | ESPN (112) |
+| [MBB](mbb/) | `sportsdataverse.mbb` | ESPN (128), sportsdataverse-data releases (34), stats.ncaa.org (118), KenPom (32), Bart Torvik T-Rank (5), Fox Sports API (27) |
+| [WBB](wbb/) | `sportsdataverse.wbb` | ESPN (129), sportsdataverse-data releases (34), stats.ncaa.org (111), Bart Torvik Women's T-Rank (1), Fox Sports API (27), Her Hoop Stats (5) |
+| [CFB](cfb/) | `sportsdataverse.cfb` | ESPN (131), sportsdataverse-data releases (74), stats.ncaa.org (1), On3 Recruit Database (82), 247Sports Recruit Database (47), Yahoo Sports Shangrila (7), Fox Sports API (29) |
+| [NFL](nfl/) | `sportsdataverse.nfl` | ESPN (124), NFL.com Shield API (22), NFL Pro (32), Sleeper fantasy API (15), PFF Developer API (68), PFF Premium Stats (LEGACY) (46), nflverse data releases (57), sportsdataverse-data releases (21), Fox Sports API (25) |
+| [MLB](mlb/) | `sportsdataverse.mlb` | ESPN (122), sportsdataverse-data releases (32), MLB Stats API (79), Baseball Savant (Statcast) (43), Fox Sports API (23) |
+| [NHL](nhl/) | `sportsdataverse.nhl` | ESPN (119), sportsdataverse-data releases (32), NHL Web API (28), NHL EDGE (35), NHL Stats REST (21), NHL Records (50), Fox Sports API (25) |
+| [MCH](mch/) | `sportsdataverse.mch` | ESPN (118) |
+| [WCH](wch/) | `sportsdataverse.wch` | ESPN (118) |
+| [College baseball](college_baseball/) | `sportsdataverse.college_baseball` | ESPN (122), stats.ncaa.org (3) |
+| [College softball](college_softball/) | `sportsdataverse.college_softball` | ESPN (121) |
+| [UFL](ufl/) | `sportsdataverse.ufl` | ESPN (114) |
+| [XFL](xfl/) | `sportsdataverse.xfl` | ESPN (112) |
+| [CFL](cfl/) | `sportsdataverse.cfl` | ESPN (112) |
+| [Soccer (all)](soccer/) | `sportsdataverse.soccer` | ESPN (112), American Soccer Analysis (16), FotMob (14), UEFA (7), FIFA (9), Football-Data.co.uk (3), OpenLigaDB (11), kloppy open event data (2) |
+| [EPL](epl/) | `sportsdataverse.epl` | ESPN (113) |
+| [LaLiga](laliga/) | `sportsdataverse.laliga` | ESPN (112) |
+| [Bundesliga](bundesliga/) | `sportsdataverse.bundesliga` | ESPN (112) |
+| [Serie A](seriea/) | `sportsdataverse.seriea` | ESPN (112) |
+| [Ligue 1](ligue1/) | `sportsdataverse.ligue1` | ESPN (112) |
+| [MLS](mls/) | `sportsdataverse.mls` | ESPN (113), MLS official web API (12) |
+| [Liga MX](ligamx/) | `sportsdataverse.ligamx` | ESPN (112) |
+| [UCL](ucl/) | `sportsdataverse.ucl` | ESPN (113) |
+| [UEL](uel/) | `sportsdataverse.uel` | ESPN (112) |
+| [NWSL](nwsl/) | `sportsdataverse.nwsl` | ESPN (112), NWSL official web API (9) |
+| [WWC](wwc/) | `sportsdataverse.wwc` | ESPN (112) |
+| [WC](wc/) | `sportsdataverse.wc` | ESPN (112) |
+| [Cricket](cricket/) | `sportsdataverse.cricket` | ESPN (112) |
+| [PWHL](pwhl/) | `sportsdataverse.pwhl` | sportsdataverse-data releases (27), HockeyTech / LeagueStat (25) |
+| [AHL](ahl/) | `sportsdataverse.hockey.ahl` | HockeyTech / LeagueStat (11) |
+| [OHL](ohl/) | `sportsdataverse.hockey.ohl` | HockeyTech / LeagueStat (11) |
+| [WHL](whl/) | `sportsdataverse.hockey.whl` | HockeyTech / LeagueStat (11) |
+| [QMJHL](qmjhl/) | `sportsdataverse.hockey.qmjhl` | HockeyTech / LeagueStat (11) |
+| [ECHL](echl/) | `sportsdataverse.hockey.echl` | HockeyTech / LeagueStat (12) |
+| [SPHL](sphl/) | `sportsdataverse.hockey.sphl` | HockeyTech / LeagueStat (12) |
+| [CHL](chl/) | `sportsdataverse.hockey.chl` | HockeyTech / LeagueStat (12) |
+| [USHL](ushl/) | `sportsdataverse.hockey.ushl` | HockeyTech / LeagueStat (12) |
+| [BCHL](bchl/) | `sportsdataverse.hockey.bchl` | HockeyTech / LeagueStat (12) |
+| [AJHL](ajhl/) | `sportsdataverse.hockey.ajhl` | HockeyTech / LeagueStat (12) |
+| [SJHL](sjhl/) | `sportsdataverse.hockey.sjhl` | HockeyTech / LeagueStat (12) |
+| [OJHL](ojhl/) | `sportsdataverse.hockey.ojhl` | HockeyTech / LeagueStat (12) |
+| [CCHL](cchl/) | `sportsdataverse.hockey.cchl` | HockeyTech / LeagueStat (12) |
+| [GOJHL](gojhl/) | `sportsdataverse.hockey.gojhl` | HockeyTech / LeagueStat (12) |
+| [MHL](mhl/) | `sportsdataverse.hockey.mhl` | HockeyTech / LeagueStat (12) |
+| [NOJHL](nojhl/) | `sportsdataverse.hockey.nojhl` | HockeyTech / LeagueStat (12) |
+| [VIJHL](vijhl/) | `sportsdataverse.hockey.vijhl` | HockeyTech / LeagueStat (12) |
+| [KIJHL](kijhl/) | `sportsdataverse.hockey.kijhl` | HockeyTech / LeagueStat (12) |
+| [MJHL](mjhl/) | `sportsdataverse.hockey.mjhl` | HockeyTech / LeagueStat (12) |
+| [Betting odds](odds/) | `sportsdataverse.odds` | The Odds API (11), Polymarket (8), Kalshi (9) |
+| [CBS Sports](cbs/) | `sportsdataverse.cbs` | CBS Sports NAPI (82) |
+| [Yahoo Sports](yahoo/) | `sportsdataverse.yahoo` | Yahoo Sports Shangrila (107) |
+| [Fox Sports](fox/) | `sportsdataverse.fox` | Fox Sports API (33) |
+| [EuroLeague](euroleague/) | `sportsdataverse.euroleague` | EuroLeague Competition Engine (15) |
+| [Formula 1](f1/) | `sportsdataverse.f1` | Jolpica F1 API (Ergast-compatible) (16) |
+| [ESPN content (news)](espn_content/) | `sportsdataverse.espn_content` | ESPN (3) |
+| [TheSportsDB](thesportsdb/) | `sportsdataverse.thesportsdb` | TheSportsDB (12) |
+<!-- END generated: leagues-and-sources -->
+
+## Errors (0.1.5)
+
+- `NoDataError` — the fetch SUCCEEDED and there is nothing there (a 404, or ESPN's
+  200-with-`code:404` body).
+- `AssetFetchError` — the fetch FAILED and the answer is unknown (403, rate limit,
+  exhausted retries). Never record this as an empty season.
+- `ValueError` — a 400 / 422: the request itself is wrong, so retrying cannot help.
+
+As of 0.1.5 the hand-written ESPN scrapers and every generated flat-API getter
+raise rather than returning an error body or an empty dict.
+
+## Asking the package about itself
+
+`sdv-docs` is an MCP server over a prebuilt index of this surface — exact columns,
+function signatures, provider endpoints and released datasets:
+
+```bash
+claude mcp add sdv-docs -- uvx --from 'sportsdataverse[mcp]' sdv-docs
+```
+
+Needs 0.1.5 or newer and Python >= 3.10.
 
 ## Polars / pandas parser layer
 

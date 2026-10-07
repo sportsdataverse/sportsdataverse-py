@@ -1,3 +1,11 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [ESPN content.core v1 fixtures](#espn-contentcore-v1-fixtures)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # ESPN content.core v1 fixtures
 
 Copied verbatim from `sdv-internal-refs/espn-content/captures/` (refs main `22b148b`).

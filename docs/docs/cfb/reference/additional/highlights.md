@@ -1,7 +1,7 @@
 ---
 title: "CFB — additional Python functions — Highlights"
 sidebar_label: "Highlights"
-sidebar_position: 4
+sidebar_position: 1
 description: "CFB — additional Python functions — Highlights — function reference in sdv-py, the SportsDataverse Python package."
 ---
 # CFB — additional Python functions — Highlights

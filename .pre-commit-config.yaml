@@ -124,7 +124,7 @@ repos:
         name: codegen drift check (generated wrappers in sync with metadata)
         entry: uv run python tools/codegen/generate.py --check
         language: system
-        files: ^tools/codegen/(endpoints|schemas|templates)/.*$
+        files: ^(tools/codegen/(endpoints|schemas|templates)/.*|tools/codegen/[^/]*\.py|CHANGELOG\.md)$
         pass_filenames: false
       # commit-msg: enforce Conventional Commits + forbid AI Co-Authored-By
       # trailers (both are CLAUDE.md rules that were previously unenforced).
@@ -147,7 +147,7 @@ repos:
         name: codegen drift check (pre-push)
         entry: uv run python tools/codegen/generate.py --check
         language: system
-        files: ^(tools/codegen/(endpoints|schemas|templates)|docs/docs)/.*$
+        files: ^(tools/codegen/(endpoints|schemas|templates)/.*|tools/codegen/[^/]*\.py|CHANGELOG\.md|docs/docs/.*)$
         pass_filenames: false
         stages: [pre-push]
       # pre-push: the /preflight offline guard. Runs the ID-type / name-matching

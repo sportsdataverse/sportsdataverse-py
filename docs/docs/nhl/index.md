@@ -5,19 +5,126 @@ description: "sdv-py NHL: endpoint references, dataset loaders and parsers for N
 ---
 # NHL (`sportsdataverse.nhl`)
 
-| Reference | Functions | Base URL |
-|---|---:|---|
-| [ESPN site API (v2)](reference/site) | 24 | `https://site.api.espn.com/apis/site/v2/sports` |
-| [ESPN web API (v3)](reference/web) | 5 | `https://site.web.api.espn.com/apis/common/v3/sports` |
-| [ESPN core API (v2)](reference/core) | 82 | `https://sports.core.api.espn.com/v2/sports` |
-| [ESPN FPI API (fitt v3)](reference/fitt) | 1 | `https://site.web.api.espn.com/apis/fitt/v3/sports` |
-| [ESPN CDN API (cdn.espn.com)](reference/cdn) | 1 | `https://cdn.espn.com/core` |
-| [NHL Web API](reference/nhl_api_web) | 27 | `https://api-web.nhle.com` |
-| [NHL EDGE API](reference/nhl_edge) | 35 | `https://api-web.nhle.com` |
-| [NHL Stats REST API](reference/nhl_stats_rest) | 21 | `https://api.nhle.com/stats/rest` |
-| [NHL Records API](reference/nhl_records) | 44 | `https://records.nhl.com/site/api` |
-| [Dataset loaders](reference/loaders) | 27 | sportsdataverse-data releases |
-| [Additional functions](reference/additional) | 87 | hand-written wrappers, loaders & helpers |
+## Data sources
+
+| Source | APIs / hosts | Functions | Auth |
+|---|---|---:|---|
+| [ESPN](#espn) | `cdn.espn.com`, `site.api.espn.com`, `site.web.api.espn.com` +1 more | 119 | none |
+| [sportsdataverse-data releases](#sportsdataverse-data-releases) | `github.com` | 32 | none |
+| [NHL Web API](#nhl-web-api) | `api-web.nhle.com` | 28 | none |
+| [NHL EDGE](#nhl-edge) | `api-web.nhle.com` | 35 | none |
+| [NHL Stats REST](#nhl-stats-rest) | `api.nhle.com` | 21 | none |
+| [NHL Records](#nhl-records) | `records.nhl.com` | 50 | none |
+| [Fox Sports API](#fox-sports-api) | `api.foxsports.com` | 25 | none |
+| [Additional functions](reference/additional) | hand-written wrappers & helpers | 87 | — |
+
+## ESPN {#espn}
+
+| Reference | Functions |
+|---|---:|
+| [ESPN site API (v2)](reference/site) | 24 |
+| [ESPN web API (v3)](reference/web) | 5 |
+| [ESPN core API (v2)](reference/core) | 82 |
+| [ESPN FPI API (fitt v3)](reference/fitt) | 1 |
+| [ESPN CDN API (cdn.espn.com)](reference/cdn) | 1 |
+| [Hand-written wrappers](reference/additional/espn) | 6 |
+
+## sportsdataverse-data releases {#sportsdataverse-data-releases}
+
+| Reference | Functions |
+|---|---:|
+| [sportsdataverse-data releases](reference/loaders) | 27 |
+| [Hand-written wrappers](reference/additional/sportsdataverse-data-releases) | 5 |
+
+## NHL Web API {#nhl-web-api}
+
+| Reference | Functions |
+|---|---:|
+| [NHL Web API](reference/nhl_api_web) | 27 |
+| [Hand-written wrappers](reference/additional/nhl-web-api) | 1 |
+
+## NHL EDGE {#nhl-edge}
+
+| Reference | Functions |
+|---|---:|
+| [NHL EDGE API](reference/nhl_edge) | 35 |
+
+## NHL Stats REST {#nhl-stats-rest}
+
+| Reference | Functions |
+|---|---:|
+| [NHL Stats REST API](reference/nhl_stats_rest) | 21 |
+
+## NHL Records {#nhl-records}
+
+| Reference | Functions |
+|---|---:|
+| [NHL Records API](reference/nhl_records) | 44 |
+| [Hand-written wrappers](reference/additional/nhl-records) | 6 |
+
+## Fox Sports API {#fox-sports-api}
+
+| Reference | Functions |
+|---|---:|
+| [Hand-written wrappers](reference/additional/fox-sports-api) | 25 |
+## Tools and helpers
+
+### Play-by-play processing {#play-by-play-processing}
+
+- [`nhl_pbp_disk`](reference/additional/play-by-play-processing#nhl_pbp_disk)
+
+### Models and calculators {#models-and-calculators}
+
+- [`ImpactConfig`](reference/additional/models-and-calculators#ImpactConfig)
+- [`LeagueConstants`](reference/additional/models-and-calculators#LeagueConstants)
+- [`add_shot_geometry`](reference/additional/models-and-calculators#add_shot_geometry)
+- [`adjust_rate_opponent`](reference/additional/models-and-calculators#adjust_rate_opponent)
+- [`as_of_ratings_split`](reference/additional/models-and-calculators#as_of_ratings_split)
+- [`booster_cache_dir`](reference/additional/models-and-calculators#booster_cache_dir)
+- [`brier_score`](reference/additional/models-and-calculators#brier_score)
+- [`build_design`](reference/additional/models-and-calculators#build_design)
+- [`build_stints`](reference/additional/models-and-calculators#build_stints)
+- [`calibration_table`](reference/additional/models-and-calculators#calibration_table)
+- [`ensure_xg_models`](reference/additional/models-and-calculators#ensure_xg_models)
+- [`get_constants`](reference/additional/models-and-calculators#get_constants)
+- [`load_xg_models`](reference/additional/models-and-calculators#load_xg_models)
+- [`log_loss_score`](reference/additional/models-and-calculators#log_loss_score)
+- [`mae`](reference/additional/models-and-calculators#mae)
+- [`nhl_expected_assists`](reference/additional/models-and-calculators#nhl_expected_assists)
+- [`nhl_goalie_gsax`](reference/additional/models-and-calculators#nhl_goalie_gsax)
+- [`nhl_skater_rapm`](reference/additional/models-and-calculators#nhl_skater_rapm)
+- [`nhl_skater_war`](reference/additional/models-and-calculators#nhl_skater_war)
+- [`nhl_team_ratings`](reference/additional/models-and-calculators#nhl_team_ratings)
+- [`nhl_unit_ratings`](reference/additional/models-and-calculators#nhl_unit_ratings)
+- [`nhl_xg`](reference/additional/models-and-calculators#nhl_xg)
+- [`prepare_xg_features`](reference/additional/models-and-calculators#prepare_xg_features)
+- [`spearman_corr`](reference/additional/models-and-calculators#spearman_corr)
+- [`team_fullname_to_abbr`](reference/additional/models-and-calculators#team_fullname_to_abbr)
+- [`team_game_xg_rates`](reference/additional/models-and-calculators#team_game_xg_rates)
+- [`weighted_ridge`](reference/additional/models-and-calculators#weighted_ridge)
+
+### Analytics {#analytics}
+
+- [`expected_goals`](reference/additional/analytics#expected_goals)
+- [`in_game_features`](reference/additional/analytics#in_game_features)
+- [`nhl_edge_skating_value`](reference/additional/analytics#nhl_edge_skating_value)
+- [`nhl_faceoff_value`](reference/additional/analytics#nhl_faceoff_value)
+- [`nhl_game_total`](reference/additional/analytics#nhl_game_total)
+- [`nhl_in_game_win_prob`](reference/additional/analytics#nhl_in_game_win_prob)
+- [`nhl_penalty_value`](reference/additional/analytics#nhl_penalty_value)
+- [`nhl_player_props`](reference/additional/analytics#nhl_player_props)
+- [`nhl_predict_games`](reference/additional/analytics#nhl_predict_games)
+- [`nhl_special_teams_value`](reference/additional/analytics#nhl_special_teams_value)
+- [`nhl_zone_transitions`](reference/additional/analytics#nhl_zone_transitions)
+- [`predict_margin`](reference/additional/analytics#predict_margin)
+- [`predict_total`](reference/additional/analytics#predict_total)
+- [`win_prob_from_margin`](reference/additional/analytics#win_prob_from_margin)
+
+### Dates and seasons {#dates-and-seasons}
+
+- [`most_recent_nhl_season`](reference/additional/dates-and-seasons#most_recent_nhl_season)
+- [`year_to_season`](reference/additional/dates-and-seasons#year_to_season)
+
 
 ## Examples
 
@@ -73,7 +180,7 @@ Each `sportsdataverse` function and its equivalent in the sister R package, [`fa
 | [`espn_nhl_league_notes`](reference/core/other#espn_nhl_league_notes) | [`espn_nhl_league_notes`](https://fastRhockey.sportsdataverse.org/reference/espn_nhl_league_notes.html) |
 | [`espn_nhl_league_root`](reference/core/other#espn_nhl_league_root) | [`espn_nhl_league_root`](https://fastRhockey.sportsdataverse.org/reference/espn_nhl_league_root.html) |
 | [`espn_nhl_news`](reference/site#espn_nhl_news) | [`espn_nhl_news`](https://fastRhockey.sportsdataverse.org/reference/espn_nhl_news.html) |
-| [`espn_nhl_pbp`](reference/additional/play-by-play-schedule-rosters#espn_nhl_pbp) | [`espn_nhl_pbp`](https://fastRhockey.sportsdataverse.org/reference/espn_nhl_pbp.html) |
+| [`espn_nhl_pbp`](reference/additional/espn#espn_nhl_pbp) | [`espn_nhl_pbp`](https://fastRhockey.sportsdataverse.org/reference/espn_nhl_pbp.html) |
 | [`espn_nhl_player_awards`](reference/core/player#espn_nhl_player_awards) | [`espn_nhl_player_awards`](https://fastRhockey.sportsdataverse.org/reference/espn_nhl_player_awards.html) |
 | [`espn_nhl_player_bio`](reference/site#espn_nhl_player_bio) | [`espn_nhl_player_bio`](https://fastRhockey.sportsdataverse.org/reference/espn_nhl_player_bio.html) |
 | [`espn_nhl_player_career_stats`](reference/core/player#espn_nhl_player_career_stats) | [`espn_nhl_player_career_stats`](https://fastRhockey.sportsdataverse.org/reference/espn_nhl_player_career_stats.html) |
@@ -95,7 +202,7 @@ Each `sportsdataverse` function and its equivalent in the sister R package, [`fa
 | [`espn_nhl_players_index`](reference/core/player#espn_nhl_players_index) | [`espn_nhl_players_index`](https://fastRhockey.sportsdataverse.org/reference/espn_nhl_players_index.html) |
 | [`espn_nhl_position`](reference/core/other#espn_nhl_position) | [`espn_nhl_position`](https://fastRhockey.sportsdataverse.org/reference/espn_nhl_position.html) |
 | [`espn_nhl_positions`](reference/core/other#espn_nhl_positions) | [`espn_nhl_positions`](https://fastRhockey.sportsdataverse.org/reference/espn_nhl_positions.html) |
-| [`espn_nhl_schedule`](reference/additional/play-by-play-schedule-rosters#espn_nhl_schedule) | [`espn_nhl_schedule`](https://fastRhockey.sportsdataverse.org/reference/espn_nhl_schedule.html) |
+| [`espn_nhl_schedule`](reference/additional/espn#espn_nhl_schedule) | [`espn_nhl_schedule`](https://fastRhockey.sportsdataverse.org/reference/espn_nhl_schedule.html) |
 | [`espn_nhl_scoreboard`](reference/site#espn_nhl_scoreboard) | [`espn_nhl_scoreboard`](https://fastRhockey.sportsdataverse.org/reference/espn_nhl_scoreboard.html) |
 | [`espn_nhl_season_awards`](reference/core/season#espn_nhl_season_awards) | [`espn_nhl_season_awards`](https://fastRhockey.sportsdataverse.org/reference/espn_nhl_season_awards.html) |
 | [`espn_nhl_season_coaches`](reference/core/season#espn_nhl_season_coaches) | [`espn_nhl_season_coaches`](https://fastRhockey.sportsdataverse.org/reference/espn_nhl_season_coaches.html) |
@@ -138,24 +245,24 @@ Each `sportsdataverse` function and its equivalent in the sister R package, [`fa
 | [`espn_nhl_team_roster`](reference/site#espn_nhl_team_roster) | [`espn_nhl_team_roster`](https://fastRhockey.sportsdataverse.org/reference/espn_nhl_team_roster.html) |
 | [`espn_nhl_team_schedule`](reference/site#espn_nhl_team_schedule) | [`espn_nhl_team_schedule`](https://fastRhockey.sportsdataverse.org/reference/espn_nhl_team_schedule.html) |
 | [`espn_nhl_team_transactions`](reference/site#espn_nhl_team_transactions) | [`espn_nhl_team_transactions`](https://fastRhockey.sportsdataverse.org/reference/espn_nhl_team_transactions.html) |
-| [`espn_nhl_teams`](reference/additional/other#espn_nhl_teams) | [`espn_nhl_teams`](https://fastRhockey.sportsdataverse.org/reference/espn_nhl_teams.html) |
+| [`espn_nhl_teams`](reference/additional/espn#espn_nhl_teams) | [`espn_nhl_teams`](https://fastRhockey.sportsdataverse.org/reference/espn_nhl_teams.html) |
 | [`espn_nhl_teams_core`](reference/core/other#espn_nhl_teams_core) | [`espn_nhl_teams_core`](https://fastRhockey.sportsdataverse.org/reference/espn_nhl_teams_core.html) |
 | [`espn_nhl_teams_site`](reference/site#espn_nhl_teams_site) | [`espn_nhl_teams_site`](https://fastRhockey.sportsdataverse.org/reference/espn_nhl_teams_site.html) |
 | [`espn_nhl_tournaments`](reference/core/other#espn_nhl_tournaments) | [`espn_nhl_tournaments`](https://fastRhockey.sportsdataverse.org/reference/espn_nhl_tournaments.html) |
 | [`espn_nhl_transactions`](reference/site#espn_nhl_transactions) | [`espn_nhl_transactions`](https://fastRhockey.sportsdataverse.org/reference/espn_nhl_transactions.html) |
 | [`espn_nhl_venue`](reference/core/other#espn_nhl_venue) | [`espn_nhl_venue`](https://fastRhockey.sportsdataverse.org/reference/espn_nhl_venue.html) |
 | [`espn_nhl_venues`](reference/core/other#espn_nhl_venues) | [`espn_nhl_venues`](https://fastRhockey.sportsdataverse.org/reference/espn_nhl_venues.html) |
-| [`fox_nhl_boxscore`](reference/additional/fox#fox_nhl_boxscore) | [`fox_nhl_boxscore`](https://fastRhockey.sportsdataverse.org/reference/fox_nhl_boxscore.html) |
-| [`fox_nhl_league_leaders`](reference/additional/fox#fox_nhl_league_leaders) | [`fox_nhl_league_leaders`](https://fastRhockey.sportsdataverse.org/reference/fox_nhl_league_leaders.html) |
-| [`fox_nhl_odds`](reference/additional/fox#fox_nhl_odds) | [`fox_nhl_odds`](https://fastRhockey.sportsdataverse.org/reference/fox_nhl_odds.html) |
-| [`fox_nhl_pbp`](reference/additional/fox#fox_nhl_pbp) | [`fox_nhl_pbp`](https://fastRhockey.sportsdataverse.org/reference/fox_nhl_pbp.html) |
-| [`fox_nhl_standings`](reference/additional/fox#fox_nhl_standings) | [`fox_nhl_standings`](https://fastRhockey.sportsdataverse.org/reference/fox_nhl_standings.html) |
-| [`fox_nhl_team_gamelog`](reference/additional/fox#fox_nhl_team_gamelog) | [`fox_nhl_team_gamelog`](https://fastRhockey.sportsdataverse.org/reference/fox_nhl_team_gamelog.html) |
-| [`fox_nhl_team_roster`](reference/additional/fox#fox_nhl_team_roster) | [`fox_nhl_team_roster`](https://fastRhockey.sportsdataverse.org/reference/fox_nhl_team_roster.html) |
-| [`fox_nhl_team_stats`](reference/additional/fox#fox_nhl_team_stats) | [`fox_nhl_team_stats`](https://fastRhockey.sportsdataverse.org/reference/fox_nhl_team_stats.html) |
+| [`fox_nhl_boxscore`](reference/additional/fox-sports-api#fox_nhl_boxscore) | [`fox_nhl_boxscore`](https://fastRhockey.sportsdataverse.org/reference/fox_nhl_boxscore.html) |
+| [`fox_nhl_league_leaders`](reference/additional/fox-sports-api#fox_nhl_league_leaders) | [`fox_nhl_league_leaders`](https://fastRhockey.sportsdataverse.org/reference/fox_nhl_league_leaders.html) |
+| [`fox_nhl_odds`](reference/additional/fox-sports-api#fox_nhl_odds) | [`fox_nhl_odds`](https://fastRhockey.sportsdataverse.org/reference/fox_nhl_odds.html) |
+| [`fox_nhl_pbp`](reference/additional/fox-sports-api#fox_nhl_pbp) | [`fox_nhl_pbp`](https://fastRhockey.sportsdataverse.org/reference/fox_nhl_pbp.html) |
+| [`fox_nhl_standings`](reference/additional/fox-sports-api#fox_nhl_standings) | [`fox_nhl_standings`](https://fastRhockey.sportsdataverse.org/reference/fox_nhl_standings.html) |
+| [`fox_nhl_team_gamelog`](reference/additional/fox-sports-api#fox_nhl_team_gamelog) | [`fox_nhl_team_gamelog`](https://fastRhockey.sportsdataverse.org/reference/fox_nhl_team_gamelog.html) |
+| [`fox_nhl_team_roster`](reference/additional/fox-sports-api#fox_nhl_team_roster) | [`fox_nhl_team_roster`](https://fastRhockey.sportsdataverse.org/reference/fox_nhl_team_roster.html) |
+| [`fox_nhl_team_stats`](reference/additional/fox-sports-api#fox_nhl_team_stats) | [`fox_nhl_team_stats`](https://fastRhockey.sportsdataverse.org/reference/fox_nhl_team_stats.html) |
 | [`load_nhl_game_info`](reference/loaders/other#load_nhl_game_info) | [`load_nhl_game_info`](https://fastRhockey.sportsdataverse.org/reference/load_nhl_game_info.html) |
 | [`load_nhl_game_rosters`](reference/loaders/other#load_nhl_game_rosters) | [`load_nhl_game_rosters`](https://fastRhockey.sportsdataverse.org/reference/load_nhl_game_rosters.html) |
-| [`load_nhl_goalie_box`](reference/additional/other#load_nhl_goalie_box) | [`load_nhl_goalie_box`](https://fastRhockey.sportsdataverse.org/reference/load_nhl_goalie_box.html) |
+| [`load_nhl_goalie_box`](reference/additional/sportsdataverse-data-releases#load_nhl_goalie_box) | [`load_nhl_goalie_box`](https://fastRhockey.sportsdataverse.org/reference/load_nhl_goalie_box.html) |
 | [`load_nhl_goalie_boxscores`](reference/loaders/other#load_nhl_goalie_boxscores) | [`load_nhl_goalie_boxscores`](https://fastRhockey.sportsdataverse.org/reference/load_nhl_goalie_boxscores.html) |
 | [`load_nhl_group_aliases`](reference/loaders/other#load_nhl_group_aliases) | [`load_nhl_group_aliases`](https://fastRhockey.sportsdataverse.org/reference/load_nhl_group_aliases.html) |
 | [`load_nhl_group_seasons`](reference/loaders/other#load_nhl_group_seasons) | [`load_nhl_group_seasons`](https://fastRhockey.sportsdataverse.org/reference/load_nhl_group_seasons.html) |
@@ -166,7 +273,7 @@ Each `sportsdataverse` function and its equivalent in the sister R package, [`fa
 | [`load_nhl_pbp_full`](reference/loaders/pbp#load_nhl_pbp_full) | [`load_nhl_pbp_full`](https://fastRhockey.sportsdataverse.org/reference/load_nhl_pbp_full.html) |
 | [`load_nhl_pbp_lite`](reference/loaders/pbp#load_nhl_pbp_lite) | [`load_nhl_pbp_lite`](https://fastRhockey.sportsdataverse.org/reference/load_nhl_pbp_lite.html) |
 | [`load_nhl_penalties`](reference/loaders/other#load_nhl_penalties) | [`load_nhl_penalties`](https://fastRhockey.sportsdataverse.org/reference/load_nhl_penalties.html) |
-| [`load_nhl_player_box`](reference/additional/other#load_nhl_player_box) | [`load_nhl_player_box`](https://fastRhockey.sportsdataverse.org/reference/load_nhl_player_box.html) |
+| [`load_nhl_player_box`](reference/additional/sportsdataverse-data-releases#load_nhl_player_box) | [`load_nhl_player_box`](https://fastRhockey.sportsdataverse.org/reference/load_nhl_player_box.html) |
 | [`load_nhl_player_boxscore`](reference/loaders/other#load_nhl_player_boxscore) | [`load_nhl_player_boxscore`](https://fastRhockey.sportsdataverse.org/reference/load_nhl_player_boxscore.html) |
 | [`load_nhl_player_boxscores`](reference/loaders/other#load_nhl_player_boxscores) | [`load_nhl_player_boxscores`](https://fastRhockey.sportsdataverse.org/reference/load_nhl_player_boxscores.html) |
 | [`load_nhl_rosters`](reference/loaders/other#load_nhl_rosters) | [`load_nhl_rosters`](https://fastRhockey.sportsdataverse.org/reference/load_nhl_rosters.html) |
@@ -177,14 +284,14 @@ Each `sportsdataverse` function and its equivalent in the sister R package, [`fa
 | [`load_nhl_shifts`](reference/loaders/other#load_nhl_shifts) | [`load_nhl_shifts`](https://fastRhockey.sportsdataverse.org/reference/load_nhl_shifts.html) |
 | [`load_nhl_shootout`](reference/loaders/other#load_nhl_shootout) | [`load_nhl_shootout`](https://fastRhockey.sportsdataverse.org/reference/load_nhl_shootout.html) |
 | [`load_nhl_shots_by_period`](reference/loaders/other#load_nhl_shots_by_period) | [`load_nhl_shots_by_period`](https://fastRhockey.sportsdataverse.org/reference/load_nhl_shots_by_period.html) |
-| [`load_nhl_skater_box`](reference/additional/other#load_nhl_skater_box) | [`load_nhl_skater_box`](https://fastRhockey.sportsdataverse.org/reference/load_nhl_skater_box.html) |
+| [`load_nhl_skater_box`](reference/additional/sportsdataverse-data-releases#load_nhl_skater_box) | [`load_nhl_skater_box`](https://fastRhockey.sportsdataverse.org/reference/load_nhl_skater_box.html) |
 | [`load_nhl_skater_boxscores`](reference/loaders/other#load_nhl_skater_boxscores) | [`load_nhl_skater_boxscores`](https://fastRhockey.sportsdataverse.org/reference/load_nhl_skater_boxscores.html) |
-| [`load_nhl_team_box`](reference/additional/other#load_nhl_team_box) | [`load_nhl_team_box`](https://fastRhockey.sportsdataverse.org/reference/load_nhl_team_box.html) |
+| [`load_nhl_team_box`](reference/additional/sportsdataverse-data-releases#load_nhl_team_box) | [`load_nhl_team_box`](https://fastRhockey.sportsdataverse.org/reference/load_nhl_team_box.html) |
 | [`load_nhl_team_boxscore`](reference/loaders/other#load_nhl_team_boxscore) | [`load_nhl_team_boxscore`](https://fastRhockey.sportsdataverse.org/reference/load_nhl_team_boxscore.html) |
 | [`load_nhl_team_boxscores`](reference/loaders/other#load_nhl_team_boxscores) | [`load_nhl_team_boxscores`](https://fastRhockey.sportsdataverse.org/reference/load_nhl_team_boxscores.html) |
 | [`load_nhl_team_group_seasons`](reference/loaders/other#load_nhl_team_group_seasons) | [`load_nhl_team_group_seasons`](https://fastRhockey.sportsdataverse.org/reference/load_nhl_team_group_seasons.html) |
 | [`load_nhl_three_stars`](reference/loaders/other#load_nhl_three_stars) | [`load_nhl_three_stars`](https://fastRhockey.sportsdataverse.org/reference/load_nhl_three_stars.html) |
-| [`most_recent_nhl_season`](reference/additional/other#most_recent_nhl_season) | [`most_recent_nhl_season`](https://fastRhockey.sportsdataverse.org/reference/most_recent_nhl_season.html) |
+| [`most_recent_nhl_season`](reference/additional/dates-and-seasons#most_recent_nhl_season) | [`most_recent_nhl_season`](https://fastRhockey.sportsdataverse.org/reference/most_recent_nhl_season.html) |
 | [`nhl_club_stats_season`](reference/nhl_api_web/club#nhl_club_stats_season) | [`nhl_club_stats_season`](https://fastRhockey.sportsdataverse.org/reference/nhl_club_stats_season.html) |
 | [`nhl_draft_rankings`](reference/nhl_api_web/draft#nhl_draft_rankings) | [`nhl_draft_rankings`](https://fastRhockey.sportsdataverse.org/reference/nhl_draft_rankings.html) |
 | [`nhl_edge_goalie_5v5_detail`](reference/nhl_edge/goalie#nhl_edge_goalie_5v5_detail) | [`nhl_edge_goalie_5v5_detail`](https://fastRhockey.sportsdataverse.org/reference/nhl_edge_goalie_5v5_detail.html) |
@@ -237,7 +344,7 @@ Each `sportsdataverse` function and its equivalent in the sister R package, [`fa
 | [`nhl_records_hof_players`](reference/nhl_records/other#nhl_records_hof_players) | [`nhl_records_hof_players`](https://fastRhockey.sportsdataverse.org/reference/nhl_records_hof_players.html) |
 | [`nhl_roster_season`](reference/nhl_api_web/other#nhl_roster_season) | [`nhl_roster_season`](https://fastRhockey.sportsdataverse.org/reference/nhl_roster_season.html) |
 | [`nhl_schedule_calendar`](reference/nhl_api_web/other#nhl_schedule_calendar) | [`nhl_schedule_calendar`](https://fastRhockey.sportsdataverse.org/reference/nhl_schedule_calendar.html) |
-| [`nhl_scoreboard`](reference/additional/nhl-native#nhl_scoreboard) | [`nhl_scoreboard`](https://fastRhockey.sportsdataverse.org/reference/nhl_scoreboard.html) |
+| [`nhl_scoreboard`](reference/additional/nhl-web-api#nhl_scoreboard) | [`nhl_scoreboard`](https://fastRhockey.sportsdataverse.org/reference/nhl_scoreboard.html) |
 | [`nhl_standings`](reference/nhl_api_web/other#nhl_standings) | [`nhl_standings`](https://fastRhockey.sportsdataverse.org/reference/nhl_standings.html) |
 | [`nhl_standings_season`](reference/nhl_api_web/other#nhl_standings_season) | [`nhl_standings_season`](https://fastRhockey.sportsdataverse.org/reference/nhl_standings_season.html) |
 | [`nhl_web_schedule`](reference/nhl_api_web/web#nhl_web_schedule) | [`nhl_schedule`](https://fastRhockey.sportsdataverse.org/reference/nhl_schedule.html) |

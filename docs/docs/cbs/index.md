@@ -5,9 +5,17 @@ description: "sdv-py CBS: endpoint references, dataset loaders and parsers for C
 ---
 # CBS (`sportsdataverse.cbs`)
 
-| Reference | Functions | Base URL |
-|---|---:|---|
-| [CBS Sports NAPI (api.cbssports.com/napi)](reference/cbs_napi) | 82 | `https://api.cbssports.com/napi` |
+## Data sources
+
+| Source | APIs / hosts | Functions | Auth |
+|---|---|---:|---|
+| [CBS Sports NAPI](#cbs-sports-napi) | `api.cbssports.com` | 82 | none |
+
+## CBS Sports NAPI {#cbs-sports-napi}
+
+| Reference | Functions |
+|---|---:|
+| [CBS Sports NAPI (api.cbssports.com/napi)](reference/cbs_napi) | 82 |
 
 ## Examples
 

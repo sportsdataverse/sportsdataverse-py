@@ -9,7 +9,7 @@ sidebar_position: 50
 Hand-written wrappers, loaders, and helpers in `sportsdataverse.f1`
 not covered by the generated API-endpoint reference above.
 
-## Other
+## Jolpica F1 API (Ergast-compatible)
 
 ### f1_laps {#f1_laps}
 

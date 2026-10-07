@@ -9,6 +9,29 @@
   - [Added — `asa_players_xpass()` and the `nasl` + `usls` ASA leagues](#added--asa_players_xpass-and-the-nasl--usls-asa-leagues)
   - [Added — kloppy as the optional `soccer` extra; `soccer_open_events()` loads open event data](#added--kloppy-as-the-optional-soccer-extra-soccer_open_events-loads-open-event-data)
   - [Changed — league index pages gain a "See also" block of companion packages (soccer first)](#changed--league-index-pages-gain-a-see-also-block-of-companion-packages-soccer-first)
+  - [Added — one play-by-play shape from six providers (#540, #541, #542, #543, #544, #545, #548)](#added--one-play-by-play-shape-from-six-providers-540-541-542-543-544-545-548)
+  - [Added — a nightly cross-source parity harness (#547)](#added--a-nightly-cross-source-parity-harness-547)
+  - [Added — team and coach tendencies, and the usage / situational box (#496, #497, #498, #614)](#added--team-and-coach-tendencies-and-the-usage--situational-box-496-497-498-614)
+  - [Added — NFL Pro Next Gen Stats (#454, #481, #489)](#added--nfl-pro-next-gen-stats-454-481-489)
+  - [Added — the Fox Sports API as a generated family (#680)](#added--the-fox-sports-api-as-a-generated-family-680)
+  - [Added — six documented provider APIs (#452)](#added--six-documented-provider-apis-452)
+  - [Added — the remaining basketball sources (#451, #678)](#added--the-remaining-basketball-sources-451-678)
+  - [Added — NBA officiating (#592)](#added--nba-officiating-592)
+  - [Added — the metric registry (#645)](#added--the-metric-registry-645)
+  - [Added — rolling form windows and shot events (#590, #657)](#added--rolling-form-windows-and-shot-events-590-657)
+  - [Added — metric curves (#652)](#added--metric-curves-652)
+  - [Added — defense vs position (#659)](#added--defense-vs-position-659)
+  - [Added — the Paper Index (#661)](#added--the-paper-index-661)
+  - [Added — a per-game validation gate (#553, #554, #555, #556, #558)](#added--a-per-game-validation-gate-553-554-555-556-558)
+  - [Added — the Shield play-by-play parser and its live layer (#528, #536)](#added--the-shield-play-by-play-parser-and-its-live-layer-528-536)
+  - [Added — the ESPN CDN family (#681)](#added--the-espn-cdn-family-681)
+  - [Added — the NBA G League (#684)](#added--the-nba-g-league-684)
+  - [Fixed — a strip-sack is the defence's recovery (#546)](#fixed--a-strip-sack-is-the-defences-recovery-546)
+  - [Fixed — the NCAA mapper's quarter markers, score walk and overturned yardage (#557)](#fixed--the-ncaa-mappers-quarter-markers-score-walk-and-overturned-yardage-557)
+  - [Fixed — the CFB and NFL processor bug sweeps (#503, #533)](#fixed--the-cfb-and-nfl-processor-bug-sweeps-503-533)
+  - [Fixed — stats.ncaa.org Terms gate (#568, #569, #570)](#fixed--statsncaaorg-terms-gate-568-569-570)
+  - [Changed — native thread pools default to one (#563)](#changed--native-thread-pools-default-to-one-563)
+  - [Changed — the docs site is generated from one registry (#664, #671, #672, #673, #674, #676)](#changed--the-docs-site-is-generated-from-one-registry-664-671-672-673-674-676)
   - [Added — sdv-docs MCP server and a published docs index](#added--sdv-docs-mcp-server-and-a-published-docs-index)
   - [Fixed — nullable boolean and integer columns keep their types; no `"nan"` strings (soccer / EuroLeague frames)](#fixed--nullable-boolean-and-integer-columns-keep-their-types-no-nan-strings-soccer--euroleague-frames)
   - [Fixed — a failed fetch in the hand-written ESPN scrapers raises instead of being parsed (BREAKING)](#fixed--a-failed-fetch-in-the-hand-written-espn-scrapers-raises-instead-of-being-parsed-breaking)
@@ -357,6 +380,7 @@ strings, and order-book price levels as the fixed-point strings the hosts send, 
 rounded or overflowed. Paging stays the caller's: a wrapper sends the cursor or offset you pass and
 never follows a continuation token on its own. Only read-only surfaces are wrapped -- Polymarket
 trading and Kalshi's `/portfolio` routes need credentials and are out of scope.
+
 ### Added — Formula 1: Jolpica (Ergast-compatible) wrappers in `sportsdataverse.f1`
 
 `sportsdataverse.f1` wraps the keyless [Jolpica F1 API](https://github.com/jolpica/jolpica-f1)
@@ -446,6 +470,137 @@ Each league's reference index (`docs/docs/<league>/index.md`) can now list the p
 to reach for next, from the hand-maintained `tools/codegen/companions.yaml` (same shape as `highlights.yaml`).
 The SOCCER page links kloppy, sdvplot, sdvplotR, itscalledsoccer, soccerdata and mplsoccer; leagues without an
 entry render unchanged.
+
+### Added — one play-by-play shape from six providers (#540, #541, #542, #543, #544, #545, #548)
+
+`sportsdataverse.football.sources` adapts a non-ESPN feed into the ESPN summary shape, so
+`NFLPlayProcess` / `CFBPlayProcess` accept `source=` and produce the same frame from any of
+them: Shield (#540), Yahoo for CFB (#541) and NFL (#543), CBS for NFL (#542) and CFB (#545),
+NCAA (#544) and Fox for both (#548). The dispatch table and the parity harness skeleton
+landed first in #525.
+
+### Added — a nightly cross-source parity harness (#547)
+
+`tools/validation/source_parity` compiles the same games from two providers and reports
+column-level disagreement, so an adapter regression surfaces as a diff rather than as a
+silently different number.
+
+### Added — team and coach tendencies, and the usage / situational box (#496, #497, #498, #614)
+
+`football.tendencies` derives team and coach play-calling splits from processed plays, and
+`football.usage_box` the usage, situational and special-teams box for both processors
+(#496, #497). `load_{cfb,nfl}_tendencies` and the ESPN usage leaderboards expose them as released
+datasets (#498), and every split now carries EPA, success rate and game-context cuts (#614).
+
+### Added — NFL Pro Next Gen Stats (#454, #481, #489)
+
+The `pro.nfl.com` family (`nfl_pro_*`, 16 endpoints) plus `load_nfl_ngs(seasons, dataset=)`
+over the SDV-native `nfl_ngs_*` releases built by `nfl-ngs-data` — 12 datasets including the
+three statboards, the unioned leaders table and five `gamecenter_*` tables (#454, #481), and
+the highlight-tracking datasets with corrected access notes (#489).
+
+### Added — the Fox Sports API as a generated family (#680)
+
+`fox_api_*` wraps `api.foxsports.com` directly (33 endpoints), alongside the existing
+per-league `fox_<league>_*` Bifrost wrappers.
+
+### Added — six documented provider APIs (#452)
+
+CBS Sports NAPI (`cbs_napi_*`), Yahoo Shangrila (`yahoo_shangrila_*`), Fox, American Soccer
+Analysis (`asa_*`), MLS (`mls_api_*`) and NWSL (`nwsl_api_*`), each generated from its own
+endpoint YAML.
+
+### Added — the remaining basketball sources (#451, #678)
+
+KenPom, Her Hoop Stats, Basketball-Reference, RealGM and the salary / draft / injury surfaces
+(#451), then Bart Torvik's `torvik_game_stats`, `torvik_player_stats` and the public
+`torvik_game_schedule` (#678).
+
+### Added — NBA officiating (#592)
+
+Last Two Minute reports, referee assignments and the `cdn` liveData feed, as
+`sportsdataverse.nba.nba_officiating`.
+
+### Added — the metric registry (#645)
+
+`sportsdataverse.registry` names every published metric once and resolves it for both Python
+and the TypeScript render path, so a metric's definition has one home.
+
+### Added — rolling form windows and shot events (#590, #657)
+
+`rolling_windows` computes event-count windows with prev-season, season and career baselines
+(#590), extended to stats.nba / stats.wnba shot events (#657).
+
+### Added — metric curves (#652)
+
+`metric_curves` fits rate curves along a continuous axis (shot distance, field position),
+binned on the coordinate distance rather than the nominal label (#658).
+
+### Added — defense vs position (#659)
+
+`defense_vs_position` reports what each defense allowed to QB, RB, WR and TE, filtered by the
+season-type column rather than skipping it (#660).
+
+### Added — the Paper Index (#661)
+
+`paper_index` ports Game on Paper's Paper Index and season deserved wins into the package.
+
+### Added — a per-game validation gate (#553, #554, #555, #556, #558)
+
+`sportsdataverse.validation` grew `validate_game` + `GameReport` (#553), the advBoxScore
+reconciliation rules with their thresholds as constants (#555), NCAA source column aliases
+with an explicit not-applicable scope so all 89 rules are accounted for (#556, #558), and the
+football processor invariant sweeps (#510).
+
+### Added — the Shield play-by-play parser and its live layer (#528, #536)
+
+`sportsdataverse.nfl.shield_pbp` graduates the `native_pbp` parser (#528) and adds the live
+layer: phase, provisional rows, current situation and the `shield_nfl_pbp` entry point (#536).
+
+### Added — the ESPN CDN family (#681)
+
+`cdn.espn.com/core` as generated wrappers (`espn_<league>_cdn_*`), with a per-endpoint league
+allowlist from a live probe matrix.
+
+### Added — the NBA G League (#684)
+
+`espn_nbagl_*` registers the G League as its own documented league.
+
+### Fixed — a strip-sack is the defence's recovery (#546)
+
+NFL type-80 rows were credited to the offence; N37 reassigns the recovery to the defence.
+
+### Fixed — the NCAA mapper's quarter markers, score walk and overturned yardage (#557)
+
+NC12-NC15: quarter markers, the score walk, overtime interception flags and overturned
+yardage, plus same-row penalty enforcement moving the end spot (#550) and no-play rows
+carrying no yardage with block-printed tries attributed to the kicking team (#560).
+
+### Fixed — the CFB and NFL processor bug sweeps (#503, #533)
+
+Stage-1 swept the two processors end to end: timeouts, roof, spread sign, re-run idempotence,
+dedupe, yard line and end clock on the NFL side, and C3-C40 plus the NCAA rounds on the CFB
+side (#503 through #533, including #504, #506, #514, #517, #519, #526, #530, #532).
+
+### Fixed — stats.ncaa.org Terms gate (#568, #569, #570)
+
+stats.ncaa.org began redirecting to `/stats_terms`; the fetch layer now passes the gate
+without ever returning or caching it as content (#568), fits its three-view cap and backs off
+on refusals (#569), and rotates the proxy when a network error interrupts acceptance (#570).
+
+### Changed — native thread pools default to one (#563)
+
+`SDV_XGB_THREADS`: xgboost's predict was fanning across every core per request and saturating
+the API under concurrency. Default 1, raise it deliberately.
+
+### Changed — the docs site is generated from one registry (#664, #671, #672, #673, #674, #676)
+
+Table rows left the search index (#664), function headings became plain with one TOC entry
+each (#671), reference pages over 70 KB split into family pages with old anchors forwarded
+(#672), the version label became `main (latest)` with tutorial redirects and the changelog
+split into three pages (#673), every league reached the sidebar and home page from one
+generated registry with a per-league search index (#674), and the changelog pages are now
+rendered by codegen so they cannot drift (#676).
 
 ### Added — sdv-docs MCP server and a published docs index
 

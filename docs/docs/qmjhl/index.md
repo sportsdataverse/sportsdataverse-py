@@ -5,9 +5,25 @@ description: "sdv-py QMJHL: endpoint references, dataset loaders and parsers for
 ---
 # QMJHL (`sportsdataverse.qmjhl`)
 
-| Reference | Functions | Base URL |
-|---|---:|---|
-| [Additional functions](reference/additional) | 13 | hand-written wrappers, loaders & helpers |
+## Data sources
+
+| Source | APIs / hosts | Functions | Auth |
+|---|---|---:|---|
+| [HockeyTech / LeagueStat](#hockeytech-leaguestat) | `lscluster.hockeytech.com` | 11 | per-league public key (SDV_<LEAGUE>_API_KEY) |
+| [Additional functions](reference/additional) | hand-written wrappers & helpers | 13 | — |
+
+## HockeyTech / LeagueStat {#hockeytech-leaguestat}
+
+| Reference | Functions |
+|---|---:|
+| [Hand-written wrappers](reference/additional) | 11 |
+## Tools and helpers
+
+### Dates and seasons {#dates-and-seasons}
+
+- [`most_recent_qmjhl_season`](reference/additional#most_recent_qmjhl_season)
+- [`qmjhl_season_id`](reference/additional#qmjhl_season_id)
+
 
 ## Examples
 

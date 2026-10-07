@@ -1,3 +1,11 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [Football-Data.co.uk fixtures — provenance](#football-datacouk-fixtures--provenance)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # Football-Data.co.uk fixtures — provenance
 
 Sample heads (header + the first 3 data rows) of the CSV files served by

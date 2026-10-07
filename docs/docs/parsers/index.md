@@ -45,7 +45,7 @@ df  = parse_team_roster(raw)
 df  = parse_team_roster(raw, return_as_pandas=True)
 ```
 
-## The 18 parsers
+## The ESPN cross-league parsers
 
 | Parser | Endpoint family | Output shape |
 |---|---|---|
@@ -109,10 +109,20 @@ Every parser obeys these rules:
 
 ## ENDPOINT_PARSERS registry
 
-The registry maps the *short name* in `_common_espn`'s wrapper tables
-to its parser. **All 121 wrapper short names are registered** — every
-factory-bound wrapper across all 8 leagues gains the `return_parsed=True`
-shim automatically.
+The registry maps each wrapper *short name* to its parser. **All 131 entries are
+registered**, so every generated wrapper accepts `return_parsed=` without any
+per-league wiring. (The wrapper factory this page once described is retired: the
+`*_espn_ext.py` modules are codegen output — see
+[Codegen](../architecture/codegen.md).)
+
+The package ships **33 parser modules** in all, one per data surface;
+`_common_espn_parsers.py` alone defines 49 parsers plus the 21-section
+`parse_summary` dispatcher.
+
+**Errors (0.1.5).** A parser never raises on an empty or malformed payload — it
+returns a zero-row frame with the documented schema. The *fetch* is what raises:
+`NoDataError` when the answer is "nothing here", `AssetFetchError` when the fetch
+failed, and `ValueError` on a 400 / 422.
 
 ```python
 >>> from sportsdataverse._common_espn_parsers import ENDPOINT_PARSERS, parser_for
@@ -154,4 +164,4 @@ endpoint families that share a shape:
 - [NHL EDGE reference](../nhl/reference/nhl_edge.md) — the EDGE
   Statcast surface (parsers documented per endpoint).
 - [ESPN cross-league architecture](../architecture/espn-cross-league) —
-  how `make_league_module()` registers each wrapper with its parser.
+  how each generated wrapper is paired with its parser.
