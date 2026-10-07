@@ -2660,6 +2660,50 @@ def _source_gaps() -> list[tuple[str, str, str]]:
     return gaps
 
 
+_RETURNS_SECTION_RE = re.compile(r"(?m)^\s*(Returns|Yields)\s*:?\s*$")
+
+
+def _documents_a_return(doc: str) -> bool:
+    """True when ``doc`` carries a napoleon ``Returns:`` or ``Yields:`` section.
+
+    A section HEADING, not the word: prose like "will return a frame" does not
+    tell a caller the shape of what comes back, which is the whole point of the
+    gate."""
+    return bool(doc) and _RETURNS_SECTION_RE.search(doc) is not None
+
+
+def _scope_callable(label: str, name: str):
+    """The live object behind an in-scope ``(league_label, name)`` pair, or ``None``."""
+    import importlib
+
+    mod_path = "sportsdataverse" if label == "global" else f"sportsdataverse.{_LEAGUE_MODULE.get(label, label)}"
+    return getattr(importlib.import_module(mod_path), name, None)
+
+
+def _returns_gaps() -> list[tuple[str, str]]:
+    """``[(league_label, name)]`` for every public callable with no documented return.
+
+    Skips callables annotated ``-> None`` (there is nothing to document) and classes
+    (calling one returns an instance; napoleon documents a class with ``Attributes:``).
+    Everything else must have a ``Returns:`` or ``Yields:`` section -- there is no
+    allowlist, because "what does this give me back" is the question the docs exist to
+    answer."""
+    import inspect
+
+    gaps: list[tuple[str, str]] = []
+    for (label, name), _module in sorted(_source_scope_objects().items()):
+        obj = _scope_callable(label, name)
+        if obj is None or inspect.isclass(obj):
+            continue
+        ann = getattr(obj, "__annotations__", {}) or {}
+        if "return" in ann and ann["return"] in (None, type(None), "None"):
+            continue
+        if _documents_a_return(inspect.getdoc(obj) or ""):
+            continue
+        gaps.append((label, name))
+    return gaps
+
+
 def coverage_report() -> int:
     """Report user-facing functions that never reach the rendered docs corpus.
 
@@ -4913,6 +4957,14 @@ def main(argv=None) -> int:
             print(
                 "codegen --check: public functions with no single source:",
                 "; ".join(f"{label}.{name}: {why}" for label, name, why in src_gaps),
+                file=sys.stderr,
+            )
+            rc = 1
+        ret_gaps = _returns_gaps()
+        if ret_gaps:
+            print(
+                "codegen --check: public functions with no documented return:",
+                ", ".join(f"{label}.{name}" for label, name in ret_gaps),
                 file=sys.stderr,
             )
             rc = 1
