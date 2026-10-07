@@ -20,7 +20,7 @@ not covered by the generated API-endpoint reference above.
 | [espn_wnba_schedule](additional/espn.md#espn_wnba_schedule) | espn_wnba_schedule - look up the WNBA schedule for a given season |
 | [espn_wnba_team_stats](additional/espn.md#espn_wnba_team_stats) | Pull ESPN team season stats for a WNBA team. |
 | [espn_wnba_teams](additional/espn.md#espn_wnba_teams) | espn_wnba_teams - look up WNBA teams |
-| [scoreboard_event_parsing](additional/espn.md#scoreboard_event_parsing) | _No description available._ |
+| [scoreboard_event_parsing](additional/espn.md#scoreboard_event_parsing) | Flatten one ESPN scoreboard event for the schedule frame, in place. |
 
 ## sportsdataverse-data releases
 
@@ -77,7 +77,7 @@ not covered by the generated API-endpoint reference above.
 | [build_athlete_identity_lookup](additional/play-by-play-processing.md#build_athlete_identity_lookup) | R `build_athlete_identity_lookup`: athlete_id -> identity from team rosters. |
 | [wnba_enhanced_pbp](additional/play-by-play-processing.md#wnba_enhanced_pbp) | Return a normalised enhanced play-by-play frame for a WNBA game. |
 | [wnba_on_court](additional/play-by-play-processing.md#wnba_on_court) | Return the rotation-keyed on-court player frame for a WNBA game. |
-| [wnba_pbp_disk](additional/play-by-play-processing.md#wnba_pbp_disk) | _No description available._ |
+| [wnba_pbp_disk](additional/play-by-play-processing.md#wnba_pbp_disk) | Read a saved ESPN WNBA play-by-play payload from disk. |
 | [wnba_play_context](additional/play-by-play-processing.md#wnba_play_context) | Return a WNBA game's possessions with the full CTG play-context surface. |
 | [wnba_possessions](additional/play-by-play-processing.md#wnba_possessions) | Return the possession-level lineup stint matrix for a WNBA game. |
 | [wnba_rapm_from_games](additional/play-by-play-processing.md#wnba_rapm_from_games) | Compute per-player RAPM estimates over a sequence of WNBA games. |

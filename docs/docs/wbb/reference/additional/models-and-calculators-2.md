@@ -891,10 +891,14 @@ Sample one women's game outcome (women's sigma/HFA/em_scale).
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `home_em` | `float` |  |  |
-| `away_em` | `float` |  |  |
-| `neutral` | `bool` |  |  |
-| `rng` | `Generator` |  |  |
+| `home_em` | `float` |  | The home team's efficiency margin. |
+| `away_em` | `float` |  | The away team's efficiency margin. |
+| `neutral` | `bool` |  | True for a neutral-site game. |
+| `rng` | `Generator` |  | The random generator to draw from. |
+
+**Returns**
+
+True if the home team wins the sampled game.
 
 **Example**
 

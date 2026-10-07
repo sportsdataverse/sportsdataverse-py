@@ -719,6 +719,7 @@ files = [
     "sportsdataverse/nba/nba_player_core.py",
     "sportsdataverse/mbb/mbb_player_core.py",
     "sportsdataverse/wnba/wnba_player_core.py",
+    "sportsdataverse/wnba/_bind.py",
     "sportsdataverse/wbb/wbb_player_core.py",
     "sportsdataverse/schemas/__init__.py",
     "sportsdataverse/scrape/__init__.py",

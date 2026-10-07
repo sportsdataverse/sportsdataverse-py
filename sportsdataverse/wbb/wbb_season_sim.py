@@ -34,6 +34,15 @@ __all__ = [
 def simulate_game(home_em: float, away_em: float, neutral: bool, rng: np.random.Generator) -> bool:
     """Sample one women's game outcome (women's sigma/HFA/em_scale).
 
+    Args:
+        home_em: The home team's efficiency margin.
+        away_em: The away team's efficiency margin.
+        neutral: True for a neutral-site game.
+        rng: The random generator to draw from.
+
+    Returns:
+        True if the home team wins the sampled game.
+
     Example:
         Quick start::
 

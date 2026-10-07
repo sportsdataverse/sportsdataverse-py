@@ -603,10 +603,14 @@ d2_d3.head()
 
 `scoreboard_event_parsing(event)`
 
-_No description available._
+Flatten one ESPN scoreboard event for the schedule frame, in place.
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `event` |  |  |  |
+| `event` |  |  | One element of the scoreboard payload's `events` list. |
+
+**Returns**
+
+The same event, modified: `competitions[0]` gains `home` / `away` team dicts (with `score`, `winner`, `currentRank`, `linescores`, `records`), `notes_type` / `notes_headline` and `broadcast_market` / `broadcast_name`, and loses `competitors`, `broadcasts`, `notes`, `odds`, `leaders` and the other nested blocks the schedule frame does not use.

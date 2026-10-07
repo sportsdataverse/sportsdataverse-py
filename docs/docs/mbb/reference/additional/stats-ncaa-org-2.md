@@ -1,10 +1,10 @@
 ---
-title: "MBB — additional Python functions — stats.ncaa.org: enrich_sub–reorder_and"
-sidebar_label: "stats.ncaa.org: enrich_sub–reorder_and"
+title: "MBB — additional Python functions — stats.ncaa.org: enrich_sub–remove_html"
+sidebar_label: "stats.ncaa.org: enrich_sub–remove_html"
 sidebar_position: 4
-description: "MBB — additional Python functions — stats.ncaa.org: enrich_sub–reorder_and — function reference in sdv-py, the SportsDataverse Python package."
+description: "MBB — additional Python functions — stats.ncaa.org: enrich_sub–remove_html — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# MBB — additional Python functions — stats.ncaa.org: enrich_sub–reorder_and
+# MBB — additional Python functions — stats.ncaa.org: enrich_sub–remove_html
 
 ### enrich_sub_error {#enrich_sub_error}
 
@@ -444,6 +444,10 @@ result = get_box_lineup("test_p1.html", html, TeamId("TeamA"), format_version=0)
 
 Return the live `NcaaFetchConfig` singleton.
 
+**Returns**
+
+The live singleton (`cache_dir`, `proxy_url`, the ProxyBonanza settings, `timeout`, `impersonate`, `max_retries` and the rotation / Terms-gate backoffs, `transport`).
+
 **Example**
 
 ```python
@@ -809,8 +813,12 @@ Return whether *path* already has a cache file on disk.
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `path` | `str` |  |  |
-| `cache_dir` | `Optional[Path]` | `None` |  |
+| `path` | `str` |  | The stats.ncaa.org URL path (with its query string, if any). |
+| `cache_dir` | `Optional[Path]` | `None` | The cache root; the active config's `cache_dir` when None. |
+
+**Returns**
+
+True when `cached_path` already exists on disk.
 
 ### is_end_of_game_fouling_vs_fastbreak {#is_end_of_game_fouling_vs_fastbreak}
 
@@ -1616,52 +1624,4 @@ Scala original is equally a defensive no-op in the common case).
 from sportsdataverse.mbb.mbb_ncaa_stints import remove_html_encoding
 remove_html_encoding("De&#39;Shayne")  # "De'Shayne"
 remove_html_encoding("Plain Name")  # "Plain Name" (unchanged)
-```
-
-### reorder_and_reverse {#reorder_and_reverse}
-
-`reorder_and_reverse(reversed_partial_events: 'Iterable[PlayByPlayEvent]') -> 'list[PlayByPlayEvent]'`
-
-Orders same-minute play-by-play events so subs never enclose the plays
-
-they logically precede/follow (`ExtractorUtils.scala:435-599`).
-
-Groups consecutive events sharing the same `min` into a block (the
-input arrives in descending/reverse-chronological order, so blocks are
-discovered and internally accumulated in reverse too), then -- for any
-block containing a sub -- reorders it via `inner_sort`: events
-referencing a subbed-OUT player (or scoring no higher than the sub) land
-in a pre-sub group, the subs themselves come next (in ascending-score
-order), and events referencing a subbed-IN player (or scoring higher
-than the sub) land in a trailing post-sub group. Free-throw attempts
-sharing the sub's inferred "direction" (team vs. opponent, inferred from
-the nearest preceding shot/FT/foul) are pulled into the pre-sub group
-unless the shooter is one of the players being subbed in. Blocks with no
-sub are returned unchanged apart from the initial score-based sort.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `reversed_partial_events` | `Iterable[PlayByPlayEvent]` |  | Events for one lineup event, in reverse-chronological (descending-time) order -- the natural order encountered walking play-by-play text bottom-up. |
-
-**Returns**
-
-The same events, forward-chronological (ascending time), with each same-minute block internally reordered so no sub encloses a play it logically shouldn't.
-
-**Example**
-
-```python
-from sportsdataverse.mbb.mbb_ncaa_models import Score
-from sportsdataverse.mbb.mbb_ncaa_stints import (
-    OtherTeamEvent,
-    SubInEvent,
-    reorder_and_reverse,
-)
-events = [
-    SubInEvent(0.4, Score(0, 0), "player1"),
-    OtherTeamEvent(0.4, Score(0, 0), "rebound"),
-]
-reorder_and_reverse(events)
-# [OtherTeamEvent(...), SubInEvent(...)]
 ```

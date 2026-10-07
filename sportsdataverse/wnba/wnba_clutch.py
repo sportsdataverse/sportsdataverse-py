@@ -9,12 +9,16 @@ from __future__ import annotations
 
 import functools
 
+from sportsdataverse.wnba._bind import wnba_doc
+
 from sportsdataverse.nba.nba_clutch import clutch_delta as clutch_delta
 from sportsdataverse.nba.nba_clutch import nba_team_clutch as _core
 from sportsdataverse.nba.nba_clutch import shrink_clutch as shrink_clutch
 
 wnba_team_clutch = functools.partial(_core, league_id="10")
 functools.update_wrapper(wnba_team_clutch, _core)
-wnba_team_clutch.__doc__ = "WNBA clutch skill (league_id='10'). See sportsdataverse.nba.nba_clutch.nba_team_clutch."
+wnba_team_clutch.__doc__ = wnba_doc(
+    "WNBA clutch skill (league_id='10'). See sportsdataverse.nba.nba_clutch.nba_team_clutch.", _core
+)
 
 __all__ = ["clutch_delta", "shrink_clutch", "wnba_team_clutch"]

@@ -144,6 +144,10 @@ WNBA in-game win probability (league_id='10'). See sportsdataverse.nba.nba_game_
 | `league_id` | `str` | `'00'` |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
+**Returns**
+
+One row per play: the five feature columns plus `home_win_prob`.
+
 ### wnba_predict_games {#wnba_predict_games}
 
 `wnba_predict_games(games: 'pl.DataFrame', ratings: 'pl.DataFrame', *, league_id: 'str' = '00', return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
@@ -158,6 +162,10 @@ WNBA vectorized pregame predictions (league_id='10'). See sportsdataverse.nba.nb
 | `ratings` | `DataFrame` |  |  |
 | `league_id` | `str` | `'00'` |  |
 | `return_as_pandas` | `bool` | `False` |  |
+
+**Returns**
+
+One row per input game: `game_id, home_team_id, away_team_id, exp_margin, home_win_prob, exp_total`. Games whose teams are missing from `ratings` carry nulls.
 
 ### wnba_predict_margin {#wnba_predict_margin}
 
@@ -176,6 +184,10 @@ WNBA expected margin (league_id='10'). See sportsdataverse.nba.nba_game_predict.
 | `neutral` | `bool` | `False` |  |
 | `league_id` | `str` | `'00'` |  |
 
+**Returns**
+
+Expected margin in points (positive favors the home team).
+
 ### wnba_predict_total {#wnba_predict_total}
 
 `wnba_predict_total(home_off: 'float', home_def: 'float', away_off: 'float', away_def: 'float', home_pace: 'float', away_pace: 'float', *, league_id: 'str' = '00') -> 'float'`
@@ -193,6 +205,10 @@ WNBA expected total (league_id='10'). See sportsdataverse.nba.nba_game_predict.p
 | `home_pace` | `float` |  |  |
 | `away_pace` | `float` |  |  |
 | `league_id` | `str` | `'00'` |  |
+
+**Returns**
+
+Expected combined points scored by both teams.
 
 ### wnba_rookie_projection {#wnba_rookie_projection}
 
@@ -233,6 +249,10 @@ WNBA team ratings (league_id='10'). See sportsdataverse.nba.nba_team_ratings.nba
 | `as_of_date` | `Union[date, None]` | `None` |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
+**Returns**
+
+One row per (season, team_id): `season, team_id, adj_off_rtg, adj_def_rtg, adj_net_rtg, adj_pace, raw_off_rtg, raw_def_rtg, raw_pace, games, rank, adj_net_z`. Empty input returns that schema with zero rows.
+
 ### wnba_win_prob_from_margin {#wnba_win_prob_from_margin}
 
 `wnba_win_prob_from_margin(exp_margin: 'float', *, league_id: 'str' = '00') -> 'float'`
@@ -245,3 +265,7 @@ WNBA home win probability (league_id='10'). See sportsdataverse.nba.nba_game_pre
 |---|---|---|---|
 | `exp_margin` | `float` |  |  |
 | `league_id` | `str` | `'00'` |  |
+
+**Returns**
+
+Probability the home team wins, in `(0, 1)`.

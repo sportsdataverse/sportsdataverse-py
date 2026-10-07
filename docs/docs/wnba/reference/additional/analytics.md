@@ -313,6 +313,10 @@ WNBA player props (league_id='10'). See sportsdataverse.nba.nba_player_props.nba
 | `league_id` | `str` | `'00'` |  |
 | `return_as_pandas` | `bool` | `False` |  |
 
+**Returns**
+
+One row per player on either team: `player_id, team_id, stat_pts_exp, stat_reb_exp, stat_ast_exp, stat_fg3m_exp, pace_proj`. Empty input returns that schema with zero rows.
+
 ### wnba_playtype_ratings {#wnba_playtype_ratings}
 
 `wnba_playtype_ratings(season: 'str', *, off_team: "'Optional[pl.DataFrame]'" = None, def_team: "'Optional[pl.DataFrame]'" = None, schedule: "'Optional[pl.DataFrame]'" = None, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"`
@@ -450,6 +454,10 @@ WNBA clutch skill (league_id='10'). See sportsdataverse.nba.nba_clutch.nba_team_
 | `season` | `int` |  |  |
 | `league_id` | `str` | `'00'` |  |
 | `return_as_pandas` | `bool` | `False` |  |
+
+**Returns**
+
+One row per team: `season, team_id, clutch_net_rating, adj_net_rtg, clutch_delta, clutch_skill_shrunk, clutch_poss`. Empty input returns that schema with zero rows.
 
 ### wnba_tracking_drive_value {#wnba_tracking_drive_value}
 

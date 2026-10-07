@@ -82,6 +82,18 @@ def espn_wnba_schedule(dates=None, season_type=None, limit=500, return_as_pandas
 
 
 def scoreboard_event_parsing(event):
+    """Flatten one ESPN scoreboard event for the schedule frame, in place.
+
+    Args:
+        event: One element of the scoreboard payload's ``events`` list.
+
+    Returns:
+        dict: The same event, modified: ``competitions[0]`` gains ``home`` / ``away`` team
+            dicts (with ``score``, ``winner``, ``currentRank``, ``linescores``, ``records``),
+            ``notes_type`` / ``notes_headline`` and ``broadcast_market`` / ``broadcast_name``,
+            and loses ``competitors``, ``broadcasts``, ``notes``, ``odds``, ``leaders`` and the
+            other nested blocks the schedule frame does not use.
+    """
     event.get("competitions")[0].get("competitors")[0].get("team").pop("links", None)
     event.get("competitions")[0].get("competitors")[1].get("team").pop("links", None)
     if event.get("competitions")[0].get("competitors")[0].get("homeAway") == "home":

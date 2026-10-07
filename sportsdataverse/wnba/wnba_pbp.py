@@ -120,6 +120,19 @@ def espn_wnba_pbp(game_id: int, raw=False, **kwargs) -> Dict:
 
 
 def wnba_pbp_disk(game_id, path_to_json):
+    """Read a saved ESPN WNBA play-by-play payload from disk.
+
+    Args:
+        game_id: The ESPN game id; the file read is ``{game_id}.json``.
+        path_to_json: The directory holding the saved payloads.
+
+    Returns:
+        dict: The payload exactly as saved (the raw ESPN summary JSON), ready for
+            ``helper_wnba_pbp``.
+
+    Raises:
+        FileNotFoundError: There is no ``{game_id}.json`` in ``path_to_json``.
+    """
     with open(os.path.join(path_to_json, f"{game_id}.json")) as json_file:
         pbp_txt = json.load(json_file)
     return pbp_txt

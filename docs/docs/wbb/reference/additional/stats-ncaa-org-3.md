@@ -1,10 +1,42 @@
 ---
-title: "WBB — additional Python functions — stats.ncaa.org: sum_shot–validate_lineup"
-sidebar_label: "stats.ncaa.org: sum_shot–validate_lineup"
+title: "WBB — additional Python functions — stats.ncaa.org: sum_event–validate_lineup"
+sidebar_label: "stats.ncaa.org: sum_event–validate_lineup"
 sidebar_position: 4
-description: "WBB — additional Python functions — stats.ncaa.org: sum_shot–validate_lineup — function reference in sdv-py, the SportsDataverse Python package."
+description: "WBB — additional Python functions — stats.ncaa.org: sum_event–validate_lineup — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# WBB — additional Python functions — stats.ncaa.org: sum_shot–validate_lineup
+# WBB — additional Python functions — stats.ncaa.org: sum_event–validate_lineup
+
+### sum_event_stats {#sum_event_stats}
+
+`sum_event_stats(lhs: 'LineupEventStats', rhs: 'LineupEventStats') -> 'LineupEventStats'`
+
+Field-wise add two :class:`~sportsdataverse.mbb.mbb_ncaa_models
+
+.LineupEventStats` (`protected def sum_event_stats`, `LineupUtils.scala
+:1534-1622`, debug-only -- the Scala's own docstring says "just used for
+debug"). The Scala builds this via `shapeless.Generic` field-zipping;
+this port is an explicit field-by-field call since Python has no
+equivalent generic-programming machinery.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `lhs` | `LineupEventStats` |  | The left-hand stat tree. |
+| `rhs` | `LineupEventStats` |  | The right-hand stat tree. |
+
+**Returns**
+
+A new `~sportsdataverse.mbb.mbb_ncaa_models.LineupEventStats` with every field summed (see the module's private sum_*` helpers for the `Optional`/nested-field summing rules).
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_lineup_enrich import sum_event_stats
+from sportsdataverse.mbb.mbb_ncaa_models import LineupEventStats
+
+sum_event_stats(LineupEventStats.empty(), LineupEventStats.empty()).num_events
+```
 
 ### sum_shot_infos {#sum_shot_infos}
 

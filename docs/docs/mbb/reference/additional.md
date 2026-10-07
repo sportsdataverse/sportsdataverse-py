@@ -27,7 +27,7 @@ not covered by the generated API-endpoint reference above.
 
 | Function | Summary |
 |---|---|
-| [scoreboard_event_parsing](additional/espn.md#scoreboard_event_parsing) | _No description available._ |
+| [scoreboard_event_parsing](additional/espn.md#scoreboard_event_parsing) | Flatten one ESPN scoreboard event for the schedule frame, in place. |
 
 ## stats.ncaa.org
 
@@ -132,7 +132,7 @@ not covered by the generated API-endpoint reference above.
 | [playwright_transport](additional/stats-ncaa-org-2.md#playwright_transport) | Build the **suggested** stats.ncaa.org game-detail scraping transport. |
 | [remove_diacritics](additional/stats-ncaa-org-2.md#remove_diacritics) | Strip diacritical marks, e.g. `"Juhász"` -> `"Juhasz"` |
 | [remove_html_encoding](additional/stats-ncaa-org-2.md#remove_html_encoding) | Undo a handful of literal HTML entity escapes (``ExtractorUtils |
-| [reorder_and_reverse](additional/stats-ncaa-org-2.md#reorder_and_reverse) | Orders same-minute play-by-play events so subs never enclose the plays |
+| [reorder_and_reverse](additional/stats-ncaa-org-3.md#reorder_and_reverse) | Orders same-minute play-by-play events so subs never enclose the plays |
 | [reset_config](additional/stats-ncaa-org-3.md#reset_config) | Reset the active config to its env-var-derived defaults. |
 | [right_kind_of_shot](additional/stats-ncaa-org-3.md#right_kind_of_shot) | Whether `pbp_event`'s shot type is compatible with `shot`'s |
 | [run_iterative_adjustment_with_hca](additional/stats-ncaa-org-3.md#run_iterative_adjustment_with_hca) | KenPom-style SoS + HCA fixed-point solver (`runIterativeAdjustmentWithHCA`, `ts:306-527`). |
@@ -200,7 +200,7 @@ not covered by the generated API-endpoint reference above.
 | [classify_zone_type](additional/play-by-play-processing.md#classify_zone_type) | Collapse a source shot-type label to `rim \| arc3 \| jump`. |
 | [espn_shots_to_canonical](additional/play-by-play-processing.md#espn_shots_to_canonical) | ESPN `load_mbb_shots` frame -> the canonical shot frame. |
 | [fit_espn_court_scale](additional/play-by-play-processing.md#fit_espn_court_scale) | Fit the ESPN raw-coordinate court scale: `(origin_x, origin_y, feet_per_unit)`. |
-| [mbb_pbp_disk](additional/play-by-play-processing.md#mbb_pbp_disk) | _No description available._ |
+| [mbb_pbp_disk](additional/play-by-play-processing.md#mbb_pbp_disk) | Read a saved ESPN MBB play-by-play payload from disk. |
 | [mbb_shot_data](additional/play-by-play-processing.md#mbb_shot_data) | Season(s) of shots in the canonical frame (the spine's data entry point). |
 | [ncaa_mbb_game_pbp](additional/play-by-play-processing.md#ncaa_mbb_game_pbp) | Scrape one MBB game's play-by-play (bigballR `scrape_game`). |
 | [shot_events_to_frame](additional/play-by-play-processing.md#shot_events_to_frame) | Flatten NCAA HTML `ShotEvent` objects to the canonical frame. |

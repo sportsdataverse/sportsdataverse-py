@@ -1,10 +1,10 @@
 ---
-title: "WBB — additional Python functions — stats.ncaa.org: ensure_ev–sum_event"
-sidebar_label: "stats.ncaa.org: ensure_ev–sum_event"
+title: "WBB — additional Python functions — stats.ncaa.org: ensure_ev–start_time"
+sidebar_label: "stats.ncaa.org: ensure_ev–start_time"
 sidebar_position: 3
-description: "WBB — additional Python functions — stats.ncaa.org: ensure_ev–sum_event — function reference in sdv-py, the SportsDataverse Python package."
+description: "WBB — additional Python functions — stats.ncaa.org: ensure_ev–start_time — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# WBB — additional Python functions — stats.ncaa.org: ensure_ev–sum_event
+# WBB — additional Python functions — stats.ncaa.org: ensure_ev–start_time
 
 ### ensure_ev_uniqueness {#ensure_ev_uniqueness}
 
@@ -386,6 +386,10 @@ result = get_box_lineup("test_p1.html", html, TeamId("TeamA"), format_version=0)
 
 Return the live `NcaaFetchConfig` singleton.
 
+**Returns**
+
+The live singleton (`cache_dir`, `proxy_url`, the ProxyBonanza settings, `timeout`, `impersonate`, `max_retries` and the rotation / Terms-gate backoffs, `transport`).
+
 **Example**
 
 ```python
@@ -751,8 +755,12 @@ Return whether *path* already has a cache file on disk.
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `path` | `str` |  |  |
-| `cache_dir` | `Optional[Path]` | `None` |  |
+| `path` | `str` |  | The stats.ncaa.org URL path (with its query string, if any). |
+| `cache_dir` | `Optional[Path]` | `None` | The cache root; the active config's `cache_dir` when None. |
+
+**Returns**
+
+True when `cached_path` already exists on disk.
 
 ### is_end_of_game_fouling_vs_fastbreak {#is_end_of_game_fouling_vs_fastbreak}
 
@@ -1463,6 +1471,10 @@ reorder_and_reverse(events)
 
 Reset the active config to its env-var-derived defaults.
 
+**Returns**
+
+The live singleton, now holding the env-var-derived defaults again.
+
 **Example**
 
 ```python
@@ -1724,36 +1736,4 @@ from sportsdataverse.mbb.mbb_ncaa_stints import start_time_from_period
 start_time_from_period(2, is_women_game=False)  # 20.0 (men's 2nd half)
 start_time_from_period(1, is_women_game=True)  # 0.0 (women's 1st quarter)
 start_time_from_period(6, is_women_game=False)  # 45.0 (men's 2nd OT)
-```
-
-### sum_event_stats {#sum_event_stats}
-
-`sum_event_stats(lhs: 'LineupEventStats', rhs: 'LineupEventStats') -> 'LineupEventStats'`
-
-Field-wise add two :class:`~sportsdataverse.mbb.mbb_ncaa_models
-
-.LineupEventStats` (`protected def sum_event_stats`, `LineupUtils.scala
-:1534-1622`, debug-only -- the Scala's own docstring says "just used for
-debug"). The Scala builds this via `shapeless.Generic` field-zipping;
-this port is an explicit field-by-field call since Python has no
-equivalent generic-programming machinery.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `lhs` | `LineupEventStats` |  | The left-hand stat tree. |
-| `rhs` | `LineupEventStats` |  | The right-hand stat tree. |
-
-**Returns**
-
-A new `~sportsdataverse.mbb.mbb_ncaa_models.LineupEventStats` with every field summed (see the module's private sum_*` helpers for the `Optional`/nested-field summing rules).
-
-**Example**
-
-```python
-from sportsdataverse.mbb.mbb_ncaa_lineup_enrich import sum_event_stats
-from sportsdataverse.mbb.mbb_ncaa_models import LineupEventStats
-
-sum_event_stats(LineupEventStats.empty(), LineupEventStats.empty()).num_events
 ```

@@ -20,7 +20,7 @@ not covered by the generated API-endpoint reference above.
 | [espn_wbb_schedule](additional/espn.md#espn_wbb_schedule) | espn_wbb_schedule - look up the women's college basketball schedule for a given season |
 | [espn_wbb_team_stats](additional/espn.md#espn_wbb_team_stats) | Pull ESPN team season stats for a women's-college-basketball team. |
 | [espn_wbb_teams](additional/espn.md#espn_wbb_teams) | espn_wbb_teams - look up the women's college basketball teams |
-| [scoreboard_event_parsing](additional/espn.md#scoreboard_event_parsing) | _No description available._ |
+| [scoreboard_event_parsing](additional/espn.md#scoreboard_event_parsing) | Flatten one ESPN scoreboard event for the schedule frame, in place. |
 
 ## stats.ncaa.org
 
@@ -130,7 +130,7 @@ not covered by the generated API-endpoint reference above.
 | [select_matching_own](additional/stats-ncaa-org-2.md#select_matching_own) | JSoup `root.select(sel + ":matchesOwn(regex)")`: candidates whose |
 | [shot_js_to_html](additional/stats-ncaa-org-2.md#shot_js_to_html) | Converts client-side `addShot(...)` JS calls into parseable |
 | [start_time_from_period](additional/stats-ncaa-org-2.md#start_time_from_period) | The game-clock time (minutes elapsed) a period starts at |
-| [sum_event_stats](additional/stats-ncaa-org-2.md#sum_event_stats) | Field-wise add two :class:`~sportsdataverse.mbb.mbb_ncaa_models |
+| [sum_event_stats](additional/stats-ncaa-org-3.md#sum_event_stats) | Field-wise add two :class:`~sportsdataverse.mbb.mbb_ncaa_models |
 | [sum_shot_infos](additional/stats-ncaa-org-3.md#sum_shot_infos) | Field-wise sum a list of :class:`~sportsdataverse.mbb.mbb_ncaa_models |
 | [td_at](additional/stats-ncaa-org-3.md#td_at) | JSoup `row >?> element("td:eq(n)")`: the `n`-th `<td>` child. |
 | [transform_shot_location](additional/stats-ncaa-org-3.md#transform_shot_location) | Transforms a raw SVG pixel location into feet from the basket, always |
@@ -193,7 +193,7 @@ not covered by the generated API-endpoint reference above.
 | [ncaa_wbb_game_pbp](additional/play-by-play-processing.md#ncaa_wbb_game_pbp) | Scrape one WBB game's play-by-play (wbigballR `scrape_game`, quarters fixed). |
 | [ncaa_wbb_play_by_play](additional/play-by-play-processing.md#ncaa_wbb_play_by_play) | Scrape many WBB games' play-by-play (wbigballR `get_play_by_play`, quarters fixed). |
 | [shot_events_to_frame](additional/play-by-play-processing.md#shot_events_to_frame) | Flatten NCAA HTML `ShotEvent` objects to the canonical frame. |
-| [wbb_pbp_disk](additional/play-by-play-processing.md#wbb_pbp_disk) | _No description available._ |
+| [wbb_pbp_disk](additional/play-by-play-processing.md#wbb_pbp_disk) | Read a saved ESPN WBB play-by-play payload from disk. |
 
 ## Models and calculators
 
