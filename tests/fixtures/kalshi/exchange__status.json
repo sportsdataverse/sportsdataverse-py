@@ -1,0 +1,28 @@
+{
+  "exchange_active": true,
+  "exchange_index_statuses": [
+    {
+      "description": "Default",
+      "exchange_active": true,
+      "exchange_index": 0,
+      "intra_exchange_transfers_active": true,
+      "trading_active": true
+    },
+    {
+      "description": "Combos",
+      "exchange_active": true,
+      "exchange_index": 1,
+      "intra_exchange_transfers_active": true,
+      "trading_active": true
+    },
+    {
+      "description": "Crypto & Commodities",
+      "exchange_active": true,
+      "exchange_index": 2,
+      "intra_exchange_transfers_active": true,
+      "trading_active": true
+    }
+  ],
+  "intra_exchange_transfers_active": true,
+  "trading_active": true
+}

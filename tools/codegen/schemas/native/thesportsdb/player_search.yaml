@@ -1,0 +1,42 @@
+columns:
+- description: ''
+  name: id_player
+  type: character
+- description: ''
+  name: id_team
+  type: character
+- description: ''
+  name: str_player
+  type: character
+- description: ''
+  name: str_team
+  type: character
+- description: ''
+  name: str_sport
+  type: character
+- description: ''
+  name: str_thumb
+  type: character
+- description: ''
+  name: str_cutout
+  type: character
+- description: ''
+  name: str_nationality
+  type: character
+- description: ''
+  name: date_born
+  type: character
+- description: ''
+  name: str_status
+  type: character
+- description: ''
+  name: str_gender
+  type: character
+- description: ''
+  name: str_position
+  type: character
+- description: ''
+  name: relevance
+  type: character
+kind: dataframe
+schema: player_search

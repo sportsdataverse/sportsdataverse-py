@@ -29,6 +29,13 @@ _SECRET_PAIR = _re.compile(
 )
 
 
+# A credential carried as a PATH SEGMENT rather than a query pair. TheSportsDB's route is
+# ``/api/v1/json/<key>/<endpoint>.php``, so ``_SECRET_PAIR`` -- which only knows the
+# ``name=value`` shapes -- never sees it, and the key would survive into every error message,
+# every ``download`` retry log line and every chained traceback.
+_PATH_KEY = _re.compile(r"(/api/v[12]/json/)[^/\s?#\"']+")
+
+
 def _redact_pair(match: _re.Match[str]) -> str:
     prefix, name, value = match.groups()
     # An unquoted value (``{'key': 1234}``, ``(token=abc)``) runs into the
@@ -54,7 +61,7 @@ def _redact_secrets(text: str) -> str:
     status, the other params -- is left as it was, so the line still says which
     request failed.
     """
-    return _SECRET_PAIR.sub(_redact_pair, text)
+    return _PATH_KEY.sub(r"\1REDACTED", _SECRET_PAIR.sub(_redact_pair, text))
 
 
 class SportsDataverseError(Exception):

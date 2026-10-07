@@ -9,7 +9,7 @@ import glob
 import json
 import os
 
-from tools.codegen.generate import ENDPOINTS, FLAT_APIS, _manual_col_desc, _r_col_desc
+from tools.codegen.generate import ENDPOINTS, FLAT_APIS, _manual_col_desc, _r_col_desc, _r_dict_applies
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 SCHEMA_DIR = os.path.join(ROOT, "tools", "codegen", "schemas")
@@ -153,6 +153,19 @@ _DEFERRED_BUCKETS: dict[str, int | None] = {
     "summary": 211,
     "team_roster": 24,
     "team_schedule": 4,
+    # wave-2 intake families, same situation: the specs are capture-derived and these providers
+    # publish no property docs, so the generators have nothing to describe from. espn-content
+    # additionally keys its returns-doc rows by dotted JSON path, which never matches a
+    # snake_cased parser column. football-data is the exception: its glossary describes 224 of
+    # 251 columns, and only the exchange-odds codes are blank upstream too. Measured 2026-10-06;
+    # re-measured 2026-10-07 once this check applied the same no-R-dict gate the renderer does
+    # (the first measurement counted cross-sport R text the page never showed as coverage).
+    "native/espn_content": 88,
+    "native/thesportsdb": 486,
+    "native/football_data": 27,
+    "native/openligadb": 139,
+    "native/polymarket": 292,
+    "native/kalshi": 157,
 }
 
 
@@ -257,11 +270,11 @@ def iter_schema_columns() -> list[dict]:
 
 def _uncovered(r: dict) -> bool:
     """A blank column with no manual-dict and no R-dict description."""
-    return (
-        r["blank"]
-        and not _manual_col_desc(r["schema"], r["col"])
-        and not _r_col_desc(r["league"], r["col"], r["schema"])
-    )
+    if not r["blank"] or _manual_col_desc(r["schema"], r["col"]):
+        return False
+    # Same gate as render: a family with no R counterpart (``_NO_R_DICT_FAMILIES``) gets no fill.
+    key = f"{r['bucket']}/{r['schema']}" if r["bucket"].startswith("native/") else r["schema"]
+    return not (_r_dict_applies(key) and _r_col_desc(r["league"], r["col"], r["schema"]))
 
 
 def residual_columns() -> list[dict]:

@@ -3,6 +3,8 @@
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
 - [Unreleased](#unreleased)
+  - [Changed — returns-table descriptions: NFL Pro, On3 and Fox authored; R-dictionary fill scoped to the league's own sport](#changed--returns-table-descriptions-nfl-pro-on3-and-fox-authored-r-dictionary-fill-scoped-to-the-leagues-own-sport)
+  - [Added — wrappers for six more intake providers (ESPN content, TheSportsDB, Football-Data.co.uk, OpenLigaDB, Polymarket, Kalshi)](#added--wrappers-for-six-more-intake-providers-espn-content-thesportsdb-football-datacouk-openligadb-polymarket-kalshi)
   - [Added — Formula 1: Jolpica (Ergast-compatible) wrappers in `sportsdataverse.f1`](#added--formula-1-jolpica-ergast-compatible-wrappers-in-sportsdataversef1)
   - [Added — EuroLeague shots, play-by-play, box score, standings and season stats (`euroleague_*`)](#added--euroleague-shots-play-by-play-box-score-standings-and-season-stats-euroleague_)
   - [Added — `asa_players_xpass()` and the `nasl` + `usls` ASA leagues](#added--asa_players_xpass-and-the-nasl--usls-asa-leagues)
@@ -337,6 +339,48 @@
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## Unreleased
+
+### Changed — returns-table descriptions: NFL Pro, On3 and Fox authored; R-dictionary fill scoped to the league's own sport
+
+The description fill for blank returns-table cells read a cross-sport union of every SDV R
+package, which put baseballr's "Inning number." on the stats.nba.com `commonteamroster.num`
+jersey number, wehoop's *argument* text ("Whether to include statistical ranks in the returned
+table.") on WNBA leaderboard `rank` columns, cfbfastR's SP+ text on the NFL Pro passer `rating`
+and nflfastR's per-play "Binary indicator ... sack" on NFL Pro season totals. The fill now reads
+only the R packages of the league's own sport (hoopR then wehoop for a men's basketball league,
+nflreadr then nflfastR for the NFL; cfbfastR is not an NFL sibling), never returns R argument
+text, and skips the aggregate families (`nflpro`, `nfl_api`, `pff`, `pff_api`, `on3`) whose
+sport's R dictionaries describe play-by-play. Every HockeyTech league, the PHF and the
+`load_ncaa_*` loaders are mapped to their sport's package so same-sport text keeps resolving;
+cells that only ever held cross-sport text are now blank and tracked in the description ratchet
+at their measured counts.
+
+Authored alongside: 1,006 of the 1,036 NFL Pro (`nfl_pro_*`) columns, each backed by a nflverse
+`load_nfl_nextgen_stats` value crosswalk, an arithmetic identity on the complete captures or the
+envelope (`tools/codegen/gen_nflpro_descriptions.py`; the 30 NGS fields none of those confirm stay
+blank); all 2,428 On3 RDB columns (`tools/codegen/gen_on3_descriptions.py`); the 13 Fox Sports
+tables sdv-js documents (keyed `fox_api_<short>` so the sdv-js docs read them); the stats.nba.com /
+stats.wnba.com `commonteamroster.num` and leaderboard `rank` columns; and the PFF legacy
+`games` / `leagues` / `players` reference columns.
+
+### Added — wrappers for six more intake providers (ESPN content, TheSportsDB, Football-Data.co.uk, OpenLigaDB, Polymarket, Kalshi)
+
+46 wrappers across six new flat-API families, each with a parser, committed fixtures and generated
+reference pages. `espn_content_*` (3) reads ESPN's cross-sport news host
+(`content.core.api.espn.com`), paging with `limit` / `offset`. `thesportsdb_*` (12) covers
+TheSportsDB v1 -- sports, leagues, teams, players, events and league tables; that API puts its key in
+the path, so the wrappers default to the documented free test key and use `$THESPORTSDB_API_KEY`
+when you set one. `football_data_*` (3) downloads the Football-Data.co.uk archive -- one
+league-season of results plus closing odds (132 columns), an 'extra' league's full history (25) and
+the upcoming-fixtures file (94) -- and is the first family whose bodies are CSV rather than JSON.
+`openligadb_*` (11) wraps the community OpenLigaDB API for German football: leagues, matchdays,
+teams, matches, tables and top scorers. `polymarket_*` (8) and `kalshi_*` (9) read prediction-market
+data and live under `sportsdataverse.odds` -- Polymarket's Gamma metadata host together with its CLOB
+order books, and Kalshi's keyless market-data routes. Both keep their long ids and tickers as
+strings, and order-book price levels as the fixed-point strings the hosts send, so nothing is
+rounded or overflowed. Paging stays the caller's: a wrapper sends the cursor or offset you pass and
+never follows a continuation token on its own. Only read-only surfaces are wrapped -- Polymarket
+trading and Kalshi's `/portfolio` routes need credentials and are out of scope.
 
 ### Added — Formula 1: Jolpica (Ergast-compatible) wrappers in `sportsdataverse.f1`
 

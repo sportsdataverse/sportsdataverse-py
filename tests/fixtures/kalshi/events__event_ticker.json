@@ -1,0 +1,131 @@
+{
+  "event": {
+    "category": "Sports",
+    "collateral_return_type": "MECNET",
+    "event_ticker": "KXNFLGAME-26OCT08TBDAL",
+    "exchange_index": 0,
+    "last_updated_ts": "0001-01-01T00:00:00Z",
+    "markets": [
+      {
+        "can_close_early": true,
+        "close_time": "2026-10-11T00:15:00Z",
+        "created_time": "2026-09-29T04:01:07.17746Z",
+        "custom_strike": {
+          "football_team": "62b97b7c-5503-461c-b328-fd8543219b22"
+        },
+        "early_close_condition": "This market will close and expire after a winner is declared.",
+        "event_ticker": "KXNFLGAME-26OCT08TBDAL",
+        "exchange_index": 0,
+        "expected_expiration_time": "2026-10-09T03:15:00Z",
+        "expiration_time": "2026-10-11T00:15:00Z",
+        "expiration_value": "",
+        "last_price_dollars": "0.8100",
+        "latest_expiration_time": "2026-10-11T00:15:00Z",
+        "market_type": "binary",
+        "no_ask_dollars": "0.2000",
+        "no_bid_dollars": "0.1900",
+        "no_sub_title": "Dallas",
+        "notional_value_dollars": "1.0000",
+        "occurrence_datetime": "2026-10-09T03:15:00Z",
+        "open_interest_fp": "242310.93",
+        "open_time": "2026-09-29T04:05:00Z",
+        "previous_price_dollars": "0.8400",
+        "previous_yes_ask_dollars": "0.8400",
+        "previous_yes_bid_dollars": "0.8300",
+        "price_level_structure": "linear_cent",
+        "price_ranges": [
+          {
+            "end": "1.0000",
+            "start": "0.0000",
+            "step": "0.0100"
+          }
+        ],
+        "result": "",
+        "rules_primary": "If Dallas wins the TB Buccaneers vs DAL Cowboys Pro Football game originally scheduled for Oct 8, 2026, then the market resolves to Yes.",
+        "rules_secondary": "The following market refers to the team who wins the TB Buccaneers vs DAL Cowboys Pro Football game originally scheduled for Oct 8, 2026. If the game ends in a tie, the market will resolve to $0.50 for each team. If the game is postponed but begins within 48 hours from its originally scheduled start time, the market will remain open and resolve based on the official final result. If the game is not started within 48 hours, the market will resolve to a fair price.\n\nKalshi is not affiliated, associated, authorized, endorsed by, or in any way officially connected with the Governing League. All trademarks, logos, and brand names are the property of their respective owners.",
+        "settlement_bounds_type": "default",
+        "settlement_timer_seconds": 60,
+        "status": "active",
+        "strike_type": "structured",
+        "ticker": "KXNFLGAME-26OCT08TBDAL-DAL",
+        "title": "Dallas wins",
+        "updated_time": "2026-09-29T04:05:00.889551Z",
+        "volume_24h_fp": "202329.86",
+        "volume_fp": "271926.68",
+        "yes_ask_dollars": "0.8100",
+        "yes_ask_size_fp": "375864.43",
+        "yes_bid_dollars": "0.8000",
+        "yes_bid_size_fp": "16529.55",
+        "yes_sub_title": "Dallas"
+      },
+      {
+        "can_close_early": true,
+        "close_time": "2026-10-11T00:15:00Z",
+        "created_time": "2026-09-29T04:01:07.17746Z",
+        "custom_strike": {
+          "football_team": "1105fa0d-c798-4020-9e24-f377a334b3d9"
+        },
+        "early_close_condition": "This market will close and expire after a winner is declared.",
+        "event_ticker": "KXNFLGAME-26OCT08TBDAL",
+        "exchange_index": 0,
+        "expected_expiration_time": "2026-10-09T03:15:00Z",
+        "expiration_time": "2026-10-11T00:15:00Z",
+        "expiration_value": "",
+        "last_price_dollars": "0.2000",
+        "latest_expiration_time": "2026-10-11T00:15:00Z",
+        "market_type": "binary",
+        "no_ask_dollars": "0.8100",
+        "no_bid_dollars": "0.8000",
+        "no_sub_title": "Tampa Bay",
+        "notional_value_dollars": "1.0000",
+        "occurrence_datetime": "2026-10-09T03:15:00Z",
+        "open_interest_fp": "377188.38",
+        "open_time": "2026-09-29T04:05:00Z",
+        "previous_price_dollars": "0.1600",
+        "previous_yes_ask_dollars": "0.1700",
+        "previous_yes_bid_dollars": "0.1600",
+        "price_level_structure": "linear_cent",
+        "price_ranges": [
+          {
+            "end": "1.0000",
+            "start": "0.0000",
+            "step": "0.0100"
+          }
+        ],
+        "result": "",
+        "rules_primary": "If Tampa Bay wins the TB Buccaneers vs DAL Cowboys Pro Football game originally scheduled for Oct 8, 2026, then the market resolves to Yes.",
+        "rules_secondary": "The following market refers to the team who wins the TB Buccaneers vs DAL Cowboys Pro Football game originally scheduled for Oct 8, 2026. If the game ends in a tie, the market will resolve to $0.50 for each team. If the game is postponed but begins within 48 hours from its originally scheduled start time, the market will remain open and resolve based on the official final result. If the game is not started within 48 hours, the market will resolve to a fair price.\n\nKalshi is not affiliated, associated, authorized, endorsed by, or in any way officially connected with the Governing League. All trademarks, logos, and brand names are the property of their respective owners.",
+        "settlement_bounds_type": "default",
+        "settlement_timer_seconds": 60,
+        "status": "active",
+        "strike_type": "structured",
+        "ticker": "KXNFLGAME-26OCT08TBDAL-TB",
+        "title": "Tampa Bay wins",
+        "updated_time": "2026-09-29T04:05:00.889551Z",
+        "volume_24h_fp": "293060.43",
+        "volume_fp": "444468.26",
+        "yes_ask_dollars": "0.2000",
+        "yes_ask_size_fp": "1481805.59",
+        "yes_bid_dollars": "0.1900",
+        "yes_bid_size_fp": "59664.76",
+        "yes_sub_title": "Tampa Bay"
+      }
+    ],
+    "mutually_exclusive": true,
+    "product_metadata": {
+      "competition": "Pro Football",
+      "competition_scope": "Game"
+    },
+    "series_ticker": "KXNFLGAME",
+    "settlement_sources": [
+      {
+        "name": "the Governing League",
+        "url": "https://www.nfl.com/"
+      }
+    ],
+    "strike_period": "",
+    "sub_title": "TB vs DAL (Oct 8)",
+    "title": "TB Buccaneers vs DAL Cowboys"
+  },
+  "markets": []
+}

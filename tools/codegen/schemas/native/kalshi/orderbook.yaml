@@ -1,0 +1,12 @@
+columns:
+- description: ''
+  name: side
+  type: character
+- description: ''
+  name: price
+  type: character
+- description: ''
+  name: size
+  type: character
+kind: dataframe
+schema: orderbook

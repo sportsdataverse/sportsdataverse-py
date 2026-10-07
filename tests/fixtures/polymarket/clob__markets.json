@@ -1,0 +1,162 @@
+{
+  "data": [
+    {
+      "enable_order_book": false,
+      "active": true,
+      "closed": true,
+      "archived": false,
+      "accepting_orders": false,
+      "accepting_order_timestamp": null,
+      "minimum_order_size": 5,
+      "minimum_tick_size": 0.01,
+      "condition_id": "0xb62f71aef4c9972ddb75ec977b48156e1cc72e30f0e36b0f12c14de7fd94c777",
+      "question_id": "",
+      "question": "Will Benjamin Netanyahu remain prime minister of Israel through June 30, 2021?",
+      "description": "This is a market on whether Benjamin Netanyahu will remain prime minister of Israel through the resolution date, June 30, 2021 12:00 PM ET. This market will resolve to “Yes” if Benjamin Netanyahu remains prime minister of Israel through to the resolution date, and “No” otherwise. If, at any point, Netanyahu is not the prime minister of Israel, this market will resolve immediately. The resolution source for this market will be the United Nations’ Protocol and Liaison Service’s list of heads of state, located upon launch of this market at protocol.un.org/dgacm/pls/site.nsf/HSHGNFA.xsp. In the event of ambiguity in terms of the market outcome, the market will be resolved at the sole discretion of the Markets Integrity Committee (MIC).",
+      "market_slug": "will-benjamin-netanyahu-remain-prime-minister-of-israel-through-june-30-2021",
+      "end_date_iso": "2021-06-30T00:00:00Z",
+      "game_start_time": null,
+      "seconds_delay": 0,
+      "fpmm": "0xFC85c71e001C77A04d6bE3d1a2De1944a29BD28C",
+      "maker_base_fee": 0,
+      "taker_base_fee": 0,
+      "notifications_enabled": true,
+      "neg_risk": false,
+      "neg_risk_market_id": "",
+      "neg_risk_request_id": "",
+      "icon": "https://polymarket-upload.s3.us-east-2.amazonaws.com/will-benjamin-netanyahu-remain-prime-minister-of-israel-through-june-30-2021-Jiiv6XAspFXn.jpg",
+      "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/will-benjamin-netanyahu-remain-prime-minister-of-israel-through-june-30-2021-Jiiv6XAspFXn.jpg",
+      "rewards": {
+        "rates": null,
+        "min_size": 0,
+        "max_spread": 0
+      },
+      "is_50_50_outcome": false,
+      "tokens": [
+        {
+          "token_id": "4764842916462157287738418815193165769775706842468360015637456523413749678364",
+          "outcome": "Yes",
+          "price": 0,
+          "winner": false
+        },
+        {
+          "token_id": "60746995446126444881122884468632478444639071490773182750920065820822712887585",
+          "outcome": "No",
+          "price": 1,
+          "winner": false
+        }
+      ],
+      "tags": [
+        "All"
+      ],
+      "version": "v1"
+    },
+    {
+      "enable_order_book": false,
+      "active": true,
+      "closed": true,
+      "archived": false,
+      "accepting_orders": false,
+      "accepting_order_timestamp": null,
+      "minimum_order_size": 5,
+      "minimum_tick_size": 0.01,
+      "condition_id": "0x2bda19aa7231cefc6b5d7e0b2bf4a785e243d255986aedac0f13fb12433ac3a9",
+      "question_id": "",
+      "question": "dodgers",
+      "description": "This is a market on whether the Los Angeles Dodgers will be declared champions of the NL West division for the 2021 MLB regular season. This market will resolve to “Yes” if the Los Angeles Dodgers are declared as having clinched their division by the resolution source (https://www.mlb.com/standings). If the division is clinched by any other team, this market will resolve to “No”. This market will resolve whenever the NL West division becomes clinched by any team. In the event of ambiguity in terms of the market outcome, the market will be resolved in good faith at the sole discretion of the Markets Integrity Committee (MIC).",
+      "market_slug": "dodgers",
+      "end_date_iso": "2021-10-05T00:00:00Z",
+      "game_start_time": null,
+      "seconds_delay": 0,
+      "fpmm": "0x737D3EE77d64912240362f5dbF00EC54836c81a3",
+      "maker_base_fee": 0,
+      "taker_base_fee": 0,
+      "notifications_enabled": true,
+      "neg_risk": false,
+      "neg_risk_market_id": "",
+      "neg_risk_request_id": "",
+      "icon": "https://polymarket-upload.s3.us-east-2.amazonaws.com/will-the-los-angeles-dodgers-win-the-nl-west-division-c5363247-0bc5-4cdf-b9c4-cb8dbad8ddf3.png",
+      "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/will-the-los-angeles-dodgers-win-the-nl-west-division-c5363247-0bc5-4cdf-b9c4-cb8dbad8ddf3.png",
+      "rewards": {
+        "rates": null,
+        "min_size": 0,
+        "max_spread": 0
+      },
+      "is_50_50_outcome": false,
+      "tokens": [
+        {
+          "token_id": "60134653715321815270200668995102583662379683168866448223256726231127912516928",
+          "outcome": "Yes",
+          "price": 0,
+          "winner": false
+        },
+        {
+          "token_id": "71348869523829125717965102624868522415934397295869916858748913982038566150725",
+          "outcome": "No",
+          "price": 1,
+          "winner": false
+        }
+      ],
+      "tags": [
+        "All"
+      ],
+      "version": "v1"
+    },
+    {
+      "enable_order_book": false,
+      "active": true,
+      "closed": true,
+      "archived": false,
+      "accepting_orders": false,
+      "accepting_order_timestamp": null,
+      "minimum_order_size": 5,
+      "minimum_tick_size": 0.01,
+      "condition_id": "0x97ff49f9ad7222f4dede0476269cdadfadb4004eb4644a908bc44bc11ddf4f81",
+      "question_id": "",
+      "question": "Will it snow in New York's Central Park on New Year's Eve (Dec 31)?",
+      "description": "This market will resolve to “Yes”, if the accumulation of new snow observed (\"New snow\") on December 31st 2021 by the National Weather Service in Central Park Area, NY, is 0.1 inches or higher, and \"No\" otherwise.\n\nThe resolution source for this market is NOAA Online Weather Data, published by National Weather Service on their website: https://www.weather.gov/wrh/Climate?wfo=okx.\n\nThe check will be at 12:00 PM ET January 1, 2022. \n\nPlease note, if \"T\" appears as the daily snowfall measurement, it means that on that day snow continually melts as it lands and is recorded as a trace (T). If that occurs for December 31, 2021 in Central Park, NY - then this market resolves to \"No\".",
+      "market_slug": "will-it-snow-in-new-yorks-central-park-on-new-years-eve-dec-31",
+      "end_date_iso": "2022-01-01T00:00:00Z",
+      "game_start_time": null,
+      "seconds_delay": 0,
+      "fpmm": "0xdbb605Afbb7aF162493Bb930E2F3FB58F1D8cCB8",
+      "maker_base_fee": 0,
+      "taker_base_fee": 0,
+      "notifications_enabled": true,
+      "neg_risk": false,
+      "neg_risk_market_id": "",
+      "neg_risk_request_id": "",
+      "icon": "https://polymarket-upload.s3.us-east-2.amazonaws.com/will-it-snow-in-new-yorks-central-park-on-the-new-years-eve-dec-31-c281aa0d-b7e5-4e28-a231-079822eb8772.png",
+      "image": "https://polymarket-upload.s3.us-east-2.amazonaws.com/will-it-snow-in-new-yorks-central-park-on-the-new-years-eve-dec-31-c281aa0d-b7e5-4e28-a231-079822eb8772.png",
+      "rewards": {
+        "rates": null,
+        "min_size": 0,
+        "max_spread": 0
+      },
+      "is_50_50_outcome": false,
+      "tokens": [
+        {
+          "token_id": "79253423956220716772688863350377500702901136187689240404628892981753051951602",
+          "outcome": "Yes",
+          "price": 0,
+          "winner": false
+        },
+        {
+          "token_id": "45258615959032109941931524123299131031368319644826548945752237231216253561729",
+          "outcome": "No",
+          "price": 1,
+          "winner": false
+        }
+      ],
+      "tags": [
+        "All",
+        "New Years",
+        "Precipitation"
+      ],
+      "version": "v1"
+    }
+  ],
+  "next_cursor": "aWQ6MjQ5Mzk2",
+  "limit": 1000,
+  "count": 1000
+}

@@ -1,0 +1,24 @@
+[
+  {
+    "id": "101867",
+    "label": "product marekt fit",
+    "slug": "product-marekt-fit",
+    "createdAt": "2025-02-18T16:58:25.464578Z",
+    "updatedAt": "2026-04-17T17:23:11.67487Z"
+  },
+  {
+    "id": "1512",
+    "label": "caitlin clark",
+    "slug": "caitlin-clark",
+    "publishedAt": "2024-02-28 22:13:06.246+00",
+    "createdAt": "2024-02-28T22:13:09.166Z",
+    "updatedAt": "2026-04-17T17:23:11.676843Z"
+  },
+  {
+    "id": "100601",
+    "label": "virgins",
+    "slug": "virgins",
+    "createdAt": "2024-09-20T00:05:07.009054Z",
+    "updatedAt": "2026-04-17T17:23:11.678298Z"
+  }
+]
