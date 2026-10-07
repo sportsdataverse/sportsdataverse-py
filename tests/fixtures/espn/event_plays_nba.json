@@ -1,0 +1,1508 @@
+{
+ "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/plays?lang=en&region=us",
+ "count": 492,
+ "items": [
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/plays/4015847934?lang=en&region=us",
+   "alternativeText": "Jalen Duren vs. Brook Lopez (Cade Cunningham gains possession)",
+   "awayScore": 0,
+   "clock": {
+    "displayValue": "12:00",
+    "value": 720.0
+   },
+   "coordinate": {
+    "x": -214748340,
+    "y": -214748365
+   },
+   "homeScore": 0,
+   "id": "4015847934",
+   "modified": "2023-11-09T01:10Z",
+   "participants": [
+    {
+     "athlete": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/athletes/4433621?lang=en&region=us"
+     },
+     "order": 1,
+     "position": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/positions/9?lang=en&region=us"
+     },
+     "statistics": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/competitors/8/roster/4433621/statistics/0?lang=en&region=us"
+     }
+    },
+    {
+     "athlete": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/athletes/3448?lang=en&region=us"
+     },
+     "order": 2,
+     "position": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/positions/9?lang=en&region=us"
+     },
+     "statistics": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/competitors/12/roster/3448/statistics/0?lang=en&region=us"
+     }
+    },
+    {
+     "athlete": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/athletes/4432166?lang=en&region=us"
+     },
+     "order": 3,
+     "position": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/positions/3?lang=en&region=us"
+     },
+     "statistics": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/competitors/8/roster/4432166/statistics/0?lang=en&region=us"
+     }
+    }
+   ],
+   "period": {
+    "displayValue": "1st Quarter",
+    "number": 1
+   },
+   "pointsAttempted": 0,
+   "priority": false,
+   "probability": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/probabilities/4015847934?lang=en&region=us"
+   },
+   "scoreValue": 0,
+   "scoringPlay": false,
+   "sequenceNumber": "4",
+   "shootingPlay": false,
+   "team": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/8?lang=en&region=us"
+   },
+   "text": "Jalen Duren vs. Brook Lopez (Cade Cunningham gains possession)",
+   "type": {
+    "id": "615",
+    "text": "Jumpball"
+   },
+   "valid": true,
+   "wallclock": "2023-11-09T01:10:45Z"
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/plays/4015847937?lang=en&region=us",
+   "alternativeText": "Brook Lopez blocks Cade Cunningham 's 6-foot two point shot",
+   "awayScore": 0,
+   "clock": {
+    "displayValue": "11:38",
+    "value": 698.0
+   },
+   "coordinate": {
+    "x": 29,
+    "y": 6
+   },
+   "homeScore": 0,
+   "id": "4015847937",
+   "modified": "2023-11-09T01:11Z",
+   "participants": [
+    {
+     "athlete": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/athletes/4432166?lang=en&region=us"
+     },
+     "order": 1,
+     "position": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/positions/3?lang=en&region=us"
+     },
+     "statistics": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/competitors/8/roster/4432166/statistics/0?lang=en&region=us"
+     },
+     "type": "shooter"
+    },
+    {
+     "athlete": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/athletes/3448?lang=en&region=us"
+     },
+     "order": 3,
+     "position": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/positions/9?lang=en&region=us"
+     },
+     "statistics": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/competitors/12/roster/3448/statistics/0?lang=en&region=us"
+     },
+     "type": "blocker"
+    }
+   ],
+   "period": {
+    "displayValue": "1st Quarter",
+    "number": 1
+   },
+   "pointsAttempted": 2,
+   "priority": false,
+   "probability": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/probabilities/4015847937?lang=en&region=us"
+   },
+   "scoreValue": 0,
+   "scoringPlay": false,
+   "sequenceNumber": "7",
+   "shootingPlay": true,
+   "shortAlternativeText": "B. Lopez blocks C. Cunningham 's 6-foot two point shot",
+   "shortText": "B. Lopez blocks C. Cunningham 's 6-foot two point shot",
+   "team": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/8?lang=en&region=us"
+   },
+   "text": "Brook Lopez blocks Cade Cunningham 's 6-foot two point shot",
+   "type": {
+    "id": "130",
+    "text": "Floating Jump Shot"
+   },
+   "valid": true,
+   "wallclock": "2023-11-09T01:11:01Z"
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/plays/4015847939?lang=en&region=us",
+   "alternativeText": "Malik Beasley defensive rebound",
+   "awayScore": 0,
+   "clock": {
+    "displayValue": "11:33",
+    "value": 693.0
+   },
+   "coordinate": {
+    "x": 29,
+    "y": 6
+   },
+   "homeScore": 0,
+   "id": "4015847939",
+   "modified": "2023-11-09T01:11Z",
+   "participants": [
+    {
+     "athlete": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/athletes/3907822?lang=en&region=us"
+     },
+     "order": 1,
+     "position": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/positions/2?lang=en&region=us"
+     },
+     "statistics": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/competitors/8/roster/3907822/statistics/0?lang=en&region=us"
+     },
+     "type": "rebounder"
+    }
+   ],
+   "period": {
+    "displayValue": "1st Quarter",
+    "number": 1
+   },
+   "pointsAttempted": 0,
+   "priority": false,
+   "probability": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/probabilities/4015847939?lang=en&region=us"
+   },
+   "scoreValue": 0,
+   "scoringPlay": false,
+   "sequenceNumber": "9",
+   "shootingPlay": false,
+   "shortAlternativeText": "M. Beasley defensive rebound",
+   "shortText": "M. Beasley defensive rebound",
+   "team": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/15?lang=en&region=us"
+   },
+   "text": "Malik Beasley defensive rebound",
+   "type": {
+    "id": "155",
+    "text": "Defensive Rebound"
+   },
+   "valid": true,
+   "wallclock": "2023-11-09T01:11:06Z"
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/plays/40158479310?lang=en&region=us",
+   "alternativeText": "Malik Beasley makes two point shot",
+   "awayScore": 0,
+   "clock": {
+    "displayValue": "11:32",
+    "value": 692.0
+   },
+   "coordinate": {
+    "x": 27,
+    "y": 5
+   },
+   "homeScore": 2,
+   "id": "40158479310",
+   "modified": "2023-11-09T01:11Z",
+   "participants": [
+    {
+     "athlete": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/athletes/3907822?lang=en&region=us"
+     },
+     "order": 1,
+     "position": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/positions/2?lang=en&region=us"
+     },
+     "statistics": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/competitors/8/roster/3907822/statistics/0?lang=en&region=us"
+     },
+     "type": "shooter"
+    }
+   ],
+   "period": {
+    "displayValue": "1st Quarter",
+    "number": 1
+   },
+   "pointsAttempted": 2,
+   "priority": false,
+   "probability": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/probabilities/40158479310?lang=en&region=us"
+   },
+   "scoreValue": 2,
+   "scoringPlay": true,
+   "sequenceNumber": "10",
+   "shootingPlay": true,
+   "shortAlternativeText": "M. Beasley makes two point shot",
+   "shortText": "M. Beasley makes two point shot",
+   "team": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/15?lang=en&region=us"
+   },
+   "text": "Malik Beasley makes two point shot",
+   "type": {
+    "id": "129",
+    "text": "Running Finger Roll Layup"
+   },
+   "valid": true,
+   "wallclock": "2023-11-09T01:11:08Z"
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/plays/40158479312?lang=en&region=us",
+   "alternativeText": "Killian Hayes misses 14-foot pullup jump shot",
+   "awayScore": 0,
+   "clock": {
+    "displayValue": "11:22",
+    "value": 682.0
+   },
+   "coordinate": {
+    "x": 23,
+    "y": 15
+   },
+   "homeScore": 2,
+   "id": "40158479312",
+   "modified": "2023-11-09T01:11Z",
+   "participants": [
+    {
+     "athlete": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/athletes/4683024?lang=en&region=us"
+     },
+     "order": 1,
+     "position": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/positions/3?lang=en&region=us"
+     },
+     "statistics": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/competitors/23/roster/4683024/statistics/0?lang=en&region=us"
+     },
+     "type": "shooter"
+    }
+   ],
+   "period": {
+    "displayValue": "1st Quarter",
+    "number": 1
+   },
+   "pointsAttempted": 2,
+   "priority": false,
+   "probability": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/probabilities/40158479312?lang=en&region=us"
+   },
+   "scoreValue": 0,
+   "scoringPlay": false,
+   "sequenceNumber": "12",
+   "shootingPlay": true,
+   "shortAlternativeText": "K. Hayes misses 14-foot pullup jump shot",
+   "shortText": "K. Hayes misses 14-foot pullup jump shot",
+   "team": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/8?lang=en&region=us"
+   },
+   "text": "Killian Hayes misses 14-foot pullup jump shot",
+   "type": {
+    "id": "131",
+    "text": "Pullup Jump Shot"
+   },
+   "valid": true,
+   "wallclock": "2023-11-09T01:11:24Z"
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/plays/40158479313?lang=en&region=us",
+   "alternativeText": "Giannis Antetokounmpo defensive rebound",
+   "awayScore": 0,
+   "clock": {
+    "displayValue": "11:18",
+    "value": 678.0
+   },
+   "coordinate": {
+    "x": 23,
+    "y": 15
+   },
+   "homeScore": 2,
+   "id": "40158479313",
+   "modified": "2023-11-09T01:11Z",
+   "participants": [
+    {
+     "athlete": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/athletes/3032977?lang=en&region=us"
+     },
+     "order": 1,
+     "position": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/positions/7?lang=en&region=us"
+     },
+     "statistics": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/competitors/14/roster/3032977/statistics/0?lang=en&region=us"
+     },
+     "type": "rebounder"
+    }
+   ],
+   "period": {
+    "displayValue": "1st Quarter",
+    "number": 1
+   },
+   "pointsAttempted": 0,
+   "priority": false,
+   "probability": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/probabilities/40158479313?lang=en&region=us"
+   },
+   "scoreValue": 0,
+   "scoringPlay": false,
+   "sequenceNumber": "13",
+   "shootingPlay": false,
+   "shortAlternativeText": "G. Antetokounmpo defensive rebound",
+   "shortText": "G. Antetokounmpo defensive rebound",
+   "team": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/15?lang=en&region=us"
+   },
+   "text": "Giannis Antetokounmpo defensive rebound",
+   "type": {
+    "id": "155",
+    "text": "Defensive Rebound"
+   },
+   "valid": true,
+   "wallclock": "2023-11-09T01:11:28Z"
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/plays/40158479314?lang=en&region=us",
+   "alternativeText": "Giannis Antetokounmpo misses two point shot",
+   "awayScore": 0,
+   "clock": {
+    "displayValue": "11:14",
+    "value": 674.0
+   },
+   "coordinate": {
+    "x": 25,
+    "y": 3
+   },
+   "homeScore": 2,
+   "id": "40158479314",
+   "modified": "2023-11-09T01:11Z",
+   "participants": [
+    {
+     "athlete": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/athletes/3032977?lang=en&region=us"
+     },
+     "order": 1,
+     "position": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/positions/7?lang=en&region=us"
+     },
+     "statistics": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/competitors/14/roster/3032977/statistics/0?lang=en&region=us"
+     },
+     "type": "shooter"
+    }
+   ],
+   "period": {
+    "displayValue": "1st Quarter",
+    "number": 1
+   },
+   "pointsAttempted": 2,
+   "priority": false,
+   "probability": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/probabilities/40158479314?lang=en&region=us"
+   },
+   "scoreValue": 0,
+   "scoringPlay": false,
+   "sequenceNumber": "14",
+   "shootingPlay": true,
+   "shortAlternativeText": "G. Antetokounmpo misses two point shot",
+   "shortText": "G. Antetokounmpo misses two point shot",
+   "team": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/15?lang=en&region=us"
+   },
+   "text": "Giannis Antetokounmpo misses two point shot",
+   "type": {
+    "id": "129",
+    "text": "Running Finger Roll Layup"
+   },
+   "valid": true,
+   "wallclock": "2023-11-09T01:11:32Z"
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/plays/40158479315?lang=en&region=us",
+   "alternativeText": "Jalen Duren defensive rebound",
+   "awayScore": 0,
+   "clock": {
+    "displayValue": "11:12",
+    "value": 672.0
+   },
+   "coordinate": {
+    "x": 25,
+    "y": 3
+   },
+   "homeScore": 2,
+   "id": "40158479315",
+   "modified": "2023-11-09T01:11Z",
+   "participants": [
+    {
+     "athlete": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/athletes/4433621?lang=en&region=us"
+     },
+     "order": 1,
+     "position": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/positions/9?lang=en&region=us"
+     },
+     "statistics": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/competitors/8/roster/4433621/statistics/0?lang=en&region=us"
+     },
+     "type": "rebounder"
+    }
+   ],
+   "period": {
+    "displayValue": "1st Quarter",
+    "number": 1
+   },
+   "pointsAttempted": 0,
+   "priority": false,
+   "probability": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/probabilities/40158479315?lang=en&region=us"
+   },
+   "scoreValue": 0,
+   "scoringPlay": false,
+   "sequenceNumber": "15",
+   "shootingPlay": false,
+   "shortAlternativeText": "J. Duren defensive rebound",
+   "shortText": "J. Duren defensive rebound",
+   "team": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/8?lang=en&region=us"
+   },
+   "text": "Jalen Duren defensive rebound",
+   "type": {
+    "id": "155",
+    "text": "Defensive Rebound"
+   },
+   "valid": true,
+   "wallclock": "2023-11-09T01:11:34Z"
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/plays/40158479316?lang=en&region=us",
+   "alternativeText": "Jalen Duren makes 1-foot dunk (Cade Cunningham assists)",
+   "awayScore": 2,
+   "clock": {
+    "displayValue": "11:04",
+    "value": 664.0
+   },
+   "coordinate": {
+    "x": 23,
+    "y": 0
+   },
+   "homeScore": 2,
+   "id": "40158479316",
+   "modified": "2023-11-09T01:11Z",
+   "participants": [
+    {
+     "athlete": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/athletes/4433621?lang=en&region=us"
+     },
+     "order": 1,
+     "position": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/positions/9?lang=en&region=us"
+     },
+     "statistics": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/competitors/8/roster/4433621/statistics/0?lang=en&region=us"
+     },
+     "type": "shooter"
+    },
+    {
+     "athlete": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/athletes/4432166?lang=en&region=us"
+     },
+     "order": 2,
+     "position": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/positions/3?lang=en&region=us"
+     },
+     "statistics": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/competitors/8/roster/4432166/statistics/0?lang=en&region=us"
+     },
+     "type": "assister"
+    }
+   ],
+   "period": {
+    "displayValue": "1st Quarter",
+    "number": 1
+   },
+   "pointsAttempted": 2,
+   "priority": false,
+   "probability": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/probabilities/40158479316?lang=en&region=us"
+   },
+   "scoreValue": 2,
+   "scoringPlay": true,
+   "sequenceNumber": "16",
+   "shootingPlay": true,
+   "shortAlternativeText": "J. Duren makes dunk (C. Cunningham assists)",
+   "shortText": "J. Duren makes dunk (C. Cunningham assists)",
+   "team": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/8?lang=en&region=us"
+   },
+   "text": "Jalen Duren makes 1-foot dunk (Cade Cunningham assists)",
+   "type": {
+    "id": "151",
+    "text": "Cutting Dunk Shot"
+   },
+   "valid": true,
+   "wallclock": "2023-11-09T01:11:42Z"
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/plays/40158479318?lang=en&region=us",
+   "alternativeText": "Malik Beasley misses 29-foot three point jumper",
+   "awayScore": 2,
+   "clock": {
+    "displayValue": "10:47",
+    "value": 647.0
+   },
+   "coordinate": {
+    "x": 16,
+    "y": 28
+   },
+   "homeScore": 2,
+   "id": "40158479318",
+   "modified": "2023-11-09T01:12Z",
+   "participants": [
+    {
+     "athlete": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/athletes/3907822?lang=en&region=us"
+     },
+     "order": 1,
+     "position": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/positions/2?lang=en&region=us"
+     },
+     "statistics": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/competitors/8/roster/3907822/statistics/0?lang=en&region=us"
+     },
+     "type": "shooter"
+    }
+   ],
+   "period": {
+    "displayValue": "1st Quarter",
+    "number": 1
+   },
+   "pointsAttempted": 3,
+   "priority": false,
+   "probability": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/probabilities/40158479318?lang=en&region=us"
+   },
+   "scoreValue": 0,
+   "scoringPlay": false,
+   "sequenceNumber": "18",
+   "shootingPlay": true,
+   "shortAlternativeText": "M. Beasley misses 29-foot three point jumper",
+   "shortText": "M. Beasley misses 29-foot three point jumper",
+   "team": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/15?lang=en&region=us"
+   },
+   "text": "Malik Beasley misses 29-foot three point jumper",
+   "type": {
+    "id": "92",
+    "text": "Jump Shot"
+   },
+   "valid": true,
+   "wallclock": "2023-11-09T01:11:59Z"
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/plays/40158479319?lang=en&region=us",
+   "alternativeText": "Ausar Thompson defensive rebound",
+   "awayScore": 2,
+   "clock": {
+    "displayValue": "10:44",
+    "value": 644.0
+   },
+   "coordinate": {
+    "x": 16,
+    "y": 28
+   },
+   "homeScore": 2,
+   "id": "40158479319",
+   "modified": "2023-11-09T01:12Z",
+   "participants": [
+    {
+     "athlete": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/athletes/4684742?lang=en&region=us"
+     },
+     "order": 1,
+     "position": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/positions/3?lang=en&region=us"
+     },
+     "statistics": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/competitors/8/roster/4684742/statistics/0?lang=en&region=us"
+     },
+     "type": "rebounder"
+    }
+   ],
+   "period": {
+    "displayValue": "1st Quarter",
+    "number": 1
+   },
+   "pointsAttempted": 0,
+   "priority": false,
+   "probability": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/probabilities/40158479319?lang=en&region=us"
+   },
+   "scoreValue": 0,
+   "scoringPlay": false,
+   "sequenceNumber": "19",
+   "shootingPlay": false,
+   "shortAlternativeText": "A. Thompson defensive rebound",
+   "shortText": "A. Thompson defensive rebound",
+   "team": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/8?lang=en&region=us"
+   },
+   "text": "Ausar Thompson defensive rebound",
+   "type": {
+    "id": "155",
+    "text": "Defensive Rebound"
+   },
+   "valid": true,
+   "wallclock": "2023-11-09T01:12:02Z"
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/plays/40158479320?lang=en&region=us",
+   "alternativeText": "Brook Lopez blocks Jalen Duren 's 9-foot jumper",
+   "awayScore": 2,
+   "clock": {
+    "displayValue": "10:35",
+    "value": 635.0
+   },
+   "coordinate": {
+    "x": 17,
+    "y": 6
+   },
+   "homeScore": 2,
+   "id": "40158479320",
+   "modified": "2023-11-09T01:12Z",
+   "participants": [
+    {
+     "athlete": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/athletes/4433621?lang=en&region=us"
+     },
+     "order": 1,
+     "position": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/positions/9?lang=en&region=us"
+     },
+     "statistics": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/competitors/8/roster/4433621/statistics/0?lang=en&region=us"
+     },
+     "type": "shooter"
+    },
+    {
+     "athlete": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/athletes/3448?lang=en&region=us"
+     },
+     "order": 3,
+     "position": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/positions/9?lang=en&region=us"
+     },
+     "statistics": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/competitors/12/roster/3448/statistics/0?lang=en&region=us"
+     },
+     "type": "blocker"
+    }
+   ],
+   "period": {
+    "displayValue": "1st Quarter",
+    "number": 1
+   },
+   "pointsAttempted": 2,
+   "priority": false,
+   "probability": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/probabilities/40158479320?lang=en&region=us"
+   },
+   "scoreValue": 0,
+   "scoringPlay": false,
+   "sequenceNumber": "20",
+   "shootingPlay": true,
+   "shortAlternativeText": "B. Lopez blocks J. Duren 's 9-foot jumper",
+   "shortText": "B. Lopez blocks J. Duren 's 9-foot jumper",
+   "team": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/8?lang=en&region=us"
+   },
+   "text": "Brook Lopez blocks Jalen Duren 's 9-foot jumper",
+   "type": {
+    "id": "92",
+    "text": "Jump Shot"
+   },
+   "valid": true,
+   "wallclock": "2023-11-09T01:12:12Z"
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/plays/40158479322?lang=en&region=us",
+   "alternativeText": "Jalen Duren offensive rebound",
+   "awayScore": 2,
+   "clock": {
+    "displayValue": "10:30",
+    "value": 630.0
+   },
+   "coordinate": {
+    "x": 17,
+    "y": 6
+   },
+   "homeScore": 2,
+   "id": "40158479322",
+   "modified": "2023-11-09T01:12Z",
+   "participants": [
+    {
+     "athlete": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/athletes/4433621?lang=en&region=us"
+     },
+     "order": 1,
+     "position": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/positions/9?lang=en&region=us"
+     },
+     "statistics": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/competitors/8/roster/4433621/statistics/0?lang=en&region=us"
+     },
+     "type": "rebounder"
+    }
+   ],
+   "period": {
+    "displayValue": "1st Quarter",
+    "number": 1
+   },
+   "pointsAttempted": 0,
+   "priority": false,
+   "probability": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/probabilities/40158479322?lang=en&region=us"
+   },
+   "scoreValue": 0,
+   "scoringPlay": false,
+   "sequenceNumber": "22",
+   "shootingPlay": false,
+   "shortAlternativeText": "J. Duren offensive rebound",
+   "shortText": "J. Duren offensive rebound",
+   "team": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/8?lang=en&region=us"
+   },
+   "text": "Jalen Duren offensive rebound",
+   "type": {
+    "id": "156",
+    "text": "Offensive Rebound"
+   },
+   "valid": true,
+   "wallclock": "2023-11-09T01:12:17Z"
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/plays/40158479323?lang=en&region=us",
+   "alternativeText": "Ausar Thompson makes 1-foot dunk (Jalen Duren assists)",
+   "awayScore": 4,
+   "clock": {
+    "displayValue": "10:29",
+    "value": 629.0
+   },
+   "coordinate": {
+    "x": 24,
+    "y": 0
+   },
+   "homeScore": 2,
+   "id": "40158479323",
+   "modified": "2023-11-09T01:12Z",
+   "participants": [
+    {
+     "athlete": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/athletes/4684742?lang=en&region=us"
+     },
+     "order": 1,
+     "position": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/positions/3?lang=en&region=us"
+     },
+     "statistics": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/competitors/8/roster/4684742/statistics/0?lang=en&region=us"
+     },
+     "type": "shooter"
+    },
+    {
+     "athlete": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/athletes/4433621?lang=en&region=us"
+     },
+     "order": 2,
+     "position": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/positions/9?lang=en&region=us"
+     },
+     "statistics": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/competitors/8/roster/4433621/statistics/0?lang=en&region=us"
+     },
+     "type": "assister"
+    }
+   ],
+   "period": {
+    "displayValue": "1st Quarter",
+    "number": 1
+   },
+   "pointsAttempted": 2,
+   "priority": false,
+   "probability": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/probabilities/40158479323?lang=en&region=us"
+   },
+   "scoreValue": 2,
+   "scoringPlay": true,
+   "sequenceNumber": "23",
+   "shootingPlay": true,
+   "shortAlternativeText": "A. Thompson makes dunk (J. Duren assists)",
+   "shortText": "A. Thompson makes dunk (J. Duren assists)",
+   "team": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/8?lang=en&region=us"
+   },
+   "text": "Ausar Thompson makes 1-foot dunk (Jalen Duren assists)",
+   "type": {
+    "id": "117",
+    "text": "Reverse Dunk Shot"
+   },
+   "valid": true,
+   "wallclock": "2023-11-09T01:12:17Z"
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/plays/40158479325?lang=en&region=us",
+   "alternativeText": "Damian Lillard misses 28-foot three point pullup jump shot",
+   "awayScore": 4,
+   "clock": {
+    "displayValue": "10:14",
+    "value": 614.0
+   },
+   "coordinate": {
+    "x": 36,
+    "y": 26
+   },
+   "homeScore": 2,
+   "id": "40158479325",
+   "modified": "2023-11-09T01:13Z",
+   "participants": [
+    {
+     "athlete": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/athletes/6606?lang=en&region=us"
+     },
+     "order": 1,
+     "position": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/positions/3?lang=en&region=us"
+     },
+     "statistics": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/competitors/22/roster/6606/statistics/0?lang=en&region=us"
+     },
+     "type": "shooter"
+    }
+   ],
+   "period": {
+    "displayValue": "1st Quarter",
+    "number": 1
+   },
+   "pointsAttempted": 3,
+   "priority": false,
+   "probability": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/probabilities/40158479325?lang=en&region=us"
+   },
+   "scoreValue": 0,
+   "scoringPlay": false,
+   "sequenceNumber": "25",
+   "shootingPlay": true,
+   "shortAlternativeText": "D. Lillard misses 28-foot three point pullup jump shot",
+   "shortText": "D. Lillard misses 28-foot three point pullup jump shot",
+   "team": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/15?lang=en&region=us"
+   },
+   "text": "Damian Lillard misses 28-foot three point pullup jump shot",
+   "type": {
+    "id": "131",
+    "text": "Pullup Jump Shot"
+   },
+   "valid": true,
+   "wallclock": "2023-11-09T01:12:32Z"
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/plays/40158479326?lang=en&region=us",
+   "alternativeText": "Cade Cunningham defensive rebound",
+   "awayScore": 4,
+   "clock": {
+    "displayValue": "10:11",
+    "value": 611.0
+   },
+   "coordinate": {
+    "x": 36,
+    "y": 26
+   },
+   "homeScore": 2,
+   "id": "40158479326",
+   "modified": "2023-11-09T01:12Z",
+   "participants": [
+    {
+     "athlete": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/athletes/4432166?lang=en&region=us"
+     },
+     "order": 1,
+     "position": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/positions/3?lang=en&region=us"
+     },
+     "statistics": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/competitors/8/roster/4432166/statistics/0?lang=en&region=us"
+     },
+     "type": "rebounder"
+    }
+   ],
+   "period": {
+    "displayValue": "1st Quarter",
+    "number": 1
+   },
+   "pointsAttempted": 0,
+   "priority": false,
+   "probability": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/probabilities/40158479326?lang=en&region=us"
+   },
+   "scoreValue": 0,
+   "scoringPlay": false,
+   "sequenceNumber": "26",
+   "shootingPlay": false,
+   "shortAlternativeText": "C. Cunningham defensive rebound",
+   "shortText": "C. Cunningham defensive rebound",
+   "team": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/8?lang=en&region=us"
+   },
+   "text": "Cade Cunningham defensive rebound",
+   "type": {
+    "id": "155",
+    "text": "Defensive Rebound"
+   },
+   "valid": true,
+   "wallclock": "2023-11-09T01:12:35Z"
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/plays/40158479327?lang=en&region=us",
+   "alternativeText": "Giannis Antetokounmpo blocks Cade Cunningham 's 1-foot two point shot",
+   "awayScore": 4,
+   "clock": {
+    "displayValue": "10:08",
+    "value": 608.0
+   },
+   "coordinate": {
+    "x": 24,
+    "y": 2
+   },
+   "homeScore": 2,
+   "id": "40158479327",
+   "modified": "2023-11-09T01:12Z",
+   "participants": [
+    {
+     "athlete": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/athletes/4432166?lang=en&region=us"
+     },
+     "order": 1,
+     "position": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/positions/3?lang=en&region=us"
+     },
+     "statistics": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/competitors/8/roster/4432166/statistics/0?lang=en&region=us"
+     },
+     "type": "shooter"
+    },
+    {
+     "athlete": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/athletes/3032977?lang=en&region=us"
+     },
+     "order": 3,
+     "position": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/positions/7?lang=en&region=us"
+     },
+     "statistics": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/competitors/14/roster/3032977/statistics/0?lang=en&region=us"
+     },
+     "type": "blocker"
+    }
+   ],
+   "period": {
+    "displayValue": "1st Quarter",
+    "number": 1
+   },
+   "pointsAttempted": 2,
+   "priority": false,
+   "probability": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/probabilities/40158479327?lang=en&region=us"
+   },
+   "scoreValue": 0,
+   "scoringPlay": false,
+   "sequenceNumber": "27",
+   "shootingPlay": true,
+   "shortAlternativeText": "G. Antetokounmpo blocks C. Cunningham 's 1-foot two point shot",
+   "shortText": "G. Antetokounmpo blocks C. Cunningham 's 1-foot two point shot",
+   "team": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/8?lang=en&region=us"
+   },
+   "text": "Giannis Antetokounmpo blocks Cade Cunningham 's 1-foot two point shot",
+   "type": {
+    "id": "109",
+    "text": "Running Layup Shot"
+   },
+   "valid": true,
+   "wallclock": "2023-11-09T01:12:39Z"
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/plays/40158479329?lang=en&region=us",
+   "alternativeText": "Jae Crowder defensive rebound",
+   "awayScore": 4,
+   "clock": {
+    "displayValue": "10:08",
+    "value": 608.0
+   },
+   "coordinate": {
+    "x": 24,
+    "y": 2
+   },
+   "homeScore": 2,
+   "id": "40158479329",
+   "modified": "2023-11-09T01:12Z",
+   "participants": [
+    {
+     "athlete": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/athletes/6581?lang=en&region=us"
+     },
+     "order": 1,
+     "position": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/positions/6?lang=en&region=us"
+     },
+     "statistics": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/competitors/23/roster/6581/statistics/0?lang=en&region=us"
+     },
+     "type": "rebounder"
+    }
+   ],
+   "period": {
+    "displayValue": "1st Quarter",
+    "number": 1
+   },
+   "pointsAttempted": 0,
+   "priority": false,
+   "probability": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/probabilities/40158479329?lang=en&region=us"
+   },
+   "scoreValue": 0,
+   "scoringPlay": false,
+   "sequenceNumber": "29",
+   "shootingPlay": false,
+   "shortAlternativeText": "J. Crowder defensive rebound",
+   "shortText": "J. Crowder defensive rebound",
+   "team": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/15?lang=en&region=us"
+   },
+   "text": "Jae Crowder defensive rebound",
+   "type": {
+    "id": "155",
+    "text": "Defensive Rebound"
+   },
+   "valid": true,
+   "wallclock": "2023-11-09T01:12:39Z"
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/plays/40158479330?lang=en&region=us",
+   "alternativeText": "Brook Lopez makes 23-foot three point jumper (Giannis Antetokounmpo assists)",
+   "awayScore": 4,
+   "clock": {
+    "displayValue": "9:48",
+    "value": 588.0
+   },
+   "coordinate": {
+    "x": 48,
+    "y": 3
+   },
+   "homeScore": 5,
+   "id": "40158479330",
+   "modified": "2023-11-09T01:13Z",
+   "participants": [
+    {
+     "athlete": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/athletes/3448?lang=en&region=us"
+     },
+     "order": 1,
+     "position": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/positions/9?lang=en&region=us"
+     },
+     "statistics": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/competitors/12/roster/3448/statistics/0?lang=en&region=us"
+     },
+     "type": "shooter"
+    },
+    {
+     "athlete": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/athletes/3032977?lang=en&region=us"
+     },
+     "order": 2,
+     "position": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/positions/7?lang=en&region=us"
+     },
+     "statistics": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/competitors/14/roster/3032977/statistics/0?lang=en&region=us"
+     },
+     "type": "assister"
+    }
+   ],
+   "period": {
+    "displayValue": "1st Quarter",
+    "number": 1
+   },
+   "pointsAttempted": 3,
+   "priority": false,
+   "probability": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/probabilities/40158479330?lang=en&region=us"
+   },
+   "scoreValue": 3,
+   "scoringPlay": true,
+   "sequenceNumber": "30",
+   "shootingPlay": true,
+   "shortAlternativeText": "B. Lopez makes three point jumper (G. Antetokounmpo assists)",
+   "shortText": "B. Lopez makes three point jumper (G. Antetokounmpo assists)",
+   "team": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/15?lang=en&region=us"
+   },
+   "text": "Brook Lopez makes 23-foot three point jumper (Giannis Antetokounmpo assists)",
+   "type": {
+    "id": "92",
+    "text": "Jump Shot"
+   },
+   "valid": true,
+   "wallclock": "2023-11-09T01:12:57Z"
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/plays/40158479332?lang=en&region=us",
+   "alternativeText": "Jalen Duren misses driving layup",
+   "awayScore": 4,
+   "clock": {
+    "displayValue": "9:36",
+    "value": 576.0
+   },
+   "coordinate": {
+    "x": 27,
+    "y": 4
+   },
+   "homeScore": 5,
+   "id": "40158479332",
+   "modified": "2023-11-09T01:13Z",
+   "participants": [
+    {
+     "athlete": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/athletes/4433621?lang=en&region=us"
+     },
+     "order": 1,
+     "position": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/positions/9?lang=en&region=us"
+     },
+     "statistics": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/competitors/8/roster/4433621/statistics/0?lang=en&region=us"
+     },
+     "type": "shooter"
+    }
+   ],
+   "period": {
+    "displayValue": "1st Quarter",
+    "number": 1
+   },
+   "pointsAttempted": 2,
+   "priority": false,
+   "probability": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/probabilities/40158479332?lang=en&region=us"
+   },
+   "scoreValue": 0,
+   "scoringPlay": false,
+   "sequenceNumber": "32",
+   "shootingPlay": true,
+   "shortAlternativeText": "J. Duren misses driving layup",
+   "shortText": "J. Duren misses driving layup",
+   "team": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/8?lang=en&region=us"
+   },
+   "text": "Jalen Duren misses driving layup",
+   "type": {
+    "id": "110",
+    "text": "Driving Layup Shot"
+   },
+   "valid": true,
+   "wallclock": "2023-11-09T01:13:10Z"
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/plays/40158479333?lang=en&region=us",
+   "alternativeText": "Malik Beasley defensive rebound",
+   "awayScore": 4,
+   "clock": {
+    "displayValue": "9:32",
+    "value": 572.0
+   },
+   "coordinate": {
+    "x": 27,
+    "y": 4
+   },
+   "homeScore": 5,
+   "id": "40158479333",
+   "modified": "2023-11-09T01:13Z",
+   "participants": [
+    {
+     "athlete": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/athletes/3907822?lang=en&region=us"
+     },
+     "order": 1,
+     "position": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/positions/2?lang=en&region=us"
+     },
+     "statistics": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/competitors/8/roster/3907822/statistics/0?lang=en&region=us"
+     },
+     "type": "rebounder"
+    }
+   ],
+   "period": {
+    "displayValue": "1st Quarter",
+    "number": 1
+   },
+   "pointsAttempted": 0,
+   "priority": false,
+   "probability": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/probabilities/40158479333?lang=en&region=us"
+   },
+   "scoreValue": 0,
+   "scoringPlay": false,
+   "sequenceNumber": "33",
+   "shootingPlay": false,
+   "shortAlternativeText": "M. Beasley defensive rebound",
+   "shortText": "M. Beasley defensive rebound",
+   "team": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/15?lang=en&region=us"
+   },
+   "text": "Malik Beasley defensive rebound",
+   "type": {
+    "id": "155",
+    "text": "Defensive Rebound"
+   },
+   "valid": true,
+   "wallclock": "2023-11-09T01:13:14Z"
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/plays/40158479334?lang=en&region=us",
+   "alternativeText": "Brook Lopez misses 27-foot three point jumper",
+   "awayScore": 4,
+   "clock": {
+    "displayValue": "9:25",
+    "value": 565.0
+   },
+   "coordinate": {
+    "x": 39,
+    "y": 24
+   },
+   "homeScore": 5,
+   "id": "40158479334",
+   "modified": "2023-11-09T01:13Z",
+   "participants": [
+    {
+     "athlete": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/athletes/3448?lang=en&region=us"
+     },
+     "order": 1,
+     "position": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/positions/9?lang=en&region=us"
+     },
+     "statistics": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/competitors/12/roster/3448/statistics/0?lang=en&region=us"
+     },
+     "type": "shooter"
+    }
+   ],
+   "period": {
+    "displayValue": "1st Quarter",
+    "number": 1
+   },
+   "pointsAttempted": 3,
+   "priority": false,
+   "probability": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/probabilities/40158479334?lang=en&region=us"
+   },
+   "scoreValue": 0,
+   "scoringPlay": false,
+   "sequenceNumber": "34",
+   "shootingPlay": true,
+   "shortAlternativeText": "B. Lopez misses 27-foot three point jumper",
+   "shortText": "B. Lopez misses 27-foot three point jumper",
+   "team": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/15?lang=en&region=us"
+   },
+   "text": "Brook Lopez misses 27-foot three point jumper",
+   "type": {
+    "id": "92",
+    "text": "Jump Shot"
+   },
+   "valid": true,
+   "wallclock": "2023-11-09T01:13:21Z"
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/plays/40158479335?lang=en&region=us",
+   "alternativeText": "Killian Hayes defensive rebound",
+   "awayScore": 4,
+   "clock": {
+    "displayValue": "9:21",
+    "value": 561.0
+   },
+   "coordinate": {
+    "x": 39,
+    "y": 24
+   },
+   "homeScore": 5,
+   "id": "40158479335",
+   "modified": "2023-11-09T01:13Z",
+   "participants": [
+    {
+     "athlete": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/athletes/4683024?lang=en&region=us"
+     },
+     "order": 1,
+     "position": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/positions/3?lang=en&region=us"
+     },
+     "statistics": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/competitors/23/roster/4683024/statistics/0?lang=en&region=us"
+     },
+     "type": "rebounder"
+    }
+   ],
+   "period": {
+    "displayValue": "1st Quarter",
+    "number": 1
+   },
+   "pointsAttempted": 0,
+   "priority": false,
+   "probability": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/probabilities/40158479335?lang=en&region=us"
+   },
+   "scoreValue": 0,
+   "scoringPlay": false,
+   "sequenceNumber": "35",
+   "shootingPlay": false,
+   "shortAlternativeText": "K. Hayes defensive rebound",
+   "shortText": "K. Hayes defensive rebound",
+   "team": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/8?lang=en&region=us"
+   },
+   "text": "Killian Hayes defensive rebound",
+   "type": {
+    "id": "155",
+    "text": "Defensive Rebound"
+   },
+   "valid": true,
+   "wallclock": "2023-11-09T01:13:25Z"
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/plays/40158479336?lang=en&region=us",
+   "alternativeText": "Killian Hayes misses running pullup jump shot",
+   "awayScore": 4,
+   "clock": {
+    "displayValue": "9:15",
+    "value": 555.0
+   },
+   "coordinate": {
+    "x": 11,
+    "y": 5
+   },
+   "homeScore": 5,
+   "id": "40158479336",
+   "modified": "2023-11-09T01:13Z",
+   "participants": [
+    {
+     "athlete": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/athletes/4683024?lang=en&region=us"
+     },
+     "order": 1,
+     "position": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/positions/3?lang=en&region=us"
+     },
+     "statistics": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/competitors/23/roster/4683024/statistics/0?lang=en&region=us"
+     },
+     "type": "shooter"
+    }
+   ],
+   "period": {
+    "displayValue": "1st Quarter",
+    "number": 1
+   },
+   "pointsAttempted": 2,
+   "priority": false,
+   "probability": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/probabilities/40158479336?lang=en&region=us"
+   },
+   "scoreValue": 0,
+   "scoringPlay": false,
+   "sequenceNumber": "36",
+   "shootingPlay": true,
+   "shortAlternativeText": "K. Hayes misses running pullup jump shot",
+   "shortText": "K. Hayes misses running pullup jump shot",
+   "team": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/8?lang=en&region=us"
+   },
+   "text": "Killian Hayes misses running pullup jump shot",
+   "type": {
+    "id": "146",
+    "text": "Running Pullup Jump Shot"
+   },
+   "valid": true,
+   "wallclock": "2023-11-09T01:13:31Z"
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/plays/40158479337?lang=en&region=us",
+   "alternativeText": "Giannis Antetokounmpo defensive rebound",
+   "awayScore": 4,
+   "clock": {
+    "displayValue": "9:12",
+    "value": 552.0
+   },
+   "coordinate": {
+    "x": 11,
+    "y": 5
+   },
+   "homeScore": 5,
+   "id": "40158479337",
+   "modified": "2023-11-09T01:13Z",
+   "participants": [
+    {
+     "athlete": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/athletes/3032977?lang=en&region=us"
+     },
+     "order": 1,
+     "position": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/positions/7?lang=en&region=us"
+     },
+     "statistics": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/competitors/14/roster/3032977/statistics/0?lang=en&region=us"
+     },
+     "type": "rebounder"
+    }
+   ],
+   "period": {
+    "displayValue": "1st Quarter",
+    "number": 1
+   },
+   "pointsAttempted": 0,
+   "priority": false,
+   "probability": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/probabilities/40158479337?lang=en&region=us"
+   },
+   "scoreValue": 0,
+   "scoringPlay": false,
+   "sequenceNumber": "37",
+   "shootingPlay": false,
+   "shortAlternativeText": "G. Antetokounmpo defensive rebound",
+   "shortText": "G. Antetokounmpo defensive rebound",
+   "team": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/15?lang=en&region=us"
+   },
+   "text": "Giannis Antetokounmpo defensive rebound",
+   "type": {
+    "id": "155",
+    "text": "Defensive Rebound"
+   },
+   "valid": true,
+   "wallclock": "2023-11-09T01:13:34Z"
+  }
+ ],
+ "pageCount": 1,
+ "pageIndex": 1,
+ "pageSize": 1000
+}

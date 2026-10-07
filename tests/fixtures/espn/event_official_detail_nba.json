@@ -1,0 +1,14 @@
+{
+ "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/officials/1?lang=en&region=us",
+ "displayName": "Rodney Mott",
+ "firstName": "Rodney",
+ "fullName": "Rodney Mott",
+ "id": "2615770",
+ "lastName": "Mott",
+ "order": 1,
+ "position": {
+  "displayName": "Referee",
+  "id": "40",
+  "name": "Referee"
+ }
+}

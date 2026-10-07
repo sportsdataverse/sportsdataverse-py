@@ -23,7 +23,12 @@ ESPN endpoint.
 
 ### Returns {#espn_nwsl_players_index-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_items`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `$ref` | character |  |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#espn_nwsl_players_index-example}
@@ -48,7 +53,65 @@ ESPN endpoint.
 
 ### Returns {#espn_nwsl_player_core-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_single_entity`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `$ref` | character |  |
+| `active` | logical |  |
+| `age` | integer |  |
+| `date_of_birth` | character |  |
+| `debut_year` | integer |  |
+| `display_height` | character |  |
+| `display_name` | character |  |
+| `display_weight` | character |  |
+| `first_name` | character |  |
+| `full_name` | character |  |
+| `guid` | character |  |
+| `height` | double |  |
+| `id` | character |  |
+| `jersey` | character |  |
+| `last_name` | character |  |
+| `linked` | logical |  |
+| `links` | character |  |
+| `short_name` | character |  |
+| `slug` | character |  |
+| `type` | character |  |
+| `uid` | character |  |
+| `weight` | double |  |
+| `alternate_ids_sdr` | character |  |
+| `birth_place_city` | character |  |
+| `birth_place_state` | character |  |
+| `college_$ref` | character |  |
+| `college_athlete_$ref` | character |  |
+| `contracts_$ref` | character |  |
+| `draft_display_text` | character |  |
+| `draft_pick_$ref` | character |  |
+| `draft_round` | integer |  |
+| `draft_selection` | integer |  |
+| `draft_team_$ref` | character |  |
+| `draft_year` | integer |  |
+| `experience_years` | integer |  |
+| `hand_abbreviation` | character |  |
+| `hand_display_value` | character |  |
+| `hand_type` | character |  |
+| `headshot_alt` | character |  |
+| `headshot_href` | character |  |
+| `position_$ref` | character |  |
+| `position_abbreviation` | character |  |
+| `position_display_name` | character |  |
+| `position_id` | character |  |
+| `position_leaf` | logical |  |
+| `position_name` | character |  |
+| `seasons_$ref` | character |  |
+| `statistics_$ref` | character |  |
+| `statisticslog_$ref` | character |  |
+| `status_abbreviation` | character |  |
+| `status_id` | character |  |
+| `status_name` | character |  |
+| `status_type` | character |  |
+| `team_$ref` | character |  |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#espn_nwsl_player_core-example}
@@ -99,7 +162,13 @@ ESPN endpoint.
 
 ### Returns {#espn_nwsl_player_statisticslog-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_items`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `statistics` | character |  |
+| `season_$ref` | character |  |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#espn_nwsl_player_statisticslog-example}
@@ -149,7 +218,12 @@ ESPN endpoint.
 
 ### Returns {#espn_nwsl_player_contracts-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_items`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `$ref` | character |  |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#espn_nwsl_player_contracts-example}
@@ -199,7 +273,12 @@ ESPN endpoint.
 
 ### Returns {#espn_nwsl_player_seasons-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_items`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `$ref` | character |  |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#espn_nwsl_player_seasons-example}

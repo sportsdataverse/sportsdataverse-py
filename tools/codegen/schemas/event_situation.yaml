@@ -1,0 +1,45 @@
+schema: event_situation
+kind: dataframe
+columns:
+- name: $ref
+  type: character
+  description: ''
+- name: away_fouls_bonus_state
+  type: character
+  description: ''
+- name: away_fouls_fouls_to_give
+  type: integer
+  description: ''
+- name: away_fouls_team_fouls
+  type: integer
+  description: ''
+- name: away_fouls_team_fouls_current
+  type: integer
+  description: ''
+- name: away_timeouts_timeouts_current
+  type: integer
+  description: ''
+- name: away_timeouts_timeouts_remaining_current
+  type: integer
+  description: ''
+- name: home_fouls_bonus_state
+  type: character
+  description: ''
+- name: home_fouls_fouls_to_give
+  type: integer
+  description: ''
+- name: home_fouls_team_fouls
+  type: integer
+  description: ''
+- name: home_fouls_team_fouls_current
+  type: integer
+  description: ''
+- name: home_timeouts_timeouts_current
+  type: integer
+  description: ''
+- name: home_timeouts_timeouts_remaining_current
+  type: integer
+  description: ''
+- name: last_play_$ref
+  type: character
+  description: ''

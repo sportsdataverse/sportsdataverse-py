@@ -1,0 +1,33 @@
+schema: coach
+kind: dataframe
+columns:
+- name: $ref
+  type: character
+  description: ''
+- name: career_records
+  type: character
+  description: ''
+- name: coach_seasons
+  type: character
+  description: ''
+- name: experience
+  type: integer
+  description: ''
+- name: first_name
+  type: character
+  description: ''
+- name: id
+  type: character
+  description: ''
+- name: last_name
+  type: character
+  description: ''
+- name: uid
+  type: character
+  description: ''
+- name: birth_place_city
+  type: character
+  description: ''
+- name: birth_place_state
+  type: character
+  description: ''

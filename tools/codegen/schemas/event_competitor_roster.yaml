@@ -1,0 +1,18 @@
+schema: event_competitor_roster
+kind: dataframe
+columns:
+- name: $ref
+  type: character
+  description: ''
+- name: active
+  type: logical
+  description: ''
+- name: starter
+  type: logical
+  description: ''
+- name: did_not_play
+  type: logical
+  description: ''
+- name: ejected
+  type: logical
+  description: ''

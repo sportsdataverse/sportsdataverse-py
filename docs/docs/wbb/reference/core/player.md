@@ -23,7 +23,12 @@ ESPN endpoint.
 
 ### Returns {#espn_wbb_players_index-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_items`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `$ref` | character |  |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#espn_wbb_players_index-example}
@@ -48,7 +53,65 @@ ESPN endpoint.
 
 ### Returns {#espn_wbb_player_core-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_single_entity`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `$ref` | character |  |
+| `active` | logical | TRUE if the row represents an active record (player / team / season). |
+| `age` | integer | Player age (in years). |
+| `date_of_birth` | character | Date of birth (YYYY-MM-DD). |
+| `debut_year` | integer | Year of professional debut. |
+| `display_height` | character | Player height in display format (e.g. '6-2'). |
+| `display_name` | character | Display name. |
+| `display_weight` | character | Player weight in display format (e.g. '180 lbs'). |
+| `first_name` | character | Player's first name. |
+| `full_name` | character | Player's full name. |
+| `guid` | character | Stable cross-league team GUID. |
+| `height` | double | Player height (string e.g. '6-2' or inches). |
+| `id` | character | Unique play identification number |
+| `jersey` | character | Jersey number worn by the player. |
+| `last_name` | character | Player's last name. |
+| `linked` | logical | TRUE if the record is linked to a related entity. |
+| `links` | character |  |
+| `short_name` | character | Short display name. |
+| `slug` | character | URL-safe identifier. |
+| `type` | character | Record type / category. |
+| `uid` | character | ESPN UID string. |
+| `weight` | double | Player weight in pounds. |
+| `alternate_ids_sdr` | character |  |
+| `birth_place_city` | character | Birth place city. |
+| `birth_place_state` | character | Birth place state. |
+| `college_$ref` | character |  |
+| `college_athlete_$ref` | character |  |
+| `contracts_$ref` | character |  |
+| `draft_display_text` | character | Draft display text. |
+| `draft_pick_$ref` | character |  |
+| `draft_round` | integer | Round of the draft selection. |
+| `draft_selection` | integer | Draft selection. |
+| `draft_team_$ref` | character |  |
+| `draft_year` | integer | Draft year (4-digit). |
+| `experience_years` | integer | Experience years. |
+| `hand_abbreviation` | character | Hand abbreviation. |
+| `hand_display_value` | character | Hand display value. |
+| `hand_type` | character | Hand type. |
+| `headshot_alt` | character | Alternative-text label for the headshot. |
+| `headshot_href` | character | Headshot image URL. |
+| `position_$ref` | character |  |
+| `position_abbreviation` | character | Position abbreviation ('G' / 'F' / 'C'). |
+| `position_display_name` | character | Position display name. |
+| `position_id` | character | Unique position identifier. |
+| `position_leaf` | logical | Position leaf. |
+| `position_name` | character | Listed roster position ('Guard', 'Forward', 'Center'). |
+| `seasons_$ref` | character |  |
+| `statistics_$ref` | character |  |
+| `statisticslog_$ref` | character |  |
+| `status_abbreviation` | character | Status abbreviation. |
+| `status_id` | character | Status identifier. |
+| `status_name` | character | Status label. |
+| `status_type` | character | Status type. |
+| `team_$ref` | character |  |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#espn_wbb_player_core-example}
@@ -99,7 +162,13 @@ ESPN endpoint.
 
 ### Returns {#espn_wbb_player_statisticslog-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_items`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `statistics` | character |  |
+| `season_$ref` | character |  |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#espn_wbb_player_statisticslog-example}
@@ -149,7 +218,12 @@ ESPN endpoint.
 
 ### Returns {#espn_wbb_player_contracts-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_items`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `$ref` | character |  |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#espn_wbb_player_contracts-example}
@@ -199,7 +273,12 @@ ESPN endpoint.
 
 ### Returns {#espn_wbb_player_seasons-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_items`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `$ref` | character |  |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#espn_wbb_player_seasons-example}

@@ -232,7 +232,6 @@ not covered by the generated API-endpoint reference above.
 | [ShotQualityConstants](additional/models-and-calculators.md#ShotQualityConstants) | Per-league rule + fitted constants for the shot-quality spine. |
 | [TeamId](additional/models-and-calculators.md#TeamId) | CBB team identifier (`TeamId`, `TeamId.scala`, `AnyVal`). |
 | [TeamSeasonId](additional/models-and-calculators.md#TeamSeasonId) | A team's season identifier (`TeamSeasonId`, `TeamSeasonId.scala`). |
-| [Year](additional/models-and-calculators.md#Year) | CBB season, named by the year it ends (`Year`, `Year.scala`). |
 | [adjust_efficiency](additional/models-and-calculators.md#adjust_efficiency) | Iterative opponent-adjusted efficiency -> AdjO / AdjD / AdjEM per team-season. |
 | [adjust_off_rating_stats](additional/models-and-calculators.md#adjust_off_rating_stats) | Apply a missing-possession correction factor to an `ORtgDiagnostics` dict in place. |
 | [adjust_tempo](additional/models-and-calculators.md#adjust_tempo) | Opponent-adjusted tempo (possessions/40) per team-season. |

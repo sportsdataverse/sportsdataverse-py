@@ -80,7 +80,8 @@ def test_core_child_resource_fills_every_path_token():
     base = "https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793"
     assert by["espn_nba_game_competition"].valid_url == base  # cid defaults to event_id
     assert by["espn_nba_game_odds"].valid_url == f"{base}/odds"
-    assert by["espn_nba_game_team"].valid_url == f"{base}/competitors/4"
+    # 15 is one of this game's two competitors (league_example_args nba); the base example's 4 is not, and 404s.
+    assert by["espn_nba_game_team"].valid_url == f"{base}/competitors/15"
 
 
 @pytest.mark.parametrize("prefix", sorted(p for p, lg in _LEAGUES.items() if "universal" in lg.scopes))

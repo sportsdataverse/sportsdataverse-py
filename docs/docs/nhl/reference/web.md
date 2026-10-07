@@ -23,7 +23,32 @@ ESPN endpoint.
 
 ### Returns {#espn_nhl_player_overview-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_athlete_overview`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `athlete_id` | character | ESPN athlete identifier (echoed from arg). |
+| `athlete_display_name` | character | Player display name. |
+| `athlete_short_name` | character | Player short name. |
+| `athlete_position` | character | Position abbreviation. |
+| `athlete_jersey` | character | Jersey number. |
+| `athlete_team_id` | character | ESPN team identifier. |
+| `athlete_team_abbreviation` | character | Team abbreviation. |
+| `split_name` | character | Split name (e.g. "All Splits"). |
+| `split_category` | character | Split category name (e.g. split, location). |
+| `games_played` | character | Games played. |
+| `avg_minutes` | character |  |
+| `field_goal_pct` | character |  |
+| `three_point_pct` | character |  |
+| `free_throw_pct` | character |  |
+| `avg_rebounds` | character |  |
+| `avg_assists` | character |  |
+| `avg_blocks` | character |  |
+| `avg_steals` | character |  |
+| `avg_fouls` | character |  |
+| `avg_turnovers` | character |  |
+| `avg_points` | character |  |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#espn_nhl_player_overview-example}
@@ -75,7 +100,37 @@ ESPN endpoint.
 
 ### Returns {#espn_nhl_player_gamelog-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_athlete_gamelog`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `season_type_id` | character | Season type id (1=pre, 2=reg, 3=post, 4=off). |
+| `season_type_name` | character |  |
+| `category` | character | Stat leader category. |
+| `event_id` | character | ESPN event id (echoed from arg). |
+| `event_date` | character |  |
+| `home_away` | character | Home or away indicator. |
+| `score` | character | Final score string. |
+| `opponent_id` | character | ESPN opponent team identifier. |
+| `opponent_abbreviation` | character |  |
+| `opponent_display_name` | character |  |
+| `game_result` | character | Game result for the player's team (W/L/OT). |
+| `game_processed` | character |  |
+| `stat_0` | character |  |
+| `stat_1` | character |  |
+| `stat_2` | character |  |
+| `stat_3` | character |  |
+| `stat_4` | character |  |
+| `stat_5` | character |  |
+| `stat_6` | character |  |
+| `stat_7` | character |  |
+| `stat_8` | character |  |
+| `stat_9` | character |  |
+| `stat_10` | character |  |
+| `stat_11` | character |  |
+| `stat_12` | character |  |
+| `stat_13` | character |  |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#espn_nhl_player_gamelog-example}
@@ -101,7 +156,18 @@ ESPN endpoint.
 
 ### Returns {#espn_nhl_player_splits-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_athlete_splits`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `descriptions` | character |  |
+| `display_name` | character | Player display name. |
+| `display_names` | character |  |
+| `filters` | character |  |
+| `labels` | character |  |
+| `names` | character |  |
+| `split_categories` | character |  |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#espn_nhl_player_splits-example}

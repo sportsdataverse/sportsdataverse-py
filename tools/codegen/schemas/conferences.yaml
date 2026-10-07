@@ -1,0 +1,27 @@
+schema: conferences
+kind: dataframe
+columns:
+- name: group_id
+  type: character
+  description: ''
+- name: name
+  type: character
+  description: ''
+- name: abbreviation
+  type: character
+  description: ''
+- name: short_name
+  type: character
+  description: ''
+- name: is_conference
+  type: logical
+  description: ''
+- name: parent_group_id
+  type: character
+  description: ''
+- name: depth
+  type: integer
+  description: ''
+- name: children_count
+  type: integer
+  description: ''

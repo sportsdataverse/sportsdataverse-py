@@ -1,0 +1,1051 @@
+{
+ "descriptions": [
+  "Games Played",
+  "The average number of minutes per game.",
+  "avgFieldGoalsMade-avgFieldGoalsAttempted",
+  "The ratio of field goals made to field goals attempted: FGM / FGA",
+  "avgThreePointFieldGoalsMade-avgThreePointFieldGoalsAttempted",
+  "The ratio of 3pt field goals made to 3pt field goals attempted: 3PM / 3PA.",
+  "avgFreeThrowsMade-avgFreeThrowsAttempted",
+  "The ratio of free throws made to free throws attempted: FTM / FTA",
+  "The average offensive rebounds per game.",
+  "The average defensive rebounds per game.",
+  "The average rebounds per game.",
+  "The average assists per game.",
+  "The average blocks per game.",
+  "The average steals per game.",
+  "The average fouls committed per game.",
+  "The average turnovers committed per game.",
+  "The average number of points scored per game."
+ ],
+ "displayName": "2019-20 Splits",
+ "displayNames": [
+  "Games Played",
+  "Minutes Per Game",
+  "Field Goals Made-Attempted Per Game",
+  "Field Goal Percentage",
+  "3-Point Field Goals Made-Attempted Per Game",
+  "3-Point Field Goal Percentage",
+  "Free Throws Made-Attempted Per Game",
+  "Free Throw Percentage",
+  "Offensive Rebounds Per Game",
+  "Defensive Rebounds Per Game",
+  "Rebounds Per Game",
+  "Assists Per Game",
+  "Blocks Per Game",
+  "Steals Per Game",
+  "Fouls Per Game",
+  "Turnovers Per Game",
+  "Points Per Game"
+ ],
+ "filters": [
+  {
+   "displayName": "League",
+   "name": "league",
+   "options": [
+    {
+     "displayValue": "NCAA Men's Basketball",
+     "shortDisplayName": "NCAAM",
+     "value": "mens-college-basketball"
+    },
+    {
+     "displayValue": "National Basketball Association",
+     "shortDisplayName": "NBA",
+     "value": "nba"
+    }
+   ],
+   "value": "nba"
+  },
+  {
+   "displayName": "Season",
+   "name": "season",
+   "options": [
+    {
+     "displayValue": "2019-20",
+     "value": "2020"
+    },
+    {
+     "displayValue": "2018-19",
+     "value": "2019"
+    },
+    {
+     "displayValue": "2017-18",
+     "value": "2018"
+    },
+    {
+     "displayValue": "2016-17",
+     "value": "2017"
+    },
+    {
+     "displayValue": "2015-16",
+     "value": "2016"
+    },
+    {
+     "displayValue": "2014-15",
+     "value": "2015"
+    },
+    {
+     "displayValue": "2013-14",
+     "value": "2014"
+    },
+    {
+     "displayValue": "2012-13",
+     "value": "2013"
+    },
+    {
+     "displayValue": "2011-12",
+     "value": "2012"
+    },
+    {
+     "displayValue": "2010-11",
+     "value": "2011"
+    }
+   ],
+   "value": "2020"
+  },
+  {
+   "displayName": "Category",
+   "name": "category",
+   "options": [
+    {
+     "displayValue": "Per Game",
+     "value": "perGame"
+    },
+    {
+     "displayValue": "Total",
+     "value": "total"
+    },
+    {
+     "displayValue": "Per 48 Minutes",
+     "value": "per48"
+    }
+   ],
+   "value": "perGame"
+  }
+ ],
+ "labels": [
+  "GP",
+  "MIN",
+  "FG",
+  "FG%",
+  "3PT",
+  "3P%",
+  "FT",
+  "FT%",
+  "OR",
+  "DR",
+  "REB",
+  "AST",
+  "BLK",
+  "STL",
+  "PF",
+  "TO",
+  "PTS"
+ ],
+ "names": [
+  "gamesPlayed",
+  "avgMinutes",
+  "avgFieldGoalsMade-avgFieldGoalsAttempted",
+  "fieldGoalPct",
+  "avgThreePointFieldGoalsMade-avgThreePointFieldGoalsAttempted",
+  "threePointFieldGoalPct",
+  "Free Throws Made-Attempted Per Game",
+  "freeThrowPct",
+  "avgOffensiveRebounds",
+  "avgDefensiveRebounds",
+  "avgRebounds",
+  "avgAssists",
+  "avgBlocks",
+  "avgSteals",
+  "avgFouls",
+  "avgTurnovers",
+  "avgPoints"
+ ],
+ "splitCategories": [
+  {
+   "displayName": "split",
+   "name": "split",
+   "splits": [
+    {
+     "abbreviation": "Total",
+     "displayName": "All Splits",
+     "stats": [
+      "19",
+      "13.2",
+      "1.3-3.5",
+      "37.3",
+      "0.0-0.3",
+      "0.0",
+      "0.6-0.7",
+      "85.7",
+      "0.4",
+      "1.6",
+      "2.0",
+      "2.0",
+      "0.4",
+      "0.5",
+      "1.1",
+      "1.4",
+      "3.3"
+     ]
+    },
+    {
+     "abbreviation": "Home",
+     "displayName": "Home",
+     "stats": [
+      "10",
+      "13.5",
+      "1.2-3.6",
+      "33.3",
+      "0.0-0.2",
+      "0.0",
+      "0.7-0.9",
+      "77.8",
+      "0.4",
+      "1.7",
+      "2.1",
+      "2.5",
+      "0.2",
+      "0.4",
+      "0.9",
+      "0.9",
+      "3.1"
+     ]
+    },
+    {
+     "abbreviation": "Road",
+     "displayName": "Road",
+     "stats": [
+      "9",
+      "12.9",
+      "1.4-3.4",
+      "41.9",
+      "0.0-0.3",
+      "0.0",
+      "0.6-0.6",
+      "100.0",
+      "0.4",
+      "1.4",
+      "1.9",
+      "1.4",
+      "0.7",
+      "0.6",
+      "1.2",
+      "1.9",
+      "3.4"
+     ]
+    },
+    {
+     "abbreviation": "vs. Div.",
+     "displayName": "vs. Division",
+     "stats": [
+      "1",
+      "11.0",
+      "0.0-2.0",
+      "0.0",
+      "0.0-1.0",
+      "0.0",
+      "1.0-2.0",
+      "50.0",
+      "0.0",
+      "3.0",
+      "3.0",
+      "1.0",
+      "0.0",
+      "0.0",
+      "2.0",
+      "1.0",
+      "1.0"
+     ]
+    },
+    {
+     "abbreviation": "vs. Conf.",
+     "displayName": "vs. Conference",
+     "stats": [
+      "13",
+      "12.8",
+      "1.0-3.0",
+      "33.3",
+      "0.0-0.3",
+      "0.0",
+      "0.4-0.5",
+      "83.3",
+      "0.3",
+      "1.5",
+      "1.8",
+      "1.7",
+      "0.5",
+      "0.4",
+      "0.9",
+      "1.5",
+      "2.4"
+     ]
+    },
+    {
+     "abbreviation": "0 Days Res",
+     "displayName": "0 Days Rest",
+     "stats": [
+      "4",
+      "11.8",
+      "1.3-4.0",
+      "31.3",
+      "0.0-0.5",
+      "0.0",
+      "0.3-0.3",
+      "100.0",
+      "0.5",
+      "1.3",
+      "1.8",
+      "1.8",
+      "0.3",
+      "0.3",
+      "1.3",
+      "1.3",
+      "2.8"
+     ]
+    },
+    {
+     "abbreviation": "1 Days Res",
+     "displayName": "1 Days Rest",
+     "stats": [
+      "8",
+      "13.3",
+      "0.9-3.3",
+      "26.9",
+      "0.0-0.3",
+      "0.0",
+      "0.8-1.0",
+      "75.0",
+      "0.4",
+      "1.6",
+      "2.0",
+      "2.3",
+      "0.8",
+      "0.5",
+      "0.8",
+      "1.8",
+      "2.5"
+     ]
+    },
+    {
+     "abbreviation": "2 Days Res",
+     "displayName": "2 Days Rest",
+     "stats": [
+      "1",
+      "15.0",
+      "3.0-6.0",
+      "50.0",
+      "0.0-0.0",
+      "0.0",
+      "1.0-1.0",
+      "100.0",
+      "1.0",
+      "1.0",
+      "2.0",
+      "3.0",
+      "0.0",
+      "0.0",
+      "2.0",
+      "0.0",
+      "7.0"
+     ]
+    },
+    {
+     "abbreviation": "3+ Days Re",
+     "displayName": "3+ Days Rest",
+     "stats": [
+      "6",
+      "14.0",
+      "1.7-3.2",
+      "52.6",
+      "0.0-0.2",
+      "0.0",
+      "0.7-0.7",
+      "100.0",
+      "0.3",
+      "1.8",
+      "2.2",
+      "1.7",
+      "0.2",
+      "0.7",
+      "1.2",
+      "1.2",
+      "4.0"
+     ]
+    }
+   ]
+  },
+  {
+   "displayName": "Month",
+   "name": "byMonth",
+   "splits": [
+    {
+     "abbreviation": "October",
+     "displayName": "October",
+     "stats": [
+      "3",
+      "11.3",
+      "1.3-2.3",
+      "57.1",
+      "0.0-0.3",
+      "0.0",
+      "1.3-1.7",
+      "80.0",
+      "0.0",
+      "1.0",
+      "1.0",
+      "2.3",
+      "0.0",
+      "1.0",
+      "0.7",
+      "0.7",
+      "4.0"
+     ]
+    },
+    {
+     "abbreviation": "November",
+     "displayName": "November",
+     "stats": [
+      "9",
+      "13.3",
+      "1.7-4.7",
+      "35.7",
+      "0.0-0.3",
+      "0.0",
+      "0.7-0.8",
+      "85.7",
+      "0.6",
+      "1.9",
+      "2.4",
+      "1.8",
+      "0.7",
+      "0.4",
+      "1.4",
+      "1.7",
+      "4.0"
+     ]
+    },
+    {
+     "abbreviation": "December",
+     "displayName": "December",
+     "stats": [
+      "6",
+      "12.7",
+      "0.8-2.3",
+      "35.7",
+      "0.0-0.2",
+      "0.0",
+      "0.3-0.3",
+      "100.0",
+      "0.3",
+      "1.5",
+      "1.8",
+      "2.2",
+      "0.3",
+      "0.2",
+      "0.5",
+      "1.3",
+      "2.0"
+     ]
+    },
+    {
+     "abbreviation": "February",
+     "displayName": "February",
+     "stats": [
+      "1",
+      "21.0",
+      "1.0-4.0",
+      "25.0",
+      "0.0-0.0",
+      "0.0",
+      "0.0-0.0",
+      "0.0",
+      "1.0",
+      "1.0",
+      "2.0",
+      "2.0",
+      "0.0",
+      "1.0",
+      "2.0",
+      "1.0",
+      "2.0"
+     ]
+    },
+    {
+     "abbreviation": "Pre All-St",
+     "displayName": "Pre All-Star",
+     "stats": [
+      "19",
+      "13.2",
+      "1.3-3.5",
+      "37.3",
+      "0.0-0.3",
+      "0.0",
+      "0.6-0.7",
+      "85.7",
+      "0.4",
+      "1.6",
+      "2.0",
+      "2.0",
+      "0.4",
+      "0.5",
+      "1.1",
+      "1.4",
+      "3.3"
+     ]
+    }
+   ]
+  },
+  {
+   "displayName": "Result",
+   "name": "byResult",
+   "splits": [
+    {
+     "abbreviation": "In wins",
+     "displayName": "Wins",
+     "stats": [
+      "3",
+      "15.7",
+      "2.3-3.7",
+      "63.6",
+      "0.0-0.3",
+      "0.0",
+      "1.3-1.7",
+      "80.0",
+      "0.3",
+      "1.0",
+      "1.3",
+      "3.3",
+      "0.0",
+      "0.7",
+      "0.7",
+      "0.3",
+      "6.0"
+     ]
+    },
+    {
+     "abbreviation": "In losses",
+     "displayName": "Losses",
+     "stats": [
+      "16",
+      "12.8",
+      "1.1-3.5",
+      "32.1",
+      "0.0-0.3",
+      "0.0",
+      "0.5-0.6",
+      "88.9",
+      "0.4",
+      "1.7",
+      "2.1",
+      "1.8",
+      "0.5",
+      "0.4",
+      "1.1",
+      "1.6",
+      "2.8"
+     ]
+    }
+   ]
+  },
+  {
+   "displayName": "Position",
+   "name": "byPosition"
+  },
+  {
+   "displayName": "Day",
+   "name": "byDay",
+   "splits": [
+    {
+     "abbreviation": "Monday",
+     "displayName": "Monday",
+     "stats": [
+      "4",
+      "14.5",
+      "1.3-3.8",
+      "33.3",
+      "0.0-0.0",
+      "0.0",
+      "1.3-1.5",
+      "83.3",
+      "0.5",
+      "1.3",
+      "1.8",
+      "3.5",
+      "0.0",
+      "1.0",
+      "0.5",
+      "0.8",
+      "3.8"
+     ]
+    },
+    {
+     "abbreviation": "Wednesday",
+     "displayName": "Wednesday",
+     "stats": [
+      "4",
+      "15.8",
+      "1.5-4.5",
+      "33.3",
+      "0.0-0.5",
+      "0.0",
+      "0.3-0.3",
+      "100.0",
+      "0.8",
+      "2.5",
+      "3.3",
+      "2.0",
+      "1.3",
+      "0.0",
+      "1.0",
+      "2.3",
+      "3.3"
+     ]
+    },
+    {
+     "abbreviation": "Thursday",
+     "displayName": "Thursday",
+     "stats": [
+      "2",
+      "12.5",
+      "2.5-3.0",
+      "83.3",
+      "0.0-0.0",
+      "0.0",
+      "0.5-0.5",
+      "100.0",
+      "0.0",
+      "0.5",
+      "0.5",
+      "2.0",
+      "0.0",
+      "0.5",
+      "0.5",
+      "0.0",
+      "5.5"
+     ]
+    },
+    {
+     "abbreviation": "Friday",
+     "displayName": "Friday",
+     "stats": [
+      "3",
+      "11.0",
+      "0.0-1.0",
+      "0.0",
+      "0.0-0.0",
+      "0.0",
+      "0.0-0.0",
+      "0.0",
+      "0.0",
+      "0.7",
+      "0.7",
+      "1.0",
+      "0.3",
+      "0.3",
+      "0.7",
+      "2.0",
+      "0.0"
+     ]
+    },
+    {
+     "abbreviation": "Saturday",
+     "displayName": "Saturday",
+     "stats": [
+      "5",
+      "11.6",
+      "1.2-4.0",
+      "30.0",
+      "0.0-0.6",
+      "0.0",
+      "0.8-1.0",
+      "80.0",
+      "0.4",
+      "2.2",
+      "2.6",
+      "1.6",
+      "0.4",
+      "0.6",
+      "1.8",
+      "1.2",
+      "3.2"
+     ]
+    },
+    {
+     "abbreviation": "Sunday",
+     "displayName": "Sunday",
+     "stats": [
+      "1",
+      "15.0",
+      "3.0-5.0",
+      "60.0",
+      "0.0-0.0",
+      "0.0",
+      "1.0-1.0",
+      "100.0",
+      "1.0",
+      "1.0",
+      "2.0",
+      "1.0",
+      "0.0",
+      "0.0",
+      "2.0",
+      "2.0",
+      "7.0"
+     ]
+    }
+   ]
+  },
+  {
+   "displayName": "Opponent",
+   "name": "byOpponent",
+   "splits": [
+    {
+     "abbreviation": "vs BKN",
+     "displayName": "Brooklyn Nets",
+     "stats": [
+      "1",
+      "21.0",
+      "1.0-4.0",
+      "25.0",
+      "0.0-0.0",
+      "0.0",
+      "0.0-0.0",
+      "0.0",
+      "1.0",
+      "2.0",
+      "3.0",
+      "4.0",
+      "2.0",
+      "0.0",
+      "1.0",
+      "3.0",
+      "2.0"
+     ]
+    },
+    {
+     "abbreviation": "vs BOS",
+     "displayName": "Boston Celtics",
+     "stats": [
+      "1",
+      "21.0",
+      "1.0-4.0",
+      "25.0",
+      "0.0-0.0",
+      "0.0",
+      "0.0-0.0",
+      "0.0",
+      "1.0",
+      "1.0",
+      "2.0",
+      "2.0",
+      "0.0",
+      "1.0",
+      "2.0",
+      "1.0",
+      "2.0"
+     ]
+    },
+    {
+     "abbreviation": "vs CHI",
+     "displayName": "Chicago Bulls",
+     "stats": [
+      "2",
+      "8.5",
+      "0.0-1.0",
+      "0.0",
+      "0.0-0.5",
+      "0.0",
+      "0.0-0.0",
+      "0.0",
+      "0.0",
+      "2.0",
+      "2.0",
+      "1.0",
+      "0.0",
+      "0.0",
+      "0.5",
+      "2.0",
+      "0.0"
+     ]
+    },
+    {
+     "abbreviation": "vs DET",
+     "displayName": "Detroit Pistons",
+     "stats": [
+      "2",
+      "13.0",
+      "2.0-2.5",
+      "80.0",
+      "0.0-0.0",
+      "0.0",
+      "0.5-0.5",
+      "100.0",
+      "0.0",
+      "0.0",
+      "0.0",
+      "2.5",
+      "0.0",
+      "0.5",
+      "1.0",
+      "1.0",
+      "4.5"
+     ]
+    },
+    {
+     "abbreviation": "vs GS",
+     "displayName": "Golden State Warriors",
+     "stats": [
+      "1",
+      "20.0",
+      "3.0-5.0",
+      "60.0",
+      "0.0-0.0",
+      "0.0",
+      "2.0-2.0",
+      "100.0",
+      "1.0",
+      "0.0",
+      "1.0",
+      "5.0",
+      "0.0",
+      "1.0",
+      "0.0",
+      "0.0",
+      "8.0"
+     ]
+    },
+    {
+     "abbreviation": "vs HOU",
+     "displayName": "Houston Rockets",
+     "stats": [
+      "1",
+      "16.0",
+      "0.0-4.0",
+      "0.0",
+      "0.0-1.0",
+      "0.0",
+      "0.0-0.0",
+      "0.0",
+      "1.0",
+      "0.0",
+      "1.0",
+      "4.0",
+      "1.0",
+      "1.0",
+      "1.0",
+      "1.0",
+      "0.0"
+     ]
+    },
+    {
+     "abbreviation": "vs IND",
+     "displayName": "Indiana Pacers",
+     "stats": [
+      "1",
+      "13.0",
+      "0.0-1.0",
+      "0.0",
+      "0.0-0.0",
+      "0.0",
+      "0.0-0.0",
+      "0.0",
+      "0.0",
+      "0.0",
+      "0.0",
+      "0.0",
+      "1.0",
+      "1.0",
+      "0.0",
+      "3.0",
+      "0.0"
+     ]
+    },
+    {
+     "abbreviation": "vs LAC",
+     "displayName": "Los Angeles Clippers",
+     "stats": [
+      "1",
+      "15.0",
+      "4.0-7.0",
+      "57.1",
+      "0.0-0.0",
+      "0.0",
+      "3.0-3.0",
+      "100.0",
+      "1.0",
+      "4.0",
+      "5.0",
+      "1.0",
+      "1.0",
+      "2.0",
+      "4.0",
+      "2.0",
+      "11.0"
+     ]
+    },
+    {
+     "abbreviation": "vs LAL",
+     "displayName": "Los Angeles Lakers",
+     "stats": [
+      "1",
+      "15.0",
+      "3.0-5.0",
+      "60.0",
+      "0.0-0.0",
+      "0.0",
+      "1.0-1.0",
+      "100.0",
+      "1.0",
+      "1.0",
+      "2.0",
+      "1.0",
+      "0.0",
+      "0.0",
+      "2.0",
+      "2.0",
+      "7.0"
+     ]
+    },
+    {
+     "abbreviation": "vs MIL",
+     "displayName": "Milwaukee Bucks",
+     "stats": [
+      "3",
+      "13.3",
+      "1.7-4.7",
+      "35.7",
+      "0.0-0.3",
+      "0.0",
+      "0.3-0.3",
+      "100.0",
+      "0.7",
+      "2.3",
+      "3.0",
+      "1.7",
+      "1.0",
+      "0.0",
+      "1.0",
+      "1.3",
+      "3.7"
+     ]
+    },
+    {
+     "abbreviation": "vs MIN",
+     "displayName": "Minnesota Timberwolves",
+     "stats": [
+      "1",
+      "11.0",
+      "1.0-5.0",
+      "20.0",
+      "0.0-0.0",
+      "0.0",
+      "1.0-2.0",
+      "50.0",
+      "0.0",
+      "4.0",
+      "4.0",
+      "5.0",
+      "0.0",
+      "0.0",
+      "0.0",
+      "1.0",
+      "3.0"
+     ]
+    },
+    {
+     "abbreviation": "vs ORL",
+     "displayName": "Orlando Magic",
+     "stats": [
+      "1",
+      "11.0",
+      "0.0-2.0",
+      "0.0",
+      "0.0-1.0",
+      "0.0",
+      "1.0-2.0",
+      "50.0",
+      "0.0",
+      "3.0",
+      "3.0",
+      "1.0",
+      "0.0",
+      "0.0",
+      "2.0",
+      "1.0",
+      "1.0"
+     ]
+    },
+    {
+     "abbreviation": "vs PHI",
+     "displayName": "Philadelphia 76ers",
+     "stats": [
+      "1",
+      "7.0",
+      "0.0-1.0",
+      "0.0",
+      "0.0-0.0",
+      "0.0",
+      "2.0-2.0",
+      "100.0",
+      "0.0",
+      "0.0",
+      "0.0",
+      "2.0",
+      "0.0",
+      "2.0",
+      "0.0",
+      "1.0",
+      "2.0"
+     ]
+    },
+    {
+     "abbreviation": "vs TOR",
+     "displayName": "Toronto Raptors",
+     "stats": [
+      "1",
+      "12.0",
+      "2.0-6.0",
+      "33.3",
+      "0.0-1.0",
+      "0.0",
+      "0.0-0.0",
+      "0.0",
+      "0.0",
+      "3.0",
+      "3.0",
+      "1.0",
+      "0.0",
+      "0.0",
+      "1.0",
+      "1.0",
+      "4.0"
+     ]
+    },
+    {
+     "abbreviation": "vs UTA",
+     "displayName": "Utah Jazz",
+     "stats": [
+      "1",
+      "8.0",
+      "1.0-2.0",
+      "50.0",
+      "0.0-0.0",
+      "0.0",
+      "0.0-0.0",
+      "0.0",
+      "0.0",
+      "1.0",
+      "1.0",
+      "0.0",
+      "0.0",
+      "0.0",
+      "1.0",
+      "0.0",
+      "2.0"
+     ]
+    }
+   ]
+  }
+ ]
+}

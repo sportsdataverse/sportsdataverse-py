@@ -1,0 +1,450 @@
+{
+ "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2027/teams/4?lang=en&region=us",
+ "abbreviation": "CHI",
+ "againstTheSpreadRecords": {
+  "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2027/types/1/teams/4/ats?lang=en&region=us"
+ },
+ "alternateColor": "000000",
+ "athletes": {
+  "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2027/teams/4/athletes?lang=en&region=us"
+ },
+ "awards": {
+  "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2027/teams/4/awards?lang=en&region=us"
+ },
+ "coaches": {
+  "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/teams/4/coaches?lang=en&region=us"
+ },
+ "color": "ce1141",
+ "depthCharts": {
+  "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2027/teams/4/depthcharts?lang=en&region=us"
+ },
+ "displayName": "Chicago Bulls",
+ "events": {
+  "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2027/teams/4/events?lang=en&region=us"
+ },
+ "franchise": {
+  "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/franchises/4?lang=en&region=us"
+ },
+ "groups": {
+  "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2027/types/1/groups/2?lang=en&region=us"
+ },
+ "guid": "e588ccf1-ba03-ea43-c34c-9a9c8d1895ca",
+ "id": "4",
+ "injuries": {
+  "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/teams/4/injuries?lang=en&region=us"
+ },
+ "isActive": true,
+ "isAllStar": false,
+ "links": [
+  {
+   "href": "https://www.espn.com/nba/team/_/name/chi/chicago-bulls",
+   "isExternal": false,
+   "isPremium": false,
+   "language": "en-US",
+   "rel": [
+    "clubhouse",
+    "desktop",
+    "team"
+   ],
+   "shortText": "Clubhouse",
+   "text": "Clubhouse"
+  },
+  {
+   "href": "https://www.espn.com/nba/team/roster/_/name/chi/chicago-bulls",
+   "isExternal": false,
+   "isPremium": false,
+   "language": "en-US",
+   "rel": [
+    "roster",
+    "desktop",
+    "team"
+   ],
+   "shortText": "Roster",
+   "text": "Roster"
+  },
+  {
+   "href": "sportscenter://x-callback-url/showClubhouse?uid=s:40~l:46~t:4&section=roster",
+   "isExternal": false,
+   "isPremium": false,
+   "language": "en-US",
+   "rel": [
+    "roster",
+    "sportscenter",
+    "app",
+    "team"
+   ],
+   "shortText": "Roster",
+   "text": "Roster"
+  },
+  {
+   "href": "https://www.espn.com/nba/team/stats/_/name/chi/chicago-bulls",
+   "isExternal": false,
+   "isPremium": false,
+   "language": "en-US",
+   "rel": [
+    "stats",
+    "desktop",
+    "team"
+   ],
+   "shortText": "Statistics",
+   "text": "Statistics"
+  },
+  {
+   "href": "sportscenter://x-callback-url/showClubhouse?uid=s:40~l:46~t:4&section=stats",
+   "isExternal": false,
+   "isPremium": false,
+   "language": "en-US",
+   "rel": [
+    "stats",
+    "sportscenter",
+    "app",
+    "team"
+   ],
+   "shortText": "Statistics",
+   "text": "Statistics"
+  },
+  {
+   "href": "https://www.espn.com/nba/team/schedule/_/name/chi",
+   "isExternal": false,
+   "isPremium": false,
+   "language": "en-US",
+   "rel": [
+    "schedule",
+    "desktop",
+    "team"
+   ],
+   "shortText": "Schedule",
+   "text": "Schedule"
+  },
+  {
+   "href": "sportscenter://x-callback-url/showClubhouse?uid=s:40~l:46~t:4&section=scores",
+   "isExternal": false,
+   "isPremium": false,
+   "language": "en-US",
+   "rel": [
+    "schedule",
+    "sportscenter",
+    "app",
+    "team"
+   ],
+   "shortText": "Schedule",
+   "text": "Schedule"
+  },
+  {
+   "href": "https://www.espn.com/nba/team/photos/_/name/chi",
+   "isExternal": false,
+   "isPremium": false,
+   "language": "en-US",
+   "rel": [
+    "photos",
+    "desktop",
+    "team"
+   ],
+   "shortText": "photos",
+   "text": "photos"
+  },
+  {
+   "href": "https://www.vividseats.com/chicago-bulls-tickets--sports-nba-basketball/performer/161?wsUser=717",
+   "isExternal": true,
+   "isPremium": false,
+   "language": "en-US",
+   "rel": [
+    "tickets",
+    "desktop",
+    "team"
+   ],
+   "shortText": "Tickets",
+   "text": "Tickets"
+  },
+  {
+   "href": "https://www.espn.com/nba/draft/teams/_/name/chi/chicago-bulls",
+   "isExternal": false,
+   "isPremium": true,
+   "language": "en-US",
+   "rel": [
+    "draftpicks",
+    "desktop",
+    "team"
+   ],
+   "shortText": "Draft Picks",
+   "text": "Draft Picks"
+  },
+  {
+   "href": "https://www.espn.com/nba/team/transactions/_/name/chi",
+   "isExternal": false,
+   "isPremium": false,
+   "language": "en-US",
+   "rel": [
+    "transactions",
+    "desktop",
+    "team"
+   ],
+   "shortText": "Transactions",
+   "text": "Transactions"
+  },
+  {
+   "href": "https://www.espn.com/nba/team/injuries/_/name/chi",
+   "isExternal": false,
+   "isPremium": false,
+   "language": "en-US",
+   "rel": [
+    "injuries",
+    "desktop",
+    "team"
+   ],
+   "shortText": "Injuries",
+   "text": "Injuries"
+  },
+  {
+   "href": "https://www.espn.com/nba/team/depth/_/name/chi",
+   "isExternal": false,
+   "isPremium": false,
+   "language": "en-US",
+   "rel": [
+    "depthchart",
+    "desktop",
+    "team"
+   ],
+   "shortText": "Depth Chart",
+   "text": "Depth Chart"
+  },
+  {
+   "href": "sportscenter://x-callback-url/showClubhouse?uid=s:40~l:46~t:4&section=depthchart",
+   "isExternal": false,
+   "isPremium": false,
+   "language": "en-US",
+   "rel": [
+    "depthchart",
+    "sportscenter",
+    "app",
+    "team"
+   ],
+   "shortText": "Depth Chart",
+   "text": "Depth Chart"
+  }
+ ],
+ "location": "Chicago",
+ "logos": [
+  {
+   "alt": "",
+   "height": 500,
+   "href": "https://a.espncdn.com/i/teamlogos/nba/500/chi.png",
+   "lastUpdated": "2024-06-25T21:17Z",
+   "rel": [
+    "full",
+    "default"
+   ],
+   "width": 500
+  },
+  {
+   "alt": "",
+   "height": 500,
+   "href": "https://a.espncdn.com/i/teamlogos/nba/500-dark/chi.png",
+   "lastUpdated": "2024-06-25T21:13Z",
+   "rel": [
+    "full",
+    "dark"
+   ],
+   "width": 500
+  },
+  {
+   "alt": "",
+   "height": 500,
+   "href": "https://a.espncdn.com/i/teamlogos/nba/500/scoreboard/chi.png",
+   "lastUpdated": "2024-06-25T21:18Z",
+   "rel": [
+    "full",
+    "scoreboard"
+   ],
+   "width": 500
+  },
+  {
+   "alt": "",
+   "height": 500,
+   "href": "https://a.espncdn.com/i/teamlogos/nba/500-dark/scoreboard/chi.png",
+   "lastUpdated": "2024-06-25T21:13Z",
+   "rel": [
+    "full",
+    "scoreboard",
+    "dark"
+   ],
+   "width": 500
+  },
+  {
+   "alt": "",
+   "height": 4096,
+   "href": "https://a.espncdn.com/guid/e588ccf1-ba03-ea43-c34c-9a9c8d1895ca/logos/primary_logo_on_white_color.png",
+   "lastUpdated": "2026-07-22T20:23Z",
+   "rel": [
+    "full",
+    "primary_logo_on_white_color"
+   ],
+   "width": 4096
+  },
+  {
+   "alt": "",
+   "height": 4096,
+   "href": "https://a.espncdn.com/guid/e588ccf1-ba03-ea43-c34c-9a9c8d1895ca/logos/primary_logo_on_black_color.png",
+   "lastUpdated": "2026-07-22T20:23Z",
+   "rel": [
+    "full",
+    "primary_logo_on_black_color"
+   ],
+   "width": 4096
+  },
+  {
+   "alt": "",
+   "height": 4096,
+   "href": "https://a.espncdn.com/guid/e588ccf1-ba03-ea43-c34c-9a9c8d1895ca/logos/primary_logo_on_primary_color.png",
+   "lastUpdated": "2026-07-22T20:23Z",
+   "rel": [
+    "full",
+    "primary_logo_on_primary_color"
+   ],
+   "width": 4096
+  },
+  {
+   "alt": "",
+   "height": 4096,
+   "href": "https://a.espncdn.com/guid/e588ccf1-ba03-ea43-c34c-9a9c8d1895ca/logos/primary_logo_on_secondary_color.png",
+   "lastUpdated": "2026-07-22T20:23Z",
+   "rel": [
+    "full",
+    "primary_logo_on_secondary_color"
+   ],
+   "width": 4096
+  },
+  {
+   "alt": "",
+   "height": 4096,
+   "href": "https://a.espncdn.com/guid/e588ccf1-ba03-ea43-c34c-9a9c8d1895ca/logos/primary_logo_black.png",
+   "lastUpdated": "2026-07-22T20:23Z",
+   "rel": [
+    "full",
+    "primary_logo_black"
+   ],
+   "width": 4096
+  },
+  {
+   "alt": "",
+   "height": 4096,
+   "href": "https://a.espncdn.com/guid/e588ccf1-ba03-ea43-c34c-9a9c8d1895ca/logos/primary_logo_white.png",
+   "lastUpdated": "2026-07-22T20:23Z",
+   "rel": [
+    "full",
+    "primary_logo_white"
+   ],
+   "width": 4096
+  },
+  {
+   "alt": "",
+   "height": 4096,
+   "href": "https://a.espncdn.com/guid/e588ccf1-ba03-ea43-c34c-9a9c8d1895ca/logos/secondary_logo_on_white_color.png",
+   "lastUpdated": "2026-07-22T20:23Z",
+   "rel": [
+    "full",
+    "secondary_logo_on_white_color"
+   ],
+   "width": 4096
+  },
+  {
+   "alt": "",
+   "height": 4096,
+   "href": "https://a.espncdn.com/guid/e588ccf1-ba03-ea43-c34c-9a9c8d1895ca/logos/secondary_logo_on_black_color.png",
+   "lastUpdated": "2026-07-22T20:23Z",
+   "rel": [
+    "full",
+    "secondary_logo_on_black_color"
+   ],
+   "width": 4096
+  },
+  {
+   "alt": "",
+   "height": 4096,
+   "href": "https://a.espncdn.com/guid/e588ccf1-ba03-ea43-c34c-9a9c8d1895ca/logos/secondary_logo_on_primary_color.png",
+   "lastUpdated": "2026-07-22T20:23Z",
+   "rel": [
+    "full",
+    "secondary_logo_on_primary_color"
+   ],
+   "width": 4096
+  },
+  {
+   "alt": "",
+   "height": 4096,
+   "href": "https://a.espncdn.com/guid/e588ccf1-ba03-ea43-c34c-9a9c8d1895ca/logos/secondary_logo_on_secondary_color.png",
+   "lastUpdated": "2026-07-22T20:23Z",
+   "rel": [
+    "full",
+    "secondary_logo_on_secondary_color"
+   ],
+   "width": 4096
+  },
+  {
+   "alt": "",
+   "height": 4096,
+   "href": "https://a.espncdn.com/guid/e588ccf1-ba03-ea43-c34c-9a9c8d1895ca/logos/secondary_logo_black.png",
+   "lastUpdated": "2026-07-22T20:23Z",
+   "rel": [
+    "full",
+    "secondary_logo_black"
+   ],
+   "width": 4096
+  },
+  {
+   "alt": "",
+   "height": 4096,
+   "href": "https://a.espncdn.com/guid/e588ccf1-ba03-ea43-c34c-9a9c8d1895ca/logos/secondary_logo_white.png",
+   "lastUpdated": "2026-07-22T20:23Z",
+   "rel": [
+    "full",
+    "secondary_logo_white"
+   ],
+   "width": 4096
+  }
+ ],
+ "name": "Bulls",
+ "notes": {
+  "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/teams/4/notes?lang=en&region=us"
+ },
+ "oddsRecords": {
+  "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2027/types/0/teams/4/odds-records?lang=en&region=us"
+ },
+ "ranks": {
+  "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2027/teams/4/ranks?lang=en&region=us"
+ },
+ "record": {
+  "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2027/types/1/teams/4/record?lang=en&region=us"
+ },
+ "shortDisplayName": "Bulls",
+ "slug": "chicago-bulls",
+ "transactions": {
+  "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2027/teams/4/transactions?lang=en&region=us"
+ },
+ "uid": "s:40~l:46~t:4",
+ "venue": {
+  "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/venues/1847?lang=en&region=us",
+  "address": {
+   "city": "Chicago",
+   "state": "IL"
+  },
+  "fullName": "United Center",
+  "grass": false,
+  "guid": "3a95b5ba-39e5-33e6-bf26-487324b58a74",
+  "id": "1847",
+  "images": [
+   {
+    "alt": "",
+    "height": 1125,
+    "href": "https://a.espncdn.com/i/venues/nba/day/1847.jpg",
+    "rel": [
+     "full",
+     "day"
+    ],
+    "width": 2000
+   }
+  ],
+  "indoor": true,
+  "shortName": "United Center"
+ }
+}

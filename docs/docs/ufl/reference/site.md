@@ -487,7 +487,22 @@ ESPN endpoint.
 
 ### Returns {#espn_ufl_transactions-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_items`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `date` | character |  |
+| `description` | character |  |
+| `team_abbreviation` | character |  |
+| `team_alternate_color` | character |  |
+| `team_color` | character |  |
+| `team_display_name` | character |  |
+| `team_id` | character |  |
+| `team_links` | character |  |
+| `team_location` | character |  |
+| `team_logos` | character |  |
+| `team_name` | character |  |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#espn_ufl_transactions-example}
@@ -511,7 +526,19 @@ ESPN endpoint.
 
 ### Returns {#espn_ufl_conferences-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_groups`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `group_id` | character |  |
+| `name` | character |  |
+| `abbreviation` | character |  |
+| `short_name` | character |  |
+| `is_conference` | logical |  |
+| `parent_group_id` | character |  |
+| `depth` | integer |  |
+| `children_count` | integer |  |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#espn_ufl_conferences-example}
@@ -627,7 +654,52 @@ ESPN endpoint.
 
 ### Returns {#espn_ufl_team-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_single_entity`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `team_abbreviation` | character |  |
+| `team_alternate_color` | character |  |
+| `team_color` | character |  |
+| `team_display_name` | character |  |
+| `team_franchise_$ref` | character |  |
+| `team_franchise_abbreviation` | character |  |
+| `team_franchise_color` | character |  |
+| `team_franchise_display_name` | character |  |
+| `team_franchise_id` | character |  |
+| `team_franchise_is_active` | logical |  |
+| `team_franchise_location` | character |  |
+| `team_franchise_name` | character |  |
+| `team_franchise_short_display_name` | character |  |
+| `team_franchise_slug` | character |  |
+| `team_franchise_team_$ref` | character |  |
+| `team_franchise_uid` | character |  |
+| `team_franchise_venue_$ref` | character |  |
+| `team_franchise_venue_address_city` | character |  |
+| `team_franchise_venue_address_state` | character |  |
+| `team_franchise_venue_full_name` | character |  |
+| `team_franchise_venue_grass` | logical |  |
+| `team_franchise_venue_guid` | character |  |
+| `team_franchise_venue_id` | character |  |
+| `team_franchise_venue_images` | character |  |
+| `team_franchise_venue_indoor` | logical |  |
+| `team_franchise_venue_short_name` | character |  |
+| `team_groups_id` | character |  |
+| `team_groups_is_conference` | logical |  |
+| `team_groups_parent_id` | character |  |
+| `team_id` | character |  |
+| `team_is_active` | logical |  |
+| `team_links` | character |  |
+| `team_location` | character |  |
+| `team_logos` | character |  |
+| `team_name` | character |  |
+| `team_next_event` | character |  |
+| `team_record_items` | character |  |
+| `team_short_display_name` | character |  |
+| `team_slug` | character |  |
+| `team_standing_summary` | character |  |
+| `team_uid` | character |  |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#espn_ufl_team-example}

@@ -1,0 +1,265 @@
+{
+ "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/athletes/4239?lang=en&region=us",
+ "active": false,
+ "age": 37,
+ "alternateIds": {
+  "sdr": "2282752"
+ },
+ "birthPlace": {
+  "city": "Chicago",
+  "state": "IL"
+ },
+ "college": {
+  "$ref": "http://sports.core.api.espn.com/v2/colleges/194?lang=en&region=us"
+ },
+ "collegeAthlete": {
+  "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/mens-college-basketball/athletes/36135?lang=en&region=us"
+ },
+ "contracts": {
+  "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/athletes/4239/contracts?lang=en&region=us"
+ },
+ "dateOfBirth": "1988-10-27T07:00Z",
+ "debutYear": 2010,
+ "displayHeight": "6' 6\"",
+ "displayName": "Evan Turner",
+ "displayWeight": "220 lbs",
+ "draft": {
+  "displayText": "Year: 2010 Round: 1 Pick: 2",
+  "pick": {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2010/draft/rounds/1/picks/2?lang=en&region=us"
+  },
+  "round": 1,
+  "selection": 2,
+  "team": {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2010/teams/20?lang=en&region=us"
+  },
+  "year": 2010
+ },
+ "experience": {
+  "years": 10
+ },
+ "firstName": "Evan",
+ "fullName": "Evan Turner",
+ "guid": "ab9d5a47-f744-1133-9afc-31a607897a3b",
+ "hand": {
+  "abbreviation": "L",
+  "displayValue": "Left",
+  "type": "LEFT"
+ },
+ "headshot": {
+  "alt": "Evan Turner",
+  "href": "https://a.espncdn.com/i/headshots/nba/players/full/4239.png"
+ },
+ "height": 78.0,
+ "id": "4239",
+ "jersey": "1",
+ "lastName": "Turner",
+ "linked": true,
+ "links": [
+  {
+   "href": "https://www.espn.com/nba/player/_/id/4239/evan-turner",
+   "isExternal": false,
+   "isPremium": false,
+   "language": "en-US",
+   "rel": [
+    "playercard",
+    "desktop",
+    "athlete"
+   ],
+   "shortText": "Player Card",
+   "text": "Player Card"
+  },
+  {
+   "href": "https://www.espn.com/nba/player/stats/_/id/4239/evan-turner",
+   "isExternal": false,
+   "isPremium": false,
+   "language": "en-US",
+   "rel": [
+    "stats",
+    "desktop",
+    "athlete"
+   ],
+   "shortText": "Stats",
+   "text": "Stats"
+  },
+  {
+   "href": "sportscenter://x-callback-url/showClubhouse?uid=s:40~l:46~a:4239&section=stats",
+   "isExternal": false,
+   "isPremium": false,
+   "language": "en-US",
+   "rel": [
+    "stats",
+    "sportscenter",
+    "app",
+    "athlete"
+   ],
+   "shortText": "Stats",
+   "text": "Stats"
+  },
+  {
+   "href": "https://www.espn.com/nba/player/splits/_/id/4239/evan-turner",
+   "isExternal": false,
+   "isPremium": false,
+   "language": "en-US",
+   "rel": [
+    "splits",
+    "desktop",
+    "athlete"
+   ],
+   "shortText": "Splits",
+   "text": "Splits"
+  },
+  {
+   "href": "https://www.espn.com/nba/player/gamelog/_/id/4239/evan-turner",
+   "isExternal": false,
+   "isPremium": false,
+   "language": "en-US",
+   "rel": [
+    "gamelog",
+    "desktop",
+    "athlete"
+   ],
+   "shortText": "Game Log",
+   "text": "Game Log"
+  },
+  {
+   "href": "sportscenter://x-callback-url/showClubhouse?uid=s:40~l:46~a:4239&section=gamelog",
+   "isExternal": false,
+   "isPremium": false,
+   "language": "en-US",
+   "rel": [
+    "gamelog",
+    "sportscenter",
+    "app",
+    "athlete"
+   ],
+   "shortText": "Game Log",
+   "text": "Game Log"
+  },
+  {
+   "href": "https://www.espn.com/nba/player/news/_/id/4239/evan-turner",
+   "isExternal": false,
+   "isPremium": false,
+   "language": "en-US",
+   "rel": [
+    "news",
+    "desktop",
+    "athlete"
+   ],
+   "shortText": "News",
+   "text": "News"
+  },
+  {
+   "href": "sportscenter://x-callback-url/showClubhouse?uid=s:40~l:46~a:4239&section=news",
+   "isExternal": false,
+   "isPremium": false,
+   "language": "en-US",
+   "rel": [
+    "news",
+    "sportscenter",
+    "app",
+    "athlete"
+   ],
+   "shortText": "News",
+   "text": "News"
+  },
+  {
+   "href": "https://www.espn.com/nba/player/bio/_/id/4239/evan-turner",
+   "isExternal": false,
+   "isPremium": false,
+   "language": "en-US",
+   "rel": [
+    "bio",
+    "desktop",
+    "athlete"
+   ],
+   "shortText": "Bio",
+   "text": "Bio"
+  },
+  {
+   "href": "sportscenter://x-callback-url/showClubhouse?uid=s:40~l:46~a:4239&section=bio",
+   "isExternal": false,
+   "isPremium": false,
+   "language": "en-US",
+   "rel": [
+    "bio",
+    "sportscenter",
+    "app",
+    "athlete"
+   ],
+   "shortText": "Bio",
+   "text": "Bio"
+  },
+  {
+   "href": "https://www.espn.com/nba/player/_/id/4239/evan-turner",
+   "isExternal": false,
+   "isPremium": false,
+   "language": "en-US",
+   "rel": [
+    "overview",
+    "desktop",
+    "athlete"
+   ],
+   "shortText": "Overview",
+   "text": "Overview"
+  },
+  {
+   "href": "sportscenter://x-callback-url/showClubhouse?uid=s:40~l:46~a:4239",
+   "isExternal": false,
+   "isPremium": false,
+   "language": "en-US",
+   "rel": [
+    "overview",
+    "sportscenter",
+    "app",
+    "athlete"
+   ],
+   "shortText": "Overview",
+   "text": "Overview"
+  },
+  {
+   "href": "https://www.espn.com/nba/player/advancedstats/_/id/4239/evan-turner",
+   "isExternal": false,
+   "isPremium": false,
+   "language": "en-US",
+   "rel": [
+    "advancedstats",
+    "desktop",
+    "athlete"
+   ],
+   "shortText": "Advanced Stats",
+   "text": "Advanced Stats"
+  }
+ ],
+ "position": {
+  "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/positions/3?lang=en&region=us",
+  "abbreviation": "G",
+  "displayName": "Guard",
+  "id": "3",
+  "leaf": false,
+  "name": "Guard"
+ },
+ "seasons": {
+  "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/athletes/4239/seasons?lang=en&region=us"
+ },
+ "shortName": "E. Turner",
+ "slug": "evan-turner",
+ "statistics": {
+  "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/athletes/4239/statistics?lang=en&region=us"
+ },
+ "statisticslog": {
+  "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/athletes/4239/statisticslog?lang=en&region=us"
+ },
+ "status": {
+  "abbreviation": "Inactive",
+  "id": "2",
+  "name": "Inactive",
+  "type": "inactive"
+ },
+ "team": {
+  "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2020/teams/16?lang=en&region=us"
+ },
+ "type": "basketball",
+ "uid": "s:40~l:46~a:4239",
+ "weight": 220.0
+}

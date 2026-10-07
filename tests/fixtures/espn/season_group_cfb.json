@@ -1,0 +1,94 @@
+{
+ "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2024/types/2/groups/80?lang=en&region=us",
+ "children": {
+  "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2024/types/2/groups/80/children?lang=en&region=us"
+ },
+ "id": "80",
+ "isConference": false,
+ "links": [
+  {
+   "href": "https://www.espn.com/college-football/standings/_/group/80",
+   "isExternal": false,
+   "isPremium": false,
+   "language": "en-US",
+   "rel": [
+    "standings",
+    "desktop",
+    "group"
+   ],
+   "shortText": "Standings",
+   "text": "Standings"
+  },
+  {
+   "href": "sportscenter://x-callback-url/showClubhouse?uid=null&section=standings",
+   "isExternal": false,
+   "isPremium": false,
+   "language": "en-US",
+   "rel": [
+    "standings",
+    "sportscenter",
+    "app",
+    "group"
+   ],
+   "shortText": "Standings",
+   "text": "Standings"
+  },
+  {
+   "href": "https://www.espn.com/college-football/scoreboard/_/group/80",
+   "isExternal": false,
+   "isPremium": false,
+   "language": "en-US",
+   "rel": [
+    "scores",
+    "desktop",
+    "group"
+   ],
+   "shortText": "Scores",
+   "text": "Scores"
+  },
+  {
+   "href": "sportscenter://x-callback-url/showClubhouse?uid=null&section=scores",
+   "isExternal": false,
+   "isPremium": false,
+   "language": "en-US",
+   "rel": [
+    "scores",
+    "sportscenter",
+    "app",
+    "group"
+   ],
+   "shortText": "Scores",
+   "text": "Scores"
+  },
+  {
+   "href": "https://www.espn.com/college-football/conferences/statistics/_/id/80/fbs",
+   "isExternal": false,
+   "isPremium": false,
+   "language": "en-US",
+   "rel": [
+    "stats",
+    "desktop",
+    "group"
+   ],
+   "shortText": "Stats",
+   "text": "Stats"
+  }
+ ],
+ "midsizeName": "FBS",
+ "name": "FBS",
+ "parent": {
+  "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2024/types/2/groups/90?lang=en&region=us"
+ },
+ "season": {
+  "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2024?lang=en&region=us"
+ },
+ "shortName": "FBS",
+ "slug": "fbs",
+ "standings": {
+  "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2024/types/2/groups/80/standings?lang=en&region=us"
+ },
+ "teams": {
+  "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2024/types/2/groups/80/teams?lang=en&region=us"
+ },
+ "uid": "s:20~l:23~g:80"
+}

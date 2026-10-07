@@ -518,7 +518,22 @@ ESPN endpoint.
 
 ### Returns {#espn_nhl_transactions-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_items`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `date` | character | Game date (ISO 8601 datetime string). |
+| `description` | character | Full text description of the event. |
+| `team_abbreviation` | character | Team abbreviation. |
+| `team_alternate_color` | character | Team alternate color hex. |
+| `team_color` | character | Team primary color hex. |
+| `team_display_name` | character | Team display name. |
+| `team_id` | character | Unique team identifier. |
+| `team_links` | character |  |
+| `team_location` | character | Team city/location. |
+| `team_logos` | character | Team logo metadata. |
+| `team_name` | character | Team name. |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#espn_nhl_transactions-example}
@@ -542,7 +557,19 @@ ESPN endpoint.
 
 ### Returns {#espn_nhl_conferences-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_groups`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `group_id` | character | Group id (echoed from arg). |
+| `name` | character | Team mascot name. |
+| `abbreviation` | character | Team abbreviation. |
+| `short_name` | character | Short game name. |
+| `is_conference` | logical | Whether this group is a conference (vs. division). |
+| `parent_group_id` | character |  |
+| `depth` | integer |  |
+| `children_count` | integer |  |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#espn_nhl_conferences-example}
@@ -658,7 +685,52 @@ ESPN endpoint.
 
 ### Returns {#espn_nhl_team-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_single_entity`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `team_abbreviation` | character | Team abbreviation. |
+| `team_alternate_color` | character | Team alternate color hex. |
+| `team_color` | character | Team primary color hex. |
+| `team_display_name` | character | Team display name. |
+| `team_franchise_$ref` | character |  |
+| `team_franchise_abbreviation` | character |  |
+| `team_franchise_color` | character |  |
+| `team_franchise_display_name` | character |  |
+| `team_franchise_id` | character | Team franchise identifier. |
+| `team_franchise_is_active` | logical |  |
+| `team_franchise_location` | character |  |
+| `team_franchise_name` | character |  |
+| `team_franchise_short_display_name` | character |  |
+| `team_franchise_slug` | character |  |
+| `team_franchise_team_$ref` | character |  |
+| `team_franchise_uid` | character |  |
+| `team_franchise_venue_$ref` | character |  |
+| `team_franchise_venue_address_city` | character |  |
+| `team_franchise_venue_address_state` | character |  |
+| `team_franchise_venue_full_name` | character |  |
+| `team_franchise_venue_grass` | logical |  |
+| `team_franchise_venue_guid` | character |  |
+| `team_franchise_venue_id` | character |  |
+| `team_franchise_venue_images` | character |  |
+| `team_franchise_venue_indoor` | logical |  |
+| `team_franchise_venue_short_name` | character |  |
+| `team_groups_id` | character |  |
+| `team_groups_is_conference` | logical |  |
+| `team_groups_parent_id` | character |  |
+| `team_id` | character | Unique team identifier. |
+| `team_is_active` | logical |  |
+| `team_links` | character |  |
+| `team_location` | character | Team city/location. |
+| `team_logos` | character | Team logo metadata. |
+| `team_name` | character | Team name. |
+| `team_next_event` | character |  |
+| `team_record_items` | character |  |
+| `team_short_display_name` | character | Team short display name. |
+| `team_slug` | character | Team URL slug. |
+| `team_standing_summary` | character |  |
+| `team_uid` | character | ESPN team uid. |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#espn_nhl_team-example}

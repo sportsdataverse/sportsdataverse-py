@@ -1,0 +1,24 @@
+schema: athlete_splits
+kind: dataframe
+columns:
+- name: descriptions
+  type: character
+  description: ''
+- name: display_name
+  type: character
+  description: ''
+- name: display_names
+  type: character
+  description: ''
+- name: filters
+  type: character
+  description: ''
+- name: labels
+  type: character
+  description: ''
+- name: names
+  type: character
+  description: ''
+- name: split_categories
+  type: character
+  description: ''

@@ -63,6 +63,7 @@ endpoints:
   parser: parse_injuries
   returns_schema: injuries
 - short: transactions
+  returns_schema: transactions
   scope: universal
   path: /{sport}/{league}/transactions
   extra_params:
@@ -73,8 +74,9 @@ endpoints:
     query_key: limit
     type: int
     default: 500
-  parser: parse_items
+  parser: parse_transactions
 - short: conferences
+  returns_schema: conferences
   scope: universal
   path: /{sport}/{league}/groups
   parser: parse_groups
@@ -97,6 +99,7 @@ endpoints:
   parser: parse_teams
   returns_schema: teams
 - short: team
+  returns_schema: team
   scope: universal
   path: /{sport}/{league}/teams/{team_id}
   path_params:

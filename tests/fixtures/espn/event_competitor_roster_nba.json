@@ -1,0 +1,326 @@
+{
+ "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/competitors/15/roster?lang=en&region=us",
+ "competition": {
+  "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793?lang=en&region=us"
+ },
+ "entries": [
+  {
+   "active": true,
+   "athlete": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/athletes/6581?lang=en&region=us"
+   },
+   "didNotPlay": false,
+   "displayName": "Crowder",
+   "ejected": false,
+   "forPlayerId": 0,
+   "jersey": "99",
+   "period": 0,
+   "playerId": 6581,
+   "position": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/positions/6?lang=en&region=us"
+   },
+   "reason": "COACH'S DECISION",
+   "starter": true,
+   "statistics": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/competitors/15/roster/6581/statistics/0?lang=en&region=us"
+   },
+   "valid": true
+  },
+  {
+   "active": false,
+   "athlete": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/athletes/3032977?lang=en&region=us"
+   },
+   "didNotPlay": false,
+   "displayName": "G. Antetokounmpo",
+   "ejected": false,
+   "forPlayerId": 0,
+   "jersey": "34",
+   "period": 0,
+   "playerId": 3032977,
+   "position": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/positions/6?lang=en&region=us"
+   },
+   "reason": "COACH'S DECISION",
+   "starter": true,
+   "statistics": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/competitors/15/roster/3032977/statistics/0?lang=en&region=us"
+   },
+   "valid": false
+  },
+  {
+   "active": true,
+   "athlete": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/athletes/3448?lang=en&region=us"
+   },
+   "didNotPlay": false,
+   "displayName": "B. Lopez",
+   "ejected": false,
+   "forPlayerId": 0,
+   "jersey": "11",
+   "period": 0,
+   "playerId": 3448,
+   "position": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/positions/9?lang=en&region=us"
+   },
+   "reason": "COACH'S DECISION",
+   "starter": true,
+   "statistics": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/competitors/15/roster/3448/statistics/0?lang=en&region=us"
+   },
+   "valid": true
+  },
+  {
+   "active": true,
+   "athlete": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/athletes/3907822?lang=en&region=us"
+   },
+   "didNotPlay": false,
+   "displayName": "Beasley",
+   "ejected": false,
+   "forPlayerId": 0,
+   "jersey": "5",
+   "period": 0,
+   "playerId": 3907822,
+   "position": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/positions/2?lang=en&region=us"
+   },
+   "reason": "COACH'S DECISION",
+   "starter": true,
+   "statistics": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/competitors/15/roster/3907822/statistics/0?lang=en&region=us"
+   },
+   "valid": true
+  },
+  {
+   "active": true,
+   "athlete": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/athletes/6606?lang=en&region=us"
+   },
+   "didNotPlay": false,
+   "displayName": "Lillard",
+   "ejected": false,
+   "forPlayerId": 0,
+   "jersey": "0",
+   "period": 0,
+   "playerId": 6606,
+   "position": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/positions/1?lang=en&region=us"
+   },
+   "reason": "COACH'S DECISION",
+   "starter": true,
+   "statistics": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/competitors/15/roster/6606/statistics/0?lang=en&region=us"
+   },
+   "valid": true
+  },
+  {
+   "active": false,
+   "athlete": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/athletes/3064482?lang=en&region=us"
+   },
+   "didNotPlay": false,
+   "displayName": "Portis",
+   "ejected": false,
+   "forPlayerId": 0,
+   "jersey": "9",
+   "period": 0,
+   "playerId": 3064482,
+   "position": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/positions/7?lang=en&region=us"
+   },
+   "reason": "COACH'S DECISION",
+   "starter": false,
+   "statistics": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/competitors/15/roster/3064482/statistics/0?lang=en&region=us"
+   },
+   "valid": false
+  },
+  {
+   "active": false,
+   "athlete": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/athletes/4432179?lang=en&region=us"
+   },
+   "didNotPlay": false,
+   "displayName": "Beauchamp",
+   "ejected": false,
+   "forPlayerId": 0,
+   "jersey": "3",
+   "period": 0,
+   "playerId": 4432179,
+   "position": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/positions/3?lang=en&region=us"
+   },
+   "reason": "COACH'S DECISION",
+   "starter": false,
+   "statistics": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/competitors/15/roster/4432179/statistics/0?lang=en&region=us"
+   },
+   "valid": false
+  },
+  {
+   "active": true,
+   "athlete": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/athletes/3064230?lang=en&region=us"
+   },
+   "didNotPlay": false,
+   "displayName": "Payne",
+   "ejected": false,
+   "forPlayerId": 0,
+   "jersey": "15",
+   "period": 0,
+   "playerId": 3064230,
+   "position": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/positions/3?lang=en&region=us"
+   },
+   "reason": "COACH'S DECISION",
+   "starter": false,
+   "statistics": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/competitors/15/roster/3064230/statistics/0?lang=en&region=us"
+   },
+   "valid": true
+  },
+  {
+   "active": false,
+   "athlete": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/athletes/2578239?lang=en&region=us"
+   },
+   "didNotPlay": false,
+   "displayName": "Connaughton",
+   "ejected": false,
+   "forPlayerId": 0,
+   "jersey": "24",
+   "period": 0,
+   "playerId": 2578239,
+   "position": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/positions/7?lang=en&region=us"
+   },
+   "reason": "COACH'S DECISION",
+   "starter": false,
+   "statistics": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/competitors/15/roster/2578239/statistics/0?lang=en&region=us"
+   },
+   "valid": false
+  },
+  {
+   "active": false,
+   "athlete": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/athletes/4432190?lang=en&region=us"
+   },
+   "didNotPlay": false,
+   "displayName": "Jackson Jr.",
+   "ejected": false,
+   "forPlayerId": 0,
+   "jersey": "44",
+   "period": 0,
+   "playerId": 4432190,
+   "position": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/positions/3?lang=en&region=us"
+   },
+   "reason": "COACH'S DECISION",
+   "starter": false,
+   "statistics": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/competitors/15/roster/4432190/statistics/0?lang=en&region=us"
+   },
+   "valid": false
+  },
+  {
+   "active": false,
+   "athlete": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/athletes/3102533?lang=en&region=us"
+   },
+   "didNotPlay": true,
+   "displayName": "T. Antetokounmpo",
+   "ejected": false,
+   "forPlayerId": 0,
+   "jersey": "43",
+   "period": 0,
+   "playerId": 3102533,
+   "position": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/positions/5?lang=en&region=us"
+   },
+   "reason": "COACH'S DECISION",
+   "starter": false,
+   "valid": false
+  },
+  {
+   "active": false,
+   "athlete": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/athletes/4433622?lang=en&region=us"
+   },
+   "didNotPlay": true,
+   "displayName": "Livingston",
+   "ejected": false,
+   "forPlayerId": 0,
+   "jersey": "7",
+   "period": 0,
+   "playerId": 4433622,
+   "position": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/positions/7?lang=en&region=us"
+   },
+   "reason": "COACH'S DECISION",
+   "starter": false,
+   "valid": false
+  },
+  {
+   "active": false,
+   "athlete": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/athletes/3447?lang=en&region=us"
+   },
+   "didNotPlay": true,
+   "displayName": "R. Lopez",
+   "ejected": false,
+   "forPlayerId": 0,
+   "jersey": "42",
+   "period": 0,
+   "playerId": 3447,
+   "position": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/positions/9?lang=en&region=us"
+   },
+   "reason": "COACH'S DECISION",
+   "starter": false,
+   "valid": false
+  },
+  {
+   "active": false,
+   "athlete": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/athletes/4277887?lang=en&region=us"
+   },
+   "didNotPlay": true,
+   "displayName": "Wigginton",
+   "ejected": false,
+   "forPlayerId": 0,
+   "jersey": "28",
+   "period": 0,
+   "playerId": 4277887,
+   "position": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/positions/3?lang=en&region=us"
+   },
+   "reason": "COACH'S DECISION",
+   "starter": false,
+   "valid": false
+  },
+  {
+   "active": false,
+   "athlete": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/athletes/4397475?lang=en&region=us"
+   },
+   "didNotPlay": true,
+   "displayName": "Green",
+   "ejected": false,
+   "forPlayerId": 0,
+   "jersey": "20",
+   "period": 0,
+   "playerId": 4397475,
+   "position": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/positions/3?lang=en&region=us"
+   },
+   "reason": "COACH'S DECISION",
+   "starter": false,
+   "valid": false
+  }
+ ],
+ "team": {
+  "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/15?lang=en&region=us"
+ }
+}

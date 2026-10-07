@@ -1,0 +1,11 @@
+{
+ "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/positions/1?lang=en&region=us",
+ "abbreviation": "PG",
+ "displayName": "Point Guard",
+ "id": "1",
+ "leaf": true,
+ "name": "Point Guard",
+ "parent": {
+  "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/positions/3?lang=en&region=us"
+ }
+}

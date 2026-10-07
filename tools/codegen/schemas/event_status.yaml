@@ -1,0 +1,36 @@
+schema: event_status
+kind: dataframe
+columns:
+- name: $ref
+  type: character
+  description: ''
+- name: clock
+  type: double
+  description: ''
+- name: display_clock
+  type: character
+  description: ''
+- name: period
+  type: integer
+  description: ''
+- name: type_completed
+  type: logical
+  description: ''
+- name: type_description
+  type: character
+  description: ''
+- name: type_detail
+  type: character
+  description: ''
+- name: type_id
+  type: character
+  description: ''
+- name: type_name
+  type: character
+  description: ''
+- name: type_short_detail
+  type: character
+  description: ''
+- name: type_state
+  type: character
+  description: ''

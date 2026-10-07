@@ -1674,6 +1674,69 @@ def _return_schema_parsers():
     }
 
 
+def _espn_parser(name: str):
+    """An ESPN parser by function name (``parse_items``), or the one ``ENDPOINT_PARSERS`` maps a short to."""
+    from sportsdataverse import _common_espn_parsers as P
+
+    return getattr(P, name, None) or P.ENDPOINT_PARSERS[name]
+
+
+def _auto_espn_schemas() -> dict:
+    """``{short: parser}`` for every ESPN endpoint whose ``returns_schema`` is its own short and that
+    the curated :func:`_return_schema_parsers` does not cover.
+
+    ``--schemas`` writes each one's GENERIC ``schemas/<short>.yaml`` from its one captured league
+    (``tools/codegen/capture_fixtures.py`` captures a representative league per endpoint): the
+    parser fixes the shape, so every league page can fall back to it."""
+    params = spec.load_parameters(ENDPOINTS / "parameters.yaml")
+    curated = _return_schema_parsers()
+    out = {}
+    for api in ESPN_APIS:
+        for ep in spec.load_espn_api(ENDPOINTS / f"{api}.yaml", params).endpoints:
+            if ep.returns_schema == ep.short and ep.short not in curated:
+                # The parser the generated wrapper actually calls (the YAML's ``parser:``).
+                out[ep.short] = _espn_parser(ep.parser or ep.short)
+    return out
+
+
+def _write_auto_espn_schemas(fix_dir: Path, schema_dir: Path) -> int:
+    """Write ``schema_dir/<short>.yaml`` for each :func:`_auto_espn_schemas` endpoint with a capture.
+
+    Returns:
+        int: How many schemas were written. An endpoint with no capture, or whose capture parses to
+        no columns, writes nothing (an empty table would claim the endpoint returns nothing)."""
+    import json
+
+    import yaml
+
+    written = 0
+    cfg = spec.load_leagues(ENDPOINTS / "leagues.yaml")
+    leagues = _LEAGUES + [lg.prefix for lg in cfg.leagues if lg.prefix not in _LEAGUES]
+    for name, parser in sorted(_auto_espn_schemas().items()):
+        fx = next((fix_dir / f"{name}_{lg}.json" for lg in leagues if (fix_dir / f"{name}_{lg}.json").exists()), None)
+        if fx is None:
+            continue
+        result = parser(json.loads(fx.read_text(encoding="utf-8")))
+        descs = _desc_lookup(name)
+        if isinstance(result, dict):
+            doc = {
+                "schema": name,
+                "kind": "frames",
+                "frames": [{"section": sec, "columns": _cols_from_frame(df, descs)} for sec, df in result.items()],
+            }
+        else:
+            cols = _cols_from_frame(result, descs)
+            if not cols:
+                continue
+            doc = {"schema": name, "kind": "dataframe", "columns": cols}
+        schema_dir.mkdir(parents=True, exist_ok=True)
+        (schema_dir / f"{name}.yaml").write_text(
+            yaml.safe_dump(doc, sort_keys=False, width=120), encoding="utf-8", newline="\n"
+        )
+        written += 1
+    return written
+
+
 def _desc_lookup(schema_name: str) -> dict:
     """{column_name: description} from the hand-curated generic schema, used to
     annotate the introspected per-league columns (which carry only name+type)."""
@@ -1846,6 +1909,8 @@ def refresh_return_schemas() -> int:
                 yaml.safe_dump(doc, sort_keys=False, width=120), encoding="utf-8", newline="\n"
             )
             written += 1
+
+    written += _write_auto_espn_schemas(_FIX, ROOT / "tools" / "codegen" / "schemas")
 
     # --- natives ---
     import importlib

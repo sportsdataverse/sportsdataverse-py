@@ -23,7 +23,12 @@ ESPN endpoint.
 
 ### Returns {#espn_nhl_players_index-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_items`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `$ref` | character |  |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#espn_nhl_players_index-example}
@@ -48,7 +53,65 @@ ESPN endpoint.
 
 ### Returns {#espn_nhl_player_core-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_single_entity`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `$ref` | character |  |
+| `active` | logical | Whether athlete is currently active. |
+| `age` | integer | Player age. |
+| `date_of_birth` | character | Date of birth (ISO 8601). |
+| `debut_year` | integer | Year of NHL debut. |
+| `display_height` | character | Formatted height string. |
+| `display_name` | character | Player display name. |
+| `display_weight` | character | Formatted weight string. |
+| `first_name` | character | Player first name. |
+| `full_name` | character | Player full name. |
+| `guid` | character | Athlete global unique identifier. |
+| `height` | double | Player height in inches. |
+| `id` | character | Unique player identifier. |
+| `jersey` | character | Jersey number. |
+| `last_name` | character | Player last name. |
+| `linked` | logical |  |
+| `links` | character |  |
+| `short_name` | character | Short game name. |
+| `slug` | character | URL slug. |
+| `type` | character | Competitor type (e.g. "team"). |
+| `uid` | character | Competitor uid string. |
+| `weight` | double | Player weight in pounds. |
+| `alternate_ids_sdr` | character | Alternate ids sdr. |
+| `birth_place_city` | character | Birth place city. |
+| `birth_place_state` | character | Birth place state. |
+| `college_$ref` | character |  |
+| `college_athlete_$ref` | character |  |
+| `contracts_$ref` | character |  |
+| `draft_display_text` | character |  |
+| `draft_pick_$ref` | character |  |
+| `draft_round` | integer | Draft round. |
+| `draft_selection` | integer |  |
+| `draft_team_$ref` | character |  |
+| `draft_year` | integer | Draft year the lottery applies to. |
+| `experience_years` | integer | Experience years. |
+| `hand_abbreviation` | character | Hand abbreviation. |
+| `hand_display_value` | character | Hand display value. |
+| `hand_type` | character | Shooting/catching hand type. |
+| `headshot_alt` | character | Headshot alt text. |
+| `headshot_href` | character | Player headshot image URL. |
+| `position_$ref` | character |  |
+| `position_abbreviation` | character | Position abbreviation. |
+| `position_display_name` | character | Position display name. |
+| `position_id` | character | Official position identifier. |
+| `position_leaf` | logical | Whether position is a leaf node. |
+| `position_name` | character | Official position name (e.g. "Referee", "Linesman"). |
+| `seasons_$ref` | character |  |
+| `statistics_$ref` | character |  |
+| `statisticslog_$ref` | character |  |
+| `status_abbreviation` | character | Status abbreviation. |
+| `status_id` | character | Status identifier. |
+| `status_name` | character | Status name. |
+| `status_type` | character | Status type. |
+| `team_$ref` | character |  |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#espn_nhl_player_core-example}
@@ -99,7 +162,13 @@ ESPN endpoint.
 
 ### Returns {#espn_nhl_player_statisticslog-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_items`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `statistics` | character |  |
+| `season_$ref` | character |  |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#espn_nhl_player_statisticslog-example}
@@ -149,7 +218,12 @@ ESPN endpoint.
 
 ### Returns {#espn_nhl_player_contracts-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_items`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `$ref` | character |  |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#espn_nhl_player_contracts-example}
@@ -199,7 +273,12 @@ ESPN endpoint.
 
 ### Returns {#espn_nhl_player_seasons-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_items`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `$ref` | character |  |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#espn_nhl_player_seasons-example}

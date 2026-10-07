@@ -1,0 +1,27 @@
+schema: coach_record
+kind: dataframe
+columns:
+- name: $ref
+  type: character
+  description: ''
+- name: display_value
+  type: character
+  description: ''
+- name: id
+  type: character
+  description: ''
+- name: name
+  type: character
+  description: ''
+- name: stats
+  type: character
+  description: ''
+- name: summary
+  type: character
+  description: ''
+- name: type
+  type: character
+  description: ''
+- name: value
+  type: double
+  description: ''

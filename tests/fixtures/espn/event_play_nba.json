@@ -1,0 +1,77 @@
+{
+ "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/plays/4015847934?lang=en&region=us",
+ "alternativeText": "Jalen Duren vs. Brook Lopez (Cade Cunningham gains possession)",
+ "awayScore": 0,
+ "clock": {
+  "displayValue": "12:00",
+  "value": 720.0
+ },
+ "coordinate": {
+  "x": -214748340,
+  "y": -214748365
+ },
+ "homeScore": 0,
+ "id": "4015847934",
+ "modified": "2023-11-09T01:10Z",
+ "participants": [
+  {
+   "athlete": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/athletes/4433621?lang=en&region=us"
+   },
+   "order": 1,
+   "position": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/positions/9?lang=en&region=us"
+   },
+   "statistics": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/competitors/8/roster/4433621/statistics/0?lang=en&region=us"
+   }
+  },
+  {
+   "athlete": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/athletes/3448?lang=en&region=us"
+   },
+   "order": 2,
+   "position": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/positions/9?lang=en&region=us"
+   },
+   "statistics": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/competitors/8/roster/3448/statistics/0?lang=en&region=us"
+   }
+  },
+  {
+   "athlete": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/athletes/4432166?lang=en&region=us"
+   },
+   "order": 3,
+   "position": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/positions/9?lang=en&region=us"
+   },
+   "statistics": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/competitors/8/roster/4432166/statistics/0?lang=en&region=us"
+   }
+  }
+ ],
+ "period": {
+  "displayValue": "1st Quarter",
+  "number": 1
+ },
+ "pointsAttempted": 0,
+ "priority": false,
+ "probability": {
+  "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/probabilities/4015847934?lang=en&region=us"
+ },
+ "scoreValue": 0,
+ "scoringPlay": false,
+ "sequenceNumber": "4",
+ "shootingPlay": false,
+ "team": {
+  "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/8?lang=en&region=us"
+ },
+ "text": "Jalen Duren vs. Brook Lopez (Cade Cunningham gains possession)",
+ "type": {
+  "id": "615",
+  "text": "Jumpball"
+ },
+ "valid": true,
+ "wallclock": "2023-11-09T01:10:45Z"
+}

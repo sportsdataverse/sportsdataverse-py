@@ -15,7 +15,7 @@ description: "sdv-py WBB: endpoint references, dataset loaders and parsers for W
 | [Bart Torvik Women's T-Rank](#bart-torvik-women-s-t-rank) | `barttorvik.com` | 1 | none |
 | [Fox Sports API](#fox-sports-api) | `api.foxsports.com` | 27 | none |
 | [Her Hoop Stats](#her-hoop-stats) | `herhoopstats.com` | 5 | subscription |
-| [Additional functions](reference/additional) | hand-written wrappers & helpers | 317 | — |
+| [Additional functions](reference/additional) | hand-written wrappers & helpers | 316 | — |
 
 ## ESPN {#espn}
 
@@ -107,7 +107,6 @@ description: "sdv-py WBB: endpoint references, dataset loaders and parsers for W
 - [`ShotQualityConstants`](reference/additional/models-and-calculators#ShotQualityConstants)
 - [`TeamId`](reference/additional/models-and-calculators#TeamId)
 - [`TeamSeasonId`](reference/additional/models-and-calculators#TeamSeasonId)
-- [`Year`](reference/additional/models-and-calculators#Year)
 - [`adjust_efficiency`](reference/additional/models-and-calculators#adjust_efficiency)
 - [`adjust_off_rating_stats`](reference/additional/models-and-calculators#adjust_off_rating_stats)
 - [`adjust_tempo`](reference/additional/models-and-calculators#adjust_tempo)

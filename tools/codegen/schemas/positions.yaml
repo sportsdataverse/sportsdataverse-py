@@ -1,0 +1,6 @@
+schema: positions
+kind: dataframe
+columns:
+- name: $ref
+  type: character
+  description: ''

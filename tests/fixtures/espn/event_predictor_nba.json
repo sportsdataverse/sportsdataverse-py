@@ -1,0 +1,72 @@
+{
+ "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/predictor?lang=en&region=us",
+ "awayTeam": {
+  "statistics": [
+   {
+    "abbreviation": "GP",
+    "description": "Team's predicted win percentage in this game at time of given BPI run",
+    "displayName": "WIN PROB",
+    "displayValue": "15.9",
+    "name": "gameProjection",
+    "shortDisplayName": "GP",
+    "value": 15.928
+   },
+   {
+    "abbreviation": "MQ",
+    "description": "A measure of projected competitiveness and excitement in the game, using a 0 to 100 scale, with 100 as the most exciting",
+    "displayName": "Matchup Quality",
+    "displayValue": "22.121",
+    "name": "matchupQuality",
+    "shortDisplayName": "MQ",
+    "value": 22.121
+   },
+   {
+    "abbreviation": "TCL",
+    "description": "",
+    "displayName": "Team Chance Loss",
+    "displayValue": "84.1",
+    "name": "teamChanceLoss",
+    "shortDisplayName": "Chance Loss",
+    "value": 84.072
+   },
+   {
+    "abbreviation": "TPPD",
+    "description": "",
+    "displayName": "Team Pred Pt Diff",
+    "displayValue": "-11.390",
+    "name": "teamPredPtDiff",
+    "shortDisplayName": "Pred Pt Diff",
+    "value": -11.39
+   },
+   {
+    "abbreviation": "TEP",
+    "description": "",
+    "displayName": "Team Expected Pts",
+    "displayValue": "110.783",
+    "name": "teamExpectedPts",
+    "shortDisplayName": "Expected Pts",
+    "value": 110.783
+   },
+   {
+    "abbreviation": "OEP",
+    "description": "",
+    "displayName": "Opp Expected Pts",
+    "displayValue": "122.173",
+    "name": "oppExpectedPts",
+    "shortDisplayName": "Opp Expected Pts",
+    "value": 122.173
+   }
+  ],
+  "team": {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/8?lang=en&region=us"
+  }
+ },
+ "homeTeam": {
+  "team": {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/15?lang=en&region=us"
+  }
+ },
+ "lastModified": "2024-06-28T05:09Z",
+ "name": "Detroit Pistons at Milwaukee Bucks",
+ "shortName": "DET @ MIL"
+}

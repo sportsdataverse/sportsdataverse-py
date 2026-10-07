@@ -674,18 +674,6 @@ A team's season identifier (`TeamSeasonId`, `TeamSeasonId.scala`).
 | `team` | `TeamId` |  | The team playing the season. |
 | `year` | `Year` |  | The year the season ends. |
 
-### Year {#Year}
-
-`Year(value: 'int') -> None`
-
-CBB season, named by the year it ends (`Year`, `Year.scala`).
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `value` | `int` |  | The ending year of the season. |
-
 ### adjust_efficiency {#adjust_efficiency}
 
 `adjust_efficiency(game_eff: 'pl.DataFrame', *, league: 'str' = 'mens', max_iter: 'int' = 100, tol: 'float' = 0.0001) -> 'pl.DataFrame'`

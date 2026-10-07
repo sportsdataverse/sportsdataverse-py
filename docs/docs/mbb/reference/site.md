@@ -467,7 +467,22 @@ ESPN endpoint.
 
 ### Returns {#espn_mbb_transactions-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_items`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `date` | character | Date in YYYY-MM-DD format. |
+| `description` | character | Long-form description text. |
+| `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
+| `team_alternate_color` | character | Team alternate color (hex without leading '#'). |
+| `team_color` | character | Team primary color (hex without leading '#'). |
+| `team_display_name` | character | Full team display name. |
+| `team_id` | character | Unique team identifier. |
+| `team_links` | character |  |
+| `team_location` | character | Team city or location string. |
+| `team_logos` | character |  |
+| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#espn_mbb_transactions-example}
@@ -491,7 +506,19 @@ ESPN endpoint.
 
 ### Returns {#espn_mbb_conferences-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_groups`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `group_id` | character | ESPN group id. |
+| `name` | character | Display name. |
+| `abbreviation` | character | Short abbreviation. |
+| `short_name` | character | Short display name. |
+| `is_conference` | logical | Whether this group is a conference. |
+| `parent_group_id` | character | Unique identifier for parent group. |
+| `depth` | integer |  |
+| `children_count` | integer |  |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#espn_mbb_conferences-example}
@@ -607,7 +634,52 @@ ESPN endpoint.
 
 ### Returns {#espn_mbb_team-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_single_entity`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
+| `team_alternate_color` | character | Team alternate color (hex without leading '#'). |
+| `team_color` | character | Team primary color (hex without leading '#'). |
+| `team_display_name` | character | Full team display name. |
+| `team_franchise_$ref` | character |  |
+| `team_franchise_abbreviation` | character |  |
+| `team_franchise_color` | character |  |
+| `team_franchise_display_name` | character |  |
+| `team_franchise_id` | character |  |
+| `team_franchise_is_active` | logical |  |
+| `team_franchise_location` | character |  |
+| `team_franchise_name` | character |  |
+| `team_franchise_short_display_name` | character |  |
+| `team_franchise_slug` | character |  |
+| `team_franchise_team_$ref` | character |  |
+| `team_franchise_uid` | character |  |
+| `team_franchise_venue_$ref` | character |  |
+| `team_franchise_venue_address_city` | character |  |
+| `team_franchise_venue_address_state` | character |  |
+| `team_franchise_venue_full_name` | character |  |
+| `team_franchise_venue_grass` | logical |  |
+| `team_franchise_venue_guid` | character |  |
+| `team_franchise_venue_id` | character |  |
+| `team_franchise_venue_images` | character |  |
+| `team_franchise_venue_indoor` | logical |  |
+| `team_franchise_venue_short_name` | character |  |
+| `team_groups_id` | character |  |
+| `team_groups_is_conference` | logical |  |
+| `team_groups_parent_id` | character |  |
+| `team_id` | character | Unique team identifier. |
+| `team_is_active` | logical | TRUE if the team is currently active. |
+| `team_links` | character |  |
+| `team_location` | character | Team city or location string. |
+| `team_logos` | character |  |
+| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
+| `team_next_event` | character |  |
+| `team_record_items` | character |  |
+| `team_short_display_name` | character | Short team display name (e.g. 'Aces'). |
+| `team_slug` | character | URL-safe team identifier (e.g. 'lasvegas-aces' / 'aces'). |
+| `team_standing_summary` | character |  |
+| `team_uid` | character | ESPN universal team identifier (UID format 's:40~l:...~t:...'). |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#espn_mbb_team-example}

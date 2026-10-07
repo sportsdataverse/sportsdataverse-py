@@ -1,0 +1,6 @@
+schema: season_recruits
+kind: dataframe
+columns:
+- name: $ref
+  type: character
+  description: ''

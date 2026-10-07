@@ -1,0 +1,33 @@
+schema: event_officials
+kind: dataframe
+columns:
+- name: $ref
+  type: character
+  description: ''
+- name: display_name
+  type: character
+  description: ''
+- name: first_name
+  type: character
+  description: ''
+- name: full_name
+  type: character
+  description: ''
+- name: id
+  type: character
+  description: ''
+- name: last_name
+  type: character
+  description: ''
+- name: order
+  type: integer
+  description: ''
+- name: position_display_name
+  type: character
+  description: ''
+- name: position_id
+  type: character
+  description: ''
+- name: position_name
+  type: character
+  description: ''

@@ -34,6 +34,7 @@ from sportsdataverse._common_espn_parsers import (
     parse_team_roster,
     parse_team_schedule,
     parse_teams,
+    parse_transactions,
     parse_weekly_powerindex,
 )
 
@@ -413,7 +414,7 @@ def espn_nba_transactions(
 
     Args:
         limit: Maximum number of items to return.
-        return_parsed: parse the payload through parse_items -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_parsed: parse the payload through parse_transactions -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
 
     Returns:
@@ -440,7 +441,7 @@ def espn_nba_transactions(
         **kwargs,
     )
     if return_parsed:
-        return parse_items(raw, return_as_pandas=return_as_pandas)
+        return parse_transactions(raw, return_as_pandas=return_as_pandas)
     return raw
 
 
@@ -3580,7 +3581,7 @@ def espn_nba_game_team(
     Bound to sport='basketball', league='nba'.
 
     Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/competitors/{team_id}``
-    Example URL: https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/competitors/4
+    Example URL: https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/competitors/15
 
     Args:
         event_id: event_id path parameter.
@@ -3600,7 +3601,7 @@ def espn_nba_game_team(
     Example:
         Quick start::
 
-            espn_nba_game_team(event_id='401584793', team_id='4')
+            espn_nba_game_team(event_id='401584793', team_id='15')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {}
@@ -3631,7 +3632,7 @@ def espn_nba_game_team_roster(
     Bound to sport='basketball', league='nba'.
 
     Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/competitors/{team_id}/roster``
-    Example URL: https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/competitors/4/roster
+    Example URL: https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/competitors/15/roster
 
     Args:
         event_id: event_id path parameter.
@@ -3651,7 +3652,7 @@ def espn_nba_game_team_roster(
     Example:
         Quick start::
 
-            espn_nba_game_team_roster(event_id='401584793', team_id='4')
+            espn_nba_game_team_roster(event_id='401584793', team_id='15')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {}
@@ -3733,7 +3734,7 @@ def espn_nba_game_team_statistics(
     Bound to sport='basketball', league='nba'.
 
     Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/competitors/{team_id}/statistics``
-    Example URL: https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/competitors/4/statistics
+    Example URL: https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/competitors/15/statistics
 
     Args:
         event_id: event_id path parameter.
@@ -3753,7 +3754,7 @@ def espn_nba_game_team_statistics(
     Example:
         Quick start::
 
-            espn_nba_game_team_statistics(event_id='401584793', team_id='4')
+            espn_nba_game_team_statistics(event_id='401584793', team_id='15')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {}
@@ -4045,7 +4046,7 @@ def espn_nba_game_play(
     Bound to sport='basketball', league='nba'.
 
     Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/plays/{play_id}``
-    Example URL: https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/plays/1
+    Example URL: https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/plays/4015847934
 
     Args:
         event_id: event_id path parameter.
@@ -4065,7 +4066,7 @@ def espn_nba_game_play(
     Example:
         Quick start::
 
-            espn_nba_game_play(event_id='401584793', play_id='1')
+            espn_nba_game_play(event_id='401584793', play_id='4015847934')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {}
@@ -4096,7 +4097,7 @@ def espn_nba_game_play_personnel(
     Bound to sport='basketball', league='nba'.
 
     Endpoint: ``GET https://sports.core.api.espn.com/v2/sports/{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/plays/{play_id}/personnel``
-    Example URL: https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/plays/1/personnel
+    Example URL: https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/plays/4015847934/personnel
 
     Args:
         event_id: event_id path parameter.
@@ -4116,7 +4117,7 @@ def espn_nba_game_play_personnel(
     Example:
         Quick start::
 
-            espn_nba_game_play_personnel(event_id='401584793', play_id='1')
+            espn_nba_game_play_personnel(event_id='401584793', play_id='4015847934')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {}

@@ -1,0 +1,24 @@
+schema: event_predictor
+kind: dataframe
+columns:
+- name: $ref
+  type: character
+  description: ''
+- name: last_modified
+  type: character
+  description: ''
+- name: name
+  type: character
+  description: ''
+- name: short_name
+  type: character
+  description: ''
+- name: away_team_statistics
+  type: character
+  description: ''
+- name: away_team_team_$ref
+  type: character
+  description: ''
+- name: home_team_team_$ref
+  type: character
+  description: ''

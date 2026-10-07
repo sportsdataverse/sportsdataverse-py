@@ -1,0 +1,6 @@
+schema: athlete_contracts
+kind: dataframe
+columns:
+- name: $ref
+  type: character
+  description: ''

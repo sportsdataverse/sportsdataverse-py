@@ -1,0 +1,26 @@
+{
+ "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/situation?lang=en&region=us",
+ "awayFouls": {
+  "bonusState": "DOUBLE",
+  "foulsToGive": 0,
+  "teamFouls": 24,
+  "teamFoulsCurrent": 8
+ },
+ "awayTimeouts": {
+  "timeoutsCurrent": 3,
+  "timeoutsRemainingCurrent": 0
+ },
+ "homeFouls": {
+  "bonusState": "DOUBLE",
+  "foulsToGive": 0,
+  "teamFouls": 18,
+  "teamFoulsCurrent": 4
+ },
+ "homeTimeouts": {
+  "timeoutsCurrent": 1,
+  "timeoutsRemainingCurrent": 0
+ },
+ "lastPlay": {
+  "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/plays/401584793709?lang=en&region=us"
+ }
+}

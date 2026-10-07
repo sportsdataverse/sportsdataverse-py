@@ -1,0 +1,6 @@
+schema: season_athletes
+kind: dataframe
+columns:
+- name: $ref
+  type: character
+  description: ''

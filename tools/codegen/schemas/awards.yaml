@@ -1,0 +1,6 @@
+schema: awards
+kind: dataframe
+columns:
+- name: $ref
+  type: character
+  description: ''

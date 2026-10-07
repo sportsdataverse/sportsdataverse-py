@@ -1,0 +1,45 @@
+schema: event_competitors
+kind: dataframe
+columns:
+- name: $ref
+  type: character
+  description: ''
+- name: home_away
+  type: character
+  description: ''
+- name: id
+  type: character
+  description: ''
+- name: order
+  type: integer
+  description: ''
+- name: type
+  type: character
+  description: ''
+- name: uid
+  type: character
+  description: ''
+- name: winner
+  type: logical
+  description: ''
+- name: leaders_$ref
+  type: character
+  description: ''
+- name: linescores_$ref
+  type: character
+  description: ''
+- name: record_$ref
+  type: character
+  description: ''
+- name: roster_$ref
+  type: character
+  description: ''
+- name: score_$ref
+  type: character
+  description: ''
+- name: statistics_$ref
+  type: character
+  description: ''
+- name: team_$ref
+  type: character
+  description: ''

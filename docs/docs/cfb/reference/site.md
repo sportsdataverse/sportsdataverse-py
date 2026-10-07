@@ -589,7 +589,22 @@ ESPN endpoint.
 
 ### Returns {#espn_cfb_transactions-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_items`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `date` | character | Date of the poll release. |
+| `description` | character | ESPN's description of the stat. |
+| `team_abbreviation` | character | Team abbreviation. |
+| `team_alternate_color` | character | Alternate team color. |
+| `team_color` | character | Primary team color. |
+| `team_display_name` | character | Full team display name. |
+| `team_id` | character | ESPN team id. |
+| `team_links` | character |  |
+| `team_location` | character | Team location / school name. |
+| `team_logos` | character |  |
+| `team_name` | character | Team nickname. |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#espn_cfb_transactions-example}
@@ -613,7 +628,19 @@ ESPN endpoint.
 
 ### Returns {#espn_cfb_conferences-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_groups`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `group_id` | character | ESPN group (conference) id for the season. |
+| `name` | character | Position name (e.g. `Quarterback`). |
+| `abbreviation` | character | Metric abbreviation. |
+| `short_name` | character | Ranking source short name (e.g. `AP Poll`). |
+| `is_conference` | logical | `TRUE` for an actual conference, `FALSE` for a division roll-up. |
+| `parent_group_id` | character | `group_id` of the parent node (`NA` at the root). |
+| `depth` | integer |  |
+| `children_count` | integer |  |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#espn_cfb_conferences-example}
@@ -729,7 +756,52 @@ ESPN endpoint.
 
 ### Returns {#espn_cfb_team-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_single_entity`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `team_abbreviation` | character | Team abbreviation. |
+| `team_alternate_color` | character | Alternate team color. |
+| `team_color` | character | Primary team color. |
+| `team_display_name` | character | Full team display name. |
+| `team_franchise_$ref` | character |  |
+| `team_franchise_abbreviation` | character |  |
+| `team_franchise_color` | character |  |
+| `team_franchise_display_name` | character |  |
+| `team_franchise_id` | character |  |
+| `team_franchise_is_active` | logical |  |
+| `team_franchise_location` | character |  |
+| `team_franchise_name` | character |  |
+| `team_franchise_short_display_name` | character |  |
+| `team_franchise_slug` | character |  |
+| `team_franchise_team_$ref` | character |  |
+| `team_franchise_uid` | character |  |
+| `team_franchise_venue_$ref` | character |  |
+| `team_franchise_venue_address_city` | character |  |
+| `team_franchise_venue_address_state` | character |  |
+| `team_franchise_venue_full_name` | character |  |
+| `team_franchise_venue_grass` | logical |  |
+| `team_franchise_venue_guid` | character |  |
+| `team_franchise_venue_id` | character |  |
+| `team_franchise_venue_images` | character |  |
+| `team_franchise_venue_indoor` | logical |  |
+| `team_franchise_venue_short_name` | character |  |
+| `team_groups_id` | character |  |
+| `team_groups_is_conference` | logical |  |
+| `team_groups_parent_id` | character |  |
+| `team_id` | character | ESPN team id. |
+| `team_is_active` | logical |  |
+| `team_links` | character |  |
+| `team_location` | character | Team location / school name. |
+| `team_logos` | character |  |
+| `team_name` | character | Team nickname. |
+| `team_next_event` | character |  |
+| `team_record_items` | character |  |
+| `team_short_display_name` | character | Short team display name. |
+| `team_slug` | character | Team slug for the stat row. |
+| `team_standing_summary` | character |  |
+| `team_uid` | character |  |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#espn_cfb_team-example}

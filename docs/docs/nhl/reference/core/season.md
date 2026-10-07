@@ -20,7 +20,43 @@ ESPN endpoint.
 
 ### Returns {#espn_nhl_season_pointer-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_single_entity`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `$ref` | character |  |
+| `display_name` | character | Player display name. |
+| `end_date` | character | Season end date. |
+| `start_date` | character | Season start date. |
+| `year` | integer | Season year from the API. |
+| `athletes_$ref` | character |  |
+| `coaches_$ref` | character |  |
+| `futures_$ref` | character |  |
+| `power_index_leaders_$ref` | character |  |
+| `power_indexes_$ref` | character |  |
+| `rankings_$ref` | character |  |
+| `type_$ref` | character |  |
+| `type_abbreviation` | character | Play type abbreviation. |
+| `type_corrections_$ref` | character |  |
+| `type_end_date` | character |  |
+| `type_groups_$ref` | character |  |
+| `type_has_groups` | logical |  |
+| `type_has_legs` | logical |  |
+| `type_has_standings` | logical |  |
+| `type_id` | character | Play type id. |
+| `type_name` | character | Status type name (e.g. "STATUS_FINAL"). |
+| `type_slug` | character | Broadcast type slug. |
+| `type_start_date` | character |  |
+| `type_type` | integer |  |
+| `type_weeks_$ref` | character |  |
+| `type_year` | integer |  |
+| `types_$ref` | character |  |
+| `types_count` | integer |  |
+| `types_items` | character |  |
+| `types_page_count` | integer |  |
+| `types_page_index` | integer |  |
+| `types_page_size` | integer |  |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#espn_nhl_season_pointer-example}
@@ -45,7 +81,44 @@ ESPN endpoint.
 
 ### Returns {#espn_nhl_season_info-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_single_entity`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `$ref` | character |  |
+| `display_name` | character | Player display name. |
+| `end_date` | character | Season end date. |
+| `start_date` | character | Season start date. |
+| `year` | integer | Season year from the API. |
+| `awards_$ref` | character |  |
+| `futures_$ref` | character |  |
+| `leaders_$ref` | character |  |
+| `power_index_leaders_$ref` | character |  |
+| `power_indexes_$ref` | character |  |
+| `rankings_$ref` | character |  |
+| `type_$ref` | character |  |
+| `type_abbreviation` | character | Play type abbreviation. |
+| `type_corrections_$ref` | character |  |
+| `type_end_date` | character |  |
+| `type_groups_$ref` | character |  |
+| `type_has_groups` | logical |  |
+| `type_has_legs` | logical |  |
+| `type_has_standings` | logical |  |
+| `type_id` | character | Play type id. |
+| `type_leaders_$ref` | character |  |
+| `type_name` | character | Status type name (e.g. "STATUS_FINAL"). |
+| `type_slug` | character | Broadcast type slug. |
+| `type_start_date` | character |  |
+| `type_type` | integer |  |
+| `type_weeks_$ref` | character |  |
+| `type_year` | integer |  |
+| `types_$ref` | character |  |
+| `types_count` | integer |  |
+| `types_items` | character |  |
+| `types_page_count` | integer |  |
+| `types_page_index` | integer |  |
+| `types_page_size` | integer |  |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#espn_nhl_season_info-example}
@@ -70,7 +143,12 @@ ESPN endpoint.
 
 ### Returns {#espn_nhl_season_types-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_items`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `$ref` | character |  |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#espn_nhl_season_types-example}
@@ -96,7 +174,27 @@ ESPN endpoint.
 
 ### Returns {#espn_nhl_season_type-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_single_entity`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `$ref` | character |  |
+| `abbreviation` | character | Team abbreviation. |
+| `end_date` | character | Season end date. |
+| `has_groups` | logical | Whether this season type has groups. |
+| `has_legs` | logical | Whether this season type has legs. |
+| `has_standings` | logical | Whether this season type has standings. |
+| `id` | character | Unique player identifier. |
+| `name` | character | Team mascot name. |
+| `slug` | character | URL slug. |
+| `start_date` | character | Season start date. |
+| `type` | integer | Competitor type (e.g. "team"). |
+| `year` | integer | Season year from the API. |
+| `corrections_$ref` | character |  |
+| `groups_$ref` | character |  |
+| `leaders_$ref` | character |  |
+| `weeks_$ref` | character |  |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#espn_nhl_season_type-example}
@@ -123,7 +221,25 @@ ESPN endpoint.
 
 ### Returns {#espn_nhl_season_group-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_single_entity`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `$ref` | character |  |
+| `id` | character | Unique player identifier. |
+| `is_conference` | logical | Whether this group is a conference (vs. division). |
+| `links` | character |  |
+| `midsize_name` | character |  |
+| `name` | character | Team mascot name. |
+| `short_name` | character | Short game name. |
+| `slug` | character | URL slug. |
+| `uid` | character | Competitor uid string. |
+| `children_$ref` | character |  |
+| `parent_$ref` | character |  |
+| `season_$ref` | character |  |
+| `standings_$ref` | character |  |
+| `teams_$ref` | character |  |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#espn_nhl_season_group-example}
@@ -149,7 +265,12 @@ ESPN endpoint.
 
 ### Returns {#espn_nhl_season_groups-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_items`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `$ref` | character |  |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#espn_nhl_season_groups-example}
@@ -283,7 +404,12 @@ ESPN endpoint.
 
 ### Returns {#espn_nhl_season_weeks-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_items`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `$ref` | character |  |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#espn_nhl_season_weeks-example}
@@ -310,7 +436,17 @@ ESPN endpoint.
 
 ### Returns {#espn_nhl_season_week-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_single_entity`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `$ref` | character |  |
+| `end_date` | character | Season end date. |
+| `number` | integer | Week number as returned by the API. |
+| `start_date` | character | Season start date. |
+| `text` | character | Full play description text. |
+| `rankings_$ref` | character |  |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#espn_nhl_season_week-example}
@@ -393,7 +529,12 @@ ESPN endpoint.
 
 ### Returns {#espn_nhl_season_teams-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_items`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `$ref` | character |  |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#espn_nhl_season_teams-example}
@@ -419,7 +560,51 @@ ESPN endpoint.
 
 ### Returns {#espn_nhl_season_team-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_single_entity`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `$ref` | character |  |
+| `abbreviation` | character | Team abbreviation. |
+| `alternate_color` | character | Alternate color hex. |
+| `color` | character | Primary color hex. |
+| `display_name` | character | Player display name. |
+| `guid` | character | Athlete global unique identifier. |
+| `id` | character | Unique player identifier. |
+| `is_active` | logical | Whether the team is active. |
+| `is_all_star` | logical | Whether the team is an all-star team. |
+| `links` | character |  |
+| `location` | character | Team city/location. |
+| `logos` | character |  |
+| `name` | character | Team mascot name. |
+| `short_display_name` | character | Short display name. |
+| `slug` | character | URL slug. |
+| `uid` | character | Competitor uid string. |
+| `against_the_spread_records_$ref` | character |  |
+| `awards_$ref` | character |  |
+| `coaches_$ref` | character |  |
+| `depth_charts_$ref` | character |  |
+| `events_$ref` | character |  |
+| `franchise_$ref` | character |  |
+| `groups_$ref` | character |  |
+| `injuries_$ref` | character |  |
+| `leaders_$ref` | character |  |
+| `notes_$ref` | character |  |
+| `ranks_$ref` | character |  |
+| `record_$ref` | character |  |
+| `statistics_$ref` | character |  |
+| `transactions_$ref` | character |  |
+| `venue_$ref` | character |  |
+| `venue_address_city` | character |  |
+| `venue_address_state` | character |  |
+| `venue_full_name` | character | Venue full name. |
+| `venue_grass` | logical |  |
+| `venue_guid` | character |  |
+| `venue_id` | character | Venue identifier. |
+| `venue_images` | character |  |
+| `venue_indoor` | logical | Whether the venue is indoors. |
+| `venue_short_name` | character |  |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#espn_nhl_season_team-example}
@@ -446,7 +631,12 @@ ESPN endpoint.
 
 ### Returns {#espn_nhl_season_players-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_items`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `$ref` | character |  |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#espn_nhl_season_players-example}
@@ -472,7 +662,12 @@ ESPN endpoint.
 
 ### Returns {#espn_nhl_season_coaches-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_coaches`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `$ref` | character |  |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#espn_nhl_season_coaches-example}
@@ -548,7 +743,17 @@ ESPN endpoint.
 
 ### Returns {#espn_nhl_season_futures-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_items`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `$ref` | character |  |
+| `display_name` | character | Player display name. |
+| `futures` | character |  |
+| `id` | integer | Unique player identifier. |
+| `name` | character | Team mascot name. |
+| `type` | character | Competitor type (e.g. "team"). |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#espn_nhl_season_futures-example}
@@ -599,7 +804,20 @@ ESPN endpoint.
 
 ### Returns {#espn_nhl_season_powerindex-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_items`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `last_updated` | character | Timestamp the entry was last updated. |
+| `max_game_date` | character |  |
+| `run_cutoff_date` | character |  |
+| `run_date_time_key` | integer |  |
+| `season` | integer | Season year (echoed from arg). |
+| `season_type` | integer | Season type code (echoed from arg). |
+| `stats` | character |  |
+| `league_$ref` | character |  |
+| `team_$ref` | character |  |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#espn_nhl_season_powerindex-example}
@@ -650,7 +868,12 @@ ESPN endpoint.
 
 ### Returns {#espn_nhl_season_awards-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_items`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `$ref` | character |  |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#espn_nhl_season_awards-example}

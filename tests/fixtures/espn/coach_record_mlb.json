@@ -1,0 +1,38 @@
+{
+ "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/coaches/1/record/0?lang=en&region=us",
+ "displayValue": "129-140",
+ "id": "0",
+ "name": "Total",
+ "stats": [
+  {
+   "abbreviation": "L",
+   "description": "Losses",
+   "displayName": "Losses",
+   "name": "losses",
+   "shortDisplayName": "L",
+   "type": "losses",
+   "value": 140.0
+  },
+  {
+   "abbreviation": "T",
+   "description": "Ties",
+   "displayName": "Ties",
+   "name": "ties",
+   "shortDisplayName": "T",
+   "type": "ties",
+   "value": 0.0
+  },
+  {
+   "abbreviation": "W",
+   "description": "Wins",
+   "displayName": "Wins",
+   "name": "wins",
+   "shortDisplayName": "W",
+   "type": "wins",
+   "value": 129.0
+  }
+ ],
+ "summary": "129-140",
+ "type": "Total",
+ "value": 0.4795539033
+}

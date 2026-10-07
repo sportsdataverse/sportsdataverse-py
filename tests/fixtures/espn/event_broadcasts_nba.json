@@ -1,0 +1,116 @@
+{
+ "count": 2,
+ "items": [
+  {
+   "channel": 846,
+   "competition": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793?lang=en&region=us"
+   },
+   "lang": "en",
+   "market": {
+    "id": "2",
+    "type": "Home"
+   },
+   "media": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/media/846?lang=en&region=us",
+    "callLetters": "FanDuel SN WI",
+    "id": "846",
+    "logos": [
+     {
+      "alt": "",
+      "height": 500,
+      "href": "https://a.espncdn.com/guid/d8a39ceb-71f2-3064-9e96-11a906183945/logos/default.png",
+      "lastUpdated": "2025-10-02T18:19Z",
+      "rel": [
+       "full",
+       "default"
+      ],
+      "width": 500
+     },
+     {
+      "alt": "",
+      "height": 500,
+      "href": "https://a.espncdn.com/guid/d8a39ceb-71f2-3064-9e96-11a906183945/logos/default-dark.png",
+      "lastUpdated": "2025-10-02T18:19Z",
+      "rel": [
+       "full",
+       "dark"
+      ],
+      "width": 500
+     }
+    ],
+    "name": "FanDuel Sports Network Wisconsin",
+    "shortName": "FanDuel SN WI",
+    "slug": "fanduel-sports-network-wisconsin"
+   },
+   "partnered": false,
+   "priority": 1,
+   "region": "us",
+   "slug": "fanduel-sn-wi",
+   "station": "FanDuel SN WI",
+   "type": {
+    "id": "1",
+    "longName": "Television",
+    "shortName": "TV",
+    "slug": "tv"
+   }
+  },
+  {
+   "channel": 825,
+   "competition": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793?lang=en&region=us"
+   },
+   "lang": "en",
+   "market": {
+    "id": "2",
+    "type": "Home"
+   },
+   "media": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/media/825?lang=en&region=us",
+    "callLetters": "FanDuel SN DET",
+    "id": "825",
+    "logos": [
+     {
+      "alt": "",
+      "height": 500,
+      "href": "https://a.espncdn.com/guid/80367815-b251-3cb1-8e94-7a5cbfe826e6/logos/default.png",
+      "lastUpdated": "2025-10-02T18:16Z",
+      "rel": [
+       "full",
+       "default"
+      ],
+      "width": 500
+     },
+     {
+      "alt": "",
+      "height": 500,
+      "href": "https://a.espncdn.com/guid/80367815-b251-3cb1-8e94-7a5cbfe826e6/logos/default-dark.png",
+      "lastUpdated": "2025-10-02T18:16Z",
+      "rel": [
+       "full",
+       "dark"
+      ],
+      "width": 500
+     }
+    ],
+    "name": "FanDuel Sports Network Detroit",
+    "shortName": "FanDuel SN DET",
+    "slug": "fanduel-sports-network-detroit"
+   },
+   "partnered": false,
+   "priority": 2,
+   "region": "us",
+   "slug": "fanduel-sn-det",
+   "station": "FanDuel SN DET",
+   "type": {
+    "id": "1",
+    "longName": "Television",
+    "shortName": "TV",
+    "slug": "tv"
+   }
+  }
+ ],
+ "pageCount": 1,
+ "pageIndex": 1,
+ "pageSize": 25
+}
