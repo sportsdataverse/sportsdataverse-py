@@ -3,6 +3,8 @@
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
 - [Unreleased](#unreleased)
+  - [Added — Expected Threat: XThreat, soccer_xthreat_rate() and a bundled grid](#added--expected-threat-xthreat-soccer_xthreat_rate-and-a-bundled-grid)
+  - [Fixed — soccer_open_events() and soccer_open_dataset() failed in a fresh interpreter](#fixed--soccer_open_events-and-soccer_open_dataset-failed-in-a-fresh-interpreter)
   - [Added — SPADL actions from any kloppy event dataset: soccer_spadl() and soccer_open_dataset()](#added--spadl-actions-from-any-kloppy-event-dataset-soccer_spadl-and-soccer_open_dataset)
   - [Changed — returns-table descriptions: NFL Pro, On3 and Fox authored; R-dictionary fill scoped to the league's own sport](#changed--returns-table-descriptions-nfl-pro-on3-and-fox-authored-r-dictionary-fill-scoped-to-the-leagues-own-sport)
   - [Added — wrappers for six more intake providers (ESPN content, TheSportsDB, Football-Data.co.uk, OpenLigaDB, Polymarket, Kalshi)](#added--wrappers-for-six-more-intake-providers-espn-content-thesportsdb-football-datacouk-openligadb-polymarket-kalshi)
@@ -363,6 +365,24 @@
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## Unreleased
+
+### Added — Expected Threat: XThreat, soccer_xthreat_rate() and a bundled grid
+
+`XThreat` fits an Expected Threat grid from SPADL actions and `soccer_xthreat_rate(actions)` appends
+an `xt_value` column to a SPADL frame; both are ports of [socceraction](https://github.com/ML-KULeuven/socceraction)
+(MIT). A fitted 12 x 16 grid ships with the package (`load_xthreat_model()`), fit on StatsBomb open
+data: the World Cup 2018 and 2022 and Euro 2020 and 2024. 222 of 230 matches were used (8 were skipped on a
+kloppy deserializer error; their ids are in the grid metadata), 471,288 actions, 50 iterations. The
+grid agrees with socceraction's own fit to 2.8e-17 on the oracle. The rate is the value of the cell an
+action ends in minus the cell it starts in, with no interpolation.
+
+StatsBomb open data is free for research and non-commercial use only, under StatsBomb's open-data
+license; the bundled grid inherits that restriction.
+
+### Fixed — soccer_open_events() and soccer_open_dataset() failed in a fresh interpreter
+
+A bare `import kloppy` does not attach `kloppy.statsbomb`, so the loaders raised `AttributeError`
+until something else had imported the provider module. They now import it explicitly.
 
 ### Added — SPADL actions from any kloppy event dataset: soccer_spadl() and soccer_open_dataset()
 

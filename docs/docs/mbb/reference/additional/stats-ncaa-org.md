@@ -1,10 +1,10 @@
 ---
-title: "MBB — additional Python functions — stats.ncaa.org: BadLineupClump–enrich_stats"
-sidebar_label: "stats.ncaa.org: BadLineupClump–enrich_stats"
+title: "MBB — additional Python functions — stats.ncaa.org: BadLineupClump–enrich_shot"
+sidebar_label: "stats.ncaa.org: BadLineupClump–enrich_shot"
 sidebar_position: 3
-description: "MBB — additional Python functions — stats.ncaa.org: BadLineupClump–enrich_stats — function reference in sdv-py, the SportsDataverse Python package."
+description: "MBB — additional Python functions — stats.ncaa.org: BadLineupClump–enrich_shot — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# MBB — additional Python functions — stats.ncaa.org: BadLineupClump–enrich_stats
+# MBB — additional Python functions — stats.ncaa.org: BadLineupClump–enrich_shot
 
 ### BadLineupClump {#BadLineupClump}
 
@@ -451,6 +451,22 @@ Modern shape (`teams/{id}/game_by_game`) is confirmed by
 | `legacy` | `bool` | `False` |  |
 | `force` | `bool` | `False` |  |
 
+#### NcaaFetcher.with_browser
+
+`NcaaFetcher.with_browser(config: 'Optional[NcaaFetchConfig]' = None, *, proxy_pool: "Optional['list[str]']" = None, **browser_opts: 'object') -> "'NcaaFetcher'"`
+
+Build a fetcher wired to the **suggested** browser transport.
+
+The go-to constructor for scraping game-detail pages
+(play-by-play / individual-stats / box-score): it attaches a
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `config` | `Optional[NcaaFetchConfig]` | `None` |  |
+| `proxy_pool` | `Optional['list[str]']` | `None` |  |
+
 ### OtherOpponentEvent {#OtherOpponentEvent}
 
 `OtherOpponentEvent(min: 'float', score: 'Score', event_string: 'str') -> None`
@@ -524,6 +540,30 @@ A parse-time error (`ParseError`, `ParseError.scala:9`).
 | `location` | `str` |  | The module in which the error occurred. |
 | `id` | `str` |  | The module-specific id for which the error occurred. |
 | `messages` | `list[str]` |  | Human-readable description(s) of the error. |
+
+**Methods**
+
+#### ParseError.single
+
+`ParseError.single(location: 'str', id: 'str', message: 'str') -> "'ParseError'"`
+
+Single-message convenience constructor (`ParseError.apply`,
+
+`ParseError.scala:19-21` -- the companion object's single-`message`
+overload). Python has no method overloading, so this is a
+`classmethod` rather than a second constructor signature.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `location` | `str` |  | The module in which the error occurred. |
+| `id` | `str` |  | The module-specific id for which the error occurred. |
+| `message` | `str` |  | A single human-readable description of the error. |
+
+**Returns**
+
+A `ParseError` with `messages=[message]`.
 
 ### PbpBuilders {#PbpBuilders}
 
@@ -1826,34 +1866,3 @@ enriched = enrich_shot_events_with_pbp(
     shots, pbp, good_lineups, bad_lineups, box_lineup
 )
 ```
-
-### enrich_stats {#enrich_stats}
-
-`enrich_stats(lineup: 'LineupEvent', event_parser: 'PossessionEvent', stats: 'LineupEventStats', player_filter_coder: 'Optional[PlayerFilterCoder]' = None, player_index: 'int' = -1) -> 'LineupEventStats'`
-
-Fold a lineup's raw events into a counting-stat tree (``protected def
-
-enrich_stats`, `LineupUtils.scala:115-162``). Reuses the Task 5a.3
-concurrent-clump batching (`~sportsdataverse.mbb.mbb_ncaa_possessions
-.lineup_as_raw_clumps` + `~sportsdataverse.mbb.mbb_ncaa_possessions
-.concurrent_event_handler`) rather than duplicating it -- both were
-already public/exported from Task 5a.3.
-
-`stats` is deep-copied once up front (see the module docstring's
-"Scala idiom decisions"), so this function never mutates the caller's
-`stats` argument -- safe to call repeatedly against the same starting
-literal (e.g. a shared "empty stats" fixture).
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `lineup` | `LineupEvent` |  | The lineup whose `raw_game_events` to fold over. |
-| `event_parser` | `PossessionEvent` |  | Selects which side (team/opponent) is "attacking". |
-| `stats` | `LineupEventStats` |  | The starting stat tree (not mutated -- see above). |
-| `player_filter_coder` | `Optional[PlayerFilterCoder]` | `None` | Optional `name -> (is_this_player, code)` predicate/coder, for per-player scoping (Task 5c.4). |
-| `player_index` | `int` | `-1` | Lineup-slot index for `~sportsdataverse.mbb .mbb_ncaa_models.PlayerShotInfo` tuples (Task 5c.4; `-1` for team-level calls, the only value exercised before then). |
-
-**Returns**
-
-A new `~sportsdataverse.mbb.mbb_ncaa_models.LineupEventStats` with every matching event folded in.

@@ -11,6 +11,146 @@ not covered by the generated API-endpoint reference above.
 
 ## kloppy open event data
 
+### NotFittedError {#NotFittedError}
+
+`NotFittedError(...)`
+
+The grid is all zeros: call `fit` or load a model first.
+
+### XThreat {#XThreat}
+
+`XThreat(grid: 'Optional[np.ndarray]' = None, *, l: 'int' = 16, w: 'int' = 12, eps: 'float' = 1e-05, max_iter: 'int' = 1000, meta: 'Optional[dict[str, Any]]' = None) -> 'None'`
+
+A fitted Expected Threat grid.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `grid` | `Optional[ndarray]` | `None` | An existing `(w, l)` array (row 0 = the top of the pitch); `None` for an unfitted model. |
+| `l` | `int` | `16` | Cells along the pitch length. |
+| `w` | `int` | `12` | Cells across the pitch width. |
+| `eps` | `float` | `1e-05` | Convergence tolerance on the absolute change of every cell. |
+| `max_iter` | `int` | `1000` | Iteration cap; exceeding it raises `RuntimeError`. |
+| `meta` | `Optional[dict[str, Any]]` | `None` | Free-form provenance stored in the JSON. |
+
+**Example**
+
+```python
+from sportsdataverse.soccer import XThreat, soccer_open_dataset, soccer_spadl
+actions = soccer_spadl(soccer_open_dataset("statsbomb", 8658))
+model = XThreat().fit(actions)
+actions = actions.with_columns(model.rate(actions))
+```
+
+**Methods**
+
+#### XThreat.fit
+
+`XThreat.fit(actions: 'pl.DataFrame') -> 'XThreat'`
+
+Fit the grid on SPADL actions by value iteration.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `actions` | `DataFrame` |  | SPADL actions with `type_name`, `result_name` and start/end coordinates. |
+
+**Returns**
+
+This model, fitted in place.
+
+**Example**
+
+```python
+from sportsdataverse.soccer import XThreat, soccer_open_dataset, soccer_spadl
+model = XThreat().fit(soccer_spadl(soccer_open_dataset("statsbomb", 8658)))
+print(model.iterations)
+```
+
+#### XThreat.from_json
+
+`XThreat.from_json(path: 'Union[str, Path]') -> 'XThreat'`
+
+Read this module's format or socceraction's bare nested list.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `path` | `Union[str, Path]` |  | A JSON file written by `to_json` or socceraction's `save_model`. |
+
+**Returns**
+
+The loaded `XThreat`.
+
+**Example**
+
+```python
+from sportsdataverse.soccer import XThreat
+model = XThreat.from_json("xthreat.json")
+```
+
+#### XThreat.rate
+
+`XThreat.rate(actions: 'pl.DataFrame') -> 'pl.Series'`
+
+Rate each action: end-cell minus start-cell value for successful passes, dribbles and crosses.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `actions` | `DataFrame` |  | SPADL actions with `type_name`, `result_name` and start/end coordinates. |
+
+**Returns**
+
+A `Float64` series named `xt_value`; null for actions xT does not value.
+
+**Example**
+
+```python
+from sportsdataverse.soccer import load_xthreat_model
+actions = actions.with_columns(load_xthreat_model().rate(actions))
+```
+
+#### XThreat.to_json
+
+`XThreat.to_json(path: 'Union[str, Path]') -> 'None'`
+
+Write `{"xT": grid, "w": .., "l": .., "meta": {..}}` (readable by `from_json`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `path` | `Union[str, Path]` |  | Destination file. |
+
+**Example**
+
+```python
+model.to_json("xthreat.json")
+```
+
+### load_xthreat_model {#load_xthreat_model}
+
+`load_xthreat_model() -> 'XThreat'`
+
+The bundled grid fit on StatsBomb open data (see `meta` for competitions, counts and license).
+
+**Returns**
+
+The fitted `XThreat` shipped with the package.
+
+**Example**
+
+```python
+from sportsdataverse.soccer import load_xthreat_model
+model = load_xthreat_model()
+print(model.xT.shape, model.meta["matches"])
+```
+
 ### soccer_events_to_frame {#soccer_events_to_frame}
 
 `soccer_events_to_frame(dataset: 'Any', *, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
@@ -157,4 +297,31 @@ print(actions.shape)
 # Pipeline next step (one line)
 
 actions.filter(pl.col("type_name") == "shot").group_by("team_id").len()
+```
+
+### soccer_xthreat_rate {#soccer_xthreat_rate}
+
+`soccer_xthreat_rate(actions: 'pl.DataFrame', model: 'Optional[XThreat]' = None, *, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
+
+Append `xt_value` (Expected Threat added by each successful pass, dribble or cross) to a SPADL frame.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `actions` | `DataFrame` |  | SPADL actions from `soccer_spadl` (needs `type_name`, `result_name`, start/end coordinates). |
+| `model` | `Optional[XThreat]` | `None` | A fitted `XThreat`; `None` uses the bundled grid. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+`actions` with a `Float64` `xt_value` column (null for actions xT does not value).
+
+**Example**
+
+```python
+import polars as pl
+from sportsdataverse.soccer import soccer_open_dataset, soccer_spadl, soccer_xthreat_rate
+actions = soccer_xthreat_rate(soccer_spadl(soccer_open_dataset("statsbomb", 8658)))
+print(actions.group_by("player_id").agg(pl.col("xt_value").sum()).sort("xt_value", descending=True).head())
 ```

@@ -76,7 +76,7 @@ not covered by the generated API-endpoint reference above.
 | [enrich_and_reverse_game_events](additional/stats-ncaa-org.md#enrich_and_reverse_game_events) | Inserts game-break events and turns descending per-row times into |
 | [enrich_lineup](additional/stats-ncaa-org.md#enrich_lineup) | Populate `pts`/`plus_minus` from the score delta, then run the |
 | [enrich_shot_events_with_pbp](additional/stats-ncaa-org.md#enrich_shot_events_with_pbp) | Enrich each shot with its play-by-play event + on-floor lineup |
-| [enrich_stats](additional/stats-ncaa-org.md#enrich_stats) | Fold a lineup's raw events into a counting-stat tree (``protected def |
+| [enrich_stats](additional/stats-ncaa-org-2.md#enrich_stats) | Fold a lineup's raw events into a counting-stat tree (``protected def |
 | [ensure_ev_uniqueness](additional/stats-ncaa-org-2.md#ensure_ev_uniqueness) | Nudge each event's `min` by a tiny per-index delta so truly |
 | [extract_player_from_ev](additional/stats-ncaa-org-2.md#extract_player_from_ev) | Resolve the player named in `pbp_event` to a |
 | [field_keys](additional/stats-ncaa-org-2.md#field_keys) | Off/def stat-key names for a field (`fieldKeys`, `ts:77-79`). |
@@ -129,8 +129,8 @@ not covered by the generated API-endpoint reference above.
 | [select_matching](additional/stats-ncaa-org-2.md#select_matching) | JSoup `root.select(sel + ":matches(regex)")`: candidates whose full |
 | [select_matching_own](additional/stats-ncaa-org-2.md#select_matching_own) | JSoup `root.select(sel + ":matchesOwn(regex)")`: candidates whose |
 | [shot_js_to_html](additional/stats-ncaa-org-2.md#shot_js_to_html) | Converts client-side `addShot(...)` JS calls into parseable |
-| [start_time_from_period](additional/stats-ncaa-org-2.md#start_time_from_period) | The game-clock time (minutes elapsed) a period starts at |
-| [sum_event_stats](additional/stats-ncaa-org-2.md#sum_event_stats) | Field-wise add two :class:`~sportsdataverse.mbb.mbb_ncaa_models |
+| [start_time_from_period](additional/stats-ncaa-org-3.md#start_time_from_period) | The game-clock time (minutes elapsed) a period starts at |
+| [sum_event_stats](additional/stats-ncaa-org-3.md#sum_event_stats) | Field-wise add two :class:`~sportsdataverse.mbb.mbb_ncaa_models |
 | [sum_shot_infos](additional/stats-ncaa-org-3.md#sum_shot_infos) | Field-wise sum a list of :class:`~sportsdataverse.mbb.mbb_ncaa_models |
 | [td_at](additional/stats-ncaa-org-3.md#td_at) | JSoup `row >?> element("td:eq(n)")`: the `n`-th `<td>` child. |
 | [transform_shot_location](additional/stats-ncaa-org-3.md#transform_shot_location) | Transforms a raw SVG pixel location into feet from the basket, always |
@@ -252,7 +252,7 @@ not covered by the generated API-endpoint reference above.
 | [build_weak_prior_from_rapm](additional/models-and-calculators.md#build_weak_prior_from_rapm) | Wrap a flat RAPM-estimate vector into `playersWeak`-shaped dicts. |
 | [calc_collinearity_diag](additional/models-and-calculators.md#calc_collinearity_diag) | Multi-collinearity diagnostic between the players in an off/def design matrix. |
 | [calc_lineup_outputs](additional/models-and-calculators.md#calc_lineup_outputs) | Build the off/def target vectors the RAPM design matrices are fit against. |
-| [calc_player_weights](additional/models-and-calculators.md#calc_player_weights) | Build the off/def player-weight (design) matrices for the RAPM solve. |
+| [calc_player_weights](additional/models-and-calculators-2.md#calc_player_weights) | Build the off/def player-weight (design) matrices for the RAPM solve. |
 | [calc_slow_pseudo_inverse](additional/models-and-calculators-2.md#calc_slow_pseudo_inverse) | Per-parameter variance terms for the ridge-regression standard errors. |
 | [calculate_predicted_out](additional/models-and-calculators-2.md#calculate_predicted_out) | Predict per-lineup outputs from fitted per-player RAPM values. |
 | [calculate_rapm](additional/models-and-calculators-2.md#calculate_rapm) | Apply a regression solver matrix to a target-outputs vector. |

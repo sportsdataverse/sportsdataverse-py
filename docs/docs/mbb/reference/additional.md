@@ -83,7 +83,7 @@ not covered by the generated API-endpoint reference above.
 | [enrich_and_reverse_game_events](additional/stats-ncaa-org.md#enrich_and_reverse_game_events) | Inserts game-break events and turns descending per-row times into |
 | [enrich_lineup](additional/stats-ncaa-org.md#enrich_lineup) | Populate `pts`/`plus_minus` from the score delta, then run the |
 | [enrich_shot_events_with_pbp](additional/stats-ncaa-org.md#enrich_shot_events_with_pbp) | Enrich each shot with its play-by-play event + on-floor lineup |
-| [enrich_stats](additional/stats-ncaa-org.md#enrich_stats) | Fold a lineup's raw events into a counting-stat tree (``protected def |
+| [enrich_stats](additional/stats-ncaa-org-2.md#enrich_stats) | Fold a lineup's raw events into a counting-stat tree (``protected def |
 | [enrich_sub_error](additional/stats-ncaa-org-2.md#enrich_sub_error) | Adds top-level location information to a single sub-error, returning a |
 | [enrich_sub_errors](additional/stats-ncaa-org-2.md#enrich_sub_errors) | Adds top-level location information to a list of sub-errors generated |
 | [ensure_ev_uniqueness](additional/stats-ncaa-org-2.md#ensure_ev_uniqueness) | Nudge each event's `min` by a tiny per-index delta so truly |
@@ -132,7 +132,7 @@ not covered by the generated API-endpoint reference above.
 | [playwright_transport](additional/stats-ncaa-org-2.md#playwright_transport) | Build the **suggested** stats.ncaa.org game-detail scraping transport. |
 | [remove_diacritics](additional/stats-ncaa-org-2.md#remove_diacritics) | Strip diacritical marks, e.g. `"Juhász"` -> `"Juhasz"` |
 | [remove_html_encoding](additional/stats-ncaa-org-2.md#remove_html_encoding) | Undo a handful of literal HTML entity escapes (``ExtractorUtils |
-| [reorder_and_reverse](additional/stats-ncaa-org-2.md#reorder_and_reverse) | Orders same-minute play-by-play events so subs never enclose the plays |
+| [reorder_and_reverse](additional/stats-ncaa-org-3.md#reorder_and_reverse) | Orders same-minute play-by-play events so subs never enclose the plays |
 | [reset_config](additional/stats-ncaa-org-3.md#reset_config) | Reset the active config to its env-var-derived defaults. |
 | [right_kind_of_shot](additional/stats-ncaa-org-3.md#right_kind_of_shot) | Whether `pbp_event`'s shot type is compatible with `shot`'s |
 | [run_iterative_adjustment_with_hca](additional/stats-ncaa-org-3.md#run_iterative_adjustment_with_hca) | KenPom-style SoS + HCA fixed-point solver (`runIterativeAdjustmentWithHCA`, `ts:306-527`). |
@@ -260,7 +260,7 @@ not covered by the generated API-endpoint reference above.
 | [calc_collinearity_diag](additional/models-and-calculators.md#calc_collinearity_diag) | Multi-collinearity diagnostic between the players in an off/def design matrix. |
 | [calc_lineup_outputs](additional/models-and-calculators.md#calc_lineup_outputs) | Build the off/def target vectors the RAPM design matrices are fit against. |
 | [calc_player_weights](additional/models-and-calculators.md#calc_player_weights) | Build the off/def player-weight (design) matrices for the RAPM solve. |
-| [calc_slow_pseudo_inverse](additional/models-and-calculators.md#calc_slow_pseudo_inverse) | Per-parameter variance terms for the ridge-regression standard errors. |
+| [calc_slow_pseudo_inverse](additional/models-and-calculators-2.md#calc_slow_pseudo_inverse) | Per-parameter variance terms for the ridge-regression standard errors. |
 | [calculate_predicted_out](additional/models-and-calculators-2.md#calculate_predicted_out) | Predict per-lineup outputs from fitted per-player RAPM values. |
 | [calculate_rapm](additional/models-and-calculators-2.md#calculate_rapm) | Apply a regression solver matrix to a target-outputs vector. |
 | [calculate_residual_error](additional/models-and-calculators-2.md#calculate_residual_error) | Sum of squared residuals between actual and predicted lineup outputs. |

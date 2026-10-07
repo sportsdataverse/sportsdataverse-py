@@ -1,10 +1,10 @@
 ---
-title: "NBA — additional Python functions — Models and calculators: AdjRapmModel–predict_margin"
-sidebar_label: "Models and calculators: AdjRapmModel–predict_margin"
+title: "NBA — additional Python functions — Models and calculators: AdjRapmModel–nba_war"
+sidebar_label: "Models and calculators: AdjRapmModel–nba_war"
 sidebar_position: 10
-description: "NBA — additional Python functions — Models and calculators: AdjRapmModel–predict_margin — function reference in sdv-py, the SportsDataverse Python package."
+description: "NBA — additional Python functions — Models and calculators: AdjRapmModel–nba_war — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# NBA — additional Python functions — Models and calculators: AdjRapmModel–predict_margin
+# NBA — additional Python functions — Models and calculators: AdjRapmModel–nba_war
 
 ### AdjRapmModel {#AdjRapmModel}
 
@@ -55,6 +55,38 @@ Delegate to fit_prior_ridge` using this model's hyperparameters.
 **Returns**
 
 `~sportsdataverse.nba.nba_model_validation.FitResult` with posterior of shape `(n_samples, 2P)`.
+
+#### AdjRapmModel.from_bpm
+
+`AdjRapmModel.from_bpm(bpm: 'pl.DataFrame', **kw: 'Any') -> "'AdjRapmModel'"`
+
+Construct from a BPM output frame (`obpm` / `dbpm` columns).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `bpm` | `DataFrame` |  | Frame with `player_id`, `obpm`, `dbpm` columns (per-100 units). |
+
+**Returns**
+
+`AdjRapmModel` whose `prior` maps each player_id to `(obpm, dbpm)`.
+
+#### AdjRapmModel.from_spm
+
+`AdjRapmModel.from_spm(spm: 'pl.DataFrame', **kw: 'Any') -> "'AdjRapmModel'"`
+
+Construct from an SPM output frame (`ospm` / `dspm` columns).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `spm` | `DataFrame` |  | Frame with `player_id`, `ospm`, `dspm` columns (per-100 units). |
+
+**Returns**
+
+`AdjRapmModel` whose `prior` maps each player_id to `(ospm, dspm)`.
 
 ### AgingCurve {#AgingCurve}
 
@@ -1503,36 +1535,4 @@ repl = calibrate_replacement_level(
     ratings, poss, pts_per_win=pts_per_win, target_total_war=300.0,
 )
 war = nba_war(ratings, poss, replacement_level=repl, pts_per_win=pts_per_win)
-```
-
-### predict_margin {#predict_margin}
-
-`predict_margin(home_net: 'float', away_net: 'float', *, home_pace: 'float', away_pace: 'float', neutral: 'bool' = False, league_id: 'str' = '00') -> 'float'`
-
-Expected home-minus-away margin from two adjusted net ratings.
-
-The AdjNet difference (points/100 possessions) is scaled by the
-matchup's `expected_possessions` before the home-court advantage
-is added.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `home_net` | `float` |  | Home team's adjusted net rating (`adj_net_rtg`). |
-| `away_net` | `float` |  | Away team's adjusted net rating. |
-| `home_pace` | `float` |  | Home team's adjusted pace. |
-| `away_pace` | `float` |  | Away team's adjusted pace. |
-| `neutral` | `bool` | `False` | True for a neutral-site game (no home-court advantage). |
-| `league_id` | `str` | `'00'` | `"00"`/`"10"`/`"20"` -- selects the fitted HFA. |
-
-**Returns**
-
-Expected margin in points (positive favors the home team).
-
-**Example**
-
-```python
-from sportsdataverse.nba.nba_game_predict import predict_margin
-predict_margin(10.0, -2.0, home_pace=100.0, away_pace=98.0, neutral=False)
 ```

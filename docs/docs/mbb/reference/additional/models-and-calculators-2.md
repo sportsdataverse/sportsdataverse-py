@@ -1,10 +1,43 @@
 ---
-title: "MBB — additional Python functions — Models and calculators: calculate_predicted–win_prob"
-sidebar_label: "Models and calculators: calculate_predicted–win_prob"
+title: "MBB — additional Python functions — Models and calculators: calc_slow–win_prob"
+sidebar_label: "Models and calculators: calc_slow–win_prob"
 sidebar_position: 10
-description: "MBB — additional Python functions — Models and calculators: calculate_predicted–win_prob — function reference in sdv-py, the SportsDataverse Python package."
+description: "MBB — additional Python functions — Models and calculators: calc_slow–win_prob — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# MBB — additional Python functions — Models and calculators: calculate_predicted–win_prob
+# MBB — additional Python functions — Models and calculators: calc_slow–win_prob
+
+### calc_slow_pseudo_inverse {#calc_slow_pseudo_inverse}
+
+`calc_slow_pseudo_inverse(player_weight_matrix: 'NDArray[np.float64]', ridge_lambda: 'float', ctx: 'RapmPlayerContext') -> 'NDArray[np.float64]'`
+
+Per-parameter variance terms for the ridge-regression standard errors.
+
+Faithful port of the private `RapmUtils.calcSlowPseudoInverse`
+(`RapmUtils.ts:1544-1557`): the same `(XᵀX + ridge_lambda·I)⁻¹` as
+`slow_regression`'s `bottomInv`, but this function returns the
+square root of its diagonal instead of the full solver matrix -- the
+`paramErrs` term consumed by the standard-error formula (see
+`calculate_sd_rapm`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `player_weight_matrix` | `NDArray[float64]` |  | The off/def design matrix, same shape as `slow_regression`'s. |
+| `ridge_lambda` | `float` |  | The Tikhonov regularization strength (must match the `ridge_lambda` used to build the corresponding `slow_regression` solver, for the SEs to be meaningful). |
+| `ctx` | `RapmPlayerContext` |  | A `RapmPlayerContext` -- only `ctx["num_players"]` is read. |
+
+**Returns**
+
+A length-`num_players` array, `sqrt(diag((XᵀX + λI)⁻¹))`.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_rapm import calc_slow_pseudo_inverse
+
+param_errs = calc_slow_pseudo_inverse(x, 1.0, ctx)
+```
 
 ### calculate_predicted_out {#calculate_predicted_out}
 

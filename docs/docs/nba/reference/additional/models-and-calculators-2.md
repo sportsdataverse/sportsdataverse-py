@@ -1,10 +1,42 @@
 ---
-title: "NBA — additional Python functions — Models and calculators: predict_total–win_prob"
-sidebar_label: "Models and calculators: predict_total–win_prob"
+title: "NBA — additional Python functions — Models and calculators: predict_margin–win_prob"
+sidebar_label: "Models and calculators: predict_margin–win_prob"
 sidebar_position: 11
-description: "NBA — additional Python functions — Models and calculators: predict_total–win_prob — function reference in sdv-py, the SportsDataverse Python package."
+description: "NBA — additional Python functions — Models and calculators: predict_margin–win_prob — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# NBA — additional Python functions — Models and calculators: predict_total–win_prob
+# NBA — additional Python functions — Models and calculators: predict_margin–win_prob
+
+### predict_margin {#predict_margin}
+
+`predict_margin(home_net: 'float', away_net: 'float', *, home_pace: 'float', away_pace: 'float', neutral: 'bool' = False, league_id: 'str' = '00') -> 'float'`
+
+Expected home-minus-away margin from two adjusted net ratings.
+
+The AdjNet difference (points/100 possessions) is scaled by the
+matchup's `expected_possessions` before the home-court advantage
+is added.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `home_net` | `float` |  | Home team's adjusted net rating (`adj_net_rtg`). |
+| `away_net` | `float` |  | Away team's adjusted net rating. |
+| `home_pace` | `float` |  | Home team's adjusted pace. |
+| `away_pace` | `float` |  | Away team's adjusted pace. |
+| `neutral` | `bool` | `False` | True for a neutral-site game (no home-court advantage). |
+| `league_id` | `str` | `'00'` | `"00"`/`"10"`/`"20"` -- selects the fitted HFA. |
+
+**Returns**
+
+Expected margin in points (positive favors the home team).
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_game_predict import predict_margin
+predict_margin(10.0, -2.0, home_pace=100.0, away_pace=98.0, neutral=False)
+```
 
 ### predict_total {#predict_total}
 
