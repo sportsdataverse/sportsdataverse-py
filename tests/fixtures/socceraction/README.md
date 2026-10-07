@@ -14,8 +14,10 @@
 | `8658_xt_fit.json` | `ExpectedThreat(l=16, w=12).fit(actions)` on those actions alone, written by `save_model` (a bare 12 x 16 nested list; row 0 = top of the pitch). | same run |
 | `8658_xt_fit_log.txt` | versions and the iteration count socceraction printed. | same run |
 
-The script runs only in a throwaway venv (`python 3.12`, `numpy<2`, `socceraction==1.5.3`, `statsbombpy`); socceraction's
-pins are incompatible with sdv-py's lock. The oracle is the direct converter, not socceraction's kloppy converter, because
+The script runs only in a throwaway venv, installed with
+`uv pip install --python <venv>/Scripts/python.exe "socceraction==1.5.3" "numpy<2" "statsbombpy>=1.13" "multimethod<2"`
+(`multimethod<2` is required: pandera 0.17.2 fails to import against multimethod 2.x). Resolved versions: socceraction 1.5.3,
+numpy 1.26.4, multimethod 1.12, pandera 0.17.2, python 3.12.6. socceraction's pins are incompatible with sdv-py's lock. The oracle is the direct converter, not socceraction's kloppy converter, because
 the latter requests `Orientation.HOME_AWAY`, which flips the home side each period in kloppy 3.19.
 
 Licenses: socceraction is MIT (c) 2019 KU Leuven Machine Learning Research Group. StatsBomb open data

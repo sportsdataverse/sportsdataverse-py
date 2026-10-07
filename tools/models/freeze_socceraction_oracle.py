@@ -3,7 +3,7 @@
 Run ONCE in a throwaway virtual environment (never sdv-py's):
 
     uv venv --python 3.12 /tmp/sa-oracle
-    uv pip install --python /tmp/sa-oracle/Scripts/python.exe "socceraction==1.5.3" "numpy<2" "statsbombpy>=1.13"
+    uv pip install --python /tmp/sa-oracle/Scripts/python.exe "socceraction==1.5.3" "numpy<2" "statsbombpy>=1.13" "multimethod<2"
     /tmp/sa-oracle/Scripts/python.exe tools/models/freeze_socceraction_oracle.py --game-id 8658 --out tests/fixtures/socceraction
 
 Writes ``<game_id>_spadl.csv`` (socceraction's DIRECT StatsBomb converter, with names, after
