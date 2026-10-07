@@ -31,6 +31,30 @@ from typing import Callable, Dict
 import pytest
 
 
+@pytest.fixture(autouse=True)
+def _clear_codegen_caches():
+    """Drop every process-level codegen cache before AND after each test.
+
+    ``generate.py`` caches its YAML reads (``_releases_cfg``, ``_apis_for``,
+    ``_generated_origins``, ``_family_rank``) and ``sources.load`` caches the registry,
+    because one real run re-reads them per league. In a test session that is a leak:
+    a test that monkeypatches ``spec.load_releases`` gets the REAL config back from a
+    cache an earlier test filled, and passes or fails by test order. Clearing on both
+    sides means each test sees exactly what it patched, and leaves nothing patched behind.
+    The session-scoped ``first_render`` cache below is separate and unaffected.
+    """
+    from tools.codegen import generate, sources
+
+    def clear() -> None:
+        for fn in (generate._releases_cfg, generate._apis_for, generate._generated_origins, generate._family_rank):
+            fn.cache_clear()
+        sources.load.cache_clear()
+
+    clear()
+    yield
+    clear()
+
+
 @pytest.fixture(scope="session")
 def first_render() -> Callable[[Callable[[], Dict[str, str]]], Dict[str, str]]:
     """Return a getter that renders each renderer at most once per session.
