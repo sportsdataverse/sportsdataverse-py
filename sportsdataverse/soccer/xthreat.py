@@ -25,12 +25,19 @@ Reference: Singh, Karun. "Introducing Expected Threat (xT)", 2019, https://karun
 
 from __future__ import annotations
 
+import json
+from pathlib import Path
+from typing import TYPE_CHECKING, Any, Optional, Union
+
 import numpy as np
 import polars as pl
 
 from sportsdataverse.soccer.spadl import FIELD_LENGTH, FIELD_WIDTH
 
-__all__ = ["NotFittedError"]
+if TYPE_CHECKING:
+    pass
+
+__all__ = ["XThreat", "NotFittedError"]
 
 GRID_W: int = 12  # cells across the width (y)
 GRID_L: int = 16  # cells along the length (x)
@@ -184,19 +191,13 @@ def _action_prob(actions: pl.DataFrame, l: int, w: int) -> tuple[np.ndarray, np.
 def _move_transition_matrix(actions: pl.DataFrame, l: int, w: int) -> np.ndarray:  # noqa: E741
     """Compute successful move transition matrix.
 
-    Parameters
-    ----------
-    actions : pl.DataFrame
-        SPADL actions with type_name, result_name, start_x, start_y, end_x, end_y columns.
-    l : int
-        Number of cells along length.
-    w : int
-        Number of cells along width.
+    Args:
+        actions: SPADL actions with type_name, result_name, start_x, start_y, end_x, end_y columns.
+        l: Number of cells along length.
+        w: Number of cells along width.
 
-    Returns
-    -------
-    np.ndarray
-        Shape (w*l, w*l) transition matrix. Row i sums to 1 if cell i had moves.
+    Returns:
+        Shape (w*l, w*l) transition matrix. Rows sum to at most 1 (failed moves stay in denominator).
     """
     m = _moves(actions).drop_nulls(["start_x", "start_y", "end_x", "end_y"])
     start = _flat_indexes(*_xy(m, "start"), l, w)
@@ -207,3 +208,107 @@ def _move_transition_matrix(actions: pl.DataFrame, l: int, w: int) -> np.ndarray
     T = np.zeros((n, n))
     np.add.at(T, (start[ok], end[ok]), 1.0)
     return _safe_divide(T, start_counts[:, None])
+
+
+class XThreat:
+    """A fitted Expected Threat grid.
+
+    Args:
+        grid: An existing ``(w, l)`` array (row 0 = the top of the pitch); ``None`` for an unfitted model.
+        l: Cells along the pitch length.
+        w: Cells across the pitch width.
+        eps: Convergence tolerance on the absolute change of every cell.
+        max_iter: Iteration cap; exceeding it raises ``RuntimeError``.
+        meta: Free-form provenance stored in the JSON.
+
+    Example:
+        Fit on SPADL actions and value the moves::
+
+            from sportsdataverse.soccer import XThreat, soccer_open_events, soccer_spadl
+            actions = soccer_spadl(soccer_open_events("statsbomb", 8658))
+            model = XThreat().fit(actions)
+            actions = actions.with_columns(model.rate(actions))
+
+    See Also:
+        * `socceraction`_ -- the original implementation (MIT)
+        * `Expected Threat`_ -- Karun Singh's description of the model
+
+    .. _socceraction: https://github.com/ML-KULeuven/socceraction
+    .. _Expected Threat: https://karun.in/blog/expected-threat.html
+    """
+
+    def __init__(
+        self,
+        grid: Optional[np.ndarray] = None,
+        *,
+        l: int = GRID_L,  # noqa: E741
+        w: int = GRID_W,
+        eps: float = 1e-5,
+        max_iter: int = 1000,
+        meta: Optional[dict[str, Any]] = None,
+    ) -> None:
+        self.l, self.w, self.eps, self.max_iter = l, w, eps, max_iter
+        self.xT: np.ndarray = np.zeros((w, l)) if grid is None else np.asarray(grid, dtype=np.float64)
+        if self.xT.shape != (w, l):
+            raise ValueError(f"grid must have shape ({w}, {l}); got {self.xT.shape}")
+        self.iterations = 0
+        self.meta: dict[str, Any] = dict(meta or {})
+
+    def fit(self, actions: pl.DataFrame) -> XThreat:
+        """Fit the grid on SPADL actions (``type_name``, ``result_name``, start/end coordinates)."""
+        p_scoring = _scoring_prob(actions, self.l, self.w)
+        p_shot, p_move = _action_prob(actions, self.l, self.w)
+        T = _move_transition_matrix(actions, self.l, self.w)
+        gs = p_scoring * p_shot
+        xT = np.zeros((self.w, self.l))
+        for it in range(1, self.max_iter + 1):
+            new = gs + p_move * (T @ xT.ravel()).reshape(self.w, self.l)
+            done = np.abs(new - xT).max() <= self.eps
+            xT = new
+            if done:
+                self.iterations = it
+                break
+        else:
+            raise RuntimeError(f"xT did not converge in {self.max_iter} iterations (eps={self.eps})")
+        self.xT = xT
+        return self
+
+    def rate(self, actions: pl.DataFrame) -> pl.Series:
+        """``xt_value`` per action: end-cell minus start-cell value for successful passes, dribbles and crosses; null otherwise."""
+        if not np.any(self.xT):
+            raise NotFittedError("the xT grid is all zeros; fit() or load_xthreat_model() first")
+        values = np.full(actions.height, np.nan)
+        ok = (
+            (actions["type_name"].is_in(list(MOVE_TYPES)) & (actions["result_name"] == "success"))
+            .fill_null(False)
+            .to_numpy()
+        )
+        if ok.any():
+            sx, sy = _xy(actions.filter(pl.Series(ok)), "start")
+            ex, ey = _xy(actions.filter(pl.Series(ok)), "end")
+            good = ~(np.isnan(sx) | np.isnan(sy) | np.isnan(ex) | np.isnan(ey))
+            sxi, syj = _cell_indexes(sx[good], sy[good], self.l, self.w)
+            exi, eyj = _cell_indexes(ex[good], ey[good], self.l, self.w)
+            out = np.full(ok.sum(), np.nan)
+            out[good] = self.xT[self.w - 1 - eyj, exi] - self.xT[self.w - 1 - syj, sxi]
+            values[ok] = out
+        return pl.Series("xt_value", values, dtype=pl.Float64).fill_nan(None)
+
+    def to_json(self, path: Union[str, Path]) -> None:
+        """Write ``{"xT": grid, "w": .., "l": .., "meta": {..}}`` (readable by ``from_json``)."""
+        Path(path).write_text(
+            json.dumps({"xT": self.xT.tolist(), "w": self.w, "l": self.l, "meta": self.meta}, indent=2),
+            encoding="utf-8",
+        )
+
+    @classmethod
+    def from_json(cls, path: Union[str, Path]) -> XThreat:
+        """Read this module's format or socceraction's bare nested list."""
+        data: Any = json.loads(Path(path).read_text(encoding="utf-8"))
+        if isinstance(data, list):
+            grid: np.ndarray = np.asarray(data, dtype=np.float64)
+            return cls(grid, l=grid.shape[1], w=grid.shape[0])
+        grid = np.asarray(data["xT"], dtype=np.float64)
+        return cls(
+            grid, l=int(data.get("l", grid.shape[1])), w=int(data.get("w", grid.shape[0])), meta=data.get("meta")
+        )

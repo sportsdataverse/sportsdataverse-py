@@ -2,10 +2,12 @@
 
 from __future__ import annotations
 
+import json
 from pathlib import Path
 
 import numpy as np
 import polars as pl
+import pytest
 
 from sportsdataverse.soccer import xthreat as xt
 
@@ -61,3 +63,72 @@ def test_scoring_prob_only_counts_open_play_shots() -> None:
 def test_transition_matrix_rows_sum_to_at_most_one() -> None:
     T = xt._move_transition_matrix(_oracle_actions(), 16, 12)
     assert T.shape == (192, 192) and T.min() >= 0 and T.sum(axis=1).max() <= 1 + 1e-12
+
+
+def test_fit_reproduces_the_socceraction_grid() -> None:
+    model = xt.XThreat().fit(_oracle_actions())
+    oracle = np.array(json.loads(ORACLE_GRID.read_text(encoding="utf-8")))
+    assert model.xT.shape == oracle.shape == (12, 16)
+    assert np.abs(model.xT - oracle).max() < 1e-6
+    assert 0 <= model.xT.min() and model.xT.max() <= 1
+
+
+def test_fit_with_no_moves_is_a_zero_grid() -> None:
+    only_shots = _oracle_actions().filter(pl.col("type_name") == "shot")
+    model = xt.XThreat().fit(only_shots)
+    assert model.xT.shape == (12, 16) and np.isfinite(model.xT).all()
+
+
+def test_null_coordinates_are_excluded_from_every_count() -> None:
+    a = _oracle_actions()
+    poisoned = pl.concat([a, a.head(3).with_columns(pl.lit(None, dtype=pl.Float64).alias("end_x"))])
+    assert np.abs(xt.XThreat().fit(poisoned).xT - xt.XThreat().fit(a).xT).max() < 1e-9
+
+
+def test_max_iter_raises() -> None:
+    with pytest.raises(RuntimeError):
+        xt.XThreat(max_iter=1, eps=1e-300).fit(_oracle_actions())
+
+
+def test_rate_values_only_successful_moves() -> None:
+    a = _oracle_actions()
+    model = xt.XThreat().fit(a)
+    s = model.rate(a)
+    assert s.dtype == pl.Float64 and s.name == "xt_value" and len(s) == a.height
+    is_move = (a["type_name"].is_in(list(xt.MOVE_TYPES)) & (a["result_name"] == "success")).to_numpy()
+    assert s.is_null().to_numpy()[~is_move].all() and (~s.is_null().to_numpy()[is_move]).all()
+
+
+def test_rate_with_no_moves_is_all_null() -> None:
+    a = _oracle_actions()
+    model = xt.XThreat().fit(a)
+    assert model.rate(a.filter(pl.col("type_name") == "shot")).is_null().all()
+
+
+def test_rate_own_box_to_opponent_box_is_positive() -> None:
+    model = xt.XThreat().fit(_oracle_actions())
+    row = pl.DataFrame(
+        {
+            "type_name": ["pass"],
+            "result_name": ["success"],
+            "start_x": [10.0],
+            "start_y": [34.0],
+            "end_x": [95.0],
+            "end_y": [34.0],
+        }
+    )
+    assert model.rate(row)[0] > 0
+
+
+def test_not_fitted_raises() -> None:
+    with pytest.raises(xt.NotFittedError):
+        xt.XThreat().rate(_oracle_actions())
+
+
+def test_json_round_trip_and_socceraction_format(tmp_path: Path) -> None:
+    model = xt.XThreat().fit(_oracle_actions())
+    model.to_json(tmp_path / "m.json")
+    back = xt.XThreat.from_json(tmp_path / "m.json")
+    assert np.array_equal(back.xT, model.xT) and back.meta == model.meta
+    bare = xt.XThreat.from_json(ORACLE_GRID)  # socceraction's save_model format
+    assert bare.xT.shape == (12, 16)
