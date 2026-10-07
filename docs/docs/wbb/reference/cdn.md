@@ -186,19 +186,19 @@ One game's espn.com play-by-play page data. The gamepackageJSON block is a Site 
 
 | col_name | type | description |
 |---|---|---|
-| `station` | character | Station full name (e.g. "FanDuel Sports Network Detroit"). |
+| `station` | character |  |
 | `lang` | character | Lang. |
 | `region` | character | Region label. |
 | `is_national` | logical | Boolean flag indicating whether the broadcast is a nationally distributed feed. |
 | `type_id` | character | Type id. |
 | `type_short_name` | character | Type short name. |
 | `type_long_name` | character | Type long name. |
-| `type_slug` | character | Broadcast-type slug (e.g. `streaming`, `tv`). |
+| `type_slug` | character |  |
 | `market_id` | character | Unique identifier for market. |
 | `market_type` | character | Market type. |
-| `media_call_letters` | character | Broadcast call letters for the outlet. |
-| `media_name` | character | ESPN media name for the outlet. |
-| `media_short_name` | character | Short ESPN media name for the outlet. |
+| `media_call_letters` | character |  |
+| `media_name` | character |  |
+| `media_short_name` | character |  |
 
 **format**
 
@@ -425,19 +425,19 @@ One game's espn.com box-score page data, parsed like a Site v2 summary. For foot
 
 | col_name | type | description |
 |---|---|---|
-| `station` | character | Station full name (e.g. "FanDuel Sports Network Detroit"). |
+| `station` | character |  |
 | `lang` | character | Lang. |
 | `region` | character | Region label. |
 | `is_national` | logical | Boolean flag indicating whether the broadcast is a nationally distributed feed. |
 | `type_id` | character | Type id. |
 | `type_short_name` | character | Type short name. |
 | `type_long_name` | character | Type long name. |
-| `type_slug` | character | Broadcast-type slug (e.g. `streaming`, `tv`). |
+| `type_slug` | character |  |
 | `market_id` | character | Unique identifier for market. |
 | `market_type` | character | Market type. |
-| `media_call_letters` | character | Broadcast call letters for the outlet. |
-| `media_name` | character | ESPN media name for the outlet. |
-| `media_short_name` | character | Short ESPN media name for the outlet. |
+| `media_call_letters` | character |  |
+| `media_name` | character |  |
+| `media_short_name` | character |  |
 
 **format**
 
@@ -546,7 +546,7 @@ espn.com schedule page data, one row per game: up to 7 days starting at `date` (
 | `home_logo` | character | Home team logo URL. |
 | `home_score` | character | Home team's score. For cricket, the innings string (e.g. '161/5 (18/20 ov, target 156)'). |
 | `home_winner` | logical | Home team's winner. |
-| `home_rank` | character | Home team rank (if ranked). |
+| `home_rank` | character |  |
 | `away_id` | character | Unique identifier for away. |
 | `away_name` | character | Away name. |
 | `away_abbreviation` | character | Away team's abbreviation. |
@@ -557,7 +557,7 @@ espn.com schedule page data, one row per game: up to 7 days starting at `date` (
 | `away_logo` | character | Away team logo URL. |
 | `away_score` | character | Away team's score. For cricket, the innings string. |
 | `away_winner` | logical | Away team's winner. |
-| `away_rank` | character | Away team rank (if ranked). |
+| `away_rank` | character |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -628,7 +628,7 @@ espn.com scoreboard page data for one day (one week for football), one row per g
 | `home_logo` | character | Home team logo URL. |
 | `home_score` | character | Home team's score. For cricket, the innings string (e.g. '161/5 (18/20 ov, target 156)'). |
 | `home_winner` | logical | Home team's winner. |
-| `home_rank` | character | Home team rank (if ranked). |
+| `home_rank` | character |  |
 | `away_id` | character | Unique identifier for away. |
 | `away_name` | character | Away name. |
 | `away_abbreviation` | character | Away team's abbreviation. |
@@ -639,7 +639,7 @@ espn.com scoreboard page data for one day (one week for football), one row per g
 | `away_logo` | character | Away team logo URL. |
 | `away_score` | character | Away team's score. For cricket, the innings string. |
 | `away_winner` | logical | Away team's winner. |
-| `away_rank` | character | Away team rank (if ranked). |
+| `away_rank` | character |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 

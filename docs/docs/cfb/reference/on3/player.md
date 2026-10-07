@@ -1,7 +1,7 @@
 ---
 title: "CFB — On3 Recruit Database (api.on3.com) — Player"
 sidebar_label: "Player"
-sidebar_position: 5
+sidebar_position: 6
 description: "CFB — On3 Recruit Database (api.on3.com) — Player — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---
@@ -25,23 +25,23 @@ GET /rdb/v1/player/{personKey}/all-rankings
 
 | col_name | type | description |
 |---|---|---|
-| `type` | character | Record-type category (e.g. `total`, `home`, `road`). |
-| `link` | character | API link to the game feed. |
+| `type` | character | Type label of the row (vocabulary depends on the endpoint). |
+| `link` | character | Site-relative On3 link for the row, when any. |
 | `ranking_key` | integer | On3 key of the ranking cycle the row belongs to. |
-| `ranking_year` | integer |  |
-| `ranking_type` | character | Poll type code (e.g. `ap`, `coaches`, `cfp`). |
-| `rating` | numeric | Overall SP+ rating (Bill Connelly methodology, in points per game). |
+| `ranking_year` | integer | Ranking cycle year. |
+| `ranking_type` | character | Ranking type (e.g. Player, TransferPortal, Team). |
+| `rating` | numeric | On3 rating of the player (0-100 scale), when published. |
 | `sport` | character | Nested On3 sport object for the ranking row (stringified). |
 | `class_year` | integer | Recruiting class year the ranking covers. |
-| `state_rank` | integer | State ranking. |
+| `state_rank` | integer | Rank within the player's state in the ranking. |
 | `state_abbr` | character | Two-letter abbreviation of the player's home state. |
-| `position_rank` | integer | Position ranking. |
-| `position_abbr` | character | Position abbreviation. |
-| `overall_rank` | integer | Overall recruit ranking (top recruits only; may be `NA`). |
-| `stars` | integer | Recruit star rating on the 247Sports scale (2-5). |
+| `position_rank` | integer | Rank at the player's position in the ranking. |
+| `position_abbr` | character | Position abbreviation the ranking entry was assigned at. |
+| `overall_rank` | integer | Overall national rank in the ranking. |
+| `stars` | integer | Star rating (2-5). |
 | `five_star_plus` | logical | Whether On3 designates the player a Five-Star Plus+ prospect. |
 | `nearly_five_star_plus` | logical | On3 flag that the player narrowly missed the Five-Star Plus+ designation. |
-| `change_1` | character |  |
+| `change_1` | character | Direction of the rating change since the previous update (e.g. Increase); the numeric suffix is a json_normalize de-duplication artefact. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -72,10 +72,10 @@ GET /rdb/v1/player/{personKey}/database-updates
 | col_name | type | description |
 |---|---|---|
 | `key` | integer | On3 RDB key for the database-update entry. |
-| `type` | character | Record-type category (e.g. `total`, `home`, `road`). |
-| `text` | character | Full play description. |
+| `type` | character | Type label of the row (vocabulary depends on the endpoint). |
+| `text` | character | Text of the update as On3 displays it. |
 | `replacement_text` | character | Rendered text of the update entry (with references substituted in). |
-| `link` | character | API link to the game feed. |
+| `link` | character | Site-relative On3 link for the row, when any. |
 | `date_added` | integer | Date the update entry was logged. |
 | `date_occurred` | integer | Date the underlying event occurred. |
 | `object_key` | integer | On3 key of the object the update refers to. |
@@ -115,20 +115,20 @@ GET /rdb/v1/player/{personKey}/images
 | `domain_override` | character | Override CDN domain for serving the image, when set. |
 | `domain` | character | CDN domain the image is served from. |
 | `source_override` | character | Override source attribution for the image, when set. |
-| `source` | character | News source. |
-| `title` | character | Specific role title for the assignment. |
-| `description` | character | ESPN's description of the stat. |
+| `source` | character | CDN-relative source path of the image asset. |
+| `title` | character | Title of the row's record. |
+| `description` | character | Free-text description or biography shipped by On3. |
 | `caption` | character | Caption text for the image. |
-| `category` | character | CFBD stats category name (e.g. passing, rushing, defensive). |
+| `category` | character | Category label On3 attaches to the row. |
 | `alt_text` | character | Alt text for the image. |
-| `height` | integer | Listed height (inches). |
+| `height` | integer | Height as a formatted string (e.g. '6-3.5'). |
 | `width` | integer | Image width in pixels. |
 | `asset_type` | character | Type of the asset (e.g. image) in On3's asset system. |
 | `file_system` | character | Storage file system the asset lives on (On3 asset metadata). |
 | `path` | character | Storage path of the image file. |
-| `type` | character | Record-type category (e.g. `total`, `home`, `road`). |
+| `type` | character | Type label of the row (vocabulary depends on the endpoint). |
 | `thumbnail` | character | URL or path of the image's thumbnail rendition. |
-| `duration` | integer | Duration. |
+| `duration` | integer | Duration of the asset when it is a video (0 for images). |
 | `mime_type` | character | MIME type of the image file (e.g. image/jpeg). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
@@ -218,28 +218,28 @@ GET /rdb/v1/player/{personKey}/rankings
 |---|---|---|
 | `key` | integer | On3 RDB key for the player's ranking row. |
 | `ranking_key` | integer | On3 key of the ranking cycle the row belongs to. |
-| `rating` | integer | Overall SP+ rating (Bill Connelly methodology, in points per game). |
-| `state_rank` | integer | State ranking. |
+| `rating` | integer | On3 rating of the player (0-100 scale), when published. |
+| `state_rank` | integer | Rank within the player's state in the ranking. |
 | `state_abbr` | character | Two-letter abbreviation of the player's home state. |
-| `position_rank` | integer | Position ranking. |
-| `position_abbr` | character | Position abbreviation. |
-| `overall_rank` | integer | Overall recruit ranking (top recruits only; may be `NA`). |
-| `stars` | integer | Recruit star rating on the 247Sports scale (2-5). |
+| `position_rank` | integer | Rank at the player's position in the ranking. |
+| `position_abbr` | character | Position abbreviation the ranking entry was assigned at. |
+| `overall_rank` | integer | Overall national rank in the ranking. |
+| `stars` | integer | Star rating (2-5). |
 | `consensus_rating` | numeric | Player's industry-consensus rating (blend of the major recruiting services). |
 | `consensus_state_rank` | integer | Player's consensus rank within their home state. |
 | `consensus_position_rank` | integer | Player's consensus rank at their position. |
 | `consensus_overall_rank` | integer | Player's national consensus rank. |
 | `consensus_stars` | integer | Player's star rating under the industry consensus. |
-| `strength` | integer | Strength label (Even, Power Play, Shorthanded). |
+| `strength` | integer | Strength score On3 attaches to the ranking entry. |
 | `five_star_plus` | logical | Whether On3 designates the player a Five-Star Plus+ prospect. |
-| `ranking_type` | character | Poll type code (e.g. `ap`, `coaches`, `cfp`). |
-| `ranking_key_2` | integer |  |
-| `ranking_sport_key` | integer |  |
-| `ranking_sport_key_2` | integer |  |
-| `ranking_sport_name` | character |  |
-| `ranking_year` | integer |  |
-| `change_38` | character |  |
-| `consensus_change_41` | character |  |
+| `ranking_type` | character | Ranking type (e.g. Player, TransferPortal, Team). |
+| `ranking_key_2` | integer | Ranking key repeated from the nested ranking object (json_normalize de-duplication suffix). |
+| `ranking_sport_key` | integer | On3 numeric key of the sport the ranking is in. |
+| `ranking_sport_key_2` | integer | On3 numeric key of the sport the ranking is in (json_normalize de-duplication suffix). |
+| `ranking_sport_name` | character | Name of the sport the ranking is in (e.g. Football). |
+| `ranking_year` | integer | Ranking cycle year. |
+| `change_38` | character | Direction of the On3 rating change since the previous update (e.g. Increase); the numeric suffix is a json_normalize de-duplication artefact. |
+| `consensus_change_41` | character | Direction of the consensus rating change since the previous update (e.g. Increase); the numeric suffix is a json_normalize de-duplication artefact. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -276,19 +276,19 @@ GET /rdb/v1/player/{personKey}/profile
 | `ranking_key` | integer | On3 key of the ranking cycle the profile's rating belongs to. |
 | `person_sport_key` | integer | On3 key of the athlete-sport profile (person x sport). |
 | `oracle_key` | character | On3's internal oracle identifier for the player record. |
-| `name` | character | Position name (e.g. `Quarterback`). |
-| `slug` | character | URL slug for the team. |
-| `high_school_name` | character | Recruit high-school name. |
+| `name` | character | Display name of the row's record. |
+| `slug` | character | URL slug of the row's record on On3. |
+| `high_school_name` | character | High-school display name (top-level field). |
 | `hometown_name` | character | Player's hometown, as listed by On3. |
-| `position_abbreviation` | character | Position abbreviation (e.g. `QB`). |
+| `position_abbreviation` | character | Position abbreviation on the record. |
 | `class_rank` | character | Player's rank within their recruiting class. |
-| `height` | character | Listed height (inches). |
-| `weight` | integer | Listed weight (lbs). |
+| `height` | character | Height as a formatted string (e.g. '6-3.5'). |
+| `weight` | integer | Weight in pounds. |
 | `class_year` | integer | Player's recruiting class year. |
 | `degree` | character | Degree the player earned or is pursuing, when listed. |
-| `age` | integer | Age as of last pipeline build, rounded to one decimal. Pipeline is built on a weekly basis. |
+| `age` | integer | Age in years, when known. |
 | `sports` | character | Sports the player is profiled in, as a stringified list. |
-| `description` | character | ESPN's description of the stat. |
+| `description` | character | Free-text description or biography shipped by On3. |
 | `bio_pro_prospect` | character | Bio text framing the player as a pro prospect (On3 RDB). |
 | `bio_college_recruit` | character | Bio text framing the player as a college recruit (On3 RDB). |
 | `organization_level` | character | Level of the player's current organization (e.g. high school, college, professional). |
@@ -304,178 +304,178 @@ GET /rdb/v1/player/{personKey}/profile
 | `visibility` | character | Profile visibility setting on On3. |
 | `tier` | character | On3 profile tier classification for the player. |
 | `review_status` | character | Editorial review status of the profile in the On3 database. |
-| `jersey_number` | integer | Jersey number. Often useful for joins by name/team/jersey. |
+| `jersey_number` | integer | Jersey number, when listed. |
 | `badge` | character | Profile badge assigned by On3, when any. |
 | `ncaa_id` | character | Player's NCAA identifier, when known to On3. |
 | `managed_by_user` | logical | On3 user account that manages the player's profile, when claimed. |
-| `ranking_key_2` | integer |  |
-| `ranking_rating` | numeric |  |
-| `ranking_stars` | integer |  |
-| `ranking_national_rank` | integer |  |
-| `ranking_position_rank` | integer |  |
-| `ranking_state_rank` | integer |  |
-| `ranking_position_abbr` | character |  |
-| `ranking_state_abbr` | character |  |
-| `ranking_five_star_plus` | logical |  |
-| `high_school_key` | integer |  |
-| `high_school_full_name` | character |  |
-| `high_school_name_2` | character |  |
-| `high_school_known_as` | character |  |
-| `high_school_mascot` | character |  |
-| `high_school_abbreviation` | character |  |
-| `high_school_asset_url` | character |  |
-| `high_school_default_asset_key` | integer |  |
-| `high_school_default_asset_domain_override` | character |  |
-| `high_school_default_asset_domain` | character |  |
-| `high_school_default_asset_source_override` | character |  |
-| `high_school_default_asset_source` | character |  |
-| `high_school_default_asset_title` | character |  |
-| `high_school_default_asset_description` | character |  |
-| `high_school_default_asset_caption` | character |  |
-| `high_school_default_asset_category` | character |  |
-| `high_school_default_asset_alt_text` | character |  |
-| `high_school_default_asset_height` | integer |  |
-| `high_school_default_asset_width` | integer |  |
-| `high_school_default_asset_asset_type` | character |  |
-| `high_school_default_asset_file_system` | character |  |
-| `high_school_default_asset_path` | character |  |
-| `high_school_default_asset_type` | character |  |
-| `high_school_default_asset_thumbnail` | character |  |
-| `high_school_default_asset_duration` | integer |  |
-| `high_school_default_asset_mime_type` | character |  |
-| `high_school_slug` | character |  |
-| `high_school_primary_color` | character |  |
-| `high_school_org_type` | character |  |
-| `high_school_org_type_enum` | character |  |
-| `high_school_division` | character |  |
-| `high_school_site_keys` | character |  |
-| `high_school_url_slug` | character |  |
-| `hometown_state_key` | integer |  |
-| `hometown_state_name` | character |  |
-| `hometown_state_abbreviation` | character | Recruit hometown state abbreviation. |
-| `hometown_state_country_key` | integer |  |
-| `current_state_key` | integer |  |
-| `current_state_name` | character |  |
-| `current_state_abbreviation` | character |  |
-| `current_state_country_key` | integer |  |
-| `default_asset_key` | integer |  |
-| `default_asset_domain_override` | character |  |
-| `default_asset_domain` | character |  |
-| `default_asset_source_override` | character |  |
-| `default_asset_source` | character |  |
-| `default_asset_title` | character |  |
-| `default_asset_description` | character |  |
-| `default_asset_caption` | character |  |
-| `default_asset_category` | character |  |
-| `default_asset_alt_text` | character |  |
-| `default_asset_height` | integer |  |
-| `default_asset_width` | integer |  |
-| `default_asset_asset_type` | character |  |
-| `default_asset_file_system` | character |  |
-| `default_asset_path` | character |  |
-| `default_asset_type` | character |  |
-| `default_asset_thumbnail` | character |  |
-| `default_asset_duration` | integer |  |
-| `default_asset_mime_type` | character |  |
-| `primary_position_key` | integer |  |
-| `primary_position_name` | character | Primary fielding position name. |
-| `primary_position_abbreviation` | character | Primary position abbreviation. |
-| `primary_position_sport_key` | integer |  |
-| `primary_position_sport_key_2` | integer |  |
-| `primary_position_sport_name` | character |  |
-| `primary_position_sport_slug` | character |  |
-| `primary_position_sport_abbreviation` | character |  |
-| `primary_position_sport_is_rankable` | logical |  |
-| `primary_position_sport_is_industry_rankable` | logical |  |
-| `primary_position_sport_is_scoutable` | logical |  |
-| `primary_position_position_type` | character |  |
-| `default_sport_key` | integer |  |
-| `default_sport_name` | character |  |
-| `player_status_type` | character |  |
-| `player_status_short_term_signee` | logical |  |
-| `player_status_date` | character |  |
-| `player_status_committed_asset_key` | integer |  |
-| `player_status_committed_asset_url` | character |  |
-| `player_status_committed_asset_slug` | character |  |
-| `player_status_committed_asset_full_name` | character |  |
-| `player_status_committed_asset_res_key` | integer |  |
-| `player_status_committed_asset_res_domain_override` | character |  |
-| `player_status_committed_asset_res_domain` | character |  |
-| `player_status_committed_asset_res_source_override` | character |  |
-| `player_status_committed_asset_res_source` | character |  |
-| `player_status_committed_asset_res_title` | character |  |
-| `player_status_committed_asset_res_description` | character |  |
-| `player_status_committed_asset_res_caption` | character |  |
-| `player_status_committed_asset_res_category` | character |  |
-| `player_status_committed_asset_res_alt_text` | character |  |
-| `player_status_committed_asset_res_height` | integer |  |
-| `player_status_committed_asset_res_width` | integer |  |
-| `player_status_committed_asset_res_asset_type` | character |  |
-| `player_status_committed_asset_res_file_system` | character |  |
-| `player_status_committed_asset_res_path` | character |  |
-| `player_status_committed_asset_res_type` | character |  |
-| `player_status_committed_asset_res_thumbnail` | character |  |
-| `player_status_committed_asset_res_duration` | integer |  |
-| `player_status_committed_asset_res_mime_type` | character |  |
-| `player_status_transferred_asset_key` | integer |  |
-| `player_status_transferred_asset_url` | character |  |
-| `player_status_transferred_asset_slug` | character |  |
-| `player_status_transferred_asset_full_name` | character |  |
-| `player_status_transferred_asset_res_key` | integer |  |
-| `player_status_transferred_asset_res_domain_override` | character |  |
-| `player_status_transferred_asset_res_domain` | character |  |
-| `player_status_transferred_asset_res_source_override` | character |  |
-| `player_status_transferred_asset_res_source` | character |  |
-| `player_status_transferred_asset_res_title` | character |  |
-| `player_status_transferred_asset_res_description` | character |  |
-| `player_status_transferred_asset_res_caption` | character |  |
-| `player_status_transferred_asset_res_category` | character |  |
-| `player_status_transferred_asset_res_alt_text` | character |  |
-| `player_status_transferred_asset_res_height` | integer |  |
-| `player_status_transferred_asset_res_width` | integer |  |
-| `player_status_transferred_asset_res_asset_type` | character |  |
-| `player_status_transferred_asset_res_file_system` | character |  |
-| `player_status_transferred_asset_res_path` | character |  |
-| `player_status_transferred_asset_res_type` | character |  |
-| `player_status_transferred_asset_res_thumbnail` | character |  |
-| `player_status_transferred_asset_res_duration` | integer |  |
-| `player_status_transferred_asset_res_mime_type` | character |  |
-| `player_status_committed_organization_key` | integer |  |
-| `player_status_committed_organization_full_name` | character |  |
-| `player_status_committed_organization_name` | character |  |
-| `player_status_committed_organization_mascot` | character |  |
-| `player_status_committed_organization_abbreviation` | character |  |
-| `player_status_committed_organization_asset_url` | character |  |
-| `player_status_committed_organization_asset_key` | integer |  |
-| `player_status_committed_organization_asset_domain_override` | character |  |
-| `player_status_committed_organization_asset_domain` | character |  |
-| `player_status_committed_organization_asset_source_override` | character |  |
-| `player_status_committed_organization_asset_source` | character |  |
-| `player_status_committed_organization_asset_title` | character |  |
-| `player_status_committed_organization_asset_description` | character |  |
-| `player_status_committed_organization_asset_caption` | character |  |
-| `player_status_committed_organization_asset_category` | character |  |
-| `player_status_committed_organization_asset_alt_text` | character |  |
-| `player_status_committed_organization_asset_height` | integer |  |
-| `player_status_committed_organization_asset_width` | integer |  |
-| `player_status_committed_organization_asset_asset_type` | character |  |
-| `player_status_committed_organization_asset_file_system` | character |  |
-| `player_status_committed_organization_asset_path` | character |  |
-| `player_status_committed_organization_asset_type` | character |  |
-| `player_status_committed_organization_asset_thumbnail` | character |  |
-| `player_status_committed_organization_asset_duration` | integer |  |
-| `player_status_committed_organization_asset_mime_type` | character |  |
-| `player_status_committed_organization_slug` | character |  |
-| `player_status_committed_organization_primary_color` | character |  |
-| `player_status_class_rank` | character |  |
-| `player_status_transfer_entered` | character |  |
-| `player_status_recruitment_year` | character |  |
-| `player_status_decommitted_asset` | character |  |
-| `player_status_transfer` | logical |  |
-| `player_status_expected_to_transfer` | logical |  |
-| `player_status_recruitment_key` | integer |  |
-| `player_status_withdrawn_transfer` | logical |  |
-| `player_status_withdrawn_transfer_date` | character |  |
+| `ranking_key_2` | integer | Ranking key repeated from the nested ranking object (json_normalize de-duplication suffix). |
+| `ranking_rating` | numeric | Numeric value of the ranking (0-100 scale). |
+| `ranking_stars` | integer | Star rating of the ranking (2-5). |
+| `ranking_national_rank` | integer | National rank of the ranking. |
+| `ranking_position_rank` | integer | Position rank of the ranking. |
+| `ranking_state_rank` | integer | State rank of the ranking. |
+| `ranking_position_abbr` | character | Position abbreviation the ranking was assigned at. |
+| `ranking_state_abbr` | character | State abbreviation the ranking was assigned in. |
+| `ranking_five_star_plus` | logical | Five-star-plus flag on the ranking. |
+| `high_school_key` | integer | On3 numeric key of the high school. |
+| `high_school_full_name` | character | Full name of the high school (with mascot). |
+| `high_school_name_2` | character | Name field of the nested high-school object (json_normalize de-duplication of high_school_name). |
+| `high_school_known_as` | character | Common short name of the high school, when On3 lists one. |
+| `high_school_mascot` | character | High-school mascot. |
+| `high_school_abbreviation` | character | High-school abbreviation. |
+| `high_school_asset_url` | character | Convenience CDN URL of the high-school logo. |
+| `high_school_default_asset_key` | integer | On3 asset key of the high school's logo asset. |
+| `high_school_default_asset_domain_override` | character | CDN domain override for the high school's logo asset (usually null). |
+| `high_school_default_asset_domain` | character | CDN domain serving the high school's logo asset. |
+| `high_school_default_asset_source_override` | character | Source-path override for the high school's logo asset (usually null). |
+| `high_school_default_asset_source` | character | CDN-relative source path of the high school's logo asset. |
+| `high_school_default_asset_title` | character | Editorial title attached to the high school's logo asset. |
+| `high_school_default_asset_description` | character | Editorial description attached to the high school's logo asset (usually null). |
+| `high_school_default_asset_caption` | character | Editorial caption attached to the high school's logo asset (usually null). |
+| `high_school_default_asset_category` | character | Editorial category label of the high school's logo asset (usually null). |
+| `high_school_default_asset_alt_text` | character | Accessibility alt text of the high school's logo asset (usually null). |
+| `high_school_default_asset_height` | integer | Pixel height of the high school's logo asset. |
+| `high_school_default_asset_width` | integer | Pixel width of the high school's logo asset. |
+| `high_school_default_asset_asset_type` | character | On3 asset-type discriminator of the high school's logo asset (e.g. Image). |
+| `high_school_default_asset_file_system` | character | Storage file-system flag of the high school's logo asset. |
+| `high_school_default_asset_path` | character | Storage path of the high school's logo asset. |
+| `high_school_default_asset_type` | character | Media type field of the high school's logo asset (file extension, e.g. png). |
+| `high_school_default_asset_thumbnail` | character | Thumbnail variant of the high school's logo asset (video assets; usually null). |
+| `high_school_default_asset_duration` | integer | Duration of the high school's logo asset when it is a video (usually null or 0). |
+| `high_school_default_asset_mime_type` | character | MIME type of the high school's logo asset. |
+| `high_school_slug` | character | URL slug of the high school on On3. |
+| `high_school_primary_color` | character | Primary hex color of the high school. |
+| `high_school_org_type` | character | Organization type label of the school (e.g. HighSchool). |
+| `high_school_org_type_enum` | character | Organization type enum of the school. |
+| `high_school_division` | character | Division or classification of the high school, when listed. |
+| `high_school_site_keys` | character | JSON-encoded On3 site keys covering the school (usually null). |
+| `high_school_url_slug` | character | URL slug variant of the high-school page, with the key appended. |
+| `hometown_state_key` | integer | On3 numeric key of the home-town state. |
+| `hometown_state_name` | character | Name of the home-town state. |
+| `hometown_state_abbreviation` | character | Two-letter abbreviation of the home-town state. |
+| `hometown_state_country_key` | integer | On3 numeric key of the home-town state's country. |
+| `current_state_key` | integer | On3 numeric key of the current state. |
+| `current_state_name` | character | Name of the current state. |
+| `current_state_abbreviation` | character | Two-letter abbreviation of the current state. |
+| `current_state_country_key` | integer | On3 numeric key of the current state's country. |
+| `default_asset_key` | integer | On3 asset key of the default asset. |
+| `default_asset_domain_override` | character | CDN domain override for the record's default asset (usually null). |
+| `default_asset_domain` | character | CDN domain serving the default asset. |
+| `default_asset_source_override` | character | Source-path override for the default asset (usually null). |
+| `default_asset_source` | character | CDN-relative source path of the default asset. |
+| `default_asset_title` | character | Editorial title attached to the default asset. |
+| `default_asset_description` | character | Editorial description attached to the default asset (usually null). |
+| `default_asset_caption` | character | Editorial caption attached to the default asset (usually null). |
+| `default_asset_category` | character | Editorial category label of the default asset (usually null). |
+| `default_asset_alt_text` | character | Accessibility alt text of the default asset (usually null). |
+| `default_asset_height` | integer | Pixel height of the default asset. |
+| `default_asset_width` | integer | Pixel width of the default asset. |
+| `default_asset_asset_type` | character | On3 asset-type discriminator of the default asset (e.g. Image). |
+| `default_asset_file_system` | character | Storage file-system flag of the default asset. |
+| `default_asset_path` | character | Storage path of the default asset. |
+| `default_asset_type` | character | Media type field of the default asset (file extension, e.g. png). |
+| `default_asset_thumbnail` | character | Thumbnail variant of the default asset (video assets; usually null). |
+| `default_asset_duration` | integer | Duration of the default asset when it is a video (usually null or 0). |
+| `default_asset_mime_type` | character | MIME type of the default asset. |
+| `primary_position_key` | integer | On3 numeric key of the primary position. |
+| `primary_position_name` | character | Name of the primary position (e.g. Quarterback). |
+| `primary_position_abbreviation` | character | Abbreviation of the primary position (e.g. QB). |
+| `primary_position_sport_key` | integer | On3 numeric key of the primary position's sport. |
+| `primary_position_sport_key_2` | integer | On3 numeric key of the primary position's sport (json_normalize de-duplication suffix). |
+| `primary_position_sport_name` | character | Name of the primary position's sport (e.g. Football). |
+| `primary_position_sport_slug` | character | URL slug of the primary position's sport. |
+| `primary_position_sport_abbreviation` | character | Abbreviation of the primary position's sport. |
+| `primary_position_sport_is_rankable` | logical | Whether On3 ranks players in the primary position's sport. |
+| `primary_position_sport_is_industry_rankable` | logical | Whether industry-consensus rankings exist for the primary position's sport. |
+| `primary_position_sport_is_scoutable` | logical | Whether On3 scouting reports exist for the primary position's sport. |
+| `primary_position_position_type` | character | Position type of the primary position (e.g. Offense, Defense). |
+| `default_sport_key` | integer | On3 numeric key of the primary sport. |
+| `default_sport_name` | character | Name of the primary sport (e.g. Football). |
+| `player_status_type` | character | Type of the player's recruiting status (e.g. Committed, Signed, Enrolled, None). |
+| `player_status_short_term_signee` | logical | Short-term-signee flag of the player's recruiting status (null when not applicable). |
+| `player_status_date` | character | Date the player's recruiting status took effect (ISO timestamp string). |
+| `player_status_committed_asset_key` | integer | On3 numeric key of the player's recruiting status's committed-to program. |
+| `player_status_committed_asset_url` | character | CDN URL of the player's recruiting status's committed-to program's logo. |
+| `player_status_committed_asset_slug` | character | URL slug of the player's recruiting status's committed-to program on On3. |
+| `player_status_committed_asset_full_name` | character | Full name of the player's recruiting status's committed-to program (e.g. 'Alabama Crimson Tide'). |
+| `player_status_committed_asset_res_key` | integer | On3 asset key of the player's recruiting status's committed-to program's logo asset. |
+| `player_status_committed_asset_res_domain_override` | character | CDN domain override for the player's recruiting status's committed-to program's logo asset (usually null). |
+| `player_status_committed_asset_res_domain` | character | CDN domain serving the player's recruiting status's committed-to program's logo asset. |
+| `player_status_committed_asset_res_source_override` | character | Source-path override for the player's recruiting status's committed-to program's logo asset (usually null). |
+| `player_status_committed_asset_res_source` | character | CDN-relative source path of the player's recruiting status's committed-to program's logo asset. |
+| `player_status_committed_asset_res_title` | character | Editorial title attached to the player's recruiting status's committed-to program's logo asset. |
+| `player_status_committed_asset_res_description` | character | Editorial description attached to the player's recruiting status's committed-to program's logo asset (usually null). |
+| `player_status_committed_asset_res_caption` | character | Editorial caption attached to the player's recruiting status's committed-to program's logo asset (usually null). |
+| `player_status_committed_asset_res_category` | character | Editorial category label of the player's recruiting status's committed-to program's logo asset (usually null). |
+| `player_status_committed_asset_res_alt_text` | character | Accessibility alt text of the player's recruiting status's committed-to program's logo asset (usually null). |
+| `player_status_committed_asset_res_height` | integer | Pixel height of the player's recruiting status's committed-to program's logo asset. |
+| `player_status_committed_asset_res_width` | integer | Pixel width of the player's recruiting status's committed-to program's logo asset. |
+| `player_status_committed_asset_res_asset_type` | character | On3 asset-type discriminator of the player's recruiting status's committed-to program's logo asset (e.g. Image). |
+| `player_status_committed_asset_res_file_system` | character | Storage file-system flag of the player's recruiting status's committed-to program's logo asset. |
+| `player_status_committed_asset_res_path` | character | Storage path of the player's recruiting status's committed-to program's logo asset. |
+| `player_status_committed_asset_res_type` | character | Media type field of the player's recruiting status's committed-to program's logo asset (file extension, e.g. png). |
+| `player_status_committed_asset_res_thumbnail` | character | Thumbnail variant of the player's recruiting status's committed-to program's logo asset (video assets; usually null). |
+| `player_status_committed_asset_res_duration` | integer | Duration of the player's recruiting status's committed-to program's logo asset when it is a video (usually null or 0). |
+| `player_status_committed_asset_res_mime_type` | character | MIME type of the player's recruiting status's committed-to program's logo asset. |
+| `player_status_transferred_asset_key` | integer | On3 numeric key of the player's recruiting status's program transferred to. |
+| `player_status_transferred_asset_url` | character | CDN URL of the player's recruiting status's program transferred to's logo. |
+| `player_status_transferred_asset_slug` | character | URL slug of the player's recruiting status's program transferred to on On3. |
+| `player_status_transferred_asset_full_name` | character | Full name of the player's recruiting status's program transferred to (e.g. 'Alabama Crimson Tide'). |
+| `player_status_transferred_asset_res_key` | integer | On3 asset key of the player's recruiting status's program transferred to's logo asset. |
+| `player_status_transferred_asset_res_domain_override` | character | CDN domain override for the player's recruiting status's program transferred to's logo asset (usually null). |
+| `player_status_transferred_asset_res_domain` | character | CDN domain serving the player's recruiting status's program transferred to's logo asset. |
+| `player_status_transferred_asset_res_source_override` | character | Source-path override for the player's recruiting status's program transferred to's logo asset (usually null). |
+| `player_status_transferred_asset_res_source` | character | CDN-relative source path of the player's recruiting status's program transferred to's logo asset. |
+| `player_status_transferred_asset_res_title` | character | Editorial title attached to the player's recruiting status's program transferred to's logo asset. |
+| `player_status_transferred_asset_res_description` | character | Editorial description attached to the player's recruiting status's program transferred to's logo asset (usually null). |
+| `player_status_transferred_asset_res_caption` | character | Editorial caption attached to the player's recruiting status's program transferred to's logo asset (usually null). |
+| `player_status_transferred_asset_res_category` | character | Editorial category label of the player's recruiting status's program transferred to's logo asset (usually null). |
+| `player_status_transferred_asset_res_alt_text` | character | Accessibility alt text of the player's recruiting status's program transferred to's logo asset (usually null). |
+| `player_status_transferred_asset_res_height` | integer | Pixel height of the player's recruiting status's program transferred to's logo asset. |
+| `player_status_transferred_asset_res_width` | integer | Pixel width of the player's recruiting status's program transferred to's logo asset. |
+| `player_status_transferred_asset_res_asset_type` | character | On3 asset-type discriminator of the player's recruiting status's program transferred to's logo asset (e.g. Image). |
+| `player_status_transferred_asset_res_file_system` | character | Storage file-system flag of the player's recruiting status's program transferred to's logo asset. |
+| `player_status_transferred_asset_res_path` | character | Storage path of the player's recruiting status's program transferred to's logo asset. |
+| `player_status_transferred_asset_res_type` | character | Media type field of the player's recruiting status's program transferred to's logo asset (file extension, e.g. png). |
+| `player_status_transferred_asset_res_thumbnail` | character | Thumbnail variant of the player's recruiting status's program transferred to's logo asset (video assets; usually null). |
+| `player_status_transferred_asset_res_duration` | integer | Duration of the player's recruiting status's program transferred to's logo asset when it is a video (usually null or 0). |
+| `player_status_transferred_asset_res_mime_type` | character | MIME type of the player's recruiting status's program transferred to's logo asset. |
+| `player_status_committed_organization_key` | integer | On3 key of the committed-to program (the player's recruiting status). |
+| `player_status_committed_organization_full_name` | character | Full name of the player's recruiting status's committed-to program (e.g. 'Alabama Crimson Tide'). |
+| `player_status_committed_organization_name` | character | Short name of the player's recruiting status's committed-to program. |
+| `player_status_committed_organization_mascot` | character | Mascot of the player's recruiting status's committed-to program. |
+| `player_status_committed_organization_abbreviation` | character | Abbreviation of the player's recruiting status's committed-to program. |
+| `player_status_committed_organization_asset_url` | character | CDN URL of the committed-to program's logo (the player's recruiting status). |
+| `player_status_committed_organization_asset_key` | integer | On3 asset key of the player's recruiting status's committed-to program's logo asset. |
+| `player_status_committed_organization_asset_domain_override` | character | CDN domain override for the player's recruiting status's committed-to program's logo asset (usually null). |
+| `player_status_committed_organization_asset_domain` | character | CDN domain serving the player's recruiting status's committed-to program's logo asset. |
+| `player_status_committed_organization_asset_source_override` | character | Source-path override for the player's recruiting status's committed-to program's logo asset (usually null). |
+| `player_status_committed_organization_asset_source` | character | CDN-relative source path of the player's recruiting status's committed-to program's logo asset. |
+| `player_status_committed_organization_asset_title` | character | Editorial title attached to the player's recruiting status's committed-to program's logo asset. |
+| `player_status_committed_organization_asset_description` | character | Editorial description attached to the player's recruiting status's committed-to program's logo asset (usually null). |
+| `player_status_committed_organization_asset_caption` | character | Editorial caption attached to the player's recruiting status's committed-to program's logo asset (usually null). |
+| `player_status_committed_organization_asset_category` | character | Editorial category label of the player's recruiting status's committed-to program's logo asset (usually null). |
+| `player_status_committed_organization_asset_alt_text` | character | Accessibility alt text of the player's recruiting status's committed-to program's logo asset (usually null). |
+| `player_status_committed_organization_asset_height` | integer | Pixel height of the player's recruiting status's committed-to program's logo asset. |
+| `player_status_committed_organization_asset_width` | integer | Pixel width of the player's recruiting status's committed-to program's logo asset. |
+| `player_status_committed_organization_asset_asset_type` | character | On3 asset-type discriminator of the player's recruiting status's committed-to program's logo asset (e.g. Image). |
+| `player_status_committed_organization_asset_file_system` | character | Storage file-system flag of the player's recruiting status's committed-to program's logo asset. |
+| `player_status_committed_organization_asset_path` | character | Storage path of the player's recruiting status's committed-to program's logo asset. |
+| `player_status_committed_organization_asset_type` | character | Media type field of the player's recruiting status's committed-to program's logo asset (file extension, e.g. png). |
+| `player_status_committed_organization_asset_thumbnail` | character | Thumbnail variant of the player's recruiting status's committed-to program's logo asset (video assets; usually null). |
+| `player_status_committed_organization_asset_duration` | integer | Duration of the player's recruiting status's committed-to program's logo asset when it is a video (usually null or 0). |
+| `player_status_committed_organization_asset_mime_type` | character | MIME type of the player's recruiting status's committed-to program's logo asset. |
+| `player_status_committed_organization_slug` | character | URL slug of the committed-to program (the player's recruiting status). |
+| `player_status_committed_organization_primary_color` | character | Primary hex color of the player's recruiting status's committed-to program. |
+| `player_status_class_rank` | character | Academic class standing recorded on the player's recruiting status (e.g. Senior). |
+| `player_status_transfer_entered` | character | Date the player entered the transfer portal (the player's recruiting status; null when never entered). |
+| `player_status_recruitment_year` | character | Recruiting-cycle year the player's recruiting status belongs to. |
+| `player_status_decommitted_asset` | character | Nested asset of the program decommitted from (the player's recruiting status; usually null). |
+| `player_status_transfer` | logical | Transfer flag of the player's recruiting status (null when not applicable). |
+| `player_status_expected_to_transfer` | logical | Expected-to-transfer flag of the player's recruiting status (null when not applicable). |
+| `player_status_recruitment_key` | integer | On3 key of the recruitment record the player's recruiting status belongs to. |
+| `player_status_withdrawn_transfer` | logical | Whether the player withdrew from the transfer portal (the player's recruiting status). |
+| `player_status_withdrawn_transfer_date` | character | Date the player withdrew from the transfer portal (the player's recruiting status; null when never withdrawn). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -541,24 +541,24 @@ GET /rdb/v1/player/verified
 | `person_can_manage_recruitment` | character | Whether the athlete can self-manage the recruitment on On3. |
 | `ranking_key` | integer | On3 key of the ranking cycle the profile's rating belongs to. |
 | `person_sport_key` | integer | On3 key of the athlete-sport profile (person x sport). |
-| `ranking` | character | National rank of the team's overall SP+ rating (1 = best). |
+| `ranking` | character | Nested ranking object (stringified; usually null). |
 | `oracle_key` | character | On3's internal oracle identifier for the player record. |
-| `name` | character | Position name (e.g. `Quarterback`). |
-| `slug` | character | URL slug for the team. |
-| `high_school_name` | character | Recruit high-school name. |
+| `name` | character | Display name of the row's record. |
+| `slug` | character | URL slug of the row's record on On3. |
+| `high_school_name` | character | High-school display name (top-level field). |
 | `hometown_name` | character | Player's hometown, as listed by On3. |
-| `hometown_state` | character | Recruit hometown state. |
-| `current_state` | character | Current home venue state. |
-| `position_abbreviation` | character | Position abbreviation (e.g. `QB`). |
+| `hometown_state` | character | Home-town state, when listed. |
+| `current_state` | character | State the player currently plays in, when listed. |
+| `position_abbreviation` | character | Position abbreviation on the record. |
 | `primary_position` | character | Nested On3 object for the player's primary position (stringified). |
 | `class_rank` | character | Player's rank within their recruiting class. |
-| `height` | character | Listed height (inches). |
-| `weight` | integer | Listed weight (lbs). |
+| `height` | character | Height as a formatted string (e.g. '6-3.5'). |
+| `weight` | integer | Weight in pounds. |
 | `class_year` | integer | Player's recruiting class year. |
 | `degree` | character | Degree the player earned or is pursuing, when listed. |
-| `age` | integer | Age as of last pipeline build, rounded to one decimal. Pipeline is built on a weekly basis. |
+| `age` | integer | Age in years, when known. |
 | `sports` | character | Sports the player is profiled in, as a stringified list. |
-| `description` | character | ESPN's description of the stat. |
+| `description` | character | Free-text description or biography shipped by On3. |
 | `bio_pro_prospect` | character | Bio text framing the player as a pro prospect (On3 RDB). |
 | `bio_college_recruit` | character | Bio text framing the player as a college recruit (On3 RDB). |
 | `organization_level` | character | Level of the player's current organization (e.g. high school, college, professional). |
@@ -575,84 +575,84 @@ GET /rdb/v1/player/verified
 | `visibility` | character | Profile visibility setting on On3. |
 | `tier` | character | On3 profile tier classification for the player. |
 | `review_status` | character | Editorial review status of the profile in the On3 database. |
-| `jersey_number` | character | Jersey number. Often useful for joins by name/team/jersey. |
+| `jersey_number` | character | Jersey number, when listed. |
 | `badge` | character | Profile badge assigned by On3, when any. |
 | `ncaa_id` | character | Player's NCAA identifier, when known to On3. |
 | `managed_by_user` | logical | On3 user account that manages the player's profile, when claimed. |
-| `high_school_key` | integer |  |
-| `high_school_full_name` | character |  |
-| `high_school_name_2` | character |  |
-| `high_school_known_as` | character |  |
-| `high_school_mascot` | character |  |
-| `high_school_abbreviation` | character |  |
-| `high_school_asset_url` | character |  |
-| `high_school_default_asset_key` | integer |  |
-| `high_school_default_asset_domain_override` | character |  |
-| `high_school_default_asset_domain` | character |  |
-| `high_school_default_asset_source_override` | character |  |
-| `high_school_default_asset_source` | character |  |
-| `high_school_default_asset_title` | character |  |
-| `high_school_default_asset_description` | character |  |
-| `high_school_default_asset_caption` | character |  |
-| `high_school_default_asset_category` | character |  |
-| `high_school_default_asset_alt_text` | character |  |
-| `high_school_default_asset_height` | integer |  |
-| `high_school_default_asset_width` | integer |  |
-| `high_school_default_asset_asset_type` | character |  |
-| `high_school_default_asset_file_system` | character |  |
-| `high_school_default_asset_path` | character |  |
-| `high_school_default_asset_type` | character |  |
-| `high_school_default_asset_thumbnail` | character |  |
-| `high_school_default_asset_duration` | integer |  |
-| `high_school_default_asset_mime_type` | character |  |
-| `high_school_slug` | character |  |
-| `high_school_primary_color` | character |  |
-| `high_school_org_type` | character |  |
-| `high_school_org_type_enum` | character |  |
-| `high_school_division` | character |  |
-| `high_school_site_keys` | character |  |
-| `high_school_url_slug` | character |  |
-| `default_asset_key` | integer |  |
-| `default_asset_domain_override` | character |  |
-| `default_asset_domain` | character |  |
-| `default_asset_source_override` | character |  |
-| `default_asset_source` | character |  |
-| `default_asset_title` | character |  |
-| `default_asset_description` | character |  |
-| `default_asset_caption` | character |  |
-| `default_asset_category` | character |  |
-| `default_asset_alt_text` | character |  |
-| `default_asset_height` | integer |  |
-| `default_asset_width` | integer |  |
-| `default_asset_asset_type` | character |  |
-| `default_asset_file_system` | character |  |
-| `default_asset_path` | character |  |
-| `default_asset_type` | character |  |
-| `default_asset_thumbnail` | character |  |
-| `default_asset_duration` | integer |  |
-| `default_asset_mime_type` | character |  |
-| `default_sport_key` | integer |  |
-| `default_sport_name` | character |  |
-| `hometown_state_key` | numeric |  |
-| `hometown_state_name` | character |  |
-| `hometown_state_abbreviation` | character | Recruit hometown state abbreviation. |
-| `hometown_state_country_key` | numeric |  |
-| `current_state_key` | numeric |  |
-| `current_state_name` | character |  |
-| `current_state_abbreviation` | character |  |
-| `current_state_country_key` | numeric |  |
-| `primary_position_key` | numeric |  |
-| `primary_position_name` | character | Primary fielding position name. |
-| `primary_position_abbreviation` | character | Primary position abbreviation. |
-| `primary_position_sport_key` | numeric |  |
-| `primary_position_sport_key_2` | numeric |  |
-| `primary_position_sport_name` | character |  |
-| `primary_position_sport_slug` | character |  |
-| `primary_position_sport_abbreviation` | character |  |
-| `primary_position_sport_is_rankable` | character |  |
-| `primary_position_sport_is_industry_rankable` | character |  |
-| `primary_position_sport_is_scoutable` | character |  |
-| `primary_position_position_type` | character |  |
+| `high_school_key` | integer | On3 numeric key of the high school. |
+| `high_school_full_name` | character | Full name of the high school (with mascot). |
+| `high_school_name_2` | character | Name field of the nested high-school object (json_normalize de-duplication of high_school_name). |
+| `high_school_known_as` | character | Common short name of the high school, when On3 lists one. |
+| `high_school_mascot` | character | High-school mascot. |
+| `high_school_abbreviation` | character | High-school abbreviation. |
+| `high_school_asset_url` | character | Convenience CDN URL of the high-school logo. |
+| `high_school_default_asset_key` | integer | On3 asset key of the high school's logo asset. |
+| `high_school_default_asset_domain_override` | character | CDN domain override for the high school's logo asset (usually null). |
+| `high_school_default_asset_domain` | character | CDN domain serving the high school's logo asset. |
+| `high_school_default_asset_source_override` | character | Source-path override for the high school's logo asset (usually null). |
+| `high_school_default_asset_source` | character | CDN-relative source path of the high school's logo asset. |
+| `high_school_default_asset_title` | character | Editorial title attached to the high school's logo asset. |
+| `high_school_default_asset_description` | character | Editorial description attached to the high school's logo asset (usually null). |
+| `high_school_default_asset_caption` | character | Editorial caption attached to the high school's logo asset (usually null). |
+| `high_school_default_asset_category` | character | Editorial category label of the high school's logo asset (usually null). |
+| `high_school_default_asset_alt_text` | character | Accessibility alt text of the high school's logo asset (usually null). |
+| `high_school_default_asset_height` | integer | Pixel height of the high school's logo asset. |
+| `high_school_default_asset_width` | integer | Pixel width of the high school's logo asset. |
+| `high_school_default_asset_asset_type` | character | On3 asset-type discriminator of the high school's logo asset (e.g. Image). |
+| `high_school_default_asset_file_system` | character | Storage file-system flag of the high school's logo asset. |
+| `high_school_default_asset_path` | character | Storage path of the high school's logo asset. |
+| `high_school_default_asset_type` | character | Media type field of the high school's logo asset (file extension, e.g. png). |
+| `high_school_default_asset_thumbnail` | character | Thumbnail variant of the high school's logo asset (video assets; usually null). |
+| `high_school_default_asset_duration` | integer | Duration of the high school's logo asset when it is a video (usually null or 0). |
+| `high_school_default_asset_mime_type` | character | MIME type of the high school's logo asset. |
+| `high_school_slug` | character | URL slug of the high school on On3. |
+| `high_school_primary_color` | character | Primary hex color of the high school. |
+| `high_school_org_type` | character | Organization type label of the school (e.g. HighSchool). |
+| `high_school_org_type_enum` | character | Organization type enum of the school. |
+| `high_school_division` | character | Division or classification of the high school, when listed. |
+| `high_school_site_keys` | character | JSON-encoded On3 site keys covering the school (usually null). |
+| `high_school_url_slug` | character | URL slug variant of the high-school page, with the key appended. |
+| `default_asset_key` | integer | On3 asset key of the default asset. |
+| `default_asset_domain_override` | character | CDN domain override for the record's default asset (usually null). |
+| `default_asset_domain` | character | CDN domain serving the default asset. |
+| `default_asset_source_override` | character | Source-path override for the default asset (usually null). |
+| `default_asset_source` | character | CDN-relative source path of the default asset. |
+| `default_asset_title` | character | Editorial title attached to the default asset. |
+| `default_asset_description` | character | Editorial description attached to the default asset (usually null). |
+| `default_asset_caption` | character | Editorial caption attached to the default asset (usually null). |
+| `default_asset_category` | character | Editorial category label of the default asset (usually null). |
+| `default_asset_alt_text` | character | Accessibility alt text of the default asset (usually null). |
+| `default_asset_height` | integer | Pixel height of the default asset. |
+| `default_asset_width` | integer | Pixel width of the default asset. |
+| `default_asset_asset_type` | character | On3 asset-type discriminator of the default asset (e.g. Image). |
+| `default_asset_file_system` | character | Storage file-system flag of the default asset. |
+| `default_asset_path` | character | Storage path of the default asset. |
+| `default_asset_type` | character | Media type field of the default asset (file extension, e.g. png). |
+| `default_asset_thumbnail` | character | Thumbnail variant of the default asset (video assets; usually null). |
+| `default_asset_duration` | integer | Duration of the default asset when it is a video (usually null or 0). |
+| `default_asset_mime_type` | character | MIME type of the default asset. |
+| `default_sport_key` | integer | On3 numeric key of the primary sport. |
+| `default_sport_name` | character | Name of the primary sport (e.g. Football). |
+| `hometown_state_key` | numeric | On3 numeric key of the home-town state. |
+| `hometown_state_name` | character | Name of the home-town state. |
+| `hometown_state_abbreviation` | character | Two-letter abbreviation of the home-town state. |
+| `hometown_state_country_key` | numeric | On3 numeric key of the home-town state's country. |
+| `current_state_key` | numeric | On3 numeric key of the current state. |
+| `current_state_name` | character | Name of the current state. |
+| `current_state_abbreviation` | character | Two-letter abbreviation of the current state. |
+| `current_state_country_key` | numeric | On3 numeric key of the current state's country. |
+| `primary_position_key` | numeric | On3 numeric key of the primary position. |
+| `primary_position_name` | character | Name of the primary position (e.g. Quarterback). |
+| `primary_position_abbreviation` | character | Abbreviation of the primary position (e.g. QB). |
+| `primary_position_sport_key` | numeric | On3 numeric key of the primary position's sport. |
+| `primary_position_sport_key_2` | numeric | On3 numeric key of the primary position's sport (json_normalize de-duplication suffix). |
+| `primary_position_sport_name` | character | Name of the primary position's sport (e.g. Football). |
+| `primary_position_sport_slug` | character | URL slug of the primary position's sport. |
+| `primary_position_sport_abbreviation` | character | Abbreviation of the primary position's sport. |
+| `primary_position_sport_is_rankable` | character | Whether On3 ranks players in the primary position's sport. |
+| `primary_position_sport_is_industry_rankable` | character | Whether industry-consensus rankings exist for the primary position's sport. |
+| `primary_position_sport_is_scoutable` | character | Whether On3 scouting reports exist for the primary position's sport. |
+| `primary_position_position_type` | character | Position type of the primary position (e.g. Offense, Defense). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -684,16 +684,16 @@ GET /rdb/v1/player/{personKey}/videos
 |---|---|---|
 | `key` | integer | On3 RDB key for the video record. |
 | `source_url` | character | Source URL of the hosted video. |
-| `title` | character | Specific role title for the assignment. |
+| `title` | character | Title of the row's record. |
 | `thumbnail` | character | URL of the video's thumbnail image. |
-| `description` | character | ESPN's description of the stat. |
+| `description` | character | Free-text description or biography shipped by On3. |
 | `date` | integer | Publication date of the video, per On3. |
 | `person_key` | integer | On3 person key of the featured athlete. |
 | `person_sport` | character | Nested athlete-sport profile the video is attached to (stringified). |
 | `is_featured` | logical | Whether the video is featured on the player's On3 profile. |
-| `featured_order` | character |  |
-| `category_key` | integer |  |
-| `category_value` | character |  |
+| `featured_order` | character | Display order among featured videos, when featured. |
+| `category_key` | integer | On3 key of the video category. |
+| `category_value` | character | Video category label (e.g. Highlights). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -758,76 +758,76 @@ GET /rdb/v1/players/industry-comparision
 |---|---|---|
 | `ratings` | character | List of per-service rating entries (On3, Rivals, 247, ESPN) composing the industry comparison. |
 | `nil_value` | integer | On3 NIL valuation for the player (US dollars). |
-| `person_key` | integer |  |
-| `person_name` | character |  |
-| `person_slug` | character |  |
-| `person_high_school_name` | character |  |
-| `person_high_school_key` | integer |  |
-| `person_high_school_full_name` | character |  |
-| `person_high_school_name_2` | character |  |
-| `person_high_school_known_as` | character |  |
-| `person_high_school_mascot` | character |  |
-| `person_high_school_abbreviation` | character |  |
-| `person_high_school_asset_url` | character |  |
-| `person_high_school_default_asset_key` | integer |  |
-| `person_high_school_default_asset_domain_override` | character |  |
-| `person_high_school_default_asset_domain` | character |  |
-| `person_high_school_default_asset_source_override` | character |  |
-| `person_high_school_default_asset_source` | character |  |
-| `person_high_school_default_asset_title` | character |  |
-| `person_high_school_default_asset_description` | character |  |
-| `person_high_school_default_asset_caption` | character |  |
-| `person_high_school_default_asset_category` | character |  |
-| `person_high_school_default_asset_alt_text` | character |  |
-| `person_high_school_default_asset_height` | integer |  |
-| `person_high_school_default_asset_width` | integer |  |
-| `person_high_school_default_asset_asset_type` | character |  |
-| `person_high_school_default_asset_file_system` | character |  |
-| `person_high_school_default_asset_path` | character |  |
-| `person_high_school_default_asset_type` | character |  |
-| `person_high_school_default_asset_thumbnail` | character |  |
-| `person_high_school_default_asset_duration` | integer |  |
-| `person_high_school_default_asset_mime_type` | character |  |
-| `person_high_school_slug` | character |  |
-| `person_high_school_primary_color` | character |  |
-| `person_high_school_org_type` | character |  |
-| `person_high_school_org_type_enum` | character |  |
-| `person_high_school_division` | character |  |
-| `person_high_school_site_keys` | character |  |
-| `person_high_school_url_slug` | character |  |
-| `person_home_town_name` | character |  |
-| `person_default_asset_url` | character |  |
-| `person_default_asset_key` | integer |  |
-| `person_default_asset_domain_override` | character |  |
-| `person_default_asset_domain` | character |  |
-| `person_default_asset_source_override` | character |  |
-| `person_default_asset_source` | character |  |
-| `person_default_asset_title` | character |  |
-| `person_default_asset_description` | character |  |
-| `person_default_asset_caption` | character |  |
-| `person_default_asset_category` | character |  |
-| `person_default_asset_alt_text` | character |  |
-| `person_default_asset_height` | integer |  |
-| `person_default_asset_width` | integer |  |
-| `person_default_asset_asset_type` | character |  |
-| `person_default_asset_file_system` | character |  |
-| `person_default_asset_path` | character |  |
-| `person_default_asset_type` | character |  |
-| `person_default_asset_thumbnail` | character |  |
-| `person_default_asset_duration` | integer |  |
-| `person_default_asset_mime_type` | character |  |
-| `person_early_signee` | logical |  |
-| `person_early_enrollee` | logical |  |
-| `person_position_abbreviation` | character |  |
-| `person_height` | numeric | Height (feet and inches). |
-| `person_formatted_height` | character |  |
-| `person_weight` | integer | Weight in pounds. |
-| `person_class_year` | integer |  |
-| `person_athlete_verified` | logical |  |
-| `person_prospect_verified` | logical |  |
-| `person_class_rank` | character |  |
-| `person_recruitment_key` | integer |  |
-| `person_age` | integer |  |
+| `person_key` | integer | On3 numeric key of the person. |
+| `person_name` | character | Display name of the person. |
+| `person_slug` | character | URL slug of the person's On3 profile. |
+| `person_high_school_name` | character | High-school display name on the person's record. |
+| `person_high_school_key` | integer | On3 numeric key of the person's high school. |
+| `person_high_school_full_name` | character | Full name of the person's high school (e.g. 'Alabama Crimson Tide'). |
+| `person_high_school_name_2` | character | High-school display name on the person's record (json_normalize de-duplication suffix). |
+| `person_high_school_known_as` | character | Common short name of the person's high school, when On3 lists one. |
+| `person_high_school_mascot` | character | Mascot of the person's high school. |
+| `person_high_school_abbreviation` | character | Abbreviation of the person's high school. |
+| `person_high_school_asset_url` | character | Convenience CDN URL of the person's high school's logo. |
+| `person_high_school_default_asset_key` | integer | On3 asset key of the person's high school's logo asset. |
+| `person_high_school_default_asset_domain_override` | character | CDN domain override for the person's high school's logo asset (usually null). |
+| `person_high_school_default_asset_domain` | character | CDN domain serving the person's high school's logo asset. |
+| `person_high_school_default_asset_source_override` | character | Source-path override for the person's high school's logo asset (usually null). |
+| `person_high_school_default_asset_source` | character | CDN-relative source path of the person's high school's logo asset. |
+| `person_high_school_default_asset_title` | character | Editorial title attached to the person's high school's logo asset. |
+| `person_high_school_default_asset_description` | character | Editorial description attached to the person's high school's logo asset (usually null). |
+| `person_high_school_default_asset_caption` | character | Editorial caption attached to the person's high school's logo asset (usually null). |
+| `person_high_school_default_asset_category` | character | Editorial category label of the person's high school's logo asset (usually null). |
+| `person_high_school_default_asset_alt_text` | character | Accessibility alt text of the person's high school's logo asset (usually null). |
+| `person_high_school_default_asset_height` | integer | Pixel height of the person's high school's logo asset. |
+| `person_high_school_default_asset_width` | integer | Pixel width of the person's high school's logo asset. |
+| `person_high_school_default_asset_asset_type` | character | On3 asset-type discriminator of the person's high school's logo asset (e.g. Image). |
+| `person_high_school_default_asset_file_system` | character | Storage file-system flag of the person's high school's logo asset. |
+| `person_high_school_default_asset_path` | character | Storage path of the person's high school's logo asset. |
+| `person_high_school_default_asset_type` | character | Media type field of the person's high school's logo asset (file extension, e.g. png). |
+| `person_high_school_default_asset_thumbnail` | character | Thumbnail variant of the person's high school's logo asset (video assets; usually null). |
+| `person_high_school_default_asset_duration` | integer | Duration of the person's high school's logo asset when it is a video (usually null or 0). |
+| `person_high_school_default_asset_mime_type` | character | MIME type of the person's high school's logo asset. |
+| `person_high_school_slug` | character | URL slug of the person's high school on On3. |
+| `person_high_school_primary_color` | character | Primary hex color of the person's high school. |
+| `person_high_school_org_type` | character | Organization type label of the person's high school (e.g. HighSchool, College). |
+| `person_high_school_org_type_enum` | character | Organization type enum of the person's high school (same vocabulary as org_type). |
+| `person_high_school_division` | character | Division or classification of the person's high school (e.g. NCAA-FB). |
+| `person_high_school_site_keys` | character | JSON-encoded On3 site keys covering the person's high school (usually null). |
+| `person_high_school_url_slug` | character | URL slug variant of the person's high school's page, with the key appended. |
+| `person_home_town_name` | character | Home town of the person as On3 lists it (e.g. 'Belleville, MI'). |
+| `person_default_asset_url` | character | Convenience CDN URL of the person's headshot. |
+| `person_default_asset_key` | integer | On3 asset key of the person's headshot asset. |
+| `person_default_asset_domain_override` | character | CDN domain override for the person's headshot asset (usually null). |
+| `person_default_asset_domain` | character | CDN domain serving the person's headshot asset. |
+| `person_default_asset_source_override` | character | Source-path override for the person's headshot asset (usually null). |
+| `person_default_asset_source` | character | CDN-relative source path of the person's headshot asset. |
+| `person_default_asset_title` | character | Editorial title attached to the person's headshot asset. |
+| `person_default_asset_description` | character | Editorial description attached to the person's headshot asset (usually null). |
+| `person_default_asset_caption` | character | Editorial caption attached to the person's headshot asset (usually null). |
+| `person_default_asset_category` | character | Editorial category label of the person's headshot asset (usually null). |
+| `person_default_asset_alt_text` | character | Accessibility alt text of the person's headshot asset (usually null). |
+| `person_default_asset_height` | integer | Pixel height of the person's headshot asset. |
+| `person_default_asset_width` | integer | Pixel width of the person's headshot asset. |
+| `person_default_asset_asset_type` | character | On3 asset-type discriminator of the person's headshot asset (e.g. Image). |
+| `person_default_asset_file_system` | character | Storage file-system flag of the person's headshot asset. |
+| `person_default_asset_path` | character | Storage path of the person's headshot asset. |
+| `person_default_asset_type` | character | Media type field of the person's headshot asset (file extension, e.g. png). |
+| `person_default_asset_thumbnail` | character | Thumbnail variant of the person's headshot asset (video assets; usually null). |
+| `person_default_asset_duration` | integer | Duration of the person's headshot asset when it is a video (usually null or 0). |
+| `person_default_asset_mime_type` | character | MIME type of the person's headshot asset. |
+| `person_early_signee` | logical | Whether the person signed during the early signing period. |
+| `person_early_enrollee` | logical | Whether the person early-enrolled at college. |
+| `person_position_abbreviation` | character | Position abbreviation on the person's record. |
+| `person_height` | numeric | Height of the person: a formatted string (e.g. '6-8') or inches, depending on the endpoint. |
+| `person_formatted_height` | character | Human-formatted height of the person (e.g. '6-3.5'). |
+| `person_weight` | integer | Weight of the person in pounds. |
+| `person_class_year` | integer | High-school graduating class year of the person. |
+| `person_athlete_verified` | logical | Whether the person's athlete profile is verified by On3. |
+| `person_prospect_verified` | logical | Whether the person's prospect measurables are verified by On3. |
+| `person_class_rank` | character | Academic class standing of the person (e.g. Senior, RedShirt Senior). |
+| `person_recruitment_key` | integer | On3 key of the person's active recruitment record. |
+| `person_age` | integer | Age of the person in years, when known. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 

@@ -45,7 +45,7 @@ releases — fast and reliable. Click any name for the full reference.
 | [`load_nba_player_boxscore`](../nba/reference/loaders/player.md#load_nba_player_boxscore) | Player box scores, every game | 📦 release |
 | [`load_nba_standings`](../nba/reference/loaders/other.md#load_nba_standings) | Historical standings | 📦 release |
 | [`espn_nba_injuries`](../nba/reference/site.md#espn_nba_injuries) | League-wide injury report, one row per team | ⭐ ESPN |
-| [`load_nba_team_boxscore`](../nba/reference/loaders/team.md#load_nba_team_boxscore) | Team box scores, every game (off/def, shooting) | 📦 release |
+| [`load_nba_team_boxscore`](../nba/reference/loaders/other.md#load_nba_team_boxscore) | Team box scores, every game (off/def, shooting) | 📦 release |
 | [`load_nba_shots`](../nba/reference/loaders/other.md#load_nba_shots) | Every made shot with court coordinates | 📦 release |
 | [`most_recent_nba_season`](../nba/reference/additional/highlights.md#most_recent_nba_season) | The current season year helper | 🧮 util |
 
@@ -221,7 +221,7 @@ out
 
 ### Recipe 5 — Offense vs defense, every team 🛡️
 
-The [`load_nba_team_boxscore`](../nba/reference/loaders/team.md#load_nba_team_boxscore)
+The [`load_nba_team_boxscore`](../nba/reference/loaders/other.md#load_nba_team_boxscore)
 release has one row per team-game with both `team_score` and
 `opponent_team_score` — so points-for, points-against and net rating are a
 single `group_by` away.

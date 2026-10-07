@@ -106,7 +106,7 @@ Polars dataframe containing team stats available for the requested seasons.
 | `fumble_recovery_opp` | integer | Number of fumbles recovered by the team from the opposing offense (defensive fumble recoveries). |
 | `fumble_recovery_yards_opp` | integer | Total yards gained by the team on returns of opponent fumble recoveries. |
 | `fumble_recovery_tds` | integer | Number of touchdowns scored by the team on fumble recoveries (own or opponent). |
-| `penalties` | integer | Total number of penalties. |
+| `penalties` | integer |  |
 | `penalty_yards` | integer | Yards gained (or lost) by the posteam from the penalty. |
 | `timeouts` | integer | Number of timeouts remaining or used by the team during the game or period covered. |
 | `fumbles_forced_by_opp` | integer | Fumbles by the team's players that were forced by the opponent, counted across all units (offense, defense and special teams). |
@@ -114,16 +114,16 @@ Polars dataframe containing team stats available for the requested seasons.
 | `fumbles_out_of_bounds` | integer | Fumbles by the team's players where the ball went out of bounds, forced or not; each is also counted in fumbles_forced_by_opp or fumbles_not_forced. |
 | `fumbles_total` | integer | Total fumbles by the team's players across all units; equals fumbles_forced_by_opp + fumbles_not_forced. |
 | `fumbles_lost_total` | integer | Total fumbles lost by the team's players, counted across all units. |
-| `punt_returns` | integer | Number of punt returns. |
-| `punt_return_yards` | integer | Team punt return yards. |
+| `punt_returns` | integer |  |
+| `punt_return_yards` | integer |  |
 | `kickoff_returns` | integer | Total number of kickoff return attempts by the team. |
 | `kickoff_return_yards` | integer | Total yards gained by the team on kickoff returns during the period covered. |
-| `fg_made` | integer | TRUE when the field goal attempt was successful. |
+| `fg_made` | integer |  |
 | `fg_att` | integer | Total field goal attempts by the team's kicker during the period covered. |
 | `fg_missed` | integer | Total number of field goal attempts that were missed (not blocked, not made) by the team's kicker. |
 | `fg_blocked` | integer | Total number of field goal attempts that were blocked by the opposing defense. |
 | `fg_long` | integer | Distance in yards of the team's longest successful field goal during the period covered. |
-| `fg_pct` | double | Field goal percentage (0-1). |
+| `fg_pct` | double |  |
 | `fg_made_0_19` | integer | Number of field goals made by the team from 0–19 yards. |
 | `fg_made_20_29` | integer | Number of field goals made by the team from 20–29 yards. |
 | `fg_made_30_39` | integer | Number of field goals made by the team from 30–39 yards. |
@@ -200,12 +200,12 @@ Polars dataframe containing teams available.
 | col_name | type | description |
 |---|---|---|
 | `team_abbr` | character | Official team abbreveation |
-| `team_name` | character | Team nickname. |
-| `team_id` | integer | ESPN team id. |
+| `team_name` | character |  |
+| `team_id` | integer |  |
 | `team_nick` | character | Team nickname or mascot name (e.g., 'Chiefs', 'Patriots'). |
 | `team_conf` | character | Conference the team belongs to (e.g., 'AFC', 'NFC'). |
 | `team_division` | character | Division within the conference the team belongs to (e.g., 'AFC East'). |
-| `team_color` | character | Primary team color. |
+| `team_color` | character |  |
 | `team_color2` | character | Secondary brand color for the team, expressed as a hex color code. |
 | `team_color3` | character | Tertiary brand color for the team, expressed as a hex color code. |
 | `team_color4` | character | Quaternary brand color for the team, expressed as a hex color code. |

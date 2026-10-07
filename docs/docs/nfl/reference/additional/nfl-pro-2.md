@@ -130,7 +130,7 @@ A polars (or pandas) `DataFrame` stacking every leader list, with a `category` c
 | `player_shortName` | character | Abbreviated player name used in display contexts (e.g., 'P.Mahomes'). |
 | `player_status` | character | Player's current roster status (e.g., 'ACT' for active, 'IR' for injured reserve). |
 | `player_uniformNumber` | character | Player's uniform number as a string, matching what appears on the jersey. |
-| `player_headshot` | character | URL to the player headshot image. |
+| `player_headshot` | character |  |
 | `player_smartId` | character | NFL Smart ID — a system-agnostic unique identifier for the player used across NFL Shield systems. |
 | `player_ngsPosition` | character | Player's position as classified by NFL Next Gen Stats (may differ from official NFL position; e.g., NGS uses 'ILB' vs 'LB'). |
 | `player_ngsPositionGroup` | character | Broad position group assigned by NFL Next Gen Stats (e.g., 'QB', 'WR', 'DB', 'DL'). |

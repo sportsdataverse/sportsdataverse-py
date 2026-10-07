@@ -97,7 +97,7 @@ A polars (or pandas) `DataFrame`, one row per play (empty frame if the game has 
 | `playDeleted` | logical | Indicates whether this play record has been marked as deleted or voided. |
 | `playDescription` | character | Official text description of the play as provided by the NFL. |
 | `playDescriptionWithJerseyNumbers` | character | Play description text augmented with player jersey numbers for participant identification. |
-| `playId` | integer | Unique play event identifier (UUID). |
+| `playId` | integer |  |
 | `playStats` | integer | Internal NFL stat identifier linking this play to associated statistical records. |
 | `playType` | character | Categorical classification of the play type (e.g., PASS, RUSH, PUNT, KICKOFF). |
 | `prePlayByPlay` | character | Narrative text describing the game situation or setup immediately before this play. |
@@ -266,14 +266,14 @@ A polars (or pandas) `DataFrame`, one row per game.
 |---|---|---|
 | `id` | character | ID of the player in the 'name' column. |
 | `category` | character | Broader category of player positions |
-| `date` | character | Date of the poll release. |
+| `date` | character |  |
 | `time` | character | Time at start of play provided in string format as minutes:seconds remaining in the quarter. |
-| `gameType` | character | Game type identifier (3 for playoffs). |
+| `gameType` | character |  |
 | `international` | logical | Boolean flag indicating whether this game is designated as an international (outside the United States) game. |
-| `neutralSite` | logical | Whether the game is at a neutral site. |
+| `neutralSite` | logical |  |
 | `season` | integer | 4 digit number indicating to which season(s) the specified timeframe belongs to. |
 | `seasonType` | character | Phase of the season in which this game takes place (e.g., 'REG', 'POST', 'PRE'). |
-| `status` | character | Game status (e.g. "scheduled", "in_progress", "completed"). |
+| `status` | character |  |
 | `week` | integer | Season week. |
 | `weekType` | character | Classification of the week type within the season (e.g., 'REG', 'WC', 'DIV', 'CONF', 'SB'). |
 | `externalIds` | character | Serialized list of external system identifiers (e.g., partner IDs, league IDs) mapped to this game. |
@@ -293,9 +293,9 @@ A polars (or pandas) `DataFrame`, one row per game.
 | `broadcastInfo_streamingNetworks` | character | Serialized list of streaming platforms (e.g., Peacock, Amazon Prime Video) carrying the game. |
 | `broadcastInfo_territory` | character | Geographic territory or market designation for which this broadcast record applies. |
 | `broadcastInfo_audioNetworks` | character | Serialized list of radio networks carrying the game's audio broadcast. |
-| `venue_id` | character | Referencing venue id. |
-| `venue_name` | character | Full name of the franchise's venue. |
-| `venue_city` | character | City where the venue is located. |
+| `venue_id` | character |  |
+| `venue_name` | character |  |
+| `venue_city` | character |  |
 | `venue_country` | character | Country name or ISO code indicating where the game's venue is located. |
 
 **Example**

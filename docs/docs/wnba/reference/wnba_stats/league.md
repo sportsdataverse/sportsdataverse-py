@@ -242,7 +242,7 @@ GET /stats/leagueleaders
 | col_name | type | description |
 |---|---|---|
 | `player_id` | integer | Unique player identifier. |
-| `rank` | integer | Whether to include statistical ranks in the returned table. |
+| `rank` | integer | Rank of the row within the returned leaderboard (1 = best) for the stat the endpoint sorts by. |
 | `player` | character | Player name. |
 | `team_id` | integer | Unique team identifier. |
 | `team` | character | Team-side label or team identifier. |
@@ -322,7 +322,7 @@ GET /stats/leaguelineupviz
 | col_name | type | description |
 |---|---|---|
 | `group_id` | character | ESPN group id. |
-| `group_name` | character | Group name (conference / division). |
+| `group_name` | character | The lineup's five players as a ' - ' separated string of abbreviated names. |
 | `team_id` | integer | Unique team identifier. |
 | `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
 | `min` | numeric | Minutes played. |

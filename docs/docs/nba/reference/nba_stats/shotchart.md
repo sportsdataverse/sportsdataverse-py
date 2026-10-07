@@ -184,7 +184,7 @@ GET /stats/shotchartlineupdetail
 | `game_id` | character | Unique game identifier. |
 | `game_event_id` | character | Unique identifier for game event. |
 | `group_id` | character | ESPN group id. |
-| `group_name` | character | Group name (conference / division). |
+| `group_name` | character | The lineup's five players as a ' - ' separated string of abbreviated names. |
 | `player_id` | character | Unique player identifier. |
 | `player_name` | character | Player name. |
 | `team_id` | character | Unique team identifier. |

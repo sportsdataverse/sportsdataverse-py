@@ -248,14 +248,14 @@ GET /stats/assistleaders
 
 | col_name | type | description |
 |---|---|---|
-| `rank` | integer | Whether to include statistical ranks in the returned table. |
+| `rank` | integer | Rank of the row within the returned leaderboard (1 = best) for the stat the endpoint sorts by. |
 | `player_id` | integer | Unique player identifier. |
 | `player` | character | Player name. |
 | `team_id` | integer | Unique team identifier. |
 | `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
 | `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
 | `jersey_num` | character | Jersey number worn by the player. |
-| `player_position` | character | Position of the player accordinng to NGS |
+| `player_position` | character | Player's position abbreviation as stats.nba.com lists it (e.g. 'G', 'F-G', 'C'). |
 | `ast` | numeric | Assists. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
@@ -490,7 +490,7 @@ GET /stats/fantasywidget
 |---|---|---|
 | `player_id` | integer | Unique player identifier. |
 | `player_name` | character | Player name. |
-| `player_position` | character | Position of the player accordinng to NGS |
+| `player_position` | character | Player's position abbreviation as stats.nba.com lists it (e.g. 'G', 'F-G', 'C'). |
 | `team_id` | integer | Unique team identifier. |
 | `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
 | `gp` | integer | Games played. |
@@ -606,7 +606,7 @@ GET /stats/homepageleaders
 
 | col_name | type | description |
 |---|---|---|
-| `rank` | integer | Whether to include statistical ranks in the returned table. |
+| `rank` | integer | Rank of the row within the returned leaderboard (1 = best) for the stat the endpoint sorts by. |
 | `team_id` | integer | Unique team identifier. |
 | `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
 | `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
@@ -678,7 +678,7 @@ GET /stats/homepagev2
 
 | col_name | type | description |
 |---|---|---|
-| `rank` | integer | Whether to include statistical ranks in the returned table. |
+| `rank` | integer | Rank of the row within the returned leaderboard (1 = best) for the stat the endpoint sorts by. |
 | `team_id` | integer | Unique team identifier. |
 | `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
 | `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
@@ -688,7 +688,7 @@ GET /stats/homepagev2
 
 | col_name | type | description |
 |---|---|---|
-| `rank` | integer | Whether to include statistical ranks in the returned table. |
+| `rank` | integer | Rank of the row within the returned leaderboard (1 = best) for the stat the endpoint sorts by. |
 | `team_id` | integer | Unique team identifier. |
 | `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
 | `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
@@ -698,7 +698,7 @@ GET /stats/homepagev2
 
 | col_name | type | description |
 |---|---|---|
-| `rank` | integer | Whether to include statistical ranks in the returned table. |
+| `rank` | integer | Rank of the row within the returned leaderboard (1 = best) for the stat the endpoint sorts by. |
 | `team_id` | integer | Unique team identifier. |
 | `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
 | `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
@@ -708,7 +708,7 @@ GET /stats/homepagev2
 
 | col_name | type | description |
 |---|---|---|
-| `rank` | integer | Whether to include statistical ranks in the returned table. |
+| `rank` | integer | Rank of the row within the returned leaderboard (1 = best) for the stat the endpoint sorts by. |
 | `team_id` | integer | Unique team identifier. |
 | `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
 | `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
@@ -718,7 +718,7 @@ GET /stats/homepagev2
 
 | col_name | type | description |
 |---|---|---|
-| `rank` | integer | Whether to include statistical ranks in the returned table. |
+| `rank` | integer | Rank of the row within the returned leaderboard (1 = best) for the stat the endpoint sorts by. |
 | `team_id` | integer | Unique team identifier. |
 | `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
 | `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
@@ -728,7 +728,7 @@ GET /stats/homepagev2
 
 | col_name | type | description |
 |---|---|---|
-| `rank` | integer | Whether to include statistical ranks in the returned table. |
+| `rank` | integer | Rank of the row within the returned leaderboard (1 = best) for the stat the endpoint sorts by. |
 | `team_id` | integer | Unique team identifier. |
 | `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
 | `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
@@ -738,7 +738,7 @@ GET /stats/homepagev2
 
 | col_name | type | description |
 |---|---|---|
-| `rank` | integer | Whether to include statistical ranks in the returned table. |
+| `rank` | integer | Rank of the row within the returned leaderboard (1 = best) for the stat the endpoint sorts by. |
 | `team_id` | integer | Unique team identifier. |
 | `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
 | `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
@@ -748,7 +748,7 @@ GET /stats/homepagev2
 
 | col_name | type | description |
 |---|---|---|
-| `rank` | integer | Whether to include statistical ranks in the returned table. |
+| `rank` | integer | Rank of the row within the returned leaderboard (1 = best) for the stat the endpoint sorts by. |
 | `team_id` | integer | Unique team identifier. |
 | `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
 | `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
@@ -878,7 +878,7 @@ GET /stats/infographicfanduelplayer
 | `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
 | `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
 | `jersey_num` | character | Jersey number worn by the player. |
-| `player_position` | character | Position of the player accordinng to NGS |
+| `player_position` | character | Player's position abbreviation as stats.nba.com lists it (e.g. 'G', 'F-G', 'C'). |
 | `location` | character | Filter results by game location. |
 | `fan_duel_pts` | numeric | Scoring or score-margin metric for fan duel points in the requested NBA or WNBA Stats split. |
 | `nba_fantasy_pts` | numeric | Nba fantasy points for the requested NBA or WNBA Stats split. |
@@ -942,7 +942,7 @@ GET /stats/leaderstiles
 
 | col_name | type | description |
 |---|---|---|
-| `rank` | integer | Whether to include statistical ranks in the returned table. |
+| `rank` | integer | Rank of the row within the returned leaderboard (1 = best) for the stat the endpoint sorts by. |
 | `player_id` | integer | Unique player identifier. |
 | `player` | character | Player name. |
 | `team_id` | integer | Unique team identifier. |
@@ -966,7 +966,7 @@ GET /stats/leaderstiles
 
 | col_name | type | description |
 |---|---|---|
-| `rank` | integer | Whether to include statistical ranks in the returned table. |
+| `rank` | integer | Rank of the row within the returned leaderboard (1 = best) for the stat the endpoint sorts by. |
 | `player_id` | integer | Unique player identifier. |
 | `player` | character | Player name. |
 | `team_id` | integer | Unique team identifier. |
@@ -1127,7 +1127,7 @@ GET /stats/videostatus
 | `home_team_id` | integer | Unique identifier for the home team. |
 | `home_team_city` | character | Home team city / location. |
 | `home_team_name` | character | Home team name. |
-| `home_team_abbreviation` | character | Home team abbreviation. |
+| `home_team_abbreviation` | character | Home team's three-letter tricode (e.g. 'PHI'). |
 | `game_status` | integer | Game status label. |
 | `game_status_text` | character | Game status display text (e.g. 'Final', '4:32 - 4th'). |
 | `is_available` | integer | Flag indicating whether game video is available in the league's stats video system. |

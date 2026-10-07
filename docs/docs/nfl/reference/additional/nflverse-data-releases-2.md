@@ -439,10 +439,10 @@ Polars dataframe containing officials available.
 |---|---|---|
 | `game_id` | character | Ten digit identifier for NFL game. |
 | `game_key` | character | Unique nflverse game identifier linking the officiating record to a specific NFL game. |
-| `official_name` | character | Official name. |
+| `official_name` | character |  |
 | `position` | character | Primary position as reported by NFL.com |
 | `jersey_number` | integer | Jersey number. Often useful for joins by name/team/jersey. |
-| `official_id` | character | Unique official / referee identifier. |
+| `official_id` | character |  |
 | `season` | integer | 4 digit number indicating to which season(s) the specified timeframe belongs to. |
 | `season_type` | character | REG or POST indicating if the timeframe belongs to regular or post season. |
 | `week` | integer | Season week. |

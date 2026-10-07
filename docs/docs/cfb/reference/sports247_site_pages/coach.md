@@ -36,8 +36,8 @@ Coach alma-mater Institution.
 | `rankable` | character | Whether the institution participates in class rankings. |
 | `mascot` | character | Team mascot. |
 | `abbreviation` | character | Metric abbreviation. |
-| `primary_color` | character | Primary team color (hex). |
-| `secondary_color` | character | Secondary team color (hex). |
+| `primary_color` | character |  |
+| `secondary_color` | character |  |
 | `is_foreign` | character | Whether the institution is located outside the United States. |
 | `site` | integer | FK -> team Site (network site key). |
 | `default_asset` | numeric | Nested 247Sports image asset for the institution's primary logo (stringified). |
@@ -77,7 +77,7 @@ Coach hometown Location.
 | col_name | type | description |
 |---|---|---|
 | `key` | integer | Primary key of this entity (the id used in its `.json` route). |
-| `postal_code` | integer | Postal code of the venue. |
+| `postal_code` | integer |  |
 | `city` | character | Venue city. |
 | `state` | integer | U.S. state of the location record, per 247Sports. |
 | `latitude` | numeric | Venue latitude in decimal degrees. |
@@ -115,7 +115,7 @@ Single CoachRanking row.
 | col_name | type | description |
 |---|---|---|
 | `key` | integer | Primary key of this entity (the id used in its `.json` route). |
-| `coach` | integer | Coach. |
+| `coach` | integer |  |
 | `institution` | integer | Nested 247Sports institution the coach recruited for during the ranking cycle (stringified). |
 | `conference` | integer | Conference of the team. |
 | `ranking` | integer | FK -> the Ranking snapshot this row belongs to. |
@@ -183,7 +183,7 @@ Coach's recruiting-ranking history (one row per Ranking snapshot).
 | col_name | type | description |
 |---|---|---|
 | `key` | integer | Primary key of this entity (the id used in its `.json` route). |
-| `coach` | integer | Coach. |
+| `coach` | integer |  |
 | `institution` | integer | Nested 247Sports institution the coach recruited for during the ranking cycle (stringified). |
 | `conference` | integer | Conference of the team. |
 | `ranking` | integer | FK -> the Ranking snapshot this row belongs to. |

@@ -31,39 +31,39 @@ GET /api/secured/stats/defense/overview/season — one row per defender for the 
 
 | col_name | type | description |
 |---|---|---|
-| `nfl_id` | character | NFL ID of player (this is used in Big Data Bowl Data) |
-| `display_name` | character | Full name of player |
-| `short_name` | character | Player short name (i.e. "F.Last") |
-| `headshot` | character | NFL headshot url for player |
-| `team_id` | character | ESPN team id. |
-| `jersey_number` | integer | Jersey number. Often useful for joins by name/team/jersey. |
-| `position` | character | Primary position as reported by NFL.com |
-| `position_group` | character | Postion group of player as listed by NFL |
-| `ngs_position` | character | Primary position as reported by the NextGen stats API. |
-| `ngs_position_group` | character | Position group of player as listed by Next Gen Stats |
-| `gp` | integer | Games played. |
-| `gs` | integer | Games started. |
-| `tg` | integer |  |
-| `total_tg` | integer |  |
-| `snap` | integer |  |
-| `snap_pct` | double |  |
+| `nfl_id` | character | NFL player id (`nflId`) as a string; the key the wrappers accept as `nfl_id`. |
+| `display_name` | character | Player's full display name (e.g. 'Aaron Rodgers'). |
+| `short_name` | character | Player's abbreviated name, first initial and surname (e.g. 'A.Rodgers'). |
+| `headshot` | character | NFL headshot image URL template; the `{formatInstructions}` token must be replaced with a Cloudinary transform (e.g. `t_headshot_desktop`) before use. |
+| `team_id` | character | NFL team id as a zero-padded string (e.g. '0200', '3430'); casting it to a number drops the leading zero. |
+| `jersey_number` | integer | Jersey number the player wore in the season. |
+| `position` | character | Roster position abbreviation (e.g. QB, WR, CB). |
+| `position_group` | character | Position group the roster position rolls up to (e.g. QB, RB, WR, TE, DB). |
+| `ngs_position` | character | Position Next Gen Stats assigns from tracking data; null for players NGS has not classified. |
+| `ngs_position_group` | character | Position group of ngs_position; null when ngs_position is null. |
+| `gp` | integer | Games played in the season (and season type) -- the denominator of every `*_pg` per-game column. |
+| `gs` | integer | Games started in the season. |
+| `tg` | integer | Games the player's team played while he was on the roster; equals gp in sampled data. |
+| `total_tg` | integer | Total games the player's team played in the season type (17 for a full regular season). |
+| `snap` | integer | Defensive snaps played, season total. |
+| `snap_pct` | double | Share of the team's defensive snaps the player played (snap / team_snap). |
 | `rd` | integer |  |
-| `pr` | integer |  |
-| `tck` | integer |  |
+| `pr` | integer | Pass-rush snaps, season total; the denominator of qbp_r. |
+| `tck` | integer | Tackles, season total. |
 | `t_stop` | integer |  |
 | `h_stop` | integer |  |
-| `qbp` | integer |  |
-| `qbp_r` | double |  |
-| `sack` | double | Binary indicator for if the play ended in a sack. |
-| `tgt_nd` | integer |  |
-| `rec_nd` | integer |  |
-| `rec_yds_nd` | integer |  |
-| `rec_td_nd` | integer |  |
-| `int` | integer | Binary flag for an interception. |
-| `pass_rating_nd` | double |  |
-| `qd` | logical |  |
-| `game_snap` | integer |  |
-| `team_snap` | integer |  |
+| `qbp` | integer | Quarterback pressures, season total. |
+| `qbp_r` | double | Pressure rate: pressures per pass-rush snap (qbp / pr). |
+| `sack` | double | Sacks, season total (a count, not a per-play flag). |
+| `tgt_nd` | integer | Targets on which the player was the nearest defender, season total, per Next Gen Stats. |
+| `rec_nd` | integer | Receptions allowed as the nearest defender, season total. |
+| `rec_yds_nd` | integer | Receiving yards allowed as the nearest defender, season total. |
+| `rec_td_nd` | integer | Receiving touchdowns allowed as the nearest defender, season total. |
+| `int` | integer | Interceptions made, season total (a count, not a per-play flag). |
+| `pass_rating_nd` | double | Passer rating allowed on targets where the player was the nearest defender. |
+| `qd` | logical | Whether the defender meets the league qualifying threshold for the table (the `qualified` filter). |
+| `game_snap` | integer | Defensive snaps the player played, season total; equals snap on the overview table. |
+| `team_snap` | integer | Defensive snaps the player's team played, season total; the denominator of snap_pct. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -100,46 +100,46 @@ GET /api/secured/stats/defense/overview/week — one row per defender per week �
 
 | col_name | type | description |
 |---|---|---|
-| `nfl_id` | character | NFL ID of player (this is used in Big Data Bowl Data) |
-| `display_name` | character | Full name of player |
-| `short_name` | character | Player short name (i.e. "F.Last") |
-| `headshot` | character | NFL headshot url for player |
-| `team_id` | character | ESPN team id. |
-| `jersey_number` | integer | Jersey number. Often useful for joins by name/team/jersey. |
-| `position` | character | Primary position as reported by NFL.com |
-| `position_group` | character | Postion group of player as listed by NFL |
-| `ngs_position` | character | Primary position as reported by the NextGen stats API. |
-| `ngs_position_group` | character | Position group of player as listed by Next Gen Stats |
-| `gp` | integer | Games played. |
-| `gs` | integer | Games started. |
-| `tg` | integer |  |
-| `total_tg` | integer |  |
-| `week_slug` | character |  |
-| `game_id` | integer | Ten digit identifier for NFL game. |
-| `fapi_game_id` | character |  |
-| `opponent_team_id` | character | Unique identifier for the opponent team. |
-| `is_home` | logical | Whether the subject team was the home team. |
-| `final_score` | character |  |
-| `game_result` | character | Game result for the player's team (`W`/`L`). |
-| `snap` | integer |  |
-| `snap_pct` | double |  |
+| `nfl_id` | character | NFL player id (`nflId`) as a string; the key the wrappers accept as `nfl_id`. |
+| `display_name` | character | Player's full display name (e.g. 'Aaron Rodgers'). |
+| `short_name` | character | Player's abbreviated name, first initial and surname (e.g. 'A.Rodgers'). |
+| `headshot` | character | NFL headshot image URL template; the `{formatInstructions}` token must be replaced with a Cloudinary transform (e.g. `t_headshot_desktop`) before use. |
+| `team_id` | character | NFL team id as a zero-padded string (e.g. '0200', '3430'); casting it to a number drops the leading zero. |
+| `jersey_number` | integer | Jersey number the player wore in the season. |
+| `position` | character | Roster position abbreviation (e.g. QB, WR, CB). |
+| `position_group` | character | Position group the roster position rolls up to (e.g. QB, RB, WR, TE, DB). |
+| `ngs_position` | character | Position Next Gen Stats assigns from tracking data; null for players NGS has not classified. |
+| `ngs_position_group` | character | Position group of ngs_position; null when ngs_position is null. |
+| `gp` | integer | Games played in the season (and season type) -- the denominator of every `*_pg` per-game column. |
+| `gs` | integer | Games started in the season. |
+| `tg` | integer | Games the player's team played while he was on the roster; equals gp in sampled data. |
+| `total_tg` | integer | Total games the player's team played in the season type (17 for a full regular season). |
+| `week_slug` | character | Week slug of the game (e.g. 'WEEK_1', 'WEEK_18'); the week scope of the row. |
+| `game_id` | integer | NFL game id as an integer (e.g. 2024090900, the date followed by a two-digit sequence). |
+| `fapi_game_id` | character | NFL Football API (FAPI) UUID of the game, the id api.nfl.com uses for the same game. |
+| `opponent_team_id` | character | Opponent's NFL team id as a zero-padded string. |
+| `is_home` | logical | Whether the player's team was the home team in the game. |
+| `final_score` | character | Final score as 'own-opponent' (e.g. '19-32' for a 32-19 loss). |
+| `game_result` | character | Result from the player's team's side: 'W', 'L' or 'T'. |
+| `snap` | integer | Defensive snaps played in the game. |
+| `snap_pct` | double | Share of the team's defensive snaps the player played (snap / team_snap). |
 | `rd` | integer |  |
-| `pr` | integer |  |
-| `tck` | integer |  |
+| `pr` | integer | Pass-rush snaps in the game; the denominator of qbp_r. |
+| `tck` | integer | Tackles in the game. |
 | `t_stop` | integer |  |
 | `h_stop` | integer |  |
-| `qbp` | integer |  |
-| `qbp_r` | double |  |
-| `sack` | integer | Binary indicator for if the play ended in a sack. |
-| `tgt_nd` | integer |  |
-| `rec_nd` | integer |  |
-| `rec_yds_nd` | integer |  |
-| `rec_td_nd` | integer |  |
-| `int` | integer | Binary flag for an interception. |
-| `pass_rating_nd` | double |  |
-| `qd` | logical |  |
-| `game_snap` | integer |  |
-| `team_snap` | integer |  |
+| `qbp` | integer | Quarterback pressures in the game. |
+| `qbp_r` | double | Pressure rate: pressures per pass-rush snap (qbp / pr). |
+| `sack` | integer | Sacks in the game (a count, not a per-play flag). |
+| `tgt_nd` | integer | Targets on which the player was the nearest defender in the game, per Next Gen Stats. |
+| `rec_nd` | integer | Receptions allowed as the nearest defender in the game. |
+| `rec_yds_nd` | integer | Receiving yards allowed as the nearest defender in the game. |
+| `rec_td_nd` | integer | Receiving touchdowns allowed as the nearest defender in the game. |
+| `int` | integer | Interceptions made in the game (a count, not a per-play flag). |
+| `pass_rating_nd` | double | Passer rating allowed on targets where the player was the nearest defender. |
+| `qd` | logical | Whether the defender meets the league qualifying threshold for the table (the `qualified` filter). |
+| `game_snap` | integer | Defensive snaps the player played in the game; equals snap on the overview table. |
+| `team_snap` | integer | Defensive snaps the player's team played in the game; the denominator of snap_pct. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -175,39 +175,39 @@ GET /api/secured/stats/defense/nearest/season — one row per defender for the s
 
 | col_name | type | description |
 |---|---|---|
-| `nfl_id` | character | NFL ID of player (this is used in Big Data Bowl Data) |
-| `display_name` | character | Full name of player |
-| `short_name` | character | Player short name (i.e. "F.Last") |
-| `headshot` | character | NFL headshot url for player |
-| `team_id` | character | ESPN team id. |
-| `jersey_number` | integer | Jersey number. Often useful for joins by name/team/jersey. |
-| `position` | character | Primary position as reported by NFL.com |
-| `position_group` | character | Postion group of player as listed by NFL |
-| `ngs_position` | character | Primary position as reported by the NextGen stats API. |
-| `ngs_position_group` | character | Position group of player as listed by Next Gen Stats |
-| `gp` | integer | Games played. |
-| `gs` | integer | Games started. |
-| `tg` | integer |  |
-| `total_tg` | integer |  |
+| `nfl_id` | character | NFL player id (`nflId`) as a string; the key the wrappers accept as `nfl_id`. |
+| `display_name` | character | Player's full display name (e.g. 'Aaron Rodgers'). |
+| `short_name` | character | Player's abbreviated name, first initial and surname (e.g. 'A.Rodgers'). |
+| `headshot` | character | NFL headshot image URL template; the `{formatInstructions}` token must be replaced with a Cloudinary transform (e.g. `t_headshot_desktop`) before use. |
+| `team_id` | character | NFL team id as a zero-padded string (e.g. '0200', '3430'); casting it to a number drops the leading zero. |
+| `jersey_number` | integer | Jersey number the player wore in the season. |
+| `position` | character | Roster position abbreviation (e.g. QB, WR, CB). |
+| `position_group` | character | Position group the roster position rolls up to (e.g. QB, RB, WR, TE, DB). |
+| `ngs_position` | character | Position Next Gen Stats assigns from tracking data; null for players NGS has not classified. |
+| `ngs_position_group` | character | Position group of ngs_position; null when ngs_position is null. |
+| `gp` | integer | Games played in the season (and season type) -- the denominator of every `*_pg` per-game column. |
+| `gs` | integer | Games started in the season. |
+| `tg` | integer | Games the player's team played while he was on the roster; equals gp in sampled data. |
+| `total_tg` | integer | Total games the player's team played in the season type (17 for a full regular season). |
 | `cov` | integer |  |
 | `cov_nd` | integer |  |
-| `tgt_nd` | integer |  |
-| `rec_nd` | integer |  |
-| `rec_yds_nd` | integer |  |
-| `rec_td_nd` | integer |  |
-| `int` | integer | Binary flag for an interception. |
-| `pass_rating_nd` | double |  |
-| `catch_nd` | double |  |
-| `croe_nd` | double |  |
-| `tgt_epa_nd` | double |  |
-| `tgt_r_nd` | double |  |
-| `sep` | double |  |
+| `tgt_nd` | integer | Targets on which the player was the nearest defender, season total, per Next Gen Stats. |
+| `rec_nd` | integer | Receptions allowed as the nearest defender, season total. |
+| `rec_yds_nd` | integer | Receiving yards allowed as the nearest defender, season total. |
+| `rec_td_nd` | integer | Receiving touchdowns allowed as the nearest defender, season total. |
+| `int` | integer | Interceptions made, season total (a count, not a per-play flag). |
+| `pass_rating_nd` | double | Passer rating allowed on targets where the player was the nearest defender. |
+| `catch_nd` | double | Catch rate allowed as the nearest defender (rec_nd / tgt_nd), as a fraction. |
+| `croe_nd` | double | Catch rate over expected allowed as the nearest defender (actual minus expected catch rate), per Next Gen Stats. |
+| `tgt_epa_nd` | double | Total expected points added allowed on targets where the player was the nearest defender. |
+| `tgt_r_nd` | double | Target rate as the nearest defender: share of coverage snaps on which the receiver he covered was targeted. |
+| `sep` | double | Average separation in yards allowed at pass arrival as the nearest defender, per Next Gen Stats. |
 | `twf_pct` | double |  |
 | `bh_pct` | double |  |
 | `yacpr_nd` | double |  |
-| `qd` | logical |  |
-| `game_snap` | integer |  |
-| `team_snap` | integer |  |
+| `qd` | logical | Whether the defender meets the league qualifying threshold for the table (the `qualified` filter). |
+| `game_snap` | integer | Defensive snaps the player played, season total; equals snap on the overview table. |
+| `team_snap` | integer | Defensive snaps the player's team played, season total; the denominator of snap_pct. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -244,46 +244,46 @@ GET /api/secured/stats/defense/nearest/week — one row per defender per week �
 
 | col_name | type | description |
 |---|---|---|
-| `nfl_id` | character | NFL ID of player (this is used in Big Data Bowl Data) |
-| `display_name` | character | Full name of player |
-| `short_name` | character | Player short name (i.e. "F.Last") |
-| `headshot` | character | NFL headshot url for player |
-| `team_id` | character | ESPN team id. |
-| `jersey_number` | integer | Jersey number. Often useful for joins by name/team/jersey. |
-| `position` | character | Primary position as reported by NFL.com |
-| `position_group` | character | Postion group of player as listed by NFL |
-| `ngs_position` | character | Primary position as reported by the NextGen stats API. |
-| `ngs_position_group` | character | Position group of player as listed by Next Gen Stats |
-| `gp` | integer | Games played. |
-| `gs` | integer | Games started. |
-| `tg` | integer |  |
-| `total_tg` | integer |  |
-| `week_slug` | character |  |
-| `game_id` | integer | Ten digit identifier for NFL game. |
-| `fapi_game_id` | character |  |
-| `opponent_team_id` | character | Unique identifier for the opponent team. |
-| `is_home` | logical | Whether the subject team was the home team. |
-| `final_score` | character |  |
-| `game_result` | character | Game result for the player's team (`W`/`L`). |
+| `nfl_id` | character | NFL player id (`nflId`) as a string; the key the wrappers accept as `nfl_id`. |
+| `display_name` | character | Player's full display name (e.g. 'Aaron Rodgers'). |
+| `short_name` | character | Player's abbreviated name, first initial and surname (e.g. 'A.Rodgers'). |
+| `headshot` | character | NFL headshot image URL template; the `{formatInstructions}` token must be replaced with a Cloudinary transform (e.g. `t_headshot_desktop`) before use. |
+| `team_id` | character | NFL team id as a zero-padded string (e.g. '0200', '3430'); casting it to a number drops the leading zero. |
+| `jersey_number` | integer | Jersey number the player wore in the season. |
+| `position` | character | Roster position abbreviation (e.g. QB, WR, CB). |
+| `position_group` | character | Position group the roster position rolls up to (e.g. QB, RB, WR, TE, DB). |
+| `ngs_position` | character | Position Next Gen Stats assigns from tracking data; null for players NGS has not classified. |
+| `ngs_position_group` | character | Position group of ngs_position; null when ngs_position is null. |
+| `gp` | integer | Games played in the season (and season type) -- the denominator of every `*_pg` per-game column. |
+| `gs` | integer | Games started in the season. |
+| `tg` | integer | Games the player's team played while he was on the roster; equals gp in sampled data. |
+| `total_tg` | integer | Total games the player's team played in the season type (17 for a full regular season). |
+| `week_slug` | character | Week slug of the game (e.g. 'WEEK_1', 'WEEK_18'); the week scope of the row. |
+| `game_id` | integer | NFL game id as an integer (e.g. 2024090900, the date followed by a two-digit sequence). |
+| `fapi_game_id` | character | NFL Football API (FAPI) UUID of the game, the id api.nfl.com uses for the same game. |
+| `opponent_team_id` | character | Opponent's NFL team id as a zero-padded string. |
+| `is_home` | logical | Whether the player's team was the home team in the game. |
+| `final_score` | character | Final score as 'own-opponent' (e.g. '19-32' for a 32-19 loss). |
+| `game_result` | character | Result from the player's team's side: 'W', 'L' or 'T'. |
 | `cov` | integer |  |
 | `cov_nd` | integer |  |
-| `tgt_nd` | integer |  |
-| `rec_nd` | integer |  |
-| `rec_yds_nd` | integer |  |
-| `rec_td_nd` | integer |  |
-| `int` | integer | Binary flag for an interception. |
-| `pass_rating_nd` | double |  |
-| `catch_nd` | double |  |
-| `croe_nd` | double |  |
-| `tgt_epa_nd` | double |  |
-| `tgt_r_nd` | double |  |
-| `sep` | double |  |
+| `tgt_nd` | integer | Targets on which the player was the nearest defender in the game, per Next Gen Stats. |
+| `rec_nd` | integer | Receptions allowed as the nearest defender in the game. |
+| `rec_yds_nd` | integer | Receiving yards allowed as the nearest defender in the game. |
+| `rec_td_nd` | integer | Receiving touchdowns allowed as the nearest defender in the game. |
+| `int` | integer | Interceptions made in the game (a count, not a per-play flag). |
+| `pass_rating_nd` | double | Passer rating allowed on targets where the player was the nearest defender. |
+| `catch_nd` | double | Catch rate allowed as the nearest defender (rec_nd / tgt_nd), as a fraction. |
+| `croe_nd` | double | Catch rate over expected allowed as the nearest defender (actual minus expected catch rate), per Next Gen Stats. |
+| `tgt_epa_nd` | double | Total expected points added allowed on targets where the player was the nearest defender. |
+| `tgt_r_nd` | double | Target rate as the nearest defender: share of coverage snaps on which the receiver he covered was targeted. |
+| `sep` | double | Average separation in yards allowed at pass arrival as the nearest defender, per Next Gen Stats. |
 | `twf_pct` | integer |  |
 | `bh_pct` | double |  |
 | `yacpr_nd` | double |  |
-| `qd` | logical |  |
-| `game_snap` | integer |  |
-| `team_snap` | integer |  |
+| `qd` | logical | Whether the defender meets the league qualifying threshold for the table (the `qualified` filter). |
+| `game_snap` | integer | Defensive snaps the player played in the game; equals snap on the overview table. |
+| `team_snap` | integer | Defensive snaps the player's team played in the game; the denominator of snap_pct. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 

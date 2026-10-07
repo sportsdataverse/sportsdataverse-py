@@ -29,19 +29,19 @@ A draft.
 |---|---|---|
 | `created` | integer |  |
 | `creators` | character |  |
-| `draft_id` | character | Draft/round id parsed from the `$ref` URL. |
+| `draft_id` | character | Sleeper draft id, as a string. |
 | `draft_order` | character |  |
 | `last_message_id` | character |  |
 | `last_message_time` | integer |  |
 | `last_picked` | integer |  |
-| `league_id` | character | League identifier ('10' = WNBA). |
+| `league_id` | character | Sleeper league id the draft belongs to, as a string. |
 | `season` | character | 4 digit number indicating to which season(s) the specified timeframe belongs to. |
 | `season_type` | character | REG or POST indicating if the timeframe belongs to regular or post season. |
 | `slot_to_roster_id` | character |  |
 | `sport` | character |  |
 | `start_time` | integer | Kickoff time in eastern time zone. |
-| `status` | character | Game status (e.g. "scheduled", "in_progress", "completed"). |
-| `type` | character | Record-type category (e.g. `total`, `home`, `road`). |
+| `status` | character | Draft status (e.g. 'pre_draft', 'drafting', 'complete'). |
+| `type` | character | Draft type (e.g. 'snake', 'linear', 'auction'). |
 | `metadata_description` | character |  |
 | `metadata_name` | character |  |
 | `metadata_scoring_type` | character |  |
@@ -85,15 +85,15 @@ Picks of a draft.
 
 | col_name | type | description |
 |---|---|---|
-| `draft_id` | character | Draft/round id parsed from the `$ref` URL. |
+| `draft_id` | character | Sleeper draft id the pick belongs to, as a string. |
 | `draft_slot` | integer |  |
 | `is_keeper` | character |  |
 | `pick_no` | integer |  |
 | `picked_by` | character |  |
-| `player_id` | character | Player ID (aka GSIS ID) as defined by nflreadr::load_rosters |
+| `player_id` | character | Sleeper player id of the drafted player, as a string. |
 | `reactions` | character |  |
 | `roster_id` | character |  |
-| `round` | integer | Draft round |
+| `round` | integer | Draft round the pick was made in (1 = first round). |
 | `metadata_first_name` | character |  |
 | `metadata_injury_status` | character |  |
 | `metadata_last_name` | character |  |
@@ -135,18 +135,18 @@ Drafts of a league.
 |---|---|---|
 | `created` | integer |  |
 | `creators` | character |  |
-| `draft_id` | character | Draft/round id parsed from the `$ref` URL. |
+| `draft_id` | character | Sleeper draft id, as a string. |
 | `draft_order` | character |  |
 | `last_message_id` | character |  |
 | `last_message_time` | integer |  |
 | `last_picked` | integer |  |
-| `league_id` | character | League identifier ('10' = WNBA). |
+| `league_id` | character | Sleeper league id the draft belongs to, as a string. |
 | `season` | character | 4 digit number indicating to which season(s) the specified timeframe belongs to. |
 | `season_type` | character | REG or POST indicating if the timeframe belongs to regular or post season. |
 | `sport` | character |  |
 | `start_time` | integer | Kickoff time in eastern time zone. |
-| `status` | character | Game status (e.g. "scheduled", "in_progress", "completed"). |
-| `type` | character | Record-type category (e.g. `total`, `home`, `road`). |
+| `status` | character | Draft status (e.g. 'pre_draft', 'drafting', 'complete'). |
+| `type` | character | Draft type (e.g. 'snake', 'linear', 'auction'). |
 | `metadata_description` | character |  |
 | `metadata_name` | character |  |
 | `metadata_scoring_type` | character |  |
@@ -192,7 +192,7 @@ A league.
 | col_name | type | description |
 |---|---|---|
 | `name` | character | Name, as reported by MFL but reordered into FirstName LastName instead of Last, First |
-| `status` | character | Game status (e.g. "scheduled", "in_progress", "completed"). |
+| `status` | character | League status (e.g. 'pre_draft', 'drafting', 'in_season', 'complete'). |
 | `avatar` | character |  |
 | `company_id` | character |  |
 | `shard` | integer |  |
@@ -209,13 +209,13 @@ A league.
 | `last_message_time` | integer |  |
 | `last_pinned_message_id` | character |  |
 | `last_read_id` | character |  |
-| `draft_id` | character | Draft/round id parsed from the `$ref` URL. |
-| `league_id` | character | League identifier ('10' = WNBA). |
+| `draft_id` | character | Sleeper draft id of the league's draft, as a string. |
+| `league_id` | character | Sleeper league id, as a string. |
 | `previous_league_id` | character |  |
 | `bracket_id` | character |  |
 | `roster_positions` | character |  |
 | `bracket_overrides_id` | character |  |
-| `group_id` | character | ESPN group (conference) id for the season. |
+| `group_id` | character | Sleeper league-group id when the league belongs to a group; null otherwise. |
 | `loser_bracket_id` | character |  |
 | `loser_bracket_overrides_id` | character |  |
 | `total_rosters` | integer |  |
@@ -368,8 +368,8 @@ Matchups for a week.
 
 | col_name | type | description |
 |---|---|---|
-| `points` | numeric | Total points accumulated by the school in the poll's weighted voting. |
-| `players` | character | Nested list of per-player box scores. |
+| `points` | numeric | Fantasy points the roster scored in the week under the league's scoring settings. |
+| `players` | character | Stringified list of Sleeper player ids on the roster for the week (starters and bench). |
 | `roster_id` | character |  |
 | `custom_points` | character |  |
 | `matchup_id` | character |  |
@@ -404,57 +404,57 @@ All NFL players (large; fetch at most once per day).
 
 | col_name | type | description |
 |---|---|---|
-| `player_id` | character | Player ID (aka GSIS ID) as defined by nflreadr::load_rosters |
-| `weight` | character | Official weight, in pounds |
-| `birth_state` | character | Birthplace state. |
-| `birth_country` | character | Birthplace country. |
-| `team_abbr` | character | Official team abbreveation |
-| `rotoworld_id` | character | Rotoworld ID - usual format is an integer with ~four digits. Not to be confused with rotowire_id. |
+| `player_id` | character | Player id in the source's own namespace, as a string. |
+| `weight` | character | Player's weight as the source lists it (pounds for US sources). |
+| `birth_state` | character | State or region of birth, where the source lists it. |
+| `birth_country` | character | Country of birth, where the source lists it. |
+| `team_abbr` | character | Abbreviation of the player's current team; null for a free agent or retired player. |
+| `rotoworld_id` | character | Rotoworld player id, as a string. |
 | `news_updated` | character |  |
-| `sportradar_id` | character | SportRadar ID - often also called sportsdata_id by other services. A UUID. |
+| `sportradar_id` | character | Sportradar player id (a UUID). |
 | `team_changed_at` | character |  |
-| `team` | character | NFL team. Uses official abbreviations as per NFL.com |
-| `depth_chart_position` | character | Position assigned on depth chart. Not always accurate! |
-| `swish_id` | character | Player ID for Swish Analytics |
-| `active` | logical | `TRUE` if the player was active for the game. |
-| `last_name` | character | Last name of player |
+| `team` | character | Current team of the player as the source ships it (a nested team object, stringified, or a team code). |
+| `depth_chart_position` | character | Position slot on the team depth chart, where the source lists it. |
+| `swish_id` | character | Swish Analytics player id, as a string. |
+| `active` | logical | Whether the player record is active with the source (e.g. on a current roster). |
+| `last_name` | character | Player's last name as the source lists it. |
 | `injury_body_part` | character |  |
 | `practice_participation` | character |  |
-| `injury_status` | character | Injury status (e.g. "Questionable", "Out"). |
-| `college` | character | Official college (usually the last one attended) |
+| `injury_status` | character | Current injury designation (e.g. 'Questionable', 'Out'); null when healthy or unknown. |
+| `college` | character | College the player attended, as the source lists it. |
 | `search_first_name` | character |  |
-| `rotowire_id` | character | Rotowire ID - usual format is an integer with ~four digits. Not to be confused with rotowire_id. |
+| `rotowire_id` | character | RotoWire player id, as a string. |
 | `injury_notes` | character |  |
 | `search_full_name` | character |  |
-| `gsis_id` | character | Game Stats and Info Service ID: the primary ID for play-by-play data. |
-| `years_exp` | integer | Years played in league |
-| `status` | character | Game status (e.g. "scheduled", "in_progress", "completed"). |
+| `gsis_id` | character | NFL GSIS player id (e.g. '00-0033873'), the nflverse play-by-play key. |
+| `years_exp` | integer | Years of professional experience. |
+| `status` | character | Player status as the source lists it (e.g. 'Active', 'Inactive'). |
 | `pandascore_id` | character |  |
-| `number` | integer | Week number as returned by the API. |
+| `number` | integer | Jersey number as the source lists it. |
 | `injury_start_date` | character |  |
 | `metadata` | character |  |
-| `height` | character | Official height, in inches |
+| `height` | character | Player's height as the source encodes it (PFF uses feet and inches without a separator, 602 = 6'02"; others use inches or centimetres). |
 | `search_rank` | integer |  |
-| `fantasy_data_id` | character | FantasyData ID - usual format five digit integer |
-| `espn_id` | character | ESPN ID - usual format is an integer with ~5 digits |
+| `fantasy_data_id` | character | FantasyData player id, as a string. |
+| `espn_id` | character | ESPN athlete id, as a string. |
 | `sport` | character |  |
 | `search_last_name` | character |  |
 | `competitions` | character |  |
 | `hashtag` | character |  |
-| `stats_id` | character | Stats ID - usual format is five digit integer |
+| `stats_id` | character | STATS (Stats Perform) player id, as a string. |
 | `practice_description` | character |  |
 | `oddsjam_id` | character |  |
-| `full_name` | character | Full name as per NFL.com |
+| `full_name` | character | Player's full name as the source lists it. |
 | `fantasy_positions` | character |  |
-| `age` | integer | Age as of last pipeline build, rounded to one decimal. Pipeline is built on a weekly basis. |
-| `first_name` | character | First name of player |
+| `age` | integer | Player's age in years at capture (string), where the source lists it. |
+| `first_name` | character | Player's first name as the source lists it. |
 | `player_shard` | character |  |
-| `position` | character | Primary position as reported by NFL.com |
-| `high_school` | character | High school |
-| `birth_city` | character | Birthplace city. |
-| `yahoo_id` | character | Yahoo ID - usual format is an integer with ~5 digits |
+| `position` | character | Position abbreviation as the source lists it (e.g. QB, WR). |
+| `high_school` | character | High school the player attended, with its state in parentheses where the source lists it (e.g. 'Killian (FL)'). |
+| `birth_city` | character | City of birth, where the source lists it. |
+| `yahoo_id` | character | Yahoo player id, as a string. |
 | `depth_chart_order` | character |  |
-| `birth_date` | character | Player birth date (sourced from NFL. Other sources may differ) |
+| `birth_date` | character | Player's date of birth (YYYY-MM-DD), where the source lists it. |
 | `kalshi_id` | character |  |
 | `opta_id` | character |  |
 
@@ -488,11 +488,11 @@ Rosters in a league.
 |---|---|---|
 | `co_owners` | character |  |
 | `keepers` | character |  |
-| `league_id` | character | League identifier ('10' = WNBA). |
+| `league_id` | character | Sleeper league id the roster belongs to, as a string. |
 | `metadata` | character |  |
 | `owner_id` | character |  |
 | `player_map` | character |  |
-| `players` | character | Nested list of per-player box scores. |
+| `players` | character | Stringified list of Sleeper player ids on the roster (starters, bench and reserve). |
 | `reserve` | character |  |
 | `roster_id` | character |  |
 | `starters` | character |  |
@@ -541,9 +541,9 @@ Current NFL week and season state.
 | `leg` | integer |  |
 | `season` | character | 4 digit number indicating to which season(s) the specified timeframe belongs to. |
 | `season_type` | character | REG or POST indicating if the timeframe belongs to regular or post season. |
-| `league_season` | character | Season year for the league record. |
+| `league_season` | character | Season the Sleeper league year currently points at, as a string (e.g. '2026'). |
 | `previous_season` | character |  |
-| `season_start_date` | character | Date in YYYY-MM-DD format. |
+| `season_start_date` | character | First day of the current Sleeper season (YYYY-MM-DD). |
 | `display_week` | integer |  |
 | `league_create_season` | character |  |
 | `season_has_scores` | logical |  |
@@ -611,13 +611,13 @@ Transactions for a week.
 
 | col_name | type | description |
 |---|---|---|
-| `status` | character | Game status (e.g. "scheduled", "in_progress", "completed"). |
-| `type` | character | Record-type category (e.g. `total`, `home`, `road`). |
+| `status` | character | Transaction status (e.g. 'complete', 'failed'). |
+| `type` | character | Transaction type (e.g. 'waiver', 'free_agent', 'trade'). |
 | `created` | integer |  |
 | `leg` | integer |  |
 | `draft_picks` | character |  |
 | `creator` | character |  |
-| `transaction_id` | character | Unique identifier for transaction. |
+| `transaction_id` | character | Sleeper transaction id, as a string. |
 | `adds` | character |  |
 | `consenter_ids` | character |  |
 | `drops` | character | Throws dropped |
@@ -657,7 +657,7 @@ Trending adds (lookback_hours, limit).
 
 | col_name | type | description |
 |---|---|---|
-| `count` | integer | Total number of players in the season index. |
+| `count` | integer | Number of Sleeper leagues that added the player over the lookback window. |
 | `player_id` | character | Player ID (aka GSIS ID) as defined by nflreadr::load_rosters |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
@@ -741,21 +741,21 @@ Leagues a user is in for a season.
 |---|---|---|
 | `last_pinned_message_id` | character |  |
 | `season` | character | 4 digit number indicating to which season(s) the specified timeframe belongs to. |
-| `group_id` | character | ESPN group (conference) id for the season. |
+| `group_id` | character | Sleeper league-group id when the league belongs to a group; null otherwise. |
 | `loser_bracket_id` | character |  |
 | `last_author_display_name` | character |  |
 | `total_rosters` | integer |  |
 | `last_message_id` | character |  |
-| `draft_id` | character | Draft/round id parsed from the `$ref` URL. |
+| `draft_id` | character | Sleeper draft id of the league's draft, as a string. |
 | `previous_league_id` | character |  |
 | `sport` | character |  |
 | `bracket_id` | character |  |
 | `bracket_overrides_id` | character |  |
 | `last_message_text_map` | character |  |
-| `status` | character | Game status (e.g. "scheduled", "in_progress", "completed"). |
+| `status` | character | League status (e.g. 'pre_draft', 'drafting', 'in_season', 'complete'). |
 | `last_message_attachment` | character |  |
 | `display_order` | integer | Position of the bracket slot within its round, controlling top-to-bottom rendering. |
-| `league_id` | character | League identifier ('10' = WNBA). |
+| `league_id` | character | Sleeper league id, as a string. |
 | `last_author_is_bot` | character |  |
 | `name` | character | Name, as reported by MFL but reordered into FirstName LastName instead of Last, First |
 | `company_id` | character |  |
@@ -930,7 +930,7 @@ Users in a league.
 | `display_name` | character | Full name of player |
 | `is_bot` | character |  |
 | `is_owner` | logical |  |
-| `league_id` | character | League identifier ('10' = WNBA). |
+| `league_id` | character | Sleeper league id the user belongs to, as a string. |
 | `settings` | character |  |
 | `user_id` | character |  |
 | `metadata_allow_pn` | character |  |
@@ -974,10 +974,10 @@ Playoff bracket.
 
 | col_name | type | description |
 |---|---|---|
-| `m` | integer | M. |
-| `r` | integer | Runs scored. |
-| `l` | integer | Losses. |
-| `w` | integer | Wins. |
+| `m` | integer | Matchup id within the bracket round. |
+| `r` | integer | Playoff round number of the bracket matchup (1 = first round). |
+| `l` | integer | Roster id of the matchup loser; null until played. |
+| `w` | integer | Roster id of the matchup winner; null until played. |
 | `t1` | integer |  |
 | `t2` | integer |  |
 | `t2_from_w` | numeric |  |

@@ -38,49 +38,49 @@ ESPN endpoint.
 | `short_name` | character | Abbreviated event name (e.g. 'TA @ TB'). |
 | `season_year` | integer | Integer season year ESPN assigns the event (e.g. 2025 for the 2025-26 season). |
 | `season_type` | integer | ESPN season-type id of the event's season: 1 preseason, 2 regular season, 3 postseason, 4 offseason for the US leagues; soccer competitions carry their own competition-specific ids (e.g. 13481). |
-| `season_slug` | character | Season slug. |
-| `status_type_id` | character | Unique identifier for status type. |
-| `status_type_name` | character | Status type name. |
-| `status_type_state` | character | Status state (pre/in/post). |
-| `status_type_completed` | logical | Whether the game is complete. |
-| `status_type_description` | character | Status type description. |
-| `status_type_detail` | character | Status type detail. |
-| `status_type_short_detail` | character | Status type short detail. |
+| `season_slug` | character |  |
+| `status_type_id` | character |  |
+| `status_type_name` | character |  |
+| `status_type_state` | character |  |
+| `status_type_completed` | logical |  |
+| `status_type_description` | character |  |
+| `status_type_detail` | character |  |
+| `status_type_short_detail` | character |  |
 | `status_clock` | double | Game clock in seconds as ESPN reports it: time remaining in the period for clock sports, elapsed seconds for soccer (e.g. 5400.0 at full time); 0.0 once a game has ended. |
-| `status_display_clock` | character | Status display clock. |
+| `status_display_clock` | character |  |
 | `status_period` | integer | Current or final period number (quarter, half, inning or period, depending on the sport). |
 | `neutral_site` | logical | Whether the match is played at a neutral venue. |
-| `conference_competition` | logical | Conference competition. |
+| `conference_competition` | logical |  |
 | `attendance` | integer | Reported attendance at the game. |
 | `venue_id` | character | Referencing venue id. |
-| `venue_full_name` | character | Venue full name. |
+| `venue_full_name` | character |  |
 | `venue_city` | character | City where the venue is located. |
 | `venue_state` | character | State (or province/country) where the venue is located. |
 | `venue_indoor` | logical | Whether the home venue is indoors. |
 | `broadcast` | character | Broadcast network short name. |
 | `note` | character | Event note text from the competition (e.g. a series or game label such as 'World Series - Game 1', or a shootout result); an empty string when there is none. |
 | `home_id` | character | Home team referencing id. |
-| `home_name` | character | Home team display name. |
-| `home_abbreviation` | character | Home team's abbreviation. |
-| `home_display_name` | character | Home team display name. |
-| `home_location` | character | Home team's location. |
-| `home_color` | character | Home team primary color hex. |
-| `home_alternate_color` | character | Color code (hex) for home alternate. |
-| `home_logo` | character | Home team logo URL. |
+| `home_name` | character |  |
+| `home_abbreviation` | character |  |
+| `home_display_name` | character |  |
+| `home_location` | character |  |
+| `home_color` | character |  |
+| `home_alternate_color` | character |  |
+| `home_logo` | character |  |
 | `home_score` | character | Home team's score. For cricket, the innings string (e.g. '161/5 (18/20 ov, target 156)'). |
-| `home_winner` | logical | Whether the home team won. |
-| `home_rank` | integer | Home team rank (if ranked). |
+| `home_winner` | logical |  |
+| `home_rank` | integer |  |
 | `away_id` | character | Away team referencing id. |
-| `away_name` | character | Away team display name. |
-| `away_abbreviation` | character | Away team's abbreviation. |
-| `away_display_name` | character | Away team display name. |
-| `away_location` | character | Away team's location. |
-| `away_color` | character | Away team primary color hex. |
-| `away_alternate_color` | character | Color code (hex) for away alternate. |
-| `away_logo` | character | Away team logo URL. |
+| `away_name` | character |  |
+| `away_abbreviation` | character |  |
+| `away_display_name` | character |  |
+| `away_location` | character |  |
+| `away_color` | character |  |
+| `away_alternate_color` | character |  |
+| `away_logo` | character |  |
 | `away_score` | character | Away team's score. For cricket, the innings string. |
-| `away_winner` | logical | Whether the away team won. |
-| `away_rank` | integer | Away team rank (if ranked). |
+| `away_winner` | logical |  |
+| `away_rank` | integer |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -127,7 +127,7 @@ ESPN endpoint.
 | `ejected` | character | Ejected. |
 | `reason` | character | Reason. |
 | `completions/passing_attempts` | character | Pass completion ratio for the player in the box score, expressed as completions divided by pass attempts. |
-| `passing_yards` | character | Numeric yards by the passer_player_name, including yards gained in pass plays with laterals. This should equal official passing statistics. |
+| `passing_yards` | character |  |
 | `yards_per_pass_attempt` | character | Average passing yards gained per pass attempt by the player in the box score. |
 | `passing_touchdowns` | character | Number of touchdown passes thrown by the player in the box score. |
 | `interceptions` | character | Passing interceptions. |
@@ -137,8 +137,8 @@ ESPN endpoint.
 | `yards_per_rush_attempt` | character | Team yards per rush attempt. |
 | `rushing_touchdowns` | character | Number of rushing touchdowns scored by the player in the box score. |
 | `long_rushing` | character | Longest single rushing gain recorded by the player in the game. |
-| `receptions` | character | The number of pass receptions. Lateral receptions officially don't count as reception. |
-| `receiving_yards` | character | Numeric yards by the receiver_player_name, excluding yards gained in pass plays with laterals. This should equal official receiving statistics but could miss yards gained in pass plays with laterals. Please see the description of `lateral_receiver_player_name` for further information. |
+| `receptions` | character |  |
+| `receiving_yards` | character |  |
 | `yards_per_reception` | character | Average receiving yards gained per reception by the player in the box score. |
 | `receiving_touchdowns` | character | Number of receiving touchdowns scored by the player in the box score. |
 | `long_reception` | character | Longest single reception recorded by the player in the game. |
@@ -163,7 +163,7 @@ ESPN endpoint.
 | `long_punt_return` | character | Longest single punt return yardage recorded by the player in the game. |
 | `punt_return_touchdowns` | character | Number of touchdowns scored on punt returns by the player in the box score. |
 | `field_goals_made/field_goal_attempts` | character | Field goal conversion ratio for the player, expressed as field goals made divided by attempts. |
-| `field_goal_pct` | character | Field goal percentage (0-1). |
+| `field_goal_pct` | character |  |
 | `long_field_goal_made` | character | Distance of the longest successful field goal kicked by the player in the game. |
 | `extra_points_made/extra_point_attempts` | character | Extra point conversion ratio for the player, expressed as extra points made divided by attempts. |
 | `total_kicking_points` | character | Total points contributed by the player through field goals and extra points in the game. |
@@ -273,8 +273,8 @@ ESPN endpoint.
 | `region` | character | Broadcast region code. |
 | `is_national` | logical | Boolean flag indicating whether the broadcast is a nationally distributed feed. |
 | `type_id` | character | Type id. |
-| `type_short_name` | character | Broadcast type short name (e.g. "TV"). |
-| `type_long_name` | character | Broadcast type long name (e.g. "Television"). |
+| `type_short_name` | character |  |
+| `type_long_name` | character |  |
 | `type_slug` | character | Broadcast-type slug (e.g. `streaming`, `tv`). |
 | `market_id` | character | ESPN futures-market identifier. |
 | `market_type` | character | Geographic market type (e.g. `National`). |
@@ -447,7 +447,7 @@ ESPN endpoint.
 | `type_text` | character | Type text. |
 | `type_abbreviation` | character | Play-type abbreviation (e.g. `RUSH`, `TD`). |
 | `period_number` | integer | Period number. |
-| `clock_value` | double | Clock value in seconds. |
+| `clock_value` | double |  |
 | `clock_display_value` | character | Clock display value. |
 | `team_id` | character | Team id. |
 | `team_uid` | character | Team uid. |
@@ -780,9 +780,9 @@ ESPN endpoint.
 | `birth_place_city` | character | Birth place city. |
 | `birth_place_state` | character | Birth place state. |
 | `birth_place_country` | character | Birth place country. |
-| `birth_place_display_text` | character | Birth place display text. |
+| `birth_place_display_text` | character |  |
 | `birth_country_alternate_id` | character | Alternate identifier for the athlete's country of birth used in ESPN's country-flag reference system. |
-| `birth_country_abbreviation` | character | Birth country abbreviation. |
+| `birth_country_abbreviation` | character |  |
 | `college_id` | character | College id. |
 | `college_guid` | character | College guid. |
 | `college_mascot` | character | College mascot. |
@@ -801,13 +801,13 @@ ESPN endpoint.
 | `position_abbreviation` | character | Position abbreviation. |
 | `position_leaf` | logical | Position leaf. |
 | `position_parent_id` | character | ESPN id of the parent position. |
-| `position_parent_name` | character | Parent position name. |
-| `position_parent_display_name` | character | Parent position display name. |
-| `position_parent_abbreviation` | character | Parent position abbreviation. |
-| `position_parent_leaf` | logical | Whether parent position is leaf. |
+| `position_parent_name` | character |  |
+| `position_parent_display_name` | character |  |
+| `position_parent_abbreviation` | character |  |
+| `position_parent_leaf` | logical |  |
 | `experience_years` | integer | Experience years. |
-| `experience_display_value` | character | Experience display value. |
-| `experience_abbreviation` | character | Experience abbreviation. |
+| `experience_display_value` | character |  |
+| `experience_abbreviation` | character |  |
 | `status_id` | character | Status id. |
 | `status_name` | character | Status name. |
 | `status_type` | character | Status type. |

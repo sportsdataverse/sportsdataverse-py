@@ -260,7 +260,7 @@ One row per team: `team`, `team_code`, `team_rank` and `wins` (Int64), and `game
 | `ot_losses` | character | Overtime losses. |
 | `shootout_losses` | character | Shootout losses. |
 | `regulation_wins` | character | Wins in regulation. |
-| `row` | character | Row index within the game grouping (sequencing helper). |
+| `row` | character |  |
 | `points` | integer | Total points (goals + assists). |
 | `penalty_minutes` | character | Penalty minutes. |
 | `streak` | character | Current streak value. |
@@ -268,7 +268,7 @@ One row per team: `team`, `team_code`, `team_rank` and `wins` (Int64), and `game
 | `goals_against` | character | Goals against. |
 | `games_remaining` | character | Games remaining in the season. |
 | `percentage` | character | Points percentage earned by the team (points divided by maximum possible points), expressed as a decimal between 0 and 1. |
-| `overall_rank` | character | Overall recruit ranking (top recruits only; may be `NA`). |
+| `overall_rank` | character |  |
 | `games_played` | character | Games played. |
 | `team_rank` | integer | Team rank in the standings. |
 | `past_10` | character | Win-loss-overtime record across the team's most recent 10 games, typically formatted as W-L-OTL. |

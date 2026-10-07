@@ -89,7 +89,7 @@ Release: [mbb_player_value](https://github.com/sportsdataverse/sportsdataverse-d
 | `box_obpm` | Float64 | Box-score offensive plus/minus for the player, the offensive half of box BPM. |
 | `box_dbpm` | Float64 | Box-score defensive plus/minus for the player, the defensive half of box BPM. |
 | `box_bpm` | Float64 | Total box plus/minus in points per 100 possessions above an average player, exactly box_obpm plus box_dbpm (verified to zero residual across all 9,805 rows of 2025). |
-| `qualified` | Boolean | True/False indicator of whether or not player meets minimum play requirement |
+| `qualified` | Boolean |  |
 
 ```python
 load_mbb_player_value(seasons=2025)
@@ -111,7 +111,7 @@ Release: [espn_mens_college_basketball_player_season_stats](https://github.com/s
 | `team_slug` | String | URL-safe team identifier (e.g. 'lasvegas-aces' / 'aces'). |
 | `team_display_name` | String | Full team display name. |
 | `category` | String | Category label. |
-| `stat_label` | String | Human-readable label of the statistic (e.g. 'At bats'). |
+| `stat_label` | String |  |
 | `stat_name` | String | Stat key. |
 | `stat_display_name` | String | Stat display name. |
 | `stat_description` | String | ESPN's prose glossary definition of the statistic named in stat_name, for example defining assists as a pass to a teammate that leads directly to a field goal. |
@@ -177,14 +177,14 @@ Release: [espn_mens_college_basketball_player_core](https://github.com/sportsdat
 | `date_of_birth` | String | Date of birth (YYYY-MM-DD). |
 | `birth_city` | String | Birth city. |
 | `birth_state` | String | Birth state / region. |
-| `birth_country` | String | Player birth country. |
+| `birth_country` | String |  |
 | `jersey` | String | Jersey number worn by the player. |
 | `position_id` | Int32 | Unique position identifier. |
 | `position_name` | String | Listed roster position ('Guard', 'Forward', 'Center'). |
 | `position_abbreviation` | String | Position abbreviation ('G' / 'F' / 'C'). |
 | `position_display_name` | String | Position display name. |
 | `college_id` | Int32 | Unique identifier for college. |
-| `current_team_id` | Int32 | Player's current team identifier. |
+| `current_team_id` | Int32 |  |
 | `headshot_href` | String | Headshot image URL. |
 | `experience_years` | Int32 | Experience years. |
 | `status_id` | Int32 | Status identifier. |

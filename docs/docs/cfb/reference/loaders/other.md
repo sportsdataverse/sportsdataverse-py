@@ -66,7 +66,7 @@ Release: [cfb_recruits](https://github.com/sportsdataverse/sportsdataverse-data/
 | `team_id_247` | String | 247Sports' own team key for the recruit's committed or signed school; not interchangeable with the ESPN/CFBD team id. |
 | `team` | String | Team name. |
 | `recruit_id` | String | ESPN recruit id. |
-| `player_name` | String | Full name of player |
+| `player_name` | String |  |
 | `stars` | Int64 | Recruit star rating on the 247Sports scale (2-5). |
 | `grade` | Float64 | ESPN recruit grade (0-100; `0` = not rated). |
 | `position` | String | Athlete position. |
@@ -118,7 +118,7 @@ Release: [espn_cfb_player_box](https://github.com/sportsdataverse/sportsdatavers
 | `yardsPerRushAttempt` | String | Yards gained per rushing attempt. |
 | `rushingTouchdowns` | String | Rushing touchdowns. |
 | `longRushing` | String | Longest rush of the game, in yards. |
-| `receptions` | String | The number of pass receptions. Lateral receptions officially don't count as reception. |
+| `receptions` | String |  |
 | `receivingYards` | String | Receiving yards gained. |
 | `yardsPerReception` | String | Yards gained per reception. |
 | `receivingTouchdowns` | String | Receiving touchdowns. |
@@ -310,9 +310,9 @@ Release: [espn_cfb_game_rosters](https://github.com/sportsdataverse/sportsdatave
 | col_name | type | description |
 |---|---|---|
 | `athlete_id` | Int64 | ESPN athlete id. |
-| `athlete_uid` | String | ESPN athlete UID (universal identifier). |
-| `athlete_guid` | String | ESPN athlete GUID. |
-| `athlete_type` | String | Athlete type / class. |
+| `athlete_uid` | String |  |
+| `athlete_guid` | String |  |
+| `athlete_type` | String |  |
 | `first_name` | String | Athlete first name. |
 | `last_name` | String | Athlete last name. |
 | `full_name` | String | Venue full name (e.g. `Tenney Stadium`). |
@@ -324,29 +324,29 @@ Release: [espn_cfb_game_rosters](https://github.com/sportsdataverse/sportsdatave
 | `display_height` | String | Human-readable height (e.g. `6' 1"`). |
 | `slug` | String | URL slug for the team. |
 | `jersey` | String | Jersey number. |
-| `linked` | Boolean | TRUE if the record is linked to a related entity. |
+| `linked` | Boolean |  |
 | `active` | Boolean | `TRUE` if the player was active for the game. |
-| `alternate_ids_sdr` | String | Alternate ids sdr. |
-| `birth_place_city` | String | Birth place city. |
-| `birth_place_state` | String | Birth place state. |
-| `birth_place_country` | String | Birth place country. |
+| `alternate_ids_sdr` | String |  |
+| `birth_place_city` | String |  |
+| `birth_place_state` | String |  |
+| `birth_place_country` | String |  |
 | `birth_country_alternate_id` | String | ESPN's internal alternate identifier for the athlete's birth country, paired with birth_place_country and the flag fields. |
-| `birth_country_abbreviation` | String | Birth country abbreviation. |
+| `birth_country_abbreviation` | String |  |
 | `headshot_href` | String | URL of the athlete headshot image. |
-| `headshot_alt` | String | Alternative-text label for the headshot. |
+| `headshot_alt` | String |  |
 | `flag_href` | String | URL of the birth-country flag image hosted on ESPN's CDN under teamlogos/countries. |
 | `flag_alt` | String | Alt text ESPN attaches to the birth-country flag image, which is the country's name spelled out. |
 | `flag_rel` | String | Stringified relationship list ESPN ships with the flag image; the only non-null value observed is a single country-flag entry. |
 | `experience_years` | Float64 | Years of experience. |
-| `experience_display_value` | String | Experience display value. |
-| `experience_abbreviation` | String | Experience abbreviation. |
+| `experience_display_value` | String |  |
+| `experience_abbreviation` | String |  |
 | `status_id` | String | ESPN commitment status id. |
 | `status_name` | String | Status-type key (e.g. `STATUS_FINAL`). |
 | `status_type` | String | Status type. |
-| `status_abbreviation` | String | Status abbreviation. |
-| `hand_type` | String | Hand type. |
-| `hand_abbreviation` | String | Hand abbreviation. |
-| `hand_display_value` | String | Hand display value. |
+| `status_abbreviation` | String |  |
+| `hand_type` | String |  |
+| `hand_abbreviation` | String |  |
+| `hand_display_value` | String |  |
 | `starter` | Boolean | `TRUE` if the athlete started the game. |
 | `jersey_right` | String | Secondary or alternate jersey number display string from ESPN's roster record, distinct from the primary jersey number. |
 | `valid` | Boolean | `TRUE` if the roster entry is flagged valid by ESPN. |
@@ -359,8 +359,8 @@ Release: [espn_cfb_game_rosters](https://github.com/sportsdataverse/sportsdatave
 | `order` | Int64 | Team order within the competition (0 = first). |
 | `home_away` | String | `home` or `away`. |
 | `winner` | Boolean | `TRUE` if this team won the game. |
-| `team_guid` | String | ESPN team GUID. |
-| `team_uid` | String | ESPN universal team identifier (UID format 's:40~l:...~t:...'). |
+| `team_guid` | String |  |
+| `team_uid` | String |  |
 | `team_slug` | String | Team slug for the stat row. |
 | `team_location` | String | Team location / school name. |
 | `team_name` | String | Team nickname. |
@@ -378,14 +378,14 @@ Release: [espn_cfb_game_rosters](https://github.com/sportsdataverse/sportsdatave
 | `game_id` | Int64 | ESPN game identifier. |
 | `season` | Int64 | Season (4-digit year). |
 | `week` | Int64 | Game week of the season. |
-| `citizenship` | String | Citizenship. |
-| `middle_name` | String | Middle name of the player. |
-| `age` | Float64 | Age as of last pipeline build, rounded to one decimal. Pipeline is built on a weekly basis. |
+| `citizenship` | String |  |
+| `middle_name` | String |  |
+| `age` | Float64 |  |
 | `date_of_birth` | String | Player date of birth (if published). |
-| `draft_display_text` | String | Draft display text. |
-| `draft_round` | Float64 | Round that player was drafted in |
-| `draft_year` | Float64 | Year that player was drafted |
-| `draft_selection` | Float64 | Draft selection. |
+| `draft_display_text` | String |  |
+| `draft_round` | Float64 |  |
+| `draft_year` | Float64 |  |
+| `draft_selection` | Float64 |  |
 | `nickname` | String | Team nickname / location label. |
 
 ```python
@@ -419,11 +419,11 @@ Release: [espn_cfb_betting](https://github.com/sportsdataverse/sportsdataverse-d
 | `game_id` | Int64 | ESPN game identifier. |
 | `season` | Int64 | Season (4-digit year). |
 | `week` | Int64 | Game week of the season. |
-| `game_spread` | Float64 | Game spread in (-X Team) format. There are almost none, I would recommend not trusting any of these three columns |
+| `game_spread` | Float64 |  |
 | `over_under` | Float64 | Pre-game over/under total from the selected provider. |
 | `home_favorite` | Boolean | `TRUE` if the home team is the favorite. |
-| `home_team_spread` | Float64 | The game spread with respect to the home team |
-| `game_spread_available` | Boolean | Logical (TRUE/FALSE) indicating whether the spread was available from ESPN. Basically, I would just not recommend using any of the spread information, I think I defaulted a lot of them to -2.5 for the home team. Most games probably do not have spread information. This column should really be listed first |
+| `home_team_spread` | Float64 |  |
+| `game_spread_available` | Boolean |  |
 | `odds_source` | String | Provenance of the spread and over/under used for the game: summary_pickcenter when ESPN's own pickcenter carried them, core_odds_api when they came from the live odds endpoint, default when neither resolved, injected when supplied by an offline rebuild. |
 
 ```python
@@ -521,7 +521,7 @@ Release: [espn_cfb_model_pbp](https://github.com/sportsdataverse/sportsdataverse
 |---|---|---|
 | `game_id` | Int64 | ESPN game identifier. |
 | `id` | String | 247Sports referencing id for the recruit. |
-| `sequenceNumber` | String | Broadcast sequence order number. |
+| `sequenceNumber` | String |  |
 | `game_play_number` | Int64 | Sequential play number within the game (excludes timeouts/end markers). |
 | `drive.id` | String | ESPN's drive identifier, formed as the game id followed by the drive's sequence number within that game. |
 | `season` | Int64 | Season (4-digit year). |
@@ -551,12 +551,12 @@ Release: [espn_cfb_model_pbp](https://github.com/sportsdataverse/sportsdataverse
 | `passer_player_name` | String | Display name of the passer -- the FIRST participant in that role on the play. |
 | `ep_before` | Float64 | Expected points value before the play (cfbfastR EPA model). |
 | `ep_after` | Float64 | Expected points value after the play (cfbfastR EPA model). |
-| `epa` | Float64 | Expected points added (EPA) by the posteam for the given play. |
+| `epa` | Float64 |  |
 | `wp_before` | Float64 | Win probability for the possession team before the play (0-1). |
 | `wp_after` | Float64 | Win probability for the possession team after the play (0-1). |
 | `wpa` | Float64 | Win Probability Added on the play (cfbfastR WP model output). |
 | `completion_prob` | Float64 | Modelled probability the pass is completed. |
-| `cpoe` | Float64 | For a single pass play this is 1 - cp when the pass was completed or 0 - cp when the pass was incomplete. Analyzed for a whole game or season an indicator for the passer how much over or under expectation his completion percentage was. |
+| `cpoe` | Float64 |  |
 | `model_pbp_version` | String | Version of the model-scored play-by-play build. |
 | `cp_model_version` | String | Version of the completion-probability model that scored the play. |
 | `ep_model_version` | String | Version of the expected-points model that scored the play. |

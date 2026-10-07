@@ -263,7 +263,7 @@ One row per team: `team`, `team_code`, `team_rank` and `wins` (Int64), and `game
 | `shootout_wins` | character | Shootout wins. |
 | `shootout_losses` | character | Shootout losses. |
 | `regulation_wins` | character | Wins in regulation. |
-| `row` | character | Row index within the game grouping (sequencing helper). |
+| `row` | character |  |
 | `points` | integer | Total points (goals + assists). |
 | `penalty_minutes` | character | Penalty minutes. |
 | `streak` | character | Current streak value. |

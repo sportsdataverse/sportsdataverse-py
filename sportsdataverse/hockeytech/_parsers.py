@@ -36,6 +36,12 @@ def _snake_columns(df: pd.DataFrame) -> pd.DataFrame:
 def _to_frame(records: List[Dict[str, Any]], return_as_pandas: bool) -> Any:
     pdf = pd.json_normalize(records or [], sep="_")
     pdf = _snake_columns(pdf)
+    for col in [c for c in pdf.columns if pd.api.types.is_object_dtype(pdf[c].dtype)]:
+        # The feed sometimes ships one field as 0 in one row and "1" in the next (gamebygame
+        # ``plus_minus``); pyarrow rejects such a column, so a mixed scalar column becomes strings.
+        kinds = {type(v) for v in pdf[col] if isinstance(v, (int, float, str, bool))}
+        if len(kinds) > 1 and str in kinds:
+            pdf[col] = pdf[col].map(lambda v: str(v) if isinstance(v, (int, float, bool)) else v)
     if return_as_pandas:
         return pdf
     return pl.from_pandas(pdf) if len(pdf) else pl.DataFrame()
@@ -743,16 +749,20 @@ def parse_game_summary(payload: Any, game_id: Any = None) -> Dict[str, Any]:
 # ---------------------------------------------------------------------------
 
 
-def _flat_sitekit_parser(key: str, rename: Optional[Dict[str, str]] = None):
+def _flat_sitekit_parser(key: str, rename: Optional[Dict[str, str]] = None, records: Optional[str] = None):
     """Factory that creates a flat SiteKit extractor for the given ``key``.
 
-    The returned parser reads ``SiteKit.<key>`` (expected to be a list of dicts),
-    optionally applies column renames, and delegates to ``_to_frame``.  An
+    The returned parser reads ``SiteKit.<key>`` -- a list of dicts, or, for views that wrap
+    it, the list under ``SiteKit.<key>.<records>`` (``transactions``: ``{"transactions":
+    [...], "num_results": N}``; ``player`` gamebygame: ``{"games": [...], ...}``). Any other
+    dict is one record. Optionally applies column renames, and delegates to ``_to_frame``. An
     empty/None payload returns a zero-row frame without raising.
     """
 
     def _parser(payload: Any, return_as_pandas: bool = False) -> Any:
         raw = _sitekit(payload, key) or []
+        if isinstance(raw, dict):
+            raw = (raw.get(records) or []) if records else [raw]
         if rename and isinstance(raw, list):
             raw = [{rename.get(k, k): v for k, v in r.items()} for r in raw if isinstance(r, dict)]
         return _to_frame(list(raw), return_as_pandas)
@@ -769,11 +779,8 @@ def _flat_sitekit_parser(key: str, rename: Optional[Dict[str, str]] = None):
 parse_player_info = _flat_sitekit_parser("Player")
 """Parse ``SiteKit.Player`` as a flat frame (single-player info view)."""
 
-parse_player_game_log = _flat_sitekit_parser("Player")
-"""Parse ``SiteKit.Player`` as a flat frame (game-log view).
-
-NOTE: needs a captured fixture for full column parity (Task A1.8 follow-up).
-"""
+parse_player_game_log = _flat_sitekit_parser("Player", records="games")
+"""Parse ``SiteKit.Player.games`` (the gamebygame view) as one row per game."""
 
 parse_player_search = _flat_sitekit_parser("Searchplayers")
 """Parse ``SiteKit.Searchplayers`` into a flat frame (player search results)."""
@@ -781,11 +788,28 @@ parse_player_search = _flat_sitekit_parser("Searchplayers")
 parse_streaks = _flat_sitekit_parser("Streaks")
 """Parse ``SiteKit.Streaks`` into a flat frame (player/team streaks)."""
 
-parse_transactions = _flat_sitekit_parser("Transactions")
+parse_transactions = _flat_sitekit_parser("Transactions", records="transactions")
 """Parse ``SiteKit.Transactions`` into a flat frame (roster transactions)."""
 
-parse_playoff_bracket = _flat_sitekit_parser("Brackets")
-"""Parse ``SiteKit.Brackets`` into a flat frame (playoff bracket data)."""
+
+def parse_playoff_bracket(payload: Any, return_as_pandas: bool = False) -> Any:
+    """Parse ``SiteKit.Brackets`` into one row per playoff series.
+
+    The view nests series under rounds (``{"rounds": [{"round": ..., "matchups": [...]}],
+    "teams": {...}}``); each series row carries its round's ``round_name`` /
+    ``round_type_name``. An empty/None payload returns a zero-row frame, never raises.
+    """
+    brackets = _sitekit(payload, "Brackets") or {}
+    rounds = brackets.get("rounds") or [] if isinstance(brackets, dict) else []
+    rows = [
+        {**{k: v for k, v in rnd.items() if k != "matchups"}, **series}
+        for rnd in rounds
+        if isinstance(rnd, dict)
+        for series in rnd.get("matchups") or []
+        if isinstance(series, dict)
+    ]
+    return _to_frame(rows, return_as_pandas)
+
 
 parse_scorebar = _flat_sitekit_parser("Scorebar")
 """Parse ``SiteKit.Scorebar`` into a flat frame (live scorebar).

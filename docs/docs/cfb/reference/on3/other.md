@@ -1,7 +1,7 @@
 ---
 title: "CFB — On3 Recruit Database (api.on3.com) — Other"
 sidebar_label: "Other"
-sidebar_position: 8
+sidebar_position: 10
 description: "CFB — On3 Recruit Database (api.on3.com) — Other — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---
@@ -61,191 +61,6 @@ No returns table is published for this endpoint: no committed capture with rows,
 
 ```python
 on3_coaches_profile(person_key=89617)
-```
-
-_Last validated n/a._
-
-## on3_collective_groups
-
-GET /rdb/v1/collective-groups
-
-**Endpoint URL:** `GET https://api.on3.com/public/rdb/v1/collective-groups`
-
-**Valid URL:** [https://api.on3.com/public/rdb/v1/collective-groups](https://api.on3.com/public/rdb/v1/collective-groups)
-
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-| `sportKey` | `sport_key` |  |  | `Y` | sportKey query parameter. |
-| `organizationKey` | `organization_key` |  |  | `Y` | organizationKey query parameter. |
-| `query` | `query` |  |  | `Y` | query query parameter. |
-| `page` | `page` |  |  | `Y` | page query parameter. |
-| `pageSize` | `page_size` |  |  | `Y` | pageSize query parameter. |
-
-### Returns {#on3_collective_groups-returns}
-
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
-
-| col_name | type | description |
-|---|---|---|
-| `key` | integer | On3 RDB key for the NIL collective group. |
-| `name` | character | Position name (e.g. `Quarterback`). |
-| `default_asset_key` | integer | On3 asset key for the collective's primary logo image. |
-| `social_asset_key` | integer | On3 asset key for the collective's social-media image. |
-| `organization_key` | integer | On3 organization key of the school the collective supports. |
-| `launch_date` | character | Date the NIL collective launched. |
-| `organization_type` | character | Organization type. |
-| `twitter_handle` | character | Collective's Twitter/X account handle. |
-| `instagram_handle` | character | Collective's Instagram account handle. |
-| `tik_tok_handle` | character | Collective's TikTok account handle. |
-| `youtube_handle` | character | Collective's YouTube channel handle. |
-| `linked_in_handle` | character | Collective's LinkedIn account handle. |
-| `website_name` | character | Display name of the collective's website. |
-| `website_url` | character | URL of the collective's website. |
-| `mission_statement` | character | Collective's stated mission, as published to On3. |
-| `description` | character | ESPN's description of the stat. |
-| `annual_goal_amount` | numeric | Collective's annual fundraising goal in dollars, as reported to On3. |
-| `confirmed_raised_amount` | numeric | Dollar amount the collective has confirmed raising, per On3. |
-| `merged_into_group_key` | integer | On3 key of the collective this group merged into, when applicable. |
-| `merged_into_group` | character | Nested On3 record for the collective this group merged into (stringified). |
-| `slug` | character | URL slug for the team. |
-| `founders` | character | Founders of the collective, as a stringified list. |
-| `sports` | character | Sports the collective funds, as a stringified list. |
-| `default_asset_key_2` | integer |  |
-| `default_asset_domain_override` | character |  |
-| `default_asset_domain` | character |  |
-| `default_asset_source_override` | character |  |
-| `default_asset_source` | character |  |
-| `default_asset_title` | character |  |
-| `default_asset_description` | character |  |
-| `default_asset_caption` | character |  |
-| `default_asset_category` | character |  |
-| `default_asset_alt_text` | character |  |
-| `default_asset_height` | integer |  |
-| `default_asset_width` | integer |  |
-| `default_asset_asset_type` | character |  |
-| `default_asset_file_system` | character |  |
-| `default_asset_path` | character |  |
-| `default_asset_type` | character |  |
-| `default_asset_thumbnail` | character |  |
-| `default_asset_duration` | integer |  |
-| `default_asset_mime_type` | character |  |
-| `social_asset_key_2` | integer |  |
-| `social_asset_domain_override` | character |  |
-| `social_asset_domain` | character |  |
-| `social_asset_source_override` | character |  |
-| `social_asset_source` | character |  |
-| `social_asset_title` | character |  |
-| `social_asset_description` | character |  |
-| `social_asset_caption` | character |  |
-| `social_asset_category` | character |  |
-| `social_asset_alt_text` | character |  |
-| `social_asset_height` | integer |  |
-| `social_asset_width` | integer |  |
-| `social_asset_asset_type` | character |  |
-| `social_asset_file_system` | character |  |
-| `social_asset_path` | character |  |
-| `social_asset_type` | character |  |
-| `social_asset_thumbnail` | character |  |
-| `social_asset_duration` | integer |  |
-| `social_asset_mime_type` | character |  |
-| `organization_key_2` | integer |  |
-| `organization_full_name` | character |  |
-| `organization_name` | character |  |
-| `organization_known_as` | character |  |
-| `organization_mascot` | character |  |
-| `organization_abbreviation` | character |  |
-| `organization_asset_url` | character |  |
-| `organization_default_asset_key` | integer |  |
-| `organization_default_asset_domain_override` | character |  |
-| `organization_default_asset_domain` | character |  |
-| `organization_default_asset_source_override` | character |  |
-| `organization_default_asset_source` | character |  |
-| `organization_default_asset_title` | character |  |
-| `organization_default_asset_description` | character |  |
-| `organization_default_asset_caption` | character |  |
-| `organization_default_asset_category` | character |  |
-| `organization_default_asset_alt_text` | character |  |
-| `organization_default_asset_height` | integer |  |
-| `organization_default_asset_width` | integer |  |
-| `organization_default_asset_asset_type` | character |  |
-| `organization_default_asset_file_system` | character |  |
-| `organization_default_asset_path` | character |  |
-| `organization_default_asset_type` | character |  |
-| `organization_default_asset_thumbnail` | character |  |
-| `organization_default_asset_duration` | integer |  |
-| `organization_default_asset_mime_type` | character |  |
-| `organization_slug` | character |  |
-| `organization_primary_color` | character |  |
-| `organization_org_type` | character |  |
-| `organization_org_type_enum` | character |  |
-| `organization_division` | character |  |
-| `organization_site_keys` | character |  |
-| `organization_url_slug` | character |  |
-
-**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
-
-### Example {#on3_collective_groups-example}
-
-```python
-on3_collective_groups()
-```
-
-_Last validated n/a._
-
-## on3_collective_groups_deals
-
-GET /rdb/v1/collective-groups/{key}/deals
-
-**Endpoint URL:** `GET https://api.on3.com/public/rdb/v1/collective-groups/{key}/deals`
-
-**Valid URL:** [https://api.on3.com/public/rdb/v1/collective-groups/1/deals](https://api.on3.com/public/rdb/v1/collective-groups/1/deals)
-
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-| `key` | `key` |  | `Y` |  | key path parameter. |
-| `page` | `page` |  |  | `Y` | page query parameter. |
-| `pageSize` | `page_size` |  |  | `Y` | pageSize query parameter. |
-
-### Returns {#on3_collective_groups_deals-returns}
-
-**`return_parsed=True`** (default) — the output of `parse_on3_rdb`; pass `return_as_pandas=True` for a `pandas.DataFrame`.
-
-No returns table is published for this endpoint: no committed capture with rows, and the response type is only heuristically mapped (x-source: call-site); names derived from the OpenAPI response type matched parse_on3_rdb's output on only 7 of the 9 checkable endpoints, so none are published.
-
-**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
-
-### Example {#on3_collective_groups_deals-example}
-
-```python
-on3_collective_groups_deals(key=1)
-```
-
-_Last validated n/a._
-
-## on3_collective_groups_key
-
-GET /rdb/v1/collective-groups/{key}
-
-**Endpoint URL:** `GET https://api.on3.com/public/rdb/v1/collective-groups/{key}`
-
-**Valid URL:** [https://api.on3.com/public/rdb/v1/collective-groups/1](https://api.on3.com/public/rdb/v1/collective-groups/1)
-
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-| `key` | `key` |  | `Y` |  | key path parameter. |
-
-### Returns {#on3_collective_groups_key-returns}
-
-**`return_parsed=True`** (default) — the output of `parse_on3_rdb`; pass `return_as_pandas=True` for a `pandas.DataFrame`.
-
-No returns table is published for this endpoint: no committed capture with rows, and the response type is only heuristically mapped (x-source: call-site); names derived from the OpenAPI response type matched parse_on3_rdb's output on only 7 of the 9 checkable endpoints, so none are published.
-
-**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
-
-### Example {#on3_collective_groups_key-example}
-
-```python
-on3_collective_groups_key(key=1)
 ```
 
 _Last validated n/a._
@@ -369,11 +184,11 @@ GET /rdb/v1/drafts-by-stars
 | `four_stars` | integer | Number of drafted players who were four-star recruits. |
 | `three_stars` | integer | Number of drafted players who were three-star recruits. |
 | `zero_stars` | integer | Number of drafted players who were unrated (zero-star) recruits. |
-| `total` | integer | The sum of each team's score in the game. Equals h_score + v_score. Is NA for games which haven't yet been played. Convenient for evaluating over/under total bets. |
-| `state_key` | integer |  |
-| `state_name` | character |  |
-| `state_abbreviation` | character |  |
-| `state_country_key` | integer |  |
+| `total` | integer | Total drafted players counted in the row. |
+| `state_key` | integer | On3 numeric key of the state. |
+| `state_name` | character | Name of the state the row aggregates (e.g. Alabama). |
+| `state_abbreviation` | character | Two-letter state abbreviation. |
+| `state_country_key` | integer | On3 numeric key of the state's country. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -491,7 +306,7 @@ GET /rdb/v1/filters/draft-rounds
 
 | col_name | type | description |
 |---|---|---|
-| `round` | integer | Round of NFL draft the draftee was picked in. |
+| `round` | integer | Draft round number. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -576,7 +391,7 @@ GET /rdb/v1/filters/status
 
 | col_name | type | description |
 |---|---|---|
-| `value` | character | Metric value. |
+| `value` | character | Filter value as On3 lists it. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -839,21 +654,21 @@ GET /rdb/v1/quotes
 |---|---|---|
 | `key` | integer | On3 RDB key for the quote record. |
 | `body` | character | Full text of the quote. |
-| `category` | character | CFBD stats category name (e.g. passing, rushing, defensive). |
+| `category` | character | Category label On3 attaches to the row. |
 | `person_key` | integer | On3 person key of the person quoted or quoted about. |
 | `date_added` | character | Date the quote was added to the On3 database. |
 | `date_updated` | character | Date the quote was last updated. |
-| `person_key_2` | integer |  |
-| `person_known_as_name` | character |  |
-| `person_first_name` | character | Player first name. |
-| `person_last_name` | character | Player last name. |
-| `person_twitter_handle` | character |  |
-| `person_instagram_profile` | character |  |
-| `person_tik_tok_handle` | character |  |
-| `person_espn_profile` | character |  |
-| `person_class_year` | integer |  |
-| `person_two_four_seven_profile` | character |  |
-| `person_rivals_profile` | character |  |
+| `person_key_2` | integer | Person key repeated from the nested person object (json_normalize de-duplication suffix). |
+| `person_known_as_name` | character | Preferred name of the person, when it differs from the given name. |
+| `person_first_name` | character | First name of the person. |
+| `person_last_name` | character | Last name of the person. |
+| `person_twitter_handle` | character | Twitter/X handle of the person, when listed. |
+| `person_instagram_profile` | character | Instagram profile of the person, when listed. |
+| `person_tik_tok_handle` | character | TikTok handle of the person, when listed. |
+| `person_espn_profile` | character | ESPN profile link of the person, when listed. |
+| `person_class_year` | integer | High-school graduating class year of the person. |
+| `person_two_four_seven_profile` | character | 247Sports profile link of the person, when listed. |
+| `person_rivals_profile` | character | Rivals profile link of the person, when listed. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -889,203 +704,6 @@ No returns table is published for this endpoint: no committed capture with rows,
 
 ```python
 on3_quotes_key(key=1)
-```
-
-_Last validated n/a._
-
-## on3_team_ranking
-
-GET /rdb/v1/team-ranking
-
-**Endpoint URL:** `GET https://api.on3.com/public/rdb/v1/team-ranking`
-
-**Valid URL:** [https://api.on3.com/public/rdb/v1/team-ranking](https://api.on3.com/public/rdb/v1/team-ranking)
-
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-| `sportKey` | `sport_key` |  |  | `Y` | sportKey query parameter. |
-| `year` | `year` |  |  | `Y` | year query parameter. |
-| `page` | `page` |  |  | `Y` | page query parameter. |
-| `pageSize` | `page_size` |  |  | `Y` | pageSize query parameter. |
-
-### Returns {#on3_team_ranking-returns}
-
-**`return_parsed=True`** (default) — the output of `parse_on3_rdb`; pass `return_as_pandas=True` for a `pandas.DataFrame`.
-
-No returns table is published for this endpoint: no committed capture with rows, and the response type is only heuristically mapped (x-source: call-site); names derived from the OpenAPI response type matched parse_on3_rdb's output on only 7 of the 9 checkable endpoints, so none are published.
-
-**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
-
-### Example {#on3_team_ranking-example}
-
-```python
-on3_team_ranking()
-```
-
-_Last validated n/a._
-
-## on3_team_ranking_bluechips_team_rankings
-
-GET /rdb/v1/team-ranking/{sport}-{year}/bluechips-team-rankings
-
-**Endpoint URL:** `GET https://api.on3.com/public/rdb/v1/team-ranking/{sport_slug}-{year}/bluechips-team-rankings`
-
-**Valid URL:** [https://api.on3.com/public/rdb/v1/team-ranking/football-2025/bluechips-team-rankings](https://api.on3.com/public/rdb/v1/team-ranking/football-2025/bluechips-team-rankings)
-
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-| `sport_slug` | `sport_slug` |  | `Y` |  | sport_slug path parameter. |
-| `year` | `year` |  | `Y` |  | year path parameter. |
-
-### Returns {#on3_team_ranking_bluechips_team_rankings-returns}
-
-**`return_parsed=True`** (default) — the output of `parse_on3_rdb`; pass `return_as_pandas=True` for a `pandas.DataFrame`.
-
-No returns table is published for this endpoint: no committed capture with rows, and the row has nested objects whose flattened column names depend on which are null in the data; names derived from the OpenAPI response type matched parse_on3_rdb's output on only 7 of the 9 checkable endpoints, so none are published.
-
-**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
-
-### Example {#on3_team_ranking_bluechips_team_rankings-example}
-
-```python
-on3_team_ranking_bluechips_team_rankings(sport_slug='football', year=2025)
-```
-
-_Last validated n/a._
-
-## on3_team_ranking_consensus_team_rankings
-
-GET /rdb/v1/team-ranking/{sport}-{year}/consensus-team-rankings
-
-**Endpoint URL:** `GET https://api.on3.com/public/rdb/v1/team-ranking/{sport_slug}-{year}/consensus-team-rankings`
-
-**Valid URL:** [https://api.on3.com/public/rdb/v1/team-ranking/football-2025/consensus-team-rankings](https://api.on3.com/public/rdb/v1/team-ranking/football-2025/consensus-team-rankings)
-
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-| `sport_slug` | `sport_slug` |  | `Y` |  | sport_slug path parameter. |
-| `year` | `year` |  | `Y` |  | year path parameter. |
-
-### Returns {#on3_team_ranking_consensus_team_rankings-returns}
-
-**`return_parsed=True`** (default) — the output of `parse_on3_rdb`; pass `return_as_pandas=True` for a `pandas.DataFrame`.
-
-No returns table is published for this endpoint: no committed capture with rows, and the row has nested objects whose flattened column names depend on which are null in the data; names derived from the OpenAPI response type matched parse_on3_rdb's output on only 7 of the 9 checkable endpoints, so none are published.
-
-**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
-
-### Example {#on3_team_ranking_consensus_team_rankings-example}
-
-```python
-on3_team_ranking_consensus_team_rankings(sport_slug='football', year=2025)
-```
-
-_Last validated n/a._
-
-## on3_team_ranking_organizations_summary
-
-GET /rdb/v1/team-ranking/organizations/{orgKey}/summary
-
-**Endpoint URL:** `GET https://api.on3.com/public/rdb/v1/team-ranking/organizations/{org_key}/summary`
-
-**Valid URL:** [https://api.on3.com/public/rdb/v1/team-ranking/organizations/1867/summary](https://api.on3.com/public/rdb/v1/team-ranking/organizations/1867/summary)
-
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-| `org_key` | `org_key` |  | `Y` |  | org_key path parameter. |
-
-### Returns {#on3_team_ranking_organizations_summary-returns}
-
-**`return_parsed=True`** (default) — the output of `parse_on3_rdb`; pass `return_as_pandas=True` for a `pandas.DataFrame`.
-
-No returns table is published for this endpoint: no committed capture with rows, and the row has nested objects whose flattened column names depend on which are null in the data; names derived from the OpenAPI response type matched parse_on3_rdb's output on only 7 of the 9 checkable endpoints, so none are published.
-
-**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
-
-### Example {#on3_team_ranking_organizations_summary-example}
-
-```python
-on3_team_ranking_organizations_summary(org_key=1867)
-```
-
-_Last validated n/a._
-
-## on3_team_ranking_team_rankings
-
-GET /rdb/v1/team-ranking/{sport}-{year}/team-rankings
-
-**Endpoint URL:** `GET https://api.on3.com/public/rdb/v1/team-ranking/{sport_slug}-{year}/team-rankings`
-
-**Valid URL:** [https://api.on3.com/public/rdb/v1/team-ranking/football-2025/team-rankings](https://api.on3.com/public/rdb/v1/team-ranking/football-2025/team-rankings)
-
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-| `sport_slug` | `sport_slug` |  | `Y` |  | sport_slug path parameter. |
-| `year` | `year` |  | `Y` |  | year path parameter. |
-
-### Returns {#on3_team_ranking_team_rankings-returns}
-
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
-
-| col_name | type | description |
-|---|---|---|
-| `key` | integer | On3 organization-ranking key for the class row. |
-| `year` | integer | Four-digit season year (e.g. 2019). |
-| `applied_total_rating` | numeric | Total On3 rating applied to the class after deductions. |
-| `applied_total_consensus_rating` | numeric | Total consensus rating applied to the class after deductions. |
-| `applied_average_rating` | numeric | Average On3 rating applied to the class after deductions. |
-| `applied_average_consensus_rating` | numeric | Average consensus rating applied to the class after deductions. |
-| `commits` | integer | Number of commits in the recruiting class. |
-| `applied_commits` | integer | Number of commits counted toward the applied class rating. |
-| `deductions` | numeric | Rating deductions applied to the class (e.g. for roster limits). |
-| `deductions_description` | character | Human-readable explanation of any applied deductions. |
-| `five_stars` | integer | Count of On3 five-star commits in the class. |
-| `consensus_five_stars` | integer | Count of consensus five-star commits in the class. |
-| `four_stars` | integer | Count of On3 four-star commits in the class. |
-| `consensus_four_stars` | integer | Count of consensus four-star commits in the class. |
-| `three_stars` | integer | Count of On3 three-star commits in the class. |
-| `consensus_three_stars` | integer | Count of consensus three-star commits in the class. |
-| `overall_rank` | integer | National rank of the class by On3 score. |
-| `overall_consensus_rank` | integer | National rank of the class by consensus score. |
-| `dispay_consensus_score` | numeric | Display consensus score for the class (On3 sic spelling of "display"). |
-| `dispay_on3_score` | numeric | Display On3 score for the class (On3 sic spelling of "display"). |
-| `average_nil_value` | numeric | Average On3 NIL valuation across the class's commits (US dollars). |
-| `conference_rank` | integer | Rank of the class within its conference by On3 score. |
-| `conference_consensus_rank` | integer | Rank of the class within its conference by consensus score. |
-| `organization_key` | integer |  |
-| `organization_full_name` | character |  |
-| `organization_name` | character |  |
-| `organization_mascot` | character |  |
-| `organization_abbreviation` | character |  |
-| `organization_asset_url` | character |  |
-| `organization_asset_key` | integer |  |
-| `organization_asset_domain_override` | character |  |
-| `organization_asset_domain` | character |  |
-| `organization_asset_source_override` | character |  |
-| `organization_asset_source` | character |  |
-| `organization_asset_title` | character |  |
-| `organization_asset_description` | character |  |
-| `organization_asset_caption` | character |  |
-| `organization_asset_category` | character |  |
-| `organization_asset_alt_text` | character |  |
-| `organization_asset_height` | integer |  |
-| `organization_asset_width` | integer |  |
-| `organization_asset_asset_type` | character |  |
-| `organization_asset_file_system` | character |  |
-| `organization_asset_path` | character |  |
-| `organization_asset_type` | character |  |
-| `organization_asset_thumbnail` | character |  |
-| `organization_asset_duration` | integer |  |
-| `organization_asset_mime_type` | character |  |
-| `organization_slug` | character |  |
-| `organization_primary_color` | character |  |
-
-**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
-
-### Example {#on3_team_ranking_team_rankings-example}
-
-```python
-on3_team_ranking_team_rankings(sport_slug='football', year=2025)
 ```
 
 _Last validated n/a._

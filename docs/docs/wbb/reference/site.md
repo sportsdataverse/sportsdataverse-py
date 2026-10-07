@@ -69,7 +69,7 @@ ESPN endpoint.
 | `home_logo` | character | Home team logo URL. |
 | `home_score` | character | Home team's score. For cricket, the innings string (e.g. '161/5 (18/20 ov, target 156)'). |
 | `home_winner` | logical | Home team's winner. |
-| `home_rank` | integer | Home team rank (if ranked). |
+| `home_rank` | integer |  |
 | `away_id` | character | Unique identifier for away. |
 | `away_name` | character | Away name. |
 | `away_abbreviation` | character | Away team's abbreviation. |
@@ -80,7 +80,7 @@ ESPN endpoint.
 | `away_logo` | character | Away team logo URL. |
 | `away_score` | character | Away team's score. For cricket, the innings string. |
 | `away_winner` | logical | Away team's winner. |
-| `away_rank` | integer | Away team rank (if ranked). |
+| `away_rank` | integer |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -269,19 +269,19 @@ ESPN endpoint.
 
 | col_name | type | description |
 |---|---|---|
-| `station` | character | Station full name (e.g. "FanDuel Sports Network Detroit"). |
+| `station` | character |  |
 | `lang` | character | Lang. |
 | `region` | character | Region label. |
 | `is_national` | logical | Boolean flag indicating whether the broadcast is a nationally distributed feed. |
 | `type_id` | character | Type id. |
 | `type_short_name` | character | Type short name. |
 | `type_long_name` | character | Type long name. |
-| `type_slug` | character | Broadcast-type slug (e.g. `streaming`, `tv`). |
+| `type_slug` | character |  |
 | `market_id` | character | Unique identifier for market. |
 | `market_type` | character | Market type. |
-| `media_call_letters` | character | Broadcast call letters for the outlet. |
-| `media_name` | character | ESPN media name for the outlet. |
-| `media_short_name` | character | Short ESPN media name for the outlet. |
+| `media_call_letters` | character |  |
+| `media_name` | character |  |
+| `media_short_name` | character |  |
 
 **format**
 
@@ -635,9 +635,9 @@ ESPN endpoint.
 | `birth_place_city` | character | Birth place city. |
 | `birth_place_state` | character | Birth place state. |
 | `birth_place_country` | character | Birth place country. |
-| `birth_place_display_text` | character | Birth place display text. |
+| `birth_place_display_text` | character |  |
 | `birth_country_alternate_id` | character | Alternate identifier for the athlete's country of birth used in ESPN's country-flag reference system. |
-| `birth_country_abbreviation` | character | Birth country abbreviation. |
+| `birth_country_abbreviation` | character |  |
 | `headshot_href` | character | Headshot href. |
 | `headshot_alt` | character | Headshot alt. |
 | `hand_type` | character | Hand type. |
@@ -701,7 +701,7 @@ ESPN endpoint.
 | `season_type_type` | integer | Season type numeric code. |
 | `season_type_name` | character | Season type name (e.g. Regular Season). |
 | `season_type_abbreviation` | character | Season type abbreviation. |
-| `week_number` | double | Week number. |
+| `week_number` | double |  |
 | `week_text` | character | Human-readable label for the week or scheduling block in which the event falls (e.g., 'Week 3', 'Bowl Week'), as returned by the ESPN schedule API. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.

@@ -88,16 +88,16 @@ one row per matched player, carrying `espn_team_id` / `fox_team_id` provenance p
 
 | col_name | type | description |
 |---|---|---|
-| `espn_team_id` | integer | ESPN team id (canonical key). |
-| `fox_team_id` | character | Fox Bifrost team id (NA if unmatched). |
+| `espn_team_id` | integer |  |
+| `fox_team_id` | character |  |
 | `person_key` | character | Normalized player-name join key: 'Last, First' flipped, lowercased, ASCII-folded, punctuation stripped and runs of initials merged, so 'C.J.' and 'CJ' both give 'cj' (e.g. 'josh brown'). |
-| `espn_athlete_id` | integer | ESPN athlete id. |
-| `fox_athlete_id` | character | Fox athlete id (NA if unmatched). |
+| `espn_athlete_id` | integer |  |
+| `fox_athlete_id` | character |  |
 | `yahoo_athlete_id` | character | Present but unpopulated in the published data (all null): the asset is built with providers=('espn', 'fox'), so no Yahoo ids are joined. |
 | `name` | character | Position name (e.g. `Quarterback`). |
-| `espn_jersey` | character | ESPN jersey number. |
-| `fox_jersey` | character | Fox jersey number (NA if unmatched). |
-| `espn_position` | character | ESPN position abbreviation. |
+| `espn_jersey` | character |  |
+| `fox_jersey` | character |  |
+| `espn_position` | character |  |
 | `fox_position` | character | Position abbreviation from the Fox Sports roster (e.g. 'QB', 'OL', 'DB'); null when the player has no Fox roster match or Fox lists no position. |
 | `yahoo_position` | character | Present but unpopulated in the published data (all null): the asset is built with providers=('espn', 'fox'), so no Yahoo positions are joined. |
 | `match_method` | character | Combination of matched sources, e.g. "fox+bart" / "fox_only" / "bart_only" / "espn_only". |

@@ -32,55 +32,55 @@ ESPN endpoint.
 | col_name | type | description |
 |---|---|---|
 | `game_id` | character | ESPN event id. |
-| `uid` | character | ESPN global unique identifier. |
+| `uid` | character |  |
 | `date` | character | Match start timestamp (ISO 8601, UTC). |
 | `name` | character | Full event name (e.g. 'Team A at Team B'). |
 | `short_name` | character | Abbreviated event name (e.g. 'TA @ TB'). |
 | `season_year` | integer | Integer season year ESPN assigns the event (e.g. 2025 for the 2025-26 season). |
 | `season_type` | integer | ESPN season-type id of the event's season: 1 preseason, 2 regular season, 3 postseason, 4 offseason for the US leagues; soccer competitions carry their own competition-specific ids (e.g. 13481). |
-| `season_slug` | character | Season slug. |
-| `status_type_id` | character | Unique identifier for status type. |
-| `status_type_name` | character | Status type name. |
-| `status_type_state` | character | Status state (pre/in/post). |
-| `status_type_completed` | logical | Whether the game is complete. |
-| `status_type_description` | character | Status type description. |
-| `status_type_detail` | character | Status type detail. |
-| `status_type_short_detail` | character | Status type short detail. |
+| `season_slug` | character |  |
+| `status_type_id` | character |  |
+| `status_type_name` | character |  |
+| `status_type_state` | character |  |
+| `status_type_completed` | logical |  |
+| `status_type_description` | character |  |
+| `status_type_detail` | character |  |
+| `status_type_short_detail` | character |  |
 | `status_clock` | double | Game clock in seconds as ESPN reports it: time remaining in the period for clock sports, elapsed seconds for soccer (e.g. 5400.0 at full time); 0.0 once a game has ended. |
-| `status_display_clock` | character | Status display clock. |
+| `status_display_clock` | character |  |
 | `status_period` | integer | Current or final period number (quarter, half, inning or period, depending on the sport). |
 | `neutral_site` | logical | Whether the match is played at a neutral venue. |
-| `conference_competition` | logical | Conference competition. |
-| `attendance` | integer | Reported attendance at the game. |
-| `venue_id` | character | Referencing venue id. |
-| `venue_full_name` | character | Venue full name. |
-| `venue_city` | character | City where the venue is located. |
-| `venue_state` | character | State (or province/country) where the venue is located. |
-| `venue_indoor` | logical | Whether the home venue is indoors. |
-| `broadcast` | character | Broadcast network short name. |
+| `conference_competition` | logical |  |
+| `attendance` | integer |  |
+| `venue_id` | character |  |
+| `venue_full_name` | character |  |
+| `venue_city` | character |  |
+| `venue_state` | character |  |
+| `venue_indoor` | logical |  |
+| `broadcast` | character |  |
 | `note` | character | Event note text from the competition (e.g. a series or game label such as 'World Series - Game 1', or a shootout result); an empty string when there is none. |
-| `home_id` | character | Home team referencing id. |
-| `home_name` | character | Home team display name. |
-| `home_abbreviation` | character | Home team's abbreviation. |
-| `home_display_name` | character | Home team display name. |
-| `home_location` | character | Home team's location. |
-| `home_color` | character | Home team primary color hex. |
-| `home_alternate_color` | character | Color code (hex) for home alternate. |
-| `home_logo` | character | Home team logo URL. |
+| `home_id` | character |  |
+| `home_name` | character |  |
+| `home_abbreviation` | character |  |
+| `home_display_name` | character |  |
+| `home_location` | character |  |
+| `home_color` | character |  |
+| `home_alternate_color` | character |  |
+| `home_logo` | character |  |
 | `home_score` | character | Home team's score. For cricket, the innings string (e.g. '161/5 (18/20 ov, target 156)'). |
-| `home_winner` | logical | Whether the home team won. |
-| `home_rank` | character | Home team rank (if ranked). |
-| `away_id` | character | Away team referencing id. |
-| `away_name` | character | Away team display name. |
-| `away_abbreviation` | character | Away team's abbreviation. |
-| `away_display_name` | character | Away team display name. |
-| `away_location` | character | Away team's location. |
-| `away_color` | character | Away team primary color hex. |
-| `away_alternate_color` | character | Color code (hex) for away alternate. |
-| `away_logo` | character | Away team logo URL. |
+| `home_winner` | logical |  |
+| `home_rank` | character |  |
+| `away_id` | character |  |
+| `away_name` | character |  |
+| `away_abbreviation` | character |  |
+| `away_display_name` | character |  |
+| `away_location` | character |  |
+| `away_color` | character |  |
+| `away_alternate_color` | character |  |
+| `away_logo` | character |  |
 | `away_score` | character | Away team's score. For cricket, the innings string. |
-| `away_winner` | logical | Whether the away team won. |
-| `away_rank` | character | Away team rank (if ranked). |
+| `away_winner` | logical |  |
+| `away_rank` | character |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -134,9 +134,9 @@ ESPN endpoint.
 | `sacks_sack_yards_lost` | character | Combined sack statistics for the player, including sack count and total yards lost by the opposing offense. |
 | `adj_qbr` | character | ESPN's Adjusted Quarterback Rating for the player, measuring overall passing efficiency on a 0-100 scale. |
 | `qb_rating` | character | Traditional passer rating for the quarterback in the box score, calculated from completions, yards, touchdowns, and interceptions. |
-| `rushing_attempts` | character | Team rushing attempts. |
+| `rushing_attempts` | character |  |
 | `rushing_yards` | character | Numeric yards by the rusher_player_name, excluding yards gained in rush plays with laterals. This should equal official rushing statistics but could miss yards gained in rush plays with laterals. Please see the description of `lateral_rusher_player_name` for further information. |
-| `yards_per_rush_attempt` | character | Team yards per rush attempt. |
+| `yards_per_rush_attempt` | character |  |
 | `rushing_touchdowns` | character | Number of rushing touchdowns scored by the player in the box score. |
 | `long_rushing` | character | Longest single rushing gain recorded by the player in the game. |
 | `receptions` | character | The number of pass receptions. Lateral receptions officially don't count as reception. |
@@ -146,24 +146,24 @@ ESPN endpoint.
 | `long_reception` | character | Longest single reception recorded by the player in the game. |
 | `receiving_targets` | character | Number of passing targets directed at the receiver during the game. |
 | `fumbles` | character | Number of fumbles committed by the player in the box score. |
-| `fumbles_lost` | character | Fumbles lost. |
-| `fumbles_recovered` | character | Team fumbles recovered. |
+| `fumbles_lost` | character |  |
+| `fumbles_recovered` | character |  |
 | `total_tackles` | character | Total tackles recorded by the player, including both solo and assisted tackles. |
 | `solo_tackles` | character | Number of unassisted tackles recorded by the player in the box score. |
 | `sacks` | character | The Number of times sacked. |
-| `tackles_for_loss` | character | Team tackles for a loss. |
+| `tackles_for_loss` | character |  |
 | `passes_defended` | character | Number of pass plays disrupted or broken up by the defensive player in the game. |
 | `qb_hits` | character | Number of times the player made contact with the opposing quarterback after or during a pass attempt. |
 | `defensive_touchdowns` | character | Number of touchdowns scored by the player via defensive plays such as interception or fumble returns. |
-| `interception_yards` | character | Interception yards. |
+| `interception_yards` | character |  |
 | `interception_touchdowns` | character | Number of touchdowns scored by the player on interception return plays. |
-| `kick_returns` | character | Number of kick returns. |
-| `kick_return_yards` | character | Team kick return yards. |
+| `kick_returns` | character |  |
+| `kick_return_yards` | character |  |
 | `yards_per_kick_return` | character | Average yards gained per kick return by the player in the box score. |
 | `long_kick_return` | character | Longest single kick return yardage recorded by the player in the game. |
 | `kick_return_touchdowns` | character | Number of touchdowns scored on kick returns by the player in the box score. |
-| `punt_returns` | character | Number of punt returns. |
-| `punt_return_yards` | character | Team punt return yards. |
+| `punt_returns` | character |  |
+| `punt_return_yards` | character |  |
 | `yards_per_punt_return` | character | Average yards gained per punt return by the player in the box score. |
 | `long_punt_return` | character | Longest single punt return yardage recorded by the player in the game. |
 | `punt_return_touchdowns` | character | Number of touchdowns scored on punt returns by the player in the box score. |
@@ -174,7 +174,7 @@ ESPN endpoint.
 | `punts_inside20` | character | Number of punts by the player that were downed or stopped inside the opposing team's 20-yard line. |
 | `long_punt` | character | Distance of the longest individual punt executed by the player in the game. |
 | `field_goals_made/field_goal_attempts` | character | Field goal conversion ratio for the player, expressed as field goals made divided by attempts. |
-| `field_goal_pct` | character | Field goal percentage (0-1). |
+| `field_goal_pct` | character |  |
 | `long_field_goal_made` | character | Distance of the longest successful field goal kicked by the player in the game. |
 | `extra_points_made/extra_point_attempts` | character | Extra point conversion ratio for the player, expressed as extra points made divided by attempts. |
 | `total_kicking_points` | character | Total points contributed by the player through field goals and extra points in the game. |
@@ -276,12 +276,12 @@ ESPN endpoint.
 | `team_uid` | character | Team uid. |
 | `team_location` | character | Team location. |
 | `losses` | character | Losses. |
-| `points_against` | character | Points allowed. |
-| `points_for` | character | Goals/points scored. |
-| `ties` | character | Number of ties in the series. |
+| `points_against` | character |  |
+| `points_for` | character |  |
+| `ties` | character |  |
 | `win_percent` | character | Win percent. |
 | `wins` | character | Wins. |
-| `overall` | character | Overall draft pick number. |
+| `overall` | character |  |
 
 **format**
 
@@ -374,35 +374,35 @@ ESPN endpoint.
 | `id` | character | Id. |
 | `description` | character | Description. |
 | `yards` | integer | The number of receiving yards |
-| `is_score` | logical | `TRUE` if the drive resulted in a score. |
-| `offensive_plays` | integer | Number of offensive plays on the drive. |
+| `is_score` | logical |  |
+| `offensive_plays` | integer |  |
 | `result` | character | The number of points the home team scored minus the number of points the visiting team scored. Equals h_score - v_score. Is NA for games which haven't yet been played. Convenient for evaluating against the spread bets. |
-| `short_display_result` | character | Short drive-result label. |
-| `display_result` | character | Drive-result label (e.g. `Punt`, `Touchdown`). |
-| `plays` | character | Total qualifying passing plays included in the WEPA calculation. |
+| `short_display_result` | character |  |
+| `display_result` | character |  |
+| `plays` | character |  |
 | `team_id` | character | Team id. |
 | `team_name` | character | Full display name of the team. |
 | `team_abbreviation` | character | Team abbreviation. |
 | `team_display_name` | character | Team display name. |
-| `team_short_display_name` | character | Short team display name. |
+| `team_short_display_name` | character |  |
 | `team_logos` | character | Team logos. |
-| `start_period_type` | character | Period type at the start of the drive (e.g. `quarter`). |
+| `start_period_type` | character |  |
 | `start_period_number` | integer | Period or quarter number in which the drive or sequence began. |
 | `start_clock_display_value` | character | Game clock time displayed at the start of the drive or scoring sequence. |
-| `start_yard_line` | integer | Yard line at the start of the play. |
-| `start_text` | character | Field-position text at the start of the drive. |
-| `end_period_type` | character | Period type at the end of the drive (e.g. `quarter`). |
+| `start_yard_line` | integer |  |
+| `start_text` | character |  |
+| `end_period_type` | character |  |
 | `end_period_number` | integer | Period or quarter number in which the drive or sequence ended. |
 | `end_clock_display_value` | character | Game clock time displayed at the end of the drive or scoring sequence. |
 | `end_yard_line` | integer | String indicating the yardline at the end of the given play consisting of team half and yard line number. |
-| `end_text` | character | Field-position text at the end of the drive. |
+| `end_text` | character |  |
 | `time_elapsed_display_value` | character | Human-readable duration of time elapsed during the drive or scoring sequence. |
 
 **drive_plays**
 
 | col_name | type | description |
 |---|---|---|
-| `drive_id` | character | CFBD drive identifier the play belongs to. |
+| `drive_id` | character |  |
 | `drive_sequence` | integer | Sequential position of the drive within the game's broadcast or play-by-play listing. |
 | `id` | character | Id. |
 | `sequence_number` | character | Sequence number. |
@@ -410,41 +410,41 @@ ESPN endpoint.
 | `away_score` | integer | Away score. |
 | `home_score` | integer | Home score. |
 | `scoring_play` | logical | Scoring play. |
-| `priority` | logical | `TRUE` if ESPN flags the play as a priority highlight. |
-| `modified` | character | ISO timestamp the play record was last modified. |
+| `priority` | logical |  |
+| `modified` | character |  |
 | `wallclock` | character | Wallclock. |
 | `team_participants` | character | Teams or participants associated with a specific drive or sequence in the broadcast record. |
-| `is_penalty` | logical | `TRUE` if the play was a penalty. |
-| `stat_yardage` | integer | Yards gained or lost on the play. |
-| `is_turnover` | logical | `TRUE` if the play was a turnover. |
+| `is_penalty` | logical |  |
+| `stat_yardage` | integer |  |
+| `is_turnover` | logical |  |
 | `type_id` | character | Type id. |
 | `type_text` | character | Type text. |
-| `type_abbreviation` | character | Play-type abbreviation (e.g. `RUSH`, `TD`). |
+| `type_abbreviation` | character |  |
 | `period_number` | integer | Period number. |
 | `clock_display_value` | character | Clock display value. |
-| `start_down` | integer | Down at the start of the play. |
-| `start_distance` | integer | Yards to go at the start of the play. |
-| `start_yard_line` | integer | Yard line at the start of the play. |
-| `start_yards_to_endzone` | integer | Yards to the end zone at the start of the play. |
-| `start_team_id` | character | ESPN team id in possession at the start of the play. |
-| `end_down` | integer | Down at the end of the play. |
-| `end_distance` | integer | Yards to go at the end of the play. |
+| `start_down` | integer |  |
+| `start_distance` | integer |  |
+| `start_yard_line` | integer |  |
+| `start_yards_to_endzone` | integer |  |
+| `start_team_id` | character |  |
+| `end_down` | integer |  |
+| `end_distance` | integer |  |
 | `end_yard_line` | integer | String indicating the yardline at the end of the given play consisting of team half and yard line number. |
-| `end_yards_to_endzone` | integer | Yards to the end zone at the end of the play. |
-| `end_down_distance_text` | character | Down-and-distance text at the end of the play. |
-| `end_short_down_distance_text` | character | Short down-and-distance text at the end of the play. |
-| `end_possession_text` | character | Field-position text at the end of the play. |
-| `end_team_id` | character | ESPN team id in possession at the end of the play. |
-| `start_down_distance_text` | character | Down-and-distance text at the start of the play. |
-| `start_short_down_distance_text` | character | Short down-and-distance text at the start of the play. |
-| `start_possession_text` | character | Field-position text at the start of the play. |
-| `scoring_type_name` | character | Scoring-type key on a scoring play (e.g. `touchdown`). |
-| `scoring_type_display_name` | character | Human-readable scoring-type name. |
-| `scoring_type_abbreviation` | character | Scoring-type abbreviation (e.g. `TD`, `FG`). |
-| `point_after_attempt_id` | double | Point-after-attempt id on a scoring play. |
-| `point_after_attempt_text` | character | Point-after-attempt text (e.g. `Extra Point Good`). |
-| `point_after_attempt_abbreviation` | character | Point-after-attempt abbreviation. |
-| `point_after_attempt_value` | double | Points added by the point-after attempt. |
+| `end_yards_to_endzone` | integer |  |
+| `end_down_distance_text` | character |  |
+| `end_short_down_distance_text` | character |  |
+| `end_possession_text` | character |  |
+| `end_team_id` | character |  |
+| `start_down_distance_text` | character |  |
+| `start_short_down_distance_text` | character |  |
+| `start_possession_text` | character |  |
+| `scoring_type_name` | character |  |
+| `scoring_type_display_name` | character |  |
+| `scoring_type_abbreviation` | character |  |
+| `point_after_attempt_id` | double |  |
+| `point_after_attempt_text` | character |  |
+| `point_after_attempt_abbreviation` | character |  |
+| `point_after_attempt_value` | double |  |
 
 **scoring_plays**
 
@@ -456,9 +456,9 @@ ESPN endpoint.
 | `home_score` | integer | Home score. |
 | `type_id` | character | Type id. |
 | `type_text` | character | Type text. |
-| `type_abbreviation` | character | Play-type abbreviation (e.g. `RUSH`, `TD`). |
+| `type_abbreviation` | character |  |
 | `period_number` | integer | Period number. |
-| `clock_value` | double | Clock value in seconds. |
+| `clock_value` | double |  |
 | `clock_display_value` | character | Clock display value. |
 | `team_id` | character | Team id. |
 | `team_uid` | character | Team uid. |
@@ -467,9 +467,9 @@ ESPN endpoint.
 | `team_links` | character | Team links. |
 | `team_logo` | character | Team logo. |
 | `team_logos` | character | Team logos. |
-| `scoring_type_name` | character | Scoring-type key on a scoring play (e.g. `touchdown`). |
-| `scoring_type_display_name` | character | Human-readable scoring-type name. |
-| `scoring_type_abbreviation` | character | Scoring-type abbreviation (e.g. `TD`, `FG`). |
+| `scoring_type_name` | character |  |
+| `scoring_type_display_name` | character |  |
+| `scoring_type_abbreviation` | character |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -802,11 +802,11 @@ ESPN endpoint.
 | `position_display_name` | character | Position display name. |
 | `position_abbreviation` | character | Position abbreviation. |
 | `position_leaf` | logical | Position leaf. |
-| `position_parent_id` | character | ESPN id of the parent position. |
-| `position_parent_name` | character | Parent position name. |
-| `position_parent_display_name` | character | Parent position display name. |
-| `position_parent_abbreviation` | character | Parent position abbreviation. |
-| `position_parent_leaf` | logical | Whether parent position is leaf. |
+| `position_parent_id` | character |  |
+| `position_parent_name` | character |  |
+| `position_parent_display_name` | character |  |
+| `position_parent_abbreviation` | character |  |
+| `position_parent_leaf` | logical |  |
 | `experience_years` | integer | Experience years. |
 | `status_id` | character | Status id. |
 | `status_name` | character | Status name. |
@@ -861,7 +861,7 @@ ESPN endpoint.
 | `season_type_type` | integer | Season type numeric code. |
 | `season_type_name` | character | Season type name (e.g. Regular Season). |
 | `season_type_abbreviation` | character | Season type abbreviation. |
-| `week_number` | integer | Week number. |
+| `week_number` | integer |  |
 | `week_text` | character | Human-readable label for the week or scheduling block in which the event falls (e.g., 'Week 3', 'Bowl Week'), as returned by the ESPN schedule API. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.

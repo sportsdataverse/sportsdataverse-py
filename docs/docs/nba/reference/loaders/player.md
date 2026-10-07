@@ -92,7 +92,7 @@ Release: [espn_nba_player_season_stats](https://github.com/sportsdataverse/sport
 | `team_slug` | String | URL-safe team identifier (e.g. 'lasvegas-aces' / 'aces'). |
 | `team_display_name` | String | Full team display name. |
 | `category` | String | Category label. |
-| `stat_label` | String | Human-readable label of the statistic (e.g. 'At bats'). |
+| `stat_label` | String |  |
 | `stat_name` | String | Stat key. |
 | `stat_display_name` | String | Stat display name. |
 | `stat_description` | String | ESPN's prose definition of the statistic on this row, for example the ratio of field goals made to field goals attempted; for the paired Made-Attempted stats it is the two definitions joined with a hyphen. |
@@ -162,14 +162,14 @@ Release: [espn_nba_player_core](https://github.com/sportsdataverse/sportsdataver
 | `date_of_birth` | String | Date of birth (YYYY-MM-DD). |
 | `birth_city` | String | Birth city. |
 | `birth_state` | String | Birth state / region. |
-| `birth_country` | String | Player birth country. |
+| `birth_country` | String |  |
 | `jersey` | String | Jersey number worn by the player. |
 | `position_id` | Int32 | Unique position identifier. |
 | `position_name` | String | Listed roster position ('Guard', 'Forward', 'Center'). |
 | `position_abbreviation` | String | Position abbreviation ('G' / 'F' / 'C'). |
 | `position_display_name` | String | Position display name. |
 | `college_id` | Int32 | Unique identifier for college. |
-| `current_team_id` | Int32 | Player's current team identifier. |
+| `current_team_id` | Int32 |  |
 | `headshot_href` | String | Headshot image URL. |
 | `experience_years` | Int32 | Experience years. |
 | `status_id` | Int32 | Status identifier. |

@@ -17,7 +17,7 @@ def test_manual_col_desc_schema_then_global_then_empty(monkeypatch):
 def test_table_cell_desc_priority(monkeypatch):
     fake = {"nfl_load_pbp": {"cpoe": "manual cpoe"}, "_global": {}}
     monkeypatch.setattr(gen, "_manual_col_descs", lambda: fake)
-    monkeypatch.setattr(gen, "_r_col_desc", lambda league, col: "rdict desc")
+    monkeypatch.setattr(gen, "_r_col_desc", lambda league, col, schema=None: "rdict desc")
     # stored wins over everything
     assert gen._table_cell_desc("kept", "nfl", "cpoe", "nfl_load_pbp") == "kept"
     # manual[schema] wins over r-dict
@@ -103,6 +103,11 @@ def test_no_orphan_manual_entries():
     valid_cols = {r["col"] for r in extract.iter_schema_columns()}
     orphans = []
     for schema, col, _ in _all_manual_entries():
+        if schema.startswith("fox_api_"):
+            # sdv-js public names (``fox_api_<short>``): sdv-py has no Fox Bifrost schema
+            # (``schema_compatible: false``), but sdv-js vendors this file and resolves a
+            # table's blanks by its public name, so the block is read there, not here.
+            continue
         if schema == "_global":
             if col not in valid_cols:
                 orphans.append(f"_global.{col}")

@@ -16,7 +16,7 @@ drift gate, but they are not the same pipeline — see
 |---|---|
 | `endpoints/leagues.yaml`, `endpoints/parameters.yaml` | the league registry (30 leagues) and the shared parameter catalog |
 | the five ESPN YAMLs in `generate.ESPN_APIS` | `espn_site_v2`, `espn_web_v3`, `espn_core_v2`, `espn_fitt_v3`, `espn_cdn` |
-| the 36 flat-API YAMLs in `generate.FLAT_APIS` | one non-ESPN live API family each (NHL ×4, MLB ×2, NFL ×5 including both PFF APIs and Sleeper, F1, basketball, soccer, recruiting, prediction markets, TheSportsDB, ESPN content, the vendor networks) |
+| the 36 flat-API YAMLs in `generate.FLAT_APIS` | one live API family each (NHL ×4, MLB ×2, NFL ×5 including both PFF APIs and Sleeper, F1, basketball, soccer, recruiting, prediction markets, TheSportsDB, ESPN content, the vendor networks) |
 | `endpoints/releases.yaml` | every dataset loader, its release `base`, tag and asset URL |
 | `espn_rename_map.yaml` | the ESPN short-name renames |
 | `sources.yaml` | provider / category registry: which source each public function belongs to |

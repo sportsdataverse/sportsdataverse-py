@@ -52,7 +52,7 @@ GET /stats/leaguedashlineups
 |---|---|---|
 | `group_set` | character | Name of the grouping family used for this dashboard or split row. |
 | `group_id` | character | ESPN group id. |
-| `group_name` | character | Group name (conference / division). |
+| `group_name` | character | The lineup's five players as a ' - ' separated string of abbreviated names (e.g. 'K. Caldwell-Pope - A. Gordon - N. Jokic - ...'). |
 | `team_id` | integer | Unique team identifier. |
 | `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
 | `gp` | integer | Games played. |
@@ -244,14 +244,14 @@ GET /stats/leaguedashplayerbiostats
 | `team_id` | integer | Unique team identifier. |
 | `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
 | `age` | numeric | Player age (in years). |
-| `player_height` | character | Participant height (e.g. "6' 5\""). |
+| `player_height` | character | Player height as a feet-inches string (e.g. '6-4'). |
 | `player_height_inches` | integer | NBA or WNBA Stats value for player height inches in the leaguedashplayerbiostats result set. |
-| `player_weight` | character | Participant weight in pounds. |
+| `player_weight` | character | Player weight in pounds, as a string. |
 | `college` | character | College. |
 | `country` | character | Venue country. |
 | `draft_year` | character | Draft year (4-digit). |
 | `draft_round` | character | Round of the draft selection. |
-| `draft_number` | character | The number pick that was used to select a given player. |
+| `draft_number` | character | Overall pick the player was selected with, as a string; 'Undrafted' when never drafted. |
 | `gp` | integer | Games played. |
 | `pts` | numeric | Points scored. |
 | `reb` | numeric | Rebounds per game. |
@@ -770,7 +770,7 @@ GET /stats/leaguedashptdefend
 | `player_name` | character | Player name. |
 | `player_last_team_id` | integer | Stats API identifier for player last team identifier associated with this NBA or WNBA Stats row. |
 | `player_last_team_abbreviation` | character | NBA or WNBA Stats value for player last team abbreviation in the leaguedashptdefend result set. |
-| `player_position` | character | Position of the player accordinng to NGS |
+| `player_position` | character | Player's position abbreviation as stats.nba.com lists it (e.g. 'G', 'F-G', 'C'). |
 | `age` | numeric | Player age (in years). |
 | `gp` | integer | Games played. |
 | `g` | integer | Games played. |

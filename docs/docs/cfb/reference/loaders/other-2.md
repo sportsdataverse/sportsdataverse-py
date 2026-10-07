@@ -68,7 +68,7 @@ Release: [espn_cfb_receiving](https://github.com/sportsdataverse/sportsdataverse
 | `yards` | Int64 | Total yards gained on the drive. |
 | `success` | Float64 | Success rate across the team plays. |
 | `comp` | UInt32 | Completed passes. |
-| `targets` | UInt32 | The number of pass plays where the player was the targeted receiver. |
+| `targets` | UInt32 |  |
 | `passing_td` | Float64 | Passing touchdowns thrown. |
 | `fumbles` | Float64 | Count of the receiver's targeted pass plays across the season whose play text mentions a fumble by either team. |
 | `playsgame` | Float64 | Plays per game. |

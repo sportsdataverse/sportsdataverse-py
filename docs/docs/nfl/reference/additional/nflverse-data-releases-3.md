@@ -106,7 +106,7 @@ Polars dataframe containing team stats available for the requested seasons.
 | `fumble_recovery_opp` | integer | Number of fumbles recovered by the team that were originally lost by the opposing team. |
 | `fumble_recovery_yards_opp` | integer | Total yards gained on returns of fumbles recovered from the opposing team during the period. |
 | `fumble_recovery_tds` | integer | Number of touchdowns scored by the team on fumble recoveries during the game or season period. |
-| `penalties` | integer | Total number of penalties. |
+| `penalties` | integer |  |
 | `penalty_yards` | integer | Yards gained (or lost) by the posteam from the penalty. |
 | `timeouts` | integer | Number of timeouts remaining or used by the team during the game or period. |
 | `fumbles_forced_by_opp` | integer | Fumbles by the team's players that were forced by the opponent, counted across all units (offense, defense and special teams). |
@@ -114,16 +114,16 @@ Polars dataframe containing team stats available for the requested seasons.
 | `fumbles_out_of_bounds` | integer | Fumbles by the team's players where the ball went out of bounds, forced or not; each is also counted in fumbles_forced_by_opp or fumbles_not_forced. |
 | `fumbles_total` | integer | Total fumbles by the team's players across all units; equals fumbles_forced_by_opp + fumbles_not_forced. |
 | `fumbles_lost_total` | integer | Total fumbles lost by the team's players, counted across all units. |
-| `punt_returns` | integer | Number of punt returns. |
-| `punt_return_yards` | integer | Team punt return yards. |
+| `punt_returns` | integer |  |
+| `punt_return_yards` | integer |  |
 | `kickoff_returns` | integer | Total number of kickoff returns recorded by the team during the game or season period. |
 | `kickoff_return_yards` | integer | Total yards gained by the team on kickoff returns during the game or season period. |
-| `fg_made` | integer | TRUE when the field goal attempt was successful. |
+| `fg_made` | integer |  |
 | `fg_att` | integer | Total number of field goal attempts by the team's kicker during the game or season period. |
 | `fg_missed` | integer | Total number of field goal attempts missed (not blocked) by the team's kicker during the period. |
 | `fg_blocked` | integer | Total number of field goal attempts that were blocked by the opposing defense during the period. |
 | `fg_long` | integer | Distance in yards of the longest successful field goal made by the team's kicker during the period. |
-| `fg_pct` | double | Field goal percentage (0-1). |
+| `fg_pct` | double |  |
 | `fg_made_0_19` | integer | Number of successful field goals made from 0–19 yards during the game or season period. |
 | `fg_made_20_29` | integer | Number of successful field goals made from 20–29 yards during the game or season period. |
 | `fg_made_30_39` | integer | Number of successful field goals made from 30–39 yards during the game or season period. |
@@ -200,12 +200,12 @@ Polars dataframe containing teams available.
 | col_name | type | description |
 |---|---|---|
 | `team_abbr` | character | Official team abbreveation |
-| `team_name` | character | Team nickname. |
-| `team_id` | integer | ESPN team id. |
+| `team_name` | character |  |
+| `team_id` | integer |  |
 | `team_nick` | character | Team nickname (e.g., 'Chiefs', 'Eagles', 'Patriots') without the city or state prefix. |
 | `team_conf` | character | Conference affiliation of the team (e.g., 'AFC' or 'NFC'). |
 | `team_division` | character | Division affiliation of the team (e.g., 'AFC North', 'NFC West'). |
-| `team_color` | character | Primary team color. |
+| `team_color` | character |  |
 | `team_color2` | character | Secondary brand color for the team in hexadecimal format (e.g., '#FFB612'). |
 | `team_color3` | character | Tertiary brand color for the team in hexadecimal format, used in alternate uniforms or accents. |
 | `team_color4` | character | Quaternary brand color for the team in hexadecimal format, part of the team's full brand palette. |
@@ -292,10 +292,10 @@ Polars dataframe containing officials available.
 |---|---|---|
 | `game_id` | character | Ten digit identifier for NFL game. |
 | `game_key` | character | Unique numeric key assigned by the NFL to identify the specific game in official records. |
-| `official_name` | character | Official name. |
+| `official_name` | character |  |
 | `position` | character | Primary position as reported by NFL.com |
 | `jersey_number` | integer | Jersey number. Often useful for joins by name/team/jersey. |
-| `official_id` | character | Unique official / referee identifier. |
+| `official_id` | character |  |
 | `season` | integer | 4 digit number indicating to which season(s) the specified timeframe belongs to. |
 | `season_type` | character | REG or POST indicating if the timeframe belongs to regular or post season. |
 | `week` | integer | Season week. |
