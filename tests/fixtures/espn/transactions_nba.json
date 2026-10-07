@@ -1,0 +1,5195 @@
+{
+ "count": 367,
+ "pageCount": 1,
+ "pageIndex": 1,
+ "pageSize": 500,
+ "requestedYear": {
+  "displayName": "2026",
+  "year": 2026
+ },
+ "season": {
+  "displayName": "2026-27",
+  "name": "Preseason",
+  "type": 1,
+  "year": 2027
+ },
+ "status": "success",
+ "timestamp": "2026-10-07T22:21:59Z",
+ "transactions": [
+  {
+   "date": "2026-10-06T07:00Z",
+   "description": "Waived G Terrell Brown Jr.",
+   "team": {
+    "abbreviation": "UTAH",
+    "alternateColor": "79a3dc",
+    "color": "4e008e",
+    "displayName": "Utah Jazz",
+    "id": "26",
+    "links": [
+     {
+      "href": "https://www.espn.com/nba/team/_/name/utah/utah-jazz",
+      "isExternal": false,
+      "isPremium": false,
+      "language": "en-US",
+      "rel": [
+       "clubhouse",
+       "desktop",
+       "team"
+      ],
+      "shortText": "Clubhouse",
+      "text": "Clubhouse"
+     }
+    ],
+    "location": "Utah",
+    "logos": [
+     {
+      "alt": "",
+      "height": 500,
+      "href": "https://a.espncdn.com/i/teamlogos/nba/500/utah.png",
+      "lastUpdated": "2025-06-24T15:32Z",
+      "rel": [
+       "full",
+       "default"
+      ],
+      "width": 500
+     },
+     {
+      "alt": "",
+      "height": 500,
+      "href": "https://a.espncdn.com/i/teamlogos/nba/500-dark/utah.png",
+      "lastUpdated": "2025-06-24T15:43Z",
+      "rel": [
+       "full",
+       "dark"
+      ],
+      "width": 500
+     },
+     {
+      "alt": "",
+      "height": 500,
+      "href": "https://a.espncdn.com/i/teamlogos/nba/500/scoreboard/utah.png",
+      "lastUpdated": "2025-06-24T15:34Z",
+      "rel": [
+       "full",
+       "scoreboard"
+      ],
+      "width": 500
+     },
+     {
+      "alt": "",
+      "height": 500,
+      "href": "https://a.espncdn.com/i/teamlogos/nba/500-dark/scoreboard/utah.png",
+      "lastUpdated": "2025-06-24T15:34Z",
+      "rel": [
+       "full",
+       "scoreboard",
+       "dark"
+      ],
+      "width": 500
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/77cea2fb-1388-b7c8-d171-2e72b3aecbfb/logos/primary_logo_on_white_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_on_white_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/77cea2fb-1388-b7c8-d171-2e72b3aecbfb/logos/primary_logo_on_black_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_on_black_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/77cea2fb-1388-b7c8-d171-2e72b3aecbfb/logos/primary_logo_on_primary_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_on_primary_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/77cea2fb-1388-b7c8-d171-2e72b3aecbfb/logos/primary_logo_on_secondary_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_on_secondary_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/77cea2fb-1388-b7c8-d171-2e72b3aecbfb/logos/primary_logo_black.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_black"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/77cea2fb-1388-b7c8-d171-2e72b3aecbfb/logos/primary_logo_white.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_white"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/77cea2fb-1388-b7c8-d171-2e72b3aecbfb/logos/secondary_logo_on_white_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_on_white_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/77cea2fb-1388-b7c8-d171-2e72b3aecbfb/logos/secondary_logo_on_black_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_on_black_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/77cea2fb-1388-b7c8-d171-2e72b3aecbfb/logos/secondary_logo_on_primary_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_on_primary_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/77cea2fb-1388-b7c8-d171-2e72b3aecbfb/logos/secondary_logo_on_secondary_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_on_secondary_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/77cea2fb-1388-b7c8-d171-2e72b3aecbfb/logos/secondary_logo_black.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_black"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/77cea2fb-1388-b7c8-d171-2e72b3aecbfb/logos/secondary_logo_white.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_white"
+      ],
+      "width": 4096
+     }
+    ],
+    "name": "Jazz"
+   }
+  },
+  {
+   "date": "2026-10-06T07:00Z",
+   "description": "Waived G Robert McCray V.",
+   "team": {
+    "abbreviation": "OKC",
+    "alternateColor": "ef3b24",
+    "color": "007ac1",
+    "displayName": "Oklahoma City Thunder",
+    "id": "25",
+    "links": [
+     {
+      "href": "https://www.espn.com/nba/team/_/name/okc/oklahoma-city-thunder",
+      "isExternal": false,
+      "isPremium": false,
+      "language": "en-US",
+      "rel": [
+       "clubhouse",
+       "desktop",
+       "team"
+      ],
+      "shortText": "Clubhouse",
+      "text": "Clubhouse"
+     }
+    ],
+    "location": "Oklahoma City",
+    "logos": [
+     {
+      "alt": "",
+      "height": 500,
+      "href": "https://a.espncdn.com/i/teamlogos/nba/500/okc.png",
+      "lastUpdated": "2024-06-25T21:17Z",
+      "rel": [
+       "full",
+       "default"
+      ],
+      "width": 500
+     },
+     {
+      "alt": "",
+      "height": 500,
+      "href": "https://a.espncdn.com/i/teamlogos/nba/500-dark/okc.png",
+      "lastUpdated": "2024-06-25T21:13Z",
+      "rel": [
+       "full",
+       "dark"
+      ],
+      "width": 500
+     },
+     {
+      "alt": "",
+      "height": 500,
+      "href": "https://a.espncdn.com/i/teamlogos/nba/500/scoreboard/okc.png",
+      "lastUpdated": "2024-06-25T21:18Z",
+      "rel": [
+       "full",
+       "scoreboard"
+      ],
+      "width": 500
+     },
+     {
+      "alt": "",
+      "height": 500,
+      "href": "https://a.espncdn.com/i/teamlogos/nba/500-dark/scoreboard/okc.png",
+      "lastUpdated": "2024-06-25T21:14Z",
+      "rel": [
+       "full",
+       "scoreboard",
+       "dark"
+      ],
+      "width": 500
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/bd458c44-2d33-47eb-cebc-35d3d4ac595c/logos/primary_logo_on_white_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_on_white_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/bd458c44-2d33-47eb-cebc-35d3d4ac595c/logos/primary_logo_on_black_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_on_black_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/bd458c44-2d33-47eb-cebc-35d3d4ac595c/logos/primary_logo_on_primary_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_on_primary_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/bd458c44-2d33-47eb-cebc-35d3d4ac595c/logos/primary_logo_on_secondary_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_on_secondary_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/bd458c44-2d33-47eb-cebc-35d3d4ac595c/logos/primary_logo_black.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_black"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/bd458c44-2d33-47eb-cebc-35d3d4ac595c/logos/primary_logo_white.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_white"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/bd458c44-2d33-47eb-cebc-35d3d4ac595c/logos/secondary_logo_on_white_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_on_white_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/bd458c44-2d33-47eb-cebc-35d3d4ac595c/logos/secondary_logo_on_black_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_on_black_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/bd458c44-2d33-47eb-cebc-35d3d4ac595c/logos/secondary_logo_on_primary_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_on_primary_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/bd458c44-2d33-47eb-cebc-35d3d4ac595c/logos/secondary_logo_on_secondary_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_on_secondary_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/bd458c44-2d33-47eb-cebc-35d3d4ac595c/logos/secondary_logo_black.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_black"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/bd458c44-2d33-47eb-cebc-35d3d4ac595c/logos/secondary_logo_white.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_white"
+      ],
+      "width": 4096
+     }
+    ],
+    "name": "Thunder"
+   }
+  },
+  {
+   "date": "2026-10-06T07:00Z",
+   "description": "Waived G Johnell Davis.",
+   "team": {
+    "abbreviation": "ORL",
+    "alternateColor": "9ca0a3",
+    "color": "0150b5",
+    "displayName": "Orlando Magic",
+    "id": "19",
+    "links": [
+     {
+      "href": "https://www.espn.com/nba/team/_/name/orl/orlando-magic",
+      "isExternal": false,
+      "isPremium": false,
+      "language": "en-US",
+      "rel": [
+       "clubhouse",
+       "desktop",
+       "team"
+      ],
+      "shortText": "Clubhouse",
+      "text": "Clubhouse"
+     }
+    ],
+    "location": "Orlando",
+    "logos": [
+     {
+      "alt": "",
+      "height": 500,
+      "href": "https://a.espncdn.com/i/teamlogos/nba/500/orl.png",
+      "lastUpdated": "2025-06-16T16:45Z",
+      "rel": [
+       "full",
+       "default"
+      ],
+      "width": 500
+     },
+     {
+      "alt": "",
+      "height": 500,
+      "href": "https://a.espncdn.com/i/teamlogos/nba/500-dark/orl.png",
+      "lastUpdated": "2025-06-16T16:45Z",
+      "rel": [
+       "full",
+       "dark"
+      ],
+      "width": 500
+     },
+     {
+      "alt": "",
+      "height": 500,
+      "href": "https://a.espncdn.com/i/teamlogos/nba/500/scoreboard/orl.png",
+      "lastUpdated": "2025-06-18T15:37Z",
+      "rel": [
+       "full",
+       "scoreboard"
+      ],
+      "width": 500
+     },
+     {
+      "alt": "",
+      "height": 500,
+      "href": "https://a.espncdn.com/i/teamlogos/nba/500-dark/scoreboard/orl.png",
+      "lastUpdated": "2025-06-18T15:35Z",
+      "rel": [
+       "full",
+       "scoreboard",
+       "dark"
+      ],
+      "width": 500
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/74c23102-8c27-c8e6-ec1b-8a8fd4d42554/logos/primary_logo_on_white_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_on_white_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/74c23102-8c27-c8e6-ec1b-8a8fd4d42554/logos/primary_logo_on_black_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_on_black_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/74c23102-8c27-c8e6-ec1b-8a8fd4d42554/logos/primary_logo_on_primary_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_on_primary_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/74c23102-8c27-c8e6-ec1b-8a8fd4d42554/logos/primary_logo_on_secondary_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_on_secondary_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/74c23102-8c27-c8e6-ec1b-8a8fd4d42554/logos/primary_logo_black.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_black"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/74c23102-8c27-c8e6-ec1b-8a8fd4d42554/logos/primary_logo_white.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_white"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/74c23102-8c27-c8e6-ec1b-8a8fd4d42554/logos/secondary_logo_on_white_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_on_white_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/74c23102-8c27-c8e6-ec1b-8a8fd4d42554/logos/secondary_logo_on_black_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_on_black_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/74c23102-8c27-c8e6-ec1b-8a8fd4d42554/logos/secondary_logo_on_primary_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_on_primary_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/74c23102-8c27-c8e6-ec1b-8a8fd4d42554/logos/secondary_logo_on_secondary_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_on_secondary_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/74c23102-8c27-c8e6-ec1b-8a8fd4d42554/logos/secondary_logo_black.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_black"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/74c23102-8c27-c8e6-ec1b-8a8fd4d42554/logos/secondary_logo_white.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_white"
+      ],
+      "width": 4096
+     }
+    ],
+    "name": "Magic"
+   }
+  },
+  {
+   "date": "2026-10-06T07:00Z",
+   "description": "Waived G Fletcher Loyer.",
+   "team": {
+    "abbreviation": "LAC",
+    "alternateColor": "c8102e",
+    "color": "12173f",
+    "displayName": "LA Clippers",
+    "id": "12",
+    "links": [
+     {
+      "href": "https://www.espn.com/nba/team/_/name/lac/la-clippers",
+      "isExternal": false,
+      "isPremium": false,
+      "language": "en-US",
+      "rel": [
+       "clubhouse",
+       "desktop",
+       "team"
+      ],
+      "shortText": "Clubhouse",
+      "text": "Clubhouse"
+     }
+    ],
+    "location": "LA",
+    "logos": [
+     {
+      "alt": "",
+      "height": 500,
+      "href": "https://a.espncdn.com/i/teamlogos/nba/500/lac.png",
+      "lastUpdated": "2024-06-25T21:17Z",
+      "rel": [
+       "full",
+       "default"
+      ],
+      "width": 500
+     },
+     {
+      "alt": "",
+      "height": 500,
+      "href": "https://a.espncdn.com/i/teamlogos/nba/500-dark/lac.png",
+      "lastUpdated": "2024-06-25T21:13Z",
+      "rel": [
+       "full",
+       "dark"
+      ],
+      "width": 500
+     },
+     {
+      "alt": "",
+      "height": 500,
+      "href": "https://a.espncdn.com/i/teamlogos/nba/500/scoreboard/lac.png",
+      "lastUpdated": "2024-06-25T21:18Z",
+      "rel": [
+       "full",
+       "scoreboard"
+      ],
+      "width": 500
+     },
+     {
+      "alt": "",
+      "height": 500,
+      "href": "https://a.espncdn.com/i/teamlogos/nba/500-dark/scoreboard/lac.png",
+      "lastUpdated": "2024-06-25T21:14Z",
+      "rel": [
+       "full",
+       "scoreboard",
+       "dark"
+      ],
+      "width": 500
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/083a58a6-b849-3501-e67b-059290d12295/logos/primary_logo_on_white_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_on_white_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/083a58a6-b849-3501-e67b-059290d12295/logos/primary_logo_on_black_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_on_black_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/083a58a6-b849-3501-e67b-059290d12295/logos/primary_logo_on_primary_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_on_primary_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/083a58a6-b849-3501-e67b-059290d12295/logos/primary_logo_on_secondary_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_on_secondary_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/083a58a6-b849-3501-e67b-059290d12295/logos/primary_logo_black.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_black"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/083a58a6-b849-3501-e67b-059290d12295/logos/primary_logo_white.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_white"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/083a58a6-b849-3501-e67b-059290d12295/logos/secondary_logo_on_white_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_on_white_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/083a58a6-b849-3501-e67b-059290d12295/logos/secondary_logo_on_black_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_on_black_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/083a58a6-b849-3501-e67b-059290d12295/logos/secondary_logo_on_primary_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_on_primary_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/083a58a6-b849-3501-e67b-059290d12295/logos/secondary_logo_on_secondary_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_on_secondary_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/083a58a6-b849-3501-e67b-059290d12295/logos/secondary_logo_black.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_black"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/083a58a6-b849-3501-e67b-059290d12295/logos/secondary_logo_white.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_white"
+      ],
+      "width": 4096
+     }
+    ],
+    "name": "Clippers"
+   }
+  },
+  {
+   "date": "2026-10-05T07:00Z",
+   "description": "Waived G Andre Jackson Jr.",
+   "team": {
+    "abbreviation": "TOR",
+    "alternateColor": "000000",
+    "color": "d91244",
+    "displayName": "Toronto Raptors",
+    "id": "28",
+    "links": [
+     {
+      "href": "https://www.espn.com/nba/team/_/name/tor/toronto-raptors",
+      "isExternal": false,
+      "isPremium": false,
+      "language": "en-US",
+      "rel": [
+       "clubhouse",
+       "desktop",
+       "team"
+      ],
+      "shortText": "Clubhouse",
+      "text": "Clubhouse"
+     }
+    ],
+    "location": "Toronto",
+    "logos": [
+     {
+      "alt": "",
+      "height": 500,
+      "href": "https://a.espncdn.com/i/teamlogos/nba/500/tor.png",
+      "lastUpdated": "2024-06-25T21:17Z",
+      "rel": [
+       "full",
+       "default"
+      ],
+      "width": 500
+     },
+     {
+      "alt": "",
+      "height": 500,
+      "href": "https://a.espncdn.com/i/teamlogos/nba/500-dark/tor.png",
+      "lastUpdated": "2025-01-21T22:35Z",
+      "rel": [
+       "full",
+       "dark"
+      ],
+      "width": 500
+     },
+     {
+      "alt": "",
+      "height": 500,
+      "href": "https://a.espncdn.com/i/teamlogos/nba/500/scoreboard/tor.png",
+      "lastUpdated": "2024-06-25T21:18Z",
+      "rel": [
+       "full",
+       "scoreboard"
+      ],
+      "width": 500
+     },
+     {
+      "alt": "",
+      "height": 500,
+      "href": "https://a.espncdn.com/i/teamlogos/nba/500-dark/scoreboard/tor.png",
+      "lastUpdated": "2025-01-22T15:28Z",
+      "rel": [
+       "full",
+       "scoreboard",
+       "dark"
+      ],
+      "width": 500
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/5a9c33b8-63fd-ff34-a833-925fe89320a6/logos/primary_logo_on_white_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_on_white_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/5a9c33b8-63fd-ff34-a833-925fe89320a6/logos/primary_logo_on_black_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_on_black_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/5a9c33b8-63fd-ff34-a833-925fe89320a6/logos/primary_logo_on_primary_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_on_primary_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/5a9c33b8-63fd-ff34-a833-925fe89320a6/logos/primary_logo_on_secondary_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_on_secondary_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/5a9c33b8-63fd-ff34-a833-925fe89320a6/logos/primary_logo_black.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_black"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/5a9c33b8-63fd-ff34-a833-925fe89320a6/logos/primary_logo_white.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_white"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/5a9c33b8-63fd-ff34-a833-925fe89320a6/logos/secondary_logo_on_white_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_on_white_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/5a9c33b8-63fd-ff34-a833-925fe89320a6/logos/secondary_logo_on_black_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_on_black_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/5a9c33b8-63fd-ff34-a833-925fe89320a6/logos/secondary_logo_on_primary_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_on_primary_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/5a9c33b8-63fd-ff34-a833-925fe89320a6/logos/secondary_logo_on_secondary_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_on_secondary_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/5a9c33b8-63fd-ff34-a833-925fe89320a6/logos/secondary_logo_black.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_black"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/5a9c33b8-63fd-ff34-a833-925fe89320a6/logos/secondary_logo_white.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_white"
+      ],
+      "width": 4096
+     }
+    ],
+    "name": "Raptors"
+   }
+  },
+  {
+   "date": "2026-10-05T07:00Z",
+   "description": "Waived G Jazian Gortman.",
+   "team": {
+    "abbreviation": "WSH",
+    "alternateColor": "002b5c",
+    "color": "e31837",
+    "displayName": "Washington Wizards",
+    "id": "27",
+    "links": [
+     {
+      "href": "https://www.espn.com/nba/team/_/name/wsh/washington-wizards",
+      "isExternal": false,
+      "isPremium": false,
+      "language": "en-US",
+      "rel": [
+       "clubhouse",
+       "desktop",
+       "team"
+      ],
+      "shortText": "Clubhouse",
+      "text": "Clubhouse"
+     }
+    ],
+    "location": "Washington",
+    "logos": [
+     {
+      "alt": "",
+      "height": 500,
+      "href": "https://a.espncdn.com/i/teamlogos/nba/500/wsh.png",
+      "lastUpdated": "2024-06-25T21:17Z",
+      "rel": [
+       "full",
+       "default"
+      ],
+      "width": 500
+     },
+     {
+      "alt": "",
+      "height": 500,
+      "href": "https://a.espncdn.com/i/teamlogos/nba/500-dark/wsh.png",
+      "lastUpdated": "2024-06-25T21:13Z",
+      "rel": [
+       "full",
+       "dark"
+      ],
+      "width": 500
+     },
+     {
+      "alt": "",
+      "height": 500,
+      "href": "https://a.espncdn.com/i/teamlogos/nba/500/scoreboard/wsh.png",
+      "lastUpdated": "2024-06-25T21:18Z",
+      "rel": [
+       "full",
+       "scoreboard"
+      ],
+      "width": 500
+     },
+     {
+      "alt": "",
+      "height": 500,
+      "href": "https://a.espncdn.com/i/teamlogos/nba/500-dark/scoreboard/wsh.png",
+      "lastUpdated": "2024-06-25T21:14Z",
+      "rel": [
+       "full",
+       "scoreboard",
+       "dark"
+      ],
+      "width": 500
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/64d73af6-b8ec-e213-87e8-a4eab3a692e7/logos/primary_logo_on_white_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_on_white_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/64d73af6-b8ec-e213-87e8-a4eab3a692e7/logos/primary_logo_on_black_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_on_black_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/64d73af6-b8ec-e213-87e8-a4eab3a692e7/logos/primary_logo_on_primary_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_on_primary_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/64d73af6-b8ec-e213-87e8-a4eab3a692e7/logos/primary_logo_on_secondary_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_on_secondary_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/64d73af6-b8ec-e213-87e8-a4eab3a692e7/logos/primary_logo_black.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_black"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/64d73af6-b8ec-e213-87e8-a4eab3a692e7/logos/primary_logo_white.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_white"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/64d73af6-b8ec-e213-87e8-a4eab3a692e7/logos/secondary_logo_on_white_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_on_white_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/64d73af6-b8ec-e213-87e8-a4eab3a692e7/logos/secondary_logo_on_black_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_on_black_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/64d73af6-b8ec-e213-87e8-a4eab3a692e7/logos/secondary_logo_on_primary_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_on_primary_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/64d73af6-b8ec-e213-87e8-a4eab3a692e7/logos/secondary_logo_on_secondary_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_on_secondary_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/64d73af6-b8ec-e213-87e8-a4eab3a692e7/logos/secondary_logo_black.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_black"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/64d73af6-b8ec-e213-87e8-a4eab3a692e7/logos/secondary_logo_white.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_white"
+      ],
+      "width": 4096
+     }
+    ],
+    "name": "Wizards"
+   }
+  },
+  {
+   "date": "2026-10-05T07:00Z",
+   "description": "Waived G Mike Sharavjamts.",
+   "team": {
+    "abbreviation": "ORL",
+    "alternateColor": "9ca0a3",
+    "color": "0150b5",
+    "displayName": "Orlando Magic",
+    "id": "19",
+    "links": [
+     {
+      "href": "https://www.espn.com/nba/team/_/name/orl/orlando-magic",
+      "isExternal": false,
+      "isPremium": false,
+      "language": "en-US",
+      "rel": [
+       "clubhouse",
+       "desktop",
+       "team"
+      ],
+      "shortText": "Clubhouse",
+      "text": "Clubhouse"
+     }
+    ],
+    "location": "Orlando",
+    "logos": [
+     {
+      "alt": "",
+      "height": 500,
+      "href": "https://a.espncdn.com/i/teamlogos/nba/500/orl.png",
+      "lastUpdated": "2025-06-16T16:45Z",
+      "rel": [
+       "full",
+       "default"
+      ],
+      "width": 500
+     },
+     {
+      "alt": "",
+      "height": 500,
+      "href": "https://a.espncdn.com/i/teamlogos/nba/500-dark/orl.png",
+      "lastUpdated": "2025-06-16T16:45Z",
+      "rel": [
+       "full",
+       "dark"
+      ],
+      "width": 500
+     },
+     {
+      "alt": "",
+      "height": 500,
+      "href": "https://a.espncdn.com/i/teamlogos/nba/500/scoreboard/orl.png",
+      "lastUpdated": "2025-06-18T15:37Z",
+      "rel": [
+       "full",
+       "scoreboard"
+      ],
+      "width": 500
+     },
+     {
+      "alt": "",
+      "height": 500,
+      "href": "https://a.espncdn.com/i/teamlogos/nba/500-dark/scoreboard/orl.png",
+      "lastUpdated": "2025-06-18T15:35Z",
+      "rel": [
+       "full",
+       "scoreboard",
+       "dark"
+      ],
+      "width": 500
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/74c23102-8c27-c8e6-ec1b-8a8fd4d42554/logos/primary_logo_on_white_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_on_white_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/74c23102-8c27-c8e6-ec1b-8a8fd4d42554/logos/primary_logo_on_black_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_on_black_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/74c23102-8c27-c8e6-ec1b-8a8fd4d42554/logos/primary_logo_on_primary_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_on_primary_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/74c23102-8c27-c8e6-ec1b-8a8fd4d42554/logos/primary_logo_on_secondary_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_on_secondary_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/74c23102-8c27-c8e6-ec1b-8a8fd4d42554/logos/primary_logo_black.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_black"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/74c23102-8c27-c8e6-ec1b-8a8fd4d42554/logos/primary_logo_white.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_white"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/74c23102-8c27-c8e6-ec1b-8a8fd4d42554/logos/secondary_logo_on_white_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_on_white_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/74c23102-8c27-c8e6-ec1b-8a8fd4d42554/logos/secondary_logo_on_black_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_on_black_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/74c23102-8c27-c8e6-ec1b-8a8fd4d42554/logos/secondary_logo_on_primary_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_on_primary_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/74c23102-8c27-c8e6-ec1b-8a8fd4d42554/logos/secondary_logo_on_secondary_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_on_secondary_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/74c23102-8c27-c8e6-ec1b-8a8fd4d42554/logos/secondary_logo_black.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_black"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/74c23102-8c27-c8e6-ec1b-8a8fd4d42554/logos/secondary_logo_white.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_white"
+      ],
+      "width": 4096
+     }
+    ],
+    "name": "Magic"
+   }
+  },
+  {
+   "date": "2026-10-05T07:00Z",
+   "description": "Waived G Isaiah Stevens.",
+   "team": {
+    "abbreviation": "CHI",
+    "alternateColor": "000000",
+    "color": "ce1141",
+    "displayName": "Chicago Bulls",
+    "id": "4",
+    "links": [
+     {
+      "href": "https://www.espn.com/nba/team/_/name/chi/chicago-bulls",
+      "isExternal": false,
+      "isPremium": false,
+      "language": "en-US",
+      "rel": [
+       "clubhouse",
+       "desktop",
+       "team"
+      ],
+      "shortText": "Clubhouse",
+      "text": "Clubhouse"
+     }
+    ],
+    "location": "Chicago",
+    "logos": [
+     {
+      "alt": "",
+      "height": 500,
+      "href": "https://a.espncdn.com/i/teamlogos/nba/500/chi.png",
+      "lastUpdated": "2024-06-25T21:17Z",
+      "rel": [
+       "full",
+       "default"
+      ],
+      "width": 500
+     },
+     {
+      "alt": "",
+      "height": 500,
+      "href": "https://a.espncdn.com/i/teamlogos/nba/500-dark/chi.png",
+      "lastUpdated": "2024-06-25T21:13Z",
+      "rel": [
+       "full",
+       "dark"
+      ],
+      "width": 500
+     },
+     {
+      "alt": "",
+      "height": 500,
+      "href": "https://a.espncdn.com/i/teamlogos/nba/500/scoreboard/chi.png",
+      "lastUpdated": "2024-06-25T21:18Z",
+      "rel": [
+       "full",
+       "scoreboard"
+      ],
+      "width": 500
+     },
+     {
+      "alt": "",
+      "height": 500,
+      "href": "https://a.espncdn.com/i/teamlogos/nba/500-dark/scoreboard/chi.png",
+      "lastUpdated": "2024-06-25T21:13Z",
+      "rel": [
+       "full",
+       "scoreboard",
+       "dark"
+      ],
+      "width": 500
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/e588ccf1-ba03-ea43-c34c-9a9c8d1895ca/logos/primary_logo_on_white_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_on_white_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/e588ccf1-ba03-ea43-c34c-9a9c8d1895ca/logos/primary_logo_on_black_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_on_black_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/e588ccf1-ba03-ea43-c34c-9a9c8d1895ca/logos/primary_logo_on_primary_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_on_primary_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/e588ccf1-ba03-ea43-c34c-9a9c8d1895ca/logos/primary_logo_on_secondary_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_on_secondary_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/e588ccf1-ba03-ea43-c34c-9a9c8d1895ca/logos/primary_logo_black.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_black"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/e588ccf1-ba03-ea43-c34c-9a9c8d1895ca/logos/primary_logo_white.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_white"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/e588ccf1-ba03-ea43-c34c-9a9c8d1895ca/logos/secondary_logo_on_white_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_on_white_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/e588ccf1-ba03-ea43-c34c-9a9c8d1895ca/logos/secondary_logo_on_black_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_on_black_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/e588ccf1-ba03-ea43-c34c-9a9c8d1895ca/logos/secondary_logo_on_primary_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_on_primary_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/e588ccf1-ba03-ea43-c34c-9a9c8d1895ca/logos/secondary_logo_on_secondary_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_on_secondary_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/e588ccf1-ba03-ea43-c34c-9a9c8d1895ca/logos/secondary_logo_black.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_black"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/e588ccf1-ba03-ea43-c34c-9a9c8d1895ca/logos/secondary_logo_white.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_white"
+      ],
+      "width": 4096
+     }
+    ],
+    "name": "Bulls"
+   }
+  },
+  {
+   "date": "2026-10-02T07:00Z",
+   "description": "Re-signed C Jalen Duren to a contract.",
+   "team": {
+    "abbreviation": "DET",
+    "alternateColor": "c8102e",
+    "color": "1d428a",
+    "displayName": "Detroit Pistons",
+    "id": "8",
+    "links": [
+     {
+      "href": "https://www.espn.com/nba/team/_/name/det/detroit-pistons",
+      "isExternal": false,
+      "isPremium": false,
+      "language": "en-US",
+      "rel": [
+       "clubhouse",
+       "desktop",
+       "team"
+      ],
+      "shortText": "Clubhouse",
+      "text": "Clubhouse"
+     }
+    ],
+    "location": "Detroit",
+    "logos": [
+     {
+      "alt": "",
+      "height": 500,
+      "href": "https://a.espncdn.com/i/teamlogos/nba/500/det.png",
+      "lastUpdated": "2024-06-25T21:17Z",
+      "rel": [
+       "full",
+       "default"
+      ],
+      "width": 500
+     },
+     {
+      "alt": "",
+      "height": 500,
+      "href": "https://a.espncdn.com/i/teamlogos/nba/500-dark/det.png",
+      "lastUpdated": "2024-06-25T21:13Z",
+      "rel": [
+       "full",
+       "dark"
+      ],
+      "width": 500
+     },
+     {
+      "alt": "",
+      "height": 500,
+      "href": "https://a.espncdn.com/i/teamlogos/nba/500/scoreboard/det.png",
+      "lastUpdated": "2024-06-25T21:18Z",
+      "rel": [
+       "full",
+       "scoreboard"
+      ],
+      "width": 500
+     },
+     {
+      "alt": "",
+      "height": 500,
+      "href": "https://a.espncdn.com/i/teamlogos/nba/500-dark/scoreboard/det.png",
+      "lastUpdated": "2024-06-25T21:14Z",
+      "rel": [
+       "full",
+       "scoreboard",
+       "dark"
+      ],
+      "width": 500
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/4e096981-dc02-51d0-3dcd-2468fcc1e22d/logos/primary_logo_on_white_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_on_white_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/4e096981-dc02-51d0-3dcd-2468fcc1e22d/logos/primary_logo_on_black_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_on_black_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/4e096981-dc02-51d0-3dcd-2468fcc1e22d/logos/primary_logo_on_primary_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_on_primary_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/4e096981-dc02-51d0-3dcd-2468fcc1e22d/logos/primary_logo_on_secondary_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_on_secondary_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/4e096981-dc02-51d0-3dcd-2468fcc1e22d/logos/primary_logo_black.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_black"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/4e096981-dc02-51d0-3dcd-2468fcc1e22d/logos/primary_logo_white.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_white"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/4e096981-dc02-51d0-3dcd-2468fcc1e22d/logos/secondary_logo_on_white_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_on_white_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/4e096981-dc02-51d0-3dcd-2468fcc1e22d/logos/secondary_logo_on_black_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_on_black_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/4e096981-dc02-51d0-3dcd-2468fcc1e22d/logos/secondary_logo_on_primary_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_on_primary_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/4e096981-dc02-51d0-3dcd-2468fcc1e22d/logos/secondary_logo_on_secondary_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_on_secondary_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/4e096981-dc02-51d0-3dcd-2468fcc1e22d/logos/secondary_logo_black.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_black"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/4e096981-dc02-51d0-3dcd-2468fcc1e22d/logos/secondary_logo_white.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_white"
+      ],
+      "width": 4096
+     }
+    ],
+    "name": "Pistons"
+   }
+  },
+  {
+   "date": "2026-10-01T07:00Z",
+   "description": "Re-signed G Jamal Shead to a veteran extension.",
+   "team": {
+    "abbreviation": "TOR",
+    "alternateColor": "000000",
+    "color": "d91244",
+    "displayName": "Toronto Raptors",
+    "id": "28",
+    "links": [
+     {
+      "href": "https://www.espn.com/nba/team/_/name/tor/toronto-raptors",
+      "isExternal": false,
+      "isPremium": false,
+      "language": "en-US",
+      "rel": [
+       "clubhouse",
+       "desktop",
+       "team"
+      ],
+      "shortText": "Clubhouse",
+      "text": "Clubhouse"
+     }
+    ],
+    "location": "Toronto",
+    "logos": [
+     {
+      "alt": "",
+      "height": 500,
+      "href": "https://a.espncdn.com/i/teamlogos/nba/500/tor.png",
+      "lastUpdated": "2024-06-25T21:17Z",
+      "rel": [
+       "full",
+       "default"
+      ],
+      "width": 500
+     },
+     {
+      "alt": "",
+      "height": 500,
+      "href": "https://a.espncdn.com/i/teamlogos/nba/500-dark/tor.png",
+      "lastUpdated": "2025-01-21T22:35Z",
+      "rel": [
+       "full",
+       "dark"
+      ],
+      "width": 500
+     },
+     {
+      "alt": "",
+      "height": 500,
+      "href": "https://a.espncdn.com/i/teamlogos/nba/500/scoreboard/tor.png",
+      "lastUpdated": "2024-06-25T21:18Z",
+      "rel": [
+       "full",
+       "scoreboard"
+      ],
+      "width": 500
+     },
+     {
+      "alt": "",
+      "height": 500,
+      "href": "https://a.espncdn.com/i/teamlogos/nba/500-dark/scoreboard/tor.png",
+      "lastUpdated": "2025-01-22T15:28Z",
+      "rel": [
+       "full",
+       "scoreboard",
+       "dark"
+      ],
+      "width": 500
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/5a9c33b8-63fd-ff34-a833-925fe89320a6/logos/primary_logo_on_white_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_on_white_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/5a9c33b8-63fd-ff34-a833-925fe89320a6/logos/primary_logo_on_black_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_on_black_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/5a9c33b8-63fd-ff34-a833-925fe89320a6/logos/primary_logo_on_primary_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_on_primary_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/5a9c33b8-63fd-ff34-a833-925fe89320a6/logos/primary_logo_on_secondary_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_on_secondary_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/5a9c33b8-63fd-ff34-a833-925fe89320a6/logos/primary_logo_black.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_black"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/5a9c33b8-63fd-ff34-a833-925fe89320a6/logos/primary_logo_white.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_white"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/5a9c33b8-63fd-ff34-a833-925fe89320a6/logos/secondary_logo_on_white_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_on_white_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/5a9c33b8-63fd-ff34-a833-925fe89320a6/logos/secondary_logo_on_black_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_on_black_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/5a9c33b8-63fd-ff34-a833-925fe89320a6/logos/secondary_logo_on_primary_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_on_primary_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/5a9c33b8-63fd-ff34-a833-925fe89320a6/logos/secondary_logo_on_secondary_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_on_secondary_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/5a9c33b8-63fd-ff34-a833-925fe89320a6/logos/secondary_logo_black.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_black"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/5a9c33b8-63fd-ff34-a833-925fe89320a6/logos/secondary_logo_white.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_white"
+      ],
+      "width": 4096
+     }
+    ],
+    "name": "Raptors"
+   }
+  },
+  {
+   "date": "2026-10-01T07:00Z",
+   "description": "Waived G Jaelen House.",
+   "team": {
+    "abbreviation": "UTAH",
+    "alternateColor": "79a3dc",
+    "color": "4e008e",
+    "displayName": "Utah Jazz",
+    "id": "26",
+    "links": [
+     {
+      "href": "https://www.espn.com/nba/team/_/name/utah/utah-jazz",
+      "isExternal": false,
+      "isPremium": false,
+      "language": "en-US",
+      "rel": [
+       "clubhouse",
+       "desktop",
+       "team"
+      ],
+      "shortText": "Clubhouse",
+      "text": "Clubhouse"
+     }
+    ],
+    "location": "Utah",
+    "logos": [
+     {
+      "alt": "",
+      "height": 500,
+      "href": "https://a.espncdn.com/i/teamlogos/nba/500/utah.png",
+      "lastUpdated": "2025-06-24T15:32Z",
+      "rel": [
+       "full",
+       "default"
+      ],
+      "width": 500
+     },
+     {
+      "alt": "",
+      "height": 500,
+      "href": "https://a.espncdn.com/i/teamlogos/nba/500-dark/utah.png",
+      "lastUpdated": "2025-06-24T15:43Z",
+      "rel": [
+       "full",
+       "dark"
+      ],
+      "width": 500
+     },
+     {
+      "alt": "",
+      "height": 500,
+      "href": "https://a.espncdn.com/i/teamlogos/nba/500/scoreboard/utah.png",
+      "lastUpdated": "2025-06-24T15:34Z",
+      "rel": [
+       "full",
+       "scoreboard"
+      ],
+      "width": 500
+     },
+     {
+      "alt": "",
+      "height": 500,
+      "href": "https://a.espncdn.com/i/teamlogos/nba/500-dark/scoreboard/utah.png",
+      "lastUpdated": "2025-06-24T15:34Z",
+      "rel": [
+       "full",
+       "scoreboard",
+       "dark"
+      ],
+      "width": 500
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/77cea2fb-1388-b7c8-d171-2e72b3aecbfb/logos/primary_logo_on_white_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_on_white_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/77cea2fb-1388-b7c8-d171-2e72b3aecbfb/logos/primary_logo_on_black_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_on_black_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/77cea2fb-1388-b7c8-d171-2e72b3aecbfb/logos/primary_logo_on_primary_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_on_primary_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/77cea2fb-1388-b7c8-d171-2e72b3aecbfb/logos/primary_logo_on_secondary_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_on_secondary_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/77cea2fb-1388-b7c8-d171-2e72b3aecbfb/logos/primary_logo_black.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_black"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/77cea2fb-1388-b7c8-d171-2e72b3aecbfb/logos/primary_logo_white.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_white"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/77cea2fb-1388-b7c8-d171-2e72b3aecbfb/logos/secondary_logo_on_white_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_on_white_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/77cea2fb-1388-b7c8-d171-2e72b3aecbfb/logos/secondary_logo_on_black_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_on_black_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/77cea2fb-1388-b7c8-d171-2e72b3aecbfb/logos/secondary_logo_on_primary_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_on_primary_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/77cea2fb-1388-b7c8-d171-2e72b3aecbfb/logos/secondary_logo_on_secondary_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_on_secondary_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/77cea2fb-1388-b7c8-d171-2e72b3aecbfb/logos/secondary_logo_black.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_black"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/77cea2fb-1388-b7c8-d171-2e72b3aecbfb/logos/secondary_logo_white.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_white"
+      ],
+      "width": 4096
+     }
+    ],
+    "name": "Jazz"
+   }
+  },
+  {
+   "date": "2026-10-01T07:00Z",
+   "description": "Waived C Rafael Castro.",
+   "team": {
+    "abbreviation": "HOU",
+    "alternateColor": "000000",
+    "color": "ce0e2d",
+    "displayName": "Houston Rockets",
+    "id": "10",
+    "links": [
+     {
+      "href": "https://www.espn.com/nba/team/_/name/hou/houston-rockets",
+      "isExternal": false,
+      "isPremium": false,
+      "language": "en-US",
+      "rel": [
+       "clubhouse",
+       "desktop",
+       "team"
+      ],
+      "shortText": "Clubhouse",
+      "text": "Clubhouse"
+     }
+    ],
+    "location": "Houston",
+    "logos": [
+     {
+      "alt": "",
+      "height": 500,
+      "href": "https://a.espncdn.com/i/teamlogos/nba/500/hou.png",
+      "lastUpdated": "2026-07-01T17:56Z",
+      "rel": [
+       "full",
+       "default"
+      ],
+      "width": 500
+     },
+     {
+      "alt": "",
+      "height": 500,
+      "href": "https://a.espncdn.com/i/teamlogos/nba/500-dark/hou.png",
+      "lastUpdated": "2026-07-01T17:57Z",
+      "rel": [
+       "full",
+       "dark"
+      ],
+      "width": 500
+     },
+     {
+      "alt": "",
+      "height": 500,
+      "href": "https://a.espncdn.com/i/teamlogos/nba/500/scoreboard/hou.png",
+      "lastUpdated": "2026-07-01T17:56Z",
+      "rel": [
+       "full",
+       "scoreboard"
+      ],
+      "width": 500
+     },
+     {
+      "alt": "",
+      "height": 500,
+      "href": "https://a.espncdn.com/i/teamlogos/nba/500-dark/scoreboard/hou.png",
+      "lastUpdated": "2026-07-01T17:56Z",
+      "rel": [
+       "full",
+       "scoreboard",
+       "dark"
+      ],
+      "width": 500
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/78113ad4-1ac7-0c04-dada-388a6ff4e15e/logos/primary_logo_on_white_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_on_white_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/78113ad4-1ac7-0c04-dada-388a6ff4e15e/logos/primary_logo_on_black_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_on_black_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/78113ad4-1ac7-0c04-dada-388a6ff4e15e/logos/primary_logo_on_primary_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_on_primary_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/78113ad4-1ac7-0c04-dada-388a6ff4e15e/logos/primary_logo_on_secondary_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_on_secondary_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/78113ad4-1ac7-0c04-dada-388a6ff4e15e/logos/primary_logo_black.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_black"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/78113ad4-1ac7-0c04-dada-388a6ff4e15e/logos/primary_logo_white.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_white"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/78113ad4-1ac7-0c04-dada-388a6ff4e15e/logos/secondary_logo_on_white_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_on_white_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/78113ad4-1ac7-0c04-dada-388a6ff4e15e/logos/secondary_logo_on_black_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_on_black_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/78113ad4-1ac7-0c04-dada-388a6ff4e15e/logos/secondary_logo_on_primary_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_on_primary_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/78113ad4-1ac7-0c04-dada-388a6ff4e15e/logos/secondary_logo_on_secondary_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_on_secondary_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/78113ad4-1ac7-0c04-dada-388a6ff4e15e/logos/secondary_logo_black.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_black"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/78113ad4-1ac7-0c04-dada-388a6ff4e15e/logos/secondary_logo_white.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_white"
+      ],
+      "width": 4096
+     }
+    ],
+    "name": "Rockets"
+   }
+  },
+  {
+   "date": "2026-10-01T07:00Z",
+   "description": "Waived G Peter Suder and F Marquel Sutton.",
+   "team": {
+    "abbreviation": "CHI",
+    "alternateColor": "000000",
+    "color": "ce1141",
+    "displayName": "Chicago Bulls",
+    "id": "4",
+    "links": [
+     {
+      "href": "https://www.espn.com/nba/team/_/name/chi/chicago-bulls",
+      "isExternal": false,
+      "isPremium": false,
+      "language": "en-US",
+      "rel": [
+       "clubhouse",
+       "desktop",
+       "team"
+      ],
+      "shortText": "Clubhouse",
+      "text": "Clubhouse"
+     }
+    ],
+    "location": "Chicago",
+    "logos": [
+     {
+      "alt": "",
+      "height": 500,
+      "href": "https://a.espncdn.com/i/teamlogos/nba/500/chi.png",
+      "lastUpdated": "2024-06-25T21:17Z",
+      "rel": [
+       "full",
+       "default"
+      ],
+      "width": 500
+     },
+     {
+      "alt": "",
+      "height": 500,
+      "href": "https://a.espncdn.com/i/teamlogos/nba/500-dark/chi.png",
+      "lastUpdated": "2024-06-25T21:13Z",
+      "rel": [
+       "full",
+       "dark"
+      ],
+      "width": 500
+     },
+     {
+      "alt": "",
+      "height": 500,
+      "href": "https://a.espncdn.com/i/teamlogos/nba/500/scoreboard/chi.png",
+      "lastUpdated": "2024-06-25T21:18Z",
+      "rel": [
+       "full",
+       "scoreboard"
+      ],
+      "width": 500
+     },
+     {
+      "alt": "",
+      "height": 500,
+      "href": "https://a.espncdn.com/i/teamlogos/nba/500-dark/scoreboard/chi.png",
+      "lastUpdated": "2024-06-25T21:13Z",
+      "rel": [
+       "full",
+       "scoreboard",
+       "dark"
+      ],
+      "width": 500
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/e588ccf1-ba03-ea43-c34c-9a9c8d1895ca/logos/primary_logo_on_white_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_on_white_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/e588ccf1-ba03-ea43-c34c-9a9c8d1895ca/logos/primary_logo_on_black_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_on_black_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/e588ccf1-ba03-ea43-c34c-9a9c8d1895ca/logos/primary_logo_on_primary_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_on_primary_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/e588ccf1-ba03-ea43-c34c-9a9c8d1895ca/logos/primary_logo_on_secondary_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_on_secondary_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/e588ccf1-ba03-ea43-c34c-9a9c8d1895ca/logos/primary_logo_black.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_black"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/e588ccf1-ba03-ea43-c34c-9a9c8d1895ca/logos/primary_logo_white.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_white"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/e588ccf1-ba03-ea43-c34c-9a9c8d1895ca/logos/secondary_logo_on_white_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_on_white_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/e588ccf1-ba03-ea43-c34c-9a9c8d1895ca/logos/secondary_logo_on_black_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_on_black_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/e588ccf1-ba03-ea43-c34c-9a9c8d1895ca/logos/secondary_logo_on_primary_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_on_primary_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/e588ccf1-ba03-ea43-c34c-9a9c8d1895ca/logos/secondary_logo_on_secondary_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_on_secondary_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/e588ccf1-ba03-ea43-c34c-9a9c8d1895ca/logos/secondary_logo_black.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_black"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/e588ccf1-ba03-ea43-c34c-9a9c8d1895ca/logos/secondary_logo_white.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_white"
+      ],
+      "width": 4096
+     }
+    ],
+    "name": "Bulls"
+   }
+  },
+  {
+   "date": "2026-09-29T07:00Z",
+   "description": "Signed F Phillip Wheeler.",
+   "team": {
+    "abbreviation": "PHX",
+    "alternateColor": "e56020",
+    "color": "29127a",
+    "displayName": "Phoenix Suns",
+    "id": "21",
+    "links": [
+     {
+      "href": "https://www.espn.com/nba/team/_/name/phx/phoenix-suns",
+      "isExternal": false,
+      "isPremium": false,
+      "language": "en-US",
+      "rel": [
+       "clubhouse",
+       "desktop",
+       "team"
+      ],
+      "shortText": "Clubhouse",
+      "text": "Clubhouse"
+     }
+    ],
+    "location": "Phoenix",
+    "logos": [
+     {
+      "alt": "",
+      "height": 500,
+      "href": "https://a.espncdn.com/i/teamlogos/nba/500/phx.png",
+      "lastUpdated": "2024-06-25T21:17Z",
+      "rel": [
+       "full",
+       "default"
+      ],
+      "width": 500
+     },
+     {
+      "alt": "",
+      "height": 500,
+      "href": "https://a.espncdn.com/i/teamlogos/nba/500-dark/phx.png",
+      "lastUpdated": "2024-06-25T21:13Z",
+      "rel": [
+       "full",
+       "dark"
+      ],
+      "width": 500
+     },
+     {
+      "alt": "",
+      "height": 500,
+      "href": "https://a.espncdn.com/i/teamlogos/nba/500/scoreboard/phx.png",
+      "lastUpdated": "2024-06-25T21:18Z",
+      "rel": [
+       "full",
+       "scoreboard"
+      ],
+      "width": 500
+     },
+     {
+      "alt": "",
+      "height": 500,
+      "href": "https://a.espncdn.com/i/teamlogos/nba/500-dark/scoreboard/phx.png",
+      "lastUpdated": "2024-06-25T21:14Z",
+      "rel": [
+       "full",
+       "scoreboard",
+       "dark"
+      ],
+      "width": 500
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/c6eade89-5971-0e84-8ccb-cd91482b2b50/logos/primary_logo_on_white_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_on_white_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/c6eade89-5971-0e84-8ccb-cd91482b2b50/logos/primary_logo_on_black_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_on_black_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/c6eade89-5971-0e84-8ccb-cd91482b2b50/logos/primary_logo_on_primary_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_on_primary_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/c6eade89-5971-0e84-8ccb-cd91482b2b50/logos/primary_logo_on_secondary_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_on_secondary_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/c6eade89-5971-0e84-8ccb-cd91482b2b50/logos/primary_logo_black.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_black"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/c6eade89-5971-0e84-8ccb-cd91482b2b50/logos/primary_logo_white.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_white"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/c6eade89-5971-0e84-8ccb-cd91482b2b50/logos/secondary_logo_on_white_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_on_white_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/c6eade89-5971-0e84-8ccb-cd91482b2b50/logos/secondary_logo_on_black_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_on_black_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/c6eade89-5971-0e84-8ccb-cd91482b2b50/logos/secondary_logo_on_primary_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_on_primary_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/c6eade89-5971-0e84-8ccb-cd91482b2b50/logos/secondary_logo_on_secondary_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_on_secondary_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/c6eade89-5971-0e84-8ccb-cd91482b2b50/logos/secondary_logo_black.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_black"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/c6eade89-5971-0e84-8ccb-cd91482b2b50/logos/secondary_logo_white.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_white"
+      ],
+      "width": 4096
+     }
+    ],
+    "name": "Suns"
+   }
+  },
+  {
+   "date": "2026-09-28T07:00Z",
+   "description": "Waived G Rob Dillingham.",
+   "team": {
+    "abbreviation": "CHA",
+    "alternateColor": "1d1060",
+    "color": "008ca8",
+    "displayName": "Charlotte Hornets",
+    "id": "30",
+    "links": [
+     {
+      "href": "https://www.espn.com/nba/team/_/name/cha/charlotte-hornets",
+      "isExternal": false,
+      "isPremium": false,
+      "language": "en-US",
+      "rel": [
+       "clubhouse",
+       "desktop",
+       "team"
+      ],
+      "shortText": "Clubhouse",
+      "text": "Clubhouse"
+     }
+    ],
+    "location": "Charlotte",
+    "logos": [
+     {
+      "alt": "",
+      "height": 500,
+      "href": "https://a.espncdn.com/i/teamlogos/nba/500/cha.png",
+      "lastUpdated": "2024-06-25T21:17Z",
+      "rel": [
+       "full",
+       "default"
+      ],
+      "width": 500
+     },
+     {
+      "alt": "",
+      "height": 500,
+      "href": "https://a.espncdn.com/i/teamlogos/nba/500-dark/cha.png",
+      "lastUpdated": "2024-06-25T21:13Z",
+      "rel": [
+       "full",
+       "dark"
+      ],
+      "width": 500
+     },
+     {
+      "alt": "",
+      "height": 500,
+      "href": "https://a.espncdn.com/i/teamlogos/nba/500/scoreboard/cha.png",
+      "lastUpdated": "2024-06-25T21:18Z",
+      "rel": [
+       "full",
+       "scoreboard"
+      ],
+      "width": 500
+     },
+     {
+      "alt": "",
+      "height": 500,
+      "href": "https://a.espncdn.com/i/teamlogos/nba/500-dark/scoreboard/cha.png",
+      "lastUpdated": "2024-06-25T21:13Z",
+      "rel": [
+       "full",
+       "scoreboard",
+       "dark"
+      ],
+      "width": 500
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/377633c2-0dd1-91a1-83c0-9ed2d0c00ea1/logos/primary_logo_on_white_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_on_white_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/377633c2-0dd1-91a1-83c0-9ed2d0c00ea1/logos/primary_logo_on_black_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_on_black_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/377633c2-0dd1-91a1-83c0-9ed2d0c00ea1/logos/primary_logo_on_primary_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_on_primary_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/377633c2-0dd1-91a1-83c0-9ed2d0c00ea1/logos/primary_logo_on_secondary_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_on_secondary_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/377633c2-0dd1-91a1-83c0-9ed2d0c00ea1/logos/primary_logo_black.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_black"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/377633c2-0dd1-91a1-83c0-9ed2d0c00ea1/logos/primary_logo_white.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_white"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/377633c2-0dd1-91a1-83c0-9ed2d0c00ea1/logos/secondary_logo_on_white_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_on_white_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/377633c2-0dd1-91a1-83c0-9ed2d0c00ea1/logos/secondary_logo_on_black_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_on_black_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/377633c2-0dd1-91a1-83c0-9ed2d0c00ea1/logos/secondary_logo_on_primary_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_on_primary_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/377633c2-0dd1-91a1-83c0-9ed2d0c00ea1/logos/secondary_logo_on_secondary_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_on_secondary_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/377633c2-0dd1-91a1-83c0-9ed2d0c00ea1/logos/secondary_logo_black.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_black"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/377633c2-0dd1-91a1-83c0-9ed2d0c00ea1/logos/secondary_logo_white.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_white"
+      ],
+      "width": 4096
+     }
+    ],
+    "name": "Hornets"
+   }
+  },
+  {
+   "date": "2026-09-28T07:00Z",
+   "description": "Signed Carson Cooper to a two-way contract. Waived C Lawson Lovering.",
+   "team": {
+    "abbreviation": "MEM",
+    "alternateColor": "12173f",
+    "color": "5d76a9",
+    "displayName": "Memphis Grizzlies",
+    "id": "29",
+    "links": [
+     {
+      "href": "https://www.espn.com/nba/team/_/name/mem/memphis-grizzlies",
+      "isExternal": false,
+      "isPremium": false,
+      "language": "en-US",
+      "rel": [
+       "clubhouse",
+       "desktop",
+       "team"
+      ],
+      "shortText": "Clubhouse",
+      "text": "Clubhouse"
+     }
+    ],
+    "location": "Memphis",
+    "logos": [
+     {
+      "alt": "",
+      "height": 500,
+      "href": "https://a.espncdn.com/i/teamlogos/nba/500/mem.png",
+      "lastUpdated": "2024-06-25T21:17Z",
+      "rel": [
+       "full",
+       "default"
+      ],
+      "width": 500
+     },
+     {
+      "alt": "",
+      "height": 500,
+      "href": "https://a.espncdn.com/i/teamlogos/nba/500-dark/mem.png",
+      "lastUpdated": "2024-06-25T21:13Z",
+      "rel": [
+       "full",
+       "dark"
+      ],
+      "width": 500
+     },
+     {
+      "alt": "",
+      "height": 500,
+      "href": "https://a.espncdn.com/i/teamlogos/nba/500/scoreboard/mem.png",
+      "lastUpdated": "2024-06-25T21:18Z",
+      "rel": [
+       "full",
+       "scoreboard"
+      ],
+      "width": 500
+     },
+     {
+      "alt": "",
+      "height": 500,
+      "href": "https://a.espncdn.com/i/teamlogos/nba/500-dark/scoreboard/mem.png",
+      "lastUpdated": "2024-06-25T21:14Z",
+      "rel": [
+       "full",
+       "scoreboard",
+       "dark"
+      ],
+      "width": 500
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/af5d4942-aeb5-2d07-2a8a-f70b54617e51/logos/primary_logo_on_white_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_on_white_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/af5d4942-aeb5-2d07-2a8a-f70b54617e51/logos/primary_logo_on_black_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_on_black_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/af5d4942-aeb5-2d07-2a8a-f70b54617e51/logos/primary_logo_on_primary_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_on_primary_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/af5d4942-aeb5-2d07-2a8a-f70b54617e51/logos/primary_logo_on_secondary_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_on_secondary_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/af5d4942-aeb5-2d07-2a8a-f70b54617e51/logos/primary_logo_black.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_black"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/af5d4942-aeb5-2d07-2a8a-f70b54617e51/logos/primary_logo_white.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_white"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/af5d4942-aeb5-2d07-2a8a-f70b54617e51/logos/secondary_logo_on_white_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_on_white_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/af5d4942-aeb5-2d07-2a8a-f70b54617e51/logos/secondary_logo_on_black_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_on_black_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/af5d4942-aeb5-2d07-2a8a-f70b54617e51/logos/secondary_logo_on_primary_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_on_primary_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/af5d4942-aeb5-2d07-2a8a-f70b54617e51/logos/secondary_logo_on_secondary_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_on_secondary_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/af5d4942-aeb5-2d07-2a8a-f70b54617e51/logos/secondary_logo_black.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_black"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/af5d4942-aeb5-2d07-2a8a-f70b54617e51/logos/secondary_logo_white.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_white"
+      ],
+      "width": 4096
+     }
+    ],
+    "name": "Grizzlies"
+   }
+  },
+  {
+   "date": "2026-09-27T07:00Z",
+   "description": "Acquired G Rob Dillingham from Chicago Bulls for G Buddy Hield.",
+   "team": {
+    "abbreviation": "CHA",
+    "alternateColor": "1d1060",
+    "color": "008ca8",
+    "displayName": "Charlotte Hornets",
+    "id": "30",
+    "links": [
+     {
+      "href": "https://www.espn.com/nba/team/_/name/cha/charlotte-hornets",
+      "isExternal": false,
+      "isPremium": false,
+      "language": "en-US",
+      "rel": [
+       "clubhouse",
+       "desktop",
+       "team"
+      ],
+      "shortText": "Clubhouse",
+      "text": "Clubhouse"
+     }
+    ],
+    "location": "Charlotte",
+    "logos": [
+     {
+      "alt": "",
+      "height": 500,
+      "href": "https://a.espncdn.com/i/teamlogos/nba/500/cha.png",
+      "lastUpdated": "2024-06-25T21:17Z",
+      "rel": [
+       "full",
+       "default"
+      ],
+      "width": 500
+     },
+     {
+      "alt": "",
+      "height": 500,
+      "href": "https://a.espncdn.com/i/teamlogos/nba/500-dark/cha.png",
+      "lastUpdated": "2024-06-25T21:13Z",
+      "rel": [
+       "full",
+       "dark"
+      ],
+      "width": 500
+     },
+     {
+      "alt": "",
+      "height": 500,
+      "href": "https://a.espncdn.com/i/teamlogos/nba/500/scoreboard/cha.png",
+      "lastUpdated": "2024-06-25T21:18Z",
+      "rel": [
+       "full",
+       "scoreboard"
+      ],
+      "width": 500
+     },
+     {
+      "alt": "",
+      "height": 500,
+      "href": "https://a.espncdn.com/i/teamlogos/nba/500-dark/scoreboard/cha.png",
+      "lastUpdated": "2024-06-25T21:13Z",
+      "rel": [
+       "full",
+       "scoreboard",
+       "dark"
+      ],
+      "width": 500
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/377633c2-0dd1-91a1-83c0-9ed2d0c00ea1/logos/primary_logo_on_white_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_on_white_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/377633c2-0dd1-91a1-83c0-9ed2d0c00ea1/logos/primary_logo_on_black_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_on_black_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/377633c2-0dd1-91a1-83c0-9ed2d0c00ea1/logos/primary_logo_on_primary_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_on_primary_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/377633c2-0dd1-91a1-83c0-9ed2d0c00ea1/logos/primary_logo_on_secondary_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_on_secondary_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/377633c2-0dd1-91a1-83c0-9ed2d0c00ea1/logos/primary_logo_black.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_black"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/377633c2-0dd1-91a1-83c0-9ed2d0c00ea1/logos/primary_logo_white.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_white"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/377633c2-0dd1-91a1-83c0-9ed2d0c00ea1/logos/secondary_logo_on_white_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_on_white_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/377633c2-0dd1-91a1-83c0-9ed2d0c00ea1/logos/secondary_logo_on_black_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_on_black_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/377633c2-0dd1-91a1-83c0-9ed2d0c00ea1/logos/secondary_logo_on_primary_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_on_primary_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/377633c2-0dd1-91a1-83c0-9ed2d0c00ea1/logos/secondary_logo_on_secondary_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_on_secondary_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/377633c2-0dd1-91a1-83c0-9ed2d0c00ea1/logos/secondary_logo_black.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_black"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/377633c2-0dd1-91a1-83c0-9ed2d0c00ea1/logos/secondary_logo_white.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_white"
+      ],
+      "width": 4096
+     }
+    ],
+    "name": "Hornets"
+   }
+  },
+  {
+   "date": "2026-09-27T07:00Z",
+   "description": "Acquired G Buddy Hield from Charlotte in exchange for G Rob Dillingham.",
+   "team": {
+    "abbreviation": "CHI",
+    "alternateColor": "000000",
+    "color": "ce1141",
+    "displayName": "Chicago Bulls",
+    "id": "4",
+    "links": [
+     {
+      "href": "https://www.espn.com/nba/team/_/name/chi/chicago-bulls",
+      "isExternal": false,
+      "isPremium": false,
+      "language": "en-US",
+      "rel": [
+       "clubhouse",
+       "desktop",
+       "team"
+      ],
+      "shortText": "Clubhouse",
+      "text": "Clubhouse"
+     }
+    ],
+    "location": "Chicago",
+    "logos": [
+     {
+      "alt": "",
+      "height": 500,
+      "href": "https://a.espncdn.com/i/teamlogos/nba/500/chi.png",
+      "lastUpdated": "2024-06-25T21:17Z",
+      "rel": [
+       "full",
+       "default"
+      ],
+      "width": 500
+     },
+     {
+      "alt": "",
+      "height": 500,
+      "href": "https://a.espncdn.com/i/teamlogos/nba/500-dark/chi.png",
+      "lastUpdated": "2024-06-25T21:13Z",
+      "rel": [
+       "full",
+       "dark"
+      ],
+      "width": 500
+     },
+     {
+      "alt": "",
+      "height": 500,
+      "href": "https://a.espncdn.com/i/teamlogos/nba/500/scoreboard/chi.png",
+      "lastUpdated": "2024-06-25T21:18Z",
+      "rel": [
+       "full",
+       "scoreboard"
+      ],
+      "width": 500
+     },
+     {
+      "alt": "",
+      "height": 500,
+      "href": "https://a.espncdn.com/i/teamlogos/nba/500-dark/scoreboard/chi.png",
+      "lastUpdated": "2024-06-25T21:13Z",
+      "rel": [
+       "full",
+       "scoreboard",
+       "dark"
+      ],
+      "width": 500
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/e588ccf1-ba03-ea43-c34c-9a9c8d1895ca/logos/primary_logo_on_white_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_on_white_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/e588ccf1-ba03-ea43-c34c-9a9c8d1895ca/logos/primary_logo_on_black_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_on_black_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/e588ccf1-ba03-ea43-c34c-9a9c8d1895ca/logos/primary_logo_on_primary_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_on_primary_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/e588ccf1-ba03-ea43-c34c-9a9c8d1895ca/logos/primary_logo_on_secondary_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_on_secondary_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/e588ccf1-ba03-ea43-c34c-9a9c8d1895ca/logos/primary_logo_black.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_black"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/e588ccf1-ba03-ea43-c34c-9a9c8d1895ca/logos/primary_logo_white.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_white"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/e588ccf1-ba03-ea43-c34c-9a9c8d1895ca/logos/secondary_logo_on_white_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_on_white_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/e588ccf1-ba03-ea43-c34c-9a9c8d1895ca/logos/secondary_logo_on_black_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_on_black_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/e588ccf1-ba03-ea43-c34c-9a9c8d1895ca/logos/secondary_logo_on_primary_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_on_primary_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/e588ccf1-ba03-ea43-c34c-9a9c8d1895ca/logos/secondary_logo_on_secondary_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_on_secondary_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/e588ccf1-ba03-ea43-c34c-9a9c8d1895ca/logos/secondary_logo_black.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_black"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/e588ccf1-ba03-ea43-c34c-9a9c8d1895ca/logos/secondary_logo_white.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_white"
+      ],
+      "width": 4096
+     }
+    ],
+    "name": "Bulls"
+   }
+  },
+  {
+   "date": "2026-09-25T07:00Z",
+   "description": "Waived G D'Angelo Russell.",
+   "team": {
+    "abbreviation": "MEM",
+    "alternateColor": "12173f",
+    "color": "5d76a9",
+    "displayName": "Memphis Grizzlies",
+    "id": "29",
+    "links": [
+     {
+      "href": "https://www.espn.com/nba/team/_/name/mem/memphis-grizzlies",
+      "isExternal": false,
+      "isPremium": false,
+      "language": "en-US",
+      "rel": [
+       "clubhouse",
+       "desktop",
+       "team"
+      ],
+      "shortText": "Clubhouse",
+      "text": "Clubhouse"
+     }
+    ],
+    "location": "Memphis",
+    "logos": [
+     {
+      "alt": "",
+      "height": 500,
+      "href": "https://a.espncdn.com/i/teamlogos/nba/500/mem.png",
+      "lastUpdated": "2024-06-25T21:17Z",
+      "rel": [
+       "full",
+       "default"
+      ],
+      "width": 500
+     },
+     {
+      "alt": "",
+      "height": 500,
+      "href": "https://a.espncdn.com/i/teamlogos/nba/500-dark/mem.png",
+      "lastUpdated": "2024-06-25T21:13Z",
+      "rel": [
+       "full",
+       "dark"
+      ],
+      "width": 500
+     },
+     {
+      "alt": "",
+      "height": 500,
+      "href": "https://a.espncdn.com/i/teamlogos/nba/500/scoreboard/mem.png",
+      "lastUpdated": "2024-06-25T21:18Z",
+      "rel": [
+       "full",
+       "scoreboard"
+      ],
+      "width": 500
+     },
+     {
+      "alt": "",
+      "height": 500,
+      "href": "https://a.espncdn.com/i/teamlogos/nba/500-dark/scoreboard/mem.png",
+      "lastUpdated": "2024-06-25T21:14Z",
+      "rel": [
+       "full",
+       "scoreboard",
+       "dark"
+      ],
+      "width": 500
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/af5d4942-aeb5-2d07-2a8a-f70b54617e51/logos/primary_logo_on_white_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_on_white_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/af5d4942-aeb5-2d07-2a8a-f70b54617e51/logos/primary_logo_on_black_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_on_black_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/af5d4942-aeb5-2d07-2a8a-f70b54617e51/logos/primary_logo_on_primary_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_on_primary_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/af5d4942-aeb5-2d07-2a8a-f70b54617e51/logos/primary_logo_on_secondary_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_on_secondary_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/af5d4942-aeb5-2d07-2a8a-f70b54617e51/logos/primary_logo_black.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_black"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/af5d4942-aeb5-2d07-2a8a-f70b54617e51/logos/primary_logo_white.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_white"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/af5d4942-aeb5-2d07-2a8a-f70b54617e51/logos/secondary_logo_on_white_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_on_white_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/af5d4942-aeb5-2d07-2a8a-f70b54617e51/logos/secondary_logo_on_black_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_on_black_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/af5d4942-aeb5-2d07-2a8a-f70b54617e51/logos/secondary_logo_on_primary_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_on_primary_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/af5d4942-aeb5-2d07-2a8a-f70b54617e51/logos/secondary_logo_on_secondary_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_on_secondary_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/af5d4942-aeb5-2d07-2a8a-f70b54617e51/logos/secondary_logo_black.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_black"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/af5d4942-aeb5-2d07-2a8a-f70b54617e51/logos/secondary_logo_white.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_white"
+      ],
+      "width": 4096
+     }
+    ],
+    "name": "Grizzlies"
+   }
+  },
+  {
+   "date": "2026-09-25T07:00Z",
+   "description": "Waived Fs Gabe Levin and Tyrone Marshall Jr..",
+   "team": {
+    "abbreviation": "SAC",
+    "alternateColor": "6a7a82",
+    "color": "5a2d81",
+    "displayName": "Sacramento Kings",
+    "id": "23",
+    "links": [
+     {
+      "href": "https://www.espn.com/nba/team/_/name/sac/sacramento-kings",
+      "isExternal": false,
+      "isPremium": false,
+      "language": "en-US",
+      "rel": [
+       "clubhouse",
+       "desktop",
+       "team"
+      ],
+      "shortText": "Clubhouse",
+      "text": "Clubhouse"
+     }
+    ],
+    "location": "Sacramento",
+    "logos": [
+     {
+      "alt": "",
+      "height": 500,
+      "href": "https://a.espncdn.com/i/teamlogos/nba/500/sac.png",
+      "lastUpdated": "2024-06-25T21:17Z",
+      "rel": [
+       "full",
+       "default"
+      ],
+      "width": 500
+     },
+     {
+      "alt": "",
+      "height": 500,
+      "href": "https://a.espncdn.com/i/teamlogos/nba/500-dark/sac.png",
+      "lastUpdated": "2024-06-25T21:13Z",
+      "rel": [
+       "full",
+       "dark"
+      ],
+      "width": 500
+     },
+     {
+      "alt": "",
+      "height": 500,
+      "href": "https://a.espncdn.com/i/teamlogos/nba/500/scoreboard/sac.png",
+      "lastUpdated": "2024-06-25T21:18Z",
+      "rel": [
+       "full",
+       "scoreboard"
+      ],
+      "width": 500
+     },
+     {
+      "alt": "",
+      "height": 500,
+      "href": "https://a.espncdn.com/i/teamlogos/nba/500-dark/scoreboard/sac.png",
+      "lastUpdated": "2024-06-25T21:14Z",
+      "rel": [
+       "full",
+       "scoreboard",
+       "dark"
+      ],
+      "width": 500
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/e266c4ea-9af3-1bd8-06fb-fd608fd30e26/logos/primary_logo_on_white_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_on_white_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/e266c4ea-9af3-1bd8-06fb-fd608fd30e26/logos/primary_logo_on_black_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_on_black_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/e266c4ea-9af3-1bd8-06fb-fd608fd30e26/logos/primary_logo_on_primary_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_on_primary_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/e266c4ea-9af3-1bd8-06fb-fd608fd30e26/logos/primary_logo_on_secondary_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_on_secondary_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/e266c4ea-9af3-1bd8-06fb-fd608fd30e26/logos/primary_logo_black.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_black"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/e266c4ea-9af3-1bd8-06fb-fd608fd30e26/logos/primary_logo_white.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_white"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/e266c4ea-9af3-1bd8-06fb-fd608fd30e26/logos/secondary_logo_on_white_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_on_white_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/e266c4ea-9af3-1bd8-06fb-fd608fd30e26/logos/secondary_logo_on_black_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_on_black_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/e266c4ea-9af3-1bd8-06fb-fd608fd30e26/logos/secondary_logo_on_primary_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_on_primary_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/e266c4ea-9af3-1bd8-06fb-fd608fd30e26/logos/secondary_logo_on_secondary_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_on_secondary_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/e266c4ea-9af3-1bd8-06fb-fd608fd30e26/logos/secondary_logo_black.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_black"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/e266c4ea-9af3-1bd8-06fb-fd608fd30e26/logos/secondary_logo_white.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_white"
+      ],
+      "width": 4096
+     }
+    ],
+    "name": "Kings"
+   }
+  },
+  {
+   "date": "2026-09-25T07:00Z",
+   "description": "Waived F Romeo Weems.",
+   "team": {
+    "abbreviation": "DET",
+    "alternateColor": "c8102e",
+    "color": "1d428a",
+    "displayName": "Detroit Pistons",
+    "id": "8",
+    "links": [
+     {
+      "href": "https://www.espn.com/nba/team/_/name/det/detroit-pistons",
+      "isExternal": false,
+      "isPremium": false,
+      "language": "en-US",
+      "rel": [
+       "clubhouse",
+       "desktop",
+       "team"
+      ],
+      "shortText": "Clubhouse",
+      "text": "Clubhouse"
+     }
+    ],
+    "location": "Detroit",
+    "logos": [
+     {
+      "alt": "",
+      "height": 500,
+      "href": "https://a.espncdn.com/i/teamlogos/nba/500/det.png",
+      "lastUpdated": "2024-06-25T21:17Z",
+      "rel": [
+       "full",
+       "default"
+      ],
+      "width": 500
+     },
+     {
+      "alt": "",
+      "height": 500,
+      "href": "https://a.espncdn.com/i/teamlogos/nba/500-dark/det.png",
+      "lastUpdated": "2024-06-25T21:13Z",
+      "rel": [
+       "full",
+       "dark"
+      ],
+      "width": 500
+     },
+     {
+      "alt": "",
+      "height": 500,
+      "href": "https://a.espncdn.com/i/teamlogos/nba/500/scoreboard/det.png",
+      "lastUpdated": "2024-06-25T21:18Z",
+      "rel": [
+       "full",
+       "scoreboard"
+      ],
+      "width": 500
+     },
+     {
+      "alt": "",
+      "height": 500,
+      "href": "https://a.espncdn.com/i/teamlogos/nba/500-dark/scoreboard/det.png",
+      "lastUpdated": "2024-06-25T21:14Z",
+      "rel": [
+       "full",
+       "scoreboard",
+       "dark"
+      ],
+      "width": 500
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/4e096981-dc02-51d0-3dcd-2468fcc1e22d/logos/primary_logo_on_white_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_on_white_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/4e096981-dc02-51d0-3dcd-2468fcc1e22d/logos/primary_logo_on_black_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_on_black_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/4e096981-dc02-51d0-3dcd-2468fcc1e22d/logos/primary_logo_on_primary_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_on_primary_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/4e096981-dc02-51d0-3dcd-2468fcc1e22d/logos/primary_logo_on_secondary_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_on_secondary_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/4e096981-dc02-51d0-3dcd-2468fcc1e22d/logos/primary_logo_black.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_black"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/4e096981-dc02-51d0-3dcd-2468fcc1e22d/logos/primary_logo_white.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_white"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/4e096981-dc02-51d0-3dcd-2468fcc1e22d/logos/secondary_logo_on_white_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_on_white_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/4e096981-dc02-51d0-3dcd-2468fcc1e22d/logos/secondary_logo_on_black_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_on_black_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/4e096981-dc02-51d0-3dcd-2468fcc1e22d/logos/secondary_logo_on_primary_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_on_primary_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/4e096981-dc02-51d0-3dcd-2468fcc1e22d/logos/secondary_logo_on_secondary_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_on_secondary_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/4e096981-dc02-51d0-3dcd-2468fcc1e22d/logos/secondary_logo_black.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_black"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/4e096981-dc02-51d0-3dcd-2468fcc1e22d/logos/secondary_logo_white.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_white"
+      ],
+      "width": 4096
+     }
+    ],
+    "name": "Pistons"
+   }
+  },
+  {
+   "date": "2026-09-25T07:00Z",
+   "description": "Re-signed F Dwight Powell.",
+   "team": {
+    "abbreviation": "DAL",
+    "alternateColor": "bbc4ca",
+    "color": "0064b1",
+    "displayName": "Dallas Mavericks",
+    "id": "6",
+    "links": [
+     {
+      "href": "https://www.espn.com/nba/team/_/name/dal/dallas-mavericks",
+      "isExternal": false,
+      "isPremium": false,
+      "language": "en-US",
+      "rel": [
+       "clubhouse",
+       "desktop",
+       "team"
+      ],
+      "shortText": "Clubhouse",
+      "text": "Clubhouse"
+     }
+    ],
+    "location": "Dallas",
+    "logos": [
+     {
+      "alt": "",
+      "height": 500,
+      "href": "https://a.espncdn.com/i/teamlogos/nba/500/dal.png",
+      "lastUpdated": "2024-06-25T21:17Z",
+      "rel": [
+       "full",
+       "default"
+      ],
+      "width": 500
+     },
+     {
+      "alt": "",
+      "height": 500,
+      "href": "https://a.espncdn.com/i/teamlogos/nba/500-dark/dal.png",
+      "lastUpdated": "2024-06-25T21:13Z",
+      "rel": [
+       "full",
+       "dark"
+      ],
+      "width": 500
+     },
+     {
+      "alt": "",
+      "height": 500,
+      "href": "https://a.espncdn.com/i/teamlogos/nba/500/scoreboard/dal.png",
+      "lastUpdated": "2024-06-25T21:18Z",
+      "rel": [
+       "full",
+       "scoreboard"
+      ],
+      "width": 500
+     },
+     {
+      "alt": "",
+      "height": 500,
+      "href": "https://a.espncdn.com/i/teamlogos/nba/500-dark/scoreboard/dal.png",
+      "lastUpdated": "2024-06-25T21:14Z",
+      "rel": [
+       "full",
+       "scoreboard",
+       "dark"
+      ],
+      "width": 500
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/f00d1f4e-4ce6-d581-466c-5b52531cf7ad/logos/primary_logo_on_white_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_on_white_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/f00d1f4e-4ce6-d581-466c-5b52531cf7ad/logos/primary_logo_on_black_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_on_black_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/f00d1f4e-4ce6-d581-466c-5b52531cf7ad/logos/primary_logo_on_primary_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_on_primary_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/f00d1f4e-4ce6-d581-466c-5b52531cf7ad/logos/primary_logo_on_secondary_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_on_secondary_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/f00d1f4e-4ce6-d581-466c-5b52531cf7ad/logos/primary_logo_black.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_black"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/f00d1f4e-4ce6-d581-466c-5b52531cf7ad/logos/primary_logo_white.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_white"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/f00d1f4e-4ce6-d581-466c-5b52531cf7ad/logos/secondary_logo_on_white_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_on_white_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/f00d1f4e-4ce6-d581-466c-5b52531cf7ad/logos/secondary_logo_on_black_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_on_black_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/f00d1f4e-4ce6-d581-466c-5b52531cf7ad/logos/secondary_logo_on_primary_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_on_primary_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/f00d1f4e-4ce6-d581-466c-5b52531cf7ad/logos/secondary_logo_on_secondary_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_on_secondary_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/f00d1f4e-4ce6-d581-466c-5b52531cf7ad/logos/secondary_logo_black.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_black"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/f00d1f4e-4ce6-d581-466c-5b52531cf7ad/logos/secondary_logo_white.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_white"
+      ],
+      "width": 4096
+     }
+    ],
+    "name": "Mavericks"
+   }
+  },
+  {
+   "date": "2026-09-25T07:00Z",
+   "description": "Waived G Houston Mallette.",
+   "team": {
+    "abbreviation": "CHI",
+    "alternateColor": "000000",
+    "color": "ce1141",
+    "displayName": "Chicago Bulls",
+    "id": "4",
+    "links": [
+     {
+      "href": "https://www.espn.com/nba/team/_/name/chi/chicago-bulls",
+      "isExternal": false,
+      "isPremium": false,
+      "language": "en-US",
+      "rel": [
+       "clubhouse",
+       "desktop",
+       "team"
+      ],
+      "shortText": "Clubhouse",
+      "text": "Clubhouse"
+     }
+    ],
+    "location": "Chicago",
+    "logos": [
+     {
+      "alt": "",
+      "height": 500,
+      "href": "https://a.espncdn.com/i/teamlogos/nba/500/chi.png",
+      "lastUpdated": "2024-06-25T21:17Z",
+      "rel": [
+       "full",
+       "default"
+      ],
+      "width": 500
+     },
+     {
+      "alt": "",
+      "height": 500,
+      "href": "https://a.espncdn.com/i/teamlogos/nba/500-dark/chi.png",
+      "lastUpdated": "2024-06-25T21:13Z",
+      "rel": [
+       "full",
+       "dark"
+      ],
+      "width": 500
+     },
+     {
+      "alt": "",
+      "height": 500,
+      "href": "https://a.espncdn.com/i/teamlogos/nba/500/scoreboard/chi.png",
+      "lastUpdated": "2024-06-25T21:18Z",
+      "rel": [
+       "full",
+       "scoreboard"
+      ],
+      "width": 500
+     },
+     {
+      "alt": "",
+      "height": 500,
+      "href": "https://a.espncdn.com/i/teamlogos/nba/500-dark/scoreboard/chi.png",
+      "lastUpdated": "2024-06-25T21:13Z",
+      "rel": [
+       "full",
+       "scoreboard",
+       "dark"
+      ],
+      "width": 500
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/e588ccf1-ba03-ea43-c34c-9a9c8d1895ca/logos/primary_logo_on_white_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_on_white_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/e588ccf1-ba03-ea43-c34c-9a9c8d1895ca/logos/primary_logo_on_black_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_on_black_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/e588ccf1-ba03-ea43-c34c-9a9c8d1895ca/logos/primary_logo_on_primary_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_on_primary_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/e588ccf1-ba03-ea43-c34c-9a9c8d1895ca/logos/primary_logo_on_secondary_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_on_secondary_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/e588ccf1-ba03-ea43-c34c-9a9c8d1895ca/logos/primary_logo_black.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_black"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/e588ccf1-ba03-ea43-c34c-9a9c8d1895ca/logos/primary_logo_white.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_white"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/e588ccf1-ba03-ea43-c34c-9a9c8d1895ca/logos/secondary_logo_on_white_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_on_white_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/e588ccf1-ba03-ea43-c34c-9a9c8d1895ca/logos/secondary_logo_on_black_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_on_black_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/e588ccf1-ba03-ea43-c34c-9a9c8d1895ca/logos/secondary_logo_on_primary_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_on_primary_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/e588ccf1-ba03-ea43-c34c-9a9c8d1895ca/logos/secondary_logo_on_secondary_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_on_secondary_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/e588ccf1-ba03-ea43-c34c-9a9c8d1895ca/logos/secondary_logo_black.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_black"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/e588ccf1-ba03-ea43-c34c-9a9c8d1895ca/logos/secondary_logo_white.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_white"
+      ],
+      "width": 4096
+     }
+    ],
+    "name": "Bulls"
+   }
+  },
+  {
+   "date": "2026-09-24T07:00Z",
+   "description": "Waived G AJ Hoggard.",
+   "team": {
+    "abbreviation": "TOR",
+    "alternateColor": "000000",
+    "color": "d91244",
+    "displayName": "Toronto Raptors",
+    "id": "28",
+    "links": [
+     {
+      "href": "https://www.espn.com/nba/team/_/name/tor/toronto-raptors",
+      "isExternal": false,
+      "isPremium": false,
+      "language": "en-US",
+      "rel": [
+       "clubhouse",
+       "desktop",
+       "team"
+      ],
+      "shortText": "Clubhouse",
+      "text": "Clubhouse"
+     }
+    ],
+    "location": "Toronto",
+    "logos": [
+     {
+      "alt": "",
+      "height": 500,
+      "href": "https://a.espncdn.com/i/teamlogos/nba/500/tor.png",
+      "lastUpdated": "2024-06-25T21:17Z",
+      "rel": [
+       "full",
+       "default"
+      ],
+      "width": 500
+     },
+     {
+      "alt": "",
+      "height": 500,
+      "href": "https://a.espncdn.com/i/teamlogos/nba/500-dark/tor.png",
+      "lastUpdated": "2025-01-21T22:35Z",
+      "rel": [
+       "full",
+       "dark"
+      ],
+      "width": 500
+     },
+     {
+      "alt": "",
+      "height": 500,
+      "href": "https://a.espncdn.com/i/teamlogos/nba/500/scoreboard/tor.png",
+      "lastUpdated": "2024-06-25T21:18Z",
+      "rel": [
+       "full",
+       "scoreboard"
+      ],
+      "width": 500
+     },
+     {
+      "alt": "",
+      "height": 500,
+      "href": "https://a.espncdn.com/i/teamlogos/nba/500-dark/scoreboard/tor.png",
+      "lastUpdated": "2025-01-22T15:28Z",
+      "rel": [
+       "full",
+       "scoreboard",
+       "dark"
+      ],
+      "width": 500
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/5a9c33b8-63fd-ff34-a833-925fe89320a6/logos/primary_logo_on_white_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_on_white_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/5a9c33b8-63fd-ff34-a833-925fe89320a6/logos/primary_logo_on_black_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_on_black_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/5a9c33b8-63fd-ff34-a833-925fe89320a6/logos/primary_logo_on_primary_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_on_primary_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/5a9c33b8-63fd-ff34-a833-925fe89320a6/logos/primary_logo_on_secondary_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_on_secondary_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/5a9c33b8-63fd-ff34-a833-925fe89320a6/logos/primary_logo_black.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_black"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/5a9c33b8-63fd-ff34-a833-925fe89320a6/logos/primary_logo_white.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_white"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/5a9c33b8-63fd-ff34-a833-925fe89320a6/logos/secondary_logo_on_white_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_on_white_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/5a9c33b8-63fd-ff34-a833-925fe89320a6/logos/secondary_logo_on_black_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_on_black_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/5a9c33b8-63fd-ff34-a833-925fe89320a6/logos/secondary_logo_on_primary_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_on_primary_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/5a9c33b8-63fd-ff34-a833-925fe89320a6/logos/secondary_logo_on_secondary_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_on_secondary_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/5a9c33b8-63fd-ff34-a833-925fe89320a6/logos/secondary_logo_black.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_black"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/5a9c33b8-63fd-ff34-a833-925fe89320a6/logos/secondary_logo_white.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_white"
+      ],
+      "width": 4096
+     }
+    ],
+    "name": "Raptors"
+   }
+  },
+  {
+   "date": "2026-09-24T07:00Z",
+   "description": "Waived C Ibrahima Diallo and G Justin Harmon.",
+   "team": {
+    "abbreviation": "UTAH",
+    "alternateColor": "79a3dc",
+    "color": "4e008e",
+    "displayName": "Utah Jazz",
+    "id": "26",
+    "links": [
+     {
+      "href": "https://www.espn.com/nba/team/_/name/utah/utah-jazz",
+      "isExternal": false,
+      "isPremium": false,
+      "language": "en-US",
+      "rel": [
+       "clubhouse",
+       "desktop",
+       "team"
+      ],
+      "shortText": "Clubhouse",
+      "text": "Clubhouse"
+     }
+    ],
+    "location": "Utah",
+    "logos": [
+     {
+      "alt": "",
+      "height": 500,
+      "href": "https://a.espncdn.com/i/teamlogos/nba/500/utah.png",
+      "lastUpdated": "2025-06-24T15:32Z",
+      "rel": [
+       "full",
+       "default"
+      ],
+      "width": 500
+     },
+     {
+      "alt": "",
+      "height": 500,
+      "href": "https://a.espncdn.com/i/teamlogos/nba/500-dark/utah.png",
+      "lastUpdated": "2025-06-24T15:43Z",
+      "rel": [
+       "full",
+       "dark"
+      ],
+      "width": 500
+     },
+     {
+      "alt": "",
+      "height": 500,
+      "href": "https://a.espncdn.com/i/teamlogos/nba/500/scoreboard/utah.png",
+      "lastUpdated": "2025-06-24T15:34Z",
+      "rel": [
+       "full",
+       "scoreboard"
+      ],
+      "width": 500
+     },
+     {
+      "alt": "",
+      "height": 500,
+      "href": "https://a.espncdn.com/i/teamlogos/nba/500-dark/scoreboard/utah.png",
+      "lastUpdated": "2025-06-24T15:34Z",
+      "rel": [
+       "full",
+       "scoreboard",
+       "dark"
+      ],
+      "width": 500
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/77cea2fb-1388-b7c8-d171-2e72b3aecbfb/logos/primary_logo_on_white_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_on_white_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/77cea2fb-1388-b7c8-d171-2e72b3aecbfb/logos/primary_logo_on_black_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_on_black_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/77cea2fb-1388-b7c8-d171-2e72b3aecbfb/logos/primary_logo_on_primary_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_on_primary_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/77cea2fb-1388-b7c8-d171-2e72b3aecbfb/logos/primary_logo_on_secondary_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_on_secondary_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/77cea2fb-1388-b7c8-d171-2e72b3aecbfb/logos/primary_logo_black.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_black"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/77cea2fb-1388-b7c8-d171-2e72b3aecbfb/logos/primary_logo_white.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "primary_logo_white"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/77cea2fb-1388-b7c8-d171-2e72b3aecbfb/logos/secondary_logo_on_white_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_on_white_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/77cea2fb-1388-b7c8-d171-2e72b3aecbfb/logos/secondary_logo_on_black_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_on_black_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/77cea2fb-1388-b7c8-d171-2e72b3aecbfb/logos/secondary_logo_on_primary_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_on_primary_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/77cea2fb-1388-b7c8-d171-2e72b3aecbfb/logos/secondary_logo_on_secondary_color.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_on_secondary_color"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/77cea2fb-1388-b7c8-d171-2e72b3aecbfb/logos/secondary_logo_black.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_black"
+      ],
+      "width": 4096
+     },
+     {
+      "alt": "",
+      "height": 4096,
+      "href": "https://a.espncdn.com/guid/77cea2fb-1388-b7c8-d171-2e72b3aecbfb/logos/secondary_logo_white.png",
+      "lastUpdated": "2026-07-22T20:23Z",
+      "rel": [
+       "full",
+       "secondary_logo_white"
+      ],
+      "width": 4096
+     }
+    ],
+    "name": "Jazz"
+   }
+  }
+ ]
+}
