@@ -641,7 +641,7 @@ def post_telemetry(
                         "message": (
                             f"{alert['rule']}: {alert['source']} "
                             f"{alert.get('metric', '')} observed={alert['observed']} "
-                            f"< floor {alert['threshold']} ({alert['detail']})"
+                            f"vs threshold {alert['threshold']} ({alert['detail']})"
                         ),
                         "path": path,
                         "context": json.dumps({**alert, "date": s["date"]}),
@@ -683,11 +683,17 @@ def run(
     """Run the harness for one date and write ``parity_{date}.parquet`` + ``summary_{date}.json``."""
     out_dir.mkdir(parents=True, exist_ok=True)
     parquet, summary_json = out_dir / f"parity_{date}.parquet", out_dir / f"summary_{date}.json"
+    floors = load_floors(floors_path)
     if parquet.exists() and summary_json.exists() and not force:
         log.info("%s already done (%s); --force to rebuild", date, parquet)
-        return json.loads(summary_json.read_text())
+        result = json.loads(summary_json.read_text())
+        # Re-score the stored per-source summaries: a rule added after the run (such as
+        # ``source_errored``, #564) or a changed floor must still alert on a cached date.
+        for s in result.get("sources") or []:
+            s["alerts"] = alerts_for(s, source_config(floors, s["league"], s["source"]))
+        result["alerts"] = [a for s in result.get("sources") or [] for a in s["alerts"]]
+        return result
 
-    floors = load_floors(floors_path)
     rows: list[dict[str, Any]] = []
     pools: dict[tuple[str, str], list[pl.DataFrame]] = {}
     for league in leagues:
