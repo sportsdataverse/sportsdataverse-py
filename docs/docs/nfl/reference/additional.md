@@ -76,22 +76,11 @@ not covered by the generated API-endpoint reference above.
 | [load_nfl_ff_playerids](additional/nflverse-data-releases-2.md#load_nfl_ff_playerids) | Load fantasy football player IDs from DynastyProcess.com |
 | [load_nfl_ff_rankings](additional/nflverse-data-releases-2.md#load_nfl_ff_rankings) | Load fantasy football rankings and projections |
 | [load_nfl_nextgen_stats](additional/nflverse-data-releases-2.md#load_nfl_nextgen_stats) | Load NFL NextGen Stats data going back to 2016. |
-| [load_nfl_ngs_passing](additional/nflverse-data-releases-2.md#load_nfl_ngs_passing) | Deprecated alias for `load_nfl_nextgen_stats(stat_type='passing')`. |
-| [load_nfl_ngs_receiving](additional/nflverse-data-releases-2.md#load_nfl_ngs_receiving) | Deprecated alias for `load_nfl_nextgen_stats(stat_type='receiving')`. |
-| [load_nfl_ngs_rushing](additional/nflverse-data-releases-2.md#load_nfl_ngs_rushing) | Deprecated alias for `load_nfl_nextgen_stats(stat_type='rushing')`. |
 | [load_nfl_officials](additional/nflverse-data-releases-2.md#load_nfl_officials) | Load NFL Officials information |
 | [load_nfl_pfr_advstats](additional/nflverse-data-releases-2.md#load_nfl_pfr_advstats) | Load Pro-Football Reference advanced statistics going back to 2018. |
-| [load_nfl_pfr_def](additional/nflverse-data-releases-2.md#load_nfl_pfr_def) | Deprecated alias for `load_nfl_pfr_advstats(stat_type='def', summary_level='season')`. |
-| [load_nfl_pfr_pass](additional/nflverse-data-releases-2.md#load_nfl_pfr_pass) | Deprecated alias for `load_nfl_pfr_advstats(stat_type='pass', summary_level='season')`. |
-| [load_nfl_pfr_rec](additional/nflverse-data-releases-2.md#load_nfl_pfr_rec) | Deprecated alias for `load_nfl_pfr_advstats(stat_type='rec', summary_level='season')`. |
-| [load_nfl_pfr_rush](additional/nflverse-data-releases-2.md#load_nfl_pfr_rush) | Deprecated alias for `load_nfl_pfr_advstats(stat_type='rush', summary_level='season')`. |
-| [load_nfl_pfr_weekly_def](additional/nflverse-data-releases-2.md#load_nfl_pfr_weekly_def) | Deprecated alias for `load_nfl_pfr_advstats(stat_type='def', summary_level='week')`. |
-| [load_nfl_pfr_weekly_pass](additional/nflverse-data-releases-3.md#load_nfl_pfr_weekly_pass) | Deprecated alias for `load_nfl_pfr_advstats(stat_type='pass', summary_level='week')`. |
-| [load_nfl_pfr_weekly_rec](additional/nflverse-data-releases-3.md#load_nfl_pfr_weekly_rec) | Deprecated alias for `load_nfl_pfr_advstats(stat_type='rec', summary_level='week')`. |
-| [load_nfl_pfr_weekly_rush](additional/nflverse-data-releases-3.md#load_nfl_pfr_weekly_rush) | Deprecated alias for `load_nfl_pfr_advstats(stat_type='rush', summary_level='week')`. |
-| [load_nfl_player_stats](additional/nflverse-data-releases-3.md#load_nfl_player_stats) | Load NFL player stats data |
-| [load_nfl_players](additional/nflverse-data-releases-3.md#load_nfl_players) | Load the nflverse NFL player-identity master. |
-| [load_nfl_schedule](additional/nflverse-data-releases-3.md#load_nfl_schedule) | Load NFL schedule data |
+| [load_nfl_player_stats](additional/nflverse-data-releases-2.md#load_nfl_player_stats) | Load NFL player stats data |
+| [load_nfl_players](additional/nflverse-data-releases-2.md#load_nfl_players) | Load the nflverse NFL player-identity master. |
+| [load_nfl_schedule](additional/nflverse-data-releases-2.md#load_nfl_schedule) | Load NFL schedule data |
 | [load_nfl_team_stats](additional/nflverse-data-releases-3.md#load_nfl_team_stats) | Load NFL team stats data going back to 1999 |
 | [load_nfl_teams](additional/nflverse-data-releases-3.md#load_nfl_teams) | Load NFL team ID information and logos |
 | [load_nfl_trades](additional/nflverse-data-releases-3.md#load_nfl_trades) | Load NFL trades data |
@@ -99,10 +88,10 @@ not covered by the generated API-endpoint reference above.
 | [load_participation](additional/nflverse-data-releases-3.md#load_participation) | Load NFL play-by-play participation data for selected seasons |
 | [load_pfr_advstats](additional/nflverse-data-releases-3.md#load_pfr_advstats) | Load Pro-Football Reference advanced statistics going back to 2018. |
 | [load_player_stats](additional/nflverse-data-releases-3.md#load_player_stats) | Load NFL player stats data |
-| [load_players](additional/nflverse-data-releases-4.md#load_players) | Load the nflverse NFL player-identity master. |
-| [load_rosters_weekly](additional/nflverse-data-releases-4.md#load_rosters_weekly) | Load NFL weekly roster data for the requested seasons. |
-| [load_schedules](additional/nflverse-data-releases-4.md#load_schedules) | Load NFL schedule data |
-| [load_snap_counts](additional/nflverse-data-releases-4.md#load_snap_counts) | Load NFL snap counts data for selected seasons |
+| [load_players](additional/nflverse-data-releases-3.md#load_players) | Load the nflverse NFL player-identity master. |
+| [load_rosters_weekly](additional/nflverse-data-releases-3.md#load_rosters_weekly) | Load NFL weekly roster data for the requested seasons. |
+| [load_schedules](additional/nflverse-data-releases-3.md#load_schedules) | Load NFL schedule data |
+| [load_snap_counts](additional/nflverse-data-releases-3.md#load_snap_counts) | Load NFL snap counts data for selected seasons |
 | [load_team_stats](additional/nflverse-data-releases-4.md#load_team_stats) | Load NFL team stats data going back to 1999 |
 | [load_teams](additional/nflverse-data-releases-4.md#load_teams) | Load NFL team ID information and logos |
 | [load_trades](additional/nflverse-data-releases-4.md#load_trades) | Load NFL trades data |

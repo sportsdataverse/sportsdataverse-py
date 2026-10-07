@@ -8,6 +8,17 @@ Merged to `main` since 0.1.4 and not yet released. Released versions are on the 
 
 ## Unreleased
 
+### Removed — BREAKING: the 11 overdue NFL loader aliases
+
+The 11 per-type NFL loaders marked `removed_in="0.1.0"` are gone: `load_nfl_ngs_passing`,
+`load_nfl_ngs_rushing`, `load_nfl_ngs_receiving`, `load_nfl_pfr_pass`, `load_nfl_pfr_weekly_pass`,
+`load_nfl_pfr_rush`, `load_nfl_pfr_weekly_rush`, `load_nfl_pfr_rec`, `load_nfl_pfr_weekly_rec`,
+`load_nfl_pfr_def`, `load_nfl_pfr_weekly_def`. Callers move to
+`load_nfl_nextgen_stats(seasons, stat_type=...)` and
+`load_nfl_pfr_advstats(seasons, stat_type=..., summary_level=...)`. They had emitted
+`DeprecationWarning` since 0.0.68 and were overdue under the `CONTRIBUTING.md` deprecation policy.
+The deprecated `sportsdataverse.parsed.nfl` aliases of the same names go with them.
+
 ### Added — SPADL actions from any kloppy event dataset: soccer_spadl() and soccer_open_dataset()
 
 `soccer_spadl(dataset)` converts any kloppy event dataset (StatsBomb, Opta, Wyscout, Sportec, ...)

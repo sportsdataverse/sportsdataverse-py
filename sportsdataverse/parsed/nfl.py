@@ -274,21 +274,10 @@ from sportsdataverse.nfl import load_nfl_injuries as load_nfl_injuries  # noqa: 
 from sportsdataverse.nfl import load_nfl_model_pbp as load_nfl_model_pbp  # noqa: F401
 from sportsdataverse.nfl import load_nfl_nextgen_stats as load_nfl_nextgen_stats  # noqa: F401
 from sportsdataverse.nfl import load_nfl_ngs as load_nfl_ngs  # noqa: F401
-from sportsdataverse.nfl import load_nfl_ngs_passing as load_nfl_ngs_passing  # noqa: F401
-from sportsdataverse.nfl import load_nfl_ngs_receiving as load_nfl_ngs_receiving  # noqa: F401
-from sportsdataverse.nfl import load_nfl_ngs_rushing as load_nfl_ngs_rushing  # noqa: F401
 from sportsdataverse.nfl import load_nfl_officials as load_nfl_officials  # noqa: F401
 from sportsdataverse.nfl import load_nfl_pbp as load_nfl_pbp  # noqa: F401
 from sportsdataverse.nfl import load_nfl_pbp_participation as load_nfl_pbp_participation  # noqa: F401
 from sportsdataverse.nfl import load_nfl_pfr_advstats as load_nfl_pfr_advstats  # noqa: F401
-from sportsdataverse.nfl import load_nfl_pfr_def as load_nfl_pfr_def  # noqa: F401
-from sportsdataverse.nfl import load_nfl_pfr_pass as load_nfl_pfr_pass  # noqa: F401
-from sportsdataverse.nfl import load_nfl_pfr_rec as load_nfl_pfr_rec  # noqa: F401
-from sportsdataverse.nfl import load_nfl_pfr_rush as load_nfl_pfr_rush  # noqa: F401
-from sportsdataverse.nfl import load_nfl_pfr_weekly_def as load_nfl_pfr_weekly_def  # noqa: F401
-from sportsdataverse.nfl import load_nfl_pfr_weekly_pass as load_nfl_pfr_weekly_pass  # noqa: F401
-from sportsdataverse.nfl import load_nfl_pfr_weekly_rec as load_nfl_pfr_weekly_rec  # noqa: F401
-from sportsdataverse.nfl import load_nfl_pfr_weekly_rush as load_nfl_pfr_weekly_rush  # noqa: F401
 from sportsdataverse.nfl import load_nfl_player_stats as load_nfl_player_stats  # noqa: F401
 from sportsdataverse.nfl import load_nfl_players as load_nfl_players  # noqa: F401
 from sportsdataverse.nfl import load_nfl_ratings_weekly as load_nfl_ratings_weekly  # noqa: F401
@@ -611,21 +600,10 @@ __all__ = [
     "load_nfl_model_pbp",
     "load_nfl_nextgen_stats",
     "load_nfl_ngs",
-    "load_nfl_ngs_passing",
-    "load_nfl_ngs_receiving",
-    "load_nfl_ngs_rushing",
     "load_nfl_officials",
     "load_nfl_pbp",
     "load_nfl_pbp_participation",
     "load_nfl_pfr_advstats",
-    "load_nfl_pfr_def",
-    "load_nfl_pfr_pass",
-    "load_nfl_pfr_rec",
-    "load_nfl_pfr_rush",
-    "load_nfl_pfr_weekly_def",
-    "load_nfl_pfr_weekly_pass",
-    "load_nfl_pfr_weekly_rec",
-    "load_nfl_pfr_weekly_rush",
     "load_nfl_player_stats",
     "load_nfl_players",
     "load_nfl_ratings_weekly",

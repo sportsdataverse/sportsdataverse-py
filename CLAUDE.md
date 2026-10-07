@@ -174,7 +174,7 @@ sportsdataverse/
   mlb/        # MLB (Statcast / Baseball Savant + stats API)
   nba/        # NBA
   nfl/        # NFL — nflreadpy-parity surface
-    nfl_loaders.py    # 45 canonical load_nfl_* + 11 deprecated per-type aliases
+    nfl_loaders.py    # 45 canonical load_nfl_* (the 11 per-type aliases were removed in 0.1.5)
     nfl_pbp.py, nfl_schedule.py, nfl_teams.py, nfl_games.py, nfl_game_rosters.py
     cache.py          # @cached_loader, memory/filesystem/off, clear_cache()
     config.py         # NflConfig dataclass + get_config / update_config / reset_config
@@ -444,9 +444,8 @@ loaders should follow that same scoping rule.
 **Unified loaders**: `load_nfl_nextgen_stats(stat_type=)` replaces three
 per-type variants (`load_nfl_ngs_passing` / `_rushing` / `_receiving`) and
 `load_nfl_pfr_advstats(stat_type=, summary_level=)` replaces eight
-per-type/per-summary variants. The legacy per-type wrappers still exist as
-thin shims that emit `DeprecationWarning` and dispatch to the unified
-function. Don't add new per-type wrappers; extend the unified function.
+per-type/per-summary variants. Those 11 per-type shims warned from 0.0.68 and
+were removed in 0.1.5. Don't add new per-type wrappers; extend the unified function.
 
 **`load_nfl_ngs(seasons, dataset=)`** (0.1.5) is a DIFFERENT source from
 `load_nfl_nextgen_stats`: it reads the SDV-native `nfl_ngs_*` releases built by
@@ -455,9 +454,9 @@ the three statboards `passing`/`rushing`/`receiving`, `statboard_leaders`, the
 single `leaders` table (a union of the 7 leaderboard families), and five
 `gamecenter_*` tables; floors are per dataset, 2009-2016). The dataset -> tag -> floor table
 lives in `nfl_loaders._NFL_NGS_DATASETS`. It is unified on purpose: the
-per-dataset names `load_nfl_ngs_passing/_rushing/_receiving` are already taken
-by the deprecated nflverse aliases, and reusing them would silently change
-their source.
+per-dataset names `load_nfl_ngs_passing/_rushing/_receiving` belonged to the
+removed nflverse aliases, and reusing them would silently change what an
+old caller gets.
 
 **`load_nfl_ff_rankings`**: accepts both `kind=` (preferred) and `type=`
 (nflreadpy's name; kept for parity). `type` shadows the builtin so the
@@ -472,7 +471,7 @@ codebase prefers `kind` internally.
 | `filesystem` | parquet under `cache_dir` | `cache_duration` seconds |
 | `off` | no caching | n/a |
 
-All 45 canonical loaders + the 11 deprecated aliases still shipping in 0.1.5 are wrapped with
+All 45 canonical loaders are wrapped with
 `@cached_loader`. The cache key hashes `(qualified_name, args, sorted_kwargs)`
 and **excludes** `return_as_pandas` so a single stored polars frame serves
 both polars and pandas callers (the conversion happens on read).
@@ -1097,12 +1096,11 @@ assert against committed fixtures; live tests carry `@skip_if_no_live`
   data until they call `clear_cache()`. During development against a
   cached loader, prefer `update_config(cache_mode="off")` or
   `clear_cache()` between runs to avoid debugging phantom data.
-- **Don't add new per-type NFL loaders.** `load_nfl_ngs_passing` /
-  `_rushing` / `_receiving` and the eight per-type/per-summary
-  `load_nfl_pfr_advstats_*` wrappers all emit `DeprecationWarning` and
-  dispatch to the unified `load_nfl_nextgen_stats(stat_type=)` /
-  `load_nfl_pfr_advstats(stat_type=, summary_level=)` functions.
-  Extend the unified function; do not introduce new per-type wrappers.
+- **Don't add new per-type NFL loaders.** The 11 per-type wrappers
+  (`load_nfl_ngs_passing` / `_rushing` / `_receiving` and the eight
+  per-type/per-summary `load_nfl_pfr_*`) were removed in 0.1.5. Extend the
+  unified `load_nfl_nextgen_stats(stat_type=)` /
+  `load_nfl_pfr_advstats(stat_type=, summary_level=)` functions instead.
 - **`load_nfl_ff_rankings`: `kind=` vs `type=`.** Both work and resolve
   to the same parameter — `kind` is preferred internally because `type`
   shadows the builtin. nflreadpy uses `type=`, so we accept both for

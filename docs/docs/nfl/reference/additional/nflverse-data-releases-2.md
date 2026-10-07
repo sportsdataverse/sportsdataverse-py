@@ -1,10 +1,10 @@
 ---
-title: "NFL — additional Python functions — nflverse data releases: nfl_ff–nfl_pfr"
-sidebar_label: "nflverse data releases: nfl_ff–nfl_pfr"
+title: "NFL — additional Python functions — nflverse data releases: nfl_ff–nfl_schedule"
+sidebar_label: "nflverse data releases: nfl_ff–nfl_schedule"
 sidebar_position: 6
-description: "NFL — additional Python functions — nflverse data releases: nfl_ff–nfl_pfr — function reference in sdv-py, the SportsDataverse Python package."
+description: "NFL — additional Python functions — nflverse data releases: nfl_ff–nfl_schedule — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# NFL — additional Python functions — nflverse data releases: nfl_ff–nfl_pfr
+# NFL — additional Python functions — nflverse data releases: nfl_ff–nfl_schedule
 
 ### load_nfl_ff_opportunity {#load_nfl_ff_opportunity}
 
@@ -419,167 +419,6 @@ ngs_pd = load_nfl_nextgen_stats(
 )
 ```
 
-### load_nfl_ngs_passing {#load_nfl_ngs_passing}
-
-`load_nfl_ngs_passing(seasons: 'List[int]' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame'`
-
-Deprecated alias for `load_nfl_nextgen_stats(stat_type='passing')`.
-
-Will be removed in a future release. Migrate callers to the unified
-`load_nfl_nextgen_stats` function.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `seasons` | `List[int]` | `None` |  |
-| `return_as_pandas` | `bool` | `False` |  |
-
-**Returns**
-
-
-| col_name | type | description |
-|---|---|---|
-| `season` | integer | 4 digit number indicating to which season(s) the specified timeframe belongs to. |
-| `season_type` | character | REG or POST indicating if the timeframe belongs to regular or post season. |
-| `week` | integer | Season week. |
-| `player_display_name` | character | Full name of the player |
-| `player_position` | character | Position of the player accordinng to NGS |
-| `team_abbr` | character | Official team abbreveation |
-| `avg_time_to_throw` | double | Average time elapsed from the time of snap to throw on every pass attempt for a passer (sacks excluded). |
-| `avg_completed_air_yards` | double | Average air yards on completed passes |
-| `avg_intended_air_yards` | double | Average air yards on all attempted passes |
-| `avg_air_yards_differential` | double | Air Yards Differential is calculated by subtracting the passer's average Intended Air Yards from his average Completed Air Yards. This stat indicates if he is on average attempting deep passes than he on average completes. |
-| `aggressiveness` | double | Aggressiveness tracks the amount of passing attempts a quarterback makes that are into tight coverage, where there is a defender within 1 yard or less of the receiver at the time of completion or incompletion. AGG is shown as a % of attempts into tight windows over all passing attempts. |
-| `max_completed_air_distance` | double | Air Distance is the amount of yards the ball has traveled on a pass, from the point of release to the point of reception (as the crow flies). Unlike Air Yards, Air Distance measures the actual distance the passer throws the ball. |
-| `avg_air_yards_to_sticks` | double | Air Yards to the Sticks shows the amount of Air Yards ahead or behind the first down marker on all attempts for a passer. The metric indicates if the passer is attempting his passes past the 1st down marker, or if he is relying on his skill position players to make yards after catch. |
-| `attempts` | integer | The number of pass attempts as defined by the NFL. |
-| `pass_yards` | integer | Number of yards gained on pass plays |
-| `pass_touchdowns` | integer | Number of touchdowns scored on pass plays |
-| `interceptions` | integer | The number of interceptions thrown. |
-| `passer_rating` | double | Overall NFL passer rating |
-| `completions` | integer | The number of completed passes. |
-| `completion_percentage` | double | Percentage of completed passes |
-| `expected_completion_percentage` | double | Using a passer's Completion Probability on every play, determine what a passer's completion percentage is expected to be. |
-| `completion_percentage_above_expectation` | double | A passer's actual completion percentage compared to their Expected Completion Percentage. |
-| `avg_air_distance` | double | A receiver's average depth of target |
-| `max_air_distance` | double | A receiver's maximum depth of target |
-| `player_gsis_id` | character | Unique identifier of the player |
-| `player_first_name` | character | Player's first name |
-| `player_last_name` | character | Player's last name |
-| `player_jersey_number` | integer | Player's jersey number |
-| `player_short_name` | character | Short version of player's name |
-
-**Example**
-
-```python
-from sportsdataverse.nfl import load_nfl_nextgen_stats
-ngs = load_nfl_nextgen_stats(seasons=[2024], stat_type="passing")
-```
-
-### load_nfl_ngs_receiving {#load_nfl_ngs_receiving}
-
-`load_nfl_ngs_receiving(seasons: 'List[int]' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame'`
-
-Deprecated alias for `load_nfl_nextgen_stats(stat_type='receiving')`.
-
-Will be removed in a future release. Migrate callers to the unified
-`load_nfl_nextgen_stats` function.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `seasons` | `List[int]` | `None` |  |
-| `return_as_pandas` | `bool` | `False` |  |
-
-**Returns**
-
-
-| col_name | type | description |
-|---|---|---|
-| `season` | integer | 4 digit number indicating to which season(s) the specified timeframe belongs to. |
-| `season_type` | character | REG or POST indicating if the timeframe belongs to regular or post season. |
-| `week` | integer | Season week. |
-| `player_display_name` | character | Full name of the player |
-| `player_position` | character | Position of the player accordinng to NGS |
-| `team_abbr` | character | Official team abbreveation |
-| `avg_cushion` | double | The distance (in yards) measured between a WR/TE and the defender they're lined up against at the time of snap on all targets. |
-| `avg_separation` | double | The distance (in yards) measured between a WR/TE and the nearest defender at the time of catch or incompletion. |
-| `avg_intended_air_yards` | double | Average air yards on all attempted passes |
-| `percent_share_of_intended_air_yards` | double | The sum of the receivers total intended air yards (all attempts) over the sum of his team's total intended air yards. Represented as a percentage, this statistic represents how much of a team's deep yards does the player account for. |
-| `receptions` | integer | The number of pass receptions. Lateral receptions officially don't count as reception. |
-| `targets` | integer | The number of pass plays where the player was the targeted receiver. |
-| `catch_percentage` | double | Percentage of caught passes relative to targets |
-| `yards` | integer | The number of receiving yards |
-| `rec_touchdowns` | integer | The number of touchdown receptions |
-| `avg_yac` | double | Average yards gained after catch by a receiver. |
-| `avg_expected_yac` | double | Average expected yards after catch, based on numerous factors using tracking data such as how open the receiver is, how fast they're traveling, how many defenders/blockers are in space, etc |
-| `avg_yac_above_expectation` | double | A receiver's YAC compared to their Expected YAC. |
-| `player_gsis_id` | character | Unique identifier of the player |
-| `player_first_name` | character | Player's first name |
-| `player_last_name` | character | Player's last name |
-| `player_jersey_number` | integer | Player's jersey number |
-| `player_short_name` | character | Short version of player's name |
-
-**Example**
-
-```python
-from sportsdataverse.nfl import load_nfl_nextgen_stats
-ngs = load_nfl_nextgen_stats(seasons=[2024], stat_type="receiving")
-```
-
-### load_nfl_ngs_rushing {#load_nfl_ngs_rushing}
-
-`load_nfl_ngs_rushing(seasons: 'List[int]' = None, return_as_pandas: 'bool' = False) -> 'pl.DataFrame'`
-
-Deprecated alias for `load_nfl_nextgen_stats(stat_type='rushing')`.
-
-Will be removed in a future release. Migrate callers to the unified
-`load_nfl_nextgen_stats` function.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `seasons` | `List[int]` | `None` |  |
-| `return_as_pandas` | `bool` | `False` |  |
-
-**Returns**
-
-
-| col_name | type | description |
-|---|---|---|
-| `season` | integer | 4 digit number indicating to which season(s) the specified timeframe belongs to. |
-| `season_type` | character | REG or POST indicating if the timeframe belongs to regular or post season. |
-| `week` | integer | Season week. |
-| `player_display_name` | character | Full name of the player |
-| `player_position` | character | Position of the player accordinng to NGS |
-| `team_abbr` | character | Official team abbreveation |
-| `efficiency` | double | Rushing efficiency is calculated by taking the total distance a player traveled on rushing plays as a ball carrier according to Next Gen Stats (measured in yards) per rushing yards gained. The lower the number, the more of a North/South runner. |
-| `percent_attempts_gte_eight_defenders` | double | On every play, Next Gen Stats calculates how many defenders are stacked in the box at snap. Using that logic, DIB% calculates how often does a rusher see 8 or more defenders in the box against them. |
-| `avg_time_to_los` | double | Next Gen Stats measures the amount of time a ball carrier spends (measured to the 10th of a second) before crossing the Line of Scrimmage. TLOS is the average time behind the LOS on all rushing plays where the player is the rusher. |
-| `rush_attempts` | integer | The number of rushing attempts |
-| `rush_yards` | integer | The number of rushing yards gained |
-| `avg_rush_yards` | double | AVerage rush yards gained |
-| `rush_touchdowns` | integer | The number of scored rushing touchdowns |
-| `player_gsis_id` | character | Unique identifier of the player |
-| `player_first_name` | character | Player's first name |
-| `player_last_name` | character | Player's last name |
-| `player_jersey_number` | integer | Player's jersey number |
-| `player_short_name` | character | Short version of player's name |
-| `expected_rush_yards` | double | Expected rushing yards based on Nextgenstats' Big Data Bowl model |
-| `rush_yards_over_expected` | double | A rusher's rush yards gained compared to the expected rush yards |
-| `rush_yards_over_expected_per_att` | double | Average rush yards above expectation |
-| `rush_pct_over_expected` | double | Rushing percentage above expectation |
-
-**Example**
-
-```python
-from sportsdataverse.nfl import load_nfl_nextgen_stats
-ngs = load_nfl_nextgen_stats(seasons=[2024], stat_type="rushing")
-```
-
 ### load_nfl_officials {#load_nfl_officials}
 
 `load_nfl_officials(return_as_pandas=False) -> 'pl.DataFrame'`
@@ -704,293 +543,305 @@ rec_pd = load_nfl_pfr_advstats(
 )
 ```
 
-### load_nfl_pfr_def {#load_nfl_pfr_def}
+### load_nfl_player_stats {#load_nfl_player_stats}
 
-`load_nfl_pfr_def(return_as_pandas: 'bool' = False) -> 'pl.DataFrame'`
+`load_nfl_player_stats(seasons: 'List[int] | None' = None, kicking=False, return_as_pandas=False, *, source: 'str' = 'nflverse') -> 'pl.DataFrame'`
 
-Deprecated alias for `load_nfl_pfr_advstats(stat_type='def', summary_level='season')`.
+Load NFL player stats data
 
-Will be removed in a future release. Migrate callers to the unified
-`load_nfl_pfr_advstats` function.
+Week-level player stats. For the default `source="nflverse"` this reads the
+live `stats_player` release (`stats_player_week_{season}.parquet`, one
+asset per season, 1999-2026) -- **not** the combined `player_stats.parquet`,
+which nflverse froze in 2025-05 and which therefore ends at season 2024.
+
+The weekly release is a 150-column superset of the old combined file. To keep
+every downstream consumer working, the output is reconciled to ONE stable
+schema -- the legacy column set, in the legacy order, at the legacy dtypes:
+
+* **Renamed back:** `team` -> `recent_team`, `passing_interceptions` ->
+  `interceptions`, `sacks_suffered` -> `sacks`.
+* **Sign-flipped:** `sack_yards_lost` (negative upstream) is negated into
+  `sack_yards` (positive yards lost), matching the legacy frame.
+* **Kept null:** `dakota` is no longer published upstream; the column
+  remains, all-null, so the column set does not move.
+* **Dropped:** the ~100 added columns (`def_*`, `pt_*`, punt/kickoff
+  returns, yardage buckets, `game_id`, `passing_cpoe`, ...) are not
+  emitted. `kicking=True` returns the legacy kicking contract, which the
+  weekly release still carries in full (44/44 columns).
+* **Rows:** a row is kept when at least one contracted stat is non-zero, so
+  the weekly release's defensive / offensive-line rows -- which have no
+  column to land in under this contract -- do not arrive as all-null noise.
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `return_as_pandas` | `bool` | `False` |  |
+| `seasons` | `list` | `None` | Seasons to load. 1999 is the earliest available season. `None` (the default) loads every season from 1999 through the current one, matching the old whole-file behavior. |
+| `kicking` | `bool` | `False` | If True, load kicking stats. If False, load all other stats. |
+| `return_as_pandas` | `bool` | `False` | If True, returns a pandas dataframe. If False, returns a polars dataframe. |
+| `source` | `str` | `'nflverse'` | Which player-stats release to read. `"nflverse"` (the default, also accepts `None`) returns the nflverse published `stats_player` weekly release, reconciled to the legacy schema described above. `"sportsdataverse"` / `"sdv"` returns the SDV-native `nfl_player_stats` release built by `sportsdataverse.nfl.build_nfl_player_stats` from SDV-native play-by-play (1999-present, week-level, REG+POST) with its own columns, season-filtered but otherwise untouched. Any other value raises `ValueError`. |
 
 **Returns**
 
+Polars dataframe containing player stats.
 
 | col_name | type | description |
 |---|---|---|
+| `player_id` | character | Player ID (aka GSIS ID) as defined by nflreadr::load_rosters |
+| `player_name` | character | Full name of player |
+| `player_display_name` | character | Full name of the player |
+| `position` | character | Primary position as reported by NFL.com |
+| `position_group` | character | Postion group of player as listed by NFL |
+| `headshot_url` | character | A URL string that points to player photos used by NFL.com (or sometimes ESPN) |
+| `recent_team` | character | Most recent team player appears in `pbp` with. |
 | `season` | integer | 4 digit number indicating to which season(s) the specified timeframe belongs to. |
-| `player` | character | Player name |
-| `pfr_id` | character | Pro-Football-Reference ID for player |
-| `tm` | character | Team ID as used on MyFantasyLeague.com |
-| `age` | double | Age as of last pipeline build, rounded to one decimal. Pipeline is built on a weekly basis. |
-| `pos` | character | Position as tracked by FP |
-| `g` | double | Goals (skaters). |
-| `gs` | double | Number of games the player started during the season or period covered by this row. |
-| `int` | double | Binary flag for an interception. |
-| `tgt` | double | Total number of times the player was the nearest defender on a pass attempt (targets in coverage) per Pro Football Reference. |
-| `cmp` | double | Number of passes completed by the opposing quarterback when targeting the player in coverage. |
-| `cmp_percent` | double | Completion percentage allowed by the player in coverage (completions divided by targets). |
-| `yds` | double | Total passing yards allowed by the player in coverage. |
-| `yds_cmp` | double | Average yards allowed per completion when the player was in coverage. |
-| `yds_tgt` | double | Average yards allowed per target thrown at the player in coverage. |
-| `td` | double | Number of touchdowns allowed by the player in coverage. |
-| `rat` | double | Passer rating allowed by the player in coverage — the NFL passer rating of quarterbacks when targeting this defender. |
-| `dadot` | double | Depth of target air yards on defended passes — average distance downfield at the point of the throw when the player was in coverage. |
-| `air` | double | Total air yards (depth of target) on passes thrown at the player in coverage, as tracked by Pro Football Reference. |
-| `yac` | double | Yards after catch allowed by the player — yards gained by receivers after the catch when the player was the nearest defender. |
-| `bltz` | double | Number of snaps on which the player blitzed the quarterback, as recorded by Pro Football Reference. |
-| `hrry` | double | Number of times the player hurried the opposing quarterback without recording a full sack, per Pro Football Reference. |
-| `qbkd` | double | Number of times the player knocked down the quarterback, making contact after or during a pass attempt. |
-| `sk` | double | Number of sacks recorded by the player, bringing the quarterback down behind the line of scrimmage. |
-| `prss` | double | Number of times the player pressured the quarterback (combining sacks, hits, and hurries) per Pro Football Reference. |
-| `comb` | double | Total combined tackles (solo plus assisted) recorded by the player per Pro Football Reference. |
-| `m_tkl` | double | Number of missed tackles attributed to the player by Pro Football Reference. |
-| `m_tkl_percent` | double | Percentage of tackle attempts the player missed out of total tackle opportunities. |
-| `loaded` | character | Indicator or metadata field from the Pro Football Reference data load, typically flagging the data source state or row completeness. |
-| `bats` | double | Number of passes batted down at the line of scrimmage by the player. |
+| `week` | integer | Season week. |
+| `season_type` | character | REG or POST indicating if the timeframe belongs to regular or post season. |
+| `opponent_team` | character | Abbreviation or name of the opposing team faced by the player in a given game or week. |
+| `completions` | integer | The number of completed passes. |
+| `attempts` | integer | The number of pass attempts as defined by the NFL. |
+| `passing_yards` | double | Numeric yards by the passer_player_name, including yards gained in pass plays with laterals. This should equal official passing statistics. |
+| `passing_tds` | integer | The number of passing touchdowns. |
+| `interceptions` | double | The number of interceptions thrown. |
+| `sacks` | double | The Number of times sacked. |
+| `sack_yards` | double | Yards lost on sack plays. |
+| `sack_fumbles` | integer | The number of sacks with a fumble. |
+| `sack_fumbles_lost` | integer | The number of sacks with a lost fumble. |
+| `passing_air_yards` | double | Passing air yards (includes incomplete passes). |
+| `passing_yards_after_catch` | double | Yards after the catch gained on plays in which player was the passer (this is an unofficial stat and may differ slightly between different sources). |
+| `passing_first_downs` | double | First downs on pass attempts. |
+| `passing_epa` | double | Total expected points added on pass attempts and sacks. NOTE: this uses the variable `qb_epa`, which gives QB credit for EPA for up to the point where a receiver lost a fumble after a completed catch and makes EPA work more like passing yards on plays with fumbles. |
+| `passing_2pt_conversions` | integer | Two-point conversion passes. |
+| `pacr` | double | Passing (yards) Air (yards) Conversion Ratio - the number of passing yards per air yards thrown per game |
+| `dakota` | double | Adjusted EPA + CPOE composite based on coefficients which best predict adjusted EPA/play in the following year. |
+| `carries` | integer | The number of official rush attempts (incl. scrambles and kneel downs). Rushes after a lateral reception don't count as carry. |
+| `rushing_yards` | double | Numeric yards by the rusher_player_name, excluding yards gained in rush plays with laterals. This should equal official rushing statistics but could miss yards gained in rush plays with laterals. Please see the description of `lateral_rusher_player_name` for further information. |
+| `rushing_tds` | integer | The number of rushing touchdowns (incl. scrambles). Also includes touchdowns after obtaining a lateral on a play that started with a rushing attempt. |
+| `rushing_fumbles` | double | The number of rushes with a fumble. |
+| `rushing_fumbles_lost` | double | The number of rushes with a lost fumble. |
+| `rushing_first_downs` | double | First downs on rush attempts (incl. scrambles). |
+| `rushing_epa` | double | Expected points added on rush attempts (incl. scrambles and kneel downs). |
+| `rushing_2pt_conversions` | integer | Two-point conversion rushes |
+| `receptions` | integer | The number of pass receptions. Lateral receptions officially don't count as reception. |
+| `targets` | integer | The number of pass plays where the player was the targeted receiver. |
+| `receiving_yards` | double | Numeric yards by the receiver_player_name, excluding yards gained in pass plays with laterals. This should equal official receiving statistics but could miss yards gained in pass plays with laterals. Please see the description of `lateral_receiver_player_name` for further information. |
+| `receiving_tds` | integer | The number of touchdowns following a pass reception. Also includes touchdowns after receiving a lateral on a play that started as a pass play. |
+| `receiving_fumbles` | double | The number of fumbles after a pass reception. |
+| `receiving_fumbles_lost` | double | The number of fumbles lost after a pass reception. |
+| `receiving_air_yards` | double | Receiving air yards (incl. incomplete passes). |
+| `receiving_yards_after_catch` | double | Yards after the catch gained on plays in which player was receiver (this is an unofficial stat and may differ slightly between different sources). |
+| `receiving_first_downs` | double | Total number of first downs gained on receptions |
+| `receiving_epa` | double | Total EPA on plays where this receiver was targeted |
+| `receiving_2pt_conversions` | integer | Two-point conversion receptions |
+| `racr` | double | Receiving (yards) Air (yards) Conversion Ratio - the number of receiving yards per air yards targeted per game |
+| `target_share` | double | "Player's share of team receiving targets in this game" |
+| `air_yards_share` | double | Player's share of the team's air yards in this game |
+| `wopr` | double | Weighted OPportunity Rating - 1.5 x target_share + 0.7 x air_yards_share - a weighted average that contextualizes total fantasy usage. |
+| `special_teams_tds` | double | Total number of kick/punt return touchdowns |
+| `fantasy_points` | double | Standard fantasy points. |
+| `fantasy_points_ppr` | double | PPR fantasy points. |
 
 **Example**
 
 ```python
-from sportsdataverse.nfl import load_nfl_pfr_advstats
-df = load_nfl_pfr_advstats(
-    seasons=[2024], stat_type="def", summary_level="season"
-)
+from sportsdataverse.nfl import load_nfl_player_stats
+stats = load_nfl_player_stats()
+stats.shape
+
+# SDV-native player stats (week-level, built from SDV play-by-play)
+
+stats_sdv = load_nfl_player_stats(source="sdv")
+stats_sdv.select(["season", "week", "player_id", "attempts"]).head()
+
+# Kicking-only stats (nflverse source only)
+
+kicking = load_nfl_player_stats(seasons=[2025], kicking=True)
+
+# A single season (2025 and 2026 live only in the weekly release)
+
+stats_2025 = load_nfl_player_stats(seasons=[2025])
 ```
 
-### load_nfl_pfr_pass {#load_nfl_pfr_pass}
+### load_nfl_players {#load_nfl_players}
 
-`load_nfl_pfr_pass(return_as_pandas: 'bool' = False) -> 'pl.DataFrame'`
+`load_nfl_players(return_as_pandas=False, *, source: 'str' = 'nflverse') -> 'pl.DataFrame'`
 
-Deprecated alias for `load_nfl_pfr_advstats(stat_type='pass', summary_level='season')`.
+Load the nflverse NFL player-identity master.
 
-Will be removed in a future release. Migrate callers to the unified
-`load_nfl_pfr_advstats` function.
+Reads nflverse's published `players.parquet` — a one-row-per-player
+identity master that is the union of **seven** upstream systems (GSIS, ESPN,
+NGS roster, Pro-Football-Reference, OverTheCap, PFF, and the Sleeper / Yahoo
+cross-walk). It is the canonical source for cross-system identifier
+columns (`gsis_id`, `espn_id`, `pfr_id`, `pff_id`, `otc_id`,
+`smart_id`, `esb_id`, `nfl_id`) plus name, position, physical, draft,
+and status fields.
+
+This is the **full identity master**. For an SDV-native, public-source-only
+alternative that does not depend on the nflverse release, see
+`sportsdataverse.nfl.build_nfl_players` (ESPN-athletes tier only) and
+`sportsdataverse.nfl.nfl_players_crosswalk` (a thin ID-only slice of
+this same parquet).
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `return_as_pandas` | `bool` | `False` |  |
+| `return_as_pandas` | `bool` | `False` | If `True`, return a `pandas.DataFrame`; otherwise a `polars.DataFrame` (default). |
+| `source` | `str` | `'nflverse'` | Which player-master release to read. `"nflverse"` (the default, also accepts `None`) returns the nflverse seven-system `players.parquet` identity master described above. `"sportsdataverse"` / `"sdv"` returns the SDV-native `nfl_players` release built by `sportsdataverse.nfl.build_nfl_players` from the **public NFL Shield / ESPN-athletes** surface, with `gsis_id` and the other cross-system IDs enriched by a best-effort join against the nflverse player master. The SDV tier is a partial build: its columns are a subset of nflverse's and cross-system IDs are sparser (notably pre-2016), though `espn_id` is populated. The default stays `"nflverse"`. Any other value raises `ValueError`. |
 
 **Returns**
 
+One-row-per-player identity master. `return_as_pandas` narrows the return to a `pandas.DataFrame`.
 
 | col_name | type | description |
 |---|---|---|
-| `player` | character | Player name |
-| `team` | character | NFL team. Uses official abbreviations as per NFL.com |
-| `pass_attempts` | double | Career pass attempts |
-| `throwaways` | double | Throwaways |
-| `spikes` | double | Spikes |
-| `drops` | double | Throws dropped |
-| `drop_pct` | double | Percent of throws dropped |
-| `bad_throws` | double | Bad throws |
-| `bad_throw_pct` | double | Percent of throws that were bad |
-| `season` | integer | 4 digit number indicating to which season(s) the specified timeframe belongs to. |
-| `pfr_id` | character | Pro-Football-Reference ID for player |
-| `pocket_time` | double | Average time in pocket |
-| `times_blitzed` | double | Number of times blitzed |
-| `times_hurried` | double | Number of times hurried |
-| `times_hit` | double | Number of times hit |
-| `times_pressured` | double | Number of times pressured |
-| `pressure_pct` | double | Percent of the time pressured |
-| `batted_balls` | double | Batted balls |
-| `on_tgt_throws` | double | On target throws |
-| `on_tgt_pct` | double | Percent of throws on target |
-| `rpo_plays` | double | Number of RPO plays |
-| `rpo_yards` | double | Yards on RPOs |
-| `rpo_pass_att` | double | Number of pass attempts on RPOs |
-| `rpo_pass_yards` | double | Passing yards on RPOs |
-| `rpo_rush_att` | double | Rush attempts on RPOs |
-| `rpo_rush_yards` | double | Rushing yards on RPOs |
-| `pa_pass_att` | double | Play action pass attempts |
-| `pa_pass_yards` | double | Play action passing yards |
-| `intended_air_yards` | double | Total air yards on all pass attempts including incompletions, measuring aggregate downfield targeting intent from Pro Football Reference. |
-| `intended_air_yards_per_pass_attempt` | double | Average intended air yards per pass attempt, capturing the passer's average depth of target regardless of completion outcome. |
-| `completed_air_yards` | double | Total air yards on completed passes only, measuring how far the ball traveled downfield through the air to the point of completion. |
-| `completed_air_yards_per_completion` | double | Average air yards per completed pass, representing the passer's typical depth of target on successful throws. |
-| `completed_air_yards_per_pass_attempt` | double | Average completed air yards per pass attempt (including incompletions), a rate measure of downfield passing efficiency. |
-| `pass_yards_after_catch` | double | Total yards gained by receivers after the catch, isolating the yards generated after initial ball reception from Pro Football Reference. |
-| `pass_yards_after_catch_per_completion` | double | Average yards after catch per completion, measuring how much yardage receivers generate on the ground after catching the ball. |
-| `scrambles` | double | Total number of quarterback scrambles (designed dropback converted to a run) recorded by Pro Football Reference. |
-| `scramble_yards_per_attempt` | double | Average yards gained per scramble attempt by the quarterback, from Pro Football Reference advanced passing stats. |
+| `gsis_id` | character | NFL Game Statistics & Information System player identifier, the canonical nflverse player key. |
+| `display_name` | character | Player's full display name as published by nflverse. |
+| `common_first_name` | character | Player's commonly used first name (the name they go by, which may differ from their legal first name). |
+| `first_name` | character | Player's legal first name. |
+| `last_name` | character | Player's last name. |
+| `short_name` | character | Abbreviated name (typically first initial plus last name). |
+| `football_name` | character | Player's preferred on-field name as used in broadcast and box-score contexts. |
+| `suffix` | character | Generational or honorific name suffix (e.g., Jr., Sr., III), when present. |
+| `esb_id` | character | Elias Sports Bureau player identifier. |
+| `nfl_id` | character | NFL.com / Shield player identifier. |
+| `pfr_id` | character | Pro-Football-Reference player identifier. |
+| `pff_id` | character | Pro Football Focus player identifier. |
+| `otc_id` | character | OverTheCap player identifier (salary-cap data source). |
+| `espn_id` | character | ESPN athlete identifier. |
+| `smart_id` | character | NFL SMART (Standard Media and Reference Table) globally unique player identifier. |
+| `birth_date` | character | Player's date of birth (ISO YYYY-MM-DD). |
+| `position_group` | character | Broad positional grouping the player belongs to (e.g., QB, RB, WR, DL). |
+| `position` | character | Player's specific listed position abbreviation. |
+| `ngs_position_group` | character | Positional grouping as classified by NFL Next Gen Stats. |
+| `ngs_position` | character | Specific position as classified by NFL Next Gen Stats. |
+| `height` | integer | Player's height in inches. |
+| `weight` | integer | Player's listed weight in pounds. |
+| `headshot` | character | URL to the player's official headshot image. |
+| `college_name` | character | Name of the college the player attended. |
+| `college_conference` | character | Athletic conference of the player's college. |
+| `jersey_number` | character | Player's uniform / jersey number. |
+| `rookie_season` | integer | Season (year) the player entered the league as a rookie. |
+| `last_season` | integer | Most recent season (year) the player appeared on an NFL roster. |
+| `latest_team` | character | Abbreviation of the most recent team the player was rostered on. |
+| `status` | character | Player's current roster status (e.g., active, retired, free agent). |
+| `ngs_status` | character | Player status as reported by NFL Next Gen Stats. |
+| `ngs_status_short_description` | character | Short human-readable description of the NFL Next Gen Stats status. |
+| `years_of_experience` | integer | Number of accrued NFL seasons of experience. |
+| `pff_position` | character | Player's position as classified by Pro Football Focus. |
+| `pff_status` | character | Player's status as classified by Pro Football Focus. |
+| `draft_year` | integer | Year the player was selected in the NFL Draft (null if undrafted). |
+| `draft_round` | integer | Round in which the player was drafted (null if undrafted). |
+| `draft_pick` | integer | Overall pick number at which the player was drafted (null if undrafted). |
+| `draft_team` | character | Abbreviation of the team that drafted the player (null if undrafted). |
 
 **Example**
 
 ```python
-from sportsdataverse.nfl import load_nfl_pfr_advstats
-df = load_nfl_pfr_advstats(
-    seasons=[2024], stat_type="pass", summary_level="season"
-)
+from sportsdataverse.nfl import load_nfl_players
+players = load_nfl_players()
+print(players.shape)
+
+# Pandas round-trip
+
+players_pd = load_nfl_players(return_as_pandas=True)
+players_pd.head()
+
+# SDV-native player master (public Shield/ESPN-athletes build; subset of nflverse columns, sparser cross-IDs)
+
+players_sdv = load_nfl_players(source="sdv")
+players_sdv.select(["display_name", "position", "espn_id"]).head()
+
+# Pipeline next step (one line)
+
+import polars as pl
+load_nfl_players().select(["gsis_id", "display_name", "position"]).head()
 ```
 
-### load_nfl_pfr_rec {#load_nfl_pfr_rec}
+### load_nfl_schedule {#load_nfl_schedule}
 
-`load_nfl_pfr_rec(return_as_pandas: 'bool' = False) -> 'pl.DataFrame'`
+`load_nfl_schedule(seasons: 'List[int]', return_as_pandas=False) -> 'pl.DataFrame'`
 
-Deprecated alias for `load_nfl_pfr_advstats(stat_type='rec', summary_level='season')`.
-
-Will be removed in a future release. Migrate callers to the unified
-`load_nfl_pfr_advstats` function.
+Load NFL schedule data
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `return_as_pandas` | `bool` | `False` |  |
+| `seasons` | `list` |  | Used to define different seasons. 1999 is the earliest available season. |
+| `return_as_pandas` | `bool` | `False` | If True, returns a pandas dataframe. If False, returns a polars dataframe. |
 
 **Returns**
 
-
-| col_name | type | description |
-|---|---|---|
-| `season` | integer | 4 digit number indicating to which season(s) the specified timeframe belongs to. |
-| `player` | character | Player name |
-| `pfr_id` | character | Pro-Football-Reference ID for player |
-| `tm` | character | Team ID as used on MyFantasyLeague.com |
-| `age` | double | Age as of last pipeline build, rounded to one decimal. Pipeline is built on a weekly basis. |
-| `pos` | character | Position as tracked by FP |
-| `g` | double | Goals (skaters). |
-| `gs` | double | Number of games the player started at a receiver position during the period covered. |
-| `tgt` | double | Total number of times the player was the intended receiver on a pass attempt. |
-| `rec` | double | Total receptions made by the player during the period covered. |
-| `yds` | double | Total receiving yards gained by the player on all receptions. |
-| `td` | double | Total receiving touchdowns scored by the player. |
-| `x1d` | double | Number of receptions by the player that resulted in a first down. |
-| `ybc` | double | Total yards the ball traveled in the air (before the catch) on receptions by the player. |
-| `ybc_r` | double | Average air yards before the catch per reception. |
-| `yac` | double | Total yards gained by the player after the catch. |
-| `yac_r` | double | Average yards after the catch per reception. |
-| `adot` | double | Average depth of target — mean air yards at point of throw on pass attempts directed at the receiver, per Pro Football Reference. |
-| `brk_tkl` | double | Number of broken tackles credited to the player after a reception, per Pro Football Reference. |
-| `rec_br` | double | Receptions per broken tackle — number of receptions for each broken tackle the player forced after the catch, per Pro Football Reference. |
-| `drop` | double | Number of catchable passes the player dropped (failed to secure after the ball reached the receiver's hands). |
-| `drop_percent` | double | Percentage of catchable targets that the player dropped. |
-| `int` | double | Binary flag for an interception. |
-| `rat` | double | Passer rating generated on passes thrown to the player — the NFL passer rating when the receiver is targeted. |
-| `loaded` | character | Indicator or metadata field from the Pro Football Reference data load, flagging the row's data source state or completeness. |
-
-**Example**
-
-```python
-from sportsdataverse.nfl import load_nfl_pfr_advstats
-df = load_nfl_pfr_advstats(
-    seasons=[2024], stat_type="rec", summary_level="season"
-)
-```
-
-### load_nfl_pfr_rush {#load_nfl_pfr_rush}
-
-`load_nfl_pfr_rush(return_as_pandas: 'bool' = False) -> 'pl.DataFrame'`
-
-Deprecated alias for `load_nfl_pfr_advstats(stat_type='rush', summary_level='season')`.
-
-Will be removed in a future release. Migrate callers to the unified
-`load_nfl_pfr_advstats` function.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `return_as_pandas` | `bool` | `False` |  |
-
-**Returns**
-
-
-| col_name | type | description |
-|---|---|---|
-| `season` | integer | 4 digit number indicating to which season(s) the specified timeframe belongs to. |
-| `player` | character | Player name |
-| `pfr_id` | character | Pro-Football-Reference ID for player |
-| `tm` | character | Team ID as used on MyFantasyLeague.com |
-| `age` | double | Age as of last pipeline build, rounded to one decimal. Pipeline is built on a weekly basis. |
-| `pos` | character | Position as tracked by FP |
-| `g` | double | Goals (skaters). |
-| `gs` | double | Number of games started by the player during the period covered. |
-| `att` | double | Total rushing attempts by the player during the period covered. |
-| `yds` | double | Total rushing yards gained during the period covered. |
-| `td` | double | Total rushing touchdowns scored during the period covered. |
-| `x1d` | double | Number of first downs gained via rushing during the period covered. |
-| `ybc` | double | Yards before contact accumulated on rushing plays, measuring yards gained in open field before being touched. |
-| `ybc_att` | double | Yards before contact per rushing attempt. |
-| `yac` | double | Yards after contact accumulated on rushing plays. |
-| `yac_att` | double | Yards after contact per rushing attempt. |
-| `brk_tkl` | double | Number of broken tackles recorded on rushing plays. |
-| `att_br` | double | Rushing attempts per broken tackle, measuring how often the player required contact to break free. |
-| `loaded` | character | Source or load-batch identifier indicating which data file or release this row was pulled from. |
-
-**Example**
-
-```python
-from sportsdataverse.nfl import load_nfl_pfr_advstats
-df = load_nfl_pfr_advstats(
-    seasons=[2024], stat_type="rush", summary_level="season"
-)
-```
-
-### load_nfl_pfr_weekly_def {#load_nfl_pfr_weekly_def}
-
-`load_nfl_pfr_weekly_def(seasons: 'List[int]', return_as_pandas: 'bool' = False) -> 'pl.DataFrame'`
-
-Deprecated alias for `load_nfl_pfr_advstats(stat_type='def', summary_level='week')`.
-
-Will be removed in a future release. Migrate callers to the unified
-`load_nfl_pfr_advstats` function.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `seasons` | `List[int]` |  |  |
-| `return_as_pandas` | `bool` | `False` |  |
-
-**Returns**
-
+Polars dataframe containing the schedule for the requested seasons.
 
 | col_name | type | description |
 |---|---|---|
 | `game_id` | character | Ten digit identifier for NFL game. |
-| `pfr_game_id` | character | PFR game ID |
 | `season` | integer | 4 digit number indicating to which season(s) the specified timeframe belongs to. |
-| `week` | integer | Season week. |
 | `game_type` | character | The most recent game type of that season that a player appeared on the roster. |
-| `team` | character | NFL team. Uses official abbreviations as per NFL.com |
-| `opponent` | character | Opposing team of player |
-| `pfr_player_name` | character | Player's name as recorded by PFR |
-| `pfr_player_id` | character | ID from Pro Football Reference |
-| `def_ints` | double | Interceptions for the week (this loader is per-player-per-week, not career). |
-| `def_targets` | double | Number of passing attempts thrown at or into the coverage area of this defender during the week. |
-| `def_completions_allowed` | double | Number of completions allowed by the defender on passes thrown into their coverage during the week. |
-| `def_completion_pct` | double | Completion percentage allowed by the defender on targets thrown in their coverage during the week. |
-| `def_yards_allowed` | double | Total receiving yards allowed by this defender in coverage during the week per Pro Football Reference. |
-| `def_yards_allowed_per_cmp` | double | Receiving yards allowed per completion by this defender in coverage during the week. |
-| `def_yards_allowed_per_tgt` | double | Receiving yards allowed per target thrown at this defender in coverage during the week. |
-| `def_receiving_td_allowed` | double | Number of receiving touchdowns allowed by the defender while in coverage during the week. |
-| `def_passer_rating_allowed` | double | NFL passer rating of quarterbacks when targeting this defender in coverage during the week. |
-| `def_adot` | double | Average depth of target (in yards) against this defender on passing plays during the week. |
-| `def_air_yards_completed` | double | Total air yards on completed passes allowed by the defender during the week. |
-| `def_yards_after_catch` | double | Total yards gained by receivers after the catch on completions allowed by this defender during the week. |
-| `def_times_blitzed` | double | Number of times this defender was sent as a blitzer on a passing play during the week. |
-| `def_times_hurried` | double | Number of times this defender hurried the quarterback on a pass rush without recording a sack during the week. |
-| `def_times_hitqb` | double | Number of times this defender made contact with the quarterback as part of a pass rush during the week. |
-| `def_sacks` | double | Number of sacks form this player |
-| `def_pressures` | double | Total number of quarterback pressures (hurries + hits + sacks) generated by the defender during the week. |
-| `def_tackles_combined` | double | Total combined tackles (solo + assisted) recorded by the defender during the week per Pro Football Reference. |
-| `def_missed_tackles` | double | Number of missed tackles recorded against this defender during the week per Pro Football Reference. |
-| `def_missed_tackle_pct` | double | Percentage of the defender's tackle opportunities that resulted in a missed tackle during the week. |
+| `week` | integer | Season week. |
+| `gameday` | character | The date on which the game occurred. |
+| `weekday` | character | The day of the week on which the game occcured. |
+| `gametime` | character | The kickoff time of the game. This is represented in 24-hour time and the Eastern time zone, regardless of what time zone the game was being played in. |
+| `away_team` | character | String abbreviation for the away team. |
+| `away_score` | integer | The number of points the away team scored. Is NA for games which haven't yet been played. |
+| `home_team` | character | The home team. Note that this contains the designated home team for games which no team is playing at home such as Super Bowls or NFL International games. |
+| `home_score` | integer | The number of points the home team scored. Is NA for games which haven't yet been played. |
+| `location` | character | Either Home if the home team is playing in their home stadium, or Neutral if the game is being played at a neutral location. This still shows as Home for games between the Giants and Jets even though they share the same home stadium. |
+| `result` | integer | The number of points the home team scored minus the number of points the visiting team scored. Equals h_score - v_score. Is NA for games which haven't yet been played. Convenient for evaluating against the spread bets. |
+| `total` | integer | The sum of each team's score in the game. Equals h_score + v_score. Is NA for games which haven't yet been played. Convenient for evaluating over/under total bets. |
+| `overtime` | integer | Binary indicator of whether or not game went to overtime. |
+| `old_game_id` | character | Legacy NFL game ID. |
+| `gsis` | integer | The id of the game issued by the NFL Game Statistics & Information System. |
+| `nfl_detail_id` | character | The id of the game issued by NFL Detail. |
+| `pfr` | character | The id of the game issued by [Pro-Football-Reference](https://www.pro-football-reference.com/) |
+| `pff` | integer | The id of the game issued by [Pro Football Focus](https://www.pff.com/) |
+| `espn` | character | The id of the game issued by [ESPN](https://www.espn.com/) |
+| `ftn` | integer | FTN Data game identifier corresponding to this scheduled game. |
+| `away_rest` | integer | Days of rest that the away team is coming off of. |
+| `home_rest` | integer | Days of rest that the home team is coming off of. |
+| `away_moneyline` | integer | Odds for away team to win the game. |
+| `home_moneyline` | integer | Odds for home team to win the game. |
+| `spread_line` | double | The closing spread line for the game. A positive number means the home team was favored by that many points, a negative number means the away team was favored by that many points. (Source: Pro-Football-Reference) |
+| `away_spread_odds` | integer | Odds for away team to cover the spread. |
+| `home_spread_odds` | integer | Odds for home team to cover the spread. |
+| `total_line` | double | The closing total line for the game. (Source: Pro-Football-Reference) |
+| `under_odds` | integer | Odds that total score of game would be under the total_line. |
+| `over_odds` | integer | Odds that total score of game would be over the total_ine. |
+| `div_game` | integer | Binary indicator of whether or not game was played by 2 teams in the same division. |
+| `roof` | character | One of 'dome', 'outdoors', 'closed', 'open' indicating indicating the roof status of the stadium the game was played in. (Source: Pro-Football-Reference) |
+| `surface` | character | What type of ground the game was played on. (Source: Pro-Football-Reference) |
+| `temp` | integer | The temperature at the stadium only for 'roof' = 'outdoors' or 'open'.(Source: Pro-Football-Reference) |
+| `wind` | integer | The speed of the wind in miles/hour only for 'roof' = 'outdoors' or 'open'. (Source: Pro-Football-Reference) |
+| `away_qb_id` | character | GSIS Player ID for away team starting quarterback. |
+| `home_qb_id` | character | GSIS Player ID for home team starting quarterback. |
+| `away_qb_name` | character | Name of away team starting QB. |
+| `home_qb_name` | character | Name of home team starting QB. |
+| `away_coach` | character | First and last name of the away team coach. (Source: Pro-Football-Reference) |
+| `home_coach` | character | First and last name of the home team coach. (Source: Pro-Football-Reference) |
+| `referee` | character | Name of the game's referee (head official) |
+| `stadium_id` | character | ID of the stadium the game was played in. (Source: Pro-Football-Reference) |
+| `stadium` | character | Name of the stadium |
 
 **Example**
 
 ```python
-from sportsdataverse.nfl import load_nfl_pfr_advstats
-df = load_nfl_pfr_advstats(
-    seasons=[2024], stat_type="def", summary_level="week"
-)
+from sportsdataverse.nfl import load_nfl_schedule
+schedule = load_nfl_schedule(seasons=[2024])
+schedule.shape
+
+# Multi-season range
+
+schedule = load_nfl_schedule(seasons=range(2020, 2025))
+
+# Filter to a single week
+
+import polars as pl
+week_one = load_nfl_schedule(seasons=[2024]).filter(pl.col("week") == 1)
+
+# Pandas round-trip
+
+schedule_pd = load_nfl_schedule(seasons=[2024], return_as_pandas=True)
+schedule_pd[["game_id", "home_team", "away_team", "week"]].head()
 ```
