@@ -114,8 +114,8 @@ python -m build          # produces sdist + wheel into dist/
 setuptools is the build backend (`build-system.build-backend =
 "setuptools.build_meta"`). Runtime deps live under `[project.dependencies]`,
 extras under `[project.optional-dependencies]` (`tests`, `nflpro`, `models`, `pff`,
-`mcp`, `all`) -- note `[all]` does NOT include `mcp`, which is the sdv-docs server's
-extra. Package data ships via `[tool.setuptools.package-data]` (currently
+`soccer`, `mcp`, `all`) -- `soccer` is kloppy for `soccer_open_events`; note `[all]`
+includes every extra EXCEPT `mcp`, which is the sdv-docs server's extra. Package data ships via `[tool.setuptools.package-data]` (currently
 `cfb/models/*`, `nfl/models/*`, and `py.typed`). The `[tool.setuptools.packages.find]`
 block excludes `tests*`, `Sphinx-docs*`, `docs*`, `examples*`, `archive*`,
 `recipe*`, `dev*` from the wheel.
@@ -1292,7 +1292,7 @@ The parts worth repeating here:
 - **Schema sources are four shapes**: `schemas/<name>.yaml`,
   `schemas/<name>/<league>.yaml`, `schemas/native/<stem>/` and
   `schemas/autodoc/<league>/`.
-- **`FLAT_APIS` has 29 families**, not three.
+- **`FLAT_APIS` has 30 families**, not three.
 - **The documented leagues come from `docs/src/data/leagues.json`**, written by
   `render_leagues_json()`; `docs/sidebars.ts` reads that file and hard-codes nothing.
 - **Returns-table descriptions go in `manual_column_descriptions.yaml`**, never in

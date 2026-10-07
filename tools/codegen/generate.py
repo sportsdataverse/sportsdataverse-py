@@ -199,7 +199,7 @@ def _build_docstring(
     (NFL.com), keeping the public ``Args`` block complete.
 
     ``doc_extras`` carries the optional per-family ``docstring:`` block from the
-    endpoint YAML (``raw_doc`` / ``raises`` / ``see_also`` / ``example_import``).
+    endpoint YAML (``raw_doc`` / ``raises`` / ``see_also`` / ``notes`` / ``example_import``).
     It is opt-in so families that don't declare it render byte-identically to
     before; new families declare it to meet the repo's Google-style contract
     (``Args`` / ``Returns`` / ``Raises`` + a runnable ``Example`` + ``See Also``).
@@ -305,6 +305,13 @@ def _build_docstring(
         lines += [f"        * `{s['name']}`_ - {s['note']}" for s in see_also]
         lines.append("")
         lines += [f"    .. _{s['name']}: {s['url']}" for s in see_also]
+    # Trailing on purpose: docstring_parser has no Notes section, and the reference
+    # renderer's _clean_example stops at the "Notes:" sentinel, so the example stays clean.
+    notes = list(extras.get("notes") or [])
+    if notes:
+        lines.append("")
+        lines.append("Notes:")
+        lines += [f"    * {n}" for n in notes]
     lines.append('"""')
     return "\n".join(("    " + ln) if ln else "" for ln in lines)
 
@@ -570,6 +577,7 @@ def _table_cell_desc(stored: str, league: str | None, col: str, schema: str | No
 _R_EXPORTS_FILE = ROOT / "tools" / "codegen" / "r_exports.yaml"
 _R_PARITY_ALIASES_FILE = ROOT / "tools" / "codegen" / "r_parity_aliases.yaml"
 _HIGHLIGHTS_FILE = ROOT / "tools" / "codegen" / "highlights.yaml"
+_COMPANIONS_FILE = ROOT / "tools" / "codegen" / "companions.yaml"
 
 # League prefix -> R package for parity (pwhl is also fastRhockey; otherwise the
 # same mapping used for column descriptions).
@@ -616,6 +624,25 @@ def _highlights_map() -> dict:
     import yaml
 
     return yaml.safe_load(_HIGHLIGHTS_FILE.read_text(encoding="utf-8")) or {}
+
+
+@functools.lru_cache(maxsize=1)
+def _companions_map() -> dict:
+    """``{league_prefix: [{name, url, note}]}`` from the committed ``companions.yaml``.
+
+    Hand-maintained companion packages rendered as the ``## See also`` block of a
+    league's index page -- see the file's own header comment. Empty dict if absent,
+    so a league with no entry renders exactly as before."""
+    if not _COMPANIONS_FILE.exists():
+        return {}
+    import yaml
+
+    return yaml.safe_load(_COMPANIONS_FILE.read_text(encoding="utf-8")) or {}
+
+
+def _companions_for(prefix: str) -> list[dict]:
+    """The ``companions.yaml`` entries for *prefix* (``[]`` when it has none)."""
+    return list(_companions_map().get(prefix) or [])
 
 
 def _highlighted_names(league: str | None, names: list[str]) -> set[str]:
@@ -773,6 +800,8 @@ class _EndpointView:
         self.fixed_params = ep.fixed_params
         self.path_params = ep.path_params
         self.parser = ep.parser
+        # Filled by _flat_views for a ``parser_columns`` family: the documented column names.
+        self.parser_columns: list[str] | None = None
         self.path = ep.path
         self.host_url = ep_host
         self.example_args = ep.example_args
@@ -788,6 +817,15 @@ class _EndpointView:
         # never displace ``headers`` / later positional args of an existing wrapper.
         self.signature_params = [p for p in ordered if not p.kw_only]
         self.kw_only_params = [p for p in ordered if p.kw_only]
+        # A closed value set (``choices:``) is checked BEFORE the request: a path-token
+        # typo would otherwise reach the host and surface as a misleading NoDataError.
+        self.choice_checks = [
+            f"if {p.python_name} not in {tuple(p.choices)!r}:"
+            + "\n        raise ValueError("
+            + f'f"{p.python_name} must be one of {tuple(p.choices)!r}; got {{{p.python_name}!r}}")'
+            for p in ordered
+            if p.choices
+        ]
 
         self.league_param = league.league_param
         # In param mode, keep {league} as a runtime f-string token (sport still baked).
@@ -1181,21 +1219,22 @@ def _flat_views(api: spec.FlatApi, league_prefix: str = "") -> list[_EndpointVie
             fn_name = api.name_pattern.format(short=ep.short)
         used.add(fn_name)
         ep_host = ep.host or api.host
-        views.append(
-            _EndpointView(
-                ep,
-                fn_name,
-                ep_host,
-                stub_league,
-                flat=True,
-                auth=api.auth,
-                raw_types=api.raw_types,
-                getter_module=api.getter_module,
-                # Per-endpoint extras win over the family block, so a large family
-                # can document one wrapper without rewriting all of its siblings.
-                doc_extras=ep.docstring or api.docstring,
-            )
+        view = _EndpointView(
+            ep,
+            fn_name,
+            ep_host,
+            stub_league,
+            flat=True,
+            auth=api.auth,
+            raw_types=api.raw_types,
+            getter_module=api.getter_module,
+            # Per-endpoint extras win over the family block, so a large family
+            # can document one wrapper without rewriting all of its siblings.
+            doc_extras=ep.docstring or api.docstring,
         )
+        if api.parser_columns:
+            view.parser_columns = [str(c["name"]) for c in _schema_doc(ep.returns_schema).get("columns") or []]
+        views.append(view)
     return views
 
 
@@ -1229,6 +1268,7 @@ def render_flat_module(api: spec.FlatApi, league_prefix: str = "") -> str:
         passthrough_query=api.passthrough_query,
         getter_module=api.getter_module,
         auth=api.auth,
+        parser_columns=api.parser_columns,
     )
 
 
@@ -1942,6 +1982,7 @@ FLAT_APIS = [
     ("uefa", "soccer"),
     ("fifa", "soccer"),
     ("sleeper", "nfl"),
+    ("f1", "f1"),  # Jolpica F1 (Ergast-compatible), sdv-internal-refs: f1/
 ]
 
 
@@ -2090,6 +2131,15 @@ def _flat_modules_for_prefix(prefix: str) -> list[str]:
     return sorted(out)
 
 
+# Hand-written modules (no endpoint YAML, so FLAT_APIS cannot drive them) that a
+# sport-group container re-exports beside its flat families. The container
+# ``__init__.py`` is generated, so a module listed here is the ONLY way its public
+# names reach ``sportsdataverse.<group>`` and the top-level package.
+_CONTAINER_HANDWRITTEN: dict[str, list[str]] = {
+    "soccer": ["soccer_events"],  # kloppy event data, the optional ``soccer`` extra
+}
+
+
 def _container_init_body(group: str, members: list[str], has_ext: bool) -> str:
     """Return the deterministic body for a sport-group container ``__init__.py``.
 
@@ -2119,6 +2169,12 @@ def _container_init_body(group: str, members: list[str], has_ext: bool) -> str:
             parsers = LIVE / group / f"{module}_parsers.py"
             if parsers.exists():
                 lines.append(f"from sportsdataverse.{group}.{module}_parsers import *  # noqa: F401,F403")
+        lines.append("")
+    handwritten = _CONTAINER_HANDWRITTEN.get(group, [])
+    if handwritten:
+        lines.append(f"# Hand-written modules homed directly at ``sportsdataverse.{group}``.")
+        for module in handwritten:
+            lines.append(f"from sportsdataverse.{group}.{module} import *  # noqa: F401,F403")
         lines.append("")
     lines.append(f"# Sub-league packages — imported so ``sportsdataverse.{group}.<leaf>`` is reachable")
     lines.append("# as an attribute on this container module (0.0.65+).")
@@ -2302,6 +2358,7 @@ _COVERAGE_LEAGUES = [
     *_HOCKEYTECH_MODULE_LEAGUES,  # ahl/ohl/whl/qmjhl + the promoted junior/minor leagues
     "odds",
     "euroleague",
+    "f1",
     # Joined in 0.1.5: each has hand-written modules, so until now the gates never
     # saw their functions and they had no Additional page.
     "soccer",
@@ -2628,11 +2685,12 @@ _FLAT_API_DOC = {
     "cbs_napi": "CBS Sports NAPI (api.cbssports.com/napi)",
     "yahoo_shangrila": "Yahoo Sports Shangrila (graphite-secure.sports.yahoo.com)",
     "fox_api": "Fox Sports API (api.foxsports.com)",
-    "euroleague": "EuroLeague Competition Engine API (api-live.euroleague.net v2)",
+    "euroleague": "EuroLeague APIs (api-live.euroleague.net v2 + v3, live.euroleague.net/api)",
     "fotmob": "FotMob data API (fotmob.com, unofficial)",
     "uefa": "UEFA front-end APIs (comp/match/standings/matchstats.uefa.com)",
     "fifa": "FIFA public API v3 (api.fifa.com)",
     "sleeper": "Sleeper fantasy API v1 (api.sleeper.app)",
+    "f1": "Jolpica F1 API (api.jolpi.ca, Ergast-compatible; CC BY-NC-SA 4.0, 500 requests/hour)",
 }
 
 # Friendly label per releases.yaml base key, for the "Dataset loaders" row of a
@@ -3001,6 +3059,7 @@ def render_league_index(
         has_highlights=has_highlights,
         highlights_count=highlights_count,
         notebooks=_notebooks_for(prefix),
+        companions=_companions_for(prefix),
         r_parity=r_parity or [],
         r_pkg=r_pkg,
         source_rows=source_rows or [],
@@ -4039,7 +4098,7 @@ def _doc_leagues() -> list[str]:
     _HOCKEYTECH_EXTRA = _HOCKEYTECH_MODULE_LEAGUES
     # Cross-sport hand-written modules that get their own docs scope but have no
     # ESPN/loader entries (e.g. the The Odds API wrappers in sportsdataverse.odds).
-    _NONLEAGUE_EXTRA = ["odds", "cbs", "yahoo", "fox", "euroleague"]
+    _NONLEAGUE_EXTRA = ["odds", "cbs", "yahoo", "fox", "euroleague", "f1"]
     known = set(prefixes) | set(extra)
     hockeytech = [lg for lg in _HOCKEYTECH_EXTRA if lg not in known]
     nonleague = [m for m in _NONLEAGUE_EXTRA if m not in known]
@@ -4440,6 +4499,7 @@ _LEAGUE_LABELS = {
     "nbagl": "NBA G League",
     "odds": "Betting odds",
     "euroleague": "EuroLeague",
+    "f1": "Formula 1",
     "seriea": "Serie A",
     "soccer": "Soccer (all)",
     "yahoo": "Yahoo Sports",

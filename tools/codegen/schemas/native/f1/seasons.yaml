@@ -1,0 +1,9 @@
+columns:
+- description: Season year (integer).
+  name: season
+  type: integer
+- description: Wikipedia URL.
+  name: url
+  type: character
+kind: dataframe
+schema: seasons

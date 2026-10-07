@@ -1,0 +1,29 @@
+{
+  "MRData": {
+    "xmlns": "",
+    "series": "f1",
+    "url": "https://api.jolpi.ca/ergast/f1/status.json",
+    "limit": "30",
+    "offset": "0",
+    "total": "136",
+    "StatusTable": {
+      "Status": [
+        {
+          "statusId": "1",
+          "count": "8181",
+          "status": "Finished"
+        },
+        {
+          "statusId": "11",
+          "count": "3850",
+          "status": "+1 Lap"
+        },
+        {
+          "statusId": "5",
+          "count": "2011",
+          "status": "Engine"
+        }
+      ]
+    }
+  }
+}

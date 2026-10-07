@@ -76,6 +76,7 @@ from sportsdataverse.hockey.ohl import *  # noqa: F401,F403,E402
 from sportsdataverse.hockey.qmjhl import *  # noqa: F401,F403,E402
 from sportsdataverse.hockey.whl import *  # noqa: F401,F403,E402
 from sportsdataverse.odds import *  # noqa: F401,F403,E402
+from sportsdataverse.f1 import *  # noqa: F401,F403,E402
 
 # --- ESPN additional leagues — sport param-families stay top-level; minor/alias
 #     leagues are nested under sport-group packages (0.0.65+). ---

@@ -217,6 +217,14 @@ providers:
     modules:
       - sportsdataverse.euroleague.euroleague_runtime
 
+  jolpica:
+    label: Jolpica F1 API (Ergast-compatible)
+    home: https://api.jolpi.ca/ergast/f1
+    auth: none (CC BY-NC-SA 4.0; 4 req/s burst, 500 req/hour)
+    flat_apis: [f1]
+    modules:
+      - sportsdataverse.f1.f1_extra
+
   kenpom:
     label: KenPom
     home: https://kenpom.com
@@ -279,6 +287,13 @@ providers:
     home: https://api.fifa.com
     auth: none
     flat_apis: [fifa]
+
+  kloppy:
+    label: kloppy open event data
+    home: https://kloppy.pysport.org
+    auth: none (optional `soccer` extra)
+    modules:
+      - sportsdataverse.soccer.soccer_events
 
   mls:
     label: MLS official web API

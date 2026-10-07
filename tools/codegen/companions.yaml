@@ -1,0 +1,57 @@
+# Hand-maintained, per-league companion packages for the "See also" block on a
+# league's index page (docs/docs/<prefix>/index.md), rendered by
+# generate.py's `render_league_index` through `_companions_for`.
+#
+# A league key lists packages a reader of that page is likely to reach for next:
+# the SportsDataverse plotting twins, an upstream client for the same API, or a
+# well-known library sdv-py interoperates with but does not wrap. Keep each note
+# to one clause (American English). A league with no key renders unchanged.
+#
+# Shape: {prefix: [{name, url, note}]}. URLs must be https.
+#
+# Never name an sdv-py function in a note: the autodoc "already documented"
+# heuristic matches bare names across the rendered docs corpus, so a mention here
+# would silently drop that function from its python-helpers / additional page
+# (tests/codegen/test_docs.py guards this).
+soccer:
+  - name: kloppy
+    url: https://kloppy.pysport.org
+    note: reads ~15 event and tracking providers behind the `soccer` extra's open-data loader
+  - name: sdvplot
+    url: https://github.com/sportsdataverse/sdvplot
+    note: "`pitch_coords()` puts any provider's events on the 105 x 68 pitch"
+  - name: sdvplotR
+    url: https://github.com/sportsdataverse/sdvplotR
+    note: the R twin (`sdv_pitch_coords()`)
+  - name: itscalledsoccer
+    url: https://github.com/American-Soccer-Analysis/itscalledsoccer
+    note: American Soccer Analysis's own client for the API behind `asa_*`
+  - name: soccerdata
+    url: https://github.com/probberechts/soccerdata
+    note: FBref, Understat, WhoScored and Sofascore scrapers that sdv-py does not wrap
+  - name: mplsoccer
+    url: https://mplsoccer.readthedocs.io
+    note: matplotlib pitches and StatsBomb helpers that sdvplot's pitch frame interoperates with
+f1:
+  - name: f1dataR
+    url: https://scottyd22.github.io/f1dataR/
+    note: the R twin over the same Jolpica (Ergast-compatible) API; wrapper and column names follow it
+  - name: FastF1
+    url: https://docs.fastf1.dev/
+    note: session timing, telemetry and tire data that sdv-py does not wrap
+  - name: Jolpica F1 API
+    url: https://github.com/jolpica/jolpica-f1
+    note: the API itself (docs, CC BY-NC-SA 4.0 terms, 500 requests/hour limit)
+euroleague:
+  - name: hoopR
+    url: https://hoopR.sportsdataverse.org
+    note: the R home of SportsDataverse basketball, where the EuroLeague wrappers land next
+  - name: sdvplot
+    url: https://github.com/sportsdataverse/sdvplot
+    note: draws the FIBA court the shot chart's hoop-origin centimeter coordinates land on
+  - name: sdvplotR
+    url: https://github.com/sportsdataverse/sdvplotR
+    note: the R twin, same FIBA court
+  - name: euroleague-api
+    url: https://github.com/giasemidis/euroleague_api
+    note: community Python client for the same EuroLeague and EuroCup APIs

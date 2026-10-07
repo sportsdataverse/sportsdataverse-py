@@ -1,0 +1,42 @@
+columns:
+- description: ASA player id (base62 string; Utf8 join key).
+  name: player_id
+  type: character
+- description: ASA team id (base62 string; Utf8 join key, never numeric).
+  name: team_id
+  type: character
+- description: General position code (GK/CB/FB/DM/CM/AM/W/ST).
+  name: general_position
+  type: character
+- description: Minutes played in the filtered window.
+  name: minutes_played
+  type: integer
+- description: Passes attempted.
+  name: attempted_passes
+  type: integer
+- description: Actual pass completion (0-1).
+  name: pass_completion_percentage
+  type: numeric
+- description: Expected pass completion (0-1).
+  name: xpass_completion_percentage
+  type: numeric
+- description: Passes completed over expected.
+  name: passes_completed_over_expected
+  type: numeric
+- description: Passes completed over expected per 100 passes.
+  name: passes_completed_over_expected_p100
+  type: numeric
+- description: Average pass distance in yards.
+  name: avg_distance_yds
+  type: numeric
+- description: Average vertical (goalward) pass distance in yards.
+  name: avg_vertical_distance_yds
+  type: numeric
+- description: Share of the team's touches (0-1).
+  name: share_team_touches
+  type: numeric
+- description: Games included in the window.
+  name: count_games
+  type: integer
+kind: dataframe
+schema: players_xpass

@@ -35,6 +35,13 @@ description: "sdv-py {{ prefix|upper }}: endpoint references, dataset loaders an
 
 {% endfor %}
 {% endif %}
+{% if companions %}
+
+## See also
+
+{% for c in companions %}- [{{ c.name }}]({{ c.url }}) — {{ c.note }}
+{% endfor %}
+{% endif %}
 {% if notebooks %}
 
 ## Examples

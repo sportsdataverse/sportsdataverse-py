@@ -91,6 +91,14 @@ tests = [
     "pytest-cov>=2.10.1",
     "pytest-xdist>=2.1.0",
     "ruff>=0.1.0",
+    # tests/soccer/test_soccer_events.py loads a StatsBomb fixture through kloppy.
+    "kloppy[polars]>=3.19",
+]
+soccer = [
+    # kloppy reads ~15 event/tracking providers (StatsBomb, Opta, Wyscout, Sportec,
+    # SkillCorner, ...) behind soccer_open_events(); optional because its dependency
+    # tree is only needed for event/tracking data, not the ESPN/ASA surface.
+    "kloppy[polars]>=3.19",
 ]
 nflpro = [
     # NFL Pro's user-bound token can only be obtained by completing the real
@@ -155,6 +163,7 @@ all = [
     # NCAA (stats.ncaa.org) browser transport -- anti-detect fork of Playwright
     # that clears Akamai bm-verify; vanilla Playwright is flagged. See mbb_ncaa_fetch.
     "patchright>=1.50",
+    "kloppy[polars]>=3.19",
 ]
 
 
@@ -321,6 +330,8 @@ warn_unused_ignores = true
 warn_redundant_casts = true
 files = [
     "sportsdataverse/_deprecation.py",
+    "sportsdataverse/euroleague/euroleague_parsers.py",
+    "sportsdataverse/euroleague/euroleague_runtime.py",
     "sportsdataverse/validation/box_reconcile.py",
     "sportsdataverse/validation/findings.py",
     "sportsdataverse/validation/pbp_invariants.py",
@@ -758,6 +769,9 @@ files = [
     "sportsdataverse/defense_vs_position.py",
     "sportsdataverse/registry/__init__.py",
     "sportsdataverse/registry/__main__.py",
+    "sportsdataverse/soccer/soccer_events.py",
+    "sportsdataverse/f1/f1_parsers.py",
+    "sportsdataverse/f1/f1_extra.py",
     "sdv_docs/__init__.py",
     "sdv_docs/schema.py",
     "sdv_docs/index.py",

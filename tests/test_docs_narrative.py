@@ -66,7 +66,7 @@ _CLAUDE_CURRENT = [
     "24 nflreadpy-style aliases",
     "291 generated call sites",
     "PWHL + 19",
-    "`tests`, `nflpro`, `models`, `pff`, `mcp`, `all`",
+    "`tests`, `nflpro`, `models`, `pff`, `soccer`, `mcp`, `all`",
     "architecture/codegen.md",
     "main (latest)",
     "VERSIONS_TO_KEEP=3",

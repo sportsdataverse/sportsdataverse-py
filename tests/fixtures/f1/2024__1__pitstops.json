@@ -1,0 +1,58 @@
+{
+  "MRData": {
+    "xmlns": "",
+    "series": "f1",
+    "url": "https://api.jolpi.ca/ergast/f1/2024/1/pitstops.json",
+    "limit": "30",
+    "offset": "0",
+    "total": "43",
+    "RaceTable": {
+      "season": "2024",
+      "round": "1",
+      "Races": [
+        {
+          "season": "2024",
+          "round": "1",
+          "url": "https://en.wikipedia.org/wiki/2024_Bahrain_Grand_Prix",
+          "raceName": "Bahrain Grand Prix",
+          "Circuit": {
+            "circuitId": "bahrain",
+            "url": "https://en.wikipedia.org/wiki/Bahrain_International_Circuit",
+            "circuitName": "Bahrain International Circuit",
+            "Location": {
+              "lat": "26.0325",
+              "long": "50.5106",
+              "locality": "Sakhir",
+              "country": "Bahrain"
+            }
+          },
+          "date": "2024-03-02",
+          "time": "15:00:00Z",
+          "PitStops": [
+            {
+              "driverId": "hulkenberg",
+              "lap": "1",
+              "stop": "1",
+              "time": "18:05:33",
+              "duration": "36.604"
+            },
+            {
+              "driverId": "zhou",
+              "lap": "9",
+              "stop": "1",
+              "time": "18:18:39",
+              "duration": "25.208"
+            },
+            {
+              "driverId": "stroll",
+              "lap": "9",
+              "stop": "1",
+              "time": "18:18:42",
+              "duration": "24.418"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

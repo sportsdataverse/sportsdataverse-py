@@ -1,3 +1,11 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [UEFA fixtures](#uefa-fixtures)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # UEFA fixtures
 
 Byte copies of every capture in `sdv-internal-refs/uefa/captures/` (source commit

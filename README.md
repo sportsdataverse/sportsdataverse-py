@@ -141,6 +141,7 @@ pip install "sportsdataverse[tests]"    # adds pytest, mypy, ruff, etc.
 pip install "sportsdataverse[nflpro]"   # NFL Pro (pro.nfl.com) Next Gen Stats
 pip install "sportsdataverse[pff]"      # PFF Developer + Premium clients
 pip install "sportsdataverse[mcp]"      # the sdv-docs MCP server (Python >= 3.10)
+pip install "sportsdataverse[soccer]"   # kloppy: soccer event / tracking data (soccer_open_events)
 ```
 
 ### Modern install (uv — recommended)

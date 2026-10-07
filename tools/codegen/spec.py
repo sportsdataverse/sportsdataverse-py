@@ -27,6 +27,7 @@ class Param:
     default_from: Optional[str] = None  # use another arg's value when None
     transform: Optional[str] = None  # named runtime transform (e.g. format_nhl_season, _csv)
     description: str = ""  # authored human-readable description for docs
+    choices: List[str] = field(default_factory=list)  # closed value set; the wrapper raises ValueError otherwise
     # Render after ``*`` so a param added to an existing wrapper never shifts the
     # positional slot of ``headers`` (or any later arg) for existing callers.
     kw_only: bool = False
@@ -113,6 +114,10 @@ class FlatApi:
     # "Exception: description"), ``see_also`` (list of {name, url, note}) and
     # ``example_import`` (bool -- prepend the import line to the Example block).
     docstring: Dict[str, object] = field(default_factory=dict)
+    # When True, every wrapper passes its returns-schema column names to the parser as
+    # ``columns=[...]`` (and the module carries them as ``_PARSER_COLUMNS``), so an empty
+    # payload parses to a zero-row frame WITH the documented schema (f1).
+    parser_columns: bool = False
 
     @property
     def prefix(self) -> str:
@@ -260,6 +265,7 @@ def _parse_endpoint(e: dict, registry: Dict[str, Param], path: Path) -> Endpoint
                 default=extra.get("default"),
                 transform=extra.get("transform"),
                 description=extra.get("description", "") or inherited_desc,
+                choices=[str(c) for c in extra.get("choices") or []],
                 kw_only=bool(extra.get("kw_only", False)),
             ),
         )
@@ -277,6 +283,7 @@ def _parse_endpoint(e: dict, registry: Dict[str, Param], path: Path) -> Endpoint
                 default_from=pp.get("default_from"),
                 transform=pp.get("transform"),
                 description=pp.get("description", ""),
+                choices=[str(c) for c in pp.get("choices") or []],
             ),
         )
     ep = Endpoint(
@@ -383,4 +390,5 @@ def load_flat_api(path: Path, registry: Dict[str, Param]) -> FlatApi:
         auth=bool(raw.get("auth", False)),
         raw_types=list(raw.get("raw_types") or ["Dict"]),
         docstring=dict(raw.get("docstring") or {}),
+        parser_columns=bool(raw.get("parser_columns", False)),
     )

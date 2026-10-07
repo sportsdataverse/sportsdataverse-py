@@ -1,0 +1,24 @@
+columns:
+- description: Country.
+  name: location_country
+  type: character
+- description: Latitude (decimal degrees).
+  name: location_lat
+  type: numeric
+- description: City / locality.
+  name: location_locality
+  type: character
+- description: Longitude (decimal degrees).
+  name: location_long
+  type: numeric
+- description: Ergast circuit id.
+  name: circuit_id
+  type: character
+- description: Circuit name.
+  name: circuit_name
+  type: character
+- description: Wikipedia URL.
+  name: url
+  type: character
+kind: dataframe
+schema: circuits

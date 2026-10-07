@@ -1,0 +1,97 @@
+{
+  "MRData": {
+    "xmlns": "",
+    "series": "f1",
+    "url": "https://api.jolpi.ca/ergast/f1/2024/1/laps.json",
+    "limit": "100",
+    "offset": "0",
+    "total": "1129",
+    "RaceTable": {
+      "season": "2024",
+      "round": "1",
+      "Races": [
+        {
+          "season": "2024",
+          "round": "1",
+          "url": "https://en.wikipedia.org/wiki/2024_Bahrain_Grand_Prix",
+          "raceName": "Bahrain Grand Prix",
+          "Circuit": {
+            "circuitId": "bahrain",
+            "url": "https://en.wikipedia.org/wiki/Bahrain_International_Circuit",
+            "circuitName": "Bahrain International Circuit",
+            "Location": {
+              "lat": "26.0325",
+              "long": "50.5106",
+              "locality": "Sakhir",
+              "country": "Bahrain"
+            }
+          },
+          "date": "2024-03-02",
+          "time": "15:00:00Z",
+          "Laps": [
+            {
+              "number": "1",
+              "Timings": [
+                {
+                  "driverId": "max_verstappen",
+                  "time": "1:37.284",
+                  "position": "1"
+                },
+                {
+                  "driverId": "leclerc",
+                  "time": "1:38.271",
+                  "position": "2"
+                },
+                {
+                  "driverId": "russell",
+                  "time": "1:39.228",
+                  "position": "3"
+                }
+              ]
+            },
+            {
+              "number": "2",
+              "Timings": [
+                {
+                  "driverId": "max_verstappen",
+                  "time": "1:36.296",
+                  "position": "1"
+                },
+                {
+                  "driverId": "leclerc",
+                  "time": "1:36.862",
+                  "position": "2"
+                },
+                {
+                  "driverId": "russell",
+                  "time": "1:36.635",
+                  "position": "3"
+                }
+              ]
+            },
+            {
+              "number": "3",
+              "Timings": [
+                {
+                  "driverId": "max_verstappen",
+                  "time": "1:36.753",
+                  "position": "1"
+                },
+                {
+                  "driverId": "russell",
+                  "time": "1:36.406",
+                  "position": "2"
+                },
+                {
+                  "driverId": "leclerc",
+                  "time": "1:38.062",
+                  "position": "3"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

@@ -11,7 +11,7 @@ import pytest
 import yaml
 
 ENDPOINTS = Path(__file__).resolve().parents[2] / "tools" / "codegen" / "endpoints"
-FAMILIES = ("euroleague", "fotmob", "uefa", "fifa", "sleeper")
+FAMILIES = ("euroleague", "fotmob", "uefa", "fifa", "sleeper", "f1")
 
 
 @pytest.mark.parametrize("stem", FAMILIES)

@@ -1,0 +1,67 @@
+columns:
+- description: 'Period of the play: 1-4, or 5 for every overtime period.'
+  name: quarter
+  type: integer
+- description: Display name of team A (= the home side, measured on one game).
+  name: team_a
+  type: character
+- description: Display name of team B (= the away side, measured on one game).
+  name: team_b
+  type: character
+- description: EuroLeague club code of team A (= the home side, measured on one game);
+    Utf8 join key.
+  name: code_team_a
+  type: character
+- description: EuroLeague club code of team B (= the away side, measured on one game);
+    Utf8 join key.
+  name: code_team_b
+  type: character
+- description: Play type (engine integer).
+  name: type
+  type: integer
+- description: Sequence number of the play within the game.
+  name: numberofplay
+  type: integer
+- description: EuroLeague club code of the team on the play (Utf8 join key; blank
+    on administrative plays).
+  name: codeteam
+  type: character
+- description: EuroLeague player code (Utf8 join key; space padding stripped; blank
+    on team rows).
+  name: player_id
+  type: character
+- description: Play type code (BP = begin period, 2FGM, 3FGA, FTM, AS = assist, TO,
+    RV, CM, ...).
+  name: playtype
+  type: character
+- description: Player display name (SURNAME, GIVEN NAME).
+  name: player
+  type: character
+- description: Display name of the team on the play (null on administrative plays).
+  name: team
+  type: character
+- description: Jersey number as displayed.
+  name: dorsal
+  type: character
+- description: Game minute of the event (1-based; 41+ in overtime).
+  name: minute
+  type: integer
+- description: Game clock at the play (mm:ss remaining in the period).
+  name: markertime
+  type: character
+- description: Running score of team A (= the home side, measured on one game) after
+    the event.
+  name: points_a
+  type: integer
+- description: Running score of team B (= the away side, measured on one game) after
+    the event.
+  name: points_b
+  type: integer
+- description: Free-text annotation of the play.
+  name: comment
+  type: character
+- description: Play description.
+  name: playinfo
+  type: character
+kind: dataframe
+schema: game_pbp

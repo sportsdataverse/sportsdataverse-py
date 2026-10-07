@@ -1,0 +1,120 @@
+{
+  "MRData": {
+    "xmlns": "",
+    "series": "f1",
+    "url": "https://api.jolpi.ca/ergast/f1/2024.json",
+    "limit": "30",
+    "offset": "0",
+    "total": "24",
+    "RaceTable": {
+      "season": "2024",
+      "Races": [
+        {
+          "season": "2024",
+          "round": "1",
+          "url": "https://en.wikipedia.org/wiki/2024_Bahrain_Grand_Prix",
+          "raceName": "Bahrain Grand Prix",
+          "Circuit": {
+            "circuitId": "bahrain",
+            "url": "https://en.wikipedia.org/wiki/Bahrain_International_Circuit",
+            "circuitName": "Bahrain International Circuit",
+            "Location": {
+              "lat": "26.0325",
+              "long": "50.5106",
+              "locality": "Sakhir",
+              "country": "Bahrain"
+            }
+          },
+          "date": "2024-03-02",
+          "time": "15:00:00Z",
+          "FirstPractice": {
+            "date": "2024-02-29",
+            "time": "11:30:00Z"
+          },
+          "SecondPractice": {
+            "date": "2024-02-29",
+            "time": "15:00:00Z"
+          },
+          "ThirdPractice": {
+            "date": "2024-03-01",
+            "time": "12:30:00Z"
+          },
+          "Qualifying": {
+            "date": "2024-03-01",
+            "time": "16:00:00Z"
+          }
+        },
+        {
+          "season": "2024",
+          "round": "2",
+          "url": "https://en.wikipedia.org/wiki/2024_Saudi_Arabian_Grand_Prix",
+          "raceName": "Saudi Arabian Grand Prix",
+          "Circuit": {
+            "circuitId": "jeddah",
+            "url": "https://en.wikipedia.org/wiki/Jeddah_Corniche_Circuit",
+            "circuitName": "Jeddah Corniche Circuit",
+            "Location": {
+              "lat": "21.6319",
+              "long": "39.1044",
+              "locality": "Jeddah",
+              "country": "Saudi Arabia"
+            }
+          },
+          "date": "2024-03-09",
+          "time": "17:00:00Z",
+          "FirstPractice": {
+            "date": "2024-03-07",
+            "time": "13:30:00Z"
+          },
+          "SecondPractice": {
+            "date": "2024-03-07",
+            "time": "17:00:00Z"
+          },
+          "ThirdPractice": {
+            "date": "2024-03-08",
+            "time": "13:30:00Z"
+          },
+          "Qualifying": {
+            "date": "2024-03-08",
+            "time": "17:00:00Z"
+          }
+        },
+        {
+          "season": "2024",
+          "round": "3",
+          "url": "https://en.wikipedia.org/wiki/2024_Australian_Grand_Prix",
+          "raceName": "Australian Grand Prix",
+          "Circuit": {
+            "circuitId": "albert_park",
+            "url": "https://en.wikipedia.org/wiki/Albert_Park_Circuit",
+            "circuitName": "Albert Park Grand Prix Circuit",
+            "Location": {
+              "lat": "-37.8497",
+              "long": "144.968",
+              "locality": "Melbourne",
+              "country": "Australia"
+            }
+          },
+          "date": "2024-03-24",
+          "time": "04:00:00Z",
+          "FirstPractice": {
+            "date": "2024-03-22",
+            "time": "01:30:00Z"
+          },
+          "SecondPractice": {
+            "date": "2024-03-22",
+            "time": "05:00:00Z"
+          },
+          "ThirdPractice": {
+            "date": "2024-03-23",
+            "time": "01:30:00Z"
+          },
+          "Qualifying": {
+            "date": "2024-03-23",
+            "time": "05:00:00Z"
+          }
+        }
+      ]
+    }
+  }
+}

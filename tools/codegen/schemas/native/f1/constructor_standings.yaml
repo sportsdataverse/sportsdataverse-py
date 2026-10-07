@@ -1,0 +1,35 @@
+columns:
+- description: Round number within the season (integer); on standings routes the round
+    the standings are computed after.
+  name: round
+  type: integer
+- description: Season year (integer).
+  name: season
+  type: integer
+- description: Ergast constructor id (join key to `/constructors`).
+  name: constructor_id
+  type: character
+- description: Constructor name.
+  name: constructor_name
+  type: character
+- description: Constructor nationality (demonym).
+  name: constructor_nationality
+  type: character
+- description: Wikipedia URL of the constructor.
+  name: constructor_url
+  type: character
+- description: Championship points scored (number).
+  name: points
+  type: numeric
+- description: Classified position (integer).
+  name: position
+  type: integer
+- description: 'Position as displayed: a number, or `R` retired, `D` disqualified,
+    `E` excluded, `W` withdrawn, `F` failed to qualify, `N` not classified.'
+  name: position_text
+  type: character
+- description: Race wins (integer).
+  name: wins
+  type: integer
+kind: dataframe
+schema: constructor_standings

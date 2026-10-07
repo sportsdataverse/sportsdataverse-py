@@ -100,7 +100,7 @@ matching `parse_*` function for NHL / MLB sibling APIs. See
 | [UFL](ufl/) | `sportsdataverse.ufl` | ESPN (114) |
 | [XFL](xfl/) | `sportsdataverse.xfl` | ESPN (112) |
 | [CFL](cfl/) | `sportsdataverse.cfl` | ESPN (112) |
-| [Soccer (all)](soccer/) | `sportsdataverse.soccer` | ESPN (112), American Soccer Analysis (15), FotMob (14), UEFA (7), FIFA (9) |
+| [Soccer (all)](soccer/) | `sportsdataverse.soccer` | ESPN (112), American Soccer Analysis (16), FotMob (14), UEFA (7), FIFA (9), kloppy open event data (2) |
 | [EPL](epl/) | `sportsdataverse.epl` | ESPN (113) |
 | [LaLiga](laliga/) | `sportsdataverse.laliga` | ESPN (112) |
 | [Bundesliga](bundesliga/) | `sportsdataverse.bundesliga` | ESPN (112) |
@@ -138,7 +138,8 @@ matching `parse_*` function for NHL / MLB sibling APIs. See
 | [CBS Sports](cbs/) | `sportsdataverse.cbs` | CBS Sports NAPI (82) |
 | [Yahoo Sports](yahoo/) | `sportsdataverse.yahoo` | Yahoo Sports Shangrila (107) |
 | [Fox Sports](fox/) | `sportsdataverse.fox` | Fox Sports API (33) |
-| [EuroLeague](euroleague/) | `sportsdataverse.euroleague` | EuroLeague Competition Engine (7) |
+| [EuroLeague](euroleague/) | `sportsdataverse.euroleague` | EuroLeague Competition Engine (15) |
+| [Formula 1](f1/) | `sportsdataverse.f1` | Jolpica F1 API (Ergast-compatible) (16) |
 <!-- END generated: leagues-and-sources -->
 
 ## Errors (0.1.5)

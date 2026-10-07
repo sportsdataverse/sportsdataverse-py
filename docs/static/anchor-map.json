@@ -1008,6 +1008,23 @@
   "espn_epl_venue": "other",
   "espn_epl_venues": "other"
  },
+ "/docs/euroleague/reference/euroleague": {
+  "euroleague_clubs": "other",
+  "euroleague_competitions": "other",
+  "euroleague_game_boxscore": "game",
+  "euroleague_game_header": "game",
+  "euroleague_game_pbp": "game",
+  "euroleague_game_points": "game",
+  "euroleague_game_report": "game",
+  "euroleague_game_stats": "game",
+  "euroleague_games": "other",
+  "euroleague_people": "other",
+  "euroleague_player_stats": "other",
+  "euroleague_rounds": "other",
+  "euroleague_seasons": "other",
+  "euroleague_standings": "other",
+  "euroleague_team_stats": "other"
+ },
  "/docs/laliga/reference/core": {
   "espn_laliga_award": "other",
   "espn_laliga_awards": "other",

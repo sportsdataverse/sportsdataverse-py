@@ -1,0 +1,12 @@
+columns:
+- description: All-time number of classifications with this status (integer).
+  name: count
+  type: integer
+- description: Finishing status text (see `/status`).
+  name: status
+  type: character
+- description: Ergast status id (integer as a string).
+  name: status_id
+  type: character
+kind: dataframe
+schema: status

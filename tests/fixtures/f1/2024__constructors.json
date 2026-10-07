@@ -1,0 +1,33 @@
+{
+  "MRData": {
+    "xmlns": "",
+    "series": "f1",
+    "url": "https://api.jolpi.ca/ergast/f1/2024/constructors.json",
+    "limit": "30",
+    "offset": "0",
+    "total": "10",
+    "ConstructorTable": {
+      "season": "2024",
+      "Constructors": [
+        {
+          "constructorId": "alpine",
+          "url": "https://en.wikipedia.org/wiki/Alpine_F1_Team",
+          "name": "Alpine F1 Team",
+          "nationality": "French"
+        },
+        {
+          "constructorId": "aston_martin",
+          "url": "https://en.wikipedia.org/wiki/Aston_Martin_in_Formula_One",
+          "name": "Aston Martin",
+          "nationality": "British"
+        },
+        {
+          "constructorId": "ferrari",
+          "url": "https://en.wikipedia.org/wiki/Scuderia_Ferrari",
+          "name": "Ferrari",
+          "nationality": "Italian"
+        }
+      ]
+    }
+  }
+}

@@ -10,10 +10,12 @@ description: "sdv-py SOCCER: endpoint references, dataset loaders and parsers fo
 | Source | APIs / hosts | Functions | Auth |
 |---|---|---:|---|
 | [ESPN](#espn) | `site.api.espn.com`, `site.web.api.espn.com`, `sports.core.api.espn.com` | 112 | none |
-| [American Soccer Analysis](#american-soccer-analysis) | `app.americansocceranalysis.com` | 15 | none |
+| [American Soccer Analysis](#american-soccer-analysis) | `app.americansocceranalysis.com` | 16 | none |
 | [FotMob](#fotmob) | `www.fotmob.com` | 14 | none (unofficial) |
 | [UEFA](#uefa) | `comp.uefa.com` | 7 | none |
 | [FIFA](#fifa) | `api.fifa.com` | 9 | none |
+| [kloppy open event data](#kloppy-open-event-data) | `kloppy.pysport.org` | 2 | none (optional `soccer` extra) |
+| [Additional functions](reference/additional) | hand-written wrappers & helpers | 2 | — |
 
 ## ESPN {#espn}
 
@@ -28,7 +30,7 @@ description: "sdv-py SOCCER: endpoint references, dataset loaders and parsers fo
 
 | Reference | Functions |
 |---|---:|
-| [American Soccer Analysis (app.americansocceranalysis.com)](reference/asa) | 15 |
+| [American Soccer Analysis (app.americansocceranalysis.com)](reference/asa) | 16 |
 
 ## FotMob {#fotmob}
 
@@ -47,6 +49,21 @@ description: "sdv-py SOCCER: endpoint references, dataset loaders and parsers fo
 | Reference | Functions |
 |---|---:|
 | [FIFA public API v3 (api.fifa.com)](reference/fifa) | 9 |
+
+## kloppy open event data {#kloppy-open-event-data}
+
+| Reference | Functions |
+|---|---:|
+| [Hand-written wrappers](reference/additional) | 2 |
+
+## See also
+
+- [kloppy](https://kloppy.pysport.org) — reads ~15 event and tracking providers behind the `soccer` extra's open-data loader
+- [sdvplot](https://github.com/sportsdataverse/sdvplot) — `pitch_coords()` puts any provider's events on the 105 x 68 pitch
+- [sdvplotR](https://github.com/sportsdataverse/sdvplotR) — the R twin (`sdv_pitch_coords()`)
+- [itscalledsoccer](https://github.com/American-Soccer-Analysis/itscalledsoccer) — American Soccer Analysis's own client for the API behind `asa_*`
+- [soccerdata](https://github.com/probberechts/soccerdata) — FBref, Understat, WhoScored and Sofascore scrapers that sdv-py does not wrap
+- [mplsoccer](https://mplsoccer.readthedocs.io) — matplotlib pitches and StatsBomb helpers that sdvplot's pitch frame interoperates with
 
 ## Examples
 
