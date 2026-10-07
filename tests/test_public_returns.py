@@ -108,3 +108,7 @@ def test_global_scope_has_no_returns_gap():
 
 def test_nfl_has_no_returns_gap():
     assert not _gap_names("nfl")
+
+
+def test_mlb_has_no_returns_gap():
+    assert not _gap_names("mlb")
