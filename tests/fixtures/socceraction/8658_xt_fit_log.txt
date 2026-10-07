@@ -1,0 +1,3 @@
+socceraction 1.5.3, numpy 1.26.4, python 3.12.6
+game_id 8658, actions 1707
+# iterations:  43

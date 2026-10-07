@@ -18,6 +18,7 @@ from sportsdataverse.soccer.uefa_parsers import *  # noqa: F401,F403
 
 # Hand-written modules homed directly at ``sportsdataverse.soccer``.
 from sportsdataverse.soccer.soccer_events import *  # noqa: F401,F403
+from sportsdataverse.soccer.spadl import *  # noqa: F401,F403
 
 # Sub-league packages — imported so ``sportsdataverse.soccer.<leaf>`` is reachable
 # as an attribute on this container module (0.0.65+).
