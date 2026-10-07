@@ -35,9 +35,9 @@ import polars as pl
 from sportsdataverse.soccer.spadl import FIELD_LENGTH, FIELD_WIDTH
 
 if TYPE_CHECKING:
-    pass
+    import pandas as pd
 
-__all__ = ["XThreat", "NotFittedError"]
+__all__ = ["XThreat", "NotFittedError", "load_xthreat_model", "soccer_xthreat_rate"]
 
 GRID_W: int = 12  # cells across the width (y)
 GRID_L: int = 16  # cells along the length (x)
@@ -224,8 +224,8 @@ class XThreat:
     Example:
         Fit on SPADL actions and value the moves::
 
-            from sportsdataverse.soccer import XThreat, soccer_open_events, soccer_spadl
-            actions = soccer_spadl(soccer_open_events("statsbomb", 8658))
+            from sportsdataverse.soccer import XThreat, soccer_open_dataset, soccer_spadl
+            actions = soccer_spadl(soccer_open_dataset("statsbomb", 8658))
             model = XThreat().fit(actions)
             actions = actions.with_columns(model.rate(actions))
 
@@ -255,7 +255,17 @@ class XThreat:
         self.meta: dict[str, Any] = dict(meta or {})
 
     def fit(self, actions: pl.DataFrame) -> XThreat:
-        """Fit the grid on SPADL actions (``type_name``, ``result_name``, start/end coordinates)."""
+        """Fit the grid on SPADL actions by value iteration.
+
+        Args:
+            actions: SPADL actions with ``type_name``, ``result_name`` and start/end coordinates.
+
+        Returns:
+            This model, fitted in place.
+
+        Raises:
+            RuntimeError: If the grid has not converged within ``max_iter`` iterations.
+        """
         p_scoring = _scoring_prob(actions, self.l, self.w)
         p_shot, p_move = _action_prob(actions, self.l, self.w)
         T = _move_transition_matrix(actions, self.l, self.w)
@@ -274,7 +284,17 @@ class XThreat:
         return self
 
     def rate(self, actions: pl.DataFrame) -> pl.Series:
-        """``xt_value`` per action: end-cell minus start-cell value for successful passes, dribbles and crosses; null otherwise."""
+        """Rate each action: end-cell minus start-cell value for successful passes, dribbles and crosses.
+
+        Args:
+            actions: SPADL actions with ``type_name``, ``result_name`` and start/end coordinates.
+
+        Returns:
+            A ``Float64`` series named ``xt_value``; null for actions xT does not value.
+
+        Raises:
+            NotFittedError: If the grid is all zeros.
+        """
         if not np.any(self.xT):
             raise NotFittedError("the xT grid is all zeros; fit() or load_xthreat_model() first")
         values = np.full(actions.height, np.nan)
@@ -312,3 +332,59 @@ class XThreat:
         return cls(
             grid, l=int(data.get("l", grid.shape[1])), w=int(data.get("w", grid.shape[0])), meta=data.get("meta")
         )
+
+
+def load_xthreat_model() -> XThreat:
+    """The bundled grid fit on StatsBomb open data (see ``meta`` for competitions, counts and license).
+
+    Returns:
+        The fitted :class:`XThreat` shipped with the package.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.soccer import load_xthreat_model
+            model = load_xthreat_model()
+            print(model.xT.shape, model.meta["matches"])
+
+    See Also:
+        * `socceraction`_ -- the original xT implementation (MIT)
+
+    .. _socceraction: https://github.com/ML-KULeuven/socceraction
+    """
+    from importlib.resources import files
+
+    return XThreat.from_json(Path(str(files("sportsdataverse.soccer") / "models" / "xthreat_statsbomb_open.json")))
+
+
+def soccer_xthreat_rate(
+    actions: pl.DataFrame, model: Optional[XThreat] = None, *, return_as_pandas: bool = False
+) -> Union[pl.DataFrame, pd.DataFrame]:
+    """Append ``xt_value`` (Expected Threat added by each successful pass, dribble or cross) to a SPADL frame.
+
+    Args:
+        actions: SPADL actions from :func:`soccer_spadl` (needs ``type_name``, ``result_name``, start/end coordinates).
+        model: A fitted :class:`XThreat`; ``None`` uses the bundled grid.
+        return_as_pandas: Return a pandas DataFrame instead of polars.
+
+    Returns:
+        ``actions`` with a ``Float64`` ``xt_value`` column (null for actions xT does not value).
+
+    Raises:
+        NotFittedError: If ``model`` is an unfitted grid.
+
+    Example:
+        Quick start::
+
+            import polars as pl
+            from sportsdataverse.soccer import soccer_open_dataset, soccer_spadl, soccer_xthreat_rate
+            actions = soccer_xthreat_rate(soccer_spadl(soccer_open_dataset("statsbomb", 8658)))
+            print(actions.group_by("player_id").agg(pl.col("xt_value").sum()).sort("xt_value", descending=True).head())
+
+    See Also:
+        * `socceraction`_ -- the original xT implementation (MIT)
+
+    .. _socceraction: https://github.com/ML-KULeuven/socceraction
+    """
+    out = actions.with_columns((model or load_xthreat_model()).rate(actions))
+    return out.to_pandas() if return_as_pandas else out

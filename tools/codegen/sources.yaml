@@ -351,6 +351,7 @@ providers:
     modules:
       - sportsdataverse.soccer.soccer_events
       - sportsdataverse.soccer.spadl
+      - sportsdataverse.soccer.xthreat
 
   mls:
     label: MLS official web API

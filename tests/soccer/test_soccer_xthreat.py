@@ -132,3 +132,21 @@ def test_json_round_trip_and_socceraction_format(tmp_path: Path) -> None:
     assert np.array_equal(back.xT, model.xT) and back.meta == model.meta
     bare = xt.XThreat.from_json(ORACLE_GRID)  # socceraction's save_model format
     assert bare.xT.shape == (12, 16)
+
+
+def test_bundled_model_loads_and_is_sane() -> None:
+    m = xt.load_xthreat_model()
+    assert m.xT.shape == (12, 16) and 0 <= m.xT.min() and m.xT.max() <= 1
+    center = m.xT[[5, 6], :].mean(axis=0)
+    assert np.all(np.diff(center[:14]) >= -1e-9)  # non-decreasing toward the goal up to the box
+    for key in ("competitions", "matches", "actions", "kloppy_version", "fit_date", "eps", "iterations", "license"):
+        assert key in m.meta
+
+
+def test_soccer_xthreat_rate_appends_the_column() -> None:
+    a = _oracle_actions()
+    out = xt.soccer_xthreat_rate(a)
+    assert out.columns == a.columns + ["xt_value"] and out.schema["xt_value"] == pl.Float64
+    assert out.filter(pl.col("xt_value").is_not_null()).height > 0
+    pdf = xt.soccer_xthreat_rate(a, return_as_pandas=True)
+    assert "xt_value" in pdf.columns
