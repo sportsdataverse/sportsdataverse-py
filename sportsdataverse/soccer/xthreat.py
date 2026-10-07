@@ -202,7 +202,7 @@ def _move_transition_matrix(actions: pl.DataFrame, l: int, w: int) -> np.ndarray
     m = _moves(actions).drop_nulls(["start_x", "start_y", "end_x", "end_y"])
     start = _flat_indexes(*_xy(m, "start"), l, w)
     end = _flat_indexes(*_xy(m, "end"), l, w)
-    ok = (m["result_name"] == "success").to_numpy()
+    ok = (m["result_name"] == "success").fill_null(False).to_numpy()
     n = w * l
     start_counts: np.ndarray = np.bincount(start, minlength=n).astype(np.float64)
     T = np.zeros((n, n))
@@ -354,7 +354,9 @@ def load_xthreat_model() -> XThreat:
     """
     from importlib.resources import files
 
-    return XThreat.from_json(Path(str(files("sportsdataverse.soccer") / "models" / "xthreat_statsbomb_open.json")))
+    text = (files("sportsdataverse.soccer") / "models" / "xthreat_statsbomb_open.json").read_text(encoding="utf-8")
+    data = json.loads(text)
+    return XThreat(np.asarray(data["xT"], dtype=np.float64), l=int(data["l"]), w=int(data["w"]), meta=data.get("meta"))
 
 
 def soccer_xthreat_rate(
@@ -386,5 +388,5 @@ def soccer_xthreat_rate(
 
     .. _socceraction: https://github.com/ML-KULeuven/socceraction
     """
-    out = actions.with_columns((model or load_xthreat_model()).rate(actions))
+    out = actions.with_columns((model if model is not None else load_xthreat_model()).rate(actions))
     return out.to_pandas() if return_as_pandas else out

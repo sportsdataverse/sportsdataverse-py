@@ -47,6 +47,8 @@ def main() -> int:
     ap.add_argument("--out", type=Path, default=OUT)
     ap.add_argument("--sleep", type=float, default=0.25)
     args = ap.parse_args()
+    if args.limit and args.out == OUT:
+        ap.error("--limit is a smoke run; pass --out so the bundled grid is not overwritten")
     import kloppy
 
     frames: list[pl.DataFrame] = []
