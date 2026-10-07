@@ -18,9 +18,10 @@ dataset-returning twin of `soccer_open_events()`, which returns a frame.
 
 The port is checked against an oracle: the socceraction 1.5.3 direct StatsBomb converter on open
 match 8658. Ours yields 1,709 rows against the oracle's 1,707 (the two extra are StatsBomb
-"Injury Clearance" passes that kloppy keeps); both sides produce 653 synthetic dribbles. Over the
-1,054 joined rows, types, results, body parts and coordinates agree 99.81 % of the time, with a
-2-id agreement allowlist.
+"Injury Clearance" passes that kloppy keeps); both sides produce 653 dribbles (617 StatsBomb
+carries + 36 synthetic). Over the 1,671 joined rows (every row with an event id), types, results,
+body parts and coordinates agree 99.88 % of the time, with a 2-id agreement allowlist; the 36
+synthetic dribbles are checked by position.
 
 ### Added — Formula 1: Jolpica (Ergast-compatible) wrappers in `sportsdataverse.f1`
 

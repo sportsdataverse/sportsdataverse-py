@@ -12,6 +12,7 @@ import pytest
 
 from sportsdataverse.soccer import soccer_spadl as spadl_fn
 from sportsdataverse.soccer import spadl
+from sportsdataverse.soccer.soccer_events import _stamp_game_id
 
 from tests.conftest import skip_if_no_live
 
@@ -78,8 +79,7 @@ statsbomb = pytest.importorskip("kloppy.statsbomb")
 
 def _with_game_id(ds: Any) -> Any:
     """File-loaded kloppy datasets carry no game_id; the fixtures are match 8658."""
-    ds.metadata = dataclasses.replace(ds.metadata, game_id="8658")
-    return ds
+    return _stamp_game_id(ds, 8658)
 
 
 def _dataset() -> Any:
@@ -215,8 +215,20 @@ def test_live_full_match_height() -> None:
     from sportsdataverse.soccer import soccer_open_dataset
 
     oracle = pl.read_csv(ORACLE)
-    out = spadl.soccer_spadl(soccer_open_dataset("statsbomb", 8658), game_id=8658)
+    out = spadl.soccer_spadl(soccer_open_dataset("statsbomb", 8658))
     assert abs(out.height - oracle.height) <= 0.02 * oracle.height
+
+
+def test_soccer_open_dataset_stamps_the_match_id(monkeypatch: pytest.MonkeyPatch) -> None:
+    from sportsdataverse.soccer import soccer_open_dataset
+
+    def fake(match_id: Any, **_: Any) -> Any:
+        return statsbomb.load(event_data=str(EVENTS), lineup_data=str(LINEUPS))
+
+    monkeypatch.setattr(statsbomb, "load_open_data", fake)
+    ds = soccer_open_dataset("statsbomb", 8658)
+    assert ds.metadata.game_id == "8658"
+    assert spadl.soccer_spadl(ds)["game_id"].unique().to_list() == ["8658"]
 
 
 def test_public_function_is_reexported_from_the_package() -> None:
@@ -340,16 +352,18 @@ def test_parity_with_the_socceraction_oracle() -> None:
         ORACLE,
         schema_overrides={"game_id": pl.Utf8, "original_event_id": pl.Utf8, "team_id": pl.Utf8, "player_id": pl.Utf8},
     )
-    ours_nd = ours.filter(pl.col("type_name") != "dribble")
-    oracle_nd = oracle.filter(pl.col("type_name") != "dribble")
-    ours_only = sorted(set(ours_nd["original_event_id"]) - set(oracle_nd["original_event_id"]))
-    oracle_only = sorted(set(oracle_nd["original_event_id"]) - set(ours_nd["original_event_id"]))
+    # rows with an event id: every real event, StatsBomb carries (dribbles) included; synthetic dribbles have none
+    ours_id = ours.drop_nulls("original_event_id")
+    oracle_id = oracle.drop_nulls("original_event_id")
+    ours_only = sorted(set(ours_id["original_event_id"]) - set(oracle_id["original_event_id"]))
+    oracle_only = sorted(set(oracle_id["original_event_id"]) - set(ours_id["original_event_id"]))
     assert not oracle_only, oracle_only[:20]
     assert ours_only == sorted(_PARITY_OURS_ONLY), ours_only[:20]
-    # the oracle itself splits the interception-pass into two rows sharing one id, so one ours-only row is not extra
-    assert ours.height == oracle.height + len(_PARITY_OURS_ONLY) - 1
-    real = ours_nd.join(oracle_nd, on="original_event_id", suffix="_o", how="inner")
-    assert real.height >= 0.98 * oracle_nd.height
+    # the oracle itself splits the interception-pass into two rows sharing one id, so those are not extra ours-only rows
+    shared = oracle_id.height - oracle_id["original_event_id"].n_unique()
+    assert ours.height == oracle.height + len(_PARITY_OURS_ONLY) - shared
+    real = ours_id.join(oracle_id, on="original_event_id", suffix="_o", how="inner")
+    assert real.height >= 0.98 * oracle_id.height
     agree = (
         (pl.col("type_name") == pl.col("type_name_o"))
         & (pl.col("result_name") == pl.col("result_name_o"))
@@ -367,6 +381,17 @@ def test_parity_with_the_socceraction_oracle() -> None:
     assert real.filter(agree & coords).height >= 0.99 * real.height, unexpected[:20]
     assert not unexpected, unexpected[:20]
     assert (real["time_seconds"] - real["time_seconds_o"]).abs().max() < 1e-3
+
+    # synthetic dribbles (no event id): pair each with the id of the row before it and compare in place
+    def synthetic(df: pl.DataFrame) -> pl.DataFrame:
+        prev = df.sort("action_id").with_columns(pl.col("original_event_id").shift(1).alias("prev_id"))
+        return prev.filter(pl.col("original_event_id").is_null()).unique("prev_id", keep="first")
+
+    pairs = synthetic(ours).join(synthetic(oracle), on="prev_id", suffix="_o", how="inner")
+    assert synthetic(ours).height == synthetic(oracle).height == pairs.height
+    for c in ("start_x", "start_y", "end_x", "end_y", "time_seconds"):
+        assert (pairs[c] - pairs[c + "_o"]).abs().max() < 1e-6, c
+    assert pairs["player_id"].to_list() == pairs["player_id_o"].to_list()
 
 
 # original_event_ids where kloppy's StatsBomb deserializer and statsbombpy legitimately differ. Grows only with a ledger entry.
@@ -390,24 +415,22 @@ _PARITY_OURS_ONLY: dict[str, str] = {
 _FULL_URL = "https://raw.githubusercontent.com/statsbomb/open-data/master/data"
 
 
-@pytest.fixture(scope="session", autouse=True)
-def _cache_full_match() -> None:
-    """Download the full 8658 match once (two requests) when live tests are on; gitignored."""
-    cache = FIXTURES / "socceraction" / "_8658_full"
-    if os.environ.get("SDV_PY_LIVE_TESTS") != "1" or (cache / "events.json").exists():
-        return
-    import requests
-
-    cache.mkdir(parents=True, exist_ok=True)
-    for kind, name in (("events", "events.json"), ("lineups", "lineups.json")):
-        r = requests.get(f"{_FULL_URL}/{kind}/8658.json", timeout=60)
-        r.raise_for_status()
-        (cache / name).write_bytes(r.content)
-
-
 def _dataset_full() -> Any:
-    """The full 8658 match through sdv-py's open-data loader (live) or a cached download (offline)."""
+    """The full 8658 match from a gitignored cache, downloaded once (two requests) under SDV_PY_LIVE_TESTS=1."""
     cache = FIXTURES / "socceraction" / "_8658_full"
-    if not (cache / "events.json").exists():
-        pytest.skip("full-match events not cached; run with SDV_PY_LIVE_TESTS=1 once to populate (gitignored)")
-    return _with_game_id(statsbomb.load(event_data=str(cache / "events.json"), lineup_data=str(cache / "lineups.json")))
+    ev, lu = cache / "events.json", cache / "lineups.json"
+    if not (ev.exists() and lu.exists()):
+        if os.environ.get("SDV_PY_LIVE_TESTS") != "1":
+            pytest.skip("full-match events not cached; run with SDV_PY_LIVE_TESTS=1 once to populate (gitignored)")
+        from sportsdataverse.dl_utils import download
+
+        cache.mkdir(parents=True, exist_ok=True)
+        try:
+            for kind, path in (("lineups", lu), ("events", ev)):  # events.json is the completion sentinel
+                r = download(f"{_FULL_URL}/{kind}/8658.json", timeout=60)
+                r.raise_for_status()
+                path.write_bytes(r.content)
+        except Exception as exc:  # noqa: BLE001 - any fetch failure skips rather than erroring the module
+            ev.unlink(missing_ok=True)
+            pytest.skip(f"could not download the full 8658 match: {exc}")
+    return _with_game_id(statsbomb.load(event_data=str(ev), lineup_data=str(lu)))
