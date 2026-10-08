@@ -955,6 +955,9 @@ Rules that keep code working on both 1.x and 2.0:
   `read_parquet_schema`). In 2.0 it requests the footer with a suffix range, and the release CDN answers
   HTTP 501. Read with `use_pyarrow=True`, as `_fetch_release_parquet` does. For a footer-only schema, pass
   an fsspec file: `pl.read_parquet_schema(fsspec.open(url, "rb").open())`.
+- polars 2.0 loads an Arrow extension type it does not know as an `Extension` column, which `.str`, `==`
+  and `cast` all reject. R writes `glue` and other classed vectors as `arrow.r.vctrs`; `sportsdataverse/__init__.py`
+  registers that one as storage. Register any other foreign extension the same way, never per call site.
 
 Use the modern API surface:
 

@@ -43,6 +43,20 @@ _apply_thread_env()
 
 import logging as _logging
 
+import polars as _pl
+
+# polars 2.0 loads an Arrow extension type it does not know as an Extension
+# column, which no str op, comparison or cast accepts. R's arrow writes classed
+# vectors (glue strings, such as the NHL and PWHL schedules' game_json_url) as
+# arrow.r.vctrs; read them as their storage type, as polars 1.x does.
+if hasattr(_pl, "register_extension_type"):  # polars >= 1.36; older has no Extension dtype
+    try:
+        _pl.register_extension_type("arrow.r.vctrs", as_storage=True)
+    # already registered in this process: Rust raises ComputeError (1.36.1-2.0); polars'
+    # own ValueError check is dead behind a typo today, but a fix would make it live
+    except (ValueError, _pl.exceptions.ComputeError):
+        pass
+
 # Library logging convention (PEP 282): attach a NullHandler at the package
 # root so merely importing sportsdataverse never emits log output unless the
 # host application configures logging. Modules obtain their logger via

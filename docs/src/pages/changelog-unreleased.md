@@ -8,6 +8,16 @@ Merged to `main` since 0.1.4 and not yet released. Released versions are on the 
 
 ## Unreleased
 
+### Fixed — R-written string columns read as String under polars 2.0
+
+R's arrow writes a classed vector, such as a `glue` string, with the `arrow.r.vctrs` extension type.
+polars 1.x reads such a column as its storage type. polars 2.0 reads it as an `Extension` column instead,
+and no `.str` operation, comparison, cast, concat or join accepts that. `use_pyarrow=True` does not
+avoid it. The published `nhl_schedules` and `pwhl_schedules` assets carry one such column,
+`game_json_url`, so under 2.0 `load_pwhl_schedule()` returned a column that could not be filtered.
+Importing sportsdataverse now registers `arrow.r.vctrs` to load as its storage type, on both polars
+versions, for the loaders and for any other parquet read in the same process.
+
 ### Fixed — NHL EDGE top-10 boards, ESPN transactions, NFL fantasy-ranking dtypes
 
 - The twelve `nhl_edge_*_top_10` functions always returned an empty frame. The EDGE boards answer
