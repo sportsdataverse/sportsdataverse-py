@@ -30,7 +30,7 @@ def espn_wnba_pbp(game_id: int, raw=False, **kwargs) -> Dict:
         Pull a single game's play-by-play feed::
 
             from sportsdataverse.wnba import espn_wnba_pbp
-            game = espn_wnba_pbp(game_id=401620238)  # 2024 WNBA Finals Game 1
+            game = espn_wnba_pbp(game_id=401620238)  # MIN at CON, 2024-05-23
             list(game.keys())  # ['gameId', 'plays', 'winprobability', ...]
 
         Inspect the parsed plays and a header summary::

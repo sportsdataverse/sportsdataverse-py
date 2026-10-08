@@ -37,7 +37,7 @@ def espn_wnba_game_rosters(game_id: int, raw=False, return_as_pandas=False, **kw
         Pull both teams' rosters for a single game::
 
             from sportsdataverse.wnba import espn_wnba_game_rosters
-            rosters = espn_wnba_game_rosters(game_id=401620238)  # 2024 WNBA Finals Game 1
+            rosters = espn_wnba_game_rosters(game_id=401620238)  # MIN at CON, 2024-05-23
             print(rosters.shape)
             rosters.select(["athlete_display_name", "jersey", "team_abbreviation", "starter"]).head(10)
 
