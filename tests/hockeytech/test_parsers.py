@@ -47,22 +47,81 @@ def test_resolve_season_id_passthrough_explicit_id():
     assert _leagues.resolve_season_id("pwhl", season_id=5) == 5
 
 
-def test_parse_schedule_one_row_per_game_with_core_cols():
+_SCHEDULE_COLS = [
+    "game_id",
+    "game_date",
+    "game_status",
+    "home_team",
+    "home_team_id",
+    "home_score",
+    "away_team",
+    "away_team_id",
+    "away_score",
+    "venue",
+    "season_id",
+    "game_type",
+]
+
+
+def test_parse_schedule_season_scoped_view_one_row_per_game():
+    from sportsdataverse.hockeytech._parsers import parse_schedule
+
+    df = parse_schedule(_load("pwhl_schedule_8"))
+    assert df.columns == _SCHEDULE_COLS
+    assert df.height == 120 and df["game_id"].n_unique() == 120
+    assert set(df["season_id"]) == {"8"}
+    assert set(df["game_status"]) == {"Final", "Final OT", "Final SO"}
+    first = df.row(0, named=True)
+    assert first["home_team"] and first["home_team_id"].isdigit() and first["away_score"].isdigit()
+
+
+def test_parse_schedule_scorebar_maps_to_the_same_columns():
     from sportsdataverse.hockeytech._parsers import parse_schedule
 
     df = parse_schedule(_load("pwhl_schedule_2025"))
-    assert isinstance(df, pl.DataFrame) and df.height > 0
-    for col in (
-        "game_id",
-        "game_date",
-        "home_team",
-        "home_team_id",
-        "away_team",
-        "away_team_id",
-        "home_score",
-        "away_score",
-    ):
-        assert col in df.columns
+    assert df.columns == _SCHEDULE_COLS
+    assert df.height == 200
+
+
+def test_parse_schedule_empty_keeps_the_documented_columns():
+    """A None/empty payload, or a filter that keeps nothing, is zero rows with the 12 columns."""
+    from sportsdataverse.hockeytech._parsers import parse_schedule
+
+    for payload, kw in [
+        (None, {}),
+        ({}, {}),
+        ({"SiteKit": {"Schedule": []}}, {}),
+        (_load("pwhl_schedule_8"), {"season_id": 9}),
+    ]:
+        df = parse_schedule(payload, **kw)
+        assert df.height == 0 and df.columns == _SCHEDULE_COLS
+        assert set(df.dtypes) == {pl.String}
+        pdf = parse_schedule(payload, return_as_pandas=True, **kw)
+        assert pdf.shape == (0, len(_SCHEDULE_COLS)) and list(pdf.columns) == _SCHEDULE_COLS
+
+
+def test_parse_schedule_unplayed_games_carry_their_start_time():
+    """Real AHL 2026-27 rows: unplayed games (status 1) have their start time in ``game_status``."""
+    from sportsdataverse.hockeytech._parsers import parse_schedule
+
+    df = parse_schedule(_load("ahl_schedule_94"), season_id=94)
+    assert df.height == 5 and df.columns == _SCHEDULE_COLS
+    unplayed = df.filter(pl.col("game_status").str.contains(r"^\d{1,2}:\d{2} [ap]m [A-Z]{3}$"))
+    assert unplayed["game_id"].to_list() == ["1029104", "1029105", "1029107"]
+    assert unplayed["game_status"].to_list() == ["7:00 pm EDT", "7:00 pm EDT", "7:05 pm EDT"]
+    assert df.filter(~pl.col("game_id").is_in(unplayed["game_id"]))["game_status"].to_list() == ["Final", "Final"]
+
+
+def test_parse_schedule_season_id_drops_other_seasons():
+    """Scorebar ignores ``season_id``: the reply asked for season 5 holds 6 seasons."""
+    from sportsdataverse.hockeytech._parsers import parse_schedule
+
+    raw = _load("pwhl_schedule_2025")
+    assert len({g["SeasonID"] for g in raw["SiteKit"]["Scorebar"]}) == 6
+    df = parse_schedule(raw, season_id=5)
+    assert df.height == 90
+    assert set(df["season_id"]) == {"5"}
+    assert parse_schedule(raw, return_as_pandas=True, season_id=5).shape == (90, len(_SCHEDULE_COLS))
 
 
 def test_parse_standings_has_team_rank_and_points():

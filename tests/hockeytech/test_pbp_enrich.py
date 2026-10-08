@@ -257,122 +257,80 @@ def test_add_coord_transforms_neutral_synthetic():
     assert out["y_coord_neutral"][0] == pytest.approx(0.0)
 
 
-def test_add_coord_transforms_fixed_synthetic():
-    """Deterministic check for x_coord_fixed and y_coord_fixed (ported from R).
+def _one_event(ox: float, oy: float, team_id, home_team_id) -> pl.DataFrame:
+    return pl.DataFrame(
+        {"x_coord": [ox], "y_coord": [oy], "team_id": [team_id], "home_team_id": [home_team_id]},
+        schema={"x_coord": pl.Float64, "y_coord": pl.Float64, "team_id": pl.Utf8, "home_team_id": pl.Utf8},
+    )
 
-    R formula (using original raw coords ox, oy):
-      x_transformed = (ox / 3) - 100
-      y_transformed = 42.5 - ((oy * 85 / 300) - 42.5) - 42.5
 
-      x_coord_fixed = x_transformed / 3   [uses .data$x_coord = transformed]
-      y_coord_fixed = 42.5 - ((y_transformed * 85 / 300) - 42.5)   [uses transformed y]
+def test_add_coord_transforms_centre_ice_is_origin_in_every_frame():
+    """Canvas (300, 150) is centre ice: (0, 0) in the fixed, right and vertical frames."""
+    from sportsdataverse.hockeytech._analytics import add_coord_transforms
 
-    With ox=300, oy=150:
-      x_t = 300/3 - 100 = 0.0
-      y_t = 42.5 - (150*85/300 - 42.5) - 42.5 = 42.5 - (42.5 - 42.5) - 42.5 = 0.0
-      x_coord_fixed = 0.0 / 3 = 0.0
-      y_coord_fixed = 42.5 - ((0.0 * 85/300) - 42.5) = 42.5 + 42.5 = 85.0
+    for team in ("1", "3"):  # home, then visitor
+        out = add_coord_transforms(_one_event(300.0, 150.0, team, "1")).row(0, named=True)
+        for col in ("x_coord_fixed", "y_coord_fixed", "x_coord_right", "y_coord_right"):
+            assert out[col] == pytest.approx(0.0), (team, col)
+        assert out["x_coord_vertical"] == pytest.approx(0.0) and out["y_coord_vertical"] == pytest.approx(0.0)
+
+
+def test_add_coord_transforms_rotations_home_and_visitor():
+    """Canvas (60, 30) is x = -80, y = 34 ft: near the net the home team attacks (sdv-internal-refs CANVAS.md).
+
+    fixed = (-x, -y) for every event; right = home (-x, -y), visitor (x, y);
+    vertical = (-y_right, x_right).
     """
     from sportsdataverse.hockeytech._analytics import add_coord_transforms
 
-    df = pl.DataFrame(
-        {
-            "x_coord": [300.0],
-            "y_coord": [150.0],
-            "team_id": [None],
-            "home_team_id": [None],
-        },
-        schema={
-            "x_coord": pl.Float64,
-            "y_coord": pl.Float64,
-            "team_id": pl.Utf8,
-            "home_team_id": pl.Utf8,
-        },
-    )
-    out = add_coord_transforms(df)
-    # x_t = (300/3) - 100 = 0.0
-    # y_t = 42.5 - (150*85/300 - 42.5) - 42.5 = 42.5 - 0 - 42.5 = 0.0
-    # x_coord_fixed = x_t / 3 = 0.0
-    # y_coord_fixed = 42.5 - (y_t * 85/300 - 42.5) = 42.5 - (0 - 42.5) = 85.0
-    assert out["x_coord_fixed"][0] == pytest.approx(0.0)
-    assert out["y_coord_fixed"][0] == pytest.approx(85.0)
+    home = add_coord_transforms(_one_event(60.0, 30.0, "1", "1")).row(0, named=True)
+    away = add_coord_transforms(_one_event(60.0, 30.0, "3", "1")).row(0, named=True)
+    for out in (home, away):
+        assert (out["x_coord_fixed"], out["y_coord_fixed"]) == (pytest.approx(80.0), pytest.approx(-34.0))
+    assert (home["x_coord_right"], home["y_coord_right"]) == (pytest.approx(80.0), pytest.approx(-34.0))
+    assert (away["x_coord_right"], away["y_coord_right"]) == (pytest.approx(-80.0), pytest.approx(34.0))
+    assert (home["x_coord_vertical"], home["y_coord_vertical"]) == (pytest.approx(34.0), pytest.approx(80.0))
 
 
-def test_add_coord_transforms_right_away_team_passthrough():
-    """For away team, x_coord_right and y_coord_right equal the transformed x/y coords."""
+def test_add_coord_transforms_unknown_side_is_null():
+    """No team (faceoffs) or no home team id: the right and vertical frames are null, fixed is not."""
     from sportsdataverse.hockeytech._analytics import add_coord_transforms
 
-    # Use ox=300, oy=150 so x_t=0, y_t=0
-    # Away team: x_coord_right = x_t = 0, y_coord_right = y_t = 0
-    df = pl.DataFrame(
-        {
-            "x_coord": [300.0],
-            "y_coord": [150.0],
-            "team_id": ["3"],
-            "home_team_id": ["1"],
-        },
-        schema={
-            "x_coord": pl.Float64,
-            "y_coord": pl.Float64,
-            "team_id": pl.Utf8,
-            "home_team_id": pl.Utf8,
-        },
+    out = add_coord_transforms(_one_event(60.0, 30.0, None, "1")).row(0, named=True)
+    assert out["x_coord_fixed"] == pytest.approx(80.0)
+    assert all(out[c] is None for c in ("x_coord_right", "y_coord_right", "x_coord_vertical", "y_coord_vertical"))
+    no_home = add_coord_transforms(_one_event(60.0, 30.0, "1", "1").drop("home_team_id")).row(0, named=True)
+    assert no_home["x_coord_right"] is None and no_home["x_coord_fixed"] == pytest.approx(80.0)
+    # enrich_pbp's home_team_id is "" when the game summary is unavailable
+    empty = add_coord_transforms(_one_event(60.0, 30.0, "1", "")).row(0, named=True)
+    assert empty["x_coord_right"] is None and empty["y_coord_vertical"] is None
+
+
+def test_add_coord_transforms_real_game_keeps_every_shot_on_the_rink():
+    """PWHL game 42: every shot and goal inside the rink in each frame; both teams attack +x when right."""
+    from sportsdataverse.hockeytech import _parsers as P
+    from sportsdataverse.hockeytech._analytics import enrich_pbp
+
+    df = enrich_pbp(
+        P.parse_pbp(load_fixture("hockeytech", "pwhl_pbp_42"), game_id=42),
+        "pwhl",
+        42,
+        meta_payload=load_fixture("hockeytech", "pwhl_game_summary_42"),
+        shifts_payload=load_fixture("hockeytech", "pwhl_gameshifts_42"),
     )
-    out = add_coord_transforms(df)
-    # x_t = 0, y_t = 0; away team: right = passthrough
-    assert out["x_coord_right"][0] == pytest.approx(0.0)
-    assert out["y_coord_right"][0] == pytest.approx(0.0)
-
-
-def test_add_coord_transforms_right_home_team_flipped():
-    """For home team, x_coord_right = 100 + (100 - x_t), y_coord_right = 42.5 - (y_t - 42.5)."""
-    from sportsdataverse.hockeytech._analytics import add_coord_transforms
-
-    # ox=300, oy=150 -> x_t=0, y_t=0
-    # Home team: x_right = 100 + (100 - 0) = 200, y_right = 42.5 - (0 - 42.5) = 85
-    df = pl.DataFrame(
-        {
-            "x_coord": [300.0],
-            "y_coord": [150.0],
-            "team_id": ["1"],
-            "home_team_id": ["1"],
-        },
-        schema={
-            "x_coord": pl.Float64,
-            "y_coord": pl.Float64,
-            "team_id": pl.Utf8,
-            "home_team_id": pl.Utf8,
-        },
-    )
-    out = add_coord_transforms(df)
-    assert out["x_coord_right"][0] == pytest.approx(200.0)
-    assert out["y_coord_right"][0] == pytest.approx(85.0)
-
-
-def test_add_coord_transforms_vertical_synthetic():
-    """x_coord_vertical = 42.5 - (y_coord_right - 42.5), y_coord_vertical = x_coord_right."""
-    from sportsdataverse.hockeytech._analytics import add_coord_transforms
-
-    # Home team, ox=300, oy=150 -> x_right=200, y_right=85
-    # x_vertical = 42.5 - (85 - 42.5) = 42.5 - 42.5 = 0.0
-    # y_vertical = 200
-    df = pl.DataFrame(
-        {
-            "x_coord": [300.0],
-            "y_coord": [150.0],
-            "team_id": ["1"],
-            "home_team_id": ["1"],
-        },
-        schema={
-            "x_coord": pl.Float64,
-            "y_coord": pl.Float64,
-            "team_id": pl.Utf8,
-            "home_team_id": pl.Utf8,
-        },
-    )
-    out = add_coord_transforms(df)
-    assert out["x_coord_vertical"][0] == pytest.approx(0.0)
-    assert out["y_coord_vertical"][0] == pytest.approx(200.0)
+    shots = df.filter(pl.col("event").is_in(["shot", "goal"]) & pl.col("x_coord_original").is_not_null())
+    shots = shots.with_columns(home=pl.col("team_id").cast(pl.Utf8) == pl.col("home_team_id").cast(pl.Utf8))
+    assert shots["home"].sum() > 0 and (~shots["home"]).sum() > 0
+    for col, lim in [("x_coord_fixed", 100), ("x_coord_right", 100), ("y_coord_vertical", 100),
+                     ("y_coord_fixed", 42.5), ("y_coord_right", 42.5), ("x_coord_vertical", 42.5)]:  # fmt: skip
+        assert shots[col].abs().max() <= lim, col
+    med = shots.group_by("home").agg(pl.col("x_coord_right").median(), fixed=pl.col("x_coord_fixed").median())
+    by = {r["home"]: r for r in med.iter_rows(named=True)}
+    assert by[True]["x_coord_right"] > 0 and by[False]["x_coord_right"] > 0
+    assert by[True]["fixed"] > 0 > by[False]["fixed"]
+    # Faceoffs carry no team: their side is unknown, so the right frame is null but fixed is not.
+    fo = df.filter((pl.col("event") == "faceoff") & pl.col("x_coord_original").is_not_null())
+    assert fo.height > 0 and fo["x_coord_right"].is_null().all() and fo["x_coord_fixed"].is_not_null().all()
 
 
 def test_add_coord_transforms_empty_frame():
