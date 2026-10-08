@@ -26,6 +26,8 @@ from typing import TYPE_CHECKING, Literal, Union, overload
 import numpy as np
 import polars as pl
 
+from sportsdataverse._temporal import as_date
+
 from sportsdataverse._common.ratings import drop_unusable_possession_rows, iterative_opponent_adjust
 from sportsdataverse.nba.nba_loaders import load_nba_schedule, load_nba_team_boxscore
 from sportsdataverse.nba.nba_prediction_constants import as_of_ratings_split, get_constants
@@ -123,7 +125,7 @@ def raw_game_efficiency(schedule: pl.DataFrame, team_box: pl.DataFrame) -> pl.Da
     sched = schedule.select(
         pl.col("game_id").cast(pl.Utf8),
         pl.col("season").cast(pl.Int64),
-        pl.col("date").cast(pl.Date),
+        as_date(pl.col("date")),
         pl.col("home_team_id").cast(pl.Utf8),
         pl.col("away_team_id").cast(pl.Utf8),
         pl.col("neutral_site").cast(pl.Boolean),

@@ -419,6 +419,7 @@ files = [
     "sportsdataverse/_fox_layout.py",
     "sportsdataverse/mbb/torvik_runtime.py",
     "sportsdataverse/_html_tables.py",
+    "sportsdataverse/_temporal.py",
     "sportsdataverse/nba/bref.py",
     "sportsdataverse/nba/nba_salary_draft.py",
     "sportsdataverse/nba/realgm.py",

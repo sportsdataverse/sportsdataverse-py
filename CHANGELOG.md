@@ -384,6 +384,27 @@ license; the bundled grid inherits that restriction.
 A bare `import kloppy` does not attach `kloppy.statsbomb`, so the loaders raised `AttributeError`
 until something else had imported the provider module. They now import it explicitly.
 
+### Fixed — code that polars 2.0 rejects now runs on both 1.x and 2.0
+
+Polars 2.0.0 (2026-10-06) removed several 1.x behaviors this codebase relied on. The suite run
+under 2.0 failed 478 tests. With these changes it passes on both 1.42 and 2.0, and output on 1.x
+is unchanged. The `polars>=1.0,<2.0` pin is not lifted here.
+
+- The seven `*_pbp` processors split the game clock with `list.to_struct(upper_bound=2)`, an
+  argument 2.0 removed. They now pass `fields=["clock.minutes", "clock.seconds"]`, which gives
+  identical output on 1.x. This one call accounted for 805 of the 2.0 errors.
+- `start.down`, `start.distance`, `end.down` and `end.distance` are cast to `Int64` where
+  `CFBPlayProcess` / `NFLPlayProcess` build the plays frame. pandas turns an int column with any
+  missing cell into float64. That happens with Fox-adapted and sparse games, and 2.0's
+  `is_in([1, 2, 3, 4])` raises on Float64 instead of coercing. `load_cfb_pbp` already declares
+  these columns `Int64`.
+- 2.0 cannot cast a String column to `pl.Date`. Eleven `.cast(pl.Date)` sites read columns that
+  are String in some loaders (`load_nfl_schedule().gameday` is String) and Date in others. They
+  now go through the private `_temporal.as_date()`, which parses a String and casts a temporal.
+- `explode()` on an empty list gives one null row in 1.x and no rows in 2.0. Five calls
+  (`usage_box`, the CBS subplays parser, the NCAA MBB RAPM stints) pass `empty_as_null=True` to
+  keep the 1.x rows.
+
 ### Added — SPADL actions from any kloppy event dataset: soccer_spadl() and soccer_open_dataset()
 
 `soccer_spadl(dataset)` converts any kloppy event dataset (StatsBomb, Opta, Wyscout, Sportec, ...)

@@ -37,6 +37,8 @@ from __future__ import annotations
 
 import polars as pl
 
+from sportsdataverse._temporal import as_date
+
 __all__ = [
     "COUNTED_SEASON_TYPES",
     "EVENT_SCHEMA",
@@ -182,7 +184,7 @@ def football_events(pbp: pl.DataFrame, game_dates: pl.DataFrame) -> pl.DataFrame
     _require_unique_game_ids(game_dates)
     if pbp.height == 0:
         return pl.DataFrame(schema=EVENT_SCHEMA)
-    dates = game_dates.select(pl.col("game_id").cast(pl.Int64), pl.col("game_date").cast(pl.Date))
+    dates = game_dates.select(pl.col("game_id").cast(pl.Int64), as_date(pl.col("game_date")))
     keep = pl.col("EPA_scrimmage").is_not_null() & pl.col("down").is_between(1, 4) & pl.col("EPA").is_not_null()
     if "seasonType" in pbp.columns:
         keep = keep & pl.col("seasonType").cast(pl.Int64, strict=False).is_in(COUNTED_SEASON_TYPES)
@@ -302,7 +304,7 @@ def shot_events(shots: pl.DataFrame, game_dates: pl.DataFrame) -> pl.DataFrame:
     _require_unique_game_ids(game_dates)
     if shots.height == 0:
         return pl.DataFrame(schema=EVENT_SCHEMA)
-    dates = game_dates.select(pl.col("game_id").cast(pl.Utf8), pl.col("game_date").cast(pl.Date))
+    dates = game_dates.select(pl.col("game_id").cast(pl.Utf8), as_date(pl.col("game_date")))
     # the row index is the provider's action order: take it BEFORE the join, which may reorder
     s = (
         shots.filter(pl.col("season_type_id").cast(pl.Utf8).is_in(_STATS_SEASON_TYPES))

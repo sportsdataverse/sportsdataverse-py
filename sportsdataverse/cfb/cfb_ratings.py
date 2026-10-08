@@ -34,6 +34,8 @@ from typing import Literal, overload
 import pandas as pd
 import polars as pl
 
+from sportsdataverse._temporal import as_date
+
 from sportsdataverse.cfb.cfb_adjusted_epa import _REQUIRED_COLUMNS, _adjust_games, _fit_opponent_ridge, _prepare
 from sportsdataverse.cfb.cfb_loaders import load_cfb_pbp, load_cfb_schedule
 from sportsdataverse.cfb.cfb_prediction_constants import RatingsConfig, as_of_ratings_split
@@ -648,7 +650,7 @@ def cfb_ratings(
         )
 
     if "date" in schedule.columns:
-        date_expr = pl.col("date").cast(pl.Date)
+        date_expr = as_date(pl.col("date"))
     else:
         # Real `load_cfb_schedule` ships `start_date` (an ISO datetime
         # string), not a bare `date` column -- take the calendar-day prefix.

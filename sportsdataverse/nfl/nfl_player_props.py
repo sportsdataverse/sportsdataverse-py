@@ -16,6 +16,8 @@ from typing import Literal, overload
 
 import pandas as pd
 import polars as pl
+
+from sportsdataverse._temporal import as_date
 from scipy.stats import norm
 
 from sportsdataverse.nfl.nfl_loaders import load_nfl_player_stats, load_nfl_schedule
@@ -334,7 +336,7 @@ def nfl_player_props(
 
     schedule = schedule.with_columns(
         pl.col("game_id").cast(pl.Utf8),
-        pl.col("gameday").cast(pl.Date),
+        as_date(pl.col("gameday")),
         (pl.col("location") == "Neutral").alias("neutral_site"),
     )
     frames: list[pl.DataFrame] = []

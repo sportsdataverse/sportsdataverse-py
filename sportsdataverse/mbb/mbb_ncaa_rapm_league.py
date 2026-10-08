@@ -282,7 +282,9 @@ def team_aggregate(stints: pl.DataFrame, players: pl.DataFrame) -> pl.DataFrame:
         # A wrong-dtype key would left-join to all-null, fill_null(0.0) every
         # coefficient, and emit all-zero team ratings with no error.
         raise TypeError(f"players.player_id must be Utf8, got {players.schema['player_id']}")
-    on_floor = set(stints["off_ids"].explode().to_list()) | set(stints["def_ids"].explode().to_list())
+    on_floor = set(stints["off_ids"].explode(empty_as_null=True).to_list()) | set(
+        stints["def_ids"].explode(empty_as_null=True).to_list()
+    )
     if players.height and not (set(players["player_id"].to_list()) & on_floor):
         raise ValueError(
             "zero player_id overlap between stints and players -- wrong frames "
