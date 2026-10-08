@@ -139,41 +139,33 @@ def add_coord_transforms(pbp: pl.DataFrame) -> pl.DataFrame:
 
     Raw coordinates (``x_coord``, ``y_coord``) come from the HockeyTech feed
     on a 600×300 canvas with a top-left origin, so centre ice is (300, 150).
-    Every probed league uses this one canvas.  This function adds ten derived
-    columns that map those raw values into various normalized frames used by
-    fastRhockey.
-
-    The transform sequence (faithful to the R mutate call, where dplyr's
-    ``.data$col`` within a single ``mutate()`` sees values produced by
-    earlier assignments in the same call):
+    Every probed league uses this one canvas, and the feed puts the home team's
+    attack toward x = 0 and the visitor's toward x = 600 in every period
+    (sdv-internal-refs ``hockeytech/CANVAS.md``). The derived frames are
+    rotations of the centre-origin feet frame ``(x_t, y_t)``, so every event
+    stays on the rink:
 
     .. code-block:: text
 
-        ox, oy         = raw x_coord, y_coord
-
+        ox, oy           = raw x_coord, y_coord
         x_coord_original = ox
         y_coord_original = oy
-
         x_coord_neutral  = ox - 300
         y_coord_neutral  = oy - 150
 
-        x_t  = (ox / 3) - 100                          [R: x_coord = ...]
-        y_t  = 42.5 - ((oy * 85 / 300) - 42.5) - 42.5  [R: y_coord = ...]
-             = 42.5 - (oy * 85 / 300)                  [simplified]
+        x_t = (ox / 3) - 100           -100..100 ft
+        y_t = 42.5 - (oy * 85 / 300)   -42.5..42.5 ft (positive = top of canvas)
 
-        x_coord_fixed = x_t / 3
-        y_coord_fixed = 42.5 - ((y_t * 85 / 300) - 42.5)
-
-        x_coord_right = if team_id == home_team_id: 100 + (100 - x_t) else x_t
-        y_coord_right = if team_id == home_team_id: 42.5 - (y_t - 42.5)  else y_t
-
-        x_coord_vertical = 42.5 - (y_coord_right - 42.5)
-        y_coord_vertical = x_coord_right
+        x_coord_fixed,    y_coord_fixed    = (-x_t, -y_t)    home team shoots right
+        x_coord_right,    y_coord_right    = home (-x_t, -y_t), visitor (x_t, y_t):
+                                             every team shoots right
+        x_coord_vertical, y_coord_vertical = (-y_coord_right, x_coord_right):
+                                             every team shoots up
 
     Rows with null ``x_coord`` or ``y_coord`` produce null for all ten columns.
-    Rows with null ``team_id`` or ``home_team_id`` produce null for
-    ``x_coord_right``, ``y_coord_right``, ``x_coord_vertical``,
-    ``y_coord_vertical`` (the team-dependent transforms).
+    Rows whose side is unknown (no ``team_id`` / ``home_team_id`` column, or a
+    null or empty id in either, as on faceoffs or a game without its summary)
+    produce null for the right and vertical columns.
 
     Parameters
     ----------
@@ -217,41 +209,32 @@ def add_coord_transforms(pbp: pl.DataFrame) -> pl.DataFrame:
     x_t = (ox / 3.0) - 100.0
     y_t = 42.5 - (oy * 85.0 / 300.0)
 
-    # x_coord_fixed = .data$x_coord / 3  (uses x_t, the transformed value)
-    x_coord_fixed = x_t / 3.0
-
-    # y_coord_fixed = 42.5 - (((.data$y_coord * 85) / 300) - 42.5)
-    #               (uses y_t, the transformed value)
-    y_coord_fixed = 42.5 - ((y_t * 85.0 / 300.0) - 42.5)
-
-    # Team-dependent right/vertical transforms.
-    # ``home_team_id`` is only present after a meta-join (task A2.5b).
-    # When absent, treat all rows as away team (passthrough).
-    if "home_team_id" in pbp.columns:
-        is_home = pl.col("team_id").cast(pl.Utf8) == pl.col("home_team_id").cast(pl.Utf8)
+    # The home team attacks x = 0, so a 180-degree turn puts it on the right. (The old
+    # flips applied a 0-200 x 0-85 mirror to these centre-origin feet: home events landed
+    # 100-300 ft out.) ``home_team_id`` arrives with the game-summary meta-join; without it,
+    # or for an event with no team, the side is unknown and the right frame is null.
+    # enrich_pbp writes home_team_id as "" when the game summary is unavailable (MJHL's gc feed
+    # is access-denied), so an empty id is as unknown as a null one.
+    if {"team_id", "home_team_id"} <= set(pbp.columns):
+        tid, hid = pl.col("team_id").cast(pl.Utf8), pl.col("home_team_id").cast(pl.Utf8)
+        is_home = pl.when((tid.fill_null("") != "") & (hid.fill_null("") != "")).then(tid == hid)
     else:
-        is_home = pl.lit(False)
+        is_home = pl.lit(None, dtype=pl.Boolean)
+    side = pl.when(is_home == True).then(-1.0).when(is_home == False).then(1.0)  # null when unknown
 
-    x_coord_right = pl.when(is_home).then(100.0 + (100.0 - x_t)).otherwise(x_t)
-    y_coord_right = pl.when(is_home).then(42.5 - (y_t - 42.5)).otherwise(y_t)
-
-    # Vertical projection uses the right coords (computed above as intermediates)
-    # R: x_coord_vertical = 42.5 - (.data$y_coord_right - 42.5)
-    #    y_coord_vertical = .data$x_coord_right
-    # We compute these as a second with_columns pass to reference the right cols.
     out = pbp.with_columns(
         x_coord_original=ox,
         y_coord_original=oy,
         x_coord_neutral=(ox - 300.0),
         y_coord_neutral=(oy - 150.0),
-        x_coord_fixed=x_coord_fixed,
-        y_coord_fixed=y_coord_fixed,
-        x_coord_right=x_coord_right,
-        y_coord_right=y_coord_right,
+        x_coord_fixed=-x_t,
+        y_coord_fixed=-y_t,
+        x_coord_right=side * x_t,
+        y_coord_right=side * y_t,
     )
 
     return out.with_columns(
-        x_coord_vertical=(42.5 - (pl.col("y_coord_right") - 42.5)),
+        x_coord_vertical=-pl.col("y_coord_right"),
         y_coord_vertical=pl.col("x_coord_right"),
     )
 
