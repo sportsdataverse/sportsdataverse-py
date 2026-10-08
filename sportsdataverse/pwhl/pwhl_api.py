@@ -93,8 +93,8 @@ def pwhl_schedule(
     """PWHL schedule — one row per game (matches fastRhockey ``pwhl_schedule``).
 
     Args:
-        season: Season as an END year (2026 = the 2025-26 season). Defaults to the newest regular
-            season when neither ``season`` nor ``season_id`` is given.
+        season: Season as an END year (2026 = the 2025-26 season). With neither ``season`` nor
+            ``season_id``, no season filter is sent and the feed's whole recent window comes back.
         season_id: The HockeyTech season id, when it is already known.
         return_as_pandas: Return a pandas DataFrame instead of polars.
 

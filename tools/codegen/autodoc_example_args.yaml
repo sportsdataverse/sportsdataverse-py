@@ -70,10 +70,6 @@ nfl:
   nfl_ngs_yac_oe: {seasons: 2023}
   load_nfl_pbp_participation: {seasons: 2023}
   load_nfl_pfr_advstats: {seasons: 2024}
-  load_nfl_pfr_weekly_def: {seasons: 2024}
-  load_nfl_pfr_weekly_pass: {seasons: 2024}
-  load_nfl_pfr_weekly_rec: {seasons: 2024}
-  load_nfl_pfr_weekly_rush: {seasons: 2024}
   load_nfl_rosters: {seasons: 2024}
   load_nfl_schedule: {seasons: 2024}
   load_nfl_snap_counts: {seasons: 2024}

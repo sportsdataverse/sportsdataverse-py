@@ -20,7 +20,7 @@ Merged to `main` since 0.1.4 and not yet released. Released versions are on the 
 - The KenPom `box`, `win_probability` and `referee` examples used ids KenPom does not recognise, and
   KenPom silently served its home page instead. `kenpom_referee` takes the numeric `r=` id.
 
-### Docs — every public function documents its return, and shows a returns table or says why not
+### Changed — every public function documents its return, and shows a returns table or says why not
 
 - `generate.py --check` fails when a public callable has no `Returns:` (or `Yields:`) section.
 - Generated wrappers and hand-written DataFrame functions show a returns table captured from real

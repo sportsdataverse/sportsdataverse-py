@@ -43,6 +43,13 @@ _SEASON_ARGS = (
     "    season_id: The HockeyTech season id, when it is already known.\n"
     "    return_as_pandas: Return a pandas DataFrame instead of polars.\n\n"
 )
+_SCHEDULE_ARGS = (
+    "Args:\n"
+    "    season: Season as an END year (2026 = the 2025-26 season). With neither ``season`` nor\n"
+    "        ``season_id``, no season filter is sent and the feed's whole recent window comes back.\n"
+    "    season_id: The HockeyTech season id, when it is already known.\n"
+    "    return_as_pandas: Return a pandas DataFrame instead of polars.\n\n"
+)
 _GAME_ARGS = (
     "Args:\n"
     "    game_id: The HockeyTech game id.\n"
@@ -136,7 +143,7 @@ def build_family(league: str) -> dict[str, Any]:
     _schedule.__name__ = f"{lg}_schedule"
     _schedule.__qualname__ = f"{lg}_schedule"
     _schedule.__doc__ = (
-        f"{cfg.name} schedule — one row per game.\n\n" + _SEASON_ARGS + "Returns:\n"
+        f"{cfg.name} schedule — one row per game.\n\n" + _SCHEDULE_ARGS + "Returns:\n"
         "    polars.DataFrame: One row per game: ``game_id``, ``game_date``, ``game_status``,\n"
         "        ``home_team`` / ``home_team_id`` / ``home_score``, ``away_team`` / ``away_team_id`` /\n"
         "        ``away_score``, ``venue``, ``season_id`` and ``game_type`` (all String). With no season\n"
