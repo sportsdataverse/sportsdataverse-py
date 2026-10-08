@@ -757,9 +757,14 @@ def get_go_wp(pbp_df: Union[pl.DataFrame, "pd.DataFrame"]) -> pd.DataFrame:
 
     # cap at TD (gains longer than possible become a TD), then collapse duplicates
     long["gain"] = np.where(long["gain"] > long["yardline_100"], long["yardline_100"], long["gain"]).astype(int)
-    agg = {"prob": "sum"}
-    agg.update({c: "first" for c in d.columns if c not in ("go_index", "prob")})
-    long = long.groupby(["go_index", "gain"], as_index=False).agg(agg)
+    # Sum the probability mass, then join the play's columns back: they are constant per go_index.
+    # A "first" agg over every column (hundreds, on an nflverse frame) built the result one column
+    # at a time and left it too fragmented for pandas.
+    long = (
+        long.groupby(["go_index", "gain"], as_index=False)["prob"]
+        .sum()
+        .merge(d.drop(columns=["prob"], errors="ignore"), on="go_index", how="left")
+    )
 
     long["yardline_100"] = long["yardline_100"].to_numpy() - long["gain"].to_numpy()
     long["turnover"] = (long["gain"].to_numpy() < long["ydstogo"].to_numpy()).astype(int)

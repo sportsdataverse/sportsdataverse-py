@@ -245,3 +245,14 @@ def test_oracle_parity_2022() -> None:
         k = np.isfinite(a) & np.isfinite(b)
         corr = np.corrcoef(a[k], b[k])[0, 1]
         assert corr > bar, f"{c} corr={corr:.4f} below {bar}"
+
+
+@pytest.mark.filterwarnings("error::pandas.errors.PerformanceWarning")
+def test_go_wp_on_a_full_nflverse_frame_is_not_fragmented():
+    """A "first" agg over every one of nflverse's ~370 columns fragmented the frame (3 warnings a call)."""
+    from pathlib import Path
+
+    pbp = pl.read_parquet(Path(__file__).parents[1] / "fixtures" / "nfl_ep_wp" / "overtime_games.parquet")
+    fourth = pbp.filter((pl.col("down") == 4) & pl.col("ydstogo").is_not_null() & pl.col("yardline_100").is_not_null())
+    out = get_go_wp(fourth)
+    assert len(out) == fourth.height and out["go_wp"].notna().all()
