@@ -159,7 +159,7 @@ import pytest
 
 @pytest.mark.parametrize("lg", ["ahl", "ohl", "whl", "qmjhl"])
 def test_junior_family_core_surface(lg):
-    mod = __import__(f"sportsdataverse.{lg}", fromlist=["*"])
+    mod = __import__(f"sportsdataverse.hockey.{lg}", fromlist=["*"])
     for stem in (
         "schedule",
         "pbp",

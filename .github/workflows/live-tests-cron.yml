@@ -65,7 +65,8 @@ jobs:
         # summary that lands in the tracking issue.
         run: |
           set -o pipefail
-          uv run --frozen pytest --maxfail=10 -rN 2>&1 | tee pytest-live.log
+          # -W default: upstream-data warnings report here; the PR jobs enforce pytest.ini's `error`.
+          uv run --frozen pytest --maxfail=10 -rN -W default 2>&1 | tee pytest-live.log
       - name: Run example notebooks (nbmake)
         # !cancelled(): run even when the live tests failed, so a drift week still gets the notebook signal.
         if: ${{ !cancelled() }}
@@ -83,7 +84,7 @@ jobs:
           ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
         run: |
           set -o pipefail
-          uv run --frozen pytest --nbmake examples/notebooks/ -q -rN 2>&1 | tee pytest-notebooks.log
+          uv run --frozen pytest --nbmake examples/notebooks/ -q -rN -W default 2>&1 | tee pytest-notebooks.log
       - name: Render notebook tutorials
         # Re-execute the example notebooks and render them (with outputs) to
         # docs/docs/tutorials/. Only from main: a dispatch from another branch would

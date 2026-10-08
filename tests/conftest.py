@@ -41,6 +41,7 @@ from __future__ import annotations
 
 import json
 import os
+import re
 import subprocess
 from pathlib import Path
 from urllib.error import HTTPError, URLError
@@ -49,6 +50,7 @@ import pytest
 
 LIVE: bool = os.environ.get("SDV_PY_LIVE_TESTS") == "1"
 
+_TRANSIENT_STATUS = (429, 502, 503, 504)
 _LIVE_REASON = "Set SDV_PY_LIVE_TESTS=1 to run tests that hit live external APIs"
 skip_if_no_live = pytest.mark.skipif(not LIVE, reason=_LIVE_REASON)
 
@@ -70,20 +72,32 @@ def skip_on_transient_network_error(exc: BaseException) -> None:
 
 
 def _is_transient(exc: BaseException | None) -> bool:
-    """A timeout, dropped connection or 429/5xx anywhere in ``exc``'s cause chain.
+    """A timeout, dropped connection or HTTP 429/502/503/504 anywhere in ``exc``'s cause chain.
 
-    Covers requests' own ``Timeout`` / ``ConnectionError``, which are not the builtin classes.
+    Covers urllib's and requests' errors (requests' ``Timeout`` / ``ConnectionError`` are not the
+    builtin classes) and this package's ``AssetFetchError``, which states the status in its message
+    ("... answered HTTP 503 ..."). A ``raise ... from None`` ends the walk.
     """
+    import socket
+
     import requests
+
+    from sportsdataverse.errors import AssetFetchError
 
     seen = set()
     while exc is not None and id(exc) not in seen:
         seen.add(id(exc))
         if isinstance(exc, HTTPError):  # a URLError subclass: decided by status, so a 404 still fails
-            return exc.code in (429, 502, 503, 504)
-        if isinstance(exc, (URLError, ConnectionError, TimeoutError, requests.Timeout, requests.ConnectionError)):
+            return exc.code in _TRANSIENT_STATUS
+        if isinstance(exc, requests.HTTPError):
+            return getattr(exc.response, "status_code", None) in _TRANSIENT_STATUS
+        if isinstance(exc, AssetFetchError) and re.search(r"\bHTTP (429|502|503|504)\b", str(exc)):
             return True
-        exc = exc.__cause__ or exc.__context__
+        if isinstance(
+            exc, (URLError, ConnectionError, TimeoutError, socket.timeout, requests.Timeout, requests.ConnectionError)
+        ):
+            return True
+        exc = exc.__cause__ or (None if exc.__suppress_context__ else exc.__context__)
     return False
 
 

@@ -36,6 +36,8 @@ def test_endpoint_count_and_names() -> None:
     assert sorted(gen.__all__) == sorted(f"fox_api_{e['short']}" for e in ENDPOINTS)
 
 
+# The walk imports the deprecated sportsdataverse.parsed namespace too; tests/test_deprecation.py asserts its warning.
+@pytest.mark.filterwarnings(r"ignore:sportsdataverse\.parsed\.\w+ is deprecated:DeprecationWarning")
 def test_no_public_name_collision() -> None:
     """Every fox_api_* name is defined once, by the generated module; no other
     sportsdataverse module defines a ``fox_api*`` name, and the package-level
