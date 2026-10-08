@@ -328,6 +328,9 @@ def test_add_coord_transforms_real_game_keeps_every_shot_on_the_rink():
     by = {r["home"]: r for r in med.iter_rows(named=True)}
     assert by[True]["x_coord_right"] > 0 and by[False]["x_coord_right"] > 0
     assert by[True]["fixed"] > 0 > by[False]["fixed"]
+    # Faceoffs carry no team: their side is unknown, so the right frame is null but fixed is not.
+    fo = df.filter((pl.col("event") == "faceoff") & pl.col("x_coord_original").is_not_null())
+    assert fo.height > 0 and fo["x_coord_right"].is_null().all() and fo["x_coord_fixed"].is_not_null().all()
 
 
 def test_add_coord_transforms_empty_frame():
