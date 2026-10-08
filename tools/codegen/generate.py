@@ -1882,10 +1882,25 @@ def refresh_return_schemas() -> int:
     return 0
 
 
+def _remote_parquet_schema(url: str):
+    """Footer-only schema of a remote parquet, read through an fsspec HTTP file.
+
+    Never ``pl.read_parquet_schema(url)``: polars 2.0's own HTTP reader fetches the footer
+    with a suffix range (``Range: bytes=-N``), which GitHub's release-asset CDN answers
+    with 501. fsspec asks for bounded ranges, which it serves, and polars still reads only
+    the footer (0.3s on the 59 MB play_by_play_2025.parquet). fsspec[http] arrives with the
+    dev extras (kloppy[http]).
+    """
+    import fsspec
+    import polars as pl
+
+    with fsspec.open(url, "rb") as fh:
+        return pl.read_parquet_schema(fh)
+
+
 def refresh_loader_schemas() -> int:
     """Re-introspect every non-stub loader's release parquet footer and rewrite
     tools/codegen/schemas/loader_schemas.yaml (network; reads metadata only)."""
-    import polars as pl
     import yaml
 
     rel = _releases_cfg()
@@ -1908,7 +1923,7 @@ def refresh_loader_schemas() -> int:
         got = None
         for s in dict.fromkeys(seasons):
             try:
-                sch = pl.read_parquet_schema(spec.fill_season(f"{rel.bases[ld.base]}{ld.url}", s))
+                sch = _remote_parquet_schema(spec.fill_season(f"{rel.bases[ld.base]}{ld.url}", s))
             except Exception:  # noqa: BLE001
                 continue
             if got is None or len(sch) > len(got):
