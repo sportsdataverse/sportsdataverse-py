@@ -48,19 +48,28 @@ jobs:
       - name: Install dependencies
         run: yarn install --frozen-lockfile
 
+      - name: Add swap
+        # Compiling every built version peaks past the runner's 16 GB of RAM (15.8 GB used when
+        # the #724 build-only run was killed). Swap absorbs that late spike; without it the kernel
+        # kills the runner, which reports only "received a shutdown signal".
+        run: |
+          sudo fallocate -l 16G /mnt/sdv-swap
+          sudo chmod 600 /mnt/sdv-swap
+          sudo mkswap /mnt/sdv-swap > /dev/null
+          sudo swapon /mnt/sdv-swap
+          free -m
+
       - name: Build site
         run: |
-          # A runner that runs out of memory reports only "received a shutdown signal";
-          # log each new peak so the trail survives it.
-          ( peak=0; while sleep 10; do u=$(free -m | awk '/^Mem:/{print $3}'); if [ "$u" -gt "$peak" ]; then peak=$u; echo "mem peak ${peak} MB"; fi; done ) &
+          # Log each new RAM + swap peak, so the trail survives a runner that is killed.
+          ( peak=0; while sleep 10; do u=$(free -m | awk '/^Mem:/{m=$3} /^Swap:/{s=$3} END{print m+s}'); if [ "$u" -gt "$peak" ]; then peak=$u; echo "mem+swap peak ${peak} MB"; fi; done ) &
           yarn build
         env:
           # The 4-version build peaked past default heap limits on Vercel's
           # container; public-repo runners have 16GB, give node room to use it.
           NODE_OPTIONS: --max-old-space-size=8192
           # `faster` renders pages in one worker thread per CPU, each holding its own copy of
-          # the server bundle (every built version) plus up to 1 GB before it is recycled. Two
-          # keep a 16 GB runner clear of the OOM that killed the #722 deploy.
+          # the server bundle (every built version) plus up to 1 GB before it is recycled.
           DOCUSAURUS_SSG_WORKER_THREAD_COUNT: 2
 
       - name: Publish to gh-pages
