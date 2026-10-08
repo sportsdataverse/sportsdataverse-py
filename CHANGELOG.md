@@ -3,116 +3,116 @@
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
 - [Unreleased](#unreleased)
-  - [Fixed — HockeyTech schedules returned other seasons' games](#fixed--hockeytech-schedules-returned-other-seasons-games)
+  - [Fixed](#fixed)
 - [0.1.5 Release: October 8, 2026](#015-release-october-8-2026)
   - [Breaking changes](#breaking-changes)
   - [Added](#added)
   - [Changed](#changed)
-  - [Fixed](#fixed)
+  - [Fixed](#fixed-1)
   - [Security](#security)
 - [0.1.4 Release: September 1, 2026](#014-release-september-1-2026)
   - [Added](#added-1)
   - [Changed](#changed-1)
-  - [Fixed](#fixed-1)
+  - [Fixed](#fixed-2)
   - [Data](#data)
 - [0.1.3 Release: August 28, 2026](#013-release-august-28-2026)
-  - [Fixed](#fixed-2)
-- [0.1.2 Release: August 27, 2026](#012-release-august-27-2026)
   - [Fixed](#fixed-3)
+- [0.1.2 Release: August 27, 2026](#012-release-august-27-2026)
+  - [Fixed](#fixed-4)
 - [0.1.1 Release: August 27, 2026](#011-release-august-27-2026)
   - [Breaking changes](#breaking-changes-1)
   - [Added](#added-2)
   - [Changed](#changed-2)
   - [Deprecated](#deprecated)
-  - [Fixed](#fixed-4)
+  - [Fixed](#fixed-5)
 - [0.0.75 Release: August 2, 2026](#0075-release-august-2-2026)
   - [Breaking changes](#breaking-changes-2)
   - [Added](#added-3)
   - [Changed](#changed-3)
-  - [Fixed](#fixed-5)
+  - [Fixed](#fixed-6)
 - [0.0.74 Release: August 2, 2026](#0074-release-august-2-2026)
   - [Breaking changes](#breaking-changes-3)
   - [Changed](#changed-4)
-  - [Fixed](#fixed-6)
+  - [Fixed](#fixed-7)
   - [Data](#data-1)
 - [0.0.73 Release: August 1, 2026](#0073-release-august-1-2026)
   - [Breaking changes](#breaking-changes-4)
   - [Added](#added-4)
   - [Changed](#changed-5)
-  - [Fixed](#fixed-7)
+  - [Fixed](#fixed-8)
 - [0.0.72 Release: July 22, 2026](#0072-release-july-22-2026)
   - [Breaking changes](#breaking-changes-5)
   - [Added](#added-5)
   - [Changed](#changed-6)
   - [Deprecated](#deprecated-1)
   - [Removed](#removed)
-  - [Fixed](#fixed-8)
+  - [Fixed](#fixed-9)
   - [Data](#data-2)
 - [0.0.71 Release: June 24, 2026](#0071-release-june-24-2026)
   - [Added](#added-6)
   - [Changed](#changed-7)
-  - [Fixed](#fixed-9)
+  - [Fixed](#fixed-10)
 - [0.0.70 Release: June 24, 2026](#0070-release-june-24-2026)
   - [Changed](#changed-8)
 - [0.0.69 Release: June 23, 2026](#0069-release-june-23-2026)
   - [Added](#added-7)
-  - [Fixed](#fixed-10)
+  - [Fixed](#fixed-11)
 - [0.0.68 Release: June 23, 2026](#0068-release-june-23-2026)
   - [Added](#added-8)
   - [Changed](#changed-9)
-  - [Fixed](#fixed-11)
+  - [Fixed](#fixed-12)
 - [0.0.67 Release: June 17, 2026](#0067-release-june-17-2026)
   - [Added](#added-9)
   - [Changed](#changed-10)
-  - [Fixed](#fixed-12)
-- [0.0.66 Release: June 17, 2026](#0066-release-june-17-2026)
   - [Fixed](#fixed-13)
+- [0.0.66 Release: June 17, 2026](#0066-release-june-17-2026)
+  - [Fixed](#fixed-14)
 - [0.0.65 Release: June 17, 2026](#0065-release-june-17-2026)
   - [Breaking changes](#breaking-changes-6)
   - [Changed](#changed-11)
   - [Deprecated](#deprecated-2)
-  - [Fixed](#fixed-14)
+  - [Fixed](#fixed-15)
 - [0.0.64 Release: June 17, 2026](#0064-release-june-17-2026)
   - [Breaking changes](#breaking-changes-7)
   - [Added](#added-10)
   - [Changed](#changed-12)
 - [0.0.63 Release: June 16, 2026](#0063-release-june-16-2026)
-  - [Fixed](#fixed-15)
-- [0.0.62 Release: June 16, 2026](#0062-release-june-16-2026)
   - [Fixed](#fixed-16)
-- [0.0.61 Release: June 16, 2026](#0061-release-june-16-2026)
+- [0.0.62 Release: June 16, 2026](#0062-release-june-16-2026)
   - [Fixed](#fixed-17)
+- [0.0.61 Release: June 16, 2026](#0061-release-june-16-2026)
+  - [Fixed](#fixed-18)
 - [0.0.60 Release: June 15, 2026](#0060-release-june-15-2026)
   - [Added](#added-11)
-  - [Fixed](#fixed-18)
+  - [Fixed](#fixed-19)
 - [0.0.59 Release: June 13, 2026](#0059-release-june-13-2026)
   - [Added](#added-12)
 - [0.0.58 Release: June 12, 2026](#0058-release-june-12-2026)
   - [Added](#added-13)
   - [Changed](#changed-13)
-  - [Fixed](#fixed-19)
+  - [Fixed](#fixed-20)
 - [0.0.57 Release: June 10, 2026](#0057-release-june-10-2026)
   - [Added](#added-14)
 - [0.0.56 Release: June 9, 2026](#0056-release-june-9-2026)
   - [Breaking changes](#breaking-changes-8)
   - [Added](#added-15)
   - [Changed](#changed-14)
-  - [Fixed](#fixed-20)
+  - [Fixed](#fixed-21)
 - [0.0.55 Release: June 8, 2026](#0055-release-june-8-2026)
   - [Changed](#changed-15)
-  - [Fixed](#fixed-21)
+  - [Fixed](#fixed-22)
 - [0.0.54 Release: June 8, 2026](#0054-release-june-8-2026)
   - [Breaking changes](#breaking-changes-9)
   - [Added](#added-16)
   - [Changed](#changed-16)
   - [Deprecated](#deprecated-3)
-  - [Fixed](#fixed-22)
+  - [Fixed](#fixed-23)
 - [0.0.53 Release: June 8, 2026](#0053-release-june-8-2026)
   - [Breaking changes](#breaking-changes-10)
   - [Added](#added-17)
   - [Changed](#changed-17)
   - [Removed](#removed-1)
-  - [Fixed](#fixed-23)
+  - [Fixed](#fixed-24)
 - [0.0.52 Release: June 3, 2026](#0052-release-june-3-2026)
   - [Added](#added-18)
   - [Changed](#changed-18)
@@ -120,13 +120,13 @@
   - [Breaking changes](#breaking-changes-11)
   - [Added](#added-19)
   - [Changed](#changed-19)
-  - [Fixed](#fixed-24)
+  - [Fixed](#fixed-25)
 - [0.0.50 Release: May 7, 2026](#0050-release-may-7-2026)
   - [Breaking changes](#breaking-changes-12)
   - [Added](#added-20)
   - [Changed](#changed-20)
   - [Deprecated](#deprecated-4)
-  - [Fixed](#fixed-25)
+  - [Fixed](#fixed-26)
 - [0.0.40 Release: December 6, 2025](#0040-release-december-6-2025)
   - [Changed](#changed-21)
 - [0.0.38-39 Release: August 28, 2023](#0038-39-release-august-28-2023)
@@ -144,7 +144,7 @@
   - [Breaking changes](#breaking-changes-16)
   - [Added](#added-23)
   - [Changed](#changed-24)
-  - [Fixed](#fixed-26)
+  - [Fixed](#fixed-27)
 - [0.0.15 Release: May 8, 2022](#0015-release-may-8-2022)
   - [Changed](#changed-25)
 - [0.0.14 Release: March 16, 2022](#0014-release-march-16-2022)
@@ -152,7 +152,7 @@
 - [0.0.12 Release: February 24, 2022](#0012-release-february-24-2022)
   - [Added](#added-24)
   - [Changed](#changed-27)
-  - [Fixed](#fixed-27)
+  - [Fixed](#fixed-28)
 - [0.0.5 Release: October 20, 2021](#005-release-october-20-2021)
   - [Changed](#changed-28)
 
@@ -160,25 +160,24 @@
 
 ## Unreleased
 
-### Fixed — HockeyTech schedules returned other seasons' games
+### Fixed
 
-`<league>_schedule(season=...)` for the 19 HockeyTech league families, and `pwhl_schedule`,
-read `modulekit/scorebar`. That view ignores the `season_id` it is sent, returns games
-oldest-first and stops at its 10,000-row limit. So `ahl_schedule(season=2026)` returned
-10,000 AHL games from 1995 to 2012 and none from 2025-26; OHL and ECHL failed the same way,
-and PWHL returned every season's games. The schedule functions now read
-`modulekit/schedule&season_id=<id>`, which the feed scopes to one season (live 2026-10-08:
-AHL 2025-26 = 1,152 games, OHL = 682, PWHL = 120, each in that season alone), and
-`parse_schedule(..., season_id=)` drops any row from another season.
-
-Behaviour changes:
-
-- With neither `season` nor `season_id`, the schedule is the newest regular season, as in
-  the other season-aware functions. It used to be the feed's whole window.
-- `game_status` now reads the schedule view's strings: `Final OT` where scorebar said
-  `Final 1st OT`, and the start time (`7:00 pm EST`) for an unplayed game.
-- A season's playoffs and preseason are separate HockeyTech season ids; pass `season_id`
-  for them.
+- **HockeyTech schedules returned other seasons' games.** `<league>_schedule(season=...)` for
+  the 19 HockeyTech league families, and `pwhl_schedule`, read `modulekit/scorebar`. That view
+  ignores the `season_id` it is sent, returns games oldest-first and stops at its 10,000-row
+  limit, so `ahl_schedule(season=2026)` returned 10,000 AHL games from 1995 to 2012 and none
+  from 2025-26; OHL and ECHL failed the same way, and PWHL returned every season's games. The
+  schedule functions now read `modulekit/schedule&season_id=<id>`, which the feed scopes to one
+  season (live 2026-10-08: AHL 2025-26 = 1,152 games, OHL = 682, PWHL = 120, each in that season
+  alone), and `parse_schedule(..., season_id=)` drops any row from another season (#727).
+  Behaviour changes:
+  - With neither `season` nor `season_id`, the schedule is the newest regular season, as in the
+    other season-aware functions. It used to be the feed's whole window.
+  - `game_status` now reads the schedule view's strings: `Final OT` where scorebar said
+    `Final 1st OT`, and the start time (`7:00 pm EST`) for an unplayed game.
+  - A season's playoffs and preseason are separate HockeyTech season ids; pass `season_id` for
+    them.
+  - An empty reply, or a season filter that keeps nothing, is zero rows with the 12 columns.
 
 ## 0.1.5 Release: October 8, 2026
 
