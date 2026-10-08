@@ -345,7 +345,7 @@ OHL schedule — one row per game of one season.
 
 **Returns**
 
-One row per game: `game_id`, `game_date`, `game_status`, `home_team` / `home_team_id` / `home_score`, `away_team` / `away_team_id` / `away_score`, `venue`, `season_id` and `game_type` (all String). Only the requested season's games: a regular season, its playoffs and its preseason are separate season ids. A pandas DataFrame when `return_as_pandas` is True.
+One row per game: `game_id`, `game_date`, `game_status`, `home_team` / `home_team_id` / `home_score`, `away_team` / `away_team_id` / `away_score`, `venue`, `season_id` and `game_type` (all String). Only the requested season's games: a regular season, its playoffs and its preseason are separate season ids, so pass `season_id` (from `ohl_season_id()`) for the playoffs. A pandas DataFrame when `return_as_pandas` is True.
 
 | col_name | type | description |
 |---|---|---|

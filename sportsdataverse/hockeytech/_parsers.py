@@ -147,11 +147,20 @@ def parse_schedule(payload: Any, return_as_pandas: bool = False, season_id: Opti
 
     One row per game. ``schedule`` (``SiteKit.Schedule``) is the season-scoped view the
     ``<league>_schedule`` functions call; a ``scorebar`` payload (``SiteKit.Scorebar``)
-    maps onto the same columns. ``season_id`` keeps only that season's games: ``scorebar``
-    ignores the ``season_id`` it is sent and returns every season in its date window.
-    Returns a :class:`polars.DataFrame` by default; pass ``return_as_pandas=True`` for a
-    :class:`pandas.DataFrame`. An empty/None payload returns a zero-row frame of the same
-    type, never raises.
+    maps onto the same columns.
+
+    Args:
+        payload: The parsed JSON reply.
+        return_as_pandas: Return a pandas DataFrame instead of polars.
+        season_id: Keep only this season's games. ``scorebar`` ignores the ``season_id`` it
+            is sent and returns every season in its date window.
+
+    Returns:
+        polars.DataFrame: One row per game: ``game_id``, ``game_date``, ``game_status``,
+            ``home_team`` / ``home_team_id`` / ``home_score``, ``away_team`` / ``away_team_id`` /
+            ``away_score``, ``venue``, ``season_id`` and ``game_type``. An empty or None payload,
+            or a filter that keeps nothing, gives zero rows with these columns (String); it
+            never raises. A pandas DataFrame when ``return_as_pandas`` is True.
     """
     games, rename = _sitekit(payload, "Schedule"), _SCHEDULE_RENAME
     if not games:
@@ -159,6 +168,9 @@ def parse_schedule(payload: Any, return_as_pandas: bool = False, season_id: Opti
     rows = [{new: g.get(old) for old, new in rename.items()} for g in games]
     if season_id is not None:
         rows = [r for r in rows if str(r["season_id"]) == str(season_id)]
+    if not rows:
+        empty = pl.DataFrame(schema=dict.fromkeys(_SCHEDULE_RENAME.values(), pl.String))
+        return empty.to_pandas() if return_as_pandas else empty
     return _to_frame(rows, return_as_pandas)
 
 

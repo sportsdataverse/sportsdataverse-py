@@ -83,6 +83,23 @@ def test_parse_schedule_scorebar_maps_to_the_same_columns():
     assert df.height == 200
 
 
+def test_parse_schedule_empty_keeps_the_documented_columns():
+    """A None/empty payload, or a filter that keeps nothing, is zero rows with the 12 columns."""
+    from sportsdataverse.hockeytech._parsers import parse_schedule
+
+    for payload, kw in [
+        (None, {}),
+        ({}, {}),
+        ({"SiteKit": {"Schedule": []}}, {}),
+        (_load("pwhl_schedule_8"), {"season_id": 9}),
+    ]:
+        df = parse_schedule(payload, **kw)
+        assert df.height == 0 and df.columns == _SCHEDULE_COLS
+        assert set(df.dtypes) == {pl.String}
+        pdf = parse_schedule(payload, return_as_pandas=True, **kw)
+        assert pdf.shape == (0, len(_SCHEDULE_COLS)) and list(pdf.columns) == _SCHEDULE_COLS
+
+
 def test_parse_schedule_season_id_drops_other_seasons():
     """Scorebar ignores ``season_id``: the reply asked for season 5 holds 6 seasons."""
     from sportsdataverse.hockeytech._parsers import parse_schedule

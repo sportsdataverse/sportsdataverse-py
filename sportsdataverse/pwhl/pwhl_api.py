@@ -102,13 +102,16 @@ def pwhl_schedule(
         polars.DataFrame: One row per game: ``game_id``, ``game_date``, ``game_status``, ``home_team`` /
             ``home_team_id`` / ``home_score``, ``away_team`` / ``away_team_id`` / ``away_score``,
             ``venue``, ``season_id`` and ``game_type`` (all String). Only the requested season's
-            games: a regular season, its playoffs and its preseason are separate season ids. A
-            pandas DataFrame when ``return_as_pandas`` is True.
+            games: a regular season, its playoffs and its preseason are separate season ids, so
+            pass ``season_id`` (from ``pwhl_season_id()``) for the playoffs. A pandas DataFrame
+            when ``return_as_pandas`` is True.
 
     Raises:
-        NoDataError: The feed answered 404.
+        NoDataError: The feed answered 404, or, with no season given, the seasons feed lists no
+            regular season.
         AssetFetchError: The fetch failed: a non-2xx status, an empty or unparseable body, or an
             ``Undefined Tab`` / ``InvalidView`` sentinel.
+        ValueError: No season matches ``season``.
     """
     sid = resolve_season_id(_LG, season=_season_or_latest(season, season_id), season_id=season_id)
     payload = hockeytech_api(_LG, "modulekit", "schedule", {"season_id": sid})

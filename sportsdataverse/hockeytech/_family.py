@@ -135,7 +135,10 @@ def build_family(league: str) -> dict[str, Any]:
         "        ``home_team`` / ``home_team_id`` / ``home_score``, ``away_team`` / ``away_team_id`` /\n"
         "        ``away_score``, ``venue``, ``season_id`` and ``game_type`` (all String). Only the\n"
         "        requested season's games: a regular season, its playoffs and its preseason are\n"
-        f"        separate season ids. {_PANDAS}" + _RAISES
+        f"        separate season ids, so pass ``season_id`` (from ``{lg}_season_id()``) for the\n"
+        f"        playoffs. {_PANDAS}" + _RAISES + "\n"
+        "    NoDataError: With no season given, the seasons feed lists no regular season.\n"
+        "    ValueError: No season matches ``season``."
     )
 
     # ------------------------------------------------------------------
