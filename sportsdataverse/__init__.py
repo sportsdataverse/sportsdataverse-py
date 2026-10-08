@@ -43,6 +43,17 @@ _apply_thread_env()
 
 import logging as _logging
 
+import polars as _pl
+
+# polars 2.0 loads an Arrow extension type it does not know as an Extension
+# column, which no str op, comparison or cast accepts. R's arrow writes classed
+# vectors (glue strings, such as the NHL and PWHL schedules' game_json_url) as
+# arrow.r.vctrs; read them as their storage type, as polars 1.x does.
+try:
+    _pl.register_extension_type("arrow.r.vctrs", as_storage=True)
+except _pl.exceptions.ComputeError:  # already registered in this process
+    pass
+
 # Library logging convention (PEP 282): attach a NullHandler at the package
 # root so merely importing sportsdataverse never emits log output unless the
 # host application configures logging. Modules obtain their logger via

@@ -3,6 +3,7 @@
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
 - [Unreleased](#unreleased)
+  - [Fixed — R-written string columns read as String under polars 2.0](#fixed--r-written-string-columns-read-as-string-under-polars-20)
   - [Fixed — NHL EDGE top-10 boards, ESPN transactions, NFL fantasy-ranking dtypes](#fixed--nhl-edge-top-10-boards-espn-transactions-nfl-fantasy-ranking-dtypes)
   - [Changed — every public function documents its return, and shows a returns table or says why not](#changed--every-public-function-documents-its-return-and-shows-a-returns-table-or-says-why-not)
   - [Changed — polars 2.x is allowed; the lock moves to polars 2.0.0](#changed--polars-2x-is-allowed-the-lock-moves-to-polars-200)
@@ -371,6 +372,16 @@
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## Unreleased
+
+### Fixed — R-written string columns read as String under polars 2.0
+
+R's arrow writes a classed vector, such as a `glue` string, with the `arrow.r.vctrs` extension type.
+polars 1.x reads such a column as its storage type. polars 2.0 reads it as an `Extension` column instead,
+and no `.str` operation, comparison, cast, concat or join accepts that. `use_pyarrow=True` does not
+avoid it. The published `nhl_schedules` and `pwhl_schedules` assets carry one such column,
+`game_json_url`, so under 2.0 `load_pwhl_schedule()` returned a column that could not be filtered.
+Importing sportsdataverse now registers `arrow.r.vctrs` to load as its storage type, on both polars
+versions, for the loaders and for any other parquet read in the same process.
 
 ### Fixed — NHL EDGE top-10 boards, ESPN transactions, NFL fantasy-ranking dtypes
 
