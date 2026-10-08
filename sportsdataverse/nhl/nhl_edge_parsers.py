@@ -130,7 +130,8 @@ def parse_edge_top10(payload: Dict, return_as_pandas: bool = False) -> pl.DataFr
     columns, and converts to polars.
 
     Args:
-        payload: Raw JSON dict from any ``nhl_edge_*_top_10`` wrapper.
+        payload: Raw JSON from any ``nhl_edge_*_top_10`` wrapper: the live boards answer with a
+            bare list of ranked rows; a dict wrapping that list is accepted too.
         return_as_pandas: Return ``pandas.DataFrame`` instead of polars.
 
     Returns:
@@ -138,6 +139,8 @@ def parse_edge_top10(payload: Dict, return_as_pandas: bool = False) -> pl.DataFr
         a zero-row frame when ``payload`` is empty or no candidate key
         resolves to a non-empty list.
     """
+    if isinstance(payload, list):  # the live boards answer with a bare list of ranked rows
+        payload = {"items": payload}
     if not payload or not isinstance(payload, dict):
         return _empty_frame(return_as_pandas)
     rows: Optional[list] = None

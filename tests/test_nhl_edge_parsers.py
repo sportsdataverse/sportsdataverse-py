@@ -228,3 +228,26 @@ def test_edge_subframe_parsers_registry_consistent():
     }
     for fn_name in EDGE_SUBFRAME_PARSERS:
         assert fn_name in wrapper_names, f"EDGE_SUBFRAME_PARSERS references missing wrapper {fn_name!r}"
+
+
+@pytest.mark.parametrize(
+    "board",
+    [
+        "skater_shot_speed_top_10",
+        "skater_speed_top_10",
+        "skater_distance_top_10",
+        "skater_zone_time_top_10",
+        "goalie_5v5_top_10",
+        "team_skating_distance_top_10",
+        "team_skating_speed_top_10",
+        "team_zone_time_top_10",
+    ],
+)
+def test_top10_parses_the_bare_list_the_live_boards_send(board):
+    """Real captures (2026-10-07): every board answers with a bare JSON list, never a dict."""
+    from sportsdataverse.nhl import parse_edge_top10
+
+    raw = _load(board)
+    assert isinstance(raw, list) and raw
+    df = parse_edge_top10(raw)
+    assert df.height == len(raw) and df.width > 0
