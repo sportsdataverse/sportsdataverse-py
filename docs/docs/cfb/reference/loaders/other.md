@@ -1,11 +1,11 @@
 ---
-title: "CFB dataset loaders — Other: ratings–passing"
-sidebar_label: "Other: ratings–passing"
+title: "CFB dataset loaders — Other: ratings–model_pbp"
+sidebar_label: "Other: ratings–model_pbp"
 sidebar_position: 15
-description: "CFB dataset loaders — Other: ratings–passing — function reference in sdv-py, the SportsDataverse Python package."
+description: "CFB dataset loaders — Other: ratings–model_pbp — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---
-# CFB dataset loaders — Other: ratings–passing
+# CFB dataset loaders — Other: ratings–model_pbp
 
 ## load_cfb_ratings
 
@@ -565,105 +565,4 @@ Release: [espn_cfb_model_pbp](https://github.com/sportsdataverse/sportsdataverse
 
 ```python
 load_cfb_model_pbp(seasons=2024)
-```
-
-## load_cfb_passing
-
-Release: [espn_cfb_passing](https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/espn_cfb_passing) · asset `https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_passing/cfb_passing_{season}.parquet`
-### Returns {#load_cfb_passing-returns}
-
-| col_name | type | description |
-|---|---|---|
-| `team_id` | Int64 | ESPN team id. |
-| `pos_team` | String | Team name in possession at the start of the play (offense, kickoff-aware). |
-| `division` | String | Division in the conference for the team. |
-| `conference` | String | Conference of the team. |
-| `season` | Int64 | Season (4-digit year). |
-| `player_id` | Int64 | ESPN player id from the roster entry. |
-| `passer_player_name` | String | Display name of the passer -- the FIRST participant in that role on the play. |
-| `plays` | UInt32 | Total qualifying passing plays included in the WEPA calculation. |
-| `games` | UInt32 | Number of games included in the ATS summary. |
-| `team_games` | UInt32 | Games the team played, used as the per-game denominator. |
-| `TEPA` | Float64 | Total EPA summed over every play. |
-| `EPAplay` | Float64 | EPA generated per play. |
-| `yards` | Float64 | Total yards gained on the drive. |
-| `success` | Float64 | Success rate across the team plays. |
-| `comp` | Float64 | Completed passes. |
-| `att` | Float64 | Pass attempts thrown. |
-| `comppct` | Float64 | Completion percentage. |
-| `passing_td` | Float64 | Passing touchdowns thrown. |
-| `playsgame` | Float64 | Plays per game. |
-| `EPAgame` | Float64 | EPA generated per game. |
-| `yardsplay` | Float64 | Yards per play. |
-| `yardsgame` | Float64 | Yards per game. |
-| `sacked` | UInt32 | Times the passer was sacked. |
-| `sack_yds` | Int64 | Yards lost to sacks. |
-| `sack_epa` | Float64 | EPA lost on the sacks the team's passers took -- the expected-points cost of those plays. |
-| `pass_int` | UInt32 | Interceptions thrown. |
-| `int_epa` | Float64 | EPA lost on the team's interceptions thrown -- the expected-points cost of the turnovers, not a count. |
-| `detmer` | Float64 | Detmer rating -- the composite passing-efficiency measure this pipeline publishes, named for the college passing-efficiency tradition. |
-| `detmergame` | Float64 | Detmer rating expressed per game. |
-| `dropbacks` | Float64 | Dropbacks taken by the passer. |
-| `sack_adj_yards` | Float64 | Passing yards adjusted for sack yardage lost. |
-| `yardsdropback` | Float64 | Yards per dropback. |
-| `TEPA_rank` | Float64 | Rank of the passer's total EPA summed over every play among passers clearing the leaderboard minimum of 14 dropbacks per team game, where 1 is best. |
-| `EPAgame_rank` | Float64 | Rank of the passer's EPA generated per game among passers clearing the leaderboard minimum of 14 dropbacks per team game, where 1 is best. |
-| `EPAplay_rank` | Float64 | Rank of the passer's EPA generated per play among passers clearing the leaderboard minimum of 14 dropbacks per team game, where 1 is best. |
-| `success_rank` | Float64 | Rank of the passer's success rate across their plays among passers clearing the leaderboard minimum of 14 dropbacks per team game, where 1 is best. |
-| `comppct_rank` | Float64 | Rank of the passer's completion percentage among passers clearing the leaderboard minimum of 14 dropbacks per team game, where 1 is best. |
-| `yards_rank` | Float64 | Rank of the passer's total yards among passers clearing the leaderboard minimum of 14 dropbacks per team game, where 1 is best. |
-| `yardsplay_rank` | Float64 | Rank of the passer's yards per play among passers clearing the leaderboard minimum of 14 dropbacks per team game, where 1 is best. |
-| `yardsgame_rank` | Float64 | Rank of the passer's yards per game among passers clearing the leaderboard minimum of 14 dropbacks per team game, where 1 is best. |
-| `sack_adj_yards_rank` | Float64 | Rank of the passer's passing yards adjusted for sack yardage lost among passers clearing the leaderboard minimum of 14 dropbacks per team game, where 1 is best. |
-| `yardsdropback_rank` | Float64 | Rank of the passer's yards per dropback among passers clearing the leaderboard minimum of 14 dropbacks per team game, where 1 is best. |
-| `detmer_rank` | Float64 | Rank of the passer's detmer rating -- the composite passing-efficiency measure this pipeline publishes, named for the college passing-efficiency tradition among passers clearing the leaderboard minimum of 14 dropbacks per team game, where 1 is best. |
-| `detmergame_rank` | Float64 | Rank of the passer's detmer rating expressed per game among passers clearing the leaderboard minimum of 14 dropbacks per team game, where 1 is best. |
-| `passing_td_rank` | Float64 | Ordinal rank of the player's passing touchdowns among qualifying players that season; ties share a fractional rank. |
-| `pass_int_rank` | Float64 | Ordinal rank of the player's interceptions thrown among qualifying players that season; ties share a fractional rank. |
-| `sacked_rank` | Float64 | Ordinal rank of the player's times sacked among qualifying players that season; ties share a fractional rank. |
-| `TEPA_pct` | Float64 | Percentile position (0-100) of the player's total EPA among qualifying players that season. |
-| `EPAgame_pct` | Float64 | Percentile position (0-100) of the player's EPA per game among qualifying players that season. |
-| `EPAplay_pct` | Float64 | Percentile position (0-100) of the player's EPA per play among qualifying players that season. |
-| `success_pct` | Float64 | Percentile position (0-100) of the player's success rate among qualifying players that season. |
-| `comppct_pct` | Float64 | Percentile position (0-100) of the player's completion percentage among qualifying players that season. |
-| `yards_pct` | Float64 | Percentile position (0-100) of the player's yards among qualifying players that season. |
-| `yardsplay_pct` | Float64 | Percentile position (0-100) of the player's yards per play among qualifying players that season. |
-| `yardsgame_pct` | Float64 | Percentile position (0-100) of the player's yards per game among qualifying players that season. |
-| `sack_adj_yards_pct` | Float64 | Percentile position (0-100) of the player's sack-adjusted yards among qualifying players that season. |
-| `yardsdropback_pct` | Float64 | Percentile position (0-100) of the player's yards per dropback among qualifying players that season. |
-| `detmer_pct` | Float64 | Percentile position (0-100) of the player's Detmer rating among qualifying players that season. |
-| `detmergame_pct` | Float64 | Percentile position (0-100) of the player's Detmer rating per game among qualifying players that season. |
-| `passing_td_pct` | Float64 | Percentile position (0-100) of the player's passing touchdowns among qualifying players that season. |
-| `pass_int_pct` | Float64 | Percentile position (0-100) of the player's interceptions thrown among qualifying players that season. |
-| `sacked_pct` | Float64 | Percentile position (0-100) of the player's times sacked among qualifying players that season. |
-| `EPAplay_n` | Int64 | Sample size behind EPAplay: the number of dropbacks (completions, incompletions, sacks and interceptions) the passer's value is computed over. 0 where EPAplay is null. |
-| `yardsdropback_n` | Int64 | Sample size behind yardsdropback: the number of dropbacks (completions, incompletions, sacks and interceptions) the passer's value is computed over. 0 where yardsdropback is null. |
-| `comppct_n` | Int64 | Sample size behind comppct: the number of throws (including interceptions, excluding sacks) the passer's value is computed over. 0 where comppct is null. |
-| `success_n` | Int64 | Sample size behind success: the number of completions and incompletions (interceptions and sacks excluded) the passer's value is computed over. 0 where success is null. nfl-data's nfl_passing table counts its success_n over dropbacks instead. |
-| `yardsplay_n` | Int64 | Sample size behind yardsplay: the number of completions and incompletions (interceptions and sacks excluded) the passer's value is computed over. 0 where yardsplay is null. nfl-data's nfl_passing table counts its yardsplay_n over pass attempts instead: interceptions included, sacks still excluded. |
-| `detmer_n` | Int64 | Sample size behind detmer: the number of games the passer's value is computed over. 0 where detmer is null. |
-| `detmergame_n` | Int64 | Sample size behind detmergame: the number of games the passer's value is computed over. 0 where detmergame is null. |
-| `EPAgame_n` | Int64 | Sample size behind EPAgame: the number of games the passer's value is computed over. 0 where EPAgame is null. |
-| `yardsgame_n` | Int64 | Sample size behind yardsgame: the number of games the passer's value is computed over. 0 where yardsgame is null. |
-| `playsgame_n` | Int64 | Sample size behind playsgame: the number of games the passer's value is computed over. 0 where playsgame is null. |
-| `fbs_class` | String | Power/Group classification for the season: P4 or G6 from 2024 on, P5 or G5 through 2023, derived from conference membership. Null for teams outside FBS. |
-| `position_group` | String | Position group from the season's ESPN roster (espn_cfb_rosters position_abbreviation): QB; RB (RB and FB); WR; TE; other for any other listed position. Null when the player is not on the season roster, is listed without a position ('-'), or is listed under two different groups. The cohort of the _pos_pct columns. |
-| `TEPA_pos_pct` | Float64 | Percentile (0-100) of total EPA summed over every play among passers clearing the leaderboard minimum of 14 dropbacks per team game at the same position group (position_group), where 100 is best. Direction is already encoded in the matching rank, so a lower-is-better metric still scores 100 at its best. Null when the metric is null, when position_group is null, or when fewer than 10 qualifiers in the group have the metric. Rows with a null metric are excluded from the denominator. |
-| `EPAgame_pos_pct` | Float64 | Percentile (0-100) of EPA generated per game among passers clearing the leaderboard minimum of 14 dropbacks per team game at the same position group (position_group), where 100 is best. Direction is already encoded in the matching rank, so a lower-is-better metric still scores 100 at its best. Null when the metric is null, when position_group is null, or when fewer than 10 qualifiers in the group have the metric. Rows with a null metric are excluded from the denominator. |
-| `EPAplay_pos_pct` | Float64 | Percentile (0-100) of EPA generated per play among passers clearing the leaderboard minimum of 14 dropbacks per team game at the same position group (position_group), where 100 is best. Direction is already encoded in the matching rank, so a lower-is-better metric still scores 100 at its best. Null when the metric is null, when position_group is null, or when fewer than 10 qualifiers in the group have the metric. Rows with a null metric are excluded from the denominator. |
-| `success_pos_pct` | Float64 | Percentile (0-100) of success rate across their plays among passers clearing the leaderboard minimum of 14 dropbacks per team game at the same position group (position_group), where 100 is best. Direction is already encoded in the matching rank, so a lower-is-better metric still scores 100 at its best. Null when the metric is null, when position_group is null, or when fewer than 10 qualifiers in the group have the metric. Rows with a null metric are excluded from the denominator. |
-| `comppct_pos_pct` | Float64 | Percentile (0-100) of completion percentage among passers clearing the leaderboard minimum of 14 dropbacks per team game at the same position group (position_group), where 100 is best. Direction is already encoded in the matching rank, so a lower-is-better metric still scores 100 at its best. Null when the metric is null, when position_group is null, or when fewer than 10 qualifiers in the group have the metric. Rows with a null metric are excluded from the denominator. |
-| `yards_pos_pct` | Float64 | Percentile (0-100) of total yards among passers clearing the leaderboard minimum of 14 dropbacks per team game at the same position group (position_group), where 100 is best. Direction is already encoded in the matching rank, so a lower-is-better metric still scores 100 at its best. Null when the metric is null, when position_group is null, or when fewer than 10 qualifiers in the group have the metric. Rows with a null metric are excluded from the denominator. |
-| `yardsplay_pos_pct` | Float64 | Percentile (0-100) of yards per play among passers clearing the leaderboard minimum of 14 dropbacks per team game at the same position group (position_group), where 100 is best. Direction is already encoded in the matching rank, so a lower-is-better metric still scores 100 at its best. Null when the metric is null, when position_group is null, or when fewer than 10 qualifiers in the group have the metric. Rows with a null metric are excluded from the denominator. |
-| `yardsgame_pos_pct` | Float64 | Percentile (0-100) of yards per game among passers clearing the leaderboard minimum of 14 dropbacks per team game at the same position group (position_group), where 100 is best. Direction is already encoded in the matching rank, so a lower-is-better metric still scores 100 at its best. Null when the metric is null, when position_group is null, or when fewer than 10 qualifiers in the group have the metric. Rows with a null metric are excluded from the denominator. |
-| `sack_adj_yards_pos_pct` | Float64 | Percentile (0-100) of passing yards adjusted for sack yardage lost among passers clearing the leaderboard minimum of 14 dropbacks per team game at the same position group (position_group), where 100 is best. Direction is already encoded in the matching rank, so a lower-is-better metric still scores 100 at its best. Null when the metric is null, when position_group is null, or when fewer than 10 qualifiers in the group have the metric. Rows with a null metric are excluded from the denominator. |
-| `yardsdropback_pos_pct` | Float64 | Percentile (0-100) of yards per dropback among passers clearing the leaderboard minimum of 14 dropbacks per team game at the same position group (position_group), where 100 is best. Direction is already encoded in the matching rank, so a lower-is-better metric still scores 100 at its best. Null when the metric is null, when position_group is null, or when fewer than 10 qualifiers in the group have the metric. Rows with a null metric are excluded from the denominator. |
-| `detmer_pos_pct` | Float64 | Percentile (0-100) of detmer rating -- the composite passing-efficiency measure this pipeline publishes, named for the college passing-efficiency tradition among passers clearing the leaderboard minimum of 14 dropbacks per team game at the same position group (position_group), where 100 is best. Direction is already encoded in the matching rank, so a lower-is-better metric still scores 100 at its best. Null when the metric is null, when position_group is null, or when fewer than 10 qualifiers in the group have the metric. Rows with a null metric are excluded from the denominator. |
-| `detmergame_pos_pct` | Float64 | Percentile (0-100) of detmer rating expressed per game among passers clearing the leaderboard minimum of 14 dropbacks per team game at the same position group (position_group), where 100 is best. Direction is already encoded in the matching rank, so a lower-is-better metric still scores 100 at its best. Null when the metric is null, when position_group is null, or when fewer than 10 qualifiers in the group have the metric. Rows with a null metric are excluded from the denominator. |
-| `passing_td_pos_pct` | Float64 | Percentile (0-100) of passing touchdowns among passers clearing the leaderboard minimum of 14 dropbacks per team game at the same position group (position_group), where 100 is best. Direction is already encoded in the matching rank, so a lower-is-better metric still scores 100 at its best. Null when the metric is null, when position_group is null, or when fewer than 10 qualifiers in the group have the metric. Rows with a null metric are excluded from the denominator. |
-| `pass_int_pos_pct` | Float64 | Percentile (0-100) of interceptions thrown among passers clearing the leaderboard minimum of 14 dropbacks per team game at the same position group (position_group), where 100 is best. Direction is already encoded in the matching rank, so a lower-is-better metric still scores 100 at its best. Null when the metric is null, when position_group is null, or when fewer than 10 qualifiers in the group have the metric. Rows with a null metric are excluded from the denominator. |
-| `sacked_pos_pct` | Float64 | Percentile (0-100) of times sacked among passers clearing the leaderboard minimum of 14 dropbacks per team game at the same position group (position_group), where 100 is best. Direction is already encoded in the matching rank, so a lower-is-better metric still scores 100 at its best. Null when the metric is null, when position_group is null, or when fewer than 10 qualifiers in the group have the metric. Rows with a null metric are excluded from the denominator. |
-
-```python
-load_cfb_passing(seasons=2024)
 ```

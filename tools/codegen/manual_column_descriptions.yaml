@@ -9132,6 +9132,12 @@ load_cfb_passing:
   EPAplay: EPA generated per play.
   EPAplay_n: 'Sample size behind EPAplay: the number of dropbacks (completions, incompletions, sacks and interceptions) the
     passer''s value is computed over. 0 where EPAplay is null.'
+  EPAplay_p10: 10th percentile (the floor) of the passer's per-game EPA per play (a game's EPA summed over the passer's dropbacks,
+    divided by those dropbacks), across dispersion_games; linear interpolation (R type 7). Null when dispersion_games is below
+    3.
+  EPAplay_p90: 90th percentile (the ceiling) of the passer's per-game EPA per play (a game's EPA summed over the passer's
+    dropbacks, divided by those dropbacks), across dispersion_games; linear interpolation (R type 7). Null when dispersion_games
+    is below 3.
   EPAplay_pct: Percentile position (0-100) of the player's EPA per play among qualifying players that season.
   EPAplay_pos_pct: Percentile (0-100) of EPA generated per play among passers clearing the leaderboard minimum of 14 dropbacks
     per team game at the same position group (position_group), where 100 is best. Direction is already encoded in the matching
@@ -9139,6 +9145,8 @@ load_cfb_passing:
     or when fewer than 10 qualifiers in the group have the metric. Rows with a null metric are excluded from the denominator.
   EPAplay_rank: Rank of the passer's EPA generated per play among passers clearing the leaderboard minimum of 14 dropbacks
     per team game, where 1 is best.
+  EPAplay_sd: Population standard deviation (ddof=0) of the passer's per-game EPA per play (a game's EPA summed over the passer's
+    dropbacks, divided by those dropbacks), across dispersion_games. Null when dispersion_games is below 3.
   TEPA: Total EPA summed over every play.
   TEPA_pct: Percentile position (0-100) of the player's total EPA among qualifying players that season.
   TEPA_pos_pct: Percentile (0-100) of total EPA summed over every play among passers clearing the leaderboard minimum of 14
@@ -9149,6 +9157,23 @@ load_cfb_passing:
   TEPA_rank: Rank of the passer's total EPA summed over every play among passers clearing the leaderboard minimum of 14 dropbacks
     per team game, where 1 is best.
   att: Pass attempts thrown.
+  boom_rate: Share of dispersion_games in which the passer's EPA per play was more than one EPAplay_sd ABOVE their own unweighted
+    per-game mean (not the play-weighted EPAplay). Strict, so a player whose games are all equal is neither a boom nor a bust.
+    Null when dispersion_games is below 3.
+  boom_rate_pct: Percentile (0-100) of boom rate (share of games more than one standard deviation above their own per-game
+    EPA per play) among passers clearing the leaderboard minimum of 14 dropbacks per team game, where 100 is best. Direction
+    is already encoded in the matching rank, so a lower-is-better metric still scores 100 at its best. Null when the metric
+    is null, and null rows are excluded from the denominator.
+  boom_rate_pos_pct: Percentile (0-100) of boom rate (share of games more than one standard deviation above their own per-game
+    EPA per play) among passers clearing the leaderboard minimum of 14 dropbacks per team game at the same position group
+    (position_group), where 100 is best. Direction is already encoded in the matching rank, so a lower-is-better metric still
+    scores 100 at its best. Null when the metric is null, when position_group is null, or when fewer than 10 qualifiers in
+    the group have the metric. Rows with a null metric are excluded from the denominator.
+  boom_rate_rank: Rank of the passer's boom rate (share of games more than one standard deviation above their own per-game
+    EPA per play) among passers clearing the leaderboard minimum of 14 dropbacks per team game, where 1 is best.
+  bust_rate: Share of dispersion_games in which the passer's EPA per play was more than one EPAplay_sd BELOW their own unweighted
+    per-game mean (not the play-weighted EPAplay). Strict, so a player whose games are all equal is neither a boom nor a bust.
+    Null when dispersion_games is below 3.
   comp: Completed passes.
   comppct: Completion percentage.
   comppct_n: 'Sample size behind comppct: the number of throws (including interceptions, excluding sacks) the passer''s value
@@ -9183,6 +9208,8 @@ load_cfb_passing:
     denominator.
   detmergame_rank: Rank of the passer's detmer rating expressed per game among passers clearing the leaderboard minimum of
     14 dropbacks per team game, where 1 is best.
+  dispersion_games: 'Games with at least one dropback by the passer: the sample the dispersion columns (EPAplay_sd, EPAplay_p10,
+    EPAplay_p90, boom_rate, bust_rate) are computed over. Those five are null below 3 games.'
   dropbacks: Dropbacks taken by the passer.
   fbs_class: 'Power/Group classification for the season: P4 or G6 from 2024 on, P5 or G5 through 2023, derived from conference
     membership. Null for teams outside FBS.'
@@ -9991,6 +10018,12 @@ load_cfb_receiving:
   EPAplay: EPA generated per play.
   EPAplay_n: 'Sample size behind EPAplay: the number of targets the receiver''s value is computed over. 0 where EPAplay is
     null.'
+  EPAplay_p10: 10th percentile (the floor) of the receiver's per-game EPA per play (a game's EPA summed over the receiver's
+    targets, divided by those targets), across dispersion_games; linear interpolation (R type 7). Null when dispersion_games
+    is below 3.
+  EPAplay_p90: 90th percentile (the ceiling) of the receiver's per-game EPA per play (a game's EPA summed over the receiver's
+    targets, divided by those targets), across dispersion_games; linear interpolation (R type 7). Null when dispersion_games
+    is below 3.
   EPAplay_pct: Percentile position (0-100) of the player's EPA per play among qualifying players that season.
   EPAplay_pos_pct: Percentile (0-100) of EPA generated per play among receivers clearing the leaderboard minimum of 1.875
     targets per team game at the same position group (position_group), where 100 is best. Direction is already encoded in
@@ -9999,6 +10032,8 @@ load_cfb_receiving:
     denominator.
   EPAplay_rank: Rank of the receiver's EPA generated per play among receivers clearing the leaderboard minimum of 1.875 targets
     per team game, where 1 is best.
+  EPAplay_sd: Population standard deviation (ddof=0) of the receiver's per-game EPA per play (a game's EPA summed over the
+    receiver's targets, divided by those targets), across dispersion_games. Null when dispersion_games is below 3.
   TEPA: Total EPA summed over every play.
   TEPA_pct: Percentile position (0-100) of the player's total EPA among qualifying players that season.
   TEPA_pos_pct: Percentile (0-100) of total EPA summed over every play among receivers clearing the leaderboard minimum of
@@ -10008,6 +10043,23 @@ load_cfb_receiving:
     denominator.
   TEPA_rank: Rank of the receiver's total EPA summed over every play among receivers clearing the leaderboard minimum of 1.875
     targets per team game, where 1 is best.
+  boom_rate: Share of dispersion_games in which the receiver's EPA per play was more than one EPAplay_sd ABOVE their own unweighted
+    per-game mean (not the play-weighted EPAplay). Strict, so a player whose games are all equal is neither a boom nor a bust.
+    Null when dispersion_games is below 3.
+  boom_rate_pct: Percentile (0-100) of boom rate (share of games more than one standard deviation above their own per-game
+    EPA per play) among receivers clearing the leaderboard minimum of 1.875 targets per team game, where 100 is best. Direction
+    is already encoded in the matching rank, so a lower-is-better metric still scores 100 at its best. Null when the metric
+    is null, and null rows are excluded from the denominator.
+  boom_rate_pos_pct: Percentile (0-100) of boom rate (share of games more than one standard deviation above their own per-game
+    EPA per play) among receivers clearing the leaderboard minimum of 1.875 targets per team game at the same position group
+    (position_group), where 100 is best. Direction is already encoded in the matching rank, so a lower-is-better metric still
+    scores 100 at its best. Null when the metric is null, when position_group is null, or when fewer than 10 qualifiers in
+    the group have the metric. Rows with a null metric are excluded from the denominator.
+  boom_rate_rank: Rank of the receiver's boom rate (share of games more than one standard deviation above their own per-game
+    EPA per play) among receivers clearing the leaderboard minimum of 1.875 targets per team game, where 1 is best.
+  bust_rate: Share of dispersion_games in which the receiver's EPA per play was more than one EPAplay_sd BELOW their own unweighted
+    per-game mean (not the play-weighted EPAplay). Strict, so a player whose games are all equal is neither a boom nor a bust.
+    Null when dispersion_games is below 3.
   catchpct: Catch rate on a 0-to-1 scale, receptions divided by targets for the season.
   catchpct_n: 'Sample size behind catchpct: the number of targets the receiver''s value is computed over. 0 where catchpct
     is null.'
@@ -10025,6 +10077,8 @@ load_cfb_receiving:
     so a lower-is-better metric still scores 100 at its best. Null when the metric is null, when position_group is null, or
     when fewer than 10 qualifiers in the group have the metric. Rows with a null metric are excluded from the denominator.
   comp_rank: Ordinal rank of the player's completions among qualifying players that season; ties share a fractional rank.
+  dispersion_games: 'Games with at least one target by the receiver: the sample the dispersion columns (EPAplay_sd, EPAplay_p10,
+    EPAplay_p90, boom_rate, bust_rate) are computed over. Those five are null below 3 games.'
   fbs_class: 'Power/Group classification for the season: P4 or G6 from 2024 on, P5 or G5 through 2023, derived from conference
     membership. Null for teams outside FBS.'
   fumbles: Count of the receiver's targeted pass plays across the season whose play text mentions a fumble by either team.
@@ -10252,6 +10306,20 @@ load_cfb_rushing:
     team game, where 1 is best.
   EPAplay: EPA generated per play.
   EPAplay_n: 'Sample size behind EPAplay: the number of carries the rusher''s value is computed over. 0 where EPAplay is null.'
+  EPAplay_not_one_score: EPA per carry on the rusher's carries with the offense more than 8 points ahead or behind at the
+    snap (pos_score_diff_start). Null when there were none.
+  EPAplay_not_one_score_n: 'Sample size behind EPAplay_not_one_score: the number of carries with the offense more than 8 points
+    ahead or behind at the snap the rusher''s value is computed over. 0 where EPAplay_not_one_score is null.'
+  EPAplay_one_score: EPA per carry on the rusher's carries with the offense within 8 points either way at the snap (pos_score_diff_start,
+    the margin before the play). Null when there were none.
+  EPAplay_one_score_n: 'Sample size behind EPAplay_one_score: the number of carries with the offense within 8 points either
+    way at the snap the rusher''s value is computed over. 0 where EPAplay_one_score is null.'
+  EPAplay_p10: 10th percentile (the floor) of the rusher's per-game EPA per play (a game's EPA summed over the rusher's carrys,
+    divided by those carrys), across dispersion_games; linear interpolation (R type 7). Null when dispersion_games is below
+    3.
+  EPAplay_p90: 90th percentile (the ceiling) of the rusher's per-game EPA per play (a game's EPA summed over the rusher's
+    carrys, divided by those carrys), across dispersion_games; linear interpolation (R type 7). Null when dispersion_games
+    is below 3.
   EPAplay_pct: Percentile position (0-100) of the player's EPA per play among qualifying players that season.
   EPAplay_pos_pct: Percentile (0-100) of EPA generated per play among rushers clearing the leaderboard minimum of 6.25 plays
     per team game at the same position group (position_group), where 100 is best. Direction is already encoded in the matching
@@ -10259,6 +10327,8 @@ load_cfb_rushing:
     or when fewer than 10 qualifiers in the group have the metric. Rows with a null metric are excluded from the denominator.
   EPAplay_rank: Rank of the rusher's EPA generated per play among rushers clearing the leaderboard minimum of 6.25 plays per
     team game, where 1 is best.
+  EPAplay_sd: Population standard deviation (ddof=0) of the rusher's per-game EPA per play (a game's EPA summed over the rusher's
+    carrys, divided by those carrys), across dispersion_games. Null when dispersion_games is below 3.
   TEPA: Total EPA summed over every play.
   TEPA_pct: Percentile position (0-100) of the player's total EPA among qualifying players that season.
   TEPA_pos_pct: Percentile (0-100) of total EPA summed over every play among rushers clearing the leaderboard minimum of 6.25
@@ -10268,6 +10338,25 @@ load_cfb_rushing:
     denominator.
   TEPA_rank: Rank of the rusher's total EPA summed over every play among rushers clearing the leaderboard minimum of 6.25
     plays per team game, where 1 is best.
+  boom_rate: Share of dispersion_games in which the rusher's EPA per play was more than one EPAplay_sd ABOVE their own unweighted
+    per-game mean (not the play-weighted EPAplay). Strict, so a player whose games are all equal is neither a boom nor a bust.
+    Null when dispersion_games is below 3.
+  boom_rate_pct: Percentile (0-100) of boom rate (share of games more than one standard deviation above their own per-game
+    EPA per play) among rushers clearing the leaderboard minimum of 6.25 plays per team game, where 100 is best. Direction
+    is already encoded in the matching rank, so a lower-is-better metric still scores 100 at its best. Null when the metric
+    is null, and null rows are excluded from the denominator.
+  boom_rate_pos_pct: Percentile (0-100) of boom rate (share of games more than one standard deviation above their own per-game
+    EPA per play) among rushers clearing the leaderboard minimum of 6.25 plays per team game at the same position group (position_group),
+    where 100 is best. Direction is already encoded in the matching rank, so a lower-is-better metric still scores 100 at
+    its best. Null when the metric is null, when position_group is null, or when fewer than 10 qualifiers in the group have
+    the metric. Rows with a null metric are excluded from the denominator.
+  boom_rate_rank: Rank of the rusher's boom rate (share of games more than one standard deviation above their own per-game
+    EPA per play) among rushers clearing the leaderboard minimum of 6.25 plays per team game, where 1 is best.
+  bust_rate: Share of dispersion_games in which the rusher's EPA per play was more than one EPAplay_sd BELOW their own unweighted
+    per-game mean (not the play-weighted EPAplay). Strict, so a player whose games are all equal is neither a boom nor a bust.
+    Null when dispersion_games is below 3.
+  dispersion_games: 'Games with at least one carry by the rusher: the sample the dispersion columns (EPAplay_sd, EPAplay_p10,
+    EPAplay_p90, boom_rate, bust_rate) are computed over. Those five are null below 3 games.'
   fbs_class: 'Power/Group classification for the season: P4 or G6 from 2024 on, P5 or G5 through 2023, derived from conference
     membership. Null for teams outside FBS.'
   fumbles: Count of the ball carrier's rush attempts across the season whose play text mentions a fumble by either team.
@@ -10277,6 +10366,12 @@ load_cfb_rushing:
     a lower-is-better metric still scores 100 at its best. Null when the metric is null, when position_group is null, or when
     fewer than 10 qualifiers in the group have the metric. Rows with a null metric are excluded from the denominator.
   fumbles_rank: Ordinal rank of the player's fumbles among qualifying players that season; ties share a fractional rank.
+  line_yards_share: Share of the rusher's carries that gained 4 or fewer yards, losses included (the line-yards tier of Football
+    Outsiders' cut-points), on the carry's own yds_rushed (penalty yardage excluded), over carries with a recorded yds_rushed;
+    line_yards_share + second_level_share + open_field_share = 1.
+  open_field_share: Share of the rusher's carries that gained 11 or more yards (the open-field tier), on the carry's own yds_rushed
+    (penalty yardage excluded), over carries with a recorded yds_rushed; line_yards_share + second_level_share + open_field_share
+    = 1.
   plays_pct: Percentile position (0-100) of the player's plays among qualifying players that season.
   plays_pos_pct: Percentile (0-100) of plays among rushers clearing the leaderboard minimum of 6.25 plays per team game at
     the same position group (position_group), where 100 is best. Direction is already encoded in the matching rank, so a lower-is-better
@@ -10297,6 +10392,21 @@ load_cfb_rushing:
     or when fewer than 10 qualifiers in the group have the metric. Rows with a null metric are excluded from the denominator.
   rushing_td_rank: Ordinal rank of the player's rushing touchdowns among qualifying players that season; ties share a fractional
     rank.
+  second_level_share: Share of the rusher's carries that gained 5 to 10 yards (the second-level tier), on the carry's own
+    yds_rushed (penalty yardage excluded), over carries with a recorded yds_rushed; line_yards_share + second_level_share
+    + open_field_share = 1.
+  stuff_rate: Share of the rusher's carries for 0 or fewer yards, over carries with a recorded yds_rushed. A stuff is also
+    a line-yards-tier carry.
+  stuff_rate_pct: Percentile (0-100) of stuff rate (share of carries for 0 or fewer yards) among rushers clearing the leaderboard
+    minimum of 6.25 plays per team game, where 100 is best. Direction is already encoded in the matching rank, so a lower-is-better
+    metric still scores 100 at its best. Null when the metric is null, and null rows are excluded from the denominator.
+  stuff_rate_pos_pct: Percentile (0-100) of stuff rate (share of carries for 0 or fewer yards) among rushers clearing the
+    leaderboard minimum of 6.25 plays per team game at the same position group (position_group), where 100 is best. Direction
+    is already encoded in the matching rank, so a lower-is-better metric still scores 100 at its best. Null when the metric
+    is null, when position_group is null, or when fewer than 10 qualifiers in the group have the metric. Rows with a null
+    metric are excluded from the denominator.
+  stuff_rate_rank: Rank of the rusher's stuff rate (share of carries for 0 or fewer yards) among rushers clearing the leaderboard
+    minimum of 6.25 plays per team game, where 1 is best.
   success: Success rate across the team plays.
   success_n: 'Sample size behind success: the number of carries the rusher''s value is computed over. 0 where success is null.'
   success_pct: Percentile position (0-100) of the player's success rate among qualifying players that season.
