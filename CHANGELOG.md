@@ -440,6 +440,9 @@
 - **Polars:** code polars 2.0 rejects now runs on 1.x and 2.0 with unchanged 1.x output: the
   `*_pbp` clock split, `start.down` / `start.distance` / `end.down` / `end.distance` cast to
   `Int64`, String-to-Date casts and `explode()` on empty lists.
+- **Polars:** on polars 2.0, a column R's arrow wrote with the `arrow.r.vctrs` extension type (such as
+  `game_json_url` in the NHL and PWHL schedules) reads as its storage type, not an `Extension` column no
+  `.str` op, comparison or join accepts; importing sportsdataverse registers it. (#723)
 - **Soccer:** `soccer_open_events()` and `soccer_open_dataset()` no longer raise `AttributeError` in
   a fresh interpreter.
 - **stats.ncaa.org:** the fetch layer passes the new `/stats_terms` Terms gate without returning or
