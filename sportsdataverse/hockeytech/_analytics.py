@@ -254,8 +254,15 @@ _MAX_PLAUSIBLE_GOAL_X = 110.0  # rink half-length is 100 ft; a goal_x past this 
 def add_shot_distance_angle(pbp: pl.DataFrame, goal_x: float = _NHL_SIZE_RINK_GOAL_X) -> pl.DataFrame:
     """Add ``shot_distance``/``shot_angle`` (feet/degrees) for shot-type events.
 
-    Assumes coordinates are already in a standard rink frame (offensive net at
-    +goal_x, y=0). Non-shot rows receive null values for both columns.
+    Distance is to the nearer net, ``dx = goal_x - |x|``: an own-half event with a
+    goalie in net is a near-net event whose coordinates the HockeyTech feed
+    mirrored, so the nearer net is right for it (sdv-internal-refs
+    ``hockeytech/CANVAS.md``, validated on 320 PWHL games). An empty-net goal
+    (``empty_net`` "1") is measured to the net its team attacks instead: the feed
+    puts the home team's attack at ``x = -goal_x`` and the visitor's at ``+goal_x``,
+    and an own-half empty-net goal is a genuine long shot. Rows without
+    ``team_id`` / ``home_team_id`` keep the nearer net. Non-shot rows receive null
+    values for both columns.
 
     Parameters
     ----------
@@ -292,7 +299,14 @@ def add_shot_distance_angle(pbp: pl.DataFrame, goal_x: float = _NHL_SIZE_RINK_GO
 
     # Coerce to Float64 so an all-null (Utf8-inferred) coord column does not
     # raise on the arithmetic below — see add_coord_transforms for context.
-    dx = pl.lit(goal_x) - pl.col("x_coord").cast(pl.Float64, strict=False).abs()
+    x = pl.col("x_coord").cast(pl.Float64, strict=False)
+    dx = pl.lit(goal_x) - x.abs()
+    if {"empty_net", "team_id", "home_team_id"} <= set(pbp.columns):
+        tid, hid = pl.col("team_id").cast(pl.Utf8), pl.col("home_team_id").cast(pl.Utf8)
+        known = (tid.fill_null("") != "") & (hid.fill_null("") != "")
+        empty_net = (pl.col("empty_net").cast(pl.Utf8) == "1") & known
+        attack_x = pl.when(tid == hid).then(-goal_x).otherwise(goal_x)
+        dx = pl.when(empty_net == True).then((attack_x - x).abs()).otherwise(dx)
     dy = pl.col("y_coord").cast(pl.Float64, strict=False)
     dist = (dx**2 + dy**2).sqrt()
     # pl.arctan2(y, x) -> radians; convert to degrees and take absolute value

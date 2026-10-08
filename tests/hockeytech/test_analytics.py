@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import polars as pl
+import pytest
 from tests.conftest import load_fixture
 
 
@@ -537,3 +538,40 @@ def test_build_on_ice_goal_epsilon_clamped_to_period_start():
     out = build_on_ice(pbp, shifts, goal_epsilon_s=2)
     # unclamped this would look up t=1202 and find nothing
     assert out["on_ice_home"][0] == "7"
+
+
+def test_empty_net_goals_measure_to_the_attacking_net():
+    """sdv-internal-refs CANVAS.md: own-half events with a goalie are mirrored; own-half EN goals are long shots.
+
+    Feet frame: the home team attacks x = -89. Canvas 560 -> x = 86.67 ft, the home team's own end.
+    """
+    from sportsdataverse.hockeytech._analytics import add_shot_distance_angle
+
+    x_own = 560 / 3 - 100
+
+    def dist(x_ft, team, empty_net):
+        df = pl.DataFrame(
+            {
+                "event": ["goal"],
+                "x_coord": [x_ft],
+                "y_coord": [0.0],
+                "team_id": [team],
+                "home_team_id": ["1"],
+                "empty_net": [empty_net],
+            },  # fmt: skip
+            schema={
+                "event": pl.Utf8,
+                "x_coord": pl.Float64,
+                "y_coord": pl.Float64,
+                "team_id": pl.Utf8,
+                "home_team_id": pl.Utf8,
+                "empty_net": pl.Utf8,
+            },  # fmt: skip
+        )
+        return add_shot_distance_angle(df)["shot_distance"][0]
+
+    assert dist(x_own, "1", "1") == pytest.approx(89 + x_own)  # 175.67 ft to the net it attacks
+    assert dist(x_own, "1", "0") == pytest.approx(89 - x_own)  # goalie in net: mirrored, 2.33 ft
+    assert dist(-x_own, "3", "1") == pytest.approx(89 + x_own)  # visitor attacks +89
+    assert dist(-80.0, "1", "1") == pytest.approx(9.0)  # attacking-half EN goal: unchanged
+    assert dist(x_own, None, "1") == pytest.approx(89 - x_own)  # unknown side: nearer net
