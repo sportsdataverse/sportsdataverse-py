@@ -18,7 +18,8 @@ on:
   workflow_dispatch:
 
 concurrency:
-  group: docs-deploy
+  # Per ref: a build-only dispatch from a branch must never cancel a main deploy.
+  group: docs-deploy-${{ github.ref }}
   cancel-in-progress: true
 
 permissions:
@@ -26,8 +27,6 @@ permissions:
 
 jobs:
   build-deploy:
-    # workflow_dispatch can be launched from any branch; only main may publish.
-    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     timeout-minutes: 30
     defaults:
@@ -49,14 +48,33 @@ jobs:
       - name: Install dependencies
         run: yarn install --frozen-lockfile
 
+      - name: Add swap
+        # Compiling every built version peaks past the runner's 16 GB of RAM (15.8 GB used when
+        # the #724 build-only run was killed). Swap absorbs that late spike; without it the kernel
+        # kills the runner, which reports only "received a shutdown signal".
+        run: |
+          sudo fallocate -l 16G /mnt/sdv-swap
+          sudo chmod 600 /mnt/sdv-swap
+          sudo mkswap /mnt/sdv-swap > /dev/null
+          sudo swapon /mnt/sdv-swap
+          free -m
+
       - name: Build site
-        run: yarn build
+        run: |
+          # Log each new RAM + swap peak, so the trail survives a runner that is killed.
+          ( peak=0; while sleep 10; do u=$(free -m | awk '/^Mem:/{m=$3} /^Swap:/{s=$3} END{print m+s}'); if [ "$u" -gt "$peak" ]; then peak=$u; echo "mem+swap peak ${peak} MB"; fi; done ) &
+          yarn build
         env:
           # The 4-version build peaked past default heap limits on Vercel's
           # container; public-repo runners have 16GB, give node room to use it.
           NODE_OPTIONS: --max-old-space-size=8192
+          # `faster` renders pages in one worker thread per CPU, each holding its own copy of
+          # the server bundle (every built version) plus up to 1 GB before it is recycled.
+          DOCUSAURUS_SSG_WORKER_THREAD_COUNT: 2
 
       - name: Publish to gh-pages
+        # workflow_dispatch from a branch is a build-only check; only main publishes.
+        if: github.ref == 'refs/heads/main'
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}

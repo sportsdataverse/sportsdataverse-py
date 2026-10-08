@@ -1,0 +1,6 @@
+{
+  "label": "WNBA Stats API (stats.wnba.com)",
+  "position": 10,
+  "collapsed": true,
+  "link": {"type": "doc", "id": "wnba/reference/wnba_stats"}
+}

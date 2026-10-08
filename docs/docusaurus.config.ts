@@ -11,10 +11,10 @@ import registry from './src/data/leagues.json';
 // always stay under versioned_docs/ in git; this only controls what's built/served.
 //
 // Default 3: the rolling `current`/`main` tree plus the latest 3 release snapshots
-// = 4 versions built/served. This is the OOM-safe default on the production Vercel
-// container (the `current + latest 3` shape only OOMed the *smaller* pre-upgrade
-// container; production has headroom for 4). Rolling cap, so older snapshots stop
-// building as versions.json grows — raise only with verified container headroom.
+// = 4 versions built/served. The site is built by .github/workflows/docs-deploy.yml on a
+// 16 GB GitHub runner and pushed to gh-pages, which Vercel serves as-is (it builds nothing).
+// Rolling cap, so older snapshots stop building as versions.json grows; raise it only after
+// a build-only dispatch of docs-deploy shows the "mem peak" log line leaves headroom.
 const VERSIONS_TO_KEEP = 3;
 const allReleasedVersions: string[] = JSON.parse(
   fs.readFileSync(path.join(__dirname, 'versions.json'), 'utf-8'),

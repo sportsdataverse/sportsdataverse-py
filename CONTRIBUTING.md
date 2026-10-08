@@ -248,7 +248,13 @@ and are never touched by edits to `current`.
      `architecture/*`, `parsers/*`) and the notebook intros are hand-authored
      — edit them directly.
    - **Home page**: `docs/src/pages/index.tsx`.
-   - **Changelog**: edit the repo-root `CHANGELOG.md`; the
+   - **Changelog**: edit the repo-root `CHANGELOG.md`. Add each change as one
+     bullet under its group in the `## Unreleased` section. The groups are, in
+     this order, `### Breaking changes`, `Added`, `Changed`, `Deprecated`,
+     `Removed`, `Fixed`, `Security`, `Data`. Write a bullet as
+     `- **<Area>:** <what changed for a user>. (#<PR>)`, at most three lines;
+     the full write-up belongs in the PR description. `tests/test_changelog.py`
+     enforces the groups and their order. The
      `sync-docs-changelog` pre-commit hook splits it into
      `docs/src/pages/CHANGELOG.md` (the newest releases, served at `/CHANGELOG`),
      `changelog-unreleased.md` and `changelog-archive.md`. If the pages drift (no

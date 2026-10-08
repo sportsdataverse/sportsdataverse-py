@@ -1,0 +1,6 @@
+{
+  "label": "CBS Sports NAPI (api.cbssports.com/napi)",
+  "position": 10,
+  "collapsed": true,
+  "link": {"type": "doc", "id": "cbs/reference/cbs_napi"}
+}
