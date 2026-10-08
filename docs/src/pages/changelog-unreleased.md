@@ -8,6 +8,15 @@ Merged to `main` since 0.1.4 and not yet released. Released versions are on the 
 
 ## Unreleased
 
+### Changed — polars 2.x is allowed; the lock moves to polars 2.0.0
+
+The runtime constraint is now `polars>=1.0,<3` (was `<2.0`), mirrored in `recipe/meta.yaml`. The
+lock resolves polars **2.0.0** on Python >= 3.10. Python 3.9 stays on **1.36.1**, because polars
+2.0 requires Python 3.10. The code already runs on both (see the polars 2.0 fix below). The full
+suite on the 2.0 lock passed 11,775 tests and failed 3, none because of polars. The two `sdv_docs`
+server tests need the `mcp` extra (`anyio`) and pass once it is installed. A timing test that failed
+while the machine was under heavy load passes on re-run. Nothing else moved in the lock.
+
 ### Added — Expected Threat: XThreat, soccer_xthreat_rate() and a bundled grid
 
 `XThreat` fits an Expected Threat grid from SPADL actions and `soccer_xthreat_rate(actions)` appends

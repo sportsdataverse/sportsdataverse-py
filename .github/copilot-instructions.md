@@ -7,7 +7,7 @@
   - [Repository Workflow](#repository-workflow)
   - [Commit Convention](#commit-convention)
   - [Code Style](#code-style)
-  - [DataFrame Engine — Polars 1.x](#dataframe-engine--polars-1x)
+  - [DataFrame Engine — Polars 1.x and 2.x](#dataframe-engine--polars-1x-and-2x)
   - [HTTP Layer](#http-layer)
   - [Module Naming](#module-naming)
   - [NFL — nflreadpy Parity](#nfl--nflreadpy-parity)
@@ -52,7 +52,7 @@ under `tests/` as the source of truth.
 ## Repository Workflow
 
 - Use feature branches for changes.
-- `main` is the default branch and release branch. It uses **polars 1.x**
+- `main` is the default branch and release branch. It uses **polars** (1.x and 2.x)
   end-to-end, all packaging metadata lives in `pyproject.toml` (PEP 621),
   and **uv** is the canonical day-to-day package manager.
 - A separate `0.36-live` branch carries pandas-based development with a
@@ -103,9 +103,10 @@ is the sole attributable contributor.
   and it keeps `X | None` working on the 3.9 floor. Modern type syntax
   (`dict[str, X]`, `X | None`, `list[int]`) is allowed everywhere.
 
-## DataFrame Engine — Polars 1.x
+## DataFrame Engine — Polars 1.x and 2.x
 
-Runtime is pinned to `polars>=1.0,<2.0`. Use the modern API surface:
+Runtime is `polars>=1.0,<3` (lock: 2.0 on Python >= 3.10, 1.36 on 3.9); code must run on both
+(see `CLAUDE.md`, "Polars version"). Use the modern API surface:
 
 | Use this | Don't use this (0.18-era) |
 |---|---|
