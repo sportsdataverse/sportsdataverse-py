@@ -67,11 +67,11 @@ def test_the_unified_replacements_still_work_offline():
 
 def test_the_changelog_names_every_removal():
     body = (ROOT / "CHANGELOG.md").read_text(encoding="utf-8")
-    section = body[body.index("## Unreleased") :].split("\n## ", 1)[0]  # renamed to [0.1.5] at release (PR C)
-    assert "### Removed" in section
+    release = body[body.index("## 0.1.5 Release") :].split("\n## ", 1)[0]
+    assert "\n### Breaking changes\n" in release
+    breaking = release.split("\n### Breaking changes\n", 1)[1].split("\n### ", 1)[0]
     for name in REMOVED:
-        assert name in section, f"Unreleased Removed does not name {name}"
-    assert "BREAKING" in section
+        assert name in breaking, f"0.1.5 Breaking changes does not name {name}"
 
 
 def test_no_deprecation_is_still_overdue():

@@ -3,6849 +3,2273 @@
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
 - [0.1.5 Release: October 8, 2026](#015-release-october-8-2026)
-  - [Fixed — NHL EDGE top-10 boards, ESPN transactions, NFL fantasy-ranking dtypes](#fixed--nhl-edge-top-10-boards-espn-transactions-nfl-fantasy-ranking-dtypes)
-  - [Changed — every public function documents its return, and shows a returns table or says why not](#changed--every-public-function-documents-its-return-and-shows-a-returns-table-or-says-why-not)
-  - [Changed — polars 2.x is allowed; the lock moves to polars 2.0.0](#changed--polars-2x-is-allowed-the-lock-moves-to-polars-200)
-  - [Fixed — CFB player loader schemas, and remote parquet reads under polars 2.0](#fixed--cfb-player-loader-schemas-and-remote-parquet-reads-under-polars-20)
-  - [Added — Expected Threat: XThreat, soccer_xthreat_rate() and a bundled grid](#added--expected-threat-xthreat-soccer_xthreat_rate-and-a-bundled-grid)
-  - [Fixed — soccer_open_events() and soccer_open_dataset() failed in a fresh interpreter](#fixed--soccer_open_events-and-soccer_open_dataset-failed-in-a-fresh-interpreter)
-  - [Fixed — code that polars 2.0 rejects now runs on both 1.x and 2.0](#fixed--code-that-polars-20-rejects-now-runs-on-both-1x-and-20)
-  - [Removed — BREAKING: the 11 overdue NFL loader aliases](#removed--breaking-the-11-overdue-nfl-loader-aliases)
-  - [Added — SPADL actions from any kloppy event dataset: soccer_spadl() and soccer_open_dataset()](#added--spadl-actions-from-any-kloppy-event-dataset-soccer_spadl-and-soccer_open_dataset)
-  - [Changed — returns-table descriptions: NFL Pro, On3 and Fox authored; R-dictionary fill scoped to the league's own sport](#changed--returns-table-descriptions-nfl-pro-on3-and-fox-authored-r-dictionary-fill-scoped-to-the-leagues-own-sport)
-  - [Added — wrappers for six more intake providers (ESPN content, TheSportsDB, Football-Data.co.uk, OpenLigaDB, Polymarket, Kalshi)](#added--wrappers-for-six-more-intake-providers-espn-content-thesportsdb-football-datacouk-openligadb-polymarket-kalshi)
-  - [Added — Formula 1: Jolpica (Ergast-compatible) wrappers in `sportsdataverse.f1`](#added--formula-1-jolpica-ergast-compatible-wrappers-in-sportsdataversef1)
-  - [Added — EuroLeague shots, play-by-play, box score, standings and season stats (`euroleague_*`)](#added--euroleague-shots-play-by-play-box-score-standings-and-season-stats-euroleague_)
-  - [Added — `asa_players_xpass()` and the `nasl` + `usls` ASA leagues](#added--asa_players_xpass-and-the-nasl--usls-asa-leagues)
-  - [Added — kloppy as the optional `soccer` extra; `soccer_open_events()` loads open event data](#added--kloppy-as-the-optional-soccer-extra-soccer_open_events-loads-open-event-data)
-  - [Changed — league index pages gain a "See also" block of companion packages (soccer first)](#changed--league-index-pages-gain-a-see-also-block-of-companion-packages-soccer-first)
-  - [Added — one play-by-play shape from six providers (#540, #541, #542, #543, #544, #545, #548)](#added--one-play-by-play-shape-from-six-providers-540-541-542-543-544-545-548)
-  - [Added — a nightly cross-source parity harness (#547)](#added--a-nightly-cross-source-parity-harness-547)
-  - [Added — team and coach tendencies, and the usage / situational box (#496, #497, #498, #614)](#added--team-and-coach-tendencies-and-the-usage--situational-box-496-497-498-614)
-  - [Added — NFL Pro Next Gen Stats (#454, #481, #489)](#added--nfl-pro-next-gen-stats-454-481-489)
-  - [Added — the Fox Sports API as a generated family (#680)](#added--the-fox-sports-api-as-a-generated-family-680)
-  - [Added — six documented provider APIs (#452)](#added--six-documented-provider-apis-452)
-  - [Added — the remaining basketball sources (#451, #678)](#added--the-remaining-basketball-sources-451-678)
-  - [Added — NBA officiating (#592)](#added--nba-officiating-592)
-  - [Added — the metric registry (#645)](#added--the-metric-registry-645)
-  - [Added — rolling form windows and shot events (#590, #657)](#added--rolling-form-windows-and-shot-events-590-657)
-  - [Added — metric curves (#652)](#added--metric-curves-652)
-  - [Added — defense vs position (#659)](#added--defense-vs-position-659)
-  - [Added — the Paper Index (#661)](#added--the-paper-index-661)
-  - [Added — a per-game validation gate (#553, #554, #555, #556, #558)](#added--a-per-game-validation-gate-553-554-555-556-558)
-  - [Added — the Shield play-by-play parser and its live layer (#528, #536)](#added--the-shield-play-by-play-parser-and-its-live-layer-528-536)
-  - [Added — the ESPN CDN family (#681)](#added--the-espn-cdn-family-681)
-  - [Added — the NBA G League (#684)](#added--the-nba-g-league-684)
-  - [Fixed — a strip-sack is the defence's recovery (#546)](#fixed--a-strip-sack-is-the-defences-recovery-546)
-  - [Fixed — the NCAA mapper's quarter markers, score walk and overturned yardage (#557)](#fixed--the-ncaa-mappers-quarter-markers-score-walk-and-overturned-yardage-557)
-  - [Fixed — the CFB and NFL processor bug sweeps (#503, #533)](#fixed--the-cfb-and-nfl-processor-bug-sweeps-503-533)
-  - [Fixed — stats.ncaa.org Terms gate (#568, #569, #570)](#fixed--statsncaaorg-terms-gate-568-569-570)
-  - [Changed — native thread pools default to one (#563)](#changed--native-thread-pools-default-to-one-563)
-  - [Changed — the docs site is generated from one registry (#664, #671, #672, #673, #674, #676)](#changed--the-docs-site-is-generated-from-one-registry-664-671-672-673-674-676)
-  - [Added — sdv-docs MCP server and a published docs index](#added--sdv-docs-mcp-server-and-a-published-docs-index)
-  - [Fixed — nullable boolean and integer columns keep their types; no `"nan"` strings (soccer / EuroLeague frames)](#fixed--nullable-boolean-and-integer-columns-keep-their-types-no-nan-strings-soccer--euroleague-frames)
-  - [Fixed — a failed fetch in the hand-written ESPN scrapers raises instead of being parsed (BREAKING)](#fixed--a-failed-fetch-in-the-hand-written-espn-scrapers-raises-instead-of-being-parsed-breaking)
-  - [Fixed — a failed stats.nba.com / stats.wnba.com fetch raises instead of returning `{}` (BREAKING)](#fixed--a-failed-statsnbacom--statswnbacom-fetch-raises-instead-of-returning--breaking)
-  - [Fixed — a failed flat-API fetch raises instead of returning the error body (BREAKING)](#fixed--a-failed-flat-api-fetch-raises-instead-of-returning-the-error-body-breaking)
-  - [Fixed — HockeyTech season names read as their end year in every league (BREAKING)](#fixed--hockeytech-season-names-read-as-their-end-year-in-every-league-breaking)
-  - [Fixed — PFF time to throw, aimed passes and receiving positive-EPA descriptions](#fixed--pff-time-to-throw-aimed-passes-and-receiving-positive-epa-descriptions)
-  - [Security — a credential in a query string no longer reaches a log or an error message](#security--a-credential-in-a-query-string-no-longer-reaches-a-log-or-an-error-message)
-  - [Fixed — nba_stats / wnba_stats defaults: a season where the API needs one, each league's own ids](#fixed--nba_stats--wnba_stats-defaults-a-season-where-the-api-needs-one-each-leagues-own-ids)
-  - [Fixed — returns tables no longer cite R-only arguments](#fixed--returns-tables-no-longer-cite-r-only-arguments)
-  - [Fixed — a failed HockeyTech fetch raises instead of returning an empty frame (BREAKING)](#fixed--a-failed-hockeytech-fetch-raises-instead-of-returning-an-empty-frame-breaking)
-  - [Fixed — ESPN basketball pbp: one-provider spreads, paired spread signs, team timeouts, MBB double-overtime seconds](#fixed--espn-basketball-pbp-one-provider-spreads-paired-spread-signs-team-timeouts-mbb-double-overtime-seconds)
-  - [Fixed — pff_api return tables for the per-player and coverage-matrix routes](#fixed--pff_api-return-tables-for-the-per-player-and-coverage-matrix-routes)
-  - [Fixed — reference-docs Valid URLs are the URLs the example calls request; summary documents its dict](#fixed--reference-docs-valid-urls-are-the-urls-the-example-calls-request-summary-documents-its-dict)
-  - [Added — ESPN NBA G League wrappers (`espn_nbagl_*`)](#added--espn-nba-g-league-wrappers-espn_nbagl_)
-  - [Fixed — nba_stats, wnba_stats and on3 return tables now match what the parsers return](#fixed--nba_stats-wnba_stats-and-on3-return-tables-now-match-what-the-parsers-return)
-  - [Fixed — CFB scores ESPN marks but no text rule named, textless copies, untyped admin rows](#fixed--cfb-scores-espn-marks-but-no-text-rule-named-textless-copies-untyped-admin-rows)
-  - [Fixed — CFB plays that end a half leave a possession worth nothing](#fixed--cfb-plays-that-end-a-half-leave-a-possession-worth-nothing)
-  - [Fixed — CFB returned kickoffs end at the receiving team's first down](#fixed--cfb-returned-kickoffs-end-at-the-receiving-teams-first-down)
-  - [Fixed — CFB plays end at the next play's clock](#fixed--cfb-plays-end-at-the-next-plays-clock)
-  - [Fixed — CFB 2007-13 touchdowns filed as their own kick get the snap's down](#fixed--cfb-2007-13-touchdowns-filed-as-their-own-kick-get-the-snaps-down)
-  - [Fixed — CFB blocked field goals keep ESPN's type (#641); null keys never twin a play copy](#fixed--cfb-blocked-field-goals-keep-espns-type-641-null-keys-never-twin-a-play-copy)
-  - [Added — the metric registry (`sportsdataverse.registry`)](#added--the-metric-registry-sportsdataverseregistry)
-  - [Fixed — CFB win probability in overtime and the final seconds, and made field goals' WPA](#fixed--cfb-win-probability-in-overtime-and-the-final-seconds-and-made-field-goals-wpa)
-  - [Fixed — CFB completions whose text states no "complete to ... for N" gain keep their yards](#fixed--cfb-completions-whose-text-states-no-complete-to--for-n-gain-keep-their-yards)
-  - [Changed — "situation-neutral" reads the score-and-clock win probability (CFB and NFL)](#changed--situation-neutral-reads-the-score-and-clock-win-probability-cfb-and-nfl)
-  - [Fixed — pace counts regulation drives once, for the drive's own offense](#fixed--pace-counts-regulation-drives-once-for-the-drives-own-offense)
-  - [Fixed — a season usage table keeps one row per player](#fixed--a-season-usage-table-keeps-one-row-per-player)
-  - [Changed — CFB xQBR retrained on the served box score, without the spread, behind a publish gate](#changed--cfb-xqbr-retrained-on-the-served-box-score-without-the-spread-behind-a-publish-gate)
-  - [Changed — tackle share counts only the defense's own scrimmage snaps](#changed--tackle-share-counts-only-the-defenses-own-scrimmage-snaps)
-  - [Fixed — a tackle is credited to the tackler's own team](#fixed--a-tackle-is-credited-to-the-tacklers-own-team)
-  - [Fixed — a pick-six or fumble-return touchdown is not the offense's conversion or touchdown](#fixed--a-pick-six-or-fumble-return-touchdown-is-not-the-offenses-conversion-or-touchdown)
-  - [Fixed — CFB plays ESPN files twice under new ids are dropped](#fixed--cfb-plays-espn-files-twice-under-new-ids-are-dropped)
-  - [Fixed — CFB losses written "for N yards loss" read as gains](#fixed--cfb-losses-written-for-n-yards-loss-read-as-gains)
-  - [Fixed — CFB fumbles in ESPN's 2025 text format keep their rush / pass flag](#fixed--cfb-fumbles-in-espns-2025-text-format-keep-their-rush--pass-flag)
-  - [Added — MLB park dimensions by season (`load_mlb_park_dimensions`)](#added--mlb-park-dimensions-by-season-load_mlb_park_dimensions)
-  - [Added — conference and division reference tables for nine leagues (`{league}_groups`)](#added--conference-and-division-reference-tables-for-nine-leagues-league_groups)
-  - [Added — the official PFF Developer API (`api.pff.com`), with the premium wrappers kept as LEGACY](#added--the-official-pff-developer-api-apipffcom-with-the-premium-wrappers-kept-as-legacy)
-  - [Added — NBA officiating data: Last Two Minute reports, referee assignments, and cdn liveData](#added--nba-officiating-data-last-two-minute-reports-referee-assignments-and-cdn-livedata)
-  - [Changed — the CFB vendor special-teams name patterns moved into the shared football grammar](#changed--the-cfb-vendor-special-teams-name-patterns-moved-into-the-shared-football-grammar)
-  - [Added — CFB kick distances and bare-punt returns derived from field position, with provenance](#added--cfb-kick-distances-and-bare-punt-returns-derived-from-field-position-with-provenance)
-  - [Changed — `cfb_returning_production` measures defense from play participants and weights it into `overall_returning`](#changed--cfb_returning_production-measures-defense-from-play-participants-and-weights-it-into-overall_returning)
-  - [Fixed — fantasy-football ids are strings, pinned instead of inferred from each DynastyProcess release](#fixed--fantasy-football-ids-are-strings-pinned-instead-of-inferred-from-each-dynastyprocess-release)
-  - [Fixed — the usage box glued shared tackles into one phantom player and read positions only from participants](#fixed--the-usage-box-glued-shared-tackles-into-one-phantom-player-and-read-positions-only-from-participants)
-  - [Fixed — CFB special teams read ESPN's 2025 jersey-style text; the usage box keys a kicker once](#fixed--cfb-special-teams-read-espns-2025-jersey-style-text-the-usage-box-keys-a-kicker-once)
-  - [Added — loaders for the ESPN football usage leaderboards and team / coach tendencies](#added--loaders-for-the-espn-football-usage-leaderboards-and-team--coach-tendencies)
-  - [Added — team and coach tendencies (`sportsdataverse.football.tendencies`)](#added--team-and-coach-tendencies-sportsdataversefootballtendencies)
-  - [Added — usage and situational box (`sportsdataverse.football.usage_box`)](#added--usage-and-situational-box-sportsdataversefootballusage_box)
-  - [Added — NFL field-position EP curve (`nfl_field_position`)](#added--nfl-field-position-ep-curve-nfl_field_position)
-  - [Added — offline processor inputs (#491)](#added--offline-processor-inputs-491)
-  - [Added — CFB drive summary and situational team stats, graduated from Game on Paper (#470)](#added--cfb-drive-summary-and-situational-team-stats-graduated-from-game-on-paper-470)
-  - [Fixed — Statcast search runner ids are Int64, not Float64](#fixed--statcast-search-runner-ids-are-int64-not-float64)
-  - [Fixed — MLB expected stats counted raw pitches as plate appearances](#fixed--mlb-expected-stats-counted-raw-pitches-as-plate-appearances)
+  - [Breaking changes](#breaking-changes)
+  - [Added](#added)
+  - [Changed](#changed)
+  - [Fixed](#fixed)
+  - [Security](#security)
 - [0.1.4 Release: September 1, 2026](#014-release-september-1-2026)
-  - [Fixed — CFB EP/WP inputs: mirrored end yardlines, the wrong `wp_after` perspective, and a flipped WP (#408, #411, #413)](#fixed--cfb-epwp-inputs-mirrored-end-yardlines-the-wrong-wp_after-perspective-and-a-flipped-wp-408-411-413)
-  - [Added — the penalty's own side, net yardage and EPA, plus first-down provenance (#408)](#added--the-penaltys-own-side-net-yardage-and-epa-plus-first-down-provenance-408)
-  - [Added — air yards, aDOT and YAC in the passer and receiver box scores (#414)](#added--air-yards-adot-and-yac-in-the-passer-and-receiver-box-scores-414)
-  - [Fixed — air yards sided by the game's own text abbreviations (#418)](#fixed--air-yards-sided-by-the-games-own-text-abbreviations-418)
-  - [Fixed — returning production had no roster since #399 (#417, #419)](#fixed--returning-production-had-no-roster-since-399-417-419)
-  - [Fixed — codegen let caller params reach ESPN, and un-truncated the endpoints that were silently short (#409)](#fixed--codegen-let-caller-params-reach-espn-and-un-truncated-the-endpoints-that-were-silently-short-409)
-  - [Changed — CI dispatches the Game on Paper deploy on every push to `main`; docs site social metadata completed (#410, #412)](#changed--ci-dispatches-the-game-on-paper-deploy-on-every-push-to-main-docs-site-social-metadata-completed-410-412)
+  - [Added](#added-1)
+  - [Changed](#changed-1)
+  - [Fixed](#fixed-1)
   - [Data](#data)
 - [0.1.3 Release: August 28, 2026](#013-release-august-28-2026)
-  - [Fixed — formation tags reached the box score as player names (#407)](#fixed--formation-tags-reached-the-box-score-as-player-names-407)
+  - [Fixed](#fixed-2)
 - [0.1.2 Release: August 27, 2026](#012-release-august-27-2026)
-  - [Fixed — passers vanished from the CFB advanced box score (#405)](#fixed--passers-vanished-from-the-cfb-advanced-box-score-405)
+  - [Fixed](#fixed-3)
 - [0.1.1 Release: August 27, 2026](#011-release-august-27-2026)
-  - [Fixed — every source family now reaches the top-level namespace](#fixed--every-source-family-now-reaches-the-top-level-namespace)
-  - [Fixed — the distribution shipped `dev/` and `tools/` as top-level packages](#fixed--the-distribution-shipped-dev-and-tools-as-top-level-packages)
-  - [Fixed — docs site layout on phones](#fixed--docs-site-layout-on-phones)
-  - [Changed — release-asset reads classify failures through the HTTP gateway (#397, #402, #404)](#changed--release-asset-reads-classify-failures-through-the-http-gateway-397-402-404)
-  - [Added — the CFB dataset surface: teams, rosters, schedules, team info (#393, #394, #396, #399)](#added--the-cfb-dataset-surface-teams-rosters-schedules-team-info-393-394-396-399)
-  - [Fixed — CFB fourth-down clamps, reproducibility, and a Torvik HTML body (#398, #400, #401)](#fixed--cfb-fourth-down-clamps-reproducibility-and-a-torvik-html-body-398-400-401)
-  - [Fixed — MBB player-code resolution and crosswalk sources (#348, #372, #373)](#fixed--mbb-player-code-resolution-and-crosswalk-sources-348-372-373)
-  - [New — the three NBA video endpoints revived (`nba_stats` 125 → 128, #391)](#new--the-three-nba-video-endpoints-revived-nba_stats-125-%E2%86%92-128-391)
-  - [New — NCAA baseball reconciliation seam + sport-generic reference parsers (#390)](#new--ncaa-baseball-reconciliation-seam--sport-generic-reference-parsers-390)
-  - [Added — league-wide NCAA RAPM solver (`mbb_ncaa_rapm_league`, #389)](#added--league-wide-ncaa-rapm-solver-mbb_ncaa_rapm_league-389)
-  - [Added — `display_name_to_roster_key` is canonical in sdv-py (#388)](#added--display_name_to_roster_key-is-canonical-in-sdv-py-388)
-  - [Added — loaders for all 24 published NCAA datasets (#387)](#added--loaders-for-all-24-published-ncaa-datasets-387)
-  - [Fix — NCAA shots `period` / `sec_left` derived instead of shipped null (#386)](#fix--ncaa-shots-period--sec_left-derived-instead-of-shipped-null-386)
-  - [Added — CFB NCAA→cfbfastR mapper + drive totals (#384)](#added--cfb-ncaa%E2%86%92cfbfastr-mapper--drive-totals-384)
-  - [Fix — `nba_stats` capture-confirmed endpoint expansion + v3 boxscore envelope (#383)](#fix--nba_stats-capture-confirmed-endpoint-expansion--v3-boxscore-envelope-383)
-  - [Added — NCAA RAPM input adapter + cross-season `person_id` resolution (#382)](#added--ncaa-rapm-input-adapter--cross-season-person_id-resolution-382)
-  - [Added — `build_wnba_season_wp`: WNBA season win-probability compile (#381)](#added--build_wnba_season_wp-wnba-season-win-probability-compile-381)
-  - [Fix — era-aware half/clock columns for pre-2006 WNBA and pre-2016 NCAA WBB (#380)](#fix--era-aware-halfclock-columns-for-pre-2006-wnba-and-pre-2016-ncaa-wbb-380)
-  - [Fix — `load_cfb_passing` declared schema synced with the published asset (#379)](#fix--load_cfb_passing-declared-schema-synced-with-the-published-asset-379)
-  - [Fix — the team-alias flaw class closed + colliding players named (#378)](#fix--the-team-alias-flaw-class-closed--colliding-players-named-378)
-  - [Fix — team-nickname yard-line side codes (up to 8 letters) (#377)](#fix--team-nickname-yard-line-side-codes-up-to-8-letters-377)
-  - [Added — warn when a team parses cleanly but yields no stints (#376)](#added--warn-when-a-team-parses-cleanly-but-yields-no-stints-376)
-  - [Deprecated — the three NBA `*_v3` loaders now read the production releases](#deprecated--the-three-nba-_v3-loaders-now-read-the-production-releases)
-  - [Docs — NBA shifted loaders: the `season` COLUMN is the END year](#docs--nba-shifted-loaders-the-season-column-is-the-end-year)
-  - [New — `sportsdataverse.wexp`: win-expectancy bake-off harness (NFL + CFB)](#new--sportsdataversewexp-win-expectancy-bake-off-harness-nfl--cfb)
-  - [New — `load_nfl_ratings_weekly`: per-week as-of NFL ratings vintages](#new--load_nfl_ratings_weekly-per-week-as-of-nfl-ratings-vintages)
-  - [New — `sportsdataverse.scrape.espn`: shared ESPN `-raw` archive engine](#new--sportsdataversescrapeespn-shared-espn--raw-archive-engine)
-  - [Fixed — `cfb_season_odds` simulated 571 non-FBS teams as league-average (#333)](#fixed--cfb_season_odds-simulated-571-non-fbs-teams-as-league-average-333)
-  - [Fixed — `cfb_season_odds` `as_of_date` bounded only the ratings, never the game set (#334)](#fixed--cfb_season_odds-as_of_date-bounded-only-the-ratings-never-the-game-set-334)
-  - [Known — `cfb_season_odds` is not bit-reproducible across runs (#392)](#known--cfb_season_odds-is-not-bit-reproducible-across-runs-392)
-  - [PWHL / HockeyTech data-quality fixes](#pwhl--hockeytech-data-quality-fixes)
-  - [Fixed — CFB box score per-player defensive/specialist attribution (#93)](#fixed--cfb-box-score-per-player-defensivespecialist-attribution-93)
-  - [Fixed — NFL play-by-play raised `KeyError: 'name'` for mascot-less franchises (#23)](#fixed--nfl-play-by-play-raised-keyerror-name-for-mascot-less-franchises-23)
-  - [Fixed — Yahoo CFB crosswalk live tests no longer red the matrix on a blocked runner (#229)](#fixed--yahoo-cfb-crosswalk-live-tests-no-longer-red-the-matrix-on-a-blocked-runner-229)
-  - [Housekeeping — the open-issue backlog was swept to zero](#housekeeping--the-open-issue-backlog-was-swept-to-zero)
-  - [Fixed — dead and malformed source URLs in `config.py` (#9 follow-up)](#fixed--dead-and-malformed-source-urls-in-configpy-9-follow-up)
-  - [Also in this release](#also-in-this-release)
-  - [Road to 0.1.0 — highlights since 0.0.40](#road-to-010--highlights-since-0040)
+  - [Breaking changes](#breaking-changes-1)
+  - [Added](#added-2)
+  - [Changed](#changed-2)
+  - [Deprecated](#deprecated)
+  - [Fixed](#fixed-4)
 - [0.0.75 Release: August 2, 2026](#0075-release-august-2-2026)
-  - [Fix — `scrape.ncaa` CLIs pointed at the wrong repo root (silent no-op)](#fix--scrapencaa-clis-pointed-at-the-wrong-repo-root-silent-no-op)
-  - [`scrape.ncaa.parse` — the parse stage is now re-runnable (`--season`, `--force`)](#scrapencaaparse--the-parse-stage-is-now-re-runnable---season---force)
-  - [New — `sportsdataverse.scrape.ncaa`: shared stats.ncaa.org hoops sweep engine](#new--sportsdataversescrapencaa-shared-statsncaaorg-hoops-sweep-engine)
-  - [`sportsdataverse.scrape.stats` — league-parameterized capture layer (Phase 2)](#sportsdataversescrapestats--league-parameterized-capture-layer-phase-2)
-  - [Docs — offline full-text search on the documentation site](#docs--offline-full-text-search-on-the-documentation-site)
-  - [CI — docs site builds on GitHub Actions and publishes to `gh-pages`](#ci--docs-site-builds-on-github-actions-and-publishes-to-gh-pages)
-  - [New — `sportsdataverse.scrape.stats`: shared stats.nba.com / stats.wnba.com sweep engine (Phase 1)](#new--sportsdataversescrapestats-shared-statsnbacom--statswnbacom-sweep-engine-phase-1)
-  - [CFB — model suite retrained on the corrected corpus (BREAKING model change)](#cfb--model-suite-retrained-on-the-corrected-corpus-breaking-model-change)
-  - [CFB — model cards ship beside every artifact](#cfb--model-cards-ship-beside-every-artifact)
+  - [Breaking changes](#breaking-changes-2)
+  - [Added](#added-3)
+  - [Changed](#changed-3)
+  - [Fixed](#fixed-5)
 - [0.0.74 Release: August 2, 2026](#0074-release-august-2-2026)
-  - [CFB — the ridge opponent adjustment was a no-op (BREAKING rating change)](#cfb--the-ridge-opponent-adjustment-was-a-no-op-breaking-rating-change)
-  - [CFB — ESPN's `-1` end-of-play yardline sentinel corrupted 2016 week 2](#cfb--espns--1-end-of-play-yardline-sentinel-corrupted-2016-week-2)
-  - [CFB — `fill_null(0.0)` is a silent no-op on booleans, pinning `rushing_power_rate` at 1.0](#cfb--fill_null00-is-a-silent-no-op-on-booleans-pinning-rushing_power_rate-at-10)
-  - [Also in this release](#also-in-this-release-1)
-  - [CFB — `opportunity_run` corrected, un-degenerating `opp_highlight_yards` (BREAKING)](#cfb--opportunity_run-corrected-un-degenerating-opp_highlight_yards-breaking)
-  - [CFB / PHF — 1,308 loader return-table columns described](#cfb--phf--1308-loader-return-table-columns-described)
-  - [CFB — `team_id` canonicalized to `Int64` at the loader boundary](#cfb--team_id-canonicalized-to-int64-at-the-loader-boundary)
-  - [Docs — loader returns tables now carry column descriptions](#docs--loader-returns-tables-now-carry-column-descriptions)
-  - [CFB — `adv_*` `pos_team` now holds the team NAME, id moves to `pos_team_id` (BREAKING data change)](#cfb--adv_-pos_team-now-holds-the-team-name-id-moves-to-pos_team_id-breaking-data-change)
-  - [CFB — `adv_*` declared schemas re-derived from the shipped data](#cfb--adv_-declared-schemas-re-derived-from-the-shipped-data)
+  - [Breaking changes](#breaking-changes-3)
+  - [Changed](#changed-4)
+  - [Fixed](#fixed-6)
+  - [Data](#data-1)
 - [0.0.73 Release: August 1, 2026](#0073-release-august-1-2026)
-  - [CFB — pre-2014 `{type}_player_id` join recovered (2004 +36pp, 2005–2013 +2–8pp)](#cfb--pre-2014-type_player_id-join-recovered-2004-36pp-20052013-28pp)
-  - [CFB — `adj_off/def/net` rescaled to the R `adjust_epa` netted statistic (BREAKING scale change)](#cfb--adj_offdefnet-rescaled-to-the-r-adjust_epa-netted-statistic-breaking-scale-change)
-  - [CFB — `adj_st_epa` rescaled to true EPA units (BREAKING scale change)](#cfb--adj_st_epa-rescaled-to-true-epa-units-breaking-scale-change)
-  - [CFB — `cfb_ratings` gameonpaper-parity filters (default ON)](#cfb--cfb_ratings-gameonpaper-parity-filters-default-on)
-  - [CFB — loaders for 3 published-but-unreachable dataset releases](#cfb--loaders-for-3-published-but-unreachable-dataset-releases)
-  - [CFB — 5 summaries loaders unblocked for 2004–2013](#cfb--5-summaries-loaders-unblocked-for-20042013)
-  - [NBA — human-readable player and team columns for model outputs](#nba--human-readable-player-and-team-columns-for-model-outputs)
-  - [NBA — read the committed raw store over URL + season-level captures](#nba--read-the-committed-raw-store-over-url--season-level-captures)
-  - [Fixes](#fixes)
+  - [Breaking changes](#breaking-changes-4)
+  - [Added](#added-4)
+  - [Changed](#changed-5)
+  - [Fixed](#fixed-7)
 - [0.0.72 Release: July 22, 2026](#0072-release-july-22-2026)
-  - [BREAKING CHANGES](#breaking-changes)
-  - [CFB — loaders for 6 published-but-unreachable dataset releases](#cfb--loaders-for-6-published-but-unreachable-dataset-releases)
-  - [CFB — `load_cfb_ratings` dataset loader](#cfb--load_cfb_ratings-dataset-loader)
-  - [NBA / WNBA — CTG play context (T3.6): possession/shot/lineup/player tables + start-type oracle](#nba--wnba--ctg-play-context-t36-possessionshotlineupplayer-tables--start-type-oracle)
-  - [Fixes](#fixes-1)
-  - [Dependencies](#dependencies)
-  - [Release utilities — `sportsdataverse.release` (sportsdataversedata R-package port)](#release-utilities--sportsdataverserelease-sportsdataversedata-r-package-port)
-  - [PWHL — coordinate-based xG (T5.3b): xg_method default flips quality → coords](#pwhl--coordinate-based-xg-t53b-xg_method-default-flips-quality-%E2%86%92-coords)
-  - [PWHL — per-strength xG calibration + geometry hardening (T5 follow-up)](#pwhl--per-strength-xg-calibration--geometry-hardening-t5-follow-up)
-  - [CFB — advanced-efficiency spine (opponent-adjusted efficiency/explosiveness/havoc → field position → adjusted tempo)](#cfb--advanced-efficiency-spine-opponent-adjusted-efficiencyexplosivenesshavoc-%E2%86%92-field-position-%E2%86%92-adjusted-tempo)
-  - [NFL — NGS over-expected tracking spine (YAC-OE → RYOE → separation-OE → man/zone rates)](#nfl--ngs-over-expected-tracking-spine-yac-oe-%E2%86%92-ryoe-%E2%86%92-separation-oe-%E2%86%92-manzone-rates)
-  - [NFL — scheme & special teams spine (play-call model → game script → kicker/punter value → line grades)](#nfl--scheme--special-teams-spine-play-call-model-%E2%86%92-game-script-%E2%86%92-kickerpunter-value-%E2%86%92-line-grades)
-  - [NFL — projection & draft spine (player projections → usage shares → availability → draft model)](#nfl--projection--draft-spine-player-projections-%E2%86%92-usage-shares-%E2%86%92-availability-%E2%86%92-draft-model)
-  - [NFL — ratings & market spine (power ratings → win prob → spread/total → player props)](#nfl--ratings--market-spine-power-ratings-%E2%86%92-win-prob-%E2%86%92-spreadtotal-%E2%86%92-player-props)
-  - [CFB — recruiting & roster-projection spine (talent composite → returning production → wins projection → transfer impact → draft projection)](#cfb--recruiting--roster-projection-spine-talent-composite-%E2%86%92-returning-production-%E2%86%92-wins-projection-%E2%86%92-transfer-impact-%E2%86%92-draft-projection)
-  - [NBA / WNBA / G-League — shot-value spine (xPoints → context make-prob → talent → selection → zone maps)](#nba--wnba--g-league--shot-value-spine-xpoints-%E2%86%92-context-make-prob-%E2%86%92-talent-%E2%86%92-selection-%E2%86%92-zone-maps)
-  - [MBB / WBB — shot-quality spine (xPoints → shot selection → shooter talent)](#mbb--wbb--shot-quality-spine-xpoints-%E2%86%92-shot-selection-%E2%86%92-shooter-talent)
-  - [MBB / WBB — player-value & projection spine (box-BPM → archetypes → recruiting → transfer → draft)](#mbb--wbb--player-value--projection-spine-box-bpm-%E2%86%92-archetypes-%E2%86%92-recruiting-%E2%86%92-transfer-%E2%86%92-draft)
-  - [Recruiting — ESPN NCAA recruiting family + On3 rankings](#recruiting--espn-ncaa-recruiting-family--on3-rankings)
-  - [MBB / WBB — prediction & tournament stack (ratings → pregame → in-game WP → résumé → bracketology → Monte Carlo)](#mbb--wbb--prediction--tournament-stack-ratings-%E2%86%92-pregame-%E2%86%92-in-game-wp-%E2%86%92-r%C3%A9sum%C3%A9-%E2%86%92-bracketology-%E2%86%92-monte-carlo)
-  - [NBA — external concurrent validity + walk-forward retrodiction (WP3)](#nba--external-concurrent-validity--walk-forward-retrodiction-wp3)
-  - [NBA — RAPM variants (WP2)](#nba--rapm-variants-wp2)
-  - [NBA — through-date ratings panel, WAR, and single-game BPM (WP4)](#nba--through-date-ratings-panel-war-and-single-game-bpm-wp4)
-  - [NBA — v3-to-v2 play-by-play adapter (`nba_v3_to_v2_pbp`)](#nba--v3-to-v2-play-by-play-adapter-nba_v3_to_v2_pbp)
-  - [NBA / WNBA — stats.nba.com / stats.wnba.com flat-API family (`nba_stats` / `wnba_stats`)](#nba--wnba--statsnbacom--statswnbacom-flat-api-family-nba_stats--wnba_stats)
-  - [NBA — possession event-detail columns, per-shooter shooting frame, `game_date`](#nba--possession-event-detail-columns-per-shooter-shooting-frame-game_date)
-  - [NBA — faithful possession boundaries (pbpstats parity)](#nba--faithful-possession-boundaries-pbpstats-parity)
-  - [NBA — quarter-box on-court lineup seeding + `lineup_source="quarter_box"`](#nba--quarter-box-on-court-lineup-seeding--lineup_sourcequarter_box)
-  - [CFB — 0.36-live pbp reconciliation + game-ending WP-perspective fix](#cfb--036-live-pbp-reconciliation--game-ending-wp-perspective-fix)
-  - [CFB — advanced box score: player-name cleanup + `cp` aggregation](#cfb--advanced-box-score-player-name-cleanup--cp-aggregation)
-  - [NFL / CFB — season standings + simulation engines (nflseedR / cfbseedR ports)](#nfl--cfb--season-standings--simulation-engines-nflseedr--cfbseedr-ports)
-  - [MBB / WBB — bigballR + wbigballR port: `ncaa_mbb_*` / `ncaa_wbb_*` stats.ncaa.org family](#mbb--wbb--bigballr--wbigballr-port-ncaa_mbb_--ncaa_wbb_-statsncaaorg-family)
-  - [MBB / WBB — college computational-core port (lineup stats → ratings/luck → RAPM → positions → NCAA stint pipeline)](#mbb--wbb--college-computational-core-port-lineup-stats-%E2%86%92-ratingsluck-%E2%86%92-rapm-%E2%86%92-positions-%E2%86%92-ncaa-stint-pipeline)
-  - [MBB / WBB / NBA — NCAA LineupStatSet producer + hoopR release-parity producers](#mbb--wbb--nba--ncaa-lineupstatset-producer--hoopr-release-parity-producers)
-  - [CFB / MBB / WBB / Baseball — stats.ncaa.org parser expansion (football pbp graduation, box tabs, college baseball + softball pbp)](#cfb--mbb--wbb--baseball--statsncaaorg-parser-expansion-football-pbp-graduation-box-tabs-college-baseball--softball-pbp)
-  - [NBA / MBB / WBB — dataset loaders for the published model releases](#nba--mbb--wbb--dataset-loaders-for-the-published-model-releases)
-  - [NBA / WNBA — read-through raw JSON store for stats.nba.com per-game payloads](#nba--wnba--read-through-raw-json-store-for-statsnbacom-per-game-payloads)
-  - [NBA / WNBA / G-League — tracking-value spine (T3.2): six over-expected models on the `playerdashpt*` surface](#nba--wnba--g-league--tracking-value-spine-t32-six-over-expected-models-on-the-playerdashpt-surface)
-  - [NBA — model-zoo v1: validation harness + SPM / BPM 2.0 / Bayesian adj-RAPM](#nba--model-zoo-v1-validation-harness--spm--bpm-20--bayesian-adj-rapm)
-  - [NBA — Kalman + aging-curve player projection + forecast validator](#nba--kalman--aging-curve-player-projection--forecast-validator)
-  - [NHL / PWHL — microstat & EDGE value spine (T5.2) + first-of-its-kind PWHL prediction (T5.3)](#nhl--pwhl--microstat--edge-value-spine-t52--first-of-its-kind-pwhl-prediction-t53)
-  - [PWHL — shift-derived `strength_state` + shot-level coordinate xG (+ two loaders)](#pwhl--shift-derived-strength_state--shot-level-coordinate-xg--two-loaders)
-  - [MLB — model spines: game state (T6.4), pitching evaluation (T6.1), fielding/catching/baserunning (T6.3)](#mlb--model-spines-game-state-t64-pitching-evaluation-t61-fieldingcatchingbaserunning-t63)
-  - [Recruiting / NFL — PFF Premium Stats stem + On3 RDB retarget + 247Sports expansion](#recruiting--nfl--pff-premium-stats-stem--on3-rdb-retarget--247sports-expansion)
-  - [Validation harness — `constant_column` check, R-lint UTF-8 fix, cron run-tracker ingest](#validation-harness--constant_column-check-r-lint-utf-8-fix-cron-run-tracker-ingest)
+  - [Breaking changes](#breaking-changes-5)
+  - [Added](#added-5)
+  - [Changed](#changed-6)
+  - [Deprecated](#deprecated-1)
+  - [Removed](#removed)
+  - [Fixed](#fixed-8)
+  - [Data](#data-2)
 - [0.0.71 Release: June 24, 2026](#0071-release-june-24-2026)
-  - [CFB — opponent-adjusted EPA (`cfb_adjusted_epa`): season + walk-forward](#cfb--opponent-adjusted-epa-cfb_adjusted_epa-season--walk-forward)
-  - [NFL — era-aware decision models + both-path (ESPN + nflverse) model parity](#nfl--era-aware-decision-models--both-path-espn--nflverse-model-parity)
+  - [Added](#added-6)
+  - [Changed](#changed-7)
+  - [Fixed](#fixed-9)
 - [0.0.70 Release: June 24, 2026](#0070-release-june-24-2026)
-  - [CFB — `qbr` / `fg` / `wp_spread` models refreshed on the consensus-odds full-corpus reprocess](#cfb--qbr--fg--wp_spread-models-refreshed-on-the-consensus-odds-full-corpus-reprocess)
+  - [Changed](#changed-8)
 - [0.0.69 Release: June 23, 2026](#0069-release-june-23-2026)
-  - [CFB — roster-backed `{type}_player_id` + player-name cleanup fixes](#cfb--roster-backed-type_player_id--player-name-cleanup-fixes)
+  - [Added](#added-7)
+  - [Fixed](#fixed-10)
 - [0.0.68 Release: June 23, 2026](#0068-release-june-23-2026)
-  - [CFB — completion-probability (`cp`/`cpoe`) + expected-pass (`xpass`/`pass_oe`) surface](#cfb--completion-probability-cpcpoe--expected-pass-xpasspass_oe-surface)
-  - [CFB — spread-free (naive) win-probability surface (`wp_*_naive`)](#cfb--spread-free-naive-win-probability-surface-wp__naive)
-  - [CFB — QBR model retrained on the full 2004–2025 history](#cfb--qbr-model-retrained-on-the-full-20042025-history)
-  - [CFB — fourth-down decision surface (`get_4th_down_probs`, cfb4th port)](#cfb--fourth-down-decision-surface-get_4th_down_probs-cfb4th-port)
-  - [CFB — two-point-conversion decision surface (`get_2pt_probs`, cfb4th port)](#cfb--two-point-conversion-decision-surface-get_2pt_probs-cfb4th-port)
-  - [CFB — rule-era QBR / FG / fourth-down models + `spread_time` sign fix](#cfb--rule-era-qbr--fg--fourth-down-models--spread_time-sign-fix)
-  - [CFB — pre-2014 play-text player-name extraction](#cfb--pre-2014-play-text-player-name-extraction)
-  - [NFL — expected pass (`xpass` / `pass_oe`) + nfl4th fourth-down decision surface](#nfl--expected-pass-xpass--pass_oe--nfl4th-fourth-down-decision-surface)
-  - [NFL — self-trained XGBoost field-goal model in the fourth-down surface](#nfl--self-trained-xgboost-field-goal-model-in-the-fourth-down-surface)
-  - [NFL — `load_nfl_espn_qbr` (ESPN QBR loader, nflreadpy parity)](#nfl--load_nfl_espn_qbr-espn-qbr-loader-nflreadpy-parity)
-  - [NFL — bundled self-derived xpass model (offline, no first-use download)](#nfl--bundled-self-derived-xpass-model-offline-no-first-use-download)
+  - [Added](#added-8)
+  - [Changed](#changed-9)
+  - [Fixed](#fixed-11)
 - [0.0.67 Release: June 17, 2026](#0067-release-june-17-2026)
-  - [Documentation — return-table column descriptions filled (~3,061 columns)](#documentation--return-table-column-descriptions-filled-3061-columns)
-  - [Documentation — doctest-prompt cleanup, native returns-tables, new tutorials](#documentation--doctest-prompt-cleanup-native-returns-tables-new-tutorials)
-  - [NFL — PBP ETL ↔ nflfastR alignment + faithful model artifacts](#nfl--pbp-etl--nflfastr-alignment--faithful-model-artifacts)
-  - [CFB — EP + WP models retrained on the full 2004–2025 history](#cfb--ep--wp-models-retrained-on-the-full-20042025-history)
+  - [Added](#added-9)
+  - [Changed](#changed-10)
+  - [Fixed](#fixed-12)
 - [0.0.66 Release: June 17, 2026](#0066-release-june-17-2026)
-  - [CFB — `cfb_pbp` sparse-game `ColumnNotFoundError` guard (`end.team.id` et al.)](#cfb--cfb_pbp-sparse-game-columnnotfounderror-guard-endteamid-et-al)
+  - [Fixed](#fixed-13)
 - [0.0.65 Release: June 17, 2026](#0065-release-june-17-2026)
-  - [Namespace — minor/alias leagues nested under sport-group packages](#namespace--minoralias-leagues-nested-under-sport-group-packages)
-  - [All sports — `espn_*_game_rosters` vectorized logo extraction](#all-sports--espn__game_rosters-vectorized-logo-extraction)
-  - [MLB — `mlb_api_*` renamed to `mlb_*`](#mlb--mlb_api_-renamed-to-mlb_)
+  - [Breaking changes](#breaking-changes-6)
+  - [Changed](#changed-11)
+  - [Deprecated](#deprecated-2)
+  - [Fixed](#fixed-14)
 - [0.0.64 Release: June 17, 2026](#0064-release-june-17-2026)
-  - [MLB — comprehensive Baseball Savant / Statcast surface (`mlb_statcast_*`, 43 endpoints)](#mlb--comprehensive-baseball-savant--statcast-surface-mlb_statcast_-43-endpoints)
-  - [Documentation — `nfl_api` (NFL.com Shield) returns-schema tables](#documentation--nfl_api-nflcom-shield-returns-schema-tables)
+  - [Breaking changes](#breaking-changes-7)
+  - [Added](#added-10)
+  - [Changed](#changed-12)
 - [0.0.63 Release: June 16, 2026](#0063-release-june-16-2026)
-  - [All sports — `espn_*_game_rosters` diagonal per-team concat (fixes silent roster loss)](#all-sports--espn__game_rosters-diagonal-per-team-concat-fixes-silent-roster-loss)
-  - [HTTP — `download()` no longer retries a definitive 404](#http--download-no-longer-retries-a-definitive-404)
+  - [Fixed](#fixed-15)
 - [0.0.62 Release: June 16, 2026](#0062-release-june-16-2026)
-  - [All sports — `espn_*_game_rosters` robust to long-tail ESPN payloads](#all-sports--espn__game_rosters-robust-to-long-tail-espn-payloads)
+  - [Fixed](#fixed-16)
 - [0.0.61 Release: June 16, 2026](#0061-release-june-16-2026)
-  - [CFB — `espn_cfb_game_rosters` robust to long-tail ESPN payloads](#cfb--espn_cfb_game_rosters-robust-to-long-tail-espn-payloads)
+  - [Fixed](#fixed-17)
 - [0.0.60 Release: June 15, 2026](#0060-release-june-15-2026)
-  - [NFL — expected points, win probability, completion probability (CP/CPOE), and expected YAC (XYAC) models](#nfl--expected-points-win-probability-completion-probability-cpcpoe-and-expected-yac-xyac-models)
-  - [CFB — `espn_cfb_schedule` guards null-competitor placeholder events](#cfb--espn_cfb_schedule-guards-null-competitor-placeholder-events)
+  - [Added](#added-11)
+  - [Fixed](#fixed-18)
 - [0.0.59 Release: June 13, 2026](#0059-release-june-13-2026)
-  - [CFB — cross-source crosswalk loaders (`load_cfb_*_crosswalk`)](#cfb--cross-source-crosswalk-loaders-load_cfb__crosswalk)
-  - [ESPN — NCAA men's & women's college hockey (`espn_mch_*`, `espn_wch_*`)](#espn--ncaa-mens--womens-college-hockey-espn_mch_-espn_wch_)
-  - [ESPN — NCAA college baseball + softball (`espn_college_baseball_*`, `espn_college_softball_*`)](#espn--ncaa-college-baseball--softball-espn_college_baseball_-espn_college_softball_)
-  - [ESPN — UFL, XFL, and CFL (`espn_ufl_*`, `espn_xfl_*`, `espn_cfl_*`)](#espn--ufl-xfl-and-cfl-espn_ufl_-espn_xfl_-espn_cfl_)
-  - [ESPN — soccer/cricket param families + soccer headline aliases (`espn_soccer_*(league=)`, `espn_cricket_*(league=)`, `espn_epl_*`, `espn_ucl_*`, `espn_mls_*`, ...)](#espn--soccercricket-param-families--soccer-headline-aliases-espn_soccer_league-espn_cricket_league-espn_epl_-espn_ucl_-espn_mls_-)
+  - [Added](#added-12)
 - [0.0.58 Release: June 12, 2026](#0058-release-june-12-2026)
-  - [Loaders — NHL core + new NBA/MBB datasets aligned to `sportsdataverse-data` releases](#loaders--nhl-core--new-nbambb-datasets-aligned-to-sportsdataverse-data-releases)
-  - [Robustness & infrastructure — typing, CI gates, HTTP, deprecation policy](#robustness--infrastructure--typing-ci-gates-http-deprecation-policy)
-  - [The Odds API wrappers (`sportsdataverse.odds`, `toa_*`)](#the-odds-api-wrappers-sportsdataverseodds-toa_)
-  - [Yahoo Sports college football wrappers (`yahoo_cfb_*`)](#yahoo-sports-college-football-wrappers-yahoo_cfb_)
-  - [NFL — `api.nfl.com` wrappers cut over to generated; "NFL.com API" docs grouping](#nfl--apinflcom-wrappers-cut-over-to-generated-nflcom-api-docs-grouping)
-  - [NFL — automatic `api.nfl.com` token caching + `NFL_ACCESS_TOKEN` override](#nfl--automatic-apinflcom-token-caching--nfl_access_token-override)
-  - [Documentation — `api.nfl.com` OpenAPI spec](#documentation--apinflcom-openapi-spec)
-  - [Bug fixes](#bug-fixes)
-  - [Internal — Fox data key single-sourced](#internal--fox-data-key-single-sourced)
+  - [Added](#added-13)
+  - [Changed](#changed-13)
+  - [Fixed](#fixed-19)
 - [0.0.57 Release: June 10, 2026](#0057-release-june-10-2026)
-  - [Fox Sports Bifrost wrappers (CFB, NBA, MBB, NHL, MLB)](#fox-sports-bifrost-wrappers-cfb-nba-mbb-nhl-mlb)
-    - [CFB — Fox as a backup source for the EPA/WPA play processor (`fox_cfb_play_process`)](#cfb--fox-as-a-backup-source-for-the-epawpa-play-processor-fox_cfb_play_process)
+  - [Added](#added-14)
 - [0.0.56 Release: June 9, 2026](#0056-release-june-9-2026)
-  - [HockeyTech — live multi-league scraper (PWHL + AHL/OHL/WHL/QMJHL) + on-ice/Corsi/TOI analytics](#hockeytech--live-multi-league-scraper-pwhl--ahlohlwhlqmjhl--on-icecorsitoi-analytics)
-  - [NFL — Next Gen Stats (`nfl_ngs_*`) + api.nfl.com football/v2 (`nfl_*`) modules](#nfl--next-gen-stats-nfl_ngs_--apinflcom-footballv2-nfl_-modules)
-  - [NFL — restored the api.nfl.com game schedule + play-by-play wrappers](#nfl--restored-the-apinflcom-game-schedule--play-by-play-wrappers)
-  - [ESPN — remove always-erroring endpoint variants + NFL R-parity](#espn--remove-always-erroring-endpoint-variants--nfl-r-parity)
-  - [Documentation — per-league Python ↔ R parity tables](#documentation--per-league-python--r-parity-tables)
-  - [Documentation — example notebooks repaired, expanded, and rendered on-site](#documentation--example-notebooks-repaired-expanded-and-rendered-on-site)
-  - [NHL / PWHL — loader naming-parity aliases + games-manifest loaders (fastRhockey parity)](#nhl--pwhl--loader-naming-parity-aliases--games-manifest-loaders-fastrhockey-parity)
-  - [Documentation — NFL return-table descriptions mined from nflverse](#documentation--nfl-return-table-descriptions-mined-from-nflverse)
-  - [Documentation — class methods rendered on autodoc pages (CFB / NFL)](#documentation--class-methods-rendered-on-autodoc-pages-cfb--nfl)
-  - [Documentation — accuracy-audit fixes](#documentation--accuracy-audit-fixes)
+  - [Breaking changes](#breaking-changes-8)
+  - [Added](#added-15)
+  - [Changed](#changed-14)
+  - [Fixed](#fixed-20)
 - [0.0.55 Release: June 8, 2026](#0055-release-june-8-2026)
-  - [Documentation — richer per-function reference](#documentation--richer-per-function-reference)
-  - [Bug fixes](#bug-fixes-1)
+  - [Changed](#changed-15)
+  - [Fixed](#fixed-21)
 - [0.0.54 Release: June 8, 2026](#0054-release-june-8-2026)
-  - [Per-sport return schemas (correctness)](#per-sport-return-schemas-correctness)
-  - [BREAKING — parser-backed wrappers return a DataFrame by default](#breaking--parser-backed-wrappers-return-a-dataframe-by-default)
-  - [Docs coverage gate + autodoc](#docs-coverage-gate--autodoc)
-  - [MLB - full MLB Stats API coverage](#mlb---full-mlb-stats-api-coverage)
-  - [Deprecations](#deprecations)
+  - [Breaking changes](#breaking-changes-9)
+  - [Added](#added-16)
+  - [Changed](#changed-16)
+  - [Deprecated](#deprecated-3)
+  - [Fixed](#fixed-22)
 - [0.0.53 Release: June 8, 2026](#0053-release-june-8-2026)
-  - [ESPN — declarative codegen + factory retirement](#espn--declarative-codegen--factory-retirement)
-  - [NHL native — codegen cutover + clean names (api-web; in progress)](#nhl-native--codegen-cutover--clean-names-api-web-in-progress)
-  - [Dataset loaders — release manifest + drift audit](#dataset-loaders--release-manifest--drift-audit)
-  - [Generated documentation — reference pages + drift gate](#generated-documentation--reference-pages--drift-gate)
-  - [CFB — advanced box score expansion (`create_box_score`)](#cfb--advanced-box-score-expansion-create_box_score)
-  - [CFB — box-score attribution correctness + ESPN-sourced totals (`create_box_score`)](#cfb--box-score-attribution-correctness--espn-sourced-totals-create_box_score)
-  - [CFB — play-type reclassification: interception-return-fumble guard (`__add_new_play_types`)](#cfb--play-type-reclassification-interception-return-fumble-guard-__add_new_play_types)
-  - [CFB — blocked-kick turnover flags + ESPN native-flag tripwires](#cfb--blocked-kick-turnover-flags--espn-native-flag-tripwires)
-  - [CFB — pre-2014 era support (`CFBPlayProcess`)](#cfb--pre-2014-era-support-cfbplayprocess)
-  - [Removed — NCAA bracketology](#removed--ncaa-bracketology)
+  - [Breaking changes](#breaking-changes-10)
+  - [Added](#added-17)
+  - [Changed](#changed-17)
+  - [Removed](#removed-1)
+  - [Fixed](#fixed-23)
 - [0.0.52 Release: June 3, 2026](#0052-release-june-3-2026)
-  - [CFB — offline reprocess support (`CFBPlayProcess`)](#cfb--offline-reprocess-support-cfbplayprocess)
+  - [Added](#added-18)
+  - [Changed](#changed-18)
 - [0.0.51 Release: May 30, 2026](#0051-release-may-30-2026)
-  - [User-facing quality-of-life additions](#user-facing-quality-of-life-additions)
-  - [New: MLB module (greenfield)](#new-mlb-module-greenfield)
-  - [New: NHL — `api-web.nhle.com` migration + EDGE / Stats REST / Records](#new-nhl--api-webnhlecom-migration--edge--stats-rest--records)
-  - [New: ESPN cross-league port](#new-espn-cross-league-port)
-  - [New: NCAA bracketology](#new-ncaa-bracketology)
-  - [New: `_common_espn_parsers.py` (polars / pandas parser layer)](#new-_common_espn_parserspy-polars--pandas-parser-layer)
-  - [New: `return_parsed=True` dispatch shim](#new-return_parsedtrue-dispatch-shim)
-  - [New: `nhl_edge_parsers.py`](#new-nhl_edge_parserspy)
-  - [New: Site v2 summary dispatcher (20 sub-parsers)](#new-site-v2-summary-dispatcher-20-sub-parsers)
-  - [New: 100% ENDPOINT_PARSERS coverage (121/121)](#new-100-endpoint_parsers-coverage-121121)
-  - [New: weekly cron live-test drift detector](#new-weekly-cron-live-test-drift-detector)
-  - [New: MLB Stats API parser layer](#new-mlb-stats-api-parser-layer)
-  - [New: NHL Stats REST + Records parser layers](#new-nhl-stats-rest--records-parser-layers)
-  - [New: NHL api-web parser layer](#new-nhl-api-web-parser-layer)
-  - [Bug fixes](#bug-fixes-2)
-  - [New: NFL drive-plays parser (true PBP parity)](#new-nfl-drive-plays-parser-true-pbp-parity)
-  - [Test infrastructure](#test-infrastructure)
-  - [Documentation](#documentation)
+  - [Breaking changes](#breaking-changes-11)
+  - [Added](#added-19)
+  - [Changed](#changed-19)
+  - [Fixed](#fixed-24)
 - [0.0.50 Release: May 7, 2026](#0050-release-may-7-2026)
-  - [Packaging modernization](#packaging-modernization)
-  - [Conda installability](#conda-installability)
-  - [Linting & pre-commit modernization](#linting--pre-commit-modernization)
-  - [Documentation toolchain](#documentation-toolchain)
-  - [Runnable docstring examples (~190 functions)](#runnable-docstring-examples-190-functions)
-  - [Example notebooks](#example-notebooks)
-  - [Contributor docs and templates](#contributor-docs-and-templates)
-  - [NFL — nflreadpy parity](#nfl--nflreadpy-parity)
-  - [NFL — caching and configuration](#nfl--caching-and-configuration)
-  - [NFL — static datasets](#nfl--static-datasets)
-  - [NFL — pickcenter / odds modern path](#nfl--pickcenter--odds-modern-path)
-  - [NFL — `load_nfl_schedule` parquet port](#nfl--load_nfl_schedule-parquet-port)
-  - [WBB / WNBA — new ESPN scrape modules](#wbb--wnba--new-espn-scrape-modules)
-  - [CFB — `cfb_play_participants` and `__add_player_cols` collapse](#cfb--cfb_play_participants-and-__add_player_cols-collapse)
-  - [CFB — pandas → polars 1.x bug-fix reconciliation (`0.36-live` → `main`)](#cfb--pandas-%E2%86%92-polars-1x-bug-fix-reconciliation-036-live-%E2%86%92-main)
-  - [Infrastructure and tooling](#infrastructure-and-tooling)
-  - [Bug fixes](#bug-fixes-3)
-  - [Deprecations](#deprecations-1)
+  - [Breaking changes](#breaking-changes-12)
+  - [Added](#added-20)
+  - [Changed](#changed-20)
+  - [Deprecated](#deprecated-4)
+  - [Fixed](#fixed-25)
 - [0.0.40 Release: December 6, 2025](#0040-release-december-6-2025)
+  - [Changed](#changed-21)
 - [0.0.38-39 Release: August 28, 2023](#0038-39-release-august-28-2023)
+  - [Changed](#changed-22)
 - [0.0.36-37 Release: July 9, 2023](#0036-37-release-july-9-2023)
+  - [Breaking changes](#breaking-changes-13)
+  - [Added](#added-21)
 - [0.0.34-35 Release: May 7-9, 2023](#0034-35-release-may-7-9-2023)
+  - [Breaking changes](#breaking-changes-14)
+  - [Changed](#changed-23)
 - [0.0.18 Release: July 25, 2022](#0018-release-july-25-2022)
+  - [Breaking changes](#breaking-changes-15)
+  - [Added](#added-22)
 - [0.0.17 Release: July 9, 2022](#0017-release-july-9-2022)
+  - [Breaking changes](#breaking-changes-16)
+  - [Added](#added-23)
+  - [Changed](#changed-24)
+  - [Fixed](#fixed-26)
 - [0.0.15 Release: May 8, 2022](#0015-release-may-8-2022)
+  - [Changed](#changed-25)
 - [0.0.14 Release: March 16, 2022](#0014-release-march-16-2022)
+  - [Changed](#changed-26)
 - [0.0.12 Release: February 24, 2022](#0012-release-february-24-2022)
+  - [Added](#added-24)
+  - [Changed](#changed-27)
+  - [Fixed](#fixed-27)
 - [0.0.5 Release: October 20, 2021](#005-release-october-20-2021)
+  - [Changed](#changed-28)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## 0.1.5 Release: October 8, 2026
 
-### Fixed — NHL EDGE top-10 boards, ESPN transactions, NFL fantasy-ranking dtypes
-
-- The twelve `nhl_edge_*_top_10` functions always returned an empty frame. The EDGE boards answer
-  with a bare JSON list and `parse_edge_top10` accepted only a dict. Eight of their documented
-  examples also used values the API rejects (`sort_by="points"`, `strength="ev"`).
-- `espn_<league>_transactions` parsed to an empty frame because it ran the generic item parser; it
-  now uses `parse_transactions`.
-- `load_nfl_ff_rankings` read `rank_delta` as String early in a season, when its first 100 cells are
-  empty. The CSV schema is now inferred from the whole file.
-- The KenPom `box`, `win_probability` and `referee` examples used ids KenPom does not recognise, and
-  KenPom silently served its home page instead. `kenpom_referee` takes the numeric `r=` id.
-
-### Changed — every public function documents its return, and shows a returns table or says why not
-
-- `generate.py --check` fails when a public callable has no `Returns:` (or `Yields:`) section.
-- Generated wrappers and hand-written DataFrame functions show a returns table captured from real
-  data. Where none can be captured, the page says why: the host refuses a datacenter IP, the route
-  needs a login, the parser reads none of the live payload, or no package function produces the
-  input. A new `tools/codegen/capture_fixtures.py` captures endpoint payloads.
-
-### Changed — polars 2.x is allowed; the lock moves to polars 2.0.0
-
-The runtime constraint is now `polars>=1.0,<3` (was `<2.0`), mirrored in `recipe/meta.yaml`. The
-lock resolves polars **2.0.0** on Python >= 3.10. Python 3.9 stays on **1.36.1**, because polars
-2.0 requires Python 3.10. The code already runs on both (see the polars 2.0 fix below). The full
-suite on the 2.0 lock passed 11,775 tests and failed 3, none because of polars. The two `sdv_docs`
-server tests need the `mcp` extra (`anyio`) and pass once it is installed. A timing test that failed
-while the machine was under heavy load passes on re-run. Nothing else moved in the lock.
-
-### Fixed — CFB player loader schemas, and remote parquet reads under polars 2.0
-
-`load_cfb_passing`, `load_cfb_receiving` and `load_cfb_rushing` declare the columns the published
-assets gained: game-to-game dispersion of EPA per play (`dispersion_games`, `EPAplay_sd`,
-`EPAplay_p10`, `EPAplay_p90`, `boom_rate`, `bust_rate`, and boom-rate rank and percentiles), and
-for rushers the yardage tiers (`line_yards_share`, `second_level_share`, `open_field_share`),
-`stuff_rate` with its rank and percentiles, and EPA per carry split at one score. All 38 have
-returns-table descriptions taken from the producer.
-
-polars 2.0 asks for a parquet footer with a suffix range request (`Range: bytes=-N`), and GitHub's
-release-asset CDN answers that with HTTP 501. So under 2.0, `pl.read_parquet(url)`,
-`pl.scan_parquet(url)` and `pl.read_parquet_schema(url)` fail on a release URL. The loaders are not
-affected: they read with `use_pyarrow=True`, which works on both versions. Two other places were
-affected and are fixed: `generate.py --loader-schemas` now reads footers through an fsspec file, and
-the `paper_index_games` example passes `use_pyarrow=True`.
-
-### Added — Expected Threat: XThreat, soccer_xthreat_rate() and a bundled grid
-
-`XThreat` fits an Expected Threat grid from SPADL actions and `soccer_xthreat_rate(actions)` appends
-an `xt_value` column to a SPADL frame; both are ports of [socceraction](https://github.com/ML-KULeuven/socceraction)
-(MIT). A fitted 12 x 16 grid ships with the package (`load_xthreat_model()`), fit on StatsBomb open
-data: the World Cup 2018 and 2022 and Euro 2020 and 2024. 222 of 230 matches were used (8 were skipped on a
-kloppy deserializer error; their ids are in the grid metadata), 471,288 actions, 50 iterations. The
-grid agrees with socceraction's own fit to 2.8e-17 on the oracle. The rate is the value of the cell an
-action ends in minus the cell it starts in, with no interpolation.
-
-StatsBomb open data is free for research and non-commercial use only, under StatsBomb's open-data
-license; the bundled grid inherits that restriction.
-
-### Fixed — soccer_open_events() and soccer_open_dataset() failed in a fresh interpreter
-
-A bare `import kloppy` does not attach `kloppy.statsbomb`, so the loaders raised `AttributeError`
-until something else had imported the provider module. They now import it explicitly.
-
-### Fixed — code that polars 2.0 rejects now runs on both 1.x and 2.0
-
-Polars 2.0.0 (2026-10-06) removed several 1.x behaviors this codebase relied on. The suite run
-under 2.0 failed 478 tests. With these changes it passes on both 1.42 and 2.0, and output on 1.x
-is unchanged. The `polars>=1.0,<2.0` pin is not lifted here.
-
-- The seven `*_pbp` processors split the game clock with `list.to_struct(upper_bound=2)`, an
-  argument 2.0 removed. They now pass `fields=["clock.minutes", "clock.seconds"]`, which gives
-  identical output on 1.x. This one call accounted for 805 of the 2.0 errors.
-- `start.down`, `start.distance`, `end.down` and `end.distance` are cast to `Int64` where
-  `CFBPlayProcess` / `NFLPlayProcess` build the plays frame. pandas turns an int column with any
-  missing cell into float64. That happens with Fox-adapted and sparse games, and 2.0's
-  `is_in([1, 2, 3, 4])` raises on Float64 instead of coercing. `load_cfb_pbp` already declares
-  these columns `Int64`.
-- 2.0 cannot cast a String column to `pl.Date`. Eleven `.cast(pl.Date)` sites read columns that
-  are String in some loaders (`load_nfl_schedule().gameday` is String) and Date in others. They
-  now go through the private `_temporal.as_date()`, which parses a String and casts a temporal.
-- `explode()` on an empty list gives one null row in 1.x and no rows in 2.0. Five calls
-  (`usage_box`, the CBS subplays parser, the NCAA MBB RAPM stints) pass `empty_as_null=True` to
-  keep the 1.x rows.
-
-### Removed — BREAKING: the 11 overdue NFL loader aliases
-
-The 11 per-type NFL loaders marked `removed_in="0.1.0"` are gone: `load_nfl_ngs_passing`,
-`load_nfl_ngs_rushing`, `load_nfl_ngs_receiving`, `load_nfl_pfr_pass`, `load_nfl_pfr_weekly_pass`,
-`load_nfl_pfr_rush`, `load_nfl_pfr_weekly_rush`, `load_nfl_pfr_rec`, `load_nfl_pfr_weekly_rec`,
-`load_nfl_pfr_def`, `load_nfl_pfr_weekly_def`. Callers move to
-`load_nfl_nextgen_stats(seasons, stat_type=...)` and
-`load_nfl_pfr_advstats(seasons, stat_type=..., summary_level=...)`. They had emitted
-`DeprecationWarning` since 0.0.68 and were overdue under the `CONTRIBUTING.md` deprecation policy.
-The deprecated `sportsdataverse.parsed.nfl` aliases of the same names go with them.
-
-### Added — SPADL actions from any kloppy event dataset: soccer_spadl() and soccer_open_dataset()
-
-`soccer_spadl(dataset)` converts any kloppy event dataset (StatsBomb, Opta, Wyscout, Sportec, ...)
-into SPADL actions, a port of [socceraction](https://github.com/ML-KULeuven/socceraction) (MIT).
-Every action attacks left to right (kloppy `ACTION_EXECUTING_TEAM` orientation), and coordinates
-are scaled linearly onto a 105 x 68 pitch, matching socceraction. `soccer_open_dataset()` is the
-dataset-returning twin of `soccer_open_events()`, which returns a frame.
-
-The port is checked against an oracle: the socceraction 1.5.3 direct StatsBomb converter on open
-match 8658. Ours yields 1,709 rows against the oracle's 1,707 (the two extra are StatsBomb
-"Injury Clearance" passes that kloppy keeps); both sides produce 653 dribbles (617 StatsBomb
-carries + 36 synthetic). Over the 1,671 joined rows (every row with an event id), types, results,
-body parts and coordinates agree 99.88 % of the time, with a 2-id agreement allowlist; the 36
-synthetic dribbles are checked by position.
-
-### Changed — returns-table descriptions: NFL Pro, On3 and Fox authored; R-dictionary fill scoped to the league's own sport
-
-The description fill for blank returns-table cells read a cross-sport union of every SDV R
-package, which put baseballr's "Inning number." on the stats.nba.com `commonteamroster.num`
-jersey number, wehoop's *argument* text ("Whether to include statistical ranks in the returned
-table.") on WNBA leaderboard `rank` columns, cfbfastR's SP+ text on the NFL Pro passer `rating`
-and nflfastR's per-play "Binary indicator ... sack" on NFL Pro season totals. The fill now reads
-only the R packages of the league's own sport (hoopR then wehoop for a men's basketball league,
-nflreadr then nflfastR for the NFL; cfbfastR is not an NFL sibling), never returns R argument
-text, and skips the aggregate families (`nflpro`, `nfl_api`, `pff`, `pff_api`, `on3`) whose
-sport's R dictionaries describe play-by-play. Every HockeyTech league, the PHF and the
-`load_ncaa_*` loaders are mapped to their sport's package so same-sport text keeps resolving;
-cells that only ever held cross-sport text are now blank and tracked in the description ratchet
-at their measured counts.
-
-Authored alongside: 1,006 of the 1,036 NFL Pro (`nfl_pro_*`) columns, each backed by a nflverse
-`load_nfl_nextgen_stats` value crosswalk, an arithmetic identity on the complete captures or the
-envelope (`tools/codegen/gen_nflpro_descriptions.py`; the 30 NGS fields none of those confirm stay
-blank); all 2,428 On3 RDB columns (`tools/codegen/gen_on3_descriptions.py`); the 13 Fox Sports
-tables sdv-js documents (keyed `fox_api_<short>` so the sdv-js docs read them); the stats.nba.com /
-stats.wnba.com `commonteamroster.num` and leaderboard `rank` columns; and the PFF legacy
-`games` / `leagues` / `players` reference columns.
-
-### Added — wrappers for six more intake providers (ESPN content, TheSportsDB, Football-Data.co.uk, OpenLigaDB, Polymarket, Kalshi)
-
-46 wrappers across six new flat-API families, each with a parser, committed fixtures and generated
-reference pages. `espn_content_*` (3) reads ESPN's cross-sport news host
-(`content.core.api.espn.com`), paging with `limit` / `offset`. `thesportsdb_*` (12) covers
-TheSportsDB v1 -- sports, leagues, teams, players, events and league tables; that API puts its key in
-the path, so the wrappers default to the documented free test key and use `$THESPORTSDB_API_KEY`
-when you set one. `football_data_*` (3) downloads the Football-Data.co.uk archive -- one
-league-season of results plus closing odds (132 columns), an 'extra' league's full history (25) and
-the upcoming-fixtures file (94) -- and is the first family whose bodies are CSV rather than JSON.
-`openligadb_*` (11) wraps the community OpenLigaDB API for German football: leagues, matchdays,
-teams, matches, tables and top scorers. `polymarket_*` (8) and `kalshi_*` (9) read prediction-market
-data and live under `sportsdataverse.odds` -- Polymarket's Gamma metadata host together with its CLOB
-order books, and Kalshi's keyless market-data routes. Both keep their long ids and tickers as
-strings, and order-book price levels as the fixed-point strings the hosts send, so nothing is
-rounded or overflowed. Paging stays the caller's: a wrapper sends the cursor or offset you pass and
-never follows a continuation token on its own. Only read-only surfaces are wrapped -- Polymarket
-trading and Kalshi's `/portfolio` routes need credentials and are out of scope.
-
-### Added — Formula 1: Jolpica (Ergast-compatible) wrappers in `sportsdataverse.f1`
-
-`sportsdataverse.f1` wraps the keyless [Jolpica F1 API](https://github.com/jolpica/jolpica-f1)
-(`api.jolpi.ca/ergast/f1`, the Ergast successor) with f1dataR-named wrappers: `f1_schedule`,
-`f1_race`, `f1_results`, `f1_qualifying`, `f1_sprint`, `f1_pitstops`, `f1_driver_standings`,
-`f1_constructor_standings`, `f1_drivers`, `f1_driver`, `f1_constructors`, `f1_circuits`,
-`f1_seasons`, `f1_status` (generated from the recon's OpenAPI spec and 3-row captures) plus
-`f1_laps(season, round)`, a hand-written pager that walks `offset` in 100-timing pages until
-`MRData.total` is read (one race ~12 requests), and the single-page `f1_laps_page`. One parser,
-`parse_f1_mrdata`, flattens the shared `MRData` envelope per the recon's rule (ancestor scalars
-carried onto each row, `Driver.driverId` -> `driver_id`, `FastestLap.lap` -> `fastest_lap`,
-list cells JSON-encoded), casts the integer / number columns Ergast serializes as strings (`season`, `round`, `position`,
-`points`, `laps`, ... are `Int64` / `Float64`, where f1dataR keeps them character) and keeps ids `Utf8`;
-an empty payload (a non-sprint weekend's `f1_sprint`) is a zero-row frame with the documented columns. Terms in every docstring's Notes: data is CC BY-NC-SA 4.0 (wrap-only, never a
-release asset) and the host allows 4 requests/second burst, 500 requests/hour sustained per IP.
-Fixtures are byte copies of the recon captures (`tests/fixtures/f1/`); the offline suite is
-`tests/f1/test_f1.py`. Generated wrappers now accept a `notes:` list in the endpoint YAML's
-`docstring:` block, rendered as a trailing `Notes:` section.
-
-### Added — EuroLeague shots, play-by-play, box score, standings and season stats (`euroleague_*`)
-
-The `euroleague` family grows from 7 to 15 wrappers, regenerated from the sdv-internal-refs
-recon of 2026-10-06, which added two hosts beside the Competition Engine v2 API (keyless, all
-three). The generator (`tools/codegen/gen_euroleague.py`) now reads the spec's per-path
-`servers`: a route on another host gets an endpoint-level `host`, and the family runtime picks
-the body contract by host.
-
-- **Live API** (`https://live.euroleague.net/api`, per game by `game_code` + `season_code`):
-  `euroleague_game_points()` — the shot chart, one row per field-goal attempt and made free
-  throw with `coord_x` / `coord_y` in **integer centimeters from the hoop**, both teams on one
-  basket, `coord_y` growing from the baseline toward the court, free throws at the `-1, -1`
-  sentinel, and which sideline is +x **unverified** (the column descriptions carry the measured
-  frame); `euroleague_game_pbp()` — the per-quarter arrays unrolled to one row per play with a
-  `quarter` column (5 = overtime); `euroleague_game_boxscore()` — one row per player plus each
-  side's team-only and totals rows (`row_type`), with the game's `attendance` / `referees` and the
-  side's per-quarter (`by_quarter_q1`..) and cumulative end-of-quarter (`end_of_quarter_q1`..)
-  scores repeated on every row; `euroleague_game_header()` — one row (its `score_quarterN_*` are
-  cumulative). `game_code` / `season_code` are positional-required on the four (an omitted code
-  answers a silent empty body). Live-API codes are space-padded on the wire and are stripped;
-  `id_player` / `player_id` / `codeteam` / `team` and the team codes are pinned to `Utf8`. The
-  live API answers an unknown game with an **empty 200 body**: the runtime returns `{}` for that
-  one case (every other host's empty 200 still raises `AssetFetchError`) and each live parser
-  makes it a zero-row frame **with its documented columns** (`_euroleague_schemas.py`, generated
-  from the captures).
-- **api-live v3** (`Accept: application/json`, like v2): `euroleague_standings(competition_code,
-  season_code, round, kind=)` — one wrapper over `basicstandings` (default), `calendarstandings`,
-  `streaks` and `aheadbehind`, one row per team as of the round, with one documented column
-  table per `kind` (any other value raises `ValueError` before a request is made — codegen gains
-  a `choices:` param field for closed value sets); `euroleague_player_stats()` /
-  `euroleague_team_stats()` with `mode="traditional"` (default) or `"advanced"` (same check) and `season_mode="Single"` /
-  `statistic_mode="PerGame"` (the capture-verified defaults; other values are unverified);
-  `euroleague_game_report()` — one row per game with both clubs, scores and last-5 form.
-- Fixtures: byte copies of the 13 new E2025 captures plus the two EuroCup (U2025) live
-  captures; offline tests for every fixture, the empty-200 path through a fake transport, and
-  one gated live smoke per host. `companions.yaml` gains `euroleague` (hoopR, sdvplot /
-  sdvplotR FIBA court, euroleague-api).
-
-### Added — `asa_players_xpass()` and the `nasl` + `usls` ASA leagues
-
-`asa_players_xpass(league_slug, season_name=...)` wraps the American Soccer Analysis
-`/{league}/players/xpass` route (13 columns: pass completion over expected, average and vertical
-pass distance, share of team touches), regenerated from the 2026-10-06 recon. The documented
-`league_slug` values gain `nasl` (North American Soccer League, 2011-2017) and `usls` (USL Super
-League). USL Super League seasons use split-year labels, so pass `season_name="2024-25"`, not
-`2024`, which returns an empty frame. Every ASA route answers on all seven slugs except
-`players/salaries`, which stays MLS-only.
-
-### Added — kloppy as the optional `soccer` extra; `soccer_open_events()` loads open event data
-
-`pip install "sportsdataverse[soccer]"` installs [kloppy](https://kloppy.pysport.org) (`kloppy[polars]>=3.19`),
-which reads ~15 soccer event / tracking providers (StatsBomb, Opta, Wyscout, Sportec, SkillCorner, ...).
-Two functions in `sportsdataverse.soccer` sit on top of it: `soccer_open_events("statsbomb", 8658)`
-loads one match of StatsBomb's free open data (research / non-commercial license) as a polars frame
-(pandas with `return_as_pandas=True`; coordinates default to the provider's own units, StatsBomb's 120 x 80,
-and other kloppy kwargs pass through), and
-`soccer_events_to_frame(dataset)` turns any dataset a user loaded with kloppy into the same frame
-(`event_id`, `event_type`, `period_id`, `timestamp`, `team_id`, `player_id`, `coordinates_x`,
-`coordinates_y`, ...). Without kloppy the package still imports; calling `soccer_open_events` raises an
-`ImportError` naming the extra. kloppy fetches its own files and is the documented exception to the
-`dl_utils.download()` rule. The frame drops straight into sdvplot's `pitch_coords(provider="statsbomb")` /
-sdvplotR's `sdv_pitch_coords()`. Tests load a trimmed real StatsBomb match (`tests/fixtures/kloppy/`);
-kloppy is also in the `tests` and `all` extras so CI has it.
-
-### Changed — league index pages gain a "See also" block of companion packages (soccer first)
-
-Each league's reference index (`docs/docs/<league>/index.md`) can now list the packages a reader is likely
-to reach for next, from the hand-maintained `tools/codegen/companions.yaml` (same shape as `highlights.yaml`).
-The SOCCER page links kloppy, sdvplot, sdvplotR, itscalledsoccer, soccerdata and mplsoccer; leagues without an
-entry render unchanged.
-
-### Added — one play-by-play shape from six providers (#540, #541, #542, #543, #544, #545, #548)
-
-`sportsdataverse.football.sources` adapts a non-ESPN feed into the ESPN summary shape, so
-`NFLPlayProcess` / `CFBPlayProcess` accept `source=` and produce the same frame from any of
-them: Shield (#540), Yahoo for CFB (#541) and NFL (#543), CBS for NFL (#542) and CFB (#545),
-NCAA (#544) and Fox for both (#548). The dispatch table and the parity harness skeleton
-landed first in #525.
-
-### Added — a nightly cross-source parity harness (#547)
-
-`tools/validation/source_parity` compiles the same games from two providers and reports
-column-level disagreement, so an adapter regression surfaces as a diff rather than as a
-silently different number.
-
-### Added — team and coach tendencies, and the usage / situational box (#496, #497, #498, #614)
-
-`football.tendencies` derives team and coach play-calling splits from processed plays, and
-`football.usage_box` the usage, situational and special-teams box for both processors
-(#496, #497). `load_{cfb,nfl}_tendencies` and the ESPN usage leaderboards expose them as released
-datasets (#498), and every split now carries EPA, success rate and game-context cuts (#614).
-
-### Added — NFL Pro Next Gen Stats (#454, #481, #489)
-
-The `pro.nfl.com` family (`nfl_pro_*`, 16 endpoints) plus `load_nfl_ngs(seasons, dataset=)`
-over the SDV-native `nfl_ngs_*` releases built by `nfl-ngs-data` — 12 datasets including the
-three statboards, the unioned leaders table and five `gamecenter_*` tables (#454, #481), and
-the highlight-tracking datasets with corrected access notes (#489).
-
-### Added — the Fox Sports API as a generated family (#680)
-
-`fox_api_*` wraps `api.foxsports.com` directly (33 endpoints), alongside the existing
-per-league `fox_<league>_*` Bifrost wrappers.
-
-### Added — six documented provider APIs (#452)
-
-CBS Sports NAPI (`cbs_napi_*`), Yahoo Shangrila (`yahoo_shangrila_*`), Fox, American Soccer
-Analysis (`asa_*`), MLS (`mls_api_*`) and NWSL (`nwsl_api_*`), each generated from its own
-endpoint YAML.
-
-### Added — the remaining basketball sources (#451, #678)
-
-KenPom, Her Hoop Stats, Basketball-Reference, RealGM and the salary / draft / injury surfaces
-(#451), then Bart Torvik's `torvik_game_stats`, `torvik_player_stats` and the public
-`torvik_game_schedule` (#678).
-
-### Added — NBA officiating (#592)
-
-Last Two Minute reports, referee assignments and the `cdn` liveData feed, as
-`sportsdataverse.nba.nba_officiating`.
-
-### Added — the metric registry (#645)
-
-`sportsdataverse.registry` names every published metric once and resolves it for both Python
-and the TypeScript render path, so a metric's definition has one home.
-
-### Added — rolling form windows and shot events (#590, #657)
-
-`rolling_windows` computes event-count windows with prev-season, season and career baselines
-(#590), extended to stats.nba / stats.wnba shot events (#657).
-
-### Added — metric curves (#652)
-
-`metric_curves` fits rate curves along a continuous axis (shot distance, field position),
-binned on the coordinate distance rather than the nominal label (#658).
-
-### Added — defense vs position (#659)
-
-`defense_vs_position` reports what each defense allowed to QB, RB, WR and TE, filtered by the
-season-type column rather than skipping it (#660).
-
-### Added — the Paper Index (#661)
-
-`paper_index` ports Game on Paper's Paper Index and season deserved wins into the package.
-
-### Added — a per-game validation gate (#553, #554, #555, #556, #558)
-
-`sportsdataverse.validation` grew `validate_game` + `GameReport` (#553), the advBoxScore
-reconciliation rules with their thresholds as constants (#555), NCAA source column aliases
-with an explicit not-applicable scope so all 89 rules are accounted for (#556, #558), and the
-football processor invariant sweeps (#510).
-
-### Added — the Shield play-by-play parser and its live layer (#528, #536)
-
-`sportsdataverse.nfl.shield_pbp` graduates the `native_pbp` parser (#528) and adds the live
-layer: phase, provisional rows, current situation and the `shield_nfl_pbp` entry point (#536).
-
-### Added — the ESPN CDN family (#681)
-
-`cdn.espn.com/core` as generated wrappers (`espn_<league>_cdn_*`), with a per-endpoint league
-allowlist from a live probe matrix.
-
-### Added — the NBA G League (#684)
-
-`espn_nbagl_*` registers the G League as its own documented league.
-
-### Fixed — a strip-sack is the defence's recovery (#546)
-
-NFL type-80 rows were credited to the offence; N37 reassigns the recovery to the defence.
-
-### Fixed — the NCAA mapper's quarter markers, score walk and overturned yardage (#557)
-
-NC12-NC15: quarter markers, the score walk, overtime interception flags and overturned
-yardage, plus same-row penalty enforcement moving the end spot (#550) and no-play rows
-carrying no yardage with block-printed tries attributed to the kicking team (#560).
-
-### Fixed — the CFB and NFL processor bug sweeps (#503, #533)
-
-Stage-1 swept the two processors end to end: timeouts, roof, spread sign, re-run idempotence,
-dedupe, yard line and end clock on the NFL side, and C3-C40 plus the NCAA rounds on the CFB
-side (#503 through #533, including #504, #506, #514, #517, #519, #526, #530, #532).
-
-### Fixed — stats.ncaa.org Terms gate (#568, #569, #570)
-
-stats.ncaa.org began redirecting to `/stats_terms`; the fetch layer now passes the gate
-without ever returning or caching it as content (#568), fits its three-view cap and backs off
-on refusals (#569), and rotates the proxy when a network error interrupts acceptance (#570).
-
-### Changed — native thread pools default to one (#563)
-
-`SDV_XGB_THREADS`: xgboost's predict was fanning across every core per request and saturating
-the API under concurrency. Default 1, raise it deliberately.
-
-### Changed — the docs site is generated from one registry (#664, #671, #672, #673, #674, #676)
-
-Table rows left the search index (#664), function headings became plain with one TOC entry
-each (#671), reference pages over 70 KB split into family pages with old anchors forwarded
-(#672), the version label became `main (latest)` with tutorial redirects and the changelog
-split into three pages (#673), every league reached the sidebar and home page from one
-generated registry with a per-league search index (#674), and the changelog pages are now
-rendered by codegen so they cannot drift (#676).
-
-### Added — sdv-docs MCP server and a published docs index
-
-`sdv-docs` is a stdio MCP server that answers exact questions about the SportsDataverse surface
-from a local SQLite index, so an agent stops guessing column names and endpoint paths. Six
-read-only tools: `search`, `get_function`, `find_columns`, `find_endpoints`, `list_datasets` and
-`index_info`. From the next release (0.1.5+), install with `pip install 'sportsdataverse[mcp]'`
-(Python 3.10+) or, for Claude Code,
-`claude mcp add sdv-docs -- uvx --from 'sportsdataverse[mcp]' sdv-docs`. Until then, install
-from GitHub main: `uvx --from 'sportsdataverse[mcp] @ git+https://github.com/sportsdataverse/sportsdataverse-py' sdv-docs`. The `sdv_docs/`
-package ships in the same wheel but never imports `sportsdataverse`, so a bare server starts in
-about 1.5 s and ~70 MB rather than the 4-12 s and ~320 MB of loading every league.
-
-The index is built by
-`uv run python tools/codegen/build_docs_index.py [--out DIR] [--offline]` from the codegen model,
-the sdv-swagger OpenAPI specs and the R packages' pkgdown `llms.txt`. It writes
-`sdv_docs_v1.sqlite`, the gzipped `sdv_docs_v1.sqlite.gz` the release serves, and
-`manifest_v1.json`, which gives the sha256 and size of both. A full build holds 8,923 functions
-(Python plus 13 R packages), 92,339 columns, 3,472 endpoints, 323 datasets and 1,080 Python-R
-equivalents, in 73.5 MB (10.2 MB gzipped). The build fails if more than 2% of an R package's
-pkgdown index entries go unparsed. `.github/workflows/docs-index.yml` runs the tests and a
-30-case retrieval gate (on pull requests too) in a read-only job, then publishes the `.gz` and
-the manifest to the rolling `docs-index` release from a separate write-permission job;
-`python-publish.yml` skips that release. The client caches the index under
-`$SDV_PY_CACHE_DIR/docs-index/` (else `~/.cache/sportsdataverse/docs-index/`), checks the
-manifest at most once a day, and verifies the download's sha256, then the decompressed index's
-sha256, `integrity_check` and schema version, before swapping a new file in. No queries leave the
-machine. `SDV_DOCS_DB=<file>` points the server at a local plain `.sqlite` and never downloads.
-
-Filters (`league`, `kind`, `lang`, `api`) are case-insensitive. A lookup that misses only
-because of a filter says where the name does exist, and results that match only some of the
-query's words are labelled as partial matches. `limit` is capped at 100, and a returns table is
-cut at about 40,000 characters with a link to the full table. `sdv-docs --help` and
-`sdv-docs --version` exit without starting the server.
-
-### Fixed — nullable boolean and integer columns keep their types; no `"nan"` strings (soccer / EuroLeague frames)
-
-The shared frame builder behind the ASA, FIFA, FotMob, UEFA, MLS, NWSL and EuroLeague
-parsers (`sportsdataverse/soccer/_frames.py`) went through pandas, so one missing value
-changed a column's type: a nullable boolean became a string column carrying the literal
-`"nan"` (`euroleague_seasons().winner_is_virtual`), and a nullable integer was promoted
-to `Float64` (`uefa_matches().score_penalty_away`). The frame is now built by polars
-directly: a nullable boolean is `Boolean` with a null, a nullable integer is `Int64`
-with a null, a column that is null on every row is `Utf8`, and no column carries a
-`"nan"` / `"None"` string. Column names, order and values are unchanged; the
-returns tables of the affected endpoints now document the corrected types
-(`numeric` -> `integer`, `character` -> `logical`, and `numeric` -> `character` for columns that are null on every captured row).
-
-### Fixed — a failed fetch in the hand-written ESPN scrapers raises instead of being parsed (BREAKING)
-
-88 hand-written fetches read `download()`'s response without checking it. Once the
-retries ran out, a 403 / 429 / 5xx came back as the last response and its body was parsed
-as data: ESPN's JSON error bodies (`{"code": 503, ...}`) became an empty schedule, a
-zero-row teams frame or a summary with no plays, and an HTML error page surfaced as a
-`JSONDecodeError`. They now decode through the same helpers as the generated wrappers
-(`_codegen_runtime._download_json`: `_transport_errors` + `_json_body`):
-
-| Answer | Before | Now |
-|---|---|---|
-| 2xx with a JSON body | the body | the body (unchanged) |
-| 404, or ESPN's 200 with `code: 404` | `NoDataError` | `NoDataError` (unchanged) |
-| 400 / 422 | the error body as data | `ValueError` |
-| 401 / 403 / 429 / 5xx after the retries | the error body as data, or `JSONDecodeError` | `AssetFetchError` |
-| 2xx with an empty or non-JSON body | `JSONDecodeError` | `AssetFetchError` |
-| connection failure after the retries | the raw `requests` exception | `AssetFetchError`, chained to it |
-
-Covered: `espn_{cfb,mbb,mlb,nba,nfl,nhl,wbb,wnba}_schedule` / `_calendar` / `_teams` /
-`_game_rosters`, `espn_{mbb,mlb,nba,nhl,wbb,wnba}_pbp`, the live summary and odds fetches
-of `CFBPlayProcess` / `NFLPlayProcess`, `espn_{cfb,nfl}_play_participants`, every
-`espn_*_player_stats`, the `espn_{wbb,wnba}` team roster, team stats, standings, game
-officials and draft wrappers, `build_nfl_players`, the MBB/WBB recruiting projection, and
-the Basketball-Reference `bref_*` scrapers (a 429 page is no longer read as an empty
-table).
-
-Loops: `build_nfl_players` raises on a failed athletes index page (it used to return a
-partial or zero-row frame) and tallies its per-athlete fetches: isolated failures are
-skipped and logged, and every athlete failing raises `CrosswalkSourceError`. The
-recruiting projection tallies its per-recruit fetches the same way. Best-effort fetches
-keep their fallbacks: the play-participants sidecar and `$ref` name backfill, the
-player-stats athlete/team metadata, the pbp odds (default line) and participants join.
-Game rosters still skip a team whose roster 404s. `build_nfl_season` still warns and skips
-a game that fails. The offline paths (`summary=`, `path_to_json`) never reach the network
-and are unchanged.
-
-The `nfl` / `cfb` download-on-demand models no longer cache an error page as the model
-file (which made every later load fail); a failed download still raises
-`FileNotFoundError`. The Spotrac / HoopsHype / NBADraft.net / RotoWire scrapers keep their
-warn-and-return-an-empty-frame posture, now also for a non-2xx answer.
-
-Migration: catch `AssetFetchError` where a loop over these functions must keep going;
-`except NoDataError` keeps skipping absent resources. A request ESPN rejects (400 / 422)
-now raises `ValueError`.
-
-### Fixed — a failed stats.nba.com / stats.wnba.com fetch raises instead of returning `{}` (BREAKING)
-
-The `nba_stats_*` / `wnba_stats_*` getter (`nba_stats_runtime._get`, and the WNBA shim
-over it) turned every failed fetch into `{}` plus an `EmptyResponseWarning`, so a
-rate-limited, blocked or erroring request parsed to a zero-row frame: "no data". It now
-uses the shared error vocabulary of the other runtime getters:
-
-| Answer | Before | Now |
-|---|---|---|
-| 2xx with a JSON body | the body | the body (unchanged) |
-| 2xx with an empty JSON object `{}`, or a 204 / 205 | `{}` + `EmptyResponseWarning` | `{}` + `EmptyResponseWarning` (unchanged) |
-| 404 | `{}` + warning | `NoDataError` |
-| 400 / 422 (e.g. `{"MeasureType":["Parameter must be valid"]}`) | `{}` + warning | `ValueError` |
-| 401 / 403 / 429 / 5xx, an EMPTY HTTP 500 included | `{}` + warning | `AssetFetchError` |
-| 2xx with a blank or non-JSON body | `{}` + warning | `AssetFetchError` |
-| connection failure (curl_cffi timeout, reset) | the raw curl_cffi exception | `AssetFetchError`, chained to it |
-
-`SDV_PY_NBA_STATS_RETRIES` still retries every failed fetch (and a bare `{}`) before it
-raises; a 404 or 400/422 is an answer and is never retried. A missing `curl_cffi` still
-raises `ImportError` and is no longer retried.
-
-stats.nba.com answers a request without a required `Season` with an empty HTTP 500
-(captured 2026-10-05: 0 bytes, no Content-Type). That is a failed request, so it raises
-`AssetFetchError` too. Since the season defaults below ("a season where the API needs one"),
-every season-keyed wrapper sends a season by default, so only an explicit `season=""` (or a hand-built request) still
-gets it.
-
-The same vocabulary now covers the cdn.nba.com / cdn.wnba.com liveData fetch
-(`nba_live_*`, `wnba_live_*`) and the official.nba.com fetch (`nba_l2m*`,
-`nba_referee_assignments`), which already raised for a failed fetch: a 400 / 422 is now a
-`ValueError` (was `AssetFetchError`), a liveData 204 / 205 is `NoDataError`, an
-official.nba.com 204 / 205 is `{}`, and their messages name host, path, status and a
-bounded body excerpt (still prefixed `fetch failed`).
-
-Callers that looped over stats fetches and dropped a failed one as an empty frame
-(synergy play types, shot charts, per-season bulk stats, the possession engines'
-rotation and quarter-box fetches) now stop on it. `nba_possessions(lineup_source="auto")`
-still falls back from rotation to quarter-box to pbp on any failure, and the season
-compile still logs and skips a failed game. `wnba_on_court` / `wnba_possessions` (and their
-G League twins) raise when the rotation fetch fails (stats.wnba.com 5xx's `gamerotation`
-below 2016) instead of returning an empty on-court frame, or possessions whose ten lineup
-slots are all null.
-
-Migration: catch `AssetFetchError` where a loop must keep going; `except NoDataError`
-keeps skipping absent resources; `EmptyResponseWarning` now fires only for a 2xx with an
-empty object.
-
-### Fixed — a failed flat-API fetch raises instead of returning the error body (BREAKING)
-
-`_codegen_runtime._get`, the getter behind every generated wrapper of the 30 `espn_*`
-league families, `fox_api_*`, `cbs_*` (NAPI), `mlb_api_*`, the four NHL families
-(`nhl_web_*`, `nhl_edge_*`, `nhl_stats_*`, `nhl_records_*`), `asa_*`, and the hand-written
-`fox_cfb_*`, `yahoo_cfb_*` and CFB crosswalk helpers, returned whatever came back. A
-401/403/429/5xx with a JSON body was handed over as if it were the payload (Fox's
-`{"fault": {"faultstring": "Invalid ApiKey"}}`, ESPN's `{"code": 400, ...}`); a non-JSON
-or empty answer became `{}`. Parsed, both were a zero-row frame: a failed fetch read as
-"no data". It now follows the package error vocabulary:
-
-| Answer | Before | Now |
-|---|---|---|
-| 2xx with a JSON body | the body | the body (unchanged) |
-| 204 / 205 | `{}` | `{}` (no content by definition) |
-| 200 with an empty body | `{}` | `AssetFetchError` (barttorvik's block, pro.nfl.com's rejected params and stats-host throttling all answer this way) |
-| 404, or ESPN 200 with `{"code": 404}` | `NoDataError` | `NoDataError` (unchanged) |
-| 400 / 422 | the error body as data | `ValueError`: the request is wrong, retrying cannot help |
-| 401 / 403 / 429 / 5xx after retries, any other non-2xx | the error body as data | `AssetFetchError` |
-| 2xx with a non-JSON body | `{}` | `AssetFetchError` |
-| connection failure (timeout, reset, DNS) after retries | a raw `requests` exception | `AssetFetchError`, chained to it |
-
-Every message names host, path and status plus a bounded excerpt of the body, never the
-query string (API keys travel there, including in ESPN `$ref` links) and with credentials
-redacted; the non-JSON case is raised outside the decode handler, so the `JSONDecodeError`
-(whose `.doc` is the whole body) is not chained. The same rule now applies to the other
-runtime getters: `mlb_statcast_*` (and the player page behind `mlb_statcast_player`),
-`torvik_*` / `bart_wbb` and `kenpom_*` (an error page was returned as CSV/HTML text), the MLS
-and NWSL stats-API wrappers (`mls_*`, `nwsl_*`), the Yahoo shangrila wrappers (`yahoo_*`,
-whose HTTP 400 `{"errors": [...]}` for a bad persisted query is now a `ValueError`),
-`on3_*`, `sports247_*` (RDB and site pages), the LEGACY `pff_*` premium wrappers,
-`pff_api_*` (connection failures), `nhl_scoreboard`, the hand-written `nhl_records_*`
-helpers and the `mlb_api_extra` helpers. Specifically:
-
-- `on3_*` and `yahoo_*` answered a 404 with `{}`; it is now `NoDataError`. On3's Next.js
-  data route still treats its FIRST 404 as "the buildId rotated" and refreshes once; a
-  second 404, or an unchanged buildId, raises `NoDataError`. A 2xx On3 page with no
-  buildId (a bot-challenge interstitial) raises `AssetFetchError` instead of returning `{}`.
-- `nfl_api_*` raised a bare `requests.HTTPError` (or `JSONDecodeError`); it now raises
-  `AssetFetchError` / `ValueError` / `NoDataError`. Code that caught `HTTPError` or read
-  `exc.response` breaks: read the status from the message, or catch the new types.
-- The 400 / 422 -> `ValueError` rule also covers `hockeytech_api` (every HockeyTech family,
-  PWHL included), The Odds API (`toa_*`, which rejects bad parameters with 422) and the
-  Statcast search windows; all three raised `AssetFetchError` for them.
-- `mlb_statcast_*` and `torvik_*`: a body labelled JSON that does not decode raises
-  `AssetFetchError` instead of being returned as text (which parsed to an empty frame);
-  CSV and HTML bodies are still returned as text.
-- The CFB crosswalks (`cfb_schedule_crosswalk`, through its ESPN calendar/schedule, Fox and
-  Yahoo legs) swallowed every exception into an empty leg, recording a failed fetch as "no
-  games". They now use the basketball crosswalk's `FetchTally`, one per leg: a 404 is an
-  answered empty item, an isolated failed week is skipped and logged once, and a leg where
-  no item answered raises `CrosswalkSourceError`. The ESPN calendar is tallied apart from
-  the ESPN weeks, so a season whose weeks all failed raises even when the calendar
-  answered; a failed calendar is logged and falls back to the default week slots. The Fox
-  week and full-season fetches are one item each, so a failed Fox fetch raises.
-  `fox_cfb_schedule` keeps raising on one bad segment: a partial season must not look
-  complete.
-
-The generated docstrings name `NoDataError`, `ValueError` and `AssetFetchError` under
-`Raises:` (the stale `requests.exceptions.RequestException` lines are gone).
-`nba_stats_*` / `wnba_stats_*` are unchanged here (a separate change); `nflpro_*` keeps
-its own errors.
-
-Migration: code that relied on an empty frame to keep a loop going should catch the error,
-e.g. `except AssetFetchError: log_and_retry_later()`; `except NoDataError` keeps skipping
-genuinely absent resources. `except SportsDataverseError` catches both, timeouts included.
-A `ValueError` means the call itself needs fixing.
-
-### Fixed — HockeyTech season names read as their end year in every league (BREAKING)
-
-`season_yr` (the `<lg>_season_id` column, and the year every `season=` argument is matched
-against) only understood "2025-26". The feeds also write "2025/26" (KIJHL, older OJHL),
-"2025-2026" (AJHL, GOJHL, SPHL, VIJHL, recent CCHL and OJHL), "2026 - 27" (WHL) and "26-27"
-(OJHL's current season):
-
-- "2025-2026" read as 2120 from 2021-22 on (2020 before). `most_recent_sphl_season()` returned
-  2120, as did AJHL, GOJHL, OJHL and VIJHL, and `sphl_standings(season=2026)` raised `ValueError`.
-  CCHL returned 2425, from "CCHL 2425 Special Events".
-- "2025/26" and "2026 - 27" read as the start year, so `whl_standings(season=2026)` and
-  `kijhl_standings(season=2026)` silently returned the 2026-27 season.
-- "26-27 Regular Season" carried no year, so OJHL's current regular season could not be resolved.
-- A one-year preseason or exhibition ("2026 Pre-season", "Pre-Season 2026", "2026 Exhibition
-  Season") took its calendar year, the year before the season it opens.
-
-The year rules now, first match wins:
-
-1. `YYYY-YYYY` or `YYYY-YY`, with `-` or `/` and optional spaces, is its end year ("1999-00" is
-   2000).
-2. `YY-ZZ` with ZZ = YY + 1 is 20ZZ ("26-27" is 2027).
-3. Otherwise the first standalone 4-digit token: a year from 1950 to two years ahead is itself; a
-   compact span `YYZZ` with ZZ = YY + 1 is its end year ("CCHL 2425 Special Events" is 2025, not
-   2425). A two-digit end year is 20ZZ, or 19ZZ while 20ZZ is more than two years ahead.
-4. Anything else, or any year outside that range, is `None` ("19 Tie Break").
-5. A preseason or exhibition whose name spans no two years and which starts in the year its name
-   gives belongs to the next year ("2026 Pre-season", starting 2026-08-11, is 2027). PWHL's "2024
-   Preseason" started 2023-11-01 and stays 2024; AHL's mid-season "2017-18 Exhibition" stays 2018.
-
-`game_type_label` gains `"exhibition"`. 45 exhibitions that were labelled `"regular"` move to it
-(MJHL 15, MHL 9, VIJHL 7, KIJHL 6, AJHL 5, AHL 2, OJHL 1), so they never answer a regular-season
-lookup. `season_yr` is `Int64` in every league; CCHL, OJHL, VIJHL and WHL returned `Float64`
-because a season without a year made pandas widen the column.
-
-`most_recent_<lg>_season()` / `most_recent_pwhl_season()`, the default every season-defaulting
-wrapper uses, is now the newest *regular season* that is not a one-off event. It falls back to the
-newest row of any kind only when the feed lists no such season. The feeds add a preseason before
-its regular season (ECHL "2026 Preseason" is id 77, "2026-27 Regular Season" id 78). Taken over
-every row, the default would name a year that has no regular season yet. Rebuilt as the feeds
-stood when each preseason or exhibition appeared, 151 of the 152 windows in the 17 leagues that
-list one now resolve to a regular season (128 on main), among them ECHL 18 of 18, QMJHL 16 of
-16, CCHL 16 of 16, WHL 15 of 15, OHL 11 of 11 and GOJHL 1 of 1. The exception is MJHL's "2017-18
-Pre-season", season id 1, which predates every regular season in its feed.
-
-Season resolution still drops the one-off events (all-star, showcase, prospect, combine, special
-event, exhibition, play-in) from regular and playoff lookups. Of the rows left, the first wins in
-this order:
-
-1. the name carries no other registered league's code;
-2. the name says its game type ("Regular Season", "Playoff", "Pre-Season", "Exhibition");
-3. the name spans two years;
-4. feed order.
-
-Before, resolution took the first row. That picked "2019 ANAVET Cup" for `mjhl` and `sjhl` 2019,
-"2025 Cottage Cup" for `ojhl` 2025, "2014 Tie-Break" for `whl` 2014 and the Sutherland Cups for
-`gojhl` 2008-15. It also picked the CCHL's "CCHL 2009/2010", which the OJHL feed lists first, for
-`ojhl` 2010, while that year's playoffs resolved to the OJHL's own "OJAHL Playoffs 2010". With
-the corrected years it would also have picked "2025 Mowat Cup" for `kijhl` 2025. Tournaments
-rank last rather than being excluded, because CHL lists nothing but its Memorial Cups, and AHL,
-ECHL, GOJHL and MHL name real playoffs after cups ("2026 Calder Cup Playoffs").
-
-**Limit:** divisions listed side by side for one year, with none of these markers between them,
-are not told apart. BCHL 2024 resolves to "2023-24 BC Regular Season" but to the "2024 AB
-Playoffs", and GOJHL 2008 to its GHL conference. Pass `season_id=` for the others.
-
-Measured on the live seasons feeds of all 20 leagues (2026-10-05, 1,154 seasons), 272
-`season_yr` values change:
-
-- AJHL 46, GOJHL 39, KIJHL 34, WHL 30, OJHL 25, SPHL 22, ECHL 18, QMJHL 16, VIJHL 15, CCHL 12,
-  OHL 12;
-- one each in BCHL, MJHL and NOJHL;
-- 71 of the 272 are preseasons and 17 exhibitions.
-
-The committed fixtures are those feeds for 18 leagues; AHL keeps its trimmed 2026-07-12 capture
-and PWHL its 2026-06-09 one, which ends at the "2026-27 Pre-Season" (id 10). On them, each
-(year, game type) lookup was checked against the feed's own dates (end year for a regular season
-or playoffs, start year + 1 for a one-year-named camp). 817 of 818 resolved seasons now agree; on
-main, 594 of 716 did. The one disagreement is MJHL's "2015 Playoffs", whose end date is 2016. The
-tests check that agreement.
-
-**Breaking:**
-
-- `season_yr` changes in those leagues, and with it the season a `season=` year selects. In WHL and
-  KIJHL `season=2026` now means 2025-26 (it returned 2026-27).
-- One-year preseasons and exhibitions answer to the next year: `resolve_season_id("ohl",
-  season=2027, game_type="preseason")` is the "2026 Pre-season".
-- Exhibitions are `game_type="exhibition"`, not `"regular"`.
-- The default season is the newest regular season, so while a preseason is listed ahead of its
-  regular season the default stays on the season just ended.
-
-A caller who passed the start year to get a season should pass the end year.
-
-### Fixed — PFF time to throw, aimed passes and receiving positive-EPA descriptions
-
-The return tables of the legacy `pff_*` passing and receiving reports, and the `pff_api` position
-and team reports, described three PFF stats wrongly. These are the same texts that #689 corrected
-for the `pff_api` player summaries. Each of the 210 descriptions was checked against real nfl and
-ncaa rows:
-
-- `avg_time_to_throw` and every `*_avg_time_to_throw` is per dropback (`ttt_total_time / dropbacks`
-  on all 74 rows that carry both, 41 of them with dropbacks different from attempts), not "on the
-  passer's attempts".
-- `aimed_passes` and every `*_aimed_passes` also excludes batted passes and throws made while hit:
-  `attempts − throwaways − spikes − bats − hit_as_threw` on 478 of 478 rows. The old formula
-  matched 331.
-- Receiving `positive_epa_percent` and its depth, concept and scheme splits are a share of the
-  receiver's plays with an EPA value, in practice their routes run, not of their targets. The
-  published percentage is a whole number of plays out of routes run on 83 of 85 rows, but out of
-  targets on only 21 of 76.
-
-Text only; no column or value changes.
-
-### Security — a credential in a query string no longer reaches a log or an error message
-
-`dl_utils.download` wrote the request URL and its `params` dict into its retry and failure
-log lines, and the `NoDataError` a 404 raises quoted the URL. Any key sent in the query
-string went with them: The Odds API's private, paid `apiKey`, the HockeyTech `key`, and the
-Fox `apikey`. A connection failure was re-raised as requests' own exception, which quotes
-the request path and chains urllib3's `MaxRetryError`, which quotes it again.
-
-- The value of a credential pair now reads `REDACTED` in every log line `download` writes,
-  in every sportsdataverse error message, in urllib3's request, retry, redirect and
-  header-parse log lines (including a caller's own `Retry` adapter), and in the re-raised transport
-  exception and every exception chained to it. That covers the exception's attributes as
-  well as its text: `err.url`, `err.request.url` and urllib3's pickled message are
-  redacted, and the request's `Authorization` / `Proxy-Authorization` / `Cookie` headers
-  are dropped. Covered names are
-  `apiKey` / `api_key` / `apikey`, `token` / `access_token`, `password`, `secret` /
-  `client_secret` and the rest of the sportsdataverse-js list, case-insensitively and in
-  URL-encoded and `'name': 'value'` form; a quoted value is redacted up to its closing
-  quote, spaces included. A bare `key` is redacted when its value has 16 or
-  more characters, as every HockeyTech key does. The host, path, status and other params
-  are kept, so the line still says which request failed.
-- The Odds API wrappers raise `AssetFetchError` on a non-2xx answer: a rejected key (401),
-  spent quota (429), or a 5xx that outlived the retries. Before, the error body came back
-  as if it were odds. A 2xx with a non-JSON body raises `AssetFetchError` too, instead of
-  a bare `JSONDecodeError`. A 404 still raises `NoDataError`. `cfb_odds_events_crosswalk`
-  reads The Odds API, so it now raises these too, where it used to parse the error body as
-  an event list.
-
-No signature changes. One behaviour change: the `args[0]` of a re-raised requests
-`ConnectionError` is now its redacted message string, not urllib3's `MaxRetryError`
-object; that object is still chained as `__context__`. `tests/test_credential_redaction.py` sends a synthetic key through
-each of the three providers on a 404, a 503 and a connection failure, and checks the
-message, `str`, `repr`, the formatted traceback with its chained causes, and the captured
-logs.
-
-### Fixed — nba_stats / wnba_stats defaults: a season where the API needs one, each league's own ids
-
-The `nba_stats_*` / `wnba_stats_*` defaults are mined from hoopR / wehoop through the
-sdv-internal-refs catalog, and three things were lost on the way. Called with their defaults, 67
-of 128 NBA and 65 of 111 WNBA wrappers returned data before this change; all 128 and all 111 do
-now (live sweep through the proxy pool, 2026-10-05; no wrapper went from working to broken).
-
-- **Season.** hoopR's default is a call (`year_to_season(...)`), and the catalog dropped it, so
-  `season` defaulted to `None` and the request went out without a `Season`. stats.nba.com answers
-  that with an empty HTTP 500, which these wrappers returned as an empty frame with no error.
-  51 NBA and 42 WNBA wrappers failed this way, among them `playergamelogs`, `playergamelog`,
-  `teamgamelogs`, `commonteamroster`, `commonallplayers`, `leaguedashplayerstats` and
-  `leaguestandingsv3`; `synergyplaytypes`, the draft-combine family, `cumestats*`,
-  `videodetailsasset`, `commonplayoffseries` and WNBA `playercompare` need theirs too.
-  These arguments now default to the **latest season that has rows**, resolved at call time for
-  the league and endpoint asked for:
-  - NBA: from November of the season's first year (`"2025-26"` until October 2026, `"2026-27"`
-    from November 2026).
-  - G League (`league_id="20"`): from the January after it tips off. Its regular season, the
-    default `SeasonType`, starts in late December (2025-26 ran 2025-12-19 to 2026-03-28).
-  - Summer League (`league_id="15"`): from August. stats.nba.com labels a Summer League by its own
-    July, so July 2026's is `"2026-27"`, a season ahead of the NBA label.
-  - Draft combine (`SeasonYear`, read by its leading year: `"2026-27"` is the May 2026 combine),
-    whichever league asks: from June.
-  - `drafthistory` (a year: `"2026"`): from July for the NBA (late-June draft) and from May for the
-    WNBA (mid-April draft).
-  - Playoffs: `commonplayoffseries`, and any endpoint asked for `SeasonType` `"Playoffs"` or
-    `"PlayIn"` (whatever the argument is called: `season_type`, `season_type_all_star`,
-    `season_type_nullable`, `season_type_playoffs`, ...). From May of the season's second year for
-    the NBA and the G League (whose playoffs began 2023-03-28, 2024-04-02, 2025-04-01 and
-    2026-03-31), and from October for the WNBA. Before this, `leaguedashplayerstats(
-    season_type_all_star="Playoffs")` on 2027-02-01 would have asked for 2026-27, five months
-    before those playoffs, and got HTTP 200 with zero rows.
-  - All-Star: any endpoint asked for `SeasonType` `"All Star"`. From March of the season's second
-    year for the NBA (games 2019-02-17 to 2024-02-18, 2021's on 03-07; 2024-25 and 2025-26 have
-    rows too) and from August for the WNBA (2021-07-14 to 2026-07-25). The G League has no
-    All-Star rows, so it keeps its own rule. Before this, an NBA All-Star call from November to
-    mid-February asked for a season whose game had not been played.
-  - WNBA: the current year from June, the previous year before.
-
-  Until a rollover the previous season is sent. It has rows, but for a few weeks after the newest
-  season's first games (late October for the NBA, late December for the G League, July for the
-  Summer League, late May for the WNBA and the combine, late June for the NBA draft, late March to
-  April for the NBA and G League playoffs, September for the WNBA playoffs, late February for the
-  NBA All-Star game, late July for the WNBA's) it is not the newest.
-  The NBA default is hoopR's current season (`year_to_season(most_recent_nba_season() - 1)`)
-  except in October. Of the 79 season defaults in wehoop's `wnba_stats_*.R` that call
-  `most_recent_wnba_season()`, 54 subtract one, a season behind this default in every month but
-  May; 24 do not, the same as this default except in May, when theirs has not tipped off; one
-  subtracts two. An explicit value, including `""`, is sent as given. A fixed month table cannot
-  follow a lockout, a CBA delay or a pandemic calendar (1998-99, 2011-12, 2020-21): pass `season`
-  explicitly then.
-- **No endpoint is exempt from the season default.** The rule: a season argument gets the
-  default iff hoopR (NBA, G League, Summer League) or wehoop (WNBA) gives that endpoint's season a
-  default season in its R signature; an R default of `""` / `NULL` keeps the API's own. An earlier
-  revision of this change exempted 30 NBA and 25 WNBA endpoints because they answer without a
-  season, but that answer is every season summed: `leaguedashteamstats()` returned each franchise
-  since 1996-97 (SuperSonics and Bullets rows, GP up to 2,395). hoopR and wehoop give every one of
-  them a season default (wehoop's deprecated `homepageleaders` / `homepagev2` / `leaderstiles`
-  included), and the three WNBA endpoints wehoop does not wrap (`leaguedashptdefend`,
-  `scheduleleaguev2`, `scheduleleaguev2int`) are per-season, so they take the NBA call like any
-  other. `drafthistory`, `leaguegamefinder` and `playergamestreakfinder` therefore return one
-  season, as in hoopR / wehoop; pass an empty season for all of them (`season_year_nullable=""`
-  for `drafthistory`, `season_nullable=""` for the finders). The catalog had also lost hoopR's
-  season for `scheduleleaguev2` (`nbagl_schedule()`). Only
-  `cumestats*` and NBA `playercompare` keep hoopR's / wehoop's literal season, paired with their
-  literal ids.
-- **`nba_shot_value(include_context=True)` asks for each shooter's own team.** `playerdashptshots`
-  answers HTTP 500 for `TeamID "0"` with a season, so the wrapper's default pins a player with his
-  team, and a context call that passed only `player_id` sent that default team: every other
-  player's context was filtered out. It now passes each (player, team) pair its fetched shots came
-  from; a player traded mid-season gets one context per team.
-- **`SeasonType` is documented as a label.** The stats wrappers inherited ESPN's
-  "1=preseason, 2=regular season, 3=postseason" description by argument name; stats.nba.com
-  answers `SeasonType=3` with HTTP 400. Every `season_type*` argument now lists the labels and
-  the rollover each one sets.
-- **Each league's own ids.** The catalog kept one example per argument and let wehoop's overwrite
-  hoopR's, so NBA wrappers defaulted to WNBA games, teams and players. `nba_stats_teaminfocommon()`
-  asked for a WNBA team and got HTTP 500, and every NBA box-score wrapper defaulted to a WNBA
-  game. NBA wrappers now take hoopR's examples and WNBA wrappers wehoop's, and an id that only the
-  other league's package sets is left out rather than borrowed: WNBA `boxscorehustlev2` /
-  `hustlestatsboxscore` used to fetch an NBA game, and `playerdashptshotdefend` defaulted to LeBron
-  James (without a player it now returns the league-wide table). `playercompare` gains its
-  player-id lists, and WNBA `playbyplayv2` sends wehoop's `StartPeriod` / `EndPeriod` (it was
-  HTTP 500 without).
-- **Empty results now warn.** When stats.nba.com / stats.wnba.com answer a non-200 status, a
-  blank body or an empty object, the wrappers still return `{}` / an empty frame (pipelines rely
-  on that for routine misses), but they now warn `sportsdataverse.errors.EmptyResponseWarning`
-  with the URL and status. Silence it with
-  `warnings.filterwarnings("ignore", category=EmptyResponseWarning)`.
-- **The vendored catalog is a plain copy again.** `tools/codegen/inputs/nba_canonical_catalog.json`
-  had drifted from sdv-internal-refs through edits made only here (#391's video endpoints, older
-  statuses). sdv-internal-refs now classifies the video envelope itself, so the file is copied
-  verbatim; the generated wrappers are unchanged by the copy.
-- stats.wnba.com answers `draftcombinestats` with the NBA draft combine; wehoop has deprecated its
-  draft-combine wrappers.
-
-### Fixed — returns tables no longer cite R-only arguments
-
-Column descriptions mined from hoopR / wehoop said "`team_detail = TRUE` only" (also
-`athlete_detail`, `position_detail`) for columns that the R wrappers add behind an argument. The
-Python parsers always return those columns and have no such argument, so the condition is dropped
-from 131 descriptions.
-
-### Fixed — a failed HockeyTech fetch raises instead of returning an empty frame (BREAKING)
-
-`hockeytech_api`, the one HTTP entry point behind the PWHL surface and the 19 other HockeyTech
-league families, caught every exception and returned `None`. A 403, a 5xx, a timeout or an
-unparseable body therefore parsed to a zero-row frame, so a failed fetch read as "no games".
-It now follows the package error vocabulary:
-
-- **HTTP 404** raises `NoDataError`.
-- **A failed fetch** raises `AssetFetchError`: a transport error, a non-2xx status that outlived
-  the retries, an empty or unparseable body, or one of the HTTP-200 error sentinels
-  (`Undefined Tab <view>`, or any top-level `{"error": "..."}` such as
-  `InvalidView error: <view>`). The sentinels used to warn and then parse to an empty frame.
-  The error text never carries the feed key: it is masked, and the URL-bearing transport
-  exception is not chained.
-- **`Feed type access denied.`**, the plain-text reply MJHL's public key gets on `gc`, is still
-  a graceful empty: `mjhl_game_summary` returns empty frames and `mjhl_pbp` returns plays without
-  game metadata.
-
-Every `<lg>_*` family function, the `pwhl_*` functions and the analytics fetches pass these errors
-to the caller. `resolve_season_id` keeps PWHL's fallback table for a failed seasons fetch and for
-a season the list lacks; other leagues re-raise. The table now runs through 2026-27 (ids 1-11,
-preseasons and the 2026 playoffs included). `pwhl_streaks` (deprecated, no such upstream view) no
-longer sends a request; it still warns and returns an empty frame.
-
-Season resolution also skips the one-off events HockeyTech lists as seasons (all-star games,
-showcases, prospect games, combines, special events, exhibitions, play-ins):
-`resolve_season_id("ahl", season=2026)` returned 91, the "2026 All-Star Challenge", instead of 90,
-the "2025-26 Regular Season". An explicit `season_id=` never asks for the seasons list, so a dead
-seasons feed cannot break `pwhl_stats(season_id=11)`. `pwhl_playoff_bracket()` with no arguments
-now uses the newest season that has playoffs, not the newest season (which usually has none yet).
-
-`most_recent_<lg>_season` / `most_recent_pwhl_season` no longer return a hard-coded 2026, which was
-already stale (the live PWHL seasons feed lists 2026-27, end-year 2027). A seasons list the feed
-answered with no season raises `NoDataError`; a failed fetch raises `AssetFetchError`. This
-matches sportsdataverse-js.
-
-**Breaking:** code that checked for `None` or an empty frame to detect a HockeyTech failure now
-gets `AssetFetchError` / `NoDataError`. Wrappers that default the season (`<lg>_standings`,
-`_teams`, `_team_roster`, `_leaders`, `pwhl_stats`, `pwhl_playoff_bracket`) raise the same way when
-they need the seasons lookup and it fails; pass `season_id=` to skip the lookup. Catch them as:
-
-```python
-import sportsdataverse as sdv
-from sportsdataverse.errors import AssetFetchError, NoDataError
-
-try:
-    df = sdv.ahl_schedule()
-except NoDataError:
-    df = None  # the fetch worked and there is nothing there: skip it
-except AssetFetchError:
-    raise  # the fetch failed and the answer is unknown: retry later, never record it as empty
-```
-
-Both subclass `SportsDataverseError`. A season that the list does not carry is still `ValueError`
-("No ahl season for season=..."), as before.
-
-34 PWHL return-column descriptions were also wrong and are corrected from real values. In
-`pwhl_scorebar`: `id` is the game id, `home_id` is the HockeyTech team id, `game_status` is the
-numeric code, `quick_score` is always `'0'`, `game_summary_url` is a game id or a site path,
-`game_letter` is the playoff-series letter, `game_date_iso8601` carries the start time and UTC
-offset, `date` is a date only, `home_city` / `timezone` / `home_goals` / `league_id` say what they
-hold, and the eight W/L columns are the team's season record as fetched, not as of the game. In
-`pwhl_player_search`: `score` is a search relevance score, `profile_image` is a file name, and
-`role_id` / `role_name` are the person's role, not a position. In `pwhl_stats`: `height` is
-feet-and-inches text, `rank` is the table rank, `namelink` is plain text, `division` is a name,
-`veteran` is a code, and `name` (also in `pwhl_leaders` and `pwhl_team_roster`) is the player's
-name, not a team mascot.
-
-### Fixed — ESPN basketball pbp: one-provider spreads, paired spread signs, team timeouts, MBB double-overtime seconds
-
-Four fixes to `espn_nba_pbp`, `espn_wnba_pbp`, `espn_mbb_pbp` and `espn_wbb_pbp` (and their
-`helper_<lg>_pbp` reprocess path). The shared logic now lives in one private module,
-`sportsdataverse/_espn_basketball_pbp.py`.
-
-- **The spread from a one-provider pickcenter.** The pickcenter helper read the odds only when
-  ESPN listed more than one provider. Modern summaries list one (DraftKings), so every such game
-  got the default spread (2.5, home favored, `gameSpreadAvailable=False`). The 2026 men's title
-  game (401856600) shipped 2.5 when DraftKings had MICH -6.5. One provider is now enough. A
-  pickcenter with no spread (a lone teamrankings record entry) still gets the defaults, and an
-  all-null over/under column no longer raises.
-- **The spread and the home favorite come from the same provider.** They used to be taken
-  independently, each as the first non-null value across providers. A record-only teamrankings
-  row has no spread and sorts first, and its favorite flag (False for both teams) was paired
-  with consensus' spread. UNC Asheville, a 17.5-point home favorite (330582427), got a home line
-  of -17.5; it is now +17.5. MIA in NBA 401430219 goes from -4.5 to +4.5. Both now come from the
-  first provider with a spread, and the favorite is the spread's sign (ESPN's spread is the home
-  line). The provider order is now explicit and unchanged: `str(provider.id)`, so teamrankings
-  ("1002") reads ahead of consensus ("1004") and Caesars ("45"). Where teamrankings and consensus
-  disagree, teamrankings matches the winner more often, and an integer sort would move MBB
-  2021-22 to Caesars' line. A spread of exactly 0 takes that row's favorite flag (home if unset).
-  `helper_<lg>_pickcenter` now returns plain floats/bools for `gameSpread`, `overUnder` and
-  `homeFavorite`; a found line used to come back as a 1-element numpy array.
-- **Every team timeout.** The timeout flags matched only ESPN's NCAA `ShortTimeOut` type, so the
-  NBA/WNBA `timeouts` map was always empty and NCAA full timeouts (`RegularTimeOut`) were
-  dropped. The flags now cover `RegularTimeOut`, `ShortTimeOut`, `Full Timeout`, `Short Timeout`,
-  `No Timeout` and `Reset Timeout`. Official and TV timeouts belong to no team and stay out. The
-  calling team comes from the play's own `team.id`. The team-name match that used to decide it is
-  a fallback for plays without one, and now matches whole words: as a substring test it credited
-  "Memphis" to PHI and "timeout" to ME. The map holds timeouts *called* as ESPN logs them, not
-  timeouts *charged*. A coach's challenge outcome is not applied because ESPN logs the
-  challenge's own timeout too inconsistently: a team timeout precedes 90% of charged and 56% of
-  retained NBA challenges, and about 5% of NCAA ones.
-- **MBB end-of-period seconds in the second and later overtimes.** On the first play of 2OT and
-  later, `end.period_seconds_remaining` took the next play's start while
-  `end.game_seconds_remaining` was set to 300. Both are now 300, matching the first overtime and
-  the other leagues. A bare-seconds MBB clock ("23.4") now parses as 0:23 instead of raising.
-
-`tests/test_basketball_pbp_offline.py` checks each fix against real summaries in
-`tests/fixtures/espn/basketball_pbp/`. The spread does not feed the shipped basketball
-win-probability models, which are ratings-based, so a reprocess changes only the published
-spread columns (`game_spread`, `home_team_spread`, `game_spread_available`, `home_favorite`)
-and the timeout flags. Published data changes only after a release reprocess, and its scope is
-the owner's call:
-
-- **One-provider games only.** About 9,150 games in the raw stores have a one-provider pickcenter
-  with a spread: MBB about 5,300 (4,766 of them in 2025-26), NBA 1,078 (2025-26), WBB 1,855
-  (mostly 2022-23 and 2025-26) and WNBA 911 (2020-22 and 2026). Add the 128 mixed-row sign
-  games (127 MBB, 107 of them in 2012-13, and NBA 401430219).
-- **Full history.** Older MBB and NBA `final.json` files were built by the pickcenter helper as
-  it stood before August 2023. A full reprocess also changes about 27% of MBB 2013-22
-  multi-provider games (about 13,000; 2.3% change sign, median change 0.5 point) and about 32% of
-  NBA 2013-19 (about 2,900; about 1% change sign). Most changes are improvements: where the
-  signs disagree, the current code matches the winner in MBB 22 of 35 and NBA 12 of 15.
-
-### Fixed — pff_api return tables for the per-player and coverage-matrix routes
-
-19 `pff_api_*` routes had no columns in their return tables. The capture they were generated
-from had two gaps. It requested one QB for every per-player report, so the kicker, punter,
-returner and defense reports came back with no week rows. It also recorded the nested bodies
-(per-game `weeks`, the coverage matrix, the snaps and rushing-direction objects) only as object
-keys. A new live capture uses a player who played each role in 2025 (NFL and NCAA, 38 reads). The
-return table of each of these routes now lists what its parser returns on that capture:
-
-- **13 per-player summaries** (`pff_api_player_*_summary`, `_offense_blocking`,
-  `_offense_pass_blocking`, `_offense_run_blocking`): the per-game rows, including the `game_*`
-  columns exploded from each row's nested game object.
-- `pff_api_player_seasons`, `_snaps_summary`, `_position_pivot` and `_rushing_direction`.
-- `pff_api_facet_receiving_coverage` and `pff_api_facet_defense_coverage_matchup`: one shared
-  schema with three frames, `defenders`, `receivers` and `versus`.
-
-710 column descriptions were added. Stat columns reuse the text already written for the same
-column of the same PFF report. Context and new columns were written from PFF's spec, and each
-derived column's formula was checked against the captured rows.
-
-**Parser fix.** For the player rushing-direction and player snaps-summary bodies,
-`parse_pff_report` returned a zero-row frame even when PFF sent data, because each body is one
-object rather than a list of rows. It now returns one row per direction, and one row with
-`snap_counts_<type>` columns, respectively. `pff_api_player_rushing_direction()` and
-`pff_api_player_snaps_summary()` now return those rows by default. Passing the envelope key
-explicitly (`report="rushing_direction_stats"` or `report="snaps"`) returns the same rows.
-
-### Fixed — reference-docs Valid URLs are the URLs the example calls request; summary documents its dict
-
-The **Valid URL** on each generated reference page, and the `Example URL:` line in the
-wrapper's docstring, now replay the wrapper body on its example arguments. Each one is the URL
-that the documented example call requests.
-
-- **ESPN Core v2 child resources.** `espn_<lg>_game_competition(event_id='401584793')` requests
-  `/events/401584793/competitions/401584793`, but the page showed `/events/401584793/competitions`.
-  Every game, competitor, play and official child resource showed that same collection URL. Path
-  tokens the wrapper fills from a default (`cid` falls back to `event_id`, `record_type=0`), an
-  optional segment, or a `/now` variant are now substituted.
-- **Default query params.** Params the wrapper always sends, such as `limit=1000` or the
-  nba_stats `PerMode` / `SeasonType` defaults, now appear in the URL.
-- **No runnable example.** 50 flat-API wrappers (41 `cbs_*`, 9 `sports247_site_pages_*`) have no
-  example value for a required argument. Their pages no longer show a truncated URL.
-- **Soccer and cricket catch-all wrappers** now pass the required `league=` argument in their
-  examples.
-
-1,426 of 3,446 ESPN URLs and 467 of 1,033 flat-API URLs changed.
-`tests/codegen/test_valid_url_matches_call.py` calls every generated wrapper offline against a
-recording `_get` and asserts that the documented URL is the requested one.
-
-`espn_<lg>_summary` (30 leagues) said it returns "a tidy `polars.DataFrame` with the columns
-below". With `section=None`, `parse_summary` returns a dict of frames keyed by section. The
-endpoint now declares `parsed_doc`, like the `espn_cdn` game pages, so its docs and docstring
-say it returns a dict.
-
-### Added — ESPN NBA G League wrappers (`espn_nbagl_*`)
-
-ESPN's G League (`basketball/nba-development`) is registered in `leagues.yaml` like every other
-ESPN league, so codegen now emits the full universal family (112 wrappers) as
-`sportsdataverse.nbagl.nbagl_espn_ext`: `espn_nbagl_standings`, `espn_nbagl_scoreboard`,
-`espn_nbagl_teams_site`, `espn_nbagl_summary`, `espn_nbagl_team_roster`, and the rest. They are
-exported from `sportsdataverse.nbagl` and the top-level package, and `return_parsed=True` (the
-default) routes through the shared ESPN parsers. Before this, G League standings needed the
-private `sportsdataverse._common_espn_parsers` and a hand-built URL. Offline tests drive the
-standings, teams, and scoreboard wrappers through real captured 2025-26 G League payloads;
-a gated live smoke test checks the teams and standings endpoints.
-
-### Fixed — nba_stats, wnba_stats and on3 return tables now match what the parsers return
-
-The reference-docs return tables for these families named columns from the stats-API catalog
-and the On3 OpenAPI spec, not from the parser output. Many of those names never appear in a
-parsed frame. The tables are now generated from the parser's output on a committed real
-capture of each endpoint.
-
-- **Renamed columns.** Examples: `fg3m` → `fg3_m`, `leagueid` → `league_id`,
-  `5-9_ft_fgm` → `5_9_ft_fgm`.
-- **Result sets.** 67 NBA and 63 WNBA endpoints return a dict of result sets. Their docs now
-  show every set, and their docstrings say they return a dict.
-- **On3 tables.** These show the flattened nested-object columns that `parse_on3_rdb` returns.
-- **On3 without a capture.** 48 On3 endpoints have no capture with rows. Each is marked
-  `unverified`, and its docs carry a one-line caveat in place of a table. The OpenAPI response
-  types were not used as a fallback: on the 9 endpoints where they could be checked against a
-  capture, their field names matched the parser on only 7.
-- **`nba_stats_playbyplayv3` / `wnba_stats_playbyplayv3`** are marked `unverified`. The generic
-  parser returns no columns for their `{meta, game}` payload.
-- **`on3_people_measurements`** shows a single `player_measurements` column. `parse_on3_rdb` does
-  not unwrap the `{playerMeasurements: [...]}` envelope, and the table documents what the parser
-  returns.
-
-Wrapper behaviour is unchanged.
-
-### Fixed — CFB scores ESPN marks but no text rule named, textless copies, untyped admin rows
-
-Three ESPN feed defects, sized on the 20,080 processed games of 2004-26:
-
-- **ESPN scored the row; sdv-py did not (~650 rows).** The touchdown or field goal is in ESPN's
-  `scoringPlay` and the score, but no text rule names it. Examples: a pick-six on a frozen
-  scoreboard (169; 282640084 "... returned for 40 yards for a TOUCHDOWN." at 28-20 before and
-  after), a 2004-07 "Vernon Gholston 21 yd fumble return." (177), a 2014+ fumble return closed
-  by "(Aaron Boumerhi KICK)" (168), and field goals typed as the snap before them. Each realised
-  the play's model end state instead of the points. A last pass, `_type_espn_scored_rows`, types
-  these from the row itself:
-  - **Who scored** is the start team's margin change: ±6-8 a touchdown, +3 a field goal. On a
-    frozen board, the play family decides, provided the text or ESPN's `scoringType` says
-    touchdown.
-  - **Rows left alone:** a row whose margin credits the other side than its family (ESPN's start
-    team is the returner), and a frozen-board fumble on a rush or pass, whose side the text
-    cannot settle.
-  - **Kickoff return touchdowns keep their score at the end of a game.** Miami's eight-lateral
-    return at Duke (2015) closes the game and is a touchdown, not a dead possession.
-- **Textless copies (~180 rows).** A row with no text whose drive has a texted row of the same
-  type, period and start state is a copy and is dropped. ESPN files it before the play at the
-  previous play's clock (401403886, 2022: eleven punts and sacks, each booked twice) or after it
-  (2007-15).
-- **Untyped admin rows (1,387 in 483 games).** These are dropped before the plays are ordered: the 2004
-  quarter and game markers, "Begin Drive", "PURDUE drive start at 15:00 (OT ).", empty rows, and a
-  try alone in parentheses ("(Sean O'Haire Kick)" ahead of the touchdown row that carries it).
-  As "Unknown" (or "End Period") rows they carried model EPA up to 4. In the drive of
-  401752914's touchdown, the kick fragment also moved that touchdown to the end of the game.
-
-On a 200-game random sample (32,146 rows), nothing else changed: 7 rows were retyped to the score,
-8 dropped (6 admin, 2 textless copies), and 3 next to them moved EPA.
-
-### Fixed — CFB plays that end a half leave a possession worth nothing
-
-A play ends the half when it is the first half's last play, regulation's last play in a game that
-goes to overtime, or a finished game's last play. Without a score nothing follows it, so its EP_end
-is now 0 and its EPA -EP_start, the cfbfastR / nflfastR convention. EPA already booked -EP_start on
-the first half's last play, but EP_end was the model at 0:00 on the 1 (about -0.4). Three cases were
-wrong outright:
-
-- **A finished game's last play was never flagged.** The flag compared against `lead_half` in the
-  same `with_columns` as the fill of its null, so the last row read the null. The final kneel of
-  400547699 booked EPA -1.51 where its possession was worth 1.93.
-- **Regulation's last play in an overtime game was not flagged**, because overtime is half 2. It
-  read the 0:00 own-1 state: 400787460's last regulation rush booked -0.55 instead of -0.10.
-- **A play whose NEXT snap is at 0:00 was treated as the end.** The dead-possession end state keyed
-  on an end clock of 0, which since the end clock became the next play's clock also catches the play
-  before an untimed down or a half's last snap. 400547699's rush to the 5 with 0:30 left was moved to
-  the 1 and booked EPA -3.34; it ends at the 0:00 snap's EP (1.93), EPA -1.64.
-
-A live game's latest play still ends nothing, since nothing follows it yet.
-
-### Fixed — CFB returned kickoffs end at the receiving team's first down
-
-ESPN ends a returned kickoff ("Kickoff Return (Offense)", 2014 on) at `end.down` -1, its no-down
-sentinel, and the EP model (all four `down_*_end` flags False) and the WP model (`end.down`) scored
-that end as a state with no down: 401282817's second-half return to the 17 read EP 0.79 where the
-1st & 10 snapped there reads 1.83. A non-scoring kickoff whose end down is outside 1-4 now ends at
-down 1, so its EP_end is the next snap's EP_start. On a 26-game 2014-26 sample that is 47 kickoffs
-(1.8 a game), whose EPA moves by a median 0.95. Found chasing cfbfastR's last second-half kickoff gap
-to sdv-py: cfbfastR already read the next snap.
-
-### Fixed — CFB plays end at the next play's clock
-
-`end.TimeSecsRem` (and `end.adj_TimeSecsRem`) was `start.TimeSecsRem.shift(1)`: the clock at the
-PREVIOUS play's start. Every EP_end and every after-state that reads the end clock was scored at an
-earlier clock than the play ended at. On most plays the difference is a few seconds, but at the end
-of a half or a game it is the whole question: 400547730's final kneel at 0:14 "ended" at 0:54, and
-its EPA was -0.97, as if the offence kept a possession worth 3.6 points. The end clock is now the
-next play's start clock, and the last play of a half or game ends at 0:00 (game time 1800 / 0):
-that kneel is EPA -4.8. Over a 7-game probe the median EPA change is 0.009; 17% of plays move by more
-than 0.1 and 2.3% by more than 0.5, almost all of them at period ends. Found aligning cfbfastR's
-end-of-half rules with sdv-py: with this fix and those, the two engines' EPA agree to a median of
-0.000 on a 92-game 2004-26 sample (was 0.015).
-
-### Fixed — CFB 2007-13 touchdowns filed as their own kick get the snap's down
-
-ESPN's 2005-13 feed writes down and distance -1 on plays with no down (kickoffs, tries,
-penalties on tries: 119,040 rows). In 2007-13 it also filed some touchdowns as ONE row with their
-extra point, typed as the kick, so the row carries the try's start state. `__helper_cfb_pbp_features`
-already retypes those 248 rows to the pass or rush touchdown and takes the snap's spot from the
-text ("for 36 yards"), but kept down -1: the EP model's down one-hots were all zero and scored the
-snap as no down at all (302602440's 59-yard rushing touchdown: EP_start 0.11). The down and distance
-are now the end state of the play before, when that play ended at the snap's spot (219 of the 248,
-a change of possession included: ESPN's end state is already the new offence's), and otherwise 1st
-and 10 (goal to go inside the 10); ESPN's "& Goal" distance 0 is the distance to the goal line. All
-247 such rows in their 86 games now carry a down 1-4 (was -1); EP_start median 3.8 -> 4.5.
-
-### Fixed — CFB blocked field goals keep ESPN's type (#641); null keys never twin a play copy
-
-Four string relabels in `__helper_cfb_pbp_features` turned any type containing "field goal" or
-"extra point" plus "blocked" or "no good" into "Extra Point Missed". On ESPN's types they only ever
-matched "Blocked Field Goal" and "Blocked Field Goal Touchdown" (1,061 rows 2004–26), which then
-went through the kick rules after them, and the one later rule that restores the type reads the
-text: 12 blocked field goals finished as "Penalty" (400547866, EPA +1.69), 4 as an "Extra Point
-Missed" try (400548023), and 55 blocked-field-goal return touchdowns as a plain "Blocked Field
-Goal" (400547865: the defence's touchdown lost, EPA -0.93 -> -7.7). The four rules are removed;
-ESPN's types stand. Found porting the relabel block to cfbfastR (sportsdataverse/cfbfastR#175).
-
-`_drop_espn_play_copies` twins a play with a later copy through a self-join on the drive and start
-state. Polars (1.40–1.44) matches rows whose join key has four or more null columns despite
-`nulls_equal=False`, so plays with no drive, team, down or distance could be dropped as a stale
-batch. Null keys are now dropped before the join; no game in the raw corpus was affected.
-
-### Added — the metric registry (`sportsdataverse.registry`)
-
-`sportsdataverse/registry/metrics.yaml` is the one source for how a published football metric is
-displayed: label, short label, axis label, format (`num2` / `num1` / `pct1` / `int`), polarity
-(`higher` / `lower`, from the offense or player perspective), family, qualifier, glossary slug and
-per-basis variants, one entry per base metric. `resolve(column)` maps any published column
-(`EPAplay_off_pass_rank`, `adj_def_epa`, `havoc_margin`) onto its entry plus the column's side,
-phase, suffix and effective polarity: `_def` flips the base's, a `_margin` is always higher-is-
-better (every producer margin is good-minus-bad). `python -m sportsdataverse.registry --ts
---target gop|web` renders a deterministic TypeScript module (`METRICS` + `resolveMetric`) headed
-by the sdv-py version and a sha256 of its body, which Game on Paper and the web platform generate
-their copies from instead of keeping four drifting tables. The yaml ships in the wheel and is
-read without PyYAML, like `validation/thresholds.yaml`. Documented under *Architecture → Metric
-registry*.
-
-### Fixed — CFB win probability in overtime and the final seconds, and made field goals' WPA
-
-The regulation WP boosters were trained on a frame that drops every game that reached overtime
-(cfbfastR-cfb-data `clean_plays`), so they estimate P(win | state, settled in regulation). A tied
-game late in the fourth was learned only from games somebody won in regulation, and overtime was
-never seen: its clock reads 0, so it scored as the last snap of such a game. On the 2022–25
-holdout, tied with two minutes or less left, the team with the ball was given 0.77 against 0.65
-won, and a tied overtime snap 0.94 against 0.50. New `cfb_wp_overtime` (fitted by
-`tools/fit_cfb_wp_overtime.py` on 2004–21, read from `models/wp_ot_reach.card.json`) mixes each
-regulation prediction with the overtime it may reach, `(1 - q) * wp + q * tie_value` (q from the new
-`wp_ot_reach` booster, the tie value a logistic in the pregame spread), and values overtime by its
-rules: the possession ends in a touchdown, a field goal or nothing, and the first team is answered
-by the second from the 25 (who had the ball first is read off the period's first snap that is not
-a timeout or a flag). Both the spread and the spread-free surfaces use it. The card pins the
-sha256 of `wp_spread.ubj` / `wp_naive.ubj`; retraining either (above all to keep overtime games)
-needs a refit of this correction, and a test fails until then.
-
-The fourth-down and two-point surfaces score the state a decision leads to. A state with no
-regulation time left after the play is now decided (win, loss, or overtime if level), and in
-overtime a punt, a kick or a failed try ends the possession instead of handing the opponent the
-ball at the spot. Georgia Tech's walk-off field goal (401754623) goes from "punt 91.7%" to FG
-68.9% vs punt 47.3%; a tied punt with 0:05 left (401762856) is overtime (56.4%, not 91.2%); Cal's
-overtime 4th and 3 at the 3, down 3 (401754585), is go 38.7% vs FG 32.8% (was FG 85.2%).
-`CFBPlayProcess` passes the overtime possession order as `ot_second_possession`; other callers
-may, and without it a non-zero margin implies the second possession.
-
-A made field goal's `wp_after` now hands over to the kickoff that follows, as a try's does. It
-was the kicker's snap at the spot with the points counted, a team with the ball: 11% of 2025's
-made field goals missed the next row by more than 5 points, up to 50 late in the fourth
-(Louisville's tying kick in 401754554 published WPA +30.9%). In overtime a touchdown row that
-carries its own try (2014 on) ends the possession at the realised margin.
-
-In a two-point shootout (2019-20 from the fifth overtime, 2021 on from the third) an attempt is
-valued by the shootout rule: a make leaves the other team one attempt of its own, not a drive from
-the 25. Alabama's first attempt at Auburn (401282146) reads 0.59 -> 0.85; scored as a possession it
-read -0.40. ESPN often files the second attempt under the first team, so the row order decides
-which attempt a row is. A shootout attempt is not a two-point decision (there is no kick to weigh),
-and its `two_pt_*` columns are null.
-
-Every play's `wp_*` / `wpa` and every fourth-down and two-point column move a little (most in
-close fourth quarters), so every CFB season needs a reprocess. EPA is unchanged. Per game,
-`fg_wp` / `make_fg_wp` / `miss_fg_wp` / `xp_wp` are Float64 like `go_wp` and `punt_wp` (they were
-Float32; the published parquet was already Float64).
-
-### Fixed — CFB completions whose text states no "complete to ... for N" gain keep their yards
-
-`yds_receiving` was read only from "complete to ... for N" text (or the touchdown form "N Yd pass
-from"), so a completion written any other way had no receiving yards and its passer's box line
-lost them. ESPN's 2025 feed writes "Preston Stone pass to Cam Porter for 4 yds" (no "complete"):
-Stone's line in 401752817 read 21 completions for 15 yards. ESPN's 2024 feed writes "pass complete
-to X for a 1ST down" with no yardage at all (874 rows in 38 games). Such a completion now takes
-ESPN's `statYardage`, which equals the stated gain on every 2025 "pass to" row and the change in
-field position on every 2024 row. The completion flag keeps incompletions and sacks out, and a
-play with a penalty or a fumble is left alone. Every season has a few such rows (2004: 1,342
-touchdown rows with no text; 2019: 47; 2021–2023: 25–32 each; 2025: 83 in the release), so
-passing / receiving yards, yards per attempt and the box scores move wherever they occur. Two
-related gaps remain (see the PR): a reversed-order text ("to X for 20 yds ..., Stone pass") files
-the passer as TEAM, and a completion lost on a fumble is typed as the recovery with `pass=False`.
-
-### Changed — "situation-neutral" reads the score-and-clock win probability (CFB and NFL)
-
-The neutral split in `football.tendencies` (win probability 20–80%, regulation, outside the last
-two minutes of a half) read `wp_before`, which carries the pregame line, so a heavy favorite's
-tied first quarter was not neutral: in 2025 only 64.1% of tied first-quarter FBS snaps counted,
-433 of 1,739 team-games had no neutral snap at all, and 25 teams' neutral pass rate moved 3+
-points between the two WPs. Per the owner's decision (2026-09-30), CFB now reads
-`wp_before_naive` (score, clock and field position only), the same model adjusted EPA's
-garbage-time rule uses; the band and the clock rules are unchanged. This moves every `*_neutral`
-column (`plays_` / `passes_` / `epa_` / `successes_neutral`, their rates and `def_` twins) and
-`sec_per_play_neutral` in team / coach tendencies and coach careers. NFL follows (owner, same
-day) so both leagues' "neutral pass rate" mean the same thing: it reads its `wp_before_naive`
-(nflfastR's spread-free `wp`) under the same band and clock rules. In 2025's Raiders–Texans game
-(401772805) the pregame line left 19 of 102 snaps neutral; the score-and-clock WP leaves 93.
-
-### Fixed — pace counts regulation drives once, for the drive's own offense
-
-`sec_per_play` in `football.tendencies` summed ESPN's drive clock over every drive with a
-parseable `drive.timeElapsed`, overtime included. Overtime has no game clock: ESPN files its
-drives as 0:00 (86 of 89 in 2025), so they added plays and no seconds, and one North Texas OT drive
-(401762461) carried 15:00 over 3 plays. Separately, an ESPN drive id holding standing snaps by both
-offenses (51 ids in 28 games in 2025) handed each offense the whole drive clock and play count.
-A drive now carries a clock only in regulation and only for its owner: the offense ESPN names as
-the drive team, else the one with the most standing snaps (the rule cfb-data's `team_summaries`
-uses). In 2025, 75 of 136 FBS teams' `sec_per_play` move, by at most 0.71 s (North Texas 27th →
-16th), and 10 teams' `sec_per_play_neutral` move by at most 0.58 s. `drives_with_clock`,
-`drive_seconds`, `drive_plays` and `pace_coverage` change with them; drive counts, finishing and
-scripting are unchanged.
-
-### Fixed — a season usage table keeps one row per player
-
-`aggregate_usage_box` summed per-game rows on `(team, player_id, player_name, position_group)`, so
-a player whose position group was missing in some games (a roster gap) or whose name changed
-split into several season rows: 177 CFB player ids in 2025 (763 in 2014), and 121 FBS players'
-main row undercounted targets (Danny Scudero, San Jose State: 160 targets published as 106 + 54).
-Season rows now key on `(team, player_id)` (the name when a row has no id) and carry the most
-frequent non-null name and position group. Every `usage_*` player table (players, tackles and the
-special-teams tables) needs a rebuild; the per-game `adv_*` tables are unchanged.
-
-### Changed — CFB xQBR retrained on the served box score, without the spread, behind a publish gate
-
-The bundled `cfb/models/qbr_model.ubj` is replaced. The old model was fitted on features
-that serving never computes: plays were grouped by passer name, so QB runs never reached
-`rush_epa`, and the booster had no split on it. Overtime games were dropped, and penalty
-plays were handled differently. The new model is trained on the published `adv_passing`
-rows, which are exactly what `create_box_score` scores. Its labels are ESPN game QBR,
-committed with provenance in cfbfastR-cfb-data. It also drops `spread`: `qbr_vars` is now
-the five EPA aggregates plus `era0..era3`. On identical plays, the old model gave a
-14-point favourite's QB about 10 points more than a 14-point underdog's.
-
-On the frozen, never-trained-on holdout (2026 weeks 1–4, 541 QB-games) the RMSE against
-ESPN raw QBR fell from 14.19 to 11.74. The correlation rose from 0.864 to 0.914 (0.660 to
-0.759 against Total QBR). The paired squared-error change is −63.5, with a 95%
-game-clustered CI of [−84.2, −43.6]. Keeping the spread would have scored 11.49; the
-pre-registered tolerance for dropping it was 0.30. The bundle now carries
-`qbr_model.gate.json`, the trainer's gate record, and `tests/cfb/test_qbr_model_gate.py`
-fails if `qbr_model.ubj` is not the candidate that passed it. Every `exp_qbr` changes;
-published `adv_passing` / pbp box scores keep the old values until they are reprocessed.
-The box score still emits a `spread` column.
-
-### Changed — tackle share counts only the defense's own scrimmage snaps
-
-Tackle share divided a player's tackle points by his team's across every play, special teams
-included: kickoff and punt coverage made up 6,590 of 113,407 CFB credits in 2025 (5.8%), with
-22 more on plays a penalty wiped out. Per the owner's decision (2026-09-30) the share now counts
-only the defense's own standing scrimmage snaps: two new columns,
-`scrimmage_tackle_points` and `team_scrimmage_tackle_points`, carry its numerator and
-denominator, and `tackle_share` is their ratio (per game, per position group and per season in
-`aggregate_usage_box`). `tackles`, `assists`, `tackle_points` and `team_tackle_points` still count
-every credit, special teams and the offense's tackles after a turnover included. Rows built before
-this change still share on every credit. The two new columns are declared in the loader schemas
-after the tackle tables are republished.
-
-### Fixed — a tackle is credited to the tackler's own team
-
-The usage box credited every tackler on a play to the play's defense, so a punting team's
-coverage tackles and an offense's tackles after an interception or fumble landed in the
-opponent's tackle table: 2,945 of 113,407 CFB tackle credits in 2025 (punts, punt returns,
-interception returns, fumble recoveries), and every FBS team's season table listed opposing
-players (Indiana's Jeff Utzinger under Miami in the 2025 title game). `create_usage_box` now reads
-each tackler's team from the game roster (`rosters`, which the CFB processor and the cfb-data build
-already pass) and files the credit under that team; a tackler the roster doesn't list stays with the
-play's defense, as before (NFL, which passes no roster, is unchanged). Raw tackle and assist counts
-are unchanged; `def_pos_team` in the `tackles` / `position_group_tackles` sections now means the
-tackler's team. `adv_tackles`, `adv_position_group_tackles` and their `usage_*` season tables need a
-rebuild.
-
-### Fixed — a pick-six or fumble-return touchdown is not the offense's conversion or touchdown
-
-The football tendencies and usage box read "touchdown" as any touchdown on the play, so a third
-down that ended in an interception or fumble returned for a score counted as the offense's
-conversion: 816 of 115,222 CFB third-down conversions in 2014–2025 (640 interception-return, 129
-fumble-return and 47 fumble-recovery touchdowns; 58 in 2025 across 40 FBS offenses). The same flag
-fed fourth-down conversions (13 of 2,081 in 2025), a ball carrier's `touchdowns` / `fd_or_td` when
-his fumble was returned for a score, red-zone and scoring-opportunity touchdowns, and the drive
-touchdown behind `rz_tds` / `so_tds`. A touchdown now counts only when it is not a
-`defense_score_play`, in `football.tendencies`, `football.usage_box` and `fit_third_down_curve`
-(both leagues). Team / coach tendencies, coach careers and the usage tables need a rebuild; the
-bundled third-down curves should be refit on the reprocessed play-by-play (today's release no
-longer reproduces them exactly, so a refit now would mix in unrelated data changes).
-
-### Fixed — CFB plays ESPN files twice under new ids are dropped
-
-ESPN sometimes files a play again under a fresh play id, in three shapes the adjacent-copy
-dedupe could not see: a stub echo on the next row (same text and down/distance, no spot), a batch
-of a drive's plays filed at the drive's start clock ahead of the same plays at their real clocks,
-and the same play on both sides of a timeout or end-of-period row. `CFBPlayProcess` now drops
-them before that dedupe, keeping the echo's play type (401752854, Oregon @ Penn State 2025, files
-its punts, kickoffs and a missed field goal first as "Pass Completion"). That game goes from 281
-rows to 173, and its scrimmage plays now match the box score. Across the raw store the pass removes
-809 rows in 105 games in 2014–2026 and 727 in 156 games in 2007–2013. Feeds with no start spot
-(2004–2006) are left to the adjacent rule. Play counts, EPA/play and success rate move in the
-affected games, so every season with drops needs a reprocess.
-
-### Fixed — CFB losses written "for N yards loss" read as gains
-
-ESPN's 2025 text states a loss after the number: "rush middle for 4 yards loss", "caught at
-SAC18, for 1 yard loss". The "rush for N" and "for N" readers matched first and stored the loss
-as a gain, so `yds_rushed` was +N on 2,224 rushes and `yds_receiving` +N on 581 receptions in the
-published 2025 season (1,508 and 364 so far in 2026, 44 rushes in 2023). The existing "yds loss"
-branch sat behind them, and it missed the singular "1 yard loss" (968 of the 2,224). Both
-readers now take the stated loss first. EPA is unaffected (it comes from field position); rushing
-and receiving yards, yards per carry, line / highlight yards, stuff and opportunity rates, and the
-penalty residual `statYardage - yds_rushed` all move. A run filed twice in one 2023 text
-("run for 7 yds ... fumbled ... rush middle for 7 yards loss") reads the loss from the second copy
-(43 rows). The 2023 and 2025 seasons and 2026 to date need a reprocess (2022 has one rush and one
-reception).
-
-### Fixed — CFB fumbles in ESPN's 2025 text format keep their rush / pass flag
-
-ESPN's 2025 feed writes a run as "rush right for 6 yards gain" (the rush flag on a
-fumble-typed row only read "run for") and files a fumble that goes out of bounds under a new
-`Fumble` type that neither flag listed. 466 of 1,401 FBS-vs-FBS scrimmage fumbles in 2025 came
-out with `rush` and `pass` both False (33 in 2024), 435 of them through these two gaps, so every
-pass/rush aggregate (havoc, EPA/play, success rate) dropped them. Fumble-typed rows now read the
-2025 rush phrasing, and a `Fumble`-typed pass counts as a pass (and a completion when complete). Safeties on "rush for a loss" rows in the
-2005–2013 feeds pick up the rush flag through the same pattern (~25 per season). A `Fumble`-typed pick whose returner
-fumbles out of bounds is typed "Interception Return" (3 rows in 2025–26), so the strip-sack rule no
-longer retypes it as a lost fumble.
-
-### Added — MLB park dimensions by season (`load_mlb_park_dimensions`)
-
-`load_mlb_park_dimensions()` reads the season-less `mlb_parks` release built by
-`sportsdataverse/sdv-reference-data`: one row per MLB venue per season, 2001 on
-(regular-season, spring-training, neutral and international sites), with fence
-distances in feet at MLB's seven markers, capacity, turf, roof, azimuth, elevation and
-coordinates as of that season, from the MLB Stats API. `venue_id` stays a string (the
-API's `venue.id`). Cited corrections for fence moves the API lags or misses are applied
-and described in `notes`. Every column is described in the returns table.
-
-### Added — conference and division reference tables for nine leagues (`{league}_groups`)
-
-Thirty-six dataset loaders over the `{league}_groups` release tags built by
-`sportsdataverse/sdv-reference-data`, four per league for `cfb`, `mbb`, `wbb`, `nfl`,
-`nba`, `wnba`, `mlb`, `nhl` and NCAA baseball (`load_ncaa_baseball_*`, under `mlb`):
-the season-less `load_<league>_groups()` (one row per group lineage, with SDV's own
-`<league>:<slug>` `group_id`), `load_<league>_group_seasons()` (each group's name,
-abbreviation, parent and member count as of that season, never today's label applied
-to the past) and `load_<league>_group_aliases()` (every label and id a source uses for
-a group, with its valid seasons), plus `load_<league>_team_group_seasons(seasons)` (each
-team's subdivision / conference / division per season, one asset per season). Seasons
-keep each league's own key -- the ENDING year for `mbb`, `wbb`, `nba` and `nhl` -- so no
-asset offset is applied. `team_id` stays a string, as the tables publish it. The NFL
-loaders are hand-written in `nfl_loaders.py` (a missing season raises `NoDataError`);
-the rest are generated. Every column is described in the returns tables.
-
-### Added — the official PFF Developer API (`api.pff.com`), with the premium wrappers kept as LEGACY
-
-PFF now publishes an official, API-key-authenticated Developer API. `pff_api_*` (68 generated
-wrappers in `sportsdataverse.nfl.pff_api`, also at top level) cover every read operation in PFF's
-own spec, named after PFF's `restish pff <command>` operations: the 60 `/v1` routes (the Premium
-Stats reports, byte-identical to `premium.pff.com`, plus 13 per-player reports, `teams/summary`
-per-game team grades and `whoami` that the legacy surface never had) and the 8 `/v2/{league}`
-tables (team stats with ranks, rosters with depth order and snap share, schedules with PFF Elo and
-SOS, qualified leaders with percentiles, 19 team and league-wide reports with ~110 new player
-metrics). Auth is one key — `api_key=`, or `PFF_API_KEY` / `SDV_PY_PFF_API_KEY` — sent as a bearer
-header by the new `pff_api_runtime`; a refused or failed fetch -- or a 200 whose body is not a
-JSON object -- raises `AssetFetchError`, never an empty frame. PFF responses bypass the package
-response cache (its key ignores the `Authorization` header, so one key could be served another's
-body). A view-only entitlement answers 200 with columns removed and a `restricted` list: the
-wrappers return that partial body with a `UserWarning` naming the columns, and raise instead with
-`strict=True` on any wrapper or `SDV_PY_PFF_STRICT=1` -- the setting for pipelines.
-`parse_pff_v2_table` types each `/v2` table from its own declared columns; id columns are `Int64`
-by name even where PFF declares them `string` (it types an all-null column, and every column of an
-empty answer, as `string`), and such typeless columns are `Null`, so a union across weeks keeps
-the real dtypes.
-
-The wire detail that matters: the new host **silently ignores** camelCase `franchiseId`/`gameId`
-(it returns the whole leaderboard). The new wrappers send `franchise_id`/`game_id`; the legacy
-`pff_*` / `pff_<league>_*` wrappers keep camelCase because `premium.pff.com` expects it.
-
-The cookie-auth `premium.pff.com` wrappers are unchanged and still work, but every one now
-documents itself as LEGACY, as do their runtime module and reference page. `parse_pff_report` and
-`parse_pff_player_detail` now look past the `restricted` block the Developer API may place beside
-a report envelope. Previously such a body came back as a dict or an empty frame.
-
-Every `pff_api` return table now documents its columns (2,739 descriptions). Report metrics that
-`/v1` already shipped reuse the legacy `native/pff` text; the `/v2`-only metrics (over-expected
-rates, positive/negative graded-play rates, pass-rush side splits, true-pass-set rates) and the
-team tables are described from PFF's own column labels and captured bodies. Each team-stats rank
-states which end ranks first, read from PFF's captured rows (1 = highest EPA, 1 = fewest
-turnovers). `native/pff_api` is off the deferred list, so the residual-description gate now covers
-it. The new tables' returns-schemas are named `pff_api_<table>` (`pff_api_team_roster`, ...):
-descriptions are looked up by that name, and the bare `team_roster`, `team_schedule`, `team_stats`
-and `team_report` already belong to ESPN, MLB, CBS, NWSL and NHL tables, so one source's text
-would have rendered on another's page (PFF packs height as feet x 100 + inches; ESPN gives inches).
-
-Fixed scoreboard cache TTL selection when dates are supplied in query parameters:
-current/future days and ranges containing them bypass both cache reads and writes,
-while wholly historical dates retain the 30-day TTL. Explicit TTL overrides still
-take precedence.
-
-The legacy PFF return tables (`pff_*`, and the `pff_api` `/v1` routes that reuse them) no longer
-borrow another source's column text: 277 columns that showed nflreadr/ESPN wording ("as reported
-by NFL.com", "ESPN franchise id", "Player ID (aka GSIS ID)") now describe PFF's own values —
-PFF team abbreviations and ids, per-target EPA, gross punt yards, one row per team line on the
-pass-blocking-efficiency table. The description check now resolves a flat family's fallback text
-with the league its page renders it with.
-
-### Added — NBA officiating data: Last Two Minute reports, referee assignments, and cdn liveData
-
-New module `sportsdataverse.nba.nba_officiating` reads official.nba.com:
-
-- `nba_l2m(game_id)` returns one game's Last Two Minute report as three frames:
-  - `calls`: one row per graded action, with the decision normalized to
-    CC / CNC / IC / INC. A blank or "Undetectable" grade stays `null`, never INC.
-  - `game`: one row of game metadata.
-  - `stats`: the report's calls / errors-in-favor / possessions-in-favor block.
-- `nba_l2m_games(season)` lists every game that has a report, from the season index
-  page. JSON reports exist only from 2019-01-01.
-- `nba_referee_assignments(date, league="nba"|"gl"|"wnba")` returns:
-  - `officials`: one row per game and filled crew slot (an empty slot has no row).
-    `crew_position` is the feed's order; slot 1 as crew chief is inferred, not labelled.
-  - `replay_center`: one row per replay-center official for the date and league.
-    The feed ties these to a date, not a game, so there is no game key.
-
-  `wnba_referee_assignments()` is the WNBA shim.
-
-official.nba.com needs a browser User-Agent: the default libcurl/curl UA gets an
-Akamai 403. Its 403s mean two different things, and the module keeps them apart:
-
-- An S3 `AccessDenied` body means the game has no report. It raises `NoDataError`.
-- An Akamai HTML page means the fetch was blocked. It raises `AssetFetchError`.
-
-New `sportsdataverse.nba.nba_live` / `sportsdataverse.wnba.wnba_live` wrap the
-cdn.nba.com / cdn.wnba.com liveData feeds: `nba_live_pbp()` / `nba_live_boxscore()`,
-plus the WNBA twins.
-
-- The play-by-play carries `official_id` on every foul (2019-20 on) and wall-clock
-  `time_actual`; it joins to `nba_referee_assignments()` on `official_id`. Only
-  2pt/3pt shots carry coordinates (`x_legacy` / `y_legacy`); fouls and blocks carry
-  a court zone (`area` / `area_detail`).
-- The cdn refuses requests carrying a plain client's default headers (a 403 page),
-  so these use the same curl_cffi Chrome impersonation as stats.nba.com, which
-  sends a browser-consistent request.
-- Every frame carries a typed core column set, even for a game with no actions.
-- Late-first-seen fields are kept, because schema inference scans every row.
-
-Every function here follows the same error rules:
-
-- A bad argument raises `ValueError` before any request: a `game_id` that is not
-  one non-negative integer id of at most 10 digits (a bool, a negative or fractional
-  number, a string that is not all digits, or a longer id), a `season` that is not a 4-digit year, a `date` that is
-  not one valid `YYYY-MM-DD`, or an unknown `league`.
-- "No data" raises `NoDataError`: a 404, or S3's `AccessDenied` 403. That covers a
-  game without an L2M report or a liveData object, and a season without a listing page.
-- A failed fetch raises `AssetFetchError`. That means a transport error, an Akamai
-  or WAF block, any other non-200 status, or a 200 without the expected shape:
-  - a body that is not a JSON object;
-  - an L2M report whose `game` is not exactly one row (the parser reads one row,
-    so a second would vanish silently) or whose `l2m` / `stats` table is not a list
-    of records (an empty record would become a made-up all-null row), or a liveData
-    body without its `game` object;
-  - a referee block whose `Table` / `Table1` rows are missing or malformed,
-    including a `Table` row without `game_id` or a `Table1` (replay-center) row
-    without a `replaycenter_official` name;
-  - a listing page without its "Last Two Minute" marker, or whose report links
-    the parser cannot read.
-
-  `raw=True` runs the same checks. On the referee feed it checks all three
-  leagues, since it returns the whole payload.
-- The liveData fetch retries throttles, 5xx and transport errors on the
-  `SDV_PY_NBA_STATS_RETRIES` / `SDV_PY_NBA_STATS_BACKOFF` budget that `nba_stats_*`
-  uses (default: no retry). A missing curl_cffi raises `ImportError` and is never
-  retried.
-- The parsers never raise. A malformed envelope gives zero-row frames with the
-  documented schema, and a cell of the wrong type becomes null (an object or list in
-  a text column is kept as JSON text).
-
-Port of atlhawksfanatic/L2M's scraping logic (MIT).
-
-### Changed — the CFB vendor special-teams name patterns moved into the shared football grammar
-
-Three CFB-local regexes (`_VENDOR_FG_KICKER_RE`, `_VENDOR_KICKOFF_RETURNER_RE`,
-`_VENDOR_PUNT_RETURNER_RE`) read a kicker or returner whose name is not the abbreviated
-"X.Surname" shape -- stats.ncaa.org's surname-first "Arreola,Carlos" and 2005-2014's
-spelled-out "Bryan Hahnfeldt". They are now one name expression in
-`sportsdataverse.football.espn_text` (`CLAUSE_NAME`) plus the two anchors built from it
-(`CLAUSE_RETURNER_RE`, one expression for punts and kickoffs since the call site already
-knows which kick it has, and `CLAUSE_FG_KICKER_RE`), and `cfb_pbp` keeps no name regex of
-its own for them. Output is unchanged: replayed over every local ESPN summary (3,227,541
-plays / 20,718 games, 2004-2026), `punt_return_player_name`, `kickoff_return_player_name`
-and `fg_kicker_player_name` are identical -- 0 lost, 0 changed, 0 gained.
-
-### Added — CFB kick distances and bare-punt returns derived from field position, with provenance
-
-ESPN's 2004 play text states no kick distance at all ("Punt by Vinnie Burns (VT)
-returned 15 yards by Reggie Bush (USC) to the Trojans 21.", "Trojans kickoff,
-touchback by Hokies."), so `yds_punted` was 2% filled and `yds_kickoff` empty for the
-season; and 29% of 2023 punts read only "Alex Weir punt for 44 yds", leaving
-`yds_punt_return` null. `CFBPlayProcess` now fills those nulls from ESPN's own field
-position at the end of the yardage step, and three new columns say where every value
-came from: `yds_punted_source`, `yds_kickoff_source`, `yds_punt_return_source` --
-`"text"` (present before, parsed or a flag convention), `"derived"`, or null. A
-parsed value is never changed.
-
-- **Punt distance**: `start.yardsToEndzone - landing`, `landing = (100 -
-  end.yardsToEndzone) - yds_punt_return`; a touchback is the distance to the goal line
-  (the text convention: 98.9-100% of stated touchback punts per sampled season).
-- **Kickoff distance**: the kick spot minus the landing, touchback = the spot. The spot
-  is ESPN's `start.yardsToEndzone` from 2005 (65 from the 35, and 70 in 2007-2011 when
-  kickoffs moved to the 30 -- a fixed 65 is exact on 0.06% of 2009 non-touchback
-  kickoffs). 2004
-  stores the catch spot there instead, so 2004 assumes the 35, requires the computed
-  landing to equal ESPN's catch spot, and skips kicks after a flag or safety.
-- **Bare-punt return**: `(100 - end) - (start - yds_punted)` when positive, the next snap
-  starts at that spot with the receiving team, and the text either describes no outcome or
-  states only that the returner stepped out of bounds -- "Jared Ballman punt for 48 yards,
-  returned by Ryan Broyles out-of-bounds.", a return whose length ESPN never gives (41 such
-  rows in a 1,329-game 2004-2026 sample, 25 of them derivable under the guards above). Returner names are not recoverable.
-- **Never derived**: penalties, fumbles, muffs, blocks, laterals, safeties,
-  touchdowns, onside kicks, out-of-bounds *kickoffs*, "for a 1ST down", unchanged
-  possession, out-of-range values (punt 0-80, kickoff 0-75, landing 10+ yards deep), a
-  no-return punt ending exactly at the 20 (a 2004 touchback reads the same), an
-  end-zone punt with the receiver at the 20, and a derived return of exactly 5 or 15
-  (what an unrecorded flag looks like).
-- A punt out of bounds **is** derived, unlike a kickoff out of bounds: a kickoff out of
-  bounds is spotted by rule (the receiving team's 35, stored as a 40-yard return), so
-  ESPN's end spot is a placement, while a punt out of bounds is dead where it crossed
-  the sideline -- the landing spot. On the 22 `punt_oob` rows of a 2005-2025 sample the
-  field position reproduces the stated distance exactly 22 times.
-
-Validated offline on 1,749 stored games (250 per season, 2004/2005/2009/2015/2023-2025;
-one 2009 game has no play-by-play).
-With the parsed value hidden, derived punt distances match the text on 98.7-99.3% of
-derived punts in 2005/2009/2015 (87.7-91.5% in 2023-2025, where the stated distance
-already disagrees with the field position on 10-24% of punts) and kickoff distances on 99.3-99.7%
-(95.8-99.2% in 2023-2025). Simulated bare punts return the parsed yardage exactly on
-95.2-97.9% of derived returns in 2005-2015 and 82.2-87.4% in 2023-2025, with 0.9-3.1%
-of unreturned punts given a return. Against ESPN's box score, which neither the text
-nor the field position feeds: 2004 team-game punting yards match exactly as often
-with derived distances (23.6%) as 2005's parsed distances do (22.9%), and on the 105
-2023 team-games that gained a derived return, 102 moved closer to the box's punt-return
-yards and 3 farther. Sample fill: 2004 `yds_punted` 1.9% -> 86.2% and `yds_kickoff`
-0% -> 90.6%; 2023 `yds_punt_return` 68.9% -> 76.4%.
-
-### Changed — `cfb_returning_production` measures defense from play participants and weights it into `overall_returning`
-
-`def_returning` was built from ESPN's per-game defensive player box, which covers 0% of
-teams in 2014-2015 and 17-65% through 2023, so the column was null for most of the league
-before 2024 and the fitted FBS weights were offense 1.0 / defense 0.0: every published
-`overall_returning` equalled `off_returning`. Defense now comes from play participants
-when the production season is 2014+, 92-100% of teams every season (all of FBS), and
-from play-by-play splash ids (sacks, interceptions, pass breakups, forced fumbles) for
-2004-2013. Participants are scored the way the box counts the same plays (every
-tackler, assister or sacker a tackle; a sack 2.0 split across sackers; one tackle for
-loss shared on a play that lost yardage or had a sack; a pass defended 1.0), and each
-defender is credited to the team their game roster lists them on, because on punts
-and turnover returns the tacklers play for the team in possession. Against the box
-where both are near-complete they track it at player r = 0.944 (2024) and 0.980 (2025).
-A season whose participants join fewer than 95% of pbp plays warns; a missing source
-release keeps the box defense.
-
-New columns `def_basis` (`participants` / `pbp_splash` / `box`) and `overall_basis`
-(`offense+defense`, or `offense` for a team with no defensive value, whose overall
-then equals `off_returning`) say which measure each row used. The splash measure has
-no tackle volume and is not on the participants' scale.
-They are returned by `cfb_returning_production()` now and reach the
-`load_cfb_returning_production` release asset when it is next rebuilt.
-
-**`overall_returning` values change.** FBS weights are refitted on the corrected
-metric: offense 0.49 / defense 0.51 (FBS 2018-2025, n = 1,017; standardized
-coefficients off +1.15, def +1.21). Spearman against the next season's scoring-margin
-change rises from 0.173 (offense only) to 0.205, and on the splash era the fit never
-saw (2005-2014, n = 1,213) from 0.239 to 0.299 (gain 95% team-cluster interval
-[+0.022, +0.097]). Fitted on 2018-2023 and scored on 2024-2025 the gain is +0.010,
-an interval spanning zero. The retention gate is re-baselined on a recaptured
-2005-2025 fixture (floors 0.18 over 2018-2025 and 0.24 over 2018-2023; the retired
-gate's fixture scores 0.156 under the new weights, its defense column being the
-retired measure), with held-out gates for 2024-2025 and the splash era, a
-fixture coverage/level gate, and the shipped weights tested against the committed
-fit. The new results fixture keeps completed games only: canceled and postponed
-games carry 0-0 scores (164 in 2016-2024) that the earlier capture admitted.
-
-### Fixed — fantasy-football ids are strings, pinned instead of inferred from each DynastyProcess release
-
-`load_nfl_ff_playerids` / `load_ff_playerids` and the CSV-backed kinds of
-`load_nfl_ff_rankings` / `load_ff_rankings` read DynastyProcess CSVs with polars' type
-inference, so an id column's dtype depended on whatever the current upstream release
-happened to contain. `fantasypros_id`, `pff_id` and `nfl_id` used to come back as strings
-and now infer as `Int64`; ids that are null in the first 100 rows (`yahoo_id`,
-`fleaflicker_id`, `rotoworld_id`, `swish_id`) flip whenever upstream reorders. Integer
-inference also dropped zero-padding: 225 `mfl_id` values such as `"0156"`, and `nfl_id`
-`"038666"`. Every id column is now pinned to `Utf8` at read time. That matches upstream's
-own `db_playerids.rds` (all 20 ids are character), keeps the padding, and lines the ids up
-with the `Utf8` ids of `build_nfl_rosters` / `build_nfl_players` and with each other, so
-cross-loader joins no longer depend on the release.
-
-Returned dtype changes from `Int64` to `Utf8`:
-
-- `load_nfl_ff_playerids`: `mfl_id`, `fantasypros_id`, `pff_id`, `sleeper_id`, `nfl_id`,
-  `espn_id`, `cbs_id`, `rotowire_id`, `ktc_id`, `stats_id`, `stats_global_id`,
-  `fantasy_data_id`. The other eight id columns were already strings and are now pinned
-  so they cannot flip.
-- `load_nfl_ff_rankings(kind="draft")`: `id`, the FantasyPros id that joins to
-  `load_nfl_ff_playerids`' `fantasypros_id`. `sportsdata_id`, `yahoo_id` and `cbs_id` are
-  pinned `Utf8` (already strings).
-- `load_nfl_ff_rankings(kind="week")`: `fantasypros_id`. `player_opponent_id` is pinned
-  `Utf8` (already a string).
-
-`kind="all"` reads upstream's parquet, which already stores these ids as strings. Code
-that joined or compared these ids as integers needs to cast its own side to `pl.Utf8`.
-
-Cached frames keep their old dtypes until the cache entry expires, so call
-`sportsdataverse.nfl.clear_cache()` after upgrading (it matters most with
-`cache_mode="filesystem"`, which persists across processes).
-
-### Fixed — the usage box glued shared tackles into one phantom player and read positions only from participants
-
-`cfbfastR-cfb-raw` stores each game's play participants with every list cell written
-as a numpy array's `str()` -- `"['5152441' '5220449']"`, no commas. The usage box
-decoded those cells with `ast.literal_eval`, which reads two adjacent string literals
-as ONE concatenated string without raising, so every two-player assist became a single
-phantom tackler (`51524415220449`, "Jon JohnsonBrett Karhu") and the real players lost
-the credit. In a sample of stored games every multi-player cell had this shape (1,528
-of 1,528); game 401760404 produced 72 `tackles` rows instead of 43. List cells now
-decode by tokenizing, so the JSON, Python-repr and numpy-repr shapes (line-wrapped,
-double-quoted names such as "D'Andre Swift", bare numbers) all yield the same items.
-
-`create_usage_box` also only knew a player's position from the participants'
-`{type}_position_id` columns, which the stored CFB participants predate, so
-`position_group_usage` and `position_group_tackles` were empty for every historical
-CFB game. It takes an optional `rosters` (a frame, a list of athlete records or the
-stored `{"data": [...]}` envelope) and fills the group of any athlete the participants
-did not classify from `position_id`, or the id inside `position_href`; a participant's
-own position still wins. `CFBPlayProcess` passes its supplied `game_roster`. On stored
-2014-2025 games the roster resolves 97-100% of participant ids; 2004-2013 have no play
-participants at all.
-
-### Fixed — CFB special teams read ESPN's 2025 jersey-style text; the usage box keys a kicker once
-
-ESPN's 2025 college feed writes kicks the way the NFL feed does -- "(04:07) #43
-M.Chiumento punt 43 yards to the OSU36 #0 B.Inniss return 16 yards to the TEX48
-(#81 N.Townsend), out of bounds", "#49 M.Diomede kickoff 65 yards to the TEX00,
-Touchback", "#96 C.Hawkins field goal attempt from 26 yards GOOD" -- and the CFB
-processor only read "punt for N yards", "kickoff for N yards", "N Yd Field Goal"
-and "returned by X for N yards". On those games (401856682, Ohio State @ Texas,
-and many more) `yds_punted`, `yds_kickoff`, `yds_fg`, `yds_punt_return` and
-`yds_kickoff_return` were null on every kick, as were the returner and
-fair-catcher names, and a returner stepping out of bounds was counted as a punt
-out of bounds. The jersey-style clauses now fill the distances, the return
-yards, the touchback and fair catch, and the punter / kicker / returner /
-fair-catcher names from the text; ESPN's participants still overwrite the
-names wherever they exist (the abbreviated text name is the fallback, as in the
-NFL processor), and the older phrasings are unchanged. The abbreviated-name
-pattern the NFL grammar was built on moved to
-`sportsdataverse.football.espn_text`, which both processors share. Verified on
-the committed 401856682 summary and participants fixtures.
-
-`create_usage_box` keyed each special-teams source on `coalesce(player_id,
-player_name)` separately, so a kicker whose kickoffs carried his id (ESPN's
-participants) and whose field goals carried only his name (the play text)
-appeared twice in `st_kickers` -- "Eli Ozick" with id 5157006 and six kickoffs,
-and again with a null id and the field-goal line. Every (id, name) pair seen on
-any source now resolves one key per team for kickers, punters, returners and
-blockers, and the merged row carries the resolved id and name.
-
-### Added — loaders for the ESPN football usage leaderboards and team / coach tendencies
-
-Twenty-eight dataset loaders over the release tags `cfbfastR-cfb-data` and `nfl-data`
-publish from `sportsdataverse.football.usage_box` and `tendencies`: the eleven usage
-sections (`load_{cfb,nfl}_usage_players`, `_usage_position_groups`, `_usage_tackles`,
-`_usage_position_group_tackles`, `_usage_teams`, `_usage_drive_scripting`,
-`_usage_st_kickers`, `_usage_st_punters`, `_usage_st_returners`, `_usage_st_blocks`,
-`_usage_st_team`), `load_{cfb,nfl}_team_tendencies`, `load_{cfb,nfl}_coach_tendencies`,
-and the season-less `load_{cfb,nfl}_coach_careers()`. One parquet per season
-(`{stem}_{season}.parquet`, CFB from 2004, NFL from 2002), unioned with
-`diagonal_relaxed`; the CFB loaders are generated from `releases.yaml` (a missing
-season is skipped with a warning), the NFL ones are hand-written in `nfl_loaders.py`
-(a missing season raises `NoDataError`, matching its siblings). Returns tables are
-derived from the published parquets and every column is described from the
-producers' semantics; published coverage caveats (NFL 2005 has no play text upstream,
-the participant-based sections start in 2014, the kicker / punter / returner tags
-have no 2005-2007 assets) live in each loader's `notes:` / docstring.
-
-The loader codegen learned a season-less form: a `releases.yaml` url with no
-`{season}` token now renders a `fn(return_as_pandas=False)` loader that reads one
-asset (an absent asset is an empty frame plus a warning), and the loaders page
-renders its example as `fn()`.
-
-### Added — team and coach tendencies (`sportsdataverse.football.tendencies`)
-
-`tendencies(plays, league=)` folds a season of processed plays (either
-processor's output) into one row per group -- `(season, pos_team)` by default,
-or `(season, coach)` when the caller attaches a coach column -- with pace
-(seconds per play from the drive clock, plays per game and per drive, with a
-coverage share so pre-clock seasons read as missing rather than wrong),
-run/pass splits by down, by score state (leading / tied / trailing) and in
-situation-neutral snaps (win probability 20-80%, regulation, outside the last
-two minutes of a half), early-down and neutral pass rates, explosive and
-success rates, EPA per play, third downs over expected, red-zone and
-scoring-opportunity trips with TD rate, points per trip and success, scripted
-vs non-scripted drive efficiency, and fourth-down decision making (go rate,
-agreement with the bundled fourth-down model, go rate when the model says go,
-go rate when it says kick, conversion rate when going, win probability left on
-the field by deciding against the model). Every rate carries its numerator and
-denominator (`RATES`), so `aggregate_tendencies(frames, keys=)` sums seasons
-into careers and recomputes the rates exactly. A defense twin (`def_*`) is
-computed by the defending key so a coach's defense is judged on what it
-allowed. Expected third downs stay null, never zero, when no curve is
-available.
-
-### Added — usage and situational box (`sportsdataverse.football.usage_box`)
-
-Six new `advBoxScore` sections on BOTH football processors, computed once in the
-shared football layer from the processed plays and the per-play participants:
-`player_usage` (explosive plays, first downs, touchdowns, first-down +
-touchdown rate, target share, first-down share, red-zone and
-scoring-opportunity touches / targets / touchdowns, third downs converted
-over expected), `position_group_usage`, `tackles` (tackle share:
-tackles + 0.5 assists over the team total), `position_group_tackles`,
-`team_usage` (third downs over expected, red-zone and scoring-opportunity
-efficiencies: trips, TD rate, points per trip, success, EPA per play) and
-`drive_scripting` (scripted = a team's first two drives of each half vs the
-rest). `aggregate_usage_box` sums per-game rows into season leaderboards and
-recomputes every rate. The participants pivot now also emits
-`{type}_position_id`; `sportsdataverse.football.positions` maps ESPN position
-ids to abbreviations and groups. Bundled third-down conversion curves
-(`{cfb,nfl}/models/{league}_third_down_conversion.parquet`, isotonic in yards to
-go; NFL 2002-2025, CFB 2022-2025) feed the "over expected" columns and refit
-with `fit_third_down_curve`.
-
-### Added — NFL field-position EP curve (`nfl_field_position`)
-
-`load_nfl_fp_curve()` loads the bundled `nfl/models/nfl_field_position_ep.parquet`
-(EP of a drive start by own yard line, 1..99), the NFL twin of the college curve
-and fit with the same recipe -- weighted isotonic regression of realized drive
-points on the starting yard line -- so the two leagues' field-position margins
-are comparable. `fit_nfl_field_position_ep(pbp)` refits it from released
-`espn_nfl_pbp` plays; the bundled artifact is the 2016-2025 fit (59,026 drives).
-
-### Added — offline processor inputs (#491)
-
-`espn_nfl_pbp(summary=)` / `espn_cfb_pbp(summary=)` run the processor over a
-stored ESPN summary with no network (participants, roster and odds fetches all
-gated); `play_participants_from_items` + `athlete_lookup_from_summary` build the
-participants frame from stored core play items; `NFLPlayProcess(odds_override=)`
-mirrors the CFB contract and `odds_source` records which branch resolved the line.
-
-### Added — CFB drive summary and situational team stats, graduated from Game on Paper (#470)
-
-`cfb_drive_summary.create_drive_summary(drives, frame, home_id, away_id,
-periods=None)` builds the StatBroadcast-style drive summary — per-team drive
-lines (both named drive-success metrics, points off turnovers, forced
-three-and-outs, TOP by quarter, first-down sources), the OBTAINED/HOW-LOST
-drive chart, how-scores-happened, and per-team long-play lists — windowable
-by start-quarter set or `"ot"`. `cfb_situational_stats.create_situational_stats(frame,
-home_id, away_id, window_expr=None)` builds the per-team situational block
-(down-by-down with distance buckets and conversion attribution, red zone,
-finishing drives, rushing tiers, passing profile, 4th-down decision report,
-score state, penalties, havoc, turnovers, field zones, pace, big plays),
-windowable via a polars filter with window-inherent sections omitted on
-windowed builds. Thin `CFBPlayProcess.create_drive_summary` /
-`.create_situational_stats` delegates mirror `create_box_score`. Both consume
-the post-pipeline `plays_frame`; drive-level attribution reads the drives
-grouping (`drive.team`), never plays grouped by `drive.id`.
-
-### Fixed — Statcast search runner ids are Int64, not Float64
-
-`mlb_statcast_search`, `mlb_statcast_search_minors` and `mlb_statcast_search_wbc`
-returned `on_1b` / `on_2b` / `on_3b` as Float64 (`660271.0`): pandas reads any
-integer CSV column holding a blank as float, and a base is blank whenever it is
-empty. Float ids break joins against `batter` / `pitcher` and stringify as
-`"660271.0"`. The 14 MLBAM id columns (`batter`, `pitcher`, `on_1b`..`on_3b`,
-`fielder_2`..`fielder_9`, `game_pk`) are now pinned to nullable Int64 (blank ->
-null), in polars and in `return_as_pandas=True` output, and the Returns docs say
-`integer`. An id column holding a non-integral value is left as read and warned
-about once per call rather than truncated.
-
-**Returned dtypes change:** `on_1b` / `on_2b` / `on_3b` go from Float64 to Int64,
-and pandas output from `parse_mlb_statcast_search` gives nullable `Int64` instead
-of numpy `int64` for the other ids.
-
-### Fixed — MLB expected stats counted raw pitches as plate appearances
-
-`mlb_expected_stats` counted every non-batted-ball *pitch* row toward `pa`
-and `ab` — published batter-seasons carried `pa` up to ~3,400, deflating
-`xba`/`xslg` to ~.05 — and trusted each cache vintage's
-`woba_value`/`woba_denom` semantics, which corrupted the xwOBA scale per
-season (qualified league means of .34–.72 shipped past the rank-based
-gates, which are scale-blind by construction). `pa`/`ab` and the wOBA
-denominator now count only plate-appearance-ending rows (`events`
-non-null), the denominator is derived from events (PA enders minus
-intentional walks, sac bunts and catcher interference) rather than read
-from `woba_denom`, PA-ending events with a null `woba_value` get fixed
-fallback weights (walk .69, HBP .72), and `intent_walk` no longer counts
-as an at-bat. Downstream, `baseballr-data` now enforces an absolute
-league-mean scale gate at publish; the full-history republish of
-`mlb_hitting_models` is the tracked follow-up.
+**Highlights**
+
+- Failed fetches raise instead of returning empty frames: `AssetFetchError` (the fetch failed),
+  `NoDataError` (nothing there) or `ValueError` (bad request), across ESPN, stats.nba.com, the
+  generated flat APIs and HockeyTech.
+- polars 2.x is supported (`polars>=1.0,<3`); the code runs on both polars 1.x and 2.0.
+- New sources: the official PFF Developer API (`pff_api_*`), Formula 1 (`f1_*`), EuroLeague live
+  data, kloppy soccer event data with SPADL and Expected Threat, Polymarket, Kalshi and more.
+- Football: one play-by-play shape from Shield, Yahoo, CBS, NCAA and Fox feeds; team and coach
+  tendencies and the usage box; many CFB EPA / WP fixes that need a reprocess.
+- `sdv-docs`: an MCP server that answers exact questions about the package from a docs index.
+
+### Breaking changes
+
+- **Errors:** a failed fetch in generated flat-API wrappers (`espn_*`, `fox_api_*`, `cbs_*`,
+  `mlb_api_*`, NHL, `asa_*`) and other getters (`mlb_statcast_*`, `torvik_*`, `kenpom_*`, `on3_*`,
+  `yahoo_*`, `nfl_api_*`, ...) raises `AssetFetchError` (400 / 422: `ValueError`), never "no data".
+- **ESPN (cross-league):** the hand-written scrapers (`espn_<league>_schedule` / `_teams` / `_pbp`,
+  `espn_*_player_stats`, `bref_*`, `build_nfl_players`, ...) raise `AssetFetchError` on a failed
+  fetch and `ValueError` on 400 / 422 instead of parsing the error body as data.
+- **HockeyTech:** season names read as their end year, so `season=` can pick another season (WHL /
+  KIJHL `season=2026` is now 2025-26); one-year preseasons answer to the next year, exhibitions are
+  `game_type="exhibition"`, the default is the newest regular season, and `season_yr` is `Int64`.
+- **HockeyTech:** `hockeytech_api` (PWHL and the 19 other leagues) raises `AssetFetchError` on a
+  failed fetch or HTTP-200 error sentinel and `NoDataError` on a 404 instead of returning an empty
+  frame, as do season-defaulting wrappers whose seasons lookup fails.
+- **MLB:** `mlb_statcast_search` / `_search_minors` / `_search_wbc` pin the 14 MLBAM id columns to
+  nullable `Int64`: `on_1b` / `on_2b` / `on_3b` were Float64 (`660271.0`), and pandas output from
+  `parse_mlb_statcast_search` gives nullable `Int64` instead of numpy `int64`.
+- **NBA / WNBA:** `nba_stats_*` / `wnba_stats_*` raise `AssetFetchError` instead of returning `{}`
+  (404: `NoDataError`, 400 / 422: `ValueError`, also for `nba_live_*`, `nba_l2m*`,
+  `nba_referee_assignments`); `wnba_on_court` / `wnba_possessions` raise on a failed rotation fetch.
+- **NBA / WNBA:** `nba_stats_*` / `wnba_stats_*` season arguments default to the latest season with
+  rows and each league's own default ids, so endpoints that summed every season (`drafthistory`,
+  `leaguegamefinder`, `playergamestreakfinder`, ...) return one season. (#391)
+- **NFL:** the 11 per-type loaders deprecated since 0.0.68 (`load_nfl_ngs_passing` / `_rushing` /
+  `_receiving` and eight `load_nfl_pfr_*` per-type and weekly variants) are removed, with their
+  `sportsdataverse.parsed.nfl` aliases.
+- **NFL:** fantasy-football id columns are `Utf8` (were `Int64`): `load_nfl_ff_playerids` (`mfl_id`,
+  `fantasypros_id`, `pff_id`, `nfl_id`, ...), `load_nfl_ff_rankings(kind="draft")` `id` and
+  `kind="week"` `fantasypros_id`; zero-padded ids such as `"0156"` keep their padding.
+- **Soccer / EuroLeague:** the ASA, FIFA, FotMob, UEFA, MLS, NWSL and EuroLeague frames keep
+  nullable types: a nullable boolean is `Boolean` (was a string with `"nan"`), a nullable integer is
+  `Int64` (was `Float64`), and an all-null column is `Utf8`.
+
+**Upgrade notes** —
+
+- **Errors:** catch `AssetFetchError` where a loop must keep going; `except NoDataError` keeps
+  skipping absent resources; `except SportsDataverseError` catches both, timeouts included; a
+  `ValueError` means the call itself needs fixing. `EmptyResponseWarning` now fires only for a 2xx
+  with an empty object. Code that caught `requests.HTTPError` from `nfl_api_*` or read
+  `exc.response` must catch the new types (read the status from the message). HockeyTech wrappers
+  that default the season raise when the seasons lookup fails; pass `season_id=` to skip it:
+
+  ```python
+  import sportsdataverse as sdv
+  from sportsdataverse.errors import AssetFetchError, NoDataError
+
+  try:
+      df = sdv.ahl_schedule()
+  except NoDataError:
+      df = None  # the fetch worked and there is nothing there: skip it
+  except AssetFetchError:
+      raise  # the fetch failed: retry later, never record it as empty
+  ```
+
+- **HockeyTech seasons:** a caller who passed the start year to get a season should pass the end
+  year; preseasons answer to the next year (`resolve_season_id("ohl", season=2027,
+  game_type="preseason")` is the "2026 Pre-season"); pass `season_id=` where divisions listed side
+  by side for one year are not told apart (e.g. BCHL 2024).
+- **nba_stats / wnba_stats:** pass `season` explicitly for a lockout or pandemic calendar; for every
+  season pass an empty one (`season_year_nullable=""` for `drafthistory`, `season_nullable=""` for
+  `leaguegamefinder` / `playergamestreakfinder`).
+- **NFL loaders:** replace `load_nfl_ngs_passing`, `load_nfl_ngs_rushing` and
+  `load_nfl_ngs_receiving` with `load_nfl_nextgen_stats(seasons, stat_type=...)`, and
+  `load_nfl_pfr_pass`, `load_nfl_pfr_weekly_pass`, `load_nfl_pfr_rush`, `load_nfl_pfr_weekly_rush`,
+  `load_nfl_pfr_rec`, `load_nfl_pfr_weekly_rec`, `load_nfl_pfr_def` and `load_nfl_pfr_weekly_def`
+  with `load_nfl_pfr_advstats(seasons, stat_type=..., summary_level=...)`.
+- **NFL fantasy ids:** code that joined or compared these ids as integers should cast its own side
+  to `pl.Utf8`; call `sportsdataverse.nfl.clear_cache()` after upgrading, since cached frames keep
+  their old dtypes (above all with `cache_mode="filesystem"`).
+
+### Added
+
+- **Analytics:** `rolling_windows` computes event-count form windows with prev-season, season and
+  career baselines, extended to stats.nba / stats.wnba shot events. (#590, #657)
+- **Analytics:** `metric_curves` fits rate curves along a continuous axis (shot distance, field
+  position), binned on the coordinate distance rather than the nominal label. (#652, #658)
+- **Analytics:** `defense_vs_position` reports what each defense allowed to QB, RB, WR and TE,
+  filtered by the season-type column. (#659, #660)
+- **Basketball:** KenPom, Her Hoop Stats, Basketball-Reference, RealGM and the salary, draft and
+  injury surfaces (#451), then Bart Torvik's `torvik_game_stats`, `torvik_player_stats` and the
+  public `torvik_game_schedule` (#678).
+- **CFB:** `paper_index` ports Game on Paper's Paper Index and season deserved wins. (#661)
+- **CFB:** `CFBPlayProcess` fills missing `yds_punted`, `yds_kickoff` and bare-punt
+  `yds_punt_return` from ESPN field position, with new `yds_punted_source`, `yds_kickoff_source` and
+  `yds_punt_return_source` columns (`"text"`, `"derived"` or null); parsed values never change.
+- **CFB:** `cfb_drive_summary.create_drive_summary()` (StatBroadcast-style drive summary) and
+  `cfb_situational_stats.create_situational_stats()` (per-team situational block), with
+  `CFBPlayProcess` delegates; graduated from Game on Paper. (#470)
+- **ESPN (cross-league):** the ESPN CDN family (`cdn.espn.com/core`) as generated
+  `espn_<league>_cdn_*` wrappers, with a per-endpoint league allowlist from a live probe. (#681)
+- **EuroLeague:** 8 new wrappers: `euroleague_game_points()` (shot chart), `euroleague_game_pbp()`,
+  `euroleague_game_boxscore()`, `euroleague_game_header()`, `euroleague_standings(kind=)`,
+  `euroleague_player_stats()`, `euroleague_team_stats()` and `euroleague_game_report()`.
+- **F1:** `sportsdataverse.f1` wraps the keyless Jolpica (Ergast-compatible) API: `f1_schedule`,
+  `f1_race`, `f1_results`, `f1_qualifying`, `f1_sprint`, `f1_pitstops`, standings, drivers,
+  constructors, circuits and the paged `f1_laps(season, round)`; data is CC BY-NC-SA 4.0.
+- **Fox:** `fox_api_*` wraps `api.foxsports.com` directly (33 endpoints), beside the per-league
+  `fox_<league>_*` Bifrost wrappers. (#680)
+- **G League:** ESPN's G League is a documented league: the universal family (112 wrappers:
+  `espn_nbagl_standings`, `espn_nbagl_scoreboard`, `espn_nbagl_summary`, ...) is exported from
+  `sportsdataverse.nbagl` and the top-level package. (#684)
+- **MLB:** `load_mlb_park_dimensions()` loads one row per MLB venue per season from 2001: fence
+  distances, capacity, turf, roof, elevation and coordinates, with `venue_id` as a string.
+- **NBA:** `sportsdataverse.nba.nba_officiating` reads official.nba.com: `nba_l2m(game_id)`,
+  `nba_l2m_games(season)`, `nba_referee_assignments(date, league=)`, `wnba_referee_assignments()`;
+  `nba_live_pbp()` / `nba_live_boxscore()` and WNBA twins read the cdn liveData feeds. (#592)
+- **NFL:** NFL Pro Next Gen Stats: the `pro.nfl.com` family (`nfl_pro_*`, 16 endpoints) and
+  `load_nfl_ngs(seasons, dataset=)` over the SDV-native `nfl_ngs_*` releases (12 datasets).
+  (#454, #481, #489)
+- **NFL:** `sportsdataverse.nfl.shield_pbp` graduates the `native_pbp` parser and adds its live
+  layer (phase, provisional rows, current situation) and the `shield_nfl_pbp` entry point.
+  (#528, #536)
+- **NFL:** `load_nfl_fp_curve()` loads the bundled NFL field-position EP curve (2016-2025 fit), and
+  `fit_nfl_field_position_ep(pbp)` refits it.
+- **NFL / CFB:** `NFLPlayProcess` / `CFBPlayProcess` accept `source=` and build the same frame from
+  Shield (#540), Yahoo (#541, #543), CBS (#542, #545), NCAA (#544) and Fox (#548) feeds through
+  `sportsdataverse.football.sources`; the dispatch table landed in #525.
+- **NFL / CFB:** `football.tendencies` (team and coach splits) and `football.usage_box` (usage,
+  situational and special-teams box), with EPA and game-context cuts, read back by 28 loaders such
+  as `load_{cfb,nfl}_team_tendencies` and `load_{cfb,nfl}_usage_players`. (#496, #497, #498, #614)
+- **NFL / CFB:** `espn_nfl_pbp(summary=)` / `espn_cfb_pbp(summary=)` process a stored ESPN summary
+  with no network, and `NFLPlayProcess(odds_override=)` mirrors the CFB contract. (#491)
+- **PFF:** the official Developer API: 68 `pff_api_*` wrappers (`sportsdataverse.nfl.pff_api`),
+  keyed by `api_key=`, `PFF_API_KEY` or `SDV_PY_PFF_API_KEY`; `strict=True` / `SDV_PY_PFF_STRICT=1`
+  raises on withheld columns. The cookie-auth `pff_*` premium wrappers still work, marked LEGACY.
+- **Providers:** 46 wrappers in six new families: `espn_content_*`, `thesportsdb_*`
+  (`$THESPORTSDB_API_KEY`), `football_data_*` (Football-Data.co.uk), `openligadb_*`, and the
+  read-only prediction markets `polymarket_*` and `kalshi_*` under `sportsdataverse.odds`.
+- **Providers:** six documented provider APIs, each generated from its own endpoint YAML: CBS NAPI
+  (`cbs_napi_*`), Yahoo Shangrila (`yahoo_shangrila_*`), Fox, ASA (`asa_*`), MLS (`mls_api_*`) and
+  NWSL (`nwsl_api_*`). (#452)
+- **Reference data:** 36 loaders over the `{league}_groups` tags for nine leagues:
+  `load_<league>_groups()`, `load_<league>_group_seasons()`, `load_<league>_group_aliases()` and
+  `load_<league>_team_group_seasons(seasons)`; NCAA baseball is `load_ncaa_baseball_*`.
+- **Registry:** `sportsdataverse.registry` (`metrics.yaml`) defines each published football metric
+  once; `resolve(column)` maps a column to its entry, and `python -m sportsdataverse.registry --ts
+  --target gop|web` renders a TypeScript module. (#645)
+- **sdv-docs:** `sdv-docs`, a stdio MCP server over a published docs index with six read-only tools
+  (`search`, `get_function`, `find_columns`, `find_endpoints`, `list_datasets`, `index_info`);
+  install `sportsdataverse[mcp]` (Python 3.10+); `SDV_DOCS_DB=<file>` uses a local index.
+- **Soccer:** `XThreat` fits an Expected Threat grid and `soccer_xthreat_rate(actions)` adds
+  `xt_value`; `load_xthreat_model()` loads a bundled 12 x 16 grid fit on StatsBomb open data
+  (research / non-commercial use only).
+- **Soccer:** `soccer_spadl(dataset)` converts any kloppy event dataset into SPADL actions (a
+  socceraction port); `soccer_open_dataset()` returns the dataset behind `soccer_open_events()`.
+- **Soccer:** `asa_players_xpass(league_slug, season_name=...)` and the `nasl` and `usls` ASA
+  leagues; USL Super League takes split-year labels (`season_name="2024-25"`, not `2024`).
+- **Soccer:** the optional `soccer` extra (`pip install "sportsdataverse[soccer]"`, kloppy) adds
+  `soccer_open_events("statsbomb", 8658)` for open event data and `soccer_events_to_frame(dataset)`
+  for any kloppy dataset.
+- **Validation:** `sportsdataverse.validation` gains `validate_game` + `GameReport`, the advBoxScore
+  reconciliation rules, NCAA source column aliases and the football processor invariant sweeps.
+  (#553, #554, #555, #556, #558, #510)
+
+### Changed
+
+- **CFB:** the bundled xQBR model (`cfb/models/qbr_model.ubj`) is retrained on the served box score
+  without the spread (`qbr_vars` is the five EPA aggregates plus `era0..era3`), behind a publish
+  gate; every `exp_qbr` changes.
+- **CFB:** the vendor special-teams name regexes moved into `sportsdataverse.football.espn_text`
+  (`CLAUSE_NAME`, `CLAUSE_RETURNER_RE`, `CLAUSE_FG_KICKER_RE`); output is unchanged.
+- **CFB:** `cfb_returning_production` measures defense from play participants (2014+) or pbp splash
+  plays (2004-13) and weights it into `overall_returning` (offense 0.49 / defense 0.51), so
+  `overall_returning` values change; new `def_basis` and `overall_basis` columns.
+- **Docs:** `generate.py --check` fails when a public callable has no `Returns:` / `Yields:`
+  section; reference pages show a returns table captured from real data, or say why there is none.
+- **Docs:** blank returns-table descriptions are filled only from the league's own sport's R
+  packages, never with R argument text; NFL Pro, On3 and 13 Fox Sports tables gain authored
+  descriptions.
+- **Docs:** league index pages can list companion packages in a "See also" block
+  (`tools/codegen/companions.yaml`); the SOCCER page links kloppy, sdvplot, sdvplotR,
+  itscalledsoccer, soccerdata and mplsoccer.
+- **Docs:** the docs site is generated from one league registry: table rows leave the search index,
+  plain function headings, large reference pages split by family, a `main (latest)` label and a
+  codegen-rendered changelog. (#664, #671, #672, #673, #674, #676)
+- **Models:** native thread pools default to one: `SDV_XGB_THREADS` (default 1) stops xgboost's
+  predict from fanning across every core per request; raise it deliberately. (#563)
+- **NFL / CFB:** the situation-neutral split in `football.tendencies` reads `wp_before_naive`
+  (score, clock and field position) instead of `wp_before`, so every `*_neutral` column and
+  `sec_per_play_neutral` move.
+- **NFL / CFB:** `tackle_share` counts only the defense's own scrimmage snaps, with new
+  `scrimmage_tackle_points` and `team_scrimmage_tackle_points` columns; `tackles`, `assists` and
+  `tackle_points` still count every credit.
+- **Packaging:** polars 2.x is allowed (`polars>=1.0,<3`, mirrored in `recipe/meta.yaml`); the lock
+  resolves polars 2.0.0 on Python 3.10+ and 1.36.1 on Python 3.9.
+- **Validation:** `tools/validation/source_parity`, a nightly harness, compiles the same games from
+  two providers and reports column-level disagreement. (#547)
+
+### Fixed
+
+- **CFB:** `load_cfb_passing`, `load_cfb_receiving` and `load_cfb_rushing` declare the columns the
+  assets gained (`dispersion_games`, `EPAplay_sd`, `boom_rate`, `stuff_rate`, ...). Under polars
+  2.0, `pl.read_parquet(url)` gets HTTP 501 from release URLs; loaders (`use_pyarrow=True`) work.
+- **CFB:** the NCAA mapper fixes quarter markers, the score walk, overtime interception flags,
+  overturned yardage and same-row penalty enforcement; no-play rows carry no yardage, and
+  block-printed tries go to the kicking team. (#557, #550, #560)
+- **CFB:** about 650 plays ESPN scores but no text rule named (frozen-board pick-sixes, fumble
+  returns, field goals) now score; textless copies and untyped admin rows ("Begin Drive", quarter
+  markers, lone try fragments) are dropped.
+- **CFB:** a play that ends a half or a finished game leaves a possession worth nothing (EP_end 0,
+  EPA -EP_start), now also for a finished game's last play and regulation's last play before
+  overtime.
+- **CFB:** a returned kickoff whose end down is outside 1-4 (ESPN's -1 sentinel) ends at down 1, so
+  its EP_end is the next snap's EP_start.
+- **CFB:** `end.TimeSecsRem` / `end.adj_TimeSecsRem` are the next play's start clock (they were the
+  previous play's), and the last play of a half or game ends at 0:00; EPA moves most at period ends.
+- **CFB:** 2007-13 touchdowns ESPN filed as their own extra-point kick carry the snap's down and
+  distance (was -1), so the EP model no longer scores them as no down.
+- **CFB:** blocked field goals keep ESPN's type instead of becoming "Penalty", "Extra Point
+  Missed" or a plain "Blocked Field Goal" (sportsdataverse/cfbfastR#175); plays with null join keys
+  are never dropped as copies. (#641)
+- **CFB:** win probability in overtime and the final seconds uses the new `cfb_wp_overtime`
+  correction, and made field goals, decision surfaces and two-point shootouts are valued correctly;
+  every `wp_*` / `wpa` moves, and `fg_wp` / `make_fg_wp` / `miss_fg_wp` / `xp_wp` are Float64.
+- **CFB:** completions written without "complete to ... for N" (ESPN 2024-25) keep their receiving
+  yards from ESPN's `statYardage`, so passing / receiving yards and box scores move.
+- **CFB:** a tackle is credited to the tackler's own team from the game roster, so coverage and
+  post-turnover tackles leave the opponent's tackle table; `def_pos_team` in `tackles` /
+  `position_group_tackles` is now the tackler's team.
+- **CFB:** plays ESPN files twice under new ids (stub echoes, drive batches at the start clock,
+  copies around a timeout) are dropped before the adjacent-copy dedupe; play counts, EPA/play and
+  success rate move in affected games.
+- **CFB:** losses written "for N yards loss" or "for 1 yard loss" (ESPN 2025) no longer read as
+  gains in `yds_rushed` and `yds_receiving`.
+- **CFB:** fumbles in ESPN's 2025 text format and the new `Fumble` type keep their `rush` / `pass`
+  flags, so pass / rush aggregates (havoc, EPA/play, success rate) no longer drop them.
+- **CFB:** the usage box no longer glues a two-player assist into one phantom tackler, and
+  `create_usage_box(rosters=)` fills `position_group_usage` / `position_group_tackles` for
+  historical games.
+- **CFB:** ESPN's 2025 jersey-style kick text fills kick distances, return yards, touchbacks, fair
+  catches and kicker / returner names, and `st_kickers` lists a kicker once per team.
+- **Cache:** a scoreboard request whose `dates=` include today or a future day now bypasses the response
+  cache (no read, no write); a wholly historical date keeps the 30-day TTL, and an explicit `cache_ttl=`
+  still wins.
+- **Docs:** descriptions mined from hoopR / wehoop no longer say "`team_detail = TRUE` only" (or
+  `athlete_detail` / `position_detail`) for columns the Python parsers always return.
+- **Docs:** each reference page's **Valid URL** and docstring `Example URL:` is the URL its example
+  call requests (ESPN Core v2 child resources, default params); `espn_<lg>_summary` documents
+  that it returns a dict.
+- **Docs:** `nba_stats`, `wnba_stats` and `on3` return tables are generated from parser output on
+  real captures (e.g. `fg3m` -> `fg3_m`), and multi-result-set endpoints document their dict;
+  wrapper behaviour is unchanged.
+- **MLB:** `mlb_expected_stats` counts only plate-appearance-ending rows for `pa`, `ab` and the wOBA
+  denominator (raw pitch rows had pushed `pa` to ~3,400, deflating `xba` / `xslg`), and
+  `intent_walk` is no longer an at-bat.
+- **NBA / WNBA / MBB / WBB:** `espn_nba_pbp`, `espn_wnba_pbp`, `espn_mbb_pbp`, `espn_wbb_pbp` read
+  the spread from a one-provider pickcenter, pair it with the same provider's favorite, flag every
+  team timeout and fix MBB 2OT+ end seconds; `helper_<lg>_pickcenter` returns plain floats / bools.
+- **NFL:** a strip-sack (type 80) credits the recovery to the defence, not the offence. (#546)
+- **NFL / CFB:** processor bug sweeps: timeouts, roof, spread sign, re-run idempotence, dedupe, yard
+  line and end clock (NFL), and C3-C40 plus the NCAA rounds (CFB). (#503, #504, #506, #514, #517,
+  #519, #526, #530, #532, #533)
+- **NFL / CFB:** `sec_per_play` in `football.tendencies` counts regulation drives only, each for its
+  own offense, so overtime 0:00 drives and drive ids shared by two offenses no longer distort pace.
+- **NFL / CFB:** `aggregate_usage_box` keeps one season row per player, keyed on
+  `(team, player_id)`, instead of splitting a player whose name or position group changed.
+- **NFL / CFB:** a pick-six or fumble-return touchdown no longer counts as the offense's conversion
+  or touchdown in `football.tendencies`, `football.usage_box` and `fit_third_down_curve`.
+- **NHL, ESPN, NFL, KenPom:** the twelve `nhl_edge_*_top_10` boards return data (always empty
+  before); `espn_<league>_transactions` uses `parse_transactions`; `load_nfl_ff_rankings` no longer
+  reads `rank_delta` as String early in a season; KenPom examples use ids KenPom recognises.
+- **PFF:** the legacy `pff_*` passing / receiving and the `pff_api` position / team return tables
+  now describe `avg_time_to_throw` (per dropback), `aimed_passes` and receiving
+  `positive_epa_percent` correctly, as already done for the player summaries. (#689)
+- **PFF:** 19 `pff_api_*` per-player and coverage-matrix routes gain their return-table columns, and
+  `pff_api_player_rushing_direction()` / `pff_api_player_snaps_summary()` return rows instead of a
+  zero-row frame.
+- **Polars:** code polars 2.0 rejects now runs on 1.x and 2.0 with unchanged 1.x output: the
+  `*_pbp` clock split, `start.down` / `start.distance` / `end.down` / `end.distance` cast to
+  `Int64`, String-to-Date casts and `explode()` on empty lists.
+- **Soccer:** `soccer_open_events()` and `soccer_open_dataset()` no longer raise `AttributeError` in
+  a fresh interpreter.
+- **stats.ncaa.org:** the fetch layer passes the new `/stats_terms` Terms gate without returning or
+  caching it as content (#568), fits its three-view cap and backs off on refusals (#569), and
+  rotates the proxy when a network error interrupts acceptance (#570).
+
+### Security
+
+- **HTTP:** a credential in a query string (The Odds API `apiKey`, HockeyTech `key`, Fox `apikey`,
+  ...) reads `REDACTED` in every `dl_utils.download` log line, error message and chained exception;
+  The Odds API wrappers raise `AssetFetchError` on a non-2xx answer instead of returning it as odds.
 
 ## 0.1.4 Release: September 1, 2026
 
-### Fixed — CFB EP/WP inputs: mirrored end yardlines, the wrong `wp_after` perspective, and a flipped WP (#408, #411, #413)
+### Added
 
-ESPN's `end.yardsToEndzone` arrives mirrored on a class of plays (a `-1` missing
-marker, kick returns resolved against the wrong possession team, an all-zero end
-state); it reached the EP model as-is, so `EPA` for those rows measured the
-wrong field position. The repairs now run before the model: the mirrored end
-yardline is corrected, a return spot is resolved against the **end** possession
-team, `EP_between` no longer folds across a score, a penalty with no effect has
-no penalty EPA, and `yds_sacked` is right for 2004-07 text. `wp_after` was
-computed from the wrong possession perspective on **24,332** home/away rows,
-and it flipped when the next play kept the same possession (**867** rows).
-One live 2026 game exposed three more: a Timeout row lent its phantom EP to the
-next play's lag, an all-zero end state now reads as 99, and the last row of a
-game in progress no longer renders 0.0% (filled as the complement of the
-end-state WP). Plays ESPN inserts late (2014+ feed) are moved back to where
-their sequence says they belong before any lag runs.
+- **CFB:** `create_box_score` adds `AirYds`, `aDOT`, `CompAirYds`, `YAC` and `AirYdsPct` to the `pass`
+  and `receiver` sections; null (not zero) where plays carry no catch spot, i.e. every season before
+  2025 (ESPN play text states the catch point only since 2025 week 9). (#414)
+- **CFB:** new penalty play-by-play columns `penalty_side`, `penalty_yards_net` (signed, only where two
+  of three signals agree), `EPA_penalty_direct`, `EP_penalty_cf` (EP had the penalty not occurred) and
+  `penalty_enforcement`; penalty parsers are era-aware (2004-13 / 2014-24 / 2025 template). (#408)
+- **CFB:** new penalty spot and count columns `penalty_spot_side`, `penalty_spot_yardline`,
+  `penalty_spot_yardsToEndzone`, `penalty_cf_yardsToEndzone`, `penalty_team_id`, `penalty_count`,
+  `penalty_declined_count`, `penalty_all_declined`, `penalty_negated_play`. (#408)
+- **CFB:** new first-down provenance columns `first_down_earned`, `first_down_yards`,
+  `first_down_penalty`, `firstD_by_yards`, `firstD_by_penalty`, `firstD_by_poss`, `firstD_by_kickoff`,
+  `new_series`. (#408)
+- **CFB:** new extra-point columns `xp_attempt`, `xp_made`, `xp_kicker_player_name`; with the penalty
+  and first-down columns, `espn_cfb_pbp` grows from 476 to 501 columns. (#408)
 
-### Added — the penalty's own side, net yardage and EPA, plus first-down provenance (#408)
+### Changed
 
-The penalty parsers are era-aware (2004-13 / 2014-24 / the 2025 vendor
-template). New play-by-play columns: `penalty_side`, `penalty_yards_net`
-(signed, only where two of three signals agree), `EPA_penalty_direct` and
-`EP_penalty_cf` (the counterfactual EP had the penalty not occurred),
-`penalty_enforcement`, `penalty_spot_side` / `penalty_spot_yardline` /
-`penalty_spot_yardsToEndzone` / `penalty_cf_yardsToEndzone`, `penalty_team_id`,
-`penalty_count`, `penalty_declined_count`, `penalty_all_declined`,
-`penalty_negated_play`; first-down provenance `first_down_earned`,
-`first_down_yards`, `first_down_penalty`, `firstD_by_yards`, `firstD_by_penalty`,
-`firstD_by_poss`, `firstD_by_kickoff`, `new_series`; and the extra-point trio
-`xp_attempt`, `xp_made`, `xp_kicker_player_name`. `espn_cfb_pbp` grows from
-476 to 501 columns.
+- **CI / Docs:** CI dispatches the Game on Paper deploy on every push to `main`; the docs site's social
+  metadata is completed. (#410, #412)
 
-### Added — air yards, aDOT and YAC in the passer and receiver box scores (#414)
+### Fixed
 
-`create_box_score` emits `AirYds`, `aDOT`, `CompAirYds`, `YAC` and `AirYdsPct`
-on the `pass` and `receiver` sections, aggregated from the play-level
-`air_yards` / `yards_after_catch`. Null (not zero) for a passer or receiver
-whose plays carry no catch spot, which is every season before 2025: ESPN's
-play text only started stating the catch point (`caught at SAC18`, `thrown to
-LIN30`) with the vendor template that rolled out in 2025 week 9.
-
-### Fixed — air yards sided by the game's own text abbreviations (#418)
-
-That vendor text spots the catch with each school's **own** abbreviation --
-`UHM`, `UH`, `USC` for South Carolina, `GSU`, `GSO`, `OSU` for Oregon State,
-`Sac St`, `BC.` -- which is frequently not ESPN's `homeTeamAbbrev` /
-`awayTeamAbbrev` (`HAW`, `HOU`, `SC`, `GAST`, `GASO`, `ORST`). The derivation
-only matched ESPN's abbreviation, so a mismatched team lost every one of its
-plays: in 2025's new-template games 25.6% of spot-phrase pass plays (6,131 of
-23,957) came out null, one whole side of the field in 103 of 411 games.
-The side is now learned from the game itself -- every `... to the ABC nn` end
-spot (the last one on a multi-spot play) is compared with ESPN's numeric
-`end.yardsToEndzone` and votes for `ABC` being the possessing or defending
-team; the per-abbreviation majority wins (>= 2 votes, >= 60%), ESPN's
-abbreviation is the fallback, a spot at the 50 needs none, and one regex covers
-every observed token shape (`UA 10`, `BC.41`, `Sac St10`, `NC ST19`). In the
-published 2025 assets in-game coverage rose from 72.4% to 89.8% of pass plays
-(100% of spot-phrase plays; 2026: 91.8%). cfbfastR carries the same logic
-(cfbfastR#146).
-
-### Fixed — returning production had no roster since #399 (#417, #419)
-
-`load_cfb_rosters` was repointed at the ESPN `espn_cfb_rosters` release in
-0.1.1 (#399); `cfb_returning_production._roster_keys` still keyed on the CFBD
-roster's `team` name, so every call raised `ColumnNotFoundError`. It now takes
-`team_id` directly from the ESPN roster -- and, because that roster is built
-from **game** rosters (week 1 of 2026: 4 teams, 476 rows, every player looked
-departed), unions it with the CFBD preseason roster resolved through
-`team_info`. 2026 returning production: 236 team rows, offense / defense
-0.452 / 0.463 (was 0.006).
-
-### Fixed — codegen let caller params reach ESPN, and un-truncated the endpoints that were silently short (#409)
-
-### Changed — CI dispatches the Game on Paper deploy on every push to `main`; docs site social metadata completed (#410, #412)
+- **CFB:** EPA no longer uses ESPN's mirrored `end.yardsToEndzone` (a `-1` marker, kick returns read
+  against the wrong possession team, an all-zero end state); `EP_between` no longer folds across a
+  score, a no-effect penalty has no penalty EPA, `yds_sacked` is right for 2004-07. (#408, #411, #413)
+- **CFB:** `wp_after` no longer uses the wrong possession perspective (24,332 home/away rows) or flips
+  when the next play keeps possession (867 rows). (#408, #411, #413)
+- **CFB:** a Timeout row no longer lends phantom EP to the next play, an all-zero end state reads as 99,
+  the last row of an in-progress game no longer shows 0.0% WP, and plays ESPN inserts late (2014+ feed)
+  are moved back into sequence before any lag runs. (#408, #411, #413)
+- **CFB:** air yards are no longer null for every play of a team whose play text spots the catch with
+  its own abbreviation (`UHM`, `USC` for South Carolina, `OSU` for Oregon State) rather than ESPN's; the
+  side is now learned from the game itself, as in cfbfastR (cfbfastR#146). (#418)
+- **CFB:** returning production (`cfb_returning_production`) raised `ColumnNotFoundError` on every call
+  since `load_cfb_rosters` moved to ESPN in 0.1.1 (#399); it now keys on `team_id` and adds the CFBD
+  preseason roster, so week-1 players no longer all look departed. (#417, #419)
+- **Codegen:** generated wrappers now let caller params reach ESPN, and endpoints that were silently
+  truncated return in full. (#409)
 
 ### Data
 
-Every cfbfastR-cfb-raw final (2004-2026) was rebuilt on this code and every
-`espn_cfb_*` season republished to sportsdataverse-data on 2026-09-01; the
-finals' `processing_version` now carries the sdv-py commit (`0.1.3+9efee9f1.3`)
-so a lock bump can no longer leave a stale final looking current.
+- **CFB:** every cfbfastR-cfb-raw final (2004-2026) was rebuilt on this code and every `espn_cfb_*`
+  season republished on 2026-09-01; finals' `processing_version` now carries the sdv-py commit
+  (`0.1.3+9efee9f1.3`), so a lock bump can no longer leave a stale final looking current.
 
 ## 0.1.3 Release: August 28, 2026
 
-### Fixed — formation tags reached the box score as player names (#407)
+### Fixed
 
-Game 401896383 listed **`No Huddle-Shotgun #1 C.Parker`** in the passing box
-score as a third quarterback, alongside that same player's real line.
-
-ESPN prefixes play text with the formation:
-
-```text
-No Huddle-Shotgun #1 C.Parker pass complete short right to #9 J.Triplett...
-```
-
-The player-name captures are windowed -- `(.{0,30} )pass` (with a trailing space) -- and read the raw
-`text`. `No Huddle-Shotgun #1 C.Parker` is 29 characters, so it fits inside the
-window and is swallowed whole; a longer prefix is captured *truncated*, starting
-mid-token (`dle-Shotgun #5 R.Marshall`). A `cleaned_text` column already stripped
-exactly these tokens for the verb-anchored parsers, but the name captures never
-used it.
-
-This surfaces only through the regex **fallback**: where ESPN supplies a
-participant, the join overwrites the name outright. It bites where ESPN does
-not, and that is not rare -- the participants feed for this game carried a null
-passer on **96 of its 210 plays**, while resolving the receiver on the very play
-that broke.
-
-The cleanup runs at the single point where all 19 `*_player_name` columns are
-finalized, so extractors that bypass `_extract_player_name` -- `receiver_player`
-from `to (.+)`, the Passing Touchdown passer from `pass from(.+)` -- are covered
-too. The formation pattern consumes through the *last* formation token, which
-handles a partial leading fragment as well as an intact prefix; no real surname
-contains "huddle" or "shotgun".
-
-Known residual: the fallback yields the abbreviated `C.Parker` where the
-participants path yields `Carson Parker`, so such a play still forms its own
-box-score row. Merging them needs first-initial+surname resolution against the
-game roster with a uniqueness guard (`_norm_player_name` strips punctuation, so
-`cparker` cannot match `carson parker` today) and is deliberately left out of a
-parsing fix.
+- **CFB:** formation prefixes (`No Huddle-Shotgun #1 C.Parker`, a third passer in game 401896383) no
+  longer leak into the 19 `*_player_name` columns where ESPN has no participant; such a play still
+  forms its own `C.Parker` box-score row beside `Carson Parker`. (#407)
 
 ## 0.1.2 Release: August 27, 2026
 
-### Fixed — passers vanished from the CFB advanced box score (#405)
+### Fixed
 
-`create_box_score` returned an empty `advBoxScore["pass"]` for **every** game
-whenever `join_participants=True`, while `rush` and `receiver` filled in
-normally. There cannot be receptions without passes, so the play data was fine
-and the aggregation was not. Game on Paper renders that section directly, so
-every box score on the site showed no passers.
-
-`athlete_name` is derived during QBR feature setup, which runs *before* the
-participants join rewrites `passer_player_name` / `rusher_player_name` with
-cleaned names. It therefore kept the raw participant text while the passer list
-built later held the cleaned name -- all 119 rows of the sample game
-disagreed:
-
-| `athlete_name` (stale) | `passer_player_name` (cleaned) |
-| --- | --- |
-| `No Huddle-Shotgun #2 E.Buehler` | `Eddie Buehler` |
-| `dle-Shotgun #5 R.Marshall` | `Rashawn Marshall` |
-
-`athlete_name.is_in(qbs_list)` then matched nothing, the QBR frame came back
-empty, and the **inner** join onto it deleted every passer.
-
-Two changes, one for the cause and one for the blast radius:
-
-- `athlete_name` is recomputed inside `create_box_score` from the current
-  passer/rusher columns, so it cannot go stale behind a later rewrite however
-  the pipeline order evolves.
-- The QBR join is now a **left** join. QBR is an enrichment; an inner join lets
-  any failure to score it delete the whole passing box score rather than leaving
-  one column null. That fragility is what turned a single stale column into an
-  empty table on every game.
-
-Only reproduces with `join_participants=True`. The offline fixtures use `False`,
-which is why the suite stayed green -- the added regression test is a live test
-asserting that passers exist wherever receivers do, and that no raw participant
-text (a `#`) leaks into a name.
-
-Verified across three games: 401866532 0 -> 2 passers, 401867894 0 -> 3, and
-401752921 0 -> 2 (Sayin 26/19/233/3TD, QBR 88.5). Rush and receiver counts are
-unchanged.
+- **CFB:** `create_box_score` no longer returns an empty `advBoxScore["pass"]` for every game when
+  `join_participants=True` (no passers on Game on Paper); `athlete_name` is recomputed from the current
+  passer/rusher columns and the QBR join is a left join, so a QBR failure leaves one column null. (#405)
 
 ## 0.1.1 Release: August 27, 2026
 
-Supersedes 0.1.0, released the same day; everything below shipped in this
-release. 0.1.0 remains on PyPI, but 0.1.1 is the one to install.
-
-### Fixed — every source family now reaches the top-level namespace
-
-`import sportsdataverse as sdv` exposed 4,655 names; an audit of every module's
-`__all__` found **2,027 more that were reachable only by deep import**. Two real
-gaps, now closed (top-level exports: 4,655 -> ~6,180):
-
-- **Soccer, 1,344 names.** `sportsdataverse/soccer/__init__.py` imported the 12
-  sub-league *packages* so `sportsdataverse.soccer.mls` resolved as an attribute,
-  but never re-exported their wrappers -- so `espn_mls_scoreboard` and its 1,343
-  siblings never reached the top level, while `espn_nba_*`, `espn_cfb_*`,
-  `espn_nhl_*` and the cricket and hockey families all did. All 12 leagues
-  (bundesliga, epl, laliga, ligamx, ligue1, mls, nwsl, seriea, ucl, uel, wc, wwc)
-  are now star-exported. The names are league-prefixed, so there were no
-  collisions to resolve.
-- **PFF, 184 new aliases.** PFF could not simply be star-exported: the `cfb`,
-  `nfl`, `ufl` and `aaf` shims each install the SAME 46 bare names bound to a
-  different league, so a bare export would collide and last-import-wins would
-  silently return another league's data. New `sportsdataverse/pff.py` mints
-  `pff_<slug>_<rest>` aliases instead -- `pff_nfl_facet_blocking_summary`,
-  `pff_ncaa_facet_blocking_summary`, `pff_ufl_*`, `pff_aaf_*` -- matching the
-  `espn_<league>_*` / `fox_<league>_*` convention. Purely additive: the bare
-  module-scoped names are untouched.
-
-`nba_stats` / `wnba_stats` deliberately stay module-scoped
-(`from sportsdataverse.nba import nba_stats`), as do the bare `pff_*` names.
-
-### Fixed — the distribution shipped `dev/` and `tools/` as top-level packages
-
-`[tool.setuptools.packages.find]` excluded `tests*/docs*/examples*/archive*` but
-not `dev*` or `tools*`, so setuptools auto-discovery installed the repo's scratch
-scripts and the codegen toolchain as **importable top-level packages**. 0.0.75
-and 0.1.0 ship 84 `dev/` and 86 `tools/` files, which means `import tools` in a
-downstream project could resolve to ours. Now an allowlist
-(`include = ["sportsdataverse*"]`), so a new top-level directory cannot leak in by
-being forgotten. Nothing under `sportsdataverse/` imported either at runtime.
-
-### Fixed — docs site layout on phones
-
-The landing page's two hero buttons sat in a non-wrapping flex row totalling
-~470px inside a `overflow: hidden` hero, so on a phone they were silently
-**clipped** -- at 320px each lost ~80px, rendering "etting Started" and
-"Ecosystem & philosoph". They now wrap, and a long label wraps inside its button
-instead of spilling past the border.
-
-Reference `@return` tables (col_name / type / description) have a ~800px
-max-content width, so Docusaurus made them horizontally scrollable -- but at
-375px the first column alone is 386px, so a reader saw a list of column names,
-none of the types or descriptions, and no hint the rest existed. Below the tablet
-breakpoint they now fit the viewport with wrapped cells: three cramped-but-visible
-columns instead of one.
-
-
-### Changed — release-asset reads classify failures through the HTTP gateway (#397, #402, #404)
-
-`CLAUDE.md` said all HTTP goes through `dl_utils.download()`; release parquet
-reads handed the URL straight to Arrow. Routing the **bytes** through the gateway
-turned out to be the wrong fix and was measured rather than assumed: on the 59 MB
-`play_by_play_2025.parquet`, buffering cost **+7% peak RSS and +75% wall**
-(1010 MB / 6.0s direct versus 1081 MB / 10.5s buffered, best of 3, one read per
-process). A temp file and a zero-copy `pa.py_buffer` were both worse. Arrow
-overlaps the fetch with decoding and range-reads column chunks; any
-fetch-then-parse design co-resides the compressed asset with the decoded frame.
-So the read stays direct, and `CLAUDE.md` now scopes the guideline instead of the
-code contradicting it.
-
-What *did* move to the gateway is the **classification** of a failure. A missing
-asset was previously detected by searching the reader's exception message for
-`"404"` / `"not found"` / `"no such"`. Now the server is asked:
-
-- **404** → `NoDataError` → the caller skips that season;
-- **any other non-200** → the new `AssetFetchError`, so a 403 or an exhausted
-  retry budget can never be recorded as "this season is empty";
-- **reachable and readable** → the original parse error is re-raised untouched.
-
-Two entry points share one implementation: `_fetch_release_parquet` **raises** on
-an absent asset (the hand-written `nfl_loaders.py` and `cfb_loaders_extra.py`,
-44 call sites, where a missing season is an error) and `_read_release_parquet`
-returns **`None`** (the 226 generated call sites, where a season gap is routine).
-Only "absent" differs — `AssetFetchError` propagates from both.
-
-Two latent bugs fell out. The `PanicException` recovery caught `BaseException`
-broadly, so a **Ctrl-C during a read was swallowed into an HTTP request** instead
-of interrupting. And that recovery path issues its *own* refetch, which was
-parsed without checking status — a 403 body surfaced as a corrupt-parquet error
-rather than `AssetFetchError`. Both fixed and regression-covered.
-
-**`NoESPNDataError` is renamed `NoDataError`**, since `download()` raises it for
-any 404 including release assets. The old name remains a true alias and a test
-asserts the two are the same object, so every existing `raise` / `except` keeps
-working.
-
-### Added — the CFB dataset surface: teams, rosters, schedules, team info (#393, #394, #396, #399)
-
-Four ESPN-sourced CFB datasets gain first-class loaders:
-
-- **`load_cfb_teams`** — `espn_cfb_teams`, the whole ESPN CFB group tree per
-  season (FBS, FCS, D-II/III and the parentless NAIA group 186), filterable to
-  FBS alone.
-- **`load_cfb_rosters`** — **BREAKING**: repointed from the CFBD-derived
-  cfbfastR-data asset to the ESPN `espn_cfb_rosters` release. The CFBD-backed
-  frame is still available as `load_cfb_rosters_cfbd`.
-- **`load_cfb_schedule`** — re-documented for the unified `cfb_schedules`
-  dataset, which reconciles the ESPN and CFBD schedule surfaces and carries an
-  FBS filter.
-- **`load_cfb_team_info`** — served from the `cfb_team_info` release.
-
-### Fixed — CFB fourth-down clamps, reproducibility, and a Torvik HTML body (#398, #400, #401)
-
-`cfb_fourth_down` end-game clamps and the documented input contract are
-corrected. `cfb_season_odds` is bit-reproducible under `seed=`. The Torvik
-loader now rejects an HTML error body instead of parsing it as a CSV — the same
-"a failed fetch must not masquerade as data" rule the transport work applies at
-the release layer.
-
-### Fixed — MBB player-code resolution and crosswalk sources (#348, #372, #373)
-
-A unique first-name-only match now resolves instead of being rejected, every
-player-code derivation routes through the box roster, and the basketball
-crosswalk sources fail loudly rather than silently — plus the
-`scheduleleaguev2` envelope is parsed correctly.
-
-
-### New — the three NBA video endpoints revived (`nba_stats` 125 → 128, #391)
-
-`videodetailsasset`, `videoevents`, and `videoeventsasset` were misclassified
-as dead by endpoint-shape detection and dropped from the generated surface; a
-2026-08-25 residential re-probe confirmed all three live for `LeagueID=00`
-(the genuinely dead `videodetails` stays excluded). The catalog reclassifies
-them capture-live — capture evidence overrides source deprecation flags per
-the `gen_nba_stats` rule — bringing `nba_stats` to **128 wrappers**
-(`wnba_stats` unchanged at 111).
-
-`parse_nba_stats_result_sets` now recognizes the video envelope (no
-`resultSets` key) and returns `{"videoUrls": frame, "playlist": frame}` as
-`dict[str, pl.DataFrame]` — snake-cased columns, empty-safe zero-row frames,
-`return_as_pandas` support, tabular paths regression-covered. Three real
-captures are committed as fixtures with provenance rows.
-
-### New — NCAA baseball reconciliation seam + sport-generic reference parsers (#390)
-
-Foundation for the NCAA baseball data program. `decompose_college_baseball_plays`
-splits `parse_college_baseball_ncaa_pbp` into extract-then-decompose, so the
-legacy R-era baseballr-data trees (2012–2023) and freshly captured games feed
-the same engine and resolve into identical `PBP_SCHEMA` columns
-(behavior-preserving for the HTML path). `scrape/ncaa/reference.py` graduates
-the stats.ncaa.org team-list / team-schedule / roster parsers from
-`ncaa-mfb-football-raw` as sport-generic — validated on real baseball
-captures (308 D-I teams, doubleheader-aware schedules with a new
-`game_number` column, header-keyed rosters), with three real fixtures and a
-provenance README.
-
-### Added — league-wide NCAA RAPM solver (`mbb_ncaa_rapm_league`, #389)
-
-The league-wide half of the NCAA RAPM program ("Path B"): one joint
-offense/defense ridge per (league, season) putting every Division-I player on
-a common scale — complementing the published `ncaa_{lg}_rapm_within_team`
-datasets, which estimate a DIFFERENT quantity (value relative to teammates)
-and must never be cross-joined with these.
-
-- `aggregate_stints` collapses id-resolved possessions (the #382
-  `mbb_ncaa_rapm_input` adapter output) into matchup stints; a
-  possession-weighted stint ridge is mathematically identical to the
-  per-possession ridge at ~1/3 the rows. Possessions with any unresolved
-  on-floor slot are dropped, never imputed.
-- `solve_rapm_league` runs the sparse joint solve (per-100 scale, positive
-  `drapm` = good defense, ±1 home-offense column). `DEFAULT_RIDGE_LAMBDA =
-  1000` was fitted by game-grouped 5-fold CV on the real 2024 corpora — both
-  leagues minimize there independently. Non-converged solves raise instead
-  of returning a partial iterate.
-- `team_aggregate` produces the model-implied team ratings used by the
-  external oracle gate. Validated on the full corpus: Torvik AdjEM Spearman
-  ≥ 0.9434 (MBB 2011–2026, median 0.9653) and ≥ 0.9723 (WBB 2022–2026;
-  0.9039 in the COVID 2021 season).
-
-The module is league-blind (frames in, frames out) — WBB passes its own
-frames; there is deliberately no `wbb_` twin. Companion `sportsdataverse.mbb`
-adapter fixes from the same program: cross-season `person_id` resolution
-(#382) and the canonical `display_name_to_roster_key` (#388).
-
-### Added — `display_name_to_roster_key` is canonical in sdv-py (#388)
-
-Box-score and shot-chart pages render a player `"Surname, First"`;
-`team_rosters` renders the same person `FIRST.MIDDLE.LAST` uppercase. The one
-canonical conversion between them was living in **two copies** inside the
-`-data` repos' publish scripts — NCAA name-matching domain logic outside the
-module that owns NCAA name matching, untested, with two places to drift. It
-is now exported from `mbb_ncaa_names` alongside `code_from_box` and
-`tidy_player`, with each normalization documented by the match rate that
-earned it on real 2024 MBB data (naive comma split 93.04% → suffix/nickname
-strip 98.07% → whitespace-to-dots for multi-token surnames 99.08%). An
-unsplittable name returns `""` — fail-closed: an empty key never matches, and
-an unresolved row beats a wrong join.
-
-### Added — loaders for all 24 published NCAA datasets (#387)
-
-Until now **not one** of the published `ncaa_*` datasets had an sdv-py loader
-— 24 release tags with no way to read them from the package. This closes the
-gap in one pass: 12 datasets × 2 leagues (`load_ncaa_{mbb,wbb}_*` for `pbp`,
-`schedule`, `player_box`, `team_box`, `rosters`, `team_rosters`, `team_ids`,
-`possessions`, `lineups`, `matchup_stints`, `shots`, and the new
-`rapm_within_team`). Seasons and asset paths were verified against the live
-releases, not assumed — `min_season` is 2010 everywhere **except `shots`
-(2019+)**, and the returns-schemas are read from the published parquet
-footers so declared types match what callers actually receive.
-
-### Fix — NCAA shots `period` / `sec_left` derived instead of shipped null (#386)
-
-`shot_events_to_frame` hardcoded `"period": None, "sec_left": None` on the
-NCAA path, so both columns were entirely null in every published
-`ncaa_{mbb,wbb}_shots` season — ~2.8M rows per league across 2019–2026 (the
-ESPN path populated them all along). They are now derived era-aware from the
-elapsed game clock, including the WBB halves-before-2016 boundary, overtime,
-league-name variants, and invalid/non-finite clocks.
-
-### Added — CFB NCAA→cfbfastR mapper + drive totals (#384)
-
-`to_cfbfastr` (`cfb/cfb_ncaa_cfbfastr.py`) graduates the NCAA→cfbfastR
-column mapper from `ncaa-mfb-football-raw`, behavior-preserving: a frozen
-104-column `CFBFASTR_SCHEMA`, the four load-bearing heuristics kept with
-their comments (FCS defense-labelled-drive majority vote, away/home
-checkpoint-slot vote, linescore-arbitrated score snapping, OT synthesis), and
-the house module contract. `parse_cfb_ncaa_drives` now carries the drives
-table's trailing "# Plays"/"Yards" cells as `n_plays` / `yards` (signed; null
-when omitted), which feeds the OT-synthesis path. Parity evidence: scripted
-full-frame comparison (columns, dtypes, every value) against the raw-repo
-original across all five real fixtures — identical.
-
-### Fix — `nba_stats` capture-confirmed endpoint expansion + v3 boxscore envelope (#383)
-
-Two changes from a residential probe sweep of both stats hosts. First, a
-latent silent-empty bug: every shipped `*v3` boxscore wrapper returned a
-`(0, 0)` frame, because the family nests statistics under a `boxScore*` key
-with no `resultSets` envelope and the shared parser read that as malformed.
-The parser now synthesizes `PlayerStats` + `TeamStats` sets (v2 naming) from
-the nested payload — verified live before/after on a real 2024 WNBA game,
-with real-capture fixtures committed. Second, capture-live now overrides
-source deprecation opinion in the codegen drop rule, expanding `nba_stats`
-113 → 125 and `wnba_stats` 95 → 111 wrappers.
-
-### Added — NCAA RAPM input adapter + cross-season `person_id` resolution (#382)
-
-`mbb_ncaa_rapm_input` turns published `possessions` + `rosters` into
-player-id-keyed lineup slots the ridge solve can consume: diacritics folding
-and uniqueness-gated alias expansion, player name-change resolution via the
-`box_score` id binding, stable synthetic cross-season `person_id`s across
-seasons and transfers, and explicit modeling of non-Division-I opponents
-(configurable drop-or-pool) while preserving Division-I minutes. Team
-pseudo-players and ambiguous roster matches are never attributed to real
-players. Input adapter only — the solver is #389 and the published datasets
-live in the `-data` repos.
-
-### Added — `build_wnba_season_wp`: WNBA season win-probability compile (#381)
-
-Closes the WNBA gap in the season WP family, mirroring
-`build_mbb_season_wp` / `build_wbb_season_wp`: a leakage-free weekly as-of
-pregame anchor, an HFA-only fallback for opening-week games, and per-game
-in-game scoring via the bundled `wnba_in_game_wp.ubj`. Contract is
-enrich-in-place — every `load_wnba_pbp` column preserved, exactly
-`pregame_home_prob` + `home_win_prob` (Float64) appended. Real-data
-validation on the 2024 season (264 games / 101,501 plays): 100.0% WP
-coverage, Brier 0.1647, 93.6% final-play correct-side share, monotone decile
-calibration.
-
-### Fix — era-aware half/clock columns for pre-2006 WNBA and pre-2016 NCAA WBB (#380)
-
-Addresses wehoop#39 at its root (a BREAKING-leaning data fix): the producer
-hard-coded the 4×10-minute quarters model for every season, so pre-2006 WNBA
-(2×20-minute halves) and pre-2015-16 NCAA WBB games shipped wrong `half`,
-`start/end.{quarter,half,game}_seconds_remaining`, OT detection (period ≥ 5
-instead of ≥ 3), and timeout half buckets. The pbp feature helpers now derive
-`is_halves_era` from the summary header season year and branch the half
-mapping, seconds-remaining offsets, period-boundary resets, and the timeout
-split; quarters-era output is unchanged. Validated on real ESPN games from
-both eras, with live-gated regression tests for all four cases, plus
-documented free-throw `type_text` / `score_value` semantics for
-`load_wbb_pbp` / `load_wnba_pbp`.
-
-### Fix — `load_cfb_passing` declared schema synced with the published asset (#379)
-
-The declared schema was missing `int_epa` and `sack_epa`, which the published
-2023 parquet carries — one test out of 5,748, but it reddened the only CI leg
-that runs live tests on **every push since 2026-08-12**, leaving PRs without
-a usable CI signal for eleven days.
-
-### Fix — the team-alias flaw class closed + colliding players named (#378)
-
-`team_aliases` rewrites a page name to a canonical one, which silently fails
-whenever both spellings occur in the same corpus with different targets (the
-NIU / `Northern Ill.` pair failed in opposite seasons depending on which
-spelling a page targeted). A guard now asserts every `team_aliases` pair also
-resolves through `same_school`, so a new directional alias cannot reintroduce
-the flaw — verified by injecting a fresh bad alias and watching it fail. A
-second test pins that near-identical **different** schools stay distinct
-(`Miami (FL)`/`Miami (OH)`, `Loyola (IL)`/`Loyola (MD)`, `UAH`/`Alabama A&M`).
-
-### Fix — team-nickname yard-line side codes (up to 8 letters) (#377)
-
-The fall-2024 backfill surfaced stats.ncaa.org pages that key yard lines by
-team NICKNAME — `BEARS38`, `SPARTANS25` — which the `{1,4}` cap in the shared
-`_SIDE` regex class silently dropped: every drive title on such a page parsed
-with a null team. One-constant fix (`{1,4}` → `{1,8}`) applied to all five
-side-code regexes, plus a regression test on the real title strings.
-
-### Added — warn when a team parses cleanly but yields no stints (#376)
-
-The lineup-parse skip ledger covered two of the three ways a team can vanish
-from the parse stage; this closes the third — the one that actually bit. A
-team whose lineup parsing succeeds but produces no usable stints now emits a
-diagnostic warning carrying contest, team, bad-stint, and roster context,
-while legitimate empty results stay non-errors.
-
-### Deprecated — the three NBA `*_v3` loaders now read the production releases
-
-`load_nba_stats_pbp_v3`, `load_nba_stats_possessions_v3` and
-`load_nba_stats_lineups_v3` read one-asset, season-2025-only release tags
-(`nba_stats_pbpv3`, `nba_stats_possessions_v3`, `nba_stats_lineups_v3`) that are
-being retired. Those assets were built before the 2025-26 Finals ended and are
-missing six games (`0042500317`, `0042500401`–`0405`).
-
-The Program V pipeline now admits every game type (preseason `001`, regular
-`002`, All-Star `003`, playoffs `004`, play-in `005`, NBA Cup `006`) across all
-30 seasons, so the production tags carry a **strict superset** — verified live
-for the overlapping season: 707,440 rows / 1,400 games vs 704,314 / 1,394, with
-zero games lost, zero games short a row, and no column dropped (production adds
-`season`).
-
-All three keep working and are now **`DeprecationWarning` shims** (removal in
-`0.1.0`) forwarding to their production successors:
-
-| Deprecated | Use instead | Release now read |
-|---|---|---|
-| `load_nba_stats_pbp_v3` | `load_nba_stats_pbp` | `nba_stats_pbp` |
-| `load_nba_stats_possessions_v3` | `load_nba_stats_possessions` | `nba_stats_possessions` |
-| `load_nba_stats_lineups_v3` | `load_nba_stats_game_lineups` | `nba_stats_game_lineups` |
-
-**The `seasons` argument is unchanged.** It was the season's START year before
-and still is: `load_nba_stats_pbp_v3(seasons=2025)` meant 2025-26 when it read
-`play_by_play_v3_2025.parquet` and still means 2025-26 now that it reads
-`nba_play_by_play_2026.parquet`. The retired assets were START-year keyed and the
-production assets are END-year keyed; that translation lives in the loader's
-`{season + 1}` asset-path template, so the shims forward `seasons` untouched.
-
-### Docs — NBA shifted loaders: the `season` COLUMN is the END year
-
-The four NBA loaders whose asset path carries `{season + 1}`
-(`load_nba_stats_schedules`, `load_nba_stats_pbp`, `load_nba_stats_possessions`,
-`load_nba_stats_game_lineups`) return frames stamped with the **asset's** year,
-so the `season` column does not equal the `seasons` argument:
-`load_nba_stats_schedules(seasons=2024)` returns rows reading `season == 2025`.
-Unshifted NBA siblings (`team_boxscores`, `officials`, `rosters`) stamp `2024`
-for that same real season.
-
-This was undocumented and is load-bearing — a partitioner keying off the column
-writes the 2024-25 season over the 2025-26 partition. The divergence is now
-documented in all four docstrings (and the three shims that inherit it), with a
-codegen test that fails if a future shifted loader ships silent. The column is
-**documented, not restamped**: it is the published asset's own identity, and
-rewriting it would make the frame disagree with the file it came from.
-
-### New — `sportsdataverse.wexp`: win-expectancy bake-off harness (NFL + CFB)
-
-A typed, mypy-ratcheted harness for walk-forward pre-game win-expectancy
-modeling across NFL (1999+) and CFB (2004+), built on a structural
-leakage-proofing philosophy: features flow only through a vintage-keyed
-store, engines receive outcome-stripped slates, and every fitted build
-parameter is stamped on its table and refused on mismatch.
-
-- `wexp.store.VintageStore` — vintage-keyed feature store with EXCLUSIVE
-  `as_of_week` semantics (`week_semantics="through"` shifts inclusive CFB
-  assets at ingest); leak-free `join_asof` with dtype guards on entity,
-  week, AND season keys.
-- `wexp.backtest.run_backtest` — the walk-forward driver: engines see only
-  completed prior games plus an outcome-stripped slate; CFB postseason
-  week-reset normalized; predictions validated; per-season + pooled result
-  rows keyed by `variant_hash`, plus like-for-like `week_slice="lined"`
-  rows wherever market coverage is partial.
-- `wexp.oracle_market` — vig-removed market oracles: NFL close from
-  nflverse schedules; CFB close/open consensus from the `cfb_line_odds`
-  archive (loaded via `load_cfb_betting_lines` by default) with a
-  LEFT-join contract so every schedule game stays model-scorable.
-- Engines (`wexp.engines` / `wexp.elo`): margin-Elo (carryover, per-era
-  HFA, continuity priors from talent + returning production), per-week
-  opponent-adjusted ridge vintages (raw / capped / close-game-filtered
-  responses), a Glickman–Stern walk-forward Kalman filter (with
-  continuity-prior composition), net-rating vintage adapters for the
-  published `nfl_ratings_weekly` / `cfb_ratings_weekly` datasets, and
-  drive-EP response extraction (`cfb_drive_deltas`).
-- `wexp.postgame.postgame_we` — post-game deserved-win probability (G3
-  analytic normal + G2 drive bootstrap, fixed-seed reproducible).
-- `wexp.features` — walk-forward team features, all keyed
-  `(season, as_of_week, team_id)` under the same EXCLUSIVE-vintage
-  contract as the engines: `sos_sor_vintages` (strength of schedule
-  faced and remaining, plus strength of record as wins above what a
-  league-average team would take from the same slate at the same
-  sites), `carry_forward_weights` (how much of last season's metrics to
-  still believe given returning production and QB / head-coach
-  continuity, ramped to zero once the current season carries its own
-  evidence), and `cfb_scoring_opportunities` (per team-game scoring
-  opportunities — drives reaching inside the opponent 40 — split into
-  `opp_rate` for creation and `points_per_opp` for finishing; a team
-  with no opportunity gets a null finishing value, never a 0).
-- `wexp.variants` — the axis config system: 1,860 valid variants across
-  cores/response/adjustment/priors/wp-map/HFA axes, stable-hashed;
-  `wexp.engines.build_predictor` dispatches implemented cells and raises
-  on unbuilt ones (never a silent fallback).
-- Committed tune-window leaderboards + variant registry under
-  `results/wexp/` — every committed row is tune-window (season <= 2021);
-  no 2022-2025 holdout result is written to the leaderboard.
-
-### New — `load_nfl_ratings_weekly`: per-week as-of NFL ratings vintages
-
-Loads the new `nfl_ratings_weekly` release on sportsdataverse-data
-(per-season assets, 1999-2025 at publish; the producer cron refreshes the current season in-season): one row
-per `(season, as_of_week, team_id)` with STRICTLY EXCLUSIVE semantics —
-a row at `as_of_week = W` was fit only on games before week W's first
-kickoff, safe to join onto week-W games with no leakage. SDV-native (no
-nflreadpy equivalent).
-
-### New — `sportsdataverse.scrape.espn`: shared ESPN `-raw` archive engine
-
-The fourth and last duplicated scrape stack in the ecosystem. `hoopR-nba-raw`,
-`hoopR-mbb-raw`, `wehoop-wnba-raw` and `wehoop-wbb-raw` run the same numbered
-stage sequence against the same tree shape — but only `wehoop-wbb-raw` had
-grown a shared package (`wbb_raw_scrape`, 451 LOC), a test suite, and the write
-guard. The other three inline those concerns in every numbered script: 22
-copy-pasted `str2bool` definitions between them, and no write guard at all.
-
-That package now lives here, parameterized on `LeagueConfig`:
-
-- `scrape/espn/persist.py` — the write guard. **The raw tree is the scrape
-  checkpoint, so a persisted provider error body is permanent**: it yields an
-  empty dataset for that key on every rebuild, forever, with nothing failing.
-  Refusing the write is the whole fix — a refused key simply looks un-scraped,
-  so the next run retries it and the archive self-heals.
-- `scrape/espn/cli.py` — the `str2bool` / `season_args` contract. `type=bool`
-  is a trap: bash passes the *string* `"false"`, and `bool("false")` is `True`.
-  `rescrape_default=` is exposed so the three repos that shipped `default=True`
-  can migrate without changing cron behavior, then flip it deliberately.
-- `scrape/espn/ids.py` — one id canonicalizer; a lossy cast raises rather than
-  silently producing an id that joins to the wrong row.
-- `scrape/espn/schedule.py` / `master.py` / `paths.py` — capture flags, URL
-  columns, the season→master union and coverage index.
-- `scrape/espn/league_config.py` — `NBA` / `MBB` / `WNBA` / `WBB` identity,
-  including which per-game families each league actually publishes (ESPN serves
-  an officials feed for the two women's leagues only).
-
-**`league` is a required keyword on every public entry point.** A defaulted
-league is how a well-formed capture ends up written under the wrong league's
-tree — wrong data, no error — which is exactly the bug the NCAA extraction
-found in `ncaa-mbb-hoops-raw`'s capture CLI. An AST-based test enforces that no
-module outside `league_config.py` names a league in executable code.
-
-86 offline tests, ported from `wehoop-wbb-raw`'s suite so the WBB assertions
-stand as the parity oracle for the lift, and extended with the league
-parameterization.
-
-### Fixed — `cfb_season_odds` simulated 571 non-FBS teams as league-average (#333)
-
-The season Monte Carlo built its team set from the schedule, which carries
-every opponent an FBS team played — 704 teams for 2023 against the 133 in
-`cfb_ratings`. `make_ratings_compute_results` scores a team absent from the
-ratings as league-average (0.0), so 571 FCS/D2/D3/NAIA programs were
-simulated as median FBS teams and took **21.2% of the championship
-probability**, with rows as incoherent as `exp_wins 1.000` alongside
-`playoff_prob 1.000`. "Missing → league average" is a sound default for a
-team with sparse data and a catastrophic one for a team that does not belong
-in the population; at the lookup the two are indistinguishable.
-
-The fix turns on *which* frame gets filtered. `teams` is the engine's entire
-standings / seeding / output universe (`cfb_simulations` builds it as
-`sims.join(teams, how="cross")`) while win-loss records are computed
-separately from `games` — so restricting `teams`, and deliberately not
-`games`, removes non-FBS programs as **contenders** while keeping them as
-**opponents**, leaving every FBS team's record untouched. The FBS universe
-comes from the schedule's `home_division`/`away_division == "fbs"` markers,
-falling back to ratings membership only for schedule shapes predating those
-columns: division markers do not move with `as_of_date`, whereas an
-early-season boundary leaves a real FBS team unrated, and dropping it would
-be this same bug in reverse. An emptied filter now raises rather than
-shipping a zero-row board — empty there means the id namespaces disagreed,
-not that no team qualified. On the real 2023 slate the output goes 704 → 133
-rows with 0.0% of championship mass off the FBS field, and the board reads
-Oregon 0.251 / Georgia 0.197 / Michigan 0.169 / Ohio State 0.138.
-
-This changes the shipped team set. No deprecation path was added: the removed
-rows were incoherent on their face, so there is no correct consumer of them.
-
-### Fixed — `cfb_season_odds` `as_of_date` bounded only the ratings, never the game set (#334)
-
-`as_of_date` was forwarded to `cfb_ratings` alone. Every schedule row still
-carried its final score, so `cfb_games_from_schedule` derived a non-null
-`result` for all of them and the engine's week loop — which fills only
-`result.is_null()` games — had nothing to simulate. A historical as-of run
-replayed the season it was supposed to forecast: on 2024 at `2024-11-10`,
-**93.1% of `exp_wins` were exact integers** and only 4 teams had a
-`playoff_prob` anywhere between 2% and 98%. The engine could not be validated
-on history, which is the only way to check playoff-odds calibration.
-
-Scores from `start_date` on/after the boundary are now masked, so those games
-are simulated instead of replayed, and masked postseason rows are dropped
-rather than kept — a bowl / conference-championship / CFP **matchup is itself
-an outcome** of the season, so an unplayed bracket row would leak the real
-bracket into the forecast; `cfb_simulations` regenerates both from each sim's
-own standings. The boundary is exclusive of the future, matching
-`cfb_ratings`' `date < as_of_date`: a game kicking off *on* `as_of_date` is
-unknowable and gets simulated. The same 2024 run now shows 0.0% integer
-`exp_wins` and 30 teams inside the (0.02, 0.98) playoff band.
-
-Validated by perturbation on real data rather than by inspection: flipping
-all 657 post-boundary games on the 2024 schedule to a 999-0 home blowout
-leaves the engine's input frame byte-identical (3652 rows, 510 unplayed) and
-moves `exp_wins` and `playoff_prob` by 0.000000, against a control without
-`as_of_date` that moves them by 3.0 and 1.0.
-
-### Known — `cfb_season_odds` is not bit-reproducible across runs (#392)
-
-Surfaced while validating the above, and pre-existing. `seed=` does not make
-the function reproducible run to run: `teams` is built with polars `.unique()`,
-which promises no row order, and that order feeds the engine's seeded RNG
-alignment — so tiebreak-sensitive probabilities move by roughly `1/n_sims`
-between two identical calls while `exp_wins` stays stable. Compare boards
-keyed on `team_id` rather than with `DataFrame.equals`.
-
-### PWHL / HockeyTech data-quality fixes
-
-- **`pwhl_pbp` goal double-rowing is now flagged (#368).** The HockeyTech
-  gamecenter feed emits two rows for (nearly) every goal — the `goal` event plus
-  a twin `shot` event carrying `isGoal` for the same play — which inflated naive
-  shot counts and every metric derived from them (shooting %, Corsi-style
-  aggregates, xG training corpora, where the goal's location was seen twice,
-  once labelled goal and once as a non-goal shot). Neither row is dropped,
-  because the shot rows *including* the twins are what reconcile with the
-  official boxscore shots-on-goal totals; instead the twin shot row now carries
-  **`is_goal_twin = True`**. Drop the flagged rows for a deduplicated event
-  stream; count `shot` rows as-is for boxscore-consistent SOG. The flag lands in
-  the shared parser, so all 20 HockeyTech league families get it.
-
-- **Goal-instant on-ice personnel are evaluated 2 seconds early (#369).**
-  HockeyTech shift-chart boundaries are unreliable at the exact second of a
-  goal: the chart is typically already rolled to the post-goal deployment, so
-  the previous at-the-instant (`eps=0`) lookup returned the line that came over
-  the boards *after* the goal. `strength_state` consequently mislabelled goals —
-  precisely the rows where strength context matters most for EV/PP/SH goal
-  attribution. `build_on_ice` now evaluates `goal` rows `GOAL_EPSILON_S` (2)
-  seconds before the goal instant, clamped to the period's start so an
-  opening-seconds goal still resolves; non-goal events are untouched and
-  `goal_epsilon_s=0` restores the old behavior. Measured against the feed's own
-  ground truth (the goal payload's official `plus_players`/`minus_players`
-  on-ice lists) on the committed game-42 fixture: **0/4 goals agreed at `eps=0`,
-  4/4 agree at `eps=2`**.
-
-- **Dead HockeyTech views now warn instead of returning a silent empty frame
-  (#238).** HockeyTech reports an unknown view with HTTP 200 and an error in the
-  body, which parsed straight through to a zero-row frame — making a dead view
-  indistinguishable from "no data" across all 20 league families. The shared
-  client now detects both envelope shapes (`"Undefined Tab <view>"` under
-  `SiteKit`/`GC`, and `{"error": "InvalidView error: <view>"}`) and warns, while
-  still returning the payload unchanged so parsers keep their never-raise
-  contract. `pwhl_streaks` is the known casualty: the `streaks` view exists on
-  neither transport and the API recon found no replacement (the PWHL site
-  appears to compute its Streaks page client-side from schedule data), so the
-  function has never returned data. It is kept — removing a published export
-  would break callers — but now emits a `DeprecationWarning` naming the upstream
-  removal and pointing at `pwhl_schedule()` / `pwhl_standings()`.
-
-### Fixed — CFB box score per-player defensive/specialist attribution (#93)
-
-- **CFB box score — per-player defensive/specialist attribution edge cases**
-  (`CFBPlayProcess.create_box_score()`). Split sacks now follow the official
-  0.5/0.5 convention: an assisted sack (`sack_player_name2` populated) credits
-  half a sack — and half the sack yardage — to each participant instead of
-  dropping the second sacker, so per-player sacks sum to the team's sack-play
-  count. `defensive_players.fumble_recoveries` counts takeaways only, so an
-  offensive or return-team self-recovery no longer appears in a defender row.
-  `forced_fumble_team` resolves to the side opposite the fumbling player rather
-  than always `def_pos_team`, and `defensive_players.forced_fumbles` groups by
-  it, correctly crediting a coverage player who forces a punt- or kick-return
-  fumble. Kickoff returns are credited via `kick_return_team` (coalesced to
-  `pos_team`), matching the punt-return convention. Team-level totals are
-  unchanged. (#93)
-
-### Fixed — NFL play-by-play raised `KeyError: 'name'` for mascot-less franchises (#23)
-
-ESPN omits `team.name` for franchises without a mascot — the 2020-2021
-Washington Football Team (id 28) ships only `location`, `abbreviation`, and
-`displayName` — and `NFLPlayProcess` read `competitors[i]["team"]["name"]`
-unguarded at four sites, so **every** Washington game from that era raised
-`KeyError` rather than parsing. All four lookups now route through a
-`_team_mascot()` helper that derives the mascot from `displayName` with the
-location prefix removed, falling back to `displayName` then `location`. The
-guard is franchise-agnostic, so any future mascot-less team is covered.
-Verified on the real 2021 games `401326312` (167 plays) and `401326127`
-(190 plays), both of which previously raised.
-
-### Fixed — Yahoo CFB crosswalk live tests no longer red the matrix on a blocked runner (#229)
-
-Yahoo serves an empty payload to some CI runner IPs (observed on
-`macos-latest` while ubuntu and windows passed in the same run) — runner-
-specific upstream blocking, not schema drift. Both live crosswalk tests now
-skip explicitly when the fetch returns a zero-row frame; real schema drift
-still fails through the existing shape and match-rate assertions whenever data
-*is* returned.
-
-### Housekeeping — the open-issue backlog was swept to zero
-
-Every issue open at the 0.1.0 cut was triaged against current `main` with a
-reproduction rather than assumption, and 36 of 38 were closed. Beyond the
-fixes above, the bulk were **already resolved** by the modernization arc and
-simply never verified shut: the 2022-2024 loader reports (`load_nfl_pbp`,
-`load_nfl_schedule`, `load_nfl_rosters`, `load_nfl_weekly_rosters`,
-`load_nfl_injuries`, `load_nfl_depth_charts`, `load_cfb_pbp`,
-`load_cfb_schedule`, `load_cfb_rosters`, `load_mbb_schedule`,
-`load_nba_player_boxscore`, `espn_nfl_schedule`) all reproduce clean now that
-the loaders read published release assets under polars 1.x; the MLB surface
-was rebuilt wholesale (#62); the CFB name-linkage and missing-team complaints
-resolve against the 2004-2025 raw backfill. The remaining closures were
-out-of-scope CFBD feature asks (sdv-py wraps ESPN and stats.ncaa.org; CFBD has
-its own client), an upstream ESPN gap, and one report that traced to the
-reporter's own AWS CDK config. Two cron trackers (#90, #230) were stale — the
-workflows have since run green — and the recent red streak on the live-tests
-cron was a single offline assertion left behind by #388, fixed in #391.
-
-Two items stay open on purpose: **#9** (bowl games missing from
-`load_cfb_schedule` for early seasons) is real but producer-side — 44 of 866
-2015 games have no schedule row because early `cfb_schedule` release assets
-carry `season_type ['regular']` only, so the fix is a postseason backfill and
-republish in the data repo, not a package change — and **#392**, filed from
-this sweep, records that `cfb_season_odds` is not bit-reproducible despite
-`seed=` because a polars `.unique()` ordering feeds the seeded RNG.
-
-### Fixed — dead and malformed source URLs in `config.py` (#9 follow-up)
-
-Every URL constant in `sportsdataverse/config.py` was probed live. Four were
-broken:
-
-- **`nhl_teams()` was entirely non-functional.** `NHL_TEAM_LOGO_URL` pointed at
-  `fastRhockey-data/main/nhl/nhl_teams_colors_logos.csv`, but the file now sits
-  at the repository root — every call 404'd. The same line also returned
-  `.to_pandas` *without calling it*, so `return_as_pandas=True` handed back a
-  bound method instead of a DataFrame. Both fixed; the loader now returns 25
-  teams x 12 columns in either mode.
-- **`CFB_BASE_URL` 404'd.** It still referenced the retired
-  `cfbfastR-data/main/pbp` path while `load_cfb_pbp` had already moved to the
-  `espn_cfb_pbp` release; several `dev/wexp/` scripts import the constant
-  directly and were silently broken. Repointed at the release the loader
-  actually serves.
-- **`MBB_TEAM_LOGO_URL` / `WBB_TEAM_LOGO_URL` were removed.** Both concatenated
-  the *releases* base onto a *repository* path, producing a URL that could
-  never resolve, and no `teams_colors_logos.csv` exists in either `hoopR-data`
-  or `wehoop-data`. They had no consumers.
-
-The nflverse-vs-SDV constant pairs (`NFL_PLAYER_URL` /
-`NFL_SDV_PLAYER_URL`, and the roster, player-stats, team-stats, and QBR
-equivalents) are deliberate, selected by each loader's `source=` argument, and
-both sides resolve. `CFB_ROSTER_URL` / `CFB_TEAM_INFO_URL` still read
-`cfbfastR-data` paths, which remain live and match their loaders; migrating
-those to ESPN-derived releases is a data change, not a repoint, and stays
-gated behind the parity checks in the CFB cutover plan.
-
-### Also in this release
-
-The post-0.0.75 window also landed, grouped by theme:
-
-- **CFB recruiting & pregame projection repair** (#335 + follow-ups):
-  loaders for the published recruiting datasets, `cfb_roster_talent` repaired
-  (it returned zero rows for every season) and re-keyed on the ESPN team id,
-  rank-weighted recruit classes with diminishing returns, tackles counted in
-  returning production, the games-played attenuation curve actually wired
-  into `cfb_predict_games`, refit pregame constants gated on a 2024 holdout
-  instead of in-sample, and tempo shrunk toward last season.
-- **Basketball crosswalk engine** (#340, #347–#349, #354, #359, #360, #363,
-  #364): the R crosswalk engine ported to Python with Fox WBB/WNBA
-  extensions and a generated Bart Torvik client; provider fetches now fail
-  loudly; ESPN conference labels resolved from the Core v2 group tree;
-  Division-I group sent on the college scoreboard sweep; Fox title-case
-  boundary mangling fixed; `mbb_team_crosswalk` ships a real bundled KenPom
-  default.
-- **Validation harness** (#337, #339, #341, #342, #344, #346): row-level
-  definitional checks for CFB + NFL pbp, penalty/yardage rules, an
-  R↔Python output-parity compare CLI, a season event-rate collapse check
-  (catches the 2013 sack outage), and interceptor-credit recovery with a
-  play-shape drift check.
-- **CFB parser & parity fixes** (#336, #350, #351, #353, #355, #357, #358,
-  #375): penalty enforcement modeled and nullified touchdowns no longer
-  counted, era-stable canonical play types with a boxscore-parity regression
-  check, era-aware penalty team resolution, four measured parity fixes (INT
-  pass flag, punt-return yardage, fumble captures, XP suffix), completions
-  counted on penalty plays that stood, the cfbfastR series/first-down
-  decomposition (`firstD_by_*`) ported, `cfb_ncaa` parsers hardened for
-  2025-season page variants plus new drive-title/scoring-summary parsers,
-  and the multi-season loaders now tolerate per-season schema drift.
-- **MBB lineup resolution chain** (#371–#374): sibling player codes
-  disambiguated instead of rejecting the game, unique first-name-only
-  matches resolved, every player-code derivation routed through the box
-  roster, and NIU / `Northern Ill.` treated as equivalent rather than a
-  directional rewrite.
-- **NBA / WNBA** — **BREAKING**: the read-only raw store is now actually
-  offline — a miss raises `RawStoreMissError` instead of silently completing
-  over the network (#356); the remaining 12 `nba_stats` loaders point at
-  END-year-named assets (#367, BREAKING); the stats loaders read the
-  Program V release assets (#361); `drafthistory` is live for `LeagueID=00`,
-  not barren (#362).
-- **WBB**: the halves period model applies to pre-2016 NCAA women's seasons
-  on the loader side too (#370).
-
-### Road to 0.1.0 — highlights since 0.0.40
-
-Nine months (0.0.41 → 0.1.0, December 2025 → August 2026) separate this
-release from the last of the 0.0.x-era snapshots. Compressed from the
-release-by-release entries below:
-
-- **Foundation (0.0.50):** the wholesale polars 0.18 → 1.x migration (~165
-  call sites across all seven `*_pbp.py` modules), uv + PEP 621 packaging
-  (no more `setup.py` / `requirements*.txt`), conda installability, and the
-  NFL nflreadpy-parity surface with its caching/config layer.
-- **ESPN cross-league architecture (0.0.51–0.0.59):** one core + N thin
-  extensions — 121 wrapper short names × 8+ leagues = 819 wrappers — plus
-  the universal parser layer (100% `ENDPOINT_PARSERS` coverage), the
-  21-section Site v2 summary dispatcher, and a weekly cron drift detector;
-  then seven more leagues (college hockey M/W, college baseball + softball,
-  UFL/XFL/CFL, soccer + cricket), Fox Sports Bifrost, Yahoo CFB, and The
-  Odds API wrappers.
-- **Docs toolchain (0.0.53–0.0.55, 0.0.75):** the declarative codegen CLI
-  replaced the Sphinx pipeline — generated per-league reference pages,
-  returns-schema tables (eventually every loader column described), a CI
-  drift gate — and the site gained offline full-text search and a
-  gh-pages static deploy.
-- **NFL models (0.0.60–0.0.71):** faithful nflfastR-parity EP / WP / CP
-  artifacts (`ep` 0.996, `wp` 0.997 vs nflverse), the real 76-class xYAC
-  model, xpass + the nfl4th fourth-down decision surface, era-aware
-  models with both-path (ESPN + nflverse) parity, and the NGS
-  over-expected, scheme/special-teams, projection/draft, and
-  ratings/market spines.
-- **CFB correctness campaign (0.0.52–0.0.75):** the pandas `0.36-live`
-  reconciliation into polars main, the endpoint-delegated participants
-  module, pre-2014 era support, rule-era EP/WP/QBR/FG/fourth-down/two-point
-  models with decision surfaces default-on, offline reprocess
-  (`odds_override`), and the 0.0.73–0.0.75 audit that fixed the ridge
-  opponent-adjustment no-op, rescaled `adj_*` to netted units, and
-  retrained the whole suite on the corrected corpus (oracle ρ 0.794 → 0.970).
-- **MLB (0.0.51–0.0.64):** a greenfield MLB Stats API module grown to full
-  coverage, then the comprehensive ~43-endpoint Baseball Savant / Statcast
+Supersedes 0.1.0, released the same day; everything below shipped in this release. 0.1.0 remains on
+PyPI, but 0.1.1 is the one to install.
+
+**Highlights**
+
+- Every source family reaches the top-level namespace (~6,180 names, up from 4,655): all 12 ESPN
+  soccer leagues and league-scoped `pff_<slug>_*` aliases.
+- Release-asset reads separate a missing season (`NoDataError`) from a failed fetch (new
+  `AssetFetchError`); `NoESPNDataError` remains an alias of `NoDataError`.
+- CFB datasets: new `load_cfb_teams` and `load_cfb_team_info`; `load_cfb_rosters` now reads ESPN
+  rosters (breaking; `load_cfb_rosters_cfbd` keeps the CFBD frame).
+- NCAA basketball: loaders for all 24 published `ncaa_*` datasets, plus the league-wide RAPM solver
+  and its input adapter.
+- New `sportsdataverse.wexp` win-expectancy harness (NFL + CFB) and the shared
+  `sportsdataverse.scrape.espn` `-raw` archive engine.
+
+**Road to 0.1.0 — highlights since 0.0.40** (0.0.41 → 0.1.0, December 2025 → August 2026)
+
+- **Foundation (0.0.50):** polars 0.18 → 1.x migration (~165 call sites across the seven `*_pbp.py`
+  modules), uv + PEP 621 packaging, conda installability, and the nflreadpy-parity NFL surface with
+  its cache/config layer.
+- **ESPN cross-league (0.0.51–0.0.59):** one core + thin extensions (121 short names × 8+ leagues =
+  819 wrappers), the universal parser layer, the 21-section summary dispatcher, a weekly drift cron;
+  then college hockey and baseball/softball, UFL/XFL/CFL, soccer, cricket, Fox, Yahoo, The Odds API.
+- **Docs (0.0.53–0.0.55, 0.0.75):** declarative codegen replaced Sphinx: generated per-league reference
+  pages, returns-schema tables, a CI drift gate, offline full-text search and a gh-pages deploy.
+- **NFL models (0.0.60–0.0.71):** nflfastR-parity EP / WP / CP (`ep` 0.996, `wp` 0.997 vs nflverse), the
+  76-class xYAC model, xpass + the nfl4th fourth-down surface, era-aware models, and the NGS
+  over-expected, scheme/special-teams, projection/draft and ratings/market spines.
+- **CFB (0.0.52–0.0.75):** the `0.36-live` reconciliation, the participants module, pre-2014 eras,
+  rule-era EP/WP/QBR/FG/fourth-down/two-point models with default-on decision surfaces,
+  `odds_override`, and the ridge opponent-adjustment audit and retrain (oracle ρ 0.794 → 0.970).
+- **MLB (0.0.51–0.0.64):** the MLB Stats API module, then the ~43-endpoint Baseball Savant / Statcast
   surface (`mlb_statcast_*`).
-- **NBA / WNBA (0.0.72 →):** the `nba_stats` / `wnba_stats` flat-API stems
-  (now 128 / 111 wrappers) on a curl_cffi Chrome-impersonation transport,
-  the read-through raw JSON store, the faithful possession engine
-  (pbpstats-parity boundaries), CTG play context, the shot-value and
-  tracking-value spines, the model zoo (RAPM variants, SPM / BPM 2.0,
-  Kalman projections, WAR), and player-impact datasets.
-- **Hockey (0.0.56, 0.0.72):** the NHL api-web / EDGE / Stats REST /
-  Records families, and the HockeyTech core whose registry now drives 20
-  league families (PWHL flagship + 19 minor/junior) with on-ice, Corsi,
-  TOI, and coordinate-based xG analytics.
-- **NCAA MBB / WBB (0.0.72 → 0.1.0):** the bigballR / wbigballR port
-  (`ncaa_mbb_*` / `ncaa_wbb_*`), the college computational core (lineups →
-  stints → possessions → ratings), the prediction & tournament stack,
-  player-value spines, within-team and league-wide RAPM, and loaders for
-  all 24 published NCAA datasets.
-- **Producers & infrastructure (0.0.72–0.0.75):** `sportsdataverse.release`
-  (the sportsdataversedata port with a byte-parity RDS writer), the tiered
-  validation harness, and the shared `scrape.espn` / `scrape.ncaa` /
-  `scrape.stats` engines with the proxy pool + sticky-session transport
-  that power the `-raw` producer repos.
+- **NBA / WNBA (0.0.72 →):** `nba_stats` / `wnba_stats` (128 / 111 wrappers) on curl_cffi Chrome
+  impersonation, the raw JSON store, the possession engine, CTG play context, shot- and tracking-value
+  spines, the model zoo (RAPM, SPM / BPM 2.0, Kalman projections, WAR) and player-impact datasets.
+- **Hockey (0.0.56, 0.0.72):** the NHL api-web / EDGE / Stats REST / Records families and the
+  HockeyTech core driving 20 league families with on-ice, Corsi, TOI and xG analytics.
+- **NCAA MBB / WBB (0.0.72 → 0.1.0):** the bigballR / wbigballR port (`ncaa_mbb_*` / `ncaa_wbb_*`), the
+  lineups → stints → possessions → ratings core, prediction and tournament stack, player-value spines,
+  within-team and league-wide RAPM, and loaders for all 24 published NCAA datasets.
+- **Producers (0.0.72–0.0.75):** `sportsdataverse.release` (byte-parity RDS writer), the tiered
+  validation harness, and the `scrape.espn` / `scrape.ncaa` / `scrape.stats` engines with the proxy
+  pool; at 0.1.0 the top-level namespace exported 4,653 public names.
 
-At 0.1.0 the top-level `sportsdataverse` namespace exports **4,653 public
-names** across 20+ leagues.
+### Breaking changes
+
+- **CFB:** `load_cfb_rosters` now reads the ESPN `espn_cfb_rosters` release instead of the CFBD-derived
+  cfbfastR-data asset; the CFBD-backed frame is available as `load_cfb_rosters_cfbd`. (#399)
+- **Config:** `MBB_TEAM_LOGO_URL` and `WBB_TEAM_LOGO_URL` are removed from `sportsdataverse.config`;
+  both built URLs that could never resolve, and nothing used them. (#9 follow-up)
+- **HTTP:** failed release-asset reads are classified by the server: 404 → `NoDataError` (season
+  skipped), any other non-200 (a recovery refetch included) → the new `AssetFetchError`, so a 403 or
+  exhausted retries never reads as an empty season. (#397, #402, #404)
+- **NBA:** the remaining 12 `nba_stats` loaders point at END-year-named assets. (#367)
+- **NBA / WNBA:** a read-only raw store is now actually offline: a miss raises `RawStoreMissError`
+  instead of silently completing over the network. (#356)
+- **WBB / WNBA:** pre-2006 WNBA and pre-2015-16 NCAA WBB pbp no longer use the 4×10-minute quarters
+  model, so `half`, `start/end.{quarter,half,game}_seconds_remaining`, OT detection (period ≥ 3) and
+  timeout half buckets change; quarters-era output is unchanged (wehoop#39). (#380)
+
+**Upgrade notes** — for the CFBD-derived roster frame, call `load_cfb_rosters_cfbd` instead of
+`load_cfb_rosters`. `NoESPNDataError` remains a true alias of `NoDataError`, so existing `raise` /
+`except NoESPNDataError` code keeps working.
+
+### Added
+
+- **Basketball crosswalk:** the R crosswalk engine is ported to Python, with Fox WBB/WNBA extensions
+  and a generated Bart Torvik client. (#340, #347–#349, #354, #359, #360, #363, #364)
+- **CFB:** new `load_cfb_teams` (the ESPN CFB group tree per season, FBS down to NAIA group 186,
+  filterable to FBS) and `load_cfb_team_info` (`cfb_team_info` release); `load_cfb_schedule` is
+  re-documented for the unified `cfb_schedules` dataset (ESPN + CFBD, FBS filter). (#393, #394, #396)
+- **CFB:** loaders for the published recruiting datasets. (#335)
+- **CFB:** `to_cfbfastr` (`cfb/cfb_ncaa_cfbfastr.py`) maps NCAA play-by-play to the frozen 104-column
+  `CFBFASTR_SCHEMA`; `parse_cfb_ncaa_drives` adds `n_plays` / `yards` (signed, null if omitted). (#384)
+- **CFB:** the cfbfastR series/first-down decomposition (`firstD_by_*`) is ported, plus new `cfb_ncaa`
+  drive-title and scoring-summary parsers. (#336, #350, #351, #353, #355, #357, #358, #375)
+- **College baseball:** `decompose_college_baseball_plays` splits `parse_college_baseball_ncaa_pbp` so
+  legacy 2012–2023 trees and new captures resolve to the same `PBP_SCHEMA`; `scrape/ncaa/reference.py`
+  adds sport-generic team-list, schedule (new `game_number`) and roster parsers. (#390)
+- **HockeyTech:** all 20 league families (`pwhl_pbp` etc.) flag the twin `shot` row of each goal with
+  `is_goal_twin = True`; drop flagged rows to deduplicate, or count `shot` rows as-is for boxscore SOG.
+  (#368)
+- **NBA:** `nba_stats` revives `videodetailsasset`, `videoevents` and `videoeventsasset` (125 → 128
+  wrappers); `parse_nba_stats_result_sets` returns `{"videoUrls": frame, "playlist": frame}` for them.
+  (#391)
+- **NBA / WNBA:** capture-live evidence now overrides source deprecation flags in codegen, expanding
+  `nba_stats` 113 → 125 and `wnba_stats` 95 → 111 wrappers. (#383)
+- **NCAA basketball:** loaders for all 24 published NCAA datasets, `load_ncaa_{mbb,wbb}_*` for `pbp`,
+  `schedule`, `player_box`, `team_box`, `rosters`, `team_rosters`, `team_ids`, `possessions`, `lineups`,
+  `matchup_stints`, `shots` and `rapm_within_team` (`min_season` 2010; `shots` 2019). (#387)
+- **NCAA basketball:** `mbb_ncaa_rapm_input` turns published `possessions` + `rosters` into
+  player-id-keyed lineup slots, with stable cross-season `person_id`s and configurable drop-or-pool
+  handling of non-Division-I opponents. (#382)
+- **NCAA basketball:** league-wide RAPM, `mbb_ncaa_rapm_league` (`aggregate_stints`,
+  `solve_rapm_league`, `team_aggregate`, `DEFAULT_RIDGE_LAMBDA = 1000`); a different quantity from
+  `ncaa_{lg}_rapm_within_team`, so never cross-join the two. (#389, with #382, #388)
+- **NCAA basketball:** `display_name_to_roster_key` (in `mbb_ncaa_names`) maps a box-score
+  `"Surname, First"` to the roster `FIRST.MIDDLE.LAST` key; an unsplittable name returns `""`. (#388)
+- **NCAA basketball:** the lineup parse warns when a team parses cleanly but yields no usable stints.
+  (#376)
+- **NFL:** `load_nfl_ratings_weekly` loads the `nfl_ratings_weekly` release (1999-2025): one row per
+  `(season, as_of_week, team_id)`, fit only on games before week `as_of_week` (strictly exclusive).
+- **PFF:** new `sportsdataverse/pff.py` mints 184 league-scoped aliases `pff_<slug>_<rest>`
+  (`pff_nfl_facet_blocking_summary`, `pff_ncaa_*`, `pff_ufl_*`, `pff_aaf_*`); the bare module-scoped
+  `pff_*` names are untouched.
+- **Scrape:** `sportsdataverse.scrape.espn`, the shared engine for the NBA / MBB / WNBA / WBB ESPN
+  `-raw` archives (write guard, `str2bool` / `season_args`, id canonicalizer, `LeagueConfig`); `league`
+  is a required keyword on every public entry point.
+- **Validation:** row-level CFB + NFL pbp checks, penalty/yardage rules, an R↔Python output-parity
+  compare CLI, a season event-rate collapse check, and interceptor-credit recovery with a play-shape
+  drift check. (#337, #339, #341, #342, #344, #346)
+- **wexp:** new `sportsdataverse.wexp` walk-forward pre-game win-expectancy harness (NFL 1999+, CFB
+  2004+): `VintageStore`, `run_backtest`, `oracle_market`, Elo/ridge/Kalman engines, `postgame_we`,
+  `features` (`sos_sor_vintages`, `carry_forward_weights`, `cfb_scoring_opportunities`), `variants`.
+- **WNBA:** `build_wnba_season_wp` (as `build_mbb_season_wp` / `build_wbb_season_wp`) appends
+  `pregame_home_prob` + `home_win_prob` (Float64) to `load_wnba_pbp` frames. (#381)
+
+### Changed
+
+- **HTTP:** `NoESPNDataError` is renamed `NoDataError`, since `download()` raises it for any 404
+  (release assets included); the old name remains a true alias. (#397, #402, #404)
+- **NBA:** `load_nba_stats_schedules`, `load_nba_stats_pbp`, `load_nba_stats_possessions` and
+  `load_nba_stats_game_lineups` now document that their `season` column is the asset's END year:
+  `load_nba_stats_schedules(seasons=2024)` returns `season == 2025`.
+- **NBA:** the stats loaders read the Program V release assets. (#361)
+- **Project:** the open-issue backlog was swept: 36 of 38 issues closed after reproduction on `main`
+  (#62, #90, #230, #388, #391); #9 (early-season bowl games missing from `load_cfb_schedule`) is a
+  producer-side gap and stays open; #392 was filed from the sweep.
+- **WBB / WNBA:** `load_wbb_pbp` / `load_wnba_pbp` document free-throw `type_text` / `score_value`
+  semantics. (#380)
+- **Yahoo:** the CFB crosswalk live tests skip when a runner is served an empty payload instead of
+  failing the matrix. (#229)
+
+### Deprecated
+
+- **NBA:** `load_nba_stats_pbp_v3`, `load_nba_stats_possessions_v3`, `load_nba_stats_lineups_v3` are
+  `DeprecationWarning` shims (removal in `0.1.0`) for `load_nba_stats_pbp`, `load_nba_stats_possessions`
+  and `load_nba_stats_game_lineups`, which read a strict superset; `seasons` is unchanged (START year).
+- **PWHL:** `pwhl_streaks` has never returned data (the `streaks` view exists on neither transport) and
+  now emits a `DeprecationWarning` pointing at `pwhl_schedule()` / `pwhl_standings()`. (#238)
+
+### Fixed
+
+- **Basketball crosswalk:** provider fetches fail loudly, ESPN conference labels come from the Core v2
+  group tree, the college scoreboard sweep uses the Division-I group, Fox title-case mangling is fixed,
+  `mbb_team_crosswalk` ships a real KenPom default. (#340, #347–#349, #354, #359, #360, #363, #364)
+- **CFB:** `cfb_fourth_down` end-game clamps and the documented input contract are corrected, and
+  `cfb_season_odds` is bit-reproducible under `seed=` (a `.unique()` row order had moved tiebreak
+  probabilities by about `1/n_sims` between identical calls). (#392, #398, #400, #401)
+- **CFB:** `cfb_season_odds` no longer simulates non-FBS opponents as league-average contenders (571
+  teams holding 21.2% of the 2023 title odds); the output is FBS teams only (704 → 133 rows). (#333)
+- **CFB:** `cfb_season_odds(as_of_date=)` now masks scores from games on or after the date (and drops
+  unplayed postseason rows), so a historical run simulates the rest of the season instead of replaying
+  it. (#334)
+- **CFB:** `create_box_score` per-player defense: split sacks credit 0.5 / 0.5 (and half the yardage),
+  `fumble_recoveries` counts takeaways only, `forced_fumbles` groups by `forced_fumble_team`, and
+  kickoff returns credit `kick_return_team`; team totals are unchanged. (#93)
+- **CFB:** `load_cfb_passing`'s declared schema adds `int_epa` and `sack_epa`, matching the published
+  asset. (#379)
+- **CFB:** stats.ncaa.org yard lines keyed by team nickname (`BEARS38`, `SPARTANS25`) now parse; drive
+  titles on such pages had a null team. (#377)
+- **CFB:** `cfb_roster_talent` returned zero rows for every season; it is repaired and re-keyed on the
+  ESPN team id. (#335)
+- **CFB:** pregame projections: the games-played attenuation curve is actually wired into
+  `cfb_predict_games`, constants are refit on a 2024 holdout, tempo shrinks toward last season, recruit
+  classes are rank-weighted, and returning production counts tackles. (#335)
+- **CFB:** penalty enforcement is modeled (nullified touchdowns no longer count), canonical play types
+  are era-stable, penalty team resolution is era-aware, and completions count on penalty plays that
+  stood. (#336, #350, #351, #353, #355, #357, #358, #375)
+- **CFB:** INT pass flag, punt-return yardage, fumble captures and XP suffix fixed; `cfb_ncaa` parsers
+  handle 2025-season page variants; multi-season loaders tolerate per-season schema drift.
+  (#336, #350, #351, #353, #355, #357, #358, #375)
+- **CFB:** `CFB_BASE_URL` 404'd on the retired `cfbfastR-data/main/pbp` path; it now points at the
+  `espn_cfb_pbp` release that `load_cfb_pbp` serves. (#9 follow-up)
+- **Docs:** on phones the landing-page hero buttons wrap instead of being clipped, and reference
+  `@return` tables fit the viewport instead of showing only the column names.
+- **HockeyTech:** a dead view (HTTP 200 with `Undefined Tab <view>` or `InvalidView error`) now warns
+  instead of returning a silent empty frame, in all 20 league families. (#238)
+- **HockeyTech:** `build_on_ice` evaluates `goal` rows `GOAL_EPSILON_S` (2) seconds early, so goals no
+  longer get the post-goal line and a wrong `strength_state`; `goal_epsilon_s=0` restores the old
+  behavior. (#369)
+- **HTTP:** Ctrl-C during a release-asset read interrupts again instead of being swallowed into an HTTP
+  request by the `PanicException` recovery. (#397, #402, #404)
+- **MBB:** the Torvik loader rejects an HTML error body instead of parsing it as CSV. (#398, #400, #401)
+- **NBA:** `drafthistory` is live for `LeagueID=00`, not barren. (#362)
+- **NBA / WNBA:** every `*v3` boxscore wrapper returned a `(0, 0)` frame; the parser now builds
+  `PlayerStats` + `TeamStats` sets from the nested `boxScore*` payload. (#383)
+- **NCAA basketball:** sibling player codes are disambiguated instead of rejecting the game, unique
+  first-name-only matches resolve, codes derive via the box roster, NIU and `Northern Ill.` are
+  equivalent, crosswalk sources fail loudly, `scheduleleaguev2` parses. (#348, #371, #372, #373, #374)
+- **NCAA basketball:** `ncaa_{mbb,wbb}_shots` `period` and `sec_left` were null in every season
+  (2019–2026); `shot_events_to_frame` now derives them era-aware from the game clock. (#386)
+- **NCAA basketball:** a guard asserts every `team_aliases` pair also resolves through `same_school`
+  (the NIU / `Northern Ill.` flaw), and near-identical schools such as `Miami (FL)` / `Miami (OH)`
+  stay distinct. (#378)
+- **NFL:** `NFLPlayProcess` no longer raises `KeyError: 'name'` for franchises without a mascot (every
+  2020-2021 Washington Football Team game); the mascot is derived from `displayName`. (#23)
+- **NHL:** `nhl_teams()` works again (`NHL_TEAM_LOGO_URL` 404'd) and `return_as_pandas=True` returns a
+  DataFrame instead of a bound method. (#9 follow-up)
+- **Packaging:** the wheel no longer installs the repo's `dev/` and `tools/` as importable top-level
+  packages (as 0.0.75 and 0.1.0 did); discovery is an allowlist, `include = ["sportsdataverse*"]`.
+- **Soccer:** all 12 ESPN soccer leagues (bundesliga, epl, laliga, ligamx, ligue1, mls, nwsl, seriea,
+  ucl, uel, wc, wwc) are star-exported, so `espn_mls_scoreboard` and its 1,343 siblings reach the top
+  level; `nba_stats` / `wnba_stats` deliberately stay module-scoped.
+- **WBB:** the halves period model applies to pre-2016 NCAA women's seasons on the loader side too.
+  (#370)
 
 ## 0.0.75 Release: August 2, 2026
 
-### Fix — `scrape.ncaa` CLIs pointed at the wrong repo root (silent no-op)
+### Breaking changes
 
-The lifted modules defaulted `--root` to `Path(__file__).resolve().parents[1]`.
-That meant "the -raw repo root" while they lived in `<repo>/python/`, and
-silently meant `sportsdataverse/scrape/` once they moved into sdv-py — so
-every stage CLI in both NCAA repos scanned an empty tree and **reported
-success having done nothing** (`bundles=0`, `EXIT=0`). No launcher passes
-`--root`, so all of them were affected.
+- **CFB:** all seven bundled CFB models (`ep_model`, `wp_spread`, `wp_naive`, `qbr_model`, `fg_model`,
+  `xpass_model`, `two_pt_model`) are retrained on the repaired `cfbfastR-cfb-raw` corpus; feature
+  contracts are unchanged (weights-only), but downstream EPA/WPA values move.
 
-The engine cannot infer a caller's repo root, so it no longer tries: `_main`
-takes `default_root` from the shim (each repo's own `REPO_ROOT`), and the
-library-level fallbacks raise a message naming the fix instead of inventing a
-path. The parse stage now also exits non-zero when a run matches no bundles —
-the silent-success that let this hide in the first place.
+**Upgrade notes** — No caller change is needed for the CFB retrain, but anything cached from an
+earlier release should be rebuilt.
 
+### Added
 
-### `scrape.ncaa.parse` — the parse stage is now re-runnable (`--season`, `--force`)
+- **CFB:** every bundled CFB `.ubj` has a `.card.json` model card recording objective, feature
+  list, training season span, hyperparameters, boost rounds and source frame (previously `None`).
+- **Scrape:** new `sportsdataverse.scrape.ncaa`, the shared stats.ncaa.org MBB/WBB hoops sweep engine
+  (`discover`, `capture`, `parse`, `rosters`, `datasets`, `identity`, `espn_game_xwalk`, `bundle`,
+  `canary`, `league_config` with `MBB` / `WBB`); `league` is a required keyword on every entry point.
+- **Scrape:** `scrape.ncaa.parse` is re-runnable: `--season` (repeatable) scopes the sweep and
+  `--force` re-parses existing output; without them the stage still skips existing files.
+- **Scrape:** new `sportsdataverse.scrape.stats` (Phase 1), the shared stats.nba.com / stats.wnba.com
+  sweep engine: `proxy`, `session_transport` (`curl_cffi` Chrome impersonation) and `observability`;
+  like `scrape.ncaa`, it is not re-exported at the top-level `sportsdataverse` namespace.
+- **Scrape:** `scrape.stats` Phase 2 adds league-parameterized capture planning: `league_config`
+  (`NBA` / `WNBA`, `by_league_id()`), `endpoints` (league-keyed season strings), `season_capture`,
+  `periods` (league- and era-aware period windows) and `refill`.
 
-The stage skipped any contest whose JSON already existed, and globbed every
-season. Together that made a reprocess impossible: a parser fix or a later
-identity backfill could never reach already-parsed games. That is not
-hypothetical — the MBB tree carries null `player_id` / `clean_name` /
-`ncaa_team_id` for 2024-2026 because those seasons were parsed before the
-reference backfill taught the pipeline to fill them, and re-running the stage
-was a no-op on exactly those files.
+### Changed
 
-`--season` (repeatable) scopes the sweep; `--force` re-parses existing output.
-Default behavior is unchanged — omit both and the stage still skips existing
-files across every season, so resumability is intact.
+- **CI:** a new `docs-deploy` workflow builds the docs site on pushes to `main` that touch `docs/**`
+  and publishes it as a single orphan commit on `gh-pages`, removing the per-push build from Vercel.
+- **Docs:** the documentation site has offline full-text search
+  (`@easyops-cn/docusaurus-search-local`), indexing only the rolling `main` version, with no external
+  service.
 
-### New — `sportsdataverse.scrape.ncaa`: shared stats.ncaa.org hoops sweep engine
+### Fixed
 
-`ncaa-mbb-hoops-raw` and `ncaa-wbb-hoops-raw` were the same pipeline twice:
-27 shared files, ~4,000 LOC of production code, and only ~90 lines of real
-difference between them — the rest maintained by hand-porting each fix from one
-repo to the other. That stack now has one home:
-
-- `scrape/ncaa/discover.py` — team/season crosswalk → contest ids → the season
-  `schedule_master`.
-- `scrape/ncaa/capture.py` — the 3-page bundle per contest: sharded,
-  disk-is-checkpoint, ban-aware.
-- `scrape/ncaa/parse.py` — bundle → pbp / shots / lineups frames.
-- `scrape/ncaa/rosters.py`, `datasets.py`, `identity.py`,
-  `espn_game_xwalk.py`, `bundle.py`, `canary.py`.
-- `scrape/ncaa/league_config.py` — `MBB` / `WBB` identity.
-
-**`league` is a required keyword on every public entry point**, deliberately.
-The capture stack is league-agnostic (stats.ncaa.org serves one contest-id
-namespace, and sdv-py's NCAA parsers already select the period model and
-three-point arc by league), so a league is only ever a token threaded through
-calls — and a shared engine that *defaults* one is how a women's run silently
-reads men's data. That was not hypothetical: the men's repo's capture CLI
-hardcoded both the schedule-master path and the capture league to `"mbb"` and
-had no `--league` flag at all, so it could not be pointed at the other league.
-A source-level test guards the literal from creeping back, since the failure it
-causes is silent — a well-formed capture written to the wrong league's tree.
-
-Not re-exported at the top-level `sportsdataverse` namespace: this is
-producer-pipeline tooling, not the tidy-data API. The two `-raw` repos keep a
-thin league-binding shim per module, their launchers (which carry real
-per-league pacing), and their test suites — those suites are the engine's
-parity harness and stay repo-side.
-
-### `sportsdataverse.scrape.stats` — league-parameterized capture layer (Phase 2)
-
-Phase 1 gave the stats-raw twins one transport/proxy/observability engine; this
-moves the *capture planning* behind a `LeagueConfig` so the two `-raw` repos
-stop carrying near-duplicate copies of it (the remaining ~700 drift lines):
-
-- `league_config.py` — frozen `NBA` / `WNBA` identity (LeagueID, wrapper
-  module and prefix, store env var and subdir), resolvable by `by_league_id()`.
-- `endpoints.py` — the signature-derived capture registry. Season-string
-  spelling is now league-keyed: the NBA's two-year span (`"2023-24"`, without
-  which several endpoints silently return zero rows) vs the WNBA's bare
-  calendar year.
-- `season_capture.py` — atomic, resumable season-level captures with the
-  contentless-payload guard (an unparseable `{}` is never persisted, because
-  resume is `path.exists()` and one empty write is permanent).
-- `periods.py` — league- and era-aware per-period window math: NBA 12-minute
-  quarters, WNBA two 20-minute halves through 2005 and four 10-minute quarters
-  from 2006. Regulation totals 2400s in *both* WNBA eras, so only the period
-  boundaries reveal a mix-up; a regression test pins the NBA path to
-  `nba_lineups._period_start_range`, the function that reads these captures
-  back.
-- `refill.py` — the empty-`{}` repair pass, driven by a `LeagueConfig` instead
-  of per-repo constants.
-
-Resolving the wrapper module from the config fixed a latent crash: the WNBA
-repo's own refill shim imported `sportsdataverse.nba.wnba_stats`, which does
-not exist, so a real (non-`--check`) refill run raised `ModuleNotFoundError`.
-
-### Docs — offline full-text search on the documentation site
-
-The Docusaurus site now ships local full-text search
-(`@easyops-cn/docusaurus-search-local`) — the search index is generated into
-the static build itself, so there is no Algolia account, external crawler, or
-third-party service involved. With versioning enabled the plugin indexes only
-the rolling `main` version, so the index does not grow as release snapshots
-accumulate. Docusaurus ships no search by default; the site had simply never
-had one configured.
-
-### CI — docs site builds on GitHub Actions and publishes to `gh-pages`
-
-A new `docs-deploy` workflow builds the static site on pushes to `main` that
-touch `docs/**` and force-publishes the output as a single orphan commit on
-the `gh-pages` branch. Hosting can then serve `gh-pages` as a plain static
-deploy (no build step on the hosting provider), which removes the heavyweight
-per-push Docusaurus build from Vercel.
-
-### New — `sportsdataverse.scrape.stats`: shared stats.nba.com / stats.wnba.com sweep engine (Phase 1)
-
-The scraping machinery that was copy-pasted between `hoopR-nba-stats-raw` and
-`wehoop-wnba-stats-raw` (and had drifted to byte-identical-or-nearly — 0–6 diff
-lines per file) now has one library home, per the 2026-08-02 pipeline audit's
-shared-engine decision:
-
-- `scrape/stats/proxy.py` — round-robin ProxyBonanza pool with quarantine +
-  outcome classification (`transport_err`/`blocked`/`blank` quarantine;
-  `server_err`/`notfound` never count against a proxy).
-- `scrape/stats/session_transport.py` — thread-local sticky-session
-  `curl_cffi` transport (Chrome impersonation; the hosts TLS/JA3-block plain
-  `requests` with a silent hang), in-session retry of the cheap `server_err`
-  class only.
-- `scrape/stats/observability.py` — sweep bookkeeping (endpoint outcome
-  ledger, degradation windows, progress heartbeat).
-
-Deliberately **not** re-exported at the top-level `sportsdataverse` namespace —
-this is producer-pipeline tooling, not the tidy-data API. The `-raw` twins
-migrate to these imports next (deleting their local copies); league-specific
-endpoint sets / season formats stay repo-side until Phase 2's `LeagueConfig`.
-All three modules are typed (mypy ratchet) and covered by the ported offline
-observability suite plus a proxy-classifier truth table (23 tests).
-
-### CFB — model suite retrained on the corrected corpus (BREAKING model change)
-
-All seven bundled CFB artifacts — `ep_model`, `wp_spread`, `wp_naive`,
-`qbr_model`, `fg_model`, `xpass_model`, `two_pt_model` — are retrained on a
-training frame rebuilt from the repaired `cfbfastR-cfb-raw` corpus.
-
-The previous frame dated from 2026-06-24, before the ESPN `-1`
-`end.yardsToEndzone` sentinel fix (0.0.74) and 13 other `cfb_pbp.py` commits. In
-that frame, **46 of 2016's games carried an implausible mean EPA**; the rebuilt
-frame has 1.
-
-Both gated metrics improve under 22-fold LOSO — the same protocol the recorded
-baselines were measured with:
-
-| model | metric | before | after |
-|---|---|---:|---:|
-| `ep` | `ep_cal_mae` | 0.0140 | **0.0137** |
-| `wp_spread` | `logloss` | 0.3518 | **0.3486** |
-
-EP's `mlogloss` (1.2333) and accuracy (0.4997) land on the previously documented
-values, which is expected: the frame changed ~0.1% of rows and those metrics
-pool over 2.2M. What moved is *calibration* — precisely the metric a corrupt-EPA
-tail distorts. `mean_pred_ep` 1.6886 against `mean_realized` 1.6888 confirms it.
-
-**Feature contracts are unchanged** for all seven models (8/5/7/4/13/12/10
-features), so this is a weights-only change: no caller adjustment is needed.
-Downstream EPA/WPA values WILL move, so anything cached from an earlier release
-should be rebuilt.
-
-### CFB — model cards ship beside every artifact
-
-Each `.ubj` now has a `.card.json` recording objective, feature list, training
-season span, full hyperparameters, boost rounds and the source frame. The
-generated cards previously emitted `objective: None`, `training_seasons: None`
-and `hyperparameters: None`, so the only way to answer "what was this model
-trained on" was to read the training code.
+- **Scrape:** `scrape.ncaa` stage CLIs no longer scan an empty tree and report success having done
+  nothing (`bundles=0`, `EXIT=0`): `--root` defaults to each repo's `REPO_ROOT` via its shim, library
+  fallbacks raise naming the fix, and the parse stage exits non-zero when it matches no bundles.
+- **Scrape:** a real (non-`--check`) WNBA refill run no longer raises `ModuleNotFoundError` on the
+  nonexistent `sportsdataverse.nba.wnba_stats`; `refill` resolves the wrapper module from the config.
 
 ## 0.0.74 Release: August 2, 2026
 
-### CFB — the ridge opponent adjustment was a no-op (BREAKING rating change)
+### Breaking changes
 
-`cfb_adjusted_epa._RIDGE_LAMBDA` was 325, carried over from cfbfastR's glmnet
-call at `cv$lambda[[1]]`. Two things were wrong with porting that number:
-`cv$lambda[[1]]` is the *largest* lambda in glmnet's grid — by construction the
-value at which the null model wins and every coefficient is zero — and glmnet's
-lambda is not sklearn's alpha, which `dropped_level_ridge` then multiplies by
-`n`. On a 64k-play season that landed at alpha = 2.1e7.
+- **CFB:** in all 10 `adv_*` release tags (republished for 2004–2025), `pos_team` / `def_pos_team`
+  now hold the team name (`String`) and the id moves to new `pos_team_id` / `def_pos_team_id`
+  (`Int64`); `def_pos_team` is in `adv_defensive` / `adv_defensive_players`. Summaries are unaffected.
+- **CFB:** `cfb_adjusted_epa` now actually opponent-adjusts: the ridge default `_RIDGE_LAMBDA` drops
+  from 325 to `0.035` and `RatingsConfig.ridge_lambda` from 0.05 to `0.035`. The old fit left raw-EPA
+  order intact (Spearman 0.999982), so adjusted ratings and ranks change substantially.
+- **CFB:** `opportunity_run` now means a rush of 4+ yards (`yds_rushed >= 4`, the cfbfastR definition;
+  was `<= 4`), so `opp_highlight_yards`, identically 0 in every published row, now carries values.
+  Published `espn_cfb_pbp` assets carry the old values until republished.
+- **CFB:** `opportunity_run`, `highlight_run` and `adj_rush_yardage` gate on the `rush` flag instead
+  of `type.text == "Rush"`, so rushing touchdowns and own-fumble-recovery rushes count and
+  `adj_rush_yardage` is no longer null on them.
+- **CFB:** nine CFB loaders now return `team_id` as `Int64` (was `String` in `passing`, `receiving`,
+  `rushing`, `team_summaries`(+`_weekly`), `ratings`(+`_weekly`), `recruiting_proj`; `Int32` in
+  `team_info`), so cross-dataset `team_id` joins match (134/134 teams, was 0). Assets are unchanged.
 
-The result was an adjustment that did not adjust. Fitted team strengths spanned
-0.0008 EPA/play across all of FBS, and `spearman(raw_off_epa, adj_off_epa)` was
-**0.999982** — not one team's ordering changed. Group of 5 teams kept full credit
-for weak schedules while Power conference teams were buried: Toledo 8th, James
-Madison 5th, Florida 114th, South Carolina 102nd.
+**Upgrade notes** — `adv_*`: read the team id from `pos_team_id` / `def_pos_team_id`. Joining
+`cfb_team_summaries.team_id` (`String`) to `adv_team.pos_team_id` (`Int64`) without a cast matches
+nothing, silently; the CFB loaders now cast `team_id` to `Int64` on read.
 
-It survived review because raw EPA/play is itself correlated with quality, so
-rank checks on the *output* looked reasonable. The tell was the coefficient
-spread, not the ranking.
+### Changed
 
-The default is now `0.035`, tuned across 2021–2025 against ESPN FPI joined on
-`team_id` and cross-checked against SP+, FEI and F+ (which agree with each other
-at 0.967–0.990). Against their 2025 consensus:
+- **Codegen:** `releases.yaml` gains an `id_int64:` key; a generated loader then emits a
+  `_cast_ids_int64` call, which casts only when every value round-trips (`"007"` or `1.5` leave the
+  column untouched).
+- **Codegen:** the description-coverage ratchet now includes the ~5,850 loader columns in
+  `loader_schemas.yaml`; the undescribed remainder is tracked via `_DEFERRED_BUCKETS`.
+- **Docs:** 1,308 more loader return-table columns are described: CFB `team_summaries`(+`_weekly`),
+  `adv_team`(+`_gamelog`), `adv_situational`, `cfb_pbp` and the four PHF loaders. (#312)
+- **Docs:** the CFB descriptions flag ESPN naming traps: bare `EPA_explosive*` / `EPA_success*`
+  columns are play counts, not EPA totals; `EPA_overall_off` duplicates `EPA_overall_offense`; and
+  `EPA_explosive_rate` is not `EPA_explosive / EPA_plays`.
+- **Docs:** generated loader returns tables gain a `description` column, resolved from
+  `manual_column_descriptions.yaml` with the R-package column dictionary as fallback.
 
-| | SP+ | FEI | F+ | FPI | consensus | mean rank error |
-|---|---|---|---|---|---|---|
-| before | 0.884 | 0.774 | 0.821 | 0.781 | 0.794 | 19.9 |
-| after | 0.930 | 0.966 | 0.956 | 0.965 | **0.967** | **7.8** |
+### Fixed
 
-`RatingsConfig.ridge_lambda` (previously 0.05) shares the value — the two entry
-points had disagreed by 6,500x. 0.035 rather than the nominal 0.02 optimum
-because the two are statistically tied on the mean (.9303 vs .9307) while 0.035
-has the better worst season and clears the PFF-grade oracle gate, which 0.02
-fails. Optimizing one oracle into another's red would have meant lowering a gate.
+- **CFB:** plays carrying ESPN's `-1` `end.yardsToEndzone` sentinel now recover the end yardline from
+  `end.yard`; 2016 week 2 (72 of 75 games) had been scored at about −2.6 EPA/play, plus 12 plays in
+  seven other seasons.
+- **CFB:** `rushing_power_rate` no longer reads 1.0 for every team in every season (2024's real rate
+  is about 0.055): boolean nulls are now filled with `False` before aggregating.
+- **CFB:** opponent-adjusted fits no longer drop one team per side (the ridge's reference level) from
+  the returned table, nor its games from its opponents' adjusted sets.
+- **Docs:** the returns tables for all 10 `adv_*` loaders now match the shipped data;
+  `load_cfb_adv_passing` gains `xComp`, `CompPct`, `xCompPct`, `CPOE` and types `rush_epa` /
+  `pen_epa` as `Float64` (not `Null`).
+- **Docs:** `load_cfb_adv_defensive_players` documents its season-dependent columns: 8 in 2004, 12
+  for 2005–2013 (`+ sacks`, `sacks_yards`, `pass_breakups`, `forced_fumbles`), 14 from 2014
+  (`+ interceptions`, `interceptions_yards`); a column absent in a season comes back null.
 
-Also fixes the ridge dropping its reference level from the *output*.
-`model.matrix` drops it from the design, but its effect is 0 by construction and
-lives in the intercept, so it belongs in the returned table — one team per side
-was silently absent from every fit, and its opponents lost those games from the
-adjusted set. Which team it hit was arbitrary (lexicographic on the string id).
+### Data
 
-### CFB — ESPN's `-1` end-of-play yardline sentinel corrupted 2016 week 2
-
-ESPN uses `-1` to mean "no end-state yards-to-endzone". The parser guarded only
-on `end.yardLine is not null` before trusting `end.yardsToEndzone` — and ESPN
-populates `end.yardLine` perfectly well on exactly the plays carrying the
-sentinel, so the guard passed and the fallback never fired for the case it exists
-to handle.
-
-2016 week 2 shipped that way: 72 of 75 games, with `-1` on ~every play (SMU @
-Baylor: all 238). `EP_end` was then scored as if the offense were on its own
-1-yard line after every snap, running EPA to about −2.6/play. It surfaced in the
-published percentiles as a 1st-percentile early-down EPA of −2.97 for 2016,
-roughly six times every neighbouring season, while the median and upper tail
-looked normal.
-
-Measured across all 19,749 committed raw payloads, plays carrying a negative
-`end.yardsToEndzone` total 13,632 in 88 games — 8.1% of 2016 and **12 plays
-across seven other seasons**. Reprocessed from raw, the three worst games move
-from −2.292/−1.894/−1.733 mean EPA to −0.158/−0.000/−0.041, while eight control
-games in 2019 and 2023 come out byte-identical.
-
-A re-scrape does not fix this: the committed raw is identical to what ESPN serves
-today. The recovery is local, from `end.yard`.
-
-### CFB — `fill_null(0.0)` is a silent no-op on booleans, pinning `rushing_power_rate` at 1.0
-
-polars leaves Boolean nulls untouched when the fill value is a float — no error,
-no warning. Aggregation frames prepared with `.fill_null(0.0)` therefore kept
-their boolean nulls, and `.mean()` on a flag that is null-where-absent averages
-over exactly the True rows and returns 1.0.
-
-`rushing_power_rate` has shipped as 1.0 for every team in every season. In 2024
-`power_rush_attempt` is null on 159,513 plays and True on 3,437, so the published
-rate read 1.0 where the real figure is 3437/63017 = 0.055.
-
-Of 44 boolean `.mean()` aggregations in the module, exactly one was wrong;
-`rushing_power_success_rate` looked like a second victim at 0.774 but is correct,
-since its frame is already filtered to power attempts. The fill is now
-centralized in `_fill_missing()` (booleans → False, numerics → 0.0) across all 10
-sites rather than patched at the one caught call site.
-
-### Also in this release
-
-### CFB — `opportunity_run` corrected, un-degenerating `opp_highlight_yards` (BREAKING)
-
-Found while **writing column descriptions**, not by a failing test — nothing
-pinned either invariant, which is why both survived.
-
-`opportunity_run` was `rush AND yds_rushed <= 4`. The cfbfastR oracle
-(`espn_cfb_15_team_summaries_creation.R:606`) is
-`((rush == 1) & (yds_rushed >= 4))`, and the sibling cfb-data producer agrees. An
-"opportunity" is a carry where the blocking **did** its job — one that reached 4
-yards. sdv-py had it as a stuff.
-
-That silently degenerated a second column. `opp_highlight_yards` gates on
-`opportunity_run`, but `highlight_yards` only accrues from 4 rushing yards up, so
-the two conditions could never co-occur: the column was **identically 0 in every
-published row**, verified across 162,950 plays in the 2024 release. It now ranges
-0–16 on the same games.
-
-The regression test then caught a **second divergence**: these gated on
-`type.text == "Rush"`, the literal ESPN play-type string, which excludes
-`"Rushing Touchdown"` and `"Fumble Recovery (Own)"` rushes — so a 4-yard rushing
-touchdown was not counted as an opportunity. The oracle gates on `rush`, and so
-does `line_yards` two statements below, which meant `adj_rush_yardage` was left
-null on exactly the plays `line_yards` tried to consume. `opportunity_run`,
-`highlight_run` and `adj_rush_yardage` now all gate on `rush`.
-
-**Still divergent, deliberately untouched:** the line-yards *scale*. The R oracle
-caps `adj_rush_yardage` at 10 and splits 0–4 / 5–10 / 11+; sdv-py caps at 8 with a
-`3 + 0.5(adj-3)` ramp and a 5.5 ceiling. Changing that shifts published
-`line_yards` / `second_level_yards` / `open_field_yards`, so it needs its own
-decision rather than riding along with a bug fix.
-
-**Breaking:** published `espn_cfb_pbp` assets carry the old values until
-republished; the column descriptions say so explicitly.
-
-### CFB / PHF — 1,308 loader return-table columns described
-
-Continues the work started in #312. Loader deferred columns **2,407 → 1,099**,
-residual ratchet unchanged at **0**.
-
-| batch | cols | grounding |
-|---|---|---|
-| `team_summaries` + `_weekly` | 757 | producer arithmetic (`_summarize_team`) |
-| `adv_team` + `_gamelog` | 131 | empirical profile of published assets |
-| `adv_situational` | 71 | empirical profile |
-| `cfb_pbp` | 247 | transcribed from `cfb_pbp.py`, thresholds quoted |
-| PHF (4 loaders) | 114 | provider fields, described at face value |
-
-Descriptions are **composed from verified vocabularies** rather than hand-written
-per column, and the generators are committed (`tools/codegen/gen_*_descriptions.py`)
-so each derivation stays reproducible. They enumerate `loader_schemas.yaml`, so
-re-running is idempotent.
-
-Profiling the ESPN blocks against real data contradicted their naming in ways that
-would otherwise have shipped as wrong documentation:
-
-- the bare `EPA_explosive*` and `EPA_success*` columns are integer play **counts**,
-  not EPA totals, despite the `EPA_` prefix (~40 columns)
-- `EPA_overall_off` and `EPA_overall_offense` are **exact duplicates**
-- `EPA_explosive_rate` is **not** `EPA_explosive / EPA_plays` — ESPN divides by a
-  smaller qualifying-play count, so deriving it will not reproduce their value
-
-Anything a generator could not ground is left **blank and reported**, never
-invented.
-
-### CFB — `team_id` canonicalized to `Int64` at the loader boundary
-
-The same ESPN team id shipped with **three different dtypes** across the CFB
-release surface, which makes a cross-dataset join match **nothing** — silently,
-with no error and a structurally valid frame:
-
-| dtype | datasets |
-|---|---|
-| `Int64` | 13 — all `adv_*`, `drives`, `game_rosters`, `linescores`, `player_box`, `team_box`, `adv_team_gamelog` |
-| `String` | 8 — `passing`, `receiving`, `rushing`, `team_summaries`(+`_weekly`), `ratings`(+`_weekly`), `recruiting_proj` |
-| `Int32` | 1 — `team_info` |
-
-All nine non-`Int64` loaders now normalize on read, so
-`load_cfb_team_summaries(...)` joined to `load_cfb_adv_team(...)` on
-`team_id`/`pos_team_id` resolves **134/134** teams where it previously matched 0.
-
-- **Fixed at the boundary, not by republishing.** The published assets are
-  untouched; the loader pins the dtype on read, per the repo's "one dtype per id,
-  cast at the boundary" rule. No breaking change for anyone reading the parquet
-  directly.
-- **New `id_int64:` key in `releases.yaml`** declares which id columns a loader
-  canonicalizes; the generated loader emits a `_cast_ids_int64` call. Declaring it
-  is the whole change — no hand-edits to generated loaders.
-- **Lossless or refused, never silent.** `_cast_ids_int64` converts only when every
-  non-null value survives a round-trip. `"007"` casts cleanly to `7` and `1.5`
-  truncates to `1` — both change the id, so both leave the column untouched. A
-  "no new nulls" check alone would let both through. Float-origin ids go straight
-  to `Int64` rather than through a string (which would yield `"123.0"`).
-- Covered by `tests/codegen/test_id_casts.py`, including a manifest gate that fails
-  if a loader declares `id_int64` without emitting the call, or declares a
-  canonicalized column as anything other than `Int64`.
-- The two producer-schema contract tests now apply the declared `id_int64` overlay:
-  a returns table documents the **loader's** output, not the raw asset, so a
-  boundary cast is an expected divergence rather than a docs lie.
-
-### Docs — loader returns tables now carry column descriptions
-
-Generated loader returns tables rendered `col_name | type` only, while endpoint
-tables carried a third `description` column. Loader tables now match, resolving
-descriptions from `manual_column_descriptions.yaml` (keyed by the loader's own
-function name) and falling back to the R-package column dict — so shared columns
-like `game_id` / `season` / `week` fill in automatically.
-
-This exposed ~5,850 loader columns to the description coverage ratchet, which had
-never globbed `loader_schemas.yaml` — so those blanks were **invisible** to a gate
-whose stated intent is "every return-table column renders a description". The
-extractor now sees them (59% already covered) and the remainder is tracked via the
-existing `_DEFERRED_BUCKETS` mechanism, mirroring the `nba_stats` decision.
-
-The first documented use is `load_cfb_adv_defensive_players`, whose column
-availability is season-dependent and previously undiscoverable without loading
-several seasons and diffing them:
-
-| seasons | cols | shape |
-|---|---|---|
-| 2004 | 8 | fumble recoveries only |
-| 2005–2013 | 12 | `+ sacks, sacks_yards, pass_breakups, forced_fumbles` |
-| 2014–2025 | 14 | `+ interceptions, interceptions_yards` |
-
-### CFB — `adv_*` `pos_team` now holds the team NAME, id moves to `pos_team_id` (BREAKING data change)
-
-ESPN's `advBoxScore` blocks put a **team id in a name-shaped column**. Verified
-against the published assets rather than assumed: all **235/235** distinct
-`pos_team` values in `adv_team` 2024 resolve to real teams.
-
-The producer (`cfbfastR-cfb-data`) now surfaces the id as `pos_team_id` /
-`def_pos_team_id` and fills the original column with the display name, so each
-column means what it is named. **All 10 `adv_*` tags have been rebuilt and
-republished for 2004–2025** (220 assets, 0 failures, 100% name resolution on
-every season).
-
-| | before | after |
-|---|---|---|
-| `pos_team` / `def_pos_team` | `Int64` id (`48`) | `String` name (`Ohio State Buckeyes`) |
-| `pos_team_id` / `def_pos_team_id` | — | `Int64` id |
-
-- **Affected tags** (10). Eight carry the offense's team and use `pos_team`:
-  `adv_team`, `adv_passing`, `adv_rushing`, `adv_receiving`, `adv_turnover`,
-  `adv_drives`, `adv_situational`, `adv_specialists`. Two carry the defense's
-  team and use `def_pos_team`: `adv_defensive`, `adv_defensive_players`.
-- **The summaries family was NOT affected** — `cfb_team_summaries`,
-  `cfb_passing`, `cfb_rushing`, `cfb_receiving` already shipped `team_id` for
-  the id and a readable `pos_team`, so they were deliberately left alone.
-- **Cross-family joins need a cast.** The two families spell this differently:
-  summaries uses `team_id` (**String**), `adv_*` uses `pos_team_id`
-  (**Int64**). Joining `cfb_team_summaries.team_id` to `adv_team.pos_team_id`
-  without casting matches nothing, silently.
-- **`espn_cfb_adv_team_gamelog` was rebuilt** for 2004–2025 off the new shape;
-  it continues to expose `team_id` + a readable `team` / `opponent`, so its
-  consumers see no change.
-
-### CFB — `adv_*` declared schemas re-derived from the shipped data
-
-The declared returns tables for all 10 `adv_*` loaders are regenerated from a
-diagonal union of real published seasons (2004/2014/2024/2025), so the
-documented schema now matches what the loaders actually return. Beyond the
-`pos_team` split this closes **pre-existing drift** the audit surfaced:
-
-- `load_cfb_adv_passing` was missing `xComp`, `CompPct`, `xCompPct`, `CPOE`,
-  and declared `rush_epa` / `pen_epa` as `Null` rather than `Float64`.
-- `load_cfb_adv_defensive_players` was missing `sacks`, `sacks_yards`,
-  `pass_breakups`, `forced_fumbles`, `interceptions`, `interceptions_yards`.
-
-  This block's shape **ramps in two steps**, so the union is the only honest
-  declaration. Columns absent in a requested season come back null (the loaders
-  concatenate diagonally), so a 2004–2025 pull is uniform in shape but sparse in
-  the early years:
-
-  | seasons | cols | shape |
-  |---|---|---|
-  | 2004 | 8 | fumble recoveries only |
-  | 2005–2013 | 12 | `+ sacks, sacks_yards, pass_breakups, forced_fumbles` |
-  | 2014–2025 | 14 | `+ interceptions, interceptions_yards` |
-
-`loader_schemas.yaml` drives the generated returns tables only — nothing casts
-from it — so this drift was invisible to the test suite and surfaced purely as
-incorrect published documentation. Declared-vs-shipped now diffs clean for all
-10.
+- **CFB:** `espn_cfb_adv_team_gamelog` is rebuilt for 2004–2025 on the new `adv_*` shape; it still
+  exposes `team_id` plus a readable `team` / `opponent`, so its consumers see no change.
 
 ## 0.0.73 Release: August 1, 2026
 
-### CFB — pre-2014 `{type}_player_id` join recovered (2004 +36pp, 2005–2013 +2–8pp)
+### Breaking changes
 
-- **Context.** ESPN ships no per-play `participants[]` before 2014 — verified
-  live against Core v2 `/events/{id}/competitions/{id}/plays`, which returns a
-  full 150–240-play stream for 2004–2013 with **zero** participants, and
-  ~90% participant coverage from 2014 on. Pre-2014 `{type}_player_id` therefore
-  comes entirely from `CFBPlayProcess.__attach_player_ids` matching a
-  regex-extracted name against the game roster. Two defects were capping that
-  join far below its ceiling.
+- **CFB:** `adj_off` / `adj_def` / `adj_net` in `efficiency_ratings` / `cfb_ratings` are now the
+  netted R `adjust_epa` statistic (per-game raw EPA minus the opponent's fitted strength, averaged),
+  not the ridge coefficient + intercept; ranks barely move, magnitudes shrink (top ~0.35, was ~0.63).
+- **CFB:** rating predictions use constants refit to the new scale (`net_points_scale` 34.49 → 44.54,
+  `margin_sd`, `total_*`; `hfa_epa` unchanged).
+- **CFB:** `adj_st_epa` is now true EPA/play (each unit's mean EPA/play, field goal, punt and kick
+  return, centered on the league mean and summed) instead of a sum of three z-scores.
+- **CFB:** `cfb_ratings()` now defaults to `fbs_only=True` (FBS-vs-FBS games only) and
+  `drop_kneels=True` (kneel-downs removed), matching game-on-paper; ratings shift, and `cfb_resume` /
+  `cfb_season_odds` inherit the defaults.
 
-- **2004 team-abbreviation suffix.** 2004 play text renders a name as
-  `"Player Name (TEAM)"`. The rusher capture strips the parenthetical; the
-  passer capture keeps it, and `_norm_player_name` folds it into the join key
-  (`"matt ryan bc"` never matches `"matt ryan"`). Passers are the largest name
-  family, which accounted for the entire 2004 gap.
+**Upgrade notes** — Pass `fbs_only=False` / `drop_kneels=False` to `cfb_ratings()` for the previous
+unfiltered behavior.
 
-- **Narrative-tail bleed (2005–2013).** Pass-direction phrases and ESPN's own
-  missing-space concatenations survived into the capture —
-  `"Russell Wilson deep out"`, `"Dominique Davis screen"`,
-  `"Raynard Hornetackled by"`.
+### Added
 
-- **Both are now cleaned at the shared chokepoint** in `__attach_player_ids`,
-  which already iterates every `{type}_player_name` column, rather than by
-  patching each extraction regex — so the emitted name column and the join key
-  are fixed together in one place. New module-level patterns
-  `_PLAYER_NAME_TEAM_SUFFIX` and `_PLAYER_NAME_TAIL`.
+- **CFB:** `load_cfb_adv_team_gamelog` (tag `espn_cfb_adv_team_gamelog`): opponent-adjusted team
+  efficiency with game context (opponent, home/away, scores, margin, result, date), one row per
+  team-game, 2004–2025.
+- **CFB:** `load_cfb_ratings_weekly` and `load_cfb_team_summaries_weekly` return long format, one
+  asset per season with a `through_week` column; filter `through_week == W` for as-of-week-W state.
+- **Models:** new repo-root `model_ledger.json`, a machine-readable ledger of 73 trained/fitted
+  models across the ecosystem (artifact, training script, trained and available season windows).
+- **NBA:** model outputs keyed on numeric ids now also carry resolved player and team names.
+- **NBA:** the possessions / season-compile path reads the committed raw JSON store (over URL, plus
+  season-level captures) in preference to network reads, so season builds reproduce offline.
+- **NBA:** the `stats.nba.com` runtime's timeout and retry are tunable.
 
-- **Two fallback join tiers** added below exact match: first-initial + surname,
-  then bare surname. Both are **team-scoped and uniqueness-gated** — an
-  ambiguous surname stays null rather than guessing.
+### Changed
 
-- **Measured** on the committed `cfbfastR-cfb-raw` tree (25 games/season, 11
-  player-column families), share of populated name cells resolving to an id:
+- **CFB:** the roster join behind pre-2014 `{type}_player_id` gains two fallback tiers below exact
+  match (first-initial + surname, then bare surname), both team-scoped; an ambiguous name stays null.
+- **CFB:** the player box score is a second `{type}_player_id` source when ESPN 404s the game roster
+  (376 of 898 games in 2018); 2018 resolution rises from 63.7% to 96.2%.
 
-  | seasons | before | after |
-  |---|---|---|
-  | 2004 | 52.1% | **87.8%** |
-  | 2005–2013 | 82.7–94.7% | 89.3–96.6% |
-  | 2014+ | 87.0–98.6% | 87.8–99.3% |
+### Fixed
 
-  End-to-end on 2004 game `242410259`: pass+rush id resolution 46.4% → 100%,
-  with names emitted as `Bryan Randall` / `Matt Leinart` rather than
-  `Bryan Randall (VT)` / `Matt Leinart (USC)`.
-
-- **Player box score is now a second id source.** `game_rosters` stays primary,
-  but ESPN 404s its roster resource for a large minority of games — 376 of 898
-  in 2018, 142 of 706 in 2020 — leaving the join nothing to match against.
-  ESPN's per-player box score covers the same athletes in the **same athlete-id
-  namespace** and already ships inside the summary payload, so it costs no extra
-  request. Namespace agreement was measured, not assumed: 0 id conflicts on the
-  roster/box overlap in 21 of 22 seasons. Where the two disagree the name becomes
-  ambiguous and resolves to null.
-
-  | seasons | gain |
-  |---|---|
-  | 2004–2013 | +0.0pp (box is a strict subset of the roster, ~27 vs ~60 names) |
-  | 2014–2017 | +2.9 to +5.3pp |
-  | **2018** | **+32.4pp** (63.7% → 96.2%) |
-  | 2019–2025 | +0.1 to +6.4pp |
-
-  End-to-end on three real 2018 empty-roster games with `game_roster=[]`:
-  97.0% / 97.7% / 98.4% — the last of which the season fill probe previously
-  reported at **0.0%**.
-
-### CFB — `adj_off/def/net` rescaled to the R `adjust_epa` netted statistic (BREAKING scale change)
-
-- **`efficiency_ratings` / `cfb_ratings` now publish the gameonpaper-parity
-  NETTED values**: each team's raw per-game EPA (all pass/rush plays, garbage
-  time included) minus the opponent's ridge-fitted strength, averaged across
-  games — the R `adjust_epa` / `team_agg.R` statistic. A top team now nets
-  ~0.30–0.40 EPA/play (2024 max 0.35 vs gameonpaper's 0.366). The previous
-  releases carried the ridge **coefficient + intercept** (a competitive-play
-  model strength) under the same column names — ~1.8× hotter at the top
-  (max ~0.63) and data-volume unstable. Ranks are nearly unchanged (the
-  Spearman oracle gates all hold); magnitudes shrink.
-- **Prediction constants refit on the new scale** (`net_points_scale`
-  34.49 → 44.54, `margin_sd`, `total_*`; `hfa_epa` unchanged — it is the
-  ridge's own home coefficient). Refit backtest: Brier 0.1416 (beats ESPN
-  FPI 0.1436), spread MAE 3.23 (was 4.06), total MAE 4.88.
-- **New magnitude oracle gate** (`test_adj_net_magnitude_matches_gameonpaper_scale`)
-  — the failure mode rank-based gates cannot see. Two floors re-derived for
-  the changed statistic (netting includes garbage time by construction), each
-  documented in its test: SP+ offense Spearman 0.84 → 0.82 (observed
-  0.849 → 0.836) and season-odds expected-wins rank calibration 0.90 → 0.885
-  (observed 0.928 → 0.899). All other oracle gates held or improved.
-
-### CFB — `adj_st_epa` rescaled to true EPA units (BREAKING scale change)
-
-- **The special-teams composite is now real EPA/play**: for each unit (field
-  goal, punt, kick return), the team's mean EPA/play centered on that unit's
-  league-wide mean, summed across the three units. The previous releases
-  shipped a **sum of three z-scores** under the `_epa` name — dimensionless,
-  std ~1.7, range ±5. The centered form also tracks the SP+ special-teams
-  oracle **better** (Spearman 0.865 vs 0.768), so the oracle floor was
-  RAISED 0.75 → 0.84.
-
-### CFB — `cfb_ratings` gameonpaper-parity filters (default ON)
-
-- **`cfb_ratings()` now defaults to `fbs_only=True` and `drop_kneels=True`**,
-  matching the game-on-paper `cfb-team-summaries` pipeline's play substrate.
-  `fbs_only` keeps only games where the schedule's `home_division` /
-  `away_division` are both `"fbs"`; `drop_kneels` strips kneel-downs via a
-  pipeline `kneel_down` flag when present, otherwise the play-text regex
-  (`kneel` / `takes a knee`) plus the end-of-half anonymized-TEAM-run clock
-  heuristic (pass plays are never treated as kneels). Both filters skip
-  gracefully when the input frame lacks the needed columns, so slim/canonical
-  frames keep working; pass `fbs_only=False` / `drop_kneels=False` for the
-  previous unfiltered behavior. Downstream consumers (`cfb_resume`,
-  `cfb_season_odds`) inherit the defaults. Ratings computed on real released
-  data will shift accordingly (FCS blowouts and kneels leave the ridge fit).
-- **`model_ledger.json`** — new repo-root machine-readable ledger of every
-  trained/fitted model across the ecosystem (73 entries): league, artifact,
-  training script, trained-season window, available-data window, window
-  rationale, and known provenance gaps. Seed registry for per-artifact model
-  cards.
-
-### CFB — loaders for 3 published-but-unreachable dataset releases
-
-The CFB producer publishes to `sportsdataverse-data`, but a release asset is
-only reachable once a loader exists on this side — the two repos are
-independent, so publishing does not make data queryable. Three tags shipped
-without one:
-
-| loader | tag | 2024 shape |
-|---|---|---|
-| `load_cfb_adv_team_gamelog` | `espn_cfb_adv_team_gamelog` | 1,892 × 90 |
-| `load_cfb_ratings_weekly` | `cfb_ratings_weekly` | 2,068 × 16 |
-| `load_cfb_team_summaries_weekly` | `cfb_team_summaries_weekly` | 2,119 × 384 |
-
-- **`load_cfb_adv_team_gamelog`** — opponent-adjusted team efficiency joined to
-  the game context `adv_team` lacks (opponent, home/away, scores, margin,
-  result, date). One row per team-**game**, 2004–2025.
-- **The two `*_weekly` loaders** return **long format**: one asset per season
-  carrying a `through_week` column that stacks every week's cumulative state,
-  so a consumer filters `through_week == W` for as-of-week-W ratings rather
-  than fetching per-week assets. Only the opponent-adjusted *team* products
-  ship weekly — the ridge is refit on everything through week W, so that state
-  cannot be reconstructed by summing per-game rows.
-
-### CFB — 5 summaries loaders unblocked for 2004–2013
-
-`load_cfb_passing`, `load_cfb_percentiles`, `load_cfb_receiving`,
-`load_cfb_rushing`, and `load_cfb_team_summaries` raised
-`SeasonNotFoundError("season cannot be less than 2014")` for seasons that are
-in fact published. The producer's offline-rebuild backfill now ships **22
-seasons (2004–2025) for all five tags**; the loader-side `min_season` guard was
-never widened to match, so **10 published seasons per dataset (2004–2013) were
-unreachable** through the public API.
-
-- Verified against the live releases before changing the guard — all four
-  probe seasons (2004/2010/2013/2014) return HTTP 200 for these five tags.
-- **`load_cfb_play_participants` and the two crosswalk loaders keep their 2014
-  floor** — that one is a real data cliff, not a stale guard: ESPN ships no
-  per-play `participants[]` before 2014, and those tags genuinely 404 pre-2014.
-  Widening them would have converted a clear error into silent empty frames.
-- **Declared `season` dtype corrected `Float64` → `Int64`** for
-  `load_cfb_passing` / `_receiving` / `_rushing` / `_team_summaries`. The
-  republished assets ship `Int64`; the declared schema drives the generated
-  returns tables only, so the drift was invisible to the test suite and
-  surfaced as incorrect published documentation.
-
-### NBA — human-readable player and team columns for model outputs
-
-Model outputs keyed on bare numeric ids now also carry resolved player and team
-names, so a published table is legible without a second join.
-
-### NBA — read the committed raw store over URL + season-level captures
-
-The possessions / season-compile path prefers the committed raw JSON store over
-network reads, making season builds reproducible offline.
-
-### Fixes
-
-- **NBA** — result-set schema inference scans **all** rows rather than the
-  first; a leading run of nulls previously inferred the wrong dtype for the
-  whole column.
-- **NBA** — three real-data bugs in the raw-store impact path.
-- **NBA** — tunable timeout + retry for the `stats.nba.com` runtime.
-- **RDS** — `write_rds` streams to its sink instead of buffering the whole
-  object; the temp-file write path keeps the umask-derived file mode.
-- **NFL** — NGS season-aggregate (week 0) upstream removal is handled with a
-  warning + xfail sentinel instead of a hard failure.
-- **NHL** — survive the R-arrow `vctrs` extension-metadata panic when reading
-  release parquets.
-- **CFB** — `load_cfb_passing` declared schema tracks the republished `Int32`
-  `sacked` / `pass_int`.
-- **Docs** — Docusaurus builds via rspack (`future.v4`), resolving the Vercel
-  heap OOM.
+- **CFB:** pre-2014 `{type}_player_name` values drop the 2004 `"(TEAM)"` suffix (`Matt Leinart`, not
+  `Matt Leinart (USC)`) and narrative tails (`"Russell Wilson deep out"`), so far more resolve to a
+  `{type}_player_id` (2004: 52.1% → 87.8% of named cells).
+- **CFB:** `load_cfb_passing`, `load_cfb_percentiles`, `load_cfb_receiving`, `load_cfb_rushing` and
+  `load_cfb_team_summaries` no longer raise `SeasonNotFoundError` for the published 2004–2013
+  seasons; `load_cfb_play_participants` and the two crosswalk loaders keep their real 2014 floor.
+- **Docs:** declared returns tables corrected: `season` is `Int64` (not `Float64`) for
+  `load_cfb_passing` / `_receiving` / `_rushing` / `_team_summaries`, and `load_cfb_passing`
+  declares the republished `Int32` `sacked` / `pass_int`.
+- **Docs:** the Docusaurus site builds via rspack (`future.v4`), resolving the Vercel heap OOM.
+- **NBA:** result-set schema inference scans all rows, not the first; a leading run of nulls had
+  inferred the wrong dtype for the whole column.
+- **NBA:** three real-data bugs in the raw-store impact path.
+- **NFL:** the upstream removal of the NGS season aggregate (week 0) is handled with a warning and an
+  xfail sentinel instead of a hard failure.
+- **NHL:** reading release parquets survives the R-arrow `vctrs` extension-metadata panic.
+- **RDS:** `write_rds` streams to its sink instead of buffering the whole object, and its temp-file
+  write path keeps the umask-derived file mode.
 
 ## 0.0.72 Release: July 22, 2026
 
-### BREAKING CHANGES
+**Highlights**
 
-- **NBA season convention is now END-year across the Python API.**
-  `compile_nba_season(2024)` and `nba_availability` now use the season ENDING
-  year (2024 = 2023-24), matching `most_recent_nba_season()` and every
-  ESPN-sourced `load_nba_*` dataset. Previously the stats.nba.com compile path
-  used the start year — external callers passing a start year must add 1.
-  Unchanged: `year_to_season` (still a low-level start-year helper — call it as
-  `year_to_season(end_year - 1)`), and `nba_box_logs` (takes the `"2023-24"`
-  string, not an integer).
+- **NBA seasons are END-year across the Python API:** `compile_nba_season(2024)` and
+  `nba_availability` now mean 2023-24, matching `most_recent_nba_season()` and the ESPN-sourced
+  `load_nba_*` datasets.
+- **New `nba_stats` / `wnba_stats` families:** 112 stats.nba.com and 95 stats.wnba.com wrappers that
+  return tidy frames through one parser, `parse_nba_stats_result_sets`.
+- **Model spines across the leagues:** ratings, projection, shot-value, tracking, draft and
+  simulation models for NFL, CFB, NBA/WNBA, MBB/WBB, NHL/PWHL and MLB, including nflseedR / cfbseedR
+  standings ports.
+- **stats.ncaa.org:** the bigballR / wbigballR port (`ncaa_mbb_*` / `ncaa_wbb_*`), the college RAPM
+  core, and new football, college baseball and softball play-by-play parsers.
+- **Loaders and release tooling:** seven new CFB dataset loaders (including `load_cfb_ratings`),
+  loaders for the published model releases, and the `sportsdataverse.release` publishing module.
 
+### Breaking changes
 
-- **`id` in Python-produced WBB play-by-play frames is Int64 (was Float64
-  in R-produced releases).** R/jsonlite has no int64, so the released pbp
-  `id` loses precision above 2^53 — adjacent ~4e17 play ids round to the
-  same double and collide (verified: multiple plays per game share an id in
-  the released assets; fixture game 401804834 yields 447/447 unique ids
-  where Float64 collided). The stored payload carries a true integer, so
-  `helper_wbb_play_by_play` now emits exact Int64 — a deliberate dtype
-  divergence from the R releases, pinned by the wehoop-wbb-data parity
-  suite's `dtype_upgrades` gate (values still compared equal under the
-  oracle's lossy Float64 view).
+- **MBB:** the `helper_{nba,mbb}_*` release-parity producers emit play-by-play `id` as Int64, not
+  R's Float64: MBB's 18-digit ids overflow R's double and collide in the R-produced releases. (#245)
+- **NBA:** the season convention is END-year across the Python API: `compile_nba_season(2024)` and
+  `nba_availability` take the ending year (2024 = 2023-24); the stats.nba.com compile path took the
+  start year.
+- **PWHL:** `pwhl_team_game_xg_rates` / `pwhl_ratings_from_proxy` gain `xg_method` (`"coords"` |
+  `"quality"`) and default to the new coordinate xG (`fit_pwhl_coord_xg`), so output values change
+  for existing callers; `LEAGUE_CONSTANTS["pwhl"].margin_sd` is re-fit 1.21 → 1.19.
+- **WBB:** `id` in Python-produced WBB play-by-play (`helper_wbb_play_by_play`) is exact Int64; the
+  R-produced releases are Float64, which loses precision above 2^53, so adjacent play ids collide.
 
-### CFB — loaders for 6 published-but-unreachable dataset releases
+**Upgrade notes** — NBA: add 1 to any start year you pass to `compile_nba_season` or
+`nba_availability`. `year_to_season` is unchanged and still takes a start year, so call it as
+`year_to_season(end_year - 1)`; `nba_box_logs` is unchanged and takes the `"2023-24"` string, not an
+integer. PWHL: pass `xg_method="quality"` to `pwhl_team_game_xg_rates` / `pwhl_ratings_from_proxy`
+to keep the old categorical shot-quality xG.
 
-`cfbfastR-cfb-data` publishes 18 dataset tags to `sportsdataverse-data`; sdv-py
-had loaders for 9. These six were built, backfilled, and published for years
-with no way to read them from Python:
+### Added
 
-| loader | tag | seasons | cols |
-|---|---|---|---|
-| `load_cfb_passing` | `espn_cfb_passing` | 2014– | 43 |
-| `load_cfb_rushing` | `espn_cfb_rushing` | 2014– | 28 |
-| `load_cfb_receiving` | `espn_cfb_receiving` | 2014– | 32 |
-| `load_cfb_percentiles` | `espn_cfb_percentiles` | 2014– | 27 |
-| `load_cfb_team_summaries` | `espn_cfb_team_summaries` | 2014– | 383 |
-| `load_cfb_model_pbp` | `espn_cfb_model_pbp` | 2004– | 43 |
+- **CFB:** loaders for five published-but-unreachable "Binion Box Score" releases (2014–):
+  `load_cfb_passing`, `load_cfb_rushing`, `load_cfb_receiving`, `load_cfb_percentiles`,
+  `load_cfb_team_summaries`.
+- **CFB:** `load_cfb_model_pbp` loads the `espn_cfb_model_pbp` release (EP/WP/QBR-enriched
+  play-by-play, 2004–), which was published but unreachable from Python.
+- **CFB:** `load_cfb_ratings(seasons)` loads the `cfb_ratings` release (one row per team-season,
+  2004–: opponent-adjusted EPA, FEI, `games`, `off_pace`, ranks, `net_z`); seasons with no asset
+  warn and are skipped.
+- **CFB:** advanced-efficiency spine: `cfb_advanced_stats` (opponent-adjusted efficiency, isoPPP,
+  success rate, EPA/play, havoc), `cfb_field_position` (`fit_field_position_ep` / `load_fp_curve`),
+  `cfb_adjusted_tempo`, and `cfb_advanced_constants`.
+- **CFB:** recruiting spine: `load_recruit_classes` (247 RDB signing classes), `blue_chip_ratio`,
+  `cfb_roster_talent` (optional `composite_247` override), `cfb_returning_production`, and
+  `cfb_recruiting_projection` (wins / margin ridge, as-of boundary enforced).
+- **CFB:** `cfb_transfer_moves` + `cfb_transfer_impact` (portal moves, net-talent win delta; no
+  team-level win signal on 2018-2023 data) and `load_draft_outcomes` + `cfb_draft_projection` (as-of
+  draft probability, expected picks per team).
+- **CFB:** cfbseedR-style standings and simulation: `cfb_standings`, `cfb_playoff_seeds` (2025 CFP
+  12-team seeding, optional `rankings=`), `cfb_simulations` / `cfb_compute_results`,
+  `cfb_games_from_schedule`; conference rank and `sov` / `sos` are conference-REG-scoped.
+- **CFB:** `parse_cfb_ncaa_pbp`: stats.ncaa.org football play-by-play, one row per play,
+  cfbfastR-style (drive context, situation, `play_type`, players, signed `yards_gained`, kick /
+  turnover / penalty detail, `qb_scramble`).
+- **CFB:** `cfb_ncaa_box` parsers: `parse_cfb_ncaa_drives`, `parse_cfb_ncaa_team_stats` (per
+  quarter), `parse_cfb_ncaa_player_stats`, `parse_cfb_ncaa_officials`, `parse_cfb_ncaa_linescore` (+
+  `game_date` / `venue` / `attendance`).
+- **CFB:** the advanced box score's passing table aggregates `cp` (xCompletion model results)
+  alongside the existing columns.
+- **CFB:** On3 recruiting: an 82-endpoint On3 RDB stem that replaces the 4-endpoint `_next/data`
+  rankings scrape (industry consensus rankings with NIL valuations and commitment / transfer
+  status).
+- **CFB:** 247Sports Recruit Database stem (11 wrappers): `sports247_recruits`,
+  `sports247_transfers` (portal), `sports247_coaches`, `sports247_target_predictions` (crystal
+  ball), `sports247_sport_years`, `sports247_tags_autocomplete`.
+- **CFB:** 247Sports ranking and portal feeds: `sports247_institution_rankings`, `sports247_teams`,
+  `sports247_composite_team_ranking_feed`, `sports247_transfer_portal_team_feed`,
+  `sports247_transfer_portal_player_feed`.
+- **CFB:** every 247Sports payload parses via `parse_sports247_result_set`, and the runtime mints
+  and refreshes the no-login guest JWT that most 247 routes need.
+- **CFB:** 247Sports expansion: the guest-usable `positions` RDB route and a new auth-free
+  `sports247_site_pages` stem.
+- **College baseball:** `parse_college_baseball_ncaa_pbp` and softball twin
+  `parse_college_softball_ncaa_pbp` split stats.ncaa.org pbp into inning context, the batter clause
+  (`play_type`, `hit_trajectory`, `rbi`, …) and runner clauses (`runs_scored`).
+- **ESPN (cross-league):** Core v2 recruiting family `espn_{league}_recruiting_years`,
+  `espn_{league}_recruiting_players`, `espn_{league}_recruiting_rankings` for the 7 NCAA-scope
+  leagues; recruits flatten to a 33-column frame.
+- **MBB:** `ncaa_mbb_*` (bigballR port over stats.ncaa.org, 33 functions with the WBB twins): pbp
+  with on-floor lineups, `_box_scores`, `_team_schedule`, `_team_roster`, `_lineups`, `_on_off`,
+  `_possessions` and more, plus `resolve_ncaa_team_id` / `refresh_ncaa_team_ids`.
+- **MBB:** college RAPM core port (with `wbb_*` shims): `mbb_lineup_stats` (lineup aggregation,
+  on/off), `mbb_ratings` (Dean Oliver ratings, "Adj Rtg+"), `mbb_luck`, `mbb_rapm` (ridge RAPM with
+  priors) and `mbb_positions` (position classifier, `build_position`, `order_lineup`).
+- **MBB:** NCAA stint pipeline, runnable end-to-end from saved HTML:
+  `mbb_ncaa_{models,events,possessions,data_quality,names,stints,lineup_enrich,stint_validation}`,
+  the `mbb_ncaa_{roster,boxscore,pbp}_parser` parsers, and a strength-adjusted stats engine.
+- **MBB:** `mbb_ncaa_fetch`, a cache-first, proxy-bound stats.ncaa.org fetch layer (no direct-fetch
+  mode) with an `NcaaFetchConfig` singleton configured by `SDV_PY_NCAA_*` / `SDV_PY_PROXYBONANZA_*`
+  env vars.
+- **MBB:** `lineup_stats_bucket` / `lineup_stats_buckets` (`mbb_ncaa_lineup_aggregation`) build the
+  254-field `LineupStatSet` bucket, so a real NCAA game runs parse → enrich → buckets → the ported
+  models.
+- **MBB:** hoopR release-parity producers `helper_{nba,mbb}_*` let `hoopR-nba-data` /
+  `hoopR-mbb-data` compile their datasets in Python, including new officials and
+  `player_season_stats` helpers.
+- **MBB:** `parse_ncaa_bb_officials`, `parse_ncaa_bb_team_stats` and `parse_ncaa_bb_linescore`
+  (`mbb_ncaa_box_tabs`) cover the remaining basketball contest-page tabs.
+- **MBB:** shot-quality spine: `mbb_shot_data` (one shot frame from ESPN shots and NCAA charts, via
+  `espn_shots_to_canonical` / `shot_events_to_frame`), `mbb_shot_quality_model` /
+  `mbb_shot_quality`, `mbb_shot_selection`, `mbb_shooter_talent` + `fit_shrinkage_k`.
+- **MBB:** player-value spine: `mbb_box_bpm` (team-constrained box Plus/Minus), `mbb_archetypes`
+  (role clusters), `mbb_recruiting_projection`, `mbb_transfer_projection` + `transfer_cohort`,
+  `mbb_draft_projection`.
+- **MBB:** `mbb_team_ratings` (AdjO / AdjD / AdjEM / AdjTempo), pregame `predict_margin` /
+  `win_prob_from_margin` / `predict_total` / `mbb_predict_games`, and in-game `in_game_features` /
+  `mbb_in_game_win_prob`.
+- **MBB:** `mbb_strength_of_schedule` (Quad 1–4 résumé, Wins Above Bubble), `mbb_bracketology` /
+  `project_bracket` (68-team field and seeds), and `mbb_season_sim` / `mbb_bracket_sim` /
+  `simulate_game`.
+- **MBB:** `load_mbb_ratings` / `load_mbb_player_value` load the published model tags (floor 2006).
+- **MLB:** game-state spine: `mlb_run_expectancy_matrix` + `run_value(...)` (RE24, exported at
+  `sportsdataverse.mlb`), win expectancy + WPA + leverage index, an umpire strike-zone model, team
+  and prop projections.
+- **MLB:** pitching spine over Statcast: `mlb_stuff_plus`, `mlb_command_plus`, `mlb_pitch_era`,
+  `mlb_pitch_features`, `mlb_pitch_sequencing`, `mlb_pitch_fatigue`, `mlb_pitch_classify`,
+  `mlb_pitch_injury`.
+- **MLB:** fielding / catching / baserunning spine: `mlb_run_values` (RE288), `mlb_catcher_framing`,
+  `mlb_catcher_defense`, `mlb_fielding_oaa`, `mlb_baserunning`, `mlb_stolen_base`.
+- **NBA:** `nba_stats` (112 `nba_stats_<slug>` wrappers at stats.nba.com) routed by `league_id`:
+  `"00"` NBA, `"20"` G-League, `"15"` Summer League; only capture-confirmed live, non-deprecated
+  endpoints are wrapped.
+- **NBA:** `parse_nba_stats_result_sets(raw, result_set=None, *, return_as_pandas=False)` returns
+  one frame, or a `dict` for multi-set payloads, and flattens the shot-location and `scoreboardv3`
+  shapes.
+- **NBA:** `nba_play_context` / `wnba_play_context` (Cleaning the Glass): per-possession
+  `possession_start_type{,_detail,_ctg}`, `is_transition`, `is_garbage_time`, `is_heave_possession`;
+  per-shot `ctg_shot_zone`, `is_putback`, `shot_context`.
+- **NBA:** `lineup_play_context` / `player_play_context` (on/off possessions and points per 5-man
+  unit and per player) and `starters_on_court_counts`, which upgrades `garbage_time_basis` to
+  `margin+starters`.
+- **NBA:** shot-value spine: `score_shot_xpoints` + `xpoints_baseline`, `make_prob_by_context` +
+  `make_prob_joint`, `shooter_talent`, `shot_selection_quality`, `zone_value_map`.
+- **NBA:** `nba_shot_value` runs the five shot models (`include_context=`), with
+  `nba_shot_value_lineups`; `league_id` picks NBA `"00"`, WNBA `"10"` or G-League `"20"`
+  (`nba_shot_value(..., league_id="20")`).
+- **NBA:** six tracking over-expected models on `playerdashpt*`: rebounding, passer value, drive
+  value, catch-and-shoot vs pull-up, touch value, rim protection; WNBA (`league_id="10"`) shims,
+  G-League degradation path.
+- **NBA:** model zoo v1: a validation harness (four external oracles, a meta-oracle, a season
+  compiler), a trained SPM with the `RatingsModel` harness extension, a BPM 2.0 port, and Bayesian
+  adj-RAPM.
+- **NBA:** RAPM variants (`nba_rapm_variants`): `nba_la_rapm` (luck-adjusted),
+  `nba_four_factor_rapm`, `nba_decay_rapm`; validity against the Ryan Davis oracle runs when
+  `SDV_PY_NBA_ORACLE_DIR` is set.
+- **NBA:** `external_validity` (five published-metric loaders in `nba_oracle_data.py`: RAPM, EPM,
+  LEBRON, DPM, ewins) and `walk_forward` retrodiction, in `nba_model_validation.py`.
+- **NBA:** `nba_ratings_panel` + `ratings_as_of` (leakage-free through-date ratings), `nba_war` +
+  `calibrate_pts_per_win` / `calibrate_replacement_level`, and single-game BPM via
+  `nba_bpm(granularity="game")`.
+- **NBA:** `nba_darko`, a per-player Kalman filter with an aging curve (`AgingCurve` /
+  `fit_aging_curve`) for next-season ratings; `darko_forecast_accuracy` + `ForecastResult`;
+  per-season `AGE` via `nba_player_ages.py`.
+- **NBA:** `nba_v3_to_v2_pbp(pbp_v3, box_v3, *, return_as_pandas=False)` builds the 61-column v2 pbp
+  frame from `playbyplayv3` + `boxscoretraditionalv3` (`playbyplayv2` returns 0 rows), recovering
+  assist / block / steal / sub / jump-ball players.
+- **NBA:** a `stats_nba` feed shim lets the v2 frame drive pbpstats' v2 provider (opt in with
+  `SDV_PBPSTATS_ROOT`); `PLAYER1_TEAM_ID` is null on team-rebound rows and the `"Transition Take"`
+  foul subtype is mapped.
+- **NBA:** possession event-detail columns (`fg2a/fg2m/fg3a/fg3m/fta/ftm/oreb/tov`), a per-shooter
+  `build_possession_shooting` frame, and `game_date` on `compile_nba_season` output (cache
+  `PIPELINE_VERSION` 1 → 2).
+- **NBA:** possessions gain `dreb`, `number_in_period`, `possession_start_type`,
+  `count_as_possession`; the shooting frame gains `team_id` (cache `PIPELINE_VERSION` 2 → 3).
+- **NBA:** quarter-box lineup seeding: `players_on_court_from_quarter_boxscores` and
+  `lineup_source="quarter_box"` on `nba_possessions` (auto chain: rotation → quarter_box → pbp).
+- **NBA:** opt-in read-through raw JSON store for per-game stats.nba.com payloads
+  (`{endpoint}/{season}/{game_id}.json`): a hit is served from disk, a miss fetches then persists;
+  with nothing set, behavior is unchanged.
+- **NBA:** store settings `raw_store_dir=` (a root or a per-endpoint mapping) /
+  `raw_store_readonly=` on `nba_possessions`, `compile_nba_season` and the fetchers, or env
+  `SDV_PY_NBA_RAW_JSON_DIR` / `SDV_PY_NBA_RAW_JSON_DIR_{ENDPOINT}`.
+- **NBA:** `load_nba_player_impact(seasons)` loads the `nba_player_impact` release (per
+  player-season RAPM / adj-RAPM / SPM / BPM / WAR / Kalman projection, 22 columns); 404-safe with a
+  1996 floor.
+- **NFL:** PFF Premium auth auto-refreshes from a saved Playwright `storage_state`
+  (`SDV_PY_PFF_STORAGE_STATE`, cached `SDV_PY_PFF_STORAGE_STATE_TTL` seconds, default 300), as tier
+  3 after `cookies=` and `SDV_PY_PFF_*` env cookies.
+- **NFL:** PFF Premium Stats 2.0 stem `pff_core` (`premium.pff.com/api/v1`, cookie auth, 46
+  wrappers) with `make_pff_league_module` shims for nfl / ncaa (cfb) / aaf / ufl; `pff_login` is an
+  experimental stub.
+- **NFL:** `nfl_season_standings`, an nflseedR v2 standings port with the real tiebreaker cascades
+  and `tiebreaker_depth` (`RANDOM` < `PRE-SOV` < `SOS` < `POINTS`); `nfl_standings` is the
+  api.nfl.com wrapper.
+- **NFL:** `nfl_simulations` / `nfl_compute_results`: week-by-week season simulation with a
+  pluggable `compute_results` (default: the nflseedR ELO generator), playoffs with reseeding and
+  `byes_per_conf`, and a 5-frame summary dict.
+- **NFL:** NGS spine: `nfl_ngs_yac_oe` (YAC over expected), `nfl_ngs_ryoe` (rush yards over
+  expected), `nfl_ngs_separation_oe`, `nfl_ngs_man_zone_rates` (team man/zone rates), shared
+  `nfl_ngs_constants`.
+- **NFL:** scheme & special-teams spine: `nfl_playcall` (run/pass + play-family model, bundled
+  `nfl_playcall.ubj`), `nfl_gamescript`, `nfl_kicker_rating`, `nfl_special_teams`,
+  `nfl_line_grades`, `nfl_scheme_constants`.
+- **NFL:** projection & draft spine: `nfl_projection`, `nfl_usage_projection` (shares sum to 1.0),
+  `nfl_availability`, `nfl_draft_model`, shared `nfl_projection_constants`.
+- **NFL:** ratings & market spine: `nfl_ratings` (opponent-adjusted team ratings), `nfl_market`
+  (pregame win probability, spread, total), `nfl_player_props` (yardage distributions),
+  `nfl_prediction_constants`.
+- **NHL:** five microstat value models over api-web pbp + EDGE: faceoff, penalty net, expected
+  primary / secondary assists, zone entry / exit, EDGE skating (`method="percentile"`); PWHL shims
+  (EDGE is NHL-only).
+- **Packaging:** `curl_cffi` (Chrome TLS impersonation for `nba_stats` / `wnba_stats` and 247Sports)
+  is a lazy optional import in the `tests` and `all` extras; without it, a clear `ImportError` says
+  how to install it.
+- **Packaging:** PFF `storage_state` refresh needs the new optional Playwright extra:
+  `pip install sportsdataverse[pff]`, then `playwright install chromium`; a missing install raises a
+  clear `ImportError`.
+- **PWHL:** `pwhl_xg_proxy`, a PWHL game-prediction model: a 2-tier xG proxy from the categorical
+  `shot_quality`, feeding the league-agnostic opponent-adjustment + market core.
+- **PWHL:** `fit_pwhl_coord_xg` gains `calibrate_strength=True` (default), per-EV/PP/SH Platt
+  recalibrators (`PwhlCoordXGModel.strength_calibrators`) that shift xG slightly on frames with
+  strength columns.
+- **PWHL:** `add_strength_state(pbp, goalie_ids)` derives `skaters_home` / `skaters_away`,
+  `strength_state` (`5v5` / `5v4` / `6v5`) and `strength_state_valid`; empty net is not derived (use
+  the goal-level `empty_net`).
+- **PWHL:** `pwhl_shot_xg()` scores every shot into a 21-column `_SHOT_XG_SCHEMA` frame (`model=`
+  reuses one fit), and `load_pwhl_shifts()` / `load_pwhl_xg_pbp()` load the `pwhl_shifts` /
+  `pwhl_xg_pbp` tags.
+- **Release:** new `sportsdataverse.release` module (port of R `sportsdataversedata` v0.0.11):
+  `sportsdataverse_save()` (rds / csv / csv.gz / parquet, type + timestamp metadata) and
+  `sportsdataverse_upload()` (sidecars, `SPORTSDATAVERSE.UPLOAD.*` retry config).
+- **Release:** `gh_cli_release_upload`, `gh_cli_release_tags`, `gh_cli_release_assets`,
+  `gh_cli_rate_limits`, `gh_cli_available`; one upload per file, `qs` raises `ValueError`, no
+  `.token` (`GH_TOKEN` falls back to `GITHUB_PAT`).
+- **Release:** native `.rds` writer (`sportsdataverse/_rds.py`, RDS v2 / XDR) needing no R or new
+  dependency, byte-for-byte equal to R 4.5.3 `saveRDS()`; nested / list columns raise `ValueError`.
+- **Validation:** new `constant_column` check flags all-null / all-NaN and zero-variance columns as
+  WARN `needs_judgment`, minus a per-dataset `expected_constant_columns` allowlist.
+- **Validation:** seven CFB modeling-suite datasets are now registered: `cfb_passing`,
+  `cfb_rushing`, `cfb_receiving`, `cfb_percentiles`, `cfb_team_summaries`, `cfb_rosters_crosswalk`,
+  `cfb_rb_eval`.
+- **WBB:** `ncaa_wbb_*` (wbigballR port) with a `period_model` knob (WBB binds `(4, 600, 300)`),
+  fixing wbigballR's halves math that misreads regulation WBB as 2-OT; plus `parse_ncaa_wbb_*`
+  box-tab re-exports.
+- **WBB:** shot-quality shims `wbb_shot_data`, `wbb_shot_quality*`, `wbb_shot_selection`,
+  `wbb_shooter_talent` (from season 2026, the `wbb_shots` release floor).
+- **WBB:** by-reference shims and women's artifacts for the five player-value models (box-BPM,
+  archetypes, recruiting, transfer, draft projections).
+- **WBB:** prediction shims `wbb_team_ratings`, `wbb_predict_games`, `wbb_in_game_win_prob`,
+  `wbb_strength_of_schedule`, `wbb_bracketology`, `wbb_season_sim` / `wbb_bracket_sim`, with women's
+  constants.
+- **WBB:** `load_wbb_ratings` (floor 2008) / `load_wbb_player_value` (floor 2014).
+- **WNBA:** `wnba_stats` (95 `wnba_stats_<slug>` wrappers at stats.wnba.com) and the
+  `parse_wnba_stats_result_sets` alias.
+- **WNBA:** `wnba_shot_value` (`league_id="10"`) and re-exports of the five shot-value model
+  functions.
+- **WNBA:** WNBA engine fetchers use the same raw store under `SDV_PY_WNBA_RAW_JSON_DIR` /
+  `SDV_PY_WNBA_RAW_JSON_READONLY` (`10`-prefixed game ids decode as single calendar years).
 
-The first five are the season-level "Binion Box Score" tables (opponent-adjusted
-team summaries + passing/rushing/receiving leaderboards + per-metric
-percentiles); `load_cfb_model_pbp` is the EP/WP/QBR-enriched play-by-play built
-by that repo's model pipeline. Every returns-schema is introspected from the
-real published parquet rather than derived, and a live-gated contract test
-asserts the declared schema against the published asset so a producer-side
-rename or dtype flip can't leave the docs table lying.
+### Changed
 
-`espn_cfb_injuries` is intentionally **not** loadable: its release exists but
-ships zero assets (`write_dataset` skips 0-row frames and ESPN's CFB injuries
-feed yields nothing), so a loader would 404 on every season.
+- **NBA:** possession boundaries follow pbpstats `stats_nba` `is_possession_ending_event` (and-1 and
+  FT-trip exceptions, real-rebound and no-turnover filtering, jump balls); technical FTs are inline
+  again.
+- **NFL:** known issue, not fixed: `load_nfl_pbp_participation` crashes on multi-season loads
+  (cross-season schema drift); load per season and combine with `how="diagonal_relaxed"`.
+- **Validation:** the weekly validation cron records one run per dataset in the sportsdataverse.org
+  run tracker (one gate per check); a dataset whose release download failed is not recorded.
 
-### CFB — `load_cfb_ratings` dataset loader
+### Deprecated
 
-- **`load_cfb_ratings(seasons)`** — loads the published `cfb_ratings` release
-  (one row per team per season, 2004–): opponent-adjusted offensive / defensive /
-  special-teams EPA, FEI, `games`, `off_pace`, dense `off_rank` / `def_rank` /
-  `net_rank`, and `net_z`. The tag is produced by `cfbfastR-cfb-data`'s
-  `cfb_model_publish ratings` builder running sdv-py's own
-  :func:`sportsdataverse.cfb.cfb_ratings` over the released `espn_cfb_pbp`
-  play-by-play, so the loader's returns-schema is the compute function's output
-  schema — a contract test pins the two together (both column order and dtype)
-  so a producer change can't silently leave the published returns-table lying.
-  Like every release loader it is 404-safe: seasons with no published asset are
-  skipped with a warning rather than raising.
+- **CFB:** the four On3 `_next/data` rankings names (`on3_player_rankings`,
+  `on3_industry_player_rankings`, `on3_team_rankings`, `on3_industry_team_rankings`) are deprecated
+  shims that keep working.
+- **NFL:** `calculate_nfl_standings` is deprecated in favor of `nfl_season_standings`; the old name
+  emits a `DeprecationWarning`.
 
-### NBA / WNBA — CTG play context (T3.6): possession/shot/lineup/player tables + start-type oracle
+### Removed
 
-- **`nba_play_context` / `wnba_play_context`** — Cleaning the Glass recreation on
-  the shipped possession engine. Per-possession context (`possession_start_type`
-  coarse family + `possession_start_type_detail` zone-split + the five
-  `possession_start_type_ctg` buckets, `is_transition` / `transition_source`,
-  `seconds_to_first_play`, `is_garbage_time` / `garbage_time_basis`,
-  `is_heave_possession`) and per-shot context (`ctg_shot_zone`, `is_putback`,
-  `is_second_chance_shot`, `shot_context`). `wnba_play_context` is a real shim
-  (`wnba_engine`), byte-identical to the NBA core on WNBA fixtures.
-- **`lineup_play_context` / `player_play_context`** — on/off possessions + points
-  per 5-man unit and per player, sharing one aggregation core; the OFF side is
-  derived by subtraction so the on/off split is exact by construction.
-- **`starters_on_court_counts`** — implements CTG's garbage-time "<=2 starters on
-  floor" clause; when starter data is joined `garbage_time_basis` upgrades from
-  `margin_only` to `margin+starters` (containment-verified against margin-only).
-- **Faithful pbpstats possession start-type** — boundary-only timeout detection
-  (a port of `possession_has_timeout` / `previous_possession_has_timeout`, incl.
-  the asymmetric FT-sandwich technical carve-out), exact CTG shot-zone boundaries
-  from the legacy coordinates (the v3 `shot_distance` column is `Int64`, rounded
-  to whole feet), and a `team_id == 0` team-rebound discriminator (the v3 feed
-  stuffs the team id into `person_id`). Validated like-for-like against
-  pbpstats-live: **99.50% coarse `possession_start_type` agreement (592/595)**
-  across the committed fixtures (`test_nba_play_context_oracle.py`, gated on
-  `SDV_PBPSTATS_ROOT`).
+- **Packaging:** the unused `pyreadr` dependency (runtime deps, the `models` / `all` extras, the
+  conda recipe), which also drops the `libbz2` / `liblzma` header requirement on Python 3.9 Linux
+  installs.
 
-### Fixes
+### Fixed
 
-- fix(cfb): `cfb_ratings()` now works against the **released `espn_cfb_pbp`
-  asset** it documents itself as loading. The function advertises that it pulls
-  play-by-play via `load_cfb_pbp`, but that path had never been exercised — the
-  module was built and gated entirely against a 14-column fixture carrying
-  cfbfastR-canonical names, while the published asset is ESPN-shaped. Every real
-  call (`cfb_ratings(2023)`) raised `KeyError` on `pos_team_id` /
-  `def_pos_team_id` / `home` / `neutral_site`, then on `play_type` / `drive_id`.
-  The orchestrator now normalizes the released field names (`start.pos_team.id`,
-  `start.def_pos_team.id`, `homeTeamId`, `type.text`, `drive.id`, plus
-  `neutral_site` off the schedule join), aliasing **only** when the canonical
-  name is absent so callers passing an already-canonical frame are unchanged.
-  The HFA term is now guarded on `pos_team`/`home` dtype agreement — it derives
-  from `pos_team == home`, which across mismatched namespaces silently marked
-  every play a road play rather than failing. Verified on the real 2023 asset
-  (153,625 plays → 227 teams); the oracle gates hold on released data (`adj_net`
-  vs FPI 0.926, vs SP+ 0.936; `adj_off` vs SP+ off 0.846; `adj_def` vs SP+ def
-  0.793).
-- fix(codegen): all codegen/capture writers now emit LF explicitly
-  (`newline="\n"`), matching `generate.py`'s convention. On Windows the
-  text-mode default translated `\n` to CRLF, so every codegen-test run (which
-  re-runs the pff / 247 site-pages generators) left ~65 endpoint + schema
-  YAMLs dirty with line-ending-only churn against the LF-normalized index.
-- feat(nfl): PFF Premium auth can now **auto-refresh from a saved Playwright
-  `storage_state`**. Point `SDV_PY_PFF_STORAGE_STATE` at a `storage_state` JSON
-  captured once from a headed login and `pff_runtime` replays it headlessly so
-  Clerk re-mints the short-lived `__session` cookie, extracting fresh
-  `_premium_key` + `__session` and caching them in-process for
-  `SDV_PY_PFF_STORAGE_STATE_TTL` seconds (default 300 — one browser launch per
-  window, not per request). It slots in as auth tier 3 (explicit `cookies=` >
-  `SDV_PY_PFF_*` env cookies > storage_state), so existing callers are
-  unaffected. Needs the new optional `playwright` extra
-  (`pip install sportsdataverse[pff]` then `playwright install chromium`); a
-  missing install raises a clear `ImportError`. The browser refresh is injectable
-  (`refresher=`) so the wiring is fully offline-testable.
-- fix(nfl): the DynastyProcess CSV loaders (`load_nfl_ff_playerids`,
-  `load_nfl_ff_rankings`) retry with exponential backoff on transient
-  upstream errors (HTTP 429/5xx) instead of failing on the first hit — the
-  raw-GitHub host rate-limits parallel CI runners.
-- fix(codegen): reference-doc **Returns** prose no longer mangles docstrings
-  whose return description is an inline `col: dtype, ...` code span.
-  `docstring_parser` splits a Google-style `Returns:` body on the first colon,
-  so a colon *inside* the span was mistaken for the type/description separator —
-  dropping the leading column/key and leaving a stray unbalanced backtick. The
-  renderer now recombines the mis-split fragment (only when the parsed type
-  contains a backtick, so legit Google types like `pl.DataFrame` are untouched),
-  fixing ~15 rendered Returns across the cfb/mbb/wbb/nba/nfl/mlb/wnba reference
-  pages.
-- fix(dl_utils): `download()` now retries **transient status codes**
-  (403/408/429/500/502/503/504) with the same `Retry-After`-aware backoff it
-  already used for connection failures — previously a 429/403/5xx came back as
-  a normal `Response` and was returned without a retry (the root cause the
-  DynastyProcess loader-level retry worked around). The retryable set is
-  configurable via the new `retry_statuses=` param; when the budget is spent
-  the last response is returned unchanged (callers still key on
-  `.status_code`), and non-2xx responses are no longer cached. 403 is retried
-  by default because ESPN's Core v2 API returns it under load — `download()`
-  is the ESPN/nflverse gateway and does not serve the auth'd endpoints.
-
-- fix(mbb): the NCAA fetch layer **proves the bm-verify solve instead of
-  assuming it**. `_solve_challenge` latched `_challenge_solved = True`
-  without checking whether the Akamai sensor actually passed, so a failed
-  solve poisoned the session — every in-page fetch thereafter returned an
-  unsolved 15-byte `NCAA Statistics` stub (invisible to both the ban check
-  and marker matching; 1,485 of them in one live run) while the layer kept
-  hammering, which is what earned the IP a ban. The fetch is now the proof:
-  an unsolved response forces a real re-solve and retry (`solve_attempts`,
-  default 2 — deliberately low, rotating to a fresh proxy recovers faster),
-  and exhaustion raises so the existing rotate-on-transport-error path
-  moves to a fresh proxy. The stub response is captured live and pinned as
-  a test fixture. (#266)
-- fix(wbb): stop trusting ESPN's `header.competitions.boxscoreAvailable`
-  flag — it is false for most pre-2014 WBB games even when
-  `boxscore.teams[].statistics` is fully populated, and the box helpers'
-  faithful port of the R gate bug-matched that wrong oracle (the root cause
-  of the WBB 2006–2013 dataset coverage hole: `team_box_2009..2013` held
-  10–280 rows against ~5,400-game seasons). Availability is now derived
-  from the payload itself; genuinely boxless games still return
-  typed-empty. Deliberate divergence from the original R behavior (R fixed
-  the same way in wehoop#64), tested on the real 2012 title-game payload.
-  (#275)
-- fix(mbb): `raw_game_efficiency` honors the empty-in/empty-out contract
-  for missing-season boxscores — a season with no released asset comes back
-  from the loader as a column-less empty frame, which crashed the select
-  with `ColumnNotFoundError` instead of returning the documented typed
-  `_EFF_SCHEMA` empty. One boundary guard covers all callers
-  (`mbb_team_ratings` and the `wbb_team_ratings` wrapper inherit it). (#280)
-- fix(cfb): future-season recruiting projections walk back to the newest
-  available teams crosswalk — the crosswalk asset trails the calendar
-  (capped at 2025 while a 2026 projection is already meaningful after early
-  signing), and the missing season's column-less empty frame crashed
-  `_crosswalk_names_to_espn`, killing the `cfb_recruiting_proj` 2016:2026
-  backfill on season 2026. Team-name → ESPN-id identity barely changes year
-  to year, so the walk-back is safe; all-missing degrades to a typed empty.
+- **CFB:** `cfb_ratings()` works on the released `espn_cfb_pbp` asset (real calls like
+  `cfb_ratings(2023)` raised `KeyError`); its HFA term is guarded on `pos_team` / `home` dtype
+  agreement (a mismatch made every play a road play).
+- **CFB:** future-season recruiting projections walk back to the newest teams crosswalk instead of
+  crashing in `_crosswalk_names_to_espn` (which killed the `cfb_recruiting_proj` backfill on 2026).
   (#282)
-- fix(nba): `compile_nba_season` threads `proxy_url` through game discovery
-  (`_season_game_index` / `_game_ids_for_season`), not just the per-game
-  fetches — on a datacenter host the unproxied `nba_stats_leaguegamelog`
-  call returned `{}`, the empty-in/empty-out contract turned it into an
-  empty index, and the whole season compiled to zero games, best-effort,
-  exit 0 — indistinguishable from success. Verified live from the failing
-  environment (0 rows unproxied → 1,230 rows proxied for 2023).
-  `proxy_provider` is now called N+1 times for an N-game season (documented).
-  (#283)
-- fix(nba): `box_features` canonicalizes the real `leaguegamelog` parser's
-  `fg3_m` column to `fg3m` at the boundary (applied only when `fg3_m` is
-  present and `fg3m` absent) — the snake-caser emits `FG3M` → `fg3_m`, so
-  the first real-data run of the SPM/BPM box-feature surface crashed with
-  `ColumnNotFoundError` while every synthetic-fixture test passed. The
-  regression test feeds the real column name and fails without the fix.
-  (#158)
-- chore(phf): PHF dataset URLs cut over from `raw.githubusercontent.com`
-  tree paths to dedicated `sportsdataverse-data` release tags mirroring the
-  `pwhl_*` convention (`phf_pbp` / `phf_player_boxscores` /
-  `phf_team_boxscores` / `phf_schedules`, 29 assets uploaded per-file). PHF
-  is a frozen dataset (league ceased operations June 2023; coverage
-  2016–2023, with 2017–2019 pbp a permanent upstream gap). (#218)
-- `calculate_nfl_standings` is deprecated in favor of `nfl_season_standings` (the nflseedR-parity engine); the old name emits a `DeprecationWarning` shim.
-
-### Dependencies
-
-- chore(deps): dropped the unused `pyreadr` dependency (runtime deps + the
-  `models`/`all` extras and the conda recipe). It had no live imports — its
-  only reference was a long-commented `.rds` contracts loader — and its
-  removal also drops the `libbz2`/`liblzma` system-header requirement that
-  pyreadr's sdist build imposed on Python 3.9 Linux installs.
-
-### Release utilities — `sportsdataverse.release` (sportsdataversedata R-package port)
-
-- feat(release): new `sportsdataverse.release` module — a Python port of the
-  `sportsdataversedata` R package (v0.0.11) used to publish data assets to
-  `sportsdataverse/sportsdataverse-data` GitHub releases. Surface:
-  `sportsdataverse_save()` (writes rds / csv / csv.gz / parquet — the R
-  default set — with `sportsdataverse_type` + `sportsdataverse_timestamp`
-  stamped into parquet metadata and as R attributes on the rds frame, plus
-  R-parity `season`/`week` integer coercion), `sportsdataverse_upload()`
-  (adds `timestamp.*` / `package_function.*` sidecars; retries the whole
-  upload with the same `SPORTSDATAVERSE.UPLOAD.*` env-var backoff config the
-  R package reads), plus `gh_cli_release_upload` / `gh_cli_release_tags` /
-  `gh_cli_release_assets` / `gh_cli_rate_limits` / `gh_cli_available`.
-  Backed by golden-fixture parity tests generated by running the real R
-  functions (`tests/fixtures/release/`). Deliberate divergences (documented
-  in the module docstring): one `gh release upload` invocation per file
-  (the multi-file form silently drops large assets), the R-only `qs` format
-  raises `ValueError`, unpadded `size_string`, no `.token` argument (gh CLI
-  auth; `GH_TOKEN` falls back to `GITHUB_PAT`).
-- feat(release): native `.rds` writing without R or any new dependency —
-  `sportsdataverse/_rds.py` implements RDS version-2 (XDR) serialization
-  for data.frames of atomic columns (integer / double / logical / character
-  / Date / POSIXct, with NA fidelity, UTF-8 strings, int64→double promotion
-  beyond int32 range, and R symbol back-references). Output is validated
-  **byte-for-byte** against R 4.5.3 `saveRDS()` via the committed
-  `rds_golden.rds` fixture (serialization header excluded) and via a live
-  `readRDS()` oracle at fixture-capture time. Nested/list columns raise
-  `ValueError`.
-
-### PWHL — coordinate-based xG (T5.3b): xg_method default flips quality → coords
-
-- feat(pwhl)!: `pwhl_team_game_xg_rates` / `pwhl_ratings_from_proxy` gain an
-  `xg_method` parameter ("coords" | "quality") and the DEFAULT is the new
-  coordinate distance/angle logistic xG (`fit_pwhl_coord_xg`, geometry from
-  `hockeytech._analytics.add_shot_distance_angle`) — **output values change
-  for existing callers** that relied on the implicit categorical
-  shot-quality proxy; pass `xg_method="quality"` to keep the old behavior.
-  `LEAGUE_CONSTANTS["pwhl"].margin_sd` re-fit 1.21 → 1.19 (coords-paired,
-  2025-only). Held-out 2026 (n=107): coords Brier 0.2444 vs quality 0.2449
-  vs naive 0.2500 (within noise; gates stay no-worse-than-naive +
-  calibration).
-
-### PWHL — per-strength xG calibration + geometry hardening (T5 follow-up)
-
-- feat(pwhl): `fit_pwhl_coord_xg` gains `calibrate_strength=True` (default) — when
-  the frame carries strength columns it fits a per-EV/PP/SH Platt recalibrator
-  (`PwhlCoordXGModel.strength_calibrators`) that shrinks residual within-bucket
-  per-strength calibration error at ~zero AUC cost (held-out LOSO SH 10-bin ECE
-  0.0130 → 0.0091, AUC 0.6962 both). **Default xG output shifts slightly for
-  strength-bearing frames**; identity (unchanged) on 2-feature or thin frames, or
-  with `calibrate_strength=False`. Buckets are shooter-relative (`is_pp`/`is_sh`).
-- fix(pwhl,hockeytech): harden the shot-xG geometry against the dual-frame
-  coordinate footgun — `fit_pwhl_coord_xg`/`predict` now raise on a RAW-scale
-  (0–600) enrich frame instead of silently scoring it with `goal_x=89`, and
-  `hockeytech._analytics.add_shot_distance_angle` asserts `goal_x` is in a
-  plausible rink range (default is the documented NHL-size-rink constant).
-
-### CFB — advanced-efficiency spine (opponent-adjusted efficiency/explosiveness/havoc → field position → adjusted tempo)
-
-- feat(cfb): `cfb_advanced_stats` — Connelly-style opponent-adjusted
-  offense/defense efficiency, explosiveness (isoPPP), success rate, EPA/play,
-  and havoc from `load_cfb_pbp` with garbage-time filtering. Validated on 2021
-  vs CFBD advanced stats + SP+: success-rate Spearman 0.954/0.959 (off/def),
-  opponent-adjusted EPA ranks vs SP+ component ranks 0.866/0.843.
-- feat(cfb): `cfb_field_position` — team drive-start field-position value model
-  on a bundled EP-by-yardline curve (`fit_field_position_ep` / `load_fp_curve`);
-  avg-start vs CFBD 2021 Spearman 0.897, MAE 0.67 yards.
-- feat(cfb): `cfb_adjusted_tempo` — opponent-adjusted, situation-neutral pace
-  (raw plays/game vs CFBD 2021 Spearman 0.902; adjusted pace validated as a
-  monotone re-ordering of raw, Spearman 0.948).
-- feat(cfb): `cfb_advanced_constants` — shared success/explosive/garbage-time
-  flags + metric helpers and the iterative opponent-adjustment solver.
-- Committed 2021 CFBD advanced + SP+ oracle corpus under
-  `tests/fixtures/cfb_advanced/` with provenance README (hosted pbp covers
-  2002-2021; 2022+ is a producer-backfill gap).
-
-### NFL — NGS over-expected tracking spine (YAC-OE → RYOE → separation-OE → man/zone rates)
-
-- feat(nfl): `nfl_ngs_yac_oe` — receiving YAC-over-expected with
-  empirical-Bayes shrinkage (weekly-σ² estimator); shrunk estimates are more
-  next-season-stable than raw (stability oracle: corr(shrunk₂₀₂₂, raw₂₀₂₃) ≥
-  corr(raw, raw), n=80).
-- feat(nfl): `nfl_ngs_ryoe` — rushing yards-over-expected per attempt with the
-  same shrinkage machinery. The 2022→2023 RYOE stability gate is a documented
-  strict xfail: the base year-over-year signal on that transition is
-  statistically zero (raw→raw corr 0.045, n=33), so no estimator can beat it —
-  escalation noted in the test.
-- feat(nfl): `nfl_ngs_separation_oe` — expected-separation ridge (cushion +
-  air-yards + alignment one-hots, intercept unpenalized) with a positive
-  cushion coefficient by construction; the separation-OE stability gate is a
-  strict xfail on the underpowered 2022→2023 transition.
-- feat(nfl): `nfl_ngs_man_zone_rates` — team-level man/zone coverage snap
-  rates (one row per season/defteam) from the NGS tracking panel.
-- feat(nfl): `nfl_ngs_constants` — shared empirical-Bayes shrinkage,
-  weekly-σ² identification, expected-separation ridge, and the dtype-guarded
-  `next_season_stability` join (asserts a `min_n` overlap floor so a shrunken
-  fixture cannot let a stability gate pass on a handful of players).
-- Committed NGS panel fixtures + fitting scripts under `tests/fixtures/` and
-  `dev/nfl_ngs/`.
-
-### NFL — scheme & special teams spine (play-call model → game script → kicker/punter value → line grades)
-
-- feat(nfl): `nfl_playcall` — run/pass + play-family classifier (bundled
-  `nfl_playcall.ubj`, trained 2016-2021) that beats the shipped `xpass_model`
-  on held-out 2022-23 (log-loss 0.498 vs 0.518, AUC 0.822 vs 0.798) with
-  PROE reconciling to pbp `pass_oe` exactly; team tendency profiles included.
-- feat(nfl): `nfl_gamescript` — expected plays / pace / game-script curves
-  (held-out 2023 expected-plays MAE 1.77).
-- feat(nfl): `nfl_kicker_rating` — environment-adjusted FG make probability +
-  empirical-Bayes FGOE (held-out 2019-23 decile calibration gap 0.038; the
-  systematic bias traced to nfl4th's long-kick decision clamp and corrected
-  with a fitted term).
-- feat(nfl): `nfl_special_teams` — per-unit ST EPA decomposition (sums
-  reconcile to team ST EPA exactly) + punter net-over-expected (YoY stability
-  0.62/0.55).
-- feat(nfl): `nfl_line_grades` — OL/DL pressure-based grades from pbp +
-  PFR advstats (pbp-vs-PFR pressures Spearman 0.794).
-- feat(nfl): `nfl_scheme_constants` — shared metrics/constants + as-of split.
-- Committed fixture corpus + fitting scripts under `tests/fixtures/` and
-  `dev/nfl_scheme/`; known upstream issue flagged:
-  `load_nfl_pbp_participation` crashes on multi-season loads (cross-season
-  schema drift) — work around per-season with `how="diagonal_relaxed"`.
-
-### NFL — projection & draft spine (player projections → usage shares → availability → draft model)
-
-- feat(nfl): `nfl_projection` — next-season player stat projections with
-  integer-age aging curves and fitted per-position damping (holdout-2024
-  Spearman QB/RB/WR/TE 0.61/0.72/0.66/0.73; beats naive carry-forward for
-  QB/WR/TE, RB shortfall shipped as a documented strict xfail).
-- feat(nfl): `nfl_usage_projection` — team-internal target/carry share
-  projections that sum to 1.0 by construction (share Spearman RB/WR/TE
-  0.73/0.65/0.74 on the 2024 holdout).
-- feat(nfl): `nfl_availability` — expected games played from historical
-  availability (MAE 3.54, decile calibration gap 0.049).
-- feat(nfl): `nfl_draft_model` — combine + college-production draft-position
-  model (Spearman 0.587 vs realized draft slots, n=1269; hit-rate calibration
-  gap 0.08) with `w_av` career labels (`car_av` upstream is all-null).
-- feat(nfl): `nfl_projection_constants` — shared metrics, league constants,
-  and the as-of split the backtests enforce; constants fitted on 2022/2023
-  as-of folds only (single-evaluation 2024 holdout).
-- Committed fixture corpus under `tests/fixtures/nfl_projection/` with
-  provenance README.
-
-### NFL — ratings & market spine (power ratings → win prob → spread/total → player props)
-
-- feat(nfl): `nfl_ratings` — opponent-adjusted ridge team ratings
-  (offense/defense/net EPA per play + HFA) from `load_nfl_pbp`, validated vs
-  ESPN FPI (Spearman 0.890) and raw team EPA (0.965, 32/32 matched).
-- feat(nfl): `nfl_market` — pregame win probability (Brier 0.232, quintile
-  calibration gap 0.036), spread and total projections (MAE 2.96 / 3.24 vs
-  closing lines over 208 as-of games, weeks 5-18), fitted constants
-  (points-per-net 23.36, HFA 3.12, margin sd 13.02) from committed fitting
-  scripts.
-- feat(nfl): `nfl_player_props` — empirical-Bayes player projection
-  distributions for passing/rushing/receiving yards with over-probabilities
-  (MAE 70.5/21.1/21.4 vs realized; p_over calibrated against lagged
-  pseudo-lines — ESPN purges historical propbets, documented in-test).
-- feat(nfl): `nfl_prediction_constants` — shared metrics (Brier, log-loss,
-  Spearman, calibration tables), league constants, and the as-of season/week
-  split helper the backtests enforce.
-- Committed fixture corpus under `tests/fixtures/nfl_prediction/` with
-  provenance README.
-
-### CFB — recruiting & roster-projection spine (talent composite → returning production → wins projection → transfer impact → draft projection)
-
-- feat(cfb): `load_recruit_classes` — per-recruit signing classes from the 247
-  RDB feed (signed institution with committed fallback; stars, composite
-  grade, position, player name; ids `Utf8`).
-- feat(cfb): `blue_chip_ratio` + `cfb_roster_talent` — Bud Elliott blue-chip
-  ratio over a trailing 4-class window and a 247-style class-recency-weighted
-  team talent composite (optional `composite_247` snapshot override).
-  Oracle-gated vs the 2023 247 Team Talent snapshot (Spearman 0.896, 196/196
-  teams name-matched) + a percentile champion blue-chip invariant.
-- feat(cfb): `cfb_returning_production` — Connelly-style returning production
-  (offense = attributed yardage; defense = splash events) from the hosted
-  per-play player-stats parquet + rosters; unit weights fitted on FBS
-  2018-2023 (offense-only; retention gate Spearman 0.229).
-- feat(cfb): `cfb_recruiting_projection` — on-demand ridge projecting wins /
-  scoring margin from preseason features (talent, blue-chip ratio, returning
-  production, prior wins) with the as-of season boundary enforced internally.
-  Backtest 2019-2023: pooled wins MAE 2.19, beating prior-year (2.46) and
-  league-mean (2.34) baselines.
-- feat(cfb): `cfb_transfer_moves` + `cfb_transfer_impact` — transfer-portal
-  moves from roster year-over-year diffs (name-matched recruit talent points)
-  and a net-talent win-delta ridge. The predictive gate is a documented
-  strict-xfail: net transfer talent shows no team-level win-delta signal on
-  2018-2023 data (escalation: position-specific values + PFF NCAA grades).
-- feat(cfb): `load_draft_outcomes` + `cfb_draft_projection` — NFL draft labels
-  from the nflverse picks dataset (the ESPN season-draft endpoint 404s) and an
-  as-of logistic draft-probability model (stars, talent points, career
-  production, class year) with per-team expected-picks roll-up. Holdout AUC
-  0.78-0.82 (2022-2024 drafts); team draft-capital Spearman 0.62 observed.
-- Committed oracle fixtures under `tests/fixtures/cfb_projection/` (results,
-  247 talent + 39.6k recruits 2014-2023, returning production, team map,
-  nflverse draft picks, per-player production, net transfer talent) with
-  provenance README.
-
-### NBA / WNBA / G-League — shot-value spine (xPoints → context make-prob → talent → selection → zone maps)
-
-- feat(nba): `score_shot_xpoints` + `xpoints_baseline` — per-shot expected
-  points from the `LeagueAverages` zone-FG% table that
-  `nba_stats_shotchartdetail` returns for free (no bundled artifact,
-  compute-on-demand). Asserts the three zone join keys share dtype before
-  joining; `game_id` stays `Utf8` (zero-padded), `player_id`/`team_id`
-  `Int64`.
-- feat(nba): `make_prob_by_context` + `make_prob_joint` — FG% by defender
-  distance and shot clock (aggregate `playerdashptshots` buckets, the only
-  form the public API exposes) plus an independence-combined joint via odds
-  multipliers.
-- feat(nba): `shooter_talent` — regressed make%-above-expected per shooter
-  (split-half-fitted shrinkage `k`; NBA/G-League 70.1).
-- feat(nba): `shot_selection_quality` (player expected value per shot vs the
-  league) + `zone_value_map` (per-player per-zone points / expected points).
-- feat(nba): `nba_shot_value` orchestrator (fetch → score → all five models,
-  `include_context=`) + `nba_shot_value_lineups` (`shotchartlineupdetail`
-  variant). One league-agnostic core switched by `league_id` (`"00"` NBA,
-  `"10"` WNBA, `"20"` G-League); court geometry + shrinkage constants keyed
-  by league.
-- feat(wnba): `wnba_shot_value` by-reference shim (`league_id="10"`) + the
-  five model functions re-exported; G-League is `nba_shot_value(...,
-  league_id="20")`.
-
-### MBB / WBB — shot-quality spine (xPoints → shot selection → shooter talent)
-
-- feat(mbb): canonical shot frame + dual-source adapter (`mbb_shot_data`,
-  `espn_shots_to_canonical`, `shot_events_to_frame`, geometry classifiers) —
-  normalizes the ESPN shots release (basket-anchored `coordinate_*_raw`
-  half-court grid, court scale FITTED from rim-make origins + made-three
-  distances, int32-sentinel rows dropped) and the NCAA HTML shot charts
-  (`create_shot_event_data` output; source axes swapped to the canonical
-  lateral/up-court orientation) into one schema with pinned `Utf8` ids.
-- feat(mbb): `mbb_shot_quality_model` + `mbb_shot_quality` — compute-on-demand
-  empirical-Bayes `zone × type` make-rate/xPoints table (cells shrunk toward
-  the parent-zone mean) and the per-shot `xmake`/`xpoints` scorer. No bundled
-  artifact. Oracle-gated offline: temporal train/holdout calibration
-  (Σ xpoints / Σ actual ≈ 1.00, per-zone bands ≤ 0.03) and blended 2P/3P
-  within ±0.02 of observed Barttorvik national aggregates.
-- feat(mbb): `mbb_shot_selection` — per shooter/team expected points per
-  attempt vs a league-average shot mix (`selection_value`, attempt-weighted
-  zero-sum by construction).
-- feat(mbb): `mbb_shooter_talent` + `fit_shrinkage_k` — per-shooter
-  make%-over-expected regressed by a split-half-fitted `k` (mens 233.2,
-  womens 92.4); reliability gated on splits the fit never saw.
-- feat(wbb): by-reference shims for all of the above
-  (`wbb_shot_data` / `wbb_shot_quality*` / `wbb_shot_selection` /
-  `wbb_shooter_talent`) with era-matched women's gates (season 2026 — the
-  `wbb_shots` release floor).
-
-### MBB / WBB — player-value & projection spine (box-BPM → archetypes → recruiting → transfer → draft)
-
-- feat(mbb): `mbb_box_bpm` — team-constrained box Plus/Minus from a
-  game-level minutes-weighted fit (lineup-free APM identification); bundled
-  ridge artifact; oracle-gated vs Barttorvik BPM (Spearman 0.88 mens / 0.91
-  womens) plus an independent 125-game NCAA stint-RAPM validation at ~95% of
-  the grain's noise ceiling.
-- feat(mbb): `mbb_archetypes` — bundled KMeans role clusters (k=6 mens, k=8
-  womens incl. women-specific "midrange big" / "slashing guard"), gated on
-  bootstrap ARI ≥ 0.70 + hand-labeled role-certain players.
-- feat(mbb): `mbb_recruiting_projection` — expected freshman box-BPM from
-  pre-arrival composite/rank/height (as-of safe); LOSO-gated ≥ 0.45 per
-  held-out class.
-- feat(mbb): `mbb_transfer_projection` + `transfer_cohort` — post-transfer
-  box-BPM projection over the boxscore-discontinuity cohort (the roster
-  release under-reports moves ~70×); beats the naive post=pre baseline.
-- feat(mbb): `mbb_draft_projection` — dual-head draft probability
-  (AUC 0.97+) + log-pick projection with tier bucketing; WNBA pick head's
-  data floor documented as an xfail at the unlowered gate.
-- feat(wbb): by-reference shims + women's artifacts for all five models.
-
-### Recruiting — ESPN NCAA recruiting family + On3 rankings
-
-- feat(espn): Core v2 `recruiting` family — `espn_{league}_recruiting_years` /
-  `espn_{league}_recruiting_players` / `espn_{league}_recruiting_rankings` across the 7
-  NCAA-scope leagues (cfb, mbb, wbb, college baseball/softball, m/w college hockey).
-  `recruiting/{year}/athletes` ships inline athlete objects that flatten to a 33-column
-  recruit frame (identity, grades, recruiting class); all three shorts route through
-  `parse_items` via the `return_parsed` shim. Live-captured MBB fixtures + offline tests.
-- feat(cfb): On3 recruiting rankings stem (`on3_player_rankings`,
-  `on3_industry_player_rankings`, `on3_team_rankings`, `on3_industry_team_rankings`)
-  over on3.com's Next.js data routes — the only public JSON surface; industry =
-  On3/Rivals/247Sports/ESPN consensus, including NIL valuations and commitment /
-  transfer status. `on3_runtime._get` auto-discovers the rotating Next.js `buildId`
-  from the rankings page and refreshes it once on the stale-buildId 404 (an unchanged
-  buildId is treated as an authoritative miss). Returns-schemas `native/on3/*` with all
-  224 column descriptions authored; trimmed real-capture fixtures + offline runtime,
-  parser, and wiring tests.
-- feat(cfb): 247Sports Recruit Database stem (11 wrappers) over
-  `ipa.247sports.com/rdb/v1/` — `sports247_recruits` (individual recruit rankings:
-  247 + industry-composite ratings/stars/ranks, commit status), `sports247_transfers`
-  (transfer portal), `sports247_coaches`, `sports247_target_predictions` (expert
-  "crystal ball"), `sports247_institution_rankings` / `sports247_teams` /
-  `sports247_composite_team_ranking_feed` / `sports247_transfer_portal_team_feed` /
-  `sports247_transfer_portal_player_feed` / `sports247_sport_years` /
-  `sports247_tags_autocomplete`. One generic `parse_sports247_result_set` covers
-  every payload shape (bare array / `{players|results|rankings|list: [...]}` envelope
-  / scalar array / single object). The Fastly edge fingerprint-blocks plain
-  `requests`, so the runtime uses lazy-optional `curl_cffi` Chrome impersonation with
-  an injectable transport (the `nba_stats` pattern) and normalizes slash-less paths
-  (the RDB 301s them). Most routes need an `Authorization: Bearer` **guest JWT** —
-  `GET https://247sports.com/` mints one with no login (~12 h TTL); the runtime
-  mints/caches/refreshes it automatically (re-mints once on a 401/403). The ~14
-  remaining routes stay 403 even with the guest token (logged-in/premium) and are not
-  wrapped. Returns-schemas `native/sports247/*` with all 211 column descriptions
-  authored; real-capture fixtures + offline parser/runtime/wiring tests.
-
-### MBB / WBB — prediction & tournament stack (ratings → pregame → in-game WP → résumé → bracketology → Monte Carlo)
-
-- feat(mbb): opponent-adjusted team ratings (`mbb_team_ratings`: AdjO/AdjD/AdjEM/AdjTempo
-  KenPom-style fixed points) oracle-gated vs barttorvik 2024 (Spearman 0.990, MAE 2.37).
-- feat(mbb): closed-form pregame predictions (`predict_margin` / `win_prob_from_margin` /
-  `predict_total` + vectorized `mbb_predict_games`) with backtest-fitted constants
-  (`em_scale`/HFA/sigma/tempo-anchor, joint least squares on a leakage-free as-of-date walk
-  of 2024); gates: Brier beats the ESPN BPI predictor (0.2006 vs 0.2031), spread MAE 1.95 /
-  total MAE 2.90 vs the closing line.
-- feat(mbb): in-game win probability (`in_game_features` + `mbb_in_game_win_prob`) from a
-  bundled shallow-xgboost artifact trained on 2023 pbp; out-of-sample 2024 decile
-  calibration max gap 0.0298 (gate ≤ 0.03).
-- feat(mbb): strength of schedule + NET-style Quad 1–4 résumé + Wins Above Bubble
-  (`mbb_strength_of_schedule`); SoS Spearman vs ESPN BPI SOS 0.923.
-- feat(mbb): bracketology (`mbb_bracketology` / `project_bracket` + conference auto-bids)
-  — committee-style résumé blend, 68-team field selection, seeds; seed-order Spearman vs
-  the actual 2024 committee 0.938.
-- feat(mbb): season + bracket Monte Carlo (`mbb_season_sim` / `mbb_bracket_sim` /
-  `simulate_game`, seeded + deterministic); neutral-site calibration slope 1.03 on 413
-  neutral games (includes the NCAA tournament).
-- feat(wbb): full women's parity — six thin shims (`wbb_team_ratings`, `wbb_predict_games`,
-  `wbb_in_game_win_prob`, `wbb_strength_of_schedule`, `wbb_bracketology`,
-  `wbb_season_sim`/`wbb_bracket_sim`) over the league-agnostic mbb cores with women's
-  fitted constants + a women's-trained WP artifact; every oracle gate re-run on WBB 2024
-  at the same thresholds (Torvik 0.995, SoS 0.985, seed-order 0.976, WP deciles 0.0224).
-- test(mbb,wbb): committed 2024 oracle corpora under `tests/fixtures/{mbb,wbb}_prediction/`
-  (results/team-box/barttorvik/ESPN BPI/predictor/odds samples/pbp WP samples/actual NCAA
-  tournament seeds) with provenance READMEs; all gates run offline in CI.
-
-### NBA — external concurrent validity + walk-forward retrodiction (WP3)
-
-- feat(nba): model-zoo v2 WP3 — Oracle 5 external concurrent validity
-  (`external_validity`, five published-metric loaders in `nba_oracle_data.py`:
-  Ryan Davis RAPM, Dunks & Threes EPM, LEBRON season/daily, daily
-  plus-minus (DPM), Dunks & Threes ewins) and Oracle 6 walk-forward retrodiction
-  (`walk_forward`, time-ordered "predict tomorrow" with carry-forward and
-  random-fold baselines) in `nba_model_validation.py`.
-
-### NBA — RAPM variants (WP2)
-
-- feat(nba): RAPM variants (`nba_rapm_variants`) — luck-adjusted (`nba_la_rapm`),
-  four-factor (`nba_four_factor_rapm`), and time-decay (`nba_decay_rapm`) RAPM, all
-  reusing the plain-RAPM design matrix; concurrent-validity vs the Ryan Davis oracle
-  CSVs gated on `SDV_PY_NBA_ORACLE_DIR`.
-
-### NBA — through-date ratings panel, WAR, and single-game BPM (WP4)
-
-- feat(nba): through-date ratings panel (`nba_ratings_panel` + `ratings_as_of`
-  primitive, leakage-free by construction — works with any harness model),
-  WAR layer (`nba_war` + `calibrate_pts_per_win`/`calibrate_replacement_level`
-  calibration helpers), and `nba_bpm(granularity="game")` single-game BPM 2.0.
-
-### NBA — v3-to-v2 play-by-play adapter (`nba_v3_to_v2_pbp`)
-
-New `sportsdataverse/nba/nba_v3_v2_adapter.py` ports hoopR's `.v3_to_v2_format()` to Python:
-`nba_v3_to_v2_pbp(pbp_v3, box_v3, *, return_as_pandas=False)` turns a `playbyplayv3` payload +
-`boxscoretraditionalv3` boxscore into the full 61-column v2-schema frame (NBA retired `playbyplayv2`,
-which now returns 0 rows for every season — this restores v2-dataset compatibility from the live v3 feed).
-
-- **Recovers the secondary players v3 drops**: assist via the `(Name N AST)` description parenthetical,
-  block/steal via the standalone `actionType == ""` rows (the blocker/stealer ships as `personId`,
-  associated to the shot/turnover at the same period+clock), sub-in via `SUB: X FOR Y`, and jump-ball
-  via `vs. / Tip to` — each resolved through a 4-tier roster name-match (family → name_i → "F. Family" →
-  fuzzy). Validated 1-to-1 against the cdn live feed's structured `assistPersonId`/`blockPersonId`/
-  `stealPersonId` fields: **100% agreement on all three committed fixture games**. Documented gap: the
-  foul-drawn player is unrecoverable from v3 (fouls carry null `player2`/`player3`).
-- **v2 schema faithful to hoopR** — event/action-type codes (EVENTMSGTYPE/EVENTMSGACTIONTYPE),
-  home/neutral/visitor description split by `location`, forward-filled `score`/`score_margin`/
-  `team_leading`, person types, time columns from the ISO clock, string-typed ids (leading zeros
-  preserved), plus the v3 passthrough columns. One deliberate divergence: `player2`/`player3` are
-  enriched **by id** from the extraction rather than hoopR's name re-resolution (which can mismatch on
-  family-name collisions).
-- **pbpstats interop**: a `stats_nba` feed shim (`resultSets` envelope) lets the adapted frame drive the
-  [`pbpstats`](https://github.com/dblackrun/pbpstats) library's v2 provider. A gated round-trip test
-  feeds our v3-derived output through pbpstats-`stats_nba` and matches pbpstats' own `live` provider on
-  the same games (possession counts within 0–2, period starters exact 8/8). The round-trip surfaced two
-  fixes: `PLAYER1_TEAM_ID` serializes as null (not 0) on team-rebound rows, and the `"Transition Take"`
-  foul subtype (EVENTMSGACTIONTYPE 31, added with the 2022-23 transition take foul rule) joined the foul
-  table. Opt in locally with `SDV_PBPSTATS_ROOT=<path to a pbpstats checkout>`.
-- Six cdn oracle fixtures committed under `tests/fixtures/nba_engine/{gid}/cdn_{playbyplay,boxscore}.json`
-  (provenance documented in the fixtures README); exported as `sportsdataverse.nba.nba_v3_to_v2_pbp`.
-
-### NBA / WNBA — stats.nba.com / stats.wnba.com flat-API family (`nba_stats` / `wnba_stats`)
-
-Two new codegen-generated flat-API stems wrap the official stats API surface:
-
-- **`nba_stats`** (`sportsdataverse/nba/nba_stats.py`) — **112 wrappers** targeting `stats.nba.com`. League routing is a single `league_id` parameter on each endpoint: `"00"` → NBA, `"20"` → G-League, `"15"` → Summer League. Named `nba_stats_<slug>` (e.g. `nba_stats_leaguedashplayerstats`, `nba_stats_playercareerstats`, `nba_stats_boxscoreplayertrackv3`).
-- **`wnba_stats`** (`sportsdataverse/wnba/wnba_stats.py`) — **95 wrappers** targeting `stats.wnba.com` (WNBA `LeagueID=10`), named `wnba_stats_<slug>`. Implemented as a thin shim re-exporting the NBA-stats runtime with the WNBA host.
-- **Codegen surface = capture-confirmed live, non-deprecated endpoints only.** The wrapper count is driven by a live capture sweep (committed under `sdv-internal-refs/nba/`): endpoints that an `nba_api`/`hoopR`/`wehoop` source marks deprecated (`lifecycle::deprecate_*`, runtime warnings, or release-note retirements — 26 endpoints) and endpoints with no capture confirming a populated table (`untested`/`barren`/`dead` for that league) are **excluded**. The full active/dying/barren/dead matrix lives in `sdv-internal-refs/nba/ENDPOINT_HEALTH.md`.
-- **One generic parser** `parse_nba_stats_result_sets(raw, result_set=None, *, return_as_pandas=False)` handles the uniform `{resultSets: [{name, headers, rowSet}]}` envelope. Returns a single `polars.DataFrame` when a `result_set` name is given or the payload has one set; returns `dict[str, DataFrame]` for multi-set payloads (e.g. `playercareerstats`). Empty / malformed payloads return a zero-row frame; columns are snake-cased via `dl_utils.underscore`. It also handles the two non-uniform shapes in this family: the shot-location endpoints (`leaguedash{player,team}shotlocations`) whose `resultSets` is a single dict with 2-level grouped headers (flattened to composite columns like `less_than_5_ft_fgm`), and `scoreboardv3` whose data lives under `scoreboard.games` (one row per game, home/away team objects inlined). `parse_wnba_stats_result_sets` is a re-export alias.
-- **Browser-TLS runtime:** `stats.nba.com` TLS/JA3-fingerprint-blocks plain `requests` (silent timeout, not an IP block). The runtime `_get` uses **`curl_cffi` with `impersonate="chrome"`**. `curl_cffi` is a **lazy optional import** shipped under the `tests` and `all` extras — not a hard runtime dep. A clear `ImportError` guides users to `pip install curl_cffi` (or `pip install sportsdataverse[all]`). The HTTP transport is injectable so wrappers and tests can run fully offline.
-- Wrappers default to `return_parsed=True` (tidy polars DataFrame). Pass `return_parsed=False` for the raw `Dict` or `return_as_pandas=True` for pandas. There is no user-facing `headers=` param — the TLS impersonation is handled inside the runtime, not via a user token.
-- Generated from the enriched canonical catalog (`tools/codegen/gen_nba_stats.py`) and registered in `FLAT_APIS` in `tools/codegen/generate.py`. Param `default`/`example` values are mined from the hoopR/wehoop roxygen signatures + `@examples`. Returns-table descriptions are authored for the pilot slugs and back-filled by column name from the SDV R-package docs (`_r_col_desc`); the remaining un-authored `native/nba_stats` + `native/wnba_stats` columns are a tracked follow-up exempted from the coverage ratchet via `extract_residual_columns._DEFERRED_BUCKETS` (surfaced by `deferred_columns()`).
-
-### NBA — possession event-detail columns, per-shooter shooting frame, `game_date`
-
-- feat(nba): possession event-detail columns (`fg2a/fg2m/fg3a/fg3m/fta/ftm/oreb/tov`),
-  per-shooter `build_possession_shooting` companion frame, and `game_date` on
-  `compile_nba_season` output (possession cache `PIPELINE_VERSION` 1 -> 2).
-
-### NBA — faithful possession boundaries (pbpstats parity)
-
-- feat(nba): `_build_possession_groups` rewritten to pbpstats `stats_nba`
-  `is_possession_ending_event` semantics (and-1 + FT-trip exceptions, real-rebound
-  and no-turnover filtering, jump-ball logic); technical FTs are inline again with
-  team-filtered event detail (per-possession points identity preserved exactly).
-- feat(nba): possessions gain `dreb`, `number_in_period`, `possession_start_type`
-  (coarse vocabulary), `count_as_possession`; shooting frame gains `team_id`
-  (possession cache `PIPELINE_VERSION` 2 -> 3).
-- test(nba): pbpstats-live oracle gate — like-for-like possession counts +
-  boundary-by-boundary diff on the committed cdn fixtures (`SDV_PBPSTATS_ROOT`).
-
-### NBA — quarter-box on-court lineup seeding + `lineup_source="quarter_box"`
-
-- feat(nba): exact quarter-box on-court seeding — `players_on_court_from_quarter_boxscores`
-  and `lineup_source="quarter_box"` on `nba_possessions` (auto chain: rotation ->
-  quarter_box -> pbp), seeded from per-period `boxscoretraditionalv3` range payloads.
-- fix(nba): `players_on_court_from_quarter_boxscores` gains an optional `raw_box`
-  full-game-boxscore name-map source (mirrors `players_on_court_from_pbp`'s own
-  signature), closing a mid-period name-resolution gap that regressed one fixture
-  to 0.8817 gamerotation-agreement; with `raw_box` threaded through, quarter_box
-  now matches `players_on_court_from_pbp` exactly on all 3 fixture games
-  (0.9689 / 0.9686 / 0.9662).
-
-### CFB — 0.36-live pbp reconciliation + game-ending WP-perspective fix
-
-Two bodies of CFB play-by-play parity work, each parity-test-first on real
-captured fixtures (`tests/cfb/test_cfb_036_reconciliation.py`, with measured
-before/after EPA/WP deltas). The reconciliation ports the valuable CFB pbp
-fixes from the pandas `0.36-live` branch into the polars `main` pipeline:
-kneel-down flag + scrimmage exclusion; `cleaned_text` +
-`yds_rushed`/`yds_receiving` direction-word parsing; box-score volume sort;
-kickoff fair-catch → touchback (era-gated ≥2018); errored-punt end-yardline
-flip; `end_state_missing` fill (`end.team.id` + `end.yardsToEndzone`
-backfill); overtime play-sort by `sequenceNumber`; and the
-penalty-assessed-on-kickoff EP/WP touchback — a refined `penalty_flag` guard
-excludes Timeouts and completes the end-state touchback `0.36-live` left
-partial (resets `down_*_end` + `pos_score_diff_end`) so EPA neutralizes to
-0.0 on the affected 2024 fixture plays. Interception return yardage is now
-excluded from offensive / drive / `total_yards` at the aggregation sites
-(the shared `statYardage` column is untouched, preserving the
-penalty-residual chain), and `statYardage==0` completions are reconstructed
-from the yardline delta. Separately, a game ending on a possession-flipping
-play whose type is absent from `end_change_vec` — notably a safety —
-reported `home_wp_after = 1.0` for the **losing** team; the game-ending WP
-perspective is now correct.
-
-### CFB — advanced box score: player-name cleanup + `cp` aggregation
-
-- feat(cfb): the advanced box score's player-name cleaning regex strips more
-  invalid cases, and the passing box score now aggregates `cp` (the
-  xCompletion model results) alongside the existing passing columns.
-  Verified against the live `test_cfb_adv_box_score` suite so existing box
-  scores don't break with the new field.
-
-### NFL / CFB — season standings + simulation engines (nflseedR / cfbseedR ports)
-
-- feat(nfl): `nfl_season_standings` — a port of the nflseedR v2 standings
-  engine with the real NFL division/conference/draft tiebreaker cascades and
-  the `tiebreaker_depth` ladder (`RANDOM` < `PRE-SOV` < `SOS` < `POINTS`).
-  Named `nfl_season_standings` because `sportsdataverse.nfl.nfl_standings`
-  is already taken by the api.nfl.com codegen wrapper. Parity vs real
-  nflseedR 2.0.2 output for 2023: **exact** on
-  `div_rank`/`conf_rank`/`draft_rank`/`exit`/games/true_wins/losses/ties/pf/pa/pd,
-  <1e-9 on wins/win_pct/div_pct/conf_pct/sov/sos (golden fixtures under
-  `tests/fixtures/seedr/` with R-provenance README).
-- feat(nfl): `nfl_simulations` / `nfl_compute_results` — week-by-week season
-  simulation with a pluggable `compute_results` generator (default = the
-  nflseedR ELO generator: init N(1500,150), +20 home, ×1.2 postseason,
-  margin `rnorm(estimate, sd=13)` rounded away from zero, K=20 log-MOV),
-  playoff rounds with reseeding + `byes_per_conf`, and the 5-frame summary
-  dict (`standings` / `games` / `overall` / `team_wins` / `game_summary`).
-- feat(cfb): `cfb_standings` + `cfb_playoff_seeds` + `cfb_simulations` /
-  `cfb_compute_results` + `cfb_games_from_schedule` — the CFB adaptation
-  (sibling of the NFL port), cross-validated against the new cfbseedR R
-  package on a designed toy fixture (all 13 output columns × 9 teams agree
-  ≤1e-6). Binding semantic ruling: the conference-rank tiebreaker cascade
-  AND the reported `sov`/`sos` are conference-REG-scoped (independents 0.0)
-  — a deliberate divergence from nflseedR's overall games-weighted
-  convention, caught and locked in by the Python↔R toy-fixture diff.
-  `CONF_CHAMP` games count toward the overall record and decide the
-  champion but not the conference record/rank. `cfb_playoff_seeds`
-  implements CFP 12-team straight seeding (2025 rule): 12 best-ranked teams
-  with the 5 highest-ranked conference champions guaranteed, optional
-  committee `rankings=` frame.
-
-### MBB / WBB — bigballR + wbigballR port: `ncaa_mbb_*` / `ncaa_wbb_*` stats.ncaa.org family
-
-Ports **bigballR** (MBB) and **wbigballR** (WBB) — the community
-stats.ncaa.org R scrapers — as a first-class 33-function
-`ncaa_mbb_*` / `ncaa_wbb_*` surface: one shared polars core in `mbb/` +
-thin WBB binding shims, built on the existing proxy-bound `NcaaFetcher`
-transport (browser path for bm-verify game pages; no new transport code).
-Surface: `ncaa_{mbb,wbb}_game_pbp` / `_play_by_play` (row-level pbp with
-both-teams on-floor lineups, possession numbering, transition +
-garbage-time flags), `_box_scores`, `_team_schedule`, `_team_roster`,
-`_date_games`, `_shot_locations`, `_join_pbp_shots`, `_lineups`,
-`_player_lineups`, `_player_combos`, `_on_off`, `_player_stats`,
-`_team_stats`, `_possessions`, `_team_ids` (+ `resolve_ncaa_team_id`,
-`refresh_ncaa_team_ids`), with bundled season-scoped team-id crosswalks
-(2009-10→2025-26 M / →2024-25 W).
-
-Parity is golden-master against the R sources on real fixtures: 27 raw HTML
-captures (8 games chosen to stress edges — blowout/garbage-time, close,
-1 OT, 2 OT, 2019-era markup) + 32 R-oracle CSVs produced by running
-bigballR/wbigballR from source, with SHA/version provenance READMEs. MBB
-play-by-play parity is cell-for-cell exact on all 35 columns including row
-order; every transform (lineups, player/team stats, possessions, combos,
-on/off, box, schedule, roster, scoreboard, shots, pbp↔shots join) is strict
-against its oracle on both leagues. R numeric fidelity is ported exactly:
-R ≥4.0 `round()` (ties-to-even with back-converted-double candidates),
-long-double `sum()` via `math.fsum`, NA-poisoning `max()`/`sum()`
-semantics, dplyr C-locale group ordering. One deliberate fix over the R
-sources (documented in-module + in tests): modern WBB pbp ships one table
-per quarter, and wbigballR — an older fork of bigballR — applies MBB halves
-math and misreads regulation WBB as 2-OT; the shared core takes a
-`period_model` knob (WBB binds `(4, 600, 300)`), with time-derived columns
-validated by invariants + a 100% chart↔pbp join match.
-
-### MBB / WBB — college computational-core port (lineup stats → ratings/luck → RAPM → positions → NCAA stint pipeline)
-
-A nine-phase port of an open-source college-basketball RAPM computational
-core (TypeScript on/off analyzer + Scala NCAA pipeline upstream) into
-`sportsdataverse/mbb/` with `wbb_*` shims throughout,
-jest-/upstream-oracle-validated:
-
-| Phase | Modules | What |
-|---|---|---|
-| 0–1 | `mbb_lineup_stats` | `LineupUtils.ts` port — weighted-sum accumulators, `complete_weighted_avg` (transition/scramble possession recompute, regressed diffs), `calculate_aggregated_lineup_stats`, `lineup_to_team_report` + `get_stats_diff` per-player on/off partition (replacement on/off ported bug-for-bug, documented) |
-| 2 | `mbb_ratings`, `mbb_luck` | Dean-Oliver individual ratings (`build_o_rtg` 93-key / `build_d_rtg` 47-key diagnostics matching the jest oracle exactly, `build_productivity` "Adj Rtg+" RAPM prior) + the complete 950-LOC luck engine (Bayesian 3P% shrink with 10-bit bit-packed shot-info deserializer, eFG→PPP→AdjEff propagation, both directions) |
-| 3 | `mbb_rapm` | Ridge RAPM over lineup design matrices — priors/player context (weak/strong/adaptive-correlation modes), `sqrt(poss/total)` design matrix + unbias row, `(XᵀX+λI)⁻¹Xᵀ` solve with standard errors, adaptive-λ picker scaled by `avgEigenVal` |
-| 4 | `mbb_positions` | Box-score → position classifier (17-feature linear discriminant → softmax over PG..C, normal-CDF height reweighting, small-sample shot-quality shrinkage), `build_position` decision tree (PG/s-PG/CG/WG/WF/S-PF/PF/C), `order_lineup` greedy slot assignment |
-| 5a–5d | `mbb_ncaa_{models,events,possessions,data_quality,names,stints,lineup_enrich,stint_validation}` | The cbb-explorer NCAA stats.ncaa.org pipeline: 20-dataclass model layer with the possession-count formula, 40 pbp event extractors, the substitution-tracking stint state machine (incl. the hand-curated 144-key duplicate-name / misspelling data-quality tables), the 1,772-LOC `enrich_lineup` counting-stat tree (18-category event dispatch, scramble 6.5s ORB-follow + transition tagging, assist source/target pairing), and stint validation + self-healing (`validate_lineup` three sanity checks, `clump_bad_lineups`, the fixer pipeline) |
-| 5e | `mbb_ncaa_html`, `mbb_ncaa_{roster,boxscore,pbp}_parser` | JSoup→bs4 semantics helpers (`:eq(N)`, `:matches`, text-collapse) + the roster/boxscore/pbp HTML parsers, making the NCAA pipeline end-to-end runnable from saved HTML; oracle'd against 5 vendored upstream fixtures + the upstream inline test suites |
-| 5f | `mbb_ncaa_fetch`, strength engine | Cache-first, proxy-bound stats.ncaa.org fetch layer (original sdv-py code — deliberately no direct-fetch mode, the host is IP-ban-happy; fetch-once caching, `NcaaFetchConfig` singleton with `SDV_PY_NCAA_*` / `SDV_PY_PROXYBONANZA_*` env, secret-redacting `__repr__`, `curl_cffi` chrome impersonation) + the Phase-4-deferred strength-adjusted stats engine |
-
-### MBB / WBB / NBA — NCAA LineupStatSet producer + hoopR release-parity producers
-
-- feat(mbb,wbb): `lineup_stats_bucket` / `lineup_stats_buckets`
-  (`mbb_ncaa_lineup_aggregation`) — a field-for-field port of
-  the upstream `commonLineupAggregations.ts` (the Elasticsearch lineup
-  aggregation), the missing **stage-2** layer that mints the 254-field
-  `LineupStatSet` bucket from the ported raw-count tree. This connects the
-  finished college model tier to real NCAA data: the ported models
-  (`mbb_rapm`, `mbb_lineup_stats`, `mbb_luck`, `mbb_ratings`) consume an
-  ES-aggregation bucket that until now came only from vendored jest
-  fixtures — now a real HTML game runs parse → enrich →
-  `lineup_stats_buckets` → models. Two field families that need external
-  opponent D1 baselines emit a documented fallback rather than a faked
-  reproduction.
-- feat(nba,mbb): release-parity producers for the **hoopR NBA + MBB Python
-  cutover** — `helper_{nba,mbb}_*` functions reproducing the hoopR R
-  creation scripts against the released parquet oracles so
-  `hoopR-nba-data` / `hoopR-mbb-data` can compile their datasets in Python
-  (the sister-league counterpart of the merged WNBA producers). NBA is the
-  WNBA variant (zero new parameters); MBB is the WBB variant with one code
-  delta; two genuinely new helpers — **officials** (projected from
-  `game_rosters.gameInfo.officials[]`) and **player_season_stats** (flat
-  career payload, Totals/teamSlug preference) — are shared by NBA + MBB.
-  Every dataset was validated full-frame equal against R's on-disk released
-  parquet oracle (NBA across the full 2025 season; MBB per-game on three
-  fixtures + full-season for the delegates). One deliberate, flagged data
-  fix: pbp `id` is emitted **Int64**, not R's Float64 — MBB's 18-digit
-  concat overflows R's double (~906k colliding released ids in 2025, 41%);
-  parity is asserted through the oracle's lossy Float64 view (#245
-  precedent).
-
-### CFB / MBB / WBB / Baseball — stats.ncaa.org parser expansion (football pbp graduation, box tabs, college baseball + softball pbp)
-
-The stats.ncaa.org parser surface now spans four sports, mirroring the MBB
-NCAA split everywhere: the library owns the parser, discovery/capture stay
-producer concerns.
-
-- feat(cfb): `parse_cfb_ncaa_pbp` (`cfb/cfb_ncaa_pbp.py`) — the
-  college-football play-by-play parser graduated from the
-  `ncaa-mfb-football-raw` producer, so `cfb/` now holds both providers
-  (ESPN + stats.ncaa.org) like `mbb/` does. One row per play,
-  cfbfastR-style, from the `div.drives` markup: drive context, situation
-  (`down`/`distance`/`yard_line`/`end_yard_line`), `play_type`
-  classification (**0 unknowns** across all fixtures), players (`passer`,
-  `rusher`, `receiver`, `kicker`, `punter`, `returner`,
-  `tackler_1`/`tackler_2` with suffix-safe "Last,First" handling), signed
-  `yards_gained`, kick/return/punt/FG detail, turnover + penalty flags, and
-  a frame-wide derived `qb_scramble` (a rush by a player who also passes in
-  the game — NCAA text doesn't label scrambles). 21 offline tests on 3 real
-  captured games.
-- feat(cfb): `cfb_ncaa_box.py` — parsers for the non-pbp football
-  game-detail tabs: `parse_cfb_ncaa_drives` (one row per drive with
-  start/end `how`/`clock`/`yard_line`), `parse_cfb_ncaa_team_stats` (team
-  box with a genuine per-quarter breakdown), `parse_cfb_ncaa_player_stats`
-  (dict of one frame per category), `parse_cfb_ncaa_officials`, and
-  `parse_cfb_ncaa_linescore` (+ `game_date`/`venue`/`attendance`).
-  Validated on a real 2024 capture (California @ Auburn): 26 drives in
-  clean sequence, linescore quarters sum to finals, officials never a nav
-  tab. NCAA's per-quarter team values don't necessarily sum to the total —
-  extracted faithfully, not "corrected".
-- feat(mbb): `mbb_ncaa_box_tabs.py` — `parse_ncaa_bb_officials`,
-  `parse_ncaa_bb_team_stats` (one row per stat/period; the period regex
-  handles WBB quarters and MBB halves), and `parse_ncaa_bb_linescore`,
-  closing the three basketball contest tabs the bigballR-port parsers
-  didn't cover — the contest page is now fully mapped. WBB re-exports them
-  (`parse_ncaa_wbb_*`).
-- feat(baseball): `parse_college_baseball_ncaa_pbp` +
-  `parse_college_softball_ncaa_pbp` (a by-reference twin — softball uses
-  the identical page layout + grammar) — a structured NCAA baseball pbp
-  decomposition: inning context and scores, the batter clause (`play_type`
-  ~20 values, `hit_trajectory`, `fielded_position`, hit/out/strikeout/
-  sacrifice/double-play flags, `rbi`, `count_balls`/`count_strikes`,
-  `pitch_sequence`, error detail) and the runner clauses (`runs_scored`,
-  `scoring_runners`, `runners_advanced`, `outs_on_play`). On 3 real D1
-  games: 0 unknown play types across 322 plays and `runs_scored`
-  reconciles exactly to the final score in every game.
-
-All of these return tidy polars frames (pandas via `return_as_pandas=True`)
-with empty input → the documented zero-row schema, and are fully typed in
-the mypy ratchet.
-
-### NBA / MBB / WBB — dataset loaders for the published model releases
-
-- feat(nba): `load_nba_player_impact(seasons)` — consumer loader for the
-  `nba_player_impact` release produced by `hoopR-nba-stats-data`'s
-  `nba_model_publish` (the RAPM / adj-RAPM / SPM / BPM / WAR /
-  Kalman-projection per-player-season impact table). Codegen-generated from `releases.yaml` +
-  `loader_schemas.yaml`; 404-safe with a **1996** floor (the stats.nba.com
-  lineup/pbp era, erring low so unpublished seasons skip rather than
-  raise); documented 22-column schema pinned by an offline round-trip test.
-- feat(mbb,wbb): `load_mbb_ratings` / `load_mbb_player_value` /
-  `load_wbb_ratings` / `load_wbb_player_value` over the four published
-  model dataset tags. Floors were probed per tag rather than inherited from
-  the 2002 boxscore loaders: MBB 2006 (2003–05 are genuine archival
-  thinness), WBB ratings 2008 (unlocked by the `boxscoreAvailable`-flag fix
-  below — better than the originally-published 2014), WBB player value 2014
-  (`wbb_box_bpm`'s ≥10-games hygiene floor is unreachable on partial
-  archival coverage). Declared returns-schemas are pinned to the producer
-  modules' schema constants by contract tests.
-
-### NBA / WNBA — read-through raw JSON store for stats.nba.com per-game payloads
-
-- feat(nba): the possession engine's module-level fetchers (`_fetch_pbp` /
-  `_fetch_box` / `_fetch_rotation` / `_fetch_box_periods`) now route through
-  an env-gated **read-through raw store**: payloads live in a raw-repo
-  checkout (canonically `hoopR-nba-stats-raw`'s `nba_stats/json`), laid out
-  `{endpoint}/{season}/{game_id}.json`. **Hit** → served from disk, no
-  network (offline rebuilds; a `PIPELINE_VERSION` bump no longer refetches
-  the corpus). **Miss** → live fetch, then atomic persist (tmp+rename) with
-  corrupt-file refetch; persist failures never fail the pipeline.
-  Read-only mode disables the persist half so compile/build consumers stay
-  pure readers — only the raw repo's own sweep fills the store.
-  Configuration is explicit-first, env-fallback: `raw_store_dir=` /
-  `raw_store_readonly=` on `nba_possessions`, `compile_nba_season`, and the
-  fetchers; `raw_store_dir` accepts a single root or a per-endpoint mapping,
-  and per-endpoint `SDV_PY_NBA_RAW_JSON_DIR_{ENDPOINT}` env vars override
-  the generic `SDV_PY_NBA_RAW_JSON_DIR`. With nothing set, every existing
-  caller is byte-identical to before.
-- feat(wnba): the WNBA engine's fetchers route through the same
-  league-agnostic store (the season decode is WNBA-aware — `10`-prefixed
-  game ids are single calendar years, no end-year shift) under a separate
-  env namespace (`SDV_PY_WNBA_RAW_JSON_DIR` +
-  `SDV_PY_WNBA_RAW_JSON_READONLY`) so a WNBA compile can read a
-  `wehoop-wnba-stats-raw` checkout offline; a test asserts no bleed from
-  the NBA env var.
-- fix(nba): the store never persists an empty `{}` payload — a present file
-  is a cache hit that never refetches, so a cached `{}` (a transient scrape
-  failure) poisoned the game permanently, silently degrading possession /
-  lineup building to pbp-inferred lineups (the backfill had left 2,732 empty
-  rotation files, including 311 of 431 in 2023 alone). Falsy payloads stay
-  retryable misses; the shared helper covers WNBA too.
-- fix(nba): `nba_player_positions` dedups to one row per `player_id` —
-  the stats.nba.com `playerindex` lists a mid-season-traded player once per
-  team, violating the documented grain and fanning out through the
-  `positions` join in `nba_bpm`/`nba_spm` (the model-publish builder
-  correctly halted on the duplicate). Listed position is a player
-  attribute, so `keep="first"` is deterministic and lossless.
-
-### NBA / WNBA / G-League — tracking-value spine (T3.2): six over-expected models on the `playerdashpt*` surface
-
-- feat(nba): six player-tracking "over-expected" value models over the
-  second-spectrum `playerdashpt*` surface, sharing one `_over_expected`
-  centering engine — rebounding over-expected (chance-adjusted), passer
-  value (assists over expected), drive value, catch-&-shoot vs pull-up shot
-  value, touch value (points per touch over expected), and rim protection
-  (points saved). WNBA (`league_id="10"`) ships as by-reference shims with
-  a G-League degradation path.
-- Oracle gates on real 2023-24 fixtures: each over-expected metric is a
-  minutes/possession-weighted centering that sums to ~0 by construction
-  (verified Σ≈2.8e-14, tol 1e-6), plus a rank-sanity gate against an
-  externally rate-sourced elite allowlist (top-K exact-cover membership;
-  qualified populations ~300–450 per model). Review-driven hardening added
-  minimum qualified-N asserts on all six rank gates (so a truncated
-  re-capture can't pass vacuously) and a position-bucket join match-rate
-  floor (`matched/height >= 0.9`) that catches the
-  dtype-agrees-but-id-spaces-disjoint bug which would silently collapse the
-  by-position baseline into one league-wide bucket. Real-data capture
-  corrected two wrong column names from the design doc (documented in the
-  fixtures README).
-
-### NBA — model-zoo v1: validation harness + SPM / BPM 2.0 / Bayesian adj-RAPM
-
-The first generation of the NBA player-value model zoo: a validation harness
-wiring four external oracles plus a meta-oracle and a season compiler; a
-trained SPM (box-score features regressed onto a RAPM target) with the
-`RatingsModel` harness extension; a faithful BPM 2.0 port (box-score player
-value) validated in a three-way head-to-head; and adj-RAPM-with-prior
-(Bayesian RAPM) with the calibration oracle activated. The v2 tier-1
-estimators (RAPM variants, external concurrent validity, the through-date
-ratings panel + WAR) build on this base.
-
-### NBA — Kalman + aging-curve player projection + forecast validator
-
-- feat(nba): `nba_darko` — a per-player **Kalman filter** over a
-  multi-season rating panel with an empirical **aging curve**
-  (`AgingCurve` / `fit_aging_curve`, delta method) that forecasts each
-  player's next-season rating with a posterior SD. Noise parameters are MLE
-  fit (`q`/`obs_base` via `scipy.optimize` with a moment-based `q`-floor);
-  observation noise scales ∝ 1/possessions. Input is a pre-built
-  `{player_id, season, rating, weight}` panel (assemble it from
-  adj-RAPM/SPM per season) so the projection layer is decoupled from the
-  estimators. `nba_player_ages.py` supplies bulk per-season `AGE` via
-  `leaguedashplayerbiostats`.
-- feat(nba): `darko_forecast_accuracy` + `ForecastResult` — the projection
-  is evaluated by forecast accuracy (predict season N+1 from history ≤ N),
-  not the possession harness. The meta-oracle has teeth: on a skill panel
-  the projection beats carry-forward (RMSE 0.82 < 0.94, corr 0.98), and on
-  a pure-noise panel it does **not** manufacture skill — building that
-  noise test exposed and fixed a real MLE pathology.
-
-### NHL / PWHL — microstat & EDGE value spine (T5.2) + first-of-its-kind PWHL prediction (T5.3)
-
-- feat(nhl): five microstat value models over the api-web pbp + EDGE
-  tracking surface, with PWHL by-reference shims — context-adjusted faceoff
-  win value (zone × strength, fit from post-faceoff xG), penalty
-  drawn/taken net value (man-advantage goals per minor), expected
-  primary/secondary assists (relative-danger xG credit), zone-entry/exit
-  value (pbp-derived controlled/dump inference), and an EDGE skating
-  z-composite value (NHL-only; PWHL zero-row) from `nhl_edge` skater
-  detail. All oracle gates pass on the real 2024 corpus (faceoff
-  context-cell calibration 0.021 ≤ 0.03; penalty net conservation ~4e-16;
-  ΣxA≈ΣA unbiasedness 0.006 ≤ 0.05; split-half stabilities 0.21–0.28 vs
-  ≥0.15 floors; EDGE component rank-corr 0.52–0.76 vs ≥0.5), with the
-  rare-event stability gates using an independent games-played denominator
-  to avoid the conditioning-on-the-sum trap. No gate lowered.
-- feat(nhl): the T5.2 deferrals fleshed out — the zone-entry
-  controlled/dump heuristic is now event-sequence-aware (the entering team
-  must win the next possession event within the window, cross-period
-  sign-flip guarded) with a directional gate (controlled entries precede a
-  same-team shot 0.98 vs 0.77 for dumps); EDGE skating gains
-  `method="percentile"` plus a joint face-validity gate; xAssists ordering
-  was re-measured, confirmed genuinely underpowered (real numbers
-  documented + reproducible via a committed check script), and replaced
-  with a powered population-level gate (secondary-assist goals carry higher
-  mean relative danger).
-- feat(pwhl): `pwhl_xg_proxy` — the T5.3 PWHL prediction, a
-  first-of-its-kind model on real PWHL data (3 live seasons, 2024–2026): a
-  2-tier empirical xG proxy from PWHL's categorical `shot_quality` feeding
-  the existing league-agnostic opponent-adjustment + market core. De-leaked
-  after review: tier weights fit on strictly pre-cutoff pbp (per-as-of in
-  the backtest) and `margin_sd` fit on train (2024+2025) and evaluated on
-  held-out 2026 only. Honest held-out result (n=107): Brier 0.2449 vs naive
-  0.2500 — within ~1 SD of noise, so the beats-naive magnitude assertion is
-  deliberately dropped in favor of the held-out calibration gate.
-
-### PWHL — shift-derived `strength_state` + shot-level coordinate xG (+ two loaders)
-
-- feat(pwhl): `add_strength_state(pbp, goalie_ids)`
-  (`hockeytech/_analytics.py`) — derives `skaters_home`/`skaters_away`,
-  home-vs-away `strength_state` (`5v5`/`5v4`/`6v5`), and a
-  `strength_state_valid` sanitize flag from the on-ice ids, unlocking real
-  offline strength context on every PWHL shot for EV/PP/SH strength-split
-  xG. Empty-net is intentionally **not** derived here — HockeyTech goalie
-  shift-tracking is unreliable (~40% false positives); use the
-  authoritative goal-level `empty_net` field.
-- fix(hockeytech): `build_on_ice` end intervals are now half-open
-  (`> end_s`), fixing a line-change double-count that produced impossible
-  ~10-v-10 on-ice states — a shared-core fix that also corrects Corsi/TOI
-  for AHL/OHL/WHL/QMJHL.
-- feat(pwhl): `pwhl_shot_xg()` — public shot-level counterpart to
-  `pwhl_team_game_xg_rates`: same pre-shot context derivation over the full
-  pbp, `PwhlCoordXGModel` scoring, returned as a curated 21-column
-  `_SHOT_XG_SCHEMA` frame (identity, rink-feet geometry, strength context,
-  outcome, `xg`), with dtypes cast at the boundary so `load_pwhl_pbp`
-  output and the pwhl-data committed parquet land on one published schema.
-  Takes `model=` so a producer can fit once on pooled seasons and score
-  every season consistently. Real-data smoke: pooled 2024–2026 fit scoring
-  2025 → 5,671 shots, xG sum 464.8 vs 499 goals.
-- feat(pwhl): `load_pwhl_shifts()` + `load_pwhl_xg_pbp()` — codegen loaders
-  for the `pwhl_shifts` and `pwhl_xg_pbp` release tags (the latter's
-  declared returns-schema pinned to `_SHOT_XG_SCHEMA` by a contract test).
-
-### MLB — model spines: game state (T6.4), pitching evaluation (T6.1), fielding/catching/baserunning (T6.3)
-
-- feat(mlb): **game-state spine** — the MLB substrate + the RE24 /
-  `run_value` denominator the sibling spines import:
-  `mlb_run_expectancy_matrix` + `run_value(...)` (exported at
-  `sportsdataverse.mlb`), a win-expectancy table + WPA + Tango leverage
-  index (pre-play-aligned), an umpire strike-zone logistic with per-umpire
-  bias (Statcast bridge), team projection (pythagenpat + as-of-date Elo),
-  and prop projection (team-runs log5 + strikeouts Poisson). Ships its own
-  `statsapi.mlb.com` collector. Gates: RE24 per-state |diff| vs Tango 0.048
-  ≤ 0.05, WE corr vs statsapi 0.974 ≥ 0.95, exact WPA-sum telescoping,
-  umpire calibration gap 0.075 ≤ 0.08, pythagenpat MAE 0.029, props
-  as-of-date MAE 2.64 runs. As-of leakage enforced (Elo updates only after
-  a team's own game; prop backtest uses strictly-prior `cum_sum().shift(1)`).
-- feat(mlb): **pitching-evaluation spine** — compute-on-demand pitcher
-  models over Baseball Savant Statcast: `mlb_stuff_plus` (xgboost run-value
-  model on pitch physics, plus-scale), `mlb_command_plus`
-  (Location+/Command+ with a bundled command model; fixed a
-  train/score-inconsistency in the categorical encoding), `mlb_pitch_era`
-  (parametric xERA + SIERA-like estimator, oracle vs the Savant xERA
-  leaderboard), `mlb_pitch_features`
-  (physics/location/sequence/TTO/workload substrate), `mlb_pitch_sequencing`
-  (tunnel geometry + sequence run value), `mlb_pitch_fatigue`
-  (times-through-order / fatigue penalty), `mlb_pitch_classify`
-  (per-pitcher GMM reclassification with an agreement gate), and
-  `mlb_pitch_injury` (leakage-safe injury-risk index). All oracle gates
-  green on real Savant pitch + leaderboard captures; model artifacts
-  bundled.
-- feat(mlb): **fielding / catching / baserunning spine** — `mlb_run_values`
-  (RE288 count table + event/count-strike run values with an as-of-date
-  split), `mlb_catcher_framing` (framing runs from a called-strike
-  probability grid), `mlb_catcher_defense` (blocking runs + throwing /
-  caught-stealing value via a pop-time model), `mlb_fielding_oaa`
-  (outs-above-average from a catch-probability surface over BIP trajectory
-  features), `mlb_baserunning` (extra-bases-above-expected + advancement
-  opportunities), and `mlb_stolen_base` (SB success surface + value; SB/CS
-  attempts derived from `des` text to fill a documented Savant capture
-  gap). All gates green against the committed real-capture Savant corpus;
-  rate-metric oracle joins assert dtype agreement + match-rate floors.
-
-### Recruiting / NFL — PFF Premium Stats stem + On3 RDB retarget + 247Sports expansion
-
-- feat(nfl,cfb): **PFF Premium Stats 2.0** stem (`premium.pff.com/api/v1`,
-  cookie-auth) — a new `pff_core` stem (46 wrappers: 32 facet reports,
-  player reports, meta) + `make_pff_league_module` shims for
-  nfl / ncaa (cfb) / aaf / ufl. Cookie-supply auth path with
-  `SDV_PY_PFF_LIVE`-gated live tests; `pff_login` ships as an experimental
-  stub; the transport is injectable so offline tests run against real
-  logged-in captures.
-- feat(cfb): **On3 RDB retarget** — the 4-endpoint `_next/data` scrape
-  becomes an 82-endpoint RDB stem; deprecated `_next/data` shims keep the 4
-  released names working.
-- feat(cfb): **247Sports expansion** — the guest-usable `positions` RDB
-  route (residential-gated live tests) plus a new auth-free
-  `sports247_site_pages` stem (curl_cffi chrome; string-numeric casts at
-  the boundary; nested entities surfaced as integer FKs).
-
-### Validation harness — `constant_column` check, R-lint UTF-8 fix, cron run-tracker ingest
-
-- feat(validation): new **`constant_column`** check — flags all-null /
-  all-NaN and zero-variance (single-valued, incl. all-zero) columns as WARN
-  `needs_judgment`, minus a per-dataset `expected_constant_columns`
-  allowlist; the class of dead-column bug the existing checks can't catch
-  (`extraction` is null-based, `sweep` is release-over-release,
-  `numeric_parity` needs an oracle). All 7 previously-unmonitored CFB
-  modeling-suite datasets (`cfb_passing`, `cfb_rushing`, `cfb_receiving`,
-  `cfb_percentiles`, `cfb_team_summaries`, `cfb_rosters_crosswalk`,
-  `cfb_rb_eval`) are now registered with committed schema snapshots, join
-  keys, and allowlists — and the check immediately surfaced real standing
-  producer findings (e.g. all-zero `sacked` / `pass_int` / `sack_yds` in
-  `cfb_passing`).
-- fix(validation): the R leakage lint decoded Rscript output as cp1252 on
-  Windows and `UnicodeDecodeError`'d on UTF-8 R sources — **silently
-  dropping those files instead of linting them**; now
-  `encoding="utf-8", errors="replace"`. The workflow's hardcoded
-  `LINT_TARGETS` had also drifted from the registry (the CFB R lint never
-  ran); a new contract test asserts the workflow's `DATASETS` /
-  `LINT_TARGETS` match `registry.py` so future drift fails CI.
-- ci(validation): the weekly validation cron now ingests one platform run
-  per validated dataset into the sportsdataverse.org run tracker — one gate
-  per harness check (pass iff zero ERROR findings; WARN-only findings
-  surface in `metrics`), with links back to the Actions run. A dataset
-  whose release download was unavailable is not ingested (an empty findings
-  file would masquerade as a perfect run), and ingest failures never fail
-  the cron.
+- **CFB:** pbp fixes from `0.36-live`: kneel-down flag, `cleaned_text` / `yds_rushed` /
+  `yds_receiving` parsing, box-score volume sort, kickoff fair catch → touchback (2018+),
+  errored-punt end yardline, `end_state_missing` fill, OT order by `sequenceNumber`.
+- **CFB:** penalty-assessed-on-kickoff plays get the full end-state touchback, so their EPA
+  neutralizes to 0.0; the `penalty_flag` guard now excludes Timeouts.
+- **CFB:** interception return yardage no longer counts toward offensive / drive / `total_yards`,
+  and `statYardage==0` completions are rebuilt from the yardline delta.
+- **CFB:** a game ending on a possession-flipping play outside `end_change_vec` (notably a safety)
+  no longer reports `home_wp_after = 1.0` for the losing team.
+- **CFB:** the advanced box score's player-name cleaning strips more invalid cases.
+- **Codegen:** codegen and capture writers emit LF (`newline="\n"`), so Windows runs no longer leave
+  endpoint and schema YAMLs dirty with CRLF churn.
+- **Docs:** reference-page **Returns** prose no longer drops the first column and leaves a stray
+  backtick when a docstring's return description is an inline `col: dtype, ...` code span.
+- **HockeyTech:** `build_on_ice` end intervals are half-open (`> end_s`), removing impossible
+  ~10-v-10 on-ice states and correcting Corsi / TOI for AHL / OHL / WHL / QMJHL.
+- **HTTP:** `download()` retries 403/408/429/500/502/503/504 with `Retry-After`-aware backoff
+  (configurable via the new `retry_statuses=`), returns the last response once the budget is spent,
+  and no longer caches non-2xx responses.
+- **MBB:** the NCAA fetch layer verifies the bm-verify solve: an unsolved `NCAA Statistics` stub
+  forces a re-solve and retry (`solve_attempts`, default 2), and exhaustion raises so the layer
+  rotates proxies. (#266)
+- **MBB:** `raw_game_efficiency` returns the typed `_EFF_SCHEMA` empty frame for a season with no
+  boxscore asset instead of raising `ColumnNotFoundError` (also covers `mbb_team_ratings` /
+  `wbb_team_ratings`). (#280)
+- **NBA:** `compile_nba_season` passes `proxy_url` to game discovery too, so a datacenter run no
+  longer compiles zero games with exit 0; `proxy_provider` is now called N+1 times for an N-game
+  season. (#283)
+- **NBA:** `box_features` maps the real `leaguegamelog` column `fg3_m` to `fg3m`, fixing a
+  `ColumnNotFoundError` on the first real-data SPM/BPM run. (#158)
+- **NBA:** the raw store never persists an empty `{}` payload, which permanently degraded a game to
+  pbp-inferred lineups; empty payloads stay retryable misses (WNBA too).
+- **NBA:** `nba_player_positions` returns one row per `player_id` (traded players were listed once
+  per team, fanning out the `positions` join in `nba_bpm` / `nba_spm`).
+- **NBA:** `players_on_court_from_quarter_boxscores` gains an optional `raw_box` name-map source,
+  closing a mid-period name-resolution gap; `quarter_box` now matches `players_on_court_from_pbp` on
+  the fixtures.
+- **NFL:** `load_nfl_ff_playerids` and `load_nfl_ff_rankings` retry with exponential backoff on HTTP
+  429/5xx instead of failing on the first hit.
+- **PWHL:** `fit_pwhl_coord_xg` / `predict` raise on a RAW-scale (0–600) frame instead of silently
+  scoring it, and `hockeytech._analytics.add_shot_distance_angle` asserts `goal_x` is in a plausible
+  rink range.
+- **Validation:** the R leakage lint reads Rscript output as UTF-8 (UTF-8 R sources were silently
+  skipped on Windows), and a contract test keeps the workflow's `DATASETS` / `LINT_TARGETS` in step
+  with `registry.py`.
+- **WBB:** box helpers derive availability from the payload, not ESPN's `boxscoreAvailable` flag
+  (false for most pre-2014 games with full stats), closing the 2006–2013 coverage hole; R fixed it
+  the same way in wehoop#64. (#275)
+
+### Data
+
+- **CFB:** `espn_cfb_injuries` has a release but zero assets (ESPN's CFB injuries feed yields
+  nothing), so it has no loader.
+- **CFB:** the new `constant_column` check found all-zero `sacked` / `pass_int` / `sack_yds` columns
+  in `cfb_passing`.
+- **PHF:** dataset URLs moved from `raw.githubusercontent.com` paths to dedicated
+  `sportsdataverse-data` release tags (`phf_pbp`, `phf_player_boxscores`, `phf_team_boxscores`,
+  `phf_schedules`); PHF is frozen (2016–2023; 2017–2019 pbp is an upstream gap). (#218)
 
 ## 0.0.71 Release: June 24, 2026
 
-### CFB — opponent-adjusted EPA (`cfb_adjusted_epa`): season + walk-forward
+### Added
 
-`sportsdataverse.cfb.cfb_adjusted_epa()` and `cfb_adjusted_epa_by_game()` add a reusable ridge / RAPM-style opponent-adjustment primitive — separating a team's per-play EPA from its schedule with a ridge regression on offense/defense team indicators (plus home-field), fit over the competitive (`0.1 ≤ wp_before ≤ 0.9`) pass and rush plays. The season function returns one row per team (adjusted off / def / net EPA + ranks); the **walk-forward** function returns one row per team-game and is point-in-time — each week is adjusted using opponent strengths fit only on *prior* weeks, so the values are leak-free and valid as in-season power-rating or model inputs (week 1 has no prior, so its adjustments are null; not-yet-seen opponents fall back to the league baseline, the intended early-season shrinkage). This is an in-sample per-season estimator lifted out of the cfb-data `team_summaries` builder — not a bundled `.ubj` artifact. `scikit-learn` is now a runtime dependency.
+- **CFB:** `cfb_adjusted_epa()` (one row per team: opponent-adjusted off / def / net EPA + ranks)
+  and `cfb_adjusted_epa_by_game()` (walk-forward, one row per team-game, fit only on prior weeks so
+  leak-free; week 1 is null), a ridge fit on competitive (`0.1 ≤ wp_before ≤ 0.9`) pass/rush plays.
+- **NFL:** the ESPN path (`NFLPlayProcess`) gains `qb_epa`, `wp` / `vegas_wp` (+ `def_wp` /
+  `home_wp` / `away_wp`) and `xpass` / `pass_oe`; xYAC stays a documented null stub there.
+- **NFL:** the nflverse path (`enrich_nfl_pbp`) gains the per-play QBR EPA components.
 
-### NFL — era-aware decision models + both-path (ESPN + nflverse) model parity
+### Changed
 
-Ships the era-aware NFL model suite and brings both PBP construction paths to model parity. Rule-era one-hots (`era0..era4`, cuts 2001/2005/2013/2017) are added to the `xpass` / fourth-down / `fg` models so the curves are era-aware across all of 1999–2025 (fourth-down 14-feature, fg 7-feature, xpass 19-feature), and the bundled `nfl/models/*` are refreshed to the 1999–2025 retrain (two-point on 2010–2025).
+- **NFL:** the `xpass`, fourth-down and `fg` models gain rule-era one-hots (`era0..era4`, cuts
+  2001/2005/2013/2017), and the bundled `nfl/models/*` are refreshed to the 1999–2025 retrain
+  (two-point on 2010–2025).
+- **NFL:** the fourth-down decision surface is on by default in both PBP builders, with each model
+  scored on its own play-type subset (xpass on scrimmage dropbacks, cp/xyac on pass + air-yards,
+  fourth-down on `down == 4`).
+- **Packaging:** `scikit-learn` is now a runtime dependency.
 
-Both builders now produce the same modeled columns: the **ESPN path** (`NFLPlayProcess`) gains `qb_epa`, `wp` / `vegas_wp` (+ `def_wp` / `home_wp` / `away_wp`), and `xpass` / `pass_oe`, wired into `run_processing_pipeline` in nflfastR order; the **nflverse path** (`enrich_nfl_pbp`) gains the per-play QBR EPA components. The fourth-down decision surface is **default-on in both builders**, scored on its play-type subset and merged back by play id, with each model applied on its correct play-type shape (xpass on scrimmage dropbacks, cp/xyac on pass + air-yards, fourth-down on `down == 4`). xYAC remains the documented null stub on the ESPN path (no `air_epa`). A latent bug the era refresh introduced is fixed: `calculate_xpass` now backfills the `era0`/`era1` features `_make_cp_mutations` did not build. Pairs with the nfl-data 1999–2025 retrain that produced the artifacts.
+### Fixed
+
+- **NFL:** `calculate_xpass` backfills the `era0` / `era1` features that `_make_cp_mutations` did
+  not build.
 
 ## 0.0.70 Release: June 24, 2026
 
-### CFB — `qbr` / `fg` / `wp_spread` models refreshed on the consensus-odds full-corpus reprocess
+### Changed
 
-The bundled CFB `qbr_model`, `fg_model`, and `wp_spread` XGBoost artifacts are retrained on the full 2004–2025 play-by-play corpus after it was re-reprocessed with two upgraded modeling inputs: the **`cfb_line_odds` multi-book consensus** pregame spread/total (replacing ESPN's single pickcenter as the EPA/WPA odds source) and **roster-backed pre-2014 player IDs**. Feature contracts are byte-identical to the shipped models (`qbr` 10-feature incl. `era0–3`, `fg` 5-feature, `wp_spread` 13-feature), so this is a drop-in artifact refresh — no model-application changes.
-
-Leave-one-season-out CV over all 22 seasons confirms the gains: **`qbr` RMSE 17.60 → 17.29** (r² 0.598 → 0.612), **`fg` logloss 0.5265 → 0.5247**, and **`wp_spread` baseline logloss 0.3616 → 0.3486** — the win-probability model improves most, since the consensus odds sharpen the `spread_time` feature directly (the signal the rule-era one-hot dummies previously had to recover). The `fourth_down` model is intentionally left unchanged: on the refreshed corpus its era variant no longer beats the consensus-odds baseline, so it was not promoted.
+- **CFB:** bundled `qbr_model`, `fg_model` and `wp_spread` are retrained on the full 2004–2025 corpus
+  reprocessed with `cfb_line_odds` multi-book consensus odds and roster-backed pre-2014 player ids;
+  feature contracts are unchanged (drop-in), and the `fourth_down` model is left unchanged.
 
 ## 0.0.69 Release: June 23, 2026
 
-### CFB — roster-backed `{type}_player_id` + player-name cleanup fixes
+### Added
 
-`CFBPlayProcess` now emits a `{type}_player_id` for every extracted `{type}_player_name`, resolved **team-aware** against the game roster: each player type maps to the team that fielded it (offense `pos_team` / defense `def_pos_team` / special-teams `kicking_team` / `return_team` / recovery), so identical names on opposing rosters don't collide; a globally-unique name is the fallback. Ids resolve for **all years** — pre-2014 (no structured `participants[]` array) via the roster, 2014+ from the clean participant names.
+- **CFB:** `CFBPlayProcess` emits a `{type}_player_id` for every `{type}_player_name`, resolved
+  team-aware against the game roster (identical names on opposing rosters don't collide), all years.
+- **CFB:** new `CFBPlayProcess(game_roster=, participants=)` constructor params let offline
+  rebuilds pass a stored roster and participants, fetch-free.
 
-- **New `CFBPlayProcess(game_roster=, participants=)` constructor params** let offline rebuilds pass the stored roster + participants — fetch-free, and keeping 2014+ clean names when `join_participants` is off. `__join_participants` now accepts a caller-supplied participant frame / `{"data": [...]}` / row list instead of always fetching.
-- **Player-name cleanup fixes the roster-match exposed:** the receiver state-abbrev strip (`ST`/`GA`/`FL`/…, with the leading space) is anchored to a *trailing standalone token* so it can't corrupt real names (it used to eat the " St" inside "Stewart" → "ewart"); a garbage guard nulls obvious play-text artifacts ("bea loss of") before the id-join.
+### Fixed
+
+- **CFB:** the receiver state-abbreviation strip only removes a trailing standalone token (it had
+  turned "Stewart" into "ewart"), and play-text artifacts ("bea loss of") are nulled before the
+  id join.
 
 ## 0.0.68 Release: June 23, 2026
 
-### CFB — completion-probability (`cp`/`cpoe`) + expected-pass (`xpass`/`pass_oe`) surface
+### Added
 
-`CFBPlayProcess` now emits per-play completion-probability and expected-pass columns, mirroring nflfastR's `cp`/`cpoe` and `xpass`/`pass_oe`.
+- **CFB:** `CFBPlayProcess` emits `cp` / `cpoe` (`100 * (completion - cp)`, pass plays) and
+  `xpass` / `pass_oe` (`100 * (pass - xpass)`, scrimmage rush-or-pass plays) from new bundled
+  `cfb/models/cfb_cp_model.ubj` / `xpass_model.ubj`; null where a source column is absent.
+- **CFB:** a spread-free win-probability surface, `wp_before_naive` / `wp_after_naive` / `wpa_naive`
+  (plus `def_` / `home_` / `away_` analogues), from new bundled `cfb/models/wp_naive.ubj`.
+- **CFB:** `sportsdataverse.cfb.get_4th_down_probs(pbp_df)` (cfb4th port) adds go / punt / field-goal
+  WP columns, `fourth_down_recommendation` (`go`, `punt`, `field_goal`), `*_wp_diff` and `go_boost`;
+  `CFBPlayProcess.add_fourth_down_probs()` applies it to a processed game's fourth-down rows.
+- **CFB:** fourth-down models `fg_model.ubj` and `punt_distribution.parquet` (bundled) and
+  `fd_model.ubj` (download-on-demand, cached under `~/.cache/sportsdataverse/cfb_models/`, override
+  with `SDV_PY_CFB_MODEL_DIR`).
+- **CFB:** `sportsdataverse.cfb.get_2pt_probs(pbp_df)` (cfb4th port) adds `two_pt_wp`, `xp_wp`,
+  `prob_2pt`, `two_pt_recommendation` (`go_for_2`, `kick_xp`) and `two_pt_wp_diff`;
+  `CFBPlayProcess.add_2pt_probs()` applies it to a processed game's point-after rows.
+- **CFB:** new bundled `two_pt_model.ubj` supplies `prob_2pt`; `prob_xp` is the empirical CFB
+  extra-point make rate `0.9851`.
+- **CFB:** `run_processing_pipeline(fourth_down_probs=True, two_pt_probs=True)` appends the
+  fourth-down and two-point decision columns by default.
+- **NFL:** `calculate_xpass` adds `xpass` and `pass_oe` to enriched NFL PBP, and
+  `nfl/nfl_fourth_down.py` ports nfl4th's go / field-goal / punt WP and recommendation
+  (download-on-demand `fd_model` / `wp_model`).
+- **NFL:** `load_nfl_espn_qbr` (alias `load_espn_qbr`) loads ESPN Total QBR: `summary_type=`
+  season|week, 2006+, `source=` the nflverse `espn_data` or the SDV-native `nfl_espn_qbr` release.
 
-- **Two new bundled models** — `cfb/models/cfb_cp_model.ubj` (8-feat `binary:logistic`: `down`, `distance`, `yards_to_goal`, `score_diff`, `seconds_remaining`, `is_home`, `period`, `passing_down`) and `cfb/models/xpass_model.ubj` (7-feat `binary:logistic`: `down`, `distance`, `yards_to_goal`, `pos_score_diff`, `TimeSecsRem`, `era`, `period`). Both are ~400 KB and ship via the existing `cfb/models/*` package-data glob (no download-on-demand).
-- **New per-play columns** — `cp` = P(complete) on pass plays with `cpoe = 100 * (completion - cp)` (percentage-point scale, null on non-pass plays); `xpass` = P(pass) on scrimmage rush-or-pass plays with `pass_oe = 100 * (pass - xpass)` (null elsewhere). Added as two pipe steps (`__process_cpoe` / `__process_xpass`) after the EPA/WPA steps in `run_processing_pipeline()`; each degrades to null columns rather than raising when a source column is absent.
+### Changed
 
-### CFB — spread-free (naive) win-probability surface (`wp_*_naive`)
+- **CFB:** bundled `qbr_model.ubj` is retrained on the full 2004–2025 history, replacing the
+  2020-lineage model (2021–2025 holdout RMSE 23.2 → 16.1 against ESPN raw QBR).
+- **CFB:** rule-era one-hots (`era0..era3`, cuts 2006/2013/2020): QBR becomes the 10-feature era
+  model, `fg_model.ubj` the 5-feature one, and `fd_model.ubj` the 9-feature one, now bundled (was
+  download-on-demand).
+- **CFB:** bundled `wp_spread.ubj` is retrained on the odds-backfilled frame (~2,167 missing-spread
+  games now carry consensus spreads); same 13-feature contract.
+- **NFL:** `get_fg_wp` / `get_2pt_wp` use a self-trained XGBoost FG model (`fg_model.ubj`:
+  `yardline_100`, `fg_roof`, `fg_era`) instead of the mgcv-GAM grid; the nfl4th long-kick clamps
+  are unchanged.
+- **NFL:** `xpass_model.ubj` is bundled under `nfl/models/`, so `calculate_xpass` works offline with
+  no first-use download; output is unchanged.
 
-`CFBPlayProcess` now emits a second, **spread-free** win-probability surface alongside the existing spread WP, completing the play-level model handoff begun in 0.0.67 (which retrained EP + spread WP on the full 2004–2025 history).
+### Fixed
 
-- **New bundled model `cfb/models/wp_naive.ubj`** — the faithful cfbscrapR "naive" recipe (12-feat = `wp_final_names` minus `spread_time`, `binary:logistic`, 65 rounds), retrained on the same full-history corpus (2,219,607 plays, 2004–2025) as the spread model. Ships via the existing `cfb/models/*` package-data glob.
-- **New per-play columns** `wp_before_naive` / `wp_after_naive` / `wpa_naive` (plus `def_`/`home_`/`away_` analogues), mirroring the spread columns under a `_naive` suffix. The naive surface answers "given only game state, who wins?" while the spread surface bakes in the pregame line; the two correlate ~0.90, diverging most early-game where the market prior carries the most information.
-- **Refactor (no behavior change to the spread surface):** the win-probability prediction + game-logic derivation in `__process_wpa` was factored into shared `_wp_predict` / `_apply_wp_derivation` helpers routed once per model. The spread (un-suffixed) output is **byte-identical** to the prior release — verified against a captured per-play baseline.
-
-### CFB — QBR model retrained on the full 2004–2025 history
-
-The bundled `cfb/models/qbr_model.ubj` (6-feat XGBoost: `qbr_epa` / `sack_epa` / `pass_epa` / `rush_epa` / `pen_epa` / `spread`) was retrained on the full-history corpus, replacing the legacy 2020-lineage model.
-
-- **Decisively better against the ESPN raw-QBR reference.** On a 2021–2025 holdout (out-of-sample for the legacy model): RMSE 23.2 → **16.1** (−31%), MAE 18.7 → **12.5**, R² 0.29 → **0.66**, correlation 0.69 → **0.82**. The retrained model's honest leave-one-season-out metrics (RMSE 17.9, R² 0.585) confirm the gains are real generalization, not in-sample fit.
-- **Drop-in swap** — same 6-feature contract, ships via the existing `cfb/models/*` package-data glob; no caller changes.
-
-### CFB — fourth-down decision surface (`get_4th_down_probs`, cfb4th port)
-
-A full college-football fourth-down decision surface, a faithful Python port of [cfb4th](https://github.com/sportsdataverse/cfb4th)'s `add_4th_probs()`, against this package's bundled EP / WP-spread boosters.
-
-- **`sportsdataverse.cfb.get_4th_down_probs(pbp_df)`** scores all three options on a frame of fourth-down situations and adds: `go_wp` / `first_down_prob` / `wp_succeed` / `wp_fail` (go), `punt_wp` (punt), `fg_make_prob` / `make_fg_wp` / `miss_fg_wp` / `fg_wp` (field goal), a `fourth_down_recommendation` ∈ {`go`, `punt`, `field_goal`} (max-WP choice), per-option `*_wp_diff`, and `go_boost` (cfb4th's headline `100·(go_wp − max(fg_wp, punt_wp))`).
-- **`CFBPlayProcess.add_fourth_down_probs()`** applies the same to a processed game's fourth-down rows after `run_processing_pipeline()`.
-- **New models:** `fg_model.ubj` (CFB-native field-goal make-probability by distance, trained on 42.6k attempts) and `punt_distribution.parquet` (punt end-yardline distribution) are bundled under `cfb/models/`; the 6-feat / 76-class `fd_model.ubj` (yards-gained, with the ordinal CFB rule-era factor) is **download-on-demand** (~16 MB, fetched from the `espn_cfb_model_artifacts` release and cached under `~/.cache/sportsdataverse/cfb_models/`, mirroring the NFL xYAC pattern; override with `SDV_PY_CFB_MODEL_DIR`). The go path reuses the reviewed cfb-data decision-layer machinery; punt/FG mirror cfb4th's possession-flip + end-game scoring.
-
-### CFB — two-point-conversion decision surface (`get_2pt_probs`, cfb4th port)
-
-The extra-point vs go-for-2 decision, a faithful Python port of [cfb4th](https://github.com/sportsdataverse/cfb4th)'s `get_2pt_wp()`, against this package's bundled EP / WP-spread boosters and a new bundled CFB two-point model.
-
-- **`sportsdataverse.cfb.get_2pt_probs(pbp_df)`** treats each row as "the scoring team just made a touchdown; decide". For each of the three point outcomes (`0` / `1` / `2`) it subtracts the points, flips to the opponent's ensuing kickoff-return drive (1st-&-10 at the 25, `yards_to_goal = 75`), scores EP → WP, and flips WP back to the scoring team. It adds `two_pt_wp` (= `prob_2pt·wp(2) + (1−prob_2pt)·wp(0)`), `xp_wp` (= `prob_xp·wp(1) + (1−prob_xp)·wp(0)`), `prob_2pt`, a `two_pt_recommendation` ∈ {`go_for_2`, `kick_xp`} (go for 2 iff `two_pt_wp > xp_wp`), and `two_pt_wp_diff` (= `two_pt_wp − xp_wp`, positive ⇒ go for 2). The ensuing-drive frame reuses the reviewed 4th-down state machinery (`_flip_team_state` + EP/WP scorers).
-- **`CFBPlayProcess.add_2pt_probs()`** applies the same to a processed game's point-after / two-point-conversion rows (those with `pointAfterAttempt.text` present) after `run_processing_pipeline()`; every other row carries nulls.
-- **New model:** `two_pt_model.ubj` (a `binary:logistic` 4-feature booster — `posteam_spread`, `posteam_total`, `pos_score_diff`, ordinal `era`) is bundled under `cfb/models/`. `prob_2pt` comes from this model (cfb4th hardcodes 0.45); `prob_xp` is the empirical CFB extra-point make rate `0.9851` (cfb4th derives XP from its FG GAM, but the empirical rate is more accurate for CFB).
-
-### CFB — rule-era QBR / FG / fourth-down models + `spread_time` sign fix
-
-The QBR, field-goal, and fourth-down (yards) models gain one-hot rule-era dummies (`era0..era3`, cuts 2006/2013/2020) where they improve out-of-fold, and the bundled boosters are swapped to the era-augmented versions.
-
-- **QBR** — `qbr_vars` gains `era0..era3` (LOSO RMSE 17.9 → 17.4); `__process_qbr` injects the per-game era one-hot before prediction; bundled `qbr_model.ubj` swapped to the 10-feature era model.
-- **Fourth-down** — `fd_model.ubj` switched to the 9-feature one-hot era model (first-down cal-MAE 0.0035 → 0.0027) and **bundled** in the package (was download-on-demand); `fg_model.ubj` swapped to the 5-feature era model.
-- **WP-spread** — bundled `wp_spread.ubj` retrained on the odds-backfilled frame (the ~2,167 missing-spread games now carry real consensus spreads; LOSO logloss 0.362 → 0.352; same 13-feature contract, no inference change).
-- **`spread_time` sign fix** — `_predict_wp` computed `spread_time = −pos_team_spread·exp(…)`, inverted vs the trained-on convention (favorites scored as underdogs in `get_go_wp`/`get_fg_wp`/`get_punt_wp`); corrected to `+pos_team_spread·exp(−4·elapsed_share)`.
-- **Decision surfaces on by default** — `run_processing_pipeline(fourth_down_probs=True, two_pt_probs=True)` now appends the fourth-down and two-point decision columns to a processed game by default.
-
-### CFB — pre-2014 play-text player-name extraction
-
-`CFBPlayProcess` now recovers per-play player names for **2004–2013** games, where ESPN ships no structured per-play participants array (only `teamParticipants`). Two latent bugs in the play-text regex extraction were fixed: a multi-alternative `str.extract` group-index bug (the matched branch's name landed in a non-default capture group, returning null for ESPN "rush" / "Punt by" / "on-side" / "returned by" phrasings) and a `\d`-escaping bug (a literal backslash instead of a digit, which broke field-goal-kicker extraction). Pre-2014 games now populate rusher / passer / receiver / sack / fg-kicker / punter / returner / fumble player names (all null before); 2014+ output is unchanged (the structured-participants overwrite still wins).
-
-### NFL — expected pass (`xpass` / `pass_oe`) + nfl4th fourth-down decision surface
-
-`calculate_xpass` adds `xpass` (P(dropback)) and `pass_oe = 100·(pass − xpass)` to the enriched NFL PBP, plus a faithful Python port of [nfl4th](https://github.com/nflverse/nfl4th)'s fourth-down decision surface (`nfl/nfl_fourth_down.py`) scoring go / field-goal / punt win probability + a recommendation.
-
-- **`calculate_xpass`** — the self-derived dropback booster; `xpass`/`pass_oe` mirror nflfastR's `add_xpass`.
-- **nfl4th surface** — go / FG / punt WP via the download-on-demand `fd_model` / `wp_model` artifacts (cached on first use), mirroring nfl4th's `add_4th_probs`.
-
-### NFL — self-trained XGBoost field-goal model in the fourth-down surface
-
-`get_fg_wp` / `get_2pt_wp` switched from the mgcv-GAM prediction grid to a self-trained `binary:logistic` XGBoost FG model (`fg_model.ubj`, features `yardline_100` / `fg_roof` / `fg_era`) with the unchanged nfl4th long-kick clamps. Oracle parity (2022): `fg_wp` 0.9995, `go_wp` 0.9998, `punt_wp` 0.9996.
-
-### NFL — `load_nfl_espn_qbr` (ESPN QBR loader, nflreadpy parity)
-
-New `load_nfl_espn_qbr` (also aliased `load_espn_qbr`) — the last nflreadpy dataset without an sdv-py loader. `summary_type=` season|week, 2006+ floor, `source=` dual (nflverse `espn_data` release or the SDV-native `nfl_espn_qbr` release, 2006–2025), read-once-then-filter, with a 23-column returns-schema.
-
-### NFL — bundled self-derived xpass model (offline, no first-use download)
-
-`xpass_model.ubj` (the self-derived dropback booster, 1121 trees, 7.4 MB) moves from download-on-demand to bundled under `nfl/models/`, so `calculate_xpass` works offline. It is the **same** model the release ships — xpass output is unchanged; removed from `_MODEL_URLS` (the bundled path wins in `_load_model`'s resolution order).
+- **CFB:** the `spread_time` sign in `_predict_wp` is corrected to
+  `+pos_team_spread·exp(−4·elapsed_share)`; favorites had been scored as underdogs in `get_go_wp` /
+  `get_fg_wp` / `get_punt_wp`.
+- **CFB:** 2004–2013 games now populate rusher, passer, receiver, sack, fg-kicker, punter, returner
+  and fumble player names from play text (all null before); 2014+ output is unchanged.
 
 ## 0.0.67 Release: June 17, 2026
 
-### Documentation — return-table column descriptions filled (~3,061 columns)
+### Added
 
-Every generated reference page renders a `col_name | type | description` returns table; ~3,061 of those cells previously rendered **blank** because the column name had no entry in the R-package-mined dictionary that backfills descriptions at render time (sdv-py-/provider-specific columns: ESPN Site v2, MLB Stats API, NHL api-web / EDGE, nflverse Shield, HockeyTech, etc.). Those cells are now filled.
+- **NFL:** `enrich_nfl_pbp()` (lead-diff orchestrator) computes nflverse-native EP / EPA / WP / WPA /
+  CP / xYAC on a real nflverse PBP frame, aligned to nflfastR.
+- **NFL:** shared `calculate_epa()` / `calculate_wpa()` in `sportsdataverse/nfl/ep_wp.py`, with the
+  NFL EP/WP constants and column contract centralized in `sportsdataverse/nfl/model_vars.py`.
 
-- **New hand-curated source** `tools/codegen/manual_column_descriptions.yaml`, keyed by the schema's `schema:` field (with a `_global` table-agnostic fallback), consumed at render time by `generate.py:_table_cell_desc`. Resolution order: captured-stored value → `manual[schema][col]` → `manual._global[col]` → R-dict mined fill → empty. Descriptions live **only** here (the `schemas/**.yaml` are clobbered blank on every capture), so they survive re-capture.
-- **Coverage:** NFL (1,158 — nflverse / Next Gen Stats / Pro Football Reference / ESPN), MLB (599 — Stats API + ESPN), NHL (588 — api-web / EDGE / ESPN), CFB (177 — ESPN + cfbfastR), plus the ESPN cross-league game **summary** (sport-agnostic), NBA/WNBA/MBB/WBB, PWHL + CHL junior hockey (OHL/QMJHL/WHL/AHL), and the shared `standings`/`leaders`/`team_roster`/`news`/`team_schedule` schemas.
-- **Regression guard:** `tools/codegen/extract_residual_columns.py` computes the render-blank residual; `tests/codegen/test_manual_descriptions.py` asserts it stays at **0** (a newly-captured undocumented column fails CI until authored), plus an orphan guard (no stale dict keys) and a filler-lint (rejects terse/generic descriptions). Every bucket was adversarially accuracy-reviewed; corrections included PFR `rec_br`, MLB `base_on_balls`, NHL EDGE goalie goal-differential / pbp assist totals, and the long-format `load_cfb_betting_lines` columns.
+### Changed
 
-### Documentation — doctest-prompt cleanup, native returns-tables, new tutorials
+- **CFB:** bundled `ep_model.ubj` and `wp_spread.ubj` are retrained on 2,219,607 plays from
+  2004–2025 with unchanged recipes and feature order (drop-in); the QBR model is intentionally
+  unchanged.
+- **Codegen:** returns-table descriptions live in new `tools/codegen/manual_column_descriptions.yaml`
+  (keyed by schema, with a `_global` fallback), so they survive re-capture; a test holds the
+  render-blank residual at 0.
+- **Docs:** ~3,061 previously blank returns-table descriptions are filled (NFL, MLB, NHL, CFB, the
+  ESPN game summary, NBA/WNBA/MBB/WBB, PWHL and CHL junior hockey, shared schemas).
+- **Docs:** generated docstrings no longer emit raw `>>>` doctest prompts (now napoleon
+  `Quick start::` blocks), and the ~55 hand-written prompts were converted.
+- **Docs:** 78 new native returns tables: NHL api-web (9), stats-rest (10), records (37), EDGE (15)
+  and MLB Stats API (8).
+- **Docs:** three new tutorials under `examples/notebooks/` (rendered to `docs/docs/tutorials/`):
+  Soccer, Cricket, and Other ESPN leagues (UFL/XFL/CFL, college baseball/softball, NCAA hockey).
 
-- **No more raw `>>>` doctest prompts.** The generated ESPN-wrapper + loader docstring templates emitted `>>> call` under `Example:` (which `sphinx.ext.doctest` would try to verify); both emission sites now produce the napoleon `Quick start::` literal block, clearing ~3,559 generated hazards. The remaining ~55 hand-written prompts (NFL NGS / parsers, The Odds API, `find`/`discover`, etc.) were converted in source.
-- **78 new native returns-tables.** Wired `returns_schema` for NHL api-web (9), stats-rest (10), records (37), EDGE (15), and MLB Stats API (8) endpoints that previously rendered no return table — captured from live fixtures; the 676 new columns are fully described. (24 endpoints were skipped: off-season EDGE top-10 leaderboards, retired record paths, and auth-gated MLB endpoints.)
-- **`refresh_return_schemas` no longer writes 0-column per-league schemas** — an empty `columns: []` file shadowed and suppressed the generic `schemas/{name}.yaml` fallback, leaving some leagues with no table; it now skips them so the generic table renders.
-- **Three new intro tutorials** under `examples/notebooks/` (rendered to `docs/docs/tutorials/`): **Soccer** (`espn_soccer_*(league=)` + headline aliases), **Cricket** (`espn_cricket_*` + the 8-section matchcard summary), and **Other ESPN leagues** (UFL/XFL/CFL, college baseball/softball, NCAA M/W hockey).
+### Fixed
 
-### NFL — PBP ETL ↔ nflfastR alignment + faithful model artifacts
-
-- **`enrich_nfl_pbp()` lead-diff orchestrator** computes nflverse-native EP/EPA/WP/WPA/CP/xYAC on a real nflverse PBP frame, aligned to nflfastR; runs on live nflverse data.
-- **Shared derivations** `calculate_epa()` / `calculate_wpa()` lifted into `sportsdataverse/nfl/ep_wp.py`; the NFL EP/WP constants + shared column contract centralized in `sportsdataverse/nfl/model_vars.py`.
-- **Faithful NFL model artifacts** replace the byte-identical CFB 8-feature placeholders that previously shipped under `nfl/models/`: `ep_model.ubj` (18 features), `wp_spread.ubj` (12), `wp_naive.ubj` (11), `cp_model.ubj` (18) — resolving the long-standing `xgboost num_feature >= num_col (8 vs 18)` mismatch that left the NFL model path red.
-- **New test coverage:** `tests/nfl/` gains enrich, enrich-derive, EPA, WPA, and column-contract suites.
-
-### CFB — EP + WP models retrained on the full 2004–2025 history
-
-- Canonical `cfb/models/ep_model.ubj` and `cfb/models/wp_spread.ubj` retrained on the complete cfbfastR-cfb-raw finals — **2,219,607 cleaned/labeled/weighted plays, seasons 2004–2025** — now that the raw backfill is complete. Shipped XGBoost recipes unchanged (EP `multi:softprob` 7-class/525 rounds; WP-spread `binary:logistic`/760 rounds).
-- **Leave-one-season-out validated** (22 folds, out-of-fold): EP mlogloss 1.233 / accuracy 0.500 / EP-value calibration MAE 0.014 pts; WP logloss 0.362 / Brier 0.118 / AUC 0.916 / weighted-cal-error 0.0147. Drop-in safe (feature names/order match `cfb_pbp.ep_final_names`/`wp_final_names`). **QBR is intentionally unchanged** (LOSO R² 0.585 — remains the Dec-2020 canonical model).
+- **Codegen:** `refresh_return_schemas` no longer writes 0-column per-league schemas that hid the
+  generic `schemas/{name}.yaml` returns table.
+- **NFL:** faithful model artifacts replace the CFB 8-feature placeholders under `nfl/models/`
+  (`ep_model.ubj` 18 features, `wp_spread.ubj` 12, `wp_naive.ubj` 11, `cp_model.ubj` 18), fixing the
+  `xgboost num_feature >= num_col (8 vs 18)` mismatch.
 
 ## 0.0.66 Release: June 17, 2026
 
-### CFB — `cfb_pbp` sparse-game `ColumnNotFoundError` guard (`end.team.id` et al.)
+### Fixed
 
-Sparse pre-2010 games (e.g. 2005 game `252440154`) crashed `CFBPlayProcess.run_processing_pipeline()` with `polars.exceptions.ColumnNotFoundError: unable to find column "end.team.id"`. The per-play `start.*`/`end.*`/`period.*`/`clock.*`/`type.*` columns are produced only by `pd.json_normalize` flattening the plays array, so when *no* play in a game carries a given nested object the column is never created — and the downstream `with_columns` chain dereferences it via `pl.col(...)` unconditionally, which raises at plan time before the existing `fill_null` / `when-otherwise` logic can substitute a value.
-
-Added a column-materialization guard in `__helper_cfb_pbp_features` (after the early-return length checks, before the main play chain) that diffs the 15 unconditionally-referenced json_normalize-origin columns against the live frame and creates any missing one as a Null literal:
-
-- String-typed source columns (`clock.displayValue`, `type.text`, `text`, `start.downDistanceText`) are created as `pl.lit(None, dtype=pl.String)` because the chain runs `.str.*` ops on them (an untyped Null column raises `SchemaError`).
-- Numeric/bool columns stay untyped `pl.lit(None)` so their explicit downstream `.cast(...)` owns the final dtype.
-- The guard is a **no-op for healthy games** — `with_columns` is skipped when nothing is missing, so output is byte-identical (verified: 5 control games reprocessed to identical 406-column frames and exact play counts). Resolves all 7 known-failing 2005 games.
+- **CFB:** `CFBPlayProcess.run_processing_pipeline()` no longer raises `ColumnNotFoundError: unable
+  to find column "end.team.id"` on sparse pre-2010 games (e.g. 2005 game `252440154`); healthy
+  games' output is unchanged.
 
 ## 0.0.65 Release: June 17, 2026
 
-### Namespace — minor/alias leagues nested under sport-group packages
+### Breaking changes
 
-- refactor(namespace): nest minor/alias leagues under sport-group packages (`sportsdataverse.soccer.epl`, `.hockey.ahl`, `.football.ufl`, `.baseball.college_baseball`); the 8 majors + pwhl/soccer/cricket stay top-level. Legacy names (`sportsdataverse.epl`, `import sportsdataverse.ufl`) still resolve with a `DeprecationWarning`. NOTE: `discover.function_count()`/`list_functions()` keep flat-leaf keys (`function_count(league="ufl")` works); `import sportsdataverse` now eagerly loads the 12 soccer-alias submodules to support attribute access.
+- **MLB:** the 64 generated `mlb_api.py` and 15 hand-written `mlb_api_extra.py` Stats API wrappers
+  are renamed `mlb_api_{short}` → `mlb_{short}`, with no aliases.
 
-### All sports — `espn_*_game_rosters` vectorized logo extraction
+**Upgrade notes** — Update call sites from `mlb_api_{short}` to `mlb_{short}`; there are no aliases.
 
-Pre-2010 ESPN team payloads omit the `logos` key entirely, causing `helper_{sport}_team_items` to raise `polars.exceptions.ColumnNotFoundError: "logos" not found`. The row-by-row item-assignment fallback (`teams_df[row, "logo_href"] = ...`) also triggers `TypeError: the truth value of a Series is ambiguous` in polars 1.x because the row-index selector internally evaluates `Series.__bool__`.
+### Changed
 
-Replaced the logos block in all seven `espn_*_game_rosters` modules (`cfb`, `mbb`, `nba`, `nfl`, `nhl`, `wbb`, `wnba`) with vectorized `with_columns`:
+- **Namespace:** minor/alias leagues are nested under sport-group packages
+  (`sportsdataverse.soccer.epl`, `.hockey.ahl`, `.football.ufl`, `.baseball.college_baseball`); the
+  8 majors plus pwhl/soccer/cricket stay top-level.
+- **Namespace:** `import sportsdataverse` now eagerly loads the 12 soccer-alias submodules, and
+  `discover.function_count()` / `list_functions()` keep flat-leaf keys
+  (`function_count(league="ufl")` works).
 
-- `if "logos" in teams_df.columns:` guard handles pre-2010 payloads where the key is absent.
-- `pl.col("logos").list.get(i).struct.field("href").fill_null("")` — expression-engine extraction, null-safe, no Python-level row iteration.
-- `except Exception:` fallback to empty-string literals if the logos payload doesn't match the expected `List(Struct)` shape.
+### Deprecated
 
-### MLB — `mlb_api_*` renamed to `mlb_*`
+- **Namespace:** legacy flat league imports (`sportsdataverse.epl`, `import sportsdataverse.ufl`)
+  still resolve but emit a `DeprecationWarning`.
 
-The 64 Stats API wrapper functions in `mlb_api.py` (generated via `tools/codegen/endpoints/mlb_api.yaml`) and the 15 hand-written functions in `mlb_api_extra.py` were renamed from `mlb_api_{short}` to `mlb_{short}` — parallel to the `statcast_*` → `mlb_statcast_*` rename in 0.0.64. The `_api_` infix was a disambiguation artifact from when multiple backends shared the module; it is now redundant. **No aliases — update call sites accordingly.**
+### Fixed
+
+- **ESPN:** the seven `espn_*_game_rosters` (`cfb`, `mbb`, `nba`, `nfl`, `nhl`, `wbb`, `wnba`) no
+  longer raise `ColumnNotFoundError: "logos" not found` on pre-2010 payloads, nor
+  `TypeError: the truth value of a Series is ambiguous` from row-wise logo assignment.
 
 ## 0.0.64 Release: June 17, 2026
 
-### MLB — comprehensive Baseball Savant / Statcast surface (`mlb_statcast_*`, 43 endpoints)
+### Breaking changes
 
-Expanded the Baseball Savant integration from a 12-endpoint representative slice to the full **~43-endpoint catalog** under the `mlb_statcast_<family>_<name>` naming (`search` / `leaderboard` / `gamefeed` / `player`), with **every endpoint parsed to a tidy frame by default** (`return_parsed=False` / `raw=True` for the raw payload).
+- **MLB:** the pre-0.0.64 `statcast_*` functions are renamed to the `mlb_statcast_*` convention,
+  with no aliases.
 
-- **39 codegen-generated wrappers** — 37 leaderboards (expected stats, sprint speed, bat tracking, pitch arsenals/movement/tempo, OAA, arm strength, catcher framing/blocking/throwing, baserunning, park factors, …) plus `mlb_statcast_gamefeed` (one row per pitch) and `mlb_statcast_schedule` (one row per game). Savant mixes CSV / JSON / HTML, so the family uses a content-type-aware getter (`dict` for JSON, `str` for CSV/HTML); the two HTML-embedded leaderboards (`fielding-run-value`, `statcast-park-factors`) are parsed from their embedded `data[]` blob.
-- **Hand-written search** — `mlb_statcast_search` (+ `_minors`, `_wbc`) auto-chunks the 25,000-row Savant cap and translates friendly filters (`season`, `pitch_type`, `at_bat_result`, `batters_lookup`, …) to Savant's `hf*` params. `mlb_statcast_player` parses a player page's `serverVals` section (default `statcast`, ~260 metrics) to a tidy frame (`section=` for others, `raw=True` for HTML).
-- **Returns-schemas** (`col_name | type | description`) for every frame-returning function, and `examples/notebooks/09_mlb_intro.ipynb` modernized to the new surface.
-- The pre-0.0.64 `statcast_*` names were **renamed (no aliases)** to the `mlb_statcast_*` convention.
+### Added
 
-### Documentation — `nfl_api` (NFL.com Shield) returns-schema tables
+- **MLB:** the full ~43-endpoint Baseball Savant surface as `mlb_statcast_<family>_<name>`
+  (`search`, `leaderboard`, `gamefeed`, `player`), parsed by default (`return_parsed=False` /
+  `raw=True` for raw): 37 leaderboards, `mlb_statcast_gamefeed` and `mlb_statcast_schedule`.
+- **MLB:** `mlb_statcast_search` (+ `_minors`, `_wbc`) auto-chunks the 25,000-row cap and translates
+  friendly filters (`season`, `pitch_type`, `at_bat_result`, `batters_lookup`, ...) to Savant's `hf*`
+  params; `mlb_statcast_player` parses a page's `serverVals` section (default `statcast`, `section=`).
 
-Added live-captured `col_name | type | description` returns-schemas for all 11 `api.nfl.com` endpoints (`standings`, `rosters`, `teams_history`, `team`, `weeks`, `weeks_by_date`, `combine_profiles`, `draft_picks`, `injuries`, `game_summaries`, `weekly_game_details`), wired via `returns_schema:` into `nfl_api.yaml` and rendered into the reference docs — bringing `nfl_api` to parity with the other six native API families (mlb_api, nhl_*). Docs/codegen-metadata only; no runtime change.
+### Changed
+
+- **Docs:** returns tables for every frame-returning `mlb_statcast_*` function, and
+  `examples/notebooks/09_mlb_intro.ipynb` modernized to the new surface.
+- **Docs:** live-captured returns tables for all 11 `api.nfl.com` (`nfl_api`) endpoints
+  (`standings`, `rosters`, `teams_history`, `team`, `weeks`, `weeks_by_date`, `combine_profiles`,
+  `draft_picks`, `injuries`, `game_summaries`, `weekly_game_details`); no runtime change.
 
 ## 0.0.63 Release: June 16, 2026
 
-### All sports — `espn_*_game_rosters` diagonal per-team concat (fixes silent roster loss)
+### Fixed
 
-The per-team roster concat in `espn_wbb/wnba/nba/mbb/nfl/cfb_game_rosters` used `pl.concat(..., how="vertical")`, which hard-fails with `polars.exceptions.ShapeError` when a game's two teams ship different roster columns (e.g. one entry list has `jersey`, the other `didNotPlay`). The whole game then errored and was discarded as empty despite having roster data. Switched to `how="diagonal"` (union + null-fill), matching `nhl_game_rosters` and the `teams`/`athletes` concats in the same modules.
-
-### HTTP — `download()` no longer retries a definitive 404
-
-`sportsdataverse.dl_utils.download` retried a `NoESPNDataError` (ESPN 404 / `code:404` body) for the full `num_retries` budget — wasting ~51s of backoff and N requests per genuinely-absent resource, amplifying load against a rate-limited host. A 404 is definitive "no data", so it now fails fast (one attempt) instead of retrying. Connection/timeout/5xx errors still retry as before.
+- **ESPN:** `espn_wbb/wnba/nba/mbb/nfl/cfb_game_rosters` no longer hard-fail with `ShapeError` and
+  discard a game whose two teams ship different roster columns (the per-team concat is now diagonal).
+- **HTTP:** `dl_utils.download` fails fast on a definitive 404 (`NoESPNDataError`) instead of
+  retrying the full `num_retries` budget (~51s of backoff); connection, timeout and 5xx errors
+  still retry.
 
 ## 0.0.62 Release: June 16, 2026
 
-### All sports — `espn_*_game_rosters` robust to long-tail ESPN payloads
+### Fixed
 
-Applies the two `espn_cfb_game_rosters` robustness fixes from 0.0.61 to every sibling rosters builder — `espn_wbb_game_rosters`, `espn_wnba_game_rosters`, `espn_nba_game_rosters`, `espn_mbb_game_rosters`, `espn_nhl_game_rosters`, and `espn_nfl_game_rosters` — which were templated from the same source and shared both bugs verbatim:
-
-- **`statistics_href` strict-rename** of the competitors payload now renames only keys actually present, so older games that omit the team-level `statistics` `$ref` no longer raise `polars.exceptions.ColumnNotFoundError`.
-- **Per-team roster 404** is now tolerated: a single team's missing `/roster` (`NoESPNDataError`) no longer fails the whole game; the other team's roster is recovered, and `NoESPNDataError` is raised only when every team is empty.
-
-Adds parametrized offline regression tests across all six modules (`tests/test_sibling_game_rosters.py`).
+- **ESPN:** `espn_wbb_game_rosters`, `espn_wnba_game_rosters`, `espn_nba_game_rosters`,
+  `espn_mbb_game_rosters`, `espn_nhl_game_rosters` and `espn_nfl_game_rosters` no longer raise
+  `ColumnNotFoundError` on older games that omit the team-level `statistics` `$ref`.
+- **ESPN:** the same six builders tolerate one team's `/roster` 404: the other team's roster is
+  returned, and `NoESPNDataError` is raised only when every team is empty.
 
 ## 0.0.61 Release: June 16, 2026
 
-### CFB — `espn_cfb_game_rosters` robust to long-tail ESPN payloads
+### Fixed
 
-Surfaced by the 2004–2023 `cfbfastR-cfb-raw` backfill, two deterministic failures used to empty a game's rosters entirely (then get caught upstream and banked as empty "hollow" extras):
-
-- **`statistics_href` strict-rename.** Older games (e.g. pre-2021) omit the team-level `statistics` `$ref` in the competitors payload, so `statistics_href` never exists and the unconditional `items.rename({..., "statistics_href": "team_statistics_href"})` raised `polars.exceptions.ColumnNotFoundError` for the whole game. The renamed column is unused downstream, so the rename now applies only to keys actually present.
-- **Per-team roster 404.** A single team's `/roster` sub-endpoint can 404 (`NoESPNDataError`) — common for older games and FCS opponents — while the other team's roster exists. The per-team loop now skips a 404 team and recovers the other, raising `NoESPNDataError` only when *every* team is empty (genuinely no roster data).
-
-Adds offline helper unit tests (`tests/cfb/test_cfb_game_rosters.py`, no network).
+- **CFB:** `espn_cfb_game_rosters` no longer raises `ColumnNotFoundError` on older (e.g. pre-2021)
+  games that omit the team-level `statistics` `$ref`.
+- **CFB:** `espn_cfb_game_rosters` tolerates one team's `/roster` 404 (common for older games and FCS
+  opponents), returning the other team; `NoESPNDataError` is raised only when every team is empty.
 
 ## 0.0.60 Release: June 15, 2026
 
-### NFL — expected points, win probability, completion probability (CP/CPOE), and expected YAC (XYAC) models
+### Added
 
-`sportsdataverse.nfl.ep_wp` gains nflfastR-parity modeling functions — `calculate_expected_points`, `calculate_win_probability`, `calculate_completion_probability` (CP + CPOE), and `calculate_xyac` (four XYAC sub-models: mean/median/SD yardage + completion probability) — fed by ESPN-adapter feature builders and wired into `NFLPlayProcess`. Ships the bundled XGBoost `.ubj` model files.
+- **NFL:** `sportsdataverse.nfl.ep_wp` gains `calculate_expected_points`, `calculate_win_probability`,
+  `calculate_completion_probability` (CP + CPOE) and `calculate_xyac` (four XYAC sub-models), wired
+  into `NFLPlayProcess` with bundled XGBoost `.ubj` models.
 
-### CFB — `espn_cfb_schedule` guards null-competitor placeholder events
+### Fixed
 
-ESPN's 2010 and 2014 college-football scoreboards include placeholder events with null `competitions`/`competitors`. `espn_cfb_schedule` now skips those events instead of raising `TypeError: 'NoneType' object is not subscriptable` and failing the entire season.
+- **CFB:** `espn_cfb_schedule` skips the null-competitor placeholder events in the 2010 and 2014
+  scoreboards instead of raising `TypeError: 'NoneType' object is not subscriptable`.
 
 ## 0.0.59 Release: June 13, 2026
 
-### CFB — cross-source crosswalk loaders (`load_cfb_*_crosswalk`)
+### Added
 
-New 404-safe dataset loaders read pre-built CFB identity crosswalks from the `cfb_crosswalk` release tag on `sportsdataverse-data`, so callers can translate ids across providers without re-scraping every source. They cache the output of the live `cfb_teams_crosswalk` / `cfb_schedule_crosswalk` / `cfb_rosters_crosswalk` builders (ESPN × Fox × Yahoo, keyed on an aggressively-normalized team name; see `sportsdataverse.cfb.cfb_crosswalk`) — a full-season schedule build otherwise fans out hundreds of requests across three providers.
-
-### ESPN — NCAA men's & women's college hockey (`espn_mch_*`, `espn_wch_*`)
-
-- feat(espn): add NCAA men's & women's college hockey (espn_mch_*, espn_wch_*)
-
-### ESPN — NCAA college baseball + softball (`espn_college_baseball_*`, `espn_college_softball_*`)
-
-- feat(espn): add NCAA college baseball + softball (espn_college_baseball_*, espn_college_softball_*)
-
-### ESPN — UFL, XFL, and CFL (`espn_ufl_*`, `espn_xfl_*`, `espn_cfl_*`)
-
-- feat(espn): add UFL, XFL, and CFL (espn_ufl_*, espn_xfl_*, espn_cfl_*)
-
-### ESPN — soccer/cricket param families + soccer headline aliases (`espn_soccer_*(league=)`, `espn_cricket_*(league=)`, `espn_epl_*`, `espn_ucl_*`, `espn_mls_*`, ...)
-
-- feat(espn): add league-parameterized soccer + cricket families (espn_soccer_*(league=), espn_cricket_*(league=)) + soccer headline aliases (espn_epl_*, espn_ucl_*, espn_mls_*, ...)
-- feat(soccer): full-parity soccer parsers — scoreboard→matches, standings→league table (group column), summary→11-section dispatcher (header/lineups/key_events/team_stats/commentary/leaders/standings/head_to_head/last_five/game_info/shootout), teams, roster — routed via per-sport codegen overrides; feat(cricket): cricket parsers — scoreboard, standings, summary→8-section matchcard dispatcher (batting/bowling/partnerships)
-
-- **`load_cfb_teams_crosswalk(seasons=)`** and **`load_cfb_schedule_crosswalk(seasons=)`** are **per-season** (`min_season` 2014) — teams and schedules are genuinely historical, published per year for 2014–2025.
-- **`load_cfb_rosters_crosswalk()`** is **season-less**: ESPN's and Fox's team-roster endpoints expose only the *current* roster, so the artifact is a single snapshot (no `seasons=` argument) rather than a misleading per-season series.
-
-All accept `return_as_pandas=`. Artifacts are produced by `cfbfastR-cfb-data/scripts/build_cfb_crosswalk.py` (the rosters table fans the per-team `cfb_rosters_crosswalk` out over the current season's ESPN↔Fox team-id pairs and concatenates them with `espn_team_id` / `fox_team_id` provenance). The companion on-demand builder `cfb_odds_events_crosswalk` (The Odds API event-id ↔ ESPN game-id) remains live-only — near-term events aren't worth caching.
+- **CFB:** 404-safe crosswalk loaders read the `cfb_crosswalk` release:
+  `load_cfb_teams_crosswalk(seasons=)` and `load_cfb_schedule_crosswalk(seasons=)` are per season
+  (`min_season` 2014, published 2014–2025); all accept `return_as_pandas=`.
+- **CFB:** `load_cfb_rosters_crosswalk()` is season-less (one current-roster snapshot);
+  `cfb_odds_events_crosswalk` (The Odds API event id ↔ ESPN game id) stays live-only.
+- **College baseball:** NCAA college baseball and softball ESPN families (`espn_college_baseball_*`,
+  `espn_college_softball_*`).
+- **College hockey:** NCAA men's and women's college hockey ESPN families (`espn_mch_*`,
+  `espn_wch_*`).
+- **Cricket:** league-parameterized `espn_cricket_*(league=)` family, with parsers for scoreboard,
+  standings and an 8-section matchcard summary dispatcher (batting, bowling, partnerships).
+- **Soccer:** league-parameterized `espn_soccer_*(league=)` family plus headline aliases
+  (`espn_epl_*`, `espn_ucl_*`, `espn_mls_*`, ...).
+- **Soccer:** full-parity parsers: scoreboard → matches, standings → league table (group column),
+  teams, roster, and an 11-section summary dispatcher (header, lineups, key_events, team_stats,
+  commentary, leaders, standings, head_to_head, last_five, game_info, shootout).
+- **UFL/XFL/CFL:** ESPN families `espn_ufl_*`, `espn_xfl_*` and `espn_cfl_*`.
 
 ## 0.0.58 Release: June 12, 2026
 
-### Loaders — NHL core + new NBA/MBB datasets aligned to `sportsdataverse-data` releases
+### Added
 
-The four core NHL loaders (`load_nhl_pbp`, `load_nhl_player_boxscore`, `load_nhl_team_boxscore`, `load_nhl_schedule`) now read the SDV-native `sportsdataverse-data` releases (`nhl_pbp_full`, `nhl_player_boxscores`, `nhl_team_boxscores`, `nhl_schedules`) instead of the legacy R `fastRhockey-data` branch — gaining the 2010 season (`min_season` 2011 → 2010). Added loaders for NBA/MBB datasets that were already published but had no loader, bringing them to parity with the WBB/WNBA surface: `load_nba_player_season_stats`, `load_nba_team_season_stats`, `load_nba_draft`, `load_nba_rosters`, and `load_mbb_standings`, `load_mbb_player_season_stats`, `load_mbb_team_season_stats`, `load_mbb_rosters`, `load_mbb_officials`, `load_mbb_game_rosters` — each with a generated return-schema table. Also fixed the `--audit-releases` drift check to key on the release **tag** (it parsed the human-readable title), which had been falsely flagging valid releases as missing.
+- **Errors:** a `SportsDataverseError` base class (`SeasonNotFoundError` / `NoESPNDataError`
+  re-parented under it) and a package logger with a `NullHandler`; previously silent `except` paths
+  now log.
+- **MBB:** loaders `load_mbb_standings`, `load_mbb_player_season_stats`,
+  `load_mbb_team_season_stats`, `load_mbb_rosters`, `load_mbb_officials` and
+  `load_mbb_game_rosters`, each with a returns table.
+- **NBA:** loaders `load_nba_player_season_stats`, `load_nba_team_season_stats`, `load_nba_draft`
+  and `load_nba_rosters`, each with a returns table.
+- **NFL:** a new `NFL_ACCESS_TOKEN` env var injects a pre-minted `api.nfl.com` bearer token;
+  `nfl_clear_token_cache()` forces a fresh mint and `nfl_token_gen(force_refresh=True)` re-mints.
+- **Odds:** new `sportsdataverse.odds` wrapping The Odds API v4 (oddsapiR `toa_*` parity):
+  `toa_sports`, `toa_sports_odds`, `toa_sports_scores`, `toa_sports_events`, `toa_event_odds`,
+  `toa_event_markets`, `toa_sports_participants`, three `*_history` variants and `toa_usage`.
+- **Odds:** the odds endpoints return long-format frames (event × bookmaker × market × outcome);
+  the key comes from the `ODDS_API_KEY` env var or `api_key=`.
+- **Packaging:** ships a PEP 561 `py.typed` marker.
+- **Yahoo:** college football wrappers `yahoo_cfb_player_season_stats`,
+  `yahoo_cfb_team_season_stats`, the `*_season_stats_legacy` variants, `yahoo_cfb_scoreboard` and a
+  `yahoo_cfb_boxscore` scaffold.
 
-### Robustness & infrastructure — typing, CI gates, HTTP, deprecation policy
+### Changed
 
-A package-wide hardening pass with no change to public data outputs:
+- **CI:** a new `quality.yml` gate runs `ruff`, `ruff format --check` and `mypy` (with a
+  `[tool.mypy] files` ratchet) on every PR, and the test workflow emits coverage.
+- **Codegen:** output is LF-only on every platform and the ruff format pass is pinned to the
+  project's ruff; the flat-API codegen gains `getter_module` + `auth` support.
+- **Deprecation:** new centralized `sportsdataverse._deprecation` (`warn_deprecated`,
+  `@deprecated`) with a documented removal window; the 11 per-type NFL loader aliases migrate to it.
+- **Docs:** the NFL docs list a dedicated "NFL.com API" reference grouping (11 functions).
+- **Docs:** an OpenAPI 3.1 description of the NFL.com "Shield" API (`api.nfl.com`) is added to the
+  reference repos (`sdv-internal-refs/nfl/`, `sdv-swagger/nfl_api_openapi.yaml`).
+- **Fox:** `cfb_fox_ext.FOX_DATA_KEY` is imported from `_fox_layout.DATA_KEY`, so the bundled Fox
+  key and its `SDV_PY_FOX_DATA_KEY` override live in one place.
+- **HTTP:** `dl_utils.download()` reuses a pooled `requests.Session` and backs off honoring
+  `Retry-After` (seconds or HTTP-date, clamped non-negative, 120s ceiling) instead of a fixed sleep.
+- **NFL:** the `api.nfl.com` wrappers (`nfl_standings`, `nfl_rosters`, `nfl_injuries`, ...) are now
+  generated from `nfl_api.yaml`; their signatures gain `return_parsed` / `**kwargs`.
+- **NFL:** the `api.nfl.com` bearer token is minted once, cached in-process and auto-renewed before
+  its JWT `exp`, instead of a token POST on every call.
+- **NHL:** `load_nhl_pbp`, `load_nhl_player_boxscore`, `load_nhl_team_boxscore` and
+  `load_nhl_schedule` read the SDV-native releases (`nhl_pbp_full`, `nhl_player_boxscores`,
+  `nhl_team_boxscores`, `nhl_schedules`) instead of `fastRhockey-data`; `min_season` 2011 → 2010.
+- **Tests:** a VCR-style record/replay harness (committed, secret-scrubbed cassettes) exercises the
+  real `download()` → parser path offline.
 
-- **Typing + CI:** ships a PEP 561 `py.typed` marker; a new `quality.yml` CI gate runs `ruff` + `ruff format --check` + `mypy` on every PR, with a `[tool.mypy] files` ratchet (modules join the strict gate as they reach clean typing), and the test workflow now emits coverage.
-- **Errors + logging:** a `SportsDataverseError` base class (with `SeasonNotFoundError` / `NoESPNDataError` re-parented under it) and a package logger with a `NullHandler`; previously-silent `except` paths now log.
-- **HTTP layer:** `dl_utils.download()` reuses a module-level pooled `requests.Session` and backs off honoring `Retry-After` (numeric **and** RFC 7231 HTTP-date, clamped non-negative, 120s ceiling) instead of a fixed sleep.
-- **Deprecation policy:** a centralized `sportsdataverse._deprecation` (`warn_deprecated` + `@deprecated`) with a documented removal window; the 11 per-type NFL loader aliases migrated to it.
-- **Codegen determinism:** generator output is LF-only on every platform and the ruff format pass is pinned to the project's ruff (no CRLF phantom diffs); idempotency tests lock it in.
-- **Tests:** a VCR-style record/replay harness (committed cassettes, secret-scrubbing) exercises the real `download()` → parser call path offline.
+### Fixed
 
-### The Odds API wrappers (`sportsdataverse.odds`, `toa_*`)
-
-New `sportsdataverse.odds` module wrapping [The Odds API](https://the-odds-api.com) v4 — live + historical sports betting odds, scores, events, markets and participants across a wide range of bookmakers. Mirrors the sister R package [oddsapiR](https://oddsapir.sportsdataverse.org)'s `toa_*` surface: `toa_sports`, `toa_sports_odds`, `toa_sports_scores`, `toa_sports_events`, `toa_event_odds`, `toa_event_markets`, `toa_sports_participants`, the three `*_history` snapshot variants, and `toa_usage` (cached quota, no network). The odds endpoints return tidy **long-format** frames (one row per event × bookmaker × market × outcome). Auth resolves from the `ODDS_API_KEY` env var (same variable as `oddsapiR`) or an `api_key=` argument; the call routes through the shared `dl_utils.download()` gateway. Same `return_parsed` / `return_as_pandas` contract (polars by default). Built from the `the_odds_api` OpenAPI spec.
-
-### Yahoo Sports college football wrappers (`yahoo_cfb_*`)
-
-Read-only Yahoo Sports wrappers for college football over Yahoo's shangrila stats graph (`graphite-secure.sports.yahoo.com/v1/query/shangrila`) and editorial feed (`api-secure.sports.yahoo.com/v1/editorial/s`): `yahoo_cfb_player_season_stats`, `yahoo_cfb_team_season_stats`, the legacy per-category `*_season_stats_legacy` variants, `yahoo_cfb_scoreboard`, and a `yahoo_cfb_boxscore` scaffold. Same `return_parsed` / `return_as_pandas` contract (polars by default).
-
-### NFL — `api.nfl.com` wrappers cut over to generated; "NFL.com API" docs grouping
-
-The hand-written `sportsdataverse.nfl.nfl_api` wrappers (`nfl_standings`, `nfl_rosters`, `nfl_injuries`, …) are now **generated** from `tools/codegen/endpoints/nfl_api.yaml`, like the NHL/MLB native families. The flat-API codegen gained `getter_module` + `auth` support so an authenticated family (the NFL.com `WEB_DESKTOP` bearer token) can be generated; the auth getter lives in `nfl_api_runtime.py` and the per-endpoint record extraction in `nfl_api_parsers.py`. As a result the NFL docs index now lists a dedicated **"NFL.com API"** reference grouping (11 functions) instead of burying those wrappers in "Additional functions". Wrapper signatures gain `return_parsed` / `**kwargs`.
-
-### NFL — automatic `api.nfl.com` token caching + `NFL_ACCESS_TOKEN` override
-
-The `api.nfl.com` bearer token is now minted once and cached in-process, then auto-renewed just before its JWT `exp` — so back-to-back `nfl_*` / `nfl_api_*` calls reuse a single token instead of POSTing to `/identity/v3/token` on every call, with no setup and no manual refresh. A new optional `NFL_ACCESS_TOKEN` env var injects a pre-minted bearer token verbatim (skipping the mint + cache); the existing `NFL_CLIENT_KEY` / `NFL_CLIENT_SECRET` credential overrides still apply. `nfl_clear_token_cache()` forces a fresh mint, and `nfl_token_gen(force_refresh=True)` re-mints on demand.
-
-### Documentation — `api.nfl.com` OpenAPI spec
-
-Added an OpenAPI 3.1 description of the modern NFL.com "Shield" data API (`api.nfl.com`: `/identity/v3/token` device-token auth + `/football/v2/*` + `/experience/*`) to the reference repos (`sdv-internal-refs/nfl/`, `sdv-swagger/nfl_api_openapi.yaml`).
-
-### Bug fixes
-
-- `load_nfl_players()` now reads the nflverse **players** release (`players/players.parquet`) on both the polars and pandas paths; the default polars path previously returned the **officials** dataset by mistake.
-- The generated `api.nfl.com` wrappers route their HTTP call through the shared `sportsdataverse.dl_utils.download()` gateway (retries + cache + ESPN-aware error handling) like every other wrapper, instead of calling `requests.get()` directly. Boolean query flags and the `nfl_weeks` `season` / `season_type` path params are hardened so `None` can no longer leak onto the wire.
-
-### Internal — Fox data key single-sourced
-
-`sportsdataverse.cfb.cfb_fox_ext.FOX_DATA_KEY` is now imported from `sportsdataverse._fox_layout.DATA_KEY` so the bundled public Fox key and its `SDV_PY_FOX_DATA_KEY` env override live in exactly one place instead of being duplicated.
+- **Codegen:** the `--audit-releases` drift check keys on the release tag instead of its title, so
+  it no longer flags valid releases as missing.
+- **NFL:** `load_nfl_players()` reads the nflverse players release (`players/players.parquet`) on
+  both paths; the default polars path had returned the officials dataset.
+- **NFL:** the generated `api.nfl.com` wrappers go through `dl_utils.download()` (retries, cache,
+  error handling) instead of `requests.get()`, and `None` no longer leaks onto the wire from boolean
+  flags or the `nfl_weeks` `season` / `season_type` path params.
 
 ## 0.0.57 Release: June 10, 2026
 
-### Fox Sports Bifrost wrappers (CFB, NBA, MBB, NHL, MLB)
+### Added
 
-Read-only Fox Sports "Bifrost" wrappers (`fox_<sport>_*`) over `api.foxsports.com/bifrost/v1/<sport>/*`, complementing the `espn_<sport>_*` families. The Bifrost API is a layout API (sections → tables → rows → cells) that is uniform across sports; a shared parsing layer (`sportsdataverse/_fox_layout.py`) backs every league module. Same `return_parsed` / `return_as_pandas` contract (polars by default).
-
-**CFB** (`cfb` module): `fox_cfb_pbp` (quarters → drives → plays), `fox_cfb_boxscore`, `fox_cfb_odds`, `fox_cfb_team_roster`, `fox_cfb_team_stats`, `fox_cfb_team_gamelog`, `fox_cfb_standings`, `fox_cfb_league_leaders`.
-
-**NBA / MBB / NHL** (`nba` / `mbb` / `nhl` modules): the same eight wrappers per sport (`fox_<sport>_pbp`, `_boxscore`, `_odds`, `_team_roster`, `_team_stats`, `_team_gamelog`, `_standings`, `_league_leaders`). Play-by-play is period-based (QUARTER / HALF / PERIOD → plays); boxscore is tidy long per player-stat.
-
-**MLB** (`mlb` module): `fox_mlb_team_roster`, `fox_mlb_team_stats`, `fox_mlb_team_gamelog`, `fox_mlb_standings`, `fox_mlb_league_leaders`, `fox_mlb_odds`. Fox does not expose MLB play-by-play or boxscore via `event/{id}/data`, so those two are intentionally omitted.
-
-Live-tested (gated behind `SDV_PY_LIVE_TESTS=1`). Reverse-engineering notes + an OpenAPI 3.1 spec live in the `sdv-internal-refs` repo. Parallels the cfbfastR / hoopR / fastRhockey / baseballr `fox_*` families.
-
-#### CFB — Fox as a backup source for the EPA/WPA play processor (`fox_cfb_play_process`)
-
-Where `fox_cfb_pbp` returns the raw Fox play rows, `fox_cfb_play_process` runs Fox data through the **same** `CFBPlayProcess` pipeline ESPN games use — producing EPA / WPA / advanced box score — as a backup/alternative when ESPN is unavailable. The new module `sportsdataverse.cfb.cfb_pbp_fox` adapts a Fox `cfb/event/{id}/data` payload into the ESPN-`summary` shape the processor consumes (`fox_to_espn_summary`), so the 6,000-line pipeline runs unmodified.
-
-- **`fox_cfb_play_process(event_id)`** — fetch + adapt + `run_processing_pipeline` (or `process=False` for cleaning-only, `raw=True` for the adapted summary). Returns the processed payload tagged `source="fox"`.
-- **`fox_to_espn_summary(fox_data)`** — the adapter (`modalPlay.events[].yardStart` → yards-to-goal, play title → down/distance, `events[].text` → ESPN `type.text` vocab, team logo → possession).
-- Validated offline (5 tests) on a captured blowout (FSU 66-10 → FSU +0.50 vs Kent −0.94 EPA/play — game-consistent). High fidelity on the structured/numeric path (down/distance/yards-to-goal/EPA/WPA); text-grammar features (detailed player attribution, penalty yards) degrade vs ESPN. Archive-format Fox games (no `modalPlay` geometry) are detected and rejected. A Fox event id differs from an ESPN game id; backing up a specific ESPN game needs matching by teams + date.
+- **Fox:** read-only Fox Sports Bifrost wrappers over `api.foxsports.com/bifrost/v1`; CFB gets
+  `fox_cfb_pbp`, `fox_cfb_boxscore`, `fox_cfb_odds`, `fox_cfb_team_roster`, `fox_cfb_team_stats`,
+  `fox_cfb_team_gamelog`, `fox_cfb_standings` and `fox_cfb_league_leaders`.
+- **Fox:** NBA, MBB and NHL get the same eight wrappers (`fox_<sport>_pbp`, `_boxscore`, `_odds`,
+  `_team_roster`, `_team_stats`, `_team_gamelog`, `_standings`, `_league_leaders`), with
+  period-based play-by-play and a long per-player-stat boxscore.
+- **Fox:** MLB gets `fox_mlb_team_roster`, `fox_mlb_team_stats`, `fox_mlb_team_gamelog`,
+  `fox_mlb_standings`, `fox_mlb_league_leaders` and `fox_mlb_odds`; Fox exposes no MLB
+  play-by-play or boxscore.
+- **Fox:** `fox_cfb_play_process(event_id)` runs Fox data through `CFBPlayProcess` (EPA / WPA /
+  advanced box score) as a backup to ESPN (`process=False` cleans only, `raw=True` returns the
+  adapted summary); the payload is tagged `source="fox"`.
+- **Fox:** `fox_to_espn_summary(fox_data)` (`sportsdataverse.cfb.cfb_pbp_fox`) adapts a Fox payload
+  to the ESPN summary shape; text-derived features degrade vs ESPN, archive-format Fox games are
+  rejected, and a Fox event id is not an ESPN game id.
 
 ## 0.0.56 Release: June 9, 2026
 
-### HockeyTech — live multi-league scraper (PWHL + AHL/OHL/WHL/QMJHL) + on-ice/Corsi/TOI analytics
+### Breaking changes
 
-A new `sportsdataverse.hockeytech` core powers live wrappers over the HockeyTech
-feeds, alongside the existing offline `load_pwhl_*` loaders:
+- **ESPN:** ~40 always-erroring generated wrappers across 8 leagues are removed: the season-less
+  `espn_*_coaches` and `espn_*_calendar_{offseason,regular_season,postseason,ondays}`. Use
+  `espn_*_season_coaches`, the coach-detail endpoints (`espn_*_coach`, ...) or `espn_*_calendar`.
 
-- **PWHL** (`sportsdataverse.pwhl`): 20 live `pwhl_*()` functions at fastRhockey
-  output parity — `pwhl_schedule`, `pwhl_scorebar`, `pwhl_game_info`,
-  `pwhl_game_summary`, `pwhl_pbp`, `pwhl_player_box`, `pwhl_teams`,
-  `pwhl_team_roster`, `pwhl_standings`, `pwhl_player_info`, `pwhl_player_stats`,
-  `pwhl_player_game_log`, `pwhl_player_search`, `pwhl_stats`, `pwhl_leaders`,
-  `pwhl_streaks`, `pwhl_transactions`, `pwhl_playoff_bracket`, `pwhl_season_id`,
-  and `most_recent_pwhl_season`.
-- **AHL / OHL / WHL / QMJHL** (`sportsdataverse.{ahl,ohl,whl,qmjhl}`): per-league
-  families (schedule, pbp, standings, teams, team_roster, player_stats, leaders,
-  game_summary, season_id, `most_recent_<lg>_season`) over one shared core.
-- **Analytics** across all five leagues: `<lg>_game_shifts`, `<lg>_player_toi`,
-  and `<lg>_game_corsi` (player-level on-ice Corsi/Fenwick), reconstructed from
-  the shift tables via countdown-clock interval matching. `<lg>_pbp` is enriched
-  to a superset (coordinate transforms, clock columns, shot distance/angle,
-  scoring chances, on-ice players, game-meta join, `blocked_shot`/`hit` events).
-- **Corsi/Fenwick caveat**: the HockeyTech feed has no missed-shot event, so both
-  metrics are computed from shots-on-goal + blocked + goals and every analytics
+### Added
+
+- **HockeyTech:** AHL, OHL, WHL and QMJHL families (`sportsdataverse.{ahl,ohl,whl,qmjhl}`):
+  schedule, pbp, standings, teams, team_roster, player_stats, leaders, game_summary, season_id and
+  `most_recent_<lg>_season`, over one shared `sportsdataverse.hockeytech` core.
+- **HockeyTech:** `<lg>_game_shifts`, `<lg>_player_toi`, `<lg>_game_corsi` (on-ice Corsi/Fenwick)
+  and an enriched `<lg>_pbp` for all five leagues; the feed has no missed shots, so every analytics
   output carries `corsi_includes_missed = False`.
-- All returned columns are snake_case; PWHL columns match fastRhockey exactly. A
-  companion fastRhockey (R) release mirrors this surface, verified by a
-  cross-language parity test pinning identical Corsi/TOI numbers.
+- **NFL:** token-free Next Gen Stats wrappers: `nfl_ngs_statboard`, `nfl_ngs_statboard_leaders`,
+  `nfl_ngs_leaders`, `nfl_ngs_league_schedule[_current]`, `nfl_ngs_league_teams`,
+  `nfl_ngs_gamecenter_overview`, `nfl_ngs_microsite_chart[_players]`, `nfl_ngs_play_is_highlight`.
+- **NFL:** `api.nfl.com/football/v2` + `/experience` wrappers: `nfl_standings`, `nfl_rosters`,
+  `nfl_teams_history`, `nfl_team`, `nfl_weeks`, `nfl_weeks_by_date`, `nfl_combine_profiles`,
+  `nfl_draft_picks`, `nfl_injuries`, `nfl_game_summaries`, `nfl_weekly_game_details`.
+- **NFL:** `nfl_game_pbp(game_id)` (one row per play, with `game_id` / `home_team` / `visitor_team`)
+  and `nfl_week_games(season, season_type, week)` (one row per game) parse the raw game dicts.
+- **NFL:** NFL.com auth defaults to the public `WEB_DESKTOP` web-client credentials, overridable via
+  the `NFL_CLIENT_KEY` / `NFL_CLIENT_SECRET` env vars or function args.
+- **NHL:** loader aliases `load_nhl_team_box`, `load_nhl_player_box`, `load_nhl_skater_box` and
+  `load_nhl_goalie_box` (for `load_nhl_team_boxscore`, `_player_boxscore`, `_skater_boxscores`,
+  `_goalie_boxscores`), plus `load_nhl_games()`, the games-in-data-repo manifest.
+- **PWHL:** live wrappers at fastRhockey parity: `pwhl_schedule`, `pwhl_scorebar`, `pwhl_game_info`,
+  `pwhl_game_summary`, `pwhl_pbp`, `pwhl_player_box`, `pwhl_teams`, `pwhl_team_roster`,
+  `pwhl_standings`, `pwhl_playoff_bracket`, `pwhl_season_id`, `most_recent_pwhl_season`.
+- **PWHL:** live player and stats wrappers: `pwhl_player_info`, `pwhl_player_stats`,
+  `pwhl_player_game_log`, `pwhl_player_search`, `pwhl_stats`, `pwhl_leaders`, `pwhl_streaks`,
+  `pwhl_transactions`.
+- **PWHL:** loader aliases `load_pwhl_team_box`, `load_pwhl_player_box`, `load_pwhl_skater_box`,
+  `load_pwhl_goalie_box` and `load_pwhl_schedule` (for the `*_boxscores` / `load_pwhl_schedules`
+  loaders), plus `load_pwhl_games()`, the games-in-data-repo manifest.
 
-### NFL — Next Gen Stats (`nfl_ngs_*`) + api.nfl.com football/v2 (`nfl_*`) modules
+### Changed
 
-- New `sportsdataverse/nfl/nfl_ngs.py` — **token-free** Next Gen Stats wrappers over
-  `nextgenstats.nfl.com/api` (browser session, no auth). 10 functions / 21 endpoints:
-  `nfl_ngs_statboard` (passing/receiving/rushing), `nfl_ngs_statboard_leaders`,
-  `nfl_ngs_leaders` (speed/distance/time-to-sack + completion/ery/yac expectation,
-  season & week), `nfl_ngs_league_schedule[_current]`, `nfl_ngs_league_teams`,
-  `nfl_ngs_gamecenter_overview`, `nfl_ngs_microsite_chart[_players]`,
-  `nfl_ngs_play_is_highlight`. The `/live/*` NGS endpoints are anonymous-403 (need
-  elevated auth) and are documented as omitted.
-- New `sportsdataverse/nfl/nfl_api.py` — `api.nfl.com/football/v2` + `/experience`
-  wrappers on the bearer token (reuses `nfl_headers_gen`). 11 functions:
-  `nfl_standings`, `nfl_rosters`, `nfl_teams_history`, `nfl_team`, `nfl_weeks`,
-  `nfl_weeks_by_date`, `nfl_combine_profiles`, `nfl_draft_picks`, `nfl_injuries`,
-  `nfl_game_summaries`, `nfl_weekly_game_details`.
-- Both return tidy polars DataFrames by default (`return_as_pandas` supported) and are
-  documented on the NFL reference pages. Catalogued from a full crawl of the NFL API
-  surface (api.nfl.com + NGS).
-- Captured autodoc **return-column tables** for all 23 new NFL functions (live
-  introspection -> `schemas/autodoc/nfl/*.yaml` + `autodoc_example_args.yaml`), so
-  each renders a `col_name | type | description` table on its reference page.
+- **Docs:** autodoc returns tables for all 23 new NFL functions.
+- **Docs:** each league `index.md` has a Python ↔ R parity table linking every function to its
+  sister R package equivalent (cfbfastR / hoopR / wehoop / baseballr / fastRhockey).
+- **Docs:** the NFL parity table maps the `load_nfl_*` loaders to their nflreadr names (e.g.
+  `load_nfl_pbp` → `load_pbp`, `load_nfl_schedule` → `load_schedules`); NFL rows go from 26 to 49.
+- **Docs:** NFL returns-table description fill rises from ~36% to ~85%, mined from nflreadr and
+  nflfastR field dictionaries, which also backfills shared CFB and MLB columns.
+- **Docs:** `CFBPlayProcess` and `NFLPlayProcess` pages document all 7 public methods, constructor
+  parameter descriptions are backfilled from `__init__`, and `CFBPlayProcess` gains a class docstring.
+- **Docs:** the example notebooks grow to ten (`05_wbb_intro` and `08_wnba_intro` split out, new
+  `09_mlb_intro` and `10_pwhl_intro`, an ESPN-NHL section in the NHL notebook).
+- **Docs:** notebooks render with real outputs to an on-site Tutorials section
+  (`docs/docs/tutorials/`, via `tools/codegen/render_notebooks.py`), re-executed weekly.
 
-### NFL — restored the api.nfl.com game schedule + play-by-play wrappers
+### Fixed
 
-- `nfl_game_schedule` / `nfl_game_details` were broken because NFL.com retired the
-  old `/v1/reroute` client-credentials token endpoint (404 -> `JSONDecodeError`).
-  Rebuilt `sportsdataverse/nfl/nfl_games.py` on the modern flow the NFL.com web app
-  (and nflverse's `nflapi`) now use: `nfl_token_gen()` mints a bearer token from
-  `/identity/v3/token` (form-encoded device grant, `X-Domain-Id: 100`);
-  `nfl_game_schedule()` reads `/football/v2/games/season/{s}/seasonType/{t}/week/{w}`;
-  `nfl_game_details()` reads `/experience/v1/gamedetails/{id}` and unwraps the shield
-  `data.viewer.gameDetail` object (plays, drives, scoring summaries, line scores).
-- Auth uses the NFL.com public `WEB_DESKTOP` web-client credentials as defaults,
-  overridable via `NFL_CLIENT_KEY` / `NFL_CLIENT_SECRET` env vars or function args
-  (no personal account; the token carries the anonymous `free` plan). Verified live:
-  16 games for 2024 REG wk1, 194 plays / 20 drives for the opener.
-- Added a **parsed surface** over the raw dicts: `nfl_game_pbp(game_id)` returns a
-  tidy polars/pandas DataFrame (one row per play, with `game_id`/`home_team`/
-  `visitor_team` context), and `nfl_week_games(season, season_type, week)` returns
-  one row per game. (Named to avoid colliding with the `nfl_pbp`/`nfl_schedule`
-  submodules.)
-
-### ESPN — remove always-erroring endpoint variants + NFL R-parity
-
-- **Removed dead ESPN endpoint variants (all leagues).** A live health sweep found
-  these generated wrappers 404 / `NoESPNDataError` at ESPN for every league and
-  season: the season-less `espn_*_coaches` list (`/leagues/{league}/coaches`) and
-  the four `espn_*_calendar_{offseason,regular_season,postseason,ondays}` sub-paths.
-  They are dropped from the codegen so the package no longer ships endpoints that
-  always raise. The working counterparts remain: `espn_*_season_coaches`
-  (`/seasons/{season}/coaches`), the coach-detail endpoints (`espn_*_coach`, ...),
-  and the base `espn_*_calendar`. (~40 dead functions removed across 8 leagues.)
-- **NFL Python ↔ R parity.** Added curated `r_parity_aliases.yaml` entries mapping
-  the canonical `load_nfl_*` loaders to their nflreadr equivalents (e.g.
-  `load_nfl_pbp` → `load_pbp`, `load_nfl_schedule` → `load_schedules`), so the NFL
-  parity table links both naming styles (nfl rows 26 → 49). The `load_nfl_*` /
-  bare `load_*` dual-naming itself was verified already consistent (intentional
-  nflreadpy parity; the only unaliased `load_nfl_*` are deprecated or sdv-specific).
-
-### Documentation — per-league Python ↔ R parity tables
-
-- Each league's `index.md` now carries a **Python ↔ R parity** table mapping every
-  `sportsdataverse` function to its equivalent in the sister R package
-  (cfbfastR / hoopR / wehoop / baseballr / fastRhockey), linking the Python doc page
-  and the R pkgdown reference. Driven by a new `tools/codegen/build_r_exports.py`
-  miner (NAMESPACE → committed `r_exports.yaml`, so links never 404 and the offline
-  `--check` stays deterministic) plus a curated `r_parity_aliases.yaml` for
-  divergent names (e.g. `mlb_api_*` → baseballr `mlb_*`, +36 verified). Coverage:
-  nhl 202, mlb 107, wnba 83, nba/wbb 74, mbb 69, cfb 55, nfl 26, pwhl 15.
-- Fixed a self-referential codegen bug the parity table exposed: `render_autodoc_page`
-  computed "already documented" against a corpus that included the index, so the
-  index's parity table (which names autodoc functions) caused those functions to be
-  dropped from `additional.md` and their parity links to 404. It now uses the
-  reference-pages corpus only, matching the autodoc-name count used for the index.
-
-### Documentation — example notebooks repaired, expanded, and rendered on-site
-
-- **Repaired the example notebooks.** Live execution (`nbclient`) surfaced runtime
-  schema/usage drift that import/compile checks miss: ESPN schedule team columns
-  renamed to `home_display_name`/`away_display_name`; `espn_*_pbp()['plays']` is a
-  raw list using dot-notation keys (`period.number`, `clock.displayValue`,
-  `scoringPlay`, `shootingPlay`, `coordinate.x/.y`) built via
-  `pl.DataFrame(...)`; ESPN scores are strings (cast before arithmetic);
-  `espn_cfb_schedule` takes `dates=` not `season=`; ESPN team rosters use
-  `full_name`; `espn_*_team_stats` returns a dict `{Averages, Totals, Misc}`; some
-  hardcoded dates had no games. All notebooks now execute clean end-to-end.
-- **Split + expanded the suite to ten notebooks.** The combined `wbb_wnba` notebook
-  was split into separate `05_wbb_intro` and `08_wnba_intro`, both expanded; the
-  NHL notebook gained an ESPN-NHL section alongside the native api-web surface; and
-  two new notebooks were added: `09_mlb_intro` (MLB Stats API + Statcast + ESPN MLB)
-  and `10_pwhl_intro` (PWHL loaders).
-- **On-site rendered Tutorials.** New `tools/codegen/render_notebooks.py` executes
-  each notebook and renders it (with real outputs, as clean monospace tables) to a
-  themed page under `docs/docs/tutorials/`, surfaced in a new **Tutorials** sidebar
-  section. Execution is quarantined to the weekly `live-tests-cron` workflow, which
-  now re-executes + renders and opens a refresh PR (main is branch-protected); the
-  normal offline docs build just consumes the committed pages. Each league index's
-  **Examples** section now links the on-site tutorial pages instead of GitHub.
-
-### NHL / PWHL — loader naming-parity aliases + games-manifest loaders (fastRhockey parity)
-
-- Added 4 NHL short-name aliases in `sportsdataverse/nhl/nhl_loaders.py`:
-  `load_nhl_team_box` → `load_nhl_team_boxscore`,
-  `load_nhl_player_box` → `load_nhl_player_boxscore`,
-  `load_nhl_skater_box` → `load_nhl_skater_boxscores`,
-  `load_nhl_goalie_box` → `load_nhl_goalie_boxscores`.
-- Added 5 PWHL short-name aliases in `sportsdataverse/pwhl/pwhl_loaders.py`:
-  `load_pwhl_team_box` → `load_pwhl_team_boxscores`,
-  `load_pwhl_player_box` → `load_pwhl_player_boxscores`,
-  `load_pwhl_skater_box` → `load_pwhl_skater_boxscores`,
-  `load_pwhl_goalie_box` → `load_pwhl_goalie_boxscores`,
-  `load_pwhl_schedule` → `load_pwhl_schedules`.
-- Added `load_nhl_games()` (no `seasons` arg) reading the NHL games-in-data-repo
-  manifest parquet from the `nhl_schedules` release asset (primary URL verified
-  working: `sportsdataverse-data/releases/download/nhl_schedules/nhl_games_in_data_repo.parquet`).
-- Added `load_pwhl_games()` (no `seasons` arg) reading the PWHL games-in-data-repo
-  manifest parquet from the `pwhl_schedules` release asset (primary URL verified
-  working: `sportsdataverse-data/releases/download/pwhl_schedules/pwhl_games_in_data_repo.parquet`).
-- Added `tests/test_loader_parity.py` covering importability, `__all__` membership,
-  docstring-based forwarding assertions, and live alias shape-parity + manifest tests
-  (gated behind `SDV_PY_LIVE_TESTS=1`).
-
-### Documentation — NFL return-table descriptions mined from nflverse
-
-- Extended `tools/codegen/build_r_col_descriptions.py` with two nflverse source
-  parsers: `mine_csv_dictionaries()` reads nflreadr's canonical
-  `data-raw/dictionary_*.csv` field docs (delimiter-sniffing for the
-  semicolon-delimited NGS file, BOM-stripping for `roster_status`, and
-  case-insensitive Field/Description column resolution across 6 header variants),
-  and `mine_item_list()` reads nflfastR's `data-raw/variable_list.txt`
-  (`\item{Field}{Description}` form). Yields `nflreadr` (941 columns) and
-  `nflfastR` (372 columns) dictionaries in `r_column_descriptions.yaml`.
-- Mapped `nfl → nflreadr` in `generate.py`'s `_LEAGUE_R_PACKAGE`; nflfastR's
-  fields still contribute via the `_merged` cross-package fallback.
-- NFL generated reference-page description fill rose from ~36% to ~85%. The
-  enlarged `_merged` union (7.3k → 8.1k columns) also backfilled previously-blank
-  shared football/stat columns on the CFB and MLB reference pages
-  (e.g. `passing_yards`, `receptions`, `kicker_player_name`, `name_short`).
-
-### Documentation — class methods rendered on autodoc pages (CFB / NFL)
-
-- Hand-written classes (`CFBPlayProcess`, `NFLPlayProcess`) previously rendered on
-  the `additional` reference pages as a bare constructor signature with no
-  description and an empty parameter table — their public methods, returns, and
-  examples were omitted entirely. The autodoc renderer now treats a class
-  specially: `_doc_view()` attaches a per-method doc-view list (via
-  `_augment_class_view()`), and the `autodoc_page.md.jinja` template renders each
-  public method as a nested `#### Class.method(...)` entry with its description,
-  parameters, returns, and example. Both classes now document all 7 of their
-  public methods (`espn_*_pbp`, `*_pbp_disk`, `*_pbp_json`, `corrupt_pbp_check`,
-  `create_box_score`, `run_cleaning_pipeline`, `run_processing_pipeline`).
-- Constructor parameter descriptions are backfilled from the class's `__init__`
-  docstring when the class object itself carries none (`CFBPlayProcess` documents
-  its ctor args on `__init__`), so the constructor parameter table now renders
-  with descriptions instead of blank cells.
-- Added a class-level docstring to `CFBPlayProcess` (it had none) mirroring
-  `NFLPlayProcess`, so the class entry leads with an overview + runnable example
-  instead of a `No description available.` placeholder.
-
-### Documentation — accuracy-audit fixes
-
-- **Stable autodoc anchors.** Every autodoc function/class heading now carries an
-  explicit `{#name}` id, so it is reliably deep-linkable instead of relying on a
-  signature-derived slug. This fixes a broken cross-link in `ecosystem.md`
-  (`espn_nhl_teams` now resolves to its `additional` page entry) and future-proofs
-  any reference to a hand-written wrapper.
-- **Invalid example code.** `_clean_example()` mis-handled reST literal-block
-  intros that wrap across multiple prose lines (only the line ending in `::` was
-  recognized), leaking a prose sentence into the rendered ` ```python ` block as a
-  broken statement. It now absorbs the preceding contiguous intro lines into the
-  step comment. Fixes the `NflConfig` and `espn_wbb_team_stats` examples; all
-  non-REPL doc examples now compile.
-- **Notebook reachability.** `ecosystem.md` now links all seven example notebooks
-  individually (previously only `01_quickstart` was linked; the per-sport intros
-  02–07 were an un-linked "for your league" mention). Each league's generated
-  `index.md` landing page also gained an **Examples** section linking the quickstart
-  plus that sport's intro notebook (`render_league_index` + a league→notebook map
-  in `generate.py`); mlb/pwhl show the quickstart until they get a dedicated intro.
+- **Docs:** the example notebooks execute clean end-to-end again (schema and usage drift such as
+  `home_display_name` / `away_display_name`, `espn_cfb_schedule(dates=)` and `full_name`).
+- **Docs:** the parity tables no longer drop functions from `additional.md` or 404 their parity
+  links (the "already documented" check no longer counts the index).
+- **Docs:** every autodoc heading carries a stable `{#name}` anchor, fixing the `espn_nhl_teams`
+  link in `ecosystem.md`.
+- **Docs:** examples whose reST literal-block intro wraps across lines no longer leak prose into the
+  code block (fixes the `NflConfig` and `espn_wbb_team_stats` examples).
+- **Docs:** `ecosystem.md` links all seven example notebooks, and each league `index.md` gains an
+  Examples section linking the quickstart and that sport's intro notebook.
+- **NFL:** `nfl_game_schedule` / `nfl_game_details` work again, rebuilt on `nfl_token_gen()` and
+  `/identity/v3/token` after NFL.com retired `/v1/reroute` (404 → `JSONDecodeError`).
 
 ## 0.0.55 Release: June 8, 2026
 
-### Documentation — richer per-function reference
+### Changed
 
-- Autodoc "Additional functions" pages now render full **Parameters** tables
-  (name/type/default/description), **Returns**, and runnable **Example** blocks
-  parsed from each function's docstring (previously just a signature + one line).
-- Endpoint reference pages gained a **Description** column on the parameter table;
-  shared query params carry authored descriptions.
-- Function **Returns** are now `col_name | type | description` tables: endpoint
-  pages from introspected per-sport schemas, and autodoc DataFrame functions from
-  a new `generate.py --autodoc-schemas` live-introspection pass (best-effort, with
-  prose fallback where a function can't be introspected offline).
-- Return-table column **descriptions** are filled by column name from the sibling
-  SDV R packages' `@return` docs (cfbfastR / hoopR / wehoop / baseballr), mined to
-  `tools/codegen/r_column_descriptions.yaml` and applied at render time
-  (hand-curated descriptions take precedence; unmatched columns stay blank).
+- **Docs:** Autodoc "Additional functions" pages render full **Parameters** tables (name, type,
+  default, description), **Returns** and runnable **Example** blocks parsed from each docstring.
+- **Docs:** Endpoint reference pages gained a **Description** column on the parameter table; shared
+  query params carry authored descriptions.
+- **Docs:** Function **Returns** are `col_name | type | description` tables: endpoint pages from
+  per-sport schemas, autodoc DataFrame functions from the new `generate.py --autodoc-schemas` pass.
+- **Docs:** Return-table column descriptions are filled by column name from the cfbfastR / hoopR /
+  wehoop / baseballr `@return` docs (`tools/codegen/r_column_descriptions.yaml`); curated ones win.
+- **NBA/WNBA:** `espn_nba_game_rosters` / `espn_wnba_game_rosters` frames now include a
+  `team_alternate_ids_sdr` column when ESPN ships it.
 
-### Bug fixes
+### Fixed
 
-- `espn_mbb_game_rosters` / `espn_wbb_game_rosters` / `espn_nfl_game_rosters`:
-  fixed a `ShapeError` (positional column rename broke when ESPN ships extra
-  `*_$ref` fields); columns are now renamed by source key.
-- `espn_nhl_schedule`: fixed `'NoneType' object has no attribute 'get'` with
-  default args (a helper was missing its `return event`).
-- The `espn_*_game_rosters` rename-by-source-key fix is additive: NBA/WNBA roster
-  frames now include a `team_alternate_ids_sdr` column when ESPN ships it (the old
-  positional rename would have raised once that field appeared).
+- **ESPN:** `espn_mbb_game_rosters` / `espn_wbb_game_rosters` / `espn_nfl_game_rosters` no longer
+  raise a `ShapeError` when ESPN ships extra `*_$ref` fields; columns are now renamed by source key.
+- **NHL:** `espn_nhl_schedule` no longer fails with `'NoneType' object has no attribute 'get'` when
+  called with default args.
 
 ## 0.0.54 Release: June 8, 2026
 
-### Per-sport return schemas (correctness)
+### Breaking changes
 
-`@return` tables are now derived per league by running the real parsers against
-captured per-sport fixtures (`generate.py --schemas`), replacing the previous
-sport-agnostic schemas that showed (e.g.) basketball boxscore columns on MLB/NHL
-pages. Native API pages (`nhl_api_web`/`nhl_edge`/`nhl_records`/`nhl_stats_rest`/
-`mlb_api`) gained accurate return schemas. Schemas are now introspected truth,
-gated by `generate.py --check`.
+- **Wrappers:** Parser-backed wrappers now default to `return_parsed=True` and return a tidy polars
+  DataFrame instead of the raw `Dict`; wrappers without a registered parser still return `Dict`.
 
-### BREAKING — parser-backed wrappers return a DataFrame by default
+**Upgrade notes** — pass `return_parsed=False` to get the raw `Dict` back; `return_as_pandas=True`
+switches polars to pandas. The `sportsdataverse.parsed.{league}` mirror modules are unaffected.
 
-`return_parsed` now defaults to **`True`** for the parser-backed wrappers; they
-return a tidy polars DataFrame instead of the raw `Dict`. Pass
-`return_parsed=False` to recover the raw `Dict`; `return_as_pandas=True` switches
-polars→pandas. Wrappers without a registered parser are unchanged (still `Dict`).
-The `sportsdataverse.parsed.{league}` mirror modules are unaffected.
+### Added
 
-### Docs coverage gate + autodoc
+- **MLB:** Full `statsapi.mlb.com` coverage: 38 more endpoints (home run derby, all-star ballots, free
+  agents, game pace, team coaches/personnel, schedule variants, etc.); 28 ship with fixtures and return
+  schemas, and the auth-gated MLBAM feeds (analytics/guids/color) are wrapped for if access exists.
 
-Every user-facing function now reaches the docs. A new `generate.py --coverage`
-audit enumerates in-scope exported functions per league and fails `--check` if
-any is undocumented (allowlist for cross-cutting internals in
-`tools/codegen/coverage_allowlist.yaml`). ~180 hand-written wrappers/loaders/
-statcast/utility functions that the endpoint-YAML codegen never documented are
-now rendered into per-league "Additional functions" reference pages
-(autodoc from live signatures + docstrings).
+### Changed
 
-### MLB - full MLB Stats API coverage
+- **Docs:** Native API pages (`nhl_api_web` / `nhl_edge` / `nhl_records` / `nhl_stats_rest` /
+  `mlb_api`) gained accurate return schemas, introspected and gated by `generate.py --check`.
+- **Docs:** ~180 hand-written wrappers, loaders, statcast and utility functions are now rendered into
+  per-league "Additional functions" reference pages from their live signatures and docstrings.
+- **Docs:** New `generate.py --coverage` audit fails `--check` when an in-scope exported function is
+  undocumented (allowlist: `tools/codegen/coverage_allowlist.yaml`).
 
-The codegen now wraps the full `statsapi.mlb.com` surface: 38 previously
-unwrapped endpoints were added (home run derby, all-star ballots, conferences,
-free agents, game pace, jobs/datacasters/official-scorers, team coaches/
-personnel, schedule variants, seasons/all, sport, teams history/stats, etc.).
-28 are publicly serviceable and ship with captured fixtures + introspected
-return schemas; the remaining handful are auth-gated/internal MLBAM feeds
-(analytics/guids/color), wrapped with valid example args for if/when access
-exists.
+### Deprecated
 
-### Deprecations
+- **Parsed modules:** `sportsdataverse.parsed.{league}` is deprecated: importing a `parsed.*` module
+  emits a `DeprecationWarning` (it still works and will be removed in a future release). Migrate to
+  `from sportsdataverse.{league} import <fn>`.
 
-- `sportsdataverse.parsed.{league}` is **deprecated** (since the default modules
-  now return parsed DataFrames by default). Importing a `parsed.*` module emits a
-  `DeprecationWarning`; it still works and will be removed in a future release.
-  Migrate to `from sportsdataverse.{league} import <fn>` directly.
+### Fixed
+
+- **Docs:** `@return` tables are derived per league by running the real parsers on per-sport fixtures
+  (`generate.py --schemas`), so MLB/NHL pages no longer show basketball boxscore columns.
 
 ## 0.0.53 Release: June 8, 2026
 
-### ESPN — declarative codegen + factory retirement
+**Highlights**
 
-The runtime "magic" that mass-registered each league's `espn_<league>_*` ESPN
-wrappers at import time (`_common_espn.make_league_module` / `_bind` + the
-`_UNIVERSAL_WRAPPERS` / `_NCAA_WRAPPERS` / `_FOOTBALL_WRAPPERS` / `_MLB_WRAPPERS`
-tables + ~127 private `_site_v2_*` / `_espn_*` / `_core_v2_*` core functions) has
-been replaced by a **declarative codegen pipeline** (`tools/codegen/`). Endpoint
-metadata lives in `tools/codegen/endpoints/*.yaml`; `generate.py` renders concrete,
-fully-documented wrapper modules into `sportsdataverse/<league>/<league>_espn_ext.py`.
+- ESPN wrappers are generated from declarative endpoint YAML with real signatures and docstrings, and
+  NHL gets a full 115-function `espn_nhl_*` surface.
+- `espn_*` names follow the hoopR / wehoop / cfbfastR taxonomy (`athlete -> player`, `event -> game`).
+- NHL api-web wrappers drop the `web` qualifier (`nhl_web_boxscore -> nhl_boxscore`); all five native
+  API families are now generated.
+- 92 release-backed `load_*` loaders, including the new PWHL league (`sportsdataverse.pwhl`).
+- CFB advanced box score: correct team attribution, ESPN-sourced totals and new defensive and
+  specialist sections.
 
-- **New `espn_nhl_*` surface (115 functions).** NHL previously had no ESPN
-  cross-league wrappers; it now gets the full Site v2 / Web v3 / Core v2 surface,
-  and `find()` works for NHL for free.
-- **Identical behavior, real signatures.** Every generated function builds a
-  byte-identical URL + query string to the function it replaced (verified by a
-  URL+params parity gate across all scopes), but now exposes concrete parameter
-  names, type hints, and docstrings instead of an opaque `*args, **kwargs` shim.
-- **Names aligned to the R sister packages (universal, token-level convention).**
-  Across all eight leagues the generated `espn_*` names follow the
-  cfbfastR/hoopR/wehoop taxonomy (behavior unchanged). The rename is applied at the
-  underscore-**token** level (not just prefixes), so `athlete`/`event` convert in
-  every position incl. plurals: `athlete -> player` (`athlete_vs_athlete ->
-  player_vs_player`, `athletes_index -> players_index`, `season_athletes ->
-  season_players`), `event -> game` (bare `event -> game`, `events -> games`,
-  `event_* -> game_*`, `season_week_events -> season_week_games`). Two combined
-  mappings run first: `event_competitor* -> game_team*` (a competitor is the game's
-  team) and `event_competition -> game_competition` / `event_competition_* ->
-  game_*`. Compound tokens like `eventlog` are preserved (`athlete_eventlog ->
-  player_eventlog`). cfb additionally gets `season_*` cleanups vs cfbfastR
-  (`futures`/`groups`/`recruits`/`week_rankings`; `powerindex -> team_powerindex`).
-  Rule engine: `generate._convention_rename`; cfb-specific exceptions:
+### Breaking changes
+
+- **CFB:** The standalone `espn_cfb_pbp(game_id=...)` is gone in the post-rename API; use
+  `CFBPlayProcess(gameId=...).espn_cfb_pbp()` followed by `.run_processing_pipeline()`.
+- **CFB:** `espn_cfb_*` also gets `season_*` cleanups vs cfbfastR (`futures` / `groups` / `recruits` /
+  `week_rankings`; `powerindex -> team_powerindex`); the exceptions live in
   `tools/codegen/espn_rename_map.yaml`.
-- **Collision-guarded.** Renames that would clash with a hand-written sibling or
-  another generated name are skipped automatically: `teams_site` (raw endpoint, !=
-  parsed `espn_*_teams`) and `espn_cfb_season_{team,awards,coaches}` (vs the
-  catalog). SAME-endpoint duplicates are dropped: the generated raw
-  `espn_{wbb,wnba}_game_officials` is suppressed (via `espn_rename_map.yaml` `drop:`)
-  because the hand-written parsed `espn_{wbb,wnba}_game_officials` (renamed from
-  `event_officials`, core-api officials with ids) exposes the same endpoint. One->many
-  splits (e.g. `summary`) remain for curation
-  (see `docs/superpowers/specs/espn-r-naming-worksheet.md`).
-- **Versioned collision rule (dynamic, "one stays bare").** When a generated name
-  would collide with an existing function but they hit *different* endpoints, both are
-  kept: ONE keeps the bare name and the larger/newer one is version-qualified. This is
-  now decided dynamically by the generator (`_league_module_source` pass 2 +
-  `_versioned_on_collision`), not hard-coded. The web-common-v3 `/athletes/{id}/stats`
-  endpoint wants the bare `player_stats`; it is version-qualified to
-  `espn_*_player_stats_v3` *only* when a hand-written bare `player_stats` already claims
-  the name — a league without that sibling would get the bare name automatically (no
-  orphaned `*_v3`).
-- **Cross-league `player_stats` parity (core-v2 season) for ALL eight ESPN leagues.**
-  Every league now exposes a bare `espn_<league>_player_stats` (core-v2
-  `/seasons/{season}/types/{type}/athletes/{id}/statistics` season line) returning
-  **one wide, self-describing row** (athlete identity + season line as
-  `{category}_{stat}` columns + `team_*` identity), plus the generated
-  `espn_<league>_player_stats_v3` (web-v3 comprehensive) — matching the
-  hoopR/wehoop/cfbfastR convention exactly. nba, mbb, nfl, nhl, mlb, and cfb gain new
-  hand-written wrappers; wnba/wbb were already converted. A single sport-aware core
-  (`sportsdataverse._common_espn_player_stats._espn_player_stats`) backs all eight
-  (basketball/football/baseball/hockey share the core-v2 `splits.categories[].stats[]`
-  shape and athlete/team `$ref` graph). New `season_type` (`"regular"`/`"postseason"`)
-  and `total` params mirror the wehoop signature. **BREAKING:** `espn_wnba_player_stats`
-  / `espn_wbb_player_stats` previously hit web-v3 and returned a `dict` of category
-  frames; they now return a single core-v2 season `DataFrame` (the web-v3 payload moved
-  to `*_player_stats_v3`).
-- **`_get` / `_csv` single source.** The HTTP + coercion helpers now live in
-  `sportsdataverse._codegen_runtime` (shared by all generated wrappers);
-  `_common_espn` re-exports them. **Note for test authors:** mock
-  `sportsdataverse._codegen_runtime.download` (not `_common_espn._get`) to
-  intercept the generated wrappers.
-- **Drift guard.** `python tools/codegen/generate.py --check` (and the
-  `sdv-codegen` pre-commit hook) fail if the committed wrappers fall out of sync
-  with the endpoint metadata.
+- **ESPN:** Generated `espn_*` names follow the cfbfastR / hoopR / wehoop taxonomy in all eight leagues
+  (behavior unchanged), per underscore token: `athlete -> player` (`athlete_vs_athlete ->
+  player_vs_player`, `athletes_index -> players_index`, `season_athletes -> season_players`).
+- **ESPN:** `event -> game` in every position: bare `event -> game`, `events -> games`,
+  `event_* -> game_*`, `season_week_events -> season_week_games`.
+- **ESPN:** Combined mappings run first: `event_competitor* -> game_team*`, `event_competition ->
+  game_competition`, `event_competition_* -> game_*`; compound tokens are kept
+  (`athlete_eventlog -> player_eventlog`).
+- **ESPN:** Internal: `sportsdataverse._common_espn` no longer exposes the factory
+  (`make_league_module`, `_bind`, the `_*_WRAPPERS` tables) or the private `_site_v2_*` /
+  `_core_v2_*` core functions.
+- **MBB/WBB:** Removed `espn_mbb_bracketology()` / `espn_wbb_bracketology()`, the `_common_ncaa.py`
+  module and `register_ncaa_bracketology()`; the ephemeral, non-league endpoint is no longer carried.
+- **NHL:** api-web wrappers drop the `web` qualifier where the clean name is free (26 functions), e.g.
+  `nhl_web_boxscore -> nhl_boxscore`, `nhl_web_standings -> nhl_standings`, `nhl_web_roster ->
+  nhl_roster`, `nhl_web_scoreboard -> nhl_scoreboard`; URL, params and parser are identical.
+- **NHL:** `nhl_web_pbp` and `nhl_web_schedule` keep their names (they collide with hand-written
+  composites); the full rename map is `tools/codegen/rename_map.yaml`.
+- **NHL:** Removed the deprecated `sportsdataverse.nhl.nhl_api` module (it targeted the retired
+  `statsapi.web.nhl.com`); use `nhl_api_web` / `nhl_pbp` instead.
+- **WBB/WNBA:** `espn_wbb_player_stats` / `espn_wnba_player_stats` now return one core-v2 season
+  `DataFrame` instead of a `dict` of web-v3 category frames; the web-v3 payload moved to
+  `espn_wbb_player_stats_v3` / `espn_wnba_player_stats_v3`.
+- **WBB/WNBA:** The hand-written parsed `espn_{wbb,wnba}_event_officials` is renamed
+  `espn_{wbb,wnba}_game_officials` (core-api officials with ids); the generated raw wrapper of that
+  name is suppressed.
 
-**BREAKING (internal):** `sportsdataverse._common_espn` no longer exposes the
-factory (`make_league_module` / `_bind` / the `_*_WRAPPERS` tables) or the private
-`_site_v2_*` / `_core_v2_*` core functions. Public `espn_<league>_*` wrappers are
-unchanged in name and behavior.
+**Upgrade notes** — tests that intercept the generated wrappers must mock
+`sportsdataverse._codegen_runtime.download` (not `_common_espn._get`): the shared `_get` / `_csv`
+helpers now live in `sportsdataverse._codegen_runtime`, and `_common_espn` re-exports them.
 
-### NHL native — codegen cutover + clean names (api-web; in progress)
+### Added
 
-The hand-written NHL native modules are being regenerated from endpoint specs
-(via `tools/codegen/extract_native.py` -> flat-API YAML -> `generate.py`) with
-**clean, R-aligned names**, family by family. **First family: `nhl_api_web`.**
+- **CFB:** `create_box_score()` (and `run_processing_pipeline()`'s `advBoxScore`) gains a
+  `defensive_players` section: per-defender `sacks`, `pass_breakups`, `interceptions`,
+  `forced_fumbles`, `fumble_recoveries` (plus yards), keyed by `def_pos_team` + `player_name`.
+- **CFB:** New `specialists` box-score section: `field_goals`, `punts`, `kick_returns`, `punt_returns`
+  (plus yards) keyed by `pos_team` + `player_name`; both new sections degrade to `[]` when empty.
+- **CFB:** New `espn_team` and `espn_players` box-score sections surface ESPN's official box verbatim
+  (turnovers, fumbles lost, interceptions, yards, penalties, first downs, player stat lines).
+- **CFB:** New per-play attribution columns `kicking_team`, `return_team`, `fumbling_team`,
+  `recovery_team`, `recovery_team_2`, `penalized_team`, and per-side turnover flags
+  `is_pos_team_turnover` / `is_def_pos_team_turnover` (one play can turn over for both teams).
+- **CFB:** New `is_blocked_punt_turnover` / `is_blocked_fg_turnover` flags for blocked kicks the
+  defense recovers, kept out of `is_turnover` / `is_st_turnover`, which match ESPN's giveaway count.
+- **ESPN:** Every league exposes a bare `espn_<league>_player_stats` (core-v2 season line: one wide row
+  of `{category}_{stat}` + `team_*` columns) with `season_type` (`"regular"` / `"postseason"`) and
+  `total` params, plus `espn_<league>_player_stats_v3` (web-v3 comprehensive).
+- **Loaders:** The release manifest grows from 24 to 92 loaders (WNBA `espn_wnba_*` + `wnba_stats_*`,
+  the full NHL `nhl_*` family incl. EDGE/lite/boxscores, WBB, NBA, MBB), each with a `@return` table;
+  `load_cfb_betting_lines`, `get_cfb_teams` and `nhl_teams` are kept.
+- **NHL:** New `espn_nhl_*` surface (115 functions): the full ESPN Site v2 / Web v3 / Core v2 surface,
+  and `find()` now works for NHL.
+- **PWHL:** New `sportsdataverse.pwhl` league with 15 release-backed loaders (e.g. `load_pwhl_pbp`).
 
-- **BREAKING renames** (`nhl_web_* -> nhl_*` where the clean name is free; the
-  qualifier is kept only on collision with a hand-written composite, so
-  `nhl_web_pbp` and `nhl_web_schedule` are unchanged): e.g. `nhl_web_boxscore ->
-  nhl_boxscore`, `nhl_web_standings -> nhl_standings`, `nhl_web_roster ->
-  nhl_roster`, `nhl_web_scoreboard -> nhl_scoreboard` (26 functions; full map in
-  `tools/codegen/rename_map.yaml`). Behavior (URL + params + parser) is identical
-  -- faithfulness was verified by `test_parity_native` before the swap.
-- `nhl_scoreboard` (the 3-way team/date/now branch) stays hand-written in
-  `nhl_api_web_extra.py` -- the single-URL-builder codegen can't represent it.
-- **Removed** the deprecated `sportsdataverse.nhl.nhl_api` module (targeted the
-  retired `statsapi.web.nhl.com`); use `nhl_api_web` / `nhl_pbp` instead.
-- **`nhl_edge`** (family 2) and **`nhl_stats_rest`** (family 3) are now generated
-  too. Both keep their meaningful API namespaces (`nhl_edge_*`, `nhl_stats_rest_*`)
-  so they are **non-breaking** codegen-ifications (35 + 21 functions). stats_rest's
-  arbitrary `**filters` power feature (cayenneExp/sort/limit/...) is preserved via
-  a new `passthrough_query` engine mode that forwards None-filtered `**kwargs` as
-  query params; `return_parsed` is additionally wired where a parser exists.
-- **`nhl_records`** (family 4) is generated too -- kept `nhl_records_*` (distinct
-  records.nhl.com product), **non-breaking** (50 functions: 44 generated +
-  `passthrough_query`, 6 value-embedded/scope-conditional ones preserved
-  hand-written in `nhl_records_extra.py`).
-- **`mlb_api`** (family 5, final) is generated too -- kept `mlb_api_*` (the raw MLB
-  Stats API namespace, distinct from the curated `mlb_*` composites),
-  **non-breaking** (41 names: 26 generated + `passthrough_query` for hydrate/fields,
-  15 conditional-`_csv` / multi-param / `/api/v1.1/`-host functions preserved
-  hand-written in `mlb_api_extra.py`).
-- **All five native families are now codegen-generated.** Only `nhl_api_web` was a
-  breaking rename (its `web` qualifier was host-noise); the other four kept their
-  meaningful API namespaces. The codegen engine gained flat-API collision
-  resolution (`FlatApi.qualifier` + `resolve_name`), `passthrough_query`, and a
-  `build_flat`/`--check` drift gate. `test_parity_native` locked in each family's
-  faithfulness before its swap.
+### Changed
 
-### Dataset loaders — release manifest + drift audit
+- **CFB:** The box-score `turnover` list is ordered `[home, away]` and every row carries `team_id`; key
+  by `team_id` rather than list position.
+- **CFB:** The `turnover` section takes `turnovers` / `Int` / `fumbles_lost` from the ESPN box
+  (`espn_sourced=True`); the play-by-play derivation stays under `*_pbp` keys as a fallback.
+- **CFB:** ESPN's native per-play `isTurnover` / `isPenalty` pass through as columns (populated back to
+  2018) as cross-checks, not sources of truth: `isTurnover` is coarser and `isPenalty` flags only
+  primary-penalty plays.
+- **CFB:** Pre-2014 era support: in a 2004-2019 sweep every game with play-by-play yields valid EPA/WPA
+  and a full advanced box score; games without PBP still exit early.
+- **CFB:** Era notes in the architecture reference: before 2014 player names come from text only,
+  ESPN's win-probability array is empty before ~2016 (`wpa` is computed in-house), PBP is sparse
+  before 2008.
+- **Codegen:** `generate.py --check` (and the `sdv-codegen` pre-commit hook) fail when committed
+  wrappers or generated docs drift from the endpoint metadata; the default `build` writes them.
+- **Codegen:** New `generate.py --audit-releases` compares the loader manifest with the live release
+  list and reports tags without a loader and orphans; tags not yet shipping parquet stay absent.
+- **Docs:** `generate.py --docs` renders the reference tree into `docs/docs/{league}/` (per-league
+  `index.md`, a page per ESPN API and native family, `reference/loaders.md`,
+  `reference/parameters.md`), replacing the legacy Sphinx apidoc dumps.
+- **Docs:** Each function gets an 8-section block (summary, endpoint URL, a valid example URL, a
+  parameter table, a `@return` table, a runnable example, a validated date) under its emitted name.
+- **Docs:** Loader docstrings carry `|col_name|type|` `@return` tables introspected from each parquet
+  footer (`tools/codegen/schemas/loader_schemas.yaml`, `generate.py --loader-schemas`).
+- **Docs:** `docs/sidebars.ts` makes each league a clickable category with an autogenerated reference
+  subtree and adds a top-level "Parameter reference" entry.
+- **Docs:** Example notebooks are CI-executed with `nbmake` (weekly `live-tests-cron`, non-blocking);
+  `02_cfb_intro` was rewritten to the `CFBPlayProcess` flow.
+- **Docs:** New [Ecosystem & philosophy](https://py.sportsdataverse.org/docs/ecosystem) page: design
+  philosophy, naming paradigm, Python ↔ R sister mapping, nflverse / PySport, the data repositories
+  and a 1:1 function map; `intro.md` and all seven notebooks link to it.
+- **Docs:** The [ESPN cross-league architecture](https://py.sportsdataverse.org/docs/architecture/espn-cross-league)
+  page now describes declarative codegen instead of the retired `make_league_module()` factory.
+- **Docs:** The generated docs are the live default at `/docs/` (`lastVersion: 'current'`, labelled
+  `main`) and refresh on every deploy; the legacy docs stay archived at `/docs/0.0.50/`.
+- **Docs:** The site builds on [Vercel](https://vercel.com) on push to `main`; at each release
+  `cd docs && yarn version:docs <x.y.z>` freezes a per-release archive.
+- **Docs:** The home page (`docs/src/pages/index.tsx`) now covers Basketball / Football / Baseball /
+  Hockey, each card naming its R sister, with an "Ecosystem & philosophy" call-to-action.
+- **ESPN:** Wrappers are generated from `tools/codegen/endpoints/*.yaml` into
+  `sportsdataverse/<league>/<league>_espn_ext.py` instead of registered at import time: real parameter
+  names, type hints and docstrings, with byte-identical URLs and query strings.
+- **ESPN:** Renames that would clash with a hand-written sibling are skipped (`teams_site`,
+  `espn_cfb_season_{team,awards,coaches}`); one-to-many splits such as `summary` remain for curation
+  (`docs/superpowers/specs/espn-r-naming-worksheet.md`).
+- **ESPN:** When names collide across different endpoints, one keeps the bare name and the newer one is
+  version-qualified: web-v3 `/athletes/{id}/stats` becomes `espn_*_player_stats_v3` only when a
+  hand-written bare `player_stats` exists.
+- **MLB:** `mlb_api` is now generated and keeps its `mlb_api_*` names (non-breaking, 41 names);
+  `passthrough_query` forwards `hydrate` / `fields`.
+- **NHL:** `nhl_edge` (35) and `nhl_stats_rest` (21) are now generated and keep their `nhl_edge_*` /
+  `nhl_stats_rest_*` names; `**filters` (`cayenneExp` / `sort` / `limit`, …) still pass through and
+  `return_parsed` is wired where a parser exists.
+- **NHL:** `nhl_records` is now generated and keeps its `nhl_records_*` names (non-breaking, 50
+  functions).
 
-- **`releases.yaml` manifest expanded 24 -> 92 loaders**, seeded from the live
-  sportsdataverse-data release list: every release tag shipping season-partitioned
-  `*.parquet` assets gets a 404-safe loader entry whose URL is derived from the
-  actual asset names (verified to resolve). New coverage: WNBA (`espn_wnba_*` +
-  `wnba_stats_*`), **PWHL** (15 datasets, a new league), NHL (full `nhl_*` family
-  incl. EDGE/lite/boxscores), WBB, NBA, MBB.
-- **`generate.py --audit-releases`** compares the manifest against the live release
-  list (gh CLI) and reports tags with no loader (gaps) + orphans -- a CI-oriented
-  drift gate (separate from the offline `--check`). `tests/codegen/fixtures/release_tags.txt`
-  snapshots the live tags for offline coverage tests.
-- Release tags that don't yet ship parquet (empty / csv-only / season-less -- e.g.
-  several `espn_cfb_*` advanced-box tags, `nba_stats_*` boxscores) are intentionally
-  absent and surfaced by the audit until parquet lands.
-- **`@return` column tables** (Task 4): every non-stub loader's parquet footer is
-  introspected into `tools/codegen/schemas/loader_schemas.yaml` (92 datasets) and
-  rendered as a `|col_name|type|` table in the generated loader docstrings
-  (reproducible via `generate.py --loader-schemas`).
-- **All loader modules are now generated** (Task 5 complete). The new
-  `sportsdataverse.pwhl` league (15 loaders) plus the six existing leagues
-  (`cfb`/`mbb`/`nba`/`nhl`/`wbb`/`wnba`) are rendered from the manifest into
-  `{league}/{league}_loaders.py` -- expanding from 4 hand-written loaders per league
-  to the full release-backed set (nhl 24, wnba 25, wbb 11, nba 9, pwhl 15, ...),
-  each with `@return` column tables. **Zero loss** (verified before/after): the
-  season-less / helper functions the loop template can't express are preserved
-  hand-written in `{league}_loaders_extra.py` residuals -- `cfb`:
-  `load_cfb_betting_lines` + `get_cfb_teams`; `nhl`: `nhl_teams`. The codegen
-  `build`/`--check` drift gate covers all generated loader modules
-  (`_GENERATED_LOADER_LEAGUES`). Verified live: `load_pwhl_pbp(2024)` -> 10,456 rows,
-  `load_nhl_pbp_lite(2010)` -> 400,512, `load_wnba_shots(2024)` -> 45,480.
+### Removed
 
-### Generated documentation — reference pages + drift gate
+- **Packaging:** The legacy Sphinx pipeline (`create_docs.sh` + `Sphinx-docs/`) is deleted, and the
+  `sphinx` / `sphinx-markdown-builder` / `sphinx-material` dev dependencies are dropped from the
+  `docs` extra/group and the `all` extra.
 
-- **`generate.py --docs`** renders the full reference docs tree from the same
-  endpoint/loader/parameter metadata that drives the wrappers, directly into the
-  live Docusaurus "Next" surface (`docs/docs/{league}/`). 64 files: per-league
-  `index.md` + `_category_.json`, a per-API reference page for every ESPN API
-  (`site`/`web`/`core`) and native flat family
-  (`nhl_api_web`/`nhl_edge`/`nhl_stats_rest`/`nhl_records`/`mlb_api`), a
-  `reference/loaders.md` per loader league, and a shared `reference/parameters.md`.
-  This **replaces the legacy Sphinx apidoc dumps** — the 7 per-league
-  `index.md` Sphinx pages plus the hand-authored NHL/MLB conceptual pages were
-  regenerated/removed; package-wide conceptual pages (`intro`, `quality-of-life`,
-  `architecture/`, `parsers/`) are preserved untouched.
-- **8-section function block** (`templates/_reference_block.jinja`): summary,
-  endpoint URL, a concrete valid example URL, an nba_api-style
-  `| API Parameter | Python | Pattern | Required | Nullable |` table, a `@return`
-  column table sourced from the `returns_schema` (handles both `kind: dataframe`
-  and multi-frame `kind: frames` payloads), a runnable `python` example, and a
-  validated-date line.
-- **Names never drift from code**: the per-endpoint name-resolution passes were
-  extracted into shared `_espn_league_views()` / `_flat_views()` helpers used by
-  both the module renderer and the docs renderer, so a reference page always
-  documents the exact wrapper name that gets emitted (e.g. the collision-qualified
-  `nhl_web_pbp` alongside the clean `nhl_boxscore`).
-- **Drift gate**: `--check` now also fails on stale generated docs (and orphans
-  inside the fully-generated league/`reference/` dirs — conceptual pages outside
-  them are never flagged); the default `build` writes them.
-  `tools/codegen/fetch_packages.py` snapshots the SDV package list for an optional
-  packages page (network tool; the gate stays offline by omitting the page when no
-  snapshot is committed). New offline tests `tests/codegen/test_docs.py` +
-  `test_doc_parity.py` assert the 8-section contract across every league x API and
-  that the live tree is current.
-- **Docusaurus migration**: `docs/sidebars.ts` now drives each league as a
-  clickable category (link → generated `index`) expanding to an autogenerated
-  reference subtree, so new endpoints surface in the nav with no sidebar edit;
-  added a top-level "Parameter reference" entry. The legacy Sphinx pipeline
-  (`create_docs.sh` + `Sphinx-docs/`) is **deleted**, along with its now-unused
-  `sphinx`/`sphinx-markdown-builder`/`sphinx-material` dev dependencies (dropped
-  from the `docs` extra/group + the `all` extra; `uv.lock` re-resolved). `yarn build`
-  passes with a link-clean `/docs/next/` surface (remaining broken-anchor warnings
-  are confined to the frozen `0.0.50` version + the CHANGELOG doctoc fragments).
-- **Example notebooks are CI-executed** (`nbmake`): the example notebooks were
-  audited against the post-rename API — only `02_cfb_intro` broke (the standalone
-  `espn_cfb_pbp(game_id=...)` is gone), and its PBP cells were rewritten to the
-  `CFBPlayProcess(gameId=...).espn_cfb_pbp()` + `.run_processing_pipeline()` flow
-  (verified live). `nbmake` was added to the `test` dependency group, and the
-  weekly `live-tests-cron` workflow now runs `pytest --nbmake examples/notebooks/`
-  as an informational (non-blocking) leg so notebook breakage surfaces as drift.
-- **Cohesive intro docs**: a new [Ecosystem & philosophy](https://py.sportsdataverse.org/docs/ecosystem)
-  page ties the docs together — the design philosophy, the full function-naming
-  paradigm (`espn_<league>_*`, native `<league>_*`, `load_<league>_*`, `parse_*`,
-  plus the R-aligned athlete→player / event→game conventions and collision rules),
-  the Python ↔ R sister mapping (hoopR / wehoop / cfbfastR / baseballr / fastRhockey,
-  plus oddsapiR / recruitR / sportyR / sportypy / sportsdataverse.js), and how the
-  package relates to nflverse (the NFL module mirrors nflreadpy) and the wider
-  PySport ecosystem. `intro.md` and all seven example notebooks now open with a
-  consistent philosophy/naming blurb and link to it. The page also documents the
-  companion **data repositories** (sportsdataverse-data releases, cfbfastR-data,
-  fastRhockey-data, nflverse-data) behind the `load_*` family and links each
-  league's generated *Automation status* loader table, and includes a **1:1
-  function map** — a table whose `sportsdataverse-py` functions deep-link to their
-  reference pages and whose R-sister functions link to the matching
-  hoopR/wehoop/cfbfastR/fastRhockey/baseballr pkgdown docs (verified against each
-  package's NAMESPACE). The
-  [ESPN cross-league architecture](https://py.sportsdataverse.org/docs/architecture/espn-cross-league)
-  page was realigned from the retired `make_league_module()` runtime factory to the
-  current declarative-codegen reality.
-- **Docs default flipped to the overhauled tree + per-release snapshot policy**:
-  `docusaurus.config.ts` sets `lastVersion: 'current'` (labelled `main`), so the
-  generated reference + conceptual docs are the live DEFAULT at the root `/docs/`
-  and auto-refresh on every deploy instead of sitting at `/docs/next/` behind the
-  frozen 0.0.50 Sphinx dumps; the legacy docs stay archived at `/docs/0.0.50/`. The
-  site builds on [Vercel](https://vercel.com) on push to `main` (no in-repo deploy
-  workflow — a GitHub Pages action would double-publish). At each release, freeze a
-  per-release archive with the new `cd docs && yarn version:docs <x.y.z>` helper
-  (keeping `current`/`main` the default) — so the live docs never drift from the
-  code (codegen `--check`-gated) yet every release still gets a frozen record. The
-  release step is documented in CLAUDE.md.
-- **Home page refreshed**: `docs/src/pages/index.tsx` was rewritten from the stale
-  MBB/CFB/EPA cards to the full current surface — Basketball / Football / Baseball /
-  Hockey (incl. native NHL & MLB APIs, loaders, the tidy-by-default parser layer) —
-  each card naming its R sister, with an "Ecosystem & philosophy" call-to-action.
-- Declined follow-up: a data-driven SDV navbar dropdown — `projects.json` carries
-  no canonical doc URLs, so the curated navbar in `docusaurus.config.ts` (which
-  has them) stays authoritative.
+### Fixed
 
-### CFB — advanced box score expansion (`create_box_score`)
-
-`CFBPlayProcess.create_box_score()` (and therefore `run_processing_pipeline()`'s
-`advBoxScore`) now emits two additional per-player sections alongside the existing eight:
-
-- **`defensive_players`** — per-defender havoc events attributed by player and defensive
-  team: `sacks` (+`sacks_yards`), `pass_breakups`, `interceptions` (+`interceptions_yards`),
-  `forced_fumbles`, `fumble_recoveries` (+`fumble_recoveries_yards`). Keyed by
-  `def_pos_team` + `player_name`. Columns present vary per game (only populated stats appear);
-  all values derive from existing enriched play columns (no new tracking data).
-- **`specialists`** — per-player kicking/punting/return production keyed by `pos_team` +
-  `player_name`: `field_goals` (+`field_goals_yards`), `punts` (+`punts_yards`),
-  `kick_returns` (+`kick_returns_yards`), `punt_returns` (+`punt_returns_yards`).
-
-Both are additive and degrade to `[]` when no events are attributable. The existing
-`pass`/`rush`/`receiver`/`team`/`situational`/`defensive`/`turnover`/`drives` sections are
-unchanged.
-
-### CFB — box-score attribution correctness + ESPN-sourced totals (`create_box_score`)
-
-A correctness pass on team/player attribution in the advanced box score, reconciled
-against ESPN's official box score for a 5-game fixture set (all turnover totals now match
-ESPN exactly). All output is additive — existing field names are preserved; previously
-wrong values are corrected and new fields/sections are added.
-
-- **Per-play attribution layer** (`__add_attribution_cols`): resolves the credited team for
-  every play from the play text + flags, aware that `pos_team`/`def_pos_team` swap roles by
-  play type (on a kickoff `pos_team` is the receiving team; on a punt it is the punting
-  team). Produces `kicking_team`, `return_team`, `fumbling_team`, `recovery_team`,
-  `recovery_team_2`, `penalized_team`, and per-side turnover flags.
-- **Special-teams turnovers are now counted.** Previously the turnover box filtered to
-  scrimmage plays, dropping muffed punts, kickoff-return fumbles, and blocked-kick
-  recoveries; these are now included. Muffs (`"muffed by …"`) are detected as fumbles, and
-  overturned plays (`"(Original Play: …)"` after a reversed review) are stripped before
-  parsing so a reversed fumble is not counted.
-- **Per-side turnover model.** A single play can register a turnover for **both** teams via
-  `is_pos_team_turnover` / `is_def_pos_team_turnover` and a 2-deep recovery chain — e.g. an
-  interception returned and fumbled back, or a sack-strip where the recovering defense
-  fumbles it back. Turnover margins/luck are keyed by team identity (fixing a prior
-  group-order bug that could swap or sign-flip them). The `turnover` list is now ordered
-  `[home, away]` and every row carries `team_id` — consumers should key by `team_id`
-  rather than list position (the previous order came from an unordered group-by).
-- **Correct team attribution** for fumble recoveries (own recoveries credited to the
-  recovering team, not always the defense), punt returns (credited to the returning team,
-  not the punting team), and **penalty yards** (charged to the penalized team via
-  `penalty_yards`, with the legacy `total_pen_yards` retained).
-- **End-of-period play-drop fix.** A dedup heuristic was dropping the real play immediately
-  before an "End of period/half/game" marker (which inherits its start state) — losing
-  end-of-half turnovers such as a Hail Mary interception. Guarded so end markers never
-  trigger dedup of the preceding play.
-- **ESPN-sourced totals.** New **`espn_team`** and **`espn_players`** sections surface
-  ESPN's official box verbatim (turnovers, fumbles lost, interceptions, total/passing/
-  rushing yards, penalties, first downs, player stat lines) as the authoritative source for
-  countable totals. The `turnover` section sources `turnovers`/`Int`/`fumbles_lost` from the
-  ESPN box (`espn_sourced=True`), keeping the play-by-play derivation under `*_pbp` keys as
-  the fallback and as a validated cross-check.
-- **Clean player names.** `run_processing_pipeline()` joins ESPN's per-play participants
-  (`espn_cfb_play_participants`) to replace regex-extracted names (which carried team
-  prefixes, e.g. `"BYU Dayan Ghanwoloku"`) with clean display names, with graceful fallback
-  to the regex names when offline. Set `join_participants = False` to skip the fetch
-  (used by offline reprocessing and the offline test suite).
-
-### CFB — play-type reclassification: interception-return-fumble guard (`__add_new_play_types`)
-
-- **Interceptions are no longer mislabeled as fumble recoveries.** The "strip-sack →
-  fumble" reclassification rules fire on `fumble_vec & pass & change_of_poss==1`. An
-  interception also sets `change_of_poss=1`, so a pick whose returner subsequently fumbled
-  matched the predicate and was relabeled `"Fumble Recovery (Opponent)"`, erasing the
-  interception (and, because the downstream `int` flag is derived from `type.text`, zeroing
-  it for EPA/WPA and the box score). Both pass strip-sack rules now additionally require
-  `type.text` not be an interception label (`int_vec`), so these plays keep their
-  interception classification (normalized to `"Interception Return"` later in the method).
-  Genuine strip-sacks — and the rush strip-sack rule, which cannot match an interception —
-  are unchanged. Verified across a 20-game / 3,439-play before/after diff: exactly one play
-  changed (`Fumble Recovery (Opponent)` → `Interception Return`), zero other plays affected.
-- **Post-attribution play-type refinement (`__refine_play_types_post_attribution`).** A new
-  pipeline step (after `__add_attribution_cols`) corrects two labels that need the turnover
-  signal the step-5 reclassifier lacks (it can only see `change_of_poss`, which is `True` on
-  every possession flip, not just turnovers):
-  - A sack-fumble the offense **recovers itself** was relabeled `Fumble Recovery (Opponent)`
-    (spurious `change_of_poss`); `is_turnover == False` restores `Fumble Recovery (Own)`.
-  - A punt-return fumble the **punting team** recovers (`recovery_team == pos_team`) becomes
-    `Punt Team Fumble Recovery` instead of staying `Punt Return`.
-
-  Only the package's own first-pass relabels are undone (guarded on `orig_play_type`); the two
-  frozen `type.text`-derived columns EPA/WPA read (`downs_turnover`, `pos_score_diff_end`) are
-  recomputed so EPA stays consistent (e.g. a 4th-down self-recovery short of the sticks is now
-  correctly scored a turnover on downs). ESPN-sourced box turnover totals are unaffected.
-  Verified across a 20-game / 3,439-play before/after diff: exactly two plays changed (both
-  intended relabels), with EPA moving only on those two plays — no collateral drift.
-
-### CFB — blocked-kick turnover flags + ESPN native-flag tripwires
-
-- **New `is_blocked_punt_turnover` / `is_blocked_fg_turnover` per-play flags (additive).**
-  `is_turnover` models only *giveaways* (INT + fumbles lost) to match ESPN's official-box
-  `turnovers` definition (so the `*_pbp` cross-check stays exact). A blocked kick the defense
-  recovers is a possession loss but **not** a giveaway — ESPN's official box does not count it
-  (verified) — so each is surfaced as a standalone flag kept out of `is_turnover` /
-  `is_st_turnover`: `True` on a `Blocked Punt`/`Blocked Field Goal` Touchdown, or the non-TD
-  variant with a possession change. These are the possession-losing classes ESPN's per-play
-  `isTurnover` flag catches that the giveaway-based derivation does not.
-- **Blocked-FG mislabel fix.** ESPN sometimes types a blocked field goal returned by the defense
-  as `Extra Point Missed`, routing it through PAT-scoring EPA logic. `__add_new_play_types` now
-  relabels these to `Blocked Field Goal[ Touchdown]` (gated on `"blocked"` + an FG/`field goal`
-  text token, so a genuine blocked PAT is untouched), which also corrects the EPA. Because the
-  relabel runs before the `type.text`-derived flag computation, all downstream flags recompute
-  cleanly (no staleness).
-- **ESPN native `isTurnover` / `isPenalty` are kept as cross-checks, not sources of truth.** They
-  pass through the flattener as columns (populated back to 2018). `isTurnover` is coarser (it
-  silently drops ~16% of plain interceptions on sparse-text plays and has no per-side/ST concept);
-  `isPenalty` flags only *primary*-penalty plays. New regression tripwires
-  (`test_espn_flag_tripwires.py`) assert `isTurnover ⇒ is_turnover OR is_blocked_punt_turnover OR
-  is_blocked_fg_turnover` and `isPenalty ⇒ penalty_flag` on the fixtures — the first would have
-  caught the interception-erasure bug above. Validated across 150 games (24,876 plays): all
-  blocked-punt and blocked-FG possession losses captured with 100% ESPN agreement and zero leakage
-  into the giveaway signals; penalty tripwire 0 violations; `isTurnover`/`is_turnover` agreed 99.6%
-  (residual disagreements are ESPN false positives — self-recovered fumbles — the stricter
-  derivation correctly excludes).
-
-### CFB — pre-2014 era support (`CFBPlayProcess`)
-
-Validated across a 240-game sweep (15 games × 2004-2019): every game that has play-by-play
-produces valid EPA/WPA and a full advanced box score in every era (209/209 of the sampled
-games-with-plays; games without PBP exit early gracefully). Legacy ESPN labels that only appear in
-older seasons are now normalized in `__add_new_play_types` (each rule is gated on the raw label, so
-it is a no-op on modern data):
-
-- **`2pt Conversion`** — ESPN's pre-2014 *successful* two-point label — is resolved via
-  `scoringPlay` to `Two-Point Conversion Good` / `Two-Point Conversion Missed`, so it routes
-  through the two-point EPA/scoring path instead of being scored as a generic play.
-- **2004 `Unknown` rows** are relabeled from their text: period/game markers → `End Period` (so
-  these non-plays are excluded from aggregates instead of producing garbage EPA), and the handful
-  of misclassified kicks → `Field Goal Missed` / `Extra Point Missed` / `… Good`.
-- **`Kickoff Return (Defense)`** (pre-2014 onside-kick-recovered) → `Kickoff`.
-- **Separate extra-point rows** are normalized to the no-down sentinel (`down`/`distance = -1`) for
-  the few pre-2005 games that ship a real down on them (2005+ and two-point rows already use it).
-
-Era notes (documented in the architecture reference): pre-2014 player attribution is
-text-extraction only (the participants endpoint returns nothing before 2014; `__join_participants`
-already falls back to regex names); ESPN's own win-probability array is empty before ~2016 but
-`wpa` is computed in-house in every era; and PBP coverage is sparse before 2008 (~47% of 2004
-games have no PBP), handled by the existing early-exit.
-
-### Removed — NCAA bracketology
-
-- **`espn_mbb_bracketology()` / `espn_wbb_bracketology()` removed.** The non-league
-  `sports.core.api.espn.com/v2/tournament/{22,23}/seasons/{y}/bracketology` wrappers added in
-  0.0.51 — along with the `_common_ncaa.py` module and the `register_ncaa_bracketology()`
-  registration machinery — have been removed. The endpoint is ephemeral (ESPN only publishes it
-  during the Jan–Mar projection window) and sat outside the per-league URL pattern, so it is no
-  longer carried. The universal `espn_mbb_*` / `espn_wbb_*` wrappers are unaffected.
+- **CFB:** Special-teams turnovers (muffed punts, kickoff-return fumbles, blocked-kick recoveries) are
+  now counted, and overturned plays (`"(Original Play: …)"`) are stripped so a reversed fumble is not.
+- **CFB:** Turnover margins / luck are keyed by team identity and can no longer be swapped or
+  sign-flipped between teams.
+- **CFB:** Fumble recoveries are credited to the recovering team, punt returns to the returning team,
+  and penalty yards to the penalized team (new `penalty_yards`; legacy `total_pen_yards` kept).
+- **CFB:** The real play just before an "End of period/half/game" marker is no longer dropped by dedup,
+  so end-of-half turnovers such as a Hail Mary interception are kept.
+- **CFB:** `run_processing_pipeline()` joins `espn_cfb_play_participants`, so player names no longer
+  carry team prefixes (e.g. `"BYU Dayan Ghanwoloku"`); set `join_participants = False` to skip it.
+- **CFB:** An interception whose returner later fumbled is no longer relabeled
+  `"Fumble Recovery (Opponent)"`; it stays `"Interception Return"` and keeps its `int` flag.
+- **CFB:** A sack-fumble the offense recovers is `Fumble Recovery (Own)` again, and a punt-return
+  fumble the punting team recovers is `Punt Team Fumble Recovery`; EPA is recomputed to match.
+- **CFB:** A blocked field goal ESPN types as `Extra Point Missed` is relabeled
+  `Blocked Field Goal[ Touchdown]`, correcting its EPA; genuine blocked PATs are untouched.
+- **CFB:** Pre-2014 `2pt Conversion` rows resolve via `scoringPlay` to `Two-Point Conversion Good` /
+  `Two-Point Conversion Missed` and score through the two-point path.
+- **CFB:** 2004 `Unknown` rows are relabeled from their text: period/game markers -> `End Period`,
+  misclassified kicks -> `Field Goal Missed` / `Extra Point Missed` / `… Good`.
+- **CFB:** Pre-2014 `Kickoff Return (Defense)` (onside kick recovered) becomes `Kickoff`.
+- **CFB:** Separate extra-point rows in the few pre-2005 games that ship a real down get the no-down
+  sentinel (`down` / `distance = -1`).
 
 ## 0.0.52 Release: June 3, 2026
 
-### CFB — offline reprocess support (`CFBPlayProcess`)
+### Added
 
-Three additive, non-breaking changes that let college-football games be rebuilt from
-on-disk raw JSON without re-hitting ESPN, in support of the `cfbfastR-cfb-raw` scraper's
-reprocess pipeline:
+- **CFB:** New `CFBPlayProcess(odds_override=...)`: a dict of `gameSpread`, `overUnder`,
+  `homeFavorite`, `gameSpreadAvailable` is used as-is, so offline rebuilds never hit the network or
+  default odds; a missing key or non-dict raises `ValueError`. No override = unchanged behavior.
+- **CFB:** New `CFBPlayProcess.odds_source` (`"summary_pickcenter"`, `"core_odds_api"`, `"default"` or
+  `"injected"`), also written into the returned payload for `run_processing_pipeline()` /
+  `run_cleaning_pipeline()` consumers.
 
-- **Raw summary allowlist now keeps `injuries` and `gameNotes`.**
-  - Before: `CFBPlayProcess(gameId=..., raw=True).espn_cfb_pbp()` filtered the ESPN summary
-    to 15 keys and dropped `injuries`/`gameNotes` even when ESPN returned them.
-  - After: both keys are retained (defaulting to `[]` when ESPN omits them). All previously
-    returned keys are unchanged — this is purely additive.
-- **New `CFBPlayProcess.odds_source` attribute.**
-  - Before: there was no way to tell where the resolved spread/total came from.
-  - After: `proc.odds_source` is set to one of `"summary_pickcenter"`, `"core_odds_api"`,
-    `"default"`, or `"injected"` during odds resolution.
-- **New `CFBPlayProcess(odds_override=...)` constructor argument.**
-  - Before: odds resolution always consulted the summary `pickcenter` and, for 2024+ games
-    with an empty `pickcenter`, cascaded to the live `sports.core.api.espn.com` odds
-    endpoint — falling back to hardcoded defaults `(2.5, 55.5, True, False)` on failure.
-    An offline rebuild could therefore silently hit the network or inherit wrong spread
-    inputs that corrupt every play's EPA/WPA.
-  - After: passing `odds_override={"gameSpread": ..., "overUnder": ..., "homeFavorite": ...,
-    "gameSpreadAvailable": ...}` short-circuits resolution to use exactly those values, sets
-    `odds_source="injected"`, and never touches the network or the defaults. With no
-    override supplied (the default), behavior is unchanged. The override is validated and
-    type-coerced at the constructor (a missing key or non-dict raises `ValueError` instead
-    of a later `KeyError`).
-- **`odds_source` is also written into the returned payload** (not just the instance
-  attribute), so dict consumers of `run_processing_pipeline()` / `run_cleaning_pipeline()`
-  retain odds provenance.
+### Changed
+
+- **CFB:** `CFBPlayProcess(gameId=..., raw=True).espn_cfb_pbp()` keeps the summary `injuries` and
+  `gameNotes` keys (default `[]`); all previously returned keys are unchanged.
 
 ## 0.0.51 Release: May 30, 2026
 
-### User-facing quality-of-life additions
-
-Three top-level helpers that significantly reduce friction for new
-users and notebook-driven exploration.
-
-**`sportsdataverse.parsed.*`** — DataFrame-by-default mirror of every
-league's wrappers. The standard `sportsdataverse.nba.espn_nba_scoreboard()`
-returns raw `Dict`; the new `sportsdataverse.parsed.nba.espn_nba_scoreboard()`
-returns a polars `DataFrame`. Both share the same underlying function
-and accept the same `return_parsed=False` / `return_as_pandas=True`
-overrides, but the default flips per import path. Available for all 8
-leagues (`parsed.nba`, `parsed.wnba`, `parsed.mbb`, `parsed.wbb`,
-`parsed.cfb`, `parsed.nfl`, `parsed.mlb`, `parsed.nhl`). Wrappers
-without a registered parser pass through unchanged.
-
-**`find_team` / `find_athlete` / `find_event`** — name-to-ID
-resolvers in `sportsdataverse.find` (also re-exported at the package
-top level). Eliminates the "what's the magic ID for X" friction:
-
-```python
-from sportsdataverse import find_team, find_event
-
-find_team("lakers", league="nba")["id"]                     # '13'
-find_event(date="2024-06-17", league="nba", home="Boston")  # NBA Finals G5
-```
-
-All three support `multi=True` for every match, case-insensitive
-substring matching against the relevant fields, and an in-process
-team-list cache (clearable via `clear_team_cache(league=None)`).
-
-**`list_functions` / `function_count`** — searchable function index
-in `sportsdataverse.discover` (also re-exported at the package top
-level). Replaces `dir()` + grep:
-
-```python
-from sportsdataverse import list_functions, function_count
-
-function_count()
-# {'cfb': 149, 'mbb': 146, 'mlb': 196, 'nba': 143, 'nfl': 208,
-#  'nhl': 199, 'wbb': 151, 'wnba': 148} — 1,340 callables total
-
-list_functions(search="pbp")          # cross-league PBP wrapper inventory
-list_functions(league="mlb", parsers_only=True)  # just the parsers
-list_functions(league="nhl", wrappers_only=True) # everything except parse_*
-```
-
-24 new offline tests in `tests/test_qol.py` cover all three QoL
-additions including the backwards-compatibility invariant (importing
-`parsed.*` must NOT mutate the raw module's default).
-
-New doc page `docs/quality-of-life.md` with a side-by-side comparison
-showing the four-line "before 0.0.51" equivalent vs the two-line
-"after" recipe (find_event → parsed.espn_nba_summary). Intro page
-Quickstart updated to show the parsed.* import path first.
-
-**Tiered TTL response cache** — new `sportsdataverse.cache` module
-adds a six-tier HTTP cache layer that `sportsdataverse.dl_utils.download`
-consults before hitting the network. Three modes (`off` (default),
-`memory`, `filesystem`) and six TTL tiers picked by URL inspection:
-
-```python
-import sportsdataverse as sdv
-
-sdv.set_cache_mode("filesystem")  # persists to ~/.cache/sportsdataverse/
-# IMMUTABLE (30d): completed-game PBP/boxscore, glossaries, NHL Records
-# REFERENCE  (7d): venues, franchises, divisions, seasons, draft picks
-# SLOW      (24h): team rosters, athlete /landing
-# MODERATE   (1h): default — leaders, season-to-date stats
-# FAST       (5m): news, injuries
-# LIVE         (0): /scoreboard/now, /standings/now — never cached
-```
-
-Scoreboard URLs with `dates=YYYYMMDD` get special handling: past dates
-become IMMUTABLE (game results don't change), future dates stay LIVE.
-Per-call `cache_ttl=` kwarg on `download()` overrides the tier picker,
-and `$SDV_PY_CACHE_DIR` overrides the on-disk location. Invalidation:
-`sdv.clear_cache()`, `sdv.clear_cache(pattern="*roster*")`,
-`sdv.clear_cache(url="https://...")`. 19 offline tests in
-`tests/test_cache.py`.
-
-**404 error messages with actionable next-action hints** —
-`NoESPNDataError` messages now include a tailored `Suggestion:` line
-inferred from the URL. A 404 on `/teams/9999/roster` suggests
-`find_team(name, league='nfl')`; an athlete 404 suggests
-`find_athlete(name, league='mlb', team=<team>)`; a summary 404 suggests
-`find_event(date, league='nba', home=..., away=...)`. League is
-extracted from both ESPN URL shapes (the flat `site.api/.../sports/<sport>/<league>/`
-form and the nested `sports.core.api/v2/sports/<sport>/leagues/<league>/`
-form). 14 offline tests in `tests/test_errors_suggest.py`.
-
-**`sdv` console script** — argparse-based CLI installed via
-`[project.scripts]` in `pyproject.toml`. Six subcommands wrap the
-top-level QoL helpers so users can poke at the package without
-spinning up a Python REPL:
-
-```sh
-sdv find-team lakers --league nba
-sdv find-event 2024-06-17 --league nba --home Boston
-sdv list-functions --league mlb --search statcast
-sdv function-count
-sdv cache mode --set filesystem
-sdv cache stats
-sdv cache clear --pattern "*roster*"
-```
-
-A `--json` flag on any command emits raw JSON for piping to `jq`; the
-default is a human-readable format. Exit codes: 0=success, 1=no match,
-2=runtime error. 19 offline tests in `tests/test_cli.py`.
-
----
-
-
-A second big release on top of `0.0.50`. The headline items:
-
-- **New `sportsdataverse.mlb` module** (greenfield) — 175 functions
-  spanning three data surfaces:
-  - 113 ESPN cross-league wrappers + 5 ESPN originals
-  - 40 official MLB Stats API wrappers (`statsapi.mlb.com`)
-  - 17 Baseball Savant / Statcast wrappers including auto-chunked
-    25,000-row truncation handling on `/statcast_search/csv`
-- **NHL migrated to `api-web.nhle.com/v1/`** — the deprecated
-  `statsapi.web.nhl.com` host is gone; replaced with 26 modern
-  `nhl_web_*` wrappers grounded in the OpenAPI spec at
-  `fastRhockey/data-raw/nhl_api_web_openapi.yaml`.
-- **Cross-league ESPN port from hoopR / wehoop / cfbfastR** — 804 new
-  wrappers across 8 leagues (NBA, MBB, WNBA, WBB, CFB, NFL, MLB, NHL)
-  via a single ~80-function core (`_common_espn.py`) parameterized on
-  the `(sport, league)` slug.  Each per-league extension module is a
-  5-line file calling `make_league_module()` to mass-register the
-  wrappers with proper `__name__` / `__qualname__` / `__doc__` for IDE
-  discoverability.
-- **3 new NHL modules** for the historical / Statcast surfaces:
-  - `nhl_edge` — 35 wrappers for the NHL EDGE player-tracking system
-    (`api-web.nhle.com/v1/edge/*`)
-  - `nhl_stats_rest` — 21 wrappers for the official stats REST API
-    (`api.nhle.com/stats/rest/`) with verbatim Cayenne filter expression
-    support
-  - `nhl_records` — 50 wrappers for the records site
-    (`records.nhl.com/site/api/`) covering awards, coaches, franchises,
-    HOF, draft, all-star, GMs
-- **NCAA bracketology** — `espn_mbb_bracketology()` and
-  `espn_wbb_bracketology()` for the non-league
-  `sports.core.api.espn.com/v2/tournament/{22,23}/seasons/{y}/bracketology`
-  endpoint (live during the projection window, Jan-Mar).
-- **20 polars/pandas parsers** in `_common_espn_parsers.py` covering
-  the most-used ESPN payload shapes (scoreboard, teams, standings,
-  groups, athlete overview/stats/gamelog/splits, leaders, coaches,
-  draft, event-competitor surface, team schedule/roster, news,
-  injuries, generic Core v2 paginated lists).
-- **4 NHL EDGE family parsers** + 3 sub-frame parsers in
-  `nhl_edge_parsers.py`, schema-grounded against live captures from
-  2026-05-23.
-- **`return_parsed=True` dispatch shim** — every wrapper whose short
-  name has a registered parser (**57** keys currently in
-  `ENDPOINT_PARSERS`) gains an optional `return_parsed=True` kwarg that
-  routes the raw response through the parser and returns a polars
-  DataFrame (pandas via `return_as_pandas=True`).  The raw-Dict path is
-  unchanged — the shim is backwards-compatible and strictly additive.
-- **80 offline parser tests** (NHL EDGE 32 + universal ESPN 16 + the
-  cross-league shim suite) + **32 live-gated integration tests** under
-  `SDV_PY_LIVE_TESTS=1` so default test runs never hit live endpoints.
-
-### New: MLB module (greenfield)
-
-- New top-level `sportsdataverse.mlb` package with 8 submodules.
-- `mlb_api.py` (40 functions) wraps the official MLB Stats API.
-  IDs to know: `sportId=1` is MLB, `leagueId` `103`=AL / `104`=NL,
-  `gameType` slugs `R`/`F`/`D`/`L`/`W`/`S`/`A`/`E`/`PO`.  Player IDs
-  (`personId` / `batter` / `pitcher`) are the same MLBAM id space
-  shared with Baseball Savant.
-- `mlb_statcast.py` (17 functions) wraps Baseball Savant.  The
-  unofficial CSV search at `/statcast_search/csv` truncates at exactly
-  25,000 rows with no pagination; `statcast_search` raises
-  `RuntimeError` when the response hits that cap (default,
-  `raise_on_truncation=True`).  Use `statcast_search_chunked` for
-  multi-week ranges — it auto-chunks the date range and stitches
-  client-side.
-- `mlb_espn_ext.py` registers 113 cross-league ESPN wrappers via
-  `make_league_module(..., include_mlb=True)`, which adds the MLB-only
-  `espn_mlb_athlete_hotzones` to the universal surface.
-
-### New: NHL — `api-web.nhle.com` migration + EDGE / Stats REST / Records
-
-- The deprecated `statsapi.web.nhl.com` is gone.  `nhl_api.py` keeps a
-  small set of backward-compatible aliases that warn and delegate to
-  `nhl_api_web`.
-- `nhl_api_web.py` (26 functions) covers the modern game-feed API at
-  `https://api-web.nhle.com/v1/`.
-- `nhl_edge.py` (35 functions) wraps the NHL EDGE player-tracking
-  surface — skater / goalie / team detail, shot-location, shot-speed,
-  skating distance, zone time, plus 12 `*_top_10` leaderboards.
-
-  **Note:** all 12 `*_top_10` URL paths return 404 as of 2026-05-23 —
-  the OpenAPI spec lists them but they're not live.  The wrappers and
-  `parse_edge_top10` are kept for forward-compatibility.
-- `nhl_stats_rest.py` (21 functions) wraps the official Stats REST
-  API at `api.nhle.com/stats/rest/`.  Verbatim Cayenne filter
-  expression support via `cayenneExp` / `factCayenneExp` kwargs.
-- `nhl_records.py` (50 functions) wraps the records site at
-  `records.nhl.com/site/api/` — awards, coaches, franchises, skaters,
-  goalies, draft, all-star, HOF, GMs, attendance, fastest goals, team
-  records.
-
-### New: ESPN cross-league port
-
-- `_common_espn.py` exposes ~80 core functions parameterized on
-  `(sport, league)`.
-- `make_league_module(sport, league, prefix, globals(), include_ncaa=,
-  include_football=, include_mlb=)` mass-registers wrappers in the
-  caller's namespace.  Each per-league extension file is a 5-line wrapper.
-- Wrappers use `functools.partial` with explicit
-  `__name__`/`__qualname__`/`__doc__` so they behave like real functions
-  for `help()`, IDE auto-complete, and `inspect.signature()`.
-- The `_NCAA_WRAPPERS` table adds `rankings`, `season_recruits`,
-  `season_week_rankings` for `mbb`, `wbb`, `cfb`.
-- The `_FOOTBALL_WRAPPERS` table adds `season_qbr`, `season_qbr_week`
-  for `nfl`, `cfb`.
-- The new `_MLB_WRAPPERS` table adds `athlete_hotzones` for `mlb`.
-
-### New: NCAA bracketology
-
-- `espn_mbb_bracketology(season, iteration=None)` / `espn_wbb_bracketology(...)`
-  at `sports.core.api.espn.com/v2/tournament/{22,23}/seasons/{y}/bracketology`.
-- The endpoint is **seasonal** — live during the projection window
-  (roughly January through March each year) and 404s the rest of the
-  year.  Integration tests handle this with `pytest.xfail` so off-season
-  CI runs don't fail.
-
-### New: `_common_espn_parsers.py` (polars / pandas parser layer)
-
-- 20 parsers covering the highest-traffic ESPN payload shapes.  All
-  parsers are **league-agnostic** — the same parser handles MLB, NFL,
-  NBA, etc. because ESPN's payload shapes are identical across leagues.
-- Every parser returns polars by default; `return_as_pandas=True` yields
-  pandas.  Empty / malformed payloads return zero-row frames rather
-  than raising.
-- Output columns snake-cased via `sportsdataverse.dl_utils.underscore`.
-- `ENDPOINT_PARSERS` registry has 57 short-name keys mapped to 20
-  unique parsers; covers the universal table plus NCAA / football /
-  MLB extras.
-- `parser_for(short_name)` lookup helper.
-
-### New: `return_parsed=True` dispatch shim
-
-- `_bind()` in `_common_espn.py` was extended with an optional
-  `parser=` argument.  When present, the bound wrapper is a closure
-  that adds `return_parsed=False` and `return_as_pandas=False` kwargs;
-  when `return_parsed=True`, the closure dispatches the raw response
-  through the parser and returns a DataFrame.
-- `make_league_module()` looks up the parser via `parser_for(short)`
-  on each wrapper registration.  The lookup is lazy-imported so a
-  missing parsers module doesn't break the package.
-- API contract: every existing caller continues to get raw `Dict` —
-  the shim is opt-in via the new kwargs.
-
-### New: `nhl_edge_parsers.py`
-
-- 4 family parsers (`parse_edge_top10`, `parse_edge_detail`,
-  `parse_edge_shot_location`, `parse_edge_zone_time`) + generic
-  fallback (`parse_edge_payload`).
-- 3 sub-frame parsers (`parse_edge_sog_details`,
-  `parse_edge_sog_summary`, `parse_edge_hardest_shots`) for unrolling
-  the rich nested lists inside detail payloads that
-  `parse_edge_detail` deliberately stringifies.
-- `EDGE_ENDPOINT_PARSERS` registers 33 of the 35 EDGE wrappers (the
-  remaining 2 fall through to the generic parser via
-  `parser_for_edge`).
-- `EDGE_SUBFRAME_PARSERS` maps each detail wrapper to the tuple of
-  sub-frame parsers that apply.
-
-### New: Site v2 summary dispatcher (20 sub-parsers)
-
-The Site v2 `summary` endpoint
-(`espn_{league}_summary(event_id=...)`) ships ~19-22 top-level sections
-per game (~700 KB to 1.8 MB per call). Rather than collapse that into
-one parser, the summary surface now has 20 targeted sub-parsers plus a
-dispatcher:
-
-- `parse_summary_boxscore_player` — one row per (team × athlete) with
-  the parallel `keys`/`stats` arrays zipped (e.g. NBA produces 27 rows
-  with `min`, `fg`, `3pt`, `ft`, `reb`, `ast`, columns).
-- `parse_summary_boxscore_team` — one row per (team × stat) with
-  `stat_name`, `stat_label`, `stat_display_value`.
-- `parse_summary_plays` — one row per play (~450 rows per NBA game).
-- `parse_summary_winprobability` — one row per win-prob tick (joinable
-  to plays via `play_id`).
-- `parse_summary_leaders` — one row per (team × category × leader)
-  from the 3-level `leaders[]` nesting.
-- `parse_summary_game_info`, `parse_summary_officials`,
-  `parse_summary_header`, `parse_summary_season_series`,
-  `parse_summary_against_the_spread`, `parse_summary_standings`,
-  `parse_summary_broadcasts`, `parse_summary_format`,
-  `parse_summary_pickcenter`, `parse_summary_odds`,
-  `parse_summary_article`, `parse_summary_injuries`,
-  `parse_summary_news` — one row per (or one row total for) the
-  corresponding summary section.
-- `parse_summary_drives`, `parse_summary_scoring_plays` — NFL / CFB
-  specific (NFL summary ships `drives.previous[]` + `scoringPlays`
-  instead of top-level `plays`). Return zero-row frames for non-football
-  leagues.
-- `parse_summary(payload, section=None)` — dispatcher. With
-  `section=None` returns a dict of all 20 sub-frames keyed by section
-  name; with `section="<name>"` returns just that frame. Empty payload
-  returns a dict of 20 zero-row frames.
-- `SUMMARY_SECTION_PARSERS` — public registry mapping section name to
-  parser.
-
-Cross-league parity tests verify the dispatcher works against captured
-fixtures for NBA / MLB / NFL / NHL / WNBA — same code path handles
-every league's summary endpoint.
-
-### New: 100% ENDPOINT_PARSERS coverage (121/121)
-
-Every wrapper short name across all 4 wrapper tables
-(`_UNIVERSAL_WRAPPERS`, `_NCAA_WRAPPERS`, `_FOOTBALL_WRAPPERS`,
-`_MLB_WRAPPERS`) is now registered in `ENDPOINT_PARSERS`. Every
-factory-bound wrapper plus the hand-bound NCAA bracketology helpers
-accepts `return_parsed=True` and `return_as_pandas=True`.
-
-Two new generic fall-through parsers cover the long tail:
-
-- `parse_single_entity` — flattens any single-resource Core v2 payload
-  (team, venue, franchise, coach, award, position, season_info,
-  athlete_core, event_competitor, etc.) to a one-row frame.
-- `parse_items` was already generic for `{items: [...]}` Core v2 lists
-  and Core v2 `{entries: [...]}` (athlete_statisticslog); this release
-  expands its registration to ~30 more list-shape endpoints (calendar
-  variants, event lists, season_powerindex, talentpicks, etc.).
-
-`register_ncaa_bracketology` was upgraded to wrap the bracketology
-helpers in the same `return_parsed=True` shim used by `make_league_module`
-— previously they were hand-bound without the shim.
-
-Three regression tests lock in the invariant:
-
-- `test_every_wrapper_short_name_has_a_registered_parser`
-- `test_no_stale_entries_in_endpoint_parsers_registry`
-- `test_return_parsed_shim_active_on_every_wrapper_across_all_leagues`
-  (walks the `__all__` of every league extension module and verifies
-  819+ wrappers carry the shim).
-
-### New: weekly cron live-test drift detector
-
-`.github/workflows/live-tests-cron.yml` runs the full live test suite
-(`tests/test_espn_live.py` and any other `SDV_PY_LIVE_TESTS=1` gated
-tests) every Monday 13:00 UTC and on `workflow_dispatch`. On failure,
-the workflow uses `actions/github-script` to find or create a tracking
-issue labeled `live-tests:drift`:
-
-- First failure opens a new issue with the last 4 KB of pytest output
-  plus a run URL.
-- Subsequent failures comment on the existing open issue instead of
-  duplicating.
-- Closing the issue resets state.
-
-Catches upstream API drift (ESPN schema changes, NHL EDGE 404s, MLB
-Stats API URL moves) on a regular cadence even when the repo is
-otherwise quiet between releases.
-
-### New: MLB Stats API parser layer
-
-`sportsdataverse.mlb.mlb_api_parsers` turns the 40 raw-Dict
-`mlb_api_*` wrappers into tidy polars / pandas DataFrames. Mirrors
-the design of `_common_espn_parsers`:
-
-- Every parser returns polars by default; pandas via
-  `return_as_pandas=True`.
-- Empty / malformed payloads return zero-row frames.
-- Output columns snake-cased via
-  `sportsdataverse.dl_utils.underscore`.
-- Most parsers use `pandas.json_normalize` for one-pass flattening.
-
-Five dedicated parsers handle the high-traffic endpoints with their
-own unrolling logic:
-
-- `parse_mlb_api_schedule` — walks `dates[].games[]` and prefixes the
-  schedule date onto each game row (one row per game with
-  `teams.home.*` / `teams.away.*` / `venue.*` / `status.*` flattened).
-- `parse_mlb_api_teams` — one row per team from `teams[]`.
-- `parse_mlb_api_team_roster` — one row per player from `roster[]`
-  with `person`, `position`, `status` sub-dicts flattened.
-- `parse_mlb_api_standings` — walks `records[].teamRecords[]`,
-  prefixes division identifiers (namespaced `standings_*` to avoid
-  column collisions with team-record fields like `lastUpdated`), and
-  produces one row per (division × team).
-- `parse_mlb_api_person_stats` — walks `stats[].splits[]` (also
-  handles `mlb_api_team_stats` with the same shape), prefixes
-  `stats_type` / `stats_group` from the parent block, and flattens
-  the inner `stat` block to wide stat columns.
-
-A generic `parse_mlb_api_list` fallback handles every list-shape
-endpoint that doesn't need extra unrolling (venues, sports, leagues,
-divisions, seasons, awards, umpires, draft, draft_prospects,
-attendance, team_leaders, team_alumni, team_affiliates, stats,
-stats_leaders, stats_streaks, people, sport_players).
-
-`MLB_API_ENDPOINT_PARSERS` registry has 26 entries (7 dedicated + 19
-generic). `parser_for_mlb_api(fn_name)` returns the registered
-parser; unknown names fall back to `parse_mlb_api_list` so the
-caller always gets a DataFrame-returning callable.
-
-Test fixtures captured 2026-05-24 from `statsapi.mlb.com` (8 captures
-in `tests/fixtures/mlb_api/`). 17 offline tests in
-`tests/test_mlb_api_parsers.py` exercise each dedicated parser plus
-the generic fallback against the live fixtures.
-
-### New: NHL Stats REST + Records parser layers
-
-`sportsdataverse.nhl.nhl_stats_rest_parsers.parse_nhl_stats_rest` and
-`sportsdataverse.nhl.nhl_records_parsers.parse_nhl_records` turn every
-wrapper in their respective surfaces into a tidy polars / pandas
-DataFrame.
-
-Both APIs ship the **identical** `{data: [...], total: N}` envelope on
-every endpoint, so a single parser handles every wrapper:
-
-- `parse_nhl_stats_rest` covers the 21 wrappers in
-  `sportsdataverse.nhl.nhl_stats_rest` (api.nhle.com/stats/rest/en/*).
-- `parse_nhl_records` covers the 50 wrappers in
-  `sportsdataverse.nhl.nhl_records` (records.nhl.com/site/api/*).
-
-The meta Stats REST endpoints (`config`, `componentSeason`, `ping`) ship
-non-`data`-keyed payloads — both parsers return zero-row frames for
-those instead of raising.
-
-Registries: `NHL_STATS_REST_ENDPOINT_PARSERS` has 17 entries (excluding
-the meta endpoints).  `parser_for_nhl_stats_rest` and
-`parser_for_nhl_records` always return a callable (fall back to the
-generic parser — never return `None`).
-
-### New: NHL api-web parser layer
-
-`sportsdataverse.nhl.nhl_api_web_parsers` covers the modern game-feed
-API at `api-web.nhle.com/v1/` — 16 dedicated parsers + 2 dispatchers
-covering all 26 `nhl_web_*` wrappers across game-center, schedule,
-score, scoreboard, standings, team, player, leaders, and draft
-families.
-
-Game-center parsers:
-
-- `parse_nhl_web_pbp` — one row per play (~330 plays per game) with
-  `eventId`, `typeCode`, `typeDescKey`, `periodDescriptor`, `details`
-  flattened.
-- `parse_nhl_web_boxscore` — unrolls the 6-bucket
-  `playerByGameStats: {away,home}Team.{forwards,defense,goalies}`
-  structure into one long-form frame, tagging each row with
-  `home_away` and `position_group`.
-- `parse_nhl_web_landing` — single-row game profile with venue,
-  teams, periodDescriptor, gameState, summary stringified.
-- `parse_nhl_web_right_rail` — **dispatcher** returning 6 sub-frames:
-  `season_series`, `shots_by_period`, `team_game_stats`, `game_info`,
-  `linescore_by_period`, `season_series_wins`. With `section="..."`
-  returns just one frame.
-
-Schedule / score parsers:
-
-- `parse_nhl_web_schedule` — walks `gameWeek[].games[]`, prefixes the
-  day's date onto each game row.
-- `parse_nhl_web_score` — flattens `games[]` for a single date.
-- `parse_nhl_web_scoreboard` — walks `gamesByDate[].games[]`,
-  prefixes `scoreboard_date` (multi-day scoreboard).
-- `parse_nhl_web_club_schedule` — flattens `games[]` with
-  `club_timezone` / `club_current_season` / `club_previous_season` /
-  `club_next_season` context columns from the parent payload.
-
-Standings + team / player parsers:
-
-- `parse_nhl_web_standings` — one row per team (84 stat columns
-  covering full win/loss/OT/SO/ROW/L10/streak/home/away breakdowns).
-- `parse_nhl_web_standings_season` — one row per season
-  (108 NHL seasons since 1917-18).
-- `parse_nhl_web_club_stats` — **dispatcher** returning
-  `{skaters, goalies}` as separate frames.
-- `parse_nhl_web_roster` — merges `forwards`, `defensemen`, `goalies`
-  into one long-form frame with a `position_group` column.
-- `parse_nhl_web_player_landing` — single-row player profile
-  (~130 columns for a player like McDavid with full career totals,
-  features, recent games).
-- `parse_nhl_web_player_game_log` — one row per game from `gameLog[]`.
-
-Leaders + draft:
-
-- `parse_nhl_web_leaders` — walks the category-keyed leaders payload
-  (`{points: [...], goals: [...]}` for skaters; `{wins: [...],
-  savePctg: [...]}` for goalies), tags each row with the category
-  it came from, concatenates.
-- `parse_nhl_web_draft_picks` — one row per pick.
-
-Registry: `NHL_API_WEB_ENDPOINT_PARSERS` has 24 entries covering all
-the data endpoints. `parser_for_nhl_api_web(fn_name)` returns the
-registered parser or `None` for the 2 idiosyncratic endpoints
-(`playoff_series`, `player_spotlight`, `draft_rankings`,
-`draft_rankings_now`) whose payloads are too idiosyncratic for a
-useful generic fallback — callers null-check.
-
-Test fixtures captured 2026-05-24 (17 captures from
-`api-web.nhle.com/v1/`). 37 offline tests in
-`tests/test_nhl_api_web_parsers.py` verify each parser against the
-captured fixtures plus dispatcher contracts, empty payload contract,
-pandas opt-in, and registry consistency.
-
----
-
-Test fixtures captured 2026-05-24 (8 from `api.nhle.com/stats/rest/`,
-6 from `records.nhl.com/site/api/`). 21 offline tests in
-`tests/test_nhl_aux_parsers.py` verify parsing across:
-
-- 7 Stats REST data endpoints (season, franchise, country, glossary,
-  skater_summary, goalie_summary, team_summary).
-- 6 Records endpoints (franchise, franchise_team_totals, coach, draft,
-  player, attendance).
-- Empty-payload contract, pandas opt-in, registry consistency, and the
-  config-as-meta zero-row case.
-
-### Bug fixes
-
-- `parse_team_roster` now handles **both** ESPN roster shapes. The
-  flat shape (`athletes[]` = list of athlete dicts; used by NBA /
-  WNBA / MBB / WBB) continues to work unchanged. The newly-
-  handled position-grouped shape (`athletes[i] = {position, items}`;
-  used by MLB / NFL / NHL / CFB) is auto-detected by inspecting the
-  first element — each player from a group's `items[]` is tagged
-  with a `position_group` column carried over from the parent group.
-  Without the fix, MLB / NFL / NHL / CFB rosters were collapsing to
-  ~5-6 group rows instead of unrolling to the full per-player list
-  (e.g. Alabama CFB went from 6 group rows to 100 player rows).
-
-### New: NFL drive-plays parser (true PBP parity)
-
-`parse_summary_drive_plays` rounds out the football PBP story. NFL
-and CFB summary payloads don't ship a top-level `plays[]` array (the
-NBA / MLB / NHL / WNBA convention); they nest plays inside each
-drive at `drives.previous[i].plays[]`. The existing
-`parse_summary_drives` returns one row per drive with the plays
-stringified. This new parser unrolls those nested plays into a true
-one-row-per-play frame with `drive_id` + `drive_sequence` columns
-carried over from the parent drive — letting callers join back to
-the drives frame for drive-level context.
-
-Verified against Super Bowl LIX: 26 drives + 186 plays unrolled
-into a 186-row × 43-column polars frame. Returns zero rows for
-NBA / MLB / NHL / WNBA fixtures (those leagues use top-level
-`plays[]`, exercised by `parse_summary_plays`).
-
-`SUMMARY_SECTION_PARSERS` registry grows from 20 to 21 entries.
-The summary dispatcher's output dict now includes the `drive_plays`
-section alongside `drives` and `scoring_plays`.
-
-### Test infrastructure
-
-- New `tests/test_espn_universal_parsers.py` (128 tests, +22 since
-  last roll-up: 8 sparse-section tests covering `broadcasts`
-  (present for MLB / NHL, empty for NBA / NFL / WNBA in past-game
-  captures) and the universally-sparse `against_the_spread` /
-  `pickcenter` / `odds`; 3 MBB/WBB/CFB NCAA summary fixture additions
-  to the cross-league parametrized tests, expanding the dispatcher +
-  boxscore_player + plays + drives + officials assertions from
-  5 leagues to all 8 ESPN leagues),
-  `tests/test_mlb_api_parsers.py` (17 tests),
-  `tests/test_nhl_aux_parsers.py` (21 tests),
-  `tests/test_nhl_api_web_parsers.py` (37 tests), and
-  `tests/test_nhl_edge_parsers.py` (32 tests) run offline against
-  captured fixtures.
-- New `tests/test_espn_live.py` (**56 live tests**, +24 since last
-  roll-up: 9 NCAA-side wrapper tests (CFB/MBB/WBB × team_roster/
-  news/team_schedule), 3 NCAA summary dispatcher tests, 3 MLB
-  Statcast pitch-search tests (small-range happy path / multi-week
-  chunked stitch / raise-on-truncation guard), plus 9 parametrized
-  `return_parsed=True` shim-parity tests confirming the raw-Dict /
-  polars / pandas round-trip is internally consistent for the NCAA
-  surface — same wrapper invocation with vs without the kwarg must
-  produce equivalent data, and `return_as_pandas=True` row count
-  must match the polars row count). Gated by `SDV_PY_LIVE_TESTS=1`
-  for live integration verification.
-- Captured fixtures live under `tests/fixtures/espn/` (43 captures —
-  the original 7 plus summary captures for **all 8 ESPN leagues**
-  (NBA / MLB / NFL / NHL / WNBA + the new NCAA captures: MBB final
-  Purdue@UConn, WBB final Iowa@SC, CFB national championship OSU@ND)
-  plus the 28-fixture cross-league parity set covering
-  `team_roster` / `team_schedule` / `news` / `injuries` for each
-  league),
-  `tests/fixtures/mlb_api/` (8 captures: schedule, teams, roster,
-  standings, person_stats, venues, sports, divisions),
-  `tests/fixtures/nhl_stats_rest/` (8 captures: season, franchise,
-  country, glossary, config, skater_summary, goalie_summary,
-  team_summary), `tests/fixtures/nhl_records/` (6 captures:
-  franchise, franchise_team_totals, coach, draft, player,
-  attendance), `tests/fixtures/nhl_api_web/` (17 captures: pbp,
-  boxscore, landing, right_rail, schedule, score, scoreboard,
-  standings, standings_season, club_schedule, club_stats, roster,
-  player_landing, player_gamelog, skater_leaders, goalie_leaders,
-  draft_picks), and `tests/fixtures/nhl_edge/` (7 captures), each
-  with a README documenting provenance.
-- Parametrized cross-league parity tests in
-  `test_espn_universal_parsers.py` exercise the summary dispatcher
-  against all 5 captured leagues and assert the full 20-section
-  dispatch contract for each (boxscore_player + boxscore_team + plays +
-  winprobability + leaders + 13 metadata sections + 2 football-only).
-
-### Documentation
-
-- README.md and docs/docs/intro.md both gain two new sections:
-  - "Supported leagues and data sources" — a per-league table showing
-    every module + the data surfaces it covers + wrapper counts
-    (NBA=118, WNBA=124, MBB=121, WBB=126, CFB=123, NFL=119, MLB=175,
-    NHL=132, total ~1,030).
-  - "Polars / pandas parser layer" — quick overview of the
-    `return_parsed=True` shim for ESPN wrappers + the
-    compose-wrapper-with-parser pattern for the NHL / MLB sibling
-    APIs. Links to the architecture + parsers docs pages.
-- New documentation pages:
-  - `docs/architecture/espn-cross-league.md` — the factory + shim
-    architecture.
-  - `docs/parsers/index.md` — the parser layer + `ENDPOINT_PARSERS`.
-  - `docs/mlb/index.md` — MLB module overview (ESPN + Stats API +
-    Statcast); brief pointers to the new dedicated `parsers` and
-    `statcast` pages.
-  - `docs/mlb/parsers.md` — dedicated MLB Stats API parsers page
-    (split out from `index.md`) with the full parser table, registry +
-    `parser_for_mlb_api`, four chaining examples, and a fixture
-    inventory.
-  - `docs/mlb/statcast.md` — dedicated Baseball Savant / Statcast
-    page (split out from `index.md`) covering the 17 `statcast_*`
-    wrappers, the 25,000-row truncation handling + the
-    `statcast_search_chunked` auto-chunked variant, Statcast
-    coverage windows by metric, MLBAM ID-space chaining with the
-    Stats API, and two end-to-end examples (catcher pop times +
-    World Series pitch-by-pitch). Both new pages are wired into
-    the MLB category in `docs/sidebars.ts`.
-  - `docs/parsers/fixtures.md` — comprehensive index of all 89
-    captured live payloads across the 6 fixture directories
-    (`espn/`, `mlb_api/`, `nhl_api_web/`, `nhl_edge/`,
-    `nhl_stats_rest/`, `nhl_records/`). Includes the full
-    endpoint mapping table per directory, the championship-game
-    event IDs used for the cross-league summary captures, and a
-    maintenance section explaining how to refresh a fixture.
-  - `docs/architecture/building-blocks.md` — meta-documentation
-    page enumerating the five low-level patterns reused across
-    every parser module: `_bind` shim factory, `make_league_module`
-    factory call, `_row_per_item` / `_single_row` json_normalize
-    helpers, the `ENDPOINT_PARSERS` registry + `parser_for_*`
-    lookup, and the dispatcher pattern (used by `parse_summary`,
-    `parse_nhl_web_right_rail`, `parse_nhl_web_club_stats`). Closes
-    with a step-by-step "Adding a new parser" checklist. Sidebar
-    entry added under the Architecture category.
-- `docs/sidebars.ts` regrouped by sport family — leagues now cluster
-  by basketball (NBA / WNBA / MBB / WBB) / football (NFL / CFB) /
-  baseball (MLB) / hockey (NHL) instead of alphabetical, surfacing
-  the cross-league helper relationships (e.g. NCAA basketball pair
-  with NBA via the same ESPN factory). Architecture + Parsers
-  categories now default to expanded (`collapsed: false`) so
-  newcomers see the package-wide overview first.
-- `nhl/nhl_loaders.py` lint cleanup: 4 sites of
-  `if type(seasons) is int:` replaced with `isinstance(seasons, int)`
-  to clear pre-existing `E721` ruff warnings (no behaviour change —
-  both forms accept the same input).
-- `tests/conftest.py` is now the single source of truth for the
-  `SDV_PY_LIVE_TESTS=1` gating mechanism. `tests/test_espn_live.py`
-  was previously redefining `LIVE` + its own `pytestmark.skipif`
-  marker; it now imports the shared `skip_if_no_live` from
-  `conftest` and assigns it directly to `pytestmark`. Behaviour is
-  identical (no env var → 56 tests skip; env var set → 56 tests
-  run) but the duplication is gone and the conftest docstring now
-  documents both the per-test decorator and module-level marker
-  patterns for future `test_*_live.py` files.
-- `tests/conftest.py` also gains a shared `load_fixture(category,
-  stem)` helper that all 5 parser test modules now use instead of
-  each carrying their own copy of the same
-  `json.loads((FIXTURE_DIR / f"{stem}.json").read_text(...))`
-  boilerplate + per-file `FIXTURE_DIR` constant. The helper raises
-  `FileNotFoundError` with the expected path baked into the
-  message when a fixture is missing — easier debugging of typo'd
-  stems. Each test file still keeps its thin local `_load(stem)`
-  alias bound to its category, so call sites (`_load("summary_nba")`)
-  remain unchanged. `test_nhl_aux_parsers.py` keeps its 2-arg
-  `_load(directory, stem)` signature for its dual-category load
-  pattern but the underlying helper is now shared.
-- `pyproject.toml` `keywords` expanded from 6 to 21 entries
-  reflecting the 0.0.51 surface — full league set (nba, wnba, nfl,
-  college football, ncaa basketball, mlb, nhl), data sources (espn,
-  mlb stats api, statcast, baseball savant, nhl edge, nhl api-web),
-  and concepts (data, epa, statistics, win probability,
-  play-by-play, web scraping, polars, parser). Improves PyPI
-  search discoverability for users searching by individual league
-  or data source.
-- New `local` pre-commit hook `sync-docs-changelog` (in
-  `.pre-commit-config.yaml`): when staging changes to `CHANGELOG.md`,
-  automatically re-copies the file to `docs/src/pages/CHANGELOG.md`
-  (the docusaurus-rendered copy) and stages the synced file so both
-  copies land in the same commit. Replaces the manual
-  `cp CHANGELOG.md docs/src/pages/CHANGELOG.md` step that contributors
-  used to remember by hand.
-- Module docstrings on every parser + wrapper module now carry a
-  `Documentation:` block linking to the matching docs page so
-  `help()` / `pydoc` users land on the right reference without
-  hunting. Updated modules:
-  `_common_espn.py`, `_common_espn_parsers.py`,
-  `nhl/nhl_api_web.py`, `nhl/nhl_api_web_parsers.py`,
-  `nhl/nhl_edge.py`, `nhl/nhl_edge_parsers.py`,
-  `nhl/nhl_stats_rest.py`, `nhl/nhl_stats_rest_parsers.py`,
-  `nhl/nhl_records.py`, `nhl/nhl_records_parsers.py`,
-  `mlb/mlb_api.py`, `mlb/mlb_api_parsers.py`,
-  `mlb/mlb_statcast.py`.
-- `nhl/nhl_pbp.py::espn_nhl_pbp` docstring gains a prominent
-  cross-reference + comparison table distinguishing it from the
-  modern `nhl_web_pbp` / `parse_nhl_web_pbp` surface (different ID
-  spaces, different schemas, not interchangeable). A matching
-  `:::caution:::` admonition added to `docs/nhl/api-web.md` so
-  users coming from either direction find the cross-reference.
-  - `docs/nhl/api-web.md` gains a "Parser deep-dive" section
-    between the registry and the full example: documents the
-    `parse_nhl_web_boxscore` 6-bucket unrolling pattern, both
-    dispatchers (`right_rail` 6-section + `club_stats` 2-section
-    breakdowns with example invocations), the roster
-    merge-with-tag pattern, and the leaders category-keyed
-    payload unrolling.
-- `docs/docs/intro.md` gains a "Quickstart" section directly under
-  the goal paragraph showing three one-liners across NBA / MLB /
-  NHL covering the three primary usage modes (return_parsed shim,
-  Stats API compose-with-parser, NHL EDGE compose-with-parser).
-- `CLAUDE.md` gains two new top-level sections ("ESPN Cross-League
-  Architecture (0.0.51+)" and "Parser Layer (0.0.51+)") that
-  document the factory pattern, `make_league_module`,
-  `_bind`+shim, ENDPOINT_PARSERS invariant, summary dispatcher
-  contract, cross-league shape divergences captured by tests, the
-  fixture inventory, and the test-file structure. ~210 lines added
-  to keep future AI assistants and contributors aligned on the
-  parser-layer conventions.
-  - `docs/nhl/api-web.md` — the modern game-feed surface
-    (`api-web.nhle.com/v1/`) with the full endpoint table and a parser
-    layer section covering all 16 dedicated parsers + 2 dispatchers
-    (`right_rail`, `club_stats`).
-  - `docs/nhl/edge.md`, `edge-parsers.md`, `stats-rest.md`,
-    `records.md` — the NHL surface (EDGE, Stats REST, Records). Each
-    now includes cross-links to the other three NHL docs pages and a
-    "Parser layer" section.
+**Highlights**
+
+- New `sportsdataverse.mlb` module (175 functions): ESPN, the MLB Stats API and Baseball Savant.
+- NHL moves to `api-web.nhle.com/v1/` and gains EDGE, Stats REST and Records modules.
+- 804 new cross-league ESPN wrappers ported from hoopR / wehoop / cfbfastR across eight leagues.
+- A polars / pandas parser layer with opt-in `return_parsed=True` on every ESPN wrapper and a 21-section
+  `summary` dispatcher.
+- Quality-of-life helpers: `find_team` / `find_athlete` / `find_event`, `parsed.*`, a tiered response
+  cache and the `sdv` CLI.
+
+### Breaking changes
+
+- **NHL:** The deprecated `statsapi.web.nhl.com` host is gone, replaced by `nhl_web_*` wrappers on
+  `api-web.nhle.com/v1/`; `nhl_api.py` keeps a small set of backward-compatible aliases that warn and
+  delegate to `nhl_api_web`.
+
+### Added
+
+- **Cache:** New `sportsdataverse.cache` tiered TTL response cache consulted by `dl_utils.download`:
+  modes `off` (default), `memory`, `filesystem` via `sdv.set_cache_mode(...)`; on-disk under
+  `~/.cache/sportsdataverse/`, overridden by `$SDV_PY_CACHE_DIR`.
+- **Cache:** Six TTL tiers picked from the URL: IMMUTABLE 30d, REFERENCE 7d, SLOW 24h, MODERATE 1h
+  (default), FAST 5m, LIVE never cached; past-date scoreboards are IMMUTABLE, future dates LIVE.
+- **Cache:** Per-call `cache_ttl=` on `download()` overrides the tier; invalidate with
+  `sdv.clear_cache()`, `sdv.clear_cache(pattern="*roster*")` or `sdv.clear_cache(url="https://...")`.
+- **CLI:** New `sdv` console script: `sdv find-team`, `sdv find-event`, `sdv list-functions`,
+  `sdv function-count`, `sdv cache mode|stats|clear`; `--json` emits raw JSON; exit codes 0 = success,
+  1 = no match, 2 = runtime error.
+- **Discovery:** New `list_functions` / `function_count` in `sportsdataverse.discover` (re-exported at
+  the top level): a searchable function index with `search=`, `league=`, `parsers_only=` and
+  `wrappers_only=`.
+- **ESPN:** Cross-league port from hoopR / wehoop / cfbfastR: 804 new wrappers across NBA, MBB, WNBA,
+  WBB, CFB, NFL, MLB and NHL from ~80 core functions in `_common_espn.py` keyed on `(sport, league)`.
+- **ESPN:** `make_league_module(sport, league, prefix, globals(), include_ncaa=, include_football=,
+  include_mlb=)` registers wrappers with real `__name__` / `__qualname__` / `__doc__` for `help()`,
+  IDE completion and `inspect.signature()`.
+- **ESPN:** NCAA leagues (`mbb`, `wbb`, `cfb`) gain `rankings`, `season_recruits` and
+  `season_week_rankings`; football (`nfl`, `cfb`) gains `season_qbr` and `season_qbr_week`.
+- **ESPN:** New `_common_espn_parsers.py`: 20 league-agnostic parsers (scoreboard, teams, standings,
+  groups, athlete overview/stats/gamelog/splits, leaders, coaches, draft, team schedule/roster, news,
+  injuries, Core v2 lists, …), polars by default or pandas with `return_as_pandas=True`.
+- **ESPN:** Parsers return zero-row frames for empty / malformed payloads and snake_case columns; the
+  `ENDPOINT_PARSERS` registry and `parser_for(short_name)` map wrapper short names to parsers.
+- **ESPN:** Every ESPN wrapper, including the bracketology helpers, accepts opt-in `return_parsed=True`
+  / `return_as_pandas=True` (all 121 short names are in `ENDPOINT_PARSERS`); the raw `Dict` default
+  is unchanged.
+- **ESPN:** New generic `parse_single_entity` flattens single-resource Core v2 payloads to one row;
+  `parse_items` now also covers ~30 more list-shape endpoints (`{items: [...]}` / `{entries: [...]}`).
+- **ESPN:** New `parse_summary(payload, section=None)` dispatcher for the Site v2 `summary` payload in
+  every league: a dict of all sub-frames, or one frame with `section=`; registry
+  `SUMMARY_SECTION_PARSERS`.
+- **ESPN:** Summary sub-parsers `parse_summary_boxscore_player`, `parse_summary_boxscore_team`,
+  `parse_summary_plays`, `parse_summary_winprobability` (joins to plays on `play_id`) and
+  `parse_summary_leaders`.
+- **ESPN:** Metadata sub-parsers `parse_summary_game_info`, `parse_summary_officials`,
+  `parse_summary_header`, `parse_summary_season_series`, `parse_summary_against_the_spread`,
+  `parse_summary_standings`, `parse_summary_broadcasts`.
+- **ESPN:** Metadata sub-parsers `parse_summary_format`, `parse_summary_pickcenter`,
+  `parse_summary_odds`, `parse_summary_article`, `parse_summary_injuries`, `parse_summary_news`.
+- **Lookup:** New `find_team` / `find_athlete` / `find_event` name-to-ID resolvers in
+  `sportsdataverse.find` (top-level re-export): case-insensitive substring match, `multi=True`, and a
+  team-list cache cleared with `clear_team_cache(league=None)`.
+- **MBB/WBB:** New `espn_mbb_bracketology(season, iteration=None)` / `espn_wbb_bracketology(...)` for
+  the seasonal `sports.core.api.espn.com/v2/tournament/{22,23}/seasons/{y}/bracketology` endpoint
+  (live roughly January-March, 404 otherwise).
+- **MLB:** New `sportsdataverse.mlb` module (175 functions, 8 submodules): 113 ESPN cross-league
+  wrappers + 5 ESPN originals, 40 MLB Stats API wrappers and 17 Baseball Savant / Statcast wrappers.
+- **MLB:** `mlb_api.py` (40 functions) wraps `statsapi.mlb.com`: `sportId=1` is MLB, `leagueId` `103`
+  = AL / `104` = NL, `gameType` slugs `R`/`F`/`D`/`L`/`W`/`S`/`A`/`E`/`PO`; player ids share Savant's
+  MLBAM id space.
+- **MLB:** `mlb_statcast.py` (17 functions): `statcast_search` raises `RuntimeError` at the 25,000-row
+  `/statcast_search/csv` cap (`raise_on_truncation=True`); `statcast_search_chunked` auto-chunks
+  multi-week ranges.
+- **MLB:** The MLB-only `espn_mlb_athlete_hotzones` joins the universal ESPN surface
+  (`make_league_module(..., include_mlb=True)`).
+- **MLB:** New `sportsdataverse.mlb.mlb_api_parsers`: `parse_mlb_api_schedule`, `parse_mlb_api_teams`,
+  `parse_mlb_api_team_roster`, `parse_mlb_api_standings` (`standings_*` prefixed) and
+  `parse_mlb_api_person_stats` (also `mlb_api_team_stats`).
+- **MLB:** Generic `parse_mlb_api_list` handles the other list-shape endpoints;
+  `MLB_API_ENDPOINT_PARSERS` (26 entries) and `parser_for_mlb_api(fn_name)`, which falls back to
+  `parse_mlb_api_list`.
+- **NFL/CFB:** New `parse_summary_drives` / `parse_summary_scoring_plays`, and
+  `parse_summary_drive_plays`, which unrolls `drives.previous[].plays[]` to one row per play with
+  `drive_id` + `drive_sequence`; zero rows for non-football leagues.
+- **NHL:** `nhl_api_web.py` (26 `nhl_web_*` functions) covers the modern game-feed API at
+  `https://api-web.nhle.com/v1/`, grounded in `fastRhockey/data-raw/nhl_api_web_openapi.yaml`.
+- **NHL:** `nhl_edge.py` (35 functions) wraps NHL EDGE player tracking (`api-web.nhle.com/v1/edge/*`);
+  the 12 `*_top_10` paths 404 as of 2026-05-23 and are kept, with `parse_edge_top10`, for later.
+- **NHL:** `nhl_stats_rest.py` (21 functions) wraps `api.nhle.com/stats/rest/` with verbatim Cayenne
+  filter expressions via `cayenneExp` / `factCayenneExp`.
+- **NHL:** `nhl_records.py` (50 functions) wraps `records.nhl.com/site/api/`: awards, coaches,
+  franchises, skaters, goalies, draft, all-star, HOF, GMs, attendance, fastest goals, team records.
+- **NHL:** New `nhl_edge_parsers.py`: `parse_edge_top10`, `parse_edge_detail`,
+  `parse_edge_shot_location`, `parse_edge_zone_time`, fallback `parse_edge_payload`, and sub-frame
+  parsers `parse_edge_sog_details`, `parse_edge_sog_summary`, `parse_edge_hardest_shots`.
+- **NHL:** `EDGE_ENDPOINT_PARSERS` registers 33 of the 35 EDGE wrappers (the rest fall through via
+  `parser_for_edge`); `EDGE_SUBFRAME_PARSERS` maps each detail wrapper to its sub-frame parsers.
+- **NHL:** New `parse_nhl_stats_rest` / `parse_nhl_records` handle every Stats REST / Records wrapper
+  (`{data: [...]}` envelope); the meta endpoints `config` / `componentSeason` / `ping` give zero rows.
+- **NHL:** `NHL_STATS_REST_ENDPOINT_PARSERS` (17 entries); `parser_for_nhl_stats_rest` and
+  `parser_for_nhl_records` always return a callable, never `None`.
+- **NHL:** New `nhl_api_web_parsers` game-center parsers `parse_nhl_web_pbp`, `parse_nhl_web_boxscore`
+  (`home_away`, `position_group`), `parse_nhl_web_landing` and dispatcher `parse_nhl_web_right_rail`
+  (6 sub-frames).
+- **NHL:** Schedule / score parsers `parse_nhl_web_schedule`, `parse_nhl_web_score`,
+  `parse_nhl_web_scoreboard` (`scoreboard_date`), `parse_nhl_web_club_schedule` (`club_*` context).
+- **NHL:** Standings / team / player parsers `parse_nhl_web_standings`,
+  `parse_nhl_web_standings_season`, `parse_nhl_web_club_stats` (`{skaters, goalies}`),
+  `parse_nhl_web_roster`, `parse_nhl_web_player_landing`, `parse_nhl_web_player_game_log`.
+- **NHL:** `parse_nhl_web_leaders` (category-tagged) and `parse_nhl_web_draft_picks`;
+  `NHL_API_WEB_ENDPOINT_PARSERS` (24 entries); `parser_for_nhl_api_web(fn_name)` returns `None` for
+  `playoff_series`, `player_spotlight`, `draft_rankings`, `draft_rankings_now` (callers null-check).
+- **Parsed modules:** New `sportsdataverse.parsed.*` (`parsed.nba`, `parsed.wnba`, `parsed.mbb`,
+  `parsed.wbb`, `parsed.cfb`, `parsed.nfl`, `parsed.mlb`, `parsed.nhl`) mirrors every league's
+  wrappers but returns a polars `DataFrame` by default; the raw modules keep returning `Dict`.
+
+### Changed
+
+- **CI:** `.github/workflows/live-tests-cron.yml` runs the live suite every Monday 13:00 UTC (and on
+  `workflow_dispatch`); a failure opens, or comments on, a `live-tests:drift` tracking issue.
+- **Docs:** New `docs/quality-of-life.md` (before/after recipes) and an intro "Quickstart" with NBA /
+  MLB / NHL one-liners that shows the `parsed.*` import path first.
+- **Docs:** README and `docs/docs/intro.md` gain "Supported leagues and data sources" (per-league
+  wrapper counts) and "Polars / pandas parser layer" sections.
+- **Docs:** New pages `docs/architecture/espn-cross-league.md`, `docs/architecture/building-blocks.md`,
+  `docs/parsers/index.md` and `docs/parsers/fixtures.md` (an index of the captured payloads).
+- **Docs:** New MLB pages `docs/mlb/index.md`, `docs/mlb/parsers.md` and `docs/mlb/statcast.md`
+  (truncation handling, Statcast coverage windows, MLBAM id chaining with the Stats API).
+- **Docs:** New NHL pages `docs/nhl/api-web.md` (with a parser deep-dive), `docs/nhl/edge.md`,
+  `edge-parsers.md`, `stats-rest.md` and `records.md`, cross-linked, each with a "Parser layer" section.
+- **Docs:** `espn_nhl_pbp`'s docstring (and a caution in `docs/nhl/api-web.md`) explains it is not
+  interchangeable with `nhl_web_pbp` / `parse_nhl_web_pbp` (different id spaces and schemas).
+- **Docs:** `docs/sidebars.ts` groups leagues by sport family, with Architecture and Parsers expanded;
+  parser and wrapper module docstrings carry a `Documentation:` link to their docs page.
+- **Docs:** `CLAUDE.md` gains "ESPN Cross-League Architecture (0.0.51+)" and "Parser Layer (0.0.51+)"
+  sections.
+- **Errors:** `NoESPNDataError` 404 messages add a `Suggestion:` line from the URL, e.g.
+  `find_team(name, league='nfl')`, `find_athlete(name, league='mlb', team=<team>)` or
+  `find_event(date, league='nba', home=..., away=...)`, reading the league from both ESPN URL shapes.
+- **Packaging:** `pyproject.toml` `keywords` grow from 6 to 21 (leagues, data sources, concepts) for
+  PyPI search.
+- **Tests:** Offline parser suites (`tests/test_espn_universal_parsers.py`, `test_mlb_api_parsers.py`,
+  `test_nhl_aux_parsers.py`, `test_nhl_api_web_parsers.py`, `test_nhl_edge_parsers.py`) run on captured
+  fixtures, each fixture directory with a provenance README; regression tests lock 121/121 coverage.
+- **Tests:** `tests/test_espn_live.py` (56 live tests) is gated by `SDV_PY_LIVE_TESTS=1`, with
+  `tests/conftest.py` as the single source of that gate plus a shared `load_fixture(category, stem)`.
+- **Tests:** New offline `tests/test_qol.py`, `tests/test_cache.py`, `tests/test_errors_suggest.py` and
+  `tests/test_cli.py`; importing `parsed.*` must not mutate the raw module's default.
+- **Tooling:** New `sync-docs-changelog` pre-commit hook copies `CHANGELOG.md` to
+  `docs/src/pages/CHANGELOG.md` and stages it; `nhl/nhl_loaders.py` uses `isinstance(seasons, int)`
+  (no behavior change).
+
+### Fixed
+
+- **ESPN:** `parse_team_roster` handles the position-grouped roster shape (MLB / NFL / NHL / CFB), so
+  those rosters unroll to one row per player with a `position_group` column instead of ~5-6 group rows.
 
 ## 0.0.50 Release: May 7, 2026
 
-This release is a big one. The headline items:
+**Highlights**
 
-- A near-drop-in nflreadpy-parity surface inside `sportsdataverse.nfl`: six new loaders, two unified per-type loaders, a caching layer, runtime config, three static datasets, 25 `load_*` aliases, and current-season / current-week helpers.
-- 11 new ESPN scrape modules across `wbb` and `wnba` (team rosters, season player & team stats, standings, draft, event officials), each with full `@overload` typing.
-- A new `cfb_play_participants` module and a corresponding ~340-line collapse inside `cfb_pbp.__add_player_cols`.
-- The long-running `0.36-live` → `main` polars-1.x reconciliation across all seven `*_pbp.py` modules (~165 API translation sites).
-- Packaging fully modernized to PEP 621 `pyproject.toml` (no more `setup.py`), conda-installable via the new `recipe/meta.yaml`.
-- Lint chain re-baselined on Ruff (replacing black + isort + pycln + flake8) plus a richer pre-commit set.
-- Runnable `Example:` sections on ~190 public callables and seven new intro / intermediate Jupyter notebooks under `examples/notebooks/`.
-- Sphinx docs build is clean under `sphinx-build -W`.
+- A near-drop-in nflreadpy-parity surface in `sportsdataverse.nfl`: new and unified loaders, a caching
+  layer, runtime config, static datasets, 25 `load_*` aliases and current-season / current-week helpers.
+- 11 new ESPN scrape modules across `wbb` and `wnba` (team rosters, season player and team stats,
+  standings, draft, event officials), each with full `@overload` typing.
+- The `0.36-live` → `main` polars 1.x reconciliation across all seven `*_pbp.py` modules (~165 sites).
+- PEP 621 `pyproject.toml` packaging (no more `setup.py`), conda-installable via `recipe/meta.yaml`.
+- A new `cfb_play_participants` module behind CFB player attribution.
 
-Round bump to `0.0.50` (rather than `0.0.41`) to signal scope; we are still alpha.
+### Breaking changes
 
-### Packaging modernization
+- **Packaging:** `setup.py` is removed; all metadata lives in PEP 621 `[project]` in `pyproject.toml`,
+  and `python -m build` is the only supported build path.
+- **Packaging:** Python 3.9–3.14 only (3.6 / 3.7 / 3.8 dropped); minimum versions raised
+  (`polars>=1.0,<2.0`, `pyarrow>=14.0`, `numpy>=1.23`, `pandas>=2.0`, etc.).
+- **Polars:** `cfb/cfb_pbp.py`, `nfl/nfl_pbp.py`, `mbb/mbb_pbp.py`, `nba/nba_pbp.py`, `nhl/nhl_pbp.py`,
+  `wbb/wbb_pbp.py` and `wnba/wnba_pbp.py` moved from the polars 0.18 API to 1.x (~165 sites).
 
-- Migrated all packaging metadata from `setup.py` to PEP 621 `[project]` in `pyproject.toml`. `setup.py` is removed; `python -m build` is the only supported build path.
-- License switched from classifier (`License :: OSI Approved :: MIT License`) to SPDX expression (`license = "MIT"` + `license-files = ["LICENSE"]`) for Metadata 2.4 compliance.
-- Python target widened to 3.9–3.14 (3.6/3.7/3.8 dropped). Dependency lower bounds modernized (`polars>=1.0,<2.0`, `pyarrow>=14.0`, `numpy>=1.23`, `pandas>=2.0`, etc.).
-- `[tool.setuptools.packages.find]` excludes `tests*`, `Sphinx-docs*`, `docs*`, `examples*`, `archive*`, `recipe*`, `dev*` from the wheel. `[tool.setuptools.package-data]` retains the `cfb/models/*` + `nfl/models/*` shipping list.
-- `MANIFEST.in` trimmed to current-relevance patterns. `.gitignore` extended to ignore `dev/`, `dist_check/`, and the Sphinx `_build/` + `_static/` artifacts; tracked `Sphinx-docs/_build/` files were untracked.
+**Upgrade notes** — the polars 1.x translations applied: `groupby` → `group_by`, `with_row_count` →
+`with_row_index`, `apply` → `map_elements` (with explicit `return_dtype`), struct list-arg → varargs,
+`shift_and_fill` → `shift`, `cumsum` → `cum_sum`, `str.strip` → `str.strip_chars`, `str.n_chars` →
+`str.len_chars`, outer-join → `full` + `coalesce`, `write_json` kwargs; for global containment (the
+1.x `is_in` same-datatype deprecation) use `is_in(col.implode())` instead of `is_in(col)`.
 
-### Conda installability
+### Added
 
-- New `recipe/meta.yaml`: `noarch: python` conda-build recipe that mirrors `[project.dependencies]` and consumes `pyproject.toml` directly. Two source modes documented — local `path: ..` for dev, PyPI `url:` + `sha256:` for conda-forge submission.
-- New `recipe/README.md`: walks through the local `conda build recipe/` workflow and the conda-forge `staged-recipes` submission flow.
-- New `.github/workflows/conda-build.yml`: verifies the recipe on every PR that touches `recipe/` or `pyproject.toml`, plus on every release. Uses `conda-incubator/setup-miniconda@v3` + miniforge / mamba; builds, installs the resulting `.conda`, smoke-imports all seven sport subpackages, uploads the built package as a workflow artifact.
+- **CFB:** New `cfb_play_participants` module reads ESPN's per-play participants endpoint and resolves
+  sidecar-missing athletes via `$ref` (default-on `resolve_missing=True`); `__add_player_cols`
+  delegates to it and keeps all 19 legacy `_player_name` columns via an alias mapping.
+- **CFB:** Hybrid scalar + list player columns (`{type}_player_name` plus `{type}_player_names`), so
+  multi-entry types like split sacks are no longer collapsed to a single name.
+- **CFB:** New `cleaned_text` column normalizes ESPN play descriptions and is the single source for
+  downstream feature and player-name extraction.
+- **Conda:** New `recipe/meta.yaml` (`noarch: python`, mirrors `[project.dependencies]`) and
+  `recipe/README.md` for local `conda build recipe/` and conda-forge `staged-recipes` submission.
+- **NFL:** Six new loaders: `load_nfl_team_stats`, `load_nfl_ftn_charting`, `load_nfl_trades`,
+  `load_nfl_ff_playerids`, `load_nfl_ff_rankings`, `load_nfl_ff_opportunity`.
+- **NFL:** Unified `load_nfl_nextgen_stats(stat_type=...)` and `load_nfl_pfr_advstats(stat_type=,
+  summary_level=)` consolidate the per-type / per-summary variants.
+- **NFL:** 25 nflreadpy-parity aliases inside `sportsdataverse.nfl` (`load_pbp` ↔ `load_nfl_pbp`, etc.),
+  identity-equivalent with no overhead.
+- **NFL:** `load_nfl_ff_rankings` gains `kind=` as the preferred parameter; `type=` is kept for
+  nflreadpy parity.
+- **NFL:** New `get_current_nfl_season()` / `get_current_nfl_week()` helpers in `nfl/utils_date.py`.
+- **NFL:** New `sportsdataverse.nfl.cache` (memory and filesystem backends, TTL) on all 23 canonical
+  loaders and the 11 deprecated aliases via `@cached_loader`; `clear_cache()` invalidates, and
+  `return_as_pandas=True` converts the single stored polars frame on read.
+- **NFL:** New `NflConfig` with `update_config()` / `get_config()` / `reset_config()` and env vars
+  `SDV_PY_NFL_CACHE`, `SDV_PY_NFL_CACHE_DIR`, `SDV_PY_NFL_CACHE_DURATION`, `SDV_PY_NFL_VERBOSE`,
+  `SDV_PY_NFL_TIMEOUT`, `SDV_PY_NFL_USER_AGENT`.
+- **NFL:** Inline-bundled static datasets `team_abbr_mapping` (143 entries; `OAK -> LV`, `SD -> LAC`,
+  `STL -> LA`), `team_abbr_mapping_norelocate` (143, history preserved), `player_name_mapping` (136).
+- **WBB/WNBA:** New `wbb_team_roster` / `wnba_team_roster` (one row per athlete per `(team_id, season)`,
+  stable schema when empty) and `wbb_standings` / `wnba_standings` (WBB defaults to `group=50`).
+- **WBB/WNBA:** New `wbb_player_stats` / `wnba_player_stats` and `wbb_team_stats` / `wnba_team_stats`:
+  multi-table dicts keyed `Averages` / `Totals` / `Misc` (always present), plus `Other` when needed.
+- **WBB/WNBA:** New `wnba_draft` (one row per pick) and `wbb_event_officials` / `wnba_event_officials`
+  (one row per official).
 
-### Linting & pre-commit modernization
+### Changed
 
-- Replaced the legacy black + isort + pycln + flake8 chain with **Ruff** (lint, import-sort, pyupgrade, format, unused-import removal). `pyproject.toml [tool.ruff]` pins `line-length = 120`, `fix = true`, `show-fixes = true`. The standalone `isort` hook is retained ONLY to inject `from __future__ import annotations` at the top of every Python file via its `--add-import` flag — Ruff handles all other import concerns.
-- `pyproject.toml [tool.ruff.lint]` ignores `E712` (intentional `pl.col(...) == True/False` for polars boolean masks), `E501` / `E402` (long-URL docstrings + module-level imports), `F601` / `F841` (legacy parser idioms). Per-file ignores cover star-imports + re-exports in `__init__.py` files (`F401` / `F403`).
-- New pre-commit hooks alongside Ruff:
-  - `pre-commit-hooks` (trailing-whitespace, check-merge-conflict, check-ast, check-toml/json/xml/yaml, check-symlinks, end-of-file-fixer, requirements-txt-fixer, check-added-large-files, debug-statements). The `check-yaml` hook excludes `recipe/meta.yaml` because its Jinja2 templating isn't valid pre-substitution YAML.
-  - `pygrep-hooks`: `python-use-type-annotations`, `python-no-eval`, `python-no-log-warn`, `rst-backticks`, `rst-directive-colons`, `rst-inline-touching-normal`, `text-unicode-replacement-char`, `python-check-mock-methods`, `python-check-blanket-noqa`, `python-check-blanket-type-ignore`.
-  - `add-trailing-comma`, `sync-pre-commit-deps`.
-  - `check-jsonschema --check-github-workflows` validates `.github/workflows/*.yml` against the GitHub Actions schema.
-  - `actionlint` for workflow expressions / shell.
-  - `yamlfmt` (config in `.yamlfmt`: `line_ending: lf`, `eof_newline: true`).
-  - `doctoc` regenerates Markdown TOCs.
-  - `markdownlint-cli2` against `.markdownlint-cli2.yaml`. The config disables a handful of rules that fight legacy README / CHANGELOG content (MD013 line-length, MD030 list-marker-space, MD045 alt-text, MD051 link-fragments, MD060 table-column-style) and allows `<a>`, `<img>`, `<br>`, `<sub>`, `<sup>` in `MD033` for the README's badge / logo HTML.
+- **CFB:** Targeted regex fallbacks remain for `sack_player_name2`, `fg_block_player_name`,
+  `punt_block_player_name` and `interception_player_name`, where ESPN's sidecar has documented gaps.
+- **Conda:** New `.github/workflows/conda-build.yml` builds, installs and smoke-imports the recipe on
+  PRs touching `recipe/` or `pyproject.toml` and on every release.
+- **Docs:** ~190 public callables ship a multi-block napoleon `Example:` section (quick start, parameter
+  combinations, a pipeline step, `See Also:` companion links), replacing the old one-line examples.
+- **Docs:** Seven intro / intermediate notebooks under `examples/notebooks/` (`01_quickstart.ipynb`
+  through `07_nhl_intro.ipynb`), outputs cleared; `.gitignore` tracks `examples/notebooks/*.ipynb`.
+- **Docs:** The Sphinx build is warning-free under `sphinx-build -W` (`sphinx.ext.napoleon`, a
+  `visit_abbreviation` shim, docstring list fixes, new `automodule` entries, `setup.rst` removed).
+- **Docs:** New `CONTRIBUTING.md`, `CLAUDE.md`, `.github/copilot-instructions.md`, a PR template (with a
+  no-AI-co-author checkbox) and issue templates (`bug_report.yml`, `feature_request.yml`,
+  `data_quality.yml`).
+- **Packaging:** The license is an SPDX expression (`license = "MIT"`, `license-files = ["LICENSE"]`)
+  for Metadata 2.4.
+- **Packaging:** The wheel excludes `tests*`, `Sphinx-docs*`, `docs*`, `examples*`, `archive*`,
+  `recipe*`, `dev*`; package data still ships `cfb/models/*` + `nfl/models/*`; `MANIFEST.in` trimmed.
+- **Packaging:** `psutil` is optional in `decorators.py` (lazy import).
+- **Packaging:** The version jumps to `0.0.50` (rather than `0.0.41`) to signal scope; still alpha.
+- **Tests:** New `tests/wbb/`, `tests/wnba/`, `tests/conftest.py` (`@skip_if_no_live`,
+  `SDV_PY_LIVE_TESTS=1`) and `tests/README.md`; NFL test files renamed descriptively; `pytest.ini`
+  filters the `nspkg.pth` and `pkg_resources` warnings.
+- **Tests:** Pickcenter regression tests for CFB and NFL: a 2024+ game must not fall back to the
+  `(2.5, 55.5, True, False)` defaults, and a pre-2024 game keeps the legacy `pickcenter` path.
+- **Tooling:** Ruff (lint, import sort, pyupgrade, format) replaces black + isort + pycln + flake8, with
+  `line-length = 120` and `E712` ignored for `pl.col(...) == True/False`; isort only adds
+  `from __future__ import annotations`.
+- **Tooling:** New pre-commit hooks: `pre-commit-hooks`, `pygrep-hooks`, `add-trailing-comma`,
+  `sync-pre-commit-deps`, `check-jsonschema`, `actionlint`, `yamlfmt`, `doctoc`, `markdownlint-cli2`.
 
-### Documentation toolchain
+### Deprecated
 
-- Added `sphinx.ext.napoleon` to `Sphinx-docs/conf.py` with explicit Google-style settings — the new `wbb` / `wnba` / `nfl` / `cfb` modules use Google-style docstrings (`Args:` / `Returns:` / `Raises:`) and these were producing 22 docutils warnings on build before napoleon was wired up.
-- Added a no-op `visit_abbreviation` shim to the markdown translator in `Sphinx-docs/conf.py`. Sphinx 9 emits `abbreviation` nodes for the keyword-only `*` separator in rendered function signatures, and `sphinx-markdown-builder` 0.6.10 has no visitor for that node type. The shim emits the inner text and skips the node, so the build is now warning-free under `sphinx-build -W`.
-- Module docstrings in `cfb_play_participants.py` and `nfl/utils_date.py` had bullet lists immediately following a `Caveats:` / `NFL season convention:` paragraph header. Added the required blank line + asterisk markers so docutils parses them as proper RST bullet lists.
-- `Sphinx-docs/sportsdataverse.{cfb,mbb,nba,nfl,nhl,wbb,wnba}.rst` register `automodule` entries for every new ESPN scrape module shipped this release.
-- `Sphinx-docs/setup.rst` deleted (was an auto-generated apidoc page for the now-removed `setup.py`). `Sphinx-docs/index.rst` fixed a single-backtick `\`toctree\`` typo so the `rst-backticks` pre-commit hook passes.
+- **NFL:** Per-type Next Gen Stats and PFR advanced-stats loaders emit `DeprecationWarning` and forward
+  to `load_nfl_nextgen_stats(stat_type=...)` / `load_nfl_pfr_advstats(stat_type=, summary_level=)`;
+  no removal yet.
 
-### Runnable docstring examples (~190 functions)
+### Fixed
 
-- Every public callable across `cfb`, `nfl`, `nba`, `nhl`, `mbb`, `wbb`, `wnba`, `dl_utils`, `decorators`, `errors`, `nfl/cache`, `nfl/config`, `nfl/datasets`, `nfl/utils_date`, and the top-level package now ships a multi-block `Example:` section: a quick-start invocation, one or two useful parameter combinations, a one-line pipeline next-step, and a `See Also:` block with cross-links to companion R packages (`wehoop`, `hoopR`, `cfbfastR`, `baseballr`, `fastRhockey`), `nflverse`, `nflreadpy`, `nba_api`, and `nhl-api-py` where applicable.
-- Examples use the napoleon literal-block format (heading + `::` + 4-space indented code) so they render as proper code blocks in the markdown docs without triggering `sphinx.ext.doctest`. Users can copy-paste any block and run it as-is.
-- Existing one-line backtick-wrapped examples (the legacy `Example: <inline call>` shape) were replaced (not appended) so each function has exactly one `Example:` section.
-
-### Example notebooks
-
-- Seven new Jupyter notebooks under `examples/notebooks/`: `01_quickstart.ipynb`, `02_cfb_intro.ipynb`, `03_nfl_intro.ipynb`, `04_nba_intro.ipynb`, `05_wbb_wnba_intro.ipynb`, `06_mbb_intro.ipynb`, `07_nhl_intro.ipynb`. Intro / intermediate level — schedule, pbp, team / player / season-stats endpoints, the `nfl.update_config` / `clear_cache` / `get_current_*` runtime surface, and a small pipeline example per sport. Outputs cleared so the user runs them locally; cross-references link to companion R packages and alternative Python libraries.
-- `.gitignore` keeps `*.ipynb` ignored at the repo level (so scratch + checkpoint notebooks aren't accidentally tracked) but adds a negative pattern `!examples/notebooks/*.ipynb` so the curated tutorial notebooks are explicitly tracked.
-
-### Contributor docs and templates
-
-- New `CLAUDE.md` and `.github/copilot-instructions.md` capture the project conventions for AI-assisted development: branching, conventional commit messages, polars 1.x rules, HTTP layer, module patterns, NFL nflreadpy-parity surface, CFB `cfb_play_participants`, test conventions, packaging, Sphinx toolchain, the docstring conventions for new functions, common pitfalls.
-- New `CONTRIBUTING.md`: canonical onboarding doc covering uv workflow, conda fallback, Python target 3.9–3.14, code standards (ruff, mypy), polars 1.x rules, test gating with `skip_if_no_live`, new-module spec.
-- New `.github/PULL_REQUEST_TEMPLATE.md` and `.github/ISSUE_TEMPLATE/` (`config.yml`, `bug_report.yml`, `feature_request.yml`, `data_quality.yml`). The PR template includes an "I have NOT included AI agents (Claude / Copilot / Cursor / GPT / Gemini) as commit co-authors" checkbox enforcing project policy.
-
-### NFL — nflreadpy parity
-
-- Six new loaders: `load_nfl_team_stats`, `load_nfl_ftn_charting`, `load_nfl_trades`, `load_nfl_ff_playerids`, `load_nfl_ff_rankings`, `load_nfl_ff_opportunity`.
-- Two new utility helpers in `nfl/utils_date.py`: `get_current_nfl_season()`, `get_current_nfl_week()`.
-- Unified `load_nfl_nextgen_stats(stat_type=...)` consolidating the per-type variants. The per-type functions are kept as aliases that emit `DeprecationWarning` and forward to the unified entry point.
-- Unified `load_nfl_pfr_advstats(stat_type=, summary_level=)` consolidating eight per-type / per-summary functions, with the same deprecation alias pattern.
-- 25 nflreadpy-parity aliases inside `sportsdataverse.nfl` (`load_pbp` ↔ `load_nfl_pbp`, etc.). Identity-equivalent — no perf overhead, just a friendlier import surface for nflreadpy users.
-- `kind=` parameter added to `load_nfl_ff_rankings` as the preferred name; `type=` retained for nflreadpy parity.
-
-### NFL — caching and configuration
-
-- New caching layer in `sportsdataverse.nfl.cache` with both memory and filesystem backends and TTL support.
-- `clear_cache()` for explicit invalidation.
-- New `NflConfig` plus `update_config()` / `get_config()` / `reset_config()`, with env-var initialization: `SDV_PY_NFL_CACHE`, `SDV_PY_NFL_CACHE_DIR`, `SDV_PY_NFL_CACHE_DURATION`, `SDV_PY_NFL_VERBOSE`, `SDV_PY_NFL_TIMEOUT`, `SDV_PY_NFL_USER_AGENT`.
-- All 23 canonical loaders plus the 11 deprecated aliases are decorated with `@cached_loader`.
-- `return_as_pandas=True` round-trips correctly through the cache: a single polars frame is stored, and conversion happens on read.
-
-### NFL — static datasets
-
-- `team_abbr_mapping` (143 entries, relocations folded into the modern abbreviation: `OAK -> LV`, `SD -> LAC`, `STL -> LA`).
-- `team_abbr_mapping_norelocate` (143 entries, history preserved).
-- `player_name_mapping` (136 entries, common-variant → canonical).
-- All three are eagerly loaded at import time and inline-bundled in the package — no separate JSON files to ship.
-
-### NFL — pickcenter / odds modern path
-
-- `__helper__espn_nfl_odds_information__` now hits the modern `sports.core.api.espn.com/v2/.../events/{gid}/competitions/{gid}/odds` endpoint when the legacy `summary?event=` `pickcenter` array is empty (true for all 2024+ games).
-- Cascades to defaults `(2.5, 55.5, True, False)` only if both modern and legacy paths fail.
-- For example, the 2024 CFP semifinal previously returned `(2.5, 55.5, True, False)` and now correctly returns `(-3.5, 67.5, True, True)`.
-
-### NFL — `load_nfl_schedule` parquet port
-
-- Switched from the stale `nflverse-pbp/master/schedules/sched_{season}.rds` (which was 404'ing on every season) to the modern `nflverse-data/releases/download/schedules/games.parquet`. One combined file, 1999–2025, 7,276 rows × 46 cols.
-
-### WBB / WNBA — new ESPN scrape modules
-
-Eleven new modules across `sportsdataverse.wbb` and `sportsdataverse.wnba`, plus their `__init__.py` re-exports and live-gated smoke tests. The WNBA modules (other than `wnba_draft`) are thin shims onto a shared `_espn_basketball_*` helper that lives in the corresponding `wbb_*.py` file (league slug fixed to `"wnba"`), keeping the wbb/wnba pair DRY.
-
-- `wbb_team_roster` / `wnba_team_roster`: per `(team_id, season)` roster, flattened to one row per athlete. Snake-case columns; stable schema on empty rosters.
-- `wbb_player_stats` / `wnba_player_stats`: per `(athlete_id, season)` stats. Multi-table dict with canonical keys `Averages` / `Totals` / `Misc` (always present, empty-frame fallback) plus an `Other` bucket only added when ESPN ships a non-canonical category.
-- `wbb_team_stats` / `wnba_team_stats`: per `(team_id, season)` stats. Same multi-table shape as player stats; ESPN ships these as `General` / `Offensive` / `Defensive` categories that map onto the canonical Averages / Totals / Misc keys. Endpoint corrected to `site.web.api.espn.com/.../teams/{id}/statistics?season=...` (the `common/v3` path the original spec named 404s).
-- `wbb_standings` / `wnba_standings`: one-row-per-team season standings. WBB defaults to `group=50` (Division I women); WNBA has no group filter.
-- `wnba_draft`: one-row-per-pick draft history. Modern endpoint at `site.web.api.espn.com/apis/site/v2/sports/basketball/wnba/draft` (the `site/v3` variant 404s).
-- `wbb_event_officials` / `wnba_event_officials`: one-row-per-official game-level officials list.
-- All eleven ship with full `@overload` typing (mypy-strict), polars 1.x APIs, and `snake_case` columns via `dl_utils.underscore`.
-
-### CFB — `cfb_play_participants` and `__add_player_cols` collapse
-
-- New `cfb_play_participants` module hits the ESPN `events/{gid}/competitions/{gid}/plays` participants endpoint, with `$ref` resolution (default-on, `resolve_missing=True`) for athletes missing from the sidecar.
-- `cfb_pbp.__add_player_cols` shrunk from 471 lines of regex extraction to ~130 lines that delegate to the participants module.
-- All 19 legacy `_player_name` columns preserved via an alias mapping.
-- Hybrid scalar + list-column output: `{type}_player_name` plus `{type}_player_names`, so multi-entry types like split sacks aren't silently collapsed to a single name.
-- Targeted regex fallbacks retained as a tertiary safety net for `sack_player_name2`, `fg_block_player_name`, `punt_block_player_name`, and `interception_player_name` — ESPN's sidecar has documented gaps for those.
-
-### CFB — pandas → polars 1.x bug-fix reconciliation (`0.36-live` → `main`)
-
-- Foundation: new `cleaned_text` column normalizes ESPN play descriptions and is the single source of truth for downstream feature extraction.
-- Behavioral: kneel-down semantics flag plus `scrimmage_play` exclusion.
-- Yardage: structural rewrite of `__add_yardage_cols` (~150-line `np.select` chain → `pl.when().then()` chain), pass-yards regex tightened from `(?<=for)` to `(?<=[\s,]for)`, full punt rewrite, fair-catch fix.
-- Helper-features: end-state edge cases, NCG 2025 GW play hardcode, `lead_half` end-of-half fix, OOB punts block, FG classification correction, `end.TimeSecsRem` shift direction flipped from lag to lead — which is what WPA inputs expected all along.
-- WPA: `__process_wpa` end-of-game branch rewrite plus onside-kick rewrite, plus `penalty_assessed_on_kickoff` plumbing across `__setup_penalty_data` + `__process_epa` + `__process_wpa`.
-- Player names: extraction migrated to `cleaned_text` everywhere.
-
-### Infrastructure and tooling
-
-- **Polars 1.x migration** across `cfb/cfb_pbp.py`, `nfl/nfl_pbp.py`, `mbb/mbb_pbp.py`, `nba/nba_pbp.py`, `nhl/nhl_pbp.py`, `wbb/wbb_pbp.py`, `wnba/wnba_pbp.py`. Roughly 165 API translation sites: `groupby` → `group_by`, `with_row_count` → `with_row_index`, `apply` → `map_elements` (with explicit `return_dtype`), struct list-arg → varargs, `shift_and_fill` → `shift`, `cumsum` → `cum_sum`, `str.strip` → `str.strip_chars`, `str.n_chars` → `str.len_chars`, outer-join → `full` + `coalesce`, `write_json` kwargs.
-- Polars 1.x `is_in` same-datatype deprecation: switched to `.implode()` for the global-containment idiom.
-- `pkg_resources.resource_filename` → `importlib.resources.files()` in `cfb_pbp.py` and `nfl_pbp.py` via small `_cfb_resource_filename` / `_nfl_resource_filename` helpers. Setuptools 81+ removed `pkg_resources`, which made the legacy import emit a `UserWarning` at module load and (eventually) break entirely.
-- `download()` retry rewrite: iterative loop instead of recursion, defensive `response = None` init, re-raises the last captured exception when the retry budget is exhausted.
-- `psutil` made optional in `decorators.py` (lazy import, previously an undeclared transitive dep that broke autodoc).
-- `pytest.ini` filterwarnings for the transitive `sphinxcontrib-jsmath` legacy `nspkg.pth` `UserWarning` and the `pkg_resources` API `DeprecationWarning` surfacing from setuptools 81+.
-- New tests under `tests/wbb/`, `tests/wnba/`, `tests/conftest.py` (with the `@skip_if_no_live` decorator gated by `SDV_PY_LIVE_TESTS=1`), and `tests/README.md` capturing the test conventions. NFL test files renamed to drop legacy-phase-jargon filenames in favor of descriptive names (`test_nfl_loaders_parity_loaders.py`, `_unified.py`, `_aliases.py`).
-
-### Bug fixes
-
-- `test_havoc_rate` corrected for both `cfb` and `nfl`: `def_int` field name fix, bounded `<=` assertion, `def_box.sort()` for deterministic group_by emit order, and `turnover_box` now produces a cli warning instead of silently padding an empty dict.
-- `yds_punted` duplicate definition removed.
-- `drive.id` NCG 2025 GW play hardcode.
-- `is_in(col)` → `is_in(col.implode())` for global containment, applied across `cfb_pbp` and `nfl_pbp`.
-- Pickcenter regression test added for both CFB and NFL: a 2024+ game must NOT silently fall back to the `(2.5, 55.5, True, False)` defaults; a pre-2024 game with populated legacy `pickcenter` must continue to use that legacy path.
-- NFL `__helper_nfl_pbp_features` defensive cast for the case where ESPN returns `overUnder` as a Python float (no `.astype()`); same shape fix as the cfb_pbp version.
-
-### Deprecations
-
-- Four NFL loader families now consolidate per-type variants into a single unified function: `load_nfl_nextgen_stats(stat_type=...)` and `load_nfl_pfr_advstats(stat_type=, summary_level=)`. The per-type names continue to work but emit a `DeprecationWarning` pointing at the unified function. No removal yet.
+- **CFB:** Kneel-downs are flagged and excluded from `scrimmage_play`.
+- **CFB:** Yardage parsing rewritten: pass-yards regex tightened (`(?<=for)` → `(?<=[\s,]for)`), a
+  full punt rewrite and a fair-catch fix.
+- **CFB:** Feature edge cases: end-state, the NCG 2025 GW play / `drive.id` hardcode, `lead_half` at
+  end of half, OOB punts, FG classification, and `end.TimeSecsRem` now leads as WPA inputs expect.
+- **CFB:** WPA end-of-game and onside-kick branches rewritten, with `penalty_assessed_on_kickoff`
+  plumbed through penalty setup, EPA and WPA.
+- **CFB:** Duplicate `yds_punted` definition removed.
+- **CFB/NFL:** Havoc / turnover box: `def_int` field name fixed, deterministic group order, and
+  `turnover_box` emits a cli warning instead of silently padding an empty dict.
+- **HTTP:** `download()` retries iteratively, initializes `response = None`, and re-raises the last
+  exception when the retry budget is exhausted.
+- **NFL:** `load_nfl_schedule` reads `nflverse-data/releases/download/schedules/games.parquet`
+  (1999–2025) instead of the stale `sched_{season}.rds`, which 404'd on every season.
+- **NFL:** With an empty `pickcenter` (all 2024+ games), odds come from the modern core `.../odds`
+  endpoint instead of the `(2.5, 55.5, True, False)` defaults; e.g. the 2024 CFP semifinal is now
+  `(-3.5, 67.5, True, True)`.
+- **NFL:** `__helper_nfl_pbp_features` handles ESPN returning `overUnder` as a Python float.
+- **Packaging:** `pkg_resources.resource_filename` → `importlib.resources.files()` in `cfb_pbp.py` and
+  `nfl_pbp.py`, so setuptools 81+ no longer warns at import (or breaks it).
 
 ## 0.0.40 Release: December 6, 2025
 
-- Minor changes to mbb_calendar and wbb_calendar functions to include all games, even when top 25 teams are not competing
+### Changed
+
+- **MBB/WBB:** `mbb_calendar` and `wbb_calendar` include all games, even when top 25 teams are not
+  competing.
 
 ## 0.0.38-39 Release: August 28, 2023
 
-- Minor changes to cfb_pbp functions to improve WP calculation and player parsing.
+### Changed
+
+- **CFB:** `cfb_pbp` functions improve the WP calculation and player parsing.
 
 ## 0.0.36-37 Release: July 9, 2023
 
-- Switched most under the hood dataframe operations to use the python `polars` library and many functions now have a parameter `return_as_pandas` which defaults to `False` but can be set to `True` to return a pandas dataframe instead of a polars dataframe. This is a **breaking change.**
-- Added `**kwargs` which pass arguments to the `dl_utils.download()` function, including `headers`, `proxy`, `timeout` (default 30s), `num_retries` (default = 15), `logger` (default = None)
-- Function `espn_cfb_game_rosters()` added.
-- Function `espn_nba_game_rosters()` added.
-- Function `espn_nfl_game_rosters()` added.
-- Function `espn_nhl_game_rosters()` added.
-- Function `espn_wbb_game_rosters()` added.
-- Function `espn_wnba_game_rosters()` added.
-- Function `load_cfb_betting_lines()` added (only 2006 through 2019).
+### Breaking changes
+
+- **Polars:** Most dataframe operations now use `polars`; many functions return a polars DataFrame
+  and take `return_as_pandas` (default `False`).
+
+**Upgrade notes** — pass `return_as_pandas=True` to get a pandas DataFrame instead of a polars one.
+
+### Added
+
+- **CFB:** `load_cfb_betting_lines()` (2006 through 2019 only).
+- **ESPN:** `espn_cfb_game_rosters()`, `espn_nba_game_rosters()`, `espn_nfl_game_rosters()`,
+  `espn_nhl_game_rosters()`, `espn_wbb_game_rosters()` and `espn_wnba_game_rosters()`.
+- **HTTP:** `**kwargs` pass through to `dl_utils.download()`: `headers`, `proxy`, `timeout` (default
+  30s), `num_retries` (default 15), `logger` (default `None`).
 
 ## 0.0.34-35 Release: May 7-9, 2023
 
-- Reconfigured some imports
-- Improved compliance with pandas upgrades
-- Updated loader locations to use sportsdataverse-data releases and nflverse releases
-- Flattened the returned results somewhat for "sportsdataverse.cfb.espn_cfb_schedule()" functions, but also now including some nested data frame and list columns
+### Breaking changes
+
+- **CFB:** `sportsdataverse.cfb.espn_cfb_schedule()` results are flattened somewhat, now including some
+  nested data frame and list columns.
+
+### Changed
+
+- **Loaders:** Loader locations use sportsdataverse-data releases and nflverse releases.
+- **Packaging:** Imports reconfigured.
+- **Packaging:** Improved compliance with pandas upgrades.
 
 ## 0.0.18 Release: July 25, 2022
 
-- Added ondays parameter to ESPN calendar functions
-- Renamed "sportsdataverse.cfb.cfb_teams()" to "sportsdataverse.cfb.espn_cfb_teams()" to avoid an edge case issue when running the function.
+### Breaking changes
+
+- **CFB:** `sportsdataverse.cfb.cfb_teams()` is renamed `sportsdataverse.cfb.espn_cfb_teams()` to avoid
+  an edge case issue when running the function.
+
+### Added
+
+- **ESPN:** `ondays` parameter on the ESPN calendar functions.
 
 ## 0.0.17 Release: July 9, 2022
 
-- Added MLBAM API functionality to the sportsdataverse-py package. For more information on how to use these new functions, refer to the docs.
-- Fixed a bug where the "sportsdataverse.nfl.load_nfl_schedule()" function would cause a 404 error when run.
-- For functions where multiple files are loaded in, progress bars have been added to indicate how far along the sportsdataverse-py package is in completing its task(s).
-- Renamed "sportsdataverse.cfb.cfb_teams()" to "sportsdataverse.cfb.get_cfb_teams()" to avoid an edge case issue when running the function.
+### Breaking changes
+
+- **CFB:** `sportsdataverse.cfb.cfb_teams()` is renamed `sportsdataverse.cfb.get_cfb_teams()` to avoid
+  an edge case issue when running the function.
+
+### Added
+
+- **MLB:** MLBAM API functionality; see the docs for how to use the new functions.
+
+### Changed
+
+- **Loaders:** Functions that load multiple files show progress bars.
+
+### Fixed
+
+- **NFL:** `sportsdataverse.nfl.load_nfl_schedule()` no longer causes a 404 error.
 
 ## 0.0.15 Release: May 8, 2022
 
-- Refactor schedule and teams functions for all existing leagues.
-- Created more robust home/away mappings to simplify assignment.
+### Changed
+
+- **All leagues:** Schedule and teams functions refactored.
+- **All leagues:** More robust home/away mappings simplify assignment.
 
 ## 0.0.14 Release: March 16, 2022
 
-- Refactor schedule and teams functions for all existing leagues.
-- Created more robust home/away mappings to simplify assignment.
+### Changed
+
+- **All leagues:** Schedule and teams functions refactored.
+- **All leagues:** More robust home/away mappings simplify assignment.
 
 ## 0.0.12 Release: February 24, 2022
 
-- Minor refactor to all the pbp functions, attempting to normalize behavior.
-- Adding raw parameter to same functions to return object as it comes in without any transformation
-- Adding some config file corrections.
+### Added
+
+- **PBP:** A `raw` parameter on the pbp functions returns the object as it comes in, without any
+  transformation.
+
+### Changed
+
+- **PBP:** Minor refactor of all the pbp functions, normalizing behavior.
+
+### Fixed
+
+- **Config:** Some config file corrections.
 
 ## 0.0.5 Release: October 20, 2021
 
-- f'in round
-- findin' out
+### Changed
+
+- **Package:** Original notes: "f'in round", "findin' out".

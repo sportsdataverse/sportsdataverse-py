@@ -16,7 +16,8 @@ import pytest
 ROOT = Path(__file__).resolve().parents[1]
 CHANGELOG = ROOT / "CHANGELOG.md"
 
-_GROUPS = {"Added", "Changed", "Fixed", "Removed", "Deprecated", "Security", "Data"}
+# A release is grouped Keep-a-Changelog style: these are its only `###` headings, in this order.
+_GROUPS = ["Breaking changes", "Added", "Changed", "Deprecated", "Removed", "Fixed", "Security", "Data"]
 
 _PRS = [
     540,
@@ -88,20 +89,19 @@ def test_the_release_section_names_the_pr(pr):
     assert f"#{pr}" in _section(), f"the release section has no entry citing #{pr}"
 
 
-def test_every_entry_uses_a_known_group_word():
-    """This changelog's entries are `### <Group> — <summary>`; the group word is the vocabulary."""
-    bad = [h for h in re.findall(r"^### (.+)$", _section(), re.M) if h.split(" ")[0].rstrip(":—-") not in _GROUPS]
-    assert not bad, "entries whose heading does not start with a known group word:\n" + "\n".join(bad)
+def test_every_group_heading_is_known_and_in_order():
+    """`###` headings are the change groups only, in the fixed order; entries are bullets under them."""
+    heads = re.findall(r"^### (.+?)\s*$", _section(), re.M)
+    unknown = [h for h in heads if h not in _GROUPS]
+    assert not unknown, f"unknown group headings: {unknown}"
+    assert heads == sorted(heads, key=_GROUPS.index), f"groups out of order: {heads}"
+    assert not re.search(r"^#### ", _section(), re.M), "entries are bullets, not #### headings"
 
 
 def test_the_backfilled_entries_each_cite_a_pr():
-    """Every entry ADDED by the 0.1.5 backfill carries its PR numbers in the heading.
-
-    Older entries put the references in the body instead, so this checks the heading only for
-    the ones that name a PR there at all -- the point is that a backfilled entry is traceable.
-    """
-    heads = re.findall(r"^### (.+)$", _section(), re.M)
-    assert sum(1 for h in heads if re.search(r"#\d+", h)) >= 25, "the backfill should add >= 25 PR-citing entries"
+    """The 0.1.5 backfill made every backfilled entry traceable: at least 25 bullets cite a PR."""
+    bullets = re.findall(r"^- .*(?:\n  .*)*", _section(), re.M)
+    assert sum(1 for b in bullets if re.search(r"#\d+", b)) >= 25, "the backfill should keep >= 25 PR-citing entries"
 
 
 def test_the_docs_changelog_pages_still_render():
