@@ -37,7 +37,7 @@ not covered by the generated API-endpoint reference above.
 | [pwhl_player_stats](additional/hockeytech-leaguestat.md#pwhl_player_stats) | PWHL player season stats across all seasons. |
 | [pwhl_player_toi](additional/hockeytech-leaguestat.md#pwhl_player_toi) | Per-player time-on-ice totals for a single PWHL game. |
 | [pwhl_playoff_bracket](additional/hockeytech-leaguestat.md#pwhl_playoff_bracket) | PWHL playoff bracket for a given season. |
-| [pwhl_schedule](additional/hockeytech-leaguestat.md#pwhl_schedule) | PWHL schedule — one row per game (matches fastRhockey `pwhl_schedule`). |
+| [pwhl_schedule](additional/hockeytech-leaguestat.md#pwhl_schedule) | PWHL schedule — one row per game of one season (matches fastRhockey `pwhl_schedule`). |
 | [pwhl_scorebar](additional/hockeytech-leaguestat.md#pwhl_scorebar) | PWHL live scorebar (today ± 3 days). |
 | [pwhl_skater_rapm](additional/hockeytech-leaguestat.md#pwhl_skater_rapm) | ② PWHL skater xG RAPM -- shim over `nhl_skater_rapm` with `league='pwhl'`. |
 | [pwhl_skater_war](additional/hockeytech-leaguestat.md#pwhl_skater_war) | ③ PWHL GAR/WAR composite -- shim over `nhl_skater_war` with `league='pwhl'`. |

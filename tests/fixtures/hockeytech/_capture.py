@@ -19,6 +19,7 @@ CAPTURES = {
         "scorebar",
         {"numberofdaysback": 400, "numberofdaysahead": 0, "limit": 200, "league_id": 1},
     ),
+    "pwhl_schedule_8": ("pwhl", "modulekit", "schedule", {"season_id": 8}),
     "pwhl_pbp_42": ("pwhl", "statviewfeed", "gameCenterPlayByPlay", {"game_id": 42, "league_id": ""}),
     "pwhl_gameshifts_42": ("pwhl", "modulekit", "gameshifts", {"game_id": 42}),
     "pwhl_standings_5": (

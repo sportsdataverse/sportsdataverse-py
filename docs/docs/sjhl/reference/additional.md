@@ -172,19 +172,19 @@ One row per player: `player_id` (Int64), `first_name`, `last_name`, `toi_seconds
 
 `sjhl_schedule(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'`
 
-SJHL schedule — one row per game.
+SJHL schedule — one row per game of one season.
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `season` | `Optional[int]` | `None` | Season as an END year (2026 = the 2025-26 season). With neither `season` nor `season_id`, no season filter is sent and the feed's whole recent window comes back. |
+| `season` | `Optional[int]` | `None` | Season as an END year (2026 = the 2025-26 season). Defaults to the newest regular season when neither `season` nor `season_id` is given. |
 | `season_id` | `Optional[int]` | `None` | The HockeyTech season id, when it is already known. |
 | `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
 
 **Returns**
 
-One row per game: `game_id`, `game_date`, `game_status`, `home_team` / `home_team_id` / `home_score`, `away_team` / `away_team_id` / `away_score`, `venue`, `season_id` and `game_type` (all String). With no season given, the feed's whole recent window. A pandas DataFrame when `return_as_pandas` is True.
+One row per game: `game_id`, `game_date`, `game_status`, `home_team` / `home_team_id` / `home_score`, `away_team` / `away_team_id` / `away_score`, `venue`, `season_id` and `game_type` (all String). Only the requested season's games: a regular season, its playoffs and its preseason are separate season ids, so pass `season_id` (from `sjhl_season_id()`) for the playoffs. A pandas DataFrame when `return_as_pandas` is True.
 
 | col_name | type | description |
 |---|---|---|
