@@ -193,7 +193,7 @@ For deeper dev-environment detail (lint, mypy, dep-bumping workflow), see
 ### Notes
 
 - **Python target:** 3.9–3.14.
-- **DataFrame engine:** polars 1.x. Most loaders accept `return_as_pandas=True`
+- **DataFrame engine:** polars 1.x or 2.x. Most loaders accept `return_as_pandas=True`
   if you prefer pandas.
 - **NFL caching:** loaders cache to memory by default. Set
   `SDV_PY_NFL_CACHE=filesystem` for cross-session reuse, or

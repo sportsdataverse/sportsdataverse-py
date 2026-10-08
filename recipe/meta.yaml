@@ -45,7 +45,7 @@ requirements:
     - matplotlib-base >=3.5.0
     - numpy >=1.23.0
     - pandas >=2.0.0
-    - polars >=1.0,<2.0
+    - polars >=1.0,<3
     - pyarrow >=14.0.0
     - pyjanitor >=0.23.1
     - rapidfuzz >=3.13.0
