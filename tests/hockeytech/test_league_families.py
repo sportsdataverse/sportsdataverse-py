@@ -67,14 +67,14 @@ def patched_api(monkeypatch):
 
 @pytest.mark.parametrize("lg", LEAGUES)
 def test_league_season_id(patched_api, lg):
-    mod = importlib.import_module(f"sportsdataverse.{lg}")
+    mod = importlib.import_module(f"sportsdataverse.hockey.{lg}")
     df = getattr(mod, f"{lg}_season_id")()
     assert isinstance(df, pl.DataFrame)
 
 
 @pytest.mark.parametrize("lg", LEAGUES)
 def test_league_schedule(patched_api, lg):
-    mod = importlib.import_module(f"sportsdataverse.{lg}")
+    mod = importlib.import_module(f"sportsdataverse.hockey.{lg}")
     df = getattr(mod, f"{lg}_schedule")()
     assert isinstance(df, pl.DataFrame)
     assert df.height > 0
@@ -85,14 +85,14 @@ def test_league_schedule(patched_api, lg):
 # live seasons lookup -- only the mocked hockeytech_api feeds the parsers.
 @pytest.mark.parametrize("lg", LEAGUES)
 def test_league_standings(patched_api, lg):
-    mod = importlib.import_module(f"sportsdataverse.{lg}")
+    mod = importlib.import_module(f"sportsdataverse.hockey.{lg}")
     df = getattr(mod, f"{lg}_standings")(season_id=5)
     assert isinstance(df, pl.DataFrame)
 
 
 @pytest.mark.parametrize("lg", LEAGUES)
 def test_league_teams(patched_api, lg):
-    mod = importlib.import_module(f"sportsdataverse.{lg}")
+    mod = importlib.import_module(f"sportsdataverse.hockey.{lg}")
     df = getattr(mod, f"{lg}_teams")(season_id=5)
     assert isinstance(df, pl.DataFrame)
     assert df.height > 0
@@ -100,7 +100,7 @@ def test_league_teams(patched_api, lg):
 
 @pytest.mark.parametrize("lg", LEAGUES)
 def test_league_pandas_roundtrip(patched_api, lg):
-    mod = importlib.import_module(f"sportsdataverse.{lg}")
+    mod = importlib.import_module(f"sportsdataverse.hockey.{lg}")
     df = getattr(mod, f"{lg}_teams")(season_id=5, return_as_pandas=True)
     assert isinstance(df, pd.DataFrame)
 
@@ -109,7 +109,7 @@ def test_all_four_leagues_share_one_surface():
     """The four families expose the same ``<lg>_*`` function set (one codebase)."""
     surfaces = {}
     for lg in LEAGUES:
-        mod = importlib.import_module(f"sportsdataverse.{lg}")
+        mod = importlib.import_module(f"sportsdataverse.hockey.{lg}")
         surfaces[lg] = {f[len(lg) + 1 :] for f in dir(mod) if f.startswith(f"{lg}_")}
     ref = surfaces["ahl"]
     assert len(ref) >= 10

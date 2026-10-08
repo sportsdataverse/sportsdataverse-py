@@ -6,6 +6,8 @@ import importlib
 from pathlib import Path
 from unittest.mock import patch
 
+import pytest
+
 from sportsdataverse import _codegen_runtime as runtime
 from sportsdataverse.errors import NoDataError
 
@@ -52,6 +54,9 @@ def _existing_url(fn_name: str, league: str):
     return box.get("url")
 
 
+# Every loader is called against a stubbed read that finds nothing, so each warns "no data"; the
+# skip-and-warn contract itself is asserted in test_on_missing.py and test_load_module.py.
+@pytest.mark.filterwarnings(r"ignore:load_\w+. no (\w+ )?data for season:UserWarning")
 def test_generated_loader_urls_match_existing():
     rel = spec.load_releases(REL)
     mismatches = []

@@ -15,15 +15,17 @@ def _db() -> sqlite3.Connection:
     return con
 
 
-def test_fts_splits_identifiers_on_underscores():
+def test_fts_splits_identifiers_on_underscores(request):
     con = _db()
+    request.addfinalizer(con.close)
     q = "SELECT name FROM search WHERE search MATCH ?"
     assert con.execute(q, ['"nhl" AND "pbp"']).fetchall() == [("load_nhl_pbp",)]
     assert con.execute(q, ['"load_nhl_pbp"']).fetchall() == [("load_nhl_pbp",)]
 
 
-def test_function_search_body_includes_param_descriptions():
+def test_function_search_body_includes_param_descriptions(request):
     con = _db()
+    request.addfinalizer(con.close)
     assert con.execute("SELECT name FROM search WHERE search MATCH '\"2010\"'").fetchall() == [("load_nhl_pbp",)]
 
 
@@ -32,9 +34,10 @@ def test_asset_names_carry_the_schema_version():
     assert MANIFEST == f"manifest_v{SCHEMA_VERSION}.json"
 
 
-def test_function_search_body_includes_return_sections():
+def test_function_search_body_includes_return_sections(request):
     # ~480 flat wrappers summarize as "GET /path"; their result-set names are the words agents search.
     con = _db()
+    request.addfinalizer(con.close)
     con.execute("DELETE FROM search")
     con.execute("INSERT INTO columns VALUES ('load_nhl_pbp','Shot_Chart_Detail','game_id','Int64',NULL)")
     con.executescript(SEARCH_SQL)

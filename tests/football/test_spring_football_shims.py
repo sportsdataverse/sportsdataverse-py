@@ -9,9 +9,14 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+import pytest
 
 from sportsdataverse.football.ufl import ufl_pbp
 from sportsdataverse.football.xfl import xfl_pbp
+
+# UFL / XFL frames lack the xYAC and 4th-down inputs, and enrich_spring_football_pbp keeps that
+# warning on purpose (see its comment); test_ufl_and_xfl_pbp_share_the_same_core asserts it.
+pytestmark = pytest.mark.filterwarnings("ignore:enrich_nfl_pbp. skipping:RuntimeWarning")
 
 FIXTURE_DIR = Path(__file__).resolve().parents[1] / "fixtures" / "league_ports"
 
@@ -51,8 +56,9 @@ def test_ufl_and_xfl_pbp_share_the_same_core(monkeypatch):
     monkeypatch.setattr("sportsdataverse.football.xfl.xfl_ep_wp.espn_xfl_summary", lambda *a, **kw: summary)
     monkeypatch.setattr("sportsdataverse.football.ufl.ufl_ep_wp.espn_ufl_summary", lambda *a, **kw: summary)
 
-    xfl_out = xfl_pbp("401517780")
-    ufl_out = ufl_pbp("401517780")
+    with pytest.warns(RuntimeWarning, match=r"enrich_nfl_pbp: skipping"):
+        xfl_out = xfl_pbp("401517780")
+        ufl_out = ufl_pbp("401517780")
     assert xfl_out.height == ufl_out.height > 0
     for col in ("ep", "epa", "wp", "wpa"):
         assert (xfl_out[col].fill_null(-999) - ufl_out[col].fill_null(-999)).abs().max() < 1e-9

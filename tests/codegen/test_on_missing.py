@@ -47,4 +47,5 @@ def test_raise_entries_raise_on_missing_season(ld, monkeypatch):
 
 def test_generated_loaders_skip_missing_season(monkeypatch):
     monkeypatch.setattr(rt, "_fetch_release_parquet", _404)
-    assert getattr(cfb, "load_cfb_pbp")(seasons=[2024]).height == 0
+    with pytest.warns(UserWarning, match=r"no data for season\(s\) \[2024\]"):
+        assert getattr(cfb, "load_cfb_pbp")(seasons=[2024]).height == 0

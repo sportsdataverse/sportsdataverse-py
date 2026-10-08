@@ -3,6 +3,7 @@
 import ast
 
 import polars as pl
+import pytest
 
 from tools.codegen import generate, spec
 
@@ -42,7 +43,8 @@ def test_generated_loader_is_404_safe(tmp_path):
         return pl.DataFrame({"x": [1]}) if "2023" in url else None  # 2024 -> missing
 
     ns["_read_release_parquet"] = fake_read  # rebind the loader's imported helper
-    out = ns["load_wnba_shots"](seasons=[2023, 2024])
+    with pytest.warns(UserWarning, match=r"no data for season\(s\) \[2024\]"):
+        out = ns["load_wnba_shots"](seasons=[2023, 2024])
     assert out.shape[0] == 1  # 2024 skipped, not crashed
 
 

@@ -25,6 +25,10 @@ from sportsdataverse.mbb.mbb_prediction_constants import (
 from sportsdataverse.mbb.mbb_strength_of_schedule import strength_of_schedule
 from sportsdataverse.mbb.mbb_team_ratings import adjust_efficiency, adjust_tempo, raw_game_efficiency
 
+# The 2024 fixture has one game whose box score shows 0 turnovers under every key, which
+# raw_game_efficiency drops with a warning; tests/mbb/test_mbb_team_ratings.py asserts it.
+pytestmark = pytest.mark.filterwarnings("ignore:raw_game_efficiency. dropped:UserWarning")
+
 FIX_DIR = Path(__file__).resolve().parents[1] / "fixtures" / "mbb_prediction"
 
 _CORE_FIXTURES = ("results_2024", "team_box_2024", "torvik_2024")

@@ -169,11 +169,12 @@ def test_parse_pkgdown_llms_reads_the_package_index_only():
 
 
 @pytest.mark.xdist_group("docs_index_build")
-def test_offline_build_end_to_end(tmp_path):
+def test_offline_build_end_to_end(tmp_path, request):
     db = B.build(tmp_path, offline=True)
     assert db == tmp_path / ASSET
     _assert_manifest_describes_the_gz(tmp_path, db)
     con = sqlite3.connect(db)
+    request.addfinalizer(con.close)
 
     def one(sql, *args):
         return con.execute(sql, args).fetchone()
@@ -301,7 +302,7 @@ def _stub_offline_parts(monkeypatch):
     monkeypatch.setattr(B, "python_columns", lambda *a, **k: None)
 
 
-def test_online_build_adds_swagger_and_pkgdown_rows(tmp_path, monkeypatch):
+def test_online_build_adds_swagger_and_pkgdown_rows(tmp_path, monkeypatch, request):
     _stub_offline_parts(monkeypatch)
     monkeypatch.setattr(B, "swagger_sha", lambda: "deadbeef")
     monkeypatch.setattr(B, "fetch_swagger", lambda sha: {})
@@ -310,6 +311,7 @@ def test_online_build_adds_swagger_and_pkgdown_rows(tmp_path, monkeypatch):
     monkeypatch.setattr(B, "http_get", lambda url, *a, **k: llms.encode())
     db = B.build(tmp_path, offline=False)
     con = sqlite3.connect(db)
+    request.addfinalizer(con.close)
     meta = dict(con.execute("SELECT key, value FROM meta"))
     assert meta["sdv_swagger_sha"] == "deadbeef" and "pkgdown_fetched" in meta and "skipped" not in meta
     assert con.execute("SELECT summary FROM functions WHERE lang='r' AND name='load_x'").fetchone() == ("Load x",)

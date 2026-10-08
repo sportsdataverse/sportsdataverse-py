@@ -21,6 +21,17 @@ from sportsdataverse.metric_curves import (
     shot_attempts,
 )
 
+
+def _bucket(col: str, edges) -> pl.Expr:
+    """``pl.col(col).cut(edges, left_closed=True)`` as a bucket index, nulls kept null.
+
+    ``cut`` warns on polars 2.0 and its ``bin_intervals`` replacement does not exist on 1.x, so the
+    hand count spells the bucket out: the number of edges at or below the value.
+    """
+    idx = pl.sum_horizontal([(pl.col(col) >= e).cast(pl.Int32) for e in edges])
+    return pl.when(pl.col(col).is_not_null()).then(idx).alias(col)
+
+
 FIX = Path(__file__).parent / "fixtures"
 CURRY = "201939"
 KEY = ["season", "entity_type", "entity_id", "metric", "down", "x_lo"]
@@ -82,7 +93,7 @@ def test_fg_attempts_and_makes_match_the_fixture(cfb_pbp, cfb_curves):
     assert league["attempts"].sum() == fg.height == 102
     assert league["successes"].sum() == fg.filter(pl.col("fg_made") == True).height == 74  # noqa: E712
     # one league row per populated season x bucket; the per-bucket counts are a hand cut of the same plays
-    hand = fg.group_by(pl.col("yds_fg").cut(list(BUCKET_EDGES["fg_pct_by_distance"][1:-1]), left_closed=True)).len()
+    hand = fg.group_by(_bucket("yds_fg", BUCKET_EDGES["fg_pct_by_distance"][1:-1])).len()
     assert sorted(league.group_by("x_lo").agg(pl.col("attempts").sum())["attempts"].to_list()) == sorted(hand["len"])
 
 
@@ -203,7 +214,7 @@ def test_nfl_kicks_and_fourth_downs(nfl_pbp, nfl_curves):
     standing = nfl_pbp.filter(pl.col("play_type").is_in(["pass", "run"]) & pl.col("down").is_between(1, 4))
     assert sdd["attempts"].sum() == standing.height == 1198
     # one team-season does not reach every down x distance cell (no 4th-and-11+ attempt): absent, not zero
-    cells = standing.group_by("down", pl.col("ydstogo").cut([2, 4, 7, 11], left_closed=True)).len()
+    cells = standing.group_by("down", _bucket("ydstogo", [2, 4, 7, 11])).len()
     assert sdd.height == cells.height == 19
 
 

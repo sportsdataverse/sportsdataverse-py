@@ -14,9 +14,14 @@ from __future__ import annotations
 from pathlib import Path
 
 import polars as pl
+import pytest
 
 from sportsdataverse.mbb.mbb_prediction_constants import mae, spearman_corr
 from sportsdataverse.mbb.mbb_team_ratings import adjust_efficiency, raw_game_efficiency
+
+# The 2024 fixture has one game whose box score shows 0 turnovers under every key, which
+# raw_game_efficiency drops with a warning; tests/mbb/test_mbb_team_ratings.py asserts it.
+pytestmark = pytest.mark.filterwarnings("ignore:raw_game_efficiency. dropped:UserWarning")
 
 FIX = Path(__file__).resolve().parents[1] / "fixtures" / "mbb_prediction"
 

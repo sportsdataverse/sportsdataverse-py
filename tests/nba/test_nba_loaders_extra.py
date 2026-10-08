@@ -84,7 +84,8 @@ def test_missing_season_is_skipped_not_fatal(monkeypatch):
 
 def test_no_published_season_returns_an_empty_frame(monkeypatch):
     monkeypatch.setattr(nba_extra, "_read_release_parquet", lambda url, *a, **k: None)
-    out = nba_extra.load_nba_stats_leaguedash("standings", [1996, 1997])
+    with pytest.warns(UserWarning, match=r"no standings data for season\(s\) \[1996, 1997\]"):
+        out = nba_extra.load_nba_stats_leaguedash("standings", [1996, 1997])
     assert isinstance(out, pl.DataFrame) and out.height == 0
 
 
