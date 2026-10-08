@@ -138,7 +138,8 @@ def add_coord_transforms(pbp: pl.DataFrame) -> pl.DataFrame:
     Ported from ``fastRhockey::pwhl_pbp`` (R/pwhl_pbp.R, lines 484-496).
 
     Raw coordinates (``x_coord``, ``y_coord``) come from the HockeyTech feed
-    on an approximately 850×400 canvas.  This function adds ten derived
+    on a 600×300 canvas with a top-left origin, so centre ice is (300, 150).
+    Every probed league uses this one canvas.  This function adds ten derived
     columns that map those raw values into various normalized frames used by
     fastRhockey.
 

@@ -742,10 +742,13 @@ from sportsdataverse.hockey.bchl import bchl_pbp   # per-league module
   disagree — a scorebar row's `league_id` is a different namespace). Every
   single-league client uses `league_id=1`; the CHL-cluster majors keep curated
   ids (ahl=4, whl=7, qmjhl=6).
-- **`pbp_style`** is the coordinate-canvas dialect (`hockeytech_a` ≈ 850×400 /
-  `hockeytech_b` ≈ 600×300). New leagues default to `_b`; flip to `_a` only after
-  a `gameCenterPlayByPlay` coordinate-range probe shows the big canvas. Classify
-  by observed range, **not** pro/junior tier (ECHL is pro but small-canvas).
+- **`pbp_style`** (`hockeytech_a` / `hockeytech_b`) is a payload-dialect label
+  that no code reads for canvas purposes: `parse_pbp` sends both to the same
+  parser, so it changes neither parsing nor coordinates. Every league ships
+  `x_coord`/`y_coord` on one **600×300 canvas, top-left origin, centre ice at
+  (300,150)**; the 2026-10-08 `gameCenterPlayByPlay` probe of PWHL, AHL, OHL and
+  ECHL found no x > 600 or y > 300, and PWHL and OHL share one faceoff-dot grid.
+  There is no 850×400 canvas. New leagues default to `_b`.
 - **Per-league PBP caveats:** `ushl` gamecenter ships goals/penalties/goalie
   changes only (no coordinates); `mjhl` (probed 2026-10-05) is the same: its
   `gameCenterPlayByPlay` returns goals/penalties/goalie changes only (no

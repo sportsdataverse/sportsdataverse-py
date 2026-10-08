@@ -153,7 +153,7 @@ def pwhl_pbp(game_id: int, return_as_pandas: bool = False) -> Any:
     Returns:
         polars.DataFrame: One row per event (shot, goal, penalty, faceoff, hit, goalie
             change ...): ``game_id``, ``event``, ``team_id``, ``period_of_game``,
-            ``time_of_period``, rink ``x_coord`` / ``y_coord`` (Float64, hockeytech_a canvas)
+            ``time_of_period``, rink ``x_coord`` / ``y_coord`` (Float64, raw 600×300 coordinates)
             and the transforms above, the primary / second / third player and goalie ids
             (Float64) and names, the plus / minus skaters on a goal, ``is_goal_twin``, and the
             clock, geometry, game-meta and on-ice columns listed above. A pandas DataFrame
