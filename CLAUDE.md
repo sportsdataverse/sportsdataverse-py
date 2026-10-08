@@ -67,7 +67,7 @@ When this guide differs from current repository docs, treat
 - **Branch:** `main` is the default branch and release branch.
 - **Python target:** 3.9, 3.10, 3.11, 3.12, 3.13, 3.14
 - **Packaging:** uv (PEP 621 `[project]` + PEP 735 `[dependency-groups]`)
-- **DataFrame engine:** polars 1.x (the `0.36-live` branch is a parallel
+- **DataFrame engine:** polars 1.x and 2.x (the `0.36-live` branch is a parallel
   pandas-based line of development; see "Branches" below)
 
 ## Commit Convention
@@ -96,7 +96,7 @@ is the sole attributable contributor.
 
 ## Branches
 
-- **`main`** — default; uses **polars 1.x** end-to-end. Recently migrated
+- **`main`** — default; uses **polars** (1.x and 2.x) end-to-end. Migrated
   from polars 0.18 → 1.x and converted to uv-based packaging (May 2026).
 - **`0.36-live`** — parallel pandas-based line of development. Carries CFB
   PBP bug fixes (kneel-down handling, half-edge cases, turnover detection,
@@ -930,10 +930,28 @@ two a missing file is — and never let a 403 take the "absent" branch.
 
 ### Polars version
 
-Pinned to `polars>=1.0,<2.0`. All seven `*_pbp.py` modules (cfb, nfl, nba,
-nhl, mbb, wbb, wnba) were migrated wholesale from the 0.18 surface to 1.x
-in May 2026 — roughly 165 call sites. If you find a 0.18-style API in
-this codebase, treat it as a bug, not a style preference.
+Constrained to `polars>=1.0,<3`. The lock resolves **2.0** on Python >= 3.10 and **1.36** on
+Python 3.9 (polars 2.0 needs 3.10), so every change must run on both. All seven `*_pbp.py`
+modules were migrated from the 0.18 surface to 1.x in May 2026 (about 165 call sites) and made
+2.0-safe in #719. A 0.18-style API in this codebase is a bug, not a style preference.
+
+Rules that keep code working on both 1.x and 2.0:
+
+- `list.to_struct(fields=[...])`, with `fields` as a keyword. `upper_bound` and `n_field_strategy` are gone in 2.0.
+- Pass `empty_as_null=` explicitly to every `explode()`. In 2.0 an empty list explodes to zero rows, not a null row.
+- Never `.cast(pl.Date/pl.Datetime)` a String column (2.0 raises). Use `str.to_date()` / `str.to_datetime()`,
+  or `sportsdataverse._temporal.as_date()` when the column's dtype depends on the loader.
+- `is_in` needs compatible dtypes: an Int column against a float list (or the reverse) raises in 2.0. Fix the
+  dtype at the boundary. pandas `json_normalize` -> `from_pandas` turns an int column with a gap into Float64.
+- `pl.concat(how="horizontal")` requires equal heights (`how="horizontal_extend"` pads).
+- `pl.DataFrame()` has height 0 in 2.0, so `pl.DataFrame().with_columns(x=pl.lit(1))` is empty. Build the frame
+  from its data instead.
+- Lazy `collect()` runs the streaming engine by default in 2.0.
+- `cut()`/`qcut()` are deprecated in 2.0, but their `bin_*` replacements don't exist in 1.x. Keep `cut`/`qcut`
+  until the floor moves to 2.0.
+- `hash()` / `hash_rows()` values change between polars versions. Never persist them.
+- `unpivot(variable_name=, value_name=)` raises in 2.0 when a melted column already has that name (1.x allowed
+  it; the upgrade guide does not mention it). Use names no input column can take, such as `value_name="__value"`.
 
 Use the modern API surface:
 
@@ -1179,7 +1197,7 @@ assert against committed fixtures; live tests carry `@skip_if_no_live`
 - `CONTRIBUTING.md` is the canonical contributor onboarding file (covers
   uv, conda, lint/typecheck, dep-bumping flow).
 - `README.md` has Standard pip / Modern uv / Development install paths plus the
-  runtime notes (Python 3.9-3.14, polars 1.x, NFL cache). There is no Conda
+  runtime notes (Python 3.9-3.14, polars 1.x/2.x, NFL cache). There is no Conda
   section in the README; the recipe lives in `recipe/`.
 - `recipe/meta.yaml` + `recipe/README.md` ship the conda-build recipe and
   document the conda-forge feedstock submission flow. The local-source

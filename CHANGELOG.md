@@ -366,6 +366,13 @@
 
 ## Unreleased
 
+### Changed — polars 2.x is allowed; the lock moves to polars 2.0.0
+
+The runtime constraint is now `polars>=1.0,<3` (was `<2.0`), mirrored in `recipe/meta.yaml`. The
+lock resolves polars **2.0.0** on Python >= 3.10. Python 3.9 stays on **1.36.1**, because polars
+2.0 requires Python 3.10. The code already runs on both (see the polars 2.0 fix below); the full
+suite passes on the 2.0 lock. Nothing else moved in the lock.
+
 ### Added — Expected Threat: XThreat, soccer_xthreat_rate() and a bundled grid
 
 `XThreat` fits an Expected Threat grid from SPADL actions and `soccer_xthreat_rate(actions)` appends
