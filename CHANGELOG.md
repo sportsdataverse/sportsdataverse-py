@@ -3,6 +3,8 @@
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
 - [Unreleased](#unreleased)
+  - [Fixed — NHL EDGE top-10 boards, ESPN transactions, NFL fantasy-ranking dtypes](#fixed--nhl-edge-top-10-boards-espn-transactions-nfl-fantasy-ranking-dtypes)
+  - [Docs — every public function documents its return, and shows a returns table or says why not](#docs--every-public-function-documents-its-return-and-shows-a-returns-table-or-says-why-not)
   - [Changed — polars 2.x is allowed; the lock moves to polars 2.0.0](#changed--polars-2x-is-allowed-the-lock-moves-to-polars-200)
   - [Added — Expected Threat: XThreat, soccer_xthreat_rate() and a bundled grid](#added--expected-threat-xthreat-soccer_xthreat_rate-and-a-bundled-grid)
   - [Fixed — soccer_open_events() and soccer_open_dataset() failed in a fresh interpreter](#fixed--soccer_open_events-and-soccer_open_dataset-failed-in-a-fresh-interpreter)
@@ -368,6 +370,26 @@
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## Unreleased
+
+### Fixed — NHL EDGE top-10 boards, ESPN transactions, NFL fantasy-ranking dtypes
+
+- The twelve `nhl_edge_*_top_10` functions always returned an empty frame. The EDGE boards answer
+  with a bare JSON list and `parse_edge_top10` accepted only a dict. Eight of their documented
+  examples also used values the API rejects (`sort_by="points"`, `strength="ev"`).
+- `espn_<league>_transactions` parsed to an empty frame because it ran the generic item parser; it
+  now uses `parse_transactions`.
+- `load_nfl_ff_rankings` read `rank_delta` as String early in a season, when its first 100 cells are
+  empty. The CSV schema is now inferred from the whole file.
+- The KenPom `box`, `win_probability` and `referee` examples used ids KenPom does not recognise, and
+  KenPom silently served its home page instead. `kenpom_referee` takes the numeric `r=` id.
+
+### Docs — every public function documents its return, and shows a returns table or says why not
+
+- `generate.py --check` fails when a public callable has no `Returns:` (or `Yields:`) section.
+- Generated wrappers and hand-written DataFrame functions show a returns table captured from real
+  data. Where none can be captured, the page says why: the host refuses a datacenter IP, the route
+  needs a login, the parser reads none of the live payload, or no package function produces the
+  input. A new `tools/codegen/capture_fixtures.py` captures endpoint payloads.
 
 ### Changed — polars 2.x is allowed; the lock moves to polars 2.0.0
 
