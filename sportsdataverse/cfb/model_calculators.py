@@ -16,6 +16,7 @@ from typing import Any
 
 import numpy as np
 import polars as pl
+import xgboost
 from xgboost import DMatrix
 
 from sportsdataverse.cfb.model_cards import card_era_contract, card_features
@@ -162,7 +163,10 @@ def predict_from_card(df: pl.DataFrame, model: str, booster: Any) -> np.ndarray:
     # Selected in the CARD's order, never the frame's: XGBoost aligns a DMatrix
     # by position, so frame order would silently score against wrong columns.
     matrix = df.select(feats).to_pandas()
-    return booster.predict(DMatrix(matrix, feature_names=feats))
+    # An empty frame scores to an empty result of the right shape; only XGBoost's
+    # "Empty dataset" log line is silenced, and only then.
+    with xgboost.config_context(verbosity=0 if df.height == 0 else xgboost.get_config()["verbosity"]):
+        return booster.predict(DMatrix(matrix, feature_names=feats))
 
 
 def add_era_columns(df: pl.DataFrame, model: str, season: int | None = None) -> pl.DataFrame:
