@@ -68,14 +68,14 @@ def patched_api(monkeypatch):
 
 @pytest.mark.parametrize("lg", LEAGUES)
 def test_league_season_id(patched_api, lg):
-    mod = importlib.import_module(f"sportsdataverse.{lg}")
+    mod = importlib.import_module(f"sportsdataverse.hockey.{lg}")
     df = getattr(mod, f"{lg}_season_id")()
     assert isinstance(df, pl.DataFrame)
 
 
 @pytest.mark.parametrize("lg", LEAGUES)
 def test_league_schedule(patched_api, lg):
-    mod = importlib.import_module(f"sportsdataverse.{lg}")
+    mod = importlib.import_module(f"sportsdataverse.hockey.{lg}")
     df = getattr(mod, f"{lg}_schedule")(season_id=8)
     assert isinstance(df, pl.DataFrame)
     assert df.height == 120
@@ -83,7 +83,7 @@ def test_league_schedule(patched_api, lg):
 
 
 @pytest.mark.parametrize(
-    "module, fn", [("sportsdataverse.ahl", "ahl_schedule"), ("sportsdataverse.pwhl", "pwhl_schedule")]
+    "module, fn", [("sportsdataverse.hockey.ahl", "ahl_schedule"), ("sportsdataverse.pwhl", "pwhl_schedule")]
 )
 def test_schedule_asks_the_season_scoped_view(monkeypatch, module, fn):
     """``modulekit/schedule`` filters by season on the server; ``scorebar`` ignores ``season_id``."""
@@ -104,7 +104,7 @@ def test_schedule_asks_the_season_scoped_view(monkeypatch, module, fn):
 
 
 @pytest.mark.parametrize(
-    "module, fn", [("sportsdataverse.ahl", "ahl_schedule"), ("sportsdataverse.pwhl", "pwhl_schedule")]
+    "module, fn", [("sportsdataverse.hockey.ahl", "ahl_schedule"), ("sportsdataverse.pwhl", "pwhl_schedule")]
 )
 def test_schedule_without_a_season_asks_the_newest_regular_season(monkeypatch, module, fn):
     """``pwhl_seasons`` ends at the 2026-27 preseason (id 10); the default is the newest regular season (id 8)."""
@@ -130,14 +130,14 @@ def test_schedule_without_a_season_asks_the_newest_regular_season(monkeypatch, m
 # live seasons lookup -- only the mocked hockeytech_api feeds the parsers.
 @pytest.mark.parametrize("lg", LEAGUES)
 def test_league_standings(patched_api, lg):
-    mod = importlib.import_module(f"sportsdataverse.{lg}")
+    mod = importlib.import_module(f"sportsdataverse.hockey.{lg}")
     df = getattr(mod, f"{lg}_standings")(season_id=5)
     assert isinstance(df, pl.DataFrame)
 
 
 @pytest.mark.parametrize("lg", LEAGUES)
 def test_league_teams(patched_api, lg):
-    mod = importlib.import_module(f"sportsdataverse.{lg}")
+    mod = importlib.import_module(f"sportsdataverse.hockey.{lg}")
     df = getattr(mod, f"{lg}_teams")(season_id=5)
     assert isinstance(df, pl.DataFrame)
     assert df.height > 0
@@ -145,7 +145,7 @@ def test_league_teams(patched_api, lg):
 
 @pytest.mark.parametrize("lg", LEAGUES)
 def test_league_pandas_roundtrip(patched_api, lg):
-    mod = importlib.import_module(f"sportsdataverse.{lg}")
+    mod = importlib.import_module(f"sportsdataverse.hockey.{lg}")
     df = getattr(mod, f"{lg}_teams")(season_id=5, return_as_pandas=True)
     assert isinstance(df, pd.DataFrame)
 
@@ -154,7 +154,7 @@ def test_all_four_leagues_share_one_surface():
     """The four families expose the same ``<lg>_*`` function set (one codebase)."""
     surfaces = {}
     for lg in LEAGUES:
-        mod = importlib.import_module(f"sportsdataverse.{lg}")
+        mod = importlib.import_module(f"sportsdataverse.hockey.{lg}")
         surfaces[lg] = {f[len(lg) + 1 :] for f in dir(mod) if f.startswith(f"{lg}_")}
     ref = surfaces["ahl"]
     assert len(ref) >= 10

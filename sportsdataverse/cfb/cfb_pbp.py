@@ -16,6 +16,7 @@ from importlib.resources import files as _resource_files
 import numpy as np
 import pandas as pd
 import polars as pl
+import xgboost
 from xgboost import Booster, DMatrix
 
 #: ESPN's OWN verdict that a play did not count. This is the reliable negation
@@ -8711,7 +8712,10 @@ class CFBPlayProcess(object):
         # # self.logger.info(pass_qbr)
 
         dtest_qbr = DMatrix(pass_qbr[qbr_vars])
-        qbr_result = qbr_model.predict(dtest_qbr)
+        # No passers yet (a live game's opening drive): score the empty frame without XGBoost's
+        # "Empty dataset" log line.
+        with xgboost.config_context(verbosity=0 if pass_qbr.height == 0 else xgboost.get_config()["verbosity"]):
+            qbr_result = qbr_model.predict(dtest_qbr)
         pass_qbr = pass_qbr.with_columns(exp_qbr=pl.lit(qbr_result))
         # LEFT, not inner: QBR is an enrichment. An inner join means any failure
         # to score QBR deletes the passing box score outright, which is how a

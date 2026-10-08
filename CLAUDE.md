@@ -1008,10 +1008,11 @@ un-typed and stay out of the gate's `files` scope until cleaned.
 ### Test gating
 
 Live-API tests use `@skip_if_no_live` from `tests/conftest.py` and run only
-when `SDV_PY_LIVE_TESTS=1` is set. `tests.yml` sets it on every PR + push by
-default (a `workflow_dispatch` with `live_tests=false` opts out), and the weekly
-`live-tests-cron.yml` always sets it — so the live suite DOES run on CI; keep
-gated tests resilient to upstream flakiness.
+when `SDV_PY_LIVE_TESTS=1` is set. `tests.yml`'s live job sets it on pushes to
+main and manual runs, not on PRs (a `workflow_dispatch` with `live_tests=false` opts
+out), and the weekly `live-tests-cron.yml` always sets it. A live test that hits a
+timeout, dropped connection or 429/5xx skips instead of failing (`tests/conftest.py`
+hook), so keep gated tests resilient to everything else.
 
 **`stats.nba.com` / `stats.wnba.com` exception (`skip_if_no_nba_stats_live`):**
 those hosts hang on datacenter / cloud IPs (the TLS/JA3 fingerprint block
@@ -1072,7 +1073,11 @@ ruff is both linter and formatter. `line-length = 120` and `line-ending = "lf"` 
 One `tests/<pkg>/` subdir per source package; parser tests are payload-agnostic and
 assert against committed fixtures; live tests carry `@skip_if_no_live`
 (`SDV_PY_LIVE_TESTS=1`), and `nba_stats` / `wnba_stats` carry
-`@skip_if_no_nba_stats_live` (`SDV_PY_NBA_STATS_LIVE=1`) instead.
+`@skip_if_no_nba_stats_live` (`SDV_PY_NBA_STATS_LIVE=1`) instead. Warnings are errors
+(`pytest.ini`): a test that exercises a warning path asserts it with
+`pytest.warns(..., match=...)`, and one that trips a warning incidentally filters exactly
+that message with a comment naming the test that asserts it. Fix a warning from our own
+code at the source; never blanket-ignore a category.
 
 ## Common Pitfalls
 

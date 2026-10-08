@@ -92,11 +92,12 @@ jobs:
           --deselect tests/test_mlb_statcast_codegen.py::test_codegen_drift_clean
 
   live:
-    name: pytest (live APIs, macOS)
+    name: pytest (live APIs)
     # Only on main and manual runs: live endpoints are third-party and flaky, and a
     # PR author cannot act on an upstream outage.
     if: github.event_name != 'pull_request'
-    runs-on: macos-latest
+    # Ubuntu: nothing here is platform-specific, and the macOS runners were the flaky part.
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
       - name: Install uv
@@ -107,12 +108,6 @@ jobs:
           cache-dependency-glob: "uv.lock"
       - name: Set up Python
         run: uv python install 3.13.2
-      # xgboost on macOS dynamically links against libomp.dylib and apple-clang
-      # doesn't ship OpenMP. The macos-15 runner image stopped pre-installing
-      # libomp via Homebrew, so xgboost.core raises "OpenMP runtime is not
-      # installed" at import time. This job is the only one that catches that.
-      - name: Install macOS runtime deps for xgboost (libomp)
-        run: brew install libomp
       - name: Install project + extras + dep groups
         run: uv sync --all-extras --all-groups --frozen --python 3.13.2
       - name: Run tests (live API tests included)
@@ -124,4 +119,5 @@ jobs:
           # plus backoff. A CI failure should surface in seconds, not minutes.
           SDV_PY_HTTP_RETRIES: "3"
           SDV_PY_HTTP_TIMEOUT: "15"
-        run: uv run --frozen pytest -n auto --dist loadgroup --maxfail=10 --cov=sportsdataverse --cov-report=term-missing:skip-covered
+        # -W default: warnings report here rather than fail; the PR jobs enforce pytest.ini's `error`.
+        run: uv run --frozen pytest -n auto --dist loadgroup --maxfail=10 -W default --cov=sportsdataverse --cov-report=term-missing:skip-covered

@@ -641,7 +641,7 @@ def test_walk_forward_beats_shuffled_date_control():
         zip(sorted(poss["game_id"].unique().to_list()), rng.permutation(dates * 100)[: poss["game_id"].n_unique()])
     )
     shuffled_poss = poss.with_columns(
-        pl.col("game_id").map_elements(lambda g: shuffled_map[g], return_dtype=pl.Date).alias("game_date")
+        pl.col("game_id").replace_strict(shuffled_map, return_dtype=pl.Date).alias("game_date")
     )
     res_shuffled = walk_forward(RidgeRapmModel(), shuffled_poss, horizon_days=10, min_games_before_first_checkpoint=20)
     # The planted skills are STATIC across the synthetic season, so shuffling

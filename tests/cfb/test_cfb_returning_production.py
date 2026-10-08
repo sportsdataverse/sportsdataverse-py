@@ -191,7 +191,8 @@ class TestSeason2004:
         monkeypatch.setattr(rp, "_load_production_2003", lambda: prod_2003)
         monkeypatch.setattr(rp, "_roster_keys", lambda _s: roster_2004)
 
-        out = rp.cfb_returning_production(2004)
+        with pytest.warns(UserWarning, match=r"def_returning is present for only"):
+            out = rp.cfb_returning_production(2004)
         assert out.height == 1
         row = out.row(0, named=True)
         assert row["season"] == 2004
@@ -224,7 +225,8 @@ class TestSeason2004:
         )
         called = []
         monkeypatch.setattr(rp, "_load_production_2003", lambda: called.append(1) or pl.DataFrame())
-        out = rp.cfb_returning_production(2005)
+        with pytest.warns(UserWarning, match=r"def_returning is present for only"):
+            out = rp.cfb_returning_production(2005)
         assert not called, "the 2003 table must not be fetched for a normal season"
         assert out["is_estimated"].to_list() == [False]
 

@@ -15,6 +15,10 @@ import sys
 
 import pytest
 
+# These tests use the deprecated sportsdataverse.parsed namespace on purpose; its import-time
+# DeprecationWarning is asserted in tests/test_deprecation.py, not repeated here.
+pytestmark = pytest.mark.filterwarnings(r"ignore:sportsdataverse\.parsed\.\w+ is deprecated:DeprecationWarning")
+
 _LEAGUES = ("nba", "wnba", "mbb", "wbb", "cfb", "nfl", "mlb", "nhl")
 
 

@@ -19,7 +19,8 @@ from sportsdataverse.nfl import calculate_nfl_standings
 # calculate_nfl_standings is deprecated in favor of nfl_season_standings; the
 # behavior tests below still exercise the reduced ladder, so silence the
 # DeprecationWarning here (a dedicated test asserts it still fires).
-pytestmark = pytest.mark.filterwarnings("ignore::DeprecationWarning")
+# calculate_nfl_standings is the deprecated alias these tests exercise; the last test asserts its warning.
+pytestmark = pytest.mark.filterwarnings("ignore:calculate_nfl_standings is a reduced:DeprecationWarning")
 
 
 def _teams() -> pl.DataFrame:
@@ -192,7 +193,6 @@ def test_standings_return_as_pandas() -> None:
     assert out.shape[0] == 4
 
 
-@pytest.mark.filterwarnings("default::DeprecationWarning")
 def test_standings_emits_deprecation_pointing_to_season_standings() -> None:
     with pytest.warns(DeprecationWarning, match="nfl_season_standings"):
         calculate_nfl_standings(_games(), teams=_teams())

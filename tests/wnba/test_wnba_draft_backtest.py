@@ -19,6 +19,7 @@ honest constant instead of silently regressing to a fake-looking fit.
 from __future__ import annotations
 
 import json
+from pathlib import Path
 
 import numpy as np
 import polars as pl
@@ -183,7 +184,7 @@ def test_wnba_rookie_projection_holdout_ranks_realized_value() -> None:
     curve = nba_aging_curve(league="wnba").select("age", "rel_value")
     rel_rookie = float(curve.filter(pl.col("age") == 22)["rel_value"][0])
 
-    rr_art = json.loads(open("sportsdataverse/nba/models/wnba_rookie_projection.json", encoding="utf-8").read())
+    rr_art = json.loads(Path("sportsdataverse/nba/models/wnba_rookie_projection.json").read_text(encoding="utf-8"))
     rookie_fraction = rr_art["rookie_fraction"]
     residual = rr_art["residual"]
 

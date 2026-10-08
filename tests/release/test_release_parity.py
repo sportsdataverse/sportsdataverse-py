@@ -362,13 +362,18 @@ def test_release_upload_skips_missing_files(gh_recorder, tmp_path):
     present.write_text("a\n")
     missing = tmp_path / "gone.csv"
 
-    assert release.gh_cli_release_upload([present, missing], tag="t") is True
+    with pytest.warns(UserWarning, match=r"files are missing"):
+        assert release.gh_cli_release_upload([present, missing], tag="t") is True
     assert [c[3] for c in gh_recorder] == [str(present)]
 
 
 def test_release_upload_all_missing_returns_false(gh_recorder, tmp_path):
     # R: warns then `return(invisible(FALSE))` (gh_cli.R L40-43)
-    assert release.gh_cli_release_upload([tmp_path / "nope.csv"], tag="t") is False
+    with (
+        pytest.warns(UserWarning, match=r"files are missing"),
+        pytest.warns(UserWarning, match=r"nothing left to upload"),
+    ):
+        assert release.gh_cli_release_upload([tmp_path / "nope.csv"], tag="t") is False
     assert gh_recorder == []
 
 

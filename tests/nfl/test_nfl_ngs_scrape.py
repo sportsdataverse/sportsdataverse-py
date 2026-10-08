@@ -166,7 +166,8 @@ def test_scrape_week_empty_on_no_stats(monkeypatch):
 def test_scrape_season_empty_when_every_week_empty(monkeypatch):
     empty_payload = {"season": 2023, "seasonType": "REG", "stats": []}
     _patch(monkeypatch, empty_payload, _fake_teams_payload())
-    df = scrape_ngs_season("passing", 2023)
+    with pytest.warns(UserWarning, match=r"NGS returned no season-aggregate"):
+        df = scrape_ngs_season("passing", 2023)
     assert df.height == 0
     assert "player_gsis_id" in df.columns
 

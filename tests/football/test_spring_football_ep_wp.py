@@ -21,6 +21,10 @@ from sportsdataverse.football.spring_football_constants import SPRING_FOOTBALL_C
 from sportsdataverse.football.spring_football_ep_wp import build_spring_football_pbp, enrich_spring_football_pbp
 from sportsdataverse.nfl.model_vars import NFLVERSE_FRAME_CONTRACT
 
+# XFL / UFL frames lack the xYAC and 4th-down inputs, and enrich_spring_football_pbp keeps that warning
+# on purpose; tests/football/test_spring_football_shims.py asserts it.
+pytestmark = pytest.mark.filterwarnings(r"ignore:enrich_nfl_pbp\x3a skipping:RuntimeWarning")
+
 FIXTURE_DIR = Path(__file__).resolve().parents[1] / "fixtures" / "league_ports"
 
 

@@ -3,6 +3,7 @@ from __future__ import annotations
 import numpy as np
 import polars as pl
 import pytest
+from scipy.special import expit
 
 from sportsdataverse.nba.nba_draft_constants import (
     as_of_class_split,
@@ -44,9 +45,9 @@ def test_logistic_separates() -> None:
     rng = np.random.default_rng(1)
     X = rng.normal(size=(300, 2))
     z = X @ np.array([3.0, -3.0])
-    y = (1 / (1 + np.exp(-z)) > 0.5).astype(int)
+    y = (z > 0).astype(int)  # == logistic(z) > 0.5
     beta = logistic_fit_irls(X, y)
-    p = 1 / (1 + np.exp(-(beta[0] + X @ beta[1:])))
+    p = expit(beta[0] + X @ beta[1:])
     assert auc(y, p) > 0.95
 
 

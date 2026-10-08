@@ -26,6 +26,7 @@ from dataclasses import dataclass, field
 
 import numpy as np
 import polars as pl
+from scipy.special import expit
 from scipy.stats import rankdata
 from sportsdataverse._common.metrics import (
     calibration_table as calibration_table,
@@ -128,7 +129,7 @@ def logistic_fit_irls(X: np.ndarray, y: np.ndarray, *, max_iter: int = 50, tol: 
     beta = np.zeros(Xi.shape[1])
     for _ in range(max_iter):
         eta = Xi @ beta
-        mu = 1 / (1 + np.exp(-eta))
+        mu = expit(eta)  # 1 / (1 + exp(-eta)) without overflowing once separable data drives |eta| up
         w = np.clip(mu * (1 - mu), 1e-9, None)
         z = eta + (yv - mu) / w
         beta_new = np.linalg.solve((Xi * w[:, None]).T @ Xi + 1e-6 * np.eye(Xi.shape[1]), (Xi * w[:, None]).T @ z)

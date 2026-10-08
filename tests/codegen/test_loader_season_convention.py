@@ -79,6 +79,7 @@ def _requested_url(fn_name: str, league: str, season: int) -> str:
     return box["url"]
 
 
+@pytest.mark.filterwarnings(r"ignore:load_nba_stats_\w+_v3 is deprecated:DeprecationWarning")  # asserted below
 @pytest.mark.parametrize(("fn_name", "league", "season", "asset"), CASES)
 def test_public_season_resolves_to_expected_asset(fn_name, league, season, asset):
     assert _requested_url(fn_name, league, season).endswith("/" + asset)
@@ -137,6 +138,7 @@ def test_only_nba_stats_families_carry_the_end_year_offset():
     assert not any(fn.startswith("load_wnba") for fn in offset)
 
 
+@pytest.mark.filterwarnings(r"ignore:load_nba_stats_\w+_v3 is deprecated:DeprecationWarning")  # asserted below
 @pytest.mark.parametrize(("shim", "target"), SHIMS)
 def test_shim_is_a_pure_pass_through(shim, target):
     """The shim must not apply its own year arithmetic.
@@ -149,6 +151,8 @@ def test_shim_is_a_pure_pass_through(shim, target):
         assert _requested_url(shim, "nba", season) == _requested_url(target, "nba", season)
 
 
+# The shim forwards to a stubbed target that finds no season, which warns "no data" (asserted in test_on_missing.py).
+@pytest.mark.filterwarnings(r"ignore:load_nba_stats_\w+\x3a no data for season:UserWarning")
 @pytest.mark.parametrize(("shim", "target"), SHIMS)
 def test_shim_warns_and_names_its_replacement(shim, target):
     import importlib

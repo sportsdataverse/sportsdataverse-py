@@ -6,6 +6,7 @@ import functools
 from pathlib import Path
 
 import polars as pl
+import pytest
 
 from sportsdataverse.nhl.nhl_gsax import nhl_goalie_gsax
 from sportsdataverse.nhl.nhl_rapm import nhl_skater_rapm
@@ -46,19 +47,23 @@ def test_pwhl_xg_runs_on_a_pwhl_shaped_synthetic_frame_via_borrowed_nhl_boosters
 
 def test_pwhl_rapm_family_returns_documented_empty_frame_on_empty_shifts(capsys):
     empty_pbp, empty_shifts = pl.DataFrame(), pl.DataFrame()
-    rapm = pwhl_skater_rapm(empty_pbp, empty_shifts)
+    with pytest.warns(UserWarning, match=r"pwhl_skater_rapm: insufficient PWHL shift-chart coverage"):
+        rapm = pwhl_skater_rapm(empty_pbp, empty_shifts)
     assert rapm.height == 0
     assert set(rapm.columns) == set(nhl_skater_rapm(pl.DataFrame(), pl.DataFrame()).columns)
 
-    units = pwhl_unit_ratings(empty_pbp, empty_shifts)
+    with pytest.warns(UserWarning, match=r"pwhl_unit_ratings: insufficient PWHL shift-chart coverage"):
+        units = pwhl_unit_ratings(empty_pbp, empty_shifts)
     assert units.height == 0
     assert set(units.columns) == set(nhl_unit_ratings(pl.DataFrame(), pl.DataFrame()).columns)
 
-    st = pwhl_special_teams_value(empty_pbp, empty_shifts)
+    with pytest.warns(UserWarning, match=r"pwhl_special_teams_value: insufficient PWHL shift-chart coverage"):
+        st = pwhl_special_teams_value(empty_pbp, empty_shifts)
     assert st.height == 0
     assert set(st.columns) == set(nhl_special_teams_value(pl.DataFrame(), pl.DataFrame()).columns)
 
-    war = pwhl_skater_war(empty_pbp, empty_shifts)
+    with pytest.warns(UserWarning, match=r"pwhl_skater_war: insufficient PWHL shift-chart coverage"):
+        war = pwhl_skater_war(empty_pbp, empty_shifts)
     assert war.height == 0
     assert set(war.columns) == set(nhl_skater_war(pl.DataFrame(), pl.DataFrame()).columns)
 

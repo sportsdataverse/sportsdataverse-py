@@ -8,8 +8,24 @@ Merged to `main` since 0.1.5 and not yet released. Released versions are on the 
 
 ## Unreleased
 
+### Changed
+
+- **Tests:** warnings are errors. A test asserts an expected warning with `pytest.warns(..., match=...)` or
+  filters an incidental one by exact message; live tests skip on a timeout or upstream 429/5xx, the
+  live job runs on Ubuntu, and the `tests` extra needs pytest >= 8.0. (#726)
+
+### Deprecated
+
+- **NBA / WNBA:** `load_nba_stats_{pbp,possessions,lineups}_v3` and the four `load_wnba_stats_*` shims
+  (`lineups`, `player_season_stats`, `standings`, `team_season_stats`) now say they will be removed in
+  0.2.0; they named 0.1.0, which has shipped. A test fails if a removal version falls behind again. (#726)
+
 ### Fixed
 
+- **CFB:** `get_go_wp` returns NaN for a 4th-down row with no `yards_to_goal` or `distance`, instead of
+  a garbage go-for-it value from casting NaN to an integer; other plays are unchanged. (#726)
+- **CFB:** scoring zero rows (QBR on a live game's opening drive, `predict_from_card` on an empty frame)
+  no longer logs XGBoost's "Empty dataset" warning. (#726)
 - **HockeyTech schedules returned other seasons' games.** `<league>_schedule(season=...)` for
   the 19 HockeyTech league families, and `pwhl_schedule`, read `modulekit/scorebar`. That view
   ignores the `season_id` it is sent, returns games oldest-first and stops at its 10,000-row
@@ -46,3 +62,7 @@ Merged to `main` since 0.1.5 and not yet released. Released versions are on the 
   measured 59 ft). Empty-net goals (`empty_net` "1") now measure to the net their team attacks;
   every other event is unchanged (sdv-internal-refs #52). `shot_distance`, `shot_angle`,
   `scoring_chance` and the xG features of those goals change.
+- **NBA:** `logistic_fit_irls` no longer overflows on separable data, and `nba_rapm` fits a single
+  possession without a divide-by-zero warning. (#726)
+- **NFL:** `get_go_wp` on a full nflverse frame no longer raises pandas `PerformanceWarning`s; output is
+  unchanged. (#726)

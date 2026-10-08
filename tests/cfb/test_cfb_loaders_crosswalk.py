@@ -59,7 +59,8 @@ def test_season_loader_url_locks_tag_and_filename(loader, stem, monkeypatch: pyt
         return None  # 404-safe path -> empty frame, no network
 
     monkeypatch.setattr(cl, "_read_release_parquet", fake)
-    loader(seasons=2024)
+    with pytest.warns(UserWarning, match=r"no data for season\(s\) \[2024\]"):
+        loader(seasons=2024)
     assert seen == [
         f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/cfb_crosswalk/{stem}_2024.parquet"
     ]
@@ -72,7 +73,8 @@ def test_season_loader_is_404_safe_and_concats(loader, stem, monkeypatch: pytest
         return pl.DataFrame({"espn_team_id": [194]}) if "2024" in url else None
 
     monkeypatch.setattr(cl, "_read_release_parquet", fake)
-    out = loader(seasons=[2024, 2025])
+    with pytest.warns(UserWarning, match=r"no data for season\(s\) \[2025\]"):
+        out = loader(seasons=[2024, 2025])
     assert isinstance(out, pl.DataFrame)
     assert out.height == 1
 

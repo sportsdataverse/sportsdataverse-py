@@ -431,3 +431,15 @@ def test_punt_path_itself_routes_return_touchdowns_to_the_winning_clamp(monkeypa
     # Up only 3, the same return TD puts them behind, so nothing is clamped.
     behind = get_punt_wp(pl.DataFrame([_row(sd=3, pto=3, **late)]))
     assert behind["punt_wp"].to_numpy()[0] < 1.0
+
+
+@requires_fd
+@pytest.mark.filterwarnings("error::RuntimeWarning")
+def test_go_wp_is_nan_for_a_play_with_no_yard_line(fourth_down_rows):
+    """A null yards_to_goal used to be cast to int64 (a garbage gain); the other plays are unchanged."""
+    rows = pl.concat([fourth_down_rows, pl.DataFrame([_row(4, 2, None)], schema=fourth_down_rows.schema)])
+    out = get_go_wp(rows)
+    alone = get_go_wp(fourth_down_rows)
+    for c in ("go_wp", "first_down_prob", "wp_succeed", "wp_fail"):
+        assert np.isnan(out[c].iloc[-1]), c
+        np.testing.assert_allclose(out[c].to_numpy()[:-1], alone[c].to_numpy(), err_msg=c)

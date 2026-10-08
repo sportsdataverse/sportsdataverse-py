@@ -62,7 +62,8 @@ def test_load_nba_player_impact_round_trips_schema(monkeypatch):
         return _impact_row(2023) if "2023" in url else (_impact_row(2024) if "2024" in url else None)
 
     monkeypatch.setattr(nba_loaders, "_read_release_parquet", fake_read)
-    out = nba_loaders.load_nba_player_impact(seasons=[2023, 2024, 2019])
+    with pytest.warns(UserWarning, match=r"no data for season\(s\) \[2019\]"):
+        out = nba_loaders.load_nba_player_impact(seasons=[2023, 2024, 2019])
     assert out.height == 2  # 2019 missing -> skipped, not raised
     assert dict(out.schema) == _IMPACT_SCHEMA  # documented schema round-trips exactly
 

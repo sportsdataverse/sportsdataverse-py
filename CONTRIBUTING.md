@@ -140,11 +140,15 @@ standalone import-sorting hook is inactive — plus
 - **Tests for new live-API modules** go under `tests/wbb/` or
   `tests/wnba/` (mirroring the source layout) and use the
   `skip_if_no_live` decorator from `tests/conftest.py`. Live tests are
-  gated by the `SDV_PY_LIVE_TESTS=1` environment variable, which `tests.yml` DOES
-set on every PR and push (opt out with a `workflow_dispatch` `live_tests=false`)
-and `live-tests-cron.yml` always sets; `nba_stats` / `wnba_stats` live tests use
+  gated by the `SDV_PY_LIVE_TESTS=1` environment variable, which `tests.yml`'s live job
+sets on pushes to main and manual runs (not on PRs; opt out with a `workflow_dispatch`
+`live_tests=false`) and `live-tests-cron.yml` always sets; `nba_stats` / `wnba_stats` live tests use
 the separate `SDV_PY_NBA_STATS_LIVE=1` gate that no workflow sets. Historically so CI and
   routine local runs do not hit upstream APIs.
+- **Warnings are errors** (`pytest.ini`). A test that exercises a warning path asserts
+  it with `pytest.warns(..., match=...)`; one that trips a warning incidentally filters
+  exactly that message, with a comment naming the test that asserts it. Fix a warning
+  from package code at the source.
 - **New `load_*` dataset modules** should mirror the existing
   `sportsdataverse/<sport>/<sport>_loaders.py` pattern: a thin parquet /
   CSV reader keyed by season, returning a `pl.DataFrame` (with

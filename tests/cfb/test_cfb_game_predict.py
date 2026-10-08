@@ -24,6 +24,10 @@ from sportsdataverse.cfb.cfb_game_predict import (
 )
 from sportsdataverse.cfb.cfb_prediction_constants import get_constants
 
+# The synthetic ratings carry no 'prior_off_pace', so every call warns that tempo is used raw;
+# tests/cfb/test_cfb_prediction_backtest.py asserts that warning.
+pytestmark = pytest.mark.filterwarnings(r"ignore:cfb_predict_games\x3a ratings frame has no:UserWarning")
+
 _C = get_constants("modern")
 
 

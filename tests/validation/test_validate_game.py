@@ -55,7 +55,7 @@ def _frame(**cols) -> pl.DataFrame:
 
 def _load(rel: str) -> dict:
     path = FIXTURES / rel
-    return json.loads(gzip.open(path, "rt").read()) if path.suffix == ".gz" else json.loads(path.read_text())
+    return json.loads(gzip.decompress(path.read_bytes())) if path.suffix == ".gz" else json.loads(path.read_text())
 
 
 def _process(league: str, game_id: int, rel: str):
