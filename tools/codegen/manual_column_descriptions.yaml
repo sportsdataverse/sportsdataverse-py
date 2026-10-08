@@ -10314,11 +10314,11 @@ load_cfb_rushing:
     the margin before the play). Null when there were none.
   EPAplay_one_score_n: 'Sample size behind EPAplay_one_score: the number of carries with the offense within 8 points either
     way at the snap the rusher''s value is computed over. 0 where EPAplay_one_score is null.'
-  EPAplay_p10: 10th percentile (the floor) of the rusher's per-game EPA per play (a game's EPA summed over the rusher's carrys,
-    divided by those carrys), across dispersion_games; linear interpolation (R type 7). Null when dispersion_games is below
+  EPAplay_p10: 10th percentile (the floor) of the rusher's per-game EPA per play (a game's EPA summed over the rusher's carries,
+    divided by those carries), across dispersion_games; linear interpolation (R type 7). Null when dispersion_games is below
     3.
   EPAplay_p90: 90th percentile (the ceiling) of the rusher's per-game EPA per play (a game's EPA summed over the rusher's
-    carrys, divided by those carrys), across dispersion_games; linear interpolation (R type 7). Null when dispersion_games
+    carries, divided by those carries), across dispersion_games; linear interpolation (R type 7). Null when dispersion_games
     is below 3.
   EPAplay_pct: Percentile position (0-100) of the player's EPA per play among qualifying players that season.
   EPAplay_pos_pct: Percentile (0-100) of EPA generated per play among rushers clearing the leaderboard minimum of 6.25 plays
@@ -10328,7 +10328,7 @@ load_cfb_rushing:
   EPAplay_rank: Rank of the rusher's EPA generated per play among rushers clearing the leaderboard minimum of 6.25 plays per
     team game, where 1 is best.
   EPAplay_sd: Population standard deviation (ddof=0) of the rusher's per-game EPA per play (a game's EPA summed over the rusher's
-    carrys, divided by those carrys), across dispersion_games. Null when dispersion_games is below 3.
+    carries, divided by those carries), across dispersion_games. Null when dispersion_games is below 3.
   TEPA: Total EPA summed over every play.
   TEPA_pct: Percentile position (0-100) of the player's total EPA among qualifying players that season.
   TEPA_pos_pct: Percentile (0-100) of total EPA summed over every play among rushers clearing the leaderboard minimum of 6.25
