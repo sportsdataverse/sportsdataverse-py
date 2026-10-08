@@ -49,10 +49,8 @@ import pytest
 
 LIVE: bool = os.environ.get("SDV_PY_LIVE_TESTS") == "1"
 
-skip_if_no_live = pytest.mark.skipif(
-    not LIVE,
-    reason="Set SDV_PY_LIVE_TESTS=1 to run tests that hit live external APIs",
-)
+_LIVE_REASON = "Set SDV_PY_LIVE_TESTS=1 to run tests that hit live external APIs"
+skip_if_no_live = pytest.mark.skipif(not LIVE, reason=_LIVE_REASON)
 
 
 def skip_on_transient_network_error(exc: BaseException) -> None:
@@ -66,10 +64,43 @@ def skip_on_transient_network_error(exc: BaseException) -> None:
     ESPN "incomplete data" gap does above -- never silently pass with fake
     data, and never assert on it either. Anything else re-raises.
     """
-    transient_status = isinstance(exc, HTTPError) and exc.code in (429, 502, 503, 504)
-    if transient_status or isinstance(exc, (URLError, ConnectionError, TimeoutError)):
+    if _is_transient(exc):
         pytest.skip(f"Live upstream fetch failed transiently: {exc}")
     raise exc
+
+
+def _is_transient(exc: BaseException | None) -> bool:
+    """A timeout, dropped connection or 429/5xx anywhere in ``exc``'s cause chain.
+
+    Covers requests' own ``Timeout`` / ``ConnectionError``, which are not the builtin classes.
+    """
+    import requests
+
+    seen = set()
+    while exc is not None and id(exc) not in seen:
+        seen.add(id(exc))
+        if isinstance(exc, HTTPError):  # a URLError subclass: decided by status, so a 404 still fails
+            return exc.code in (429, 502, 503, 504)
+        if isinstance(exc, (URLError, ConnectionError, TimeoutError, requests.Timeout, requests.ConnectionError)):
+            return True
+        exc = exc.__cause__ or exc.__context__
+    return False
+
+
+@pytest.hookimpl(wrapper=True)
+def pytest_runtest_call(item: pytest.Item):
+    """Every ``@skip_if_no_live`` test skips, rather than fails, on a transient upstream problem.
+
+    The live job runs on main only, where nobody can act on a third-party outage; a skip
+    still shows in the summary, and the next run retries.
+    """
+    try:
+        return (yield)
+    except Exception as exc:
+        live = any(m.kwargs.get("reason") == _LIVE_REASON for m in item.iter_markers("skipif"))
+        if live and _is_transient(exc):
+            pytest.skip(f"Live upstream fetch failed transiently: {exc!r}")
+        raise
 
 
 # stats.nba.com / stats.wnba.com hang on datacenter / cloud IPs: the TLS/JA3
