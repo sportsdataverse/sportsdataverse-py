@@ -180,7 +180,8 @@ def nba_rapm(
             An empty or fully-null-lineup frame returns a zero-row result.
         alphas: 1-D array of ridge penalty values to evaluate via cross-
             validation.  Defaults to :data:`DEFAULT_RAPM_ALPHAS`
-            (``np.logspace(2, 5, 8)``, i.e. 100 … 100 000).
+            (``np.logspace(2, 5, 8)``, i.e. 100 … 100 000). A single-possession
+            design cannot be cross-validated, so it is fit at ``max(alphas)``.
 
     Returns:
         A :class:`polars.DataFrame` with exactly the columns defined in
@@ -233,8 +234,8 @@ def nba_rapm(
     P = len(player_ids)
 
     # Fit RidgeCV — accepts sparse csr_matrix with default solver="auto". Its leave-one-out CV is
-    # undefined for a single possession (it divides by zero), so that case takes the grid's
-    # strongest prior, the shrink-to-zero the CV would pick anyway.
+    # undefined for a single possession (it divides by zero), so that case falls back to a plain
+    # Ridge at the grid's strongest penalty instead of cross-validating.
     model = RidgeCV(alphas=alphas, fit_intercept=True) if X.shape[0] > 1 else Ridge(alpha=max(alphas))
     model.fit(X, y)
 
