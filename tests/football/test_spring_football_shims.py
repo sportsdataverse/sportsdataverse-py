@@ -16,7 +16,7 @@ from sportsdataverse.football.xfl import xfl_pbp
 
 # UFL / XFL frames lack the xYAC and 4th-down inputs, and enrich_spring_football_pbp keeps that
 # warning on purpose (see its comment); test_ufl_and_xfl_pbp_share_the_same_core asserts it.
-pytestmark = pytest.mark.filterwarnings("ignore:enrich_nfl_pbp. skipping:RuntimeWarning")
+pytestmark = pytest.mark.filterwarnings(r"ignore:enrich_nfl_pbp\x3a skipping:RuntimeWarning")
 
 FIXTURE_DIR = Path(__file__).resolve().parents[1] / "fixtures" / "league_ports"
 

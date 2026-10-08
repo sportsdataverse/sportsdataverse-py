@@ -152,7 +152,7 @@ def test_shim_is_a_pure_pass_through(shim, target):
 
 
 # The shim forwards to a stubbed target that finds no season, which warns "no data" (asserted in test_on_missing.py).
-@pytest.mark.filterwarnings(r"ignore:load_nba_stats_\w+. no data for season:UserWarning")
+@pytest.mark.filterwarnings(r"ignore:load_nba_stats_\w+\x3a no data for season:UserWarning")
 @pytest.mark.parametrize(("shim", "target"), SHIMS)
 def test_shim_warns_and_names_its_replacement(shim, target):
     import importlib

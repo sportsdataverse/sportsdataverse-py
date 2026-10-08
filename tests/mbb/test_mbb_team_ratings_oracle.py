@@ -21,7 +21,7 @@ from sportsdataverse.mbb.mbb_team_ratings import adjust_efficiency, raw_game_eff
 
 # The 2024 fixture has one game whose box score shows 0 turnovers under every key, which
 # raw_game_efficiency drops with a warning; tests/mbb/test_mbb_team_ratings.py asserts it.
-pytestmark = pytest.mark.filterwarnings("ignore:raw_game_efficiency. dropped:UserWarning")
+pytestmark = pytest.mark.filterwarnings(r"ignore:raw_game_efficiency\x3a dropped:UserWarning")
 
 FIX = Path(__file__).resolve().parents[1] / "fixtures" / "mbb_prediction"
 
