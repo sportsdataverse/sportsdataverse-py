@@ -100,6 +100,18 @@ def test_parse_schedule_empty_keeps_the_documented_columns():
         assert pdf.shape == (0, len(_SCHEDULE_COLS)) and list(pdf.columns) == _SCHEDULE_COLS
 
 
+def test_parse_schedule_unplayed_games_carry_their_start_time():
+    """Real AHL 2026-27 rows: unplayed games (status 1) have their start time in ``game_status``."""
+    from sportsdataverse.hockeytech._parsers import parse_schedule
+
+    df = parse_schedule(_load("ahl_schedule_94"), season_id=94)
+    assert df.height == 5 and df.columns == _SCHEDULE_COLS
+    unplayed = df.filter(pl.col("game_status").str.contains(r"^\d{1,2}:\d{2} [ap]m [A-Z]{3}$"))
+    assert unplayed["game_id"].to_list() == ["1029104", "1029105", "1029107"]
+    assert unplayed["game_status"].to_list() == ["7:00 pm EDT", "7:00 pm EDT", "7:05 pm EDT"]
+    assert df.filter(~pl.col("game_id").is_in(unplayed["game_id"]))["game_status"].to_list() == ["Final", "Final"]
+
+
 def test_parse_schedule_season_id_drops_other_seasons():
     """Scorebar ignores ``season_id``: the reply asked for season 5 holds 6 seasons."""
     from sportsdataverse.hockeytech._parsers import parse_schedule

@@ -14,6 +14,7 @@ Captured JSON payloads from `lscluster.hockeytech.com` / `cluster.leaguestat.com
 | stem | league | endpoint | game/season |
 |------|--------|----------|-------------|
 | pwhl_schedule_2025 | pwhl | modulekit/scorebar | sent season_id 5; holds 200 rows across 6 seasons (90 in season 5), because scorebar ignores season_id |
+| ahl_schedule_94 | ahl | modulekit/schedule | season_id 94 (2026-27 regular season), live 2026-10-08 via `hockeytech_api`, trimmed to its first 2 final and first 3 unplayed games (rows unmodified), key redacted |
 | pwhl_schedule_8 | pwhl | modulekit/schedule | season_id 8 (2025-26 regular season), all 120 games; live 2026-10-08 via `hockeytech_api`, key redacted |
 | pwhl_pbp_42 | pwhl | statviewfeed/gameCenterPlayByPlay | game_id 42 |
 | pwhl_gameshifts_42 | pwhl | modulekit/gameshifts | game_id 42 |
