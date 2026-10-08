@@ -52,7 +52,9 @@ import polars as _pl
 if hasattr(_pl, "register_extension_type"):  # polars >= 1.36; older has no Extension dtype
     try:
         _pl.register_extension_type("arrow.r.vctrs", as_storage=True)
-    except _pl.exceptions.ComputeError:  # already registered in this process
+    # already registered in this process: Rust raises ComputeError (1.36.1-2.0); polars'
+    # own ValueError check is dead behind a typo today, but a fix would make it live
+    except (ValueError, _pl.exceptions.ComputeError):
         pass
 
 # Library logging convention (PEP 282): attach a NullHandler at the package
