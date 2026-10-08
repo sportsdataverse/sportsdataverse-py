@@ -38,6 +38,17 @@ Running state threaded through `calculate_possessions_by_event`
 | `opponent_stats` | `PossCalcFragment` |  | Accumulated fragment for the opponent since the last lineup boundary. |
 | `prev_clump` | `ConcurrentClump` |  | The previously-processed merged clump (used by `calculate_stats`'s and-one / deadball-rebound heuristics). |
 
+**Methods**
+
+#### PossState.init
+
+`PossState.init() -> "'PossState'"`
+
+A fresh starting state (`PossState.init`, `:45-48`) -- builds
+
+new instances per call, matching the mutable-dataclass rationale in
+`mbb_ncaa_models.py`'s `.empty()` factories.
+
 ### apply_relative_positional_overrides {#apply_relative_positional_overrides}
 
 `apply_relative_positional_overrides(results: 'list[dict[str, str]]', team_season: 'str', recurse_count: 'int' = 0) -> 'list[dict[str, str]]'`

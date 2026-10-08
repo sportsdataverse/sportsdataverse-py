@@ -3,6 +3,10 @@
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
 - [Unreleased](#unreleased)
+  - [Added — Expected Threat: XThreat, soccer_xthreat_rate() and a bundled grid](#added--expected-threat-xthreat-soccer_xthreat_rate-and-a-bundled-grid)
+  - [Fixed — soccer_open_events() and soccer_open_dataset() failed in a fresh interpreter](#fixed--soccer_open_events-and-soccer_open_dataset-failed-in-a-fresh-interpreter)
+  - [Fixed — code that polars 2.0 rejects now runs on both 1.x and 2.0](#fixed--code-that-polars-20-rejects-now-runs-on-both-1x-and-20)
+  - [Removed — BREAKING: the 11 overdue NFL loader aliases](#removed--breaking-the-11-overdue-nfl-loader-aliases)
   - [Added — SPADL actions from any kloppy event dataset: soccer_spadl() and soccer_open_dataset()](#added--spadl-actions-from-any-kloppy-event-dataset-soccer_spadl-and-soccer_open_dataset)
   - [Changed — returns-table descriptions: NFL Pro, On3 and Fox authored; R-dictionary fill scoped to the league's own sport](#changed--returns-table-descriptions-nfl-pro-on3-and-fox-authored-r-dictionary-fill-scoped-to-the-leagues-own-sport)
   - [Added — wrappers for six more intake providers (ESPN content, TheSportsDB, Football-Data.co.uk, OpenLigaDB, Polymarket, Kalshi)](#added--wrappers-for-six-more-intake-providers-espn-content-thesportsdb-football-datacouk-openligadb-polymarket-kalshi)
@@ -238,7 +242,7 @@
 - [0.0.67 Release: June 17, 2026](#0067-release-june-17-2026)
   - [Documentation — return-table column descriptions filled (~3,061 columns)](#documentation--return-table-column-descriptions-filled-3061-columns)
   - [Documentation — doctest-prompt cleanup, native returns-tables, new tutorials](#documentation--doctest-prompt-cleanup-native-returns-tables-new-tutorials)
-  - [NFL — PBP ETL ↔ nflfastR alignment + faithful model artifacts](#nfl--pbp-etl-%E2%86%94-nflfastr-alignment--faithful-model-artifacts)
+  - [NFL — PBP ETL ↔ nflfastR alignment + faithful model artifacts](#nfl--pbp-etl--nflfastr-alignment--faithful-model-artifacts)
   - [CFB — EP + WP models retrained on the full 2004–2025 history](#cfb--ep--wp-models-retrained-on-the-full-20042025-history)
 - [0.0.66 Release: June 17, 2026](#0066-release-june-17-2026)
   - [CFB — `cfb_pbp` sparse-game `ColumnNotFoundError` guard (`end.team.id` et al.)](#cfb--cfb_pbp-sparse-game-columnnotfounderror-guard-endteamid-et-al)
@@ -283,7 +287,7 @@
   - [NFL — Next Gen Stats (`nfl_ngs_*`) + api.nfl.com football/v2 (`nfl_*`) modules](#nfl--next-gen-stats-nfl_ngs_--apinflcom-footballv2-nfl_-modules)
   - [NFL — restored the api.nfl.com game schedule + play-by-play wrappers](#nfl--restored-the-apinflcom-game-schedule--play-by-play-wrappers)
   - [ESPN — remove always-erroring endpoint variants + NFL R-parity](#espn--remove-always-erroring-endpoint-variants--nfl-r-parity)
-  - [Documentation — per-league Python ↔ R parity tables](#documentation--per-league-python-%E2%86%94-r-parity-tables)
+  - [Documentation — per-league Python ↔ R parity tables](#documentation--per-league-python--r-parity-tables)
   - [Documentation — example notebooks repaired, expanded, and rendered on-site](#documentation--example-notebooks-repaired-expanded-and-rendered-on-site)
   - [NHL / PWHL — loader naming-parity aliases + games-manifest loaders (fastRhockey parity)](#nhl--pwhl--loader-naming-parity-aliases--games-manifest-loaders-fastrhockey-parity)
   - [Documentation — NFL return-table descriptions mined from nflverse](#documentation--nfl-return-table-descriptions-mined-from-nflverse)
@@ -321,7 +325,7 @@
   - [New: `return_parsed=True` dispatch shim](#new-return_parsedtrue-dispatch-shim)
   - [New: `nhl_edge_parsers.py`](#new-nhl_edge_parserspy)
   - [New: Site v2 summary dispatcher (20 sub-parsers)](#new-site-v2-summary-dispatcher-20-sub-parsers)
-  - [New: 100% ENDPOINT_PARSERS coverage (121/121)](#new-100%25-endpoint_parsers-coverage-121121)
+  - [New: 100% ENDPOINT_PARSERS coverage (121/121)](#new-100-endpoint_parsers-coverage-121121)
   - [New: weekly cron live-test drift detector](#new-weekly-cron-live-test-drift-detector)
   - [New: MLB Stats API parser layer](#new-mlb-stats-api-parser-layer)
   - [New: NHL Stats REST + Records parser layers](#new-nhl-stats-rest--records-parser-layers)
@@ -363,6 +367,45 @@
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## Unreleased
+
+### Added — Expected Threat: XThreat, soccer_xthreat_rate() and a bundled grid
+
+`XThreat` fits an Expected Threat grid from SPADL actions and `soccer_xthreat_rate(actions)` appends
+an `xt_value` column to a SPADL frame; both are ports of [socceraction](https://github.com/ML-KULeuven/socceraction)
+(MIT). A fitted 12 x 16 grid ships with the package (`load_xthreat_model()`), fit on StatsBomb open
+data: the World Cup 2018 and 2022 and Euro 2020 and 2024. 222 of 230 matches were used (8 were skipped on a
+kloppy deserializer error; their ids are in the grid metadata), 471,288 actions, 50 iterations. The
+grid agrees with socceraction's own fit to 2.8e-17 on the oracle. The rate is the value of the cell an
+action ends in minus the cell it starts in, with no interpolation.
+
+StatsBomb open data is free for research and non-commercial use only, under StatsBomb's open-data
+license; the bundled grid inherits that restriction.
+
+### Fixed — soccer_open_events() and soccer_open_dataset() failed in a fresh interpreter
+
+A bare `import kloppy` does not attach `kloppy.statsbomb`, so the loaders raised `AttributeError`
+until something else had imported the provider module. They now import it explicitly.
+
+### Fixed — code that polars 2.0 rejects now runs on both 1.x and 2.0
+
+Polars 2.0.0 (2026-10-06) removed several 1.x behaviors this codebase relied on. The suite run
+under 2.0 failed 478 tests. With these changes it passes on both 1.42 and 2.0, and output on 1.x
+is unchanged. The `polars>=1.0,<2.0` pin is not lifted here.
+
+- The seven `*_pbp` processors split the game clock with `list.to_struct(upper_bound=2)`, an
+  argument 2.0 removed. They now pass `fields=["clock.minutes", "clock.seconds"]`, which gives
+  identical output on 1.x. This one call accounted for 805 of the 2.0 errors.
+- `start.down`, `start.distance`, `end.down` and `end.distance` are cast to `Int64` where
+  `CFBPlayProcess` / `NFLPlayProcess` build the plays frame. pandas turns an int column with any
+  missing cell into float64. That happens with Fox-adapted and sparse games, and 2.0's
+  `is_in([1, 2, 3, 4])` raises on Float64 instead of coercing. `load_cfb_pbp` already declares
+  these columns `Int64`.
+- 2.0 cannot cast a String column to `pl.Date`. Eleven `.cast(pl.Date)` sites read columns that
+  are String in some loaders (`load_nfl_schedule().gameday` is String) and Date in others. They
+  now go through the private `_temporal.as_date()`, which parses a String and casts a temporal.
+- `explode()` on an empty list gives one null row in 1.x and no rows in 2.0. Five calls
+  (`usage_box`, the CBS subplays parser, the NCAA MBB RAPM stints) pass `empty_as_null=True` to
+  keep the 1.x rows.
 
 ### Removed — BREAKING: the 11 overdue NFL loader aliases
 

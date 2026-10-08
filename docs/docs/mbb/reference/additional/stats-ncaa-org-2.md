@@ -1,10 +1,41 @@
 ---
-title: "MBB — additional Python functions — stats.ncaa.org: enrich_sub–remove_html"
-sidebar_label: "stats.ncaa.org: enrich_sub–remove_html"
+title: "MBB — additional Python functions — stats.ncaa.org: enrich_stats–remove_html"
+sidebar_label: "stats.ncaa.org: enrich_stats–remove_html"
 sidebar_position: 4
-description: "MBB — additional Python functions — stats.ncaa.org: enrich_sub–remove_html — function reference in sdv-py, the SportsDataverse Python package."
+description: "MBB — additional Python functions — stats.ncaa.org: enrich_stats–remove_html — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# MBB — additional Python functions — stats.ncaa.org: enrich_sub–remove_html
+# MBB — additional Python functions — stats.ncaa.org: enrich_stats–remove_html
+
+### enrich_stats {#enrich_stats}
+
+`enrich_stats(lineup: 'LineupEvent', event_parser: 'PossessionEvent', stats: 'LineupEventStats', player_filter_coder: 'Optional[PlayerFilterCoder]' = None, player_index: 'int' = -1) -> 'LineupEventStats'`
+
+Fold a lineup's raw events into a counting-stat tree (``protected def
+
+enrich_stats`, `LineupUtils.scala:115-162``). Reuses the Task 5a.3
+concurrent-clump batching (`~sportsdataverse.mbb.mbb_ncaa_possessions
+.lineup_as_raw_clumps` + `~sportsdataverse.mbb.mbb_ncaa_possessions
+.concurrent_event_handler`) rather than duplicating it -- both were
+already public/exported from Task 5a.3.
+
+`stats` is deep-copied once up front (see the module docstring's
+"Scala idiom decisions"), so this function never mutates the caller's
+`stats` argument -- safe to call repeatedly against the same starting
+literal (e.g. a shared "empty stats" fixture).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `lineup` | `LineupEvent` |  | The lineup whose `raw_game_events` to fold over. |
+| `event_parser` | `PossessionEvent` |  | Selects which side (team/opponent) is "attacking". |
+| `stats` | `LineupEventStats` |  | The starting stat tree (not mutated -- see above). |
+| `player_filter_coder` | `Optional[PlayerFilterCoder]` | `None` | Optional `name -> (is_this_player, code)` predicate/coder, for per-player scoping (Task 5c.4). |
+| `player_index` | `int` | `-1` | Lineup-slot index for `~sportsdataverse.mbb .mbb_ncaa_models.PlayerShotInfo` tuples (Task 5c.4; `-1` for team-level calls, the only value exercised before then). |
+
+**Returns**
+
+A new `~sportsdataverse.mbb.mbb_ncaa_models.LineupEventStats` with every matching event folded in.
 
 ### enrich_sub_error {#enrich_sub_error}
 

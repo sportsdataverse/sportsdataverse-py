@@ -1,10 +1,41 @@
 ---
-title: "WBB — additional Python functions — stats.ncaa.org: sum_event–validate_lineup"
-sidebar_label: "stats.ncaa.org: sum_event–validate_lineup"
+title: "WBB — additional Python functions — stats.ncaa.org: start_time–validate_lineup"
+sidebar_label: "stats.ncaa.org: start_time–validate_lineup"
 sidebar_position: 4
-description: "WBB — additional Python functions — stats.ncaa.org: sum_event–validate_lineup — function reference in sdv-py, the SportsDataverse Python package."
+description: "WBB — additional Python functions — stats.ncaa.org: start_time–validate_lineup — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# WBB — additional Python functions — stats.ncaa.org: sum_event–validate_lineup
+# WBB — additional Python functions — stats.ncaa.org: start_time–validate_lineup
+
+### start_time_from_period {#start_time_from_period}
+
+`start_time_from_period(period: 'int', is_women_game: 'bool') -> 'float'`
+
+The game-clock time (minutes elapsed) a period starts at
+
+(`ExtractorUtils.scala:272-281`).
+
+Women's games play four 10-minute quarters then 5-minute overtimes; men's
+games play two 20-minute halves then 5-minute overtimes.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `period` | `int` |  | The 1-indexed period number (1/2 = halves for men, 1-4 = quarters for women, 5+ = overtimes for both). |
+| `is_women_game` | `bool` |  | Whether to use the women's (quarters) or men's (halves) period schedule. |
+
+**Returns**
+
+The game-clock minute the period begins at.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_stints import start_time_from_period
+start_time_from_period(2, is_women_game=False)  # 20.0 (men's 2nd half)
+start_time_from_period(1, is_women_game=True)  # 0.0 (women's 1st quarter)
+start_time_from_period(6, is_women_game=False)  # 45.0 (men's 2nd OT)
+```
 
 ### sum_event_stats {#sum_event_stats}
 

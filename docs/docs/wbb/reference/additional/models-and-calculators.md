@@ -1,10 +1,10 @@
 ---
-title: "WBB — additional Python functions — Models and calculators: AssistEvent–calc_player"
-sidebar_label: "Models and calculators: AssistEvent–calc_player"
+title: "WBB — additional Python functions — Models and calculators: AssistEvent–calc_lineup"
+sidebar_label: "Models and calculators: AssistEvent–calc_lineup"
 sidebar_position: 8
-description: "WBB — additional Python functions — Models and calculators: AssistEvent–calc_player — function reference in sdv-py, the SportsDataverse Python package."
+description: "WBB — additional Python functions — Models and calculators: AssistEvent–calc_lineup — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# WBB — additional Python functions — Models and calculators: AssistEvent–calc_player
+# WBB — additional Python functions — Models and calculators: AssistEvent–calc_lineup
 
 ### AssistEvent {#AssistEvent}
 
@@ -208,6 +208,14 @@ exercised by Phase 5a -- see the module docstring's scope note.
 | `player_shot_info` | `Optional[PlayerShotInfo]` | `None` | Per-player shot-quality info, if tracked. |
 | `pts` | `int` | `0` | Points scored. |
 | `plus_minus` | `int` | `0` | Point differential while this lineup was on the floor. |
+
+**Methods**
+
+#### LineupEventStats.empty
+
+`LineupEventStats.empty() -> "'LineupEventStats'"`
+
+A fresh all-defaults `LineupEventStats` (`:41`).
 
 ### LineupId {#LineupId}
 
@@ -470,6 +478,41 @@ string is the literal `"date,time,event"` line from the NCAA website.
 | `team` | `Optional[str]` | `None` | The raw event string, if this event belongs to the team under analysis. |
 | `opponent` | `Optional[str]` | `None` | The raw event string, if this event belongs to the opponent. |
 
+**Methods**
+
+#### RawGameEvent.for_opponent
+
+`RawGameEvent.for_opponent(s: 'str', min: 'float') -> "'RawGameEvent'"`
+
+Build an opponent-side event (Scala ``RawGameEvent.opponent(s,
+
+min)`, `LineupEvent.scala:109-110` -- renamed per the "Scala
+idiom decisions" module note to avoid colliding with the
+`opponent`` field).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `s` | `str` |  |  |
+| `min` | `float` |  |  |
+
+#### RawGameEvent.for_team
+
+`RawGameEvent.for_team(s: 'str', min: 'float') -> "'RawGameEvent'"`
+
+Build a team-side event (Scala `RawGameEvent.team(s, min)`,
+
+`LineupEvent.scala:107-108` -- renamed per the "Scala idiom
+decisions" module note to avoid colliding with the `team` field).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `s` | `str` |  |  |
+| `min` | `float` |  |  |
+
 ### RosterEntry {#RosterEntry}
 
 `RosterEntry(player_code_id: 'PlayerCodeId', number: 'str', pos: 'str', height: 'str', height_in: 'Optional[int]', year_class: 'str', gp: 'int', origin: 'Optional[str]', role: 'Optional[str]') -> None`
@@ -519,6 +562,14 @@ Score context at the start/end of a lineup event
 | `end` | `Score` |  | Score at the end of the event. |
 | `start_diff` | `int` |  | Score differential (team - opponent) at the start. |
 | `end_diff` | `int` |  | Score differential (team - opponent) at the end. |
+
+**Methods**
+
+#### ScoreInfo.empty
+
+`ScoreInfo.empty() -> "'ScoreInfo'"`
+
+A fresh zeroed `ScoreInfo` (`ScoreInfo.empty`, `:161-166`).
 
 ### ShotClockStats {#ShotClockStats}
 
@@ -1375,38 +1426,4 @@ print(off_outputs.shape)  # (num_off_lineups,)
 off_luck, def_luck = calc_lineup_outputs(
     "adj_ppp", 100.0, 100.0, ctx, use_old_val_if_possible=(True, True)
 )
-```
-
-### calc_player_weights {#calc_player_weights}
-
-`calc_player_weights(ctx: 'RapmPlayerContext') -> 'list[NDArray[np.float64]]'`
-
-Build the off/def player-weight (design) matrices for the RAPM solve.
-
-Faithful port of `RapmUtils.calcPlayerWeights` (`RapmUtils.ts:544-595`).
-One row per (filtered) lineup, one column per remaining player; each
-filled cell is `sqrt(lineup_possessions / total_side_possessions)` --
-the possession-weighted design-matrix entry the ridge regression (Task
-3.4) solves against. This is the first function in the module where a
-`dict`-shaped `RapmPlayerContext` gets materialized into a
-`numpy.ndarray` -- see the module docstring's "dict -> `numpy.ndarray`
-boundary" note.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `ctx` | `RapmPlayerContext` |  | A `RapmPlayerContext`, e.g. from `build_player_context`. |
-
-**Returns**
-
-`[off_weights, def_weights]` -- two `numpy.ndarray` matrices of shape `(num_{off,def}_lineups [+1 if ctx["unbias_weight"] > 0], ctx["num_players"])`. The optional extra row (only emitted when `ctx["unbias_weight"] > 0` -- always `0.0` in production per `build_player_context`'s hardcoded local, but settable directly on the returned context dict, as the oracle test does) holds each column's `unbias_weight`-scaled sum-of-squares, an "unbiasing observation" row (`RapmUtils.ts:578-593`).
-
-**Example**
-
-```python
-from sportsdataverse.mbb.mbb_rapm import calc_player_weights
-
-off_weights, def_weights = calc_player_weights(ctx)
-print(off_weights.shape)  # (num_off_lineups, num_players)
 ```

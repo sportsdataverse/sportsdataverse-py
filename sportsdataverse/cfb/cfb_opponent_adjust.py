@@ -15,6 +15,8 @@ from typing import Optional
 import numpy as np
 import polars as pl
 
+from sportsdataverse._temporal import as_date
+
 from sportsdataverse.cfb.cfb_advanced_constants import (
     EXPLOSIVE_EPA,
     GARBAGE_TIME_MARGIN,
@@ -272,7 +274,7 @@ def build_play_long(
     return out.select(
         pl.col("season").cast(pl.Int64),
         pl.col("game_id").cast(pl.Int64, strict=False).cast(pl.Utf8),
-        pl.col("date").cast(pl.Date),
+        as_date(pl.col("date")),
         pl.col("pos_team_id").cast(pl.Int64).cast(pl.Utf8).alias("team_id"),
         pl.col("def_pos_team_id").cast(pl.Int64).cast(pl.Utf8).alias("opp_team_id"),
         pl.col("epa").cast(pl.Float64),

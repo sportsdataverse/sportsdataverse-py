@@ -100,7 +100,7 @@ matching `parse_*` function for NHL / MLB sibling APIs. See
 | [UFL](ufl/) | `sportsdataverse.ufl` | ESPN (114) |
 | [XFL](xfl/) | `sportsdataverse.xfl` | ESPN (112) |
 | [CFL](cfl/) | `sportsdataverse.cfl` | ESPN (112) |
-| [Soccer (all)](soccer/) | `sportsdataverse.soccer` | ESPN (112), American Soccer Analysis (16), FotMob (14), UEFA (7), FIFA (9), Football-Data.co.uk (3), OpenLigaDB (11), kloppy open event data (4) |
+| [Soccer (all)](soccer/) | `sportsdataverse.soccer` | ESPN (112), American Soccer Analysis (16), FotMob (14), UEFA (7), FIFA (9), Football-Data.co.uk (3), OpenLigaDB (11), kloppy open event data (8) |
 | [EPL](epl/) | `sportsdataverse.epl` | ESPN (113) |
 | [LaLiga](laliga/) | `sportsdataverse.laliga` | ESPN (112) |
 | [Bundesliga](bundesliga/) | `sportsdataverse.bundesliga` | ESPN (112) |

@@ -323,7 +323,7 @@ def helper_wbb_pbp_features(game_id, pbp_txt, init):
             # polars 1.x deprecated `n_field_strategy=` and now requires
             # `upper_bound=` (or `fields=`). MM:SS game clocks always
             # split into exactly 2 fields.
-            .list.to_struct(upper_bound=2)
+            .list.to_struct(fields=["clock.minutes", "clock.seconds"])
             .alias("clock.mm"),
         )
         .with_columns(pl.col("clock.mm").struct.rename_fields(["clock.minutes", "clock.seconds"]))

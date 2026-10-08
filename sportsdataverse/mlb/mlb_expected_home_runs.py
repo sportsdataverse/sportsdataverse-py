@@ -12,6 +12,8 @@ from typing import TYPE_CHECKING, Callable, Literal, Optional, Union, overload
 
 import polars as pl
 
+from sportsdataverse._temporal import as_date
+
 from sportsdataverse.mlb.mlb_hitting_constants import GRID, MLB_TEAM_ID_BY_ABBREV, spray_angle
 from sportsdataverse.mlb.mlb_statcast import mlb_statcast_leaderboard_park_factors
 from sportsdataverse.mlb.mlb_statcast_extra import mlb_statcast_search
@@ -253,7 +255,7 @@ def mlb_expected_home_runs(
     elif pitches.schema["game_date"] == pl.Utf8:
         season_expr = pl.col("game_date").str.to_date().dt.year().cast(pl.Int64)
     else:
-        season_expr = pl.col("game_date").cast(pl.Date).dt.year().cast(pl.Int64)
+        season_expr = as_date(pl.col("game_date")).dt.year().cast(pl.Int64)
     pitches = pitches.with_columns(season_expr.alias("season"))
 
     pitches = _add_hr_bins(pitches)

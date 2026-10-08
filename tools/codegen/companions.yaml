@@ -17,6 +17,9 @@ soccer:
   - name: kloppy
     url: https://kloppy.pysport.org
     note: reads ~15 event and tracking providers behind the `soccer` extra's open-data loader
+  - name: socceraction
+    url: https://github.com/ML-KULeuven/socceraction
+    note: the SPADL and xT reference implementation these ports follow
   - name: sdvplot
     url: https://github.com/sportsdataverse/sdvplot
     note: "`pitch_coords()` puts any provider's events on the 105 x 68 pitch"

@@ -16,8 +16,8 @@ description: "sdv-py SOCCER: endpoint references, dataset loaders and parsers fo
 | [FIFA](#fifa) | `api.fifa.com` | 9 | none |
 | [Football-Data.co.uk](#football-data-co-uk) | `www.football-data.co.uk` | 3 | none (CSV archive) |
 | [OpenLigaDB](#openligadb) | `api.openligadb.de` | 11 | none |
-| [kloppy open event data](#kloppy-open-event-data) | `kloppy.pysport.org` | 4 | none (optional `soccer` extra) |
-| [Additional functions](reference/additional) | hand-written wrappers & helpers | 4 | — |
+| [kloppy open event data](#kloppy-open-event-data) | `kloppy.pysport.org` | 8 | none (optional `soccer` extra) |
+| [Additional functions](reference/additional) | hand-written wrappers & helpers | 8 | — |
 
 ## ESPN {#espn}
 
@@ -68,11 +68,12 @@ description: "sdv-py SOCCER: endpoint references, dataset loaders and parsers fo
 
 | Reference | Functions |
 |---|---:|
-| [Hand-written wrappers](reference/additional) | 4 |
+| [Hand-written wrappers](reference/additional) | 8 |
 
 ## See also
 
 - [kloppy](https://kloppy.pysport.org) — reads ~15 event and tracking providers behind the `soccer` extra's open-data loader
+- [socceraction](https://github.com/ML-KULeuven/socceraction) — the SPADL and xT reference implementation these ports follow
 - [sdvplot](https://github.com/sportsdataverse/sdvplot) — `pitch_coords()` puts any provider's events on the 105 x 68 pitch
 - [sdvplotR](https://github.com/sportsdataverse/sdvplotR) — the R twin (`sdv_pitch_coords()`)
 - [itscalledsoccer](https://github.com/American-Soccer-Analysis/itscalledsoccer) — American Soccer Analysis's own client for the API behind `asa_*`

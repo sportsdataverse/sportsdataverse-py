@@ -2308,7 +2308,7 @@ def _flat_modules_for_prefix(prefix: str) -> list[str]:
 # ``__init__.py`` is generated, so a module listed here is the ONLY way its public
 # names reach ``sportsdataverse.<group>`` and the top-level package.
 _CONTAINER_HANDWRITTEN: dict[str, list[str]] = {
-    "soccer": ["soccer_events", "spadl"],  # kloppy event data, the optional ``soccer`` extra
+    "soccer": ["soccer_events", "spadl", "xthreat"],  # kloppy event data, the optional ``soccer`` extra
 }
 
 
@@ -3885,7 +3885,7 @@ def _augment_class_view(cls, view: dict) -> None:
                     p["type"] = ip["type_name"]
 
     methods = []
-    for name, member in inspect.getmembers(cls, predicate=inspect.isfunction):
+    for name, member in inspect.getmembers(cls, predicate=lambda m: inspect.isfunction(m) or inspect.ismethod(m)):
         if name.startswith("_"):
             continue
         methods.append({"name": name, "signature": _method_signature(member), **_doc_view(member)})

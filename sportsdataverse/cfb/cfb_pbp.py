@@ -2398,6 +2398,14 @@ class CFBPlayProcess(object):
             )
             pbp_txt["plays"] = pd.concat([pbp_txt["plays"], prev_drives], axis=0, ignore_index=True)
         pbp_txt["plays"] = pl.from_pandas(pbp_txt["plays"])
+        # pandas stores an int column with any missing cell as float64 (a Fox-adapted or sparse game);
+        # down/distance are Int64 in the published schema, and polars 2.0's is_in([1, 2, 3, 4]) raises
+        # on Float64 instead of coercing.
+        pbp_txt["plays"] = pbp_txt["plays"].with_columns(
+            pl.col(c).cast(pl.Int64)
+            for c in ("start.down", "start.distance", "end.down", "end.distance")
+            if pbp_txt["plays"].schema.get(c, pl.Null).is_float()
+        )
         pbp_txt["timeouts"] = {
             init["homeTeamId"]: {"1": [], "2": []},
             init["awayTeamId"]: {"1": [], "2": []},
@@ -2496,7 +2504,10 @@ class CFBPlayProcess(object):
                 # Clock is always "MM:SS" → exactly 2 fields. Polars 1.x deprecated
                 # `n_field_strategy` (it has no effect when `upper_bound` is set);
                 # `upper_bound=2` alone is the modern, warning-free signature.
-                pl.col("clock.displayValue").str.split(":").list.to_struct(upper_bound=2).alias("clock.mm"),
+                pl.col("clock.displayValue")
+                .str.split(":")
+                .list.to_struct(fields=["clock.minutes", "clock.seconds"])
+                .alias("clock.mm"),
             )
             .with_columns(pl.col("clock.mm").struct.rename_fields(["clock.minutes", "clock.seconds"]))
             .unnest("clock.mm")

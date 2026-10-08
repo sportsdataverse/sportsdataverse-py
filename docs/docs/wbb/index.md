@@ -126,7 +126,7 @@ description: "sdv-py WBB: endpoint references, dataset loaders and parsers for W
 - [`build_weak_prior_from_rapm`](reference/additional/models-and-calculators#build_weak_prior_from_rapm)
 - [`calc_collinearity_diag`](reference/additional/models-and-calculators#calc_collinearity_diag)
 - [`calc_lineup_outputs`](reference/additional/models-and-calculators#calc_lineup_outputs)
-- [`calc_player_weights`](reference/additional/models-and-calculators#calc_player_weights)
+- [`calc_player_weights`](reference/additional/models-and-calculators-2#calc_player_weights)
 - [`calc_slow_pseudo_inverse`](reference/additional/models-and-calculators-2#calc_slow_pseudo_inverse)
 - [`calculate_predicted_out`](reference/additional/models-and-calculators-2#calculate_predicted_out)
 - [`calculate_rapm`](reference/additional/models-and-calculators-2#calculate_rapm)

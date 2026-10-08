@@ -13,6 +13,7 @@
 | `8658_spadl.csv` | SPADL actions for StatsBomb open-data match 8658 (2018 World Cup final) from socceraction 1.5.3's DIRECT StatsBomb converter (`spadl.statsbomb.convert_to_actions` + `play_left_to_right` + `add_names`). Every action attacks left to right on the 105 x 68 pitch. | frozen 2026-10-07 by `tools/models/freeze_socceraction_oracle.py` |
 | `8658_xt_fit.json` | `ExpectedThreat(l=16, w=12).fit(actions)` on those actions alone, written by `save_model` (a bare 12 x 16 nested list; row 0 = top of the pitch). | same run |
 | `8658_xt_fit_log.txt` | versions and the iteration count socceraction printed. | same run |
+| `8658_xt_rate.csv` | `ExpectedThreat.rate(actions)` (socceraction 1.5.3, no interpolation) with the model fit above, on the same 1,707 actions; keyed by `game_id`, `original_event_id`, `action_id`; `xt` is empty for actions xT does not value. | same script, frozen 2026-10-07 |
 
 The script runs only in a throwaway venv, installed with
 `uv pip install --python <venv>/bin/python "socceraction==1.5.3" "numpy<2" "statsbombpy>=1.13" "multimethod<2"` (on Windows the interpreter is `<venv>/Scripts/python.exe`)

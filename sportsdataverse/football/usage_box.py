@@ -499,9 +499,9 @@ def _tackle_rows(
         # ids and names are parallel lists (built from the same participant rows)
         same_len = rows.filter(pl.col("ids").list.len() == pl.col("names").list.len())
         rows = (
-            same_len.explode(["ids", "names"])
+            same_len.explode(["ids", "names"], empty_as_null=True)
             if same_len.height == rows.height
-            else rows.explode("ids").with_columns(names=pl.lit(None, dtype=pl.Utf8))
+            else rows.explode("ids", empty_as_null=True).with_columns(names=pl.lit(None, dtype=pl.Utf8))
         )
         rows = rows.with_columns(
             player_id=pl.col("ids").cast(pl.Utf8),

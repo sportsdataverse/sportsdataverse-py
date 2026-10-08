@@ -8,6 +8,45 @@ Merged to `main` since 0.1.4 and not yet released. Released versions are on the 
 
 ## Unreleased
 
+### Added — Expected Threat: XThreat, soccer_xthreat_rate() and a bundled grid
+
+`XThreat` fits an Expected Threat grid from SPADL actions and `soccer_xthreat_rate(actions)` appends
+an `xt_value` column to a SPADL frame; both are ports of [socceraction](https://github.com/ML-KULeuven/socceraction)
+(MIT). A fitted 12 x 16 grid ships with the package (`load_xthreat_model()`), fit on StatsBomb open
+data: the World Cup 2018 and 2022 and Euro 2020 and 2024. 222 of 230 matches were used (8 were skipped on a
+kloppy deserializer error; their ids are in the grid metadata), 471,288 actions, 50 iterations. The
+grid agrees with socceraction's own fit to 2.8e-17 on the oracle. The rate is the value of the cell an
+action ends in minus the cell it starts in, with no interpolation.
+
+StatsBomb open data is free for research and non-commercial use only, under StatsBomb's open-data
+license; the bundled grid inherits that restriction.
+
+### Fixed — soccer_open_events() and soccer_open_dataset() failed in a fresh interpreter
+
+A bare `import kloppy` does not attach `kloppy.statsbomb`, so the loaders raised `AttributeError`
+until something else had imported the provider module. They now import it explicitly.
+
+### Fixed — code that polars 2.0 rejects now runs on both 1.x and 2.0
+
+Polars 2.0.0 (2026-10-06) removed several 1.x behaviors this codebase relied on. The suite run
+under 2.0 failed 478 tests. With these changes it passes on both 1.42 and 2.0, and output on 1.x
+is unchanged. The `polars>=1.0,<2.0` pin is not lifted here.
+
+- The seven `*_pbp` processors split the game clock with `list.to_struct(upper_bound=2)`, an
+  argument 2.0 removed. They now pass `fields=["clock.minutes", "clock.seconds"]`, which gives
+  identical output on 1.x. This one call accounted for 805 of the 2.0 errors.
+- `start.down`, `start.distance`, `end.down` and `end.distance` are cast to `Int64` where
+  `CFBPlayProcess` / `NFLPlayProcess` build the plays frame. pandas turns an int column with any
+  missing cell into float64. That happens with Fox-adapted and sparse games, and 2.0's
+  `is_in([1, 2, 3, 4])` raises on Float64 instead of coercing. `load_cfb_pbp` already declares
+  these columns `Int64`.
+- 2.0 cannot cast a String column to `pl.Date`. Eleven `.cast(pl.Date)` sites read columns that
+  are String in some loaders (`load_nfl_schedule().gameday` is String) and Date in others. They
+  now go through the private `_temporal.as_date()`, which parses a String and casts a temporal.
+- `explode()` on an empty list gives one null row in 1.x and no rows in 2.0. Five calls
+  (`usage_box`, the CBS subplays parser, the NCAA MBB RAPM stints) pass `empty_as_null=True` to
+  keep the 1.x rows.
+
 ### Removed — BREAKING: the 11 overdue NFL loader aliases
 
 The 11 per-type NFL loaders marked `removed_in="0.1.0"` are gone: `load_nfl_ngs_passing`,

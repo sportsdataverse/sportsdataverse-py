@@ -305,7 +305,7 @@ def helper_mbb_pbp_features(game_id, pbp_txt, init):
             .then(pl.col("clock.displayValue"))
             .otherwise("0:" + pl.col("clock.displayValue"))
             .str.split(":")
-            .list.to_struct(upper_bound=2)
+            .list.to_struct(fields=["clock.minutes", "clock.seconds"])
             .alias("clock.mm"),
         )
         .with_columns(pl.col("clock.mm").struct.rename_fields(["clock.minutes", "clock.seconds"]))
