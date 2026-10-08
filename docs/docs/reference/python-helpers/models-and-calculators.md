@@ -328,7 +328,7 @@ url = (
     "https://github.com/sportsdataverse/sportsdataverse-data/releases/download/"
     "espn_nfl_pbp/play_by_play_2024.parquet"
 )
-games = paper_index_games(pl.read_parquet(url, columns=list(PBP_COLUMNS)), "nfl")
+games = paper_index_games(pl.read_parquet(url, columns=list(PBP_COLUMNS), use_pyarrow=True), "nfl")
 
 # Pipeline next step (one line)
 

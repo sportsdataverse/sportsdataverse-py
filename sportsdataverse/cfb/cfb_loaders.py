@@ -3161,6 +3161,12 @@ def load_cfb_passing(seasons, return_as_pandas: bool = False):
         |dropbacks              |Float64 |
         |sack_adj_yards         |Float64 |
         |yardsdropback          |Float64 |
+        |dispersion_games       |Int64   |
+        |EPAplay_sd             |Float64 |
+        |EPAplay_p10            |Float64 |
+        |EPAplay_p90            |Float64 |
+        |boom_rate              |Float64 |
+        |bust_rate              |Float64 |
         |TEPA_rank              |Float64 |
         |EPAgame_rank           |Float64 |
         |EPAplay_rank           |Float64 |
@@ -3176,6 +3182,7 @@ def load_cfb_passing(seasons, return_as_pandas: bool = False):
         |passing_td_rank        |Float64 |
         |pass_int_rank          |Float64 |
         |sacked_rank            |Float64 |
+        |boom_rate_rank         |Float64 |
         |TEPA_pct               |Float64 |
         |EPAgame_pct            |Float64 |
         |EPAplay_pct            |Float64 |
@@ -3191,6 +3198,7 @@ def load_cfb_passing(seasons, return_as_pandas: bool = False):
         |passing_td_pct         |Float64 |
         |pass_int_pct           |Float64 |
         |sacked_pct             |Float64 |
+        |boom_rate_pct          |Float64 |
         |EPAplay_n              |Int64   |
         |yardsdropback_n        |Int64   |
         |comppct_n              |Int64   |
@@ -3218,6 +3226,7 @@ def load_cfb_passing(seasons, return_as_pandas: bool = False):
         |passing_td_pos_pct     |Float64 |
         |pass_int_pos_pct       |Float64 |
         |sacked_pos_pct         |Float64 |
+        |boom_rate_pos_pct      |Float64 |
 
     Raises:
         SeasonNotFoundError: if a requested season is below 2004.
@@ -3357,6 +3366,12 @@ def load_cfb_receiving(seasons, return_as_pandas: bool = False):
         |yardsplay            |Float64 |
         |yardsgame            |Float64 |
         |catchpct             |Float64 |
+        |dispersion_games     |Int64   |
+        |EPAplay_sd           |Float64 |
+        |EPAplay_p10          |Float64 |
+        |EPAplay_p90          |Float64 |
+        |boom_rate            |Float64 |
+        |bust_rate            |Float64 |
         |TEPA_rank            |Float64 |
         |EPAgame_rank         |Float64 |
         |EPAplay_rank         |Float64 |
@@ -3369,6 +3384,7 @@ def load_cfb_receiving(seasons, return_as_pandas: bool = False):
         |fumbles_rank         |Float64 |
         |yardsplay_rank       |Float64 |
         |yardsgame_rank       |Float64 |
+        |boom_rate_rank       |Float64 |
         |TEPA_pct             |Float64 |
         |EPAgame_pct          |Float64 |
         |EPAplay_pct          |Float64 |
@@ -3381,6 +3397,7 @@ def load_cfb_receiving(seasons, return_as_pandas: bool = False):
         |fumbles_pct          |Float64 |
         |yardsplay_pct        |Float64 |
         |yardsgame_pct        |Float64 |
+        |boom_rate_pct        |Float64 |
         |EPAplay_n            |Int64   |
         |success_n            |Int64   |
         |yardsplay_n          |Int64   |
@@ -3402,6 +3419,7 @@ def load_cfb_receiving(seasons, return_as_pandas: bool = False):
         |fumbles_pos_pct      |Float64 |
         |yardsplay_pos_pct    |Float64 |
         |yardsgame_pos_pct    |Float64 |
+        |boom_rate_pos_pct    |Float64 |
 
     Raises:
         SeasonNotFoundError: if a requested season is below 2004.
@@ -3446,66 +3464,86 @@ def load_cfb_rushing(seasons, return_as_pandas: bool = False):
         A polars (or pandas) DataFrame; seasons with no published asset are
         skipped with a warning rather than raising (404-safe).
 
-        |col_name           |type    |
-        |:------------------|:-------|
-        |team_id            |Int64   |
-        |pos_team           |String  |
-        |division           |String  |
-        |conference         |String  |
-        |season             |Int64   |
-        |player_id          |Int64   |
-        |rusher_player_name |String  |
-        |plays              |UInt32  |
-        |games              |UInt32  |
-        |team_games         |UInt32  |
-        |TEPA               |Float64 |
-        |EPAplay            |Float64 |
-        |yards              |Int64   |
-        |success            |Float64 |
-        |rushing_td         |Float64 |
-        |fumbles            |Float64 |
-        |playsgame          |Float64 |
-        |EPAgame            |Float64 |
-        |yardsplay          |Float64 |
-        |yardsgame          |Float64 |
-        |TEPA_rank          |Float64 |
-        |EPAgame_rank       |Float64 |
-        |EPAplay_rank       |Float64 |
-        |success_rank       |Float64 |
-        |plays_rank         |Float64 |
-        |yards_rank         |Float64 |
-        |rushing_td_rank    |Float64 |
-        |fumbles_rank       |Float64 |
-        |yardsplay_rank     |Float64 |
-        |yardsgame_rank     |Float64 |
-        |TEPA_pct           |Float64 |
-        |EPAgame_pct        |Float64 |
-        |EPAplay_pct        |Float64 |
-        |success_pct        |Float64 |
-        |plays_pct          |Float64 |
-        |yards_pct          |Float64 |
-        |rushing_td_pct     |Float64 |
-        |fumbles_pct        |Float64 |
-        |yardsplay_pct      |Float64 |
-        |yardsgame_pct      |Float64 |
-        |EPAplay_n          |Int64   |
-        |success_n          |Int64   |
-        |yardsplay_n        |Int64   |
-        |EPAgame_n          |Int64   |
-        |yardsgame_n        |Int64   |
-        |playsgame_n        |Int64   |
-        |fbs_class          |String  |
-        |position_group     |String  |
-        |TEPA_pos_pct       |Float64 |
-        |EPAgame_pos_pct    |Float64 |
-        |EPAplay_pos_pct    |Float64 |
-        |success_pos_pct    |Float64 |
-        |plays_pos_pct      |Float64 |
-        |yards_pos_pct      |Float64 |
-        |rushing_td_pos_pct |Float64 |
-        |fumbles_pos_pct    |Float64 |
-        |yardsplay_pos_pct  |Float64 |
-        |yardsgame_pos_pct  |Float64 |
+        |col_name                |type    |
+        |:-----------------------|:-------|
+        |team_id                 |Int64   |
+        |pos_team                |String  |
+        |division                |String  |
+        |conference              |String  |
+        |season                  |Int64   |
+        |player_id               |Int64   |
+        |rusher_player_name      |String  |
+        |plays                   |UInt32  |
+        |games                   |UInt32  |
+        |team_games              |UInt32  |
+        |TEPA                    |Float64 |
+        |EPAplay                 |Float64 |
+        |yards                   |Int64   |
+        |success                 |Float64 |
+        |rushing_td              |Float64 |
+        |fumbles                 |Float64 |
+        |playsgame               |Float64 |
+        |EPAgame                 |Float64 |
+        |yardsplay               |Float64 |
+        |yardsgame               |Float64 |
+        |dispersion_games        |Int64   |
+        |EPAplay_sd              |Float64 |
+        |EPAplay_p10             |Float64 |
+        |EPAplay_p90             |Float64 |
+        |boom_rate               |Float64 |
+        |bust_rate               |Float64 |
+        |line_yards_share        |Float64 |
+        |second_level_share      |Float64 |
+        |open_field_share        |Float64 |
+        |stuff_rate              |Float64 |
+        |EPAplay_one_score       |Float64 |
+        |EPAplay_one_score_n     |Int64   |
+        |EPAplay_not_one_score   |Float64 |
+        |EPAplay_not_one_score_n |Int64   |
+        |TEPA_rank               |Float64 |
+        |EPAgame_rank            |Float64 |
+        |EPAplay_rank            |Float64 |
+        |success_rank            |Float64 |
+        |plays_rank              |Float64 |
+        |yards_rank              |Float64 |
+        |rushing_td_rank         |Float64 |
+        |fumbles_rank            |Float64 |
+        |yardsplay_rank          |Float64 |
+        |yardsgame_rank          |Float64 |
+        |boom_rate_rank          |Float64 |
+        |stuff_rate_rank         |Float64 |
+        |TEPA_pct                |Float64 |
+        |EPAgame_pct             |Float64 |
+        |EPAplay_pct             |Float64 |
+        |success_pct             |Float64 |
+        |plays_pct               |Float64 |
+        |yards_pct               |Float64 |
+        |rushing_td_pct          |Float64 |
+        |fumbles_pct             |Float64 |
+        |yardsplay_pct           |Float64 |
+        |yardsgame_pct           |Float64 |
+        |boom_rate_pct           |Float64 |
+        |stuff_rate_pct          |Float64 |
+        |EPAplay_n               |Int64   |
+        |success_n               |Int64   |
+        |yardsplay_n             |Int64   |
+        |EPAgame_n               |Int64   |
+        |yardsgame_n             |Int64   |
+        |playsgame_n             |Int64   |
+        |fbs_class               |String  |
+        |position_group          |String  |
+        |TEPA_pos_pct            |Float64 |
+        |EPAgame_pos_pct         |Float64 |
+        |EPAplay_pos_pct         |Float64 |
+        |success_pos_pct         |Float64 |
+        |plays_pos_pct           |Float64 |
+        |yards_pos_pct           |Float64 |
+        |rushing_td_pos_pct      |Float64 |
+        |fumbles_pos_pct         |Float64 |
+        |yardsplay_pos_pct       |Float64 |
+        |yardsgame_pos_pct       |Float64 |
+        |boom_rate_pos_pct       |Float64 |
+        |stuff_rate_pos_pct      |Float64 |
 
     Raises:
         SeasonNotFoundError: if a requested season is below 2004.

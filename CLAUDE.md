@@ -951,6 +951,10 @@ Rules that keep code working on both 1.x and 2.0:
 - `hash()` / `hash_rows()` values change between polars versions. Never persist them.
 - `unpivot(variable_name=, value_name=)` raises in 2.0 when a melted column already has that name (1.x allowed
   it; the upgrade guide does not mention it). Use names no input column can take, such as `value_name="__value"`.
+- Never hand a GitHub release URL to polars' own reader (`pl.read_parquet(url)`, `scan_parquet`,
+  `read_parquet_schema`). In 2.0 it requests the footer with a suffix range, and the release CDN answers
+  HTTP 501. Read with `use_pyarrow=True`, as `_fetch_release_parquet` does. For a footer-only schema, pass
+  an fsspec file: `pl.read_parquet_schema(fsspec.open(url, "rb").open())`.
 
 Use the modern API surface:
 

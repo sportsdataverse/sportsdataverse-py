@@ -407,7 +407,7 @@
   "load_cfb_groups": "other-2",
   "load_cfb_linescores": "other",
   "load_cfb_model_pbp": "other",
-  "load_cfb_passing": "other",
+  "load_cfb_passing": "other-2",
   "load_cfb_pbp": "pbp",
   "load_cfb_pbp_r": "pbp-2",
   "load_cfb_percentiles": "other-2",

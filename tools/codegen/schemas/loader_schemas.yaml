@@ -3755,6 +3755,18 @@ load_cfb_passing:
   type: Float64
 - name: yardsdropback
   type: Float64
+- name: dispersion_games
+  type: Int64
+- name: EPAplay_sd
+  type: Float64
+- name: EPAplay_p10
+  type: Float64
+- name: EPAplay_p90
+  type: Float64
+- name: boom_rate
+  type: Float64
+- name: bust_rate
+  type: Float64
 - name: TEPA_rank
   type: Float64
 - name: EPAgame_rank
@@ -3785,6 +3797,8 @@ load_cfb_passing:
   type: Float64
 - name: sacked_rank
   type: Float64
+- name: boom_rate_rank
+  type: Float64
 - name: TEPA_pct
   type: Float64
 - name: EPAgame_pct
@@ -3814,6 +3828,8 @@ load_cfb_passing:
 - name: pass_int_pct
   type: Float64
 - name: sacked_pct
+  type: Float64
+- name: boom_rate_pct
   type: Float64
 - name: EPAplay_n
   type: Int64
@@ -3868,6 +3884,8 @@ load_cfb_passing:
 - name: pass_int_pos_pct
   type: Float64
 - name: sacked_pos_pct
+  type: Float64
+- name: boom_rate_pos_pct
   type: Float64
 load_cfb_pbp:
 - name: season
@@ -6102,6 +6120,18 @@ load_cfb_receiving:
   type: Float64
 - name: catchpct
   type: Float64
+- name: dispersion_games
+  type: Int64
+- name: EPAplay_sd
+  type: Float64
+- name: EPAplay_p10
+  type: Float64
+- name: EPAplay_p90
+  type: Float64
+- name: boom_rate
+  type: Float64
+- name: bust_rate
+  type: Float64
 - name: TEPA_rank
   type: Float64
 - name: EPAgame_rank
@@ -6126,6 +6156,8 @@ load_cfb_receiving:
   type: Float64
 - name: yardsgame_rank
   type: Float64
+- name: boom_rate_rank
+  type: Float64
 - name: TEPA_pct
   type: Float64
 - name: EPAgame_pct
@@ -6149,6 +6181,8 @@ load_cfb_receiving:
 - name: yardsplay_pct
   type: Float64
 - name: yardsgame_pct
+  type: Float64
+- name: boom_rate_pct
   type: Float64
 - name: EPAplay_n
   type: Int64
@@ -6191,6 +6225,8 @@ load_cfb_receiving:
 - name: yardsplay_pos_pct
   type: Float64
 - name: yardsgame_pos_pct
+  type: Float64
+- name: boom_rate_pos_pct
   type: Float64
 load_cfb_recruiting_proj:
 - name: season
@@ -6490,6 +6526,34 @@ load_cfb_rushing:
   type: Float64
 - name: yardsgame
   type: Float64
+- name: dispersion_games
+  type: Int64
+- name: EPAplay_sd
+  type: Float64
+- name: EPAplay_p10
+  type: Float64
+- name: EPAplay_p90
+  type: Float64
+- name: boom_rate
+  type: Float64
+- name: bust_rate
+  type: Float64
+- name: line_yards_share
+  type: Float64
+- name: second_level_share
+  type: Float64
+- name: open_field_share
+  type: Float64
+- name: stuff_rate
+  type: Float64
+- name: EPAplay_one_score
+  type: Float64
+- name: EPAplay_one_score_n
+  type: Int64
+- name: EPAplay_not_one_score
+  type: Float64
+- name: EPAplay_not_one_score_n
+  type: Int64
 - name: TEPA_rank
   type: Float64
 - name: EPAgame_rank
@@ -6510,6 +6574,10 @@ load_cfb_rushing:
   type: Float64
 - name: yardsgame_rank
   type: Float64
+- name: boom_rate_rank
+  type: Float64
+- name: stuff_rate_rank
+  type: Float64
 - name: TEPA_pct
   type: Float64
 - name: EPAgame_pct
@@ -6529,6 +6597,10 @@ load_cfb_rushing:
 - name: yardsplay_pct
   type: Float64
 - name: yardsgame_pct
+  type: Float64
+- name: boom_rate_pct
+  type: Float64
+- name: stuff_rate_pct
   type: Float64
 - name: EPAplay_n
   type: Int64
@@ -6565,6 +6637,10 @@ load_cfb_rushing:
 - name: yardsplay_pos_pct
   type: Float64
 - name: yardsgame_pos_pct
+  type: Float64
+- name: boom_rate_pos_pct
+  type: Float64
+- name: stuff_rate_pos_pct
   type: Float64
 load_cfb_schedule:
 - name: game_id
