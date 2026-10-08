@@ -50,7 +50,6 @@ import pytest
 
 LIVE: bool = os.environ.get("SDV_PY_LIVE_TESTS") == "1"
 
-_TRANSIENT_STATUS = (429, 502, 503, 504)
 _LIVE_REASON = "Set SDV_PY_LIVE_TESTS=1 to run tests that hit live external APIs"
 skip_if_no_live = pytest.mark.skipif(not LIVE, reason=_LIVE_REASON)
 
@@ -71,8 +70,13 @@ def skip_on_transient_network_error(exc: BaseException) -> None:
     raise exc
 
 
+def _transient_status(code: int | None) -> bool:
+    """Rate-limited or an upstream server error: retrying later can succeed."""
+    return code == 429 or (code is not None and 500 <= code <= 599)
+
+
 def _is_transient(exc: BaseException | None) -> bool:
-    """A timeout, dropped connection or HTTP 429/502/503/504 anywhere in ``exc``'s cause chain.
+    """A timeout, dropped connection, HTTP 429 or any HTTP 5xx anywhere in ``exc``'s cause chain.
 
     Covers urllib's and requests' errors (requests' ``Timeout`` / ``ConnectionError`` are not the
     builtin classes) and this package's ``AssetFetchError``, which states the status in its message
@@ -88,10 +92,10 @@ def _is_transient(exc: BaseException | None) -> bool:
     while exc is not None and id(exc) not in seen:
         seen.add(id(exc))
         if isinstance(exc, HTTPError):  # a URLError subclass: decided by status, so a 404 still fails
-            return exc.code in _TRANSIENT_STATUS
+            return _transient_status(exc.code)
         if isinstance(exc, requests.HTTPError):
-            return getattr(exc.response, "status_code", None) in _TRANSIENT_STATUS
-        if isinstance(exc, AssetFetchError) and re.search(r"\bHTTP (429|502|503|504)\b", str(exc)):
+            return _transient_status(getattr(exc.response, "status_code", None))
+        if isinstance(exc, AssetFetchError) and re.search(r"\bHTTP (429|5\d\d)\b", str(exc)):
             return True
         if isinstance(
             exc, (URLError, ConnectionError, TimeoutError, socket.timeout, requests.Timeout, requests.ConnectionError)

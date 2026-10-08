@@ -48,9 +48,12 @@ def _suppressed_timeout() -> AssertionError:
         HTTPError("u", 429, "Too Many Requests", None, None),
         _wrapped(requests.exceptions.ReadTimeout("read timed out")),
         _requests_http_error(503),
+        _requests_http_error(500),
+        HTTPError("u", 500, "Internal Server Error", None, None),
         _requests_http_error(429),
         AssetFetchError("api.example.test /v1/x answered HTTP 503: upstream unavailable"),
         AssetFetchError("release asset fetch failed with HTTP 502: https://x/y.parquet"),
+        AssetFetchError("api.example.test /v1/x answered HTTP 500 with an empty body"),
     ],
 )
 def test_upstream_trouble_is_transient(exc):
