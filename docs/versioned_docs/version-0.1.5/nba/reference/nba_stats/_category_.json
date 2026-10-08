@@ -1,0 +1,6 @@
+{
+  "label": "NBA Stats API (stats.nba.com)",
+  "position": 10,
+  "collapsed": true,
+  "link": {"type": "doc", "id": "nba/reference/nba_stats"}
+}
