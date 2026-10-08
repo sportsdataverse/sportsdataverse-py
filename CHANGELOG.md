@@ -4,8 +4,9 @@
 
 - [Unreleased](#unreleased)
   - [Fixed — NHL EDGE top-10 boards, ESPN transactions, NFL fantasy-ranking dtypes](#fixed--nhl-edge-top-10-boards-espn-transactions-nfl-fantasy-ranking-dtypes)
-  - [Docs — every public function documents its return, and shows a returns table or says why not](#docs--every-public-function-documents-its-return-and-shows-a-returns-table-or-says-why-not)
+  - [Changed — every public function documents its return, and shows a returns table or says why not](#changed--every-public-function-documents-its-return-and-shows-a-returns-table-or-says-why-not)
   - [Changed — polars 2.x is allowed; the lock moves to polars 2.0.0](#changed--polars-2x-is-allowed-the-lock-moves-to-polars-200)
+  - [Fixed — CFB player loader schemas, and remote parquet reads under polars 2.0](#fixed--cfb-player-loader-schemas-and-remote-parquet-reads-under-polars-20)
   - [Added — Expected Threat: XThreat, soccer_xthreat_rate() and a bundled grid](#added--expected-threat-xthreat-soccer_xthreat_rate-and-a-bundled-grid)
   - [Fixed — soccer_open_events() and soccer_open_dataset() failed in a fresh interpreter](#fixed--soccer_open_events-and-soccer_open_dataset-failed-in-a-fresh-interpreter)
   - [Fixed — code that polars 2.0 rejects now runs on both 1.x and 2.0](#fixed--code-that-polars-20-rejects-now-runs-on-both-1x-and-20)
