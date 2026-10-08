@@ -180,7 +180,7 @@ def build_family(league: str) -> dict[str, Any]:
         f"{cfg.name} play-by-play — one row per event, fully enriched.\n\n" + _GAME_ARGS + "Returns:\n"
         "    polars.DataFrame: One row per event (shot, goal, penalty, faceoff, hit, goalie change ...):\n"
         "        ``game_id``, ``event``, ``team_id``, ``period_of_game``, ``time_of_period``, rink\n"
-        f"        ``x_coord`` / ``y_coord`` (Float64, {cfg.pbp_style} canvas), the primary / second / third\n"
+        "        ``x_coord`` / ``y_coord`` (Float64, raw 600×300 coordinates), the primary / second / third\n"
         "        player and goalie ids and names, the plus / minus skaters on a goal, game metadata from\n"
         "        the game summary, and derived ``shot_distance`` / ``shot_angle`` / ``scoring_chance`` and\n"
         "        the ``on_ice_home`` / ``on_ice_away`` skaters from the shift feed. Player ids are Float64\n"

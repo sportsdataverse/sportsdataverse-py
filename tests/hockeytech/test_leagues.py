@@ -32,7 +32,7 @@ def test_new_leagues_use_single_league_client_defaults():
     from sportsdataverse.hockeytech import LEAGUES
 
     # The 15 leagues promoted 2026-07-12 are single-league clients: league_id=1,
-    # site_id=0, small-canvas pbp dialect (standings-verified live).
+    # site_id=0, "hockeytech_b" pbp dialect label (standings-verified live).
     for lg in ("echl", "sphl", "chl", "ushl", "bchl", "cchl", "kijhl", "mjhl"):
         cfg = LEAGUES[lg]
         assert cfg.league_id == 1

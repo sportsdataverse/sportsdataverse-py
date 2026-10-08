@@ -54,11 +54,11 @@ _LEAGUESTAT = "https://cluster.leaguestat.com/feed/index.php"
 LEAGUES: Dict[str, LeagueConfig] = {
     # Verified live 2026-07-12 (all 20 respond on lscluster.hockeytech.com; seasons +
     # scorebar schemas are byte-identical across every league). league_id for the
-    # single-league clients is 1 (standings-verified live); pbp_style for the leagues
-    # added in this pass defaults to "hockeytech_b" (small ~600x300 canvas — the
-    # junior/lower-pro majority; ECHL's small canvas was observed directly). Determine
-    # a league's true canvas with one gameCenterPlayByPlay coordinate-range probe and
-    # flip to "hockeytech_a" if it ships the ~850x400 canvas.
+    # single-league clients is 1 (standings-verified live). pbp_style is a payload-dialect
+    # label only: parse_pbp routes both values to the same parser and no code reads it for
+    # canvas purposes. Every league ships x/y on one 600x300 canvas with a top-left origin
+    # (centre ice at 300,150); a 2026-10-08 gameCenterPlayByPlay probe of PWHL, AHL, OHL
+    # and ECHL found no value above 600 in x or 300 in y. New leagues take "hockeytech_b".
     # -- flagship / already-shipped (league_id + pbp_style curated) --
     "pwhl": LeagueConfig("PWHL", "pwhl", "446521baf8c38984", 1, 0, _LSCLUSTER, "hockeytech_a", 600),
     "ahl": LeagueConfig("AHL", "ahl", "ccb91f29d6744675", 4, 3, _LSCLUSTER, "hockeytech_a", 300),
