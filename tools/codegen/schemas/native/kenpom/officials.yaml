@@ -1,0 +1,26 @@
+schema: officials
+kind: frames
+frames:
+- section: ratings_table
+  columns:
+  - name: column_0
+    type: integer
+    description: ''
+  - name: name_faa
+    type: character
+    description: ''
+  - name: rating
+    type: double
+    description: ''
+  - name: gms
+    type: integer
+    description: ''
+  - name: last_game
+    type: character
+    description: ''
+  - name: last_game_rk
+    type: character
+    description: ''
+  - name: last_game_rk_rk
+    type: character
+    description: ''

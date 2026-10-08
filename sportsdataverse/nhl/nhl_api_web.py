@@ -206,11 +206,11 @@ def nhl_right_rail(
 
     Args:
         game_id: game_id path parameter.
-        return_parsed: parse the payload through parse_nhl_web_right_rail -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
-        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        return_parsed: parse the payload through parse_nhl_web_right_rail -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
 
     Returns:
-        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+        A dict of polars/pandas DataFrames by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
@@ -676,11 +676,11 @@ def nhl_club_stats(
         team: team path parameter.
         season: season path parameter.
         game_type: game_type path parameter.
-        return_parsed: parse the payload through parse_nhl_web_club_stats -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
-        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        return_parsed: parse the payload through parse_nhl_web_club_stats -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
 
     Returns:
-        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+        A dict of polars/pandas DataFrames by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
@@ -725,11 +725,11 @@ def nhl_club_stats_season(
 
     Args:
         team: team path parameter.
-        return_parsed: parse the payload through parse_nhl_web_club_stats -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
-        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        return_parsed: parse the payload through parse_nhl_web_club_stats -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a dict of pandas DataFrames (same keys) instead of polars.
 
     Returns:
-        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+        A dict of polars/pandas DataFrames by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.

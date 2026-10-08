@@ -1,0 +1,5 @@
+columns: []
+kind: dataframe
+schema: season_type_leaders
+unverified: 'parser: parse_items returns no columns on the live payload (nba, nfl, mlb, nhl, wnba, cfb, mbb, wbb, 2026-10-07);
+  its rows sit under keys it does not read (top level: $ref, abbreviation, categories, id, name, type)'

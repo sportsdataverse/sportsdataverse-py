@@ -1,0 +1,71 @@
+schema: archive_ratings
+kind: frames
+frames:
+- section: ratings_table
+  columns:
+  - name: rk
+    type: character
+    description: ''
+  - name: team
+    type: character
+    description: ''
+  - name: ratings_on_2025_02_01_conf
+    type: character
+    description: ''
+  - name: ratings_on_2025_02_01_net_rtg
+    type: character
+    description: ''
+  - name: ratings_on_2025_02_01_o_rtg
+    type: character
+    description: ''
+  - name: ratings_on_2025_02_01_o_rtg_rk
+    type: character
+    description: ''
+  - name: ratings_on_2025_02_01_d_rtg
+    type: character
+    description: ''
+  - name: ratings_on_2025_02_01_d_rtg_rk
+    type: character
+    description: ''
+  - name: ratings_on_2025_02_01_adj_t
+    type: character
+    description: ''
+  - name: ratings_on_2025_02_01_adj_t_rk
+    type: character
+    description: ''
+  - name: final_2025_ratings_rk
+    type: character
+    description: ''
+  - name: final_2025_ratings_net_rtg
+    type: character
+    description: ''
+  - name: final_2025_ratings_o_rtg
+    type: character
+    description: ''
+  - name: final_2025_ratings_o_rtg_rk
+    type: character
+    description: ''
+  - name: final_2025_ratings_d_rtg
+    type: character
+    description: ''
+  - name: final_2025_ratings_d_rtg_rk
+    type: character
+    description: ''
+  - name: final_2025_ratings_adj_t
+    type: character
+    description: ''
+  - name: final_2025_ratings_adj_t_rk
+    type: character
+    description: ''
+  - name: rk_chg
+    type: character
+    description: ''
+  - name: em_chg
+    type: character
+    description: ''
+  - name: adj_t_chg
+    type: character
+    description: ''
+  - name: ncaa_seed
+    type: integer
+    description: ''

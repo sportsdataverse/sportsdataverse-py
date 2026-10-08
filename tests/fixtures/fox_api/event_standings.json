@@ -1,0 +1,583 @@
+{
+ "header": {
+  "link": {
+   "text": "LEAGUE STANDINGS",
+   "webUrl": "/nfl/standings"
+  },
+  "title": "STANDINGS"
+ },
+ "standingsSections": [
+  {
+   "id": "division",
+   "metadata": {
+    "parameters": {
+     "leagueName": "NFL",
+     "season": "2026",
+     "standingsType": "Division"
+    }
+   },
+   "standings": [
+    {
+     "headers": [
+      {
+       "columns": [
+        {
+         "emphasized": true,
+         "index": 0,
+         "priority": 1,
+         "sortable": "none",
+         "template": "cell-rank",
+         "text": "NFC NORTH",
+         "weight": 0.5
+        },
+        {
+         "emphasized": false,
+         "index": 1,
+         "priority": 2,
+         "sortable": "none",
+         "template": "cell-entity",
+         "weight": 4.5
+        },
+        {
+         "emphasized": false,
+         "index": 2,
+         "priority": 3,
+         "sortable": "none",
+         "template": "cell-record",
+         "text": "W-L-T",
+         "weight": 2
+        },
+        {
+         "emphasized": false,
+         "index": 3,
+         "priority": 4,
+         "sortable": "none",
+         "template": "cell-number",
+         "text": "DIV",
+         "weight": 1.5
+        },
+        {
+         "emphasized": false,
+         "index": 4,
+         "priority": 5,
+         "sortable": "none",
+         "template": "cell-number",
+         "text": "STRK",
+         "weight": 1.5
+        }
+       ],
+       "isPrimary": true
+      }
+     ],
+     "rows": [
+      {
+       "columns": [
+        {
+         "emphasized": false,
+         "index": 0,
+         "text": "1"
+        },
+        {
+         "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Vikings.vresize.200.200.medium.0.png",
+         "emphasized": false,
+         "imageAltText": "Minnesota Vikings",
+         "imageType": "image-logo",
+         "imageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Vikings.vresize.200.200.medium.0.png",
+         "index": 1,
+         "text": "Vikings"
+        },
+        {
+         "emphasized": false,
+         "index": 2,
+         "text": "4-0"
+        },
+        {
+         "emphasized": false,
+         "index": 3,
+         "text": "2-0"
+        },
+        {
+         "emphasized": false,
+         "index": 4,
+         "text": "W4"
+        }
+       ],
+       "entityLink": {
+        "analyticsName": "minnesota-vikings",
+        "analyticsSport": "nfl",
+        "color": "1, 141, 52, 255",
+        "contentType": "team",
+        "contentUri": "football/nfl/teams/23",
+        "imageAltText": "Minnesota Vikings",
+        "imageType": "image-logo",
+        "imageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Vikings.vresize.200.200.medium.0.png",
+        "layout": {
+         "path": "/layouts?type=layout&subtype=teamsLayout&elementId=nfl",
+         "tokens": {
+          "contentUri": "football/nfl/teams/23",
+          "id": "23"
+         }
+        },
+        "title": "MINNESOTA VIKINGS",
+        "type": "entity",
+        "webUrl": "/nfl/minnesota-vikings-team"
+       },
+       "isCutoff": false,
+       "isFaded": false,
+       "selected": false
+      },
+      {
+       "columns": [
+        {
+         "emphasized": false,
+         "index": 0,
+         "text": "2"
+        },
+        {
+         "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Bears.vresize.200.200.medium.1.png",
+         "emphasized": false,
+         "imageAltText": "Chicago Bears",
+         "imageType": "image-logo",
+         "imageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Bears.vresize.200.200.medium.1.png",
+         "index": 1,
+         "text": "Bears"
+        },
+        {
+         "emphasized": false,
+         "index": 2,
+         "text": "3-1"
+        },
+        {
+         "emphasized": false,
+         "index": 3,
+         "text": "0-1"
+        },
+        {
+         "emphasized": false,
+         "index": 4,
+         "text": "W2"
+        }
+       ],
+       "entityLink": {
+        "analyticsName": "chicago-bears",
+        "analyticsSport": "nfl",
+        "color": "1, 255, 104, 53",
+        "contentType": "team",
+        "contentUri": "football/nfl/teams/20",
+        "imageAltText": "Chicago Bears",
+        "imageType": "image-logo",
+        "imageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Bears.vresize.200.200.medium.1.png",
+        "layout": {
+         "path": "/layouts?type=layout&subtype=teamsLayout&elementId=nfl",
+         "tokens": {
+          "contentUri": "football/nfl/teams/20",
+          "id": "20"
+         }
+        },
+        "title": "CHICAGO BEARS",
+        "type": "entity",
+        "webUrl": "/nfl/chicago-bears-team"
+       },
+       "isCutoff": false,
+       "isFaded": false,
+       "selected": false
+      },
+      {
+       "columns": [
+        {
+         "emphasized": false,
+         "index": 0,
+         "text": "3"
+        },
+        {
+         "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Lions.vresize.200.200.medium.0.png",
+         "emphasized": false,
+         "imageAltText": "Detroit Lions",
+         "imageType": "image-logo",
+         "imageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Lions.vresize.200.200.medium.0.png",
+         "index": 1,
+         "text": "Lions"
+        },
+        {
+         "emphasized": false,
+         "index": 2,
+         "text": "2-2"
+        },
+        {
+         "emphasized": false,
+         "index": 3,
+         "text": "0-0"
+        },
+        {
+         "emphasized": false,
+         "index": 4,
+         "text": "L1"
+        }
+       ],
+       "entityLink": {
+        "analyticsName": "detroit-lions",
+        "analyticsSport": "nfl",
+        "color": "1, 82, 181, 255",
+        "contentType": "team",
+        "contentUri": "football/nfl/teams/21",
+        "imageAltText": "Detroit Lions",
+        "imageType": "image-logo",
+        "imageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Lions.vresize.200.200.medium.0.png",
+        "layout": {
+         "path": "/layouts?type=layout&subtype=teamsLayout&elementId=nfl",
+         "tokens": {
+          "contentUri": "football/nfl/teams/21",
+          "id": "21"
+         }
+        },
+        "title": "DETROIT LIONS",
+        "type": "entity",
+        "webUrl": "/nfl/detroit-lions-team"
+       },
+       "isCutoff": false,
+       "isFaded": false,
+       "selected": false
+      },
+      {
+       "columns": [
+        {
+         "emphasized": false,
+         "index": 0,
+         "text": "4"
+        },
+        {
+         "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Packers.vresize.200.200.medium.0.png",
+         "emphasized": false,
+         "imageAltText": "Green Bay Packers",
+         "imageType": "image-logo",
+         "imageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Packers.vresize.200.200.medium.0.png",
+         "index": 1,
+         "text": "Packers"
+        },
+        {
+         "emphasized": false,
+         "index": 2,
+         "text": "2-2"
+        },
+        {
+         "emphasized": false,
+         "index": 3,
+         "text": "0-1"
+        },
+        {
+         "emphasized": false,
+         "index": 4,
+         "text": "W1"
+        }
+       ],
+       "entityLink": {
+        "analyticsName": "green-bay-packers",
+        "analyticsSport": "nfl",
+        "color": "1, 0, 156, 26",
+        "contentType": "team",
+        "contentUri": "football/nfl/teams/22",
+        "imageAltText": "Green Bay Packers",
+        "imageType": "image-logo",
+        "imageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Packers.vresize.200.200.medium.0.png",
+        "layout": {
+         "path": "/layouts?type=layout&subtype=teamsLayout&elementId=nfl",
+         "tokens": {
+          "contentUri": "football/nfl/teams/22",
+          "id": "22"
+         }
+        },
+        "title": "GREEN BAY PACKERS",
+        "type": "entity",
+        "webUrl": "/nfl/green-bay-packers-team"
+       },
+       "isCutoff": false,
+       "isFaded": false,
+       "selected": true
+      }
+     ],
+     "template": "table-standings"
+    },
+    {
+     "headers": [
+      {
+       "columns": [
+        {
+         "emphasized": true,
+         "index": 0,
+         "priority": 1,
+         "sortable": "none",
+         "template": "cell-rank",
+         "text": "NFC SOUTH",
+         "weight": 0.5
+        },
+        {
+         "emphasized": false,
+         "index": 1,
+         "priority": 2,
+         "sortable": "none",
+         "template": "cell-entity",
+         "weight": 4.5
+        },
+        {
+         "emphasized": false,
+         "index": 2,
+         "priority": 3,
+         "sortable": "none",
+         "template": "cell-record",
+         "text": "W-L-T",
+         "weight": 2
+        },
+        {
+         "emphasized": false,
+         "index": 3,
+         "priority": 4,
+         "sortable": "none",
+         "template": "cell-number",
+         "text": "DIV",
+         "weight": 1.5
+        },
+        {
+         "emphasized": false,
+         "index": 4,
+         "priority": 5,
+         "sortable": "none",
+         "template": "cell-number",
+         "text": "STRK",
+         "weight": 1.5
+        }
+       ],
+       "isPrimary": true
+      }
+     ],
+     "rows": [
+      {
+       "columns": [
+        {
+         "emphasized": false,
+         "index": 0,
+         "text": "1"
+        },
+        {
+         "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Panthers.vresize.200.200.medium.0.png",
+         "emphasized": false,
+         "imageAltText": "Carolina Panthers",
+         "imageType": "image-logo",
+         "imageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Panthers.vresize.200.200.medium.0.png",
+         "index": 1,
+         "text": "Panthers"
+        },
+        {
+         "emphasized": false,
+         "index": 2,
+         "text": "2-2"
+        },
+        {
+         "emphasized": false,
+         "index": 3,
+         "text": "1-0"
+        },
+        {
+         "emphasized": false,
+         "index": 4,
+         "text": "W1"
+        }
+       ],
+       "entityLink": {
+        "analyticsName": "carolina-panthers",
+        "analyticsSport": "nfl",
+        "color": "1, 82, 181, 255",
+        "contentType": "team",
+        "contentUri": "football/nfl/teams/32",
+        "imageAltText": "Carolina Panthers",
+        "imageType": "image-logo",
+        "imageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Panthers.vresize.200.200.medium.0.png",
+        "layout": {
+         "path": "/layouts?type=layout&subtype=teamsLayout&elementId=nfl",
+         "tokens": {
+          "contentUri": "football/nfl/teams/32",
+          "id": "32"
+         }
+        },
+        "title": "CAROLINA PANTHERS",
+        "type": "entity",
+        "webUrl": "/nfl/carolina-panthers-team"
+       },
+       "isCutoff": false,
+       "isFaded": false,
+       "selected": false
+      },
+      {
+       "columns": [
+        {
+         "emphasized": false,
+         "index": 0,
+         "text": "2"
+        },
+        {
+         "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Falcons.vresize.200.200.medium.1.png",
+         "emphasized": false,
+         "imageAltText": "Atlanta Falcons",
+         "imageType": "image-logo",
+         "imageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Falcons.vresize.200.200.medium.1.png",
+         "index": 1,
+         "text": "Falcons"
+        },
+        {
+         "emphasized": false,
+         "index": 2,
+         "text": "2-2"
+        },
+        {
+         "emphasized": false,
+         "index": 3,
+         "text": "1-1"
+        },
+        {
+         "emphasized": false,
+         "index": 4,
+         "text": "W2"
+        }
+       ],
+       "entityLink": {
+        "analyticsName": "atlanta-falcons",
+        "analyticsSport": "nfl",
+        "color": "1, 240, 31, 65",
+        "contentType": "team",
+        "contentUri": "football/nfl/teams/25",
+        "imageAltText": "Atlanta Falcons",
+        "imageType": "image-logo",
+        "imageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Falcons.vresize.200.200.medium.1.png",
+        "layout": {
+         "path": "/layouts?type=layout&subtype=teamsLayout&elementId=nfl",
+         "tokens": {
+          "contentUri": "football/nfl/teams/25",
+          "id": "25"
+         }
+        },
+        "title": "ATLANTA FALCONS",
+        "type": "entity",
+        "webUrl": "/nfl/atlanta-falcons-team"
+       },
+       "isCutoff": false,
+       "isFaded": false,
+       "selected": true
+      },
+      {
+       "columns": [
+        {
+         "emphasized": false,
+         "index": 0,
+         "text": "3"
+        },
+        {
+         "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Saints-alternate.vresize.200.200.medium.0.png",
+         "emphasized": false,
+         "imageAltText": "New Orleans Saints",
+         "imageType": "image-logo",
+         "imageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Saints.vresize.200.200.medium.1.png",
+         "index": 1,
+         "text": "Saints"
+        },
+        {
+         "emphasized": false,
+         "index": 2,
+         "text": "1-3"
+        },
+        {
+         "emphasized": false,
+         "index": 3,
+         "text": "0-1"
+        },
+        {
+         "emphasized": false,
+         "index": 4,
+         "text": "L2"
+        }
+       ],
+       "entityLink": {
+        "analyticsName": "new-orleans-saints",
+        "analyticsSport": "nfl",
+        "color": "1, 222, 190, 103",
+        "contentType": "team",
+        "contentUri": "football/nfl/teams/27",
+        "imageAltText": "New Orleans Saints",
+        "imageType": "image-logo",
+        "imageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Saints-alternate.vresize.200.200.medium.0.png",
+        "layout": {
+         "path": "/layouts?type=layout&subtype=teamsLayout&elementId=nfl",
+         "tokens": {
+          "contentUri": "football/nfl/teams/27",
+          "id": "27"
+         }
+        },
+        "title": "NEW ORLEANS SAINTS",
+        "type": "entity",
+        "webUrl": "/nfl/new-orleans-saints-team"
+       },
+       "isCutoff": false,
+       "isFaded": false,
+       "selected": false
+      },
+      {
+       "columns": [
+        {
+         "emphasized": false,
+         "index": 0,
+         "text": "4"
+        },
+        {
+         "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Buccaneers.vresize.200.200.medium.2.png",
+         "emphasized": false,
+         "imageAltText": "Tampa Bay Buccaneers",
+         "imageType": "image-logo",
+         "imageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Buccaneers.vresize.200.200.medium.2.png",
+         "index": 1,
+         "text": "Buccaneers"
+        },
+        {
+         "emphasized": false,
+         "index": 2,
+         "text": "0-4"
+        },
+        {
+         "emphasized": false,
+         "index": 3,
+         "text": "0-0"
+        },
+        {
+         "emphasized": false,
+         "index": 4,
+         "text": "L4"
+        }
+       ],
+       "entityLink": {
+        "analyticsName": "tampa-bay-buccaneers",
+        "analyticsSport": "nfl",
+        "color": "1, 170, 0, 49",
+        "contentType": "team",
+        "contentUri": "football/nfl/teams/24",
+        "imageAltText": "Tampa Bay Buccaneers",
+        "imageType": "image-logo",
+        "imageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Buccaneers.vresize.200.200.medium.2.png",
+        "layout": {
+         "path": "/layouts?type=layout&subtype=teamsLayout&elementId=nfl",
+         "tokens": {
+          "contentUri": "football/nfl/teams/24",
+          "id": "24"
+         }
+        },
+        "title": "TAMPA BAY BUCCANEERS",
+        "type": "entity",
+        "webUrl": "/nfl/tampa-bay-buccaneers-team"
+       },
+       "isCutoff": false,
+       "isFaded": false,
+       "selected": false
+      }
+     ],
+     "template": "table-standings"
+    }
+   ]
+  }
+ ]
+}

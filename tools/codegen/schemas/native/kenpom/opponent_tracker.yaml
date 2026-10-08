@@ -1,0 +1,77 @@
+schema: opponent_tracker
+kind: frames
+frames:
+- section: conf_table
+  columns:
+  - name: date
+    type: character
+    description: ''
+  - name: team
+    type: character
+    description: ''
+  - name: result
+    type: character
+    description: ''
+  - name: adj_oe
+    type: double
+    description: ''
+  - name: adj_oe_1
+    type: integer
+    description: ''
+  - name: e_fg_pct
+    type: double
+    description: ''
+  - name: e_fg_pct_1
+    type: integer
+    description: ''
+  - name: to_pct
+    type: double
+    description: ''
+  - name: to_pct_1
+    type: integer
+    description: ''
+  - name: or_pct
+    type: double
+    description: ''
+  - name: or_pct_1
+    type: integer
+    description: ''
+  - name: ftr
+    type: double
+    description: ''
+  - name: ftr_1
+    type: integer
+    description: ''
+  - name: 2_p_pct
+    type: double
+    description: ''
+  - name: 2_p_pct_1
+    type: integer
+    description: ''
+  - name: 3_p_pct
+    type: double
+    description: ''
+  - name: 3_p_pct_1
+    type: integer
+    description: ''
+  - name: ft_pct
+    type: double
+    description: ''
+  - name: ft_pct_1
+    type: integer
+    description: ''
+  - name: 3_pa_pct
+    type: double
+    description: ''
+  - name: 3_pa_pct_1
+    type: integer
+    description: ''
+  - name: apl
+    type: double
+    description: ''
+  - name: apl_1
+    type: integer
+    description: ''
+  - name: ncaa_seed
+    type: integer
+    description: ''

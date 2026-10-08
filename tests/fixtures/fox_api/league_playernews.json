@@ -1,0 +1,1895 @@
+{
+ "items": [
+  {
+   "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/327719.vresize.140.170.medium.4.png",
+   "date": "2026-10-07T22:55:41Z",
+   "description": "McConkey (foot) was a non-participant at Wednesday's practice.",
+   "entityLink": {
+    "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/327719.vresize.140.170.medium.4.png",
+    "analyticsName": "ladd-mcconkey",
+    "analyticsSport": "nfl",
+    "color": "1, 82, 181, 255",
+    "contentType": "athlete",
+    "contentUri": "football/nfl/athletes/327719",
+    "imageAltText": "Ladd McConkey",
+    "imageType": "image-headshot",
+    "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/327719.vresize.140.170.medium.4.png",
+    "layout": {
+     "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+     "tokens": {
+      "contentUri": "football/nfl/athletes/327719",
+      "id": "327719"
+     }
+    },
+    "title": "LADD MCCONKEY",
+    "type": "entity",
+    "webUrl": "/nfl/ladd-mcconkey-player"
+   },
+   "headline": "No practice Wednesday",
+   "imageAltText": "Ladd McConkey",
+   "imageType": "image-headshot",
+   "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/327719.vresize.140.170.medium.4.png",
+   "impact": "McConkey attempted to play through a foot injury in Week 4, but when he exited this past Sunday's loss at Seattle in the third quarter, he had no catches among his two targets. Coach Jim Harbaugh told Alex Insdorf of BoltBeat.com on Monday that McConkey is \"week-to-week,\" so his lack of activity to begin Week 5 prep lines up with that assessment. Friday's injury report ultimately may provide clarity on McConkey's status for Sunday's game against the Broncos.",
+   "impactTitle": "Impact",
+   "source": "Rotowire",
+   "subtitle": "LAC #15 - WR",
+   "title": "Ladd McConkey"
+  },
+  {
+   "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/14006.vresize.140.170.medium.5.png",
+   "date": "2026-10-07T22:41:03Z",
+   "description": "Goedert (knee) practiced on a limited basis Wednesday.",
+   "entityLink": {
+    "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/14006.vresize.140.170.medium.5.png",
+    "analyticsName": "dallas-goedert",
+    "analyticsSport": "nfl",
+    "color": "1, 0, 170, 150",
+    "contentType": "athlete",
+    "contentUri": "football/nfl/athletes/14006",
+    "imageAltText": "Dallas Goedert",
+    "imageType": "image-headshot",
+    "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/14006.vresize.140.170.medium.5.png",
+    "layout": {
+     "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+     "tokens": {
+      "contentUri": "football/nfl/athletes/14006",
+      "id": "14006"
+     }
+    },
+    "title": "DALLAS GOEDERT",
+    "type": "entity",
+    "webUrl": "/nfl/dallas-goedert-player"
+   },
+   "headline": "Officially limited Wednesday",
+   "imageAltText": "Dallas Goedert",
+   "imageType": "image-headshot",
+   "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/14006.vresize.140.170.medium.5.png",
+   "impact": "Goedert has missed the last two contests due to a sprained MCL in his right knee, but his return to drills this week puts game action back on the table for the ninth-year tight end. He likely will need to string together consecutive days of on-field work to give the Eagles peace of mind and clear him to play Sunday versus the Jaguars in London. For the time being, though, Johnny Mundt and E.J. Jenkins are the healthy TE options on the active roster, and the team can still use one more elevation on Zach Ertz to reinforce the position",
+   "impactTitle": "Impact",
+   "source": "Rotowire",
+   "subtitle": "PHI #88 - TE",
+   "title": "Dallas Goedert"
+  },
+  {
+   "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/21467.vresize.140.170.medium.4.png",
+   "date": "2026-10-07T22:32:26Z",
+   "description": "Jefferson (ankle) said Wednesday that he's aiming to play Sunday at New Orleans, Kevin Seifert of ESPN reports.",
+   "entityLink": {
+    "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/21467.vresize.140.170.medium.4.png",
+    "analyticsName": "justin-jefferson",
+    "analyticsSport": "nfl",
+    "color": "1, 141, 52, 255",
+    "contentType": "athlete",
+    "contentUri": "football/nfl/athletes/21467",
+    "imageAltText": "Justin Jefferson",
+    "imageType": "image-headshot",
+    "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/21467.vresize.140.170.medium.4.png",
+    "layout": {
+     "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+     "tokens": {
+      "contentUri": "football/nfl/athletes/21467",
+      "id": "21467"
+     }
+    },
+    "title": "JUSTIN JEFFERSON",
+    "type": "entity",
+    "webUrl": "/nfl/justin-jefferson-player"
+   },
+   "headline": "Intends to play Sunday",
+   "imageAltText": "Justin Jefferson",
+   "imageType": "image-headshot",
+   "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/21467.vresize.140.170.medium.4.png",
+   "impact": "Coach Kevin O'Connell provided an update on Jefferson earlier Wednesday, saying the wide receiver \"is doing well\" and will be limited to begin Week 5 prep. Jefferson's ensuing activity level indeed was limited, but per the player himself he wants to play against the Saints as a native of Louisiana. The Vikings will take the situation \"day by day,\" and his listing on Friday's practice report may be telling for his odds to suit up this weekend.",
+   "impactTitle": "Impact",
+   "source": "Rotowire",
+   "subtitle": "MIN #18 - WR",
+   "title": "Justin Jefferson"
+  },
+  {
+   "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/10513.vresize.140.170.medium.5.png",
+   "date": "2026-10-07T22:28:34Z",
+   "description": "Evans (ribs) was listed as a limited participant for Wednesday's practice, Cam Inman of The San Jose Mercury News reports.",
+   "entityLink": {
+    "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/10513.vresize.140.170.medium.5.png",
+    "analyticsName": "mike-evans",
+    "analyticsSport": "nfl",
+    "color": "1, 170, 0, 49",
+    "contentType": "athlete",
+    "contentUri": "football/nfl/athletes/10513",
+    "imageAltText": "Mike Evans",
+    "imageType": "image-headshot",
+    "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/10513.vresize.140.170.medium.5.png",
+    "layout": {
+     "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+     "tokens": {
+      "contentUri": "football/nfl/athletes/10513",
+      "id": "10513"
+     }
+    },
+    "title": "MIKE EVANS",
+    "type": "entity",
+    "webUrl": "/nfl/mike-evans-player"
+   },
+   "headline": "Limited at Wednesday's practice",
+   "imageAltText": "Mike Evans",
+   "imageType": "image-headshot",
+   "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/10513.vresize.140.170.medium.5.png",
+   "impact": "With Evans managing the rib issue well enough to practice in a limited capacity after playing through it last Sunday, his status appears to be trending in the right direction ahead of the Niners' Week 5 date with the Seahawks. Evans has been dinged up seemingly all season already but has been productive through it all, catching 17 passes for 213 yards and two touchdowns on 24 targets.",
+   "impactTitle": "Impact",
+   "source": "Rotowire",
+   "subtitle": "SF #5 - WR",
+   "title": "Mike Evans"
+  },
+  {
+   "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/13959.vresize.140.170.medium.5.png",
+   "date": "2026-10-07T22:21:41Z",
+   "description": "Barkley (hamstring) officially didn't practice Wednesday",
+   "entityLink": {
+    "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/13959.vresize.140.170.medium.5.png",
+    "analyticsName": "saquon-barkley",
+    "analyticsSport": "nfl",
+    "color": "1, 0, 170, 150",
+    "contentType": "athlete",
+    "contentUri": "football/nfl/athletes/13959",
+    "imageAltText": "Saquon Barkley",
+    "imageType": "image-headshot",
+    "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/13959.vresize.140.170.medium.5.png",
+    "layout": {
+     "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+     "tokens": {
+      "contentUri": "football/nfl/athletes/13959",
+      "id": "13959"
+     }
+    },
+    "title": "SAQUON BARKLEY",
+    "type": "entity",
+    "webUrl": "/nfl/saquon-barkley-player"
+   },
+   "headline": "No practice Wednesday",
+   "imageAltText": "Saquon Barkley",
+   "imageType": "image-headshot",
+   "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/13959.vresize.140.170.medium.5.png",
+   "impact": "Barkley lasted just four offensive snaps before exiting this past Sunday's loss to the Rams in the first quarter due to a hamstring issue. Head coach Nick Sirianni remained mum Monday regarding Barkley's status, according to Zach Berman of The Athletic, though Ian Rapoport of NFL Network later reported that the running back is considered week-to-week with an injury that's not deemed to be long term. As a result, Barkley's lack of activity Wednesday isn't a shock, and if he indeed sits out Sunday's game against the Jaguars in London, he likely will pass off the No. 1 spot in the Eagles backfield to Will Shipley, with Dameon Pierce backing him up.",
+   "impactTitle": "Impact",
+   "source": "Rotowire",
+   "subtitle": "PHI #26 - RB",
+   "title": "Saquon Barkley"
+  },
+  {
+   "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22275.vresize.140.170.medium.3.png",
+   "date": "2026-10-07T22:00:09Z",
+   "description": "Stevenson was listed as a limited participant in Wednesday's practice due to a knee injury.",
+   "entityLink": {
+    "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22275.vresize.140.170.medium.3.png",
+    "analyticsName": "rhamondre-stevenson",
+    "analyticsSport": "nfl",
+    "color": "1, 0, 87, 244",
+    "contentType": "athlete",
+    "contentUri": "football/nfl/athletes/22275",
+    "imageAltText": "Rhamondre Stevenson",
+    "imageType": "image-headshot",
+    "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22275.vresize.140.170.medium.3.png",
+    "layout": {
+     "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+     "tokens": {
+      "contentUri": "football/nfl/athletes/22275",
+      "id": "22275"
+     }
+    },
+    "title": "RHAMONDRE STEVENSON",
+    "type": "entity",
+    "webUrl": "/nfl/rhamondre-stevenson-player"
+   },
+   "headline": "Turns in limited practice Wednesday",
+   "imageAltText": "Rhamondre Stevenson",
+   "imageType": "image-headshot",
+   "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22275.vresize.140.170.medium.3.png",
+   "impact": "Per Mark Daniels of MassLive.com, head coach Mike Vrabel said prior to Wednesday's session that Stevenson had \"no chance\" of practicing, but the running back ultimately was able to get in enough on-field work to receive a limited listing on the Patriots' first Week 5 injury report. Stevenson is banged up after he appeared to land awkwardly on his right knee after getting tackled on his final carry with 1:05 remaining in this past Sunday's 29-26 win over the Bills. Vrabel noted that Stevenson hasn't been ruled out for this weekend's matchup with the Raiders, though the 28-year-old would likely need to upgrade to full practice participation Thursday or Friday in order to avoid taking a designation into Sunday.",
+   "impactTitle": "Impact",
+   "source": "Rotowire",
+   "subtitle": "NE #38 - RB",
+   "title": "Rhamondre Stevenson"
+  },
+  {
+   "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/329379.vresize.140.170.medium.1.png",
+   "date": "2026-10-07T21:16:50Z",
+   "description": "Head coach Mike LaFleur said Wednesday that Love's ankle injury shouldn't impact him during Week 5 prep, Tyler Drake of ArizonaSports.com reports.",
+   "entityLink": {
+    "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/329379.vresize.140.170.medium.1.png",
+    "analyticsName": "jeremiyah-love",
+    "analyticsSport": "nfl",
+    "color": "1, 170, 0, 49",
+    "contentType": "athlete",
+    "contentUri": "football/nfl/athletes/329379",
+    "imageAltText": "Jeremiyah Love",
+    "imageType": "image-headshot",
+    "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/329379.vresize.140.170.medium.1.png",
+    "layout": {
+     "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+     "tokens": {
+      "contentUri": "football/nfl/athletes/329379",
+      "id": "329379"
+     }
+    },
+    "title": "JEREMIYAH LOVE",
+    "type": "entity",
+    "webUrl": "/nfl/jeremiyah-love-player"
+   },
+   "headline": "Ankle injury downplayed by LaFleur",
+   "imageAltText": "Jeremiyah Love",
+   "imageType": "image-headshot",
+   "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/329379.vresize.140.170.medium.1.png",
+   "impact": "The Cardinals have yet to post Wednesday's injury report, but LaFleur previously told Dani Sureck of the team's official site on Monday that Love has a new ankle issue that's unrelated to the high-ankle sprain he tended to in August. LaFleur's most recent comments imply that Love may not have practice restrictions this week, or if he does he could be listed as \"not-injury related, rest.\"",
+   "impactTitle": "Impact",
+   "source": "Rotowire",
+   "subtitle": "ARI #4 - RB",
+   "title": "Jeremiyah Love"
+  },
+  {
+   "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/13985.vresize.140.170.medium.4.png",
+   "date": "2026-10-07T21:15:17Z",
+   "description": "The Ravens listed Jackson (ankle) as a non-participant in Wednesday's practice.",
+   "entityLink": {
+    "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/13985.vresize.140.170.medium.4.png",
+    "analyticsName": "lamar-jackson",
+    "analyticsSport": "nfl",
+    "color": "1, 141, 52, 255",
+    "contentType": "athlete",
+    "contentUri": "football/nfl/athletes/13985",
+    "imageAltText": "Lamar Jackson",
+    "imageType": "image-headshot",
+    "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/13985.vresize.140.170.medium.4.png",
+    "layout": {
+     "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+     "tokens": {
+      "contentUri": "football/nfl/athletes/13985",
+      "id": "13985"
+     }
+    },
+    "title": "LAMAR JACKSON",
+    "type": "entity",
+    "webUrl": "/nfl/lamar-jackson-player"
+   },
+   "headline": "No practice, but not ruled out for Week 5",
+   "imageAltText": "Lamar Jackson",
+   "imageType": "image-headshot",
+   "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/13985.vresize.140.170.medium.4.png",
+   "impact": "Head coach Jesse Minter was non-committal on Jackson's status for the Ravens' Week 5 matchup with the Falcons following practice, noting that \"there'll be a point later in the week\" where the team \"figures out where he's at.\" Per Sam Cohn of The Baltimore Sun, Minter also noted Wednesday that Jackson could miss the majority of the practice week and still play Sunday, but at this point, the two-time MVP seems more likely than not to sit out in Atlanta while he manages a sprained left ankle. Tyler Huntley took the reps with the first-team offense during Wednesday's practice and would be in line to start if Jackson is sidelined this weekend.",
+   "impactTitle": "Impact",
+   "source": "Rotowire",
+   "subtitle": "BAL #8 - QB",
+   "title": "Lamar Jackson"
+  },
+  {
+   "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/326927.vresize.140.170.medium.3.png",
+   "date": "2026-10-07T21:06:11Z",
+   "description": "Flowers (foot) was limited in Wednesday's practice.",
+   "entityLink": {
+    "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/326927.vresize.140.170.medium.3.png",
+    "analyticsName": "zay-flowers",
+    "analyticsSport": "nfl",
+    "color": "1, 141, 52, 255",
+    "contentType": "athlete",
+    "contentUri": "football/nfl/athletes/326927",
+    "imageAltText": "Zay Flowers",
+    "imageType": "image-headshot",
+    "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/326927.vresize.140.170.medium.3.png",
+    "layout": {
+     "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+     "tokens": {
+      "contentUri": "football/nfl/athletes/326927",
+      "id": "326927"
+     }
+    },
+    "title": "ZAY FLOWERS",
+    "type": "entity",
+    "webUrl": "/nfl/zay-flowers-player"
+   },
+   "headline": "Limited with foot injury Wednesday",
+   "imageAltText": "Zay Flowers",
+   "imageType": "image-headshot",
+   "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/326927.vresize.140.170.medium.3.png",
+   "impact": "Flowers has dealt with hamstring issues off and on since training camp, and now he has a new foot issue heading into Week 5. He was able to get some work in during Wednesday's session, but it didn't come during the media viewing period. The Ravens' outlook on offense is already tenuous, with Lamar Jackson's ankle injury preventing him from practicing Wednesday. Flowers still has time to ramp up to a full practice before the end of the week, however.",
+   "impactTitle": "Impact",
+   "source": "Rotowire",
+   "subtitle": "BAL #4 - WR",
+   "title": "Zay Flowers"
+  },
+  {
+   "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/14964.vresize.140.170.medium.4.png",
+   "date": "2026-10-07T20:51:55Z",
+   "description": "Pollard (foot) did not practice Wednesday.",
+   "entityLink": {
+    "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/14964.vresize.140.170.medium.4.png",
+    "analyticsName": "tony-pollard",
+    "analyticsSport": "nfl",
+    "color": "1, 82, 181, 255",
+    "contentType": "athlete",
+    "contentUri": "football/nfl/athletes/14964",
+    "imageAltText": "Tony Pollard",
+    "imageType": "image-headshot",
+    "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/14964.vresize.140.170.medium.4.png",
+    "layout": {
+     "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+     "tokens": {
+      "contentUri": "football/nfl/athletes/14964",
+      "id": "14964"
+     }
+    },
+    "title": "TONY POLLARD",
+    "type": "entity",
+    "webUrl": "/nfl/tony-pollard-player"
+   },
+   "headline": "Does not practice Wednesday",
+   "imageAltText": "Tony Pollard",
+   "imageType": "image-headshot",
+   "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/14964.vresize.140.170.medium.4.png",
+   "impact": "Pollard dealt with a foot issue that limited his participation in practice last week, but the veteran still played against the Ravens. He may be on a similar trajectory going into Week 5. Pollard was able to log a full practice Thursday going into Week 4. The Titans host the Texans on Sunday.",
+   "impactTitle": "Impact",
+   "source": "Rotowire",
+   "subtitle": "TEN #20 - RB",
+   "title": "Tony Pollard"
+  },
+  {
+   "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/328616.vresize.140.170.medium.4.png",
+   "date": "2026-10-07T20:45:16Z",
+   "description": "Shough was limited with a non-throwing hand injury Wednesday, Mike Triplett of NewOrleans.Football reports.",
+   "entityLink": {
+    "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/328616.vresize.140.170.medium.4.png",
+    "analyticsName": "tyler-shough",
+    "analyticsSport": "nfl",
+    "color": "1, 222, 190, 103",
+    "contentType": "athlete",
+    "contentUri": "football/nfl/athletes/328616",
+    "imageAltText": "Tyler Shough",
+    "imageType": "image-headshot",
+    "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/328616.vresize.140.170.medium.4.png",
+    "layout": {
+     "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+     "tokens": {
+      "contentUri": "football/nfl/athletes/328616",
+      "id": "328616"
+     }
+    },
+    "title": "TYLER SHOUGH",
+    "type": "entity",
+    "webUrl": "/nfl/tyler-shough-player"
+   },
+   "headline": "Limited with left hand issue",
+   "imageAltText": "Tyler Shough",
+   "imageType": "image-headshot",
+   "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/328616.vresize.140.170.medium.4.png",
+   "impact": "Shough had his left hand wrapped during Wednesday's walkthrough, but the team is not overly concerned, according to Triplett. It was a physical game Monday night as the Falcons registered 12 quarterback hits on Shough. As it stands, Shough's status is not in jeopardy for Sunday's game against the Vikings.",
+   "impactTitle": "Impact",
+   "source": "Rotowire",
+   "subtitle": "NO #6 - QB",
+   "title": "Tyler Shough"
+  },
+  {
+   "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22880.vresize.140.170.medium.3.png",
+   "date": "2026-10-07T20:39:40Z",
+   "description": "Likely (knee/groin) practiced in a limited capacity Wednesday, Dan Salomone of the Giants' official site reports.",
+   "entityLink": {
+    "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22880.vresize.140.170.medium.3.png",
+    "analyticsName": "isaiah-likely",
+    "analyticsSport": "nfl",
+    "color": "1, 0, 87, 244",
+    "contentType": "athlete",
+    "contentUri": "football/nfl/athletes/22880",
+    "imageAltText": "Isaiah Likely",
+    "imageType": "image-headshot",
+    "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22880.vresize.140.170.medium.3.png",
+    "layout": {
+     "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+     "tokens": {
+      "contentUri": "football/nfl/athletes/22880",
+      "id": "22880"
+     }
+    },
+    "title": "ISAIAH LIKELY",
+    "type": "entity",
+    "webUrl": "/nfl/isaiah-likely-player"
+   },
+   "headline": "Limited Wednesday",
+   "imageAltText": "Isaiah Likely",
+   "imageType": "image-headshot",
+   "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22880.vresize.140.170.medium.3.png",
+   "impact": "Likely is tending to a pair of health concerns as Week 5 prep begins, but he at least has two more chances to get back to full this week and avoid a designation ahead of Sunday's game at Washington. Through four contests this season, he's been a key cog in the Giants' passing game, totaling 22 catches (on 35 targets) for 190 yards and two touchdowns.",
+   "impactTitle": "Impact",
+   "source": "Rotowire",
+   "subtitle": "NYG #9 - TE",
+   "title": "Isaiah Likely"
+  },
+  {
+   "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22774.vresize.140.170.medium.4.png",
+   "date": "2026-10-07T20:38:53Z",
+   "description": "Hall (quadriceps) didn't practice Wednesday.",
+   "entityLink": {
+    "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22774.vresize.140.170.medium.4.png",
+    "analyticsName": "breece-hall",
+    "analyticsSport": "nfl",
+    "color": "1, 0, 156, 26",
+    "contentType": "athlete",
+    "contentUri": "football/nfl/athletes/22774",
+    "imageAltText": "Breece Hall",
+    "imageType": "image-headshot",
+    "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22774.vresize.140.170.medium.4.png",
+    "layout": {
+     "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+     "tokens": {
+      "contentUri": "football/nfl/athletes/22774",
+      "id": "22774"
+     }
+    },
+    "title": "BREECE HALL",
+    "type": "entity",
+    "webUrl": "/nfl/breece-hall-player"
+   },
+   "headline": "Sits out practice Wednesday",
+   "imageAltText": "Breece Hall",
+   "imageType": "image-headshot",
+   "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22774.vresize.140.170.medium.4.png",
+   "impact": "Hall's continued absence from practice comes as little surprise after head coach Aaron Glenn said prior to Wednesday's session that the running back is week-to-week. With Hall looking likely to miss a second straight game Sunday versus the Browns, Braelon Allen should be in store for another turn as the Jets' lead back.",
+   "impactTitle": "Impact",
+   "source": "Rotowire",
+   "subtitle": "NYJ #20 - RB",
+   "title": "Breece Hall"
+  },
+  {
+   "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/21486.vresize.140.170.medium.6.png",
+   "date": "2026-10-07T20:38:28Z",
+   "description": "Higgins (groin/neck) did not practice Wednesday, Jay Morrison of SI.com reports.",
+   "entityLink": {
+    "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/21486.vresize.140.170.medium.6.png",
+    "analyticsName": "tee-higgins",
+    "analyticsSport": "nfl",
+    "color": "1, 255, 104, 53",
+    "contentType": "athlete",
+    "contentUri": "football/nfl/athletes/21486",
+    "imageAltText": "Tee Higgins",
+    "imageType": "image-headshot",
+    "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/21486.vresize.140.170.medium.6.png",
+    "layout": {
+     "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+     "tokens": {
+      "contentUri": "football/nfl/athletes/21486",
+      "id": "21486"
+     }
+    },
+    "title": "TEE HIGGINS",
+    "type": "entity",
+    "webUrl": "/nfl/tee-higgins-player"
+   },
+   "headline": "Does not practice Wednesday",
+   "imageAltText": "Tee Higgins",
+   "imageType": "image-headshot",
+   "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/21486.vresize.140.170.medium.6.png",
+   "impact": "It was reported earlier Wednesday that Higgins would be limited in that session, but Higgins was ultimately held out completely. Fellow wideout Ja'Marr Chase (concussion) also did not practice, while Colbie Young returned in limited fashion. Higgins' status will be under the microscope as the week progresses.",
+   "impactTitle": "Impact",
+   "source": "Rotowire",
+   "subtitle": "CIN #5 - WR",
+   "title": "Tee Higgins"
+  },
+  {
+   "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/328677.vresize.140.170.medium.2.png",
+   "date": "2026-10-07T20:32:30Z",
+   "description": "Skattebo was limited at Wednesday's practice due to a shoulder injury, Dan Salomone of the Giants' official site reports.",
+   "entityLink": {
+    "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/328677.vresize.140.170.medium.2.png",
+    "analyticsName": "cam-skattebo",
+    "analyticsSport": "nfl",
+    "color": "1, 0, 87, 244",
+    "contentType": "athlete",
+    "contentUri": "football/nfl/athletes/328677",
+    "imageAltText": "Cam Skattebo",
+    "imageType": "image-headshot",
+    "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/328677.vresize.140.170.medium.2.png",
+    "layout": {
+     "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+     "tokens": {
+      "contentUri": "football/nfl/athletes/328677",
+      "id": "328677"
+     }
+    },
+    "title": "CAM SKATTEBO",
+    "type": "entity",
+    "webUrl": "/nfl/cam-skattebo-player"
+   },
+   "headline": "Dealing with shoulder issue",
+   "imageAltText": "Cam Skattebo",
+   "imageType": "image-headshot",
+   "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/328677.vresize.140.170.medium.2.png",
+   "impact": "Skattebo has yet to hit 100 rushing yards in a game this season and currently is sitting on 302 yards from scrimmage and one rushing TD on 76 touches through four contests. As the Giants kick off prep for a Week 5 road matchup with the Commanders, he's dealing with a health concern and likely will need to practice fully Thursday or Friday in order to avoid a designation ahead of the weekend.",
+   "impactTitle": "Impact",
+   "source": "Rotowire",
+   "subtitle": "NYG #44 - RB",
+   "title": "Cam Skattebo"
+  },
+  {
+   "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/327689.vresize.140.170.medium.3.png",
+   "date": "2026-10-07T20:26:33Z",
+   "description": "Nabers didn't practice Wednesday due to a knee injury, Dan Salomone of the Giants' official site reports.",
+   "entityLink": {
+    "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/327689.vresize.140.170.medium.3.png",
+    "analyticsName": "malik-nabers",
+    "analyticsSport": "nfl",
+    "color": "1, 0, 87, 244",
+    "contentType": "athlete",
+    "contentUri": "football/nfl/athletes/327689",
+    "imageAltText": "Malik Nabers",
+    "imageType": "image-headshot",
+    "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/327689.vresize.140.170.medium.3.png",
+    "layout": {
+     "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+     "tokens": {
+      "contentUri": "football/nfl/athletes/327689",
+      "id": "327689"
+     }
+    },
+    "title": "MALIK NABERS",
+    "type": "entity",
+    "webUrl": "/nfl/malik-nabers-player"
+   },
+   "headline": "DNP due to knee injury",
+   "imageAltText": "Malik Nabers",
+   "imageType": "image-headshot",
+   "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/327689.vresize.140.170.medium.3.png",
+   "impact": "After Wednesday's session, Nabers relayed to Connor Hughes of SNY.tv that he did \"as much as I could,\" and now the nature of that discomfort has been revealed. It's a bit concerning that Nabers went down as a DNP with a knee issue to begin Week 5 prep, especially since he's a year removed from tearing his right ACL. He also told Ralph Vacchiano of FoxSports.com that his shoulder is \"a little sore,\" but the team didn't list that as the reason for his absence. In any case, Nabers' status will be watched as the week goes on to get a sense of his odds to suit up Sunday at Washington.",
+   "impactTitle": "Impact",
+   "source": "Rotowire",
+   "subtitle": "NYG #1 - WR",
+   "title": "Malik Nabers"
+  },
+  {
+   "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22761.vresize.140.170.medium.5.png",
+   "date": "2026-10-07T20:22:16Z",
+   "description": "Olave had a rest day at Wednesday's practice, Katherine Terrell of ESPN.com reports.",
+   "entityLink": {
+    "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22761.vresize.140.170.medium.5.png",
+    "analyticsName": "chris-olave",
+    "analyticsSport": "nfl",
+    "color": "1, 222, 190, 103",
+    "contentType": "athlete",
+    "contentUri": "football/nfl/athletes/22761",
+    "imageAltText": "Chris Olave",
+    "imageType": "image-headshot",
+    "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22761.vresize.140.170.medium.5.png",
+    "layout": {
+     "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+     "tokens": {
+      "contentUri": "football/nfl/athletes/22761",
+      "id": "22761"
+     }
+    },
+    "title": "CHRIS OLAVE",
+    "type": "entity",
+    "webUrl": "/nfl/chris-olave-player"
+   },
+   "headline": "Gets rest day Wednesday",
+   "imageAltText": "Chris Olave",
+   "imageType": "image-headshot",
+   "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22761.vresize.140.170.medium.5.png",
+   "impact": "The Saints had a walkthrough Wednesday after having played Monday night against the Falcons. Olave was given a rest day, and according to Nick Underhill of NewOrleans.Football, it was unrelated to a hard shot he took during the loss to the Falcons. Olave does not appear to be dealing with an injury, and should return to practice later in the week.",
+   "impactTitle": "Impact",
+   "source": "Rotowire",
+   "subtitle": "NO #12 - WR",
+   "title": "Chris Olave"
+  },
+  {
+   "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/11514.vresize.140.170.medium.3.png",
+   "date": "2026-10-07T20:20:37Z",
+   "description": "Diggs was a non-participant at Wednesday's practice due to a hamstring injury.",
+   "entityLink": {
+    "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/11514.vresize.140.170.medium.3.png",
+    "analyticsName": "stefon-diggs",
+    "analyticsSport": "nfl",
+    "color": "1, 170, 0, 49",
+    "contentType": "athlete",
+    "contentUri": "football/nfl/athletes/11514",
+    "imageAltText": "Stefon Diggs",
+    "imageType": "image-headshot",
+    "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/11514.vresize.140.170.medium.3.png",
+    "layout": {
+     "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+     "tokens": {
+      "contentUri": "football/nfl/athletes/11514",
+      "id": "11514"
+     }
+    },
+    "title": "STEFON DIGGS",
+    "type": "entity",
+    "webUrl": "/nfl/stefon-diggs-player"
+   },
+   "headline": "DNP due to hamstring issue",
+   "imageAltText": "Stefon Diggs",
+   "imageType": "image-headshot",
+   "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/11514.vresize.140.170.medium.3.png",
+   "impact": "Diggs wasn't spotted on the field during the portion of Wednesday's session open to the media, and now the reason for his absence is known. Both he and fellow WR Terry McLaurin weren't able to mix into drills to begin Week 5 prep due to hamstring issues, leaving massive question marks for the state of the Commanders' passing game ahead of Sunday's contest against the Giants. Practice reports Thursday and Friday ultimately will be telling for the statuses of McLaurin and Diggs.",
+   "impactTitle": "Impact",
+   "source": "Rotowire",
+   "subtitle": "WAS #3 - WR",
+   "title": "Stefon Diggs"
+  },
+  {
+   "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22833.vresize.140.170.medium.5.png",
+   "date": "2026-10-07T20:16:45Z",
+   "description": "White (shoulder) was limited in practice Wednesday, Ralph Vacchiano of FoxSports.com reports.",
+   "entityLink": {
+    "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22833.vresize.140.170.medium.5.png",
+    "analyticsName": "rachaad-white",
+    "analyticsSport": "nfl",
+    "color": "1, 170, 0, 49",
+    "contentType": "athlete",
+    "contentUri": "football/nfl/athletes/22833",
+    "imageAltText": "Rachaad White",
+    "imageType": "image-headshot",
+    "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22833.vresize.140.170.medium.5.png",
+    "layout": {
+     "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+     "tokens": {
+      "contentUri": "football/nfl/athletes/22833",
+      "id": "22833"
+     }
+    },
+    "title": "RACHAAD WHITE",
+    "type": "entity",
+    "webUrl": "/nfl/rachaad-white-player"
+   },
+   "headline": "Returns in limited fashion Wednesday",
+   "imageAltText": "Rachaad White",
+   "imageType": "image-headshot",
+   "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22833.vresize.140.170.medium.5.png",
+   "impact": "After missing Week 4 with a shoulder injury, White is trending in the right direction. He wasn't a full-go Wednesday but was able to practice in a limited fashion. His status becomes all the more important now that Jacory Croskey-Merritt (groin) was limited to begin the week.",
+   "impactTitle": "Impact",
+   "source": "Rotowire",
+   "subtitle": "WAS #1 - RB",
+   "title": "Rachaad White"
+  },
+  {
+   "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/21479.vresize.140.170.medium.5.png",
+   "date": "2026-10-07T20:16:19Z",
+   "description": "Pittman (foot) was a limited participant in Wednesday's practice, Brooke Pryor of ESPN.com reports.",
+   "entityLink": {
+    "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/21479.vresize.140.170.medium.5.png",
+    "analyticsName": "michael-pittman-2",
+    "analyticsSport": "nfl",
+    "color": "1, 255, 188, 41",
+    "contentType": "athlete",
+    "contentUri": "football/nfl/athletes/21479",
+    "imageAltText": "Michael Pittman Jr.",
+    "imageType": "image-headshot",
+    "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/21479.vresize.140.170.medium.5.png",
+    "layout": {
+     "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+     "tokens": {
+      "contentUri": "football/nfl/athletes/21479",
+      "id": "21479"
+     }
+    },
+    "title": "MICHAEL PITTMAN JR.",
+    "type": "entity",
+    "webUrl": "/nfl/michael-pittman-2-player"
+   },
+   "headline": "Manages limited practice Wednesday",
+   "imageAltText": "Michael Pittman Jr.",
+   "imageType": "image-headshot",
+   "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/21479.vresize.140.170.medium.5.png",
+   "impact": "Pittman sat out the Steelers' Week 2 loss to the Patriots due to a foot issue, but he proceeded to suit up for the team's subsequent two games, playing north of 70 percent of snaps in both contests while producing a combined 4-31-0 receiving line on nine targets. The Steelers haven't indicated that Pittman is dealing with any major setback coming out of this past Thursday's loss to the Browns, even though he was spotted moving around the locker room Wednesday with a one-legged scooter and no shoe on his left foot, per Mark Kaboly of 93.7 The Fan Pittsburgh. Pittman's ability to practice in some fashion to kick off Week 5 prep suggests that he remains likely to play this Sunday against the Colts.",
+   "impactTitle": "Impact",
+   "source": "Rotowire",
+   "subtitle": "PIT #11 - WR",
+   "title": "Michael Pittman Jr."
+  },
+  {
+   "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/327692.vresize.140.170.medium.5.png",
+   "date": "2026-10-07T20:13:44Z",
+   "description": "Daniels (left elbow) practiced fully Wednesday.",
+   "entityLink": {
+    "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/327692.vresize.140.170.medium.5.png",
+    "analyticsName": "jayden-daniels",
+    "analyticsSport": "nfl",
+    "color": "1, 170, 0, 49",
+    "contentType": "athlete",
+    "contentUri": "football/nfl/athletes/327692",
+    "imageAltText": "Jayden Daniels",
+    "imageType": "image-headshot",
+    "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/327692.vresize.140.170.medium.5.png",
+    "layout": {
+     "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+     "tokens": {
+      "contentUri": "football/nfl/athletes/327692",
+      "id": "327692"
+     }
+    },
+    "title": "JAYDEN DANIELS",
+    "type": "entity",
+    "webUrl": "/nfl/jayden-daniels-player"
+   },
+   "headline": "Logs full practice Wednesday",
+   "imageAltText": "Jayden Daniels",
+   "imageType": "image-headshot",
+   "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/327692.vresize.140.170.medium.5.png",
+   "impact": "After Daniels missed the last two contests due to a dislocated left elbow, coach Dan Quinn said Monday that the Commanders expected the quarterback to be full this week and start Sunday versus the Giants. Daniels' activity level to begin Week 5 prep thus isn't a surprise, and he thus will slot back in as the No. 1 for a QB room that lost his backup Marcus Mariota to a right MCL sprain this past Sunday against the Colts in London. Washington's skill-position group is particularly banged-up at the moment, though, as WRs Terry McLaurin (hamstring) and Stefon Diggs (hamstring) didn't practice Wednesday, while all of RBs Jacory Croskey-Merritt (groin) and Rachaad White (shoulder) and TEs Chig Okonkwo (hamstring) and Ben Sinnott (ribs) were limited.",
+   "impactTitle": "Impact",
+   "source": "Rotowire",
+   "subtitle": "WAS #5 - QB",
+   "title": "Jayden Daniels"
+  },
+  {
+   "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/328796.vresize.140.170.medium.4.png",
+   "date": "2026-10-07T20:12:44Z",
+   "description": "Croskey-Merritt (groin) was limited in Wednesday's practice session,Ralph Vacchiano of FoxSports.com",
+   "entityLink": {
+    "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/328796.vresize.140.170.medium.4.png",
+    "analyticsName": "jacory-croskey-merritt",
+    "analyticsSport": "nfl",
+    "color": "1, 170, 0, 49",
+    "contentType": "athlete",
+    "contentUri": "football/nfl/athletes/328796",
+    "imageAltText": "Jacory Croskey-Merritt",
+    "imageType": "image-headshot",
+    "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/328796.vresize.140.170.medium.4.png",
+    "layout": {
+     "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+     "tokens": {
+      "contentUri": "football/nfl/athletes/328796",
+      "id": "328796"
+     }
+    },
+    "title": "JACORY CROSKEY-MERRITT",
+    "type": "entity",
+    "webUrl": "/nfl/jacory-croskey-merritt-player"
+   },
+   "headline": "Limited with groin injury",
+   "imageAltText": "Jacory Croskey-Merritt",
+   "imageType": "image-headshot",
+   "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/328796.vresize.140.170.medium.4.png",
+   "impact": "The Commanders have a lengthy injury report Wednesday, including their starting running back. Croskey-Merritt is dealing with a groin injury as the Commanders prepare to host the Giants, but he was at least able to get some work in. Fellow running back Rachaad White (shoulder) also logged a limited session.",
+   "impactTitle": "Impact",
+   "source": "Rotowire",
+   "subtitle": "WAS #22 - RB",
+   "title": "Jacory Croskey-Merritt"
+  },
+  {
+   "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22113.vresize.140.170.medium.5.png",
+   "date": "2026-10-07T20:06:48Z",
+   "description": "Dowdle (toe) was listed as a limited participant in Wednesday's practice, Alan Saunders of SteelersNow.com reports.",
+   "entityLink": {
+    "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22113.vresize.140.170.medium.5.png",
+    "analyticsName": "rico-dowdle",
+    "analyticsSport": "nfl",
+    "color": "1, 255, 188, 41",
+    "contentType": "athlete",
+    "contentUri": "football/nfl/athletes/22113",
+    "imageAltText": "Rico Dowdle",
+    "imageType": "image-headshot",
+    "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22113.vresize.140.170.medium.5.png",
+    "layout": {
+     "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+     "tokens": {
+      "contentUri": "football/nfl/athletes/22113",
+      "id": "22113"
+     }
+    },
+    "title": "RICO DOWDLE",
+    "type": "entity",
+    "webUrl": "/nfl/rico-dowdle-player"
+   },
+   "headline": "Officially limited Wednesday",
+   "imageAltText": "Rico Dowdle",
+   "imageType": "image-headshot",
+   "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22113.vresize.140.170.medium.5.png",
+   "impact": "Earlier Wednesday, head coach Mike McCarthy told Ray Fittipaldo of the Pittsburgh Post-Gazette that Dowdle would be part of the rehab group to begin Week 5 prep, but the running back was apparently able to fit in enough work behind the scenes to log his first practice activity since dislocating a toe in the Steelers' Week 2 loss to New England. Given that he's missed the Steelers' past two games, Dowdle may need to upgrade to full practice participation by the end of the week in order to get cleared to play Sunday versus the Colts. If Dowdle is available this weekend, McCarthy has previously indicated that he would likely reclaim his spot in a backfield timeshare with Jaylen Warren, who has thrived while handling an every-down role over the past two games.",
+   "impactTitle": "Impact",
+   "source": "Rotowire",
+   "subtitle": "PIT #13 - RB",
+   "title": "Rico Dowdle"
+  },
+  {
+   "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/328797.vresize.140.170.medium.4.png",
+   "date": "2026-10-07T20:00:21Z",
+   "description": "Monangai (toe/thumb) did not practice Wednesday.",
+   "entityLink": {
+    "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/328797.vresize.140.170.medium.4.png",
+    "analyticsName": "kyle-monangai",
+    "analyticsSport": "nfl",
+    "color": "1, 255, 104, 53",
+    "contentType": "athlete",
+    "contentUri": "football/nfl/athletes/328797",
+    "imageAltText": "Kyle Monangai",
+    "imageType": "image-headshot",
+    "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/328797.vresize.140.170.medium.4.png",
+    "layout": {
+     "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+     "tokens": {
+      "contentUri": "football/nfl/athletes/328797",
+      "id": "328797"
+     }
+    },
+    "title": "KYLE MONANGAI",
+    "type": "entity",
+    "webUrl": "/nfl/kyle-monangai-player"
+   },
+   "headline": "Does not practice Wednesday",
+   "imageAltText": "Kyle Monangai",
+   "imageType": "image-headshot",
+   "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/328797.vresize.140.170.medium.4.png",
+   "impact": "The thumb injury was known coming out of Sunday's win, but the toe issue is a new revelation. Monangai peeled off 146 yards over 30 carries before coach Ben Johnson announced that the second-year back was dealing with a thumb issue. The Bears kept him out of practice Wednesday, so Monangai's status is now on the radar for the rest of the week. Of note, D'Andre Swift (hip/knee) also did not practice Wednesday. Chicago's run game has been key to keeping things on track in Caleb Williams' absence.",
+   "impactTitle": "Impact",
+   "source": "Rotowire",
+   "subtitle": "CHI #25 - RB",
+   "title": "Kyle Monangai"
+  },
+  {
+   "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/21498.vresize.140.170.medium.5.png",
+   "date": "2026-10-07T19:58:52Z",
+   "description": "Swift didn't practice Thursday due to hip and knee injuries.",
+   "entityLink": {
+    "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/21498.vresize.140.170.medium.5.png",
+    "analyticsName": "dandre-swift",
+    "analyticsSport": "nfl",
+    "color": "1, 255, 104, 53",
+    "contentType": "athlete",
+    "contentUri": "football/nfl/athletes/21498",
+    "imageAltText": "D'Andre Swift",
+    "imageType": "image-headshot",
+    "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/21498.vresize.140.170.medium.5.png",
+    "layout": {
+     "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+     "tokens": {
+      "contentUri": "football/nfl/athletes/21498",
+      "id": "21498"
+     }
+    },
+    "title": "D'ANDRE SWIFT",
+    "type": "entity",
+    "webUrl": "/nfl/dandre-swift-player"
+   },
+   "headline": "DNP on Wednesday",
+   "imageAltText": "D'Andre Swift",
+   "imageType": "image-headshot",
+   "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/21498.vresize.140.170.medium.5.png",
+   "impact": "Both Swift and fellow RB Kyle Monangai (thumb/toe) were non-participants to begin Week 5 prep, leaving question marks in the Bears backfield ahead of Sunday's contest at Green Bay. While Swift ceded 30 carries to Monangai in a Week 4 win against the Jets, the former notched 15 rushes and two catches en route to 74 yards from scrimmage. The overall situation will continue to be monitored to get a sense of who among the duo will be Chicago's lead runner this weekend.",
+   "impactTitle": "Impact",
+   "source": "Rotowire",
+   "subtitle": "CHI #4 - RB",
+   "title": "D'Andre Swift"
+  },
+  {
+   "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/10513.vresize.140.170.medium.5.png",
+   "date": "2026-10-07T19:53:01Z",
+   "description": "Coach Kyle Shanahan said Evans (ribs) is expected to be limited at Wednesday's practice, Nick Wagoner of ESPN.com reports.",
+   "entityLink": {
+    "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/10513.vresize.140.170.medium.5.png",
+    "analyticsName": "mike-evans",
+    "analyticsSport": "nfl",
+    "color": "1, 170, 0, 49",
+    "contentType": "athlete",
+    "contentUri": "football/nfl/athletes/10513",
+    "imageAltText": "Mike Evans",
+    "imageType": "image-headshot",
+    "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/10513.vresize.140.170.medium.5.png",
+    "layout": {
+     "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+     "tokens": {
+      "contentUri": "football/nfl/athletes/10513",
+      "id": "10513"
+     }
+    },
+    "title": "MIKE EVANS",
+    "type": "entity",
+    "webUrl": "/nfl/mike-evans-player"
+   },
+   "headline": "To be limited Wednesday",
+   "imageAltText": "Mike Evans",
+   "imageType": "image-headshot",
+   "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/10513.vresize.140.170.medium.5.png",
+   "impact": "Evans was able to gut through strained ribs this past Sunday against the Broncos, logging a 59 percent snap share and hauling in five of eight targets for 76 yards. He likely will endure practice restrictions for as long as he's dealing with the injury, but at this point there's no indication that his availability for a Week 5 matchup at Seattle is in question.",
+   "impactTitle": "Impact",
+   "source": "Rotowire",
+   "subtitle": "SF #5 - WR",
+   "title": "Mike Evans"
+  },
+  {
+   "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/327689.vresize.140.170.medium.3.png",
+   "date": "2026-10-07T19:26:02Z",
+   "description": "Nabers said he took on \"as much as I could\" at Wednesday's practice, after which he noted he's dealing with undisclosed soreness, Connor Hughes of SNY.tv reports.",
+   "entityLink": {
+    "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/327689.vresize.140.170.medium.3.png",
+    "analyticsName": "malik-nabers",
+    "analyticsSport": "nfl",
+    "color": "1, 0, 87, 244",
+    "contentType": "athlete",
+    "contentUri": "football/nfl/athletes/327689",
+    "imageAltText": "Malik Nabers",
+    "imageType": "image-headshot",
+    "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/327689.vresize.140.170.medium.3.png",
+    "layout": {
+     "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+     "tokens": {
+      "contentUri": "football/nfl/athletes/327689",
+      "id": "327689"
+     }
+    },
+    "title": "MALIK NABERS",
+    "type": "entity",
+    "webUrl": "/nfl/malik-nabers-player"
+   },
+   "headline": "Dealing with soreness",
+   "imageAltText": "Malik Nabers",
+   "imageType": "image-headshot",
+   "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/327689.vresize.140.170.medium.3.png",
+   "impact": "Nabers also relayed that he'll \"see how the week goes\" as it pertains to his odds to play Sunday at Washington. He's already on his second signal-caller of the campaign (Jameis Winston) and has a cumulative 18-208-1 line on 26 targets through four games, and whether or not he'll be available in Week 5 remains to be seen",
+   "impactTitle": "Impact",
+   "source": "Rotowire",
+   "subtitle": "NYG #1 - WR",
+   "title": "Malik Nabers"
+  },
+  {
+   "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/326927.vresize.140.170.medium.3.png",
+   "date": "2026-10-07T19:16:57Z",
+   "description": "Ravens head coach Jesse Minter said that Flowers (hamstring) was a limited participant in Wednesday's practice, Brian Wacker of The Baltimore Sun reports.",
+   "entityLink": {
+    "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/326927.vresize.140.170.medium.3.png",
+    "analyticsName": "zay-flowers",
+    "analyticsSport": "nfl",
+    "color": "1, 141, 52, 255",
+    "contentType": "athlete",
+    "contentUri": "football/nfl/athletes/326927",
+    "imageAltText": "Zay Flowers",
+    "imageType": "image-headshot",
+    "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/326927.vresize.140.170.medium.3.png",
+    "layout": {
+     "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+     "tokens": {
+      "contentUri": "football/nfl/athletes/326927",
+      "id": "326927"
+     }
+    },
+    "title": "ZAY FLOWERS",
+    "type": "entity",
+    "webUrl": "/nfl/zay-flowers-player"
+   },
+   "headline": "Limited in first Week 5 practice",
+   "imageAltText": "Zay Flowers",
+   "imageType": "image-headshot",
+   "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/326927.vresize.140.170.medium.3.png",
+   "impact": "Though Flowers wasn't present on the field for the media-access portion of practice, the fourth-year wideout was apparently able to get in some work behind the scenes Wednesday. The Ravens haven't indicated that Flowers has experienced any setbacks with his hamstring since returning from a one-game absence to play in both of the previous two contests, so his limitations to begin Week 5 prep were most likely maintenance-related. Flowers still appears likely to head into Sunday's game in Atlanta without an injury designation, though his fantasy appeal may be more limited than usual with Tyler Huntley trending toward drawing the Week 5 start in place of the injured Lamar Jackson (ankle).",
+   "impactTitle": "Impact",
+   "source": "Rotowire",
+   "subtitle": "BAL #4 - WR",
+   "title": "Zay Flowers"
+  },
+  {
+   "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/327719.vresize.140.170.medium.4.png",
+   "date": "2026-10-07T19:16:07Z",
+   "description": "McConkey (foot) is expected to be at practice Wednesday, Kris Rhim of ESPN.com reports.",
+   "entityLink": {
+    "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/327719.vresize.140.170.medium.4.png",
+    "analyticsName": "ladd-mcconkey",
+    "analyticsSport": "nfl",
+    "color": "1, 82, 181, 255",
+    "contentType": "athlete",
+    "contentUri": "football/nfl/athletes/327719",
+    "imageAltText": "Ladd McConkey",
+    "imageType": "image-headshot",
+    "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/327719.vresize.140.170.medium.4.png",
+    "layout": {
+     "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+     "tokens": {
+      "contentUri": "football/nfl/athletes/327719",
+      "id": "327719"
+     }
+    },
+    "title": "LADD MCCONKEY",
+    "type": "entity",
+    "webUrl": "/nfl/ladd-mcconkey-player"
+   },
+   "headline": "Will be at practice Wednesday",
+   "imageAltText": "Ladd McConkey",
+   "imageType": "image-headshot",
+   "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/327719.vresize.140.170.medium.4.png",
+   "impact": "The level of McConkey's participation remains to be seen but it appears he'll get some work in Wednesday, according to coach Jim Harbaugh. McConkey has battled through a couple of injuries this season, the most recent being a foot issue that flared up in the third quarter of the Chargers' loss to the Seahawks. The Chargers have a critical game Sunday at home against the Broncos.",
+   "impactTitle": "Impact",
+   "source": "Rotowire",
+   "subtitle": "LAC #15 - WR",
+   "title": "Ladd McConkey"
+  },
+  {
+   "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/21479.vresize.140.170.medium.5.png",
+   "date": "2026-10-07T18:54:40Z",
+   "description": "Pittman was spotted in the Pittsburgh locker room Wednesday using a one-legged scooter with his left foot propped up, Nick Farabaugh of PennLive.com reports.",
+   "entityLink": {
+    "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/21479.vresize.140.170.medium.5.png",
+    "analyticsName": "michael-pittman-2",
+    "analyticsSport": "nfl",
+    "color": "1, 255, 188, 41",
+    "contentType": "athlete",
+    "contentUri": "football/nfl/athletes/21479",
+    "imageAltText": "Michael Pittman Jr.",
+    "imageType": "image-headshot",
+    "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/21479.vresize.140.170.medium.5.png",
+    "layout": {
+     "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+     "tokens": {
+      "contentUri": "football/nfl/athletes/21479",
+      "id": "21479"
+     }
+    },
+    "title": "MICHAEL PITTMAN JR.",
+    "type": "entity",
+    "webUrl": "/nfl/michael-pittman-2-player"
+   },
+   "headline": "Still dealing with foot issue",
+   "imageAltText": "Michael Pittman Jr.",
+   "imageType": "image-headshot",
+   "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/21479.vresize.140.170.medium.5.png",
+   "impact": "Pittman missed the Steelers' Week 2 loss to the Patriots due to a foot issue, though he was able to play in both of the Steelers' last two contests. The wideout may have just been using the scooter as a precaution, but at the very least, it's an indication that he hasn't yet made a full recovery from the injury. The veteran receiver's participation in practices Wednesday through Friday will ultimately determine whether he suits up this Sunday, when the Steelers will be taking on his former Colts squad.",
+   "impactTitle": "Impact",
+   "source": "Rotowire",
+   "subtitle": "PIT #11 - WR",
+   "title": "Michael Pittman Jr."
+  },
+  {
+   "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/13959.vresize.140.170.medium.5.png",
+   "date": "2026-10-07T18:47:43Z",
+   "description": "Barkley (hamstring) wasn't spotted at Wednesday's practice, Brooks Kubena of The Athletic reports.",
+   "entityLink": {
+    "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/13959.vresize.140.170.medium.5.png",
+    "analyticsName": "saquon-barkley",
+    "analyticsSport": "nfl",
+    "color": "1, 0, 170, 150",
+    "contentType": "athlete",
+    "contentUri": "football/nfl/athletes/13959",
+    "imageAltText": "Saquon Barkley",
+    "imageType": "image-headshot",
+    "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/13959.vresize.140.170.medium.5.png",
+    "layout": {
+     "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+     "tokens": {
+      "contentUri": "football/nfl/athletes/13959",
+      "id": "13959"
+     }
+    },
+    "title": "SAQUON BARKLEY",
+    "type": "entity",
+    "webUrl": "/nfl/saquon-barkley-player"
+   },
+   "headline": "Absent from practice Wednesday",
+   "imageAltText": "Saquon Barkley",
+   "imageType": "image-headshot",
+   "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/13959.vresize.140.170.medium.5.png",
+   "impact": "With Barkley already considered week-to-week coming out of Sunday's loss to the Rams, his absence from Wednesday's session is no surprise. Barkley should be considered closer to doubtful for Sunday's game against the Jaguars in London. Will Shipley and Dameon Pierce are currently in line to handle backfield duties after Tank Bigsby (abdomen) was placed on injured reserve Tuesday.",
+   "impactTitle": "Impact",
+   "source": "Rotowire",
+   "subtitle": "PHI #26 - RB",
+   "title": "Saquon Barkley"
+  },
+  {
+   "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22185.vresize.140.170.medium.3.png",
+   "date": "2026-10-07T18:46:58Z",
+   "description": "Smith (hamstring) isn't taking part in Wednesday's practice, Brooks Kubena of The Athletic reports.",
+   "entityLink": {
+    "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22185.vresize.140.170.medium.3.png",
+    "analyticsName": "devonta-smith",
+    "analyticsSport": "nfl",
+    "color": "1, 0, 170, 150",
+    "contentType": "athlete",
+    "contentUri": "football/nfl/athletes/22185",
+    "imageAltText": "DeVonta Smith",
+    "imageType": "image-headshot",
+    "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22185.vresize.140.170.medium.3.png",
+    "layout": {
+     "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+     "tokens": {
+      "contentUri": "football/nfl/athletes/22185",
+      "id": "22185"
+     }
+    },
+    "title": "DEVONTA SMITH",
+    "type": "entity",
+    "webUrl": "/nfl/devonta-smith-player"
+   },
+   "headline": "Not practicing Wednesday",
+   "imageAltText": "DeVonta Smith",
+   "imageType": "image-headshot",
+   "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22185.vresize.140.170.medium.3.png",
+   "impact": "Smith hasn't practiced since a Week 3 loss at Chicago in which he played all 50 offensive snaps on an existing hamstring issue, which is leaving him as, \"at very best, questionable\" for this coming Sunday's game in Jacksonville, per Mike Garafolo of NFL Network. Smith likely will need to mix into drills Thursday and/or Friday in order to give himself a chance to be available in Week 5. Currently, Dontayvion Wicks, Makai Lemon, Darius Cooper, Elijah Moore and Britain Covey are the healthy wide receivers on the Eagles' active roster.",
+   "impactTitle": "Impact",
+   "source": "Rotowire",
+   "subtitle": "PHI #6 - WR",
+   "title": "DeVonta Smith"
+  },
+  {
+   "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/14006.vresize.140.170.medium.5.png",
+   "date": "2026-10-07T18:38:38Z",
+   "description": "Goedert (knee) is practicing Wednesday, Dave Zangaro of NBC Sports Philadelphia reports.",
+   "entityLink": {
+    "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/14006.vresize.140.170.medium.5.png",
+    "analyticsName": "dallas-goedert",
+    "analyticsSport": "nfl",
+    "color": "1, 0, 170, 150",
+    "contentType": "athlete",
+    "contentUri": "football/nfl/athletes/14006",
+    "imageAltText": "Dallas Goedert",
+    "imageType": "image-headshot",
+    "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/14006.vresize.140.170.medium.5.png",
+    "layout": {
+     "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+     "tokens": {
+      "contentUri": "football/nfl/athletes/14006",
+      "id": "14006"
+     }
+    },
+    "title": "DALLAS GOEDERT",
+    "type": "entity",
+    "webUrl": "/nfl/dallas-goedert-player"
+   },
+   "headline": "Back at practice Wednesday",
+   "imageAltText": "Dallas Goedert",
+   "imageType": "image-headshot",
+   "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/14006.vresize.140.170.medium.5.png",
+   "impact": "With Goedert returning to the field after recently being ruled out for Sunday's game against the Rams, this marks his first visible step forward in his recovery from a sprained MCL in his right knee. His participation Wednesday puts the Eagles tight end back on the radar for Week 5, though his practice level and any game designation later in the week will still determine his availability.",
+   "impactTitle": "Impact",
+   "source": "Rotowire",
+   "subtitle": "PHI #88 - TE",
+   "title": "Dallas Goedert"
+  },
+  {
+   "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/21467.vresize.140.170.medium.4.png",
+   "date": "2026-10-07T18:36:36Z",
+   "description": "Coach Kevin O'Connell said Jefferson (ankle) \"is doing well\" and will be a limited practice participant Wednesday.",
+   "entityLink": {
+    "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/21467.vresize.140.170.medium.4.png",
+    "analyticsName": "justin-jefferson",
+    "analyticsSport": "nfl",
+    "color": "1, 141, 52, 255",
+    "contentType": "athlete",
+    "contentUri": "football/nfl/athletes/21467",
+    "imageAltText": "Justin Jefferson",
+    "imageType": "image-headshot",
+    "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/21467.vresize.140.170.medium.4.png",
+    "layout": {
+     "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+     "tokens": {
+      "contentUri": "football/nfl/athletes/21467",
+      "id": "21467"
+     }
+    },
+    "title": "JUSTIN JEFFERSON",
+    "type": "entity",
+    "webUrl": "/nfl/justin-jefferson-player"
+   },
+   "headline": "To be limited Wednesday",
+   "imageAltText": "Justin Jefferson",
+   "imageType": "image-headshot",
+   "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/21467.vresize.140.170.medium.4.png",
+   "impact": "This will mark Jefferson's first on-field work since he suffered a sprained left ankle in the second quarter of a Week 3 win at Tampa Bay. Jeremy Fowler of ESPN.com reported Saturday morning that the Vikings are hopeful that Jefferson will return to action in Week 5, and his ability to practice in any capacity Wednesday is a step in that direction.",
+   "impactTitle": "Impact",
+   "source": "Rotowire",
+   "subtitle": "MIN #18 - WR",
+   "title": "Justin Jefferson"
+  },
+  {
+   "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/326921.vresize.140.170.medium.4.png",
+   "date": "2026-10-07T18:32:30Z",
+   "description": "Addison (hamstring) won't practice Wednesday, Alec Lewis of The Athletic reports.",
+   "entityLink": {
+    "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/326921.vresize.140.170.medium.4.png",
+    "analyticsName": "jordan-addison",
+    "analyticsSport": "nfl",
+    "color": "1, 141, 52, 255",
+    "contentType": "athlete",
+    "contentUri": "football/nfl/athletes/326921",
+    "imageAltText": "Jordan Addison",
+    "imageType": "image-headshot",
+    "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/326921.vresize.140.170.medium.4.png",
+    "layout": {
+     "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+     "tokens": {
+      "contentUri": "football/nfl/athletes/326921",
+      "id": "326921"
+     }
+    },
+    "title": "JORDAN ADDISON",
+    "type": "entity",
+    "webUrl": "/nfl/jordan-addison-player"
+   },
+   "headline": "Nursing hamstring soreness",
+   "imageAltText": "Jordan Addison",
+   "imageType": "image-headshot",
+   "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/326921.vresize.140.170.medium.4.png",
+   "impact": "Head coach Kevin O'Connell said Addison has some hamstring soreness after he played 75 of 78 offensive snaps against the Dolphins last Sunday. With Justin Jefferson (ankle) missing that game versus Miami, Addison turned six targets into a 4-52-0 receiving line, as he took a back seat to T.J. Hockenson, who hauled in all 13 of his targets for 119 yards. The Vikings made a couple wideout additions to the practice squad Wednesday.",
+   "impactTitle": "Impact",
+   "source": "Rotowire",
+   "subtitle": "MIN #3 - WR",
+   "title": "Jordan Addison"
+  },
+  {
+   "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/327000.vresize.140.170.medium.4.png",
+   "date": "2026-10-07T18:20:06Z",
+   "description": "The Texans opened Dell's (knee) 21-day practice window Wednesday.",
+   "entityLink": {
+    "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/327000.vresize.140.170.medium.4.png",
+    "analyticsName": "tank-dell",
+    "analyticsSport": "nfl",
+    "color": "1, 240, 31, 65",
+    "contentType": "athlete",
+    "contentUri": "football/nfl/athletes/327000",
+    "imageAltText": "Tank Dell",
+    "imageType": "image-headshot",
+    "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/327000.vresize.140.170.medium.4.png",
+    "layout": {
+     "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+     "tokens": {
+      "contentUri": "football/nfl/athletes/327000",
+      "id": "327000"
+     }
+    },
+    "title": "TANK DELL",
+    "type": "entity",
+    "webUrl": "/nfl/tank-dell-player"
+   },
+   "headline": "Ready to practice Wednesday",
+   "imageAltText": "Tank Dell",
+   "imageType": "image-headshot",
+   "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/327000.vresize.140.170.medium.4.png",
+   "impact": "As expected, Dell will make his return to practice Wednesday when first eligible, after he missed the required four games to begin the season upon landing on injured reserve Aug. 30. Houston's offense is desperate for an infusion of speed and playmaking ability beyond No. 1 wideout Nico Collins, but it's unclear if Dell will be able to fill the void as he works his way back from the gruesome left knee injury he sustained in December 2024. Though he was able to take part in some full-team work during training camp, Dell may need some time to ramp back up following his abbreviated layoff to begin the season and could be activated from injured reserve toward the back end of his 21-day window.",
+   "impactTitle": "Impact",
+   "source": "Rotowire",
+   "subtitle": "HOU #1 - WR",
+   "title": "Tank Dell"
+  },
+  {
+   "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/14884.vresize.140.170.medium.3.png",
+   "date": "2026-10-07T18:07:07Z",
+   "description": "Brown (ankle) was seen in the locker room Wednesday without a noticeable limp, Doug Kyed of the Boston Herald reports.",
+   "entityLink": {
+    "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/14884.vresize.140.170.medium.3.png",
+    "analyticsName": "aj-brown",
+    "analyticsSport": "nfl",
+    "color": "1, 0, 87, 244",
+    "contentType": "athlete",
+    "contentUri": "football/nfl/athletes/14884",
+    "imageAltText": "A.J. Brown",
+    "imageType": "image-headshot",
+    "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/14884.vresize.140.170.medium.3.png",
+    "layout": {
+     "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+     "tokens": {
+      "contentUri": "football/nfl/athletes/14884",
+      "id": "14884"
+     }
+    },
+    "title": "A.J. BROWN",
+    "type": "entity",
+    "webUrl": "/nfl/aj-brown-player"
+   },
+   "headline": "Walking without limp",
+   "imageAltText": "A.J. Brown",
+   "imageType": "image-headshot",
+   "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/14884.vresize.140.170.medium.3.png",
+   "impact": "When Brown came out of Week 1 with a right high-ankle sprain, he was expected to be sidelined for up to six weeks, but his placement on IR before Week 2 action means he's eligible to return to practice as soon as next week. That doesn't mean he actually will be, but being able to move about sans limp generally is a good sign in his recovery and could mean practice reps are on the horizon for the Patriots' No. 1 wide receiver.",
+   "impactTitle": "Impact",
+   "source": "Rotowire",
+   "subtitle": "NE #1 - WR",
+   "title": "A.J. Brown"
+  },
+  {
+   "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22176.vresize.140.170.medium.6.png",
+   "date": "2026-10-07T17:45:38Z",
+   "description": "Chase remains in the league's concussion protocol Wednesday, Ben Baby of ESPN.com reports.",
+   "entityLink": {
+    "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22176.vresize.140.170.medium.6.png",
+    "analyticsName": "jamarr-chase",
+    "analyticsSport": "nfl",
+    "color": "1, 255, 104, 53",
+    "contentType": "athlete",
+    "contentUri": "football/nfl/athletes/22176",
+    "imageAltText": "Ja'Marr Chase",
+    "imageType": "image-headshot",
+    "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22176.vresize.140.170.medium.6.png",
+    "layout": {
+     "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+     "tokens": {
+      "contentUri": "football/nfl/athletes/22176",
+      "id": "22176"
+     }
+    },
+    "title": "JA'MARR CHASE",
+    "type": "entity",
+    "webUrl": "/nfl/jamarr-chase-player"
+   },
+   "headline": "Remains in concussion protocol",
+   "imageAltText": "Ja'Marr Chase",
+   "imageType": "image-headshot",
+   "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22176.vresize.140.170.medium.6.png",
+   "impact": "Chase suffered a concussion early in last Sunday's loss to the Jaguars and isn't certain to be cleared in time for Week 5 against the Dolphins. The Bengals then have a Week 6 bye, so it's possible Chase won't play again for another couple weeks. Dohnte Meyers and Mike Gesicki would be in line for increased target shares if Chase is unable to play versus Miami. It's also notable that Tee Higgins (groin) was limited in Wednesday's practice.",
+   "impactTitle": "Impact",
+   "source": "Rotowire",
+   "subtitle": "CIN #1 - WR",
+   "title": "Ja'Marr Chase"
+  },
+  {
+   "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/327692.vresize.140.170.medium.5.png",
+   "date": "2026-10-07T17:36:14Z",
+   "description": "Daniels (elbow) was spotted throwing during the open portion of Wednesday's practice, John Keim of ESPN.com reports.",
+   "entityLink": {
+    "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/327692.vresize.140.170.medium.5.png",
+    "analyticsName": "jayden-daniels",
+    "analyticsSport": "nfl",
+    "color": "1, 170, 0, 49",
+    "contentType": "athlete",
+    "contentUri": "football/nfl/athletes/327692",
+    "imageAltText": "Jayden Daniels",
+    "imageType": "image-headshot",
+    "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/327692.vresize.140.170.medium.5.png",
+    "layout": {
+     "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+     "tokens": {
+      "contentUri": "football/nfl/athletes/327692",
+      "id": "327692"
+     }
+    },
+    "title": "JAYDEN DANIELS",
+    "type": "entity",
+    "webUrl": "/nfl/jayden-daniels-player"
+   },
+   "headline": "Practicing Wednesday",
+   "imageAltText": "Jayden Daniels",
+   "imageType": "image-headshot",
+   "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/327692.vresize.140.170.medium.5.png",
+   "impact": "Daniels has missed the last two games due to a dislocated left elbow, but head coach Dan Quinn told Zach Selby of the Commanders' official site on Monday that the quarterback likely will be a full participant this week with the intent to start Sunday against the Giants. Wednesday's practice report ultimately will reveal Daniels' activity level to begin Week 5 prep.",
+   "impactTitle": "Impact",
+   "source": "Rotowire",
+   "subtitle": "WAS #5 - QB",
+   "title": "Jayden Daniels"
+  },
+  {
+   "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/11514.vresize.140.170.medium.3.png",
+   "date": "2026-10-07T17:36:01Z",
+   "description": "Diggs (undisclosed) was not on the practice field during the portion of Wednesday's practice open to the media, John Keim of ESPN.com reports.",
+   "entityLink": {
+    "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/11514.vresize.140.170.medium.3.png",
+    "analyticsName": "stefon-diggs",
+    "analyticsSport": "nfl",
+    "color": "1, 170, 0, 49",
+    "contentType": "athlete",
+    "contentUri": "football/nfl/athletes/11514",
+    "imageAltText": "Stefon Diggs",
+    "imageType": "image-headshot",
+    "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/11514.vresize.140.170.medium.3.png",
+    "layout": {
+     "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+     "tokens": {
+      "contentUri": "football/nfl/athletes/11514",
+      "id": "11514"
+     }
+    },
+    "title": "STEFON DIGGS",
+    "type": "entity",
+    "webUrl": "/nfl/stefon-diggs-player"
+   },
+   "headline": "Not present for Wednesday's practice",
+   "imageAltText": "Stefon Diggs",
+   "imageType": "image-headshot",
+   "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/11514.vresize.140.170.medium.3.png",
+   "impact": "Losing Diggs to an injury is the last thing the Commanders need after Terry McLaurin went down in practice with a hamstring injury last week, causing him to miss last Sunday's loss to the Colts. Washington leaned on rookie Antonio Williams and veterans Dyami Brown and Treylon Burks behind Diggs against Indy.",
+   "impactTitle": "Impact",
+   "source": "Rotowire",
+   "subtitle": "WAS #3 - WR",
+   "title": "Stefon Diggs"
+  },
+  {
+   "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/328797.vresize.140.170.medium.4.png",
+   "date": "2026-10-07T17:33:00Z",
+   "description": "Head coach Ben Johnson said Wednesday that Monangai's thumb injury is not an issue, Courtney Cronin of ESPN.com reports.",
+   "entityLink": {
+    "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/328797.vresize.140.170.medium.4.png",
+    "analyticsName": "kyle-monangai",
+    "analyticsSport": "nfl",
+    "color": "1, 255, 104, 53",
+    "contentType": "athlete",
+    "contentUri": "football/nfl/athletes/328797",
+    "imageAltText": "Kyle Monangai",
+    "imageType": "image-headshot",
+    "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/328797.vresize.140.170.medium.4.png",
+    "layout": {
+     "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+     "tokens": {
+      "contentUri": "football/nfl/athletes/328797",
+      "id": "328797"
+     }
+    },
+    "title": "KYLE MONANGAI",
+    "type": "entity",
+    "webUrl": "/nfl/kyle-monangai-player"
+   },
+   "headline": "Thumb injury not considered an issue",
+   "imageAltText": "Kyle Monangai",
+   "imageType": "image-headshot",
+   "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/328797.vresize.140.170.medium.4.png",
+   "impact": "While Johnson downplayed Monangai's thumb issue, he did say the running back is feeling the effects of his 30-carry workload from last Sunday's win over the Jets. The Bears could limit Monangai's snaps in practice this week, and it's fair to wonder if D'Andre Swift will step back into the clear lead role for Sunday's divisional matchup with the Packers.",
+   "impactTitle": "Impact",
+   "source": "Rotowire",
+   "subtitle": "CHI #25 - RB",
+   "title": "Kyle Monangai"
+  },
+  {
+   "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22275.vresize.140.170.medium.3.png",
+   "date": "2026-10-07T17:24:31Z",
+   "description": "Patriots head coach Mike Vrabel said that Stevenson isn't expected to practice Wednesday due to an apparent leg injury, Taylor Kyles of CLNSMedia.com reports.",
+   "entityLink": {
+    "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22275.vresize.140.170.medium.3.png",
+    "analyticsName": "rhamondre-stevenson",
+    "analyticsSport": "nfl",
+    "color": "1, 0, 87, 244",
+    "contentType": "athlete",
+    "contentUri": "football/nfl/athletes/22275",
+    "imageAltText": "Rhamondre Stevenson",
+    "imageType": "image-headshot",
+    "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22275.vresize.140.170.medium.3.png",
+    "layout": {
+     "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+     "tokens": {
+      "contentUri": "football/nfl/athletes/22275",
+      "id": "22275"
+     }
+    },
+    "title": "RHAMONDRE STEVENSON",
+    "type": "entity",
+    "webUrl": "/nfl/rhamondre-stevenson-player"
+   },
+   "headline": "Not expected to practice Wednesday",
+   "imageAltText": "Rhamondre Stevenson",
+   "imageType": "image-headshot",
+   "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22275.vresize.140.170.medium.3.png",
+   "impact": "Stevenson looked to have injured his leg or knee near the end of Sunday's win over the Bills, but the Patriots' first Week 5 injury report will be released later Wednesday and provide more clarity on the nature of his health concern. Vrabel expressed some optimism that Stevenson can still play during this Sunday's game against the Raiders, but if Stevenson can't go, TreVeyon Henderson would be set up for a heftier workload as the clear lead back for New England.",
+   "impactTitle": "Impact",
+   "source": "Rotowire",
+   "subtitle": "NE #38 - RB",
+   "title": "Rhamondre Stevenson"
+  },
+  {
+   "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/21486.vresize.140.170.medium.6.png",
+   "date": "2026-10-07T17:21:29Z",
+   "description": "Higgins (adductor) will be limited in practice Wednesday, Ben Baby of ESPN.com reports.",
+   "entityLink": {
+    "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/21486.vresize.140.170.medium.6.png",
+    "analyticsName": "tee-higgins",
+    "analyticsSport": "nfl",
+    "color": "1, 255, 104, 53",
+    "contentType": "athlete",
+    "contentUri": "football/nfl/athletes/21486",
+    "imageAltText": "Tee Higgins",
+    "imageType": "image-headshot",
+    "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/21486.vresize.140.170.medium.6.png",
+    "layout": {
+     "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+     "tokens": {
+      "contentUri": "football/nfl/athletes/21486",
+      "id": "21486"
+     }
+    },
+    "title": "TEE HIGGINS",
+    "type": "entity",
+    "webUrl": "/nfl/tee-higgins-player"
+   },
+   "headline": "Will be limited Wednesday",
+   "imageAltText": "Tee Higgins",
+   "imageType": "image-headshot",
+   "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/21486.vresize.140.170.medium.6.png",
+   "impact": "With Higgins having been labeled day-to-day earlier in the week, his return to practice in any capacity is a positive step for his Week 5 availability against the Dolphins. The Bengals are going to need Higgins if Ja'Marr Chase is unable to clear concussion protocol. Dohnte Meyers and Mike Gesicki would be next in line for targets, and both are sensible fantasy pickups this week.",
+   "impactTitle": "Impact",
+   "source": "Rotowire",
+   "subtitle": "CIN #5 - WR",
+   "title": "Tee Higgins"
+  },
+  {
+   "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/13985.vresize.140.170.medium.4.png",
+   "date": "2026-10-07T17:19:36Z",
+   "description": "Jackson (ankle) wasn't participating in the media-access portion of Wednesday's practice, Jamison Hensley of ESPN.com reports.",
+   "entityLink": {
+    "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/13985.vresize.140.170.medium.4.png",
+    "analyticsName": "lamar-jackson",
+    "analyticsSport": "nfl",
+    "color": "1, 141, 52, 255",
+    "contentType": "athlete",
+    "contentUri": "football/nfl/athletes/13985",
+    "imageAltText": "Lamar Jackson",
+    "imageType": "image-headshot",
+    "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/13985.vresize.140.170.medium.4.png",
+    "layout": {
+     "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+     "tokens": {
+      "contentUri": "football/nfl/athletes/13985",
+      "id": "13985"
+     }
+    },
+    "title": "LAMAR JACKSON",
+    "type": "entity",
+    "webUrl": "/nfl/lamar-jackson-player"
+   },
+   "headline": "Not practicing Wednesday",
+   "imageAltText": "Lamar Jackson",
+   "imageType": "image-headshot",
+   "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/13985.vresize.140.170.medium.4.png",
+   "impact": "Jackson missed the entire second half of this past Sunday's win over the Titans due to a sprained left ankle and appears to have only an \"outside chance\" of playing Week 5 against the Falcons, per Ian Rapoport of NFL Network. The Ravens will likely wait and see if Jackson can practice in any fashion Thursday or Friday before officially ruling on his status for Sunday's game, though head coach Jesse Minter said that the two-time MVP doesn't necessarily need to practice this week in order to play versus Atlanta, per Sam Cohn of The Baltimore Sun. Even so, in the likely event that Jackson ends up sitting out this weekend, Tyler Huntley would be in line to start under center. Huntley's presence at quarterback would amount to a downgrade from a fantasy perspective for all of Baltimore's skill-position players.",
+   "impactTitle": "Impact",
+   "source": "Rotowire",
+   "subtitle": "BAL #8 - QB",
+   "title": "Lamar Jackson"
+  },
+  {
+   "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/327710.vresize.140.170.medium.4.png",
+   "date": "2026-10-07T16:54:49Z",
+   "description": "Head coach Aaron Glenn said Wednesday that Mitchell (finger) remains week-to-week, Brian Costello of the New York Post reports.",
+   "entityLink": {
+    "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/327710.vresize.140.170.medium.4.png",
+    "analyticsName": "adonai-mitchell",
+    "analyticsSport": "nfl",
+    "color": "1, 0, 156, 26",
+    "contentType": "athlete",
+    "contentUri": "football/nfl/athletes/327710",
+    "imageAltText": "Adonai Mitchell",
+    "imageType": "image-headshot",
+    "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/327710.vresize.140.170.medium.4.png",
+    "layout": {
+     "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+     "tokens": {
+      "contentUri": "football/nfl/athletes/327710",
+      "id": "327710"
+     }
+    },
+    "title": "ADONAI MITCHELL",
+    "type": "entity",
+    "webUrl": "/nfl/adonai-mitchell-player"
+   },
+   "headline": "Remains week-to-week",
+   "imageAltText": "Adonai Mitchell",
+   "imageType": "image-headshot",
+   "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/327710.vresize.140.170.medium.4.png",
+   "impact": "Mitchell has sat out the Jets' last two games and looks on his way to missing a third straight contest Sunday against the Browns. In Mitchell's absence over the previous two weeks, Isaiah Williams and practice-squad member Sterling Shepard have been rounding out three-receiver sets behind Garrett Wilson, but the Jets could also get Tim Patrick (groin) back from injured reserve this week after his 21-day practice window was opened Wednesday.",
+   "impactTitle": "Impact",
+   "source": "Rotowire",
+   "subtitle": "NYJ #15 - WR",
+   "title": "Adonai Mitchell"
+  },
+  {
+   "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/14929.vresize.140.170.medium.5.png",
+   "date": "2026-10-07T16:39:14Z",
+   "description": "McLaurin (hamstring) won't practice Wednesday, Tashan Reed of The Washington Post reports.",
+   "entityLink": {
+    "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/14929.vresize.140.170.medium.5.png",
+    "analyticsName": "terry-mclaurin",
+    "analyticsSport": "nfl",
+    "color": "1, 170, 0, 49",
+    "contentType": "athlete",
+    "contentUri": "football/nfl/athletes/14929",
+    "imageAltText": "Terry McLaurin",
+    "imageType": "image-headshot",
+    "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/14929.vresize.140.170.medium.5.png",
+    "layout": {
+     "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+     "tokens": {
+      "contentUri": "football/nfl/athletes/14929",
+      "id": "14929"
+     }
+    },
+    "title": "TERRY MCLAURIN",
+    "type": "entity",
+    "webUrl": "/nfl/terry-mclaurin-player"
+   },
+   "headline": "Won't practice Wednesday",
+   "imageAltText": "Terry McLaurin",
+   "imageType": "image-headshot",
+   "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/14929.vresize.140.170.medium.5.png",
+   "impact": "McLaurin will work off to the side during Wednesday's practice after he suffered the hamstring injury in practice last week before missing Sunday's loss to the Colts in London. With McLaurin out against Indy, Antonio Williams was the biggest winner from a playing time standpoint, running 30 routes on 41 dropbacks while seeing eight targets. All three of Williams, Dyami Brown and Treylon Burks would again be in line for increased snaps behind Stefon Diggs if McLaurin is unable to suit up against the Giants in Week 5.",
+   "impactTitle": "Impact",
+   "source": "Rotowire",
+   "subtitle": "WAS #17 - WR",
+   "title": "Terry McLaurin"
+  },
+  {
+   "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22774.vresize.140.170.medium.4.png",
+   "date": "2026-10-07T16:36:51Z",
+   "description": "Head coach Aaron Glenn said Wednesday that Hall (quadriceps) remains week-to-week, Al Iannazzone of Newsday reports.",
+   "entityLink": {
+    "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22774.vresize.140.170.medium.4.png",
+    "analyticsName": "breece-hall",
+    "analyticsSport": "nfl",
+    "color": "1, 0, 156, 26",
+    "contentType": "athlete",
+    "contentUri": "football/nfl/athletes/22774",
+    "imageAltText": "Breece Hall",
+    "imageType": "image-headshot",
+    "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22774.vresize.140.170.medium.4.png",
+    "layout": {
+     "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+     "tokens": {
+      "contentUri": "football/nfl/athletes/22774",
+      "id": "22774"
+     }
+    },
+    "title": "BREECE HALL",
+    "type": "entity",
+    "webUrl": "/nfl/breece-hall-player"
+   },
+   "headline": "Remains week-to-week",
+   "imageAltText": "Breece Hall",
+   "imageType": "image-headshot",
+   "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22774.vresize.140.170.medium.4.png",
+   "impact": "Hall won't practice Wednesday and looks on track to miss a second straight game Sunday versus the Browns. After starting and playing 32 of the Jets' 34 offensive snaps in last Sunday's loss to the Bears, Braelon Allen should once again be expected to handle a featured role out of the backfield in Week 5 while Hall is likely sidelined.",
+   "impactTitle": "Impact",
+   "source": "Rotowire",
+   "subtitle": "NYJ #20 - RB",
+   "title": "Breece Hall"
+  },
+  {
+   "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22113.vresize.140.170.medium.5.png",
+   "date": "2026-10-07T16:01:08Z",
+   "description": "Steelers head coach Mike McCarthy said that Dowdle (toe) will remain in the rehab group for Wednesday's practice, but the running back is expected to do more on-field work later in the week, Ray Fittipaldo of the Pittsburgh Post-Gazette reports.",
+   "entityLink": {
+    "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22113.vresize.140.170.medium.5.png",
+    "analyticsName": "rico-dowdle",
+    "analyticsSport": "nfl",
+    "color": "1, 255, 188, 41",
+    "contentType": "athlete",
+    "contentUri": "football/nfl/athletes/22113",
+    "imageAltText": "Rico Dowdle",
+    "imageType": "image-headshot",
+    "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22113.vresize.140.170.medium.5.png",
+    "layout": {
+     "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+     "tokens": {
+      "contentUri": "football/nfl/athletes/22113",
+      "id": "22113"
+     }
+    },
+    "title": "RICO DOWDLE",
+    "type": "entity",
+    "webUrl": "/nfl/rico-dowdle-player"
+   },
+   "headline": "Not practicing Wednesday",
+   "imageAltText": "Rico Dowdle",
+   "imageType": "image-headshot",
+   "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22113.vresize.140.170.medium.5.png",
+   "impact": "Dowdle has been sidelined for Pittsburgh's last two games due to an injury that he relayed Tuesday was a dislocated toe on his right foot, per Will Graves of the Associated Press. He said that he dislocated the toe twice during the Steelers' Week 2 loss to the Patriots, checking back into the game for a brief spell after popping the toe back in before it popped back out again. He sounds like he's making some progress, but he'll likely need to practice in some fashion Thursday and/or Friday to have a shot at playing Sunday versus the Colts. Jaylen Warren has handled heavy workloads the past two weeks in Dowdle's absence, though McCarthy told Nick Farabaugh of PennLive.com on Monday that he envisions the two backs forming a \"one-two punch\" once Dowdle returns to action.",
+   "impactTitle": "Impact",
+   "source": "Rotowire",
+   "subtitle": "PIT #13 - RB",
+   "title": "Rico Dowdle"
+  },
+  {
+   "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/10518.vresize.140.170.medium.1.png",
+   "date": "2026-10-07T14:56:09Z",
+   "description": "Beckham agreed Wednesday to sign with the Vikings' practice squad, according to NFL reporter Jordan Schultz.",
+   "entityLink": {
+    "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/10518.vresize.140.170.medium.1.png",
+    "analyticsName": "odell-beckham-jr",
+    "analyticsSport": "nfl",
+    "color": "1, 141, 52, 255",
+    "contentType": "athlete",
+    "contentUri": "football/nfl/athletes/10518",
+    "imageAltText": "Odell Beckham Jr.",
+    "imageType": "image-headshot",
+    "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/10518.vresize.140.170.medium.1.png",
+    "layout": {
+     "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+     "tokens": {
+      "contentUri": "football/nfl/athletes/10518",
+      "id": "10518"
+     }
+    },
+    "title": "ODELL BECKHAM JR.",
+    "type": "entity",
+    "webUrl": "/nfl/odell-beckham-jr-player"
+   },
+   "headline": "Catches on with Vikings",
+   "imageAltText": "Odell Beckham Jr.",
+   "imageType": "image-headshot",
+   "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/10518.vresize.140.170.medium.1.png",
+   "impact": "After winning a spot on the Giants' roster coming out of the preseason, Beckham struggled to find playing time, logging just one target and logging 20 total snaps before he was cut following Week 3. He was able to find a new opportunity with the Vikings, who can elevate Beckham for up to three games before he would need to be signed to the 53-man roster in order to continue playing for the team. Unless top wideout Justin Jefferson's ankle injury costs him more time, Beckham may still face an uphill battle to earning meaningful snaps in a Vikings receiver room that also includes Jordan Addison, Jauan Jennings and Tai Felton.",
+   "impactTitle": "Impact",
+   "source": "Rotowire",
+   "subtitle": "- WR",
+   "title": "Odell Beckham Jr."
+  },
+  {
+   "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/328094.vresize.140.170.medium.5.png",
+   "date": "2026-10-07T14:53:59Z",
+   "description": "The Panthers are hopeful that Coker (quadriceps) will be ready to return to action following their Week 5 bye, Jeremy Fowler of ESPN.com reports.",
+   "entityLink": {
+    "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/328094.vresize.140.170.medium.5.png",
+    "analyticsName": "jalen-coker",
+    "analyticsSport": "nfl",
+    "color": "1, 82, 181, 255",
+    "contentType": "athlete",
+    "contentUri": "football/nfl/athletes/328094",
+    "imageAltText": "Jalen Coker",
+    "imageType": "image-headshot",
+    "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/328094.vresize.140.170.medium.5.png",
+    "layout": {
+     "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+     "tokens": {
+      "contentUri": "football/nfl/athletes/328094",
+      "id": "328094"
+     }
+    },
+    "title": "JALEN COKER",
+    "type": "entity",
+    "webUrl": "/nfl/jalen-coker-player"
+   },
+   "headline": "Could return after Week 5 bye",
+   "imageAltText": "Jalen Coker",
+   "imageType": "image-headshot",
+   "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/328094.vresize.140.170.medium.5.png",
+   "impact": "After making an early exit from the Panthers' Week 3 loss to the Browns due to a quad strain, Coker missed one practice and was limited in two others before taking a questionable tag into this past Sunday's game against the Lions. He was ultimately inactive for the Panthers' 32-26 win, but the team is optimistic that with another week off to heal up from the injury, Coker will be ready to go for a Week 6 matchup with the Eagles on Oct. 18. Despite essentially playing just two and a half games this season, Coker has been highly productive during his time on the field with an 18-222-2 receiving line on 22 targets.",
+   "impactTitle": "Impact",
+   "source": "Rotowire",
+   "subtitle": "CAR #18 - WR",
+   "title": "Jalen Coker"
+  },
+  {
+   "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/326997.vresize.140.170.medium.5.png",
+   "date": "2026-10-06T23:17:48Z",
+   "description": "The Eagles placed Bigsby (abdomen) on injured reserve Tuesday, Zach Berman of The Athletic reports.",
+   "entityLink": {
+    "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/326997.vresize.140.170.medium.5.png",
+    "analyticsName": "tank-bigsby",
+    "analyticsSport": "nfl",
+    "color": "1, 0, 170, 150",
+    "contentType": "athlete",
+    "contentUri": "football/nfl/athletes/326997",
+    "imageAltText": "Tank Bigsby",
+    "imageType": "image-headshot",
+    "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/326997.vresize.140.170.medium.5.png",
+    "layout": {
+     "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+     "tokens": {
+      "contentUri": "football/nfl/athletes/326997",
+      "id": "326997"
+     }
+    },
+    "title": "TANK BIGSBY",
+    "type": "entity",
+    "webUrl": "/nfl/tank-bigsby-player"
+   },
+   "headline": "Placed on IR",
+   "imageAltText": "Tank Bigsby",
+   "imageType": "image-headshot",
+   "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/326997.vresize.140.170.medium.5.png",
+   "impact": "Bigsby will undergo core muscle surgery for an abdominal injury that he picked up during the Eagles' Week 4 loss to the Rams. The fourth-year pro will be required to miss at least the next four games, so the earliest he can return is Week 9 against the Giants. Saquon Barkley (hamstring) is also considered week-to-week, so with Bigsby on IR, Will Shipley could be the Eagles' starting running back for Week 5 against the Jaguars on Sunday in London.",
+   "impactTitle": "Impact",
+   "source": "Rotowire",
+   "subtitle": "PHI #8 - RB",
+   "title": "Tank Bigsby"
+  },
+  {
+   "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/13985.vresize.140.170.medium.4.png",
+   "date": "2026-10-06T20:50:56Z",
+   "description": "Jackson appears \"unlikely\" to play Sunday against the Falcons due to a \"rarer type of ankle sprain\" that could put him at risk of missing multiple games, Ian Rapoport of NFL Network reports.",
+   "entityLink": {
+    "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/13985.vresize.140.170.medium.4.png",
+    "analyticsName": "lamar-jackson",
+    "analyticsSport": "nfl",
+    "color": "1, 141, 52, 255",
+    "contentType": "athlete",
+    "contentUri": "football/nfl/athletes/13985",
+    "imageAltText": "Lamar Jackson",
+    "imageType": "image-headshot",
+    "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/13985.vresize.140.170.medium.4.png",
+    "layout": {
+     "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+     "tokens": {
+      "contentUri": "football/nfl/athletes/13985",
+      "id": "13985"
+     }
+    },
+    "title": "LAMAR JACKSON",
+    "type": "entity",
+    "webUrl": "/nfl/lamar-jackson-player"
+   },
+   "headline": "Viewed as unlikely for Week 5",
+   "imageAltText": "Lamar Jackson",
+   "imageType": "image-headshot",
+   "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/13985.vresize.140.170.medium.4.png",
+   "impact": "The ankle injury sidelined Jackson for the entire second half of last Sunday's 24-18 win over the Titans, resulting in backup Tyler Huntley directing the offense for the final two quarters. Huntley now appears to be trending toward a Week 5 start while Jackson recovers from what Rapoport suggests is an \"unconventional\" injury that's not necessarily a low- or high-ankle sprain. The Ravens are expected to take a week-by-week approach with their star quarterback, who isn't believed to be at risk of a long-term absence but could end up sitting out more than one game, depending on how he responds to rehab.",
+   "impactTitle": "Impact",
+   "source": "Rotowire",
+   "subtitle": "BAL #8 - QB",
+   "title": "Lamar Jackson"
+  },
+  {
+   "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/13142.vresize.140.170.medium.1.png",
+   "date": "2026-10-06T18:05:13Z",
+   "description": "The Seahawks opted not to sign Mixon (foot) after he underwent a physical for the team Tuesday, Adam Schefter of ESPN reports.",
+   "entityLink": {
+    "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/13142.vresize.140.170.medium.1.png",
+    "analyticsName": "joe-mixon",
+    "analyticsSport": "nfl",
+    "color": "1, 0, 156, 26",
+    "contentType": "athlete",
+    "contentUri": "football/nfl/athletes/13142",
+    "imageAltText": "Joe Mixon",
+    "imageType": "image-headshot",
+    "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/13142.vresize.140.170.medium.1.png",
+    "layout": {
+     "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+     "tokens": {
+      "contentUri": "football/nfl/athletes/13142",
+      "id": "13142"
+     }
+    },
+    "title": "JOE MIXON",
+    "type": "entity",
+    "webUrl": "/nfl/joe-mixon-player"
+   },
+   "headline": "Not joining Seattle after all",
+   "imageAltText": "Joe Mixon",
+   "imageType": "image-headshot",
+   "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/13142.vresize.140.170.medium.1.png",
+   "impact": "With Jadarian Price (chest) recently landing on injured reserve and with Zach Charbonnet (knee) not expected to return from the PUP list until at least Week 6, Seattle planned to bring Mixon aboard to bolster their running-back room. However, the Seahawks evidently had some reservations about Mixon's health after reviewing his physical, and the 30-year-old will now remain a free agent. Mixon last appeared in the NFL with the Texans in 2024, as he missed the entire 2025 campaign due to an unspecified foot/ankle injury that he ultimately addressed with a surgery earlier this past offseason.",
+   "impactTitle": "Impact",
+   "source": "Rotowire",
+   "subtitle": "- RB",
+   "title": "Joe Mixon"
+  },
+  {
+   "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/13985.vresize.140.170.medium.4.png",
+   "date": "2026-10-06T13:11:58Z",
+   "description": "Jackson (ankle) is not dealing with a long-term injury, but he has \"only an outside chance to play\" in Week 5 and \"could end up missing multiple games,\" Ian Rapoport of NFL Network reports.",
+   "entityLink": {
+    "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/13985.vresize.140.170.medium.4.png",
+    "analyticsName": "lamar-jackson",
+    "analyticsSport": "nfl",
+    "color": "1, 141, 52, 255",
+    "contentType": "athlete",
+    "contentUri": "football/nfl/athletes/13985",
+    "imageAltText": "Lamar Jackson",
+    "imageType": "image-headshot",
+    "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/13985.vresize.140.170.medium.4.png",
+    "layout": {
+     "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+     "tokens": {
+      "contentUri": "football/nfl/athletes/13985",
+      "id": "13985"
+     }
+    },
+    "title": "LAMAR JACKSON",
+    "type": "entity",
+    "webUrl": "/nfl/lamar-jackson-player"
+   },
+   "headline": "Could miss multiple games",
+   "imageAltText": "Lamar Jackson",
+   "imageType": "image-headshot",
+   "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/13985.vresize.140.170.medium.4.png",
+   "impact": "Jackson is believed to be dealing with a sprain, but the report indicates it's more likely than not he will sit out Baltimore's upcoming Sunday Night Football matchup with Atlanta -- and he may miss more time beyond that. Jackson's participation -- or lack thereof -- in practice this week will likely determine his availability for Week 5. If he is unable to go, Tyler Huntley would be next in line at the signal-caller spot.",
+   "impactTitle": "Impact",
+   "source": "Rotowire",
+   "subtitle": "BAL #8 - QB",
+   "title": "Lamar Jackson"
+  }
+ ],
+ "title": "NFL PLAYER NEWS"
+}

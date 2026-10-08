@@ -1,0 +1,4 @@
+columns: []
+kind: dataframe
+schema: content_module
+unverified: 'no parser: the wrapper returns the raw JSON dict as-is, so there are no columns to tabulate'

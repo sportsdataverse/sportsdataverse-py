@@ -1,0 +1,6 @@
+columns: []
+kind: dataframe
+schema: rankings
+unverified: 'parser: parse_items returns no columns on the live payload (cfb, mbb, wbb, mch, wch, 2026-10-07); its rows sit
+  under keys it does not read (top level: availableRankings, latestSeason, latestWeek, leagues, rankings, requestedSeason,
+  sports, weekCounts)'

@@ -1,0 +1,3227 @@
+{
+ "eventInfo": {
+  "header": {
+   "title": "EVENT INFO"
+  },
+  "image": {
+   "altText": "Lambeau Field",
+   "url": "https://b.fssta.com/uploads/application/nfl/venues/SR-Lambeau-Field.vresize.975.546.medium.1.jpg"
+  },
+  "items": [
+   {
+    "image": {
+     "key": "venue",
+     "type": "embedded"
+    },
+    "template": "text",
+    "text": "Green Bay, WI"
+   },
+   {
+    "date": {
+     "dateOnly": false,
+     "start": "2026-09-24T20:15:00-04:00"
+    },
+    "image": {
+     "key": "calendar",
+     "type": "embedded"
+    },
+    "template": "date"
+   },
+   {
+    "image": {
+     "key": "attendance",
+     "type": "embedded"
+    },
+    "template": "text",
+    "text": "76,955"
+   },
+   {
+    "image": {
+     "key": "clock",
+     "type": "embedded"
+    },
+    "template": "text",
+    "text": "3 Hours 2 Minutes"
+   }
+  ],
+  "title": "Lambeau Field"
+ },
+ "eventInsights": {
+  "header": {
+   "highlightText": "9",
+   "title": "FOX FACTS"
+  },
+  "increment": 6,
+  "items": [
+   {
+    "entityImage": {
+     "altText": "Bijan Robinson",
+     "altUrl": "https://b.fssta.com/uploads/application/nfl/headshots/326923.vresize.140.170.medium.5.png",
+     "type": "image-headshot",
+     "url": "https://b.fssta.com/uploads/application/nfl/headshots/326923.vresize.140.170.medium.5.png"
+    },
+    "entityLink": {
+     "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/326923.vresize.140.170.medium.5.png",
+     "analyticsName": "bijan-robinson",
+     "analyticsSport": "nfl",
+     "color": "1, 240, 31, 65",
+     "contentType": "athlete",
+     "contentUri": "football/nfl/athletes/326923",
+     "imageAltText": "Bijan Robinson",
+     "imageType": "image-headshot",
+     "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/326923.vresize.140.170.medium.5.png",
+     "layout": {
+      "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+      "tokens": {
+       "contentUri": "football/nfl/athletes/326923",
+       "id": "326923"
+      }
+     },
+     "title": "BIJAN ROBINSON",
+     "type": "entity",
+     "webUrl": "/nfl/bijan-robinson-player"
+    },
+    "text": "Bijan Robinson has set his season high with 194 rushing yards. His previous season high was 83 rushing yards.",
+    "title": "STAT HIGH"
+   },
+   {
+    "entityImage": {
+     "altText": "Drake London",
+     "altUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22760.vresize.140.170.medium.5.png",
+     "type": "image-headshot",
+     "url": "https://b.fssta.com/uploads/application/nfl/headshots/22760.vresize.140.170.medium.5.png"
+    },
+    "entityLink": {
+     "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22760.vresize.140.170.medium.5.png",
+     "analyticsName": "drake-london",
+     "analyticsSport": "nfl",
+     "color": "1, 240, 31, 65",
+     "contentType": "athlete",
+     "contentUri": "football/nfl/athletes/22760",
+     "imageAltText": "Drake London",
+     "imageType": "image-headshot",
+     "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22760.vresize.140.170.medium.5.png",
+     "layout": {
+      "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+      "tokens": {
+       "contentUri": "football/nfl/athletes/22760",
+       "id": "22760"
+      }
+     },
+     "title": "DRAKE LONDON",
+     "type": "entity",
+     "webUrl": "/nfl/drake-london-player"
+    },
+    "text": "Drake London has set his career high with 194 receiving yards. His previous career high was 187 receiving yards.",
+    "title": "STAT HIGH"
+   },
+   {
+    "entityImage": {
+     "altText": "Jordan Love",
+     "altUrl": "https://b.fssta.com/uploads/application/nfl/headshots/21466.vresize.140.170.medium.4.png",
+     "type": "image-headshot",
+     "url": "https://b.fssta.com/uploads/application/nfl/headshots/21466.vresize.140.170.medium.4.png"
+    },
+    "entityLink": {
+     "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/21466.vresize.140.170.medium.4.png",
+     "analyticsName": "jordan-love",
+     "analyticsSport": "nfl",
+     "color": "1, 0, 156, 26",
+     "contentType": "athlete",
+     "contentUri": "football/nfl/athletes/21466",
+     "imageAltText": "Jordan Love",
+     "imageType": "image-headshot",
+     "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/21466.vresize.140.170.medium.4.png",
+     "layout": {
+      "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+      "tokens": {
+       "contentUri": "football/nfl/athletes/21466",
+       "id": "21466"
+      }
+     },
+     "title": "JORDAN LOVE",
+     "type": "entity",
+     "webUrl": "/nfl/jordan-love-player"
+    },
+    "text": "Jordan Love has tied Tobin Rote for 5th on the Packers all-time passing touchdowns list with 89.",
+    "title": "MILESTONE"
+   },
+   {
+    "entityImage": {
+     "altText": "Jordan Love",
+     "altUrl": "https://b.fssta.com/uploads/application/nfl/headshots/21466.vresize.140.170.medium.4.png",
+     "type": "image-headshot",
+     "url": "https://b.fssta.com/uploads/application/nfl/headshots/21466.vresize.140.170.medium.4.png"
+    },
+    "entityLink": {
+     "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/21466.vresize.140.170.medium.4.png",
+     "analyticsName": "jordan-love",
+     "analyticsSport": "nfl",
+     "color": "1, 0, 156, 26",
+     "contentType": "athlete",
+     "contentUri": "football/nfl/athletes/21466",
+     "imageAltText": "Jordan Love",
+     "imageType": "image-headshot",
+     "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/21466.vresize.140.170.medium.4.png",
+     "layout": {
+      "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+      "tokens": {
+       "contentUri": "football/nfl/athletes/21466",
+       "id": "21466"
+      }
+     },
+     "title": "JORDAN LOVE",
+     "type": "entity",
+     "webUrl": "/nfl/jordan-love-player"
+    },
+    "text": "Jordan Love has set his season high with 53 passing attempts. His previous season high was 42 passing attempts.",
+    "title": "STAT HIGH"
+   },
+   {
+    "entityImage": {
+     "altText": "Drake London",
+     "altUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22760.vresize.140.170.medium.5.png",
+     "type": "image-headshot",
+     "url": "https://b.fssta.com/uploads/application/nfl/headshots/22760.vresize.140.170.medium.5.png"
+    },
+    "entityLink": {
+     "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22760.vresize.140.170.medium.5.png",
+     "analyticsName": "drake-london",
+     "analyticsSport": "nfl",
+     "color": "1, 240, 31, 65",
+     "contentType": "athlete",
+     "contentUri": "football/nfl/athletes/22760",
+     "imageAltText": "Drake London",
+     "imageType": "image-headshot",
+     "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22760.vresize.140.170.medium.5.png",
+     "layout": {
+      "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+      "tokens": {
+       "contentUri": "football/nfl/athletes/22760",
+       "id": "22760"
+      }
+     },
+     "title": "DRAKE LONDON",
+     "type": "entity",
+     "webUrl": "/nfl/drake-london-player"
+    },
+    "text": "Drake London has passed Alge Crumpler for 7th on the Falcons all-time receptions list with 317.",
+    "title": "MILESTONE"
+   },
+   {
+    "entityImage": {
+     "altText": "Bijan Robinson",
+     "altUrl": "https://b.fssta.com/uploads/application/nfl/headshots/326923.vresize.140.170.medium.5.png",
+     "type": "image-headshot",
+     "url": "https://b.fssta.com/uploads/application/nfl/headshots/326923.vresize.140.170.medium.5.png"
+    },
+    "entityLink": {
+     "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/326923.vresize.140.170.medium.5.png",
+     "analyticsName": "bijan-robinson",
+     "analyticsSport": "nfl",
+     "color": "1, 240, 31, 65",
+     "contentType": "athlete",
+     "contentUri": "football/nfl/athletes/326923",
+     "imageAltText": "Bijan Robinson",
+     "imageType": "image-headshot",
+     "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/326923.vresize.140.170.medium.5.png",
+     "layout": {
+      "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+      "tokens": {
+       "contentUri": "football/nfl/athletes/326923",
+       "id": "326923"
+      }
+     },
+     "title": "BIJAN ROBINSON",
+     "type": "entity",
+     "webUrl": "/nfl/bijan-robinson-player"
+    },
+    "text": "Bijan Robinson has set his career high with 29 rushing attempts. His previous career high was 28 rushing attempts.",
+    "title": "STAT HIGH"
+   },
+   {
+    "entityImage": {
+     "altText": "Drake London",
+     "altUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22760.vresize.140.170.medium.5.png",
+     "type": "image-headshot",
+     "url": "https://b.fssta.com/uploads/application/nfl/headshots/22760.vresize.140.170.medium.5.png"
+    },
+    "entityLink": {
+     "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22760.vresize.140.170.medium.5.png",
+     "analyticsName": "drake-london",
+     "analyticsSport": "nfl",
+     "color": "1, 240, 31, 65",
+     "contentType": "athlete",
+     "contentUri": "football/nfl/athletes/22760",
+     "imageAltText": "Drake London",
+     "imageType": "image-headshot",
+     "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22760.vresize.140.170.medium.5.png",
+     "layout": {
+      "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+      "tokens": {
+       "contentUri": "football/nfl/athletes/22760",
+       "id": "22760"
+      }
+     },
+     "title": "DRAKE LONDON",
+     "type": "entity",
+     "webUrl": "/nfl/drake-london-player"
+    },
+    "text": "Drake London has passed Alge Crumpler for 8th on the Falcons all-time receiving yards list with 4,235.",
+    "title": "MILESTONE"
+   },
+   {
+    "entityImage": {
+     "altText": "Drake London",
+     "altUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22760.vresize.140.170.medium.5.png",
+     "type": "image-headshot",
+     "url": "https://b.fssta.com/uploads/application/nfl/headshots/22760.vresize.140.170.medium.5.png"
+    },
+    "entityLink": {
+     "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22760.vresize.140.170.medium.5.png",
+     "analyticsName": "drake-london",
+     "analyticsSport": "nfl",
+     "color": "1, 240, 31, 65",
+     "contentType": "athlete",
+     "contentUri": "football/nfl/athletes/22760",
+     "imageAltText": "Drake London",
+     "imageType": "image-headshot",
+     "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22760.vresize.140.170.medium.5.png",
+     "layout": {
+      "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+      "tokens": {
+       "contentUri": "football/nfl/athletes/22760",
+       "id": "22760"
+      }
+     },
+     "title": "DRAKE LONDON",
+     "type": "entity",
+     "webUrl": "/nfl/drake-london-player"
+    },
+    "text": "Drake London has set his season high with 9 receptions. His previous season high was 4 receptions.",
+    "title": "STAT HIGH"
+   },
+   {
+    "entityImage": {
+     "altText": "Matthew Golden",
+     "altUrl": "https://b.fssta.com/uploads/application/nfl/headshots/328580.vresize.140.170.medium.3.png",
+     "type": "image-headshot",
+     "url": "https://b.fssta.com/uploads/application/nfl/headshots/328580.vresize.140.170.medium.3.png"
+    },
+    "entityLink": {
+     "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/328580.vresize.140.170.medium.3.png",
+     "analyticsName": "matthew-golden",
+     "analyticsSport": "nfl",
+     "color": "1, 0, 156, 26",
+     "contentType": "athlete",
+     "contentUri": "football/nfl/athletes/328580",
+     "imageAltText": "Matthew Golden",
+     "imageType": "image-headshot",
+     "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/328580.vresize.140.170.medium.3.png",
+     "layout": {
+      "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+      "tokens": {
+       "contentUri": "football/nfl/athletes/328580",
+       "id": "328580"
+      }
+     },
+     "title": "MATTHEW GOLDEN",
+     "type": "entity",
+     "webUrl": "/nfl/matthew-golden-player"
+    },
+    "text": "Matthew Golden has set his career high with 100 receiving yards. His previous career high was 95 receiving yards.",
+    "title": "STAT HIGH"
+   }
+  ],
+  "visible": 3
+ },
+ "favoriteCta": {
+  "entities": [
+   {
+    "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Falcons.vresize.200.200.medium.1.png",
+    "analyticsName": "atlanta-falcons",
+    "contentType": "team",
+    "contentUri": "football/nfl/teams/25",
+    "imageAltText": "Atlanta Falcons",
+    "imageType": "image-logo",
+    "imageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Falcons.vresize.200.200.medium.1.png",
+    "name": "Atlanta Falcons",
+    "text": "Atlanta Falcons"
+   },
+   {
+    "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Packers.vresize.200.200.medium.0.png",
+    "analyticsName": "green-bay-packers",
+    "contentType": "team",
+    "contentUri": "football/nfl/teams/22",
+    "imageAltText": "Green Bay Packers",
+    "imageType": "image-logo",
+    "imageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Packers.vresize.200.200.medium.0.png",
+    "name": "Green Bay Packers",
+    "text": "Green Bay Packers"
+   }
+  ],
+  "header": {
+   "link": {
+    "linkType": "explore-favorite",
+    "text": "ADD MORE"
+   },
+   "title": "FOLLOW YOUR FAVORITES"
+  },
+  "template": "vertical-left",
+  "text": "Follow your favorite leagues, teams and players to personalize your FOX Sports experience."
+ },
+ "featuredPairing": {
+  "bottomEntity": {
+   "backgroundImage": {},
+   "entityLink": {
+    "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/21466.vresize.140.170.medium.4.png",
+    "analyticsName": "jordan-love",
+    "analyticsSport": "nfl",
+    "color": "1, 0, 156, 26",
+    "contentType": "athlete",
+    "contentUri": "football/nfl/athletes/21466",
+    "imageAltText": "Jordan Love",
+    "imageType": "image-headshot",
+    "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/21466.vresize.140.170.medium.4.png",
+    "layout": {
+     "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+     "tokens": {
+      "contentUri": "football/nfl/athletes/21466",
+      "id": "21466"
+     }
+    },
+    "title": "JORDAN LOVE",
+    "type": "entity",
+    "webUrl": "/nfl/jordan-love-player"
+   },
+   "featuredEntityStats": [
+    {
+     "rank": {
+      "color": "1, 229, 229, 229",
+      "value": "8th"
+     },
+     "title": "PASSING YDS",
+     "value": "1,041"
+    },
+    {
+     "rank": {
+      "color": "1, 229, 229, 229",
+      "value": "T-7th"
+     },
+     "title": "TDS",
+     "value": "8"
+    },
+    {
+     "rank": {
+      "color": "1, 229, 229, 229",
+      "value": "T-40th"
+     },
+     "title": "INT",
+     "value": "3"
+    }
+   ],
+   "image": {
+    "altText": "Jordan Love",
+    "altUrl": "https://b.fssta.com/uploads/application/nfl/headshots/21466.vresize.140.170.medium.4.png",
+    "type": "image-headshot",
+    "url": "https://b.fssta.com/uploads/application/nfl/headshots/21466.vresize.140.170.medium.4.png"
+   },
+   "imageLabel": "",
+   "line1": "#10 · GB",
+   "line2": "",
+   "name": "Jordan Love"
+  },
+  "header": {
+   "title": "STARTING QUARTERBACKS"
+  },
+  "template": "default",
+  "topEntity": {
+   "backgroundImage": {},
+   "entityLink": {
+    "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/327699.vresize.140.170.medium.5.png",
+    "analyticsName": "michael-penix",
+    "analyticsSport": "nfl",
+    "color": "1, 240, 31, 65",
+    "contentType": "athlete",
+    "contentUri": "football/nfl/athletes/327699",
+    "imageAltText": "Michael Penix Jr.",
+    "imageType": "image-headshot",
+    "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/327699.vresize.140.170.medium.5.png",
+    "layout": {
+     "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+     "tokens": {
+      "contentUri": "football/nfl/athletes/327699",
+      "id": "327699"
+     }
+    },
+    "title": "MICHAEL PENIX JR.",
+    "type": "entity",
+    "webUrl": "/nfl/michael-penix-player"
+   },
+   "featuredEntityStats": [
+    {
+     "rank": {
+      "color": "1, 229, 229, 229",
+      "value": "T-28th"
+     },
+     "title": "PASSING YDS",
+     "value": "479"
+    },
+    {
+     "rank": {
+      "color": "1, 229, 229, 229",
+      "value": "T-32nd"
+     },
+     "title": "TDS",
+     "value": "2"
+    },
+    {
+     "rank": {
+      "color": "1, 229, 229, 229",
+      "value": "T-23rd"
+     },
+     "title": "INT",
+     "value": "1"
+    }
+   ],
+   "image": {
+    "altText": "Michael Penix Jr.",
+    "altUrl": "https://b.fssta.com/uploads/application/nfl/headshots/327699.vresize.140.170.medium.5.png",
+    "type": "image-headshot",
+    "url": "https://b.fssta.com/uploads/application/nfl/headshots/327699.vresize.140.170.medium.5.png"
+   },
+   "imageLabel": "",
+   "line1": "#9 · ATL",
+   "line2": "",
+   "name": "Michael Penix Jr."
+  }
+ },
+ "featuredPlayerNews": {
+  "header": {
+   "link": {
+    "text": "PLAYER NEWS",
+    "webUrl": "/nfl/player-news"
+   },
+   "title": "PLAYER NEWS"
+  },
+  "items": [
+   {
+    "description": "Packers head coach Matt LaFleur said that Brooks (ankle) won't practice Wednesday, Matt Schneidman of The Athletic reports.",
+    "entityLink": {
+     "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/327487.vresize.140.170.medium.3.png",
+     "analyticsName": "chris-brooks-2",
+     "analyticsSport": "nfl",
+     "color": "1, 0, 156, 26",
+     "contentType": "athlete",
+     "contentUri": "football/nfl/athletes/327487",
+     "imageAltText": "Chris Brooks",
+     "imageType": "image-headshot",
+     "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/327487.vresize.140.170.medium.3.png",
+     "layout": {
+      "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+      "tokens": {
+       "contentUri": "football/nfl/athletes/327487",
+       "id": "327487"
+      }
+     },
+     "title": "CHRIS BROOKS",
+     "type": "entity",
+     "webUrl": "/nfl/chris-brooks-2-player"
+    },
+    "image": {
+     "altText": "Chris Brooks",
+     "altUrl": "https://b.fssta.com/uploads/application/nfl/headshots/327487.vresize.140.170.medium.3.png",
+     "type": "image-headshot",
+     "url": "https://b.fssta.com/uploads/application/nfl/headshots/327487.vresize.140.170.medium.3.png"
+    },
+    "subtitle": "GB #30 · RB",
+    "title": "Chris Brooks"
+   },
+   {
+    "description": "The Packers designated Williams (ankle) to return from injured reserve ahead of Wednesday's practice session.",
+    "entityLink": {
+     "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/328645.vresize.140.170.medium.2.png",
+     "analyticsName": "savion-williams",
+     "analyticsSport": "nfl",
+     "color": "1, 0, 156, 26",
+     "contentType": "athlete",
+     "contentUri": "football/nfl/athletes/328645",
+     "imageAltText": "Savion Williams",
+     "imageType": "image-headshot",
+     "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/328645.vresize.140.170.medium.2.png",
+     "layout": {
+      "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+      "tokens": {
+       "contentUri": "football/nfl/athletes/328645",
+       "id": "328645"
+      }
+     },
+     "title": "SAVION WILLIAMS",
+     "type": "entity",
+     "webUrl": "/nfl/savion-williams-player"
+    },
+    "image": {
+     "altText": "Savion Williams",
+     "altUrl": "https://b.fssta.com/uploads/application/nfl/headshots/328645.vresize.140.170.medium.2.png",
+     "type": "image-headshot",
+     "url": "https://b.fssta.com/uploads/application/nfl/headshots/328645.vresize.140.170.medium.2.png"
+    },
+    "subtitle": "GB #83 · WR",
+    "title": "Savion Williams"
+   },
+   {
+    "description": "Williams finished Sunday's 17-14 win over the Buccaneers with seven tackles (three solo), including 1.0 sacks, and two pass defenses (including one interception).",
+    "entityLink": {
+     "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/327796.vresize.140.170.medium.3.png",
+     "analyticsName": "evan-williams",
+     "analyticsSport": "nfl",
+     "color": "1, 0, 156, 26",
+     "contentType": "athlete",
+     "contentUri": "football/nfl/athletes/327796",
+     "imageAltText": "Evan Williams",
+     "imageType": "image-headshot",
+     "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/327796.vresize.140.170.medium.3.png",
+     "layout": {
+      "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+      "tokens": {
+       "contentUri": "football/nfl/athletes/327796",
+       "id": "327796"
+      }
+     },
+     "title": "EVAN WILLIAMS",
+     "type": "entity",
+     "webUrl": "/nfl/evan-williams-player"
+    },
+    "image": {
+     "altText": "Evan Williams",
+     "altUrl": "https://b.fssta.com/uploads/application/nfl/headshots/327796.vresize.140.170.medium.3.png",
+     "type": "image-headshot",
+     "url": "https://b.fssta.com/uploads/application/nfl/headshots/327796.vresize.140.170.medium.3.png"
+    },
+    "subtitle": "GB #33 · S",
+    "title": "Evan Williams"
+   }
+  ]
+ },
+ "injuries": {
+  "header": {
+   "title": "INJURIES"
+  },
+  "tabbedDesktop": false,
+  "tabs": [
+   {
+    "model": {
+     "table": {
+      "headers": [
+       {
+        "columns": [
+         {
+          "emphasized": true,
+          "index": 0,
+          "priority": 1,
+          "template": "cell-entity",
+          "text": "PLAYER",
+          "weight": 6
+         },
+         {
+          "index": 1,
+          "priority": 2,
+          "template": "cell-text",
+          "text": "STATUS",
+          "weight": 4
+         }
+        ],
+        "isPrimary": true
+       }
+      ],
+      "rows": [
+       {
+        "columns": [
+         {
+          "emphasized": true,
+          "image": {
+           "altText": "Zach Bako-Bewele",
+           "type": "image-headshot",
+           "url": "https://b.fssta.com/uploads/application/nfl/headshots/22868.vresize.140.170.medium.3.png"
+          },
+          "index": 0,
+          "subtext": "Knee",
+          "superscript": "OL",
+          "text": "Zach Bako-Bewele"
+         },
+         {
+          "index": 1,
+          "text": "Out",
+          "textColor": "1, 230, 0, 0"
+         }
+        ],
+        "entityLink": {
+         "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22868.vresize.140.170.medium.3.png",
+         "analyticsName": "zach-tom",
+         "analyticsSport": "nfl",
+         "color": "1, 0, 156, 26",
+         "contentType": "athlete",
+         "contentUri": "football/nfl/athletes/22868",
+         "imageAltText": "Zach Bako-Bewele",
+         "imageType": "image-headshot",
+         "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22868.vresize.140.170.medium.3.png",
+         "layout": {
+          "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+          "tokens": {
+           "contentUri": "football/nfl/athletes/22868",
+           "id": "22868"
+          }
+         },
+         "title": "ZACH BAKO-BEWELE",
+         "type": "entity",
+         "webUrl": "/nfl/zach-tom-player"
+        }
+       },
+       {
+        "columns": [
+         {
+          "emphasized": true,
+          "image": {
+           "altText": "Aaron Banks",
+           "type": "image-headshot",
+           "url": "https://b.fssta.com/uploads/application/nfl/headshots/22229.vresize.140.170.medium.3.png"
+          },
+          "index": 0,
+          "subtext": "Knee",
+          "superscript": "G",
+          "text": "Aaron Banks"
+         },
+         {
+          "index": 1,
+          "text": "Out",
+          "textColor": "1, 230, 0, 0"
+         }
+        ],
+        "entityLink": {
+         "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22229.vresize.140.170.medium.3.png",
+         "analyticsName": "aaron-banks",
+         "analyticsSport": "nfl",
+         "color": "1, 0, 156, 26",
+         "contentType": "athlete",
+         "contentUri": "football/nfl/athletes/22229",
+         "imageAltText": "Aaron Banks",
+         "imageType": "image-headshot",
+         "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22229.vresize.140.170.medium.3.png",
+         "layout": {
+          "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+          "tokens": {
+           "contentUri": "football/nfl/athletes/22229",
+           "id": "22229"
+          }
+         },
+         "title": "AARON BANKS",
+         "type": "entity",
+         "webUrl": "/nfl/aaron-banks-player"
+        }
+       },
+       {
+        "columns": [
+         {
+          "emphasized": true,
+          "image": {
+           "altText": "Warren Brinson",
+           "type": "image-headshot",
+           "url": "https://b.fssta.com/uploads/application/nfl/headshots/328760.vresize.140.170.medium.2.png"
+          },
+          "index": 0,
+          "subtext": "Calf",
+          "superscript": "DT",
+          "text": "Warren Brinson"
+         },
+         {
+          "index": 1,
+          "text": "Out",
+          "textColor": "1, 230, 0, 0"
+         }
+        ],
+        "entityLink": {
+         "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/328760.vresize.140.170.medium.2.png",
+         "analyticsName": "warren-brinson",
+         "analyticsSport": "nfl",
+         "color": "1, 0, 156, 26",
+         "contentType": "athlete",
+         "contentUri": "football/nfl/athletes/328760",
+         "imageAltText": "Warren Brinson",
+         "imageType": "image-headshot",
+         "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/328760.vresize.140.170.medium.2.png",
+         "layout": {
+          "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+          "tokens": {
+           "contentUri": "football/nfl/athletes/328760",
+           "id": "328760"
+          }
+         },
+         "title": "WARREN BRINSON",
+         "type": "entity",
+         "webUrl": "/nfl/warren-brinson-player"
+        }
+       },
+       {
+        "columns": [
+         {
+          "emphasized": true,
+          "image": {
+           "altText": "Jayden Reed",
+           "type": "image-headshot",
+           "url": "https://b.fssta.com/uploads/application/nfl/headshots/326953.vresize.140.170.medium.4.png"
+          },
+          "index": 0,
+          "subtext": "Neck",
+          "superscript": "WR",
+          "text": "Jayden Reed"
+         },
+         {
+          "index": 1,
+          "text": "Out",
+          "textColor": "1, 230, 0, 0"
+         }
+        ],
+        "entityLink": {
+         "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/326953.vresize.140.170.medium.4.png",
+         "analyticsName": "jayden-reed",
+         "analyticsSport": "nfl",
+         "color": "1, 0, 156, 26",
+         "contentType": "athlete",
+         "contentUri": "football/nfl/athletes/326953",
+         "imageAltText": "Jayden Reed",
+         "imageType": "image-headshot",
+         "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/326953.vresize.140.170.medium.4.png",
+         "layout": {
+          "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+          "tokens": {
+           "contentUri": "football/nfl/athletes/326953",
+           "id": "326953"
+          }
+         },
+         "title": "JAYDEN REED",
+         "type": "entity",
+         "webUrl": "/nfl/jayden-reed-player"
+        }
+       },
+       {
+        "columns": [
+         {
+          "emphasized": true,
+          "image": {
+           "altText": "Anthony Campbell",
+           "type": "image-headshot",
+           "url": "https://b.fssta.com/uploads/application/nfl/headshots/329310.vresize.140.170.medium.2.png"
+          },
+          "index": 0,
+          "subtext": "Ankle",
+          "superscript": "DT",
+          "text": "Anthony Campbell"
+         },
+         {
+          "index": 1,
+          "text": "Questionable"
+         }
+        ],
+        "entityLink": {
+         "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/329310.vresize.140.170.medium.2.png",
+         "analyticsName": "anthony-campbell",
+         "analyticsSport": "nfl",
+         "color": "1, 0, 156, 26",
+         "contentType": "athlete",
+         "contentUri": "football/nfl/athletes/329310",
+         "imageAltText": "Anthony Campbell",
+         "imageType": "image-headshot",
+         "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/329310.vresize.140.170.medium.2.png",
+         "layout": {
+          "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+          "tokens": {
+           "contentUri": "football/nfl/athletes/329310",
+           "id": "329310"
+          }
+         },
+         "title": "ANTHONY CAMPBELL",
+         "type": "entity",
+         "webUrl": "/nfl/anthony-campbell-player"
+        }
+       },
+       {
+        "columns": [
+         {
+          "emphasized": true,
+          "image": {
+           "altText": "Javon Hargrave",
+           "type": "image-headshot",
+           "url": "https://b.fssta.com/uploads/application/nfl/headshots/12309.vresize.140.170.medium.4.png"
+          },
+          "index": 0,
+          "subtext": "Knee",
+          "superscript": "DT",
+          "text": "Javon Hargrave"
+         },
+         {
+          "index": 1,
+          "text": "Questionable"
+         }
+        ],
+        "entityLink": {
+         "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/12309.vresize.140.170.medium.4.png",
+         "analyticsName": "javon-hargrave",
+         "analyticsSport": "nfl",
+         "color": "1, 0, 156, 26",
+         "contentType": "athlete",
+         "contentUri": "football/nfl/athletes/12309",
+         "imageAltText": "Javon Hargrave",
+         "imageType": "image-headshot",
+         "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/12309.vresize.140.170.medium.4.png",
+         "layout": {
+          "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+          "tokens": {
+           "contentUri": "football/nfl/athletes/12309",
+           "id": "12309"
+          }
+         },
+         "title": "JAVON HARGRAVE",
+         "type": "entity",
+         "webUrl": "/nfl/javon-hargrave-player"
+        }
+       }
+      ],
+      "template": "table"
+     },
+     "visible": 5
+    },
+    "text": "Packers",
+    "type": "expandableTable"
+   },
+   {
+    "model": {
+     "table": {
+      "headers": [
+       {
+        "columns": [
+         {
+          "emphasized": true,
+          "index": 0,
+          "priority": 1,
+          "template": "cell-entity",
+          "text": "PLAYER",
+          "weight": 6
+         },
+         {
+          "index": 1,
+          "priority": 2,
+          "template": "cell-text",
+          "text": "STATUS",
+          "weight": 4
+         }
+        ],
+        "isPrimary": true
+       }
+      ],
+      "rows": [
+       {
+        "columns": [
+         {
+          "emphasized": true,
+          "image": {
+           "altText": "Samson Ebukam",
+           "type": "image-headshot",
+           "url": "https://b.fssta.com/uploads/application/nfl/headshots/13221.vresize.140.170.medium.3.png"
+          },
+          "index": 0,
+          "subtext": "Hamstring",
+          "superscript": "DE",
+          "text": "Samson Ebukam"
+         },
+         {
+          "index": 1,
+          "text": "Out",
+          "textColor": "1, 230, 0, 0"
+         }
+        ],
+        "entityLink": {
+         "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/13221.vresize.140.170.medium.3.png",
+         "analyticsName": "samson-ebukam",
+         "analyticsSport": "nfl",
+         "color": "1, 240, 31, 65",
+         "contentType": "athlete",
+         "contentUri": "football/nfl/athletes/13221",
+         "imageAltText": "Samson Ebukam",
+         "imageType": "image-headshot",
+         "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/13221.vresize.140.170.medium.3.png",
+         "layout": {
+          "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+          "tokens": {
+           "contentUri": "football/nfl/athletes/13221",
+           "id": "13221"
+          }
+         },
+         "title": "SAMSON EBUKAM",
+         "type": "entity",
+         "webUrl": "/nfl/samson-ebukam-player"
+        }
+       },
+       {
+        "columns": [
+         {
+          "emphasized": true,
+          "image": {
+           "altText": "Billy Bowman Jr.",
+           "type": "image-headshot",
+           "url": "https://b.fssta.com/uploads/application/nfl/headshots/328684.vresize.140.170.medium.4.png"
+          },
+          "index": 0,
+          "subtext": "Achilles",
+          "superscript": "CB",
+          "text": "Billy Bowman Jr."
+         },
+         {
+          "index": 1,
+          "text": "Questionable"
+         }
+        ],
+        "entityLink": {
+         "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/328684.vresize.140.170.medium.4.png",
+         "analyticsName": "billy-bowman-jr",
+         "analyticsSport": "nfl",
+         "color": "1, 240, 31, 65",
+         "contentType": "athlete",
+         "contentUri": "football/nfl/athletes/328684",
+         "imageAltText": "Billy Bowman Jr.",
+         "imageType": "image-headshot",
+         "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/328684.vresize.140.170.medium.4.png",
+         "layout": {
+          "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+          "tokens": {
+           "contentUri": "football/nfl/athletes/328684",
+           "id": "328684"
+          }
+         },
+         "title": "BILLY BOWMAN JR.",
+         "type": "entity",
+         "webUrl": "/nfl/billy-bowman-jr-player"
+        }
+       }
+      ],
+      "template": "table"
+     },
+     "visible": 5
+    },
+    "text": "Falcons",
+    "type": "expandableTable"
+   }
+  ],
+  "template": "default"
+ },
+ "schedule": {
+  "header": {
+   "link": {
+    "text": "LEAGUE SCORES",
+    "webUrl": "/nfl/scores"
+   },
+   "title": "SCHEDULE"
+  },
+  "tabbedDesktop": false,
+  "tabs": [
+   {
+    "model": {
+     "sectionList": [
+      {
+       "tables": [
+        {
+         "contentUri": "football/nfl/teams/25",
+         "headers": [
+          {
+           "columns": [
+            {
+             "emphasized": true,
+             "image": {
+              "altText": "Atlanta Falcons",
+              "altUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Falcons.vresize.200.200.medium.1.png",
+              "type": "image-logo",
+              "url": "https://b.fssta.com/uploads/application/nfl/team-logos/Falcons.vresize.200.200.medium.1.png"
+             },
+             "index": 0,
+             "link": {
+              "analyticsName": "atlanta-falcons",
+              "analyticsSport": "nfl",
+              "color": "1, 240, 31, 65",
+              "contentType": "team",
+              "contentUri": "football/nfl/teams/25",
+              "imageAltText": "Atlanta Falcons",
+              "imageType": "image-logo",
+              "imageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Falcons.vresize.200.200.medium.1.png",
+              "layout": {
+               "path": "/layouts?type=layout&subtype=teamsLayout&elementId=nfl",
+               "tokens": {
+                "contentUri": "football/nfl/teams/25",
+                "id": "25"
+               }
+              },
+              "title": "ATLANTA FALCONS",
+              "type": "entity",
+              "webUrl": "/nfl/atlanta-falcons-team"
+             },
+             "priority": 1,
+             "sortable": "none",
+             "template": "cell-text",
+             "text": "ATL",
+             "weight": 1
+            },
+            {
+             "emphasized": false,
+             "index": 1,
+             "priority": 2,
+             "sortable": "none",
+             "template": "cell-text",
+             "weight": 0.5
+            },
+            {
+             "emphasized": false,
+             "index": 2,
+             "priority": 3,
+             "sortable": "none",
+             "template": "cell-entity",
+             "weight": 1.75
+            },
+            {
+             "emphasized": false,
+             "index": 3,
+             "priority": 4,
+             "sortable": "none",
+             "template": "cell-gameresult",
+             "text": "RESULT",
+             "weight": 2.25
+            },
+            {
+             "emphasized": false,
+             "index": 4,
+             "priority": 5,
+             "sortable": "none",
+             "template": "cell-odds",
+             "text": "ATS",
+             "weight": 2.25
+            },
+            {
+             "emphasized": false,
+             "index": 5,
+             "priority": 6,
+             "sortable": "none",
+             "template": "cell-odds",
+             "text": "O/U",
+             "weight": 2.25
+            }
+           ],
+           "isPrimary": true
+          }
+         ],
+         "rows": [
+          {
+           "columns": [
+            {
+             "emphasized": false,
+             "index": 0,
+             "text": "9/20"
+            },
+            {
+             "emphasized": false,
+             "index": 1,
+             "text": "vs"
+            },
+            {
+             "emphasized": false,
+             "index": 2,
+             "text": "CAR"
+            },
+            {
+             "emphasized": false,
+             "index": 3,
+             "subType": "loss",
+             "superscript": "L",
+             "text": "3-34"
+            },
+            {
+             "emphasized": false,
+             "index": 4,
+             "subType": "failure",
+             "text": "+2.5"
+            },
+            {
+             "emphasized": false,
+             "index": 5,
+             "text": "U 43.5"
+            }
+           ],
+           "entityLink": {
+            "analyticsSport": "nfl",
+            "contentType": "event",
+            "contentUri": "football/nfl/events/11056",
+            "layout": {
+             "path": "/layouts?type=layout&subtype=nflEventLayout",
+             "tokens": {
+              "awayUri": "football/nfl/teams/32",
+              "eventUri": "football/nfl/events/11056",
+              "homeUri": "football/nfl/teams/25",
+              "id": "11056"
+             }
+            },
+            "type": "entity",
+            "webUrl": "/nfl/week-2-carolina-panthers-vs-atlanta-falcons-sep-20-2026-game-boxscore-11056"
+           },
+           "isCutoff": false,
+           "isFaded": false,
+           "linkList": [
+            {
+             "columns": [
+              1
+             ],
+             "entityLink": {
+              "analyticsName": "carolina-panthers",
+              "analyticsSport": "nfl",
+              "color": "1, 82, 181, 255",
+              "contentType": "team",
+              "contentUri": "football/nfl/teams/32",
+              "imageAltText": "Carolina Panthers",
+              "imageType": "image-logo",
+              "imageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Panthers.vresize.200.200.medium.0.png",
+              "layout": {
+               "path": "/layouts?type=layout&subtype=teamsLayout&elementId=nfl",
+               "tokens": {
+                "contentUri": "football/nfl/teams/32",
+                "id": "32"
+               }
+              },
+              "tab": "schedule",
+              "title": "CAROLINA PANTHERS",
+              "type": "entity",
+              "webUrl": "/nfl/carolina-panthers-team"
+             }
+            },
+            {
+             "columns": [
+              0,
+              2,
+              3,
+              4
+             ],
+             "entityLink": {
+              "analyticsSport": "nfl",
+              "contentType": "event",
+              "contentUri": "football/nfl/events/11056",
+              "layout": {
+               "path": "/layouts?type=layout&subtype=nflEventLayout",
+               "tokens": {
+                "awayUri": "football/nfl/teams/32",
+                "eventUri": "football/nfl/events/11056",
+                "homeUri": "football/nfl/teams/25",
+                "id": "11056"
+               }
+              },
+              "type": "entity",
+              "webUrl": "/nfl/week-2-carolina-panthers-vs-atlanta-falcons-sep-20-2026-game-boxscore-11056"
+             }
+            }
+           ],
+           "selected": false
+          },
+          {
+           "columns": [
+            {
+             "emphasized": false,
+             "index": 0,
+             "text": "9/13"
+            },
+            {
+             "emphasized": false,
+             "index": 1,
+             "text": "@"
+            },
+            {
+             "emphasized": false,
+             "index": 2,
+             "text": "PIT"
+            },
+            {
+             "emphasized": false,
+             "index": 3,
+             "subType": "loss",
+             "superscript": "L",
+             "text": "13-20"
+            },
+            {
+             "emphasized": false,
+             "index": 4,
+             "subType": "failure",
+             "text": "+6.5"
+            },
+            {
+             "emphasized": false,
+             "index": 5,
+             "text": "U 40.5"
+            }
+           ],
+           "entityLink": {
+            "analyticsSport": "nfl",
+            "contentType": "event",
+            "contentUri": "football/nfl/events/11041",
+            "layout": {
+             "path": "/layouts?type=layout&subtype=nflEventLayout",
+             "tokens": {
+              "awayUri": "football/nfl/teams/25",
+              "eventUri": "football/nfl/events/11041",
+              "homeUri": "football/nfl/teams/9",
+              "id": "11041"
+             }
+            },
+            "type": "entity",
+            "webUrl": "/nfl/week-1-atlanta-falcons-vs-pittsburgh-steelers-sep-13-2026-game-boxscore-11041"
+           },
+           "isCutoff": true,
+           "isFaded": false,
+           "linkList": [
+            {
+             "columns": [
+              1
+             ],
+             "entityLink": {
+              "analyticsName": "pittsburgh-steelers",
+              "analyticsSport": "nfl",
+              "color": "1, 255, 188, 41",
+              "contentType": "team",
+              "contentUri": "football/nfl/teams/9",
+              "imageAltText": "Pittsburgh Steelers",
+              "imageType": "image-logo",
+              "imageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Steelers.vresize.200.200.medium.0.png",
+              "layout": {
+               "path": "/layouts?type=layout&subtype=teamsLayout&elementId=nfl",
+               "tokens": {
+                "contentUri": "football/nfl/teams/9",
+                "id": "9"
+               }
+              },
+              "tab": "schedule",
+              "title": "PITTSBURGH STEELERS",
+              "type": "entity",
+              "webUrl": "/nfl/pittsburgh-steelers-team"
+             }
+            },
+            {
+             "columns": [
+              0,
+              2,
+              3,
+              4
+             ],
+             "entityLink": {
+              "analyticsSport": "nfl",
+              "contentType": "event",
+              "contentUri": "football/nfl/events/11041",
+              "layout": {
+               "path": "/layouts?type=layout&subtype=nflEventLayout",
+               "tokens": {
+                "awayUri": "football/nfl/teams/25",
+                "eventUri": "football/nfl/events/11041",
+                "homeUri": "football/nfl/teams/9",
+                "id": "11041"
+               }
+              },
+              "type": "entity",
+              "webUrl": "/nfl/week-1-atlanta-falcons-vs-pittsburgh-steelers-sep-13-2026-game-boxscore-11041"
+             }
+            }
+           ],
+           "selected": false
+          },
+          {
+           "columns": [
+            {
+             "emphasized": false,
+             "index": 0,
+             "text": "8/28"
+            },
+            {
+             "emphasized": false,
+             "index": 1,
+             "text": "@"
+            },
+            {
+             "emphasized": false,
+             "index": 2,
+             "text": "MIA"
+            },
+            {
+             "emphasized": false,
+             "index": 3,
+             "subType": "win",
+             "superscript": "W",
+             "text": "17-12"
+            },
+            {
+             "emphasized": false,
+             "index": 4,
+             "subType": "failure",
+             "text": "-6.5"
+            },
+            {
+             "emphasized": false,
+             "index": 5,
+             "text": "U 35.5"
+            }
+           ],
+           "entityLink": {
+            "analyticsSport": "nfl",
+            "contentType": "event",
+            "contentUri": "football/nfl/events/11175",
+            "layout": {
+             "path": "/layouts?type=layout&subtype=nflEventLayout",
+             "tokens": {
+              "awayUri": "football/nfl/teams/25",
+              "eventUri": "football/nfl/events/11175",
+              "homeUri": "football/nfl/teams/3",
+              "id": "11175"
+             }
+            },
+            "type": "entity",
+            "webUrl": "/nfl/preseason-week-3-atlanta-falcons-vs-miami-dolphins-aug-28-2026-game-boxscore-11175"
+           },
+           "isCutoff": false,
+           "isFaded": false,
+           "linkList": [
+            {
+             "columns": [
+              1
+             ],
+             "entityLink": {
+              "analyticsName": "miami-dolphins",
+              "analyticsSport": "nfl",
+              "color": "1, 0, 188, 200",
+              "contentType": "team",
+              "contentUri": "football/nfl/teams/3",
+              "imageAltText": "Miami Dolphins",
+              "imageType": "image-logo",
+              "imageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Dolphins.vresize.200.200.medium.0.png",
+              "layout": {
+               "path": "/layouts?type=layout&subtype=teamsLayout&elementId=nfl",
+               "tokens": {
+                "contentUri": "football/nfl/teams/3",
+                "id": "3"
+               }
+              },
+              "tab": "schedule",
+              "title": "MIAMI DOLPHINS",
+              "type": "entity",
+              "webUrl": "/nfl/miami-dolphins-team"
+             }
+            },
+            {
+             "columns": [
+              0,
+              2,
+              3,
+              4
+             ],
+             "entityLink": {
+              "analyticsSport": "nfl",
+              "contentType": "event",
+              "contentUri": "football/nfl/events/11175",
+              "layout": {
+               "path": "/layouts?type=layout&subtype=nflEventLayout",
+               "tokens": {
+                "awayUri": "football/nfl/teams/25",
+                "eventUri": "football/nfl/events/11175",
+                "homeUri": "football/nfl/teams/3",
+                "id": "11175"
+               }
+              },
+              "type": "entity",
+              "webUrl": "/nfl/preseason-week-3-atlanta-falcons-vs-miami-dolphins-aug-28-2026-game-boxscore-11175"
+             }
+            }
+           ],
+           "selected": false
+          },
+          {
+           "columns": [
+            {
+             "emphasized": false,
+             "index": 0,
+             "text": "8/22"
+            },
+            {
+             "emphasized": false,
+             "index": 1,
+             "text": "@"
+            },
+            {
+             "emphasized": false,
+             "index": 2,
+             "text": "IND"
+            },
+            {
+             "emphasized": false,
+             "index": 3,
+             "subType": "win",
+             "superscript": "W",
+             "text": "34-6"
+            },
+            {
+             "emphasized": false,
+             "index": 4,
+             "subType": "success",
+             "text": "+3.5"
+            },
+            {
+             "emphasized": false,
+             "index": 5,
+             "text": "O 36.5"
+            }
+           ],
+           "entityLink": {
+            "analyticsSport": "nfl",
+            "contentType": "event",
+            "contentUri": "football/nfl/events/11160",
+            "layout": {
+             "path": "/layouts?type=layout&subtype=nflEventLayout",
+             "tokens": {
+              "awayUri": "football/nfl/teams/25",
+              "eventUri": "football/nfl/events/11160",
+              "homeUri": "football/nfl/teams/2",
+              "id": "11160"
+             }
+            },
+            "type": "entity",
+            "webUrl": "/nfl/preseason-week-2-atlanta-falcons-vs-indianapolis-colts-aug-22-2026-game-boxscore-11160"
+           },
+           "isCutoff": false,
+           "isFaded": false,
+           "linkList": [
+            {
+             "columns": [
+              1
+             ],
+             "entityLink": {
+              "analyticsName": "indianapolis-colts",
+              "analyticsSport": "nfl",
+              "color": "1, 0, 87, 244",
+              "contentType": "team",
+              "contentUri": "football/nfl/teams/2",
+              "imageAltText": "Indianapolis Colts",
+              "imageType": "image-logo",
+              "imageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Colts.vresize.200.200.medium.1.png",
+              "layout": {
+               "path": "/layouts?type=layout&subtype=teamsLayout&elementId=nfl",
+               "tokens": {
+                "contentUri": "football/nfl/teams/2",
+                "id": "2"
+               }
+              },
+              "tab": "schedule",
+              "title": "INDIANAPOLIS COLTS",
+              "type": "entity",
+              "webUrl": "/nfl/indianapolis-colts-team"
+             }
+            },
+            {
+             "columns": [
+              0,
+              2,
+              3,
+              4
+             ],
+             "entityLink": {
+              "analyticsSport": "nfl",
+              "contentType": "event",
+              "contentUri": "football/nfl/events/11160",
+              "layout": {
+               "path": "/layouts?type=layout&subtype=nflEventLayout",
+               "tokens": {
+                "awayUri": "football/nfl/teams/25",
+                "eventUri": "football/nfl/events/11160",
+                "homeUri": "football/nfl/teams/2",
+                "id": "11160"
+               }
+              },
+              "type": "entity",
+              "webUrl": "/nfl/preseason-week-2-atlanta-falcons-vs-indianapolis-colts-aug-22-2026-game-boxscore-11160"
+             }
+            }
+           ],
+           "selected": false
+          },
+          {
+           "columns": [
+            {
+             "emphasized": false,
+             "index": 0,
+             "text": "8/14"
+            },
+            {
+             "emphasized": false,
+             "index": 1,
+             "text": "vs"
+            },
+            {
+             "emphasized": false,
+             "index": 2,
+             "text": "DEN"
+            },
+            {
+             "emphasized": false,
+             "index": 3,
+             "subType": "loss",
+             "superscript": "L",
+             "text": "7-27"
+            },
+            {
+             "emphasized": false,
+             "index": 4,
+             "subType": "failure",
+             "text": "+3.5"
+            },
+            {
+             "emphasized": false,
+             "index": 5,
+             "text": "U 39.5"
+            }
+           ],
+           "entityLink": {
+            "analyticsSport": "nfl",
+            "contentType": "event",
+            "contentUri": "football/nfl/events/11144",
+            "layout": {
+             "path": "/layouts?type=layout&subtype=nflEventLayout",
+             "tokens": {
+              "awayUri": "football/nfl/teams/10",
+              "eventUri": "football/nfl/events/11144",
+              "homeUri": "football/nfl/teams/25",
+              "id": "11144"
+             }
+            },
+            "type": "entity",
+            "webUrl": "/nfl/preseason-week-1-denver-broncos-vs-atlanta-falcons-aug-14-2026-game-boxscore-11144"
+           },
+           "isCutoff": false,
+           "isFaded": false,
+           "linkList": [
+            {
+             "columns": [
+              1
+             ],
+             "entityLink": {
+              "analyticsName": "denver-broncos",
+              "analyticsSport": "nfl",
+              "color": "1, 0, 87, 244",
+              "contentType": "team",
+              "contentUri": "football/nfl/teams/10",
+              "imageAltText": "Denver Broncos",
+              "imageType": "image-logo",
+              "imageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Broncos.vresize.200.200.medium.0.png",
+              "layout": {
+               "path": "/layouts?type=layout&subtype=teamsLayout&elementId=nfl",
+               "tokens": {
+                "contentUri": "football/nfl/teams/10",
+                "id": "10"
+               }
+              },
+              "tab": "schedule",
+              "title": "DENVER BRONCOS",
+              "type": "entity",
+              "webUrl": "/nfl/denver-broncos-team"
+             }
+            },
+            {
+             "columns": [
+              0,
+              2,
+              3,
+              4
+             ],
+             "entityLink": {
+              "analyticsSport": "nfl",
+              "contentType": "event",
+              "contentUri": "football/nfl/events/11144",
+              "layout": {
+               "path": "/layouts?type=layout&subtype=nflEventLayout",
+               "tokens": {
+                "awayUri": "football/nfl/teams/10",
+                "eventUri": "football/nfl/events/11144",
+                "homeUri": "football/nfl/teams/25",
+                "id": "11144"
+               }
+              },
+              "type": "entity",
+              "webUrl": "/nfl/preseason-week-1-denver-broncos-vs-atlanta-falcons-aug-14-2026-game-boxscore-11144"
+             }
+            }
+           ],
+           "selected": false
+          }
+         ],
+         "template": "table-odds-results"
+        },
+        {
+         "contentUri": "football/nfl/teams/22",
+         "headers": [
+          {
+           "columns": [
+            {
+             "emphasized": true,
+             "image": {
+              "altText": "Green Bay Packers",
+              "altUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Packers.vresize.200.200.medium.0.png",
+              "type": "image-logo",
+              "url": "https://b.fssta.com/uploads/application/nfl/team-logos/Packers.vresize.200.200.medium.0.png"
+             },
+             "index": 0,
+             "link": {
+              "analyticsName": "green-bay-packers",
+              "analyticsSport": "nfl",
+              "color": "1, 0, 156, 26",
+              "contentType": "team",
+              "contentUri": "football/nfl/teams/22",
+              "imageAltText": "Green Bay Packers",
+              "imageType": "image-logo",
+              "imageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Packers.vresize.200.200.medium.0.png",
+              "layout": {
+               "path": "/layouts?type=layout&subtype=teamsLayout&elementId=nfl",
+               "tokens": {
+                "contentUri": "football/nfl/teams/22",
+                "id": "22"
+               }
+              },
+              "title": "GREEN BAY PACKERS",
+              "type": "entity",
+              "webUrl": "/nfl/green-bay-packers-team"
+             },
+             "priority": 1,
+             "sortable": "none",
+             "template": "cell-text",
+             "text": "GB",
+             "weight": 1
+            },
+            {
+             "emphasized": false,
+             "index": 1,
+             "priority": 2,
+             "sortable": "none",
+             "template": "cell-text",
+             "weight": 0.5
+            },
+            {
+             "emphasized": false,
+             "index": 2,
+             "priority": 3,
+             "sortable": "none",
+             "template": "cell-entity",
+             "weight": 1.75
+            },
+            {
+             "emphasized": false,
+             "index": 3,
+             "priority": 4,
+             "sortable": "none",
+             "template": "cell-gameresult",
+             "text": "RESULT",
+             "weight": 2.25
+            },
+            {
+             "emphasized": false,
+             "index": 4,
+             "priority": 5,
+             "sortable": "none",
+             "template": "cell-odds",
+             "text": "ATS",
+             "weight": 2.25
+            },
+            {
+             "emphasized": false,
+             "index": 5,
+             "priority": 6,
+             "sortable": "none",
+             "template": "cell-odds",
+             "text": "O/U",
+             "weight": 2.25
+            }
+           ],
+           "isPrimary": true
+          }
+         ],
+         "rows": [
+          {
+           "columns": [
+            {
+             "emphasized": false,
+             "index": 0,
+             "text": "9/20"
+            },
+            {
+             "emphasized": false,
+             "index": 1,
+             "text": "@"
+            },
+            {
+             "emphasized": false,
+             "index": 2,
+             "text": "NYJ"
+            },
+            {
+             "emphasized": false,
+             "index": 3,
+             "subType": "win",
+             "superscript": "W",
+             "text": "20-17"
+            },
+            {
+             "emphasized": false,
+             "index": 4,
+             "subType": "failure",
+             "text": "-3.5"
+            },
+            {
+             "emphasized": false,
+             "index": 5,
+             "text": "U 44.5"
+            }
+           ],
+           "entityLink": {
+            "analyticsSport": "nfl",
+            "contentType": "event",
+            "contentUri": "football/nfl/events/11057",
+            "layout": {
+             "path": "/layouts?type=layout&subtype=nflEventLayout",
+             "tokens": {
+              "awayUri": "football/nfl/teams/22",
+              "eventUri": "football/nfl/events/11057",
+              "homeUri": "football/nfl/teams/5",
+              "id": "11057"
+             }
+            },
+            "type": "entity",
+            "webUrl": "/nfl/week-2-green-bay-packers-vs-new-york-jets-sep-20-2026-game-boxscore-11057"
+           },
+           "isCutoff": false,
+           "isFaded": false,
+           "linkList": [
+            {
+             "columns": [
+              1
+             ],
+             "entityLink": {
+              "analyticsName": "new-york-jets",
+              "analyticsSport": "nfl",
+              "color": "1, 0, 156, 26",
+              "contentType": "team",
+              "contentUri": "football/nfl/teams/5",
+              "imageAltText": "New York Jets",
+              "imageType": "image-logo",
+              "imageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Jets-alternate.vresize.200.200.medium.1.png",
+              "layout": {
+               "path": "/layouts?type=layout&subtype=teamsLayout&elementId=nfl",
+               "tokens": {
+                "contentUri": "football/nfl/teams/5",
+                "id": "5"
+               }
+              },
+              "tab": "schedule",
+              "title": "NEW YORK JETS",
+              "type": "entity",
+              "webUrl": "/nfl/new-york-jets-team"
+             }
+            },
+            {
+             "columns": [
+              0,
+              2,
+              3,
+              4
+             ],
+             "entityLink": {
+              "analyticsSport": "nfl",
+              "contentType": "event",
+              "contentUri": "football/nfl/events/11057",
+              "layout": {
+               "path": "/layouts?type=layout&subtype=nflEventLayout",
+               "tokens": {
+                "awayUri": "football/nfl/teams/22",
+                "eventUri": "football/nfl/events/11057",
+                "homeUri": "football/nfl/teams/5",
+                "id": "11057"
+               }
+              },
+              "type": "entity",
+              "webUrl": "/nfl/week-2-green-bay-packers-vs-new-york-jets-sep-20-2026-game-boxscore-11057"
+             }
+            }
+           ],
+           "selected": false
+          },
+          {
+           "columns": [
+            {
+             "emphasized": false,
+             "index": 0,
+             "text": "9/13"
+            },
+            {
+             "emphasized": false,
+             "index": 1,
+             "text": "@"
+            },
+            {
+             "emphasized": false,
+             "index": 2,
+             "text": "MIN"
+            },
+            {
+             "emphasized": false,
+             "index": 3,
+             "subType": "loss",
+             "superscript": "L",
+             "text": "22-39"
+            },
+            {
+             "emphasized": false,
+             "index": 4,
+             "subType": "failure",
+             "text": "+2.5"
+            },
+            {
+             "emphasized": false,
+             "index": 5,
+             "text": "O 45.5"
+            }
+           ],
+           "entityLink": {
+            "analyticsSport": "nfl",
+            "contentType": "event",
+            "contentUri": "football/nfl/events/11047",
+            "layout": {
+             "path": "/layouts?type=layout&subtype=nflEventLayout",
+             "tokens": {
+              "awayUri": "football/nfl/teams/22",
+              "eventUri": "football/nfl/events/11047",
+              "homeUri": "football/nfl/teams/23",
+              "id": "11047"
+             }
+            },
+            "type": "entity",
+            "webUrl": "/nfl/week-1-green-bay-packers-vs-minnesota-vikings-sep-13-2026-game-boxscore-11047"
+           },
+           "isCutoff": true,
+           "isFaded": false,
+           "linkList": [
+            {
+             "columns": [
+              1
+             ],
+             "entityLink": {
+              "analyticsName": "minnesota-vikings",
+              "analyticsSport": "nfl",
+              "color": "1, 141, 52, 255",
+              "contentType": "team",
+              "contentUri": "football/nfl/teams/23",
+              "imageAltText": "Minnesota Vikings",
+              "imageType": "image-logo",
+              "imageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Vikings.vresize.200.200.medium.0.png",
+              "layout": {
+               "path": "/layouts?type=layout&subtype=teamsLayout&elementId=nfl",
+               "tokens": {
+                "contentUri": "football/nfl/teams/23",
+                "id": "23"
+               }
+              },
+              "tab": "schedule",
+              "title": "MINNESOTA VIKINGS",
+              "type": "entity",
+              "webUrl": "/nfl/minnesota-vikings-team"
+             }
+            },
+            {
+             "columns": [
+              0,
+              2,
+              3,
+              4
+             ],
+             "entityLink": {
+              "analyticsSport": "nfl",
+              "contentType": "event",
+              "contentUri": "football/nfl/events/11047",
+              "layout": {
+               "path": "/layouts?type=layout&subtype=nflEventLayout",
+               "tokens": {
+                "awayUri": "football/nfl/teams/22",
+                "eventUri": "football/nfl/events/11047",
+                "homeUri": "football/nfl/teams/23",
+                "id": "11047"
+               }
+              },
+              "type": "entity",
+              "webUrl": "/nfl/week-1-green-bay-packers-vs-minnesota-vikings-sep-13-2026-game-boxscore-11047"
+             }
+            }
+           ],
+           "selected": false
+          },
+          {
+           "columns": [
+            {
+             "emphasized": false,
+             "index": 0,
+             "text": "8/28"
+            },
+            {
+             "emphasized": false,
+             "index": 1,
+             "text": "vs"
+            },
+            {
+             "emphasized": false,
+             "index": 2,
+             "text": "ARI"
+            },
+            {
+             "emphasized": false,
+             "index": 3,
+             "subType": "win",
+             "superscript": "W",
+             "text": "42-38"
+            },
+            {
+             "emphasized": false,
+             "index": 4,
+             "subType": "success",
+             "text": "-1.5"
+            },
+            {
+             "emphasized": false,
+             "index": 5,
+             "text": "O 36.5"
+            }
+           ],
+           "entityLink": {
+            "analyticsSport": "nfl",
+            "contentType": "event",
+            "contentUri": "football/nfl/events/11183",
+            "layout": {
+             "path": "/layouts?type=layout&subtype=nflEventLayout",
+             "tokens": {
+              "awayUri": "football/nfl/teams/18",
+              "eventUri": "football/nfl/events/11183",
+              "homeUri": "football/nfl/teams/22",
+              "id": "11183"
+             }
+            },
+            "type": "entity",
+            "webUrl": "/nfl/preseason-week-3-arizona-cardinals-vs-green-bay-packers-aug-28-2026-game-boxscore-11183"
+           },
+           "isCutoff": false,
+           "isFaded": false,
+           "linkList": [
+            {
+             "columns": [
+              1
+             ],
+             "entityLink": {
+              "analyticsName": "arizona-cardinals",
+              "analyticsSport": "nfl",
+              "color": "1, 170, 0, 49",
+              "contentType": "team",
+              "contentUri": "football/nfl/teams/18",
+              "imageAltText": "Arizona Cardinals",
+              "imageType": "image-logo",
+              "imageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Cardinals.vresize.200.200.medium.0.png",
+              "layout": {
+               "path": "/layouts?type=layout&subtype=teamsLayout&elementId=nfl",
+               "tokens": {
+                "contentUri": "football/nfl/teams/18",
+                "id": "18"
+               }
+              },
+              "tab": "schedule",
+              "title": "ARIZONA CARDINALS",
+              "type": "entity",
+              "webUrl": "/nfl/arizona-cardinals-team"
+             }
+            },
+            {
+             "columns": [
+              0,
+              2,
+              3,
+              4
+             ],
+             "entityLink": {
+              "analyticsSport": "nfl",
+              "contentType": "event",
+              "contentUri": "football/nfl/events/11183",
+              "layout": {
+               "path": "/layouts?type=layout&subtype=nflEventLayout",
+               "tokens": {
+                "awayUri": "football/nfl/teams/18",
+                "eventUri": "football/nfl/events/11183",
+                "homeUri": "football/nfl/teams/22",
+                "id": "11183"
+               }
+              },
+              "type": "entity",
+              "webUrl": "/nfl/preseason-week-3-arizona-cardinals-vs-green-bay-packers-aug-28-2026-game-boxscore-11183"
+             }
+            }
+           ],
+           "selected": false
+          },
+          {
+           "columns": [
+            {
+             "emphasized": false,
+             "index": 0,
+             "text": "8/21"
+            },
+            {
+             "emphasized": false,
+             "index": 1,
+             "text": "@"
+            },
+            {
+             "emphasized": false,
+             "index": 2,
+             "text": "DEN"
+            },
+            {
+             "emphasized": false,
+             "index": 3,
+             "subType": "win",
+             "superscript": "W",
+             "text": "33-13"
+            },
+            {
+             "emphasized": false,
+             "index": 4,
+             "subType": "success",
+             "text": "+6.5"
+            },
+            {
+             "emphasized": false,
+             "index": 5,
+             "text": "O 40.5"
+            }
+           ],
+           "entityLink": {
+            "analyticsSport": "nfl",
+            "contentType": "event",
+            "contentUri": "football/nfl/events/11162",
+            "layout": {
+             "path": "/layouts?type=layout&subtype=nflEventLayout",
+             "tokens": {
+              "awayUri": "football/nfl/teams/22",
+              "eventUri": "football/nfl/events/11162",
+              "homeUri": "football/nfl/teams/10",
+              "id": "11162"
+             }
+            },
+            "type": "entity",
+            "webUrl": "/nfl/preseason-week-2-green-bay-packers-vs-denver-broncos-aug-21-2026-game-boxscore-11162"
+           },
+           "isCutoff": false,
+           "isFaded": false,
+           "linkList": [
+            {
+             "columns": [
+              1
+             ],
+             "entityLink": {
+              "analyticsName": "denver-broncos",
+              "analyticsSport": "nfl",
+              "color": "1, 0, 87, 244",
+              "contentType": "team",
+              "contentUri": "football/nfl/teams/10",
+              "imageAltText": "Denver Broncos",
+              "imageType": "image-logo",
+              "imageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Broncos.vresize.200.200.medium.0.png",
+              "layout": {
+               "path": "/layouts?type=layout&subtype=teamsLayout&elementId=nfl",
+               "tokens": {
+                "contentUri": "football/nfl/teams/10",
+                "id": "10"
+               }
+              },
+              "tab": "schedule",
+              "title": "DENVER BRONCOS",
+              "type": "entity",
+              "webUrl": "/nfl/denver-broncos-team"
+             }
+            },
+            {
+             "columns": [
+              0,
+              2,
+              3,
+              4
+             ],
+             "entityLink": {
+              "analyticsSport": "nfl",
+              "contentType": "event",
+              "contentUri": "football/nfl/events/11162",
+              "layout": {
+               "path": "/layouts?type=layout&subtype=nflEventLayout",
+               "tokens": {
+                "awayUri": "football/nfl/teams/22",
+                "eventUri": "football/nfl/events/11162",
+                "homeUri": "football/nfl/teams/10",
+                "id": "11162"
+               }
+              },
+              "type": "entity",
+              "webUrl": "/nfl/preseason-week-2-green-bay-packers-vs-denver-broncos-aug-21-2026-game-boxscore-11162"
+             }
+            }
+           ],
+           "selected": false
+          },
+          {
+           "columns": [
+            {
+             "emphasized": false,
+             "index": 0,
+             "text": "8/13"
+            },
+            {
+             "emphasized": false,
+             "index": 1,
+             "text": "@"
+            },
+            {
+             "emphasized": false,
+             "index": 2,
+             "text": "PIT"
+            },
+            {
+             "emphasized": false,
+             "index": 3,
+             "subType": "loss",
+             "superscript": "L",
+             "text": "9-28"
+            },
+            {
+             "emphasized": false,
+             "index": 4,
+             "subType": "failure",
+             "text": "-3.0"
+            },
+            {
+             "emphasized": false,
+             "index": 5,
+             "text": "U 38.5"
+            }
+           ],
+           "entityLink": {
+            "analyticsSport": "nfl",
+            "contentType": "event",
+            "contentUri": "football/nfl/events/11139",
+            "layout": {
+             "path": "/layouts?type=layout&subtype=nflEventLayout",
+             "tokens": {
+              "awayUri": "football/nfl/teams/22",
+              "eventUri": "football/nfl/events/11139",
+              "homeUri": "football/nfl/teams/9",
+              "id": "11139"
+             }
+            },
+            "type": "entity",
+            "webUrl": "/nfl/preseason-week-1-green-bay-packers-vs-pittsburgh-steelers-aug-13-2026-game-boxscore-11139"
+           },
+           "isCutoff": false,
+           "isFaded": false,
+           "linkList": [
+            {
+             "columns": [
+              1
+             ],
+             "entityLink": {
+              "analyticsName": "pittsburgh-steelers",
+              "analyticsSport": "nfl",
+              "color": "1, 255, 188, 41",
+              "contentType": "team",
+              "contentUri": "football/nfl/teams/9",
+              "imageAltText": "Pittsburgh Steelers",
+              "imageType": "image-logo",
+              "imageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Steelers.vresize.200.200.medium.0.png",
+              "layout": {
+               "path": "/layouts?type=layout&subtype=teamsLayout&elementId=nfl",
+               "tokens": {
+                "contentUri": "football/nfl/teams/9",
+                "id": "9"
+               }
+              },
+              "tab": "schedule",
+              "title": "PITTSBURGH STEELERS",
+              "type": "entity",
+              "webUrl": "/nfl/pittsburgh-steelers-team"
+             }
+            },
+            {
+             "columns": [
+              0,
+              2,
+              3,
+              4
+             ],
+             "entityLink": {
+              "analyticsSport": "nfl",
+              "contentType": "event",
+              "contentUri": "football/nfl/events/11139",
+              "layout": {
+               "path": "/layouts?type=layout&subtype=nflEventLayout",
+               "tokens": {
+                "awayUri": "football/nfl/teams/22",
+                "eventUri": "football/nfl/events/11139",
+                "homeUri": "football/nfl/teams/9",
+                "id": "11139"
+               }
+              },
+              "type": "entity",
+              "webUrl": "/nfl/preseason-week-1-green-bay-packers-vs-pittsburgh-steelers-aug-13-2026-game-boxscore-11139"
+             }
+            }
+           ],
+           "selected": false
+          }
+         ],
+         "template": "table-odds-results"
+        }
+       ]
+      }
+     ]
+    },
+    "text": "RECENT GAMES",
+    "type": "tables"
+   },
+   {
+    "model": {
+     "events": [
+      {
+       "altSortKey": "132023091717002283010051",
+       "contentType": "event",
+       "contentUri": "football/nfl/events/10051",
+       "entityLink": {
+        "analyticsSport": "nfl",
+        "contentType": "event",
+        "contentUri": "football/nfl/events/10051",
+        "layout": {
+         "path": "/layouts?type=layout&subtype=nflEventLayout",
+         "tokens": {
+          "awayUri": "football/nfl/teams/22",
+          "eventUri": "football/nfl/events/10051",
+          "homeUri": "football/nfl/teams/25",
+          "id": "10051"
+         }
+        },
+        "type": "entity",
+        "webUrl": "/nfl/week-2-green-bay-packers-vs-atlanta-falcons-sep-17-2023-game-boxscore-10051"
+       },
+       "eventHeadline": "Falcons close game on 13-0 run, edge past Packers 25-24",
+       "eventStatus": 3,
+       "eventTime": "2023-09-17T17:00:00Z",
+       "favoriteEntities": [
+        "football/nfl/teams/25",
+        "football/nfl/teams/22"
+       ],
+       "id": "nfl10051",
+       "importance": 1,
+       "isTba": false,
+       "league": "NFL",
+       "lowerTeam": {
+        "alternateLogoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Falcons.vresize.80.80.medium.1.png",
+        "hasPossession": false,
+        "imageAltText": "Atlanta Falcons",
+        "imageType": "image-logo",
+        "isLoser": false,
+        "logoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Falcons.vresize.80.80.medium.1.png",
+        "longName": "Falcons",
+        "name": "ATL",
+        "record": "2-0",
+        "score": 25,
+        "stackedNameBottom": "Falcons",
+        "stackedNameTop": "Atlanta",
+        "uri": "football/nfl/teams/25"
+       },
+       "oddsLine": "GB +3.0",
+       "overUnderLine": "OVER 40.5",
+       "sortKey": "132023091717002283010051",
+       "statusLine": "FINAL",
+       "template": "scores-team",
+       "upperTeam": {
+        "alternateLogoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Packers.vresize.80.80.medium.0.png",
+        "hasPossession": false,
+        "imageAltText": "Green Bay Packers",
+        "imageType": "image-logo",
+        "isLoser": true,
+        "logoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Packers.vresize.80.80.medium.0.png",
+        "longName": "Packers",
+        "name": "GB",
+        "record": "1-1",
+        "score": 24,
+        "stackedNameBottom": "Packers",
+        "stackedNameTop": "Green Bay",
+        "uri": "football/nfl/teams/22"
+       },
+       "uri": "https://api.foxsports.com/bifrost/v1/nfl/scorechip/nfl10051"
+      },
+      {
+       "altSortKey": "132020100601003221009095",
+       "contentType": "event",
+       "contentUri": "football/nfl/events/9095",
+       "entityLink": {
+        "analyticsSport": "nfl",
+        "contentType": "event",
+        "contentUri": "football/nfl/events/9095",
+        "layout": {
+         "path": "/layouts?type=layout&subtype=nflEventLayout",
+         "tokens": {
+          "awayUri": "football/nfl/teams/25",
+          "eventUri": "football/nfl/events/9095",
+          "homeUri": "football/nfl/teams/22",
+          "id": "9095"
+         }
+        },
+        "type": "entity",
+        "webUrl": "/nfl/week-4-atlanta-falcons-vs-green-bay-packers-oct-05-2020-game-boxscore-9095"
+       },
+       "eventHeadline": "Packers QB Rodgers passes for 327 yds, 4 TD",
+       "eventStatus": 3,
+       "eventTime": "2020-10-06T01:00:00Z",
+       "favoriteEntities": [
+        "football/nfl/teams/22",
+        "football/nfl/teams/25"
+       ],
+       "id": "nfl9095",
+       "importance": 0,
+       "isTba": false,
+       "league": "NFL",
+       "lowerTeam": {
+        "alternateLogoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Packers.vresize.80.80.medium.0.png",
+        "hasPossession": false,
+        "imageAltText": "Green Bay Packers",
+        "imageType": "image-logo",
+        "isLoser": false,
+        "logoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Packers.vresize.80.80.medium.0.png",
+        "longName": "Packers",
+        "name": "GB",
+        "record": "4-0",
+        "score": 30,
+        "stackedNameBottom": "Packers",
+        "stackedNameTop": "Green Bay",
+        "uri": "football/nfl/teams/22"
+       },
+       "sortKey": "132020100601003221009095",
+       "statusLine": "FINAL",
+       "template": "scores-team",
+       "upperTeam": {
+        "alternateLogoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Falcons.vresize.80.80.medium.1.png",
+        "hasPossession": false,
+        "imageAltText": "Atlanta Falcons",
+        "imageType": "image-logo",
+        "isLoser": true,
+        "logoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Falcons.vresize.80.80.medium.1.png",
+        "longName": "Falcons",
+        "name": "ATL",
+        "record": "0-4",
+        "score": 16,
+        "stackedNameBottom": "Falcons",
+        "stackedNameTop": "Atlanta",
+        "uri": "football/nfl/teams/25"
+       },
+       "uri": "https://api.foxsports.com/bifrost/v1/nfl/scorechip/nfl9095"
+      },
+      {
+       "altSortKey": "132018120918003234008546",
+       "contentType": "event",
+       "contentUri": "football/nfl/events/8546",
+       "entityLink": {
+        "analyticsSport": "nfl",
+        "contentType": "event",
+        "contentUri": "football/nfl/events/8546",
+        "layout": {
+         "path": "/layouts?type=layout&subtype=nflEventLayout",
+         "tokens": {
+          "awayUri": "football/nfl/teams/25",
+          "eventUri": "football/nfl/events/8546",
+          "homeUri": "football/nfl/teams/22",
+          "id": "8546"
+         }
+        },
+        "type": "entity",
+        "webUrl": "/nfl/week-14-atlanta-falcons-vs-green-bay-packers-dec-09-2018-game-boxscore-8546"
+       },
+       "eventHeadline": "Falcons nearly erase 27 pt gap",
+       "eventStatus": 3,
+       "eventTime": "2018-12-09T18:00:00Z",
+       "favoriteEntities": [
+        "football/nfl/teams/22",
+        "football/nfl/teams/25"
+       ],
+       "id": "nfl8546",
+       "importance": 0,
+       "isTba": false,
+       "league": "NFL",
+       "lowerTeam": {
+        "alternateLogoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Packers.vresize.80.80.medium.0.png",
+        "hasPossession": false,
+        "imageAltText": "Green Bay Packers",
+        "imageType": "image-logo",
+        "isLoser": false,
+        "logoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Packers.vresize.80.80.medium.0.png",
+        "longName": "Packers",
+        "name": "GB",
+        "record": "5-7-1",
+        "score": 34,
+        "stackedNameBottom": "Packers",
+        "stackedNameTop": "Green Bay",
+        "uri": "football/nfl/teams/22"
+       },
+       "sortKey": "132018120918003234008546",
+       "statusLine": "FINAL",
+       "template": "scores-team",
+       "upperTeam": {
+        "alternateLogoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Falcons.vresize.80.80.medium.1.png",
+        "hasPossession": false,
+        "imageAltText": "Atlanta Falcons",
+        "imageType": "image-logo",
+        "isLoser": true,
+        "logoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Falcons.vresize.80.80.medium.1.png",
+        "longName": "Falcons",
+        "name": "ATL",
+        "record": "4-9",
+        "score": 20,
+        "stackedNameBottom": "Falcons",
+        "stackedNameTop": "Atlanta",
+        "uri": "football/nfl/teams/25"
+       },
+       "uri": "https://api.foxsports.com/bifrost/v1/nfl/scorechip/nfl8546"
+      }
+     ],
+     "hideLeague": true,
+     "showDates": true,
+     "showOdds": false,
+     "showPlayoff": false
+    },
+    "text": "HEAD-TO-HEAD",
+    "type": "scoreChips"
+   }
+  ],
+  "template": "default"
+ },
+ "teamLeadersComparison": {
+  "header": {
+   "title": "TEAM LEADERS"
+  },
+  "tabbedDesktop": false,
+  "tabs": [
+   {
+    "model": {
+     "items": [
+      {
+       "leftItemDetails": {
+        "emphasized": true,
+        "entityLink": {
+         "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/327699.vresize.140.170.medium.5.png",
+         "analyticsName": "michael-penix",
+         "analyticsSport": "nfl",
+         "color": "1, 240, 31, 65",
+         "contentType": "athlete",
+         "contentUri": "football/nfl/athletes/327699",
+         "imageAltText": "Michael Penix Jr.",
+         "imageType": "image-headshot",
+         "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/327699.vresize.140.170.medium.5.png",
+         "layout": {
+          "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+          "tokens": {
+           "contentUri": "football/nfl/athletes/327699",
+           "id": "327699"
+          }
+         },
+         "title": "MICHAEL PENIX JR.",
+         "type": "entity",
+         "webUrl": "/nfl/michael-penix-player"
+        },
+        "image": {
+         "altText": "Michael Penix Jr.",
+         "altUrl": "https://b.fssta.com/uploads/application/nfl/headshots/327699.vresize.140.170.medium.5.png",
+         "type": "image-headshot",
+         "url": "https://b.fssta.com/uploads/application/nfl/headshots/327699.vresize.140.170.medium.5.png"
+        },
+        "secondaryTitle": "Penix Jr.",
+        "subtitle": "479",
+        "title": "Michael"
+       },
+       "rightItemDetails": {
+        "emphasized": true,
+        "entityLink": {
+         "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/21466.vresize.140.170.medium.4.png",
+         "analyticsName": "jordan-love",
+         "analyticsSport": "nfl",
+         "color": "1, 0, 156, 26",
+         "contentType": "athlete",
+         "contentUri": "football/nfl/athletes/21466",
+         "imageAltText": "Jordan Love",
+         "imageType": "image-headshot",
+         "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/21466.vresize.140.170.medium.4.png",
+         "layout": {
+          "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+          "tokens": {
+           "contentUri": "football/nfl/athletes/21466",
+           "id": "21466"
+          }
+         },
+         "title": "JORDAN LOVE",
+         "type": "entity",
+         "webUrl": "/nfl/jordan-love-player"
+        },
+        "image": {
+         "altText": "Jordan Love",
+         "altUrl": "https://b.fssta.com/uploads/application/nfl/headshots/21466.vresize.140.170.medium.4.png",
+         "type": "image-headshot",
+         "url": "https://b.fssta.com/uploads/application/nfl/headshots/21466.vresize.140.170.medium.4.png"
+        },
+        "secondaryTitle": "Love",
+        "subtitle": "1,041",
+        "title": "Jordan"
+       },
+       "title": "PASS YARDS"
+      },
+      {
+       "leftItemDetails": {
+        "emphasized": true,
+        "entityLink": {
+         "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/326923.vresize.140.170.medium.5.png",
+         "analyticsName": "bijan-robinson",
+         "analyticsSport": "nfl",
+         "color": "1, 240, 31, 65",
+         "contentType": "athlete",
+         "contentUri": "football/nfl/athletes/326923",
+         "imageAltText": "Bijan Robinson",
+         "imageType": "image-headshot",
+         "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/326923.vresize.140.170.medium.5.png",
+         "layout": {
+          "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+          "tokens": {
+           "contentUri": "football/nfl/athletes/326923",
+           "id": "326923"
+          }
+         },
+         "title": "BIJAN ROBINSON",
+         "type": "entity",
+         "webUrl": "/nfl/bijan-robinson-player"
+        },
+        "image": {
+         "altText": "Bijan Robinson",
+         "altUrl": "https://b.fssta.com/uploads/application/nfl/headshots/326923.vresize.140.170.medium.5.png",
+         "type": "image-headshot",
+         "url": "https://b.fssta.com/uploads/application/nfl/headshots/326923.vresize.140.170.medium.5.png"
+        },
+        "secondaryTitle": "Robinson",
+        "subtitle": "494",
+        "title": "Bijan"
+       },
+       "rightItemDetails": {
+        "emphasized": true,
+        "entityLink": {
+         "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/327762.vresize.140.170.medium.4.png",
+         "analyticsName": "marshawn-lloyd",
+         "analyticsSport": "nfl",
+         "color": "1, 0, 156, 26",
+         "contentType": "athlete",
+         "contentUri": "football/nfl/athletes/327762",
+         "imageAltText": "MarShawn Lloyd",
+         "imageType": "image-headshot",
+         "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/327762.vresize.140.170.medium.4.png",
+         "layout": {
+          "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+          "tokens": {
+           "contentUri": "football/nfl/athletes/327762",
+           "id": "327762"
+          }
+         },
+         "title": "MARSHAWN LLOYD",
+         "type": "entity",
+         "webUrl": "/nfl/marshawn-lloyd-player"
+        },
+        "image": {
+         "altText": "MarShawn Lloyd",
+         "altUrl": "https://b.fssta.com/uploads/application/nfl/headshots/327762.vresize.140.170.medium.4.png",
+         "type": "image-headshot",
+         "url": "https://b.fssta.com/uploads/application/nfl/headshots/327762.vresize.140.170.medium.4.png"
+        },
+        "secondaryTitle": "Lloyd",
+        "subtitle": "81",
+        "title": "MarShawn"
+       },
+       "title": "RUSH YARDS"
+      },
+      {
+       "leftItemDetails": {
+        "emphasized": true,
+        "entityLink": {
+         "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22828.vresize.140.170.medium.3.png",
+         "analyticsName": "brian-robinson",
+         "analyticsSport": "nfl",
+         "color": "1, 240, 31, 65",
+         "contentType": "athlete",
+         "contentUri": "football/nfl/athletes/22828",
+         "imageAltText": "Brian Robinson",
+         "imageType": "image-headshot",
+         "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22828.vresize.140.170.medium.3.png",
+         "layout": {
+          "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+          "tokens": {
+           "contentUri": "football/nfl/athletes/22828",
+           "id": "22828"
+          }
+         },
+         "title": "BRIAN ROBINSON",
+         "type": "entity",
+         "webUrl": "/nfl/brian-robinson-player"
+        },
+        "image": {
+         "altText": "Brian Robinson",
+         "altUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22828.vresize.140.170.medium.3.png",
+         "type": "image-headshot",
+         "url": "https://b.fssta.com/uploads/application/nfl/headshots/22828.vresize.140.170.medium.3.png"
+        },
+        "secondaryTitle": "Robinson",
+        "subtitle": "4",
+        "title": "Brian"
+       },
+       "rightItemDetails": {
+        "emphasized": true,
+        "entityLink": {
+         "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/21466.vresize.140.170.medium.4.png",
+         "analyticsName": "jordan-love",
+         "analyticsSport": "nfl",
+         "color": "1, 0, 156, 26",
+         "contentType": "athlete",
+         "contentUri": "football/nfl/athletes/21466",
+         "imageAltText": "Jordan Love",
+         "imageType": "image-headshot",
+         "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/21466.vresize.140.170.medium.4.png",
+         "layout": {
+          "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+          "tokens": {
+           "contentUri": "football/nfl/athletes/21466",
+           "id": "21466"
+          }
+         },
+         "title": "JORDAN LOVE",
+         "type": "entity",
+         "webUrl": "/nfl/jordan-love-player"
+        },
+        "image": {
+         "altText": "Jordan Love",
+         "altUrl": "https://b.fssta.com/uploads/application/nfl/headshots/21466.vresize.140.170.medium.4.png",
+         "type": "image-headshot",
+         "url": "https://b.fssta.com/uploads/application/nfl/headshots/21466.vresize.140.170.medium.4.png"
+        },
+        "secondaryTitle": "Love",
+        "subtitle": "0",
+        "title": "Jordan"
+       },
+       "title": "RUSHING TOUCHDOWNS"
+      },
+      {
+       "leftItemDetails": {
+        "emphasized": true,
+        "entityLink": {
+         "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22760.vresize.140.170.medium.5.png",
+         "analyticsName": "drake-london",
+         "analyticsSport": "nfl",
+         "color": "1, 240, 31, 65",
+         "contentType": "athlete",
+         "contentUri": "football/nfl/athletes/22760",
+         "imageAltText": "Drake London",
+         "imageType": "image-headshot",
+         "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22760.vresize.140.170.medium.5.png",
+         "layout": {
+          "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+          "tokens": {
+           "contentUri": "football/nfl/athletes/22760",
+           "id": "22760"
+          }
+         },
+         "title": "DRAKE LONDON",
+         "type": "entity",
+         "webUrl": "/nfl/drake-london-player"
+        },
+        "image": {
+         "altText": "Drake London",
+         "altUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22760.vresize.140.170.medium.5.png",
+         "type": "image-headshot",
+         "url": "https://b.fssta.com/uploads/application/nfl/headshots/22760.vresize.140.170.medium.5.png"
+        },
+        "secondaryTitle": "London",
+        "subtitle": "370",
+        "title": "Drake"
+       },
+       "rightItemDetails": {
+        "emphasized": true,
+        "entityLink": {
+         "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22791.vresize.140.170.medium.3.png",
+         "analyticsName": "christian-watson",
+         "analyticsSport": "nfl",
+         "color": "1, 0, 156, 26",
+         "contentType": "athlete",
+         "contentUri": "football/nfl/athletes/22791",
+         "imageAltText": "Christian Watson",
+         "imageType": "image-headshot",
+         "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22791.vresize.140.170.medium.3.png",
+         "layout": {
+          "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+          "tokens": {
+           "contentUri": "football/nfl/athletes/22791",
+           "id": "22791"
+          }
+         },
+         "title": "CHRISTIAN WATSON",
+         "type": "entity",
+         "webUrl": "/nfl/christian-watson-player"
+        },
+        "image": {
+         "altText": "Christian Watson",
+         "altUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22791.vresize.140.170.medium.3.png",
+         "type": "image-headshot",
+         "url": "https://b.fssta.com/uploads/application/nfl/headshots/22791.vresize.140.170.medium.3.png"
+        },
+        "secondaryTitle": "Watson",
+        "subtitle": "331",
+        "title": "Christian"
+       },
+       "title": "RECEIVING YARDS"
+      },
+      {
+       "leftItemDetails": {
+        "emphasized": true,
+        "entityLink": {
+         "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/12291.vresize.140.170.medium.5.png",
+         "analyticsName": "austin-hooper",
+         "analyticsSport": "nfl",
+         "color": "1, 240, 31, 65",
+         "contentType": "athlete",
+         "contentUri": "football/nfl/athletes/12291",
+         "imageAltText": "Austin Hooper",
+         "imageType": "image-headshot",
+         "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/12291.vresize.140.170.medium.5.png",
+         "layout": {
+          "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+          "tokens": {
+           "contentUri": "football/nfl/athletes/12291",
+           "id": "12291"
+          }
+         },
+         "title": "AUSTIN HOOPER",
+         "type": "entity",
+         "webUrl": "/nfl/austin-hooper-player"
+        },
+        "image": {
+         "altText": "Austin Hooper",
+         "altUrl": "https://b.fssta.com/uploads/application/nfl/headshots/12291.vresize.140.170.medium.5.png",
+         "type": "image-headshot",
+         "url": "https://b.fssta.com/uploads/application/nfl/headshots/12291.vresize.140.170.medium.5.png"
+        },
+        "secondaryTitle": "Hooper",
+        "subtitle": "1",
+        "title": "Austin"
+       },
+       "rightItemDetails": {
+        "emphasized": true,
+        "entityLink": {
+         "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22791.vresize.140.170.medium.3.png",
+         "analyticsName": "christian-watson",
+         "analyticsSport": "nfl",
+         "color": "1, 0, 156, 26",
+         "contentType": "athlete",
+         "contentUri": "football/nfl/athletes/22791",
+         "imageAltText": "Christian Watson",
+         "imageType": "image-headshot",
+         "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22791.vresize.140.170.medium.3.png",
+         "layout": {
+          "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+          "tokens": {
+           "contentUri": "football/nfl/athletes/22791",
+           "id": "22791"
+          }
+         },
+         "title": "CHRISTIAN WATSON",
+         "type": "entity",
+         "webUrl": "/nfl/christian-watson-player"
+        },
+        "image": {
+         "altText": "Christian Watson",
+         "altUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22791.vresize.140.170.medium.3.png",
+         "type": "image-headshot",
+         "url": "https://b.fssta.com/uploads/application/nfl/headshots/22791.vresize.140.170.medium.3.png"
+        },
+        "secondaryTitle": "Watson",
+        "subtitle": "4",
+        "title": "Christian"
+       },
+       "title": "RECEIVING TOUCHDOWNS"
+      },
+      {
+       "leftItemDetails": {
+        "emphasized": true,
+        "entityLink": {
+         "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/328648.vresize.140.170.medium.4.png",
+         "analyticsName": "xavier-watts",
+         "analyticsSport": "nfl",
+         "color": "1, 240, 31, 65",
+         "contentType": "athlete",
+         "contentUri": "football/nfl/athletes/328648",
+         "imageAltText": "Xavier Watts",
+         "imageType": "image-headshot",
+         "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/328648.vresize.140.170.medium.4.png",
+         "layout": {
+          "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+          "tokens": {
+           "contentUri": "football/nfl/athletes/328648",
+           "id": "328648"
+          }
+         },
+         "title": "XAVIER WATTS",
+         "type": "entity",
+         "webUrl": "/nfl/xavier-watts-player"
+        },
+        "image": {
+         "altText": "Xavier Watts",
+         "altUrl": "https://b.fssta.com/uploads/application/nfl/headshots/328648.vresize.140.170.medium.4.png",
+         "type": "image-headshot",
+         "url": "https://b.fssta.com/uploads/application/nfl/headshots/328648.vresize.140.170.medium.4.png"
+        },
+        "secondaryTitle": "Watts",
+        "subtitle": "24",
+        "title": "Xavier"
+       },
+       "rightItemDetails": {
+        "emphasized": true,
+        "entityLink": {
+         "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/327796.vresize.140.170.medium.3.png",
+         "analyticsName": "evan-williams",
+         "analyticsSport": "nfl",
+         "color": "1, 0, 156, 26",
+         "contentType": "athlete",
+         "contentUri": "football/nfl/athletes/327796",
+         "imageAltText": "Evan Williams",
+         "imageType": "image-headshot",
+         "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/327796.vresize.140.170.medium.3.png",
+         "layout": {
+          "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+          "tokens": {
+           "contentUri": "football/nfl/athletes/327796",
+           "id": "327796"
+          }
+         },
+         "title": "EVAN WILLIAMS",
+         "type": "entity",
+         "webUrl": "/nfl/evan-williams-player"
+        },
+        "image": {
+         "altText": "Evan Williams",
+         "altUrl": "https://b.fssta.com/uploads/application/nfl/headshots/327796.vresize.140.170.medium.3.png",
+         "type": "image-headshot",
+         "url": "https://b.fssta.com/uploads/application/nfl/headshots/327796.vresize.140.170.medium.3.png"
+        },
+        "secondaryTitle": "Williams",
+        "subtitle": "32",
+        "title": "Evan"
+       },
+       "title": "TACKLES"
+      },
+      {
+       "leftItemDetails": {
+        "emphasized": true,
+        "entityLink": {
+         "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/11497.vresize.140.170.medium.1.png",
+         "analyticsName": "zadarius-smith",
+         "analyticsSport": "nfl",
+         "color": "1, 240, 31, 65",
+         "contentType": "athlete",
+         "contentUri": "football/nfl/athletes/11497",
+         "imageAltText": "Za'Darius Smith",
+         "imageType": "image-headshot",
+         "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/11497.vresize.140.170.medium.1.png",
+         "layout": {
+          "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+          "tokens": {
+           "contentUri": "football/nfl/athletes/11497",
+           "id": "11497"
+          }
+         },
+         "title": "ZA'DARIUS SMITH",
+         "type": "entity",
+         "webUrl": "/nfl/zadarius-smith-player"
+        },
+        "image": {
+         "altText": "Za'Darius Smith",
+         "altUrl": "https://b.fssta.com/uploads/application/nfl/headshots/11497.vresize.140.170.medium.1.png",
+         "type": "image-headshot",
+         "url": "https://b.fssta.com/uploads/application/nfl/headshots/11497.vresize.140.170.medium.1.png"
+        },
+        "secondaryTitle": "Smith",
+        "subtitle": "2",
+        "title": "Za'Darius"
+       },
+       "rightItemDetails": {
+        "emphasized": true,
+        "entityLink": {
+         "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/327728.vresize.140.170.medium.3.png",
+         "analyticsName": "edgerrin-cooper",
+         "analyticsSport": "nfl",
+         "color": "1, 0, 156, 26",
+         "contentType": "athlete",
+         "contentUri": "football/nfl/athletes/327728",
+         "imageAltText": "Edgerrin Cooper",
+         "imageType": "image-headshot",
+         "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/327728.vresize.140.170.medium.3.png",
+         "layout": {
+          "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+          "tokens": {
+           "contentUri": "football/nfl/athletes/327728",
+           "id": "327728"
+          }
+         },
+         "title": "EDGERRIN COOPER",
+         "type": "entity",
+         "webUrl": "/nfl/edgerrin-cooper-player"
+        },
+        "image": {
+         "altText": "Edgerrin Cooper",
+         "altUrl": "https://b.fssta.com/uploads/application/nfl/headshots/327728.vresize.140.170.medium.3.png",
+         "type": "image-headshot",
+         "url": "https://b.fssta.com/uploads/application/nfl/headshots/327728.vresize.140.170.medium.3.png"
+        },
+        "secondaryTitle": "Cooper",
+        "subtitle": "3",
+        "title": "Edgerrin"
+       },
+       "title": "SACKS"
+      }
+     ],
+     "leftEntityLink": {
+      "analyticsName": "atlanta-falcons",
+      "analyticsSport": "nfl",
+      "color": "1, 240, 31, 65",
+      "contentType": "team",
+      "contentUri": "football/nfl/teams/25",
+      "imageAltText": "Atlanta Falcons",
+      "imageType": "image-logo",
+      "imageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Falcons.vresize.200.200.medium.1.png",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=teamsLayout&elementId=nfl",
+       "tokens": {
+        "contentUri": "football/nfl/teams/25",
+        "id": "25"
+       }
+      },
+      "title": "ATLANTA FALCONS",
+      "type": "entity",
+      "webUrl": "/nfl/atlanta-falcons-team"
+     },
+     "leftImage": {
+      "altText": "Atlanta Falcons",
+      "altUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Falcons.vresize.200.200.medium.1.png",
+      "type": "image-logo",
+      "url": "https://b.fssta.com/uploads/application/nfl/team-logos/Falcons.vresize.200.200.medium.1.png"
+     },
+     "leftName": "ATL",
+     "rightEntityLink": {
+      "analyticsName": "green-bay-packers",
+      "analyticsSport": "nfl",
+      "color": "1, 0, 156, 26",
+      "contentType": "team",
+      "contentUri": "football/nfl/teams/22",
+      "imageAltText": "Green Bay Packers",
+      "imageType": "image-logo",
+      "imageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Packers.vresize.200.200.medium.0.png",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=teamsLayout&elementId=nfl",
+       "tokens": {
+        "contentUri": "football/nfl/teams/22",
+        "id": "22"
+       }
+      },
+      "title": "GREEN BAY PACKERS",
+      "type": "entity",
+      "webUrl": "/nfl/green-bay-packers-team"
+     },
+     "rightImage": {
+      "altText": "Green Bay Packers",
+      "altUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Packers.vresize.200.200.medium.0.png",
+      "type": "image-logo",
+      "url": "https://b.fssta.com/uploads/application/nfl/team-logos/Packers.vresize.200.200.medium.0.png"
+     },
+     "rightName": "GB"
+    },
+    "type": "comparisonTable"
+   }
+  ],
+  "template": "default"
+ },
+ "teamStatsComparison": {
+  "header": {
+   "title": "TEAM STATS"
+  },
+  "items": [
+   {
+    "leftItemDetails": {
+     "emphasized": true,
+     "title": "24.0"
+    },
+    "rightItemDetails": {
+     "emphasized": false,
+     "title": "18.3"
+    },
+    "title": "PTS/G"
+   },
+   {
+    "leftItemDetails": {
+     "emphasized": false,
+     "title": "179.5"
+    },
+    "rightItemDetails": {
+     "emphasized": true,
+     "title": "249.3"
+    },
+    "title": "PASS YARDS"
+   },
+   {
+    "leftItemDetails": {
+     "emphasized": true,
+     "title": "181.0"
+    },
+    "rightItemDetails": {
+     "emphasized": false,
+     "title": "58.0"
+    },
+    "title": "RUSH YARDS"
+   },
+   {
+    "leftItemDetails": {
+     "emphasized": true,
+     "title": "23.0"
+    },
+    "rightItemDetails": {
+     "emphasized": false,
+     "title": "26.3"
+    },
+    "title": "OPP PTS/G"
+   },
+   {
+    "leftItemDetails": {
+     "emphasized": false,
+     "title": "264.8"
+    },
+    "rightItemDetails": {
+     "emphasized": true,
+     "title": "185.0"
+    },
+    "title": "OPP PASS YARDS"
+   },
+   {
+    "leftItemDetails": {
+     "emphasized": true,
+     "title": "48.3"
+    },
+    "rightItemDetails": {
+     "emphasized": false,
+     "title": "139.3"
+    },
+    "title": "OPP RUSH YARDS"
+   }
+  ],
+  "leftEntityLink": {
+   "analyticsName": "atlanta-falcons",
+   "analyticsSport": "nfl",
+   "color": "1, 240, 31, 65",
+   "contentType": "team",
+   "contentUri": "football/nfl/teams/25",
+   "imageAltText": "Atlanta Falcons",
+   "imageType": "image-logo",
+   "imageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Falcons.vresize.200.200.medium.1.png",
+   "layout": {
+    "path": "/layouts?type=layout&subtype=teamsLayout&elementId=nfl",
+    "tokens": {
+     "contentUri": "football/nfl/teams/25",
+     "id": "25"
+    }
+   },
+   "title": "ATLANTA FALCONS",
+   "type": "entity",
+   "webUrl": "/nfl/atlanta-falcons-team"
+  },
+  "leftImage": {
+   "altText": "Atlanta Falcons",
+   "altUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Falcons.vresize.200.200.medium.1.png",
+   "type": "image-logo",
+   "url": "https://b.fssta.com/uploads/application/nfl/team-logos/Falcons.vresize.200.200.medium.1.png"
+  },
+  "leftName": "ATL",
+  "rightEntityLink": {
+   "analyticsName": "green-bay-packers",
+   "analyticsSport": "nfl",
+   "color": "1, 0, 156, 26",
+   "contentType": "team",
+   "contentUri": "football/nfl/teams/22",
+   "imageAltText": "Green Bay Packers",
+   "imageType": "image-logo",
+   "imageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Packers.vresize.200.200.medium.0.png",
+   "layout": {
+    "path": "/layouts?type=layout&subtype=teamsLayout&elementId=nfl",
+    "tokens": {
+     "contentUri": "football/nfl/teams/22",
+     "id": "22"
+    }
+   },
+   "title": "GREEN BAY PACKERS",
+   "type": "entity",
+   "webUrl": "/nfl/green-bay-packers-team"
+  },
+  "rightImage": {
+   "altText": "Green Bay Packers",
+   "altUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Packers.vresize.200.200.medium.0.png",
+   "type": "image-logo",
+   "url": "https://b.fssta.com/uploads/application/nfl/team-logos/Packers.vresize.200.200.medium.0.png"
+  },
+  "rightName": "GB"
+ },
+ "template": "matchupv2",
+ "winProbability": {
+  "data": [
+   {
+    "alternateColor": "1, 0, 156, 26",
+    "color": "1, 0, 156, 26",
+    "displayValue": "67.9%",
+    "image": {
+     "altText": "Green Bay Packers",
+     "altUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Packers.vresize.200.200.medium.0.png",
+     "type": "image-logo",
+     "url": "https://b.fssta.com/uploads/application/nfl/team-logos/Packers.vresize.200.200.medium.0.png"
+    },
+    "percentage": 67.9
+   },
+   {
+    "alternateColor": "1, 240, 31, 65",
+    "color": "1, 240, 31, 65",
+    "displayValue": "32.1%",
+    "image": {
+     "altText": "Atlanta Falcons",
+     "altUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Falcons.vresize.200.200.medium.1.png",
+     "type": "image-logo",
+     "url": "https://b.fssta.com/uploads/application/nfl/team-logos/Falcons.vresize.200.200.medium.1.png"
+    },
+    "percentage": 32.1
+   }
+  ],
+  "header": {
+   "title": "WIN PROBABILITY"
+  }
+ }
+}

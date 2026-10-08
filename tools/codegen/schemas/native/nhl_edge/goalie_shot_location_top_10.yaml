@@ -1,0 +1,5 @@
+columns: []
+kind: dataframe
+schema: goalie_shot_location_top_10
+unverified: 'no capture: every value tried 404s for season 20242025 (sort_by points/total/savePctg/save-pctg, position F/forwards/all,
+  category shots/high/all/high-danger, fastRhockey''s examples included), so the valid path values are unconfirmed'

@@ -1,0 +1,1233 @@
+{
+ "count": 175,
+ "items": [
+  {
+   "pick": {
+    "competition": {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401872964/competitions/401872964?lang=en&region=us"
+    },
+    "competitor": {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401872964/competitions/401872964/competitors/23?lang=en&region=us"
+    },
+    "correct": true,
+    "person": {
+     "displayName": "Matt Bowen",
+     "firstName": "Matt",
+     "headshot": {
+      "alt": "Matt Bowen",
+      "href": "https://a.espncdn.com/i/columnists/full/bowen_matt.png"
+     },
+     "id": "2329",
+     "lastName": "Bowen"
+    }
+   },
+   "weekRecord": {
+    "displayValue": "38-25",
+    "season": {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026?lang=en&region=us"
+    },
+    "stats": [
+     {
+      "abbreviation": "W",
+      "description": "Wins",
+      "displayName": "Wins",
+      "displayValue": "9",
+      "name": "win",
+      "shortDisplayName": "W",
+      "type": "win",
+      "value": 9.0
+     },
+     {
+      "abbreviation": "L",
+      "description": "Losses",
+      "displayName": "Losses",
+      "displayValue": "6",
+      "name": "loss",
+      "shortDisplayName": "L",
+      "type": "loss",
+      "value": 6.0
+     }
+    ]
+   }
+  },
+  {
+   "pick": {
+    "competition": {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401872965/competitions/401872965?lang=en&region=us"
+    },
+    "competitor": {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401872965/competitions/401872965/competitors/11?lang=en&region=us"
+    },
+    "correct": true,
+    "person": {
+     "displayName": "Matt Bowen",
+     "firstName": "Matt",
+     "headshot": {
+      "alt": "Matt Bowen",
+      "href": "https://a.espncdn.com/i/columnists/full/bowen_matt.png"
+     },
+     "id": "2329",
+     "lastName": "Bowen"
+    }
+   },
+   "weekRecord": {
+    "displayValue": "38-25",
+    "season": {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026?lang=en&region=us"
+    },
+    "stats": [
+     {
+      "abbreviation": "W",
+      "description": "Wins",
+      "displayName": "Wins",
+      "displayValue": "9",
+      "name": "win",
+      "shortDisplayName": "W",
+      "type": "win",
+      "value": 9.0
+     },
+     {
+      "abbreviation": "L",
+      "description": "Losses",
+      "displayName": "Losses",
+      "displayValue": "6",
+      "name": "loss",
+      "shortDisplayName": "L",
+      "type": "loss",
+      "value": 6.0
+     }
+    ]
+   }
+  },
+  {
+   "pick": {
+    "competition": {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401872966/competitions/401872966?lang=en&region=us"
+    },
+    "competitor": {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401872966/competitions/401872966/competitors/22?lang=en&region=us"
+    },
+    "correct": true,
+    "person": {
+     "displayName": "Matt Bowen",
+     "firstName": "Matt",
+     "headshot": {
+      "alt": "Matt Bowen",
+      "href": "https://a.espncdn.com/i/columnists/full/bowen_matt.png"
+     },
+     "id": "2329",
+     "lastName": "Bowen"
+    }
+   },
+   "weekRecord": {
+    "displayValue": "38-25",
+    "season": {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026?lang=en&region=us"
+    },
+    "stats": [
+     {
+      "abbreviation": "W",
+      "description": "Wins",
+      "displayName": "Wins",
+      "displayValue": "9",
+      "name": "win",
+      "shortDisplayName": "W",
+      "type": "win",
+      "value": 9.0
+     },
+     {
+      "abbreviation": "L",
+      "description": "Losses",
+      "displayName": "Losses",
+      "displayValue": "6",
+      "name": "loss",
+      "shortDisplayName": "L",
+      "type": "loss",
+      "value": 6.0
+     }
+    ]
+   }
+  },
+  {
+   "pick": {
+    "competition": {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401872967/competitions/401872967?lang=en&region=us"
+    },
+    "competitor": {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401872967/competitions/401872967/competitors/6?lang=en&region=us"
+    },
+    "correct": true,
+    "person": {
+     "displayName": "Matt Bowen",
+     "firstName": "Matt",
+     "headshot": {
+      "alt": "Matt Bowen",
+      "href": "https://a.espncdn.com/i/columnists/full/bowen_matt.png"
+     },
+     "id": "2329",
+     "lastName": "Bowen"
+    }
+   },
+   "weekRecord": {
+    "displayValue": "38-25",
+    "season": {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026?lang=en&region=us"
+    },
+    "stats": [
+     {
+      "abbreviation": "W",
+      "description": "Wins",
+      "displayName": "Wins",
+      "displayValue": "9",
+      "name": "win",
+      "shortDisplayName": "W",
+      "type": "win",
+      "value": 9.0
+     },
+     {
+      "abbreviation": "L",
+      "description": "Losses",
+      "displayName": "Losses",
+      "displayValue": "6",
+      "name": "loss",
+      "shortDisplayName": "L",
+      "type": "loss",
+      "value": 6.0
+     }
+    ]
+   }
+  },
+  {
+   "pick": {
+    "competition": {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401872968/competitions/401872968?lang=en&region=us"
+    },
+    "competitor": {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401872968/competitions/401872968/competitors/9?lang=en&region=us"
+    },
+    "correct": true,
+    "person": {
+     "displayName": "Matt Bowen",
+     "firstName": "Matt",
+     "headshot": {
+      "alt": "Matt Bowen",
+      "href": "https://a.espncdn.com/i/columnists/full/bowen_matt.png"
+     },
+     "id": "2329",
+     "lastName": "Bowen"
+    }
+   },
+   "weekRecord": {
+    "displayValue": "38-25",
+    "season": {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026?lang=en&region=us"
+    },
+    "stats": [
+     {
+      "abbreviation": "W",
+      "description": "Wins",
+      "displayName": "Wins",
+      "displayValue": "9",
+      "name": "win",
+      "shortDisplayName": "W",
+      "type": "win",
+      "value": 9.0
+     },
+     {
+      "abbreviation": "L",
+      "description": "Losses",
+      "displayName": "Losses",
+      "displayValue": "6",
+      "name": "loss",
+      "shortDisplayName": "L",
+      "type": "loss",
+      "value": 6.0
+     }
+    ]
+   }
+  },
+  {
+   "pick": {
+    "competition": {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401872969/competitions/401872969?lang=en&region=us"
+    },
+    "competitor": {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401872969/competitions/401872969/competitors/4?lang=en&region=us"
+    },
+    "correct": true,
+    "person": {
+     "displayName": "Matt Bowen",
+     "firstName": "Matt",
+     "headshot": {
+      "alt": "Matt Bowen",
+      "href": "https://a.espncdn.com/i/columnists/full/bowen_matt.png"
+     },
+     "id": "2329",
+     "lastName": "Bowen"
+    }
+   },
+   "weekRecord": {
+    "displayValue": "38-25",
+    "season": {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026?lang=en&region=us"
+    },
+    "stats": [
+     {
+      "abbreviation": "W",
+      "description": "Wins",
+      "displayName": "Wins",
+      "displayValue": "9",
+      "name": "win",
+      "shortDisplayName": "W",
+      "type": "win",
+      "value": 9.0
+     },
+     {
+      "abbreviation": "L",
+      "description": "Losses",
+      "displayName": "Losses",
+      "displayValue": "6",
+      "name": "loss",
+      "shortDisplayName": "L",
+      "type": "loss",
+      "value": 6.0
+     }
+    ]
+   }
+  },
+  {
+   "pick": {
+    "competition": {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401872970/competitions/401872970?lang=en&region=us"
+    },
+    "competitor": {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401872970/competitions/401872970/competitors/14?lang=en&region=us"
+    },
+    "correct": true,
+    "person": {
+     "displayName": "Matt Bowen",
+     "firstName": "Matt",
+     "headshot": {
+      "alt": "Matt Bowen",
+      "href": "https://a.espncdn.com/i/columnists/full/bowen_matt.png"
+     },
+     "id": "2329",
+     "lastName": "Bowen"
+    }
+   },
+   "weekRecord": {
+    "displayValue": "38-25",
+    "season": {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026?lang=en&region=us"
+    },
+    "stats": [
+     {
+      "abbreviation": "W",
+      "description": "Wins",
+      "displayName": "Wins",
+      "displayValue": "9",
+      "name": "win",
+      "shortDisplayName": "W",
+      "type": "win",
+      "value": 9.0
+     },
+     {
+      "abbreviation": "L",
+      "description": "Losses",
+      "displayName": "Losses",
+      "displayValue": "6",
+      "name": "loss",
+      "shortDisplayName": "L",
+      "type": "loss",
+      "value": 6.0
+     }
+    ]
+   }
+  },
+  {
+   "pick": {
+    "competition": {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401872971/competitions/401872971?lang=en&region=us"
+    },
+    "competitor": {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401872971/competitions/401872971/competitors/2?lang=en&region=us"
+    },
+    "correct": true,
+    "person": {
+     "displayName": "Matt Bowen",
+     "firstName": "Matt",
+     "headshot": {
+      "alt": "Matt Bowen",
+      "href": "https://a.espncdn.com/i/columnists/full/bowen_matt.png"
+     },
+     "id": "2329",
+     "lastName": "Bowen"
+    }
+   },
+   "weekRecord": {
+    "displayValue": "38-25",
+    "season": {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026?lang=en&region=us"
+    },
+    "stats": [
+     {
+      "abbreviation": "W",
+      "description": "Wins",
+      "displayName": "Wins",
+      "displayValue": "9",
+      "name": "win",
+      "shortDisplayName": "W",
+      "type": "win",
+      "value": 9.0
+     },
+     {
+      "abbreviation": "L",
+      "description": "Losses",
+      "displayName": "Losses",
+      "displayValue": "6",
+      "name": "loss",
+      "shortDisplayName": "L",
+      "type": "loss",
+      "value": 6.0
+     }
+    ]
+   }
+  },
+  {
+   "pick": {
+    "competition": {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401872972/competitions/401872972?lang=en&region=us"
+    },
+    "competitor": {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401872972/competitions/401872972/competitors/3?lang=en&region=us"
+    },
+    "correct": true,
+    "person": {
+     "displayName": "Matt Bowen",
+     "firstName": "Matt",
+     "headshot": {
+      "alt": "Matt Bowen",
+      "href": "https://a.espncdn.com/i/columnists/full/bowen_matt.png"
+     },
+     "id": "2329",
+     "lastName": "Bowen"
+    }
+   },
+   "weekRecord": {
+    "displayValue": "38-25",
+    "season": {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026?lang=en&region=us"
+    },
+    "stats": [
+     {
+      "abbreviation": "W",
+      "description": "Wins",
+      "displayName": "Wins",
+      "displayValue": "9",
+      "name": "win",
+      "shortDisplayName": "W",
+      "type": "win",
+      "value": 9.0
+     },
+     {
+      "abbreviation": "L",
+      "description": "Losses",
+      "displayName": "Losses",
+      "displayValue": "6",
+      "name": "loss",
+      "shortDisplayName": "L",
+      "type": "loss",
+      "value": 6.0
+     }
+    ]
+   }
+  },
+  {
+   "pick": {
+    "competition": {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401872973/competitions/401872973?lang=en&region=us"
+    },
+    "competitor": {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401872973/competitions/401872973/competitors/33?lang=en&region=us"
+    },
+    "correct": true,
+    "person": {
+     "displayName": "Matt Bowen",
+     "firstName": "Matt",
+     "headshot": {
+      "alt": "Matt Bowen",
+      "href": "https://a.espncdn.com/i/columnists/full/bowen_matt.png"
+     },
+     "id": "2329",
+     "lastName": "Bowen"
+    }
+   },
+   "weekRecord": {
+    "displayValue": "38-25",
+    "season": {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026?lang=en&region=us"
+    },
+    "stats": [
+     {
+      "abbreviation": "W",
+      "description": "Wins",
+      "displayName": "Wins",
+      "displayValue": "9",
+      "name": "win",
+      "shortDisplayName": "W",
+      "type": "win",
+      "value": 9.0
+     },
+     {
+      "abbreviation": "L",
+      "description": "Losses",
+      "displayName": "Losses",
+      "displayValue": "6",
+      "name": "loss",
+      "shortDisplayName": "L",
+      "type": "loss",
+      "value": 6.0
+     }
+    ]
+   }
+  },
+  {
+   "pick": {
+    "competition": {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401872974/competitions/401872974?lang=en&region=us"
+    },
+    "competitor": {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401872974/competitions/401872974/competitors/16?lang=en&region=us"
+    },
+    "correct": true,
+    "person": {
+     "displayName": "Matt Bowen",
+     "firstName": "Matt",
+     "headshot": {
+      "alt": "Matt Bowen",
+      "href": "https://a.espncdn.com/i/columnists/full/bowen_matt.png"
+     },
+     "id": "2329",
+     "lastName": "Bowen"
+    }
+   },
+   "weekRecord": {
+    "displayValue": "38-25",
+    "season": {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026?lang=en&region=us"
+    },
+    "stats": [
+     {
+      "abbreviation": "W",
+      "description": "Wins",
+      "displayName": "Wins",
+      "displayValue": "9",
+      "name": "win",
+      "shortDisplayName": "W",
+      "type": "win",
+      "value": 9.0
+     },
+     {
+      "abbreviation": "L",
+      "description": "Losses",
+      "displayName": "Losses",
+      "displayValue": "6",
+      "name": "loss",
+      "shortDisplayName": "L",
+      "type": "loss",
+      "value": 6.0
+     }
+    ]
+   }
+  },
+  {
+   "pick": {
+    "competition": {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401872975/competitions/401872975?lang=en&region=us"
+    },
+    "competitor": {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401872975/competitions/401872975/competitors/25?lang=en&region=us"
+    },
+    "correct": true,
+    "person": {
+     "displayName": "Matt Bowen",
+     "firstName": "Matt",
+     "headshot": {
+      "alt": "Matt Bowen",
+      "href": "https://a.espncdn.com/i/columnists/full/bowen_matt.png"
+     },
+     "id": "2329",
+     "lastName": "Bowen"
+    }
+   },
+   "weekRecord": {
+    "displayValue": "38-25",
+    "season": {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026?lang=en&region=us"
+    },
+    "stats": [
+     {
+      "abbreviation": "W",
+      "description": "Wins",
+      "displayName": "Wins",
+      "displayValue": "9",
+      "name": "win",
+      "shortDisplayName": "W",
+      "type": "win",
+      "value": 9.0
+     },
+     {
+      "abbreviation": "L",
+      "description": "Losses",
+      "displayName": "Losses",
+      "displayValue": "6",
+      "name": "loss",
+      "shortDisplayName": "L",
+      "type": "loss",
+      "value": 6.0
+     }
+    ]
+   }
+  },
+  {
+   "pick": {
+    "competition": {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401872976/competitions/401872976?lang=en&region=us"
+    },
+    "competitor": {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401872976/competitions/401872976/competitors/12?lang=en&region=us"
+    },
+    "correct": true,
+    "person": {
+     "displayName": "Matt Bowen",
+     "firstName": "Matt",
+     "headshot": {
+      "alt": "Matt Bowen",
+      "href": "https://a.espncdn.com/i/columnists/full/bowen_matt.png"
+     },
+     "id": "2329",
+     "lastName": "Bowen"
+    }
+   },
+   "weekRecord": {
+    "displayValue": "38-25",
+    "season": {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026?lang=en&region=us"
+    },
+    "stats": [
+     {
+      "abbreviation": "W",
+      "description": "Wins",
+      "displayName": "Wins",
+      "displayValue": "9",
+      "name": "win",
+      "shortDisplayName": "W",
+      "type": "win",
+      "value": 9.0
+     },
+     {
+      "abbreviation": "L",
+      "description": "Losses",
+      "displayName": "Losses",
+      "displayValue": "6",
+      "name": "loss",
+      "shortDisplayName": "L",
+      "type": "loss",
+      "value": 6.0
+     }
+    ]
+   }
+  },
+  {
+   "pick": {
+    "competition": {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401872978/competitions/401872978?lang=en&region=us"
+    },
+    "competitor": {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401872978/competitions/401872978/competitors/8?lang=en&region=us"
+    },
+    "correct": true,
+    "person": {
+     "displayName": "Matt Bowen",
+     "firstName": "Matt",
+     "headshot": {
+      "alt": "Matt Bowen",
+      "href": "https://a.espncdn.com/i/columnists/full/bowen_matt.png"
+     },
+     "id": "2329",
+     "lastName": "Bowen"
+    }
+   },
+   "weekRecord": {
+    "displayValue": "38-25",
+    "season": {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026?lang=en&region=us"
+    },
+    "stats": [
+     {
+      "abbreviation": "W",
+      "description": "Wins",
+      "displayName": "Wins",
+      "displayValue": "9",
+      "name": "win",
+      "shortDisplayName": "W",
+      "type": "win",
+      "value": 9.0
+     },
+     {
+      "abbreviation": "L",
+      "description": "Losses",
+      "displayName": "Losses",
+      "displayValue": "6",
+      "name": "loss",
+      "shortDisplayName": "L",
+      "type": "loss",
+      "value": 6.0
+     }
+    ]
+   }
+  },
+  {
+   "pick": {
+    "competition": {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401872979/competitions/401872979?lang=en&region=us"
+    },
+    "competitor": {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401872979/competitions/401872979/competitors/18?lang=en&region=us"
+    },
+    "correct": true,
+    "person": {
+     "displayName": "Matt Bowen",
+     "firstName": "Matt",
+     "headshot": {
+      "alt": "Matt Bowen",
+      "href": "https://a.espncdn.com/i/columnists/full/bowen_matt.png"
+     },
+     "id": "2329",
+     "lastName": "Bowen"
+    }
+   },
+   "weekRecord": {
+    "displayValue": "38-25",
+    "season": {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026?lang=en&region=us"
+    },
+    "stats": [
+     {
+      "abbreviation": "W",
+      "description": "Wins",
+      "displayName": "Wins",
+      "displayValue": "9",
+      "name": "win",
+      "shortDisplayName": "W",
+      "type": "win",
+      "value": 9.0
+     },
+     {
+      "abbreviation": "L",
+      "description": "Losses",
+      "displayName": "Losses",
+      "displayValue": "6",
+      "name": "loss",
+      "shortDisplayName": "L",
+      "type": "loss",
+      "value": 6.0
+     }
+    ]
+   }
+  },
+  {
+   "pick": {
+    "competition": {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401872964/competitions/401872964?lang=en&region=us"
+    },
+    "competitor": {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401872964/competitions/401872964/competitors/5?lang=en&region=us"
+    },
+    "correct": true,
+    "person": {
+     "displayName": "Seth Wickersham",
+     "firstName": "Seth",
+     "headshot": {
+      "alt": "Seth Wickersham",
+      "href": "https://a.espncdn.com/i/columnists/full/wickersham_seth.png"
+     },
+     "id": "17702",
+     "lastName": "Wickersham"
+    }
+   },
+   "weekRecord": {
+    "displayValue": "37-27",
+    "season": {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026?lang=en&region=us"
+    },
+    "stats": [
+     {
+      "abbreviation": "W",
+      "description": "Wins",
+      "displayName": "Wins",
+      "displayValue": "9",
+      "name": "win",
+      "shortDisplayName": "W",
+      "type": "win",
+      "value": 9.0
+     },
+     {
+      "abbreviation": "L",
+      "description": "Losses",
+      "displayName": "Losses",
+      "displayValue": "7",
+      "name": "loss",
+      "shortDisplayName": "L",
+      "type": "loss",
+      "value": 7.0
+     }
+    ]
+   }
+  },
+  {
+   "pick": {
+    "competition": {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401872965/competitions/401872965?lang=en&region=us"
+    },
+    "competitor": {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401872965/competitions/401872965/competitors/28?lang=en&region=us"
+    },
+    "correct": true,
+    "person": {
+     "displayName": "Seth Wickersham",
+     "firstName": "Seth",
+     "headshot": {
+      "alt": "Seth Wickersham",
+      "href": "https://a.espncdn.com/i/columnists/full/wickersham_seth.png"
+     },
+     "id": "17702",
+     "lastName": "Wickersham"
+    }
+   },
+   "weekRecord": {
+    "displayValue": "37-27",
+    "season": {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026?lang=en&region=us"
+    },
+    "stats": [
+     {
+      "abbreviation": "W",
+      "description": "Wins",
+      "displayName": "Wins",
+      "displayValue": "9",
+      "name": "win",
+      "shortDisplayName": "W",
+      "type": "win",
+      "value": 9.0
+     },
+     {
+      "abbreviation": "L",
+      "description": "Losses",
+      "displayName": "Losses",
+      "displayValue": "7",
+      "name": "loss",
+      "shortDisplayName": "L",
+      "type": "loss",
+      "value": 7.0
+     }
+    ]
+   }
+  },
+  {
+   "pick": {
+    "competition": {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401872966/competitions/401872966?lang=en&region=us"
+    },
+    "competitor": {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401872966/competitions/401872966/competitors/22?lang=en&region=us"
+    },
+    "correct": true,
+    "person": {
+     "displayName": "Seth Wickersham",
+     "firstName": "Seth",
+     "headshot": {
+      "alt": "Seth Wickersham",
+      "href": "https://a.espncdn.com/i/columnists/full/wickersham_seth.png"
+     },
+     "id": "17702",
+     "lastName": "Wickersham"
+    }
+   },
+   "weekRecord": {
+    "displayValue": "37-27",
+    "season": {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026?lang=en&region=us"
+    },
+    "stats": [
+     {
+      "abbreviation": "W",
+      "description": "Wins",
+      "displayName": "Wins",
+      "displayValue": "9",
+      "name": "win",
+      "shortDisplayName": "W",
+      "type": "win",
+      "value": 9.0
+     },
+     {
+      "abbreviation": "L",
+      "description": "Losses",
+      "displayName": "Losses",
+      "displayValue": "7",
+      "name": "loss",
+      "shortDisplayName": "L",
+      "type": "loss",
+      "value": 7.0
+     }
+    ]
+   }
+  },
+  {
+   "pick": {
+    "competition": {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401872967/competitions/401872967?lang=en&region=us"
+    },
+    "competitor": {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401872967/competitions/401872967/competitors/34?lang=en&region=us"
+    },
+    "correct": true,
+    "person": {
+     "displayName": "Seth Wickersham",
+     "firstName": "Seth",
+     "headshot": {
+      "alt": "Seth Wickersham",
+      "href": "https://a.espncdn.com/i/columnists/full/wickersham_seth.png"
+     },
+     "id": "17702",
+     "lastName": "Wickersham"
+    }
+   },
+   "weekRecord": {
+    "displayValue": "37-27",
+    "season": {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026?lang=en&region=us"
+    },
+    "stats": [
+     {
+      "abbreviation": "W",
+      "description": "Wins",
+      "displayName": "Wins",
+      "displayValue": "9",
+      "name": "win",
+      "shortDisplayName": "W",
+      "type": "win",
+      "value": 9.0
+     },
+     {
+      "abbreviation": "L",
+      "description": "Losses",
+      "displayName": "Losses",
+      "displayValue": "7",
+      "name": "loss",
+      "shortDisplayName": "L",
+      "type": "loss",
+      "value": 7.0
+     }
+    ]
+   }
+  },
+  {
+   "pick": {
+    "competition": {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401872968/competitions/401872968?lang=en&region=us"
+    },
+    "competitor": {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401872968/competitions/401872968/competitors/9?lang=en&region=us"
+    },
+    "correct": true,
+    "person": {
+     "displayName": "Seth Wickersham",
+     "firstName": "Seth",
+     "headshot": {
+      "alt": "Seth Wickersham",
+      "href": "https://a.espncdn.com/i/columnists/full/wickersham_seth.png"
+     },
+     "id": "17702",
+     "lastName": "Wickersham"
+    }
+   },
+   "weekRecord": {
+    "displayValue": "37-27",
+    "season": {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026?lang=en&region=us"
+    },
+    "stats": [
+     {
+      "abbreviation": "W",
+      "description": "Wins",
+      "displayName": "Wins",
+      "displayValue": "9",
+      "name": "win",
+      "shortDisplayName": "W",
+      "type": "win",
+      "value": 9.0
+     },
+     {
+      "abbreviation": "L",
+      "description": "Losses",
+      "displayName": "Losses",
+      "displayValue": "7",
+      "name": "loss",
+      "shortDisplayName": "L",
+      "type": "loss",
+      "value": 7.0
+     }
+    ]
+   }
+  },
+  {
+   "pick": {
+    "competition": {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401872969/competitions/401872969?lang=en&region=us"
+    },
+    "competitor": {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401872969/competitions/401872969/competitors/4?lang=en&region=us"
+    },
+    "correct": true,
+    "person": {
+     "displayName": "Seth Wickersham",
+     "firstName": "Seth",
+     "headshot": {
+      "alt": "Seth Wickersham",
+      "href": "https://a.espncdn.com/i/columnists/full/wickersham_seth.png"
+     },
+     "id": "17702",
+     "lastName": "Wickersham"
+    }
+   },
+   "weekRecord": {
+    "displayValue": "37-27",
+    "season": {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026?lang=en&region=us"
+    },
+    "stats": [
+     {
+      "abbreviation": "W",
+      "description": "Wins",
+      "displayName": "Wins",
+      "displayValue": "9",
+      "name": "win",
+      "shortDisplayName": "W",
+      "type": "win",
+      "value": 9.0
+     },
+     {
+      "abbreviation": "L",
+      "description": "Losses",
+      "displayName": "Losses",
+      "displayValue": "7",
+      "name": "loss",
+      "shortDisplayName": "L",
+      "type": "loss",
+      "value": 7.0
+     }
+    ]
+   }
+  },
+  {
+   "pick": {
+    "competition": {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401872970/competitions/401872970?lang=en&region=us"
+    },
+    "competitor": {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401872970/competitions/401872970/competitors/14?lang=en&region=us"
+    },
+    "correct": true,
+    "person": {
+     "displayName": "Seth Wickersham",
+     "firstName": "Seth",
+     "headshot": {
+      "alt": "Seth Wickersham",
+      "href": "https://a.espncdn.com/i/columnists/full/wickersham_seth.png"
+     },
+     "id": "17702",
+     "lastName": "Wickersham"
+    }
+   },
+   "weekRecord": {
+    "displayValue": "37-27",
+    "season": {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026?lang=en&region=us"
+    },
+    "stats": [
+     {
+      "abbreviation": "W",
+      "description": "Wins",
+      "displayName": "Wins",
+      "displayValue": "9",
+      "name": "win",
+      "shortDisplayName": "W",
+      "type": "win",
+      "value": 9.0
+     },
+     {
+      "abbreviation": "L",
+      "description": "Losses",
+      "displayName": "Losses",
+      "displayValue": "7",
+      "name": "loss",
+      "shortDisplayName": "L",
+      "type": "loss",
+      "value": 7.0
+     }
+    ]
+   }
+  },
+  {
+   "pick": {
+    "competition": {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401872971/competitions/401872971?lang=en&region=us"
+    },
+    "competitor": {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401872971/competitions/401872971/competitors/2?lang=en&region=us"
+    },
+    "correct": true,
+    "person": {
+     "displayName": "Seth Wickersham",
+     "firstName": "Seth",
+     "headshot": {
+      "alt": "Seth Wickersham",
+      "href": "https://a.espncdn.com/i/columnists/full/wickersham_seth.png"
+     },
+     "id": "17702",
+     "lastName": "Wickersham"
+    }
+   },
+   "weekRecord": {
+    "displayValue": "37-27",
+    "season": {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026?lang=en&region=us"
+    },
+    "stats": [
+     {
+      "abbreviation": "W",
+      "description": "Wins",
+      "displayName": "Wins",
+      "displayValue": "9",
+      "name": "win",
+      "shortDisplayName": "W",
+      "type": "win",
+      "value": 9.0
+     },
+     {
+      "abbreviation": "L",
+      "description": "Losses",
+      "displayName": "Losses",
+      "displayValue": "7",
+      "name": "loss",
+      "shortDisplayName": "L",
+      "type": "loss",
+      "value": 7.0
+     }
+    ]
+   }
+  },
+  {
+   "pick": {
+    "competition": {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401872972/competitions/401872972?lang=en&region=us"
+    },
+    "competitor": {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401872972/competitions/401872972/competitors/3?lang=en&region=us"
+    },
+    "correct": true,
+    "person": {
+     "displayName": "Seth Wickersham",
+     "firstName": "Seth",
+     "headshot": {
+      "alt": "Seth Wickersham",
+      "href": "https://a.espncdn.com/i/columnists/full/wickersham_seth.png"
+     },
+     "id": "17702",
+     "lastName": "Wickersham"
+    }
+   },
+   "weekRecord": {
+    "displayValue": "37-27",
+    "season": {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026?lang=en&region=us"
+    },
+    "stats": [
+     {
+      "abbreviation": "W",
+      "description": "Wins",
+      "displayName": "Wins",
+      "displayValue": "9",
+      "name": "win",
+      "shortDisplayName": "W",
+      "type": "win",
+      "value": 9.0
+     },
+     {
+      "abbreviation": "L",
+      "description": "Losses",
+      "displayName": "Losses",
+      "displayValue": "7",
+      "name": "loss",
+      "shortDisplayName": "L",
+      "type": "loss",
+      "value": 7.0
+     }
+    ]
+   }
+  },
+  {
+   "pick": {
+    "competition": {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401872973/competitions/401872973?lang=en&region=us"
+    },
+    "competitor": {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/401872973/competitions/401872973/competitors/33?lang=en&region=us"
+    },
+    "correct": true,
+    "person": {
+     "displayName": "Seth Wickersham",
+     "firstName": "Seth",
+     "headshot": {
+      "alt": "Seth Wickersham",
+      "href": "https://a.espncdn.com/i/columnists/full/wickersham_seth.png"
+     },
+     "id": "17702",
+     "lastName": "Wickersham"
+    }
+   },
+   "weekRecord": {
+    "displayValue": "37-27",
+    "season": {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026?lang=en&region=us"
+    },
+    "stats": [
+     {
+      "abbreviation": "W",
+      "description": "Wins",
+      "displayName": "Wins",
+      "displayValue": "9",
+      "name": "win",
+      "shortDisplayName": "W",
+      "type": "win",
+      "value": 9.0
+     },
+     {
+      "abbreviation": "L",
+      "description": "Losses",
+      "displayName": "Losses",
+      "displayValue": "7",
+      "name": "loss",
+      "shortDisplayName": "L",
+      "type": "loss",
+      "value": 7.0
+     }
+    ]
+   }
+  }
+ ],
+ "pageCount": 7,
+ "pageIndex": 1,
+ "pageSize": 25
+}

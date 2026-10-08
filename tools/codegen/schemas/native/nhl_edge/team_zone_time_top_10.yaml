@@ -1,0 +1,36 @@
+schema: team_zone_time_top_10
+kind: dataframe
+columns:
+- name: defensive_zone_time
+  type: double
+  description: ''
+- name: neutral_zone_time
+  type: double
+  description: ''
+- name: offensive_zone_time
+  type: double
+  description: ''
+- name: team_abbrev
+  type: character
+  description: ''
+- name: team_common_name_default
+  type: character
+  description: ''
+- name: team_place_name_with_preposition_default
+  type: character
+  description: ''
+- name: team_place_name_with_preposition_fr
+  type: character
+  description: ''
+- name: team_slug
+  type: character
+  description: ''
+- name: team_team_logo_dark
+  type: character
+  description: ''
+- name: team_team_logo_light
+  type: character
+  description: ''
+- name: team_common_name_fr
+  type: character
+  description: ''

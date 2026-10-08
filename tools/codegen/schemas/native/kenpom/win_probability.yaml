@@ -1,0 +1,5 @@
+columns: []
+kind: dataframe
+schema: win_probability
+unverified: 'parser: KenPom draws this page from an embedded script, and parse_kenpom_page reads HTML tables only, so the
+  captured page parses to no frames'

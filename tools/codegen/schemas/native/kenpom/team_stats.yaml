@@ -1,0 +1,74 @@
+schema: team_stats
+kind: frames
+frames:
+- section: ratings_table
+  columns:
+  - name: team
+    type: character
+    description: ''
+  - name: conf
+    type: character
+    description: ''
+  - name: 3_p_pct
+    type: character
+    description: ''
+  - name: 3_p_pct_rk
+    type: character
+    description: ''
+  - name: 2_p_pct
+    type: character
+    description: ''
+  - name: 2_p_pct_rk
+    type: character
+    description: ''
+  - name: ft_pct
+    type: character
+    description: ''
+  - name: ft_pct_rk
+    type: character
+    description: ''
+  - name: blk_pct
+    type: character
+    description: ''
+  - name: blk_pct_rk
+    type: character
+    description: ''
+  - name: stl_pct
+    type: character
+    description: ''
+  - name: stl_pct_rk
+    type: character
+    description: ''
+  - name: nst_pct
+    type: character
+    description: ''
+  - name: nst_pct_rk
+    type: character
+    description: ''
+  - name: 2_p_dist
+    type: character
+    description: ''
+  - name: 2_p_dist_rk
+    type: character
+    description: ''
+  - name: a_pct
+    type: character
+    description: ''
+  - name: a_pct_rk
+    type: character
+    description: ''
+  - name: 3_pa_pct
+    type: character
+    description: ''
+  - name: 3_pa_pct_rk
+    type: character
+    description: ''
+  - name: adj_oe
+    type: character
+    description: ''
+  - name: adj_oe_rk
+    type: character
+    description: ''
+  - name: ncaa_seed
+    type: integer
+    description: ''

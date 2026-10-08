@@ -1,0 +1,71 @@
+schema: efficiency
+kind: frames
+frames:
+- section: ratings_table
+  columns:
+  - name: team
+    type: character
+    description: ''
+  - name: conf
+    type: character
+    description: ''
+  - name: off_rating_adjusted
+    type: double
+    description: ''
+  - name: off_rating_adjusted_rk
+    type: double
+    description: ''
+  - name: off_rating_adjusted_rk_rk
+    type: integer
+    description: ''
+  - name: off_rating_raw
+    type: double
+    description: ''
+  - name: off_rating_raw_rk
+    type: integer
+    description: ''
+  - name: def_rating_adjusted
+    type: double
+    description: ''
+  - name: def_rating_adjusted_rk
+    type: double
+    description: ''
+  - name: def_rating_adjusted_rk_rk
+    type: integer
+    description: ''
+  - name: def_rating_raw
+    type: double
+    description: ''
+  - name: def_rating_raw_rk
+    type: integer
+    description: ''
+  - name: tempo_adjusted
+    type: double
+    description: ''
+  - name: tempo_adjusted_rk
+    type: double
+    description: ''
+  - name: tempo_raw
+    type: integer
+    description: ''
+  - name: tempo_raw_rk
+    type: double
+    description: ''
+  - name: tempo_off
+    type: integer
+    description: ''
+  - name: avg_poss_length_off
+    type: double
+    description: ''
+  - name: avg_poss_length_def
+    type: integer
+    description: ''
+  - name: avg_poss_length_def_rk
+    type: double
+    description: ''
+  - name: avg_poss_length_def_rk_rk
+    type: integer
+    description: ''
+  - name: ncaa_seed
+    type: integer
+    description: ''

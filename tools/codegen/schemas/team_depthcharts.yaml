@@ -1,0 +1,5 @@
+columns: []
+kind: dataframe
+schema: team_depthcharts
+unverified: 'parser: parse_items returns no columns on the live payload (nba, nfl, mlb, nhl, wnba, cfb, mbb, wbb, 2026-10-07);
+  its rows sit under keys it does not read (top level: depthchart, season, status, team, timestamp)'

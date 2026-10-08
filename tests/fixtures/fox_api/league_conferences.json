@@ -1,0 +1,707 @@
+{
+ "groups": [
+  {
+   "items": [
+    {
+     "alternateLogoUrl": "https://b.fssta.com/uploads/application/college/conference-logos/AtlanticCoast-alternate.vresize.80.80.medium.0.png",
+     "entityLink": {
+      "analyticsName": "acc",
+      "analyticsSport": "college-football",
+      "color": "1, 0, 61, 166",
+      "contentType": "league",
+      "contentUri": "football/cfb/groups/9",
+      "imageAltText": "Atlantic Coast",
+      "imageType": "image-logo",
+      "imageUrl": "https://b.fssta.com/uploads/application/college/conference-logos/AtlanticCoast-alternate.vresize.200.200.medium.0.png",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=cfbLayout&elementId=subleague",
+       "tokens": {
+        "contentUri": "football/cfb/groups/9",
+        "id": "9"
+       }
+      },
+      "title": "ATLANTIC COAST FOOTBALL",
+      "type": "entity",
+      "webUrl": "/college-football/acc"
+     },
+     "imageAltText": "Atlantic Coast",
+     "imageType": "image-logo",
+     "logoUrl": "https://b.fssta.com/uploads/application/college/conference-logos/AtlanticCoast.vresize.80.80.medium.0.png",
+     "template": "default",
+     "title": "Atlantic Coast"
+    },
+    {
+     "alternateLogoUrl": "https://b.fssta.com/uploads/application/college/conference-logos/Big12.vresize.80.80.medium.1.png",
+     "entityLink": {
+      "analyticsName": "big-12",
+      "analyticsSport": "college-football",
+      "color": "1, 0, 0, 0",
+      "contentType": "league",
+      "contentUri": "football/cfb/groups/12",
+      "imageAltText": "Big 12",
+      "imageType": "image-logo",
+      "imageUrl": "https://b.fssta.com/uploads/application/college/conference-logos/Big12.vresize.200.200.medium.1.png",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=cfbLayout&elementId=subleague",
+       "tokens": {
+        "contentUri": "football/cfb/groups/12",
+        "id": "12"
+       }
+      },
+      "title": "BIG 12 FOOTBALL",
+      "type": "entity",
+      "webUrl": "/college-football/big-12"
+     },
+     "imageAltText": "Big 12",
+     "imageType": "image-logo",
+     "logoUrl": "https://b.fssta.com/uploads/application/college/conference-logos/Big12.vresize.80.80.medium.1.png",
+     "template": "default",
+     "title": "Big 12"
+    },
+    {
+     "alternateLogoUrl": "https://b.fssta.com/uploads/application/college/conference-logos/BigTen-alternate.vresize.80.80.medium.0.png",
+     "entityLink": {
+      "analyticsName": "big-ten",
+      "analyticsSport": "college-football",
+      "color": "1, 0, 151, 215",
+      "contentType": "league",
+      "contentUri": "football/cfb/groups/11",
+      "imageAltText": "Big Ten",
+      "imageType": "image-logo",
+      "imageUrl": "https://b.fssta.com/uploads/application/college/conference-logos/BigTen-alternate.vresize.200.200.medium.0.png",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=cfbLayout&elementId=subleague",
+       "tokens": {
+        "contentUri": "football/cfb/groups/11",
+        "id": "11"
+       }
+      },
+      "title": "BIG TEN FOOTBALL",
+      "type": "entity",
+      "webUrl": "/college-football/big-ten"
+     },
+     "imageAltText": "Big Ten",
+     "imageType": "image-logo",
+     "logoUrl": "https://b.fssta.com/uploads/application/college/conference-logos/BigTen.vresize.80.80.medium.0.png",
+     "template": "default",
+     "title": "Big Ten"
+    },
+    {
+     "alternateLogoUrl": "https://b.fssta.com/uploads/application/college/conference-logos/Southeastern.vresize.80.80.medium.0.png",
+     "entityLink": {
+      "analyticsName": "sec",
+      "analyticsSport": "college-football",
+      "color": "1, 0, 45, 116",
+      "contentType": "league",
+      "contentUri": "football/cfb/groups/19",
+      "imageAltText": "SEC",
+      "imageType": "image-logo",
+      "imageUrl": "https://b.fssta.com/uploads/application/college/conference-logos/Southeastern.vresize.200.200.medium.0.png",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=cfbLayout&elementId=subleague",
+       "tokens": {
+        "contentUri": "football/cfb/groups/19",
+        "id": "19"
+       }
+      },
+      "title": "SEC FOOTBALL",
+      "type": "entity",
+      "webUrl": "/college-football/sec"
+     },
+     "imageAltText": "SEC",
+     "imageType": "image-logo",
+     "logoUrl": "https://b.fssta.com/uploads/application/college/conference-logos/Southeastern.vresize.80.80.medium.0.png",
+     "template": "default",
+     "title": "SEC"
+    },
+    {
+     "alternateLogoUrl": "https://b.fssta.com/uploads/application/college/conference-logos/AmericanAthletic.vresize.80.80.medium.0.png",
+     "entityLink": {
+      "analyticsName": "aac",
+      "analyticsSport": "college-football",
+      "color": "1, 4, 30, 66",
+      "contentType": "league",
+      "contentUri": "football/cfb/groups/197",
+      "imageAltText": "American",
+      "imageType": "image-logo",
+      "imageUrl": "https://b.fssta.com/uploads/application/college/conference-logos/AmericanAthletic.vresize.200.200.medium.0.png",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=cfbLayout&elementId=subleague",
+       "tokens": {
+        "contentUri": "football/cfb/groups/197",
+        "id": "197"
+       }
+      },
+      "title": "AMERICAN FOOTBALL",
+      "type": "entity",
+      "webUrl": "/college-football/aac"
+     },
+     "imageAltText": "American",
+     "imageType": "image-logo",
+     "logoUrl": "https://b.fssta.com/uploads/application/college/conference-logos/AmericanAthletic.vresize.80.80.medium.0.png",
+     "template": "default",
+     "title": "American"
+    },
+    {
+     "alternateLogoUrl": "https://b.fssta.com/uploads/application/college/conference-logos/BigSky.vresize.80.80.medium.0.png",
+     "entityLink": {
+      "analyticsName": "big-sky",
+      "analyticsSport": "college-football",
+      "color": "1, 0, 93, 170",
+      "contentType": "league",
+      "contentUri": "football/cfb/groups/22",
+      "imageAltText": "Big Sky",
+      "imageType": "image-logo",
+      "imageUrl": "https://b.fssta.com/uploads/application/college/conference-logos/BigSky.vresize.200.200.medium.0.png",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=cfbLayout&elementId=subleague",
+       "tokens": {
+        "contentUri": "football/cfb/groups/22",
+        "id": "22"
+       }
+      },
+      "title": "BIG SKY FOOTBALL",
+      "type": "entity",
+      "webUrl": "/college-football/big-sky"
+     },
+     "imageAltText": "Big Sky",
+     "imageType": "image-logo",
+     "logoUrl": "https://b.fssta.com/uploads/application/college/conference-logos/BigSky.vresize.80.80.medium.0.png",
+     "template": "default",
+     "title": "Big Sky"
+    },
+    {
+     "alternateLogoUrl": "https://b.fssta.com/uploads/application/college/conference-logos/ColonialAthletic-alternate.vresize.80.80.medium.0.png",
+     "entityLink": {
+      "analyticsName": "caa",
+      "analyticsSport": "college-football",
+      "color": "1, 0, 62, 126",
+      "contentType": "league",
+      "contentUri": "football/cfb/groups/136",
+      "imageAltText": "Coastal Athletic Association",
+      "imageType": "image-logo",
+      "imageUrl": "https://b.fssta.com/uploads/application/college/conference-logos/ColonialAthletic-alternate.vresize.200.200.medium.0.png",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=cfbLayout&elementId=subleague",
+       "tokens": {
+        "contentUri": "football/cfb/groups/136",
+        "id": "136"
+       }
+      },
+      "title": "COASTAL ATHLETIC ASSOCIATION FOOTBALL",
+      "type": "entity",
+      "webUrl": "/college-football/caa"
+     },
+     "imageAltText": "Coastal Athletic Association",
+     "imageType": "image-logo",
+     "logoUrl": "https://b.fssta.com/uploads/application/college/conference-logos/ColonialAthletic.vresize.80.80.medium.0.png",
+     "template": "default",
+     "title": "Coastal Athletic Association"
+    },
+    {
+     "alternateLogoUrl": "https://b.fssta.com/uploads/application/college/conference-logos/ConferenceUSA.vresize.80.80.medium.1.png",
+     "entityLink": {
+      "analyticsName": "conference-usa",
+      "analyticsSport": "college-football",
+      "color": "1, 0, 55, 100",
+      "contentType": "league",
+      "contentUri": "football/cfb/groups/14",
+      "imageAltText": "Conference USA",
+      "imageType": "image-logo",
+      "imageUrl": "https://b.fssta.com/uploads/application/college/conference-logos/ConferenceUSA.vresize.200.200.medium.1.png",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=cfbLayout&elementId=subleague",
+       "tokens": {
+        "contentUri": "football/cfb/groups/14",
+        "id": "14"
+       }
+      },
+      "title": "CONFERENCE USA FOOTBALL",
+      "type": "entity",
+      "webUrl": "/college-football/conference-usa"
+     },
+     "imageAltText": "Conference USA",
+     "imageType": "image-logo",
+     "logoUrl": "https://b.fssta.com/uploads/application/college/conference-logos/ConferenceUSA.vresize.80.80.medium.1.png",
+     "template": "default",
+     "title": "Conference USA"
+    },
+    {
+     "alternateLogoUrl": "https://b.fssta.com/uploads/application/college/conference-logos/Independents(FBS).vresize.80.80.medium.0.png",
+     "entityLink": {
+      "analyticsName": "fbs-independents",
+      "analyticsSport": "college-football",
+      "color": "1, 87, 220, 224",
+      "contentType": "league",
+      "contentUri": "football/cfb/groups/15",
+      "imageAltText": "Independents (FBS)",
+      "imageType": "image-logo",
+      "imageUrl": "https://b.fssta.com/uploads/application/college/conference-logos/Independents(FBS).vresize.200.200.medium.0.png",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=cfbLayout&elementId=subleague",
+       "tokens": {
+        "contentUri": "football/cfb/groups/15",
+        "id": "15"
+       }
+      },
+      "title": "INDEPENDENTS (FBS) FOOTBALL",
+      "type": "entity",
+      "webUrl": "/college-football/fbs-independents"
+     },
+     "imageAltText": "Independents (FBS)",
+     "imageType": "image-logo",
+     "logoUrl": "https://b.fssta.com/uploads/application/college/conference-logos/Independents(FBS).vresize.80.80.medium.0.png",
+     "template": "default",
+     "title": "Independents (FBS)"
+    },
+    {
+     "alternateLogoUrl": "https://b.fssta.com/uploads/application/college/conference-logos/Independents(FCS).vresize.80.80.medium.0.png",
+     "entityLink": {
+      "analyticsName": "fcs-independents",
+      "analyticsSport": "college-football",
+      "color": "1, 185, 178, 151",
+      "contentType": "league",
+      "contentUri": "football/cfb/groups/24",
+      "imageAltText": "Independents (FCS)",
+      "imageType": "image-logo",
+      "imageUrl": "https://b.fssta.com/uploads/application/college/conference-logos/Independents(FCS).vresize.200.200.medium.0.png",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=cfbLayout&elementId=subleague",
+       "tokens": {
+        "contentUri": "football/cfb/groups/24",
+        "id": "24"
+       }
+      },
+      "title": "INDEPENDENTS (FCS) FOOTBALL",
+      "type": "entity",
+      "webUrl": "/college-football/fcs-independents"
+     },
+     "imageAltText": "Independents (FCS)",
+     "imageType": "image-logo",
+     "logoUrl": "https://b.fssta.com/uploads/application/college/conference-logos/Independents(FCS).vresize.80.80.medium.0.png",
+     "template": "default",
+     "title": "Independents (FCS)"
+    },
+    {
+     "alternateLogoUrl": "https://b.fssta.com/uploads/application/college/conference-logos/IvyLeague-alternate.vresize.80.80.medium.2.png",
+     "entityLink": {
+      "analyticsName": "ivy-league",
+      "analyticsSport": "college-football",
+      "color": "1, 2, 105, 55",
+      "contentType": "league",
+      "contentUri": "football/cfb/groups/25",
+      "imageAltText": "Ivy League",
+      "imageType": "image-logo",
+      "imageUrl": "https://b.fssta.com/uploads/application/college/conference-logos/IvyLeague-alternate.vresize.200.200.medium.2.png",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=cfbLayout&elementId=subleague",
+       "tokens": {
+        "contentUri": "football/cfb/groups/25",
+        "id": "25"
+       }
+      },
+      "title": "IVY LEAGUE FOOTBALL",
+      "type": "entity",
+      "webUrl": "/college-football/ivy-league"
+     },
+     "imageAltText": "Ivy League",
+     "imageType": "image-logo",
+     "logoUrl": "https://b.fssta.com/uploads/application/college/conference-logos/IvyLeague.vresize.80.80.medium.2.png",
+     "template": "default",
+     "title": "Ivy League"
+    },
+    {
+     "alternateLogoUrl": "https://b.fssta.com/uploads/application/college/conference-logos/Mid-American.vresize.80.80.medium.0.png",
+     "entityLink": {
+      "analyticsName": "mac",
+      "analyticsSport": "college-football",
+      "color": "1, 0, 43, 92",
+      "contentType": "league",
+      "contentUri": "football/cfb/groups/16",
+      "imageAltText": "Mid-American",
+      "imageType": "image-logo",
+      "imageUrl": "https://b.fssta.com/uploads/application/college/conference-logos/Mid-American.vresize.200.200.medium.0.png",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=cfbLayout&elementId=subleague",
+       "tokens": {
+        "contentUri": "football/cfb/groups/16",
+        "id": "16"
+       }
+      },
+      "title": "MID-AMERICAN FOOTBALL",
+      "type": "entity",
+      "webUrl": "/college-football/mac"
+     },
+     "imageAltText": "Mid-American",
+     "imageType": "image-logo",
+     "logoUrl": "https://b.fssta.com/uploads/application/college/conference-logos/Mid-American.vresize.80.80.medium.0.png",
+     "template": "default",
+     "title": "Mid-American"
+    },
+    {
+     "alternateLogoUrl": "https://b.fssta.com/uploads/application/college/conference-logos/Mid-Eastern.vresize.80.80.medium.0.png",
+     "entityLink": {
+      "analyticsName": "mid-eastern",
+      "analyticsSport": "college-football",
+      "color": "1, 52, 42, 122",
+      "contentType": "league",
+      "contentUri": "football/cfb/groups/27",
+      "imageAltText": "Mid-Eastern Athletic",
+      "imageType": "image-logo",
+      "imageUrl": "https://b.fssta.com/uploads/application/college/conference-logos/Mid-Eastern.vresize.200.200.medium.0.png",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=cfbLayout&elementId=subleague",
+       "tokens": {
+        "contentUri": "football/cfb/groups/27",
+        "id": "27"
+       }
+      },
+      "title": "MID-EASTERN ATHLETIC FOOTBALL",
+      "type": "entity",
+      "webUrl": "/college-football/mid-eastern"
+     },
+     "imageAltText": "Mid-Eastern Athletic",
+     "imageType": "image-logo",
+     "logoUrl": "https://b.fssta.com/uploads/application/college/conference-logos/Mid-Eastern.vresize.80.80.medium.0.png",
+     "template": "default",
+     "title": "Mid-Eastern Athletic"
+    },
+    {
+     "alternateLogoUrl": "https://b.fssta.com/uploads/application/college/conference-logos/MissouriValley-alternate.vresize.80.80.medium.0.png",
+     "entityLink": {
+      "analyticsName": "missouri-valley",
+      "analyticsSport": "college-football",
+      "color": "1, 0, 71, 132",
+      "contentType": "league",
+      "contentUri": "football/cfb/groups/23",
+      "imageAltText": "Missouri Valley",
+      "imageType": "image-logo",
+      "imageUrl": "https://b.fssta.com/uploads/application/college/conference-logos/MissouriValley-alternate.vresize.200.200.medium.0.png",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=cfbLayout&elementId=subleague",
+       "tokens": {
+        "contentUri": "football/cfb/groups/23",
+        "id": "23"
+       }
+      },
+      "title": "MISSOURI VALLEY FOOTBALL",
+      "type": "entity",
+      "webUrl": "/college-football/missouri-valley"
+     },
+     "imageAltText": "Missouri Valley",
+     "imageType": "image-logo",
+     "logoUrl": "https://b.fssta.com/uploads/application/college/conference-logos/MissouriValley.vresize.80.80.medium.0.png",
+     "template": "default",
+     "title": "Missouri Valley"
+    },
+    {
+     "alternateLogoUrl": "https://b.fssta.com/uploads/application/college/conference-logos/MountainWest.vresize.80.80.medium.1.png",
+     "entityLink": {
+      "analyticsName": "mountain-west",
+      "analyticsSport": "college-football",
+      "color": "1, 79, 45, 127",
+      "contentType": "league",
+      "contentUri": "football/cfb/groups/17",
+      "imageAltText": "Mountain West",
+      "imageType": "image-logo",
+      "imageUrl": "https://b.fssta.com/uploads/application/college/conference-logos/MountainWest.vresize.200.200.medium.1.png",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=cfbLayout&elementId=subleague",
+       "tokens": {
+        "contentUri": "football/cfb/groups/17",
+        "id": "17"
+       }
+      },
+      "title": "MOUNTAIN WEST FOOTBALL",
+      "type": "entity",
+      "webUrl": "/college-football/mountain-west"
+     },
+     "imageAltText": "Mountain West",
+     "imageType": "image-logo",
+     "logoUrl": "https://b.fssta.com/uploads/application/college/conference-logos/MountainWest.vresize.80.80.medium.1.png",
+     "template": "default",
+     "title": "Mountain West"
+    },
+    {
+     "alternateLogoUrl": "https://b.fssta.com/uploads/application/college/conference-logos/Northeast.vresize.80.80.medium.0.png",
+     "entityLink": {
+      "analyticsName": "northeast",
+      "analyticsSport": "college-football",
+      "color": "1, 0, 107, 163",
+      "contentType": "league",
+      "contentUri": "football/cfb/groups/28",
+      "imageAltText": "Northeast",
+      "imageType": "image-logo",
+      "imageUrl": "https://b.fssta.com/uploads/application/college/conference-logos/Northeast.vresize.200.200.medium.0.png",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=cfbLayout&elementId=subleague",
+       "tokens": {
+        "contentUri": "football/cfb/groups/28",
+        "id": "28"
+       }
+      },
+      "title": "NORTHEAST FOOTBALL",
+      "type": "entity",
+      "webUrl": "/college-football/northeast"
+     },
+     "imageAltText": "Northeast",
+     "imageType": "image-logo",
+     "logoUrl": "https://b.fssta.com/uploads/application/college/conference-logos/Northeast.vresize.80.80.medium.0.png",
+     "template": "default",
+     "title": "Northeast"
+    },
+    {
+     "alternateLogoUrl": "https://b.fssta.com/uploads/application/college/conference-logos/OhioValley.vresize.80.80.medium.0.png",
+     "entityLink": {
+      "analyticsName": "ohio-valley",
+      "analyticsSport": "college-football",
+      "color": "1, 161, 0, 40",
+      "contentType": "league",
+      "contentUri": "football/cfb/groups/29",
+      "imageAltText": "Ohio Valley",
+      "imageType": "image-logo",
+      "imageUrl": "https://b.fssta.com/uploads/application/college/conference-logos/OhioValley.vresize.200.200.medium.0.png",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=cfbLayout&elementId=subleague",
+       "tokens": {
+        "contentUri": "football/cfb/groups/29",
+        "id": "29"
+       }
+      },
+      "title": "OHIO VALLEY FOOTBALL",
+      "type": "entity",
+      "webUrl": "/college-football/ohio-valley"
+     },
+     "imageAltText": "Ohio Valley",
+     "imageType": "image-logo",
+     "logoUrl": "https://b.fssta.com/uploads/application/college/conference-logos/OhioValley.vresize.80.80.medium.0.png",
+     "template": "default",
+     "title": "Ohio Valley"
+    },
+    {
+     "alternateLogoUrl": "https://b.fssta.com/uploads/application/college/conference-logos/Pac-12.vresize.80.80.medium.0.png",
+     "entityLink": {
+      "analyticsName": "pac-12",
+      "analyticsSport": "college-football",
+      "color": "1, 0, 75, 145",
+      "contentType": "league",
+      "contentUri": "football/cfb/groups/18",
+      "imageAltText": "Pac-12",
+      "imageType": "image-logo",
+      "imageUrl": "https://b.fssta.com/uploads/application/college/conference-logos/Pac-12.vresize.200.200.medium.0.png",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=cfbLayout&elementId=subleague",
+       "tokens": {
+        "contentUri": "football/cfb/groups/18",
+        "id": "18"
+       }
+      },
+      "title": "PAC-12 FOOTBALL",
+      "type": "entity",
+      "webUrl": "/college-football/pac-12"
+     },
+     "imageAltText": "Pac-12",
+     "imageType": "image-logo",
+     "logoUrl": "https://b.fssta.com/uploads/application/college/conference-logos/Pac-12.vresize.80.80.medium.0.png",
+     "template": "default",
+     "title": "Pac-12"
+    },
+    {
+     "alternateLogoUrl": "https://b.fssta.com/uploads/application/college/conference-logos/PatriotLeague-alternate.vresize.80.80.medium.0.png",
+     "entityLink": {
+      "analyticsName": "patriot",
+      "analyticsSport": "college-football",
+      "color": "1, 0, 57, 118",
+      "contentType": "league",
+      "contentUri": "football/cfb/groups/30",
+      "imageAltText": "Patriot League",
+      "imageType": "image-logo",
+      "imageUrl": "https://b.fssta.com/uploads/application/college/conference-logos/PatriotLeague-alternate.vresize.200.200.medium.0.png",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=cfbLayout&elementId=subleague",
+       "tokens": {
+        "contentUri": "football/cfb/groups/30",
+        "id": "30"
+       }
+      },
+      "title": "PATRIOT LEAGUE FOOTBALL",
+      "type": "entity",
+      "webUrl": "/college-football/patriot"
+     },
+     "imageAltText": "Patriot League",
+     "imageType": "image-logo",
+     "logoUrl": "https://b.fssta.com/uploads/application/college/conference-logos/PatriotLeague.vresize.80.80.medium.0.png",
+     "template": "default",
+     "title": "Patriot League"
+    },
+    {
+     "alternateLogoUrl": "https://b.fssta.com/uploads/application/college/conference-logos/PioneerLeague.vresize.80.80.medium.0.png",
+     "entityLink": {
+      "analyticsName": "pioneer",
+      "analyticsSport": "college-football",
+      "color": "1, 20, 45, 93",
+      "contentType": "league",
+      "contentUri": "football/cfb/groups/31",
+      "imageAltText": "Pioneer League",
+      "imageType": "image-logo",
+      "imageUrl": "https://b.fssta.com/uploads/application/college/conference-logos/PioneerLeague.vresize.200.200.medium.0.png",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=cfbLayout&elementId=subleague",
+       "tokens": {
+        "contentUri": "football/cfb/groups/31",
+        "id": "31"
+       }
+      },
+      "title": "PIONEER LEAGUE FOOTBALL",
+      "type": "entity",
+      "webUrl": "/college-football/pioneer"
+     },
+     "imageAltText": "Pioneer League",
+     "imageType": "image-logo",
+     "logoUrl": "https://b.fssta.com/uploads/application/college/conference-logos/PioneerLeague.vresize.80.80.medium.0.png",
+     "template": "default",
+     "title": "Pioneer League"
+    },
+    {
+     "alternateLogoUrl": "https://b.fssta.com/uploads/application/college/conference-logos/Southern.vresize.80.80.medium.2.png",
+     "entityLink": {
+      "analyticsName": "southern",
+      "analyticsSport": "college-football",
+      "color": "1, 0, 83, 159",
+      "contentType": "league",
+      "contentUri": "football/cfb/groups/32",
+      "imageAltText": "Southern",
+      "imageType": "image-logo",
+      "imageUrl": "https://b.fssta.com/uploads/application/college/conference-logos/Southern.vresize.200.200.medium.2.png",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=cfbLayout&elementId=subleague",
+       "tokens": {
+        "contentUri": "football/cfb/groups/32",
+        "id": "32"
+       }
+      },
+      "title": "SOUTHERN FOOTBALL",
+      "type": "entity",
+      "webUrl": "/college-football/southern"
+     },
+     "imageAltText": "Southern",
+     "imageType": "image-logo",
+     "logoUrl": "https://b.fssta.com/uploads/application/college/conference-logos/Southern.vresize.80.80.medium.2.png",
+     "template": "default",
+     "title": "Southern"
+    },
+    {
+     "alternateLogoUrl": "https://b.fssta.com/uploads/application/college/conference-logos/Southland-alternate.vresize.80.80.medium.1.png",
+     "entityLink": {
+      "analyticsName": "southland",
+      "analyticsSport": "college-football",
+      "color": "1, 0, 0, 0",
+      "contentType": "league",
+      "contentUri": "football/cfb/groups/33",
+      "imageAltText": "Southland",
+      "imageType": "image-logo",
+      "imageUrl": "https://b.fssta.com/uploads/application/college/conference-logos/Southland-alternate.vresize.200.200.medium.1.png",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=cfbLayout&elementId=subleague",
+       "tokens": {
+        "contentUri": "football/cfb/groups/33",
+        "id": "33"
+       }
+      },
+      "title": "SOUTHLAND FOOTBALL",
+      "type": "entity",
+      "webUrl": "/college-football/southland"
+     },
+     "imageAltText": "Southland",
+     "imageType": "image-logo",
+     "logoUrl": "https://b.fssta.com/uploads/application/college/conference-logos/Southland.vresize.80.80.medium.1.png",
+     "template": "default",
+     "title": "Southland"
+    },
+    {
+     "alternateLogoUrl": "https://b.fssta.com/uploads/application/college/conference-logos/SouthwesternAthletic.vresize.80.80.medium.1.png",
+     "entityLink": {
+      "analyticsName": "swac",
+      "analyticsSport": "college-football",
+      "color": "1, 237, 28, 46",
+      "contentType": "league",
+      "contentUri": "football/cfb/groups/34",
+      "imageAltText": "Southwestern Athletic",
+      "imageType": "image-logo",
+      "imageUrl": "https://b.fssta.com/uploads/application/college/conference-logos/SouthwesternAthletic.vresize.200.200.medium.1.png",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=cfbLayout&elementId=subleague",
+       "tokens": {
+        "contentUri": "football/cfb/groups/34",
+        "id": "34"
+       }
+      },
+      "title": "SOUTHWESTERN ATHLETIC FOOTBALL",
+      "type": "entity",
+      "webUrl": "/college-football/swac"
+     },
+     "imageAltText": "Southwestern Athletic",
+     "imageType": "image-logo",
+     "logoUrl": "https://b.fssta.com/uploads/application/college/conference-logos/SouthwesternAthletic.vresize.80.80.medium.1.png",
+     "template": "default",
+     "title": "Southwestern Athletic"
+    },
+    {
+     "alternateLogoUrl": "https://b.fssta.com/uploads/application/college/conference-logos/SunBelt-alternate.vresize.80.80.medium.1.png",
+     "entityLink": {
+      "analyticsName": "sun-belt",
+      "analyticsSport": "college-football",
+      "color": "1, 10, 34, 64",
+      "contentType": "league",
+      "contentUri": "football/cfb/groups/105",
+      "imageAltText": "Sun Belt",
+      "imageType": "image-logo",
+      "imageUrl": "https://b.fssta.com/uploads/application/college/conference-logos/SunBelt-alternate.vresize.200.200.medium.1.png",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=cfbLayout&elementId=subleague",
+       "tokens": {
+        "contentUri": "football/cfb/groups/105",
+        "id": "105"
+       }
+      },
+      "title": "SUN BELT FOOTBALL",
+      "type": "entity",
+      "webUrl": "/college-football/sun-belt"
+     },
+     "imageAltText": "Sun Belt",
+     "imageType": "image-logo",
+     "logoUrl": "https://b.fssta.com/uploads/application/college/conference-logos/SunBelt.vresize.80.80.medium.1.png",
+     "template": "default",
+     "title": "Sun Belt"
+    },
+    {
+     "alternateLogoUrl": "https://b.fssta.com/uploads/application/college/conference-logos/UnitedAthletic.vresize.80.80.medium.1.png",
+     "entityLink": {
+      "analyticsName": "united-athletic",
+      "analyticsSport": "college-football",
+      "contentType": "league",
+      "contentUri": "football/cfb/groups/1412",
+      "imageAltText": "United Athletic",
+      "imageType": "image-logo",
+      "imageUrl": "https://b.fssta.com/uploads/application/college/conference-logos/UnitedAthletic.vresize.200.200.medium.1.png",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=cfbLayout&elementId=subleague",
+       "tokens": {
+        "contentUri": "football/cfb/groups/1412",
+        "id": "1412"
+       }
+      },
+      "title": "UNITED ATHLETIC FOOTBALL",
+      "type": "entity",
+      "webUrl": "/college-football/united-athletic"
+     },
+     "imageAltText": "United Athletic",
+     "imageType": "image-logo",
+     "logoUrl": "https://b.fssta.com/uploads/application/college/conference-logos/UnitedAthletic.vresize.80.80.medium.1.png",
+     "template": "default",
+     "title": "United Athletic"
+    }
+   ]
+  }
+ ]
+}

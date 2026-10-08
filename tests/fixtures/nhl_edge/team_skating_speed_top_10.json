@@ -1,0 +1,545 @@
+[
+ {
+  "bursts18To20": 1840,
+  "bursts20To22": 257,
+  "burstsOver22": 11,
+  "maxSkatingSpeed": {
+   "imperial": 24.561,
+   "metric": 39.527,
+   "overlay": {
+    "awayTeam": {
+     "abbrev": "VAN",
+     "score": 3
+    },
+    "gameDate": "2025-03-22",
+    "gameOutcome": {
+     "lastPeriodType": "REG"
+    },
+    "gameType": 2,
+    "homeTeam": {
+     "abbrev": "NYR",
+     "score": 5
+    },
+    "periodDescriptor": {
+     "maxRegulationPeriods": 3,
+     "number": 3,
+     "periodType": "REG"
+    },
+    "player": {
+     "firstName": {
+      "default": "Quinn"
+     },
+     "lastName": {
+      "default": "Hughes"
+     }
+    },
+    "timeInPeriod": "07:53"
+   }
+  },
+  "team": {
+   "abbrev": "VAN",
+   "commonName": {
+    "default": "Canucks"
+   },
+   "id": 23,
+   "placeNameWithPreposition": {
+    "default": "Vancouver",
+    "fr": "de Vancouver"
+   },
+   "slug": "vancouver-canucks-23",
+   "teamLogo": {
+    "dark": "https://assets.nhle.com/logos/nhl/svg/VAN_dark.svg",
+    "light": "https://assets.nhle.com/logos/nhl/svg/VAN_light.svg"
+   }
+  }
+ },
+ {
+  "bursts18To20": 1713,
+  "bursts20To22": 294,
+  "burstsOver22": 12,
+  "maxSkatingSpeed": {
+   "imperial": 24.189,
+   "metric": 38.929,
+   "overlay": {
+    "awayTeam": {
+     "abbrev": "DAL",
+     "score": 4
+    },
+    "gameDate": "2024-11-25",
+    "gameOutcome": {
+     "lastPeriodType": "REG"
+    },
+    "gameType": 2,
+    "homeTeam": {
+     "abbrev": "CAR",
+     "score": 6
+    },
+    "periodDescriptor": {
+     "maxRegulationPeriods": 3,
+     "number": 2,
+     "periodType": "REG"
+    },
+    "player": {
+     "firstName": {
+      "default": "Jaccob"
+     },
+     "lastName": {
+      "default": "Slavin"
+     }
+    },
+    "timeInPeriod": "13:07"
+   }
+  },
+  "team": {
+   "abbrev": "CAR",
+   "commonName": {
+    "default": "Hurricanes"
+   },
+   "id": 12,
+   "placeNameWithPreposition": {
+    "default": "Carolina",
+    "fr": "de la Caroline"
+   },
+   "slug": "carolina-hurricanes-12",
+   "teamLogo": {
+    "dark": "https://assets.nhle.com/logos/nhl/svg/CAR_dark.svg",
+    "light": "https://assets.nhle.com/logos/nhl/svg/CAR_light.svg"
+   }
+  }
+ },
+ {
+  "bursts18To20": 1740,
+  "bursts20To22": 349,
+  "burstsOver22": 18,
+  "maxSkatingSpeed": {
+   "imperial": 23.771,
+   "metric": 38.256,
+   "overlay": {
+    "awayTeam": {
+     "abbrev": "CAR",
+     "score": 0
+    },
+    "gameDate": "2025-02-25",
+    "gameOutcome": {
+     "lastPeriodType": "REG"
+    },
+    "gameType": 2,
+    "homeTeam": {
+     "abbrev": "MTL",
+     "score": 4
+    },
+    "periodDescriptor": {
+     "maxRegulationPeriods": 3,
+     "number": 2,
+     "periodType": "REG"
+    },
+    "player": {
+     "firstName": {
+      "default": "Lane"
+     },
+     "lastName": {
+      "default": "Hutson"
+     }
+    },
+    "timeInPeriod": "04:54"
+   }
+  },
+  "team": {
+   "abbrev": "MTL",
+   "commonName": {
+    "default": "Canadiens"
+   },
+   "id": 8,
+   "placeNameWithPreposition": {
+    "default": "Montréal",
+    "fr": "de Montréal"
+   },
+   "slug": "montreal-canadiens-8",
+   "teamLogo": {
+    "dark": "https://assets.nhle.com/logos/nhl/svg/MTL_dark.svg",
+    "light": "https://assets.nhle.com/logos/nhl/svg/MTL_light.svg"
+   }
+  }
+ },
+ {
+  "bursts18To20": 1696,
+  "bursts20To22": 250,
+  "burstsOver22": 9,
+  "maxSkatingSpeed": {
+   "imperial": 23.673,
+   "metric": 38.098,
+   "overlay": {
+    "awayTeam": {
+     "abbrev": "TOR",
+     "score": 0
+    },
+    "gameDate": "2024-10-09",
+    "gameOutcome": {
+     "lastPeriodType": "REG"
+    },
+    "gameType": 2,
+    "homeTeam": {
+     "abbrev": "MTL",
+     "score": 1
+    },
+    "periodDescriptor": {
+     "maxRegulationPeriods": 3,
+     "number": 1,
+     "periodType": "REG"
+    },
+    "player": {
+     "firstName": {
+      "default": "Jake"
+     },
+     "lastName": {
+      "default": "McCabe"
+     }
+    },
+    "timeInPeriod": "12:56"
+   }
+  },
+  "team": {
+   "abbrev": "TOR",
+   "commonName": {
+    "default": "Maple Leafs"
+   },
+   "id": 10,
+   "placeNameWithPreposition": {
+    "default": "Toronto",
+    "fr": "de Toronto"
+   },
+   "slug": "toronto-maple-leafs-10",
+   "teamLogo": {
+    "dark": "https://assets.nhle.com/logos/nhl/svg/TOR_dark.svg",
+    "light": "https://assets.nhle.com/logos/nhl/svg/TOR_light.svg"
+   }
+  }
+ },
+ {
+  "bursts18To20": 1918,
+  "bursts20To22": 293,
+  "burstsOver22": 15,
+  "maxSkatingSpeed": {
+   "imperial": 23.671,
+   "metric": 38.095,
+   "overlay": {
+    "awayTeam": {
+     "abbrev": "TBL",
+     "score": 3
+    },
+    "gameDate": "2024-11-19",
+    "gameOutcome": {
+     "lastPeriodType": "OT",
+     "otPeriods": 1
+    },
+    "gameType": 2,
+    "homeTeam": {
+     "abbrev": "PIT",
+     "score": 2
+    },
+    "periodDescriptor": {
+     "maxRegulationPeriods": 3,
+     "number": 1,
+     "periodType": "REG"
+    },
+    "player": {
+     "firstName": {
+      "default": "Erik"
+     },
+     "lastName": {
+      "default": "Karlsson"
+     }
+    },
+    "timeInPeriod": "17:48"
+   }
+  },
+  "team": {
+   "abbrev": "PIT",
+   "commonName": {
+    "default": "Penguins"
+   },
+   "id": 5,
+   "placeNameWithPreposition": {
+    "default": "Pittsburgh",
+    "fr": "de Pittsburgh"
+   },
+   "slug": "pittsburgh-penguins-5",
+   "teamLogo": {
+    "dark": "https://assets.nhle.com/logos/nhl/svg/PIT_dark.svg",
+    "light": "https://assets.nhle.com/logos/nhl/svg/PIT_light.svg"
+   }
+  }
+ },
+ {
+  "bursts18To20": 2121,
+  "bursts20To22": 474,
+  "burstsOver22": 39,
+  "maxSkatingSpeed": {
+   "imperial": 23.626,
+   "metric": 38.022,
+   "overlay": {
+    "awayTeam": {
+     "abbrev": "NYR",
+     "score": 2
+    },
+    "gameDate": "2025-01-14",
+    "gameOutcome": {
+     "lastPeriodType": "OT",
+     "otPeriods": 1
+    },
+    "gameType": 2,
+    "homeTeam": {
+     "abbrev": "COL",
+     "score": 3
+    },
+    "periodDescriptor": {
+     "maxRegulationPeriods": 3,
+     "number": 4,
+     "periodType": "OT"
+    },
+    "player": {
+     "firstName": {
+      "default": "Cale"
+     },
+     "lastName": {
+      "default": "Makar"
+     }
+    },
+    "timeInPeriod": "02:50"
+   }
+  },
+  "team": {
+   "abbrev": "COL",
+   "commonName": {
+    "default": "Avalanche"
+   },
+   "id": 21,
+   "placeNameWithPreposition": {
+    "default": "Colorado",
+    "fr": "du Colorado"
+   },
+   "slug": "colorado-avalanche-21",
+   "teamLogo": {
+    "dark": "https://assets.nhle.com/logos/nhl/svg/COL_dark.svg",
+    "light": "https://assets.nhle.com/logos/nhl/svg/COL_light.svg"
+   }
+  }
+ },
+ {
+  "bursts18To20": 1691,
+  "bursts20To22": 224,
+  "burstsOver22": 20,
+  "maxSkatingSpeed": {
+   "imperial": 23.583,
+   "metric": 37.953,
+   "overlay": {
+    "awayTeam": {
+     "abbrev": "SEA",
+     "score": 2
+    },
+    "gameDate": "2024-12-06",
+    "gameOutcome": {
+     "lastPeriodType": "REG"
+    },
+    "gameType": 2,
+    "homeTeam": {
+     "abbrev": "NJD",
+     "score": 3
+    },
+    "periodDescriptor": {
+     "maxRegulationPeriods": 3,
+     "number": 2,
+     "periodType": "REG"
+    },
+    "player": {
+     "firstName": {
+      "default": "Luke"
+     },
+     "lastName": {
+      "default": "Hughes"
+     }
+    },
+    "timeInPeriod": "08:59"
+   }
+  },
+  "team": {
+   "abbrev": "NJD",
+   "commonName": {
+    "default": "Devils"
+   },
+   "id": 1,
+   "placeNameWithPreposition": {
+    "default": "New Jersey",
+    "fr": "du New Jersey"
+   },
+   "slug": "new-jersey-devils-1",
+   "teamLogo": {
+    "dark": "https://assets.nhle.com/logos/nhl/svg/NJD_dark.svg",
+    "light": "https://assets.nhle.com/logos/nhl/svg/NJD_light.svg"
+   }
+  }
+ },
+ {
+  "bursts18To20": 2194,
+  "bursts20To22": 359,
+  "burstsOver22": 9,
+  "maxSkatingSpeed": {
+   "imperial": 23.583,
+   "metric": 37.953,
+   "overlay": {
+    "awayTeam": {
+     "abbrev": "NSH",
+     "score": 4
+    },
+    "gameDate": "2025-04-10",
+    "gameOutcome": {
+     "lastPeriodType": "SO"
+    },
+    "gameType": 2,
+    "homeTeam": {
+     "abbrev": "UTA",
+     "score": 3
+    },
+    "periodDescriptor": {
+     "maxRegulationPeriods": 3,
+     "number": 4,
+     "periodType": "OT"
+    },
+    "player": {
+     "firstName": {
+      "default": "Justin"
+     },
+     "lastName": {
+      "default": "Barron"
+     }
+    },
+    "timeInPeriod": "00:42"
+   }
+  },
+  "team": {
+   "abbrev": "NSH",
+   "commonName": {
+    "default": "Predators"
+   },
+   "id": 18,
+   "placeNameWithPreposition": {
+    "default": "Nashville",
+    "fr": "de Nashville"
+   },
+   "slug": "nashville-predators-18",
+   "teamLogo": {
+    "dark": "https://assets.nhle.com/logos/nhl/svg/NSH_dark.svg",
+    "light": "https://assets.nhle.com/logos/nhl/svg/NSH_light.svg"
+   }
+  }
+ },
+ {
+  "bursts18To20": 1974,
+  "bursts20To22": 360,
+  "burstsOver22": 27,
+  "maxSkatingSpeed": {
+   "imperial": 23.53,
+   "metric": 37.868,
+   "overlay": {
+    "awayTeam": {
+     "abbrev": "MIN",
+     "score": 0
+    },
+    "gameDate": "2025-02-01",
+    "gameOutcome": {
+     "lastPeriodType": "REG"
+    },
+    "gameType": 2,
+    "homeTeam": {
+     "abbrev": "OTT",
+     "score": 6
+    },
+    "periodDescriptor": {
+     "maxRegulationPeriods": 3,
+     "number": 2,
+     "periodType": "REG"
+    },
+    "player": {
+     "firstName": {
+      "default": "Jake"
+     },
+     "lastName": {
+      "default": "Sanderson"
+     }
+    },
+    "timeInPeriod": "15:03"
+   }
+  },
+  "team": {
+   "abbrev": "OTT",
+   "commonName": {
+    "default": "Senators",
+    "fr": "Sénateurs"
+   },
+   "id": 9,
+   "placeNameWithPreposition": {
+    "default": "Ottawa",
+    "fr": "d'Ottawa"
+   },
+   "slug": "ottawa-senators-9",
+   "teamLogo": {
+    "dark": "https://assets.nhle.com/logos/nhl/svg/OTT_dark.svg",
+    "light": "https://assets.nhle.com/logos/nhl/svg/OTT_light.svg"
+   }
+  }
+ },
+ {
+  "bursts18To20": 1871,
+  "bursts20To22": 365,
+  "burstsOver22": 5,
+  "maxSkatingSpeed": {
+   "imperial": 23.515,
+   "metric": 37.844,
+   "overlay": {
+    "awayTeam": {
+     "abbrev": "SEA",
+     "score": 3
+    },
+    "gameDate": "2024-11-05",
+    "gameOutcome": {
+     "lastPeriodType": "REG"
+    },
+    "gameType": 2,
+    "homeTeam": {
+     "abbrev": "COL",
+     "score": 6
+    },
+    "periodDescriptor": {
+     "maxRegulationPeriods": 3,
+     "number": 3,
+     "periodType": "REG"
+    },
+    "player": {
+     "firstName": {
+      "default": "Brandon"
+     },
+     "lastName": {
+      "default": "Montour"
+     }
+    },
+    "timeInPeriod": "11:07"
+   }
+  },
+  "team": {
+   "abbrev": "SEA",
+   "commonName": {
+    "default": "Kraken"
+   },
+   "id": 55,
+   "placeNameWithPreposition": {
+    "default": "Seattle",
+    "fr": "de Seattle"
+   },
+   "slug": "seattle-kraken-55",
+   "teamLogo": {
+    "dark": "https://assets.nhle.com/logos/nhl/svg/SEA_dark.svg",
+    "light": "https://assets.nhle.com/logos/nhl/svg/SEA_light.svg"
+   }
+  }
+ }
+]

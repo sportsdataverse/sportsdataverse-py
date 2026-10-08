@@ -1,0 +1,24 @@
+schema: scoreboard
+kind: dataframe
+columns:
+- name: id
+  type: character
+  description: ''
+- name: parameters_season_type
+  type: character
+  description: ''
+- name: parameters_week
+  type: character
+  description: ''
+- name: subtitle
+  type: character
+  description: ''
+- name: title
+  type: character
+  description: ''
+- name: uri
+  type: character
+  description: ''
+- name: web_url
+  type: character
+  description: ''

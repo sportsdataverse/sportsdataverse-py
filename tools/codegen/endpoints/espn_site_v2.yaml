@@ -44,6 +44,7 @@ endpoints:
 # (verified nfl/cfb/nhl) -- removed so we don't ship endpoints that always raise
 # NoESPNDataError. Per-season week detail is available via the scoreboard/schedule.
 - short: calendar
+  returns_schema: calendar
   scope: universal
   path: /{sport}/{league}/calendar
   parser: parse_items
@@ -81,10 +82,12 @@ endpoints:
   path: /{sport}/{league}/groups
   parser: parse_groups
 - short: statistics_league
+  returns_schema: statistics_league
   scope: universal
   path: /{sport}/{league}/statistics
   parser: parse_items
 - short: draft
+  returns_schema: draft
   scope: universal
   path: /{sport}/{league}/draft
   parser: parse_items
@@ -144,6 +147,7 @@ endpoints:
   example_args:
     team_id: '4'
 - short: team_record
+  returns_schema: team_record
   scope: universal
   path: /{sport}/{league}/teams/{team_id}/record
   path_params:
@@ -154,6 +158,7 @@ endpoints:
   example_args:
     team_id: '4'
 - short: team_depthcharts
+  returns_schema: team_depthcharts
   scope: universal
   path: /{sport}/{league}/teams/{team_id}/depthcharts
   path_params:
@@ -175,6 +180,7 @@ endpoints:
   example_args:
     team_id: '4'
 - short: team_transactions
+  returns_schema: team_transactions
   scope: universal
   path: /{sport}/{league}/teams/{team_id}/transactions
   path_params:
@@ -185,6 +191,7 @@ endpoints:
   example_args:
     team_id: '4'
 - short: team_history
+  returns_schema: team_history
   scope: universal
   path: /{sport}/{league}/teams/{team_id}/history
   path_params:
@@ -211,6 +218,7 @@ endpoints:
   example_args:
     team_id: '4'
 - short: team_leaders
+  returns_schema: team_leaders
   scope: universal
   path: /{sport}/{league}/teams/{team_id}/leaders
   path_params:
@@ -221,6 +229,7 @@ endpoints:
   example_args:
     team_id: '4'
 - short: athlete_info
+  returns_schema: athlete_info
   scope: universal
   path: /{sport}/{league}/athletes/{athlete_id}
   path_params:
@@ -231,6 +240,7 @@ endpoints:
   example_args:
     athlete_id: '4239'
 - short: athlete_bio
+  returns_schema: athlete_bio
   scope: universal
   path: /{sport}/{league}/athletes/{athlete_id}/bio
   path_params:
@@ -268,6 +278,7 @@ endpoints:
   parser: parse_standings
   returns_schema: standings
 - short: rankings
+  returns_schema: rankings
   scope: ncaa
   path: /{sport}/{league}/rankings
   parser: parse_items

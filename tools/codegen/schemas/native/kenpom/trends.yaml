@@ -1,0 +1,62 @@
+schema: trends
+kind: frames
+frames:
+- section: ratings_table
+  columns:
+  - name: season
+    type: integer
+    description: ''
+  - name: efficiency
+    type: double
+    description: ''
+  - name: tempo
+    type: double
+    description: ''
+  - name: e_fg_pct
+    type: double
+    description: ''
+  - name: to_pct
+    type: double
+    description: ''
+  - name: or_pct
+    type: double
+    description: ''
+  - name: ft_rate
+    type: double
+    description: ''
+  - name: 2_p_pct
+    type: double
+    description: ''
+  - name: 3_p_pct
+    type: double
+    description: ''
+  - name: 3_pa_pct
+    type: double
+    description: ''
+  - name: ft_pct
+    type: double
+    description: ''
+  - name: a_pct
+    type: double
+    description: ''
+  - name: blk_pct
+    type: double
+    description: ''
+  - name: stl_pct
+    type: double
+    description: ''
+  - name: nst_pct
+    type: double
+    description: ''
+  - name: avg_ht
+    type: double
+    description: ''
+  - name: cont
+    type: double
+    description: ''
+  - name: home_win_pct
+    type: double
+    description: ''
+  - name: ppg
+    type: double
+    description: ''

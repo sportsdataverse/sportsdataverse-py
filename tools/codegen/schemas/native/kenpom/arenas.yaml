@@ -1,0 +1,23 @@
+schema: arenas
+kind: frames
+frames:
+- section: ratings_table
+  columns:
+  - name: column_0
+    type: integer
+    description: ''
+  - name: team
+    type: character
+    description: ''
+  - name: conf
+    type: character
+    description: ''
+  - name: arena
+    type: character
+    description: ''
+  - name: alternate
+    type: double
+    description: ''
+  - name: ncaa_seed
+    type: integer
+    description: ''

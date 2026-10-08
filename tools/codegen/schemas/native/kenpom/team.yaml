@@ -1,0 +1,182 @@
+schema: team
+kind: frames
+frames:
+- section: report_table
+  columns:
+  - name: category
+    type: character
+    description: ''
+  - name: offense
+    type: character
+    description: ''
+  - name: defense
+    type: character
+    description: ''
+  - name: d_i_avg
+    type: double
+    description: ''
+- section: schedule_table
+  columns:
+  - name: '0'
+    type: character
+    description: ''
+  - name: '1'
+    type: integer
+    description: ''
+  - name: '2'
+    type: integer
+    description: ''
+  - name: '3'
+    type: character
+    description: ''
+  - name: '4'
+    type: character
+    description: ''
+  - name: '5'
+    type: integer
+    description: ''
+  - name: '6'
+    type: character
+    description: ''
+  - name: '7'
+    type: character
+    description: ''
+  - name: '8'
+    type: character
+    description: ''
+  - name: '9'
+    type: character
+    description: ''
+  - name: '10'
+    type: character
+    description: ''
+- section: player_table
+  columns:
+  - name: column_0
+    type: double
+    description: ''
+  - name: column_0_rk
+    type: character
+    description: ''
+  - name: ht
+    type: character
+    description: ''
+  - name: wt
+    type: double
+    description: ''
+  - name: yr
+    type: character
+    description: ''
+  - name: g
+    type: double
+    description: ''
+  - name: s
+    type: double
+    description: ''
+  - name: pct_min
+    type: double
+    description: ''
+  - name: o_rtg
+    type: double
+    description: ''
+  - name: pct_poss
+    type: double
+    description: ''
+  - name: pct_shots
+    type: double
+    description: ''
+  - name: e_fg_pct
+    type: double
+    description: ''
+  - name: ts_pct
+    type: double
+    description: ''
+  - name: or_pct
+    type: double
+    description: ''
+  - name: dr_pct
+    type: double
+    description: ''
+  - name: a_rate
+    type: double
+    description: ''
+  - name: to_rate
+    type: double
+    description: ''
+  - name: blk_pct
+    type: double
+    description: ''
+  - name: stl_pct
+    type: double
+    description: ''
+  - name: fc_40
+    type: double
+    description: ''
+  - name: fd_40
+    type: double
+    description: ''
+  - name: ft_rate
+    type: double
+    description: ''
+  - name: ftm_a
+    type: character
+    description: ''
+  - name: pct
+    type: double
+    description: ''
+  - name: 2_pm_a
+    type: character
+    description: ''
+  - name: pct_1
+    type: double
+    description: ''
+  - name: 3_pm_a
+    type: character
+    description: ''
+  - name: pct_2
+    type: double
+    description: ''
+- section: depth_chart
+  columns:
+  - name: player_id
+    type: integer
+    description: ''
+  - name: pct_pg
+    type: double
+    description: ''
+  - name: pct_sg
+    type: double
+    description: ''
+  - name: pct_sf
+    type: double
+    description: ''
+  - name: pct_pf
+    type: double
+    description: ''
+  - name: pct_c
+    type: double
+    description: ''
+  - name: name
+    type: character
+    description: ''
+  - name: pct_poss
+    type: double
+    description: ''
+  - name: fta
+    type: integer
+    description: ''
+  - name: fg2_a
+    type: integer
+    description: ''
+  - name: fg3_a
+    type: integer
+    description: ''
+  - name: height
+    type: character
+    description: ''
+  - name: weight
+    type: integer
+    description: ''
+  - name: year
+    type: character
+    description: ''

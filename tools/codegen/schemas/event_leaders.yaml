@@ -1,0 +1,4 @@
+columns: []
+kind: dataframe
+schema: event_leaders
+unverified: 'no capture: 404 in nfl, mlb, nhl, wnba, cfb, mbb, wbb; 400 in nba with the documented example arguments (2026-10-07)'

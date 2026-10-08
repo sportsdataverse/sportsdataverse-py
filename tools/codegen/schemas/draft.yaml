@@ -1,0 +1,5 @@
+columns: []
+kind: dataframe
+schema: draft
+unverified: 'parser: parse_items returns no columns on the live payload (nba, nfl, nhl, wnba, 2026-10-07); its rows sit under
+  keys it does not read (top level: breakingNews, broadcasts, displayName, picks, positions, rounds, shortDisplayName, status)'

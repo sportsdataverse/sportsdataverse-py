@@ -1,0 +1,219 @@
+schema: team_players_expanded
+kind: frames
+frames:
+- section: player_table
+  columns:
+  - name: column_0
+    type: double
+    description: ''
+  - name: column_0_rk
+    type: character
+    description: ''
+  - name: ht
+    type: character
+    description: ''
+  - name: wt
+    type: double
+    description: ''
+  - name: yr
+    type: character
+    description: ''
+  - name: g
+    type: double
+    description: ''
+  - name: pct_min
+    type: double
+    description: ''
+  - name: o_rtg
+    type: character
+    description: ''
+  - name: pct_poss
+    type: character
+    description: ''
+  - name: pct_shots
+    type: character
+    description: ''
+  - name: e_fg_pct
+    type: character
+    description: ''
+  - name: ts_pct
+    type: character
+    description: ''
+  - name: or_pct
+    type: double
+    description: ''
+  - name: dr_pct
+    type: character
+    description: ''
+  - name: a_rate
+    type: character
+    description: ''
+  - name: to_rate
+    type: double
+    description: ''
+  - name: blk_pct
+    type: character
+    description: ''
+  - name: stl_pct
+    type: character
+    description: ''
+  - name: fc_40
+    type: double
+    description: ''
+  - name: fd_40
+    type: character
+    description: ''
+  - name: ft_rate
+    type: character
+    description: ''
+  - name: ftm_a
+    type: character
+    description: ''
+  - name: pct
+    type: character
+    description: ''
+  - name: 2_pm_a
+    type: character
+    description: ''
+  - name: pct_1
+    type: double
+    description: ''
+  - name: 3_pm_a
+    type: character
+    description: ''
+  - name: pct_2
+    type: character
+    description: ''
+- section: player_table_2
+  columns:
+  - name: column_0
+    type: double
+    description: ''
+  - name: column_0_rk
+    type: character
+    description: ''
+  - name: ht
+    type: character
+    description: ''
+  - name: wt
+    type: double
+    description: ''
+  - name: yr
+    type: character
+    description: ''
+  - name: g
+    type: double
+    description: ''
+  - name: pct_min
+    type: character
+    description: ''
+  - name: o_rtg
+    type: character
+    description: ''
+  - name: pct_poss
+    type: character
+    description: ''
+  - name: pct_shots
+    type: character
+    description: ''
+  - name: e_fg_pct
+    type: character
+    description: ''
+  - name: ts_pct
+    type: character
+    description: ''
+  - name: or_pct
+    type: double
+    description: ''
+  - name: dr_pct
+    type: character
+    description: ''
+  - name: a_rate
+    type: character
+    description: ''
+  - name: to_rate
+    type: double
+    description: ''
+  - name: blk_pct
+    type: character
+    description: ''
+  - name: stl_pct
+    type: character
+    description: ''
+  - name: fc_40
+    type: double
+    description: ''
+  - name: fd_40
+    type: character
+    description: ''
+  - name: ft_rate
+    type: character
+    description: ''
+  - name: ftm_a
+    type: character
+    description: ''
+  - name: pct
+    type: character
+    description: ''
+  - name: 2_pm_a
+    type: character
+    description: ''
+  - name: pct_1
+    type: character
+    description: ''
+  - name: 3_pm_a
+    type: character
+    description: ''
+  - name: pct_2
+    type: character
+    description: ''
+- section: minutes_table
+  columns:
+  - name: column_0
+    type: character
+    description: ''
+  - name: column_0_rk
+    type: integer
+    description: ''
+  - name: column_0_rk_rk
+    type: character
+    description: ''
+  - name: column_0_rk_rk_rk
+    type: character
+    description: ''
+  - name: caleb_foster
+    type: integer
+    description: ''
+  - name: darren_harris
+    type: double
+    description: ''
+  - name: isaiah_evans
+    type: double
+    description: ''
+  - name: mason_gillis
+    type: integer
+    description: ''
+  - name: sion_james
+    type: integer
+    description: ''
+  - name: tyrese_proctor
+    type: integer
+    description: ''
+  - name: kon_knueppel
+    type: integer
+    description: ''
+  - name: cooper_flagg
+    type: integer
+    description: ''
+  - name: maliq_brown
+    type: integer
+    description: ''
+  - name: patrick_ngongba
+    type: double
+    description: ''
+  - name: khaman_maluach
+    type: integer
+    description: ''
+  - name: starting_lineup_number
+    type: integer
+    description: ''

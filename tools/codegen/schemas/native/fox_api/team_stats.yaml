@@ -1,0 +1,39 @@
+schema: team_stats
+kind: dataframe
+columns:
+- name: condensed_uri
+  type: character
+  description: ''
+- name: image_alt_text
+  type: character
+  description: ''
+- name: image_type
+  type: character
+  description: ''
+- name: image_url
+  type: character
+  description: ''
+- name: name
+  type: character
+  description: ''
+- name: selection_id
+  type: character
+  description: ''
+- name: short_name
+  type: character
+  description: ''
+- name: stat_abbreviation
+  type: character
+  description: ''
+- name: stat_value
+  type: character
+  description: ''
+- name: template
+  type: character
+  description: ''
+- name: title
+  type: character
+  description: ''
+- name: web_url
+  type: character
+  description: ''

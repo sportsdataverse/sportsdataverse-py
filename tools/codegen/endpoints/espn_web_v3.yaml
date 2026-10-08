@@ -14,6 +14,7 @@ endpoints:
   example_args:
     athlete_id: '4239'
 - short: athlete_stats
+  returns_schema: athlete_stats
   scope: universal
   path: /{sport}/{league}/athletes/{athlete_id}/stats
   path_params:

@@ -22,6 +22,7 @@ from __future__ import annotations
 import argparse
 import functools
 import importlib
+import inspect
 import json
 import sys
 import time
@@ -124,7 +125,9 @@ def _call(api: str, short: str, league: str):
         ).module
         mod = importlib.import_module(f"sportsdataverse.{generate._LEAGUE_MODULE.get(prefix, prefix)}.{fa_module}")
     fn = getattr(mod, view.fn_name)
-    return fn(**dict(view.example_args), return_parsed=False)
+    # A wrapper with no parser returns the raw payload already and takes no return_parsed.
+    raw = {"return_parsed": False} if "return_parsed" in inspect.signature(fn).parameters else {}
+    return fn(**dict(view.example_args), **raw)
 
 
 def _register_native(api: str, short: str, fname: str) -> None:

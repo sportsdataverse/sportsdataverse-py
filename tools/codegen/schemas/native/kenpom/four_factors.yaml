@@ -1,0 +1,80 @@
+schema: four_factors
+kind: frames
+frames:
+- section: ratings_table
+  columns:
+  - name: team
+    type: character
+    description: ''
+  - name: conf
+    type: character
+    description: ''
+  - name: adj_tempo
+    type: double
+    description: ''
+  - name: adj_tempo_rk
+    type: integer
+    description: ''
+  - name: offense_adj_oe
+    type: double
+    description: ''
+  - name: offense_adj_oe_rk
+    type: integer
+    description: ''
+  - name: offense_e_fg_pct
+    type: double
+    description: ''
+  - name: offense_e_fg_pct_rk
+    type: integer
+    description: ''
+  - name: offense_to_pct
+    type: double
+    description: ''
+  - name: offense_to_pct_rk
+    type: integer
+    description: ''
+  - name: offense_or_pct
+    type: double
+    description: ''
+  - name: offense_or_pct_rk
+    type: integer
+    description: ''
+  - name: offense_ft_rate
+    type: double
+    description: ''
+  - name: offense_ft_rate_rk
+    type: integer
+    description: ''
+  - name: defense_adj_de
+    type: double
+    description: ''
+  - name: defense_adj_de_rk
+    type: integer
+    description: ''
+  - name: defense_e_fg_pct
+    type: double
+    description: ''
+  - name: defense_e_fg_pct_rk
+    type: integer
+    description: ''
+  - name: defense_to_pct
+    type: double
+    description: ''
+  - name: defense_to_pct_rk
+    type: integer
+    description: ''
+  - name: defense_or_pct
+    type: double
+    description: ''
+  - name: defense_or_pct_rk
+    type: integer
+    description: ''
+  - name: defense_ft_rate
+    type: double
+    description: ''
+  - name: defense_ft_rate_rk
+    type: integer
+    description: ''
+  - name: ncaa_seed
+    type: integer
+    description: ''

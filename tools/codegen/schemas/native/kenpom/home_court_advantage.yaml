@@ -1,0 +1,50 @@
+schema: home_court_advantage
+kind: frames
+frames:
+- section: ratings_table
+  columns:
+  - name: team
+    type: character
+    description: ''
+  - name: conf
+    type: character
+    description: ''
+  - name: hca
+    type: character
+    description: ''
+  - name: hca_rk
+    type: character
+    description: ''
+  - name: model_inputs_based_on_last_60_home_and_road_conf_games_values_are_per_game_differences_between_home_and_road_margin_pf
+    type: character
+    description: ''
+  - name: model_inputs_based_on_last_60_home_and_road_conf_games_values_are_per_game_differences_between_home_and_road_margin_pf_rk
+    type: character
+    description: ''
+  - name: model_inputs_based_on_last_60_home_and_road_conf_games_values_are_per_game_differences_between_home_and_road_margin_pts
+    type: character
+    description: ''
+  - name: model_inputs_based_on_last_60_home_and_road_conf_games_values_are_per_game_differences_between_home_and_road_margin_pts_rk
+    type: character
+    description: ''
+  - name: model_inputs_based_on_last_60_home_and_road_conf_games_values_are_per_game_differences_between_home_and_road_margin_nst
+    type: character
+    description: ''
+  - name: model_inputs_based_on_last_60_home_and_road_conf_games_values_are_per_game_differences_between_home_and_road_margin_nst_rk
+    type: character
+    description: ''
+  - name: model_inputs_based_on_last_60_home_and_road_conf_games_values_are_per_game_differences_between_home_and_road_margin_blk
+    type: character
+    description: ''
+  - name: model_inputs_based_on_last_60_home_and_road_conf_games_values_are_per_game_differences_between_home_and_road_margin_blk_rk
+    type: character
+    description: ''
+  - name: model_inputs_based_on_last_60_home_and_road_conf_games_values_are_per_game_differences_between_home_and_road_margin_elev
+    type: character
+    description: ''
+  - name: model_inputs_based_on_last_60_home_and_road_conf_games_values_are_per_game_differences_between_home_and_road_margin_elev_rk
+    type: character
+    description: ''
+  - name: ncaa_seed
+    type: integer
+    description: ''

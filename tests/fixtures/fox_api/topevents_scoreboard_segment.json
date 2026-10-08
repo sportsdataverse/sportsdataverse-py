@@ -1,0 +1,1027 @@
+{
+ "id": "1",
+ "quickNav": [
+  {
+   "date": "2026-10-06T04:00:00Z",
+   "id": "0",
+   "uri": "https://api.foxsports.com/bifrost/v1/topevents/scoreboard/segment/0"
+  },
+  {
+   "date": "2026-10-07T04:00:00Z",
+   "id": "1",
+   "selected": true,
+   "uri": "https://api.foxsports.com/bifrost/v1/topevents/scoreboard/segment/1"
+  }
+ ],
+ "sectionList": [
+  {
+   "hideLeague": false,
+   "id": "favorites",
+   "template": "favorite",
+   "title": "MY TEAMS"
+  },
+  {
+   "events": [
+    {
+     "altSortKey": "131202610072300200043536",
+     "contentType": "event",
+     "contentUri": "football/cfb/events/43536",
+     "entityLink": {
+      "analyticsSport": "college-football",
+      "contentType": "event",
+      "contentUri": "football/cfb/events/43536",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=cfbEventLayout",
+       "tokens": {
+        "awayUri": "football/cfb/teams/219",
+        "eventUri": "football/cfb/events/43536",
+        "homeUri": "football/cfb/teams/776",
+        "id": "43536"
+       }
+      },
+      "type": "entity",
+      "webUrl": "/college-football/jacksonville-state-gamecocks-vs-kennesaw-state-owls-oct-07-2026-game-boxscore-43536"
+     },
+     "eventStatus": 1,
+     "eventTime": "2026-10-07T23:00:00Z",
+     "favoriteEntities": [
+      "football/cfb/teams/776",
+      "football/cfb/teams/219"
+     ],
+     "hasStreamPromo": true,
+     "id": "cfb43536",
+     "importance": 0,
+     "isTba": false,
+     "league": "CFB",
+     "liveStartTime": "2026-10-07T22:50:00Z",
+     "lowerTeam": {
+      "alternateLogoUrl": "https://b.fssta.com/uploads/application/college/team-logos/KennesawState.vresize.80.80.medium.0.png",
+      "hasPossession": true,
+      "imageAltText": "Kennesaw State Owls",
+      "imageType": "image-logo",
+      "isInRedzone": true,
+      "isLoser": false,
+      "logoUrl": "https://b.fssta.com/uploads/application/college/team-logos/KennesawState.vresize.80.80.medium.0.png",
+      "longName": "Kennesaw State",
+      "name": "KENN",
+      "record": "1-3",
+      "score": 0,
+      "stackedNameBottom": "Owls",
+      "stackedNameTop": "Kennesaw State",
+      "uri": "football/cfb/teams/776"
+     },
+     "sortKey": "1120261007230039900043536",
+     "statusLine": "1ST 8:02",
+     "template": "scores-team",
+     "tvStation": "CBSS",
+     "upperTeam": {
+      "alternateLogoUrl": "https://b.fssta.com/uploads/application/college/team-logos/JacksonvilleState.vresize.80.80.medium.3.png",
+      "hasPossession": false,
+      "imageAltText": "Jacksonville State Gamecocks",
+      "imageType": "image-logo",
+      "isLoser": false,
+      "logoUrl": "https://b.fssta.com/uploads/application/college/team-logos/JacksonvilleState.vresize.80.80.medium.3.png",
+      "longName": "Jacksonville St",
+      "name": "JVST",
+      "record": "3-2",
+      "score": 0,
+      "stackedNameBottom": "Gamecocks",
+      "stackedNameTop": "Jacksonville State",
+      "uri": "football/cfb/teams/219"
+     },
+     "uri": "https://api.foxsports.com/bifrost/v1/cfb/scorechip/cfb43536"
+    },
+    {
+     "altSortKey": "132202610072330200043537",
+     "contentType": "event",
+     "contentUri": "football/cfb/events/43537",
+     "entityLink": {
+      "analyticsSport": "college-football",
+      "contentType": "event",
+      "contentUri": "football/cfb/events/43537",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=cfbEventLayout",
+       "tokens": {
+        "awayUri": "football/cfb/teams/44",
+        "eventUri": "football/cfb/events/43537",
+        "homeUri": "football/cfb/teams/447",
+        "id": "43537"
+       }
+      },
+      "type": "entity",
+      "webUrl": "/college-football/new-mexico-state-aggies-vs-florida-international-panthers-oct-07-2026-game-boxscore-43537"
+     },
+     "eventHeadline": "In Conference USA contest, FIU welcomes New Mexico State",
+     "eventStatus": 2,
+     "eventTime": "2026-10-07T23:30:00Z",
+     "favoriteEntities": [
+      "football/cfb/teams/447",
+      "football/cfb/teams/44"
+     ],
+     "hasStreamPromo": true,
+     "id": "cfb43537",
+     "importance": 0,
+     "isTba": false,
+     "league": "CFB",
+     "liveStartTime": "2026-10-07T23:20:00Z",
+     "lowerTeam": {
+      "alternateLogoUrl": "https://b.fssta.com/uploads/application/college/team-logos/FloridaInternational.vresize.80.80.medium.1.png",
+      "hasPossession": false,
+      "imageAltText": "Florida International Panthers",
+      "imageType": "image-logo",
+      "isLoser": false,
+      "logoUrl": "https://b.fssta.com/uploads/application/college/team-logos/FloridaInternational.vresize.80.80.medium.1.png",
+      "longName": "FIU",
+      "name": "FIU",
+      "record": "2-2",
+      "stackedNameBottom": "Panthers",
+      "stackedNameTop": "Florida International",
+      "uri": "football/cfb/teams/447"
+     },
+     "oddsLine": "FIU -6.5",
+     "overUnderLine": "TOTAL 46.5",
+     "sortKey": "1220261007233039900043537",
+     "template": "scores-team",
+     "tvStation": "ESPN2",
+     "upperTeam": {
+      "alternateLogoUrl": "https://b.fssta.com/uploads/application/college/team-logos/NewMexicoState.vresize.80.80.medium.0.png",
+      "hasPossession": false,
+      "imageAltText": "New Mexico State Aggies",
+      "imageType": "image-logo",
+      "isLoser": false,
+      "logoUrl": "https://b.fssta.com/uploads/application/college/team-logos/NewMexicoState.vresize.80.80.medium.0.png",
+      "longName": "New Mexico State",
+      "name": "NMSU",
+      "record": "2-3",
+      "stackedNameBottom": "Aggies",
+      "stackedNameTop": "New Mexico State",
+      "uri": "football/cfb/teams/44"
+     },
+     "uri": "https://api.foxsports.com/bifrost/v1/cfb/scorechip/cfb43537"
+    }
+   ],
+   "headerLink": {
+    "analyticsName": "college-football",
+    "analyticsSport": "college-football",
+    "color": "1, 0, 54, 86",
+    "contentType": "league",
+    "contentUri": "football/cfb/league/1",
+    "imageAltText": "College Football",
+    "imageType": "image-logo",
+    "imageUrl": "https://b.fssta.com/uploads/application/leagues/logos/NCAAFootball.vresize.200.200.medium.2.png",
+    "layout": {
+     "path": "/layouts?type=layout&subtype=cfbLayout",
+     "tokens": {
+      "contentUri": "football/cfb/league/1"
+     }
+    },
+    "tab": "polls",
+    "title": "NCAA FOOTBALL",
+    "type": "entity",
+    "webUrl": "/college-football/polls"
+   },
+   "headerText": "POLLS",
+   "hideLeague": true,
+   "id": "sport_COLLEGE FOOTBALL",
+   "image": {
+    "altText": "College Football Logo",
+    "altUrl": "https://b.fssta.com/uploads/application/leagues/logos/NCAAFootball.vresize.80.80.medium.2.png",
+    "type": "image-logo",
+    "url": "https://b.fssta.com/uploads/application/leagues/logos/NCAAFootball.vresize.80.80.medium.2.png"
+   },
+   "template": "default",
+   "title": "COLLEGE FOOTBALL",
+   "titleLink": {
+    "analyticsName": "college-football",
+    "analyticsSport": "college-football",
+    "color": "1, 0, 54, 86",
+    "contentType": "league",
+    "contentUri": "football/cfb/league/1",
+    "imageAltText": "College Football",
+    "imageType": "image-logo",
+    "imageUrl": "https://b.fssta.com/uploads/application/leagues/logos/NCAAFootball.vresize.200.200.medium.2.png",
+    "layout": {
+     "path": "/layouts?type=layout&subtype=cfbLayout",
+     "tokens": {
+      "contentUri": "football/cfb/league/1"
+     }
+    },
+    "tab": "scores",
+    "title": "NCAA FOOTBALL",
+    "type": "entity",
+    "webUrl": "/college-football/scores"
+   },
+   "uri": "football/cfb/league/1"
+  },
+  {
+   "events": [
+    {
+     "altSortKey": "131202610072000200097204",
+     "contentType": "event",
+     "contentUri": "baseball/mlb/events/97204",
+     "entityLink": {
+      "analyticsSport": "mlb",
+      "contentType": "event",
+      "contentUri": "baseball/mlb/events/97204",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=mlbEventLayout",
+       "tokens": {
+        "awayUri": "baseball/mlb/teams/3",
+        "eventUri": "baseball/mlb/events/97204",
+        "homeUri": "baseball/mlb/teams/9",
+        "id": "97204"
+       }
+      },
+      "type": "entity",
+      "webUrl": "/mlb/alds-game-3-cleveland-guardians-vs-chicago-white-sox-oct-07-2026-game-boxscore-97204"
+     },
+     "eventStatus": 1,
+     "eventTime": "2026-10-07T20:00:00Z",
+     "favoriteEntities": [
+      "baseball/mlb/teams/9",
+      "baseball/mlb/teams/3"
+     ],
+     "gameNotes": "GM 3 CWS LEADS 2-0",
+     "hasStreamPromo": true,
+     "id": "mlb97204",
+     "importance": 0,
+     "isPlayoff": true,
+     "isTba": false,
+     "league": "MLB",
+     "liveStartTime": "2026-10-07T19:50:00Z",
+     "lowerTeam": {
+      "alternateLogoUrl": "https://b.fssta.com/uploads/application/mlb/team-logos/WhiteSox-alternate.vresize.80.80.medium.0.png",
+      "hasPossession": false,
+      "imageAltText": "White Sox",
+      "imageType": "image-logo",
+      "isLoser": false,
+      "logoUrl": "https://b.fssta.com/uploads/application/mlb/team-logos/WhiteSox.vresize.80.80.medium.0.png",
+      "longName": "White Sox",
+      "name": "CWS",
+      "playoffBottomName": "White Sox",
+      "playoffTopName": "Chicago",
+      "record": "84-78",
+      "score": 3,
+      "stackedNameBottom": "White Sox",
+      "stackedNameTop": "Chicago",
+      "uri": "baseball/mlb/teams/9"
+     },
+     "sortKey": "112026100720003200097204",
+     "statusLine": "▲ 9, 0 OUTS",
+     "template": "scores-team",
+     "tvStation": "TBS",
+     "upperTeam": {
+      "alternateLogoUrl": "https://b.fssta.com/uploads/application/mlb/team-logos/Guardians-alternate.vresize.80.80.medium.0.png",
+      "hasPossession": false,
+      "imageAltText": "Guardians",
+      "imageType": "image-logo",
+      "isLoser": false,
+      "logoUrl": "https://b.fssta.com/uploads/application/mlb/team-logos/Guardians.vresize.80.80.medium.1.png",
+      "longName": "Guardians",
+      "name": "CLE",
+      "playoffBottomName": "Guardians",
+      "playoffTopName": "Cleveland",
+      "record": "85-77",
+      "score": 8,
+      "stackedNameBottom": "Guardians",
+      "stackedNameTop": "Cleveland",
+      "uri": "baseball/mlb/teams/3"
+     },
+     "uri": "https://api.foxsports.com/bifrost/v1/mlb/scorechip/mlb97204"
+    },
+    {
+     "altSortKey": "121202610072200100097210",
+     "contentType": "event",
+     "contentUri": "baseball/mlb/events/97210",
+     "entityLink": {
+      "analyticsSport": "mlb",
+      "contentType": "event",
+      "contentUri": "baseball/mlb/events/97210",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=mlbEventLayout",
+       "tokens": {
+        "awayUri": "baseball/mlb/teams/24",
+        "eventUri": "baseball/mlb/events/97210",
+        "homeUri": "baseball/mlb/teams/21",
+        "id": "97210"
+       }
+      },
+      "type": "entity",
+      "webUrl": "/mlb/nlds-game-4-los-angeles-dodgers-vs-atlanta-braves-oct-07-2026-game-boxscore-97210"
+     },
+     "eventStatus": 1,
+     "eventTime": "2026-10-07T22:00:00Z",
+     "favoriteEntities": [
+      "baseball/mlb/teams/21",
+      "baseball/mlb/teams/24"
+     ],
+     "gameNotes": "GM 4 LAD LEADS 2-1",
+     "hasStreamPromo": true,
+     "id": "mlb97210",
+     "importance": 1,
+     "isPlayoff": true,
+     "isTba": false,
+     "league": "MLB",
+     "liveStartTime": "2026-10-07T21:50:00Z",
+     "lowerTeam": {
+      "alternateLogoUrl": "https://b.fssta.com/uploads/application/mlb/team-logos/Braves-alternate.vresize.80.80.medium.0.png",
+      "hasPossession": false,
+      "imageAltText": "Braves",
+      "imageType": "image-logo",
+      "isLoser": false,
+      "logoUrl": "https://b.fssta.com/uploads/application/mlb/team-logos/Braves.vresize.80.80.medium.0.png",
+      "longName": "Braves",
+      "name": "ATL",
+      "playoffBottomName": "Braves",
+      "playoffTopName": "Atlanta",
+      "record": "94-68",
+      "score": 1,
+      "stackedNameBottom": "Braves",
+      "stackedNameTop": "Atlanta",
+      "uri": "baseball/mlb/teams/21"
+     },
+     "sortKey": "112026100722002100097210",
+     "statusLine": "MID 4",
+     "template": "scores-team",
+     "tvStation": "FS1",
+     "upperTeam": {
+      "alternateLogoUrl": "https://b.fssta.com/uploads/application/mlb/team-logos/Dodgers-alternate.vresize.80.80.medium.0.png",
+      "hasPossession": false,
+      "imageAltText": "Dodgers",
+      "imageType": "image-logo",
+      "isLoser": false,
+      "logoUrl": "https://b.fssta.com/uploads/application/mlb/team-logos/Dodgers.vresize.80.80.medium.0.png",
+      "longName": "Dodgers",
+      "name": "LAD",
+      "playoffBottomName": "Dodgers",
+      "playoffTopName": "Los Angeles",
+      "record": "100-62",
+      "score": 1,
+      "stackedNameBottom": "Dodgers",
+      "stackedNameTop": "Los Angeles",
+      "uri": "baseball/mlb/teams/24"
+     },
+     "uri": "https://api.foxsports.com/bifrost/v1/mlb/scorechip/mlb97210"
+    },
+    {
+     "altSortKey": "132202610080000200097214",
+     "contentType": "event",
+     "contentUri": "baseball/mlb/events/97214",
+     "entityLink": {
+      "analyticsSport": "mlb",
+      "contentType": "event",
+      "contentUri": "baseball/mlb/events/97214",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=mlbEventLayout",
+       "tokens": {
+        "awayUri": "baseball/mlb/teams/31",
+        "eventUri": "baseball/mlb/events/97214",
+        "homeUri": "baseball/mlb/teams/6",
+        "id": "97214"
+       }
+      },
+      "type": "entity",
+      "webUrl": "/mlb/alds-game-3-tampa-bay-rays-vs-new-york-yankees-oct-07-2026-game-boxscore-97214"
+     },
+     "eventHeadline": "Rays (Martinez) visit Rice and Yankees (Fried) in Game 3, fresh off his 2-3, 2 HR, 2 RBI game",
+     "eventStatus": 2,
+     "eventTime": "2026-10-08T00:00:00Z",
+     "favoriteEntities": [
+      "baseball/mlb/teams/6",
+      "baseball/mlb/teams/31"
+     ],
+     "gameNotes": "GM 3 TB LEADS 2-0",
+     "hasStreamPromo": true,
+     "id": "mlb97214",
+     "importance": 0,
+     "isPlayoff": true,
+     "isTba": false,
+     "league": "MLB",
+     "liveStartTime": "2026-10-07T23:50:00Z",
+     "lowerTeam": {
+      "alternateLogoUrl": "https://b.fssta.com/uploads/application/mlb/team-logos/Yankees-alternate.vresize.80.80.medium.0.png",
+      "hasPossession": false,
+      "imageAltText": "Yankees",
+      "imageType": "image-logo",
+      "isLoser": false,
+      "logoUrl": "https://b.fssta.com/uploads/application/mlb/team-logos/Yankees.vresize.80.80.medium.0.png",
+      "longName": "Yankees",
+      "name": "NYY",
+      "playoffBottomName": "Yankees",
+      "playoffTopName": "New York",
+      "record": "93-68",
+      "stackedNameBottom": "Yankees",
+      "stackedNameTop": "New York",
+      "uri": "baseball/mlb/teams/6"
+     },
+     "oddsLine": "TB +143",
+     "overUnderLine": "NYY -176",
+     "sortKey": "122026100800003200097214",
+     "template": "scores-team",
+     "tvStation": "TBS",
+     "upperTeam": {
+      "alternateLogoUrl": "https://b.fssta.com/uploads/application/mlb/team-logos/Rays-alternate.vresize.80.80.medium.0.png",
+      "hasPossession": false,
+      "imageAltText": "Rays",
+      "imageType": "image-logo",
+      "isLoser": false,
+      "logoUrl": "https://b.fssta.com/uploads/application/mlb/team-logos/Rays.vresize.80.80.medium.0.png",
+      "longName": "Rays",
+      "name": "TB",
+      "playoffBottomName": "Rays",
+      "playoffTopName": "Tampa Bay",
+      "record": "98-64",
+      "stackedNameBottom": "Rays",
+      "stackedNameTop": "Tampa Bay",
+      "uri": "baseball/mlb/teams/31"
+     },
+     "uri": "https://api.foxsports.com/bifrost/v1/mlb/scorechip/mlb97214"
+    },
+    {
+     "altSortKey": "132202610080200100097220",
+     "contentType": "event",
+     "contentUri": "baseball/mlb/events/97220",
+     "entityLink": {
+      "analyticsSport": "mlb",
+      "contentType": "event",
+      "contentUri": "baseball/mlb/events/97220",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=mlbEventLayout",
+       "tokens": {
+        "awayUri": "baseball/mlb/teams/5",
+        "eventUri": "baseball/mlb/events/97220",
+        "homeUri": "baseball/mlb/teams/25",
+        "id": "97220"
+       }
+      },
+      "type": "entity",
+      "webUrl": "/mlb/nlds-game-4-milwaukee-brewers-vs-san-diego-padres-oct-07-2026-game-boxscore-97220"
+     },
+     "eventHeadline": "It's win or go home for Padres as they host Brewers in Game 4",
+     "eventStatus": 2,
+     "eventTime": "2026-10-08T02:00:00Z",
+     "favoriteEntities": [
+      "baseball/mlb/teams/25",
+      "baseball/mlb/teams/5"
+     ],
+     "gameNotes": "GM 4 MIL LEADS 2-1",
+     "hasStreamPromo": true,
+     "id": "mlb97220",
+     "importance": 0,
+     "isPlayoff": true,
+     "isTba": false,
+     "league": "MLB",
+     "liveStartTime": "2026-10-08T01:50:00Z",
+     "lowerTeam": {
+      "alternateLogoUrl": "https://b.fssta.com/uploads/application/mlb/team-logos/Padres-alternate.vresize.80.80.medium.1.png",
+      "hasPossession": false,
+      "imageAltText": "Padres",
+      "imageType": "image-logo",
+      "isLoser": false,
+      "logoUrl": "https://b.fssta.com/uploads/application/mlb/team-logos/Padres.vresize.80.80.medium.1.png",
+      "longName": "Padres",
+      "name": "SD",
+      "playoffBottomName": "Padres",
+      "playoffTopName": "San Diego",
+      "record": "91-71",
+      "stackedNameBottom": "Padres",
+      "stackedNameTop": "San Diego",
+      "uri": "baseball/mlb/teams/25"
+     },
+     "sortKey": "122026100802003100097220",
+     "template": "scores-team",
+     "tvStation": "FS1",
+     "upperTeam": {
+      "alternateLogoUrl": "https://b.fssta.com/uploads/application/mlb/team-logos/Brewers.vresize.80.80.medium.1.png",
+      "hasPossession": false,
+      "imageAltText": "Brewers",
+      "imageType": "image-logo",
+      "isLoser": false,
+      "logoUrl": "https://b.fssta.com/uploads/application/mlb/team-logos/Brewers.vresize.80.80.medium.1.png",
+      "longName": "Brewers",
+      "name": "MIL",
+      "playoffBottomName": "Brewers",
+      "playoffTopName": "Milwaukee",
+      "record": "103-59",
+      "stackedNameBottom": "Brewers",
+      "stackedNameTop": "Milwaukee",
+      "uri": "baseball/mlb/teams/5"
+     },
+     "uri": "https://api.foxsports.com/bifrost/v1/mlb/scorechip/mlb97220"
+    }
+   ],
+   "headerLink": {
+    "analyticsName": "major-league-baseball",
+    "analyticsSport": "mlb",
+    "color": "1, 4, 30, 66",
+    "contentType": "league",
+    "contentUri": "baseball/mlb/league/1",
+    "imageAltText": "Major League Baseball",
+    "imageType": "image-logo",
+    "imageUrl": "https://b.fssta.com/uploads/application/leagues/logos/MLB.vresize.200.200.medium.0.png",
+    "layout": {
+     "path": "/layouts?type=layout&subtype=mlbLayout",
+     "tokens": {
+      "contentUri": "baseball/mlb/league/1"
+     }
+    },
+    "shortTitle": "MLB",
+    "title": "MAJOR LEAGUE BASEBALL",
+    "type": "entity",
+    "webUrl": "/mlb"
+   },
+   "headerText": "HOME",
+   "hideLeague": true,
+   "id": "sport_MLB",
+   "image": {
+    "altText": "MLB Logo",
+    "altUrl": "https://b.fssta.com/uploads/application/leagues/logos/MLB.vresize.80.80.medium.0.png",
+    "type": "image-logo",
+    "url": "https://b.fssta.com/uploads/application/leagues/logos/MLB.vresize.80.80.medium.0.png"
+   },
+   "template": "default",
+   "title": "MLB",
+   "titleLink": {
+    "analyticsName": "major-league-baseball",
+    "analyticsSport": "mlb",
+    "color": "1, 4, 30, 66",
+    "contentType": "league",
+    "contentUri": "baseball/mlb/league/1",
+    "imageAltText": "Major League Baseball",
+    "imageType": "image-logo",
+    "imageUrl": "https://b.fssta.com/uploads/application/leagues/logos/MLB.vresize.200.200.medium.0.png",
+    "layout": {
+     "path": "/layouts?type=layout&subtype=mlbLayout",
+     "tokens": {
+      "contentUri": "baseball/mlb/league/1"
+     }
+    },
+    "shortTitle": "MLB",
+    "tab": "scores",
+    "title": "MAJOR LEAGUE BASEBALL",
+    "type": "entity",
+    "webUrl": "/mlb/scores"
+   },
+   "uri": "baseball/mlb/league/1"
+  },
+  {
+   "events": [
+    {
+     "altSortKey": "132202610072330200044609",
+     "contentType": "event",
+     "contentUri": "hockey/nhl/events/44609",
+     "entityLink": {
+      "analyticsSport": "nhl",
+      "contentType": "event",
+      "contentUri": "hockey/nhl/events/44609",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=nhlEventLayout",
+       "tokens": {
+        "awayUri": "hockey/nhl/teams/11",
+        "eventUri": "hockey/nhl/events/44609",
+        "homeUri": "hockey/nhl/teams/12",
+        "id": "44609"
+       }
+      },
+      "type": "entity",
+      "webUrl": "/nhl/pittsburgh-penguins-vs-washington-capitals-oct-07-2026-game-boxscore-44609"
+     },
+     "eventHeadline": "Penguins visit Capitals with both teams hoping to avoid second straight loss",
+     "eventStatus": 2,
+     "eventTime": "2026-10-07T23:30:00Z",
+     "favoriteEntities": [
+      "hockey/nhl/teams/12",
+      "hockey/nhl/teams/11"
+     ],
+     "id": "nhl44609",
+     "importance": 0,
+     "isTba": false,
+     "league": "NHL",
+     "liveStartTime": "2026-10-07T23:20:00Z",
+     "lowerTeam": {
+      "alternateLogoUrl": "https://b.fssta.com/uploads/application/nhl/team-logos/Capitals-alternate.vresize.80.80.medium.1.png",
+      "hasPossession": false,
+      "imageAltText": "Washington Capitals",
+      "imageType": "image-logo",
+      "isLoser": false,
+      "logoUrl": "https://b.fssta.com/uploads/application/nhl/team-logos/Capitals.vresize.80.80.medium.1.png",
+      "longName": "Capitals",
+      "name": "WSH",
+      "record": "1-1-0",
+      "stackedNameBottom": "Capitals",
+      "stackedNameTop": "Washington",
+      "uri": "hockey/nhl/teams/12"
+     },
+     "oddsLine": "PIT +135",
+     "overUnderLine": "WSH -166",
+     "sortKey": "122026100723303200044609",
+     "template": "scores-team",
+     "tvStation": "TNT",
+     "upperTeam": {
+      "alternateLogoUrl": "https://b.fssta.com/uploads/application/nhl/team-logos/Penguins.vresize.80.80.medium.0.png",
+      "hasPossession": false,
+      "imageAltText": "Pittsburgh Penguins",
+      "imageType": "image-logo",
+      "isLoser": false,
+      "logoUrl": "https://b.fssta.com/uploads/application/nhl/team-logos/Penguins.vresize.80.80.medium.0.png",
+      "longName": "Penguins",
+      "name": "PIT",
+      "record": "2-1-0",
+      "stackedNameBottom": "Penguins",
+      "stackedNameTop": "Pittsburgh",
+      "uri": "hockey/nhl/teams/11"
+     },
+     "uri": "https://api.foxsports.com/bifrost/v1/nhl/scorechip/nhl44609"
+    },
+    {
+     "altSortKey": "132202610072330200044610",
+     "contentType": "event",
+     "contentUri": "hockey/nhl/events/44610",
+     "entityLink": {
+      "analyticsSport": "nhl",
+      "contentType": "event",
+      "contentUri": "hockey/nhl/events/44610",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=nhlEventLayout",
+       "tokens": {
+        "awayUri": "hockey/nhl/teams/6",
+        "eventUri": "hockey/nhl/events/44610",
+        "homeUri": "hockey/nhl/teams/30",
+        "id": "44610"
+       }
+      },
+      "type": "entity",
+      "webUrl": "/nhl/colorado-avalanche-vs-winnipeg-jets-oct-07-2026-game-boxscore-44610"
+     },
+     "eventHeadline": "Jets host Avalanche and Necas, fresh off his 2 G, 1 A game",
+     "eventStatus": 2,
+     "eventTime": "2026-10-07T23:30:00Z",
+     "favoriteEntities": [
+      "hockey/nhl/teams/30",
+      "hockey/nhl/teams/6"
+     ],
+     "id": "nhl44610",
+     "importance": 0,
+     "isTba": false,
+     "league": "NHL",
+     "liveStartTime": "2026-10-07T23:20:00Z",
+     "lowerTeam": {
+      "alternateLogoUrl": "https://b.fssta.com/uploads/application/nhl/team-logos/Jets.vresize.80.80.medium.0.png",
+      "hasPossession": false,
+      "imageAltText": "Winnipeg Jets",
+      "imageType": "image-logo",
+      "isLoser": false,
+      "logoUrl": "https://b.fssta.com/uploads/application/nhl/team-logos/Jets.vresize.80.80.medium.0.png",
+      "longName": "Jets",
+      "name": "WPG",
+      "record": "2-0-1",
+      "stackedNameBottom": "Jets",
+      "stackedNameTop": "Winnipeg",
+      "uri": "hockey/nhl/teams/30"
+     },
+     "oddsLine": "COL -199",
+     "overUnderLine": "WPG +161",
+     "sortKey": "122026100723303200044610",
+     "template": "scores-team",
+     "tvStation": "ESPN+",
+     "upperTeam": {
+      "alternateLogoUrl": "https://b.fssta.com/uploads/application/nhl/team-logos/Avalanche.vresize.80.80.medium.0.png",
+      "hasPossession": false,
+      "imageAltText": "Colorado Avalanche",
+      "imageType": "image-logo",
+      "isLoser": false,
+      "logoUrl": "https://b.fssta.com/uploads/application/nhl/team-logos/Avalanche.vresize.80.80.medium.0.png",
+      "longName": "Avalanche",
+      "name": "COL",
+      "record": "2-0-0",
+      "stackedNameBottom": "Avalanche",
+      "stackedNameTop": "Colorado",
+      "uri": "hockey/nhl/teams/6"
+     },
+     "uri": "https://api.foxsports.com/bifrost/v1/nhl/scorechip/nhl44610"
+    },
+    {
+     "altSortKey": "132202610080200200044611",
+     "contentType": "event",
+     "contentUri": "hockey/nhl/events/44611",
+     "entityLink": {
+      "analyticsSport": "nhl",
+      "contentType": "event",
+      "contentUri": "hockey/nhl/events/44611",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=nhlEventLayout",
+       "tokens": {
+        "awayUri": "hockey/nhl/teams/20",
+        "eventUri": "hockey/nhl/events/44611",
+        "homeUri": "hockey/nhl/teams/28",
+        "id": "44611"
+       }
+      },
+      "type": "entity",
+      "webUrl": "/nhl/edmonton-oilers-vs-anaheim-ducks-oct-07-2026-game-boxscore-44611"
+     },
+     "eventHeadline": "Gauthier looks to follow up 2 G, 1 A game as Ducks welcome Oilers in Honda Center",
+     "eventStatus": 2,
+     "eventTime": "2026-10-08T02:00:00Z",
+     "favoriteEntities": [
+      "hockey/nhl/teams/28",
+      "hockey/nhl/teams/20"
+     ],
+     "id": "nhl44611",
+     "importance": 0,
+     "isTba": false,
+     "league": "NHL",
+     "liveStartTime": "2026-10-08T01:50:00Z",
+     "lowerTeam": {
+      "alternateLogoUrl": "https://b.fssta.com/uploads/application/nhl/team-logos/Ducks.vresize.80.80.medium.1.png",
+      "hasPossession": false,
+      "imageAltText": "Anaheim Ducks",
+      "imageType": "image-logo",
+      "isLoser": false,
+      "logoUrl": "https://b.fssta.com/uploads/application/nhl/team-logos/Ducks.vresize.80.80.medium.1.png",
+      "longName": "Ducks",
+      "name": "ANA",
+      "record": "2-0-0",
+      "stackedNameBottom": "Ducks",
+      "stackedNameTop": "Anaheim",
+      "uri": "hockey/nhl/teams/28"
+     },
+     "oddsLine": "EDM -136",
+     "overUnderLine": "ANA +111",
+     "sortKey": "122026100802003200044611",
+     "template": "scores-team",
+     "tvStation": "ESPN+",
+     "upperTeam": {
+      "alternateLogoUrl": "https://b.fssta.com/uploads/application/nhl/team-logos/Oilers.vresize.80.80.medium.0.png",
+      "hasPossession": false,
+      "imageAltText": "Edmonton Oilers",
+      "imageType": "image-logo",
+      "isLoser": false,
+      "logoUrl": "https://b.fssta.com/uploads/application/nhl/team-logos/Oilers.vresize.80.80.medium.0.png",
+      "longName": "Oilers",
+      "name": "EDM",
+      "record": "2-0-1",
+      "stackedNameBottom": "Oilers",
+      "stackedNameTop": "Edmonton",
+      "uri": "hockey/nhl/teams/20"
+     },
+     "uri": "https://api.foxsports.com/bifrost/v1/nhl/scorechip/nhl44611"
+    }
+   ],
+   "headerLink": {
+    "analyticsName": "national-hockey-league",
+    "analyticsSport": "nhl",
+    "color": "1, 0, 0, 0",
+    "contentType": "league",
+    "contentUri": "hockey/nhl/league/1",
+    "imageAltText": "National Hockey League",
+    "imageType": "image-logo",
+    "imageUrl": "https://b.fssta.com/uploads/application/leagues/logos/NHL.vresize.200.200.medium.0.png",
+    "layout": {
+     "path": "/layouts?type=layout&subtype=nhlLayout",
+     "tokens": {
+      "contentUri": "hockey/nhl/league/1"
+     }
+    },
+    "shortTitle": "NHL",
+    "title": "NATIONAL HOCKEY LEAGUE",
+    "type": "entity",
+    "webUrl": "/nhl"
+   },
+   "headerText": "HOME",
+   "hideLeague": true,
+   "id": "sport_NHL",
+   "image": {
+    "altText": "NHL Logo",
+    "altUrl": "https://b.fssta.com/uploads/application/leagues/logos/NHL.vresize.80.80.medium.0.png",
+    "type": "image-logo",
+    "url": "https://b.fssta.com/uploads/application/leagues/logos/NHL.vresize.80.80.medium.0.png"
+   },
+   "template": "default",
+   "title": "NHL",
+   "titleLink": {
+    "analyticsName": "national-hockey-league",
+    "analyticsSport": "nhl",
+    "color": "1, 0, 0, 0",
+    "contentType": "league",
+    "contentUri": "hockey/nhl/league/1",
+    "imageAltText": "National Hockey League",
+    "imageType": "image-logo",
+    "imageUrl": "https://b.fssta.com/uploads/application/leagues/logos/NHL.vresize.200.200.medium.0.png",
+    "layout": {
+     "path": "/layouts?type=layout&subtype=nhlLayout",
+     "tokens": {
+      "contentUri": "hockey/nhl/league/1"
+     }
+    },
+    "shortTitle": "NHL",
+    "tab": "scores",
+    "title": "NATIONAL HOCKEY LEAGUE",
+    "type": "entity",
+    "webUrl": "/nhl/scores"
+   },
+   "uri": "hockey/nhl/league/1"
+  },
+  {
+   "events": [
+    {
+     "altSortKey": "132202610072330222002583",
+     "contentType": "event",
+     "contentUri": "basketball/wnba/events/2583",
+     "entityLink": {
+      "analyticsSport": "wnba",
+      "contentType": "event",
+      "contentUri": "basketball/wnba/events/2583",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=wnbaEventLayout",
+       "tokens": {
+        "awayUri": "basketball/wnba/teams/5",
+        "eventUri": "basketball/wnba/events/2583",
+        "homeUri": "basketball/wnba/teams/1",
+        "id": "2583"
+       }
+      },
+      "type": "entity",
+      "webUrl": "/wnba/wnba-semi-finals-game-2-new-york-liberty-vs-atlanta-dream-oct-07-2026-game-boxscore-2583"
+     },
+     "eventStatus": 2,
+     "eventTime": "2026-10-07T23:30:00Z",
+     "favoriteEntities": [
+      "basketball/wnba/teams/1",
+      "basketball/wnba/teams/5"
+     ],
+     "gameNotes": "GM 2 ATL LEADS 1-0",
+     "id": "wnba2583",
+     "importance": 0,
+     "isPlayoff": true,
+     "isTba": false,
+     "league": "WNBA",
+     "liveStartTime": "2026-10-07T23:20:00Z",
+     "lowerTeam": {
+      "alternateLogoUrl": "https://b.fssta.com/uploads/application/wnba/team-logos/Dream.vresize.80.80.medium.2.png",
+      "hasPossession": false,
+      "imageAltText": "Atlanta Dream",
+      "imageType": "image-logo",
+      "isLoser": false,
+      "logoUrl": "https://b.fssta.com/uploads/application/wnba/team-logos/Dream.vresize.80.80.medium.2.png",
+      "longName": "Dream",
+      "name": "ATL",
+      "playoffBottomName": "Dream",
+      "playoffTopName": "Atlanta",
+      "record": "30-14",
+      "stackedNameBottom": "Dream",
+      "stackedNameTop": "Atlanta",
+      "uri": "basketball/wnba/teams/1"
+     },
+     "oddsLine": "ATL -2.5",
+     "overUnderLine": "TOTAL 170.5",
+     "sortKey": "122026100723303222002583",
+     "template": "scores-team",
+     "tvStation": "ESPN",
+     "upperTeam": {
+      "alternateLogoUrl": "https://b.fssta.com/uploads/application/wnba/team-logos/Liberty.vresize.80.80.medium.2.png",
+      "hasPossession": false,
+      "imageAltText": "New York Liberty",
+      "imageType": "image-logo",
+      "isLoser": false,
+      "logoUrl": "https://b.fssta.com/uploads/application/wnba/team-logos/Liberty.vresize.80.80.medium.2.png",
+      "longName": "Liberty",
+      "name": "NYL",
+      "playoffBottomName": "Liberty",
+      "playoffTopName": "New York",
+      "record": "26-18",
+      "stackedNameBottom": "Liberty",
+      "stackedNameTop": "New York",
+      "uri": "basketball/wnba/teams/5"
+     },
+     "uri": "https://api.foxsports.com/bifrost/v1/wnba/scorechip/wnba2583"
+    },
+    {
+     "altSortKey": "132202610080130221002578",
+     "contentType": "event",
+     "contentUri": "basketball/wnba/events/2578",
+     "entityLink": {
+      "analyticsSport": "wnba",
+      "contentType": "event",
+      "contentUri": "basketball/wnba/events/2578",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=wnbaEventLayout",
+       "tokens": {
+        "awayUri": "basketball/wnba/teams/11",
+        "eventUri": "basketball/wnba/events/2578",
+        "homeUri": "basketball/wnba/teams/23",
+        "id": "2578"
+       }
+      },
+      "type": "entity",
+      "webUrl": "/wnba/wnba-semi-finals-game-2-las-vegas-aces-vs-golden-state-valkyries-oct-07-2026-game-boxscore-2578"
+     },
+     "eventStatus": 2,
+     "eventTime": "2026-10-08T01:30:00Z",
+     "favoriteEntities": [
+      "basketball/wnba/teams/23",
+      "basketball/wnba/teams/11"
+     ],
+     "gameNotes": "GM 2 GSV LEADS 1-0",
+     "id": "wnba2578",
+     "importance": 0,
+     "isPlayoff": true,
+     "isTba": false,
+     "league": "WNBA",
+     "liveStartTime": "2026-10-08T01:20:00Z",
+     "lowerTeam": {
+      "alternateLogoUrl": "https://b.fssta.com/uploads/application/wnba/team-logos/Valkyries-alternate.vresize.80.80.medium.0.png",
+      "hasPossession": false,
+      "imageAltText": "Golden State Valkyries",
+      "imageType": "image-logo",
+      "isLoser": false,
+      "logoUrl": "https://b.fssta.com/uploads/application/wnba/team-logos/Valkyries.vresize.80.80.medium.0.png",
+      "longName": "Valkyries",
+      "name": "GSV",
+      "playoffBottomName": "Valkyries",
+      "playoffTopName": "Golden State",
+      "record": "32-12",
+      "stackedNameBottom": "Valkyries",
+      "stackedNameTop": "Golden State",
+      "uri": "basketball/wnba/teams/23"
+     },
+     "oddsLine": "GSV -1.5",
+     "overUnderLine": "TOTAL 156.5",
+     "sortKey": "122026100801303221002578",
+     "template": "scores-team",
+     "tvStation": "Peacock",
+     "upperTeam": {
+      "alternateLogoUrl": "https://b.fssta.com/uploads/application/wnba/team-logos/Aces.vresize.80.80.medium.2.png",
+      "hasPossession": false,
+      "imageAltText": "Las Vegas Aces",
+      "imageType": "image-logo",
+      "isLoser": false,
+      "logoUrl": "https://b.fssta.com/uploads/application/wnba/team-logos/Aces.vresize.80.80.medium.2.png",
+      "longName": "Aces",
+      "name": "LVA",
+      "playoffBottomName": "Aces",
+      "playoffTopName": "Las Vegas",
+      "record": "31-13",
+      "stackedNameBottom": "Aces",
+      "stackedNameTop": "Las Vegas",
+      "uri": "basketball/wnba/teams/11"
+     },
+     "uri": "https://api.foxsports.com/bifrost/v1/wnba/scorechip/wnba2578"
+    }
+   ],
+   "headerLink": {
+    "analyticsName": "womens-national-basketball-association",
+    "analyticsSport": "wnba",
+    "color": "1, 250, 77, 0",
+    "contentType": "league",
+    "contentUri": "basketball/wnba/league/1",
+    "imageAltText": "Women's National Basketball Association",
+    "imageType": "image-logo",
+    "imageUrl": "https://b.fssta.com/uploads/application/leagues/logos/WNBA-alternate.vresize.200.200.medium.0.png",
+    "layout": {
+     "path": "/layouts?type=layout&subtype=wnbaLayout",
+     "tokens": {
+      "contentUri": "basketball/wnba/league/1"
+     }
+    },
+    "shortTitle": "WNBA",
+    "title": "WOMEN'S NATIONAL BASKETBALL ASSOCIATION",
+    "type": "entity",
+    "webUrl": "/wnba"
+   },
+   "headerText": "HOME",
+   "hideLeague": true,
+   "id": "sport_WNBA",
+   "image": {
+    "altText": "WNBA Logo",
+    "altUrl": "https://b.fssta.com/uploads/application/leagues/logos/WNBA-alternate.vresize.80.80.medium.0.png",
+    "type": "image-logo",
+    "url": "https://b.fssta.com/uploads/application/leagues/logos/WNBA.vresize.80.80.medium.0.png"
+   },
+   "template": "default",
+   "title": "WNBA",
+   "titleLink": {
+    "analyticsName": "womens-national-basketball-association",
+    "analyticsSport": "wnba",
+    "color": "1, 250, 77, 0",
+    "contentType": "league",
+    "contentUri": "basketball/wnba/league/1",
+    "imageAltText": "Women's National Basketball Association",
+    "imageType": "image-logo",
+    "imageUrl": "https://b.fssta.com/uploads/application/leagues/logos/WNBA-alternate.vresize.200.200.medium.0.png",
+    "layout": {
+     "path": "/layouts?type=layout&subtype=wnbaLayout",
+     "tokens": {
+      "contentUri": "basketball/wnba/league/1"
+     }
+    },
+    "shortTitle": "WNBA",
+    "tab": "scores",
+    "title": "WOMEN'S NATIONAL BASKETBALL ASSOCIATION",
+    "type": "entity",
+    "webUrl": "/wnba/scores"
+   },
+   "uri": "basketball/wnba/league/1"
+  }
+ ]
+}

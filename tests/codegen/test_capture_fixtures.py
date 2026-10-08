@@ -66,7 +66,7 @@ def test_capture_writes_lf_json(tmp_path, monkeypatch):
 
 
 def test_main_dry_run_exits_zero_and_lists_each_endpoint(capsys):
-    assert cf.main(["--api", "espn_web_v3", "--all-missing", "--dry-run"]) == 0
+    assert cf.main(["--api", "espn_web_v3", "--endpoints", "athlete_stats", "--dry-run"]) == 0
     out = capsys.readouterr().out
     assert "dry-run" in out and "capture_fixtures:" in out
 

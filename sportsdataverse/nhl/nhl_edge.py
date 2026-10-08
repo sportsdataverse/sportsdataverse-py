@@ -339,7 +339,7 @@ def nhl_edge_skater_shot_speed_top_10(
     """Pull the EDGE top-10 skaters by shot speed.
 
     Endpoint: ``GET https://api-web.nhle.com/v1/edge/skater-shot-speed-top-10/{positions}/{sort_by}/{season}/{game_type}``
-    Example URL: https://api-web.nhle.com/v1/edge/skater-shot-speed-top-10/defense/points/now
+    Example URL: https://api-web.nhle.com/v1/edge/skater-shot-speed-top-10/defense/max/20242025/2
 
     Args:
         positions: positions path parameter.
@@ -360,7 +360,7 @@ def nhl_edge_skater_shot_speed_top_10(
     Example:
         Quick start::
 
-            nhl_edge_skater_shot_speed_top_10(positions='defense', sort_by='points')
+            nhl_edge_skater_shot_speed_top_10(positions='defense', sort_by='max', season=20242025)
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {}
@@ -500,7 +500,7 @@ def nhl_edge_skater_speed_top_10(
     """Pull the EDGE top-10 skaters by skating speed.
 
     Endpoint: ``GET https://api-web.nhle.com/v1/edge/skater-speed-top-10/{positions}/{sort_by}/{season}/{game_type}``
-    Example URL: https://api-web.nhle.com/v1/edge/skater-speed-top-10/defense/points/now
+    Example URL: https://api-web.nhle.com/v1/edge/skater-speed-top-10/defense/max/20242025/2
 
     Args:
         positions: positions path parameter.
@@ -521,7 +521,7 @@ def nhl_edge_skater_speed_top_10(
     Example:
         Quick start::
 
-            nhl_edge_skater_speed_top_10(positions='defense', sort_by='points')
+            nhl_edge_skater_speed_top_10(positions='defense', sort_by='max', season=20242025)
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {}
@@ -556,7 +556,7 @@ def nhl_edge_skater_distance_top_10(
     """Pull the EDGE top-10 skaters by skating distance.
 
     Endpoint: ``GET https://api-web.nhle.com/v1/edge/skater-distance-top-10/{positions}/{strength}/{sort_by}/{season}/{game_type}``
-    Example URL: https://api-web.nhle.com/v1/edge/skater-distance-top-10/defense/ev/points/now
+    Example URL: https://api-web.nhle.com/v1/edge/skater-distance-top-10/defense/all/total/20242025/2
 
     Args:
         positions: positions path parameter.
@@ -578,7 +578,7 @@ def nhl_edge_skater_distance_top_10(
     Example:
         Quick start::
 
-            nhl_edge_skater_distance_top_10(positions='defense', strength='ev', sort_by='points')
+            nhl_edge_skater_distance_top_10(positions='defense', strength='all', sort_by='total', season=20242025)
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {}
@@ -666,7 +666,7 @@ def nhl_edge_skater_zone_time_top_10(
     """Pull the EDGE top-10 skaters by zone time.
 
     Endpoint: ``GET https://api-web.nhle.com/v1/edge/skater-zone-time-top-10/{positions}/{strength}/{sort_by}/{season}/{game_type}``
-    Example URL: https://api-web.nhle.com/v1/edge/skater-zone-time-top-10/defense/ev/points/now
+    Example URL: https://api-web.nhle.com/v1/edge/skater-zone-time-top-10/defense/all/offensive/20242025/2
 
     Args:
         positions: positions path parameter.
@@ -688,7 +688,7 @@ def nhl_edge_skater_zone_time_top_10(
     Example:
         Quick start::
 
-            nhl_edge_skater_zone_time_top_10(positions='defense', strength='ev', sort_by='points')
+            nhl_edge_skater_zone_time_top_10(positions='defense', strength='all', sort_by='offensive', season=20242025)
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {}
@@ -878,7 +878,7 @@ def nhl_edge_goalie_5v5_top_10(
     """Pull the EDGE top-10 goalies by 5-on-5 metrics.
 
     Endpoint: ``GET https://api-web.nhle.com/v1/edge/goalie-5v5-top-10/{sort_by}/{season}/{game_type}``
-    Example URL: https://api-web.nhle.com/v1/edge/goalie-5v5-top-10/points/now
+    Example URL: https://api-web.nhle.com/v1/edge/goalie-5v5-top-10/save-pctg/20242025/2
 
     Args:
         sort_by: sort_by path parameter.
@@ -898,7 +898,7 @@ def nhl_edge_goalie_5v5_top_10(
     Example:
         Quick start::
 
-            nhl_edge_goalie_5v5_top_10(sort_by='points')
+            nhl_edge_goalie_5v5_top_10(sort_by='save-pctg', season=20242025)
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {}
@@ -1564,7 +1564,7 @@ def nhl_edge_team_skating_distance_top_10(
     """Pull the EDGE top-10 teams by skating distance.
 
     Endpoint: ``GET https://api-web.nhle.com/v1/edge/team-skating-distance-top-10/{positions}/{strength}/{sort_by}/{season}/{game_type}``
-    Example URL: https://api-web.nhle.com/v1/edge/team-skating-distance-top-10/defense/ev/points/now
+    Example URL: https://api-web.nhle.com/v1/edge/team-skating-distance-top-10/defense/all/total/20242025/2
 
     Args:
         positions: positions path parameter.
@@ -1586,7 +1586,7 @@ def nhl_edge_team_skating_distance_top_10(
     Example:
         Quick start::
 
-            nhl_edge_team_skating_distance_top_10(positions='defense', strength='ev', sort_by='points')
+            nhl_edge_team_skating_distance_top_10(positions='defense', strength='all', sort_by='total', season=20242025)
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {}
@@ -1666,7 +1666,7 @@ def nhl_edge_team_skating_speed_top_10(
     """Pull the EDGE top-10 teams by skating speed.
 
     Endpoint: ``GET https://api-web.nhle.com/v1/edge/team-skating-speed-top-10/{positions}/{sort_by}/{season}/{game_type}``
-    Example URL: https://api-web.nhle.com/v1/edge/team-skating-speed-top-10/defense/points/now
+    Example URL: https://api-web.nhle.com/v1/edge/team-skating-speed-top-10/defense/max/20242025/2
 
     Args:
         positions: positions path parameter.
@@ -1687,7 +1687,7 @@ def nhl_edge_team_skating_speed_top_10(
     Example:
         Quick start::
 
-            nhl_edge_team_skating_speed_top_10(positions='defense', sort_by='points')
+            nhl_edge_team_skating_speed_top_10(positions='defense', sort_by='max', season=20242025)
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {}
@@ -1774,7 +1774,7 @@ def nhl_edge_team_zone_time_top_10(
     """Pull the EDGE top-10 teams by zone time.
 
     Endpoint: ``GET https://api-web.nhle.com/v1/edge/team-zone-time-top-10/{strength}/{sort_by}/{season}/{game_type}``
-    Example URL: https://api-web.nhle.com/v1/edge/team-zone-time-top-10/ev/points/now
+    Example URL: https://api-web.nhle.com/v1/edge/team-zone-time-top-10/all/offensive/20242025/2
 
     Args:
         strength: strength path parameter.
@@ -1795,7 +1795,7 @@ def nhl_edge_team_zone_time_top_10(
     Example:
         Quick start::
 
-            nhl_edge_team_zone_time_top_10(strength='ev', sort_by='points')
+            nhl_edge_team_zone_time_top_10(strength='all', sort_by='offensive', season=20242025)
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {}

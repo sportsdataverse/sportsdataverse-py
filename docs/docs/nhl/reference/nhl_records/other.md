@@ -319,7 +319,10 @@ Skater career statistics (all-time, regular season).
 
 ### Returns {#nhl_records_skater_career_stats-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_nhl_records`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — the output of `parse_nhl_records`; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+No returns table is published for this endpoint: no capture: records.nhl.com answers 404 for this route with the documented example arguments (2026-10-07).
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#nhl_records_skater_career_stats-example}
@@ -343,7 +346,10 @@ All-time skater career leaderboards.
 
 ### Returns {#nhl_records_skater_career_leaders-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_nhl_records`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — the output of `parse_nhl_records`; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+No returns table is published for this endpoint: no capture: records.nhl.com answers 404 for this route with the documented example arguments (2026-10-07).
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#nhl_records_skater_career_leaders-example}

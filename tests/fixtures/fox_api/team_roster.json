@@ -1,0 +1,5251 @@
+{
+ "groups": [
+  {
+   "headers": [
+    {
+     "columns": [
+      {
+       "emphasized": true,
+       "index": 0,
+       "priority": 1,
+       "sortable": "none",
+       "template": "cell-entity",
+       "text": "OFFENSE",
+       "weight": 6.5
+      },
+      {
+       "emphasized": false,
+       "index": 1,
+       "priority": 2,
+       "sortable": "none",
+       "template": "cell-text",
+       "text": "POS",
+       "weight": 2.5
+      },
+      {
+       "emphasized": false,
+       "index": 2,
+       "priority": 3,
+       "sortable": "none",
+       "template": "cell-text",
+       "text": "AGE",
+       "weight": 2.5
+      },
+      {
+       "emphasized": false,
+       "index": 3,
+       "priority": 4,
+       "sortable": "none",
+       "template": "cell-text",
+       "text": "HT",
+       "weight": 2.5
+      },
+      {
+       "emphasized": false,
+       "index": 4,
+       "priority": 5,
+       "sortable": "none",
+       "template": "cell-text",
+       "text": "WT",
+       "weight": 2.5
+      },
+      {
+       "emphasized": false,
+       "index": 5,
+       "priority": 6,
+       "sortable": "none",
+       "template": "cell-text",
+       "text": "COLLEGE",
+       "weight": 2.5
+      }
+     ],
+     "isPrimary": true
+    }
+   ],
+   "rows": [
+    {
+     "columns": [
+      {
+       "emphasized": false,
+       "imageAltText": "Default Headshot",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/fs-app/default-headshot.vresize.140.170.medium.0.png",
+       "index": 0,
+       "superscript": "#86",
+       "text": "Vinny Anthony II"
+      },
+      {
+       "emphasized": false,
+       "index": 1,
+       "text": "WR"
+      },
+      {
+       "emphasized": false,
+       "index": 2,
+       "text": "23"
+      },
+      {
+       "emphasized": false,
+       "index": 3,
+       "text": "6'0\""
+      },
+      {
+       "emphasized": false,
+       "index": 4,
+       "text": "190 lbs"
+      },
+      {
+       "emphasized": false,
+       "index": 5,
+       "text": "Wisconsin"
+      }
+     ],
+     "entityLink": {
+      "alternateImageUrl": "https://b.fssta.com/uploads/application/fs-app/default-headshot_dark.vresize.140.170.medium.0.png",
+      "analyticsName": "vinny-anthony-ii",
+      "analyticsSport": "nfl",
+      "color": "1, 240, 31, 65",
+      "contentType": "athlete",
+      "contentUri": "football/nfl/athletes/329734",
+      "imageAltText": "Default Headshot",
+      "imageType": "image-headshot",
+      "imageUrl": "https://b.fssta.com/uploads/application/fs-app/default-headshot.vresize.140.170.medium.0.png",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+       "tokens": {
+        "contentUri": "football/nfl/athletes/329734",
+        "id": "329734"
+       }
+      },
+      "title": "VINNY ANTHONY II",
+      "type": "entity",
+      "webUrl": "/nfl/vinny-anthony-ii-player"
+     },
+     "isCutoff": false,
+     "isFaded": false,
+     "selected": false
+    },
+    {
+     "columns": [
+      {
+       "emphasized": false,
+       "imageAltText": "Matthew Bergeron",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/326956.vresize.140.170.medium.5.png",
+       "index": 0,
+       "superscript": "#65",
+       "text": "Matthew Bergeron"
+      },
+      {
+       "emphasized": false,
+       "index": 1,
+       "text": "OL"
+      },
+      {
+       "emphasized": false,
+       "index": 2,
+       "text": "26"
+      },
+      {
+       "emphasized": false,
+       "index": 3,
+       "text": "6'5\""
+      },
+      {
+       "emphasized": false,
+       "index": 4,
+       "text": "315 lbs"
+      },
+      {
+       "emphasized": false,
+       "index": 5,
+       "text": "Syracuse"
+      }
+     ],
+     "entityLink": {
+      "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/326956.vresize.140.170.medium.5.png",
+      "analyticsName": "matthew-bergeron",
+      "analyticsSport": "nfl",
+      "color": "1, 240, 31, 65",
+      "contentType": "athlete",
+      "contentUri": "football/nfl/athletes/326956",
+      "imageAltText": "Matthew Bergeron",
+      "imageType": "image-headshot",
+      "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/326956.vresize.140.170.medium.5.png",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+       "tokens": {
+        "contentUri": "football/nfl/athletes/326956",
+        "id": "326956"
+       }
+      },
+      "title": "MATTHEW BERGERON",
+      "type": "entity",
+      "webUrl": "/nfl/matthew-bergeron-player"
+     },
+     "isCutoff": false,
+     "isFaded": false,
+     "selected": false
+    },
+    {
+     "columns": [
+      {
+       "emphasized": false,
+       "imageAltText": "Chris Blair",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22156.vresize.140.170.medium.3.png",
+       "index": 0,
+       "superscript": "#19",
+       "text": "Chris Blair"
+      },
+      {
+       "emphasized": false,
+       "index": 1,
+       "text": "WR"
+      },
+      {
+       "emphasized": false,
+       "index": 2,
+       "text": "29"
+      },
+      {
+       "emphasized": false,
+       "index": 3,
+       "text": "6'2\""
+      },
+      {
+       "emphasized": false,
+       "index": 4,
+       "text": "215 lbs"
+      },
+      {
+       "emphasized": false,
+       "index": 5,
+       "text": "Alcorn State"
+      }
+     ],
+     "entityLink": {
+      "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22156.vresize.140.170.medium.3.png",
+      "analyticsName": "chris-blair",
+      "analyticsSport": "nfl",
+      "color": "1, 240, 31, 65",
+      "contentType": "athlete",
+      "contentUri": "football/nfl/athletes/22156",
+      "imageAltText": "Chris Blair",
+      "imageType": "image-headshot",
+      "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22156.vresize.140.170.medium.3.png",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+       "tokens": {
+        "contentUri": "football/nfl/athletes/22156",
+        "id": "22156"
+       }
+      },
+      "title": "CHRIS BLAIR",
+      "type": "entity",
+      "webUrl": "/nfl/chris-blair-player"
+     },
+     "isCutoff": false,
+     "isFaded": false,
+     "selected": false
+    },
+    {
+     "columns": [
+      {
+       "emphasized": false,
+       "imageAltText": "Zachariah Branch",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/329448.vresize.140.170.medium.2.png",
+       "index": 0,
+       "superscript": "#17",
+       "text": "Zachariah Branch"
+      },
+      {
+       "emphasized": false,
+       "index": 1,
+       "text": "WR"
+      },
+      {
+       "emphasized": false,
+       "index": 2,
+       "text": "22"
+      },
+      {
+       "emphasized": false,
+       "index": 3,
+       "text": "5'10\""
+      },
+      {
+       "emphasized": false,
+       "index": 4,
+       "text": "180 lbs"
+      },
+      {
+       "emphasized": false,
+       "index": 5,
+       "text": "Georgia"
+      }
+     ],
+     "entityLink": {
+      "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/329448.vresize.140.170.medium.2.png",
+      "analyticsName": "zachariah-branch",
+      "analyticsSport": "nfl",
+      "color": "1, 240, 31, 65",
+      "contentType": "athlete",
+      "contentUri": "football/nfl/athletes/329448",
+      "imageAltText": "Zachariah Branch",
+      "imageType": "image-headshot",
+      "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/329448.vresize.140.170.medium.2.png",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+       "tokens": {
+        "contentUri": "football/nfl/athletes/329448",
+        "id": "329448"
+       }
+      },
+      "title": "ZACHARIAH BRANCH",
+      "type": "entity",
+      "webUrl": "/nfl/zachariah-branch-player"
+     },
+     "isCutoff": false,
+     "isFaded": false,
+     "selected": false
+    },
+    {
+     "columns": [
+      {
+       "emphasized": false,
+       "imageAltText": "Beaux Collins",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/328962.vresize.140.170.medium.2.png",
+       "index": 0,
+       "superscript": "#88",
+       "text": "Beaux Collins"
+      },
+      {
+       "emphasized": false,
+       "index": 1,
+       "text": "WR"
+      },
+      {
+       "emphasized": false,
+       "index": 2,
+       "text": "23"
+      },
+      {
+       "emphasized": false,
+       "index": 3,
+       "text": "6'3\""
+      },
+      {
+       "emphasized": false,
+       "index": 4,
+       "text": "206 lbs"
+      },
+      {
+       "emphasized": false,
+       "index": 5,
+       "text": "Notre Dame"
+      }
+     ],
+     "entityLink": {
+      "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/328962.vresize.140.170.medium.2.png",
+      "analyticsName": "beaux-collins",
+      "analyticsSport": "nfl",
+      "color": "1, 240, 31, 65",
+      "contentType": "athlete",
+      "contentUri": "football/nfl/athletes/328962",
+      "imageAltText": "Beaux Collins",
+      "imageType": "image-headshot",
+      "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/328962.vresize.140.170.medium.2.png",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+       "tokens": {
+        "contentUri": "football/nfl/athletes/328962",
+        "id": "328962"
+       }
+      },
+      "title": "BEAUX COLLINS",
+      "type": "entity",
+      "webUrl": "/nfl/beaux-collins-player"
+     },
+     "isCutoff": false,
+     "isFaded": false,
+     "selected": false
+    },
+    {
+     "columns": [
+      {
+       "emphasized": false,
+       "imageAltText": "Default Headshot",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/fs-app/default-headshot.vresize.140.170.medium.0.png",
+       "index": 0,
+       "superscript": "#61",
+       "text": "Kam Dewberry"
+      },
+      {
+       "emphasized": false,
+       "index": 1,
+       "text": "G"
+      },
+      {
+       "emphasized": false,
+       "index": 2,
+       "text": "22"
+      },
+      {
+       "emphasized": false,
+       "index": 3,
+       "text": "6'4\""
+      },
+      {
+       "emphasized": false,
+       "index": 4,
+       "text": "332 lbs"
+      },
+      {
+       "emphasized": false,
+       "index": 5,
+       "text": "Alabama"
+      }
+     ],
+     "entityLink": {
+      "alternateImageUrl": "https://b.fssta.com/uploads/application/fs-app/default-headshot_dark.vresize.140.170.medium.0.png",
+      "analyticsName": "kam-dewberry",
+      "analyticsSport": "nfl",
+      "color": "1, 240, 31, 65",
+      "contentType": "athlete",
+      "contentUri": "football/nfl/athletes/329737",
+      "imageAltText": "Default Headshot",
+      "imageType": "image-headshot",
+      "imageUrl": "https://b.fssta.com/uploads/application/fs-app/default-headshot.vresize.140.170.medium.0.png",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+       "tokens": {
+        "contentUri": "football/nfl/athletes/329737",
+        "id": "329737"
+       }
+      },
+      "title": "KAM DEWBERRY",
+      "type": "entity",
+      "webUrl": "/nfl/kam-dewberry-player"
+     },
+     "isCutoff": false,
+     "isFaded": false,
+     "selected": false
+    },
+    {
+     "columns": [
+      {
+       "emphasized": false,
+       "imageAltText": "Jahan Dotson",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22754.vresize.140.170.medium.5.png",
+       "index": 0,
+       "superscript": "#4",
+       "text": "Jahan Dotson"
+      },
+      {
+       "emphasized": false,
+       "index": 1,
+       "text": "WR"
+      },
+      {
+       "emphasized": false,
+       "index": 2,
+       "text": "26"
+      },
+      {
+       "emphasized": false,
+       "index": 3,
+       "text": "5'11\""
+      },
+      {
+       "emphasized": false,
+       "index": 4,
+       "text": "184 lbs"
+      },
+      {
+       "emphasized": false,
+       "index": 5,
+       "text": "Penn State"
+      }
+     ],
+     "entityLink": {
+      "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22754.vresize.140.170.medium.5.png",
+      "analyticsName": "jahan-dotson",
+      "analyticsSport": "nfl",
+      "color": "1, 240, 31, 65",
+      "contentType": "athlete",
+      "contentUri": "football/nfl/athletes/22754",
+      "imageAltText": "Jahan Dotson",
+      "imageType": "image-headshot",
+      "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22754.vresize.140.170.medium.5.png",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+       "tokens": {
+        "contentUri": "football/nfl/athletes/22754",
+        "id": "22754"
+       }
+      },
+      "title": "JAHAN DOTSON",
+      "type": "entity",
+      "webUrl": "/nfl/jahan-dotson-player"
+     },
+     "isCutoff": false,
+     "isFaded": false,
+     "selected": false
+    },
+    {
+     "columns": [
+      {
+       "emphasized": false,
+       "imageAltText": "Dylan Drummond",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/327590.vresize.140.170.medium.3.png",
+       "index": 0,
+       "superscript": "#80",
+       "text": "Dylan Drummond"
+      },
+      {
+       "emphasized": false,
+       "index": 1,
+       "text": "WR"
+      },
+      {
+       "emphasized": false,
+       "index": 2,
+       "text": "26"
+      },
+      {
+       "emphasized": false,
+       "index": 3,
+       "text": "6'0\""
+      },
+      {
+       "emphasized": false,
+       "index": 4,
+       "text": "190 lbs"
+      },
+      {
+       "emphasized": false,
+       "index": 5,
+       "text": "Eastern Michigan"
+      }
+     ],
+     "entityLink": {
+      "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/327590.vresize.140.170.medium.3.png",
+      "analyticsName": "dylan-drummond",
+      "analyticsSport": "nfl",
+      "color": "1, 240, 31, 65",
+      "contentType": "athlete",
+      "contentUri": "football/nfl/athletes/327590",
+      "imageAltText": "Dylan Drummond",
+      "imageType": "image-headshot",
+      "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/327590.vresize.140.170.medium.3.png",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+       "tokens": {
+        "contentUri": "football/nfl/athletes/327590",
+        "id": "327590"
+       }
+      },
+      "title": "DYLAN DRUMMOND",
+      "type": "entity",
+      "webUrl": "/nfl/dylan-drummond-player"
+     },
+     "isCutoff": false,
+     "isFaded": false,
+     "selected": false
+    },
+    {
+     "columns": [
+      {
+       "emphasized": false,
+       "imageAltText": "Khalil Herbert",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22389.vresize.140.170.medium.3.png",
+       "index": 0,
+       "superscript": "#25",
+       "text": "Khalil Herbert"
+      },
+      {
+       "emphasized": false,
+       "index": 1,
+       "text": "RB"
+      },
+      {
+       "emphasized": false,
+       "index": 2,
+       "text": "28"
+      },
+      {
+       "emphasized": false,
+       "index": 3,
+       "text": "5'9\""
+      },
+      {
+       "emphasized": false,
+       "index": 4,
+       "text": "212 lbs"
+      },
+      {
+       "emphasized": false,
+       "index": 5,
+       "text": "Virginia Tech"
+      }
+     ],
+     "entityLink": {
+      "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22389.vresize.140.170.medium.3.png",
+      "analyticsName": "khalil-herbert",
+      "analyticsSport": "nfl",
+      "color": "1, 240, 31, 65",
+      "contentType": "athlete",
+      "contentUri": "football/nfl/athletes/22389",
+      "imageAltText": "Khalil Herbert",
+      "imageType": "image-headshot",
+      "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22389.vresize.140.170.medium.3.png",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+       "tokens": {
+        "contentUri": "football/nfl/athletes/22389",
+        "id": "22389"
+       }
+      },
+      "title": "KHALIL HERBERT",
+      "type": "entity",
+      "webUrl": "/nfl/khalil-herbert-player"
+     },
+     "isCutoff": false,
+     "isFaded": false,
+     "selected": false
+    },
+    {
+     "columns": [
+      {
+       "emphasized": false,
+       "imageAltText": "Kyle Hinton",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/21701.vresize.140.170.medium.3.png",
+       "index": 0,
+       "superscript": "#68",
+       "text": "Kyle Hinton"
+      },
+      {
+       "emphasized": false,
+       "index": 1,
+       "text": "OL"
+      },
+      {
+       "emphasized": false,
+       "index": 2,
+       "text": "28"
+      },
+      {
+       "emphasized": false,
+       "index": 3,
+       "text": "6'2\""
+      },
+      {
+       "emphasized": false,
+       "index": 4,
+       "text": "315 lbs"
+      },
+      {
+       "emphasized": false,
+       "index": 5,
+       "text": "Washburn"
+      }
+     ],
+     "entityLink": {
+      "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/21701.vresize.140.170.medium.3.png",
+      "analyticsName": "kyle-hinton",
+      "analyticsSport": "nfl",
+      "color": "1, 240, 31, 65",
+      "contentType": "athlete",
+      "contentUri": "football/nfl/athletes/21701",
+      "imageAltText": "Kyle Hinton",
+      "imageType": "image-headshot",
+      "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/21701.vresize.140.170.medium.3.png",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+       "tokens": {
+        "contentUri": "football/nfl/athletes/21701",
+        "id": "21701"
+       }
+      },
+      "title": "KYLE HINTON",
+      "type": "entity",
+      "webUrl": "/nfl/kyle-hinton-player"
+     },
+     "isCutoff": false,
+     "isFaded": false,
+     "selected": false
+    },
+    {
+     "columns": [
+      {
+       "emphasized": false,
+       "imageAltText": "Austin Hooper",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/12291.vresize.140.170.medium.5.png",
+       "index": 0,
+       "superscript": "#81",
+       "text": "Austin Hooper"
+      },
+      {
+       "emphasized": false,
+       "index": 1,
+       "text": "TE"
+      },
+      {
+       "emphasized": false,
+       "index": 2,
+       "text": "31"
+      },
+      {
+       "emphasized": false,
+       "index": 3,
+       "text": "6'4\""
+      },
+      {
+       "emphasized": false,
+       "index": 4,
+       "text": "254 lbs"
+      },
+      {
+       "emphasized": false,
+       "index": 5,
+       "text": "Stanford"
+      }
+     ],
+     "entityLink": {
+      "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/12291.vresize.140.170.medium.5.png",
+      "analyticsName": "austin-hooper",
+      "analyticsSport": "nfl",
+      "color": "1, 240, 31, 65",
+      "contentType": "athlete",
+      "contentUri": "football/nfl/athletes/12291",
+      "imageAltText": "Austin Hooper",
+      "imageType": "image-headshot",
+      "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/12291.vresize.140.170.medium.5.png",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+       "tokens": {
+        "contentUri": "football/nfl/athletes/12291",
+        "id": "12291"
+       }
+      },
+      "title": "AUSTIN HOOPER",
+      "type": "entity",
+      "webUrl": "/nfl/austin-hooper-player"
+     },
+     "isCutoff": false,
+     "isFaded": false,
+     "selected": false
+    },
+    {
+     "columns": [
+      {
+       "emphasized": false,
+       "imageAltText": "Michael Jerrell",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/327870.vresize.140.170.medium.3.png",
+       "index": 0,
+       "superscript": "#72",
+       "text": "Michael Jerrell"
+      },
+      {
+       "emphasized": false,
+       "index": 1,
+       "text": "OL"
+      },
+      {
+       "emphasized": false,
+       "index": 2,
+       "text": "27"
+      },
+      {
+       "emphasized": false,
+       "index": 3,
+       "text": "6'5\""
+      },
+      {
+       "emphasized": false,
+       "index": 4,
+       "text": "309 lbs"
+      },
+      {
+       "emphasized": false,
+       "index": 5,
+       "text": "Findlay"
+      }
+     ],
+     "entityLink": {
+      "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/327870.vresize.140.170.medium.3.png",
+      "analyticsName": "michael-jerrell",
+      "analyticsSport": "nfl",
+      "color": "1, 240, 31, 65",
+      "contentType": "athlete",
+      "contentUri": "football/nfl/athletes/327870",
+      "imageAltText": "Michael Jerrell",
+      "imageType": "image-headshot",
+      "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/327870.vresize.140.170.medium.3.png",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+       "tokens": {
+        "contentUri": "football/nfl/athletes/327870",
+        "id": "327870"
+       }
+      },
+      "title": "MICHAEL JERRELL",
+      "type": "entity",
+      "webUrl": "/nfl/michael-jerrell-player"
+     },
+     "isCutoff": false,
+     "isFaded": false,
+     "selected": false
+    },
+    {
+     "columns": [
+      {
+       "emphasized": false,
+       "imageAltText": "Corey Levin",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/13313.vresize.140.170.medium.3.png",
+       "index": 0,
+       "superscript": "#62",
+       "text": "Corey Levin"
+      },
+      {
+       "emphasized": false,
+       "index": 1,
+       "text": "OL"
+      },
+      {
+       "emphasized": false,
+       "index": 2,
+       "text": "32"
+      },
+      {
+       "emphasized": false,
+       "index": 3,
+       "text": "6'4\""
+      },
+      {
+       "emphasized": false,
+       "index": 4,
+       "text": "307 lbs"
+      },
+      {
+       "emphasized": false,
+       "index": 5,
+       "text": "Chattanooga"
+      }
+     ],
+     "entityLink": {
+      "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/13313.vresize.140.170.medium.3.png",
+      "analyticsName": "corey-levin",
+      "analyticsSport": "nfl",
+      "color": "1, 240, 31, 65",
+      "contentType": "athlete",
+      "contentUri": "football/nfl/athletes/13313",
+      "imageAltText": "Corey Levin",
+      "imageType": "image-headshot",
+      "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/13313.vresize.140.170.medium.3.png",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+       "tokens": {
+        "contentUri": "football/nfl/athletes/13313",
+        "id": "13313"
+       }
+      },
+      "title": "COREY LEVIN",
+      "type": "entity",
+      "webUrl": "/nfl/corey-levin-player"
+     },
+     "isCutoff": false,
+     "isFaded": false,
+     "selected": false
+    },
+    {
+     "columns": [
+      {
+       "emphasized": false,
+       "imageAltText": "Chris Lindstrom",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/14862.vresize.140.170.medium.5.png",
+       "index": 0,
+       "superscript": "#63",
+       "text": "Chris Lindstrom"
+      },
+      {
+       "emphasized": false,
+       "index": 1,
+       "text": "G"
+      },
+      {
+       "emphasized": false,
+       "index": 2,
+       "text": "29"
+      },
+      {
+       "emphasized": false,
+       "index": 3,
+       "text": "6'4\""
+      },
+      {
+       "emphasized": false,
+       "index": 4,
+       "text": "310 lbs"
+      },
+      {
+       "emphasized": false,
+       "index": 5,
+       "text": "Boston College"
+      }
+     ],
+     "entityLink": {
+      "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/14862.vresize.140.170.medium.5.png",
+      "analyticsName": "chris-lindstrom",
+      "analyticsSport": "nfl",
+      "color": "1, 240, 31, 65",
+      "contentType": "athlete",
+      "contentUri": "football/nfl/athletes/14862",
+      "imageAltText": "Chris Lindstrom",
+      "imageType": "image-headshot",
+      "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/14862.vresize.140.170.medium.5.png",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+       "tokens": {
+        "contentUri": "football/nfl/athletes/14862",
+        "id": "14862"
+       }
+      },
+      "title": "CHRIS LINDSTROM",
+      "type": "entity",
+      "webUrl": "/nfl/chris-lindstrom-player"
+     },
+     "isCutoff": false,
+     "isFaded": false,
+     "selected": false
+    },
+    {
+     "columns": [
+      {
+       "emphasized": false,
+       "imageAltText": "Drake London",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22760.vresize.140.170.medium.5.png",
+       "index": 0,
+       "superscript": "#5",
+       "text": "Drake London"
+      },
+      {
+       "emphasized": false,
+       "index": 1,
+       "text": "WR"
+      },
+      {
+       "emphasized": false,
+       "index": 2,
+       "text": "25"
+      },
+      {
+       "emphasized": false,
+       "index": 3,
+       "text": "6'4\""
+      },
+      {
+       "emphasized": false,
+       "index": 4,
+       "text": "215 lbs"
+      },
+      {
+       "emphasized": false,
+       "index": 5,
+       "text": "USC"
+      }
+     ],
+     "entityLink": {
+      "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22760.vresize.140.170.medium.5.png",
+      "analyticsName": "drake-london",
+      "analyticsSport": "nfl",
+      "color": "1, 240, 31, 65",
+      "contentType": "athlete",
+      "contentUri": "football/nfl/athletes/22760",
+      "imageAltText": "Drake London",
+      "imageType": "image-headshot",
+      "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22760.vresize.140.170.medium.5.png",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+       "tokens": {
+        "contentUri": "football/nfl/athletes/22760",
+        "id": "22760"
+       }
+      },
+      "title": "DRAKE LONDON",
+      "type": "entity",
+      "webUrl": "/nfl/drake-london-player"
+     },
+     "isCutoff": false,
+     "isFaded": false,
+     "selected": false
+    },
+    {
+     "columns": [
+      {
+       "emphasized": false,
+       "imageAltText": "Default Headshot",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/fs-app/default-headshot.vresize.140.170.medium.0.png",
+       "index": 0,
+       "superscript": "#76",
+       "text": "Riley Mahlman"
+      },
+      {
+       "emphasized": false,
+       "index": 1,
+       "text": "T"
+      },
+      {
+       "emphasized": false,
+       "index": 2,
+       "text": "23"
+      },
+      {
+       "emphasized": false,
+       "index": 3,
+       "text": "6'8\""
+      },
+      {
+       "emphasized": false,
+       "index": 4,
+       "text": "318 lbs"
+      },
+      {
+       "emphasized": false,
+       "index": 5,
+       "text": "Wisconsin"
+      }
+     ],
+     "entityLink": {
+      "alternateImageUrl": "https://b.fssta.com/uploads/application/fs-app/default-headshot_dark.vresize.140.170.medium.0.png",
+      "analyticsName": "riley-mahlman",
+      "analyticsSport": "nfl",
+      "color": "1, 240, 31, 65",
+      "contentType": "athlete",
+      "contentUri": "football/nfl/athletes/329738",
+      "imageAltText": "Default Headshot",
+      "imageType": "image-headshot",
+      "imageUrl": "https://b.fssta.com/uploads/application/fs-app/default-headshot.vresize.140.170.medium.0.png",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+       "tokens": {
+        "contentUri": "football/nfl/athletes/329738",
+        "id": "329738"
+       }
+      },
+      "title": "RILEY MAHLMAN",
+      "type": "entity",
+      "webUrl": "/nfl/riley-mahlman-player"
+     },
+     "isCutoff": false,
+     "isFaded": false,
+     "selected": false
+    },
+    {
+     "columns": [
+      {
+       "emphasized": false,
+       "imageAltText": "Jake Matthews",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/10505.vresize.140.170.medium.5.png",
+       "index": 0,
+       "superscript": "#70",
+       "text": "Jake Matthews"
+      },
+      {
+       "emphasized": false,
+       "index": 1,
+       "text": "T"
+      },
+      {
+       "emphasized": false,
+       "index": 2,
+       "text": "34"
+      },
+      {
+       "emphasized": false,
+       "index": 3,
+       "text": "6'5\""
+      },
+      {
+       "emphasized": false,
+       "index": 4,
+       "text": "310 lbs"
+      },
+      {
+       "emphasized": false,
+       "index": 5,
+       "text": "Texas A&M"
+      }
+     ],
+     "entityLink": {
+      "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/10505.vresize.140.170.medium.5.png",
+      "analyticsName": "jake-matthews",
+      "analyticsSport": "nfl",
+      "color": "1, 240, 31, 65",
+      "contentType": "athlete",
+      "contentUri": "football/nfl/athletes/10505",
+      "imageAltText": "Jake Matthews",
+      "imageType": "image-headshot",
+      "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/10505.vresize.140.170.medium.5.png",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+       "tokens": {
+        "contentUri": "football/nfl/athletes/10505",
+        "id": "10505"
+       }
+      },
+      "title": "JAKE MATTHEWS",
+      "type": "entity",
+      "webUrl": "/nfl/jake-matthews-player"
+     },
+     "isCutoff": false,
+     "isFaded": false,
+     "selected": false
+    },
+    {
+     "columns": [
+      {
+       "emphasized": false,
+       "imageAltText": "Default Headshot",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/fs-app/default-headshot.vresize.140.170.medium.0.png",
+       "index": 0,
+       "superscript": "-",
+       "text": "Jam Miller"
+      },
+      {
+       "emphasized": false,
+       "index": 1,
+       "text": "RB"
+      },
+      {
+       "emphasized": false,
+       "index": 2,
+       "text": "-"
+      },
+      {
+       "emphasized": false,
+       "index": 3,
+       "text": "5'10\""
+      },
+      {
+       "emphasized": false,
+       "index": 4,
+       "text": "209 lbs"
+      },
+      {
+       "emphasized": false,
+       "index": 5,
+       "text": "Alabama"
+      }
+     ],
+     "entityLink": {
+      "alternateImageUrl": "https://b.fssta.com/uploads/application/fs-app/default-headshot_dark.vresize.140.170.medium.0.png",
+      "analyticsName": "jam-miller",
+      "analyticsSport": "nfl",
+      "color": "1, 240, 31, 65",
+      "contentType": "athlete",
+      "contentUri": "football/nfl/athletes/329580",
+      "imageAltText": "Default Headshot",
+      "imageType": "image-headshot",
+      "imageUrl": "https://b.fssta.com/uploads/application/fs-app/default-headshot.vresize.140.170.medium.0.png",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+       "tokens": {
+        "contentUri": "football/nfl/athletes/329580",
+        "id": "329580"
+       }
+      },
+      "title": "JAM MILLER",
+      "type": "entity",
+      "webUrl": "/nfl/jam-miller-player"
+     },
+     "isCutoff": false,
+     "isFaded": false,
+     "selected": false
+    },
+    {
+     "columns": [
+      {
+       "emphasized": false,
+       "imageAltText": "Nick Muse",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22992.vresize.140.170.medium.3.png",
+       "index": 0,
+       "superscript": "#87",
+       "text": "Nick Muse"
+      },
+      {
+       "emphasized": false,
+       "index": 1,
+       "text": "TE"
+      },
+      {
+       "emphasized": false,
+       "index": 2,
+       "text": "27"
+      },
+      {
+       "emphasized": false,
+       "index": 3,
+       "text": "6'5\""
+      },
+      {
+       "emphasized": false,
+       "index": 4,
+       "text": "252 lbs"
+      },
+      {
+       "emphasized": false,
+       "index": 5,
+       "text": "South Carolina"
+      }
+     ],
+     "entityLink": {
+      "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22992.vresize.140.170.medium.3.png",
+      "analyticsName": "nick-muse",
+      "analyticsSport": "nfl",
+      "color": "1, 240, 31, 65",
+      "contentType": "athlete",
+      "contentUri": "football/nfl/athletes/22992",
+      "imageAltText": "Nick Muse",
+      "imageType": "image-headshot",
+      "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22992.vresize.140.170.medium.3.png",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+       "tokens": {
+        "contentUri": "football/nfl/athletes/22992",
+        "id": "22992"
+       }
+      },
+      "title": "NICK MUSE",
+      "type": "entity",
+      "webUrl": "/nfl/nick-muse-player"
+     },
+     "isCutoff": false,
+     "isFaded": false,
+     "selected": false
+    },
+    {
+     "columns": [
+      {
+       "emphasized": false,
+       "imageAltText": "Ryan Neuzil",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22602.vresize.140.170.medium.3.png",
+       "index": 0,
+       "superscript": "#64",
+       "text": "Ryan Neuzil"
+      },
+      {
+       "emphasized": false,
+       "index": 1,
+       "text": "OL"
+      },
+      {
+       "emphasized": false,
+       "index": 2,
+       "text": "29"
+      },
+      {
+       "emphasized": false,
+       "index": 3,
+       "text": "6'3\""
+      },
+      {
+       "emphasized": false,
+       "index": 4,
+       "text": "305 lbs"
+      },
+      {
+       "emphasized": false,
+       "index": 5,
+       "text": "Appalachian State"
+      }
+     ],
+     "entityLink": {
+      "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22602.vresize.140.170.medium.3.png",
+      "analyticsName": "ryan-neuzil",
+      "analyticsSport": "nfl",
+      "color": "1, 240, 31, 65",
+      "contentType": "athlete",
+      "contentUri": "football/nfl/athletes/22602",
+      "imageAltText": "Ryan Neuzil",
+      "imageType": "image-headshot",
+      "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22602.vresize.140.170.medium.3.png",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+       "tokens": {
+        "contentUri": "football/nfl/athletes/22602",
+        "id": "22602"
+       }
+      },
+      "title": "RYAN NEUZIL",
+      "type": "entity",
+      "webUrl": "/nfl/ryan-neuzil-player"
+     },
+     "isCutoff": false,
+     "isFaded": false,
+     "selected": false
+    },
+    {
+     "columns": [
+      {
+       "emphasized": false,
+       "imageAltText": "Storm Norton",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/13768.vresize.140.170.medium.3.png",
+       "index": 0,
+       "superscript": "#77",
+       "text": "Storm Norton"
+      },
+      {
+       "emphasized": false,
+       "index": 1,
+       "text": "OL"
+      },
+      {
+       "emphasized": false,
+       "index": 2,
+       "text": "32"
+      },
+      {
+       "emphasized": false,
+       "index": 3,
+       "text": "6'7\""
+      },
+      {
+       "emphasized": false,
+       "index": 4,
+       "text": "310 lbs"
+      },
+      {
+       "emphasized": false,
+       "index": 5,
+       "text": "Toledo"
+      }
+     ],
+     "entityLink": {
+      "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/13768.vresize.140.170.medium.3.png",
+      "analyticsName": "storm-norton",
+      "analyticsSport": "nfl",
+      "color": "1, 240, 31, 65",
+      "contentType": "athlete",
+      "contentUri": "football/nfl/athletes/13768",
+      "imageAltText": "Storm Norton",
+      "imageType": "image-headshot",
+      "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/13768.vresize.140.170.medium.3.png",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+       "tokens": {
+        "contentUri": "football/nfl/athletes/13768",
+        "id": "13768"
+       }
+      },
+      "title": "STORM NORTON",
+      "type": "entity",
+      "webUrl": "/nfl/storm-norton-player"
+     },
+     "isCutoff": false,
+     "isFaded": false,
+     "selected": false
+    },
+    {
+     "columns": [
+      {
+       "emphasized": false,
+       "imageAltText": "Ethan Onianwa",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/329605.vresize.140.170.medium.2.png",
+       "index": 0,
+       "superscript": "#75",
+       "text": "Ethan Onianwa"
+      },
+      {
+       "emphasized": false,
+       "index": 1,
+       "text": "T"
+      },
+      {
+       "emphasized": false,
+       "index": 2,
+       "text": "23"
+      },
+      {
+       "emphasized": false,
+       "index": 3,
+       "text": "6'7\""
+      },
+      {
+       "emphasized": false,
+       "index": 4,
+       "text": "331 lbs"
+      },
+      {
+       "emphasized": false,
+       "index": 5,
+       "text": "Ohio State"
+      }
+     ],
+     "entityLink": {
+      "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/329605.vresize.140.170.medium.2.png",
+      "analyticsName": "ethan-onianwa",
+      "analyticsSport": "nfl",
+      "color": "1, 240, 31, 65",
+      "contentType": "athlete",
+      "contentUri": "football/nfl/athletes/329605",
+      "imageAltText": "Ethan Onianwa",
+      "imageType": "image-headshot",
+      "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/329605.vresize.140.170.medium.2.png",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+       "tokens": {
+        "contentUri": "football/nfl/athletes/329605",
+        "id": "329605"
+       }
+      },
+      "title": "ETHAN ONIANWA",
+      "type": "entity",
+      "webUrl": "/nfl/ethan-onianwa-player"
+     },
+     "isCutoff": false,
+     "isFaded": false,
+     "selected": false
+    },
+    {
+     "columns": [
+      {
+       "emphasized": false,
+       "imageAltText": "Michael Penix Jr.",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/327699.vresize.140.170.medium.5.png",
+       "index": 0,
+       "superscript": "#9",
+       "text": "Michael Penix Jr."
+      },
+      {
+       "emphasized": false,
+       "index": 1,
+       "text": "QB"
+      },
+      {
+       "emphasized": false,
+       "index": 2,
+       "text": "26"
+      },
+      {
+       "emphasized": false,
+       "index": 3,
+       "text": "6'3\""
+      },
+      {
+       "emphasized": false,
+       "index": 4,
+       "text": "220 lbs"
+      },
+      {
+       "emphasized": false,
+       "index": 5,
+       "text": "Washington"
+      }
+     ],
+     "entityLink": {
+      "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/327699.vresize.140.170.medium.5.png",
+      "analyticsName": "michael-penix",
+      "analyticsSport": "nfl",
+      "color": "1, 240, 31, 65",
+      "contentType": "athlete",
+      "contentUri": "football/nfl/athletes/327699",
+      "imageAltText": "Michael Penix Jr.",
+      "imageType": "image-headshot",
+      "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/327699.vresize.140.170.medium.5.png",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+       "tokens": {
+        "contentUri": "football/nfl/athletes/327699",
+        "id": "327699"
+       }
+      },
+      "title": "MICHAEL PENIX JR.",
+      "type": "entity",
+      "webUrl": "/nfl/michael-penix-player"
+     },
+     "isCutoff": false,
+     "isFaded": false,
+     "selected": false
+    },
+    {
+     "columns": [
+      {
+       "emphasized": false,
+       "imageAltText": "Kyle Pitts Sr.",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22193.vresize.140.170.medium.5.png",
+       "index": 0,
+       "superscript": "#8",
+       "text": "Kyle Pitts Sr."
+      },
+      {
+       "emphasized": false,
+       "index": 1,
+       "text": "TE"
+      },
+      {
+       "emphasized": false,
+       "index": 2,
+       "text": "26"
+      },
+      {
+       "emphasized": false,
+       "index": 3,
+       "text": "6'6\""
+      },
+      {
+       "emphasized": false,
+       "index": 4,
+       "text": "250 lbs"
+      },
+      {
+       "emphasized": false,
+       "index": 5,
+       "text": "Florida"
+      }
+     ],
+     "entityLink": {
+      "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22193.vresize.140.170.medium.5.png",
+      "analyticsName": "kyle-pitts",
+      "analyticsSport": "nfl",
+      "color": "1, 240, 31, 65",
+      "contentType": "athlete",
+      "contentUri": "football/nfl/athletes/22193",
+      "imageAltText": "Kyle Pitts Sr.",
+      "imageType": "image-headshot",
+      "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22193.vresize.140.170.medium.5.png",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+       "tokens": {
+        "contentUri": "football/nfl/athletes/22193",
+        "id": "22193"
+       }
+      },
+      "title": "KYLE PITTS SR.",
+      "type": "entity",
+      "webUrl": "/nfl/kyle-pitts-player"
+     },
+     "isCutoff": false,
+     "isFaded": false,
+     "selected": false
+    },
+    {
+     "columns": [
+      {
+       "emphasized": false,
+       "imageAltText": "Bijan Robinson",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/326923.vresize.140.170.medium.5.png",
+       "index": 0,
+       "superscript": "#7",
+       "text": "Bijan Robinson"
+      },
+      {
+       "emphasized": false,
+       "index": 1,
+       "text": "RB"
+      },
+      {
+       "emphasized": false,
+       "index": 2,
+       "text": "24"
+      },
+      {
+       "emphasized": false,
+       "index": 3,
+       "text": "5'11\""
+      },
+      {
+       "emphasized": false,
+       "index": 4,
+       "text": "215 lbs"
+      },
+      {
+       "emphasized": false,
+       "index": 5,
+       "text": "Texas"
+      }
+     ],
+     "entityLink": {
+      "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/326923.vresize.140.170.medium.5.png",
+      "analyticsName": "bijan-robinson",
+      "analyticsSport": "nfl",
+      "color": "1, 240, 31, 65",
+      "contentType": "athlete",
+      "contentUri": "football/nfl/athletes/326923",
+      "imageAltText": "Bijan Robinson",
+      "imageType": "image-headshot",
+      "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/326923.vresize.140.170.medium.5.png",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+       "tokens": {
+        "contentUri": "football/nfl/athletes/326923",
+        "id": "326923"
+       }
+      },
+      "title": "BIJAN ROBINSON",
+      "type": "entity",
+      "webUrl": "/nfl/bijan-robinson-player"
+     },
+     "isCutoff": false,
+     "isFaded": false,
+     "selected": false
+    },
+    {
+     "columns": [
+      {
+       "emphasized": false,
+       "imageAltText": "Brian Robinson",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22828.vresize.140.170.medium.3.png",
+       "index": 0,
+       "superscript": "#15",
+       "text": "Brian Robinson"
+      },
+      {
+       "emphasized": false,
+       "index": 1,
+       "text": "RB"
+      },
+      {
+       "emphasized": false,
+       "index": 2,
+       "text": "27"
+      },
+      {
+       "emphasized": false,
+       "index": 3,
+       "text": "6'1\""
+      },
+      {
+       "emphasized": false,
+       "index": 4,
+       "text": "225 lbs"
+      },
+      {
+       "emphasized": false,
+       "index": 5,
+       "text": "Alabama"
+      }
+     ],
+     "entityLink": {
+      "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22828.vresize.140.170.medium.3.png",
+      "analyticsName": "brian-robinson",
+      "analyticsSport": "nfl",
+      "color": "1, 240, 31, 65",
+      "contentType": "athlete",
+      "contentUri": "football/nfl/athletes/22828",
+      "imageAltText": "Brian Robinson",
+      "imageType": "image-headshot",
+      "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22828.vresize.140.170.medium.3.png",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+       "tokens": {
+        "contentUri": "football/nfl/athletes/22828",
+        "id": "22828"
+       }
+      },
+      "title": "BRIAN ROBINSON",
+      "type": "entity",
+      "webUrl": "/nfl/brian-robinson-player"
+     },
+     "isCutoff": false,
+     "isFaded": false,
+     "selected": false
+    },
+    {
+     "columns": [
+      {
+       "emphasized": false,
+       "imageAltText": "Cooper Rush",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/13757.vresize.140.170.medium.3.png",
+       "index": 0,
+       "superscript": "#13",
+       "text": "Cooper Rush"
+      },
+      {
+       "emphasized": false,
+       "index": 1,
+       "text": "QB"
+      },
+      {
+       "emphasized": false,
+       "index": 2,
+       "text": "32"
+      },
+      {
+       "emphasized": false,
+       "index": 3,
+       "text": "6'3\""
+      },
+      {
+       "emphasized": false,
+       "index": 4,
+       "text": "224 lbs"
+      },
+      {
+       "emphasized": false,
+       "index": 5,
+       "text": "Central Michigan"
+      }
+     ],
+     "entityLink": {
+      "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/13757.vresize.140.170.medium.3.png",
+      "analyticsName": "cooper-rush",
+      "analyticsSport": "nfl",
+      "color": "1, 240, 31, 65",
+      "contentType": "athlete",
+      "contentUri": "football/nfl/athletes/13757",
+      "imageAltText": "Cooper Rush",
+      "imageType": "image-headshot",
+      "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/13757.vresize.140.170.medium.3.png",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+       "tokens": {
+        "contentUri": "football/nfl/athletes/13757",
+        "id": "13757"
+       }
+      },
+      "title": "COOPER RUSH",
+      "type": "entity",
+      "webUrl": "/nfl/cooper-rush-player"
+     },
+     "isCutoff": false,
+     "isFaded": false,
+     "selected": false
+    },
+    {
+     "columns": [
+      {
+       "emphasized": false,
+       "imageAltText": "Trey Sermon",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22268.vresize.140.170.medium.3.png",
+       "index": 0,
+       "superscript": "#44",
+       "text": "Trey Sermon"
+      },
+      {
+       "emphasized": false,
+       "index": 1,
+       "text": "RB"
+      },
+      {
+       "emphasized": false,
+       "index": 2,
+       "text": "27"
+      },
+      {
+       "emphasized": false,
+       "index": 3,
+       "text": "6'0\""
+      },
+      {
+       "emphasized": false,
+       "index": 4,
+       "text": "215 lbs"
+      },
+      {
+       "emphasized": false,
+       "index": 5,
+       "text": "Ohio State"
+      }
+     ],
+     "entityLink": {
+      "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22268.vresize.140.170.medium.3.png",
+      "analyticsName": "trey-sermon",
+      "analyticsSport": "nfl",
+      "color": "1, 240, 31, 65",
+      "contentType": "athlete",
+      "contentUri": "football/nfl/athletes/22268",
+      "imageAltText": "Trey Sermon",
+      "imageType": "image-headshot",
+      "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22268.vresize.140.170.medium.3.png",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+       "tokens": {
+        "contentUri": "football/nfl/athletes/22268",
+        "id": "22268"
+       }
+      },
+      "title": "TREY SERMON",
+      "type": "entity",
+      "webUrl": "/nfl/trey-sermon-player"
+     },
+     "isCutoff": false,
+     "isFaded": false,
+     "selected": false
+    },
+    {
+     "columns": [
+      {
+       "emphasized": false,
+       "imageAltText": "Colby Sorsdal",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/327057.vresize.140.170.medium.3.png",
+       "index": 0,
+       "superscript": "#74",
+       "text": "Colby Sorsdal"
+      },
+      {
+       "emphasized": false,
+       "index": 1,
+       "text": "OL"
+      },
+      {
+       "emphasized": false,
+       "index": 2,
+       "text": "26"
+      },
+      {
+       "emphasized": false,
+       "index": 3,
+       "text": "6'6\""
+      },
+      {
+       "emphasized": false,
+       "index": 4,
+       "text": "315 lbs"
+      },
+      {
+       "emphasized": false,
+       "index": 5,
+       "text": "William & Mary"
+      }
+     ],
+     "entityLink": {
+      "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/327057.vresize.140.170.medium.3.png",
+      "analyticsName": "colby-sorsdal",
+      "analyticsSport": "nfl",
+      "color": "1, 240, 31, 65",
+      "contentType": "athlete",
+      "contentUri": "football/nfl/athletes/327057",
+      "imageAltText": "Colby Sorsdal",
+      "imageType": "image-headshot",
+      "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/327057.vresize.140.170.medium.3.png",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+       "tokens": {
+        "contentUri": "football/nfl/athletes/327057",
+        "id": "327057"
+       }
+      },
+      "title": "COLBY SORSDAL",
+      "type": "entity",
+      "webUrl": "/nfl/colby-sorsdal-player"
+     },
+     "isCutoff": false,
+     "isFaded": false,
+     "selected": false
+    },
+    {
+     "columns": [
+      {
+       "emphasized": false,
+       "imageAltText": "Default Headshot",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/fs-app/default-headshot.vresize.140.170.medium.0.png",
+       "index": 0,
+       "superscript": "#18",
+       "text": "Jack Strand"
+      },
+      {
+       "emphasized": false,
+       "index": 1,
+       "text": "QB"
+      },
+      {
+       "emphasized": false,
+       "index": 2,
+       "text": "22"
+      },
+      {
+       "emphasized": false,
+       "index": 3,
+       "text": "6'5\""
+      },
+      {
+       "emphasized": false,
+       "index": 4,
+       "text": "240 lbs"
+      },
+      {
+       "emphasized": false,
+       "index": 5,
+       "text": "Minnesota State Moorhead"
+      }
+     ],
+     "entityLink": {
+      "alternateImageUrl": "https://b.fssta.com/uploads/application/fs-app/default-headshot_dark.vresize.140.170.medium.0.png",
+      "analyticsName": "jack-strand",
+      "analyticsSport": "nfl",
+      "color": "1, 240, 31, 65",
+      "contentType": "athlete",
+      "contentUri": "football/nfl/athletes/329635",
+      "imageAltText": "Default Headshot",
+      "imageType": "image-headshot",
+      "imageUrl": "https://b.fssta.com/uploads/application/fs-app/default-headshot.vresize.140.170.medium.0.png",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+       "tokens": {
+        "contentUri": "football/nfl/athletes/329635",
+        "id": "329635"
+       }
+      },
+      "title": "JACK STRAND",
+      "type": "entity",
+      "webUrl": "/nfl/jack-strand-player"
+     },
+     "isCutoff": false,
+     "isFaded": false,
+     "selected": false
+    },
+    {
+     "columns": [
+      {
+       "emphasized": false,
+       "imageAltText": "Tua Tagovailoa",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/21446.vresize.140.170.medium.6.png",
+       "index": 0,
+       "superscript": "#1",
+       "text": "Tua Tagovailoa"
+      },
+      {
+       "emphasized": false,
+       "index": 1,
+       "text": "QB"
+      },
+      {
+       "emphasized": false,
+       "index": 2,
+       "text": "28"
+      },
+      {
+       "emphasized": false,
+       "index": 3,
+       "text": "6'1\""
+      },
+      {
+       "emphasized": false,
+       "index": 4,
+       "text": "225 lbs"
+      },
+      {
+       "emphasized": false,
+       "index": 5,
+       "text": "Alabama"
+      }
+     ],
+     "entityLink": {
+      "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/21446.vresize.140.170.medium.6.png",
+      "analyticsName": "tua-tagovailoa",
+      "analyticsSport": "nfl",
+      "color": "1, 240, 31, 65",
+      "contentType": "athlete",
+      "contentUri": "football/nfl/athletes/21446",
+      "imageAltText": "Tua Tagovailoa",
+      "imageType": "image-headshot",
+      "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/21446.vresize.140.170.medium.6.png",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+       "tokens": {
+        "contentUri": "football/nfl/athletes/21446",
+        "id": "21446"
+       }
+      },
+      "title": "TUA TAGOVAILOA",
+      "type": "entity",
+      "webUrl": "/nfl/tua-tagovailoa-player"
+     },
+     "isCutoff": false,
+     "isFaded": false,
+     "selected": false
+    },
+    {
+     "columns": [
+      {
+       "emphasized": false,
+       "imageAltText": "Jawaan Taylor",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/14905.vresize.140.170.medium.3.png",
+       "index": 0,
+       "superscript": "#71",
+       "text": "Jawaan Taylor"
+      },
+      {
+       "emphasized": false,
+       "index": 1,
+       "text": "T"
+      },
+      {
+       "emphasized": false,
+       "index": 2,
+       "text": "28"
+      },
+      {
+       "emphasized": false,
+       "index": 3,
+       "text": "6'5\""
+      },
+      {
+       "emphasized": false,
+       "index": 4,
+       "text": "312 lbs"
+      },
+      {
+       "emphasized": false,
+       "index": 5,
+       "text": "Florida"
+      }
+     ],
+     "entityLink": {
+      "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/14905.vresize.140.170.medium.3.png",
+      "analyticsName": "jawaan-taylor",
+      "analyticsSport": "nfl",
+      "color": "1, 240, 31, 65",
+      "contentType": "athlete",
+      "contentUri": "football/nfl/athletes/14905",
+      "imageAltText": "Jawaan Taylor",
+      "imageType": "image-headshot",
+      "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/14905.vresize.140.170.medium.3.png",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+       "tokens": {
+        "contentUri": "football/nfl/athletes/14905",
+        "id": "14905"
+       }
+      },
+      "title": "JAWAAN TAYLOR",
+      "type": "entity",
+      "webUrl": "/nfl/jawaan-taylor-player"
+     },
+     "isCutoff": false,
+     "isFaded": false,
+     "selected": false
+    },
+    {
+     "columns": [
+      {
+       "emphasized": false,
+       "imageAltText": "Default Headshot",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/fs-app/default-headshot.vresize.140.170.medium.0.png",
+       "index": 0,
+       "superscript": "#67",
+       "text": "Josh Thompson"
+      },
+      {
+       "emphasized": false,
+       "index": 1,
+       "text": "OL"
+      },
+      {
+       "emphasized": false,
+       "index": 2,
+       "text": "27"
+      },
+      {
+       "emphasized": false,
+       "index": 3,
+       "text": "6'5\""
+      },
+      {
+       "emphasized": false,
+       "index": 4,
+       "text": "315 lbs"
+      },
+      {
+       "emphasized": false,
+       "index": 5,
+       "text": "LSU"
+      }
+     ],
+     "entityLink": {
+      "alternateImageUrl": "https://b.fssta.com/uploads/application/fs-app/default-headshot_dark.vresize.140.170.medium.0.png",
+      "analyticsName": "josh-thompson-2",
+      "analyticsSport": "nfl",
+      "color": "1, 240, 31, 65",
+      "contentType": "athlete",
+      "contentUri": "football/nfl/athletes/329850",
+      "imageAltText": "Default Headshot",
+      "imageType": "image-headshot",
+      "imageUrl": "https://b.fssta.com/uploads/application/fs-app/default-headshot.vresize.140.170.medium.0.png",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+       "tokens": {
+        "contentUri": "football/nfl/athletes/329850",
+        "id": "329850"
+       }
+      },
+      "title": "JOSH THOMPSON",
+      "type": "entity",
+      "webUrl": "/nfl/josh-thompson-2-player"
+     },
+     "isCutoff": false,
+     "isFaded": false,
+     "selected": false
+    },
+    {
+     "columns": [
+      {
+       "emphasized": false,
+       "imageAltText": "Default Headshot",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/fs-app/default-headshot.vresize.140.170.medium.0.png",
+       "index": 0,
+       "superscript": "#84",
+       "text": "Jack Velling"
+      },
+      {
+       "emphasized": false,
+       "index": 1,
+       "text": "TE"
+      },
+      {
+       "emphasized": false,
+       "index": 2,
+       "text": "22"
+      },
+      {
+       "emphasized": false,
+       "index": 3,
+       "text": "6'5\""
+      },
+      {
+       "emphasized": false,
+       "index": 4,
+       "text": "245 lbs"
+      },
+      {
+       "emphasized": false,
+       "index": 5,
+       "text": "Michigan State"
+      }
+     ],
+     "entityLink": {
+      "alternateImageUrl": "https://b.fssta.com/uploads/application/fs-app/default-headshot_dark.vresize.140.170.medium.0.png",
+      "analyticsName": "jack-velling",
+      "analyticsSport": "nfl",
+      "color": "1, 240, 31, 65",
+      "contentType": "athlete",
+      "contentUri": "football/nfl/athletes/329915",
+      "imageAltText": "Default Headshot",
+      "imageType": "image-headshot",
+      "imageUrl": "https://b.fssta.com/uploads/application/fs-app/default-headshot.vresize.140.170.medium.0.png",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+       "tokens": {
+        "contentUri": "football/nfl/athletes/329915",
+        "id": "329915"
+       }
+      },
+      "title": "JACK VELLING",
+      "type": "entity",
+      "webUrl": "/nfl/jack-velling-player"
+     },
+     "isCutoff": false,
+     "isFaded": false,
+     "selected": false
+    },
+    {
+     "columns": [
+      {
+       "emphasized": false,
+       "imageAltText": "Antwane Wells Jr.",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/329218.vresize.140.170.medium.2.png",
+       "index": 0,
+       "superscript": "#82",
+       "text": "Antwane Wells Jr."
+      },
+      {
+       "emphasized": false,
+       "index": 1,
+       "text": "WR"
+      },
+      {
+       "emphasized": false,
+       "index": 2,
+       "text": "25"
+      },
+      {
+       "emphasized": false,
+       "index": 3,
+       "text": "6'0\""
+      },
+      {
+       "emphasized": false,
+       "index": 4,
+       "text": "205 lbs"
+      },
+      {
+       "emphasized": false,
+       "index": 5,
+       "text": "Ole Miss"
+      }
+     ],
+     "entityLink": {
+      "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/329218.vresize.140.170.medium.2.png",
+      "analyticsName": "antwane-wells-jr",
+      "analyticsSport": "nfl",
+      "color": "1, 240, 31, 65",
+      "contentType": "athlete",
+      "contentUri": "football/nfl/athletes/329218",
+      "imageAltText": "Antwane Wells Jr.",
+      "imageType": "image-headshot",
+      "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/329218.vresize.140.170.medium.2.png",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+       "tokens": {
+        "contentUri": "football/nfl/athletes/329218",
+        "id": "329218"
+       }
+      },
+      "title": "ANTWANE WELLS JR.",
+      "type": "entity",
+      "webUrl": "/nfl/antwane-wells-jr-player"
+     },
+     "isCutoff": false,
+     "isFaded": false,
+     "selected": false
+    },
+    {
+     "columns": [
+      {
+       "emphasized": false,
+       "imageAltText": "Cameron Williams",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/328755.vresize.140.170.medium.2.png",
+       "index": 0,
+       "superscript": "#73",
+       "text": "Cameron Williams"
+      },
+      {
+       "emphasized": false,
+       "index": 1,
+       "text": "T"
+      },
+      {
+       "emphasized": false,
+       "index": 2,
+       "text": "22"
+      },
+      {
+       "emphasized": false,
+       "index": 3,
+       "text": "6'6\""
+      },
+      {
+       "emphasized": false,
+       "index": 4,
+       "text": "317 lbs"
+      },
+      {
+       "emphasized": false,
+       "index": 5,
+       "text": "Texas"
+      }
+     ],
+     "entityLink": {
+      "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/328755.vresize.140.170.medium.2.png",
+      "analyticsName": "cameron-williams",
+      "analyticsSport": "nfl",
+      "color": "1, 240, 31, 65",
+      "contentType": "athlete",
+      "contentUri": "football/nfl/athletes/328755",
+      "imageAltText": "Cameron Williams",
+      "imageType": "image-headshot",
+      "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/328755.vresize.140.170.medium.2.png",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+       "tokens": {
+        "contentUri": "football/nfl/athletes/328755",
+        "id": "328755"
+       }
+      },
+      "title": "CAMERON WILLIAMS",
+      "type": "entity",
+      "webUrl": "/nfl/cameron-williams-player"
+     },
+     "isCutoff": false,
+     "isFaded": false,
+     "selected": false
+    },
+    {
+     "columns": [
+      {
+       "emphasized": false,
+       "imageAltText": "Charlie Woerner",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/21643.vresize.140.170.medium.3.png",
+       "index": 0,
+       "superscript": "#89",
+       "text": "Charlie Woerner"
+      },
+      {
+       "emphasized": false,
+       "index": 1,
+       "text": "TE"
+      },
+      {
+       "emphasized": false,
+       "index": 2,
+       "text": "28"
+      },
+      {
+       "emphasized": false,
+       "index": 3,
+       "text": "6'5\""
+      },
+      {
+       "emphasized": false,
+       "index": 4,
+       "text": "250 lbs"
+      },
+      {
+       "emphasized": false,
+       "index": 5,
+       "text": "Georgia"
+      }
+     ],
+     "entityLink": {
+      "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/21643.vresize.140.170.medium.3.png",
+      "analyticsName": "charlie-woerner",
+      "analyticsSport": "nfl",
+      "color": "1, 240, 31, 65",
+      "contentType": "athlete",
+      "contentUri": "football/nfl/athletes/21643",
+      "imageAltText": "Charlie Woerner",
+      "imageType": "image-headshot",
+      "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/21643.vresize.140.170.medium.3.png",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+       "tokens": {
+        "contentUri": "football/nfl/athletes/21643",
+        "id": "21643"
+       }
+      },
+      "title": "CHARLIE WOERNER",
+      "type": "entity",
+      "webUrl": "/nfl/charlie-woerner-player"
+     },
+     "isCutoff": false,
+     "isFaded": false,
+     "selected": false
+    },
+    {
+     "columns": [
+      {
+       "emphasized": false,
+       "imageAltText": "Olamide Zaccheaus",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/20906.vresize.140.170.medium.5.png",
+       "index": 0,
+       "superscript": "#14",
+       "text": "Olamide Zaccheaus"
+      },
+      {
+       "emphasized": false,
+       "index": 1,
+       "text": "WR"
+      },
+      {
+       "emphasized": false,
+       "index": 2,
+       "text": "29"
+      },
+      {
+       "emphasized": false,
+       "index": 3,
+       "text": "5'8\""
+      },
+      {
+       "emphasized": false,
+       "index": 4,
+       "text": "194 lbs"
+      },
+      {
+       "emphasized": false,
+       "index": 5,
+       "text": "Virginia"
+      }
+     ],
+     "entityLink": {
+      "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/20906.vresize.140.170.medium.5.png",
+      "analyticsName": "olamide-zaccheaus",
+      "analyticsSport": "nfl",
+      "color": "1, 240, 31, 65",
+      "contentType": "athlete",
+      "contentUri": "football/nfl/athletes/20906",
+      "imageAltText": "Olamide Zaccheaus",
+      "imageType": "image-headshot",
+      "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/20906.vresize.140.170.medium.5.png",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+       "tokens": {
+        "contentUri": "football/nfl/athletes/20906",
+        "id": "20906"
+       }
+      },
+      "title": "OLAMIDE ZACCHEAUS",
+      "type": "entity",
+      "webUrl": "/nfl/olamide-zaccheaus-player"
+     },
+     "isCutoff": false,
+     "isFaded": false,
+     "selected": false
+    }
+   ],
+   "template": "table-roster"
+  },
+  {
+   "headers": [
+    {
+     "columns": [
+      {
+       "emphasized": true,
+       "index": 0,
+       "priority": 1,
+       "sortable": "none",
+       "template": "cell-entity",
+       "text": "DEFENSE",
+       "weight": 6.5
+      },
+      {
+       "emphasized": false,
+       "index": 1,
+       "priority": 2,
+       "sortable": "none",
+       "template": "cell-text",
+       "text": "POS",
+       "weight": 2.5
+      },
+      {
+       "emphasized": false,
+       "index": 2,
+       "priority": 3,
+       "sortable": "none",
+       "template": "cell-text",
+       "text": "AGE",
+       "weight": 2.5
+      },
+      {
+       "emphasized": false,
+       "index": 3,
+       "priority": 4,
+       "sortable": "none",
+       "template": "cell-text",
+       "text": "HT",
+       "weight": 2.5
+      },
+      {
+       "emphasized": false,
+       "index": 4,
+       "priority": 5,
+       "sortable": "none",
+       "template": "cell-text",
+       "text": "WT",
+       "weight": 2.5
+      },
+      {
+       "emphasized": false,
+       "index": 5,
+       "priority": 6,
+       "sortable": "none",
+       "template": "cell-text",
+       "text": "COLLEGE",
+       "weight": 2.5
+      }
+     ],
+     "isPrimary": true
+    }
+   ],
+   "rows": [
+    {
+     "columns": [
+      {
+       "emphasized": false,
+       "imageAltText": "Yasir Abdullah",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/327072.vresize.140.170.medium.3.png",
+       "index": 0,
+       "superscript": "#22",
+       "text": "Yasir Abdullah"
+      },
+      {
+       "emphasized": false,
+       "index": 1,
+       "text": "LB"
+      },
+      {
+       "emphasized": false,
+       "index": 2,
+       "text": "26"
+      },
+      {
+       "emphasized": false,
+       "index": 3,
+       "text": "6'1\""
+      },
+      {
+       "emphasized": false,
+       "index": 4,
+       "text": "234 lbs"
+      },
+      {
+       "emphasized": false,
+       "index": 5,
+       "text": "Louisville"
+      }
+     ],
+     "entityLink": {
+      "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/327072.vresize.140.170.medium.3.png",
+      "analyticsName": "yasir-abdullah",
+      "analyticsSport": "nfl",
+      "color": "1, 240, 31, 65",
+      "contentType": "athlete",
+      "contentUri": "football/nfl/athletes/327072",
+      "imageAltText": "Yasir Abdullah",
+      "imageType": "image-headshot",
+      "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/327072.vresize.140.170.medium.3.png",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+       "tokens": {
+        "contentUri": "football/nfl/athletes/327072",
+        "id": "327072"
+       }
+      },
+      "title": "YASIR ABDULLAH",
+      "type": "entity",
+      "webUrl": "/nfl/yasir-abdullah-player"
+     },
+     "isCutoff": false,
+     "isFaded": false,
+     "selected": false
+    },
+    {
+     "columns": [
+      {
+       "emphasized": false,
+       "imageAltText": "Brian Asamoah II",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22832.vresize.140.170.medium.3.png",
+       "index": 0,
+       "superscript": "#41",
+       "text": "Brian Asamoah II"
+      },
+      {
+       "emphasized": false,
+       "index": 1,
+       "text": "LB"
+      },
+      {
+       "emphasized": false,
+       "index": 2,
+       "text": "26"
+      },
+      {
+       "emphasized": false,
+       "index": 3,
+       "text": "6'1\""
+      },
+      {
+       "emphasized": false,
+       "index": 4,
+       "text": "230 lbs"
+      },
+      {
+       "emphasized": false,
+       "index": 5,
+       "text": "Oklahoma"
+      }
+     ],
+     "entityLink": {
+      "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22832.vresize.140.170.medium.3.png",
+      "analyticsName": "brian-asamoah",
+      "analyticsSport": "nfl",
+      "color": "1, 240, 31, 65",
+      "contentType": "athlete",
+      "contentUri": "football/nfl/athletes/22832",
+      "imageAltText": "Brian Asamoah II",
+      "imageType": "image-headshot",
+      "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22832.vresize.140.170.medium.3.png",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+       "tokens": {
+        "contentUri": "football/nfl/athletes/22832",
+        "id": "22832"
+       }
+      },
+      "title": "BRIAN ASAMOAH II",
+      "type": "entity",
+      "webUrl": "/nfl/brian-asamoah-player"
+     },
+     "isCutoff": false,
+     "isFaded": false,
+     "selected": false
+    },
+    {
+     "columns": [
+      {
+       "emphasized": false,
+       "imageAltText": "Jessie Bates III",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/14003.vresize.140.170.medium.5.png",
+       "index": 0,
+       "superscript": "#3",
+       "text": "Jessie Bates III"
+      },
+      {
+       "emphasized": false,
+       "index": 1,
+       "text": "S"
+      },
+      {
+       "emphasized": false,
+       "index": 2,
+       "text": "29"
+      },
+      {
+       "emphasized": false,
+       "index": 3,
+       "text": "6'1\""
+      },
+      {
+       "emphasized": false,
+       "index": 4,
+       "text": "210 lbs"
+      },
+      {
+       "emphasized": false,
+       "index": 5,
+       "text": "Wake Forest"
+      }
+     ],
+     "entityLink": {
+      "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/14003.vresize.140.170.medium.5.png",
+      "analyticsName": "jessie-bates-iii",
+      "analyticsSport": "nfl",
+      "color": "1, 240, 31, 65",
+      "contentType": "athlete",
+      "contentUri": "football/nfl/athletes/14003",
+      "imageAltText": "Jessie Bates III",
+      "imageType": "image-headshot",
+      "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/14003.vresize.140.170.medium.5.png",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+       "tokens": {
+        "contentUri": "football/nfl/athletes/14003",
+        "id": "14003"
+       }
+      },
+      "title": "JESSIE BATES III",
+      "type": "entity",
+      "webUrl": "/nfl/jessie-bates-iii-player"
+     },
+     "isCutoff": false,
+     "isFaded": false,
+     "selected": false
+    },
+    {
+     "columns": [
+      {
+       "emphasized": false,
+       "imageAltText": "JD Bertrand",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/327837.vresize.140.170.medium.3.png",
+       "index": 0,
+       "superscript": "#40",
+       "text": "JD Bertrand"
+      },
+      {
+       "emphasized": false,
+       "index": 1,
+       "text": "LB"
+      },
+      {
+       "emphasized": false,
+       "index": 2,
+       "text": "26"
+      },
+      {
+       "emphasized": false,
+       "index": 3,
+       "text": "6'1\""
+      },
+      {
+       "emphasized": false,
+       "index": 4,
+       "text": "230 lbs"
+      },
+      {
+       "emphasized": false,
+       "index": 5,
+       "text": "Notre Dame"
+      }
+     ],
+     "entityLink": {
+      "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/327837.vresize.140.170.medium.3.png",
+      "analyticsName": "jd-bertrand",
+      "analyticsSport": "nfl",
+      "color": "1, 240, 31, 65",
+      "contentType": "athlete",
+      "contentUri": "football/nfl/athletes/327837",
+      "imageAltText": "JD Bertrand",
+      "imageType": "image-headshot",
+      "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/327837.vresize.140.170.medium.3.png",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+       "tokens": {
+        "contentUri": "football/nfl/athletes/327837",
+        "id": "327837"
+       }
+      },
+      "title": "JD BERTRAND",
+      "type": "entity",
+      "webUrl": "/nfl/jd-bertrand-player"
+     },
+     "isCutoff": false,
+     "isFaded": false,
+     "selected": false
+    },
+    {
+     "columns": [
+      {
+       "emphasized": false,
+       "imageAltText": "Billy Bowman Jr.",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/328684.vresize.140.170.medium.4.png",
+       "index": 0,
+       "superscript": "#33",
+       "text": "Billy Bowman Jr."
+      },
+      {
+       "emphasized": false,
+       "index": 1,
+       "text": "CB"
+      },
+      {
+       "emphasized": false,
+       "index": 2,
+       "text": "23"
+      },
+      {
+       "emphasized": false,
+       "index": 3,
+       "text": "5'10\""
+      },
+      {
+       "emphasized": false,
+       "index": 4,
+       "text": "194 lbs"
+      },
+      {
+       "emphasized": false,
+       "index": 5,
+       "text": "Oklahoma"
+      }
+     ],
+     "entityLink": {
+      "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/328684.vresize.140.170.medium.4.png",
+      "analyticsName": "billy-bowman-jr",
+      "analyticsSport": "nfl",
+      "color": "1, 240, 31, 65",
+      "contentType": "athlete",
+      "contentUri": "football/nfl/athletes/328684",
+      "imageAltText": "Billy Bowman Jr.",
+      "imageType": "image-headshot",
+      "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/328684.vresize.140.170.medium.4.png",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+       "tokens": {
+        "contentUri": "football/nfl/athletes/328684",
+        "id": "328684"
+       }
+      },
+      "title": "BILLY BOWMAN JR.",
+      "type": "entity",
+      "webUrl": "/nfl/billy-bowman-jr-player"
+     },
+     "isCutoff": false,
+     "isFaded": false,
+     "selected": false
+    },
+    {
+     "columns": [
+      {
+       "emphasized": false,
+       "imageAltText": "Sydney Brown",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/326979.vresize.140.170.medium.3.png",
+       "index": 0,
+       "superscript": "#29",
+       "text": "Sydney Brown"
+      },
+      {
+       "emphasized": false,
+       "index": 1,
+       "text": "DB"
+      },
+      {
+       "emphasized": false,
+       "index": 2,
+       "text": "26"
+      },
+      {
+       "emphasized": false,
+       "index": 3,
+       "text": "5'10\""
+      },
+      {
+       "emphasized": false,
+       "index": 4,
+       "text": "211 lbs"
+      },
+      {
+       "emphasized": false,
+       "index": 5,
+       "text": "Illinois"
+      }
+     ],
+     "entityLink": {
+      "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/326979.vresize.140.170.medium.3.png",
+      "analyticsName": "sydney-brown",
+      "analyticsSport": "nfl",
+      "color": "1, 240, 31, 65",
+      "contentType": "athlete",
+      "contentUri": "football/nfl/athletes/326979",
+      "imageAltText": "Sydney Brown",
+      "imageType": "image-headshot",
+      "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/326979.vresize.140.170.medium.3.png",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+       "tokens": {
+        "contentUri": "football/nfl/athletes/326979",
+        "id": "326979"
+       }
+      },
+      "title": "SYDNEY BROWN",
+      "type": "entity",
+      "webUrl": "/nfl/sydney-brown-player"
+     },
+     "isCutoff": false,
+     "isFaded": false,
+     "selected": false
+    },
+    {
+     "columns": [
+      {
+       "emphasized": false,
+       "imageAltText": "Kendal Daniels",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/329486.vresize.140.170.medium.2.png",
+       "index": 0,
+       "superscript": "#53",
+       "text": "Kendal Daniels"
+      },
+      {
+       "emphasized": false,
+       "index": 1,
+       "text": "LB"
+      },
+      {
+       "emphasized": false,
+       "index": 2,
+       "text": "23"
+      },
+      {
+       "emphasized": false,
+       "index": 3,
+       "text": "6'5\""
+      },
+      {
+       "emphasized": false,
+       "index": 4,
+       "text": "242 lbs"
+      },
+      {
+       "emphasized": false,
+       "index": 5,
+       "text": "Oklahoma"
+      }
+     ],
+     "entityLink": {
+      "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/329486.vresize.140.170.medium.2.png",
+      "analyticsName": "kendal-daniels",
+      "analyticsSport": "nfl",
+      "color": "1, 240, 31, 65",
+      "contentType": "athlete",
+      "contentUri": "football/nfl/athletes/329486",
+      "imageAltText": "Kendal Daniels",
+      "imageType": "image-headshot",
+      "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/329486.vresize.140.170.medium.2.png",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+       "tokens": {
+        "contentUri": "football/nfl/athletes/329486",
+        "id": "329486"
+       }
+      },
+      "title": "KENDAL DANIELS",
+      "type": "entity",
+      "webUrl": "/nfl/kendal-daniels-player"
+     },
+     "isCutoff": false,
+     "isFaded": false,
+     "selected": false
+    },
+    {
+     "columns": [
+      {
+       "emphasized": false,
+       "imageAltText": "Divine Deablo",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22239.vresize.140.170.medium.5.png",
+       "index": 0,
+       "superscript": "#0",
+       "text": "Divine Deablo"
+      },
+      {
+       "emphasized": false,
+       "index": 1,
+       "text": "LB"
+      },
+      {
+       "emphasized": false,
+       "index": 2,
+       "text": "28"
+      },
+      {
+       "emphasized": false,
+       "index": 3,
+       "text": "6'3\""
+      },
+      {
+       "emphasized": false,
+       "index": 4,
+       "text": "223 lbs"
+      },
+      {
+       "emphasized": false,
+       "index": 5,
+       "text": "Virginia Tech"
+      }
+     ],
+     "entityLink": {
+      "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22239.vresize.140.170.medium.5.png",
+      "analyticsName": "divine-deablo",
+      "analyticsSport": "nfl",
+      "color": "1, 240, 31, 65",
+      "contentType": "athlete",
+      "contentUri": "football/nfl/athletes/22239",
+      "imageAltText": "Divine Deablo",
+      "imageType": "image-headshot",
+      "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22239.vresize.140.170.medium.5.png",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+       "tokens": {
+        "contentUri": "football/nfl/athletes/22239",
+        "id": "22239"
+       }
+      },
+      "title": "DIVINE DEABLO",
+      "type": "entity",
+      "webUrl": "/nfl/divine-deablo-player"
+     },
+     "isCutoff": false,
+     "isFaded": false,
+     "selected": false
+    },
+    {
+     "columns": [
+      {
+       "emphasized": false,
+       "imageAltText": "Default Headshot",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/fs-app/default-headshot.vresize.140.170.medium.0.png",
+       "index": 0,
+       "superscript": "#36",
+       "text": "Malcolm DeWalt IV"
+      },
+      {
+       "emphasized": false,
+       "index": 1,
+       "text": "CB"
+      },
+      {
+       "emphasized": false,
+       "index": 2,
+       "text": "24"
+      },
+      {
+       "emphasized": false,
+       "index": 3,
+       "text": "6'2\""
+      },
+      {
+       "emphasized": false,
+       "index": 4,
+       "text": "190 lbs"
+      },
+      {
+       "emphasized": false,
+       "index": 5,
+       "text": "Akron"
+      }
+     ],
+     "entityLink": {
+      "alternateImageUrl": "https://b.fssta.com/uploads/application/fs-app/default-headshot_dark.vresize.140.170.medium.0.png",
+      "analyticsName": "malcom-dewalt-iv",
+      "analyticsSport": "nfl",
+      "color": "1, 240, 31, 65",
+      "contentType": "athlete",
+      "contentUri": "football/nfl/athletes/330047",
+      "imageAltText": "Default Headshot",
+      "imageType": "image-headshot",
+      "imageUrl": "https://b.fssta.com/uploads/application/fs-app/default-headshot.vresize.140.170.medium.0.png",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+       "tokens": {
+        "contentUri": "football/nfl/athletes/330047",
+        "id": "330047"
+       }
+      },
+      "title": "MALCOLM DEWALT IV",
+      "type": "entity",
+      "webUrl": "/nfl/malcom-dewalt-iv-player"
+     },
+     "isCutoff": false,
+     "isFaded": false,
+     "selected": false
+    },
+    {
+     "columns": [
+      {
+       "emphasized": false,
+       "imageAltText": "Gervon Dexter Sr.",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/326950.vresize.140.170.medium.3.png",
+       "index": 0,
+       "superscript": "#95",
+       "text": "Gervon Dexter Sr."
+      },
+      {
+       "emphasized": false,
+       "index": 1,
+       "text": "DT"
+      },
+      {
+       "emphasized": false,
+       "index": 2,
+       "text": "25"
+      },
+      {
+       "emphasized": false,
+       "index": 3,
+       "text": "6'6\""
+      },
+      {
+       "emphasized": false,
+       "index": 4,
+       "text": "326 lbs"
+      },
+      {
+       "emphasized": false,
+       "index": 5,
+       "text": "Florida"
+      }
+     ],
+     "entityLink": {
+      "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/326950.vresize.140.170.medium.3.png",
+      "analyticsName": "gervon-dexter-sr",
+      "analyticsSport": "nfl",
+      "color": "1, 240, 31, 65",
+      "contentType": "athlete",
+      "contentUri": "football/nfl/athletes/326950",
+      "imageAltText": "Gervon Dexter Sr.",
+      "imageType": "image-headshot",
+      "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/326950.vresize.140.170.medium.3.png",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+       "tokens": {
+        "contentUri": "football/nfl/athletes/326950",
+        "id": "326950"
+       }
+      },
+      "title": "GERVON DEXTER SR.",
+      "type": "entity",
+      "webUrl": "/nfl/gervon-dexter-sr-player"
+     },
+     "isCutoff": false,
+     "isFaded": false,
+     "selected": false
+    },
+    {
+     "columns": [
+      {
+       "emphasized": false,
+       "imageAltText": "Brandon Dorlus",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/327799.vresize.140.170.medium.5.png",
+       "index": 0,
+       "superscript": "#54",
+       "text": "Brandon Dorlus"
+      },
+      {
+       "emphasized": false,
+       "index": 1,
+       "text": "DL"
+      },
+      {
+       "emphasized": false,
+       "index": 2,
+       "text": "25"
+      },
+      {
+       "emphasized": false,
+       "index": 3,
+       "text": "6'3\""
+      },
+      {
+       "emphasized": false,
+       "index": 4,
+       "text": "295 lbs"
+      },
+      {
+       "emphasized": false,
+       "index": 5,
+       "text": "Oregon"
+      }
+     ],
+     "entityLink": {
+      "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/327799.vresize.140.170.medium.5.png",
+      "analyticsName": "brandon-dorlus",
+      "analyticsSport": "nfl",
+      "color": "1, 240, 31, 65",
+      "contentType": "athlete",
+      "contentUri": "football/nfl/athletes/327799",
+      "imageAltText": "Brandon Dorlus",
+      "imageType": "image-headshot",
+      "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/327799.vresize.140.170.medium.5.png",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+       "tokens": {
+        "contentUri": "football/nfl/athletes/327799",
+        "id": "327799"
+       }
+      },
+      "title": "BRANDON DORLUS",
+      "type": "entity",
+      "webUrl": "/nfl/brandon-dorlus-player"
+     },
+     "isCutoff": false,
+     "isFaded": false,
+     "selected": false
+    },
+    {
+     "columns": [
+      {
+       "emphasized": false,
+       "imageAltText": "Samson Ebukam",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/13221.vresize.140.170.medium.3.png",
+       "index": 0,
+       "superscript": "#52",
+       "text": "Samson Ebukam"
+      },
+      {
+       "emphasized": false,
+       "index": 1,
+       "text": "DE"
+      },
+      {
+       "emphasized": false,
+       "index": 2,
+       "text": "31"
+      },
+      {
+       "emphasized": false,
+       "index": 3,
+       "text": "6'3\""
+      },
+      {
+       "emphasized": false,
+       "index": 4,
+       "text": "245 lbs"
+      },
+      {
+       "emphasized": false,
+       "index": 5,
+       "text": "Eastern Washington"
+      }
+     ],
+     "entityLink": {
+      "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/13221.vresize.140.170.medium.3.png",
+      "analyticsName": "samson-ebukam",
+      "analyticsSport": "nfl",
+      "color": "1, 240, 31, 65",
+      "contentType": "athlete",
+      "contentUri": "football/nfl/athletes/13221",
+      "imageAltText": "Samson Ebukam",
+      "imageType": "image-headshot",
+      "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/13221.vresize.140.170.medium.3.png",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+       "tokens": {
+        "contentUri": "football/nfl/athletes/13221",
+        "id": "13221"
+       }
+      },
+      "title": "SAMSON EBUKAM",
+      "type": "entity",
+      "webUrl": "/nfl/samson-ebukam-player"
+     },
+     "isCutoff": false,
+     "isFaded": false,
+     "selected": false
+    },
+    {
+     "columns": [
+      {
+       "emphasized": false,
+       "imageAltText": "Mike Ford Jr.",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/14617.vresize.140.170.medium.3.png",
+       "index": 0,
+       "superscript": "#28",
+       "text": "Mike Ford Jr."
+      },
+      {
+       "emphasized": false,
+       "index": 1,
+       "text": "CB"
+      },
+      {
+       "emphasized": false,
+       "index": 2,
+       "text": "31"
+      },
+      {
+       "emphasized": false,
+       "index": 3,
+       "text": "6'0\""
+      },
+      {
+       "emphasized": false,
+       "index": 4,
+       "text": "199 lbs"
+      },
+      {
+       "emphasized": false,
+       "index": 5,
+       "text": "Southeast Missouri State"
+      }
+     ],
+     "entityLink": {
+      "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/14617.vresize.140.170.medium.3.png",
+      "analyticsName": "mike-ford",
+      "analyticsSport": "nfl",
+      "color": "1, 240, 31, 65",
+      "contentType": "athlete",
+      "contentUri": "football/nfl/athletes/14617",
+      "imageAltText": "Mike Ford Jr.",
+      "imageType": "image-headshot",
+      "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/14617.vresize.140.170.medium.3.png",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+       "tokens": {
+        "contentUri": "football/nfl/athletes/14617",
+        "id": "14617"
+       }
+      },
+      "title": "MIKE FORD JR.",
+      "type": "entity",
+      "webUrl": "/nfl/mike-ford-player"
+     },
+     "isCutoff": false,
+     "isFaded": false,
+     "selected": false
+    },
+    {
+     "columns": [
+      {
+       "emphasized": false,
+       "imageAltText": "Da'Shawn Hand",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/14064.vresize.140.170.medium.3.png",
+       "index": 0,
+       "superscript": "#90",
+       "text": "Da'Shawn Hand"
+      },
+      {
+       "emphasized": false,
+       "index": 1,
+       "text": "DT"
+      },
+      {
+       "emphasized": false,
+       "index": 2,
+       "text": "30"
+      },
+      {
+       "emphasized": false,
+       "index": 3,
+       "text": "6'3\""
+      },
+      {
+       "emphasized": false,
+       "index": 4,
+       "text": "302 lbs"
+      },
+      {
+       "emphasized": false,
+       "index": 5,
+       "text": "Alabama"
+      }
+     ],
+     "entityLink": {
+      "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/14064.vresize.140.170.medium.3.png",
+      "analyticsName": "dashawn-hand",
+      "analyticsSport": "nfl",
+      "color": "1, 240, 31, 65",
+      "contentType": "athlete",
+      "contentUri": "football/nfl/athletes/14064",
+      "imageAltText": "Da'Shawn Hand",
+      "imageType": "image-headshot",
+      "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/14064.vresize.140.170.medium.3.png",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+       "tokens": {
+        "contentUri": "football/nfl/athletes/14064",
+        "id": "14064"
+       }
+      },
+      "title": "DA'SHAWN HAND",
+      "type": "entity",
+      "webUrl": "/nfl/dashawn-hand-player"
+     },
+     "isCutoff": false,
+     "isFaded": false,
+     "selected": false
+    },
+    {
+     "columns": [
+      {
+       "emphasized": false,
+       "imageAltText": "Christian Harris",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22843.vresize.140.170.medium.5.png",
+       "index": 0,
+       "superscript": "#45",
+       "text": "Christian Harris"
+      },
+      {
+       "emphasized": false,
+       "index": 1,
+       "text": "LB"
+      },
+      {
+       "emphasized": false,
+       "index": 2,
+       "text": "25"
+      },
+      {
+       "emphasized": false,
+       "index": 3,
+       "text": "6'2\""
+      },
+      {
+       "emphasized": false,
+       "index": 4,
+       "text": "232 lbs"
+      },
+      {
+       "emphasized": false,
+       "index": 5,
+       "text": "Alabama"
+      }
+     ],
+     "entityLink": {
+      "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22843.vresize.140.170.medium.5.png",
+      "analyticsName": "christian-harris",
+      "analyticsSport": "nfl",
+      "color": "1, 240, 31, 65",
+      "contentType": "athlete",
+      "contentUri": "football/nfl/athletes/22843",
+      "imageAltText": "Christian Harris",
+      "imageType": "image-headshot",
+      "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22843.vresize.140.170.medium.5.png",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+       "tokens": {
+        "contentUri": "football/nfl/athletes/22843",
+        "id": "22843"
+       }
+      },
+      "title": "CHRISTIAN HARRIS",
+      "type": "entity",
+      "webUrl": "/nfl/christian-harris-player"
+     },
+     "isCutoff": false,
+     "isFaded": false,
+     "selected": false
+    },
+    {
+     "columns": [
+      {
+       "emphasized": false,
+       "imageAltText": "Zach Harrison",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/326990.vresize.140.170.medium.5.png",
+       "index": 0,
+       "superscript": "#96",
+       "text": "Zach Harrison"
+      },
+      {
+       "emphasized": false,
+       "index": 1,
+       "text": "DL"
+      },
+      {
+       "emphasized": false,
+       "index": 2,
+       "text": "25"
+      },
+      {
+       "emphasized": false,
+       "index": 3,
+       "text": "6'5\""
+      },
+      {
+       "emphasized": false,
+       "index": 4,
+       "text": "270 lbs"
+      },
+      {
+       "emphasized": false,
+       "index": 5,
+       "text": "Ohio State"
+      }
+     ],
+     "entityLink": {
+      "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/326990.vresize.140.170.medium.5.png",
+      "analyticsName": "zach-harrison",
+      "analyticsSport": "nfl",
+      "color": "1, 240, 31, 65",
+      "contentType": "athlete",
+      "contentUri": "football/nfl/athletes/326990",
+      "imageAltText": "Zach Harrison",
+      "imageType": "image-headshot",
+      "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/326990.vresize.140.170.medium.5.png",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+       "tokens": {
+        "contentUri": "football/nfl/athletes/326990",
+        "id": "326990"
+       }
+      },
+      "title": "ZACH HARRISON",
+      "type": "entity",
+      "webUrl": "/nfl/zach-harrison-player"
+     },
+     "isCutoff": false,
+     "isFaded": false,
+     "selected": false
+    },
+    {
+     "columns": [
+      {
+       "emphasized": false,
+       "imageAltText": "DeMarcco Hellams",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/327145.vresize.140.170.medium.3.png",
+       "index": 0,
+       "superscript": "#23",
+       "text": "DeMarcco Hellams"
+      },
+      {
+       "emphasized": false,
+       "index": 1,
+       "text": "S"
+      },
+      {
+       "emphasized": false,
+       "index": 2,
+       "text": "26"
+      },
+      {
+       "emphasized": false,
+       "index": 3,
+       "text": "6'1\""
+      },
+      {
+       "emphasized": false,
+       "index": 4,
+       "text": "203 lbs"
+      },
+      {
+       "emphasized": false,
+       "index": 5,
+       "text": "Alabama"
+      }
+     ],
+     "entityLink": {
+      "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/327145.vresize.140.170.medium.3.png",
+      "analyticsName": "demarcco-hellams",
+      "analyticsSport": "nfl",
+      "color": "1, 240, 31, 65",
+      "contentType": "athlete",
+      "contentUri": "football/nfl/athletes/327145",
+      "imageAltText": "DeMarcco Hellams",
+      "imageType": "image-headshot",
+      "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/327145.vresize.140.170.medium.3.png",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+       "tokens": {
+        "contentUri": "football/nfl/athletes/327145",
+        "id": "327145"
+       }
+      },
+      "title": "DEMARCCO HELLAMS",
+      "type": "entity",
+      "webUrl": "/nfl/demarcco-hellams-player"
+     },
+     "isCutoff": false,
+     "isFaded": false,
+     "selected": false
+    },
+    {
+     "columns": [
+      {
+       "emphasized": false,
+       "imageAltText": "C.J. Henderson",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/21475.vresize.140.170.medium.1.png",
+       "index": 0,
+       "superscript": "#26",
+       "text": "C.J. Henderson"
+      },
+      {
+       "emphasized": false,
+       "index": 1,
+       "text": "CB"
+      },
+      {
+       "emphasized": false,
+       "index": 2,
+       "text": "28"
+      },
+      {
+       "emphasized": false,
+       "index": 3,
+       "text": "6'1\""
+      },
+      {
+       "emphasized": false,
+       "index": 4,
+       "text": "205 lbs"
+      },
+      {
+       "emphasized": false,
+       "index": 5,
+       "text": "Florida"
+      }
+     ],
+     "entityLink": {
+      "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/21475.vresize.140.170.medium.1.png",
+      "analyticsName": "cj-henderson",
+      "analyticsSport": "nfl",
+      "color": "1, 240, 31, 65",
+      "contentType": "athlete",
+      "contentUri": "football/nfl/athletes/21475",
+      "imageAltText": "C.J. Henderson",
+      "imageType": "image-headshot",
+      "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/21475.vresize.140.170.medium.1.png",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+       "tokens": {
+        "contentUri": "football/nfl/athletes/21475",
+        "id": "21475"
+       }
+      },
+      "title": "C.J. HENDERSON",
+      "type": "entity",
+      "webUrl": "/nfl/cj-henderson-player"
+     },
+     "isCutoff": false,
+     "isFaded": false,
+     "selected": false
+    },
+    {
+     "columns": [
+      {
+       "emphasized": false,
+       "imageAltText": "Darnay Holmes",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/21592.vresize.140.170.medium.3.png",
+       "index": 0,
+       "superscript": "#30",
+       "text": "Darnay Holmes"
+      },
+      {
+       "emphasized": false,
+       "index": 1,
+       "text": "CB"
+      },
+      {
+       "emphasized": false,
+       "index": 2,
+       "text": "28"
+      },
+      {
+       "emphasized": false,
+       "index": 3,
+       "text": "5'9\""
+      },
+      {
+       "emphasized": false,
+       "index": 4,
+       "text": "198 lbs"
+      },
+      {
+       "emphasized": false,
+       "index": 5,
+       "text": "UCLA"
+      }
+     ],
+     "entityLink": {
+      "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/21592.vresize.140.170.medium.3.png",
+      "analyticsName": "darnay-holmes",
+      "analyticsSport": "nfl",
+      "color": "1, 240, 31, 65",
+      "contentType": "athlete",
+      "contentUri": "football/nfl/athletes/21592",
+      "imageAltText": "Darnay Holmes",
+      "imageType": "image-headshot",
+      "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/21592.vresize.140.170.medium.3.png",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+       "tokens": {
+        "contentUri": "football/nfl/athletes/21592",
+        "id": "21592"
+       }
+      },
+      "title": "DARNAY HOLMES",
+      "type": "entity",
+      "webUrl": "/nfl/darnay-holmes-player"
+     },
+     "isCutoff": false,
+     "isFaded": false,
+     "selected": false
+    },
+    {
+     "columns": [
+      {
+       "emphasized": false,
+       "imageAltText": "Mike Hughes",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/13978.vresize.140.170.medium.3.png",
+       "index": 0,
+       "superscript": "#21",
+       "text": "Mike Hughes"
+      },
+      {
+       "emphasized": false,
+       "index": 1,
+       "text": "CB"
+      },
+      {
+       "emphasized": false,
+       "index": 2,
+       "text": "29"
+      },
+      {
+       "emphasized": false,
+       "index": 3,
+       "text": "5'10\""
+      },
+      {
+       "emphasized": false,
+       "index": 4,
+       "text": "190 lbs"
+      },
+      {
+       "emphasized": false,
+       "index": 5,
+       "text": "UCF"
+      }
+     ],
+     "entityLink": {
+      "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/13978.vresize.140.170.medium.3.png",
+      "analyticsName": "mike-hughes",
+      "analyticsSport": "nfl",
+      "color": "1, 240, 31, 65",
+      "contentType": "athlete",
+      "contentUri": "football/nfl/athletes/13978",
+      "imageAltText": "Mike Hughes",
+      "imageType": "image-headshot",
+      "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/13978.vresize.140.170.medium.3.png",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+       "tokens": {
+        "contentUri": "football/nfl/athletes/13978",
+        "id": "13978"
+       }
+      },
+      "title": "MIKE HUGHES",
+      "type": "entity",
+      "webUrl": "/nfl/mike-hughes-player"
+     },
+     "isCutoff": false,
+     "isFaded": false,
+     "selected": false
+    },
+    {
+     "columns": [
+      {
+       "emphasized": false,
+       "imageAltText": "Jared Ivey",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/329142.vresize.140.170.medium.2.png",
+       "index": 0,
+       "superscript": "#51",
+       "text": "Jared Ivey"
+      },
+      {
+       "emphasized": false,
+       "index": 1,
+       "text": "LB"
+      },
+      {
+       "emphasized": false,
+       "index": 2,
+       "text": "24"
+      },
+      {
+       "emphasized": false,
+       "index": 3,
+       "text": "6'6\""
+      },
+      {
+       "emphasized": false,
+       "index": 4,
+       "text": "274 lbs"
+      },
+      {
+       "emphasized": false,
+       "index": 5,
+       "text": "Ole Miss"
+      }
+     ],
+     "entityLink": {
+      "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/329142.vresize.140.170.medium.2.png",
+      "analyticsName": "jared-ivey",
+      "analyticsSport": "nfl",
+      "color": "1, 240, 31, 65",
+      "contentType": "athlete",
+      "contentUri": "football/nfl/athletes/329142",
+      "imageAltText": "Jared Ivey",
+      "imageType": "image-headshot",
+      "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/329142.vresize.140.170.medium.2.png",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+       "tokens": {
+        "contentUri": "football/nfl/athletes/329142",
+        "id": "329142"
+       }
+      },
+      "title": "JARED IVEY",
+      "type": "entity",
+      "webUrl": "/nfl/jared-ivey-player"
+     },
+     "isCutoff": false,
+     "isFaded": false,
+     "selected": false
+    },
+    {
+     "columns": [
+      {
+       "emphasized": false,
+       "imageAltText": "Drake Jackson",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22799.vresize.140.170.medium.1.png",
+       "index": 0,
+       "superscript": "#91",
+       "text": "Drake Jackson"
+      },
+      {
+       "emphasized": false,
+       "index": 1,
+       "text": "DE"
+      },
+      {
+       "emphasized": false,
+       "index": 2,
+       "text": "25"
+      },
+      {
+       "emphasized": false,
+       "index": 3,
+       "text": "6'4\""
+      },
+      {
+       "emphasized": false,
+       "index": 4,
+       "text": "273 lbs"
+      },
+      {
+       "emphasized": false,
+       "index": 5,
+       "text": "USC"
+      }
+     ],
+     "entityLink": {
+      "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22799.vresize.140.170.medium.1.png",
+      "analyticsName": "drake-jackson-2",
+      "analyticsSport": "nfl",
+      "color": "1, 240, 31, 65",
+      "contentType": "athlete",
+      "contentUri": "football/nfl/athletes/22799",
+      "imageAltText": "Drake Jackson",
+      "imageType": "image-headshot",
+      "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22799.vresize.140.170.medium.1.png",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+       "tokens": {
+        "contentUri": "football/nfl/athletes/22799",
+        "id": "22799"
+       }
+      },
+      "title": "DRAKE JACKSON",
+      "type": "entity",
+      "webUrl": "/nfl/drake-jackson-2-player"
+     },
+     "isCutoff": false,
+     "isFaded": false,
+     "selected": false
+    },
+    {
+     "columns": [
+      {
+       "emphasized": false,
+       "imageAltText": "LaCale London",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/21740.vresize.140.170.medium.3.png",
+       "index": 0,
+       "superscript": "#94",
+       "text": "LaCale London"
+      },
+      {
+       "emphasized": false,
+       "index": 1,
+       "text": "DT"
+      },
+      {
+       "emphasized": false,
+       "index": 2,
+       "text": "29"
+      },
+      {
+       "emphasized": false,
+       "index": 3,
+       "text": "6'3\""
+      },
+      {
+       "emphasized": false,
+       "index": 4,
+       "text": "297 lbs"
+      },
+      {
+       "emphasized": false,
+       "index": 5,
+       "text": "Western Illinois"
+      }
+     ],
+     "entityLink": {
+      "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/21740.vresize.140.170.medium.3.png",
+      "analyticsName": "lacale-london",
+      "analyticsSport": "nfl",
+      "color": "1, 240, 31, 65",
+      "contentType": "athlete",
+      "contentUri": "football/nfl/athletes/21740",
+      "imageAltText": "LaCale London",
+      "imageType": "image-headshot",
+      "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/21740.vresize.140.170.medium.3.png",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+       "tokens": {
+        "contentUri": "football/nfl/athletes/21740",
+        "id": "21740"
+       }
+      },
+      "title": "LACALE LONDON",
+      "type": "entity",
+      "webUrl": "/nfl/lacale-london-player"
+     },
+     "isCutoff": false,
+     "isFaded": false,
+     "selected": false
+    },
+    {
+     "columns": [
+      {
+       "emphasized": false,
+       "imageAltText": "Robert Longerbeam",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/328770.vresize.140.170.medium.2.png",
+       "index": 0,
+       "superscript": "#37",
+       "text": "Robert Longerbeam"
+      },
+      {
+       "emphasized": false,
+       "index": 1,
+       "text": "CB"
+      },
+      {
+       "emphasized": false,
+       "index": 2,
+       "text": "25"
+      },
+      {
+       "emphasized": false,
+       "index": 3,
+       "text": "5'11\""
+      },
+      {
+       "emphasized": false,
+       "index": 4,
+       "text": "178 lbs"
+      },
+      {
+       "emphasized": false,
+       "index": 5,
+       "text": "Rutgers"
+      }
+     ],
+     "entityLink": {
+      "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/328770.vresize.140.170.medium.2.png",
+      "analyticsName": "robert-longerbeam",
+      "analyticsSport": "nfl",
+      "color": "1, 240, 31, 65",
+      "contentType": "athlete",
+      "contentUri": "football/nfl/athletes/328770",
+      "imageAltText": "Robert Longerbeam",
+      "imageType": "image-headshot",
+      "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/328770.vresize.140.170.medium.2.png",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+       "tokens": {
+        "contentUri": "football/nfl/athletes/328770",
+        "id": "328770"
+       }
+      },
+      "title": "ROBERT LONGERBEAM",
+      "type": "entity",
+      "webUrl": "/nfl/robert-longerbeam-player"
+     },
+     "isCutoff": false,
+     "isFaded": false,
+     "selected": false
+    },
+    {
+     "columns": [
+      {
+       "emphasized": false,
+       "imageAltText": "DeAngelo Malone",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22834.vresize.140.170.medium.3.png",
+       "index": 0,
+       "superscript": "#50",
+       "text": "DeAngelo Malone"
+      },
+      {
+       "emphasized": false,
+       "index": 1,
+       "text": "LB"
+      },
+      {
+       "emphasized": false,
+       "index": 2,
+       "text": "27"
+      },
+      {
+       "emphasized": false,
+       "index": 3,
+       "text": "6'3\""
+      },
+      {
+       "emphasized": false,
+       "index": 4,
+       "text": "235 lbs"
+      },
+      {
+       "emphasized": false,
+       "index": 5,
+       "text": "Western Kentucky"
+      }
+     ],
+     "entityLink": {
+      "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22834.vresize.140.170.medium.3.png",
+      "analyticsName": "deangelo-malone",
+      "analyticsSport": "nfl",
+      "color": "1, 240, 31, 65",
+      "contentType": "athlete",
+      "contentUri": "football/nfl/athletes/22834",
+      "imageAltText": "DeAngelo Malone",
+      "imageType": "image-headshot",
+      "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22834.vresize.140.170.medium.3.png",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+       "tokens": {
+        "contentUri": "football/nfl/athletes/22834",
+        "id": "22834"
+       }
+      },
+      "title": "DEANGELO MALONE",
+      "type": "entity",
+      "webUrl": "/nfl/deangelo-malone-player"
+     },
+     "isCutoff": false,
+     "isFaded": false,
+     "selected": false
+    },
+    {
+     "columns": [
+      {
+       "emphasized": false,
+       "imageAltText": "James Pearce Jr.",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/328583.vresize.140.170.medium.2.png",
+       "index": 0,
+       "superscript": "#27",
+       "text": "James Pearce Jr."
+      },
+      {
+       "emphasized": false,
+       "index": 1,
+       "text": "DE"
+      },
+      {
+       "emphasized": false,
+       "index": 2,
+       "text": "22"
+      },
+      {
+       "emphasized": false,
+       "index": 3,
+       "text": "6'5\""
+      },
+      {
+       "emphasized": false,
+       "index": 4,
+       "text": "243 lbs"
+      },
+      {
+       "emphasized": false,
+       "index": 5,
+       "text": "Tennessee"
+      }
+     ],
+     "entityLink": {
+      "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/328583.vresize.140.170.medium.2.png",
+      "analyticsName": "james-pearce",
+      "analyticsSport": "nfl",
+      "color": "1, 240, 31, 65",
+      "contentType": "athlete",
+      "contentUri": "football/nfl/athletes/328583",
+      "imageAltText": "James Pearce Jr.",
+      "imageType": "image-headshot",
+      "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/328583.vresize.140.170.medium.2.png",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+       "tokens": {
+        "contentUri": "football/nfl/athletes/328583",
+        "id": "328583"
+       }
+      },
+      "title": "JAMES PEARCE JR.",
+      "type": "entity",
+      "webUrl": "/nfl/james-pearce-player"
+     },
+     "isCutoff": false,
+     "isFaded": false,
+     "selected": false
+    },
+    {
+     "columns": [
+      {
+       "emphasized": false,
+       "imageAltText": "Harold Perkins Jr.",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/329606.vresize.140.170.medium.2.png",
+       "index": 0,
+       "superscript": "#56",
+       "text": "Harold Perkins Jr."
+      },
+      {
+       "emphasized": false,
+       "index": 1,
+       "text": "LB"
+      },
+      {
+       "emphasized": false,
+       "index": 2,
+       "text": "22"
+      },
+      {
+       "emphasized": false,
+       "index": 3,
+       "text": "6'0\""
+      },
+      {
+       "emphasized": false,
+       "index": 4,
+       "text": "223 lbs"
+      },
+      {
+       "emphasized": false,
+       "index": 5,
+       "text": "LSU"
+      }
+     ],
+     "entityLink": {
+      "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/329606.vresize.140.170.medium.2.png",
+      "analyticsName": "harold-perkins",
+      "analyticsSport": "nfl",
+      "color": "1, 240, 31, 65",
+      "contentType": "athlete",
+      "contentUri": "football/nfl/athletes/329606",
+      "imageAltText": "Harold Perkins Jr.",
+      "imageType": "image-headshot",
+      "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/329606.vresize.140.170.medium.2.png",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+       "tokens": {
+        "contentUri": "football/nfl/athletes/329606",
+        "id": "329606"
+       }
+      },
+      "title": "HAROLD PERKINS JR.",
+      "type": "entity",
+      "webUrl": "/nfl/harold-perkins-player"
+     },
+     "isCutoff": false,
+     "isFaded": false,
+     "selected": false
+    },
+    {
+     "columns": [
+      {
+       "emphasized": false,
+       "imageAltText": "Zacch Pickens",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/326984.vresize.140.170.medium.3.png",
+       "index": 0,
+       "superscript": "#93",
+       "text": "Zacch Pickens"
+      },
+      {
+       "emphasized": false,
+       "index": 1,
+       "text": "DT"
+      },
+      {
+       "emphasized": false,
+       "index": 2,
+       "text": "26"
+      },
+      {
+       "emphasized": false,
+       "index": 3,
+       "text": "6'4\""
+      },
+      {
+       "emphasized": false,
+       "index": 4,
+       "text": "303 lbs"
+      },
+      {
+       "emphasized": false,
+       "index": 5,
+       "text": "South Carolina"
+      }
+     ],
+     "entityLink": {
+      "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/326984.vresize.140.170.medium.3.png",
+      "analyticsName": "zacch-pickens",
+      "analyticsSport": "nfl",
+      "color": "1, 240, 31, 65",
+      "contentType": "athlete",
+      "contentUri": "football/nfl/athletes/326984",
+      "imageAltText": "Zacch Pickens",
+      "imageType": "image-headshot",
+      "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/326984.vresize.140.170.medium.3.png",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+       "tokens": {
+        "contentUri": "football/nfl/athletes/326984",
+        "id": "326984"
+       }
+      },
+      "title": "ZACCH PICKENS",
+      "type": "entity",
+      "webUrl": "/nfl/zacch-pickens-player"
+     },
+     "isCutoff": false,
+     "isFaded": false,
+     "selected": false
+    },
+    {
+     "columns": [
+      {
+       "emphasized": false,
+       "imageAltText": "Jammie Robinson",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/327073.vresize.140.170.medium.3.png",
+       "index": 0,
+       "superscript": "#34",
+       "text": "Jammie Robinson"
+      },
+      {
+       "emphasized": false,
+       "index": 1,
+       "text": "S"
+      },
+      {
+       "emphasized": false,
+       "index": 2,
+       "text": "25"
+      },
+      {
+       "emphasized": false,
+       "index": 3,
+       "text": "5'11\""
+      },
+      {
+       "emphasized": false,
+       "index": 4,
+       "text": "195 lbs"
+      },
+      {
+       "emphasized": false,
+       "index": 5,
+       "text": "Florida State"
+      }
+     ],
+     "entityLink": {
+      "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/327073.vresize.140.170.medium.3.png",
+      "analyticsName": "jammie-robinson",
+      "analyticsSport": "nfl",
+      "color": "1, 240, 31, 65",
+      "contentType": "athlete",
+      "contentUri": "football/nfl/athletes/327073",
+      "imageAltText": "Jammie Robinson",
+      "imageType": "image-headshot",
+      "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/327073.vresize.140.170.medium.3.png",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+       "tokens": {
+        "contentUri": "football/nfl/athletes/327073",
+        "id": "327073"
+       }
+      },
+      "title": "JAMMIE ROBINSON",
+      "type": "entity",
+      "webUrl": "/nfl/jammie-robinson-player"
+     },
+     "isCutoff": false,
+     "isFaded": false,
+     "selected": false
+    },
+    {
+     "columns": [
+      {
+       "emphasized": false,
+       "imageAltText": "Maason Smith",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/327734.vresize.140.170.medium.3.png",
+       "index": 0,
+       "superscript": "#92",
+       "text": "Maason Smith"
+      },
+      {
+       "emphasized": false,
+       "index": 1,
+       "text": "DL"
+      },
+      {
+       "emphasized": false,
+       "index": 2,
+       "text": "23"
+      },
+      {
+       "emphasized": false,
+       "index": 3,
+       "text": "6'5\""
+      },
+      {
+       "emphasized": false,
+       "index": 4,
+       "text": "306 lbs"
+      },
+      {
+       "emphasized": false,
+       "index": 5,
+       "text": "LSU"
+      }
+     ],
+     "entityLink": {
+      "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/327734.vresize.140.170.medium.3.png",
+      "analyticsName": "maason-smith",
+      "analyticsSport": "nfl",
+      "color": "1, 240, 31, 65",
+      "contentType": "athlete",
+      "contentUri": "football/nfl/athletes/327734",
+      "imageAltText": "Maason Smith",
+      "imageType": "image-headshot",
+      "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/327734.vresize.140.170.medium.3.png",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+       "tokens": {
+        "contentUri": "football/nfl/athletes/327734",
+        "id": "327734"
+       }
+      },
+      "title": "MAASON SMITH",
+      "type": "entity",
+      "webUrl": "/nfl/maason-smith-player"
+     },
+     "isCutoff": false,
+     "isFaded": false,
+     "selected": false
+    },
+    {
+     "columns": [
+      {
+       "emphasized": false,
+       "imageAltText": "Za'Darius Smith",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/11497.vresize.140.170.medium.1.png",
+       "index": 0,
+       "superscript": "#55",
+       "text": "Za'Darius Smith"
+      },
+      {
+       "emphasized": false,
+       "index": 1,
+       "text": "DE"
+      },
+      {
+       "emphasized": false,
+       "index": 2,
+       "text": "34"
+      },
+      {
+       "emphasized": false,
+       "index": 3,
+       "text": "6'4\""
+      },
+      {
+       "emphasized": false,
+       "index": 4,
+       "text": "270 lbs"
+      },
+      {
+       "emphasized": false,
+       "index": 5,
+       "text": "Kentucky"
+      }
+     ],
+     "entityLink": {
+      "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/11497.vresize.140.170.medium.1.png",
+      "analyticsName": "zadarius-smith",
+      "analyticsSport": "nfl",
+      "color": "1, 240, 31, 65",
+      "contentType": "athlete",
+      "contentUri": "football/nfl/athletes/11497",
+      "imageAltText": "Za'Darius Smith",
+      "imageType": "image-headshot",
+      "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/11497.vresize.140.170.medium.1.png",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+       "tokens": {
+        "contentUri": "football/nfl/athletes/11497",
+        "id": "11497"
+       }
+      },
+      "title": "ZA'DARIUS SMITH",
+      "type": "entity",
+      "webUrl": "/nfl/zadarius-smith-player"
+     },
+     "isCutoff": false,
+     "isFaded": false,
+     "selected": false
+    },
+    {
+     "columns": [
+      {
+       "emphasized": false,
+       "imageAltText": "Avieon Terrell",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/329413.vresize.140.170.medium.2.png",
+       "index": 0,
+       "superscript": "#12",
+       "text": "Avieon Terrell"
+      },
+      {
+       "emphasized": false,
+       "index": 1,
+       "text": "CB"
+      },
+      {
+       "emphasized": false,
+       "index": 2,
+       "text": "21"
+      },
+      {
+       "emphasized": false,
+       "index": 3,
+       "text": "5'11\""
+      },
+      {
+       "emphasized": false,
+       "index": 4,
+       "text": "180 lbs"
+      },
+      {
+       "emphasized": false,
+       "index": 5,
+       "text": "Clemson"
+      }
+     ],
+     "entityLink": {
+      "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/329413.vresize.140.170.medium.2.png",
+      "analyticsName": "avieon-terrell",
+      "analyticsSport": "nfl",
+      "color": "1, 240, 31, 65",
+      "contentType": "athlete",
+      "contentUri": "football/nfl/athletes/329413",
+      "imageAltText": "Avieon Terrell",
+      "imageType": "image-headshot",
+      "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/329413.vresize.140.170.medium.2.png",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+       "tokens": {
+        "contentUri": "football/nfl/athletes/329413",
+        "id": "329413"
+       }
+      },
+      "title": "AVIEON TERRELL",
+      "type": "entity",
+      "webUrl": "/nfl/avieon-terrell-player"
+     },
+     "isCutoff": false,
+     "isFaded": false,
+     "selected": false
+    },
+    {
+     "columns": [
+      {
+       "emphasized": false,
+       "imageAltText": "A.J. Terrell Jr.",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/21470.vresize.140.170.medium.5.png",
+       "index": 0,
+       "superscript": "#24",
+       "text": "A.J. Terrell Jr."
+      },
+      {
+       "emphasized": false,
+       "index": 1,
+       "text": "CB"
+      },
+      {
+       "emphasized": false,
+       "index": 2,
+       "text": "28"
+      },
+      {
+       "emphasized": false,
+       "index": 3,
+       "text": "6'1\""
+      },
+      {
+       "emphasized": false,
+       "index": 4,
+       "text": "200 lbs"
+      },
+      {
+       "emphasized": false,
+       "index": 5,
+       "text": "Clemson"
+      }
+     ],
+     "entityLink": {
+      "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/21470.vresize.140.170.medium.5.png",
+      "analyticsName": "aj-terrell",
+      "analyticsSport": "nfl",
+      "color": "1, 240, 31, 65",
+      "contentType": "athlete",
+      "contentUri": "football/nfl/athletes/21470",
+      "imageAltText": "A.J. Terrell Jr.",
+      "imageType": "image-headshot",
+      "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/21470.vresize.140.170.medium.5.png",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+       "tokens": {
+        "contentUri": "football/nfl/athletes/21470",
+        "id": "21470"
+       }
+      },
+      "title": "A.J. TERRELL JR.",
+      "type": "entity",
+      "webUrl": "/nfl/aj-terrell-player"
+     },
+     "isCutoff": false,
+     "isFaded": false,
+     "selected": false
+    },
+    {
+     "columns": [
+      {
+       "emphasized": false,
+       "imageAltText": "Cameron Thomas",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22827.vresize.140.170.medium.3.png",
+       "index": 0,
+       "superscript": "#99",
+       "text": "Cameron Thomas"
+      },
+      {
+       "emphasized": false,
+       "index": 1,
+       "text": "DE"
+      },
+      {
+       "emphasized": false,
+       "index": 2,
+       "text": "26"
+      },
+      {
+       "emphasized": false,
+       "index": 3,
+       "text": "6'4\""
+      },
+      {
+       "emphasized": false,
+       "index": 4,
+       "text": "265 lbs"
+      },
+      {
+       "emphasized": false,
+       "index": 5,
+       "text": "San Diego State"
+      }
+     ],
+     "entityLink": {
+      "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22827.vresize.140.170.medium.3.png",
+      "analyticsName": "cameron-thomas",
+      "analyticsSport": "nfl",
+      "color": "1, 240, 31, 65",
+      "contentType": "athlete",
+      "contentUri": "football/nfl/athletes/22827",
+      "imageAltText": "Cameron Thomas",
+      "imageType": "image-headshot",
+      "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22827.vresize.140.170.medium.3.png",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+       "tokens": {
+        "contentUri": "football/nfl/athletes/22827",
+        "id": "22827"
+       }
+      },
+      "title": "CAMERON THOMAS",
+      "type": "entity",
+      "webUrl": "/nfl/cameron-thomas-player"
+     },
+     "isCutoff": false,
+     "isFaded": false,
+     "selected": false
+    },
+    {
+     "columns": [
+      {
+       "emphasized": false,
+       "imageAltText": "Default Headshot",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/fs-app/default-headshot.vresize.140.170.medium.0.png",
+       "index": 0,
+       "superscript": "#98",
+       "text": "Anterio Thompson"
+      },
+      {
+       "emphasized": false,
+       "index": 1,
+       "text": "DT"
+      },
+      {
+       "emphasized": false,
+       "index": 2,
+       "text": "23"
+      },
+      {
+       "emphasized": false,
+       "index": 3,
+       "text": "6'4\""
+      },
+      {
+       "emphasized": false,
+       "index": 4,
+       "text": "310 lbs"
+      },
+      {
+       "emphasized": false,
+       "index": 5,
+       "text": "Washington"
+      }
+     ],
+     "entityLink": {
+      "alternateImageUrl": "https://b.fssta.com/uploads/application/fs-app/default-headshot_dark.vresize.140.170.medium.0.png",
+      "analyticsName": "anterio-thompson",
+      "analyticsSport": "nfl",
+      "color": "1, 240, 31, 65",
+      "contentType": "athlete",
+      "contentUri": "football/nfl/athletes/329566",
+      "imageAltText": "Default Headshot",
+      "imageType": "image-headshot",
+      "imageUrl": "https://b.fssta.com/uploads/application/fs-app/default-headshot.vresize.140.170.medium.0.png",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+       "tokens": {
+        "contentUri": "football/nfl/athletes/329566",
+        "id": "329566"
+       }
+      },
+      "title": "ANTERIO THOMPSON",
+      "type": "entity",
+      "webUrl": "/nfl/anterio-thompson-player"
+     },
+     "isCutoff": false,
+     "isFaded": false,
+     "selected": false
+    },
+    {
+     "columns": [
+      {
+       "emphasized": false,
+       "imageAltText": "Bralen Trice",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/327766.vresize.140.170.medium.3.png",
+       "index": 0,
+       "superscript": "#48",
+       "text": "Bralen Trice"
+      },
+      {
+       "emphasized": false,
+       "index": 1,
+       "text": "DE"
+      },
+      {
+       "emphasized": false,
+       "index": 2,
+       "text": "25"
+      },
+      {
+       "emphasized": false,
+       "index": 3,
+       "text": "6'4\""
+      },
+      {
+       "emphasized": false,
+       "index": 4,
+       "text": "274 lbs"
+      },
+      {
+       "emphasized": false,
+       "index": 5,
+       "text": "Washington"
+      }
+     ],
+     "entityLink": {
+      "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/327766.vresize.140.170.medium.3.png",
+      "analyticsName": "bralen-trice",
+      "analyticsSport": "nfl",
+      "color": "1, 240, 31, 65",
+      "contentType": "athlete",
+      "contentUri": "football/nfl/athletes/327766",
+      "imageAltText": "Bralen Trice",
+      "imageType": "image-headshot",
+      "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/327766.vresize.140.170.medium.3.png",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+       "tokens": {
+        "contentUri": "football/nfl/athletes/327766",
+        "id": "327766"
+       }
+      },
+      "title": "BRALEN TRICE",
+      "type": "entity",
+      "webUrl": "/nfl/bralen-trice-player"
+     },
+     "isCutoff": false,
+     "isFaded": false,
+     "selected": false
+    },
+    {
+     "columns": [
+      {
+       "emphasized": false,
+       "imageAltText": "Jalon Walker",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/328584.vresize.140.170.medium.4.png",
+       "index": 0,
+       "superscript": "#11",
+       "text": "Jalon Walker"
+      },
+      {
+       "emphasized": false,
+       "index": 1,
+       "text": "LB"
+      },
+      {
+       "emphasized": false,
+       "index": 2,
+       "text": "22"
+      },
+      {
+       "emphasized": false,
+       "index": 3,
+       "text": "6'2\""
+      },
+      {
+       "emphasized": false,
+       "index": 4,
+       "text": "245 lbs"
+      },
+      {
+       "emphasized": false,
+       "index": 5,
+       "text": "Georgia"
+      }
+     ],
+     "entityLink": {
+      "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/328584.vresize.140.170.medium.4.png",
+      "analyticsName": "jalon-walker",
+      "analyticsSport": "nfl",
+      "color": "1, 240, 31, 65",
+      "contentType": "athlete",
+      "contentUri": "football/nfl/athletes/328584",
+      "imageAltText": "Jalon Walker",
+      "imageType": "image-headshot",
+      "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/328584.vresize.140.170.medium.4.png",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+       "tokens": {
+        "contentUri": "football/nfl/athletes/328584",
+        "id": "328584"
+       }
+      },
+      "title": "JALON WALKER",
+      "type": "entity",
+      "webUrl": "/nfl/jalon-walker-player"
+     },
+     "isCutoff": false,
+     "isFaded": false,
+     "selected": false
+    },
+    {
+     "columns": [
+      {
+       "emphasized": false,
+       "imageAltText": "Xavier Watts",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/328648.vresize.140.170.medium.4.png",
+       "index": 0,
+       "superscript": "#31",
+       "text": "Xavier Watts"
+      },
+      {
+       "emphasized": false,
+       "index": 1,
+       "text": "S"
+      },
+      {
+       "emphasized": false,
+       "index": 2,
+       "text": "24"
+      },
+      {
+       "emphasized": false,
+       "index": 3,
+       "text": "6'0\""
+      },
+      {
+       "emphasized": false,
+       "index": 4,
+       "text": "203 lbs"
+      },
+      {
+       "emphasized": false,
+       "index": 5,
+       "text": "Notre Dame"
+      }
+     ],
+     "entityLink": {
+      "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/328648.vresize.140.170.medium.4.png",
+      "analyticsName": "xavier-watts",
+      "analyticsSport": "nfl",
+      "color": "1, 240, 31, 65",
+      "contentType": "athlete",
+      "contentUri": "football/nfl/athletes/328648",
+      "imageAltText": "Xavier Watts",
+      "imageType": "image-headshot",
+      "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/328648.vresize.140.170.medium.4.png",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+       "tokens": {
+        "contentUri": "football/nfl/athletes/328648",
+        "id": "328648"
+       }
+      },
+      "title": "XAVIER WATTS",
+      "type": "entity",
+      "webUrl": "/nfl/xavier-watts-player"
+     },
+     "isCutoff": false,
+     "isFaded": false,
+     "selected": false
+    },
+    {
+     "columns": [
+      {
+       "emphasized": false,
+       "imageAltText": "Josh Woods",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/14736.vresize.140.170.medium.3.png",
+       "index": 0,
+       "superscript": "#46",
+       "text": "Josh Woods"
+      },
+      {
+       "emphasized": false,
+       "index": 1,
+       "text": "LB"
+      },
+      {
+       "emphasized": false,
+       "index": 2,
+       "text": "30"
+      },
+      {
+       "emphasized": false,
+       "index": 3,
+       "text": "6'1\""
+      },
+      {
+       "emphasized": false,
+       "index": 4,
+       "text": "235 lbs"
+      },
+      {
+       "emphasized": false,
+       "index": 5,
+       "text": "Maryland"
+      }
+     ],
+     "entityLink": {
+      "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/14736.vresize.140.170.medium.3.png",
+      "analyticsName": "josh-woods",
+      "analyticsSport": "nfl",
+      "color": "1, 240, 31, 65",
+      "contentType": "athlete",
+      "contentUri": "football/nfl/athletes/14736",
+      "imageAltText": "Josh Woods",
+      "imageType": "image-headshot",
+      "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/14736.vresize.140.170.medium.3.png",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+       "tokens": {
+        "contentUri": "football/nfl/athletes/14736",
+        "id": "14736"
+       }
+      },
+      "title": "JOSH WOODS",
+      "type": "entity",
+      "webUrl": "/nfl/josh-woods-player"
+     },
+     "isCutoff": false,
+     "isFaded": false,
+     "selected": false
+    }
+   ],
+   "template": "table-roster"
+  },
+  {
+   "headers": [
+    {
+     "columns": [
+      {
+       "emphasized": true,
+       "index": 0,
+       "priority": 1,
+       "sortable": "none",
+       "template": "cell-entity",
+       "text": "SPECIAL TEAMS",
+       "weight": 6.5
+      },
+      {
+       "emphasized": false,
+       "index": 1,
+       "priority": 2,
+       "sortable": "none",
+       "template": "cell-text",
+       "text": "POS",
+       "weight": 2.5
+      },
+      {
+       "emphasized": false,
+       "index": 2,
+       "priority": 3,
+       "sortable": "none",
+       "template": "cell-text",
+       "text": "AGE",
+       "weight": 2.5
+      },
+      {
+       "emphasized": false,
+       "index": 3,
+       "priority": 4,
+       "sortable": "none",
+       "template": "cell-text",
+       "text": "HT",
+       "weight": 2.5
+      },
+      {
+       "emphasized": false,
+       "index": 4,
+       "priority": 5,
+       "sortable": "none",
+       "template": "cell-text",
+       "text": "WT",
+       "weight": 2.5
+      },
+      {
+       "emphasized": false,
+       "index": 5,
+       "priority": 6,
+       "sortable": "none",
+       "template": "cell-text",
+       "text": "COLLEGE",
+       "weight": 2.5
+      }
+     ],
+     "isPrimary": true
+    }
+   ],
+   "rows": [
+    {
+     "columns": [
+      {
+       "emphasized": false,
+       "imageAltText": "Jake Bailey",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/15006.vresize.140.170.medium.3.png",
+       "index": 0,
+       "superscript": "#16",
+       "text": "Jake Bailey"
+      },
+      {
+       "emphasized": false,
+       "index": 1,
+       "text": "P"
+      },
+      {
+       "emphasized": false,
+       "index": 2,
+       "text": "29"
+      },
+      {
+       "emphasized": false,
+       "index": 3,
+       "text": "6'2\""
+      },
+      {
+       "emphasized": false,
+       "index": 4,
+       "text": "212 lbs"
+      },
+      {
+       "emphasized": false,
+       "index": 5,
+       "text": "Stanford"
+      }
+     ],
+     "entityLink": {
+      "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/15006.vresize.140.170.medium.3.png",
+      "analyticsName": "jake-bailey",
+      "analyticsSport": "nfl",
+      "color": "1, 240, 31, 65",
+      "contentType": "athlete",
+      "contentUri": "football/nfl/athletes/15006",
+      "imageAltText": "Jake Bailey",
+      "imageType": "image-headshot",
+      "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/15006.vresize.140.170.medium.3.png",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+       "tokens": {
+        "contentUri": "football/nfl/athletes/15006",
+        "id": "15006"
+       }
+      },
+      "title": "JAKE BAILEY",
+      "type": "entity",
+      "webUrl": "/nfl/jake-bailey-player"
+     },
+     "isCutoff": false,
+     "isFaded": false,
+     "selected": false
+    },
+    {
+     "columns": [
+      {
+       "emphasized": false,
+       "imageAltText": "Nick Folk",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/6520.vresize.140.170.medium.1.png",
+       "index": 0,
+       "superscript": "#6",
+       "text": "Nick Folk"
+      },
+      {
+       "emphasized": false,
+       "index": 1,
+       "text": "K"
+      },
+      {
+       "emphasized": false,
+       "index": 2,
+       "text": "41"
+      },
+      {
+       "emphasized": false,
+       "index": 3,
+       "text": "6'1\""
+      },
+      {
+       "emphasized": false,
+       "index": 4,
+       "text": "225 lbs"
+      },
+      {
+       "emphasized": false,
+       "index": 5,
+       "text": "Arizona"
+      }
+     ],
+     "entityLink": {
+      "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/6520.vresize.140.170.medium.1.png",
+      "analyticsName": "nick-folk",
+      "analyticsSport": "nfl",
+      "color": "1, 240, 31, 65",
+      "contentType": "athlete",
+      "contentUri": "football/nfl/athletes/6520",
+      "imageAltText": "Nick Folk",
+      "imageType": "image-headshot",
+      "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/6520.vresize.140.170.medium.1.png",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+       "tokens": {
+        "contentUri": "football/nfl/athletes/6520",
+        "id": "6520"
+       }
+      },
+      "title": "NICK FOLK",
+      "type": "entity",
+      "webUrl": "/nfl/nick-folk-player"
+     },
+     "isCutoff": false,
+     "isFaded": false,
+     "selected": false
+    },
+    {
+     "columns": [
+      {
+       "emphasized": false,
+       "imageAltText": "Liam McCullough",
+       "imageType": "image-headshot",
+       "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22081.vresize.140.170.medium.3.png",
+       "index": 0,
+       "superscript": "#49",
+       "text": "Liam McCullough"
+      },
+      {
+       "emphasized": false,
+       "index": 1,
+       "text": "LS"
+      },
+      {
+       "emphasized": false,
+       "index": 2,
+       "text": "29"
+      },
+      {
+       "emphasized": false,
+       "index": 3,
+       "text": "6'2\""
+      },
+      {
+       "emphasized": false,
+       "index": 4,
+       "text": "245 lbs"
+      },
+      {
+       "emphasized": false,
+       "index": 5,
+       "text": "Ohio State"
+      }
+     ],
+     "entityLink": {
+      "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22081.vresize.140.170.medium.3.png",
+      "analyticsName": "liam-mccullough",
+      "analyticsSport": "nfl",
+      "color": "1, 240, 31, 65",
+      "contentType": "athlete",
+      "contentUri": "football/nfl/athletes/22081",
+      "imageAltText": "Liam McCullough",
+      "imageType": "image-headshot",
+      "imageUrl": "https://b.fssta.com/uploads/application/nfl/headshots/22081.vresize.140.170.medium.3.png",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=playersLayout&elementId=nfl",
+       "tokens": {
+        "contentUri": "football/nfl/athletes/22081",
+        "id": "22081"
+       }
+      },
+      "title": "LIAM MCCULLOUGH",
+      "type": "entity",
+      "webUrl": "/nfl/liam-mccullough-player"
+     },
+     "isCutoff": false,
+     "isFaded": false,
+     "selected": false
+    }
+   ],
+   "template": "table-roster"
+  },
+  {
+   "headers": [
+    {
+     "columns": [
+      {
+       "emphasized": true,
+       "index": 0,
+       "priority": 1,
+       "sortable": "none",
+       "template": "cell-text",
+       "text": "PLAYER COUNT",
+       "weight": 2.5
+      },
+      {
+       "emphasized": false,
+       "hideView": 1,
+       "index": 1,
+       "priority": 5,
+       "sortable": "none",
+       "template": "cell-text",
+       "weight": 2.5
+      },
+      {
+       "emphasized": false,
+       "index": 2,
+       "priority": 2,
+       "sortable": "none",
+       "template": "cell-text",
+       "text": "AVG AGE",
+       "weight": 2.5
+      },
+      {
+       "emphasized": false,
+       "index": 3,
+       "priority": 3,
+       "sortable": "none",
+       "template": "cell-text",
+       "text": "AVG HT",
+       "weight": 2.5
+      },
+      {
+       "emphasized": false,
+       "index": 4,
+       "priority": 4,
+       "sortable": "none",
+       "template": "cell-text",
+       "text": "AVG WT",
+       "weight": 2.5
+      }
+     ],
+     "isPrimary": true
+    }
+   ],
+   "rows": [
+    {
+     "columns": [
+      {
+       "emphasized": false,
+       "index": 0,
+       "text": "80"
+      },
+      {
+       "emphasized": false,
+       "index": 1
+      },
+      {
+       "emphasized": false,
+       "index": 2,
+       "text": "26.6"
+      },
+      {
+       "emphasized": false,
+       "index": 3,
+       "text": "6'2\""
+      },
+      {
+       "emphasized": false,
+       "index": 4,
+       "text": "247.0 lbs"
+      }
+     ],
+     "isCutoff": false,
+     "isFaded": false,
+     "selected": false
+    }
+   ],
+   "template": "table-roster"
+  }
+ ],
+ "title": "2026 Atlanta Falcons Roster"
+}

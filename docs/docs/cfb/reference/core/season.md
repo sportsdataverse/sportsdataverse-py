@@ -267,7 +267,12 @@ ESPN endpoint.
 
 ### Returns {#espn_cfb_season_group_teams-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_items`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `$ref` | character |  |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#espn_cfb_season_group_teams-example}
@@ -295,7 +300,12 @@ ESPN endpoint.
 
 ### Returns {#espn_cfb_season_group_children-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_items`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `$ref` | character |  |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#espn_cfb_season_group_children-example}
@@ -321,7 +331,10 @@ ESPN endpoint.
 
 ### Returns {#espn_cfb_season_type_leaders-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_items`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — the output of `parse_items`; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+No returns table is published for this endpoint: parser: parse_items returns no columns on the live payload (nba, nfl, mlb, nhl, wnba, cfb, mbb, wbb, 2026-10-07); its rows sit under keys it does not read (top level: $ref, abbreviation, categories, id, name, type).
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#espn_cfb_season_type_leaders-example}
@@ -347,7 +360,18 @@ ESPN endpoint.
 
 ### Returns {#espn_cfb_season_type_corrections-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_items`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `athlete_$ref` | character |  |
+| `competition_$ref` | character |  |
+| `split_stats_abbreviation` | character |  |
+| `split_stats_categories` | character |  |
+| `split_stats_id` | character |  |
+| `split_stats_name` | character |  |
+| `team_$ref` | character |  |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#espn_cfb_season_type_corrections-example}
@@ -443,7 +467,48 @@ ESPN endpoint.
 
 ### Returns {#espn_cfb_season_week_powerindex-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_weekly_powerindex`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `team_id` | integer | ESPN team id. |
+| `season` | integer | Season (4-digit year). |
+| `last_updated` | character | Timestamp ESPN last refreshed the power index. |
+| `run_date_time_key` | integer |  |
+| `fpi` | double | ESPN Football Power Index rating (projected scoring margin vs. average team). |
+| `fpirank` | double |  |
+| `projectedw` | double |  |
+| `projectedl` | double |  |
+| `projectedt` | double |  |
+| `record` | double |  |
+| `probwinout` | double |  |
+| `probwinconf` | character |  |
+| `sosremainingrank` | double |  |
+| `accomplishment` | character |  |
+| `accomplishmentrank` | double |  |
+| `adjwins` | character |  |
+| `adjlosses` | character |  |
+| `adjwinpctrank` | double |  |
+| `gamecontrol` | character |  |
+| `gamecontrolrank` | double |  |
+| `adjavgingamewp` | character |  |
+| `adjavgingamewprank` | double |  |
+| `avgingamewp` | double |  |
+| `avgingamewprank` | double |  |
+| `avgsosrank` | double |  |
+| `epaoffense` | double |  |
+| `epadefense` | double |  |
+| `epaspecialteams` | double |  |
+| `probwindiv` | double |  |
+| `offefficiency` | double |  |
+| `offefficiencyrank` | double |  |
+| `defefficiency` | double |  |
+| `defefficiencyrank` | double |  |
+| `stefficiency` | double |  |
+| `stefficiencyrank` | double |  |
+| `totefficiency` | double |  |
+| `totefficiencyrank` | double |  |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#espn_cfb_season_week_powerindex-example}
@@ -471,7 +536,12 @@ ESPN endpoint.
 
 ### Returns {#espn_cfb_season_week_games-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_items`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `$ref` | character |  |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#espn_cfb_season_week_games-example}
@@ -661,7 +731,10 @@ ESPN endpoint.
 
 ### Returns {#espn_cfb_season_draft-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_draft`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — the output of `parse_draft`; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+No returns table is published for this endpoint: parser: parse_draft raises AttributeError: 'str' object has no attribute 'get' on the live payload (nba, nfl, wnba, 2026-10-07), so no columns can be derived.
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#espn_cfb_season_draft-example}
@@ -687,7 +760,10 @@ ESPN endpoint.
 
 ### Returns {#espn_cfb_season_draft_round_picks-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_items`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — the output of `parse_items`; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+No returns table is published for this endpoint: no capture: 404 in nba, nfl, mlb, nhl, wnba, cfb, mbb, wbb with the documented example arguments (2026-10-07).
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#espn_cfb_season_draft_round_picks-example}
@@ -712,7 +788,10 @@ ESPN endpoint.
 
 ### Returns {#espn_cfb_season_freeagents-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_items`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — the output of `parse_items`; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+No returns table is published for this endpoint: no capture: the page holds zero items (count 0) in nfl, mlb, nhl, cfb; 400 in nba, wnba, mbb, wbb with the documented example arguments (2026-10-07).
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#espn_cfb_season_freeagents-example}
@@ -737,7 +816,14 @@ ESPN endpoint.
 
 ### Returns {#espn_cfb_season_powerindex_leaders-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_items`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `display_name` | character | Human-readable metric name. |
+| `leaders` | character |  |
+| `name` | character | Position name (e.g. `Quarterback`). |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#espn_cfb_season_powerindex_leaders-example}
@@ -796,7 +882,10 @@ ESPN endpoint.
 
 ### Returns {#espn_cfb_season_qbr-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_items`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — the output of `parse_items`; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+No returns table is published for this endpoint: no capture: 404 in nfl, cfb with the documented example arguments (2026-10-07).
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#espn_cfb_season_qbr-example}

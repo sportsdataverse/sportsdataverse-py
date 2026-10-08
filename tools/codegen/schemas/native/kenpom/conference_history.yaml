@@ -1,0 +1,74 @@
+schema: conference_history
+kind: frames
+frames:
+- section: player_table
+  columns:
+  - name: year
+    type: double
+    description: ''
+  - name: rank
+    type: integer
+    description: ''
+  - name: pace
+    type: double
+    description: ''
+  - name: o_rtg
+    type: double
+    description: ''
+  - name: e_fg_pct
+    type: double
+    description: ''
+  - name: to_pct
+    type: double
+    description: ''
+  - name: or_pct
+    type: double
+    description: ''
+  - name: ftr
+    type: double
+    description: ''
+  - name: 2_p_pct
+    type: double
+    description: ''
+  - name: 3_p_pct
+    type: double
+    description: ''
+  - name: ft_pct
+    type: double
+    description: ''
+  - name: 3_pa_pct
+    type: double
+    description: ''
+  - name: a_pct
+    type: double
+    description: ''
+  - name: blk_pct
+    type: double
+    description: ''
+  - name: stl_pct
+    type: double
+    description: ''
+  - name: home_record
+    type: character
+    description: ''
+  - name: bids
+    type: integer
+    description: ''
+  - name: s16
+    type: integer
+    description: ''
+  - name: f4
+    type: integer
+    description: ''
+  - name: ch
+    type: integer
+    description: ''
+  - name: reg_season_champ
+    type: character
+    description: ''
+  - name: tourney_champ
+    type: character
+    description: ''
+  - name: best_team
+    type: character
+    description: ''

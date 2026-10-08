@@ -26,7 +26,18 @@ GET /bifrost/v1/{sport}/scoreboard/main -- Fox Sports API scoreboard.
 
 ### Returns {#fox_api_scoreboard-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_fox_api_events`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `id` | character |  |
+| `parameters_season_type` | character |  |
+| `parameters_week` | character |  |
+| `subtitle` | character |  |
+| `title` | character |  |
+| `uri` | character |  |
+| `web_url` | character |  |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#fox_api_scoreboard-example}
@@ -53,7 +64,64 @@ GET /bifrost/v1/{sport}/scorechip/{chip_id} -- one game's score chip (this route
 
 ### Returns {#fox_api_scorechip-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_fox_api_scorechip`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `alt_sort_key` | character |  |
+| `content_type` | character |  |
+| `content_uri` | character |  |
+| `entity_link_analytics_sport` | character |  |
+| `entity_link_content_type` | character |  |
+| `entity_link_content_uri` | character |  |
+| `entity_link_layout_path` | character |  |
+| `entity_link_layout_tokens_away_uri` | character |  |
+| `entity_link_layout_tokens_event_uri` | character |  |
+| `entity_link_layout_tokens_home_uri` | character |  |
+| `entity_link_layout_tokens_id` | character |  |
+| `entity_link_type` | character |  |
+| `entity_link_web_url` | character |  |
+| `event_headline` | character |  |
+| `event_status` | integer |  |
+| `event_time` | character |  |
+| `favorite_entities` | character |  |
+| `id` | character |  |
+| `importance` | integer |  |
+| `is_tba` | logical |  |
+| `league` | character |  |
+| `lower_team_alternate_logo_url` | character |  |
+| `lower_team_has_possession` | logical |  |
+| `lower_team_image_alt_text` | character |  |
+| `lower_team_image_type` | character |  |
+| `lower_team_is_loser` | logical |  |
+| `lower_team_logo_url` | character |  |
+| `lower_team_long_name` | character |  |
+| `lower_team_name` | character |  |
+| `lower_team_record` | character |  |
+| `lower_team_score` | integer |  |
+| `lower_team_stacked_name_bottom` | character |  |
+| `lower_team_stacked_name_top` | character |  |
+| `lower_team_uri` | character |  |
+| `odds_line` | character |  |
+| `over_under_line` | character |  |
+| `sort_key` | character |  |
+| `status_line` | character |  |
+| `template` | character |  |
+| `upper_team_alternate_logo_url` | character |  |
+| `upper_team_has_possession` | logical |  |
+| `upper_team_image_alt_text` | character |  |
+| `upper_team_image_type` | character |  |
+| `upper_team_is_loser` | logical |  |
+| `upper_team_logo_url` | character |  |
+| `upper_team_long_name` | character |  |
+| `upper_team_name` | character |  |
+| `upper_team_record` | character |  |
+| `upper_team_score` | integer |  |
+| `upper_team_stacked_name_bottom` | character |  |
+| `upper_team_stacked_name_top` | character |  |
+| `upper_team_uri` | character |  |
+| `uri` | character |  |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#fox_api_scorechip-example}
@@ -80,7 +148,32 @@ GET /bifrost/v1/topevents/scoreboard/segment/{segment} -- Fox Sports API topeven
 
 ### Returns {#fox_api_topevents_scoreboard_segment-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_fox_api_events`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `segment_id` | character |  |
+| `section_id` | character |  |
+| `section_title` | character |  |
+| `game_id` | character |  |
+| `chip_id` | character |  |
+| `league` | character |  |
+| `date` | character |  |
+| `event_status` | integer |  |
+| `status` | character |  |
+| `tv_station` | character |  |
+| `headline` | character |  |
+| `odds_line` | character |  |
+| `over_under_line` | character |  |
+| `home_team` | character |  |
+| `home_team_id` | character |  |
+| `home_score` | integer |  |
+| `home_record` | character |  |
+| `away_team` | character |  |
+| `away_team_id` | character |  |
+| `away_score` | integer |  |
+| `away_record` | character |  |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#fox_api_topevents_scoreboard_segment-example}
@@ -97,7 +190,7 @@ GET /bifrost/v1/{sport}/league/conferences -- Fox Sports API league conferences.
 
 **Endpoint URL:** `GET https://api.foxsports.com/bifrost/v1/{sport}/league/conferences`
 
-**Valid URL:** [https://api.foxsports.com/bifrost/v1/nfl/league/conferences?apikey=jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq&api-version=1.1](https://api.foxsports.com/bifrost/v1/nfl/league/conferences?apikey=jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq&api-version=1.1)
+**Valid URL:** [https://api.foxsports.com/bifrost/v1/cfb/league/conferences?apikey=jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq&api-version=1.1](https://api.foxsports.com/bifrost/v1/cfb/league/conferences?apikey=jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq&api-version=1.1)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -107,13 +200,26 @@ GET /bifrost/v1/{sport}/league/conferences -- Fox Sports API league conferences.
 
 ### Returns {#fox_api_league_conferences-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_fox_api_nav`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `group` | character |  |
+| `fox_id` | character |  |
+| `abbreviation` | character |  |
+| `name` | character |  |
+| `content_uri` | character |  |
+| `content_type` | character |  |
+| `web_url` | character |  |
+| `color` | character |  |
+| `logo_url` | character |  |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#fox_api_league_conferences-example}
 
 ```python
-fox_api_league_conferences(sport='nfl')
+fox_api_league_conferences(sport='cfb')
 ```
 
 _Last validated n/a._
@@ -134,7 +240,21 @@ GET /bifrost/v1/{sport}/league/header -- Fox Sports API league header.
 
 ### Returns {#fox_api_league_header-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_fox_api_header`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `template` | character |  |
+| `title` | character |  |
+| `entity_id` | character | Composite Yahoo id this editorial row was keyed under, surfaced from the collection map key (e.g., "ncaaf.g.202509200023" for a game, "ncaaf.t.29" for a team); always carried as Utf8. |
+| `content_uri` | character |  |
+| `content_type` | character |  |
+| `color` | character |  |
+| `logo_url` | character |  |
+| `image_alt_text` | character |  |
+| `rank` | character |  |
+| `details` | character |  |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#fox_api_league_header-example}
@@ -162,7 +282,48 @@ GET /bifrost/v1/{sport}/league/odds -- Fox Sports API league odds.
 
 ### Returns {#fox_api_league_odds-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_fox_api`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `model_gambling_text_bet_text` | character |  |
+| `model_gambling_text_winnings_text` | character |  |
+| `model_image_alt_text` | character |  |
+| `model_image_alt_url` | character |  |
+| `model_image_type` | character |  |
+| `model_image_url` | character |  |
+| `model_info_date` | character |  |
+| `model_info_sub_text` | character |  |
+| `model_main_text` | character |  |
+| `model_odds_bet_slip_bet_display` | character |  |
+| `model_odds_bet_slip_bet_increment` | integer |  |
+| `model_odds_bet_slip_bet_index` | integer |  |
+| `model_odds_bet_slip_bet_max` | integer |  |
+| `model_odds_bet_slip_bet_min` | integer |  |
+| `model_odds_bet_slip_description` | character |  |
+| `model_odds_bet_slip_disclaimer_text` | character |  |
+| `model_odds_bet_slip_event_time` | character |  |
+| `model_odds_bet_slip_event_title` | character |  |
+| `model_odds_bet_slip_image_alt_text` | character |  |
+| `model_odds_bet_slip_image_alt_url` | character |  |
+| `model_odds_bet_slip_image_type` | character |  |
+| `model_odds_bet_slip_image_url` | character |  |
+| `model_odds_bet_slip_odds_display` | character |  |
+| `model_odds_bet_slip_payout_multiplier` | double |  |
+| `model_odds_bet_slip_tracking_data_bet_entity_name` | character |  |
+| `model_odds_bet_slip_tracking_data_bet_entity_uri` | character |  |
+| `model_odds_bet_slip_tracking_data_bet_event_status` | integer |  |
+| `model_odds_bet_slip_tracking_data_bet_event_uri` | character |  |
+| `model_odds_bet_slip_tracking_data_bet_outcome_line` | character |  |
+| `model_odds_bet_slip_tracking_data_bet_outcome_title` | character |  |
+| `model_odds_bet_slip_tracking_data_content_entity_uri` | character |  |
+| `model_odds_bet_slip_tracking_data_page_start_source` | character |  |
+| `model_odds_sub_text` | character |  |
+| `model_odds_text` | character |  |
+| `model_odds_title` | character |  |
+| `model_sub_text` | character |  |
+| `template` | character |  |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#fox_api_league_odds-example}
@@ -189,7 +350,38 @@ GET /bifrost/v1/{sport}/league/playernews -- Fox Sports API league playernews.
 
 ### Returns {#fox_api_league_playernews-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_fox_api`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `alternate_image_url` | character |  |
+| `date` | character |  |
+| `description` | character |  |
+| `entity_link_alternate_image_url` | character |  |
+| `entity_link_analytics_name` | character |  |
+| `entity_link_analytics_sport` | character |  |
+| `entity_link_color` | character |  |
+| `entity_link_content_type` | character |  |
+| `entity_link_content_uri` | character |  |
+| `entity_link_image_alt_text` | character |  |
+| `entity_link_image_type` | character |  |
+| `entity_link_image_url` | character |  |
+| `entity_link_layout_path` | character |  |
+| `entity_link_layout_tokens_content_uri` | character |  |
+| `entity_link_layout_tokens_id` | character |  |
+| `entity_link_title` | character |  |
+| `entity_link_type` | character |  |
+| `entity_link_web_url` | character |  |
+| `headline` | character |  |
+| `image_alt_text` | character |  |
+| `image_type` | character |  |
+| `image_url` | character |  |
+| `impact` | character |  |
+| `impact_title` | character |  |
+| `source` | character |  |
+| `subtitle` | character |  |
+| `title` | character |  |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#fox_api_league_playernews-example}
@@ -206,7 +398,7 @@ GET /bifrost/v1/{sport}/league/polls -- Fox Sports API league polls.
 
 **Endpoint URL:** `GET https://api.foxsports.com/bifrost/v1/{sport}/league/polls`
 
-**Valid URL:** [https://api.foxsports.com/bifrost/v1/nfl/league/polls?apikey=jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq&api-version=1.1](https://api.foxsports.com/bifrost/v1/nfl/league/polls?apikey=jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq&api-version=1.1)
+**Valid URL:** [https://api.foxsports.com/bifrost/v1/cfb/league/polls?apikey=jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq&api-version=1.1](https://api.foxsports.com/bifrost/v1/cfb/league/polls?apikey=jE7yBJVRNAwdDesMgTzTXUUSx1It41Fq&api-version=1.1)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -216,13 +408,25 @@ GET /bifrost/v1/{sport}/league/polls -- Fox Sports API league polls.
 
 ### Returns {#fox_api_league_polls-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_fox_api_polls`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `section` | character |  |
+| `ranking` | character |  |
+| `v1` | character |  |
+| `v2` | character |  |
+| `pts` | character |  |
+| `entity_id` | character | Composite Yahoo id this editorial row was keyed under, surfaced from the collection map key (e.g., "ncaaf.g.202509200023" for a game, "ncaaf.t.29" for a team); always carried as Utf8. |
+| `team` | character |  |
+| `rank_change` | integer |  |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#fox_api_league_polls-example}
 
 ```python
-fox_api_league_polls(sport='nfl')
+fox_api_league_polls(sport='cfb')
 ```
 
 _Last validated n/a._
@@ -243,7 +447,18 @@ GET /bifrost/v1/{sport}/league/schedule -- Fox Sports API league schedule.
 
 ### Returns {#fox_api_league_schedule-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_fox_api_events`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `id` | character |  |
+| `parameters_season_type` | character |  |
+| `parameters_week` | character |  |
+| `subtitle` | character |  |
+| `title` | character |  |
+| `uri` | character |  |
+| `web_url` | character |  |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#fox_api_league_schedule-example}
@@ -270,7 +485,18 @@ GET /bifrost/v1/{sport}/league/scores -- Fox Sports API league scores.
 
 ### Returns {#fox_api_league_scores-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_fox_api_events`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `id` | character |  |
+| `parameters_season_type` | character |  |
+| `parameters_week` | character |  |
+| `subtitle` | character |  |
+| `title` | character |  |
+| `uri` | character |  |
+| `web_url` | character |  |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#fox_api_league_scores-example}
@@ -299,7 +525,32 @@ GET /bifrost/v1/{sport}/league/scores-segment/{segment_id} -- Fox Sports API lea
 
 ### Returns {#fox_api_league_scores_segment-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_fox_api_events`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `segment_id` | character |  |
+| `section_id` | character |  |
+| `section_title` | character |  |
+| `game_id` | character |  |
+| `chip_id` | character |  |
+| `league` | character |  |
+| `date` | character |  |
+| `event_status` | integer |  |
+| `status` | character |  |
+| `tv_station` | character |  |
+| `headline` | character |  |
+| `odds_line` | character |  |
+| `over_under_line` | character |  |
+| `home_team` | character |  |
+| `home_team_id` | character |  |
+| `home_score` | integer |  |
+| `home_record` | character |  |
+| `away_team` | character |  |
+| `away_team_id` | character |  |
+| `away_score` | integer |  |
+| `away_record` | character |  |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#fox_api_league_scores_segment-example}
@@ -326,7 +577,33 @@ GET /bifrost/v1/{sport}/league/standings -- Fox Sports API league standings.
 
 ### Returns {#fox_api_league_standings-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_fox_api_standings`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `section` | character |  |
+| `afc_east` | character |  |
+| `v1` | character |  |
+| `w_l_t` | character |  |
+| `pct` | character |  |
+| `pf` | character |  |
+| `pa` | character |  |
+| `home` | character |  |
+| `away` | character |  |
+| `conf` | character |  |
+| `div` | character |  |
+| `strk` | character |  |
+| `entity_id` | character | Composite Yahoo id this editorial row was keyed under, surfaced from the collection map key (e.g., "ncaaf.g.202509200023" for a game, "ncaaf.t.29" for a team); always carried as Utf8. |
+| `afc_north` | character |  |
+| `afc_south` | character |  |
+| `afc_west` | character |  |
+| `nfc_east` | character |  |
+| `nfc_north` | character |  |
+| `nfc_south` | character |  |
+| `nfc_west` | character |  |
+| `american_football_conference` | character |  |
+| `national_football_conference` | character |  |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#fox_api_league_standings-example}
@@ -353,7 +630,24 @@ GET /bifrost/v1/{sport}/league/stats -- Fox Sports API league stats.
 
 ### Returns {#fox_api_league_stats-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_fox_api`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `condensed_uri` | character |  |
+| `image_alt_text` | character |  |
+| `image_type` | character |  |
+| `image_url` | character |  |
+| `name` | character |  |
+| `selection_id` | character |  |
+| `short_name` | character |  |
+| `stat_abbreviation` | character |  |
+| `stat_value` | character |  |
+| `team_abbreviation` | character |  |
+| `template` | character |  |
+| `title` | character |  |
+| `web_url` | character |  |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#fox_api_league_stats-example}
@@ -384,7 +678,30 @@ GET /bifrost/v1/{sport}/league/stats-con/{who}/{category}/{page} -- Fox Sports A
 
 ### Returns {#fox_api_league_stats_con-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_fox_api`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `columns` | character |  |
+| `entity_link_alternate_image_url` | character |  |
+| `entity_link_analytics_name` | character |  |
+| `entity_link_analytics_sport` | character |  |
+| `entity_link_color` | character |  |
+| `entity_link_content_type` | character |  |
+| `entity_link_content_uri` | character |  |
+| `entity_link_image_alt_text` | character |  |
+| `entity_link_image_type` | character |  |
+| `entity_link_image_url` | character |  |
+| `entity_link_layout_path` | character |  |
+| `entity_link_layout_tokens_content_uri` | character |  |
+| `entity_link_layout_tokens_id` | character |  |
+| `entity_link_title` | character |  |
+| `entity_link_type` | character |  |
+| `entity_link_web_url` | character |  |
+| `is_cutoff` | logical |  |
+| `is_faded` | logical |  |
+| `selected` | logical |  |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#fox_api_league_stats_con-example}
@@ -411,7 +728,20 @@ GET /bifrost/v1/{sport}/league/teamnav -- Fox Sports API league teamnav.
 
 ### Returns {#fox_api_league_teamnav-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_fox_api_nav`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `group` | character |  |
+| `fox_id` | character |  |
+| `abbreviation` | character |  |
+| `name` | character |  |
+| `content_uri` | character |  |
+| `content_type` | character |  |
+| `web_url` | character |  |
+| `color` | character |  |
+| `logo_url` | character |  |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#fox_api_league_teamnav-example}
@@ -439,7 +769,30 @@ GET /bifrost/v1/{sport}/event/{event_id}/data -- Fox Sports API event data.
 
 ### Returns {#fox_api_event_data-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_fox_api`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `columns` | character |  |
+| `entity_link_alternate_image_url` | character |  |
+| `entity_link_analytics_name` | character |  |
+| `entity_link_analytics_sport` | character |  |
+| `entity_link_color` | character |  |
+| `entity_link_content_type` | character |  |
+| `entity_link_content_uri` | character |  |
+| `entity_link_image_alt_text` | character |  |
+| `entity_link_image_type` | character |  |
+| `entity_link_image_url` | character |  |
+| `entity_link_layout_path` | character |  |
+| `entity_link_layout_tokens_content_uri` | character |  |
+| `entity_link_layout_tokens_id` | character |  |
+| `entity_link_title` | character |  |
+| `entity_link_type` | character |  |
+| `entity_link_web_url` | character |  |
+| `is_cutoff` | logical |  |
+| `is_faded` | logical |  |
+| `selected` | logical |  |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#fox_api_event_data-example}
@@ -467,7 +820,32 @@ GET /bifrost/v1/{sport}/event/{event_id}/matchup -- Fox Sports API event matchup
 
 ### Returns {#fox_api_event_matchup-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_fox_api`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `entity_image_alt_text` | character |  |
+| `entity_image_alt_url` | character |  |
+| `entity_image_type` | character |  |
+| `entity_image_url` | character |  |
+| `entity_link_alternate_image_url` | character |  |
+| `entity_link_analytics_name` | character |  |
+| `entity_link_analytics_sport` | character |  |
+| `entity_link_color` | character |  |
+| `entity_link_content_type` | character |  |
+| `entity_link_content_uri` | character |  |
+| `entity_link_image_alt_text` | character |  |
+| `entity_link_image_type` | character |  |
+| `entity_link_image_url` | character |  |
+| `entity_link_layout_path` | character |  |
+| `entity_link_layout_tokens_content_uri` | character |  |
+| `entity_link_layout_tokens_id` | character |  |
+| `entity_link_title` | character |  |
+| `entity_link_type` | character |  |
+| `entity_link_web_url` | character |  |
+| `text` | character |  |
+| `title` | character |  |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#fox_api_event_matchup-example}
@@ -495,7 +873,21 @@ GET /bifrost/v1/{sport}/event/{event_id}/odds -- Fox Sports API event odds.
 
 ### Returns {#fox_api_event_odds-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_fox_api`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `odds1` | character |  |
+| `odds2` | character |  |
+| `point` | integer |  |
+| `text` | character |  |
+| `text1` | character |  |
+| `text2` | character |  |
+| `timestamp` | character |  |
+| `annotation_color` | character |  |
+| `annotation_text` | character |  |
+| `annotation_type` | character |  |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#fox_api_event_odds-example}
@@ -523,7 +915,32 @@ GET /bifrost/v1/{sport}/event/{event_id}/recap -- Fox Sports API event recap.
 
 ### Returns {#fox_api_event_recap-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_fox_api`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `entity_image_alt_text` | character |  |
+| `entity_image_alt_url` | character |  |
+| `entity_image_type` | character |  |
+| `entity_image_url` | character |  |
+| `entity_link_alternate_image_url` | character |  |
+| `entity_link_analytics_name` | character |  |
+| `entity_link_analytics_sport` | character |  |
+| `entity_link_color` | character |  |
+| `entity_link_content_type` | character |  |
+| `entity_link_content_uri` | character |  |
+| `entity_link_image_alt_text` | character |  |
+| `entity_link_image_type` | character |  |
+| `entity_link_image_url` | character |  |
+| `entity_link_layout_path` | character |  |
+| `entity_link_layout_tokens_content_uri` | character |  |
+| `entity_link_layout_tokens_id` | character |  |
+| `entity_link_title` | character |  |
+| `entity_link_type` | character |  |
+| `entity_link_web_url` | character |  |
+| `text` | character |  |
+| `title` | character |  |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#fox_api_event_recap-example}
@@ -551,7 +968,19 @@ GET /bifrost/v1/{sport}/event/{event_id}/standings -- Fox Sports API event stand
 
 ### Returns {#fox_api_event_standings-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_fox_api_standings`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `section` | character |  |
+| `nfc_north` | character |  |
+| `v1` | character |  |
+| `w_l_t` | character |  |
+| `div` | character |  |
+| `strk` | character |  |
+| `entity_id` | character | Composite Yahoo id this editorial row was keyed under, surfaced from the collection map key (e.g., "ncaaf.g.202509200023" for a game, "ncaaf.t.29" for a team); always carried as Utf8. |
+| `nfc_south` | character |  |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#fox_api_event_standings-example}
@@ -579,7 +1008,18 @@ GET /bifrost/v1/{sport}/team/{team_id}/gamelog -- Fox Sports API team gamelog.
 
 ### Returns {#fox_api_team_gamelog-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_fox_api`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `emphasized` | logical |  |
+| `index` | integer |  |
+| `priority` | integer |  |
+| `sortable` | character |  |
+| `template` | character |  |
+| `text` | character |  |
+| `weight` | double |  |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#fox_api_team_gamelog-example}
@@ -607,7 +1047,21 @@ GET /bifrost/v1/{sport}/team/{team_id}/header -- Fox Sports API team header.
 
 ### Returns {#fox_api_team_header-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_fox_api_header`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `template` | character |  |
+| `title` | character |  |
+| `entity_id` | character | Composite Yahoo id this editorial row was keyed under, surfaced from the collection map key (e.g., "ncaaf.g.202509200023" for a game, "ncaaf.t.29" for a team); always carried as Utf8. |
+| `content_uri` | character |  |
+| `content_type` | character |  |
+| `color` | character |  |
+| `logo_url` | character |  |
+| `image_alt_text` | character |  |
+| `rank` | character |  |
+| `details` | character |  |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#fox_api_team_header-example}
@@ -635,7 +1089,19 @@ GET /bifrost/v1/{sport}/team/{team_id}/roster -- Fox Sports API team roster.
 
 ### Returns {#fox_api_team_roster-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_fox_api_roster`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `position_group` | character |  |
+| `player` | character |  |
+| `pos` | character |  |
+| `age` | character | Athlete age in years. |
+| `ht` | character |  |
+| `wt` | character |  |
+| `college` | character |  |
+| `athlete_id` | character | ESPN numeric identifier for the athlete. |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#fox_api_team_roster-example}
@@ -663,7 +1129,33 @@ GET /bifrost/v1/{sport}/team/{team_id}/standings -- Fox Sports API team standing
 
 ### Returns {#fox_api_team_standings-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_fox_api_standings`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `section` | character |  |
+| `nfc_south` | character |  |
+| `v1` | character |  |
+| `w_l_t` | character |  |
+| `pct` | character |  |
+| `pf` | character |  |
+| `pa` | character |  |
+| `home` | character |  |
+| `away` | character |  |
+| `conf` | character |  |
+| `div` | character |  |
+| `strk` | character |  |
+| `entity_id` | character | Composite Yahoo id this editorial row was keyed under, surfaced from the collection map key (e.g., "ncaaf.g.202509200023" for a game, "ncaaf.t.29" for a team); always carried as Utf8. |
+| `nfc_east` | character |  |
+| `nfc_north` | character |  |
+| `nfc_west` | character |  |
+| `afc_east` | character |  |
+| `afc_north` | character |  |
+| `afc_south` | character |  |
+| `afc_west` | character |  |
+| `national_football_conference` | character |  |
+| `american_football_conference` | character |  |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#fox_api_team_standings-example}
@@ -691,7 +1183,23 @@ GET /bifrost/v1/{sport}/team/{team_id}/stats -- Fox Sports API team stats.
 
 ### Returns {#fox_api_team_stats-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_fox_api`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `condensed_uri` | character |  |
+| `image_alt_text` | character |  |
+| `image_type` | character |  |
+| `image_url` | character |  |
+| `name` | character |  |
+| `selection_id` | character |  |
+| `short_name` | character |  |
+| `stat_abbreviation` | character |  |
+| `stat_value` | character |  |
+| `template` | character |  |
+| `title` | character |  |
+| `web_url` | character |  |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#fox_api_team_stats-example}
@@ -718,7 +1226,20 @@ GET /bifrost/v1/explore/browse/{section}/main -- Fox Sports API explore browse.
 
 ### Returns {#fox_api_explore_browse-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_fox_api_nav`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `group` | character |  |
+| `fox_id` | character |  |
+| `abbreviation` | character |  |
+| `name` | character |  |
+| `content_uri` | character |  |
+| `content_type` | character |  |
+| `web_url` | character |  |
+| `color` | character |  |
+| `logo_url` | character |  |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#fox_api_explore_browse-example}
@@ -744,7 +1265,22 @@ GET /bifrost/v1/explore/odds/main -- Fox Sports API explore odds.
 
 ### Returns {#fox_api_explore_odds-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_fox_api`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `external_id` | character | Provider-side identifier for the media item, matching the play id it accompanies. |
+| `external_uri` | character |  |
+| `isa_value` | character |  |
+| `path` | character |  |
+| `short_title` | character |  |
+| `slug` | character |  |
+| `spark_id` | character |  |
+| `tag_type` | character |  |
+| `title` | character |  |
+| `type` | character |  |
+| `uuidv5` | character |  |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#fox_api_explore_odds-example}
@@ -771,7 +1307,21 @@ GET /bifrost/v1/search/content -- Fox Sports API search content.
 
 ### Returns {#fox_api_search_content-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_fox_api_search`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `group` | character |  |
+| `type` | character |  |
+| `entity_id` | character | Composite Yahoo id this editorial row was keyed under, surfaced from the collection map key (e.g., "ncaaf.g.202509200023" for a game, "ncaaf.t.29" for a team); always carried as Utf8. |
+| `title` | character |  |
+| `subtitle` | character |  |
+| `content_type` | character |  |
+| `content_uri` | character |  |
+| `web_url` | character |  |
+| `analytics_name` | character |  |
+| `image_url` | character |  |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#fox_api_search_content-example}
@@ -798,7 +1348,21 @@ GET /bifrost/v1/search/entities -- Fox Sports API search entities.
 
 ### Returns {#fox_api_search_entities-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_fox_api_search`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `group` | character |  |
+| `type` | character |  |
+| `entity_id` | character | Composite Yahoo id this editorial row was keyed under, surfaced from the collection map key (e.g., "ncaaf.g.202509200023" for a game, "ncaaf.t.29" for a team); always carried as Utf8. |
+| `title` | character |  |
+| `subtitle` | character |  |
+| `content_type` | character |  |
+| `content_uri` | character |  |
+| `web_url` | character |  |
+| `analytics_name` | character |  |
+| `image_url` | character |  |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#fox_api_search_entities-example}
@@ -824,7 +1388,21 @@ GET /bifrost/v1/search/popular -- Fox Sports API search popular.
 
 ### Returns {#fox_api_search_popular-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_fox_api_search`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `group` | character |  |
+| `type` | character |  |
+| `entity_id` | character | Composite Yahoo id this editorial row was keyed under, surfaced from the collection map key (e.g., "ncaaf.g.202509200023" for a game, "ncaaf.t.29" for a team); always carried as Utf8. |
+| `title` | character |  |
+| `subtitle` | character |  |
+| `content_type` | character |  |
+| `content_uri` | character |  |
+| `web_url` | character |  |
+| `analytics_name` | character |  |
+| `image_url` | character |  |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#fox_api_search_popular-example}
@@ -852,7 +1430,22 @@ GET /bifrost/v1/general/trending/articles -- Fox Sports API trending articles.
 
 ### Returns {#fox_api_trending_articles-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_fox_api_trending`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `id` | character |  |
+| `spark_id` | character |  |
+| `title` | character |  |
+| `description` | character |  |
+| `content_type` | character |  |
+| `component_type` | character |  |
+| `publication_date` | character |  |
+| `last_published_date` | character |  |
+| `canonical_url` | character |  |
+| `thumbnail_url` | character |  |
+| `playback_url` | character |  |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#fox_api_trending_articles-example}
@@ -880,7 +1473,22 @@ GET /bifrost/v1/general/trending/videos -- Fox Sports API trending videos.
 
 ### Returns {#fox_api_trending_videos-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_fox_api_trending`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `id` | character |  |
+| `spark_id` | character |  |
+| `title` | character |  |
+| `description` | character |  |
+| `content_type` | character |  |
+| `component_type` | character |  |
+| `publication_date` | character |  |
+| `last_published_date` | character |  |
+| `canonical_url` | character |  |
+| `thumbnail_url` | character |  |
+| `playback_url` | character |  |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#fox_api_trending_videos-example}
@@ -907,7 +1515,39 @@ GET /foxpolls/v1/polls -- Fox Sports API foxpolls.
 
 ### Returns {#fox_api_foxpolls-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_fox_api`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `poll_id` | integer |  |
+| `uri` | character |  |
+| `title` | character |  |
+| `type` | character |  |
+| `background_image_url` | character |  |
+| `background_image_version` | integer |  |
+| `background_image_type` | character |  |
+| `background_image_alt_text` | character |  |
+| `background_image_additional_urls` | character |  |
+| `min_submissions_needed` | integer |  |
+| `max_submissions_allowed` | integer |  |
+| `max_votes_per_user` | integer |  |
+| `cta_text` | character |  |
+| `cta_url` | character |  |
+| `results_display_type` | character |  |
+| `results_display_text` | character |  |
+| `results_commentary` | character |  |
+| `results_displayed_at` | character |  |
+| `authorization_type` | character |  |
+| `starts_at` | character |  |
+| `ends_at` | character |  |
+| `locks_at` | character |  |
+| `answers` | character |  |
+| `votes` | integer |  |
+| `min_votes_to_display_post_lock` | integer |  |
+| `ads_enabled` | logical |  |
+| `background_image_additional_urls_resized_url` | character |  |
+| `background_image` | character |  |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#fox_api_foxpolls-example}

@@ -1,0 +1,901 @@
+{
+ "maxItems": 11,
+ "navItems": [
+  {
+   "alternateLogoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Cowboys.vresize.200.200.medium.0.png",
+   "entityLink": {
+    "analyticsName": "dallas-cowboys",
+    "analyticsSport": "nfl",
+    "color": "1, 192, 192, 192",
+    "contentType": "team",
+    "contentUri": "football/nfl/teams/15",
+    "imageAltText": "Dallas Cowboys",
+    "imageType": "image-logo",
+    "imageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Cowboys.vresize.200.200.medium.0.png",
+    "layout": {
+     "path": "/layouts?type=layout&subtype=teamsLayout&elementId=nfl",
+     "tokens": {
+      "contentUri": "football/nfl/teams/15",
+      "id": "15"
+     }
+    },
+    "title": "DALLAS COWBOYS",
+    "type": "entity",
+    "webUrl": "/nfl/dallas-cowboys-team"
+   },
+   "imageAltText": "Cowboys",
+   "imageType": "image-logo",
+   "logoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Cowboys.vresize.200.200.medium.0.png",
+   "template": "default",
+   "title": "DAL"
+  },
+  {
+   "alternateLogoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Eagles.vresize.200.200.medium.0.png",
+   "entityLink": {
+    "analyticsName": "philadelphia-eagles",
+    "analyticsSport": "nfl",
+    "color": "1, 0, 170, 150",
+    "contentType": "team",
+    "contentUri": "football/nfl/teams/17",
+    "imageAltText": "Philadelphia Eagles",
+    "imageType": "image-logo",
+    "imageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Eagles.vresize.200.200.medium.0.png",
+    "layout": {
+     "path": "/layouts?type=layout&subtype=teamsLayout&elementId=nfl",
+     "tokens": {
+      "contentUri": "football/nfl/teams/17",
+      "id": "17"
+     }
+    },
+    "title": "PHILADELPHIA EAGLES",
+    "type": "entity",
+    "webUrl": "/nfl/philadelphia-eagles-team"
+   },
+   "imageAltText": "Eagles",
+   "imageType": "image-logo",
+   "logoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Eagles.vresize.200.200.medium.0.png",
+   "template": "default",
+   "title": "PHI"
+  },
+  {
+   "alternateLogoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Bears.vresize.200.200.medium.1.png",
+   "entityLink": {
+    "analyticsName": "chicago-bears",
+    "analyticsSport": "nfl",
+    "color": "1, 255, 104, 53",
+    "contentType": "team",
+    "contentUri": "football/nfl/teams/20",
+    "imageAltText": "Chicago Bears",
+    "imageType": "image-logo",
+    "imageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Bears.vresize.200.200.medium.1.png",
+    "layout": {
+     "path": "/layouts?type=layout&subtype=teamsLayout&elementId=nfl",
+     "tokens": {
+      "contentUri": "football/nfl/teams/20",
+      "id": "20"
+     }
+    },
+    "title": "CHICAGO BEARS",
+    "type": "entity",
+    "webUrl": "/nfl/chicago-bears-team"
+   },
+   "imageAltText": "Bears",
+   "imageType": "image-logo",
+   "logoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Bears.vresize.200.200.medium.1.png",
+   "template": "default",
+   "title": "CHI"
+  },
+  {
+   "alternateLogoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Packers.vresize.200.200.medium.0.png",
+   "entityLink": {
+    "analyticsName": "green-bay-packers",
+    "analyticsSport": "nfl",
+    "color": "1, 0, 156, 26",
+    "contentType": "team",
+    "contentUri": "football/nfl/teams/22",
+    "imageAltText": "Green Bay Packers",
+    "imageType": "image-logo",
+    "imageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Packers.vresize.200.200.medium.0.png",
+    "layout": {
+     "path": "/layouts?type=layout&subtype=teamsLayout&elementId=nfl",
+     "tokens": {
+      "contentUri": "football/nfl/teams/22",
+      "id": "22"
+     }
+    },
+    "title": "GREEN BAY PACKERS",
+    "type": "entity",
+    "webUrl": "/nfl/green-bay-packers-team"
+   },
+   "imageAltText": "Packers",
+   "imageType": "image-logo",
+   "logoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Packers.vresize.200.200.medium.0.png",
+   "template": "default",
+   "title": "GB"
+  },
+  {
+   "alternateLogoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Vikings.vresize.200.200.medium.0.png",
+   "entityLink": {
+    "analyticsName": "minnesota-vikings",
+    "analyticsSport": "nfl",
+    "color": "1, 141, 52, 255",
+    "contentType": "team",
+    "contentUri": "football/nfl/teams/23",
+    "imageAltText": "Minnesota Vikings",
+    "imageType": "image-logo",
+    "imageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Vikings.vresize.200.200.medium.0.png",
+    "layout": {
+     "path": "/layouts?type=layout&subtype=teamsLayout&elementId=nfl",
+     "tokens": {
+      "contentUri": "football/nfl/teams/23",
+      "id": "23"
+     }
+    },
+    "title": "MINNESOTA VIKINGS",
+    "type": "entity",
+    "webUrl": "/nfl/minnesota-vikings-team"
+   },
+   "imageAltText": "Vikings",
+   "imageType": "image-logo",
+   "logoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Vikings.vresize.200.200.medium.0.png",
+   "template": "default",
+   "title": "MIN"
+  },
+  {
+   "alternateLogoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/49ers.vresize.200.200.medium.1.png",
+   "entityLink": {
+    "analyticsName": "san-francisco-49ers",
+    "analyticsSport": "nfl",
+    "color": "1, 170, 0, 49",
+    "contentType": "team",
+    "contentUri": "football/nfl/teams/28",
+    "imageAltText": "San Francisco 49ers",
+    "imageType": "image-logo",
+    "imageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/49ers.vresize.200.200.medium.1.png",
+    "layout": {
+     "path": "/layouts?type=layout&subtype=teamsLayout&elementId=nfl",
+     "tokens": {
+      "contentUri": "football/nfl/teams/28",
+      "id": "28"
+     }
+    },
+    "title": "SAN FRANCISCO 49ERS",
+    "type": "entity",
+    "webUrl": "/nfl/san-francisco-49ers-team"
+   },
+   "imageAltText": "49ers",
+   "imageType": "image-logo",
+   "logoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/49ers.vresize.200.200.medium.1.png",
+   "template": "default",
+   "title": "SF"
+  },
+  {
+   "alternateLogoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Texans.vresize.200.200.medium.1.png",
+   "entityLink": {
+    "analyticsName": "houston-texans",
+    "analyticsSport": "nfl",
+    "color": "1, 240, 31, 65",
+    "contentType": "team",
+    "contentUri": "football/nfl/teams/34",
+    "imageAltText": "Houston Texans",
+    "imageType": "image-logo",
+    "imageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Texans.vresize.200.200.medium.1.png",
+    "layout": {
+     "path": "/layouts?type=layout&subtype=teamsLayout&elementId=nfl",
+     "tokens": {
+      "contentUri": "football/nfl/teams/34",
+      "id": "34"
+     }
+    },
+    "title": "HOUSTON TEXANS",
+    "type": "entity",
+    "webUrl": "/nfl/houston-texans-team"
+   },
+   "imageAltText": "Texans",
+   "imageType": "image-logo",
+   "logoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Texans.vresize.200.200.medium.1.png",
+   "template": "default",
+   "title": "HOU"
+  },
+  {
+   "alternateLogoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Rams-alternate.vresize.200.200.medium.2.png",
+   "entityLink": {
+    "analyticsName": "los-angeles-rams",
+    "analyticsSport": "nfl",
+    "color": "1, 0, 87, 244",
+    "contentType": "team",
+    "contentUri": "football/nfl/teams/26",
+    "imageAltText": "Los Angeles Rams",
+    "imageType": "image-logo",
+    "imageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Rams-alternate.vresize.200.200.medium.2.png",
+    "layout": {
+     "path": "/layouts?type=layout&subtype=teamsLayout&elementId=nfl",
+     "tokens": {
+      "contentUri": "football/nfl/teams/26",
+      "id": "26"
+     }
+    },
+    "title": "LOS ANGELES RAMS",
+    "type": "entity",
+    "webUrl": "/nfl/los-angeles-rams-team"
+   },
+   "imageAltText": "Rams",
+   "imageType": "image-logo",
+   "logoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Rams.vresize.200.200.medium.3.png",
+   "template": "default",
+   "title": "LAR"
+  },
+  {
+   "alternateLogoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Lions.vresize.200.200.medium.0.png",
+   "entityLink": {
+    "analyticsName": "detroit-lions",
+    "analyticsSport": "nfl",
+    "color": "1, 82, 181, 255",
+    "contentType": "team",
+    "contentUri": "football/nfl/teams/21",
+    "imageAltText": "Detroit Lions",
+    "imageType": "image-logo",
+    "imageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Lions.vresize.200.200.medium.0.png",
+    "layout": {
+     "path": "/layouts?type=layout&subtype=teamsLayout&elementId=nfl",
+     "tokens": {
+      "contentUri": "football/nfl/teams/21",
+      "id": "21"
+     }
+    },
+    "title": "DETROIT LIONS",
+    "type": "entity",
+    "webUrl": "/nfl/detroit-lions-team"
+   },
+   "imageAltText": "Lions",
+   "imageType": "image-logo",
+   "logoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Lions.vresize.200.200.medium.0.png",
+   "template": "default",
+   "title": "DET"
+  },
+  {
+   "alternateLogoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Seahawks.vresize.200.200.medium.0.png",
+   "entityLink": {
+    "analyticsName": "seattle-seahawks",
+    "analyticsSport": "nfl",
+    "color": "1, 0, 156, 26",
+    "contentType": "team",
+    "contentUri": "football/nfl/teams/14",
+    "imageAltText": "Seattle Seahawks",
+    "imageType": "image-logo",
+    "imageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Seahawks.vresize.200.200.medium.0.png",
+    "layout": {
+     "path": "/layouts?type=layout&subtype=teamsLayout&elementId=nfl",
+     "tokens": {
+      "contentUri": "football/nfl/teams/14",
+      "id": "14"
+     }
+    },
+    "title": "SEATTLE SEAHAWKS",
+    "type": "entity",
+    "webUrl": "/nfl/seattle-seahawks-team"
+   },
+   "imageAltText": "Seahawks",
+   "imageType": "image-logo",
+   "logoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Seahawks.vresize.200.200.medium.0.png",
+   "template": "default",
+   "title": "SEA"
+  },
+  {
+   "alternateLogoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Bills.vresize.200.200.medium.0.png",
+   "entityLink": {
+    "analyticsName": "buffalo-bills",
+    "analyticsSport": "nfl",
+    "color": "1, 240, 31, 65",
+    "contentType": "team",
+    "contentUri": "football/nfl/teams/1",
+    "imageAltText": "Buffalo Bills",
+    "imageType": "image-logo",
+    "imageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Bills.vresize.200.200.medium.0.png",
+    "layout": {
+     "path": "/layouts?type=layout&subtype=teamsLayout&elementId=nfl",
+     "tokens": {
+      "contentUri": "football/nfl/teams/1",
+      "id": "1"
+     }
+    },
+    "title": "BUFFALO BILLS",
+    "type": "entity",
+    "webUrl": "/nfl/buffalo-bills-team"
+   },
+   "imageAltText": "Bills",
+   "imageType": "image-logo",
+   "logoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Bills.vresize.200.200.medium.0.png",
+   "template": "default",
+   "title": "BUF"
+  },
+  {
+   "alternateLogoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Chiefs.vresize.200.200.medium.0.png",
+   "entityLink": {
+    "analyticsName": "kansas-city-chiefs",
+    "analyticsSport": "nfl",
+    "color": "1, 240, 31, 65",
+    "contentType": "team",
+    "contentUri": "football/nfl/teams/11",
+    "imageAltText": "Kansas City Chiefs",
+    "imageType": "image-logo",
+    "imageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Chiefs.vresize.200.200.medium.0.png",
+    "layout": {
+     "path": "/layouts?type=layout&subtype=teamsLayout&elementId=nfl",
+     "tokens": {
+      "contentUri": "football/nfl/teams/11",
+      "id": "11"
+     }
+    },
+    "title": "KANSAS CITY CHIEFS",
+    "type": "entity",
+    "webUrl": "/nfl/kansas-city-chiefs-team"
+   },
+   "imageAltText": "Chiefs",
+   "imageType": "image-logo",
+   "logoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Chiefs.vresize.200.200.medium.0.png",
+   "template": "default",
+   "title": "KC"
+  },
+  {
+   "alternateLogoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Raiders-alternate.vresize.200.200.medium.0.png",
+   "entityLink": {
+    "analyticsName": "las-vegas-raiders",
+    "analyticsSport": "nfl",
+    "color": "1, 135, 135, 135",
+    "contentType": "team",
+    "contentUri": "football/nfl/teams/12",
+    "imageAltText": "Las Vegas Raiders",
+    "imageType": "image-logo",
+    "imageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Raiders-alternate.vresize.200.200.medium.0.png",
+    "layout": {
+     "path": "/layouts?type=layout&subtype=teamsLayout&elementId=nfl",
+     "tokens": {
+      "contentUri": "football/nfl/teams/12",
+      "id": "12"
+     }
+    },
+    "title": "LAS VEGAS RAIDERS",
+    "type": "entity",
+    "webUrl": "/nfl/las-vegas-raiders-team"
+   },
+   "imageAltText": "Raiders",
+   "imageType": "image-logo",
+   "logoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Raiders.vresize.200.200.medium.3.png",
+   "template": "default",
+   "title": "LV"
+  },
+  {
+   "alternateLogoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Giants-alternate.vresize.200.200.medium.0.png",
+   "entityLink": {
+    "analyticsName": "new-york-giants",
+    "analyticsSport": "nfl",
+    "color": "1, 0, 87, 244",
+    "contentType": "team",
+    "contentUri": "football/nfl/teams/16",
+    "imageAltText": "New York Giants",
+    "imageType": "image-logo",
+    "imageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Giants-alternate.vresize.200.200.medium.0.png",
+    "layout": {
+     "path": "/layouts?type=layout&subtype=teamsLayout&elementId=nfl",
+     "tokens": {
+      "contentUri": "football/nfl/teams/16",
+      "id": "16"
+     }
+    },
+    "title": "NEW YORK GIANTS",
+    "type": "entity",
+    "webUrl": "/nfl/new-york-giants-team"
+   },
+   "imageAltText": "Giants",
+   "imageType": "image-logo",
+   "logoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Giants.vresize.200.200.medium.0.png",
+   "template": "default",
+   "title": "NYG"
+  },
+  {
+   "alternateLogoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Browns.vresize.200.200.medium.1.png",
+   "entityLink": {
+    "analyticsName": "cleveland-browns",
+    "analyticsSport": "nfl",
+    "color": "1, 255, 104, 53",
+    "contentType": "team",
+    "contentUri": "football/nfl/teams/7",
+    "imageAltText": "Cleveland Browns",
+    "imageType": "image-logo",
+    "imageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Browns.vresize.200.200.medium.1.png",
+    "layout": {
+     "path": "/layouts?type=layout&subtype=teamsLayout&elementId=nfl",
+     "tokens": {
+      "contentUri": "football/nfl/teams/7",
+      "id": "7"
+     }
+    },
+    "title": "CLEVELAND BROWNS",
+    "type": "entity",
+    "webUrl": "/nfl/cleveland-browns-team"
+   },
+   "imageAltText": "Browns",
+   "imageType": "image-logo",
+   "logoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Browns.vresize.200.200.medium.1.png",
+   "template": "default",
+   "title": "CLE"
+  },
+  {
+   "alternateLogoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Buccaneers.vresize.200.200.medium.2.png",
+   "entityLink": {
+    "analyticsName": "tampa-bay-buccaneers",
+    "analyticsSport": "nfl",
+    "color": "1, 170, 0, 49",
+    "contentType": "team",
+    "contentUri": "football/nfl/teams/24",
+    "imageAltText": "Tampa Bay Buccaneers",
+    "imageType": "image-logo",
+    "imageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Buccaneers.vresize.200.200.medium.2.png",
+    "layout": {
+     "path": "/layouts?type=layout&subtype=teamsLayout&elementId=nfl",
+     "tokens": {
+      "contentUri": "football/nfl/teams/24",
+      "id": "24"
+     }
+    },
+    "title": "TAMPA BAY BUCCANEERS",
+    "type": "entity",
+    "webUrl": "/nfl/tampa-bay-buccaneers-team"
+   },
+   "imageAltText": "Buccaneers",
+   "imageType": "image-logo",
+   "logoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Buccaneers.vresize.200.200.medium.2.png",
+   "template": "default",
+   "title": "TB"
+  },
+  {
+   "alternateLogoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Falcons.vresize.200.200.medium.1.png",
+   "entityLink": {
+    "analyticsName": "atlanta-falcons",
+    "analyticsSport": "nfl",
+    "color": "1, 240, 31, 65",
+    "contentType": "team",
+    "contentUri": "football/nfl/teams/25",
+    "imageAltText": "Atlanta Falcons",
+    "imageType": "image-logo",
+    "imageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Falcons.vresize.200.200.medium.1.png",
+    "layout": {
+     "path": "/layouts?type=layout&subtype=teamsLayout&elementId=nfl",
+     "tokens": {
+      "contentUri": "football/nfl/teams/25",
+      "id": "25"
+     }
+    },
+    "title": "ATLANTA FALCONS",
+    "type": "entity",
+    "webUrl": "/nfl/atlanta-falcons-team"
+   },
+   "imageAltText": "Falcons",
+   "imageType": "image-logo",
+   "logoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Falcons.vresize.200.200.medium.1.png",
+   "template": "default",
+   "title": "ATL"
+  },
+  {
+   "alternateLogoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Commanders-alternate.vresize.200.200.medium.1.png",
+   "entityLink": {
+    "analyticsName": "washington-commanders",
+    "analyticsSport": "nfl",
+    "color": "1, 170, 0, 49",
+    "contentType": "team",
+    "contentUri": "football/nfl/teams/19",
+    "imageAltText": "Washington Commanders",
+    "imageType": "image-logo",
+    "imageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Commanders-alternate.vresize.200.200.medium.1.png",
+    "layout": {
+     "path": "/layouts?type=layout&subtype=teamsLayout&elementId=nfl",
+     "tokens": {
+      "contentUri": "football/nfl/teams/19",
+      "id": "19"
+     }
+    },
+    "title": "WASHINGTON COMMANDERS",
+    "type": "entity",
+    "webUrl": "/nfl/washington-commanders-team"
+   },
+   "imageAltText": "Commanders",
+   "imageType": "image-logo",
+   "logoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Commanders.vresize.200.200.medium.4.png",
+   "template": "default",
+   "title": "WAS"
+  },
+  {
+   "alternateLogoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Jets-alternate.vresize.200.200.medium.1.png",
+   "entityLink": {
+    "analyticsName": "new-york-jets",
+    "analyticsSport": "nfl",
+    "color": "1, 0, 156, 26",
+    "contentType": "team",
+    "contentUri": "football/nfl/teams/5",
+    "imageAltText": "New York Jets",
+    "imageType": "image-logo",
+    "imageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Jets-alternate.vresize.200.200.medium.1.png",
+    "layout": {
+     "path": "/layouts?type=layout&subtype=teamsLayout&elementId=nfl",
+     "tokens": {
+      "contentUri": "football/nfl/teams/5",
+      "id": "5"
+     }
+    },
+    "title": "NEW YORK JETS",
+    "type": "entity",
+    "webUrl": "/nfl/new-york-jets-team"
+   },
+   "imageAltText": "Jets",
+   "imageType": "image-logo",
+   "logoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Jets.vresize.200.200.medium.2.png",
+   "template": "default",
+   "title": "NYJ"
+  },
+  {
+   "alternateLogoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Chargers.vresize.200.200.medium.2.png",
+   "entityLink": {
+    "analyticsName": "los-angeles-chargers",
+    "analyticsSport": "nfl",
+    "color": "1, 82, 181, 255",
+    "contentType": "team",
+    "contentUri": "football/nfl/teams/13",
+    "imageAltText": "Los Angeles Chargers",
+    "imageType": "image-logo",
+    "imageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Chargers.vresize.200.200.medium.2.png",
+    "layout": {
+     "path": "/layouts?type=layout&subtype=teamsLayout&elementId=nfl",
+     "tokens": {
+      "contentUri": "football/nfl/teams/13",
+      "id": "13"
+     }
+    },
+    "title": "LOS ANGELES CHARGERS",
+    "type": "entity",
+    "webUrl": "/nfl/los-angeles-chargers-team"
+   },
+   "imageAltText": "Chargers",
+   "imageType": "image-logo",
+   "logoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Chargers.vresize.200.200.medium.2.png",
+   "template": "default",
+   "title": "LAC"
+  },
+  {
+   "alternateLogoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Dolphins.vresize.200.200.medium.0.png",
+   "entityLink": {
+    "analyticsName": "miami-dolphins",
+    "analyticsSport": "nfl",
+    "color": "1, 0, 188, 200",
+    "contentType": "team",
+    "contentUri": "football/nfl/teams/3",
+    "imageAltText": "Miami Dolphins",
+    "imageType": "image-logo",
+    "imageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Dolphins.vresize.200.200.medium.0.png",
+    "layout": {
+     "path": "/layouts?type=layout&subtype=teamsLayout&elementId=nfl",
+     "tokens": {
+      "contentUri": "football/nfl/teams/3",
+      "id": "3"
+     }
+    },
+    "title": "MIAMI DOLPHINS",
+    "type": "entity",
+    "webUrl": "/nfl/miami-dolphins-team"
+   },
+   "imageAltText": "Dolphins",
+   "imageType": "image-logo",
+   "logoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Dolphins.vresize.200.200.medium.0.png",
+   "template": "default",
+   "title": "MIA"
+  },
+  {
+   "alternateLogoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Ravens.vresize.200.200.medium.0.png",
+   "entityLink": {
+    "analyticsName": "baltimore-ravens",
+    "analyticsSport": "nfl",
+    "color": "1, 141, 52, 255",
+    "contentType": "team",
+    "contentUri": "football/nfl/teams/33",
+    "imageAltText": "Baltimore Ravens",
+    "imageType": "image-logo",
+    "imageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Ravens.vresize.200.200.medium.0.png",
+    "layout": {
+     "path": "/layouts?type=layout&subtype=teamsLayout&elementId=nfl",
+     "tokens": {
+      "contentUri": "football/nfl/teams/33",
+      "id": "33"
+     }
+    },
+    "title": "BALTIMORE RAVENS",
+    "type": "entity",
+    "webUrl": "/nfl/baltimore-ravens-team"
+   },
+   "imageAltText": "Ravens",
+   "imageType": "image-logo",
+   "logoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Ravens.vresize.200.200.medium.0.png",
+   "template": "default",
+   "title": "BAL"
+  },
+  {
+   "alternateLogoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Broncos.vresize.200.200.medium.0.png",
+   "entityLink": {
+    "analyticsName": "denver-broncos",
+    "analyticsSport": "nfl",
+    "color": "1, 0, 87, 244",
+    "contentType": "team",
+    "contentUri": "football/nfl/teams/10",
+    "imageAltText": "Denver Broncos",
+    "imageType": "image-logo",
+    "imageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Broncos.vresize.200.200.medium.0.png",
+    "layout": {
+     "path": "/layouts?type=layout&subtype=teamsLayout&elementId=nfl",
+     "tokens": {
+      "contentUri": "football/nfl/teams/10",
+      "id": "10"
+     }
+    },
+    "title": "DENVER BRONCOS",
+    "type": "entity",
+    "webUrl": "/nfl/denver-broncos-team"
+   },
+   "imageAltText": "Broncos",
+   "imageType": "image-logo",
+   "logoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Broncos.vresize.200.200.medium.0.png",
+   "template": "default",
+   "title": "DEN"
+  },
+  {
+   "alternateLogoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Steelers.vresize.200.200.medium.0.png",
+   "entityLink": {
+    "analyticsName": "pittsburgh-steelers",
+    "analyticsSport": "nfl",
+    "color": "1, 255, 188, 41",
+    "contentType": "team",
+    "contentUri": "football/nfl/teams/9",
+    "imageAltText": "Pittsburgh Steelers",
+    "imageType": "image-logo",
+    "imageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Steelers.vresize.200.200.medium.0.png",
+    "layout": {
+     "path": "/layouts?type=layout&subtype=teamsLayout&elementId=nfl",
+     "tokens": {
+      "contentUri": "football/nfl/teams/9",
+      "id": "9"
+     }
+    },
+    "title": "PITTSBURGH STEELERS",
+    "type": "entity",
+    "webUrl": "/nfl/pittsburgh-steelers-team"
+   },
+   "imageAltText": "Steelers",
+   "imageType": "image-logo",
+   "logoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Steelers.vresize.200.200.medium.0.png",
+   "template": "default",
+   "title": "PIT"
+  },
+  {
+   "alternateLogoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Saints-alternate.vresize.200.200.medium.0.png",
+   "entityLink": {
+    "analyticsName": "new-orleans-saints",
+    "analyticsSport": "nfl",
+    "color": "1, 222, 190, 103",
+    "contentType": "team",
+    "contentUri": "football/nfl/teams/27",
+    "imageAltText": "New Orleans Saints",
+    "imageType": "image-logo",
+    "imageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Saints-alternate.vresize.200.200.medium.0.png",
+    "layout": {
+     "path": "/layouts?type=layout&subtype=teamsLayout&elementId=nfl",
+     "tokens": {
+      "contentUri": "football/nfl/teams/27",
+      "id": "27"
+     }
+    },
+    "title": "NEW ORLEANS SAINTS",
+    "type": "entity",
+    "webUrl": "/nfl/new-orleans-saints-team"
+   },
+   "imageAltText": "Saints",
+   "imageType": "image-logo",
+   "logoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Saints.vresize.200.200.medium.1.png",
+   "template": "default",
+   "title": "NO"
+  },
+  {
+   "alternateLogoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Patriots.vresize.200.200.medium.0.png",
+   "entityLink": {
+    "analyticsName": "new-england-patriots",
+    "analyticsSport": "nfl",
+    "color": "1, 0, 87, 244",
+    "contentType": "team",
+    "contentUri": "football/nfl/teams/4",
+    "imageAltText": "New England Patriots",
+    "imageType": "image-logo",
+    "imageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Patriots.vresize.200.200.medium.0.png",
+    "layout": {
+     "path": "/layouts?type=layout&subtype=teamsLayout&elementId=nfl",
+     "tokens": {
+      "contentUri": "football/nfl/teams/4",
+      "id": "4"
+     }
+    },
+    "title": "NEW ENGLAND PATRIOTS",
+    "type": "entity",
+    "webUrl": "/nfl/new-england-patriots-team"
+   },
+   "imageAltText": "Patriots",
+   "imageType": "image-logo",
+   "logoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Patriots.vresize.200.200.medium.0.png",
+   "template": "default",
+   "title": "NE"
+  },
+  {
+   "alternateLogoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Bengals.vresize.200.200.medium.0.png",
+   "entityLink": {
+    "analyticsName": "cincinnati-bengals",
+    "analyticsSport": "nfl",
+    "color": "1, 255, 104, 53",
+    "contentType": "team",
+    "contentUri": "football/nfl/teams/6",
+    "imageAltText": "Cincinnati Bengals",
+    "imageType": "image-logo",
+    "imageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Bengals.vresize.200.200.medium.0.png",
+    "layout": {
+     "path": "/layouts?type=layout&subtype=teamsLayout&elementId=nfl",
+     "tokens": {
+      "contentUri": "football/nfl/teams/6",
+      "id": "6"
+     }
+    },
+    "title": "CINCINNATI BENGALS",
+    "type": "entity",
+    "webUrl": "/nfl/cincinnati-bengals-team"
+   },
+   "imageAltText": "Bengals",
+   "imageType": "image-logo",
+   "logoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Bengals.vresize.200.200.medium.0.png",
+   "template": "default",
+   "title": "CIN"
+  },
+  {
+   "alternateLogoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Panthers.vresize.200.200.medium.0.png",
+   "entityLink": {
+    "analyticsName": "carolina-panthers",
+    "analyticsSport": "nfl",
+    "color": "1, 82, 181, 255",
+    "contentType": "team",
+    "contentUri": "football/nfl/teams/32",
+    "imageAltText": "Carolina Panthers",
+    "imageType": "image-logo",
+    "imageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Panthers.vresize.200.200.medium.0.png",
+    "layout": {
+     "path": "/layouts?type=layout&subtype=teamsLayout&elementId=nfl",
+     "tokens": {
+      "contentUri": "football/nfl/teams/32",
+      "id": "32"
+     }
+    },
+    "title": "CAROLINA PANTHERS",
+    "type": "entity",
+    "webUrl": "/nfl/carolina-panthers-team"
+   },
+   "imageAltText": "Panthers",
+   "imageType": "image-logo",
+   "logoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Panthers.vresize.200.200.medium.0.png",
+   "template": "default",
+   "title": "CAR"
+  },
+  {
+   "alternateLogoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Colts.vresize.200.200.medium.1.png",
+   "entityLink": {
+    "analyticsName": "indianapolis-colts",
+    "analyticsSport": "nfl",
+    "color": "1, 0, 87, 244",
+    "contentType": "team",
+    "contentUri": "football/nfl/teams/2",
+    "imageAltText": "Indianapolis Colts",
+    "imageType": "image-logo",
+    "imageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Colts.vresize.200.200.medium.1.png",
+    "layout": {
+     "path": "/layouts?type=layout&subtype=teamsLayout&elementId=nfl",
+     "tokens": {
+      "contentUri": "football/nfl/teams/2",
+      "id": "2"
+     }
+    },
+    "title": "INDIANAPOLIS COLTS",
+    "type": "entity",
+    "webUrl": "/nfl/indianapolis-colts-team"
+   },
+   "imageAltText": "Colts",
+   "imageType": "image-logo",
+   "logoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Colts.vresize.200.200.medium.1.png",
+   "template": "default",
+   "title": "IND"
+  },
+  {
+   "alternateLogoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Cardinals.vresize.200.200.medium.0.png",
+   "entityLink": {
+    "analyticsName": "arizona-cardinals",
+    "analyticsSport": "nfl",
+    "color": "1, 170, 0, 49",
+    "contentType": "team",
+    "contentUri": "football/nfl/teams/18",
+    "imageAltText": "Arizona Cardinals",
+    "imageType": "image-logo",
+    "imageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Cardinals.vresize.200.200.medium.0.png",
+    "layout": {
+     "path": "/layouts?type=layout&subtype=teamsLayout&elementId=nfl",
+     "tokens": {
+      "contentUri": "football/nfl/teams/18",
+      "id": "18"
+     }
+    },
+    "title": "ARIZONA CARDINALS",
+    "type": "entity",
+    "webUrl": "/nfl/arizona-cardinals-team"
+   },
+   "imageAltText": "Cardinals",
+   "imageType": "image-logo",
+   "logoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Cardinals.vresize.200.200.medium.0.png",
+   "template": "default",
+   "title": "ARI"
+  },
+  {
+   "alternateLogoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Jaguars.vresize.200.200.medium.0.png",
+   "entityLink": {
+    "analyticsName": "jacksonville-jaguars",
+    "analyticsSport": "nfl",
+    "color": "1, 0, 170, 150",
+    "contentType": "team",
+    "contentUri": "football/nfl/teams/31",
+    "imageAltText": "Jacksonville Jaguars",
+    "imageType": "image-logo",
+    "imageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Jaguars.vresize.200.200.medium.0.png",
+    "layout": {
+     "path": "/layouts?type=layout&subtype=teamsLayout&elementId=nfl",
+     "tokens": {
+      "contentUri": "football/nfl/teams/31",
+      "id": "31"
+     }
+    },
+    "title": "JACKSONVILLE JAGUARS",
+    "type": "entity",
+    "webUrl": "/nfl/jacksonville-jaguars-team"
+   },
+   "imageAltText": "Jaguars",
+   "imageType": "image-logo",
+   "logoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Jaguars.vresize.200.200.medium.0.png",
+   "template": "default",
+   "title": "JAX"
+  },
+  {
+   "alternateLogoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Titans.vresize.200.200.medium.1.png",
+   "entityLink": {
+    "analyticsName": "tennessee-titans",
+    "analyticsSport": "nfl",
+    "color": "1, 82, 181, 255",
+    "contentType": "team",
+    "contentUri": "football/nfl/teams/8",
+    "imageAltText": "Tennessee Titans",
+    "imageType": "image-logo",
+    "imageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Titans.vresize.200.200.medium.1.png",
+    "layout": {
+     "path": "/layouts?type=layout&subtype=teamsLayout&elementId=nfl",
+     "tokens": {
+      "contentUri": "football/nfl/teams/8",
+      "id": "8"
+     }
+    },
+    "title": "TENNESSEE TITANS",
+    "type": "entity",
+    "webUrl": "/nfl/tennessee-titans-team"
+   },
+   "imageAltText": "Titans",
+   "imageType": "image-logo",
+   "logoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Titans.vresize.200.200.medium.1.png",
+   "template": "default",
+   "title": "TEN"
+  }
+ ]
+}

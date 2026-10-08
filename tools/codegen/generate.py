@@ -1928,7 +1928,14 @@ def refresh_return_schemas() -> int:
             try:
                 payload = json.loads((ROOT / "tests" / "fixtures" / api / fname).read_text("utf-8"))
                 df = getattr(pmod, ep.parser)(payload)
-                doc = {"schema": short, "kind": "dataframe", "columns": _cols_from_frame(df, {})}
+                if isinstance(df, dict):  # one frame per section (a KenPom page parses to {table_id: frame})
+                    doc = {
+                        "schema": short,
+                        "kind": "frames",
+                        "frames": [{"section": sec, "columns": _cols_from_frame(f, {})} for sec, f in df.items()],
+                    }
+                else:
+                    doc = {"schema": short, "kind": "dataframe", "columns": _cols_from_frame(df, {})}
             except Exception as e:  # noqa: BLE001
                 print(f"  native skip {api}/{short} ({fname}): {e}")
                 continue

@@ -1,0 +1,36 @@
+schema: trending_videos
+kind: dataframe
+columns:
+- name: id
+  type: character
+  description: ''
+- name: spark_id
+  type: character
+  description: ''
+- name: title
+  type: character
+  description: ''
+- name: description
+  type: character
+  description: ''
+- name: content_type
+  type: character
+  description: ''
+- name: component_type
+  type: character
+  description: ''
+- name: publication_date
+  type: character
+  description: ''
+- name: last_published_date
+  type: character
+  description: ''
+- name: canonical_url
+  type: character
+  description: ''
+- name: thumbnail_url
+  type: character
+  description: ''
+- name: playback_url
+  type: character
+  description: ''

@@ -1,0 +1,71 @@
+schema: ratings
+kind: frames
+frames:
+- section: ratings_table
+  columns:
+  - name: rk
+    type: character
+    description: ''
+  - name: team
+    type: character
+    description: ''
+  - name: conf
+    type: character
+    description: ''
+  - name: w_l
+    type: character
+    description: ''
+  - name: net_rtg
+    type: character
+    description: ''
+  - name: o_rtg
+    type: character
+    description: ''
+  - name: o_rtg_rk
+    type: character
+    description: ''
+  - name: d_rtg
+    type: character
+    description: ''
+  - name: d_rtg_rk
+    type: character
+    description: ''
+  - name: adj_t
+    type: character
+    description: ''
+  - name: adj_t_rk
+    type: character
+    description: ''
+  - name: luck
+    type: character
+    description: ''
+  - name: luck_rk
+    type: character
+    description: ''
+  - name: strength_of_schedule_net_rtg
+    type: character
+    description: ''
+  - name: strength_of_schedule_net_rtg_rk
+    type: character
+    description: ''
+  - name: strength_of_schedule_o_rtg
+    type: character
+    description: ''
+  - name: strength_of_schedule_o_rtg_rk
+    type: character
+    description: ''
+  - name: strength_of_schedule_d_rtg
+    type: character
+    description: ''
+  - name: strength_of_schedule_d_rtg_rk
+    type: character
+    description: ''
+  - name: ncsos_net_rtg
+    type: character
+    description: ''
+  - name: ncsos_net_rtg_rk
+    type: character
+    description: ''
+  - name: ncaa_seed
+    type: integer
+    description: ''

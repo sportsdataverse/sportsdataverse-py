@@ -1,0 +1,1147 @@
+{
+ "currentSectionId": "2026-3-1thu",
+ "id": "2026-3-1",
+ "quickNav": [
+  {
+   "id": "2026-2-1",
+   "title": "Week 2",
+   "uri": "https://api.foxsports.com/bifrost/v1/nfl/league/scores-segment/2026-2-1",
+   "webUrl": "/nfl/scores?seasonType=reg&week=2"
+  },
+  {
+   "id": "2026-3-1",
+   "selected": true,
+   "title": "Week 3",
+   "uri": "https://api.foxsports.com/bifrost/v1/nfl/league/scores-segment/2026-3-1",
+   "webUrl": "/nfl/scores?seasonType=reg&week=3"
+  },
+  {
+   "id": "2026-4-1",
+   "title": "Week 4",
+   "uri": "https://api.foxsports.com/bifrost/v1/nfl/league/scores-segment/2026-4-1",
+   "webUrl": "/nfl/scores?seasonType=reg&week=4"
+  }
+ ],
+ "sectionList": [
+  {
+   "events": [
+    {
+     "altSortKey": "132026092500153200011195",
+     "contentType": "event",
+     "contentUri": "football/nfl/events/11195",
+     "entityLink": {
+      "analyticsSport": "nfl",
+      "contentType": "event",
+      "contentUri": "football/nfl/events/11195",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=nflEventLayout",
+       "tokens": {
+        "awayUri": "football/nfl/teams/25",
+        "eventUri": "football/nfl/events/11195",
+        "homeUri": "football/nfl/teams/22",
+        "id": "11195"
+       }
+      },
+      "type": "entity",
+      "webUrl": "/nfl/week-3-atlanta-falcons-vs-green-bay-packers-sep-24-2026-game-boxscore-11195"
+     },
+     "eventHeadline": "Robinson rumbles for 194 yards, scores 2 TDs as Falcons handle Packers",
+     "eventStatus": 3,
+     "eventTime": "2026-09-25T00:15:00Z",
+     "favoriteEntities": [
+      "football/nfl/teams/22",
+      "football/nfl/teams/25"
+     ],
+     "id": "nfl11195",
+     "importance": 0,
+     "isTba": false,
+     "league": "NFL",
+     "lowerTeam": {
+      "alternateLogoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Packers.vresize.80.80.medium.0.png",
+      "hasPossession": false,
+      "imageAltText": "Green Bay Packers",
+      "imageType": "image-logo",
+      "isLoser": true,
+      "logoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Packers.vresize.80.80.medium.0.png",
+      "longName": "Packers",
+      "name": "GB",
+      "record": "1-2",
+      "score": 14,
+      "stackedNameBottom": "Packers",
+      "stackedNameTop": "Green Bay",
+      "uri": "football/nfl/teams/22"
+     },
+     "oddsLine": "ATL +4.5",
+     "overUnderLine": "OVER 43.5",
+     "sortKey": "132026092500153200011195",
+     "statusLine": "FINAL",
+     "template": "scores-team",
+     "upperTeam": {
+      "alternateLogoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Falcons.vresize.80.80.medium.1.png",
+      "hasPossession": false,
+      "imageAltText": "Atlanta Falcons",
+      "imageType": "image-logo",
+      "isLoser": false,
+      "logoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Falcons.vresize.80.80.medium.1.png",
+      "longName": "Falcons",
+      "name": "ATL",
+      "record": "1-2",
+      "score": 35,
+      "stackedNameBottom": "Falcons",
+      "stackedNameTop": "Atlanta",
+      "uri": "football/nfl/teams/25"
+     },
+     "uri": "https://api.foxsports.com/bifrost/v1/nfl/scorechip/nfl11195"
+    }
+   ],
+   "id": "2026-3-1thu",
+   "menuTitle": "THU, SEP 24",
+   "menuTitlePrefix": "Week 3 - ",
+   "sectionDate": "2026-09-24T04:00:00Z",
+   "segmentId": "2026-3-1",
+   "selectionId": "2026-3-1",
+   "subtitle": "THU, SEP 24",
+   "title": "Week 3"
+  },
+  {
+   "events": [
+    {
+     "altSortKey": "132026092717003200011196",
+     "contentType": "event",
+     "contentUri": "football/nfl/events/11196",
+     "entityLink": {
+      "analyticsSport": "nfl",
+      "contentType": "event",
+      "contentUri": "football/nfl/events/11196",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=nflEventLayout",
+       "tokens": {
+        "awayUri": "football/nfl/teams/11",
+        "eventUri": "football/nfl/events/11196",
+        "homeUri": "football/nfl/teams/3",
+        "id": "11196"
+       }
+      },
+      "type": "entity",
+      "webUrl": "/nfl/week-3-kansas-city-chiefs-vs-miami-dolphins-sep-27-2026-game-boxscore-11196"
+     },
+     "eventStatus": 3,
+     "eventTime": "2026-09-27T17:00:00Z",
+     "favoriteEntities": [
+      "football/nfl/teams/3",
+      "football/nfl/teams/11"
+     ],
+     "id": "nfl11196",
+     "importance": 0,
+     "isTba": false,
+     "league": "NFL",
+     "lowerTeam": {
+      "alternateLogoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Dolphins.vresize.80.80.medium.0.png",
+      "hasPossession": false,
+      "imageAltText": "Miami Dolphins",
+      "imageType": "image-logo",
+      "isLoser": true,
+      "logoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Dolphins.vresize.80.80.medium.0.png",
+      "longName": "Dolphins",
+      "name": "MIA",
+      "record": "0-3",
+      "score": 10,
+      "stackedNameBottom": "Dolphins",
+      "stackedNameTop": "Miami",
+      "uri": "football/nfl/teams/3"
+     },
+     "oddsLine": "KC -9.5",
+     "overUnderLine": "UNDER 45.5",
+     "sortKey": "132026092717003200011196",
+     "statusLine": "FINAL",
+     "template": "scores-team",
+     "upperTeam": {
+      "alternateLogoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Chiefs.vresize.80.80.medium.0.png",
+      "hasPossession": false,
+      "imageAltText": "Kansas City Chiefs",
+      "imageType": "image-logo",
+      "isLoser": false,
+      "logoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Chiefs.vresize.80.80.medium.0.png",
+      "longName": "Chiefs",
+      "name": "KC",
+      "record": "3-0",
+      "score": 24,
+      "stackedNameBottom": "Chiefs",
+      "stackedNameTop": "Kansas City",
+      "uri": "football/nfl/teams/11"
+     },
+     "uri": "https://api.foxsports.com/bifrost/v1/nfl/scorechip/nfl11196"
+    },
+    {
+     "altSortKey": "132026092717003200011197",
+     "contentType": "event",
+     "contentUri": "football/nfl/events/11197",
+     "entityLink": {
+      "analyticsSport": "nfl",
+      "contentType": "event",
+      "contentUri": "football/nfl/events/11197",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=nflEventLayout",
+       "tokens": {
+        "awayUri": "football/nfl/teams/32",
+        "eventUri": "football/nfl/events/11197",
+        "homeUri": "football/nfl/teams/7",
+        "id": "11197"
+       }
+      },
+      "type": "entity",
+      "webUrl": "/nfl/week-3-carolina-panthers-vs-cleveland-browns-sep-27-2026-game-boxscore-11197"
+     },
+     "eventHeadline": "Fannin Jr. scores twice as Browns knock off Panthers",
+     "eventStatus": 3,
+     "eventTime": "2026-09-27T17:00:00Z",
+     "favoriteEntities": [
+      "football/nfl/teams/7",
+      "football/nfl/teams/32"
+     ],
+     "id": "nfl11197",
+     "importance": 0,
+     "isTba": false,
+     "league": "NFL",
+     "lowerTeam": {
+      "alternateLogoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Browns.vresize.80.80.medium.1.png",
+      "hasPossession": false,
+      "imageAltText": "Cleveland Browns",
+      "imageType": "image-logo",
+      "isLoser": false,
+      "logoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Browns.vresize.80.80.medium.1.png",
+      "longName": "Browns",
+      "name": "CLE",
+      "record": "2-1",
+      "score": 21,
+      "stackedNameBottom": "Browns",
+      "stackedNameTop": "Cleveland",
+      "uri": "football/nfl/teams/7"
+     },
+     "oddsLine": "CLE +2.5",
+     "overUnderLine": "UNDER 42.5",
+     "sortKey": "132026092717003200011197",
+     "statusLine": "FINAL",
+     "template": "scores-team",
+     "upperTeam": {
+      "alternateLogoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Panthers.vresize.80.80.medium.0.png",
+      "hasPossession": false,
+      "imageAltText": "Carolina Panthers",
+      "imageType": "image-logo",
+      "isLoser": true,
+      "logoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Panthers.vresize.80.80.medium.0.png",
+      "longName": "Panthers",
+      "name": "CAR",
+      "record": "1-2",
+      "score": 18,
+      "stackedNameBottom": "Panthers",
+      "stackedNameTop": "Carolina",
+      "uri": "football/nfl/teams/32"
+     },
+     "uri": "https://api.foxsports.com/bifrost/v1/nfl/scorechip/nfl11197"
+    },
+    {
+     "altSortKey": "132026092717003200011198",
+     "contentType": "event",
+     "contentUri": "football/nfl/events/11198",
+     "entityLink": {
+      "analyticsSport": "nfl",
+      "contentType": "event",
+      "contentUri": "football/nfl/events/11198",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=nflEventLayout",
+       "tokens": {
+        "awayUri": "football/nfl/teams/8",
+        "eventUri": "football/nfl/events/11198",
+        "homeUri": "football/nfl/teams/16",
+        "id": "11198"
+       }
+      },
+      "type": "entity",
+      "webUrl": "/nfl/week-3-tennessee-titans-vs-new-york-giants-sep-27-2026-game-boxscore-11198"
+     },
+     "eventStatus": 3,
+     "eventTime": "2026-09-27T17:00:00Z",
+     "favoriteEntities": [
+      "football/nfl/teams/16",
+      "football/nfl/teams/8"
+     ],
+     "id": "nfl11198",
+     "importance": 0,
+     "isTba": false,
+     "league": "NFL",
+     "lowerTeam": {
+      "alternateLogoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Giants-alternate.vresize.80.80.medium.0.png",
+      "hasPossession": false,
+      "imageAltText": "New York Giants",
+      "imageType": "image-logo",
+      "isLoser": false,
+      "logoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Giants.vresize.80.80.medium.0.png",
+      "longName": "Giants",
+      "name": "NYG",
+      "record": "2-1",
+      "score": 12,
+      "stackedNameBottom": "Giants",
+      "stackedNameTop": "New York",
+      "uri": "football/nfl/teams/16"
+     },
+     "oddsLine": "NYG -2.5",
+     "overUnderLine": "UNDER 37.5",
+     "sortKey": "132026092717003200011198",
+     "statusLine": "FINAL",
+     "template": "scores-team",
+     "upperTeam": {
+      "alternateLogoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Titans.vresize.80.80.medium.1.png",
+      "hasPossession": false,
+      "imageAltText": "Tennessee Titans",
+      "imageType": "image-logo",
+      "isLoser": true,
+      "logoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Titans.vresize.80.80.medium.1.png",
+      "longName": "Titans",
+      "name": "TEN",
+      "record": "0-3",
+      "score": 7,
+      "stackedNameBottom": "Titans",
+      "stackedNameTop": "Tennessee",
+      "uri": "football/nfl/teams/8"
+     },
+     "uri": "https://api.foxsports.com/bifrost/v1/nfl/scorechip/nfl11198"
+    },
+    {
+     "altSortKey": "132026092717003200011199",
+     "contentType": "event",
+     "contentUri": "football/nfl/events/11199",
+     "entityLink": {
+      "analyticsSport": "nfl",
+      "contentType": "event",
+      "contentUri": "football/nfl/events/11199",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=nflEventLayout",
+       "tokens": {
+        "awayUri": "football/nfl/teams/4",
+        "eventUri": "football/nfl/events/11199",
+        "homeUri": "football/nfl/teams/31",
+        "id": "11199"
+       }
+      },
+      "type": "entity",
+      "webUrl": "/nfl/week-3-new-england-patriots-vs-jacksonville-jaguars-sep-27-2026-game-boxscore-11199"
+     },
+     "eventStatus": 3,
+     "eventTime": "2026-09-27T17:00:00Z",
+     "favoriteEntities": [
+      "football/nfl/teams/31",
+      "football/nfl/teams/4"
+     ],
+     "id": "nfl11199",
+     "importance": 0,
+     "isTba": false,
+     "league": "NFL",
+     "lowerTeam": {
+      "alternateLogoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Jaguars.vresize.80.80.medium.0.png",
+      "hasPossession": false,
+      "imageAltText": "Jacksonville Jaguars",
+      "imageType": "image-logo",
+      "isLoser": false,
+      "logoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Jaguars.vresize.80.80.medium.0.png",
+      "longName": "Jaguars",
+      "name": "JAX",
+      "record": "2-1",
+      "score": 35,
+      "stackedNameBottom": "Jaguars",
+      "stackedNameTop": "Jacksonville",
+      "uri": "football/nfl/teams/31"
+     },
+     "oddsLine": "JAX -2.5",
+     "overUnderLine": "UNDER 46.5",
+     "sortKey": "132026092717003200011199",
+     "statusLine": "FINAL",
+     "template": "scores-team",
+     "upperTeam": {
+      "alternateLogoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Patriots.vresize.80.80.medium.0.png",
+      "hasPossession": false,
+      "imageAltText": "New England Patriots",
+      "imageType": "image-logo",
+      "isLoser": true,
+      "logoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Patriots.vresize.80.80.medium.0.png",
+      "longName": "Patriots",
+      "name": "NE",
+      "record": "1-2",
+      "score": 6,
+      "stackedNameBottom": "Patriots",
+      "stackedNameTop": "New England",
+      "uri": "football/nfl/teams/4"
+     },
+     "uri": "https://api.foxsports.com/bifrost/v1/nfl/scorechip/nfl11199"
+    },
+    {
+     "altSortKey": "132026092717003200011200",
+     "contentType": "event",
+     "contentUri": "football/nfl/events/11200",
+     "entityLink": {
+      "analyticsSport": "nfl",
+      "contentType": "event",
+      "contentUri": "football/nfl/events/11200",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=nflEventLayout",
+       "tokens": {
+        "awayUri": "football/nfl/teams/13",
+        "eventUri": "football/nfl/events/11200",
+        "homeUri": "football/nfl/teams/1",
+        "id": "11200"
+       }
+      },
+      "type": "entity",
+      "webUrl": "/nfl/week-3-los-angeles-chargers-vs-buffalo-bills-sep-27-2026-game-boxscore-11200"
+     },
+     "eventHeadline": "Chargers give up 24-6 run to end game, lose to Bills",
+     "eventStatus": 3,
+     "eventTime": "2026-09-27T17:00:00Z",
+     "favoriteEntities": [
+      "football/nfl/teams/1",
+      "football/nfl/teams/13"
+     ],
+     "id": "nfl11200",
+     "importance": 0,
+     "isTba": false,
+     "league": "NFL",
+     "lowerTeam": {
+      "alternateLogoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Bills.vresize.80.80.medium.0.png",
+      "hasPossession": false,
+      "imageAltText": "Buffalo Bills",
+      "imageType": "image-logo",
+      "isLoser": false,
+      "logoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Bills.vresize.80.80.medium.0.png",
+      "longName": "Bills",
+      "name": "BUF",
+      "record": "3-0",
+      "score": 24,
+      "stackedNameBottom": "Bills",
+      "stackedNameTop": "Buffalo",
+      "uri": "football/nfl/teams/1"
+     },
+     "oddsLine": "BUF -7.5",
+     "overUnderLine": "UNDER 50.5",
+     "sortKey": "132026092717003200011200",
+     "statusLine": "FINAL",
+     "template": "scores-team",
+     "upperTeam": {
+      "alternateLogoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Chargers.vresize.80.80.medium.2.png",
+      "hasPossession": false,
+      "imageAltText": "Los Angeles Chargers",
+      "imageType": "image-logo",
+      "isLoser": true,
+      "logoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Chargers.vresize.80.80.medium.2.png",
+      "longName": "Chargers",
+      "name": "LAC",
+      "record": "0-3",
+      "score": 16,
+      "stackedNameBottom": "Chargers",
+      "stackedNameTop": "Los Angeles",
+      "uri": "football/nfl/teams/13"
+     },
+     "uri": "https://api.foxsports.com/bifrost/v1/nfl/scorechip/nfl11200"
+    },
+    {
+     "altSortKey": "132026092717003200011201",
+     "contentType": "event",
+     "contentUri": "football/nfl/events/11201",
+     "entityLink": {
+      "analyticsSport": "nfl",
+      "contentType": "event",
+      "contentUri": "football/nfl/events/11201",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=nflEventLayout",
+       "tokens": {
+        "awayUri": "football/nfl/teams/5",
+        "eventUri": "football/nfl/events/11201",
+        "homeUri": "football/nfl/teams/21",
+        "id": "11201"
+       }
+      },
+      "type": "entity",
+      "webUrl": "/nfl/week-3-new-york-jets-vs-detroit-lions-sep-27-2026-game-boxscore-11201"
+     },
+     "eventHeadline": "Lions knock off Jets, despite 107 Yds, TD from Wilson",
+     "eventStatus": 3,
+     "eventTime": "2026-09-27T17:00:00Z",
+     "favoriteEntities": [
+      "football/nfl/teams/21",
+      "football/nfl/teams/5"
+     ],
+     "id": "nfl11201",
+     "importance": 0,
+     "isTba": false,
+     "league": "NFL",
+     "lowerTeam": {
+      "alternateLogoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Lions.vresize.80.80.medium.0.png",
+      "hasPossession": false,
+      "imageAltText": "Detroit Lions",
+      "imageType": "image-logo",
+      "isLoser": false,
+      "logoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Lions.vresize.80.80.medium.0.png",
+      "longName": "Lions",
+      "name": "DET",
+      "record": "2-1",
+      "score": 31,
+      "stackedNameBottom": "Lions",
+      "stackedNameTop": "Detroit",
+      "uri": "football/nfl/teams/21"
+     },
+     "oddsLine": "DET -6.5",
+     "overUnderLine": "OVER 50.5",
+     "sortKey": "132026092717003200011201",
+     "statusLine": "FINAL",
+     "template": "scores-team",
+     "upperTeam": {
+      "alternateLogoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Jets-alternate.vresize.80.80.medium.1.png",
+      "hasPossession": false,
+      "imageAltText": "New York Jets",
+      "imageType": "image-logo",
+      "isLoser": true,
+      "logoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Jets.vresize.80.80.medium.2.png",
+      "longName": "Jets",
+      "name": "NYJ",
+      "record": "1-2",
+      "score": 24,
+      "stackedNameBottom": "Jets",
+      "stackedNameTop": "New York",
+      "uri": "football/nfl/teams/5"
+     },
+     "uri": "https://api.foxsports.com/bifrost/v1/nfl/scorechip/nfl11201"
+    },
+    {
+     "altSortKey": "132026092717003200011202",
+     "contentType": "event",
+     "contentUri": "football/nfl/events/11202",
+     "entityLink": {
+      "analyticsSport": "nfl",
+      "contentType": "event",
+      "contentUri": "football/nfl/events/11202",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=nflEventLayout",
+       "tokens": {
+        "awayUri": "football/nfl/teams/34",
+        "eventUri": "football/nfl/events/11202",
+        "homeUri": "football/nfl/teams/2",
+        "id": "11202"
+       }
+      },
+      "type": "entity",
+      "webUrl": "/nfl/week-3-houston-texans-vs-indianapolis-colts-sep-27-2026-game-boxscore-11202"
+     },
+     "eventHeadline": "Shrader FG lifts Colts over Texans",
+     "eventStatus": 3,
+     "eventTime": "2026-09-27T17:00:00Z",
+     "favoriteEntities": [
+      "football/nfl/teams/2",
+      "football/nfl/teams/34"
+     ],
+     "id": "nfl11202",
+     "importance": 0,
+     "isTba": false,
+     "league": "NFL",
+     "lowerTeam": {
+      "alternateLogoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Colts.vresize.80.80.medium.1.png",
+      "hasPossession": false,
+      "imageAltText": "Indianapolis Colts",
+      "imageType": "image-logo",
+      "isLoser": false,
+      "logoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Colts.vresize.80.80.medium.1.png",
+      "longName": "Colts",
+      "name": "IND",
+      "record": "1-2",
+      "score": 19,
+      "stackedNameBottom": "Colts",
+      "stackedNameTop": "Indianapolis",
+      "uri": "football/nfl/teams/2"
+     },
+     "oddsLine": "IND +1.5",
+     "overUnderLine": "UNDER 42.5",
+     "sortKey": "132026092717003200011202",
+     "statusLine": "FINAL",
+     "template": "scores-team",
+     "upperTeam": {
+      "alternateLogoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Texans.vresize.80.80.medium.1.png",
+      "hasPossession": false,
+      "imageAltText": "Houston Texans",
+      "imageType": "image-logo",
+      "isLoser": true,
+      "logoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Texans.vresize.80.80.medium.1.png",
+      "longName": "Texans",
+      "name": "HOU",
+      "record": "0-3",
+      "score": 17,
+      "stackedNameBottom": "Texans",
+      "stackedNameTop": "Houston",
+      "uri": "football/nfl/teams/34"
+     },
+     "uri": "https://api.foxsports.com/bifrost/v1/nfl/scorechip/nfl11202"
+    },
+    {
+     "altSortKey": "132026092717003200011203",
+     "contentType": "event",
+     "contentUri": "football/nfl/events/11203",
+     "entityLink": {
+      "analyticsSport": "nfl",
+      "contentType": "event",
+      "contentUri": "football/nfl/events/11203",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=nflEventLayout",
+       "tokens": {
+        "awayUri": "football/nfl/teams/14",
+        "eventUri": "football/nfl/events/11203",
+        "homeUri": "football/nfl/teams/19",
+        "id": "11203"
+       }
+      },
+      "type": "entity",
+      "webUrl": "/nfl/week-3-seattle-seahawks-vs-washington-commanders-sep-27-2026-game-boxscore-11203"
+     },
+     "eventHeadline": "Smith-Njigba's 128 yards receiving and 2 TDs not enough as Commanders squeeze past Seahawks",
+     "eventStatus": 3,
+     "eventTime": "2026-09-27T17:00:00Z",
+     "favoriteEntities": [
+      "football/nfl/teams/19",
+      "football/nfl/teams/14"
+     ],
+     "id": "nfl11203",
+     "importance": 0,
+     "isTba": false,
+     "league": "NFL",
+     "lowerTeam": {
+      "alternateLogoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Commanders-alternate.vresize.80.80.medium.1.png",
+      "hasPossession": false,
+      "imageAltText": "Washington Commanders",
+      "imageType": "image-logo",
+      "isLoser": false,
+      "logoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Commanders.vresize.80.80.medium.4.png",
+      "longName": "Commanders",
+      "name": "WAS",
+      "record": "1-2",
+      "score": 33,
+      "stackedNameBottom": "Commanders",
+      "stackedNameTop": "Washington",
+      "uri": "football/nfl/teams/19"
+     },
+     "oddsLine": "WAS +8.5",
+     "overUnderLine": "OVER 40.5",
+     "sortKey": "132026092717003200011203",
+     "statusLine": "FINAL",
+     "template": "scores-team",
+     "upperTeam": {
+      "alternateLogoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Seahawks.vresize.80.80.medium.0.png",
+      "hasPossession": false,
+      "imageAltText": "Seattle Seahawks",
+      "imageType": "image-logo",
+      "isLoser": true,
+      "logoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Seahawks.vresize.80.80.medium.0.png",
+      "longName": "Seahawks",
+      "name": "SEA",
+      "record": "2-1",
+      "score": 31,
+      "stackedNameBottom": "Seahawks",
+      "stackedNameTop": "Seattle",
+      "uri": "football/nfl/teams/14"
+     },
+     "uri": "https://api.foxsports.com/bifrost/v1/nfl/scorechip/nfl11203"
+    },
+    {
+     "altSortKey": "132026092717003200011204",
+     "contentType": "event",
+     "contentUri": "football/nfl/events/11204",
+     "entityLink": {
+      "analyticsSport": "nfl",
+      "contentType": "event",
+      "contentUri": "football/nfl/events/11204",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=nflEventLayout",
+       "tokens": {
+        "awayUri": "football/nfl/teams/6",
+        "eventUri": "football/nfl/events/11204",
+        "homeUri": "football/nfl/teams/9",
+        "id": "11204"
+       }
+      },
+      "type": "entity",
+      "webUrl": "/nfl/week-3-cincinnati-bengals-vs-pittsburgh-steelers-sep-27-2026-game-boxscore-11204"
+     },
+     "eventHeadline": "Steelers top Bengals, led by Rodgers' 292 passing yards (19-34, 3 TDs)",
+     "eventStatus": 3,
+     "eventTime": "2026-09-27T17:00:00Z",
+     "favoriteEntities": [
+      "football/nfl/teams/9",
+      "football/nfl/teams/6"
+     ],
+     "id": "nfl11204",
+     "importance": 0,
+     "isTba": false,
+     "league": "NFL",
+     "lowerTeam": {
+      "alternateLogoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Steelers.vresize.80.80.medium.0.png",
+      "hasPossession": false,
+      "imageAltText": "Pittsburgh Steelers",
+      "imageType": "image-logo",
+      "isLoser": false,
+      "logoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Steelers.vresize.80.80.medium.0.png",
+      "longName": "Steelers",
+      "name": "PIT",
+      "record": "2-1",
+      "score": 30,
+      "stackedNameBottom": "Steelers",
+      "stackedNameTop": "Pittsburgh",
+      "uri": "football/nfl/teams/9"
+     },
+     "oddsLine": "PIT +3.5",
+     "overUnderLine": "OVER 42.5",
+     "sortKey": "132026092717003200011204",
+     "statusLine": "FINAL",
+     "template": "scores-team",
+     "upperTeam": {
+      "alternateLogoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Bengals.vresize.80.80.medium.0.png",
+      "hasPossession": false,
+      "imageAltText": "Cincinnati Bengals",
+      "imageType": "image-logo",
+      "isLoser": true,
+      "logoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Bengals.vresize.80.80.medium.0.png",
+      "longName": "Bengals",
+      "name": "CIN",
+      "record": "2-1",
+      "score": 27,
+      "stackedNameBottom": "Bengals",
+      "stackedNameTop": "Cincinnati",
+      "uri": "football/nfl/teams/6"
+     },
+     "uri": "https://api.foxsports.com/bifrost/v1/nfl/scorechip/nfl11204"
+    },
+    {
+     "altSortKey": "132026092720052200011205",
+     "contentType": "event",
+     "contentUri": "football/nfl/events/11205",
+     "entityLink": {
+      "analyticsSport": "nfl",
+      "contentType": "event",
+      "contentUri": "football/nfl/events/11205",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=nflEventLayout",
+       "tokens": {
+        "awayUri": "football/nfl/teams/18",
+        "eventUri": "football/nfl/events/11205",
+        "homeUri": "football/nfl/teams/28",
+        "id": "11205"
+       }
+      },
+      "type": "entity",
+      "webUrl": "/nfl/week-3-arizona-cardinals-vs-san-francisco-49ers-sep-27-2026-game-boxscore-11205"
+     },
+     "eventHeadline": "Wilson's 89 receiving yards and a touchdown not enough as 49ers knock off Cardinals",
+     "eventStatus": 3,
+     "eventTime": "2026-09-27T20:05:00Z",
+     "favoriteEntities": [
+      "football/nfl/teams/28",
+      "football/nfl/teams/18"
+     ],
+     "id": "nfl11205",
+     "importance": 1,
+     "isTba": false,
+     "league": "NFL",
+     "lowerTeam": {
+      "alternateLogoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/49ers.vresize.80.80.medium.1.png",
+      "hasPossession": false,
+      "imageAltText": "San Francisco 49ers",
+      "imageType": "image-logo",
+      "isLoser": false,
+      "logoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/49ers.vresize.80.80.medium.1.png",
+      "longName": "49ers",
+      "name": "SF",
+      "record": "3-0",
+      "score": 36,
+      "stackedNameBottom": "49ers",
+      "stackedNameTop": "San Francisco",
+      "uri": "football/nfl/teams/28"
+     },
+     "oddsLine": "ARI +7.5",
+     "overUnderLine": "OVER 48.5",
+     "sortKey": "132026092720052200011205",
+     "statusLine": "FINAL",
+     "template": "scores-team",
+     "upperTeam": {
+      "alternateLogoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Cardinals.vresize.80.80.medium.0.png",
+      "hasPossession": false,
+      "imageAltText": "Arizona Cardinals",
+      "imageType": "image-logo",
+      "isLoser": true,
+      "logoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Cardinals.vresize.80.80.medium.0.png",
+      "longName": "Cardinals",
+      "name": "ARI",
+      "record": "1-2",
+      "score": 30,
+      "stackedNameBottom": "Cardinals",
+      "stackedNameTop": "Arizona",
+      "uri": "football/nfl/teams/18"
+     },
+     "uri": "https://api.foxsports.com/bifrost/v1/nfl/scorechip/nfl11205"
+    },
+    {
+     "altSortKey": "132026092720052200011206",
+     "contentType": "event",
+     "contentUri": "football/nfl/events/11206",
+     "entityLink": {
+      "analyticsSport": "nfl",
+      "contentType": "event",
+      "contentUri": "football/nfl/events/11206",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=nflEventLayout",
+       "tokens": {
+        "awayUri": "football/nfl/teams/23",
+        "eventUri": "football/nfl/events/11206",
+        "homeUri": "football/nfl/teams/24",
+        "id": "11206"
+       }
+      },
+      "type": "entity",
+      "webUrl": "/nfl/week-3-minnesota-vikings-vs-tampa-bay-buccaneers-sep-27-2026-game-boxscore-11206"
+     },
+     "eventStatus": 3,
+     "eventTime": "2026-09-27T20:05:00Z",
+     "favoriteEntities": [
+      "football/nfl/teams/24",
+      "football/nfl/teams/23"
+     ],
+     "id": "nfl11206",
+     "importance": 1,
+     "isTba": false,
+     "league": "NFL",
+     "lowerTeam": {
+      "alternateLogoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Buccaneers.vresize.80.80.medium.2.png",
+      "hasPossession": false,
+      "imageAltText": "Tampa Bay Buccaneers",
+      "imageType": "image-logo",
+      "isLoser": true,
+      "logoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Buccaneers.vresize.80.80.medium.2.png",
+      "longName": "Buccaneers",
+      "name": "TB",
+      "record": "0-3",
+      "score": 16,
+      "stackedNameBottom": "Buccaneers",
+      "stackedNameTop": "Tampa Bay",
+      "uri": "football/nfl/teams/24"
+     },
+     "oddsLine": "MIN -1.5",
+     "overUnderLine": "UNDER 42.5",
+     "sortKey": "132026092720052200011206",
+     "statusLine": "FINAL",
+     "template": "scores-team",
+     "upperTeam": {
+      "alternateLogoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Vikings.vresize.80.80.medium.0.png",
+      "hasPossession": false,
+      "imageAltText": "Minnesota Vikings",
+      "imageType": "image-logo",
+      "isLoser": false,
+      "logoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Vikings.vresize.80.80.medium.0.png",
+      "longName": "Vikings",
+      "name": "MIN",
+      "record": "3-0",
+      "score": 23,
+      "stackedNameBottom": "Vikings",
+      "stackedNameTop": "Minnesota",
+      "uri": "football/nfl/teams/23"
+     },
+     "uri": "https://api.foxsports.com/bifrost/v1/nfl/scorechip/nfl11206"
+    },
+    {
+     "altSortKey": "132026092720253200011137",
+     "contentType": "event",
+     "contentUri": "football/nfl/events/11137",
+     "entityLink": {
+      "analyticsSport": "nfl",
+      "contentType": "event",
+      "contentUri": "football/nfl/events/11137",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=nflEventLayout",
+       "tokens": {
+        "awayUri": "football/nfl/teams/33",
+        "eventUri": "football/nfl/events/11137",
+        "homeUri": "football/nfl/teams/15",
+        "id": "11137"
+       }
+      },
+      "type": "entity",
+      "webUrl": "/nfl/week-3-baltimore-ravens-vs-dallas-cowboys-sep-27-2026-game-boxscore-11137"
+     },
+     "eventHeadline": "Loop FG lifts Ravens over Cowboys",
+     "eventStatus": 3,
+     "eventTime": "2026-09-27T20:25:00Z",
+     "favoriteEntities": [
+      "football/nfl/teams/15",
+      "football/nfl/teams/33"
+     ],
+     "id": "nfl11137",
+     "importance": 0,
+     "isTba": false,
+     "league": "NFL",
+     "lowerTeam": {
+      "alternateLogoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Cowboys.vresize.80.80.medium.0.png",
+      "hasPossession": false,
+      "imageAltText": "Dallas Cowboys",
+      "imageType": "image-logo",
+      "isLoser": true,
+      "logoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Cowboys.vresize.80.80.medium.0.png",
+      "longName": "Cowboys",
+      "name": "DAL",
+      "record": "1-2",
+      "score": 31,
+      "stackedNameBottom": "Cowboys",
+      "stackedNameTop": "Dallas",
+      "uri": "football/nfl/teams/15"
+     },
+     "oddsLine": "DAL +3.0",
+     "overUnderLine": "OVER 54.5",
+     "sortKey": "132026092720253200011137",
+     "statusLine": "FINAL",
+     "template": "scores-team",
+     "upperTeam": {
+      "alternateLogoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Ravens.vresize.80.80.medium.0.png",
+      "hasPossession": false,
+      "imageAltText": "Baltimore Ravens",
+      "imageType": "image-logo",
+      "isLoser": false,
+      "logoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Ravens.vresize.80.80.medium.0.png",
+      "longName": "Ravens",
+      "name": "BAL",
+      "record": "2-1",
+      "score": 34,
+      "stackedNameBottom": "Ravens",
+      "stackedNameTop": "Baltimore",
+      "uri": "football/nfl/teams/33"
+     },
+     "uri": "https://api.foxsports.com/bifrost/v1/nfl/scorechip/nfl11137"
+    },
+    {
+     "altSortKey": "132026092720253200011207",
+     "contentType": "event",
+     "contentUri": "football/nfl/events/11207",
+     "entityLink": {
+      "analyticsSport": "nfl",
+      "contentType": "event",
+      "contentUri": "football/nfl/events/11207",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=nflEventLayout",
+       "tokens": {
+        "awayUri": "football/nfl/teams/12",
+        "eventUri": "football/nfl/events/11207",
+        "homeUri": "football/nfl/teams/27",
+        "id": "11207"
+       }
+      },
+      "type": "entity",
+      "webUrl": "/nfl/week-3-las-vegas-raiders-vs-new-orleans-saints-sep-27-2026-game-boxscore-11207"
+     },
+     "eventHeadline": "Shough's 255 passing yards (29-42, 4 TDs) not enough as Raiders knock off Saints",
+     "eventStatus": 3,
+     "eventTime": "2026-09-27T20:25:00Z",
+     "favoriteEntities": [
+      "football/nfl/teams/27",
+      "football/nfl/teams/12"
+     ],
+     "id": "nfl11207",
+     "importance": 0,
+     "isTba": false,
+     "league": "NFL",
+     "lowerTeam": {
+      "alternateLogoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Saints-alternate.vresize.80.80.medium.0.png",
+      "hasPossession": false,
+      "imageAltText": "New Orleans Saints",
+      "imageType": "image-logo",
+      "isLoser": true,
+      "logoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Saints.vresize.80.80.medium.1.png",
+      "longName": "Saints",
+      "name": "NO",
+      "record": "1-2",
+      "score": 27,
+      "stackedNameBottom": "Saints",
+      "stackedNameTop": "New Orleans",
+      "uri": "football/nfl/teams/27"
+     },
+     "oddsLine": "LV +3.5",
+     "overUnderLine": "OVER 44.5",
+     "sortKey": "132026092720253200011207",
+     "statusLine": "FINAL",
+     "template": "scores-team",
+     "upperTeam": {
+      "alternateLogoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Raiders-alternate.vresize.80.80.medium.0.png",
+      "hasPossession": false,
+      "imageAltText": "Las Vegas Raiders",
+      "imageType": "image-logo",
+      "isLoser": false,
+      "logoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Raiders.vresize.80.80.medium.3.png",
+      "longName": "Raiders",
+      "name": "LV",
+      "record": "3-0",
+      "score": 35,
+      "stackedNameBottom": "Raiders",
+      "stackedNameTop": "Las Vegas",
+      "uri": "football/nfl/teams/12"
+     },
+     "uri": "https://api.foxsports.com/bifrost/v1/nfl/scorechip/nfl11207"
+    },
+    {
+     "altSortKey": "132026092800203200011208",
+     "contentType": "event",
+     "contentUri": "football/nfl/events/11208",
+     "entityLink": {
+      "analyticsSport": "nfl",
+      "contentType": "event",
+      "contentUri": "football/nfl/events/11208",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=nflEventLayout",
+       "tokens": {
+        "awayUri": "football/nfl/teams/26",
+        "eventUri": "football/nfl/events/11208",
+        "homeUri": "football/nfl/teams/10",
+        "id": "11208"
+       }
+      },
+      "type": "entity",
+      "webUrl": "/nfl/week-3-los-angeles-rams-vs-denver-broncos-sep-27-2026-game-boxscore-11208"
+     },
+     "eventHeadline": "Broncos fight back from 16 down to knock off Rams",
+     "eventStatus": 3,
+     "eventTime": "2026-09-28T00:20:00Z",
+     "favoriteEntities": [
+      "football/nfl/teams/10",
+      "football/nfl/teams/26"
+     ],
+     "id": "nfl11208",
+     "importance": 0,
+     "isTba": false,
+     "league": "NFL",
+     "lowerTeam": {
+      "alternateLogoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Broncos.vresize.80.80.medium.0.png",
+      "hasPossession": false,
+      "imageAltText": "Denver Broncos",
+      "imageType": "image-logo",
+      "isLoser": false,
+      "logoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Broncos.vresize.80.80.medium.0.png",
+      "longName": "Broncos",
+      "name": "DEN",
+      "record": "2-1",
+      "score": 30,
+      "stackedNameBottom": "Broncos",
+      "stackedNameTop": "Denver",
+      "uri": "football/nfl/teams/10"
+     },
+     "oddsLine": "DEN +1.5",
+     "overUnderLine": "OVER 44.5",
+     "sortKey": "132026092800203200011208",
+     "statusLine": "FINAL",
+     "template": "scores-team",
+     "upperTeam": {
+      "alternateLogoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Rams-alternate.vresize.80.80.medium.2.png",
+      "hasPossession": false,
+      "imageAltText": "Los Angeles Rams",
+      "imageType": "image-logo",
+      "isLoser": true,
+      "logoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Rams.vresize.80.80.medium.3.png",
+      "longName": "Rams",
+      "name": "LAR",
+      "record": "1-2",
+      "score": 26,
+      "stackedNameBottom": "Rams",
+      "stackedNameTop": "Los Angeles",
+      "uri": "football/nfl/teams/26"
+     },
+     "uri": "https://api.foxsports.com/bifrost/v1/nfl/scorechip/nfl11208"
+    }
+   ],
+   "id": "2026-3-1sun",
+   "menuTitle": "SUN, SEP 27",
+   "menuTitlePrefix": "Week 3 - ",
+   "sectionDate": "2026-09-27T04:00:00Z",
+   "segmentId": "2026-3-1",
+   "selectionId": "2026-3-1",
+   "subtitle": "SUN, SEP 27",
+   "subtitlePrefix": "Week 3 - "
+  },
+  {
+   "events": [
+    {
+     "altSortKey": "132026092900153200011209",
+     "contentType": "event",
+     "contentUri": "football/nfl/events/11209",
+     "entityLink": {
+      "analyticsSport": "nfl",
+      "contentType": "event",
+      "contentUri": "football/nfl/events/11209",
+      "layout": {
+       "path": "/layouts?type=layout&subtype=nflEventLayout",
+       "tokens": {
+        "awayUri": "football/nfl/teams/17",
+        "eventUri": "football/nfl/events/11209",
+        "homeUri": "football/nfl/teams/20",
+        "id": "11209"
+       }
+      },
+      "type": "entity",
+      "webUrl": "/nfl/week-3-philadelphia-eagles-vs-chicago-bears-sep-28-2026-game-boxscore-11209"
+     },
+     "eventHeadline": "Bears top Eagles, led by Keenum's 3 TDs (24-34, 247 Yds)",
+     "eventStatus": 3,
+     "eventTime": "2026-09-29T00:15:00Z",
+     "favoriteEntities": [
+      "football/nfl/teams/20",
+      "football/nfl/teams/17"
+     ],
+     "id": "nfl11209",
+     "importance": 0,
+     "isTba": false,
+     "league": "NFL",
+     "lowerTeam": {
+      "alternateLogoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Bears.vresize.80.80.medium.1.png",
+      "hasPossession": false,
+      "imageAltText": "Chicago Bears",
+      "imageType": "image-logo",
+      "isLoser": false,
+      "logoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Bears.vresize.80.80.medium.1.png",
+      "longName": "Bears",
+      "name": "CHI",
+      "record": "2-1",
+      "score": 27,
+      "stackedNameBottom": "Bears",
+      "stackedNameTop": "Chicago",
+      "uri": "football/nfl/teams/20"
+     },
+     "oddsLine": "CHI +3.5",
+     "overUnderLine": "UNDER 42.5",
+     "sortKey": "132026092900153200011209",
+     "statusLine": "FINAL",
+     "template": "scores-team",
+     "upperTeam": {
+      "alternateLogoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Eagles.vresize.80.80.medium.0.png",
+      "hasPossession": false,
+      "imageAltText": "Philadelphia Eagles",
+      "imageType": "image-logo",
+      "isLoser": true,
+      "logoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Eagles.vresize.80.80.medium.0.png",
+      "longName": "Eagles",
+      "name": "PHI",
+      "record": "2-1",
+      "score": 7,
+      "stackedNameBottom": "Eagles",
+      "stackedNameTop": "Philadelphia",
+      "uri": "football/nfl/teams/17"
+     },
+     "uri": "https://api.foxsports.com/bifrost/v1/nfl/scorechip/nfl11209"
+    }
+   ],
+   "id": "2026-3-1mon",
+   "menuTitle": "MON, SEP 28",
+   "menuTitlePrefix": "Week 3 - ",
+   "sectionDate": "2026-09-28T04:00:00Z",
+   "segmentId": "2026-3-1",
+   "selectionId": "2026-3-1",
+   "subtitle": "MON, SEP 28",
+   "subtitlePrefix": "Week 3 - "
+  }
+ ]
+}

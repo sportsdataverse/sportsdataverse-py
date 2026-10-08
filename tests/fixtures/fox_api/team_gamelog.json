@@ -1,0 +1,6209 @@
+{
+ "metadata": {
+  "parameters": {
+   "teamName": "Atlanta Falcons",
+   "year": "2026"
+  }
+ },
+ "sectionList": [
+  {
+   "id": "passing",
+   "legend": {
+    "details": [
+     {
+      "key": "COMP",
+      "text": " - Completions"
+     },
+     {
+      "key": "PATT",
+      "text": " - Passing Attempts"
+     },
+     {
+      "key": "PCT",
+      "text": " - Completion %"
+     },
+     {
+      "key": "YDS",
+      "text": " - Passing Yards"
+     },
+     {
+      "key": "PAVG",
+      "text": " - Passing Yards / Attempt"
+     },
+     {
+      "key": "RECAVG",
+      "text": " - Yards / Reception"
+     },
+     {
+      "key": "TD",
+      "text": " - Passing Touchdowns"
+     },
+     {
+      "key": "INT",
+      "text": " - Offensive Interceptions"
+     },
+     {
+      "key": "SCK",
+      "text": " - Sacks"
+     },
+     {
+      "key": "YDS",
+      "text": " - Sack Yards"
+     },
+     {
+      "key": "QBR",
+      "text": " - QB Rating"
+     },
+     {
+      "key": "P-1ST",
+      "text": " - First Downs Passing"
+     },
+     {
+      "key": "FUM",
+      "text": " - Fumbles"
+     },
+     {
+      "key": "FUML",
+      "text": " - Fumbles Lost"
+     }
+    ]
+   },
+   "moreLink": {
+    "text": "FULL PASSING GAME LOG",
+    "webUrl": "/nfl/atlanta-falcons-team-game-log?season=2026&category=passing"
+   },
+   "tables": [
+    {
+     "headers": [
+      {
+       "columns": [
+        {
+         "emphasized": true,
+         "index": 0,
+         "priority": 1,
+         "sortable": "none",
+         "template": "cell-text",
+         "text": "REGULAR SEASON",
+         "weight": 1.9
+        },
+        {
+         "emphasized": false,
+         "index": 1,
+         "priority": 2,
+         "sortable": "none",
+         "template": "cell-entity",
+         "weight": 2.6
+        },
+        {
+         "emphasized": false,
+         "index": 2,
+         "priority": 1,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "COMP",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 3,
+         "priority": 2,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "PATT",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 4,
+         "priority": 3,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "PCT",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 5,
+         "priority": 4,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "YDS",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 6,
+         "priority": 5,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "PAVG",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 7,
+         "priority": 6,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "RECAVG",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 8,
+         "priority": 7,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "TD",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 9,
+         "priority": 8,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "INT",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 10,
+         "priority": 9,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "SCK",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 11,
+         "priority": 10,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "YDS",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 12,
+         "priority": 11,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "QBR",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 13,
+         "priority": 12,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "P-1ST",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 14,
+         "priority": 13,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "FUM",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 15,
+         "priority": 14,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "FUML",
+         "weight": 1.8
+        }
+       ],
+       "isPrimary": true
+      }
+     ],
+     "rows": [
+      {
+       "columns": [
+        {
+         "emphasized": false,
+         "index": 0,
+         "text": "10/5"
+        },
+        {
+         "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Saints-alternate.vresize.200.200.medium.0.png",
+         "emphasized": false,
+         "imageAltText": "New Orleans Saints",
+         "imageType": "image-logo",
+         "imageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Saints.vresize.200.200.medium.1.png",
+         "index": 1,
+         "subType": "win",
+         "superscript": "W",
+         "text": "@NO"
+        },
+        {
+         "emphasized": false,
+         "index": 2,
+         "text": "15"
+        },
+        {
+         "emphasized": false,
+         "index": 3,
+         "text": "20"
+        },
+        {
+         "emphasized": false,
+         "index": 4,
+         "text": "75.0"
+        },
+        {
+         "emphasized": false,
+         "index": 5,
+         "text": "215"
+        },
+        {
+         "emphasized": false,
+         "index": 6,
+         "text": "10.8"
+        },
+        {
+         "emphasized": false,
+         "index": 7,
+         "text": "14.9"
+        },
+        {
+         "emphasized": false,
+         "index": 8,
+         "text": "1"
+        },
+        {
+         "emphasized": false,
+         "index": 9,
+         "text": "0"
+        },
+        {
+         "emphasized": false,
+         "index": 10,
+         "text": "1"
+        },
+        {
+         "emphasized": false,
+         "index": 11,
+         "text": "8"
+        },
+        {
+         "emphasized": false,
+         "index": 12,
+         "text": "127.7"
+        },
+        {
+         "emphasized": false,
+         "index": 13,
+         "text": "9"
+        },
+        {
+         "emphasized": false,
+         "index": 14,
+         "text": "0"
+        },
+        {
+         "emphasized": false,
+         "index": 15,
+         "text": "0"
+        }
+       ],
+       "entityLink": {
+        "analyticsSport": "nfl",
+        "contentType": "event",
+        "contentUri": "football/nfl/events/11224",
+        "layout": {
+         "path": "/layouts?type=layout&subtype=nflEventLayout",
+         "tokens": {
+          "awayUri": "football/nfl/teams/25",
+          "eventUri": "football/nfl/events/11224",
+          "homeUri": "football/nfl/teams/27",
+          "id": "11224"
+         }
+        },
+        "tab": "boxscore",
+        "type": "entity",
+        "webUrl": "/nfl/week-4-atlanta-falcons-vs-new-orleans-saints-oct-05-2026-game-boxscore-11224?tab=boxscore"
+       },
+       "isCutoff": false,
+       "isFaded": false,
+       "selected": false
+      },
+      {
+       "columns": [
+        {
+         "emphasized": false,
+         "index": 0,
+         "text": "9/24"
+        },
+        {
+         "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Packers.vresize.200.200.medium.0.png",
+         "emphasized": false,
+         "imageAltText": "Green Bay Packers",
+         "imageType": "image-logo",
+         "imageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Packers.vresize.200.200.medium.0.png",
+         "index": 1,
+         "subType": "win",
+         "superscript": "W",
+         "text": "@GB"
+        },
+        {
+         "emphasized": false,
+         "index": 2,
+         "text": "18"
+        },
+        {
+         "emphasized": false,
+         "index": 3,
+         "text": "25"
+        },
+        {
+         "emphasized": false,
+         "index": 4,
+         "text": "72.0"
+        },
+        {
+         "emphasized": false,
+         "index": 5,
+         "text": "256"
+        },
+        {
+         "emphasized": false,
+         "index": 6,
+         "text": "10.2"
+        },
+        {
+         "emphasized": false,
+         "index": 7,
+         "text": "14.2"
+        },
+        {
+         "emphasized": false,
+         "index": 8,
+         "text": "1"
+        },
+        {
+         "emphasized": false,
+         "index": 9,
+         "text": "1"
+        },
+        {
+         "emphasized": false,
+         "index": 10,
+         "text": "0"
+        },
+        {
+         "emphasized": false,
+         "index": 11,
+         "text": "0"
+        },
+        {
+         "emphasized": false,
+         "index": 12,
+         "text": "101.4"
+        },
+        {
+         "emphasized": false,
+         "index": 13,
+         "text": "8"
+        },
+        {
+         "emphasized": false,
+         "index": 14,
+         "text": "0"
+        },
+        {
+         "emphasized": false,
+         "index": 15,
+         "text": "0"
+        }
+       ],
+       "entityLink": {
+        "analyticsSport": "nfl",
+        "contentType": "event",
+        "contentUri": "football/nfl/events/11195",
+        "layout": {
+         "path": "/layouts?type=layout&subtype=nflEventLayout",
+         "tokens": {
+          "awayUri": "football/nfl/teams/25",
+          "eventUri": "football/nfl/events/11195",
+          "homeUri": "football/nfl/teams/22",
+          "id": "11195"
+         }
+        },
+        "tab": "boxscore",
+        "type": "entity",
+        "webUrl": "/nfl/week-3-atlanta-falcons-vs-green-bay-packers-sep-24-2026-game-boxscore-11195?tab=boxscore"
+       },
+       "isCutoff": false,
+       "isFaded": false,
+       "selected": false
+      },
+      {
+       "columns": [
+        {
+         "emphasized": false,
+         "index": 0,
+         "text": "9/20"
+        },
+        {
+         "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Panthers.vresize.200.200.medium.0.png",
+         "emphasized": false,
+         "imageAltText": "Carolina Panthers",
+         "imageType": "image-logo",
+         "imageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Panthers.vresize.200.200.medium.0.png",
+         "index": 1,
+         "subType": "loss",
+         "superscript": "L",
+         "text": "CAR"
+        },
+        {
+         "emphasized": false,
+         "index": 2,
+         "text": "18"
+        },
+        {
+         "emphasized": false,
+         "index": 3,
+         "text": "32"
+        },
+        {
+         "emphasized": false,
+         "index": 4,
+         "text": "56.3"
+        },
+        {
+         "emphasized": false,
+         "index": 5,
+         "text": "129"
+        },
+        {
+         "emphasized": false,
+         "index": 6,
+         "text": "4.0"
+        },
+        {
+         "emphasized": false,
+         "index": 7,
+         "text": "8.1"
+        },
+        {
+         "emphasized": false,
+         "index": 8,
+         "text": "0"
+        },
+        {
+         "emphasized": false,
+         "index": 9,
+         "text": "3"
+        },
+        {
+         "emphasized": false,
+         "index": 10,
+         "text": "3"
+        },
+        {
+         "emphasized": false,
+         "index": 11,
+         "text": "16"
+        },
+        {
+         "emphasized": false,
+         "index": 12,
+         "text": "28.8"
+        },
+        {
+         "emphasized": false,
+         "index": 13,
+         "text": "10"
+        },
+        {
+         "emphasized": false,
+         "index": 14,
+         "text": "0"
+        },
+        {
+         "emphasized": false,
+         "index": 15,
+         "text": "0"
+        }
+       ],
+       "entityLink": {
+        "analyticsSport": "nfl",
+        "contentType": "event",
+        "contentUri": "football/nfl/events/11056",
+        "layout": {
+         "path": "/layouts?type=layout&subtype=nflEventLayout",
+         "tokens": {
+          "awayUri": "football/nfl/teams/32",
+          "eventUri": "football/nfl/events/11056",
+          "homeUri": "football/nfl/teams/25",
+          "id": "11056"
+         }
+        },
+        "tab": "boxscore",
+        "type": "entity",
+        "webUrl": "/nfl/week-2-carolina-panthers-vs-atlanta-falcons-sep-20-2026-game-boxscore-11056?tab=boxscore"
+       },
+       "isCutoff": false,
+       "isFaded": false,
+       "selected": false
+      },
+      {
+       "columns": [
+        {
+         "emphasized": false,
+         "index": 0,
+         "text": "9/13"
+        },
+        {
+         "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Steelers.vresize.200.200.medium.0.png",
+         "emphasized": false,
+         "imageAltText": "Pittsburgh Steelers",
+         "imageType": "image-logo",
+         "imageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Steelers.vresize.200.200.medium.0.png",
+         "index": 1,
+         "subType": "loss",
+         "superscript": "L",
+         "text": "@PIT"
+        },
+        {
+         "emphasized": false,
+         "index": 2,
+         "text": "12"
+        },
+        {
+         "emphasized": false,
+         "index": 3,
+         "text": "22"
+        },
+        {
+         "emphasized": false,
+         "index": 4,
+         "text": "54.5"
+        },
+        {
+         "emphasized": false,
+         "index": 5,
+         "text": "118"
+        },
+        {
+         "emphasized": false,
+         "index": 6,
+         "text": "5.4"
+        },
+        {
+         "emphasized": false,
+         "index": 7,
+         "text": "11.9"
+        },
+        {
+         "emphasized": false,
+         "index": 8,
+         "text": "1"
+        },
+        {
+         "emphasized": false,
+         "index": 9,
+         "text": "2"
+        },
+        {
+         "emphasized": false,
+         "index": 10,
+         "text": "4"
+        },
+        {
+         "emphasized": false,
+         "index": 11,
+         "text": "25"
+        },
+        {
+         "emphasized": false,
+         "index": 12,
+         "text": "51.9"
+        },
+        {
+         "emphasized": false,
+         "index": 13,
+         "text": "4"
+        },
+        {
+         "emphasized": false,
+         "index": 14,
+         "text": "0"
+        },
+        {
+         "emphasized": false,
+         "index": 15,
+         "text": "0"
+        }
+       ],
+       "entityLink": {
+        "analyticsSport": "nfl",
+        "contentType": "event",
+        "contentUri": "football/nfl/events/11041",
+        "layout": {
+         "path": "/layouts?type=layout&subtype=nflEventLayout",
+         "tokens": {
+          "awayUri": "football/nfl/teams/25",
+          "eventUri": "football/nfl/events/11041",
+          "homeUri": "football/nfl/teams/9",
+          "id": "11041"
+         }
+        },
+        "tab": "boxscore",
+        "type": "entity",
+        "webUrl": "/nfl/week-1-atlanta-falcons-vs-pittsburgh-steelers-sep-13-2026-game-boxscore-11041?tab=boxscore"
+       },
+       "isCutoff": false,
+       "isFaded": false,
+       "selected": false
+      }
+     ],
+     "template": "table-game-log"
+    },
+    {
+     "headers": [
+      {
+       "columns": [
+        {
+         "emphasized": true,
+         "index": 0,
+         "priority": 1,
+         "sortable": "none",
+         "template": "cell-text",
+         "text": "PRESEASON",
+         "weight": 1.9
+        },
+        {
+         "emphasized": false,
+         "index": 1,
+         "priority": 2,
+         "sortable": "none",
+         "template": "cell-entity",
+         "weight": 2.6
+        },
+        {
+         "emphasized": false,
+         "index": 2,
+         "priority": 1,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "COMP",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 3,
+         "priority": 2,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "PATT",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 4,
+         "priority": 3,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "PCT",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 5,
+         "priority": 4,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "YDS",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 6,
+         "priority": 5,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "PAVG",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 7,
+         "priority": 6,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "RECAVG",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 8,
+         "priority": 7,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "TD",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 9,
+         "priority": 8,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "INT",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 10,
+         "priority": 9,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "SCK",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 11,
+         "priority": 10,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "YDS",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 12,
+         "priority": 11,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "QBR",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 13,
+         "priority": 12,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "P-1ST",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 14,
+         "priority": 13,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "FUM",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 15,
+         "priority": 14,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "FUML",
+         "weight": 1.8
+        }
+       ],
+       "isPrimary": true
+      }
+     ],
+     "rows": [
+      {
+       "columns": [
+        {
+         "emphasized": false,
+         "index": 0,
+         "text": "8/28"
+        },
+        {
+         "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Dolphins.vresize.200.200.medium.0.png",
+         "emphasized": false,
+         "imageAltText": "Miami Dolphins",
+         "imageType": "image-logo",
+         "imageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Dolphins.vresize.200.200.medium.0.png",
+         "index": 1,
+         "subType": "win",
+         "superscript": "W",
+         "text": "@MIA"
+        },
+        {
+         "emphasized": false,
+         "index": 2,
+         "text": "26"
+        },
+        {
+         "emphasized": false,
+         "index": 3,
+         "text": "33"
+        },
+        {
+         "emphasized": false,
+         "index": 4,
+         "text": "78.8"
+        },
+        {
+         "emphasized": false,
+         "index": 5,
+         "text": "239"
+        },
+        {
+         "emphasized": false,
+         "index": 6,
+         "text": "7.2"
+        },
+        {
+         "emphasized": false,
+         "index": 7,
+         "text": "9.4"
+        },
+        {
+         "emphasized": false,
+         "index": 8,
+         "text": "1"
+        },
+        {
+         "emphasized": false,
+         "index": 9,
+         "text": "1"
+        },
+        {
+         "emphasized": false,
+         "index": 10,
+         "text": "1"
+        },
+        {
+         "emphasized": false,
+         "index": 11,
+         "text": "6"
+        },
+        {
+         "emphasized": false,
+         "index": 12,
+         "text": "95.1"
+        },
+        {
+         "emphasized": false,
+         "index": 13,
+         "text": "12"
+        },
+        {
+         "emphasized": false,
+         "index": 14,
+         "text": "0"
+        },
+        {
+         "emphasized": false,
+         "index": 15,
+         "text": "0"
+        }
+       ],
+       "entityLink": {
+        "analyticsSport": "nfl",
+        "contentType": "event",
+        "contentUri": "football/nfl/events/11175",
+        "layout": {
+         "path": "/layouts?type=layout&subtype=nflEventLayout",
+         "tokens": {
+          "awayUri": "football/nfl/teams/25",
+          "eventUri": "football/nfl/events/11175",
+          "homeUri": "football/nfl/teams/3",
+          "id": "11175"
+         }
+        },
+        "tab": "boxscore",
+        "type": "entity",
+        "webUrl": "/nfl/preseason-week-3-atlanta-falcons-vs-miami-dolphins-aug-28-2026-game-boxscore-11175?tab=boxscore"
+       },
+       "isCutoff": false,
+       "isFaded": false,
+       "selected": false
+      }
+     ],
+     "template": "table-game-log"
+    }
+   ]
+  },
+  {
+   "id": "rushing",
+   "legend": {
+    "details": [
+     {
+      "key": "RATT",
+      "text": " - Rushing Attempts"
+     },
+     {
+      "key": "YDS",
+      "text": " - Rushing Yards"
+     },
+     {
+      "key": "RAVG",
+      "text": " - Rushing Yards / Attempt"
+     },
+     {
+      "key": "TD",
+      "text": " - Rushing Touchdowns"
+     },
+     {
+      "key": "R-1ST",
+      "text": " - First Downs Rushing"
+     }
+    ]
+   },
+   "moreLink": {
+    "text": "FULL RUSHING GAME LOG",
+    "webUrl": "/nfl/atlanta-falcons-team-game-log?season=2026&category=rushing"
+   },
+   "tables": [
+    {
+     "headers": [
+      {
+       "columns": [
+        {
+         "emphasized": true,
+         "index": 0,
+         "priority": 1,
+         "sortable": "none",
+         "template": "cell-text",
+         "text": "REGULAR SEASON",
+         "weight": 1.9
+        },
+        {
+         "emphasized": false,
+         "index": 1,
+         "priority": 2,
+         "sortable": "none",
+         "template": "cell-entity",
+         "weight": 2.6
+        },
+        {
+         "emphasized": false,
+         "index": 2,
+         "priority": 1,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "RATT",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 3,
+         "priority": 2,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "YDS",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 4,
+         "priority": 3,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "RAVG",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 5,
+         "priority": 4,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "TD",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 6,
+         "priority": 5,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "R-1ST",
+         "weight": 1.8
+        }
+       ],
+       "isPrimary": true
+      }
+     ],
+     "rows": [
+      {
+       "columns": [
+        {
+         "emphasized": false,
+         "index": 0,
+         "text": "10/5"
+        },
+        {
+         "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Saints-alternate.vresize.200.200.medium.0.png",
+         "emphasized": false,
+         "imageAltText": "New Orleans Saints",
+         "imageType": "image-logo",
+         "imageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Saints.vresize.200.200.medium.1.png",
+         "index": 1,
+         "subType": "win",
+         "superscript": "W",
+         "text": "@NO"
+        },
+        {
+         "emphasized": false,
+         "index": 2,
+         "text": "35"
+        },
+        {
+         "emphasized": false,
+         "index": 3,
+         "text": "205"
+        },
+        {
+         "emphasized": false,
+         "index": 4,
+         "text": "5.9"
+        },
+        {
+         "emphasized": false,
+         "index": 5,
+         "text": "5"
+        },
+        {
+         "emphasized": false,
+         "index": 6,
+         "text": "13"
+        }
+       ],
+       "entityLink": {
+        "analyticsSport": "nfl",
+        "contentType": "event",
+        "contentUri": "football/nfl/events/11224",
+        "layout": {
+         "path": "/layouts?type=layout&subtype=nflEventLayout",
+         "tokens": {
+          "awayUri": "football/nfl/teams/25",
+          "eventUri": "football/nfl/events/11224",
+          "homeUri": "football/nfl/teams/27",
+          "id": "11224"
+         }
+        },
+        "tab": "boxscore",
+        "type": "entity",
+        "webUrl": "/nfl/week-4-atlanta-falcons-vs-new-orleans-saints-oct-05-2026-game-boxscore-11224?tab=boxscore"
+       },
+       "isCutoff": false,
+       "isFaded": false,
+       "selected": false
+      },
+      {
+       "columns": [
+        {
+         "emphasized": false,
+         "index": 0,
+         "text": "9/24"
+        },
+        {
+         "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Packers.vresize.200.200.medium.0.png",
+         "emphasized": false,
+         "imageAltText": "Green Bay Packers",
+         "imageType": "image-logo",
+         "imageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Packers.vresize.200.200.medium.0.png",
+         "index": 1,
+         "subType": "win",
+         "superscript": "W",
+         "text": "@GB"
+        },
+        {
+         "emphasized": false,
+         "index": 2,
+         "text": "41"
+        },
+        {
+         "emphasized": false,
+         "index": 3,
+         "text": "242"
+        },
+        {
+         "emphasized": false,
+         "index": 4,
+         "text": "5.9"
+        },
+        {
+         "emphasized": false,
+         "index": 5,
+         "text": "3"
+        },
+        {
+         "emphasized": false,
+         "index": 6,
+         "text": "15"
+        }
+       ],
+       "entityLink": {
+        "analyticsSport": "nfl",
+        "contentType": "event",
+        "contentUri": "football/nfl/events/11195",
+        "layout": {
+         "path": "/layouts?type=layout&subtype=nflEventLayout",
+         "tokens": {
+          "awayUri": "football/nfl/teams/25",
+          "eventUri": "football/nfl/events/11195",
+          "homeUri": "football/nfl/teams/22",
+          "id": "11195"
+         }
+        },
+        "tab": "boxscore",
+        "type": "entity",
+        "webUrl": "/nfl/week-3-atlanta-falcons-vs-green-bay-packers-sep-24-2026-game-boxscore-11195?tab=boxscore"
+       },
+       "isCutoff": false,
+       "isFaded": false,
+       "selected": false
+      },
+      {
+       "columns": [
+        {
+         "emphasized": false,
+         "index": 0,
+         "text": "9/20"
+        },
+        {
+         "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Panthers.vresize.200.200.medium.0.png",
+         "emphasized": false,
+         "imageAltText": "Carolina Panthers",
+         "imageType": "image-logo",
+         "imageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Panthers.vresize.200.200.medium.0.png",
+         "index": 1,
+         "subType": "loss",
+         "superscript": "L",
+         "text": "CAR"
+        },
+        {
+         "emphasized": false,
+         "index": 2,
+         "text": "32"
+        },
+        {
+         "emphasized": false,
+         "index": 3,
+         "text": "157"
+        },
+        {
+         "emphasized": false,
+         "index": 4,
+         "text": "4.9"
+        },
+        {
+         "emphasized": false,
+         "index": 5,
+         "text": "0"
+        },
+        {
+         "emphasized": false,
+         "index": 6,
+         "text": "7"
+        }
+       ],
+       "entityLink": {
+        "analyticsSport": "nfl",
+        "contentType": "event",
+        "contentUri": "football/nfl/events/11056",
+        "layout": {
+         "path": "/layouts?type=layout&subtype=nflEventLayout",
+         "tokens": {
+          "awayUri": "football/nfl/teams/32",
+          "eventUri": "football/nfl/events/11056",
+          "homeUri": "football/nfl/teams/25",
+          "id": "11056"
+         }
+        },
+        "tab": "boxscore",
+        "type": "entity",
+        "webUrl": "/nfl/week-2-carolina-panthers-vs-atlanta-falcons-sep-20-2026-game-boxscore-11056?tab=boxscore"
+       },
+       "isCutoff": false,
+       "isFaded": false,
+       "selected": false
+      },
+      {
+       "columns": [
+        {
+         "emphasized": false,
+         "index": 0,
+         "text": "9/13"
+        },
+        {
+         "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Steelers.vresize.200.200.medium.0.png",
+         "emphasized": false,
+         "imageAltText": "Pittsburgh Steelers",
+         "imageType": "image-logo",
+         "imageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Steelers.vresize.200.200.medium.0.png",
+         "index": 1,
+         "subType": "loss",
+         "superscript": "L",
+         "text": "@PIT"
+        },
+        {
+         "emphasized": false,
+         "index": 2,
+         "text": "31"
+        },
+        {
+         "emphasized": false,
+         "index": 3,
+         "text": "120"
+        },
+        {
+         "emphasized": false,
+         "index": 4,
+         "text": "3.9"
+        },
+        {
+         "emphasized": false,
+         "index": 5,
+         "text": "0"
+        },
+        {
+         "emphasized": false,
+         "index": 6,
+         "text": "9"
+        }
+       ],
+       "entityLink": {
+        "analyticsSport": "nfl",
+        "contentType": "event",
+        "contentUri": "football/nfl/events/11041",
+        "layout": {
+         "path": "/layouts?type=layout&subtype=nflEventLayout",
+         "tokens": {
+          "awayUri": "football/nfl/teams/25",
+          "eventUri": "football/nfl/events/11041",
+          "homeUri": "football/nfl/teams/9",
+          "id": "11041"
+         }
+        },
+        "tab": "boxscore",
+        "type": "entity",
+        "webUrl": "/nfl/week-1-atlanta-falcons-vs-pittsburgh-steelers-sep-13-2026-game-boxscore-11041?tab=boxscore"
+       },
+       "isCutoff": false,
+       "isFaded": false,
+       "selected": false
+      }
+     ],
+     "template": "table-game-log"
+    },
+    {
+     "headers": [
+      {
+       "columns": [
+        {
+         "emphasized": true,
+         "index": 0,
+         "priority": 1,
+         "sortable": "none",
+         "template": "cell-text",
+         "text": "PRESEASON",
+         "weight": 1.9
+        },
+        {
+         "emphasized": false,
+         "index": 1,
+         "priority": 2,
+         "sortable": "none",
+         "template": "cell-entity",
+         "weight": 2.6
+        },
+        {
+         "emphasized": false,
+         "index": 2,
+         "priority": 1,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "RATT",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 3,
+         "priority": 2,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "YDS",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 4,
+         "priority": 3,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "RAVG",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 5,
+         "priority": 4,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "TD",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 6,
+         "priority": 5,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "R-1ST",
+         "weight": 1.8
+        }
+       ],
+       "isPrimary": true
+      }
+     ],
+     "rows": [
+      {
+       "columns": [
+        {
+         "emphasized": false,
+         "index": 0,
+         "text": "8/28"
+        },
+        {
+         "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Dolphins.vresize.200.200.medium.0.png",
+         "emphasized": false,
+         "imageAltText": "Miami Dolphins",
+         "imageType": "image-logo",
+         "imageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Dolphins.vresize.200.200.medium.0.png",
+         "index": 1,
+         "subType": "win",
+         "superscript": "W",
+         "text": "@MIA"
+        },
+        {
+         "emphasized": false,
+         "index": 2,
+         "text": "24"
+        },
+        {
+         "emphasized": false,
+         "index": 3,
+         "text": "40"
+        },
+        {
+         "emphasized": false,
+         "index": 4,
+         "text": "1.7"
+        },
+        {
+         "emphasized": false,
+         "index": 5,
+         "text": "1"
+        },
+        {
+         "emphasized": false,
+         "index": 6,
+         "text": "3"
+        }
+       ],
+       "entityLink": {
+        "analyticsSport": "nfl",
+        "contentType": "event",
+        "contentUri": "football/nfl/events/11175",
+        "layout": {
+         "path": "/layouts?type=layout&subtype=nflEventLayout",
+         "tokens": {
+          "awayUri": "football/nfl/teams/25",
+          "eventUri": "football/nfl/events/11175",
+          "homeUri": "football/nfl/teams/3",
+          "id": "11175"
+         }
+        },
+        "tab": "boxscore",
+        "type": "entity",
+        "webUrl": "/nfl/preseason-week-3-atlanta-falcons-vs-miami-dolphins-aug-28-2026-game-boxscore-11175?tab=boxscore"
+       },
+       "isCutoff": false,
+       "isFaded": false,
+       "selected": false
+      }
+     ],
+     "template": "table-game-log"
+    }
+   ]
+  },
+  {
+   "id": "kicking",
+   "legend": {
+    "details": [
+     {
+      "key": "PTS",
+      "text": " - Kicking Points"
+     },
+     {
+      "key": "FGM",
+      "text": " - Field Goals Made"
+     },
+     {
+      "key": "FGA",
+      "text": " - Field Goals Attempted"
+     },
+     {
+      "key": "FG PCT",
+      "text": " - Field Goal %"
+     },
+     {
+      "key": "FG-LNG",
+      "text": " - Longest Field Goal"
+     },
+     {
+      "key": "XPM",
+      "text": " - Extra Points Made"
+     },
+     {
+      "key": "XPA",
+      "text": " - Extra Points Attempted"
+     },
+     {
+      "key": "XP PCT",
+      "text": " - Extra Point %"
+     }
+    ]
+   },
+   "moreLink": {
+    "text": "FULL KICKING GAME LOG",
+    "webUrl": "/nfl/atlanta-falcons-team-game-log?season=2026&category=kicking"
+   },
+   "tables": [
+    {
+     "headers": [
+      {
+       "columns": [
+        {
+         "emphasized": true,
+         "index": 0,
+         "priority": 1,
+         "sortable": "none",
+         "template": "cell-text",
+         "text": "REGULAR SEASON",
+         "weight": 1.9
+        },
+        {
+         "emphasized": false,
+         "index": 1,
+         "priority": 2,
+         "sortable": "none",
+         "template": "cell-entity",
+         "weight": 2.6
+        },
+        {
+         "emphasized": false,
+         "index": 2,
+         "priority": 1,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "PTS",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 3,
+         "priority": 2,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "FGM",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 4,
+         "priority": 3,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "FGA",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 5,
+         "priority": 4,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "FG PCT",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 6,
+         "priority": 5,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "FG-LNG",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 7,
+         "priority": 6,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "XPM",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 8,
+         "priority": 7,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "XPA",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 9,
+         "priority": 8,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "XP PCT",
+         "weight": 1.8
+        }
+       ],
+       "isPrimary": true
+      }
+     ],
+     "rows": [
+      {
+       "columns": [
+        {
+         "emphasized": false,
+         "index": 0,
+         "text": "10/5"
+        },
+        {
+         "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Saints-alternate.vresize.200.200.medium.0.png",
+         "emphasized": false,
+         "imageAltText": "New Orleans Saints",
+         "imageType": "image-logo",
+         "imageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Saints.vresize.200.200.medium.1.png",
+         "index": 1,
+         "subType": "win",
+         "superscript": "W",
+         "text": "@NO"
+        },
+        {
+         "emphasized": false,
+         "index": 2,
+         "text": "9"
+        },
+        {
+         "emphasized": false,
+         "index": 3,
+         "text": "1"
+        },
+        {
+         "emphasized": false,
+         "index": 4,
+         "text": "1"
+        },
+        {
+         "emphasized": false,
+         "index": 5,
+         "text": "100.0"
+        },
+        {
+         "emphasized": false,
+         "index": 6,
+         "text": "29"
+        },
+        {
+         "emphasized": false,
+         "index": 7,
+         "text": "6"
+        },
+        {
+         "emphasized": false,
+         "index": 8,
+         "text": "6"
+        },
+        {
+         "emphasized": false,
+         "index": 9,
+         "text": "100.0"
+        }
+       ],
+       "entityLink": {
+        "analyticsSport": "nfl",
+        "contentType": "event",
+        "contentUri": "football/nfl/events/11224",
+        "layout": {
+         "path": "/layouts?type=layout&subtype=nflEventLayout",
+         "tokens": {
+          "awayUri": "football/nfl/teams/25",
+          "eventUri": "football/nfl/events/11224",
+          "homeUri": "football/nfl/teams/27",
+          "id": "11224"
+         }
+        },
+        "tab": "boxscore",
+        "type": "entity",
+        "webUrl": "/nfl/week-4-atlanta-falcons-vs-new-orleans-saints-oct-05-2026-game-boxscore-11224?tab=boxscore"
+       },
+       "isCutoff": false,
+       "isFaded": false,
+       "selected": false
+      },
+      {
+       "columns": [
+        {
+         "emphasized": false,
+         "index": 0,
+         "text": "9/24"
+        },
+        {
+         "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Packers.vresize.200.200.medium.0.png",
+         "emphasized": false,
+         "imageAltText": "Green Bay Packers",
+         "imageType": "image-logo",
+         "imageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Packers.vresize.200.200.medium.0.png",
+         "index": 1,
+         "subType": "win",
+         "superscript": "W",
+         "text": "@GB"
+        },
+        {
+         "emphasized": false,
+         "index": 2,
+         "text": "9"
+        },
+        {
+         "emphasized": false,
+         "index": 3,
+         "text": "2"
+        },
+        {
+         "emphasized": false,
+         "index": 4,
+         "text": "2"
+        },
+        {
+         "emphasized": false,
+         "index": 5,
+         "text": "100.0"
+        },
+        {
+         "emphasized": false,
+         "index": 6,
+         "text": "44"
+        },
+        {
+         "emphasized": false,
+         "index": 7,
+         "text": "3"
+        },
+        {
+         "emphasized": false,
+         "index": 8,
+         "text": "3"
+        },
+        {
+         "emphasized": false,
+         "index": 9,
+         "text": "100.0"
+        }
+       ],
+       "entityLink": {
+        "analyticsSport": "nfl",
+        "contentType": "event",
+        "contentUri": "football/nfl/events/11195",
+        "layout": {
+         "path": "/layouts?type=layout&subtype=nflEventLayout",
+         "tokens": {
+          "awayUri": "football/nfl/teams/25",
+          "eventUri": "football/nfl/events/11195",
+          "homeUri": "football/nfl/teams/22",
+          "id": "11195"
+         }
+        },
+        "tab": "boxscore",
+        "type": "entity",
+        "webUrl": "/nfl/week-3-atlanta-falcons-vs-green-bay-packers-sep-24-2026-game-boxscore-11195?tab=boxscore"
+       },
+       "isCutoff": false,
+       "isFaded": false,
+       "selected": false
+      },
+      {
+       "columns": [
+        {
+         "emphasized": false,
+         "index": 0,
+         "text": "9/20"
+        },
+        {
+         "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Panthers.vresize.200.200.medium.0.png",
+         "emphasized": false,
+         "imageAltText": "Carolina Panthers",
+         "imageType": "image-logo",
+         "imageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Panthers.vresize.200.200.medium.0.png",
+         "index": 1,
+         "subType": "loss",
+         "superscript": "L",
+         "text": "CAR"
+        },
+        {
+         "emphasized": false,
+         "index": 2,
+         "text": "3"
+        },
+        {
+         "emphasized": false,
+         "index": 3,
+         "text": "1"
+        },
+        {
+         "emphasized": false,
+         "index": 4,
+         "text": "2"
+        },
+        {
+         "emphasized": false,
+         "index": 5,
+         "text": "50.0"
+        },
+        {
+         "emphasized": false,
+         "index": 6,
+         "text": "41"
+        },
+        {
+         "emphasized": false,
+         "index": 7,
+         "text": "0"
+        },
+        {
+         "emphasized": false,
+         "index": 8,
+         "text": "0"
+        },
+        {
+         "emphasized": false,
+         "index": 9,
+         "text": "-"
+        }
+       ],
+       "entityLink": {
+        "analyticsSport": "nfl",
+        "contentType": "event",
+        "contentUri": "football/nfl/events/11056",
+        "layout": {
+         "path": "/layouts?type=layout&subtype=nflEventLayout",
+         "tokens": {
+          "awayUri": "football/nfl/teams/32",
+          "eventUri": "football/nfl/events/11056",
+          "homeUri": "football/nfl/teams/25",
+          "id": "11056"
+         }
+        },
+        "tab": "boxscore",
+        "type": "entity",
+        "webUrl": "/nfl/week-2-carolina-panthers-vs-atlanta-falcons-sep-20-2026-game-boxscore-11056?tab=boxscore"
+       },
+       "isCutoff": false,
+       "isFaded": false,
+       "selected": false
+      },
+      {
+       "columns": [
+        {
+         "emphasized": false,
+         "index": 0,
+         "text": "9/13"
+        },
+        {
+         "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Steelers.vresize.200.200.medium.0.png",
+         "emphasized": false,
+         "imageAltText": "Pittsburgh Steelers",
+         "imageType": "image-logo",
+         "imageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Steelers.vresize.200.200.medium.0.png",
+         "index": 1,
+         "subType": "loss",
+         "superscript": "L",
+         "text": "@PIT"
+        },
+        {
+         "emphasized": false,
+         "index": 2,
+         "text": "7"
+        },
+        {
+         "emphasized": false,
+         "index": 3,
+         "text": "2"
+        },
+        {
+         "emphasized": false,
+         "index": 4,
+         "text": "4"
+        },
+        {
+         "emphasized": false,
+         "index": 5,
+         "text": "50.0"
+        },
+        {
+         "emphasized": false,
+         "index": 6,
+         "text": "51"
+        },
+        {
+         "emphasized": false,
+         "index": 7,
+         "text": "1"
+        },
+        {
+         "emphasized": false,
+         "index": 8,
+         "text": "1"
+        },
+        {
+         "emphasized": false,
+         "index": 9,
+         "text": "100.0"
+        }
+       ],
+       "entityLink": {
+        "analyticsSport": "nfl",
+        "contentType": "event",
+        "contentUri": "football/nfl/events/11041",
+        "layout": {
+         "path": "/layouts?type=layout&subtype=nflEventLayout",
+         "tokens": {
+          "awayUri": "football/nfl/teams/25",
+          "eventUri": "football/nfl/events/11041",
+          "homeUri": "football/nfl/teams/9",
+          "id": "11041"
+         }
+        },
+        "tab": "boxscore",
+        "type": "entity",
+        "webUrl": "/nfl/week-1-atlanta-falcons-vs-pittsburgh-steelers-sep-13-2026-game-boxscore-11041?tab=boxscore"
+       },
+       "isCutoff": false,
+       "isFaded": false,
+       "selected": false
+      }
+     ],
+     "template": "table-game-log"
+    },
+    {
+     "headers": [
+      {
+       "columns": [
+        {
+         "emphasized": true,
+         "index": 0,
+         "priority": 1,
+         "sortable": "none",
+         "template": "cell-text",
+         "text": "PRESEASON",
+         "weight": 1.9
+        },
+        {
+         "emphasized": false,
+         "index": 1,
+         "priority": 2,
+         "sortable": "none",
+         "template": "cell-entity",
+         "weight": 2.6
+        },
+        {
+         "emphasized": false,
+         "index": 2,
+         "priority": 1,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "PTS",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 3,
+         "priority": 2,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "FGM",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 4,
+         "priority": 3,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "FGA",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 5,
+         "priority": 4,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "FG PCT",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 6,
+         "priority": 5,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "FG-LNG",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 7,
+         "priority": 6,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "XPM",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 8,
+         "priority": 7,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "XPA",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 9,
+         "priority": 8,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "XP PCT",
+         "weight": 1.8
+        }
+       ],
+       "isPrimary": true
+      }
+     ],
+     "rows": [
+      {
+       "columns": [
+        {
+         "emphasized": false,
+         "index": 0,
+         "text": "8/28"
+        },
+        {
+         "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Dolphins.vresize.200.200.medium.0.png",
+         "emphasized": false,
+         "imageAltText": "Miami Dolphins",
+         "imageType": "image-logo",
+         "imageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Dolphins.vresize.200.200.medium.0.png",
+         "index": 1,
+         "subType": "win",
+         "superscript": "W",
+         "text": "@MIA"
+        },
+        {
+         "emphasized": false,
+         "index": 2,
+         "text": "5"
+        },
+        {
+         "emphasized": false,
+         "index": 3,
+         "text": "1"
+        },
+        {
+         "emphasized": false,
+         "index": 4,
+         "text": "1"
+        },
+        {
+         "emphasized": false,
+         "index": 5,
+         "text": "100.0"
+        },
+        {
+         "emphasized": false,
+         "index": 6,
+         "text": "34"
+        },
+        {
+         "emphasized": false,
+         "index": 7,
+         "text": "2"
+        },
+        {
+         "emphasized": false,
+         "index": 8,
+         "text": "2"
+        },
+        {
+         "emphasized": false,
+         "index": 9,
+         "text": "100.0"
+        }
+       ],
+       "entityLink": {
+        "analyticsSport": "nfl",
+        "contentType": "event",
+        "contentUri": "football/nfl/events/11175",
+        "layout": {
+         "path": "/layouts?type=layout&subtype=nflEventLayout",
+         "tokens": {
+          "awayUri": "football/nfl/teams/25",
+          "eventUri": "football/nfl/events/11175",
+          "homeUri": "football/nfl/teams/3",
+          "id": "11175"
+         }
+        },
+        "tab": "boxscore",
+        "type": "entity",
+        "webUrl": "/nfl/preseason-week-3-atlanta-falcons-vs-miami-dolphins-aug-28-2026-game-boxscore-11175?tab=boxscore"
+       },
+       "isCutoff": false,
+       "isFaded": false,
+       "selected": false
+      }
+     ],
+     "template": "table-game-log"
+    }
+   ]
+  },
+  {
+   "id": "punting",
+   "legend": {
+    "details": [
+     {
+      "key": "PUNTS",
+      "text": " - Punts"
+     },
+     {
+      "key": "YDS",
+      "text": " - Punt Yards"
+     },
+     {
+      "key": "P-AVG",
+      "text": " - Punt Yards Avg"
+     }
+    ]
+   },
+   "moreLink": {
+    "text": "FULL PUNTING GAME LOG",
+    "webUrl": "/nfl/atlanta-falcons-team-game-log?season=2026&category=punting"
+   },
+   "tables": [
+    {
+     "headers": [
+      {
+       "columns": [
+        {
+         "emphasized": true,
+         "index": 0,
+         "priority": 1,
+         "sortable": "none",
+         "template": "cell-text",
+         "text": "REGULAR SEASON",
+         "weight": 1.9
+        },
+        {
+         "emphasized": false,
+         "index": 1,
+         "priority": 2,
+         "sortable": "none",
+         "template": "cell-entity",
+         "weight": 2.6
+        },
+        {
+         "emphasized": false,
+         "index": 2,
+         "priority": 1,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "PUNTS",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 3,
+         "priority": 2,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "YDS",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 4,
+         "priority": 3,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "P-AVG",
+         "weight": 1.8
+        }
+       ],
+       "isPrimary": true
+      }
+     ],
+     "rows": [
+      {
+       "columns": [
+        {
+         "emphasized": false,
+         "index": 0,
+         "text": "10/5"
+        },
+        {
+         "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Saints-alternate.vresize.200.200.medium.0.png",
+         "emphasized": false,
+         "imageAltText": "New Orleans Saints",
+         "imageType": "image-logo",
+         "imageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Saints.vresize.200.200.medium.1.png",
+         "index": 1,
+         "subType": "win",
+         "superscript": "W",
+         "text": "@NO"
+        },
+        {
+         "emphasized": false,
+         "index": 2,
+         "text": "2"
+        },
+        {
+         "emphasized": false,
+         "index": 3,
+         "text": "72"
+        },
+        {
+         "emphasized": false,
+         "index": 4,
+         "text": "36.0"
+        }
+       ],
+       "entityLink": {
+        "analyticsSport": "nfl",
+        "contentType": "event",
+        "contentUri": "football/nfl/events/11224",
+        "layout": {
+         "path": "/layouts?type=layout&subtype=nflEventLayout",
+         "tokens": {
+          "awayUri": "football/nfl/teams/25",
+          "eventUri": "football/nfl/events/11224",
+          "homeUri": "football/nfl/teams/27",
+          "id": "11224"
+         }
+        },
+        "tab": "boxscore",
+        "type": "entity",
+        "webUrl": "/nfl/week-4-atlanta-falcons-vs-new-orleans-saints-oct-05-2026-game-boxscore-11224?tab=boxscore"
+       },
+       "isCutoff": false,
+       "isFaded": false,
+       "selected": false
+      },
+      {
+       "columns": [
+        {
+         "emphasized": false,
+         "index": 0,
+         "text": "9/24"
+        },
+        {
+         "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Packers.vresize.200.200.medium.0.png",
+         "emphasized": false,
+         "imageAltText": "Green Bay Packers",
+         "imageType": "image-logo",
+         "imageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Packers.vresize.200.200.medium.0.png",
+         "index": 1,
+         "subType": "win",
+         "superscript": "W",
+         "text": "@GB"
+        },
+        {
+         "emphasized": false,
+         "index": 2,
+         "text": "2"
+        },
+        {
+         "emphasized": false,
+         "index": 3,
+         "text": "91"
+        },
+        {
+         "emphasized": false,
+         "index": 4,
+         "text": "45.5"
+        }
+       ],
+       "entityLink": {
+        "analyticsSport": "nfl",
+        "contentType": "event",
+        "contentUri": "football/nfl/events/11195",
+        "layout": {
+         "path": "/layouts?type=layout&subtype=nflEventLayout",
+         "tokens": {
+          "awayUri": "football/nfl/teams/25",
+          "eventUri": "football/nfl/events/11195",
+          "homeUri": "football/nfl/teams/22",
+          "id": "11195"
+         }
+        },
+        "tab": "boxscore",
+        "type": "entity",
+        "webUrl": "/nfl/week-3-atlanta-falcons-vs-green-bay-packers-sep-24-2026-game-boxscore-11195?tab=boxscore"
+       },
+       "isCutoff": false,
+       "isFaded": false,
+       "selected": false
+      },
+      {
+       "columns": [
+        {
+         "emphasized": false,
+         "index": 0,
+         "text": "9/20"
+        },
+        {
+         "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Panthers.vresize.200.200.medium.0.png",
+         "emphasized": false,
+         "imageAltText": "Carolina Panthers",
+         "imageType": "image-logo",
+         "imageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Panthers.vresize.200.200.medium.0.png",
+         "index": 1,
+         "subType": "loss",
+         "superscript": "L",
+         "text": "CAR"
+        },
+        {
+         "emphasized": false,
+         "index": 2,
+         "text": "3"
+        },
+        {
+         "emphasized": false,
+         "index": 3,
+         "text": "151"
+        },
+        {
+         "emphasized": false,
+         "index": 4,
+         "text": "50.3"
+        }
+       ],
+       "entityLink": {
+        "analyticsSport": "nfl",
+        "contentType": "event",
+        "contentUri": "football/nfl/events/11056",
+        "layout": {
+         "path": "/layouts?type=layout&subtype=nflEventLayout",
+         "tokens": {
+          "awayUri": "football/nfl/teams/32",
+          "eventUri": "football/nfl/events/11056",
+          "homeUri": "football/nfl/teams/25",
+          "id": "11056"
+         }
+        },
+        "tab": "boxscore",
+        "type": "entity",
+        "webUrl": "/nfl/week-2-carolina-panthers-vs-atlanta-falcons-sep-20-2026-game-boxscore-11056?tab=boxscore"
+       },
+       "isCutoff": false,
+       "isFaded": false,
+       "selected": false
+      },
+      {
+       "columns": [
+        {
+         "emphasized": false,
+         "index": 0,
+         "text": "9/13"
+        },
+        {
+         "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Steelers.vresize.200.200.medium.0.png",
+         "emphasized": false,
+         "imageAltText": "Pittsburgh Steelers",
+         "imageType": "image-logo",
+         "imageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Steelers.vresize.200.200.medium.0.png",
+         "index": 1,
+         "subType": "loss",
+         "superscript": "L",
+         "text": "@PIT"
+        },
+        {
+         "emphasized": false,
+         "index": 2,
+         "text": "6"
+        },
+        {
+         "emphasized": false,
+         "index": 3,
+         "text": "289"
+        },
+        {
+         "emphasized": false,
+         "index": 4,
+         "text": "48.2"
+        }
+       ],
+       "entityLink": {
+        "analyticsSport": "nfl",
+        "contentType": "event",
+        "contentUri": "football/nfl/events/11041",
+        "layout": {
+         "path": "/layouts?type=layout&subtype=nflEventLayout",
+         "tokens": {
+          "awayUri": "football/nfl/teams/25",
+          "eventUri": "football/nfl/events/11041",
+          "homeUri": "football/nfl/teams/9",
+          "id": "11041"
+         }
+        },
+        "tab": "boxscore",
+        "type": "entity",
+        "webUrl": "/nfl/week-1-atlanta-falcons-vs-pittsburgh-steelers-sep-13-2026-game-boxscore-11041?tab=boxscore"
+       },
+       "isCutoff": false,
+       "isFaded": false,
+       "selected": false
+      }
+     ],
+     "template": "table-game-log"
+    },
+    {
+     "headers": [
+      {
+       "columns": [
+        {
+         "emphasized": true,
+         "index": 0,
+         "priority": 1,
+         "sortable": "none",
+         "template": "cell-text",
+         "text": "PRESEASON",
+         "weight": 1.9
+        },
+        {
+         "emphasized": false,
+         "index": 1,
+         "priority": 2,
+         "sortable": "none",
+         "template": "cell-entity",
+         "weight": 2.6
+        },
+        {
+         "emphasized": false,
+         "index": 2,
+         "priority": 1,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "PUNTS",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 3,
+         "priority": 2,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "YDS",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 4,
+         "priority": 3,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "P-AVG",
+         "weight": 1.8
+        }
+       ],
+       "isPrimary": true
+      }
+     ],
+     "rows": [
+      {
+       "columns": [
+        {
+         "emphasized": false,
+         "index": 0,
+         "text": "8/28"
+        },
+        {
+         "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Dolphins.vresize.200.200.medium.0.png",
+         "emphasized": false,
+         "imageAltText": "Miami Dolphins",
+         "imageType": "image-logo",
+         "imageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Dolphins.vresize.200.200.medium.0.png",
+         "index": 1,
+         "subType": "win",
+         "superscript": "W",
+         "text": "@MIA"
+        },
+        {
+         "emphasized": false,
+         "index": 2,
+         "text": "5"
+        },
+        {
+         "emphasized": false,
+         "index": 3,
+         "text": "281"
+        },
+        {
+         "emphasized": false,
+         "index": 4,
+         "text": "56.2"
+        }
+       ],
+       "entityLink": {
+        "analyticsSport": "nfl",
+        "contentType": "event",
+        "contentUri": "football/nfl/events/11175",
+        "layout": {
+         "path": "/layouts?type=layout&subtype=nflEventLayout",
+         "tokens": {
+          "awayUri": "football/nfl/teams/25",
+          "eventUri": "football/nfl/events/11175",
+          "homeUri": "football/nfl/teams/3",
+          "id": "11175"
+         }
+        },
+        "tab": "boxscore",
+        "type": "entity",
+        "webUrl": "/nfl/preseason-week-3-atlanta-falcons-vs-miami-dolphins-aug-28-2026-game-boxscore-11175?tab=boxscore"
+       },
+       "isCutoff": false,
+       "isFaded": false,
+       "selected": false
+      }
+     ],
+     "template": "table-game-log"
+    }
+   ]
+  },
+  {
+   "id": "returning",
+   "legend": {
+    "details": [
+     {
+      "key": "K-RET",
+      "text": " - Kick Returns"
+     },
+     {
+      "key": "K-RET YDS",
+      "text": " - Kick Return Yards"
+     },
+     {
+      "key": "K-RET AVG",
+      "text": " - Kick Return Avg"
+     },
+     {
+      "key": "K-RET TD",
+      "text": " - Kick Return Touchdowns"
+     },
+     {
+      "key": "K-RET LNG",
+      "text": " - Kick Return Long"
+     },
+     {
+      "key": "P-RET",
+      "text": " - Punt Returns"
+     },
+     {
+      "key": "P-RET YDS",
+      "text": " - Punt Return Yards"
+     },
+     {
+      "key": "P-RET AVG",
+      "text": " - Punt Return Avg"
+     },
+     {
+      "key": "P-RET TD",
+      "text": " - Punt Return Touchdowns"
+     },
+     {
+      "key": "P-RET LNG",
+      "text": " - Punt Return Long"
+     }
+    ]
+   },
+   "moreLink": {
+    "text": "FULL RETURNING GAME LOG",
+    "webUrl": "/nfl/atlanta-falcons-team-game-log?season=2026&category=returning"
+   },
+   "tables": [
+    {
+     "headers": [
+      {
+       "columns": [
+        {
+         "emphasized": true,
+         "index": 0,
+         "priority": 1,
+         "sortable": "none",
+         "template": "cell-text",
+         "text": "REGULAR SEASON",
+         "weight": 1.9
+        },
+        {
+         "emphasized": false,
+         "index": 1,
+         "priority": 2,
+         "sortable": "none",
+         "template": "cell-entity",
+         "weight": 2.6
+        },
+        {
+         "emphasized": false,
+         "index": 2,
+         "priority": 1,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "K-RET",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 3,
+         "priority": 2,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "K-RET YDS",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 4,
+         "priority": 3,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "K-RET AVG",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 5,
+         "priority": 4,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "K-RET TD",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 6,
+         "priority": 5,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "K-RET LNG",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 7,
+         "priority": 6,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "P-RET",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 8,
+         "priority": 7,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "P-RET YDS",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 9,
+         "priority": 8,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "P-RET AVG",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 10,
+         "priority": 9,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "P-RET TD",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 11,
+         "priority": 10,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "P-RET LNG",
+         "weight": 1.8
+        }
+       ],
+       "isPrimary": true
+      }
+     ],
+     "rows": [
+      {
+       "columns": [
+        {
+         "emphasized": false,
+         "index": 0,
+         "text": "10/5"
+        },
+        {
+         "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Saints-alternate.vresize.200.200.medium.0.png",
+         "emphasized": false,
+         "imageAltText": "New Orleans Saints",
+         "imageType": "image-logo",
+         "imageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Saints.vresize.200.200.medium.1.png",
+         "index": 1,
+         "subType": "win",
+         "superscript": "W",
+         "text": "@NO"
+        },
+        {
+         "emphasized": false,
+         "index": 2,
+         "text": "3"
+        },
+        {
+         "emphasized": false,
+         "index": 3,
+         "text": "65"
+        },
+        {
+         "emphasized": false,
+         "index": 4,
+         "text": "21.7"
+        },
+        {
+         "emphasized": false,
+         "index": 5,
+         "text": "0"
+        },
+        {
+         "emphasized": false,
+         "index": 6,
+         "text": "25"
+        },
+        {
+         "emphasized": false,
+         "index": 7,
+         "text": "1"
+        },
+        {
+         "emphasized": false,
+         "index": 8,
+         "text": "25"
+        },
+        {
+         "emphasized": false,
+         "index": 9,
+         "text": "25.0"
+        },
+        {
+         "emphasized": false,
+         "index": 10,
+         "text": "0"
+        },
+        {
+         "emphasized": false,
+         "index": 11,
+         "text": "25"
+        }
+       ],
+       "entityLink": {
+        "analyticsSport": "nfl",
+        "contentType": "event",
+        "contentUri": "football/nfl/events/11224",
+        "layout": {
+         "path": "/layouts?type=layout&subtype=nflEventLayout",
+         "tokens": {
+          "awayUri": "football/nfl/teams/25",
+          "eventUri": "football/nfl/events/11224",
+          "homeUri": "football/nfl/teams/27",
+          "id": "11224"
+         }
+        },
+        "tab": "boxscore",
+        "type": "entity",
+        "webUrl": "/nfl/week-4-atlanta-falcons-vs-new-orleans-saints-oct-05-2026-game-boxscore-11224?tab=boxscore"
+       },
+       "isCutoff": false,
+       "isFaded": false,
+       "selected": false
+      },
+      {
+       "columns": [
+        {
+         "emphasized": false,
+         "index": 0,
+         "text": "9/24"
+        },
+        {
+         "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Packers.vresize.200.200.medium.0.png",
+         "emphasized": false,
+         "imageAltText": "Green Bay Packers",
+         "imageType": "image-logo",
+         "imageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Packers.vresize.200.200.medium.0.png",
+         "index": 1,
+         "subType": "win",
+         "superscript": "W",
+         "text": "@GB"
+        },
+        {
+         "emphasized": false,
+         "index": 2,
+         "text": "3"
+        },
+        {
+         "emphasized": false,
+         "index": 3,
+         "text": "76"
+        },
+        {
+         "emphasized": false,
+         "index": 4,
+         "text": "25.3"
+        },
+        {
+         "emphasized": false,
+         "index": 5,
+         "text": "0"
+        },
+        {
+         "emphasized": false,
+         "index": 6,
+         "text": "30"
+        },
+        {
+         "emphasized": false,
+         "index": 7,
+         "text": "2"
+        },
+        {
+         "emphasized": false,
+         "index": 8,
+         "text": "22"
+        },
+        {
+         "emphasized": false,
+         "index": 9,
+         "text": "11.0"
+        },
+        {
+         "emphasized": false,
+         "index": 10,
+         "text": "0"
+        },
+        {
+         "emphasized": false,
+         "index": 11,
+         "text": "18"
+        }
+       ],
+       "entityLink": {
+        "analyticsSport": "nfl",
+        "contentType": "event",
+        "contentUri": "football/nfl/events/11195",
+        "layout": {
+         "path": "/layouts?type=layout&subtype=nflEventLayout",
+         "tokens": {
+          "awayUri": "football/nfl/teams/25",
+          "eventUri": "football/nfl/events/11195",
+          "homeUri": "football/nfl/teams/22",
+          "id": "11195"
+         }
+        },
+        "tab": "boxscore",
+        "type": "entity",
+        "webUrl": "/nfl/week-3-atlanta-falcons-vs-green-bay-packers-sep-24-2026-game-boxscore-11195?tab=boxscore"
+       },
+       "isCutoff": false,
+       "isFaded": false,
+       "selected": false
+      },
+      {
+       "columns": [
+        {
+         "emphasized": false,
+         "index": 0,
+         "text": "9/20"
+        },
+        {
+         "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Panthers.vresize.200.200.medium.0.png",
+         "emphasized": false,
+         "imageAltText": "Carolina Panthers",
+         "imageType": "image-logo",
+         "imageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Panthers.vresize.200.200.medium.0.png",
+         "index": 1,
+         "subType": "loss",
+         "superscript": "L",
+         "text": "CAR"
+        },
+        {
+         "emphasized": false,
+         "index": 2,
+         "text": "4"
+        },
+        {
+         "emphasized": false,
+         "index": 3,
+         "text": "79"
+        },
+        {
+         "emphasized": false,
+         "index": 4,
+         "text": "19.8"
+        },
+        {
+         "emphasized": false,
+         "index": 5,
+         "text": "0"
+        },
+        {
+         "emphasized": false,
+         "index": 6,
+         "text": "25"
+        },
+        {
+         "emphasized": false,
+         "index": 7,
+         "text": "1"
+        },
+        {
+         "emphasized": false,
+         "index": 8,
+         "text": "7"
+        },
+        {
+         "emphasized": false,
+         "index": 9,
+         "text": "7.0"
+        },
+        {
+         "emphasized": false,
+         "index": 10,
+         "text": "0"
+        },
+        {
+         "emphasized": false,
+         "index": 11,
+         "text": "7"
+        }
+       ],
+       "entityLink": {
+        "analyticsSport": "nfl",
+        "contentType": "event",
+        "contentUri": "football/nfl/events/11056",
+        "layout": {
+         "path": "/layouts?type=layout&subtype=nflEventLayout",
+         "tokens": {
+          "awayUri": "football/nfl/teams/32",
+          "eventUri": "football/nfl/events/11056",
+          "homeUri": "football/nfl/teams/25",
+          "id": "11056"
+         }
+        },
+        "tab": "boxscore",
+        "type": "entity",
+        "webUrl": "/nfl/week-2-carolina-panthers-vs-atlanta-falcons-sep-20-2026-game-boxscore-11056?tab=boxscore"
+       },
+       "isCutoff": false,
+       "isFaded": false,
+       "selected": false
+      },
+      {
+       "columns": [
+        {
+         "emphasized": false,
+         "index": 0,
+         "text": "9/13"
+        },
+        {
+         "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Steelers.vresize.200.200.medium.0.png",
+         "emphasized": false,
+         "imageAltText": "Pittsburgh Steelers",
+         "imageType": "image-logo",
+         "imageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Steelers.vresize.200.200.medium.0.png",
+         "index": 1,
+         "subType": "loss",
+         "superscript": "L",
+         "text": "@PIT"
+        },
+        {
+         "emphasized": false,
+         "index": 2,
+         "text": "4"
+        },
+        {
+         "emphasized": false,
+         "index": 3,
+         "text": "123"
+        },
+        {
+         "emphasized": false,
+         "index": 4,
+         "text": "30.8"
+        },
+        {
+         "emphasized": false,
+         "index": 5,
+         "text": "0"
+        },
+        {
+         "emphasized": false,
+         "index": 6,
+         "text": "40"
+        },
+        {
+         "emphasized": false,
+         "index": 7,
+         "text": "3"
+        },
+        {
+         "emphasized": false,
+         "index": 8,
+         "text": "33"
+        },
+        {
+         "emphasized": false,
+         "index": 9,
+         "text": "11.0"
+        },
+        {
+         "emphasized": false,
+         "index": 10,
+         "text": "0"
+        },
+        {
+         "emphasized": false,
+         "index": 11,
+         "text": "14"
+        }
+       ],
+       "entityLink": {
+        "analyticsSport": "nfl",
+        "contentType": "event",
+        "contentUri": "football/nfl/events/11041",
+        "layout": {
+         "path": "/layouts?type=layout&subtype=nflEventLayout",
+         "tokens": {
+          "awayUri": "football/nfl/teams/25",
+          "eventUri": "football/nfl/events/11041",
+          "homeUri": "football/nfl/teams/9",
+          "id": "11041"
+         }
+        },
+        "tab": "boxscore",
+        "type": "entity",
+        "webUrl": "/nfl/week-1-atlanta-falcons-vs-pittsburgh-steelers-sep-13-2026-game-boxscore-11041?tab=boxscore"
+       },
+       "isCutoff": false,
+       "isFaded": false,
+       "selected": false
+      }
+     ],
+     "template": "table-game-log"
+    },
+    {
+     "headers": [
+      {
+       "columns": [
+        {
+         "emphasized": true,
+         "index": 0,
+         "priority": 1,
+         "sortable": "none",
+         "template": "cell-text",
+         "text": "PRESEASON",
+         "weight": 1.9
+        },
+        {
+         "emphasized": false,
+         "index": 1,
+         "priority": 2,
+         "sortable": "none",
+         "template": "cell-entity",
+         "weight": 2.6
+        },
+        {
+         "emphasized": false,
+         "index": 2,
+         "priority": 1,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "K-RET",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 3,
+         "priority": 2,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "K-RET YDS",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 4,
+         "priority": 3,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "K-RET AVG",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 5,
+         "priority": 4,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "K-RET TD",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 6,
+         "priority": 5,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "K-RET LNG",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 7,
+         "priority": 6,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "P-RET",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 8,
+         "priority": 7,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "P-RET YDS",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 9,
+         "priority": 8,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "P-RET AVG",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 10,
+         "priority": 9,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "P-RET TD",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 11,
+         "priority": 10,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "P-RET LNG",
+         "weight": 1.8
+        }
+       ],
+       "isPrimary": true
+      }
+     ],
+     "rows": [
+      {
+       "columns": [
+        {
+         "emphasized": false,
+         "index": 0,
+         "text": "8/28"
+        },
+        {
+         "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Dolphins.vresize.200.200.medium.0.png",
+         "emphasized": false,
+         "imageAltText": "Miami Dolphins",
+         "imageType": "image-logo",
+         "imageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Dolphins.vresize.200.200.medium.0.png",
+         "index": 1,
+         "subType": "win",
+         "superscript": "W",
+         "text": "@MIA"
+        },
+        {
+         "emphasized": false,
+         "index": 2,
+         "text": "4"
+        },
+        {
+         "emphasized": false,
+         "index": 3,
+         "text": "120"
+        },
+        {
+         "emphasized": false,
+         "index": 4,
+         "text": "30.0"
+        },
+        {
+         "emphasized": false,
+         "index": 5,
+         "text": "0"
+        },
+        {
+         "emphasized": false,
+         "index": 6,
+         "text": "52"
+        },
+        {
+         "emphasized": false,
+         "index": 7,
+         "text": "3"
+        },
+        {
+         "emphasized": false,
+         "index": 8,
+         "text": "36"
+        },
+        {
+         "emphasized": false,
+         "index": 9,
+         "text": "12.0"
+        },
+        {
+         "emphasized": false,
+         "index": 10,
+         "text": "0"
+        },
+        {
+         "emphasized": false,
+         "index": 11,
+         "text": "18"
+        }
+       ],
+       "entityLink": {
+        "analyticsSport": "nfl",
+        "contentType": "event",
+        "contentUri": "football/nfl/events/11175",
+        "layout": {
+         "path": "/layouts?type=layout&subtype=nflEventLayout",
+         "tokens": {
+          "awayUri": "football/nfl/teams/25",
+          "eventUri": "football/nfl/events/11175",
+          "homeUri": "football/nfl/teams/3",
+          "id": "11175"
+         }
+        },
+        "tab": "boxscore",
+        "type": "entity",
+        "webUrl": "/nfl/preseason-week-3-atlanta-falcons-vs-miami-dolphins-aug-28-2026-game-boxscore-11175?tab=boxscore"
+       },
+       "isCutoff": false,
+       "isFaded": false,
+       "selected": false
+      }
+     ],
+     "template": "table-game-log"
+    }
+   ]
+  },
+  {
+   "id": "defense",
+   "legend": {
+    "details": [
+     {
+      "key": "PA",
+      "text": " - Points Allowed"
+     },
+     {
+      "key": "TCKL",
+      "text": " - Defensive Tackles"
+     },
+     {
+      "key": "SOLO",
+      "text": " - Solo Tackles"
+     },
+     {
+      "key": "AST",
+      "text": " - Assisted Tackles"
+     },
+     {
+      "key": "SCK",
+      "text": " - Sacks"
+     },
+     {
+      "key": "SCK YDS",
+      "text": " - Sack Yards"
+     },
+     {
+      "key": "DEF INT",
+      "text": " - Defensive Interceptions"
+     },
+     {
+      "key": "INTTD",
+      "text": " - Interception Touchdowns"
+     },
+     {
+      "key": "FF",
+      "text": " - Forced Fumbles"
+     },
+     {
+      "key": "REC",
+      "text": " - Fumbles Recovered"
+     },
+     {
+      "key": "TD",
+      "text": " - Fumble Recovery Touchdowns"
+     },
+     {
+      "key": "PDEF",
+      "text": " - Passes Defended"
+     },
+     {
+      "key": "SFTY",
+      "text": " - Safeties"
+     }
+    ]
+   },
+   "moreLink": {
+    "text": "FULL DEFENSE GAME LOG",
+    "webUrl": "/nfl/atlanta-falcons-team-game-log?season=2026&category=defense"
+   },
+   "tables": [
+    {
+     "headers": [
+      {
+       "columns": [
+        {
+         "emphasized": true,
+         "index": 0,
+         "priority": 1,
+         "sortable": "none",
+         "template": "cell-text",
+         "text": "REGULAR SEASON",
+         "weight": 1.9
+        },
+        {
+         "emphasized": false,
+         "index": 1,
+         "priority": 2,
+         "sortable": "none",
+         "template": "cell-entity",
+         "weight": 2.6
+        },
+        {
+         "emphasized": false,
+         "index": 2,
+         "priority": 1,
+         "sortable": "asc",
+         "template": "cell-number",
+         "text": "PA",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 3,
+         "priority": 2,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "TCKL",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 4,
+         "priority": 3,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "SOLO",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 5,
+         "priority": 4,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "AST",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 6,
+         "priority": 5,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "SCK",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 7,
+         "priority": 6,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "SCK YDS",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 8,
+         "priority": 7,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "DEF INT",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 9,
+         "priority": 8,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "INTTD",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 10,
+         "priority": 9,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "FF",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 11,
+         "priority": 10,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "REC",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 12,
+         "priority": 11,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "TD",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 13,
+         "priority": 12,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "PDEF",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 14,
+         "priority": 13,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "SFTY",
+         "weight": 1.8
+        }
+       ],
+       "isPrimary": true
+      }
+     ],
+     "rows": [
+      {
+       "columns": [
+        {
+         "emphasized": false,
+         "index": 0,
+         "text": "10/5"
+        },
+        {
+         "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Saints-alternate.vresize.200.200.medium.0.png",
+         "emphasized": false,
+         "imageAltText": "New Orleans Saints",
+         "imageType": "image-logo",
+         "imageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Saints.vresize.200.200.medium.1.png",
+         "index": 1,
+         "subType": "win",
+         "superscript": "W",
+         "text": "@NO"
+        },
+        {
+         "emphasized": false,
+         "index": 2,
+         "text": "24"
+        },
+        {
+         "emphasized": false,
+         "index": 3,
+         "text": "55"
+        },
+        {
+         "emphasized": false,
+         "index": 4,
+         "text": "40"
+        },
+        {
+         "emphasized": false,
+         "index": 5,
+         "text": "15"
+        },
+        {
+         "emphasized": false,
+         "index": 6,
+         "text": "2.0"
+        },
+        {
+         "emphasized": false,
+         "index": 7,
+         "text": "16"
+        },
+        {
+         "emphasized": false,
+         "index": 8,
+         "text": "0"
+        },
+        {
+         "emphasized": false,
+         "index": 9,
+         "text": "0"
+        },
+        {
+         "emphasized": false,
+         "index": 10,
+         "text": "1"
+        },
+        {
+         "emphasized": false,
+         "index": 11,
+         "text": "1"
+        },
+        {
+         "emphasized": false,
+         "index": 12,
+         "text": "0"
+        },
+        {
+         "emphasized": false,
+         "index": 13,
+         "text": "8"
+        },
+        {
+         "emphasized": false,
+         "index": 14,
+         "text": "0"
+        }
+       ],
+       "entityLink": {
+        "analyticsSport": "nfl",
+        "contentType": "event",
+        "contentUri": "football/nfl/events/11224",
+        "layout": {
+         "path": "/layouts?type=layout&subtype=nflEventLayout",
+         "tokens": {
+          "awayUri": "football/nfl/teams/25",
+          "eventUri": "football/nfl/events/11224",
+          "homeUri": "football/nfl/teams/27",
+          "id": "11224"
+         }
+        },
+        "tab": "boxscore",
+        "type": "entity",
+        "webUrl": "/nfl/week-4-atlanta-falcons-vs-new-orleans-saints-oct-05-2026-game-boxscore-11224?tab=boxscore"
+       },
+       "isCutoff": false,
+       "isFaded": false,
+       "selected": false
+      },
+      {
+       "columns": [
+        {
+         "emphasized": false,
+         "index": 0,
+         "text": "9/24"
+        },
+        {
+         "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Packers.vresize.200.200.medium.0.png",
+         "emphasized": false,
+         "imageAltText": "Green Bay Packers",
+         "imageType": "image-logo",
+         "imageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Packers.vresize.200.200.medium.0.png",
+         "index": 1,
+         "subType": "win",
+         "superscript": "W",
+         "text": "@GB"
+        },
+        {
+         "emphasized": false,
+         "index": 2,
+         "text": "14"
+        },
+        {
+         "emphasized": false,
+         "index": 3,
+         "text": "43"
+        },
+        {
+         "emphasized": false,
+         "index": 4,
+         "text": "28"
+        },
+        {
+         "emphasized": false,
+         "index": 5,
+         "text": "15"
+        },
+        {
+         "emphasized": false,
+         "index": 6,
+         "text": "1.0"
+        },
+        {
+         "emphasized": false,
+         "index": 7,
+         "text": "1"
+        },
+        {
+         "emphasized": false,
+         "index": 8,
+         "text": "1"
+        },
+        {
+         "emphasized": false,
+         "index": 9,
+         "text": "0"
+        },
+        {
+         "emphasized": false,
+         "index": 10,
+         "text": "0"
+        },
+        {
+         "emphasized": false,
+         "index": 11,
+         "text": "0"
+        },
+        {
+         "emphasized": false,
+         "index": 12,
+         "text": "0"
+        },
+        {
+         "emphasized": false,
+         "index": 13,
+         "text": "9"
+        },
+        {
+         "emphasized": false,
+         "index": 14,
+         "text": "0"
+        }
+       ],
+       "entityLink": {
+        "analyticsSport": "nfl",
+        "contentType": "event",
+        "contentUri": "football/nfl/events/11195",
+        "layout": {
+         "path": "/layouts?type=layout&subtype=nflEventLayout",
+         "tokens": {
+          "awayUri": "football/nfl/teams/25",
+          "eventUri": "football/nfl/events/11195",
+          "homeUri": "football/nfl/teams/22",
+          "id": "11195"
+         }
+        },
+        "tab": "boxscore",
+        "type": "entity",
+        "webUrl": "/nfl/week-3-atlanta-falcons-vs-green-bay-packers-sep-24-2026-game-boxscore-11195?tab=boxscore"
+       },
+       "isCutoff": false,
+       "isFaded": false,
+       "selected": false
+      },
+      {
+       "columns": [
+        {
+         "emphasized": false,
+         "index": 0,
+         "text": "9/20"
+        },
+        {
+         "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Panthers.vresize.200.200.medium.0.png",
+         "emphasized": false,
+         "imageAltText": "Carolina Panthers",
+         "imageType": "image-logo",
+         "imageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Panthers.vresize.200.200.medium.0.png",
+         "index": 1,
+         "subType": "loss",
+         "superscript": "L",
+         "text": "CAR"
+        },
+        {
+         "emphasized": false,
+         "index": 2,
+         "text": "34"
+        },
+        {
+         "emphasized": false,
+         "index": 3,
+         "text": "55"
+        },
+        {
+         "emphasized": false,
+         "index": 4,
+         "text": "30"
+        },
+        {
+         "emphasized": false,
+         "index": 5,
+         "text": "25"
+        },
+        {
+         "emphasized": false,
+         "index": 6,
+         "text": "2.0"
+        },
+        {
+         "emphasized": false,
+         "index": 7,
+         "text": "15"
+        },
+        {
+         "emphasized": false,
+         "index": 8,
+         "text": "0"
+        },
+        {
+         "emphasized": false,
+         "index": 9,
+         "text": "0"
+        },
+        {
+         "emphasized": false,
+         "index": 10,
+         "text": "1"
+        },
+        {
+         "emphasized": false,
+         "index": 11,
+         "text": "0"
+        },
+        {
+         "emphasized": false,
+         "index": 12,
+         "text": "0"
+        },
+        {
+         "emphasized": false,
+         "index": 13,
+         "text": "3"
+        },
+        {
+         "emphasized": false,
+         "index": 14,
+         "text": "0"
+        }
+       ],
+       "entityLink": {
+        "analyticsSport": "nfl",
+        "contentType": "event",
+        "contentUri": "football/nfl/events/11056",
+        "layout": {
+         "path": "/layouts?type=layout&subtype=nflEventLayout",
+         "tokens": {
+          "awayUri": "football/nfl/teams/32",
+          "eventUri": "football/nfl/events/11056",
+          "homeUri": "football/nfl/teams/25",
+          "id": "11056"
+         }
+        },
+        "tab": "boxscore",
+        "type": "entity",
+        "webUrl": "/nfl/week-2-carolina-panthers-vs-atlanta-falcons-sep-20-2026-game-boxscore-11056?tab=boxscore"
+       },
+       "isCutoff": false,
+       "isFaded": false,
+       "selected": false
+      },
+      {
+       "columns": [
+        {
+         "emphasized": false,
+         "index": 0,
+         "text": "9/13"
+        },
+        {
+         "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Steelers.vresize.200.200.medium.0.png",
+         "emphasized": false,
+         "imageAltText": "Pittsburgh Steelers",
+         "imageType": "image-logo",
+         "imageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Steelers.vresize.200.200.medium.0.png",
+         "index": 1,
+         "subType": "loss",
+         "superscript": "L",
+         "text": "@PIT"
+        },
+        {
+         "emphasized": false,
+         "index": 2,
+         "text": "20"
+        },
+        {
+         "emphasized": false,
+         "index": 3,
+         "text": "56"
+        },
+        {
+         "emphasized": false,
+         "index": 4,
+         "text": "30"
+        },
+        {
+         "emphasized": false,
+         "index": 5,
+         "text": "26"
+        },
+        {
+         "emphasized": false,
+         "index": 6,
+         "text": "2.0"
+        },
+        {
+         "emphasized": false,
+         "index": 7,
+         "text": "15"
+        },
+        {
+         "emphasized": false,
+         "index": 8,
+         "text": "0"
+        },
+        {
+         "emphasized": false,
+         "index": 9,
+         "text": "0"
+        },
+        {
+         "emphasized": false,
+         "index": 10,
+         "text": "1"
+        },
+        {
+         "emphasized": false,
+         "index": 11,
+         "text": "1"
+        },
+        {
+         "emphasized": false,
+         "index": 12,
+         "text": "0"
+        },
+        {
+         "emphasized": false,
+         "index": 13,
+         "text": "5"
+        },
+        {
+         "emphasized": false,
+         "index": 14,
+         "text": "0"
+        }
+       ],
+       "entityLink": {
+        "analyticsSport": "nfl",
+        "contentType": "event",
+        "contentUri": "football/nfl/events/11041",
+        "layout": {
+         "path": "/layouts?type=layout&subtype=nflEventLayout",
+         "tokens": {
+          "awayUri": "football/nfl/teams/25",
+          "eventUri": "football/nfl/events/11041",
+          "homeUri": "football/nfl/teams/9",
+          "id": "11041"
+         }
+        },
+        "tab": "boxscore",
+        "type": "entity",
+        "webUrl": "/nfl/week-1-atlanta-falcons-vs-pittsburgh-steelers-sep-13-2026-game-boxscore-11041?tab=boxscore"
+       },
+       "isCutoff": false,
+       "isFaded": false,
+       "selected": false
+      }
+     ],
+     "template": "table-game-log"
+    },
+    {
+     "headers": [
+      {
+       "columns": [
+        {
+         "emphasized": true,
+         "index": 0,
+         "priority": 1,
+         "sortable": "none",
+         "template": "cell-text",
+         "text": "PRESEASON",
+         "weight": 1.9
+        },
+        {
+         "emphasized": false,
+         "index": 1,
+         "priority": 2,
+         "sortable": "none",
+         "template": "cell-entity",
+         "weight": 2.6
+        },
+        {
+         "emphasized": false,
+         "index": 2,
+         "priority": 1,
+         "sortable": "asc",
+         "template": "cell-number",
+         "text": "PA",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 3,
+         "priority": 2,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "TCKL",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 4,
+         "priority": 3,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "SOLO",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 5,
+         "priority": 4,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "AST",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 6,
+         "priority": 5,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "SCK",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 7,
+         "priority": 6,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "SCK YDS",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 8,
+         "priority": 7,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "DEF INT",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 9,
+         "priority": 8,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "INTTD",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 10,
+         "priority": 9,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "FF",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 11,
+         "priority": 10,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "REC",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 12,
+         "priority": 11,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "TD",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 13,
+         "priority": 12,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "PDEF",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 14,
+         "priority": 13,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "SFTY",
+         "weight": 1.8
+        }
+       ],
+       "isPrimary": true
+      }
+     ],
+     "rows": [
+      {
+       "columns": [
+        {
+         "emphasized": false,
+         "index": 0,
+         "text": "8/28"
+        },
+        {
+         "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Dolphins.vresize.200.200.medium.0.png",
+         "emphasized": false,
+         "imageAltText": "Miami Dolphins",
+         "imageType": "image-logo",
+         "imageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Dolphins.vresize.200.200.medium.0.png",
+         "index": 1,
+         "subType": "win",
+         "superscript": "W",
+         "text": "@MIA"
+        },
+        {
+         "emphasized": false,
+         "index": 2,
+         "text": "12"
+        },
+        {
+         "emphasized": false,
+         "index": 3,
+         "text": "50"
+        },
+        {
+         "emphasized": false,
+         "index": 4,
+         "text": "32"
+        },
+        {
+         "emphasized": false,
+         "index": 5,
+         "text": "18"
+        },
+        {
+         "emphasized": false,
+         "index": 6,
+         "text": "5.0"
+        },
+        {
+         "emphasized": false,
+         "index": 7,
+         "text": "10"
+        },
+        {
+         "emphasized": false,
+         "index": 8,
+         "text": "0"
+        },
+        {
+         "emphasized": false,
+         "index": 9,
+         "text": "0"
+        },
+        {
+         "emphasized": false,
+         "index": 10,
+         "text": "1"
+        },
+        {
+         "emphasized": false,
+         "index": 11,
+         "text": "1"
+        },
+        {
+         "emphasized": false,
+         "index": 12,
+         "text": "0"
+        },
+        {
+         "emphasized": false,
+         "index": 13,
+         "text": "5"
+        },
+        {
+         "emphasized": false,
+         "index": 14,
+         "text": "0"
+        }
+       ],
+       "entityLink": {
+        "analyticsSport": "nfl",
+        "contentType": "event",
+        "contentUri": "football/nfl/events/11175",
+        "layout": {
+         "path": "/layouts?type=layout&subtype=nflEventLayout",
+         "tokens": {
+          "awayUri": "football/nfl/teams/25",
+          "eventUri": "football/nfl/events/11175",
+          "homeUri": "football/nfl/teams/3",
+          "id": "11175"
+         }
+        },
+        "tab": "boxscore",
+        "type": "entity",
+        "webUrl": "/nfl/preseason-week-3-atlanta-falcons-vs-miami-dolphins-aug-28-2026-game-boxscore-11175?tab=boxscore"
+       },
+       "isCutoff": false,
+       "isFaded": false,
+       "selected": false
+      }
+     ],
+     "template": "table-game-log"
+    }
+   ]
+  },
+  {
+   "id": "downs",
+   "legend": {
+    "details": [
+     {
+      "key": "1ST",
+      "text": " - First Downs"
+     },
+     {
+      "key": "R-1ST",
+      "text": " - First Downs Rushing"
+     },
+     {
+      "key": "P-1ST",
+      "text": " - First Downs Passing"
+     },
+     {
+      "key": "3RD",
+      "text": " - Third Downs Made"
+     },
+     {
+      "key": "3RDA",
+      "text": " - Third Downs Attempted"
+     },
+     {
+      "key": "3RD%",
+      "text": " - Third Down %"
+     },
+     {
+      "key": "4TH",
+      "text": " - Fourth Downs Made"
+     },
+     {
+      "key": "4THA",
+      "text": " - Fourth Downs Attempted"
+     },
+     {
+      "key": "4TH%",
+      "text": " - Fourth Down %"
+     },
+     {
+      "key": "PEN",
+      "text": " - Penalties"
+     },
+     {
+      "key": "PEN YDS",
+      "text": " - Penalty Yards"
+     }
+    ]
+   },
+   "moreLink": {
+    "text": "FULL DOWNS GAME LOG",
+    "webUrl": "/nfl/atlanta-falcons-team-game-log?season=2026&category=downs"
+   },
+   "tables": [
+    {
+     "headers": [
+      {
+       "columns": [
+        {
+         "emphasized": true,
+         "index": 0,
+         "priority": 1,
+         "sortable": "none",
+         "template": "cell-text",
+         "text": "REGULAR SEASON",
+         "weight": 1.9
+        },
+        {
+         "emphasized": false,
+         "index": 1,
+         "priority": 2,
+         "sortable": "none",
+         "template": "cell-entity",
+         "weight": 2.6
+        },
+        {
+         "emphasized": false,
+         "index": 2,
+         "priority": 1,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "1ST",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 3,
+         "priority": 2,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "R-1ST",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 4,
+         "priority": 3,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "P-1ST",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 5,
+         "priority": 4,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "3RD",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 6,
+         "priority": 5,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "3RDA",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 7,
+         "priority": 6,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "3RD%",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 8,
+         "priority": 7,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "4TH",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 9,
+         "priority": 8,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "4THA",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 10,
+         "priority": 9,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "4TH%",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 11,
+         "priority": 10,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "PEN",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 12,
+         "priority": 11,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "PEN YDS",
+         "weight": 1.8
+        }
+       ],
+       "isPrimary": true
+      }
+     ],
+     "rows": [
+      {
+       "columns": [
+        {
+         "emphasized": false,
+         "index": 0,
+         "text": "10/5"
+        },
+        {
+         "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Saints-alternate.vresize.200.200.medium.0.png",
+         "emphasized": false,
+         "imageAltText": "New Orleans Saints",
+         "imageType": "image-logo",
+         "imageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Saints.vresize.200.200.medium.1.png",
+         "index": 1,
+         "subType": "win",
+         "superscript": "W",
+         "text": "@NO"
+        },
+        {
+         "emphasized": false,
+         "index": 2,
+         "text": "24"
+        },
+        {
+         "emphasized": false,
+         "index": 3,
+         "text": "13"
+        },
+        {
+         "emphasized": false,
+         "index": 4,
+         "text": "9"
+        },
+        {
+         "emphasized": false,
+         "index": 5,
+         "text": "4"
+        },
+        {
+         "emphasized": false,
+         "index": 6,
+         "text": "8"
+        },
+        {
+         "emphasized": false,
+         "index": 7,
+         "text": "50.0"
+        },
+        {
+         "emphasized": false,
+         "index": 8,
+         "text": "0"
+        },
+        {
+         "emphasized": false,
+         "index": 9,
+         "text": "0"
+        },
+        {
+         "emphasized": false,
+         "index": 10,
+         "text": "0.0"
+        },
+        {
+         "emphasized": false,
+         "index": 11,
+         "text": "8"
+        },
+        {
+         "emphasized": false,
+         "index": 12,
+         "text": "70"
+        }
+       ],
+       "entityLink": {
+        "analyticsSport": "nfl",
+        "contentType": "event",
+        "contentUri": "football/nfl/events/11224",
+        "layout": {
+         "path": "/layouts?type=layout&subtype=nflEventLayout",
+         "tokens": {
+          "awayUri": "football/nfl/teams/25",
+          "eventUri": "football/nfl/events/11224",
+          "homeUri": "football/nfl/teams/27",
+          "id": "11224"
+         }
+        },
+        "tab": "boxscore",
+        "type": "entity",
+        "webUrl": "/nfl/week-4-atlanta-falcons-vs-new-orleans-saints-oct-05-2026-game-boxscore-11224?tab=boxscore"
+       },
+       "isCutoff": false,
+       "isFaded": false,
+       "selected": false
+      },
+      {
+       "columns": [
+        {
+         "emphasized": false,
+         "index": 0,
+         "text": "9/24"
+        },
+        {
+         "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Packers.vresize.200.200.medium.0.png",
+         "emphasized": false,
+         "imageAltText": "Green Bay Packers",
+         "imageType": "image-logo",
+         "imageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Packers.vresize.200.200.medium.0.png",
+         "index": 1,
+         "subType": "win",
+         "superscript": "W",
+         "text": "@GB"
+        },
+        {
+         "emphasized": false,
+         "index": 2,
+         "text": "25"
+        },
+        {
+         "emphasized": false,
+         "index": 3,
+         "text": "15"
+        },
+        {
+         "emphasized": false,
+         "index": 4,
+         "text": "8"
+        },
+        {
+         "emphasized": false,
+         "index": 5,
+         "text": "6"
+        },
+        {
+         "emphasized": false,
+         "index": 6,
+         "text": "10"
+        },
+        {
+         "emphasized": false,
+         "index": 7,
+         "text": "60.0"
+        },
+        {
+         "emphasized": false,
+         "index": 8,
+         "text": "0"
+        },
+        {
+         "emphasized": false,
+         "index": 9,
+         "text": "0"
+        },
+        {
+         "emphasized": false,
+         "index": 10,
+         "text": "0.0"
+        },
+        {
+         "emphasized": false,
+         "index": 11,
+         "text": "6"
+        },
+        {
+         "emphasized": false,
+         "index": 12,
+         "text": "83"
+        }
+       ],
+       "entityLink": {
+        "analyticsSport": "nfl",
+        "contentType": "event",
+        "contentUri": "football/nfl/events/11195",
+        "layout": {
+         "path": "/layouts?type=layout&subtype=nflEventLayout",
+         "tokens": {
+          "awayUri": "football/nfl/teams/25",
+          "eventUri": "football/nfl/events/11195",
+          "homeUri": "football/nfl/teams/22",
+          "id": "11195"
+         }
+        },
+        "tab": "boxscore",
+        "type": "entity",
+        "webUrl": "/nfl/week-3-atlanta-falcons-vs-green-bay-packers-sep-24-2026-game-boxscore-11195?tab=boxscore"
+       },
+       "isCutoff": false,
+       "isFaded": false,
+       "selected": false
+      },
+      {
+       "columns": [
+        {
+         "emphasized": false,
+         "index": 0,
+         "text": "9/20"
+        },
+        {
+         "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Panthers.vresize.200.200.medium.0.png",
+         "emphasized": false,
+         "imageAltText": "Carolina Panthers",
+         "imageType": "image-logo",
+         "imageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Panthers.vresize.200.200.medium.0.png",
+         "index": 1,
+         "subType": "loss",
+         "superscript": "L",
+         "text": "CAR"
+        },
+        {
+         "emphasized": false,
+         "index": 2,
+         "text": "17"
+        },
+        {
+         "emphasized": false,
+         "index": 3,
+         "text": "7"
+        },
+        {
+         "emphasized": false,
+         "index": 4,
+         "text": "10"
+        },
+        {
+         "emphasized": false,
+         "index": 5,
+         "text": "4"
+        },
+        {
+         "emphasized": false,
+         "index": 6,
+         "text": "13"
+        },
+        {
+         "emphasized": false,
+         "index": 7,
+         "text": "30.8"
+        },
+        {
+         "emphasized": false,
+         "index": 8,
+         "text": "1"
+        },
+        {
+         "emphasized": false,
+         "index": 9,
+         "text": "2"
+        },
+        {
+         "emphasized": false,
+         "index": 10,
+         "text": "50.0"
+        },
+        {
+         "emphasized": false,
+         "index": 11,
+         "text": "6"
+        },
+        {
+         "emphasized": false,
+         "index": 12,
+         "text": "39"
+        }
+       ],
+       "entityLink": {
+        "analyticsSport": "nfl",
+        "contentType": "event",
+        "contentUri": "football/nfl/events/11056",
+        "layout": {
+         "path": "/layouts?type=layout&subtype=nflEventLayout",
+         "tokens": {
+          "awayUri": "football/nfl/teams/32",
+          "eventUri": "football/nfl/events/11056",
+          "homeUri": "football/nfl/teams/25",
+          "id": "11056"
+         }
+        },
+        "tab": "boxscore",
+        "type": "entity",
+        "webUrl": "/nfl/week-2-carolina-panthers-vs-atlanta-falcons-sep-20-2026-game-boxscore-11056?tab=boxscore"
+       },
+       "isCutoff": false,
+       "isFaded": false,
+       "selected": false
+      },
+      {
+       "columns": [
+        {
+         "emphasized": false,
+         "index": 0,
+         "text": "9/13"
+        },
+        {
+         "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Steelers.vresize.200.200.medium.0.png",
+         "emphasized": false,
+         "imageAltText": "Pittsburgh Steelers",
+         "imageType": "image-logo",
+         "imageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Steelers.vresize.200.200.medium.0.png",
+         "index": 1,
+         "subType": "loss",
+         "superscript": "L",
+         "text": "@PIT"
+        },
+        {
+         "emphasized": false,
+         "index": 2,
+         "text": "16"
+        },
+        {
+         "emphasized": false,
+         "index": 3,
+         "text": "9"
+        },
+        {
+         "emphasized": false,
+         "index": 4,
+         "text": "4"
+        },
+        {
+         "emphasized": false,
+         "index": 5,
+         "text": "2"
+        },
+        {
+         "emphasized": false,
+         "index": 6,
+         "text": "12"
+        },
+        {
+         "emphasized": false,
+         "index": 7,
+         "text": "16.7"
+        },
+        {
+         "emphasized": false,
+         "index": 8,
+         "text": "0"
+        },
+        {
+         "emphasized": false,
+         "index": 9,
+         "text": "0"
+        },
+        {
+         "emphasized": false,
+         "index": 10,
+         "text": "0.0"
+        },
+        {
+         "emphasized": false,
+         "index": 11,
+         "text": "9"
+        },
+        {
+         "emphasized": false,
+         "index": 12,
+         "text": "96"
+        }
+       ],
+       "entityLink": {
+        "analyticsSport": "nfl",
+        "contentType": "event",
+        "contentUri": "football/nfl/events/11041",
+        "layout": {
+         "path": "/layouts?type=layout&subtype=nflEventLayout",
+         "tokens": {
+          "awayUri": "football/nfl/teams/25",
+          "eventUri": "football/nfl/events/11041",
+          "homeUri": "football/nfl/teams/9",
+          "id": "11041"
+         }
+        },
+        "tab": "boxscore",
+        "type": "entity",
+        "webUrl": "/nfl/week-1-atlanta-falcons-vs-pittsburgh-steelers-sep-13-2026-game-boxscore-11041?tab=boxscore"
+       },
+       "isCutoff": false,
+       "isFaded": false,
+       "selected": false
+      }
+     ],
+     "template": "table-game-log"
+    },
+    {
+     "headers": [
+      {
+       "columns": [
+        {
+         "emphasized": true,
+         "index": 0,
+         "priority": 1,
+         "sortable": "none",
+         "template": "cell-text",
+         "text": "PRESEASON",
+         "weight": 1.9
+        },
+        {
+         "emphasized": false,
+         "index": 1,
+         "priority": 2,
+         "sortable": "none",
+         "template": "cell-entity",
+         "weight": 2.6
+        },
+        {
+         "emphasized": false,
+         "index": 2,
+         "priority": 1,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "1ST",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 3,
+         "priority": 2,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "R-1ST",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 4,
+         "priority": 3,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "P-1ST",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 5,
+         "priority": 4,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "3RD",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 6,
+         "priority": 5,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "3RDA",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 7,
+         "priority": 6,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "3RD%",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 8,
+         "priority": 7,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "4TH",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 9,
+         "priority": 8,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "4THA",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 10,
+         "priority": 9,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "4TH%",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 11,
+         "priority": 10,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "PEN",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 12,
+         "priority": 11,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "PEN YDS",
+         "weight": 1.8
+        }
+       ],
+       "isPrimary": true
+      }
+     ],
+     "rows": [
+      {
+       "columns": [
+        {
+         "emphasized": false,
+         "index": 0,
+         "text": "8/28"
+        },
+        {
+         "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Dolphins.vresize.200.200.medium.0.png",
+         "emphasized": false,
+         "imageAltText": "Miami Dolphins",
+         "imageType": "image-logo",
+         "imageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Dolphins.vresize.200.200.medium.0.png",
+         "index": 1,
+         "subType": "win",
+         "superscript": "W",
+         "text": "@MIA"
+        },
+        {
+         "emphasized": false,
+         "index": 2,
+         "text": "15"
+        },
+        {
+         "emphasized": false,
+         "index": 3,
+         "text": "3"
+        },
+        {
+         "emphasized": false,
+         "index": 4,
+         "text": "12"
+        },
+        {
+         "emphasized": false,
+         "index": 5,
+         "text": "5"
+        },
+        {
+         "emphasized": false,
+         "index": 6,
+         "text": "13"
+        },
+        {
+         "emphasized": false,
+         "index": 7,
+         "text": "38.5"
+        },
+        {
+         "emphasized": false,
+         "index": 8,
+         "text": "1"
+        },
+        {
+         "emphasized": false,
+         "index": 9,
+         "text": "1"
+        },
+        {
+         "emphasized": false,
+         "index": 10,
+         "text": "100.0"
+        },
+        {
+         "emphasized": false,
+         "index": 11,
+         "text": "10"
+        },
+        {
+         "emphasized": false,
+         "index": 12,
+         "text": "78"
+        }
+       ],
+       "entityLink": {
+        "analyticsSport": "nfl",
+        "contentType": "event",
+        "contentUri": "football/nfl/events/11175",
+        "layout": {
+         "path": "/layouts?type=layout&subtype=nflEventLayout",
+         "tokens": {
+          "awayUri": "football/nfl/teams/25",
+          "eventUri": "football/nfl/events/11175",
+          "homeUri": "football/nfl/teams/3",
+          "id": "11175"
+         }
+        },
+        "tab": "boxscore",
+        "type": "entity",
+        "webUrl": "/nfl/preseason-week-3-atlanta-falcons-vs-miami-dolphins-aug-28-2026-game-boxscore-11175?tab=boxscore"
+       },
+       "isCutoff": false,
+       "isFaded": false,
+       "selected": false
+      }
+     ],
+     "template": "table-game-log"
+    }
+   ]
+  },
+  {
+   "id": "yardage",
+   "legend": {
+    "details": [
+     {
+      "key": "YDS",
+      "text": " - Yards"
+     },
+     {
+      "key": "YDS",
+      "text": " - Rushing Yards"
+     },
+     {
+      "key": "RAVG",
+      "text": " - Rushing Yards / Attempt"
+     },
+     {
+      "key": "TD",
+      "text": " - Rushing Touchdowns"
+     },
+     {
+      "key": "YDS",
+      "text": " - Passing Yards"
+     },
+     {
+      "key": "PAVG",
+      "text": " - Passing Yards / Attempt"
+     },
+     {
+      "key": "RECAVG",
+      "text": " - Yards / Reception"
+     },
+     {
+      "key": "TD",
+      "text": " - Passing Touchdowns"
+     },
+     {
+      "key": "K-RET YDS",
+      "text": " - Kick Return Yards"
+     },
+     {
+      "key": "P-RET YDS",
+      "text": " - Punt Return Yards"
+     },
+     {
+      "key": "PEN YDS",
+      "text": " - Penalty Yards"
+     }
+    ]
+   },
+   "moreLink": {
+    "text": "FULL YARDAGE GAME LOG",
+    "webUrl": "/nfl/atlanta-falcons-team-game-log?season=2026&category=yardage"
+   },
+   "tables": [
+    {
+     "headers": [
+      {
+       "columns": [
+        {
+         "emphasized": true,
+         "index": 0,
+         "priority": 1,
+         "sortable": "none",
+         "template": "cell-text",
+         "text": "REGULAR SEASON",
+         "weight": 1.9
+        },
+        {
+         "emphasized": false,
+         "index": 1,
+         "priority": 2,
+         "sortable": "none",
+         "template": "cell-entity",
+         "weight": 2.6
+        },
+        {
+         "emphasized": false,
+         "index": 2,
+         "priority": 1,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "YDS",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 3,
+         "priority": 2,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "YDS",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 4,
+         "priority": 3,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "RAVG",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 5,
+         "priority": 4,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "TD",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 6,
+         "priority": 5,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "YDS",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 7,
+         "priority": 6,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "PAVG",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 8,
+         "priority": 7,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "RECAVG",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 9,
+         "priority": 8,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "TD",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 10,
+         "priority": 9,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "K-RET YDS",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 11,
+         "priority": 10,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "P-RET YDS",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 12,
+         "priority": 11,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "PEN YDS",
+         "weight": 1.8
+        }
+       ],
+       "isPrimary": true
+      }
+     ],
+     "rows": [
+      {
+       "columns": [
+        {
+         "emphasized": false,
+         "index": 0,
+         "text": "10/5"
+        },
+        {
+         "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Saints-alternate.vresize.200.200.medium.0.png",
+         "emphasized": false,
+         "imageAltText": "New Orleans Saints",
+         "imageType": "image-logo",
+         "imageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Saints.vresize.200.200.medium.1.png",
+         "index": 1,
+         "subType": "win",
+         "superscript": "W",
+         "text": "@NO"
+        },
+        {
+         "emphasized": false,
+         "index": 2,
+         "text": "420"
+        },
+        {
+         "emphasized": false,
+         "index": 3,
+         "text": "205"
+        },
+        {
+         "emphasized": false,
+         "index": 4,
+         "text": "5.9"
+        },
+        {
+         "emphasized": false,
+         "index": 5,
+         "text": "5"
+        },
+        {
+         "emphasized": false,
+         "index": 6,
+         "text": "215"
+        },
+        {
+         "emphasized": false,
+         "index": 7,
+         "text": "10.8"
+        },
+        {
+         "emphasized": false,
+         "index": 8,
+         "text": "14.9"
+        },
+        {
+         "emphasized": false,
+         "index": 9,
+         "text": "1"
+        },
+        {
+         "emphasized": false,
+         "index": 10,
+         "text": "65"
+        },
+        {
+         "emphasized": false,
+         "index": 11,
+         "text": "25"
+        },
+        {
+         "emphasized": false,
+         "index": 12,
+         "text": "70"
+        }
+       ],
+       "entityLink": {
+        "analyticsSport": "nfl",
+        "contentType": "event",
+        "contentUri": "football/nfl/events/11224",
+        "layout": {
+         "path": "/layouts?type=layout&subtype=nflEventLayout",
+         "tokens": {
+          "awayUri": "football/nfl/teams/25",
+          "eventUri": "football/nfl/events/11224",
+          "homeUri": "football/nfl/teams/27",
+          "id": "11224"
+         }
+        },
+        "tab": "boxscore",
+        "type": "entity",
+        "webUrl": "/nfl/week-4-atlanta-falcons-vs-new-orleans-saints-oct-05-2026-game-boxscore-11224?tab=boxscore"
+       },
+       "isCutoff": false,
+       "isFaded": false,
+       "selected": false
+      },
+      {
+       "columns": [
+        {
+         "emphasized": false,
+         "index": 0,
+         "text": "9/24"
+        },
+        {
+         "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Packers.vresize.200.200.medium.0.png",
+         "emphasized": false,
+         "imageAltText": "Green Bay Packers",
+         "imageType": "image-logo",
+         "imageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Packers.vresize.200.200.medium.0.png",
+         "index": 1,
+         "subType": "win",
+         "superscript": "W",
+         "text": "@GB"
+        },
+        {
+         "emphasized": false,
+         "index": 2,
+         "text": "498"
+        },
+        {
+         "emphasized": false,
+         "index": 3,
+         "text": "242"
+        },
+        {
+         "emphasized": false,
+         "index": 4,
+         "text": "5.9"
+        },
+        {
+         "emphasized": false,
+         "index": 5,
+         "text": "3"
+        },
+        {
+         "emphasized": false,
+         "index": 6,
+         "text": "256"
+        },
+        {
+         "emphasized": false,
+         "index": 7,
+         "text": "10.2"
+        },
+        {
+         "emphasized": false,
+         "index": 8,
+         "text": "14.2"
+        },
+        {
+         "emphasized": false,
+         "index": 9,
+         "text": "1"
+        },
+        {
+         "emphasized": false,
+         "index": 10,
+         "text": "76"
+        },
+        {
+         "emphasized": false,
+         "index": 11,
+         "text": "22"
+        },
+        {
+         "emphasized": false,
+         "index": 12,
+         "text": "83"
+        }
+       ],
+       "entityLink": {
+        "analyticsSport": "nfl",
+        "contentType": "event",
+        "contentUri": "football/nfl/events/11195",
+        "layout": {
+         "path": "/layouts?type=layout&subtype=nflEventLayout",
+         "tokens": {
+          "awayUri": "football/nfl/teams/25",
+          "eventUri": "football/nfl/events/11195",
+          "homeUri": "football/nfl/teams/22",
+          "id": "11195"
+         }
+        },
+        "tab": "boxscore",
+        "type": "entity",
+        "webUrl": "/nfl/week-3-atlanta-falcons-vs-green-bay-packers-sep-24-2026-game-boxscore-11195?tab=boxscore"
+       },
+       "isCutoff": false,
+       "isFaded": false,
+       "selected": false
+      },
+      {
+       "columns": [
+        {
+         "emphasized": false,
+         "index": 0,
+         "text": "9/20"
+        },
+        {
+         "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Panthers.vresize.200.200.medium.0.png",
+         "emphasized": false,
+         "imageAltText": "Carolina Panthers",
+         "imageType": "image-logo",
+         "imageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Panthers.vresize.200.200.medium.0.png",
+         "index": 1,
+         "subType": "loss",
+         "superscript": "L",
+         "text": "CAR"
+        },
+        {
+         "emphasized": false,
+         "index": 2,
+         "text": "286"
+        },
+        {
+         "emphasized": false,
+         "index": 3,
+         "text": "157"
+        },
+        {
+         "emphasized": false,
+         "index": 4,
+         "text": "4.9"
+        },
+        {
+         "emphasized": false,
+         "index": 5,
+         "text": "0"
+        },
+        {
+         "emphasized": false,
+         "index": 6,
+         "text": "129"
+        },
+        {
+         "emphasized": false,
+         "index": 7,
+         "text": "4.0"
+        },
+        {
+         "emphasized": false,
+         "index": 8,
+         "text": "8.1"
+        },
+        {
+         "emphasized": false,
+         "index": 9,
+         "text": "0"
+        },
+        {
+         "emphasized": false,
+         "index": 10,
+         "text": "79"
+        },
+        {
+         "emphasized": false,
+         "index": 11,
+         "text": "7"
+        },
+        {
+         "emphasized": false,
+         "index": 12,
+         "text": "39"
+        }
+       ],
+       "entityLink": {
+        "analyticsSport": "nfl",
+        "contentType": "event",
+        "contentUri": "football/nfl/events/11056",
+        "layout": {
+         "path": "/layouts?type=layout&subtype=nflEventLayout",
+         "tokens": {
+          "awayUri": "football/nfl/teams/32",
+          "eventUri": "football/nfl/events/11056",
+          "homeUri": "football/nfl/teams/25",
+          "id": "11056"
+         }
+        },
+        "tab": "boxscore",
+        "type": "entity",
+        "webUrl": "/nfl/week-2-carolina-panthers-vs-atlanta-falcons-sep-20-2026-game-boxscore-11056?tab=boxscore"
+       },
+       "isCutoff": false,
+       "isFaded": false,
+       "selected": false
+      },
+      {
+       "columns": [
+        {
+         "emphasized": false,
+         "index": 0,
+         "text": "9/13"
+        },
+        {
+         "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Steelers.vresize.200.200.medium.0.png",
+         "emphasized": false,
+         "imageAltText": "Pittsburgh Steelers",
+         "imageType": "image-logo",
+         "imageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Steelers.vresize.200.200.medium.0.png",
+         "index": 1,
+         "subType": "loss",
+         "superscript": "L",
+         "text": "@PIT"
+        },
+        {
+         "emphasized": false,
+         "index": 2,
+         "text": "238"
+        },
+        {
+         "emphasized": false,
+         "index": 3,
+         "text": "120"
+        },
+        {
+         "emphasized": false,
+         "index": 4,
+         "text": "3.9"
+        },
+        {
+         "emphasized": false,
+         "index": 5,
+         "text": "0"
+        },
+        {
+         "emphasized": false,
+         "index": 6,
+         "text": "118"
+        },
+        {
+         "emphasized": false,
+         "index": 7,
+         "text": "5.4"
+        },
+        {
+         "emphasized": false,
+         "index": 8,
+         "text": "11.9"
+        },
+        {
+         "emphasized": false,
+         "index": 9,
+         "text": "1"
+        },
+        {
+         "emphasized": false,
+         "index": 10,
+         "text": "123"
+        },
+        {
+         "emphasized": false,
+         "index": 11,
+         "text": "33"
+        },
+        {
+         "emphasized": false,
+         "index": 12,
+         "text": "96"
+        }
+       ],
+       "entityLink": {
+        "analyticsSport": "nfl",
+        "contentType": "event",
+        "contentUri": "football/nfl/events/11041",
+        "layout": {
+         "path": "/layouts?type=layout&subtype=nflEventLayout",
+         "tokens": {
+          "awayUri": "football/nfl/teams/25",
+          "eventUri": "football/nfl/events/11041",
+          "homeUri": "football/nfl/teams/9",
+          "id": "11041"
+         }
+        },
+        "tab": "boxscore",
+        "type": "entity",
+        "webUrl": "/nfl/week-1-atlanta-falcons-vs-pittsburgh-steelers-sep-13-2026-game-boxscore-11041?tab=boxscore"
+       },
+       "isCutoff": false,
+       "isFaded": false,
+       "selected": false
+      }
+     ],
+     "template": "table-game-log"
+    },
+    {
+     "headers": [
+      {
+       "columns": [
+        {
+         "emphasized": true,
+         "index": 0,
+         "priority": 1,
+         "sortable": "none",
+         "template": "cell-text",
+         "text": "PRESEASON",
+         "weight": 1.9
+        },
+        {
+         "emphasized": false,
+         "index": 1,
+         "priority": 2,
+         "sortable": "none",
+         "template": "cell-entity",
+         "weight": 2.6
+        },
+        {
+         "emphasized": false,
+         "index": 2,
+         "priority": 1,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "YDS",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 3,
+         "priority": 2,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "YDS",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 4,
+         "priority": 3,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "RAVG",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 5,
+         "priority": 4,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "TD",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 6,
+         "priority": 5,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "YDS",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 7,
+         "priority": 6,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "PAVG",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 8,
+         "priority": 7,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "RECAVG",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 9,
+         "priority": 8,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "TD",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 10,
+         "priority": 9,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "K-RET YDS",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 11,
+         "priority": 10,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "P-RET YDS",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 12,
+         "priority": 11,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "PEN YDS",
+         "weight": 1.8
+        }
+       ],
+       "isPrimary": true
+      }
+     ],
+     "rows": [
+      {
+       "columns": [
+        {
+         "emphasized": false,
+         "index": 0,
+         "text": "8/28"
+        },
+        {
+         "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Dolphins.vresize.200.200.medium.0.png",
+         "emphasized": false,
+         "imageAltText": "Miami Dolphins",
+         "imageType": "image-logo",
+         "imageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Dolphins.vresize.200.200.medium.0.png",
+         "index": 1,
+         "subType": "win",
+         "superscript": "W",
+         "text": "@MIA"
+        },
+        {
+         "emphasized": false,
+         "index": 2,
+         "text": "279"
+        },
+        {
+         "emphasized": false,
+         "index": 3,
+         "text": "40"
+        },
+        {
+         "emphasized": false,
+         "index": 4,
+         "text": "1.7"
+        },
+        {
+         "emphasized": false,
+         "index": 5,
+         "text": "1"
+        },
+        {
+         "emphasized": false,
+         "index": 6,
+         "text": "239"
+        },
+        {
+         "emphasized": false,
+         "index": 7,
+         "text": "7.2"
+        },
+        {
+         "emphasized": false,
+         "index": 8,
+         "text": "9.4"
+        },
+        {
+         "emphasized": false,
+         "index": 9,
+         "text": "1"
+        },
+        {
+         "emphasized": false,
+         "index": 10,
+         "text": "120"
+        },
+        {
+         "emphasized": false,
+         "index": 11,
+         "text": "36"
+        },
+        {
+         "emphasized": false,
+         "index": 12,
+         "text": "78"
+        }
+       ],
+       "entityLink": {
+        "analyticsSport": "nfl",
+        "contentType": "event",
+        "contentUri": "football/nfl/events/11175",
+        "layout": {
+         "path": "/layouts?type=layout&subtype=nflEventLayout",
+         "tokens": {
+          "awayUri": "football/nfl/teams/25",
+          "eventUri": "football/nfl/events/11175",
+          "homeUri": "football/nfl/teams/3",
+          "id": "11175"
+         }
+        },
+        "tab": "boxscore",
+        "type": "entity",
+        "webUrl": "/nfl/preseason-week-3-atlanta-falcons-vs-miami-dolphins-aug-28-2026-game-boxscore-11175?tab=boxscore"
+       },
+       "isCutoff": false,
+       "isFaded": false,
+       "selected": false
+      }
+     ],
+     "template": "table-game-log"
+    }
+   ]
+  },
+  {
+   "id": "turnovers",
+   "legend": {
+    "details": [
+     {
+      "key": "+/-",
+      "text": " - Turnover +/-"
+     },
+     {
+      "key": "PASS INT",
+      "text": " - Offensive Interceptions"
+     },
+     {
+      "key": "REC",
+      "text": " - Fumbles Recovered"
+     },
+     {
+      "key": "DEF INT",
+      "text": " - Defensive Interceptions"
+     },
+     {
+      "key": "FUML",
+      "text": " - Fumbles Lost"
+     }
+    ]
+   },
+   "moreLink": {
+    "text": "FULL TURNOVERS GAME LOG",
+    "webUrl": "/nfl/atlanta-falcons-team-game-log?season=2026&category=turnovers"
+   },
+   "tables": [
+    {
+     "headers": [
+      {
+       "columns": [
+        {
+         "emphasized": true,
+         "index": 0,
+         "priority": 1,
+         "sortable": "none",
+         "template": "cell-text",
+         "text": "REGULAR SEASON",
+         "weight": 1.9
+        },
+        {
+         "emphasized": false,
+         "index": 1,
+         "priority": 2,
+         "sortable": "none",
+         "template": "cell-entity",
+         "weight": 2.6
+        },
+        {
+         "emphasized": false,
+         "index": 2,
+         "priority": 1,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "+/-",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 3,
+         "priority": 2,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "PASS INT",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 4,
+         "priority": 3,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "REC",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 5,
+         "priority": 4,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "DEF INT",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 6,
+         "priority": 5,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "FUML",
+         "weight": 1.8
+        }
+       ],
+       "isPrimary": true
+      }
+     ],
+     "rows": [
+      {
+       "columns": [
+        {
+         "emphasized": false,
+         "index": 0,
+         "text": "10/5"
+        },
+        {
+         "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Saints-alternate.vresize.200.200.medium.0.png",
+         "emphasized": false,
+         "imageAltText": "New Orleans Saints",
+         "imageType": "image-logo",
+         "imageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Saints.vresize.200.200.medium.1.png",
+         "index": 1,
+         "subType": "win",
+         "superscript": "W",
+         "text": "@NO"
+        },
+        {
+         "emphasized": false,
+         "index": 2,
+         "text": "1"
+        },
+        {
+         "emphasized": false,
+         "index": 3,
+         "text": "-"
+        },
+        {
+         "emphasized": false,
+         "index": 4,
+         "text": "1"
+        },
+        {
+         "emphasized": false,
+         "index": 5,
+         "text": "0"
+        },
+        {
+         "emphasized": false,
+         "index": 6,
+         "text": "0"
+        }
+       ],
+       "entityLink": {
+        "analyticsSport": "nfl",
+        "contentType": "event",
+        "contentUri": "football/nfl/events/11224",
+        "layout": {
+         "path": "/layouts?type=layout&subtype=nflEventLayout",
+         "tokens": {
+          "awayUri": "football/nfl/teams/25",
+          "eventUri": "football/nfl/events/11224",
+          "homeUri": "football/nfl/teams/27",
+          "id": "11224"
+         }
+        },
+        "tab": "boxscore",
+        "type": "entity",
+        "webUrl": "/nfl/week-4-atlanta-falcons-vs-new-orleans-saints-oct-05-2026-game-boxscore-11224?tab=boxscore"
+       },
+       "isCutoff": false,
+       "isFaded": false,
+       "selected": false
+      },
+      {
+       "columns": [
+        {
+         "emphasized": false,
+         "index": 0,
+         "text": "9/24"
+        },
+        {
+         "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Packers.vresize.200.200.medium.0.png",
+         "emphasized": false,
+         "imageAltText": "Green Bay Packers",
+         "imageType": "image-logo",
+         "imageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Packers.vresize.200.200.medium.0.png",
+         "index": 1,
+         "subType": "win",
+         "superscript": "W",
+         "text": "@GB"
+        },
+        {
+         "emphasized": false,
+         "index": 2,
+         "text": "0"
+        },
+        {
+         "emphasized": false,
+         "index": 3,
+         "text": "-"
+        },
+        {
+         "emphasized": false,
+         "index": 4,
+         "text": "0"
+        },
+        {
+         "emphasized": false,
+         "index": 5,
+         "text": "1"
+        },
+        {
+         "emphasized": false,
+         "index": 6,
+         "text": "0"
+        }
+       ],
+       "entityLink": {
+        "analyticsSport": "nfl",
+        "contentType": "event",
+        "contentUri": "football/nfl/events/11195",
+        "layout": {
+         "path": "/layouts?type=layout&subtype=nflEventLayout",
+         "tokens": {
+          "awayUri": "football/nfl/teams/25",
+          "eventUri": "football/nfl/events/11195",
+          "homeUri": "football/nfl/teams/22",
+          "id": "11195"
+         }
+        },
+        "tab": "boxscore",
+        "type": "entity",
+        "webUrl": "/nfl/week-3-atlanta-falcons-vs-green-bay-packers-sep-24-2026-game-boxscore-11195?tab=boxscore"
+       },
+       "isCutoff": false,
+       "isFaded": false,
+       "selected": false
+      },
+      {
+       "columns": [
+        {
+         "emphasized": false,
+         "index": 0,
+         "text": "9/20"
+        },
+        {
+         "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Panthers.vresize.200.200.medium.0.png",
+         "emphasized": false,
+         "imageAltText": "Carolina Panthers",
+         "imageType": "image-logo",
+         "imageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Panthers.vresize.200.200.medium.0.png",
+         "index": 1,
+         "subType": "loss",
+         "superscript": "L",
+         "text": "CAR"
+        },
+        {
+         "emphasized": false,
+         "index": 2,
+         "text": "-5"
+        },
+        {
+         "emphasized": false,
+         "index": 3,
+         "text": "-"
+        },
+        {
+         "emphasized": false,
+         "index": 4,
+         "text": "0"
+        },
+        {
+         "emphasized": false,
+         "index": 5,
+         "text": "0"
+        },
+        {
+         "emphasized": false,
+         "index": 6,
+         "text": "2"
+        }
+       ],
+       "entityLink": {
+        "analyticsSport": "nfl",
+        "contentType": "event",
+        "contentUri": "football/nfl/events/11056",
+        "layout": {
+         "path": "/layouts?type=layout&subtype=nflEventLayout",
+         "tokens": {
+          "awayUri": "football/nfl/teams/32",
+          "eventUri": "football/nfl/events/11056",
+          "homeUri": "football/nfl/teams/25",
+          "id": "11056"
+         }
+        },
+        "tab": "boxscore",
+        "type": "entity",
+        "webUrl": "/nfl/week-2-carolina-panthers-vs-atlanta-falcons-sep-20-2026-game-boxscore-11056?tab=boxscore"
+       },
+       "isCutoff": false,
+       "isFaded": false,
+       "selected": false
+      },
+      {
+       "columns": [
+        {
+         "emphasized": false,
+         "index": 0,
+         "text": "9/13"
+        },
+        {
+         "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Steelers.vresize.200.200.medium.0.png",
+         "emphasized": false,
+         "imageAltText": "Pittsburgh Steelers",
+         "imageType": "image-logo",
+         "imageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Steelers.vresize.200.200.medium.0.png",
+         "index": 1,
+         "subType": "loss",
+         "superscript": "L",
+         "text": "@PIT"
+        },
+        {
+         "emphasized": false,
+         "index": 2,
+         "text": "-1"
+        },
+        {
+         "emphasized": false,
+         "index": 3,
+         "text": "-"
+        },
+        {
+         "emphasized": false,
+         "index": 4,
+         "text": "1"
+        },
+        {
+         "emphasized": false,
+         "index": 5,
+         "text": "0"
+        },
+        {
+         "emphasized": false,
+         "index": 6,
+         "text": "0"
+        }
+       ],
+       "entityLink": {
+        "analyticsSport": "nfl",
+        "contentType": "event",
+        "contentUri": "football/nfl/events/11041",
+        "layout": {
+         "path": "/layouts?type=layout&subtype=nflEventLayout",
+         "tokens": {
+          "awayUri": "football/nfl/teams/25",
+          "eventUri": "football/nfl/events/11041",
+          "homeUri": "football/nfl/teams/9",
+          "id": "11041"
+         }
+        },
+        "tab": "boxscore",
+        "type": "entity",
+        "webUrl": "/nfl/week-1-atlanta-falcons-vs-pittsburgh-steelers-sep-13-2026-game-boxscore-11041?tab=boxscore"
+       },
+       "isCutoff": false,
+       "isFaded": false,
+       "selected": false
+      }
+     ],
+     "template": "table-game-log"
+    },
+    {
+     "headers": [
+      {
+       "columns": [
+        {
+         "emphasized": true,
+         "index": 0,
+         "priority": 1,
+         "sortable": "none",
+         "template": "cell-text",
+         "text": "PRESEASON",
+         "weight": 1.9
+        },
+        {
+         "emphasized": false,
+         "index": 1,
+         "priority": 2,
+         "sortable": "none",
+         "template": "cell-entity",
+         "weight": 2.6
+        },
+        {
+         "emphasized": false,
+         "index": 2,
+         "priority": 1,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "+/-",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 3,
+         "priority": 2,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "PASS INT",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 4,
+         "priority": 3,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "REC",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 5,
+         "priority": 4,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "DEF INT",
+         "weight": 1.8
+        },
+        {
+         "emphasized": false,
+         "index": 6,
+         "priority": 5,
+         "sortable": "desc",
+         "template": "cell-number",
+         "text": "FUML",
+         "weight": 1.8
+        }
+       ],
+       "isPrimary": true
+      }
+     ],
+     "rows": [
+      {
+       "columns": [
+        {
+         "emphasized": false,
+         "index": 0,
+         "text": "8/28"
+        },
+        {
+         "alternateImageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Dolphins.vresize.200.200.medium.0.png",
+         "emphasized": false,
+         "imageAltText": "Miami Dolphins",
+         "imageType": "image-logo",
+         "imageUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Dolphins.vresize.200.200.medium.0.png",
+         "index": 1,
+         "subType": "win",
+         "superscript": "W",
+         "text": "@MIA"
+        },
+        {
+         "emphasized": false,
+         "index": 2,
+         "text": "-2"
+        },
+        {
+         "emphasized": false,
+         "index": 3,
+         "text": "-"
+        },
+        {
+         "emphasized": false,
+         "index": 4,
+         "text": "1"
+        },
+        {
+         "emphasized": false,
+         "index": 5,
+         "text": "0"
+        },
+        {
+         "emphasized": false,
+         "index": 6,
+         "text": "2"
+        }
+       ],
+       "entityLink": {
+        "analyticsSport": "nfl",
+        "contentType": "event",
+        "contentUri": "football/nfl/events/11175",
+        "layout": {
+         "path": "/layouts?type=layout&subtype=nflEventLayout",
+         "tokens": {
+          "awayUri": "football/nfl/teams/25",
+          "eventUri": "football/nfl/events/11175",
+          "homeUri": "football/nfl/teams/3",
+          "id": "11175"
+         }
+        },
+        "tab": "boxscore",
+        "type": "entity",
+        "webUrl": "/nfl/preseason-week-3-atlanta-falcons-vs-miami-dolphins-aug-28-2026-game-boxscore-11175?tab=boxscore"
+       },
+       "isCutoff": false,
+       "isFaded": false,
+       "selected": false
+      }
+     ],
+     "template": "table-game-log"
+    }
+   ]
+  }
+ ]
+}

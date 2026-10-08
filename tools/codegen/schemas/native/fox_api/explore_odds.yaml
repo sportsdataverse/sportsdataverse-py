@@ -1,0 +1,36 @@
+schema: explore_odds
+kind: dataframe
+columns:
+- name: external_id
+  type: character
+  description: ''
+- name: external_uri
+  type: character
+  description: ''
+- name: isa_value
+  type: character
+  description: ''
+- name: path
+  type: character
+  description: ''
+- name: short_title
+  type: character
+  description: ''
+- name: slug
+  type: character
+  description: ''
+- name: spark_id
+  type: character
+  description: ''
+- name: tag_type
+  type: character
+  description: ''
+- name: title
+  type: character
+  description: ''
+- name: type
+  type: character
+  description: ''
+- name: uuidv5
+  type: character
+  description: ''

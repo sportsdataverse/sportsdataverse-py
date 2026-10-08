@@ -1,0 +1,74 @@
+schema: height
+kind: frames
+frames:
+- section: ratings_table
+  columns:
+  - name: team
+    type: character
+    description: ''
+  - name: conf
+    type: character
+    description: ''
+  - name: avg_hgt
+    type: character
+    description: ''
+  - name: avg_hgt_rk
+    type: character
+    description: ''
+  - name: eff_hgt
+    type: character
+    description: ''
+  - name: eff_hgt_rk
+    type: character
+    description: ''
+  - name: c_hgt
+    type: character
+    description: ''
+  - name: c_hgt_rk
+    type: character
+    description: ''
+  - name: pf_hgt
+    type: character
+    description: ''
+  - name: pf_hgt_rk
+    type: character
+    description: ''
+  - name: sf_hgt
+    type: character
+    description: ''
+  - name: sf_hgt_rk
+    type: character
+    description: ''
+  - name: sg_hgt
+    type: character
+    description: ''
+  - name: sg_hgt_rk
+    type: character
+    description: ''
+  - name: pg_hgt
+    type: character
+    description: ''
+  - name: pg_hgt_rk
+    type: character
+    description: ''
+  - name: experience
+    type: character
+    description: ''
+  - name: experience_rk
+    type: character
+    description: ''
+  - name: bench
+    type: character
+    description: ''
+  - name: bench_rk
+    type: character
+    description: ''
+  - name: continuity
+    type: character
+    description: ''
+  - name: continuity_rk
+    type: character
+    description: ''
+  - name: ncaa_seed
+    type: integer
+    description: ''

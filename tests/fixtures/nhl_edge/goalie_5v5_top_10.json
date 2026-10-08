@@ -1,0 +1,337 @@
+[
+ {
+  "player": {
+   "firstName": {
+    "default": "Anthony"
+   },
+   "headshot": "https://assets.nhle.com/mugs/nhl/20242025/TOR/8476932.png",
+   "lastName": {
+    "default": "Stolarz"
+   },
+   "position": "G",
+   "slug": "anthony-stolarz-8476932",
+   "sweaterNumber": 41,
+   "team": {
+    "abbrev": "TOR",
+    "commonName": {
+     "default": "Maple Leafs"
+    },
+    "placeNameWithPreposition": {
+     "default": "Toronto",
+     "fr": "de Toronto"
+    },
+    "slug": "toronto-maple-leafs-10",
+    "teamLogo": {
+     "dark": "https://assets.nhle.com/logos/nhl/svg/TOR_dark.svg",
+     "light": "https://assets.nhle.com/logos/nhl/svg/TOR_light.svg"
+    }
+   }
+  },
+  "savePctg": 0.9438,
+  "savePctgClose": 0.9475,
+  "shots": 729,
+  "shotsPer60": 27.632
+ },
+ {
+  "player": {
+   "firstName": {
+    "default": "Connor"
+   },
+   "headshot": "https://assets.nhle.com/mugs/nhl/20242025/WPG/8476945.png",
+   "lastName": {
+    "default": "Hellebuyck"
+   },
+   "position": "G",
+   "slug": "connor-hellebuyck-8476945",
+   "sweaterNumber": 37,
+   "team": {
+    "abbrev": "WPG",
+    "commonName": {
+     "default": "Jets"
+    },
+    "placeNameWithPreposition": {
+     "default": "Winnipeg",
+     "fr": "de Winnipeg"
+    },
+    "slug": "winnipeg-jets-52",
+    "teamLogo": {
+     "dark": "https://assets.nhle.com/logos/nhl/svg/WPG_dark.svg",
+     "light": "https://assets.nhle.com/logos/nhl/svg/WPG_light.svg"
+    }
+   }
+  },
+  "savePctg": 0.9365,
+  "savePctgClose": 0.9378,
+  "shots": 1339,
+  "shotsPer60": 25.7396
+ },
+ {
+  "player": {
+   "firstName": {
+    "default": "Darcy"
+   },
+   "headshot": "https://assets.nhle.com/mugs/nhl/20242025/LAK/8475311.png",
+   "lastName": {
+    "default": "Kuemper"
+   },
+   "position": "G",
+   "slug": "darcy-kuemper-8475311",
+   "sweaterNumber": 35,
+   "team": {
+    "abbrev": "LAK",
+    "commonName": {
+     "default": "Kings"
+    },
+    "placeNameWithPreposition": {
+     "default": "Los Angeles",
+     "fr": "de Los Angeles"
+    },
+    "slug": "los-angeles-kings-26",
+    "teamLogo": {
+     "dark": "https://assets.nhle.com/logos/nhl/svg/LAK_dark.svg",
+     "light": "https://assets.nhle.com/logos/nhl/svg/LAK_light.svg"
+    }
+   }
+  },
+  "savePctg": 0.9342,
+  "savePctgClose": 0.9448,
+  "shots": 973,
+  "shotsPer60": 24.3024
+ },
+ {
+  "player": {
+   "firstName": {
+    "cs": "Andrej",
+    "default": "Andrei",
+    "sk": "Andrej"
+   },
+   "headshot": "https://assets.nhle.com/mugs/nhl/20242025/TBL/8476883.png",
+   "lastName": {
+    "cs": "Vasilevskij",
+    "default": "Vasilevskiy",
+    "fi": "Vasilevski",
+    "sk": "Vasilevskij"
+   },
+   "position": "G",
+   "slug": "andrei-vasilevskiy-8476883",
+   "sweaterNumber": 88,
+   "team": {
+    "abbrev": "TBL",
+    "commonName": {
+     "default": "Lightning"
+    },
+    "placeNameWithPreposition": {
+     "default": "Tampa Bay",
+     "fr": "de Tampa Bay"
+    },
+    "slug": "tampa-bay-lightning-14",
+    "teamLogo": {
+     "dark": "https://assets.nhle.com/logos/nhl/svg/TBL_dark.svg",
+     "light": "https://assets.nhle.com/logos/nhl/svg/TBL_light.svg"
+    }
+   }
+  },
+  "savePctg": 0.9324,
+  "savePctgClose": 0.9357,
+  "shots": 1405,
+  "shotsPer60": 27.5014
+ },
+ {
+  "player": {
+   "firstName": {
+    "default": "Casey"
+   },
+   "headshot": "https://assets.nhle.com/mugs/nhl/20242025/DAL/8479193.png",
+   "lastName": {
+    "default": "DeSmith"
+   },
+   "position": "G",
+   "slug": "casey-desmith-8479193",
+   "sweaterNumber": 1,
+   "team": {
+    "abbrev": "DAL",
+    "commonName": {
+     "default": "Stars"
+    },
+    "placeNameWithPreposition": {
+     "default": "Dallas",
+     "fr": "de Dallas"
+    },
+    "slug": "dallas-stars-25",
+    "teamLogo": {
+     "dark": "https://assets.nhle.com/logos/nhl/svg/DAL_dark.svg",
+     "light": "https://assets.nhle.com/logos/nhl/svg/DAL_light.svg"
+    }
+   }
+  },
+  "savePctg": 0.9281,
+  "savePctgClose": 0.9174,
+  "shots": 612,
+  "shotsPer60": 30.228
+ },
+ {
+  "player": {
+   "firstName": {
+    "default": "John"
+   },
+   "headshot": "https://assets.nhle.com/mugs/nhl/20242025/ANA/8476434.png",
+   "lastName": {
+    "default": "Gibson"
+   },
+   "position": "G",
+   "slug": "john-gibson-8476434",
+   "sweaterNumber": 36,
+   "team": {
+    "abbrev": "ANA",
+    "commonName": {
+     "default": "Ducks"
+    },
+    "placeNameWithPreposition": {
+     "default": "Anaheim",
+     "fr": "d'Anaheim"
+    },
+    "slug": "anaheim-ducks-24",
+    "teamLogo": {
+     "dark": "https://assets.nhle.com/logos/nhl/svg/ANA_dark.svg",
+     "light": "https://assets.nhle.com/logos/nhl/svg/ANA_light.svg"
+    }
+   }
+  },
+  "savePctg": 0.9277,
+  "savePctgClose": 0.9252,
+  "shots": 650,
+  "shotsPer60": 30.2599
+ },
+ {
+  "player": {
+   "firstName": {
+    "default": "Filip"
+   },
+   "headshot": "https://assets.nhle.com/mugs/nhl/20242025/MIN/8479406.png",
+   "lastName": {
+    "default": "Gustavsson"
+   },
+   "position": "G",
+   "slug": "filip-gustavsson-8479406",
+   "sweaterNumber": 32,
+   "team": {
+    "abbrev": "MIN",
+    "commonName": {
+     "default": "Wild"
+    },
+    "placeNameWithPreposition": {
+     "default": "Minnesota",
+     "fr": "du Minnesota"
+    },
+    "slug": "minnesota-wild-30",
+    "teamLogo": {
+     "dark": "https://assets.nhle.com/logos/nhl/svg/MIN_dark.svg",
+     "light": "https://assets.nhle.com/logos/nhl/svg/MIN_light.svg"
+    }
+   }
+  },
+  "savePctg": 0.9269,
+  "savePctgClose": 0.9332,
+  "shots": 1300,
+  "shotsPer60": 27.4788
+ },
+ {
+  "player": {
+   "firstName": {
+    "default": "Cam"
+   },
+   "headshot": "https://assets.nhle.com/mugs/nhl/20242025/DET/8475660.png",
+   "lastName": {
+    "default": "Talbot"
+   },
+   "position": "G",
+   "slug": "cam-talbot-8475660",
+   "sweaterNumber": 33,
+   "team": {
+    "abbrev": "DET",
+    "commonName": {
+     "default": "Red Wings"
+    },
+    "placeNameWithPreposition": {
+     "default": "Detroit",
+     "fr": "de Detroit"
+    },
+    "slug": "detroit-red-wings-17",
+    "teamLogo": {
+     "dark": "https://assets.nhle.com/logos/nhl/svg/DET_dark.svg",
+     "light": "https://assets.nhle.com/logos/nhl/svg/DET_light.svg"
+    }
+   }
+  },
+  "savePctg": 0.9263,
+  "savePctgClose": 0.9507,
+  "shots": 1045,
+  "shotsPer60": 28.1905
+ },
+ {
+  "player": {
+   "firstName": {
+    "default": "Dustin"
+   },
+   "headshot": "https://assets.nhle.com/mugs/nhl/20242025/CGY/8481692.png",
+   "lastName": {
+    "default": "Wolf"
+   },
+   "position": "G",
+   "slug": "dustin-wolf-8481692",
+   "sweaterNumber": 32,
+   "team": {
+    "abbrev": "CGY",
+    "commonName": {
+     "default": "Flames"
+    },
+    "placeNameWithPreposition": {
+     "default": "Calgary",
+     "fr": "de Calgary"
+    },
+    "slug": "calgary-flames-20",
+    "teamLogo": {
+     "dark": "https://assets.nhle.com/logos/nhl/svg/CGY_dark.svg",
+     "light": "https://assets.nhle.com/logos/nhl/svg/CGY_light.svg"
+    }
+   }
+  },
+  "savePctg": 0.9257,
+  "savePctgClose": 0.932,
+  "shots": 1212,
+  "shotsPer60": 28.4024
+ },
+ {
+  "player": {
+   "firstName": {
+    "default": "Joel"
+   },
+   "headshot": "https://assets.nhle.com/mugs/nhl/20242025/STL/8480981.png",
+   "lastName": {
+    "default": "Hofer"
+   },
+   "position": "G",
+   "slug": "joel-hofer-8480981",
+   "sweaterNumber": 30,
+   "team": {
+    "abbrev": "STL",
+    "commonName": {
+     "default": "Blues"
+    },
+    "placeNameWithPreposition": {
+     "default": "St. Louis",
+     "fr": "de St. Louis"
+    },
+    "slug": "st-louis-blues-19",
+    "teamLogo": {
+     "dark": "https://assets.nhle.com/logos/nhl/svg/STL_20082009-20242025_dark.svg",
+     "light": "https://assets.nhle.com/logos/nhl/svg/STL_20082009-20242025_light.svg"
+    }
+   }
+  },
+  "savePctg": 0.9254,
+  "savePctgClose": 0.9104,
+  "shots": 630,
+  "shotsPer60": 26.756
+ }
+]

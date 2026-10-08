@@ -1,0 +1,5 @@
+columns: []
+kind: dataframe
+schema: season_freeagents
+unverified: 'no capture: the page holds zero items (count 0) in nfl, mlb, nhl, cfb; 400 in nba, wnba, mbb, wbb with the documented
+  example arguments (2026-10-07)'

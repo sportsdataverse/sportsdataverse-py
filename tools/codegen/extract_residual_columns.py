@@ -171,6 +171,21 @@ _DEFERRED_BUCKETS: dict[str, int | None] = {
     "transactions.yaml": 11,
     "venue.yaml": 7,
     "venues.yaml": 1,
+    # Same 2026-10-07 sweep, second pass: captured in the league whose payload the parser reads
+    # (CFB groups, NFL corrections/weeks/talent picks, MBB power-index leaders) and the two
+    # power-index tables whose links had pointed at no schema since 0.0.67.
+    "fpi.yaml": 41,
+    "season_group_children.yaml": 1,
+    "season_group_teams.yaml": 1,
+    "season_powerindex_leaders.yaml": 3,
+    "season_type_corrections.yaml": 7,
+    "season_week_events.yaml": 1,
+    "season_week_powerindex.yaml": 37,
+    "talentpicks.yaml": 12,
+    # Fox Sports and KenPom tables from the same capture sweep. KenPom's column names are
+    # hoopR's kp_* @return vocabulary in snake case, so it is the source to author them from.
+    "native/fox_api": 496,
+    "native/kenpom": 449,
     "native/nflpro": 30,  # the un-authorable NGS fields only (2026-10-07); was None
     "native/nba_stats": 312,
     "native/wnba_stats": 269,
@@ -208,8 +223,8 @@ _DEFERRED_BUCKETS: dict[str, int | None] = {
     "native/cbs_napi": 42,
     "native/mlb_api": 10,
     "native/mls_api": 8,
-    "native/nhl_api_web": 6,
-    "native/nhl_edge": 12,
+    "native/nhl_api_web": 17,  # was 6: right_rail / club_stats(_season) built 2026-10-07 (dict -> frames)
+    "native/nhl_edge": 74,  # was 12: eight *_top_10 boards captured 2026-10-07 (fastRhockey describes them)
     "native/nhl_records": 19,
     "native/nhl_stats_rest": 2,
     "native/nwsl_api": 9,

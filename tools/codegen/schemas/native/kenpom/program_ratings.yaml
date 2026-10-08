@@ -1,0 +1,59 @@
+schema: program_ratings
+kind: frames
+frames:
+- section: ratings_table
+  columns:
+  - name: column_0
+    type: integer
+    description: ''
+  - name: team
+    type: character
+    description: ''
+  - name: conf
+    type: character
+    description: ''
+  - name: rtg
+    type: double
+    description: ''
+  - name: kenpom_best
+    type: integer
+    description: ''
+  - name: kenpom_best_1
+    type: integer
+    description: ''
+  - name: kenpom_worst
+    type: integer
+    description: ''
+  - name: kenpom_worst_1
+    type: integer
+    description: ''
+  - name: kenpom_median
+    type: integer
+    description: ''
+  - name: kenpom_top_10
+    type: integer
+    description: ''
+  - name: kenpom_top_25
+    type: integer
+    description: ''
+  - name: kenpom_top_50
+    type: integer
+    description: ''
+  - name: ncaa_tourney_ch
+    type: integer
+    description: ''
+  - name: ncaa_tourney_f4
+    type: integer
+    description: ''
+  - name: ncaa_tourney_s16
+    type: integer
+    description: ''
+  - name: ncaa_tourney_r1
+    type: integer
+    description: ''
+  - name: chg
+    type: integer
+    description: ''
+  - name: ncaa_seed
+    type: integer
+    description: ''

@@ -124,10 +124,12 @@ endpoints:
   path: /all-time-record-vs-franchise
   parser: parse_nhl_records
 - short: skater_career_stats
+  returns_schema: native/nhl_records/skater_career_stats
   summary: Skater career statistics (all-time, regular season).
   path: /skater-career-statistics
   parser: parse_nhl_records
 - short: skater_career_leaders
+  returns_schema: native/nhl_records/skater_career_leaders
   summary: All-time skater career leaderboards.
   path: /skater-career-leaders
   parser: parse_nhl_records

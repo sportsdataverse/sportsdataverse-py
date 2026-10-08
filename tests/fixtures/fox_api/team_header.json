@@ -1,0 +1,40 @@
+{
+ "color": "1, 240, 31, 65",
+ "contentType": "team",
+ "contentUri": "football/nfl/teams/25",
+ "details": [
+  {
+   "text": "2-2 · 2ND IN NFC SOUTH"
+  }
+ ],
+ "eventDetails": {
+  "contentType": "event",
+  "contentUri": "football/nfl/events/11073",
+  "entityLink": {
+   "analyticsSport": "nfl",
+   "contentType": "event",
+   "contentUri": "football/nfl/events/11073",
+   "layout": {
+    "path": "/layouts?type=layout&subtype=nflEventLayout",
+    "tokens": {
+     "awayUri": "football/nfl/teams/33",
+     "eventUri": "football/nfl/events/11073",
+     "homeUri": "football/nfl/teams/25",
+     "id": "11073"
+    }
+   },
+   "type": "entity",
+   "webUrl": "/nfl/week-5-baltimore-ravens-vs-atlanta-falcons-oct-11-2026-game-boxscore-11073"
+  },
+  "isTba": false,
+  "scoreChipUri": "https://api.foxsports.com/bifrost/v1/nfl/scorechip/nfl11073",
+  "startTime": "2026-10-12T00:20:00Z",
+  "subtitle": "ATL -3.5 TOTAL 43.5",
+  "title": "Next Game vs Ravens · "
+ },
+ "imageAltText": "Atlanta Falcons",
+ "imageType": "image-logo",
+ "logoUrl": "https://b.fssta.com/uploads/application/nfl/team-logos/Falcons.vresize.400.400.medium.1.png",
+ "template": "entity-header",
+ "title": "ATLANTA FALCONS"
+}

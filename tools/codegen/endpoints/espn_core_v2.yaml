@@ -94,6 +94,7 @@ endpoints:
     season: 2024
     season_type: 2
 - short: season_group_teams
+  returns_schema: season_group_teams
   scope: universal
   path: /{sport}/leagues/{league}/seasons/{season}/types/{season_type}/groups/{group_id}/teams
   path_params:
@@ -117,6 +118,7 @@ endpoints:
     season_type: 2
     group_id: 80
 - short: season_group_children
+  returns_schema: season_group_children
   scope: universal
   path: /{sport}/leagues/{league}/seasons/{season}/types/{season_type}/groups/{group_id}/children
   path_params:
@@ -145,6 +147,7 @@ endpoints:
     season_type: 2
     group_id: 80
 - short: season_type_leaders
+  returns_schema: season_type_leaders
   scope: universal
   path: /{sport}/leagues/{league}/seasons/{season}/types/{season_type}/leaders
   path_params:
@@ -159,6 +162,7 @@ endpoints:
     season: 2024
     season_type: 2
 - short: season_type_corrections
+  returns_schema: season_type_corrections
   scope: universal
   path: /{sport}/leagues/{league}/seasons/{season}/types/{season_type}/corrections
   path_params:
@@ -233,12 +237,13 @@ endpoints:
     type: int
     description: Page size for this weekly power-index table; pass a limit large enough to avoid paging (table size varies by sport/league -- CFB's FBS table alone is ~134 rows).
   parser: parse_weekly_powerindex
-  returns_schema: weekly_powerindex
+  returns_schema: season_week_powerindex
   example_args:
     season: 2024
     season_type: 2
     week: 8
 - short: season_week_events
+  returns_schema: season_week_events
   scope: universal
   path: /{sport}/leagues/{league}/seasons/{season}/types/{season_type}/weeks/{week}/events
   path_params:
@@ -335,6 +340,7 @@ endpoints:
   example_args:
     season: 2024
 - short: season_draft
+  returns_schema: season_draft
   scope: universal
   path: /{sport}/leagues/{league}/seasons/{season}/draft
   path_params:
@@ -345,6 +351,7 @@ endpoints:
   example_args:
     season: 2024
 - short: season_draft_round_picks
+  returns_schema: season_draft_round_picks
   scope: universal
   path: /{sport}/leagues/{league}/seasons/{season}/draft/rounds/{round_num}/picks
   path_params:
@@ -370,6 +377,7 @@ endpoints:
   example_args:
     season: 2024
 - short: season_freeagents
+  returns_schema: season_freeagents
   scope: universal
   path: /{sport}/leagues/{league}/seasons/{season}/freeagents
   path_params:
@@ -395,6 +403,7 @@ endpoints:
   example_args:
     season: 2024
 - short: season_powerindex_leaders
+  returns_schema: season_powerindex_leaders
   scope: universal
   path: /{sport}/leagues/{league}/seasons/{season}/powerindex/leaders
   path_params:
@@ -451,6 +460,7 @@ endpoints:
   example_args:
     athlete_id: '4239'
 - short: athlete_career_stats
+  returns_schema: athlete_career_stats
   scope: universal
   path: /{sport}/leagues/{league}/athletes/{athlete_id}/statistics[/{stat_type}]
   path_params:
@@ -476,6 +486,7 @@ endpoints:
   example_args:
     athlete_id: '4239'
 - short: athlete_eventlog
+  returns_schema: athlete_eventlog
   scope: universal
   path: /{sport}/leagues/{league}/athletes/{athlete_id}/eventlog
   path_params:
@@ -497,6 +508,7 @@ endpoints:
   example_args:
     athlete_id: '4239'
 - short: athlete_awards
+  returns_schema: athlete_awards
   scope: universal
   path: /{sport}/leagues/{league}/athletes/{athlete_id}/awards
   path_params:
@@ -518,6 +530,7 @@ endpoints:
   example_args:
     athlete_id: '4239'
 - short: athlete_records
+  returns_schema: athlete_records
   scope: universal
   path: /{sport}/leagues/{league}/athletes/{athlete_id}/records
   path_params:
@@ -539,6 +552,7 @@ endpoints:
   example_args:
     athlete_id: '4239'
 - short: athlete_notes
+  returns_schema: athlete_notes
   scope: universal
   path: /{sport}/leagues/{league}/athletes/{athlete_id}/notes
   path_params:
@@ -549,6 +563,7 @@ endpoints:
   example_args:
     athlete_id: '4239'
 - short: athlete_vs_athlete
+  returns_schema: athlete_vs_athlete
   scope: universal
   path: /{sport}/leagues/{league}/athletes/{athlete_id}/vsathlete/{opp_id}
   path_params:
@@ -663,6 +678,7 @@ endpoints:
       event_id: '401584793'
       team_id: '15'
 - short: event_competitor_linescores
+  returns_schema: event_competitor_linescores
   scope: universal
   path: /{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/competitors/{team_id}/linescores
   path_params:
@@ -681,6 +697,7 @@ endpoints:
     event_id: '401584793'
     team_id: '4'
 - short: event_competitor_statistics
+  returns_schema: event_competitor_statistics
   scope: universal
   path: /{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/competitors/{team_id}/statistics
   path_params:
@@ -703,6 +720,7 @@ endpoints:
       event_id: '401584793'
       team_id: '15'
 - short: event_competitor_record
+  returns_schema: event_competitor_record
   scope: universal
   path: /{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/competitors/{team_id}/record
   path_params:
@@ -721,6 +739,7 @@ endpoints:
     event_id: '401584793'
     team_id: '4'
 - short: event_competitor_leaders
+  returns_schema: event_competitor_leaders
   scope: universal
   path: /{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/competitors/{team_id}/leaders
   path_params:
@@ -817,6 +836,7 @@ endpoints:
       event_id: '401584793'
       play_id: '4015847934'
 - short: event_play_personnel
+  returns_schema: event_play_personnel
   scope: universal
   path: /{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/plays/{play_id}/personnel
   path_params:
@@ -929,6 +949,7 @@ endpoints:
   example_args:
     event_id: '401584793'
 - short: event_propbets
+  returns_schema: event_propbets
   scope: universal
   path: /{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/propbets
   path_params:
@@ -943,6 +964,7 @@ endpoints:
   example_args:
     event_id: '401584793'
 - short: event_leaders
+  returns_schema: event_leaders
   scope: universal
   path: /{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/leaders
   path_params:
@@ -957,6 +979,7 @@ endpoints:
   example_args:
     event_id: '401584793'
 - short: event_scoringplays
+  returns_schema: event_scoringplays
   scope: universal
   path: /{sport}/leagues/{league}/events/{event_id}/competitions/{cid}/scoringplays
   path_params:
@@ -1091,6 +1114,7 @@ endpoints:
   example_args:
     coach_id: '1'
 - short: coach_season
+  returns_schema: coach_season
   scope: universal
   path: /{sport}/leagues/{league}/coaches/{coach_id}/seasons/{season}
   path_params:
@@ -1162,14 +1186,17 @@ endpoints:
   parser: parse_standings
   returns_schema: standings
 - short: leaders_core
+  returns_schema: leaders_core
   scope: universal
   path: /{sport}/leagues/{league}/leaders
   parser: parse_items
 - short: league_notes
+  returns_schema: league_notes
   scope: universal
   path: /{sport}/leagues/{league}/notes
   parser: parse_items
 - short: talentpicks
+  returns_schema: talentpicks
   scope: universal
   path: /{sport}/leagues/{league}/talentpicks
   parser: parse_items
@@ -1253,6 +1280,7 @@ endpoints:
     season_type: 2
     week: 1
 - short: season_qbr
+  returns_schema: season_qbr
   scope: football
   path: /{sport}/leagues/{league}/seasons/{season}/types/{season_type}[/groups/{group_id}]/qbr/{split}
   path_params:

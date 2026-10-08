@@ -39,6 +39,7 @@ endpoints:
 
 # --- season-wide ratings / efficiency tables (hoopR kp_ratings_tables.R) -----
 - short: ratings
+  returns_schema: native/kenpom/ratings
   summary: "GET /index.php - Pomeroy season ratings (AdjEM/AdjO/AdjD/AdjT plus SOS, one row per team). Port of hoopR kp_pomeroy_ratings()."
   path: /index.php
   extra_params:
@@ -51,6 +52,7 @@ endpoints:
   parser: parse_kenpom_page
 
 - short: efficiency
+  returns_schema: native/kenpom/efficiency
   summary: "GET /summary.php - efficiency and tempo summary (adjusted and raw O/D/T, average possession length). Port of hoopR kp_efficiency()."
   path: /summary.php
   extra_params:
@@ -63,6 +65,7 @@ endpoints:
   parser: parse_kenpom_page
 
 - short: four_factors
+  returns_schema: native/kenpom/four_factors
   summary: "GET /stats.php - four-factors rankings (eFG%, TO%, OR%, FTRate on offense and defense). Port of hoopR kp_fourfactors()."
   path: /stats.php
   extra_params:
@@ -75,6 +78,7 @@ endpoints:
   parser: parse_kenpom_page
 
 - short: point_distribution
+  returns_schema: native/kenpom/point_distribution
   summary: "GET /pointdist.php - share of points scored from 2s, 3s and free throws, offense and defense. Port of hoopR kp_pointdist()."
   path: /pointdist.php
   extra_params:
@@ -87,6 +91,7 @@ endpoints:
   parser: parse_kenpom_page
 
 - short: height
+  returns_schema: native/kenpom/height
   summary: "GET /height.php - team height, effective height, experience, bench minutes and continuity. Port of hoopR kp_height()."
   path: /height.php
   extra_params:
@@ -99,6 +104,7 @@ endpoints:
   parser: parse_kenpom_page
 
 - short: foul_trouble
+  returns_schema: native/kenpom/foul_trouble
   summary: "GET /foul_trouble.php - team foul-trouble splits (minutes and efficiency with starters in foul trouble). Port of hoopR kp_foul_trouble()."
   path: /foul_trouble.php
   extra_params:
@@ -111,6 +117,7 @@ endpoints:
   parser: parse_kenpom_page
 
 - short: team_stats
+  returns_schema: native/kenpom/team_stats
   summary: "GET /teamstats.php - team shooting and style splits; side='o' for offense, 'd' for defense. Port of hoopR kp_teamstats()."
   path: /teamstats.php
   extra_params:
@@ -127,6 +134,7 @@ endpoints:
   parser: parse_kenpom_page
 
 - short: player_stats
+  returns_schema: native/kenpom/player_stats
   summary: "GET /playerstats.php - national player leaderboard for one metric. Port of hoopR kp_playerstats()."
   path: /playerstats.php
   extra_params:
@@ -157,6 +165,7 @@ endpoints:
   parser: parse_kenpom_page
 
 - short: kpoy
+  returns_schema: native/kenpom/kpoy
   summary: "GET /kpoy.php - KenPom Player of the Year standings and the game-MVP table. Port of hoopR kp_kpoy()."
   path: /kpoy.php
   extra_params:
@@ -170,6 +179,7 @@ endpoints:
 
 # --- per-team pages (hoopR kp_team_tables.R) --------------------------------
 - short: team
+  returns_schema: native/kenpom/team
   summary: >-
     GET /team.php - a team's full season page. Returns EVERY table on it, so one call
     covers hoopR's kp_team_schedule(), kp_team_players() and kp_team_lineups(), which
@@ -192,6 +202,7 @@ endpoints:
   parser: parse_kenpom_page
 
 - short: team_players_expanded
+  returns_schema: native/kenpom/team_players_expanded
   summary: >-
     GET /player-expanded.php - a team's expanded per-player table plus the minutes
     matrix. Covers hoopR's kp_team_player_stats() and kp_minutes_matrix() in one fetch.
@@ -211,6 +222,7 @@ endpoints:
   parser: parse_kenpom_page
 
 - short: game_plan
+  returns_schema: native/kenpom/game_plan
   summary: "GET /gameplan.php - a team's game-plan page (per-game four factors and personnel splits). Port of hoopR kp_gameplan()."
   path: /gameplan.php
   extra_params:
@@ -228,6 +240,7 @@ endpoints:
   parser: parse_kenpom_page
 
 - short: opponent_tracker
+  returns_schema: native/kenpom/opponent_tracker
   summary: "GET /opptracker.php - opponent tracker; side='o' for offense, 'd' for defense. Port of hoopR kp_opptracker()."
   path: /opptracker.php
   extra_params:
@@ -249,6 +262,7 @@ endpoints:
   parser: parse_kenpom_page
 
 - short: player_career
+  returns_schema: native/kenpom/player_career
   summary: "GET /player.php - one player's career page (season-by-season stats and game log). Port of hoopR kp_player_career()."
   path: /player.php
   extra_params:
@@ -262,6 +276,7 @@ endpoints:
 
 # --- per-game pages (hoopR kp_box_tables.R) ---------------------------------
 - short: box
+  returns_schema: native/kenpom/box
   summary: "GET /box.php - box-score detail for one game (per-team four factors, player lines, scoring runs). Port of hoopR kp_box()."
   path: /box.php
   extra_params:
@@ -275,10 +290,11 @@ endpoints:
     type: int
     required: true
     description: Season (4-digit ENDING year) the game belongs to.
-  example_args: {game_id: 20250401, year: 2025}
+  example_args: {game_id: 1097, year: 2025}
   parser: parse_kenpom_page
 
 - short: win_probability
+  returns_schema: native/kenpom/win_probability
   summary: "GET /winprob.php - in-game win-probability table for one game. Port of hoopR kp_winprob()."
   path: /winprob.php
   extra_params:
@@ -292,10 +308,11 @@ endpoints:
     type: int
     required: true
     description: Season (4-digit ENDING year) the game belongs to.
-  example_args: {game_id: 20250401, year: 2025}
+  example_args: {game_id: 3577, year: 2025}
   parser: parse_kenpom_page
 
 - short: fan_match
+  returns_schema: native/kenpom/fan_match
   summary: "GET /fanmatch.php - the FanMatch slate for one date (predictions, thrill score, results). Port of hoopR kp_fanmatch()."
   path: /fanmatch.php
   extra_params:
@@ -309,6 +326,7 @@ endpoints:
 
 # --- history / program / conference (hoopR kp_historical_tables.R) ----------
 - short: team_history
+  returns_schema: native/kenpom/team_history
   summary: "GET /history.php?t= - a program's season-by-season history. Port of hoopR kp_team_history()."
   path: /history.php
   extra_params:
@@ -321,6 +339,7 @@ endpoints:
   parser: parse_kenpom_page
 
 - short: coach_history
+  returns_schema: native/kenpom/coach_history
   summary: "GET /history.php?c= - a coach's season-by-season history. Port of hoopR kp_coach_history()."
   path: /history.php
   extra_params:
@@ -333,12 +352,14 @@ endpoints:
   parser: parse_kenpom_page
 
 - short: program_ratings
+  returns_schema: native/kenpom/program_ratings
   summary: "GET /programs.php - program-level ratings across the full KenPom era. Port of hoopR kp_program_ratings()."
   path: /programs.php
   example_args: {}
   parser: parse_kenpom_page
 
 - short: archive_ratings
+  returns_schema: native/kenpom/archive_ratings
   summary: "GET /archive.php - the Pomeroy ratings as they stood on a past date. Port of hoopR kp_pomeroy_archive_ratings()."
   path: /archive.php
   extra_params:
@@ -351,6 +372,7 @@ endpoints:
   parser: parse_kenpom_page
 
 - short: conference
+  returns_schema: native/kenpom/conference
   summary: "GET /conf.php - one conference's season page (standings, efficiency, per-team splits). Port of hoopR kp_conf()."
   path: /conf.php
   extra_params:
@@ -368,6 +390,7 @@ endpoints:
   parser: parse_kenpom_page
 
 - short: conference_stats
+  returns_schema: native/kenpom/conference_stats
   summary: "GET /confstats.php - league-wide conference comparison for one season. Port of hoopR kp_confstats()."
   path: /confstats.php
   extra_params:
@@ -380,6 +403,7 @@ endpoints:
   parser: parse_kenpom_page
 
 - short: conference_history
+  returns_schema: native/kenpom/conference_history
   summary: "GET /confhistory.php - one conference's season-by-season history. Port of hoopR kp_confhistory()."
   path: /confhistory.php
   extra_params:
@@ -393,18 +417,21 @@ endpoints:
 
 # --- miscellany (hoopR kp_misc_stats.R) -------------------------------------
 - short: trends
+  returns_schema: native/kenpom/trends
   summary: "GET /trends.php - national Division I trends by season (tempo, efficiency, shooting, fouls). Port of hoopR kp_trends()."
   path: /trends.php
   example_args: {}
   parser: parse_kenpom_page
 
 - short: home_court_advantage
+  returns_schema: native/kenpom/home_court_advantage
   summary: "GET /hca.php - per-team home-court advantage estimates. Port of hoopR kp_hca()."
   path: /hca.php
   example_args: {}
   parser: parse_kenpom_page
 
 - short: arenas
+  returns_schema: native/kenpom/arenas
   summary: "GET /arenas.php - arena reference (name, capacity, average attendance) by team. Port of hoopR kp_arenas()."
   path: /arenas.php
   extra_params:
@@ -417,6 +444,7 @@ endpoints:
   parser: parse_kenpom_page
 
 - short: officials
+  returns_schema: native/kenpom/officials
   summary: "GET /officials.php - referee ratings for one season. Port of hoopR kp_officials()."
   path: /officials.php
   extra_params:
@@ -429,23 +457,25 @@ endpoints:
   parser: parse_kenpom_page
 
 - short: referee
+  returns_schema: native/kenpom/referee
   summary: "GET /referee.php - one referee's game log and splits for a season. Port of hoopR kp_referee()."
   path: /referee.php
   extra_params:
   - name: referee
     query_key: r
-    type: str
+    type: int|str
     required: true
-    description: Referee name as KenPom spells it (take it from the officials table).
+    description: KenPom referee id - the `r=` value on an officials-table link.
   - name: year
     query_key: y
     type: int
     required: true
     description: Season as a 4-digit ENDING year.
-  example_args: {referee: Ron Groover, year: 2025}
+  example_args: {referee: 714294, year: 2025}
   parser: parse_kenpom_page
 
 - short: game_attributes
+  returns_schema: native/kenpom/game_attributes
   summary: "GET /game_attrs.php - season game leaderboards by attribute (thrill score, comebacks, upsets, ...). Port of hoopR kp_game_attrs()."
   path: /game_attrs.php
   extra_params:

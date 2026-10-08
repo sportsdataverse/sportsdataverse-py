@@ -1,0 +1,7 @@
+schema: club_stats_season
+kind: frames
+frames:
+- section: skaters
+  columns: []
+- section: goalies
+  columns: []

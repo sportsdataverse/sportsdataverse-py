@@ -1,0 +1,5 @@
+columns: []
+kind: dataframe
+schema: event_competitor_leaders
+unverified: 'parser: parse_items returns no columns on the live payload (nba, 2026-10-07); its rows sit under keys it does
+  not read (top level: $ref, abbreviation, categories, id, name, type)'

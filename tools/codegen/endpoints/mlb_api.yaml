@@ -532,6 +532,7 @@ endpoints:
   parser: parse_mlb_api_schedule
   returns_schema: native/mlb_api/game_changes
 - short: analytics_games
+  returns_schema: native/mlb_api/analytics_games
   summary: View timestamps of most recent data corrections made to games.
   path: /api/v1/game/analytics/game
   extra_params:
@@ -558,6 +559,7 @@ endpoints:
     type: str
   parser: parse_mlb_api_list
 - short: analytics_guids
+  returns_schema: native/mlb_api/analytics_guids
   summary: View timestamps of most recent data corrections made to GUIDs.
   path: /api/v1/game/analytics/guids
   extra_params:
@@ -584,6 +586,7 @@ endpoints:
     type: str
   parser: parse_mlb_api_list
 - short: game_guids
+  returns_schema: native/mlb_api/game_guids
   summary: View Statcast data for a specific game.
   path: /api/v1/game/{game_pk}/guids
   path_params:
@@ -619,6 +622,7 @@ endpoints:
     game_pk: 716390
   parser: parse_mlb_api_list
 - short: play_analytics
+  returns_schema: native/mlb_api/play_analytics
   summary: View Statcast data for a specific play.
   path: /api/v1/game/{game_pk}/{guid}/analytics
   path_params:
@@ -640,6 +644,7 @@ endpoints:
     guid: 90groovy-2438-test-guid-placeholder0
   parser: parse_mlb_api_list
 - short: play_context_metrics_averages
+  returns_schema: native/mlb_api/play_context_metrics_averages
   summary: View Statcast contextMetrics data for a specific play.
   path: /api/v1/game/{game_pk}/{guid}/contextMetricsAverages
   path_params:
@@ -658,6 +663,7 @@ endpoints:
     guid: 90groovy-2438-test-guid-placeholder0
   parser: parse_mlb_api_list
 - short: game_color
+  returns_schema: native/mlb_api/game_color
   summary: View game color commentary info.
   path: /api/v1/game/{game_pk}/feed/color
   path_params:
@@ -675,6 +681,7 @@ endpoints:
     game_pk: 716390
   parser: parse_mlb_api_list
 - short: game_color_diff
+  returns_schema: native/mlb_api/game_color_diff
   summary: View game color feed.
   path: /api/v1/game/{game_pk}/feed/color/diffPatch
   path_params:
@@ -692,6 +699,7 @@ endpoints:
     game_pk: 716390
   parser: parse_mlb_api_list
 - short: game_color_timestamps
+  returns_schema: native/mlb_api/game_color_timestamps
   summary: View all of the color timecodes for a game.
   path: /api/v1/game/{game_pk}/feed/color/timestamps
   path_params:
@@ -966,6 +974,7 @@ endpoints:
   parser: parse_mlb_api_list
   returns_schema: native/mlb_api/official_scorers
 - short: umpire_games
+  returns_schema: native/mlb_api/umpire_games
   summary: Get umpires and associated game for umpireId.
   path: /api/v1/jobs/umpires/games/{umpire_id}
   path_params:
@@ -1094,6 +1103,7 @@ endpoints:
   parser: parse_mlb_api_list
   returns_schema: native/mlb_api/sport
 - short: stats_metrics
+  returns_schema: native/mlb_api/stats_metrics
   summary: View Statcast stats.
   path: /api/v1/stats/metrics
   extra_params:

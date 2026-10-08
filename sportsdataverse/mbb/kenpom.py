@@ -898,7 +898,7 @@ def kenpom_box(
     """GET /box.php - box-score detail for one game (per-team four factors, player lines, scoring runs). Port of hoopR kp_box().
 
     Endpoint: ``GET https://kenpom.com/box.php``
-    Example URL: https://kenpom.com/box.php?g=20250401&y=2025
+    Example URL: https://kenpom.com/box.php?g=1097&y=2025
 
     Args:
         game_id: KenPom game id - the `g=` value on a FanMatch game link.
@@ -921,7 +921,7 @@ def kenpom_box(
         Quick start::
 
             from sportsdataverse.mbb import kenpom_box
-            kenpom_box(game_id=20250401, year=2025)
+            kenpom_box(game_id=1097, year=2025)
 
         See Also:
             * `hoopR`_ - R sister package; this is the port of its kp_* family
@@ -959,7 +959,7 @@ def kenpom_win_probability(
     """GET /winprob.php - in-game win-probability table for one game. Port of hoopR kp_winprob().
 
     Endpoint: ``GET https://kenpom.com/winprob.php``
-    Example URL: https://kenpom.com/winprob.php?g=20250401&y=2025
+    Example URL: https://kenpom.com/winprob.php?g=3577&y=2025
 
     Args:
         game_id: KenPom game id.
@@ -982,7 +982,7 @@ def kenpom_win_probability(
         Quick start::
 
             from sportsdataverse.mbb import kenpom_win_probability
-            kenpom_win_probability(game_id=20250401, year=2025)
+            kenpom_win_probability(game_id=3577, year=2025)
 
         See Also:
             * `hoopR`_ - R sister package; this is the port of its kp_* family
@@ -1696,7 +1696,7 @@ def kenpom_officials(
 
 
 def kenpom_referee(
-    referee: str,
+    referee: Union[int, str],
     year: int,
     headers: Optional[Dict[str, str]] = None,
     *,
@@ -1707,10 +1707,10 @@ def kenpom_referee(
     """GET /referee.php - one referee's game log and splits for a season. Port of hoopR kp_referee().
 
     Endpoint: ``GET https://kenpom.com/referee.php``
-    Example URL: https://kenpom.com/referee.php?r=Ron+Groover&y=2025
+    Example URL: https://kenpom.com/referee.php?r=714294&y=2025
 
     Args:
-        referee: Referee name as KenPom spells it (take it from the officials table).
+        referee: KenPom referee id - the `r=` value on an officials-table link.
         year: Season as a 4-digit ENDING year.
         headers: optional pre-built request headers to reuse across calls; the authenticated kenpom.com session is resolved and cached when omitted.
         return_parsed: parse the payload through parse_kenpom_page -> dict of polars DataFrames (default True). Pass return_parsed=False for the raw page HTML (``str``).
@@ -1730,7 +1730,7 @@ def kenpom_referee(
         Quick start::
 
             from sportsdataverse.mbb import kenpom_referee
-            kenpom_referee(referee='Ron Groover', year=2025)
+            kenpom_referee(referee=714294, year=2025)
 
         See Also:
             * `hoopR`_ - R sister package; this is the port of its kp_* family

@@ -1,0 +1,20 @@
+{
+ "color": "1, 8, 31, 87",
+ "contentType": "league",
+ "contentUri": "football/nfl/league/1",
+ "details": [
+  {
+   "text": "WEEK 5: OCT 8 - OCT 12 "
+  }
+ ],
+ "hasFeature": [
+  "press",
+  "photosAndLogos"
+ ],
+ "imageAltText": "National Football League",
+ "imageType": "image-logo",
+ "logoUrl": "https://b.fssta.com/uploads/application/leagues/logos/NFL.vresize.200.200.medium.0.png",
+ "shortTitle": "NFL",
+ "template": "entity-header",
+ "title": "NATIONAL FOOTBALL LEAGUE"
+}

@@ -25,7 +25,52 @@ ESPN endpoint.
 
 ### Returns {#espn_cfb_fpi-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_fpi`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `team_id` | character | ESPN team id. |
+| `team_uid` | character |  |
+| `team_abbreviation` | character | Team abbreviation. |
+| `team_display_name` | character | Full team display name. |
+| `team_short_display_name` | character | Short team display name. |
+| `team_nickname` | character | Team nickname label. |
+| `bpi` | double |  |
+| `bpirank` | double |  |
+| `bpioffense` | double |  |
+| `bpidefense` | double |  |
+| `playoffbpi` | double |  |
+| `offtalent` | character |  |
+| `deftalent` | character |  |
+| `numwins` | double |  |
+| `numlosses` | double |  |
+| `projectedw` | double |  |
+| `projectedl` | double |  |
+| `probwindiv` | double |  |
+| `probmakeplayoffs` | double |  |
+| `top6seed` | double |  |
+| `playinchance` | double |  |
+| `playoffseed` | double |  |
+| `projdraftslot` | double |  |
+| `probno1draftpick` | double |  |
+| `playoffbpi_playoffs` | double |  |
+| `playoffoff` | double |  |
+| `playoffdef` | double |  |
+| `probmakeplayoffs_playoffs` | double |  |
+| `probmakeconfsemi` | double |  |
+| `probmakeconfchamp` | double |  |
+| `probmaketitlegame` | double |  |
+| `probwintitle` | double |  |
+| `season.displayName` | character |  |
+| `season.endDate` | character |  |
+| `season.startDate` | character |  |
+| `season.type.endDate` | character |  |
+| `season.type.id` | character |  |
+| `season.type.name` | character |  |
+| `season.type.startDate` | character |  |
+| `season.type.type` | integer |  |
+| `season.year` | integer |  |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#espn_cfb_fpi-example}

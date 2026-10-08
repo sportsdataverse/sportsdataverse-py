@@ -1,0 +1,132 @@
+{
+ "count": 9,
+ "items": [
+  {
+   "displayName": "BPI Leader",
+   "leaders": [
+    {
+     "displayValue": "23",
+     "shortDisplayValue": "32-5",
+     "team": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/mens-college-basketball/seasons/2024/teams/248?lang=en&region=us"
+     },
+     "value": 23.0327246777
+    }
+   ],
+   "name": "bpi"
+  },
+  {
+   "displayName": "NCAAM RPI Leader",
+   "leaders": [
+    {
+     "shortDisplayValue": "32-5",
+     "team": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/mens-college-basketball/seasons/2024/teams/248?lang=en&region=us"
+     }
+    }
+   ],
+   "name": "rpirank"
+  },
+  {
+   "displayName": "SOS Leader",
+   "leaders": [
+    {
+     "displayValue": "0.5",
+     "shortDisplayValue": "34-5",
+     "team": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/mens-college-basketball/seasons/2024/teams/2509?lang=en&region=us"
+     },
+     "value": 0.461567392
+    }
+   ],
+   "name": "sospast"
+  },
+  {
+   "displayName": "SOR Leader",
+   "leaders": [
+    {
+     "displayValue": "100",
+     "shortDisplayValue": "37-3",
+     "team": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/mens-college-basketball/seasons/2024/teams/41?lang=en&region=us"
+     },
+     "value": 99.9994396408
+    }
+   ],
+   "name": "sor"
+  },
+  {
+   "displayName": "BPI Off Leader",
+   "leaders": [
+    {
+     "displayValue": "13.8",
+     "shortDisplayValue": "37-3",
+     "team": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/mens-college-basketball/seasons/2024/teams/41?lang=en&region=us"
+     },
+     "value": 13.8452483668
+    }
+   ],
+   "name": "bpioffense"
+  },
+  {
+   "displayName": "BPI Def Leader",
+   "leaders": [
+    {
+     "displayValue": "13.9",
+     "shortDisplayValue": "32-5",
+     "team": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/mens-college-basketball/seasons/2024/teams/248?lang=en&region=us"
+     },
+     "value": 13.8890901064
+    }
+   ],
+   "name": "bpidefense"
+  },
+  {
+   "displayName": "7-Day RK CHG Leader",
+   "leaders": [
+    {
+     "displayValue": "8",
+     "shortDisplayValue": "25-12",
+     "team": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/mens-college-basketball/seasons/2024/teams/2550?lang=en&region=us"
+     },
+     "value": 8.0
+    }
+   ],
+   "name": "bpisevendaychangerank"
+  },
+  {
+   "displayName": "Most Quality Wins",
+   "leaders": [
+    {
+     "displayValue": "19",
+     "shortDisplayValue": "37-3",
+     "team": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/mens-college-basketball/seasons/2024/teams/41?lang=en&region=us"
+     },
+     "value": 19.0
+    }
+   ],
+   "name": "top50bpiwins"
+  },
+  {
+   "displayName": "Non-Conf SOS Leader",
+   "leaders": [
+    {
+     "displayValue": "0.4",
+     "shortDisplayValue": "1-30",
+     "team": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/mens-college-basketball/seasons/2024/teams/2400?lang=en&region=us"
+     },
+     "value": 0.4313923363
+    }
+   ],
+   "name": "sosoutofconfpast"
+  }
+ ],
+ "pageCount": 1,
+ "pageIndex": 1,
+ "pageSize": 25
+}

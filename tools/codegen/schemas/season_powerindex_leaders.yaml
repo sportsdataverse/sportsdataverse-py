@@ -1,0 +1,12 @@
+schema: season_powerindex_leaders
+kind: dataframe
+columns:
+- name: display_name
+  type: character
+  description: ''
+- name: leaders
+  type: character
+  description: ''
+- name: name
+  type: character
+  description: ''

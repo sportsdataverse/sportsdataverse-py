@@ -1,0 +1,5 @@
+columns: []
+kind: dataframe
+schema: pff_api_whoami
+unverified: 'no capture: the body is the calling account''s own identity record, so
+  none is committed; there is no parser either -- the wrapper returns that raw dict'

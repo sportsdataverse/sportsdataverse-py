@@ -1,0 +1,44 @@
+schema: foul_trouble
+kind: frames
+frames:
+- section: ratings_table
+  columns:
+  - name: team
+    type: character
+    description: ''
+  - name: conf
+    type: character
+    description: ''
+  - name: 2_fp_pct
+    type: double
+    description: ''
+  - name: 2_fp_pct_rk
+    type: integer
+    description: ''
+  - name: adj2_fp
+    type: double
+    description: ''
+  - name: adj2_fp_rk
+    type: integer
+    description: ''
+  - name: 2_foul_total_time
+    type: character
+    description: ''
+  - name: 2_foul_total_time_rk
+    type: integer
+    description: ''
+  - name: 2_foul_time_on
+    type: character
+    description: ''
+  - name: 2_foul_time_on_rk
+    type: integer
+    description: ''
+  - name: bench_pct
+    type: double
+    description: ''
+  - name: bench_pct_rk
+    type: integer
+    description: ''
+  - name: ncaa_seed
+    type: integer
+    description: ''

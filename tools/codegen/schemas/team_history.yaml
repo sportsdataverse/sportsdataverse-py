@@ -1,0 +1,5 @@
+columns: []
+kind: dataframe
+schema: team_history
+unverified: 'no capture: ESPN answers an empty object in nba, nfl, mlb, nhl, wnba, mbb, wbb; 400 in cfb with the documented
+  example arguments (2026-10-07)'

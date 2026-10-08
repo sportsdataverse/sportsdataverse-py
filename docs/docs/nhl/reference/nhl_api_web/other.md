@@ -164,7 +164,82 @@ Pull the gamecenter right-rail payload (in-game widgets).
 
 ### Returns {#nhl_right_rail-returns}
 
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_nhl_web_right_rail`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a dict of `polars.DataFrame`s (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
+
+**season_series**
+
+| col_name | type | description |
+|---|---|---|
+| `id` | integer | Unique player identifier. |
+| `season` | integer | Season year (echoed from arg). |
+| `game_type` | integer | Game type the row belongs to. |
+| `game_date` | character | Game date. |
+| `start_time_utc` | character | Scheduled start time in UTC. |
+| `eastern_utc_offset` | character | Eastern time UTC offset. |
+| `venue_utc_offset` | character | Venue UTC offset. |
+| `game_state` | character | Game state (e.g., FINAL, LIVE). |
+| `game_schedule_state` | character | Schedule state of the game. |
+| `game_center_link` | character | Link to the NHL game center page. |
+| `away_team_id` | integer | Away team identifier. |
+| `away_team_abbrev` | character | Away team abbreviation. |
+| `away_team_logo` | character | URL to the away team logo. |
+| `away_team_score` | integer | Away team final score. |
+| `home_team_id` | integer | Home team identifier. |
+| `home_team_abbrev` | character | Home team abbreviation. |
+| `home_team_logo` | character | URL to the home team logo. |
+| `home_team_score` | integer | Home team final score. |
+| `period_descriptor_number` | integer | Period number. |
+| `period_descriptor_period_type` | character | Period type (e.g., REG, OT). |
+| `period_descriptor_max_regulation_periods` | integer | Maximum number of regulation periods. |
+| `game_outcome_last_period_type` | character | Period type in which the game ended. |
+
+**shots_by_period**
+
+| col_name | type | description |
+|---|---|---|
+| `away` | integer | Away team shots in the period. |
+| `home` | integer | Whether the player's team was home. |
+| `period_descriptor_number` | integer | Period number. |
+| `period_descriptor_period_type` | character | Period type (e.g., REG, OT). |
+| `period_descriptor_max_regulation_periods` | integer | Maximum number of regulation periods. |
+
+**team_game_stats**
+
+| col_name | type | description |
+|---|---|---|
+| `category` | character | Stat leader category. |
+| `away_value` | character |  |
+| `home_value` | character |  |
+
+**game_info**
+
+| col_name | type | description |
+|---|---|---|
+| `referees` | character |  |
+| `linesmen` | character |  |
+| `away_team_head_coach_default` | character |  |
+| `away_team_scratches` | character |  |
+| `home_team_head_coach_default` | character |  |
+| `home_team_scratches` | character |  |
+
+**linescore_by_period**
+
+| col_name | type | description |
+|---|---|---|
+| `away` | integer | Away team shots in the period. |
+| `home` | integer | Whether the player's team was home. |
+| `period_descriptor_number` | integer | Period number. |
+| `period_descriptor_period_type` | character | Period type (e.g., REG, OT). |
+| `period_descriptor_max_regulation_periods` | integer | Maximum number of regulation periods. |
+
+**season_series_wins**
+
+| col_name | type | description |
+|---|---|---|
+| `away_team_wins` | integer |  |
+| `home_team_wins` | integer |  |
+| `needed_to_win` | integer |  |
+
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#nhl_right_rail-example}
