@@ -504,6 +504,18 @@ def get_go_wp(pbp_df) -> pd.DataFrame:
 
     st = _to_pandas(pbp_df)
 
+    # A play with no yards_to_goal or distance (e.g. a penalty or timeout row tagged down 4) has no
+    # go-for-it outcome. Its NaN used to be cast to int64 below, giving a garbage gain distribution
+    # instead of NaN. Each play is independent, so the rest are computed alone, unchanged.
+    ok = (st["yards_to_goal"].notna() & st["distance"].notna()).to_numpy()
+    if not ok.all():
+        part = get_go_wp(base[ok].reset_index(drop=True))
+        out = base.copy()
+        for c in ("go_wp", "first_down_prob", "wp_succeed", "wp_fail"):
+            out[c] = np.nan
+            out.loc[ok, c] = part[c].to_numpy()
+        return out
+
     # step 1: fd_model 76-class yards-gained distribution per play
     fd_X = pd.DataFrame(
         {
