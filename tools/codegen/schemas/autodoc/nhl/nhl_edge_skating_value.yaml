@@ -1,0 +1,27 @@
+schema: nhl_edge_skating_value
+kind: dataframe
+columns:
+- name: player_id
+  type: character
+  description: ''
+- name: season
+  type: integer
+  description: ''
+- name: top_speed
+  type: double
+  description: ''
+- name: distance_km
+  type: double
+  description: ''
+- name: speed_bursts_20
+  type: double
+  description: ''
+- name: oz_time_pct
+  type: double
+  description: ''
+- name: skating_value
+  type: double
+  description: ''
+- name: skating_value_rank
+  type: integer
+  description: ''

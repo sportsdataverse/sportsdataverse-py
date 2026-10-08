@@ -1,0 +1,4 @@
+schema: pff_aaf_leagues
+kind: dataframe
+columns: []
+unverified: 'no capture: PFF Premium (legacy) needs a browser session cookie, and the docs build has none'

@@ -1,10 +1,10 @@
 ---
-title: "MBB — additional Python functions — Models and calculators: AssistEvent–calc_player"
-sidebar_label: "Models and calculators: AssistEvent–calc_player"
+title: "MBB — additional Python functions — Models and calculators: AssistEvent–build_priors"
+sidebar_label: "Models and calculators: AssistEvent–build_priors"
 sidebar_position: 9
-description: "MBB — additional Python functions — Models and calculators: AssistEvent–calc_player — function reference in sdv-py, the SportsDataverse Python package."
+description: "MBB — additional Python functions — Models and calculators: AssistEvent–build_priors — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# MBB — additional Python functions — Models and calculators: AssistEvent–calc_player
+# MBB — additional Python functions — Models and calculators: AssistEvent–build_priors
 
 ### AssistEvent {#AssistEvent}
 
@@ -726,6 +726,17 @@ sign); `avg` is the league mean efficiency and `hfa` comes from
 
 One row per (season, team_id): `season, team_id, adj_o, adj_d, adj_em, raw_o, raw_d, games`. Empty input returns that schema with zero rows.
 
+| col_name | type | description |
+|---|---|---|
+| `season` | integer | Season year. |
+| `team_id` | character | Unique team identifier. |
+| `adj_o` | double | Adj o. |
+| `adj_d` | double | Adj d. |
+| `adj_em` | double | Adj em. |
+| `raw_o` | double | Raw o. |
+| `raw_d` | double | Raw d. |
+| `games` | integer | Games played. |
+
 **Example**
 
 ```python
@@ -799,6 +810,12 @@ the league baseline tempo from
 
 One row per (season, team_id): `season, team_id, adj_tempo`. Empty input returns that schema with zero rows.
 
+| col_name | type | description |
+|---|---|---|
+| `season` | integer | Season year. |
+| `team_id` | character | Unique team identifier. |
+| `adj_tempo` | double |  |
+
 **Example**
 
 ```python
@@ -831,6 +848,31 @@ all remaining attempts fold into `fga_mid`.
 **Returns**
 
 One row per (player_id, season, team_id): `player_id:Utf8, season, team_id:Utf8, player, minutes` + the counting columns + `fga_rim, fga_mid, fga_three`. Empty input returns zero rows.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | integer | Season year. |
+| `team_id` | character | Unique team identifier. |
+| `player` | character | Player name. |
+| `position` | character | Listed roster position (G, F, C, etc.). |
+| `minutes` | double | Minutes played, formatted MM:SS (V3 PT-duration parsed) or decimal minutes (V2). |
+| `field_goals_made` | double | Field goals made (2-pt + 3-pt). |
+| `field_goals_attempted` | double | Field goal attempts (2-pt + 3-pt). |
+| `three_point_field_goals_made` | double | Three-point field goals made. |
+| `three_point_field_goals_attempted` | double | Three-point field goal attempts. |
+| `free_throws_made` | double | Free throws made. |
+| `free_throws_attempted` | double | Free throw attempts. |
+| `offensive_rebounds` | double | Offensive rebounds. |
+| `defensive_rebounds` | double | Defensive rebounds. |
+| `assists` | double | Total assists. |
+| `steals` | double | Total steals. |
+| `blocks` | double | Total blocks. |
+| `turnovers` | double | Total turnovers. |
+| `points` | double | Points scored. |
+| `player_id` | character | Unique player identifier. |
+| `fga_rim` | double |  |
+| `fga_mid` | double |  |
+| `fga_three` | double |  |
 
 **Example**
 
@@ -896,6 +938,92 @@ Filter a results frame to games strictly before a cutoff date (leakage boundary)
 
 A `polars.DataFrame` containing only rows with `date < cutoff_date`.
 
+| col_name | type | description |
+|---|---|---|
+| `id` | integer | Id. |
+| `uid` | character | ESPN UID string. |
+| `attendance` | double | Reported attendance. |
+| `time_valid` | logical | Time valid. |
+| `neutral_site` | logical | Neutral site. |
+| `conference_competition` | logical | Conference competition. |
+| `play_by_play_available` | logical |  |
+| `recent` | logical | Recent. |
+| `start_date` | character | Start date (YYYY-MM-DD). |
+| `notes_type` | character | Notes type. |
+| `notes_headline` | character | Notes headline. |
+| `broadcast_market` | character | Broadcast market label (e.g. 'national', 'home'). |
+| `broadcast_name` | character | Broadcast name. |
+| `type_id` | integer | Type identifier (numeric). |
+| `type_abbreviation` | character | Type abbreviation. |
+| `venue_id` | integer | Unique venue identifier. |
+| `venue_full_name` | character | Venue full name. |
+| `venue_address_city` | character | Venue address city. |
+| `venue_address_state` | character | Venue address state / region. |
+| `venue_indoor` | logical | TRUE if the venue is indoors. |
+| `status_clock` | double | Status clock. |
+| `status_display_clock` | character | Status display clock. |
+| `status_period` | double | Status period. |
+| `status_type_id` | integer | Unique identifier for status type. |
+| `status_type_name` | character | Status type name. |
+| `status_type_state` | character | Status type state. |
+| `status_type_completed` | logical | Status type completed. |
+| `status_type_description` | character | Status type description. |
+| `status_type_detail` | character | Status type detail. |
+| `status_type_short_detail` | character | Status type short detail. |
+| `format_regulation_periods` | double | Format regulation periods. |
+| `home_team_id` | integer | Unique identifier for the home team. |
+| `home_uid` | character | Home team's uid. |
+| `home_location` | character | Home team's location. |
+| `home_name` | character | Home name. |
+| `home_abbreviation` | character | Home team's abbreviation. |
+| `home_display_name` | character | Home display name. |
+| `home_short_display_name` | character | Home short display name. |
+| `home_color` | character | Color code (hex) for home. |
+| `home_alternate_color` | character | Color code (hex) for home alternate. |
+| `home_is_active` | logical | Home team's is active. |
+| `home_venue_id` | integer | Unique identifier for home venue. |
+| `home_logo` | character | Home team logo URL. |
+| `home_conference_id` | integer | Unique identifier for home conference. |
+| `home_score` | integer | Home team score at the time of the play. |
+| `home_winner` | logical | Home team's winner. |
+| `home_current_rank` | double |  |
+| `home_linescores` | character |  |
+| `home_records` | character |  |
+| `away_team_id` | integer | Unique identifier for the away team. |
+| `away_uid` | character | Away team's uid. |
+| `away_location` | character | Away team's location. |
+| `away_name` | character | Away name. |
+| `away_abbreviation` | character | Away team's abbreviation. |
+| `away_display_name` | character | Away display name. |
+| `away_short_display_name` | character | Away short display name. |
+| `away_color` | character | Color code (hex) for away. |
+| `away_alternate_color` | character | Color code (hex) for away alternate. |
+| `away_is_active` | logical | Away team's is active. |
+| `away_venue_id` | integer | Unique identifier for away venue. |
+| `away_logo` | character | Away team logo URL. |
+| `away_conference_id` | integer | Unique identifier for away conference. |
+| `away_score` | integer | Away team score at the time of the play. |
+| `away_winner` | logical | Away team's winner. |
+| `away_current_rank` | double |  |
+| `away_linescores` | character |  |
+| `away_records` | character |  |
+| `game_id` | integer | Unique game identifier. |
+| `season` | integer | Season year. |
+| `season_type` | integer | Season type (1=pre-season, 2=regular season, 3=postseason, 4=off-season for ESPN; or string label for WNBA Stats). |
+| `status_type_alt_detail` | character | Status type alt detail. |
+| `tournament_id` | integer | ESPN tournament identifier. |
+| `groups_id` | integer | Unique identifier for groups. |
+| `groups_name` | character | Groups name. |
+| `groups_short_name` | character | Groups short name. |
+| `groups_is_conference` | logical | Groups is conference. |
+| `game_json` | logical |  |
+| `game_json_url` | character |  |
+| `game_date_time` | character | Game start date/time (ISO 8601). |
+| `date` | character | Date in YYYY-MM-DD format. |
+| `PBP` | logical |  |
+| `team_box` | logical | Team box. |
+| `player_box` | logical | Player box. |
+
 **Example**
 
 ```python
@@ -920,6 +1048,31 @@ Rows strictly before `target_season` -- the leakage boundary.
 **Returns**
 
 The subset with `season < target_season`.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | integer | Season year. |
+| `team_id` | character | Unique team identifier. |
+| `player` | character | Player name. |
+| `position` | character | Listed roster position (G, F, C, etc.). |
+| `minutes` | double | Minutes played, formatted MM:SS (V3 PT-duration parsed) or decimal minutes (V2). |
+| `field_goals_made` | double | Field goals made (2-pt + 3-pt). |
+| `field_goals_attempted` | double | Field goal attempts (2-pt + 3-pt). |
+| `three_point_field_goals_made` | double | Three-point field goals made. |
+| `three_point_field_goals_attempted` | double | Three-point field goal attempts. |
+| `free_throws_made` | double | Free throws made. |
+| `free_throws_attempted` | double | Free throw attempts. |
+| `offensive_rebounds` | double | Offensive rebounds. |
+| `defensive_rebounds` | double | Defensive rebounds. |
+| `assists` | double | Total assists. |
+| `steals` | double | Total steals. |
+| `blocks` | double | Total blocks. |
+| `turnovers` | double | Total turnovers. |
+| `points` | double | Points scored. |
+| `player_id` | character | Unique player identifier. |
+| `fga_rim` | double |  |
+| `fga_mid` | double |  |
+| `fga_three` | double |  |
 
 **Example**
 
@@ -1044,6 +1197,70 @@ appended -- the enrich-in-place shape that overwrites the season's
 **Returns**
 
 The season's `load_mbb_pbp` frame (every column preserved) with the two WP_COLS` appended (both `Float64`), sorted by `game_id` then `game_play_number`.
+
+| col_name | type | description |
+|---|---|---|
+| `game_play_number` | integer | Sequential play number within the game. |
+| `id` | integer | Id. |
+| `sequence_number` | integer | Sequence number representing a shot-possession (V3 PBP). |
+| `type_id` | integer | Type identifier (numeric). |
+| `type_text` | character | Display text for the type field. |
+| `text` | character | Text description of the play / record. |
+| `away_score` | integer | Away team score at the time of the play. |
+| `home_score` | integer | Home team score at the time of the play. |
+| `period_number` | integer | Numeric period (1-4 for quarters; 5+ for OT). |
+| `period_display_value` | character | Period display label (e.g. '1st Quarter', 'OT'). |
+| `clock_display_value` | character | Game clock display string (e.g. '8:32'). |
+| `scoring_play` | logical | TRUE if the play resulted in points scored. |
+| `score_value` | integer | Point value of the play (2 / 3 / 1). |
+| `team_id` | integer | Unique team identifier. |
+| `athlete_id_1` | integer | Primary athlete identifier (e.g. shooter). |
+| `wallclock` | character | Wallclock. |
+| `shooting_play` | logical | TRUE if the play was a shooting attempt. |
+| `athlete_id_2` | integer | Secondary athlete identifier (e.g. assister / fouler). |
+| `game_id` | integer | Unique game identifier. |
+| `season` | integer | Season year. |
+| `season_type` | integer | Season type (1=pre-season, 2=regular season, 3=postseason, 4=off-season for ESPN; or string label for WNBA Stats). |
+| `home_team_id` | integer | Unique identifier for the home team. |
+| `home_team_name` | character | Home team name. |
+| `home_team_mascot` | character | Home team mascot. |
+| `home_team_abbrev` | character | Home team three-letter abbreviation. |
+| `home_team_name_alt` | character | Alternate home team name. |
+| `away_team_id` | integer | Unique identifier for the away team. |
+| `away_team_name` | character | Away team name. |
+| `away_team_mascot` | character | Away team mascot. |
+| `away_team_abbrev` | character | Away team three-letter abbreviation. |
+| `away_team_name_alt` | character | Alternate away team name. |
+| `game_spread` | double | Game spread (signed; positive = home favored). |
+| `home_favorite` | logical | TRUE if the home team is the betting favorite. |
+| `game_spread_available` | logical | TRUE if a point spread was available. |
+| `home_team_spread` | double | Home team's point spread. |
+| `half` | integer | Half of the game (1 or 2). |
+| `time` | character | Time / clock value. |
+| `clock_minutes` | integer | Clock minutes split out for convenience. |
+| `clock_seconds` | integer | Clock seconds split out for convenience. |
+| `home_timeout_called` | logical |  |
+| `away_timeout_called` | logical |  |
+| `lag_period` | integer |  |
+| `lead_period` | integer |  |
+| `lag_half` | integer | A lag column on the half |
+| `lead_half` | integer | A lead column on the half |
+| `start_period_seconds_remaining` | integer |  |
+| `start_game_seconds_remaining` | integer | Seconds remaining in the game at the start of the play. |
+| `end_period_seconds_remaining` | integer |  |
+| `end_game_seconds_remaining` | integer | Seconds remaining in the game at the end of the play. |
+| `game_date` | character | Game date (YYYY-MM-DD). |
+| `game_date_time` | character | Game start date/time (ISO 8601). |
+| `coordinate_x` | double | X coordinate on the court (half-court layout). |
+| `coordinate_y` | double | Y coordinate on the court (half-court layout). |
+| `coordinate_x_raw` | double | X coordinate as returned by the API before any adjustment. |
+| `coordinate_y_raw` | double | Y coordinate as returned by the API before any adjustment. |
+| `athlete_name_1` | character |  |
+| `athlete_name_2` | character |  |
+| `athlete_name_3` | character |  |
+| `media_id` | character | Media identifier (video / image). |
+| `pregame_home_prob` | double |  |
+| `home_win_prob` | double |  |
 
 **Example**
 
@@ -1217,223 +1434,4 @@ from sportsdataverse.mbb.mbb_rapm import build_priors
 
 priors = build_priors({}, {}, 100.0, ["Wiggins, Aaron"], -1)
 print(priors["players_weak"][0])
-```
-
-### build_productivity {#build_productivity}
-
-`build_productivity(o_rtg: 'float', o_adj: 'float', usage: 'float', avg_efficiency: 'float') -> 'dict[str, float]'`
-
-Public port of `RatingUtils.buildProductivity` (`RatingUtils.ts:963-990`).
-
-Promoted to public in Task 2.3 -- see the module docstring's "Ported
-behavior" section for the promotion rationale (Phase-3 RAPM needs to
-import this across module boundaries).
-
-Converts `ORtg` and a few other numbers into "productivity" using Dean
-Oliver's PUE ("Player Usage Efficiency") formulation, SoS-adjusted via
-`o_adj = avgEfficiency / Def_SOS`. **RAPM prior source (Phase 3):**
-`Adj_ORtgPlus` is the value RAPM uses as an individual-offense prior --
-see `PLAN-phase2.md`'s self-review notes.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `o_rtg` | `float` |  | The player's (possibly override-adjusted) `ORtg`. |
-| `o_adj` | `float` |  | `avg_efficiency / Def_SOS` -- the strength-of-schedule adjustment factor. |
-| `usage` | `float` |  | `100 * TotPoss / (Team_Poss or 1)` -- the player's possession-usage percentage. |
-| `avg_efficiency` | `float` |  | The league/context average efficiency (`100` in every vendored jest call). |
-
-**Returns**
-
-`{"Adj_ORtg": float, "Adj_ORtgPlus": float, "Usage_Bonus": float, "SoS_Bonus": float}` -- keys kept TS-verbatim (see module docstring's naming-convention note).
-
-### build_weak_prior_from_rapm {#build_weak_prior_from_rapm}
-
-`build_weak_prior_from_rapm(rapm_results: 'list[float]', off_or_def: 'str') -> 'list[dict[str, float]]'`
-
-Wrap a flat RAPM-estimate vector into `playersWeak`-shaped dicts.
-
-Faithful port of `RapmUtils.buildWeakPriorFromRapm` (`RapmUtils.ts:410-419`),
-used only by `pick_ridge_regression`'s `use_recursive_weak_prior`
-branch to substitute the just-computed (pre-strong-prior) RAPM values as
-the *weak* prior for a follow-up `apply_weak_priors` call -- "the
-recursive prior" per the upstream `/** For "recursive" prior */` comment.
-
-**Uncovered by the oracle** -- `semiRealRapmResults.testContext.priorInfo
-.useRecursiveWeakPrior` is `false`, so `RapmUtils.test.ts`'s
-`"pickRidgeRegression"` test never calls this function. Ported
-faithfully from TS regardless (per "TS governs"); flagged as a documented
-gap rather than backed by a synthetic test, matching this module's
-existing convention for other upstream-untested branches (e.g. the
-"Task 3.3 coverage gap" note above).
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `rapm_results` | `list[float]` |  | A flat per-player RAPM estimate vector, e.g. `pick_ridge_regression`'s own `results_pre_prior`. |
-| `off_or_def` | `str` |  | `"off"` or `"def"` -- selects the output key, `f"{off_or_def}_adj_ppp"`. |
-
-**Returns**
-
-One `{f"{off_or_def}_adj_ppp": rapm}` dict per input element, index-aligned with `rapm_results`.
-
-**Example**
-
-```python
-from sportsdataverse.mbb.mbb_rapm import build_weak_prior_from_rapm
-
-weak_prior = build_weak_prior_from_rapm([5.0, 4.5], "off")
-print(weak_prior[0])  # {"off_adj_ppp": 5.0}
-```
-
-### calc_collinearity_diag {#calc_collinearity_diag}
-
-`calc_collinearity_diag(weight_matrix: 'NDArray[np.float64]', ctx: 'RapmPlayerContext') -> 'RapmPreProcDiagnostics'`
-
-Multi-collinearity diagnostic between the players in an off/def design matrix.
-
-Faithful port of `RapmUtils.calcCollinearityDiag` (`RapmUtils.ts:1629-1760`).
-Runs an SVD of `weight_matrix`, builds condition indices ("lineup
-combos") from the ratio of the largest to each singular value, and a
-variance-decomposition-proportions ("VDP") matrix identifying which
-players load onto which collinear combo -- the classic Belsley-Kuh-Welsch
-collinearity-diagnostics recipe (see the upstream comment's
-[colldiag.m](https://github.com/brian-lau/colldiag/blob/master/colldiag.m)
-citation). Also builds a plain Pearson player/player correlation matrix
-(calc_player_correlations`) and folds it into a possession
--weighted `adaptive_correl_weights` summary per player.
-
-**`numpy.linalg.svd(weight_matrix, full_matrices=False)` replaces
-`svd-js`'s `SVD(weightMatrix, false)`.** Both are the standard
-Golub-Kahan-Reinsch decomposition (`A = U @ diag(S) @ Vᵀ`); numpy's
-`Vh` return value already *is* `Vᵀ` (what the TS code separately
-computes via `transpose(matrix(v))`), so this port skips that
-transpose. The TS code (and this port) never reads `u`/the first SVD
-return -- only `q`/`S` (singular values) and `v`/`Vᵀ`. Singular
--vector **sign is immaterial here**: every place `V` is used
-(`phiMatrix`/`phi_matrix`) squares each entry (`val * val`), and a
-per-singular-value sign flip on `U`/`V` together is a valid SVD
-regardless -- so any `U`/`V` sign convention difference between
-`svd-js` and LAPACK (numpy's backend) cannot change this function's
-output. **Singular-value ordering is likewise immaterial**: both this
-port and the TS source explicitly re-sort `q` (ascending, carrying the
-original index along) before using it, so whichever order either SVD
-implementation returns values in, the final result only depends on the
-*values themselves* (up to the explicit resort), not on numpy's native
-descending convention vs whatever order `svd-js` happens to return.
-
-**`correl_matrix`/`poss_correl_matrix` stay `numpy.ndarray`** (see
-the module docstring's "Task 3.6 notes" for why this doesn't hit the
-Task 3.5 "`ndarray` breaks deep `==`" concern).
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `weight_matrix` | `NDArray[float64]` |  | An off/def design matrix, shape `(num_lineups, ctx["num_players"])` (e.g. `calc_player_weights`'s first return value, or a hand-built matrix for isolated testing). |
-| `ctx` | `RapmPlayerContext` |  | A `RapmPlayerContext`. `ctx["num_players"]` sizes every per-player structure; `ctx["col_to_player"]` keys `player_combos`. |
-
-**Returns**
-
-A `RapmPreProcDiagnostics`.
-
-**Example**
-
-```python
-from sportsdataverse.mbb.mbb_rapm import calc_collinearity_diag, calc_player_weights
-
-off_weights, _ = calc_player_weights(ctx)
-diag = calc_collinearity_diag(off_weights, ctx)
-print(diag["lineup_combos"][0])  # the worst-conditioned combo
-```
-
-### calc_lineup_outputs {#calc_lineup_outputs}
-
-`calc_lineup_outputs(field: 'str', off_offset: 'float', def_offset: 'float', ctx: 'RapmPlayerContext', adaptive_correl_weights: 'list[float] | None' = None, use_old_val_if_possible: 'tuple[bool, bool]' = (False, False)) -> 'list[NDArray[np.float64]]'`
-
-Build the off/def target vectors the RAPM design matrices are fit against.
-
-Faithful port of `RapmUtils.calcLineupOutputs` (`RapmUtils.ts:598-751`).
-For each filtered lineup, computes a possession-weighted residual: the
-lineup's own stat value, plus any global luck adjustment, minus the
-accumulated "prior offset" contributed by every player on the lineup
-(a strong-prior blend for kept players -- see get_strong_weight`
--- or a fixed baseline contribution for removed players).
-
-Upstream keeps this as a plain `Array<Array<number>>` (*not* a mathjs
-`Matrix`, unlike `calc_player_weights`'s `offWeights`/
-`defWeights` -- `RapmUtils.test.ts`'s own `tidyResults` helper for
-this function has a visibly different shape, see the classification map
-in `tests/fixtures/hoop_explorer/README.md`). This port still
-materializes both output vectors as `numpy.ndarray` for consistency
-with `calc_player_weights` at the same dict -> array boundary --
-Task 3.4's ridge-regression solve consumes both as arrays regardless of
-the upstream distinction.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `field` | `str` |  | The stat suffix to read off each lineup, e.g. `"adj_ppp"` (read as `{prefix}_{field}`, e.g. `"off_adj_ppp"`). |
-| `off_offset` | `float` |  | The D1-average offensive value for `field` (the regression's starting/baseline value on the RHS). |
-| `def_offset` | `float` |  | The D1-average defensive value for `field`. |
-| `ctx` | `RapmPlayerContext` |  | A `RapmPlayerContext`, e.g. from `build_player_context`. |
-| `adaptive_correl_weights` | `list[float] \| None` | `None` | Optional per-player adaptive-correlation weights (index-aligned with `ctx["col_to_player"]`), used as the strong-prior blend fallback when `ctx["prior_info"] ["strong_weight"] < 0` -- see get_strong_weight`. |
-| `use_old_val_if_possible` | `tuple[bool, bool]` | `(False, False)` | `(use_old_val_for_off, use_old_val_for_def)` -- whether to prefer each lineup/team stat's luck-adjusted `old_value` over its raw `value` when present. This is the luck-adjustment hook Task 3.1's classification map flags as an **inherited coverage gap**: the vendored oracle fixture has `old_value == value` on every field (via `insertOldValues`), so neither jest nor this port's replay test ever observes this flag change the resulting numbers -- only that passing it doesn't crash. See the module docstring's "Task 3.3 coverage gap" note. |
-
-**Returns**
-
-`[off_outputs, def_outputs]` -- two 1-D `numpy.ndarray` target vectors, index-aligned with `ctx["filtered_lineups"]("off"/"def")` (plus one extra element each when `ctx["unbias_weight"] > 0`, an "unbiasing observation" target -- always unreached in production, same as `calc_player_weights`'s extra row).
-
-**Example**
-
-```python
-from sportsdataverse.mbb.mbb_rapm import calc_lineup_outputs
-
-off_outputs, def_outputs = calc_lineup_outputs(
-    "adj_ppp", 100.0, 100.0, ctx
-)
-print(off_outputs.shape)  # (num_off_lineups,)
-
-# Luck-adjusted variant (reads ``old_value`` where present)
-
-off_luck, def_luck = calc_lineup_outputs(
-    "adj_ppp", 100.0, 100.0, ctx, use_old_val_if_possible=(True, True)
-)
-```
-
-### calc_player_weights {#calc_player_weights}
-
-`calc_player_weights(ctx: 'RapmPlayerContext') -> 'list[NDArray[np.float64]]'`
-
-Build the off/def player-weight (design) matrices for the RAPM solve.
-
-Faithful port of `RapmUtils.calcPlayerWeights` (`RapmUtils.ts:544-595`).
-One row per (filtered) lineup, one column per remaining player; each
-filled cell is `sqrt(lineup_possessions / total_side_possessions)` --
-the possession-weighted design-matrix entry the ridge regression (Task
-3.4) solves against. This is the first function in the module where a
-`dict`-shaped `RapmPlayerContext` gets materialized into a
-`numpy.ndarray` -- see the module docstring's "dict -> `numpy.ndarray`
-boundary" note.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `ctx` | `RapmPlayerContext` |  | A `RapmPlayerContext`, e.g. from `build_player_context`. |
-
-**Returns**
-
-`[off_weights, def_weights]` -- two `numpy.ndarray` matrices of shape `(num_{off,def}_lineups [+1 if ctx["unbias_weight"] > 0], ctx["num_players"])`. The optional extra row (only emitted when `ctx["unbias_weight"] > 0` -- always `0.0` in production per `build_player_context`'s hardcoded local, but settable directly on the returned context dict, as the oracle test does) holds each column's `unbias_weight`-scaled sum-of-squares, an "unbiasing observation" row (`RapmUtils.ts:578-593`).
-
-**Example**
-
-```python
-from sportsdataverse.mbb.mbb_rapm import calc_player_weights
-
-off_weights, def_weights = calc_player_weights(ctx)
-print(off_weights.shape)  # (num_off_lineups, num_players)
 ```

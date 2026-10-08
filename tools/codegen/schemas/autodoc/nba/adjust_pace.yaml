@@ -1,0 +1,15 @@
+schema: adjust_pace
+kind: dataframe
+columns:
+- name: season
+  type: integer
+  description: ''
+- name: team_id
+  type: character
+  description: ''
+- name: adj_pace
+  type: double
+  description: ''
+- name: raw_pace
+  type: double
+  description: ''

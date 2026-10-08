@@ -1,0 +1,27 @@
+schema: mbb_transfer_projection
+kind: dataframe
+columns:
+- name: player_id
+  type: character
+  description: ''
+- name: player
+  type: character
+  description: ''
+- name: from_team_id
+  type: character
+  description: ''
+- name: to_team_id
+  type: character
+  description: ''
+- name: to_season
+  type: integer
+  description: ''
+- name: pre_box_bpm
+  type: double
+  description: ''
+- name: proj_box_bpm
+  type: double
+  description: ''
+- name: proj_delta
+  type: double
+  description: ''

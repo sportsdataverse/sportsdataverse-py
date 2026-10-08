@@ -1,0 +1,27 @@
+schema: fox_cfb_team_roster
+kind: dataframe
+columns:
+- name: team_id
+  type: character
+  description: ''
+- name: position_group
+  type: character
+  description: ''
+- name: player
+  type: character
+  description: ''
+- name: pos
+  type: character
+  description: ''
+- name: cls
+  type: character
+  description: ''
+- name: ht
+  type: character
+  description: ''
+- name: wt
+  type: character
+  description: ''
+- name: athlete_id
+  type: character
+  description: ''

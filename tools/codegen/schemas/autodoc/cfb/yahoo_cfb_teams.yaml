@@ -1,0 +1,39 @@
+schema: yahoo_cfb_teams
+kind: dataframe
+columns:
+- name: team_id
+  type: character
+  description: ''
+- name: abbreviation
+  type: character
+  description: ''
+- name: display_name
+  type: character
+  description: ''
+- name: full_name
+  type: character
+  description: ''
+- name: location
+  type: character
+  description: ''
+- name: nickname
+  type: character
+  description: ''
+- name: conference
+  type: character
+  description: ''
+- name: conference_abbreviation
+  type: character
+  description: ''
+- name: conference_id
+  type: character
+  description: ''
+- name: division
+  type: character
+  description: ''
+- name: division_id
+  type: character
+  description: ''
+- name: seatgeek_id
+  type: character
+  description: ''

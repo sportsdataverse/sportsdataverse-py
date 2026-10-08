@@ -1,0 +1,15 @@
+schema: mlb_catcher_throwing
+kind: dataframe
+columns:
+- name: catcher_id
+  type: character
+  description: ''
+- name: attempts
+  type: integer
+  description: ''
+- name: cs_above_expected
+  type: double
+  description: ''
+- name: throwing_runs
+  type: double
+  description: ''

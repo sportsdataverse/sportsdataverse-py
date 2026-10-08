@@ -1,0 +1,27 @@
+schema: fox_wnba_team_gamelog
+kind: dataframe
+columns:
+- name: team_id
+  type: character
+  description: ''
+- name: season_type
+  type: character
+  description: ''
+- name: category
+  type: character
+  description: ''
+- name: game_id
+  type: character
+  description: ''
+- name: game_date
+  type: character
+  description: ''
+- name: opponent
+  type: character
+  description: ''
+- name: stat
+  type: character
+  description: ''
+- name: value
+  type: character
+  description: ''

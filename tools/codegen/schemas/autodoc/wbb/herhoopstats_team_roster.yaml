@@ -1,0 +1,45 @@
+schema: herhoopstats_team_roster
+kind: dataframe
+columns:
+- name: player
+  type: character
+  description: ''
+- name: g
+  type: integer
+  description: ''
+- name: gs
+  type: integer
+  description: ''
+- name: min
+  type: double
+  description: ''
+- name: pts
+  type: double
+  description: ''
+- name: trb
+  type: double
+  description: ''
+- name: ast
+  type: double
+  description: ''
+- name: tov
+  type: double
+  description: ''
+- name: stl
+  type: double
+  description: ''
+- name: blk
+  type: double
+  description: ''
+- name: fg_pct
+  type: character
+  description: ''
+- name: ft_pct
+  type: character
+  description: ''
+- name: 2_p_pct
+  type: character
+  description: ''
+- name: 3_p_pct
+  type: character
+  description: ''

@@ -1,0 +1,33 @@
+schema: build_possession_shooting
+kind: dataframe
+columns:
+- name: game_id
+  type: character
+  description: ''
+- name: possession_number
+  type: integer
+  description: ''
+- name: player_id
+  type: integer
+  description: ''
+- name: team_id
+  type: integer
+  description: ''
+- name: fg2a
+  type: integer
+  description: ''
+- name: fg2m
+  type: integer
+  description: ''
+- name: fg3a
+  type: integer
+  description: ''
+- name: fg3m
+  type: integer
+  description: ''
+- name: fta
+  type: integer
+  description: ''
+- name: ftm
+  type: integer
+  description: ''

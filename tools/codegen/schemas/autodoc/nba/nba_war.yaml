@@ -1,0 +1,9 @@
+schema: nba_war
+kind: dataframe
+columns:
+- name: player_id
+  type: integer
+  description: ''
+- name: war
+  type: double
+  description: ''

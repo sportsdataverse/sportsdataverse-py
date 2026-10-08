@@ -1,0 +1,30 @@
+schema: nhl_unit_ratings
+kind: dataframe
+columns:
+- name: team
+  type: character
+  description: ''
+- name: unit_ids
+  type: character
+  description: ''
+- name: unit_players
+  type: character
+  description: ''
+- name: toi_minutes
+  type: double
+  description: ''
+- name: on_ice_xgf
+  type: double
+  description: ''
+- name: on_ice_xga
+  type: double
+  description: ''
+- name: on_ice_xgf_pct
+  type: double
+  description: ''
+- name: summed_rapm
+  type: double
+  description: ''
+- name: unit_value
+  type: double
+  description: ''

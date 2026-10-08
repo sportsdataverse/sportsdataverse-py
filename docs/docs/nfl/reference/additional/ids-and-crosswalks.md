@@ -1,7 +1,7 @@
 ---
 title: "NFL — additional Python functions — IDs and crosswalks"
 sidebar_label: "IDs and crosswalks"
-sidebar_position: 16
+sidebar_position: 26
 description: "NFL — additional Python functions — IDs and crosswalks — function reference in sdv-py, the SportsDataverse Python package."
 ---
 # NFL — additional Python functions — IDs and crosswalks
@@ -38,6 +38,27 @@ only on the live public ESPN API.
 **Returns**
 
 A one-row-per-player `DataFrame` with the documented schema (`espn_id`, `full_name`, `first_name`, `last_name`, `position`, `team`, `jersey`, `height`, `weight`, `birth_date`, `status`, `headshot_url`, `gsis_id`, `esb_id`, `pfr_id`, `pff_id`, `smart_id`, `college`). An empty fetch yields a zero-row frame carrying the same column set.
+
+| col_name | type | description |
+|---|---|---|
+| `espn_id` | character | ESPN ID - usual format is an integer with ~5 digits |
+| `full_name` | character | Full name as per NFL.com |
+| `first_name` | character | First name of player |
+| `last_name` | character | Last name of player |
+| `position` | character | Primary position as reported by NFL.com |
+| `team` | character | NFL team. Uses official abbreviations as per NFL.com |
+| `jersey` | character |  |
+| `height` | double | Official height, in inches |
+| `weight` | double | Official weight, in pounds |
+| `birth_date` | character | Player birth date (sourced from NFL. Other sources may differ) |
+| `status` | character |  |
+| `headshot_url` | character | A URL string that points to player photos used by NFL.com (or sometimes ESPN) |
+| `gsis_id` | character | Game Stats and Info Service ID: the primary ID for play-by-play data. |
+| `esb_id` | character | Player ID for Elias Sports Bureau |
+| `pfr_id` | character | Pro-Football-Reference ID for player |
+| `pff_id` | character | Pro Football Focus ID - usually an integer with between 3 and 6 digits. |
+| `smart_id` | character | SMART ID for player (that's in raw pbp. It includes a hashed ESB_ID) |
+| `college` | character | Official college (usually the last one attended) |
 
 **Example**
 
@@ -82,6 +103,21 @@ frames without carrying the full ~40-column master.
 **Returns**
 
 A one-row-per-`gsis_id` `DataFrame` of cross-system IDs (all `Utf8`) + `full_name` / `position`, with `yahoo_id` / `cbs_id` null where DynastyProcess has no unambiguous match (or its load fails). A failed / empty players load yields a zero-row frame carrying the same column set (never a raise).
+
+| col_name | type | description |
+|---|---|---|
+| `full_name` | character | Full name as per NFL.com |
+| `position` | character | Primary position as reported by NFL.com |
+| `gsis_id` | character | Game Stats and Info Service ID: the primary ID for play-by-play data. |
+| `esb_id` | character | Player ID for Elias Sports Bureau |
+| `espn_id` | character | ESPN ID - usual format is an integer with ~5 digits |
+| `pfr_id` | character | Pro-Football-Reference ID for player |
+| `pff_id` | character | Pro Football Focus ID - usually an integer with between 3 and 6 digits. |
+| `otc_id` | character | Over the Cap ID for player |
+| `nfl_id` | character | NFL ID of player (this is used in Big Data Bowl Data) |
+| `smart_id` | character | SMART ID for player (that's in raw pbp. It includes a hashed ESB_ID) |
+| `yahoo_id` | character | Yahoo ID - usual format is an integer with ~5 digits |
+| `cbs_id` | character | CBS ID - usual format is an integer with ~ 7 digits. |
 
 **Example**
 

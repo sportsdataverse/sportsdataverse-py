@@ -75,6 +75,105 @@ fed back into the boosters (Decision D2; a new feature would force a retrain).
 
 `df` with `distance_to_net:Float64`, `shot_angle:Float64`, `shot_danger:Utf8` appended.
 
+| col_name | type | description |
+|---|---|---|
+| `event_type` | character | Standardized event type code. |
+| `event` | character | Event description label. |
+| `secondary_type` | character | Secondary event type (e.g. shot type). |
+| `event_team_abbr` | character | Abbreviation of the team credited with the event. |
+| `event_team_type` | character | Whether the event team is home or away. |
+| `description` | character | Full text description of the event. |
+| `period` | integer | Period number. |
+| `period_type` | character | Period type (REG/OT/SO). |
+| `period_time` | character | Elapsed time in the period (MM:SS). |
+| `period_seconds` | integer | Elapsed seconds in the period. |
+| `period_seconds_remaining` | integer | Seconds remaining in the period. |
+| `period_time_remaining` | character | Time remaining in the period (MM:SS). |
+| `game_seconds` | integer | Elapsed seconds in the game. |
+| `game_seconds_remaining` | integer | Seconds remaining in regulation. |
+| `home_score` | integer | Home team final score. |
+| `away_score` | integer | Away team final score. |
+| `event_player_1_name` | character | Name of the primary event player. |
+| `event_player_1_type` | character | Role of the primary event player. |
+| `event_player_1_id` | integer | Player id of the primary event player. |
+| `event_player_2_name` | character | Name of the secondary event player. |
+| `event_player_2_type` | character | Role of the secondary event player. |
+| `event_player_2_id` | integer | Player id of the secondary event player. |
+| `event_player_3_name` | character | Name of the tertiary event player. |
+| `event_player_3_type` | character | Role of the tertiary event player. |
+| `event_player_3_id` | integer | Player ID of the tertiary event player. |
+| `event_goalie_name` | character | Name of the goalie on the event. |
+| `event_goalie_id` | integer | Player id of the goalie on the event. |
+| `penalty_severity` | character | Severity of the penalty. |
+| `penalty_minutes` | integer | Penalty minutes. |
+| `strength_state` | character | Strength state (e.g. 5v5, 5v4). |
+| `strength_code` | character | Strength state code (e.g., all, even, pp, pk). |
+| `strength` | character | Strength label (Even, Power Play, Shorthanded). |
+| `empty_net` | logical | Whether the net was empty. |
+| `extra_attacker` | logical | Whether an extra attacker was on the ice. |
+| `x` | integer | Raw x-coordinate of the event. |
+| `y` | integer | Raw y-coordinate of the event. |
+| `x_fixed` | integer | Normalized x coordinate (home shoots right). |
+| `y_fixed` | integer | Normalized y coordinate (home shoots right). |
+| `shot_distance` | double | Distance of the shot from the net. |
+| `shot_angle` | double | Angle of the shot relative to the net. |
+| `home_skaters` | integer | Number of home skaters on the ice. |
+| `away_skaters` | integer | Number of away skaters on the ice. |
+| `home_on_1` | character | Name of home skater 1 on the ice. |
+| `home_on_2` | character | Name of home skater 2 on the ice. |
+| `home_on_3` | character | Name of home skater 3 on the ice. |
+| `home_on_4` | character | Name of home skater 4 on the ice. |
+| `home_on_5` | character | Name of home skater 5 on the ice. |
+| `home_on_6` | character | Name of home skater 6 on the ice. |
+| `home_on_7` | character | Name of home skater 7 on the ice. |
+| `away_on_1` | character | Name of away skater 1 on the ice. |
+| `away_on_2` | character | Name of away skater 2 on the ice. |
+| `away_on_3` | character | Name of away skater 3 on the ice. |
+| `away_on_4` | character | Name of away skater 4 on the ice. |
+| `away_on_5` | character | Name of away skater 5 on the ice. |
+| `away_on_6` | character | Name of away skater 6 on the ice. |
+| `away_on_7` | character | Name of away skater 7 on the ice. |
+| `home_goalie` | character | Name of the home goalie on the ice. |
+| `away_goalie` | character | Name of the away goalie on the ice. |
+| `num_on` | integer | Number of players coming on (line change). |
+| `players_on` | character | Names of players coming on. |
+| `num_off` | integer | Number of players going off (line change). |
+| `players_off` | character | Names of players going off. |
+| `game_id` | integer | Unique game identifier. |
+| `season` | character | Season year (echoed from arg). |
+| `season_type` | character | Season type code (echoed from arg). |
+| `home_abbr` | character | Home team abbreviation. |
+| `away_abbr` | character | Away team abbreviation. |
+| `event_idx` | integer | Sequential event index within the game. |
+| `event_id` | integer | ESPN event id (echoed from arg). |
+| `pptReplayUrl` | character | URL to the play replay, if available. |
+| `away_goalie_in` | integer | Whether the away goalie is on the ice (1/0). |
+| `home_goalie_in` | integer | Whether the home goalie is on the ice (1/0). |
+| `reason` | character | Reason for the event (e.g. stoppage reason). |
+| `secondaryReason` | character | Secondary reason for a stoppage. |
+| `ids_on` | character | Player ids coming on. |
+| `ids_off` | character | Player ids going off. |
+| `home_on_1_id` | integer | Player id of home skater 1 on the ice. |
+| `away_on_1_id` | integer | Player id of away skater 1 on the ice. |
+| `home_on_2_id` | integer | Player id of home skater 2 on the ice. |
+| `away_on_2_id` | integer | Player id of away skater 2 on the ice. |
+| `home_on_3_id` | integer | Player id of home skater 3 on the ice. |
+| `away_on_3_id` | integer | Player id of away skater 3 on the ice. |
+| `home_on_4_id` | integer | Player id of home skater 4 on the ice. |
+| `away_on_4_id` | integer | Player id of away skater 4 on the ice. |
+| `home_on_5_id` | integer | Player id of home skater 5 on the ice. |
+| `away_on_5_id` | integer | Player id of away skater 5 on the ice. |
+| `home_on_6_id` | integer | Player id of home skater 6 on the ice. |
+| `away_on_6_id` | integer | Player id of away skater 6 on the ice. |
+| `home_on_7_id` | integer | Player id of home skater 7 on the ice. |
+| `away_on_7_id` | integer | Player id of away skater 7 on the ice. |
+| `home_goalie_id` | integer | Player ID of the home goalie on the ice. |
+| `away_goalie_id` | integer | Player ID of the away goalie on the ice. |
+| `xg` | double | Expected goals value for the shot event. |
+| `game_date` | character | Game date. |
+| `distance_to_net` | double |  |
+| `shot_danger` | character |  |
+
 **Example**
 
 ```python
@@ -112,6 +211,8 @@ are symmetric (offense sees opponent defense).
 
 A polars DataFrame, one row per (season, team). |col_name |type | |:------------|:------| |season |Int64 | |team |String | |adj_for |Float64| |adj_against |Float64| |adj_net |Float64| |raw_for |Float64| |raw_against |Float64| |games |Int64 |
 
+No returns table is published for this function: no capture: it needs a schedule with date / home_abbr / away_abbr / neutral_site, and no loader returns one (load_nhl_schedules carries game_date / home_team_abbr).
+
 **Example**
 
 ```python
@@ -139,6 +240,44 @@ Filter a frame to rows strictly before `cutoff_date` (the leakage boundary).
 **Returns**
 
 The subset of `df` with `df[date_col] < cutoff_date`.
+
+| col_name | type | description |
+|---|---|---|
+| `game_id` | integer | Unique game identifier. |
+| `season_full` | character | Full season label (e.g. 20212022). |
+| `game_type` | character | Game type the row belongs to. |
+| `game_date` | character | Game date. |
+| `game_time` | character | Scheduled start time of the game. |
+| `home_team_abbr` | character | Home team abbreviation. |
+| `away_team_abbr` | character | Away team abbreviation. |
+| `home_team_name` | character | Home team name. |
+| `away_team_name` | character | Away team name. |
+| `home_score` | integer | Home team final score. |
+| `away_score` | integer | Away team final score. |
+| `game_state` | character | Game state (e.g., FINAL, LIVE). |
+| `venue` | character | Venue where the game was played. |
+| `series_letter` | character |  |
+| `playoff_round` | integer | Playoff round identifier. |
+| `series_game_number` | integer |  |
+| `season` | integer | Season year (echoed from arg). |
+| `game_json` | logical | Whether processed game JSON is available. |
+| `game_json_url` | character | URL to the processed game JSON. |
+| `PBP` | logical | Whether play-by-play data is available. |
+| `team_box` | logical | Whether team box score data is available. |
+| `player_box` | logical | Whether player box score data is available. |
+| `skater_box` | logical | Whether skater box data is available. |
+| `goalie_box` | logical | Whether goalie box data is available. |
+| `game_info` | logical | Whether game info data is available. |
+| `game_rosters` | logical | Whether game rosters data is available. |
+| `scoring` | logical |  |
+| `penalties` | logical | Penalty count. |
+| `scratches` | logical |  |
+| `linescore` | logical |  |
+| `three_stars` | logical | Whether three stars data is available. |
+| `shifts` | logical | Number of shifts. |
+| `officials` | logical | Whether officials data is available. |
+| `shots_by_period` | logical | Whether shots-by-period data is available. |
+| `shootout` | logical | Whether shootout data is available. |
 
 **Example**
 
@@ -254,6 +393,8 @@ events' `home_goalie_id`/`away_goalie_id` (the modal value in the interval).
 
 one row per interval -- `game_id:Int64, period:Int64, start_s:Int64, end_s:Int64, duration:Int64, home_ids:List(Int64), away_ids:List(Int64), home_goalie:Int64, away_goalie:Int64, strength_state:Utf8, xgf_home:Float64, xgf_away:Float64`. Empty/malformed `shifts` returns a zero-row frame with this schema.
 
+No returns table is published for this function: no capture: it runs longer than the capture allows even on 53 games (build_stints makes one eager filter per shift change).
+
 **Example**
 
 ```python
@@ -283,6 +424,13 @@ Bucket predicted probabilities into bins and compare to actual outcome rates.
 **Returns**
 
 A `polars.DataFrame` with columns `bin_mid`, `mean_pred`, `mean_actual`, `n` (one row per non-empty bin).
+
+| col_name | type | description |
+|---|---|---|
+| `bin_mid` | double |  |
+| `mean_pred` | double |  |
+| `mean_actual` | double |  |
+| `n` | integer |  |
 
 **Example**
 
@@ -451,6 +599,16 @@ they out-assisted their shot quality); `primary_share = primary /
 
 Per-player frame: `player_id`, `primary_assists`, `secondary_assists`, `x_primary_assists`, `x_secondary_assists`, `assists_above_expected`, `primary_share`. Zero-row input returns a zero-row frame with this schema.
 
+| col_name | type | description |
+|---|---|---|
+| `player_id` | character | Unique player identifier. |
+| `primary_assists` | integer |  |
+| `secondary_assists` | integer |  |
+| `x_primary_assists` | double |  |
+| `x_secondary_assists` | double |  |
+| `assists_above_expected` | double |  |
+| `primary_share` | double |  |
+
 **Example**
 
 ```python
@@ -489,6 +647,16 @@ rest of the player-impact spine but is not currently required for TOI.
 **Returns**
 
 `player_id:Int64, goalie:Utf8, shots:Int64, xga:Float64, ga:Int64, gsax:Float64, gsax_per_60:Float64`. League-wide `sum(gsax) == sum(xga) - sum(goals)`, which is `~= 0` at large sample and exactly zero only under perfect league-wide xG calibration. Empty/malformed input returns a zero-row frame with this schema -- never raises.
+
+| col_name | type | description |
+|---|---|---|
+| `player_id` | integer | Unique player identifier. |
+| `goalie` | character | Whether the player was the goalie. |
+| `shots` | integer | Shots on goal. |
+| `xga` | double |  |
+| `ga` | integer | Goals against (goalies). |
+| `gsax` | double |  |
+| `gsax_per_60` | double |  |
 
 **Example**
 
@@ -534,6 +702,8 @@ rating is the `off_<player>` coefficient; defensive rating is the **negated**
 
 `player_id:Int64, xg_rapm_off:Float64, xg_rapm_def:Float64, xg_rapm:Float64, toi_minutes:Float64`. Empty input returns a zero-row frame with this schema.
 
+No returns table is published for this function: no capture: it runs longer than the capture allows even on 53 games (build_stints makes one eager filter per shift change).
+
 **Example**
 
 ```python
@@ -564,6 +734,8 @@ Per-skater GAR/WAR composite -- EV + special-teams + faceoffs + penalties.
 **Returns**
 
 `player_id:Int64, ev_off:Float64, ev_def:Float64, pp:Float64, pk:Float64, pens:Float64, faceoffs:Float64, gar:Float64, war:Float64`. `ev_off`/`ev_def` are `(5v5-only RAPM rate - replacement level) * EV TOI/60`; `gar` sums every component; `war = gar / goals_per_win`. Empty input returns a zero-row frame with this schema.
+
+No returns table is published for this function: no capture: it runs longer than the capture allows even on 53 games (build_stints makes one eager filter per shift change).
 
 **Example**
 
@@ -599,6 +771,21 @@ rating) via `adjust_rate_opponent`, and derives off/def/net ranks.
 **Returns**
 
 A polars (or pandas) DataFrame, one row per (season, team). Empty input seasons return a zero-row frame with the documented schema. |col_name |type | |:----------|:------| |season |Int64 | |team |String | |adj_xgf |Float64| |adj_xga |Float64| |adj_xg_net |Float64| |adj_gf |Float64| |adj_ga |Float64| |games |Int64 | |off_rank |Int64 | |def_rank |Int64 | |net_rank |Int64 | |net_z |Float64|
+
+| col_name | type | description |
+|---|---|---|
+| `season` | integer | Season year (echoed from arg). |
+| `team` | character | Team name. |
+| `adj_xgf` | double |  |
+| `adj_xga` | double |  |
+| `adj_xg_net` | double |  |
+| `adj_gf` | double |  |
+| `adj_ga` | double |  |
+| `games` | integer | Games played. |
+| `off_rank` | integer |  |
+| `def_rank` | integer |  |
+| `net_rank` | integer |  |
+| `net_z` | double |  |
 
 **Example**
 
@@ -641,6 +828,18 @@ Per on-ice skater combination: observed xGF/xGA + shrinkage-blended summed RAPM.
 **Returns**
 
 `team:Utf8, unit_ids:Utf8 (sorted "id-id-id"), unit_players:Utf8, toi_minutes:Float64, on_ice_xgf:Float64, on_ice_xga:Float64, on_ice_xgf_pct:Float64, summed_rapm:Float64, unit_value:Float64`. Empty input returns a zero-row frame with this schema.
+
+| col_name | type | description |
+|---|---|---|
+| `team` | character | Team name. |
+| `unit_ids` | character |  |
+| `unit_players` | character |  |
+| `toi_minutes` | double | Time on ice in minutes. |
+| `on_ice_xgf` | double |  |
+| `on_ice_xga` | double |  |
+| `on_ice_xgf_pct` | double |  |
+| `summed_rapm` | double |  |
+| `unit_value` | double |  |
 
 **Example**
 
@@ -711,6 +910,105 @@ numbers above. The same measurement is packaged as
 
 `pbp` with `xg:Float64`, `distance_to_net:Float64`, `shot_angle:Float64`, `shot_danger:Utf8` appended (null/absent for non-shot rows). Empty/malformed input returns the input frame with a null `xg` column -- never raises.
 
+| col_name | type | description |
+|---|---|---|
+| `event_type` | character | Standardized event type code. |
+| `event` | character | Event description label. |
+| `secondary_type` | character | Secondary event type (e.g. shot type). |
+| `event_team_abbr` | character | Abbreviation of the team credited with the event. |
+| `event_team_type` | character | Whether the event team is home or away. |
+| `description` | character | Full text description of the event. |
+| `period` | integer | Period number. |
+| `period_type` | character | Period type (REG/OT/SO). |
+| `period_time` | character | Elapsed time in the period (MM:SS). |
+| `period_seconds` | integer | Elapsed seconds in the period. |
+| `period_seconds_remaining` | integer | Seconds remaining in the period. |
+| `period_time_remaining` | character | Time remaining in the period (MM:SS). |
+| `game_seconds` | integer | Elapsed seconds in the game. |
+| `game_seconds_remaining` | integer | Seconds remaining in regulation. |
+| `home_score` | integer | Home team final score. |
+| `away_score` | integer | Away team final score. |
+| `event_player_1_name` | character | Name of the primary event player. |
+| `event_player_1_type` | character | Role of the primary event player. |
+| `event_player_1_id` | integer | Player id of the primary event player. |
+| `event_player_2_name` | character | Name of the secondary event player. |
+| `event_player_2_type` | character | Role of the secondary event player. |
+| `event_player_2_id` | integer | Player id of the secondary event player. |
+| `event_player_3_name` | character | Name of the tertiary event player. |
+| `event_player_3_type` | character | Role of the tertiary event player. |
+| `event_player_3_id` | integer | Player ID of the tertiary event player. |
+| `event_goalie_name` | character | Name of the goalie on the event. |
+| `event_goalie_id` | integer | Player id of the goalie on the event. |
+| `penalty_severity` | character | Severity of the penalty. |
+| `penalty_minutes` | integer | Penalty minutes. |
+| `strength_state` | character | Strength state (e.g. 5v5, 5v4). |
+| `strength_code` | character | Strength state code (e.g., all, even, pp, pk). |
+| `strength` | character | Strength label (Even, Power Play, Shorthanded). |
+| `empty_net` | logical | Whether the net was empty. |
+| `extra_attacker` | logical | Whether an extra attacker was on the ice. |
+| `x` | integer | Raw x-coordinate of the event. |
+| `y` | integer | Raw y-coordinate of the event. |
+| `x_fixed` | integer | Normalized x coordinate (home shoots right). |
+| `y_fixed` | integer | Normalized y coordinate (home shoots right). |
+| `shot_distance` | double | Distance of the shot from the net. |
+| `shot_angle` | double | Angle of the shot relative to the net. |
+| `home_skaters` | integer | Number of home skaters on the ice. |
+| `away_skaters` | integer | Number of away skaters on the ice. |
+| `home_on_1` | character | Name of home skater 1 on the ice. |
+| `home_on_2` | character | Name of home skater 2 on the ice. |
+| `home_on_3` | character | Name of home skater 3 on the ice. |
+| `home_on_4` | character | Name of home skater 4 on the ice. |
+| `home_on_5` | character | Name of home skater 5 on the ice. |
+| `home_on_6` | character | Name of home skater 6 on the ice. |
+| `home_on_7` | character | Name of home skater 7 on the ice. |
+| `away_on_1` | character | Name of away skater 1 on the ice. |
+| `away_on_2` | character | Name of away skater 2 on the ice. |
+| `away_on_3` | character | Name of away skater 3 on the ice. |
+| `away_on_4` | character | Name of away skater 4 on the ice. |
+| `away_on_5` | character | Name of away skater 5 on the ice. |
+| `away_on_6` | character | Name of away skater 6 on the ice. |
+| `away_on_7` | character | Name of away skater 7 on the ice. |
+| `home_goalie` | character | Name of the home goalie on the ice. |
+| `away_goalie` | character | Name of the away goalie on the ice. |
+| `num_on` | integer | Number of players coming on (line change). |
+| `players_on` | character | Names of players coming on. |
+| `num_off` | integer | Number of players going off (line change). |
+| `players_off` | character | Names of players going off. |
+| `game_id` | integer | Unique game identifier. |
+| `season` | character | Season year (echoed from arg). |
+| `season_type` | character | Season type code (echoed from arg). |
+| `home_abbr` | character | Home team abbreviation. |
+| `away_abbr` | character | Away team abbreviation. |
+| `event_idx` | integer | Sequential event index within the game. |
+| `event_id` | integer | ESPN event id (echoed from arg). |
+| `pptReplayUrl` | character | URL to the play replay, if available. |
+| `away_goalie_in` | integer | Whether the away goalie is on the ice (1/0). |
+| `home_goalie_in` | integer | Whether the home goalie is on the ice (1/0). |
+| `reason` | character | Reason for the event (e.g. stoppage reason). |
+| `secondaryReason` | character | Secondary reason for a stoppage. |
+| `ids_on` | character | Player ids coming on. |
+| `ids_off` | character | Player ids going off. |
+| `home_on_1_id` | integer | Player id of home skater 1 on the ice. |
+| `away_on_1_id` | integer | Player id of away skater 1 on the ice. |
+| `home_on_2_id` | integer | Player id of home skater 2 on the ice. |
+| `away_on_2_id` | integer | Player id of away skater 2 on the ice. |
+| `home_on_3_id` | integer | Player id of home skater 3 on the ice. |
+| `away_on_3_id` | integer | Player id of away skater 3 on the ice. |
+| `home_on_4_id` | integer | Player id of home skater 4 on the ice. |
+| `away_on_4_id` | integer | Player id of away skater 4 on the ice. |
+| `home_on_5_id` | integer | Player id of home skater 5 on the ice. |
+| `away_on_5_id` | integer | Player id of away skater 5 on the ice. |
+| `home_on_6_id` | integer | Player id of home skater 6 on the ice. |
+| `away_on_6_id` | integer | Player id of away skater 6 on the ice. |
+| `home_on_7_id` | integer | Player id of home skater 7 on the ice. |
+| `away_on_7_id` | integer | Player id of away skater 7 on the ice. |
+| `home_goalie_id` | integer | Player ID of the home goalie on the ice. |
+| `away_goalie_id` | integer | Player ID of the away goalie on the ice. |
+| `game_date` | character | Game date. |
+| `xg` | double | Expected goals value for the shot event. |
+| `distance_to_net` | double |  |
+| `shot_danger` | character |  |
+
 **Example**
 
 ```python
@@ -740,6 +1038,142 @@ Port of `helper_nhl_prepare_xg_data` -- one row per unblocked shot, model featur
 **Returns**
 
 one row per unblocked shot (`SHOT`/`MISSED_SHOT`/`GOAL`) carrying every era one-hot, shot-type one-hot, last-event one-hot, and the derived `rebound`/`rush`/`cross_ice_event`/`total_skaters_on`/ `event_team_advantage`/`empty_net` columns the boosters expect. Empty/ malformed input returns a zero-row frame (never raises).
+
+| col_name | type | description |
+|---|---|---|
+| `event_type` | character | Standardized event type code. |
+| `event` | character | Event description label. |
+| `secondary_type` | character | Secondary event type (e.g. shot type). |
+| `event_team_abbr` | character | Abbreviation of the team credited with the event. |
+| `event_team_type` | character | Whether the event team is home or away. |
+| `description` | character | Full text description of the event. |
+| `period` | integer | Period number. |
+| `period_type` | character | Period type (REG/OT/SO). |
+| `period_time` | character | Elapsed time in the period (MM:SS). |
+| `period_seconds` | integer | Elapsed seconds in the period. |
+| `period_seconds_remaining` | integer | Seconds remaining in the period. |
+| `period_time_remaining` | character | Time remaining in the period (MM:SS). |
+| `game_seconds` | integer | Elapsed seconds in the game. |
+| `game_seconds_remaining` | integer | Seconds remaining in regulation. |
+| `home_score` | integer | Home team final score. |
+| `away_score` | integer | Away team final score. |
+| `event_player_1_name` | character | Name of the primary event player. |
+| `event_player_1_type` | character | Role of the primary event player. |
+| `event_player_1_id` | integer | Player id of the primary event player. |
+| `event_player_2_name` | character | Name of the secondary event player. |
+| `event_player_2_type` | character | Role of the secondary event player. |
+| `event_player_2_id` | integer | Player id of the secondary event player. |
+| `event_player_3_name` | character | Name of the tertiary event player. |
+| `event_player_3_type` | character | Role of the tertiary event player. |
+| `event_player_3_id` | integer | Player ID of the tertiary event player. |
+| `event_goalie_name` | character | Name of the goalie on the event. |
+| `event_goalie_id` | integer | Player id of the goalie on the event. |
+| `penalty_severity` | character | Severity of the penalty. |
+| `penalty_minutes` | integer | Penalty minutes. |
+| `strength_state` | character | Strength state (e.g. 5v5, 5v4). |
+| `strength_code` | character | Strength state code (e.g., all, even, pp, pk). |
+| `strength` | character | Strength label (Even, Power Play, Shorthanded). |
+| `empty_net` | integer | Whether the net was empty. |
+| `extra_attacker` | logical | Whether an extra attacker was on the ice. |
+| `x` | integer | Raw x-coordinate of the event. |
+| `y` | integer | Raw y-coordinate of the event. |
+| `x_fixed` | integer | Normalized x coordinate (home shoots right). |
+| `y_fixed` | integer | Normalized y coordinate (home shoots right). |
+| `shot_distance` | double | Distance of the shot from the net. |
+| `shot_angle` | double | Angle of the shot relative to the net. |
+| `home_skaters` | integer | Number of home skaters on the ice. |
+| `away_skaters` | integer | Number of away skaters on the ice. |
+| `home_on_1` | character | Name of home skater 1 on the ice. |
+| `home_on_2` | character | Name of home skater 2 on the ice. |
+| `home_on_3` | character | Name of home skater 3 on the ice. |
+| `home_on_4` | character | Name of home skater 4 on the ice. |
+| `home_on_5` | character | Name of home skater 5 on the ice. |
+| `home_on_6` | character | Name of home skater 6 on the ice. |
+| `home_on_7` | character | Name of home skater 7 on the ice. |
+| `away_on_1` | character | Name of away skater 1 on the ice. |
+| `away_on_2` | character | Name of away skater 2 on the ice. |
+| `away_on_3` | character | Name of away skater 3 on the ice. |
+| `away_on_4` | character | Name of away skater 4 on the ice. |
+| `away_on_5` | character | Name of away skater 5 on the ice. |
+| `away_on_6` | character | Name of away skater 6 on the ice. |
+| `away_on_7` | character | Name of away skater 7 on the ice. |
+| `home_goalie` | character | Name of the home goalie on the ice. |
+| `away_goalie` | character | Name of the away goalie on the ice. |
+| `num_on` | integer | Number of players coming on (line change). |
+| `players_on` | character | Names of players coming on. |
+| `num_off` | integer | Number of players going off (line change). |
+| `players_off` | character | Names of players going off. |
+| `game_id` | integer | Unique game identifier. |
+| `season` | character | Season year (echoed from arg). |
+| `season_type` | character | Season type code (echoed from arg). |
+| `home_abbr` | character | Home team abbreviation. |
+| `away_abbr` | character | Away team abbreviation. |
+| `event_idx` | integer | Sequential event index within the game. |
+| `event_id` | integer | ESPN event id (echoed from arg). |
+| `pptReplayUrl` | character | URL to the play replay, if available. |
+| `away_goalie_in` | integer | Whether the away goalie is on the ice (1/0). |
+| `home_goalie_in` | integer | Whether the home goalie is on the ice (1/0). |
+| `reason` | character | Reason for the event (e.g. stoppage reason). |
+| `secondaryReason` | character | Secondary reason for a stoppage. |
+| `ids_on` | character | Player ids coming on. |
+| `ids_off` | character | Player ids going off. |
+| `home_on_1_id` | integer | Player id of home skater 1 on the ice. |
+| `away_on_1_id` | integer | Player id of away skater 1 on the ice. |
+| `home_on_2_id` | integer | Player id of home skater 2 on the ice. |
+| `away_on_2_id` | integer | Player id of away skater 2 on the ice. |
+| `home_on_3_id` | integer | Player id of home skater 3 on the ice. |
+| `away_on_3_id` | integer | Player id of away skater 3 on the ice. |
+| `home_on_4_id` | integer | Player id of home skater 4 on the ice. |
+| `away_on_4_id` | integer | Player id of away skater 4 on the ice. |
+| `home_on_5_id` | integer | Player id of home skater 5 on the ice. |
+| `away_on_5_id` | integer | Player id of away skater 5 on the ice. |
+| `home_on_6_id` | integer | Player id of home skater 6 on the ice. |
+| `away_on_6_id` | integer | Player id of away skater 6 on the ice. |
+| `home_on_7_id` | integer | Player id of home skater 7 on the ice. |
+| `away_on_7_id` | integer | Player id of away skater 7 on the ice. |
+| `home_goalie_id` | integer | Player ID of the home goalie on the ice. |
+| `away_goalie_id` | integer | Player ID of the away goalie on the ice. |
+| `xg` | double | Expected goals value for the shot event. |
+| `game_date` | character | Game date. |
+| `event_zone` | character |  |
+| `last_event_type` | character |  |
+| `last_event_team` | character |  |
+| `time_since_last` | integer |  |
+| `last_x` | integer |  |
+| `last_y` | integer |  |
+| `last_event_zone` | character |  |
+| `distance_from_last` | double |  |
+| `era_2011_2013` | integer |  |
+| `era_2014_2018` | integer |  |
+| `era_2019_2021` | integer |  |
+| `era_2022_2024` | integer |  |
+| `era_2025_on` | integer |  |
+| `total_skaters_on` | integer |  |
+| `event_team_advantage` | integer |  |
+| `rebound` | integer |  |
+| `rush` | integer |  |
+| `cross_ice_event` | integer |  |
+| `wrist_shot` | integer |  |
+| `snap_shot` | integer |  |
+| `slap_shot` | integer |  |
+| `backhand` | integer |  |
+| `wrap_around` | integer |  |
+| `tip_in` | integer |  |
+| `deflected` | integer |  |
+| `poke` | integer |  |
+| `batted` | integer |  |
+| `between_legs` | integer |  |
+| `cradle` | integer |  |
+| `last_faceoff` | integer |  |
+| `last_giveaway` | integer |  |
+| `last_takeaway` | integer |  |
+| `last_blocked_shot` | integer |  |
+| `last_hit` | integer |  |
+| `last_missed_shot` | integer |  |
+| `last_shot` | integer |  |
+| `last_stop` | integer |  |
+| `last_penalty` | integer |  |
+| `last_goal` | integer |  |
 
 **Example**
 
@@ -816,6 +1250,8 @@ Per-(game, team) even-strength xG-for/against + realized goals.
 **Returns**
 
 A polars DataFrame, one row per (game_id, team), both home and away. |col_name |type | |:------------|:------| |game_id |String | |season |Int64 | |date |Date | |team |String | |opp_team |String | |is_home |Boolean| |neutral_site |Boolean| |xgf |Float64| |xga |Float64| |gf |Int64 | |ga |Int64 |
+
+No returns table is published for this function: no capture: it needs a schedule with date / home_abbr / away_abbr / neutral_site, and no loader returns one (load_nhl_schedules carries game_date / home_team_abbr).
 
 **Example**
 

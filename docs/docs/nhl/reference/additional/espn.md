@@ -349,7 +349,7 @@ Polars dataframe containing schedule dates for the requested season. Returns Non
 | `recent` | logical | Whether the game is recent. |
 | `start_date` | character | Season start date. |
 | `broadcast` | character | Broadcast network(s). |
-| `highlights` | character |  |
+| `highlights` | integer |  |
 | `notes_type` | character |  |
 | `notes_headline` | character |  |
 | `broadcast_market` | character |  |
@@ -406,6 +406,11 @@ Polars dataframe containing schedule dates for the requested season. Returns Non
 | `game_id` | integer | Unique game identifier. |
 | `season` | integer | Season year (echoed from arg). |
 | `season_type` | integer | Season type code (echoed from arg). |
+| `status_featured_athletes` | integer |  |
+| `home_logo_dark` | character |  |
+| `home_winner` | logical | Whether the home team won. |
+| `away_logo_dark` | character |  |
+| `away_winner` | logical | Whether the away team won. |
 
 **Example**
 

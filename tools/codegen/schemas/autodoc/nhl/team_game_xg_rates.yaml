@@ -1,0 +1,5 @@
+schema: team_game_xg_rates
+kind: dataframe
+columns: []
+unverified: 'no capture: it needs a schedule with date / home_abbr / away_abbr / neutral_site, and no loader returns one (load_nhl_schedules
+  carries game_date / home_team_abbr)'

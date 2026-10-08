@@ -85,6 +85,12 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 | `home_team_record` | character |  |
 | `away_team_common_name_fr` | character | Away team common name (French). |
 | `home_team_common_name_fr` | character | Home team common name (French). |
+| `away_team_sog` | double | Away team shots on goal. |
+| `home_team_sog` | double | Home team shots on goal. |
+| `clock_time_remaining` | character |  |
+| `clock_seconds_remaining` | double |  |
+| `clock_running` | logical |  |
+| `clock_in_intermission` | logical |  |
 
 **Example**
 

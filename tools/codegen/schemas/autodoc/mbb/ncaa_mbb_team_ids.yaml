@@ -1,0 +1,15 @@
+schema: ncaa_mbb_team_ids
+kind: dataframe
+columns:
+- name: team
+  type: character
+  description: ''
+- name: conference
+  type: character
+  description: ''
+- name: id
+  type: integer
+  description: ''
+- name: season
+  type: character
+  description: ''

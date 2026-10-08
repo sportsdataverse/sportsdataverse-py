@@ -55,6 +55,19 @@ matrix = college_softball_re24(state=state)
 
 see the core function's Returns table.
 
+| col_name | type | description |
+|---|---|---|
+| `game_id` | character |  |
+| `inning` | integer |  |
+| `half` | character |  |
+| `base_state` | character |  |
+| `outs` | integer |  |
+| `runs_before` | integer |  |
+| `runs_after` | integer |  |
+| `batting_team_id` | character |  |
+| `play_seq` | integer |  |
+| `score_diff` | integer |  |
+
 **Example**
 
 ```python

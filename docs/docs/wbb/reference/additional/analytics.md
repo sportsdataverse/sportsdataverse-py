@@ -1,10 +1,10 @@
 ---
-title: "WBB — additional Python functions — Analytics"
-sidebar_label: "Analytics"
+title: "WBB — additional Python functions — Analytics: ConcurrentClump–wbb_bracketology"
+sidebar_label: "Analytics: ConcurrentClump–wbb_bracketology"
 sidebar_position: 10
-description: "WBB — additional Python functions — Analytics — function reference in sdv-py, the SportsDataverse Python package."
+description: "WBB — additional Python functions — Analytics: ConcurrentClump–wbb_bracketology — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# WBB — additional Python functions — Analytics
+# WBB — additional Python functions — Analytics: ConcurrentClump–wbb_bracketology
 
 ### ConcurrentClump {#ConcurrentClump}
 
@@ -991,6 +991,84 @@ for the algorithm, column contract, and the `fix_tip_in` vocab fix.
 
 One row per lineup+team; see the MBB sibling for the column contract.
 
+| col_name | type | description |
+|---|---|---|
+| `p1` | character |  |
+| `p2` | character |  |
+| `p3` | character |  |
+| `p4` | character |  |
+| `p5` | character |  |
+| `team` | character | Team-side label or team identifier. |
+| `mins` | double |  |
+| `o_mins` | double |  |
+| `d_mins` | double |  |
+| `o_poss` | double |  |
+| `d_poss` | double |  |
+| `ortg` | double |  |
+| `drtg` | double |  |
+| `netrtg` | double |  |
+| `pts` | double | Points scored. |
+| `d_pts` | double |  |
+| `fga` | double | Field goal attempts. |
+| `d_fga` | double |  |
+| `fgm` | double | Field goals made. |
+| `d_fgm` | double |  |
+| `tpa` | double |  |
+| `d_tpa` | double |  |
+| `tpm` | double |  |
+| `d_tpm` | double |  |
+| `fta` | double | Free throw attempts. |
+| `d_fta` | double |  |
+| `ftm` | double | Free throws made. |
+| `d_ftm` | double |  |
+| `rima` | double |  |
+| `d_rima` | double |  |
+| `rimm` | double |  |
+| `d_rimm` | double |  |
+| `orb` | double |  |
+| `d_orb` | double |  |
+| `drb` | double |  |
+| `d_drb` | double |  |
+| `blk` | double | Blocks. |
+| `d_blk` | double |  |
+| `to` | double | To. |
+| `d_to` | double |  |
+| `ast` | double | Assists. |
+| `d_ast` | double |  |
+| `e_poss` | double |  |
+| `fg_pct` | double | Field goal percentage (0-1). |
+| `d_fg_pct` | double |  |
+| `tpp` | double |  |
+| `d_tpp` | double |  |
+| `ftp` | double |  |
+| `d_ftp` | double |  |
+| `efg_pct` | double |  |
+| `d_efg_pct` | double |  |
+| `ts_pct` | double | True shooting percentage (0-1). |
+| `d_ts_pct` | double |  |
+| `rim_pct` | double |  |
+| `d_rim_pct` | double |  |
+| `mid_pct` | double |  |
+| `d_mid_pct` | double |  |
+| `tp_rate` | double |  |
+| `d_tp_rate` | double |  |
+| `rim_rate` | double |  |
+| `d_rim_rate` | double |  |
+| `mid_rate` | double |  |
+| `d_mid_rate` | double |  |
+| `ft_rate` | double | Ft rate. |
+| `d_ft_rate` | double |  |
+| `ast_rate` | double |  |
+| `d_ast_rate` | double |  |
+| `to_rate` | double | To rate. |
+| `d_to_rate` | double |  |
+| `blk_rate` | double |  |
+| `o_blk_rate` | double |  |
+| `orb_pct` | double | Offensive rebound percentage. |
+| `drb_pct` | double | Defensive rebound percentage. |
+| `time_per_poss` | double |  |
+| `d_time_per_poss` | double |  |
+
 **Example**
 
 ```python
@@ -1022,6 +1100,79 @@ Pure delegation to
 **Returns**
 
 `2^k` rows — `status` + the stat columns.
+
+| col_name | type | description |
+|---|---|---|
+| `status` | character | Status label. |
+| `mins` | double |  |
+| `o_mins` | double |  |
+| `d_mins` | double |  |
+| `o_poss` | double |  |
+| `d_poss` | double |  |
+| `ortg` | double |  |
+| `drtg` | double |  |
+| `netrtg` | double |  |
+| `pts` | double | Points scored. |
+| `d_pts` | double |  |
+| `fga` | double | Field goal attempts. |
+| `d_fga` | double |  |
+| `fgm` | double | Field goals made. |
+| `d_fgm` | double |  |
+| `tpa` | double |  |
+| `d_tpa` | double |  |
+| `tpm` | double |  |
+| `d_tpm` | double |  |
+| `fta` | double | Free throw attempts. |
+| `d_fta` | double |  |
+| `ftm` | double | Free throws made. |
+| `d_ftm` | double |  |
+| `rima` | double |  |
+| `d_rima` | double |  |
+| `rimm` | double |  |
+| `d_rimm` | double |  |
+| `orb` | double |  |
+| `d_orb` | double |  |
+| `drb` | double |  |
+| `d_drb` | double |  |
+| `blk` | double | Blocks. |
+| `d_blk` | double |  |
+| `to` | double | To. |
+| `d_to` | double |  |
+| `ast` | double | Assists. |
+| `d_ast` | double |  |
+| `e_poss` | double |  |
+| `fg_pct` | double | Field goal percentage (0-1). |
+| `d_fg_pct` | double |  |
+| `tpp` | double |  |
+| `d_tpp` | double |  |
+| `ftp` | double |  |
+| `d_ftp` | double |  |
+| `efg_pct` | double |  |
+| `d_efg_pct` | double |  |
+| `ts_pct` | double | True shooting percentage (0-1). |
+| `d_ts_pct` | double |  |
+| `rim_pct` | double |  |
+| `d_rim_pct` | double |  |
+| `mid_pct` | double |  |
+| `d_mid_pct` | double |  |
+| `tp_rate` | double |  |
+| `d_tp_rate` | double |  |
+| `rim_rate` | double |  |
+| `d_rim_rate` | double |  |
+| `mid_rate` | double |  |
+| `d_mid_rate` | double |  |
+| `ft_rate` | double | Ft rate. |
+| `d_ft_rate` | double |  |
+| `ast_rate` | double |  |
+| `d_ast_rate` | double |  |
+| `to_rate` | double | To rate. |
+| `d_to_rate` | double |  |
+| `blk_rate` | double |  |
+| `o_blk_rate` | double |  |
+| `orb_pct` | double | Offensive rebound percentage. |
+| `drb_pct` | double | Defensive rebound percentage. |
+| `time_per_poss` | double |  |
+| `d_time_per_poss` | double |  |
 
 **Example**
 
@@ -1057,6 +1208,81 @@ Pure delegation to
 
 One row per combo: `team, p1..pn` + the stat surface.
 
+| col_name | type | description |
+|---|---|---|
+| `team` | character | Team-side label or team identifier. |
+| `p1` | character |  |
+| `p2` | character |  |
+| `mins` | double |  |
+| `o_mins` | double |  |
+| `d_mins` | double |  |
+| `o_poss` | double |  |
+| `d_poss` | double |  |
+| `ortg` | double |  |
+| `drtg` | double |  |
+| `netrtg` | double |  |
+| `pts` | double | Points scored. |
+| `d_pts` | double |  |
+| `fga` | double | Field goal attempts. |
+| `d_fga` | double |  |
+| `fgm` | double | Field goals made. |
+| `d_fgm` | double |  |
+| `tpa` | double |  |
+| `d_tpa` | double |  |
+| `tpm` | double |  |
+| `d_tpm` | double |  |
+| `fta` | double | Free throw attempts. |
+| `d_fta` | double |  |
+| `ftm` | double | Free throws made. |
+| `d_ftm` | double |  |
+| `rima` | double |  |
+| `d_rima` | double |  |
+| `rimm` | double |  |
+| `d_rimm` | double |  |
+| `orb` | double |  |
+| `d_orb` | double |  |
+| `drb` | double |  |
+| `d_drb` | double |  |
+| `blk` | double | Blocks. |
+| `d_blk` | double |  |
+| `to` | double | To. |
+| `d_to` | double |  |
+| `ast` | double | Assists. |
+| `d_ast` | double |  |
+| `e_poss` | double |  |
+| `fg_pct` | double | Field goal percentage (0-1). |
+| `d_fg_pct` | double |  |
+| `tpp` | double |  |
+| `d_tpp` | double |  |
+| `ftp` | double |  |
+| `d_ftp` | double |  |
+| `efg_pct` | double |  |
+| `d_efg_pct` | double |  |
+| `ts_pct` | double | True shooting percentage (0-1). |
+| `d_ts_pct` | double |  |
+| `rim_pct` | double |  |
+| `d_rim_pct` | double |  |
+| `mid_pct` | double |  |
+| `d_mid_pct` | double |  |
+| `tp_rate` | double |  |
+| `d_tp_rate` | double |  |
+| `rim_rate` | double |  |
+| `d_rim_rate` | double |  |
+| `mid_rate` | double |  |
+| `d_mid_rate` | double |  |
+| `ft_rate` | double | Ft rate. |
+| `d_ft_rate` | double |  |
+| `ast_rate` | double |  |
+| `d_ast_rate` | double |  |
+| `to_rate` | double | To rate. |
+| `d_to_rate` | double |  |
+| `blk_rate` | double |  |
+| `o_blk_rate` | double |  |
+| `orb_pct` | double | Offensive rebound percentage. |
+| `drb_pct` | double | Defensive rebound percentage. |
+| `time_per_poss` | double |  |
+| `d_time_per_poss` | double |  |
+
 **Example**
 
 ```python
@@ -1087,6 +1313,84 @@ Pure delegation to
 **Returns**
 
 Row-subset of `lineups`; schema unchanged.
+
+| col_name | type | description |
+|---|---|---|
+| `p1` | character |  |
+| `p2` | character |  |
+| `p3` | character |  |
+| `p4` | character |  |
+| `p5` | character |  |
+| `team` | character | Team-side label or team identifier. |
+| `mins` | double |  |
+| `o_mins` | double |  |
+| `d_mins` | double |  |
+| `o_poss` | double |  |
+| `d_poss` | double |  |
+| `ortg` | double |  |
+| `drtg` | double |  |
+| `netrtg` | double |  |
+| `pts` | double | Points scored. |
+| `d_pts` | double |  |
+| `fga` | double | Field goal attempts. |
+| `d_fga` | double |  |
+| `fgm` | double | Field goals made. |
+| `d_fgm` | double |  |
+| `tpa` | double |  |
+| `d_tpa` | double |  |
+| `tpm` | double |  |
+| `d_tpm` | double |  |
+| `fta` | double | Free throw attempts. |
+| `d_fta` | double |  |
+| `ftm` | double | Free throws made. |
+| `d_ftm` | double |  |
+| `rima` | double |  |
+| `d_rima` | double |  |
+| `rimm` | double |  |
+| `d_rimm` | double |  |
+| `orb` | double |  |
+| `d_orb` | double |  |
+| `drb` | double |  |
+| `d_drb` | double |  |
+| `blk` | double | Blocks. |
+| `d_blk` | double |  |
+| `to` | double | To. |
+| `d_to` | double |  |
+| `ast` | double | Assists. |
+| `d_ast` | double |  |
+| `e_poss` | double |  |
+| `fg_pct` | double | Field goal percentage (0-1). |
+| `d_fg_pct` | double |  |
+| `tpp` | double |  |
+| `d_tpp` | double |  |
+| `ftp` | double |  |
+| `d_ftp` | double |  |
+| `efg_pct` | double |  |
+| `d_efg_pct` | double |  |
+| `ts_pct` | double | True shooting percentage (0-1). |
+| `d_ts_pct` | double |  |
+| `rim_pct` | double |  |
+| `d_rim_pct` | double |  |
+| `mid_pct` | double |  |
+| `d_mid_pct` | double |  |
+| `tp_rate` | double |  |
+| `d_tp_rate` | double |  |
+| `rim_rate` | double |  |
+| `d_rim_rate` | double |  |
+| `mid_rate` | double |  |
+| `d_mid_rate` | double |  |
+| `ft_rate` | double | Ft rate. |
+| `d_ft_rate` | double |  |
+| `ast_rate` | double |  |
+| `d_ast_rate` | double |  |
+| `to_rate` | double | To rate. |
+| `d_to_rate` | double |  |
+| `blk_rate` | double |  |
+| `o_blk_rate` | double |  |
+| `orb_pct` | double | Offensive rebound percentage. |
+| `drb_pct` | double | Defensive rebound percentage. |
+| `time_per_poss` | double |  |
+| `d_time_per_poss` | double |  |
 
 **Example**
 
@@ -1187,6 +1491,8 @@ Select and seed a tournament field from a per-team résumé frame.
 
 One row per input team: `season, team_id, resume_score, projected_seed` (1-16, capped for the First Four; null outside the field), `at_large_prob` (logistic in `resume_score` centred on the selection cutoff -- every selected at-large clears 0.5), `auto_bid`, `bid` (exactly `field_size` true).
 
+No returns table is published for this function: no capture: it needs a resume frame (strength of schedule joined with the ratings' adj_em_z) that no package function returns.
+
 **Example**
 
 ```python
@@ -1255,6 +1561,8 @@ Per-team SoS + Quad 1-4 record + WAB from completed games and ratings.
 **Returns**
 
 One row per (season, team_id): `season, team_id, sos, sos_rank, wab, quad1_w .. quad4_l, quality_wins`. `sos` is the mean opponent `adj_em` (rank 1 = hardest schedule); quads follow the NET venue-adjusted opponent-rank thresholds; `quality_wins` is Quad-1 + Quad-2 wins; `wab` is actual wins minus a bubble-quality team's expected wins against the same schedule. Empty input returns the schema with zero rows.
+
+No returns table is published for this function: no capture: it raises a join-key dtype mismatch on every real season (the schedule's home_team_id is Int32, the ratings' team_id is String).
 
 **Example**
 
@@ -1351,83 +1659,11 @@ Delegates to `sportsdataverse.mbb.mbb_bracketology.mbb_bracketology` with `leagu
 
 One row per team: `season, team_id, resume_score, projected_seed, at_large_prob, auto_bid, bid` -- see the mbb core for the full contract.
 
+No returns table is published for this function: no capture: it raises a join-key dtype mismatch on every real season (the schedule's home_team_id is Int32, the ratings' team_id is String).
+
 **Example**
 
 ```python
 from sportsdataverse.wbb import wbb_bracketology
 field = wbb_bracketology(2024)
-```
-
-### wbb_strength_of_schedule {#wbb_strength_of_schedule}
-
-`wbb_strength_of_schedule(seasons: 'list[int]', *, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
-
-Women's season-level SoS / Quad / WAB résumé.
-
-Delegates to `sportsdataverse.mbb.mbb_strength_of_schedule.mbb_strength_of_schedule` with `league="womens"` (WBB loaders + women's constants).
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `seasons` | `list[int]` |  | Seasons to compute (e.g. `[2024]`). |
-| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
-
-**Returns**
-
-One row per (season, team_id): `season, team_id, sos, sos_rank, wab, quad1_w .. quad4_l, quality_wins` -- see the mbb core for the full contract.
-
-**Example**
-
-```python
-from sportsdataverse.wbb import wbb_strength_of_schedule
-wbb_strength_of_schedule([2024]).sort("wab", descending=True).head(20)
-```
-
-### weighted_avg {#weighted_avg}
-
-`weighted_avg(mutable_acc: 'LineupStatSet', obj: 'LineupStatSet') -> 'None'`
-
-Merge `obj` into `mutable_acc` with possession weighting.
-
-Faithful port of `LineupUtils.weightedAvg` (`LineupUtils.ts:645`).
-Mutates `mutable_acc` in place (matching the upstream mutable-state
-contract) and returns `None`. Each call accumulates a **weighted
-sum**, not a weighted average -- the companion `completeWeightedAvg`
-(upstream `LineupUtils.ts:752`, not yet ported) divides by the
-accumulated weight totals to finish the average. The per-field weight
-used at each merge step is derived from `obj`'s *own* totals (e.g.
-that single lineup's `total_off_fga`), not from any running total on
-`mutable_acc` -- callers accumulating many lineups must call
-`weighted_avg` once per lineup so every lineup contributes its own
-weight.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `mutable_acc` | `LineupStatSet` |  | The running accumulator (`LineupStatSet`). Mutated in place; fields absent from the accumulator are initialized to `{"value": 0.0}` (plus `old_value` / `override` when `obj`'s field carries a luck-adjustment `override` marker) before `obj`'s contribution is added. |
-| `obj` | `LineupStatSet` |  | The per-lineup `LineupStatSet` document to merge in. |
-
-**Returns**
-
-None. `mutable_acc` is mutated in place.
-
-**Example**
-
-```python
-from sportsdataverse.mbb.mbb_lineup_stats import weighted_avg
-
-acc: dict = {}
-weighted_avg(acc, lineup_a)
-weighted_avg(acc, lineup_b)
-print(acc["off_poss"]["value"])  # plain sum (SUM_FIELDS)
-
-# Two-lineup possession-weighted merge
-
-acc = {}
-for lineup in three_lineups:
-    weighted_avg(acc, lineup)
-# acc now holds weighted SUMS; complete_weighted_avg (not yet
-# ported) is required to turn these into rate-stat averages.
 ```

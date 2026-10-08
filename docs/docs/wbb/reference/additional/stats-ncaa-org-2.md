@@ -1,10 +1,10 @@
 ---
-title: "WBB — additional Python functions — stats.ncaa.org: enrich_stats–shot_js"
-sidebar_label: "stats.ncaa.org: enrich_stats–shot_js"
+title: "WBB — additional Python functions — stats.ncaa.org: enrich_stats–phase1_shot"
+sidebar_label: "stats.ncaa.org: enrich_stats–phase1_shot"
 sidebar_position: 3
-description: "WBB — additional Python functions — stats.ncaa.org: enrich_stats–shot_js — function reference in sdv-py, the SportsDataverse Python package."
+description: "WBB — additional Python functions — stats.ncaa.org: enrich_stats–phase1_shot — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# WBB — additional Python functions — stats.ncaa.org: enrich_stats–shot_js
+# WBB — additional Python functions — stats.ncaa.org: enrich_stats–phase1_shot
 
 ### enrich_stats {#enrich_stats}
 
@@ -1075,6 +1075,37 @@ markup no longer ships).
 
 Per-player box rows (or per-player aggregates with `multi_games`).
 
+| col_name | type | description |
+|---|---|---|
+| `game_id` | character | Unique game identifier. |
+| `box_id` | character |  |
+| `player` | character | Player name. |
+| `clean_name` | character |  |
+| `team` | character | Team-side label or team identifier. |
+| `mp` | double | Minutes played. |
+| `pts` | double | Points scored. |
+| `orb` | double |  |
+| `drb` | double |  |
+| `trb` | double | Career total rebounds. |
+| `ast` | double | Assists. |
+| `to` | double | To. |
+| `stl` | double | Steals. |
+| `blk` | double | Blocks. |
+| `fga` | double | Field goal attempts. |
+| `fgm` | double | Field goals made. |
+| `fg_pct` | double | Field goal percentage (0-1). |
+| `tpa` | double |  |
+| `tpm` | double |  |
+| `tp_pct` | double |  |
+| `fta` | double | Free throw attempts. |
+| `ftm` | double | Free throws made. |
+| `ft_pct` | double | Free throw percentage (0-1). |
+| `ts_pct` | double | True shooting percentage (0-1). |
+| `efg_pct` | double |  |
+| `fouls` | double | Personal fouls. |
+| `dq` | double |  |
+| `tech` | double |  |
+
 **Example**
 
 ```python
@@ -1108,6 +1139,23 @@ the 2010-11..2025-26 coverage caveat).
 
 One row per game — see the MBB sibling for the full `SCOREBOARD_SCHEMA` column contract.
 
+| col_name | type | description |
+|---|---|---|
+| `date` | character | Date in YYYY-MM-DD format. |
+| `start_time` | character |  |
+| `home` | character | Home. |
+| `away` | character | Away record. |
+| `box_id` | character |  |
+| `game_id` | character | Unique game identifier. |
+| `home_score` | character | Home team score at the time of the play. |
+| `away_score` | character | Away team score at the time of the play. |
+| `attendance` | character | Reported attendance. |
+| `neutral_site` | logical | Neutral site. |
+| `home_wins` | integer | Home team's wins. |
+| `home_losses` | integer | Home team's losses. |
+| `away_wins` | integer | Away team's wins. |
+| `away_losses` | integer | Away team's losses. |
+
 **Example**
 
 ```python
@@ -1137,6 +1185,49 @@ the joined 40-column contract.
 **Returns**
 
 The pbp frame with shot columns attached (unmatched rows NA-filled).
+
+| col_name | type | description |
+|---|---|---|
+| `game_id` | character | Unique game identifier. |
+| `game_date` | character | Game date (YYYY-MM-DD). |
+| `home` | character | Home. |
+| `away` | character | Away record. |
+| `period` | integer | Period of the game (1-4 quarters; 5+ for OT). |
+| `clock` | character | Game clock value. |
+| `game_time` | character | Game start time. |
+| `game_seconds` | integer |  |
+| `home_score` | integer | Home team score at the time of the play. |
+| `away_score` | integer | Away team score at the time of the play. |
+| `event_team` | character |  |
+| `event_description` | character |  |
+| `player_1` | character |  |
+| `player_2` | character |  |
+| `event_type` | character | Event / play type code (V2 PBP). |
+| `event_result` | character |  |
+| `shot_value` | integer | Point value of the shot (2 or 3). |
+| `event_length` | integer |  |
+| `poss_num` | integer |  |
+| `poss_team` | character |  |
+| `poss_length` | integer |  |
+| `is_transition` | logical |  |
+| `home_1` | character |  |
+| `home_2` | character |  |
+| `home_3` | character |  |
+| `home_4` | character |  |
+| `home_5` | character |  |
+| `away_1` | character |  |
+| `away_2` | character |  |
+| `away_3` | character |  |
+| `away_4` | character |  |
+| `away_5` | character |  |
+| `status` | character | Status label. |
+| `is_garbage_time` | logical |  |
+| `sub_deviate` | integer |  |
+| `team` | character | Team-side label or team identifier. |
+| `player` | character | Player name. |
+| `x` | double | X. |
+| `y` | double | Y. |
+| `shot_dist` | double |  |
 
 **Example**
 
@@ -1170,6 +1261,124 @@ see it for the algorithm and column contracts.
 
 One row per player+team (+game when `multi_games=False`).
 
+| col_name | type | description |
+|---|---|---|
+| `game_id` | character | Unique game identifier. |
+| `game_date` | character | Game date (YYYY-MM-DD). |
+| `home` | character | Home. |
+| `away` | character | Away record. |
+| `team` | character | Team-side label or team identifier. |
+| `player` | character | Player name. |
+| `mins` | double |  |
+| `o_poss` | double |  |
+| `pts` | double | Points scored. |
+| `orb` | double |  |
+| `drb` | double |  |
+| `ast` | double | Assists. |
+| `stl` | double | Steals. |
+| `blk` | double | Blocks. |
+| `tov` | double | Turnovers. |
+| `pf` | double | Personal fouls. |
+| `ts_pct` | double | True shooting percentage (0-1). |
+| `efg_pct` | double |  |
+| `fgm` | double | Field goals made. |
+| `fga` | double | Field goal attempts. |
+| `fg_pct` | double | Field goal percentage (0-1). |
+| `tpm` | double |  |
+| `tpa` | double |  |
+| `tp_pct` | double |  |
+| `ftm` | double | Free throws made. |
+| `fta` | double | Free throw attempts. |
+| `ft_pct` | double | Free throw percentage (0-1). |
+| `rimm` | double |  |
+| `rima` | double |  |
+| `rim_pct` | double |  |
+| `midm` | double |  |
+| `mida` | double |  |
+| `mid_pct` | double |  |
+| `pbackm` | double |  |
+| `pbacka` | double |  |
+| `pback_pct` | double |  |
+| `blk_rim` | double |  |
+| `blk_mid` | double |  |
+| `blk_three` | double |  |
+| `pct_fga_trans` | double |  |
+| `pct_tpa_trans` | double |  |
+| `pct_rima_trans` | double |  |
+| `pct_fgm_trans` | double |  |
+| `pct_tpm_trans` | double |  |
+| `pct_rimm_trans` | double |  |
+| `pct_fgm_ast` | double |  |
+| `pct_tpm_ast` | double |  |
+| `pct_rimm_ast` | double |  |
+| `pts_trans` | double |  |
+| `orb_trans` | double |  |
+| `drb_trans` | double |  |
+| `ast_trans` | double |  |
+| `stl_trans` | double |  |
+| `blk_trans` | double |  |
+| `tov_trans` | double |  |
+| `ts_pct_trans` | double |  |
+| `efg_pct_trans` | double |  |
+| `fgm_trans` | double |  |
+| `fga_trans` | double |  |
+| `fg_pct_trans` | double |  |
+| `tpm_trans` | double |  |
+| `tpa_trans` | double |  |
+| `tp_pct_trans` | double |  |
+| `ftm_trans` | double |  |
+| `fta_trans` | double |  |
+| `ft_pct_trans` | double |  |
+| `rimm_trans` | double |  |
+| `rima_trans` | double |  |
+| `rim_pct_trans` | double |  |
+| `midm_trans` | double |  |
+| `mida_trans` | double |  |
+| `mid_pct_trans` | double |  |
+| `pts_half` | double |  |
+| `orb_half` | double |  |
+| `drb_half` | double |  |
+| `ast_half` | double |  |
+| `stl_half` | double |  |
+| `blk_half` | double |  |
+| `tov_half` | double |  |
+| `ts_pct_half` | double |  |
+| `efg_pct_half` | double |  |
+| `fgm_half` | double |  |
+| `fga_half` | double |  |
+| `fg_pct_half` | double |  |
+| `tpm_half` | double |  |
+| `tpa_half` | double |  |
+| `tp_pct_half` | double |  |
+| `ftm_half` | double |  |
+| `fta_half` | double |  |
+| `ft_pct_half` | double |  |
+| `rimm_half` | double |  |
+| `rima_half` | double |  |
+| `rim_pct_half` | double |  |
+| `midm_half` | double |  |
+| `mida_half` | double |  |
+| `mid_pct_half` | double |  |
+| `pts_ast` | double |  |
+| `fgm_ast` | double |  |
+| `tpm_ast` | double |  |
+| `rimm_ast` | double |  |
+| `midm_ast` | double |  |
+| `pts_unast` | double |  |
+| `efg_pct_unast` | double |  |
+| `fgm_unast` | double |  |
+| `fga_unast` | double |  |
+| `fg_pct_unast` | double |  |
+| `tpm_unast` | double |  |
+| `tpa_unast` | double |  |
+| `tp_pct_unast` | double |  |
+| `rimm_unast` | double |  |
+| `rima_unast` | double |  |
+| `rim_pct_unast` | double |  |
+| `midm_unast` | double |  |
+| `mida_unast` | double |  |
+| `mid_pct_unast` | double |  |
+
 **Example**
 
 ```python
@@ -1201,6 +1410,37 @@ faithful flag convention.
 **Returns**
 
 One row per possession.
+
+| col_name | type | description |
+|---|---|---|
+| `game_id` | character | Unique game identifier. |
+| `game_date` | character | Game date (YYYY-MM-DD). |
+| `home` | character | Home. |
+| `away` | character | Away record. |
+| `period` | integer | Period of the game (1-4 quarters; 5+ for OT). |
+| `poss_num` | integer |  |
+| `poss_team` | character |  |
+| `home_1` | character |  |
+| `home_2` | character |  |
+| `home_3` | character |  |
+| `home_4` | character |  |
+| `home_5` | character |  |
+| `away_1` | character |  |
+| `away_2` | character |  |
+| `away_3` | character |  |
+| `away_4` | character |  |
+| `away_5` | character |  |
+| `home_score` | integer | Home team score at the time of the play. |
+| `away_score` | integer | Away team score at the time of the play. |
+| `pts` | integer | Points scored. |
+| `is_assisted` | integer |  |
+| `is_transition` | integer |  |
+| `is_garbage_time` | integer |  |
+| `start_event_type` | character |  |
+| `first_shot_time` | integer |  |
+| `first_shot_type` | character |  |
+| `last_event_time` | integer |  |
+| `last_event_type` | character |  |
 
 **Example**
 
@@ -1238,6 +1478,19 @@ contract.
 
 All games' shots row-bound (zero-row schema frame when none found).
 
+| col_name | type | description |
+|---|---|---|
+| `game_id` | character | Unique game identifier. |
+| `period` | integer | Period of the game (1-4 quarters; 5+ for OT). |
+| `clock` | character | Game clock value. |
+| `game_seconds` | integer |  |
+| `team` | character | Team-side label or team identifier. |
+| `player` | character | Player name. |
+| `shot_result` | character | Shot result ('Made' / 'Missed'). |
+| `x` | double | X. |
+| `y` | double | Y. |
+| `shot_dist` | double |  |
+
 **Example**
 
 ```python
@@ -1271,6 +1524,22 @@ league-agnostic; algorithm detail:
 
 One row per player — see `~sportsdataverse.mbb.mbb_ncaa_schedule.parse_ncaa_bb_team_roster` for the column contract.
 
+| col_name | type | description |
+|---|---|---|
+| `gp` | character | Games played. |
+| `gs` | character | Games started. |
+| `jersey` | character | Jersey number worn by the player. |
+| `name` | character | Display name. |
+| `class` | character | College class / draft eligibility note. |
+| `position` | character | Listed roster position (G, F, C, etc.). |
+| `height` | character | Player height (string e.g. '6-2' or inches). |
+| `hometown` | character | Player hometown. |
+| `high_school` | character |  |
+| `player` | character | Player name. |
+| `clean_name` | character |  |
+| `ht_inches` | integer |  |
+| `player_id` | character | Unique player identifier. |
+
 **Example**
 
 ```python
@@ -1303,6 +1572,19 @@ WBB crosswalk (see the module docstring). Algorithm detail:
 
 One row per scheduled game — see `~sportsdataverse.mbb.mbb_ncaa_schedule.parse_ncaa_bb_team_schedule` for the column contract.
 
+| col_name | type | description |
+|---|---|---|
+| `game_date` | character | Game date (YYYY-MM-DD). |
+| `home` | character | Home. |
+| `home_score` | integer | Home team score at the time of the play. |
+| `away` | character | Away record. |
+| `away_score` | integer | Away team score at the time of the play. |
+| `box_id` | character |  |
+| `game_id` | character | Unique game identifier. |
+| `is_neutral` | logical |  |
+| `detail` | character | Detail. |
+| `attendance` | integer | Reported attendance. |
+
 **Example**
 
 ```python
@@ -1333,6 +1615,82 @@ it for the algorithm and column contract.
 **Returns**
 
 One row per team per game.
+
+| col_name | type | description |
+|---|---|---|
+| `game_id` | character | Unique game identifier. |
+| `home` | character | Home. |
+| `away` | character | Away record. |
+| `team` | character | Team-side label or team identifier. |
+| `mins` | double |  |
+| `o_mins` | double |  |
+| `d_mins` | double |  |
+| `o_poss` | double |  |
+| `d_poss` | double |  |
+| `ortg` | double |  |
+| `drtg` | double |  |
+| `netrtg` | double |  |
+| `pts` | double | Points scored. |
+| `d_pts` | double |  |
+| `fga` | double | Field goal attempts. |
+| `d_fga` | double |  |
+| `fgm` | double | Field goals made. |
+| `d_fgm` | double |  |
+| `tpa` | double |  |
+| `d_tpa` | double |  |
+| `tpm` | double |  |
+| `d_tpm` | double |  |
+| `fta` | double | Free throw attempts. |
+| `d_fta` | double |  |
+| `ftm` | double | Free throws made. |
+| `d_ftm` | double |  |
+| `rima` | double |  |
+| `d_rima` | double |  |
+| `rimm` | double |  |
+| `d_rimm` | double |  |
+| `orb` | double |  |
+| `d_orb` | double |  |
+| `drb` | double |  |
+| `d_drb` | double |  |
+| `blk` | double | Blocks. |
+| `d_blk` | double |  |
+| `to` | double | To. |
+| `d_to` | double |  |
+| `ast` | double | Assists. |
+| `d_ast` | double |  |
+| `e_poss` | double |  |
+| `fg_pct` | double | Field goal percentage (0-1). |
+| `d_fg_pct` | double |  |
+| `tpp` | double |  |
+| `d_tpp` | double |  |
+| `ftp` | double |  |
+| `d_ftp` | double |  |
+| `efg_pct` | double |  |
+| `d_efg_pct` | double |  |
+| `ts_pct` | double | True shooting percentage (0-1). |
+| `d_ts_pct` | double |  |
+| `rim_pct` | double |  |
+| `d_rim_pct` | double |  |
+| `mid_pct` | double |  |
+| `d_mid_pct` | double |  |
+| `tp_rate` | double |  |
+| `d_tp_rate` | double |  |
+| `rim_rate` | double |  |
+| `d_rim_rate` | double |  |
+| `mid_rate` | double |  |
+| `d_mid_rate` | double |  |
+| `ft_rate` | double | Ft rate. |
+| `d_ft_rate` | double |  |
+| `ast_rate` | double |  |
+| `d_ast_rate` | double |  |
+| `to_rate` | double | To rate. |
+| `d_to_rate` | double |  |
+| `blk_rate` | double |  |
+| `o_blk_rate` | double |  |
+| `orb_pct` | double | Offensive rebound percentage. |
+| `drb_pct` | double | Defensive rebound percentage. |
+| `time_per_poss` | double |  |
+| `d_time_per_poss` | double |  |
 
 **Example**
 
@@ -1383,357 +1741,4 @@ The fully court-geometry-enriched shots, in the same order as `sorted_very_raw_e
 ```python
 from sportsdataverse.mbb.mbb_ncaa_shot_parser import phase1_shot_event_enrichment
 shots = phase1_shot_event_enrichment([(1, very_raw_shot)])
-```
-
-### playwright_transport {#playwright_transport}
-
-`playwright_transport(*, headless_new: 'bool' = True, challenge_wait_ms: 'int' = 8000, nav_timeout_ms: 'int' = 45000, user_agent: 'Optional[str]' = None, solve_attempts: 'int' = 3, relaunch_backoff: 'float' = 2.0) -> "'_PlaywrightTransport'"`
-
-Build the **suggested** stats.ncaa.org game-detail scraping transport.
-
-Drives a real Chromium via Playwright in Chrome's new-headless mode
-(`--headless=new`) to clear the Akamai `bm-verify` challenge that
-`curl_cffi` cannot, then serves raw server HTML for the 5a-5e parsers.
-Playwright is a **lazy optional import** (not a hard dependency); a clear
-`ImportError` fires on first use if it is missing.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `headless_new` | `bool` | `True` | Use `--headless=new` (real-GPU render, no window) -- the default and the proven-working mode. `False` runs old headless (`headless_shell`), which Akamai flags -- avoid. |
-| `challenge_wait_ms` | `int` | `8000` | Milliseconds to let the bm-verify sensor run after the first navigation. |
-| `nav_timeout_ms` | `int` | `45000` | Per-navigation timeout. |
-| `user_agent` | `Optional[str]` | `None` | Override the Chrome UA string. |
-| `solve_attempts` | `int` | `3` |  |
-| `relaunch_backoff` | `float` | `2.0` |  |
-
-**Returns**
-
-A stateful, callable `FetchTransport` reusing one browser for the session. Close it when done (it is a context manager, has `close()`, and registers an `atexit` safety net).
-
-**Example**
-
-```python
-from sportsdataverse.mbb.mbb_ncaa_fetch import NcaaFetcher
-with NcaaFetcher.with_browser() as fetcher:
-    pbp = fetcher.fetch_game_pbp("1613299")               # raw PBP HTML
-    box = fetcher.fetch_game_individual_stats("1613299")  # raw box HTML
-# -> feed to get_box_lineup / create_lineup_data (mbb_ncaa_*_parser)
-```
-
-### remove_diacritics {#remove_diacritics}
-
-`remove_diacritics(fragment: 'str') -> 'str'`
-
-Strip diacritical marks, e.g. `"Juhász"` -> `"Juhasz"`
-
-(`ExtractorUtils.scala:38-43`: NFD normalization then removal of the
-combining-diacritical-marks block).
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `fragment` | `str` |  | Any string (a full player name or a name fragment). |
-
-**Returns**
-
-The string with combining marks removed.
-
-**Example**
-
-```python
-from sportsdataverse.mbb.mbb_ncaa_stints import remove_diacritics
-print(remove_diacritics("Dorka Juhász"))  # "Dorka Juhasz"
-```
-
-### reorder_and_reverse {#reorder_and_reverse}
-
-`reorder_and_reverse(reversed_partial_events: 'Iterable[PlayByPlayEvent]') -> 'list[PlayByPlayEvent]'`
-
-Orders same-minute play-by-play events so subs never enclose the plays
-
-they logically precede/follow (`ExtractorUtils.scala:435-599`).
-
-Groups consecutive events sharing the same `min` into a block (the
-input arrives in descending/reverse-chronological order, so blocks are
-discovered and internally accumulated in reverse too), then -- for any
-block containing a sub -- reorders it via `inner_sort`: events
-referencing a subbed-OUT player (or scoring no higher than the sub) land
-in a pre-sub group, the subs themselves come next (in ascending-score
-order), and events referencing a subbed-IN player (or scoring higher
-than the sub) land in a trailing post-sub group. Free-throw attempts
-sharing the sub's inferred "direction" (team vs. opponent, inferred from
-the nearest preceding shot/FT/foul) are pulled into the pre-sub group
-unless the shooter is one of the players being subbed in. Blocks with no
-sub are returned unchanged apart from the initial score-based sort.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `reversed_partial_events` | `Iterable[PlayByPlayEvent]` |  | Events for one lineup event, in reverse-chronological (descending-time) order -- the natural order encountered walking play-by-play text bottom-up. |
-
-**Returns**
-
-The same events, forward-chronological (ascending time), with each same-minute block internally reordered so no sub encloses a play it logically shouldn't.
-
-**Example**
-
-```python
-from sportsdataverse.mbb.mbb_ncaa_models import Score
-from sportsdataverse.mbb.mbb_ncaa_stints import (
-    OtherTeamEvent,
-    SubInEvent,
-    reorder_and_reverse,
-)
-events = [
-    SubInEvent(0.4, Score(0, 0), "player1"),
-    OtherTeamEvent(0.4, Score(0, 0), "rebound"),
-]
-reorder_and_reverse(events)
-# [OtherTeamEvent(...), SubInEvent(...)]
-```
-
-### reset_config {#reset_config}
-
-`reset_config() -> 'NcaaFetchConfig'`
-
-Reset the active config to its env-var-derived defaults.
-
-**Returns**
-
-The live singleton, now holding the env-var-derived defaults again.
-
-**Example**
-
-```python
-from sportsdataverse.mbb.mbb_ncaa_fetch import update_config, reset_config
-update_config(timeout=5)
-reset_config()
-```
-
-### right_kind_of_shot {#right_kind_of_shot}
-
-`right_kind_of_shot(shot: 'ShotEvent', pbp_event: 'MiscGameEvent', strict: 'bool') -> 'bool'`
-
-Whether `pbp_event`'s shot type is compatible with `shot`'s
-
-distance and make/miss (`ShotEnrichmentUtils.right_kind_of_shot`,
-`PlayByPlayUtils.scala:659-679`).
-
-The distance-in-the-data is approximate, so exact 2-vs-3 discrimination is
-impossible; this only rules out the *obvious* mismatches (a clearly-short
-shot matched to a 3, or vice versa) and always requires make/miss
-agreement.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `shot` | `ShotEvent` |  | The shot being enriched (`pts`/`dist` read). |
-| `pbp_event` | `MiscGameEvent` |  | The candidate play-by-play event. |
-| `strict` | `bool` |  | If `True`, also apply the distance gate; if `False`, only the make/miss agreement is required. |
-
-**Returns**
-
-`True` if the event could plausibly be this shot.
-
-**Example**
-
-```python
-from sportsdataverse.mbb.mbb_ncaa_pbp_glue import right_kind_of_shot
-right_kind_of_shot(shot, pbp_event, strict=True)
-```
-
-### run_iterative_adjustment_with_hca {#run_iterative_adjustment_with_hca}
-
-`run_iterative_adjustment_with_hca(teams: 'Sequence[TeamDetail]', team_by_name: 'dict[str, TeamDetail]', fields: 'Sequence[str]', league_averages: 'LeagueAverages', poss_splits: 'dict[str, PossessionSplits]', *, max_iterations: 'int' = 100, tolerance: 'float' = 1e-06) -> 'IterationResult'`
-
-KenPom-style SoS + HCA fixed-point solver (`runIterativeAdjustmentWithHCA`, `ts:306-527`).
-
-Each iteration (Jacobi -- all teams read the *previous* iteration's
-adjustments, then commit together):
-
-1. Per team/field, adjust every game
-   `adj_game = raw_game * (league / (opp_adj +/- hca))` and take the
-   weighted mean; a field with no valid games keeps its current value.
-2. Re-estimate per-field HCA from home/away possession-imbalance residuals
-   `hca = sum((raw - pred) * |imbalance|) / sum(|imbalance|)` over teams
-   with `|imbalance| >= IMBALANCE_MIN`.
-
-Stops when the max per-team/field change drops below `tolerance` or after
-`max_iterations` sweeps (the HCA re-estimate still runs on the final
-sweep). The cross-guard on the per-game branch, the asymmetric residual
-prediction, and the cross-named opponent strengths are all preserved -- see
-the module docstring's landmine list.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `teams` | `Sequence[TeamDetail]` |  | The teams to solve over. |
-| `team_by_name` | `dict[str, TeamDetail]` |  | `{team_name: team_detail}` for opponent lookup. |
-| `fields` | `Sequence[str]` |  | The stat fields to solve. |
-| `league_averages` | `LeagueAverages` |  | Output of `compute_league_averages_from_per_game`. |
-| `poss_splits` | `dict[str, PossessionSplits]` |  | `{team_name:` `PossessionSplits` `}`. |
-| `max_iterations` | `int` | `100` | Iteration cap (default `MAX_ITERATIONS`; pin to `1` to inspect a single sweep). |
-| `tolerance` | `float` | `1e-06` | Convergence tolerance (default `TOLERANCE`). |
-
-**Returns**
-
-An `IterationResult` (`adj_values`, `hca_per_field`).
-
-**Example**
-
-```python
-from sportsdataverse.mbb.mbb_ncaa_strength import (
-    STRENGTH_ADJUSTED_FIELDS,
-    compute_league_averages_from_per_game,
-    compute_possession_splits,
-    run_iterative_adjustment_with_hca,
-)
-
-by_name = {t["team_name"]: t for t in teams}
-league = compute_league_averages_from_per_game(teams)
-splits = {t["team_name"]: compute_possession_splits(t) for t in teams}
-result = run_iterative_adjustment_with_hca(
-    teams, by_name, STRENGTH_ADJUSTED_FIELDS, league, splits,
-)
-print(result.hca_per_field["3p"]["hca_off"])
-```
-
-### select_contains {#select_contains}
-
-`select_contains(root: 'Tag', selector: 'str', text: 'str') -> 'list[Tag]'`
-
-JSoup `root.select(sel + ":contains(text)")`: candidates whose full
-
-text (own + every descendant's) case-insensitively CONTAINS `text` as
-a plain substring -- **not** a regex (Task 5e.2 addition; see the module
-docstring's "Critical divergence" note).
-
-JSoup's `:contains()` is documented case-insensitive substring
-containment; soupsieve's `:-soup-contains()` (the non-deprecated
-spelling of its `:contains()`) is case-SENSITIVE, with no
-case-insensitive variant of its own. Reproducing JSoup's actual
-semantics therefore needs this helper rather than `:-soup-contains()`.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `root` | `Tag` |  | The element to search within. |
-| `selector` | `str` |  | A plain (soupsieve-legal) CSS selector for the structural part of the match (everything before `:contains`). |
-| `text` | `str` |  | The plain substring each candidate's collapsed text must case-insensitively contain. |
-
-**Returns**
-
-Every `selector` match whose `jsoup_text` case-insensitively contains `text`, in document order.
-
-**Example**
-
-```python
-from sportsdataverse.mbb.mbb_ncaa_html import parse_html, select_contains
-soup = parse_html("<td>game date:</td><td>Location:</td>")
-select_contains(soup, "td", "Game Date:")  # [<td>game date:</td>]
-```
-
-### select_matching {#select_matching}
-
-`select_matching(root: 'Tag', selector: 'str', regex: 'str') -> 'list[Tag]'`
-
-JSoup `root.select(sel + ":matches(regex)")`: candidates whose full
-
-text (own + every descendant's) matches `regex`.
-
-Soupsieve has no `:matches()` pseudo-class equivalent, so this runs the
-plain structural `selector` first, then filters by `re.search`
-over each candidate's `jsoup_text` (own text plus descendants',
-matching JSoup's `:matches()` semantics -- as opposed to
-`select_matching_own`'s own-text-only `:matchesOwn()`).
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `root` | `Tag` |  | The element to search within. |
-| `selector` | `str` |  | A plain (soupsieve-legal) CSS selector. |
-| `regex` | `str` |  | The pattern each candidate's collapsed text must `re.search`-match. |
-
-**Returns**
-
-Every `selector` match whose `jsoup_text` contains a `regex` match, in document order.
-
-**Example**
-
-```python
-from sportsdataverse.mbb.mbb_ncaa_html import parse_html, select_matching
-soup = parse_html("<div><p>Home Team</p><p>Away Team</p></div>")
-select_matching(soup, "p", r"^Home")  # [<p>Home Team</p>]
-```
-
-### select_matching_own {#select_matching_own}
-
-`select_matching_own(root: 'Tag', selector: 'str', regex: 'str') -> 'list[Tag]'`
-
-JSoup `root.select(sel + ":matchesOwn(regex)")`: candidates whose
-
-OWN text only (excluding descendant elements' text) matches `regex`.
-
-JSoup's `Element.ownText()` walks only the element's direct
-`TextNode` children, not text nested inside child elements -- the
-same distinction bs4 draws between a tag's direct
-`bs4.NavigableString` children and its full `.get_text()`.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `root` | `Tag` |  | The element to search within. |
-| `selector` | `str` |  | A plain (soupsieve-legal) CSS selector. |
-| `regex` | `str` |  | The pattern each candidate's own (whitespace-collapsed) text must `re.search`-match. |
-
-**Returns**
-
-Every `selector` match whose own text contains a `regex` match, in document order.
-
-**Example**
-
-```python
-from sportsdataverse.mbb.mbb_ncaa_html import parse_html, select_matching_own
-soup = parse_html('<div class="card-header">Coach <b>Info</b></div>')
-select_matching_own(soup, "div.card-header", r"^Coach")
-# [<div class="card-header">Coach <b>Info</b></div>]
-```
-
-### shot_js_to_html {#shot_js_to_html}
-
-`shot_js_to_html(js: 'str') -> 'list[Tag]'`
-
-Converts client-side `addShot(...)` JS calls into parseable
-
-`circle.shot` HTML, for pages where the shot map is built on the fly
-rather than baked into the initial HTML (`ShotEventParser
-.shot_js_to_html`, `:266-283`). See the module docstring's "Scala
-idiom decision" note -- the Scala's `builders`/`browser` parameters
-are dropped here since the Scala body never actually uses them.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `js` | `str` |  | The concatenated `<script>` text containing one or more `addShot(x, y, ..., 'title', ...)` calls, one per line. |
-
-**Returns**
-
-The `circle.shot` elements reconstructed from every matching line (non-matching lines, e.g. the `addShot` function definition line itself, are silently skipped).
-
-**Example**
-
-```python
-from sportsdataverse.mbb.mbb_ncaa_shot_parser import shot_js_to_html
-js = "addShot(27.0, 77.0, 392, false, 1, 'title text', 'class', false);"
-circles = shot_js_to_html(js)
 ```

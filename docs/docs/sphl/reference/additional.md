@@ -218,6 +218,8 @@ One row per team: `team`, `team_code`, `team_rank` and `wins` (Int64), and `game
 | `team_rank` | integer | Team rank in the standings. |
 | `past_10` | character | Record over the team's most recent 10 games (feed header 'Past 10 Games') as a hyphenated string: W-L-OTL-SOL when four parts are shipped (e.g. '2-0-0-1'), W-L-OTL when three are (e.g. '0-2-1'). |
 | `team` | character | Team name. |
+| `non_reg_wins` | character | Non-regulation wins. |
+| `non_reg_losses` | character | Non-regulation losses. |
 
 ### sphl_team_roster {#sphl_team_roster}
 

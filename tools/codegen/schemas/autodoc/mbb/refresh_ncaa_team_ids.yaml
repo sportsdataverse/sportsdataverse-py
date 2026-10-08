@@ -1,0 +1,5 @@
+schema: refresh_ncaa_team_ids
+kind: dataframe
+columns: []
+unverified: 'no capture: it refreshes the stats.ncaa.org team-id table through a configured proxy, and the docs build has
+  none'

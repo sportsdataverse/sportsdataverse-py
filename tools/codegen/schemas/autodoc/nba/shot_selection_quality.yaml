@@ -1,0 +1,5 @@
+schema: shot_selection_quality
+kind: dataframe
+columns: []
+unverified: 'no capture: its input is stats.nba.com shot-chart detail (shot zones and types), which answers HTTP 403 to the
+  datacenter IP the docs are built on and is not in the raw store'

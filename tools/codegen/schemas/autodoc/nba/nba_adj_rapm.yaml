@@ -1,0 +1,21 @@
+schema: nba_adj_rapm
+kind: dataframe
+columns:
+- name: player_id
+  type: integer
+  description: ''
+- name: o_adj_rapm
+  type: double
+  description: ''
+- name: d_adj_rapm
+  type: double
+  description: ''
+- name: adj_rapm
+  type: double
+  description: ''
+- name: off_poss
+  type: integer
+  description: ''
+- name: def_poss
+  type: integer
+  description: ''

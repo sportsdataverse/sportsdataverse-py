@@ -30,6 +30,8 @@ Jaro-Winkler with jersey and DOB tiebreaks); Fox contributes
 
 `pl.DataFrame` (or pandas), one row per ESPN athlete, 21 columns.
 
+No returns table is published for this function: no capture: it reads stats.wnba.com, which answers HTTP 403 to the datacenter IP the docs are built on; the function works from a residential IP.
+
 **Example**
 
 ```python
@@ -70,6 +72,8 @@ effectively current-season.
 
 `pl.DataFrame` (or pandas) with `SCHEDULE_COLUMNS`.
 
+No returns table is published for this function: no capture: it reads stats.wnba.com, which answers HTTP 403 to the datacenter IP the docs are built on; the function works from a residential IP.
+
 **Example**
 
 ```python
@@ -104,6 +108,8 @@ and joined on the normalized `city + name`.
 **Returns**
 
 `pl.DataFrame` (or pandas), one row per ESPN team, with `TEAM_COLUMNS`.
+
+No returns table is published for this function: no capture: it reads stats.wnba.com, which answers HTTP 403 to the datacenter IP the docs are built on; the function works from a residential IP.
 
 **Example**
 

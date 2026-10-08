@@ -1,0 +1,4 @@
+schema: wbb_schedule_crosswalk
+kind: dataframe
+columns: []
+unverified: 'no capture: barttorvik.com answers HTTP 403 to the datacenter IP the docs are built on'

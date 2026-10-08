@@ -1,0 +1,24 @@
+schema: load_epm
+kind: dataframe
+columns:
+- name: player_id
+  type: integer
+  description: ''
+- name: season
+  type: integer
+  description: ''
+- name: player_name
+  type: character
+  description: ''
+- name: team
+  type: character
+  description: ''
+- name: oepm
+  type: double
+  description: ''
+- name: depm
+  type: double
+  description: ''
+- name: epm
+  type: double
+  description: ''

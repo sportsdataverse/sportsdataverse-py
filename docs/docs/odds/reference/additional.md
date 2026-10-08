@@ -36,6 +36,19 @@ Markets available for a single event
 
 A `polars`/`pandas` `DataFrame` (one row per bookmaker x available market) by default; raw JSON `dict` when `return_parsed=False`.
 
+| col_name | type | description |
+|---|---|---|
+| `event_id` | character |  |
+| `sport_key` | character |  |
+| `sport_title` | character |  |
+| `commence_time` | character |  |
+| `home_team` | character |  |
+| `away_team` | character |  |
+| `bookmaker_key` | character |  |
+| `bookmaker_title` | character |  |
+| `market_key` | character |  |
+| `market_last_update` | character |  |
+
 **Example**
 
 ```python
@@ -76,6 +89,26 @@ Odds for a single event, incl. player-prop markets
 
 A long-form `polars`/`pandas` `DataFrame` (one row per bookmaker x market x outcome) by default; raw JSON `dict` when `return_parsed=False`.
 
+| col_name | type | description |
+|---|---|---|
+| `event_id` | character |  |
+| `sport_key` | character |  |
+| `sport_title` | character |  |
+| `commence_time` | character |  |
+| `home_team` | character |  |
+| `away_team` | character |  |
+| `bookmaker_key` | character |  |
+| `bookmaker_title` | character |  |
+| `bookmaker_last_update` | character |  |
+| `market_key` | character |  |
+| `market_last_update` | character |  |
+| `outcome_name` | character |  |
+| `outcome_description` | character |  |
+| `outcome_price` | integer |  |
+| `outcome_point` | character |  |
+| `outcome_link` | character |  |
+| `outcome_sid` | character |  |
+
 **Example**
 
 ```python
@@ -113,6 +146,29 @@ Historical odds snapshot for a single event
 **Returns**
 
 A long-form `polars`/`pandas` `DataFrame` (one row per bookmaker x market x outcome, stamped with the snapshot timestamps) by default; the raw JSON snapshot `dict` when `return_parsed=False`.
+
+| col_name | type | description |
+|---|---|---|
+| `snapshot_timestamp` | character |  |
+| `previous_timestamp` | character |  |
+| `next_timestamp` | character |  |
+| `event_id` | character |  |
+| `sport_key` | character |  |
+| `sport_title` | character |  |
+| `commence_time` | character |  |
+| `home_team` | character |  |
+| `away_team` | character |  |
+| `bookmaker_key` | character |  |
+| `bookmaker_title` | character |  |
+| `bookmaker_last_update` | character |  |
+| `market_key` | character |  |
+| `market_last_update` | character |  |
+| `outcome_name` | character |  |
+| `outcome_description` | character |  |
+| `outcome_price` | integer |  |
+| `outcome_point` | character |  |
+| `outcome_link` | character |  |
+| `outcome_sid` | character |  |
 
 **Example**
 

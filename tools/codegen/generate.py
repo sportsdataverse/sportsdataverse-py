@@ -6,6 +6,7 @@ import argparse
 import dataclasses
 import functools
 import json
+import os
 import re
 import shutil
 import subprocess
@@ -3375,6 +3376,16 @@ def _autodoc_return_columns(scope: str, fn: str) -> tuple:
     return tuple(d.get("columns", []) or [])
 
 
+def _autodoc_unverified(scope: str, fn: str) -> str:
+    """The committed ``unverified:`` reason for an autodoc function with no capturable table, or ``""``."""
+    p = _AUTODOC_SCHEMA_DIR / scope / f"{fn}.yaml"
+    if not p.exists():
+        return ""
+    import yaml
+
+    return str((yaml.safe_load(p.read_text(encoding="utf-8")) or {}).get("unverified") or "")
+
+
 # Modules whose name happens to end in "_parsers" but which are genuine
 # user-facing NCAA HTML-parser modules (Phase 5e), not generic per-source
 # dispatch-registry files -- exempted from the ``endswith("_parsers")`` leak
@@ -4078,7 +4089,13 @@ def _autodoc_groups(league: str | None, names: list[str]) -> list[dict]:
             c["name"] = raw_name.replace("|", "\\|")
             c["type"] = str(c.get("type", "")).replace("|", "\\|")
         by_family.setdefault(_autodoc_family(n, highlighted, module=getattr(obj, "__module__", "")), []).append(
-            {"name": n, "signature": _autodoc_signature(obj), "return_columns": return_columns, **view},
+            {
+                "name": n,
+                "signature": _autodoc_signature(obj),
+                "return_columns": return_columns,
+                "return_unverified": "" if return_columns else _autodoc_unverified(scope, n),
+                **view,
+            },
         )
 
     rank = _family_rank()
@@ -4193,6 +4210,87 @@ def _merge_autodoc_columns(committed: list, df) -> tuple:
     return out, len(fresh), retained, types_kept
 
 
+def _resolve_autodoc_arg(value, memo: dict):
+    """An example argument, with ``{"$call": "<scope>.<fn>", "args": {...}, "key": ...}`` replaced
+    by that call's result.
+
+    Lets a function that takes a frame be captured on real data: another sportsdataverse
+    function fetches the input. ``key`` picks one frame out of a dict result. Results are
+    memoized on the reference, so one season load feeds every transformer that names it."""
+    if not (isinstance(value, dict) and "$call" in value):
+        return value
+    ref = json.dumps(value, sort_keys=True, default=str)
+    if ref not in memo:
+        scope, _, fn = str(value["$call"]).rpartition(".")
+        args = {k: _resolve_autodoc_arg(v, memo) for k, v in (value.get("args") or {}).items()}
+        out = _scope_callable(scope or "global", fn)(**args)
+        memo[ref] = out[value["key"]] if "key" in value else out
+    return memo[ref]
+
+
+def _call_with_timeout(thunk, seconds: float):
+    """``thunk()``, raising ``TimeoutError`` after ``seconds`` where SIGALRM exists (0 = no limit).
+
+    stats.nba.com stalls rather than failing on a datacenter IP; one such call must not
+    hang the whole capture run."""
+    import signal
+
+    if not seconds or not hasattr(signal, "SIGALRM"):
+        return thunk()
+
+    def _alarm(*_):
+        raise TimeoutError(f"no answer within {seconds:g}s (SDV_AUTODOC_CALL_TIMEOUT)")
+
+    old = signal.signal(signal.SIGALRM, _alarm)
+    signal.setitimer(signal.ITIMER_REAL, seconds)
+    try:
+        return thunk()
+    finally:
+        signal.setitimer(signal.ITIMER_REAL, 0)
+        signal.signal(signal.SIGALRM, old)
+
+
+def _returns_a_frame(annotation) -> bool:
+    """True when a return annotation's top level is a DataFrame (alone or in a union).
+
+    ``dict[str, pl.DataFrame]`` / ``list[pl.DataFrame]`` are containers of frames, not a frame:
+    they get no single returns table. ``pl.DataFrame | dict`` (a ``raw=`` escape hatch) counts."""
+    s = str(annotation or "").strip().strip("'\"")
+    if s.startswith(("Union[", "Optional[", "typing.Union[", "typing.Optional[")):
+        s, sep = s[s.index("[") + 1 : -1], ","
+    else:
+        sep = "|"
+    members, depth, cur = [], 0, ""
+    for ch in s:
+        depth += ch == "["
+        depth -= ch == "]"
+        if ch == sep and depth == 0:
+            members.append(cur)
+            cur = ""
+        else:
+            cur += ch
+    members.append(cur)
+    return any("DataFrame" in m and "[" not in m.split("DataFrame")[0] for m in (x.strip() for x in members))
+
+
+def _autodoc_dataframe_names() -> list[tuple[str, str]]:
+    """``[(scope_key, fn)]`` for every autodoc function annotated to return a DataFrame.
+
+    The capture's denominator: a function whose return annotation mentions
+    ``DataFrame`` is expected to have a returns table, and one that does not (an
+    int, a dict of frames, None) is not. Annotation strings are enough here --
+    ``from __future__ import annotations`` makes every annotation a string, and
+    this is a docs gate, not a type check."""
+    out: list[tuple[str, str]] = []
+    for scope, names in _autodoc_names_by_scope().items():
+        scope_key = "global" if scope is None else scope
+        for fn in names:
+            obj = _scope_callable(scope_key, fn)
+            if _returns_a_frame((getattr(obj, "__annotations__", {}) or {}).get("return")):
+                out.append((scope_key, fn))
+    return sorted(out)
+
+
 def refresh_autodoc_schemas() -> int:
     """Call every in-scope autodoc DataFrame-returning function and capture its
     column schema to ``schemas/autodoc/{scope}/{fn}.yaml`` (network; best-effort).
@@ -4219,18 +4317,26 @@ def refresh_autodoc_schemas() -> int:
     # whether or not its capture succeeds -- the prune guard below keys off this.
     in_scope: set = set()
     args_by_scope = _autodoc_example_args()
+    memo: dict = {}
+    timeout = float(os.environ.get("SDV_AUTODOC_CALL_TIMEOUT", "120"))
     for scope, names in _autodoc_names_by_scope().items():
         scope_key = "global" if scope is None else scope
         mod = importlib.import_module("sportsdataverse" if scope is None else f"sportsdataverse.{scope}")
         scope_args = args_by_scope.get(scope_key, {})
+        memo.clear()  # inputs are scope-local; don't hold every league's season loads at once
         for fn in names:
             obj = getattr(mod, fn, None)
             if obj is None or not callable(obj):
                 continue
             in_scope.add((scope_key, fn))
             kwargs = scope_args.get(fn, {})
+            annotated = _returns_a_frame((getattr(obj, "__annotations__", {}) or {}).get("return"))
+            if not (annotated or fn in scope_args or (_AUTODOC_SCHEMA_DIR / scope_key / f"{fn}.yaml").exists()):
+                continue  # not a frame function: never call it blind (it may write files or clear a cache)
             try:
-                df = obj(**kwargs)
+                df = _call_with_timeout(
+                    lambda: obj(**{k: _resolve_autodoc_arg(v, memo) for k, v in kwargs.items()}), timeout
+                )
             except Exception as e:  # noqa: BLE001
                 msg = str(e).splitlines()[0][:120] if str(e) else type(e).__name__
                 print(f"  autodoc skip {scope_key}.{fn}: {msg}")

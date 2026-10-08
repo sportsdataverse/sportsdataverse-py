@@ -1,0 +1,15 @@
+schema: mlb_stolen_base_value
+kind: dataframe
+columns:
+- name: runner_id
+  type: character
+  description: ''
+- name: attempts
+  type: integer
+  description: ''
+- name: p_success_mean
+  type: double
+  description: ''
+- name: sb_run_value
+  type: double
+  description: ''

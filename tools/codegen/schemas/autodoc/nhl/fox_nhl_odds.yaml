@@ -1,0 +1,5 @@
+schema: fox_nhl_odds
+kind: dataframe
+columns: []
+unverified: 'no capture: for this sport Fox sends the odds under sectionList modules rather than the top-level sixPack key
+  the shared parser reads (football and MLB still use sixPack), so it returns an empty frame for every game'

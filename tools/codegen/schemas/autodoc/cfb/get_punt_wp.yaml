@@ -1,0 +1,5 @@
+schema: get_punt_wp
+kind: dataframe
+columns: []
+unverified: 'no capture: on the smallest real input (one released season of play-by-play) it runs longer than the capture
+  allows'

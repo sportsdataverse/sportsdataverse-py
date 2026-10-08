@@ -1,0 +1,33 @@
+schema: college_baseball_state
+kind: dataframe
+columns:
+- name: game_id
+  type: character
+  description: ''
+- name: inning
+  type: integer
+  description: ''
+- name: half
+  type: character
+  description: ''
+- name: base_state
+  type: character
+  description: ''
+- name: outs
+  type: integer
+  description: ''
+- name: runs_before
+  type: integer
+  description: ''
+- name: runs_after
+  type: integer
+  description: ''
+- name: batting_team_id
+  type: character
+  description: ''
+- name: play_seq
+  type: integer
+  description: ''
+- name: score_diff
+  type: integer
+  description: ''

@@ -152,6 +152,106 @@ names and ids.
 
 Polars (or pandas) DataFrame, one row per play; the raw play dicts when `raw=True`.
 
+| col_name | type | description |
+|---|---|---|
+| `game_id` | integer | Ten digit identifier for NFL game. |
+| `play_id` | integer | Numeric play id that when used with game_id and drive provides the unique identifier for a single play. |
+| `kicker_player_name` | character | String name for the kicker on FG or kickoff. |
+| `returner_player_name` | character |  |
+| `assisted_by_player_name` | character |  |
+| `other_player_name` | character |  |
+| `passer_player_name` | character | String name for the player that attempted the pass. |
+| `receiver_player_name` | character | String name for the targeted receiver. |
+| `rusher_player_name` | character | String name for the player that attempted the run. |
+| `tackler_player_name` | character |  |
+| `pass_defender_player_name` | character |  |
+| `scorer_player_name` | character |  |
+| `pat_scorer_player_name` | character |  |
+| `penalized_player_name` | character |  |
+| `punter_player_name` | character | String name for the punter. |
+| `fumbler_player_name` | character |  |
+| `forced_by_player_name` | character |  |
+| `recoverer_player_name` | character |  |
+| `sacked_by_player_name` | character |  |
+| `snapper_player_name` | character |  |
+| `holder_player_name` | character |  |
+| `kicker_player_id` | character | Unique identifier for the kicker on FG or kickoff. |
+| `returner_player_id` | character |  |
+| `assisted_by_player_id` | character |  |
+| `other_player_id` | character |  |
+| `passer_player_id` | character | Unique identifier for the player that attempted the pass. |
+| `receiver_player_id` | character | Unique identifier for the receiver that was targeted on the pass. |
+| `rusher_player_id` | character | Unique identifier for the player that attempted the run. |
+| `tackler_player_id` | character |  |
+| `pass_defender_player_id` | character |  |
+| `scorer_player_id` | character |  |
+| `pat_scorer_player_id` | character |  |
+| `penalized_player_id` | character |  |
+| `punter_player_id` | character | Unique identifier for the punter. |
+| `fumbler_player_id` | character |  |
+| `forced_by_player_id` | character |  |
+| `recoverer_player_id` | character |  |
+| `sacked_by_player_id` | character |  |
+| `snapper_player_id` | character |  |
+| `holder_player_id` | character |  |
+| `kicker_position_id` | character |  |
+| `returner_position_id` | character |  |
+| `assisted_by_position_id` | character |  |
+| `other_position_id` | character |  |
+| `passer_position_id` | character |  |
+| `receiver_position_id` | character |  |
+| `rusher_position_id` | character |  |
+| `tackler_position_id` | character |  |
+| `pass_defender_position_id` | character |  |
+| `scorer_position_id` | character |  |
+| `pat_scorer_position_id` | character |  |
+| `penalized_position_id` | character |  |
+| `punter_position_id` | character |  |
+| `fumbler_position_id` | character |  |
+| `forced_by_position_id` | character |  |
+| `recoverer_position_id` | character |  |
+| `sacked_by_position_id` | character |  |
+| `snapper_position_id` | character |  |
+| `holder_position_id` | character |  |
+| `kicker_player_names` | character |  |
+| `returner_player_names` | character |  |
+| `assisted_by_player_names` | character |  |
+| `other_player_names` | character |  |
+| `passer_player_names` | character |  |
+| `receiver_player_names` | character |  |
+| `rusher_player_names` | character |  |
+| `tackler_player_names` | character |  |
+| `pass_defender_player_names` | character |  |
+| `scorer_player_names` | character |  |
+| `pat_scorer_player_names` | character |  |
+| `penalized_player_names` | character |  |
+| `punter_player_names` | character |  |
+| `fumbler_player_names` | character |  |
+| `forced_by_player_names` | character |  |
+| `recoverer_player_names` | character |  |
+| `sacked_by_player_names` | character |  |
+| `snapper_player_names` | character |  |
+| `holder_player_names` | character |  |
+| `kicker_player_ids` | character |  |
+| `returner_player_ids` | character |  |
+| `assisted_by_player_ids` | character |  |
+| `other_player_ids` | character |  |
+| `passer_player_ids` | character |  |
+| `receiver_player_ids` | character |  |
+| `rusher_player_ids` | character |  |
+| `tackler_player_ids` | character |  |
+| `pass_defender_player_ids` | character |  |
+| `scorer_player_ids` | character |  |
+| `pat_scorer_player_ids` | character |  |
+| `penalized_player_ids` | character |  |
+| `punter_player_ids` | character |  |
+| `fumbler_player_ids` | character |  |
+| `forced_by_player_ids` | character |  |
+| `recoverer_player_ids` | character |  |
+| `sacked_by_player_ids` | character |  |
+| `snapper_player_ids` | character |  |
+| `holder_player_ids` | character |  |
+
 **Example**
 
 ```python
@@ -500,6 +600,9 @@ Polars dataframe containing schedule dates for the requested season. Returns Non
 | `season` | integer | 4 digit number indicating to which season(s) the specified timeframe belongs to. |
 | `season_type` | integer | REG or POST indicating if the timeframe belongs to regular or post season. |
 | `week` | integer | Season week. |
+| `format_overtime_periods` | integer |  |
+| `home_logo_dark` | character |  |
+| `away_logo_dark` | character |  |
 
 **Example**
 

@@ -1,0 +1,39 @@
+schema: fox_cfb_pbp
+kind: dataframe
+columns:
+- name: game_id
+  type: character
+  description: ''
+- name: quarter
+  type: character
+  description: ''
+- name: drive_id
+  type: character
+  description: ''
+- name: drive_result
+  type: character
+  description: ''
+- name: drive_summary
+  type: character
+  description: ''
+- name: drive_team
+  type: character
+  description: ''
+- name: play_id
+  type: character
+  description: ''
+- name: period
+  type: character
+  description: ''
+- name: clock
+  type: character
+  description: ''
+- name: field_position
+  type: character
+  description: ''
+- name: play_text
+  type: character
+  description: ''
+- name: play_team
+  type: character
+  description: ''

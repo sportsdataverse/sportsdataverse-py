@@ -1,0 +1,4 @@
+schema: mlb_baserunning_value
+kind: dataframe
+columns: []
+unverified: 'no capture: it raises ColumnNotFoundError (runner_id) on its documented sprint-speed input, which carries player_id'

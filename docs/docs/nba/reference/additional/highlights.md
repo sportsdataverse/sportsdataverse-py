@@ -247,6 +247,8 @@ frame is tagged with a `season` column.
 
 The season possession frame (+ `season` and `game_date` cols). Empty typed frame if no games.
 
+No returns table is published for this function: no capture: it reads stats.nba.com (HTTP 403 to the datacenter IP the docs are built on), and compiling a season from the raw store takes far longer than the capture allows.
+
 **Example**
 
 ```python
@@ -551,6 +553,8 @@ Polars dataframe containing schedule dates for the requested season. Returns Non
 | `game_id` | integer | Unique game identifier. |
 | `season` | integer | Season year. |
 | `season_type` | integer | Season type (1=pre-season, 2=regular season, 3=postseason, 4=off-season for ESPN; or string label for WNBA Stats). |
+| `home_logo_dark` | character |  |
+| `away_logo_dark` | character |  |
 
 **Example**
 

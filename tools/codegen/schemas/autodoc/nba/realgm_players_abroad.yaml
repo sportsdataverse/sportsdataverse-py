@@ -1,0 +1,36 @@
+schema: realgm_players_abroad
+kind: dataframe
+columns:
+- name: player
+  type: character
+  description: ''
+- name: pos
+  type: character
+  description: ''
+- name: ht
+  type: character
+  description: ''
+- name: wt
+  type: integer
+  description: ''
+- name: nba_status
+  type: character
+  description: ''
+- name: team_s
+  type: character
+  description: ''
+- name: gp
+  type: integer
+  description: ''
+- name: mpg
+  type: double
+  description: ''
+- name: ppg
+  type: double
+  description: ''
+- name: rpg
+  type: double
+  description: ''
+- name: apg
+  type: double
+  description: ''

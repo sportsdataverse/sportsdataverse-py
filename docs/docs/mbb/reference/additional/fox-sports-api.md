@@ -24,6 +24,16 @@ MBB boxscore (long: one row per player-stat).
 
 A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
 
+| col_name | type | description |
+|---|---|---|
+| `game_id` | character | Unique game identifier. |
+| `team` | character | Team-side label or team identifier. |
+| `stat_group` | character |  |
+| `player` | character | Player name. |
+| `athlete_id` | character | Unique athlete identifier (ESPN). |
+| `stat` | character | Stat. |
+| `value` | character | Numeric or string value field. |
+
 **Example**
 
 ```python
@@ -252,6 +262,8 @@ A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, o
 | `home` | character | Home. |
 | `away` | character | Away record. |
 | `neutral` | character | Neutral. |
+| `team` | character | Team-side label or team identifier. |
+| `rank_change` | integer |  |
 
 **Example**
 
@@ -384,6 +396,8 @@ MBB game odds six-pack (spread / to-win / total per team).
 
 A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
 
+No returns table is published for this function: no capture: for this sport Fox sends the odds under sectionList modules rather than the top-level sixPack key the shared parser reads (football and MLB still use sixPack), so it returns an empty frame for every game.
+
 **Example**
 
 ```python
@@ -408,6 +422,19 @@ MBB play-by-play (one row per play; period-based).
 **Returns**
 
 A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+| col_name | type | description |
+|---|---|---|
+| `game_id` | character | Unique game identifier. |
+| `period` | character | Period of the game (1-4 quarters; 5+ for OT). |
+| `left_team` | character |  |
+| `right_team` | character |  |
+| `play_id` | character | Unique play identifier within a game. |
+| `clock` | character | Game clock value. |
+| `team` | character | Team-side label or team identifier. |
+| `left_score_change` | logical |  |
+| `right_score_change` | logical |  |
+| `play_text` | character | Play description text. |
 
 **Example**
 
@@ -502,6 +529,22 @@ MBB standings for a team's conference/division.
 
 A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
 
+| col_name | type | description |
+|---|---|---|
+| `team_id` | character | Unique team identifier. |
+| `section` | character |  |
+| `acc` | character |  |
+| `v1` | character |  |
+| `conf` | character | character. |
+| `w_l` | character | W l. |
+| `top_25` | character |  |
+| `home` | character | Home. |
+| `away` | character | Away record. |
+| `pf` | character | Personal fouls. |
+| `pa` | character |  |
+| `strk` | character | Current streak. |
+| `entity_id` | character | Composite Yahoo id this editorial row was keyed under, surfaced from the collection map key (e.g., "ncaaf.g.202509200023" for a game, "ncaaf.t.29" for a team); always carried as Utf8. |
+
 **Example**
 
 ```python
@@ -526,6 +569,17 @@ MBB team game log (long: one row per game-stat).
 **Returns**
 
 A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+| col_name | type | description |
+|---|---|---|
+| `team_id` | character | Unique team identifier. |
+| `season_type` | character | Season type (1=pre-season, 2=regular season, 3=postseason, 4=off-season for ESPN; or string label for WNBA Stats). |
+| `category` | character | Category label. |
+| `game_id` | character | Unique game identifier. |
+| `game_date` | character | Game date (YYYY-MM-DD). |
+| `opponent` | character | Opponent. |
+| `stat` | character | Stat. |
+| `value` | character | Numeric or string value field. |
 
 **Example**
 
@@ -571,6 +625,17 @@ MBB team roster (one row per player).
 
 A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
 
+| col_name | type | description |
+|---|---|---|
+| `team_id` | character | Unique team identifier. |
+| `position_group` | character |  |
+| `player` | character | Player name. |
+| `pos` | character | Position. |
+| `cls` | character |  |
+| `ht` | character | Listed height. |
+| `wt` | character | Listed weight (lbs). |
+| `athlete_id` | character | Unique athlete identifier (ESPN). |
+
 **Example**
 
 ```python
@@ -595,6 +660,15 @@ MBB team stat leaders by category.
 **Returns**
 
 A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+| col_name | type | description |
+|---|---|---|
+| `team_id` | character | Unique team identifier. |
+| `category` | character | Category label. |
+| `stat` | character | Stat. |
+| `stat_abbreviation` | character |  |
+| `player` | character | Player name. |
+| `value` | character | Numeric or string value field. |
 
 **Example**
 

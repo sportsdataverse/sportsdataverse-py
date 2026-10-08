@@ -1,0 +1,18 @@
+schema: xpoints_baseline
+kind: dataframe
+columns:
+- name: shot_zone_basic
+  type: character
+  description: ''
+- name: shot_zone_area
+  type: character
+  description: ''
+- name: shot_zone_range
+  type: character
+  description: ''
+- name: base_fg_pct
+  type: double
+  description: ''
+- name: is_three
+  type: logical
+  description: ''

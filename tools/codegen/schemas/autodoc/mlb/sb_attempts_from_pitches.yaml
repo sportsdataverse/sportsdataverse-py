@@ -1,0 +1,18 @@
+schema: sb_attempts_from_pitches
+kind: dataframe
+columns:
+- name: game_date
+  type: character
+  description: ''
+- name: runner_id
+  type: character
+  description: ''
+- name: catcher_id
+  type: character
+  description: ''
+- name: base
+  type: character
+  description: ''
+- name: outcome
+  type: character
+  description: ''

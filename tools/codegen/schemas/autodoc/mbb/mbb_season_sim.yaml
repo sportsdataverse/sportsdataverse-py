@@ -1,0 +1,5 @@
+schema: mbb_season_sim
+kind: dataframe
+columns: []
+unverified: 'no capture: it needs a schedule with home_team_id / away_team_id columns, and no package function returns one
+  (load_mbb_schedule ships home_id / away_id)'

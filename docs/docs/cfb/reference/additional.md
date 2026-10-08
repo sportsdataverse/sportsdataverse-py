@@ -120,23 +120,23 @@ not covered by the generated API-endpoint reference above.
 | [cfb_roster_talent](additional/models-and-calculators.md#cfb_roster_talent) | Team-talent composite per team-season (247 Team Talent Composite style). |
 | [cfb_simulations](additional/models-and-calculators.md#cfb_simulations) | Simulate college football seasons (nflseedR-style week loop). |
 | [efficiency_ratings](additional/models-and-calculators.md#efficiency_ratings) | One row per team: opponent-adjusted offensive/defensive efficiency. |
-| [fei_ratings](additional/models-and-calculators.md#fei_ratings) | One row per team: opponent-adjusted per-drive efficiency (FEI-style). |
-| [fit_field_position_ep](additional/models-and-calculators.md#fit_field_position_ep) | Fit the monotone EP-by-starting-yardline curve from a drives frame. |
-| [get_2pt_probs](additional/models-and-calculators.md#get_2pt_probs) | Two-point-conversion decision surface (cfb4th `get_2pt_wp`). |
-| [get_4th_down_probs](additional/models-and-calculators.md#get_4th_down_probs) | Full 4th-down decision surface (cfb4th `add_4th_probs`) + recommendation. |
-| [get_fg_wp](additional/models-and-calculators.md#get_fg_wp) | Expected win probability of attempting a field goal (cfb4th `get_fg_wp`). |
-| [get_go_wp](additional/models-and-calculators.md#get_go_wp) | Expected win probability of going for it on 4th down (cfb4th `get_go_wp`). |
-| [get_punt_wp](additional/models-and-calculators.md#get_punt_wp) | Expected win probability of punting on 4th down (cfb4th `get_punt_wp`). |
-| [load_draft_outcomes](additional/models-and-calculators.md#load_draft_outcomes) | NFL draft picks with the college of each pick, for the requested draft years. |
-| [load_fp_curve](additional/models-and-calculators.md#load_fp_curve) | Load the bundled EP-by-yardline curve (no network, no first-use download). |
-| [load_recruit_classes](additional/models-and-calculators.md#load_recruit_classes) | Load recruiting classes as per-recruit rows from the 247 RDB feed. |
-| [normalize_pbp_columns](additional/models-and-calculators.md#normalize_pbp_columns) | Add card-named copies of any play-by-play columns `df` already carries. |
-| [predict_from_card](additional/models-and-calculators.md#predict_from_card) | Score `df` with `booster`, validated and ordered by the model's card. |
-| [predict_margin](additional/models-and-calculators.md#predict_margin) | Expected home scoring margin from the two net ratings. |
-| [predict_total](additional/models-and-calculators.md#predict_total) | Expected combined point total from the four efficiency ratings + tempo. |
-| [slope_for_games](additional/models-and-calculators.md#slope_for_games) | Points per unit of rating differential, given how many games back it. |
-| [special_teams_ratings](additional/models-and-calculators.md#special_teams_ratings) | One row per team: a per-unit special-teams EPA composite. |
-| [win_prob_from_margin](additional/models-and-calculators-2.md#win_prob_from_margin) | Home win probability from an expected margin via the Gaussian CDF. |
+| [fei_ratings](additional/models-and-calculators-2.md#fei_ratings) | One row per team: opponent-adjusted per-drive efficiency (FEI-style). |
+| [fit_field_position_ep](additional/models-and-calculators-2.md#fit_field_position_ep) | Fit the monotone EP-by-starting-yardline curve from a drives frame. |
+| [get_2pt_probs](additional/models-and-calculators-2.md#get_2pt_probs) | Two-point-conversion decision surface (cfb4th `get_2pt_wp`). |
+| [get_4th_down_probs](additional/models-and-calculators-2.md#get_4th_down_probs) | Full 4th-down decision surface (cfb4th `add_4th_probs`) + recommendation. |
+| [get_fg_wp](additional/models-and-calculators-2.md#get_fg_wp) | Expected win probability of attempting a field goal (cfb4th `get_fg_wp`). |
+| [get_go_wp](additional/models-and-calculators-2.md#get_go_wp) | Expected win probability of going for it on 4th down (cfb4th `get_go_wp`). |
+| [get_punt_wp](additional/models-and-calculators-2.md#get_punt_wp) | Expected win probability of punting on 4th down (cfb4th `get_punt_wp`). |
+| [load_draft_outcomes](additional/models-and-calculators-2.md#load_draft_outcomes) | NFL draft picks with the college of each pick, for the requested draft years. |
+| [load_fp_curve](additional/models-and-calculators-2.md#load_fp_curve) | Load the bundled EP-by-yardline curve (no network, no first-use download). |
+| [load_recruit_classes](additional/models-and-calculators-2.md#load_recruit_classes) | Load recruiting classes as per-recruit rows from the 247 RDB feed. |
+| [normalize_pbp_columns](additional/models-and-calculators-3.md#normalize_pbp_columns) | Add card-named copies of any play-by-play columns `df` already carries. |
+| [predict_from_card](additional/models-and-calculators-3.md#predict_from_card) | Score `df` with `booster`, validated and ordered by the model's card. |
+| [predict_margin](additional/models-and-calculators-3.md#predict_margin) | Expected home scoring margin from the two net ratings. |
+| [predict_total](additional/models-and-calculators-3.md#predict_total) | Expected combined point total from the four efficiency ratings + tempo. |
+| [slope_for_games](additional/models-and-calculators-3.md#slope_for_games) | Points per unit of rating differential, given how many games back it. |
+| [special_teams_ratings](additional/models-and-calculators-3.md#special_teams_ratings) | One row per team: a per-unit special-teams EPA composite. |
+| [win_prob_from_margin](additional/models-and-calculators-3.md#win_prob_from_margin) | Home win probability from an expected margin via the Gaussian CDF. |
 
 ## Analytics
 

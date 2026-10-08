@@ -1,0 +1,5 @@
+schema: nba_ratings_panel
+kind: dataframe
+columns: []
+unverified: 'no capture: its possessions input needs a game_date column, and neither nba_possessions nor the released possessions
+  carry one'

@@ -1,0 +1,42 @@
+schema: players_on_court_from_rotation
+kind: dataframe
+columns:
+- name: game_id
+  type: character
+  description: ''
+- name: action_number
+  type: integer
+  description: ''
+- name: period
+  type: integer
+  description: ''
+- name: home_player_1
+  type: integer
+  description: ''
+- name: home_player_2
+  type: integer
+  description: ''
+- name: home_player_3
+  type: integer
+  description: ''
+- name: home_player_4
+  type: integer
+  description: ''
+- name: home_player_5
+  type: integer
+  description: ''
+- name: away_player_1
+  type: integer
+  description: ''
+- name: away_player_2
+  type: integer
+  description: ''
+- name: away_player_3
+  type: integer
+  description: ''
+- name: away_player_4
+  type: integer
+  description: ''
+- name: away_player_5
+  type: integer
+  description: ''

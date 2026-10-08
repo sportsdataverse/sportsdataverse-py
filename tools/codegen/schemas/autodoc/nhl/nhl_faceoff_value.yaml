@@ -1,0 +1,21 @@
+schema: nhl_faceoff_value
+kind: dataframe
+columns:
+- name: player_id
+  type: character
+  description: ''
+- name: faceoffs_taken
+  type: integer
+  description: ''
+- name: faceoffs_won
+  type: integer
+  description: ''
+- name: fo_win_pct
+  type: double
+  description: ''
+- name: fo_win_pct_above_exp
+  type: double
+  description: ''
+- name: faceoff_value
+  type: double
+  description: ''

@@ -208,3 +208,9 @@ columns:
 - name: season_type
   type: integer
   description: ''
+- name: home_logo_dark
+  type: character
+  description: ''
+- name: away_logo_dark
+  type: character
+  description: ''

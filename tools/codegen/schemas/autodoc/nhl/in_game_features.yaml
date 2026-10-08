@@ -1,0 +1,24 @@
+schema: in_game_features
+kind: dataframe
+columns:
+- name: score_diff
+  type: integer
+  description: ''
+- name: sec_remaining
+  type: double
+  description: ''
+- name: sqrt_sec_remaining
+  type: double
+  description: ''
+- name: strength_diff
+  type: integer
+  description: ''
+- name: home_goalie_pulled
+  type: integer
+  description: ''
+- name: away_goalie_pulled
+  type: integer
+  description: ''
+- name: pregame_logit
+  type: double
+  description: ''

@@ -1,0 +1,5 @@
+schema: efficiency_ratings
+kind: dataframe
+columns: []
+unverified: 'no capture: it needs play-by-play joined with schedule fields (home, neutral_site, pos_team_id) that neither
+  load_cfb_pbp nor load_cfb_pbp_r carries; only cfb_ratings builds that join, internally'

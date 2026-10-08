@@ -408,7 +408,7 @@ Polars dataframe containing schedule dates for the requested season. Returns Non
 | `tournament_id` | integer | ESPN tournament identifier. |
 | `start_date` | character | Start date (YYYY-MM-DD). |
 | `broadcast` | character | Broadcast information string. |
-| `highlights` | integer |  |
+| `highlights` | character |  |
 | `notes_type` | character | Notes type. |
 | `notes_headline` | character | Notes headline. |
 | `broadcast_market` | character | Broadcast market label (e.g. 'national', 'home'). |
@@ -470,6 +470,8 @@ Polars dataframe containing schedule dates for the requested season. Returns Non
 | `game_id` | integer | Unique game identifier. |
 | `season` | integer | Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted. |
 | `season_type` | integer | Season type (1=pre-season, 2=regular season, 3=postseason, 4=off-season for ESPN; or string label for WNBA Stats). |
+| `home_logo_dark` | character |  |
+| `away_logo_dark` | character |  |
 
 **Example**
 

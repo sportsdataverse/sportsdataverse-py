@@ -1,0 +1,24 @@
+schema: mbb_draft_projection
+kind: dataframe
+columns:
+- name: player_id
+  type: character
+  description: ''
+- name: player
+  type: character
+  description: ''
+- name: season
+  type: integer
+  description: ''
+- name: team_id
+  type: character
+  description: ''
+- name: draft_prob
+  type: double
+  description: ''
+- name: projected_pick
+  type: double
+  description: ''
+- name: pro_tier
+  type: character
+  description: ''

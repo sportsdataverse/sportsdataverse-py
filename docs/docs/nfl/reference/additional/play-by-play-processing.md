@@ -1,10 +1,10 @@
 ---
-title: "NFL — additional Python functions — Play-by-play processing"
-sidebar_label: "Play-by-play processing"
+title: "NFL — additional Python functions — Play-by-play processing: NFLPlayProcess–build_nfl"
+sidebar_label: "Play-by-play processing: NFLPlayProcess–build_nfl"
 sidebar_position: 10
-description: "NFL — additional Python functions — Play-by-play processing — function reference in sdv-py, the SportsDataverse Python package."
+description: "NFL — additional Python functions — Play-by-play processing: NFLPlayProcess–build_nfl — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# NFL — additional Python functions — Play-by-play processing
+# NFL — additional Python functions — Play-by-play processing: NFLPlayProcess–build_nfl
 
 ### NFLPlayProcess {#NFLPlayProcess}
 
@@ -291,6 +291,62 @@ SDV-PBP column-gap handling (`passing_epa` uses the exact `qb_epa`;
 
 A polars (or pandas) DataFrame in the published `load_nfl_player_stats` schema. At `summary_level="season"` the `week` / `season_type` / `opponent_team` columns are replaced by a `games` column.
 
+| col_name | type | description |
+|---|---|---|
+| `player_id` | character | Player ID (aka GSIS ID) as defined by nflreadr::load_rosters |
+| `player_name` | character | Full name of player |
+| `player_display_name` | character | Full name of the player |
+| `position` | character | Primary position as reported by NFL.com |
+| `position_group` | character | Postion group of player as listed by NFL |
+| `headshot_url` | character | A URL string that points to player photos used by NFL.com (or sometimes ESPN) |
+| `recent_team` | character | Most recent team player appears in `pbp` with. |
+| `season` | integer | 4 digit number indicating to which season(s) the specified timeframe belongs to. |
+| `week` | integer | Season week. |
+| `season_type` | character | REG or POST indicating if the timeframe belongs to regular or post season. |
+| `opponent_team` | character |  |
+| `completions` | integer | The number of completed passes. |
+| `attempts` | integer | The number of pass attempts as defined by the NFL. |
+| `passing_yards` | double | Numeric yards by the passer_player_name, including yards gained in pass plays with laterals. This should equal official passing statistics. |
+| `passing_tds` | integer | The number of passing touchdowns. |
+| `interceptions` | integer | The number of interceptions thrown. |
+| `sacks` | integer | The Number of times sacked. |
+| `sack_yards` | double | Yards lost on sack plays. |
+| `sack_fumbles` | integer | The number of sacks with a fumble. |
+| `sack_fumbles_lost` | integer | The number of sacks with a lost fumble. |
+| `passing_air_yards` | double | Passing air yards (includes incomplete passes). |
+| `passing_yards_after_catch` | double | Yards after the catch gained on plays in which player was the passer (this is an unofficial stat and may differ slightly between different sources). |
+| `passing_first_downs` | integer | First downs on pass attempts. |
+| `passing_epa` | double | Total expected points added on pass attempts and sacks. NOTE: this uses the variable `qb_epa`, which gives QB credit for EPA for up to the point where a receiver lost a fumble after a completed catch and makes EPA work more like passing yards on plays with fumbles. |
+| `passing_2pt_conversions` | integer | Two-point conversion passes. |
+| `pacr` | double | Passing (yards) Air (yards) Conversion Ratio - the number of passing yards per air yards thrown per game |
+| `dakota` | double | Adjusted EPA + CPOE composite based on coefficients which best predict adjusted EPA/play in the following year. |
+| `carries` | integer | The number of official rush attempts (incl. scrambles and kneel downs). Rushes after a lateral reception don't count as carry. |
+| `rushing_yards` | double | Numeric yards by the rusher_player_name, excluding yards gained in rush plays with laterals. This should equal official rushing statistics but could miss yards gained in rush plays with laterals. Please see the description of `lateral_rusher_player_name` for further information. |
+| `rushing_tds` | integer | The number of rushing touchdowns (incl. scrambles). Also includes touchdowns after obtaining a lateral on a play that started with a rushing attempt. |
+| `rushing_fumbles` | integer | The number of rushes with a fumble. |
+| `rushing_fumbles_lost` | integer | The number of rushes with a lost fumble. |
+| `rushing_first_downs` | integer | First downs on rush attempts (incl. scrambles). |
+| `rushing_epa` | double | Expected points added on rush attempts (incl. scrambles and kneel downs). |
+| `rushing_2pt_conversions` | integer | Two-point conversion rushes |
+| `receptions` | integer | The number of pass receptions. Lateral receptions officially don't count as reception. |
+| `targets` | integer | The number of pass plays where the player was the targeted receiver. |
+| `receiving_yards` | double | Numeric yards by the receiver_player_name, excluding yards gained in pass plays with laterals. This should equal official receiving statistics but could miss yards gained in pass plays with laterals. Please see the description of `lateral_receiver_player_name` for further information. |
+| `receiving_tds` | integer | The number of touchdowns following a pass reception. Also includes touchdowns after receiving a lateral on a play that started as a pass play. |
+| `receiving_fumbles` | integer | The number of fumbles after a pass reception. |
+| `receiving_fumbles_lost` | integer | The number of fumbles lost after a pass reception. |
+| `receiving_air_yards` | double | Receiving air yards (incl. incomplete passes). |
+| `receiving_yards_after_catch` | double | Yards after the catch gained on plays in which player was receiver (this is an unofficial stat and may differ slightly between different sources). |
+| `receiving_first_downs` | integer | Total number of first downs gained on receptions |
+| `receiving_epa` | double | Total EPA on plays where this receiver was targeted |
+| `receiving_2pt_conversions` | integer | Two-point conversion receptions |
+| `racr` | double | Receiving (yards) Air (yards) Conversion Ratio - the number of receiving yards per air yards targeted per game |
+| `target_share` | double | "Player's share of team receiving targets in this game" |
+| `air_yards_share` | double | Player's share of the team's air yards in this game |
+| `wopr` | double | Weighted OPportunity Rating - 1.5 x target_share + 0.7 x air_yards_share - a weighted average that contextualizes total fantasy usage. |
+| `special_teams_tds` | integer | Total number of kick/punt return touchdowns |
+| `fantasy_points` | double | Standard fantasy points. |
+| `fantasy_points_ppr` | double | PPR fantasy points. |
+
 **Example**
 
 ```python
@@ -338,6 +394,39 @@ the R function's own signature.
 
 A polars (or pandas) DataFrame with the `def_*` column set documented in the nflfastR-parity reference (weekly grain carries `season`/`week`/`season_type`; the season collapse replaces those with `games`).
 
+| col_name | type | description |
+|---|---|---|
+| `player_id` | character | Player ID (aka GSIS ID) as defined by nflreadr::load_rosters |
+| `player_name` | character | Full name of player |
+| `player_display_name` | character | Full name of the player |
+| `games` | integer | Games played in career |
+| `position` | character | Primary position as reported by NFL.com |
+| `position_group` | character | Postion group of player as listed by NFL |
+| `headshot_url` | character | A URL string that points to player photos used by NFL.com (or sometimes ESPN) |
+| `team` | character | NFL team. Uses official abbreviations as per NFL.com |
+| `def_tackles` | double | Total number of tackles for this player |
+| `def_tackles_solo` | double | Total number of solo tackles for this player |
+| `def_tackles_with_assist` | double | Number of tackles this player had with an assisted tackle |
+| `def_tackle_assists` | double | Number of assisted tackles for this player |
+| `def_tackles_for_loss` | double | Number of tackles for loss (TFL) for this player |
+| `def_tackles_for_loss_yards` | double | Yards lost from TFLs involving this player |
+| `def_fumbles_forced` | double | Number of times a fumble was forced from this player |
+| `def_sacks` | double | Number of sacks form this player |
+| `def_sack_yards` | double | Yards lost from sacks forced by this player |
+| `def_qb_hits` | double | Number of QB hits from this player (should not include plays where the QB was sacked) |
+| `def_interceptions` | double | Number of interceptions forced by this player |
+| `def_interception_yards` | double | yards gained/lost by interception returns from this player |
+| `def_pass_defended` | double | Number of passes defended/broken up by this player |
+| `def_tds` | double | Number of defensive touchdowns scored by this player |
+| `def_fumbles` | double | Number of fumbles by this player |
+| `def_fumble_recovery_own` | double | Number of times a player's team fumbled the ball and this player recovered |
+| `def_fumble_recovery_yards_own` | double | Number of yards gained/lost from fumble recoveries that happened because the player's team fumbled the ball and this player recovered the fumble on that same play |
+| `def_fumble_recovery_opp` | double | Number of times a player's opponent fumbled the ball and this player recovered |
+| `def_fumble_recovery_yards_opp` | double | Number of yards gained/lost from fumble recoveries that happened because the player's opponent fumbled the ball and this player recovered the fumble on that same play |
+| `def_safety` | double | Number of times this player forced a defensive safety |
+| `def_penalty` | double | Number of times this player was penalized defensively |
+| `def_penalty_yards` | double | Number of penalty yards for this player defensively |
+
 **Example**
 
 ```python
@@ -384,6 +473,51 @@ function's own signature.
 **Returns**
 
 A polars (or pandas) DataFrame with the `fg_*`/`pat_*`/`gwfg_*` column set documented in the nflfastR-parity reference.
+
+| col_name | type | description |
+|---|---|---|
+| `player_id` | character | Player ID (aka GSIS ID) as defined by nflreadr::load_rosters |
+| `team` | character | NFL team. Uses official abbreviations as per NFL.com |
+| `player_name` | character | Full name of player |
+| `player_display_name` | character | Full name of the player |
+| `games` | integer | Games played in career |
+| `position` | character | Primary position as reported by NFL.com |
+| `position_group` | character | Postion group of player as listed by NFL |
+| `headshot_url` | character | A URL string that points to player photos used by NFL.com (or sometimes ESPN) |
+| `fg_made` | integer |  |
+| `fg_att` | integer |  |
+| `fg_missed` | integer |  |
+| `fg_blocked` | integer |  |
+| `fg_long` | double |  |
+| `fg_pct` | double |  |
+| `fg_made_0_19` | integer |  |
+| `fg_made_20_29` | integer |  |
+| `fg_made_30_39` | integer |  |
+| `fg_made_40_49` | integer |  |
+| `fg_made_50_59` | integer |  |
+| `fg_made_60_` | integer |  |
+| `fg_missed_0_19` | integer |  |
+| `fg_missed_20_29` | integer |  |
+| `fg_missed_30_39` | integer |  |
+| `fg_missed_40_49` | integer |  |
+| `fg_missed_50_59` | integer |  |
+| `fg_missed_60_` | integer |  |
+| `fg_made_list` | character |  |
+| `fg_missed_list` | character |  |
+| `fg_blocked_list` | character |  |
+| `fg_made_distance` | integer |  |
+| `fg_missed_distance` | integer |  |
+| `fg_blocked_distance` | integer |  |
+| `pat_made` | integer |  |
+| `pat_att` | integer |  |
+| `pat_missed` | integer |  |
+| `pat_blocked` | integer |  |
+| `pat_pct` | double |  |
+| `gwfg_att` | integer |  |
+| `gwfg_distance_list` | character |  |
+| `gwfg_made` | integer |  |
+| `gwfg_missed` | integer |  |
+| `gwfg_blocked` | integer |  |
 
 **Example**
 
@@ -438,6 +572,39 @@ SDV-native frame that depends only on the live NFL Shield API.
 
 A one-row-per-player season-roster `DataFrame` with the documented schema. An empty / missing season yields a zero-row frame carrying the same column set (never a raise).
 
+| col_name | type | description |
+|---|---|---|
+| `season` | integer | 4 digit number indicating to which season(s) the specified timeframe belongs to. |
+| `team` | character | NFL team. Uses official abbreviations as per NFL.com |
+| `position` | character | Primary position as reported by NFL.com |
+| `depth_chart_position` | character | Position assigned on depth chart. Not always accurate! |
+| `jersey_number` | integer | Jersey number. Often useful for joins by name/team/jersey. |
+| `status` | character |  |
+| `full_name` | character | Full name as per NFL.com |
+| `first_name` | character | First name of player |
+| `last_name` | character | Last name of player |
+| `birth_date` | character | Player birth date (sourced from NFL. Other sources may differ) |
+| `height` | double | Official height, in inches |
+| `weight` | integer | Official weight, in pounds |
+| `college` | character | Official college (usually the last one attended) |
+| `gsis_id` | character | Game Stats and Info Service ID: the primary ID for play-by-play data. |
+| `espn_id` | character | ESPN ID - usual format is an integer with ~5 digits |
+| `sportradar_id` | character | SportRadar ID - often also called sportsdata_id by other services. A UUID. |
+| `yahoo_id` | character | Yahoo ID - usual format is an integer with ~5 digits |
+| `rotowire_id` | character | Rotowire ID - usual format is an integer with ~four digits. Not to be confused with rotowire_id. |
+| `pff_id` | character | Pro Football Focus ID - usually an integer with between 3 and 6 digits. |
+| `pfr_id` | character | Pro-Football-Reference ID for player |
+| `fantasy_data_id` | character | FantasyData ID - usual format five digit integer |
+| `sleeper_id` | character | Sleeper ID - usually an integer with ~4 digits. |
+| `years_exp` | integer | Years played in league |
+| `headshot_url` | character | A URL string that points to player photos used by NFL.com (or sometimes ESPN) |
+| `esb_id` | character | Player ID for Elias Sports Bureau |
+| `smart_id` | character | SMART ID for player (that's in raw pbp. It includes a hashed ESB_ID) |
+| `football_name` | character | Common player name (i.e. in most cases common_first_name last_name) |
+| `ngs_position` | character | Primary position as reported by the NextGen stats API. |
+| `entry_year` | integer | The year a player first became eligible to play in the NFL. |
+| `rookie_year` | integer | The year a player lost their rookie eligibility. |
+
 **Example**
 
 ```python
@@ -488,6 +655,537 @@ different column sets merge cleanly.
 **Returns**
 
 All plays from the requested games/seasons, concatenated with schema-union semantics (missing columns are `null`). Returns a zero-row frame if every game failed (ESPN source only). When *return_as_pandas* is `True`, returns a `pandas.DataFrame` instead. For `source="shield"` the frame carries the nflverse base columns (233; a superset of the EP/WP/CP training contract) with the same names, types and meanings as `sportsdataverse.nfl.load_nfl_model_pbp` minus the EP/WP/CP enrichment columns: identifiers (`game_id`, `play_id`, `posteam`, `defteam`), game state (`down`, `ydstogo`, `yardline_100`, `qtr`, `half_seconds_remaining`, `game_seconds_remaining`, `score_differential`, `posteam_timeouts_remaining`), play classification (`play_type`, `pass`, `rush`, `desc`, `yards_gained`, `touchdown`, `field_goal_result`), drive/series (`fixed_drive`, `fixed_drive_result`, `series`, `series_result`), schedule fields (`roof`, `spread_line`, `total_line`) and game outcome (`home_score`, `away_score`, `result`).
+
+| col_name | type | description |
+|---|---|---|
+| `game_play_number` | integer |  |
+| `id` | integer | ID of the player in the 'name' column. |
+| `sequenceNumber` | integer |  |
+| `text` | character |  |
+| `awayScore` | integer |  |
+| `homeScore` | integer |  |
+| `scoringPlay` | logical |  |
+| `priority` | logical |  |
+| `modified` | character |  |
+| `wallclock` | character |  |
+| `teamParticipants` | integer |  |
+| `isPenalty` | logical |  |
+| `statYardage` | integer |  |
+| `isTurnover` | logical |  |
+| `type.id` | character |  |
+| `type.text` | character |  |
+| `period.number` | integer |  |
+| `clock.displayValue` | character |  |
+| `start.down` | integer |  |
+| `start.distance` | integer |  |
+| `start.yardLine` | integer |  |
+| `start.yardsToEndzone` | integer |  |
+| `start.team.id` | integer |  |
+| `end.down` | integer |  |
+| `end.distance` | integer |  |
+| `end.yardLine` | integer |  |
+| `end.yardsToEndzone` | integer |  |
+| `end.team.id` | integer |  |
+| `type.abbreviation` | character |  |
+| `start.downDistanceText` | character |  |
+| `start.shortDownDistanceText` | character |  |
+| `start.possessionText` | character |  |
+| `end.downDistanceText` | character |  |
+| `end.shortDownDistanceText` | character |  |
+| `end.possessionText` | character |  |
+| `scoringType.name` | character |  |
+| `scoringType.displayName` | character |  |
+| `scoringType.abbreviation` | character |  |
+| `pointAfterAttempt.id` | double |  |
+| `pointAfterAttempt.text` | character |  |
+| `pointAfterAttempt.abbreviation` | character |  |
+| `pointAfterAttempt.value` | double |  |
+| `drive.id` | character |  |
+| `drive.displayResult` | character |  |
+| `drive.isScore` | logical |  |
+| `drive.team.shortDisplayName` | character |  |
+| `drive.team.displayName` | character |  |
+| `drive.team.name` | character |  |
+| `drive.team.abbreviation` | character |  |
+| `drive.yards` | integer |  |
+| `drive.offensivePlays` | integer |  |
+| `drive.result` | character |  |
+| `drive.description` | character |  |
+| `drive.shortDisplayResult` | character |  |
+| `drive.timeElapsed.displayValue` | character |  |
+| `drive.start.period.number` | integer |  |
+| `drive.start.period.type` | character |  |
+| `drive.start.yardLine` | integer |  |
+| `drive.start.clock.displayValue` | character |  |
+| `drive.start.text` | character |  |
+| `drive.end.period.number` | integer |  |
+| `drive.end.period.type` | character |  |
+| `drive.end.yardLine` | integer |  |
+| `drive.end.clock.displayValue` | character |  |
+| `game_id` | integer | Ten digit identifier for NFL game. |
+| `season` | integer | 4 digit number indicating to which season(s) the specified timeframe belongs to. |
+| `seasonType` | integer |  |
+| `week` | integer | Season week. |
+| `status_type_completed` | logical |  |
+| `homeTeamId` | integer |  |
+| `awayTeamId` | integer |  |
+| `homeTeamName` | character |  |
+| `awayTeamName` | character |  |
+| `homeTeamMascot` | character |  |
+| `awayTeamMascot` | character |  |
+| `homeTeamAbbrev` | character |  |
+| `awayTeamAbbrev` | character |  |
+| `homeTeamNameAlt` | character |  |
+| `awayTeamNameAlt` | character |  |
+| `gameSpread` | double |  |
+| `homeFavorite` | logical |  |
+| `gameSpreadAvailable` | logical |  |
+| `overUnder` | double |  |
+| `roof` | character | One of 'dome', 'outdoors', 'closed', 'open' indicating indicating the roof status of the stadium the game was played in. (Source: Pro-Football-Reference) |
+| `homeTeamSpread` | double |  |
+| `clock.minutes` | integer |  |
+| `clock.seconds` | integer |  |
+| `half` | integer |  |
+| `lag_half` | integer |  |
+| `lead_half` | integer |  |
+| `start.TimeSecsRem` | integer |  |
+| `start.adj_TimeSecsRem` | integer |  |
+| `orig_play_type` | character |  |
+| `lead_text` | character |  |
+| `lead_start_team` | character |  |
+| `lead_start_yardsToEndzone` | integer |  |
+| `lead_start_down` | integer |  |
+| `lead_start_distance` | integer |  |
+| `lead_scoringPlay` | logical |  |
+| `text_dupe` | logical |  |
+| `start.pos_team.id` | integer |  |
+| `start.def_pos_team.id` | integer |  |
+| `end.def_pos_team.id` | integer |  |
+| `end.pos_team.id` | integer |  |
+| `start.pos_team.name` | character |  |
+| `start.def_pos_team.name` | character |  |
+| `end.pos_team.name` | character |  |
+| `end.def_pos_team.name` | character |  |
+| `start.is_home` | logical |  |
+| `end.is_home` | logical |  |
+| `homeTimeoutCalled` | logical |  |
+| `awayTimeoutCalled` | logical |  |
+| `end.homeTeamTimeouts` | integer |  |
+| `end.awayTeamTimeouts` | integer |  |
+| `start.homeTeamTimeouts` | integer |  |
+| `start.awayTeamTimeouts` | integer |  |
+| `end.TimeSecsRem` | integer |  |
+| `end.adj_TimeSecsRem` | integer |  |
+| `start.posTeamTimeouts` | integer |  |
+| `start.defPosTeamTimeouts` | integer |  |
+| `end.posTeamTimeouts` | integer |  |
+| `end.defPosTeamTimeouts` | integer |  |
+| `firstHalfKickoffTeamId` | integer |  |
+| `period` | integer |  |
+| `start.yard` | integer |  |
+| `end.yard` | integer |  |
+| `lag_scoringPlay` | logical |  |
+| `end_of_half` | logical |  |
+| `down_1` | logical |  |
+| `down_2` | logical |  |
+| `down_3` | logical |  |
+| `down_4` | logical |  |
+| `down_1_end` | logical |  |
+| `down_2_end` | logical |  |
+| `down_3_end` | logical |  |
+| `down_4_end` | logical |  |
+| `scoring_play` | logical |  |
+| `td_play` | logical |  |
+| `touchdown` | logical | Binary indicator for if the play resulted in a TD. |
+| `td_check` | logical |  |
+| `safety` | logical | Binary indicator for whether or not a safety occurred. |
+| `fumble_vec` | logical |  |
+| `forced_fumble` | logical |  |
+| `kickoff_play` | logical |  |
+| `kickoff_tb` | logical |  |
+| `kickoff_onside` | logical |  |
+| `kickoff_oob` | logical |  |
+| `kickoff_fair_catch` | logical | Binary indicator for if the kickoff was caught with a fair catch. |
+| `kickoff_downed` | logical | Binary indicator for if the kickoff was downed. |
+| `kick_play` | logical |  |
+| `kickoff_safety` | logical |  |
+| `punt` | logical |  |
+| `punt_play` | logical |  |
+| `punt_tb` | logical |  |
+| `punt_oob` | logical |  |
+| `punt_fair_catch` | logical | Binary indicator for if the punt was caught with a fair catch. |
+| `punt_downed` | logical | Binary indicator for if the punt was downed. |
+| `punt_safety` | logical |  |
+| `punt_blocked` | logical | Binary indicator for if the punt was blocked. |
+| `penalty_safety` | logical |  |
+| `rush` | logical | Binary indicator if the play was a rushing play. |
+| `pass` | logical | Binary indicator if the play was a pass play (sacks and scrambles included). |
+| `sack_vec` | logical |  |
+| `pos_team` | integer |  |
+| `def_pos_team` | integer |  |
+| `is_home` | logical |  |
+| `lag_HA_score_diff` | integer |  |
+| `HA_score_diff` | integer |  |
+| `net_HA_score_pts` | integer |  |
+| `H_score_diff` | integer |  |
+| `A_score_diff` | integer |  |
+| `lag_homeScore` | integer |  |
+| `lag_awayScore` | integer |  |
+| `start.homeScore` | integer |  |
+| `start.awayScore` | integer |  |
+| `end.homeScore` | integer |  |
+| `end.awayScore` | integer |  |
+| `pos_team_score` | integer |  |
+| `def_pos_team_score` | integer |  |
+| `start.pos_team_score` | integer |  |
+| `start.def_pos_team_score` | integer |  |
+| `start.pos_score_diff` | integer |  |
+| `end.pos_team_score` | integer |  |
+| `end.def_pos_team_score` | integer |  |
+| `end.pos_score_diff` | integer |  |
+| `lag_pos_team` | integer |  |
+| `lead_pos_team` | integer |  |
+| `lead_pos_team2` | integer |  |
+| `pos_score_diff` | integer |  |
+| `lag_pos_score_diff` | integer |  |
+| `pos_score_pts` | integer |  |
+| `pos_score_diff_start` | integer |  |
+| `start.pos_team_receives_2H_kickoff` | logical |  |
+| `end.pos_team_receives_2H_kickoff` | logical |  |
+| `change_of_poss` | logical |  |
+| `penalty_flag` | logical |  |
+| `penalty_declined` | logical |  |
+| `penalty_no_play` | logical |  |
+| `penalty_offset` | logical |  |
+| `penalty_1st_conv` | logical |  |
+| `penalty_in_text` | logical |  |
+| `penalty_detail` | character |  |
+| `penalty_text` | character |  |
+| `yds_penalty` | character |  |
+| `penalty_count` | integer |  |
+| `penalty_declined_count` | integer |  |
+| `penalty_all_declined` | logical |  |
+| `penalty_enforcement` | character |  |
+| `penalty_negated_play` | logical |  |
+| `sack` | logical | Binary indicator for if the play ended in a sack. |
+| `int` | logical |  |
+| `int_td` | logical |  |
+| `completion` | logical |  |
+| `pass_attempt` | logical | Binary indicator for if the play was a pass attempt (includes sacks). |
+| `target` | logical |  |
+| `pass_breakup` | logical |  |
+| `pass_td` | logical |  |
+| `rush_td` | logical |  |
+| `pass_depth` | character |  |
+| `pass_direction` | character |  |
+| `rush_direction` | character |  |
+| `turnover_vec` | logical |  |
+| `offense_score_play` | logical |  |
+| `defense_score_play` | logical |  |
+| `downs_turnover` | logical |  |
+| `yds_punted` | integer |  |
+| `yds_punt_gained` | integer |  |
+| `fg_attempt` | logical |  |
+| `fg_made` | logical |  |
+| `yds_fg` | integer |  |
+| `pos_unit` | character |  |
+| `def_pos_unit` | character |  |
+| `lead_play_type` | character |  |
+| `sp` | logical | Binary indicator for whether or not a score occurred on the play. |
+| `play` | logical | Binary indicator: 1 if the play was a 'normal' play (including penalties), 0 otherwise. |
+| `scrimmage_play` | logical |  |
+| `change_of_pos_team` | logical |  |
+| `pos_score_diff_end` | integer |  |
+| `fumble_lost` | logical | Binary indicator for if the fumble was lost. |
+| `fumble_recovered` | logical |  |
+| `field_goal_result` | character | String indicator for result of field goal attempt: made, missed, or blocked. |
+| `extra_point_result` | character | String indicator for the result of the extra point attempt: good, failed, blocked, safety (touchback in defensive endzone is 1 point apparently), or aborted. |
+| `two_point_conv_result` | character | String indicator for result of two point conversion attempt: success, failure, safety (touchback in defensive endzone is 1 point apparently), or return. |
+| `kneel_down` | logical |  |
+| `qb_hurry` | logical |  |
+| `xp_attempt` | logical |  |
+| `xp_made` | logical |  |
+| `two_point_attempt` | logical | Binary indicator for two point conversion attempt. |
+| `defensive_two_point_attempt` | logical | Binary indicator whether or not the defense was able to have an attempt on a two point conversion, this results following a turnover. |
+| `defensive_two_point_conv` | logical | Binary indicator whether or not the defense successfully scored on the two point conversion. |
+| `two_point_pass` | logical |  |
+| `two_point_rush` | logical |  |
+| `yds_rushed` | integer |  |
+| `yds_receiving` | integer |  |
+| `yds_int_return` | character |  |
+| `yds_kickoff` | integer |  |
+| `yds_kickoff_return` | integer |  |
+| `yds_punt_return` | integer |  |
+| `yds_fumble_return` | character |  |
+| `yds_sacked` | integer |  |
+| `sack_players` | character |  |
+| `xp_kicker_player_name` | character |  |
+| `passer_player_name` | character | String name for the player that attempted the pass. |
+| `rusher_player_name` | character | String name for the player that attempted the run. |
+| `receiver_player_name` | character | String name for the targeted receiver. |
+| `sack_player_name` | character | String name of the player who recorded a solo sack. |
+| `sack_player_name2` | character |  |
+| `pass_breakup_player_name` | character |  |
+| `interception_player_name` | character | String name for the player that intercepted the pass. |
+| `fg_kicker_player_name` | character |  |
+| `fg_block_player_name` | character |  |
+| `fg_return_player_name` | character |  |
+| `kickoff_player_name` | character |  |
+| `kickoff_return_player_name` | character |  |
+| `punter_player_name` | character | String name for the punter. |
+| `punt_block_player_name` | character |  |
+| `punt_return_player_name` | character |  |
+| `punt_block_return_player_name` | character |  |
+| `fumble_player_name` | character |  |
+| `fumble_forced_player_name` | character |  |
+| `fumble_recovered_player_name` | character |  |
+| `kicking_team` | integer |  |
+| `return_team` | integer | String abbreviation of the return team. Returns may occur on any of: interception, fumble, kickoff, punt, or blocked kicks. |
+| `fumble_or_muff` | logical |  |
+| `recovery_team` | character |  |
+| `recovery_team_2` | character |  |
+| `penalty_spot_yardline` | integer |  |
+| `penalty_spot_side` | character |  |
+| `penalty_spot_yardsToEndzone` | integer |  |
+| `fumbling_team` | character |  |
+| `int_turnover` | logical |  |
+| `pos_fumble_lost` | logical |  |
+| `def_fumble_lost` | logical |  |
+| `is_pos_team_turnover` | logical |  |
+| `is_def_pos_team_turnover` | logical |  |
+| `is_turnover` | logical |  |
+| `turnover_team` | character |  |
+| `is_st_turnover` | logical |  |
+| `is_blocked_punt_turnover` | logical |  |
+| `is_blocked_fg_turnover` | logical |  |
+| `sack_team` | integer |  |
+| `interception_team` | integer |  |
+| `pass_breakup_team` | integer |  |
+| `forced_fumble_team` | integer |  |
+| `fumble_recovery_team` | character |  |
+| `punt_return_team` | integer |  |
+| `kick_return_team` | integer |  |
+| `fg_team` | integer |  |
+| `punt_team` | integer |  |
+| `penalized_team` | integer |  |
+| `penalty_yards_signed` | integer |  |
+| `penalty_side` | character |  |
+| `penalty_yards_net` | integer |  |
+| `penalty_team_id` | integer |  |
+| `lateral_player_name` | character |  |
+| `yds_lateral` | character |  |
+| `yards_after_catch` | character | Numeric value for distance in yards perpendicular to the yard line where the receiver made the reception to where the play ended. |
+| `air_yards` | character | Numeric value for distance in yards perpendicular to the line of scrimmage at where the targeted receiver either caught or didn't catch the ball. |
+| `air_yardsToEndzone` | character |  |
+| `new_down` | integer |  |
+| `new_distance` | integer |  |
+| `middle_8` | logical |  |
+| `rz_play` | logical |  |
+| `under_2` | logical |  |
+| `goal_to_go` | logical | Binary indicator for whether or not the posteam is in a goal down situation. |
+| `scoring_opp` | logical |  |
+| `stuffed_run` | logical |  |
+| `stopped_run` | logical |  |
+| `opportunity_run` | logical |  |
+| `highlight_run` | logical |  |
+| `adj_rush_yardage` | integer |  |
+| `line_yards` | double |  |
+| `second_level_yards` | double |  |
+| `open_field_yards` | integer |  |
+| `highlight_yards` | double |  |
+| `opp_highlight_yards` | double |  |
+| `short_rush_success` | logical |  |
+| `short_rush_attempt` | logical |  |
+| `power_rush_success` | logical |  |
+| `power_rush_attempt` | logical |  |
+| `early_down` | logical |  |
+| `late_down` | logical |  |
+| `early_down_pass` | logical |  |
+| `early_down_rush` | logical |  |
+| `late_down_pass` | logical |  |
+| `late_down_rush` | logical |  |
+| `standard_down` | logical |  |
+| `passing_down` | logical |  |
+| `TFL` | logical |  |
+| `TFL_pass` | logical |  |
+| `TFL_rush` | logical |  |
+| `havoc` | logical |  |
+| `first_down_yards` | logical |  |
+| `first_down_penalty` | logical | Binary indicator for if a penalty converted the first down. |
+| `first_down_earned` | logical |  |
+| `new_series` | logical |  |
+| `firstD_by_kickoff` | logical |  |
+| `firstD_by_poss` | logical |  |
+| `firstD_by_penalty` | logical |  |
+| `firstD_by_yards` | logical |  |
+| `start.pos_team_spread` | double |  |
+| `start.elapsed_share` | double |  |
+| `start.spread_time` | double |  |
+| `end.pos_team_spread` | double |  |
+| `end.elapsed_share` | double |  |
+| `end.spread_time` | double |  |
+| `pass_length` | character | String indicator for pass length: short or deep. |
+| `pass_location` | character | String indicator for pass location: left, middle, or right. |
+| `shotgun` | integer | Binary indicator for whether or not the play was in shotgun formation. |
+| `no_huddle` | integer | Binary indicator for whether or not the play was in no_huddle formation. |
+| `pass_middle` | integer |  |
+| `down` | integer | The down for the given play. |
+| `distance` | integer |  |
+| `start.yardsToEndzone.touchback` | integer |  |
+| `penalty_assessed_on_kickoff` | logical |  |
+| `EP_start_touchback` | double |  |
+| `EP_start` | double |  |
+| `EP_end` | double |  |
+| `EP_penalty_cf` | character |  |
+| `penalty_cf_yardsToEndzone` | character |  |
+| `lag_EP_end` | double |  |
+| `lag_change_of_pos_team` | logical |  |
+| `EP_between` | double |  |
+| `EPA` | double |  |
+| `def_EPA` | double |  |
+| `EPA_scrimmage` | double |  |
+| `EPA_rush` | double |  |
+| `EPA_pass` | double |  |
+| `EPA_explosive` | logical |  |
+| `EPA_non_explosive` | double |  |
+| `EPA_explosive_pass` | logical |  |
+| `EPA_explosive_rush` | logical |  |
+| `first_down_created` | logical |  |
+| `EPA_success` | logical |  |
+| `EPA_success_early_down` | logical |  |
+| `EPA_success_early_down_pass` | logical |  |
+| `EPA_success_early_down_rush` | logical |  |
+| `EPA_success_late_down` | logical |  |
+| `EPA_success_late_down_pass` | logical |  |
+| `EPA_success_late_down_rush` | logical |  |
+| `EPA_success_standard_down` | logical |  |
+| `EPA_success_passing_down` | logical |  |
+| `EPA_success_pass` | logical |  |
+| `EPA_success_rush` | logical |  |
+| `EPA_success_EPA` | double |  |
+| `EPA_success_standard_down_EPA` | double |  |
+| `EPA_success_passing_down_EPA` | double |  |
+| `EPA_success_pass_EPA` | double |  |
+| `EPA_success_rush_EPA` | double |  |
+| `EPA_middle_8_success` | logical |  |
+| `EPA_middle_8_success_pass` | logical |  |
+| `EPA_middle_8_success_rush` | logical |  |
+| `EPA_penalty` | double |  |
+| `EPA_penalty_direct` | double |  |
+| `EPA_sp` | double |  |
+| `EPA_fg` | double |  |
+| `EPA_punt` | double |  |
+| `EPA_kickoff` | double |  |
+| `qb_epa` | double | Gives QB credit for EPA for up to the point where a receiver lost a fumble after a completed catch and makes EPA work more like passing yards on plays with fumbles. |
+| `start.ExpScoreDiff_touchback` | double |  |
+| `start.ExpScoreDiff` | double |  |
+| `start.ExpScoreDiff_Time_Ratio_touchback` | double |  |
+| `start.ExpScoreDiff_Time_Ratio` | double |  |
+| `end.ExpScoreDiff` | double |  |
+| `end.ExpScoreDiff_Time_Ratio` | double |  |
+| `wp_before` | double |  |
+| `wp_touchback` | double |  |
+| `wp_after` | double |  |
+| `def_wp_before` | double |  |
+| `home_wp_before` | double |  |
+| `away_wp_before` | double |  |
+| `lead_wp_before` | double |  |
+| `lead_wp_before2` | double |  |
+| `def_wp_after` | double |  |
+| `home_wp_after` | double |  |
+| `away_wp_after` | double |  |
+| `wpa` | double | Win probability added (WPA) for the posteam. |
+| `wp` | double | Estimated win probability for the posteam given the current situation at the start of the given play. |
+| `vegas_wp` | double | Estimated win probability for the posteam given the current situation at the start of the given play, incorporating pre-game Vegas line. |
+| `def_wp` | double | Estimated win probability for the defteam. |
+| `home_wp` | double | Estimated win probability for the home team. |
+| `away_wp` | double | Estimated win probability for the away team. |
+| `wp_before_naive` | double |  |
+| `wp_after_naive` | double |  |
+| `wpa_naive` | double |  |
+| `def_wp_before_naive` | double |  |
+| `def_wp_after_naive` | double |  |
+| `home_wp_before_naive` | double |  |
+| `home_wp_after_naive` | double |  |
+| `lead_wp_before_naive` | double |  |
+| `lead_wp_before2_naive` | double |  |
+| `wp_touchback_naive` | double |  |
+| `away_wp_before_naive` | double |  |
+| `away_wp_after_naive` | double |  |
+| `cp` | character | Numeric value indicating the probability for a complete pass based on comparable game situations. |
+| `cpoe` | character | For a single pass play this is 1 - cp when the pass was completed or 0 - cp when the pass was incomplete. Analyzed for a whole game or season an indicator for the passer how much over or under expectation his completion percentage was. |
+| `xpass` | double | Probability of dropback scaled from 0 to 1. |
+| `pass_oe` | double | Dropback percent over expected on a given play scaled from 0 to 100. |
+| `xyac_epa` | character | Expected value of EPA gained after the catch, starting from where the catch was made. Zero yards after the catch would be listed as zero EPA. |
+| `xyac_mean_yardage` | character | Average expected yards after the catch based on where the ball was caught. |
+| `xyac_median_yardage` | character | Median expected yards after the catch based on where the ball was caught. |
+| `xyac_success` | character | Probability play earns positive EPA (relative to where play started) based on where ball was caught. |
+| `xyac_fd` | character | Probability play earns a first down based on where the ball was caught. |
+| `drive_start` | double |  |
+| `drive_stopped` | logical |  |
+| `drive_play_index` | integer |  |
+| `drive_offense_plays` | integer |  |
+| `prog_drive_EPA` | double |  |
+| `prog_drive_WPA` | double |  |
+| `drive_offense_yards` | integer |  |
+| `drive_total_yards` | integer |  |
+| `fixed_drive` | integer | Manually created drive number in a game. |
+| `fixed_drive_result` | character | Manually created drive result. |
+| `series` | integer | Starts at 1, each new first down increments, numbers shared across both teams NA: kickoffs, extra point/two point conversion attempts, non-plays, no posteam |
+| `series_result` | character | Possible values: First down, Touchdown, Opp touchdown, Field goal, Missed field goal, Safety, Turnover, Punt, Turnover on downs, QB kneel, End of half |
+| `series_success` | integer | 1: scored touchdown, gained enough yards for first down. |
+| `go_wp` | double |  |
+| `first_down_prob` | double |  |
+| `wp_succeed` | double |  |
+| `wp_fail` | double |  |
+| `fg_make_prob` | double |  |
+| `make_fg_wp` | double |  |
+| `miss_fg_wp` | double |  |
+| `fg_wp` | double |  |
+| `punt_wp` | double |  |
+| `go_boost` | double |  |
+| `go_wp_diff` | double |  |
+| `punt_wp_diff` | double |  |
+| `fg_wp_diff` | double |  |
+| `fourth_down_recommendation` | character |  |
+| `two_pt_wp` | double |  |
+| `xp_wp` | double |  |
+| `prob_2pt` | double |  |
+| `two_pt_wp_diff` | double |  |
+| `two_pt_recommendation` | character |  |
+| `qbr_epa` | double |  |
+| `weight` | double | Official weight, in pounds |
+| `non_fumble_sack` | logical |  |
+| `sack_epa` | double |  |
+| `pass_epa` | double |  |
+| `rush_epa` | double |  |
+| `pen_epa` | double |  |
+| `sack_weight` | double |  |
+| `pass_weight` | double |  |
+| `rush_weight` | double |  |
+| `pen_weight` | double |  |
+| `action_play` | logical |  |
+| `athlete_name` | character |  |
+| `sack_player_id2` | character |  |
+| `passer_player_id` | character | Unique identifier for the player that attempted the pass. |
+| `rusher_player_id` | character | Unique identifier for the player that attempted the run. |
+| `receiver_player_id` | character | Unique identifier for the receiver that was targeted on the pass. |
+| `punter_player_id` | character | Unique identifier for the punter. |
+| `fg_kicker_player_id` | character |  |
+| `sack_player_id` | character | Unique identifier of the player who recorded a solo sack. |
+| `punt_return_player_id` | character |  |
+| `kickoff_return_player_id` | character |  |
+| `interception_player_id` | character | Unique identifier for the player that intercepted the pass. |
+| `pass_breakup_player_id` | character |  |
+| `fumble_forced_player_id` | character |  |
+| `fumble_recovered_player_id` | character |  |
+| `fumble_player_id` | character |  |
+| `punt_block_player_id` | character |  |
+| `punt_block_return_player_id` | character |  |
+| `kickoff_player_id` | character |  |
+| `fg_block_player_id` | character |  |
+| `fg_return_player_id` | character |  |
+| `xp_kicker_player_id` | character |  |
 
 **Example**
 
@@ -550,6 +1248,111 @@ uses the exact `qb_epa`; `gwfg_*` derive from `fixed_drive`).
 
 A polars (or pandas) DataFrame in the published `load_nfl_team_stats` schema (~102 columns). At `summary_level="season"` the `week` / `season_type` / `opponent_team` columns are replaced by a `games` column.
 
+| col_name | type | description |
+|---|---|---|
+| `season` | integer | 4 digit number indicating to which season(s) the specified timeframe belongs to. |
+| `week` | integer | Season week. |
+| `team` | character | NFL team. Uses official abbreviations as per NFL.com |
+| `season_type` | character | REG or POST indicating if the timeframe belongs to regular or post season. |
+| `opponent_team` | character |  |
+| `completions` | integer | The number of completed passes. |
+| `attempts` | integer | The number of pass attempts as defined by the NFL. |
+| `passing_yards` | double | Numeric yards by the passer_player_name, including yards gained in pass plays with laterals. This should equal official passing statistics. |
+| `passing_tds` | integer | The number of passing touchdowns. |
+| `passing_interceptions` | integer |  |
+| `sacks_suffered` | integer |  |
+| `sack_yards_lost` | double |  |
+| `sack_fumbles` | integer | The number of sacks with a fumble. |
+| `sack_fumbles_lost` | integer | The number of sacks with a lost fumble. |
+| `passing_air_yards` | double | Passing air yards (includes incomplete passes). |
+| `passing_yards_after_catch` | double | Yards after the catch gained on plays in which player was the passer (this is an unofficial stat and may differ slightly between different sources). |
+| `passing_first_downs` | integer | First downs on pass attempts. |
+| `passing_epa` | double | Total expected points added on pass attempts and sacks. NOTE: this uses the variable `qb_epa`, which gives QB credit for EPA for up to the point where a receiver lost a fumble after a completed catch and makes EPA work more like passing yards on plays with fumbles. |
+| `passing_cpoe` | double |  |
+| `passing_2pt_conversions` | integer | Two-point conversion passes. |
+| `carries` | integer | The number of official rush attempts (incl. scrambles and kneel downs). Rushes after a lateral reception don't count as carry. |
+| `rushing_yards` | double | Numeric yards by the rusher_player_name, excluding yards gained in rush plays with laterals. This should equal official rushing statistics but could miss yards gained in rush plays with laterals. Please see the description of `lateral_rusher_player_name` for further information. |
+| `rushing_tds` | integer | The number of rushing touchdowns (incl. scrambles). Also includes touchdowns after obtaining a lateral on a play that started with a rushing attempt. |
+| `rushing_fumbles` | integer | The number of rushes with a fumble. |
+| `rushing_fumbles_lost` | integer | The number of rushes with a lost fumble. |
+| `rushing_first_downs` | integer | First downs on rush attempts (incl. scrambles). |
+| `rushing_epa` | double | Expected points added on rush attempts (incl. scrambles and kneel downs). |
+| `rushing_2pt_conversions` | integer | Two-point conversion rushes |
+| `receptions` | integer | The number of pass receptions. Lateral receptions officially don't count as reception. |
+| `targets` | integer | The number of pass plays where the player was the targeted receiver. |
+| `receiving_yards` | double | Numeric yards by the receiver_player_name, excluding yards gained in pass plays with laterals. This should equal official receiving statistics but could miss yards gained in pass plays with laterals. Please see the description of `lateral_receiver_player_name` for further information. |
+| `receiving_tds` | integer | The number of touchdowns following a pass reception. Also includes touchdowns after receiving a lateral on a play that started as a pass play. |
+| `receiving_fumbles` | integer | The number of fumbles after a pass reception. |
+| `receiving_fumbles_lost` | integer | The number of fumbles lost after a pass reception. |
+| `receiving_air_yards` | double | Receiving air yards (incl. incomplete passes). |
+| `receiving_yards_after_catch` | double | Yards after the catch gained on plays in which player was receiver (this is an unofficial stat and may differ slightly between different sources). |
+| `receiving_first_downs` | integer | Total number of first downs gained on receptions |
+| `receiving_epa` | double | Total EPA on plays where this receiver was targeted |
+| `receiving_2pt_conversions` | integer | Two-point conversion receptions |
+| `special_teams_tds` | integer | Total number of kick/punt return touchdowns |
+| `def_tackles_solo` | integer | Total number of solo tackles for this player |
+| `def_tackles_with_assist` | integer | Number of tackles this player had with an assisted tackle |
+| `def_tackle_assists` | integer | Number of assisted tackles for this player |
+| `def_tackles_for_loss` | integer | Number of tackles for loss (TFL) for this player |
+| `def_tackles_for_loss_yards` | integer | Yards lost from TFLs involving this player |
+| `def_fumbles_forced` | integer | Number of times a fumble was forced from this player |
+| `def_sacks` | double | Number of sacks form this player |
+| `def_sack_yards` | double | Yards lost from sacks forced by this player |
+| `def_qb_hits` | integer | Number of QB hits from this player (should not include plays where the QB was sacked) |
+| `def_interceptions` | integer | Number of interceptions forced by this player |
+| `def_interception_yards` | double | yards gained/lost by interception returns from this player |
+| `def_pass_defended` | integer | Number of passes defended/broken up by this player |
+| `def_tds` | integer | Number of defensive touchdowns scored by this player |
+| `def_fumbles` | integer | Number of fumbles by this player |
+| `def_safeties` | integer |  |
+| `misc_yards` | integer |  |
+| `fumble_recovery_own` | integer |  |
+| `fumble_recovery_yards_own` | integer |  |
+| `fumble_recovery_opp` | integer |  |
+| `fumble_recovery_yards_opp` | integer |  |
+| `fumble_recovery_tds` | integer |  |
+| `penalties` | integer |  |
+| `penalty_yards` | integer | Yards gained (or lost) by the posteam from the penalty. |
+| `timeouts` | integer |  |
+| `punt_returns` | integer |  |
+| `punt_return_yards` | integer |  |
+| `kickoff_returns` | integer |  |
+| `kickoff_return_yards` | integer |  |
+| `fg_made` | integer |  |
+| `fg_att` | integer |  |
+| `fg_missed` | integer |  |
+| `fg_blocked` | integer |  |
+| `fg_long` | double |  |
+| `fg_pct` | double |  |
+| `fg_made_0_19` | integer |  |
+| `fg_made_20_29` | integer |  |
+| `fg_made_30_39` | integer |  |
+| `fg_made_40_49` | integer |  |
+| `fg_made_50_59` | integer |  |
+| `fg_made_60_` | integer |  |
+| `fg_missed_0_19` | integer |  |
+| `fg_missed_20_29` | integer |  |
+| `fg_missed_30_39` | integer |  |
+| `fg_missed_40_49` | integer |  |
+| `fg_missed_50_59` | integer |  |
+| `fg_missed_60_` | integer |  |
+| `fg_made_list` | character |  |
+| `fg_missed_list` | character |  |
+| `fg_blocked_list` | character |  |
+| `fg_made_distance` | integer |  |
+| `fg_missed_distance` | integer |  |
+| `fg_blocked_distance` | integer |  |
+| `pat_made` | integer |  |
+| `pat_att` | integer |  |
+| `pat_missed` | integer |  |
+| `pat_blocked` | integer |  |
+| `pat_pct` | double |  |
+| `gwfg_made` | integer |  |
+| `gwfg_att` | integer |  |
+| `gwfg_missed` | integer |  |
+| `gwfg_blocked` | integer |  |
+| `gwfg_distance` | integer |  |
+
 **Example**
 
 ```python
@@ -566,181 +1369,3 @@ df_pd = build_nfl_team_stats([2023], summary_level="season",
 
 wk.sort("def_sacks", descending=True).head()
 ```
-
-### calculate_nfl_series_conversion_rates {#calculate_nfl_series_conversion_rates}
-
-`calculate_nfl_series_conversion_rates(pbp: 'pl.DataFrame', *, weekly: 'bool' = False, return_as_pandas: 'bool' = False) -> "pl.DataFrame | 'pd.DataFrame'"`
-
-Compute per-team offense + defense series conversion rates.
-
-A faithful polars port of nflfastR's `calculate_series_conversion_rates`.
-Series where `down` is null (kickoffs, PAT/2pt attempts, non-plays, no
-`posteam`) and series ending in a `"QB kneel"` are excluded from the
-series count before rates are computed, matching the R source.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `pbp` | `DataFrame` |  | Play-by-play frame carrying `season`, `week`, `posteam`, `defteam`, `down`, `series`, `series_success`, and `series_result` (added by the `add_series_data` port). Rows must already be in play order within each series so the internal `first()`/`last()` series collapse is correct. |
-| `weekly` | `bool` | `False` | If `True`, group on `(season, team, week)`; if `False` (default), group on `(season, team)` -- collapsing every week into one season-level rate. |
-| `return_as_pandas` | `bool` | `False` | If `True` return a pandas DataFrame; else polars. |
-
-**Returns**
-
-A polars (or pandas) DataFrame with one row per team (per week when `weekly=True`), `off_n`/`def_n` (series count) plus the `off_*`/`def_*` rate columns documented in reference Sec 11. A team with offensive series but zero defensive series in a group (or vice versa -- effectively never happens in real data) carries nulls in the missing side rather than being dropped (full outer join).
-
-**Example**
-
-```python
-from sportsdataverse.nfl import calculate_nfl_series_conversion_rates
-rates = calculate_nfl_series_conversion_rates(pbp)
-rates.filter(pl.col("team") == "KC").select("off_scr", "def_scr")
-
-# Weekly grain
-
-weekly = calculate_nfl_series_conversion_rates(pbp, weekly=True)
-
-# Pipeline next step (one line)
-
-rates.sort("off_scr", descending=True).head()
-```
-
-### clean_nfl_pbp {#clean_nfl_pbp}
-
-`clean_nfl_pbp(df: 'pl.DataFrame', *, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"`
-
-Canonicalize names/ids/teams on a play-by-play frame (nflfastR `clean_pbp` port).
-
-See the module docstring for the full column set added, the
-compute-if-absent scope note on `pass`/`rush`, and the lookaround ->
-capture-group regex rewrites.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `df` | `DataFrame` |  | An nflverse-shape (or ESPN/native) play-by-play `polars.DataFrame`. Required columns: `desc`, `epa`, `game_id`, `play_id`, `season`, `posteam`. See the module docstring for the full optional-column-with-default list. |
-| `return_as_pandas` | `bool` | `False` | If `True`, return a `pandas.DataFrame`; otherwise a `polars.DataFrame` (default). |
-
-**Returns**
-
-The input frame with every §6 column added/overwritten (idempotent -- pre-existing values of those columns, except `pass`/`rush`, are dropped and recomputed). A zero-row input yields a zero-row frame carrying the full documented schema rather than raising.
-
-**Example**
-
-```python
-from sportsdataverse.nfl import load_nfl_pbp
-from sportsdataverse.nfl.nfl_clean import clean_nfl_pbp
-
-pbp = load_nfl_pbp([2023])
-cleaned = clean_nfl_pbp(pbp)
-print(cleaned.select("name", "id", "fantasy").head())
-
-# Pandas output
-
-cleaned_pd = clean_nfl_pbp(pbp, return_as_pandas=True)
-
-# Pipeline next step (one line)
-
-import polars as pl
-cleaned.filter(pl.col("play") == 1).group_by("passer").len()
-```
-
-### shield_nfl_pbp {#shield_nfl_pbp}
-
-`shield_nfl_pbp(game_detail: 'Optional[Dict[str, Any]]' = None, shield_game_id: 'Optional[str]' = None, *, enrich: 'bool' = True, context: 'Optional[Dict[str, Any]]' = None, game_id: 'Optional[str]' = None) -> 'pl.DataFrame'`
-
-Build one NFL game's nflverse-shape play-by-play from Shield, at ANY game phase.
-
-The live entry point: the same parser `build_pbp` runs on the archived
-`nfl/raw` finals, plus the four things a game still being played needs — the
-in-progress drive's possession, game-outcome columns held null until the feed says
-FINAL, a next-snap row from `summary`, and provisional rows flagged (see
-`sportsdataverse.nfl.shield_pbp.live`). Safe to poll: pass the payload you
-already have via *game_detail* (no network), or a *shield_game_id* to fetch it.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `game_detail` | `Optional[Dict[str, Any]]` | `None` | A Shield `experience/v2/gamedetails` payload (the raw body, or a `{"data": ...}` envelope). Takes precedence over *shield_game_id*, so tests and pollers that already hold a payload never touch the network. |
-| `shield_game_id` | `Optional[str]` | `None` | Shield game uuid, fetched via `sportsdataverse.nfl.nfl_game_details_v2` with `include_drive_chart=True, return_parsed=False` when *game_detail* is None. |
-| `enrich` | `bool` | `True` | Run `sportsdataverse.nfl.ep_wp.enrich_nfl_pbp` on the result (default True) for the `nfl_model_pbp` EP/EPA/WP/WPA/CP/CPOE columns. Pass False for the base frame only (no model loads). |
-| `context` | `Optional[Dict[str, Any]]` | `None` | Game context `{"roof": ..., "spread_line": ..., "total_line": ...}` the Shield feed omits. Unset fields fall back to the nflverse schedule row for this game, then to `live.DEFAULT_CONTEXT` (`outdoors` / 2.5 / 55.5, the same default the ESPN processor uses). |
-| `game_id` | `Optional[str]` | `None` | Override the nflverse game_id (computed from the payload when None). |
-
-**Returns**
-
-A polars DataFrame, one row per play (plus, while `summary.phase` is `INGAME`, one current-situation row), carrying the `nfl_model_pbp` columns — the `build_pbp` base frame, the EP/WP enrichment when *enrich* is True, and: | col_name | type | description | |----------|------|-------------| | `live_phase` | `str` | The payload's `summary.phase`: `PREGAME`, `INGAME`, `HALFTIME`, `FINAL` or `FINAL_OVERTIME`. | | `is_play` | `int` | `1` for a real play; `0` for the feed's `GAME_START` / `END_QUARTER` / `END_GAME` markers and the current-situation row. | | `provisional` | `int` | `1` when the feed has not closed the play (`playEndTime` null) and it is in the trailing run of such plays of a non-final game — its text, yardage and stats may still change. Always `0` on a final game. | `home_score` / `away_score` / `result` are null until the game is final. The current-situation row is not inert once *enrich* is True: it is the next state, so it also completes the **previous** play's lead-diff columns (`epa`, `qb_epa`, `wpa`, `vegas_wpa`, the `total_*` running sums). That play is usually still `provisional`, so those values can move on the next poll. A payload Shield has not populated a drive chart for (every scheduled game before kickoff) returns a zero-row frame carrying only the three live columns — check `df.is_empty()` before selecting anything else.
-
-**Example**
-
-```python
-import polars as pl
-from sportsdataverse.nfl import shield_nfl_pbp
-
-df = shield_nfl_pbp(shield_game_id="a9a8944e-4feb-11f1-abca-2c54536568a9")
-df.filter(pl.col("is_play") == 0).select("posteam", "down", "ydstogo", "wp")
-```
-
-### shield_to_espn_summary {#shield_to_espn_summary}
-
-`shield_to_espn_summary(game_detail: 'Mapping[str, Any]', idmap_row: 'Mapping[str, Any]', *, parsed: 'Optional[pl.DataFrame]' = None, odds: 'Optional[Mapping[str, Any]]' = None, player_stats: 'Optional[Mapping[str, Any]]' = None, team_stats: 'Optional[Mapping[str, Any]]' = None) -> 'Tuple[Dict[str, Any], List[str]]'`
-
-Project one Shield game (any phase) onto an ESPN-summary-shaped dict.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `game_detail` | `Mapping[str, Any]` |  | A Shield `experience/v2/gamedetails` payload (raw body or a `{"data": ...}` envelope) -- the same object `sportsdataverse.nfl.shield_pbp.build.shield_nfl_pbp` consumes. |
-| `idmap_row` | `Mapping[str, Any]` |  | The game's pre-kickoff id-map row (`sportsdataverse.football.sources.idmap.GAME_SCHEMA`): `espn_event_id`, `home_espn_team_id` and `away_espn_team_id` are required; the optional `home_team` / `away_team` sub-dicts supply the era-correct `espn_abbr`. |
-| `parsed` | `Optional[DataFrame]` | `None` | The frame `shield_nfl_pbp(game_detail, enrich=False)` already produced. Built here when None -- pass it to parse the payload once for both projections. |
-| `odds` | `Optional[Mapping[str, Any]]` | `None` | `{gameSpread, overUnder, homeFavorite, gameSpreadAvailable}` (the stored closing line, `sportsdataverse.football.sources.idmap._odds_override_from_row`). Becomes the summary's one-provider `pickcenter`. |
-| `player_stats` | `Optional[Mapping[str, Any]]` | `None` | A Shield `/football/v2/stats/live/player-statistics/{gameId}` body. Becomes `boxscore.players` in ESPN's exact shape (ten categories, athletes carrying ESPN ids from the players crosswalk). Omitted -> the box stays empty and no ESPN athlete id is attached to any play. |
-| `team_stats` | `Optional[Mapping[str, Any]]` | `None` | A Shield `/football/v2/stats/live/team-statistics/{gameId}` body. Becomes `boxscore.teams` -- the authoritative countable team totals `NFLPlayProcess.create_box_score` prefers over its play-by-play derivation. |
-
-**Returns**
-
-`(summary, notes)`. | item | type | description | |---|---|---| | summary | dict | An ESPN-summary-shaped payload: `header` (season/week/competitions/competitors/status), `drives.previous` (+ `drives.current` while the game is live), `gameInfo`, `pickcenter`, `boxscore` (filled when `player_stats`/`team_stats` are given) and passthrough arrays. Feed it to `espn_nfl_pbp(summary=)`. | | notes | list[str] | Adapter-side degradations worth surfacing in provenance: a missing `summary.timeouts` block, a missing `summary.homeTeam`/`awayTeam` team id, a PAT with no touchdown to fold into, plays outside the drive chart, and (pre-2014) play ids that do not join ESPN's own. |
-
-**Example**
-
-```python
-import json
-from sportsdataverse.nfl import NFLPlayProcess, shield_to_espn_summary
-
-# any Shield gamedetails body -- here the copy nfl-raw keeps
-with open("nfl/raw/2025/2025_07_LA_JAX.json") as fh:
-    game = json.load(fh)
-row = {"espn_event_id": "401772635", "home_espn_team_id": "30", "away_espn_team_id": "14"}
-summary, notes = shield_to_espn_summary(game, row)
-proc = NFLPlayProcess(gameId=401772635, join_participants=False)
-proc.espn_nfl_pbp(summary=summary)
-result = proc.run_processing_pipeline()
-```
-
-### team_name_fn {#team_name_fn}
-
-`team_name_fn(expr: 'pl.Expr') -> 'pl.Expr'`
-
-Fold historical/relocated team codes onto their current abbreviation.
-
-Verbatim port of nflfastR's `team_name_fn` (a plain
-`stringr::str_replace_all` over a 10-entry named vector). Operates as a
-**substring** replace (not a full-value lookup) so it also fixes
-embedded codes like `"SD 49" -> "LAC 49"` on yard-line columns. The
-10 from-codes are disjoint from all of their to-values, so the order of
-the 10 sequential replacements does not matter (verified in
-`tests.nfl.test_nfl_clean`).
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `expr` | `Expr` |  | A `polars.Expr` over a Utf8 column (e.g. `pl.col("posteam")`). |
-
-**Returns**
-
-The same expression with every occurrence of the 10 historical codes replaced by their current-franchise code.

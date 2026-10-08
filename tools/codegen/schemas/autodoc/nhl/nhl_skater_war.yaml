@@ -1,0 +1,5 @@
+schema: nhl_skater_war
+kind: dataframe
+columns: []
+unverified: 'no capture: it runs longer than the capture allows even on 53 games (build_stints makes one eager filter per
+  shift change)'

@@ -46,3 +46,6 @@ columns:
 - name: team
   type: character
   description: ''
+- name: team_code
+  type: character
+  description: ''

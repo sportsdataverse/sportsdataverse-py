@@ -1,0 +1,33 @@
+schema: ncaa_wbb_team_schedule
+kind: dataframe
+columns:
+- name: game_date
+  type: character
+  description: ''
+- name: home
+  type: character
+  description: ''
+- name: home_score
+  type: integer
+  description: ''
+- name: away
+  type: character
+  description: ''
+- name: away_score
+  type: integer
+  description: ''
+- name: box_id
+  type: character
+  description: ''
+- name: game_id
+  type: character
+  description: ''
+- name: is_neutral
+  type: logical
+  description: ''
+- name: detail
+  type: character
+  description: ''
+- name: attendance
+  type: integer
+  description: ''

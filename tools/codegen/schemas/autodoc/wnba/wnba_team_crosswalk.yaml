@@ -1,0 +1,5 @@
+schema: wnba_team_crosswalk
+kind: dataframe
+columns: []
+unverified: 'no capture: it reads stats.wnba.com, which answers HTTP 403 to the datacenter IP the docs are built on; the function
+  works from a residential IP'

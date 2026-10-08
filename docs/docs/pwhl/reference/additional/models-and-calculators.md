@@ -46,6 +46,20 @@ Filter a frame to rows strictly before `cutoff_date` (the leakage boundary).
 
 The subset of `df` with `df[date_col] < cutoff_date`.
 
+| col_name | type | description |
+|---|---|---|
+| `game_id` | character | Unique game identifier. |
+| `season` | integer | Season year (echoed from arg). |
+| `date` | character | Game date (ISO 8601 datetime string). |
+| `team` | character | Team name. |
+| `opp_team` | character |  |
+| `is_home` | logical | Home-team flag. |
+| `neutral_site` | logical | Whether the game is at a neutral site. |
+| `xgf` | double |  |
+| `xga` | double |  |
+| `gf` | integer |  |
+| `ga` | integer | Goals against (goalies). |
+
 **Example**
 
 ```python
@@ -98,6 +112,13 @@ Bucket predicted probabilities into bins and compare to actual outcome rates.
 **Returns**
 
 A `polars.DataFrame` with columns `bin_mid`, `mean_pred`, `mean_actual`, `n` (one row per non-empty bin).
+
+| col_name | type | description |
+|---|---|---|
+| `bin_mid` | double |  |
+| `mean_pred` | double |  |
+| `mean_actual` | double |  |
+| `n` | integer |  |
 
 **Example**
 

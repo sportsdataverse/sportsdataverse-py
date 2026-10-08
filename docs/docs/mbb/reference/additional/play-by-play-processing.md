@@ -149,6 +149,23 @@ fitted basket origin and scaled to feet.
 
 The canonical shot frame (`CANONICAL_SHOT_SCHEMA`); empty input returns the zero-row schema.
 
+| col_name | type | description |
+|---|---|---|
+| `game_id` | character | Unique game identifier. |
+| `season` | integer | Season year. |
+| `team_id` | character | Unique team identifier. |
+| `shooter_id` | character | Unique identifier for shooter. |
+| `shot_x` | double |  |
+| `shot_y` | double |  |
+| `dist_ft` | double |  |
+| `shot_zone` | character |  |
+| `shot_type` | character | Shot type label (e.g. 'Jump Shot', 'Layup'). |
+| `made` | logical |  |
+| `point_value` | integer |  |
+| `period` | integer | Period of the game (1-4 quarters; 5+ for OT). |
+| `sec_left` | double |  |
+| `source` | character |  |
+
 **Example**
 
 ```python
@@ -230,6 +247,23 @@ instead (`source="ncaa"` raises with that pointer).
 
 The canonical shot frame; seasons the release doesn't cover are skipped, and no coverage at all returns the zero-row schema.
 
+| col_name | type | description |
+|---|---|---|
+| `game_id` | character | Unique game identifier. |
+| `season` | integer | Season year. |
+| `team_id` | character | Unique team identifier. |
+| `shooter_id` | character | Unique identifier for shooter. |
+| `shot_x` | double |  |
+| `shot_y` | double |  |
+| `dist_ft` | double |  |
+| `shot_zone` | character |  |
+| `shot_type` | character | Shot type label (e.g. 'Jump Shot', 'Layup'). |
+| `made` | logical |  |
+| `point_value` | integer |  |
+| `period` | integer | Period of the game (1-4 quarters; 5+ for OT). |
+| `sec_left` | double |  |
+| `source` | character |  |
+
 **Example**
 
 ```python
@@ -262,6 +296,44 @@ through `parse_ncaa_bb_game_pbp` with the MBB period model
 **Returns**
 
 The 35-column play-by-play frame (zero rows when the game is not found).
+
+| col_name | type | description |
+|---|---|---|
+| `game_id` | character | Unique game identifier. |
+| `game_date` | character | Game date (YYYY-MM-DD). |
+| `home` | character | Home. |
+| `away` | character | Away record. |
+| `period` | integer | Period of the game (1-4 quarters; 5+ for OT). |
+| `clock` | character | Game clock value. |
+| `game_time` | character | Game start time. |
+| `game_seconds` | integer |  |
+| `home_score` | integer | Home team score at the time of the play. |
+| `away_score` | integer | Away team score at the time of the play. |
+| `event_team` | character |  |
+| `event_description` | character |  |
+| `player_1` | character |  |
+| `player_2` | character |  |
+| `event_type` | character | Event / play type code (V2 PBP). |
+| `event_result` | character |  |
+| `shot_value` | integer | Point value of the shot (2 or 3). |
+| `event_length` | integer |  |
+| `poss_num` | integer |  |
+| `poss_team` | character |  |
+| `poss_length` | integer |  |
+| `is_transition` | logical |  |
+| `home_1` | character |  |
+| `home_2` | character |  |
+| `home_3` | character |  |
+| `home_4` | character |  |
+| `home_5` | character |  |
+| `away_1` | character |  |
+| `away_2` | character |  |
+| `away_3` | character |  |
+| `away_4` | character |  |
+| `away_5` | character |  |
+| `status` | character | Status label. |
+| `is_garbage_time` | logical |  |
+| `sub_deviate` | integer |  |
 
 **Example**
 
@@ -301,6 +373,23 @@ geometry classifiers. The parser-phase `pts` field is the MADE flag
 **Returns**
 
 The canonical shot frame (`CANONICAL_SHOT_SCHEMA`); empty input returns the zero-row schema.
+
+| col_name | type | description |
+|---|---|---|
+| `game_id` | character | Unique game identifier. |
+| `season` | integer | Season year. |
+| `team_id` | character | Unique team identifier. |
+| `shooter_id` | character | Unique identifier for shooter. |
+| `shot_x` | double |  |
+| `shot_y` | double |  |
+| `dist_ft` | double |  |
+| `shot_zone` | character |  |
+| `shot_type` | character | Shot type label (e.g. 'Jump Shot', 'Layup'). |
+| `made` | logical |  |
+| `point_value` | integer |  |
+| `period` | integer | Period of the game (1-4 quarters; 5+ for OT). |
+| `sec_left` | double |  |
+| `source` | character |  |
 
 **Example**
 

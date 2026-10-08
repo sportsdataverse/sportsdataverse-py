@@ -1,0 +1,5 @@
+schema: zone_value_map
+kind: dataframe
+columns: []
+unverified: 'no capture: its input is the shots frame of wnba_shot_value, which reads stats.nba.com shotchartdetail; that
+  host answers HTTP 403 to the datacenter IP the docs are built on'

@@ -1,0 +1,12 @@
+schema: predict_sb_success
+kind: dataframe
+columns:
+- name: runner_id
+  type: character
+  description: ''
+- name: base
+  type: character
+  description: ''
+- name: p_success
+  type: double
+  description: ''

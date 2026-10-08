@@ -1,0 +1,36 @@
+schema: nba_four_factor_rapm
+kind: dataframe
+columns:
+- name: player_id
+  type: integer
+  description: ''
+- name: efg__off
+  type: double
+  description: ''
+- name: efg__def
+  type: double
+  description: ''
+- name: ftr__off
+  type: double
+  description: ''
+- name: ftr__def
+  type: double
+  description: ''
+- name: orbd__off
+  type: double
+  description: ''
+- name: orbd__def
+  type: double
+  description: ''
+- name: tov__off
+  type: double
+  description: ''
+- name: tov__def
+  type: double
+  description: ''
+- name: off_poss
+  type: integer
+  description: ''
+- name: def_poss
+  type: integer
+  description: ''

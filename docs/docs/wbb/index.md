@@ -122,10 +122,10 @@ description: "sdv-py WBB: endpoint references, dataset loaders and parsers for W
 - [`build_player_context`](reference/additional/models-and-calculators#build_player_context)
 - [`build_priors`](reference/additional/models-and-calculators#build_priors)
 - [`build_productivity`](reference/additional/models-and-calculators#build_productivity)
-- [`build_wbb_season_wp`](reference/additional/models-and-calculators#build_wbb_season_wp)
-- [`build_weak_prior_from_rapm`](reference/additional/models-and-calculators#build_weak_prior_from_rapm)
-- [`calc_collinearity_diag`](reference/additional/models-and-calculators#calc_collinearity_diag)
-- [`calc_lineup_outputs`](reference/additional/models-and-calculators#calc_lineup_outputs)
+- [`build_wbb_season_wp`](reference/additional/models-and-calculators-2#build_wbb_season_wp)
+- [`build_weak_prior_from_rapm`](reference/additional/models-and-calculators-2#build_weak_prior_from_rapm)
+- [`calc_collinearity_diag`](reference/additional/models-and-calculators-2#calc_collinearity_diag)
+- [`calc_lineup_outputs`](reference/additional/models-and-calculators-2#calc_lineup_outputs)
 - [`calc_player_weights`](reference/additional/models-and-calculators-2#calc_player_weights)
 - [`calc_slow_pseudo_inverse`](reference/additional/models-and-calculators-2#calc_slow_pseudo_inverse)
 - [`calculate_predicted_out`](reference/additional/models-and-calculators-2#calculate_predicted_out)
@@ -210,8 +210,8 @@ description: "sdv-py WBB: endpoint references, dataset loaders and parsers for W
 - [`test_positional_aware_filter`](reference/additional/analytics#test_positional_aware_filter)
 - [`using_roster_pos`](reference/additional/analytics#using_roster_pos)
 - [`wbb_bracketology`](reference/additional/analytics#wbb_bracketology)
-- [`wbb_strength_of_schedule`](reference/additional/analytics#wbb_strength_of_schedule)
-- [`weighted_avg`](reference/additional/analytics#weighted_avg)
+- [`wbb_strength_of_schedule`](reference/additional/analytics-2#wbb_strength_of_schedule)
+- [`weighted_avg`](reference/additional/analytics-2#weighted_avg)
 
 ### Dates and seasons {#dates-and-seasons}
 

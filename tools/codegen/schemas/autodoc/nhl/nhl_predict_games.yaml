@@ -1,0 +1,4 @@
+schema: nhl_predict_games
+kind: dataframe
+columns: []
+unverified: 'no capture: it needs games with home_team / away_team / neutral_site columns that no loader returns'

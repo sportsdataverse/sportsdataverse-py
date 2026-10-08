@@ -38,7 +38,7 @@ columns:
   type: character
   description: ''
 - name: highlights
-  type: character
+  type: integer
   description: ''
 - name: notes_type
   type: character
@@ -234,4 +234,16 @@ columns:
   description: ''
 - name: week
   type: integer
+  description: ''
+- name: home_logo_dark
+  type: character
+  description: ''
+- name: away_logo_dark
+  type: character
+  description: ''
+- name: home_winner
+  type: logical
+  description: ''
+- name: away_winner
+  type: logical
   description: ''

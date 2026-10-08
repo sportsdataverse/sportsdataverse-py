@@ -1,10 +1,10 @@
 ---
-title: "NBA — additional Python functions — Analytics: add_ctg–nba_tracking"
-sidebar_label: "Analytics: add_ctg–nba_tracking"
+title: "NBA — additional Python functions — Analytics: add_ctg–nba_referee"
+sidebar_label: "Analytics: add_ctg–nba_referee"
 sidebar_position: 12
-description: "NBA — additional Python functions — Analytics: add_ctg–nba_tracking — function reference in sdv-py, the SportsDataverse Python package."
+description: "NBA — additional Python functions — Analytics: add_ctg–nba_referee — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# NBA — additional Python functions — Analytics: add_ctg–nba_tracking
+# NBA — additional Python functions — Analytics: add_ctg–nba_referee
 
 ### add_ctg_shot_zones {#add_ctg_shot_zones}
 
@@ -33,6 +33,47 @@ midrange at the free-throw-line distance rather than at the paint boundary.
 **Returns**
 
 The input frame with a `ctg_shot_zone` Utf8 column appended (null on non-field-goal rows). Empty input returns a zero-row frame carrying the column — never raises.
+
+| col_name | type | description |
+|---|---|---|
+| `order_index` | integer |  |
+| `action_number` | integer | Sequential action number within a game (V3 PBP). |
+| `clock` | character | Game clock value. |
+| `period` | integer | Period of the game (1-4 quarters; 5+ for OT). |
+| `team_id` | integer | Unique team identifier. |
+| `team_tricode` | character | Three-letter team code (e.g. 'LAS' / 'NYL'). |
+| `person_id` | integer | Unique player identifier (V3 endpoints). |
+| `player_name` | character | Player name. |
+| `player_name_i` | character | Player name i. |
+| `x_legacy` | integer | V2-format X coordinate (preserved for V3-to-V2 compatibility). |
+| `y_legacy` | integer | V2-format Y coordinate (preserved for V3-to-V2 compatibility). |
+| `shot_distance` | integer | Shot distance from the basket, in feet. |
+| `shot_result` | character | Shot result ('Made' / 'Missed'). |
+| `is_field_goal` | integer | 1 if the action was a field goal; 0 otherwise. |
+| `score_home` | character | Score home. |
+| `score_away` | character | Score away. |
+| `points_total` | integer | Running total of points scored. |
+| `location` | character | Location. |
+| `description` | character | Long-form description text. |
+| `action_type` | character | Action type label (e.g. 'Made Shot', 'Substitution'). |
+| `sub_type` | character | Action sub-type label. |
+| `video_available` | integer | Video available. |
+| `shot_value` | integer | Point value of the shot (2 or 3). |
+| `action_id` | integer | Unique action identifier within a game (V3 PBP). |
+| `game_id` | character | Unique game identifier. |
+| `seconds_remaining` | double | Seconds remaining in the period. |
+| `event_type` | character | Event / play type code (V2 PBP). |
+| `is_made_shot` | logical |  |
+| `is_missed_shot` | logical |  |
+| `is_free_throw` | logical |  |
+| `is_rebound` | logical |  |
+| `is_turnover` | logical |  |
+| `is_foul` | logical |  |
+| `is_substitution` | logical |  |
+| `is_jump_ball` | logical |  |
+| `is_timeout` | logical |  |
+| `is_period` | logical |  |
+| `ctg_shot_zone` | character |  |
 
 **Example**
 
@@ -67,6 +108,41 @@ The CTG filter columns are **flags, not filters** — nothing is dropped. Apply
 **Returns**
 
 The possession frame (`POSSESSIONS_SCHEMA`) plus every column in `PLAY_CONTEXT_POSSESSIONS_SCHEMA`.
+
+| col_name | type | description |
+|---|---|---|
+| `game_id` | character | Unique game identifier. |
+| `period` | integer | Period of the game (1-4 quarters; 5+ for OT). |
+| `possession_number` | integer | Possession number. |
+| `offense_team_id` | integer | Unique identifier for offense team. |
+| `defense_team_id` | integer |  |
+| `start_order_index` | integer |  |
+| `end_order_index` | integer |  |
+| `start_seconds_remaining` | double |  |
+| `end_seconds_remaining` | double |  |
+| `points` | integer | Points scored. |
+| `is_second_chance` | logical |  |
+| `number_in_period` | integer |  |
+| `possession_start_type` | character |  |
+| `count_as_possession` | logical |  |
+| `fg2a` | integer |  |
+| `fg2m` | integer |  |
+| `fg3a` | integer | Three-point field goal attempts. |
+| `fg3m` | integer | Three-point field goals made. |
+| `fta` | integer | Free throw attempts. |
+| `ftm` | integer | Free throws made. |
+| `oreb` | integer | Offensive rebounds. |
+| `dreb` | integer | Defensive rebounds. |
+| `tov` | integer | Turnovers. |
+| `possession_start_type_detail` | character |  |
+| `possession_start_type_ctg` | character |  |
+| `seconds_to_first_play` | double |  |
+| `is_transition` | logical |  |
+| `transition_source` | character |  |
+| `possession_context` | character |  |
+| `is_heave_possession` | logical |  |
+| `is_garbage_time` | logical |  |
+| `garbage_time_basis` | character |  |
 
 **Example**
 
@@ -108,6 +184,34 @@ possession is `OffTimeout`, not `OffMadeShot`).
 **Returns**
 
 `possessions` with the two columns appended. Empty input returns a zero-row frame carrying them — never raises.
+
+| col_name | type | description |
+|---|---|---|
+| `game_id` | character | Unique game identifier. |
+| `period` | integer | Period of the game (1-4 quarters; 5+ for OT). |
+| `possession_number` | integer | Possession number. |
+| `offense_team_id` | integer | Unique identifier for offense team. |
+| `defense_team_id` | integer |  |
+| `start_order_index` | integer |  |
+| `end_order_index` | integer |  |
+| `start_seconds_remaining` | double |  |
+| `end_seconds_remaining` | double |  |
+| `points` | integer | Points scored. |
+| `is_second_chance` | logical |  |
+| `number_in_period` | integer |  |
+| `possession_start_type` | character |  |
+| `count_as_possession` | logical |  |
+| `fg2a` | integer |  |
+| `fg2m` | integer |  |
+| `fg3a` | integer | Three-point field goal attempts. |
+| `fg3m` | integer | Three-point field goals made. |
+| `fta` | integer | Free throw attempts. |
+| `ftm` | integer | Free throws made. |
+| `oreb` | integer | Offensive rebounds. |
+| `dreb` | integer | Defensive rebounds. |
+| `tov` | integer | Turnovers. |
+| `possession_start_type_detail` | character |  |
+| `possession_start_type_ctg` | character |  |
 
 **Example**
 
@@ -155,6 +259,38 @@ variant.
 
 `possessions` with `seconds_to_first_play` (Float64, null when the possession had no play), `is_transition` (Boolean), `transition_source` (Utf8: `steal` / `live_rebound` / `made` / `deadball`; null when not transition) and `possession_context` (Utf8: `transition` / `halfcourt` / `misc`) appended.
 
+| col_name | type | description |
+|---|---|---|
+| `game_id` | character | Unique game identifier. |
+| `period` | integer | Period of the game (1-4 quarters; 5+ for OT). |
+| `possession_number` | integer | Possession number. |
+| `offense_team_id` | integer | Unique identifier for offense team. |
+| `defense_team_id` | integer |  |
+| `start_order_index` | integer |  |
+| `end_order_index` | integer |  |
+| `start_seconds_remaining` | double |  |
+| `end_seconds_remaining` | double |  |
+| `points` | integer | Points scored. |
+| `is_second_chance` | logical |  |
+| `number_in_period` | integer |  |
+| `possession_start_type` | character |  |
+| `count_as_possession` | logical |  |
+| `fg2a` | integer |  |
+| `fg2m` | integer |  |
+| `fg3a` | integer | Three-point field goal attempts. |
+| `fg3m` | integer | Three-point field goals made. |
+| `fta` | integer | Free throw attempts. |
+| `ftm` | integer | Free throws made. |
+| `oreb` | integer | Offensive rebounds. |
+| `dreb` | integer | Defensive rebounds. |
+| `tov` | integer | Turnovers. |
+| `possession_start_type_detail` | character |  |
+| `possession_start_type_ctg` | character |  |
+| `seconds_to_first_play` | double |  |
+| `is_transition` | logical |  |
+| `transition_source` | character |  |
+| `possession_context` | character |  |
+
 **Example**
 
 ```python
@@ -189,6 +325,23 @@ game's own team pace), then summed — the result is fully deterministic.
 
 One row per player: `player_id`, the STATS` per-100 rates, `min` (total), `gp` (games). Empty frame with that schema on empty input.
 
+| col_name | type | description |
+|---|---|---|
+| `player_id` | integer | Unique player identifier. |
+| `pts` | double | Points scored. |
+| `fg3m` | double | Three-point field goals made. |
+| `fga` | double | Field goal attempts. |
+| `fta` | double | Free throw attempts. |
+| `ast` | double | Assists. |
+| `oreb` | double | Offensive rebounds. |
+| `dreb` | double | Defensive rebounds. |
+| `stl` | double | Steals. |
+| `blk` | double | Blocks. |
+| `tov` | double | Turnovers. |
+| `pf` | double | Personal fouls. |
+| `min` | double | Minutes played. |
+| `gp` | integer | Games played. |
+
 ### build_play_context_shots {#build_play_context_shots}
 
 `build_play_context_shots(possessions: 'pl.DataFrame', enhanced_pbp: 'pl.DataFrame', *, putback_seconds: 'float' = 2.0) -> 'pl.DataFrame'`
@@ -221,6 +374,22 @@ play-level view — one row per field-goal attempt.
 
 Polars DataFrame with schema `PLAY_CONTEXT_SHOTS_SCHEMA` — one row per field-goal attempt. Empty input returns the zero-row schema.
 
+| col_name | type | description |
+|---|---|---|
+| `game_id` | character | Unique game identifier. |
+| `possession_number` | integer | Possession number. |
+| `order_index` | integer |  |
+| `period` | integer | Period of the game (1-4 quarters; 5+ for OT). |
+| `team_id` | integer | Unique team identifier. |
+| `person_id` | integer | Unique player identifier (V3 endpoints). |
+| `shot_value` | integer | Point value of the shot (2 or 3). |
+| `shot_made` | logical |  |
+| `ctg_shot_zone` | character |  |
+| `is_assisted` | logical |  |
+| `is_putback` | logical |  |
+| `is_second_chance_shot` | logical |  |
+| `shot_context` | character |  |
+
 **Example**
 
 ```python
@@ -252,6 +421,19 @@ shooting response.
 **Returns**
 
 Polars DataFrame with schema `POSSESSION_SHOOTING_SCHEMA`. One row per `(possession_number, player_id)` pair. Events with `person_id == 0` are skipped (unattributable to a shooter — they still count toward `build_possessions`' team-level totals). Per-possession sums of the six shooting columns match the corresponding `build_possessions` columns exactly.
+
+| col_name | type | description |
+|---|---|---|
+| `game_id` | character | Unique game identifier. |
+| `possession_number` | integer | Possession number. |
+| `player_id` | integer | Unique player identifier. |
+| `team_id` | integer | Unique team identifier. |
+| `fg2a` | integer |  |
+| `fg2m` | integer |  |
+| `fg3a` | integer | Three-point field goal attempts. |
+| `fg3m` | integer | Three-point field goals made. |
+| `fta` | integer | Free throw attempts. |
+| `ftm` | integer | Free throws made. |
 
 **Example**
 
@@ -294,6 +476,8 @@ agreement first).
 **Returns**
 
 One row per matched (season, team_id): `season, team_id, clutch_net_rating, adj_net_rtg, clutch_delta, clutch_poss`. Empty input returns that schema with zero rows.
+
+No returns table is published for this function: no capture: its clutch frame is built from stats.nba.com leaguedashteamclutch, which answers HTTP 403 to the datacenter IP the docs are built on.
 
 **Example**
 
@@ -341,6 +525,34 @@ CTG-exact.
 
 `possessions` with Boolean `is_garbage_time` and Utf8 `garbage_time_basis` (`"margin_and_starters"` or `"margin_only"`) appended.
 
+| col_name | type | description |
+|---|---|---|
+| `game_id` | character | Unique game identifier. |
+| `period` | integer | Period of the game (1-4 quarters; 5+ for OT). |
+| `possession_number` | integer | Possession number. |
+| `offense_team_id` | integer | Unique identifier for offense team. |
+| `defense_team_id` | integer |  |
+| `start_order_index` | integer |  |
+| `end_order_index` | integer |  |
+| `start_seconds_remaining` | double |  |
+| `end_seconds_remaining` | double |  |
+| `points` | integer | Points scored. |
+| `is_second_chance` | logical |  |
+| `number_in_period` | integer |  |
+| `possession_start_type` | character |  |
+| `count_as_possession` | logical |  |
+| `fg2a` | integer |  |
+| `fg2m` | integer |  |
+| `fg3a` | integer | Three-point field goal attempts. |
+| `fg3m` | integer | Three-point field goals made. |
+| `fta` | integer | Free throw attempts. |
+| `ftm` | integer | Free throws made. |
+| `oreb` | integer | Offensive rebounds. |
+| `dreb` | integer | Defensive rebounds. |
+| `tov` | integer | Turnovers. |
+| `is_garbage_time` | logical |  |
+| `garbage_time_basis` | character |  |
+
 **Example**
 
 ```python
@@ -371,6 +583,44 @@ late Q4 possession is a real possession.
 **Returns**
 
 `possessions` with a Boolean `is_heave_possession` column appended.
+
+| col_name | type | description |
+|---|---|---|
+| `game_id` | character | Unique game identifier. |
+| `period` | integer | Period of the game (1-4 quarters; 5+ for OT). |
+| `possession_number` | integer | Possession number. |
+| `offense_team_id` | integer | Unique identifier for offense team. |
+| `defense_team_id` | integer |  |
+| `start_order_index` | integer |  |
+| `end_order_index` | integer |  |
+| `start_seconds_remaining` | double |  |
+| `end_seconds_remaining` | double |  |
+| `points` | integer | Points scored. |
+| `is_second_chance` | logical |  |
+| `number_in_period` | integer |  |
+| `possession_start_type` | character |  |
+| `count_as_possession` | logical |  |
+| `fg2a` | integer |  |
+| `fg2m` | integer |  |
+| `fg3a` | integer | Three-point field goal attempts. |
+| `fg3m` | integer | Three-point field goals made. |
+| `fta` | integer | Free throw attempts. |
+| `ftm` | integer | Free throws made. |
+| `oreb` | integer | Offensive rebounds. |
+| `dreb` | integer | Defensive rebounds. |
+| `tov` | integer | Turnovers. |
+| `off_player_1` | integer |  |
+| `off_player_2` | integer |  |
+| `off_player_3` | integer |  |
+| `off_player_4` | integer |  |
+| `off_player_5` | integer |  |
+| `def_player_1` | integer |  |
+| `def_player_2` | integer |  |
+| `def_player_3` | integer |  |
+| `def_player_4` | integer |  |
+| `def_player_5` | integer |  |
+| `lineup_source` | character |  |
+| `is_heave_possession` | logical |  |
 
 **Example**
 
@@ -475,6 +725,29 @@ order).
 
 One row per (team, lineup) with `LINEUP_PLAY_CONTEXT_SCHEMA`. Empty input returns a zero-row frame with that schema.
 
+| col_name | type | description |
+|---|---|---|
+| `offense_team_id` | integer | Unique identifier for offense team. |
+| `lineup_id` | character |  |
+| `off_player_1` | integer |  |
+| `off_player_2` | integer |  |
+| `off_player_3` | integer |  |
+| `off_player_4` | integer |  |
+| `off_player_5` | integer |  |
+| `poss` | integer | Poss. |
+| `points` | integer | Points scored. |
+| `pts_per_100` | double |  |
+| `transition_poss` | integer |  |
+| `transition_points` | integer |  |
+| `transition_freq` | double |  |
+| `transition_pts_per_100` | double |  |
+| `non_transition_pts_per_100` | double |  |
+| `transition_pts_added_per_100` | double |  |
+| `halfcourt_poss` | integer |  |
+| `halfcourt_pts_per_100` | double |  |
+| `freq_off_steal` | double |  |
+| `freq_off_live_rebound` | double |  |
+
 **Example**
 
 ```python
@@ -539,6 +812,8 @@ defense), documented here so callers weigh it.
 
 One row per `(close_def_dist_range, shot_clock_range)`: `close_def_dist_range:Utf8, shot_clock_range:Utf8, joint_fg_pct:Float64`. Empty inputs return the zero-row schema.
 
+No returns table is published for this function: no capture: its inputs come from make_prob_by_context on stats.nba.com tracking data, which answers HTTP 403 to the datacenter IP the docs are built on.
+
 **Example**
 
 ```python
@@ -570,6 +845,8 @@ reports it as a separate column too).
 **Returns**
 
 Frame `player_id:Utf8, season:Int64, avail_pct:Float64` (clipped to `[0, 1]`). Empty `seasons` -> zero-row schema.
+
+No returns table is published for this function: no capture: it reads stats.nba.com, which answers HTTP 403 to the datacenter IP the docs are built on; the function works from a residential IP.
 
 **Example**
 
@@ -637,6 +914,8 @@ conversion self-normalizes and `Σ expected_fta ≡ Σ fta` holds exactly.
 **Returns**
 
 One row per player: `player_id` (Int64), `poss`/`fta`/ `expected_fta`/`foul_draw_skill` (Float64), `pfd` (Float64, null when *advanced* has no data for that player or is omitted). Zero-row frame with this schema when the inputs are empty (sparse-coverage leagues never raise).
+
+No returns table is published for this function: no capture: it reads stats.nba.com, which answers HTTP 403 to the datacenter IP the docs are built on; the function works from a residential IP.
 
 **Example**
 
@@ -809,6 +1088,8 @@ threshold here is league-agnostic.
 
 Possession frame with the play-context columns. Empty/malformed payloads return a zero-row frame — never raises.
 
+No returns table is published for this function: no capture: it reads stats.nba.com, which answers HTTP 403 to the datacenter IP the docs are built on; the function works from a residential IP.
+
 **Example**
 
 ```python
@@ -842,6 +1123,8 @@ Per-player age for a season (bulk), for the DARKO aging curve.
 **Returns**
 
 Frame `player_id:Int64, age:Float64`.
+
+No returns table is published for this function: no capture: it reads stats.nba.com, which answers HTTP 403 to the datacenter IP the docs are built on; the function works from a residential IP.
 
 **Example**
 
@@ -879,6 +1162,15 @@ so a trade is visible rather than silently collapsed.
 
 One row per `player_id` with `PLAYER_IDENTITY_SCHEMA`. An empty input -- or one missing any required column, `min` included -- gives the zero-row frame with that schema, so callers can join unconditionally. `min` is required rather than optional: without it every team totals zero minutes and "primary team" quietly degrades to whichever `team_id` sorts first, which looks like an answer but is not one.
 
+| col_name | type | description |
+|---|---|---|
+| `player_id` | integer | Unique player identifier. |
+| `player_name` | character | Player name. |
+| `team_id` | integer | Unique team identifier. |
+| `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
+| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
+| `teams` | character | Nested list of member-team membership spans. |
+
 **Example**
 
 ```python
@@ -915,6 +1207,8 @@ Fetch league-wide listed positions for a season as numeric 1-5.
 **Returns**
 
 Frame with columns `player_id:Int64, position_num:Float64`.
+
+No returns table is published for this function: no capture: it reads stats.nba.com, which answers HTTP 403 to the datacenter IP the docs are built on; the function works from a residential IP.
 
 **Example**
 
@@ -956,6 +1250,16 @@ two teams in the matchup are returned.
 
 One row per player on either team: `player_id, team_id, stat_pts_exp, stat_reb_exp, stat_ast_exp, stat_fg3m_exp, pace_proj`. Empty input returns that schema with zero rows.
 
+| col_name | type | description |
+|---|---|---|
+| `player_id` | character | Unique player identifier. |
+| `team_id` | character | Unique team identifier. |
+| `stat_pts_exp` | double |  |
+| `stat_reb_exp` | double |  |
+| `stat_ast_exp` | double |  |
+| `stat_fg3m_exp` | double |  |
+| `pace_proj` | double |  |
+
 **Example**
 
 ```python
@@ -988,6 +1292,8 @@ league schedule, computes raw per-type efficiency
 **Returns**
 
 One row per team: `team_id` (Int64), `adj_off`/`adj_def`/`adj_net` (Float64) roll-ups, plus per-type wide columns `adj_off_ppp_<playtype>`/`adj_def_ppp_<playtype>`/`off_freq_<playtype>` (Float64) for each play type present in the data. `adj_off = Σ_t off_freq_t · adj_off_ppp_t · 100` (symmetric for `adj_def` off `def_freq_t`); `adj_net = adj_off - adj_def`. Returns a zero-row frame with the base roll-up schema when the upstream fetch is empty (sparse-coverage leagues never raise).
+
+No returns table is published for this function: no capture: it reads stats.nba.com, which answers HTTP 403 to the datacenter IP the docs are built on; the function works from a residential IP.
 
 **Example**
 
@@ -1032,6 +1338,8 @@ live in-game updating (out of scope; see spec non-goals).
 **Returns**
 
 Long frame with `RATINGS_PANEL_SCHEMA` columns (`player_id`, `date`, `o_rating`, `d_rating`, `rating`). Zero-row (that schema) when `possessions` is empty or no date yields any players.
+
+No returns table is published for this function: no capture: its possessions input needs a game_date column, and neither nba_possessions nor the released possessions carry one.
 
 **Example**
 
@@ -1083,6 +1391,38 @@ same committed tree the per-game compile reads.
 **Returns**
 
 The parsed `polars.DataFrame`, or `None` when the store is unset, the capture is absent, or the payload carries no usable frame -- so a caller can cleanly fall back to a live fetch.
+
+| col_name | type | description |
+|---|---|---|
+| `season_id` | character | Unique season identifier. |
+| `team_id` | integer | Unique team identifier. |
+| `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
+| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
+| `game_id` | character | Unique game identifier. |
+| `game_date` | character | Game date (YYYY-MM-DD). |
+| `matchup` | character | Matchup. |
+| `wl` | character | Wl. |
+| `min` | integer | Minutes played. |
+| `fgm` | integer | Field goals made. |
+| `fga` | integer | Field goal attempts. |
+| `fg_pct` | double | Field goal percentage (0-1). |
+| `fg3_m` | integer | Three-point field goals made. |
+| `fg3_a` | integer | Three-point field goal attempts. |
+| `fg3_pct` | double | Three-point field goal percentage (0-1). |
+| `ftm` | integer | Free throws made. |
+| `fta` | integer | Free throw attempts. |
+| `ft_pct` | double | Free throw percentage (0-1). |
+| `oreb` | integer | Offensive rebounds. |
+| `dreb` | integer | Defensive rebounds. |
+| `reb` | integer | Rebounds per game. |
+| `ast` | integer | Assists. |
+| `stl` | integer | Steals. |
+| `blk` | integer | Blocks. |
+| `tov` | integer | Turnovers. |
+| `pf` | integer | Personal fouls. |
+| `pts` | integer | Points scored. |
+| `plus_minus` | integer | Plus/minus point differential while on court. |
+| `video_available` | integer | Video available. |
 
 **Example**
 
@@ -1157,274 +1497,4 @@ print(f"Found {officials.height} official slots")
 
 result = nba_referee_assignments("2026-06-13", league="wnba")
 wnba_officials = result["officials"]
-```
-
-### nba_shot_value {#nba_shot_value}
-
-`nba_shot_value(player_ids: "'list[int]'", season: 'str', *, league_id: 'str' = '00', include_context: 'bool' = False, return_as_pandas: 'bool' = False) -> "'dict[str, Union[pl.DataFrame, pd.DataFrame]]'"`
-
-One-call shot-value spine: fetch, score, and run all five models.
-
-Fetches each player's `shotchartdetail`, scores per-shot expected points
-from the free `LeagueAverages` zone table, and returns the scored shots
-plus shooter talent, selection quality, and zone-value maps (and the
-defender/shot-clock context tables when `include_context=True`).
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `player_ids` | `list[int]` |  | Player ids to fetch. |
-| `season` | `str` |  | Season string, e.g. `"2022-23"`. |
-| `league_id` | `str` | `'00'` | `"00"` NBA, `"10"` WNBA, `"20"` G-League. |
-| `include_context` | `bool` | `False` | Also fetch + return the `playerdashptshots` defender/shot-clock context tables, once per player and team his fetched shots came from. |
-| `return_as_pandas` | `bool` | `False` | Return pandas frames instead of polars. |
-
-**Returns**
-
-`{"shots", "talent", "selection", "zones"}` (plus `"context"` when requested). An empty fetch returns a dict of zero-row frames.
-
-**Example**
-
-```python
-from sportsdataverse.nba import nba_shot_value
-out = nba_shot_value([201939], "2022-23")
-out["talent"].head()
-```
-
-### nba_shot_value_lineups {#nba_shot_value_lineups}
-
-`nba_shot_value_lineups(group_id: 'str', season: 'str', *, team_id: 'int', league_id: 'str' = '00', return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"`
-
-Scored per-shot frame for one 5-man lineup (`shotchartlineupdetail`).
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `group_id` | `str` |  | The 5-man lineup group id (dash-joined player ids); kept `Utf8`. |
-| `season` | `str` |  | Season string, e.g. `"2022-23"`. |
-| `team_id` | `int` |  | The lineup's team id. |
-| `league_id` | `str` | `'00'` | `"00"` NBA, `"10"` WNBA, `"20"` G-League. |
-| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
-
-**Returns**
-
-The lineup's shots scored by `score_shot_xpoints` (with `xpoints`). Empty fetch returns the augmented zero-row schema.
-
-**Example**
-
-```python
-from sportsdataverse.nba import nba_shot_value_lineups
-df = nba_shot_value_lineups("201939-202691-...", "2022-23", team_id=1610612744)
-```
-
-### nba_team_clutch {#nba_team_clutch}
-
-`nba_team_clutch(season: 'int', *, league_id: 'str' = '00', return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
-
-Opponent-agnostic clutch skill (shrunk clutch net-rating delta) per team.
-
-Loads the season's clutch net rating (`nba_stats_leaguedashteamclutch`)
-and full-game net baseline (`nba_stats_leaguedashteamstats`), computes
-`clutch_delta`, and applies `shrink_clutch`.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `season` | `int` |  | End year of the season (e.g. `2024` for 2023-24). |
-| `league_id` | `str` | `'00'` | `"00"` NBA / `"10"` WNBA / `"20"` G-League. |
-| `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
-
-**Returns**
-
-One row per team: `season, team_id, clutch_net_rating, adj_net_rtg, clutch_delta, clutch_skill_shrunk, clutch_poss`. Empty input returns that schema with zero rows.
-
-**Example**
-
-```python
-from sportsdataverse.nba.nba_clutch import nba_team_clutch
-skill = nba_team_clutch(2024)
-skill.sort("clutch_skill_shrunk", descending=True).head()
-```
-
-### nba_tracking_drive_value {#nba_tracking_drive_value}
-
-`nba_tracking_drive_value(seasons: "'int | str | list'", *, league_id: 'str' = '00', per_mode: 'str' = 'Totals', by_position: 'bool' = True, positions: 'Optional[pl.DataFrame]' = None, return_as_pandas: 'bool' = False, _get_fn: 'Optional[Callable[..., dict]]' = None) -> "'Union[pl.DataFrame, pd.DataFrame]'"`
-
-Drive value over expected + rim-pressure, per player-season.
-
-Fetches the `Drives` `leaguedashptstats` measure and computes
-`drive_pts_oe = drive_pts - drives * bucket_pts_per_drive`. `rim_pressure`
-is the z-score of `drive_fta / drives` within the player's role bucket
-(a proxy for foul-drawing pressure independent of scoring efficiency).
-`drive_ast`/`drive_tov` are passed through unchanged.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `seasons` | `int \| str \| list` |  | A single season or list of seasons. |
-| `league_id` | `str` | `'00'` | `"00"` NBA (default), `"10"` WNBA, `"20"` G-League. |
-| `per_mode` | `str` | `'Totals'` | `per_mode_simple` passed to the fetch (default `"Totals"`). |
-| `by_position` | `bool` | `True` | Compute the baseline within role buckets (default); `False` forces one league-wide bucket. |
-| `positions` | `Optional[DataFrame]` | `None` | Optional pre-fetched positions frame. |
-| `return_as_pandas` | `bool` | `False` | Return a `pandas.DataFrame` instead of polars. |
-| `_get_fn` | `Optional[Callable[..., dict]]` | `None` | Injectable replacement for `nba_stats_leaguedashptstats`. |
-
-**Returns**
-
-One row per player-season: `season:Int64, player_id:Utf8, player_name:Utf8, team_id:Utf8, position_bucket:Utf8, gp:Int64, min:Float64, drives:Float64, drive_pts:Float64, drive_baseline_rate:Float64, drive_expected:Float64, drive_pts_oe:Float64, drive_pts_oe_per_36:Float64, drive_fta:Float64, rim_pressure:Float64, drive_ast:Float64, drive_tov:Float64, league_id:Utf8`. Empty/malformed input returns a zero-row frame with this schema.
-
-**Example**
-
-```python
-from sportsdataverse.nba import nba_tracking_drive_value
-df = nba_tracking_drive_value(2024)
-print(df.sort("drive_pts_oe", descending=True).head())
-```
-
-### nba_tracking_pass_value {#nba_tracking_pass_value}
-
-`nba_tracking_pass_value(seasons: "'int | str | list'", *, league_id: 'str' = '00', per_mode: 'str' = 'Totals', by_position: 'bool' = True, positions: 'Optional[pl.DataFrame]' = None, fetch_potential_assists: 'bool' = False, max_players: 'int' = 0, return_as_pandas: 'bool' = False, _get_fn: 'Optional[Callable[..., dict]]' = None, _pass_get_fn: 'Optional[Callable[..., dict]]' = None) -> "'Union[pl.DataFrame, pd.DataFrame]'"`
-
-Expected-assists / passer value: `ast_oe` per player-season.
-
-Fetches the `Passing` `leaguedashptstats` measure (one call) and computes
-`ast_oe = ast - passes * bucket_assist_rate`. When
-`fetch_potential_assists=True`, also fetches `nba_stats_playerdashptpass`
-for the top-`max_players` passers (capped, optional -- never a hard
-dependency) and recomputes the residual against the richer
-`potential_assists` denominator for that subset; `max_players=0`
-(default) makes exactly one request total. `ast_pts_created` is passed
-through directly from the Passing measure (it is already computed there;
-not re-derived).
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `seasons` | `int \| str \| list` |  | A single season or list of seasons. |
-| `league_id` | `str` | `'00'` | `"00"` NBA (default), `"10"` WNBA, `"20"` G-League. |
-| `per_mode` | `str` | `'Totals'` | `per_mode_simple` passed to the fetch (default `"Totals"`). |
-| `by_position` | `bool` | `True` | Compute the baseline within role buckets (default); `False` forces one league-wide bucket. |
-| `positions` | `Optional[DataFrame]` | `None` | Optional pre-fetched positions frame. |
-| `fetch_potential_assists` | `bool` | `False` | Enrich the top passers with `playerdashptpass` potential-assist counts. |
-| `max_players` | `int` | `0` | Cap on per-player enrichment fetches; `0` disables enrichment regardless of `fetch_potential_assists`. |
-| `return_as_pandas` | `bool` | `False` | Return a `pandas.DataFrame` instead of polars. |
-| `_get_fn` | `Optional[Callable[..., dict]]` | `None` | Injectable replacement for `nba_stats_leaguedashptstats`. |
-| `_pass_get_fn` | `Optional[Callable[..., dict]]` | `None` | Injectable replacement for `nba_stats_playerdashptpass`. |
-
-**Returns**
-
-One row per player-season: `season:Int64, player_id:Utf8, player_name:Utf8, team_id:Utf8, position_bucket:Utf8, gp:Int64, min:Float64, ast:Float64, passes:Float64, ast_baseline_rate:Float64, ast_expected:Float64, ast_oe:Float64, ast_oe_per_36:Float64, ast_pts_created:Float64, league_id:Utf8`. Empty/malformed input returns a zero-row frame with this schema.
-
-**Example**
-
-```python
-from sportsdataverse.nba import nba_tracking_pass_value
-df = nba_tracking_pass_value(2024)
-print(df.sort("ast_oe", descending=True).head())
-
-# With potential-assist enrichment for the top 50 passers
-
-df = nba_tracking_pass_value(2024, fetch_potential_assists=True, max_players=50)
-```
-
-### nba_tracking_reb_oe {#nba_tracking_reb_oe}
-
-`nba_tracking_reb_oe(seasons: "'int | str | list'", *, league_id: 'str' = '00', per_mode: 'str' = 'Totals', by_position: 'bool' = True, positions: 'Optional[pl.DataFrame]' = None, return_as_pandas: 'bool' = False, _get_fn: 'Optional[Callable[..., dict]]' = None) -> "'Union[pl.DataFrame, pd.DataFrame]'"`
-
-Rebounding-over-expected: `reb_oe` plus OREB/DREB splits, per player-season.
-
-Fetches the `Rebounding` `leaguedashptstats` measure, attaches a
-`guard`/`wing`/`big` role bucket, and computes
-`reb_oe = reb - reb_chances * bucket_rate` (contest-difficulty-adjusted
-when the endpoint carries separate contested/uncontested CHANCE columns;
-the live `stats.nba.com` payload currently does not, so this degrades
-gracefully to the plain rate -- see the fixtures README for the finding).
-OREB/DREB residuals are computed identically against their own chance
-columns. Baselines are recomputed from the same season slice on every
-call -- there is no fitted constant or bundled artifact.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `seasons` | `int \| str \| list` |  | A single season (`int` ending-year or `"YYYY-YY"` string) or a list of seasons to concatenate. |
-| `league_id` | `str` | `'00'` | `"00"` NBA (default), `"10"` WNBA, `"20"` G-League. |
-| `per_mode` | `str` | `'Totals'` | `per_mode_simple` passed to the fetch (default `"Totals"`). |
-| `by_position` | `bool` | `True` | Compute the baseline within `guard`/`wing`/`big` buckets (default). `False` forces one league-wide bucket. |
-| `positions` | `Optional[DataFrame]` | `None` | Optional pre-fetched positions frame (see attach_role_bucket`); mostly for injecting a fixture in tests. |
-| `return_as_pandas` | `bool` | `False` | Return a `pandas.DataFrame` instead of polars. |
-| `_get_fn` | `Optional[Callable[..., dict]]` | `None` | Injectable replacement for `nba_stats_leaguedashptstats` returning the raw payload dict directly -- offline testing hook. |
-
-**Returns**
-
-One row per player-season: `season:Int64, player_id:Utf8, player_name:Utf8, team_id:Utf8, position_bucket:Utf8, gp:Int64, min:Float64, reb:Float64, reb_chances:Float64, reb_baseline_rate:Float64, reb_expected:Float64, reb_oe:Float64, reb_oe_per_36:Float64, oreb_oe:Float64, dreb_oe:Float64, league_id:Utf8`. Empty/malformed input returns a zero-row frame with this schema.
-
-**Example**
-
-```python
-from sportsdataverse.nba import nba_tracking_reb_oe
-df = nba_tracking_reb_oe(2024)
-print(df.sort("reb_oe", descending=True).head())
-
-# League-wide baseline (no position split)
-
-df_all = nba_tracking_reb_oe(2024, by_position=False)
-
-# Pandas output
-
-df_pd = nba_tracking_reb_oe(2024, return_as_pandas=True)
-```
-
-### nba_tracking_rim_protect_value {#nba_tracking_rim_protect_value}
-
-`nba_tracking_rim_protect_value(seasons: "'int | str | list'", *, league_id: 'str' = '00', per_mode: 'str' = 'Totals', by_position: 'bool' = True, positions: 'Optional[pl.DataFrame]' = None, source: 'str' = 'leaguedash', max_players: 'int' = 0, return_as_pandas: 'bool' = False, _get_fn: 'Optional[Callable[..., dict]]' = None, _defend_get_fn: 'Optional[Callable[..., dict]]' = None) -> "'Union[pl.DataFrame, pd.DataFrame]'"`
-
-Rim-protection / shot-defend points-saved over expected, per player-season.
-
-Fetches the `Defense` `leaguedashptstats` measure -- which on the live
-`stats.nba.com` payload exposes only rim-band defended shooting
-(`def_rim_fgm`/`def_rim_fga`/`def_rim_fg_pct`, no separate overall
-figure -- see the fixtures README) -- and computes
-`rim_protect_pts_saved = (normal_fg_pct - d_fg_pct) * d_fga * 2` where
-`normal_fg_pct` is the bucket-mean defended rate (there is no
-shooters'-own-average column on this endpoint, so the bucket mean is the
-baseline; this is the same attempts-weighted construction as every other
-model, just sign-flipped so a defender who holds shooters BELOW the
-bucket mean gets a positive points-saved value).
-
-`source="shotdefend"` swaps in the `Less-Than-6-Ft` band from
-`nba_stats_playerdashptshotdefend` for the top-`max_players` defenders
-by attempt volume (capped, optional -- never a hard dependency);
-`max_players=0` (default) uses the leaguedash figures for everyone.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `seasons` | `int \| str \| list` |  | A single season or list of seasons. |
-| `league_id` | `str` | `'00'` | `"00"` NBA (default), `"10"` WNBA, `"20"` G-League. |
-| `per_mode` | `str` | `'Totals'` | `per_mode_simple` passed to the fetch (default `"Totals"`). |
-| `by_position` | `bool` | `True` | Compute the baseline within role buckets (default); `False` forces one league-wide bucket. |
-| `positions` | `Optional[DataFrame]` | `None` | Optional pre-fetched positions frame. |
-| `source` | `str` | `'leaguedash'` | `"leaguedash"` (default) or `"shotdefend"`. |
-| `max_players` | `int` | `0` | Cap on per-player `shotdefend` enrichment fetches; ignored unless `source="shotdefend"`. |
-| `return_as_pandas` | `bool` | `False` | Return a `pandas.DataFrame` instead of polars. |
-| `_get_fn` | `Optional[Callable[..., dict]]` | `None` | Injectable replacement for `nba_stats_leaguedashptstats`. |
-| `_defend_get_fn` | `Optional[Callable[..., dict]]` | `None` | Injectable replacement for `nba_stats_playerdashptshotdefend`. |
-
-**Returns**
-
-One row per player-season: `season:Int64, player_id:Utf8, player_name:Utf8, team_id:Utf8, position_bucket:Utf8, gp:Int64, min:Float64, d_fga:Float64, d_fgm:Float64, d_fg_pct:Float64, normal_fg_pct:Float64, rim_protect_pts_saved:Float64, rim_protect_pts_saved_per_36:Float64, source:Utf8, league_id:Utf8`. Empty/malformed input returns a zero-row frame with this schema.
-
-**Example**
-
-```python
-from sportsdataverse.nba import nba_tracking_rim_protect_value
-df = nba_tracking_rim_protect_value(2024)
-print(df.sort("rim_protect_pts_saved", descending=True).head())
 ```

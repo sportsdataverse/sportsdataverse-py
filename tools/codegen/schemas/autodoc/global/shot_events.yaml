@@ -1,0 +1,36 @@
+schema: shot_events
+kind: dataframe
+columns:
+- name: season
+  type: integer
+  description: ''
+- name: entity_type
+  type: character
+  description: ''
+- name: entity_id
+  type: character
+  description: ''
+- name: entity_name
+  type: character
+  description: ''
+- name: team_id
+  type: character
+  description: ''
+- name: window_unit
+  type: character
+  description: ''
+- name: metric
+  type: character
+  description: ''
+- name: game_id
+  type: character
+  description: ''
+- name: event_date
+  type: character
+  description: ''
+- name: seq
+  type: integer
+  description: ''
+- name: value
+  type: double
+  description: ''

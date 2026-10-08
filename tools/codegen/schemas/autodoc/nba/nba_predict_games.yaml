@@ -1,0 +1,5 @@
+schema: nba_predict_games
+kind: dataframe
+columns: []
+unverified: 'no capture: it raises a join-key dtype mismatch on a real schedule (the schedule''s home_team_id is Int32, nba_team_ratings''
+  team_id is String)'

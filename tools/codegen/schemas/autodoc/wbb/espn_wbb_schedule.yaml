@@ -38,7 +38,7 @@ columns:
   type: character
   description: ''
 - name: highlights
-  type: integer
+  type: character
   description: ''
 - name: notes_type
   type: character
@@ -222,4 +222,10 @@ columns:
   description: ''
 - name: season_type
   type: integer
+  description: ''
+- name: home_logo_dark
+  type: character
+  description: ''
+- name: away_logo_dark
+  type: character
   description: ''

@@ -1,0 +1,18 @@
+schema: nhl_special_teams_value
+kind: dataframe
+columns:
+- name: player_id
+  type: integer
+  description: ''
+- name: pp_toi_minutes
+  type: double
+  description: ''
+- name: pk_toi_minutes
+  type: double
+  description: ''
+- name: pp_value
+  type: double
+  description: ''
+- name: pk_value
+  type: double
+  description: ''

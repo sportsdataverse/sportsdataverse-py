@@ -1,0 +1,21 @@
+schema: catch_prob_surface
+kind: dataframe
+columns:
+- name: position
+  type: integer
+  description: ''
+- name: dist_b
+  type: integer
+  description: ''
+- name: spray_b
+  type: integer
+  description: ''
+- name: la_bin
+  type: integer
+  description: ''
+- name: p_catch
+  type: double
+  description: ''
+- name: n
+  type: integer
+  description: ''

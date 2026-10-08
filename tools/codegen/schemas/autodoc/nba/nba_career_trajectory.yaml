@@ -1,0 +1,4 @@
+schema: nba_career_trajectory
+kind: dataframe
+columns: []
+unverified: 'no capture: its input is a user-built player-age panel (player_id, age, value) that no package function produces'

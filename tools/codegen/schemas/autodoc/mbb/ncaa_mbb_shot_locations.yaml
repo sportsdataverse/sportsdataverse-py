@@ -1,0 +1,33 @@
+schema: ncaa_mbb_shot_locations
+kind: dataframe
+columns:
+- name: game_id
+  type: character
+  description: ''
+- name: period
+  type: integer
+  description: ''
+- name: clock
+  type: character
+  description: ''
+- name: game_seconds
+  type: integer
+  description: ''
+- name: team
+  type: character
+  description: ''
+- name: player
+  type: character
+  description: ''
+- name: shot_result
+  type: character
+  description: ''
+- name: x
+  type: double
+  description: ''
+- name: y
+  type: double
+  description: ''
+- name: shot_dist
+  type: double
+  description: ''

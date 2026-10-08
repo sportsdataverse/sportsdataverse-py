@@ -80,6 +80,23 @@ name column, falling back to the tallest table on the page.
 
 One row per player. A zero-row frame when the page carried no roster.
 
+| col_name | type | description |
+|---|---|---|
+| `player` | character | Player name. |
+| `g` | integer | Games played. |
+| `gs` | integer | Games started. |
+| `min` | double | Minutes played. |
+| `pts` | double | Points scored. |
+| `trb` | double | Career total rebounds. |
+| `ast` | double | Assists. |
+| `tov` | double | Turnovers. |
+| `stl` | double | Steals. |
+| `blk` | double | Blocks. |
+| `fg_pct` | character | Field goal percentage (0-1). |
+| `ft_pct` | character | Free throw percentage (0-1). |
+| `2_p_pct` | character |  |
+| `3_p_pct` | character |  |
+
 **Example**
 
 ```python
@@ -144,6 +161,26 @@ per-100-possession columns), with the requested `min_season` /
 **Returns**
 
 One row per team-season, plus a `team_link` column carrying each team's page path -- the only way to reach `herhoopstats_team_stats` / `herhoopstats_team_roster`. A zero-row frame when nothing matched.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | character | Season identifier (4-digit year or 'YYYY-YY' string). |
+| `team` | character | Team-side label or team identifier. |
+| `g` | integer | Games played. |
+| `w` | integer | Wins. |
+| `l` | integer | Losses. |
+| `win_pct` | character | Win percentage (0-1 decimal). |
+| `pts` | double | Points scored. |
+| `opp_pts` | double | Opponent points. |
+| `net_pts` | double |  |
+| `off_rtg` | double |  |
+| `def_rtg` | double |  |
+| `net_rtg` | double |  |
+| `pace` | double | Possessions per 48 minutes. |
+| `team_link` | character |  |
+| `min_season` | integer |  |
+| `max_season` | integer |  |
+| `division` | integer | Team division. |
 
 **Example**
 

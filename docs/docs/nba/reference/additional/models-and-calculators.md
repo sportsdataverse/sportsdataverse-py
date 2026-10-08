@@ -1,10 +1,10 @@
 ---
-title: "NBA — additional Python functions — Models and calculators: AdjRapmModel–nba_war"
-sidebar_label: "Models and calculators: AdjRapmModel–nba_war"
+title: "NBA — additional Python functions — Models and calculators: AdjRapmModel–nba_rookie"
+sidebar_label: "Models and calculators: AdjRapmModel–nba_rookie"
 sidebar_position: 10
-description: "NBA — additional Python functions — Models and calculators: AdjRapmModel–nba_war — function reference in sdv-py, the SportsDataverse Python package."
+description: "NBA — additional Python functions — Models and calculators: AdjRapmModel–nba_rookie — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# NBA — additional Python functions — Models and calculators: AdjRapmModel–nba_war
+# NBA — additional Python functions — Models and calculators: AdjRapmModel–nba_rookie
 
 ### AdjRapmModel {#AdjRapmModel}
 
@@ -431,6 +431,17 @@ comes from `~sportsdataverse.nba.nba_prediction_constants.get_constants`.
 
 One row per (season, team_id): `season, team_id, adj_off_rtg, adj_def_rtg, adj_net_rtg, raw_off_rtg, raw_def_rtg, games`. Empty input returns that schema with zero rows.
 
+| col_name | type | description |
+|---|---|---|
+| `season` | integer | Season year. |
+| `team_id` | character | Unique team identifier. |
+| `adj_off_rtg` | double |  |
+| `adj_def_rtg` | double |  |
+| `adj_net_rtg` | double |  |
+| `raw_off_rtg` | double |  |
+| `raw_def_rtg` | double |  |
+| `games` | integer | Games played. |
+
 **Example**
 
 ```python
@@ -463,6 +474,13 @@ pace. `avg` is the league baseline pace from
 
 One row per (season, team_id): `season, team_id, adj_pace, raw_pace`. Empty input returns that schema with zero rows.
 
+| col_name | type | description |
+|---|---|---|
+| `season` | integer | Season year. |
+| `team_id` | character | Unique team identifier. |
+| `adj_pace` | double |  |
+| `raw_pace` | double |  |
+
 **Example**
 
 ```python
@@ -486,6 +504,19 @@ Filter a results frame to games strictly before a cutoff date (leakage boundary)
 **Returns**
 
 A `polars.DataFrame` containing only rows with `date < cutoff_date`.
+
+| col_name | type | description |
+|---|---|---|
+| `game_id` | character | Unique game identifier. |
+| `season` | integer | Season year. |
+| `date` | character | Date in YYYY-MM-DD format. |
+| `team_id` | character | Unique team identifier. |
+| `opp_team_id` | character |  |
+| `is_home` | logical | Whether the team was home. |
+| `neutral_site` | logical | Neutral site. |
+| `poss` | double | Poss. |
+| `off_rtg` | double |  |
+| `def_rtg` | double |  |
 
 **Example**
 
@@ -808,6 +839,14 @@ Per-play in-game win-probability features from a `load_nba_pbp` frame.
 
 One row per input play: `score_diff` (home - away), `sec_left` (clipped at 0 -- overtime plays count as 0 seconds left), `sqrt_sec_left`, `pregame_logit`, `home_has_ball` (`Int8`; dead-ball / unknown-team plays are 0).
 
+| col_name | type | description |
+|---|---|---|
+| `score_diff` | double |  |
+| `sec_left` | double |  |
+| `sqrt_sec_left` | double |  |
+| `pregame_logit` | double |  |
+| `home_has_ball` | integer |  |
+
 **Example**
 
 ```python
@@ -856,6 +895,44 @@ tech FT).
 
 `possessions` with an added `la_points: Float64` column (same rows, same order). Empty `possessions` → returned unchanged with an empty `la_points` column.
 
+| col_name | type | description |
+|---|---|---|
+| `game_id` | character | Unique game identifier. |
+| `period` | integer | Period of the game (1-4 quarters; 5+ for OT). |
+| `possession_number` | integer | Possession number. |
+| `offense_team_id` | integer | Unique identifier for offense team. |
+| `defense_team_id` | integer |  |
+| `start_order_index` | integer |  |
+| `end_order_index` | integer |  |
+| `start_seconds_remaining` | double |  |
+| `end_seconds_remaining` | double |  |
+| `points` | integer | Points scored. |
+| `is_second_chance` | logical |  |
+| `number_in_period` | integer |  |
+| `possession_start_type` | character |  |
+| `count_as_possession` | logical |  |
+| `fg2a` | integer |  |
+| `fg2m` | integer |  |
+| `fg3a` | integer | Three-point field goal attempts. |
+| `fg3m` | integer | Three-point field goals made. |
+| `fta` | integer | Free throw attempts. |
+| `ftm` | integer | Free throws made. |
+| `oreb` | integer | Offensive rebounds. |
+| `dreb` | integer | Defensive rebounds. |
+| `tov` | integer | Turnovers. |
+| `off_player_1` | integer |  |
+| `off_player_2` | integer |  |
+| `off_player_3` | integer |  |
+| `off_player_4` | integer |  |
+| `off_player_5` | integer |  |
+| `def_player_1` | integer |  |
+| `def_player_2` | integer |  |
+| `def_player_3` | integer |  |
+| `def_player_4` | integer |  |
+| `def_player_5` | integer |  |
+| `lineup_source` | character |  |
+| `la_points` | double |  |
+
 **Example**
 
 ```python
@@ -901,6 +978,15 @@ Sign convention (matches `~sportsdataverse.nba.nba_rapm.nba_rapm`):
 **Returns**
 
 Frame with columns `player_id` (Int64), `o_adj_rapm` (Float64), `d_adj_rapm` (Float64), `adj_rapm` (Float64), `off_poss` (Int64), `def_poss` (Int64).
+
+| col_name | type | description |
+|---|---|---|
+| `player_id` | integer | Unique player identifier. |
+| `o_adj_rapm` | double |  |
+| `d_adj_rapm` | double |  |
+| `adj_rapm` | double |  |
+| `off_poss` | integer |  |
+| `def_poss` | integer |  |
 
 **Example**
 
@@ -966,6 +1052,8 @@ Faithful BPM 2.0 per player, at season or single-game granularity.
 
 `"season"`: frame with `player_id`, `obpm`, `dbpm`, `bpm`, `min`, `gp` (Int64 player_id/gp, Float64 obpm/dbpm/bpm/min). `"game"`: the same columns prefixed with `game_id` (Utf8), one row per (game_id, player_id). Empty (that schema) input -> zero-row frame with the same schema; never raises on empty.
 
+No returns table is published for this function: no capture: its positions input is nba_player_positions output, which reads stats.nba.com (HTTP 403 to the datacenter IP the docs are built on).
+
 **Example**
 
 ```python
@@ -1006,6 +1094,8 @@ Age-adjust player-season values with the bundled aging curve.
 
 `player_values` plus `age_adjusted_value` (`value / rel_value(age)`, peak-centered) and `proj_next_value` (`value * rel_value(age+1) / rel_value(age)`). Ages outside the bundled curve's range fall back to `rel_value = 1.0` (no adjustment). Empty input returns the zero-row schema.
 
+No returns table is published for this function: no capture: its input is a user-built player-age panel (player_id, age, value) that no package function produces.
+
 **Example**
 
 ```python
@@ -1035,6 +1125,8 @@ Project each player's next-season rating via a per-player Kalman filter + aging 
 **Returns**
 
 `player_id, last_season, forecast_season, filtered_skill, projected_rating, projected_sd`.
+
+No returns table is published for this function: no capture: its input is a multi-season player rating panel with ages per season that no package function produces.
 
 **Example**
 
@@ -1075,6 +1167,15 @@ the binding WP2 ridge-schedule ruling documented in the module docstring.
 
 Frame with `DECAY_RAPM_SCHEMA`. Empty input, or an `asof` that drops every possession, -> zero-row frame.
 
+| col_name | type | description |
+|---|---|---|
+| `player_id` | integer | Unique player identifier. |
+| `o_decay_rapm` | double |  |
+| `d_decay_rapm` | double |  |
+| `decay_rapm` | double |  |
+| `off_poss` | integer |  |
+| `def_poss` | integer |  |
+
 **Example**
 
 ```python
@@ -1114,6 +1215,8 @@ and applies the bundled ridge (`proj_career_value`) / logistic
 **Returns**
 
 Frame `player_id:Utf8, draft_year:Int64, proj_career_value:Float64, draft_prob:Float64, projected_pick:Int64, pro_tier:Utf8` — one row per prospect with combine measurements for that class. `projected_pick` is a contiguous 1..N rank within each draft year. Empty/malformed input returns the zero-row schema, never raises.
+
+No returns table is published for this function: no capture: it reads stats.nba.com, which answers HTTP 403 to the datacenter IP the docs are built on; the function works from a residential IP.
 
 **Example**
 
@@ -1167,6 +1270,8 @@ runs lower than model (3)'s -- see the oracle gate for the observed floor.
 
 One row per player: `player_id` (Int64), `poss`/`tov`/ `expected_tov`/`ball_security_skill` (Float64). Zero-row frame with this schema when the inputs are empty (sparse-coverage leagues never raise).
 
+No returns table is published for this function: no capture: it reads stats.nba.com, which answers HTTP 403 to the datacenter IP the docs are built on; the function works from a residential IP.
+
 **Example**
 
 ```python
@@ -1206,6 +1311,20 @@ govern the response definitions.
 
 Frame with `FOUR_FACTOR_SCHEMA` — `{factor}__off` / `{factor}__def` columns per factor, plus possession counts. Empty input → zero-row frame.
 
+| col_name | type | description |
+|---|---|---|
+| `player_id` | integer | Unique player identifier. |
+| `efg__off` | double |  |
+| `efg__def` | double |  |
+| `ftr__off` | double |  |
+| `ftr__def` | double |  |
+| `orbd__off` | double |  |
+| `orbd__def` | double |  |
+| `tov__off` | double |  |
+| `tov__def` | double |  |
+| `off_poss` | integer |  |
+| `def_poss` | integer |  |
+
 **Example**
 
 ```python
@@ -1244,6 +1363,15 @@ feed. See the fixtures README + SDD ledger.
 
 One row per play: the five feature columns plus `home_win_prob`.
 
+| col_name | type | description |
+|---|---|---|
+| `score_diff` | double |  |
+| `sec_left` | double |  |
+| `sqrt_sec_left` | double |  |
+| `pregame_logit` | double |  |
+| `home_has_ball` | integer |  |
+| `home_win_prob` | double |  |
+
 **Example**
 
 ```python
@@ -1278,6 +1406,15 @@ expected value (`luck_adjusted_response`); 2-pt makes stay realized.
 **Returns**
 
 Frame with `LA_RAPM_SCHEMA`. Empty input → zero-row frame.
+
+| col_name | type | description |
+|---|---|---|
+| `player_id` | integer | Unique player identifier. |
+| `o_la_rapm` | double |  |
+| `d_la_rapm` | double |  |
+| `la_rapm` | double |  |
+| `off_poss` | integer |  |
+| `def_poss` | integer |  |
 
 **Example**
 
@@ -1325,6 +1462,12 @@ low-double-digit points per 100 vs the league defender average.
 
 One row per defender: `player_id` (Int64), `matchup_drapm` (Float64, points-allowed-per-100 estimate, higher = better defense), `matchup_poss` (Float64, total matchup possessions guarded). Returns a zero-row frame with this schema when the upstream fetch/injection is empty or no row survives the `min_matchup_poss` floor (sparse-coverage leagues never raise).
 
+| col_name | type | description |
+|---|---|---|
+| `player_id` | integer | Unique player identifier. |
+| `matchup_drapm` | double |  |
+| `matchup_poss` | double |  |
+
 **Example**
 
 ```python
@@ -1363,6 +1506,8 @@ math column-wise.
 **Returns**
 
 One row per input game: `game_id, home_team_id, away_team_id, exp_margin, home_win_prob, exp_total`. Games whose teams are missing from `ratings` carry nulls.
+
+No returns table is published for this function: no capture: it raises a join-key dtype mismatch on a real schedule (the schedule's home_team_id is Int32, nba_team_ratings' team_id is String).
 
 **Example**
 
@@ -1404,135 +1549,12 @@ output of ①②③):
 
 Frame `player_id:Utf8, draft_year:Int64, proj_rookie_value:Float64, proj_soph_value:Float64, proj_rookie_min:Float64, proj_avail_pct:Float64, pro_tier:Utf8`. Empty input -> zero-row schema.
 
+No returns table is published for this function: no capture: it reads stats.nba.com, which answers HTTP 403 to the datacenter IP the docs are built on; the function works from a residential IP.
+
 **Example**
 
 ```python
 from sportsdataverse.nba import nba_rookie_projection
 board = nba_rookie_projection(2019)
 print(board.sort("proj_rookie_value", descending=True).head())
-```
-
-### nba_spm {#nba_spm}
-
-`nba_spm(box_features: 'pl.DataFrame', coefficients: 'SpmCoefficients', *, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
-
-Apply fitted SPM coefficients to per-100 box features -> OSPM/DSPM/SPM.
-
-Applies a linear scoring rule:
-
-.. code-block:: text
-
-    ospm = X @ o_coef + o_intercept
-    dspm = X @ d_coef + d_intercept
-    spm  = ospm + dspm
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `box_features` | `DataFrame` |  | Per-player per-100 features. Must contain `player_id`, every column in `coefficients.feature_names`, `min`, and `gp`. |
-| `coefficients` | `SpmCoefficients` |  | A `SpmCoefficients` instance from `train_spm`. |
-| `return_as_pandas` | `bool` | `False` | When `True`, return a `pandas.DataFrame` instead of a `polars.DataFrame`. |
-
-**Returns**
-
-Per-player frame with columns `player_id` (Int64), `ospm` (Float64), `dspm` (Float64), `spm` (Float64), `min` (Float64), `gp` (Int64).
-
-**Example**
-
-```python
-from sportsdataverse.nba import nba_spm
-ratings = nba_spm(box_feats, coef)
-print(ratings.sort("spm", descending=True).head())
-
-# Pipeline next step
-
-ratings.filter(pl.col("min") >= 500).sort("spm", descending=True)
-```
-
-### nba_team_ratings {#nba_team_ratings}
-
-`nba_team_ratings(seasons: 'Union[int, list[int]]', *, league_id: 'str' = '00', as_of_date: 'Union[dt.date, None]' = None, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"`
-
-Opponent-adjusted team ratings (AdjOffRtg/AdjDefRtg/AdjNet/AdjPace), as-of-date aware.
-
-Loads schedule + team box score for `seasons`, optionally filters to
-games strictly before `as_of_date` (the leakage boundary, via
-`~sportsdataverse.nba.nba_prediction_constants.as_of_ratings_split`),
-computes per-game efficiency, runs the opponent-adjustment fixed points,
-and adds a per-season dense `rank` (on `adj_net_rtg` descending) and
-`adj_net_z` (z-score of `adj_net_rtg`).
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `seasons` | `Union[int, list[int]]` |  | A season (e.g. `2024`) or list of seasons. |
-| `league_id` | `str` | `'00'` | `"00"` NBA / `"10"` WNBA / `"20"` G-League. |
-| `as_of_date` | `Union[date, None]` | `None` | If given, only games with `date < as_of_date` are used (predictive/backtest usage); `None` computes full-season descriptive ratings. |
-| `return_as_pandas` | `bool` | `False` | Return a pandas frame instead of polars. |
-
-**Returns**
-
-One row per (season, team_id): `season, team_id, adj_off_rtg, adj_def_rtg, adj_net_rtg, adj_pace, raw_off_rtg, raw_def_rtg, raw_pace, games, rank, adj_net_z`. Empty input returns that schema with zero rows.
-
-**Example**
-
-```python
-from sportsdataverse.nba.nba_team_ratings import nba_team_ratings
-ratings = nba_team_ratings(2024)
-ratings.sort("rank").head()
-
-# As-of-date (leakage-safe) ratings for a backtest
-
-import datetime as dt
-ratings = nba_team_ratings(2024, as_of_date=dt.date(2024, 1, 15))
-
-# WNBA / G-League via ``league_id``
-
-wnba_ratings = nba_team_ratings(2024, league_id="10")
-```
-
-### nba_war {#nba_war}
-
-`nba_war(ratings: 'pl.DataFrame', poss: 'pl.DataFrame', *, replacement_level: 'float', pts_per_win: 'float', rating_col: 'str' = 'rating', poss_col: 'str' = 'poss', return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
-
-Points-above-replacement -> wins for each player.
-
-`war_i = (rating_i - replacement_level) * poss_i / 100 / pts_per_win`.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `ratings` | `DataFrame` |  | Per-player rating frame with `player_id` and `rating_col` (e.g. `nba_rapm`'s `rapm` column renamed, a `nba_ratings_panel` row filtered to one date, or `nba_bpm`'s `bpm` column). |
-| `poss` | `DataFrame` |  | Per-player possession-count frame with `player_id` and `poss_col` (e.g. `off_poss + def_poss` from `nba_rapm`). |
-| `replacement_level` | `float` |  | Per-100-possession rating of a replacement-level player. No built-in default — calibrate via `calibrate_replacement_level`. |
-| `pts_per_win` | `float` |  | Points of season point-margin per marginal win. No built-in default — calibrate via `calibrate_pts_per_win`. |
-| `rating_col` | `str` | `'rating'` | Column in `ratings` to score. |
-| `poss_col` | `str` | `'poss'` | Column in `poss` giving total possessions played. |
-| `return_as_pandas` | `bool` | `False` | Return pandas instead of polars. |
-
-**Returns**
-
-Frame with `WAR_SCHEMA` columns (`player_id`, `war`). Empty (that schema) when either input is empty.
-
-**Example**
-
-```python
-from sportsdataverse.nba.nba_war import nba_war
-war = nba_war(rapm_df.rename({"rapm": "rating"}), poss_df,
-               replacement_level=-2.0, pts_per_win=250.0)
-print(war.sort("war", descending=True).head())
-
-# Derive both required kwargs from real data first
-
-from sportsdataverse.nba.nba_war import (
-    calibrate_pts_per_win, calibrate_replacement_level, nba_war,
-)
-pts_per_win = calibrate_pts_per_win(team_standings)
-repl = calibrate_replacement_level(
-    ratings, poss, pts_per_win=pts_per_win, target_total_war=300.0,
-)
-war = nba_war(ratings, poss, replacement_level=repl, pts_per_win=pts_per_win)
 ```

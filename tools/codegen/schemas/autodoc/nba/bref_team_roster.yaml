@@ -1,0 +1,36 @@
+schema: bref_team_roster
+kind: dataframe
+columns:
+- name: number
+  type: double
+  description: ''
+- name: player
+  type: character
+  description: ''
+- name: pos
+  type: character
+  description: ''
+- name: height
+  type: character
+  description: ''
+- name: weight
+  type: double
+  description: ''
+- name: birth_date
+  type: character
+  description: ''
+- name: flag
+  type: character
+  description: ''
+- name: years_experience
+  type: character
+  description: ''
+- name: college
+  type: character
+  description: ''
+- name: team
+  type: character
+  description: ''
+- name: season
+  type: integer
+  description: ''

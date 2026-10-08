@@ -1,0 +1,9 @@
+schema: special_teams_ratings
+kind: dataframe
+columns:
+- name: team_id
+  type: character
+  description: ''
+- name: adj_st_epa
+  type: double
+  description: ''

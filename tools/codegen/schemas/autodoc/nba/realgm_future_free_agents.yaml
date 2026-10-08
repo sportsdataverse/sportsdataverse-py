@@ -1,0 +1,42 @@
+schema: realgm_future_free_agents
+kind: dataframe
+columns:
+- name: player
+  type: character
+  description: ''
+- name: pos
+  type: character
+  description: ''
+- name: team
+  type: character
+  description: ''
+- name: season
+  type: character
+  description: ''
+- name: age
+  type: integer
+  description: ''
+- name: yos
+  type: integer
+  description: ''
+- name: veteran_fa_status
+  type: character
+  description: ''
+- name: gp
+  type: integer
+  description: ''
+- name: pts
+  type: double
+  description: ''
+- name: reb
+  type: double
+  description: ''
+- name: ast
+  type: double
+  description: ''
+- name: per
+  type: double
+  description: ''
+- name: agent
+  type: character
+  description: ''

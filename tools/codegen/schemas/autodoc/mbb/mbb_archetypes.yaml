@@ -1,0 +1,27 @@
+schema: mbb_archetypes
+kind: dataframe
+columns:
+- name: player_id
+  type: character
+  description: ''
+- name: player
+  type: character
+  description: ''
+- name: season
+  type: integer
+  description: ''
+- name: team_id
+  type: character
+  description: ''
+- name: min
+  type: double
+  description: ''
+- name: archetype
+  type: character
+  description: ''
+- name: cluster
+  type: integer
+  description: ''
+- name: dist_to_center
+  type: double
+  description: ''

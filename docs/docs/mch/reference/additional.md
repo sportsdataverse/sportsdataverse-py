@@ -32,6 +32,16 @@ the completed games, and adjusts with
 
 One row per team: `team_id, adj_off, adj_def, adj_net, raw_off, raw_def, games`.
 
+| col_name | type | description |
+|---|---|---|
+| `team_id` | character |  |
+| `adj_off` | double |  |
+| `adj_def` | double |  |
+| `adj_net` | double |  |
+| `raw_off` | double |  |
+| `raw_def` | double |  |
+| `games` | integer |  |
+
 **Example**
 
 ```python

@@ -1,0 +1,4 @@
+schema: nba_darko
+kind: dataframe
+columns: []
+unverified: 'no capture: its input is a multi-season player rating panel with ages per season that no package function produces'

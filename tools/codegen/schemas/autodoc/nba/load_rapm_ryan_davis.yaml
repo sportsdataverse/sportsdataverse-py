@@ -1,0 +1,30 @@
+schema: load_rapm_ryan_davis
+kind: dataframe
+columns:
+- name: player_id
+  type: integer
+  description: ''
+- name: player_name
+  type: character
+  description: ''
+- name: season
+  type: character
+  description: ''
+- name: LA_RAPM
+  type: double
+  description: ''
+- name: RAPM
+  type: double
+  description: ''
+- name: RA_EFG
+  type: double
+  description: ''
+- name: RA_FTR
+  type: double
+  description: ''
+- name: RA_ORBD
+  type: double
+  description: ''
+- name: RA_TOV
+  type: double
+  description: ''

@@ -1,0 +1,5 @@
+schema: nba_bpm
+kind: dataframe
+columns: []
+unverified: 'no capture: its positions input is nba_player_positions output, which reads stats.nba.com (HTTP 403 to the datacenter
+  IP the docs are built on)'

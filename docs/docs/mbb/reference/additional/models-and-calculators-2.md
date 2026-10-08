@@ -1,10 +1,229 @@
 ---
-title: "MBB — additional Python functions — Models and calculators: calc_slow–win_prob"
-sidebar_label: "Models and calculators: calc_slow–win_prob"
+title: "MBB — additional Python functions — Models and calculators: build_productivity–slow_regression"
+sidebar_label: "Models and calculators: build_productivity–slow_regression"
 sidebar_position: 10
-description: "MBB — additional Python functions — Models and calculators: calc_slow–win_prob — function reference in sdv-py, the SportsDataverse Python package."
+description: "MBB — additional Python functions — Models and calculators: build_productivity–slow_regression — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# MBB — additional Python functions — Models and calculators: calc_slow–win_prob
+# MBB — additional Python functions — Models and calculators: build_productivity–slow_regression
+
+### build_productivity {#build_productivity}
+
+`build_productivity(o_rtg: 'float', o_adj: 'float', usage: 'float', avg_efficiency: 'float') -> 'dict[str, float]'`
+
+Public port of `RatingUtils.buildProductivity` (`RatingUtils.ts:963-990`).
+
+Promoted to public in Task 2.3 -- see the module docstring's "Ported
+behavior" section for the promotion rationale (Phase-3 RAPM needs to
+import this across module boundaries).
+
+Converts `ORtg` and a few other numbers into "productivity" using Dean
+Oliver's PUE ("Player Usage Efficiency") formulation, SoS-adjusted via
+`o_adj = avgEfficiency / Def_SOS`. **RAPM prior source (Phase 3):**
+`Adj_ORtgPlus` is the value RAPM uses as an individual-offense prior --
+see `PLAN-phase2.md`'s self-review notes.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `o_rtg` | `float` |  | The player's (possibly override-adjusted) `ORtg`. |
+| `o_adj` | `float` |  | `avg_efficiency / Def_SOS` -- the strength-of-schedule adjustment factor. |
+| `usage` | `float` |  | `100 * TotPoss / (Team_Poss or 1)` -- the player's possession-usage percentage. |
+| `avg_efficiency` | `float` |  | The league/context average efficiency (`100` in every vendored jest call). |
+
+**Returns**
+
+`{"Adj_ORtg": float, "Adj_ORtgPlus": float, "Usage_Bonus": float, "SoS_Bonus": float}` -- keys kept TS-verbatim (see module docstring's naming-convention note).
+
+### build_weak_prior_from_rapm {#build_weak_prior_from_rapm}
+
+`build_weak_prior_from_rapm(rapm_results: 'list[float]', off_or_def: 'str') -> 'list[dict[str, float]]'`
+
+Wrap a flat RAPM-estimate vector into `playersWeak`-shaped dicts.
+
+Faithful port of `RapmUtils.buildWeakPriorFromRapm` (`RapmUtils.ts:410-419`),
+used only by `pick_ridge_regression`'s `use_recursive_weak_prior`
+branch to substitute the just-computed (pre-strong-prior) RAPM values as
+the *weak* prior for a follow-up `apply_weak_priors` call -- "the
+recursive prior" per the upstream `/** For "recursive" prior */` comment.
+
+**Uncovered by the oracle** -- `semiRealRapmResults.testContext.priorInfo
+.useRecursiveWeakPrior` is `false`, so `RapmUtils.test.ts`'s
+`"pickRidgeRegression"` test never calls this function. Ported
+faithfully from TS regardless (per "TS governs"); flagged as a documented
+gap rather than backed by a synthetic test, matching this module's
+existing convention for other upstream-untested branches (e.g. the
+"Task 3.3 coverage gap" note above).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `rapm_results` | `list[float]` |  | A flat per-player RAPM estimate vector, e.g. `pick_ridge_regression`'s own `results_pre_prior`. |
+| `off_or_def` | `str` |  | `"off"` or `"def"` -- selects the output key, `f"{off_or_def}_adj_ppp"`. |
+
+**Returns**
+
+One `{f"{off_or_def}_adj_ppp": rapm}` dict per input element, index-aligned with `rapm_results`.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_rapm import build_weak_prior_from_rapm
+
+weak_prior = build_weak_prior_from_rapm([5.0, 4.5], "off")
+print(weak_prior[0])  # {"off_adj_ppp": 5.0}
+```
+
+### calc_collinearity_diag {#calc_collinearity_diag}
+
+`calc_collinearity_diag(weight_matrix: 'NDArray[np.float64]', ctx: 'RapmPlayerContext') -> 'RapmPreProcDiagnostics'`
+
+Multi-collinearity diagnostic between the players in an off/def design matrix.
+
+Faithful port of `RapmUtils.calcCollinearityDiag` (`RapmUtils.ts:1629-1760`).
+Runs an SVD of `weight_matrix`, builds condition indices ("lineup
+combos") from the ratio of the largest to each singular value, and a
+variance-decomposition-proportions ("VDP") matrix identifying which
+players load onto which collinear combo -- the classic Belsley-Kuh-Welsch
+collinearity-diagnostics recipe (see the upstream comment's
+[colldiag.m](https://github.com/brian-lau/colldiag/blob/master/colldiag.m)
+citation). Also builds a plain Pearson player/player correlation matrix
+(calc_player_correlations`) and folds it into a possession
+-weighted `adaptive_correl_weights` summary per player.
+
+**`numpy.linalg.svd(weight_matrix, full_matrices=False)` replaces
+`svd-js`'s `SVD(weightMatrix, false)`.** Both are the standard
+Golub-Kahan-Reinsch decomposition (`A = U @ diag(S) @ Vᵀ`); numpy's
+`Vh` return value already *is* `Vᵀ` (what the TS code separately
+computes via `transpose(matrix(v))`), so this port skips that
+transpose. The TS code (and this port) never reads `u`/the first SVD
+return -- only `q`/`S` (singular values) and `v`/`Vᵀ`. Singular
+-vector **sign is immaterial here**: every place `V` is used
+(`phiMatrix`/`phi_matrix`) squares each entry (`val * val`), and a
+per-singular-value sign flip on `U`/`V` together is a valid SVD
+regardless -- so any `U`/`V` sign convention difference between
+`svd-js` and LAPACK (numpy's backend) cannot change this function's
+output. **Singular-value ordering is likewise immaterial**: both this
+port and the TS source explicitly re-sort `q` (ascending, carrying the
+original index along) before using it, so whichever order either SVD
+implementation returns values in, the final result only depends on the
+*values themselves* (up to the explicit resort), not on numpy's native
+descending convention vs whatever order `svd-js` happens to return.
+
+**`correl_matrix`/`poss_correl_matrix` stay `numpy.ndarray`** (see
+the module docstring's "Task 3.6 notes" for why this doesn't hit the
+Task 3.5 "`ndarray` breaks deep `==`" concern).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `weight_matrix` | `NDArray[float64]` |  | An off/def design matrix, shape `(num_lineups, ctx["num_players"])` (e.g. `calc_player_weights`'s first return value, or a hand-built matrix for isolated testing). |
+| `ctx` | `RapmPlayerContext` |  | A `RapmPlayerContext`. `ctx["num_players"]` sizes every per-player structure; `ctx["col_to_player"]` keys `player_combos`. |
+
+**Returns**
+
+A `RapmPreProcDiagnostics`.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_rapm import calc_collinearity_diag, calc_player_weights
+
+off_weights, _ = calc_player_weights(ctx)
+diag = calc_collinearity_diag(off_weights, ctx)
+print(diag["lineup_combos"][0])  # the worst-conditioned combo
+```
+
+### calc_lineup_outputs {#calc_lineup_outputs}
+
+`calc_lineup_outputs(field: 'str', off_offset: 'float', def_offset: 'float', ctx: 'RapmPlayerContext', adaptive_correl_weights: 'list[float] | None' = None, use_old_val_if_possible: 'tuple[bool, bool]' = (False, False)) -> 'list[NDArray[np.float64]]'`
+
+Build the off/def target vectors the RAPM design matrices are fit against.
+
+Faithful port of `RapmUtils.calcLineupOutputs` (`RapmUtils.ts:598-751`).
+For each filtered lineup, computes a possession-weighted residual: the
+lineup's own stat value, plus any global luck adjustment, minus the
+accumulated "prior offset" contributed by every player on the lineup
+(a strong-prior blend for kept players -- see get_strong_weight`
+-- or a fixed baseline contribution for removed players).
+
+Upstream keeps this as a plain `Array<Array<number>>` (*not* a mathjs
+`Matrix`, unlike `calc_player_weights`'s `offWeights`/
+`defWeights` -- `RapmUtils.test.ts`'s own `tidyResults` helper for
+this function has a visibly different shape, see the classification map
+in `tests/fixtures/hoop_explorer/README.md`). This port still
+materializes both output vectors as `numpy.ndarray` for consistency
+with `calc_player_weights` at the same dict -> array boundary --
+Task 3.4's ridge-regression solve consumes both as arrays regardless of
+the upstream distinction.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `field` | `str` |  | The stat suffix to read off each lineup, e.g. `"adj_ppp"` (read as `{prefix}_{field}`, e.g. `"off_adj_ppp"`). |
+| `off_offset` | `float` |  | The D1-average offensive value for `field` (the regression's starting/baseline value on the RHS). |
+| `def_offset` | `float` |  | The D1-average defensive value for `field`. |
+| `ctx` | `RapmPlayerContext` |  | A `RapmPlayerContext`, e.g. from `build_player_context`. |
+| `adaptive_correl_weights` | `list[float] \| None` | `None` | Optional per-player adaptive-correlation weights (index-aligned with `ctx["col_to_player"]`), used as the strong-prior blend fallback when `ctx["prior_info"] ["strong_weight"] < 0` -- see get_strong_weight`. |
+| `use_old_val_if_possible` | `tuple[bool, bool]` | `(False, False)` | `(use_old_val_for_off, use_old_val_for_def)` -- whether to prefer each lineup/team stat's luck-adjusted `old_value` over its raw `value` when present. This is the luck-adjustment hook Task 3.1's classification map flags as an **inherited coverage gap**: the vendored oracle fixture has `old_value == value` on every field (via `insertOldValues`), so neither jest nor this port's replay test ever observes this flag change the resulting numbers -- only that passing it doesn't crash. See the module docstring's "Task 3.3 coverage gap" note. |
+
+**Returns**
+
+`[off_outputs, def_outputs]` -- two 1-D `numpy.ndarray` target vectors, index-aligned with `ctx["filtered_lineups"]("off"/"def")` (plus one extra element each when `ctx["unbias_weight"] > 0`, an "unbiasing observation" target -- always unreached in production, same as `calc_player_weights`'s extra row).
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_rapm import calc_lineup_outputs
+
+off_outputs, def_outputs = calc_lineup_outputs(
+    "adj_ppp", 100.0, 100.0, ctx
+)
+print(off_outputs.shape)  # (num_off_lineups,)
+
+# Luck-adjusted variant (reads ``old_value`` where present)
+
+off_luck, def_luck = calc_lineup_outputs(
+    "adj_ppp", 100.0, 100.0, ctx, use_old_val_if_possible=(True, True)
+)
+```
+
+### calc_player_weights {#calc_player_weights}
+
+`calc_player_weights(ctx: 'RapmPlayerContext') -> 'list[NDArray[np.float64]]'`
+
+Build the off/def player-weight (design) matrices for the RAPM solve.
+
+Faithful port of `RapmUtils.calcPlayerWeights` (`RapmUtils.ts:544-595`).
+One row per (filtered) lineup, one column per remaining player; each
+filled cell is `sqrt(lineup_possessions / total_side_possessions)` --
+the possession-weighted design-matrix entry the ridge regression (Task
+3.4) solves against. This is the first function in the module where a
+`dict`-shaped `RapmPlayerContext` gets materialized into a
+`numpy.ndarray` -- see the module docstring's "dict -> `numpy.ndarray`
+boundary" note.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `ctx` | `RapmPlayerContext` |  | A `RapmPlayerContext`, e.g. from `build_player_context`. |
+
+**Returns**
+
+`[off_weights, def_weights]` -- two `numpy.ndarray` matrices of shape `(num_{off,def}_lineups [+1 if ctx["unbias_weight"] > 0], ctx["num_players"])`. The optional extra row (only emitted when `ctx["unbias_weight"] > 0` -- always `0.0` in production per `build_player_context`'s hardcoded local, but settable directly on the returned context dict, as the oracle test does) holds each column's `unbias_weight`-scaled sum-of-squares, an "unbiasing observation" row (`RapmUtils.ts:578-593`).
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_rapm import calc_player_weights
+
+off_weights, def_weights = calc_player_weights(ctx)
+print(off_weights.shape)  # (num_off_lineups, num_players)
+```
 
 ### calc_slow_pseudo_inverse {#calc_slow_pseudo_inverse}
 
@@ -212,6 +431,13 @@ Bucket predicted probabilities into bins and compare to actual outcome rates.
 
 A `polars.DataFrame` with columns `bin_mid`, `mean_pred`, `mean_actual`, `n` (one row per non-empty bin).
 
+| col_name | type | description |
+|---|---|---|
+| `bin_mid` | double |  |
+| `mean_pred` | double |  |
+| `mean_actual` | double |  |
+| `n` | integer |  |
+
 **Example**
 
 ```python
@@ -306,6 +532,14 @@ Per-play in-game win-probability features from a `load_mbb_pbp` frame.
 **Returns**
 
 One row per input play: `score_diff` (home - away), `sec_left` (clipped at 0 -- overtime plays count as 0 seconds left), `sqrt_sec_left`, `pregame_logit`, `home_has_ball` (`Int8`; dead-ball / unknown-team plays are 0).
+
+| col_name | type | description |
+|---|---|---|
+| `score_diff` | double |  |
+| `sec_left` | double |  |
+| `sqrt_sec_left` | double |  |
+| `pregame_logit` | double |  |
+| `home_has_ball` | integer |  |
 
 **Example**
 
@@ -521,6 +755,17 @@ average; positive = good on both ends).
 
 One row per (player_id, season, team_id): `player_id:Utf8, player, season, team_id:Utf8, min, box_obpm, box_dbpm, box_bpm`. Empty input returns the schema with zero rows.
 
+| col_name | type | description |
+|---|---|---|
+| `player_id` | character | Unique player identifier. |
+| `player` | character | Player name. |
+| `season` | integer | Season year. |
+| `team_id` | character | Unique team identifier. |
+| `min` | double | Minutes played. |
+| `box_obpm` | double |  |
+| `box_dbpm` | double |  |
+| `box_bpm` | double |  |
+
 **Example**
 
 ```python
@@ -559,6 +804,8 @@ early columns are 1.0 for everyone (trivially reached).
 
 One row per field team: `team_id, seed?, reach_r32, reach_s16, reach_e8, reach_f4, reach_final, champion` (probabilities).
 
+No returns table is published for this function: no capture: it needs a bracket-ordered field whose size is a power of two, and no package function returns one.
+
 **Example**
 
 ```python
@@ -588,6 +835,16 @@ expected overall pick conditional on being drafted (lower = better);
 **Returns**
 
 One row per qualifying player-season: `player_id:Utf8, player, season, team_id:Utf8, draft_prob, projected_pick, pro_tier`. Empty input returns the schema with zero rows.
+
+| col_name | type | description |
+|---|---|---|
+| `player_id` | character | Unique player identifier. |
+| `player` | character | Player name. |
+| `season` | integer | Season year. |
+| `team_id` | character | Unique team identifier. |
+| `draft_prob` | double |  |
+| `projected_pick` | double |  |
+| `pro_tier` | character |  |
 
 **Example**
 
@@ -623,6 +880,15 @@ gate season so the calibration backtest stays out-of-sample).
 
 One row per play: the five feature columns plus `home_win_prob`.
 
+| col_name | type | description |
+|---|---|---|
+| `score_diff` | double |  |
+| `sec_left` | double |  |
+| `sqrt_sec_left` | double |  |
+| `pregame_logit` | double |  |
+| `home_has_ball` | integer |  |
+| `home_win_prob` | double |  |
+
 **Example**
 
 ```python
@@ -654,6 +920,8 @@ Joins the ratings frame twice (home / away) and applies the closed-form
 **Returns**
 
 One row per input game: `game_id, home_team_id, away_team_id, exp_margin, home_win_prob, exp_total`. Games whose teams are missing from `ratings` carry nulls.
+
+No returns table is published for this function: no capture: it needs a schedule with home_team_id / away_team_id columns, and no package function returns one (load_mbb_schedule ships home_id / away_id).
 
 **Example**
 
@@ -688,6 +956,18 @@ college athlete id).
 
 One row per recruit: `recruit_id:Utf8, player_id:Utf8 (nullable), player, season, team_id:Utf8, composite, rank_nat, exp_box_bpm, resume_residual`. Empty input returns the schema with zero rows.
 
+| col_name | type | description |
+|---|---|---|
+| `recruit_id` | character |  |
+| `player_id` | character | Unique player identifier. |
+| `player` | character | Player name. |
+| `season` | integer | Season year. |
+| `team_id` | character | Unique team identifier. |
+| `composite` | double |  |
+| `rank_nat` | integer |  |
+| `exp_box_bpm` | double |  |
+| `resume_residual` | double |  |
+
 **Example**
 
 ```python
@@ -720,6 +1000,8 @@ Monte Carlo the remaining schedule: expected wins + title odds.
 
 One row per team: `season, team_id, exp_wins` (mean simulated total wins), `playoff_prob` (share of sims finishing in the top 68 win totals -- a field-size proxy, ties broken by `adj_em`) and `conf_title_prob` (share of sims with the most wins among conference members; ties count for every tied team; null without a `conference` column).
 
+No returns table is published for this function: no capture: it needs a schedule with home_team_id / away_team_id columns, and no package function returns one (load_mbb_schedule ships home_id / away_id).
+
 **Example**
 
 ```python
@@ -745,6 +1027,17 @@ Per-shooter EB-regressed make% over expected + points over expected.
 **Returns**
 
 One row per shooter: `shooter_id:Utf8, n_shots, make_rate, xmake_mean, oe_pct, oe_pct_regressed, points_over_expected, poe_per_100`. Empty input returns the zero-row schema.
+
+| col_name | type | description |
+|---|---|---|
+| `shooter_id` | character | Unique identifier for shooter. |
+| `n_shots` | integer |  |
+| `make_rate` | double |  |
+| `xmake_mean` | double |  |
+| `oe_pct` | double |  |
+| `oe_pct_regressed` | double |  |
+| `points_over_expected` | double |  |
+| `poe_per_100` | double |  |
 
 **Example**
 
@@ -775,6 +1068,25 @@ Score each shot with `xmake` / `xpoints` from the cell table.
 **Returns**
 
 `shots`'s columns plus `xmake:Float64, xpoints:Float64` (null for cells absent from the model). Empty input returns the input schema plus the two columns, zero rows.
+
+| col_name | type | description |
+|---|---|---|
+| `game_id` | character | Unique game identifier. |
+| `season` | integer | Season year. |
+| `team_id` | character | Unique team identifier. |
+| `shooter_id` | character | Unique identifier for shooter. |
+| `shot_x` | double |  |
+| `shot_y` | double |  |
+| `dist_ft` | double |  |
+| `shot_zone` | character |  |
+| `shot_type` | character | Shot type label (e.g. 'Jump Shot', 'Layup'). |
+| `made` | logical |  |
+| `point_value` | integer |  |
+| `period` | integer | Period of the game (1-4 quarters; 5+ for OT). |
+| `sec_left` | double |  |
+| `source` | character |  |
+| `xmake` | double |  |
+| `xpoints` | double |  |
 
 **Example**
 
@@ -811,6 +1123,16 @@ strength from their zone; `xpoints = make_rate_shrunk * point_value`
 
 One row per `(shot_zone, shot_type)`: `shot_zone, shot_type, n, make_rate_raw, make_rate_shrunk, point_value, xpoints`. Empty input returns the zero-row schema.
 
+| col_name | type | description |
+|---|---|---|
+| `shot_zone` | character |  |
+| `shot_type` | character | Shot type label (e.g. 'Jump Shot', 'Layup'). |
+| `n` | integer |  |
+| `make_rate_raw` | double |  |
+| `make_rate_shrunk` | double |  |
+| `point_value` | double |  |
+| `xpoints` | double |  |
+
 **Example**
 
 ```python
@@ -843,6 +1165,20 @@ runs the opponent-adjustment fixed points, and adds a per-season dense
 **Returns**
 
 One row per (season, team_id) with columns `season, team_id, adj_o, adj_d, adj_em, adj_tempo, raw_o, raw_d, games, rank, adj_em_z`. Empty input returns that schema with zero rows.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | integer | Season year. |
+| `team_id` | character | Unique team identifier. |
+| `adj_o` | double | Adj o. |
+| `adj_d` | double | Adj d. |
+| `adj_em` | double | Adj em. |
+| `adj_tempo` | double |  |
+| `raw_o` | double | Raw o. |
+| `raw_d` | double | Raw d. |
+| `games` | integer | Games played. |
+| `rank` | integer | Rank. |
+| `adj_em_z` | double |  |
 
 **Example**
 
@@ -878,6 +1214,17 @@ move-related change; typically shrinks stars toward the mean).
 **Returns**
 
 One row per transfer: `player_id:Utf8, player, from_team_id:Utf8, to_team_id:Utf8, to_season:Int64, pre_box_bpm, proj_box_bpm, proj_delta`. Transfers without a qualifying pre-season sample are dropped. Empty input returns the schema with zero rows.
+
+| col_name | type | description |
+|---|---|---|
+| `player_id` | character | Unique player identifier. |
+| `player` | character | Player name. |
+| `from_team_id` | character | Unique identifier for from team. |
+| `to_team_id` | character | Unique identifier for to team. |
+| `to_season` | integer |  |
+| `pre_box_bpm` | double |  |
+| `proj_box_bpm` | double |  |
+| `proj_delta` | double |  |
 
 **Example**
 
@@ -1019,6 +1366,29 @@ Per-100 / rate features for every (player_id, season).
 **Returns**
 
 One row per (player_id, season): ids as `Utf8` plus the 17 rate / per-100 features. Empty input returns the schema with zero rows.
+
+| col_name | type | description |
+|---|---|---|
+| `player_id` | character | Unique player identifier. |
+| `season` | integer | Season year. |
+| `team_id` | character | Unique team identifier. |
+| `min` | double | Minutes played. |
+| `usage` | double | Usage rate. |
+| `ts_pct` | double | True shooting percentage (0-1). |
+| `efg_pct` | double |  |
+| `ast_pct` | double | Assist percentage. |
+| `tov_pct` | double |  |
+| `oreb_pct` | double |  |
+| `dreb_pct` | double |  |
+| `blk_pct` | double | Blocks percentage (0-1 decimal). |
+| `stl_pct` | double | Steals percentage (0-1 decimal). |
+| `ftr` | double | Free-throw rate (offense). |
+| `rim_share` | double |  |
+| `mid_share` | double |  |
+| `three_share` | double |  |
+| `pts_per100` | double |  |
+| `reb_per100` | double |  |
+| `ast_per100` | double |  |
 
 **Example**
 
@@ -1170,6 +1540,19 @@ Per-team, per-game possessions + raw offensive/defensive efficiency.
 **Returns**
 
 One row per (game_id, team_id): `game_id, season, date, team_id, opp_team_id, is_home, neutral_site, poss, off_eff, def_eff`. Empty input returns that schema with zero rows. Team-game rows whose possession estimate is non-positive (an all-zero ESPN boxscore shell) are dropped with a `UserWarning` -- their efficiency is undefined, and one of them poisons the whole season's fixed point. Games in which either team still has 0 turnovers are dropped the same way: the possession estimate would miss its turnover term.
+
+| col_name | type | description |
+|---|---|---|
+| `game_id` | character | Unique game identifier. |
+| `season` | integer | Season year. |
+| `date` | character | Date in YYYY-MM-DD format. |
+| `team_id` | character | Unique team identifier. |
+| `opp_team_id` | character |  |
+| `is_home` | logical | Whether the team was home. |
+| `neutral_site` | logical | Neutral site. |
+| `poss` | double | Poss. |
+| `off_eff` | double | Off eff. |
+| `def_eff` | double | Def eff. |
 
 **Example**
 
@@ -1367,104 +1750,4 @@ from sportsdataverse.mbb.mbb_rapm import slow_regression, calculate_rapm
 x = np.array([[1.0, 0.0], [0.0, 1.0], [1.0, 1.0]])
 solver = slow_regression(x, 1.0, ctx)  # ctx["num_players"] == 2
 rapm = calculate_rapm(solver, [1.0, 2.0, 3.0])
-```
-
-### spearman_corr {#spearman_corr}
-
-`spearman_corr(a: 'np.ndarray', b: 'np.ndarray') -> 'float'`
-
-Spearman rank correlation between two arrays.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `a` | `ndarray` |  | First array of values. |
-| `b` | `ndarray` |  | Second array of values (same length as `a`). |
-
-**Returns**
-
-The Spearman rank correlation coefficient.
-
-**Example**
-
-```python
-import numpy as np
-from sportsdataverse._common.metrics import spearman_corr
-spearman_corr(np.array([1, 2, 3]), np.array([3, 1, 2]))
-```
-
-### talent_split_mse {#talent_split_mse}
-
-`talent_split_mse(scored: 'pl.DataFrame', *, k: 'float', seed: 'int' = 0) -> 'float'`
-
-Weighted MSE of the k-regressed first half predicting the raw second half.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `scored` | `DataFrame` |  | `mbb_shot_quality` output. |
-| `k` | `float` |  | Shrinkage pseudo-shots to evaluate. |
-| `seed` | `int` | `0` | Split seed. |
-
-**Returns**
-
-`sum(n_h2 * (oe_h1 * n_h1/(n_h1+k) - oe_h2)^2) / sum(n_h2)`.
-
-**Example**
-
-```python
-from sportsdataverse.mbb.mbb_shooter_talent import talent_split_mse
-talent_split_mse(scored, k=200.0)
-```
-
-### transfer_cohort {#transfer_cohort}
-
-`transfer_cohort(rosters: 'pl.DataFrame') -> 'pl.DataFrame'`
-
-One row per transfer: same `player_id`, different `team_id` in
-
-consecutive seasons.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `rosters` | `DataFrame` |  | Frame with `player_id`, `team_id`, `season` (extra columns ignored; one row per player-season-team). |
-
-**Returns**
-
-`player_id: Utf8, from_team_id:Utf8, to_team_id:Utf8, from_season:Int64, to_season:Int64` -- a player transferring twice appears twice.
-
-**Example**
-
-```python
-from sportsdataverse.mbb import mbb_box_bpm, transfer_cohort
-bpm = mbb_box_bpm([2025, 2026]).filter(pl.col("min") >= 150)
-moves = transfer_cohort(bpm.select("player_id", "team_id", "season"))
-```
-
-### win_prob_from_margin {#win_prob_from_margin}
-
-`win_prob_from_margin(exp_margin: 'float', *, league: 'str' = 'mens') -> 'float'`
-
-Home win probability from an expected margin (normal-CDF closed form).
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `exp_margin` | `float` |  | Expected home-minus-away margin in points. |
-| `league` | `str` | `'mens'` | `"mens"` or `"womens"` (selects the fitted margin sigma). |
-
-**Returns**
-
-Probability the home team wins, in `(0, 1)`.
-
-**Example**
-
-```python
-from sportsdataverse.mbb.mbb_game_predict import win_prob_from_margin
-win_prob_from_margin(5.0)
 ```

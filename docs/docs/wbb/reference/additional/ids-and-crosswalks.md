@@ -1,7 +1,7 @@
 ---
 title: "WBB — additional Python functions — IDs and crosswalks"
 sidebar_label: "IDs and crosswalks"
-sidebar_position: 12
+sidebar_position: 13
 description: "WBB — additional Python functions — IDs and crosswalks — function reference in sdv-py, the SportsDataverse Python package."
 ---
 # WBB — additional Python functions — IDs and crosswalks
@@ -393,6 +393,13 @@ season). Algorithm detail:
 
 DataFrame with columns `team` (str), `conference` (str), `id` (Int64 — the season-specific stats.ncaa.org team id) and `season` (str, `"YYYY-YY"`).
 
+| col_name | type | description |
+|---|---|---|
+| `team` | character | Team-side label or team identifier. |
+| `conference` | character | Filter players or teams by conference. |
+| `id` | integer | Unique play identification number |
+| `season` | character | Season identifier (4-digit year or 'YYYY-YY' string). |
+
 **Example**
 
 ```python
@@ -499,6 +506,8 @@ for WBB, so it is not joined; Yahoo columns are null placeholders.
 
 `pl.DataFrame` (or pandas), one row per ESPN athlete, 17 columns ending in `match_method` / `match_confidence` / `match_keys`.
 
+No returns table is published for this function: no capture: barttorvik.com answers HTTP 403 to the datacenter IP the docs are built on.
+
 **Example**
 
 ```python
@@ -538,6 +547,8 @@ games whose teams cannot be resolved to ESPN ids survive as `bart_only`.
 
 `pl.DataFrame` (or pandas) with `SCHEDULE_COLUMNS`.
 
+No returns table is published for this function: no capture: barttorvik.com answers HTTP 403 to the datacenter IP the docs are built on.
+
 **Example**
 
 ```python
@@ -574,6 +585,8 @@ bridge); Torvik on the normalized school name after the
 **Returns**
 
 `pl.DataFrame` (or pandas), one row per ESPN team, with `TEAM_COLUMNS`.
+
+No returns table is published for this function: no capture: barttorvik.com answers HTTP 403 to the datacenter IP the docs are built on.
 
 **Example**
 

@@ -1,0 +1,4 @@
+schema: wbb_season_sim
+kind: dataframe
+columns: []
+unverified: 'no capture: it raises KeyError on a real schedule (the schedule''s team ids are integers, the ratings'' are strings)'

@@ -1,0 +1,27 @@
+schema: load_lebron_season
+kind: dataframe
+columns:
+- name: player_id
+  type: integer
+  description: ''
+- name: player_name
+  type: character
+  description: ''
+- name: seasons
+  type: character
+  description: ''
+- name: team
+  type: character
+  description: ''
+- name: lebron
+  type: double
+  description: ''
+- name: o_lebron
+  type: double
+  description: ''
+- name: d_lebron
+  type: double
+  description: ''
+- name: war
+  type: double
+  description: ''

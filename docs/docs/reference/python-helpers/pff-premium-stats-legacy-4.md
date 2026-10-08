@@ -684,6 +684,8 @@ Example URL: https://premium.pff.com/api/v1/leagues
 
 A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=False`.
 
+No returns table is published for this function: no capture: PFF Premium (legacy) needs a browser session cookie, and the docs build has none.
+
 **Example**
 
 ```python

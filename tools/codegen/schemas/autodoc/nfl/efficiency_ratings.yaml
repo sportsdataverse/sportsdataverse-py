@@ -1,0 +1,18 @@
+schema: efficiency_ratings
+kind: dataframe
+columns:
+- name: team_id
+  type: character
+  description: ''
+- name: adj_off_epa
+  type: double
+  description: ''
+- name: adj_def_epa
+  type: double
+  description: ''
+- name: adj_net
+  type: double
+  description: ''
+- name: games
+  type: integer
+  description: ''

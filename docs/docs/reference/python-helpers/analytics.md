@@ -172,6 +172,8 @@ scramble flag, so a scramble is a carry.
 
 one row per event x metric (`epa`, `success_rate`), `EVENT_SCHEMA`.
 
+No returns table is published for this function: no capture: its game_dates input needs game_id with game_date, and no package function returns that pair (load_cfb_schedule carries start_date).
+
 **Example**
 
 ```python
@@ -323,6 +325,29 @@ Rolling-window form for every entity with an event in `season`.
 
 one row per (entity, unit, metric, window size), `OUTPUT_SCHEMA`. Null / NaN event values are dropped before any window is computed. Columns: * `cur`: the mean of the entity's last `window_n` events through `season`. * `prev`: the mean of the `window_n` events immediately before `cur`'s window; null unless a full window of earlier history exists. * `season_start`: the mean of the `window_n` events immediately before season `season` started -- i.e. the entity's form entering the season, not counting any event actually played in `season`. * `career_baseline`: the mean of every event before `cur`'s window, including earlier events within `season` itself; null unless at least one full window of history precedes it. * `qualified`: `True` iff `n == window_n` -- the window is fully populated (not padded by a short career). Consumers building a "hottest" list should filter on this first. * `team_id` / `entity_name`: taken from the entity's single latest event through `season`, so a player who changed teams mid-season is labelled with their current team. * `delta_prev_rank`: 1 = biggest riser, ties share the lowest rank; null unless `qualified` and `prev` exists.
 
+| col_name | type | description |
+|---|---|---|
+| `season` | integer |  |
+| `entity_type` | character | Kind of entity the alias record points at (e.g., "team", "player", "league"). |
+| `entity_id` | character | Composite Yahoo id this editorial row was keyed under, surfaced from the collection map key (e.g., "ncaaf.g.202509200023" for a game, "ncaaf.t.29" for a team); always carried as Utf8. |
+| `entity_name` | character |  |
+| `team_id` | character |  |
+| `metric` | character |  |
+| `window_unit` | character |  |
+| `window_n` | integer |  |
+| `cur` | double |  |
+| `prev` | double |  |
+| `season_start` | double |  |
+| `career_baseline` | double |  |
+| `delta_prev` | double |  |
+| `delta_season` | double |  |
+| `delta_career` | double |  |
+| `delta_prev_rank` | integer |  |
+| `n` | integer |  |
+| `qualified` | logical |  |
+| `last_event_date` | character |  |
+| `as_of_date` | character |  |
+
 **Example**
 
 ```python
@@ -428,6 +453,20 @@ period, then game clock running down, then the provider's row order.
 **Returns**
 
 one row per attempt x unit, `EVENT_SCHEMA`. `entity_id` is the stats.nba / stats.wnba `person_id`, not an ESPN id; `entity_name` is the provider's name, which is the family name only (`"Curry"`).
+
+| col_name | type | description |
+|---|---|---|
+| `season` | integer |  |
+| `entity_type` | character | Kind of entity the alias record points at (e.g., "team", "player", "league"). |
+| `entity_id` | character | Composite Yahoo id this editorial row was keyed under, surfaced from the collection map key (e.g., "ncaaf.g.202509200023" for a game, "ncaaf.t.29" for a team); always carried as Utf8. |
+| `entity_name` | character |  |
+| `team_id` | character |  |
+| `window_unit` | character |  |
+| `metric` | character |  |
+| `game_id` | character |  |
+| `event_date` | character |  |
+| `seq` | integer |  |
+| `value` | double |  |
 
 **Example**
 

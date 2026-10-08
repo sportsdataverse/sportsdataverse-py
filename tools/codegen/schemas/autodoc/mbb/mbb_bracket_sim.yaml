@@ -1,0 +1,4 @@
+schema: mbb_bracket_sim
+kind: dataframe
+columns: []
+unverified: 'no capture: it needs a bracket-ordered field whose size is a power of two, and no package function returns one'

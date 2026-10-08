@@ -1,0 +1,24 @@
+schema: fox_nfl_boxscore
+kind: dataframe
+columns:
+- name: game_id
+  type: character
+  description: ''
+- name: team
+  type: character
+  description: ''
+- name: stat_group
+  type: character
+  description: ''
+- name: player
+  type: character
+  description: ''
+- name: athlete_id
+  type: character
+  description: ''
+- name: stat
+  type: character
+  description: ''
+- name: value
+  type: character
+  description: ''

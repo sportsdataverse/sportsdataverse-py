@@ -24,6 +24,16 @@ NFL boxscore (long: one row per player-stat).
 
 A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
 
+| col_name | type | description |
+|---|---|---|
+| `game_id` | character | Ten digit identifier for NFL game. |
+| `team` | character | NFL team. Uses official abbreviations as per NFL.com |
+| `stat_group` | character |  |
+| `player` | character | Player name |
+| `athlete_id` | character |  |
+| `stat` | character |  |
+| `value` | character | Total contract value |
+
 **Example**
 
 ```python
@@ -407,6 +417,14 @@ NFL game odds six-pack (spread / to-win / total per team).
 
 A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
 
+| col_name | type | description |
+|---|---|---|
+| `game_id` | character | Ten digit identifier for NFL game. |
+| `team` | character | NFL team. Uses official abbreviations as per NFL.com |
+| `spread` | character |  |
+| `to_win` | character |  |
+| `total` | character | The sum of each team's score in the game. Equals h_score + v_score. Is NA for games which haven't yet been played. Convenient for evaluating over/under total bets. |
+
 **Example**
 
 ```python
@@ -431,6 +449,21 @@ NFL play-by-play (one row per play; drive-based).
 **Returns**
 
 A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+| col_name | type | description |
+|---|---|---|
+| `game_id` | character | Ten digit identifier for NFL game. |
+| `quarter` | character |  |
+| `drive_id` | character |  |
+| `drive_result` | character |  |
+| `drive_summary` | character |  |
+| `drive_team` | character |  |
+| `play_id` | character | Numeric play id that when used with game_id and drive provides the unique identifier for a single play. |
+| `period` | character |  |
+| `clock` | character |  |
+| `field_position` | character | Ball spot expressed on Yahoo's 0-100 field scale, measured toward the offense's target goal line. |
+| `play_text` | character |  |
+| `play_team` | character |  |
 
 **Example**
 
@@ -525,6 +558,32 @@ NFL standings for a team's conference/division.
 
 A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
 
+| col_name | type | description |
+|---|---|---|
+| `team_id` | character |  |
+| `section` | character |  |
+| `afc_west` | character |  |
+| `v1` | character |  |
+| `w_l_t` | character |  |
+| `pct` | character |  |
+| `pf` | character |  |
+| `pa` | character |  |
+| `home` | character |  |
+| `away` | character |  |
+| `conf` | character |  |
+| `div` | character |  |
+| `strk` | character |  |
+| `entity_id` | character | Composite Yahoo id this editorial row was keyed under, surfaced from the collection map key (e.g., "ncaaf.g.202509200023" for a game, "ncaaf.t.29" for a team); always carried as Utf8. |
+| `afc_east` | character |  |
+| `afc_north` | character |  |
+| `afc_south` | character |  |
+| `nfc_east` | character |  |
+| `nfc_north` | character |  |
+| `nfc_south` | character |  |
+| `nfc_west` | character |  |
+| `american_football_conference` | character |  |
+| `national_football_conference` | character |  |
+
 **Example**
 
 ```python
@@ -549,6 +608,17 @@ NFL team game log (long: one row per game-stat).
 **Returns**
 
 A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+| col_name | type | description |
+|---|---|---|
+| `team_id` | character |  |
+| `season_type` | character | REG or POST indicating if the timeframe belongs to regular or post season. |
+| `category` | character | Broader category of player positions |
+| `game_id` | character | Ten digit identifier for NFL game. |
+| `game_date` | character | Date of the game. |
+| `opponent` | character | Opposing team of player |
+| `stat` | character |  |
+| `value` | character | Total contract value |
 
 **Example**
 
@@ -594,6 +664,18 @@ NFL team roster (one row per player).
 
 A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
 
+| col_name | type | description |
+|---|---|---|
+| `team_id` | character |  |
+| `position_group` | character | Postion group of player as listed by NFL |
+| `player` | character | Player name |
+| `pos` | character | Position as tracked by FP |
+| `age` | character | Age as of last pipeline build, rounded to one decimal. Pipeline is built on a weekly basis. |
+| `ht` | character | Height of player (feet and inches) |
+| `wt` | character | Weight of player (lbs) |
+| `college` | character | Official college (usually the last one attended) |
+| `athlete_id` | character |  |
+
 **Example**
 
 ```python
@@ -618,6 +700,15 @@ NFL team stat leaders by category.
 **Returns**
 
 A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+| col_name | type | description |
+|---|---|---|
+| `team_id` | character |  |
+| `category` | character | Broader category of player positions |
+| `stat` | character |  |
+| `stat_abbreviation` | character |  |
+| `player` | character | Player name |
+| `value` | character | Total contract value |
 
 **Example**
 

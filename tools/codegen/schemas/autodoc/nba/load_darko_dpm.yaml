@@ -1,0 +1,18 @@
+schema: load_darko_dpm
+kind: dataframe
+columns:
+- name: player_name
+  type: character
+  description: ''
+- name: team
+  type: character
+  description: ''
+- name: dpm
+  type: integer
+  description: ''
+- name: odpm
+  type: integer
+  description: ''
+- name: ddpm
+  type: integer
+  description: ''

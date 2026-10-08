@@ -1,0 +1,21 @@
+schema: fox_nhl_team_stats
+kind: dataframe
+columns:
+- name: team_id
+  type: character
+  description: ''
+- name: category
+  type: character
+  description: ''
+- name: stat
+  type: character
+  description: ''
+- name: stat_abbreviation
+  type: character
+  description: ''
+- name: player
+  type: character
+  description: ''
+- name: value
+  type: character
+  description: ''

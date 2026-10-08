@@ -1,0 +1,30 @@
+schema: load_lebron_daily
+kind: dataframe
+columns:
+- name: player_id
+  type: integer
+  description: ''
+- name: through_date
+  type: character
+  description: ''
+- name: season
+  type: character
+  description: ''
+- name: player_name
+  type: character
+  description: ''
+- name: mins
+  type: double
+  description: ''
+- name: lebron
+  type: double
+  description: ''
+- name: o_lebron
+  type: double
+  description: ''
+- name: d_lebron
+  type: double
+  description: ''
+- name: war
+  type: double
+  description: ''

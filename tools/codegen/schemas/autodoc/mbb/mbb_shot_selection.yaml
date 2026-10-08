@@ -1,0 +1,21 @@
+schema: mbb_shot_selection
+kind: dataframe
+columns:
+- name: shooter_id
+  type: character
+  description: ''
+- name: n_shots
+  type: integer
+  description: ''
+- name: xppp
+  type: double
+  description: ''
+- name: actual_ppp
+  type: double
+  description: ''
+- name: selection_value
+  type: double
+  description: ''
+- name: selection_value_total
+  type: double
+  description: ''
